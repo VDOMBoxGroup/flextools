@@ -17,14 +17,14 @@ public const ident_1:int = 150;
 public const ident_2:int = 200;
 
 [Bindable]
-public var mainDataFile:XML;
+private var mainDataFile:XML;
 [Bindable]
-public var langStr:String = new String("RU");
+private var langStr:String = new String("RU");
 [Bindable]		
-public var menuBarCollection:XMLListCollection;
-public var menubarXML:XMLList = new XMLList;
+private var menuBarCollection:XMLListCollection;
+private var menubarXML:XMLList = new XMLList;
 [Bindable]
-public var attributesCollection:XMLListCollection;
+private var attributesCollection:XMLListCollection;
  
 /* **** Start() is the main function, that is being executed as soon as form created **** */
 public function start():void {
@@ -36,8 +36,8 @@ public function start():void {
 private function addNewAttribute():void {
 	/* addNewAttribute() Adding new empty Attribute to the Attributes list */
 	attributesCollection.addItem (
-		<attribute label="New Attribute" defval="" regexp="" visined="" extended="" itype="">
-			<name><lang label="" text=""/></name>
+		<attribute label="New Attribute" name="" defval="" regexp="" visined="" extended="" itype="">
+			<dname><lang label="" text=""/></dname>
 			<err><lang label="" text=""/></err>
 			<descript><lang label="" text=""/></descript>
 			<codeinterface></codeinterface>
@@ -45,20 +45,23 @@ private function addNewAttribute():void {
 	);	
 }
 
-public function createBasicAttr():void {
+private function createBasicAttr():void {
 	attributesCollection = new XMLListCollection();
-	
 	addNewAttribute();
-	attributesCollection[0].@label = "111";
-	addNewAttribute();
-	attributesCollection[1].@label = "123";
-	addNewAttribute();
-	attributesCollection[2].@label = "222";
-	
+}
+
+private function attrFieldsRefresh():void {
+	attrName.text = attrList.selectedItem.@name;
+}
+
+private function attrFieldsApply():void {
+	attrList.selectedItem.@name = attrName.text;
+	attrList.selectedItem.@label = attrName.text;
+	Alert.show("Attribute's fields were sucessfully updated", "Apply");
 	trace(attributesCollection);
 }
 
-public function lng(label:String):String {
+private function lng(label:String):String {
 	/* lng() used only in case to have short representation of such long string :) */
 	/* Used in menu creation function langRefresh() */
 	return langData.language.(@id == langStr).sentence.(@label == label).toString();
