@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<vdom_Object>
+    <general_Informations>
+        <IdObjectType>1</IdObjectType>
+        <IconeObject>#Res(001)</IconeObject>
+        <WYSIWYG-IconeObject>#Res(002)</WYSIWYG-IconeObject>
+        <ObjectDescription>#Lang(12)</ObjectDescription>
+        <Moveable>True</Moveable>
+        <Border>True</Border>
+        <IdObjectCategory>1</IdObjectCategory>
+        <IsObjectDynamic>True</IsObjectDynamic>
+        <Tversion>1.1</Tversion>
+        <InterfaceType>1</InterfaceType>
+        <ptrHeight>002</ptrHeight>
+        <ptrWidth>003</ptrWidth>
+        <OptHierarchy>2</OptHierarchy>
+        <MinIconeObject>#Res(003)</MinIconeObject>
+        <IsConteneur>0</IsConteneur>
+        <ExtRef>0AFDECCE-FEAF</ExtRef>
+        <WCAGSupported>True</WCAGSupported>
+        <SupportedLanguage>FR,EN,BG,RU</SupportedLanguage>
+    </general_Informations>
+    <LanguageData>
+        <Lang ICode="FR">
+          <Sentence Id="1"><![CDATA[Une petite phrase]]></Sentence>
+          <Sentence Id="2"><![CDATA[Une petite phrase]]></Sentence>
+       </Lang>
+       <Lang ICode="EN">
+         <Sentence Id="1"><![CDATA[Une petite phrase]]></Sentence>
+         <Sentence Id="2"><![CDATA[Une petite phrase]]></Sentence>
+       </Lang>
+       <Lang ICode="BG">
+         <Sentence Id="1"><![CDATA[Une petite phrase]]></Sentence>
+         <Sentence Id="2"><![CDATA[Une petite phrase]]></Sentence>
+      </Lang>
+      <Lang ICode="RU">
+        <Sentence Id="1"><![CDATA[Une petite phrase]]></Sentence>
+        <Sentence Id="2"><![CDATA[Une petite phrase]]></Sentence>
+     </Lang>
+    </LanguageData>
+    <WCAG>
+        <Recommandation Level="1">#Lang(3)</Recommandation>
+        <Recommandation Level="2">#Lang(3)</Recommandation>
+        <Recommandation Level="3">#Lang(3)</Recommandation>
+    </WCAG>
+    <ClientSupported>
+        <ClientType Target="HTML" v="4.x" AllSupported="False"
+            >InternetExplorer-6.x,InternetExplorer-5.x,InternetExplorer-4.x,MozillaFirefox-1.x,Opera-7.x,Safari-1.x</ClientType>
+        <ClientType Target="WAP" v="1.x" AllSupported="True"/>
+        <ClientType Target="PDF" v="1.1" AllSupported="True"/>
+        <ClientType Target="FLASH" v="7.0" AllSupported="True"/>
+    </ClientSupported>
+    <Resources>
+        <Res id="001" FileType="jpg" Name="truc"><![CDATA[açuIokdJFK3.,%]]></Res>
+        <Res id="002" FileType="jpg" Name="truc"><![CDATA[açuIokdJFK3.,%]]></Res>
+        <Res id="003" FileType="jpg" Name="truc"><![CDATA[açuIokdJFK3.,%]]></Res>
+    </Resources>
+    <Attributes>
+        <Attribut idattribut="1">
+            <Name>#Lang(1)</Name>
+            <PatternRemplacement><![CDATA[
+                                                                        <!-- Expression réguliére de transformation -->
+                ]]></PatternRemplacement>
+            <DefaultValue><![CDATA[-]]></DefaultValue>
+            <ContentType>Number</ContentType>
+            <RegularExpressionValidation><![CDATA[ 
+
+         <!-- Expression réguliére de validation du type -->
+
+]]></RegularExpressionValidation>
+            <Visible><![CDATA[O]]></Visible>
+            <Extended><![CDATA[N]]></Extended>
+            <Help>#Lang(22)</Help>
+            <MenuInterface><![CDATA[
+                
+                                                                          <!-- Code HTML Pour l'interface -->
+                
+                ]]></MenuInterface>
+            <ExtendedMenuInterface><![CDATA[
+                
+                                                                          <!-- Code Python + HTML pour interface Spécifique -->
+                
+                
+                ]]></ExtendedMenuInterface>
+        </Attribut>
+    </Attributes>
+    <WYSIWYG Type='XSLT'><![CDATA[<!--- Code Source de transformation de l'Objet pour l'environnement d'édition -->]]></WYSIWYG>
+    <XSLT-ObjectSourceCode>
+        <Target Name="HTML"><![CDATA[<!--- Code Source XSLT de transformation de l'Objet -->]]></Target>
+        <Target Name="WAP"><![CDATA[<!--- Code Source XSLT de transformation de l'Objet -->]]></Target>
+    </XSLT-ObjectSourceCode>
+    <Scripting-ObjectSourceCode>
+        <Target Name="HTML" Type="ASCII" Mode="XSLT-Trasform"><![CDATA[<!-- Code Source script générant le code XSLT Objet -->]]></Target>
+        <Target Name="HTML" Type="ASCII" Mode="XSLT-Trasform"><![CDATA[<!-- Code Source script générant le code XSLT Objet -->]]></Target>
+		<Target Name="HTML" Type="ASCII" Mode="Sub-XSLT-Trasform"><![CDATA[<!-- Code Source script générant le code XSLT Objet -->]]></Target>
+        <Target Name="PDF" Type="ASCII" Mode="File"><![CDATA[<!-- Code Source script générant le modèle de transformation Objet -->]]></Target>
+        <Target Name="FLASH" Type="Binary" Mode="File"><![CDATA[<!-- Code Source script générant le modèle de transformation Objet -->]]></Target>
+    </Scripting-ObjectSourceCode>
+    <EVDOM>
+        <Events>
+            <StandardEventSupported>OnLoad,OnClick,OnDblClick,OnMouseOver,OnMouseOut</StandardEventSupported>
+            <ExtratEventSupported>
+                <Event>OnTimeOut</Event>
+                <Event>OnBlur</Event>
+            </ExtratEventSupported>
+        </Events>
+        <Actions>
+            <DirectAction id="1">
+                <ActionName>#LANG(3)</ActionName>
+                <JScriptAction><![CDATA[   <!-- JS code pour l'action -->  ]]></JScriptAction>
+            </DirectAction>
+            <DirectAction id="2">
+                <ActionName>#LANG(4)</ActionName>
+                <JScriptAction><![CDATA[   <!-- JS code pour l'action -->  ]]></JScriptAction>
+            </DirectAction>
+        </Actions>
+    </EVDOM>
+    <E2VDOM>
+        <EventSupported>OnLoad,OnClick,OnDblClick,OnMouseOver,OnMouseOut</EventSupported>
+        <Actions>
+            <Method Name='NomMethode1'><![CDATA[
+                
+                                                    <!-- JS Code de transformation -->
+                
+                ]]></Method>
+            <Method Name='NomMethode2'><![CDATA[
+                
+                                                    <!-- JS Code de transformation -->
+                
+                ]]></Method>
+        </Actions>
+    </E2VDOM>
+</vdom_Object>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Development by Vadim A. Usoltsev, SE Group Ltd., Tomsk, Russia, 2007.
+-->
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="{start();}">
+	<mx:XML id="langData" source="langs/languages.xml" />
+	<mx:Script source="main.as" />
+	
+	<mx:states>
+		<mx:State name="editorParams">
+			<mx:AddChild relativeTo="{hbox1}" position="before">
+				<mx:HBox width="100%">
+					<mx:Spacer width="{ident_2}"/>
+					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'title')}:"/>
+					<mx:TextArea height="20" width="100%" cornerRadius="3"/>
+					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'info')}:"/>
+					<mx:TextArea height="20" width="100%" cornerRadius="3"/>
+				</mx:HBox>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+	
+	<mx:Fade id="myFade"/> 
+    <mx:Panel id="mainForm" title="V.D.O.M. Object IDE" paddingTop="0" paddingBottom="0" paddingLeft="0"
+    	paddingRight="0" width="100%" height="100%" hideEffect="myFade" borderStyle="none"
+    	backgroundColor="#c0c0c0" cornerRadius="0" minHeight="550" minWidth="700">
+    	
+        <mx:MenuBar labelField="@label" itemClick="menuHandler(event)" dataProvider="{menuBarCollection}" width="100%"/>
+        
+        <mx:TabNavigator width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+        
+			<!-- Information tab -->
+			<mx:Canvas id="infoTab" label="{langData.language.(@id == langStr).sentence.(@label == 'information')}" width="100%" height="100%">
+			
+				<!-- Basic Preference panels -->
+				<mx:HBox direction="horizontal" width="100%" height="100%" x="0">
+					<mx:Panel id="bpPanel" title="{langData.language.(@id == langStr).sentence.(@label == 'bscpref')}"
+						width="50%" height="100%" dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1"
+						borderColor="#c0c0c0">
+							
+						<mx:HBox width="100%">
+							<!-- Object Name -->
+							<mx:Label id="onameLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'oname')}" width="{ident_1}"
+								toolTip="You must define an Object Name"/>
+							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<!-- ID -->
+							<mx:Label id="idLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'id')}" width="{ident_1}"
+								toolTip="Unique identifier of this attribute, this identifier is an extension of the object identifier it use the base and a numerical value unique"/>
+							<mx:TextArea width="100%" height="20" editable="false" cornerRadius="3"/>
+						</mx:HBox>
+						
+						<mx:HBox width="100%" verticalAlign="bottom">
+							<!-- Display Name (Multilanguage) -->
+							<mx:Label id="dnameLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'dname')}" width="{ident_1}"/>
+							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<mx:Canvas label="EN" width="100%" height="100%">
+									<mx:TextArea width="100%" height="20"/>
+								</mx:Canvas>
+							</mx:TabNavigator>
+						</mx:HBox>
+						
+						<mx:HRule width="100%" height="1"/>
+						
+						<mx:HBox width="100%">
+							<!-- Icon -->
+							<mx:Label id="iconLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'icon')}" width="{ident_1}"/>
+							<mx:Image width="64" height="64" autoLoad="true" scaleContent="true"  source="@Embed(source='splash.png')"/>
+							<mx:Button id="browseButton1" label="{langData.language.(@id == langStr).sentence.(@label == 'browse')}"/>
+						</mx:HBox>
+						
+						<mx:HRule width="100%" height="1"/>
+						
+						<mx:HBox width="100%">
+							<!-- Editor Icon -->
+							<mx:Label id="eiconLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'eicon')}" width="{ident_1}"/>
+							<mx:Image width="64" height="64" scaleContent="true" autoLoad="true" source="@Embed(source='splash.png')"/>
+							<mx:Button id="browseButton2" label="{langData.language.(@id == langStr).sentence.(@label == 'browse')}"/>
+						</mx:HBox>
+						
+						<mx:HRule width="100%" height="1"/>
+						
+						<mx:HBox width="100%">
+							<!-- Structure Icon -->
+							<mx:Label id="siconLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'sicon')}" width="{ident_1}"/>
+							<mx:Image width="64" height="64" scaleContent="true" autoLoad="true" source="@Embed(source='splash.png')"/>
+							<mx:Button id="browseButton3" label="{langData.language.(@id == langStr).sentence.(@label == 'browse')}"/>
+						</mx:HBox>
+
+						<mx:HRule width="100%" height="1"/>
+						
+						<mx:HBox width="100%" verticalAlign="middle">
+							<!-- Description (Multilanguage)-->
+							<mx:Label id="descLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'descript')}" width="{ident_1}"/>
+							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<mx:Canvas label="EN" width="100%" height="100%">
+								<mx:TextArea id="desc1" width="100%" height="60"/>	
+								</mx:Canvas>
+								<mx:Canvas label="RU" width="100%" height="100%">
+								<mx:TextArea id="desc2" width="100%" height="60"/>	
+								</mx:Canvas>
+							</mx:TabNavigator>
+						</mx:HBox>
+						
+					</mx:Panel>
+         
+					<mx:Panel width="50%" height="100%"  dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1" borderColor="#c0c0c0">
+					
+						<mx:CheckBox id="mvChkBox" label="{langData.language.(@id == langStr).sentence.(@label == 'moveable')}"/>
+						
+						<mx:CheckBox id="dynamicChkBox" label="{langData.language.(@id == langStr).sentence.(@label == 'dynamic')}"/>
+						
+						<mx:HBox width="100%">
+							<mx:Label id="categoryLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'category')}" width="{ident_1}"/>
+							<mx:ComboBox id="ctgrsComboBox" width="200">
+								<mx:dataProvider>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'standart')}" data=""/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'advanced')}" data=""/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'usual')}" data=""/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'portal')}" data=""/>
+								</mx:dataProvider>
+							</mx:ComboBox>
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<mx:Label id="itypeLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'itype')}" width="{ident_1}"/>
+							<mx:ComboBox id="itypeComboBox" width="200">
+								<mx:dataProvider>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'standart')}" data="1"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'rteditor')}" data="2"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'teditor')}" data="3"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'picture')}" data="4"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'spectable')}" data="5"/>
+								</mx:dataProvider>
+							</mx:ComboBox>
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<mx:Label id="verLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'version')}" width="{ident_1}"/>
+							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<mx:Label id="opriorLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'optimprior')}" width="{ident_1}"/>
+							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<mx:Label id="cntnrsLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'containers')}" width="{ident_1}"/>
+							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<mx:Label id="lngsLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'languages')}" width="{ident_1}"/>
+							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+						</mx:HBox>
+					</mx:Panel>
+				</mx:HBox>
+            </mx:Canvas>
+            
+			<mx:Canvas label="{langData.language.(@id == langStr).sentence.(@label == 'attributes')}" width="100%" height="100%">
+				<mx:HBox width="100%" height="100%">
+				
+					<mx:VBox width="200" height="100%">
+						<mx:List id="objList" width="100%" height="100%" labelField="@label" dataProvider="{attributesCollection}"/>
+						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'addnewattr')}" width="100%"/>
+						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'rmattr')}" width="100%"/>
+					</mx:VBox>
+					
+					<mx:Panel title="{langData.language.(@id == langStr).sentence.(@label == 'attrprop')}" width="100%" height="100%" dropShadowEnabled="false"
+						alpha="1.0" borderStyle="solid" borderThickness="1" borderColor="#c0c0c0" id="panel1">
+						
+						<mx:HBox width="100%" id="hbox2">
+							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'name')}" width="{ident_2}"/>
+							<mx:TextArea height="20" width="100%" cornerRadius="3"/>
+						</mx:HBox>
+						
+						<mx:HBox width="100%" verticalAlign="bottom">
+							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'dname')}" width="{ident_2}" alpha="1.0"/>
+							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<mx:Canvas label="EN" width="100%" height="100%">
+									<mx:TextArea width="100%" height="20"/>
+								</mx:Canvas>
+							</mx:TabNavigator>
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'defval')}" width="{ident_2}"
+								toolTip="Value witch is set to when the object is created"/>
+							<mx:TextArea height="20" width="100%" cornerRadius="3"/>							
+						</mx:HBox>
+						
+						<mx:HBox width="100%">
+							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'regexpvld')}" width="{ident_2}"/>
+							<mx:TextArea height="20" width="100%" cornerRadius="3"/>							
+						</mx:HBox>
+						
+						<mx:HBox width="100%" verticalAlign="bottom">
+							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'errvldmess')}" width="{ident_2}"/>
+							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<mx:Canvas label="EN" width="100%" height="100%">
+									<mx:TextArea width="100%" height="20"/>
+								</mx:Canvas>
+							</mx:TabNavigator>						
+						</mx:HBox>
+						
+	 					<mx:CheckBox label="{langData.language.(@id == langStr).sentence.(@label == 'visined')}"/>
+	 					
+	 					<mx:CheckBox label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" toolTip="Is this attribute is a simple value or a long text"/>
+	 					
+						<mx:HBox width="100%">
+							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'itype')}:" width="{ident_2}"
+								toolTip="Define if the interface is a built-in one (Std) or it use a VDOM XML Object to create it dynamically (Ext)"/>
+								
+							<mx:ComboBox id="objectInterfaceType" close="{checkInterface();}" width="180">
+								<mx:dataProvider>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'standart')}" data="Std"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" data="Ext"/>
+								</mx:dataProvider>
+							</mx:ComboBox>
+							<mx:ComboBox id="stdInterfaceType" close="{checkStdInterfaceType();}" width="200">
+								<mx:dataProvider>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'txtfld')}" data="TextField"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'ddownmenu')}" data="DropDown"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'file')}" data="File"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'clrch')}" data="Color"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'pglink')}" data="PageLink"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'objlist')}" data="ObjectList"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'lnkbase')}" data="LinkedBase"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'exteditor')}" data="ExternalEditor"/>
+								</mx:dataProvider>
+							</mx:ComboBox>
+							<mx:Button id="codeButton" label="{langData.language.(@id == langStr).sentence.(@label == 'ocinterface')}"
+								creationComplete="{codeButton.enabled = false;}"
+								toolTip="Opens an XML Code Editor. To use Code Interface you must change Interface Type to [Extended]"/>
+								
+						</mx:HBox>
+						
+						<mx:HBox id="hbox1" width="100%" verticalAlign="middle">
+							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'descript')}" width="{ident_2}"/>
+							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<mx:Canvas label="EN" width="100%" height="100%">
+								<mx:TextArea width="100%" height="60"/>	
+								</mx:Canvas>
+								<mx:Canvas label="RU" width="100%" height="100%">
+								<mx:TextArea width="100%" height="60"/>	
+								</mx:Canvas>
+							</mx:TabNavigator>
+						</mx:HBox>
+						
+					</mx:Panel>
+				</mx:HBox>
+            </mx:Canvas>
+			<mx:Canvas label="WCAG" width="100%" height="100%">
+			</mx:Canvas>
+			<mx:Canvas label="WYSIWYG" width="100%" height="100%">
+			</mx:Canvas>
+			<mx:Canvas label="SourceCode" width="100%" height="100%">
+			</mx:Canvas>
+			<mx:Canvas label="Libraries" width="100%" height="330">
+			</mx:Canvas>
+        </mx:TabNavigator>
+        <mx:Label id="hint" text="V.D.O.M. next generation v2.0"/>
+    </mx:Panel>
+</mx:Application>
