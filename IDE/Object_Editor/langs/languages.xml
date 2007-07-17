@@ -56,6 +56,7 @@
     <sentence id="52" label="info">Info</sentence>
     <sentence id="53" label="rmattr">Remove Attribute</sentence>
     <sentence id="54" label="apply">Apply</sentence>
+    <sentence id="55" label="restore">Restore</sentence>
 </language>
 <language id="RU" label="Русский">
     <sentence id="0" label="file">Файл</sentence>
@@ -113,5 +114,6 @@
     <sentence id="52" label="info">Информация</sentence>
     <sentence id="53" label="rmattr">Убрать атрибут</sentence>
     <sentence id="54" label="apply">Apply</sentence>
+    <sentence id="55" label="restore">Restore</sentence>
 </language>
 </root>

@@ -169,7 +169,7 @@
 							dataProvider="{attributesCollection}" change="{attrFieldsRefresh();}"/>
 							
 						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'addnewattr')}" width="100%" click="{addNewAttribute();}"/>
-						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'rmattr')}" width="100%"/>
+						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'rmattr')}" width="100%" click="{removeAttributeAlert()}"/>
 					</mx:VBox>
 					
 					<mx:Panel title="{langData.language.(@id == langStr).sentence.(@label == 'attrprop')}" width="100%" height="100%" dropShadowEnabled="false"
@@ -177,15 +177,17 @@
 						
 						<mx:HBox width="100%" id="hbox2">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'name')}" width="{ident_2}"/>
-							<mx:TextArea id="attrName" height="20" width="100%" cornerRadius="3"/>
+							<mx:TextArea id="attrName" height="20" width="100%" cornerRadius="3" change="{checkAttrSelection()}"/>
 						</mx:HBox>
 						
 						<mx:HBox width="100%" verticalAlign="bottom">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'dname')}" width="{ident_2}" alpha="1.0"/>
-							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+							<mx:TabNavigator id="dnameTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<!--
 								<mx:Canvas label="EN" width="100%" height="100%">
 									<mx:TextArea width="100%" height="20"/>
 								</mx:Canvas>
+								-->
 							</mx:TabNavigator>
 						</mx:HBox>
 						
@@ -209,9 +211,9 @@
 							</mx:TabNavigator>						
 						</mx:HBox>
 						
-	 					<mx:CheckBox label="{langData.language.(@id == langStr).sentence.(@label == 'visined')}"/>
+	 					<mx:CheckBox id="visinedChBox" label="{langData.language.(@id == langStr).sentence.(@label == 'visined')}"/>
 	 					
-	 					<mx:CheckBox label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" toolTip="Is this attribute is a simple value or a long text"/>
+	 					<mx:CheckBox id="extChBox" label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" toolTip="Is this attribute is a simple value or a long text"/>
 	 					
 						<mx:HBox width="100%">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'itype')}:" width="{ident_2}"
@@ -252,7 +254,7 @@
 								</mx:Canvas>
 							</mx:TabNavigator>
 						</mx:HBox>
-						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'apply')}" click="{attrFieldsApply();}"/>
+						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'restore')}" click="{addDnameLangs();}"/>
 					</mx:Panel>
 				</mx:HBox>
             </mx:Canvas>

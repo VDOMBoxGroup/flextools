@@ -3,6 +3,7 @@
 	Development by Vadim A. Usoltsev, SE Group Ltd., Tomsk, Russia, 2007.
 */
 import mx.events.MenuEvent;
+import mx.events.CloseEvent;
 import mx.controls.Alert;
 import mx.collections.*;
 import mx.containers.Panel;
@@ -12,6 +13,8 @@ import mx.core.UIComponent;
 import mx.containers.ViewStack;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
+import mx.controls.TextArea;
+import mx.containers.Canvas;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
@@ -25,7 +28,8 @@ private var menuBarCollection:XMLListCollection;
 private var menubarXML:XMLList = new XMLList;
 [Bindable]
 private var attributesCollection:XMLListCollection;
- 
+private var previousAttr:int = -1;
+
 /* **** Start() is the main function, that is being executed as soon as form created **** */
 public function start():void {
 	/* langRefresh() creating the main menu and setting up some global variables. It also applying multilanguage support */
@@ -36,7 +40,7 @@ public function start():void {
 private function addNewAttribute():void {
 	/* addNewAttribute() Adding new empty Attribute to the Attributes list */
 	attributesCollection.addItem (
-		<attribute label="New Attribute" name="" defval="" regexp="" visined="" extended="" itype="">
+		<attribute label="New Attribute" name="New Attribute" defval="" regexp="" visined="0" extended="0" itype="">
 			<dname><lang label="" text=""/></dname>
 			<err><lang label="" text=""/></err>
 			<descript><lang label="" text=""/></descript>
@@ -45,20 +49,45 @@ private function addNewAttribute():void {
 	);	
 }
 
+private function removeAttributeAlert():void {
+	if (attrList.selectedIndex != -1) Alert.show("Do you want to proceed?", "Delete Attribute", 3, this, removeAttribute);
+}
+
+private function removeAttribute(event:CloseEvent):void {
+	if (event.detail == Alert.YES) {
+		attributesCollection.removeItemAt(attrList.selectedIndex);
+		previousAttr = -1;
+	}
+}
+
 private function createBasicAttr():void {
 	attributesCollection = new XMLListCollection();
 	addNewAttribute();
 }
 
 private function attrFieldsRefresh():void {
-	attrName.text = attrList.selectedItem.@name;
+	if (previousAttr != -1) {
+		attributesCollection[previousAttr].@name = attrName.text;
+		attributesCollection[previousAttr].@label = attrName.text;
+		attributesCollection[previousAttr].@visined = Number(visinedChBox.selected);
+		attributesCollection[previousAttr].@extended = Number(extChBox.selected);
+	}
+
+	previousAttr = attrList.selectedIndex;
+	attrName.text = attributesCollection[previousAttr].@name;
+	visinedChBox.selected = Number(attributesCollection[previousAttr].@visined);
+	extChBox.selected = Number(attributesCollection[previousAttr].@extended);
 }
 
-private function attrFieldsApply():void {
-	attrList.selectedItem.@name = attrName.text;
-	attrList.selectedItem.@label = attrName.text;
-	Alert.show("Attribute's fields were sucessfully updated", "Apply");
-	trace(attributesCollection);
+private function addDnameLangs():void {
+	var lll:Canvas = new Canvas();
+	lll.label = "RU";
+	dnameTabs.addChild(lll);
+}
+
+private function checkAttrSelection():void {
+	if (attrList.selectedIndex == -1)
+		Alert.show("No attribute selected!\nSelect an attribute in the list on the left.", "Alert");
 }
 
 private function lng(label:String):String {
