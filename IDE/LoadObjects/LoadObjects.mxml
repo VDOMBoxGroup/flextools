@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import com.vdom.connect.Soap;
+			import mx.controls.Alert;
+
+		private var mySOAP:Soap;
+					
+		private function init():void{
+	//		Alert.show("Привет!");
+			mySOAP = new Soap;
+		}
+		private function set_ses():void{
+			mySOAP.login('login Name', '777');
+		}
+		private function close_session():void{
+			Alert.show("Закрываем сессию");
+			mySOAP.close_session();
+		}
+		private function create_application():void{
+			Alert.show("Привет!");
+		}
+		private function set_application():void{
+			Alert.show("Привет!");
+		}
+		private function all_applications():void{
+			Alert.show("Привет!");
+		}
+		private function all_types():void{
+			Alert.show("Привет!");
+		}
+			
+		]]>
+	</mx:Script>
+	<mx:Panel x="10" y="10" width="644" height="318" layout="absolute">
+		<mx:Button x="493" y="10" label="Установка сесси" click="set_ses()"/>
+		<mx:Button x="493" y="40" label="close session " width="121" click="close_session()"/>
+		<mx:Button x="493" y="70" label="create application" width="121" click="create_application()"/>
+		<mx:Button x="493" y="100" label="set application" width="121" click="set_application()"/>
+		<mx:Button x="493" y="130" label=" all applications" width="121" click="all_applications()"/>
+		<mx:Button x="493" y="160" label="all types" width="121" click="all_types()"/>
+		<mx:TextArea x="10" y="27" height="241" width="464"/>
+		<mx:Label x="10" y="1" text="Trace:" fontWeight="bold" />
+	</mx:Panel>
+	
+</mx:Application>
