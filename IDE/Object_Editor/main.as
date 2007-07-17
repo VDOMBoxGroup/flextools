@@ -18,6 +18,11 @@ import mx.containers.Canvas;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
+public const supLanguages:XMLList =
+	<>
+		<language label="EN" text="English"/>
+		<language label="RU" text="Русский"/>
+	</>;
 
 [Bindable]
 private var mainDataFile:XML;
@@ -29,6 +34,11 @@ private var menubarXML:XMLList = new XMLList;
 [Bindable]
 private var attributesCollection:XMLListCollection;
 private var previousAttr:int = -1;
+
+/* Multilingual strings collections for each TextArea */
+private var attrDnameCollector:Array = new Array();
+private var attrErrmsgCollector:Array = new Array();
+private var attrDescriptCollector:Array = new Array();
 
 /* **** Start() is the main function, that is being executed as soon as form created **** */
 public function start():void {
@@ -57,6 +67,7 @@ private function removeAttribute(event:CloseEvent):void {
 	if (event.detail == Alert.YES) {
 		attributesCollection.removeItemAt(attrList.selectedIndex);
 		previousAttr = -1;
+		panel1.visible = false;
 	}
 }
 
@@ -65,29 +76,64 @@ private function createBasicAttr():void {
 	addNewAttribute();
 }
 
-private function attrFieldsRefresh():void {
+private function attrFieldsWrite():void {
 	if (previousAttr != -1) {
 		attributesCollection[previousAttr].@name = attrName.text;
 		attributesCollection[previousAttr].@label = attrName.text;
 		attributesCollection[previousAttr].@visined = Number(visinedChBox.selected);
 		attributesCollection[previousAttr].@extended = Number(extChBox.selected);
-	}
+	}	
+}
 
+private function attrFieldsRefresh():void {
 	previousAttr = attrList.selectedIndex;
 	attrName.text = attributesCollection[previousAttr].@name;
 	visinedChBox.selected = Number(attributesCollection[previousAttr].@visined);
 	extChBox.selected = Number(attributesCollection[previousAttr].@extended);
+	panel1.visible = true;
 }
 
-private function addDnameLangs():void {
-	var lll:Canvas = new Canvas();
-	lll.label = "RU";
-	dnameTabs.addChild(lll);
-}
+private function addAttrLangsTabs():void {
+	var tab:Canvas;
+	var textArea:TextArea;
+	var i:uint;
+	var language:XML;
+		
+	/* Display Name tabs */
+	i = 0;
+	for each(language in supLanguages) {
+		tab = new Canvas();
+		attrDnameCollector[i] = new TextArea();
+		attrDnameCollector[i].height = 20;
+		tab.label = language.@label;
+		tab.addChild(attrDnameCollector[i]);
+		dnameTabs.addChild(tab);
+		i++;
+	}
 
-private function checkAttrSelection():void {
-	if (attrList.selectedIndex == -1)
-		Alert.show("No attribute selected!\nSelect an attribute in the list on the left.", "Alert");
+	/* Error Exp Validation Messages tabs */
+	i = 0;
+	for each(language in supLanguages) {
+		tab = new Canvas();
+		attrErrmsgCollector[i] = new TextArea();
+		attrErrmsgCollector[i].height = 20;
+		tab.label = language.@label;
+		tab.addChild(attrErrmsgCollector[i]);
+		errmsgTabs.addChild(tab);
+		i++;
+	}	
+
+	/* Attribute Description tabs */
+	i = 0;
+	for each(language in supLanguages) {
+		tab = new Canvas();
+		attrDescriptCollector[i] = new TextArea();
+		attrDescriptCollector[i].height = 60;
+		tab.label = language.@label;
+		tab.addChild(attrDescriptCollector[i]);
+		descriptTabs.addChild(tab);
+		i++;
+	}	
 }
 
 private function lng(label:String):String {
@@ -101,23 +147,20 @@ private function langRefresh():void {
 	menubarXML = 
 	<>
 		<menuitem label={lng('file')} data="file">
-			<menuitem label={lng('lxml')} data="load" />
+			<menuitem label={lng('lxml')} data="load"/>
 			<menuitem type="separator" data=""/>
-			<menuitem label={lng('close')} data="close" />
+			<menuitem label={lng('close')} data="close"/>
 		</menuitem>
-		<menuitem label={lng('languages')} data="langs">
-		</menuitem>
+		<menuitem label={lng('languages')} data="langs"></menuitem>
 		<menuitem label={lng('help')} data="top">
-			<menuitem label={lng('about')} data="about" />
+			<menuitem label={lng('about')} data="about"/>
 		</menuitem>
 	</>;	
 
-	/* Adding the list of avaliable languages from the source XML to the Languages main menu item */
+	/* Adding the list of avaliable _Interface_ languages from the source XML to the Languages main menu item */
 	for each(var language:XML in langData.language) {
 		menubarXML.(@data == "langs").appendChild(<menuitem type="radio" label={language.@label} data={'lng' + language.@id} />);
 	}
-
-//	desc.text = menubarXML.(@data == "langs");
 
 	/* Flushing the ComboBoxes from the text in previous language */
 	ctgrsComboBox.text = "";
@@ -135,6 +178,7 @@ private function menuHandler(event:MenuEvent):void {
 		mainForm.visible = false;
 		fscommand("quit", "true");
 	}
+	
 	if (event.item.@data == "about") {
 		Alert.show("V.D.O.M. Object IDE v2.0\n\nDeveloped by SE GROUP, 2007", "About");
 	}
