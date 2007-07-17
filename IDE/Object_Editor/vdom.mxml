@@ -174,7 +174,7 @@
 					
 					<mx:Panel title="{langData.language.(@id == langStr).sentence.(@label == 'attrprop')}" width="100%" height="100%"
 						dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1" borderColor="#c0c0c0" id="panel1"
-						creationComplete="{panel1.visible = false;}">
+						creationComplete="{panel1.visible = false; createAttrLangsTabs();}">
 						
 						<mx:HBox width="100%" id="hbox2">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'name')}" width="{ident_2}"/>
@@ -256,7 +256,7 @@
 								-->
 							</mx:TabNavigator>
 						</mx:HBox>
-						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'restore')}" click="{addAttrLangsTabs();}"/>
+						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'restore')}"/>
 					</mx:Panel>
 				</mx:HBox>
             </mx:Canvas>

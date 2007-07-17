@@ -51,9 +51,9 @@ private function addNewAttribute():void {
 	/* addNewAttribute() Adding new empty Attribute to the Attributes list */
 	attributesCollection.addItem (
 		<attribute label="New Attribute" name="New Attribute" defval="" regexp="" visined="0" extended="0" itype="">
-			<dname><lang label="" text=""/></dname>
-			<err><lang label="" text=""/></err>
-			<descript><lang label="" text=""/></descript>
+			<dname></dname>
+			<err></err>
+			<descript></descript>
 			<codeinterface></codeinterface>
 		</attribute>
 	);	
@@ -77,15 +77,46 @@ private function createBasicAttr():void {
 }
 
 private function attrFieldsWrite():void {
+	var i:uint;
+	var language:XML;
+	
 	if (previousAttr != -1) {
-		attributesCollection[previousAttr].@name = attrName.text;
-		attributesCollection[previousAttr].@label = attrName.text;
-		attributesCollection[previousAttr].@visined = Number(visinedChBox.selected);
-		attributesCollection[previousAttr].@extended = Number(extChBox.selected);
+		with (attributesCollection[previousAttr]) {
+			/* Writing basic simple properties */
+			@name = attrName.text;
+			@label = attrName.text;
+			@visined = Number(visinedChBox.selected);
+			@extended = Number(extChBox.selected);
+
+			/* Writing multilingual properties */
+			i = 0;
+			for each(language in supLanguages) {
+				/* Display Name tabs */
+				if (dname.lang.(@label == language.@label).toXMLString() == "")
+					dname.appendChild(<lang label={language.@label} text={attrDnameCollector[i].text}/>);
+				else
+					dname.lang.(@label == language.@label).@text = attrDnameCollector[i].text;					
+	
+				/* Error Exp Validation Messages tabs */
+				if (err.lang.(@label == language.@label).toXMLString() == "")
+					err.appendChild(<lang label={language.@label} text={attrErrmsgCollector[i].text}/>);
+				else
+					err.lang.(@label == language.@label).@text = attrErrmsgCollector[i].text;					
+
+				/* Attribute Description tabs */
+				if (descript.lang.(@label == language.@label).toXMLString() == "")
+					descript.appendChild(<lang label={language.@label} text={attrDescriptCollector[i].text}/>);
+				else
+					descript.lang.(@label == language.@label).@text = attrDescriptCollector[i].text;					
+					
+				i++;
+			}
+		}
 	}	
 }
 
 private function attrFieldsRefresh():void {
+	attrFieldsWrite();
 	previousAttr = attrList.selectedIndex;
 	attrName.text = attributesCollection[previousAttr].@name;
 	visinedChBox.selected = Number(attributesCollection[previousAttr].@visined);
@@ -93,7 +124,7 @@ private function attrFieldsRefresh():void {
 	panel1.visible = true;
 }
 
-private function addAttrLangsTabs():void {
+private function createAttrLangsTabs():void {
 	var tab:Canvas;
 	var textArea:TextArea;
 	var i:uint;
@@ -105,6 +136,7 @@ private function addAttrLangsTabs():void {
 		tab = new Canvas();
 		attrDnameCollector[i] = new TextArea();
 		attrDnameCollector[i].height = 20;
+		attrDnameCollector[i].percentWidth = 100;
 		tab.label = language.@label;
 		tab.addChild(attrDnameCollector[i]);
 		dnameTabs.addChild(tab);
@@ -117,6 +149,7 @@ private function addAttrLangsTabs():void {
 		tab = new Canvas();
 		attrErrmsgCollector[i] = new TextArea();
 		attrErrmsgCollector[i].height = 20;
+		attrErrmsgCollector[i].percentWidth = 100;
 		tab.label = language.@label;
 		tab.addChild(attrErrmsgCollector[i]);
 		errmsgTabs.addChild(tab);
@@ -129,6 +162,7 @@ private function addAttrLangsTabs():void {
 		tab = new Canvas();
 		attrDescriptCollector[i] = new TextArea();
 		attrDescriptCollector[i].height = 60;
+		attrDescriptCollector[i].percentWidth = 100;
 		tab.label = language.@label;
 		tab.addChild(attrDescriptCollector[i]);
 		descriptTabs.addChild(tab);
