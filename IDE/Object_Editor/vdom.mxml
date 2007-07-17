@@ -200,7 +200,7 @@
 						
 						<mx:HBox width="100%">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'regexpvld')}" width="{ident_2}"/>
-							<mx:TextArea height="20" width="100%" cornerRadius="3"/>							
+							<mx:TextArea id="regExpVld" height="20" width="100%" cornerRadius="3"/>							
 						</mx:HBox>
 						
 						<mx:HBox width="100%" verticalAlign="bottom">
@@ -222,12 +222,13 @@
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'itype')}:" width="{ident_2}"
 								toolTip="Define if the interface is a built-in one (Std) or it use a VDOM XML Object to create it dynamically (Ext)"/>
 								
-							<mx:ComboBox id="objectInterfaceType" close="{checkInterface();}" width="180">
+							<mx:ComboBox id="attributeInterfaceType" close="{checkInterface();}" width="180">
 								<mx:dataProvider>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'standart')}" data="Std"/>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" data="Ext"/>
 								</mx:dataProvider>
 							</mx:ComboBox>
+							
 							<mx:ComboBox id="stdInterfaceType" close="{checkStdInterfaceType();}" width="200">
 								<mx:dataProvider>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'txtfld')}" data="TextField"/>

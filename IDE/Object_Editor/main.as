@@ -85,8 +85,11 @@ private function attrFieldsWrite():void {
 			/* Writing basic simple properties */
 			@name = attrName.text;
 			@label = attrName.text;
+			@defval = defValue.text;
+			@regexp = regExpVld.text;
 			@visined = Number(visinedChBox.selected);
 			@extended = Number(extChBox.selected);
+			@itype = attributeInterfaceType.selectedItem.data;
 
 			/* Writing multilingual properties */
 			i = 0;
@@ -112,15 +115,43 @@ private function attrFieldsWrite():void {
 				i++;
 			}
 		}
-	}	
+	}
+	
+	trace(attributesCollection);
 }
 
 private function attrFieldsRefresh():void {
+	/* Saving previous Attribute */
 	attrFieldsWrite();
+	
+	/* Setting new Attribute as prevoius :) */
 	previousAttr = attrList.selectedIndex;
-	attrName.text = attributesCollection[previousAttr].@name;
-	visinedChBox.selected = Number(attributesCollection[previousAttr].@visined);
-	extChBox.selected = Number(attributesCollection[previousAttr].@extended);
+	
+	if (previousAttr != -1) {
+		with (attributesCollection[previousAttr]) {
+			/* Loading simple properties */
+			attrName.text = @name;
+			visinedChBox.selected = Number(@visined);
+			extChBox.selected = Number(@extended);
+	
+			/* Loading multilingual properties */
+			i = 0;
+			for each(language in supLanguages) {
+				/* Display Name tabs */
+				attrDnameCollector[i].text = dname.lang.(@label == language.@label).@text;
+	
+				/* Error Exp Validation Messages tabs */
+				attrErrmsgCollector[i].text = err.lang.(@label == language.@label).@text;
+
+				/* Attribute Description tabs */
+				attrDescriptCollector[i].text = descript.lang.(@label == language.@label).@text;					
+					
+				i++;
+			}
+		}
+	}
+	
+	
 	panel1.visible = true;
 }
 
@@ -199,8 +230,8 @@ private function langRefresh():void {
 	/* Flushing the ComboBoxes from the text in previous language */
 	ctgrsComboBox.text = "";
 	itypeComboBox.text = "";
-	if (objectInterfaceType != null) objectInterfaceType.text = "";
-	if (stdInterfaceType != null) objectInterfaceType.text = "";
+	if (attributeInterfaceType != null) attributeInterfaceType.text = "";
+	if (stdInterfaceType != null) stdInterfaceType.text = "";
 
 	/* Creating the main menu */
 	menuBarCollection = new XMLListCollection(menubarXML);
@@ -225,7 +256,7 @@ private function menuHandler(event:MenuEvent):void {
 }
 
 private function checkInterface():void {
-	if (objectInterfaceType.selectedItem.data == "Ext") {
+	if (attributeInterfaceType.selectedItem.data == "Ext") {
 		codeButton.enabled = true;
 		stdInterfaceType.enabled = false;
 	} else {
