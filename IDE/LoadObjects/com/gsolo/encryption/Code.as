@@ -11,18 +11,22 @@ package com.gsolo.encryption
 		
 		//initialization
 		public function Code(hstr:String):void{
+			trace('hesh:' + hstr)
 			protector = new VDOM_session_protector(hstr);
 		}
 		
 		// input First key
 		public function inputSKey(str:String):void{
 			key = str;
+			trace('first key: ' + key)
 		}
 		
 		// generation next key
 		public function skey():String{
 			counter++;
+			
 			key = protector.nextSessionKey(key);
+			trace('key: ' + key)
 			return key;
 		}
 		

@@ -31,7 +31,7 @@
 //			Alert.show("Привет!");
 		}
 		private function all_types():void{
-			mySOAP.getTypeResource();
+			mySOAP.getApplicationResource();
 //			Alert.show("Привет!");
 		}
 			

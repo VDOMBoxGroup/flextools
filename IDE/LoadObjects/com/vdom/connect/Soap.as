@@ -166,7 +166,7 @@ package com.vdom.connect
 			
 			ws.get_type.arguments.sid = sid;
 			ws.get_type.arguments.skey = code.skey();
-			ws.get_type.arguments.type_id  = 'any';//- идентификатор типа
+			ws.get_type.arguments.typeid  = 'any';//- идентификатор типа
 						
 			ws.get_type();
 			ws.get_type.addEventListener(ResultEvent.RESULT,getTypeCompleteListener);	
@@ -188,8 +188,8 @@ package com.vdom.connect
 			
 			ws.get_type_resource.arguments.sid = sid;
 			ws.get_type_resource.arguments.skey = code.skey();
-			ws.get_type_resource.arguments.type_id  = 'any';//- идентификатор типа
-			ws.get_type_resource.arguments.res_id  = 'any';//- идентификатор ресурса
+			ws.get_type_resource.arguments.typeid  = 'any';//- идентификатор типа
+			ws.get_type_resource.arguments.resid  = 'any';//- идентификатор ресурса
 						
 			ws.get_type_resource();
 			ws.get_type_resource.addEventListener(ResultEvent.RESULT,getTypeResourceCompleteListener);	
@@ -205,6 +205,30 @@ package com.vdom.connect
 				ws.list_applications.removeEventListener(ResultEvent.RESULT,getTypeResourceCompleteListener);
 			}
 		}
+		
+		// 9 -  get application resource  'get_application_resource'
+		public function getApplicationResource():void {
+			
+			ws.get_application_resource.arguments.sid = sid;
+			ws.get_application_resource.arguments.skey = code.skey();
+			ws.get_application_resource.arguments.appid = 'any';//- идентификатор приложения
+			ws.get_application_resource.arguments.resid  = 'any';//- идентификатор ресурса
+						
+			ws.get_application_resource();
+			ws.get_application_resource.addEventListener(ResultEvent.RESULT,getApplicationResourceCompleteListener);	
+		}
+
+		private function getApplicationResourceCompleteListener(event:ResultEvent):void{
+			var myXML:XML = XML(ws.get_application_resource.lastResult.Result);
+			if(myXML.Error.toString() != ''){
+				Alert.show("Error from server:\n" + myXML.Error );
+			} else{
+				Alert.show("getApplicationResource: \n" + myXML);
+				// <Resource><![CDATA[resource data]]></Resource>
+				ws.list_applications.removeEventListener(ResultEvent.RESULT,getApplicationResourceCompleteListener);
+			}
+		}
+		
 		//Error
 		private function errorListener(event:FaultEvent):void{
 			Alert.show("Error:\n"+ event);

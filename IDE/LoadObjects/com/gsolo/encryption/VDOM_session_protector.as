@@ -19,7 +19,7 @@ session key:  5311482591
 получаем последовательность:
 Next session:  1357063627
 Next session:  7719777830
-Next session:  1550285562
+Next session:  1550285562	
 Next session:  1010650169
 Next session:  6027560829
 Next session:  1211052166
@@ -79,8 +79,8 @@ Next session:  1629876353
 			case 4:
 				var num:Number = 0;
 				// Абра-Кадабра
-				for( i = 1; i<=9; i++)
-					num += Number(sessionKey.substr(i,1))+41;
+				for(i=1; i<9; i++)
+					num += Number(sessionKey.charAt(i))+41
 				return num.toString();
 				break;
 			case 5: 
