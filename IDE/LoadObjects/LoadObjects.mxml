@@ -16,7 +16,7 @@
 		}
 		private function close_session():void{
 			Alert.show("Закрываем сессию");
-			mySOAP.close_session();
+			mySOAP.closeSession();
 		}
 		private function create_application():void{
 			Alert.show("Привет!");
