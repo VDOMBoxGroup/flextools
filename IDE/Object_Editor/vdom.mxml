@@ -3,7 +3,7 @@
 	Development by Vadim A. Usoltsev, SE Group Ltd., Tomsk, Russia, 2007.
 -->
 
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="{start();}">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="{start();}" currentState="start">
 	<mx:XML id="langData" source="langs/languages.xml" />
 	<mx:Script source="main.as" />
 	
@@ -19,6 +19,25 @@
 				</mx:HBox>
 			</mx:AddChild>
 		</mx:State>
+		<mx:State name="start">
+			<mx:RemoveChild target="{tabnavigator1}"/>
+			<mx:AddChild relativeTo="{hint}" position="before">
+				<mx:Spacer height="100%"/>
+			</mx:AddChild>
+		</mx:State>
+		<mx:State name="langSelect">
+			<mx:RemoveChild target="{tabnavigator1}"/>
+			<mx:AddChild relativeTo="{hint}" position="before">
+				<mx:Spacer height="30%"/>
+			</mx:AddChild>
+			<mx:AddChild relativeTo="{spacer1}" position="before">
+				<mx:Panel width="250" height="200" layout="absolute" horizontalAlign="center">
+				</mx:Panel>
+			</mx:AddChild>
+			<mx:AddChild relativeTo="{hint}" position="before">
+				<mx:Spacer id="spacer1" height="30%"/>
+			</mx:AddChild>
+		</mx:State>
 	</mx:states>
 	
 	<mx:Fade id="myFade"/> 
@@ -28,16 +47,17 @@
     	
         <mx:MenuBar labelField="@label" itemClick="menuHandler(event)" dataProvider="{menuBarCollection}" width="100%"/>
         
-        <mx:TabNavigator width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+        <mx:TabNavigator width="100%" height="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10" id="tabnavigator1">
         
 			<!-- Information tab -->
-			<mx:Canvas id="infoTab" label="{langData.language.(@id == langStr).sentence.(@label == 'information')}" width="100%" height="100%">
+			<mx:Canvas id="infoTab" label="{langData.language.(@id == langStr).sentence.(@label == 'information')}" width="100%"
+				height="100%">
 			
 				<!-- Basic Preference panels -->
 				<mx:HBox direction="horizontal" width="100%" height="100%" x="0">
 					<mx:Panel id="bpPanel" title="{langData.language.(@id == langStr).sentence.(@label == 'bscpref')}"
 						width="50%" height="100%" dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1"
-						borderColor="#c0c0c0">
+						borderColor="#c0c0c0" creationComplete="{createInformationLangsTabs();}">
 							
 						<mx:HBox width="100%">
 							<!-- Object Name -->
@@ -56,10 +76,12 @@
 						<mx:HBox width="100%" verticalAlign="bottom">
 							<!-- Display Name (Multilanguage) -->
 							<mx:Label id="dnameLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'dname')}" width="{ident_1}"/>
-							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+							<mx:TabNavigator id="infoDnameTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<!--
 								<mx:Canvas label="EN" width="100%" height="100%">
 									<mx:TextArea width="100%" height="20"/>
 								</mx:Canvas>
+								-->
 							</mx:TabNavigator>
 						</mx:HBox>
 						
@@ -95,19 +117,19 @@
 						<mx:HBox width="100%" verticalAlign="middle">
 							<!-- Description (Multilanguage)-->
 							<mx:Label id="descLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'descript')}" width="{ident_1}"/>
-							<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+							<mx:TabNavigator id="infoDescriptTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+								<!--
 								<mx:Canvas label="EN" width="100%" height="100%">
 								<mx:TextArea id="desc1" width="100%" height="60"/>	
 								</mx:Canvas>
-								<mx:Canvas label="RU" width="100%" height="100%">
-								<mx:TextArea id="desc2" width="100%" height="60"/>	
-								</mx:Canvas>
+								-->
 							</mx:TabNavigator>
 						</mx:HBox>
 						
 					</mx:Panel>
          
-					<mx:Panel width="50%" height="100%"  dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1" borderColor="#c0c0c0">
+					<mx:Panel width="50%" height="100%"  dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1"
+						borderColor="#c0c0c0">
 					
 						<mx:CheckBox id="mvChkBox" label="{langData.language.(@id == langStr).sentence.(@label == 'moveable')}"/>
 						
@@ -155,18 +177,23 @@
 						
 						<mx:HBox width="100%">
 							<mx:Label id="lngsLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'languages')}" width="{ident_1}"/>
-							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+							<mx:TextArea width="100%" height="20" cornerRadius="3" editable="false"/>
+						</mx:HBox>
+						<mx:HBox width="100%">
+							<mx:Spacer width="{ident_1}"/>
+							<mx:LinkButton label="add" height="20"/>
+							<mx:LinkButton label="remove" height="20"/>
 						</mx:HBox>
 					</mx:Panel>
 				</mx:HBox>
             </mx:Canvas>
             
-			<mx:Canvas label="{langData.language.(@id == langStr).sentence.(@label == 'attributes')}" width="100%" height="100%">
+			<mx:Canvas label="{langData.language.(@id == langStr).sentence.(@label == 'attributes')}" width="100%" height="100%"  hide="{attrFieldsWrite();}">
 				<mx:HBox width="100%" height="100%">
 				
 					<mx:VBox width="200" height="100%">
 						<mx:List id="attrList" width="100%" height="100%" labelField="@label"
-							dataProvider="{attributesCollection}" change="{attrFieldsRefresh();}"/>
+							dataProvider="{attributesCollection}" change="{attrFieldsWriteNRefresh();}"/>
 							
 						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'addnewattr')}" width="100%" click="{addNewAttribute();}"/>
 						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'rmattr')}" width="100%" click="{removeAttributeAlert()}"/>
@@ -178,12 +205,12 @@
 						
 						<mx:HBox width="100%" id="hbox2">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'name')}" width="{ident_2}"/>
-							<mx:TextArea id="attrName" height="20" width="100%" cornerRadius="3" change="{attrFieldsWrite();}"/>
+							<mx:TextArea id="attrName" height="20" width="100%" cornerRadius="3"/>
 						</mx:HBox>
 						
 						<mx:HBox width="100%" verticalAlign="bottom">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'dname')}" width="{ident_2}" alpha="1.0"/>
-							<mx:TabNavigator id="dnameTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+							<mx:TabNavigator id="attrDnameTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
 								<!--
 								<mx:Canvas label="EN" width="100%" height="100%">
 									<mx:TextArea width="100%" height="20"/>
@@ -205,7 +232,7 @@
 						
 						<mx:HBox width="100%" verticalAlign="bottom">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'errvldmess')}" width="{ident_2}"/>
-							<mx:TabNavigator id="errmsgTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+							<mx:TabNavigator id="attrErrmsgTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
 								<!--
 								<mx:Canvas label="EN" width="100%" height="100%">
 									<mx:TextArea width="100%" height="20"/>
@@ -249,7 +276,7 @@
 						
 						<mx:HBox id="hbox1" width="100%" verticalAlign="middle">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'descript')}" width="{ident_2}"/>
-							<mx:TabNavigator id="descriptTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
+							<mx:TabNavigator id="attrDescriptTabs" width="100%" tabHeight="16" borderStyle="none" paddingTop="1">
 								<!--
 								<mx:Canvas label="EN" width="100%" height="100%">
 								<mx:TextArea width="100%" height="60"/>	
@@ -257,7 +284,8 @@
 								-->
 							</mx:TabNavigator>
 						</mx:HBox>
-						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'restore')}"/>
+						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'restore')}" click="attrFieldsRefresh();"/>
+						<mx:LinkButton label="test" click="{test();}"/>
 					</mx:Panel>
 				</mx:HBox>
             </mx:Canvas>

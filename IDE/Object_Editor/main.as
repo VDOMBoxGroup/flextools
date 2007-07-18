@@ -36,6 +36,8 @@ private var attributesCollection:XMLListCollection;
 private var previousAttr:int = -1;
 
 /* Multilingual strings collections for each TextArea */
+private var infoDnameCollector:Array = new Array();
+private var infoDescriptCollector:Array = new Array();
 private var attrDnameCollector:Array = new Array();
 private var attrErrmsgCollector:Array = new Array();
 private var attrDescriptCollector:Array = new Array();
@@ -76,6 +78,7 @@ private function createBasicAttr():void {
 	addNewAttribute();
 }
 
+/* attrFieldsWrite() writes the data from Attribute Form Fields to the XML in memory */
 private function attrFieldsWrite():void {
 	var i:uint;
 	var language:XML;
@@ -116,23 +119,31 @@ private function attrFieldsWrite():void {
 			}
 		}
 	}
-	
-	trace(attributesCollection);
 }
 
-private function attrFieldsRefresh():void {
+private function attrFieldsWriteNRefresh():void {
 	/* Saving previous Attribute */
 	attrFieldsWrite();
 	
 	/* Setting new Attribute as prevoius :) */
 	previousAttr = attrList.selectedIndex;
 	
+	attrFieldsRefresh();
+}
+
+/* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
+private function attrFieldsRefresh():void {	
 	if (previousAttr != -1) {
 		with (attributesCollection[previousAttr]) {
 			/* Loading simple properties */
 			attrName.text = @name;
+			defValue.text = @defval;
+			regExpVld.text = @regexp;
 			visinedChBox.selected = Number(@visined);
 			extChBox.selected = Number(@extended);
+
+			if (@itype == "Std") attributeInterfaceType.selectedIndex = 0;
+			if (@itype == "Ext") attributeInterfaceType.selectedIndex = 1;
 	
 			/* Loading multilingual properties */
 			i = 0;
@@ -151,54 +162,48 @@ private function attrFieldsRefresh():void {
 		}
 	}
 	
-	
 	panel1.visible = true;
 }
 
-private function createAttrLangsTabs():void {
+private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:int):void {
 	var tab:Canvas;
 	var textArea:TextArea;
 	var i:uint;
 	var language:XML;
-		
+//	if (viewForm != null) {
+		i = 0;
+		for each(language in supLanguages) {
+			tab = new Canvas();
+			Collector[i] = new TextArea();
+			Collector[i].height = txtHeight;
+			Collector[i].percentWidth = 100;
+			tab.label = language.@label;
+			tab.addChild(Collector[i]);
+			viewForm.addChild(tab);
+			i++;
+		}
+//	}
+}
+
+/* createAttrLangsTabs() creates the language labels (tabs) for each multilingual string on the Attributes properties tab */
+private function createAttrLangsTabs():void {
 	/* Display Name tabs */
-	i = 0;
-	for each(language in supLanguages) {
-		tab = new Canvas();
-		attrDnameCollector[i] = new TextArea();
-		attrDnameCollector[i].height = 20;
-		attrDnameCollector[i].percentWidth = 100;
-		tab.label = language.@label;
-		tab.addChild(attrDnameCollector[i]);
-		dnameTabs.addChild(tab);
-		i++;
-	}
+	createLangsTabsAt(attrDnameTabs, attrDnameCollector, 20);
 
 	/* Error Exp Validation Messages tabs */
-	i = 0;
-	for each(language in supLanguages) {
-		tab = new Canvas();
-		attrErrmsgCollector[i] = new TextArea();
-		attrErrmsgCollector[i].height = 20;
-		attrErrmsgCollector[i].percentWidth = 100;
-		tab.label = language.@label;
-		tab.addChild(attrErrmsgCollector[i]);
-		errmsgTabs.addChild(tab);
-		i++;
-	}	
+	createLangsTabsAt(attrErrmsgTabs, attrErrmsgCollector, 20);
 
 	/* Attribute Description tabs */
-	i = 0;
-	for each(language in supLanguages) {
-		tab = new Canvas();
-		attrDescriptCollector[i] = new TextArea();
-		attrDescriptCollector[i].height = 60;
-		attrDescriptCollector[i].percentWidth = 100;
-		tab.label = language.@label;
-		tab.addChild(attrDescriptCollector[i]);
-		descriptTabs.addChild(tab);
-		i++;
-	}	
+	createLangsTabsAt(attrDescriptTabs, attrDescriptCollector, 60);
+}
+
+/* createInformationLangsTabs() creates the language labels (tabs) for each multilingual string on the Information tab */
+private function createInformationLangsTabs():void {
+	/* Display Name tabs */
+	createLangsTabsAt(infoDnameTabs, infoDnameCollector, 20);
+
+	/* Attribute Description tabs */
+	createLangsTabsAt(infoDescriptTabs, infoDescriptCollector, 60);
 }
 
 private function lng(label:String):String {
@@ -228,10 +233,10 @@ private function langRefresh():void {
 	}
 
 	/* Flushing the ComboBoxes from the text in previous language */
-	ctgrsComboBox.text = "";
-	itypeComboBox.text = "";
-	if (attributeInterfaceType != null) attributeInterfaceType.text = "";
-	if (stdInterfaceType != null) stdInterfaceType.text = "";
+	ctgrsComboBox.selectedItem = ctgrsComboBox.selectedItem;
+	itypeComboBox.selectedItem = itypeComboBox.selectedItem;
+	if (attributeInterfaceType != null) attributeInterfaceType.selectedItem = attributeInterfaceType.selectedItem;
+	if (stdInterfaceType != null) stdInterfaceType.selectedItem = stdInterfaceType.selectedItem;
 
 	/* Creating the main menu */
 	menuBarCollection = new XMLListCollection(menubarXML);
@@ -271,4 +276,8 @@ private function checkStdInterfaceType():void {
 	} else {
 		currentState = "";
 	}
+}
+
+private function test():void {
+	attrDescriptTabs.removeAllChildren();
 }
