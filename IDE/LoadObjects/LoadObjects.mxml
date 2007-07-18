@@ -15,20 +15,24 @@
 			mySOAP.login('login Name', '777');
 		}
 		private function close_session():void{
-			Alert.show("Закрываем сессию");
+			//Alert.show("Закрываем сессию");
 			mySOAP.closeSession();
 		}
 		private function create_application():void{
-			Alert.show("Привет!");
+			mySOAP.createApplication();
+//			Alert.show("Привет!");
 		}
 		private function set_application():void{
-			Alert.show("Привет!");
+			mySOAP.setApplicationInfo();
+//			Alert.show("Привет!");
 		}
 		private function all_applications():void{
-			Alert.show("Привет!");
+			mySOAP.getType()
+//			Alert.show("Привет!");
 		}
 		private function all_types():void{
-			Alert.show("Привет!");
+			mySOAP.getTypeResource();
+//			Alert.show("Привет!");
 		}
 			
 		]]>
