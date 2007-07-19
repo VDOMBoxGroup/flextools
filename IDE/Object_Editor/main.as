@@ -18,10 +18,9 @@ import mx.containers.Canvas;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
-public const supLanguages:XMLList =
+public const supLanguages:XMLList = 
 	<>
-		<language label="EN" text="English"/>
-		<language label="RU" text="Русский"/>
+		<language label="" text=""/>
 	</>;
 
 [Bindable]
@@ -233,8 +232,8 @@ private function langRefresh():void {
 	}
 
 	/* Flushing the ComboBoxes from the text in previous language */
-	ctgrsComboBox.selectedItem = ctgrsComboBox.selectedItem;
-	itypeComboBox.selectedItem = itypeComboBox.selectedItem;
+	if (ctgrsComboBox != null) ctgrsComboBox.selectedItem = ctgrsComboBox.selectedItem;
+	if (itypeComboBox != null) itypeComboBox.selectedItem = itypeComboBox.selectedItem;
 	if (attributeInterfaceType != null) attributeInterfaceType.selectedItem = attributeInterfaceType.selectedItem;
 	if (stdInterfaceType != null) stdInterfaceType.selectedItem = stdInterfaceType.selectedItem;
 
@@ -278,6 +277,10 @@ private function checkStdInterfaceType():void {
 	}
 }
 
-private function test():void {
-	attrDescriptTabs.removeAllChildren();
+private function checkForLanguageSelection():void {
+	if (nativeLanguageComboBox.selectedItem != null) {
+		supLanguages.@label = nativeLanguageComboBox.selectedItem.@label;
+		supLanguages.@text = nativeLanguageComboBox.selectedItem.@text;
+		vs.selectedChild = mainView;
+	}
 }
