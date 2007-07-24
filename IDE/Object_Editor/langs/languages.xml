@@ -2,4 +2,5 @@
 <root>
 	<language label="EN" text="English"/>
 	<language label="RU" text="Russian"/>
+	<language label="FR" text="French"/>
 </root>
