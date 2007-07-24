@@ -28,8 +28,21 @@
 					<mx:Label text="Language:"/>
 					<mx:ComboBox width="200" id="addLanguageComboBox" dataProvider="{langsSource.language}" labelField="@text" height="20"></mx:ComboBox>
 					<mx:LinkButton label="add" click="{addSupLanguage();}"/>
+					<mx:LinkButton label="cancel" click="{currentState = '';}"/>
 				</mx:HBox>
 			</mx:AddChild>
+		</mx:State>
+		<mx:State name="remLanguage">
+			<mx:AddChild relativeTo="{panel2}" position="lastChild">
+				<mx:HBox width="100%">
+					<mx:Spacer width="{ident_1}"/>
+					<mx:Label text="Language:"/>
+					<mx:ComboBox width="200" id="remLanguageComboBox" dataProvider="{supLanguages.language}" labelField="@text" height="20"></mx:ComboBox>
+					<mx:LinkButton label="remove" click="{removeSupLanguage();}"/>
+					<mx:LinkButton label="cancel" click="{currentState = '';}"/>
+				</mx:HBox>
+			</mx:AddChild>
+			<mx:RemoveChild target="{hbox3}"/>
 		</mx:State>
 	</mx:states>
 
@@ -177,8 +190,8 @@
 						</mx:HBox>
 						<mx:HBox width="100%" id="hbox3" verticalAlign="middle">
 							<mx:Spacer width="{ident_1}"/>
-							<mx:LinkButton label="add" height="20" click="{currentState = 'addLanguage';}"/>
-							<mx:LinkButton label="remove" height="20"/>
+							<mx:LinkButton label="add" height="20" click="{currentState = 'addLanguage';}" id="linkbutton2"/>
+							<mx:LinkButton label="remove" height="20" id="linkbutton1" click="{currentState = 'remLanguage'}"/>
 						</mx:HBox>
 					</mx:Panel>
 				</mx:HBox>
@@ -226,8 +239,10 @@
 						</mx:HBox>
 						
 	 					<mx:CheckBox id="visinedChBox" label="{langData.language.(@id == langStr).sentence.(@label == 'visined')}"/>
-	 					
+						
+						<!-- Removed with new XML Specification	 					
 	 					<mx:CheckBox id="extChBox" label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" toolTip="Is this attribute is a simple value or a long text"/>
+	 					-->
 	 					
 						<mx:HBox width="100%">
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'itype')}:" width="{ident_2}"
@@ -268,11 +283,9 @@
             </mx:Canvas>
 			<mx:Canvas label="WCAG" width="100%" height="100%">
 			</mx:Canvas>
-			<mx:Canvas label="WYSIWYG" width="100%" height="100%">
-			</mx:Canvas>
 			<mx:Canvas label="SourceCode" width="100%" height="100%">
 			</mx:Canvas>
-			<mx:Canvas label="Libraries" width="100%" height="330">
+			<mx:Canvas label="Libraries" width="100%" height="100%">
 			</mx:Canvas>
 			<mx:Canvas label="Target XML" width="100%" height="100%" show="{buildObjectXML();}">
 				<mx:TextArea id="targetXMLTextArea" width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="auto"/>

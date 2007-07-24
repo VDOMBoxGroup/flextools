@@ -15,6 +15,7 @@ import flash.net.URLLoader;
 import flash.net.URLRequest;
 import mx.controls.TextArea;
 import mx.containers.Canvas;
+import mx.containers.TabNavigator;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
@@ -26,7 +27,7 @@ public const supLanguages:XML =
 [Bindable]
 private var mainDataFile:XML;
 [Bindable]
-private var langStr:String = new String("RU");
+private var langStr:String = new String("EN");
 [Bindable]		
 private var menuBarCollection:XMLListCollection;
 private var menubarXML:XMLList = new XMLList;
@@ -35,6 +36,8 @@ private var attributesCollection:XMLListCollection;
 private var previousAttr:int = -1;
 [Bindable]
 private var objectXML:XML;
+private var language:XML = new XML();  /* used in For Each cycles */
+private var attribute:XML = new XML();  /* used in For Each cycles */
 private var lang_id:int = 100;
 
 /* Multilingual strings collections for each TextArea */
@@ -44,15 +47,16 @@ private var attrDnameCollector:Array = new Array();
 private var attrErrmsgCollector:Array = new Array();
 private var attrDescriptCollector:Array = new Array();
 
-/* **** Start() is the main function, that is being executed as soon as form created **** */
 public function start():void {
-	/* langRefresh() creating the main menu and setting up some global variables. It also applying multilanguage support */
+/* **** Start() is the main function, that is being executed as soon as form created **** */
+
 	langRefresh();
 	createBasicAttr();
 }
 
 private function addNewAttribute():void {
-	/* addNewAttribute() Adding new empty Attribute to the Attributes list */
+/* addNewAttribute() Adding new empty Attribute to the Attributes list */
+
 	attributesCollection.addItem (
 		<attribute label="New Attribute" name="New Attribute" defval="" regexp="" visined="0" extended="0" itype="">
 			<dname></dname>
@@ -80,8 +84,9 @@ private function createBasicAttr():void {
 	addNewAttribute();
 }
 
-/* attrFieldsWrite() writes the data from Attribute Form Fields to the XML in memory */
 private function attrFieldsWrite():void {
+/* attrFieldsWrite() writes the data from Attribute Form Fields to the XML in memory */
+
 	var i:uint;
 	var language:XML;
 	
@@ -93,7 +98,9 @@ private function attrFieldsWrite():void {
 			@defval = defValue.text;
 			@regexp = regExpVld.text;
 			@visined = Number(visinedChBox.selected);
+			/* Removed with new XML specification *
 			@extended = Number(extChBox.selected);
+			*/
 			@itype = attributeInterfaceType.selectedItem.data;
 
 			/* Writing multilingual properties */
@@ -133,8 +140,9 @@ private function attrFieldsWriteNRefresh():void {
 	attrFieldsRefresh();
 }
 
-/* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
 private function attrFieldsRefresh():void {	
+/* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
+
 	if (previousAttr != -1) {
 		with (attributesCollection[previousAttr]) {
 			/* Loading simple properties */
@@ -142,8 +150,11 @@ private function attrFieldsRefresh():void {
 			defValue.text = @defval;
 			regExpVld.text = @regexp;
 			visinedChBox.selected = Number(@visined);
+			
+			/* Removed with new XML specification *
 			extChBox.selected = Number(@extended);
-
+			*/
+			
 			if (@itype == "Std") attributeInterfaceType.selectedIndex = 0;
 			if (@itype == "Ext") attributeInterfaceType.selectedIndex = 1;
 	
@@ -164,7 +175,7 @@ private function attrFieldsRefresh():void {
 		}
 	}
 	
-	attributesPanel.visible = true;
+	if (attributesPanel != null) attributesPanel.visible = true;
 }
 
 private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:int):void {
@@ -187,8 +198,19 @@ private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:i
 	}
 }
 
-/* createAttrLangsTabs() creates the language labels (tabs) for each multilingual string on the Attributes properties tab */
+private function createInformationLangsTabs():void {
+/* createInformationLangsTabs() creates the language labels (tabs) for each multilingual string on the Information tab */
+
+	/* Display Name tabs */
+	createLangsTabsAt(infoDnameTabs, infoDnameCollector, 20);
+	
+	/* Attribute Description tabs */
+	createLangsTabsAt(infoDescriptTabs, infoDescriptCollector, 60);
+}
+
 private function createAttrLangsTabs():void {
+/* createAttrLangsTabs() creates the language labels (tabs) for each multilingual string on the Attributes properties tab */
+
 	/* Display Name tabs */
 	createLangsTabsAt(attrDnameTabs, attrDnameCollector, 20);
 
@@ -199,22 +221,16 @@ private function createAttrLangsTabs():void {
 	createLangsTabsAt(attrDescriptTabs, attrDescriptCollector, 60);
 }
 
-/* createInformationLangsTabs() creates the language labels (tabs) for each multilingual string on the Information tab */
-private function createInformationLangsTabs():void {
-	/* Display Name tabs */
-	createLangsTabsAt(infoDnameTabs, infoDnameCollector, 20);
-
-	/* Attribute Description tabs */
-	createLangsTabsAt(infoDescriptTabs, infoDescriptCollector, 60);
-}
-
 private function lng(label:String):String {
-	/* lng() used only in case to have short representation of such long string :) */
-	/* Used in menu creation function langRefresh() */
+/* lng() used only in case to have short representation of such long string :) */
+/* Used in menu creation function langRefresh() */
+
 	return langData.language.(@id == langStr).sentence.(@label == label).toString();
 }
 
 private function langRefresh():void {
+/* langRefresh() creating the main menu and setting up some global variables. It also applying multilanguage support */
+
 	/* Setting up new (in new language) main menu items */
 	menubarXML = 
 	<>
@@ -244,39 +260,54 @@ private function langRefresh():void {
 	menuBarCollection = new XMLListCollection(menubarXML);
 }
 
+private function removeTabsAt(tn:TabNavigator):void {
+	if (tn != null) {
+		tn.removeAllChildren();
+	}
+}
+
 private function addSupLanguage():void {
 	if (addLanguageComboBox.selectedItem != null) {
-		/* Saving current state of the Object XML (to store already typed language data */
-		buildObjectXML();
-		
 		if (supLanguages.language.(@label == addLanguageComboBox.selectedItem.@label).toXMLString() != "") {
 			Alert.show("Sorry, you have already have the same one", "Adding language");
 		} else {
+			/* Saving current state of the Object XML (to store already typed language data */
+			buildObjectXML();
+
 			supLanguages.appendChild(<language label={addLanguageComboBox.selectedItem.@label} text={addLanguageComboBox.selectedItem.@text}/>);
 			currentState = "";
-		}
-		
-		/* Refreshing supported Languages Field */
-		supLangsTextArea.text = "";
-		for each(var language:XML in supLanguages.language) {
-			supLangsTextArea.text += language.@label + " ";
-		}
-		
-		/* Refreshing multilingual fields, creating(removing) addidation tabs */
-		infoDnameTabs.removeAllChildren();
-		infoDescriptTabs.removeAllChildren();
-		if (attrDnameTabs != null) attrDnameTabs.removeAllChildren();
-		if (attrErrmsgTabs != null) attrErrmsgTabs.removeAllChildren();
-		if (attrDescriptTabs != null) attrDescriptTabs.removeAllChildren();
 
-		infoDnameCollector = new Array();
-		infoDescriptCollector = new Array();
-		attrDnameCollector = new Array();
-		attrErrmsgCollector = new Array();
-		attrDescriptCollector = new Array();
+			/* Refreshing supported Languages TextArea Field */
+			supLangsTextArea.text = "";
+			for each(var language:XML in supLanguages.language) {
+				supLangsTextArea.text += language.@label + " ";
+			}
 
-		createInformationLangsTabs();
-		createAttrLangsTabs();
+			/* Refreshing multilingual fields, creating(removing) addidation tabs */
+			removeTabsAt(infoDnameTabs);
+			removeTabsAt(infoDescriptTabs);			
+			removeTabsAt(attrDnameTabs);			
+			removeTabsAt(attrErrmsgTabs);
+			removeTabsAt(attrDescriptTabs);
+
+			infoDnameCollector = new Array();
+			infoDescriptCollector = new Array();
+			attrDnameCollector = new Array();
+			attrErrmsgCollector = new Array();
+			attrDescriptCollector = new Array();
+
+			createInformationLangsTabs();
+			createAttrLangsTabs();
+
+			/* Restoring multilingual data from the Object XML in memory */
+			var i:int = 0;
+			for each(language in supLanguages.language) {
+				infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "1");
+				infoDescriptCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "2");
+				i++;
+			}
+			attrFieldsRefresh();
+		}
 	}
 }
 
@@ -358,38 +389,60 @@ private function buildObjectXML():void {
 	/* adding multilingual data */
 	
 	/* DisplayName field */
-	objectXML.Information.appendChild(<DisplayName>#Lang(1)</DisplayName>);
+	objectXML.Information.appendChild(<DisplayName LangData="1">#Lang(1)</DisplayName>);
 	/* Description field */
-	objectXML.Information.appendChild(<Description>#Lang(2)</Description>);
+	objectXML.Information.appendChild(<Description LangData="2">#Lang(2)</Description>);
 
 	/* Adding multilingual part of object XML */
+
 	var i:int = 0;
-	for each(var language:XML in supLanguages.language) {
+	for each(language in supLanguages.language) {
 		if (objectXML.Languages.Language.(@Code == language.@label).toXMLString() == "")
 			objectXML.Languages.appendChild(<Language Code={language.@label}></Language>);
 
 		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="1">{infoDnameCollector[i].text}</Sentence>);					
 		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="2">{infoDescriptCollector[i].text}</Sentence>);					
 
-		for each(var attribute:XML in attributesCollection) {
-			objectXML.Attributes.appendChild(
+		lang_id = 100;
+		for each(attribute in attributesCollection) {
+			if (objectXML.Attributes.Attribute.(Name == attribute.@name).toXMLString() == "") {
+			var tmpAttribute:XML = 
 				<Attribute>
-					<Name></Name>
-					<DisplayName></DisplayName>
-					<DefaultValue></DefaultValue>
-					<RegularExpressionValidation></RegularExpressionValidation>
-					<ErrorValidationMessage></ErrorValidationMessage>
-					<Visible></Visible>
-					<Description></Description>	
-					<InterfaceType></InterfaceType>
-					<CodeInterface></CodeInterface>
-				</Attribute>
+					<Name>{attribute.@name}</Name>
+					<DisplayName LangData={lang_id}>#Lang({lang_id})</DisplayName>
+					<DefaultValue>{attribute.@defval}</DefaultValue>
+					<RegularExpressionValidation>{attribute.@regexp}</RegularExpressionValidation>
+					<ErrorValidationMessage LangData={lang_id + 1}>#Lang({lang_id + 1})</ErrorValidationMessage>
+					<Visible>{attribute.@visined}</Visible>
+					<Description LangData={lang_id + 2}>#Lang({lang_id + 2})</Description>	
+					<InterfaceType>{attribute.@itype}</InterfaceType>
+					<CodeInterface>{attribute.codeinterface.toString()}</CodeInterface>
+				</Attribute>;
+				
+			objectXML.Attributes.appendChild(tmpAttribute);
+			}
+			
+			objectXML.Languages.Language.(@Code == language.@label).appendChild (
+				<Sentence ID={tmpAttribute.DisplayName.@LangData}>
+					{attribute.dname.lang.(@label == language.@label).@text}
+				</Sentence>
 			);
+			objectXML.Languages.Language.(@Code == language.@label).appendChild (
+				<Sentence ID={tmpAttribute.ErrorValidationMessage.@LangData}>
+					{attribute.err.lang.(@label == language.@label).@text}
+				</Sentence>
+			);
+			objectXML.Languages.Language.(@Code == language.@label).appendChild (
+				<Sentence ID={tmpAttribute.Description.@LangData}>
+					{attribute.descript.lang.(@label == language.@label).@text}
+				</Sentence>
+			);
+			
+			lang_id += 3;
 		}
-		
 		i++;
 	}
 	
-	targetXMLTextArea.text = objectXML.toXMLString();
-	trace(attributesCollection);
+	/* Show object XML in TextArea on the Target XML tab */	
+	if (targetXMLTextArea != null) targetXMLTextArea.text = objectXML.toXMLString();
 }
