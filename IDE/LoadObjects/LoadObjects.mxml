@@ -11,6 +11,7 @@
 	//		Alert.show("Привет!");
 			mySOAP = new Soap;
 		}
+		Math.sin(123);
 		private function set_ses():void{
 			mySOAP.login('login Name', '777');
 		}
@@ -38,14 +39,20 @@
 		]]>
 	</mx:Script>
 	<mx:Panel x="10" y="10" width="644" height="318" layout="absolute">
-		<mx:Button x="493" y="10" label="Установка сесси" click="set_ses()"/>
-		<mx:Button x="493" y="40" label="close session " width="121" click="close_session()"/>
-		<mx:Button x="493" y="70" label="create application" width="121" click="create_application()"/>
-		<mx:Button x="493" y="100" label="set application" width="121" click="set_application()"/>
-		<mx:Button x="493" y="130" label=" all applications" width="121" click="all_applications()"/>
-		<mx:Button x="493" y="160" label="all types" width="121" click="all_types()"/>
-		<mx:TextArea x="10" y="27" height="241" width="464"/>
+		<mx:Button x="298" y="10" label="Установка сесси" click="set_ses()"/>
+		<mx:Button x="298" y="40" label="close session " width="121" click="close_session()"/>
+		<mx:Button x="298" y="70" label="create application" width="121" click="create_application()"/>
+		<mx:Button x="298" y="100" label="set application" width="121" click="set_application()"/>
+		<mx:Button x="298" y="130" label=" all applications" width="121" click="all_applications()"/>
+		<mx:Button x="298" y="160" label="all types" width="121" click="all_types()"/>
+		<mx:TextArea x="10" y="27" height="241" width="271"/>
 		<mx:Label x="10" y="1" text="Trace:" fontWeight="bold" />
+		<mx:Button x="444" y="10" label="render object to xml"/>
+		<mx:Button x="444" y="40" label="create object"/>
+		<mx:Button x="444" y="70" label="get application top-level "/>
+		<mx:Button x="444" y="100" label="get object's child objects"/>
+		<mx:Button x="444" y="130" label="get application language"/>
+		<mx:Button x="444" y="160" label="set object attribute value"/>
 	</mx:Panel>
 	
 </mx:Application>

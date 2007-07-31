@@ -20,7 +20,7 @@ package com.vdom.connect
 		private var sid:String; //sission Identifier
 		
 		// initialization
-		public function Soap():void {
+		public  function init():void {
 			ws.wsdl = 'http://192.168.0.23:82/vdom.wsdl';
 			ws.useProxy = false;
 			ws.loadWSDL();		
@@ -153,7 +153,7 @@ package com.vdom.connect
 			} else{
 				Alert.show("setIpplicationInfo: " + myXML);
 				// <Types>
-			    //     <Application id="id приложения" name="имя приложения"/>
+			    //     <Type id="id типа" name="имя типа"/>
         		// 	...
 				// </Types>
 				ws.list_applications.removeEventListener(ResultEvent.RESULT,listApplicationsCompleteListener);
@@ -228,6 +228,22 @@ package com.vdom.connect
 				ws.list_applications.removeEventListener(ResultEvent.RESULT,getApplicationResourceCompleteListener);
 			}
 		}
+		//10. render object to xml presentation  - render_wysiwyg
+		
+		//11. create object - create_object
+		
+		//12. get application top-level objects  - get_top_objects
+		
+		//13. get object's child objects'  - get_child_objects
+		
+		//14. get application language data - get_application_language_data
+		
+		//15. set object attribute value - set_attribute
+		
+		//16. set object value
+		//17. set object script
+		//18. set application resource
+		//19. delete object
 		
 		//Error
 		private function errorListener(event:FaultEvent):void{
