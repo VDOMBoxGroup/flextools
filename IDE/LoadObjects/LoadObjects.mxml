@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:example="com.example.programmingas3.fileio.*" xmlns="*" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
 			import com.vdom.connect.Soap;
@@ -9,35 +9,37 @@
 					
 		private function init():void{
 	//		Alert.show("Привет!");
-			mySOAP = new Soap;
+		 	Soap.init();
 		}
-		Math.sin(123);
+	
 		private function set_ses():void{
-			mySOAP.login('login Name', '777');
+			Soap.login('login Name', '777');
 		}
 		private function close_session():void{
 			//Alert.show("Закрываем сессию");
-			mySOAP.closeSession();
+			Soap.closeSession();
 		}
 		private function create_application():void{
-			mySOAP.createApplication();
+			Soap.createApplication();
 //			Alert.show("Привет!");
 		}
 		private function set_application():void{
-			mySOAP.setApplicationInfo();
+			Soap.setApplicationInfo();
+			Soap.getType();
 //			Alert.show("Привет!");
 		}
 		private function all_applications():void{
-			mySOAP.getType()
+			Soap.getType()
 //			Alert.show("Привет!");
 		}
 		private function all_types():void{
-			mySOAP.getApplicationResource();
+			Soap.getApplicationResource();
 //			Alert.show("Привет!");
 		}
 			
 		]]>
 	</mx:Script>
+	<example:FileUpload id="fileUpload" creationComplete="fileUpload.init(uploadProgress, cancelUpload);" />
 	<mx:Panel x="10" y="10" width="644" height="318" layout="absolute">
 		<mx:Button x="298" y="10" label="Установка сесси" click="set_ses()"/>
 		<mx:Button x="298" y="40" label="close session " width="121" click="close_session()"/>
@@ -46,13 +48,17 @@
 		<mx:Button x="298" y="130" label=" all applications" width="121" click="all_applications()"/>
 		<mx:Button x="298" y="160" label="all types" width="121" click="all_types()"/>
 		<mx:TextArea x="10" y="27" height="241" width="271"/>
-		<mx:Label x="10" y="1" text="Trace:" fontWeight="bold" />
+		<mx:Label x="10" y="1" text="Trace:" fontWeight="Upload"  click="fileUpload.startUpload();"/>
 		<mx:Button x="444" y="10" label="render object to xml"/>
 		<mx:Button x="444" y="40" label="create object"/>
 		<mx:Button x="444" y="70" label="get application top-level "/>
 		<mx:Button x="444" y="100" label="get object's child objects"/>
 		<mx:Button x="444" y="130" label="get application language"/>
 		<mx:Button x="444" y="160" label="set object attribute value"/>
+		
+		<mx:ProgressBar id="uploadProgress" label="" mode="manual"  x="289" y="220"/>
+		<mx:Button id="cancelUpload" label="Cancel" click="fileUpload.cancelUpload();" enabled="false"  x="374" y="190"/>
+		<mx:Button id="startUpload" label="Upload..." click="fileUpload.startUpload();"  x="289" y="190"/>
 	</mx:Panel>
 	
 </mx:Application>

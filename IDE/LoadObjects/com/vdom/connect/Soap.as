@@ -1,6 +1,6 @@
 package com.vdom.connect
 {
-
+	import mx.core.Singleton;	
 	import mx.rpc.soap.WebService;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.events.FaultEvent;
@@ -12,15 +12,20 @@ package com.vdom.connect
 	import mx.controls.Alert;
 	import com.gsolo.encryption.Code;
 	
-	public class Soap 
+	public class Soap //extends EventDispatcher
 	{
-		private var code:Code;
+		private static var code:Code;
 		private var dispatcher:EventDispatcher;
-		private var ws:WebService = new WebService;
-		private var sid:String; //sission Identifier
+		private static var ws:WebService = new WebService;
+		private static var sid:String; //sission Identifier
+		
+		public static function getSid():String{
+			return sid;
+		}
+	//	public static var dispatchEvent;
 		
 		// initialization
-		public  function init():void {
+		public static function init():void {
 			ws.wsdl = 'http://192.168.0.23:82/vdom.wsdl';
 			ws.useProxy = false;
 			ws.loadWSDL();		
@@ -28,14 +33,14 @@ package com.vdom.connect
 		}
 		
 		// 1 - open_session
-		public function login(login:String, password:String):void {
+		public  static function login(login:String, password:String):void {
 			ws.open_session.arguments.name = login;
 			ws.open_session.arguments.pwd_md5 = MD5.encrypt(password);
 			ws.open_session();
 			ws.open_session.addEventListener(ResultEvent.RESULT,loginCompleteListener);
 		}
 
-		private function loginCompleteListener(event:ResultEvent):void{
+		private static function loginCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.open_session.lastResult.Result);
 			// run session protector
 			code = new Code(myXML.HashString);
@@ -43,22 +48,24 @@ package com.vdom.connect
 			
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
-			} else{
+			} else{  
 				sid = myXML.SessionId;
 				
 				Alert.show("Password and User correct" );
 				ws.open_session.removeEventListener(ResultEvent.RESULT,loginCompleteListener);
+	//			this.dispatchEvent(new Event('loginLoadComplete'));
+				
 			}
 		}	
 		
 		// 2 - close_session
-		public function closeSession():void {
+		public static function closeSession():void {
 			ws.close_session.arguments.sid = sid;
 			ws.close_session();
 			ws.close_session.addEventListener(ResultEvent.RESULT,closeSessionCompleteListener);	
 		}
 
-		private function closeSessionCompleteListener(event:ResultEvent):void{
+		private static function closeSessionCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.close_session.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
@@ -70,15 +77,15 @@ package com.vdom.connect
 		
 		
 		// 3 - create application
-		public function createApplication():void {
+		public static function createApplication():void {
 			ws.create_application.arguments.sid = sid;
 			ws.create_application.arguments.skey = code.skey();			
 			ws.create_application();
 			ws.create_application.addEventListener(ResultEvent.RESULT,createApplicationCompleteListener);	
 		}
 
-		private function createApplicationCompleteListener(event:ResultEvent):void{
-			var myXML:XML = XML(ws.create_application.lastResult.Result);
+		private static function createApplicationCompleteListener(event:ResultEvent):void{
+			var myXML:XMLList = XMLList(ws.create_application.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
 			} else{
@@ -89,7 +96,7 @@ package com.vdom.connect
 		}
 		
 		// 4 - set application general information
-		public function setApplicationInfo():void {
+		public static function setApplicationInfo():void {
 			
 			ws.set_application_info.arguments.sid = sid;
 			ws.set_application_info.arguments.skey = code.skey();
@@ -101,7 +108,7 @@ package com.vdom.connect
 			ws.set_application_info.addEventListener(ResultEvent.RESULT,setApplicationInfoCompleteListener);	
 		}
 
-		private function setApplicationInfoCompleteListener(event:ResultEvent):void{
+		private static function setApplicationInfoCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.set_application_info.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
@@ -113,7 +120,7 @@ package com.vdom.connect
 		}
 		
 		// 5 - get the list of all applications  'list_applications'
-		public function listApplications():void {
+		public static function listApplications():void {
 			
 			ws.list_applications.arguments.sid = sid;
 			ws.list_applications.arguments.skey = code.skey();
@@ -122,7 +129,7 @@ package com.vdom.connect
 			ws.list_applications.addEventListener(ResultEvent.RESULT,listApplicationsCompleteListener);	
 		}
 
-		private function listApplicationsCompleteListener(event:ResultEvent):void{
+		private static function listApplicationsCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.list_applications.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
@@ -137,7 +144,7 @@ package com.vdom.connect
 		}
 		 
 		// 6 - get the list of all types 'list_types'
-		public function listTypes():void {
+		public static function listTypes():void {
 			
 			ws.list_types.arguments.sid = sid;
 			ws.list_types.arguments.skey = code.skey();
@@ -146,7 +153,7 @@ package com.vdom.connect
 			ws.list_types.addEventListener(ResultEvent.RESULT,listTypesCompleteListener);	
 		}
 
-		private function listTypesCompleteListener(event:ResultEvent):void{
+		private static function listTypesCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.list_types.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
@@ -162,7 +169,7 @@ package com.vdom.connect
 				
 		
 		// 7 - get type description get_type
-		public function getType():void {
+		public static function getType():void {
 			
 			ws.get_type.arguments.sid = sid;
 			ws.get_type.arguments.skey = code.skey();
@@ -172,7 +179,7 @@ package com.vdom.connect
 			ws.get_type.addEventListener(ResultEvent.RESULT,getTypeCompleteListener);	
 		}
 
-		private function getTypeCompleteListener(event:ResultEvent):void{
+		private static function getTypeCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_type.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
@@ -184,7 +191,7 @@ package com.vdom.connect
 		}
 		
 		// 8 - get type resource get_type_resource
-		public function getTypeResource():void {
+		public static function getTypeResource():void {
 			
 			ws.get_type_resource.arguments.sid = sid;
 			ws.get_type_resource.arguments.skey = code.skey();
@@ -195,7 +202,7 @@ package com.vdom.connect
 			ws.get_type_resource.addEventListener(ResultEvent.RESULT,getTypeResourceCompleteListener);	
 		}
 
-		private function getTypeResourceCompleteListener(event:ResultEvent):void{
+		private static function getTypeResourceCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_type_resource.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
@@ -207,7 +214,7 @@ package com.vdom.connect
 		}
 		
 		// 9 -  get application resource  'get_application_resource'
-		public function getApplicationResource():void {
+		public static function getApplicationResource():void {
 			
 			ws.get_application_resource.arguments.sid = sid;
 			ws.get_application_resource.arguments.skey = code.skey();
@@ -218,7 +225,7 @@ package com.vdom.connect
 			ws.get_application_resource.addEventListener(ResultEvent.RESULT,getApplicationResourceCompleteListener);	
 		}
 
-		private function getApplicationResourceCompleteListener(event:ResultEvent):void{
+		private static function getApplicationResourceCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_application_resource.lastResult.Result);
 			if(myXML.Error.toString() != ''){
 				Alert.show("Error from server:\n" + myXML.Error );
@@ -228,6 +235,7 @@ package com.vdom.connect
 				ws.list_applications.removeEventListener(ResultEvent.RESULT,getApplicationResourceCompleteListener);
 			}
 		}
+		
 		//10. render object to xml presentation  - render_wysiwyg
 		
 		//11. create object - create_object
@@ -245,8 +253,29 @@ package com.vdom.connect
 		//18. set application resource
 		//19. delete object
 		
+		//20. get_echo
+		public static function getEcho():void {
+			
+			ws.get_echo.arguments.sid = sid;
+											
+			ws.get_echo();
+			ws.get_echo.addEventListener(ResultEvent.RESULT,getEchoCompleteListener);	
+		}
+
+		private static function getEchoCompleteListener(event:ResultEvent):void{
+			var myXML:XML = XML(ws.get_echo.lastResult.Result);
+			if(myXML.Error.toString() == 'Error'){
+				Alert.show("Error from server:\n" + myXML.Error );
+			} else{
+				Alert.show("getApplicationResource: \n" + ws.get_echo.lastResult.Result);
+				//trace("getEcho:_" + myXML.Error.toString()+'!')
+				// <Resource><![CDATA[resource data]]></Resource>
+				ws.list_applications.removeEventListener(ResultEvent.RESULT,getEchoCompleteListener);
+			}
+		}
+		
 		//Error
-		private function errorListener(event:FaultEvent):void{
+		private static function errorListener(event:FaultEvent):void{
 			Alert.show("Error:\n"+ event);
 		}		
 	}
