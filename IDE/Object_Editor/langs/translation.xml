@@ -57,6 +57,10 @@
     <sentence id="53" label="rmattr">Remove Attribute</sentence>
     <sentence id="54" label="apply">Apply</sentence>
     <sentence id="55" label="restore">Restore</sentence>
+    <sentence id="56" label="add">Add</sentence>
+    <sentence id="57" label="remove">Remove</sentence>
+    <sentence id="58" label="cancel">Cancel</sentence>
+    <sentence id="59" label="language">Language</sentence>
 </language>
 <language id="RU" label="Русский">
     <sentence id="0" label="file">Файл</sentence>
@@ -113,7 +117,11 @@
     <sentence id="51" label="title">Заголовок</sentence>
     <sentence id="52" label="info">Информация</sentence>
     <sentence id="53" label="rmattr">Убрать атрибут</sentence>
-    <sentence id="54" label="apply">Apply</sentence>
-    <sentence id="55" label="restore">Restore</sentence>
+    <sentence id="54" label="apply">Применить</sentence>
+    <sentence id="55" label="restore">Вернуть</sentence>
+    <sentence id="56" label="add">Добавить</sentence>
+    <sentence id="57" label="remove">Убрать</sentence>
+    <sentence id="58" label="cancel">Отмена</sentence>
+    <sentence id="59" label="language">Язык</sentence>
 </language>
 </root>

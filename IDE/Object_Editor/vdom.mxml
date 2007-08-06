@@ -25,10 +25,10 @@
 			<mx:AddChild relativeTo="{panel2}" position="lastChild">
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Spacer width="{ident_1}"/>
-					<mx:Label text="Language:"/>
+					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'language')}:"/>
 					<mx:ComboBox width="200" id="addLanguageComboBox" dataProvider="{langsSource.language}" labelField="@text" height="20"></mx:ComboBox>
-					<mx:LinkButton label="add" click="{addSupLanguage();}"/>
-					<mx:LinkButton label="cancel" click="{currentState = '';}"/>
+					<mx:LinkButton label="{langData.language.(@id == langStr).sentence.(@label == 'add')}" click="{addSupLanguage();}"/>
+					<mx:LinkButton label="{langData.language.(@id == langStr).sentence.(@label == 'cancel')}" click="{currentState = '';}"/>
 				</mx:HBox>
 			</mx:AddChild>
 		</mx:State>
@@ -36,17 +36,17 @@
 			<mx:AddChild relativeTo="{panel2}" position="lastChild">
 				<mx:HBox width="100%">
 					<mx:Spacer width="{ident_1}"/>
-					<mx:Label text="Language:"/>
+					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'language')}:"/>
 					<mx:ComboBox width="200" id="remLanguageComboBox" dataProvider="{supLanguages.language}" labelField="@text" height="20"></mx:ComboBox>
-					<mx:LinkButton label="remove" click="{removeSupLanguage();}"/>
-					<mx:LinkButton label="cancel" click="{currentState = '';}"/>
+					<mx:LinkButton label="{langData.language.(@id == langStr).sentence.(@label == 'remove')}" click="{removeSupLanguage();}"/>
+					<mx:LinkButton label="{langData.language.(@id == langStr).sentence.(@label == 'cancel')}" click="{currentState = '';}"/>
 				</mx:HBox>
 			</mx:AddChild>
 			<mx:RemoveChild target="{hbox3}"/>
 		</mx:State>
 	</mx:states>
 
-	<mx:Fade id="myFade"/> 
+	<mx:Fade id="myFade"/>
 	
 	<mx:ViewStack id="vs" width="100%" height="100%">
 	<mx:Canvas id="lngView" width="100%" height="100%">
@@ -171,12 +171,12 @@
 						
 						<mx:HBox width="100%" verticalAlign="middle">
 							<mx:Label id="verLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'version')}" width="{ident_1}"/>
-							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+							<mx:TextArea id="versionTextArea" width="100%" height="20" cornerRadius="3"/>
 						</mx:HBox>
 						
 						<mx:HBox width="100%" verticalAlign="middle">
 							<mx:Label id="opriorLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'optimprior')}" width="{ident_1}"/>
-							<mx:TextArea width="100%" height="20" cornerRadius="3"/>
+							<mx:TextArea id="opriorTextArea" width="100%" height="20" cornerRadius="3"/>
 						</mx:HBox>
 						
 						<mx:HBox width="100%" verticalAlign="middle">
@@ -190,8 +190,8 @@
 						</mx:HBox>
 						<mx:HBox width="100%" id="hbox3" verticalAlign="middle">
 							<mx:Spacer width="{ident_1}"/>
-							<mx:LinkButton label="add" height="20" click="{currentState = 'addLanguage';}" id="linkbutton2"/>
-							<mx:LinkButton label="remove" height="20" id="linkbutton1" click="{currentState = 'remLanguage'}"/>
+							<mx:LinkButton label="{langData.language.(@id == langStr).sentence.(@label == 'add')}" height="20" click="{currentState = 'addLanguage';}" id="linkbutton2"/>
+							<mx:LinkButton label="{langData.language.(@id == langStr).sentence.(@label == 'remove')}" height="20" id="linkbutton1" click="{currentState = 'remLanguage'}"/>
 						</mx:HBox>
 					</mx:Panel>
 				</mx:HBox>
@@ -289,6 +289,12 @@
 			</mx:Canvas>
 			<mx:Canvas label="Target XML" width="100%" height="100%" show="{buildObjectXML();}">
 				<mx:TextArea id="targetXMLTextArea" width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="auto"/>
+			</mx:Canvas>
+			<mx:Canvas label="Source XML" width="100%" height="100%">
+				<mx:VBox height="100%" width="100%" horizontalAlign="right">
+					<mx:TextArea id="sourceXMLTextArea" width="100%" height="100%" verticalScrollPolicy="auto" horizontalScrollPolicy="auto"/>
+					<mx:Button x="965" y="611" label="Load" click="{loadObjectXML();}"/>
+				</mx:VBox>
 			</mx:Canvas>
         </mx:TabNavigator>
         <mx:Label id="hint" text="V.D.O.M. next generation v2.0"/>

@@ -16,6 +16,7 @@ import flash.net.URLRequest;
 import mx.controls.TextArea;
 import mx.containers.Canvas;
 import mx.containers.TabNavigator;
+import mx.charts.chartClasses.RenderData;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
@@ -33,7 +34,7 @@ private var menuBarCollection:XMLListCollection;
 private var menubarXML:XMLList = new XMLList;
 [Bindable]
 private var attributesCollection:XMLListCollection;
-private var previousAttr:int = -1;
+private var currentAttr:int = -1;
 [Bindable]
 private var objectXML:XML;
 private var language:XML = new XML();  /* used in For Each cycles */
@@ -68,13 +69,14 @@ private function addNewAttribute():void {
 }
 
 private function removeAttributeAlert():void {
-	if (attrList.selectedIndex != -1) Alert.show("Do you want to proceed?", "Delete Attribute", 3, this, removeAttribute);
+	if (attrList.selectedIndex != -1)
+		Alert.show("Do you want to proceed?", "Delete Attribute", 3, this, removeAttribute);
 }
 
 private function removeAttribute(event:CloseEvent):void {
 	if (event.detail == Alert.YES) {
 		attributesCollection.removeItemAt(attrList.selectedIndex);
-		previousAttr = -1;
+		currentAttr = -1;
 		attributesPanel.visible = false;
 	}
 }
@@ -90,8 +92,8 @@ private function attrFieldsWrite():void {
 	var i:uint;
 	var language:XML;
 	
-	if (previousAttr != -1) {
-		with (attributesCollection[previousAttr]) {
+	if (currentAttr != -1) {
+		with (attributesCollection[currentAttr]) {
 			/* Writing basic simple properties */
 			@name = attrName.text;
 			@label = attrName.text;
@@ -135,7 +137,7 @@ private function attrFieldsWriteNRefresh():void {
 	attrFieldsWrite();
 	
 	/* Setting new Attribute as prevoius :) */
-	previousAttr = attrList.selectedIndex;
+	currentAttr = attrList.selectedIndex;
 	
 	attrFieldsRefresh();
 }
@@ -143,13 +145,13 @@ private function attrFieldsWriteNRefresh():void {
 private function attrFieldsRefresh():void {	
 /* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
 
-	if (previousAttr != -1) {
-		with (attributesCollection[previousAttr]) {
+	if (currentAttr != -1) {
+		with (attributesCollection[currentAttr]) {
 			/* Loading simple properties */
 			attrName.text = @name;
 			defValue.text = @defval;
 			regExpVld.text = @regexp;
-			visinedChBox.selected = Number(@visined);
+			visinedChBox.selected = Boolean(Number(@visined));
 			
 			/* Removed with new XML specification *
 			extChBox.selected = Number(@extended);
@@ -176,7 +178,7 @@ private function attrFieldsRefresh():void {
 	}
 	
 	if (attributesPanel != null) attributesPanel.visible = true;
-}
+}	
 
 private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:int):void {
 	var tab:Canvas;
@@ -246,7 +248,7 @@ private function langRefresh():void {
 	</>;	
 
 	/* Adding the list of avaliable _Interface_ languages from the source XML to the Languages main menu item */
-	for each(var language:XML in langData.language) {
+	for each(language in langData.language) {
 		menubarXML.(@data == "langs").appendChild(<menuitem type="radio" label={language.@label} data={'lng' + language.@id} />);
 	}
 
@@ -266,6 +268,39 @@ private function removeTabsAt(tn:TabNavigator):void {
 	}
 }
 
+private function rebuildInterface():void {
+	/* Refreshing supported Languages TextArea Field */
+	supLangsTextArea.text = "";
+	for each(var language:XML in supLanguages.language) {
+		supLangsTextArea.text += language.@label + " ";
+	}
+
+	/* Refreshing multilingual fields, creating(removing) addidation tabs */
+	removeTabsAt(infoDnameTabs);
+	removeTabsAt(infoDescriptTabs);			
+	removeTabsAt(attrDnameTabs);			
+	removeTabsAt(attrErrmsgTabs);
+	removeTabsAt(attrDescriptTabs);
+	
+	infoDnameCollector = new Array();
+	infoDescriptCollector = new Array();
+	attrDnameCollector = new Array();
+	attrErrmsgCollector = new Array();
+	attrDescriptCollector = new Array();
+
+	createInformationLangsTabs();
+	createAttrLangsTabs();
+
+	/* Restoring multilingual data from the Object XML in memory */
+	var i:int = 0;
+	for each(language in supLanguages.language) {
+		infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "1");
+		infoDescriptCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "2");
+		i++;
+	}
+	attrFieldsRefresh();
+}
+
 private function addSupLanguage():void {
 	if (addLanguageComboBox.selectedItem != null) {
 		if (supLanguages.language.(@label == addLanguageComboBox.selectedItem.@label).toXMLString() != "") {
@@ -275,44 +310,40 @@ private function addSupLanguage():void {
 			buildObjectXML();
 
 			supLanguages.appendChild(<language label={addLanguageComboBox.selectedItem.@label} text={addLanguageComboBox.selectedItem.@text}/>);
+
+			/* Rebuilding programm interface */
 			currentState = "";
-
-			/* Refreshing supported Languages TextArea Field */
-			supLangsTextArea.text = "";
-			for each(var language:XML in supLanguages.language) {
-				supLangsTextArea.text += language.@label + " ";
-			}
-
-			/* Refreshing multilingual fields, creating(removing) addidation tabs */
-			removeTabsAt(infoDnameTabs);
-			removeTabsAt(infoDescriptTabs);			
-			removeTabsAt(attrDnameTabs);			
-			removeTabsAt(attrErrmsgTabs);
-			removeTabsAt(attrDescriptTabs);
-
-			infoDnameCollector = new Array();
-			infoDescriptCollector = new Array();
-			attrDnameCollector = new Array();
-			attrErrmsgCollector = new Array();
-			attrDescriptCollector = new Array();
-
-			createInformationLangsTabs();
-			createAttrLangsTabs();
-
-			/* Restoring multilingual data from the Object XML in memory */
-			var i:int = 0;
-			for each(language in supLanguages.language) {
-				infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "1");
-				infoDescriptCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "2");
-				i++;
-			}
-			attrFieldsRefresh();
+			rebuildInterface();
 		}
 	}
 }
 
 private function removeSupLanguage():void {
-	
+	if (remLanguageComboBox.selectedItem != null) {
+		if (supLanguages.children().length() == 1) {
+			Alert.show("Sorry, you can not remove the last Language", "Removing language");
+		} else {
+			/* Saving current state of the Object XML (to store already typed language data) */
+			buildObjectXML();
+			
+			/* Deleting selected language from the supported laguages list */
+			var i:int;
+			
+			for (i = 0; i < supLanguages.children().length(); i++) {
+				if (supLanguages.language[i].@label == remLanguageComboBox.selectedItem.@label) {
+					delete supLanguages.language[i];				
+				}
+			}
+
+			/* Rebuilding programm interface */
+			currentState = "";
+			rebuildInterface();
+			
+//			supLanguages.language.(@label == "EN").removeAllChildren();
+//			delete supLanguages.language.(@label == "EN");
+			trace(supLanguages.language.toXMLString());
+		}
+	}
 }
 
 private function menuHandler(event:MenuEvent):void {
@@ -382,7 +413,7 @@ private function buildObjectXML():void {
 	objectXML.Information.appendChild(<Dynamic>{Number(dynamicChkBox.selected)}</Dynamic>);
 	objectXML.Information.appendChild(<Category>{ctgrsComboBox.selectedItem.data}</Category>);
 	objectXML.Information.appendChild(<InterfaceType>{itypeComboBox.selectedItem.data}</InterfaceType>);
-	objectXML.Information.appendChild(<OptimizationPriority>{itypeComboBox.selectedItem.data}</OptimizationPriority>);
+	objectXML.Information.appendChild(<OptimizationPriority>{opriorTextArea.text}</OptimizationPriority>);
 	objectXML.Information.appendChild(<Containers>{containersTextArea.text}</Containers>);
 	objectXML.Information.appendChild(<Languages>{supLangsTextArea.text}</Languages>);
 	
@@ -445,4 +476,29 @@ private function buildObjectXML():void {
 	
 	/* Show object XML in TextArea on the Target XML tab */	
 	if (targetXMLTextArea != null) targetXMLTextArea.text = objectXML.toXMLString();
+}
+
+private function loadObjectXML():void {
+	objectXML = new XML(sourceXMLTextArea.text);
+
+	/* Load Basic properties */
+	onameTextArea.text = objectXML.Information.Name;
+	mvChkBox.selected = Boolean(Number(objectXML.Information.Moveable));
+	dynamicChkBox.selected = Boolean(Number(objectXML.Information.Dynamic));
+	opriorTextArea.text = objectXML.Information.OptimizationPriority;
+	containersTextArea.text = objectXML.Information.Containers;
+	supLangsTextArea.text = objectXML.Information.Languages;
+	
+	/* Categories ComboBox */
+	switch (String(objectXML.Information.Category)) {
+		case "standart":	ctgrsComboBox.selectedIndex = 0; break;
+		case "advanced":	ctgrsComboBox.selectedIndex = 1; break;
+		case "usual":		ctgrsComboBox.selectedIndex = 2; break;
+		case "portal":		ctgrsComboBox.selectedIndex = 3; break;
+	}
+	
+	/* Interface Type ComboBox */
+	itypeComboBox.selectedIndex = Number(objectXML.Information.InterfaceType) - 1;
+	
+//	ctgrsComboBox.selectedIndex = 3;
 }
