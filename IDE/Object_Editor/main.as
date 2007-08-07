@@ -17,10 +17,11 @@ import mx.controls.TextArea;
 import mx.containers.Canvas;
 import mx.containers.TabNavigator;
 import mx.charts.chartClasses.RenderData;
+import mx.core.Container;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
-public const supLanguages:XML = 
+public var supLanguages:XML = 
 	<root>
 		<language label="" text=""/>
 	</root>;
@@ -231,7 +232,7 @@ private function lng(label:String):String {
 }
 
 private function langRefresh():void {
-/* langRefresh() creating the main menu and setting up some global variables. It also applying multilanguage support */
+/* langRefresh() creating the main menu and setting up some global variables. It also applying multilanguage Interface support */
 
 	/* Setting up new (in new language) main menu items */
 	menubarXML = 
@@ -337,11 +338,7 @@ private function removeSupLanguage():void {
 
 			/* Rebuilding programm interface */
 			currentState = "";
-			rebuildInterface();
-			
-//			supLanguages.language.(@label == "EN").removeAllChildren();
-//			delete supLanguages.language.(@label == "EN");
-			trace(supLanguages.language.toXMLString());
+			rebuildInterface();			
 		}
 	}
 }
@@ -394,28 +391,47 @@ private function buildObjectXML():void {
 	/* set Basic XML Structure */
 	objectXML = new XML(
 		<Type>
-			<Information></Information>
-			<Attributes></Attributes>
-			<Languages></Languages>
-			<Resources></Resources>
-			<WYSIWYG></WYSIWYG>
-			<WCAG></WCAG>
-			<SourceCode></SourceCode>
-			<Libraries></Libraries>
+			<Information>
+				<Name/>
+				<Moveable/>
+				<Dynamic/>
+				<Container/>
+				<Version/>
+				<Icon/>
+				<StructureIcon/>
+				<EditorIcon/>
+				<Category/>
+				<ID/>
+				<InterfaceType/>
+				<OptimizationPriority/>
+				<Containers/>
+				<Languages/>
+			</Information>
+			<Attributes/>
+			<Languages/>
+			<Resources/>
+			<WYSIWYG/>
+			<WCAG/>
+			<SourceCode/>
+			<Libraries/>
 		</Type>
 		);
 
 	/* add details to the Object Type XML */
 	
 	/* adding data from the Information tab */
-	objectXML.Information.appendChild(<Name>{onameTextArea.text}</Name>);
-	objectXML.Information.appendChild(<Moveable>{Number(mvChkBox.selected)}</Moveable>);
-	objectXML.Information.appendChild(<Dynamic>{Number(dynamicChkBox.selected)}</Dynamic>);
-	objectXML.Information.appendChild(<Category>{ctgrsComboBox.selectedItem.data}</Category>);
-	objectXML.Information.appendChild(<InterfaceType>{itypeComboBox.selectedItem.data}</InterfaceType>);
-	objectXML.Information.appendChild(<OptimizationPriority>{opriorTextArea.text}</OptimizationPriority>);
-	objectXML.Information.appendChild(<Containers>{containersTextArea.text}</Containers>);
-	objectXML.Information.appendChild(<Languages>{supLangsTextArea.text}</Languages>);
+	with (objectXML.Information) {
+		Name = onameTextArea.text;
+		Moveable  = Number(mvChkBox.selected);
+		Dynamic = Number(dynamicChkBox.selected);
+		Category = ctgrsComboBox.selectedItem.data;
+		InterfaceType = itypeComboBox.selectedItem.data;
+		OptimizationPriority = opriorTextArea.text;
+		Containers = containersTextArea.text;
+		Languages = supLangsTextArea.text;
+		Version = versionTextArea.text;
+	}
+	objectXML.Information.Container = Number(containerChkBox.selected);
 	
 	/* adding multilingual data */
 	
@@ -481,15 +497,19 @@ private function buildObjectXML():void {
 private function loadObjectXML():void {
 	objectXML = new XML(sourceXMLTextArea.text);
 
-	/* Load Basic properties */
-	onameTextArea.text = objectXML.Information.Name;
-	mvChkBox.selected = Boolean(Number(objectXML.Information.Moveable));
-	dynamicChkBox.selected = Boolean(Number(objectXML.Information.Dynamic));
-	opriorTextArea.text = objectXML.Information.OptimizationPriority;
-	containersTextArea.text = objectXML.Information.Containers;
-	supLangsTextArea.text = objectXML.Information.Languages;
+	/* Set Basic properties */
+	with (objectXML.Information) {
+		onameTextArea.text = Name;
+		mvChkBox.selected = Boolean(Number(Moveable));
+		dynamicChkBox.selected = Boolean(Number(Dynamic));
+		opriorTextArea.text = OptimizationPriority;
+		containersTextArea.text = Containers;
+		idTextArea.text = ID;
+		versionTextArea.text = Version;
+	}
+	containerChkBox.selected = Boolean(Number(objectXML.Information.Container));
 	
-	/* Categories ComboBox */
+	/* Fill in Categories ComboBox */
 	switch (String(objectXML.Information.Category)) {
 		case "standart":	ctgrsComboBox.selectedIndex = 0; break;
 		case "advanced":	ctgrsComboBox.selectedIndex = 1; break;
@@ -500,5 +520,20 @@ private function loadObjectXML():void {
 	/* Interface Type ComboBox */
 	itypeComboBox.selectedIndex = Number(objectXML.Information.InterfaceType) - 1;
 	
-//	ctgrsComboBox.selectedIndex = 3;
+	/* Parsing supported languages field */
+	var lngs_str:String = objectXML.Information.Languages; /* Get string data from the Object Type XML */
+	var lngs_array:Array = lngs_str.split(" "); /* Parse string into array of langs labels(codes) */
+	
+	supLanguages = new XML(<root/>); /* Creating empty supported languages XML */
+	for each(var lng:String in lngs_array) {
+		/* Add supported language and get its real name from the langsSource XML */
+		supLanguages.appendChild(<language label={lng} text={langsSource.language.(@label == lng).@text}/>);
+	}
+	
+	/* Loading attributes records */
+	
+	
+
+
+	rebuildInterface();
 }

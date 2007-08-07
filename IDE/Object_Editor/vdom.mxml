@@ -91,7 +91,7 @@
 							<!-- ID -->
 							<mx:Label id="idLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'id')}" width="{ident_1}"
 								toolTip="Unique identifier of this attribute, this identifier is an extension of the object identifier it use the base and a numerical value unique"/>
-							<mx:TextArea width="100%" height="20" editable="false" cornerRadius="3"/>
+							<mx:TextArea id="idTextArea" width="100%" height="20" editable="false" cornerRadius="3"/>
 						</mx:HBox>
 						
 						<mx:HBox width="100%" verticalAlign="bottom">
@@ -143,6 +143,8 @@
 						<mx:CheckBox id="mvChkBox" label="{langData.language.(@id == langStr).sentence.(@label == 'moveable')}"/>
 						
 						<mx:CheckBox id="dynamicChkBox" label="{langData.language.(@id == langStr).sentence.(@label == 'dynamic')}"/>
+
+						<mx:CheckBox id="containerChkBox" label="{langData.language.(@id == langStr).sentence.(@label == 'container')}"/>
 						
 						<mx:HBox width="100%" verticalAlign="middle">
 							<mx:Label id="categoryLabel" text="{langData.language.(@id == langStr).sentence.(@label == 'category')}" width="{ident_1}"/>
