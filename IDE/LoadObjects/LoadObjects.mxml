@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:example="com.example.programmingas3.fileio.*" xmlns="*" creationComplete="init()">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"  xmlns:example="com.example.programmingas3.fileio.*" xmlns="*" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
 			import com.vdom.connect.Soap;
 			import mx.controls.Alert;
+			import com.example.programmingas3.fileio.FileUpload;
 
 		private var mySOAP:Soap;
 					
@@ -24,8 +25,9 @@
 //			Alert.show("Привет!");
 		}
 		private function set_application():void{
+			for(var i:uint =0; i< 10; i++)
 			Soap.setApplicationInfo();
-			Soap.getType();
+
 //			Alert.show("Привет!");
 		}
 		private function all_applications():void{
@@ -47,7 +49,7 @@
 		<mx:Button x="298" y="100" label="set application" width="121" click="set_application()"/>
 		<mx:Button x="298" y="130" label=" all applications" width="121" click="all_applications()"/>
 		<mx:Button x="298" y="160" label="all types" width="121" click="all_types()"/>
-		<mx:TextArea x="10" y="27" height="241" width="271"/>
+		<mx:TextArea id="textArea" x="10" y="27" height="241" width="271"/>
 		<mx:Label x="10" y="1" text="Trace:" fontWeight="Upload"  click="fileUpload.startUpload();"/>
 		<mx:Button x="444" y="10" label="render object to xml"/>
 		<mx:Button x="444" y="40" label="create object"/>

@@ -7,7 +7,7 @@ package com.gsolo.encryption
 		
 		private var protector:VDOM_session_protector;
 		private var key:String;
-		private var counter:uint = 0;
+		private var counter:int = -1;
 		
 		//initialization
 		public function Code(hstr:String):void{
@@ -23,11 +23,12 @@ package com.gsolo.encryption
 		
 		// generation next key
 		public function skey():String{
-			counter++;
+			
 			
 			key = protector.nextSessionKey(key);
+			counter++;
 			trace('key: ' + key)
-			return key;
+			return key+'_'+counter.toString();
 		}
 		
 		// count amount of calls
