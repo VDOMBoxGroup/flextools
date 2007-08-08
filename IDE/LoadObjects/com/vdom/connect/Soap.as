@@ -19,10 +19,16 @@ package com.vdom.connect
 		private static var ws:WebService = new WebService;
 		private static var sid:String; //sission Identifier
 		
+		private static var instance:Soap = new Soap();
+		
+		public function Soap() {
+                        if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" ); 
+                }
+		
 		public static function getSid():String{
 			return sid;
 		}
-
+		
 		
 		// initialization
 		public static function init():void {
@@ -50,7 +56,7 @@ package com.vdom.connect
 			code.inputSKey(myXML.SessionKey);
 			
 			if(myXML.children().toXMLString() == ''){
-				Alert.show("Error from server:\n" + myXML );
+				Alert.show("Error open session:\n" + myXML );
 			} else{  
 				sid = myXML.SessionId;
 			
@@ -72,7 +78,7 @@ package com.vdom.connect
 		private static function closeSessionCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.close_session.lastResult.Result);
 			if(myXML.children().toXMLString() == ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+				Alert.show("Error close session:\n" + myXML );
 			} else{
 				Alert.show("Сессия закрыта: " + myXML);
 				ws.close_session.removeEventListener(ResultEvent.RESULT,closeSessionCompleteListener);
@@ -90,9 +96,9 @@ package com.vdom.connect
 		}
 
 		private static function createApplicationCompleteListener(event:ResultEvent):void{
-			var myXML:XMLList = XMLList(ws.create_application.lastResult.Result);
-			if(myXML.children().toXMLString() == ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			var myXML:XML = XML(ws.create_application.lastResult.Result);
+			if(myXML.name() == 'Error'){
+				Alert.show("Error create application:\n" + myXML );
 			} else{
 				Alert.show("createApplication: " + myXML);
 				// myXML - идентификатор нового приложения
@@ -115,8 +121,8 @@ package com.vdom.connect
 
 		private static function setApplicationInfoCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.set_application_info.lastResult.Result);
-			if(myXML.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error set application general information:\n" + myXML );
 			} else{
 				Alert.show("setIpplicationInfo: " + myXML);
 				// 'OK'
@@ -136,8 +142,8 @@ package com.vdom.connect
 
 		private static function listApplicationsCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.list_applications.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get the list of all applications:\n" + myXML);
 			} else{
 				Alert.show("setIpplicationInfo: " + myXML);
 				// <Applications>
@@ -160,8 +166,8 @@ package com.vdom.connect
 
 		private static function listTypesCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.list_types.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get the list of all types:\n" + myXML );
 			} else{
 				Alert.show("setIpplicationInfo: " + myXML);
 				// <Types>
@@ -186,8 +192,8 @@ package com.vdom.connect
 
 		private static function getTypeCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_type.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get type description:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// xml вида описание типа без ветки <Resources>
@@ -209,8 +215,8 @@ package com.vdom.connect
 
 		private static function getTypeResourceCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_type_resource.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get type resource:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -232,8 +238,8 @@ package com.vdom.connect
 
 		private static function getApplicationResourceCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_application_resource.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get application resource:\n" + myXML );
 			} else{
 				Alert.show("getApplicationResource: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -257,8 +263,8 @@ package com.vdom.connect
 
 		private static function renderWysiwygCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.render_wysiwyg.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error render object to xml presentation:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -284,8 +290,8 @@ package com.vdom.connect
 
 		private static function createObjectCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.create_object.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error create object:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -310,8 +316,8 @@ package com.vdom.connect
 
 		private static function getTopObjectsCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_top_objects.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get application top-level objects:\n" + myXML);
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -337,8 +343,8 @@ package com.vdom.connect
 
 		private static function getChildObjectsCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_child_objects.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get object's child objects':\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -362,8 +368,8 @@ package com.vdom.connect
 
 		private static function getApplicationLanguageCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_application_language_data.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get application language data:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -391,8 +397,8 @@ package com.vdom.connect
 
 		private static function setAttributeCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.set_attribute.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error set object attribute value:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -418,8 +424,8 @@ package com.vdom.connect
 
 		private static function setValueCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.set_value.lastResult.Result);
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error set object value:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -447,8 +453,8 @@ package com.vdom.connect
 			
 			var myXML:XML = XML(ws.set_script.lastResult.Result);
 			
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error set object script:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -477,8 +483,8 @@ package com.vdom.connect
 			
 			var myXML:XML = XML(ws.set_resource.lastResult.Result);
 			
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error set application resource:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -507,8 +513,8 @@ package com.vdom.connect
 			
 			var myXML:XML = XML(ws.set_resource.lastResult.Result);
 			
-			if(myXML.Error.toString() != ''){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error delete object:\n" + myXML );
 			} else{
 				Alert.show("getType: \n" + myXML);
 				// <Resource><![CDATA[resource data]]></Resource>
@@ -528,8 +534,8 @@ package com.vdom.connect
 
 		private static function getEchoCompleteListener(event:ResultEvent):void{
 			var myXML:XML = XML(ws.get_echo.lastResult.Result);
-			if(myXML.Error.toString() == 'Error'){
-				Alert.show("Error from server:\n" + myXML.Error );
+			if(myXML.name() == 'Error'){
+				Alert.show("Error get temporarily stored session data:\n" + myXML );
 			} else{
 				Alert.show("getApplicationResource: \n" + ws.get_echo.lastResult.Result);
 				//trace("getEcho:_" + myXML.Error.toString()+'!')
