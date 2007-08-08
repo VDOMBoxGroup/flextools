@@ -29,7 +29,7 @@ public var supLanguages:XML =
 [Bindable]
 private var mainDataFile:XML;
 [Bindable]
-private var langStr:String = new String("EN");
+private var langStr:String = new String("EN"); /* Set default Interface language */
 [Bindable]		
 private var menuBarCollection:XMLListCollection;
 private var menubarXML:XMLList = new XMLList;
@@ -90,8 +90,7 @@ private function createBasicAttr():void {
 private function attrFieldsWrite():void {
 /* attrFieldsWrite() writes the data from Attribute Form Fields to the XML in memory */
 
-	var i:uint;
-	var language:XML;
+	var i:uint = 0;
 	
 	if (currentAttr != -1) {
 		with (attributesCollection[currentAttr]) {
@@ -101,10 +100,15 @@ private function attrFieldsWrite():void {
 			@defval = defValue.text;
 			@regexp = regExpVld.text;
 			@visined = Number(visinedChBox.selected);
+			@itype = attributeInterfaceType.selectedItem.data;
 			/* Removed with new XML specification *
 			@extended = Number(extChBox.selected);
 			*/
-			@itype = attributeInterfaceType.selectedItem.data;
+			if (@itype.toString() == "Std") {
+				codeinterface = stdInterfaceType.selectedItem.data;
+			} else {
+				codeinterface = "";  /*  !!!!!! Temporary void !!!!!!  */
+			}
 
 			/* Writing multilingual properties */
 			i = 0;
@@ -157,10 +161,30 @@ private function attrFieldsRefresh():void {
 			/* Removed with new XML specification *
 			extChBox.selected = Number(@extended);
 			*/
+
+			/* Set up Interface Type ComboBox */
+			switch (@itype.toString()) {
+				case "Std":	attributeInterfaceType.selectedIndex = 0; break;
+				case "Ext": attributeInterfaceType.selectedIndex = 1; break;
+			}
+
+			/* Set up Standart Interface Type ComboBox */
+			if (@itype.toString() == "Std") {
+				switch (codeinterface.toString()) {
+					case "TextField":		stdInterfaceType.selectedIndex = 0; break;
+					case "DropDown":		stdInterfaceType.selectedIndex = 1; break;
+					case "File":			stdInterfaceType.selectedIndex = 2; break;
+					case "Color":			stdInterfaceType.selectedIndex = 3; break;
+					case "PageLink":		stdInterfaceType.selectedIndex = 4; break;
+					case "ObjectList":		stdInterfaceType.selectedIndex = 5; break;
+					case "LinkedBase":		stdInterfaceType.selectedIndex = 6; break;
+					case "ExternalEditor":	stdInterfaceType.selectedIndex = 7; break;
+				}
+			} else {
+				stdInterfaceType.selectedIndex = 0;
+				stdInterfaceType.text = "";
+			}
 			
-			if (@itype == "Std") attributeInterfaceType.selectedIndex = 0;
-			if (@itype == "Ext") attributeInterfaceType.selectedIndex = 1;
-	
 			/* Loading multilingual properties */
 			i = 0;
 			for each(language in supLanguages.language) {
@@ -179,6 +203,8 @@ private function attrFieldsRefresh():void {
 	}
 	
 	if (attributesPanel != null) attributesPanel.visible = true;
+	if (attributePropVS != null) attributePropVS.selectedChild = attributesPanel;
+	checkCodeInterface();
 }	
 
 private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:int):void {
@@ -361,13 +387,15 @@ private function menuHandler(event:MenuEvent):void {
 	}
 }
 
-private function checkInterface():void {
-	if (attributeInterfaceType.selectedItem.data == "Ext") {
-		codeButton.enabled = true;
-		stdInterfaceType.enabled = false;
-	} else {
-		codeButton.enabled = false;
-		stdInterfaceType.enabled = true;
+private function checkCodeInterface():void {
+	if (attributeInterfaceType != null) {
+		if (attributeInterfaceType.selectedItem.data == "Ext") {
+			codeButton.enabled = true;
+			stdInterfaceType.enabled = false;
+		} else {
+			codeButton.enabled = false;
+			stdInterfaceType.enabled = true;
+		}
 	}
 }
 
@@ -441,18 +469,18 @@ private function buildObjectXML():void {
 	objectXML.Information.appendChild(<Description LangData="2">#Lang(2)</Description>);
 
 	/* Adding multilingual part of object XML */
-
-	var i:int = 0;
 	for each(language in supLanguages.language) {
 		if (objectXML.Languages.Language.(@Code == language.@label).toXMLString() == "")
-			objectXML.Languages.appendChild(<Language Code={language.@label}></Language>);
+			objectXML.Languages.appendChild(<Language Code={language.@label}/>);
 
-		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="1">{infoDnameCollector[i].text}</Sentence>);					
-		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="2">{infoDescriptCollector[i].text}</Sentence>);					
+		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="1">{infoDnameCollector[i].text}</Sentence>);
+		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="2">{infoDescriptCollector[i].text}</Sentence>);
+	}
 
-		lang_id = 100;
-		for each(attribute in attributesCollection) {
-			if (objectXML.Attributes.Attribute.(Name == attribute.@name).toXMLString() == "") {
+	var i:int = 0;
+	lang_id = 100;
+	for each (attribute in attributesCollection) {
+		if (objectXML.Attributes.Attribute.(Name == attribute.@name).toXMLString() == "") {
 			var tmpAttribute:XML = 
 				<Attribute>
 					<Name>{attribute.@name}</Name>
@@ -467,29 +495,33 @@ private function buildObjectXML():void {
 				</Attribute>;
 				
 			objectXML.Attributes.appendChild(tmpAttribute);
+			
+			language = null;
+			for each(language in supLanguages.language) {
+				if (objectXML.Languages.Language.(@Code == language.@label).toXMLString() == "")
+					objectXML.Languages.appendChild(<Language Code={language.@label}/>);
+
+				objectXML.Languages.Language.(@Code == language.@label).appendChild (
+					<Sentence ID={tmpAttribute.DisplayName.@LangData}>
+						{attribute.dname.lang.(@label == language.@label).@text}
+					</Sentence>
+				);
+				objectXML.Languages.Language.(@Code == language.@label).appendChild (
+					<Sentence ID={tmpAttribute.ErrorValidationMessage.@LangData}>
+						{attribute.err.lang.(@label == language.@label).@text}
+					</Sentence>
+				);
+				objectXML.Languages.Language.(@Code == language.@label).appendChild (
+					<Sentence ID={tmpAttribute.Description.@LangData}>
+						{attribute.descript.lang.(@label == language.@label).@text}
+					</Sentence>
+				);
 			}
-			
-			objectXML.Languages.Language.(@Code == language.@label).appendChild (
-				<Sentence ID={tmpAttribute.DisplayName.@LangData}>
-					{attribute.dname.lang.(@label == language.@label).@text}
-				</Sentence>
-			);
-			objectXML.Languages.Language.(@Code == language.@label).appendChild (
-				<Sentence ID={tmpAttribute.ErrorValidationMessage.@LangData}>
-					{attribute.err.lang.(@label == language.@label).@text}
-				</Sentence>
-			);
-			objectXML.Languages.Language.(@Code == language.@label).appendChild (
-				<Sentence ID={tmpAttribute.Description.@LangData}>
-					{attribute.descript.lang.(@label == language.@label).@text}
-				</Sentence>
-			);
-			
-			lang_id += 3;
-		}
-		i++;
-	}
 	
+			lang_id += 3;
+		}	
+	}
+
 	/* Show object XML in TextArea on the Target XML tab */	
 	if (targetXMLTextArea != null) targetXMLTextArea.text = objectXML.toXMLString();
 }
@@ -531,9 +563,41 @@ private function loadObjectXML():void {
 	}
 	
 	/* Loading attributes records */
-	
-	
+	attributesCollection = new XMLListCollection();
 
+	currentAttr = -1;
+	for each(attribute in objectXML.Attributes.Attribute) {
+		addNewAttribute();
+		currentAttr++;
+
+		with (attributesCollection[currentAttr]) {
+			/* Writing basic simple properties */
+			@name = attribute.Name;
+			@label = attribute.Name;
+			@defval = attribute.DefaultValue;
+			@regexp = attribute.RegularExpressionValidation;
+			@visined = attribute.Visible;
+			@itype = attribute.InterfaceType;
+			
+			var dnameLangID:String = attribute.DisplayName.@LangData;
+			var errLangID:String = attribute.ErrorValidationMessage.@LangData;
+			var descriptLangID:String = attribute.Description.@LangData;
+
+			/* Writing multilingual properties */
+			for each(language in supLanguages.language) {
+				var lnglabel:String = language.@label;
+				/* Display Name tabs */
+				dname.appendChild(<lang label={language.@label} text={objectXML.Languages.Language.(@Code == lnglabel).Sentence.(@ID == dnameLangID)}/>);
+
+				/* Error Exp Validation Messages tabs */
+				err.appendChild(<lang label={language.@label} text={objectXML.Languages.Language.(@Code == lnglabel).Sentence.(@ID == errLangID)}/>);
+
+				/* Attribute Description tabs */
+				descript.appendChild(<lang label={language.@label} text={objectXML.Languages.Language.(@Code == lnglabel).Sentence.(@ID == descriptLangID)}/>);
+			}
+		}
+	}
+	currentAttr = -1;
 
 	rebuildInterface();
 }

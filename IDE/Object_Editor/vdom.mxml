@@ -48,6 +48,7 @@
 
 	<mx:Fade id="myFade"/>
 	
+	
 	<mx:ViewStack id="vs" width="100%" height="100%">
 	<mx:Canvas id="lngView" width="100%" height="100%">
 		<mx:Panel title="Language select" paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10"
@@ -210,6 +211,10 @@
 						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'rmattr')}" width="100%" click="{removeAttributeAlert()}"/>
 					</mx:VBox>
 					
+					
+					<!-- /* ViewStack with Attribute Properties panels: Code interface Panel and Standart Properties Panel */ -->
+					
+					<mx:ViewStack id="attributePropVS" width="100%" height="100%">
 					<mx:Panel title="{langData.language.(@id == langStr).sentence.(@label == 'attrprop')}" width="100%" height="100%"
 						dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1" borderColor="#c0c0c0" id="attributesPanel"
 						creationComplete="{attributesPanel.visible = false; createAttrLangsTabs();}">
@@ -250,7 +255,7 @@
 							<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'itype')}:" width="{ident_2}"
 								toolTip="Define if the interface is a built-in one (Std) or it use a VDOM XML Object to create it dynamically (Ext)"/>
 								
-							<mx:ComboBox id="attributeInterfaceType" close="{checkInterface();}" width="180">
+							<mx:ComboBox id="attributeInterfaceType" close="{checkCodeInterface();}" width="180">
 								<mx:dataProvider>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'standart')}" data="Std"/>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" data="Ext"/>
@@ -271,6 +276,7 @@
 							</mx:ComboBox>
 							<mx:Button id="codeButton" label="{langData.language.(@id == langStr).sentence.(@label == 'ocinterface')}"
 								creationComplete="{codeButton.enabled = false;}"
+								click="{attributePropVS.selectedChild = attrCodeInterfacePanel; attrCodeInterfacePanel.visible = true;}"
 								toolTip="Opens an XML Code Editor. To use Code Interface you must change Interface Type to [Extended]"/>
 								
 						</mx:HBox>
@@ -281,6 +287,22 @@
 						</mx:HBox>
 						<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'restore')}" click="attrFieldsRefresh();"/>
 					</mx:Panel>
+					<mx:Panel title="{langData.language.(@id == langStr).sentence.(@label == 'codeeditor')}" width="100%" height="100%"
+						dropShadowEnabled="false" alpha="1.0" borderStyle="solid" borderThickness="1" borderColor="#c0c0c0" id="attrCodeInterfacePanel"
+						creationComplete="{attrCodeInterfacePanel.visible = true;}">
+						
+						<mx:VBox horizontalAlign="right" width="100%" height="100%">
+							<mx:HBox width="100%" height="100%">
+								<mx:TextArea width="50" height="100%" borderStyle="none" verticalScrollPolicy="off" textAlign="right" editable="false"/>
+								<mx:TextArea width="100%" height="100%"/>
+							</mx:HBox>
+							<mx:Button label="{langData.language.(@id == langStr).sentence.(@label == 'back')}" click="{attributePropVS.selectedChild = attributesPanel;}"/>
+						</mx:VBox>						
+					</mx:Panel>
+					</mx:ViewStack>
+					
+					<!-- /* End of ViewStack Atribute Properties Panels */ -->
+					
 				</mx:HBox>
             </mx:Canvas>
 			<mx:Canvas label="WCAG" width="100%" height="100%">
