@@ -64,6 +64,16 @@
     <sentence id="60" label="container">Container</sentence>
     <sentence id="61" label="codeeditor">Code Editor</sentence>
     <sentence id="62" label="back">Back</sentence>
+    <sentence id="63" label="tooltip">You must define an unique Object Name (only latin letters are possible!)</sentence>
+    <sentence id="64" label="tooltip">Unique identifier of this attribute, this identifier is an extension of the object identifier.</sentence>
+    <sentence id="65" label="message">Do you want to proceed?</sentence>
+    <sentence id="66" label="label">Delete Attribute</sentence>
+    <sentence id="67" label="message">Sorry, you have already have the same one</sentence>
+    <sentence id="68" label="label">Adding language</sentence>
+    <sentence id="69" label="message">Sorry, you can not remove the last Language</sentence>
+    <sentence id="70" label="label">Removing language</sentence>
+    <sentence id="71" label="length">Length</sentence>
+    <sentence id="72" label="tooltip">Opens an XML Code Editor. To use Code Interface you must change Interface Type to [Extended]</sentence>
 </language>
 <language id="RU" label="Русский">
     <sentence id="0" label="file">Файл</sentence>
@@ -128,6 +138,16 @@
     <sentence id="59" label="language">Язык</sentence>
     <sentence id="60" label="container">Контейнер</sentence>
     <sentence id="61" label="codeeditor">Редактор кода</sentence>
-    <sentence id="62" label="back">Back</sentence>
+    <sentence id="62" label="back">Назад</sentence>
+    <sentence id="63" label="tooltip">Вы должны выбрать уникальное имя для объекта (возможны только латинские символы!)</sentence>
+    <sentence id="64" label="tooltip">Уникальный идентификатор этого объекта</sentence>
+    <sentence id="65" label="message">Вы хотите продолжить операцию?</sentence>
+    <sentence id="66" label="label">Удалить атрибут</sentence>
+    <sentence id="67" label="message">Извините, вы уже имеете такой же.</sentence>
+    <sentence id="68" label="label">Добавление языка</sentence>
+    <sentence id="69" label="message">Извините, вы не можете удалить последний язык</sentence>
+    <sentence id="70" label="label">Удаление языка</sentence>
+    <sentence id="71" label="length">Длина</sentence>
+    <sentence id="72" label="tooltip">Открывает редактор кода XML. Чтобы использовать редактор кода, вы должны переключить Тип Интерфейса на [Расширенный]</sentence>
 </language>
 </root>

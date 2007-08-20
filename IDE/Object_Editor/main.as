@@ -1,7 +1,8 @@
 // ActionScript file
-/*
-	Development by Vadim A. Usoltsev, SE Group Ltd., Tomsk, Russia, 2007.
-*/
+/** 
+ * Development by Vadim A. Usoltsev, SE Group Ltd., Tomsk, Russia, 2007.
+**/
+
 import mx.events.MenuEvent;
 import mx.events.CloseEvent;
 import mx.controls.Alert;
@@ -18,6 +19,12 @@ import mx.containers.Canvas;
 import mx.containers.TabNavigator;
 import mx.charts.chartClasses.RenderData;
 import mx.core.Container;
+import flash.events.KeyboardEvent;
+import com.connection.soap.Soap;
+import com.connection.soap.SoapEvent;
+import flash.events.Event;
+import mx.controls.Image;
+import mx.states.AddChild;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
@@ -35,12 +42,15 @@ private var menuBarCollection:XMLListCollection;
 private var menubarXML:XMLList = new XMLList;
 [Bindable]
 private var attributesCollection:XMLListCollection;
-private var currentAttr:int = -1;
+private var currentAttr:int = 0;
 [Bindable]
 private var objectXML:XML;
 private var language:XML = new XML();  /* used in For Each cycles */
 private var attribute:XML = new XML();  /* used in For Each cycles */
 private var lang_id:int = 100;
+private var attrEditorStrCount:int = 1;
+
+private var SOAP:Soap;
 
 /* Multilingual strings collections for each TextArea */
 private var infoDnameCollector:Array = new Array();
@@ -49,11 +59,20 @@ private var attrDnameCollector:Array = new Array();
 private var attrErrmsgCollector:Array = new Array();
 private var attrDescriptCollector:Array = new Array();
 
+/* Loaded images */
+[Bindable]
+private var iconImage:Image = new Image();
+[Bindable]
+private var editorIconImage:Image = new Image();
+[Bindable]
+private var structureIconImage:Image = new Image();
+
 public function start():void {
 /* **** Start() is the main function, that is being executed as soon as form created **** */
 
 	langRefresh();
 	createBasicAttr();
+	initSoap();
 }
 
 private function addNewAttribute():void {
@@ -71,7 +90,8 @@ private function addNewAttribute():void {
 
 private function removeAttributeAlert():void {
 	if (attrList.selectedIndex != -1)
-		Alert.show("Do you want to proceed?", "Delete Attribute", 3, this, removeAttribute);
+		/* Alert.show("Do you want to proceed?", "Delete Attribute", 3, this, removeAttribute); */
+		Alert.show(langData.language.(@id == langStr).sentence.(@id == 65), langData.language.(@id == langStr).sentence.(@id == 66), 3, this, removeAttribute);
 }
 
 private function removeAttribute(event:CloseEvent):void {
@@ -107,7 +127,10 @@ private function attrFieldsWrite():void {
 			if (@itype.toString() == "Std") {
 				codeinterface = stdInterfaceType.selectedItem.data;
 			} else {
-				codeinterface = "";  /*  !!!!!! Temporary void !!!!!!  */
+				if (attrCodeEditorTextArea != null)
+					codeinterface = attrCodeEditorTextArea.text;
+				else
+					codeinterface = "";
 			}
 
 			/* Writing multilingual properties */
@@ -150,7 +173,11 @@ private function attrFieldsWriteNRefresh():void {
 private function attrFieldsRefresh():void {	
 /* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
 
-	if (currentAttr != -1) {
+	if (currentAttr != -1 && attributesPanel != null) {
+		if (attributesPanel != null) attributesPanel.visible = true;
+		if (attributePropVS != null) attributePropVS.selectedChild = attributesPanel;
+		if (attrCodeInterfacePanel != null) attrCodeInterfacePanel.visible = false;
+
 		with (attributesCollection[currentAttr]) {
 			/* Loading simple properties */
 			attrName.text = @name;
@@ -165,7 +192,12 @@ private function attrFieldsRefresh():void {
 			/* Set up Interface Type ComboBox */
 			switch (@itype.toString()) {
 				case "Std":	attributeInterfaceType.selectedIndex = 0; break;
-				case "Ext": attributeInterfaceType.selectedIndex = 1; break;
+				case "Ext":
+					attributeInterfaceType.selectedIndex = 1;
+					if (attrCodeEditorTextArea != null)
+						attrCodeEditorText
+						Area.text = attributesCollection[currentAttr].codeinterface;
+					break;
 			}
 
 			/* Set up Standart Interface Type ComboBox */
@@ -200,11 +232,11 @@ private function attrFieldsRefresh():void {
 				i++;
 			}
 		}
+		
+		checkCodeInterface();
+	} else {
+		if (attributesPanel != null) attributesPanel.visible = false;
 	}
-	
-	if (attributesPanel != null) attributesPanel.visible = true;
-	if (attributePropVS != null) attributePropVS.selectedChild = attributesPanel;
-	checkCodeInterface();
 }	
 
 private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:int):void {
@@ -299,8 +331,9 @@ private function rebuildInterface():void {
 	/* Refreshing supported Languages TextArea Field */
 	supLangsTextArea.text = "";
 	for each(var language:XML in supLanguages.language) {
-		supLangsTextArea.text += language.@label + " ";
+		supLangsTextArea.text += language.@label + ", ";
 	}
+	supLangsTextArea.text = supLangsTextArea.text.substr(0, supLangsTextArea.text.length - 2);
 
 	/* Refreshing multilingual fields, creating(removing) addidation tabs */
 	removeTabsAt(infoDnameTabs);
@@ -319,10 +352,12 @@ private function rebuildInterface():void {
 	createAttrLangsTabs();
 
 	/* Restoring multilingual data from the Object XML in memory */
+	var dnameLangID:String = refID(objectXML.Information.DisplayName);
+	var descriptLangID:String = refID(objectXML.Information.Description);
 	var i:int = 0;
 	for each(language in supLanguages.language) {
-		infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "1");
-		infoDescriptCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == "2");
+		infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == dnameLangID);
+		infoDescriptCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == descriptLangID);
 		i++;
 	}
 	attrFieldsRefresh();
@@ -331,7 +366,8 @@ private function rebuildInterface():void {
 private function addSupLanguage():void {
 	if (addLanguageComboBox.selectedItem != null) {
 		if (supLanguages.language.(@label == addLanguageComboBox.selectedItem.@label).toXMLString() != "") {
-			Alert.show("Sorry, you have already have the same one", "Adding language");
+			/* Alert.show("Sorry, you have already have the same one", "Adding language"); */
+			Alert.show(langData.language.(@id == langStr).sentence.(@id == 67), langData.language.(@id == langStr).sentence.(@id == 68));
 		} else {
 			/* Saving current state of the Object XML (to store already typed language data */
 			buildObjectXML();
@@ -348,7 +384,7 @@ private function addSupLanguage():void {
 private function removeSupLanguage():void {
 	if (remLanguageComboBox.selectedItem != null) {
 		if (supLanguages.children().length() == 1) {
-			Alert.show("Sorry, you can not remove the last Language", "Removing language");
+			Alert.show(langData.language.(@id == langStr).sentence.(@id == 69), langData.language.(@id == langStr).sentence.(@id == 70));
 		} else {
 			/* Saving current state of the Object XML (to store already typed language data) */
 			buildObjectXML();
@@ -415,6 +451,18 @@ private function checkForLanguageSelection():void {
 	}
 }
 
+private function refID(refStr:String):String {
+	var left:int;
+	var right:int;
+	for (var i:int = 0; i < refStr.length; i++) {
+		switch (refStr.charCodeAt(i)) {
+			case 40: left = i; break;
+			case 41: right = i; break;
+		}
+	}
+	return refStr.substring(left + 1, right);
+}
+ 
 private function buildObjectXML():void {
 	/* set Basic XML Structure */
 	objectXML = new XML(
@@ -458,38 +506,40 @@ private function buildObjectXML():void {
 		Containers = containersTextArea.text;
 		Languages = supLangsTextArea.text;
 		Version = versionTextArea.text;
+		ID = idTextArea.text;
 	}
 	objectXML.Information.Container = Number(containerChkBox.selected);
 	
 	/* adding multilingual data */
 	
 	/* DisplayName field */
-	objectXML.Information.appendChild(<DisplayName LangData="1">#Lang(1)</DisplayName>);
+	objectXML.Information.appendChild(<DisplayName>#Lang(1)</DisplayName>);
 	/* Description field */
-	objectXML.Information.appendChild(<Description LangData="2">#Lang(2)</Description>);
+	objectXML.Information.appendChild(<Description>#Lang(2)</Description>);
 
 	/* Adding multilingual part of object XML */
+	var i:int = 0;
 	for each(language in supLanguages.language) {
 		if (objectXML.Languages.Language.(@Code == language.@label).toXMLString() == "")
 			objectXML.Languages.appendChild(<Language Code={language.@label}/>);
 
 		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="1">{infoDnameCollector[i].text}</Sentence>);
 		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="2">{infoDescriptCollector[i].text}</Sentence>);
+		i++;
 	}
 
-	var i:int = 0;
 	lang_id = 100;
 	for each (attribute in attributesCollection) {
 		if (objectXML.Attributes.Attribute.(Name == attribute.@name).toXMLString() == "") {
 			var tmpAttribute:XML = 
 				<Attribute>
 					<Name>{attribute.@name}</Name>
-					<DisplayName LangData={lang_id}>#Lang({lang_id})</DisplayName>
+					<DisplayName>#Lang({lang_id})</DisplayName>
 					<DefaultValue>{attribute.@defval}</DefaultValue>
 					<RegularExpressionValidation>{attribute.@regexp}</RegularExpressionValidation>
-					<ErrorValidationMessage LangData={lang_id + 1}>#Lang({lang_id + 1})</ErrorValidationMessage>
+					<ErrorValidationMessage>#Lang({lang_id + 1})</ErrorValidationMessage>
 					<Visible>{attribute.@visined}</Visible>
-					<Description LangData={lang_id + 2}>#Lang({lang_id + 2})</Description>	
+					<Description>#Lang({lang_id + 2})</Description>	
 					<InterfaceType>{attribute.@itype}</InterfaceType>
 					<CodeInterface>{attribute.codeinterface.toString()}</CodeInterface>
 				</Attribute>;
@@ -502,17 +552,17 @@ private function buildObjectXML():void {
 					objectXML.Languages.appendChild(<Language Code={language.@label}/>);
 
 				objectXML.Languages.Language.(@Code == language.@label).appendChild (
-					<Sentence ID={tmpAttribute.DisplayName.@LangData}>
+					<Sentence ID={refID(tmpAttribute.DisplayName)}>
 						{attribute.dname.lang.(@label == language.@label).@text}
 					</Sentence>
 				);
 				objectXML.Languages.Language.(@Code == language.@label).appendChild (
-					<Sentence ID={tmpAttribute.ErrorValidationMessage.@LangData}>
+					<Sentence ID={refID(tmpAttribute.ErrorValidationMessage)}>
 						{attribute.err.lang.(@label == language.@label).@text}
 					</Sentence>
 				);
 				objectXML.Languages.Language.(@Code == language.@label).appendChild (
-					<Sentence ID={tmpAttribute.Description.@LangData}>
+					<Sentence ID={refID(tmpAttribute.Description)}>
 						{attribute.descript.lang.(@label == language.@label).@text}
 					</Sentence>
 				);
@@ -554,7 +604,11 @@ private function loadObjectXML():void {
 	
 	/* Parsing supported languages field */
 	var lngs_str:String = objectXML.Information.Languages; /* Get string data from the Object Type XML */
-	var lngs_array:Array = lngs_str.split(" "); /* Parse string into array of langs labels(codes) */
+	var index:int = -1;
+	while ((index = lngs_str.search(" ")) != -1) {
+		lngs_str = lngs_str.substring(0, index) + lngs_str.substr(index + 1);
+	}
+	var lngs_array:Array = lngs_str.split(","); /* Parse string into array of langs labels(codes) */
 	
 	supLanguages = new XML(<root/>); /* Creating empty supported languages XML */
 	for each(var lng:String in lngs_array) {
@@ -579,9 +633,9 @@ private function loadObjectXML():void {
 			@visined = attribute.Visible;
 			@itype = attribute.InterfaceType;
 			
-			var dnameLangID:String = attribute.DisplayName.@LangData;
-			var errLangID:String = attribute.ErrorValidationMessage.@LangData;
-			var descriptLangID:String = attribute.Description.@LangData;
+			var dnameLangID:String = refID(attribute.DisplayName);
+			var errLangID:String = refID(attribute.ErrorValidationMessage);
+			var descriptLangID:String = refID(attribute.Description);
 
 			/* Writing multilingual properties */
 			for each(language in supLanguages.language) {
@@ -597,7 +651,147 @@ private function loadObjectXML():void {
 			}
 		}
 	}
-	currentAttr = -1;
-
+	
+	if (attributesCollection.length != 0)
+		currentAttr = 0
+	else
+		currentAttr = -1;
+		
 	rebuildInterface();
 }
+
+/* -------------- Soap Connections -------------- */
+private function initSoap():void {
+	SOAP = Soap.getInstance();
+	SOAP.init('http://192.168.0.23:82/vdom.wsdl');
+	SOAP.login('123','777');
+}
+
+/* Validators for Icon */
+private function processIconData(event:Event):void {
+	SOAP.sendEcho("icon", browseButton1, processIconImage, restoreIconImage);
+	iconImageBox.source = waitingImage.source;
+}
+
+private function processIconImage(event:Event):void {
+	iconImage.source = SOAP.getEchoResult("icon").source;
+	iconImageBox.source = iconImage.source;
+}
+
+private function restoreIconImage(event:Event):void {
+	iconImageBox.source = iconImage.source;	
+}
+
+/* Validators for Editor Icon */
+private function processEditorIconData(event:Event):void {
+	SOAP.sendEcho("editorIcon", browseButton2, processEditorIconImage, restoreEditorIconImage);
+	editorIconImageBox.source = waitingImage.source;
+}
+
+private function processEditorIconImage(event:Event):void {
+	editorIconImage.source = SOAP.getEchoResult("editorIcon").source;
+	editorIconImageBox.source = editorIconImage.source;
+}
+
+private function restoreEditorIconImage(event:Event):void {
+	editorIconImageBox.source = editorIconImage.source;	
+}
+
+/* Valiators for Structure Icon */
+private function processStructureIconData(event:Event):void {
+	SOAP.sendEcho("structureIcon", browseButton3, processStructureIconImage, restoreStructureIconImage);
+	structureIconImageBox.source = waitingImage.source;
+}
+
+private function processStructureIconImage(event:Event):void {
+	structureIconImage.source = SOAP.getEchoResult("structureIcon").source;
+	structureIconImageBox.source = structureIconImage.source;
+}
+
+private function restoreStructureIconImage(event:Event):void {
+	structureIconImageBox.source = structureIconImage.source;	
+}
+/* -------------- END Soap Connections -------------- */
+
+/* -------------- CODE EDITOR Functions and Procedures -------------- */
+private function keyValidator(key:KeyboardEvent):void {
+	var ta:TextArea = attrCodeEditorTextArea;
+
+	/* <tab> key validation */
+	if (key.charCode == 9) {
+		ta.text = ta.text.substring(0, ta.selectionBeginIndex) + String.fromCharCode(9) + ta.text.substring(ta.selectionBeginIndex);
+		ta.setSelection(ta.selectionBeginIndex + 1, ta.selectionBeginIndex + 1);
+	}
+	
+	/* XML Parser and Colorer */
+	/* Process "<" char */
+
+	/* Draw srings numbers */
+	var na:TextArea = attrCodeEditorNumbersArea;
+	var strNumber:int = ta.verticalScrollPosition + 1;
+
+	na.htmlText = "";
+	var xPosition:int = 1;
+	var currentPosition:int = 0;
+	while (currentPosition < ta.selectionBeginIndex) {
+		if (ta.text.charCodeAt(currentPosition) == 13)
+			xPosition++;
+		
+		currentPosition++;
+	}
+
+	for (var i:int = 0; i < ta.height / 12; i++) {
+		switch (key.keyCode) {
+			case 13:
+			case 40:
+				if (strNumber == xPosition + 1)
+					na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
+				else
+					na.htmlText += strNumber.toString() + "<br>";
+				break;
+			case 38:
+				if (strNumber == xPosition - 1)
+					na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
+				else
+					na.htmlText += strNumber.toString() + "<br>";
+				break;
+			default:
+				if (strNumber == xPosition)
+					na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
+				else
+					na.htmlText += strNumber.toString() + "<br>";
+		}
+		strNumber++;
+	}
+	
+}
+
+private function justDrawNumbers():void {  /*  :-)  */
+	var ta:TextArea = attrCodeEditorTextArea;
+	var na:TextArea = attrCodeEditorNumbersArea;
+	var strNumber:int = ta.verticalScrollPosition + 1;
+
+	na.htmlText = "";
+	var xPosition:int = 1;
+	var currentPosition:int = 0;
+	while (currentPosition < ta.selectionBeginIndex) {
+		if (ta.text.charCodeAt(currentPosition) == 13)
+			xPosition++;
+		
+		currentPosition++;
+	}
+
+	for (var i:int = 0; i < ta.height / 12; i++) {
+		if (strNumber == xPosition)
+			na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
+		else
+			na.htmlText += strNumber.toString() + "<br>";
+		strNumber++;
+	}
+}
+
+private function checkTextAreaFocus():void {
+	if (attrCodeInterfacePanel.visible == true)
+		attrCodeEditorTextArea.setFocus();	
+}
+/* ------------ END CODE EDITOR Functions and Procedures ------------ */
