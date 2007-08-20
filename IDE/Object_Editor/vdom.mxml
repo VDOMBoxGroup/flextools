@@ -228,7 +228,7 @@
 					</mx:VBox>
 					
 					
-					<!-- /* ViewStack with Attribute Properties panels: Code interface Panel and Standart Properties Panel */ -->
+					<!-- /* ViewStack with Attribute Properties panels: Code interface Panel and Standart Properties Panel  */ -->
 					
 					<mx:ViewStack id="attributePropVS" width="100%" height="100%">
 					<mx:Panel title="{langData.language.(@id == langStr).sentence.(@label == 'attrprop')}" width="100%" height="100%"
