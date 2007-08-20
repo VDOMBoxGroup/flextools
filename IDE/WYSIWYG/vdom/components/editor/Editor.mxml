@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	backgroundColor="#ffffff" backgroundAlpha="1.0"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	creationComplete="init();" xmlns:containers="vdom.components.editor.containers.*">
+	<mx:Script source="scripts/editorScript.as" />
+	
+	<mx:HBox height="100%" width="100%">
+	
+	    <containers:Types id="types" height="100%" y="100" borderThickness="1" borderColor="#000000" minWidth="170" dataProvider="{typesXML}" width="120"/>
+	    
+	    <mx:VBox id="main" width="100%" height="100%">
+	    	<containers:Workflow  id="editorMainCanvas"
+	    		width="100%" height="100%" 
+	    		backgroundColor="#ffffff" backgroundAlpha="1.0" 
+	    		borderStyle="solid" borderThickness="20" borderColor="#000000"
+	    	/>
+	    	<containers:Toolbar width="100%" id="toolbar"/>
+	    </mx:VBox>
+	    
+		<mx:VBox verticalGap="10" paddingTop="10" paddingLeft="10" paddingRight="10">
+			<containers:AttributesPanel title="Properties" id="objectProperties" label="Properties"
+				paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10" cornerRadius="0" dataProvider="{element.Attributes.Attribute}" width="100%">
+	    	</containers:AttributesPanel>
+	    	<containers:ClosablePanel id="helpPanel" title="Help" >
+	    		<mx:Text htmlText="{objectProperties.help}" condenseWhite="true" width="200"/>
+	    	</containers:ClosablePanel>
+		</mx:VBox>
+		
+	</mx:HBox>
+</mx:Canvas>

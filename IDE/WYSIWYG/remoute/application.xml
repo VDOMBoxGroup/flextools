@@ -1,0 +1,67 @@
+<Application>
+    <Information>
+        <ID>...</ID>
+        <Name>...</Name>
+        <Description>...</Description>
+        <Owner>...</Owner>
+        <Active>...</Active>
+        <Index>...</Index>
+    </Information>
+    <Objects>
+        <Object Name="Первый объект" ID="12111" Type="1">
+            <Script>...</Script>
+            <Attributes>
+                <Attribute Name="width">80</Attribute>
+				<Attribute Name="height">150</Attribute>
+				<Attribute Name="x">30</Attribute>
+				<Attribute Name="y">10</Attribute>
+            </Attributes>
+            <Objects>
+            </Objects>
+            <Value>
+            </Value>
+        </Object>
+		<Object Name="Второй объект" ID="1231" Type="2">
+            <Script>...</Script>
+            <Attributes>
+                <Attribute Name="width">100</Attribute>
+				<Attribute Name="height">100</Attribute>
+				<Attribute Name="x">200</Attribute>
+				<Attribute Name="y">200</Attribute>
+            </Attributes>
+            <Objects>
+            </Objects>
+            <Value>
+            </Value>
+        </Object>
+		<Object Name="Третий объект" ID="345" Type="3">
+            <Script>...</Script>
+            <Attributes>
+                <Attribute Name="width">100</Attribute>
+				<Attribute Name="height">100</Attribute>
+				<Attribute Name="x">300</Attribute>
+				<Attribute Name="y">300</Attribute>
+            </Attributes>
+            <Objects>
+            </Objects>
+            <Value>
+            </Value>
+        </Object>
+		<Object Name="Четвертый объект" ID="213" Type="2">
+            <Script>...</Script>
+            <Attributes>
+                <Attribute Name="width">70</Attribute>
+				<Attribute Name="height">70</Attribute>
+				<Attribute Name="x">400</Attribute>
+				<Attribute Name="y">400</Attribute>
+            </Attributes>
+            <Objects>
+            </Objects>
+            <Value>
+            </Value>
+        </Object>
+    </Objects>
+    <Resources>
+        <Resource ID="...">...</Resource>
+    </Resources>
+</Application>
