@@ -1,0 +1,15 @@
+16 august 13:04
+	* Soap.getEcho: 
+		- Get 'id' of session 
+		- Get nesesary Button for enable/disable
+		- Get function for listen
+	* soap/FileUpload class
+		- add chek of size file (300kb)
+		- fixed ERORR
+16 august 16:12
+	* soap/FileUpload class
+		- add FileFilter "*.jpg; *.gif; *.png"
+		- fixed
+	* Soap.getEcho:
+		- Get listenERROR
+	

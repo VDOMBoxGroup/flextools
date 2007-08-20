@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Image;
+			import flash.events.Event;
+			import mx.controls.Alert;
+			import com.connection.soap.Soap;
+			import com.connection.soap.SoapEvent;
+			
+//			import flash.utils
+			
+			private var soap:Soap;
+			private var img :Image = new Image;
+			private var img2 :Image = new Image();
+			private var xml:XML;
+			
+			private function init():void{
+				soap = Soap.getInstance();
+				soap.init();	
+			}
+			
+			private function login():void{
+				soap.login('123','777');
+				soap.addEventListener(SoapEvent.LOGIN_OK,test);
+	//			soap.addEventListener(SoapEvent.LOGIN_ERROR,test);
+			//	trace ("img1: "+ img.width);
+			}//783-661
+			
+			private function test(ev:Event):void{
+				xml = soap.loginResult();
+				textArea.text += xml.name().toString();
+			/**
+			* вызов  
+			***/	
+		//		
+				soap.sendEcho('asd', bt, makeImage,makeImage);
+	
+//				soap.masEcho['asd'].addEventListener( SoapEvent.GET_ECHO_OK);
+				//soap.addEventListener(SoapEvent.GET_ECHO_ERROR, runAll);
+			}
+			private function start():void{
+				trace('ЗАПУСТИЛ SOAP');
+				soap.sendEcho('asd2', bt2, makeImage2, cansle);
+				
+			//	textArea.text += "\n"+evt.type.toString();
+				//if(evt == SoapEvent.GET_ECHO_OK) 
+			}
+			private function cansle(evt:Event):void{
+				Alert.show("Cancle upload");
+			}
+			
+			private function makeImage(evt:Event):void{
+				soap.getEchoResult('asd');
+					pict.source = soap.getEchoResult('asd').source; 
+							
+			//	addChild(img);
+				//trace ("img4: "+ img.width);
+			}
+			private function makeImage2(evt:Event):void{
+				img2 =  soap.getEchoResult('asd2');
+				 
+				
+				addChild(img2);
+				//trace ("img4: "+ img.width);
+				pict2.source = img2.source;
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Button id="bt" click="login()" label="login" x="380" y="237"/>
+	<mx:TextArea id="textArea" x="77" y="73" width="408" height="156"/>
+	<mx:Image id="pict" x="464" y="33" />
+	<mx:Button id="bt2"  x="464" y="237" label="Button" click="start()"/>
+	<mx:Image  id="pict2" x="77" y="306"/>
+		
+
+</mx:Application>
