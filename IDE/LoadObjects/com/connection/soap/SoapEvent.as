@@ -4,7 +4,7 @@ package com.connection.soap
 	import flash.events.Event;
 	import mx.rpc.soap.WebService;
 	
-	public class SoapEvent extends Event
+	public class SoapEvent extends EventDispatcher
 	{
 		public static var LOGIN_OK						:String = "Login OK";
 		public static var OPEN_SESSION_OK				:String = "Open session OK"; 			//1
@@ -51,22 +51,11 @@ package com.connection.soap
 		public static var DELETE_OBJECT_ERROR 				:String = "Delete object ERROR"; 			//19
 		public static var GET_ECHO_ERROR					:String =  "Get echo ERROR"; 				//20
 		public static var UNZIP_ERROR						:String =  "Unzip ERROR";
-		
-		public function SoapEvent(type:String, bubbles:Boolean = false,
-								  cancelable:Boolean = true,
-								  result:XML = null)
-		{
-			super(type, bubbles, cancelable);
-	
-			this.result = result;
-		}
-		
-		public var result:XML;
-		
-   		/* public  function dispatch(evt:Event):void {
+
+   		public  function dispatch(evt:Event):void {
         	dispatchEvent(evt);
        // 	trace(evt.toString())
-    	} */
+    	}
     	
     	
 		private function completeListener():void{

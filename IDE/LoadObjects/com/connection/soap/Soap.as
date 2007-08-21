@@ -63,7 +63,7 @@ package com.connection.soap
 		}
 		
 		/**
-		 * 2 - close_session  
+		 *  2 - close_session  
 		 */
 		private var sCloseSession:SCloseSession = new SCloseSession(ws); 
 		
@@ -399,7 +399,7 @@ package com.connection.soap
 			  ed.addEventListener(type, listener, useCapture, priority);
     	}
            
-    	public function dispatchEvent(evt:SoapEvent):Boolean{
+    	public function dispatchEvent(evt:Event):Boolean{
       		return	 ed.dispatchEvent(evt);
     	}		
 	}
