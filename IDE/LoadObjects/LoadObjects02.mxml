@@ -2,6 +2,8 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.Fault;
 			import mx.controls.Image;
 			import flash.events.Event;
 			import mx.controls.Alert;
@@ -17,9 +19,13 @@
 			
 			private function init():void{
 				soap = Soap.getInstance();
-				soap.init();	
+				soap.init();
+				soap.addEventListener(FaultEvent.FAULT , error);
 			}
-			
+			private function error(evt:Event):void
+			{
+				textArea.text += "Error from SOAP"+ evt;
+			};
 			private function login():void{
 				soap.login('123','777');
 				soap.addEventListener(SoapEvent.LOGIN_OK,test);
