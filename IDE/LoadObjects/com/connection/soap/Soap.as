@@ -399,7 +399,7 @@ package com.connection.soap
 			  ed.addEventListener(type, listener, useCapture, priority);
     	}
            
-    	public function dispatchEvent(evt:Event):Boolean{
+    	public function dispatchEvent(evt:SoapEvent):Boolean{
       		return	 ed.dispatchEvent(evt);
     	}		
 	}
