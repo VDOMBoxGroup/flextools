@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language version="1">
+<main_tab_panel>
+	<appmaintab>Менеджер приложений</appmaintab>
+	<editortab>Редактор</editortab>
+	<multilintab>Менеджер языков</multilintab>
+	<portalmantab>Менеджер портала</portalmantab>
+	<publishtab>Публикация</publishtab>
+	<safeguardtab>Мыло :)</safeguardtab>
+	<vdomtab>V.D.O.M</vdomtab>
+</main_tab_panel>
+<appmain_panel>
+	<news>Новый</news>
+	<steps>5 шагов</steps>
+	<search>Поиск</search>
+	<applist>Список прил.</applist>
+	<appinfo>Информация</appinfo>
+</appmain_panel>
+<editor_panel>
+	<edition>Редактир.</edition>
+	<script>Скрипты</script>
+	<preview>Просмотр</preview>
+	<tree>Дерево</tree>
+	<analyse>Анализ</analyse>
+	<statistics>Статистика</statistics>
+	<events>События</events>
+</editor_panel>
+</language>

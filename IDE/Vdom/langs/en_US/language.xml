@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language version="1">
+<main_tab_panel>
+	<appmaintab>Application(s) management</appmaintab>
+	<editortab>Editor</editortab>
+	<multilintab>Multilingual management</multilintab>
+	<portalmantab>Portal management</portalmantab>
+	<publishtab>Publish</publishtab>
+	<safeguardtab>Safeguard</safeguardtab>
+	<vdomtab>V.D.O.M</vdomtab>
+</main_tab_panel>
+<appmain_panel>
+	<news>New</news>
+	<steps>5 steps</steps>
+	<search>Search</search>
+	<applist>Application list</applist>
+	<appinfo>Application information</appinfo>
+</appmain_panel>
+<editor_panel>
+	<edition>Edition</edition>
+	<script>Script</script>
+	<preview>Preview</preview>
+	<tree>Tree</tree>
+	<analyse>Analyse</analyse>
+	<statistics>Statistics</statistics>
+	<events>Events</events>
+</editor_panel>
+</language>

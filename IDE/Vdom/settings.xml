@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+	<languages default="en_US" path="langs/">
+		<language id="en_US" title="Angiyski" />
+		<language id="ru_RU" title="Русский" />
+	</languages>
+</settings>
