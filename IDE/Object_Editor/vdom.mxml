@@ -17,13 +17,22 @@
 				<mx:HBox width="100%">
 					<mx:Spacer width="{ident_2}"/>
 					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'title')}:"/>
-					<mx:TextArea height="20" width="100%" cornerRadius="3"/>
+					<mx:TextArea id="extEditorParam1" height="20" width="100%" cornerRadius="3"/>
 					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'info')}:"/>
-					<mx:TextArea height="20" width="100%" cornerRadius="3"/>
+					<mx:TextArea id="extEditorParam2" height="20" width="100%" cornerRadius="3"/>
 				</mx:HBox>
 			</mx:AddChild>
 		</mx:State>
 		<mx:State name="textFieldParams">
+			<mx:AddChild relativeTo="{hbox1}" position="before">
+				<mx:HBox width="100%">
+					<mx:Spacer width="{ident_2}"/>
+					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'length')}:"/>
+					<mx:TextArea id="textFieldParam1" height="20" width="200" cornerRadius="3"/>
+				</mx:HBox>
+			</mx:AddChild>
+		</mx:State>
+		<mx:State name="dropDownMenuParams">
 			<mx:AddChild relativeTo="{hbox1}" position="before">
 				<mx:HBox width="100%">
 					<mx:Spacer width="{ident_2}"/>
@@ -278,15 +287,15 @@
 								</mx:dataProvider>
 							</mx:ComboBox>
 							
-							<mx:ComboBox id="stdInterfaceType" close="{checkStdInterfaceType();}" width="200">
+							<mx:ComboBox id="stdInterfaceType" change="{checkStdInterfaceType();}" width="200">
 								<mx:dataProvider>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'txtfld')}" data="TextField"/>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'ddownmenu')}" data="DropDown"/>
-								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'file')}" data="File"/>
-								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'clrch')}" data="Color"/>
-								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'pglink')}" data="PageLink"/>
-								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'objlist')}" data="ObjectList"/>
-								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'lnkbase')}" data="LinkedBase"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'file')}" data="File()"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'clrch')}" data="Color()"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'pglink')}" data="PageLink()"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'objlist')}" data="ObjectList()"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'lnkbase')}" data="LinkedBase()"/>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'exteditor')}" data="ExternalEditor"/>
 								</mx:dataProvider>
 							</mx:ComboBox>

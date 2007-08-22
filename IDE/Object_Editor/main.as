@@ -25,6 +25,7 @@ import com.connection.soap.SoapEvent;
 import flash.events.Event;
 import mx.controls.Image;
 import mx.states.AddChild;
+import mx.formatters.SwitchSymbolFormatter;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
@@ -125,7 +126,22 @@ private function attrFieldsWrite():void {
 			@extended = Number(extChBox.selected);
 			*/
 			if (@itype.toString() == "Std") {
-				codeinterface = stdInterfaceType.selectedItem.data;
+				var selectedData:String = stdInterfaceType.selectedItem.data.toString();
+				switch (selectedData) {
+					case "ExternalEditor":
+						codeinterface = selectedData + "(" + extEditorParam1.text + "," + extEditorParam2.text + ")";
+						break;
+					case "TextField":
+						if (textFieldParam1 != null) {
+							codeinterface = selectedData + "(" + textFieldParam1.text + ")";
+						} else {
+							codeinterface = selectedData + "()";							
+						}
+						break;						
+					default:
+						codeinterface = selectedData;
+						break;
+				}
 			} else {
 				if (attrCodeEditorTextArea != null)
 					codeinterface = attrCodeEditorTextArea.text;
@@ -201,8 +217,16 @@ private function attrFieldsRefresh():void {
 			}
 
 			/* Set up Standart Interface Type ComboBox */
-			if (@itype.toString() == "Std") {
-				switch (codeinterface.toString()) {
+			if (@itype.toString() == "Std" && stdInterfaceType != null) {
+				var stdInterfaceTypeRegexp:RegExp = /([a-zA-Z0-9]+)\([a-zA-Z0-9,]*\)/;
+				var interfaceString:String = new String();
+				if (codeinterface.toString().match(stdInterfaceTypeRegexp) != null) {
+					interfaceString = codeinterface.toString().match(stdInterfaceTypeRegexp)[1];
+				} else {
+					interfaceString = codeinterface.toString();					
+				}
+
+				switch (interfaceString) {
 					case "TextField":		stdInterfaceType.selectedIndex = 0; break;
 					case "DropDown":		stdInterfaceType.selectedIndex = 1; break;
 					case "File":			stdInterfaceType.selectedIndex = 2; break;
@@ -239,6 +263,31 @@ private function attrFieldsRefresh():void {
 	}
 }	
 
+private function checkStdInterfaceType():void {
+	var selectedData:String = stdInterfaceType.selectedItem.data.toString();
+	var stdInterfaceTypeRegexp:RegExp = new RegExp();
+	switch (selectedData) {
+		case "ExternalEditor":
+			currentState = "editorParams";
+			
+			stdInterfaceTypeRegexp = /[a-zA-Z]+\(([a-zA-Z0-9]*)\,([a-zA-Z0-9]*)\)/;
+			if (attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp) != null) {
+				extEditorParam1.text = attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp)[1];
+				extEditorParam2.text = attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp)[2];					
+			}
+			break;
+		case "TextField":
+			currentState = "textFieldParams";
+
+			stdInterfaceTypeRegexp = /[a-zA-Z]+\(([a-zA-Z0-9,]*)\)/;
+			if (attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp) != null) {
+				textFieldParam1.text = attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp)[1];					
+			}
+			break;
+		default: currentState = ""; break;
+	}
+}
+
 private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:int):void {
 	var tab:Canvas;
 	var textArea:TextArea;
@@ -257,6 +306,12 @@ private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:i
 			i++;
 		}
 	}
+}
+
+private function clearExtendedFields():void {
+	
+	
+	
 }
 
 private function createInformationLangsTabs():void {
@@ -431,15 +486,8 @@ private function checkCodeInterface():void {
 		} else {
 			codeButton.enabled = false;
 			stdInterfaceType.enabled = true;
+			checkStdInterfaceType();
 		}
-	}
-}
-
-private function checkStdInterfaceType():void {
-	if (stdInterfaceType.selectedItem.data == "ExternalEditor") {
-		currentState = "editorParams";
-	} else {
-		currentState = "";
 	}
 }
 
@@ -723,9 +771,6 @@ private function keyValidator(key:KeyboardEvent):void {
 		ta.setSelection(ta.selectionBeginIndex + 1, ta.selectionBeginIndex + 1);
 	}
 	
-	/* XML Parser and Colorer */
-	/* Process "<" char */
-
 	/* Draw srings numbers */
 	var na:TextArea = attrCodeEditorNumbersArea;
 	var strNumber:int = ta.verticalScrollPosition + 1;
