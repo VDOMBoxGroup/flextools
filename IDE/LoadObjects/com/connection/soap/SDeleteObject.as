@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SDeleteObject extends SoapEvent 
+	public class SDeleteObject extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -38,21 +38,27 @@ package com.connection.soap
 			
 			// get result 
 			resultXML = XML(ws.delete_object.lastResult.Result);
+			var evt:SoapEvent;
+			
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				dispatch(new Event(DELETE_OBJECT_ERROR));
+				evt = new SoapEvent(SoapEvent.DELETE_OBJECT_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 			//	Alert.show("ERROR!\nFrom: " + this.toString() )
-				trace("ERROR! From: " + this.toString() );
+			//	trace("ERROR! From: " + this.toString() );
 			} else{
 
-				dispatch(new Event(DELETE_OBJECT_OK));
-				trace(this.toString() + ' - OK')
+				evt = new SoapEvent(SoapEvent.DELETE_OBJECT_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
+			//	trace(this.toString() + ' - OK')
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}

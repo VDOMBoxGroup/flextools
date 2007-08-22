@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SGetTopObjects extends SoapEvent 
+	public class SGetTopObjects extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -22,32 +22,37 @@ package com.connection.soap
 		
 		public function execute(appid:String):void{
 			// data
-			ws.create_object.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.create_object.arguments.skey 		= code.skey();			//- очередной ключ сессии 
-			ws.get_child_objects.arguments.appid  	= appid;		//- идентификатор приложения 
+			ws.get_top_objects.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
+			ws.get_top_objects.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			ws.get_top_objects.arguments.appid  	= appid;		//- идентификатор приложения 
 			
 			//send data & set listener 
-			ws.create_object();
-			ws.create_object.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.get_top_objects();
+			ws.get_top_objects.addEventListener(ResultEvent.RESULT,completeListener);
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void{
 			// get result 
-			resultXML = XML(ws.create_object.lastResult.Result);
+			resultXML = XML(ws.get_top_objects.lastResult.Result);
+			var evt:SoapEvent;
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
-				dispatch(new Event(CREATE_OBJECT_ERROR));
+				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				trace("ERROR! From: " + this.toString() )
+				//trace("ERROR! From: " + this.toString() )
 			} else{
-				dispatch(new Event(CREATE_OBJECT_OK));
+				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 				// trace(this.toString() + ' - OK')
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}

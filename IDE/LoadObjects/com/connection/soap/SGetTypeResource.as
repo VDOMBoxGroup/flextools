@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SGetTypeResource extends SoapEvent 
+	public class SGetTypeResource extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -40,21 +40,27 @@ package com.connection.soap
 			
 			// get result 
 			resultXML = XML(ws.get_type_resource.lastResult.Result);
+			var evt:SoapEvent;
+			
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				dispatch(new Event(GET_TYPE_RESOURCE_ERROR));
+				evt = new SoapEvent(SoapEvent.GET_TYPE_RESOURCE_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				trace("ERROR! From: " + this.toString() )
+				//trace("ERROR! From: " + this.toString() )
 			} else{
 
-				dispatch(new Event(GET_TYPE_RESOURCE_OK));
-				trace(this.toString() + ' - OK')
+				evt = new SoapEvent(SoapEvent.GET_TYPE_RESOURCE_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
+				//trace(this.toString() + ' - OK')
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}

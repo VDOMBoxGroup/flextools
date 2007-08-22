@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SRenderWysiwyg extends SoapEvent 
+	public class SRenderWysiwyg extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -20,13 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String, objid:String, dynamic:String):void{
+		public function execute(appid:String, objid:String, sdynamic:String):void{
 			// data
 			ws.render_wysiwyg.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.render_wysiwyg.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			ws.render_wysiwyg.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.render_wysiwyg.arguments.objid  	= objid;		//- идентификатор объекта 
-			ws.render_wysiwyg.arguments.dynamic  = dynamic;		//- способ рендеринга: для только что созданных объектов нужно указывать 0, для всех остальных 1
+			ws.render_wysiwyg.arguments.dynamic  = sdynamic;		//- способ рендеринга: для только что созданных объектов нужно указывать 0, для всех остальных 1
 		
 			
 			//send data & set listener 
@@ -39,21 +39,27 @@ package com.connection.soap
 			
 			// get result 
 			resultXML = XML(ws.render_wysiwyg.lastResult.Result);
+			var evt:SoapEvent;
+			
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				dispatch(new Event(RENDER_WYSIWYG_ERROR));
+				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				trace("ERROR! From: " + this.toString() )
+				//trace("ERROR! From: " + this.toString() )
 			} else{
 
-				dispatch(new Event(RENDER_WYSIWYG_OK));
+				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 				//trace(this.toString() + ' - OK')
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}

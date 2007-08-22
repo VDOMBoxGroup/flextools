@@ -15,8 +15,9 @@ package com.connection.soap
 	import mx.charts.AreaChart;
 	import mx.controls.Button;
 	import flash.display.Loader;
+	import flash.events.ErrorEvent;
 		
-	public class Soap 
+	public class Soap  extends EventDispatcher
 	{
 		private static 	var ws			:WebService	= new WebService;
 		private static 	var instance	:Soap;
@@ -35,7 +36,7 @@ package com.connection.soap
 		 {
              return instance||new Soap() ;
          }		
-		
+		//app_text
 		public function init(wsdl:String= 'http://192.168.0.23:82/vdom.wsdl'):void
 		{
              //	var loader :Loader = new Loader; 
@@ -50,11 +51,13 @@ package com.connection.soap
 		 */
 		private var sLogin:SLogin = new SLogin(ws); 
 
-		public   function login(login:String='', password:String=''):void 
-		{
+		public   function login( login:String='', password:String='' ):void 
+		{	
+			//var fun:Function;
+			
 			sLogin.execute(login,password);
-			sLogin.addEventListener(SoapEvent.LOGIN_OK, dispatchEvent);
-			sLogin.addEventListener(SoapEvent.LOGIN_ERROR, dispatchEvent);
+			sLogin.addEventListener(SoapEvent.LOGIN_OK,    ldispatchEvent  );
+			sLogin.addEventListener(SoapEvent.LOGIN_ERROR, ldispatchEvent);
 		}
 	
 		public   function loginResult():XML 
@@ -70,8 +73,8 @@ package com.connection.soap
 		public  function closeSession():void 
 		{
 			sCloseSession.execute();
-			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_OK, dispatchEvent);
-			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_ERROR, dispatchEvent);
+			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_OK, ldispatchEvent);
+			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_ERROR, ldispatchEvent);
 		}
 		/*
 		public   function closeSessionResult():XML 
@@ -87,8 +90,8 @@ package com.connection.soap
 		public  function createApplication():void 
 		{
 			sCreateApplication.execute();
-			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_OK, dispatchEvent);
-			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_ERROR, dispatchEvent);
+			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_OK, ldispatchEvent);
+			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_ERROR, ldispatchEvent);
 		}
 		
 		public   function createApplicationResult():XML 
@@ -104,8 +107,8 @@ package com.connection.soap
 		public  function setApplicationInfo(appid:String='',attrname:String='',attrvalue:String=''):void 
 		{
 			sSetApplicationInfo.execute(appid, attrname, attrvalue);
-			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_OK, dispatchEvent);
-			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_ERROR, dispatchEvent);
+			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_OK, ldispatchEvent);
+			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_ERROR, ldispatchEvent);
 		}
 		/*
 		public   function setApplicationInfoResult():XML 
@@ -121,8 +124,8 @@ package com.connection.soap
 		public  function listApplications():void 
 		{
 			istApplications.execute();
-			istApplications.addEventListener(SoapEvent.LIST_APLICATION_OK, dispatchEvent);
-			istApplications.addEventListener(SoapEvent.LIST_APLICATION_ERROR, dispatchEvent);
+			istApplications.addEventListener(SoapEvent.LIST_APLICATION_OK, ldispatchEvent);
+			istApplications.addEventListener(SoapEvent.LIST_APLICATION_ERROR, ldispatchEvent);
 		}
 		
 		public   function listApplicationsResult():XML 
@@ -138,8 +141,8 @@ package com.connection.soap
 		public  function listTypes():void 
 		{
 			sListTipes.execute();
-			sListTipes.addEventListener(SoapEvent.LIST_TYPES_OK, dispatchEvent);
-			sListTipes.addEventListener(SoapEvent.LIST_TYPES_ERROR, dispatchEvent);
+			sListTipes.addEventListener(SoapEvent.LIST_TYPES_OK, ldispatchEvent);
+			sListTipes.addEventListener(SoapEvent.LIST_TYPES_ERROR, ldispatchEvent);
 		}
 		
 		public   function listTypesResult():XML {
@@ -154,8 +157,8 @@ package com.connection.soap
 		public  function getType(typeid:String=''):void 
 		{
 			sGetType.execute(typeid);
-			sGetType.addEventListener(SoapEvent.GET_TYPE_OK, dispatchEvent);
-			sGetType.addEventListener(SoapEvent.GET_TYPE_ERROR, dispatchEvent);
+			sGetType.addEventListener(SoapEvent.GET_TYPE_OK, ldispatchEvent);
+			sGetType.addEventListener(SoapEvent.GET_TYPE_ERROR, ldispatchEvent);
 		}
 		
 		public   function sGetTypeResult():XML 
@@ -171,8 +174,8 @@ package com.connection.soap
 		public  function getTypeResource(typeid:String='',resid:String=''):void 
 		{
 			sGetTypeResource.execute(typeid, resid);
-			sGetTypeResource.addEventListener(SoapEvent.GET_TYPE_RESOURCE_OK, dispatchEvent);
-			sGetTypeResource.addEventListener(SoapEvent.GET_TYPE_RESOURCE_ERROR, dispatchEvent);
+			sGetTypeResource.addEventListener(SoapEvent.GET_TYPE_RESOURCE_OK, ldispatchEvent);
+			sGetTypeResource.addEventListener(SoapEvent.GET_TYPE_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
 		public   function getTypeResourceResult():XML 
@@ -188,8 +191,8 @@ package com.connection.soap
 		public  function getApplicationResource(appid:String='',resid:String=''):void 
 		{
 			sGetApplicationResource.execute(appid, resid);
-			sGetApplicationResource.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_OK, dispatchEvent);
-			sGetApplicationResource.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_ERROR, dispatchEvent);
+			sGetApplicationResource.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_OK, ldispatchEvent);
+			sGetApplicationResource.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
 		public   function getApplicationResourceResult():XML 
@@ -205,8 +208,8 @@ package com.connection.soap
 		public  function renderWysiwyg(appid:String='',objid:String='',dynamic:String = ''):void 
 		{
 			sRenderWysiwig.execute(appid, objid, dynamic);
-			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, dispatchEvent);
-			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, dispatchEvent);
+			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, ldispatchEvent);
+			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, ldispatchEvent);
 		}
 		
 		public   function renderWysiwygResult():XML 
@@ -222,8 +225,8 @@ package com.connection.soap
 		public function createObject(appid:String='',parentid:String='',typeid:String = ''):void
 		{
 			sco.execute(appid,parentid,typeid);
-			sco.addEventListener(SoapEvent.CREATE_OBJECT_OK, dispatchEvent);
-			sco.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, dispatchEvent);
+			sco.addEventListener(SoapEvent.CREATE_OBJECT_OK, ldispatchEvent);
+			sco.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, ldispatchEvent);
 		}
 		
 		public   function createObjectResult():XML 
@@ -239,8 +242,8 @@ package com.connection.soap
 		public  function getTopObjects(appid:String=''):void 
 		{
 			sGetTopObjects.execute(appid);
-			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, dispatchEvent);
-			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_ERROR, dispatchEvent);
+			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, ldispatchEvent);
+			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_ERROR, ldispatchEvent);
 		}
 		
 		public   function getTopObjectsResult():XML 
@@ -256,8 +259,8 @@ package com.connection.soap
 		public  function getChildObjects(appid:String='',objid:String=''):void 
 		{
 			sGetChildObjects.execute(appid, objid );
-			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, dispatchEvent);
-			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_ERROR, dispatchEvent);
+			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, ldispatchEvent);
+			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_ERROR, ldispatchEvent);
 		}
 		
 		public   function getChildObjectsResult():XML 
@@ -273,8 +276,8 @@ package com.connection.soap
 		public  function getApplicationLanguageData(appid:String=''):void 
 		{
 			sGetApplicationLanguageData.execute(appid);
-			sGetApplicationLanguageData.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_OK, dispatchEvent);
-			sGetApplicationLanguageData.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_ERROR, dispatchEvent);
+			sGetApplicationLanguageData.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_OK, ldispatchEvent);
+			sGetApplicationLanguageData.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_ERROR, ldispatchEvent);
 		}
 		
 		public   function getApplicationLanguageDataResult():XML 
@@ -290,8 +293,8 @@ package com.connection.soap
 		public  function setAttribute(appid:String='',objid:String='', attr:String='',value:String='' ):void 
 		{
 			sSetAttribute.execute(appid, objid,attr, value);
-			sSetAttribute.addEventListener(SoapEvent.SET_APLICATION_OK, dispatchEvent);
-			sSetAttribute.addEventListener(SoapEvent.SET_APLICATION_ERROR, dispatchEvent);
+			sSetAttribute.addEventListener(SoapEvent.SET_ATTRIBUTE_OK, ldispatchEvent);
+			sSetAttribute.addEventListener(SoapEvent.SET_ATTRIBUTE_ERROR, ldispatchEvent);
 		}
 		
 		public   function setAttributeResult():XML 
@@ -306,8 +309,8 @@ package com.connection.soap
 		public  function setValue(appid:String='',objid:String='', value:String='' ):void 
 		{
 			sSetValue.execute(appid, objid, value);
-			sSetValue.addEventListener(SoapEvent.SET_VALUE_OK, dispatchEvent);
-			sSetValue.addEventListener(SoapEvent.SET_VALUE_ERROR, dispatchEvent);
+			sSetValue.addEventListener(SoapEvent.SET_VALUE_OK, ldispatchEvent);
+			sSetValue.addEventListener(SoapEvent.SET_VALUE_ERROR, ldispatchEvent);
 		}
 		
 		public   function setValueResult():XML 
@@ -322,8 +325,8 @@ package com.connection.soap
 		public  function setScript(appid:String='',objid:String='', script:String='' ):void 
 		{
 			sSetScript.execute(appid, objid, script);
-			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_OK, dispatchEvent);
-			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_ERROR, dispatchEvent);
+			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_OK, ldispatchEvent);
+			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_ERROR, ldispatchEvent);
 		}
 		
 		public   function setScriptResult():XML 
@@ -339,8 +342,8 @@ package com.connection.soap
 		public  function setResource(appid:String='',resid:String='', resdata:String='' ):void 
 		{
 			sSetResource.execute(appid, resid,resdata);
-			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_OK, dispatchEvent);
-			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_ERROR, dispatchEvent);
+			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_OK, ldispatchEvent);
+			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
 		public   function setResourceResult():XML 
@@ -356,8 +359,8 @@ package com.connection.soap
 		public  function deleteObject(appid:String='',objid:String='' ):void 
 		{
 			sDeleteObject.execute();
-			sDeleteObject.addEventListener(SoapEvent.DELETE_OBJECT_OK, dispatchEvent);
-			sDeleteObject.addEventListener(SoapEvent.DELETE_OBJECT_ERROR, dispatchEvent);
+			sDeleteObject.addEventListener(SoapEvent.DELETE_OBJECT_OK, ldispatchEvent);
+			sDeleteObject.addEventListener(SoapEvent.DELETE_OBJECT_ERROR, ldispatchEvent);
 		}
 		
 		public   function deleteObjectResult():XML 
@@ -391,17 +394,21 @@ package com.connection.soap
 		
 		
 		//Error
-		private  function errorListener(event:ResultEvent):void{
-			dispatchEvent(event);
+		private  function errorListener(event:FaultEvent):void{
+			//ed.dispatchEvent(event);
+			trace('Блина:' + event);
 		}
 
-		public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void{
+	/*	public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void{
 			  ed.addEventListener(type, listener, useCapture, priority);
     	}
-           
-    	public function dispatchEvent(evt:Event):Boolean{
-      		return	 ed.dispatchEvent(evt);
-    	}		
+           */
+    	public function ldispatchEvent(evt:SoapEvent):void{
+      		trace(evt.result);
+			var soapEvent:SoapEvent = new SoapEvent(evt.type);
+			soapEvent.result = evt.result;
+			dispatchEvent(soapEvent);
+    	}	
 	}
 }
 

@@ -23,7 +23,7 @@ package com.connection.utils
 	
 	
 
-    public dynamic class FileUpload extends SoapEvent
+    public dynamic class FileUpload extends EventDispatcher
     //extends UIComponent
     {
         // Hard-code the URL of the remote upload script.
@@ -95,7 +95,7 @@ package com.connection.utils
             myTimer.addEventListener("timer", runWebService);
             myTimer.start(); 
             
-            trace('1. Time to upload: '+ (getTimer() - time)  + 'c.');  
+          //  trace('1. Time to upload: '+ (getTimer() - time)  + 'c.');  
             time = getTimer();      
         }
 
@@ -106,15 +106,15 @@ package com.connection.utils
 		
 			ge.addEventListener(SoapEvent.GET_ECHO_OK, extractData);
 			ge.addEventListener(SoapEvent.GET_ECHO_ERROR, dispatchEvent);
-			trace('2. Time to Run WebServise: '+ (getTimer() - time)  + 'c.');
+			//trace('2. Time to Run WebServise: '+ (getTimer() - time)  + 'c.');
 			time = getTimer();
 		}
 		
 		private var extract:Extract = new Extract();
 		private function extractData(evt:Event):void{
-			trace('3.Time to get result from SOAP servise: '+ (getTimer() - time) + 'c.');
+			//trace('3.Time to get result from SOAP servise: '+ (getTimer() - time) + 'c.');
 			time = getTimer();
-			extract.unziping(ge.getResult()); 
+			extract.unziping(ge.getResult().toString()); 
 			extract.addEventListener(SoapEvent.UNZIP_OK, getImage);
 			ge.removeEventListener(SoapEvent.GET_ECHO_OK, extractData);
 		}		
@@ -124,7 +124,7 @@ package com.connection.utils
 			//necessary data for as
 			img = extract.getImage();
 		//	trace ("img File Up3: "+ img.width);
-			trace('5.Time to UnZip: '+ (getTimer() - time) + 'c.');
+			//trace('5.Time to UnZip: '+ (getTimer() - time) + 'c.');
 			time = getTimer();
 			dispatchEvent(new Event(SoapEvent.GET_ECHO_OK));
 			
@@ -137,7 +137,7 @@ package com.connection.utils
 	
         public function getResul():Image{
         	//return ge.getResult();
-        	trace('6. REzult Time: '+ (getTimer() - times) + 'c.');
+        	//trace('6. REzult Time: '+ (getTimer() - times) + 'c.');
         	return  img;
         }
     }

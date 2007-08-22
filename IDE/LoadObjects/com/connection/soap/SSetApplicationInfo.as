@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SSetApplicationInfo extends SoapEvent 
+	public class SSetApplicationInfo extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -38,21 +38,27 @@ package com.connection.soap
 			
 			// get result 
 			resultXML = XML(ws.set_application_info.lastResult.Result);
+			var evt:SoapEvent;
+			
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				dispatch(new Event(SET_APLICATION_ERROR));
+				evt = new SoapEvent(SoapEvent.SET_APLICATION_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				trace("ERROR! From: " + this.toString() )
+				//trace("ERROR! From: " + this.toString() )
 			} else{
 
-				dispatch(new Event(SET_APLICATION_OK));
-				trace(this.toString() + ' - OK')
+				evt = new SoapEvent(SoapEvent.SET_APLICATION_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
+				//trace(this.toString() + ' - OK')
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}

@@ -4,8 +4,9 @@ package com.connection.utils
 	import com.connection.soap.SoapEvent;
 	import flash.events.Event;
 	import flash.display.Loader;
+	import flash.events.EventDispatcher;
 	
-	public class Extract extends SoapEvent
+	public class Extract extends EventDispatcher
 	{
 		import flash.display.Sprite;
 		import flash.utils.ByteArray;
@@ -47,7 +48,7 @@ package com.connection.utils
    				img.height = ld.height;
    				img.source = ld.content;
    				//addChild(img);
-   				dispatch(new Event(UNZIP_OK));
+   				dispatchEvent(new Event(SoapEvent.UNZIP_OK));
    				ld.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);
    			}
    		public function getImage():Image{

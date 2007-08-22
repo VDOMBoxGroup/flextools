@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SModel extends SoapEvent 
+	public class SModel extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -39,13 +39,15 @@ package com.connection.soap
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				dispatch(new Event(YYYYY_ERROR));
+				evt = new SoapEvent(SoapEvent.);
+				dispatchEvent(evt);
 				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				trace("ERROR! From: " + this.toString() )
+				//trace("ERROR! From: " + this.toString() )
 			} else{
 
-				dispatch(new Event(YYYYY_OK));
-				trace(this.toString() + ' - OK')
+				evt = new SoapEvent(SoapEvent.);
+				dispatchEvent(evt);
+				//trace(this.toString() + ' - OK')
 			}
 		}
 		

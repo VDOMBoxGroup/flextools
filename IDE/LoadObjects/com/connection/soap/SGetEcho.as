@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SGetEcho extends SoapEvent 
+	public class SGetEcho extends EventDispatcher
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -34,23 +34,29 @@ package com.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void{
 			ws.get_echo.removeEventListener(ResultEvent.RESULT,completeListener);
+
 			// get result 
 			resultXML = XML(ws.get_echo.lastResult.Result);
+			var evt:SoapEvent;
+			
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				dispatch(new Event(GET_ECHO_ERROR));
+				evt = new SoapEvent(SoapEvent.GET_ECHO_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 			//	Alert.show("GetEcho: "+resultXML);
 			} else{
-			
-				dispatch(new Event(GET_ECHO_OK));
+				evt = new SoapEvent(SoapEvent.GET_ECHO_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 				//Alert.show("GetEcho: "+resultXML); 
-				trace ("SGetEcho.as: OK");
+				//trace ("SGetEcho.as: OK");
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}

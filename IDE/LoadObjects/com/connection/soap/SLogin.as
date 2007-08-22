@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SLogin extends SoapEvent 
+	public class SLogin extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -33,11 +33,17 @@ package com.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void{
 			
+			// get result 
 			resultXML = XML(ws.open_session.lastResult.Result);
+			var evt:SoapEvent;
+			
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
-				Alert.show("ERROR!\nFrom: " + this.toString() )
+				evt = new SoapEvent(SoapEvent.LOGIN_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
+				//Alert.show("ERROR!\nFrom: " + this.toString() )
 			} else{
 				
 				// run session protector
@@ -46,13 +52,15 @@ package com.connection.soap
 				code.sessionId = resultXML.SessionId;
 		
 			//	Alert.show("Password and User correct\nsid: "+ code.sessionId );
-			trace("Password and User correct\nsid: "+ code.sessionId);
+			//trace("Password and User correct\nsid: "+ code.sessionId);
 			trace(this.toString() );
-				dispatch(new Event(LOGIN_OK));
+				evt = new SoapEvent(SoapEvent.LOGIN_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}

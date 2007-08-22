@@ -28,19 +28,94 @@
 			};
 			private function login():void{
 				soap.login('123','777');
-				soap.addEventListener(SoapEvent.LOGIN_OK,test);
-	//			soap.addEventListener(SoapEvent.LOGIN_ERROR,test);
-			//	trace ("img1: "+ img.width);
+				soap.addEventListener(SoapEvent.LOGIN_OK,    startMetods);
+				soap.addEventListener(SoapEvent.LOGIN_ERROR, startMetods);
+								
 			}//783-661
+			private function startMetods(evt:SoapEvent):void{
+		/*		soap.createApplication();
+				soap.addEventListener(SoapEvent.CREATE_APPLICATION_OK, test);
+				soap.addEventListener(SoapEvent.CREATE_APPLICATION_ERROR, test);
+				
+				soap.createObject();
+				soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, test);
+				soap.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, test);
+				
+				soap.deleteObject();
+				soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, test);
+				soap.addEventListener(SoapEvent.DELETE_OBJECT_ERROR, test);
+				
+				soap.getApplicationLanguageData();
+				soap.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_OK, test);
+				soap.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_ERROR, test);
+				
+				soap.getApplicationResource();
+				soap.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_OK, test);
+				soap.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_ERROR, test);
+				
+				soap.getChildObjects();
+				soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, test);
+				soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_ERROR, test);
+				
+				soap.getTopObjects();
+				soap.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, test);
+				soap.addEventListener(SoapEvent.GET_TOP_OBJECTS_ERROR, test);
+				
+				soap.getType();
+				soap.addEventListener(SoapEvent.GET_TYPE_OK, test);
+				soap.addEventListener(SoapEvent.GET_TYPE_ERROR, test);
+				
+				soap.getTypeResource();
+				soap.addEventListener(SoapEvent.GET_TYPE_RESOURCE_OK, test);
+				soap.addEventListener(SoapEvent.GET_TYPE_RESOURCE_ERROR, test);
+				
+				soap.listApplications();
+				soap.addEventListener(SoapEvent.LIST_APLICATION_OK, test);
+				soap.addEventListener(SoapEvent.LIST_APLICATION_ERROR, test);
+					
+				soap.listTypes();
+				soap.addEventListener(SoapEvent.LIST_TYPES_OK, test);
+				soap.addEventListener(SoapEvent.LIST_TYPES_ERROR, test);
+		*/
+		/**		
+				soap.renderWysiwyg();
+				soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, test);
+				soap.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, test);
+			*/
+				
+				soap.setApplicationInfo();
+				soap.addEventListener(SoapEvent.SET_APLICATION_OK, test);
+				soap.addEventListener(SoapEvent.SET_APLICATION_ERROR, test);
+				
+				soap.setAttribute();
+				soap.addEventListener(SoapEvent.SET_ATTRIBUTE_OK, test);
+				soap.addEventListener(SoapEvent.SET_ATTRIBUTE_ERROR, test);
+			/**	
+				soap.setResource();
+				soap.addEventListener(SoapEvent.SET_RESOURCE_OK, test);
+				soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, test);
+			*/	
+				soap.setScript();
+				soap.addEventListener(SoapEvent.SET_SCRIPT_OK, test);
+				soap.addEventListener(SoapEvent.SET_SCRIPT_ERROR, test);
+				
+				soap.setValue();
+				soap.addEventListener(SoapEvent.SET_VALUE_OK, test);
+				soap.addEventListener(SoapEvent.SET_VALUE_ERROR, test);
+				
+				
+				
+			}
 			
-			private function test(ev:Event):void{
-				xml = soap.loginResult();
-				textArea.text += xml.name().toString();
+			private function test(ev:SoapEvent):void{
+				//xml = soap.loginResult();
+			//	trace(ev.target+":\n " + ev.result );
+				textArea.text +=   ev.type.toString()+ ": - " + ev.result + '\n';
 			/**
 			* вызов  
 			***/	
 		//		
-				soap.sendEcho('asd', bt, makeImage,makeImage);
+			//	soap.sendEcho('asd', bt, makeImage,makeImage);
 	
 //				soap.masEcho['asd'].addEventListener( SoapEvent.GET_ECHO_OK);
 				//soap.addEventListener(SoapEvent.GET_ECHO_ERROR, runAll);

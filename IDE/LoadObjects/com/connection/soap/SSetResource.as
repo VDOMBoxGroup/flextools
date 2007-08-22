@@ -10,7 +10,7 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SSetResource extends SoapEvent 
+	public class SSetResource extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -33,28 +33,35 @@ package com.connection.soap
 			//send data & set listener 
 			ws.set_resource();
 			ws.set_resource.addEventListener(ResultEvent.RESULT,completeListener);
+			
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void{
-			
+			Alert.show('set_resource');
 			// get result 
 			resultXML = XML(ws.set_resource.lastResult.Result);
+			var evt:SoapEvent;
+			
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				dispatch(new Event(SET_RESOURCE_ERROR));
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				trace("ERROR! From: " + this.toString() )
+				evt = new SoapEvent(SoapEvent.SET_RESOURCE_ERROR);
+				evt.result = resultXML;
+				dispatchEvent(evt);
+				 //Alert.show("ERROR!\nFrom: " + this.toString() )
+				//trace("ERROR! From: " + this.toString() )
 			} else{
 
-				dispatch(new Event(SET_RESOURCE_OK));
-				trace(this.toString() + ' - OK')
+				evt = new SoapEvent(SoapEvent.SET_RESOURCE_OK);
+				evt.result = resultXML;
+				dispatchEvent(evt);
+				//trace(this.toString() + ' - OK')
 			}
 		}
 		
-		public override   function getResult():XML{
+		public    function getResult():XML{
 			return resultXML;
 		}
 	}
