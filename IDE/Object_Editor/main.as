@@ -29,6 +29,8 @@ import mx.formatters.SwitchSymbolFormatter;
 
 public const ident_1:int = 150;
 public const ident_2:int = 200;
+
+/* XML with Object Supported languages */
 public var supLanguages:XML = 
 	<root>
 		<language label="" text=""/>
@@ -69,7 +71,7 @@ private var editorIconImage:Image = new Image();
 private var structureIconImage:Image = new Image();
 
 public function start():void {
-/* **** Start() is the main function, that is being executed as soon as form created **** */
+	/* **** Start() is the main function, that is being executed as soon as form created **** */
 
 	langRefresh();
 	createBasicAttr();
@@ -77,7 +79,7 @@ public function start():void {
 }
 
 private function addNewAttribute():void {
-/* addNewAttribute() Adding new empty Attribute to the Attributes list */
+	/* addNewAttribute() Adding new empty Attribute to the Attributes list */
 
 	attributesCollection.addItem (
 		<attribute label="New Attribute" name="New Attribute" defval="" regexp="" visined="0" extended="0" itype="">
@@ -108,8 +110,9 @@ private function createBasicAttr():void {
 	addNewAttribute();
 }
 
+
 private function attrFieldsWrite():void {
-/* attrFieldsWrite() writes the data from Attribute Form Fields to the XML in memory */
+	/* attrFieldsWrite() writes the data from Attribute Form Fields to the XML in memory */
 
 	var i:uint = 0;
 	
@@ -122,9 +125,10 @@ private function attrFieldsWrite():void {
 			@regexp = regExpVld.text;
 			@visined = Number(visinedChBox.selected);
 			@itype = attributeInterfaceType.selectedItem.data;
-			/* Removed with new XML specification *
+			/** Removed with new XML specification *
 			@extended = Number(extChBox.selected);
 			*/
+			
 			if (@itype.toString() == "Std") {
 				var selectedData:String = stdInterfaceType.selectedItem.data.toString();
 				switch (selectedData) {
@@ -180,14 +184,15 @@ private function attrFieldsWriteNRefresh():void {
 	/* Saving previous Attribute */
 	attrFieldsWrite();
 	
-	/* Setting new Attribute as prevoius :) */
+	/* Setting new Attribute as prevoius :-) */
 	currentAttr = attrList.selectedIndex;
 	
+	/* Refreshing now current Attribute :-) */
 	attrFieldsRefresh();
 }
 
 private function attrFieldsRefresh():void {	
-/* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
+	/* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
 
 	if (currentAttr != -1 && attributesPanel != null) {
 		if (attributesPanel != null) attributesPanel.visible = true;
@@ -201,7 +206,7 @@ private function attrFieldsRefresh():void {
 			regExpVld.text = @regexp;
 			visinedChBox.selected = Boolean(Number(@visined));
 			
-			/* Removed with new XML specification *
+			/** Removed with new XML specification *
 			extChBox.selected = Number(@extended);
 			*/
 
@@ -211,8 +216,7 @@ private function attrFieldsRefresh():void {
 				case "Ext":
 					attributeInterfaceType.selectedIndex = 1;
 					if (attrCodeEditorTextArea != null)
-						attrCodeEditorText
-						Area.text = attributesCollection[currentAttr].codeinterface;
+						attrCodeEditorTextArea.text = attributesCollection[currentAttr].codeinterface;
 					break;
 			}
 
@@ -266,22 +270,26 @@ private function attrFieldsRefresh():void {
 private function checkStdInterfaceType():void {
 	var selectedData:String = stdInterfaceType.selectedItem.data.toString();
 	var stdInterfaceTypeRegexp:RegExp = new RegExp();
+	
 	switch (selectedData) {
 		case "ExternalEditor":
-			currentState = "editorParams";
-			
-			stdInterfaceTypeRegexp = /[a-zA-Z]+\(([a-zA-Z0-9]*)\,([a-zA-Z0-9]*)\)/;
+			currentState = "editorParams";			
+			stdInterfaceTypeRegexp = /ExternalEditor\(([a-zA-Z0-9]*)\,([a-zA-Z0-9]*)\)/;
 			if (attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp) != null) {
 				extEditorParam1.text = attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp)[1];
 				extEditorParam2.text = attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp)[2];					
+			} else {
+				extEditorParam1.text = "";
+				extEditorParam2.text = "";
 			}
 			break;
 		case "TextField":
 			currentState = "textFieldParams";
-
-			stdInterfaceTypeRegexp = /[a-zA-Z]+\(([a-zA-Z0-9,]*)\)/;
+			stdInterfaceTypeRegexp = /TextField\(([0-9]*)\)/;
 			if (attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp) != null) {
 				textFieldParam1.text = attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp)[1];					
+			} else {
+				textFieldParam1.text = "";
 			}
 			break;
 		default: currentState = ""; break;
@@ -289,10 +297,17 @@ private function checkStdInterfaceType():void {
 }
 
 private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:int):void {
+	/*
+		createLangsTabsAt creates tabs at container _viewForm_ (usually it's an empty TabNavigator)
+		with Languages labels and puts into created child TextArea (it's height sets as _txtHeight_).
+		_Collector_ will contain references to all TextAreas.
+	*/
+	
 	var tab:Canvas;
 	var textArea:TextArea;
 	var i:uint;
-	var language:XML;
+	var language:XML; /* Just in case instead of global */
+	
 	if (viewForm != null) {
 		i = 0;
 		for each(language in supLanguages.language) {
@@ -308,14 +323,8 @@ private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:i
 	}
 }
 
-private function clearExtendedFields():void {
-	
-	
-	
-}
-
 private function createInformationLangsTabs():void {
-/* createInformationLangsTabs() creates the language labels (tabs) for each multilingual string on the Information tab */
+	/* createInformationLangsTabs() creates the language labels (tabs) for each multilingual string on the Information tab */
 
 	/* Display Name tabs */
 	createLangsTabsAt(infoDnameTabs, infoDnameCollector, 20);
@@ -325,7 +334,7 @@ private function createInformationLangsTabs():void {
 }
 
 private function createAttrLangsTabs():void {
-/* createAttrLangsTabs() creates the language labels (tabs) for each multilingual string on the Attributes properties tab */
+	/* createAttrLangsTabs() creates the language labels (tabs) for each multilingual string on the Attributes properties tab */
 
 	/* Display Name tabs */
 	createLangsTabsAt(attrDnameTabs, attrDnameCollector, 20);
@@ -338,14 +347,14 @@ private function createAttrLangsTabs():void {
 }
 
 private function lng(label:String):String {
-/* lng() used only in case to have short representation of such long string :) */
-/* Used in menu creation function langRefresh() */
+	/* lng() used only in case to have short representation of such long string :) */
+	/* Used in menu creation function langRefresh() */
 
 	return langData.language.(@id == langStr).sentence.(@label == label).toString();
 }
 
 private function langRefresh():void {
-/* langRefresh() creating the main menu and setting up some global variables. It also applying multilanguage Interface support */
+	/* langRefresh() creating the main menu and setting up some global variables. It also applying multilanguage Interface support */
 
 	/* Setting up new (in new language) main menu items */
 	menubarXML = 
@@ -462,6 +471,7 @@ private function removeSupLanguage():void {
 
 private function menuHandler(event:MenuEvent):void {
 	/* menuHandler() process menu click events */
+	
 	if (event.item.@data == "close") {
 		mainForm.visible = false;
 		fscommand("quit", "true");
@@ -502,6 +512,7 @@ private function checkForLanguageSelection():void {
 private function refID(refStr:String):String {
 	var left:int;
 	var right:int;
+	
 	for (var i:int = 0; i < refStr.length; i++) {
 		switch (refStr.charCodeAt(i)) {
 			case 40: left = i; break;
