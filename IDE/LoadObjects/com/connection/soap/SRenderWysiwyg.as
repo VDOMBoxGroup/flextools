@@ -20,7 +20,7 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String, objid:String, sdynamic:String):void{
+		public function execute(appid:String, objid:String, sdynamic:String ):void{
 			// data
 			ws.render_wysiwyg.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.render_wysiwyg.arguments.skey 		= code.skey();			//- очередной ключ сессии 
@@ -36,7 +36,7 @@ package com.connection.soap
 		
 		
 		private  function completeListener(event:ResultEvent):void{
-			
+		//	trace('render_wysiwyg - result');
 			// get result 
 			resultXML = XML(ws.render_wysiwyg.lastResult.Result);
 			var evt:SoapEvent;

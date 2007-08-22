@@ -39,7 +39,7 @@ package com.connection.soap
 		//app_text
 		public function init(wsdl:String= 'http://192.168.0.23:82/vdom.wsdl'):void
 		{
-             //	var loader :Loader = new Loader; 
+             //	var loader :Loader = new Loader; 	
              	ws.wsdl = wsdl;
 				ws.useProxy = false;
 				ws.loadWSDL();
@@ -205,9 +205,9 @@ package com.connection.soap
 		 */
 		private var sRenderWysiwig:SRenderWysiwyg = new SRenderWysiwyg(ws);
 		
-		public  function renderWysiwyg(appid:String='',objid:String='',dynamic:String = ''):void 
+		public  function renderWysiwyg(appid:String='',objid:String='',dynamik:String  = '0'):void 
 		{
-			sRenderWysiwig.execute(appid, objid, dynamic);
+			sRenderWysiwig.execute(appid, objid, dynamik);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, ldispatchEvent);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, ldispatchEvent);
 		}
@@ -339,9 +339,9 @@ package com.connection.soap
 		 */
 		private var sSetResource:SSetResource = new SSetResource(ws);
 		
-		public  function setResource(appid:String='',resid:String='', resdata:String='' ):void 
+		public  function setResource(appid:String='',resid:String='', restype:String='', resname:String='', resdata:String='' ):void 
 		{
-			sSetResource.execute(appid, resid,resdata);
+			sSetResource.execute(appid, resid, restype, resname, resdata);
 			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_OK, ldispatchEvent);
 			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_ERROR, ldispatchEvent);
 		}

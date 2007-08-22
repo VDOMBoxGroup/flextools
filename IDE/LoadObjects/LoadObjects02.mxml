@@ -77,12 +77,12 @@
 				soap.addEventListener(SoapEvent.LIST_TYPES_OK, test);
 				soap.addEventListener(SoapEvent.LIST_TYPES_ERROR, test);
 		*/
-		/**		
+			/*--- Error --*/	
 				soap.renderWysiwyg();
 				soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, test);
 				soap.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, test);
-			*/
-				
+			/* --- End Error---*/
+			/*	
 				soap.setApplicationInfo();
 				soap.addEventListener(SoapEvent.SET_APLICATION_OK, test);
 				soap.addEventListener(SoapEvent.SET_APLICATION_ERROR, test);
@@ -90,11 +90,15 @@
 				soap.setAttribute();
 				soap.addEventListener(SoapEvent.SET_ATTRIBUTE_OK, test);
 				soap.addEventListener(SoapEvent.SET_ATTRIBUTE_ERROR, test);
-			/**	
+			*/
+				/*--- Error --*/	
+			/*
 				soap.setResource();
 				soap.addEventListener(SoapEvent.SET_RESOURCE_OK, test);
 				soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, test);
-			*/	
+				
+			/*--- End Error --*/	
+			/*
 				soap.setScript();
 				soap.addEventListener(SoapEvent.SET_SCRIPT_OK, test);
 				soap.addEventListener(SoapEvent.SET_SCRIPT_ERROR, test);
@@ -103,7 +107,7 @@
 				soap.addEventListener(SoapEvent.SET_VALUE_OK, test);
 				soap.addEventListener(SoapEvent.SET_VALUE_ERROR, test);
 				
-				
+			*/	
 				
 			}
 			
