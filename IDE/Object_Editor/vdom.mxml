@@ -34,10 +34,14 @@
 		</mx:State>
 		<mx:State name="dropDownMenuParams">
 			<mx:AddChild relativeTo="{hbox1}" position="before">
-				<mx:HBox width="100%">
+				<mx:HBox width="100%" verticalAlign="bottom">
+					
 					<mx:Spacer width="{ident_2}"/>
-					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'length')}:"/>
-					<mx:TextArea height="20" width="200" cornerRadius="3"/>
+					<mx:ComboBox width="180"/>
+					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'displaytext')}:"/>
+					<mx:TabNavigator width="100%" tabHeight="16" borderStyle="none" paddingTop="1"/>
+					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'value')}:"/>
+					<mx:TextArea height="20" width="100" cornerRadius="3"/>
 				</mx:HBox>
 			</mx:AddChild>
 		</mx:State>

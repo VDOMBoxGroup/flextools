@@ -292,6 +292,17 @@ private function checkStdInterfaceType():void {
 				textFieldParam1.text = "";
 			}
 			break;
+		case "DropDown":
+			currentState = "dropDownMenuParams";
+			stdInterfaceTypeRegexp = /DropDown\(([a-zA-Z0-9]*)\)/;
+/*
+			if (attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp) != null) {
+				textFieldParam1.text = attributesCollection[currentAttr].codeinterface.match(stdInterfaceTypeRegexp)[1];					
+			} else {
+				textFieldParam1.text = "";
+			}
+*/
+			break;
 		default: currentState = ""; break;
 	}
 }

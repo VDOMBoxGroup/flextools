@@ -74,6 +74,8 @@
     <sentence id="70" label="label">Removing language</sentence>
     <sentence id="71" label="length">Length</sentence>
     <sentence id="72" label="tooltip">Opens an XML Code Editor. To use Code Interface you must change Interface Type to [Extended]</sentence>
+    <sentence id="73" label="displaytext">Display text</sentence>
+    <sentence id="74" label="value">Value</sentence>
 </language>
 <language id="RU" label="Русский">
     <sentence id="0" label="file">Файл</sentence>
@@ -149,5 +151,7 @@
     <sentence id="70" label="label">Удаление языка</sentence>
     <sentence id="71" label="length">Длина</sentence>
     <sentence id="72" label="tooltip">Открывает редактор кода XML. Чтобы использовать редактор кода, вы должны переключить Тип Интерфейса на [Расширенный]</sentence>
+    <sentence id="73" label="displaytext">Отображаемый текст</sentence>
+    <sentence id="74" label="value">Значение</sentence>
 </language>
 </root>
