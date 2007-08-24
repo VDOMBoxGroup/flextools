@@ -212,8 +212,8 @@ private function attrFieldsRefresh():void {
 
 			/* Set up Interface Type ComboBox */
 			switch (@itype.toString()) {
-				case "Std":	attributeInterfaceType.selectedIndex = 0; break;
-				case "Ext":
+				case "0":	attributeInterfaceType.selectedIndex = 0; break;
+				case "1":
 					attributeInterfaceType.selectedIndex = 1;
 					if (attrCodeEditorTextArea != null)
 						attrCodeEditorTextArea.text = attributesCollection[currentAttr].codeinterface;
@@ -221,7 +221,7 @@ private function attrFieldsRefresh():void {
 			}
 
 			/* Set up Standart Interface Type ComboBox */
-			if (@itype.toString() == "Std" && stdInterfaceType != null) {
+			if (@itype.toString() == "0" && stdInterfaceType != null) {
 				var stdInterfaceTypeRegexp:RegExp = /([a-zA-Z0-9]+)\([a-zA-Z0-9,]*\)/;
 				var interfaceString:String = new String();
 				if (codeinterface.toString().match(stdInterfaceTypeRegexp) != null) {
@@ -427,8 +427,8 @@ private function rebuildInterface():void {
 	createAttrLangsTabs();
 
 	/* Restoring multilingual data from the Object XML in memory */
-	var dnameLangID:String = refID(objectXML.Information.DisplayName);
-	var descriptLangID:String = refID(objectXML.Information.Description);
+	var dnameLangID:String = getRefID(objectXML.Information.DisplayName);
+	var descriptLangID:String = getRefID(objectXML.Information.Description);
 	var i:int = 0;
 	for each(language in supLanguages.language) {
 		infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@id).Sentence.(@ID == dnameLangID);
@@ -520,7 +520,16 @@ private function checkForLanguageSelection():void {
 	}
 }
 
-private function refID(refStr:String):String {
+private function getRefID(refStr:String):String {
+	var refRegExp:RegExp = /^#[a-zA-Z]+\(([0-9]*)\)/;
+
+	if (refStr.match(refRegExp) != null) {
+		return refStr.match(refRegExp)[1];
+	} else {
+		return "";
+	}
+	
+/*
 	var left:int;
 	var right:int;
 	
@@ -531,6 +540,7 @@ private function refID(refStr:String):String {
 		}
 	}
 	return refStr.substring(left + 1, right);
+*/
 }
  
 private function buildObjectXML():void {
@@ -622,17 +632,17 @@ private function buildObjectXML():void {
 					objectXML.Languages.appendChild(<Language Code={language.@id}/>);
 
 				objectXML.Languages.Language.(@Code == language.@id).appendChild (
-					<Sentence ID={refID(tmpAttribute.DisplayName)}>
+					<Sentence ID={getRefID(tmpAttribute.DisplayName)}>
 						{attribute.dname.lang.(@id == language.@id).@text}
 					</Sentence>
 				);
 				objectXML.Languages.Language.(@Code == language.@id).appendChild (
-					<Sentence ID={refID(tmpAttribute.ErrorValidationMessage)}>
+					<Sentence ID={getRefID(tmpAttribute.ErrorValidationMessage)}>
 						{attribute.err.lang.(@id == language.@id).@text}
 					</Sentence>
 				);
 				objectXML.Languages.Language.(@Code == language.@id).appendChild (
-					<Sentence ID={refID(tmpAttribute.Description)}>
+					<Sentence ID={getRefID(tmpAttribute.Description)}>
 						{attribute.descript.lang.(@id == language.@id).@text}
 					</Sentence>
 				);
@@ -702,10 +712,11 @@ private function loadObjectXML():void {
 			@regexp = attribute.RegularExpressionValidation;
 			@visined = attribute.Visible;
 			@itype = attribute.InterfaceType;
+			codeinterface = attribute.CodeInterface.toString();
 			
-			var dnameLangID:String = refID(attribute.DisplayName);
-			var errLangID:String = refID(attribute.ErrorValidationMessage);
-			var descriptLangID:String = refID(attribute.Description);
+			var dnameLangID:String = getRefID(attribute.DisplayName);
+			var errLangID:String = getRefID(attribute.ErrorValidationMessage);
+			var descriptLangID:String = getRefID(attribute.Description);
 
 			/* Writing multilingual properties */
 			for each(language in supLanguages.language) {
