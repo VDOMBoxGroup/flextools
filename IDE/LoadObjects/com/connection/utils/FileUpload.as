@@ -100,7 +100,7 @@ package com.connection.utils
           //  trace('1. Time to upload: '+ (getTimer() - time)  + 'c.');  
            // time = getTimer();      
         }
-//--------------- ВСТАВИТЬ СОАП ------/
+
 		private var soap:Soap	 =  Soap.getInstance()
 		private function runWebService(ev:Event):void{
 			myTimer.removeEventListener("timer", runWebService);
@@ -111,18 +111,20 @@ package com.connection.utils
 			//trace('2. Time to Run WebServise: '+ (getTimer() - time)  + 'c.');
 		//	time = getTimer();
 		}
-		
+		/**
+		 *  ------ Extract Data
+		 */
 		private var extract:Extract = new Extract();
 		private function extractData(evt:SoapEvent):void{
 			//trace('3.Time to get result from SOAP servise: '+ (getTimer() - time) + 'c.');
 			time = getTimer();
 			extract.unziping(evt.result.toString()); 
-			extract.addEventListener(SoapEvent.UNZIP_OK, getImage);
+			extract.addEventListener(UtilsEvent.UNZIP_COMPLETE, dispatches);
 	//		extract.addEventListener(SoapEvent.UNZIP_ERROR, ---//--);
 			
 			soap.removeEventListener(SoapEvent.GET_ECHO_OK, extractData);
 		}		
-		
+		/*
 		private function getImage(evt:Event):void{
 			btn.enabled = true;
 			//necessary data for as
@@ -132,8 +134,8 @@ package com.connection.utils
 			time = getTimer();
 //***			dispatchEvent(new Event(UtilsEvent.FILE_UPLOAD_COMPLETE, ));
 		}
-		
-		private function dispatches(evt:Event):void{
+		*/
+		private function dispatches(evt:UtilsEvent):void{
 			btn.enabled = true;
 			dispatchEvent(evt);
 		}

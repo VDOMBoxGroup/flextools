@@ -28,6 +28,8 @@ package com.connection.soap
 		public static var DELETE_OBJECT_OK 				:String = "Delete object OK"; 			//19
 		public static var GET_ECHO_OK					:String =  "Get echo OK"; 				//20
 		public static var UNZIP_OK						:String =  "Unzip OK";
+		public static var GET_ALL_TYPES_OK				:String =  "getAllTypesOK"; 				//21
+		//get_all_types
 		
 		public static var LOGIN_ERROR						:String = "Login ERROR";
 		public static var OPEN_SESSION_ERROR				:String = "Open session ERROR"; 			//1
@@ -51,10 +53,11 @@ package com.connection.soap
 		public static var DELETE_OBJECT_ERROR 				:String = "Delete object ERROR"; 			//19
 		public static var GET_ECHO_ERROR					:String =  "Get echo ERROR"; 				//20
 		public static var UNZIP_ERROR						:String =  "Unzip ERROR";
+		public static var GET_ALL_TYPES_ERROR				:String =  "getAllTypesERROR"; 				//21
 		
 		public function SoapEvent(type:String, 
-		result:XML = null, bubbles:Boolean = false,
-								  cancelable:Boolean = true
+									result:XML = null, bubbles:Boolean = false,
+								 	cancelable:Boolean = true
 								  )
 		{
 			super(type, bubbles, cancelable);

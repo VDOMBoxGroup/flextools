@@ -74,7 +74,7 @@
 				soap.addEventListener(SoapEvent.GET_TYPE_RESOURCE_OK, test);
 				soap.addEventListener(SoapEvent.GET_TYPE_RESOURCE_ERROR, test);
 				*/
-				soap.listApplications();
+			/*	soap.listApplications();
 				soap.addEventListener(SoapEvent.LIST_APLICATION_OK, test);
 				soap.addEventListener(SoapEvent.LIST_APLICATION_ERROR, test);
 					/*
@@ -113,7 +113,9 @@
 				soap.addEventListener(SoapEvent.SET_VALUE_ERROR, test);
 				
 			*/	
-				
+				soap.getAllTypes();
+				soap.addEventListener(SoapEvent.GET_ALL_TYPES_OK, test);
+				soap.addEventListener(SoapEvent.GET_ALL_TYPES_ERROR, test);
 			}
 			
 			private function test(ev:SoapEvent):void{

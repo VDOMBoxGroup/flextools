@@ -50,7 +50,7 @@ package com.connection.utils
    				img.height = ld.height;
    				img.source = ld.content;
    				//addChild(img);
-   				dispatchEvent(new Event(SoapEvent.UNZIP_OK));
+   				dispatchEvent(new UtilsEvent(UtilsEvent.UNZIP_COMPLETE,  ld.content));
    				ld.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);
    		}
    		

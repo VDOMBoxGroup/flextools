@@ -384,6 +384,16 @@ package com.connection.soap
 	//		masEcho[identificator].addEventListener(SoapEvent.GET_ECHO_OK, listenerOk);
 	//		masEcho[identificator].addEventListener(SoapEvent.GET_ECHO_ERROR, istenerError);
 		}
+		
+		/**
+		 *  21 Get All Types 
+		 */ 
+		private var sGetAllTypes:SGetAllTypes = new SGetAllTypes(ws);
+		public function getAllTypes():void{
+			sGetAllTypes.execute();
+			sGetAllTypes.addEventListener(SoapEvent.GET_ALL_TYPES_OK, ldispatchEvent);
+			sGetAllTypes.addEventListener(SoapEvent.GET_ALL_TYPES_ERROR, ldispatchEvent);
+		}
 		/**
 		 *  Event Dispatcher
 		 */
