@@ -20,6 +20,8 @@ package com.connection.utils
 	import flash.utils.getTimer;
 	import mx.controls.Alert;
 	import flash.net.FileFilter;
+	import flash.display.DisplayObject;
+	import com.connection.soap.Soap;
 	
 	
 
@@ -32,15 +34,17 @@ package com.connection.utils
  		private var code:Code = Code.getInstance();
  		private var ws:WebService;
  		private var exteract:Extract = new Extract();
- 		public var img:Image = new Image();
+ 		public var displObj:DisplayObject;// = new DisplayObject;
  		private var times:uint;
  		private var time:uint;
  		private var myTimer:Timer = new Timer(100, 1);
  		private var btn:Button;
+ 		private var imagesFilter:FileFilter = new FileFilter("Images: *.jpg *.gif; *.png", "*.jpg;*.gif;*.png");
  		 
 
-        public function FileUpload() {
-        	
+        public function FileUpload(btn:Button):void
+        {
+        	this.btn = btn;
         	fr = new FileReference();
             fr.addEventListener(Event.SELECT, selectHandler);
         //    fr.addEventListener(Event.OPEN, openHandler);
@@ -52,10 +56,8 @@ package com.connection.utils
         /**
          * Launch the browse dialog box which allows the user to select a file to upload to the server.
          */
-        public function startUpload(ws:WebService,btn:Button):void {
-        	this.ws = ws;
-        	this.btn = btn;
-        	var imagesFilter:FileFilter = new FileFilter("Images: *.jpg *.gif; *.png", "*.jpg;*.gif;*.png");
+        public function startUpload():void {
+   //     	this.ws = ws;
             fr.browse([imagesFilter]);
         }
         
@@ -64,24 +66,24 @@ package com.connection.utils
          */
         public function cancelUpload(evt:Event):void {
             //fr.cancel();
-           dispatchEvent(new Event(SoapEvent.GET_ECHO_ERROR));
+           dispatchEvent(new Event(UtilsEvent.FILE_UPLOAD_ERROR));
         }
 
-                /**
+        /**
          * Begin uploading the file specified in the UPLOAD_URL constant.
          */
         private function selectHandler(event:Event):void {
             var request:URLRequest = new URLRequest();
             request.url = UPLOAD_URL + code.sessionId;// Soap.getSid();
-            time = getTimer();
-            times = getTimer();
-            trace('File size: '+ Math.round(fr.size/1000)+ "KB" );
+            //time = getTimer();
+           // times = getTimer();
+           // trace('File size: '+ Math.round(fr.size/1000)+ "KB" );
 			if(fr.size < 300000){
 				fr.upload(request);
 				btn.enabled = false;
 			}else{
 				Alert.show( "It's more then 300kb!\n Try again...");
-				dispatchEvent(new Event(SoapEvent.GET_ECHO_ERROR));
+				dispatchEvent(new Event(UtilsEvent.FILE_UPLOAD_ERROR));
 			}
         }
 		
@@ -96,38 +98,39 @@ package com.connection.utils
             myTimer.start(); 
             
           //  trace('1. Time to upload: '+ (getTimer() - time)  + 'c.');  
-            time = getTimer();      
+           // time = getTimer();      
         }
-
-		private var ge:SGetEcho = new SGetEcho();
+//--------------- ВСТАВИТЬ СОАП ------/
+		private var soap:Soap	 =  Soap.getInstance()
 		private function runWebService(ev:Event):void{
 			myTimer.removeEventListener("timer", runWebService);
-			ge.execute(ws);
+		//	ge.execute(ws);
 		
-			ge.addEventListener(SoapEvent.GET_ECHO_OK, extractData);
-			ge.addEventListener(SoapEvent.GET_ECHO_ERROR, dispatchEvent);
+			soap.addEventListener(SoapEvent.GET_ECHO_OK, extractData);
+			soap.addEventListener(SoapEvent.GET_ECHO_ERROR, dispatchEvent);
 			//trace('2. Time to Run WebServise: '+ (getTimer() - time)  + 'c.');
-			time = getTimer();
+		//	time = getTimer();
 		}
 		
 		private var extract:Extract = new Extract();
-		private function extractData(evt:Event):void{
+		private function extractData(evt:SoapEvent):void{
 			//trace('3.Time to get result from SOAP servise: '+ (getTimer() - time) + 'c.');
 			time = getTimer();
-			extract.unziping(ge.getResult().toString()); 
+			extract.unziping(evt.result.toString()); 
 			extract.addEventListener(SoapEvent.UNZIP_OK, getImage);
-			ge.removeEventListener(SoapEvent.GET_ECHO_OK, extractData);
+	//		extract.addEventListener(SoapEvent.UNZIP_ERROR, ---//--);
+			
+			soap.removeEventListener(SoapEvent.GET_ECHO_OK, extractData);
 		}		
 		
 		private function getImage(evt:Event):void{
 			btn.enabled = true;
 			//necessary data for as
-			img = extract.getImage();
+			displObj = extract.getImage();
 		//	trace ("img File Up3: "+ img.width);
 			//trace('5.Time to UnZip: '+ (getTimer() - time) + 'c.');
 			time = getTimer();
-			dispatchEvent(new Event(SoapEvent.GET_ECHO_OK));
-			
+//***			dispatchEvent(new Event(UtilsEvent.FILE_UPLOAD_COMPLETE, ));
 		}
 		
 		private function dispatches(evt:Event):void{
@@ -135,10 +138,10 @@ package com.connection.utils
 			dispatchEvent(evt);
 		}
 	
-        public function getResul():Image{
+        public function getResul():DisplayObject{
         	//return ge.getResult();
         	//trace('6. REzult Time: '+ (getTimer() - times) + 'c.');
-        	return  img;
+        	return  displObj;
         }
     }
 }

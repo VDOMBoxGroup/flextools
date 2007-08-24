@@ -16,12 +16,11 @@ package com.connection.soap
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetEcho():void{
+		public function SGetEcho(ws:WebService):void{
+			this.ws = ws;
 		}
 		
-		public function execute(ws:WebService):void{
-
-			this.ws = ws;
+		public function execute():void{
 
 			// data
 			ws.get_echo.arguments.sid 		= code.sessionId;		// - идентификатор сессии 

@@ -44,14 +44,14 @@ package com.connection.soap
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				evt = new SoapEvent(SoapEvent.CREATE_OBJECT_ERROR);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.CREATE_OBJECT_ERROR, resultXML);
+			//	evt.result = resultXML;
 				dispatchEvent(evt);
 			//	Alert.show("ERROR!\nFrom: " + this.toString() )
 				//trace("ERROR! From: " + this.toString());
 			} else{
-				evt = new SoapEvent(SoapEvent.CREATE_OBJECT_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.CREATE_OBJECT_OK,resultXML);
+		//		evt.result = resultXML;
 				dispatchEvent(evt);
 			//	trace(resultXML.toString());
 			}

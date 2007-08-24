@@ -52,16 +52,17 @@ package com.connection.soap
 		public static var GET_ECHO_ERROR					:String =  "Get echo ERROR"; 				//20
 		public static var UNZIP_ERROR						:String =  "Unzip ERROR";
 		
-		public function SoapEvent(type:String, bubbles:Boolean = false,
-								  cancelable:Boolean = true,
-								  result:XML = null)
+		public function SoapEvent(type:String, 
+		result:XML = null, bubbles:Boolean = false,
+								  cancelable:Boolean = true
+								  )
 		{
 			super(type, bubbles, cancelable);
 	
 			this.result = result;
 		}
 		
-		public var result:Object = new Object();
+		public var result:XML = new XML();
 		
    		/* public  function dispatch(evt:Event):void {
         	dispatchEvent(evt);

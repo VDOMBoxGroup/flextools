@@ -2,6 +2,8 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
+			import com.connection.utils.UtilsEvent;
+			import com.connection.utils.FileUpload;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.Fault;
 			import mx.controls.Image;
@@ -36,11 +38,14 @@
 		/*		soap.createApplication();
 				soap.addEventListener(SoapEvent.CREATE_APPLICATION_OK, test);
 				soap.addEventListener(SoapEvent.CREATE_APPLICATION_ERROR, test);
-				
+			**/	
+			
+			/*
 				soap.createObject();
+				
 				soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, test);
 				soap.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, test);
-				
+				/*
 				soap.deleteObject();
 				soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, test);
 				soap.addEventListener(SoapEvent.DELETE_OBJECT_ERROR, test);
@@ -78,7 +83,7 @@
 				soap.addEventListener(SoapEvent.LIST_TYPES_ERROR, test);
 		*/
 			/*--- Error --*/	
-				soap.renderWysiwyg();
+			/*	soap.renderWysiwyg();
 				soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, test);
 				soap.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, test);
 			/* --- End Error---*/
@@ -125,27 +130,29 @@
 				//soap.addEventListener(SoapEvent.GET_ECHO_ERROR, runAll);
 			}
 			private function start():void{
-				trace('ЗАПУСТИЛ SOAP');
-				soap.sendEcho('asd2', bt2, makeImage2, cansle);
+				var fileUpload:FileUpload = new FileUpload(bt2);
+				fileUpload.startUpload();
+				fileUpload.addEventListener(UtilsEvent.FILE_UPLOAD_COMPLETE, test);	
+				fileUpload.addEventListener(UtilsEvent.FILE_UPLOAD_ERROR, test);	
+		//		file
+		//		trace('ЗАПУСТИЛ SOAP');
+		//		soap.sendEcho('asd2',  makeImage2, cansle);
 				
 			//	textArea.text += "\n"+evt.type.toString();
 				//if(evt == SoapEvent.GET_ECHO_OK) 
 			}
+			
 			private function cansle(evt:Event):void{
 				Alert.show("Cancle upload");
 			}
 			
 			private function makeImage(evt:Event):void{
-				soap.getEchoResult('asd');
-					pict.source = soap.getEchoResult('asd').source; 
 							
 			//	addChild(img);
 				//trace ("img4: "+ img.width);
 			}
+			
 			private function makeImage2(evt:Event):void{
-				img2 =  soap.getEchoResult('asd2');
-				 
-				
 				addChild(img2);
 				//trace ("img4: "+ img.width);
 				pict2.source = img2.source;

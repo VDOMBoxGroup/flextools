@@ -5,6 +5,7 @@ package com.connection.utils
 	import flash.events.Event;
 	import flash.display.Loader;
 	import flash.events.EventDispatcher;
+	import flash.display.DisplayObject;
 	
 	public class Extract extends EventDispatcher
 	{
@@ -36,8 +37,9 @@ package com.connection.utils
 
  			ba = bs.drain();
  			ba.uncompress();
-			trace('*****  Разпаковка  *******')
+		//	trace('*****  Разпаковка  *******')
 			//ld ;
+			var zzz:Object = ba;
 			ld.loadBytes(ba);
 			ld.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
  		}
@@ -50,10 +52,11 @@ package com.connection.utils
    				//addChild(img);
    				dispatchEvent(new Event(SoapEvent.UNZIP_OK));
    				ld.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);
-   			}
-   		public function getImage():Image{
+   		}
+   		
+   		public function getImage():DisplayObject{
    	//		trace ("img Extract2: "+ img.width);
-   			return  img;
+   			return  ld.content;
    		}
    		
 	}
