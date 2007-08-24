@@ -47,7 +47,7 @@ package com.connection.soap
 				//trace("ERROR! From: " + this.toString() )
 			} else{
 
-				evt = new SoapEvent(SoapEvent.LIST_APLICATION_OK);
+				evt = new SoapEvent(SoapEvent.LIST_APLICATION_OK, resultXML);
 				dispatchEvent(evt);
 				//trace(this.toString() + ' - OK')
 			}

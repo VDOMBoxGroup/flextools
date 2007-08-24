@@ -73,11 +73,11 @@
 				soap.getTypeResource();
 				soap.addEventListener(SoapEvent.GET_TYPE_RESOURCE_OK, test);
 				soap.addEventListener(SoapEvent.GET_TYPE_RESOURCE_ERROR, test);
-				
+				*/
 				soap.listApplications();
 				soap.addEventListener(SoapEvent.LIST_APLICATION_OK, test);
 				soap.addEventListener(SoapEvent.LIST_APLICATION_ERROR, test);
-					
+					/*
 				soap.listTypes();
 				soap.addEventListener(SoapEvent.LIST_TYPES_OK, test);
 				soap.addEventListener(SoapEvent.LIST_TYPES_ERROR, test);
