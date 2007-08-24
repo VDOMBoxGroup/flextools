@@ -294,12 +294,12 @@
 								
 							<mx:ComboBox id="attributeInterfaceType" close="{checkCodeInterface();}" width="180">
 								<mx:dataProvider>
-								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'standart')}" data="Std"/>
-								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" data="Ext"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'standart')}" data="0"/>
+								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'extended')}" data="1"/>
 								</mx:dataProvider>
 							</mx:ComboBox>
 							
-							<mx:ComboBox id="stdInterfaceType" change="{checkStdInterfaceType();}" width="200">
+							<mx:ComboBox id="stdInterfaceType" change="{checkStdInterfaceTypeState();}" width="200">
 								<mx:dataProvider>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'txtfld')}" data="TextField"/>
 								<mx:Object label="{langData.language.(@id == langStr).sentence.(@label == 'ddownmenu')}" data="DropDown"/>

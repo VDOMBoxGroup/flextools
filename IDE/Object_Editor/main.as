@@ -129,7 +129,7 @@ private function attrFieldsWrite():void {
 			@extended = Number(extChBox.selected);
 			*/
 			
-			if (@itype.toString() == "Std") {
+			if (Number(@itype) == 0) {
 				var selectedData:String = stdInterfaceType.selectedItem.data.toString();
 				switch (selectedData) {
 					case "ExternalEditor":
@@ -194,7 +194,7 @@ private function attrFieldsWriteNRefresh():void {
 private function attrFieldsRefresh():void {	
 	/* attrFieldsRefresh() fills in Attribite properties fields with Attribute information from XML in memory */
 
-	if (currentAttr != -1 && attributesPanel != null) {
+	if ((currentAttr != -1) && (attributesPanel != null)) {
 		if (attributesPanel != null) attributesPanel.visible = true;
 		if (attributePropVS != null) attributePropVS.selectedChild = attributesPanel;
 		if (attrCodeInterfacePanel != null) attrCodeInterfacePanel.visible = false;
@@ -211,9 +211,9 @@ private function attrFieldsRefresh():void {
 			*/
 
 			/* Set up Interface Type ComboBox */
-			switch (@itype.toString()) {
-				case "0":	attributeInterfaceType.selectedIndex = 0; break;
-				case "1":
+			switch (Number(@itype)) {
+				case 0:	attributeInterfaceType.selectedIndex = 0; break;
+				case 1:
 					attributeInterfaceType.selectedIndex = 1;
 					if (attrCodeEditorTextArea != null)
 						attrCodeEditorTextArea.text = attributesCollection[currentAttr].codeinterface;
@@ -221,7 +221,7 @@ private function attrFieldsRefresh():void {
 			}
 
 			/* Set up Standart Interface Type ComboBox */
-			if (@itype.toString() == "0" && stdInterfaceType != null) {
+			if (Number(@itype) == 0 && stdInterfaceType != null) {
 				var stdInterfaceTypeRegexp:RegExp = /([a-zA-Z0-9]+)\([a-zA-Z0-9,]*\)/;
 				var interfaceString:String = new String();
 				if (codeinterface.toString().match(stdInterfaceTypeRegexp) != null) {
@@ -230,16 +230,17 @@ private function attrFieldsRefresh():void {
 					interfaceString = codeinterface.toString();					
 				}
 
-				switch (interfaceString) {
-					case "TextField":		stdInterfaceType.selectedIndex = 0; break;
-					case "DropDown":		stdInterfaceType.selectedIndex = 1; break;
-					case "File":			stdInterfaceType.selectedIndex = 2; break;
-					case "Color":			stdInterfaceType.selectedIndex = 3; break;
-					case "PageLink":		stdInterfaceType.selectedIndex = 4; break;
-					case "ObjectList":		stdInterfaceType.selectedIndex = 5; break;
-					case "LinkedBase":		stdInterfaceType.selectedIndex = 6; break;
-					case "ExternalEditor":	stdInterfaceType.selectedIndex = 7; break;
+				switch (interfaceString.toLowerCase()) {
+					case "textfield":		stdInterfaceType.selectedIndex = 0; break;
+					case "dropdown":		stdInterfaceType.selectedIndex = 1; break;
+					case "file":			stdInterfaceType.selectedIndex = 2; break;
+					case "color":			stdInterfaceType.selectedIndex = 3; break;
+					case "pagelink":		stdInterfaceType.selectedIndex = 4; break;
+					case "objectlist":		stdInterfaceType.selectedIndex = 5; break;
+					case "linkedbase":		stdInterfaceType.selectedIndex = 6; break;
+					case "externaleditor":	stdInterfaceType.selectedIndex = 7; break;
 				}
+				trace("#lower: ", interfaceString.toLowerCase());
 			} else {
 				stdInterfaceType.selectedIndex = 0;
 				stdInterfaceType.text = "";
@@ -267,7 +268,7 @@ private function attrFieldsRefresh():void {
 	}
 }	
 
-private function checkStdInterfaceType():void {
+private function checkStdInterfaceTypeState():void {
 	var selectedData:String = stdInterfaceType.selectedItem.data.toString();
 	var stdInterfaceTypeRegexp:RegExp = new RegExp();
 	
@@ -501,13 +502,13 @@ private function menuHandler(event:MenuEvent):void {
 
 private function checkCodeInterface():void {
 	if (attributeInterfaceType != null) {
-		if (attributeInterfaceType.selectedItem.data == "Ext") {
+		if (Number(attributeInterfaceType.selectedItem.data) != 0) {
 			codeButton.enabled = true;
 			stdInterfaceType.enabled = false;
 		} else {
 			codeButton.enabled = false;
 			stdInterfaceType.enabled = true;
-			checkStdInterfaceType();
+			checkStdInterfaceTypeState();
 		}
 	}
 }
@@ -672,13 +673,13 @@ private function loadObjectXML():void {
 	containerChkBox.selected = Boolean(Number(objectXML.Information.Container));
 	
 	/* Fill in Categories ComboBox */
-	switch (String(objectXML.Information.Category)) {
+	switch (objectXML.Information.Category.toString().toLowerCase()) {
 		case "standart":	ctgrsComboBox.selectedIndex = 0; break;
 		case "advanced":	ctgrsComboBox.selectedIndex = 1; break;
 		case "usual":		ctgrsComboBox.selectedIndex = 2; break;
 		case "portal":		ctgrsComboBox.selectedIndex = 3; break;
 	}
-	
+
 	/* Interface Type ComboBox */
 	itypeComboBox.selectedIndex = Number(objectXML.Information.InterfaceType) - 1;
 	
@@ -711,8 +712,9 @@ private function loadObjectXML():void {
 			@defval = attribute.DefaultValue;
 			@regexp = attribute.RegularExpressionValidation;
 			@visined = attribute.Visible;
-			@itype = attribute.InterfaceType;
+			@itype = Number(attribute.InterfaceType);
 			codeinterface = attribute.CodeInterface.toString();
+			trace("#loaded itype: ", codeinterface);
 			
 			var dnameLangID:String = getRefID(attribute.DisplayName);
 			var errLangID:String = getRefID(attribute.ErrorValidationMessage);
