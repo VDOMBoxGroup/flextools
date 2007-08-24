@@ -370,23 +370,17 @@ package com.connection.soap
 		} */
 
 		/**
-		 *  20 get Echo 
+		 * ------------- 20 get Echo --------
 		 */ 
 		private var sGetEcho:SGetEcho = new SGetEcho(ws);
 		public function getEcho():void{
 			sGetEcho.execute();
 			sGetEcho.addEventListener(SoapEvent.GET_ECHO_OK, ldispatchEvent);
 			sGetEcho.addEventListener(SoapEvent.GET_ECHO_ERROR, ldispatchEvent);
-	//		this.btn = btn;
-	//		masEcho[identificator] = new FileUpload();
-	//		masListenet[identificator] =  new Function();
-	//		masEcho[identificator].startUpload(ws, this.btn)
-	//		masEcho[identificator].addEventListener(SoapEvent.GET_ECHO_OK, listenerOk);
-	//		masEcho[identificator].addEventListener(SoapEvent.GET_ECHO_ERROR, istenerError);
 		}
 		
 		/**
-		 *  21 Get All Types 
+		 *  --------- 21 Get All Types -----
 		 */ 
 		private var sGetAllTypes:SGetAllTypes = new SGetAllTypes(ws);
 		public function getAllTypes():void{
@@ -394,25 +388,30 @@ package com.connection.soap
 			sGetAllTypes.addEventListener(SoapEvent.GET_ALL_TYPES_OK, ldispatchEvent);
 			sGetAllTypes.addEventListener(SoapEvent.GET_ALL_TYPES_ERROR, ldispatchEvent);
 		}
+		
 		/**
-		 *  Event Dispatcher
+		 *  --------- 22  Set value of several object's attributes -----
+		 * 						--setAttributes --
+		 */ 
+		private var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
+		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):void{
+			sSetAttributes.execute(appid, objid, attr);
+			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
+			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);
+		}
+		/**
+		 *  --------  Event Dispatcher -------------
 		 */
-	//	 private var ed:EventDispatcher = new EventDispatcher;
 		 
 		
 		
 		//Error
 		private  function errorListener(event:FaultEvent):void{
 			//ed.dispatchEvent(event);
-			trace('Блина, SOAP GLOBSL ERROR: \n' + event);
+			trace('Блина, SOAP GLOBaL ERROR: \n' + event);
 		}
-
-	/*	public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void{
-			  ed.addEventListener(type, listener, useCapture, priority);
-    	}
-           */
     	public function ldispatchEvent(evt:SoapEvent):void{
-      		trace(evt.result);
+      		//trace(evt.result);
 			var soapEvent:SoapEvent = new SoapEvent(evt.type);
 			soapEvent.result = evt.result;
 			dispatchEvent(soapEvent);

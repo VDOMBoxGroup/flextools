@@ -29,7 +29,9 @@ package com.connection.soap
 		public static var GET_ECHO_OK					:String =  "Get echo OK"; 				//20
 		public static var UNZIP_OK						:String =  "Unzip OK";
 		public static var GET_ALL_TYPES_OK				:String =  "getAllTypesOK"; 				//21
-		//get_all_types
+		public static var SET_ATTRIBUTE_S_OK			:String =  "setAttributesOK"; 				//22
+		
+		//setAttributes
 		
 		public static var LOGIN_ERROR						:String = "Login ERROR";
 		public static var OPEN_SESSION_ERROR				:String = "Open session ERROR"; 			//1
@@ -54,6 +56,7 @@ package com.connection.soap
 		public static var GET_ECHO_ERROR					:String =  "Get echo ERROR"; 				//20
 		public static var UNZIP_ERROR						:String =  "Unzip ERROR";
 		public static var GET_ALL_TYPES_ERROR				:String =  "getAllTypesERROR"; 				//21
+		public static var SET_ATTRIBUTE_S_ERROR				:String =  "setAttributesERROR"; 				//22
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,

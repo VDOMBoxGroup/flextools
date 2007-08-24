@@ -10,36 +10,35 @@ package com.connection.soap
 	import mx.preloaders.DownloadProgressBar;
 	import com.connection.protect.*;
 	
-	public class SSetAttribute extends EventDispatcher 
+	public class SSetAttributes extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetAttribute(ws:WebService):void{
+		public function SSetAttributes(ws:WebService):void{
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String,objid:String, attr:String, value:String):void{
+		public function execute(appid:String = '', objid:String = '', attr:String = ''):void{
 			// data
-			ws.set_attribute.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.set_attribute.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			ws.set_attributes.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
+			ws.set_attributes.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
-			ws.set_attribute.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.set_attribute.arguments.objid  	= objid;		//- идентификатор объекта
-			ws.set_attribute.arguments.attr  	= attr;			//- имя атрибута  
-			ws.set_attribute.arguments.value 	= value;		//- значение атрибута
+			ws.set_attributes.arguments.appid  	= appid;		//- идентификатор приложения 
+			ws.set_attributes.arguments.objid  	= objid;		//- идентификатор объекта
+			ws.set_attributes.arguments.attr  	= attr;			//- имя атрибута  
 			
 			//send data & set listener 
-			ws.set_attribute();
-			ws.set_attribute.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.set_attributes();
+			ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void{
 			
 			// get result 
-			resultXML = XML(ws.set_attribute.lastResult.Result);
+			resultXML = XML(ws.set_attributes.lastResult.Result);
 			var evt:SoapEvent;
 			
 			
@@ -47,7 +46,7 @@ package com.connection.soap
 			if(resultXML.name().toString() == 'Error'){
 
 				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_ERROR, resultXML);
-			//	evt.result = resultXML;
+				//evt.result = resultXML;
 				dispatchEvent(evt);
 		
 				// Alert.show("ERROR!\nFrom: " + this.toString() )
