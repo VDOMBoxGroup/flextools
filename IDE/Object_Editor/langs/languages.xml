@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
-	<language label="EN" text="English"/>
-	<language label="RU" text="Russian"/>
-	<language label="FR" text="French"/>
+	<language id="EN" label="English"/>
+	<language id="RU" label="Russian"/>
+	<language id="FR" label="French"/>
 </root>

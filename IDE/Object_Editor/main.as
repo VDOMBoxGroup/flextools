@@ -33,7 +33,7 @@ public const ident_2:int = 200;
 /* XML with Object Supported languages */
 public var supLanguages:XML = 
 	<root>
-		<language label="" text=""/>
+		<language id="" label=""/>
 	</root>;
 
 [Bindable]
@@ -94,7 +94,7 @@ private function addNewAttribute():void {
 private function removeAttributeAlert():void {
 	if (attrList.selectedIndex != -1)
 		/* Alert.show("Do you want to proceed?", "Delete Attribute", 3, this, removeAttribute); */
-		Alert.show(langData.language.(@id == langStr).sentence.(@id == 65), langData.language.(@id == langStr).sentence.(@id == 66), 3, this, removeAttribute);
+		Alert.show(langData.language.(@id == langStr).sentence.(@id == 'a65'), langData.language.(@id == langStr).sentence.(@id == 'a66'), 3, this, removeAttribute);
 }
 
 private function removeAttribute(event:CloseEvent):void {
@@ -157,22 +157,22 @@ private function attrFieldsWrite():void {
 			i = 0;
 			for each(language in supLanguages.language) {
 				/* Display Name tabs */
-				if (dname.lang.(@label == language.@label).toXMLString() == "")
-					dname.appendChild(<lang label={language.@label} text={attrDnameCollector[i].text}/>);
+				if (dname.lang.(@id == language.@id).toXMLString() == "")
+					dname.appendChild(<lang id={language.@id} text={attrDnameCollector[i].text}/>);
 				else
-					dname.lang.(@label == language.@label).@text = attrDnameCollector[i].text;					
+					dname.lang.(@id == language.@id).@text = attrDnameCollector[i].text;					
 	
 				/* Error Exp Validation Messages tabs */
-				if (err.lang.(@label == language.@label).toXMLString() == "")
-					err.appendChild(<lang label={language.@label} text={attrErrmsgCollector[i].text}/>);
+				if (err.lang.(@id == language.@id).toXMLString() == "")
+					err.appendChild(<lang id={language.@id} text={attrErrmsgCollector[i].text}/>);
 				else
-					err.lang.(@label == language.@label).@text = attrErrmsgCollector[i].text;					
+					err.lang.(@id == language.@id).@text = attrErrmsgCollector[i].text;					
 
 				/* Attribute Description tabs */
-				if (descript.lang.(@label == language.@label).toXMLString() == "")
-					descript.appendChild(<lang label={language.@label} text={attrDescriptCollector[i].text}/>);
+				if (descript.lang.(@id == language.@id).toXMLString() == "")
+					descript.appendChild(<lang id={language.@id} text={attrDescriptCollector[i].text}/>);
 				else
-					descript.lang.(@label == language.@label).@text = attrDescriptCollector[i].text;					
+					descript.lang.(@id == language.@id).@text = attrDescriptCollector[i].text;					
 					
 				i++;
 			}
@@ -249,13 +249,13 @@ private function attrFieldsRefresh():void {
 			i = 0;
 			for each(language in supLanguages.language) {
 				/* Display Name tabs */
-				attrDnameCollector[i].text = dname.lang.(@label == language.@label).@text;
+				attrDnameCollector[i].text = dname.lang.(@id == language.@id).@text;
 	
 				/* Error Exp Validation Messages tabs */
-				attrErrmsgCollector[i].text = err.lang.(@label == language.@label).@text;
+				attrErrmsgCollector[i].text = err.lang.(@id == language.@id).@text;
 
 				/* Attribute Description tabs */
-				attrDescriptCollector[i].text = descript.lang.(@label == language.@label).@text;					
+				attrDescriptCollector[i].text = descript.lang.(@id == language.@id).@text;					
 					
 				i++;
 			}
@@ -326,7 +326,7 @@ private function createLangsTabsAt(viewForm:Object, Collector:Array, txtHeight:i
 			Collector[i] = new TextArea();
 			Collector[i].height = txtHeight;
 			Collector[i].percentWidth = 100;
-			tab.label = language.@label;
+			tab.label = language.@id;
 			tab.addChild(Collector[i]);
 			viewForm.addChild(tab);
 			i++;
@@ -405,8 +405,8 @@ private function removeTabsAt(tn:TabNavigator):void {
 private function rebuildInterface():void {
 	/* Refreshing supported Languages TextArea Field */
 	supLangsTextArea.text = "";
-	for each(var language:XML in supLanguages.language) {
-		supLangsTextArea.text += language.@label + ", ";
+	for each(language in supLanguages.language) {
+		supLangsTextArea.text += language.@id + ", ";
 	}
 	supLangsTextArea.text = supLangsTextArea.text.substr(0, supLangsTextArea.text.length - 2);
 
@@ -431,8 +431,8 @@ private function rebuildInterface():void {
 	var descriptLangID:String = refID(objectXML.Information.Description);
 	var i:int = 0;
 	for each(language in supLanguages.language) {
-		infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == dnameLangID);
-		infoDescriptCollector[i].text = objectXML.Languages.Language.(@Code == language.@label).Sentence.(@ID == descriptLangID);
+		infoDnameCollector[i].text = objectXML.Languages.Language.(@Code == language.@id).Sentence.(@ID == dnameLangID);
+		infoDescriptCollector[i].text = objectXML.Languages.Language.(@Code == language.@id).Sentence.(@ID == descriptLangID);
 		i++;
 	}
 	attrFieldsRefresh();
@@ -440,14 +440,14 @@ private function rebuildInterface():void {
 
 private function addSupLanguage():void {
 	if (addLanguageComboBox.selectedItem != null) {
-		if (supLanguages.language.(@label == addLanguageComboBox.selectedItem.@label).toXMLString() != "") {
+		if (supLanguages.language.(@id == addLanguageComboBox.selectedItem.@id).toXMLString() != "") {
 			/* Alert.show("Sorry, you have already have the same one", "Adding language"); */
-			Alert.show(langData.language.(@id == langStr).sentence.(@id == 67), langData.language.(@id == langStr).sentence.(@id == 68));
+			Alert.show(langData.language.(@id == langStr).sentence.(@id == 'a67'), langData.language.(@id == langStr).sentence.(@id == 'a68'));
 		} else {
 			/* Saving current state of the Object XML (to store already typed language data */
 			buildObjectXML();
 
-			supLanguages.appendChild(<language label={addLanguageComboBox.selectedItem.@label} text={addLanguageComboBox.selectedItem.@text}/>);
+			supLanguages.appendChild(<language id={addLanguageComboBox.selectedItem.@id} label={addLanguageComboBox.selectedItem.@label}/>);
 
 			/* Rebuilding programm interface */
 			currentState = "";
@@ -459,7 +459,7 @@ private function addSupLanguage():void {
 private function removeSupLanguage():void {
 	if (remLanguageComboBox.selectedItem != null) {
 		if (supLanguages.children().length() == 1) {
-			Alert.show(langData.language.(@id == langStr).sentence.(@id == 69), langData.language.(@id == langStr).sentence.(@id == 70));
+			Alert.show(langData.language.(@id == langStr).sentence.(@id == 'a69'), langData.language.(@id == langStr).sentence.(@id == 'a70'));
 		} else {
 			/* Saving current state of the Object XML (to store already typed language data) */
 			buildObjectXML();
@@ -514,8 +514,8 @@ private function checkCodeInterface():void {
 
 private function checkForLanguageSelection():void {
 	if (nativeLanguageComboBox.selectedItem != null) {
+		supLanguages.language.@id = nativeLanguageComboBox.selectedItem.@id;
 		supLanguages.language.@label = nativeLanguageComboBox.selectedItem.@label;
-		supLanguages.language.@text = nativeLanguageComboBox.selectedItem.@text;
 		vs.selectedChild = mainView;
 	}
 }
@@ -590,11 +590,11 @@ private function buildObjectXML():void {
 	/* Adding multilingual part of object XML */
 	var i:int = 0;
 	for each(language in supLanguages.language) {
-		if (objectXML.Languages.Language.(@Code == language.@label).toXMLString() == "")
-			objectXML.Languages.appendChild(<Language Code={language.@label}/>);
+		if (objectXML.Languages.Language.(@Code == language.@id).toXMLString() == "")
+			objectXML.Languages.appendChild(<Language Code={language.@id}/>);
 
-		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="1">{infoDnameCollector[i].text}</Sentence>);
-		objectXML.Languages.Language.(@Code == language.@label).appendChild(<Sentence ID="2">{infoDescriptCollector[i].text}</Sentence>);
+		objectXML.Languages.Language.(@Code == language.@id).appendChild(<Sentence ID="1">{infoDnameCollector[i].text}</Sentence>);
+		objectXML.Languages.Language.(@Code == language.@id).appendChild(<Sentence ID="2">{infoDescriptCollector[i].text}</Sentence>);
 		i++;
 	}
 
@@ -618,22 +618,22 @@ private function buildObjectXML():void {
 			
 			language = null;
 			for each(language in supLanguages.language) {
-				if (objectXML.Languages.Language.(@Code == language.@label).toXMLString() == "")
-					objectXML.Languages.appendChild(<Language Code={language.@label}/>);
+				if (objectXML.Languages.Language.(@Code == language.@id).toXMLString() == "")
+					objectXML.Languages.appendChild(<Language Code={language.@id}/>);
 
-				objectXML.Languages.Language.(@Code == language.@label).appendChild (
+				objectXML.Languages.Language.(@Code == language.@id).appendChild (
 					<Sentence ID={refID(tmpAttribute.DisplayName)}>
-						{attribute.dname.lang.(@label == language.@label).@text}
+						{attribute.dname.lang.(@id == language.@id).@text}
 					</Sentence>
 				);
-				objectXML.Languages.Language.(@Code == language.@label).appendChild (
+				objectXML.Languages.Language.(@Code == language.@id).appendChild (
 					<Sentence ID={refID(tmpAttribute.ErrorValidationMessage)}>
-						{attribute.err.lang.(@label == language.@label).@text}
+						{attribute.err.lang.(@id == language.@id).@text}
 					</Sentence>
 				);
-				objectXML.Languages.Language.(@Code == language.@label).appendChild (
+				objectXML.Languages.Language.(@Code == language.@id).appendChild (
 					<Sentence ID={refID(tmpAttribute.Description)}>
-						{attribute.descript.lang.(@label == language.@label).@text}
+						{attribute.descript.lang.(@id == language.@id).@text}
 					</Sentence>
 				);
 			}
@@ -683,7 +683,7 @@ private function loadObjectXML():void {
 	supLanguages = new XML(<root/>); /* Creating empty supported languages XML */
 	for each(var lng:String in lngs_array) {
 		/* Add supported language and get its real name from the langsSource XML */
-		supLanguages.appendChild(<language label={lng} text={langsSource.language.(@label == lng).@text}/>);
+		supLanguages.appendChild(<language id={lng} label={langsSource.language.(@id == lng).@text}/>);
 	}
 	
 	/* Loading attributes records */
@@ -709,15 +709,15 @@ private function loadObjectXML():void {
 
 			/* Writing multilingual properties */
 			for each(language in supLanguages.language) {
-				var lnglabel:String = language.@label;
+				var lngID:String = language.@id;
 				/* Display Name tabs */
-				dname.appendChild(<lang label={language.@label} text={objectXML.Languages.Language.(@Code == lnglabel).Sentence.(@ID == dnameLangID)}/>);
+				dname.appendChild(<lang id={language.@id} label={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == dnameLangID)}/>);
 
 				/* Error Exp Validation Messages tabs */
-				err.appendChild(<lang label={language.@label} text={objectXML.Languages.Language.(@Code == lnglabel).Sentence.(@ID == errLangID)}/>);
+				err.appendChild(<lang id={language.@id} label={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == errLangID)}/>);
 
 				/* Attribute Description tabs */
-				descript.appendChild(<lang label={language.@label} text={objectXML.Languages.Language.(@Code == lnglabel).Sentence.(@ID == descriptLangID)}/>);
+				descript.appendChild(<lang id={language.@id} label={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == descriptLangID)}/>);
 			}
 		}
 	}
