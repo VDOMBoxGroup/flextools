@@ -29,7 +29,7 @@ package com.connection.utils
     //extends UIComponent
     {
         // Hard-code the URL of the remote upload script.
-        private const UPLOAD_URL:String = "http://192.168.0.23:82/echo.py?sid=";
+        private const UPLOAD_URL:String = "http://192.168.0.10:80/echo.py?sid=";
         private var fr:FileReference;
  		private var code:Code = Code.getInstance();
  		private var ws:WebService;
@@ -40,7 +40,7 @@ package com.connection.utils
  		private var myTimer:Timer = new Timer(100, 1);
  		private var btn:Button;
  		private var imagesFilter:FileFilter = new FileFilter("Images: *.jpg *.gif; *.png", "*.jpg;*.gif;*.png");
- 		 
+ 		private var request:URLRequest = new URLRequest(); 
 
         public function FileUpload(btn:Button):void
         {
@@ -50,7 +50,7 @@ package com.connection.utils
         //    fr.addEventListener(Event.OPEN, openHandler);
          //   fr.addEventListener(ProgressEvent.PROGRESS, progressHandler);
          	fr.addEventListener(Event.CANCEL, cancelUpload );
-            fr.addEventListener(Event.COMPLETE, completeHandler);
+            fr.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, completeHandler);
         }
 
         /**
@@ -65,25 +65,24 @@ package com.connection.utils
          * Immediately cancel the upload in progress and disable the cancel button.
          */
         public function cancelUpload(evt:Event):void {
-            //fr.cancel();
-           dispatchEvent(new Event(UtilsEvent.FILE_UPLOAD_ERROR));
+           dispatchEvent(new UtilsEvent(UtilsEvent.FILE_UPLOAD_ERROR));
         }
 
         /**
          * Begin uploading the file specified in the UPLOAD_URL constant.
          */
         private function selectHandler(event:Event):void {
-            var request:URLRequest = new URLRequest();
+            
             request.url = UPLOAD_URL + code.sessionId;// Soap.getSid();
-            //time = getTimer();
-           // times = getTimer();
-           // trace('File size: '+ Math.round(fr.size/1000)+ "KB" );
+            time = getTimer();
+            times = getTimer();
+        //    trace('File size: '+ Math.round(fr.size/1000)+ "KB" );
 			if(fr.size < 300000){
 				fr.upload(request);
 				btn.enabled = false;
 			}else{
 				Alert.show( "It's more then 300kb!\n Try again...");
-				dispatchEvent(new Event(UtilsEvent.FILE_UPLOAD_ERROR));
+				dispatchEvent(new UtilsEvent(UtilsEvent.FILE_UPLOAD_ERROR));
 			}
         }
 		
@@ -92,31 +91,32 @@ package com.connection.utils
          * disable the "Cancel" button since the upload is already completed.
          */
         private function completeHandler(event:Event):void {
+        	trace('result:' + event);
         	fr.removeEventListener(Event.COMPLETE, completeHandler);
 			var myTimer:Timer = new Timer(100, 1);
             myTimer.addEventListener("timer", runWebService);
             myTimer.start(); 
             
-          //  trace('1. Time to upload: '+ (getTimer() - time)  + 'c.');  
-           // time = getTimer();      
+      //      trace('1. Time to upload: '+ (getTimer() - time)  + 'c.');  
+            time = getTimer();      
         }
 
 		private var soap:Soap	 =  Soap.getInstance()
 		private function runWebService(ev:Event):void{
 			myTimer.removeEventListener("timer", runWebService);
 		//	ge.execute(ws);
-		
+			soap.getEcho();
 			soap.addEventListener(SoapEvent.GET_ECHO_OK, extractData);
-			soap.addEventListener(SoapEvent.GET_ECHO_ERROR, dispatchEvent);
-			//trace('2. Time to Run WebServise: '+ (getTimer() - time)  + 'c.');
-		//	time = getTimer();
+			soap.addEventListener(SoapEvent.GET_ECHO_ERROR, dispatches);
+		//trace('2. Time to Run WebServise: '+ (getTimer() - time)  + 'c.');
+			time = getTimer();
 		}
 		/**
 		 *  ------ Extract Data
 		 */
 		private var extract:Extract = new Extract();
 		private function extractData(evt:SoapEvent):void{
-			//trace('3.Time to get result from SOAP servise: '+ (getTimer() - time) + 'c.');
+		//	trace('3.Time to get result from SOAP servise: '+ (getTimer() - time) + 'c.');
 			time = getTimer();
 			extract.unziping(evt.result.toString()); 
 			extract.addEventListener(UtilsEvent.UNZIP_COMPLETE, dispatches);
@@ -137,12 +137,14 @@ package com.connection.utils
 		*/
 		private function dispatches(evt:UtilsEvent):void{
 			btn.enabled = true;
-			dispatchEvent(evt);
+			var utEvt:UtilsEvent = new UtilsEvent(UtilsEvent.FILE_UPLOAD_COMPLETE, evt.result)
+		//	trace('4. REzult Time: '+ (getTimer() - times) + 'c.');
+			dispatchEvent(utEvt);
 		}
 	
         public function getResul():DisplayObject{
         	//return ge.getResult();
-        	//trace('6. REzult Time: '+ (getTimer() - times) + 'c.');
+        	
         	return  displObj;
         }
     }

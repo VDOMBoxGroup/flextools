@@ -20,11 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String, objid:String):void{
-			// data
+		public function execute(appid:String, objid:String):void
+		{
+			// protect
 			ws.get_child_objects.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.get_child_objects.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
+			// data
 			ws.get_child_objects.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.get_child_objects.arguments.objid  	= objid;		//- идентификатор объекта 
 			
@@ -34,32 +36,21 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.get_child_objects.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
-				evt = new SoapEvent(SoapEvent.GET_CHILD_OBJECTS_ERROR);
-				evt.result = resultXML;
+			if(resultXML.name().toString() == 'Error')
+			{
+				evt = new SoapEvent(SoapEvent.GET_CHILD_OBJECTS_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
-				evt = new SoapEvent(SoapEvent.GET_CHILD_OBJECTS_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.GET_CHILD_OBJECTS_OK, resultXML);
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

@@ -20,11 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String,objid:String, script:String ):void{
-			// data
+		public function execute(appid:String,objid:String, script:String ):void
+		{
+			// protect
 			ws.set_script.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.set_script.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
+			//data
 			ws.set_script.arguments.appid  		= appid;		//- идентификатор приложения 
 			ws.set_script.arguments.objid  		= objid;		//- идентификатор объекта
 			ws.set_script.arguments.script  	= script;		//- текст скрипта 
@@ -35,32 +37,21 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.set_script.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
-				evt = new SoapEvent(SoapEvent.SET_SCRIPT_ERROR);
-				evt.result = resultXML;
+			if(resultXML.name().toString() == 'Error')
+			{
+				evt = new SoapEvent(SoapEvent.SET_SCRIPT_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
-				evt = new SoapEvent(SoapEvent.SET_SCRIPT_ERROR);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.SET_SCRIPT_ERROR, resultXML);
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

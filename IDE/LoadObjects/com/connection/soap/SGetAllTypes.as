@@ -20,10 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute():void{
-			// data
+		public function execute():void
+		{
+			// protect
 			ws.get_all_types.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.get_all_types.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			
+			// no data to send
 			
 			//send data & set listener 
 			ws.get_all_types();
@@ -31,32 +34,21 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.get_all_types.lastResult.Result);
 			var evt:SoapEvent;
-			
-			
+
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
+			if(resultXML.name().toString() == 'Error')
+			{
 				evt = new SoapEvent(SoapEvent.GET_ALL_TYPES_ERROR,resultXML );
-			//	evt.result = resultXML;
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
 				evt = new SoapEvent(SoapEvent.GET_ALL_TYPES_OK, resultXML);
-		//		evt.result = resultXML;
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

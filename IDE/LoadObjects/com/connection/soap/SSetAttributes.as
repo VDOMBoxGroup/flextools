@@ -20,11 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String = '', objid:String = '', attr:String = ''):void{
-			// data
+		public function execute(appid:String = '', objid:String = '', attr:String = ''):void
+		{
+			// protect
 			ws.set_attributes.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.set_attributes.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
+			//data 
 			ws.set_attributes.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.set_attributes.arguments.objid  	= objid;		//- идентификатор объекта
 			ws.set_attributes.arguments.attr  	= attr;			//- имя атрибута  
@@ -41,28 +43,15 @@ package com.connection.soap
 			resultXML = XML(ws.set_attributes.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
 				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_ERROR, resultXML);
-				//evt.result = resultXML;
 				dispatchEvent(evt);
-		
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
 				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_OK, resultXML);
-				//evt.result = resultXML;
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
-				
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

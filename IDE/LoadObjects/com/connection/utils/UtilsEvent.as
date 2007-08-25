@@ -9,7 +9,7 @@ package com.connection.utils
 		public static var UNZIP_COMPLETE :String = "fileUploadErorr";
 		public static var UNZIP_ERROR :String = "fileUploadErorr";
 		
-		private var result:Object;
+		public var result:Object = new Object();
 		
 		public function UtilsEvent(type:String, result		:Object = null, 
 												bubbles		:Boolean = false,

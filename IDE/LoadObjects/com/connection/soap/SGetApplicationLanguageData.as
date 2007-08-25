@@ -20,14 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String):void{
-
-			
-
-			// data
+		public function execute(appid:String):void
+		{
+			//  protect
 			ws.get_application_language_data.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.get_application_language_data.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
+			// data 
 			ws.get_application_language_data.arguments.appid  	= appid;		//- идентификатор приложения 
 			
 			//send data & set listener 
@@ -36,32 +35,21 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.get_application_language_data.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
-				evt = new SoapEvent(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_ERROR);
-				evt.result = resultXML;
+			if(resultXML.name().toString() == 'Error')
+			{
+				evt = new SoapEvent(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
-				evt = new SoapEvent(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_OK, resultXML);
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

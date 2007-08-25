@@ -20,10 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String, attrname:String, attrvalue:String ):void{
-			// data
+		public function execute(appid:String, attrname:String, attrvalue:String ):void
+		{
+			// protect
 			ws.set_application_info.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.set_application_info.arguments.skey 		= code.skey();	//- очередной ключ сессии 
+
+			// data
 			ws.set_application_info.arguments.appid  	= appid;		//- идентификатор приложения;
 			ws.set_application_info.arguments.attrname 	= attrname;		//- имя атрибута приложения из раздела information
 			ws.set_application_info.arguments.attrvalue = attrvalue;	//- значение атрибута
@@ -34,32 +37,22 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.set_application_info.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
-				evt = new SoapEvent(SoapEvent.SET_APLICATION_ERROR);
-				evt.result = resultXML;
+			if(resultXML.name().toString() == 'Error')
+			{
+				evt = new SoapEvent(SoapEvent.SET_APLICATION_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
 
-				evt = new SoapEvent(SoapEvent.SET_APLICATION_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.SET_APLICATION_OK, resultXML);
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

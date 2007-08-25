@@ -20,12 +20,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute( login:String, password:String):void{
-
-			
+		public function execute( login:String, password:String):void
+		{
+			// data
 			ws.open_session.arguments.name 		= login; 				 //- имя пользователя, строка
 			ws.open_session.arguments.pwd_md5 	= MD5.encrypt(password); //- md5-хэш пароля, строка
 			
+			//send data & set listener 
 			ws.open_session();
 			ws.open_session.addEventListener(ResultEvent.RESULT,completeListener);
 		}

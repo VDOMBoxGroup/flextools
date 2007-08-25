@@ -21,13 +21,14 @@ package com.connection.soap
 		}
 		
 		public function execute(appid:String, objid:String, sdynamic:String ):void{
-			// data
+			// protect
 			ws.render_wysiwyg.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.render_wysiwyg.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			
+			// data
 			ws.render_wysiwyg.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.render_wysiwyg.arguments.objid  	= objid;		//- идентификатор объекта 
 			ws.render_wysiwyg.arguments.dynamic  = sdynamic;		//- способ рендеринга: для только что созданных объектов нужно указывать 0, для всех остальных 1
-		
 			
 			//send data & set listener 
 			ws.render_wysiwyg();
@@ -35,32 +36,20 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-		//	trace('render_wysiwyg - result');
-			// get result 
+		private  function completeListener(event:ResultEvent):void
+		{
 			resultXML = XML(ws.render_wysiwyg.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
-				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_ERROR);
-				evt.result = resultXML;
+			if(resultXML.name().toString() == 'Error')
+			{
+				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
-				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_OK, resultXML);
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

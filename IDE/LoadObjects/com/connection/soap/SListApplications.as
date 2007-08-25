@@ -20,8 +20,9 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute():void{
-			// data
+		public function execute():void
+		{
+			// protect
 			ws.list_applications.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.list_applications.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
@@ -30,31 +31,22 @@ package com.connection.soap
 			ws.list_applications.addEventListener(ResultEvent.RESULT,completeListener);	
 		}
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.list_applications.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
-				evt = new SoapEvent(SoapEvent.LIST_APLICATION_ERROR);
-				evt.result = resultXML;
+			if(resultXML.name().toString() == 'Error')
+			{
+				evt = new SoapEvent(SoapEvent.LIST_APLICATION_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
 
 				evt = new SoapEvent(SoapEvent.LIST_APLICATION_OK, resultXML);
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }
