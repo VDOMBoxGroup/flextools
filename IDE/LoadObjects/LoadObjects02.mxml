@@ -152,8 +152,9 @@
 			private function makeImage2(evt:UtilsEvent):void{
 				//addChild(img2);
 				//trace ("img4: "+ img.width);
-				trace(evt.type + " типа ок! " );
-				pict2.source = evt.result;
+			//	trace(evt.type + " типа ок! " );
+				pict2.source = evt.source;
+				textArea.text +=  evt.base64data;
 			//	 trace(evt.result.toString());
 			}
 			

@@ -22,6 +22,8 @@ package com.connection.utils
 	import flash.net.FileFilter;
 	import flash.display.DisplayObject;
 	import com.connection.soap.Soap;
+	import mx.utils.Base64Decoder;
+	import flash.display.Loader;
 	
 	
 
@@ -29,7 +31,7 @@ package com.connection.utils
     //extends UIComponent
     {
         // Hard-code the URL of the remote upload script.
-        private const UPLOAD_URL:String = "http://192.168.0.10:80/echo.py?sid=";
+        private const UPLOAD_URL:String = "http://192.168.0.23:82/echo.py?sid=";
         private var fr:FileReference;
  		private var code:Code = Code.getInstance();
  		private var ws:WebService;
@@ -41,6 +43,9 @@ package com.connection.utils
  		private var btn:Button;
  		private var imagesFilter:FileFilter = new FileFilter("Images: *.jpg *.gif; *.png", "*.jpg;*.gif;*.png");
  		private var request:URLRequest = new URLRequest(); 
+ 		private var ld:Loader = new Loader();
+ 		private var bs:Base64Decoder = new Base64Decoder();
+ 		private var utEvt:UtilsEvent = new UtilsEvent(UtilsEvent.FILE_UPLOAD_COMPLETE)
 
         public function FileUpload(btn:Button):void
         {
@@ -90,62 +95,32 @@ package com.connection.utils
          * Once the upload has completed, change the progress bar's label and 
          * disable the "Cancel" button since the upload is already completed.
          */
-        private function completeHandler(event:Event):void {
-        	trace('result:' + event);
+        private function completeHandler(event:DataEvent):void {
+        //	trace('result:' + event.text);
         	fr.removeEventListener(Event.COMPLETE, completeHandler);
-			var myTimer:Timer = new Timer(100, 1);
-            myTimer.addEventListener("timer", runWebService);
-            myTimer.start(); 
-            
-      //      trace('1. Time to upload: '+ (getTimer() - time)  + 'c.');  
-            time = getTimer();      
+        	
+        	var bs:Base64Decoder = new Base64Decoder();
+        	bs.decode(event.text);
+ 			ld.loadBytes(bs.drain());
+ 			utEvt.base64data = event.text;
+			ld.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
         }
 
-		private var soap:Soap	 =  Soap.getInstance()
-		private function runWebService(ev:Event):void{
-			myTimer.removeEventListener("timer", runWebService);
-		//	ge.execute(ws);
-			soap.getEcho();
-			soap.addEventListener(SoapEvent.GET_ECHO_OK, extractData);
-			soap.addEventListener(SoapEvent.GET_ECHO_ERROR, dispatches);
-		//trace('2. Time to Run WebServise: '+ (getTimer() - time)  + 'c.');
-			time = getTimer();
-		}
+		
 		/**
 		 *  ------ Extract Data
 		 */
-		private var extract:Extract = new Extract();
-		private function extractData(evt:SoapEvent):void{
-		//	trace('3.Time to get result from SOAP servise: '+ (getTimer() - time) + 'c.');
-			time = getTimer();
-			extract.unziping(evt.result.toString()); 
-			extract.addEventListener(UtilsEvent.UNZIP_COMPLETE, dispatches);
-	//		extract.addEventListener(SoapEvent.UNZIP_ERROR, ---//--);
-			
-			soap.removeEventListener(SoapEvent.GET_ECHO_OK, extractData);
-		}		
-		/*
-		private function getImage(evt:Event):void{
+		private function loadComplete(evt:Event):void
+		{
 			btn.enabled = true;
-			//necessary data for as
-			displObj = extract.getImage();
-		//	trace ("img File Up3: "+ img.width);
-			//trace('5.Time to UnZip: '+ (getTimer() - time) + 'c.');
-			time = getTimer();
-//***			dispatchEvent(new Event(UtilsEvent.FILE_UPLOAD_COMPLETE, ));
-		}
-		*/
-		private function dispatches(evt:UtilsEvent):void{
-			btn.enabled = true;
-			var utEvt:UtilsEvent = new UtilsEvent(UtilsEvent.FILE_UPLOAD_COMPLETE, evt.result)
-		//	trace('4. REzult Time: '+ (getTimer() - times) + 'c.');
+		//	var utEvt:UtilsEvent = new UtilsEvent(UtilsEvent.FILE_UPLOAD_COMPLETE,ld.content, 'str')
+			utEvt.source = ld.content;
 			dispatchEvent(utEvt);
-		}
-	
-        public function getResul():DisplayObject{
-        	//return ge.getResult();
-        	
-        	return  displObj;
-        }
+		}		
+	/*	private function dispatches(evt:UtilsEvent):void{
+			btn.enabled = true;
+			var utEvt:UtilsEvent = new UtilsEvent(UtilsEvent.FILE_UPLOAD_COMPLETE, evt.source)
+			dispatchEvent(utEvt);
+		}*/
     }
 }

@@ -9,15 +9,18 @@ package com.connection.utils
 		public static var UNZIP_COMPLETE :String = "fileUploadErorr";
 		public static var UNZIP_ERROR :String = "fileUploadErorr";
 		
-		public var result:Object = new Object();
+		public var source:Object = new Object();
+		public var base64data:String = new String();
 		
-		public function UtilsEvent(type:String, result		:Object = null, 
+		public function UtilsEvent(type:String, source		:Object = null, 
+												base64data  :String = '',
 												bubbles		:Boolean = false,
 								  				cancelable	:Boolean = true )
 		{
 			super(type, bubbles, cancelable);
 
-			this.result = result;
+			this.source = source;
+			this.base64data = base64data;
 		}
 		
 		

@@ -46,7 +46,7 @@ package com.connection.soap
 				evt = new SoapEvent(SoapEvent.CREATE_APPLICATION_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.CREATE_APPLICATION_OK);
+				evt = new SoapEvent(SoapEvent.CREATE_APPLICATION_OK, resultXML);
 				evt.result = resultXML;
 				dispatchEvent(evt);
 			}
