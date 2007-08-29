@@ -7,19 +7,18 @@ import vdom.components.editor.managers.ResizeManager;
 import vdom.components.editor.events.ResizeManagerEvent;
 import flash.events.Event;
 	
-public class Workflow extends Canvas
+public class Workspace extends Canvas
 {
 	
-	public var selectedItem:Item;
+	public var selectedElement:String;
 	
 	private var resizer:ResizeManager;
 	
 	private var _elements:Object;
 	
-	public function Workflow()
+	public function Workspace()
 	{
 		super();
-		
 		
 		_elements = [];
 		resizer = new ResizeManager();
@@ -36,7 +35,12 @@ public class Workflow extends Canvas
 		for each(var attr:XML in elementAttr.Attributes.Attribute) {
 			element[attr.Name] = attr.Value;
 		}
-		resizer.item = selectedItem;
+		resizer.item = _elements[selectedElement];
+	}
+	
+	public function destroyElements():void {
+		selectedElement = null;
+		removeAllChildren();
 	}
 	
 	public function set dataProvider(objects:Object):void {
@@ -47,15 +51,24 @@ public class Workflow extends Canvas
 		return new Object();
 	}
 	
-	public function addItem(objectAttributes:Object):void {
+	public function addItem(objectAttributes:XML):void {
 		
-		var elementId:int = int(objectAttributes.@ID);
+		var elementId:String = objectAttributes.@ID;
 		
 		var element:Item = new Item(elementId);
-
-		for each(var attr:XML in objectAttributes.Attributes.Attribute) {
+		
+		var elWidth:int = objectAttributes.Attributes.Attribute.(@Name == 'width')[0];
+		var elHeight:int = objectAttributes.Attributes.Attribute.(@Name == 'height')[0];
+		
+		element.width = (elWidth == 0) ? 50 : elWidth;
+		element.height = (elHeight == 0) ? 50 : elHeight;
+		
+		element.x = objectAttributes.Attributes.Attribute.(@Name == 'left')[0];
+		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
+		
+		/* for each(var attr:XML in objectAttributes.Attributes.Attribute) {
 			element[attr.@Name] = attr;
-		}
+		} */
 		
 		element.addEventListener(MouseEvent.CLICK, elementClickHandler);
 		_elements[objectAttributes.@ID] = element
@@ -68,14 +81,15 @@ public class Workflow extends Canvas
 	
 	private function elementClickHandler(event:MouseEvent):void {
 	
-		if(selectedItem) {
-			selectedItem = null;
+		if(selectedElement) {
+			selectedElement = null;
 			removeChild(resizer);
 		}
 		
-		selectedItem = Item(event.currentTarget);
-		selectedItem.content.setFocus();
-		resizer.item = selectedItem;
+		selectedElement = Item(event.currentTarget).elementId;
+		_elements[selectedElement].content.setFocus();
+		
+		resizer.item = _elements[selectedElement];
 		addChild(resizer);
 		event.stopPropagation();
 		dispatchEvent(new Event('objectChange'));
@@ -83,9 +97,9 @@ public class Workflow extends Canvas
 	
 	private function mainClickHandler(event:MouseEvent):void
 	{
-		if(event.target == event.currentTarget && selectedItem) {
+		if(event.target == event.currentTarget && selectedElement) {
 			setFocus();
-			selectedItem = null;
+			selectedElement = null;
 			removeChild(resizer);
 			dispatchEvent(new Event('objectChange'));
 		}

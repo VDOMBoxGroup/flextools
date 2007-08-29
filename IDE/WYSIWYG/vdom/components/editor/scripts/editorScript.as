@@ -3,23 +3,30 @@ import vdom.components.editor.managers.VdomDragManager;
 import vdom.components.editor.managers.DataManager;
 import vdom.components.editor.events.DataManagerEvent;
 import vdom.components.editor.containers.Item;
-import vdom.components.editor.containers.Workflow;
 import mx.core.EdgeMetrics;
 import flash.events.Event;
 import vdom.components.editor.containers.typesClasses.Type;
+import vdom.components.editor.containers.Workspace;
+import flash.display.DisplayObject;
+import mx.managers.PopUpManager;
+import vdom.MyLoader;
+import mx.containers.Canvas;
 
 [Bindable]
-private var selectedItem:Item;
+private var selectedElement:String;
 
 private var objectsXML:XML;
+[Bindable]
 private var editorDataManager:DataManager;
 private var currInterfaceType:uint;
 
-[Bindable]
-public var objects:Object;
+private var publicData:Object;
 
 [Bindable]
-public var element:XML;
+public var objects:XML;
+
+[Bindable]
+public var elementDescription:XML;
 
 [Bindable]
 public var typesXML:XML;
@@ -27,16 +34,25 @@ public var typesXML:XML;
 [Bindable]
 public var help:String;
 
+private var ppm:Canvas;
+
 private function init():void {
 	
-	/*Загрузка типов*/
+	ppm = new MyLoader();
+	publicData = mx.core.Application.application.publicData;
 	editorDataManager = DataManager.getInstance();
 	
-	editorDataManager.addEventListener(DataManagerEvent.TYPES_LOADED, typesLoadHandler);
-	editorDataManager.addEventListener(DataManagerEvent.OBJECTS_LOADED, objectsLoadHandler);
 	
-	editorDataManager.loadTypes();
-	editorDataManager.loadObjects();
+	
+	/*Загрузка типов*/
+	
+	
+	
+	
+	
+	
+	//editorDataManager.loadTypes();
+	//editorDataManager.loadObjects();
 	
 	addEventListener('objectCreated', objectCreatedHandler);
 	
@@ -49,6 +65,43 @@ private function init():void {
 	typesXML = null;
 }
 
+private function show():void {
+	
+	PopUpManager.addPopUp(ppm, this, true);
+	PopUpManager.centerPopUp(ppm);
+	//trace(publicData['appId']);
+	editorDataManager.addEventListener('initComplete', initCompleteHandler);
+	editorDataManager.init(publicData['appId']);
+}
+
+private function hide():void {
+	editorMainCanvas.visible = false;
+}
+
+private function initCompleteHandler(event:Event):void {
+	createObjects(editorDataManager.getObjects());
+}
+
+private function createTypes():void {
+	
+	typesXML = publicData['types'];
+	PopUpManager.removePopUp(ppm);
+}
+
+private function createObjects(objectsXML:XML):void {
+	
+	editorMainCanvas.destroyElements();
+	
+	for each(var itemAttrs:XML in objectsXML.Object) {
+		
+		editorMainCanvas.addItem(itemAttrs);
+	}
+	
+	dispatchEvent(new Event('objectCreated'));
+	
+	createTypes();
+}
+
 private function propsChangedHandler(event:Event):void {
 	
 	/* if(attributes.Attributes.Attribute.(@Name == 'x')[0]) selectedItem.x = attributes.Attributes.Attribute.(@Name == 'x')[0];
@@ -57,8 +110,8 @@ private function propsChangedHandler(event:Event):void {
 	if(attributes.Attributes.Attribute.(@Name == 'height')[0]) selectedItem.height = attributes.Attributes.Attribute.(@Name == 'height')[0]; */
 	//resizer.item = selectedItem;
 	
-	element = new XML(element);
-	editorMainCanvas.updateElement(element);
+	elementDescription = new XML(elementDescription);
+	editorMainCanvas.updateElement(elementDescription);
 	//trace(attributes.@ID);
 }
 
@@ -75,33 +128,21 @@ private function objectsLoadHandler(event:Event):void {
 	createObjects(objectsXML);
 }
 
-private function createObjects(objectsXML:XML):void {
-	
-	for each(var itemAttrs:Object in objectsXML.Object) {
-		
-		editorMainCanvas.addItem(itemAttrs);
-	}
-	
-	dispatchEvent(new Event('objectCreated'));
-}
-
 private function objectChangeHandler(event:Event):void {
 
-	if(editorMainCanvas.selectedItem) {
-		element = editorDataManager.getFullAttributes(editorMainCanvas.selectedItem.elementId);
+	if(editorMainCanvas.selectedElement) {
+		elementDescription = editorDataManager.getFullAttributes(editorMainCanvas.selectedElement);
 	} else {
-		element = null;
+		elementDescription = null;
 	}
-	toolbar.type = element;
-}
-
-private function createTypes(typesXML:XML):void {
-	
+	toolbar.type = elementDescription;
+	//trace(elementDescription);
 }
 
 private function objectCreatedHandler(event:Event):void {
-	
 	objects = editorDataManager.getObjects();
+	editorMainCanvas.visible = true;
+	PopUpManager.removePopUp(ppm);
 }
 
 private function dragEnterHandler(event:DragEvent):void {
@@ -112,29 +153,32 @@ private function dragEnterHandler(event:DragEvent):void {
 
 private function dropHandler(event:DragEvent):void {
 	
-	var workflow:Workflow = Workflow(event.currentTarget);
+	var workspace:Workspace = Workspace(event.currentTarget);
 	
-	var bm:EdgeMetrics = workflow.borderMetrics;
+	var bm:EdgeMetrics = workspace.borderMetrics;
 	
-	var typeId:uint = event.dragSource.dataForFormat('Object').typeId;
+	var typeId:String = event.dragSource.dataForFormat('Object').typeId;
 	var type:Object = editorDataManager.getType(typeId);
 	
-	var objectX:Number = workflow.mouseX - int(type.Attributes.Attribute.(Name == 'width').DefaultValue/2) - bm.left;
-	var objectY:Number = workflow.mouseY - int(type.Attributes.Attribute.(Name == 'height').DefaultValue/2) - bm.top;
+	//var objectX:Number = workspace.mouseX - int(type.Attributes.Attribute.(Name == 'width').DefaultValue/2) - bm.left;
+	//var objectY:Number = workspace.mouseY - int(type.Attributes.Attribute.(Name == 'height').DefaultValue/2) - bm.top;
 	
-	objectX = (objectX < 0) ? 0 : objectX;
-	objectY = (objectY < 0) ? 0 : objectY;
+	var objectLeft:Number = workspace.mouseX - 25 - bm.left;
+	var objectTop:Number = workspace.mouseY - 25 - bm.top;
+	
+	objectLeft = (objectLeft < 0) ? 0 : objectLeft;
+	objectTop = (objectTop < 0) ? 0 : objectTop;
 	
 	var initProp:Object = {};
 	
 	initProp.typeId = typeId;
-	initProp.x = objectX;
-	initProp.y = objectY;
+	initProp.left = objectLeft;
+	initProp.top = objectTop;
 	
 	
-	var id:uint = editorDataManager.createObject(initProp);
+	var id:String = editorDataManager.createObject(initProp);
 	
-	var newItemAtrs:Object = editorDataManager.getProperties(id);
+	var newItemAtrs:XML = editorDataManager.getProperties(id);
 	
 	editorMainCanvas.addItem(newItemAtrs);
 }

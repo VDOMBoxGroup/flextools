@@ -10,7 +10,7 @@ import mx.managers.SystemManager;
 	
 public class Type extends VBox
 {
-	protected var _id:uint;
+	protected var _id:String;
 	
 	private var typeIcon:Image;
 	private var typeLabel:Label;
@@ -18,7 +18,7 @@ public class Type extends VBox
 	private var _iconSource:String;
 
 	
-	public function Type(id:uint, iconSource:String, label:String)
+	public function Type(id:String, iconSource:String, label:String)
 	{
 		super();
 		this._id = id;
@@ -43,7 +43,7 @@ public class Type extends VBox
 		var dataObject:Object = {typeId:_id, offX:dragInitiator.mouseX, offY:dragInitiator.mouseY};
 		ds.addData(dataObject, 'Object');
 		var proxy:Image = new Image();
-		proxy.source = typeIcon.source;
+		//proxy.source = typeIcon.source;
 		proxy.width = 40;
 		proxy.height = 40;
 		VdomDragManager.doDrag(dragInitiator, ds, event, proxy, proxy.width/2 - dragInitiator.mouseX, proxy.height/2 - dragInitiator.mouseY);

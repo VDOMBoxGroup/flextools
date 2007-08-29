@@ -28,7 +28,6 @@ public class AttributesPanel extends ClosablePanel
 	private var applyButton:Button;
 	private var collection:XMLListCollection;
 	private var fieldsArray:Array;
-	
 	[Bindable]
 	public var help:String;
 	
@@ -41,15 +40,19 @@ public class AttributesPanel extends ClosablePanel
 	
 	public function set dataProvider(prop:Object):void {
 		
-		if(prop == null) {		
+		if(prop == null) {	
 			applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
+			title = 'Attributes';
 			applyButton.visible = false;
 			attributesGrid.visible = false;
+			attributesGrid.removeAllChildren();
 			return
 		};
-		
+		//trace(prop);
+		title = 'Attributes: '+prop.Type.Information.Name;
+		help = '';
 		var xl:XMLList = new XMLList();
-        xl += prop;
+        xl += prop.Attributes.Attribute;
         collection = new XMLListCollection(xl);
 
         createChild();
@@ -101,7 +104,7 @@ public class AttributesPanel extends ClosablePanel
 			attrFieldItem = new GridItem();
 			attrFieldItem.percentWidth = 100;
 			
-			var typeRE:RegExp = /(\w+)\((\d+)\)/;
+			var typeRE:RegExp = /(\w+)\((\d*)\)/;
 			codeInterface['type'] = collection[i].CodeInterface.match(typeRE)[1].toLowerCase();
 			codeInterface['length'] = collection[i].CodeInterface.match(typeRE)[2];
 			
@@ -142,13 +145,27 @@ public class AttributesPanel extends ClosablePanel
 				case 'objectlist':
 				case 'linkedbase':
 				case 'externaleditor':
-			}
+				default:
+					var tw:TextInput = new TextInput();
+					//attrField.name = collection[i].Name;
+					tw.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
+					tw.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
+					tw.maxChars = codeInterface['length'];
+					tw.percentWidth = 100;
+					tw.name = i.toString();
+					tw.text = collection[i].Attribute.Value.toString();
+					//attrField.data = collection[i].Value;
+					fieldsArray[i] = [tw, 'text'];
+					attrFieldItem.addChild(tw);
+				
+			} 
 
 			attrRow.addChild(attrLabelItem);
 			attrRow.addChild(attrFieldItem);
 			
 			attributesGrid.addChild(attrRow);
 		}
+		var zzz:String = 'asdasdasdasdasdsa';
 	}
 
 	override protected function createChildren():void {

@@ -1,0 +1,13 @@
+Trying to change property 'svn:ignore' from 'bin
+html-template
+' to 'bin
+html-template
+.settings
+',
+but property already exists with value 'bin
+html-template
+.actionScriptProperties
+.flexProperties
+.settings
+.project
+'.

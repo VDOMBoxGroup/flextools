@@ -5,14 +5,16 @@ import mx.core.UIComponent;
 import mx.controls.Label;
 import flash.display.Graphics;
 	
-public class Item extends Canvas
+public dynamic class Item extends Canvas
 {
 	private var _content:UIComponent;
-	private var _elementId:int;
+	private var _elementId:String;
 	
-	public function Item(id:int)
+	public function Item(id:String)
 	{
 		super();
+		horizontalScrollPolicy = "off";
+		verticalScrollPolicy = "off";
 		focusEnabled = true;
 		mouseFocusEnabled = true;
 		_elementId = id;
@@ -21,11 +23,11 @@ public class Item extends Canvas
 		addChild(lbl);
 	}
 	
-	public function get elementId():int {
+	public function get elementId():String {
 		return _elementId;
 	}
 	
-	public function set elementId(objectId:int):void {
+	public function set elementId(objectId:String):void {
 		elementId = _elementId;
 	}
 	

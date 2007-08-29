@@ -6,7 +6,10 @@ import flash.events.EventDispatcher;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 import vdom.components.editor.events.DataManagerEvent;
-	
+import com.connection.soap.Soap;
+import com.connection.soap.SoapEvent;
+import mx.core.Application;
+
 public class DataManager implements IEventDispatcher
 {
 	private var _typesURL:String
@@ -16,23 +19,37 @@ public class DataManager implements IEventDispatcher
 	
 	private var _objects:XML;
 	private var _types:XML;
+	[Bindable]
+	public var pages:XML;
+	
+	private var soap:Soap;
+	
+	private var _appId:String;
+	private var _pageId:String;
+	
+	private var publicData:Object;
 	
 	private var dispatcher:EventDispatcher;
 	
 	private static var instance:DataManager;
+
+	/**
+	 * 
+	 * @return instance of DataManager class (Singleton)
+	 * 
+	 */	
 	
 	public static function getInstance():DataManager
 	{
-		if (!instance)
-		{
-			//sm = SystemManagerGlobals.topLevelSystemManagers[0];
+		if (!instance) {
+			
 			instance = new DataManager();
 		}
 
 		return instance;
 	}
 	
-	public function getFullAttributes(objectId:int):XML {
+	public function getFullAttributes(objectId:String):XML {
 		
 		var object:Object = getProperties(objectId);
 		
@@ -69,12 +86,78 @@ public class DataManager implements IEventDispatcher
 			throw new Error("Instance already exists.");
 		
 		dispatcher = new EventDispatcher();
+		soap = Soap.getInstance();
+		
+		publicData = mx.core.Application.application.publicData;
 		
 		_typesURL = 'remoute/types.xml';
 		_typesXML = null;
 		_objectsURL = 'remoute/application.xml';
 		_objectsXML = null;
 		_objects = null;
+	}
+	
+	/**
+	 * Инициализация класса, попытка загрузить объекты вехнего уровня.
+	 * @param appId идентификатор приложения
+	 * 
+	 */	
+	
+	public function init(appId:String):void {
+		
+		_appId = appId;
+		_types = publicData['types'];
+		//trace('init');
+		//trace(appId);
+		//_pageId = 'acc9e168-8b68-49e3-a9f7-c355e7b5a016';
+				
+		soap.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, getTopObjectsHandler);
+		soap.getTopObjects(_appId);
+	}
+	
+	/**
+	 * Получение результатов запроса всех объектов верхнего уровня. 
+	 * Попытка загрузить всех потомков объекта верхнего уровня
+	 * @param event
+	 * 
+	 */	
+	
+	private function getTopObjectsHandler(event:SoapEvent):void {
+		//trace('getTopObjectsHandler');
+		
+		pages = event.result;
+		_pageId = event.result.Object[0].@ID;
+		//trace('pageId: '+_pageId);
+		
+		soap.removeEventListener(SoapEvent.GET_TOP_OBJECTS_OK, getTopObjectsHandler);
+		
+		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, loadedObjectsHandler);
+		soap.getChildObjects(_appId, _pageId);
+	}
+	
+	/* private function loadedObjectsHandler(event:SoapEvent):void {
+		
+		trace('loadedObjectsHandler');
+		
+		
+	} */
+	
+	/* private function typeLoadedHandler(event:Event):void {
+		
+		_types = soap.listTypesResult();
+		
+		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, loadedObjectsHandler);
+		soap.getChildObjects(_appId, _pageId);
+	} */
+	
+ 	private function loadedObjectsHandler(event:SoapEvent):void {
+ 		
+		//soap.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_OK, zzz);
+		//soap.getApplicationResource(_appId, '002');
+		
+		_objects = event.result;
+		dispatchEvent(new Event('initComplete'));
+		//trace('initComplete');
 	}
 	
 	public function get types():XML {
@@ -95,17 +178,14 @@ public class DataManager implements IEventDispatcher
 	
 	public function loadObjects():void {
 		
-		var objectsXML_URLRequest:URLRequest = new URLRequest(_objectsURL);
-		var objectsXML_URLLoader:URLLoader = new URLLoader(objectsXML_URLRequest);
-	
-		objectsXML_URLLoader.addEventListener(Event.COMPLETE, objectsXMLLoadHandler);
+		soap.getChildObjects('26c0dc2d-5edd-44ae-aaa9-195f54c46f74', 'acc9e168-8b68-49e3-a9f7-c355e7b5a016');
 	}
 	
-	public function getProperties(itemId:int):XML {
+	public function getProperties(itemId:String):XML {
 		return _objects.Object.(@ID == itemId)[0];
 	}
 	
-	public function getType(typeId:int):XML {
+	public function getType(typeId:String):XML {
 		return _types.Type.Information.(ID == typeId).parent();
 	}
 	
@@ -113,8 +193,8 @@ public class DataManager implements IEventDispatcher
 		return _types.Type.Information.(ID == typeId).parent();
 	}
 	
-	public function getObjects():Object {
-		return _objects.Object;
+	public function getObjects():XML {
+		return _objects;
 	}
 	
 	public function getAttributeHelp(objectId:int, attributeName:String):String {
@@ -123,13 +203,13 @@ public class DataManager implements IEventDispatcher
 		return help;
 	}
 	
-	public function createObject(initProp:Object):uint {
+	public function createObject(initProp:Object):String {
 		
 		var objectType:XML = _types.Type.Information.(ID == initProp.typeId).parent();
 		
-		var objectId:int = Math.round(Math.random()*1000);
+		var objectId:String = Math.round(Math.random()*1000).toString();
 		while (_objects.Object.(@ID == objectId).toString()) {
-			objectId = Math.round(Math.random()*1000);
+			objectId = Math.round(Math.random()*1000).toString();
 		}
 		
 		var newObject:XML = <Object Name={objectType.Information.DisplayName+objectId} ID={objectId} Type={objectType.Information.ID} />;
@@ -139,8 +219,10 @@ public class DataManager implements IEventDispatcher
 		for each(var prop:XML in objectType.Attributes.Attribute) {
 			attributes.appendChild(<Attribute Name={prop.Name.toString()}>{prop.DefaultValue.toString()}</Attribute>);
 		}
-		attributes.appendChild(<Attribute Name="x">{initProp.x}</Attribute>);
-		attributes.appendChild(<Attribute Name="y">{initProp.y}</Attribute>);
+		attributes.Attribute.(@Name == 'left')[0] = initProp.left;
+		attributes.Attribute.(@Name == 'top')[0] = initProp.top;
+		//attributes.appendChild(<Attribute Name="left">{initProp.left}</Attribute>);
+		//attributes.appendChild(<Attribute Name="top">{initProp.top}</Attribute>);
 		
 		newObject.appendChild(attributes);
 		
