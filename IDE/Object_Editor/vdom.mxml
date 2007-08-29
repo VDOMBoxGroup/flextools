@@ -16,10 +16,15 @@
 			<mx:AddChild relativeTo="{hbox1}" position="before">
 				<mx:HBox width="100%">
 					<mx:Spacer width="{ident_2}"/>
-					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'title')}:"/>
-					<mx:TextArea id="extEditorParam1" height="20" width="100%" cornerRadius="3"/>
-					<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'info')}:"/>
-					<mx:TextArea id="extEditorParam2" height="20" width="100%" cornerRadius="3"/>
+					<mx:Panel title="External Editor Parameters" paddingTop="0" paddingBottom="0" paddingLeft="0"
+						paddingRight="0" width="100%" borderStyle="solid" cornerRadius="0" dropShadowEnabled="false">
+						<mx:HBox width="100%">
+						<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'title')}:"/>
+						<mx:TextArea id="extEditorParam1" height="20" width="100%" cornerRadius="3"/>
+						<mx:Label text="{langData.language.(@id == langStr).sentence.(@label == 'info')}:"/>
+						<mx:TextArea id="extEditorParam2" height="20" width="100%" cornerRadius="3"/>
+						</mx:HBox>
+					</mx:Panel>
 				</mx:HBox>
 			</mx:AddChild>
 		</mx:State>
@@ -36,6 +41,8 @@
 			<mx:AddChild relativeTo="{hbox1}" position="before">
 				<mx:HBox width="100%">
 					<mx:Spacer width="{ident_2}"/>
+					<mx:Panel title="DropDown Menu Parameters" paddingTop="0" paddingBottom="0" paddingLeft="0"
+						paddingRight="0" width="100%" borderStyle="solid" cornerRadius="0" dropShadowEnabled="false">
 					<mx:VBox width="100%">
 						<mx:HBox width="100%" verticalAlign="bottom">
 							<mx:ComboBox width="180"/>
@@ -50,6 +57,7 @@
 							<mx:TextArea height="20" width="100" cornerRadius="3"/>
 						</mx:HBox>
 					</mx:VBox>
+				</mx:Panel>
 				</mx:HBox>
 			</mx:AddChild>
 		</mx:State>

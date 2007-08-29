@@ -223,7 +223,7 @@ private function attrFieldsRefresh():void {
 
 			/* Set up Standart Interface Type ComboBox */
 			if (Number(@itype) == 0 && stdInterfaceType != null) {
-				var stdInterfaceTypeRegexp:RegExp = /([a-zA-Z0-9]+)\([a-zA-Z0-9,]*\)/;
+				var stdInterfaceTypeRegexp:RegExp = /([a-zA-Z0-9]+)\([a-zA-Z0-9,#|()]*\)/;
 				var interfaceString:String = new String();
 				if (codeinterface.toString().match(stdInterfaceTypeRegexp) != null) {
 					interfaceString = codeinterface.toString().match(stdInterfaceTypeRegexp)[1];
@@ -241,7 +241,6 @@ private function attrFieldsRefresh():void {
 					case "linkedbase":		stdInterfaceType.selectedIndex = 6; break;
 					case "externaleditor":	stdInterfaceType.selectedIndex = 7; break;
 				}
-				trace("#lower: ", interfaceString.toLowerCase());
 			} else {
 				stdInterfaceType.selectedIndex = 0;
 				stdInterfaceType.text = "";
@@ -720,7 +719,6 @@ private function loadObjectXML():void {
 			@visined = attribute.Visible;
 			@itype = Number(attribute.InterfaceType);
 			codeinterface = attribute.CodeInterface.toString();
-			trace("#loaded itype: ", codeinterface);
 			
 			var dnameLangID:String = getRefID(attribute.DisplayName);
 			var errLangID:String = getRefID(attribute.ErrorValidationMessage);
@@ -729,14 +727,15 @@ private function loadObjectXML():void {
 			/* Writing multilingual properties */
 			for each(language in supLanguages.language) {
 				var lngID:String = language.@id;
+
 				/* Display Name tabs */
-				dname.appendChild(<lang id={language.@id} label={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == dnameLangID)}/>);
+				dname.appendChild(<lang id={language.@id} text={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == dnameLangID)}/>);
 
 				/* Error Exp Validation Messages tabs */
-				err.appendChild(<lang id={language.@id} label={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == errLangID)}/>);
+				err.appendChild(<lang id={language.@id} text={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == errLangID)}/>);
 
 				/* Attribute Description tabs */
-				descript.appendChild(<lang id={language.@id} label={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == descriptLangID)}/>);
+				descript.appendChild(<lang id={language.@id} text={objectXML.Languages.Language.(@Code == lngID).Sentence.(@ID == descriptLangID)}/>);
 			}
 		}
 	}
@@ -745,7 +744,7 @@ private function loadObjectXML():void {
 		currentAttr = 0
 	else
 		currentAttr = -1;
-		
+	
 	rebuildInterface();
 }
 
