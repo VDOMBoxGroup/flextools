@@ -61,6 +61,7 @@ private var infoDescriptCollector:Array = new Array();
 private var attrDnameCollector:Array = new Array();
 private var attrErrmsgCollector:Array = new Array();
 private var attrDescriptCollector:Array = new Array();
+private var ddownDispTextCollector:Array = new Array();
 
 /* Loaded images */
 [Bindable]
@@ -356,6 +357,9 @@ private function createAttrLangsTabs():void {
 
 	/* Attribute Description tabs */
 	createLangsTabsAt(attrDescriptTabs, attrDescriptCollector, 60);
+	
+	/* Attribute Standart Inteface Type - dropDownMenu parameters */
+	createLangsTabsAt(ddownDispTextTabs, ddownDispTextCollector, 20);
 }
 
 private function lng(label:String):String {
@@ -417,12 +421,14 @@ private function rebuildInterface():void {
 	removeTabsAt(attrDnameTabs);			
 	removeTabsAt(attrErrmsgTabs);
 	removeTabsAt(attrDescriptTabs);
+	removeTabsAt(ddownDispTextTabs);
 	
 	infoDnameCollector = new Array();
 	infoDescriptCollector = new Array();
 	attrDnameCollector = new Array();
 	attrErrmsgCollector = new Array();
 	attrDescriptCollector = new Array();
+	ddownDispTextCollector = new Array();
 
 	createInformationLangsTabs();
 	createAttrLangsTabs();
@@ -694,7 +700,7 @@ private function loadObjectXML():void {
 	supLanguages = new XML(<root/>); /* Creating empty supported languages XML */
 	for each(var lng:String in lngs_array) {
 		/* Add supported language and get its real name from the langsSource XML */
-		supLanguages.appendChild(<language id={lng} label={langsSource.language.(@id == lng).@text}/>);
+		supLanguages.appendChild(<language id={lng} label={langsSource.language.(@id == lng).@label}/>);
 	}
 	
 	/* Loading attributes records */
