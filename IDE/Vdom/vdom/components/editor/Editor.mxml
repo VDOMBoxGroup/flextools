@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:containers="vdom.components.editor.containers.*"
+	
+	
+	backgroundColor="#ffffff" backgroundAlpha="1.0"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	
+	creationComplete="init();"
+	show="show();"
+	hide="hide();"
+ width="100%" height="100%">
+	<mx:Script source="scripts/editorScript.as" />
+	
+	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">
+	
+	    <containers:Types id="types" 
+	    	height="100%" y="100" width="120" minWidth="170"
+	    	dataProvider="{typesXML}"
+	    />
+	    
+	    <mx:VBox id="main" width="100%" bottom="0" height="100%">
+	    	<containers:Workspace id="editorMainCanvas"
+	    		width="100%" height="100%" visible="false"
+	    		backgroundColor="#ffffff" backgroundAlpha="1.0" 
+	    		borderStyle="solid" borderThickness="20" borderColor="#000000"
+	    	/>
+	    	<containers:Toolbar width="100%" id="toolbar"/>
+	    </mx:VBox>
+	    
+		<mx:VBox autoLayout="true" verticalGap="10" paddingTop="10" paddingLeft="10" paddingRight="10"  verticalScrollPolicy="auto" height="100%" width="220">
+			<containers:AttributesPanel title="Properties" id="objectProperties" label="Properties"
+				paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10" cornerRadius="0" dataProvider="{elementDescription}" width="200">
+	    	</containers:AttributesPanel>
+	    	<containers:ClosablePanel id="helpPanel" title="Help"  width="200" height="64">
+	    		<mx:Text htmlText="{objectProperties.help}" condenseWhite="true" width="100%" height="100%"/>
+	    	</containers:ClosablePanel>
+	    	<containers:ClosablePanel id="pagePanel" title="Pages"  width="200">
+	    		<mx:List dataProvider="{editorDataManager.pages.Object}" labelField="@Name" width="100%"/>
+	    	</containers:ClosablePanel>
+		</mx:VBox>
+		
+	</mx:HBox>
+</mx:Canvas>
