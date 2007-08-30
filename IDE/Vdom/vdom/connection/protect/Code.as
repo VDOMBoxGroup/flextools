@@ -1,3 +1,6 @@
+/* 
+* Provide protect when connetion to server 
+*/
 package vdom.connection.protect
 {
 	public class Code 
@@ -15,42 +18,61 @@ package vdom.connection.protect
 		private static var instance:Code;
 		
 		
+		/**
+		 * this is impossible, because it is singleton
+		 * 
+		 * @return 
+		 * 
+		 */
 		public function Code() {
             if( instance ) throw new Error( "Singleton and can only be accessed through Code.getInstance(hstr:String)" );
          } 		
 		 
-		 // initialization		
+		  		
+		 
+		 /**
+		  *  class initialization.
+		  * 
+		  * @return instanse of this class
+		  * 
+		  */
 		 public static function getInstance():Code {
              
              return instance || (instance = new Code()); ;
         }
-		//initialization
+
+		/**
+		 * protect initialization
+		 *  
+		 * @param hstr - hesh
+		 * 
+		 */
 		public function init(hstr:String):void{
 		//	trace('hesh:' + hstr)
 			protector = new VDOM_session_protector(hstr);
 		}
 		
-		// input First key
+		
+		/**
+		 * input First key
+		 * 
+		 * @param str
+		 * 
+		 */
 		public function inputSKey(str:String):void{
 			key = str;
-		//	trace('first key: ' + key)
 		}
 		
-		// generation next key
+		/**
+		 * generation next key
+		 * 
+		 * @return necessary key 
+		 * 
+		 */
 		public function skey():String{
-			
-			
 			key = protector.nextSessionKey(key);
 			counter++;
-		//	trace('key: ' + key)
 			return key+'_'+counter.toString();
 		}
-		
-		// count amount of calls
-		public function count():String{
-			return counter.toString();
-		}
-		
-		
 	}
 }
