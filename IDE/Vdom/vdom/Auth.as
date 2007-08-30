@@ -3,13 +3,14 @@ package vdom
 	import mx.rpc.soap.WebService;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.events.FaultEvent;
-	import com.gsolo.encryption.MD5;
 	import flash.events.EventDispatcher;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-	import com.connection.soap.Soap;
-	import com.connection.soap.SoapEvent;
+	
 	import vdom.events.AuthEvent;
+	import vdom.connection.soap.SoapEvent;
+	import vdom.connection.soap.Soap;
+	import vdom.connection.protect.MD5;
 	
 	public class Auth 
 		implements IEventDispatcher

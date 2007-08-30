@@ -10,7 +10,7 @@
 	verticalScrollPolicy="off"
 	
 	xmlns:vdom="vdom.*" 
-	xmlns:controls="com.dougmccune.controls.*" 
+	xmlns:controls="vdom.containers.*" 
 	xmlns:editor="vdom.components.editor.*"
 >
 	

@@ -4,8 +4,6 @@ import vdom.Lang;
 import vdom.components.editor.managers.DataManager;
 import mx.collections.XMLListCollection;
 import vdom.events.AuthEvent;
-import com.connection.soap.Soap;
-import com.connection.soap.SoapEvent;
 import mx.events.ListEvent;
 import flash.events.Event;
 import vdom.MyLoader;
@@ -14,7 +12,11 @@ import mx.core.IFlexDisplayObject;
 import flash.display.DisplayObject;
 import mx.containers.Canvas;
 import mx.controls.List;
-import mx.core.Singleton
+import mx.core.Singleton
+import vdom.connection.soap.SoapEvent;
+import vdom.connection.soap.Soap;
+
+;
 
 private var myLoader:URLLoader;
 private var myXML:XML;
@@ -30,7 +32,9 @@ private var mtLang:Lang;
 [Bindable]
 private var applicationsList:XML;
 
+
 private var soap:Soap;
+
 
 public var editorDataManager:DataManager;
 

@@ -3,7 +3,6 @@ package vdom
 	import mx.rpc.soap.WebService;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.events.FaultEvent;
-	import com.gsolo.encryption.MD5;
 	import flash.events.EventDispatcher;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;

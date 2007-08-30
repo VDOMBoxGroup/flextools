@@ -6,9 +6,10 @@ import flash.events.EventDispatcher;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 import vdom.components.editor.events.DataManagerEvent;
-import com.connection.soap.Soap;
-import com.connection.soap.SoapEvent;
+
 import mx.core.Application;
+import vdom.connection.soap.SoapEvent;
+import vdom.connection.soap.Soap;
 
 public class DataManager implements IEventDispatcher
 {
