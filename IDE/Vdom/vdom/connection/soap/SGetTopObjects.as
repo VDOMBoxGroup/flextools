@@ -1,14 +1,10 @@
-package com.connection.soap
+package vdom.connection.soap
 {
-	import flash.events.EventDispatcher;
-	import flash.events.Event;
-	import flash.profiler.showRedrawRegions;
-	import flash.events.EventDispatcher;
-	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.WebService;
-	import mx.controls.Alert;
-	import mx.preloaders.DownloadProgressBar;
-	import com.connection.protect.*;
+	import flash.events.EventDispatcher;
+	import vdom.connection.protect.Code;
+	import mx.rpc.events.ResultEvent;
+	
 	
 	public class SGetTopObjects extends EventDispatcher 
 	{
@@ -20,10 +16,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String):void{
-			// data
+		public function execute(appid:String):void
+		{
+			// protect
 			ws.get_top_objects.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.get_top_objects.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			
+			// data
 			ws.get_top_objects.arguments.appid  	= appid;		//- идентификатор приложения 
 			
 			//send data & set listener 
@@ -32,28 +31,20 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.get_top_objects.lastResult.Result);
 			var evt:SoapEvent;
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
-				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_ERROR);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_OK, resultXML);
 				dispatchEvent(evt);
-				// trace(this.toString() + ' - OK')
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

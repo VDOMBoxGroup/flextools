@@ -1,14 +1,10 @@
-package com.connection.soap
+package vdom.connection.soap
 {
-	import flash.events.EventDispatcher;
-	import flash.events.Event;
-	import flash.profiler.showRedrawRegions;
-	import flash.events.EventDispatcher;
-	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.WebService;
-	import mx.controls.Alert;
-	import mx.preloaders.DownloadProgressBar;
-	import com.connection.protect.*;
+	import flash.events.EventDispatcher;
+	import vdom.connection.protect.Code;
+	import mx.rpc.events.ResultEvent;
+	
 	
 	public class SGetEcho extends EventDispatcher
 	{
@@ -20,10 +16,12 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute():void{
-
-			// data
+		public function execute():void
+		{
+			// protect
 			ws.get_echo.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
+			
+			// no data to send
 			
 			//send data & set listener 
 			ws.get_echo();
@@ -31,32 +29,22 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
+		private  function completeListener(event:ResultEvent):void
+		{
 			ws.get_echo.removeEventListener(ResultEvent.RESULT,completeListener);
-
 			// get result 
 			resultXML = XML(ws.get_echo.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				evt = new SoapEvent(SoapEvent.GET_ECHO_ERROR);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.GET_ECHO_ERROR, resultXML);
 				dispatchEvent(evt);
-			//	Alert.show("GetEcho: "+resultXML);
 			} else{
-				evt = new SoapEvent(SoapEvent.GET_ECHO_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.GET_ECHO_OK, resultXML);
 				dispatchEvent(evt);
-				//Alert.show("GetEcho: "+resultXML); 
-				//trace ("SGetEcho.as: OK");
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

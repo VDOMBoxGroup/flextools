@@ -1,14 +1,9 @@
-package com.connection.soap
+package vdom.connection.soap
 {
-	import flash.events.EventDispatcher;
-	import flash.events.Event;
-	import flash.profiler.showRedrawRegions;
-	import flash.events.EventDispatcher;
-	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.WebService;
-	import mx.controls.Alert;
-	import mx.preloaders.DownloadProgressBar;
-	import com.connection.protect.*;
+	import flash.events.EventDispatcher;
+	import vdom.connection.protect.Code;
+	import mx.rpc.events.ResultEvent;
 	
 	public class SCreateApplication extends EventDispatcher
 	{
@@ -20,10 +15,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute():void{
-			// data
+		public function execute():void
+		{
+			//  protect
 			ws.create_application.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.create_application.arguments.skey 		= code.skey();	//- очередной ключ сессии 
+			
+			// no data to send
 			
 			//send data & set listener 
 			ws.create_application();
@@ -31,27 +29,21 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.create_application.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-
-				evt = new SoapEvent(SoapEvent.CREATE_APPLICATION_ERROR);
-				evt.result = resultXML;
+			if(resultXML.name().toString() == 'Error')
+			{
+				evt = new SoapEvent(SoapEvent.CREATE_APPLICATION_ERROR, resultXML);
 				dispatchEvent(evt);
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
-				evt = new SoapEvent(SoapEvent.CREATE_APPLICATION_OK);
+				evt = new SoapEvent(SoapEvent.CREATE_APPLICATION_OK, resultXML);
 				evt.result = resultXML;
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
 			}
 		}
 		

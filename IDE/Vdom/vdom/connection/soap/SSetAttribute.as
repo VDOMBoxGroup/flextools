@@ -1,14 +1,10 @@
-package com.connection.soap
+package vdom.connection.soap
 {
-	import flash.events.EventDispatcher;
-	import flash.events.Event;
-	import flash.profiler.showRedrawRegions;
-	import flash.events.EventDispatcher;
-	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.WebService;
-	import mx.controls.Alert;
-	import mx.preloaders.DownloadProgressBar;
-	import com.connection.protect.*;
+	import flash.events.EventDispatcher;
+	import vdom.connection.protect.Code;
+	import mx.rpc.events.ResultEvent;
+	
 	
 	public class SSetAttribute extends EventDispatcher 
 	{
@@ -21,10 +17,11 @@ package com.connection.soap
 		}
 		
 		public function execute(appid:String,objid:String, attr:String, value:String):void{
-			// data
+			// protect
 			ws.set_attribute.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.set_attribute.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
+			// data
 			ws.set_attribute.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.set_attribute.arguments.objid  	= objid;		//- идентификатор объекта
 			ws.set_attribute.arguments.attr  	= attr;			//- имя атрибута  
@@ -36,34 +33,21 @@ package com.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			
+		private  function completeListener(event:ResultEvent):void
+		{
 			// get result 
 			resultXML = XML(ws.set_attribute.lastResult.Result);
 			var evt:SoapEvent;
 			
-			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_ERROR);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_ERROR, resultXML);
 				dispatchEvent(evt);
-		
-				// Alert.show("ERROR!\nFrom: " + this.toString() )
-				//trace("ERROR! From: " + this.toString() )
 			} else{
-
-				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_OK);
-				evt.result = resultXML;
+				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_OK, resultXML);
 				dispatchEvent(evt);
-				//trace(this.toString() + ' - OK')
-				
 			}
-		}
-		
-		public    function getResult():XML{
-			return resultXML;
 		}
 	}
 }

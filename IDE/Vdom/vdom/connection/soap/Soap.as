@@ -1,22 +1,11 @@
-package com.connection.soap
+package vdom.connection.soap
 {
 	import mx.rpc.soap.WebService;
-	import com.connection.protect.MD5;
-	import com.connection.soap.*;
+	import flash.events.EventDispatcher;
+	import vdom.connection.protect.Code;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.events.FaultEvent;
-	import mx.controls.Alert;
-	import mx.rpc.soap.LoadEvent;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import com.connection.soap.SoapEvent;
-	import com.connection.utils.FileUpload;
-	import mx.controls.Image;
-	import mx.charts.AreaChart;
-	import mx.controls.Button;
-	import flash.display.Loader;
-	import flash.events.ErrorEvent;
-	import flash.display.DisplayObject;
+	
 		
 	public class Soap  extends EventDispatcher
 	{
@@ -54,18 +43,11 @@ package com.connection.soap
 
 		public   function login( login:String='', password:String='' ):void 
 		{	
-			//var fun:Function;
-			
 			sLogin.execute(login,password);
 			sLogin.addEventListener(SoapEvent.LOGIN_OK,    ldispatchEvent  );
 			sLogin.addEventListener(SoapEvent.LOGIN_ERROR, ldispatchEvent);
 		}
-	/*
-		public   function loginResult():XML 
-		{
-			return sLogin.getResult();
-		}
-	*/
+
 		/**
 		 *  2 - close_session  
 		 */
@@ -77,12 +59,7 @@ package com.connection.soap
 			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_OK, ldispatchEvent);
 			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_ERROR, ldispatchEvent);
 		}
-		/*
-		public   function closeSessionResult():XML 
-		{
-			return sCloseSession.getResult();
-		}
-		*/
+
 		/**
 		 * 3 - create application 
 		 */ 
@@ -111,12 +88,7 @@ package com.connection.soap
 			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_OK, ldispatchEvent);
 			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_ERROR, ldispatchEvent);
 		}
-		/*
-		public   function setApplicationInfoResult():XML 
-		{
-			return sSetApplicationInfo.getResult();
-		}
-		*/
+
 		/**
 		 *  5 - get the list of all applications  'list_applications'
 		 */
@@ -128,12 +100,7 @@ package com.connection.soap
 			istApplications.addEventListener(SoapEvent.LIST_APLICATION_OK, ldispatchEvent);
 			istApplications.addEventListener(SoapEvent.LIST_APLICATION_ERROR, ldispatchEvent);
 		}
-		
-		/* public   function listApplicationsResult():XML 
-		{
-			return istApplications.getResult();
-		} */
-		
+
 		/**
 		 *  6 - get the list of all types 'list_types'
 		 */
@@ -145,10 +112,6 @@ package com.connection.soap
 			sListTipes.addEventListener(SoapEvent.LIST_TYPES_OK, ldispatchEvent);
 			sListTipes.addEventListener(SoapEvent.LIST_TYPES_ERROR, ldispatchEvent);
 		}
-		
-		/* public   function listTypesResult():XML {
-			return sListTipes.getResult();
-		} */
 		
 		/**
 		 *  7 - get type description get_type
@@ -162,11 +125,6 @@ package com.connection.soap
 			sGetType.addEventListener(SoapEvent.GET_TYPE_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function sGetTypeResult():XML 
-		{
-			return sGetType.getResult();
-		} */
-		
 		/**
 		 *  8 - get type resource get_type_resource
 		 */
@@ -179,10 +137,6 @@ package com.connection.soap
 			sGetTypeResource.addEventListener(SoapEvent.GET_TYPE_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function getTypeResourceResult():XML 
-		{
-			return sGetTypeResource.getResult();
-		} */
 		
 		/**
 		 *  9 -  get application resource  'get_application_resource'
@@ -196,10 +150,6 @@ package com.connection.soap
 			sGetApplicationResource.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function getApplicationResourceResult():XML 
-		{
-			return sGetApplicationResource.getResult();
-		} */
 		
 		/**
 		 * 10. render object to xml presentation  - render_wysiwyg
@@ -213,10 +163,6 @@ package com.connection.soap
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function renderWysiwygResult():XML 
-		{
-			return sRenderWysiwig.getResult();
-		} */
 		
 		/**
 		 * 11. create object - create_object
@@ -230,10 +176,6 @@ package com.connection.soap
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function createObjectResult():XML 
-		{
-			return sco.getResult();
-		} */
 		
 		/**
 		 * 12. get application top-level objects  - get_top_objects
@@ -247,10 +189,6 @@ package com.connection.soap
 			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function getTopObjectsResult():XML 
-		{
-			return sGetTopObjects.getResult();
-		} */
 		
 		/**
 		 * 13. get object's child objects'  - get_child_objects
@@ -264,11 +202,6 @@ package com.connection.soap
 			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function getChildObjectsResult():XML 
-		{
-			return sGetChildObjects.getResult();
-		}
-		 */
 		/**
 		 * 14. get application language data - get_application_language_data
 		 */
@@ -281,10 +214,6 @@ package com.connection.soap
 			sGetApplicationLanguageData.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function getApplicationLanguageDataResult():XML 
-		{
-			return sGetApplicationLanguageData.getResult();
-		} */
 		
 		/**
 		 * 15. set object attribute value - set_attribute
@@ -298,10 +227,6 @@ package com.connection.soap
 			sSetAttribute.addEventListener(SoapEvent.SET_ATTRIBUTE_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function setAttributeResult():XML 
-		{
-			return sSetAttribute.getResult();
-		} */
 		/**
 		 * 16. set object value set_value
 		 */
@@ -314,10 +239,6 @@ package com.connection.soap
 			sSetValue.addEventListener(SoapEvent.SET_VALUE_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function setValueResult():XML 
-		{
-			return sSetValue.getResult();
-		} */
 		/**
 		 * 17. set object script set_script
 		 */
@@ -330,10 +251,6 @@ package com.connection.soap
 			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function setScriptResult():XML 
-		{
-			return sSetScript.getResult();
-		} */
 		
 		/**
 		 * 18. set application resource set_resource
@@ -347,10 +264,6 @@ package com.connection.soap
 			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function setResourceResult():XML 
-		{
-			return sSetResource.getResult();
-		}	 */
 		
 		/**
 		 * 19. delete object delete_object
@@ -359,34 +272,24 @@ package com.connection.soap
 		
 		public  function deleteObject(appid:String='',objid:String='' ):void 
 		{
-			sDeleteObject.execute();
+			sDeleteObject.execute(appid, objid);
 			sDeleteObject.addEventListener(SoapEvent.DELETE_OBJECT_OK, ldispatchEvent);
 			sDeleteObject.addEventListener(SoapEvent.DELETE_OBJECT_ERROR, ldispatchEvent);
 		}
 		
-		/* public   function deleteObjectResult():XML 
-		{
-			return sDeleteObject.getResult();
-		} */
-
+		
 		/**
-		 *  20 get Echo 
+		 * ------------- 20 get Echo --------
 		 */ 
 		private var sGetEcho:SGetEcho = new SGetEcho(ws);
 		public function getEcho():void{
 			sGetEcho.execute();
 			sGetEcho.addEventListener(SoapEvent.GET_ECHO_OK, ldispatchEvent);
 			sGetEcho.addEventListener(SoapEvent.GET_ECHO_ERROR, ldispatchEvent);
-	//		this.btn = btn;
-	//		masEcho[identificator] = new FileUpload();
-	//		masListenet[identificator] =  new Function();
-	//		masEcho[identificator].startUpload(ws, this.btn)
-	//		masEcho[identificator].addEventListener(SoapEvent.GET_ECHO_OK, listenerOk);
-	//		masEcho[identificator].addEventListener(SoapEvent.GET_ECHO_ERROR, istenerError);
 		}
 		
 		/**
-		 *  21 Get All Types 
+		 *  --------- 21 Get All Types -----
 		 */ 
 		private var sGetAllTypes:SGetAllTypes = new SGetAllTypes(ws);
 		public function getAllTypes():void{
@@ -394,23 +297,28 @@ package com.connection.soap
 			sGetAllTypes.addEventListener(SoapEvent.GET_ALL_TYPES_OK, ldispatchEvent);
 			sGetAllTypes.addEventListener(SoapEvent.GET_ALL_TYPES_ERROR, ldispatchEvent);
 		}
+		
 		/**
-		 *  Event Dispatcher
+		 *  --------- 22  Set value of several object's attributes -----
+		 * 						--setAttributes --
+		 */ 
+		private var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
+		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):void{
+			sSetAttributes.execute(appid, objid, attr);
+			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
+			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);
+		}
+		/**
+		 *  --------  Event Dispatcher -------------
 		 */
-	//	 private var ed:EventDispatcher = new EventDispatcher;
 		 
 		
 		
 		//Error
 		private  function errorListener(event:FaultEvent):void{
 			//ed.dispatchEvent(event);
-			trace('Блина, SOAP GLOBSL ERROR: \n' + event);
+			trace('Блина, SOAP GLOBaL ERROR: \n' + event);
 		}
-
-	/*	public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void{
-			  ed.addEventListener(type, listener, useCapture, priority);
-    	}
-           */
     	public function ldispatchEvent(evt:SoapEvent):void{
       		//trace(evt.result);
 			var soapEvent:SoapEvent = new SoapEvent(evt.type);

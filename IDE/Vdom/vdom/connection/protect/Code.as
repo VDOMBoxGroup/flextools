@@ -1,8 +1,8 @@
-package com.connection.protect
+package vdom.connection.protect
 {
 	public class Code 
 	{
-		import com.connection.protect.VDOM_session_protector;
+		
 //		import com.gsolo.encryption.protector;
 
 		public var sessionId: String;

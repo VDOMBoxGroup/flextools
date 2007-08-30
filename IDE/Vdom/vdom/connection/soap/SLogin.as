@@ -1,14 +1,11 @@
-package com.connection.soap
+package vdom.connection.soap
 {
-	import flash.events.EventDispatcher;
-	import flash.events.Event;
-	import flash.profiler.showRedrawRegions;
-	import flash.events.EventDispatcher;
-	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.WebService;
-	import mx.controls.Alert;
-	import mx.preloaders.DownloadProgressBar;
-	import com.connection.protect.*;
+	import flash.events.EventDispatcher;
+	import vdom.connection.protect.Code;
+	import mx.rpc.events.ResultEvent;
+	import vdom.connection.protect.MD5;
+	
 	
 	public class SLogin extends EventDispatcher 
 	{
@@ -20,12 +17,13 @@ package com.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute( login:String, password:String):void{
-
-			
+		public function execute( login:String, password:String):void
+		{
+			// data
 			ws.open_session.arguments.name 		= login; 				 //- имя пользователя, строка
 			ws.open_session.arguments.pwd_md5 	= MD5.encrypt(password); //- md5-хэш пароля, строка
 			
+			//send data & set listener 
 			ws.open_session();
 			ws.open_session.addEventListener(ResultEvent.RESULT,completeListener);
 		}

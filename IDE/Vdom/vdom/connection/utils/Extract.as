@@ -1,4 +1,4 @@
-package com.connection.utils
+package vdom.connection.utils
 {
 	import mx.controls.Image;
 	import com.connection.soap.SoapEvent;
@@ -36,7 +36,7 @@ package com.connection.utils
  			bs.decode(base64Zip);
 
  			ba = bs.drain();
- 			ba.uncompress();
+ 		//	ba.uncompress();
 		//	trace('*****  Разпаковка  *******')
 			//ld ;
 			var zzz:Object = ba;

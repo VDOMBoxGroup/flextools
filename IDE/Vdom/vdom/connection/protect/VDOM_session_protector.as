@@ -1,4 +1,4 @@
-package com.connection.protect
+package vdom.connection.protect
 {
 /*
 1. Вызвав веб-сервис login, ты получаешь две строки: hash string и session key

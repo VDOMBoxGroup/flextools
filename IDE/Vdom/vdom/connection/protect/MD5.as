@@ -1,4 +1,4 @@
-package com.connection.protect {	
+package vdom.connection.protect {	
 	public class MD5 {
 		/*
 		 * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
