@@ -1,4 +1,4 @@
-package vdom.components.editor.containers
+package vdom.components.editor.containers.WorkspaceClasses
 {
 import mx.containers.Canvas;
 import mx.core.UIComponent;
@@ -8,7 +8,7 @@ import flash.display.Graphics;
 public dynamic class Item extends Canvas
 {
 	private var _content:UIComponent;
-	private var _elementId:String;
+	private var _objectId:String;
 	
 	public function Item(id:String)
 	{
@@ -17,18 +17,18 @@ public dynamic class Item extends Canvas
 		verticalScrollPolicy = "off";
 		focusEnabled = true;
 		mouseFocusEnabled = true;
-		_elementId = id;
+		_objectId = id;
 		var lbl:Label = new Label();
 		lbl.text = 'ID: ' + id;
 		addChild(lbl);
 	}
 	
-	public function get elementId():String {
-		return _elementId;
+	public function get objectId():String {
+		return _objectId;
 	}
 	
-	public function set elementId(objectId:String):void {
-		elementId = _elementId;
+	public function set objectId(objectId:String):void {
+		objectId = _objectId;
 	}
 	
 	public function get content():UIComponent {

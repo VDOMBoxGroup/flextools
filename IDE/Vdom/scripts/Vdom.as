@@ -16,8 +16,6 @@ import mx.core.Singleton
 import vdom.connection.soap.SoapEvent;
 import vdom.connection.soap.Soap;
 
-;
-
 private var myLoader:URLLoader;
 private var myXML:XML;
 private var myXMLL:XMLList;
@@ -116,7 +114,7 @@ private function listApplicationHandler(event:SoapEvent):void {
 	soap.addEventListener(SoapEvent.GET_ALL_TYPES_OK, getAllTypesHandler);
 	soap.getAllTypes();
 	
-	trace('applicationsList'+applicationsList);
+	//trace('applicationsList'+applicationsList);
 	
 }
 	
@@ -131,8 +129,7 @@ private function getAllTypesHandler(event:SoapEvent):void {
 	//trace('getAllTypesHandler');
 	
 	publicData['types'] = event.result;
-	//trace('_types: '+_types);
-	
+	//trace(publicData['types']);
 	soap.removeEventListener(SoapEvent.GET_ALL_TYPES_OK, getAllTypesHandler);
 	
 	mtLang = new Lang();
@@ -144,7 +141,7 @@ private function getAllTypesHandler(event:SoapEvent):void {
 private function authError(event:Event):void {
 	//Alert.show('Ошибка! \n Неверные имя пльзователя или пароль');
 	passwordText.text = '';
-	trace('authError');
+	//trace('authError');
 }
 
 private function getLangValue(mod:String, item:String):String {

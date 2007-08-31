@@ -38,7 +38,7 @@ public class AttributesPanel extends ClosablePanel
 		this.addEventListener(KeyboardEvent.KEY_UP, enterHandler);
 	}
 	
-	public function set dataProvider(prop:Object):void {
+	public function set dataProvider(prop:XML):void {
 		
 		if(prop == null) {	
 			applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
@@ -63,9 +63,9 @@ public class AttributesPanel extends ClosablePanel
 		invalidateDisplayList();
 	}
 	
-	public function get dataProvider():Object {
+	public function get dataProvider():XML {
 		
-		return collection;
+		return XML(collection);
 	}
 	
 	private function applyChanges(event:Event):void {

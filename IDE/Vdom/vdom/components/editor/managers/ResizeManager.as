@@ -18,6 +18,7 @@ import mx.styles.StyleManager;
 import mx.controls.ToolTip;
 import mx.managers.ToolTipManager;
 import mx.styles.CSSStyleDeclaration;
+import mx.events.ResizeEvent;
 			
 [Event(name="RESIZE_COMPLETE", type="vdom.events.ResizeManagerEvent")]
 
@@ -165,7 +166,16 @@ public class ResizeManager extends UIComponent
 		out_handler(null);			
 		destroyToolTip();
 		//trace('resizeCompl');
-		dispatchEvent(new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE));
+		
+		var prop:Object = {};
+		prop['left'] = x;
+		prop['top'] = y;
+		prop['width'] = measuredWidth;
+		prop['height'] = measuredHeight;
+		
+		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
+		rmEvent.properties = prop;
+		dispatchEvent(rmEvent);
 		event.stopImmediatePropagation();
 	}
 	

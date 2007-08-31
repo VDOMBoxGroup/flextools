@@ -7,12 +7,13 @@ import mx.controls.Label;
 import mx.core.DragSource;
 import vdom.components.editor.managers.VdomDragManager;
 import mx.managers.SystemManager;
+import mx.containers.Canvas;
 	
 public class Type extends VBox
 {
 	protected var _id:String;
 	
-	private var typeIcon:Image;
+	private var typeIcon:*;
 	private var typeLabel:Label;
 	
 	private var _iconSource:String;
@@ -24,8 +25,12 @@ public class Type extends VBox
 		this._id = id;
 		if(iconSource != '') {
 			_iconSource = iconSource;
-			typeIcon = new Image();
-			typeIcon.source = iconSource;
+			//typeIcon = new Image();
+			typeIcon = new Canvas();
+			typeIcon.width = 40;
+			typeIcon.height = 40;
+			typeIcon.setStyle('backgroundColor', '#FF00FF');
+			//typeIcon.source = iconSource;
 		}
 		
 		typeLabel = new Label();
@@ -42,7 +47,9 @@ public class Type extends VBox
 		var ds:DragSource = new DragSource();
 		var dataObject:Object = {typeId:_id, offX:dragInitiator.mouseX, offY:dragInitiator.mouseY};
 		ds.addData(dataObject, 'Object');
-		var proxy:Image = new Image();
+		var proxy:Canvas = new Canvas();
+		proxy.setStyle('backgroundColor', '#FF00FF');
+		//var proxy:Image = new Image();
 		//proxy.source = typeIcon.source;
 		proxy.width = 40;
 		proxy.height = 40;

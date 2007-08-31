@@ -52,7 +52,7 @@ public class DataManager implements IEventDispatcher
 	
 	public function getFullAttributes(objectId:String):XML {
 		
-		var object:Object = getProperties(objectId);
+		var object:Object = getAttributes(objectId);
 		
 		var type:XML = new XML(getType(object.@Type));
 		
@@ -65,7 +65,7 @@ public class DataManager implements IEventDispatcher
 		for each(var attr:XML in type.Attributes.Attribute){
 			
 			//var value:XML
-			//if(!attr.Value)	
+			//if(!attr.Value)
 				attr.appendChild(<Value>{object.Attributes.Attribute.(@Name == attr.Name).toString()}</Value>);
 			
 			attributes.appendChild(attr);
@@ -76,9 +76,24 @@ public class DataManager implements IEventDispatcher
 		return element;
 	}
 	
-	public function getTypeId(objectId:int):Number {
-		
+	
+	
+	public function getTypeId(objectId:int):Number {	
 		return _objects.Object.(@ID == objectId).@Type;
+	}
+	
+	public function updateAttributes(selectedObjects:XML):void {
+		var objectId:String = selectedObjects.@ID;
+		var attributes:XMLList = selectedObjects.Attributes.Attribute;
+		var newAttributes:XML = <Attributes />;
+		for each(var attr:XML in attributes) {
+			newAttributes.appendChild(<Attribute Name={attr.Name}>{attr.Value.toString()}</Attribute>);
+		}
+		_objects.Object.(@ID == objectId).Attributes = newAttributes;
+		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
+		dmEvent.objectId = objectId;
+		dispatchEvent(dmEvent);
+		
 	}
 	
 	public function DataManager() {
@@ -104,9 +119,10 @@ public class DataManager implements IEventDispatcher
 	 * 
 	 */	
 	
-	public function init(appId:String):void {
+	public function init(appId:String, pageId:String):void {
 		
 		_appId = appId;
+		_pageId = pageId;
 		_types = publicData['types'];
 		//trace('init');
 		//trace(appId);
@@ -127,7 +143,9 @@ public class DataManager implements IEventDispatcher
 		//trace('getTopObjectsHandler');
 		
 		pages = event.result;
-		_pageId = event.result.Object[0].@ID;
+		if(!_pageId) {
+			_pageId = event.result.Object[0].@ID;
+		}
 		//trace('pageId: '+_pageId);
 		
 		soap.removeEventListener(SoapEvent.GET_TOP_OBJECTS_OK, getTopObjectsHandler);
@@ -182,8 +200,8 @@ public class DataManager implements IEventDispatcher
 		soap.getChildObjects('26c0dc2d-5edd-44ae-aaa9-195f54c46f74', 'acc9e168-8b68-49e3-a9f7-c355e7b5a016');
 	}
 	
-	public function getProperties(itemId:String):XML {
-		return _objects.Object.(@ID == itemId)[0];
+	public function getAttributes(objectId:String):XML {
+		return _objects.Object.(@ID == objectId)[0];
 	}
 	
 	public function getType(typeId:String):XML {

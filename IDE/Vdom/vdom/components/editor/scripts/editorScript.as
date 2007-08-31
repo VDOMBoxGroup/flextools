@@ -2,7 +2,6 @@ import mx.events.DragEvent;
 import vdom.components.editor.managers.VdomDragManager;
 import vdom.components.editor.managers.DataManager;
 import vdom.components.editor.events.DataManagerEvent;
-import vdom.components.editor.containers.Item;
 import mx.core.EdgeMetrics;
 import flash.events.Event;
 import vdom.components.editor.containers.typesClasses.Type;
@@ -11,6 +10,7 @@ import flash.display.DisplayObject;
 import mx.managers.PopUpManager;
 import vdom.MyLoader;
 import mx.containers.Canvas;
+import vdom.components.editor.events.ResizeManagerEvent;
 
 [Bindable]
 private var selectedElement:String;
@@ -26,7 +26,7 @@ private var publicData:Object;
 public var objects:XML;
 
 [Bindable]
-public var elementDescription:XML;
+public var objectDescription:XML;
 
 [Bindable]
 public var typesXML:XML;
@@ -41,15 +41,11 @@ private function init():void {
 	ppm = new MyLoader();
 	publicData = mx.core.Application.application.publicData;
 	editorDataManager = DataManager.getInstance();
+	pageList.selectedIndex = 0;
 	
 	
 	
 	/*Загрузка типов*/
-	
-	
-	
-	
-	
 	
 	//editorDataManager.loadTypes();
 	//editorDataManager.loadObjects();
@@ -59,7 +55,11 @@ private function init():void {
 	editorMainCanvas.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
 	editorMainCanvas.addEventListener(DragEvent.DRAG_DROP, dropHandler);
 	editorMainCanvas.addEventListener('objectChange', objectChangeHandler);
-	objectProperties.addEventListener('propsChanged', propsChangedHandler);
+	
+	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, attributesUpdateCompleteHandler);
+	
+	objectAttributes.addEventListener('propsChanged', attributesChangedHandler);
+	editorMainCanvas.addEventListener('propsChanged', attributesChangedHandler);
 	//objectProperties.addEventListener('focusChanged', focusChangedHandler);
 	
 	typesXML = null;
@@ -69,9 +69,14 @@ private function show():void {
 	
 	PopUpManager.addPopUp(ppm, this, true);
 	PopUpManager.centerPopUp(ppm);
+	createPage();
 	//trace(publicData['appId']);
+	
+}
+
+private function createPage():void {
 	editorDataManager.addEventListener('initComplete', initCompleteHandler);
-	editorDataManager.init(publicData['appId']);
+	editorDataManager.init(publicData['appId'], publicData['pageId']);
 }
 
 private function hide():void {
@@ -88,13 +93,19 @@ private function createTypes():void {
 	PopUpManager.removePopUp(ppm);
 }
 
+private function pageChange():void {
+	
+	publicData['pageId'] = pageList.selectedItem.@ID;
+	createPage();
+}
+
 private function createObjects(objectsXML:XML):void {
 	
 	editorMainCanvas.destroyElements();
 	
 	for each(var itemAttrs:XML in objectsXML.Object) {
 		
-		editorMainCanvas.addItem(itemAttrs);
+		editorMainCanvas.addObject(itemAttrs);
 	}
 	
 	dispatchEvent(new Event('objectCreated'));
@@ -102,17 +113,13 @@ private function createObjects(objectsXML:XML):void {
 	createTypes();
 }
 
-private function propsChangedHandler(event:Event):void {
-	
-	/* if(attributes.Attributes.Attribute.(@Name == 'x')[0]) selectedItem.x = attributes.Attributes.Attribute.(@Name == 'x')[0];
-	if(attributes.Attributes.Attribute.(@Name == 'y')[0]) selectedItem.y = attributes.Attributes.Attribute.(@Name == 'y')[0];
-	if(attributes.Attributes.Attribute.(@Name == 'width')[0]) selectedItem.width = attributes.Attributes.Attribute.(@Name == 'width')[0];
-	if(attributes.Attributes.Attribute.(@Name == 'height')[0]) selectedItem.height = attributes.Attributes.Attribute.(@Name == 'height')[0]; */
-	//resizer.item = selectedItem;
-	
-	elementDescription = new XML(elementDescription);
-	editorMainCanvas.updateElement(elementDescription);
-	//trace(attributes.@ID);
+private function attributesUpdateCompleteHandler(event:DataManagerEvent):void {
+	editorMainCanvas.updateObject(editorDataManager.getAttributes(event.objectId));
+	objectDescription = editorDataManager.getFullAttributes(event.objectId);
+}
+
+private function attributesChangedHandler(event:Event):void {
+	editorDataManager.updateAttributes(objectDescription);
 }
 
 /* private function focusChangedHandler(event:Event):void {
@@ -129,14 +136,14 @@ private function objectsLoadHandler(event:Event):void {
 }
 
 private function objectChangeHandler(event:Event):void {
-
+	
 	if(editorMainCanvas.selectedElement) {
-		elementDescription = editorDataManager.getFullAttributes(editorMainCanvas.selectedElement);
+		objectDescription = editorDataManager.getFullAttributes(editorMainCanvas.selectedElement);
 	} else {
-		elementDescription = null;
+		objectDescription = null;
 	}
-	toolbar.type = elementDescription;
-	//trace(elementDescription);
+	toolbar.type = objectDescription;
+	//trace(objectDescription);
 }
 
 private function objectCreatedHandler(event:Event):void {
@@ -178,7 +185,7 @@ private function dropHandler(event:DragEvent):void {
 	
 	var id:String = editorDataManager.createObject(initProp);
 	
-	var newItemAtrs:XML = editorDataManager.getProperties(id);
+	var newItemAtrs:XML = editorDataManager.getAttributes(id);
 	
-	editorMainCanvas.addItem(newItemAtrs);
+	editorMainCanvas.addObject(newItemAtrs);
 }

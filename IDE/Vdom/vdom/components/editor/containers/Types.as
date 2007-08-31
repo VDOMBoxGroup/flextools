@@ -24,7 +24,7 @@ public class Types extends Accordion
 			cat[num.Information.Category].setStyle('horizontalAlign', 'center');
 			cat[num.Information.Category].percentWidth = 100;
 			
-			var et:Type = new Type(num.Information.ID, num.Information.EditorIcon, num.Information.DisplayName);
+			var et:Type = new Type(num.Information.ID, num.Information.EditorIcon, num.Information.Name);
 			
 			//zzz[num.Information.EditorIcon] = num.Information.EditorIcon;
 			
@@ -34,6 +34,7 @@ public class Types extends Accordion
 		}
 		
 		for each(var vb:VBox in cat) {
+			vb.horizontalScrollPolicy = 'off';
 			addChild(vb); 
 		}
 	}
