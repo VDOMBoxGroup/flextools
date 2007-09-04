@@ -1,7 +1,7 @@
 package vdom.connection.utils
 {
 	import mx.controls.Image;
-	import com.connection.soap.SoapEvent;
+
 	import flash.events.Event;
 	import flash.display.Loader;
 	import flash.events.EventDispatcher;

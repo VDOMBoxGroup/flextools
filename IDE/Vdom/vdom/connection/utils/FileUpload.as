@@ -1,5 +1,19 @@
 package vdom.connection.utils
 {
+	import flash.events.EventDispatcher;
+	import mx.controls.Button;
+	import flash.events.Event;
+	import flash.events.DataEvent;
+	import mx.controls.Alert;
+	import mx.utils.Base64Decoder;
+	import flash.net.FileFilter;
+	import flash.net.URLRequest;
+	import flash.net.FileReference;
+	import flash.display.Loader;
+	import vdom.connection.protect.Code;
+	import flash.display.DisplayObject;
+	import mx.rpc.soap.WebService;
+	
     
 	
 	
@@ -16,7 +30,7 @@ package vdom.connection.utils
  		public var displObj:DisplayObject;// = new DisplayObject;
  		private var times:uint;
  		private var time:uint;
- 		private var myTimer:Timer = new Timer(100, 1);
+ 	//	private var myTimer:Timer = new Timer(100, 1);
  		private var btn:Button;
  		private var imagesFilter:FileFilter = new FileFilter("Images: *.jpg *.gif; *.png", "*.jpg;*.gif;*.png");
  		private var request:URLRequest = new URLRequest(); 
@@ -54,8 +68,6 @@ package vdom.connection.utils
         private function selectHandler(event:Event):void {
             
             request.url = UPLOAD_URL + code.sessionId;// Soap.getSid();
-            time = getTimer();
-            times = getTimer();
         //    trace('File size: '+ Math.round(fr.size/1000)+ "KB" );
 			if(fr.size < 300000){
 				fr.upload(request);

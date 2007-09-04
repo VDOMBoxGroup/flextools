@@ -5,13 +5,14 @@ package vdom.connection.soap
 	import vdom.connection.protect.Code;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.events.FaultEvent;
+	import vdom.connection.utils.FileUpload;
 	
 		
 	public class Soap  extends EventDispatcher
 	{
 		private static 	var ws			:WebService	= new WebService;
 		private static 	var instance	:Soap;
-
+FileUpload
 		/**
 		 *	  initialisation
 		 */
