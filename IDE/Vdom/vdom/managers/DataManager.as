@@ -11,8 +11,8 @@ import vdom.components.editor.events.DataManagerEvent;
 import vdom.connection.soap.SoapEvent;
 import vdom.connection.soap.Soap;
 
-public class DataManager implements IEventDispatcher
-{
+public class DataManager implements IEventDispatcher {
+	
 	private static var instance:DataManager;
 	
 	[Bindable]

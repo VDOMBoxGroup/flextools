@@ -2,7 +2,6 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	
 	creationComplete="init();" 
-	resize="resizeHandler(event);"
 	
 	backgroundGradientColors="[#ffffff, #ffffff]" 
 	minWidth="800" minHeight="400"
@@ -64,9 +63,6 @@
 			<mx:FormItem label="Password">
 				<mx:TextInput id="passwordText"/>
 			</mx:FormItem>
-			<mx:FormItem label="Language">
-				<mx:ComboBox/>
-			</mx:FormItem>
 			<mx:FormItem>
 				<mx:Button label="OK" click="checkAuth()"/>
 			</mx:FormItem>
@@ -88,12 +84,13 @@
 		 fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]">
 		</mx:ComboBox>
 	</mx:ApplicationControlBar>
-	<mx:Image x="6" y="5" source="@Embed(source='img/logo.png')"/>
-	<vdom:MainTabNavigator id="tabPanel"
+	<mx:Image x="6" y="5" source="@Embed(source='assets/logo.png')"/>
+	<controls:MainTabNavigator id="tabPanel"
 		top="60" left="10" right="10"
 		paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" tabPaddingLeft="80"
 		borderColor="#808080" borderThickness="1"  fillColors="[#c0c0c0, #c0c0c0]" fillAlphas="[1.0, 1.0]"
-		height="150">
+		height="150"
+	>
 		<mx:Canvas label="{mtLang.lang.main_tab_panel.appmaintab}" width="100%" height="100%" id="appManTab" show="{placeCanvas.selectedChild=appManCanv}" verticalScrollPolicy="off">
 			<mx:HBox horizontalAlign="left" horizontalGap="5" verticalAlign="middle" top="0" bottom="0" width="100%" verticalScrollPolicy="off">
 				<controls:ExtendedPanel styleName="extPan" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" width="100">
@@ -182,7 +179,7 @@
 		</mx:Canvas>
 		<mx:Canvas label="{mtLang.lang.main_tab_panel.vdomtab}" width="100%" height="100%" id="vdomTab" show="{placeCanvas.selectedChild=vdomCanv}">
 		</mx:Canvas>
-	</vdom:MainTabNavigator>
+	</controls:MainTabNavigator>
 	<mx:ViewStack id="placeCanvas" borderStyle="solid" borderThickness="1" borderColor="#808080" left="10" right="10" top="220" bottom="30">
 		<mx:Canvas id="appManCanv" width="100%" height="100%">
 			<mx:Label text="{mtLang.lang.main_tab_panel.appmaintab}" horizontalCenter="0" verticalCenter="0"/>

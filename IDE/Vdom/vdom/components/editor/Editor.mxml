@@ -12,7 +12,7 @@
 	show="show();"
 	hide="hide();"
 >
-	<mx:Script source="scripts/editor.as" />
+	<mx:Script source="../../../scripts/editor.as" />
 	
 	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">
 	

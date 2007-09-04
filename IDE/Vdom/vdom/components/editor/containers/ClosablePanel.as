@@ -26,9 +26,9 @@ public class ClosablePanel extends Panel {
 	        
 	        collapseButton.focusEnabled = false;
 	        collapseButton.setStyle("upSkin", CollOnButtonUp);
-	        collapseButton.setStyle("downSkin",CollOnButtonDown);
-	        collapseButton.setStyle("overSkin",CollOnButtonOver);
-	        collapseButton.setStyle("disabledSkin",CollOnButtonDisabled);
+	        collapseButton.setStyle("downSkin", CollOnButtonDown);
+	        collapseButton.setStyle("overSkin", CollOnButtonOver);
+	        collapseButton.setStyle("disabledSkin", CollOnButtonDisabled);
 	        collapseButton.enabled = enabled;
 	        collapseButton.styleName = this;	
 	        

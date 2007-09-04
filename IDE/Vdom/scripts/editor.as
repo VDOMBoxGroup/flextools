@@ -4,6 +4,7 @@ import mx.core.EdgeMetrics;
 import mx.events.DragEvent;
 import mx.managers.PopUpManager;
 import mx.containers.Canvas;
+import mx.controls.Alert;
 
 import vdom.components.editor.containers.typesClasses.Type;
 import vdom.components.editor.containers.Workspace;
@@ -13,18 +14,12 @@ import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
 import vdom.MyLoader;
 
-[Bindable]
-private var objects:XML;
-[Bindable]
-private var objectDescription:XML;
-[Bindable]
-private var typesXML:XML;
-[Bindable]
-private var help:String;
-[Bindable]
-private var selectedElement:String;
-[Bindable]
-private var editorDataManager:DataManager;
+[Bindable] private var objects:XML;
+[Bindable] private var objectDescription:XML;
+[Bindable] private var typesXML:XML;
+[Bindable] private var help:String;
+[Bindable] private var selectedElement:String;
+[Bindable] private var editorDataManager:DataManager;
 
 private var objectsXML:XML;
 private var currInterfaceType:uint;
@@ -156,6 +151,12 @@ private function dropHandler(event:DragEvent):void {
 	
 	var typeId:String = event.dragSource.dataForFormat('Object').typeId;
 	var type:Object = editorDataManager.getType(typeId);
+	
+	/* Patch: проверка типа родителя */
+	if(type.Information.Containers != 'HTML') {
+		Alert.show('Not aviable');
+		return;
+	}
 	
 	var objectLeft:Number = workspace.mouseX - 25 - bm.left;
 	var objectTop:Number = workspace.mouseY - 25 - bm.top;

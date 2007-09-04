@@ -1,5 +1,6 @@
 package vdom.components.editor.containers {
-	
+
+import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;

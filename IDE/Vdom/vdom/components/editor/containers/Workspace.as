@@ -7,19 +7,21 @@ import mx.containers.Canvas;
 import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.components.editor.containers.WorkspaceClasses.Item;
 import vdom.components.editor.managers.ResizeManager;
+import vdom.managers.DataManager;
 
 public class Workspace extends Canvas {
 	
 	public var selectedObject:String;
 	
 	private var resizer:ResizeManager;
+	private var dataManager:DataManager;
 	private var _elements:Object;
 	private var collection:XML;
 	
 	public function Workspace() {
 		
 		super();
-		
+		dataManager = DataManager.getInstance();
 		_elements = [];
 		resizer = new ResizeManager();
 		resizer.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
@@ -87,7 +89,21 @@ public class Workspace extends Canvas {
 		element.x = objectAttributes.Attributes.Attribute.(@Name == 'left')[0];
 		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
 		
-		element.resizeMode = objectAttributes
+		switch (objectAttributes.Information.Resizable) {
+			case 0:
+				element.resizeMode = ResizeManager.RESIZE_NONE;
+			break;
+			case 1:
+				element.resizeMode = ResizeManager.RESIZE_WIDTH;
+			break;
+			case 2:
+				element.resizeMode = ResizeManager.RESIZE_HEIGHT;
+			break;
+			case 3:
+				element.resizeMode = ResizeManager.RESIZE_ALL;
+			break;
+		}
+		
 		
 		element.addEventListener(MouseEvent.CLICK, objectClickHandler);
 		_elements[objectAttributes.@ID] = element;
@@ -119,6 +135,7 @@ public class Workspace extends Canvas {
 		}
 		
 		selectedObject = Item(event.currentTarget).objectId;
+		dataManager
 		_elements[selectedObject].content.setFocus();
 		
 		addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
