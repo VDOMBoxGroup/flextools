@@ -6,13 +6,18 @@ import mx.containers.Canvas;
 import mx.controls.Label;
 
 public dynamic class Item extends Canvas {
+	
+	public var resizeMode:String;
+	public var moveMode:Boolean;
+	
 	private var _content:UIComponent;
 	private var _objectId:String;
-	public var resizeMode:String;
+	
 	
 	public function Item(id:String) {
 		super();
 		resizeMode = null;
+		moveMode = false;
 		horizontalScrollPolicy = "off";
 		verticalScrollPolicy = "off";
 		focusEnabled = true;

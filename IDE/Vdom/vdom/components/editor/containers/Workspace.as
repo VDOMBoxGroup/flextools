@@ -89,7 +89,9 @@ public class Workspace extends Canvas {
 		element.x = objectAttributes.Attributes.Attribute.(@Name == 'left')[0];
 		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
 		
-		switch (objectAttributes.Information.Resizable) {
+		var resizable:int = objectAttributes.Type.Information.Resizable;
+		
+		switch (resizable) {
 			case 0:
 				element.resizeMode = ResizeManager.RESIZE_NONE;
 			break;
@@ -104,6 +106,51 @@ public class Workspace extends Canvas {
 			break;
 		}
 		
+		
+		element.addEventListener(MouseEvent.CLICK, objectClickHandler);
+		_elements[objectAttributes.@ID] = element;
+		
+		addChild(element);
+	}
+	
+	public function addNewObject(objectAttributes:XML):void {
+		
+		var objectId:String = objectAttributes.@ID;
+		var element:Item = new Item(objectId);
+		var objWidth:int = objectAttributes.Attributes.Attribute.(Name == 'width').Value;
+		var objHeight:int = objectAttributes.Attributes.Attribute.(Name == 'height').Value;
+		
+		element.width = (objWidth == 0) ? 50 : objWidth;
+		element.height = (objHeight == 0) ? 50 : objHeight;
+		
+		element.x = objectAttributes.Attributes.Attribute.(Name == 'left').Value;
+		element.y = objectAttributes.Attributes.Attribute.(Name == 'top').Value;
+		
+		var resizable:int = objectAttributes.Type.Information.Resizable;
+		var movable:int = objectAttributes.Type.Information.Moveable;
+		
+		switch (resizable) {
+			case 0:
+				element.resizeMode = ResizeManager.RESIZE_NONE;
+			break;
+			case 1:
+				element.resizeMode = ResizeManager.RESIZE_WIDTH;
+			break;
+			case 2:
+				element.resizeMode = ResizeManager.RESIZE_HEIGHT;
+			break;
+			case 3:
+				element.resizeMode = ResizeManager.RESIZE_ALL;
+			break;
+		}
+		switch (movable) {
+			case 0:
+				element.moveMode = false;
+			break;
+			case 1:
+				element.moveMode = true
+			break;
+		}
 		
 		element.addEventListener(MouseEvent.CLICK, objectClickHandler);
 		_elements[objectAttributes.@ID] = element;
@@ -135,10 +182,11 @@ public class Workspace extends Canvas {
 		}
 		
 		selectedObject = Item(event.currentTarget).objectId;
-		dataManager
 		_elements[selectedObject].content.setFocus();
 		
 		addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
+		resizer.resizeMode = _elements[selectedObject].resizeMode;
+		resizer.moveMode = _elements[selectedObject].moveMode;
 		resizer.item = _elements[selectedObject];
 		addChild(resizer);
 		event.stopPropagation();

@@ -172,7 +172,7 @@ private function dropHandler(event:DragEvent):void {
 	
 	var id:String = editorDataManager.createObject(initProp);
 	
-	var newItemAtrs:XML = editorDataManager.getAttributes(id);
+	var newItemAtrs:XML = editorDataManager.getFullAttributes(id);
 	
-	editorMainCanvas.addObject(newItemAtrs);
+	editorMainCanvas.addNewObject(newItemAtrs);
 }

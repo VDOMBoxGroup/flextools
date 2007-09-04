@@ -1,24 +1,25 @@
-package vdom.components.editor.managers
-{
-import mx.core.UIComponent;
+package vdom.components.editor.managers {
+	
 import flash.events.MouseEvent;
-import vdom.components.editor.events.ResizeManagerEvent;
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 import flash.display.Graphics;
-import mx.core.EdgeMetrics;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import mx.containers.Canvas;
 import flash.display.CapsStyle;
 import flash.display.JointStyle;
 import flash.display.LineScaleMode;
-import mx.managers.CursorManager;
-import mx.styles.StyleManager;
-import mx.controls.ToolTip;
-import mx.managers.ToolTipManager;
-import mx.styles.CSSStyleDeclaration;
 import mx.events.ResizeEvent;
+import mx.core.EdgeMetrics;
+import mx.core.UIComponent;
+import mx.containers.Canvas;
+import mx.controls.ToolTip;
+import mx.managers.CursorManager;
+import mx.managers.ToolTipManager;
+import mx.styles.StyleManager;
+import mx.styles.CSSStyleDeclaration;
+
+import vdom.components.editor.events.ResizeManagerEvent;
 			
 [Event(name="RESIZE_COMPLETE", type="vdom.events.ResizeManagerEvent")]
 
@@ -30,13 +31,13 @@ import mx.events.ResizeEvent;
 [Inspectable(name="maxHeigh", verbose=1)]	
 
 [IconFile("ResizeTool.png")]
-public class ResizeManager extends UIComponent
-{
+
+public class ResizeManager extends UIComponent {
+	
 	public static const RESIZE_NONE:String = 'resize_none';
 	public static const RESIZE_WIDTH:String = 'resize_width';
 	public static const RESIZE_HEIGHT:String = 'resize_height';
 	public static const RESIZE_ALL:String = 'resize_all';
-	
 	
 	[Embed(source="/assets/resizeTool/up_down.png")]
 	private var verticalCursorClass:Class;
@@ -48,9 +49,10 @@ public class ResizeManager extends UIComponent
 	private var trCursorClass:Class;
 	[Embed(source="/assets/resizeTool/move.png")]
 	private var ccCursorClass:Class;
-
+	
+	private static var classConstructed:Boolean = classConstruct();
 	private var CursorID:uint		
-	private static var classConstructed:Boolean = classConstruct();		
+			
 	private var moving:DisplayObject;
 	private var movingItem:DisplayObject;
 	private var mItemChanged:Boolean;
@@ -73,24 +75,25 @@ public class ResizeManager extends UIComponent
 	private var cc_box:Sprite;
 	private var mousePosition:Point;
 	private var markerName:String;
-	private var _mode:String;
+	private var _resizeMode:String;
+	private var _moveMode:Boolean;
 	
-	public function ResizeManager()
-	{
+	public function ResizeManager() {
+		
 		super();
 		this.addEventListener(MouseEvent.MOUSE_DOWN, down_handler);
 		this.addEventListener(ResizeManagerEvent.RESIZE_CHANGING, changingHandler)
 		this.addEventListener(MouseEvent.MOUSE_OVER, over_handler);
 		this.addEventListener(MouseEvent.MOUSE_OUT,  out_handler);
 		modeChanged = false;
-		_mode = RESIZE_ALL;			
+		_resizeMode = RESIZE_ALL;
+		_moveMode = false;
 	}
 	
 	
 	private static function classConstruct():Boolean 
 	{
-		if (!StyleManager.getStyleDeclaration("ResizeManager"))
-		{
+		if (!StyleManager.getStyleDeclaration("ResizeManager")) {
 			var newStyleDeclaration:CSSStyleDeclaration = new CSSStyleDeclaration();
 			newStyleDeclaration.setStyle("boxSize", 6);
 			//newStyleDeclaration.setStyle("backgroundColor", 0xFFFFFF);
@@ -104,8 +107,7 @@ public class ResizeManager extends UIComponent
 	
 	
 	
-	private function down_handler(e:MouseEvent):void
-	{
+	private function down_handler(e:MouseEvent):void {
 		moving = null;
 		mousePosition = new Point(mouseX, mouseY);
 		if(e.target != this)
@@ -119,8 +121,7 @@ public class ResizeManager extends UIComponent
 		this.stage.addEventListener(MouseEvent.MOUSE_UP, up_handler);
 	}
 	
-	private function out_handler(e:MouseEvent):void
-	{
+	private function out_handler(e:MouseEvent):void {
 		if(item)
 		{
 			if(!moving)
@@ -130,20 +131,27 @@ public class ResizeManager extends UIComponent
 		}
 	}		
 	
-	public function get mode():String {
-		return _mode;
+	public function get resizeMode():String {
+		return _resizeMode;
 	}
 	
-	public function set mode(modeValue:String):void {
-		if(_mode != modeValue) {
-			_mode = modeValue;
+	public function set resizeMode(modeValue:String):void {
+		if(_resizeMode != modeValue) {
+			_resizeMode = modeValue;
 			modeChanged = true;
 			invalidateDisplayList();
 		}
 	}
 	
-	private function over_handler(e:MouseEvent):void
-	{
+	public function get moveMode():Boolean {
+		return _moveMode;
+	}
+	
+	public function set moveMode(modeValue:Boolean):void {
+		_moveMode = modeValue;
+	}
+	
+	private function over_handler(e:MouseEvent):void {
 		if(item)
 		{
 			var target:Sprite = Sprite(e.target);
@@ -379,14 +387,15 @@ public class ResizeManager extends UIComponent
 		}
 		
 		if(modeChanged){
-			switch(_mode) {
+			switch(_resizeMode) {
 				case RESIZE_ALL:
-					tl_box.visible = true;
-					tc_box.visible = true;
-					tr_box.visible = true;
-					cl_box.visible = true;
+					tl_box.visible = _moveMode;
+					tc_box.visible = _moveMode;
+					tr_box.visible = _moveMode;
+					cl_box.visible = _moveMode;
+					bl_box.visible = _moveMode;
+					
 					cr_box.visible = true;
-					bl_box.visible = true;
 					bc_box.visible = true;
 					br_box.visible = true;
 				break;
@@ -394,19 +403,21 @@ public class ResizeManager extends UIComponent
 					tl_box.visible = false;
 					tc_box.visible = false;
 					tr_box.visible = false;
-					cl_box.visible = true;
-					cr_box.visible = true;
+					cl_box.visible = _moveMode;
 					bl_box.visible = false;
+					
+					cr_box.visible = true;
 					bc_box.visible = false;
 					br_box.visible = false;
 				break;
 				case RESIZE_HEIGHT:
 					tl_box.visible = false;
-					tc_box.visible = true;
+					tc_box.visible = _moveMode;
 					tr_box.visible = false;
 					cl_box.visible = false;
-					cr_box.visible = false;
 					bl_box.visible = false;
+					
+					cr_box.visible = false;
 					bc_box.visible = true;
 					br_box.visible = false;
 				break;
@@ -421,6 +432,8 @@ public class ResizeManager extends UIComponent
 					br_box.visible = false;
 				break;
 			}
+				
+			cc_box.visible = _moveMode
 		}
 		
 		if(mItemChanged){
@@ -491,8 +504,7 @@ public class ResizeManager extends UIComponent
 		}
 	}
 			
-	override public function styleChanged(styleProp:String):void
-	{
+	override public function styleChanged(styleProp:String):void {
 		super.styleChanged(styleProp);
 		bStyleChanged = true;
 		invalidateDisplayList()
@@ -505,35 +517,10 @@ public class ResizeManager extends UIComponent
 		graphics.lineStyle(.25, borderColor, 1, true, LineScaleMode.NONE);
 		graphics.drawRect(0,0, measuredWidth, measuredHeight);
 		graphics.endFill();
-		
-		/* tl_box.width  = boxSize;
-		tl_box.height = boxSize;
-
-		tc_box.width  = boxSize;
-		tc_box.height = boxSize;
-
-		tr_box.width  = boxSize;
-		tr_box.height = boxSize;
-
-		cl_box.width  = boxSize;
-		cl_box.height = boxSize;
-
-		cr_box.width  = boxSize;
-		cr_box.height = boxSize;
-
-		bl_box.width  = boxSize;
-		bl_box.height = boxSize;
-
-		bc_box.width  = boxSize;
-		bc_box.height = boxSize;
-
-		br_box.width  = boxSize;
-		br_box.height = boxSize; */
 	}
 	
 	
-	protected function changingHandler(e:ResizeManagerEvent):void
-	{
+	protected function changingHandler(e:ResizeManagerEvent):void {
 		//var pt:Point = new Point(x,y)
 		//pt = item.globalToLocal(pt)
 		
@@ -543,8 +530,7 @@ public class ResizeManager extends UIComponent
 		item.height = measuredHeight;
 	}
 	
-	protected function createBox(name:String):Sprite
-	{
+	protected function createBox(name:String):Sprite {
 		var b:Sprite = new Sprite();
 		b.graphics.beginFill(0xFFFFFF, 1)
 		b.graphics.lineStyle(1, 0x00, 1, true, LineScaleMode.NONE);
@@ -557,8 +543,7 @@ public class ResizeManager extends UIComponent
 	
 	
 	[Inspectable(verbose=1)]
-	public function set item(s:DisplayObject):void
-	{
+	public function set item(s:DisplayObject):void {
 		movingItem = s;
 		mItemChanged = true;
 		
@@ -567,8 +552,7 @@ public class ResizeManager extends UIComponent
 		invalidateDisplayList();
 	}
 	
-	public function get item():DisplayObject
-	{
+	public function get item():DisplayObject {
 		return movingItem;
 	}
 }
