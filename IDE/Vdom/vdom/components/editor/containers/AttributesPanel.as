@@ -1,35 +1,26 @@
-package vdom.components.editor.containers
-{
+package vdom.components.editor.containers {
+	
+import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
-import flash.events.Event;
 import mx.containers.Grid;
-import mx.collections.XMLListCollection;
-import mx.collections.Sort;
-import mx.collections.SortField;
-import mx.controls.Button;
-import mx.containers.GridItem;
-import mx.controls.TextInput;
-import mx.controls.Label;
 import mx.containers.GridRow;
-import flash.events.FocusEvent;
-import mx.events.FlexEvent;
+import mx.containers.GridItem;
+import mx.controls.Button;
+import mx.controls.Label;
 import mx.controls.NumericStepper;
-import flash.display.DisplayObject;
-import mx.core.UIComponent;
-import mx.logging.Log;
-import mx.logging.LogEventLevel;
+import mx.controls.TextInput;
+import mx.collections.XMLListCollection;
 
-
-		
 public class AttributesPanel extends ClosablePanel
 {
+	[Bindable]
+	public var help:String;
+	
 	private var attributesGrid:Grid;
 	private var applyButton:Button;
 	private var collection:XMLListCollection;
 	private var fieldsArray:Array;
-	[Bindable]
-	public var help:String;
 	
 	public function AttributesPanel() {
 		
@@ -73,7 +64,6 @@ public class AttributesPanel extends ClosablePanel
 		for (var i:uint = 0; i < collection.length; i++) {
 			collection[i].Value = fieldsArray[i][0][fieldsArray[i][1]];
 		}
-		//trace('sdfsdfsdfs sdf');
 		dispatchEvent(new Event('propsChanged'));
 	}
 	

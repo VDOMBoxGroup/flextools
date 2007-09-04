@@ -1,7 +1,8 @@
-package vdom.components.editor.containers
-{
+package vdom.components.editor.containers {
+
 import mx.containers.Canvas;
 import mx.controls.Button;
+
 import vdom.components.editor.containers.toolbarClasses.TextTools;
 import vdom.components.editor.containers.toolbarClasses.RichTextTools;
 import vdom.components.editor.containers.toolbarClasses.ImageTools;
@@ -49,15 +50,5 @@ public class Toolbar extends Canvas
         	addChild(_interfaceTypes[_type]);
         }
 	}
-    
-    /* override protected function createChildren():void
-    {
-        super.createChildren();
-        var zzz:ImageTools = new ImageTools()
-        addChild(zzz);
-        if(_interfaceTypes[_type]) {
-        	addChild(_interfaceTypes[_type]);
-        }
-    } */
 }
 }

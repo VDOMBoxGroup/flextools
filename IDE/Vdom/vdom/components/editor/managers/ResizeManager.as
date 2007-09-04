@@ -32,6 +32,12 @@ import mx.events.ResizeEvent;
 [IconFile("ResizeTool.png")]
 public class ResizeManager extends UIComponent
 {
+	public static const RESIZE_NONE:String = 'resize_none';
+	public static const RESIZE_WIDTH:String = 'resize_width';
+	public static const RESIZE_HEIGHT:String = 'resize_height';
+	public static const RESIZE_ALL:String = 'resize_all';
+	
+	
 	[Embed(source="/assets/resizeTool/up_down.png")]
 	private var verticalCursorClass:Class;
 	[Embed(source="/assets/resizeTool/left_right.png")]
@@ -48,6 +54,7 @@ public class ResizeManager extends UIComponent
 	private var moving:DisplayObject;
 	private var movingItem:DisplayObject;
 	private var mItemChanged:Boolean;
+	private var modeChanged:Boolean;
 	private var bStyleChanged:Boolean
 	private var boxSize:int = 6;
 	private var borderColor:uint;
@@ -66,6 +73,7 @@ public class ResizeManager extends UIComponent
 	private var cc_box:Sprite;
 	private var mousePosition:Point;
 	private var markerName:String;
+	private var _mode:String;
 	
 	public function ResizeManager()
 	{
@@ -73,7 +81,9 @@ public class ResizeManager extends UIComponent
 		this.addEventListener(MouseEvent.MOUSE_DOWN, down_handler);
 		this.addEventListener(ResizeManagerEvent.RESIZE_CHANGING, changingHandler)
 		this.addEventListener(MouseEvent.MOUSE_OVER, over_handler);
-		this.addEventListener(MouseEvent.MOUSE_OUT,  out_handler);			
+		this.addEventListener(MouseEvent.MOUSE_OUT,  out_handler);
+		modeChanged = false;
+		_mode = RESIZE_ALL;			
 	}
 	
 	
@@ -91,6 +101,8 @@ public class ResizeManager extends UIComponent
 		}
 		return true;
 	}
+	
+	
 	
 	private function down_handler(e:MouseEvent):void
 	{
@@ -117,6 +129,18 @@ public class ResizeManager extends UIComponent
 			}
 		}
 	}		
+	
+	public function get mode():String {
+		return _mode;
+	}
+	
+	public function set mode(modeValue:String):void {
+		if(_mode != modeValue) {
+			_mode = modeValue;
+			modeChanged = true;
+			invalidateDisplayList();
+		}
+	}
 	
 	private function over_handler(e:MouseEvent):void
 	{
@@ -310,7 +334,6 @@ public class ResizeManager extends UIComponent
 			up_handler(null);
 		} 
 	}
-
 	
 	override protected function createChildren():void
 	{
@@ -345,8 +368,7 @@ public class ResizeManager extends UIComponent
 	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 	{
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		if(bStyleChanged)
-		{
+		if(bStyleChanged){
 			boxSize         = this.getStyle("boxSize");
 			borderColor     = this.getStyle("borderColor");
 			//backgroundColor = this.getStyle("backgroundColor");
@@ -355,8 +377,53 @@ public class ResizeManager extends UIComponent
 			updateBoxes();
 			bStyleChanged = false;
 		}
-		if(mItemChanged)
-		{
+		
+		if(modeChanged){
+			switch(_mode) {
+				case RESIZE_ALL:
+					tl_box.visible = true;
+					tc_box.visible = true;
+					tr_box.visible = true;
+					cl_box.visible = true;
+					cr_box.visible = true;
+					bl_box.visible = true;
+					bc_box.visible = true;
+					br_box.visible = true;
+				break;
+				case RESIZE_WIDTH:
+					tl_box.visible = false;
+					tc_box.visible = false;
+					tr_box.visible = false;
+					cl_box.visible = true;
+					cr_box.visible = true;
+					bl_box.visible = false;
+					bc_box.visible = false;
+					br_box.visible = false;
+				break;
+				case RESIZE_HEIGHT:
+					tl_box.visible = false;
+					tc_box.visible = true;
+					tr_box.visible = false;
+					cl_box.visible = false;
+					cr_box.visible = false;
+					bl_box.visible = false;
+					bc_box.visible = true;
+					br_box.visible = false;
+				break;
+				case RESIZE_NONE:
+					tl_box.visible = false;
+					tc_box.visible = false;
+					tr_box.visible = false;
+					cl_box.visible = false;
+					cr_box.visible = false;
+					bl_box.visible = false;
+					bc_box.visible = false;
+					br_box.visible = false;
+				break;
+			}
+		}
+		
+		if(mItemChanged){
 			measure();
 			mItemChanged = false
 		}

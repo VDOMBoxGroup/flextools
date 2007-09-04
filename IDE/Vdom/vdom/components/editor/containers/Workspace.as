@@ -1,26 +1,23 @@
-package vdom.components.editor.containers
-{
-import mx.containers.Canvas;
-import flash.display.DisplayObject;
+package vdom.components.editor.containers {
+
 import flash.events.MouseEvent;
-import vdom.components.editor.managers.ResizeManager;
-import vdom.components.editor.events.ResizeManagerEvent;
 import flash.events.Event;
+import mx.containers.Canvas;
+
+import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.components.editor.containers.WorkspaceClasses.Item;
-import mx.collections.XMLListCollection;
+import vdom.components.editor.managers.ResizeManager;
+
+public class Workspace extends Canvas {
 	
-public class Workspace extends Canvas
-{
-	
-	public var selectedElement:String;
+	public var selectedObject:String;
 	
 	private var resizer:ResizeManager;
-	
 	private var _elements:Object;
 	private var collection:XML;
 	
-	public function Workspace()
-	{
+	public function Workspace() {
+		
 		super();
 		
 		_elements = [];
@@ -29,6 +26,11 @@ public class Workspace extends Canvas
 		addEventListener(MouseEvent.CLICK, mainClickHandler, false);
 	}
 	
+	/**
+	 * Обновление отображения объекта.
+	 * @param objectAttributes аттрибуты объекта.
+	 * 
+	 */	
 	public function updateObject(objectAttributes:XML):void {
 		
 		var objectId:String = objectAttributes.@ID;
@@ -45,19 +47,20 @@ public class Workspace extends Canvas
 		object.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
 		
 		resizer.item = object;
-		
 	}
 	
-	public function destroyElements():void {
-		selectedElement = null;
+	/**
+	 * Удаление всех объектов из рабочей области.
+	 * 
+	 */	
+	public function destroyObjects():void {
+		
+		selectedObject = null;
 		removeAllChildren();
 	}
 	
 	public function set dataProvider(attributes:XML):void {
 		
-		//var xl:XMLList = new XMLList();
-       //xl += attributes.Attributes.Attribute;
-        //collection = new XMLListCollection(xl);
         collection = attributes.Attributes[0];
 	}
 	
@@ -66,14 +69,15 @@ public class Workspace extends Canvas
 		return XML(collection);
 	}
 	
-	
-	
+	/**
+	 * Добавление нового объекта в рабочую область
+	 * @param objectAttributes аттрибуты объекта.
+	 * 
+	 */	
 	public function addObject(objectAttributes:XML):void {
 		
 		var objectId:String = objectAttributes.@ID;
-		
 		var element:Item = new Item(objectId);
-		
 		var objWidth:int = objectAttributes.Attributes.Attribute.(@Name == 'width')[0];
 		var objHeight:int = objectAttributes.Attributes.Attribute.(@Name == 'height')[0];
 		
@@ -83,52 +87,55 @@ public class Workspace extends Canvas
 		element.x = objectAttributes.Attributes.Attribute.(@Name == 'left')[0];
 		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
 		
-		/* for each(var attr:XML in objectAttributes.Attributes.Attribute) {
-			element[attr.@Name] = attr;
-		} */
+		element.resizeMode = objectAttributes
 		
-		element.addEventListener(MouseEvent.CLICK, elementClickHandler);
-		_elements[objectAttributes.@ID] = element
+		element.addEventListener(MouseEvent.CLICK, objectClickHandler);
+		_elements[objectAttributes.@ID] = element;
+		
 		addChild(element);
 	}
 	
+	/**
+     *  @private
+     */
 	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
+		
 		collection.Attribute.(Name == 'top').Value = event.properties['top'];
 		collection.Attribute.(Name == 'left').Value = event.properties['left'];
 		collection.Attribute.(Name == 'width').Value = event.properties['width'];
 		collection.Attribute.(Name == 'height').Value = event.properties['height'];
-		//var zzz:Object = collection.(Name == 'top'); //= event.properties['top'];
-		//collection.Attributes.Attribute.(Name == 'left') = event.properties['left'];
-		//collection.Attributes.Attribute.(Name == 'width') = event.properties['width'];
-		//collection.Attributes.Attribute.(Name == 'height') = event.properties['height'];
 		
 		dispatchEvent(new Event('propsChanged'));
 	}
+	/**
+     *  @private
+     */
+	private function objectClickHandler(event:MouseEvent):void {
 	
-	private function elementClickHandler(event:MouseEvent):void {
-	
-		if(selectedElement) {
+		if(selectedObject) {
 			removeEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-			selectedElement = null;
+			selectedObject = null;
 			removeChild(resizer);
 		}
 		
-		selectedElement = Item(event.currentTarget).objectId;
-		_elements[selectedElement].content.setFocus();
+		selectedObject = Item(event.currentTarget).objectId;
+		_elements[selectedObject].content.setFocus();
 		
 		addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-		resizer.item = _elements[selectedElement];
+		resizer.item = _elements[selectedObject];
 		addChild(resizer);
 		event.stopPropagation();
 		dispatchEvent(new Event('objectChange'));
 	}
 	
-	
-	
+	/**
+     *  @private
+     */
 	private function mainClickHandler(event:MouseEvent):void {
-		if(event.target == event.currentTarget && selectedElement) {
+		
+		if(event.target == event.currentTarget && selectedObject) {
 			setFocus();
-			selectedElement = null;
+			selectedObject = null;
 			removeChild(resizer);
 			dispatchEvent(new Event('objectChange'));
 		}

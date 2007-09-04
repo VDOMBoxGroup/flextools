@@ -1,5 +1,5 @@
-package vdom.managers
-{
+package vdom.managers {
+
 import flash.events.IEventDispatcher;
 import flash.events.Event;
 import flash.events.EventDispatcher;

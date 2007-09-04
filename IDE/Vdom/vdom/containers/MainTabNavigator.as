@@ -1,4 +1,4 @@
-package vdom
+package vdom.containers
 {
 	import mx.containers.TabNavigator;
 	import mx.controls.TabBar;

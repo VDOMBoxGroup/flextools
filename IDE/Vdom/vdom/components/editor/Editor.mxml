@@ -3,6 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:containers="vdom.components.editor.containers.*"
 	
+	width="100%" height="100%"
 	
 	backgroundColor="#ffffff" backgroundAlpha="1.0"
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
@@ -10,8 +11,8 @@
 	creationComplete="init();"
 	show="show();"
 	hide="hide();"
- width="100%" height="100%">
-	<mx:Script source="scripts/editorScript.as" />
+>
+	<mx:Script source="scripts/editor.as" />
 	
 	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">
 	
@@ -41,6 +42,5 @@
 	    		<mx:List id="pageList" dataProvider="{editorDataManager.pages.Object}" labelField="@Name" width="100%" change="pageChange()"/>
 	    	</containers:ClosablePanel>
 		</mx:VBox>
-		
 	</mx:HBox>
 </mx:Canvas>

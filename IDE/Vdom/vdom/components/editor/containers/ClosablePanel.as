@@ -1,28 +1,23 @@
-package vdom.components.editor.containers
-{
-import mx.containers.Panel;
-import flash.events.MouseEvent;
-import mx.core.EdgeMetrics;
-import mx.controls.Button;
-	
-public class ClosablePanel extends Panel
-{
+package vdom.components.editor.containers {
 
+import flash.events.MouseEvent;	
+import mx.containers.Panel;
+import mx.controls.Button;
+import mx.core.EdgeMetrics;
+
+public class ClosablePanel extends Panel {
+	
 	private var collapseButton:Button;
 	private var switcher:Boolean;
 	private var lastHeight:Number;
 	private var _dataProvider:Object;
-	//[Bindable(event="propChange")]
 	
-	public function ClosablePanel()
-	{
+	public function ClosablePanel() {
 		super();
-		//addEventListener('propertyChange', zzz);
 	}
 	
-	
-	override protected function createChildren():void
-	{
+	override protected function createChildren():void {
+		
 	    super.createChildren();
 	    setStyle('headerHeight', '30');
 	    if (!collapseButton) {
@@ -43,8 +38,9 @@ public class ClosablePanel extends Panel
 			collapseButton.owner = this;
 	   }  
 	}
-	override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void
-	{
+	
+	override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void {
+		
 		super.layoutChrome(unscaledWidth, unscaledHeight);
 		var bm:EdgeMetrics = borderMetrics;
 
@@ -57,9 +53,10 @@ public class ClosablePanel extends Panel
 	        collapseButton.getExplicitOrMeasuredWidth(),
 	        (titleBar.height -
 	        collapseButton.getExplicitOrMeasuredHeight()) / 2);
-		
 	}
+	
 	private function collapseButton_clickHandler(event:MouseEvent):void {
+		
 		if(switcher) {
 			collapseButton.setStyle("upSkin", CollOnButtonUp);
 	        collapseButton.setStyle("downSkin",CollOnButtonDown);

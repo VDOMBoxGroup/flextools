@@ -26,8 +26,6 @@ public class Types extends Accordion
 			
 			var et:Type = new Type(num.Information.ID, num.Information.EditorIcon, num.Information.Name);
 			
-			//zzz[num.Information.EditorIcon] = num.Information.EditorIcon;
-			
 			et.setStyle('horizontalAlign', 'center');
 			et.percentWidth = 100;
 			cat[num.Information.Category].addChild(et); 
