@@ -36,9 +36,9 @@
 		]]>
 	</mx:Script>
 	
-	<mx:TextArea x="133" y="22" text="" height="100%" width="24" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
-			verticalScrollPolicy="off" textAlign="right"/>
-	<mx:TextArea  id="txtArea" keyUp="{keyFunction(event),numricString()}" x="{numStrok.width}"
-		keyDown="numricString()" left="165" top="21" height="100%"	width="100%"  focusOut="{checkTextAreaFocus()}"
+	<mx:TextArea text="" width="24" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
+			verticalScrollPolicy="off" textAlign="right" top="0" bottom="0" left="0"/>
+	<mx:TextArea  id="txtArea" keyUp="{keyFunction(event),numricString()}"
+		keyDown="numricString()" x="{numStrok.width}" height="100%"	width="100%"  focusOut="{checkTextAreaFocus()}"
 		/>
 </mx:Canvas>
