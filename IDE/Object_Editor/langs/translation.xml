@@ -76,6 +76,7 @@
     <sentence id="a72" label="tooltip">Opens an XML Code Editor. To use Code Interface you must change Interface Type to [Extended]</sentence>
     <sentence id="a73" label="displaytext">Display text</sentence>
     <sentence id="a74" label="value">Value</sentence>
+    <sentence id="a75" label="xmlscriptname">XML Script Name</sentence>
 </language>
 <language id="RU" label="Русский">
     <sentence id="a0" label="file">Файл</sentence>
@@ -153,5 +154,6 @@
     <sentence id="a72" label="tooltip">Открывает редактор кода XML. Чтобы использовать редактор кода, вы должны переключить Тип Интерфейса на [Расширенный]</sentence>
     <sentence id="a73" label="displaytext">Отображаемый текст</sentence>
     <sentence id="a74" label="value">Значение</sentence>
+    <sentence id="a75" label="xmlscriptname">Имя для XML скрипта</sentence>
 </language>
 </root>

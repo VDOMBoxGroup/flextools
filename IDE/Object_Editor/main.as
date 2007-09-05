@@ -558,6 +558,7 @@ private function buildObjectXML():void {
 				<Moveable/>
 				<Dynamic/>
 				<Container/>
+				<ClassName/>
 				<Version/>
 				<Icon/>
 				<StructureIcon/>
@@ -568,6 +569,7 @@ private function buildObjectXML():void {
 				<OptimizationPriority/>
 				<Containers/>
 				<Languages/>
+				<RenderType/>
 			</Information>
 			<Attributes/>
 			<Languages/>
