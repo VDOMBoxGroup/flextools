@@ -54,7 +54,7 @@ package vdom.connection.utils
            dispatchEvent(new UtilsEvent(UtilsEvent.FILE_UPLOAD_ERROR));
         }
 
-        /**
+        /**	
          * Begin uploading the file specified in the UPLOAD_URL constant.
          */
         private function selectHandler(event:Event):void {
