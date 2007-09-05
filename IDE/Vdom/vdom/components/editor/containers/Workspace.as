@@ -5,7 +5,7 @@ import flash.events.Event;
 import mx.containers.Canvas;
 
 import vdom.components.editor.events.ResizeManagerEvent;
-import vdom.components.editor.containers.WorkspaceClasses.Item;
+import vdom.components.editor.containers.workspaceClasses.Item;
 import vdom.components.editor.managers.ResizeManager;
 import vdom.managers.DataManager;
 
