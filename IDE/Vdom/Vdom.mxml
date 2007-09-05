@@ -11,7 +11,7 @@
 	xmlns:vdom="vdom.*" 
 	xmlns:controls="vdom.containers.*" 
 	xmlns:editor="vdom.components.editor.*"
->
+ xmlns:ns1="vdom.components.scriptEditor.*">
 	
 	<mx:Script source="scripts/Vdom.as"/>
 	<mx:Style source="theme/AeonGraphical.css" />
@@ -182,11 +182,15 @@
 	</controls:MainTabNavigator>
 	<mx:ViewStack id="placeCanvas" borderStyle="solid" borderThickness="1" borderColor="#808080" left="10" right="10" top="220" bottom="30">
 		<mx:Canvas id="appManCanv" width="100%" height="100%">
+			
 			<mx:Label text="{mtLang.lang.main_tab_panel.appmaintab}" horizontalCenter="0" verticalCenter="0"/>
+			
 		</mx:Canvas>
 			<editor:Editor id="editorCanv" height="100%"/>
 		<mx:Canvas id="scriptCanv" width="100%" height="100%">
-			<mx:Label text="Script Panel" />
+			<ns1:ScriptEditor x="0" y="0" width="100%" height="100%">
+			</ns1:ScriptEditor>
+			<!--- <mx:Label text="Script Panel" />- -->
 		</mx:Canvas>
 		<mx:Canvas id="multilinCanv" width="100%" height="100%">
 			<mx:Label text="{mtLang.lang.main_tab_panel.multilintab}" horizontalCenter="0" verticalCenter="0"/>
