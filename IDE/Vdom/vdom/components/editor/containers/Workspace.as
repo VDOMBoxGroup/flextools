@@ -90,6 +90,7 @@ public class Workspace extends Canvas {
 		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
 		
 		var resizable:int = objectAttributes.Type.Information.Resizable;
+		var movable:int = objectAttributes.Type.Information.Moveable;
 		
 		switch (resizable) {
 			case 0:
@@ -105,7 +106,14 @@ public class Workspace extends Canvas {
 				element.resizeMode = ResizeManager.RESIZE_ALL;
 			break;
 		}
-		
+		switch (movable) {
+			case 0:
+				element.moveMode = false;
+			break;
+			case 1:
+				element.moveMode = true
+			break;
+		}
 		
 		element.addEventListener(MouseEvent.CLICK, objectClickHandler);
 		_elements[objectAttributes.@ID] = element;

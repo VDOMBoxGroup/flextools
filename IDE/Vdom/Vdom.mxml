@@ -11,7 +11,8 @@
 	xmlns:vdom="vdom.*" 
 	xmlns:controls="vdom.containers.*" 
 	xmlns:editor="vdom.components.editor.*"
- xmlns:ns1="vdom.components.scriptEditor.*">
+	xmlns:scriptEditor="vdom.components.scriptEditor.*"
+>
 	
 	<mx:Script source="scripts/Vdom.as"/>
 	<mx:Style source="theme/AeonGraphical.css" />
@@ -56,7 +57,7 @@
 	<mx:ViewStack id="viewstack" width="100%" height="100%">
 	<mx:Canvas id="auth" width="100%" height="100%">
 		<mx:Form verticalCenter="0" borderStyle="solid" cornerRadius="4" horizontalCenter="0">
-			<mx:FormHeading label="Авторизация"/>
+			<mx:FormHeading label="Auth"/>
 			<mx:FormItem label="Login">
 				<mx:TextInput id="loginText"/>
 			</mx:FormItem>
@@ -118,7 +119,7 @@
 				</controls:ExtendedPanel>
 				<controls:ExtendedPanel styleName="extPan" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" width="200">
 					<mx:List width="100%" height="100%" labelField="@id" id="applicationListContainer" 
-						change="trace(List(event.target).selectedItem.data)"/>
+						change="List(event.target).selectedItem.data"/>
 					<mx:ControlBar horizontalAlign="center" x="0" y="76">
 						<mx:Label text="{mtLang.lang.appmain_panel.applist}"/>
 					</mx:ControlBar>
@@ -188,8 +189,7 @@
 		</mx:Canvas>
 			<editor:Editor id="editorCanv" height="100%"/>
 		<mx:Canvas id="scriptCanv" width="100%" height="100%">
-			<ns1:ScriptEditor x="0" y="0" width="100%" height="100%">
-			</ns1:ScriptEditor>
+			<scriptEditor:ScriptEditor x="0" y="0" width="100%" height="100%"/>
 			<!--- <mx:Label text="Script Panel" />- -->
 		</mx:Canvas>
 		<mx:Canvas id="multilinCanv" width="100%" height="100%">

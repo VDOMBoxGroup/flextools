@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="120" xmlns:ns1="source.mx.controls.*">
-	<mx:Button x="10" y="10" label="RotateLeft"/>
-	<mx:Button x="106" y="10" label="RotateRight"/>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="50" xmlns:ns1="source.mx.controls.*">
+	<mx:Button x="108" y="18" label="Action #1"/>
+	<mx:Button x="204" y="18" label="Action #2"/>
+	<mx:Label x="10" y="10" text="Sample toolbar "/>
 </mx:Canvas>

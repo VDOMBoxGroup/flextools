@@ -172,7 +172,7 @@ public class AttributesPanel extends ClosablePanel
 		if (!applyButton) {
 			applyButton = new Button();
 			applyButton.visible = false;
-			applyButton.label = 'Применить';
+			applyButton.label = 'Save';
 			addChild(applyButton);
 		}
 	}

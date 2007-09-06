@@ -17,6 +17,8 @@ import vdom.MyLoader;
 import vdom.Auth;
 import vdom.Lang;
 
+import mdm.Application;
+
 public var editorDataManager:DataManager;
 public var publicData:Object;
 
@@ -34,6 +36,7 @@ private var ppm:Canvas;
 
 private function init():void {
 	
+	mdm.Application.init(this);
 	Singleton.registerClass("vdom.components.editor.managers::IVdomDragManager", 
 		Class(getDefinitionByName("vdom.components.editor.managers::VdomDragManagerImpl")));
 	soap = Soap.getInstance();		
@@ -63,6 +66,7 @@ private function mainInitHandler(event:Event):void {
 
 private function appChangedHandler(event:ListEvent):void {
 	publicData['appId'] = List(event.currentTarget).selectedItem.@id;
+	publicData['pageId'] = null;
 }
 
 private function authComplete(event:Event):void {
@@ -100,7 +104,7 @@ private function getAllTypesHandler(event:SoapEvent):void {
 private function authError(event:Event):void {
 	PopUpManager.removePopUp(ppm);
 	passwordText.text = '';
-	Alert.show('Ошибка! \n Неверные имя пльзователя или пароль');
+	Alert.show('Error! \n Wrong auth data');
 }
 
 private function getLangValue(mod:String, item:String):String {
