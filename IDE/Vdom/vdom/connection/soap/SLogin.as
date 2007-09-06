@@ -51,7 +51,7 @@ package vdom.connection.soap
 		
 			//	Alert.show("Password and User correct\nsid: "+ code.sessionId );
 			//trace("Password and User correct\nsid: "+ code.sessionId);
-			trace(this.toString() );
+		//	trace(this.toString() );
 				evt = new SoapEvent(SoapEvent.LOGIN_OK);
 				evt.result = resultXML;
 				dispatchEvent(evt);
