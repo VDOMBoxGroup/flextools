@@ -109,8 +109,6 @@ public class DataManager implements IEventDispatcher {
 		
 		element.appendChild(attributes);
 		
-		proxy.setAttributes(_appId, objectId, attributes);
-		
 		return element;
 	}
 	
@@ -130,6 +128,11 @@ public class DataManager implements IEventDispatcher {
 		}
 		
 		_objects.Object.(@ID == objectId).Attributes = newAttributes;
+		
+		
+		trace(selectedObjects);
+		proxy.setAttributes(_appId, selectedObjects.@ID, selectedObjects.Attributes[0]);
+		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		dmEvent.objectId = objectId;
 		dispatchEvent(dmEvent);

@@ -182,7 +182,9 @@ public class Workspace extends Canvas {
      *  @private
      */
 	private function objectClickHandler(event:MouseEvent):void {
-	
+		
+		if(event.currentTarget == selectedObject) return;
+		
 		if(selectedObject) {
 			removeEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
 			selectedObject = null;
