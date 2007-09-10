@@ -10,6 +10,8 @@ import mx.core.Application;
 import vdom.components.editor.events.DataManagerEvent;
 import vdom.connection.soap.SoapEvent;
 import vdom.connection.soap.Soap;
+import mx.messaging.Producer;
+import vdom.connection.Proxy;
 
 public class DataManager implements IEventDispatcher {
 	
@@ -25,6 +27,7 @@ public class DataManager implements IEventDispatcher {
 	private var _types:XML;
 	private var _appId:String;
 	private var _pageId:String;
+	private var proxy:Proxy;
 	
 	/**
 	 * 
@@ -53,7 +56,7 @@ public class DataManager implements IEventDispatcher {
 		
 		dispatcher = new EventDispatcher();
 		soap = Soap.getInstance();
-		
+		proxy = Proxy.getInstance();
 		publicData = mx.core.Application.application.publicData;
 		
 		_objects = null;
@@ -87,6 +90,7 @@ public class DataManager implements IEventDispatcher {
 	 */	
 	public function getFullAttributes(objectId:String):XML {
 		
+		
 		var object:Object = getAttributes(objectId);
 		
 		var type:XML = new XML(getType(object.@Type));
@@ -104,6 +108,8 @@ public class DataManager implements IEventDispatcher {
 		}
 		
 		element.appendChild(attributes);
+		
+		proxy.setAttributes(_appId, objectId, attributes);
 		
 		return element;
 	}
