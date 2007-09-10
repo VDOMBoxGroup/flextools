@@ -11,12 +11,46 @@
 					numStrok.text += (i + txtArea.verticalScrollPosition).toString() 
 									+"\n";				
 				}
+				
+				var yPosition:int = 1;
+				var currentPosition:int = 0;
+				while (currentPosition < txtArea.selectionBeginIndex) {
+					if (txtArea.text.charCodeAt(currentPosition) == 13)
+						yPosition++;
+					currentPosition++;
+				}
+				trace('строчка: ' + yPosition);
+			/*	
+				for (var i:int = 0; i < ta.height / 12; i++) {
+					switch (key.keyCode) {
+						case 13:
+						case 40:
+							if (strNumber == xPosition + 1)
+								na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
+							else
+								na.htmlText += strNumber.toString() + "<br>";
+							break;
+						case 38:
+							if (strNumber == xPosition - 1)
+								na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
+							else
+								na.htmlText += strNumber.toString() + "<br>";
+							break;
+						default:
+							if (strNumber == xPosition)
+								na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
+							else
+								na.htmlText += strNumber.toString() + "<br>";
+					}
+					strNumber++;
+				}
+				*/
 			}
 			public function get text ():String{
 				return txtArea.text;
 			}
 			
-			public function set text (text:String):void{
+			public function set text (text: String):void{
 				 txtArea.text = text;
 			}
 		//		txtArea.tabEnabled

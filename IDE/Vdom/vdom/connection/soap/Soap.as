@@ -12,7 +12,7 @@ package vdom.connection.soap
 	{
 		private static 	var ws			:WebService	= new WebService;
 		private static 	var instance	:Soap;
-FileUpload
+//FileUpload
 		/**
 		 *	  initialisation
 		 */
