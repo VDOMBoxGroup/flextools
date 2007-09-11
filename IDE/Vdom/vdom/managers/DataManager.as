@@ -120,18 +120,31 @@ public class DataManager implements IEventDispatcher {
 	public function updateAttributes(selectedObjects:XML):void {
 		
 		var objectId:String = selectedObjects.@ID;
-		var attributes:XMLList = selectedObjects.Attributes.Attribute;
-		var newAttributes:XML = <Attributes />;
 		
-		for each(var attr:XML in attributes) {
+		var oldListAttributes:XMLList = _objects.Object.(@ID == objectId).Attributes.Attribute
+		var newListAttributes:XMLList = selectedObjects.Attributes.Attribute;
+		
+		var newAttributes:XML = <Attributes />;
+		var newOnlyAttributes:XML = <Attributes />;
+		
+		for each(var attr:XML in newListAttributes) {
+			
 			newAttributes.appendChild(<Attribute Name={attr.Name}>{attr.Value.toString()}</Attribute>);
+			
+			if(oldListAttributes.(@Name == attr.Name).toString() != attr.Value) {
+				
+				newOnlyAttributes.item += <Attributes Name={attr.Name}>{attr.Value.toString()}</Attributes>;
+			} 
 		}
+		 
+		
+		/* for each(var attr:XML in attributes) {
+			newAttributes.appendChild(<Attribute Name={attr.Name}>{attr.Value.toString()}</Attribute>);
+		} */
 		
 		_objects.Object.(@ID == objectId).Attributes = newAttributes;
 		
-		
-		trace(selectedObjects);
-		proxy.setAttributes(_appId, selectedObjects.@ID, selectedObjects.Attributes[0]);
+		proxy.setAttributes(_appId, selectedObjects.@ID, newOnlyAttributes);
 		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		dmEvent.objectId = objectId;
