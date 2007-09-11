@@ -36,7 +36,6 @@ private var ppm:Canvas;
 
 private function init():void {
 	
-	mdm.Application.init(this);
 	Singleton.registerClass("vdom.components.editor.managers::IVdomDragManager", 
 		Class(getDefinitionByName("vdom.components.editor.managers::VdomDragManagerImpl")));
 	soap = Soap.getInstance();		
