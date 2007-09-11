@@ -17,8 +17,6 @@ import vdom.MyLoader;
 import vdom.Auth;
 import vdom.Lang;
 
-import mdm.Application;
-
 public var editorDataManager:DataManager;
 public var publicData:Object;
 
