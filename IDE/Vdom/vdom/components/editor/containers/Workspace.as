@@ -8,6 +8,8 @@ import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.components.editor.containers.workspaceClasses.Item;
 import vdom.components.editor.managers.ResizeManager;
 import vdom.managers.DataManager;
+import flash.events.KeyboardEvent;
+import vdom.components.editor.events.WorkspaceEvent;
 
 public class Workspace extends Canvas {
 	
@@ -25,6 +27,8 @@ public class Workspace extends Canvas {
 		_elements = [];
 		resizer = new ResizeManager();
 		resizer.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
+		
+		addEventListener(KeyboardEvent.KEY_UP, deleteObjectHandler);
 		addEventListener(MouseEvent.CLICK, mainClickHandler, false);
 	}
 	
@@ -59,6 +63,19 @@ public class Workspace extends Canvas {
 		
 		selectedObject = null;
 		removeAllChildren();
+	}
+	/**
+	 * Удаление объекта по его идентификатору
+	 * @param objectId идентификатор объекта
+	 * 
+	 */	
+	public function deleteObject(objectId:String):void {
+		
+		removeChild(_elements[objectId]);
+		setFocus();
+		selectedObject = null;
+		removeChild(resizer);
+		dispatchEvent(new Event('objectChange'));
 	}
 	
 	public function set dataProvider(attributes:XML):void {
@@ -125,14 +142,14 @@ public class Workspace extends Canvas {
 		
 		var objectId:String = objectAttributes.@ID;
 		var element:Item = new Item(objectId);
-		var objWidth:int = objectAttributes.Attributes.Attribute.(Name == 'width').Value;
-		var objHeight:int = objectAttributes.Attributes.Attribute.(Name == 'height').Value;
+		var objWidth:int = objectAttributes.Attributes.Attribute.(@Name == 'width');
+		var objHeight:int = objectAttributes.Attributes.Attribute.(@Name == 'height');
 		
 		element.width = (objWidth == 0) ? 50 : objWidth;
 		element.height = (objHeight == 0) ? 50 : objHeight;
 		
-		element.x = objectAttributes.Attributes.Attribute.(Name == 'left').Value;
-		element.y = objectAttributes.Attributes.Attribute.(Name == 'top').Value;
+		element.x = objectAttributes.Attributes.Attribute.(@Name == 'left');
+		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top');
 		
 		var resizable:int = objectAttributes.Type.Information.Resizable;
 		var movable:int = objectAttributes.Type.Information.Moveable;
@@ -171,13 +188,28 @@ public class Workspace extends Canvas {
      */
 	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
 		
-		collection.Attribute.(Name == 'top').Value = event.properties['top'];
-		collection.Attribute.(Name == 'left').Value = event.properties['left'];
-		collection.Attribute.(Name == 'width').Value = event.properties['width'];
-		collection.Attribute.(Name == 'height').Value = event.properties['height'];
+		collection.Attribute.(@Name == 'top')[0] = event.properties['top'];
+		collection.Attribute.(@Name == 'left')[0] = event.properties['left'];
+		collection.Attribute.(@Name == 'width')[0] = event.properties['width'];
+		collection.Attribute.(@Name == 'height')[0] = event.properties['height'];
 		
 		dispatchEvent(new Event('propsChanged'));
 	}
+	
+	/**
+     *  @private
+     */
+	private function deleteObjectHandler(event:KeyboardEvent):void {
+		
+		if(event.keyCode == 46) {
+			if(selectedObject) {
+				var we:WorkspaceEvent = new WorkspaceEvent(WorkspaceEvent.DELETE_OBJECT);
+				we.objectID = selectedObject;
+				dispatchEvent(we);
+			}
+		}
+	}
+	
 	/**
      *  @private
      */

@@ -9,13 +9,13 @@ import vdom.components.editor.containers.toolbarClasses.ImageTools;
 
 public class Toolbar extends Canvas
 {	
-	private var _type:uint;
+	private var _interfaceType:uint;
 	private var _interfaceTypes:Array;
 	
 	public function Toolbar()
 	{
 		super();
-		_type = 0;
+		_interfaceType = 0;
 		_interfaceTypes = new Array();
 		_interfaceTypes[2] = new TextTools();
 		_interfaceTypes[3] = new RichTextTools();
@@ -29,11 +29,11 @@ public class Toolbar extends Canvas
         measuredMinHeight = 0;
     }
     
-    public function set type(elementAttributes:Object):void {
-    	if(elementAttributes)
-    		_type = parseInt(elementAttributes.Type.Information.InterfaceType.toString());
+    public function set type(objectType:Object):void {
+    	if(objectType)
+    		_interfaceType = parseInt(objectType.Information.InterfaceType.toString());
     	else
-    		_type = 0;
+    		_interfaceType = 0;
     		
     	invalidateDisplayList();
     	
@@ -46,8 +46,8 @@ public class Toolbar extends Canvas
 		
 		removeAllChildren();
 		
-		if(_interfaceTypes[_type]) {
-        	addChild(_interfaceTypes[_type]);
+		if(_interfaceTypes[_interfaceType]) {
+        	addChild(_interfaceTypes[_interfaceType]);
         }
 	}
 }

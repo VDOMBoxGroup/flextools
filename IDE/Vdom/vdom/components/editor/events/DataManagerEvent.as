@@ -24,6 +24,7 @@ public class DataManagerEvent extends Event
 	public static const TYPES_LOADED:String = 'typesLoaded';
 	public static const OBJECTS_LOADED:String = 'objectsLoaded';
 	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';
+	public static const OBJECT_DELETED:String = 'objectDeleted';
 
     // Define a public variable to hold the state of the enable property.
 	public var isEnabled:Boolean;

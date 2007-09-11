@@ -12,6 +12,7 @@ import vdom.connection.soap.SoapEvent;
 import vdom.connection.soap.Soap;
 import mx.messaging.Producer;
 import vdom.connection.Proxy;
+import vdom.components.editor.Editor;
 
 public class DataManager implements IEventDispatcher {
 	
@@ -91,15 +92,15 @@ public class DataManager implements IEventDispatcher {
 	public function getFullAttributes(objectId:String):XML {
 		
 		
-		var object:Object = getAttributes(objectId);
+		//var object:XML = getObject(objectId);
 		
-		var type:XML = new XML(getType(object.@Type));
+		//var type:XML = new XML(getType(object.@Type));
 		
-		var element:XML = <Element ID={objectId} />;
+		//var element:XML = <Element ID={objectId} />;
 		
-		element.appendChild(type);
+		//element.appendChild(type);
 		
-		var attributes:XML = <Attributes />;
+		/* var attributes:XML = <Attributes />;
 		
 		for each(var attr:XML in type.Attributes.Attribute){
 			
@@ -107,9 +108,9 @@ public class DataManager implements IEventDispatcher {
 			attributes.appendChild(attr);
 		}
 		
-		element.appendChild(attributes);
+		element.appendChild(attributes); */
 		
-		return element;
+		return new XML(getObject(objectId));
 	}
 	
 	/**
@@ -117,23 +118,19 @@ public class DataManager implements IEventDispatcher {
 	 * @param selectedObjects описание типа объекта, которое надо сохранить, для последующей отправки на сервер.
 	 * 
 	 */	
-	public function updateAttributes(selectedObjects:XML):void {
+	public function updateAttributes(objectDescription:XML):void {
 		
-		var objectId:String = selectedObjects.@ID;
+		var objectId:String = objectDescription.@ID;
 		
 		var oldListAttributes:XMLList = _objects.Object.(@ID == objectId).Attributes.Attribute
-		var newListAttributes:XMLList = selectedObjects.Attributes.Attribute;
+		var newListAttributes:XMLList = objectDescription.Attributes.Attribute;
 		
-		var newAttributes:XML = <Attributes />;
 		var newOnlyAttributes:XML = <Attributes />;
 		
 		for each(var attr:XML in newListAttributes) {
 			
-			newAttributes.appendChild(<Attribute Name={attr.Name}>{attr.Value.toString()}</Attribute>);
-			
-			if(oldListAttributes.(@Name == attr.Name).toString() != attr.Value) {
-				
-				newOnlyAttributes.item += <Attributes Name={attr.Name}>{attr.Value.toString()}</Attributes>;
+			if(oldListAttributes.(@Name == attr.@Name) != attr) {	
+				newOnlyAttributes.item += attr;
 			} 
 		}
 		 
@@ -142,9 +139,9 @@ public class DataManager implements IEventDispatcher {
 			newAttributes.appendChild(<Attribute Name={attr.Name}>{attr.Value.toString()}</Attribute>);
 		} */
 		
-		_objects.Object.(@ID == objectId).Attributes = newAttributes;
+		_objects.Object.(@ID == objectId).Attributes = objectDescription.Attributes;
 		
-		proxy.setAttributes(_appId, selectedObjects.@ID, newOnlyAttributes);
+		proxy.setAttributes(_appId, objectDescription.@ID, newOnlyAttributes);
 		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		dmEvent.objectId = objectId;
@@ -176,6 +173,25 @@ public class DataManager implements IEventDispatcher {
 		return _objects;
 	}
 	
+	public function deleteObject(objectId:String):void {
+		
+		delete _objects.Object.(@ID == objectId)[0];
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
+		dme.objectId = objectId;
+		dispatchEvent(dme);
+	}
+	
+	/**
+	 * 
+	 * @param objectId идентификатор объекта
+	 * @return XML описание объекта.
+	 * 
+	 */	
+	private function getObject(objectId:String):XML {
+		
+		return _objects.Object.(@ID == objectId)[0];
+	}
+	
 	/**
 	 * Создание нового объекта.
 	 * @param initProp Начальные свойства объекта (идентификатор типа, координаты).
@@ -202,6 +218,7 @@ public class DataManager implements IEventDispatcher {
 		attributes.Attribute.(@Name == 'top')[0] = initProp.top;
 		
 		newObject.appendChild(attributes);
+		newObject.appendChild(objectType);
 		
 		_objects.appendChild(newObject);		
 

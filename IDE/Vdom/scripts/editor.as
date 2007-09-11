@@ -13,6 +13,7 @@ import vdom.components.editor.events.DataManagerEvent;
 import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
 import vdom.MyLoader;
+import vdom.components.editor.events.WorkspaceEvent;
 
 [Bindable] private var objects:XML;
 [Bindable] private var objectDescription:XML;
@@ -42,7 +43,9 @@ private function init():void {
 	
 	editorMainCanvas.addEventListener('objectChange', objectChangeHandler);
 	editorMainCanvas.addEventListener('propsChanged', attributesChangedHandler);
+	editorMainCanvas.addEventListener(WorkspaceEvent.DELETE_OBJECT, deleteObjectHandler);
 	
+	editorDataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
 	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, attributesUpdateCompleteHandler);
 	
 	objectAttributes.addEventListener('propsChanged', attributesChangedHandler);
@@ -124,10 +127,11 @@ private function objectChangeHandler(event:Event):void {
 	
 	if(editorMainCanvas.selectedObject) {
 		objectDescription = editorDataManager.getFullAttributes(editorMainCanvas.selectedObject);
+		toolbar.type = objectDescription.Type
 	} else {
 		objectDescription = null;
+		toolbar.type = null;
 	}
-	toolbar.type = objectDescription;
 }
 
 private function objectCreatedHandler(event:Event):void {
@@ -135,6 +139,16 @@ private function objectCreatedHandler(event:Event):void {
 	objects = editorDataManager.getObjects();
 	editorMainCanvas.visible = true;
 	PopUpManager.removePopUp(ppm);
+}
+
+private function deleteObjectHandler(event:WorkspaceEvent):void {
+	
+	editorDataManager.deleteObject(event.objectID);;
+}
+
+private function objectDeletedHandler(event:DataManagerEvent):void {
+	
+	editorMainCanvas.deleteObject(event.objectId);
 }
 
 private function dragEnterHandler(event:DragEvent):void {
@@ -174,5 +188,5 @@ private function dropHandler(event:DragEvent):void {
 	
 	var newItemAtrs:XML = editorDataManager.getFullAttributes(id);
 	
-	editorMainCanvas.addNewObject(newItemAtrs);
+	editorMainCanvas.addObject(newItemAtrs);
 }

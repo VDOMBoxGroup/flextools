@@ -20,7 +20,10 @@ public class AttributesPanel extends ClosablePanel
 	
 	private var attributesGrid:Grid;
 	private var applyButton:Button;
-	private var collection:XMLListCollection;
+	
+	private var _type:XML;
+	private var _collection:XMLListCollection;
+	
 	private var fieldsArray:Array;
 	
 	public function AttributesPanel() {
@@ -30,9 +33,9 @@ public class AttributesPanel extends ClosablePanel
 		this.addEventListener(KeyboardEvent.KEY_UP, enterHandler);
 	}
 	
-	public function set dataProvider(prop:XML):void {
+	public function set dataProvider(objectDescription:XML):void {
 		
-		if(prop == null) {	
+		if(objectDescription == null) {	
 			applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
 			title = 'Attributes';
 			applyButton.visible = false;
@@ -40,30 +43,34 @@ public class AttributesPanel extends ClosablePanel
 			attributesGrid.removeAllChildren();
 			return
 		};
+		
+		_type = objectDescription.Type[0];
+		
 		//trace(prop);
-		title = 'Attributes: '+prop.Type.Information.Name;
+		title = 'Attributes: ' + _type.Information.Name;
 		help = '';
+		
 		var xl:XMLList = new XMLList();
-        xl += prop.Attributes.Attribute;
-        collection = new XMLListCollection(xl);
-
-        createChild();
-             
-        applyButton.addEventListener(MouseEvent.CLICK, applyChanges);
-        attributesGrid.visible = true;
+		xl += objectDescription.Attributes.Attribute;
+		_collection = new XMLListCollection(xl);
+		
+		createChild();
+		     
+		applyButton.addEventListener(MouseEvent.CLICK, applyChanges);
+		attributesGrid.visible = true;
 		applyButton.visible = true;
 		invalidateDisplayList();
 	}
 	
 	public function get dataProvider():XML {
 		
-		return XML(collection);
+		return XML(_collection);
 	}
 	
 	private function applyChanges(event:Event):void {
 
-		for (var i:uint = 0; i < collection.length; i++) {
-			collection[i].Value = fieldsArray[i][0][fieldsArray[i][1]];
+		for (var i:uint = 0; i < _collection.length; i++) {
+			_collection[i] = fieldsArray[i][0][fieldsArray[i][1]];
 		}
 		dispatchEvent(new Event('propsChanged'));
 	}
@@ -80,7 +87,9 @@ public class AttributesPanel extends ClosablePanel
 		var attrFieldItem:GridItem;
 		var attrLabel:Label;
 		
-		for (var i:uint = 0; i < collection.length; i++) {
+		for (var i:uint = 0; i < _collection.length; i++) {
+			
+			var attributeDescription:XML = _type.Attributes.Attribute.(Name == _collection[i].@Name)[0]
 			
 			attrRow = new GridRow();
 			attrRow.percentWidth = 100;
@@ -89,15 +98,16 @@ public class AttributesPanel extends ClosablePanel
 			attrLabel = new Label();
 			attrLabel.percentWidth = 100;
 			attrLabel.setStyle('textAlign', 'right');
-			attrLabel.text = collection[i].Name;		
+			attrLabel.text = _collection[i].@Name;		
 			attrLabelItem.addChild(attrLabel);
 			
 			attrFieldItem = new GridItem();
 			attrFieldItem.percentWidth = 100;
 			
 			var typeRE:RegExp = /(\w+)\((\d*)\)/;
-			codeInterface['type'] = collection[i].CodeInterface.match(typeRE)[1].toLowerCase();
-			codeInterface['length'] = collection[i].CodeInterface.match(typeRE)[2];
+			
+			codeInterface['type'] = attributeDescription.CodeInterface.match(typeRE)[1].toLowerCase();
+			codeInterface['length'] = attributeDescription.CodeInterface.match(typeRE)[2];
 			
 			switch(codeInterface['type']) {
 				case 'number':
@@ -109,8 +119,8 @@ public class AttributesPanel extends ClosablePanel
 					ns.minimum = 0;
 					ns.maximum = Math.pow(10, codeInterface['length']) - 1;
 					ns.percentWidth = 100;
-					ns.value = collection[i].Value.toString();
-					ns.name = i.toString();
+					ns.value = _collection[i];
+					ns.name = _collection[i].@Name.toString();
 					//ns.data = collection[i];
 					//attrField.data = collection[i].Value;
 					fieldsArray[i] = [ns, 'value'];
@@ -123,8 +133,8 @@ public class AttributesPanel extends ClosablePanel
 					ti.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
 					ti.maxChars = codeInterface['length'];
 					ti.percentWidth = 100;
-					ti.name = i.toString();
-					ti.text = collection[i].Value.toString();
+					ti.name = _collection[i].@Name.toString();
+					ti.text = _collection[i];
 					//attrField.data = collection[i].Value;
 					fieldsArray[i] = [ti, 'text'];
 					attrFieldItem.addChild(ti);
@@ -143,8 +153,8 @@ public class AttributesPanel extends ClosablePanel
 					tw.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
 					tw.maxChars = codeInterface['length'];
 					tw.percentWidth = 100;
-					tw.name = i.toString();
-					tw.text = collection[i].Attribute.Value.toString();
+					tw.name = _collection[i].@Name.toString();
+					tw.text = _collection[i];
 					//attrField.data = collection[i].Value;
 					fieldsArray[i] = [tw, 'text'];
 					attrFieldItem.addChild(tw);
@@ -179,7 +189,7 @@ public class AttributesPanel extends ClosablePanel
 	
 	private function focusInEventHandler(event:FocusEvent):void {
 		
-		help = collection[event.currentTarget.name].Help;
+		help = _type.Attributes.Attribute.(Name == event.currentTarget.name).Help;
 	}
 	
 	private function focusOutEventHandler(event:FocusEvent):void {
