@@ -33,7 +33,7 @@ package vdom.connection.soap
 		
 		
 		private  function completeListener(event:ResultEvent):void{
-			
+			//trace(ws.set_attributes.lastResult.Result);
 			// get result 
 			resultXML = XML(ws.set_attributes.lastResult.Result);
 			var evt:SoapEvent;
@@ -41,10 +41,10 @@ package vdom.connection.soap
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_S_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_S_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}
