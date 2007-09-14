@@ -39,17 +39,6 @@ public class ResizeManager extends UIComponent {
 	public static const RESIZE_HEIGHT:String = 'resize_height';
 	public static const RESIZE_ALL:String = 'resize_all';
 	
-	[Embed(source="/assets/resizeTool/up_down.png")]
-	private var verticalCursorClass:Class;
-	[Embed(source="/assets/resizeTool/left_right.png")]
-	private var horizontalCursorClass:Class;
-	[Embed(source="/assets/resizeTool/tl_dr.png")]
-	private var tlCursorClass:Class;
-	[Embed(source="/assets/resizeTool/tr_dl.png")]
-	private var trCursorClass:Class;
-	[Embed(source="/assets/resizeTool/move.png")]
-	private var ccCursorClass:Class;
-	
 	private static var classConstructed:Boolean = classConstruct();
 	private var CursorID:uint		
 			
@@ -161,22 +150,22 @@ public class ResizeManager extends UIComponent {
 			{
 				case "bc":
 				case "tc":
-					CursorID = CursorManager.setCursor(verticalCursorClass, 2, -6, -8);
+					CursorID = CursorManager.setCursor(getStyle('topDownCursor'), 2, -6, -8);
 					break;
 				case "cl":
 				case "cr":
-					CursorID = CursorManager.setCursor(horizontalCursorClass, 2, -8, -4);
+					CursorID = CursorManager.setCursor(getStyle('leftRightCursor'), 2, -8, -4);
 					break;
 				case "tl":
 				case "br":
-					CursorID = CursorManager.setCursor(tlCursorClass, 2, -8, -6);
+					CursorID = CursorManager.setCursor(getStyle('topLDownRCursor'), 2, -8, -6);
 					break;
 				case "tr":
 				case "bl":
-					CursorID = CursorManager.setCursor(trCursorClass, 2, -6, -10);
+					CursorID = CursorManager.setCursor(getStyle('topRDownLCursor'), 2, -6, -10);
 					break;
 				case "cc":
-					CursorID = CursorManager.setCursor(ccCursorClass, 2, -10, -10);
+					CursorID = CursorManager.setCursor(getStyle('moveCursor'), 2, -10, -10);
 					break;
 				default:
 					break;

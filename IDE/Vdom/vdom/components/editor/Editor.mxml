@@ -39,7 +39,7 @@
 	    		<mx:Text htmlText="{objectAttributes.help}" condenseWhite="true" width="100%" height="100%"/>
 	    	</containers:ClosablePanel>
 	    	<containers:ClosablePanel id="pagePanel" title="Pages"  width="200">
-	    		<mx:List id="pageList" dataProvider="{editorDataManager.pages.Object}" labelField="@Name" width="100%" change="pageChange()"/>
+	    		<mx:List id="pageList" dataProvider="{editorDataManager.pages.Object}" labelField="@Name" width="100%" minHeight="0" change="pageChange()"/>
 	    	</containers:ClosablePanel>
 		</mx:VBox>
 	</mx:HBox>

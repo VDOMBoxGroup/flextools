@@ -8,8 +8,7 @@ import mx.core.EdgeMetrics;
 public class ClosablePanel extends Panel {
 	
 	private var collapseButton:Button;
-	private var switcher:Boolean;
-	private var lastHeight:Number;
+	protected var switcher:Boolean;
 	private var _dataProvider:Object;
 	
 	public function ClosablePanel() {
@@ -62,13 +61,12 @@ public class ClosablePanel extends Panel {
 	        collapseButton.setStyle("downSkin",CollOnButtonDown);
 	        collapseButton.setStyle("overSkin",CollOnButtonOver);
 	        collapseButton.setStyle("disabledSkin",CollOnButtonDisabled);
-			height = lastHeight;
+			height = NaN;
 		} else {
 			collapseButton.setStyle("upSkin", CollOffButtonUp);
 	        collapseButton.setStyle("downSkin",CollOffButtonDown);
 	        collapseButton.setStyle("overSkin",CollOffButtonOver);
 	        collapseButton.setStyle("disabledSkin",CollOffButtonDisabled);
-			lastHeight = height;
 			height = getStyle('headerHeight');
 		}
 		switcher = !switcher;

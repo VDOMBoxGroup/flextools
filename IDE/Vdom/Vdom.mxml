@@ -15,39 +15,11 @@
 >
 	
 	<mx:Script source="scripts/Vdom.as"/>
-	<mx:Style source="theme/AeonGraphical.css" />
 	<mx:Style>
 		Application {
 		
 		}
-		.extPan {
-			rounded-bottom-corners:true;
-			padding-top:10;
-			padding-left:5;
-			padding-right:5;
-			padding-bottom:5;
-			borderAlpha: 1;
-			borderThicknessLeft: 0;
-			borderThicknessTop: 0;
-			borderThicknessBottom: 0;
-			borderThicknessRight: 0;
-			roundedBottomCorners: true;
-			headerHeight: 0;
-			
-			highlightAlphas: 0, 0.12;
-			headerColors: #4e84df, #0f6cc3;
-			footerColors: #efaa15, #e6780c;
-			titleStyleName: "mypanelTitle";
-		}
 		
-		ControlBar {
-			paddingTop:2px;
-			paddingBottom:2px;
-			height:15px;
-		}
-	    .myTabStyle {
-			fillColors: #cccccc, #cccc66;
-	    }
 
 
 	</mx:Style>
