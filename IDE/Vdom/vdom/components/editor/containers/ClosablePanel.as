@@ -24,10 +24,10 @@ public class ClosablePanel extends Panel {
 	        collapseButton.explicitWidth = collapseButton.explicitHeight = 16;
 	        
 	        collapseButton.focusEnabled = false;
-	        collapseButton.setStyle("upSkin", CollOnButtonUp);
-	        collapseButton.setStyle("downSkin", CollOnButtonDown);
-	        collapseButton.setStyle("overSkin", CollOnButtonOver);
-	        collapseButton.setStyle("disabledSkin", CollOnButtonDisabled);
+	        collapseButton.setStyle("upSkin", getStyle('CollapseButtonOnButtonUp'));
+	        collapseButton.setStyle("downSkin", getStyle('CollapseButtonOnButtonDown'));
+	        collapseButton.setStyle("overSkin", getStyle('CollapseButtonOnButtonOver'));
+	        collapseButton.setStyle("disabledSkin", getStyle('CollapseButtonOnButtonDisabled'));
 	        collapseButton.enabled = enabled;
 	        collapseButton.styleName = this;	
 	        
@@ -57,16 +57,16 @@ public class ClosablePanel extends Panel {
 	private function collapseButton_clickHandler(event:MouseEvent):void {
 		
 		if(switcher) {
-			collapseButton.setStyle("upSkin", CollOnButtonUp);
-	        collapseButton.setStyle("downSkin",CollOnButtonDown);
-	        collapseButton.setStyle("overSkin",CollOnButtonOver);
-	        collapseButton.setStyle("disabledSkin",CollOnButtonDisabled);
+			collapseButton.setStyle("upSkin", getStyle('CollapseButtonOnButtonUp'));
+	        collapseButton.setStyle("downSkin",getStyle('CollapseButtonOnButtonDown'));
+	        collapseButton.setStyle("overSkin",getStyle('CollapseButtonOnButtonOver'));
+	        collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOnButtonDisabled'));
 			height = NaN;
 		} else {
-			collapseButton.setStyle("upSkin", CollOffButtonUp);
-	        collapseButton.setStyle("downSkin",CollOffButtonDown);
-	        collapseButton.setStyle("overSkin",CollOffButtonOver);
-	        collapseButton.setStyle("disabledSkin",CollOffButtonDisabled);
+			collapseButton.setStyle("upSkin", getStyle('CollapseButtonOffButtonUp'));
+	        collapseButton.setStyle("downSkin",getStyle('CollapseButtonOffButtonDown'));
+	        collapseButton.setStyle("overSkin",getStyle('CollapseButtonOffButtonOver'));
+	        collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOffButtonDisabled'));
 			height = getStyle('headerHeight');
 		}
 		switcher = !switcher;
