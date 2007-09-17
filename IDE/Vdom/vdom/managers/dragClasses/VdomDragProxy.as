@@ -1,17 +1,19 @@
 package vdom.managers.dragClasses
 {
-import mx.core.UIComponent;
-import mx.core.DragSource;
-import mx.core.IUIComponent;
-import flash.events.MouseEvent;
-import flash.events.Event;
 import flash.display.DisplayObject;
-import mx.events.DragEvent;
-import flash.geom.Point;
-import mx.managers.ISystemManager;
-import mx.managers.DragManager;
 import flash.display.DisplayObjectContainer;
 import flash.display.InteractiveObject;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.geom.Point;
+
+import mx.core.DragSource;
+import mx.core.IUIComponent;
+import mx.core.UIComponent;
+import mx.events.DragEvent;
+import mx.managers.DragManager;
+import mx.managers.ISystemManager;
+
 import vdom.managers.VdomDragManager;
 
 /**

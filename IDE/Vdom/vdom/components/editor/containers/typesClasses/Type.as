@@ -1,10 +1,11 @@
 package vdom.components.editor.containers.typesClasses {
 	
 import flash.events.MouseEvent;
-import mx.core.DragSource;
-import mx.containers.VBox;
+
 import mx.containers.Canvas;
+import mx.containers.VBox;
 import mx.controls.Label;
+import mx.core.DragSource;
 
 import vdom.managers.VdomDragManager;
 	

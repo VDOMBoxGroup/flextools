@@ -1,17 +1,18 @@
 package vdom.managers {
 
-import flash.events.IEventDispatcher;
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
-import mx.core.Application;
 
-import vdom.connection.soap.SoapEvent;
-import vdom.connection.soap.Soap;
+import mx.core.Application;
 import mx.messaging.Producer;
-import vdom.connection.Proxy;
+
 import vdom.components.editor.Editor;
+import vdom.connection.Proxy;
+import vdom.connection.soap.Soap;
+import vdom.connection.soap.SoapEvent;
 import vdom.events.DataManagerEvent;
 
 public class DataManager implements IEventDispatcher {

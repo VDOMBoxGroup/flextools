@@ -1,9 +1,10 @@
 package vdom.managers
 {
-import mx.core.IUIComponent;
+import flash.events.MouseEvent;
+
 import mx.core.DragSource;
 import mx.core.IFlexDisplayObject;
-import flash.events.MouseEvent;
+import mx.core.IUIComponent;
 	
 [ExcludeClass]
 

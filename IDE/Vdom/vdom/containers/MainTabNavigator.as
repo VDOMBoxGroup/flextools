@@ -1,9 +1,10 @@
 package vdom.containers
 {
-	import mx.containers.TabNavigator;
-	import mx.controls.TabBar;
-	import mx.controls.Button;
 	import flash.events.FocusEvent;
+	
+	import mx.containers.TabNavigator;
+	import mx.controls.Button;
+	import mx.controls.TabBar;
 	
 	[Style(name="tabPaddingLeft", type="Number", format="Length", inherit="no")]
 	

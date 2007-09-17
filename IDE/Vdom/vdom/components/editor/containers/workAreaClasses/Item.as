@@ -1,9 +1,10 @@
 package vdom.components.editor.containers.workAreaClasses {
 
 import flash.display.Graphics;
-import mx.core.UIComponent;
+
 import mx.containers.Canvas;
 import mx.controls.Label;
+import mx.core.UIComponent;
 
 public dynamic class Item extends Canvas {
 	

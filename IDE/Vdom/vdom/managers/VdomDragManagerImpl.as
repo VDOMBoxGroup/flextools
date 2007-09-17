@@ -1,14 +1,16 @@
 package vdom.managers
 {
-import mx.core.IUIComponent;
-import mx.core.DragSource;
-import flash.events.MouseEvent;
-import mx.core.IFlexDisplayObject;
-import mx.managers.ISystemManager;
 import flash.display.DisplayObject;
+import flash.events.MouseEvent;
 import flash.geom.Point;
-import mx.styles.StyleManager;
+
+import mx.core.DragSource;
+import mx.core.IFlexDisplayObject;
+import mx.core.IUIComponent;
+import mx.managers.ISystemManager;
 import mx.styles.CSSStyleDeclaration;
+import mx.styles.StyleManager;
+
 import vdom.managers.dragClasses.VdomDragProxy;
 
 	
