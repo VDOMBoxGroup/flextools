@@ -1,4 +1,4 @@
-package vdom.components.editor.managers.dragClasses
+package vdom.managers.dragClasses
 {
 import mx.core.UIComponent;
 import mx.core.DragSource;
@@ -12,7 +12,7 @@ import mx.managers.ISystemManager;
 import mx.managers.DragManager;
 import flash.display.DisplayObjectContainer;
 import flash.display.InteractiveObject;
-import vdom.components.editor.managers.VdomDragManager;
+import vdom.managers.VdomDragManager;
 
 /**
  *  @private

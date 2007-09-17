@@ -1,4 +1,4 @@
-package vdom.components.editor.events
+package vdom.events
 {
 
 import flash.events.Event;

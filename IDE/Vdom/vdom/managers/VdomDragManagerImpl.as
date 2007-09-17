@@ -1,4 +1,4 @@
-package vdom.components.editor.managers
+package vdom.managers
 {
 import mx.core.IUIComponent;
 import mx.core.DragSource;
@@ -9,7 +9,7 @@ import flash.display.DisplayObject;
 import flash.geom.Point;
 import mx.styles.StyleManager;
 import mx.styles.CSSStyleDeclaration;
-import vdom.components.editor.managers.dragClasses.VdomDragProxy;
+import vdom.managers.dragClasses.VdomDragProxy;
 
 	
 [ExcludeClass]

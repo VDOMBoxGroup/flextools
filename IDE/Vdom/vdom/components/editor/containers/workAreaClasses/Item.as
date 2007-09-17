@@ -1,4 +1,4 @@
-package vdom.components.editor.containers.workspaceClasses {
+package vdom.components.editor.containers.workAreaClasses {
 
 import flash.display.Graphics;
 import mx.core.UIComponent;

@@ -7,13 +7,13 @@ import mx.containers.Canvas;
 import mx.controls.Alert;
 
 import vdom.components.editor.containers.typesClasses.Type;
-import vdom.components.editor.containers.Workspace;
-import vdom.components.editor.managers.VdomDragManager;
-import vdom.components.editor.events.DataManagerEvent;
+import vdom.managers.VdomDragManager;
 import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
 import vdom.MyLoader;
-import vdom.components.editor.events.WorkspaceEvent;
+import vdom.events.DataManagerEvent;
+import vdom.components.editor.events.WorkAreaEvent;
+import vdom.components.editor.containers.WorkArea;
 
 [Bindable] private var objects:XML;
 [Bindable] private var objectDescription:XML;
@@ -38,12 +38,12 @@ private function init():void {
 	
 	addEventListener('objectCreated', objectCreatedHandler);
 	
-	editorMainCanvas.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
-	editorMainCanvas.addEventListener(DragEvent.DRAG_DROP, dropHandler);
+	workArea.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
+	workArea.addEventListener(DragEvent.DRAG_DROP, dropHandler);
 	
-	editorMainCanvas.addEventListener('objectChange', objectChangeHandler);
-	editorMainCanvas.addEventListener('propsChanged', attributesChangedHandler);
-	editorMainCanvas.addEventListener(WorkspaceEvent.DELETE_OBJECT, deleteObjectHandler);
+	workArea.addEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
+	workArea.addEventListener(WorkAreaEvent.PROPS_CHANGE, attributesChangedHandler);
+	workArea.addEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
 	
 	editorDataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
 	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, attributesUpdateCompleteHandler);
@@ -68,7 +68,7 @@ private function createPage():void {
 
 private function hide():void {
 	
-	editorMainCanvas.visible = false;
+	workArea.visible = false;
 }
 
 private function createTypes():void {
@@ -85,11 +85,11 @@ private function pageChange():void {
 
 private function createObjects(objectsXML:XML):void {
 	
-	editorMainCanvas.destroyObjects();
+	workArea.destroyObjects();
 	
 	for each(var itemAttrs:XML in objectsXML.Object) {
 		
-		editorMainCanvas.addObject(itemAttrs);
+		workArea.addObject(itemAttrs);
 	}
 	
 	dispatchEvent(new Event('objectCreated'));	
@@ -103,7 +103,7 @@ private function initCompleteHandler(event:Event):void {
 
 private function attributesUpdateCompleteHandler(event:DataManagerEvent):void {
 	
-	editorMainCanvas.updateObject(editorDataManager.getAttributes(event.objectId));
+	workArea.updateObject(editorDataManager.getAttributes(event.objectId));
 	objectDescription = editorDataManager.getFullAttributes(event.objectId);
 }
 
@@ -125,8 +125,8 @@ private function objectsLoadHandler(event:Event):void {
 
 private function objectChangeHandler(event:Event):void {
 	
-	if(editorMainCanvas.selectedObject) {
-		objectDescription = editorDataManager.getFullAttributes(editorMainCanvas.selectedObject);
+	if(workArea.selectedObjectId) {
+		objectDescription = editorDataManager.getFullAttributes(workArea.selectedObjectId);
 		toolbar.type = objectDescription.Type
 	} else {
 		objectDescription = null;
@@ -137,18 +137,18 @@ private function objectChangeHandler(event:Event):void {
 private function objectCreatedHandler(event:Event):void {
 	
 	objects = editorDataManager.getObjects();
-	editorMainCanvas.visible = true;
+	workArea.visible = true;
 	PopUpManager.removePopUp(ppm);
 }
 
-private function deleteObjectHandler(event:WorkspaceEvent):void {
+private function deleteObjectHandler(event:WorkAreaEvent):void {
 	
 	editorDataManager.deleteObject(event.objectID);;
 }
 
 private function objectDeletedHandler(event:DataManagerEvent):void {
 	
-	editorMainCanvas.deleteObject(event.objectId);
+	workArea.deleteObject(event.objectId);
 }
 
 private function dragEnterHandler(event:DragEvent):void {
@@ -159,9 +159,9 @@ private function dragEnterHandler(event:DragEvent):void {
 
 private function dropHandler(event:DragEvent):void {
 	
-	var workspace:Workspace = Workspace(event.currentTarget);
+	var workArea:WorkArea = WorkArea(event.currentTarget);
 	
-	var bm:EdgeMetrics = workspace.borderMetrics;
+	var bm:EdgeMetrics = workArea.borderMetrics;
 	
 	var typeId:String = event.dragSource.dataForFormat('Object').typeId;
 	var type:Object = editorDataManager.getType(typeId);
@@ -172,8 +172,8 @@ private function dropHandler(event:DragEvent):void {
 		return;
 	}
 	
-	var objectLeft:Number = workspace.mouseX - 25 - bm.left;
-	var objectTop:Number = workspace.mouseY - 25 - bm.top;
+	var objectLeft:Number = workArea.mouseX - 25 - bm.left;
+	var objectTop:Number = workArea.mouseY - 25 - bm.top;
 	
 	objectLeft = (objectLeft < 0) ? 0 : objectLeft;
 	objectTop = (objectTop < 0) ? 0 : objectTop;
@@ -188,5 +188,5 @@ private function dropHandler(event:DragEvent):void {
 	
 	var newItemAtrs:XML = editorDataManager.getFullAttributes(id);
 	
-	editorMainCanvas.addObject(newItemAtrs);
+	workArea.addObject(newItemAtrs);
 }

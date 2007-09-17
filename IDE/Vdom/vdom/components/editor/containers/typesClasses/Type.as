@@ -6,7 +6,7 @@ import mx.containers.VBox;
 import mx.containers.Canvas;
 import mx.controls.Label;
 
-import vdom.components.editor.managers.VdomDragManager;
+import vdom.managers.VdomDragManager;
 	
 public class Type extends VBox {
 	protected var _id:String;

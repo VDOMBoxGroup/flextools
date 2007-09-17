@@ -82,15 +82,6 @@ public class ResizeManager extends UIComponent {
 	
 	private static function classConstruct():Boolean 
 	{
-		if (!StyleManager.getStyleDeclaration("ResizeManager")) {
-			var newStyleDeclaration:CSSStyleDeclaration = new CSSStyleDeclaration();
-			newStyleDeclaration.setStyle("boxSize", 6);
-			//newStyleDeclaration.setStyle("backgroundColor", 0xFFFFFF);
-			newStyleDeclaration.setStyle("borderColor", 0xff0000);
-			newStyleDeclaration.setStyle("borderAlpha", 0.0);
-			newStyleDeclaration.setStyle("backgroundAlpha", .9);
-			StyleManager.setStyleDeclaration("ResizeManager", newStyleDeclaration, true);
-		}
 		return true;
 	}
 	
@@ -226,15 +217,6 @@ public class ResizeManager extends UIComponent {
 		if(moving && event.buttonDown)
 		{
 			var bm:EdgeMetrics =  Canvas(item.parent).borderMetrics;
-			
-			/* var itemX:Number = item.x;
-			var itemY:Number = item.y;
-			
-			var itemXRight:Number = itemX + item.width;
-			var itemYBottom:Number = itemY + item.height;
-			
-			var contWidth:Number = item.parent.width;
-			var contHeight:Number = item.parent.height; */
 			
 			var mx:Number = mouseX;
 			var my:Number = mouseY;
@@ -450,15 +432,12 @@ public class ResizeManager extends UIComponent {
 		
 		var g:Graphics = cc_box.graphics;
 		g.clear();
-		g.lineStyle(getStyle('boxSize'), 0, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+		g.lineStyle(getStyle('boxSize'), 1, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 		g.drawRect(0, 0, measuredWidth, measuredHeight);
 		g.endFill();
 		graphics.clear();			
-		//graphics.beginFill(backgroundColor, backgroundAlpha);
-		graphics.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+		graphics.lineStyle(2, 0, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 		graphics.drawRect(0, 0, measuredWidth, measuredHeight);
-		//graphics.lineStyle(this.getStyle('boxSize'), borderColor, borderAlpha, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		//graphics.drawRect(0, 0, measuredWidth, measuredHeight);
 		graphics.endFill();
 
 	}

@@ -34,8 +34,8 @@ private var ppm:Canvas;
 
 private function init():void {
 	
-	Singleton.registerClass("vdom.components.editor.managers::IVdomDragManager", 
-		Class(getDefinitionByName("vdom.components.editor.managers::VdomDragManagerImpl")));
+	Singleton.registerClass("vdom.managers::IVdomDragManager", 
+		Class(getDefinitionByName("vdom.managers::VdomDragManagerImpl")));
 	soap = Soap.getInstance();		
 	var wsdl:String= 'http://192.168.0.24:82/vdom.wsdl';
 	soap.init(wsdl);

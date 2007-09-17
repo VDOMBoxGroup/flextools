@@ -7,12 +7,12 @@ import flash.net.URLLoader;
 import flash.net.URLRequest;
 import mx.core.Application;
 
-import vdom.components.editor.events.DataManagerEvent;
 import vdom.connection.soap.SoapEvent;
 import vdom.connection.soap.Soap;
 import mx.messaging.Producer;
 import vdom.connection.Proxy;
 import vdom.components.editor.Editor;
+import vdom.events.DataManagerEvent;
 
 public class DataManager implements IEventDispatcher {
 	

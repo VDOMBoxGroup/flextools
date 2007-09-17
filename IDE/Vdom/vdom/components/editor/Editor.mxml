@@ -22,7 +22,7 @@
 	    />
 	    
 	    <mx:VBox id="main" width="100%" bottom="0" height="100%">
-	    	<containers:Workspace id="editorMainCanvas"
+	    	<containers:WorkArea id="workArea"
 	    		width="100%" height="100%" visible="false"
 	    		backgroundColor="#ffffff" backgroundAlpha="1.0" 
 	    		borderStyle="solid" borderThickness="2" borderColor="#000000"

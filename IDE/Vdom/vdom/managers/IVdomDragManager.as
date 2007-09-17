@@ -1,4 +1,4 @@
-package vdom.components.editor.managers
+package vdom.managers
 {
 import mx.core.IUIComponent;
 import mx.core.DragSource;

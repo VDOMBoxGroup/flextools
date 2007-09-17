@@ -1,26 +1,28 @@
 package vdom.components.editor.containers {
 
-import flash.events.MouseEvent;
 import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.events.KeyboardEvent;
+
 import mx.containers.Canvas;
 
 import vdom.components.editor.events.ResizeManagerEvent;
-import vdom.components.editor.containers.workspaceClasses.Item;
+import vdom.components.editor.containers.workAreaClasses.Item;
 import vdom.components.editor.managers.ResizeManager;
 import vdom.managers.DataManager;
-import flash.events.KeyboardEvent;
-import vdom.components.editor.events.WorkspaceEvent;
 
-public class Workspace extends Canvas {
+import vdom.components.editor.events.WorkAreaEvent;
+
+public class WorkArea extends Canvas {
 	
-	public var selectedObject:String;
+	public var selectedObjectId:String;
 	
 	private var resizer:ResizeManager;
 	private var dataManager:DataManager;
 	private var _elements:Object;
 	private var collection:XML;
 	
-	public function Workspace() {
+	public function WorkArea() {
 		
 		super();
 		dataManager = DataManager.getInstance();
@@ -61,7 +63,7 @@ public class Workspace extends Canvas {
 	 */	
 	public function destroyObjects():void {
 		
-		selectedObject = null;
+		selectedObjectId = null;
 		removeAllChildren();
 	}
 	/**
@@ -73,9 +75,9 @@ public class Workspace extends Canvas {
 		
 		removeChild(_elements[objectId]);
 		setFocus();
-		selectedObject = null;
+		selectedObjectId = null;
 		removeChild(resizer);
-		dispatchEvent(new Event('objectChange'));
+		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
 	public function set dataProvider(attributes:XML):void {
@@ -193,7 +195,7 @@ public class Workspace extends Canvas {
 		collection.Attribute.(@Name == 'width')[0] = event.properties['width'];
 		collection.Attribute.(@Name == 'height')[0] = event.properties['height'];
 		
-		dispatchEvent(new Event('propsChanged'));
+		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.PROPS_CHANGE));
 	}
 	
 	/**
@@ -202,9 +204,9 @@ public class Workspace extends Canvas {
 	private function deleteObjectHandler(event:KeyboardEvent):void {
 		
 		if(event.keyCode == 46) {
-			if(selectedObject) {
-				var we:WorkspaceEvent = new WorkspaceEvent(WorkspaceEvent.DELETE_OBJECT);
-				we.objectID = selectedObject;
+			if(selectedObjectId) {
+				var we:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.DELETE_OBJECT);
+				we.objectID = selectedObjectId;
 				dispatchEvent(we);
 			}
 		}
@@ -215,24 +217,24 @@ public class Workspace extends Canvas {
      */
 	private function objectClickHandler(event:MouseEvent):void {
 		
-		if(event.currentTarget.objectId == selectedObject) return;
+		if(event.currentTarget.objectId == selectedObjectId) return;
 		
-		if(selectedObject) {
+		if(selectedObjectId) {
 			removeEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-			selectedObject = null;
+			selectedObjectId = null;
 			removeChild(resizer);
 		}
 		
-		selectedObject = Item(event.currentTarget).objectId;
-		_elements[selectedObject].content.setFocus();
+		selectedObjectId = Item(event.currentTarget).objectId;
+		_elements[selectedObjectId].content.setFocus();
 		
 		addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-		resizer.resizeMode = _elements[selectedObject].resizeMode;
-		resizer.moveMode = _elements[selectedObject].moveMode;
-		resizer.item = _elements[selectedObject];
+		resizer.resizeMode = _elements[selectedObjectId].resizeMode;
+		resizer.moveMode = _elements[selectedObjectId].moveMode;
+		resizer.item = _elements[selectedObjectId];
 		addChild(resizer);
 		event.stopPropagation();
-		dispatchEvent(new Event('objectChange'));
+		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
 	/**
@@ -240,11 +242,11 @@ public class Workspace extends Canvas {
      */
 	private function mainClickHandler(event:MouseEvent):void {
 		
-		if(event.target == event.currentTarget && selectedObject) {
+		if(event.target == event.currentTarget && selectedObjectId) {
 			setFocus();
-			selectedObject = null;
+			selectedObjectId = null;
 			removeChild(resizer);
-			dispatchEvent(new Event('objectChange'));
+			dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 		}
 	}
 }
