@@ -19,7 +19,7 @@ public class VdomDragManager
 	 *  @private
 	 */
 	private static var impl:IVdomDragManager = Singleton
-		.getInstance("vdom.components.editor.managers::IVdomDragManager") as IVdomDragManager;
+		.getInstance("vdom.managers::IVdomDragManager") as IVdomDragManager;
 	
 	//--------------------------------------------------------------------------
 	//
