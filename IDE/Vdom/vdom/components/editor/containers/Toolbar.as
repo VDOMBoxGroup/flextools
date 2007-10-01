@@ -30,17 +30,16 @@ public class Toolbar extends Canvas
     }
     
     public function set type(objectType:Object):void {
+    	
     	if(objectType)
-    		_interfaceType = parseInt(objectType.Information.InterfaceType.toString());
+    		_interfaceType = parseInt(objectType.Type.Information.InterfaceType.toString());
     	else
     		_interfaceType = 0;
     		
     	invalidateDisplayList();
-    	
     }
     
-    override protected function updateDisplayList(unscaledWidth:Number,
-												  unscaledHeight:Number):void
+    override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 	{
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
 		

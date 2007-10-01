@@ -24,7 +24,7 @@
 		
 		return _allowTabKey;
 	}
-
+	
 	private function catchTabKey(e:FocusEvent = null):void {
 	
 		if(e) {

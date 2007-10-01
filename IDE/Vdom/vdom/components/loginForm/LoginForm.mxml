@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	width="100%" height="100%"
+	
+	creationComplete="init();"
+	show="show();"
+	hide="hide();">
+
+	<mx:Script source="includes/loginForm.as"/>
+	
+	<mx:Form defaultButton="{submitButton}" horizontalCenter="0" verticalCenter="0" borderColor="#808080" borderStyle="solid">
+		<mx:FormItem label="{languages.language.(@label == 'login_username')}">
+			<mx:TextInput id="username" 
+				width="100"/>
+		</mx:FormItem>
+		<mx:FormItem label="{languages.language.(@label == 'login_password')}">
+			<mx:TextInput id="password"
+				width="100" 
+				displayAsPassword="true" text="777"/>
+		</mx:FormItem>
+		<mx:FormItem>
+			<mx:ComboBox id="selectLang"
+				width="80"
+				dataProvider="{languageList.language}"
+				labelField="@label"
+		 		fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
+		 		change="changeLanguageHandler(event);"/>
+		</mx:FormItem>
+		<mx:FormItem>
+			<mx:Button id="submitButton" 
+				label="{languages.language.(@label == 'login_sendbutton')}"
+				click="submitLogin(event);"/>
+		</mx:FormItem>
+	</mx:Form>
+</mx:Canvas>

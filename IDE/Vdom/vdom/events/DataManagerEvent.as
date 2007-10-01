@@ -21,6 +21,7 @@ public class DataManagerEvent extends Event
 	}
 
     // Define static constant.
+    public static const INIT_COMPLETE:String = 'initComplete';
 	public static const TYPES_LOADED:String = 'typesLoaded';
 	public static const OBJECTS_LOADED:String = 'objectsLoaded';
 	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';

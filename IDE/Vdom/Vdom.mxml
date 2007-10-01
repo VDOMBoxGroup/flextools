@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
 	
-	creationComplete="init();" 
+	initialize="initalizeHandler();"
 	
 	backgroundGradientColors="[#ffffff, #ffffff]" 
 	minWidth="800" minHeight="400"
@@ -12,40 +12,28 @@
 	xmlns:controls="vdom.containers.*" 
 	xmlns:editor="vdom.components.editor.*"
 	xmlns:scriptEditor="vdom.components.scriptEditor.*"
->
+	xmlns:loginForm="vdom.components.loginForm.*" 
+	xmlns:main="vdom.components.main.*">
 	
-	<mx:Script source="scripts/Vdom.as"/>
+	<mx:Script source="includes/Vdom.as"/>
 	
-	<mx:XML source="settings.xml" id="settings" />
+	<mx:XML source="langs/languages.xml" id="languageList" />
+	<mx:XML source="langs/translation.xml" id="languagesTranslation" />
 	
 	<mx:ViewStack id="viewstack" width="100%" height="100%">
-	<mx:Canvas id="auth" width="100%" height="100%">
-		<mx:Form verticalCenter="0" borderStyle="solid" cornerRadius="4" horizontalCenter="0">
-			<mx:FormHeading label="Auth"/>
-			<mx:FormItem label="Login">
-				<mx:TextInput id="loginText"/>
-			</mx:FormItem>
-			<mx:FormItem label="Password">
-				<mx:TextInput id="passwordText"/>
-			</mx:FormItem>
-			<mx:FormItem>
-				<mx:Button label="OK" click="checkAuth()"/>
-			</mx:FormItem>
-		</mx:Form>
-	</mx:Canvas>
+	
+	<loginForm:LoginForm creationComplete="loginCreationComleteHandler(event);"/>
+	
 	<mx:Canvas id="main" creationComplete="mainInitHandler(event)" width="100%" height="100%">
 	<mx:ApplicationControlBar
 		top="0" left="0" right="0" height="40" 
 		fillColors="[#000000, #000000]" fillAlphas="[0.63, 1.0]" cornerRadius="0" dock="true">
 		<mx:Spacer x="10" y="10" width="100%"/>
-		<mx:Label id="authText" color="#ffffff" fontWeight="bold" fontFamily="Arial" fontSize="15" textAlign="center" text="{'Account: '+mtAuth.loginName}"/>
-		
 		<mx:Spacer x="10" y="10" width="100%"/>
 		<mx:ComboBox id="selectLang" width="80"
-			creationComplete="setDefaultLanguage()"
-			change="changeEvt(event)" 
-			dataProvider="{settings.languages.language}" 
-			labelField="@title"
+			
+			dataProvider="{languagesTranslation.language}" 
+			labelField="@label"
 		 fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]">
 		</mx:ComboBox>
 	</mx:ApplicationControlBar>
@@ -53,22 +41,23 @@
 	<controls:MainTabNavigator id="tabPanel"
 		top="60" left="10" right="10"
 		paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" tabPaddingLeft="80"
-		borderColor="#808080" borderThickness="1"  fillColors="[#c0c0c0, #c0c0c0]" fillAlphas="[1.0, 1.0]"
-		height="150"
-	>
-		<mx:Canvas label="{mtLang.lang.main_tab_panel.appmaintab}" width="100%" height="100%" id="appManTab" show="{placeCanvas.selectedChild=appManCanv}" verticalScrollPolicy="off">
-			<mx:HBox horizontalAlign="left" horizontalGap="5" verticalAlign="middle" top="0" bottom="0" width="100%" verticalScrollPolicy="off">
-				<controls:ExtendedPanel styleName="extPan" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" width="100">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.appmain_panel.news}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" width="100">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.appmain_panel.steps}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1">
+		borderColor="#808080" borderThickness="1" fillColors="[#c0c0c0, #c0c0c0]" fillAlphas="[1.0, 1.0]"
+		height="150">
+		
+		<mx:Canvas id="appManTab" label="{languages.language.(@label == 'main_title')}" 
+			width="100%" height="100%" verticalScrollPolicy="off"
+			show="{placeCanvas.selectedChild=mainCanv}">
+			
+			<mx:HBox  
+				top="0" bottom="0" width="100%" 
+				horizontalAlign="left" horizontalGap="5" verticalAlign="middle" verticalScrollPolicy="off">
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_steps')}" />
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_search')}"/>
+
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_search')}"  width="250">
+				
 					<mx:HBox width="100%">
 						<mx:Button label="Find" height="61"/>
 						<mx:VBox width="100%" horizontalAlign="right">
@@ -77,97 +66,95 @@
 							<mx:Button label="Go"/>
 						</mx:VBox>
 					</mx:HBox>
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.appmain_panel.search}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" width="200">
-					<mx:List width="100%" height="100%" labelField="@id" id="applicationListContainer" 
-						change="List(event.target).selectedItem.data"/>
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.appmain_panel.applist}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" width="100">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.appmain_panel.appinfo}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
+					
+				</controls:ActionPanel>
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_applist')}" width="200">
+				
+					<mx:HorizontalList id="applicationListContainer"
+						minWidth="0" minHeight="0" height="78" labelField="@id" 
+						itemRenderer="vdom.containers.Thumbnail" 
+						change="HorizontalList(event.target).selectedItem.data"/>
+						
+				</controls:ActionPanel>
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_appinfo')}" width="100" />
+				
 			</mx:HBox>
 		</mx:Canvas>
-		<mx:Canvas label="{mtLang.lang.main_tab_panel.editortab}" width="100%" height="100%" id="editorTab" show="{placeCanvas.selectedChild=editorCanv}">
-			<mx:HBox horizontalAlign="left" horizontalGap="5" verticalAlign="middle" top="0" bottom="0" width="100%">
-				<controls:ExtendedPanel styleName="extPan" width="100" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" click="{placeCanvas.selectedChild=editorCanv}">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.editor_panel.edition}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" width="100" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1" click="{placeCanvas.selectedChild=scriptCanv}">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.editor_panel.script}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" width="100" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.editor_panel.preview}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" width="100" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.editor_panel.tree}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" width="100" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.editor_panel.analyse}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" width="100" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.editor_panel.statistics}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
-				<controls:ExtendedPanel styleName="extPan" width="100" height="100" borderColor="#808080" borderStyle="solid" cornerRadius="5" borderThickness="1">
-					<mx:ControlBar horizontalAlign="center" x="0" y="76">
-						<mx:Label text="{mtLang.lang.editor_panel.events}"/>
-					</mx:ControlBar>
-				</controls:ExtendedPanel>
+		
+		<mx:Canvas id="editorTab"
+			label="{languages.language.(@label == 'editor_title')}" width="100%" height="100%"  
+			show="{placeCanvas.selectedChild=editorCanv}">
+			
+			<mx:HBox 
+				top="0" bottom="0" width="100%" horizontalAlign="left" horizontalGap="5" verticalAlign="middle">
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_edition')}" 
+					click="{placeCanvas.selectedChild=editorCanv}"/>
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_script')}" 
+					click="{placeCanvas.selectedChild=scriptCanv}"/>
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_preview')}" />
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_tree')}" />
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_analyse')}" />
+				
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_statistics')}" />
+
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_events')}" />
+
 			</mx:HBox>
 		</mx:Canvas>
-		<mx:Canvas label="{mtLang.lang.main_tab_panel.multilintab}" width="100%" height="100%" id="multilinTab" show="{placeCanvas.selectedChild=multilinCanv}">
+		<mx:Canvas id="multilinTab"
+			label="{languages.language.(@label == 'mling_title')}" width="100%" height="100%"  
+			show="{placeCanvas.selectedChild=multilinCanv}">
 		</mx:Canvas>
-		<mx:Canvas label="{mtLang.lang.main_tab_panel.portalmantab}" width="100%" height="100%" id="portalManTab" show="{placeCanvas.selectedChild=portalManCanv}">
+		<mx:Canvas id="portalManTab"
+			label="{languages.language.(@label == 'portal_title')}" width="100%" height="100%" 
+			show="{placeCanvas.selectedChild=portalManCanv}">
 		</mx:Canvas>
-		<mx:Canvas label="{mtLang.lang.main_tab_panel.publishtab}" width="100%" height="100%" id="publishTab" show="{placeCanvas.selectedChild=publishCanv}">
+		<mx:Canvas id="publishTab"
+			label="{languages.language.(@label == 'publish_title')}" width="100%" height="100%" 
+			show="{placeCanvas.selectedChild=publishCanv}">
 		</mx:Canvas>
-		<mx:Canvas label="{mtLang.lang.main_tab_panel.safeguardtab}" width="100%" height="100%" id="safeguardTab" show="{placeCanvas.selectedChild=safeguardCanv}">
+		<mx:Canvas id="safeguardTab"
+			label="{languages.language.(@label == 'safe_title')}" width="100%" height="100%"  
+			show="{placeCanvas.selectedChild=safeguardCanv}">
 		</mx:Canvas>
-		<mx:Canvas label="{mtLang.lang.main_tab_panel.vdomtab}" width="100%" height="100%" id="vdomTab" show="{placeCanvas.selectedChild=vdomCanv}">
+		<mx:Canvas id="vdomTab"
+			label="{languages.language.(@label == 'vdom_title')}" width="100%" height="100%"  
+			show="{placeCanvas.selectedChild=vdomCanv}">
 		</mx:Canvas>
 	</controls:MainTabNavigator>
-	<mx:ViewStack id="placeCanvas" borderStyle="solid" borderThickness="1" borderColor="#808080" left="10" right="10" top="220" bottom="30">
-		<mx:Canvas id="appManCanv" width="100%" height="100%">
-			<mx:Label text="{mtLang.lang.main_tab_panel.appmaintab}" horizontalCenter="0" verticalCenter="0"/>
-		</mx:Canvas>
+	<mx:ViewStack id="placeCanvas" 
+		borderStyle="solid" borderThickness="1" borderColor="#808080" left="10" right="10" top="220" bottom="30">
+	
+		<main:Main id="mainCanv"
+			width="100%" height="100%"/>
 		
-		<editor:Editor id="editorCanv" height="100%"/>
+		<editor:Editor id="editorCanv" 
+			width="100%" height="100%"/>
 		
-		<scriptEditor:ScriptEditor id="scriptCanv" x="0" y="0" width="100%" height="100%"/>
+		<scriptEditor:ScriptEditor id="scriptCanv" 
+			width="100%" height="100%"/>
 		
 		<mx:Canvas id="multilinCanv" width="100%" height="100%">
-			<mx:Label text="{mtLang.lang.main_tab_panel.multilintab}" horizontalCenter="0" verticalCenter="0"/>
+			<mx:Label horizontalCenter="0" verticalCenter="0"/>
 		</mx:Canvas>
 		<mx:Canvas id="portalManCanv" width="100%" height="100%">
-			<mx:Label text="{mtLang.lang.main_tab_panel.portalmantab}" horizontalCenter="0" verticalCenter="0"/>
+			<mx:Label horizontalCenter="0" verticalCenter="0"/>
 		</mx:Canvas>
 		<mx:Canvas id="publishCanv" width="100%" height="100%">
-			<mx:Label text="{mtLang.lang.main_tab_panel.publishtab}" horizontalCenter="0" verticalCenter="0"/>
+			<mx:Label horizontalCenter="0" verticalCenter="0"/>
 		</mx:Canvas>
 		<mx:Canvas id="safeguardCanv" width="100%" height="100%">
-			<mx:Label text="{mtLang.lang.main_tab_panel.safeguardtab}" horizontalCenter="0" verticalCenter="0"/>
+			<mx:Label horizontalCenter="0" verticalCenter="0"/>
 		</mx:Canvas>
 		<mx:Canvas id="vdomCanv" width="100%" height="100%">
-			<mx:Label text="{mtLang.lang.main_tab_panel.vdomtab}" horizontalCenter="0" verticalCenter="0"/>
+			<mx:Label horizontalCenter="0" verticalCenter="0"/>
 		</mx:Canvas>
 	</mx:ViewStack>
 	</mx:Canvas>

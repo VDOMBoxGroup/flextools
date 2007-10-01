@@ -20,7 +20,7 @@ public class DataManager implements IEventDispatcher {
 	private static var instance:DataManager;
 	
 	[Bindable]
-	public var pages:XML;
+	public var topLevelObjects:XML;
 	
 	private var dispatcher:EventDispatcher;
 	private var soap:Soap;
@@ -30,6 +30,7 @@ public class DataManager implements IEventDispatcher {
 	private var _appId:String;
 	private var _pageId:String;
 	private var proxy:Proxy;
+	private var _objectDescription:XML;
 	
 	/**
 	 * 
@@ -62,6 +63,7 @@ public class DataManager implements IEventDispatcher {
 		publicData = mx.core.Application.application.publicData;
 		
 		_objects = null;
+		topLevelObjects = null;
 	}
 	
 	public function init(appId:String, pageId:String):void {
@@ -79,9 +81,16 @@ public class DataManager implements IEventDispatcher {
 		return _types;
 	}
 	
-	public function get objectsXML():XML {
+	[Bindable (event="objectDescriptionChanged")]
+	public function get objectDescription():XML {
 		
-		return _objects;
+		return _objectDescription;
+	}
+	
+	public function set objectDescription(object:XML):void {
+		
+		_objectDescription = object;
+		dispatchEvent(new Event('objectDescriptionChanged'));
 	}
 	
 	/**
@@ -90,26 +99,13 @@ public class DataManager implements IEventDispatcher {
 	 * @return все данные об объекте, в т.ч. описание его типа.
 	 * 
 	 */	
-	public function getFullAttributes(objectId:String):XML {
+	public function setActiveObject(objectId:String):void {
 		
-		
-		//var object:XML = getObject(objectId);
-		
-		//var type:XML = new XML(getType(object.@Type));
-		
-		//var element:XML = <Element ID={objectId} />;
-		
-		//element.appendChild(type);
-		
-		/* var attributes:XML = <Attributes />;
-		
-		for each(var attr:XML in type.Attributes.Attribute){
-			
-			attr.appendChild(<Value>{object.Attributes.Attribute.(@Name == attr.Name).toString()}</Value>);
-			attributes.appendChild(attr);
-		}
-		
-		element.appendChild(attributes); */
+		_objectDescription = new XML(getObject(objectId));
+		dispatchEvent(new Event('objectDescriptionChanged'));
+	}
+	
+	public function getAttributes(objectId:String):XML {
 		
 		return new XML(getObject(objectId));
 	}
@@ -119,12 +115,12 @@ public class DataManager implements IEventDispatcher {
 	 * @param selectedObjects описание типа объекта, которое надо сохранить, для последующей отправки на сервер.
 	 * 
 	 */	
-	public function updateAttributes(objectDescription:XML):void {
+	public function updateAttributes(obdjectDescription:XML):void {
 		
-		var objectId:String = objectDescription.@ID;
+		var objectId:String = _objectDescription.@ID;
 		
 		var oldListAttributes:XMLList = _objects.Object.(@ID == objectId).Attributes.Attribute
-		var newListAttributes:XMLList = objectDescription.Attributes.Attribute;
+		var newListAttributes:XMLList = _objectDescription.Attributes.Attribute;
 		
 		var newOnlyAttributes:XML = <Attributes />;
 		
@@ -134,23 +130,15 @@ public class DataManager implements IEventDispatcher {
 				newOnlyAttributes.item += attr;
 			} 
 		}
-		 
 		
-		/* for each(var attr:XML in attributes) {
-			newAttributes.appendChild(<Attribute Name={attr.Name}>{attr.Value.toString()}</Attribute>);
-		} */
+		_objects.Object.(@ID == objectId).Attributes = _objectDescription.Attributes;
 		
-		_objects.Object.(@ID == objectId).Attributes = objectDescription.Attributes;
-		
-		proxy.setAttributes(_appId, objectDescription.@ID, newOnlyAttributes);
+		proxy.setAttributes(_appId, _objectDescription.@ID, newOnlyAttributes);
 		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		dmEvent.objectId = objectId;
+		dispatchEvent(new Event('objectDescriptionChanged'));
 		dispatchEvent(dmEvent);
-	}
-	
-	public function getAttributes(objectId:String):XML {
-		return _objects.Object.(@ID == objectId)[0];
 	}
 	
 	/**
@@ -234,7 +222,7 @@ public class DataManager implements IEventDispatcher {
 	 */	
 	private function getTopObjectsHandler(event:SoapEvent):void {
 		
-		pages = event.result;
+		topLevelObjects = event.result;
 		if(!_pageId) {
 			_pageId = event.result.Object[0].@ID;
 		}
@@ -252,7 +240,8 @@ public class DataManager implements IEventDispatcher {
 		for each (var object:XML in _objects.Object) {
 			object.appendChild(_types.Type.Information.(ID == object.@Type).parent());
 		}
-		dispatchEvent(new Event('initComplete'));
+		
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.INIT_COMPLETE));
 	}
 	
 	// Реализация диспатчера

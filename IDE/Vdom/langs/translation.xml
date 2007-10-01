@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+<language ID="EN" label="English">
+	<!-- Begin Login Form -->
+	<sentence ID="b1" label="login_username">Username</sentence>
+	<sentence ID="b2" label="login_password">Password</sentence>
+	<sentence ID="b3" label="login_sendbutton">Login</sentence>
+	<!-- End Login Form -->
+	
+	<!-- Begin Main Tab -->
+	<sentence ID="c1" label="main_title">Application(s) management</sentence>
+	<sentence ID="c2" label="main_new">New</sentence>
+	<sentence ID="c3" label="main_steps">5 steps</sentence>
+	<sentence ID="c4" label="main_search">Search</sentence>
+	<sentence ID="c5" label="main_applist">Application list</sentence>
+	<sentence ID="c6" label="main_appinfo">Application information</sentence>
+	<!-- End Main Tab -->
+	
+	<!-- Begin Edit Tab -->
+	<sentence ID="d1" label="editor_title">Editor</sentence>
+	<sentence ID="d2" label="editor_edition">Edition</sentence>
+	<sentence ID="d3" label="editor_script">Script</sentence>
+	<sentence ID="d4" label="editor_preview">Preview</sentence>
+	<sentence ID="d5" label="editor_tree">Tree</sentence>
+	<sentence ID="d6" label="editor_analyse">Analyse</sentence>
+	<sentence ID="d7" label="editor_statistics">Statistics</sentence>
+	<sentence ID="d8" label="editor_events">Events</sentence>
+	<!-- End Edit Tab -->
+	
+	<!-- Begin Multilingual Tab -->
+	<sentence ID="e1" label="mling_title">Multilingual management</sentence>
+	<!-- End Multilingual Tab -->
+	
+	<!-- Begin PortalManagment Tab -->
+	<sentence ID="f1" label="portal_title">Portal management</sentence>
+	<!-- End PortalManagment Tab -->
+	
+	<!-- Begin Publish Tab -->
+	<sentence ID="g1" label="publish_title">Publish</sentence>
+	<!-- End Publish Tab -->
+	
+	<!-- Begin Safeguard Tab -->
+	<sentence ID="h1" label="safe_title">Safeguard</sentence>
+	<!-- End Safeguard Tab -->
+	
+	<!-- Begin VDOM Tab -->
+	<sentence ID="i1" label="vdom_title">V.D.O.M</sentence>
+	<!-- End VDOM Tab -->
+</language>
+<language ID="RU" label="Русский">
+    <!-- Начало Login Form -->
+	<sentence ID="b1" label="login_username">Логин</sentence>
+	<sentence ID="b2" label="login_password">Пароль</sentence>
+	<sentence ID="b3" label="login_sendbutton">Отправить</sentence>
+	<!-- Конец Login Form -->
+	
+	<!-- Начало Main Tab -->
+	<sentence ID="c1" label="main_title">Менеджер приложений</sentence>
+	<sentence ID="c2" label="main_new">Новый</sentence>
+	<sentence ID="c3" label="main_steps">5 шагов</sentence>
+	<sentence ID="c4" label="main_search">Поиск</sentence>
+	<sentence ID="c5" label="main_applist">Список прил.</sentence>
+	<sentence ID="c6" label="main_appinfo">Информация</sentence>
+	<!-- Конец Main Tab -->
+	
+	<!-- Начало Edit Tab -->
+	<sentence ID="d1" label="editor_title">Редактор</sentence>
+	<sentence ID="d2" label="editor_edition">Редактир.</sentence>
+	<sentence ID="d3" label="editor_script">Скрипты</sentence>
+	<sentence ID="d4" label="editor_preview">Просмотр</sentence>
+	<sentence ID="d5" label="editor_tree">Дерево</sentence>
+	<sentence ID="d6" label="editor_analyse">Анализ</sentence>
+	<sentence ID="d7" label="editor_statistics">Статистика</sentence>
+	<sentence ID="d8" label="edit_events">События</sentence>
+	<!-- Конец Edit Tab -->
+	
+	<!-- Начало Multilingual Tab -->
+	<sentence ID="e1" label="mling_title">Менеджер языков</sentence>
+	<!-- Конец Multilingual Tab -->
+	
+	<!-- Начало PortalManagment Tab -->
+	<sentence ID="f1" label="portal_title">Менеджер портала</sentence>
+	<!-- Конец PortalManagment Tab -->
+	
+	<!-- Начало Publish Tab -->
+	<sentence ID="g1" label="publish_title">Публикация</sentence>
+	<!-- Конец Publish Tab -->
+	
+	<!-- Начало Safeguard Tab -->
+	
+	<!-- Конец Safeguard Tab -->
+	
+	<!-- Начало VDOM Tab -->
+
+	<!-- Конец VDOM Tab -->
+</language>
+</root>

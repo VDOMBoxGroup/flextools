@@ -1,22 +1,22 @@
-import flash.events.Event;
 import flash.display.DisplayObject;
+import flash.events.Event;
+
+import mx.containers.Canvas;
+import mx.controls.Alert;
 import mx.core.EdgeMetrics;
 import mx.events.DragEvent;
 import mx.managers.PopUpManager;
-import mx.containers.Canvas;
-import mx.controls.Alert;
 
-import vdom.components.editor.containers.typesClasses.Type;
-import vdom.managers.VdomDragManager;
-import vdom.components.editor.events.ResizeManagerEvent;
-import vdom.managers.DataManager;
 import vdom.MyLoader;
-import vdom.events.DataManagerEvent;
-import vdom.components.editor.events.WorkAreaEvent;
 import vdom.components.editor.containers.WorkArea;
+import vdom.components.editor.containers.typesClasses.Type;
+import vdom.components.editor.events.ResizeManagerEvent;
+import vdom.components.editor.events.WorkAreaEvent;
+import vdom.events.DataManagerEvent;
+import vdom.managers.DataManager;
+import vdom.managers.VdomDragManager;
 
 [Bindable] private var objects:XML;
-[Bindable] private var objectDescription:XML;
 [Bindable] private var typesXML:XML;
 [Bindable] private var help:String;
 [Bindable] private var selectedElement:String;
@@ -26,13 +26,14 @@ private var objectsXML:XML;
 private var currInterfaceType:uint;
 private var publicData:Object;
 private var ppm:Canvas;
+private var applicationId:String;
+private var topLevelObjectId:String;
 
-private function init():void {
+private function creationCompleteHandler():void {
 	
 	ppm = new MyLoader();
 	publicData = mx.core.Application.application.publicData;
 	editorDataManager = DataManager.getInstance();
-	pageList.selectedIndex = 0;
 
 	/*Загрузка типов*/
 	
@@ -55,20 +56,29 @@ private function init():void {
 
 private function show():void {
 	
-	PopUpManager.addPopUp(ppm, this, true);
-	PopUpManager.centerPopUp(ppm);
-	createPage();	
-}
-
-private function createPage():void {
 	
-	editorDataManager.addEventListener('initComplete', initCompleteHandler);
-	editorDataManager.init(publicData['appId'], publicData['pageId']);
+	
+	if(applicationId != publicData['applicationId'] || topLevelObjectId != publicData['topLevelObjectId']) {
+		
+		applicationId = publicData['applicationId'];
+		topLevelObjectId = publicData['topLevelObjectId'];
+		PopUpManager.addPopUp(ppm, this, true);
+		PopUpManager.centerPopUp(ppm);
+		createTopLevelObject();	
+	} else {
+		workArea.visible = true;
+	}
 }
 
 private function hide():void {
 	
 	workArea.visible = false;
+}
+
+private function createTopLevelObject():void {
+	
+	editorDataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
+	editorDataManager.init(applicationId, topLevelObjectId);
 }
 
 private function createTypes():void {
@@ -77,19 +87,19 @@ private function createTypes():void {
 	PopUpManager.removePopUp(ppm);
 }
 
-private function pageChange():void {
+private function topLevelObjectChange():void {
 	
-	publicData['pageId'] = pageList.selectedItem.@ID;
-	createPage();
+	topLevelObjectId = publicData['topLevelObjectId'] = pageList.selectedItem.@ID;
+	createTopLevelObject();
 }
 
 private function createObjects(objectsXML:XML):void {
 	
 	workArea.destroyObjects();
 	
-	for each(var itemAttrs:XML in objectsXML.Object) {
+	for each(var objectAttrs:XML in objectsXML.Object) {
 		
-		workArea.addObject(itemAttrs);
+		workArea.addObject(objectAttrs);
 	}
 	
 	dispatchEvent(new Event('objectCreated'));	
@@ -98,18 +108,18 @@ private function createObjects(objectsXML:XML):void {
 
 private function initCompleteHandler(event:Event):void {
 	
+	pageList.dataProvider = editorDataManager.topLevelObjects.Object;
 	createObjects(editorDataManager.getObjects());
 }
 
 private function attributesUpdateCompleteHandler(event:DataManagerEvent):void {
 	
 	workArea.updateObject(editorDataManager.getAttributes(event.objectId));
-	objectDescription = editorDataManager.getFullAttributes(event.objectId);
 }
 
 private function attributesChangedHandler(event:Event):void {
 	
-	editorDataManager.updateAttributes(objectDescription);
+	editorDataManager.updateAttributes(editorDataManager.objectDescription);
 }
 
 private function typesLoadHandler(event:Event):void {
@@ -119,18 +129,18 @@ private function typesLoadHandler(event:Event):void {
 
 private function objectsLoadHandler(event:Event):void {
 	
-	objectsXML = editorDataManager.objectsXML;
+	objectsXML = editorDataManager.getObjects();
 	createObjects(objectsXML);
 }
 
 private function objectChangeHandler(event:Event):void {
 	
 	if(workArea.selectedObjectId) {
-		objectDescription = editorDataManager.getFullAttributes(workArea.selectedObjectId);
-		toolbar.type = objectDescription.Type
+		
+		editorDataManager.setActiveObject(workArea.selectedObjectId);
 	} else {
-		objectDescription = null;
-		toolbar.type = null;
+		
+		editorDataManager.objectDescription = null;
 	}
 }
 
@@ -143,7 +153,7 @@ private function objectCreatedHandler(event:Event):void {
 
 private function deleteObjectHandler(event:WorkAreaEvent):void {
 	
-	editorDataManager.deleteObject(event.objectID);;
+	editorDataManager.deleteObject(event.objectID);
 }
 
 private function objectDeletedHandler(event:DataManagerEvent):void {
@@ -186,7 +196,7 @@ private function dropHandler(event:DragEvent):void {
 	
 	var id:String = editorDataManager.createObject(initProp);
 	
-	var newItemAtrs:XML = editorDataManager.getFullAttributes(id);
+	var newItemAtrs:XML = editorDataManager.getAttributes(id);
 	
 	workArea.addObject(newItemAtrs);
 }

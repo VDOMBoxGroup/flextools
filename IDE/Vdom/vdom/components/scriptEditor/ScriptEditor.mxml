@@ -1,78 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="numricString()">
-<mx:Script>
-		<![CDATA[
-			import mx.controls.Alert;
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:containers="vdom.components.scriptEditor.containers.*"
+	
+	width="400" height="300"
+	
+	creationComplete="creationCompleteHandler();"
+	show="show();"
+	hide="hide();"
+>
+	<mx:Script>
+	<![CDATA[
+		import vdom.managers.DataManager;
+		
+		private var dataManager:DataManager;
+		
+		private function creationCompleteHandler():void{
 			
-			//  show number of string
-			private function numricString():void{
-				numStrok.text ="";
-				for(var i:Number =1; i <= txtArea.height / 14; i++){
-					numStrok.text += (i + txtArea.verticalScrollPosition).toString() 
-									+"\n";				
-				}
+			dataManager = DataManager.getInstance();
+			
+			numStrok.text ="";
+			for(var i:Number =1; i <= txtArea.height / 14; i++){
+				numStrok.text += (i + txtArea.verticalScrollPosition).toString() + "\n";				
+			}
+			
+			var yPosition:int = 1;
+			var currentPosition:int = 0;
+			while (currentPosition < txtArea.selectionBeginIndex) {
+				if (txtArea.text.charCodeAt(currentPosition) == 13)
+					yPosition++;
+				currentPosition++;
+			}
+		}
+		
+		private function show():void {
+			
+			var scriptText:String = '';
+			
+			if(dataManager.objectDescription) {
 				
-				var yPosition:int = 1;
-				var currentPosition:int = 0;
-				while (currentPosition < txtArea.selectionBeginIndex) {
-					if (txtArea.text.charCodeAt(currentPosition) == 13)
-						yPosition++;
-					currentPosition++;
-				}
-				trace('строчка: ' + yPosition);
-			/*	
-				for (var i:int = 0; i < ta.height / 12; i++) {
-					switch (key.keyCode) {
-						case 13:
-						case 40:
-							if (strNumber == xPosition + 1)
-								na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
-							else
-								na.htmlText += strNumber.toString() + "<br>";
-							break;
-						case 38:
-							if (strNumber == xPosition - 1)
-								na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
-							else
-								na.htmlText += strNumber.toString() + "<br>";
-							break;
-						default:
-							if (strNumber == xPosition)
-								na.htmlText += "<b><font color='#000000'>" + strNumber.toString() + "</font></b><br>";
-							else
-								na.htmlText += strNumber.toString() + "<br>";
-					}
-					strNumber++;
-				}
-				*/
+				var pattern:RegExp = /\W+/;
+				scriptText = dataManager.objectDescription.Type.SourceCode;
+				scriptText = scriptText.replace(pattern,'');
 			}
-			public function get text ():String{
-				return txtArea.text;
-			}
+				
+			txtArea.text = scriptText;
+		}
+		
+		private function hide():void {
 			
-			public function set text (text: String):void{
-				 txtArea.text = text;
-			}
-		//		txtArea.tabEnabled
-			// correct input & show 'Tab' simbol
-			private function keyFunction(event:KeyboardEvent):void{
-				if (event.charCode == 9){
-					txtArea.text=txtArea.text.substring(0,txtArea.selectionBeginIndex)
-									 +String.fromCharCode(event.charCode)
-									 +txtArea.text.substring(txtArea.selectionBeginIndex);
-				txtArea.setSelection(txtArea.selectionBeginIndex+1,txtArea.selectionBeginIndex+1);
-				}
-			}
-			private function checkTextAreaFocus():void {
-				if (txtArea.visible == true)
-				txtArea.setFocus();	
-			}
-		]]>
+		}
+	]]>
 	</mx:Script>
 	
-	<mx:TextArea text="" width="24" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
+	<containers:TabbedTextArea  />
+	<mx:TextArea text="" width="28" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
 			verticalScrollPolicy="off" textAlign="right" top="0" bottom="0" left="0"/>
-	<mx:TextArea  id="txtArea" keyUp="{keyFunction(event),numricString()}"
-		keyDown="numricString()" x="{numStrok.width}" height="100%"	width="100%"  focusOut="{checkTextAreaFocus()}"
-		/>
+	<containers:TabbedTextArea id="txtArea" 
+		allowTabKey="true"  x="{numStrok.width}" height="100%" width="100%" />
 </mx:Canvas>

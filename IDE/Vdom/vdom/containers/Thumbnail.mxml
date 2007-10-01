@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	horizontalAlign="center" 
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	verticalGap="0" horizontalGap="0">
+	
+	<mx:Image id="img" width="60" height="50" />
+	<mx:Label width="60" fontWeight="bold" text="zzzzzz"/>
+</mx:VBox>
+
