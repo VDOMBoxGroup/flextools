@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init()">
+<mx:Script>
+	<![CDATA[
+		import mx.events.MoveEvent;
+		import mx.controls.Image;
+		import mx.events.TreeEvent;
+		import vdom.events.TreeEditorEvent;
+		import mx.states.AddChild;
+		import mx.core.Container;
+		import mx.controls.Button;
+		import mx.events.DragEvent;
+	//данные которые уже есть
+	private var xml1:XML = 
+<Structure>
+	<Object ID="id_01" top="10" left="10">
+		<Level Index="0">
+			<Object ID="id_02"/>
+			<Object ID="id_03"/>
+		</Level>
+		<Level Index="1">
+			<Object ID="id_03"/>
+			<Object ID="id_04"/>
+		</Level>
+		<Level Index="2">
+			<Object ID="id_05"/>
+			<Object ID="id_06"/>
+		</Level>
+		<Level Index="3">
+			<Object ID="id_07"/>
+			<Object ID="id_08"/>
+		</Level>
+		<Level Index="4">
+			<Object ID="id_02"/>
+			<Object ID="id_03"/>
+		</Level>
+		<Level Index="5">
+			<Object ID="id_03"/>
+			<Object ID="id_04"/>
+		</Level>
+	</Object>
+	<Object ID="id_02" top="10" left="150">
+		<Level Index="0">
+			<Object ID="id_03"/>
+			<Object ID="id_04"/>
+		</Level>
+		</Object>
+	<Object ID="id_03" top="50" left="10"/>
+	<Object ID="id_04" top="100" left="150"/>
+	<Object ID="id_05" top="150" left="150"/>
+	<Object ID="id_06" top="90" left="10"/>
+	<Object ID="id_07" top="50" left="200"/>
+	<Object ID="id_08" top="200" left="200"/>
+</Structure>;  
+ 
+ 	private var massTreeElements:Array = new Array();
+	private var massLines:Array = new Array();
+	private var resizer:ResizeManager;
+	private var selectedTreeEliment:String;
+	private var treeElement:TreeElement = new TreeElement();
+	private var canRectangle:Canvas = new Canvas();
+	private var curTree:Object = new Object();
+		
+	/***
+		* создать _дубликат_ обьекта 	
+		* при нажатии на свертывание не перетаскивался обьект
+	*/
+	private function init():void
+	{
+		//создаем массив с обьектами
+		for each(var xmlObj:XML in xml1.children())
+		{
+			var obID:String = xmlObj.@ID.toXMLString();
+			massTreeElements[obID] =  new TreeElement();
+			//massTreeElements[obID].setStyle('backgroundColor', '#ffffff');
+			massTreeElements[obID].name = xmlObj.@ID.toXMLString();
+			massTreeElements[obID].x = xmlObj.@left.toXMLString();
+			massTreeElements[obID].y = xmlObj.@top.toXMLString();	
+			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
+			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAG , startingDrag);	
+			//massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_DRAG , stopingDrag);
+		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);//
+		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);	//
+			addChild(massTreeElements[obID]);
+			//trace('1: '+massTreeElements[obID].width)
+		}
+		drawLines()
+	}
+	
+	// перерисовываем необходимые линии
+	public function mouseHandler(trEvt:Object):void
+	{
+//		trace('trEvt.ID: '+trEvt.ID)
+	//	massTreeElements[trEvt.ID].current = false;
+	//	massTreeElements[trEvt.ID].current = true; 
+		for (var level:String in massLines)
+		for(var ind1:String in massLines[level])
+			for(var ind2:String in massLines[level][ind1])
+				if (trEvt.ID == ind1 || trEvt.ID == ind2)
+				{
+				//	trace(trEvt.ID);
+					 cnvLevelDown.removeChild( massLines[level][ind1][ind2]);
+					 massLines[level][ind1][ind2] = new TreeVector(massTreeElements[ind1], massTreeElements[ind2], level);
+					 cnvLevelDown.addChild(massLines[level][ind1][ind2]);
+				}
+	}
+	
+	
+	// рисуем линии
+	private function drawLines():void
+	{
+		for each(var xmlObj:XML in xml1.children())
+		{
+			var obID:String = xmlObj.@ID.toXMLString();
+			
+			//создаем массив с Направляющими между обьектами
+			for each(var xmlLavel:XML in xmlObj.children())
+			{
+				var level:String = xmlLavel.@Index.toXMLString();
+				// mass of levels where  level  consist of numbers betvin 0-9
+				if (!massLines[level]) massLines[level] = new Array();
+				
+				if (!massLines[level][obID]) massLines[level][obID] = new Array();
+				//massLines[level][fromObjID][toObjID]
+				for each(var xmlLavelObj:XML in xmlLavel.children())
+				{
+					var toObjID:String = xmlLavelObj.@ID.toXMLString();
+				//	trace(obID +' -  '+ toObjID);
+		//		trace('2: '+massTreeElements[obID].width)
+					if (massLines[level][obID][toObjID])
+						removeChild( massLines[level][obID][toObjID]);
+					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
+					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
+				}
+			}
+		}
+	}
+	
+	private function startingDrag(evt:TreeEditorEvent):void
+	{
+		var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
+		curTree.current = false;
+		curTree = evt.currentTarget;
+		curTree.current = true;
+		
+		canRectangle.x = evt.currentTarget.x;
+		canRectangle.y = evt.currentTarget.y;
+		canRectangle.graphics.lineStyle(1, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+		canRectangle.graphics.beginFill(0x555555,  0.1);
+		canRectangle.graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
+		canRectangle.addEventListener(MouseEvent.MOUSE_UP, stopingDrag);
+		canRectangle.startDrag(false, rect);
+		cnvLevelDown.addChild(canRectangle);
+		
+//		curTree.startDrag(false, rect);
+	}
+	
+	private function stopingDrag(trEvt:MouseEvent):void
+	{
+		canRectangle.stopDrag();
+		curTree.x = canRectangle.x;
+		curTree.y = canRectangle.y;
+		canRectangle.graphics.clear();
+		canRectangle.removeEventListener(MouseEvent.MOUSE_UP, stopingDrag);
+		mouseHandler(curTree);
+	}
+	
+	// перетаскиваем обьект
+//	private function mouseDownHandler(evt:MouseEvent):void
+	//{
+		
+		
+		
+		
+//		if(curTree.drag){
+			
+//		}
+//		evt.currentTarget.drag = true;
+	//	trace('this.MOUSE_DOWN');
+//	}
+	
+	// прекращаем перетаскивание
+/*	private function mouseUpHandler(evt:MouseEvent):void
+	{
+	//	if (evt.currentTarget.drag){
+		//	canRectangle.stopDrag();
+		//	cnvLevelDown.removeChild(treeElement);
+			evt.currentTarget.stopDrag();
+			canRectangle.x = curTree.x;
+			canRectangle.y = curTree.y;
+		//	curTree.alpha  = 1;
+			cnvLevelDown.removeChild(canRectangle);
+			canRectangle.graphics.clear();
+			canRectangle.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		//	curTree = evt.currentTarget;
+		//	removeChild(canRectangle);
+			evt.currentTarget.drag = true;
+			
+	//	}
+		trace('drag: '+ evt.currentTarget.drag);
+		trace('this.MOUSE_UP');
+	//	evt.currentTarget.current = true;
+		
+	}
+	*/
+	]]>
+</mx:Script>
+<mx:Canvas id="cnvLevelTop"/>
+<mx:Canvas id="cnvLevelDown"/>
+	
+
+</mx:Canvas>
