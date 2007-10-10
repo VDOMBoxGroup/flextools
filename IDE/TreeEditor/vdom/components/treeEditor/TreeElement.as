@@ -115,13 +115,13 @@ package vdom.components.treeEditor
 		
 		private function btLineDown(muEvt:MouseEvent):void
 		{
-			this.drag = false;
-			trace('btLineDown');
+			//this.drag = false;
+			//trace('btLineDown');
 		}
 		
-		private function btLineUp(muEvt:MouseEvent):void
+		private function btLineUp(muEvt:MouseEvent):void 
 		{
-			//this.drag = true;	
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAW_LINE, ID));	
 		}
 		
 		
@@ -144,7 +144,7 @@ package vdom.components.treeEditor
 		
 		private function btDeleteUp(muEvt:MouseEvent):void
 		{
-		//	this.drag = true;	
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, ID));	
 		}
 
 		private function btDeleteOut(muEvt:MouseEvent):void
