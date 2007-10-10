@@ -79,7 +79,7 @@
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAG , startingDrag);	
 			//massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_DRAG , stopingDrag);
-		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);//
+			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);//
 		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);	//
 			addChild(massTreeElements[obID]);
 			//trace('1: '+massTreeElements[obID].width)
@@ -138,20 +138,20 @@
 	
 	private function startingDrag(evt:TreeEditorEvent):void
 	{
+		
 		var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
-		curTree.current = false;
-		curTree = evt.currentTarget;
-		curTree.current = true;
+		
 		
 		canRectangle.x = evt.currentTarget.x;
 		canRectangle.y = evt.currentTarget.y;
-		canRectangle.graphics.lineStyle(1, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		canRectangle.graphics.beginFill(0x555555,  0.1);
+		canRectangle.graphics.lineStyle(3, 0.5, 0.2, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+		canRectangle.graphics.beginFill(0x555555,  0);
 		canRectangle.graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
 		canRectangle.addEventListener(MouseEvent.MOUSE_UP, stopingDrag);
 		canRectangle.startDrag(false, rect);
-		cnvLevelDown.addChild(canRectangle);
-		
+		//cnvLevelDown.addChild(canRectangle);
+		addChild(canRectangle);
+		trace('asd');
 //		curTree.startDrag(false, rect);
 	}
 	
@@ -163,12 +163,18 @@
 		canRectangle.graphics.clear();
 		canRectangle.removeEventListener(MouseEvent.MOUSE_UP, stopingDrag);
 		mouseHandler(curTree);
+	//	cnvLevelDown.removeChild(canRectangle);
+		removeChild(canRectangle);
 	}
 	
-	// перетаскиваем обьект
-//	private function mouseDownHandler(evt:MouseEvent):void
-	//{
-		
+	// Кликнули по обьекту, выделяем его
+	private function mouseDownHandler(evt:MouseEvent):void
+	{
+	//	curTree.current = false;
+		curTree.alpha = 1;
+		curTree = evt.currentTarget;
+	//	curTree.current = true;
+		curTree.alpha = 0.5;
 		
 		
 		
@@ -177,7 +183,7 @@
 //		}
 //		evt.currentTarget.drag = true;
 	//	trace('this.MOUSE_DOWN');
-//	}
+	}
 	
 	// прекращаем перетаскивание
 /*	private function mouseUpHandler(evt:MouseEvent):void

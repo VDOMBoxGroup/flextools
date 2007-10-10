@@ -36,10 +36,11 @@ package vdom.components.treeEditor
 		public function TreeElement()
 		{
 			setStyle('backgroundColor', '#99ffff')
-			this.buttonMode = true;
+			
 			
 			txt = new Label();
 			txt.addEventListener(MouseEvent.MOUSE_DOWN, dispStartDrag);
+			txt.buttonMode = true;
 			addChild(txt);
 			
 			btLine = new Button();
