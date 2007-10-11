@@ -68,10 +68,7 @@
 	
 	
 	
-	/***
-		* создать _дубликат_ обьекта 	
-		* при нажатии на свертывание не перетаскивался обьект
-	*/
+	
 	private function init():void
 	{
 		//создаем массив с обьектами
@@ -92,21 +89,14 @@
 			//
 		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);	//
 			addChild(massTreeElements[obID]);
-			//trace('1: '+massTreeElements[obID].width)
 			
 		}
 		drawLines();
-		
-		
-		
 	}
 	
 	// перерисовываем необходимые линии
-	public function mouseHandler(trEvt:Object):void
+	private function mouseHandler(trEvt:Object):void
 	{
-//		trace('trEvt.ID: '+trEvt.ID)
-	//	massTreeElements[trEvt.ID].current = false;
-	//	massTreeElements[trEvt.ID].current = true; 
 		for (var level:String in massLines)
 		for(var ind1:String in massLines[level])
 			for(var ind2:String in massLines[level][ind1])
@@ -133,9 +123,8 @@
 				var level:String = xmlLavel.@Index.toXMLString();
 				// mass of levels where  level  consist of numbers betvin 0-9
 				if (!massLines[level]) massLines[level] = new Array();
-				
 				if (!massLines[level][obID]) massLines[level][obID] = new Array();
-				//massLines[level][fromObjID][toObjID]
+				
 				for each(var xmlLavelObj:XML in xmlLavel.children())
 				{
 					var toObjID:String = xmlLavelObj.@ID.toXMLString();
@@ -143,12 +132,18 @@
 						removeChild( massLines[level][obID][toObjID]);
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
 					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
-					trace(toObjID);
 				}
 			}
 		}
 	}
+	/******
+	При выделении темнее
+	на двойной щелчек скрываться /разкрываться
+	когда  соединяешь, стрелка за мышкой
+	цвет по текущему уровню
+	Баг верхнего угла
 	
+	*/
 	
 	private function startingDrag(evt:TreeEditorEvent):void
 	{
@@ -183,14 +178,31 @@
 		
 		// проводим линию
 		if(blDrawLine){
+			var fromObj:String = curTree.ID.toString();
+			var toObj:String = evt.currentTarget.ID.toString();
+			var necessaryLevel:String = '0';
 			//trace('blDrawLine == true: '+ evt.currentTarget.ID.toString());
-			if(!massLines['0']) massLines['0'] = new Array();
-			if(!massLines['0'][curTree.ID.toString()]) massLines['0'][curTree.ID.toString()] = new Array();
+			//              СОЗДАТЬ ЗАРАНЕЕ !!!    
+			if(!massLines[necessaryLevel]) 
+				massLines[necessaryLevel] = new Array();
 			
-			massLines['0'][curTree.ID.toString()][evt.currentTarget.ID.toString()] 	= 
-			new TreeVector(massTreeElements[curTree.ID], massTreeElements[evt.currentTarget.ID], '0');
+			if(!massLines[necessaryLevel][curTree.ID.toString()]) 
+				massLines[necessaryLevel][curTree.ID.toString()] = new Array();
 			
-			cnvLevelDown.addChild(massLines['0'][curTree.ID.toString()][evt.currentTarget.ID.toString()]);
+			// может эта линия уже есть?
+			for (var level:String in massLines)
+				for (var frsTrElem:String in massLines[level])
+					for (var sknTrElem:String in massLines[level][frsTrElem])
+						if((frsTrElem == fromObj && sknTrElem == toObj ) ||
+							(frsTrElem == toObj && sknTrElem ==  fromObj ))
+								return;
+					
+						
+			massLines[necessaryLevel][curTree.ID.toString()][evt.currentTarget.ID.toString()] 	= 
+			new TreeVector(massTreeElements[curTree.ID], massTreeElements[evt.currentTarget.ID], necessaryLevel);
+			
+			cnvLevelDown.addChild(massLines[necessaryLevel][curTree.ID.toString()][evt.currentTarget.ID.toString()]);
+				
 			
 		}else{
 			trace('blDrawLine == false');
@@ -234,20 +246,18 @@
 	
 	private function stopDrawLine(msEvt:MouseEvent):void
 	{
-//		if ()
 		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		canLine.graphics.clear(); 
 		removeChild(canLine);
 		blDrawLine = false;  //говорим что НЕ рисуем линию
-//	delete canLine;
-		
 	}
 	private function drLine (mEvt:MouseEvent):void
 	{
 		canLine.graphics.clear();
 		canLine.graphics.lineStyle(1, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 		canLine.graphics.moveTo(pnFrom.x, pnFrom.y);
+		
 		var dX:int = 2;
 		var dY:int = 2;
 		var tX:int = mouseX - pnFrom.x;

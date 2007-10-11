@@ -7,8 +7,6 @@ package vdom.components.treeEditor
 	import flash.geom.Point;
 	import flash.net.ObjectEncoding;
 	
-	
-	
 	public class TreeVector extends Container
 	{
 		private var trEl0:TreeElement;
@@ -18,17 +16,10 @@ package vdom.components.treeEditor
 		
 		public function TreeVector(trEl0:TreeElement, trEl1:TreeElement, level:String):void
 		{
-		//	this.trEl0 = trEl0;
-		//	this.trEl1 = trEl1;
-	//	trace('vector: '+trEl1.width)
 			this.buttonMode = true;
-		//	Math.acos(
 			setColor(level);
-			
 			pointTo(trEl0, trEl1);
-			
 			createVector (trEl0, pointTo(trEl0, trEl1));
-			//trace('**//**');
 		}
 		
 		private function setColor(level:String):void
@@ -117,7 +108,6 @@ package vdom.components.treeEditor
 		private function createVector (trEl0:TreeElement, trEl1:Object):void
 		{
 			this.graphics.lineStyle(2, color, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-//			this.graphics.lineStyle(
 			var x0h:Number = trEl0.width/2;
 			var y0h:Number = trEl0.height/2;
 			var x1h:Number = trEl1.width/2;
@@ -134,11 +124,7 @@ package vdom.components.treeEditor
 			var dY:Number;
 			
 			///---- point 1----
-		//	dX = (trEl1.x + trEl1.width)- trEl0.x;
-			//dY = trEl1.y - trEl0.y;
 			distanse = dX*dX + dY*dY;
-
-//			poin.x = trEl1.x + trEl1.width;
 
 			this.graphics.moveTo(x0,y0);
 			this.graphics.lineTo(x1,y1);
@@ -146,17 +132,9 @@ package vdom.components.treeEditor
 			 dY = y0-y1; 
 			var alf:Number = Math.atan(dY/dX);
 			if (dX<0) alf+=Math.PI;
-	/*		trace('x0:' + trEl0.x +' x1:' + trEl1.x);
-			trace('y0:' + trEl0.y +' y1:' + trEl1.y);
-			trace('dX: ' + dX);
-			trace('dY: ' + dY);
-		*/	this.graphics.lineTo(x1 + Math.cos(alf+0.2)*15, y1 + Math.sin(alf+0.2)*15 );
+			this.graphics.lineTo(x1 + Math.cos(alf+0.2)*15, y1 + Math.sin(alf+0.2)*15 );
 			this.graphics.lineTo(x1 + Math.cos(alf-0.2)*15, y1 + Math.sin(alf-0.2)*15);
 			this.graphics.lineTo(x1,y1 );
-			
-			//this.graphics.endFill()
-//			this.graphics.drawCircle(x1 + Math.cos(alf)*15, y1 + Math.sin(alf)*15, 3);
 		}
-		
 	}
 }
