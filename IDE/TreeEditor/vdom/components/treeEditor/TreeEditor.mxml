@@ -62,17 +62,12 @@
 	private var curTree:Object = new Object();
 	private var canLine:Canvas = new Canvas();
 	private var pnFrom:Point = new Point();
+	private var blDrawLine:Boolean = false;
 	
 		
 	
 	
-	private function drLine (mEvt:MouseEvent):void
-	{
-		canLine.graphics.clear();
-		canLine.graphics.lineStyle(2, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		canLine.graphics.moveTo(pnFrom.x, pnFrom.y);
-		canLine.graphics.lineTo(mouseX, mouseY);
-	}
+	
 	/***
 		* создать _дубликат_ обьекта 	
 		* при нажатии на свертывание не перетаскивался обьект
@@ -148,10 +143,12 @@
 						removeChild( massLines[level][obID][toObjID]);
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
 					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
+					trace(toObjID);
 				}
 			}
 		}
 	}
+	
 	
 	private function startingDrag(evt:TreeEditorEvent):void
 	{
@@ -183,6 +180,23 @@
 	// Кликнули по обьекту, выделяем его
 	private function mouseDownHandler(evt:MouseEvent):void
 	{
+		
+		// проводим линию
+		if(blDrawLine){
+			//trace('blDrawLine == true: '+ evt.currentTarget.ID.toString());
+			if(!massLines['0']) massLines['0'] = new Array();
+			if(!massLines['0'][curTree.ID.toString()]) massLines['0'][curTree.ID.toString()] = new Array();
+			
+			massLines['0'][curTree.ID.toString()][evt.currentTarget.ID.toString()] 	= 
+			new TreeVector(massTreeElements[curTree.ID], massTreeElements[evt.currentTarget.ID], '0');
+			
+			cnvLevelDown.addChild(massLines['0'][curTree.ID.toString()][evt.currentTarget.ID.toString()]);
+			
+		}else{
+			trace('blDrawLine == false');
+		};
+
+		// выделяем необходимый
 		curTree.alpha = 1;
 		curTree = evt.currentTarget;
 		curTree.alpha = 0.5;
@@ -206,21 +220,45 @@
 	
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
+	//	canLine = new Canvas()
 		addChild(canLine); //для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
-		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+		
 		pnFrom.x = trEvt.currentTarget.x;
 		pnFrom.y = trEvt.currentTarget.y;
-		drLine(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		blDrawLine = true; //говорим что рисуем линию
+//		trEvt.stopPropagation();
+		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+		drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
 	}
 	
 	private function stopDrawLine(msEvt:MouseEvent):void
 	{
+//		if ()
 		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		canLine.graphics.clear(); 
 		removeChild(canLine);
+		blDrawLine = false;  //говорим что НЕ рисуем линию
+//	delete canLine;
 		
+	}
+	private function drLine (mEvt:MouseEvent):void
+	{
+		canLine.graphics.clear();
+		canLine.graphics.lineStyle(1, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+		canLine.graphics.moveTo(pnFrom.x, pnFrom.y);
+		var dX:int = 2;
+		var dY:int = 2;
+		var tX:int = mouseX - pnFrom.x;
+		var tY:int = mouseY - pnFrom.y;
+		
+		if((tX>0) && (tY>0) )
+		{
+			dX = -3;
+			dY = -3
+		}
+		canLine.graphics.lineTo(mouseX + dX, mouseY + dY);
 	}
 	
 	]]>
