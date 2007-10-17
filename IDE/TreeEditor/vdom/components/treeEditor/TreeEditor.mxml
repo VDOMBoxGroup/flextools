@@ -63,7 +63,7 @@
 	private var canLine:Canvas = new Canvas();
 	private var pnFrom:Point = new Point();
 	private var blDrawLine:Boolean = false;
-	
+	private var vctTest:Vector = new Vector();
 		
 	
 	
@@ -101,12 +101,8 @@
 		for(var ind1:String in massLines[level])
 			for(var ind2:String in massLines[level][ind1])
 				if (trEvt.ID == ind1 || trEvt.ID == ind2)
-				{
-				//	trace(trEvt.ID);
-					 cnvLevelDown.removeChild( massLines[level][ind1][ind2]);
-					 massLines[level][ind1][ind2] = new TreeVector(massTreeElements[ind1], massTreeElements[ind2], level);
-					 cnvLevelDown.addChild(massLines[level][ind1][ind2]);
-				}
+					massLines[level][ind1][ind2].updateVector();
+				
 	}
 	
 	
@@ -128,8 +124,9 @@
 				for each(var xmlLavelObj:XML in xmlLavel.children())
 				{
 					var toObjID:String = xmlLavelObj.@ID.toXMLString();
-					if (massLines[level][obID][toObjID])
-						removeChild( massLines[level][obID][toObjID]);
+					
+//					if (massLines[level][obID][toObjID]) removeChild( massLines[level][obID][toObjID]);
+					
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
 					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
 				}
@@ -175,6 +172,8 @@
 	// Кликнули по обьекту, выделяем его
 	private function mouseDownHandler(evt:MouseEvent):void
 	{
+		pnFrom.x = evt.currentTarget.x;
+		pnFrom.y =evt.currentTarget.y;
 		
 		// проводим линию
 		if(blDrawLine){
@@ -189,6 +188,9 @@
 			if(!massLines[necessaryLevel][curTree.ID.toString()]) 
 				massLines[necessaryLevel][curTree.ID.toString()] = new Array();
 			
+			// обьект сам на себя
+			if(toObj == fromObj)return;
+			
 			// может эта линия уже есть?
 			for (var level:String in massLines)
 				for (var frsTrElem:String in massLines[level])
@@ -197,21 +199,21 @@
 							(frsTrElem == toObj && sknTrElem ==  fromObj ))
 								return;
 					
+			
 						
-			massLines[necessaryLevel][curTree.ID.toString()][evt.currentTarget.ID.toString()] 	= 
-			new TreeVector(massTreeElements[curTree.ID], massTreeElements[evt.currentTarget.ID], necessaryLevel);
+			massLines[necessaryLevel][fromObj][toObj] 	= 
+			new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
 			
-			cnvLevelDown.addChild(massLines[necessaryLevel][curTree.ID.toString()][evt.currentTarget.ID.toString()]);
-				
-			
+			cnvLevelDown.addChild(massLines[necessaryLevel][fromObj][toObj]);
 		}else{
-			trace('blDrawLine == false');
+		//	trace('blDrawLine == false');
 		};
 
 		// выделяем необходимый
 		curTree.alpha = 1;
 		curTree = evt.currentTarget;
 		curTree.alpha = 0.5;
+
 	}
 	
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
@@ -232,12 +234,11 @@
 	
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
-	//	canLine = new Canvas()
-		addChild(canLine); //для рисования связывающей линии
+		//addChild(canLine); //для рисования связывающей линии
+		addChild(vctTest);//-------------******
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		
-		pnFrom.x = trEvt.currentTarget.x;
-		pnFrom.y = trEvt.currentTarget.y;
+		
 		blDrawLine = true; //говорим что рисуем линию
 //		trEvt.stopPropagation();
 		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
@@ -249,7 +250,8 @@
 		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		canLine.graphics.clear(); 
-		removeChild(canLine);
+		//removeChild(canLine);
+		removeChild(vctTest); ///-------------***********
 		blDrawLine = false;  //говорим что НЕ рисуем линию
 	}
 	private function drLine (mEvt:MouseEvent):void
@@ -263,12 +265,23 @@
 		var tX:int = mouseX - pnFrom.x;
 		var tY:int = mouseY - pnFrom.y;
 		
-		if((tX>0) && (tY>0) )
+		var pnTo:Object = new Object();
+		pnTo.x = mouseX + dX;
+		pnTo.y = mouseY + dY;
+		
+		if((tX>0) && (tY>0))
 		{
 			dX = -3;
-			dY = -3
+			dY = -3;
+			
+			pnTo.x = mouseX - 3;
+			pnTo.y = mouseY - 3;
 		}
 		canLine.graphics.lineTo(mouseX + dX, mouseY + dY);
+		
+		vctTest.graphics.clear();
+//		vctTest.createVector(pnFrom, pnTo);	
+		vctTest.createVector(curTree, pnTo);	
 	}
 	
 	]]>
