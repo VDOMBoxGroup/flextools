@@ -94,18 +94,6 @@
 		drawLines();
 	}
 	
-	// перерисовываем необходимые линии
-	private function mouseHandler(trEvt:Object):void
-	{
-		for (var level:String in massLines)
-		for(var ind1:String in massLines[level])
-			for(var ind2:String in massLines[level][ind1])
-				if (trEvt.ID == ind1 || trEvt.ID == ind2)
-					massLines[level][ind1][ind2].updateVector();
-				
-	}
-	
-	
 	// рисуем линии
 	private function drawLines():void
 	{
@@ -125,28 +113,46 @@
 				{
 					var toObjID:String = xmlLavelObj.@ID.toXMLString();
 					
-//					if (massLines[level][obID][toObjID]) removeChild( massLines[level][obID][toObjID]);
-					
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
 					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
 				}
 			}
 		}
 	}
+	/***
+	* 
+	* ---------- перерисовываем необходимые линии -----------------
+	*
+	*/
+	private function mouseHandler(trEvt:Object):void
+	{
+		for (var level:String in massLines)
+		for(var ind1:String in massLines[level])
+			for(var ind2:String in massLines[level][ind1])
+				if (trEvt.ID == ind1 || trEvt.ID == ind2)
+					massLines[level][ind1][ind2].updateVector();
+				
+	}
+	
 	/******
-	При выделении темнее
-	на двойной щелчек скрываться /разкрываться
-	когда  соединяешь, стрелка за мышкой
-	цвет по текущему уровню
-	Баг верхнего угла
+	- При выделении темнее
+	- на двойной щелчек скрываться /разкрываться
+	+ когда  соединяешь, стрелка за мышкой
+	- цвет по текущему уровню
+	- Баг верхнего угла
 	
 	*/
 	
+	/***
+	*
+	*		выделяем необходимый елемент дерерва 
+	*		рисуем и перетаскиваем прямоугольник прямоугольник
+	*
+	*/
 	private function startingDrag(evt:TreeEditorEvent):void
 	{
 		
 		var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
-		
 		
 		canRectangle.x = evt.currentTarget.x;
 		canRectangle.y = evt.currentTarget.y;
@@ -158,6 +164,12 @@
 		addChild(canRectangle);
 	}
 	
+	/**
+	*
+	*		прекращаем перетаскивание прямоугольника
+	*		и на его места стави выделенный елемент дерерва
+	*
+	*/
 	private function stopingDrag(trEvt:MouseEvent):void
 	{
 		canRectangle.stopDrag();
@@ -169,7 +181,14 @@
 		removeChild(canRectangle);
 	}
 	
-	// Кликнули по обьекту, выделяем его
+	/** 
+	*
+	*		Кликнули по обьекту, 
+	*		- выделяем его
+	*		- если надо проводим к нему линию связи с 
+	*		с от другого обьекта
+	*/
+	
 	private function mouseDownHandler(evt:MouseEvent):void
 	{
 		pnFrom.x = evt.currentTarget.x;
@@ -180,8 +199,7 @@
 			var fromObj:String = curTree.ID.toString();
 			var toObj:String = evt.currentTarget.ID.toString();
 			var necessaryLevel:String = '0';
-			//trace('blDrawLine == true: '+ evt.currentTarget.ID.toString());
-			//              СОЗДАТЬ ЗАРАНЕЕ !!!    
+
 			if(!massLines[necessaryLevel]) 
 				massLines[necessaryLevel] = new Array();
 			
@@ -205,17 +223,19 @@
 			new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
 			
 			cnvLevelDown.addChild(massLines[necessaryLevel][fromObj][toObj]);
-		}else{
-		//	trace('blDrawLine == false');
-		};
+		}
 
-		// выделяем необходимый
+		// выделяем необходимый елемент дерева
 		curTree.alpha = 1;
 		curTree = evt.currentTarget;
 		curTree.alpha = 0.5;
-
 	}
 	
+	/**
+	*
+	*		удаляем обьект и все его связи
+	*
+	*/
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
 		// удаляем "связи" 
@@ -232,55 +252,61 @@
 		delete massTreeElements[trEvt.ID];
 	}
 	
+	/**
+	*
+	*		запускаем прорисовку линию от елемента дерева
+	*		до курсора мыши
+	*
+	*/
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
-		//addChild(canLine); //для рисования связывающей линии
-		addChild(vctTest);//-------------******
+		addChild(vctTest);//--для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		
 		
 		blDrawLine = true; //говорим что рисуем линию
-//		trEvt.stopPropagation();
 		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
 	}
 	
+	/**
+	*
+	*		перестаем рисовать линию от елемента дерева
+	*		до курсора мыши
+	*
+	*/
 	private function stopDrawLine(msEvt:MouseEvent):void
 	{
 		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
-		canLine.graphics.clear(); 
-		//removeChild(canLine);
 		removeChild(vctTest); ///-------------***********
 		blDrawLine = false;  //говорим что НЕ рисуем линию
 	}
+	/**
+	*
+	*		рисуем линию от елемента дерева
+	*		до курсора мыши
+	*
+	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
-		canLine.graphics.clear();
-		canLine.graphics.lineStyle(1, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		canLine.graphics.moveTo(pnFrom.x, pnFrom.y);
-		
-		var dX:int = 2;
-		var dY:int = 2;
 		var tX:int = mouseX - pnFrom.x;
 		var tY:int = mouseY - pnFrom.y;
-		
 		var pnTo:Object = new Object();
-		pnTo.x = mouseX + dX;
-		pnTo.y = mouseY + dY;
 		
+		// чтоб мышка не кликала по своей линии
 		if((tX>0) && (tY>0))
 		{
-			dX = -3;
-			dY = -3;
-			
 			pnTo.x = mouseX - 3;
 			pnTo.y = mouseY - 3;
 		}
-		canLine.graphics.lineTo(mouseX + dX, mouseY + dY);
+		else
+		{
+			pnTo.x = mouseX + 2;
+			pnTo.y = mouseY + 2;
+		}
 		
 		vctTest.graphics.clear();
-//		vctTest.createVector(pnFrom, pnTo);	
 		vctTest.createVector(curTree, pnTo);	
 	}
 	
