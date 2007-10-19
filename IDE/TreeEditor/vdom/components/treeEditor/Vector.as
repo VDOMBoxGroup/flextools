@@ -1,26 +1,35 @@
 package vdom.components.treeEditor
 {
-	import flash.net.ObjectEncoding;
-	import flash.geom.Point;
-	import mx.core.Container;
-	import flash.display.LineScaleMode;
 	import flash.display.CapsStyle;
-	import flash.display.JointStyle;
 	import flash.display.Graphics;
+	import flash.display.JointStyle;
+	import flash.display.LineScaleMode;
+	import flash.geom.Point;
+	import flash.net.ObjectEncoding;
 	
-	public class Vector extends Container
+	import mx.controls.Button;
+	import mx.core.Container;
+	import mx.containers.Canvas;
+	
+	public class Vector extends Canvas
 	{
 		private var _numColor:Number = 0x999922;
 		private var _strColor:String = '0';
+		private var curLine:Object = new Object;
+		public var btX:Number;
+		public var btY:Number;
+		public var _mark:Boolean = false;
 		
 		public function Vector():void
 		{
+			
 			
 		}
 		
 		public function createVector (trEl0:Object, trEl1:Object):void
 		{
-			drawLine( pointTo(trEl0, trEl1));
+			curLine = pointTo(trEl0, trEl1)
+			drawLine(curLine);
 		}
 					
 		public function pointTo(trEl0:Object, trEl1:Object):Object
@@ -83,8 +92,13 @@ package vdom.components.treeEditor
 		
 		
 		
-		private function drawLine( trEl1:Object):void
+		public function drawLine( trEl1:Object = null):void
 		{
+			if (!trEl1)
+			{
+				trEl1 = curLine;
+			//	_mark = true;
+			}
 			var x0:Number = trEl1.x1;
 			var y0:Number = trEl1.y1;
 			var x1:Number = trEl1.x2;
@@ -100,6 +114,17 @@ package vdom.components.treeEditor
 			alf = Math.atan(dY/dX);
 			if (dX<0) alf+=Math.PI;
 			
+			
+			btX = x0 - dX/2;
+			btY = y0 - dY/2;
+			
+			this.graphics.clear();
+			
+			this.graphics.lineStyle(8, _numColor, 0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			
+			this.graphics.moveTo(x0, y0);
+			this.graphics.lineTo(x1, y1);
+			
 			this.graphics.lineStyle(2, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 			
 			this.graphics.moveTo(x0, y0);
@@ -111,6 +136,14 @@ package vdom.components.treeEditor
 			this.graphics.lineTo(x1 + Math.cos(alf-dA)*dDist, y1 + Math.sin(alf-dA)*dDist);
 			this.graphics.lineTo(x1,y1);
 			//this.graphics.endFill();
+			if (_mark)
+			{
+				this.graphics.lineStyle(4, _numColor, .3, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			
+				this.graphics.moveTo(x0, y0);
+				this.graphics.lineTo(x1, y1);
+				trace('I markd');
+			}
 
 		}
 		

@@ -16,10 +16,8 @@
 	<Object ID="id_01" top="10" left="10">
 		<Level Index="0">
 			<Object ID="id_02"/>
-			<Object ID="id_03"/>
 		</Level>
 		<Level Index="1">
-			<Object ID="id_03"/>
 			<Object ID="id_04"/>
 		</Level>
 		<Level Index="2">
@@ -32,7 +30,6 @@
 		</Level>
 		<Level Index="4">
 			<Object ID="id_02"/>
-			<Object ID="id_03"/>
 		</Level>
 		<Level Index="5">
 			<Object ID="id_03"/>
@@ -64,6 +61,8 @@
 	private var pnFrom:Point = new Point();
 	private var blDrawLine:Boolean = false;
 	private var vctTest:Vector = new Vector();
+	private var curLine:Object = new Object();
+	private var btLine:Button;
 		
 	
 	
@@ -92,8 +91,31 @@
 			
 		}
 		drawLines();
+	
+		btLine = new Button();
+		btLine.label = "D";
+		btLine.width = 20;
+		btLine.height = 20;
+		btLine.visible = false;
+		btLine.addEventListener(MouseEvent.CLICK, delLine);
+		addChild(btLine);
 	}
 	
+	private function delLine(msEvt:MouseEvent):void
+	{
+		//ссылка на самого себя 
+		// curLine;
+		for (var level:String in massLines)
+				for (var frsTrElem:String in massLines[level])
+					for (var sknTrElem:String in massLines[level][frsTrElem])
+						if(curLine  == massLines[level][frsTrElem][sknTrElem] )
+						{
+						//	trace('im here!'); 
+							cnvLevelDown.removeChild(massLines[level][frsTrElem][sknTrElem]);
+							delete massLines[level][frsTrElem][sknTrElem];
+							btLine.visible = false;
+						}
+	}
 	// рисуем линии
 	private function drawLines():void
 	{
@@ -114,10 +136,23 @@
 					var toObjID:String = xmlLavelObj.@ID.toXMLString();
 					
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
+					massLines[level][obID][toObjID].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
 					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
 				}
 			}
 		}
+	}
+	
+	private function markLines(muEvt:MouseEvent):void
+	{
+		curLine.mark = false;
+		curLine = muEvt.currentTarget;
+		curLine.mark = true;
+	//	btLine.x = curLine.btX  ;
+	//	btLine.y = curLine.btY - btLine.height;
+		btLine.x = mouseX - btLine.width;
+		btLine.y = mouseY  - btLine.height;
+		btLine.visible = true;
 	}
 	/***
 	* 
@@ -140,6 +175,7 @@
 	+ когда  соединяешь, стрелка за мышкой
 	- цвет по текущему уровню
 	- Баг верхнего угла
+	- при нажатии на линиию появлялась становилась видима кнопка
 	
 	*/
 	
@@ -151,6 +187,8 @@
 	*/
 	private function startingDrag(evt:TreeEditorEvent):void
 	{
+		curLine.mark = false; // снимаем выдиление с текущей линии
+		btLine.visible = false; // прячем кнопку 
 		
 		var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
 		
@@ -223,6 +261,7 @@
 			new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
 			
 			cnvLevelDown.addChild(massLines[necessaryLevel][fromObj][toObj]);
+			massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
 		}
 
 		// выделяем необходимый елемент дерева
@@ -295,15 +334,23 @@
 		var pnTo:Object = new Object();
 		
 		// чтоб мышка не кликала по своей линии
-		if((tX>0) && (tY>0))
+		
+		if((tX>0))
 		{
-			pnTo.x = mouseX - 3;
-			pnTo.y = mouseY - 3;
+			pnTo.x = mouseX - 10;
 		}
 		else
 		{
-			pnTo.x = mouseX + 2;
-			pnTo.y = mouseY + 2;
+			pnTo.x = mouseX + 10;
+		}
+		
+		if( (tY>0))
+		{
+			pnTo.y = mouseY - 10;
+		}
+		else
+		{
+			pnTo.y = mouseY + 10;
 		}
 		
 		vctTest.graphics.clear();
