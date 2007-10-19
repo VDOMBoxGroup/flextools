@@ -9,7 +9,7 @@ package vdom.components.treeEditor
 	import mx.controls.Button;
 	import mx.controls.Label;
 	import mx.controls.Text;
-	import mx.core.LayoutContainer;
+//	import mx.core.LayoutContainer;
 	import mx.events.DragEvent;
 	
 	import vdom.events.TreeEditorEvent;
@@ -86,7 +86,7 @@ package vdom.components.treeEditor
 			textArea.x = 35; // btButton.width;
 			textArea.y = 25  //txt.height;
 			textArea.editable = false;
-			textArea.selectable = false;
+	//		textArea.selectable = false;
 			textArea.text = 'any text, a lot of text';
 			textArea.width = 60;
 			textArea.height = 40;
@@ -139,7 +139,6 @@ package vdom.components.treeEditor
 		private function btDeleteDown(muEvt:MouseEvent):void
 		{
 			this.drag = false;
-			trace('btDeleteDown');
 		}
 		
 		private function btDeleteUp(muEvt:MouseEvent):void
@@ -161,12 +160,10 @@ package vdom.components.treeEditor
 		private function btLessenDown(muEvt:MouseEvent):void
 		{
 			this.drag = false;
-			trace('btLessenDown');
 		}
 		// при нажатии кнопки свернуть
 		private function btLessenUp(msEnt:MouseEvent):void
 		{
-			trace('btLessenUp');
 			// убираем "лишнее"
 			if (min){
 				removeChild(textArea);

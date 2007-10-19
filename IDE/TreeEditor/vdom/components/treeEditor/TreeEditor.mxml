@@ -97,24 +97,42 @@
 		btLine.width = 20;
 		btLine.height = 20;
 		btLine.visible = false;
-		btLine.addEventListener(MouseEvent.CLICK, delLine);
+		btLine.addEventListener(MouseEvent.CLICK, 		delButtonOperation);
+		btLine.addEventListener(MouseEvent.MOUSE_OVER, 	delButtonOperation);
+		btLine.addEventListener(MouseEvent.MOUSE_OUT, 	delButtonOperation);
 		addChild(btLine);
 	}
 	
-	private function delLine(msEvt:MouseEvent):void
+	private function delButtonOperation(msEvt:MouseEvent):void
 	{
 		//ссылка на самого себя 
 		// curLine;
-		for (var level:String in massLines)
-				for (var frsTrElem:String in massLines[level])
-					for (var sknTrElem:String in massLines[level][frsTrElem])
-						if(curLine  == massLines[level][frsTrElem][sknTrElem] )
-						{
-						//	trace('im here!'); 
-							cnvLevelDown.removeChild(massLines[level][frsTrElem][sknTrElem]);
-							delete massLines[level][frsTrElem][sknTrElem];
-							btLine.visible = false;
-						}
+		if(msEvt.type == MouseEvent.CLICK)
+		{
+			
+			for (var level:String in massLines)
+					for (var frsTrElem:String in massLines[level])
+						for (var sknTrElem:String in massLines[level][frsTrElem])
+							if(curLine  == massLines[level][frsTrElem][sknTrElem] )
+							{
+							//	trace('im here!'); 
+								cnvLevelDown.removeChild(massLines[level][frsTrElem][sknTrElem]);
+								delete massLines[level][frsTrElem][sknTrElem];
+								btLine.alpha = 0.1;
+								btLine.visible = false;
+							}
+		}
+		
+		if(msEvt.type == MouseEvent.MOUSE_OVER)
+		{
+			btLine.alpha = 1;
+		}
+		
+		if(msEvt.type == MouseEvent.MOUSE_OUT)
+		{
+			
+			btLine.alpha = 0.1;
+		}
 	}
 	// рисуем линии
 	private function drawLines():void
