@@ -46,7 +46,7 @@ package vdom.components.treeEditor
 				this._mark = false;
 				drawLine();
 			//	button.visible = false;
-			trace('mark = fulse')
+		//	trace('mark = fulse')
 			}
 		}
 	}
