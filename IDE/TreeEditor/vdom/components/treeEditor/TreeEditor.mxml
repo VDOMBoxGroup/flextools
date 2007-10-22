@@ -62,7 +62,7 @@
 	private var blDrawLine:Boolean = false;
 	private var vctTest:Vector = new Vector();
 	private var curLine:Object = new Object();
-	private var btLine:Button;
+	private var btLine:DeleteLineButton;
 		
 	
 	
@@ -92,14 +92,8 @@
 		}
 		drawLines();
 	
-		btLine = new Button();
-		btLine.label = "D";
-		btLine.width = 20;
-		btLine.height = 20;
-		btLine.visible = false;
+		btLine = new DeleteLineButton();
 		btLine.addEventListener(MouseEvent.CLICK, 		delButtonOperation);
-		btLine.addEventListener(MouseEvent.MOUSE_OVER, 	delButtonOperation);
-		btLine.addEventListener(MouseEvent.MOUSE_OUT, 	delButtonOperation);
 		addChild(btLine);
 	}
 	
@@ -107,8 +101,7 @@
 	{
 		//ссылка на самого себя 
 		// curLine;
-		if(msEvt.type == MouseEvent.CLICK)
-		{
+	
 			
 			for (var level:String in massLines)
 					for (var frsTrElem:String in massLines[level])
@@ -118,21 +111,12 @@
 							//	trace('im here!'); 
 								cnvLevelDown.removeChild(massLines[level][frsTrElem][sknTrElem]);
 								delete massLines[level][frsTrElem][sknTrElem];
-								btLine.alpha = 0.1;
+								btLine.alpha = 0.5;
 								btLine.visible = false;
 							}
-		}
 		
-		if(msEvt.type == MouseEvent.MOUSE_OVER)
-		{
-			btLine.alpha = 1;
-		}
 		
-		if(msEvt.type == MouseEvent.MOUSE_OUT)
-		{
-			
-			btLine.alpha = 0.1;
-		}
+		
 	}
 	// рисуем линии
 	private function drawLines():void
@@ -168,8 +152,8 @@
 		curLine.mark = true;
 	//	btLine.x = curLine.btX  ;
 	//	btLine.y = curLine.btY - btLine.height;
-		btLine.x = mouseX - btLine.width;
-		btLine.y = mouseY  - btLine.height;
+		btLine.x = mouseX;// - btLine.width - 2;
+		btLine.y = mouseY  - btLine.height - 2;
 		btLine.visible = true;
 	}
 	/***
@@ -205,19 +189,22 @@
 	*/
 	private function startingDrag(evt:TreeEditorEvent):void
 	{
-		curLine.mark = false; // снимаем выдиление с текущей линии
-		btLine.visible = false; // прячем кнопку 
-		
-		var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
-		
-		canRectangle.x = evt.currentTarget.x;
-		canRectangle.y = evt.currentTarget.y;
-		canRectangle.graphics.lineStyle(3, 0.5, 0.2, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		canRectangle.graphics.beginFill(0x555555,  0);
-		canRectangle.graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
-		canRectangle.addEventListener(MouseEvent.MOUSE_UP, stopingDrag);
-		canRectangle.startDrag(false, rect);
-		addChild(canRectangle);
+		if(!blDrawLine)
+		{	
+			curLine.mark = false; // снимаем выдиление с текущей линии
+			btLine.visible = false; // прячем кнопку 
+			
+			var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
+			
+			canRectangle.x = evt.currentTarget.x;
+			canRectangle.y = evt.currentTarget.y;
+			canRectangle.graphics.lineStyle(3, 0.5, 0.2, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			canRectangle.graphics.beginFill(0x555555,  0);
+			canRectangle.graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
+			canRectangle.addEventListener(MouseEvent.MOUSE_UP, stopingDrag);
+			canRectangle.startDrag(false, rect);
+			addChild(canRectangle);
+		}
 	}
 	
 	/**
@@ -379,6 +366,5 @@
 </mx:Script>
 <mx:Canvas id="cnvLevelTop"/>
 <mx:Canvas id="cnvLevelDown"/>
-	
 
 </mx:Canvas>
