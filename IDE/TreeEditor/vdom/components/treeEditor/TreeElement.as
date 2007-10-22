@@ -51,9 +51,8 @@ package vdom.components.treeEditor
 			btLine.label = 'L';
 			addChild(btLine);
 			
-			btLine.addEventListener(MouseEvent.MOUSE_DOWN, btLineDown);
-			btLine.addEventListener(MouseEvent.MOUSE_OUT, btLineOut);
-			btLine.addEventListener(MouseEvent.MOUSE_UP, btLineUp);
+	//		btLine.addEventListener(MouseEvent.MOUSE_OUT, btLineOut);
+			btLine.addEventListener(MouseEvent.CLICK, btLineClick);
 			
 			
 			btDelete = new Button();
@@ -65,8 +64,8 @@ package vdom.components.treeEditor
 			btDelete.name = 'deleteButton';
 			addChild(btDelete);
 			
-			btDelete.addEventListener(MouseEvent.MOUSE_DOWN, btDeleteDown);
-			btDelete.addEventListener(MouseEvent.MOUSE_UP, btDeleteUp);
+	//		btDelete.addEventListener(MouseEvent.MOUSE_DOWN, btDeleteDown);
+			btDelete.addEventListener(MouseEvent.CLICK, btDeleteClick);
 			
 			
 			btLessen = new Button();
@@ -76,8 +75,8 @@ package vdom.components.treeEditor
 			btLessen.y = 3;
 			btLessen.label = 'H';
 			
-			btLessen.addEventListener(MouseEvent.MOUSE_DOWN, btLessenDown);
-			btLessen.addEventListener(MouseEvent.MOUSE_UP, btLessenUp);
+	//		btLessen.addEventListener(MouseEvent.MOUSE_DOWN, btLessenDown);
+			btLessen.addEventListener(MouseEvent.CLICK, btLessenClick);
 			
 			
 			addChild(btLessen);
@@ -113,13 +112,9 @@ package vdom.components.treeEditor
 		 *  
 		 */
 		
-		private function btLineDown(muEvt:MouseEvent):void
-		{
-			//this.drag = false;
-			//trace('btLineDown');
-		}
 		
-		private function btLineUp(muEvt:MouseEvent):void 
+		
+		private function btLineClick(muEvt:MouseEvent):void 
 		{
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAW_LINE, ID));	
 		}
@@ -141,7 +136,7 @@ package vdom.components.treeEditor
 			this.drag = false;
 		}
 		
-		private function btDeleteUp(muEvt:MouseEvent):void
+		private function btDeleteClick(muEvt:MouseEvent):void
 		{
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, ID));	
 		}
@@ -162,7 +157,7 @@ package vdom.components.treeEditor
 			this.drag = false;
 		}
 		// при нажатии кнопки свернуть
-		private function btLessenUp(msEnt:MouseEvent):void
+		private function btLessenClick(msEnt:MouseEvent):void
 		{
 			// убираем "лишнее"
 			if (min){
@@ -205,10 +200,7 @@ package vdom.components.treeEditor
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAG, ID));
 		}
 		 
-		private function dispStopDrag(evt:MouseEvent):void
-		{
-		//	dispatchEvent(new TreeEditorEvent(TreeEditorEvent.STOP_DRAG, ID));
-		}
+		
 		 
 		private function drawRect():void
 		{
