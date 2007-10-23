@@ -1,25 +1,25 @@
 package vdom.components.treeEditor
 {
+	import flash.display.CapsStyle;
+	import flash.display.DisplayObject;
+	import flash.display.JointStyle;
+	import flash.display.LineScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.ui.Mouse;
 	
 	import mx.containers.Canvas;
 	import mx.containers.TitleWindow;
 	import mx.controls.Button;
 	import mx.controls.Label;
 	import mx.controls.Text;
-//	import mx.core.LayoutContainer;
+	import mx.controls.TextArea;
 	import mx.events.DragEvent;
+	import mx.states.AddChild;
+	import mx.states.SetStyle;
 	
 	import vdom.events.TreeEditorEvent;
-	import flash.display.DisplayObject;
-	import mx.states.AddChild;
-	import mx.controls.TextArea;
-	import flash.display.LineScaleMode;
-	import flash.display.CapsStyle;
-	import flash.display.JointStyle;
-	import flash.ui.Mouse;
 	
 	public class TreeElement extends Canvas
 	{
@@ -36,25 +36,34 @@ package vdom.components.treeEditor
 		public function TreeElement()
 		{
 			setStyle('backgroundColor', '#99ffff')
+		//	setStyle('borderColor', '#ff0000')
+			//setStyle('borderStyle', 'solid')
+		//	this.setStyle('cornerRadius','15px') 
+		//	setStyle('borderThickness', '5px'); 
+			initHead();
 			
+			initLittleBody();
+			initBigBody(); 
 			
-			txt = new Label();
-			txt.addEventListener(MouseEvent.MOUSE_DOWN, dispStartDrag);
-			txt.buttonMode = true;
-			addChild(txt);
+			isRedraw = true;
+			addChild(rect);
+		}
+		
+		private function initHead():void
+		{
+			// поле для перетаскивания
 			
-			btLine = new Button();
-			btLine.x  = 80;
-			btLine.y  = 3;
-			btLine.width = 20;
-			btLine.height = 15; 
-			btLine.label = 'L';
-			addChild(btLine);
+			// кнопка скрыть
+			btLessen = new Button();
+			btLessen.width = 20;
+		 	btLessen.height = 15;
+			btLessen.x = 40;
+			btLessen.y = 3;
+			btLessen.label = 'H';
+			btLessen.addEventListener(MouseEvent.CLICK, btLessenClick);
+			addChild(btLessen);
 			
-	//		btLine.addEventListener(MouseEvent.MOUSE_OUT, btLineOut);
-			btLine.addEventListener(MouseEvent.CLICK, btLineClick);
-			
-			
+			// кнопка удалить
 			btDelete = new Button();
 			btDelete.width = 20;
 		 	btDelete.height = 15;
@@ -63,24 +72,29 @@ package vdom.components.treeEditor
 			btDelete.label = 'D';
 			btDelete.name = 'deleteButton';
 			addChild(btDelete);
-			
-	//		btDelete.addEventListener(MouseEvent.MOUSE_DOWN, btDeleteDown);
 			btDelete.addEventListener(MouseEvent.CLICK, btDeleteClick);
 			
-			
-			btLessen = new Button();
-			btLessen.width = 20;
-		 	btLessen.height = 15;
-			btLessen.x = 40;
-			btLessen.y = 3;
-			btLessen.label = 'H';
-			
-	//		btLessen.addEventListener(MouseEvent.MOUSE_DOWN, btLessenDown);
-			btLessen.addEventListener(MouseEvent.CLICK, btLessenClick);
-			
-			
-			addChild(btLessen);
-			
+			// кнопка линия
+			btLine = new Button();
+			btLine.x  = 80;
+			btLine.y  = 3;
+			btLine.width = 20;
+			btLine.height = 15; 
+			btLine.label = 'L';
+			addChild(btLine);
+			btLine.addEventListener(MouseEvent.CLICK, btLineClick);
+		}
+		
+		private function initLittleBody():void
+		{
+			txt = new Label();
+			txt.addEventListener(MouseEvent.MOUSE_DOWN, dispStartDrag);
+			txt.buttonMode = true;
+			addChild(txt);
+		}
+		
+		private function initBigBody():void
+		{
 			textArea = new TextArea();
 			textArea.x = 35; // btButton.width;
 			textArea.y = 25  //txt.height;
@@ -90,10 +104,7 @@ package vdom.components.treeEditor
 			textArea.width = 60;
 			textArea.height = 40;
 			addChild(textArea);
-			isRedraw = true;
-			addChild(rect);
 		}
-		
 		
 		private var isRedraw:Boolean;
 		
@@ -188,11 +199,10 @@ package vdom.components.treeEditor
 		
 		public function set current(data:Boolean):void
 		{
-			if (data){
+			if (data)
 				drawRect();
-			} else {
+			else 
 				rect.graphics.clear();
-			}
 		}
 		
 		private function dispStartDrag(evt:MouseEvent):void

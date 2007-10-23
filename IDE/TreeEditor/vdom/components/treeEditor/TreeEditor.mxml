@@ -152,7 +152,7 @@
 		curLine.mark = true;
 	//	btLine.x = curLine.btX  ;
 	//	btLine.y = curLine.btY - btLine.height;
-		btLine.x = mouseX;// - btLine.width - 2;
+		btLine.x = mouseX - btLine.width / 2;
 		btLine.y = mouseY  - btLine.height - 2;
 		btLine.visible = true;
 	}
@@ -176,8 +176,8 @@
 	- на двойной щелчек скрываться /разкрываться
 	+ когда  соединяешь, стрелка за мышкой
 	- цвет по текущему уровню
-	- Баг верхнего угла
-	- при нажатии на линиию появлялась становилась видима кнопка
+	+ Баг верхнего угла
+	+ при нажатии на линиию появлялась становилась видима кнопка
 	
 	*/
 	
@@ -314,7 +314,7 @@
 	}
 	
 	/**
-	*
+	* ресурсы
 	*		перестаем рисовать линию от елемента дерева
 	*		до курсора мыши
 	*
@@ -341,22 +341,14 @@
 		// чтоб мышка не кликала по своей линии
 		
 		if((tX>0))
-		{
 			pnTo.x = mouseX - 10;
-		}
 		else
-		{
 			pnTo.x = mouseX + 10;
-		}
 		
 		if( (tY>0))
-		{
 			pnTo.y = mouseY - 10;
-		}
 		else
-		{
 			pnTo.y = mouseY + 10;
-		}
 		
 		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo);	

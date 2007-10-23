@@ -15,14 +15,14 @@ package vdom.components.treeEditor
 		public function DeleteLineButton()
 		{
 			bt = new Button();
-			bt.height = 20;
-			bt.width = 20;
+			bt.height = 18;
+			bt.width = 18;
 			addChild(bt);
 			
 			icons = new Image();
 			icons.source='resource/vdom2_treeEditor_delete_01.jpg';
-			icons.width = 16;
-			icons.height = 16;
+			icons.width = 15;
+			icons.height = 15;
 			icons.x = 2;
 			icons.y = 1
 			addChild(icons);
