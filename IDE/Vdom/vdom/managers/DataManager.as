@@ -167,6 +167,7 @@ public class DataManager implements IEventDispatcher {
 		delete _objects.Object.(@ID == objectId)[0];
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
 		dme.objectId = objectId;
+		soap.deleteObject(_appId, objectId);
 		dispatchEvent(dme);
 	}
 	
@@ -209,8 +210,10 @@ public class DataManager implements IEventDispatcher {
 		newObject.appendChild(attributes);
 		newObject.appendChild(objectType);
 		
-		_objects.appendChild(newObject);		
-
+		_objects.appendChild(newObject);
+		
+		soap.createObject(_appId, _pageId, initProp.typeId);
+		
 		return objectId;
 	}
 	

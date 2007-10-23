@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<project 
+	name="ThemeCreator" 
+	default="build"
+	basedir=".">
+	
+	<taskdef resource="flexTasks.tasks" classpath="${basedir}/lib/flexTasks.jar" />
+	
+    <property file="local.properties"/>
+	<!-- dirs -->
+	<property name="flex.sdk.dir" location="."/>
+	<property name="workspace.dir" location="."/>
+	<property name="src.dir" location="assets/theme/src"/>
+	<property name="build.dir" location="assets/theme/swc"/>
+	
+	<!-- files -->
+	<property name="compc.jar" location="${flex.sdk.dir}/lib/compc.jar"/>
+	<property name="default.css" location="${src.dir}/default.css"/>
+	<property name="VdomThemeAssets.swf" location="${src.dir}/VdomThemeAssets.swf"/>
+	<property name="class.ActionPanelBackground" value="vdom.skins.ActionPanelBackground"/>
+
+
+
+    <description>
+    	A vdom theme builder
+    </description>
+
+    <!-- ================================= 
+          target: build              
+         ================================= -->
+    <target 
+    	name="build" 
+    	depends="clear,compile" 
+    	description="--> Simple application">
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: compile                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="compile">
+		<compc 
+			output="${build.dir}/VdomThemeAssets.swc"
+			include-classes="${class.ActionPanelBackground}">
+			<source-path path-element="${basedir}"/>
+			<include-file name="default.css" path="${default.css}"/>
+			<include-file name="VdomThemeAssets.swf" path="${VdomThemeAssets.swf}"/>          
+		</compc>       
+	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: clear                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clear">
+		<delete failonerror="false">
+			<fileset dir="${build.dir}" includes="**/*.*" />
+		</delete>
+    </target>
+</project>

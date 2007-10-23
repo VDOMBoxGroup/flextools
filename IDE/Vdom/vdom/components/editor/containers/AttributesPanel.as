@@ -4,14 +4,29 @@ import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+
+import mx.collections.ArrayCollection;
+import mx.collections.XMLListCollection;
 import mx.containers.Grid;
-import mx.containers.GridRow;
 import mx.containers.GridItem;
+import mx.containers.GridRow;
 import mx.controls.Button;
+import mx.controls.ComboBox;
 import mx.controls.Label;
 import mx.controls.NumericStepper;
+import mx.controls.Text;
 import mx.controls.TextInput;
-import mx.collections.XMLListCollection;
+import mx.controls.ToolTip;
+import mx.events.ValidationResultEvent;
+import mx.managers.ToolTipManager;
+import mx.validators.NumberValidator;
+import mx.validators.RegExpValidator;
+import mx.validators.Validator;
+
+import vdom.Languages;
+import mx.events.FlexEvent;
+
+//use namespace mx_internal;
 
 public class AttributesPanel extends ClosablePanel
 {
@@ -22,44 +37,31 @@ public class AttributesPanel extends ClosablePanel
 	private var applyButton:Button;
 	
 	private var _type:XML;
+	private var _typeID:String;
 	private var _collection:XMLListCollection;
 	
 	private var fieldsArray:Array;
+	private var languages:Languages;
+	
+	private var _isValid:Boolean;
+	private var _objectChanged:Boolean;
+	
+	private var invalidElementsCount:uint;
 	
 	public function AttributesPanel() {
 		
 		super();
 		help = null;
+		_typeID = null;
+		languages = Languages.getInstance();
 		this.addEventListener(KeyboardEvent.KEY_UP, enterHandler);
-	}
-	
-	public function set dataProvider(objectDescription:XML):void {
+		horizontalScrollPolicy = 'off';
+		verticalScrollPolicy = 'off';
+		ToolTip.maxWidth = 120;
 		
-		if(objectDescription == null) {	
-			applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
-			title = 'Attributes';
-			applyButton.visible = false;
-			attributesGrid.visible = false;
-			attributesGrid.removeAllChildren();
-			return
-		};
+		_isValid = true;
 		
-		_type = objectDescription.Type[0];
-		
-		//trace(prop);
-		title = 'Attributes: ' + _type.Information.Name;
-		help = '';
-		
-		var xl:XMLList = new XMLList();
-		xl += objectDescription.Attributes.Attribute;
-		_collection = new XMLListCollection(xl);
-		
-		createChild();
-		     
-		applyButton.addEventListener(MouseEvent.CLICK, applyChanges);
-		attributesGrid.visible = true;
-		applyButton.visible = true;
-		invalidateDisplayList();
+		invalidElementsCount = 0;
 	}
 	
 	public function get dataProvider():XML {
@@ -67,15 +69,37 @@ public class AttributesPanel extends ClosablePanel
 		return XML(_collection);
 	}
 	
+	public function set dataProvider(objectDescription:XML):void {
+		
+		if (objectDescription is XML) {
+			
+			var xl:XMLList = new XMLList();
+			xl += objectDescription.Attributes.Attribute;
+			_collection = new XMLListCollection(xl);
+			
+			_type = objectDescription.Type[0];
+			
+		} else {
+			
+			_collection = null;
+			_type = null;
+		}
+		
+		_objectChanged = true;
+		invalidateProperties();
+	}
+	
+	
+	
 	private function applyChanges(event:Event):void {
 
-		for (var i:uint = 0; i < _collection.length; i++) {
+		for (var i:String in fieldsArray) {
 			_collection[i] = fieldsArray[i][0][fieldsArray[i][1]];
 		}
 		dispatchEvent(new Event('propsChanged'));
 	}
 	
-	private function createChild():void {
+	private function createAttributes():void {
 		
 		attributesGrid.removeAllChildren();
 		fieldsArray = [];
@@ -84,91 +108,149 @@ public class AttributesPanel extends ClosablePanel
 		
 		var attrRow:GridRow;
 		var attrLabelItem:GridItem;
-		var attrFieldItem:GridItem;
-		var attrLabel:Label;
+		var attrValueItem:GridItem;
+		
+		var attrLabel:Text;
 		
 		for (var i:uint = 0; i < _collection.length; i++) {
 			
 			var attributeDescription:XML = _type.Attributes.Attribute.(Name == _collection[i].@Name)[0]
 			
+			if (attributeDescription == null) continue;
+			
 			attrRow = new GridRow();
 			attrRow.percentWidth = 100;
-			
+				
 			attrLabelItem = new GridItem();
-			attrLabel = new Label();
-			attrLabel.percentWidth = 100;
+			attrLabel = new Text();
+			attrLabel.width = 70;
 			attrLabel.setStyle('textAlign', 'right');
-			attrLabel.text = _collection[i].@Name;		
+			
+			attrLabel.selectable = false;
+			attrLabel.text = getLanguagePhrase(_typeID, attributeDescription.DisplayName);	
 			attrLabelItem.addChild(attrLabel);
 			
-			attrFieldItem = new GridItem();
-			attrFieldItem.percentWidth = 100;
+			attrValueItem = new GridItem();
+			attrValueItem.percentWidth = 100;
 			
-			var typeRE:RegExp = /(\w+)\((\d*)\)/;
+			var codeInterfaceRE:RegExp = /^(\w*)\((.*)\)/;
 			
-			codeInterface['type'] = attributeDescription.CodeInterface.match(typeRE)[1].toLowerCase();
-			codeInterface['length'] = attributeDescription.CodeInterface.match(typeRE)[2];
+			var matches:Array = attributeDescription.CodeInterface.match(codeInterfaceRE);
+			
+			codeInterface['type'] = matches[1].toLowerCase();
+			codeInterface['value'] = matches[2];
+			
+			var valueContainer:*;
+			var valueType:String;
 			
 			switch(codeInterface['type']) {
 				case 'number':
-					var ns:NumericStepper = new NumericStepper();
-					//attrField.name = collection[i].Name;
-					ns.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
-					ns.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
-					ns.maxChars = codeInterface['length'];
-					ns.minimum = 0;
-					ns.maximum = Math.pow(10, codeInterface['length']) - 1;
-					ns.percentWidth = 100;
-					ns.value = _collection[i];
-					ns.name = _collection[i].@Name.toString();
-					//ns.data = collection[i];
-					//attrField.data = collection[i].Value;
-					fieldsArray[i] = [ns, 'value'];
-					attrFieldItem.addChild(ns);
-					break;
+					valueContainer = new NumericStepper();
+					valueType = 'value';
+					
+					valueContainer.maxChars = codeInterface['value'];
+					valueContainer.minimum = 0;
+					valueContainer.maximum = Math.pow(10, codeInterface['value']) - 1;
+					
+					valueContainer.value = _collection[i];
+				break;
 					
 				case 'textfield':
-					var ti:TextInput = new TextInput();
-					//attrField.name = collection[i].Name;
-					ti.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
-					ti.maxChars = codeInterface['length'];
-					ti.percentWidth = 100;
-					ti.name = _collection[i].@Name.toString();
-					ti.text = _collection[i];
-					//attrField.data = collection[i].Value;
-					fieldsArray[i] = [ti, 'text'];
-					attrFieldItem.addChild(ti);
-					break;
+				
+					valueContainer = new TextInput();
+					valueType = 'text';
+					
+					
+					
+					valueContainer.maxChars = codeInterface['value'];
+					
+					valueContainer.text = _collection[i];
+				break;
+					
 				case 'dropdown':
+					valueContainer = new ComboBox();
+					valueType = 'value';
+					var comboBoxData:Array = new Array();
+					var codeInterfaceValueRE:RegExp = /\((#Lang\(.*?\))\|(.*?)\)/g;
+					
+					var listValues:Array = codeInterfaceValueRE.exec(codeInterface['value']);
+					while (listValues != null) {
+					    var comboBoxLabel:String = getLanguagePhrase(_typeID, listValues[1]);
+					    comboBoxData.push({label:comboBoxLabel, data:listValues[2]});
+					    listValues = codeInterfaceValueRE.exec(codeInterface['value']);
+					}
+					valueContainer.dataProvider = comboBoxData;
+				break;
+				
 				case 'file':
 				case 'color':
 				case 'pageLink':
 				case 'objectlist':
 				case 'linkedbase':
 				case 'externaleditor':
-				default:
-					var tw:TextInput = new TextInput();
-					//attrField.name = collection[i].Name;
-					tw.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
-					tw.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
-					tw.maxChars = codeInterface['length'];
-					tw.percentWidth = 100;
-					tw.name = _collection[i].@Name.toString();
-					tw.text = _collection[i];
-					//attrField.data = collection[i].Value;
-					fieldsArray[i] = [tw, 'text'];
-					attrFieldItem.addChild(tw);
 				
-			} 
-
+				default:
+					valueContainer = new TextInput();
+					valueType = 'text';
+					
+					valueContainer.text = _collection[i];
+			}
+			
+			valueContainer.percentWidth = 100;
+			valueContainer.minWidth = 0;
+			valueContainer.data = {
+				'elementName':attributeDescription.Name,
+				'helpPhraseID':attributeDescription.Help,
+				'valid': true
+			};
+			
+			addValidator(
+				valueContainer, 
+				valueType, 
+				attributeDescription.RegularExpressionValidation, 
+				attributeDescription.ErrorValidationMessage
+			);
+			
+			valueContainer.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
+			valueContainer.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
+			
+			attrValueItem.addChild(valueContainer);
+			
+			fieldsArray[i] = [valueContainer, valueType];
+			
 			attrRow.addChild(attrLabelItem);
-			attrRow.addChild(attrFieldItem);
+			attrRow.addChild(attrValueItem);
 			
 			attributesGrid.addChild(attrRow);
 		}
-		var zzz:String = 'asdasdasdasdasdsa';
 	}
-
+	
+	private function getLanguagePhrase(typeID:String, phraseID:String):String {
+		
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		phraseID = phraseID.match(phraseRE)[1];
+		var languageID:String = typeID + '-' + phraseID;
+		
+		return languages.language.(@ID == languageID)[0];
+	}
+	
+	private function addValidator(valueContainer:Object, valueType:String, regExp:String, errorMsg:String):void {
+		
+		if (regExp == '') return;
+		var validator:RegExpValidator = new RegExpValidator();
+		
+		validator.addEventListener(ValidationResultEvent.INVALID, validateHandler);
+		validator.addEventListener(ValidationResultEvent.VALID, validateHandler);
+		
+		validator.source = valueContainer;
+		validator.property = valueType;
+		validator.expression = '^'+regExp+'$';
+		validator.noMatchError = 
+			validator.requiredFieldError = 
+				getLanguagePhrase(_typeID, errorMsg);
+		
+	}
+	
 	override protected function createChildren():void {
 		
 		super.createChildren();
@@ -183,13 +265,76 @@ public class AttributesPanel extends ClosablePanel
 			applyButton = new Button();
 			applyButton.visible = false;
 			applyButton.label = 'Save';
+			applyButton.enabled = false;
 			addChild(applyButton);
 		}
 	}
 	
+	override protected function commitProperties():void {
+		
+		if(_objectChanged) {
+			
+			var titleValue:String = 'Attributes';
+			
+			if (_collection is XMLListCollection) {
+				
+				_typeID = _type.Information.ID;
+				titleValue += ': ' + _type.Information.Name;
+				
+				createAttributes();
+				
+				applyButton.addEventListener(MouseEvent.CLICK, applyChanges);
+				attributesGrid.visible = true;
+				applyButton.visible = true;
+				_isValid = true;
+				
+			} else {
+				
+				applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
+				applyButton.visible = false;
+				attributesGrid.visible = false;
+				attributesGrid.removeAllChildren();
+				_isValid = false;
+			}
+			
+			title = titleValue;
+			help = '';
+			invalidElementsCount = 0;
+			
+			_objectChanged = false;
+		}
+		
+		if(_isValid)
+			applyButton.enabled = true;
+		else
+			applyButton.enabled = false;
+			
+		super.commitProperties();	
+	}
+	
+	private function validateHandler(event:ValidationResultEvent):void {
+		
+		var element:Object = event.currentTarget.source.data;
+		var oldValid:Boolean = _isValid;
+		
+		if (event.type == ValidationResultEvent.VALID && element['valid'] == false) {
+			element['valid'] = true;
+			invalidElementsCount--;
+		} else if(event.type == ValidationResultEvent.INVALID && element['valid'] == true) {
+			element['valid'] = false;
+			invalidElementsCount++;
+		}
+		
+		if(invalidElementsCount > 0) _isValid = false;
+			else _isValid = true;
+		
+		if(oldValid !== _isValid) invalidateProperties();
+	}
+	
 	private function focusInEventHandler(event:FocusEvent):void {
 		
-		help = _type.Attributes.Attribute.(Name == event.currentTarget.name).Help;
+		var phraseID:String = event.currentTarget.data['helpPhraseID'];
+		help = getLanguagePhrase(_typeID, phraseID);
 	}
 	
 	private function focusOutEventHandler(event:FocusEvent):void {
@@ -199,7 +344,7 @@ public class AttributesPanel extends ClosablePanel
 	
 	private function enterHandler(event:KeyboardEvent):void {
 		
-		if(event.keyCode == 13) applyChanges(event);
+		//if(event.keyCode == 13) applyChanges(event);
 	}
 }
 }

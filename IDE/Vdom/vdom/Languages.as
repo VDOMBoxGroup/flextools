@@ -3,7 +3,10 @@ package vdom {
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
-import mx.containers.ControlBar;
+import vdom.connection.protect.Code;
+import flash.net.sendToURL;
+import flash.utils.getTimer;
+import mx.core.Application;
 	
 public class Languages implements IEventDispatcher {
 	
@@ -11,9 +14,12 @@ public class Languages implements IEventDispatcher {
 	
 	private var dispatcher:EventDispatcher;
 	private var _defaultLanguage:XMLList;
+	private var _defaultLanguageCode:String;
 	private var _currentLanguage:XMLList;
+	private var _currentLanguageCode:String;
 	private var allLanguages:XMLList;
-	ControlBar
+	private var allLanguageCode:XMLList;
+	
 	public static function getInstance():Languages
 	{
 		if (!instance) {
@@ -30,28 +36,51 @@ public class Languages implements IEventDispatcher {
 			throw new Error("Instance already exists.");
 	}
 	
-	public function init(languages:XML, defaultLanguage:String):void {
+	public function init(languages:XML, aviableLanguages:XML, defaultLanguageCode:String):void {
 	
 		dispatcher = new EventDispatcher(this);
-		allLanguages = languages.language;
-		
-		_defaultLanguage = allLanguages.(@ID == defaultLanguage).*;
+		allLanguageCode = aviableLanguages.*;
+		allLanguages = languages.Language;
+		_defaultLanguageCode = defaultLanguageCode;
+		_defaultLanguage = allLanguages.(@Code == _defaultLanguageCode).*;
 		_currentLanguage = _defaultLanguage;
 	}
 	
 	[Bindable (event='languageChanged')]
 	public function get language():XMLList {
 		
+		//trace('languageChangedGet');
 		return _currentLanguage;
 	}
 	
 	public function set language(language:XMLList):void {
+		//trace('languageChangedSet');
+	}
+	
+	public function parseLanguageData(languageData:XML):void {
 		
+		//var beginT:int = getTimer();
+		for each(var element:XML in languageData.Type.Languages.Language.Sentence) {
+			
+			var languageCode:String = element.parent().@Code;
+			
+			if(allLanguageCode.(@Code == languageCode)[0] == undefined) break;
+			
+			var lng:XML = allLanguages.(@Code == languageCode)[0];
+			
+			var idString:String = element.parent().parent().parent().Information.ID.toString() + '-' + element.@ID.toString();
+
+			lng.appendChild(<Sentence ID={idString} label="">{element.toString()}</Sentence>);
+		}
+		
+		_defaultLanguage = allLanguages.(@Code == _defaultLanguageCode).*;
+		changeLanguage(_currentLanguageCode);
+		//trace((getTimer()-beginT)/1000);
 	}
 	
 	public function changeLanguage(languageLabel:String):void {
 		
-		var newLanguage:XMLList = allLanguages.(@ID == languageLabel);
+		var newLanguage:XMLList = allLanguages.(@Code == languageLabel);
 		var tmpLanguage:XMLList = _defaultLanguage.copy();
 		
 		for each(var sentence:XML in newLanguage.*) {
@@ -60,7 +89,8 @@ public class Languages implements IEventDispatcher {
 		}
 
 		_currentLanguage = tmpLanguage;
-		dispatchEvent(new Event('languageChanged'));
+		_currentLanguageCode = languageLabel;
+		Application.application.executeChildBindings(true);
 	}
 	
 	

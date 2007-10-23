@@ -4,7 +4,7 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	verticalGap="0" horizontalGap="0">
 	
-	<mx:Image id="img" width="60" height="50" />
-	<mx:Label width="60" fontWeight="bold" text="zzzzzz"/>
+	<mx:Image focusEnabled="false" id="img" width="50" height="50" />
+	<mx:Label fontWeight="bold" text="zzzzzz"/>
 </mx:VBox>
 

@@ -3,7 +3,6 @@
 	
 	initialize="initalizeHandler();"
 	
-	backgroundGradientColors="[#ffffff, #ffffff]" 
 	minWidth="800" minHeight="400"
 	
 	verticalScrollPolicy="off"
@@ -22,20 +21,20 @@
 	
 	<mx:ViewStack id="viewstack" width="100%" height="100%">
 	
-	<loginForm:LoginForm creationComplete="loginCreationComleteHandler(event);"/>
+	<loginForm:LoginForm authDataChanged="submitLogin(event)" />
 	
 	<mx:Canvas id="main" creationComplete="mainInitHandler(event)" width="100%" height="100%">
 	<mx:ApplicationControlBar
 		top="0" left="0" right="0" height="40" 
 		fillColors="[#000000, #000000]" fillAlphas="[0.63, 1.0]" cornerRadius="0" dock="true">
 		<mx:Spacer x="10" y="10" width="100%"/>
-		<mx:Spacer x="10" y="10" width="100%"/>
-		<mx:ComboBox id="selectLang" width="80"
-			
-			dataProvider="{languagesTranslation.language}" 
+		<mx:ComboBox id="selectTestLang"
+			width="140"
+			dataProvider="{languageList.Language}"
 			labelField="@label"
-		 fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]">
-		</mx:ComboBox>
+				fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
+				change="changeLanguageHandler(event);"/>
+		<mx:Spacer x="10" y="10" width="100%"/>
 	</mx:ApplicationControlBar>
 	<mx:Image x="6" y="5" source="@Embed(source='assets/logo.png')"/>
 	<controls:MainTabNavigator id="tabPanel"
@@ -69,12 +68,12 @@
 					
 				</controls:ActionPanel>
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'main_applist')}" width="200">
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_applist')}">
 				
 					<mx:HorizontalList id="applicationListContainer"
-						minWidth="0" minHeight="0" height="78" labelField="@id" 
+						minWidth="0" minHeight="0" labelField="@id" 
 						itemRenderer="vdom.containers.Thumbnail" 
-						change="HorizontalList(event.target).selectedItem.data"/>
+						change="HorizontalList(event.target).selectedItem.data" columnCount="4"/>
 						
 				</controls:ActionPanel>
 				
@@ -130,7 +129,7 @@
 		</mx:Canvas>
 	</controls:MainTabNavigator>
 	<mx:ViewStack id="placeCanvas" 
-		borderStyle="solid" borderThickness="1" borderColor="#808080" left="10" right="10" top="220" bottom="30">
+		borderStyle="none" left="10" right="10" top="220" bottom="10">
 	
 		<main:Main id="mainCanv"
 			width="100%" height="100%"/>

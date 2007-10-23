@@ -12,6 +12,7 @@ import vdom.components.editor.managers.ResizeManager;
 import vdom.managers.DataManager;
 
 import vdom.components.editor.events.WorkAreaEvent;
+import flash.ui.Keyboard;
 
 public class WorkArea extends Canvas {
 	
@@ -30,7 +31,7 @@ public class WorkArea extends Canvas {
 		resizer = new ResizeManager();
 		resizer.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
 		
-		addEventListener(KeyboardEvent.KEY_UP, deleteObjectHandler);
+		addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 		addEventListener(MouseEvent.CLICK, mainClickHandler, false);
 	}
 	
@@ -201,14 +202,21 @@ public class WorkArea extends Canvas {
 	/**
      *  @private
      */
-	private function deleteObjectHandler(event:KeyboardEvent):void {
+	override protected function keyDownHandler(event:KeyboardEvent):void {
 		
-		if(event.keyCode == 46) {
-			if(selectedObjectId) {
+		if(!selectedObjectId) return;
+		
+		
+		
+		switch (event.keyCode) {
+			
+			case Keyboard.DELETE:
+			
 				var we:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.DELETE_OBJECT);
 				we.objectID = selectedObjectId;
 				dispatchEvent(we);
-			}
+				event.stopPropagation();
+				break;
 		}
 	}
 	

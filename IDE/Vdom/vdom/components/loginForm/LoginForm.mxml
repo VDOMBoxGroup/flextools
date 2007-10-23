@@ -7,23 +7,36 @@
 	creationComplete="init();"
 	show="show();"
 	hide="hide();">
-
+	
+	<mx:Metadata>
+		[Exclude(name="alignButtons", kind="property")]
+		[Event(name="authDataChanged", type="vdom.events.AuthenticationEvent")]
+		
+	</mx:Metadata>
+	
 	<mx:Script source="includes/loginForm.as"/>
 	
-	<mx:Form defaultButton="{submitButton}" horizontalCenter="0" verticalCenter="0" borderColor="#808080" borderStyle="solid">
+	<mx:Form defaultButton="{submitButton}" 
+		horizontalCenter="0" verticalCenter="0" 
+		borderColor="#808080" borderStyle="solid" backgroundColor="#ffffff" dropShadowEnabled="true">
 		<mx:FormItem label="{languages.language.(@label == 'login_username')}">
-			<mx:TextInput id="username" 
-				width="100"/>
+			<mx:TextInput id="_username" 
+				width="140"/>
 		</mx:FormItem>
 		<mx:FormItem label="{languages.language.(@label == 'login_password')}">
-			<mx:TextInput id="password"
-				width="100" 
+			<mx:TextInput id="_password"
+				width="140" 
 				displayAsPassword="true" text="777"/>
+		</mx:FormItem>
+		<mx:FormItem label="{languages.language.(@label == 'login_ip')}">
+			<mx:TextInput id="_ip"
+				width="140" 
+				text="192.168.1.1"/>
 		</mx:FormItem>
 		<mx:FormItem>
 			<mx:ComboBox id="selectLang"
-				width="80"
-				dataProvider="{languageList.language}"
+				width="140"
+				dataProvider="{languageList.Language}"
 				labelField="@label"
 		 		fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
 		 		change="changeLanguageHandler(event);"/>
@@ -31,7 +44,7 @@
 		<mx:FormItem>
 			<mx:Button id="submitButton" 
 				label="{languages.language.(@label == 'login_sendbutton')}"
-				click="submitLogin(event);"/>
+				click="checkData();"/>
 		</mx:FormItem>
 	</mx:Form>
 </mx:Canvas>

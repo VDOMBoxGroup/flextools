@@ -37,8 +37,9 @@ public class ActionPanel extends Panel {
 	override protected function measure():void {
 		
 		super.measure();
-		measuredWidth = 100;
-		measuredHeight = 100;
+		
+		measuredWidth = Math.max(measuredWidth, 100);
+		measuredHeight = 105;
 	}
 	
 	override protected function commitProperties():void {
@@ -61,7 +62,7 @@ public class ActionPanel extends Panel {
 			
 			_panelLabel = new Label();
 			_panelLabel.percentWidth = 100;
-			_panelLabel.height = 14;
+			_panelLabel.height = 16;
 			_panelLabel.styleName = 'actionPanlelLabel';
 			
 			tempBar.addChild(_panelLabel);

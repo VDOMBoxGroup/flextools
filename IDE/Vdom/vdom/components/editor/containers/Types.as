@@ -1,25 +1,29 @@
-package vdom.components.editor.containers
-{
+package vdom.components.editor.containers {
+
 import mx.containers.Accordion;
 import mx.containers.VBox;
+
 import vdom.components.editor.containers.typesClasses.Type;
+import mx.collections.ArrayCollection;
 	
-public class Types extends Accordion
-{
-	public function Types()
-	{
+public class Types extends Accordion {
+	
+	public function Types()	{
+		
 		super();
 	}
 	
 	public function set dataProvider(typesXML:XML):void {
-		//trace(typesXML);
-		var cat:Array = new Array();
-		var zzz:Object = {};
+		
+		var cat:Object = {};
+		
 		for each (var num:XML in typesXML.Type) {
+			
 			if(!cat[num.Information.Category]) {
-				cat[num.Information.Category.toString()] = new VBox();
-				cat.length++;
+				
+				cat[num.Information.Category] = new VBox();
 			}
+			
 			cat[num.Information.Category].label = num.Information.Category;
 			cat[num.Information.Category].setStyle('horizontalAlign', 'center');
 			cat[num.Information.Category].percentWidth = 100;
