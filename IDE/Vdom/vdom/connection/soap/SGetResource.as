@@ -19,23 +19,23 @@ package vdom.connection.soap
 		public function execute(ownerid:String, resid:String):void
 		{
 			// protect
-			ws.get_type_resource.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.get_type_resource.arguments.skey 		= code.skey();		//- очередной ключ сессии 
+			ws.get_resource.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
+			ws.get_resource.arguments.skey 		= code.skey();		//- очередной ключ сессии 
 			
 			// data
-			ws.get_type_resource.arguments.ownerid  	= ownerid;				//- идентификатор типа
-			ws.get_type_resource.arguments.resid  	= resid;				//- идентификатор ресурса
+			ws.get_resource.arguments.ownerid  	= ownerid;				//- идентификатор типа
+			ws.get_resource.arguments.resid  	= resid;				//- идентификатор ресурса
 			
 			//send data & set listener 
-			ws.get_type_resource();
-			ws.get_type_resource.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.get_resource();
+			ws.get_resource.addEventListener(ResultEvent.RESULT,completeListener);
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void
 		{
 			// get result 
-			resultXML = XML(ws.get_type_resource.lastResult.Result);
+			resultXML = XML(ws.get_resource.lastResult.Result);
 			var evt:SoapEvent;
 			
 			// check Error

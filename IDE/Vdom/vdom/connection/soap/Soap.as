@@ -126,8 +126,8 @@ package vdom.connection.soap
 			sGetType.addEventListener(SoapEvent.GET_TYPE_ERROR, ldispatchEvent);
 		}
 		
-		/** ********************** И З М Е Н И Т Ь / У Д А Л И Т Ь * * * ***************************
-		 *  8 - get type resource get_type_resource
+		/** 
+		 *  8 - get type resource get_resource
 		 */
 		private var sGetTypeResource:SGetResource = new SGetResource(ws);
 		
@@ -136,19 +136,6 @@ package vdom.connection.soap
 			sGetTypeResource.execute(ownerid, resid);
 			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_OK, ldispatchEvent);
 			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_ERROR, ldispatchEvent);
-		}
-		
-		
-		/** ********************** И З М Е Н И Т Ь / У Д А Л И Т Ь * * * ***************************
-		 *  8 -  get application resource  'get_application_resource'
-		 */
-		private var sGetApplicationResource:SGetApplicationResource = new SGetApplicationResource(ws);
-		
-		public  function getApplicationResource(appid:String='',resid:String=''):void 
-		{
-			sGetApplicationResource.execute(appid, resid);
-			sGetApplicationResource.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_OK, ldispatchEvent);
-			sGetApplicationResource.addEventListener(SoapEvent.GET_APPLICATION_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
 		
