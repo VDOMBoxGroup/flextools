@@ -63,6 +63,7 @@
 	private var vctTest:Vector = new Vector();
 	private var curLine:Object = new Object();
 	private var btLine:DeleteLineButton;
+	private var temMenu:TreeElementMenu;
 		
 	
 	
@@ -79,12 +80,15 @@
 			massTreeElements[obID].name = xmlObj.@ID.toXMLString();
 			massTreeElements[obID].x = xmlObj.@left.toXMLString();
 			massTreeElements[obID].y = xmlObj.@top.toXMLString();	
+			
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAG , startingDrag);	
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);	
 			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			//massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_DRAG , stopingDrag);
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 			//
 		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);	//
 			addChild(massTreeElements[obID]);
@@ -95,6 +99,11 @@
 		btLine = new DeleteLineButton();
 		btLine.addEventListener(MouseEvent.CLICK, 		delButtonOperation);
 		addChild(btLine);
+		
+		temMenu = new TreeElementMenu();
+		temMenu.addEventListener(MouseEvent.MOUSE_OVER, showTEMMenu);
+		temMenu.addEventListener(MouseEvent.MOUSE_OUT, hideTEMMenu);
+		addChild(temMenu);
 	}
 	
 	private function delButtonOperation(msEvt:MouseEvent):void
@@ -207,6 +216,29 @@
 		}
 	}
 	
+	
+	private function mouseOverHandler(msEvt:MouseEvent):void
+	{
+		temMenu.x = msEvt.currentTarget.x;
+		temMenu.y = msEvt.currentTarget.y - temMenu.height;
+		temMenu.alpha = 0.5;
+	}
+	
+	private function mouseOutHandler(msEvt:MouseEvent):void
+	{
+		temMenu.alpha = .0;
+		
+	}
+	
+	private function showTEMMenu(msEvt:MouseEvent):void
+	{
+		temMenu.alpha = 1;
+	}
+	
+	private function hideTEMMenu(msEvt:MouseEvent):void
+	{
+		temMenu.alpha = .0;
+	}
 	/**
 	*
 	*		прекращаем перетаскивание прямоугольника

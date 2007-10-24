@@ -40,7 +40,7 @@ package vdom.components.treeEditor
 			//setStyle('borderStyle', 'solid')
 		//	this.setStyle('cornerRadius','15px') 
 		//	setStyle('borderThickness', '5px'); 
-			initHead();
+		//	initHead();
 			
 			initLittleBody();
 			initBigBody(); 
