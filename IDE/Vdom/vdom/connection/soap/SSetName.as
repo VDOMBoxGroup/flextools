@@ -12,7 +12,7 @@ package vdom.connection.soap
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetResource(ws:WebService):void{
+		public function SSetName(ws:WebService):void{
 			this.ws = ws;
 		}
 		

@@ -6,13 +6,13 @@ package vdom.connection.soap
 	import mx.rpc.events.ResultEvent;
 	
 	
-	public class SWoleUpdate extends EventDispatcher 
+	public class SWholeUpdate extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetResource(ws:WebService):void{
+		public function SWholeUpdate(ws:WebService):void{
 			this.ws = ws;
 		}
 		
@@ -42,10 +42,10 @@ package vdom.connection.soap
 			// check Error
 			if(resultXML.name().toString() == 'Error')
 			{
-				evt = new SoapEvent(SoapEvent.WOLE_UPDATE_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.WHOLE_UPDATE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.WOLE_UPDATE_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.WHOLE_UPDATE_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}

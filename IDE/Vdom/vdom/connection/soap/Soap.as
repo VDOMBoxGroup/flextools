@@ -277,7 +277,7 @@ package vdom.connection.soap
 		}
 		
 		/**
-		 *  --------- 21 Get All Types -----
+		 *  --------- 20 Get All Types -----
 		 */ 
 		private var sGetAllTypes:SGetAllTypes = new SGetAllTypes(ws);
 		public function getAllTypes():void{
@@ -287,7 +287,7 @@ package vdom.connection.soap
 		}
 		
 		/**
-		 *  --------- 22  Set value of several object's attributes -----
+		 *  --------- 21  Set value of several object's attributes -----
 		 * 						--setAttributes --
 		 */ 
 		private var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
@@ -296,6 +296,58 @@ package vdom.connection.soap
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);
 		}
+		
+		/**
+		 * 		22. set object name  'set_name' 
+		 */
+		private var sSetName:SSetName = new SSetName(ws);
+		public function setName(appid:String = '', objid:String = '', name:String = ''):void{
+			sSetName.execute(appid, objid, name);
+			sSetName.addEventListener(SoapEvent.SET_NAME_OK, ldispatchEvent);
+			sSetName.addEventListener(SoapEvent.SET_NAME_ERROR, ldispatchEvent);
+		}
+		
+		/**
+		 * 		23. Create WHOLE object - 'whole_create'
+		 */
+		private var sWholeCreate:SWholeCreate = new SWholeCreate(ws);
+		public function wholeCreate(appid:String = '', parentid:String = '', name:String = '', data:String = ''):void{
+			sWholeCreate.execute(appid, parentid, name, data);
+			sWholeCreate.addEventListener(SoapEvent.WHOLE_CREATE_OK, ldispatchEvent);
+			sWholeCreate.addEventListener(SoapEvent.WHOLE_CREATE_ERROR, ldispatchEvent);
+		}
+
+		/**
+		 * 		24. Delete WHOLE object - 'whole_delete'
+		 */
+		private var sWholeDelete:SWholeDelete = new SWholeDelete(ws);
+		public function wholeDelete(appid:String = '', objid:String = ''):void{
+			sWholeDelete.execute(appid, objid);
+			sWholeDelete.addEventListener(SoapEvent.WHOLE_DELETE_OK, ldispatchEvent);
+			sWholeDelete.addEventListener(SoapEvent.WHOLE_DELETE_ERROR, ldispatchEvent);
+		}
+
+		/**
+		 * 		25.  Update WHOLE object - 'whole_update'
+		 */
+		private var sWholeUpdate:SWholeUpdate = new SWholeUpdate(ws);
+		public function wholeUpdate(appid:String = '', objid:String = '', data:String = ''):void{
+			sWholeUpdate.execute(appid, objid, data);
+			sWholeUpdate.addEventListener(SoapEvent.WHOLE_UPDATE_OK, ldispatchEvent);
+			sWholeUpdate.addEventListener(SoapEvent.WHOLE_UPDATE_ERROR, ldispatchEvent);
+		}
+
+		/**
+		 * 		26. Create new page for placing WHOLE objects - 'whole_create_page'
+		 */
+		private var sWholeCreatePage:SWholeCreatePage = new SWholeCreatePage(ws);
+		public function wholeCreatePage(appid:String = '', sourceid:String = ''):void{
+			sWholeCreatePage.execute(appid, sourceid);
+			sWholeCreatePage.addEventListener(SoapEvent.WHOLE_UPDATE_OK, ldispatchEvent);
+			sWholeCreatePage.addEventListener(SoapEvent.WHOLE_UPDATE_ERROR, ldispatchEvent);
+		}
+		
+		
 		/**
 		 *  --------  Event Dispatcher -------------
 		 */

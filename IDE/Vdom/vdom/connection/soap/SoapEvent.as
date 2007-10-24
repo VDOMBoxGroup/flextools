@@ -31,10 +31,10 @@ package vdom.connection.soap
 		public static var SET_ATTRIBUTE_S_OK			:String =  "setAttributesOK"; 				//21
 	
 		public static var SET_NAME_OK					:String =  "setNameOK"; 					//22
-		public static var WOLE_CREATE_OK				:String =  "woleCreateOK"; 					//23
-		public static var WOLE_DELETE_OK				:String =  "woleDeleteOK"; 					//24
-		public static var WOLE_UPDATE_OK				:String =  "woleUpdateOK"; 					//25
-		public static var WOLE_CREATE_PAGE_OK			:String =  "woleCreatePageOK"; 				//26
+		public static var WHOLE_CREATE_OK				:String =  "wholeCreateOK"; 					//23
+		public static var WHOLE_DELETE_OK				:String =  "wholeDeleteOK"; 					//24
+		public static var WHOLE_UPDATE_OK				:String =  "wholeUpdateOK"; 					//25
+		public static var WHOLE_CREATE_PAGE_OK			:String =  "wholeCreatePageOK"; 				//26
 		
 		
 		//setAttributes
@@ -48,7 +48,7 @@ package vdom.connection.soap
 		public static var LIST_TYPES_ERROR					:String = "List types ERROR"; 				//6
 		public static var GET_TYPE_ERROR 					:String = "Get type ERROR"; 				//7
 		public static var GET_RESOURCE_ERROR 				:String = "Get resource ERROR"; 			//8
-		public static var RENDER_WYSIWYG_ERROR 			:String = "Render wysiwyg ERROR"; 				//9
+		public static var RENDER_WYSIWYG_ERROR 				:String = "Render wysiwyg ERROR"; 				//9
 		public static var CREATE_OBJECT_ERROR 				:String = "Create object ERROR"; 			//10
 		public static var GET_TOP_OBJECTS_ERROR 			:String = "Get top objects ERROR" 			//11
 		public static var GET_CHILD_OBJECTS_ERROR 			:String = "String Get child objects ERROR"; 		//12
@@ -64,10 +64,10 @@ package vdom.connection.soap
 		public static var SET_ATTRIBUTE_S_ERROR				:String =  "setAttributesERROR"; 			//21
 		
 		public static var SET_NAME_ERROR					:String =  "setNameERROR"; 					//22
-		public static var WOLE_CREATE_ERROR					:String =  "woleCreateERROR"; 				//23
-		public static var WOLE_DELETE_ERROR					:String =  "woleDeleteERROR"; 				//24
-		public static var WOLE_UPDATE_ERROR					:String =  "woleUpdateERROR"; 				//25
-		public static var WOLE_CREATE_PAGE_ERROR			:String =  "woleCreatePageERROR"; 			//26
+		public static var WHOLE_CREATE_ERROR				:String =  "wholeCreateERROR"; 				//23
+		public static var WHOLE_DELETE_ERROR				:String =  "wholeDeleteERROR"; 				//24
+		public static var WHOLE_UPDATE_ERROR				:String =  "wholeUpdateERROR"; 				//25
+		public static var WHOLE_CREATE_PAGE_ERROR			:String =  "wholeCreatePageERROR"; 			//26
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,

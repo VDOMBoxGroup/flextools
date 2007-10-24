@@ -6,13 +6,13 @@ package vdom.connection.soap
 	import mx.rpc.events.ResultEvent;
 	
 	
-	public class SWoleDelete extends EventDispatcher 
+	public class SWholeDelete extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetResource(ws:WebService):void{
+		public function SWholeDelete(ws:WebService):void{
 			this.ws = ws;
 		}
 		
@@ -29,7 +29,6 @@ package vdom.connection.soap
 			//send data & set listener 
 			ws.whole_delete();
 			ws.whole_delete.addEventListener(ResultEvent.RESULT,completeListener);
-			
 		}
 		
 		
@@ -42,10 +41,10 @@ package vdom.connection.soap
 			// check Error
 			if(resultXML.name().toString() == 'Error')
 			{
-				evt = new SoapEvent(SoapEvent.WOLE_DELETE_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.WHOLE_DELETE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.WOLE_DELETE_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.WHOLE_DELETE_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}

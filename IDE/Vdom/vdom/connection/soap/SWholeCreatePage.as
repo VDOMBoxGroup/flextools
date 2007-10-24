@@ -6,13 +6,13 @@ package vdom.connection.soap
 	import mx.rpc.events.ResultEvent;
 	
 	
-	public class SWoleCreatePage extends EventDispatcher 
+	public class SWholeCreatePage extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetResource(ws:WebService):void{
+		public function SWholeCreatePage(ws:WebService):void{
 			this.ws = ws;
 		}
 		
@@ -42,10 +42,10 @@ package vdom.connection.soap
 			// check Error
 			if(resultXML.name().toString() == 'Error')
 			{
-				evt = new SoapEvent(SoapEvent.WOLE_CREATE_PAGE_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.WHOLE_CREATE_PAGE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.WOLE_CREATE_PAGE_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.WHOLE_CREATE_PAGE_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}
