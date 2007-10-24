@@ -6,24 +6,24 @@ package vdom.connection.soap
 	import mx.rpc.events.ResultEvent;
 	
 	
-	public class SGetTypeResource extends EventDispatcher 
+	public class SGetResource  extends EventDispatcher 
 	{
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetTypeResource(ws:WebService):void{
+		public function SGetResource(ws:WebService):void{
 			this.ws = ws;
 		}
 		
-		public function execute(typeid:String, resid:String):void
+		public function execute(ownerid:String, resid:String):void
 		{
 			// protect
 			ws.get_type_resource.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.get_type_resource.arguments.skey 		= code.skey();		//- очередной ключ сессии 
 			
 			// data
-			ws.get_type_resource.arguments.typeid  	= typeid;				//- идентификатор типа
+			ws.get_type_resource.arguments.ownerid  	= ownerid;				//- идентификатор типа
 			ws.get_type_resource.arguments.resid  	= resid;				//- идентификатор ресурса
 			
 			//send data & set listener 
@@ -41,10 +41,10 @@ package vdom.connection.soap
 			// check Error
 			if(resultXML.name().toString() == 'Error'){
 
-				evt = new SoapEvent(SoapEvent.GET_TYPE_RESOURCE_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.GET_RESOURCE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.GET_TYPE_RESOURCE_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.GET_RESOURCE_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}

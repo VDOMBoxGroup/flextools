@@ -14,7 +14,7 @@ package vdom.connection.soap
 		public static var LIST_APLICATION_OK 			:String = "List applications OK"; 		//5
 		public static var LIST_TYPES_OK 				:String = "List types OK"; 				//6
 		public static var GET_TYPE_OK 					:String = "Get type OK"; 				//7
-		public static var GET_TYPE_RESOURCE_OK 			:String = "Get type resource OK"; 		//8
+		public static var GET_RESOURCE_OK 				:String = "Get resource OK"; 		//8
 		public static var GET_APPLICATION_RESOURCE_OK 	:String = "Get application resource OK" 	//9
 		public static var RENDER_WYSIWYG_OK 			:String = "Render wysiwyg OK"; 			//10
 		public static var CREATE_OBJECT_OK 				:String = "Create object OK"; 			//11
@@ -41,7 +41,7 @@ package vdom.connection.soap
 		public static var LIST_APLICATION_ERROR 			:String = "List applications ERROR"; 		//5
 		public static var LIST_TYPES_ERROR					:String = "List types ERROR"; 				//6
 		public static var GET_TYPE_ERROR 					:String = "Get type ERROR"; 				//7
-		public static var GET_TYPE_RESOURCE_ERROR 			:String = "Get type resource ERROR"; 		//8
+		public static var GET_RESOURCE_ERROR 				:String = "Get resource ERROR"; 		//8
 		public static var GET_APPLICATION_RESOURCE_ERROR 	:String = "Get application resource ERROR" 	//9
 		public static var RENDER_WYSIWYG_ERROR 			:String = "Render wysiwyg ERROR"; 			//10
 		public static var CREATE_OBJECT_ERROR 				:String = "Create object ERROR"; 			//11

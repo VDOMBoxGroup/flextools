@@ -31,7 +31,7 @@ package vdom.connection.soap
 		public function init(wsdl:String= 'http://192.168.0.23:82/vdom.wsdl'):void
 		{
              //	var loader :Loader = new Loader; 	
-             	ws.wsdl = wsdl;
+             	ws.wsdl =wsdl;
 				ws.useProxy = false;
 				ws.loadWSDL();
 				ws.addEventListener(FaultEvent.FAULT, errorListener  );
@@ -62,7 +62,7 @@ package vdom.connection.soap
 		}
 
 		/**
-		 * 3 - create application 
+		 * 3 - create application  'create_application'
 		 */ 
 		private var sCreateApplication:SCreateApplication = new SCreateApplication(ws);  
 		
@@ -79,7 +79,7 @@ package vdom.connection.soap
 		}
 		
 		/**
-		 *  4 - set application general information
+		 *  4 - set application general information 'set_application_info'
 		 */
 		private var  sSetApplicationInfo:SSetApplicationInfo = new SSetApplicationInfo(ws);
 		
@@ -126,21 +126,21 @@ package vdom.connection.soap
 			sGetType.addEventListener(SoapEvent.GET_TYPE_ERROR, ldispatchEvent);
 		}
 		
-		/**
+		/** ********************** И З М Е Н И Т Ь / У Д А Л И Т Ь * * * ***************************
 		 *  8 - get type resource get_type_resource
 		 */
-		private var sGetTypeResource:SGetTypeResource = new SGetTypeResource(ws);
+		private var sGetTypeResource:SGetResource = new SGetResource(ws);
 		
-		public  function getTypeResource(typeid:String='',resid:String=''):void 
+		public  function getResource(ownerid:String='',resid:String=''):void 
 		{
-			sGetTypeResource.execute(typeid, resid);
-			sGetTypeResource.addEventListener(SoapEvent.GET_TYPE_RESOURCE_OK, ldispatchEvent);
-			sGetTypeResource.addEventListener(SoapEvent.GET_TYPE_RESOURCE_ERROR, ldispatchEvent);
+			sGetTypeResource.execute(ownerid, resid);
+			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_OK, ldispatchEvent);
+			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_ERROR, ldispatchEvent);
 		}
 		
 		
-		/**
-		 *  9 -  get application resource  'get_application_resource'
+		/** ********************** И З М Е Н И Т Ь / У Д А Л И Т Ь * * * ***************************
+		 *  8 -  get application resource  'get_application_resource'
 		 */
 		private var sGetApplicationResource:SGetApplicationResource = new SGetApplicationResource(ws);
 		
@@ -153,7 +153,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * 10. render object to xml presentation  - render_wysiwyg
+		 * 9. render object to xml presentation  - render_wysiwyg
 		 */
 		private var sRenderWysiwig:SRenderWysiwyg = new SRenderWysiwyg(ws);
 		
@@ -166,7 +166,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * 11. create object - create_object
+		 * 10. create object - create_object
 		 */
 		private var sco: SCreateObject =new SCreateObject(ws);
 		
@@ -179,7 +179,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * 12. get application top-level objects  - get_top_objects
+		 * 11. get application top-level objects  - get_top_objects
 		 */
 		private var sGetTopObjects:SGetTopObjects = new SGetTopObjects(ws);
 		
@@ -192,7 +192,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * 13. get object's child objects'  - get_child_objects
+		 * 12. get object's child objects'  - get_child_objects
 		 */
 		private var sGetChildObjects:SGetChildObjects = new SGetChildObjects(ws);
 		
@@ -204,7 +204,7 @@ package vdom.connection.soap
 		}
 		
 		/**
-		 * 14. get application language data - get_application_language_data
+		 * 13. get application language data - get_application_language_data
 		 */
 		private var sGetApplicationLanguageData:SGetApplicationLanguageData = new SGetApplicationLanguageData(ws);
 		
@@ -217,7 +217,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * 15. set object attribute value - set_attribute
+		 * 14. set object attribute value - set_attribute
 		 */
 		private var sSetAttribute:SSetAttribute = new SSetAttribute(ws);
 		
@@ -229,7 +229,7 @@ package vdom.connection.soap
 		}
 		
 		/**
-		 * 16. set object value set_value
+		 * 15. set object value set_value
 		 */
 		private var sSetValue:SSetValue = new SSetValue(ws);
 		
@@ -241,7 +241,7 @@ package vdom.connection.soap
 		}
 		
 		/**
-		 * 17. set object script set_script
+		 * 16. set object script set_script
 		 */
 		private var sSetScript:SSetScript=  new SSetScript(ws);
 		
@@ -254,7 +254,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * 18. set application resource set_resource
+		 * 17. set application resource set_resource
 		 */
 		private var sSetResource:SSetResource = new SSetResource(ws);
 		
@@ -267,7 +267,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * 19. delete object delete_object
+		 * 18. delete object delete_object
 		 */
 		private var sDeleteObject:SDeleteObject = new SDeleteObject(ws);
 		
@@ -280,7 +280,7 @@ package vdom.connection.soap
 		
 		
 		/**
-		 * ------------- 20 get Echo --------
+		 * ------------- 19 get Echo --------
 		 */ 
 		private var sGetEcho:SGetEcho = new SGetEcho(ws);
 		public function getEcho():void{
