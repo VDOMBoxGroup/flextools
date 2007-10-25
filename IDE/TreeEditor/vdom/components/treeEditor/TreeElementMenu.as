@@ -86,5 +86,15 @@ package vdom.components.treeEditor
 		{
 			msEvt.stopPropagation();
 		}
+		
+		public function set show(sh:Boolean):void
+		{
+			
+		}
+		
+		private function setAlpha():void
+		{
+			
+		}
 	}
 }
