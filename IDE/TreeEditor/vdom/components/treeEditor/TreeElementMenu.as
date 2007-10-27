@@ -50,7 +50,7 @@ package vdom.components.treeEditor
 	//		addChild(btDelete);
 
 			imgDelete = new Image();
-			imgDelete.source='resource/vdom2_treeEditor_delete_01.jpg';
+			imgDelete.source='resource/204920994aa.jpg';
 			imgDelete.width = btDelete.width - 3;
 			imgDelete.height = btDelete.height - 3;
 			imgDelete.x = btDelete.x + 2 ;
