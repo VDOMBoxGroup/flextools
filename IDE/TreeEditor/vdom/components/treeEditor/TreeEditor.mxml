@@ -395,7 +395,8 @@
 		for(var ind1:String in massLines[level])
 			for(var ind2:String in massLines[level][ind1])
 			{
-				if (outXML.Object.(@ID == ind1)
+				if (outXML.Object.(@ID == ind1))
+				{}
 				
 			}
 			
