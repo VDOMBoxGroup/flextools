@@ -31,11 +31,12 @@ package vdom.components.treeEditor
 //			addChild(btLessen);
 			
 			imgLessen = new Image();
-			imgLessen.source='resource/vdom_treeEditor_button_03.swf';
-	//		imgLessen.width = btLessen.width - 3;
-	//		imgLessen.height = btLessen.height - 3;
+			imgLessen.source = 'resource/vdom2_treeEditor_show_on_02.png';
+			imgLessen.width = btLessen.width - 3;
+			imgLessen.height = btLessen.height - 3;
 			imgLessen.x = btLessen.x + 2 ;
 			imgLessen.y = btLessen.y + 1;
+			imgLessen.buttonMode = true;
 			addChild(imgLessen);
 			
 			// кнопка удалить
@@ -50,11 +51,12 @@ package vdom.components.treeEditor
 	//		addChild(btDelete);
 
 			imgDelete = new Image();
-			imgDelete.source='resource/204920994aa.jpg';
+			imgDelete.source='resource/vdom2_treeEditor_delete_05.png';
 			imgDelete.width = btDelete.width - 3;
 			imgDelete.height = btDelete.height - 3;
 			imgDelete.x = btDelete.x + 2 ;
 			imgDelete.y = btDelete.y + 1;
+			imgDelete.buttonMode = true;
 			addChild(imgDelete);
 			btDelete.addEventListener(MouseEvent.MOUSE_OUT, stopImmediateProp);
 			
@@ -70,7 +72,7 @@ package vdom.components.treeEditor
 		
 		
 			imgLine = new Image();
-			imgLine.source='resource/vdom2_treeEditor_delete_01.jpg';
+			imgLine.source='resource/vdom2_treeEditor_line_02.png';
 			imgLine.width = btLine.width - 3;
 			imgLine.height = btLine.height - 3;
 			imgLine.x = btLine.x + 2 ;

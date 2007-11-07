@@ -188,7 +188,8 @@
 	- цвет по текущему уровню
 	+ Баг верхнего угла
 	+ при нажатии на линиию появлялась становилась видима кнопка
-	
+	- нармальные картикни
+	- а
 	*/
 	
 	/***
@@ -395,9 +396,40 @@
 		for(var ind1:String in massLines[level])
 			for(var ind2:String in massLines[level][ind1])
 			{
+
+				// создаем все елементы дерева
+				var object:XMLList = new XMLList('<Object/>');
+
+				if (outXML.Object.(@ID == ind1).@ID != ind1 )
+				{
+					object.@ID = ind1;
+					object.@left = massTreeElements[ind1].x;
+					object.@left = massTreeElements[ind1].y;
+					outXML.appendChild(object.toXMLString());
+					
+				}
 				if (outXML.Object.(@ID == ind1))
 				{}
 				
+				var levelXMLList:XMLList = new XMLList('<Level/>');
+				if(outXML.Object.(@ID == ind1).Level.(@Index == level).@Index != level)
+				{
+					levelXMLList.@Index = level;
+					outXML.Object.(@ID == ind1).appendChild(levelXMLList);
+				}
+				
+				var myXMLList:XMLList = new XMLList('<Object/>') ;
+				myXMLList.@ID = ind2;
+				outXML.Object.(@ID == ind1).Level.(@Index == level).appendChild(myXMLList);
+				
+				
+				if (outXML.Object.(@ID == ind2).@ID != ind2 )
+				{
+					object.@ID = ind2;
+					object.@left = massTreeElements[ind2].x;
+					object.@left = massTreeElements[ind2].y;
+					outXML.appendChild(object.toXMLString());
+				}	
 			}
 			
 		trace(outXML);
