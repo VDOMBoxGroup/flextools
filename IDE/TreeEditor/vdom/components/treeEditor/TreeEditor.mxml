@@ -83,8 +83,8 @@
 			
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAG , startingDrag);	
-			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);	
-			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
+		//*	massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);	
+		//*	massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			//massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_DRAG , stopingDrag);
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
@@ -256,6 +256,7 @@
 		canRectangle.removeEventListener(MouseEvent.MOUSE_UP, stopingDrag);
 		mouseHandler(curTree);
 		removeChild(canRectangle);
+		//removeChild(massTreeElements[curTree.ID]) /**********++++++++*****/
 	}
 	
 	/** 
@@ -387,7 +388,11 @@
 		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo);	
 	}
-	
+	/**
+	*
+	*		получаем из существующей структуры данных XML 
+	*
+	*/
 	private function toXML():void
 	{
 		var outXML:XML = <Structure/> ;
@@ -408,8 +413,7 @@
 					outXML.appendChild(object.toXMLString());
 					
 				}
-				if (outXML.Object.(@ID == ind1))
-				{}
+				
 				
 				var levelXMLList:XMLList = new XMLList('<Level/>');
 				if(outXML.Object.(@ID == ind1).Level.(@Index == level).@Index != level)
@@ -432,8 +436,10 @@
 				}	
 			}
 			
-		trace(outXML);
+	//	trace(outXML);
 	}
+	
+	
 	
 	]]>
 </mx:Script>

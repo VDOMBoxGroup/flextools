@@ -35,6 +35,7 @@ package vdom.components.treeEditor
 		
 		public function TreeElement()
 		{
+			super();
 			setStyle('backgroundColor', '#99ffff')
 		//	setStyle('borderColor', '#ff0000')
 			//setStyle('borderStyle', 'solid')
@@ -47,6 +48,7 @@ package vdom.components.treeEditor
 			
 			isRedraw = true;
 			addChild(rect);
+			
 		}
 		
 		private function initHead():void
