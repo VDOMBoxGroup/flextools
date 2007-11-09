@@ -7,7 +7,6 @@ import flash.net.URLLoader;
 import flash.net.URLRequest;
 
 import mx.core.Application;
-import mx.messaging.Producer;
 
 import vdom.components.editor.Editor;
 import vdom.connection.Proxy;
@@ -71,6 +70,8 @@ public class DataManager implements IEventDispatcher {
 		_appId = appId;
 		_pageId = pageId;
 		_types = publicData['types'];
+		objectDescription = null;
+		
 				
 		soap.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, getTopObjectsHandler);
 		soap.getTopObjects(_appId);

@@ -23,6 +23,11 @@ package vdom.connection.soap
 			ws.list_applications.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
 			//send data & set listener 
+			//var sid:String = code.sessionId;
+			//var skey:String	= code.skey();
+			//trace('sid: ' + sid);
+			//trace('skey: ' + skey);
+			//ws.list_applications(sid, skey);
 			ws.list_applications();
 			ws.list_applications.addEventListener(ResultEvent.RESULT,completeListener);	
 		}

@@ -49,7 +49,7 @@ private function creationCompleteHandler():void {
 	editorDataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
 	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, attributesUpdateCompleteHandler);
 	
-	objectAttributes.addEventListener('propsChanged', attributesChangedHandler);
+	attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 	
 	typesXML = null;
 }
@@ -120,6 +120,7 @@ private function attributesUpdateCompleteHandler(event:DataManagerEvent):void {
 private function attributesChangedHandler(event:Event):void {
 	
 	editorDataManager.updateAttributes(editorDataManager.objectDescription);
+	attributesPanel.dataProvider = editorDataManager.objectDescription; //<-- исправить!!!!!!
 }
 
 private function typesLoadHandler(event:Event):void {

@@ -4,10 +4,11 @@ import flash.events.Event;
 
 public class AuthenticationEvent extends Event {
 	
-	public static const AUTH_DATA_CHANGED:String = 'authDataChanged';
-	public static const AUTH_COMPLETE:String = 'authComplete';
+	public static const DATA_CHANGED:String = 'authDataChanged';
+	public static const LOGIN_COMPLETE:String = 'loginComplete';
+	public static const LOGOUT:String = 'authComplete';
 	
-	public static const AUTH_ERROR:String = 'authError';
+	public static const ERROR:String = 'authLogout';
 	
 	public var username:String;
 	public var password:String;

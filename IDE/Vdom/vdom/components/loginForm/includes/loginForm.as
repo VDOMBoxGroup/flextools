@@ -2,6 +2,7 @@ import mx.core.Application;
 
 import vdom.Languages;
 import vdom.events.AuthenticationEvent;
+import flash.events.Event;
 
 
 [Bindable]
@@ -25,7 +26,8 @@ private function hide():void {
 
 private function checkData():void {
 	
-	var ae:AuthenticationEvent = new AuthenticationEvent(AuthenticationEvent.AUTH_DATA_CHANGED);
+	dispatchEvent(new Event('submitBegin'));
+	var ae:AuthenticationEvent = new AuthenticationEvent(AuthenticationEvent.DATA_CHANGED);
 	ae.username = _username.text;
 	ae.password = _password.text;
 	ae.ip = _ip.text;

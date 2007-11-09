@@ -17,7 +17,12 @@ public class Authentication implements IEventDispatcher {
 	private var dispatcher:EventDispatcher = new EventDispatcher();
 	private var publicData:Object;
 	private var soap:Soap;
+	
 	private var _username:String;
+	private var _tmpUsername:String;
+	
+	private var _password:String;
+	private var _tmpPassword:String;
 	
 	
 	/**
@@ -52,25 +57,40 @@ public class Authentication implements IEventDispatcher {
 	}
 	
 	public function login(username:String, password:String):void {
-			
+		
+		_tmpUsername = username;
+		_tmpPassword = password;
+		
 		soap.addEventListener(SoapEvent.LOGIN_OK, loginHandler);
 		soap.addEventListener(SoapEvent.LOGIN_ERROR, loginErrorHandler);
 		soap.login(username, password);	
 	}
 	
-	public function get username():String {
+	public function logout():void {
 		
-		return new String();
+		_username = _password = null;
+		
+		var event:AuthenticationEvent = new AuthenticationEvent(AuthenticationEvent.LOGOUT)
+		dispatcher.dispatchEvent(event);
 	}
 	
-	public function set username(username:String):void {
+	public function get username():String {
 		
+		return _username;
+	}
+	
+	public function get password():String {
+		
+		return _password;
 	}
 	
 	private function loginHandler(event:SoapEvent):void {
 		
+		_username = _tmpUsername;
+		_password = _tmpPassword;
+		
 		soap.removeEventListener(SoapEvent.LOGIN_OK, loginHandler);
-		dispatchEvent(new Event(AuthenticationEvent.AUTH_COMPLETE));
+		dispatchEvent(new Event(AuthenticationEvent.LOGIN_COMPLETE));
 	}
 	
 	private function loginErrorHandler(event:SoapEvent):void {

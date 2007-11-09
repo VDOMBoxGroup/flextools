@@ -11,12 +11,12 @@
 	<mx:Metadata>
 		[Exclude(name="alignButtons", kind="property")]
 		[Event(name="authDataChanged", type="vdom.events.AuthenticationEvent")]
-		
+		[Event(name="submitBegin", type="flash.events.Event")]
 	</mx:Metadata>
 	
 	<mx:Script source="includes/loginForm.as"/>
 	
-	<mx:Form defaultButton="{submitButton}" 
+	<mx:Form 
 		horizontalCenter="0" verticalCenter="0" 
 		borderColor="#808080" borderStyle="solid" backgroundColor="#ffffff" dropShadowEnabled="true">
 		<mx:FormItem label="{languages.language.(@label == 'login_username')}">
@@ -31,7 +31,7 @@
 		<mx:FormItem label="{languages.language.(@label == 'login_ip')}">
 			<mx:TextInput id="_ip"
 				width="140" 
-				text="192.168.1.1"/>
+				text="127.0.0.1:81"/>
 		</mx:FormItem>
 		<mx:FormItem>
 			<mx:ComboBox id="selectLang"

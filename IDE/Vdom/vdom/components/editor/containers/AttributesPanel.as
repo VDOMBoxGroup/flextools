@@ -25,9 +25,12 @@ import mx.validators.Validator;
 
 import vdom.Languages;
 import mx.events.FlexEvent;
+import mx.collections.IViewCursor;
+import mx.collections.Sort;
+import mx.collections.SortField;
+import mx.controls.DataGrid;
 
 //use namespace mx_internal;
-
 public class AttributesPanel extends ClosablePanel
 {
 	[Bindable]
@@ -46,6 +49,8 @@ public class AttributesPanel extends ClosablePanel
 	private var _isValid:Boolean;
 	private var _objectChanged:Boolean;
 	
+	private var cursor:IViewCursor;
+	
 	private var invalidElementsCount:uint;
 	
 	public function AttributesPanel() {
@@ -54,7 +59,7 @@ public class AttributesPanel extends ClosablePanel
 		help = null;
 		_typeID = null;
 		languages = Languages.getInstance();
-		this.addEventListener(KeyboardEvent.KEY_UP, enterHandler);
+		//this.addEventListener(KeyboardEvent.KEY_UP, enterHandler);
 		horizontalScrollPolicy = 'off';
 		verticalScrollPolicy = 'off';
 		ToolTip.maxWidth = 120;
@@ -77,6 +82,13 @@ public class AttributesPanel extends ClosablePanel
 			xl += objectDescription.Attributes.Attribute;
 			_collection = new XMLListCollection(xl);
 			
+			var sortA:Sort = new Sort();
+			sortA.fields = [new SortField("@Name", false, true)];
+			_collection.sort = sortA;
+			_collection.refresh();
+			
+			cursor = _collection.createCursor();
+			
 			_type = objectDescription.Type[0];
 			
 		} else {
@@ -93,8 +105,10 @@ public class AttributesPanel extends ClosablePanel
 	
 	private function applyChanges(event:Event):void {
 
-		for (var i:String in fieldsArray) {
-			_collection[i] = fieldsArray[i][0][fieldsArray[i][1]];
+		for (var attrName:String in fieldsArray) {
+			cursor.findFirst({'@Name':attrName});
+			var currentElement:Object = cursor.current;
+			currentElement.*[0] = fieldsArray[attrName][0][fieldsArray[attrName][1]];
 		}
 		dispatchEvent(new Event('propsChanged'));
 	}
@@ -112,11 +126,13 @@ public class AttributesPanel extends ClosablePanel
 		
 		var attrLabel:Text;
 		
-		for (var i:uint = 0; i < _collection.length; i++) {
+		var attributes:XMLList = _type.Attributes.Attribute;
+		
+		for each(var attributeDescription:XML in attributes) {
 			
-			var attributeDescription:XML = _type.Attributes.Attribute.(Name == _collection[i].@Name)[0]
+			cursor.findFirst({'@Name':attributeDescription.Name})
 			
-			if (attributeDescription == null) continue;
+			var currentAttribute:Object = cursor.current;
 			
 			attrRow = new GridRow();
 			attrRow.percentWidth = 100;
@@ -152,7 +168,7 @@ public class AttributesPanel extends ClosablePanel
 					valueContainer.minimum = 0;
 					valueContainer.maximum = Math.pow(10, codeInterface['value']) - 1;
 					
-					valueContainer.value = _collection[i];
+					valueContainer.value = currentAttribute;
 				break;
 					
 				case 'textfield':
@@ -164,7 +180,7 @@ public class AttributesPanel extends ClosablePanel
 					
 					valueContainer.maxChars = codeInterface['value'];
 					
-					valueContainer.text = _collection[i];
+					valueContainer.text = currentAttribute;
 				break;
 					
 				case 'dropdown':
@@ -193,7 +209,7 @@ public class AttributesPanel extends ClosablePanel
 					valueContainer = new TextInput();
 					valueType = 'text';
 					
-					valueContainer.text = _collection[i];
+					valueContainer.text = currentAttribute;
 			}
 			
 			valueContainer.percentWidth = 100;
@@ -216,7 +232,7 @@ public class AttributesPanel extends ClosablePanel
 			
 			attrValueItem.addChild(valueContainer);
 			
-			fieldsArray[i] = [valueContainer, valueType];
+			fieldsArray[currentAttribute.@Name] = [valueContainer, valueType];
 			
 			attrRow.addChild(attrLabelItem);
 			attrRow.addChild(attrValueItem);

@@ -12,7 +12,8 @@
 	xmlns:editor="vdom.components.editor.*"
 	xmlns:scriptEditor="vdom.components.scriptEditor.*"
 	xmlns:loginForm="vdom.components.loginForm.*" 
-	xmlns:main="vdom.components.main.*">
+	xmlns:main="vdom.components.main.*"
+	xmlns:analyse="vdom.components.analyse.*">
 	
 	<mx:Script source="includes/Vdom.as"/>
 	
@@ -21,39 +22,38 @@
 	
 	<mx:ViewStack id="viewstack" width="100%" height="100%">
 	
-	<loginForm:LoginForm authDataChanged="submitLogin(event)" />
-	
+	<loginForm:LoginForm id="loginForm" authDataChanged="submitLogin(event)" submitBegin="lockStage()"/>
 	<mx:Canvas id="main" creationComplete="mainInitHandler(event)" width="100%" height="100%">
 	<mx:ApplicationControlBar
 		top="0" left="0" right="0" height="40" 
 		fillColors="[#000000, #000000]" fillAlphas="[0.63, 1.0]" cornerRadius="0" dock="true">
 		<mx:Spacer x="10" y="10" width="100%"/>
-		<mx:ComboBox id="selectTestLang"
+		<!--<mx:ComboBox id="selectTestLang"
 			width="140"
 			dataProvider="{languageList.Language}"
 			labelField="@label"
 				fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
-				change="changeLanguageHandler(event);"/>
+				change="changeLanguageHandler(event);"/> -->
 		<mx:Spacer x="10" y="10" width="100%"/>
+		<mx:Button label="Logout" click="viewstack.selectedChild=loginForm"/>
 	</mx:ApplicationControlBar>
 	<mx:Image x="6" y="5" source="@Embed(source='assets/logo.png')"/>
 	<controls:MainTabNavigator id="tabPanel"
 		top="60" left="10" right="10"
 		paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" tabPaddingLeft="80"
-		borderColor="#808080" borderThickness="1" fillColors="[#c0c0c0, #c0c0c0]" fillAlphas="[1.0, 1.0]"
-		height="150">
+	>
 		
 		<mx:Canvas id="appManTab" label="{languages.language.(@label == 'main_title')}" 
 			width="100%" height="100%" verticalScrollPolicy="off"
-			show="{placeCanvas.selectedChild=mainCanv}">
+			show="{placeCanvas.selectedChild=mainCanvas}">
 			
 			<mx:HBox  
 				top="0" bottom="0" width="100%" 
 				horizontalAlign="left" horizontalGap="5" verticalAlign="middle" verticalScrollPolicy="off">
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'main_steps')}" />
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_new')}" />
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'main_search')}"/>
+				<controls:ActionPanel panelName="{languages.language.(@label == 'main_steps')}"/>
 
 				<controls:ActionPanel panelName="{languages.language.(@label == 'main_search')}"  width="250">
 				
@@ -68,16 +68,17 @@
 					
 				</controls:ActionPanel>
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'main_applist')}">
+				<controls:ApplicationPanel id="applicationListContainer"
+					
+					panelName="{languages.language.(@label == 'main_applist')}" 
+					dataProvider="{listApplication.Application}"
+					applicationChange="appChangedHandler(event)"
+					/>
 				
-					<mx:HorizontalList id="applicationListContainer"
-						minWidth="0" minHeight="0" labelField="@id" 
-						itemRenderer="vdom.containers.Thumbnail" 
-						change="HorizontalList(event.target).selectedItem.data" columnCount="4"/>
-						
-				</controls:ActionPanel>
-				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'main_appinfo')}" width="100" />
+				<controls:ActionPanel
+					
+					panelName="{languages.language.(@label == 'main_appinfo')}"
+					width="100" visible="false"/>
 				
 			</mx:HBox>
 		</mx:Canvas>
@@ -99,7 +100,8 @@
 				
 				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_tree')}" />
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_analyse')}" />
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_analyse')}"
+					click="{placeCanvas.selectedChild=analyseCanv}"/>
 				
 				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_statistics')}" />
 
@@ -128,17 +130,19 @@
 			show="{placeCanvas.selectedChild=vdomCanv}">
 		</mx:Canvas>
 	</controls:MainTabNavigator>
-	<mx:ViewStack id="placeCanvas" 
+	<mx:ViewStack id="placeCanvas"
 		borderStyle="none" left="10" right="10" top="220" bottom="10">
 	
-		<main:Main id="mainCanv"
-			width="100%" height="100%"/>
+		<main:Main id="mainCanvas"
+			width="100%" height="100%" styleName="mainCanvas"/>
 		
 		<editor:Editor id="editorCanv" 
 			width="100%" height="100%"/>
 		
 		<scriptEditor:ScriptEditor id="scriptCanv" 
 			width="100%" height="100%"/>
+			
+		<analyse:Analyse id="analyseCanv" width="100%" height="100%"/>
 		
 		<mx:Canvas id="multilinCanv" width="100%" height="100%">
 			<mx:Label horizontalCenter="0" verticalCenter="0"/>

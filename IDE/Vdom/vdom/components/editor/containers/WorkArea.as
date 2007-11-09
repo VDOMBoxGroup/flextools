@@ -1,24 +1,23 @@
 package vdom.components.editor.containers {
 
 import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import flash.ui.Keyboard;
 
 import mx.containers.Canvas;
 
-import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.components.editor.containers.workAreaClasses.Item;
+import vdom.components.editor.events.ResizeManagerEvent;
+import vdom.components.editor.events.WorkAreaEvent;
 import vdom.components.editor.managers.ResizeManager;
 import vdom.managers.DataManager;
-
-import vdom.components.editor.events.WorkAreaEvent;
-import flash.ui.Keyboard;
 
 public class WorkArea extends Canvas {
 	
 	public var selectedObjectId:String;
 	
-	private var resizer:ResizeManager;
+	private var resizeManager:ResizeManager;
 	private var dataManager:DataManager;
 	private var _elements:Object;
 	private var collection:XML;
@@ -28,8 +27,8 @@ public class WorkArea extends Canvas {
 		super();
 		dataManager = DataManager.getInstance();
 		_elements = [];
-		resizer = new ResizeManager();
-		resizer.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
+		resizeManager = new ResizeManager();
+		resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
 		
 		addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 		addEventListener(MouseEvent.CLICK, mainClickHandler, false);
@@ -55,7 +54,7 @@ public class WorkArea extends Canvas {
 		object.x = objectAttributes.Attributes.Attribute.(@Name == 'left')[0];
 		object.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
 		
-		resizer.item = object;
+		resizeManager.item = object;
 	}
 	
 	/**
@@ -77,7 +76,7 @@ public class WorkArea extends Canvas {
 		removeChild(_elements[objectId]);
 		setFocus();
 		selectedObjectId = null;
-		removeChild(resizer);
+		removeChild(resizeManager);
 		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
@@ -206,17 +205,14 @@ public class WorkArea extends Canvas {
 		
 		if(!selectedObjectId) return;
 		
-		
-		
 		switch (event.keyCode) {
 			
 			case Keyboard.DELETE:
-			
 				var we:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.DELETE_OBJECT);
 				we.objectID = selectedObjectId;
 				dispatchEvent(we);
 				event.stopPropagation();
-				break;
+			break;
 		}
 	}
 	
@@ -230,17 +226,17 @@ public class WorkArea extends Canvas {
 		if(selectedObjectId) {
 			removeEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
 			selectedObjectId = null;
-			removeChild(resizer);
+			removeChild(resizeManager);
 		}
 		
 		selectedObjectId = Item(event.currentTarget).objectId;
 		_elements[selectedObjectId].content.setFocus();
 		
 		addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-		resizer.resizeMode = _elements[selectedObjectId].resizeMode;
-		resizer.moveMode = _elements[selectedObjectId].moveMode;
-		resizer.item = _elements[selectedObjectId];
-		addChild(resizer);
+		resizeManager.resizeMode = _elements[selectedObjectId].resizeMode;
+		resizeManager.moveMode = _elements[selectedObjectId].moveMode;
+		resizeManager.item = _elements[selectedObjectId];
+		addChild(resizeManager);
 		event.stopPropagation();
 		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
@@ -253,7 +249,7 @@ public class WorkArea extends Canvas {
 		if(event.target == event.currentTarget && selectedObjectId) {
 			setFocus();
 			selectedObjectId = null;
-			removeChild(resizer);
+			removeChild(resizeManager);
 			dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 		}
 	}

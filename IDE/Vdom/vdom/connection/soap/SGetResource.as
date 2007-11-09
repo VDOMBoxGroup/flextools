@@ -29,6 +29,7 @@ package vdom.connection.soap
 			//send data & set listener 
 			ws.get_resource();
 			ws.get_resource.addEventListener(ResultEvent.RESULT,completeListener);
+			trace('loadBegin');
 		}
 		
 		
@@ -36,9 +37,9 @@ package vdom.connection.soap
 		{
 			// get result 
 		//	trace(ws.get_resource.lastResult.Result)
+			trace('loadBeginComplete');
 			resultXML = <Result />
 			resultXML.appendChild(XMLList(ws.get_resource.lastResult.Result));
-			
 			var evt:SoapEvent;
 			
 			// check Error

@@ -49,6 +49,7 @@ package vdom.connection.protect
 		 */
 		public function init(hstr:String):void{
 		//	trace('hesh:' + hstr)
+			counter = -1;
 			protector = new VDOM_session_protector(hstr);
 		}
 		

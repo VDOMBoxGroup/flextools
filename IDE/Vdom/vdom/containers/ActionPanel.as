@@ -20,6 +20,7 @@ public class ActionPanel extends Panel {
 	public function ActionPanel() {
 		
 		super();
+		buttonMode = true;
 	}
 	
 	public function get panelName():String {

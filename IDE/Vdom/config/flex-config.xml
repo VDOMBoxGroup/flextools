@@ -209,4 +209,8 @@
 		<creator>segroup</creator>
 		<language>EN</language>
 	</metadata>
+	<default-size>
+		<height>700</height>
+		<width>1000</width>
+	</default-size>
 </flex-config>

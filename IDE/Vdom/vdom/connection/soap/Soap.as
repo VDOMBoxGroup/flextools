@@ -10,7 +10,7 @@ package vdom.connection.soap
 		
 	public class Soap  extends EventDispatcher
 	{
-		private static 	var ws			:WebService	= new WebService;
+		private static var ws			:WebService = new WebService();
 		private static 	var instance	:Soap;
 //FileUpload
 		/**
@@ -30,7 +30,8 @@ package vdom.connection.soap
 		//app_text
 		public function init(wsdl:String= 'http://192.168.0.23:82/vdom.wsdl'):void
 		{
-             //	var loader :Loader = new Loader; 	
+             //	var loader :Loader = new Loader;
+             	ws = new WebService();	
              	ws.wsdl =wsdl;
 				ws.useProxy = false;
 				ws.loadWSDL();
@@ -40,11 +41,11 @@ package vdom.connection.soap
 		/**
 		 *  1 - open session open_session
 		 */
-
+		
 		public   function login( login:String='', password:String='' ):void 
 		{	
-			var sLogin:SLogin = new SLogin(ws); 
 			
+			var sLogin:SLogin = new SLogin(ws); 
 			sLogin.execute(login,password);
 			sLogin.addEventListener(SoapEvent.LOGIN_OK,    ldispatchEvent  );
 			sLogin.addEventListener(SoapEvent.LOGIN_ERROR, ldispatchEvent);
@@ -97,11 +98,9 @@ package vdom.connection.soap
 		/**
 		 *  5 - get the list of all applications  'list_applications'
 		 */
-		
 		public  function listApplications():void 
 		{
-			 var istApplications:SListApplications = new SListApplications(ws);
-			
+			var istApplications:SListApplications = new SListApplications(ws);
 			istApplications.execute();
 			istApplications.addEventListener(SoapEvent.LIST_APLICATION_OK, ldispatchEvent);
 			istApplications.addEventListener(SoapEvent.LIST_APLICATION_ERROR, ldispatchEvent);
@@ -136,10 +135,10 @@ package vdom.connection.soap
 		/** 
 		 *  8 - get type resource get_resource
 		 */
-		
+		private var sGetTypeResource:SGetResource = new SGetResource(ws);
 		public  function getResource(ownerid:String='',resid:String=''):void 
 		{
-			var sGetTypeResource:SGetResource = new SGetResource(ws);
+			
 			
 			sGetTypeResource.execute(ownerid, resid);
 			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_OK, ldispatchEvent);

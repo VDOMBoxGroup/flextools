@@ -18,7 +18,6 @@ public class ClosablePanel extends Panel {
 	override protected function createChildren():void {
 		
 	    super.createChildren();
-	    setStyle('headerHeight', '30');
 	    if (!collapseButton) {
 	        collapseButton = new Button();
 	        collapseButton.explicitWidth = collapseButton.explicitHeight = 16;

@@ -1,12 +1,10 @@
 Application {
-	backgroundColor: #000000;
+	backgroundColor: #484848;
 	backgroundGradientColors: "[#000000, #000000]";
-	backgroundImage: Embed(source="VdomThemeAssets.swf", symbol="AppBackgroundApplicationBackground");
+	backgroundImage: Embed(source="VdomThemeAssets.swf", symbol="ApplicationBackground");
 	backgroundAlpha: 1.0;
     backgroundSize: "100%";
 	backgroundGradientAlphas: 1, 1;
-
-
 }
 
 /*
@@ -25,6 +23,41 @@ Tab {
 	selectedUpSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedUpSkin");
 	
 }
+
+MainTabNavigator {
+	backgroundColor: #191919;
+	backgroundAlpha: .1;	
+}
+
+.mainCanvas {
+	borderThickness: 1;
+	borderColor: #ffffff;
+	borderStyle: solid;
+	backgroundColor: #c2c2c2;
+}
+
+Types {
+	borderThickness: 1;
+	borderColor: #ffffff;
+	borderStyle: solid;
+	textAlign:center;
+	backgroundColor: #c2c2c2;
+	headerStyleName: typesHeaderStyle ;
+}
+
+.typesHeaderStyle {
+	color: #ffffff;
+	highlightAlphas: 0, 0;
+	selectedFillColors: #d91107, #d91107;
+	textRollOverColor:#ffffff;
+	textSelectedColor:#ffffff; 
+	fillAlphas:1, 1;
+	fillColors:#d91107, #d91107;
+}
+Item {
+	backgroundAlpha: .4;
+	backgroundColor: #c2c2c2;
+}
 ClosablePanel {
 	CollapseButtonOnButtonUp: Embed(source="VdomThemeAssets.swf", symbol="CollapseButtonOnButtonUp");
 	CollapseButtonOnButtonDown: Embed(source="VdomThemeAssets.swf", symbol="CollapseButtonOnButtonDown");
@@ -34,6 +67,20 @@ ClosablePanel {
 	CollapseButtonOffButtonDown: Embed(source="VdomThemeAssets.swf", symbol="CollapseButtonOffButtonDown");
 	CollapseButtonOffButtonOver: Embed(source="VdomThemeAssets.swf", symbol="CollapseButtonOffButtonOver");
 	CollapseButtonOffButtonDisabled: Embed(source="VdomThemeAssets.swf", symbol="CollapseButtonOffButtonDisabled");
+	
+	paddingTop: 5;
+	paddingBottom: 5;
+	paddingLeft: 5;
+	paddingRight: 5;
+	cornerRadius: 0;
+	headerHeight: 20;
+	backgroundColor: #c2c2c2;
+	borderThicknessLeft: 0;
+	borderThicknessRight: 0;
+	titleStyleName: closablePanelTitle;
+}
+.closablePanelTitle {
+	color: #ffffff;
 }
 ResizeManager {
 	boxSize: 6px;
@@ -47,24 +94,33 @@ ResizeManager {
 	moveCursor: Embed(source="VdomThemeAssets.swf", symbol="ResizeCursorsMoveCursor");
 }
 ActionPanel {
+	color: #ffffff;
 	borderAlpha: 1;	
 	headerColors: #4e84df, #0f6cc3;
-	footerColors: #efaa15, #e6780c;
+	footerColors: #d91107, #d91107;
 	headerHeight: 0;
-	
+	fontWeight: bold;
 	roundedBottomCorners: true;
-	cornerRadius: 10;
+	cornerRadius: 0;
 	paddingTop: 5;
 	paddingBottom: 0;
 	paddingLeft: 0;
 	paddingRight: 0;
 	highlightAlphas: 0, 0.12;
-	backgroundColor: white;
+	backgroundColor: #484848;
 	layout: absolute;
-	borderColor: #808080;
+	borderColor: #ffffff;
 	dropShadowEnabled: true;
 	borderStyle: solid;
 	borderThickness: 1;
+}
+WorkArea {
+	dropShadowEnabled: true;
+	backgroundColor: #ffffff;
+	backgroundAlpha: 1.0; 
+	borderStyle: solid; 
+	borderThickness: 1;
+	borderColor: #000000;
 }
 ControlBar {
 	backgroundAlpha: 1;
@@ -76,12 +132,4 @@ ControlBar {
 .actionPanlelLabel {
 	fontFamily: Verdana;
 	textAlign: center;
-}
-ClosablePanel {
-	paddingTop: 5;
-	paddingBottom: 5;
-	paddingLeft: 5;
-	paddingRight: 5;
-	borderThicknessLeft: 0;
-	borderThicknessRight: 0;
 }
