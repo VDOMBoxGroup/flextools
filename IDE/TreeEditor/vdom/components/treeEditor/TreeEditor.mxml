@@ -64,10 +64,6 @@
 	private var curLine:Object = new Object();
 	private var btLine:DeleteLineButton;
 	private var temMenu:TreeElementMenu;
-		
-	
-	
-	
 	
 	private function init():void
 	{
@@ -82,13 +78,14 @@
 			massTreeElements[obID].y = xmlObj.@top.toXMLString();	
 			
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
-			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAG , startingDrag);	
+		//-	massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAG , startingDrag);	
 		//*	massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);	
 		//*	massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			//massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_DRAG , stopingDrag);
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+		//	massTreeElements[obID].addEventListener(MouseEvent.CLICK, treeElementsClick);
 			//
 		//	massTreeElements[obID].addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);	//
 			addChild(massTreeElements[obID]);
@@ -101,17 +98,39 @@
 		addChild(btLine);
 		
 		temMenu = new TreeElementMenu();
-		temMenu.addEventListener(MouseEvent.MOUSE_OVER, showTEMMenu);
-		temMenu.addEventListener(MouseEvent.MOUSE_OUT, hideTEMMenu);
+	//	temMenu.addEventListener(MouseEvent.MOUSE_OVER, showTEMMenu);
+	//	temMenu.addEventListener(MouseEvent.MOUSE_OUT, hideTEMMenu);
+		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);
 		addChild(temMenu);
+		
+		addEventListener(MouseEvent.CLICK, hideTemMenu);
+	}
+	
+	private function hideTreeElement(trEvt:TreeEditorEvent):void
+	{
+		massTreeElements[curTree.ID].resize = true;
+		//temMenu.position = massTreeElements[curTree.ID];
+	}
+	
+	private function hideTemMenu(msEvt:MouseEvent):void
+	{
+		
+	}
+	private function treeElementsClick(msEvt:MouseEvent):void
+	{
+		/***-++++++++++++-***/
+		temMenu.position = msEvt.currentTarget;
+	//	temMenu.x = msEvt.currentTarget.x;
+	//	temMenu.y = msEvt.currentTarget.y - temMenu.height;
+		temMenu.alpha = 0.5;
 	}
 	
 	private function delButtonOperation(msEvt:MouseEvent):void
 	{
 		//ссылка на самого себя 
 		// curLine;
-	
-			
 			for (var level:String in massLines)
 					for (var frsTrElem:String in massLines[level])
 						for (var sknTrElem:String in massLines[level][frsTrElem])
@@ -123,9 +142,6 @@
 								btLine.alpha = 0.5;
 								btLine.visible = false;
 							}
-		
-		
-		
 	}
 	// рисуем линии
 	private function drawLines():void
@@ -166,81 +182,55 @@
 		btLine.y = mouseY  - btLine.height - 2;
 		btLine.visible = true;
 	}
+	
+	private function mouseHandler(msEvt:TreeEditorEvent):void
+	{
+		//trace(msEvt.currentTarget.ID);
+		redrawLines(msEvt.currentTarget.ID);
+	}
+	
 	/***
 	* 
 	* ---------- перерисовываем необходимые линии -----------------
 	*
 	*/
-	private function mouseHandler(trEvt:Object):void
+	
+	private function redrawLines(strID:String):void
 	{
+	//	var strID:String 
 		for (var level:String in massLines)
 		for(var ind1:String in massLines[level])
 			for(var ind2:String in massLines[level][ind1])
-				if (trEvt.ID == ind1 || trEvt.ID == ind2)
+				if (strID == ind1 || strID == ind2)
 					massLines[level][ind1][ind2].updateVector();
 				
+		temMenu.position = massTreeElements[strID];
+		trace('redrawLines');
 	}
 	
 	/******
-	- При выделении темнее
+	
 	- на двойной щелчек скрываться /разкрываться
 	+ когда  соединяешь, стрелка за мышкой
 	- цвет по текущему уровню
 	+ Баг верхнего угла
 	+ при нажатии на линиию появлялась становилась видима кнопка
-	- нармальные картикни
-	- а
+	+ нармальные картикни
+	+ Выделение текущего елемента
+	- снятие выделения текущего елемента
+	- прозрачность у меню в зависимости от расстоянию до мышки
+	- свертывание и развертывание елементов
+	
 	*/
 	
-	/***
-	*
-	*		выделяем необходимый елемент дерерва 
-	*		рисуем и перетаскиваем прямоугольник прямоугольник
-	*
-	*/
-	private function startingDrag(evt:TreeEditorEvent):void
-	{
-		if(!blDrawLine)
-		{	
-			curLine.mark = false; // снимаем выдиление с текущей линии
-			btLine.visible = false; // прячем кнопку 
-			
-			var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
-			
-			canRectangle.x = evt.currentTarget.x;
-			canRectangle.y = evt.currentTarget.y;
-			canRectangle.graphics.lineStyle(3, 0.5, 0.2, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-			canRectangle.graphics.beginFill(0x555555,  0);
-			canRectangle.graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
-			canRectangle.addEventListener(MouseEvent.MOUSE_UP, stopingDrag);
-			canRectangle.startDrag(false, rect);
-			addChild(canRectangle);
-		}
-	}
 	
-	
-	private function mouseOverHandler(msEvt:MouseEvent):void
-	{
-		temMenu.x = msEvt.currentTarget.x;
-		temMenu.y = msEvt.currentTarget.y - temMenu.height;
-		temMenu.alpha = 0.5;
-	}
-	
-	private function mouseOutHandler(msEvt:MouseEvent):void
-	{
-		temMenu.alpha = .0;
-		
-	}
 	
 	private function showTEMMenu(msEvt:MouseEvent):void
 	{
 		temMenu.alpha = 1;
 	}
 	
-	private function hideTEMMenu(msEvt:MouseEvent):void
-	{
-		temMenu.alpha = .0;
-	}
+	
 	/**
 	*
 	*		прекращаем перетаскивание прямоугольника
@@ -248,15 +238,23 @@
 	*
 	*/
 	private function stopingDrag(trEvt:MouseEvent):void
-	{
+	{/****************************/
+		trace('stopingDrag')
 		canRectangle.stopDrag();
 		curTree.x = canRectangle.x;
 		curTree.y = canRectangle.y;
+	//	curTree.ID = trEvt.currentTarget.ID;
 		canRectangle.graphics.clear();
 		canRectangle.removeEventListener(MouseEvent.MOUSE_UP, stopingDrag);
-		mouseHandler(curTree);
+		redrawLines(curTree.ID);
 		removeChild(canRectangle);
 		//removeChild(massTreeElements[curTree.ID]) /**********++++++++*****/
+	
+		temMenu.position = curTree;
+	//	temMenu.x = trEvt.currentTarget.x;
+	//	temMenu.y = trEvt.currentTarget.y;
+		temMenu.alpha = 0.5;
+		
 	}
 	
 	/** 
@@ -269,8 +267,30 @@
 	
 	private function mouseDownHandler(evt:MouseEvent):void
 	{
-		pnFrom.x = evt.currentTarget.x;
-		pnFrom.y =evt.currentTarget.y;
+			pnFrom.x = evt.currentTarget.x;
+			pnFrom.y =evt.currentTarget.y;
+			
+			temMenu.position = evt.currentTarget;
+		trace('startingDrag - blDrawLine: '+ blDrawLine);
+		if(!blDrawLine)
+		{
+		/*---выделяем и перетаскиваем обьект---*/	
+			curLine.mark = false; // снимаем выдиление с текущей линии
+			btLine.visible = false; // прячем кнопку 
+			
+			var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
+			
+			canRectangle.addEventListener(MouseEvent.MOUSE_UP, stopingDrag);
+			
+			canRectangle.x = evt.currentTarget.x;
+			canRectangle.y = evt.currentTarget.y;
+			canRectangle.graphics.lineStyle(3, 0.5, 0.2, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			canRectangle.graphics.beginFill(0x555555,  0);
+			canRectangle.graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
+			
+			canRectangle.startDrag(false, rect);
+			addChild(canRectangle);
+		}
 		
 		// проводим линию
 		if(blDrawLine){
@@ -293,10 +313,15 @@
 					for (var sknTrElem:String in massLines[level][frsTrElem])
 						if((frsTrElem == fromObj && sknTrElem == toObj ) ||
 							(frsTrElem == toObj && sknTrElem ==  fromObj ))
+							{	
+								trace('return');
+								curTree = evt.currentTarget;
 								return;
-					
+								
+							}
 			
-						
+			
+			//trace('maked');			
 			massLines[necessaryLevel][fromObj][toObj] 	= 
 			new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
 			
@@ -305,9 +330,10 @@
 		}
 
 		// выделяем необходимый елемент дерева
-		curTree.alpha = 1;
+	//	curTree.alpha = 1;
 		curTree = evt.currentTarget;
-		curTree.alpha = 0.5;
+	//	curTree.alpha = 0.5;
+
 	}
 	
 	/**
@@ -318,17 +344,20 @@
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
 		// удаляем "связи" 
+		var strID:String = curTree.ID;
 		for (var level:String in massLines)
-		for(var ind1:String in massLines[level])
-			for(var ind2:String in massLines[level][ind1])
-				if (trEvt.ID == ind1 || trEvt.ID == ind2)
-				{
-					 cnvLevelDown.removeChild( massLines[level][ind1][ind2]);
-					 delete massLines[level][ind1][ind2];
-				}
+			for(var ind1:String in massLines[level])
+				for(var ind2:String in massLines[level][ind1])
+					if (strID == ind1 || strID == ind2)
+					{
+						 cnvLevelDown.removeChild( massLines[level][ind1][ind2]);
+						 delete massLines[level][ind1][ind2];
+					}
 		// удаляем сам обьект
-		removeChild(massTreeElements[trEvt.ID]);
-		delete massTreeElements[trEvt.ID];
+		removeChild(massTreeElements[strID]);
+		delete massTreeElements[strID];
+		
+		curTree = null;
 	}
 	
 	/**
@@ -341,7 +370,6 @@
 	{
 		addChild(vctTest);//--для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
-		
 		
 		blDrawLine = true; //говорим что рисуем линию
 		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
@@ -369,10 +397,13 @@
 	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
-		var tX:int = mouseX - pnFrom.x;
+		/*var tX:int = mouseX - pnFrom.x;
 		var tY:int = mouseY - pnFrom.y;
-		var pnTo:Object = new Object();
+		*/
+		var tX:int = mouseX - curTree.x;
+		var tY:int = mouseY - curTree.y;
 		
+		var pnTo:Object = new Object();
 		// чтоб мышка не кликала по своей линии
 		
 		if((tX>0))
@@ -385,11 +416,12 @@
 		else
 			pnTo.y = mouseY + 10;
 		
+	
 		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo);	
 	}
 	/**
-	*
+	*  
 	*		получаем из существующей структуры данных XML 
 	*
 	*/
@@ -411,7 +443,6 @@
 					object.@left = massTreeElements[ind1].x;
 					object.@left = massTreeElements[ind1].y;
 					outXML.appendChild(object.toXMLString());
-					
 				}
 				
 				

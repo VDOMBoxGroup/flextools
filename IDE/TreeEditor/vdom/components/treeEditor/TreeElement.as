@@ -48,7 +48,7 @@ package vdom.components.treeEditor
 			
 			isRedraw = true;
 			addChild(rect);
-			
+			this.buttonMode = true;
 		}
 		
 		private function initHead():void
@@ -62,7 +62,7 @@ package vdom.components.treeEditor
 			btLessen.x = 40;
 			btLessen.y = 3;
 			btLessen.label = 'H';
-			btLessen.addEventListener(MouseEvent.CLICK, btLessenClick);
+		//	btLessen.addEventListener(MouseEvent.CLICK, btLessenClick);
 			addChild(btLessen);
 			
 			// кнопка удалить
@@ -90,7 +90,7 @@ package vdom.components.treeEditor
 		private function initLittleBody():void
 		{
 			txt = new Label();
-			txt.addEventListener(MouseEvent.MOUSE_DOWN, dispStartDrag);
+		//	txt.addEventListener(MouseEvent.MOUSE_DOWN, dispStartDrag);
 			txt.buttonMode = true;
 			addChild(txt);
 		}
@@ -170,7 +170,7 @@ package vdom.components.treeEditor
 			this.drag = false;
 		}
 		// при нажатии кнопки свернуть
-		private function btLessenClick(msEnt:MouseEvent):void
+		public function set resize(blHide:Boolean):void
 		{
 			// убираем "лишнее"
 			if (min){

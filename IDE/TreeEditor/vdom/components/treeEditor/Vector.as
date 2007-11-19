@@ -28,6 +28,7 @@ package vdom.components.treeEditor
 		
 		public function createVector (trEl0:Object, trEl1:Object):void
 		{
+		//	trace('Draw Line!!!' );
 			curLine = pointTo(trEl0, trEl1)
 			drawLine(curLine);
 		}
@@ -120,7 +121,7 @@ package vdom.components.treeEditor
 			
 			btX = x0 - dX/2;
 			btY = y0 - dY/2;
-			
+		//	trace('Draw Line: '+ btX );
 			this.graphics.clear();
 			
 			this.graphics.lineStyle(8, _numColor, 0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
@@ -177,7 +178,7 @@ package vdom.components.treeEditor
 				 case '9':
 				   		_numColor = 0xff0099;  break;
 				 default:
-				   		_numColor = 0xffffff; 	break;
+				   		_numColor = 0xffff00; 	break;
 			}
 		}
 		
