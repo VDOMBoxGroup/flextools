@@ -103,9 +103,11 @@
 		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
 		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
 		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);
+		
 		addChild(temMenu);
 		
 		addEventListener(MouseEvent.CLICK, hideTemMenu);
+		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 	}
 	
 	private function hideTreeElement(trEvt:TreeEditorEvent):void
@@ -118,13 +120,21 @@
 	{
 		
 	}
+	
+	private function alfaMenu(msEvt:MouseEvent):void
+	{
+		temMenu.alfaMenu(mouseX - temMenu.x,  mouseY - temMenu.y );
+	//	trace("mouseX: " + mouseX);
+	//	trace("temMenu.x: " + temMenu.x);
+	//	trace("mouseX - temMenu.x: " + (mouseX - temMenu.x) );
+	}
 	private function treeElementsClick(msEvt:MouseEvent):void
 	{
 		/***-++++++++++++-***/
 		temMenu.position = msEvt.currentTarget;
 	//	temMenu.x = msEvt.currentTarget.x;
 	//	temMenu.y = msEvt.currentTarget.y - temMenu.height;
-		temMenu.alpha = 0.5;
+		temMenu.setAlpha = 0.5;
 	}
 	
 	private function delButtonOperation(msEvt:MouseEvent):void
@@ -218,8 +228,8 @@
 	+ нармальные картикни
 	+ Выделение текущего елемента
 	- снятие выделения текущего елемента
-	- прозрачность у меню в зависимости от расстоянию до мышки
-	- свертывание и развертывание елементов
+	+ прозрачность у меню в зависимости от расстоянию до мышки
+	+ свертывание и развертывание елементов
 	
 	*/
 	
@@ -227,7 +237,7 @@
 	
 	private function showTEMMenu(msEvt:MouseEvent):void
 	{
-		temMenu.alpha = 1;
+		temMenu.setAlpha = 1;
 	}
 	
 	
@@ -253,7 +263,7 @@
 		temMenu.position = curTree;
 	//	temMenu.x = trEvt.currentTarget.x;
 	//	temMenu.y = trEvt.currentTarget.y;
-		temMenu.alpha = 0.5;
+		temMenu.setAlpha = 0.5;
 		
 	}
 	
@@ -271,7 +281,7 @@
 			pnFrom.y =evt.currentTarget.y;
 			
 			temMenu.position = evt.currentTarget;
-		trace('startingDrag - blDrawLine: '+ blDrawLine);
+	//	trace('startingDrag - blDrawLine: '+ blDrawLine);
 		if(!blDrawLine)
 		{
 		/*---выделяем и перетаскиваем обьект---*/	

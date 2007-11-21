@@ -23,15 +23,102 @@ package vdom.components.treeEditor
 		public function Vector():void
 		{
 			
-			
+			trace('1');
 		}
 		
 		public function createVector (trEl0:Object, trEl1:Object):void
 		{
 		//	trace('Draw Line!!!' );
+			trace('2 createVector');
 			curLine = pointTo(trEl0, trEl1)
 			drawLine(curLine);
 		}
+		/*
+		public function pointTo(trEl0:Object, trEl1:Object):Object
+		{
+			var objFrom:Object = new Object();
+			var objTo:Object = new Object();
+			
+			trace('3 pointTo');
+			objFrom = getPoint(trEl0, trEl1);
+			objReturn.x1 = objFrom.x;
+			objReturn.y1 = objFrom.y;
+			
+			
+			trace('4 pointTo');
+			var objReturn:Object = new Object();
+			
+			if(trEl1.className != 'TreeElement')
+			{
+				trace('5a pointTo');
+				objReturn.x2 = trEl1.x;
+				objReturn.y2 = trEl1.x;
+			}else{
+				trace('5b pointTo');
+				objTo = getPoint(trEl1, trEl0);
+				objReturn.x2 = objTo.x;
+				objReturn.y2 = objTo.x;
+			}
+			trace('6 pointTo');
+			
+			return objReturn;	
+		}
+		*/
+		private function getPoint(pointFrom:Object, pointTo:Object):Object
+		{	
+			
+			var vertCross:Boolean = false;
+							
+				var fromX:int = pointFrom.width/2;
+				var fromY:int = pointFrom.height/2;
+				
+				var toX:int = pointTo.width/2;
+				var toY:int = pointTo.height/2;
+												
+				var contWidth:int = pointFrom.widht;
+				var contHeight:int = pointFrom.height;
+			
+											
+			var arrowWidth:int = Math.abs(toX-fromX);
+			var arrowHeight:int = Math.abs(toY-fromY);    				
+			
+			//if(arrowWidth<=contWidth && arrowHeight<=contHeight)
+			//	continue;    				
+			// 
+			
+			var tmp:Number = arrowWidth/arrowHeight;
+
+			if( tmp > contWidth/contHeight )
+				vertCross = true;	    			
+				
+			var dX:Number;
+			var dY:Number;
+			// если пересекаем с боку....
+			if(vertCross)
+			{
+				dX = contWidth/2;
+				dY = dX/tmp;
+			}
+			else
+			{
+				dY = contHeight/2;
+				dX = dY*tmp;
+			}    				
+			// определяем направление линий
+   			if(fromX<toX) 	{ fromX+=dX; toX-=dX; }
+   			else 			{ fromX-=dX; toX+=dX; }    					
+				
+   			if(fromY<toY) 	{ fromY+=dY; toY-=dY; }    					
+   			else			{ fromY-=dY; toY+=dY; }
+			
+			var objReturn:Object = new Object();   			
+			objReturn.x = fromX;
+			objReturn.y = fromY;
+			
+			trace('objReturn.x ' + objReturn.x);
+			return  objReturn;
+		}
+		
 					
 		public function pointTo(trEl0:Object, trEl1:Object):Object
 		{
@@ -78,6 +165,7 @@ package vdom.components.treeEditor
 		// вычисляем расстояние между 2-мя точками
 		private function getObg(x1:Number, y1:Number, x2:Number, y2:Number):Object
 		{
+			
 			var dX:Number;
 			var dY:Number;
 			var distanse:Number;
@@ -99,6 +187,7 @@ package vdom.components.treeEditor
 		
 		public function drawLine( trEl1:Object = null):void
 		{
+			trace('8 drawLine');
 			if (!trEl1)
 			{
 				trEl1 = curLine;

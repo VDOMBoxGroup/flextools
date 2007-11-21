@@ -18,12 +18,16 @@ package vdom.components.treeEditor
 		private var imgDelete:Image;
 		private var imgLine:Image;
 		private var imgLessen:Image;
+		private var canMenu:Canvas  = new Canvas();
+		private var canRect:Canvas = new Canvas();
 		
 		
 		public function TreeElementMenu():void
 		{
 			var btWidth:int = 18;
 			var btHeight:int = 18;
+			
+			//var canMenu:Canvas  = new Canvas();
 			
 			btLessen = new Button();
 			btLessen.width = btWidth;
@@ -43,7 +47,7 @@ package vdom.components.treeEditor
 			imgLessen.y = btLessen.y + 1;
 			imgLessen.buttonMode = true;
 			imgLessen.addEventListener(MouseEvent.CLICK, imgLessenClick);
-			addChild(imgLessen);
+			canMenu.addChild(imgLessen);
 			
 			// кнопка удалить
 			
@@ -64,7 +68,7 @@ package vdom.components.treeEditor
 			imgDelete.y = btDelete.y + 1;
 			imgDelete.buttonMode = true;
 			imgDelete.addEventListener(MouseEvent.CLICK, imgDeleteClick);
-			addChild(imgDelete);
+			canMenu.addChild(imgDelete);
 		//	btDelete.addEventListener(MouseEvent.MOUSE_OUT, stopImmediateProp);
 			
 			// кнопка линия
@@ -87,25 +91,44 @@ package vdom.components.treeEditor
 			imgLine.buttonMode = true;
 			imgLine.addEventListener(MouseEvent.CLICK, imgLineClick); 
 			
-			addChild(imgLine);
-		
-			alpha = 0.1;
+			canMenu.addChild(imgLine);
+			//canMenu.addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
+			addChild(canMenu);
+			addChild(canRect);
+			
+			canMenu.alpha = 0;
+			//alpha = .7
+			//alpha = 0.1;
 		}
 		
+		public function alfaMenu(deltaX:Number, deltaY:Number):void
+		{
+			trace('deltaX do: ' +  deltaX);
+			deltaX = Math.abs(deltaX)- this.width/2 ;
+			deltaY = Math.abs(deltaY) - 10; 
+			var delta:Number = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+			var k:int = 5;
+			canMenu.alpha = (100 - Math.abs(delta))/100;
+		// canMenu.alpha = .01
+			trace('deltaX past: ' +  deltaX);
+			trace('canMenu.alpha: ' +  canMenu.alpha);
+		//	canRect.graphics.drawCircle(deltaX, deltaY,3);
+		} 
 		public function set position(objPosit:Object):void
 		{
 			this.visible = true;
 			
 			this.x = objPosit.x;
 			this.y = objPosit.y-25;
-			trace(objPosit.width);
+		//	trace(objPosit.width);
 			if (!objPosit.width)return;
 			
-			graphics.clear();
-			graphics.lineStyle(3, 0.5, 0.5, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			
+			canRect.graphics.clear();
+			canRect.graphics.lineStyle(3, 0.5, 0.5, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 		//	graphics.beginFill(0x555555,  0);
 		//	graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
-			graphics.drawRect(-1, 23, objPosit.width+1, objPosit.height+1);
+			canRect.graphics.drawRect(-1, 23, objPosit.width+1, objPosit.height+1);
 		}
 		
 		
@@ -119,9 +142,9 @@ package vdom.components.treeEditor
 			
 		}
 		
-		private function setAlpha():void
+		public function set setAlpha(alf:Number):void
 		{
-			
+				canRect.alpha = alf;
 		}
 		
 		private function btLessenClick(msEvt:MouseEvent):void

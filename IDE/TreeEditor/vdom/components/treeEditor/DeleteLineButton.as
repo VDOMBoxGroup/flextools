@@ -17,10 +17,10 @@ package vdom.components.treeEditor
 			bt = new Button();
 			bt.height = 18;
 			bt.width = 18;
-			addChild(bt);
+		//	addChild(bt);
 			
 			icons = new Image();
-			icons.source='resource/vdom2_treeEditor_delete_01.jpg';
+			icons.source='resource/vdom2_treeEditor_delete_05.png';
 			icons.width = 15;
 			icons.height = 15;
 			icons.x = 2;

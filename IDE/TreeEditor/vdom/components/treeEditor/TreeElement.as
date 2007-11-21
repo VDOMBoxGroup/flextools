@@ -51,41 +51,6 @@ package vdom.components.treeEditor
 			this.buttonMode = true;
 		}
 		
-		private function initHead():void
-		{
-			// поле для перетаскивания
-			
-			// кнопка скрыть
-			btLessen = new Button();
-			btLessen.width = 20;
-		 	btLessen.height = 15;
-			btLessen.x = 40;
-			btLessen.y = 3;
-			btLessen.label = 'H';
-		//	btLessen.addEventListener(MouseEvent.CLICK, btLessenClick);
-			addChild(btLessen);
-			
-			// кнопка удалить
-			btDelete = new Button();
-			btDelete.width = 20;
-		 	btDelete.height = 15;
-			btDelete.x = 60;
-			btDelete.y = 3;
-			btDelete.label = 'D';
-			btDelete.name = 'deleteButton';
-			addChild(btDelete);
-			btDelete.addEventListener(MouseEvent.CLICK, btDeleteClick);
-			
-			// кнопка линия
-			btLine = new Button();
-			btLine.x  = 80;
-			btLine.y  = 3;
-			btLine.width = 20;
-			btLine.height = 15; 
-			btLine.label = 'L';
-			addChild(btLine);
-			btLine.addEventListener(MouseEvent.CLICK, btLineClick);
-		}
 		
 		private function initLittleBody():void
 		{
