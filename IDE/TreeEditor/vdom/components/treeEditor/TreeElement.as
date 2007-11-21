@@ -66,10 +66,10 @@ package vdom.components.treeEditor
 			textArea.x = 35; // btButton.width;
 			textArea.y = 25  //txt.height;
 			textArea.editable = false;
-	//		textArea.selectable = false;
-			textArea.text = 'any text, a lot of text';
-			textArea.width = 60;
-			textArea.height = 40;
+			textArea.selectable = false;
+			textArea.text = 'a lot of words, because it is description of a site';
+			//textArea.width =  110;
+			//textArea.height = 50;
 			addChild(textArea);
 		}
 		
@@ -159,7 +159,7 @@ package vdom.components.treeEditor
 		
 		override public function set name(names:String):void
 		{
-			txt.text = names;
+			txt.text = 'Это название странички';
 			ID = names;
 		}
 		
