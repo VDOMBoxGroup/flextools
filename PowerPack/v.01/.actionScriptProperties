@@ -10,11 +10,13 @@
       <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/rpc.swc" linkType="1"/>
       <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/charts.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
       <libraryPathEntry kind="1" path="${FRAMEWORKS}/locale/{locale}" linkType="1"/>
+      <libraryPathEntry kind="3" path="C:\Documents and Settings\lee ej\WORK\VDOM\SpringGraph_20061210\SpringGraph\bin\SpringGraph.swc" linkType="1" sourcepath="C:\Documents and Settings\lee ej\WORK\VDOM\SpringGraph_20061210\SpringGraph"/>
     </libraryPath>
     <sourceAttachmentPath>
       <sourceAttachmentPathEntry kind="3" path="${FRAMEWORKS}/libs/flex.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
       <sourceAttachmentPathEntry kind="3" path="${FRAMEWORKS}/libs/framework.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
       <sourceAttachmentPathEntry kind="3" path="${FRAMEWORKS}/libs/charts.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
+      <sourceAttachmentPathEntry kind="3" path="C:\Documents and Settings\lee ej\WORK\VDOM\SpringGraph_20061210\SpringGraph\bin\SpringGraph.swc" linkType="1" sourcepath="C:\Documents and Settings\lee ej\WORK\VDOM\SpringGraph_20061210\SpringGraph"/>
     </sourceAttachmentPath>
   </compiler>
   <applications>

@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
-	
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:ns1="http://www.adobe.com/2006/fc" xmlns:ns2="com.adobe.flex.extras.controls.springgraph.*"  creationComplete="init()" xmlns:ns3="powerPack.com.*">
+	<mx:Script>
+		<![CDATA[
+		import powerPack.com.graphNode;
+		
+		private function init():void { 
+			var node_1:graphNode = new graphNode();
+			var node_2:graphNode = new graphNode();
+
+			this.addChild(node_1);
+			this.addChild(node_2);
+			
+			node_1.move(10, 10);
+			node_2.move(10, 60);
+		
+			node_1.text = "as\ndfsdfsl k f    dsfsdfdsfsdfsfa \ngdfsdf";
+			node_2.text = "asdfsdfsl k f    dsfsdfdsfsdfsfa \ngdfsdf";
+			
+	    }
+		]]>
+	</mx:Script>
+	<ns3:graphNode x="402" y="67" width="71" height="65" type="2">
+	</ns3:graphNode>
+	<ns3:graphNode x="307" y="297" type="1">
+	</ns3:graphNode>
 </mx:Application>
