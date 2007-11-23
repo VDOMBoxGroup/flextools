@@ -28,16 +28,12 @@ package vdom.components.treeEditor
 			var btWidth:int = 18;
 			var btHeight:int = 18;
 			
-			//var canMenu:Canvas  = new Canvas();
 			
 			btLessen = new Button();
 			btLessen.width = btWidth;
 		 	btLessen.height = btHeight;
-			btLessen.x = 40;
+			btLessen.x = 0;
 			btLessen.y = 3;
-	//		btLessen.label = 'H';
-	//		btLessen.addEventListener(MouseEvent.MOUSE_OUT, stopImmediateProp);
-//			addChild(btLessen);
 			
 			imgLessen = new Image();
 			imgLessen.source = 'resource/vdom2_treeEditor_show_on_02.png';
@@ -54,11 +50,9 @@ package vdom.components.treeEditor
 			btDelete = new Button();
 			btDelete.width = btWidth;
 		 	btDelete.height = btHeight;
-			btDelete.x = 80;
+			btDelete.x = 40;
 			btDelete.y = 3;
-		//	btDelete.label = 'D';
 			btDelete.name = 'deleteButton';
-	//		addChild(btDelete);
 
 			imgDelete = new Image();
 			imgDelete.source='resource/vdom2_treeEditor_delete_05.png';
@@ -69,17 +63,14 @@ package vdom.components.treeEditor
 			imgDelete.buttonMode = true;
 			imgDelete.addEventListener(MouseEvent.CLICK, imgDeleteClick);
 			canMenu.addChild(imgDelete);
-		//	btDelete.addEventListener(MouseEvent.MOUSE_OUT, stopImmediateProp);
 			
 			// кнопка линия
 			btLine = new Button();
-			btLine.x  = 60;
+			btLine.x  = 20;
 			btLine.y  = 3;
 			btLine.width = btWidth;
 			btLine.height = btHeight; 
-		//	btLine.label = 'L';
-//			addChild(btLine);
-		//	btLine.addEventListener(MouseEvent.CLICK, btLineClick);
+		
 		
 		
 			imgLine = new Image();
@@ -92,19 +83,10 @@ package vdom.components.treeEditor
 			imgLine.addEventListener(MouseEvent.CLICK, imgLineClick); 
 			
 			canMenu.addChild(imgLine);
-			
-	//		canMenu.addEventListener(MouseEvent.MOUSE_MOVE, canMenuAlpha);
-	//		canMenu.graphics.lineStyle(3, 0.5, 0.5, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-	//		canMenu.graphics.beginFill(0x555555,  .5);
-	//		canMenu.graphics.drawRect(0, 0, 100, 25);
-			//canMenu.graphics
 			addChild(canMenu);
-			
 			addChild(canRect);
 			
 			canMenu.alpha = 0;
-			//alpha = .7
-			//alpha = 0.1;
 		}
 		
 		public function alfaMenu(deltaX:Number, deltaY:Number):void
@@ -112,11 +94,9 @@ package vdom.components.treeEditor
 			if(	deltaX < this.width && deltaX > 0
 				&& deltaY < 25 && deltaY > 0)
 			 {
-			// 	trace('I am UP dX: ' + deltaX + ' dY: ' + deltaY);
 			 	canMenu.alpha = 1;	
 			 	return
 			 }
-			// trace('I am out dX: ' + deltaX + '(' +deltaY + ') this.width: ' + this.width + '('+ 10+ ')');
 			deltaX = Math.abs(deltaX)- this.width/2 ;
 			deltaY = Math.abs(deltaY) - 10; 
 			
@@ -130,7 +110,6 @@ package vdom.components.treeEditor
 			
 			this.x = objPosit.x;
 			this.y = objPosit.y-25;
-		//	trace(objPosit.width);
 			if (!objPosit.width)return;
 			
 			

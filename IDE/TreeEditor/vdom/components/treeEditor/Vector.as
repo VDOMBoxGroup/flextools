@@ -23,41 +23,52 @@ package vdom.components.treeEditor
 		public function Vector():void
 		{
 			
-			trace('1');
+			//trace('1');
 		}
 		
 		public function createVector (trEl0:Object, trEl1:Object):void
 		{
 		//	trace('Draw Line!!!' );
-			trace('2 createVector');
+		//	trace('2 createVector');
 			curLine = pointTo(trEl0, trEl1)
 			drawLine(curLine);
 		}
 		/*
 		public function pointTo(trEl0:Object, trEl1:Object):Object
 		{
-			var objFrom:Object = new Object();
-			var objTo:Object = new Object();
 			
-			trace('3 pointTo');
+			
+			
+			var objFrom:Object 	;
+			var objTo:Object 		= new Object();
+			var objReturn:Object	= new Object();
+			
+			/****---- temp ----****
+			//objReturn.x1 = trEl0.x;
+			//objReturn.y1 = trEl0.y;
+			objReturn.x2 = trEl1.x;
+			objReturn.y2 = trEl1.y;
+		
+			/****---- end of temp ----****
+			
 			objFrom = getPoint(trEl0, trEl1);
 			objReturn.x1 = objFrom.x;
 			objReturn.y1 = objFrom.y;
 			
 			
-			trace('4 pointTo');
-			var objReturn:Object = new Object();
+			return  objReturn;
+			
 			
 			if(trEl1.className != 'TreeElement')
 			{
 				trace('5a pointTo');
 				objReturn.x2 = trEl1.x;
-				objReturn.y2 = trEl1.x;
+				objReturn.y2 = trEl1.y;
 			}else{
 				trace('5b pointTo');
 				objTo = getPoint(trEl1, trEl0);
 				objReturn.x2 = objTo.x;
-				objReturn.y2 = objTo.x;
+				objReturn.y2 = objTo.y;
 			}
 			trace('6 pointTo');
 			
@@ -66,21 +77,47 @@ package vdom.components.treeEditor
 		*/
 		private function getPoint(pointFrom:Object, pointTo:Object):Object
 		{	
+			var objReturn:Object = new Object();  
+			
+			
 			
 			var vertCross:Boolean = false;
 							
-				var fromX:int = pointFrom.width/2;
-				var fromY:int = pointFrom.height/2;
-				
-				var toX:int = pointTo.width/2;
-				var toY:int = pointTo.height/2;
-												
-				var contWidth:int = pointFrom.widht;
-				var contHeight:int = pointFrom.height;
+			var fromX:Number = 1;
+			var fromY:Number = 1;
 			
+			var toX:Number = 1;
+			var toY:Number = 1;
+											
+			var contWidth:Number = 1;
+			var contHeight:Number = 1;
+		
+			if(pointFrom.width >0)
+			{
+			 	fromX = pointFrom.width/2;
+			 	fromY = pointFrom.height/2;
+			 	
+			 	contWidth = pointFrom.width;
+				contHeight = pointFrom.width;
+			}
+			
+			if (pointTo.width > 0)
+			{
+				 toX = pointTo.width/2;
+				 toY = pointTo.height/2;
+			}								
+			 
 											
 			var arrowWidth:int = Math.abs(toX-fromX);
-			var arrowHeight:int = Math.abs(toY-fromY);    				
+			var arrowHeight:int = Math.abs(toY-fromY);    
+			
+			
+			/******--  temp  --*****/
+			
+			objReturn.x = pointFrom.x;
+			objReturn.y = pointFrom.y;
+		//	return objReturn;
+			/******--  end  of temp  --*****/				
 			
 			//if(arrowWidth<=contWidth && arrowHeight<=contHeight)
 			//	continue;    				
@@ -111,7 +148,7 @@ package vdom.components.treeEditor
    			if(fromY<toY) 	{ fromY+=dY; toY-=dY; }    					
    			else			{ fromY-=dY; toY+=dY; }
 			
-			var objReturn:Object = new Object();   			
+			 			
 			objReturn.x = fromX;
 			objReturn.y = fromY;
 			

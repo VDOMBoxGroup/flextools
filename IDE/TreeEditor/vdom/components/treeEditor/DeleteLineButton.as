@@ -39,7 +39,7 @@ package vdom.components.treeEditor
 				alpha = 1;
 			
 			if(msEvt.type == MouseEvent.MOUSE_OUT)
-				alpha = 0.6;
+				alpha = 0.3;
 		}
 		
 	}

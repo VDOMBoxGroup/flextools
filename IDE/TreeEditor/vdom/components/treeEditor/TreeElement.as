@@ -20,6 +20,7 @@ package vdom.components.treeEditor
 	import mx.states.SetStyle;
 	
 	import vdom.events.TreeEditorEvent;
+	import mx.controls.Image;
 	
 	public class TreeElement extends Canvas
 	{
@@ -32,16 +33,12 @@ package vdom.components.treeEditor
 		private var rect:Canvas = new Canvas();
 		private var min:Boolean = true;
 		public var drag:Boolean = true;
+		private var image:Image;
 		
 		public function TreeElement()
 		{
 			super();
-			setStyle('backgroundColor', '#99ffff')
-		//	setStyle('borderColor', '#ff0000')
-			//setStyle('borderStyle', 'solid')
-		//	this.setStyle('cornerRadius','15px') 
-		//	setStyle('borderThickness', '5px'); 
-		//	initHead();
+			setStyle('backgroundColor', '#dddddd')
 			
 			initLittleBody();
 			initBigBody(); 
@@ -69,8 +66,16 @@ package vdom.components.treeEditor
 			textArea.selectable = false;
 			textArea.text = 'a lot of words, because it is description of a site';
 			//textArea.width =  110;
-			//textArea.height = 50;
+			textArea.height = 80;
 			addChild(textArea);
+			
+			image = new Image();
+			image.source = 'resource/_204920994.jpg';
+			image.y = textArea.y;
+			image.width = textArea.x;
+			image.height = 80;
+			image.maintainAspectRatio = false;
+			addChild(image);
 		}
 		
 		private var isRedraw:Boolean;
@@ -140,9 +145,11 @@ package vdom.components.treeEditor
 			// убираем "лишнее"
 			if (min){
 				removeChild(textArea);
+				removeChild(image);
 				min = false;
 			}else{
 				addChild(textArea);
+				addChild(image);
 				min = true;
 			}
 			//	убираем квадрат
@@ -164,12 +171,12 @@ package vdom.components.treeEditor
 		}
 		
 		
-		public function set current(data:Boolean):void
+		private function set current(data:Boolean):void
 		{
-			if (data)
+		/*	if (data)
 				drawRect();
 			else 
-				rect.graphics.clear();
+				rect.graphics.clear();*/
 		}
 		
 		private function dispStartDrag(evt:MouseEvent):void
