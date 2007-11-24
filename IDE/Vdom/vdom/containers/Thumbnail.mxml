@@ -4,7 +4,20 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	verticalGap="0" horizontalGap="0">
 	
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			private var labelValue:String
+			
+			override public function set data(value:Object):void {
+				
+				super.data = value;
+				labelValue = value.@id;
+			}
+		]]>
+	</mx:Script>
+	
 	<mx:Canvas id="img" width="50" height="50" backgroundColor="#ff0000" borderStyle="none"/>
-	<mx:Label width="50" fontWeight="bold" text="app_name" height="15" textAlign="center" truncateToFit="true"/>
+	<mx:Label id="thumbLabel" width="50" fontWeight="bold" height="15" text="{labelValue}" textAlign="center" truncateToFit="true"/>
 </mx:VBox>
 

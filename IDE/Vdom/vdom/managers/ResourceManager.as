@@ -6,6 +6,11 @@ import flash.events.IEventDispatcher;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
+import mx.utils.Base64Decoder;
+import flash.utils.ByteArray;
+import flash.display.Loader;
+import flash.display.Bitmap;
+import flash.display.LoaderInfo;
 	
 	
 public class ResourceManager implements IEventDispatcher {
@@ -17,6 +22,8 @@ public class ResourceManager implements IEventDispatcher {
 	
 	private var requestQue:Object;
 	private static var _resourceStorage:Object;
+	
+	private var loader:Loader;
 	/**
 	 * 
 	 * @return instance of ResourceManager class (Singleton)
@@ -46,14 +53,16 @@ public class ResourceManager implements IEventDispatcher {
 		soap = Soap.getInstance();
 		requestQue = {};
 		_resourceStorage = {};
+		
 	}
 	
 	public function loadResource(ownerID:String, GUID:String, destTarget:Object):void {
 		
-		trace('load res'+GUID);
+		//trace('load res'+GUID);
 		if(_resourceStorage[GUID]) {
 			//trace('resource aviable');
-			destTarget['resource'] = _resourceStorage[GUID];
+			var resourceObject:Object = {guid:GUID, data:_resourceStorage[GUID]}
+			destTarget['resource'] = resourceObject;
 			return;
 		}
 		
@@ -62,15 +71,39 @@ public class ResourceManager implements IEventDispatcher {
 		soap.getResource(ownerID, GUID);
 	}
 	
+	
+	
 	private function resourceLoadedHandler(event:SoapEvent):void {
 		
 		var guid:String = event.result.ResourceID;
 		var resource:String = event.result.Resource;
-		trace(guid);
-		_resourceStorage[guid] = resource;
 		
-		requestQue[guid].resource = resource;
+		var decoder:Base64Decoder = new Base64Decoder();
+		decoder.decode(resource);
+		
+		var imageSource:ByteArray = decoder.drain();
+		imageSource.uncompress();
+		
+		loader = new Loader();
+		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+		loader.name = guid;
+		loader.loadBytes(imageSource);
+		
+		_resourceStorage[guid] = resource;
+	}
+	
+	
+	
+	private function loadComplete(event:Event):void {
+		
+		var guid:String = event.currentTarget.loader.name;
+		_resourceStorage[guid] = loader.content;
+		var data:Bitmap = new Bitmap(Bitmap(loader.content).bitmapData);
+		
+		var resourceObject:Object = {guid:guid, data:data}
+		requestQue[guid].resource = resourceObject;
 		delete requestQue[guid];
+		
 	}
 	
 	// Реализация диспатчера

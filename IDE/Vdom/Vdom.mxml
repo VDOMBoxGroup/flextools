@@ -96,7 +96,12 @@
 				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_script')}" 
 					click="{placeCanvas.selectedChild=scriptCanv}"/>
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_preview')}" />
+				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_preview')}"
+					click="{
+						navigateToURL(
+							new URLRequest('http://vdom:81/'+application.publicData['topLevelObjectId']+'.vdom')
+						)
+					}"/>
 				
 				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_tree')}" />
 				

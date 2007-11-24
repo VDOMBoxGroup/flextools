@@ -1,10 +1,12 @@
 package vdom.connection {
 
-import vdom.connection.soap.Soap;
-import flash.utils.Timer;
-import flash.events.TimerEvent;
-import vdom.connection.soap.SoapEvent;
+import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
+
+import vdom.connection.soap.Soap;
+import vdom.connection.soap.SoapEvent;
 import vdom.events.ProxyEvent;
 
 public class Proxy {
@@ -12,6 +14,7 @@ public class Proxy {
 	private static var instance:Proxy;
 	
 	private var soap:Soap;
+	private var dispatcher:EventDispatcher;
 	private var massObj:Array = new Array();
 	private var dataToSend:Boolean = false ;
 	private var timeToSend:Boolean = true;
@@ -22,6 +25,7 @@ public class Proxy {
         if( instance ) throw new Error( "Singleton and can only be accessed through Proxy.anyFunction()" );
         
          soap = Soap.getInstance();
+         dispatcher = new EventDispatcher();
     } 
 	 
 	 // initialization		
@@ -89,12 +93,14 @@ public class Proxy {
 		{
 			dataToSend = false;
 			sender();
-		}
+		}	
 	}
 	
 	private function sender():void
 	{
+		//
 		if(timeToSend){
+			trace('-Send data-');
 		//	trace('Data sended');
 			timeToSend = false;
 			for (var appid:String in massObj)
@@ -105,7 +111,7 @@ public class Proxy {
 					delete massObj[appid][objid];
 				}
 			}
-			var myTimer:Timer = new Timer(3000, 1);
+			var myTimer:Timer = new Timer(1000, 1);
 	        myTimer.addEventListener("timer", timeManedger);
 	        myTimer.start();
   		} 
@@ -115,7 +121,49 @@ public class Proxy {
 	{
 	//	trace('*************** return **************');
 	//	trace(evt.result);
-		evtDisp.dispatchEvent(new ProxyEvent(ProxyEvent.PROXY_COMPLETE, evt.result) );
+		dispatchEvent(new ProxyEvent(ProxyEvent.PROXY_COMPLETE, evt.result) );
 		
 	}
+	
+	// Реализация диспатчера
+	
+	/**
+     *  @private
+     */
+	public function addEventListener(
+		type:String, 
+		listener:Function, 
+		useCapture:Boolean = false, 
+		priority:int = 0, 
+		useWeakReference:Boolean = false):void {
+			dispatcher.addEventListener(type, listener, useCapture, priority);
+    }
+    
+    /**
+     *  @private
+     */
+    public function dispatchEvent(evt:Event):Boolean{
+        return dispatcher.dispatchEvent(evt);
+    }
+    
+	/**
+     *  @private
+     */
+    public function hasEventListener(type:String):Boolean{
+        return dispatcher.hasEventListener(type);
+    }
+    
+	/**
+     *  @private
+     */
+    public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void{
+        dispatcher.removeEventListener(type, listener, useCapture);
+    }
+    
+    /**
+     *  @private
+     */            
+    public function willTrigger(type:String):Boolean {
+        return dispatcher.willTrigger(type);
+    }
 }}

@@ -1,23 +1,21 @@
 package vdom.components.editor.managers {
-	
-import flash.events.MouseEvent;
-import flash.display.DisplayObject;
-import flash.display.Sprite;
-import flash.display.Graphics;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+
 import flash.display.CapsStyle;
+import flash.display.DisplayObject;
+import flash.display.Graphics;
 import flash.display.JointStyle;
 import flash.display.LineScaleMode;
-import mx.events.ResizeEvent;
-import mx.core.EdgeMetrics;
-import mx.core.UIComponent;
+import flash.display.Sprite;
+import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+
 import mx.containers.Canvas;
 import mx.controls.ToolTip;
+import mx.core.EdgeMetrics;
+import mx.core.UIComponent;
 import mx.managers.CursorManager;
 import mx.managers.ToolTipManager;
-import mx.styles.StyleManager;
-import mx.styles.CSSStyleDeclaration;
 
 import vdom.components.editor.events.ResizeManagerEvent;
 			
@@ -39,9 +37,8 @@ public class ResizeManager extends UIComponent {
 	public static const RESIZE_HEIGHT:String = 'resize_height';
 	public static const RESIZE_ALL:String = 'resize_all';
 	
-	private static var classConstructed:Boolean = classConstruct();
 	private var CursorID:uint		
-			
+	
 	private var moving:DisplayObject;
 	private var movingItem:DisplayObject;
 	private var mItemChanged:Boolean;
@@ -71,7 +68,7 @@ public class ResizeManager extends UIComponent {
 		
 		super();
 		this.addEventListener(MouseEvent.MOUSE_DOWN, down_handler);
-		this.addEventListener(ResizeManagerEvent.RESIZE_CHANGING, changingHandler)
+		//this.addEventListener(ResizeManagerEvent.RESIZE_CHANGING, changingHandler)
 		this.addEventListener(MouseEvent.MOUSE_OVER, over_handler);
 		this.addEventListener(MouseEvent.MOUSE_OUT,  out_handler);
 		modeChanged = false;
@@ -79,43 +76,13 @@ public class ResizeManager extends UIComponent {
 		_moveMode = false;
 	}
 	
-	
-	private static function classConstruct():Boolean 
-	{
-		return true;
-	}
-	
-	
-	
-	private function down_handler(e:MouseEvent):void {
-		moving = null;
-		mousePosition = new Point(mouseX, mouseY);
-		if(e.target != this)
-		{
-			moving = DisplayObject(e.target);
-			createToolTip();
-		} else {
-			moving = this;
-		}
-		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, move_handler);			
-		this.stage.addEventListener(MouseEvent.MOUSE_UP, up_handler);
-	}
-	
-	private function out_handler(e:MouseEvent):void {
-		if(item)
-		{
-			if(!moving)
-			{
-				CursorManager.removeAllCursors()
-			}
-		}
-	}		
-	
 	public function get resizeMode():String {
+		
 		return _resizeMode;
 	}
 	
 	public function set resizeMode(modeValue:String):void {
+		
 		if(_resizeMode != modeValue) {
 			_resizeMode = modeValue;
 			modeChanged = true;
@@ -124,198 +91,33 @@ public class ResizeManager extends UIComponent {
 	}
 	
 	public function get moveMode():Boolean {
+		
 		return _moveMode;
 	}
 	
 	public function set moveMode(modeValue:Boolean):void {
+		
 		_moveMode = modeValue;
 	}
 	
-	private function over_handler(e:MouseEvent):void {
-		if(item)
-		{
-			var target:Sprite = Sprite(e.target);
-			CursorManager.removeAllCursors();
-			//trace(target);
-			switch(target.name)
-			{
-				case "bc":
-				case "tc":
-					CursorID = CursorManager.setCursor(getStyle('topDownCursor'), 2, -6, -8);
-					break;
-				case "cl":
-				case "cr":
-					CursorID = CursorManager.setCursor(getStyle('leftRightCursor'), 2, -8, -4);
-					break;
-				case "tl":
-				case "br":
-					CursorID = CursorManager.setCursor(getStyle('topLDownRCursor'), 2, -8, -6);
-					break;
-				case "tr":
-				case "bl":
-					CursorID = CursorManager.setCursor(getStyle('topRDownLCursor'), 2, -6, -10);
-					break;
-				case "cc":
-					CursorID = CursorManager.setCursor(getStyle('moveCursor'), 2, -10, -10);
-					break;
-				default:
-					break;
-			}
-		}
-	}		
-	
-	private function up_handler(event:MouseEvent):void
-	{
-		var evt:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_CHANGING);
-		//trace('asdasdasd');
+	[Inspectable(verbose=1)]
+	public function set item(s:DisplayObject):void {
 		
-			
-		dispatchEvent(evt);
-		this.stage.removeEventListener(MouseEvent.MOUSE_UP, up_handler);
-		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, move_handler);
-		moving = null;
-		mousePosition = null;
-		out_handler(null);			
-		destroyToolTip();
-		//trace('resizeCompl');
+		movingItem = s;
+		mItemChanged = true;
 		
-		var prop:Object = {};
-		prop['left'] = x;
-		prop['top'] = y;
-		prop['width'] = measuredWidth;
-		prop['height'] = measuredHeight;
+		invalidateProperties();
+		invalidateSize();
+		invalidateDisplayList();
+	}
+	
+	public function get item():DisplayObject {
 		
-		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
-		rmEvent.properties = prop;
-		dispatchEvent(rmEvent);
-		event.stopImmediatePropagation();
+		return movingItem;
 	}
 	
-	private function createToolTip():void
-	{
-		tip = ToolTip(ToolTipManager.createToolTip("", 0, 0, null, this));
-		tip.setStyle("backgroundColor", 0xFFFFFF);
-		tip.setStyle("fontSize", 9);
-		tip.setStyle("cornerRadius", 0);
-		tip.visible = false;
-	}
-	
-	private function destroyToolTip():void
-	{
-		if(tip)
-		{
-			ToolTipManager.destroyToolTip(tip);
-			tip = null;
-		}
-	}
-	
-	private function move_handler(event:MouseEvent):void
-	{
-		CursorManager.removeAllCursors();
-		var rect:Rectangle= new Rectangle(x, y, measuredWidth, measuredHeight);
-		var allow:Boolean = true;
-		if(moving && event.buttonDown)
-		{
-			var bm:EdgeMetrics =  Canvas(item.parent).borderMetrics;
-			
-			var mx:Number = mouseX;
-			var my:Number = mouseY;
-			
-			switch(moving.name)
-			{
-				case "br":
-					rect.width = mouseX;
-					rect.height = mouseY;
-					
-					break;
-				case "bc":
-					rect.height = mouseY;
-					
-					break;
-				case "bl":
-					if(rect.x + mx < 0) {rect.width += rect.x; rect.x = 0;}
-						else {rect.x += mx; rect.width -= mx;}	
-					rect.height = mouseY;
-					
-					break;
-				case "cr":
-					rect.width = mouseX;
-					
-					break;
-				case "cl":
-					if(rect.x + mx < 0) {rect.width += rect.x; rect.x = 0;}
-						else {rect.x += mx; rect.width -= mx;}
-
-					break;
-				case "tl":
-					if(rect.x + mx < 0) {rect.width += rect.x; rect.x = 0;}
-						else {rect.x += mx; rect.width -= mx;}			
-					if(rect.y + my < 0) {rect.height += rect.y; rect.y = 0;}
-						else {rect.y += my; rect.height -= my;}
-						
-					break;
-				case "tc":
-					if(rect.y + my < 0) {rect.height += rect.y; rect.y = 0;}
-						else {rect.y += my; rect.height -= my;}
-
-					break;
-				case "tr":
-					rect.width = mouseX;
-					if(rect.y + my < 0) {rect.height += rect.y; rect.y = 0;}
-						else {rect.y += my; rect.height -= my;}
-						
-					break;
-				case "cc":
-					if(rect.x + mx - mousePosition.x < 0) {rect.x = 0;}
-						else {rect.x += mx - mousePosition.x;}				
-					if(rect.y + my - mousePosition.y < 0) {rect.y = 0;}
-						else {rect.y += my - mousePosition.y;}
-
-					break;
-				default:
-					break;
-			}
-			
-			if(rect.width > maxWidth || rect.width < minWidth) allow = false;
-			if(rect.height > maxHeight || rect.height < minHeight) allow = false;
-			
-			if(rect)
-			{
-				
-				if(rect.width > maxWidth)   rect.width = maxWidth
-				if(rect.width < minWidth)   rect.width = minWidth
-				if(rect.height > maxHeight) rect.height = maxHeight
-				if(rect.height < minHeight) rect.height = minHeight
-				if(allow)
-				{
-					move(rect.x, rect.y);
-					measuredHeight = rect.height;
-					measuredWidth  = rect.width;			
-				}
-			}
-			
-			/* if(tip)
-			{
-				tip.visible = true;
-				tip.x = stage.mouseX + 15;
-				tip.y = stage.mouseY +15;
-				tip.text = measuredWidth.toString()+"x"+measuredHeight.toString();
-			} */
-			
-			// finally dispatch event
-			/* var evt:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_CHANGING);
-			
-			dispatchEvent(evt); */		
-								
-			event.updateAfterEvent();
-			invalidateDisplayList()
-		} else {
-			up_handler(null);
-		} 
-	}
-	
-	override protected function createChildren():void
-	{
+	override protected function createChildren():void {
+		
 		super.createChildren();
 		
 		cc_box = new Sprite();
@@ -344,10 +146,12 @@ public class ResizeManager extends UIComponent {
 		
 	}
 	
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-	{
+	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+		
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		if(bStyleChanged){
+		
+		if(bStyleChanged) {
+			
 			boxSize         = this.getStyle("boxSize");
 			borderColor     = this.getStyle("borderColor");
 			//backgroundColor = this.getStyle("backgroundColor");
@@ -357,8 +161,10 @@ public class ResizeManager extends UIComponent {
 			bStyleChanged = false;
 		}
 		
-		if(modeChanged){
+		if(modeChanged) {
+			
 			switch(_resizeMode) {
+				
 				case RESIZE_ALL:
 					tl_box.visible = _moveMode;
 					tc_box.visible = _moveMode;
@@ -370,6 +176,7 @@ public class ResizeManager extends UIComponent {
 					bc_box.visible = true;
 					br_box.visible = true;
 				break;
+				
 				case RESIZE_WIDTH:
 					tl_box.visible = false;
 					tc_box.visible = false;
@@ -381,6 +188,7 @@ public class ResizeManager extends UIComponent {
 					bc_box.visible = false;
 					br_box.visible = false;
 				break;
+				
 				case RESIZE_HEIGHT:
 					tl_box.visible = false;
 					tc_box.visible = _moveMode;
@@ -392,6 +200,7 @@ public class ResizeManager extends UIComponent {
 					bc_box.visible = true;
 					br_box.visible = false;
 				break;
+				
 				case RESIZE_NONE:
 					tl_box.visible = false;
 					tc_box.visible = false;
@@ -407,10 +216,12 @@ public class ResizeManager extends UIComponent {
 			cc_box.visible = _moveMode
 		}
 		
-		if(mItemChanged){
+		if(mItemChanged) {
+			
 			measure();
 			mItemChanged = false
 		}
+		
 		tl_box.x = 0;
 		tl_box.y = 0;
 		tc_box.x = measuredWidth/2
@@ -439,47 +250,52 @@ public class ResizeManager extends UIComponent {
 		graphics.lineStyle(2, 0, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 		graphics.drawRect(0, 0, measuredWidth, measuredHeight);
 		graphics.endFill();
-
 	}
 	
-	override protected function commitProperties():void
-	{
-		super.commitProperties();
-	}
-	
-	override protected function measure():void
-	{
-		//trace('measure');
+	override protected function measure():void {
+		
 		super.measure();
+		
 		measuredMinHeight = minHeight;
 		measuredMinWidth  = minWidth;
 		
-		var bm:EdgeMetrics =  Canvas(item.parent).viewMetricsAndPadding;
+		//var bm:EdgeMetrics =  Canvas(item.parent).viewMetricsAndPadding;
 		
-		if(item)
-		{
-			//trace(this.parent);	
-			var rect:Rectangle = item.getRect(movingItem.parent)
+		if(item) {
+			
+			//var rect:Rectangle = item.getRect(movingItem.parent)
 			measuredWidth  = item.width;
 			measuredHeight = item.height;
-			x = item.x; //rect.x - bm.left;
-			y = item.y; //rect.y - bm.top;
-			//trace([rect.x, rect.y]);
-			//trace([x, y, item.x, item.y]);
+			
+			var rectangle:Rectangle = getContentRectangle(item, this);
+			
+			/* var parent:Object = this.parent;
+			var proxyOrigin:Point = new Point();
+			proxyOrigin = item.parent.localToGlobal(
+				new Point(item.x, item.y));
+				
+			proxyOrigin = parent.globalToLocal(proxyOrigin); */
+			
+			x = rectangle.x; //rect.x - bm.left;
+			y = rectangle.y; //rect.y - bm.top;
+			
 		} else {
-			measuredWidth  = maxWidth;
-			measuredHeight = maxHeight;
+			
+			//measuredWidth  = maxWidth;
+			//measuredHeight = maxHeight;
 		}
 	}
 			
 	override public function styleChanged(styleProp:String):void {
+		
 		super.styleChanged(styleProp);
+		
 		bStyleChanged = true;
 		invalidateDisplayList()
 	}
 	
-	protected function updateBoxes():void
-	{
+	protected function updateBoxes():void {
+		
 		graphics.clear();
 		graphics.beginFill(backgroundColor, backgroundAlpha);
 		graphics.lineStyle(.25, borderColor, 1, true, LineScaleMode.NONE);
@@ -488,40 +304,243 @@ public class ResizeManager extends UIComponent {
 	}
 	
 	
-	protected function changingHandler(e:ResizeManagerEvent):void {
-		//var pt:Point = new Point(x,y)
-		//pt = item.globalToLocal(pt)
-		
-		item.x = x;
-		item.y = y;
-		item.width  = measuredWidth;
-		item.height = measuredHeight;
-	}
-	
 	protected function createBox(name:String):Sprite {
+		
 		var b:Sprite = new Sprite();
 		b.graphics.beginFill(0xFFFFFF, 1)
 		b.graphics.lineStyle(1, 0x00, 1, true, LineScaleMode.NONE);
-		b.graphics.drawRect(-boxSize/2,-boxSize/2, boxSize, boxSize);
+		b.graphics.drawRect(-boxSize/2, -boxSize/2, boxSize, boxSize);
 		b.graphics.endFill();
 		b.buttonMode = true
+		b.useHandCursor = false;
 		b.name = name
 		return b;
 	}
 	
-	
-	[Inspectable(verbose=1)]
-	public function set item(s:DisplayObject):void {
-		movingItem = s;
-		mItemChanged = true;
+	private function getContentRectangle(sourceContainer:DisplayObject, destinationContainer:DisplayObject):Rectangle {
 		
-		invalidateProperties();
-		invalidateSize();
-		invalidateDisplayList();
+		var pt:Point = new Point(sourceContainer.x, sourceContainer.y);
+		pt = Canvas(sourceContainer.parent).contentToGlobal(pt);
+		pt = Canvas(destinationContainer.parent).globalToContent(pt);
+		
+		return new Rectangle(pt.x, pt.y, measuredWidth, measuredHeight);
 	}
 	
-	public function get item():DisplayObject {
-		return movingItem;
+	private function createToolTip():void {
+		
+		tip = ToolTip(ToolTipManager.createToolTip("", 0, 0, null, this));
+		tip.setStyle("backgroundColor", 0xFFFFFF);
+		tip.setStyle("fontSize", 9);
+		tip.setStyle("cornerRadius", 0);
+		tip.visible = false;
+	}
+	
+	private function destroyToolTip():void {
+		
+		if(tip) {
+			
+			ToolTipManager.destroyToolTip(tip);
+			tip = null;
+		}
+	}
+	
+	private function down_handler(e:MouseEvent):void {
+		
+		moving = null;
+		mousePosition = new Point(mouseX, mouseY);
+		
+		if(e.target != this) {
+			
+			moving = DisplayObject(e.target);
+			createToolTip();
+			
+		} else {
+			
+			moving = this;
+		}
+		
+		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, move_handler);			
+		this.stage.addEventListener(MouseEvent.MOUSE_UP, up_handler);
+	}
+	
+	private function out_handler(e:MouseEvent):void {
+		
+		if(item)			
+			if(!moving)				
+				CursorManager.removeAllCursors();
+	}		
+	
+	private function over_handler(e:MouseEvent):void {
+		
+		if(item) {
+			
+			var target:Sprite = Sprite(e.target);
+			CursorManager.removeAllCursors();
+			
+			switch(target.name) {
+				
+				case "bc":
+				case "tc":
+					CursorID = CursorManager.setCursor(getStyle('topDownCursor'), 2, -6, -8);
+				break;
+				
+				case "cl":
+				case "cr":
+					CursorID = CursorManager.setCursor(getStyle('leftRightCursor'), 2, -8, -4);
+				break;
+				
+				case "tl":
+				case "br":
+					CursorID = CursorManager.setCursor(getStyle('topLDownRCursor'), 2, -8, -6);
+				break;
+				
+				case "tr":
+				case "bl":
+					CursorID = CursorManager.setCursor(getStyle('topRDownLCursor'), 2, -6, -10);
+				break;
+				
+				case "cc":
+					CursorID = CursorManager.setCursor(getStyle('moveCursor'), 2, -10, -10);
+				break;
+			}
+		}
+	}		
+	
+	private function up_handler(event:MouseEvent):void {
+		
+		var evt:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_CHANGING);
+	
+		dispatchEvent(evt);
+		this.stage.removeEventListener(MouseEvent.MOUSE_UP, up_handler);
+		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, move_handler);
+		moving = null;
+		mousePosition = null;
+		out_handler(null);			
+		destroyToolTip();
+		
+		var rectangle:Rectangle = getContentRectangle(this, item);
+		
+		item.x = rectangle.x;
+		item.y = rectangle.y;
+		item.width  = rectangle.width; //measuredWidth;
+		item.height = rectangle.height; //measuredHeight;
+		
+		var prop:Object = {
+			left : rectangle.x,
+			top : rectangle.y,
+			width : rectangle.width,
+			height : rectangle.height
+		};
+		
+		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
+		rmEvent.properties = prop;
+		dispatchEvent(rmEvent);
+		event.stopImmediatePropagation();
+	}
+	
+	
+	
+	private function move_handler(event:MouseEvent):void {
+		
+		CursorManager.removeAllCursors();
+		
+		var rect:Rectangle= new Rectangle(x, y, measuredWidth, measuredHeight);
+		var allow:Boolean = true;
+		
+		if(moving && event.buttonDown) {
+			
+			var mx:Number = mouseX;
+			var my:Number = mouseY;
+			
+			switch(moving.name) {
+				
+				case "br":
+					rect.width = mouseX;
+					rect.height = mouseY;	
+				break;
+				
+				case "bc":
+					rect.height = mouseY;	
+				break;
+				
+				case "bl":
+					if(rect.x + mx < 0) {rect.width += rect.x; rect.x = 0;}
+						else {rect.x += mx; rect.width -= mx;}	
+					rect.height = mouseY;	
+				break;
+				
+				case "cr":
+					rect.width = mouseX;	
+				break;
+				
+				case "cl":
+					if(rect.x + mx < 0) {rect.width += rect.x; rect.x = 0;}
+						else {rect.x += mx; rect.width -= mx;}
+				break;
+				
+				case "tl":
+					if(rect.x + mx < 0) {rect.width += rect.x; rect.x = 0;}
+						else {rect.x += mx; rect.width -= mx;}			
+					if(rect.y + my < 0) {rect.height += rect.y; rect.y = 0;}
+						else {rect.y += my; rect.height -= my;}		
+				break;
+					
+				case "tc":
+					if(rect.y + my < 0) {rect.height += rect.y; rect.y = 0;}
+						else {rect.y += my; rect.height -= my;}
+				break;
+				
+				case "tr":
+					rect.width = mouseX;
+					if(rect.y + my < 0) {rect.height += rect.y; rect.y = 0;}
+						else {rect.y += my; rect.height -= my;}		
+				break;
+				
+				case "cc":
+					if(rect.x + mx - mousePosition.x < 0) {rect.x = 0;}
+						else {rect.x += mx - mousePosition.x;}				
+					if(rect.y + my - mousePosition.y < 0) {rect.y = 0;}
+						else {rect.y += my - mousePosition.y;}
+				break;
+			}
+			
+			if(rect.width > maxWidth || rect.width < minWidth) allow = false;
+			if(rect.height > maxHeight || rect.height < minHeight) allow = false;
+			
+			if(rect) {
+				
+				if(rect.width > maxWidth)   rect.width = maxWidth;
+				if(rect.width < minWidth)   rect.width = minWidth;
+				if(rect.height > maxHeight) rect.height = maxHeight;
+				if(rect.height < minHeight) rect.height = minHeight;
+				
+				if(allow) {
+					move(rect.x, rect.y);
+					measuredHeight = rect.height;
+					measuredWidth  = rect.width;			
+				}
+			}
+			
+			/* if(tip)
+			{
+				tip.visible = true;
+				tip.x = stage.mouseX + 15;
+				tip.y = stage.mouseY +15;
+				tip.text = measuredWidth.toString()+"x"+measuredHeight.toString();
+			} */
+			
+			// finally dispatch event
+			/* var evt:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_CHANGING);
+			
+			dispatchEvent(evt); */		
+								
+			event.updateAfterEvent();
+			invalidateDisplayList()
+			
+		} else {
+			
+			up_handler(null);
+		} 
 	}
 }
 }

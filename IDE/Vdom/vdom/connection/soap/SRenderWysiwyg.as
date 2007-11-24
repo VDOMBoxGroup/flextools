@@ -16,7 +16,7 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String, objid:String, sdynamic:String ):void{
+		public function execute(appid:String, objid:String, parentid:String, sdynamic:String ):void{
 			// protect
 			ws.render_wysiwyg.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
 			ws.render_wysiwyg.arguments.skey 		= code.skey();			//- очередной ключ сессии 
@@ -24,6 +24,7 @@ package vdom.connection.soap
 			// data
 			ws.render_wysiwyg.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.render_wysiwyg.arguments.objid  	= objid;		//- идентификатор объекта 
+			ws.render_wysiwyg.arguments.parentid  	= parentid;
 			ws.render_wysiwyg.arguments.dynamic  = sdynamic;		//- способ рендеринга: для только что созданных объектов нужно указывать 0, для всех остальных 1
 			
 			//send data & set listener 

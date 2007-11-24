@@ -13,6 +13,7 @@ import mx.core.DragSource;
 import mx.utils.Base64Decoder;
 
 import vdom.managers.VdomDragManager;
+import vdom.Languages;
 
 public class Type extends VBox {
 	protected var _id:String;
@@ -23,19 +24,23 @@ public class Type extends VBox {
 	private var loader:Loader;
 	private var iconData:Bitmap;
 	
-	public function Type(id:String, iconSource:String, label:String) {
+	public var aviableContainers:String;
+	
+	public function Type(typeDescription:XML) {
 		
 		super();
-		this._id = id;
-		if(iconSource != '') {
+		this.visible = false;
+		this._id = typeDescription.Information.ID;
+		if(typeDescription.Information.Icon != '') {
 			typeIcon = new Image();
 			typeIcon.width = 40;
 			typeIcon.height = 40;
 			typeIcon.setStyle('backgroundColor', '#FF00FF');
 		}
 		
+			
 		typeLabel = new Label();
-		typeLabel.text = label;
+		typeLabel.text = getLanguagePhrase(typeDescription.Information.ID, typeDescription.Information.DisplayName);
 		typeLabel.truncateToFit = true;
 		typeLabel.width = 90;
 		
@@ -45,9 +50,21 @@ public class Type extends VBox {
 		this.addEventListener(MouseEvent.MOUSE_DOWN, dragIt);
 	}
 	
-	public function set resource(imageResource:String):void {
+	private function getLanguagePhrase(typeID:String, phraseID:String):String {
 		
-		var decoder:Base64Decoder = new Base64Decoder();
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		phraseID = phraseID.match(phraseRE)[1];
+		var languageID:String = typeID + '-' + phraseID;
+		var languages:Languages = Languages.getInstance();
+		return languages.language.(@ID == languageID)[0];
+	}
+	
+	public function set resource(imageResource:Object):void {
+		
+		iconData = imageResource.data;
+		typeIcon.source = Bitmap(iconData);
+		this.visible = true;
+		/* var decoder:Base64Decoder = new Base64Decoder();
 		decoder.decode(imageResource);
 		
 		var imageSource:ByteArray = decoder.drain();
@@ -55,7 +72,7 @@ public class Type extends VBox {
 		
 		loader = new Loader();
 		loader.loadBytes(imageSource);
-		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete); */
 	}
 	
 	private function loadComplete(event:Event):void {
@@ -68,8 +85,15 @@ public class Type extends VBox {
 		
 		var dragInitiator:Type = Type(event.currentTarget);
 		var ds:DragSource = new DragSource();
-		var dataObject:Object = {typeId:_id, offX:dragInitiator.mouseX, offY:dragInitiator.mouseY};
-		ds.addData(dataObject, 'Object');
+		
+		var dataObject:Object = {
+			typeId:_id, 
+			aviableContainers:aviableContainers, 
+			offX:dragInitiator.mouseX, 
+			offY:dragInitiator.mouseY
+		};
+		
+		ds.addData(dataObject, 'typeDescription');
 		
 		var proxy:Image = new Image();
 		proxy.setStyle('backgroundColor', '#FF00FF');

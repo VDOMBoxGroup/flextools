@@ -30,17 +30,16 @@ public class Types extends Accordion {
 				addChild(cat[num.Information.Category]);
 			}
 			
-			
-			
 			cat[num.Information.Category].label = num.Information.Category;
 			cat[num.Information.Category].setStyle('horizontalAlign', 'center');
 			cat[num.Information.Category].horizontalScrollPolicy = 'off';
 			cat[num.Information.Category].percentWidth = 100;
 			
-			var et:Type = new Type(num.Information.ID, num.Information.EditorIcon, num.Information.Name);
+			var et:Type = new Type(num);
 			
 			et.setStyle('horizontalAlign', 'center');
 			et.width = 90;
+			et.aviableContainers = num.Information.Containers;
 			
 			var resourceID:String = num.Information.Icon;
 			var resourceRE:RegExp = /#Res\((.*)\)/;

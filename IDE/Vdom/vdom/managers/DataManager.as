@@ -13,6 +13,7 @@ import vdom.connection.Proxy;
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.events.DataManagerEvent;
+import vdom.events.ProxyEvent;
 
 public class DataManager implements IEventDispatcher {
 	
@@ -134,10 +135,18 @@ public class DataManager implements IEventDispatcher {
 		
 		_objects.Object.(@ID == objectId).Attributes = _objectDescription.Attributes;
 		
+		proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, sendAttributeComplete);
 		proxy.setAttributes(_appId, _objectDescription.@ID, newOnlyAttributes);
 		
+		
+	}
+	
+	private function sendAttributeComplete(event:ProxyEvent):void {
+		
+		proxy.removeEventListener(ProxyEvent.PROXY_COMPLETE, sendAttributeComplete);
+		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
-		dmEvent.objectId = objectId;
+		dmEvent.objectId = event.xml.@ID;
 		dispatchEvent(new Event('objectDescriptionChanged'));
 		dispatchEvent(dmEvent);
 	}
@@ -165,20 +174,28 @@ public class DataManager implements IEventDispatcher {
 	
 	public function deleteObject(objectId:String):void {
 		
-		delete _objects.Object.(@ID == objectId)[0];
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
-		dme.objectId = objectId;
+		
+		soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
 		soap.deleteObject(_appId, objectId);
-		dispatchEvent(dme);
+		
 	}
 	
+	
+	public function objectDeletedHandler (event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
+		delete _objects.Object.(@ID == event.result)[0];
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
+		dme.objectId = event.result;
+		dispatchEvent(dme);
+	}
 	/**
 	 * 
 	 * @param objectId идентификатор объекта
 	 * @return XML описание объекта.
 	 * 
 	 */	
-	private function getObject(objectId:String):XML {
+	public function getObject(objectId:String):XML {
 		
 		return _objects.Object.(@ID == objectId)[0];
 	}
@@ -189,33 +206,65 @@ public class DataManager implements IEventDispatcher {
 	 * @return идентификатор объекта
 	 * 
 	 */	
-	public function createObject(initProp:Object):String {
+	public function createObject(initProp:Object):void {
 		
-		var objectType:XML = _types.Type.Information.(ID == initProp.typeId).parent();
+		//var objectType:XML = _types.Type.Information.(ID == initProp.typeId).parent();
 		
-		var objectId:String = Math.round(Math.random()*1000).toString();
-		while (_objects.Object.(@ID == objectId).toString()) {
-			objectId = Math.round(Math.random()*1000).toString();
-		}
+		//var objectId:String = Math.round(Math.random()*1000).toString();
+		//while (_objects.Object.(@ID == objectId).toString()) {
+			//objectId = Math.round(Math.random()*1000).toString();
+		//}
 		
-		var newObject:XML = <Object Name={objectType.Information.DisplayName+objectId} ID={objectId} Type={objectType.Information.ID} />;
-
+		//var newObject:XML = <Object Name={objectType.Information.DisplayName+objectId} ID={objectId} Type={objectType.Information.ID} />;
+		
 		var attributes:XML = <Attributes />
 		
+		//for (var prop:String in initProp) {
+		attributes.appendChild(<Attribute Name="left">{initProp.left}</Attribute>);
+		attributes.appendChild(<Attribute Name="top">{initProp.top}</Attribute>);
+		//}
+		
+		//attributes.Attribute.(@Name == 'left')[0] = initProp.left;
+		//attributes.Attribute.(@Name == 'top')[0] = initProp.top;
+		
+		//newObject.appendChild(attributes);
+		//newObject.appendChild(objectType);
+		
+		//_objects.appendChild(newObject);
+		
+		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, createObjectCompleteHandler);
+		soap.createObject(_appId, initProp.parentId, initProp.typeId, attributes);
+		
+		//return objectId;
+	}
+	
+	private function createObjectCompleteHandler(event:SoapEvent):void {
+		
+		var result:XML = event.result;
+		var objectId:String = result.@ID;
+		var objectTypeId:String = result.@Type;
+		var objectType:XML = _types.Type.Information.(ID == objectTypeId).parent();
+		
+		
+		var newObject:XML = <Object Name={result.@Name} ID={objectId} Type={objectType.Information.ID} />;
+
+		var attributes:XML = <Attributes />;
+		
 		for each(var prop:XML in objectType.Attributes.Attribute) {
+			
 			attributes.appendChild(<Attribute Name={prop.Name.toString()}>{prop.DefaultValue.toString()}</Attribute>);
 		}
-		attributes.Attribute.(@Name == 'left')[0] = initProp.left;
-		attributes.Attribute.(@Name == 'top')[0] = initProp.top;
 		
 		newObject.appendChild(attributes);
 		newObject.appendChild(objectType);
 		
 		_objects.appendChild(newObject);
 		
-		soap.createObject(_appId, _pageId, initProp.typeId);
 		
-		return objectId;
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
+		dme.objectId = '';
+		dispatchEvent(dme);
+
 	}
 	
 	/**
@@ -229,12 +278,13 @@ public class DataManager implements IEventDispatcher {
 		topLevelObjects = event.result;
 		if(!_pageId) {
 			_pageId = event.result.Object[0].@ID;
+			publicData['topLevelObjectId'] = _pageId;
 		}
 		
 		soap.removeEventListener(SoapEvent.GET_TOP_OBJECTS_OK, getTopObjectsHandler);
 		
-		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, loadedObjectsHandler);
-		soap.getChildObjects(_appId, _pageId);
+		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, loadedObjectsHandler);
+		soap.getChildObjectsTree(_appId, _pageId);
 	}
 	
  	private function loadedObjectsHandler(event:SoapEvent):void {

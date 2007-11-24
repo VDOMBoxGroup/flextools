@@ -149,12 +149,10 @@ package vdom.connection.soap
 		/**
 		 * 9. render object to xml presentation  - render_wysiwyg
 		 */
-		
-		public  function renderWysiwyg(appid:String='',objid:String='',dynamik:String  = '0'):void 
-		{
-			var sRenderWysiwig:SRenderWysiwyg = new SRenderWysiwyg(ws);
-			
-			sRenderWysiwig.execute(appid, objid, dynamik);
+		private var sRenderWysiwig:SRenderWysiwyg = new SRenderWysiwyg(ws);
+		public  function renderWysiwyg(appid:String='',objid:String='', parentid:String='' ,sdynamic:String  = '0'):void 
+		{	
+			sRenderWysiwig.execute(appid, objid, parentid, sdynamic);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, ldispatchEvent);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, ldispatchEvent);
 		}
@@ -164,11 +162,11 @@ package vdom.connection.soap
 		 * 10. create object - create_object
 		 */
 		
-		public function createObject(appid:String='',parentid:String='',typeid:String = ''):void
+		public function createObject(appid:String='',parentid:String='',typeid:String = '', attrs:String = ''):void
 		{
 			var sco: SCreateObject =new SCreateObject(ws);
 			
-			sco.execute(appid,parentid,typeid);
+			sco.execute(appid,parentid,typeid, attrs);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_OK, ldispatchEvent);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, ldispatchEvent);
 		}
@@ -177,10 +175,10 @@ package vdom.connection.soap
 		/**
 		 * 11. get application top-level objects  - get_top_objects
 		 */
+		private var sGetTopObjects:SGetTopObjects = new SGetTopObjects(ws);
 		
 		public  function getTopObjects(appid:String=''):void 
 		{
-			var sGetTopObjects:SGetTopObjects = new SGetTopObjects(ws);
 			
 			sGetTopObjects.execute(appid);
 			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, ldispatchEvent);
@@ -191,10 +189,10 @@ package vdom.connection.soap
 		/**
 		 * 12. get object's child objects'  - get_child_objects
 		 */
+		private var sGetChildObjects:SGetChildObjects = new SGetChildObjects(ws);
 		
 		public  function getChildObjects(appid:String='',objid:String=''):void 
 		{
-			var sGetChildObjects:SGetChildObjects = new SGetChildObjects(ws);
 			
 			sGetChildObjects.execute(appid, objid );
 			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, ldispatchEvent);
@@ -376,6 +374,13 @@ package vdom.connection.soap
 			sWholeCreatePage.addEventListener(SoapEvent.WHOLE_UPDATE_ERROR, ldispatchEvent);
 		}
 		
+		private var sGetChildObjectsTree:SGetChildObjectsTree = new SGetChildObjectsTree(ws);
+		public  function getChildObjectsTree(appid:String='',objid:String=''):void 
+		{	
+			sGetChildObjectsTree.execute(appid, objid);
+			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, ldispatchEvent);
+			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_ERROR, ldispatchEvent);
+		}
 		
 		/**
 		 *  --------  Event Dispatcher -------------

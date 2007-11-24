@@ -55,8 +55,7 @@ Types {
 	fillColors:#d91107, #d91107;
 }
 Item {
-	backgroundAlpha: .4;
-	backgroundColor: #c2c2c2;
+	
 }
 ClosablePanel {
 	CollapseButtonOnButtonUp: Embed(source="VdomThemeAssets.swf", symbol="CollapseButtonOnButtonUp");

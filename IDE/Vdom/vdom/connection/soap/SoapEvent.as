@@ -35,6 +35,7 @@ package vdom.connection.soap
 		public static var WHOLE_DELETE_OK				:String =  "wholeDeleteOK"; 					//24
 		public static var WHOLE_UPDATE_OK				:String =  "wholeUpdateOK"; 					//25
 		public static var WHOLE_CREATE_PAGE_OK			:String =  "wholeCreatePageOK"; 				//26
+		public static var GET_CHILD_OBJECTS_TREE_OK		:String =  "Get child objects tree OK";
 		
 		
 		//setAttributes
@@ -68,6 +69,7 @@ package vdom.connection.soap
 		public static var WHOLE_DELETE_ERROR				:String =  "wholeDeleteERROR"; 				//24
 		public static var WHOLE_UPDATE_ERROR				:String =  "wholeUpdateERROR"; 				//25
 		public static var WHOLE_CREATE_PAGE_ERROR			:String =  "wholeCreatePageERROR"; 			//26
+		public static var GET_CHILD_OBJECTS_TREE_ERROR		:String =  "Get child objects tree ERROR";
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,

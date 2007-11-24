@@ -33,6 +33,7 @@ import mx.controls.DataGrid;
 //use namespace mx_internal;
 public class AttributesPanel extends ClosablePanel
 {
+		
 	[Bindable]
 	public var help:String;
 	

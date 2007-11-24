@@ -1,75 +1,32 @@
 package vdom.components.editor.containers.workAreaClasses {
 
-import flash.display.Graphics;
-
-import mx.containers.Canvas;
-import mx.controls.Label;
-import mx.core.UIComponent;
+import mx.containers.Canvas;	
 
 public dynamic class Item extends Canvas {
 	
 	public var resizeMode:String;
 	public var moveMode:Boolean;
+	public var contents:String;
+	public var guid:String;
+	public var containers:String;
+	private var _guid:String;
+	public var parentId:String;
 	
-	private var _content:UIComponent;
-	private var _objectId:String;
-	
-	
-	public function Item(id:String) {
+	public function Item(guid:String) {
 		super();
 		resizeMode = null;
 		moveMode = false;
+		this.guid = guid;
 		horizontalScrollPolicy = "off";
 		verticalScrollPolicy = "off";
 		focusEnabled = true;
 		mouseFocusEnabled = true;
-		_objectId = id;
-		var lbl:Label = new Label();
-		lbl.text = 'ID: ' + id;
-		addChild(lbl);
-	}
-	
-	public function get objectId():String {
-		
-		return _objectId;
-	}
-	
-	public function set objectId(objectId:String):void {
-		
-		objectId = _objectId;
-	}
-	
-	public function get content():UIComponent {
-		
-		return _content;
-	}
-	
-	override protected function createChildren():void {
-		
-		super.createChildren();
-		
-		var g:Graphics = graphics;
-		g.clear();
-		g.lineStyle(1);
-		g.drawRect(0, 0, unscaledWidth, unscaledHeight);
-		g.endFill();
-				
-		if(!_content) {
-			
-			_content = new Canvas();
-			addChild(_content);
-		}
+		contents = 'Dynamic';
 	}
 	
     override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     	
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
-		
-		var g:Graphics = graphics;
-		g.clear();
-		g.lineStyle(1);
-		g.drawRect(0, 0, unscaledWidth, unscaledHeight);
-		g.endFill();
 	}
 }
 }
