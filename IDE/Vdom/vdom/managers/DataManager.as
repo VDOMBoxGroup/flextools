@@ -162,6 +162,11 @@ public class DataManager implements IEventDispatcher {
 		return _types.Type.Information.(ID == typeId).parent();
 	}
 	
+	public function getTopLevelTypes():XML {
+		
+		return _types.Type.Information.(Container == 3).parent();
+	}
+	
 	/**
 	 * 
 	 * @return xml-описание всех объектов вместе с типами.
@@ -197,7 +202,7 @@ public class DataManager implements IEventDispatcher {
 	 */	
 	public function getObject(objectId:String):XML {
 		
-		return _objects.Object.(@ID == objectId)[0];
+		return _objects..Object.(@ID == objectId)[0];
 	}
 	
 	/**
