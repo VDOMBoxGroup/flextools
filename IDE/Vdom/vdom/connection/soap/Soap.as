@@ -162,11 +162,11 @@ package vdom.connection.soap
 		 * 10. create object - create_object
 		 */
 		
-		public function createObject(appid:String='',parentid:String='',typeid:String = '', attrs:String = ''):void
+		public function createObject(appid:String='',parentid:String='',typeid:String = '', attrs:String = '', name:String =''):void
 		{
 			var sco: SCreateObject =new SCreateObject(ws);
 			
-			sco.execute(appid,parentid,typeid, attrs);
+			sco.execute(appid,parentid,typeid, attrs, name);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_OK, ldispatchEvent);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, ldispatchEvent);
 		}
@@ -381,6 +381,26 @@ package vdom.connection.soap
 			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, ldispatchEvent);
 			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_ERROR, ldispatchEvent);
 		}
+		
+		
+		private var sGetApplicationStructure:SGetApplicationStructure = new SGetApplicationStructure(ws);
+		public  function getApplicationStructure(appid:String=''):void 
+		{	
+			sGetApplicationStructure.execute(appid);
+			sGetApplicationStructure.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, ldispatchEvent);
+			sGetApplicationStructure.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_ERROR, ldispatchEvent);
+		}
+		
+		
+		private var sSetApplicationStructure:SSetApplicationStructure = new SSetApplicationStructure(ws);
+		public  function setApplicationStructure(appid:String='', struct:String = ''):void 
+		{	
+			sSetApplicationStructure.execute(appid, struct);
+			sSetApplicationStructure.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, ldispatchEvent);
+			sSetApplicationStructure.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, ldispatchEvent);
+		}
+		
+		
 		
 		/**
 		 *  --------  Event Dispatcher -------------

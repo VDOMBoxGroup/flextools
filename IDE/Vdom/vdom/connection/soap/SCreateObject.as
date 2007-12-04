@@ -16,7 +16,7 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String='',parentid:String='',typeid:String = '', attrs:String = ''):void
+		public function execute(appid:String='',parentid:String='',typeid:String = '', attrs:String = '', name:String =''):void
 		{
 			// protect
 			ws.create_object.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
@@ -26,7 +26,8 @@ package vdom.connection.soap
 			ws.create_object.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.create_object.arguments.parentid = parentid;		//- идентификатор объекта 
 			ws.create_object.arguments.typeid  	= typeid;
-			ws.create_object.arguments.attr = attrs		//- идентификатор типа
+			ws.create_object.arguments.attr = attrs;		//- идентификатор типа
+			ws.create_object.arguments.name = name;
 			
 			//send data & set listener 
 			ws.create_object();

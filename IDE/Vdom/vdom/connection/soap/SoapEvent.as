@@ -36,6 +36,8 @@ package vdom.connection.soap
 		public static var WHOLE_UPDATE_OK				:String =  "wholeUpdateOK"; 					//25
 		public static var WHOLE_CREATE_PAGE_OK			:String =  "wholeCreatePageOK"; 				//26
 		public static var GET_CHILD_OBJECTS_TREE_OK		:String =  "Get child objects tree OK";
+		public static var GET_APPLICATION_STRUCTURE_OK	:String =  "GetApplicationStructureOK";
+		public static var SET_APPLICATION_STRUCTURE_OK	:String =  "SetApplicationStructureOK";
 		
 		
 		//setAttributes
@@ -70,6 +72,8 @@ package vdom.connection.soap
 		public static var WHOLE_UPDATE_ERROR				:String =  "wholeUpdateERROR"; 				//25
 		public static var WHOLE_CREATE_PAGE_ERROR			:String =  "wholeCreatePageERROR"; 			//26
 		public static var GET_CHILD_OBJECTS_TREE_ERROR		:String =  "Get child objects tree ERROR";
+		public static var GET_APPLICATION_STRUCTURE_ERROR			:String =  "GetApplicationStructureERROR";
+		public static var SET_APPLICATION_STRUCTURE_ERROR		:String =  "SetApplicationStructureERROR";
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,
