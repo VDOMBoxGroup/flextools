@@ -16,6 +16,7 @@ import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
 import vdom.managers.VdomDragManager;
 import vdom.components.editor.containers.workAreaClasses.Item;
+import mx.core.Application;
 
 //[Bindable] private var objects:XML;
 [Bindable] private var typesXML:XML;
@@ -33,7 +34,7 @@ private var topLevelObjectId:String;
 private function creationCompleteHandler():void {
 	
 	ppm = new MyLoader();
-	publicData = mx.core.Application.application.publicData;
+	publicData = Application.application.publicData;
 	editorDataManager = DataManager.getInstance();
 
 	/*Загрузка типов*/
