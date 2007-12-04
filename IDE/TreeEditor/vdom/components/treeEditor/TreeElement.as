@@ -70,7 +70,7 @@ package vdom.components.treeEditor
 			addChild(textArea);
 			
 			image = new Image();
-			image.source = 'resource/_204920994.jpg';
+			image.source = 'assets/TreeEditor/_204920994.jpg';
 			image.y = textArea.y;
 			image.width = textArea.x;
 			image.height = 80;
@@ -166,7 +166,7 @@ package vdom.components.treeEditor
 		
 		override public function set name(names:String):void
 		{
-			txt.text = 'Это название странички';
+			txt.text = names;
 			ID = names;
 		}
 		

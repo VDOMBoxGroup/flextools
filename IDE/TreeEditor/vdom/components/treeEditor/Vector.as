@@ -152,7 +152,7 @@ package vdom.components.treeEditor
 			objReturn.x = fromX;
 			objReturn.y = fromY;
 			
-			trace('objReturn.x ' + objReturn.x);
+		//	trace('objReturn.x ' + objReturn.x);
 			return  objReturn;
 		}
 		
@@ -224,7 +224,7 @@ package vdom.components.treeEditor
 		
 		public function drawLine( trEl1:Object = null):void
 		{
-			trace('8 drawLine');
+		//	trace('8 drawLine');
 			if (!trEl1)
 			{
 				trEl1 = curLine;

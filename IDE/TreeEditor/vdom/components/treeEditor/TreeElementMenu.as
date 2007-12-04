@@ -36,7 +36,7 @@ package vdom.components.treeEditor
 			btLessen.y = 3;
 			
 			imgLessen = new Image();
-			imgLessen.source = 'resource/vdom2_treeEditor_show_on_02.png';
+			imgLessen.source = 'assets/TreeEditor/vdom2_treeEditor_show_on_02.png';
 			imgLessen.width = btLessen.width - 3;
 			imgLessen.height = btLessen.height - 3;
 			imgLessen.x = btLessen.x + 2 ;
@@ -55,7 +55,7 @@ package vdom.components.treeEditor
 			btDelete.name = 'deleteButton';
 
 			imgDelete = new Image();
-			imgDelete.source='resource/vdom2_treeEditor_delete_05.png';
+			imgDelete.source='assets/TreeEditor/vdom2_treeEditor_delete_05.png';
 			imgDelete.width = btDelete.width - 3;
 			imgDelete.height = btDelete.height - 3;
 			imgDelete.x = btDelete.x + 2 ;
@@ -74,7 +74,7 @@ package vdom.components.treeEditor
 		
 		
 			imgLine = new Image();
-			imgLine.source='resource/vdom2_treeEditor_line_02.png';
+			imgLine.source='assets/TreeEditor/vdom2_treeEditor_line_02.png';
 			imgLine.width = btLine.width - 3;
 			imgLine.height = btLine.height - 3;
 			imgLine.x = btLine.x + 2 ;

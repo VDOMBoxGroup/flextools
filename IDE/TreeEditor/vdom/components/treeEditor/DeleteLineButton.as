@@ -20,7 +20,7 @@ package vdom.components.treeEditor
 		//	addChild(bt);
 			
 			icons = new Image();
-			icons.source='resource/vdom2_treeEditor_delete_05.png';
+			icons.source='assets/TreeEditor/vdom2_treeEditor_delete_05.png';
 			icons.width = 15;
 			icons.height = 15;
 			icons.x = 2;

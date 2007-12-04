@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init()" label="add Element">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init()"  label="add Element">
 <mx:Script>
 	<![CDATA[
+		import mx.controls.Alert;
+		import mx.events.CloseEvent;
+		import vdom.managers.DataManager;
+		import vdom.connection.soap.SoapEvent;
+		import vdom.connection.soap.Soap;
+		import mx.core.Application;
 		import mx.events.MoveEvent;
 		import mx.controls.Image;
 		import mx.events.TreeEvent;
@@ -10,7 +16,10 @@
 		import mx.core.Container;
 		import mx.controls.Button;
 		import mx.events.DragEvent;
+		//hide когда закрываем
+		// show когда открываем снова
 	//данные которые уже есть
+	//Application.application.publicData (applicationId and topLevelObject - текущий )
 	private var xml1:XML = 
 <Structure>
   <Object ID="id_02" left="31" top="93">
@@ -64,8 +73,49 @@
 	private var curLine:Object = new Object();
 	private var btLine:DeleteLineButton;
 	private var temMenu:TreeElementMenu;
+	private var levelsMenu:LevelsMenu;
+	private var soap:Soap = Soap.getInstance();
+	private var publicData:Object;
+	private var dataManager:DataManager = DataManager.getInstance();
+	private var script:TreeEditorScript  = new TreeEditorScript();
 	
 	private function init():void
+	{
+		levelsMenu = new LevelsMenu();
+
+		publicData = Application.application.publicData;
+		soap.getApplicationStructure(publicData.applicationId);
+		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, soapListenner);
+		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_ERROR, soapListenner);
+
+		
+	
+		btLine = new DeleteLineButton();
+		btLine.addEventListener(MouseEvent.CLICK, 		delButtonOperation);
+		addChild(btLine);
+		
+		temMenu = new TreeElementMenu();
+		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);
+		
+		addChild(temMenu);
+		
+	//	addEventListener(MouseEvent.CLICK, hideTemMenu);
+		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
+		
+	}
+	
+	private function  soapListenner(soapEvt:SoapEvent):void
+	{
+		xml1 = soapEvt.result;
+		trace('xml1: ' + xml1)
+		script.createTreeArr(xml1);
+		createTree();
+		drawLines();
+	}
+	
+	private function createTree():void
 	{
 		//создаем массив с обьектами
 		for each(var xmlObj:XML in xml1.children())
@@ -82,22 +132,11 @@
 			addChild(massTreeElements[obID]);
 			
 		}
-		drawLines();
-	
-		btLine = new DeleteLineButton();
-		btLine.addEventListener(MouseEvent.CLICK, 		delButtonOperation);
-		addChild(btLine);
 		
-		temMenu = new TreeElementMenu();
-		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
-		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);
 		
-		addChild(temMenu);
-		
-	//	addEventListener(MouseEvent.CLICK, hideTemMenu);
-		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 	}
+	
+	
 	
 	private function hideTreeElement(trEvt:TreeEditorEvent):void
 	{
@@ -157,7 +196,7 @@
 				}
 			}
 		}
-		toXML();
+	//	toXML();
 	}
 	
 	private function markLines(muEvt:MouseEvent):void
@@ -217,6 +256,7 @@
 	- выбор локального рисунка;
 	- подтверждение на удаление;
 	- нормальные линии между елементами дерева
+	
 	*/
 	
 	
@@ -333,8 +373,33 @@
 	*/
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
+		Alert.show("Do you want to delete Element?", "Delete Element", 3, this, alertClickDeleteTreeElement);
+		
+		
+		
+	}
+	 
+            // Event handler function for displaying the selected Alert button.
+    private function alertClickDeleteTreeElement(event:CloseEvent):void {
+        if (event.detail==Alert.YES)
+        {
+           	soap.deleteObject(publicData.applicationId, curTree.ID);
+		
+			soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, soapListennerDeleteObject);
+			soap.addEventListener(SoapEvent.DELETE_OBJECT_ERROR, soapListennerDeleteObject);
+        }
+        
+    }
+	
+	private function soapListennerDeleteObject(soapEvt:SoapEvent):void
+	{
+		//trace(soapEvt.result);
+		
+		soap.removeEventListener(SoapEvent.DELETE_OBJECT_OK, soapListennerDeleteObject);
+		soap.removeEventListener(SoapEvent.DELETE_OBJECT_ERROR, soapListennerDeleteObject);
+		
 		// удаляем "связи" 
-		var strID:String = curTree.ID;
+		var strID:String = soapEvt.result;
 		for (var level:String in massLines)
 			for(var ind1:String in massLines[level])
 				for(var ind2:String in massLines[level][ind1])
@@ -348,6 +413,9 @@
 		delete massTreeElements[strID];
 		
 		curTree = null;
+		
+		saveToServer();
+				
 	}
 	
 	/**
@@ -412,10 +480,22 @@
 	*		получаем из существующей структуры данных XML 
 	*
 	*/
-	private function toXML():void
+	private function toXML():String
 	{
 		var outXML:XML = <Structure/> ;
+		//trace('1 XML to server: ' + outXML.toString());
 		
+		for (var levels:String in massTreeElements)
+		{
+			var xmlList:XMLList = new XMLList('<Object/>');
+			xmlList.@ID = levels;
+					xmlList.@left = massTreeElements[levels].x;
+					xmlList.@top = massTreeElements[levels].y;
+					outXML.appendChild(xmlList.toXMLString());
+
+		}
+		
+	//	trace('1 XML to server: ' + outXML.toString())
 		for (var level:String in massLines)
 		for(var ind1:String in massLines[level])
 			for(var ind2:String in massLines[level][ind1])
@@ -432,7 +512,7 @@
 					outXML.appendChild(object.toXMLString());
 				}
 				
-				
+		//		trace('2 XML to server: ' + outXML.toString());
 				var levelXMLList:XMLList = new XMLList('<Level/>');
 				if(outXML.Object.(@ID == ind1).Level.(@Index == level).@Index != level)
 				{
@@ -454,11 +534,33 @@
 				}	
 			}
 			
+			trace(' XML to server: ' + outXML.toString());
+			return outXML.toString();
+	}
+	
+	private function  soapListennerCreateObject(soapEvt:SoapEvent):void
+	{
+		trace('CreateObject: '+soapEvt.result);
+		addTreeElement(soapEvt.result.@ID);
+		soap.removeEventListener(SoapEvent.CREATE_OBJECT_OK, soapListennerCreateObject);
+		soap.removeEventListener(SoapEvent.CREATE_OBJECT_ERROR, soapListennerCreateObject);
+	}
+	
+	private function soapAddTreeElement():void
+	{
+		var types:XML = dataManager.getTopLevelTypes();
+		
+		soap.createObject(publicData.applicationId, '', types.Information.ID,'');
+		trace('***');
+		trace(publicData.applicationId);
+	//	trace(types.Information.ID);
+		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, soapListennerCreateObject);
+		soap.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, soapListennerCreateObject);
 		
 	}
-		private function addTreeElement():void
+		private function addTreeElement(obID:String):void
 		{
-			var obID:String = String(Math.random());
+			trace('obID: ' + obID);
 			massTreeElements[obID] =  new TreeElement();
 			massTreeElements[obID].name = obID;
 			massTreeElements[obID].x = 0;
@@ -470,10 +572,25 @@
 			//trace(obID);
 		}
 	
+	private function  soapListennerSetApplicationStructure(soapEvt:SoapEvent):void
+	{
+		trace('Soap Listenner Set Application Structure: /n'+soapEvt.result);
+		soap.removeEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, soapListennerSetApplicationStructure);
+ 		soap.removeEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, soapListennerSetApplicationStructure);
+	}
+	
+	private function saveToServer():void
+	{
+		 var dataToServer:String =  toXML();
+		 soap.setApplicationStructure(publicData.applicationId, dataToServer);
+		 soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, soapListennerSetApplicationStructure);
+ 		 soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, soapListennerSetApplicationStructure);
+	}
 	
 	]]>
 </mx:Script>
 <mx:Canvas id="cnvLevelTop"/>
 <mx:Canvas id="cnvLevelDown"/>
-<mx:Button id="btAddTreeElement" label="add element" right="10" top="10"  click="addTreeElement()"/>
+<mx:Button id="btAddTreeElement" label="add element" right="10" top="10"  click="soapAddTreeElement()"/>
+	<mx:Button label="Save to server" right="10" top="40" click="saveToServer()"/>
 </mx:Canvas>
