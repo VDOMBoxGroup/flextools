@@ -21,6 +21,8 @@ package vdom.components.treeEditor
 	
 	import vdom.events.TreeEditorEvent;
 	import mx.controls.Image;
+	import vdom.connection.utils.Extract;
+	import vdom.connection.utils.UtilsEvent;
 	
 	public class TreeElement extends Canvas
 	{
@@ -34,6 +36,8 @@ package vdom.components.treeEditor
 		private var min:Boolean = true;
 		public var drag:Boolean = true;
 		private var image:Image;
+		
+		public var resourceID:String = '';
 		
 		public function TreeElement()
 		{
@@ -87,6 +91,18 @@ package vdom.components.treeEditor
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW, ID));
 				isRedraw = false;
 			}
+		}
+		
+		public function set sourseImg(bs64:String):void
+		{
+			var extract:Extract = new Extract(); 
+			extract.unziping(bs64);
+			extract.addEventListener(UtilsEvent.UNZIP_COMPLETE, setSourseImg);
+		}
+		
+		private function setSourseImg(evt:UtilsEvent):void
+		{
+				image.source = evt.source;
 		}
 		
 		/**

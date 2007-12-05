@@ -23,6 +23,7 @@ package vdom.components.treeEditor
 			massTreeElements[obID].name = xmlObj.@ID.toXMLString();
 			massTreeElements[obID].x = xmlObj.@left.toXMLString();
 			massTreeElements[obID].y = xmlObj.@top.toXMLString();	
+			massTreeElements[obID].resourceID = xmlObj.@ResourceID.toXMLString();
 		}
 		return massTreeElements;		
 	}
