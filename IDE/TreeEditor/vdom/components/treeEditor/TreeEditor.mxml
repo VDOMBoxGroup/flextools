@@ -76,7 +76,7 @@
 	private var levelsMenu:LevelsMenu;
 	private var soap:Soap = Soap.getInstance();
 	private var publicData:Object;
-	private var dataManager:DataManager = DataManager.getInstance();
+	private var dataManager:DataManager  = DataManager.getInstance();
 	private var script:TreeEditorScript  = new TreeEditorScript();
 	
 	private function init():void
@@ -85,8 +85,14 @@
 
 		publicData = Application.application.publicData;
 		soap.getApplicationStructure(publicData.applicationId);
+		
+				/**  SOAP Listeners **/
+				
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, soapListenner);
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_ERROR, soapListenner);
+		
+	//	soap.addEventListener(SoapEvent.GET_RESOURCE_OK, soapListennerGetResource);
+	//	soap.addEventListener(SoapEvent.GET_RESOURCE_ERROR, soapErrorListenner);
 
 		
 	
@@ -109,34 +115,40 @@
 	private function  soapListenner(soapEvt:SoapEvent):void
 	{
 		xml1 = soapEvt.result;
-		trace('xml1: ' + xml1)
-		script.createTreeArr(xml1);
+		trace('xml1: ' + xml1);
+		massTreeElements = script.createTreeArr(xml1);
 		createTree();
 		drawLines();
 	}
 	
 	private function createTree():void
 	{
-		//создаем массив с обьектами
-		for each(var xmlObj:XML in xml1.children())
+		for (var obID:String in massTreeElements)
 		{
-			var obID:String = xmlObj.@ID.toXMLString();
-			massTreeElements[obID] =  new TreeElement();
-			//massTreeElements[obID].setStyle('backgroundColor', '#ffffff');
-			massTreeElements[obID].name = xmlObj.@ID.toXMLString();
-			massTreeElements[obID].x = xmlObj.@left.toXMLString();
-			massTreeElements[obID].y = xmlObj.@top.toXMLString();	
-			
+			if (massTreeElements[obID]!='') 
+			{
+				soap.getResource(publicData.applicationId, massTreeElements[obID].resourceID);
+			}
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			addChild(massTreeElements[obID]);
-			
 		}
-		
-		
 	}
 	
-	
+	private function soapListennerGetResource(soapEvt:SoapEvent):void
+	{
+		//massTreeElements[obID].pictureResurse 
+		trace('soap Listenner Get Resource: \n')
+		trace(soapEvt.result.ResourceID);
+		trace(soapEvt.result.Resource);
+		for (var obID:String in massTreeElements)
+		{
+			if(massTreeElements[obID].resourceID == soapEvt.result.ResourceID )	
+			trace(soapEvt.result.soapEvt.Resource);
+			//massTreeElements[obID].sourseImg = soapEvt.result.soapEvt.Resource;
+		}
+		
+	}
 	
 	private function hideTreeElement(trEvt:TreeEditorEvent):void
 	{
@@ -243,14 +255,15 @@
 	- снятие выделения текущего елемента
 	+ прозрачность у меню в зависимости от расстоянию до мышки
 	+ свертывание и развертывание елементов
+	+ загрузка данных на сервер
+	+ чтение данных с сервера
 	
-	- загрузка данных на сервер
-	- чтение данных с сервера
 	
 	* меню:
 		- уровни
 		- показывать/скрывать
 		- рисовать в соответсвии выделеного уровня
+	
 	
 	- получение рисунков
 	- выбор локального рисунка;
@@ -534,16 +547,18 @@
 				}	
 			}
 			
-			trace(' XML to server: ' + outXML.toString());
+			//trace(' XML to server: ' + outXML.toString());
 			return outXML.toString();
 	}
 	
 	private function  soapListennerCreateObject(soapEvt:SoapEvent):void
 	{
-		trace('CreateObject: '+soapEvt.result);
+	//	trace('CreateObject: '+soapEvt.result);
 		addTreeElement(soapEvt.result.@ID);
 		soap.removeEventListener(SoapEvent.CREATE_OBJECT_OK, soapListennerCreateObject);
 		soap.removeEventListener(SoapEvent.CREATE_OBJECT_ERROR, soapListennerCreateObject);
+		
+		saveToServer();
 	}
 	
 	private function soapAddTreeElement():void
@@ -551,8 +566,8 @@
 		var types:XML = dataManager.getTopLevelTypes();
 		
 		soap.createObject(publicData.applicationId, '', types.Information.ID,'');
-		trace('***');
-		trace(publicData.applicationId);
+	//	trace('***');
+	//	trace(publicData.applicationId);
 	//	trace(types.Information.ID);
 		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, soapListennerCreateObject);
 		soap.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, soapListennerCreateObject);
@@ -560,7 +575,7 @@
 	}
 		private function addTreeElement(obID:String):void
 		{
-			trace('obID: ' + obID);
+			//trace('obID: ' + obID);
 			massTreeElements[obID] =  new TreeElement();
 			massTreeElements[obID].name = obID;
 			massTreeElements[obID].x = 0;
@@ -574,7 +589,7 @@
 	
 	private function  soapListennerSetApplicationStructure(soapEvt:SoapEvent):void
 	{
-		trace('Soap Listenner Set Application Structure: /n'+soapEvt.result);
+	//	trace('Soap Listenner Set Application Structure: /n'+soapEvt.result);
 		soap.removeEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, soapListennerSetApplicationStructure);
  		soap.removeEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, soapListennerSetApplicationStructure);
 	}
@@ -585,6 +600,11 @@
 		 soap.setApplicationStructure(publicData.applicationId, dataToServer);
 		 soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, soapListennerSetApplicationStructure);
  		 soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, soapListennerSetApplicationStructure);
+	}
+	
+	private function soapErrorListenner(soapEvt:SoapEvent):void
+	{
+	//	Alert.show(soapEvt.result, 'Soap Error:');
 	}
 	
 	]]>
