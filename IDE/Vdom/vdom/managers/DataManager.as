@@ -73,7 +73,6 @@ public class DataManager implements IEventDispatcher {
 		_types = publicData['types'];
 		objectDescription = null;
 		
-				
 		soap.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, getTopObjectsHandler);
 		soap.getTopObjects(_appId);
 	}
@@ -164,7 +163,14 @@ public class DataManager implements IEventDispatcher {
 	
 	public function getTopLevelTypes():XML {
 		
-		return _types.Type.Information.(Container == 3).parent();
+		var topLevelTypes:XML = <Types />;
+		
+		for each (var element:XML in _types.Type.Information.(Container == 3)) {
+		
+			topLevelTypes.appendChild(element.parent());
+		}
+		
+		return topLevelTypes;
 	}
 	
 	/**
