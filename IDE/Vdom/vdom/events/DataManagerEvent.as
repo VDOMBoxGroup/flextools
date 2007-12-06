@@ -8,7 +8,8 @@ public class DataManagerEvent extends Event
 
     // Public constructor.
 	public function DataManagerEvent(
-		type:String, 
+		type:String,
+		result:* = null,
 		isEnabled:Boolean=false,
 		objectId:String=null){
 			
@@ -18,6 +19,7 @@ public class DataManagerEvent extends Event
 			// Set the new property.
 			this.isEnabled = isEnabled;
 			this.objectId = objectId;
+			this.result = result;
 	}
 
     // Define static constant.
@@ -27,11 +29,14 @@ public class DataManagerEvent extends Event
 	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';
 	public static const OBJECTS_CREATED:String = 'objectCreated';
 	public static const OBJECT_DELETED:String = 'objectDeleted';
+	public static const STRUCTURE_LOADED:String = 'structureLoaded';
+	public static const STRUCTURE_SAVED:String = 'structureSaved';
 	
 
     // Define a public variable to hold the state of the enable property.
 	public var isEnabled:Boolean;
 	public var objectId:String;
+	public var result:String;
 	
     // Override the inherited clone() method.
     override public function clone():Event {
