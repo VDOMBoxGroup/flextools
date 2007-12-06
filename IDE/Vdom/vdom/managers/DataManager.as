@@ -265,7 +265,7 @@ public class DataManager implements IEventDispatcher {
 		//_objects.appendChild(newObject);
 		
 		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, createObjectCompleteHandler);
-		soap.createObject(_appId, initProp.parentId, initProp.typeId, attributes);
+		soap.createObject(_appId, initProp.parentId, initProp.typeId, attributes, '');
 		
 		//return objectId;
 	}
@@ -293,7 +293,7 @@ public class DataManager implements IEventDispatcher {
 		_objects.appendChild(newObject);
 		
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECTS_CREATED);
 		dme.objectId = '';
 		dispatchEvent(dme);
 
