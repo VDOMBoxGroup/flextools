@@ -1,91 +1,75 @@
 package vdom.components.editor.containers {
 
+import flash.display.DisplayObject;
+import flash.display.DisplayObjectContainer;
 import flash.display.Loader;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.geom.Point;
 import flash.ui.Keyboard;
+import flash.utils.getQualifiedClassName;
 
 import mx.containers.Canvas;
-import mx.controls.Button;
-import mx.controls.Image;
-import mx.controls.Text;
+import mx.core.Application;
 import mx.events.DragEvent;
+import mx.managers.IFocusManagerComponent;
 
 import vdom.components.editor.containers.workAreaClasses.Item;
-import vdom.components.editor.containers.workAreaClasses.WysiwygCheckBox;
-import vdom.components.editor.containers.workAreaClasses.WysiwygRadioButton;
 import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.components.editor.events.WorkAreaEvent;
 import vdom.components.editor.managers.ResizeManager;
-import vdom.connection.soap.Soap;
-import vdom.connection.soap.SoapEvent;
+import vdom.events.RenderManagerEvent;
 import vdom.managers.DataManager;
+import vdom.managers.RenderManager;
 import vdom.managers.ResourceManager;
 import vdom.managers.VdomDragManager;
 
-public class WorkArea extends Canvas {
+public class WorkArea extends Canvas implements IFocusManagerComponent {
 	
 	public var selectedObjectId:String;
 	
 	private var resizeManager:ResizeManager;
 	private var resourceManager:ResourceManager;
-	
+	private var renderManager:RenderManager;
 	private var dataManager:DataManager;
+	
+	private var itemStack:Array;
+	private var selectedItem:DisplayObject;
+	private var selectedIndex:int;
+	private var resetItemStack:Boolean;
+	
 	private var _elements:Object;
 	private var collection:XML;
-	private var soap:Soap;
-	private var container:Item;
+	//private var soap:Soap;
+	private var container:Canvas;
 	
 	private var applicationId:String;
 	private var topLevelObjectId:String;
 	
 	private var _images:Object;
 	private var loader:Loader;
-
 	
 	public function WorkArea() {
 		
 		super();
+		
+		tabEnabled = true;
+		
 		dataManager = DataManager.getInstance();
 		resourceManager = ResourceManager.getInstance();
-		soap = Soap.getInstance();
-		_images = {};
-		_elements = [];
+		renderManager = RenderManager.getInstance();
 		
+		selectedItem = null;
+		selectedIndex = -1;
+		itemStack = [];
 		
-		
-		addEventListener(MouseEvent.CLICK, mainClickHandler, false);
-		
+		addEventListener(MouseEvent.CLICK, mouseClickHandler, false);
 	}
-	
-	/**
-	 * Обновление отображения объекта.
-	 * @param objectAttributes аттрибуты объекта.
-	 * 
-	 */	
-	/* public function updateObject(objectAttributes:XML):void {
-		
-		var objectId:String = objectAttributes.@ID;
-		
-		var object:Item = _elements[objectId];
-		
-		var objWidth:int = objectAttributes.Attributes.Attribute.(@Name == 'width')[0];
-		var objHeight:int = objectAttributes.Attributes.Attribute.(@Name == 'height')[0];
-		
-		object.width = (objWidth == 0) ? 50 : objWidth;
-		object.height = (objHeight == 0) ? 50 : objHeight;
-		
-		object.x = objectAttributes.Attributes.Attribute.(@Name == 'left')[0];
-		object.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
-		
-		resizeManager.item = resizeManager.item;
-	} */
-	
 	/**
 	 * Удаление всех объектов из рабочей области.
 	 * 
 	 */	
-	public function destroyObjects():void {
+	public function deleteObjects():void {
 		
 		selectedObjectId = null;
 		removeAllChildren();
@@ -101,10 +85,7 @@ public class WorkArea extends Canvas {
 		resizeManager.visible = false;
 		selectedObjectId = null;
 		createObjects(applicationId, topLevelObjectId, '');
-		//removeChild(_elements[objectId]);
-		//setFocus();
 		
-		//removeChild(resizeManager);
 		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
@@ -124,8 +105,7 @@ public class WorkArea extends Canvas {
 		
 		if(!container) {
 			
-			container = new Item(null)
-			
+			container = new Canvas();
 			addChild(container);
 		}
 		
@@ -137,308 +117,28 @@ public class WorkArea extends Canvas {
 			
 			addChild(resizeManager);
 		}
+		
 	}
 	
 	public function createObjects(applicationId:String, topLevelObjectId:String, objectId:String = ''):void {
+		
+		resizeManager.visible = false;
 		
 		this.applicationId = applicationId;
 		this.topLevelObjectId = topLevelObjectId;
 		
 		var parentId:String = '';
 		if(objectId == '') objectId = topLevelObjectId;
-		if(_elements[objectId]) {
-			
-			parentId = _elements[objectId].parentId;
-			if(objectId == topLevelObjectId && parentId == topLevelObjectId) parentId = '';
-		}
-			
-		var dyn:String = '1';
-		//parentId = '';
-		trace('------------------------');
-		trace('topLevelObjectId: ' + topLevelObjectId);
-		trace('objectId: ' + objectId);
-		trace('parentId: ' + parentId);
-		trace('------------------------');
 		
-		if(parentId == '')
-			soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, updatePageHandler);
-		else
-			soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, updateItemHandler);
-		soap.renderWysiwyg(applicationId, objectId, parentId, dyn);
+		renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+		renderManager.renderWYSIWYG(applicationId, objectId);
 	}
 	
-	private function updatePageHandler(event:SoapEvent):void {
+	private function renderCompleteHandler(event:RenderManagerEvent):void {
 		
-		soap.removeEventListener(SoapEvent.RENDER_WYSIWYG_OK, updatePageHandler);
-		_elements = {};
 		container.removeAllChildren();
-		container.guid = topLevelObjectId;
-
-		renderWysiwyg(event.result, container)
+		container.addChild(event.result);
 	}
-	
-	private function updateItemHandler(event:SoapEvent):void {
-		
-		soap.removeEventListener(SoapEvent.RENDER_WYSIWYG_OK, updateItemHandler);
-		var guid:String = event.result.object.@guid;
-		var item:Item = _elements[guid];
-		item.removeAllChildren();
-		renderWysiwyg(event.result, Item(item.parent));
-		resizeManager.item = _elements[selectedObjectId];
-	}
-	
-	private function renderWysiwyg(source:XML, parent:Item = null):void {
-		
-		for each(var item:XML in source.*) {
-			
-			var name:String = item.name().localName;
-			var guid:String = item.@guid.toString();
-			var parentGuid:String = parent.guid;
-			
-			switch(name) {
-				
-				case 'object':
-					var obj:Item = new Item(item.@guid);
-					var objectAttributes:XML = dataManager.getObject(item.@guid);
-					obj.horizontalScrollPolicy = 'off';
-					obj.verticalScrollPolicy = 'off';
-					parent.addChild(obj);
-					obj.x = item.@left;
-					obj.y = item.@top;
-					if(int(item.@width) != 0)
-						obj.width = item.@width;
-					if(int(item.@height) != 0)
-						obj.height = item.@height;
-						
-					var moveable:int = objectAttributes.Type.Information.Moveable;
-					var resizable:int = objectAttributes.Type.Information.Resizable;		
-					obj.name = 	objectAttributes.Type.Information.Name
-					obj.parentId = parent.guid;
-					
-					switch (resizable) {
-						case 0:
-							obj.resizeMode = ResizeManager.RESIZE_NONE;
-						break;
-						case 1:
-							obj.resizeMode = ResizeManager.RESIZE_WIDTH;
-						break;
-						case 2:
-							obj.resizeMode = ResizeManager.RESIZE_HEIGHT;
-						break;
-						case 3:
-							obj.resizeMode = ResizeManager.RESIZE_ALL;
-						break;
-					}
-					switch (moveable) {
-						case 0:
-							obj.moveMode = false;
-						break;
-						case 1:
-							obj.moveMode = true
-						break;
-					}
-					
-					obj.containers = objectAttributes.Type.Information.Containers;
-					
-					//trace('\n ---element---\nresizeMode: '+obj.resizeMode+'\nmoveMode: '+obj.moveMode);
-					obj.addEventListener(MouseEvent.CLICK, objectClickHandler);
-					obj.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-					
-					obj.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler, true);
-					obj.addEventListener(DragEvent.DRAG_DROP, dropHandler);
-					
-					_elements[objectAttributes.@ID] = obj;
-					this.renderWysiwyg(item, obj);
-				break;
-				
-				case 'rectangle':
-					var rectangle:Canvas = new Canvas()
-					parent.addChild(rectangle);
-					//properties
-					rectangle.x = item.@left;
-					rectangle.y = item.@top;
-					rectangle.width = item.@width;
-					rectangle.height = item.@height;
-					rectangle.setStyle('borderStyle', 'solid');
-					rectangle.setStyle('borderThickness', item.@border);
-					rectangle.setStyle('borderColor', item.@color);
-					rectangle.setStyle('backgroundColor', '#'+item.@fill);
-				break;
-				
-				case 'radiobutton':
-					var radiobutton:WysiwygRadioButton = new WysiwygRadioButton()
-					parent.addChild(radiobutton);
-					
-					radiobutton.x = item.@left;
-					radiobutton.y = item.@top;
-					radiobutton.width = item.@width;
-					radiobutton.height = item.@height;
-					radiobutton.value = item.@value;
-					radiobutton.label = item.@label;
-					if(item.@state == 'checked')
-						radiobutton.selected = true;
-					
-					
-					radiobutton.setStyle('fontStyle ', item.@font);
-					radiobutton.setStyle('color ', item.@color);
-				break;
-				
-				case 'checkbox':
-					var checkbox:WysiwygCheckBox = new WysiwygCheckBox()
-					parent.addChild(checkbox);
-					
-					checkbox.x = item.@left;
-					checkbox.y = item.@top;
-					checkbox.width = item.@width;
-					checkbox.height = item.@height;
-					checkbox.label = item.@label;
-					if(item.@state == 'checked')
-						checkbox.selected = true;
-					
-					checkbox.setStyle('fontStyle ', item.@font);
-					checkbox.setStyle('color ', item.@color);
-				break;
-				
-				case 'button':
-					var button:Button = new Button()
-					parent.addChild(button);
-							
-					button.x = item.@left;
-					button.y = item.@top;
-					button.width = item.@width;
-					button.height = item.@height;
-					button.label = item.@label;
-					
-					button.setStyle('fontStyle ', item.@font);
-					button.setStyle('color ', item.@color);
-				break;
-				
-				case 'text':
-					var text:Text = new Text()
-					parent.addChild(text);
-					text.x = item.@left;
-					text.y = item.@top;
-					text.width = item.@width;
-					text.height = item.@height;
-					text.htmlText = item;
-					text.selectable = false;
-					text.setStyle('fontStyle ', item.@font);
-					text.setStyle('color ', item.@color);
-				break;
-				
-				case 'image':
-					var image:Image = new Image()
-					parent.addChild(image);
-					image.x = item.@left;
-					image.y = item.@top;
-					image.width = item.@width;
-					image.height = item.@height;
-					image.maintainAspectRatio = false;
-					_images[guid] = image;
-					resourceManager.loadResource(parentGuid, guid, this);
-				break;
-			}
-		}
-	}
-	
-	public function set resource(imageResource:Object):void {
-		
-		_images[imageResource.guid].source = imageResource.data;
-	}
-	
-	/**
-	 * Добавление нового объекта в рабочую область
-	 * @param objectAttributes аттрибуты объекта.
-	 * 
-	 */	
-	/* public function addObject(objectAttributes:XML):void {
-		
-		var objectId:String = objectAttributes.@ID;
-		var element:Item = new Item(objectId);
-		var objWidth:int = objectAttributes.Attributes.Attribute.(@Name == 'width')[0];
-		var objHeight:int = objectAttributes.Attributes.Attribute.(@Name == 'height')[0];
-		
-		element.width = (objWidth == 0) ? 50 : objWidth;
-		element.height = (objHeight == 0) ? 50 : objHeight;
-		
-		element.x = objectAttributes.Attributes.Attribute.(@Name == 'left')[0];
-		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top')[0];
-		
-		var resizable:int = objectAttributes.Type.Information.Resizable;
-		var moveable:int = objectAttributes.Type.Information.Moveable;
-		
-		switch (resizable) {
-			case 0:
-				element.resizeMode = ResizeManager.RESIZE_NONE;
-			break;
-			case 1:
-				element.resizeMode = ResizeManager.RESIZE_WIDTH;
-			break;
-			case 2:
-				element.resizeMode = ResizeManager.RESIZE_HEIGHT;
-			break;
-			case 3:
-				element.resizeMode = ResizeManager.RESIZE_ALL;
-			break;
-		}
-		switch (moveable) {
-			case 0:
-				element.moveMode = false;
-			break;
-			case 1:
-				element.moveMode = true
-			break;
-		}
-		
-		element.addEventListener(MouseEvent.CLICK, objectClickHandler);
-		_elements[objectAttributes.@ID] = element;
-		
-		addChild(element);
-	} */
-	
-	/* public function addNewObject(objectAttributes:XML):void {
-		
-		var objectId:String = objectAttributes.@ID;
-		var element:Item = new Item(objectId);
-		var objWidth:int = objectAttributes.Attributes.Attribute.(@Name == 'width');
-		var objHeight:int = objectAttributes.Attributes.Attribute.(@Name == 'height');
-		
-		element.width = (objWidth == 0) ? 50 : objWidth;
-		element.height = (objHeight == 0) ? 50 : objHeight;
-		
-		element.x = objectAttributes.Attributes.Attribute.(@Name == 'left');
-		element.y = objectAttributes.Attributes.Attribute.(@Name == 'top');
-		
-		var resizable:int = objectAttributes.Type.Information.Resizable;
-		var moveable:int = objectAttributes.Type.Information.Moveable;
-		
-		switch (resizable) {
-			case 0:
-				element.resizeMode = ResizeManager.RESIZE_NONE;
-			break;
-			case 1:
-				element.resizeMode = ResizeManager.RESIZE_WIDTH;
-			break;
-			case 2:
-				element.resizeMode = ResizeManager.RESIZE_HEIGHT;
-			break;
-			case 3:
-				element.resizeMode = ResizeManager.RESIZE_ALL;
-			break;
-		}
-		switch (moveable) {
-			case 0:
-				element.moveMode = false;
-			break;
-			case 1:
-				element.moveMode = true
-			break;
-		}
-		element.addEventListener(MouseEvent.CLICK, objectClickHandler);
-		_elements[objectAttributes.@ID] = element;
-		
-		addChild(element);
-	} */
 	
 	/**
      *  @private
@@ -474,7 +174,7 @@ public class WorkArea extends Canvas {
 	/**
      *  @private
      */
-	private function objectClickHandler(event:MouseEvent):void {
+	/* private function objectClickHandler(event:MouseEvent):void {
 		
 		var item:Item = Item(event.currentTarget);
 		if(item.guid == selectedObjectId) return;
@@ -487,7 +187,6 @@ public class WorkArea extends Canvas {
 		}
 		
 		selectedObjectId = item.guid;
-		//_elements[selectedObjectId].content.setFocus();
 		
 		addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
 		resizeManager.resizeMode = _elements[selectedObjectId].resizeMode;
@@ -495,56 +194,81 @@ public class WorkArea extends Canvas {
 		resizeManager.item = _elements[selectedObjectId];
 		resizeManager.visible = true;
 		item.setFocus();
-		//addChild(resizeManager);
 		event.stopPropagation();
 		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
-	}
+	} */
 	
-	/**
-     *  @private
-     */
-	private function mainClickHandler(event:MouseEvent):void {
+	/* private function getNearestItem(element:Object):* {
 		
-		if(event.target == event.currentTarget && selectedObjectId) {
-			setFocus();
-			selectedObjectId = null;
-			//removeChild(resizeManager);
-			resizeManager.visible = false;
-			dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
+		if(element is Item) return element;
+		if(!element.parent) return false
+			else element = getNearestItem(element.parent);
+		return element;
+	} */
+	
+	/* private function mainClickHandler(event:MouseEvent):void {
+		
+		if(resetItemStack || itemStack.length == 0) {
+		
+			resetItemStack = false;
+			var contentPoint:Point = container.globalToContent(new Point(event.stageX, event.stageY));
+			//var contentPoint:Point = new Point(event.stageX, event.stageY);
+			var rawItemStack:Array = container.getObjectsUnderPoint(contentPoint);
+			//var ddd:* = container.areInaccessibleObjectsUnderPoint(new Point(1, 1));
+			
+			selectedItem = null;
+			itemStack = [];
+			selectedIndex = 0;
+			
+			container.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			
+			for(var i:uint = 0; i < rawItemStack.length; i++) {
+			
+				var item:DisplayObject = getNearestItem(rawItemStack[i]);
+				itemStack.push(item);
+				
+				if(item == selectedItem) selectedIndex = i;
+			}
 		}
-	}
+		
+		var itemStackLength:uint = itemStack.length;
+		
+		if(itemStackLength == 0) return;
+		
+		selectedIndex = selectedIndex ? selectedIndex : 0;
+		
+		if(selectedIndex == 0) selectedIndex = itemStack.length - 1;
+			else selectedIndex = selectedIndex - 1;
+		trace(itemStack[selectedIndex]);
+	}*/
+	
+	/* private function mouseMoveHandler(event:MouseEvent):void {
+		
+		container.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);	
+		resetItemStack = true;
+	} */
 	
 	private function dragEnterHandler(event:DragEvent):void {
 		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
 		var currentContainer:Item = Item(event.currentTarget);
-		
-		//var currentItemName:String = 'HTML'
+		currentContainer.setStyle('focusColor', '#ff00ff');
+		currentContainer.drawFocus(true);
+		var zzz:* = currentContainer.focusManager.focusPane.getChildAt(0);
+		zzz.setStyle('focusColor', '#ff00ff');
 		var currentItemName:String = currentContainer.name;
 		var aviableContainers:Array = typeDescription.aviableContainers.split(',');
-		//trace('acceptDragDrop '+ currentItemName);
 		VdomDragManager.acceptDragDrop(currentContainer);
-		if(aviableContainers.indexOf(currentItemName) != -1) {
-			
-			//VdomDragManager.acceptDragDrop(currentContainer);
-			
-		}
-		
-		//event.stopPropagation();
 	}
 	
 	private function dropHandler(event:DragEvent):void {
 		
-		trace(event.currentTarget.name);
-		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
 		var currentContainer:Item = Item(event.currentTarget);
 		
-		//var currentItemName:String = 'HTML'
 		var currentItemName:String = currentContainer.name;
 		var aviableContainers:Array = typeDescription.aviableContainers.split(',');
-		//trace('acceptDragDrop '+ currentItemName);
-		//VdomDragManager.acceptDragDrop(currentContainer);
+		
 		if(aviableContainers.indexOf(currentItemName) != -1) {
 			
 			var objectLeft:Number = currentContainer.mouseX - 25;// - bm.left;
@@ -561,39 +285,76 @@ public class WorkArea extends Canvas {
 			initProp.top = objectTop;
 			
 			dataManager.createObject(initProp);
-			
-			trace('done!')
 		}
-		//var workArea:WorkArea = WorkArea(event.currentTarget);
+	}
+	
+	private function getObjectsUnderMouse(rootContainer:DisplayObjectContainer, targetClassName:String):Array {
 		
-		//var bm:EdgeMetrics = workArea.borderMetrics;
+		var app:Application = Application.application as Application;
+	
+		var allObjectUnderPoint:Array = app.stage.getObjectsUnderPoint( 
+				new Point(app.stage.mouseX, app.stage.mouseY )
+		);
+			
+		var stack:Array = new Array();
 		
-		//var typeId:String = event.dragSource.dataForFormat('Object').typeId;
-		//var type:Object = editorDataManager.getType(typeId);
+		for (var i:int = allObjectUnderPoint.length-1; i >= 0; i--) {
+			
+			var target:DisplayObject = allObjectUnderPoint[i];
+			
+			if (!rootContainer.contains(target))
+				continue
+			
+			while (target) {
+				
+				var currentClassName:String = getQualifiedClassName(target);
+					
+				if(currentClassName == targetClassName)
+					break;
+					
+				if(target.hasOwnProperty('parent'))
+					target = target.parent;
+									
+				else
+					target = null;
+			}
+			
+			if (target && stack[stack.length - 1] != target)
+				stack.push(target);
+		}
+		//trace(stack.join('\n'));
+		return stack;
+	}
+	
+	private function mouseClickHandler(event:MouseEvent):void {
 		
-		/* Patch: проверка типа родителя */
-		/* if(type.Information.Containers != 'HTML') {
-			Alert.show('Not aviable');
-			return;
-		} */
+		if(resetItemStack || itemStack.length == 0) {
+			
+			resetItemStack = false;
+			selectedItem = null;
+			itemStack = getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
+			selectedIndex = -1;
+				
+			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		}
 		
-		//var objectLeft:Number = workArea.mouseX - 25 - bm.left;
-		//var objectTop:Number = workArea.mouseY - 25 - bm.top;
+		var itemStackLength:uint = itemStack.length;
 		
-		//objectLeft = (objectLeft < 0) ? 0 : objectLeft;
-		//objectTop = (objectTop < 0) ? 0 : objectTop;
+		if(itemStackLength == 0) return;
 		
-		//var initProp:Object = {};
+		if(selectedIndex >= itemStackLength - 1 || selectedIndex == -1)
+			selectedIndex = 0;
+		else
+			selectedIndex = selectedIndex + 1;
+			
+		resizeManager.item = itemStack[selectedIndex];
+		resizeManager.visible = true;
+	}
+	
+	private function mouseMoveHandler(event:MouseEvent):void {
 		
-		//initProp.typeId = typeId;
-		//initProp.left = objectLeft;
-		//initProp.top = objectTop;
-		
-		//var id:String = editorDataManager.createObject(initProp);
-		
-		//var newItemAtrs:XML = editorDataManager.getAttributes(id);
-		
-		//workArea.addObject(newItemAtrs);
+		this.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);	
+		resetItemStack = true;
 	}
 }
 }

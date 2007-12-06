@@ -2,6 +2,7 @@
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:containers="vdom.components.editor.containers.*"
+	xmlns:mainContainers="vdom.containers.*"
 	
 	width="100%" height="100%"
 	
@@ -21,10 +22,16 @@
 		/>
 		
 		<mx:VBox id="main" width="100%" bottom="0" height="100%">
-			<containers:WorkArea id="workArea"
-				width="100%" height="100%" visible="false"
-				dataProvider="{editorDataManager.objectDescription}"
-			/>
+			<mainContainers:AdvancedTabNavigator width="100%" height="100%" borderStyle="none">			
+				
+				<containers:WorkArea id="workArea" 
+					visible="false"
+					dataProvider="{editorDataManager.objectDescription}" />
+					
+				<mx:Canvas  id="XMLEditor" 
+					visible="true"/>
+				
+			</mainContainers:AdvancedTabNavigator>
 		<!-- <containers:Toolbar width="100%" type="{editorDataManager.objectDescription}" id="toolbar"/> -->
 		</mx:VBox>
 		

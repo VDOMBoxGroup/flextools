@@ -8,10 +8,9 @@ package vdom.containers
 	
 	[Style(name="tabPaddingLeft", type="Number", format="Length", inherit="no")]
 	
-	public class MainTabNavigator extends TabNavigator	
-	{
-		public function MainTabNavigator()
-		{
+	public class MainTabNavigator extends TabNavigator {
+		public function MainTabNavigator() {
+			
 			super();
 		}
 		

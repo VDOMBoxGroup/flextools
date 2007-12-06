@@ -20,7 +20,7 @@
 	<mx:XML source="langs/languages.xml" id="languageList" />
 	<mx:XML source="langs/translation.xml" id="languagesTranslation" />
 	
-	<mx:ViewStack id="viewstack" width="100%" height="100%">
+	<mx:ViewStack id="viewstack" width="100%" height="100%" y="-10">
 	
 	<loginForm:LoginForm id="loginForm" authDataChanged="submitLogin(event)" submitBegin="lockStage()"/>
 	<mx:Canvas id="main" creationComplete="mainInitHandler(event)" width="100%" height="100%">
@@ -41,7 +41,7 @@
 	<controls:MainTabNavigator id="tabPanel"
 		top="60" left="10" right="10"
 		paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" tabPaddingLeft="80"
-	>
+	 height="140">
 		
 		<mx:Canvas id="appManTab" label="{languages.language.(@label == 'main_title')}" 
 			width="100%" height="100%" verticalScrollPolicy="off"
@@ -87,32 +87,52 @@
 			label="{languages.language.(@label == 'editor_title')}" width="100%" height="100%"  
 			show="{placeCanvas.selectedChild=editorCanv}">
 			
-			<mx:HBox 
+			<controls:ControlPanel 
 				top="0" bottom="0" width="100%" horizontalAlign="left" horizontalGap="5" verticalAlign="middle">
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_edition')}" 
+				<controls:ActionButton styleName="editionButton"
+					label="{languages.language.(@label == 'editor_edition')}"
+					labelPlacement="bottom"
 					click="{placeCanvas.selectedChild=editorCanv}"/>
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_script')}" 
+				<controls:ActionButton styleName="scriptButton" 
+					label="{languages.language.(@label == 'editor_script')}" 
+					labelPlacement="bottom"
 					click="{placeCanvas.selectedChild=scriptCanv}"/>
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_preview')}"
+				<controls:ActionButton styleName="previewButton" 
+					label="{languages.language.(@label == 'editor_preview')}"
+					labelPlacement="bottom"
 					click="{
 						navigateToURL(
 							new URLRequest('http://vdom:81/'+application.publicData['topLevelObjectId']+'.vdom')
 						)
 					}"/>
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_tree')}" />
+				<controls:ActionButton styleName="treeButton"
+					labelPlacement="bottom"
+					label="{languages.language.(@label == 'editor_tree')}"
+					click="{placeCanvas.selectedChild=treeCanv}"/>
+					
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_analyse')}"
+				<controls:ActionButton styleName="analyseButton"
+					label="{languages.language.(@label == 'editor_analyse')}"
+					labelPlacement="bottom"
 					click="{placeCanvas.selectedChild=analyseCanv}"/>
 				
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_statistics')}" />
+				<controls:ActionButton styleName="statButton" 
+					label="{'asdasda'+languages.language.(@label == 'editor_statistics')}"
+					labelPlacement="bottom"/>
+				
+				<controls:ActionButton styleName="eventsButton"
+					label="{languages.language.(@label == 'editor_events')}"
+					labelPlacement="bottom"/>
+					
+				
+				<controls:ActionButton styleName="newsButton"
+					labelPlacement="bottom"/>
 
-				<controls:ActionPanel panelName="{languages.language.(@label == 'editor_events')}" />
-
-			</mx:HBox>
+			</controls:ControlPanel>
 		</mx:Canvas>
 		<mx:Canvas id="multilinTab"
 			label="{languages.language.(@label == 'mling_title')}" width="100%" height="100%"  
@@ -141,8 +161,7 @@
 		<main:Main id="mainCanvas"
 			width="100%" height="100%" styleName="mainCanvas"/>
 		
-		<editor:Editor id="editorCanv" 
-			width="100%" height="100%"/>
+		<editor:Editor id="editorCanv" width="100%" height="100%"/>
 		
 		<scriptEditor:ScriptEditor id="scriptCanv" 
 			width="100%" height="100%"/>

@@ -3,12 +3,13 @@ package vdom.events {
 import flash.events.Event;
 
 import mx.core.UIComponent;
+import vdom.components.editor.containers.workAreaClasses.Item;
 	
 public class RenderManagerEvent extends Event {
 	
     // Public constructor.
 	public function RenderManagerEvent(
-		type:String, result:UIComponent=null, 
+		type:String, result:Item=null, 
 		bubbles:Boolean=false, cancelable:Boolean=false){
 			
 			// Call the constructor of the superclass.
@@ -22,7 +23,7 @@ public class RenderManagerEvent extends Event {
 	public static const RENDER_COMPLETE:String = 'renderComlete';
 
     // Define a public variable to hold the state of the enable property.
-	public var result:UIComponent;
+	public var result:Item;
 	
     // Override the inherited clone() method.
     override public function clone():Event {

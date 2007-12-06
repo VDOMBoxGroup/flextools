@@ -62,7 +62,7 @@ public class Type extends VBox {
 	public function set resource(imageResource:Object):void {
 		
 		iconData = imageResource.data;
-		typeIcon.source = Bitmap(iconData);
+		typeIcon.source = iconData;
 		this.visible = true;
 		/* var decoder:Base64Decoder = new Base64Decoder();
 		decoder.decode(imageResource);

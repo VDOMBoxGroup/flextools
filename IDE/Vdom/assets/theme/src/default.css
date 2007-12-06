@@ -29,6 +29,35 @@ MainTabNavigator {
 	backgroundAlpha: .1;	
 }
 
+AdvancedTabNavigator {
+
+	tabStyleName: "advancedTab";
+	paddingTop: 0;
+	tabBarPosition: "bottom";
+}
+
+.advancedTabTop {
+	disabledSkin: Embed(source="VdomThemeAssets.swf", symbol="TabDisabledSkin");
+	downSkin: Embed(source="VdomThemeAssets.swf", symbol="TabDownSkin");
+	overSkin: Embed(source="VdomThemeAssets.swf", symbol="TabOverSkin");
+	upSkin: Embed(source="VdomThemeAssets.swf", symbol="TabUpSkin");
+	selectedDisabledSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedDisabledSkin");
+	selectedDownSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedDownSkin");
+	selectedOverSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedOverSkin");
+	selectedUpSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedUpSkin");
+}
+
+.advancedTabBottom {
+	disabledSkin: Embed(source="VdomThemeAssets.swf", symbol="TabDisabledSkinBottom");
+	downSkin: Embed(source="VdomThemeAssets.swf", symbol="TabDownSkinBottom");
+	overSkin: Embed(source="VdomThemeAssets.swf", symbol="TabOverSkinBottom");
+	upSkin: Embed(source="VdomThemeAssets.swf", symbol="TabUpSkinBottom");
+	selectedDisabledSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedDisabledSkinBottom");
+	selectedDownSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedDownSkinBottom");
+	selectedOverSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedOverSkinBottom");
+	selectedUpSkin: Embed(source="VdomThemeAssets.swf", symbol="TabSelectedUpSkinBottom");
+}
+
 .mainCanvas {
 	borderThickness: 1;
 	borderColor: #ffffff;

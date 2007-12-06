@@ -1,17 +1,16 @@
 package vdom.managers {
 
+import flash.display.Bitmap;
+import flash.display.Loader;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
+import flash.utils.ByteArray;
+
+import mx.utils.Base64Decoder;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
-import mx.utils.Base64Decoder;
-import flash.utils.ByteArray;
-import flash.display.Loader;
-import flash.display.Bitmap;
-import flash.display.LoaderInfo;
-	
 	
 public class ResourceManager implements IEventDispatcher {
 	
@@ -56,26 +55,31 @@ public class ResourceManager implements IEventDispatcher {
 		
 	}
 	
-	public function loadResource(ownerID:String, GUID:String, destTarget:Object):void {
+	public function loadResource(ownerID:String, resourceID:String, destTarget:Object, 
+		property:String = 'resource', raw:Boolean = false):void {
 		
-		//trace('load res'+GUID);
-		if(_resourceStorage[GUID]) {
-			//trace('resource aviable');
-			var resourceObject:Object = {guid:GUID, data:_resourceStorage[GUID]}
-			destTarget['resource'] = resourceObject;
+		if(_resourceStorage[resourceID]) {
+			
+			if(raw) {
+				
+				destTarget[property] = _resourceStorage[resourceID];
+				return
+			}
+			var resourceObject:Object = {resourceID:resourceID, data:_resourceStorage[resourceID]}
+			destTarget[property] = resourceObject;
 			return;
 		}
 		
-		requestQue[GUID] = destTarget;
+		requestQue[resourceID] = {object:destTarget, property:property, raw:raw};
 		soap.addEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
-		soap.getResource(ownerID, GUID);
+		soap.getResource(ownerID, resourceID);
 	}
 	
 	
 	
 	private function resourceLoadedHandler(event:SoapEvent):void {
 		
-		var guid:String = event.result.ResourceID;
+		var resourceID:String = event.result.ResourceID;
 		var resource:String = event.result.Resource;
 		
 		var decoder:Base64Decoder = new Base64Decoder();
@@ -86,24 +90,33 @@ public class ResourceManager implements IEventDispatcher {
 		
 		loader = new Loader();
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
-		loader.name = guid;
+		loader.name = resourceID;
 		loader.loadBytes(imageSource);
 		
-		_resourceStorage[guid] = resource;
+		_resourceStorage[resourceID] = resource;
 	}
 	
 	
 	
 	private function loadComplete(event:Event):void {
 		
-		var guid:String = event.currentTarget.loader.name;
-		_resourceStorage[guid] = loader.content;
+		var resourceID:String = event.currentTarget.loader.name;
+		_resourceStorage[resourceID] = loader.content;
 		var data:Bitmap = new Bitmap(Bitmap(loader.content).bitmapData);
 		
-		var resourceObject:Object = {guid:guid, data:data}
-		requestQue[guid].resource = resourceObject;
-		delete requestQue[guid];
+		var requestObject:Object = requestQue[resourceID].object;
+		var requestProperty:String = requestQue[resourceID].property;
 		
+		
+		if(requestQue[resourceID].raw) {
+				
+			requestObject[requestProperty] = _resourceStorage[resourceID];	
+		} else {
+			
+			requestObject[requestProperty] = {resourceID:resourceID, data:data};
+		}
+		
+		delete requestQue[resourceID];
 	}
 	
 	// Реализация диспатчера
