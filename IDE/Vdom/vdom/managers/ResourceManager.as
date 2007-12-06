@@ -107,7 +107,6 @@ public class ResourceManager implements IEventDispatcher {
 		var requestObject:Object = requestQue[resourceID].object;
 		var requestProperty:String = requestQue[resourceID].property;
 		
-		
 		if(requestQue[resourceID].raw) {
 				
 			requestObject[requestProperty] = _resourceStorage[resourceID];	

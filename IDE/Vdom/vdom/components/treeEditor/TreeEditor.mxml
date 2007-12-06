@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init()"  label="add Element">
+<mx:Script>
+	<![CDATA[
+		import vdom.managers.ResourceManager;
+		import mx.controls.Alert;
+		import mx.events.CloseEvent;
+		import vdom.managers.DataManager;
+		import vdom.connection.soap.SoapEvent;
+		import vdom.connection.soap.Soap;
+		import mx.core.Application;
+		import mx.events.MoveEvent;
+		import mx.controls.Image;
+		import mx.events.TreeEvent;
+		import vdom.events.TreeEditorEvent;
+		import mx.states.AddChild;
+		import mx.core.Container;
+		import mx.controls.Button;
+		import mx.events.DragEvent;
+		//hide когда закрываем
+		// show когда открываем снова
+	//данные которые уже есть
+	private var xml1:XML; 
+ 	private var massTreeElements:Array = new Array();
+	private var massLines:Array = new Array();
+	private var resizer:ResizeManager;
+	private var selectedTreeEliment:String;
+	private var treeElement:TreeElement = new TreeElement();
+	private var canRectangle:Canvas = new Canvas();
+	private var curTree:Object = new Object();
+	private var canLine:Canvas = new Canvas();
+	private var pnFrom:Point = new Point();
+	private var blDrawLine:Boolean = false;
+	private var vctTest:Vector = new Vector();
+	private var curLine:Object = new Object();
+	private var btLine:DeleteLineButton;
+	private var temMenu:TreeElementMenu;
+	private var levelsMenu:LevelsMenu;
+	private var soap:Soap = Soap.getInstance();
+	private var publicData:Object;
+	private var dataManager:DataManager  = DataManager.getInstance();
+	private var script:TreeEditorScript  = new TreeEditorScript();
+	
+	private function init():void
+	{
+		levelsMenu = new LevelsMenu();
+
+		publicData = Application.application.publicData;
+		soap.getApplicationStructure(publicData.applicationId);
+		
+				/**  SOAP Listeners **/
+				
+		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, soapListenner);
+		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_ERROR, soapListenner);
+		
+		
+	
+		btLine = new DeleteLineButton();
+		btLine.addEventListener(MouseEvent.CLICK, 		delButtonOperation);
+		addChild(btLine);
+		
+		temMenu = new TreeElementMenu();
+		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);
+		
+		addChild(temMenu);
+		
+	//	addEventListener(MouseEvent.CLICK, hideTemMenu);
+		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
+		
+	}
+	
+	private function  soapListenner(soapEvt:SoapEvent):void
+	{
+		xml1 = soapEvt.result;
+		trace('xml1: ' + xml1);
+		massTreeElements = script.createTreeArr(xml1);
+		createTree();
+		drawLines();
+	}
+	
+	public function set resource (object:Object):void
+	{
+		for (var obID:String in massTreeElements)
+		{
+			if(massTreeElements[obID].resourceID == object.guid )	
+			{
+				massTreeElements[obID].sourseImg = object.data;
+				//trace(object.data);
+			}
+		}
+	}
+	
+	private function createTree():void
+	{
+		for (var obID:String in massTreeElements)
+		{
+			if (massTreeElements[obID]!='') 
+			{
+				var resMan:ResourceManager = ResourceManager.getInstance();
+				resMan.loadResource(publicData.applicationId, massTreeElements[obID].resourceID, this)
+			}
+			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
+			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			addChild(massTreeElements[obID]);
+		}
+	}
+	
+	private function hideTreeElement(trEvt:TreeEditorEvent):void
+	{
+		massTreeElements[curTree.ID].resize = true;
+	}
+	
+
+	
+	private function alfaMenu(msEvt:MouseEvent):void
+	{
+		temMenu.alfaMenu(mouseX - temMenu.x,  mouseY - temMenu.y );
+	}
+	private function treeElementsClick(msEvt:MouseEvent):void
+	{
+		temMenu.position = msEvt.currentTarget;
+		temMenu.setAlpha = 0.5;
+	}
+	
+	private function delButtonOperation(msEvt:MouseEvent):void
+	{
+		//ссылка на самого себя 
+			for (var level:String in massLines)
+					for (var frsTrElem:String in massLines[level])
+						for (var sknTrElem:String in massLines[level][frsTrElem])
+							if(curLine  == massLines[level][frsTrElem][sknTrElem] )
+							{
+							//	trace('im here!'); 
+								cnvLevelDown.removeChild(massLines[level][frsTrElem][sknTrElem]);
+								delete massLines[level][frsTrElem][sknTrElem];
+								btLine.alpha = 0.5;
+								btLine.visible = false;
+							}
+	}
+	// рисуем линии
+	private function drawLines():void
+	{
+		for each(var xmlObj:XML in xml1.children())
+		{
+			var obID:String = xmlObj.@ID.toXMLString();
+			
+			//создаем массив с Направляющими между обьектами
+			for each(var xmlLavel:XML in xmlObj.children())
+			{
+				var level:String = xmlLavel.@Index.toXMLString();
+				// mass of levels where  level  consist of numbers betvin 0-9
+				if (!massLines[level]) massLines[level] = new Array();
+				if (!massLines[level][obID]) massLines[level][obID] = new Array();
+				
+				for each(var xmlLavelObj:XML in xmlLavel.children())
+				{
+					var toObjID:String = xmlLavelObj.@ID.toXMLString();
+					
+					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
+					massLines[level][obID][toObjID].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
+					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
+				}
+			}
+		}
+	//	toXML();
+	}
+	
+	private function markLines(muEvt:MouseEvent):void
+	{
+		curLine.mark = false;
+		curLine = muEvt.currentTarget;
+		curLine.mark = true;
+		btLine.x = mouseX - btLine.width / 2;
+		btLine.y = mouseY  - btLine.height - 2;
+		btLine.visible = true;
+	}
+	
+	private function mouseHandler(msEvt:TreeEditorEvent):void
+	{
+		redrawLines(msEvt.currentTarget.ID);
+	}
+	
+	/***
+	* 
+	* ---------- перерисовываем необходимые линии -----------------
+	*
+	*/
+	
+	private function redrawLines(strID:String):void
+	{
+		for (var level:String in massLines)
+		for(var ind1:String in massLines[level])
+			for(var ind2:String in massLines[level][ind1])
+				if (strID == ind1 || strID == ind2)
+					massLines[level][ind1][ind2].updateVector();
+				
+		temMenu.position = massTreeElements[strID];
+	}
+	
+	/******
+	
+	- на двойной щелчек скрываться /разкрываться
+	+ когда  соединяешь, стрелка за мышкой
+	- цвет по текущему уровню
+	+ Баг верхнего угла
+	+ при нажатии на линиию появлялась становилась видима кнопка
+	+ нармальные картикни
+	+ Выделение текущего елемента
+	- снятие выделения текущего елемента
+	+ прозрачность у меню в зависимости от расстоянию до мышки
+	+ свертывание и развертывание елементов
+	+ загрузка данных на сервер
+	+ чтение данных с сервера
+	
+	
+	* меню:
+		- уровни
+		- показывать/скрывать
+		- рисовать в соответсвии выделеного уровня
+	
+	- корректоное отображение при смене апликухи
+	- оптимизация %)
+	+ получение рисунков
+	- выбор локального рисунка;
+	+ подтверждение на удаление;
+	- нормальные линии между елементами дерева
+	
+	*/
+	
+	
+	
+	private function showTEMMenu(msEvt:MouseEvent):void
+	{
+		temMenu.setAlpha = 1;
+	}
+	
+	
+	/**
+	*
+	*		прекращаем перетаскивание прямоугольника
+	*		и на его места стави выделенный елемент дерерва
+	*
+	*/
+	private function stopingDrag(trEvt:MouseEvent):void
+	{/****************************/
+		canRectangle.stopDrag();
+		curTree.x = canRectangle.x;
+		curTree.y = canRectangle.y;
+		canRectangle.graphics.clear();
+		canRectangle.removeEventListener(MouseEvent.MOUSE_UP, stopingDrag);
+		redrawLines(curTree.ID);
+		removeChild(canRectangle);
+	
+		temMenu.position = curTree;
+		temMenu.setAlpha = 0.5;
+	}
+	
+	/** 
+	*
+	*		Кликнули по обьекту, 
+	*		- выделяем его
+	*		- если надо проводим к нему линию связи с 
+	*		с от другого обьекта
+	*/
+	
+	private function mouseDownHandler(evt:MouseEvent):void
+	{
+		//toXML();
+		btLine.visible = false;
+		
+			pnFrom.x = evt.currentTarget.x;
+			pnFrom.y =evt.currentTarget.y;
+			
+			temMenu.position = evt.currentTarget;
+		if(!blDrawLine)
+		{
+		/*---выделяем и перетаскиваем обьект---*/	
+			curLine.mark = false; // снимаем выдиление с текущей линии
+			btLine.visible = false; // прячем кнопку 
+			
+			var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
+			
+			canRectangle.addEventListener(MouseEvent.MOUSE_UP, stopingDrag);
+			
+			canRectangle.x = evt.currentTarget.x;
+			canRectangle.y = evt.currentTarget.y;
+			canRectangle.graphics.lineStyle(3, 0.5, 0.2, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			canRectangle.graphics.beginFill(0x555555,  0);
+			canRectangle.graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
+			
+			canRectangle.startDrag(false, rect);
+			addChild(canRectangle);
+		}
+		
+		// проводим линию
+		if(blDrawLine){
+			var fromObj:String = curTree.ID.toString();
+			var toObj:String = evt.currentTarget.ID.toString();
+			var necessaryLevel:String = '0';
+
+			if(!massLines[necessaryLevel]) 
+				massLines[necessaryLevel] = new Array();
+			
+			if(!massLines[necessaryLevel][curTree.ID.toString()]) 
+				massLines[necessaryLevel][curTree.ID.toString()] = new Array();
+			
+			// обьект сам на себя
+			if(toObj == fromObj)return;
+			
+			// может эта линия уже есть?
+			for (var level:String in massLines)
+				for (var frsTrElem:String in massLines[level])
+					for (var sknTrElem:String in massLines[level][frsTrElem])
+						if((frsTrElem == fromObj && sknTrElem == toObj ) ||
+							(frsTrElem == toObj && sknTrElem ==  fromObj ))
+							{	
+							//	trace('return');
+								curTree = evt.currentTarget;
+								return;
+								
+							}
+			
+			
+			//trace('maked');			
+			massLines[necessaryLevel][fromObj][toObj] 	= 
+			new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
+			
+			cnvLevelDown.addChild(massLines[necessaryLevel][fromObj][toObj]);
+			massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
+		}
+
+		// выделяем необходимый елемент дерева
+		curTree = evt.currentTarget;
+	}
+	
+	/**
+	*
+	*		удаляем обьект и все его связи
+	*
+	*/
+	private function deleteTreeElement(trEvt:TreeEditorEvent):void
+	{
+		Alert.show("Do you want to delete Element?", "Delete Element", 3, this, alertClickDeleteTreeElement);
+		
+		
+		
+	}
+	 
+            // Event handler function for displaying the selected Alert button.
+    private function alertClickDeleteTreeElement(event:CloseEvent):void {
+        if (event.detail==Alert.YES)
+        {
+           	soap.deleteObject(publicData.applicationId, curTree.ID);
+		
+			soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, soapListennerDeleteObject);
+			soap.addEventListener(SoapEvent.DELETE_OBJECT_ERROR, soapListennerDeleteObject);
+        }
+        
+    }
+	
+	private function soapListennerDeleteObject(soapEvt:SoapEvent):void
+	{
+		//trace(soapEvt.result);
+		
+		soap.removeEventListener(SoapEvent.DELETE_OBJECT_OK, soapListennerDeleteObject);
+		soap.removeEventListener(SoapEvent.DELETE_OBJECT_ERROR, soapListennerDeleteObject);
+		
+		// удаляем "связи" 
+		var strID:String = soapEvt.result;
+		for (var level:String in massLines)
+			for(var ind1:String in massLines[level])
+				for(var ind2:String in massLines[level][ind1])
+					if (strID == ind1 || strID == ind2)
+					{
+						 cnvLevelDown.removeChild( massLines[level][ind1][ind2]);
+						 delete massLines[level][ind1][ind2];
+					}
+		// удаляем сам обьект
+		removeChild(massTreeElements[strID]);
+		delete massTreeElements[strID];
+		
+		curTree = null;
+		
+		saveToServer();
+				
+	}
+	
+	/**
+	*
+	*		запускаем прорисовку линию от елемента дерева
+	*		до курсора мыши
+	*
+	*/
+	private function startDrawLine(trEvt:TreeEditorEvent):void
+	{
+		addChild(vctTest);//--для рисования связывающей линии
+		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
+		
+		blDrawLine = true; //говорим что рисуем линию
+		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+		drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
+	}
+	
+	/**
+	* ресурсы
+	*		перестаем рисовать линию от елемента дерева
+	*		до курсора мыши
+	*
+	*/
+	private function stopDrawLine(msEvt:MouseEvent):void
+	{
+		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
+		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+		removeChild(vctTest); ///-------------***********
+		blDrawLine = false;  //говорим что НЕ рисуем линию
+	}
+	/**
+	*
+	*		рисуем линию от елемента дерева
+	*		до курсора мыши
+	*
+	*/
+	private function drLine (mEvt:MouseEvent):void
+	{
+		var tX:int = mouseX - curTree.x;
+		var tY:int = mouseY - curTree.y;
+		
+		var pnTo:Object = new Object();
+		// чтоб мышка не кликала по своей линии
+		
+		if((tX>0))
+			pnTo.x = mouseX - 10;
+		else
+			pnTo.x = mouseX + 10;
+		
+		if( (tY>0))
+			pnTo.y = mouseY - 10;
+		else
+			pnTo.y = mouseY + 10;
+		
+	
+		vctTest.graphics.clear();
+		vctTest.createVector(curTree, pnTo);	
+	}
+	/**
+	*  
+	*		получаем из существующей структуры данных XML 
+	*
+	*/
+	private function toXML():String
+	{
+		
+					/*** оптимизировать!!!**/
+		var outXML:XML = <Structure/> ;
+		//trace('1 XML to server: ' + outXML.toString());
+		
+		for (var levels:String in massTreeElements)
+		{
+			var xmlList:XMLList = new XMLList('<Object/>');
+			xmlList.@ID = levels;
+					xmlList.@left = massTreeElements[levels].x;
+					xmlList.@top = massTreeElements[levels].y;
+					xmlList.@ResourceID = massTreeElements[levels].resourceID;
+					outXML.appendChild(xmlList.toXMLString());
+					
+
+		}
+		
+	//	trace('1 XML to server: ' + outXML.toString())
+		for (var level:String in massLines)
+		for(var ind1:String in massLines[level])
+			for(var ind2:String in massLines[level][ind1])
+			{
+
+				// создаем все елементы дерева
+				var object:XMLList = new XMLList('<Object/>');
+
+				if (outXML.Object.(@ID == ind1).@ID != ind1 )
+				{
+					object.@ID = ind1;
+					object.@left = massTreeElements[ind1].x;
+					object.@top = massTreeElements[ind1].y;
+					object.@ResourceID = massTreeElements[ind1].resourceID;
+					outXML.appendChild(object.toXMLString());
+				}
+				
+		//		trace('2 XML to server: ' + outXML.toString());
+				var levelXMLList:XMLList = new XMLList('<Level/>');
+				if(outXML.Object.(@ID == ind1).Level.(@Index == level).@Index != level)
+				{
+					levelXMLList.@Index = level;
+					outXML.Object.(@ID == ind1).appendChild(levelXMLList);
+				}
+				
+				var myXMLList:XMLList = new XMLList('<Object/>') ;
+				myXMLList.@ID = ind2;
+				outXML.Object.(@ID == ind1).Level.(@Index == level).appendChild(myXMLList);
+				
+				
+				if (outXML.Object.(@ID == ind2).@ID != ind2 )
+				{
+					object.@ID = ind2;
+					object.@left = massTreeElements[ind2].x;
+					object.@top = massTreeElements[ind2].y;
+					object.@ResourceID = massTreeElements[ind1].resourceID;
+					outXML.appendChild(object.toXMLString());
+				}	
+			}
+			
+			trace(' XML to server: ' + outXML.toString());
+			return outXML.toString();
+	}
+	
+	private function  soapListennerCreateObject(soapEvt:SoapEvent):void
+	{
+	//	trace('CreateObject: '+soapEvt.result);
+		addTreeElement(soapEvt.result.@ID);
+		soap.removeEventListener(SoapEvent.CREATE_OBJECT_OK, soapListennerCreateObject);
+		soap.removeEventListener(SoapEvent.CREATE_OBJECT_ERROR, soapListennerCreateObject);
+		
+		saveToServer();
+	}
+	
+	private function soapAddTreeElement():void
+	{
+		var types:XML = dataManager.getTopLevelTypes();
+		
+		soap.createObject(publicData.applicationId, '', types.Information.ID,'');
+	//	trace('***');
+	//	trace(publicData.applicationId);
+	//	trace(types.Information.ID);
+		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, soapListennerCreateObject);
+		soap.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, soapListennerCreateObject);
+		
+	}
+		private function addTreeElement(obID:String):void
+		{
+			//trace('obID: ' + obID);
+			massTreeElements[obID] =  new TreeElement();
+			massTreeElements[obID].name = obID;
+			massTreeElements[obID].x = 0;
+			massTreeElements[obID].y = 0;	
+			
+			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
+			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			addChild(massTreeElements[obID]);
+			//trace(obID);
+		}
+	
+	private function  soapListennerSetApplicationStructure(soapEvt:SoapEvent):void
+	{
+	//	trace('Soap Listenner Set Application Structure: /n'+soapEvt.result);
+		soap.removeEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, soapListennerSetApplicationStructure);
+ 		soap.removeEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, soapListennerSetApplicationStructure);
+	}
+	
+	private function saveToServer():void
+	{
+		 var dataToServer:String =  toXML();
+		 soap.setApplicationStructure(publicData.applicationId, dataToServer);
+		 soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, soapListennerSetApplicationStructure);
+ 		 soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, soapListennerSetApplicationStructure);
+	}
+	
+	private function soapErrorListenner(soapEvt:SoapEvent):void
+	{
+	//	Alert.show(soapEvt.result, 'Soap Error:');
+	}
+	
+	]]>
+</mx:Script>
+<mx:Canvas id="cnvLevelTop"/>
+<mx:Canvas id="cnvLevelDown"/>
+<mx:Button id="btAddTreeElement" label="add element" right="10" top="10"  click="soapAddTreeElement()"/>
+	<mx:Button label="Save to server" right="10" top="40" click="saveToServer()"/>
+	<mx:Button label="Show XML" right="10" top="70" click="toXML()"/>
+</mx:Canvas>
