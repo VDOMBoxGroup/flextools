@@ -189,11 +189,38 @@ public class DataManager implements IEventDispatcher {
 	public function objectDeletedHandler (event:SoapEvent):void {
 		
 		soap.removeEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
-		delete _objects.Object.(@ID == event.result)[0];
+		delete _objects..Object.(@ID == event.result)[0];
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
 		dme.objectId = event.result;
 		dispatchEvent(dme);
 	}
+	
+	public function getApplactionStructure():void {
+		
+		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, getApplicationStructureHandler);
+		soap.getApplicationStructure(_appId);
+	}
+	
+	private function getApplicationStructureHandler(event:SoapEvent):void {
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.STRUCTURE_LOADED);
+		dme.result = event.result;
+		dispatchEvent(dme);
+	}
+	
+	public function setApplactionStructure(struct:XML):void {
+		
+		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, setApplicationStructureHandler);
+		soap.setApplicationStructure(_appId, struct);
+	}
+	
+	private function setApplicationStructureHandler(event:SoapEvent):void {
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.STRUCTURE_SAVED);
+		dme.result = event.result;
+		dispatchEvent(dme);
+	}
+	
 	/**
 	 * 
 	 * @param objectId идентификатор объекта
@@ -296,7 +323,7 @@ public class DataManager implements IEventDispatcher {
 		
 		_objects = event.result;
 		
-		for each (var object:XML in _objects.Object) {
+		for each (var object:XML in _objects..Object) {
 			object.appendChild(_types.Type.Information.(ID == object.@Type).parent());
 		}
 		
