@@ -13,7 +13,7 @@
 	xmlns:scriptEditor="vdom.components.scriptEditor.*"
 	xmlns:loginForm="vdom.components.loginForm.*" 
 	xmlns:main="vdom.components.main.*"
-	xmlns:analyse="vdom.components.analyse.*">
+	xmlns:analyse="vdom.components.analyse.*" xmlns:treeEditor="vdom.components.treeEditor.*">
 	
 	<mx:Script source="includes/Vdom.as"/>
 	
@@ -165,7 +165,10 @@
 		
 		<scriptEditor:ScriptEditor id="scriptCanv" 
 			width="100%" height="100%"/>
-			
+		
+		<treeEditor:TreeEditor id="treeCanv"
+			width="100%" height="100%" />
+		
 		<analyse:Analyse id="analyseCanv" width="100%" height="100%"/>
 		
 		<mx:Canvas id="multilinCanv" width="100%" height="100%">

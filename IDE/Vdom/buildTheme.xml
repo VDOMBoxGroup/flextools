@@ -16,6 +16,7 @@
 	<!-- files -->
 	<property name="compc.jar" location="${flex.sdk.dir}/lib/compc.jar"/>
 	<property name="default.css" location="${src.dir}/default.css"/>
+	<property name="actionButtons.css" location="${src.dir}/actionButtons.css"/>
 	<property name="VdomThemeAssets.swf" location="${src.dir}/VdomThemeAssets.swf"/>
 	<property name="class.ActionPanelBackground" value="vdom.skins.ActionPanelBackground"/>
 
@@ -43,6 +44,7 @@
 			include-classes="${class.ActionPanelBackground}">
 			<source-path path-element="${basedir}"/>
 			<include-file name="default.css" path="${default.css}"/>
+          	<include-file name="actionButtons.css" path="${actionButtons.css}"/>
 			<include-file name="VdomThemeAssets.swf" path="${VdomThemeAssets.swf}"/>          
 		</compc>       
 	</target>
