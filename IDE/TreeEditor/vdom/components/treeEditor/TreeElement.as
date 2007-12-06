@@ -93,17 +93,12 @@ package vdom.components.treeEditor
 			}
 		}
 		
-		public function set sourseImg(bs64:String):void
+		public function set sourseImg(obj:Object):void
 		{
-			var extract:Extract = new Extract(); 
-			extract.unziping(bs64);
-			extract.addEventListener(UtilsEvent.UNZIP_COMPLETE, setSourseImg);
+			image.source = obj;
 		}
 		
-		private function setSourseImg(evt:UtilsEvent):void
-		{
-				image.source = evt.source;
-		}
+		
 		
 		/**
 		 *

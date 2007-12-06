@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init()"  label="add Element">
 <mx:Script>
 	<![CDATA[
+		import vdom.managers.ResourceManager;
 		import mx.controls.Alert;
 		import mx.events.CloseEvent;
 		import vdom.managers.DataManager;
@@ -19,46 +20,7 @@
 		//hide когда закрываем
 		// show когда открываем снова
 	//данные которые уже есть
-	//Application.application.publicData (applicationId and topLevelObject - текущий )
-	private var xml1:XML = 
-<Structure>
-  <Object ID="id_02" left="31" top="93">
-    <Level Index="0">
-      <Object ID="id_04"/>
-      <Object ID="id_03"/>
-    </Level>
-  </Object>
-  <Object ID="id_04" left="28" top="259"/>
-  <Object ID="id_03" left="302" top="40"/>
-  <Object ID="id_01" left="280" top="239">
-    <Level Index="0">
-      <Object ID="id_02"/>
-    </Level>
-    <Level Index="1">
-      <Object ID="id_04"/>
-    </Level>
-    <Level Index="2">
-      <Object ID="id_05"/>
-      <Object ID="id_06"/>
-    </Level>
-    <Level Index="3">
-      <Object ID="id_08"/>
-      <Object ID="id_07"/>
-    </Level>
-    <Level Index="4">
-      <Object ID="id_02"/>
-    </Level>
-    <Level Index="5">
-      <Object ID="id_04"/>
-      <Object ID="id_03"/>
-    </Level>
-  </Object>
-  <Object ID="id_05" left="624" top="74"/>
-  <Object ID="id_06" left="402" top="446"/>
-  <Object ID="id_08" left="552" top="281"/>
-  <Object ID="id_07" left="144" top="438"/>
-</Structure>
-
+	private var xml1:XML; 
  	private var massTreeElements:Array = new Array();
 	private var massLines:Array = new Array();
 	private var resizer:ResizeManager;
@@ -91,9 +53,6 @@
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, soapListenner);
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_ERROR, soapListenner);
 		
-	//	soap.addEventListener(SoapEvent.GET_RESOURCE_OK, soapListennerGetResource);
-	//	soap.addEventListener(SoapEvent.GET_RESOURCE_ERROR, soapErrorListenner);
-
 		
 	
 		btLine = new DeleteLineButton();
@@ -121,33 +80,31 @@
 		drawLines();
 	}
 	
+	public function set resource (object:Object):void
+	{
+		for (var obID:String in massTreeElements)
+		{
+			if(massTreeElements[obID].resourceID == object.guid )	
+			{
+				massTreeElements[obID].sourseImg = object.data;
+				//trace(object.data);
+			}
+		}
+	}
+	
 	private function createTree():void
 	{
 		for (var obID:String in massTreeElements)
 		{
 			if (massTreeElements[obID]!='') 
 			{
-				soap.getResource(publicData.applicationId, massTreeElements[obID].resourceID);
+				var resMan:ResourceManager = ResourceManager.getInstance();
+				resMan.loadResource(publicData.applicationId, massTreeElements[obID].resourceID, this)
 			}
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			addChild(massTreeElements[obID]);
 		}
-	}
-	
-	private function soapListennerGetResource(soapEvt:SoapEvent):void
-	{
-		//massTreeElements[obID].pictureResurse 
-		trace('soap Listenner Get Resource: \n')
-		trace(soapEvt.result.ResourceID);
-		trace(soapEvt.result.Resource);
-		for (var obID:String in massTreeElements)
-		{
-			if(massTreeElements[obID].resourceID == soapEvt.result.ResourceID )	
-			trace(soapEvt.result.soapEvt.Resource);
-			//massTreeElements[obID].sourseImg = soapEvt.result.soapEvt.Resource;
-		}
-		
 	}
 	
 	private function hideTreeElement(trEvt:TreeEditorEvent):void
@@ -163,7 +120,6 @@
 	}
 	private function treeElementsClick(msEvt:MouseEvent):void
 	{
-		/***-++++++++++++-***/
 		temMenu.position = msEvt.currentTarget;
 		temMenu.setAlpha = 0.5;
 	}
@@ -264,10 +220,11 @@
 		- показывать/скрывать
 		- рисовать в соответсвии выделеного уровня
 	
-	
-	- получение рисунков
+	- корректоное отображение при смене апликухи
+	- оптимизация %)
+	+ получение рисунков
 	- выбор локального рисунка;
-	- подтверждение на удаление;
+	+ подтверждение на удаление;
 	- нормальные линии между елементами дерева
 	
 	*/
@@ -298,7 +255,6 @@
 	
 		temMenu.position = curTree;
 		temMenu.setAlpha = 0.5;
-		
 	}
 	
 	/** 
@@ -495,6 +451,8 @@
 	*/
 	private function toXML():String
 	{
+		
+					/*** оптимизировать!!!**/
 		var outXML:XML = <Structure/> ;
 		//trace('1 XML to server: ' + outXML.toString());
 		
@@ -504,7 +462,9 @@
 			xmlList.@ID = levels;
 					xmlList.@left = massTreeElements[levels].x;
 					xmlList.@top = massTreeElements[levels].y;
+					xmlList.@ResourceID = massTreeElements[levels].resourceID;
 					outXML.appendChild(xmlList.toXMLString());
+					
 
 		}
 		
@@ -522,6 +482,7 @@
 					object.@ID = ind1;
 					object.@left = massTreeElements[ind1].x;
 					object.@top = massTreeElements[ind1].y;
+					object.@ResourceID = massTreeElements[ind1].resourceID;
 					outXML.appendChild(object.toXMLString());
 				}
 				
@@ -543,11 +504,12 @@
 					object.@ID = ind2;
 					object.@left = massTreeElements[ind2].x;
 					object.@top = massTreeElements[ind2].y;
+					object.@ResourceID = massTreeElements[ind1].resourceID;
 					outXML.appendChild(object.toXMLString());
 				}	
 			}
 			
-			//trace(' XML to server: ' + outXML.toString());
+			trace(' XML to server: ' + outXML.toString());
 			return outXML.toString();
 	}
 	
@@ -613,4 +575,5 @@
 <mx:Canvas id="cnvLevelDown"/>
 <mx:Button id="btAddTreeElement" label="add element" right="10" top="10"  click="soapAddTreeElement()"/>
 	<mx:Button label="Save to server" right="10" top="40" click="saveToServer()"/>
+	<mx:Button label="Show XML" right="10" top="70" click="toXML()"/>
 </mx:Canvas>
