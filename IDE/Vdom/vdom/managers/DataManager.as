@@ -216,7 +216,7 @@ public class DataManager implements IEventDispatcher {
 	
 	public function setApplactionStructure(struct:XML):void {
 		
-		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, setApplicationStructureHandler);
+		soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, setApplicationStructureHandler);
 		soap.setApplicationStructure(_appId, struct);
 	}
 	
