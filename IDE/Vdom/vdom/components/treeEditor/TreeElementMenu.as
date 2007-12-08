@@ -114,12 +114,12 @@ package vdom.components.treeEditor
 			
 			
 			canRect.graphics.clear();
-			canRect.graphics.lineStyle(3, 0.5, 0.5, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			canRect.graphics.lineStyle(3, 0xdd1000, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 			graphics.beginFill(0x555555,  0);
 	//		graphics.drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
 		
-			canRect.graphics.drawRect(-1, 23, objPosit.width+1, objPosit.height+1);
-			canMenu.alpha = .7;
+			canRect.graphics.drawRect(-1, 23, objPosit.width+2, objPosit.height+2);
+			canMenu.alpha = .9;
 		}
 		
 		
@@ -132,7 +132,8 @@ package vdom.components.treeEditor
 		
 		public function set setAlpha(alf:Number):void
 		{
-				canRect.alpha = alf;
+			
+				//canRect.alpha = alf;
 		}
 		
 		
