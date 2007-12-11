@@ -1,27 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:ns1="http://www.adobe.com/2006/fc" xmlns:ns2="com.adobe.flex.extras.controls.springgraph.*"  creationComplete="init()" xmlns:ns3="powerPack.com.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:ns1="http://www.adobe.com/2006/fc" xmlns:ns2="com.adobe.flex.extras.controls.springgraph.*"  creationComplete="show()" xmlns:ns3="powerPack.com.*" xmlns:ns4="powerPack.com.graph.*" xmlns:ns5="*">
 	<mx:Script>
 		<![CDATA[
-		import powerPack.com.graphNode;
-		
-		private function init():void { 
-			var node_1:graphNode = new graphNode();
-			var node_2:graphNode = new graphNode();
+			import mx.events.MenuEvent;
+			import powerPack.com.graph.PowerPackClass;	
+			import powerPack.com.graph.graphArrow;
+			import mx.controls.Alert;
+			
+			import powerPack.com.graph.graphNode;
+            import mx.collections.*;
+			import mdm.*;
+			import mx.managers.PopUpManager;
+            
+            [Bindable]
+            public var menuBarCollection:XMLListCollection;
+            
+            public var curOpenFile:String;
+            
+            private var menubarXML:XMLList =
+                <>
+                    <menuitem label="File" data="">
+                        <menuitem label="New" data=""/>
+                        <menuitem label="Open File..." data=""/>
+                        <menuitem type="separator"/>
+                        <menuitem label="Save" data=""/>
+                        <menuitem label="Save As..." data=""/> 
+                        <menuitem type="separator"/>
+                        <menuitem label="Exit" data=""/>                                                
+                    </menuitem>
+                    <menuitem label="Help" data="">
+                    </menuitem>
+                </>;
+                            				
+			private function show():void { 
+				mdm.Application.init(this, OnInit); 	
+				mdm.FileExplorer.init();			
+				
+				menuBarCollection = new XMLListCollection(menubarXML);
+				
+				var node_1:graphNode = new graphNode();
+				var node_2:graphNode = new graphNode();
+	
+				canvas_1.addChild(node_1);
+				canvas_1.addChild(node_2);
+				
+				node_1.move(10, 10);
+				node_2.move(10, 60);
+			
+				node_1.text = "\n			\r\t";
+				node_2.text = "asdfsdfsl k f    dsfsdfdsfsdfsfa \ngdfsdf";	
+				
+				addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 
-			this.addChild(node_1);
-			this.addChild(node_2);
-			
-			node_1.move(10, 10);
-			node_2.move(10, 60);
-		
-			node_1.text = "as\ndfsdfsl k f    dsfsdfdsfsdfsfa \ngdfsdf";
-			node_2.text = "asdfsdfsl k f    dsfsdfdsfsdfsfa \ngdfsdf";
-			
-	    }
+		    }
+		    
+		   	private function OnInit():void
+	       	{
+		       	mdm.Menu.Context.menuType = "function";
+		       	graphCanvas.generateContextMenu();
+		       	graphNode.generateContextMenu();
+		    	graphArrow.generateContextMenu();
+	       	}
+	    	
+	    	private function mouseOverHandler(event:MouseEvent):void
+	   		{	    	
+	    		PowerPackClass.refreshMenu(this);
+	    		event.stopPropagation();
+	    	}
+
+            // Event handler for the MenuBar control's itemClick event.
+            private function menuHandler(event:MenuEvent):void  {
+                // Don't open the Alert for a menu bar item that 
+                // opens a popup submenu.
+                var fileBrowser:FileBrowser;
+                
+                if(event.item.@label == "New")
+                {
+                	curOpenFile = null;
+	                canvas_1.clear();
+                }
+                else if(event.item.@label == "Open File...")
+                {		
+                	fileBrowser = new FileBrowser();
+                	
+                	PopUpManager.addPopUp(fileBrowser, this, true);
+                	PopUpManager.centerPopUp(fileBrowser);
+                	fileBrowser.title = "Open File";
+                	fileBrowser.btnConfirm.label = "Open";                	
+                	fileBrowser.addEventListener("closeBrowse", openBrowseHandler);
+                }
+    	        else if(event.item.@label == "Save")
+    	        {
+    	        	if(!curOpenFile)
+    	        	{
+                		fileBrowser = new FileBrowser();
+                	
+                		PopUpManager.addPopUp(fileBrowser, this, true);
+                		PopUpManager.centerPopUp(fileBrowser);
+                		fileBrowser.title = "Save File";
+                		fileBrowser.btnConfirm.label = "Save";
+                		fileBrowser.addEventListener("closeBrowse", saveBrowseHandler); 
+              		} 
+              		else
+              		{		            		
+		            	var fileData:String = canvas_1.toXML().toXMLString();
+		            	mdm.FileSystem.saveFileUnicode(curOpenFile, fileData);             		
+              		}	        
+    	        }
+				else if(event.item.@label == "Save As...")
+				{
+            		fileBrowser = new FileBrowser();
+            	
+            		PopUpManager.addPopUp(fileBrowser, this, true);
+            		PopUpManager.centerPopUp(fileBrowser);            		
+               		fileBrowser.title = "Save File";
+               		fileBrowser.btnConfirm.label = "Save";
+            		fileBrowser.addEventListener("closeBrowse", saveBrowseHandler); 				
+				}
+				else if(event.item.@label == "Exit")
+				{
+					mdm.Application.exit();
+				}     
+            }
+            	
+            private function openBrowseHandler(event:Event):void
+            {
+            	if(event.target.selectedItem.type != "file")
+            		return;
+            		
+            	var exists:Boolean = mdm.FileSystem.fileExistsUnicode(event.target.selectedItem.path);
+
+            	if(!exists)
+            		return;
+            	
+            	var fileData:String = mdm.FileSystem.loadFileUnicode(event.target.selectedItem.path);
+            	
+            	canvas_1.clear();
+            	canvas_1.fromXML(fileData);            	
+
+            	curOpenFile = event.target.selectedItem.path;
+            }
+            
+            private function saveBrowseHandler(event:Event):void
+            {
+            	var fileData:String = canvas_1.toXML().toXMLString();
+            	mdm.FileSystem.saveFileUnicode(event.target.selectedItem.path, fileData);
+            	
+            	curOpenFile = event.target.selectedItem.path;
+            }            
 		]]>
 	</mx:Script>
-	<ns3:graphNode x="402" y="67" width="71" height="65" type="2">
-	</ns3:graphNode>
-	<ns3:graphNode x="307" y="297" type="1">
-	</ns3:graphNode>
+	<mx:MenuBar y="0" left="0" right="0" labelField="@label" itemClick="menuHandler(event);" 
+            dataProvider="{menuBarCollection}" ></mx:MenuBar>
+	<mx:Accordion width="137" bottom="40" top="148" left="10">
+		<mx:Canvas label="Accordion Pane 1" width="100%" height="100%">
+		</mx:Canvas>
+	</mx:Accordion>
+	<mx:TabNavigator height="110" right="10" left="10" top="30">
+		<mx:Canvas label="File" width="100%" height="100%">
+		</mx:Canvas>
+		<mx:Canvas label="Import" width="100%" height="92">
+		</mx:Canvas>
+		<mx:Canvas label="VDOM Box" width="100%" height="100%">
+		</mx:Canvas>
+	</mx:TabNavigator>
+	<mx:ViewStack id="viewstack1" borderStyle="solid" left="155" right="10" top="148" bottom="10">
+		<ns4:graphCanvas id="canvas_1" label="View 1" width="100%" height="100%">
+		</ns4:graphCanvas>
+	</mx:ViewStack>
+	<mx:ComboBox width="137" bottom="10" left="10"></mx:ComboBox>
 </mx:Application>

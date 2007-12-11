@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="436" height="352" creationComplete="showBrowse();" initialize="init();">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.CloseEvent;
+			import mx.events.MoveEvent;	
+			import mdm.*;
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+            import mx.events.ValidationResultEvent;
+            import mx.validators.*;
+			
+			private var bMoved:Boolean = false;
+			private var strPath:String = "";
+			private var strStyle:String = "smallicon"; 
+			public var selectedItem:Object;
+			private var validFileName:Boolean = false;
+			
+			private function init():void
+			{				
+				title = "Select File"
+				defaultButton = btnConfirm;
+				showCloseButton = true;
+				selectedItem = new Object();
+				selectedItem.type = "";
+				selectedItem.path = "";
+				
+				/* regExpV.expression = "[^\\\/\|\?\"*:><]?";
+				regExpV.noMatchError = "The filename is invalid."  */
+				
+				mdm.FileExplorer.ListView.dblClickExecutes(true);
+            
+    	       	mdm.FileExplorer.onFileListViewDbdClick = function(myObject:Object):void{
+					mdm.Dialogs.Prompt(myObject.type) ;
+					mdm.Dialogs.Prompt(myObject.name) ;
+					mdm.Dialogs.Prompt(myObject.association) ;
+				}
+					
+				mdm.FileExplorer.ListView.setViewStyle(strStyle);	
+				
+				strPath = mdm.FileSystem.getCurrentDirUnicode();	
+								
+				addEventListener(MoveEvent.MOVE, moveWindowHandler);
+				addEventListener(CloseEvent.CLOSE, closeWindowHandler);
+				addEventListener(FlexEvent.UPDATE_COMPLETE, updateCompleteHandler);
+			}
+			
+			private function showBrowse():void
+			{				
+				var point:Point = contentToGlobal(new Point(canvasListView.x, canvasListView.y));
+				
+				mdm.FileExplorer.ListView.show(
+					int(point.x+1), int(point.y+1), 
+					int(canvasListView.width-2), int(canvasListView.height-2), 
+					strPath); 
+			}
+			
+			private function close():void
+			{
+				mdm.FileExplorer.ListView.hide();
+				PopUpManager.removePopUp(this);				
+				
+				dispatchEvent(new Event("closeBrowse"));
+			}	
+			
+			private function moveUp():Boolean
+			{
+				if(!strPath)
+					return false;
+				
+				var exists:Boolean = mdm.FileSystem.folderExistsUnicode(strPath);
+				
+				if(!exists)
+					return false; 
+	    		
+		    	var rePattern:RegExp;
+		    	rePattern = /[^\\\/]+[\\\/]*$/gi;
+		    	
+		        var index:int = strPath.search(rePattern);
+		        
+		        if(index<0)
+		        	return false;
+		        	
+		        var newStrPath:String = strPath.substring(0, index);
+		        
+		        exists = mdm.FileSystem.folderExistsUnicode(newStrPath);
+				
+				if(!exists)
+					return false;
+					
+				strPath = newStrPath;
+				
+				bMoved = true;
+				mdm.FileExplorer.ListView.hide();
+				invalidateDisplayList();
+									
+		        return true;			
+			}
+			
+			//--------------------------------------------------------------------------
+	    	//
+	    	//  Event handlers
+	    	//
+	    	//--------------------------------------------------------------------------
+	    			
+			private function updateCompleteHandler(event:FlexEvent):void
+			{				
+				if(bMoved)
+				{
+					bMoved = false;		
+					showBrowse();
+				}			
+			}
+			
+			private function moveWindowHandler(event:MoveEvent):void
+			{
+				bMoved = true;
+				mdm.FileExplorer.ListView.hide();
+				invalidateDisplayList();
+			}
+						
+			private function selectHandler(event:MouseEvent):void
+			{
+				var strSelectedItem:String = mdm.FileExplorer.ListView.getSelected();	
+		    	var rePattern:RegExp;
+		    	
+		    	rePattern = /^[^:]+:/gi;		    	
+		        selectedItem.path = strSelectedItem.replace(rePattern, "");
+		        rePattern = /:.*/gi;
+		        selectedItem.type = strSelectedItem.replace(rePattern, "");
+				
+				
+				//if(txtFile && validFileName)
+					close();
+			}	
+				
+			private function closeWindowHandler(event:Object):void
+			{
+				close(); 
+			}	
+  
+  			private function handleResult(event:ValidationResultEvent):void 
+  			{  				
+				if (event.type == "valid")
+					validFileName = true;
+  				else
+  					validFileName = false;
+  			}
+								
+		]]>
+	</mx:Script>
+	
+	<!--<mx:RegExpValidator id="regExpV" 
+        source="{txtFile}" property="text" 
+        flags="g" 
+        valid="handleResult(event);" 
+        invalid="handleResult(event);"/> -->
+						
+	<mx:Button label="Cancel" width="65" id="btnCancel" click="closeWindowHandler(event);" bottom="10" right="10"/>
+	<mx:Button label="Confirm" width="65" id="btnConfirm" click="selectHandler(event);" right="10" bottom="40"/>
+	<mx:Canvas id="canvasListView" left="10" right="10" bottom="70" top="10" borderStyle="solid">
+	</mx:Canvas>
+	<mx:TextInput x="83" y="250" editable="true" width="250" id="txtFile" visible="false"/>
+	<mx:Label x="10" y="252" text="File Name:" id="lblFileName" visible="false"/>
+</mx:TitleWindow>
