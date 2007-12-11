@@ -145,8 +145,9 @@ public class DataManager implements IEventDispatcher {
 		proxy.removeEventListener(ProxyEvent.PROXY_COMPLETE, sendAttributeComplete);
 		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
-		dmEvent.objectId = event.xml.@ID;
-		dispatchEvent(new Event('objectDescriptionChanged'));
+		dmEvent.objectId = event.xml.Object.@ID;
+		dmEvent.result = event.xml;
+		//dispatchEvent(new Event('objectDescriptionChanged'));
 		dispatchEvent(dmEvent);
 	}
 	
@@ -156,9 +157,14 @@ public class DataManager implements IEventDispatcher {
 	 * @return xml-описание типа.
 	 * 
 	 */	
-	public function getType(typeId:String):XML {
+	public function getTypeByTypeId(typeId:String):XML {
 		
-		return _types.Type.Information.(ID == typeId).parent();
+		return _types.Type.Information.(ID == typeId)[0].parent();
+	}
+	
+	public function getTypeByObjectId(objectId:String):XML {
+		
+		return _objects..Object.(@ID == objectId).Type[0];
 	}
 	
 	public function getTopLevelTypes():XML {
@@ -279,8 +285,9 @@ public class DataManager implements IEventDispatcher {
 	private function createObjectCompleteHandler(event:SoapEvent):void {
 		
 		var result:XML = event.result;
-		var objectId:String = result.@ID;
-		var objectTypeId:String = result.@Type;
+		var objectId:String = result.Object.@ID;
+		var parentId:String = result.Parent;
+		var objectTypeId:String = result.Object.@Type;
 		var objectType:XML = _types.Type.Information.(ID == objectTypeId).parent();
 		
 		
@@ -296,11 +303,11 @@ public class DataManager implements IEventDispatcher {
 		newObject.appendChild(attributes);
 		newObject.appendChild(objectType);
 		
-		_objects.appendChild(newObject);
+		_objects..Object.(@ID == parentId)[0].Objects.appendChild(newObject);
 		
 		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECTS_CREATED);
-		dme.objectId = '';
+		dme.result = event.result;
 		dispatchEvent(dme);
 
 	}
