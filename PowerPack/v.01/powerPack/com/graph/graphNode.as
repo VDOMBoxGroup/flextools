@@ -35,6 +35,7 @@ package powerPack.com.graph
 	import mx.core.UIComponent;
 	import mdm.Menu;
 	import powerPack.com.graph.PowerPackClass;
+	import powerPack.com.NodeTextValidator;
 	
 	use namespace mx_internal;
 	
@@ -54,7 +55,7 @@ package powerPack.com.graph
 	    //--------------------------------------------------------------------------
 	    public static const DEFAULT_WIDTH:Number = 30;
 	    public static const DEFAULT_HEIGHT:Number = 20;
-	    public static const OFFSET:Number = 2;
+	    public static const OFFSET:Number = 1;
 	    public static const PADDING:Number = 0;
 	    
 	    private static const ALERT_DELETE_TITLE:String = "Confirmation";
@@ -133,6 +134,8 @@ package powerPack.com.graph
     	private var _mode:Number = 0;
         
 	    private var contextMenuOld:ContextMenu;
+	    
+		private var validator:NodeTextValidator;
 	    
 	    //--------------------------------------------------------------------------
 	
@@ -436,7 +439,16 @@ package powerPack.com.graph
 	        	contextMenu.customItems[6].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setSubgraphCategoryHandler);
 	        	contextMenu.customItems.push(new ContextMenuItem((_type==graphNodeCategory.COMMAND?"> ":"  ")+MENU_ITEM_CAPTIONS[7]));			
 	        	contextMenu.customItems[7].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setCommandCategoryHandler);
-	        }	        
+	        }	
+	        if (!validator)
+	        {
+	        	validator = new NodeTextValidator();
+				validator.source = this;
+				validator.property = "text";
+				validator.listener = nodeTextArea;
+				validator.required = true;
+				validator.triggerEvent = "textChanged";
+	        }        
 	    }
 
 	    override protected function commitProperties():void
