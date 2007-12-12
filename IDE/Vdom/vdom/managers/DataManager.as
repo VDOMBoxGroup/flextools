@@ -250,7 +250,7 @@ public class DataManager implements IEventDispatcher {
 	 * @return идентификатор объекта
 	 * 
 	 */	
-	public function createObject(initProp:Object):void {
+	public function createObject(parentId:String, typeId:String, objectName:String = '', attributes:XML = null):void {
 		
 		//var objectType:XML = _types.Type.Information.(ID == initProp.typeId).parent();
 		
@@ -261,11 +261,11 @@ public class DataManager implements IEventDispatcher {
 		
 		//var newObject:XML = <Object Name={objectType.Information.DisplayName+objectId} ID={objectId} Type={objectType.Information.ID} />;
 		
-		var attributes:XML = <Attributes />
+		//var attributes:XML = <Attributes />
 		
 		//for (var prop:String in initProp) {
-		attributes.appendChild(<Attribute Name="left">{initProp.left}</Attribute>);
-		attributes.appendChild(<Attribute Name="top">{initProp.top}</Attribute>);
+		//attributes.appendChild(<Attribute Name="left">{initProp.left}</Attribute>);
+		//attributes.appendChild(<Attribute Name="top">{initProp.top}</Attribute>);
 		//}
 		
 		//attributes.Attribute.(@Name == 'left')[0] = initProp.left;
@@ -277,7 +277,7 @@ public class DataManager implements IEventDispatcher {
 		//_objects.appendChild(newObject);
 		
 		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, createObjectCompleteHandler);
-		soap.createObject(_appId, initProp.parentId, initProp.typeId, attributes, '');
+		soap.createObject(_appId, parentId, typeId, attributes, objectName);
 		
 		//return objectId;
 	}
@@ -293,12 +293,13 @@ public class DataManager implements IEventDispatcher {
 		
 		var newObject:XML = <Object Name={result.@Name} ID={objectId} Type={objectType.Information.ID} />;
 
-		var attributes:XML = <Attributes />;
+		//var attributes:XML = <Attributes />;
+		var attributes:XML = result.Object.Attributes[0];
 		
-		for each(var prop:XML in objectType.Attributes.Attribute) {
+		/* for each(var prop:XML in objectType.Attributes.Attribute) {
 			
 			attributes.appendChild(<Attribute Name={prop.Name.toString()}>{prop.DefaultValue.toString()}</Attribute>);
-		}
+		} */
 		
 		newObject.appendChild(attributes);
 		newObject.appendChild(objectType);
