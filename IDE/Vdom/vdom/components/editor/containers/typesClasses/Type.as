@@ -96,7 +96,7 @@ public class Type extends VBox {
 		ds.addData(dataObject, 'typeDescription');
 		
 		var proxy:Image = new Image();
-		proxy.setStyle('backgroundColor', '#FF00FF');
+		//proxy.setStyle('backgroundColor', '#FF00FF');
 		proxy.width = 40;
 		proxy.height = 40;
 		proxy.source = new Bitmap(iconData.bitmapData);

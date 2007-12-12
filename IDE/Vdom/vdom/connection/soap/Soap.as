@@ -161,10 +161,9 @@ package vdom.connection.soap
 		/**
 		 * 10. create object - create_object
 		 */
-		
+		private var sco: SCreateObject =new SCreateObject(ws);
 		public function createObject(appid:String='',parentid:String='',typeid:String = '', attrs:String = '', name:String =''):void
 		{
-			var sco: SCreateObject =new SCreateObject(ws);
 			
 			sco.execute(appid,parentid,typeid, attrs, name);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_OK, ldispatchEvent);
@@ -310,9 +309,10 @@ package vdom.connection.soap
 		 *  --------- 21  Set value of several object's attributes -----
 		 * 						--setAttributes --
 		 */ 
+		private var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
 		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):void
 		{
-			var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
+			
 			sSetAttributes.execute(appid, objid, attr);
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);

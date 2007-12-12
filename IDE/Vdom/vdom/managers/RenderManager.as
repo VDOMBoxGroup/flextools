@@ -1,25 +1,33 @@
 package vdom.managers
 {
-import flash.events.IEventDispatcher;
-
-import vdom.connection.soap.Soap;
-import flash.events.Event;
-import mx.core.Application;
-import flash.events.EventDispatcher;
-import vdom.connection.soap.SoapEvent;
-import mx.containers.Canvas;
 import flash.display.DisplayObject;
-import mx.charts.CandlestickChart;
-import mx.states.SetStyle;
-import vdom.events.RenderManagerEvent;
-import vdom.components.editor.containers.workAreaClasses.Item;
-import vdom.components.editor.containers.workAreaClasses.WysiwygRadioButton;
-import vdom.components.editor.containers.workAreaClasses.WysiwygCheckBox;
+import flash.display.DisplayObjectContainer;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
+import flash.events.MouseEvent;
+
+import mx.containers.Canvas;
 import mx.controls.Button;
-import mx.controls.Text;
 import mx.controls.Image;
-import vdom.components.editor.managers.ResizeManager;
+import mx.controls.Text;
+import mx.controls.TextArea;
+import mx.core.Application;
+import mx.core.Container;
+import mx.core.UIComponent;
+import mx.events.DragEvent;
+
+import vdom.components.editor.containers.workAreaClasses.Item;
+import vdom.components.editor.containers.workAreaClasses.WysiwygCheckBox;
 import vdom.components.editor.containers.workAreaClasses.WysiwygImage;
+import vdom.components.editor.containers.workAreaClasses.WysiwygRadioButton;
+import vdom.components.editor.managers.ResizeManager;
+import vdom.connection.soap.Soap;
+import vdom.connection.soap.SoapEvent;
+import vdom.events.RenderManagerEvent;
+import mx.collections.XMLListCollection;
+import mx.collections.Sort;
+import mx.collections.SortField;
 
 public class RenderManager implements IEventDispatcher
 {
@@ -29,6 +37,11 @@ public class RenderManager implements IEventDispatcher
 	private var dispatcher:EventDispatcher;
 	private var publicData:Object;
 	private var resourceManager:ResourceManager;
+	
+	private var _container:Container;
+	private var applicationId:String;
+	private var _items:Object;
+	private var _source:XML;
 	
 	/**
 	 * 
@@ -54,42 +67,123 @@ public class RenderManager implements IEventDispatcher
 		soap = Soap.getInstance();
 		publicData = mx.core.Application.application.publicData;
 		resourceManager = ResourceManager.getInstance();
+		_items = {};
+		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
 	}
 	
-	public function renderWYSIWYG(applicationId:String, objectId:String):void {
+	/* public function renderWYSIWYG(applicationId:String, objectId:String, parentId:String):void {
 		
-		var parentId:String = '';
 		var dyn:String = '1';
 		
 		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
 		soap.renderWysiwyg(applicationId, objectId, parentId, dyn);
+	} */
+	
+	public function removeItem(id:String):void {
+		
+		
 	}
 	
-	private function render(parentContainer:Item, source:XML):void {
+	public function refreshItem(objectID:String, parentId:String):void {
+		
+		
+	}
+	
+	public function init(destContainer:Container, applicationId:String = null):void {
+		
+		_container = destContainer;
+		
+		if(!applicationId)
+			this.applicationId = publicData['applicationId'];
+			
+	}
+	
+	public function addItem(objectId:String, parentId:String):void {
+		
+		var item:Item = new Item(objectId);
+		_items[objectId] = item;
+		_items[parentId].addChild(item);
+		item.visible = false;
+		
+		item.setStyle('backgroundColor', '#ffffff');
+		item.setStyle('backgroundAlpha', '0');
+		
+		soap.renderWysiwyg(publicData['applicationId'], objectId, parentId);
+	}
+	
+	public function deleteItem(objectId:String, parentId:String):void {
+		
+		
+	}
+	
+	public function updateItem(objectId:String, parentId:String):void {
+		
+		if(parentId == '') {
+			
+			_container.removeAllChildren();
+			
+			var mainItem:Item = new Item(objectId);
+			
+			_container.addChild(mainItem);
+			
+			mainItem.setStyle('backgroundColor', '#ffffff');
+			mainItem.setStyle('backgroundAlpha', '0');
+			mainItem.visible = false;
+			_items[objectId] = mainItem;
+			
+		} else {
+			
+			_items[objectId].removeAllChildren();
+		}
+		
+		soap.renderWysiwyg(applicationId, objectId, parentId);
+			
+	}
+	
+	private function renderWysiwygOkHandler(event:SoapEvent):void {
+		
+		_source = event.result;
+		
+		var objectId:String = _source.object.@guid;
+		
+		var container:Item = _items[objectId];
+		
+		container.x = _source.object.@left;
+		container.y = _source.object.@top;
+			
+		if(_source.@width.length())
+			container.width = _source.@width;
+			
+		if(_source.@height.length())
+			container.height = _source.@height;
+		
+		var staticContainer:Boolean = false;
+		//trace(_source);
+		if(_source.object.@contents == 'static')
+			staticContainer = true
+		
+		render(container, _source.object[0], staticContainer);
+		_items[objectId].visible = true;
+		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
+		rme.result = container;
+		//dispatchEvent(rme);
+	}
+	
+	private function render(parentContainer:DisplayObjectContainer, source:XML, staticContainer:Boolean):void {
+		
+		var itemList:XMLListCollection = new XMLListCollection();
 		
 		for each(var item:XML in source.*) {
 			
 			var objectName:String = item.name().localName;
 			var objectID:String = item.@guid.toString();
-			var parentID:String = parentContainer.objectID;
+			var parentID:String = item.parent().@guid; 
 			
 			switch(objectName) {
 				
 				case 'object':
-				
-					var viewObject:Item = new Item(item.@guid);
 					
-					viewObject.horizontalScrollPolicy = 'off';
-					viewObject.verticalScrollPolicy = 'off';
-					
-					viewObject.x = item.@left;
-					viewObject.y = item.@top;
-						
-					viewObject.parentID = parentContainer.objectID;
-					
-					parentContainer.addChild(viewObject);
-					
-					this.render(viewObject, item);
+					itemList.addItem(item);
 					
 				break;
 				
@@ -171,16 +265,23 @@ public class RenderManager implements IEventDispatcher
 				
 				case 'text':
 					
-					var viewText:Text = new Text()
+					var viewText:TextArea = new TextArea()
 					
 					viewText.x = item.@left;
 					viewText.y = item.@top;
 					viewText.width = item.@width;
-					viewText.height = item.@height;
+					if(item.@height.length())
+						viewText.height = item.@height;
 					viewText.htmlText = item;
 					viewText.selectable = false;
-					viewText.setStyle('fontStyle ', item.@font);
-					viewText.setStyle('color ', item.@color);
+					viewText.setStyle('fontStyle', item.@font);
+					viewText.setStyle('color', item.@color);
+					
+					viewText.setStyle('borderStyle', 'solid');
+					viewText.setStyle('borderColor', '#cccccc');
+					viewText.setStyle('borderAlpha', .3);
+					viewText.setStyle('backgroundAlpha', 0);
+					viewText.focusEnabled = false;
 					
 					parentContainer.addChild(viewText);
 					
@@ -199,23 +300,58 @@ public class RenderManager implements IEventDispatcher
 					resourceManager.loadResource(parentID, objectID, viewImage, 'source', true);
 					
 					parentContainer.addChild(viewImage);
+					
 				break;
 			}
 		}
-	}
-	
-	private function renderWysiwygOkHandler(event:SoapEvent):void {
 		
-		var result:XML = event.result;
-		var objectId:String = result.object.@guid;
-		var mainContainer:Item = new Item(objectId);
-		mainContainer.setStyle('backgroundColor', '#ffffff');
-		mainContainer.setStyle('backgroundAlpha', '0');
-		render(mainContainer, result);
+		if(itemList.length > 1) {
 		
-		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
-		rme.result = mainContainer;
-		dispatchEvent(rme);
+			var sort:Sort = new Sort();
+			sort.fields = [new SortField('@zindex'), new SortField('@hierarchy')];
+			itemList.sort = sort;
+			itemList.refresh();
+		}
+		
+		for each (var collectionItem:XML in itemList) {
+			
+			var objectID1:String = collectionItem.@guid.toString();
+			var parentID1:String = collectionItem.parent().@guid;
+			
+			var viewObject:Container;
+			
+			if(!staticContainer) {
+				
+				viewObject = new Item(objectID1);
+				_items[objectID] = viewObject;
+				
+			} else
+				viewObject = new Canvas();
+				
+			viewObject.setStyle('backgroundColor', '#ffffff');
+			viewObject.setStyle('backgroundAlpha', '0');
+			
+			viewObject.clipContent = true;
+			
+			viewObject.x = collectionItem.@left;
+			viewObject.y = collectionItem.@top;
+			
+			if(collectionItem.@width.length())
+				viewObject.width = collectionItem.@width;
+			
+			if(collectionItem.@height.length())
+						viewObject.height = collectionItem.@height;
+			
+			if(parentID && viewObject is Item)	
+				Item(viewObject).parentID = parentID1;
+			
+			parentContainer.addChild(viewObject);
+			
+			if(staticContainer || collectionItem.@contents == 'static')
+				staticContainer = true;
+			
+			this.render(viewObject, collectionItem, staticContainer);
+		}
 	}
 		
 	/**

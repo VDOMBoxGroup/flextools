@@ -50,7 +50,8 @@ private function creationCompleteHandler():void {
 	
 	editorDataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
 	editorDataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
-	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, attributesUpdateCompleteHandler);
+	editorDataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
+	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
 	
 	attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 	
@@ -109,15 +110,20 @@ private function initCompleteHandler(event:Event):void {
 	//createObjects(editorDataManager.getObjects());
 }
 
-private function attributesUpdateCompleteHandler(event:DataManagerEvent):void {
+private function objectCreatedHandler(event:DataManagerEvent):void {
 	
-	workArea.createObjects(publicData['applicationId'], publicData['topLevelObjectId'], event.objectId);
+	workArea.createObject(event.result);
 }
 
 private function attributesChangedHandler(event:Event):void {
 	
 	editorDataManager.updateAttributes(editorDataManager.objectDescription);
 	attributesPanel.dataProvider = editorDataManager.objectDescription; //<-- исправить!!!!!!
+}
+
+private function updateAttributesCompleteHandler(event:DataManagerEvent):void {
+	
+	workArea.updateObject(event.result);
 }
 
 private function typesLoadHandler(event:Event):void {

@@ -11,6 +11,7 @@ import flash.utils.getQualifiedClassName;
 
 import mx.containers.Canvas;
 import mx.core.Application;
+import mx.core.UIComponent;
 import mx.events.DragEvent;
 import mx.managers.IFocusManagerComponent;
 
@@ -24,7 +25,7 @@ import vdom.managers.RenderManager;
 import vdom.managers.ResourceManager;
 import vdom.managers.VdomDragManager;
 
-public class WorkArea extends Canvas implements IFocusManagerComponent {
+public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	
 	public var selectedObjectId:String;
 	
@@ -49,11 +50,13 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 	private var _images:Object;
 	private var loader:Loader;
 	
+	private var focusedItem:Item;
+	
 	public function WorkArea() {
 		
 		super();
 		
-		tabEnabled = true;
+		//tabEnabled = true;
 		
 		dataManager = DataManager.getInstance();
 		resourceManager = ResourceManager.getInstance();
@@ -63,7 +66,10 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 		selectedIndex = -1;
 		itemStack = [];
 		
+		renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+		
 		addEventListener(MouseEvent.CLICK, mouseClickHandler, false);
+		addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 	}
 	/**
 	 * Удаление всех объектов из рабочей области.
@@ -89,6 +95,11 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
+	public function updateObject(result:XML):void {
+		
+		renderManager.updateItem(result.Object.@ID, result.Parent);
+	}
+	
 	public function set dataProvider(attributes:XML):void {
 		
         collection = attributes.Attributes[0];
@@ -106,6 +117,9 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 		if(!container) {
 			
 			container = new Canvas();
+			container.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
+			container.addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
+			container.addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
 			addChild(container);
 		}
 		
@@ -128,16 +142,26 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 		this.topLevelObjectId = topLevelObjectId;
 		
 		var parentId:String = '';
-		if(objectId == '') objectId = topLevelObjectId;
+		//if(objectId == '') objectId = topLevelObjectId;
 		
 		renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-		renderManager.renderWYSIWYG(applicationId, objectId);
+		renderManager.init(container);
+		renderManager.updateItem(topLevelObjectId, '');
+	}
+	
+	public function createObject(result:XML):void {
+
+		renderManager.addItem(result.Object.@ID, result.Parent);
 	}
 	
 	private function renderCompleteHandler(event:RenderManagerEvent):void {
 		
 		container.removeAllChildren();
 		container.addChild(event.result);
+		if(selectedItem) {
+			
+			resizeManager.item = selectedItem;
+		}
 	}
 	
 	/**
@@ -149,7 +173,7 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 		collection.Attribute.(@Name == 'left')[0] = event.properties['left'];
 		collection.Attribute.(@Name == 'width')[0] = event.properties['width'];
 		collection.Attribute.(@Name == 'height')[0] = event.properties['height'];
-		
+		trace('top: '+event.properties['top']+' left: '+event.properties['left']);
 		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.PROPS_CHANGE));
 	}
 	
@@ -248,45 +272,7 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 		resetItemStack = true;
 	} */
 	
-	private function dragEnterHandler(event:DragEvent):void {
-		
-		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
-		var currentContainer:Item = Item(event.currentTarget);
-		currentContainer.setStyle('focusColor', '#ff00ff');
-		currentContainer.drawFocus(true);
-		var zzz:* = currentContainer.focusManager.focusPane.getChildAt(0);
-		zzz.setStyle('focusColor', '#ff00ff');
-		var currentItemName:String = currentContainer.name;
-		var aviableContainers:Array = typeDescription.aviableContainers.split(',');
-		VdomDragManager.acceptDragDrop(currentContainer);
-	}
 	
-	private function dropHandler(event:DragEvent):void {
-		
-		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
-		var currentContainer:Item = Item(event.currentTarget);
-		
-		var currentItemName:String = currentContainer.name;
-		var aviableContainers:Array = typeDescription.aviableContainers.split(',');
-		
-		if(aviableContainers.indexOf(currentItemName) != -1) {
-			
-			var objectLeft:Number = currentContainer.mouseX - 25;// - bm.left;
-			var objectTop:Number = currentContainer.mouseY - 25;// - bm.top;
-		
-			objectLeft = (objectLeft < 0) ? 0 : objectLeft;
-			objectTop = (objectTop < 0) ? 0 : objectTop;
-			
-			var initProp:Object = {};
-			
-			initProp.typeId = typeDescription.typeId
-			initProp.parentId = currentContainer.guid;
-			initProp.left = objectLeft;
-			initProp.top = objectTop;
-			
-			dataManager.createObject(initProp);
-		}
-	}
 	
 	private function getObjectsUnderMouse(rootContainer:DisplayObjectContainer, targetClassName:String):Array {
 		
@@ -325,9 +311,69 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 		//trace(stack.join('\n'));
 		return stack;
 	}
+	private function dragEnterHandler(event:DragEvent):void {
+		
+		VdomDragManager.acceptDragDrop(UIComponent(event.currentTarget));
+	}
 	
+	private function dragOverHandler(event:DragEvent):void {
+		
+		var stack:Array = getObjectsUnderMouse(container, 'vdom.components.editor.containers.workAreaClasses::Item');
+		var currentItem:Item = stack[0];
+		
+		if(focusedItem == currentItem) {
+			//trace('same');
+			return;
+		}
+		focusedItem = currentItem;
+		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
+		trace(typeDescription.aviableContainers.split(',').join('\n'))
+		currentItem.drawFocus(true);
+		
+		
+	}
+	
+	private function dragDropHandler(event:DragEvent):void {
+		
+		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
+		var currentContainer:Item = focusedItem;
+		
+		var currentItemName:String = 
+			dataManager.getTypeByObjectId(currentContainer.objectID).Information.Name;;
+		var aviableContainers:Array = typeDescription.aviableContainers.split(',');
+		
+		if(aviableContainers.indexOf(currentItemName) != -1) {
+			
+			var objectLeft:Number = currentContainer.mouseX - 25;// - bm.left;
+			var objectTop:Number = currentContainer.mouseY - 25;// - bm.top;
+		
+			objectLeft = (objectLeft < 0) ? 0 : objectLeft;
+			objectTop = (objectTop < 0) ? 0 : objectTop;
+			
+			var attributes:XML = 
+				<Attributes>
+        			<Attribute Name="top">{objectTop}</Attribute>
+        			<Attribute Name="left">{objectLeft}</Attribute>
+    			</Attributes>
+			
+/* 			var initProp:Object = {};
+			
+			initProp.typeId = typeDescription.typeId
+			initProp.parentId = currentContainer.objectID;
+			initProp.left = objectLeft;
+			initProp.top = objectTop; */
+			
+			dataManager.createObject(
+				typeDescription.typeId,
+				currentContainer.objectID,
+				'',
+				attributes);
+		}
+	}
 	private function mouseClickHandler(event:MouseEvent):void {
 		
+		if(!container.contains(DisplayObject(event.target)))
+			return;
 		if(resetItemStack || itemStack.length == 0) {
 			
 			resetItemStack = false;
@@ -346,9 +392,19 @@ public class WorkArea extends Canvas implements IFocusManagerComponent {
 			selectedIndex = 0;
 		else
 			selectedIndex = selectedIndex + 1;
-			
+		
+		selectedObjectId = Item(itemStack[selectedIndex]).objectID;
+		Item(itemStack[selectedIndex]).setFocus();
+		
+		var objectType:XML = dataManager.getTypeByObjectId(selectedObjectId);
+		
+		resizeManager.moveMode = objectType.Information.Moveable;
+		resizeManager.resizeMode = objectType.Information.Resizable;
+		
 		resizeManager.item = itemStack[selectedIndex];
 		resizeManager.visible = true;
+		
+		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
 	private function mouseMoveHandler(event:MouseEvent):void {

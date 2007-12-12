@@ -6,6 +6,7 @@ import flash.events.Event;
 public class ResizeManagerEvent extends Event
 {
 	public static const RESIZE_CHANGING:String = "changing";
+	public static const RESIZE_BEGIN:String = "begin";
 	public static const RESIZE_COMPLETE:String = "complete";
 	
 	public var properties:Object;

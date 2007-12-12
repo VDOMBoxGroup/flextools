@@ -36,7 +36,7 @@ public class DataManagerEvent extends Event
     // Define a public variable to hold the state of the enable property.
 	public var isEnabled:Boolean;
 	public var objectId:String;
-	public var result:String;
+	public var result:XML;
 	
     // Override the inherited clone() method.
     override public function clone():Event {

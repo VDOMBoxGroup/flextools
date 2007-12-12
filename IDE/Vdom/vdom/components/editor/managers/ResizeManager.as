@@ -32,10 +32,10 @@ import vdom.components.editor.events.ResizeManagerEvent;
 
 public class ResizeManager extends UIComponent {
 	
-	public static const RESIZE_NONE:String = 'resize_none';
-	public static const RESIZE_WIDTH:String = 'resize_width';
-	public static const RESIZE_HEIGHT:String = 'resize_height';
-	public static const RESIZE_ALL:String = 'resize_all';
+	public static const RESIZE_NONE:String = '0';
+	public static const RESIZE_WIDTH:String = '1';
+	public static const RESIZE_HEIGHT:String = '2';
+	public static const RESIZE_ALL:String = '3';
 	
 	private var CursorID:uint		
 	
@@ -320,8 +320,10 @@ public class ResizeManager extends UIComponent {
 	private function getContentRectangle(sourceContainer:DisplayObject, destinationContainer:DisplayObject):Rectangle {
 		
 		var pt:Point = new Point(sourceContainer.x, sourceContainer.y);
-		pt = Canvas(sourceContainer.parent).contentToGlobal(pt);
-		pt = Canvas(destinationContainer.parent).globalToContent(pt);
+		var sc:Canvas = Canvas(sourceContainer.parent);
+		var dc:Canvas = Canvas(destinationContainer.parent);
+		pt = sc.contentToGlobal(pt);
+		pt = dc.globalToContent(pt);
 		
 		return new Rectangle(pt.x, pt.y, measuredWidth, measuredHeight);
 	}
@@ -345,6 +347,9 @@ public class ResizeManager extends UIComponent {
 	}
 	
 	private function down_handler(e:MouseEvent):void {
+		trace('resbeg');
+		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_BEGIN);
+		dispatchEvent(rmEvent);
 		
 		moving = null;
 		mousePosition = new Point(mouseX, mouseY);
@@ -431,10 +436,11 @@ public class ResizeManager extends UIComponent {
 			width : rectangle.width,
 			height : rectangle.height
 		};
-		
+		trace(prop.top+'---'+prop.left);
 		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
 		rmEvent.properties = prop;
 		dispatchEvent(rmEvent);
+		//trace('rescom');
 		event.stopImmediatePropagation();
 	}
 	
