@@ -44,21 +44,12 @@ private function creationCompleteHandler():void {
 	//workArea.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
 	//workArea.addEventListener(DragEvent.DRAG_DROP, dropHandler);
 	
-	workArea.addEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
-	workArea.addEventListener(WorkAreaEvent.PROPS_CHANGE, attributesChangedHandler);
-	workArea.addEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
 	
-	editorDataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
-	editorDataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
-	editorDataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
-	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
-	
-	attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 	
 	//typesXML = null;
 }
 
-private function show():void {
+private function showHandler():void {
 	
 	if(applicationId != publicData['applicationId'] || topLevelObjectId != publicData['topLevelObjectId']) {
 		
@@ -71,9 +62,31 @@ private function show():void {
 		
 		workArea.visible = true;
 	}
+	
+	workArea.addEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
+	workArea.addEventListener(WorkAreaEvent.PROPS_CHANGE, attributesChangedHandler);
+	workArea.addEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
+	
+	editorDataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
+	editorDataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
+	editorDataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
+	editorDataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
+	
+	attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 }
 
-private function hide():void {
+private function hideHandler():void {
+	
+	workArea.removeEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
+	workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGE, attributesChangedHandler);
+	workArea.removeEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
+	
+	editorDataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
+	editorDataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
+	editorDataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
+	editorDataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
+	
+	attributesPanel.removeEventListener('propsChanged', attributesChangedHandler);
 	
 	workArea.visible = false;
 }

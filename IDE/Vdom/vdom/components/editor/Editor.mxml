@@ -9,8 +9,8 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	
 	creationComplete="creationCompleteHandler();"
-	show="show();"
-	hide="hide();"
+	show="showHandler();"
+	hide="hideHandler();"
 >
 	<mx:Script source="includes/editor.as" />
 	

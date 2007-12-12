@@ -24,6 +24,7 @@ import vdom.managers.DataManager;
 import vdom.managers.RenderManager;
 import vdom.managers.ResourceManager;
 import vdom.managers.VdomDragManager;
+import mx.events.FlexEvent;
 
 public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	
@@ -74,7 +75,8 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	/**
 	 * Удаление всех объектов из рабочей области.
 	 * 
-	 */	
+	 */
+	
 	public function deleteObjects():void {
 		
 		selectedObjectId = null;
