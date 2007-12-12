@@ -250,7 +250,7 @@ public class DataManager implements IEventDispatcher {
 	 * @return идентификатор объекта
 	 * 
 	 */	
-	public function createObject(parentId:String, typeId:String, objectName:String = '', attributes:XML = null):void {
+	public function createObject(typeId:String, parentId:String = '', objectName:String = '', attributes:XML = null):void {
 		
 		//var objectType:XML = _types.Type.Information.(ID == initProp.typeId).parent();
 		
