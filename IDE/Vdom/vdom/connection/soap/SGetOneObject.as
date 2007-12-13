@@ -25,7 +25,7 @@ package vdom.connection.soap
 			// data
 			ws.get_one_object.arguments.appid  		= appid;				//- идентификатор приложения 
 			ws.get_one_object.arguments.objid  		= objid;				//- идентификатор объекта
-			ws.get_one_object.arguments.pres  		= pres;
+
 			
 			//send data & set listener 
 			ws.get_one_object();
