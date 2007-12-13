@@ -37,10 +37,10 @@ package vdom.connection.soap
 			// get result 
 			resultXML = XML(ws.set_application_structure.lastResult.Result);
 			var evt:SoapEvent;
-			
+			trace(resultXML)
 			// check Error
 			if(resultXML.name().toString() == 'Error')
-			{
+			{	
 				evt = new SoapEvent(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{

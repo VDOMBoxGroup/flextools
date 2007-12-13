@@ -401,7 +401,32 @@ package vdom.connection.soap
 		}
 		
 		
+		private var sSubmitObjectScriptPresentation:SSubmitObjectScriptPresentation = new SSubmitObjectScriptPresentation(ws);
+		public  function submitObjectScriptPresentation(appid:String='', struct:String = '', pres:String = ''):void 
+		{	
+			sSubmitObjectScriptPresentation.execute(appid, struct, pres);
+			sSubmitObjectScriptPresentation.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK, ldispatchEvent);
+			sSubmitObjectScriptPresentation.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, ldispatchEvent);
+		}
 		
+	
+		
+		private var sGetOneObject:SGetOneObject = new SGetOneObject(ws);
+		public  function getOneObject(appid:String='', struct:String = ''):void 
+		{	
+			sGetOneObject.execute(appid, struct);
+			sGetOneObject.addEventListener(SoapEvent.GET_ONE_OBJECT_OK, ldispatchEvent);
+			sGetOneObject.addEventListener(SoapEvent.GET_ONE_OBJECT_ERROR, ldispatchEvent);
+		}
+		
+		
+		private var sGetObjectScriptPresentation:SGetObjectScriptPresentation = new SGetObjectScriptPresentation(ws);
+		public  function getObjectScriptPresentation(appid:String='', struct:String = ''):void 
+		{	
+			sGetObjectScriptPresentation.execute(appid, struct);
+			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, 		ldispatchEvent);
+			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_ERROR, 	ldispatchEvent);
+		}
 		/**
 		 *  --------  Event Dispatcher -------------
 		 */

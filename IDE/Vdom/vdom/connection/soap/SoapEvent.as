@@ -38,8 +38,9 @@ package vdom.connection.soap
 		public static var GET_CHILD_OBJECTS_TREE_OK		:String =  "Get child objects tree OK";
 		public static var GET_APPLICATION_STRUCTURE_OK	:String =  "GetApplicationStructureOK";
 		public static var SET_APPLICATION_STRUCTURE_OK	:String =  "SetApplicationStructureOK";
-		
-		
+		public static var SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK 	:String =  "SubmitObjectScriptPresentationOK";
+		public static var GET_OBJECT_SCRIPT_PRESENTATION_OK  	:String =  "GetObjectScriptPresentationOK";
+		public static var GET_ONE_OBJECT_OK			  	:String =  "SGetOneObjectOK"; 
 		//setAttributes
 		
 		public static var LOGIN_ERROR						:String = "Login ERROR";
@@ -74,6 +75,9 @@ package vdom.connection.soap
 		public static var GET_CHILD_OBJECTS_TREE_ERROR		:String =  "Get child objects tree ERROR";
 		public static var GET_APPLICATION_STRUCTURE_ERROR			:String =  "GetApplicationStructureERROR";
 		public static var SET_APPLICATION_STRUCTURE_ERROR		:String =  "SetApplicationStructureERROR";
+		public static var SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR 	:String =  "SubmitObjectScriptPresentationERROR";
+		public static var GET_OBJECT_SCRIPT_PRESENTATION_ERROR  	:String =  "GetObjectScriptPresentationERROR";
+		public static var GET_ONE_OBJECT_ERROR			  	:String =  "SGetOneObjectERROR";
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,
