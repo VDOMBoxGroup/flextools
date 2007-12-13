@@ -304,7 +304,10 @@ public class DataManager implements IEventDispatcher {
 		newObject.appendChild(attributes);
 		newObject.appendChild(objectType);
 		
-		_objects..Object.(@ID == parentId)[0].Objects.appendChild(newObject);
+		if(result.Parent.toString() != '')
+			_objects..Object.(@ID == parentId)[0].Objects.appendChild(newObject);
+		else
+			_objects.appendChild(newObject);
 		
 		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECTS_CREATED);
