@@ -4,6 +4,8 @@
 			show="showHnadler()" label="add Element">
 <mx:Script>
 	<![CDATA[
+		import vdom.Languages;
+		import vdom.components.editor.containers.AttributesPanel;
 		import vdom.events.DataManagerEvent;
 		import vdom.managers.ResourceManager;
 		import mx.controls.Alert;
@@ -20,6 +22,8 @@
 		import mx.core.Container;
 		import mx.controls.Button;
 		import mx.events.DragEvent;
+		
+//		var asd:AttributesPanel  = 
 		//hide когда закрываем
 		// show когда открываем снова
 	//данные которые уже есть
@@ -43,37 +47,32 @@
 	private var publicData:Object;
 	private var dataManager:DataManager  = DataManager.getInstance();
 	private var script:TreeEditorScript  = new TreeEditorScript();
+	private var languages:Languages;
+	
+	 [Bindable]
+   private var arrAppl: Array = new Array();
+     [Bindable]
+   public var selectedAppl:Object;  
 	
 	private function creationCompleteHandler():void
 	{
+		languages = Languages.getInstance();
 		levelsMenu = new LevelsMenu();
 
 		publicData = Application.application.publicData;
 		
-		//dataManager.getApplactionStructure();
-		dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
-						
-
 		btLine = new DeleteLineButton();
-		btLine.addEventListener(MouseEvent.CLICK, delButtonOperation);
+		
 		addChild(btLine);
-		
 		temMenu = new TreeElementMenu();
-		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
-		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);
-		
 		addChild(temMenu);
-		
-		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
-		
 	}
 	
 	private function hideHendler():void
 	{
 		// save current position to server
 		saveToServer();
-		
+
 		// delete all Lines
 		for (var level:String in massLines)
 			for (var frsTrElem:String in massLines[level])
@@ -93,20 +92,63 @@
 			delete massTreeElements[obID];
 		}
 		
+		publicData.topLevelObjectId = curTree.ID;		
+		
+				
+					/** * * *   delete Listeners  * * * * */
+		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
+		temMenu.removeEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+		temMenu.removeEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+		temMenu.removeEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
+		btLine.removeEventListener(MouseEvent.CLICK, delButtonOperation);
+		removeEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 		
 	}
 	
 	private function showHnadler():void
 	{
-			dataManager.getApplactionStructure();
+		
+		/******  	set Listeners  ******/
+		
+		dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
+		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
+		btLine.addEventListener(MouseEvent.CLICK, delButtonOperation);
+		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
+			
+		dataManager.getApplactionStructure();
+			
+		arrAppl = [];
+		var types:XML = dataManager.getTopLevelTypes();
+		for each(var lavel:XML in types.Type )
+		{
+				var strLabel:String = getLanguagePhrase(lavel.Information.ID, lavel.Information.DisplayName);
+				var strID:String = lavel.Information.ID;
+
+				arrAppl.push({label:strLabel, data:strID});
+		}
+	//	comBoxAppl.dataProvider = arrAppl;
+		
+		btAddTreeElement.enabled = false;
+	}
+	
+	private function getLanguagePhrase(typeID:String, phraseID:String):String {
+		
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		phraseID = phraseID.match(phraseRE)[1];
+		var languageID:String = typeID + '-' + phraseID;
+		
+		return languages.language.(@ID == languageID)[0];
 	}
 	
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
 		xml1 = XML(dtManEvt.result);
-		trace('_Data from server: ' + xml1);
+	//	trace('_Data from server: ' + xml1);
 		massTreeElements = script.createTreeArr(xml1);
 		createTree();
+		curTree = massTreeElements[publicData.topLevelObjectId];
 		drawLines();
 	}
 	
@@ -142,9 +184,10 @@
 		}
 	}
 	
-	private function hideTreeElement(trEvt:TreeEditorEvent):void
+	private function hideTreeElement(trEvt:Object):void
 	{
 		massTreeElements[curTree.ID].resize = true;
+		//publicData.topLevelObjectId = curTree.ID;
 	}
 	
 
@@ -230,31 +273,29 @@
 				if (strID == ind1 || strID == ind2)
 					massLines[level][ind1][ind2].updateVector();
 				
-		temMenu.position = massTreeElements[strID];
+	//	temMenu.position = massTreeElements[strID];
+		temMenu.position = massTreeElements[publicData.topLevelObjectId];
 	}
 	
 	/******
 	
-	- на двойной щелчек скрываться /разкрываться
 	+ когда  соединяешь, стрелка за мышкой
 	- цвет по текущему уровню
 	+ Баг верхнего угла
 	+ при нажатии на линиию появлялась становилась видима кнопка
 	+ нармальные картикни
 	+ Выделение текущего елемента
-	- снятие выделения текущего елемента
 	+ прозрачность у меню в зависимости от расстоянию до мышки
 	+ свертывание и развертывание елементов
 	+ загрузка данных на сервер
 	+ чтение данных с сервера
-	
 	
 	* меню:
 		- уровни
 		- показывать/скрывать
 		- рисовать в соответсвии выделеного уровня
 	
-	- корректоное отображение при смене апликухи
+	+ корректоное отображение при смене апликухи
 	- оптимизация %)
 	+ получение рисунков
 	- выбор локального рисунка;
@@ -262,8 +303,6 @@
 	- нормальные линии между елементами дерева
 	
 	*/
-	
-	
 	
 	
 	/**
@@ -343,10 +382,8 @@
 						if((frsTrElem == fromObj && sknTrElem == toObj ) ||
 							(frsTrElem == toObj && sknTrElem ==  fromObj ))
 							{	
-							//	trace('return');
 								curTree = evt.currentTarget;
 								return;
-								
 							}
 			
 			
@@ -369,9 +406,6 @@
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
 		Alert.show("Do you want to delete Element?", "Delete Element", 3, this, alertClickDeleteTreeElement);
-		
-		
-		
 	}
 	 
             // Event handler function for displaying the selected Alert button.
@@ -381,6 +415,13 @@
            	dataManager.deleteObject(curTree.ID)
            	deleteObject(curTree.ID);
         }
+        var ID:String = '';
+			for (var nam:String in massTreeElements)
+				if(ID == '') ID = nam; 
+		
+			
+		curTree = massTreeElements[ID];
+		temMenu.position = curTree;
         
     }
 	
@@ -455,10 +496,10 @@
 		
 	private function  createObject(dmEvt:DataManagerEvent):void
 	{
-	//	trace('CreateObject: '+soapEvt.result);
+		//trace('CreateObject: '+dmEvt.result);
 		var xml:XML = new XML(dmEvt.result);
-		trace('xml.@ID: ' + xml.@ID);
-		addTreeElement(xml.@ID);
+	//	trace('xml new Elem: ' + xml);
+		addTreeElement(xml.Object.@ID);
 		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 		
 		saveToServer();
@@ -470,15 +511,14 @@
 		var objInitProp:Object = new  Object();
 		
 		objInitProp.parentId = '';
-		objInitProp.typeId = types.Information.ID;
+		objInitProp.typeId = selectedAppl.data;
 
-		dataManager.createObject(objInitProp);
+		dataManager.createObject(selectedAppl.data);
 		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 	}
 		
 		private function addTreeElement(obID:String):void
 		{
-			//trace('obID: ' + obID);
 			massTreeElements[obID] =  new TreeElement();
 			massTreeElements[obID].name = obID;
 			massTreeElements[obID].x = 0;
@@ -487,7 +527,6 @@
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			addChild(massTreeElements[obID]);
-			//trace(obID);
 		}
 	
 	
@@ -496,22 +535,32 @@
 	{
 		 var dataToServer:XML =  script.dataToXML(massTreeElements, massLines);
 		 dataManager.setApplactionStructure(dataToServer);
-		 dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner);
+		// dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner);
 		
 	}
 	
 	private function dataManagerListenner(soapEvt:DataManagerEvent):void
 	{
-		//	Alert.show(soapEvt.result, 'Soap Error:');
 		trace('rez: \n' + soapEvt.result)
+	}
+	
+	private function comBoxClose(evt:Object):void
+	{
+		selectedAppl=ComboBox(evt).selectedItem;
+		btAddTreeElement.enabled = true;
+	//	trace(selectedAppl.data);
 	}
 	
 	]]>
 </mx:Script>
 <mx:Canvas id="cnvLevelTop"/>
 <mx:Canvas id="cnvLevelDown"/>
-<mx:Button id="btAddTreeElement" label="add element" right="10" top="216"  click="soapAddTreeElement()"/>
-	<mx:Button label="Send to server" click="saveToServer()" right="10" top="246"/>
-	<mx:Button x="645" y="276" label="Load From server"/>
+
+<mx:Label text="Select type of Applikation:" right="10" top="160" color="#ffffff"/>
+ <mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
+            close="comBoxClose(event.target)" right="10" top="186"/> 
+            
+<mx:Button id="btAddTreeElement" label="add element" right="10" top="216"   click="soapAddTreeElement()"/>
+	
 	
 </mx:Canvas>

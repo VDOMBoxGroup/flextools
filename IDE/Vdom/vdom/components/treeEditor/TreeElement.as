@@ -33,7 +33,7 @@ package vdom.components.treeEditor
 		private var textArea:TextArea;
 		public var ID:String;
 		private var rect:Canvas = new Canvas();
-		private var min:Boolean = true;
+		private var min:Boolean = false;
 		public var drag:Boolean = true;
 		private var image:Image;
 		
@@ -71,7 +71,7 @@ package vdom.components.treeEditor
 			textArea.text = 'a lot of words, because it is description of a site';
 			//textArea.width =  110;
 			textArea.height = 80;
-			addChild(textArea);
+	//		addChild(textArea);
 			
 			image = new Image();
 			image.source = 'assets/TreeEditor/_204920994.jpg';
@@ -79,7 +79,7 @@ package vdom.components.treeEditor
 			image.width = textArea.x;
 			image.height = 80;
 			image.maintainAspectRatio = false;
-			addChild(image);
+	//		addChild(image);
 		}
 		
 		private var isRedraw:Boolean;

@@ -106,11 +106,14 @@ package vdom.components.treeEditor
 		} 
 		public function set position(objPosit:Object):void
 		{
+			if (objPosit == null)return;
+			if (!objPosit.width)return;
+			
 			this.visible = true;
 			
 			this.x = objPosit.x;
 			this.y = objPosit.y-25;
-			if (!objPosit.width)return;
+			
 			
 			
 			canRect.graphics.clear();
