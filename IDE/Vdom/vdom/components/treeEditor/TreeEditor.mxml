@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" 
 			creationComplete="creationCompleteHandler()" hide="hideHendler()" 
-			show="showHnadler()" label="add Element">
+			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*">
 <mx:Script>
 	<![CDATA[
 		import vdom.Languages;
@@ -110,6 +110,8 @@
 		
 		/******  	set Listeners  ******/
 		
+		colorMenu.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
+		colorMenu.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
 		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
@@ -364,7 +366,7 @@
 		if(blDrawLine){
 			var fromObj:String = curTree.ID.toString();
 			var toObj:String = evt.currentTarget.ID.toString();
-			var necessaryLevel:String = '0';
+			var necessaryLevel:String = colorMenu.selectedItem.level;
 
 			if(!massLines[necessaryLevel]) 
 				massLines[necessaryLevel] = new Array();
@@ -486,7 +488,7 @@
 		var pnTo:Object = script.drLine(mouseX, mouseY, curTree);
 	
 		vctTest.graphics.clear();
-		vctTest.createVector(curTree, pnTo);	
+		vctTest.createVector(curTree, pnTo, colorMenu.selectedItem.data);	
 	}
 	/**
 	*  
@@ -551,16 +553,34 @@
 	//	trace(selectedAppl.data);
 	}
 	
+	private function hideLines(treEvt:TreeEditorEvent):void
+	{
+		var level:String = treEvt.ID;
+		for (var frsTrElem:String in massLines[level])
+			for (var sknTrElem:String in massLines[level][frsTrElem])
+				massLines[level][frsTrElem][sknTrElem].visible = false;
+	}
+	
+	private function showLines(treEvt:TreeEditorEvent):void
+	{
+		var level:String = treEvt.ID;
+		for (var frsTrElem:String in massLines[level])
+			for (var sknTrElem:String in massLines[level][frsTrElem])
+				massLines[level][frsTrElem][sknTrElem].visible = true;
+	}
+	
 	]]>
 </mx:Script>
 <mx:Canvas id="cnvLevelTop"/>
 <mx:Canvas id="cnvLevelDown"/>
 
-<mx:Label text="Select type of Applikation:" right="10" top="160" color="#ffffff"/>
+<mx:Label text="Select type of Applikation:" right="23" top="255" color="#ffffff"/>
  <mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
-            close="comBoxClose(event.target)" right="10" top="186"/> 
+            close="comBoxClose(event.target)" right="23" top="281"/> 
             
-<mx:Button id="btAddTreeElement" label="add element" right="10" top="216"   click="soapAddTreeElement()"/>
+<mx:Button id="btAddTreeElement" label="add element" right="23" top="311"   click="soapAddTreeElement()"/>
+	<ns1:ColorMenu id="colorMenu" right="33" top="26"/>
+	
 	
 	
 </mx:Canvas>

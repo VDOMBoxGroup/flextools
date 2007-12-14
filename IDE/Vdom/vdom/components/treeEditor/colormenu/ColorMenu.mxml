@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"  creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import vdom.events.TreeEditorEvent;
+			
+			import mx.rpc.events.AbstractEvent;
+			private var levels:Levels = new Levels();
+			private var arrImages:Array = new Array();
+			
+            
+            public function get selectedItem():Object
+            {
+            	return list.selectedItem;
+            }
+            
+			private function init():void
+			{
+				list.dataProvider = levels.data;
+				list.selectedIndex = 0;
+				this.height  = list.height;
+				setPictures();
+			}
+
+
+			private function setPictures():void
+			{
+				var arr:Array = levels.data;
+				
+				//trace(arr.length)
+				for(var str:String in arr)
+				{
+					//trace(arr[str].level);
+					var level:String =  arr[str].level;
+					
+					arrImages[level] = new ColorMenuPicture(arr[str]);
+					arrImages[level].y += Number(str)*22;
+					
+					arrImages[level].addEventListener(TreeEditorEvent.HIDE_LINES, dispasher);
+					arrImages[level].addEventListener(TreeEditorEvent.SHOW_LINES, dispasher);
+					
+					addChild(arrImages[level]);
+				}
+			}
+			
+			private function dispasher(treEvt:TreeEditorEvent):void
+			{
+			//	trace(treEvt);
+				dispatchEvent(new TreeEditorEvent(treEvt.type, treEvt.ID));
+			}
+		]]>
+	</mx:Script>
+		
+	<mx:List id="list" x="30" y="0" height="200"  width="100"/>
+	
+</mx:Canvas>

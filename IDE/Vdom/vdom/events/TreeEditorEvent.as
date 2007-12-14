@@ -10,6 +10,8 @@ public class TreeEditorEvent extends Event
 	public static const DELETE:String = 'delete';
 	public static const START_DRAW_LINE:String = 'startDrowLine';
 	public static const RESIZE_TREE_ELEMENT:String = 'resizeTreeElement';
+	public static const SHOW_LINES:String = 'showLine';
+	public static const HIDE_LINES:String = 'hideLine';
 //	public static const DELETE:String = 'delete';
 	//canLine.graphics.lineStyle(2, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);	
 	//public static const PROXY_ERROR:String = 'proxyError';

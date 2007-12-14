@@ -33,6 +33,7 @@ package vdom.components.treeEditor
 			createVector (trEl0,  trEl1);
 		}
 		
+		
 		public  function set mark(bool:Boolean):void
 		{
 			if(bool)
@@ -49,5 +50,7 @@ package vdom.components.treeEditor
 		//	trace('mark = fulse')
 			}
 		}
+		
+		
 	}
 }

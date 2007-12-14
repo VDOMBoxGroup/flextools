@@ -10,11 +10,12 @@ package vdom.components.treeEditor
 	import mx.controls.Button;
 	import mx.core.Container;
 	import mx.containers.Canvas;
+	import vdom.components.treeEditor.colormenu.Levels;
 	
 	public class Vector extends Canvas
 	{
 		private var _numColor:Number = 0x999922;
-		private var _strColor:String = '0';
+		private var _strColor:String ;
 		private var curLine:Object = new Object;
 		public var btX:Number;
 		public var btY:Number;
@@ -26,8 +27,10 @@ package vdom.components.treeEditor
 			//trace('1');
 		}
 		
-		public function createVector (trEl0:Object, trEl1:Object):void
+		public function createVector (trEl0:Object, trEl1:Object, color:Number = 0 ):void
 		{
+			if( color!= 0)
+			_numColor = color;
 		//	trace('Draw Line!!!' );
 		//	trace('2 createVector');
 			curLine = pointTo(trEl0, trEl1)
@@ -279,33 +282,10 @@ package vdom.components.treeEditor
 		
 		public function set color(level:String):void
 		{
+			var levcColor:Levels = new Levels();
 			_strColor = level;
+			_numColor = levcColor.getColor(level);
 			
-			switch(level) 
-			{
-				 case '0':
-				   		_numColor = 0xff00ff; 	break;
-				 case '1':
-				   		_numColor = 0x000099; 	break;
-				 case '2':
-				   		_numColor = 0x0000ff; 	break;
-				 case '3':
-				   		_numColor = 0x009900; 	break;
-				 case '4':
-				   		_numColor = 0x009999;  break;
-				 case '5':
-				   		_numColor = 0x00ff00; 	break;
-				 case '6':
-				   		_numColor = 0x00ff99;  break;
-				 case '7':
-				   		_numColor = 0x00ffff; break;
-				 case '8':
-				   		_numColor = 0xff0000; 	break;
-				 case '9':
-				   		_numColor = 0xff0099;  break;
-				 default:
-				   		_numColor = 0xffff00; 	break;
-			}
 		}
 		
 		public function get color():String
