@@ -11,6 +11,7 @@
             import mx.collections.*;
 			import mdm.*;
 			import mx.managers.PopUpManager;
+			import powerPack.com.*;
 
       import mx.controls.Button;
       import mx.collections.*;
@@ -167,38 +168,40 @@
                    
 		]]>
 	</mx:Script>
-	<mx:MenuBar left="10" right="10" labelField="@label" itemClick="menuHandler(event);" 
-            dataProvider="{menuBarCollection}"  top="10"></mx:MenuBar>
-	<mx:Accordion width="165" bottom="40" top="148" left="10">
-		<mx:VBox label="Graphs" width="100%" height="100%">
-			<mx:ControlBar paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" horizontalGap="0" width="100%" horizontalAlign="center">
-				<mx:Button label="New" width="33" labelPlacement="bottom" fontFamily="Arial" textAlign="center" cornerRadius="0" alpha="0.5"/>
-				<mx:Button label="Rename" labelPlacement="bottom" fontFamily="Arial" width="47" cornerRadius="0" alpha="0.5"/>
-				<mx:Button label="Delete" fontFamily="Arial" width="43" cornerRadius="0" labelPlacement="bottom" alpha="0.5"/>
-				<mx:Button label="Help" fontFamily="Arial" width="38" cornerRadius="0" labelPlacement="bottom" alpha="0.5"/>
-			</mx:ControlBar>
-			<mx:Canvas width="100%" height="100%">
-				<mx:TileList columnCount="1" direction="vertical" allowMultipleSelection="false" dataProvider="{TileListdp}" itemRenderer="mx.controls.Button" borderStyle="none" verticalScrollPolicy="auto" wordWrap="true" width="100%" x="0" y="0" maxColumns="1"></mx:TileList>
+	<mx:ComboBox width="165" bottom="10" left="10"></mx:ComboBox>
+	<mx:VBox x="0" y="0" height="545">
+		<mx:MenuBar labelField="@label" itemClick="menuHandler(event);" 
+		        dataProvider="{menuBarCollection}" width="677"></mx:MenuBar>
+		<mx:TabNavigator height="100" width="677">
+			<mx:Canvas label="File" width="100%" height="100%">
 			</mx:Canvas>
-		</mx:VBox>
-		<mx:Canvas label="Application" width="100%" height="100%">
-		</mx:Canvas>
-		<mx:Canvas label="Container" width="100%" height="100%">
-		</mx:Canvas>
-		<mx:Canvas label="Resources" width="100%" height="100%">
-		</mx:Canvas>
-	</mx:Accordion>
-	<mx:TabNavigator height="100" right="10" left="10" top="40">
-		<mx:Canvas label="File" width="100%" height="100%">
-		</mx:Canvas>
-		<mx:Canvas label="Import" width="100%" height="92">
-		</mx:Canvas>
-		<mx:Canvas label="VDOM Box" width="100%" height="100%">
-		</mx:Canvas>
-	</mx:TabNavigator>
-	<mx:ViewStack id="viewstack1" borderStyle="solid" left="183" right="10" top="148" bottom="10">
+			<mx:Canvas label="Import" width="100%" height="92">
+			</mx:Canvas>
+			<mx:Canvas label="VDOM Box" width="100%" height="100%">
+			</mx:Canvas>
+		</mx:TabNavigator>
+		<mx:HDividedBox width="577">
+			<mx:Accordion fontFamily="Verdana" borderStyle="solid" height="457">
+				<mx:VBox label="Graphs" width="100%" height="100%">
+					<mx:ControlBar paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" horizontalGap="0" width="100%" horizontalAlign="center">
+						<mx:Button label="New" width="33" labelPlacement="bottom" fontFamily="Arial" textAlign="center" cornerRadius="0" alpha="0.5"/>
+						<mx:Button label="Rename" labelPlacement="bottom" fontFamily="Arial" width="47" cornerRadius="0" alpha="0.5"/>
+						<mx:Button label="Delete" fontFamily="Arial" width="43" cornerRadius="0" labelPlacement="bottom" alpha="0.5"/>
+						<mx:Button label="Help" fontFamily="Arial" width="38" cornerRadius="0" labelPlacement="bottom" alpha="0.5"/>
+					</mx:ControlBar>
+					<mx:TileList columnCount="1" direction="vertical" allowMultipleSelection="false" dataProvider="{TileListdp}" itemRenderer="powerPack.com.Thumb" borderStyle="none" verticalScrollPolicy="auto" wordWrap="true" maxColumns="1" width="100%" height="100%"></mx:TileList>
+				</mx:VBox>
+				<mx:Canvas label="Application" width="100%" height="100%">
+				</mx:Canvas>
+				<mx:Canvas label="Container" width="100%" height="100%">
+				</mx:Canvas>
+				<mx:Canvas label="Resources" width="100%" height="100%">
+				</mx:Canvas>
+			</mx:Accordion>
+		</mx:HDividedBox>
+	</mx:VBox>
+	<mx:ViewStack id="viewstack" borderStyle="solid" width="504" height="487" x="685" y="220">
 		<ns4:graphCanvas id="canvas_1" label="View 1" width="100%" height="100%">
 		</ns4:graphCanvas>
 	</mx:ViewStack>
-	<mx:ComboBox width="165" bottom="10" left="10"></mx:ComboBox>
 </mx:Application>
