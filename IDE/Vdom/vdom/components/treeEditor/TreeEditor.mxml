@@ -96,12 +96,16 @@
 		
 				
 					/** * * *   delete Listeners  * * * * */
+		colorMenu.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
+		colorMenu.removeEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 		temMenu.removeEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
 		temMenu.removeEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
 		temMenu.removeEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
 		btLine.removeEventListener(MouseEvent.CLICK, delButtonOperation);
 		removeEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
+		
+		colorMenu.hide();
 		
 	}
 	
@@ -120,6 +124,7 @@
 		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 			
 		dataManager.getApplactionStructure();
+		colorMenu.show();
 			
 		arrAppl = [];
 		var types:XML = dataManager.getTopLevelTypes();
@@ -282,7 +287,7 @@
 	/******
 	
 	+ когда  соединяешь, стрелка за мышкой
-	- цвет по текущему уровню
+	+ цвет по текущему уровню
 	+ Баг верхнего угла
 	+ при нажатии на линиию появлялась становилась видима кнопка
 	+ нармальные картикни
@@ -580,7 +585,4 @@
             
 <mx:Button id="btAddTreeElement" label="add element" right="23" top="311"   click="soapAddTreeElement()"/>
 	<ns1:ColorMenu id="colorMenu" right="33" top="26"/>
-	
-	
-	
 </mx:Canvas>

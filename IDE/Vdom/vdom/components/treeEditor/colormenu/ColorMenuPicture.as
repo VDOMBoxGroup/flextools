@@ -77,5 +77,21 @@ package vdom.components.treeEditor.colormenu
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SHOW_LINES, level));
 			}
 		}
+		
+		public function set show(bl:Boolean):void
+		{
+			if (!bl)
+			{
+				imgHide.visible = true;
+				imgShow.visible = false;
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.HIDE_LINES, level));
+			}
+			else
+			{
+				imgHide.visible = false;
+				imgShow.visible = true;
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SHOW_LINES, level));
+			}
+		}
 	}
 }
