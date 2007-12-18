@@ -562,7 +562,7 @@ package PowerPack.com.graph
 	        {
 	            _textChanged = false;
 	            nodeTextArea.text = _text;
-	            nodeTextArea.toolTip = _text;
+	            //nodeTextArea.toolTip = _text;
 	        }	
 	        if (_categoryChanged)
 	        {
@@ -844,6 +844,7 @@ package PowerPack.com.graph
 					{
 						var point:Point = Container(parent).contentToGlobal(new Point(arrow.x, arrow.y));
 						arrToolTip.push(ToolTipManager.createToolTip(arrow.label, point.x+arrow.width/2, point.y+arrow.height/2));
+						arrow.highlight = true;
 					}
 				}
 			}
@@ -857,6 +858,11 @@ package PowerPack.com.graph
 			if(parent && parent is GraphCanvas)
 			{
 				setStyle( "backgroundAlpha", 0.5 );
+			}
+
+			for each(var arrow:GraphArrow in outArrows)
+			{
+				arrow.highlight = false;
 			}
 
 			for each(var toolTip:ToolTip in arrToolTip)

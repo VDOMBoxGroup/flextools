@@ -4,6 +4,7 @@ package PowerPack.com
     import mx.validators.ValidationResult;
     import PowerPack.com.graph.GraphNodeCategory;
     import PowerPack.com.graph.GraphNode;
+    import mx.controls.Alert;
 
 	public class NodeTextValidator extends Validator
 	{
@@ -54,23 +55,27 @@ package PowerPack.com
             	{
                 	results.push(new ValidationResult(true, null, "invalidVarName", 
                     	"Not valid variable name."));
-                	return results;
+                	//return results;
             	}       
         	}
         	else if (category == GraphNodeCategory.SUBGRAPH)
         	{
 	        	pattern = /[^a-z0-9_]/gi;
+	        	
 				if(pattern.test(str))
             	{
                 	results.push(new ValidationResult(true, null, "invalidSubgraph", 
                     	"Not valid graph name."));
-                	return results;
+                	//return results;
             	}
          	}
         	else if (category == GraphNodeCategory.COMMAND)
         	{        		
-       			// check for test command
-       			var bTestCommand:Boolean = true;
+       			// check for command
+       			var bTestCommand:Boolean = false;
+       			var bOperationCommand:Boolean = false;
+       			var bFunctionCommand:Boolean = false;
+       			
         		var lexem:Array = new Array();
 
         		// lexical analyzer 
@@ -78,7 +83,9 @@ package PowerPack.com
         		/**
         		 * lexem types:
         		 * u - undefined
-        		 * s - string constant
+        		 * n - name (function name, graph name, prefix, etc)
+        		 * s - string constant (double quote)
+        		 * c - string constant (single quote)
         		 * v - variable
         		 * i - integer constant
         		 * f - float constant
@@ -91,6 +98,9 @@ package PowerPack.com
         		 * 5 - logical operator
         		 * ${ - {
         		 * } - }
+        		 * [ - [
+        		 * ] - ]
+        		 * = - =
         		 */
         		 
         		var i:int = 0;
@@ -115,7 +125,19 @@ package PowerPack.com
         								(str.charAt(i-1)=='\\' && str.charAt(i)=='"') );        						
     						
         					if(i<str.length)
-        						type = 's'; //string constant
+        						type = 's'; // string constant
+        					break;
+
+        				case '\'':
+    						do {
+        						i++;
+        						if(i>=str.length)
+        							break;
+        					} while(	str.charAt(i)!='\'' || 
+        								(str.charAt(i-1)=='\\' && str.charAt(i)=='\'') );        						
+    						
+        					if(i<str.length)
+        						type = 'c'; // string constant
         					break;
 
         				case '$':
@@ -153,18 +175,28 @@ package PowerPack.com
        						type = '0'; // close bracer
         					break;  
         					      				
+        				case '[':
+       						type = '['; // [ bracer
+        					break;        
+        									
+        				case ']':
+       						type = ']'; // ] bracer
+        					break;  
+
         				case '+':
        						type = '4'; // plus
         					break;
+        					
         				case '-':
-       						type = '2'; // sign
+       						type = '2'; // minus
         					break;
+        					
         				case '*':
         				case '/':
         				case '%':
        						type = '1'; // operand
         					break;
-        				case '':
+        					
         				default: 
         					if(str.charAt(i).search(/\d/)>=0) // digit
         					{
@@ -172,7 +204,7 @@ package PowerPack.com
         							i++;
     	    						if(i>=str.length)
 	        							break;       							
-        						} while(str.charAt(i).search(/\d/)>=0)
+        						} while(str.charAt(i).search(/\d/)>=0);
         						i--;
         						type = 'i'; // integer constant
 
@@ -186,19 +218,34 @@ package PowerPack.com
         								i++;	
     		    						if(i>=str.length)
 		        							break;         								
-        							} while(str.charAt(i).search(/\d/)>=0)
+        							} while(str.charAt(i).search(/\d/)>=0);
         							i--;   
         							type = 'f'; // float constant    						
         						}        						
         						break;
         					}
+        					else if(str.charAt(i).search(/[_a-z]/i)>=0)
+        					{
+        						do {
+        							i++;
+        							if(i>=str.length)
+        								break;
+        						} while(str.charAt(i).search(/[_a-z0-9]/i)>=0);
+								i--;
+	       						type = 'n'; // name
+	       						break;
+        					}
         					else if(str.charAt(i).search(/[=!<>\|&]/)>=0) // any operator
         					{
-        						if(str.charAt(i).search(/[<>]/)>=0)
+        						if(str.charAt(i).search(/=/)>=0)
+        						{
+	        						type = '='; // =
+        						}        						
+        						else if(str.charAt(i).search(/[<>]/)>=0)
         						{
 	        						type = '3'; // operator
         						}
-        						
+
         						if(i+1<str.length)
         						{
         							if(	str.charAt(i).search(/[=!<>]/)>=0 && str.charAt(i+1).search(/=/)>=0 )
@@ -228,92 +275,119 @@ package PowerPack.com
 					
 					if(push)
 					{
-						if(type=='u')
-						{
-							bTestCommand = false;
-	 						break;
-	 					}
 	 					lexem.push([type, str.substring(fix, i+1)]);
 	 				} 					
         			i++;        			        				
         		}        	
-        		
+        		        		
+    			// syntax analyzer 
+    			var strSentence:String = "";       			
+    			for(i=0; i<lexem.length; i++)
+    				strSentence = strSentence + lexem[i][0];
+
+				var prevLen:int;
+				
+				// parse operations
+				do {
+					prevLen = strSentence.length;
+					
+					// remove signs
+					pattern = /(^|3|9|=)[24](v|i|f)/g;						
+					strSentence = strSentence.replace(pattern, "$1$2");  
+
+					// split into variable
+					pattern = /[Vvif]1[Vvif]/g;						
+					strSentence = strSentence.replace(pattern, "V");  
+					pattern = /[Vvif]2[Vvif]/g;						
+					strSentence = strSentence.replace(pattern, "V");  
+					pattern = /[Vvifsc]4[Vvifsc]/g;						
+					strSentence = strSentence.replace(pattern, "V");
+					
+					pattern = /9(V|v|i|f|s|c)0/g;						
+					strSentence = strSentence.replace(pattern, "$1");	
+
+					pattern = /\{[Vvifsc]\}/g;						
+					strSentence = strSentence.replace(pattern, "v");													  
+
+				} while (prevLen != strSentence.length && strSentence.length);
+				
+				pattern = /^v=[Vvifsc]$/;
+				if(pattern.test(strSentence))
+					bOperationCommand = true;						
+				
+				// parse test
+				if(strSentence.search(/[35]/)>=0)
+				{
+					do {
+						prevLen = strSentence.length;
+	
+						pattern = /[Vvifsc]3[Vvifsc]/g;						
+						strSentence = strSentence.replace(pattern, "O"); // operator							
+	
+						pattern = /[OL]5[OL]/g;						
+						strSentence = strSentence.replace(pattern, "L"); // logical operator							
+	
+						pattern = /9O0/g;						
+						strSentence = strSentence.replace(pattern, "O");							  
+	
+						pattern = /9L0/g;						
+						strSentence = strSentence.replace(pattern, "L");							  
+						
+					} while (prevLen != strSentence.length && strSentence.length);
+				
+					if(strSentence=="O" || strSentence=="L")
+						bTestCommand = true; 			        		
+				}
+				
+				// parse function
+				if(strSentence.search(/\[.+\]/)>=0)
+				{
+					pattern = /^(v=){0,1}\[n[nc]{0,}\]$/;
+					
+					if(pattern.test(strSentence))
+						bFunctionCommand = true;
+				}  		     
+				
+				node.toolTip = "";
         		if(bTestCommand)
         		{
-        			// syntax analyzer 
-        			var strSentence:String = "";       			
-        			for(i=0; i<lexem.length; i++)
-        				strSentence = strSentence + lexem[i][0];
-
-					if(strSentence.search(/[35]/)==-1)
-					{
-						bTestCommand = false;
-					}
-					else
-					{					
-						var prevLen:int;
-						do {
-							prevLen = strSentence.length;
-							
-							// remove signs
-							pattern = /^[24][vif]/g;						
-							strSentence = strSentence.replace(pattern, "v");  
-							pattern = /3[24][vif]/g;						
-							strSentence = strSentence.replace(pattern, "3v");  
-							pattern = /9[24][vif]/g;						
-							strSentence = strSentence.replace(pattern, "9v");  
-
-							// split into variable
-							pattern = /[vif]1[vif]/g;						
-							strSentence = strSentence.replace(pattern, "v");  
-							pattern = /[vif]2[vif]/g;						
-							strSentence = strSentence.replace(pattern, "v");  
-							pattern = /[vifs]4[vifs]/g;						
-							strSentence = strSentence.replace(pattern, "v");
-							
-							pattern = /9[vifs]0/g;						
-							strSentence = strSentence.replace(pattern, "v");	
-
-							pattern = /\{[vifs]\}/g;						
-							strSentence = strSentence.replace(pattern, "v");													  
-
-						} while (prevLen != strSentence.length && strSentence.length);
-						
-						trace(strSentence);
-						
-						do {
-							prevLen = strSentence.length;
-
-							pattern = /[ifs]/g;						
-							strSentence = strSentence.replace(pattern, "v");
-
-							pattern = /v3v/g;						
-							strSentence = strSentence.replace(pattern, "o"); // operator							
-
-							pattern = /[oL]5[oL]/g;						
-							strSentence = strSentence.replace(pattern, "L"); // logical operator							
-
-							pattern = /9o0/g;						
-							strSentence = strSentence.replace(pattern, "o");							  
-
-							pattern = /9L0/g;						
-							strSentence = strSentence.replace(pattern, "L");							  
-							
-						} while (prevLen != strSentence.length && strSentence.length);
-						
-						trace(strSentence);
-						
-						if(strSentence!="o" && strSentence!="L")
-							bTestCommand = false;
-     				} 
-        		}     
-        		if(bTestCommand)
-        		{
+        			node.toolTip = "test command:\n";
 	    			arrTrans = ["true", "false"];
 	    		}
+        		if(bOperationCommand)
+        		{
+        			node.toolTip = "operation command:\n";
+	    		}	    		
+        		if(bFunctionCommand)
+        		{
+        			node.toolTip = "function command:\n";
+					
+					// generate transitions if there is question command
+					for(i=0;i<lexem.length;i++)
+					{
+						if(lexem[i][0]=='n')
+							break;
+					}						
+					pattern = /^(v=){0,1}\[ncc\]$/;
+					if(	i+2<lexem.length &&
+						pattern.test(strSentence) && 
+						lexem[i][1].toLowerCase()=="question" )
+					{
+						var strVariations:String = lexem[i+2][1];
+						strVariations = strVariations.replace(/(^'|'$)/g, "");
+						strVariations = strVariations.replace(/\\'/g, "'");
+						arrTrans = strVariations.split(/\s*,\s*/);
+					}
+	    		}
 	    		
-	    		//check for command
+	    		if(!bTestCommand && !bOperationCommand && !bFunctionCommand)
+	    		{
+	    			results.push(new ValidationResult(true, null, "invalidCommand", 
+                    	"Not valid command."));
+       			}	    		
+        		node.toolTip += node.text;	    		
         	}
+
    			node.arrTrans = arrTrans;
             return results;
         }
