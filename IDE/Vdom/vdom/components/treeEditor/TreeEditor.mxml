@@ -92,7 +92,7 @@
 			delete massTreeElements[obID];
 		}
 		
-		publicData.topLevelObjectId = curTree.ID;		
+		//publicData.topLevelObjectId = curTree.ID;		
 		
 				
 					/** * * *   delete Listeners  * * * * */
@@ -177,6 +177,7 @@
 			addChild(massTreeElements[obID]);
 		}
 	}
+	
 	
 	public function set resource (object:Object):void
 	{
@@ -365,6 +366,7 @@
 			
 			canRectangle.startDrag(false, rect);
 			addChild(canRectangle);
+			
 		}
 		
 		// проводим линию
@@ -403,6 +405,7 @@
 
 		// выделяем необходимый елемент дерева
 		curTree = evt.currentTarget;
+		publicData.topLevelObjectId = curTree.ID;
 	}
 	
 	/**
