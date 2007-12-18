@@ -505,16 +505,16 @@ package PowerPack.com.graph
 	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[2]));			
 	        	contextMenu.customItems[2].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, copyNodeHandler);
 
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeType.INITIAL?"> ":"  ")+menuItemCaptions[3], true));			
+	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeType.INITIAL?"· ":"  ")+menuItemCaptions[3], true));			
 	        	contextMenu.customItems[3].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setInitialTypeHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeType.TERMINAL?"> ":"  ")+menuItemCaptions[4]));			
+	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeType.TERMINAL?"· ":"  ")+menuItemCaptions[4]));			
 	        	contextMenu.customItems[4].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setTerminalTypeHandler);
 
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.NORMAL?"> ":"  ")+menuItemCaptions[5], true));			
+	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.NORMAL?"· ":"  ")+menuItemCaptions[5], true));			
 	        	contextMenu.customItems[5].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setNormalCategoryHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.SUBGRAPH?"> ":"  ")+menuItemCaptions[6]));			
+	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.SUBGRAPH?"· ":"  ")+menuItemCaptions[6]));			
 	        	contextMenu.customItems[6].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setSubgraphCategoryHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.COMMAND?"> ":"  ")+menuItemCaptions[7]));			
+	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.COMMAND?"· ":"  ")+menuItemCaptions[7]));			
 	        	contextMenu.customItems[7].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setCommandCategoryHandler);
 	        }	
 	        if (!validator)
@@ -582,21 +582,21 @@ package PowerPack.com.graph
 	            		nodeTextArea.setStyle( "backgroundColor",  0xffffff);
 	            		nodeTextArea.setStyle( "color",  0x000000);
 	            		if (contextMenu)
-		            		contextMenu.customItems[5].caption = "> " + contextMenu.customItems[5].caption;
+		            		contextMenu.customItems[5].caption = "· " + contextMenu.customItems[5].caption;
 	            		break;
 	            	case GraphNodeCategory.SUBGRAPH:
 	            		nodeTextArea.setStyle( "borderColor",  0x000000);
 	            		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
 	            		nodeTextArea.setStyle( "color",  0x000000);
 	            		if (contextMenu)
-		            		contextMenu.customItems[6].caption = "> " + contextMenu.customItems[6].caption;
+		            		contextMenu.customItems[6].caption = "· " + contextMenu.customItems[6].caption;
 	            		break;	            	
 	            	case GraphNodeCategory.COMMAND:
 	            		nodeTextArea.setStyle( "borderColor",  0xffff00);
 	            		nodeTextArea.setStyle( "backgroundColor",  0x333333);
 	            		nodeTextArea.setStyle( "color",  0xffff00);
 	            		if (contextMenu)
-		            		contextMenu.customItems[7].caption = "> " + contextMenu.customItems[7].caption;
+		            		contextMenu.customItems[7].caption = "· " + contextMenu.customItems[7].caption;
 	            		break;        		
 	            }          
 	        }	
@@ -615,11 +615,11 @@ package PowerPack.com.graph
 		            	break;
 	            	case GraphNodeType.INITIAL:
 	            		setStyle( "borderColor", 0xff0000);	
-	    	       		contextMenu.customItems[3].caption = "> " + contextMenu.customItems[3].caption;
+	    	       		contextMenu.customItems[3].caption = "· " + contextMenu.customItems[3].caption;
 		            	break;
 	            	case GraphNodeType.TERMINAL:
 	            		setStyle( "borderColor", 0x0000ff);	
-    		       		contextMenu.customItems[4].caption = "> " + contextMenu.customItems[4].caption;
+    		       		contextMenu.customItems[4].caption = "· " + contextMenu.customItems[4].caption;
 		            	break;
 	            }
 	        }		            

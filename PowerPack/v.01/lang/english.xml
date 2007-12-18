@@ -95,7 +95,7 @@
 
 	<graphcanvas>
 		<menuitemadd>Add State</menuitemadd>		
-		<menuitempaste>Paste</menuitempaste>
+		<menuitempaste>Paste State</menuitempaste>
 		<menuitemclear>Clear Stage</menuitemclear>
 	</graphcanvas> 
 

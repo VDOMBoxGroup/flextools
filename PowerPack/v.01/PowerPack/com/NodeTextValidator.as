@@ -74,6 +74,7 @@ package PowerPack.com
         		var lexem:Array = new Array();
 
         		// lexical analyzer 
+        		
         		/**
         		 * lexem types:
         		 * u - undefined

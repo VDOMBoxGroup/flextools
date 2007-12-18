@@ -1,7 +1,5 @@
 package PowerPack.com.graph
 {
-	import mx.core.FlexTextField;
-	
 	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.events.ContextMenuEvent;
@@ -28,7 +26,6 @@ package PowerPack.com.graph
 	import mx.controls.ComboBox;
 	import mx.events.DropdownEvent;
 	import mx.core.Container;
-	
 	
 	[Style(name="color", type="uint", format="Color", inherit="yes")]
 	[Style(name="rollOverColor", type="uint", format="Color", inherit="yes")]
@@ -68,7 +65,8 @@ package PowerPack.com.graph
 	    //
 	    //  Variables and properties
 	    //
-	    //--------------------------------------------------------------------------	 
+	    //--------------------------------------------------------------------------	
+	     
 	    [Bindable]
 	    private var alertDeleteTitle:String = "Confirmation";
 	    [Bindable]
@@ -174,6 +172,7 @@ package PowerPack.com.graph
 	        return _langXML;	        
 	    }	
 	   	//--------------------------------------------------------------------------
+	   	
 	    private var bHighlighted:Boolean = false;
     	private var bHighlightChanged:Boolean = false;
     	
@@ -321,7 +320,7 @@ package PowerPack.com.graph
 			doubleClickEnabled = true;
 			focusEnabled = true;
 			mouseFocusEnabled = true;
-			//tabEnabled = false;	
+			tabEnabled = false;	
 			styleName = this.className;	
 			cacheAsBitmap = true;
 			
@@ -402,9 +401,9 @@ package PowerPack.com.graph
 	        	contextMenu.customItems[0].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, selectTransHandler);	        	
 	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[1], false, true, false));	
 	        	contextMenu.customItems[1].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteArrowHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((bEnabled?"> ":"") + menuItemCaptions[2], false, true, false));			
+	        	contextMenu.customItems.push(new ContextMenuItem((bEnabled?"· ":"") + menuItemCaptions[2], false, true, false));			
 	        	contextMenu.customItems[2].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, enableHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((bHighlighted?"> ":"") + menuItemCaptions[3], false, true, false));			
+	        	contextMenu.customItems.push(new ContextMenuItem((bHighlighted?"· ":"") + menuItemCaptions[3], false, true, false));			
 	        	contextMenu.customItems[3].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, highlightHandler);
 	        }	        
 	    }
@@ -439,14 +438,14 @@ package PowerPack.com.graph
 	        {
 	            bEnabledChanged = false;
 	            if(contextMenu && contextMenu.customItems.length>0)
-		            contextMenu.customItems[2].caption = (bEnabled?"> ":"") + menuItemCaptions[2];
+		            contextMenu.customItems[2].caption = (bEnabled?"· ":"") + menuItemCaptions[2];
 	            bChanged = true;
 	        }	
 	        if (bHighlightChanged)
 	        {
 	            bHighlightChanged = false;
 	            if(contextMenu && contextMenu.customItems.length>1)
-		            contextMenu.customItems[3].caption = (bHighlighted?"> ":"") + menuItemCaptions[3];
+		            contextMenu.customItems[3].caption = (bHighlighted?"· ":"") + menuItemCaptions[3];
 	            bChanged = true;
 	        }
 	        if (bLabelChanged)

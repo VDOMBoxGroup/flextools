@@ -118,7 +118,7 @@
 						cbInitialGraph.selectedIndex=i;
 						break;
 					}
-				}				
+				}
 			}
 			
 			/** 
@@ -135,7 +135,7 @@
 				}	
 				
 				return tmplXML;
-			}	
+			}
 			
 			public function clear():void
 			{
@@ -149,7 +149,7 @@
 					if(child is GraphCanvas)
 						GraphCanvas(child).destroy();
 				}
-			}			
+			}
 		
 			//--------------------------------------------------------------------------
 		    //
@@ -225,15 +225,15 @@
 				lstGraphs.validateNow();
 				vsViewStack.validateNow();
 				
-				if(selectedIndex==0)
+				if(selectedIndex>=graphs.length)
 				{
-					lstGraphs.selectedIndex=selectedIndex;	
-					vsViewStack.selectedIndex=selectedIndex;				
+					lstGraphs.selectedIndex=graphs.length-1;	
+					vsViewStack.selectedIndex=graphs.length-1;				
 				}				
 				else
 				{												
-					lstGraphs.selectedIndex=selectedIndex-1;	
-					vsViewStack.selectedIndex=selectedIndex-1;				
+					lstGraphs.selectedIndex=selectedIndex;	
+					vsViewStack.selectedIndex=selectedIndex;				
 				}
 			}				    		
 			private function btnHelpClickHandler(event:MouseEvent):void

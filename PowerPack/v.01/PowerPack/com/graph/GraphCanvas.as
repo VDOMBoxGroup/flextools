@@ -26,7 +26,6 @@ package PowerPack.com.graph
 	import mx.core.UIComponent;
 	import mx.binding.utils.*;
 
-
 	public class GraphCanvas extends Canvas
 	{
 		//--------------------------------------------------------------------------
@@ -151,7 +150,26 @@ package PowerPack.com.graph
 		//  Overridden methods
 		//
 		//--------------------------------------------------------------------------
-					
+	    override protected function commitProperties():void
+	    {
+	        super.commitProperties();
+	        	        
+	        if (bLangXMLChanged)
+	        {	        	
+	        	bLangXMLChanged = false;
+
+	        	menuItemCaptions = [];
+	        	
+		    	menuItemCaptions = new Array(
+		    		langXML.graphcanvas.menuitemadd, 
+		    		langXML.graphcanvas.menuitempaste, 
+	    			langXML.graphcanvas.menuitemclear );	   
+				
+				for(var i:int=0; i<contextMenu.customItems.length; i++)
+		    		contextMenu.customItems[i].caption = menuItemCaptions[i];   
+	        }
+	    }
+	    					
 		/**
 	     *  Create child objects.
 	     */
@@ -255,6 +273,7 @@ package PowerPack.com.graph
 			{
 				var newNode:GraphNode = new GraphNode(nodeXML.@category, nodeXML.@type, nodeXML.text);
 				newNode.name = nodeXML.@name;
+				BindingUtils.bindProperty(newNode, "langXML", this, "langXML");				
 				addChild(newNode);					
 				newNode.enabled = nodeXML.@enabled;
 				newNode.move(nodeXML.@x, nodeXML.@y);
@@ -270,6 +289,7 @@ package PowerPack.com.graph
 			{
 				var newArrow:GraphArrow = new GraphArrow();
 				newArrow.langXML = langXML;
+				BindingUtils.bindProperty(newArrow, "langXML", this, "langXML");				
 				addChildAt(newArrow, 0);
 				newArrow.fromObject = getChildByName(arrowXML.@source) as UIComponent;		
 				newArrow.toObject = getChildByName(arrowXML.@destination) as UIComponent;
@@ -348,7 +368,8 @@ package PowerPack.com.graph
 		{
 	       	PowerPackClass.addMenuItemsByType("GraphCanvas");
 
-	     	/* mdm.Menu.Context.onContextMenuClick_Add_State = function():void{	
+	     	/*
+	     	mdm.Menu.Context.onContextMenuClick_Add_State = function():void{	
 	     		var point:Point = new Point(Application.application.stage.mouseX, Application.application.stage.mouseY);
 				var array:Array = Application.application.getObjectsUnderPoint(point);				
 				
@@ -357,7 +378,8 @@ package PowerPack.com.graph
 
 	     	mdm.Menu.Context.onContextMenuClick_Paste = function():void{
 				mdm.Dialogs.prompt("Paste");				
-			}	 */		
+			}	 
+			*/		
 		}			
 	}
 }
