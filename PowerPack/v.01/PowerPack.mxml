@@ -287,15 +287,13 @@
 						
 						<ns4:GraphsAccordionChild 
 							id="graphsAccordionChild"
+							name="application"							
 							langXML="{langXML}" 
 							templateXML="{templateXML}" 
 							cbInitialGraph="{cbInitGraph}"
 							vsViewStack="{viewstack}">
-						</ns4:GraphsAccordionChild>						
-						
-						<mx:Canvas label="Application" width="100%" height="100%">
-						</mx:Canvas>
-						
+						</ns4:GraphsAccordionChild>			
+
 						<mx:Canvas label="Container" width="100%" height="100%">
 						</mx:Canvas>
 						

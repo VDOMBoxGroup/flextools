@@ -13,7 +13,7 @@
 	<navigatorpanel>
 		<title>VDOM Application</title>
 		<graphs>	
-			<title>Graphs</title>
+			<title>Application</title>
 			<btnnew>New</btnnew>
 			<btnrename>Rename</btnrename>
 			<btndelete>Delete</btndelete>

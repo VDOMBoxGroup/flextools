@@ -25,6 +25,10 @@ package PowerPack.com.graph
 	import flash.display.DisplayObject;
 	import mx.core.UIComponent;
 	import mx.binding.utils.*;
+	import mx.events.DragEvent;
+	import mx.managers.DragManager;
+	import mx.core.IUIComponent;
+	import mx.controls.Alert;
 
 	public class GraphCanvas extends Canvas
 	{
@@ -119,8 +123,10 @@ package PowerPack.com.graph
 			//TODO: implement function
 			super();
 			
-			addEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
-			addEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
+			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+			addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
+			addEventListener(DragEvent.DRAG_DROP, dragDropHandler); 
 		}
 		
 		//--------------------------------------------------------------------------
@@ -136,6 +142,8 @@ package PowerPack.com.graph
 		{		
 			removeEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 			removeEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
+			removeEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
+			removeEventListener(DragEvent.DRAG_DROP, dragDropHandler); 
        		
        		clear();
        		
@@ -354,7 +362,30 @@ package PowerPack.com.graph
 	    	if(contextMenuOld)
 	    		Application.application.contextMenu = contextMenuOld;	    	
 	    }  
-	    	    		
+	    private function dragEnterHandler(event:DragEvent):void
+	    {
+            if (	event.dragSource.hasFormat("items") && 
+		            event.dragSource.dataForFormat("items") &&
+            		(event.dragSource.dataForFormat("items") as Array).length>0 &&
+            		(event.dragSource.dataForFormat("items") as Array)[0].data is GraphCanvas )
+            {
+                DragManager.acceptDragDrop(IUIComponent(event.target));
+            }	    	
+	    }
+	    private function dragDropHandler(event:DragEvent):void
+	    {
+	    	var items:Array = 
+                    event.dragSource.dataForFormat("items") as Array;
+	    	
+	    	var graph:GraphCanvas = items[0].data as GraphCanvas;
+	    	
+			var newNode:GraphNode = new GraphNode( GraphNodeCategory.SUBGRAPH, GraphNodeType.NORMAL, graph.label );
+			newNode.langXML = langXML;
+			BindingUtils.bindProperty(newNode, "langXML", this, "langXML");			          
+			addChild(newNode);
+			newNode.move(mouseX, mouseY);
+			newNode.setFocus();	    	
+	    }
 		//--------------------------------------------------------------------------
 	    //
 	    //  For MDM Zinc integration

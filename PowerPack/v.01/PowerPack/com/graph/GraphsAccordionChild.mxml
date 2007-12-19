@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-		label="{langXML.navigatorpanel.graphs.title}" 
+		label="{langXML.navigatorpanel.graphs.title}"
 		initialize="init();"
 		width="100%" height="100%">
 
@@ -76,22 +76,24 @@
 
 				clear();				
 				
-				for each (var graphXML:XML in templateXML.elements("graph"))
+				for each (var graphXML:XML in templateXML.elements("graph").(@category.toLowerCase()==this.name.toLowerCase()))
 				{					
 					if(graphXML.@initial.toString().toLowerCase() == "true")
 						initialId = graphXML.@id;
 					
-					initGraphs.addItem( {	id: graphXML.@id, 
-											name: graphXML.@name, 
-											initial: graphXML.@initial	} );
-
-					graphs.addItem( new ObjectProxy({	id: graphXML.@id, 
-										name: graphXML.@name, 
-										initial: graphXML.@initial	}) );										
-					
 					var newGraph:GraphCanvas = new GraphCanvas();
 					newGraph.langXML = langXML;
 					BindingUtils.bindProperty(newGraph, "langXML", this, "langXML");				
+
+					initGraphs.addItem( {	id: graphXML.@id, 
+											name: graphXML.@name, 
+											initial: graphXML.@initial,
+											data: newGraph	} );
+
+					graphs.addItem( new ObjectProxy({	id: graphXML.@id, 
+										name: graphXML.@name, 
+										initial: graphXML.@initial,
+										data:newGraph	}) );										
 					
 					newGraph.name = graphXML.@id;
 					newGraph.label = graphXML.@name;
@@ -100,7 +102,7 @@
 					newGraph.fromXML(graphXML.toXMLString());
 				}	
 				
-				lstGraphs.labelField = "name";			
+				lstGraphs.labelField = "name";	
 				lstGraphs.dataProvider = graphs;						
 				
 				cbInitialGraph.labelField = "name";
@@ -126,7 +128,8 @@
 			 */	
 			public function toXML():XML
 			{
-				var tmplXML:XML = new XML(<template></template>);
+				var tmplXML:XML = new XML();
+				tmplXML.name = "template";
 				
 				for each (var child:DisplayObject in vsViewStack.getChildren())
 				{
@@ -182,11 +185,13 @@
 
 				initGraphs.addItem( {	id: newGraph.name, 
 										name: newGraph.label, 
-										initial: newGraph.initial.toString() } );
+										initial: newGraph.initial.toString(),
+										data: newGraph } );
 
 				graphs.addItem(  new ObjectProxy({	id: newGraph.name, 
 									name: newGraph.label, 
-									initial: newGraph.initial.toString() }) );
+									initial: newGraph.initial.toString(),
+									data: newGraph }) );
 										
 				vsViewStack.addChild(newGraph);
 				
@@ -287,6 +292,7 @@
 	</mx:ControlBar>
 	
 	<mx:List width="100%" height="100%" allowMultipleSelection="false" textAlign="center" borderStyle="none" id="lstGraphs" 
+		dragEnabled="true"
 		alternatingItemColors="[#FFFFFF, #f6f6f6]"
 		itemRenderer="PowerPack.com.graph.GraphThumb"
 		rendererIsEditor="true"		
