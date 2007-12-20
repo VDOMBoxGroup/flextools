@@ -101,6 +101,7 @@ package PowerPack.com
         		 * [ - [
         		 * ] - ]
         		 * = - =
+        		 * ; - ;
         		 */
         		 
         		var i:int = 0;
@@ -165,6 +166,10 @@ package PowerPack.com
         					
         				case '}':
        						type = '}'; 
+        					break;  
+
+        				case ';':
+       						type = ';'; 
         					break;  
 
         				case '(':
@@ -311,7 +316,13 @@ package PowerPack.com
 
 				} while (prevLen != strSentence.length && strSentence.length);
 				
-				pattern = /^v=[Vvifsc]$/;
+				// parse assignment
+				pattern = /;+/g;						
+				strSentence = strSentence.replace(pattern, ";");
+									
+				pattern = /v=[Vvifsc]/g;
+				strSentence = strSentence.replace(pattern, "A");
+				pattern = /^(A;)*A{0,1}$/;				
 				if(pattern.test(strSentence))
 					bOperationCommand = true;						
 				
@@ -385,7 +396,7 @@ package PowerPack.com
 	    			results.push(new ValidationResult(true, null, "invalidCommand", 
                     	"Not valid command."));
        			}	    		
-        		node.toolTip += node.text;	    		
+        		node.toolTip += node.text;
         	}
 
    			node.arrTrans = arrTrans;
