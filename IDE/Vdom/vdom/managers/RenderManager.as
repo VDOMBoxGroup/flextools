@@ -1,5 +1,5 @@
-package vdom.managers
-{
+package vdom.managers {
+
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
@@ -28,9 +28,13 @@ import vdom.events.RenderManagerEvent;
 import mx.collections.XMLListCollection;
 import mx.collections.Sort;
 import mx.collections.SortField;
+import mx.collections.ArrayCollection;
+import mx.collections.IViewCursor;
+import vdom.components.editor.containers.workAreaClasses.WysiwygText;
+import vdom.components.editor.containers.workAreaClasses.WysiwygTextInput;
 
-public class RenderManager implements IEventDispatcher
-{
+public class RenderManager implements IEventDispatcher {
+	
 	private static var instance:RenderManager;
 	
 	private var soap:Soap;
@@ -40,8 +44,9 @@ public class RenderManager implements IEventDispatcher
 	
 	private var _container:Container;
 	private var applicationId:String;
-	private var _items:Object;
+	private var _items:ArrayCollection;
 	private var _source:XML;
+	private var _cursor:IViewCursor;
 	
 	/**
 	 * 
@@ -67,7 +72,12 @@ public class RenderManager implements IEventDispatcher
 		soap = Soap.getInstance();
 		publicData = mx.core.Application.application.publicData;
 		resourceManager = ResourceManager.getInstance();
-		_items = {};
+		
+		_items = new ArrayCollection();
+		_cursor = _items.createCursor();
+		var sort:Sort = new Sort();
+		_items.sort = sort;
+		
 		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
 	}
 	
@@ -84,7 +94,7 @@ public class RenderManager implements IEventDispatcher
 		
 	}
 	
-	public function refreshItem(objectID:String, parentId:String):void {
+	public function refreshItem(objectId:String, parentId:String):void {
 		
 		
 	}
@@ -98,92 +108,289 @@ public class RenderManager implements IEventDispatcher
 			
 	}
 	
-	public function addItem(objectId:String, parentId:String):void {
+	public function addItem(objectID:String, parentID:String):void {
 		
-		var item:Item = new Item(objectId);
-		_items[objectId] = item;
-		_items[parentId].addChild(item);
-		item.visible = false;
+		var item:Item = new Item(objectID);
+		
+		_items.filterFunction = null;
+		_items.sort = new Sort();
+		_items.sort.fields = [new SortField('objectID')];
+		_items.refresh();
+		
+		_cursor.findFirst({objectID:parentID});
+		
+		_items.addItem({
+			objectID:objectID, 
+			parentID:parentID,
+			fullPath:_cursor.current.fullPath + '.' + objectID,
+			zindex:0, 
+			hierarchy:0,
+			order:0,
+			item:item, 
+			properties:{}
+		});
+		
+		var parentObject:Item = Item(_cursor.current.item);
+		parentObject.addChild(item);
+		
+		//item.visible = false;
 		
 		item.setStyle('backgroundColor', '#ffffff');
 		item.setStyle('backgroundAlpha', '0');
 		
-		soap.renderWysiwyg(publicData['applicationId'], objectId, parentId);
+		soap.renderWysiwyg(publicData['applicationId'], objectID, parentID);
 	}
 	
-	public function deleteItem(objectId:String, parentId:String):void {
+	public function deleteItem(objectID:String):void {
+		
+		_items.filterFunction = null;
+		_items.sort = new Sort();
+		_items.sort.fields = [new SortField('objectID')];
+		_items.refresh();
+		
+		_cursor.findAny({objectID:objectID});
+		
+		var currentItem:Item = _cursor.current.item;
+		
+		_cursor.findAny({objectID:_cursor.current.parentID});
+		
+		Item(_cursor.current.item).removeChild(currentItem);
+		
+		_items.filterFunction = 
+			function (item:Object):Boolean {
+				return (item.fullPath.indexOf(objectID) != -1);
+		}
+		
+		_items.sort = new Sort();
+		_items.sort.fields = [new SortField('objectID')];
+		_items.refresh();
+		
+		_items.removeAll();
+		_items.filterFunction = null;
+		_items.refresh();
+	}
+	
+	private function reorderItems():void {
 		
 		
 	}
 	
-	public function updateItem(objectId:String, parentId:String):void {
+	public function updateItem(objectID:String, parentID:String):void {
 		
-		if(parentId == '') {
+		if(parentID == '') {
 			
 			_container.removeAllChildren();
 			
-			var mainItem:Item = new Item(objectId);
 			
-			_container.addChild(mainItem);
+			_items.filterFunction = null;
+			_items.sort = new Sort();
+			_items.refresh();
+			_items.removeAll();
+			var item:Item = new Item(objectID);
+		
+			_items.addItem({
+				objectID:objectID, 
+				parentID:parentID,
+				fullPath:objectID,
+				zindex:0, 
+				hierarchy:0,
+				order:0,
+				item:item, 
+				properties:{}
+			});
+			//_items.sort = new Sort();
 			
-			mainItem.setStyle('backgroundColor', '#ffffff');
-			mainItem.setStyle('backgroundAlpha', '0');
-			mainItem.visible = false;
-			_items[objectId] = mainItem;
+			//var res:Boolean = _cursor.findFirst({objectID:parentID});
+			
+			//var parentObject:Item = Item(_cursor.current.item);
+			_container.addChild(item);
+			
+			item.setStyle('backgroundColor', '#ffffff');
+			item.setStyle('backgroundAlpha', '0');
+			item.visible = false;
+			//_items[objectId] = mainItem;
 			
 		} else {
+			_items.filterFunction = null;
+			_items.sort = new Sort();
+			_items.sort.fields = [new SortField('objectID')];
+			_items.refresh();
 			
-			_items[objectId].removeAllChildren();
+			_cursor.findAny({objectID:objectID});
+			
+			var currentItem:Item = Item(_cursor.current.item);
+			currentItem.removeAllChildren();
+			parentID = _cursor.current.parentID
 		}
-		
-		soap.renderWysiwyg(applicationId, objectId, parentId);
+			
+		soap.renderWysiwyg(applicationId, objectID, parentID);
 			
 	}
 	
 	private function renderWysiwygOkHandler(event:SoapEvent):void {
 		
-		_source = event.result;
+		var result:XML = _source = event.result;
 		
-		var objectId:String = _source.object.@guid;
-		
-		var container:Item = _items[objectId];
-		
-		container.x = _source.object.@left;
-		container.y = _source.object.@top;
+		/* if(_source == null)
+			_source = result; */
 			
-		if(_source.@width.length())
-			container.width = _source.@width;
+		
+		
+		var objectID:String = result.object.@guid;
+		
+		_items.filterFunction = null
+		_items.sort = new Sort();
+		_items.sort.fields = [new SortField('objectID')];
+		_items.refresh();
+		
+		var res:Boolean = _cursor.findAny({objectID:objectID});
+		
+		var parentID:String = _cursor.current.parentID;
+		var fullPath:String = _cursor.current.fullPath;
+		
+		_cursor.current.zindex = String(event.result.object.@zindex);
+		_cursor.current.hierarchy = String(event.result.object.@hierarchy);
+		
+		var container:Item = Item(_cursor.current.item);
+		
+		var res1:Boolean = _cursor.findAny({objectID:parentID});
+		var parentContainer:Item = Item(_cursor.current.item);
+		
+		container.x = result.object.@left;
+		container.y = result.object.@top;
 			
-		if(_source.@height.length())
-			container.height = _source.@height;
+		if(result.object.@width.length())
+			container.width = result.object.@width;
+			
+		if(result.object.@height.length())
+			container.height = result.object.@height;
 		
 		var staticContainer:Boolean = false;
 		//trace(_source);
-		if(_source.object.@contents == 'static')
+		if(result.object.@contents == 'static')
 			staticContainer = true
+			
+		container.removeAllChildren();
+		container.removeViewChildren();
 		
-		render(container, _source.object[0], staticContainer);
-		_items[objectId].visible = true;
-		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
-		rme.result = container;
+		if(parentID) {
+			
+			_items.filterFunction = 
+				function (item:Object):Boolean {
+					return (item.fullPath.indexOf(objectID+'.') != -1);
+			}
+			var sort1:Sort = new Sort();
+			sort1.fields = [new SortField('zindex'), new SortField('hierarchy'), new SortField('order')];
+			_items.sort = sort1;
+			
+			_items.refresh();
+			
+			_items.removeAll();
+			
+			_items.refresh();
+		}
+		
+		render(container, result.object[0], fullPath, staticContainer);
+		//-->z-index refresh;
+		_items.filterFunction = null;
+		_items.sort = null;
+		_items.refresh();
+		
+		if(parentID) {
+			
+			_items.filterFunction = 
+				function (item:Object):Boolean {
+					return item.parentID == parentID;
+			}
+			var sort:Sort = new Sort();
+			sort.fields = [new SortField('zindex'), new SortField('hierarchy'), new SortField('order')];
+			_items.sort = sort;
+			
+			_items.refresh();
+			
+			var count:uint = 0;
+			
+			for each (var collectionItem:Object in _items) {
+				
+				parentContainer.setChildIndex(collectionItem.item, count);
+				count++;
+				//this.render(viewObject, collectionItem, staticContainer);
+			}
+		}
+		
+		container.visible = true;
+		//var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
+		//rme.result = container;
 		//dispatchEvent(rme);
 	}
 	
-	private function render(parentContainer:DisplayObjectContainer, source:XML, staticContainer:Boolean):void {
+	private function render(
+		parentContainer:Container, 
+		source:XML, 
+		fullPath:String, 
+		staticContainer:Boolean):void {
 		
-		var itemList:XMLListCollection = new XMLListCollection();
+		//var itemList:XMLListCollection = new XMLListCollection();
+		//var count:int = 0;
+		var parentID:String = source.@guid;
 		
-		for each(var item:XML in source.*) {
+		for each(var itemDescription:XML in source.*) {
 			
-			var objectName:String = item.name().localName;
-			var objectID:String = item.@guid.toString();
-			var parentID:String = item.parent().@guid; 
+			var objectName:String = itemDescription.name().localName;
+			var objectID:String = itemDescription.@guid.toString(); 
 			
 			switch(objectName) {
 				
 				case 'object':
 					
-					itemList.addItem(item);
+					var viewObject:Container;
+			
+					if(!staticContainer)
+						viewObject = new Item(objectID);
+						
+					else
+						viewObject = new Canvas();
+						
+					viewObject.setStyle('backgroundColor', '#cccccc');
+					viewObject.setStyle('backgroundAlpha', '.2');
+					
+					viewObject.clipContent = true;
+					
+					viewObject.x = itemDescription.@left;
+					viewObject.y = itemDescription.@top;
+					
+					var zzz:* = itemDescription.@width;
+					
+					if(itemDescription.@width.length())
+						viewObject.width = itemDescription.@width;
+					
+					if(itemDescription.@height.length())
+								viewObject.height = itemDescription.@height;
+					
+					/* if(parentID && viewObject is Item)	
+						Item(viewObject).parentID = parentID; */
+					
+					//parentContainer.addChild(viewObject);
+					
+					if(staticContainer || itemDescription.@contents == 'static')
+						staticContainer = true;
+					
+					var newPath:String = fullPath + '.' + objectID
+					
+					_items.addItem({
+						objectID:objectID, 
+						parentID:parentID,
+						fullPath:newPath ,
+						zindex:String(itemDescription.@zindex), 
+						hierarchy:String(itemDescription.@hierarchy), 
+						order:String(itemDescription.@order),
+						item:viewObject, 
+						properties:{}
+					});
+					
+					//count++;
+					
+					this.render(viewObject, itemDescription, newPath, staticContainer);
 					
 				break;
 				
@@ -192,16 +399,20 @@ public class RenderManager implements IEventDispatcher
 					var viewRectangle:Canvas = new Canvas()
 					
 					//properties
-					viewRectangle.x = item.@left;
-					viewRectangle.y = item.@top;
-					viewRectangle.width = item.@width;
-					viewRectangle.height = item.@height;
+					viewRectangle.x = itemDescription.@left;
+					viewRectangle.y = itemDescription.@top;
+					viewRectangle.width = itemDescription.@width;
+					viewRectangle.height = itemDescription.@height;
 					viewRectangle.setStyle('borderStyle', 'solid');
-					viewRectangle.setStyle('borderThickness', item.@border);
-					viewRectangle.setStyle('borderColor', item.@color);
-					viewRectangle.setStyle('backgroundColor', '#'+item.@fill);
+					viewRectangle.setStyle('borderThickness', itemDescription.@border);
+					viewRectangle.setStyle('borderColor', itemDescription.@color);
+					viewRectangle.setStyle('backgroundColor', '#'+itemDescription.@fill);
 					
-					parentContainer.addChild(viewRectangle);
+					if(parentContainer is Item)					
+						Item(parentContainer).addViewChild(viewRectangle);
+						
+					else
+						parentContainer.rawChildren.addChild(viewRectangle);
 					
 				break;
 				
@@ -209,19 +420,19 @@ public class RenderManager implements IEventDispatcher
 					
 					var viewRadiobutton:WysiwygRadioButton = new WysiwygRadioButton()
 					
-					viewRadiobutton.x = item.@left;
-					viewRadiobutton.y = item.@top;
-					viewRadiobutton.width = item.@width;
-					viewRadiobutton.height = item.@height;
-					viewRadiobutton.value = item.@value;
-					viewRadiobutton.label = item.@label;
+					viewRadiobutton.x = itemDescription.@left;
+					viewRadiobutton.y = itemDescription.@top;
+					viewRadiobutton.width = itemDescription.@width;
+					viewRadiobutton.height = itemDescription.@height;
+					viewRadiobutton.value = itemDescription.@value;
+					viewRadiobutton.label = itemDescription.@label;
 					
-					if(item.@state == 'checked')
+					if(itemDescription.@state == 'checked')
 						viewRadiobutton.selected = true;
 					
 					
-					viewRadiobutton.setStyle('fontStyle ', item.@font);
-					viewRadiobutton.setStyle('color ', item.@color);
+					viewRadiobutton.setStyle('fontStyle ', itemDescription.@font);
+					viewRadiobutton.setStyle('color ', itemDescription.@color);
 					
 					parentContainer.addChild(viewRadiobutton);
 					
@@ -231,18 +442,73 @@ public class RenderManager implements IEventDispatcher
 				
 					var viewCheckbox:WysiwygCheckBox = new WysiwygCheckBox()
 					
-					viewCheckbox.x = item.@left;
-					viewCheckbox.y = item.@top;
-					viewCheckbox.width = item.@width;
-					viewCheckbox.height = item.@height;
-					viewCheckbox.label = item.@label;
-					if(item.@state == 'checked')
-						viewCheckbox.selected = true;
-					
-					viewCheckbox.setStyle('fontStyle ', item.@font);
-					viewCheckbox.setStyle('color ', item.@color);
-					
+					viewCheckbox.x = itemDescription.@left;
+					viewCheckbox.y = itemDescription.@top;
+					viewCheckbox.width = itemDescription.@width;
+					viewCheckbox.height = itemDescription.@height;
+					viewCheckbox.label = itemDescription.@label;
+					if(itemDescription.@state == 'checked')
+						viewCheckbox.selected = true; 
+						
+					viewCheckbox.setStyle('fontStyle ', itemDescription.@font);
+					viewCheckbox.setStyle('color ', itemDescription.@color);
+					parentContainer.removeAllChildren();
 					parentContainer.addChild(viewCheckbox);
+					
+				break;
+				
+				case 'input':
+				
+					var viewInput:WysiwygTextInput = new WysiwygTextInput()
+					
+					viewInput.x = itemDescription.@left;
+					viewInput.y = itemDescription.@top;
+					viewInput.width = itemDescription.@width;
+					if(itemDescription.@height.length())
+						viewInput.height = itemDescription.@height;
+					viewInput.htmlText = itemDescription;
+					viewInput.editable = false;
+					viewInput.enabled = false;
+					//viewInput.selectable = false;
+					viewInput.setStyle('disabledColor', '#000000');
+					viewInput.setStyle('fontStyle', itemDescription.@font);
+					viewInput.setStyle('color', itemDescription.@color);
+					
+					//viewInput.setStyle('borderStyle', 'solid');
+					//viewInput.setStyle('borderColor', '#cccccc');
+					//viewInput.setStyle('borderAlpha', .3);
+					//viewInput.setStyle('backgroundAlpha', 0);
+					viewInput.focusEnabled = false;
+					
+					parentContainer.addChild(viewInput);
+					
+				break;
+				
+				case 'password':
+				
+					var viewPassword:WysiwygTextInput = new WysiwygTextInput()
+					
+					viewPassword.x = itemDescription.@left;
+					viewPassword.y = itemDescription.@top;
+					viewPassword.width = itemDescription.@width;
+					if(itemDescription.@height.length())
+						viewPassword.height = itemDescription.@height;
+					viewPassword.htmlText = itemDescription;
+					viewPassword.editable = false;
+					viewPassword.enabled = false;
+					viewPassword.displayAsPassword = true;
+					//viewInput.selectable = false;
+					viewPassword.setStyle('disabledColor', '#000000');
+					viewPassword.setStyle('fontStyle', itemDescription.@font);
+					viewPassword.setStyle('color', itemDescription.@color);
+					
+					//viewInput.setStyle('borderStyle', 'solid');
+					//viewInput.setStyle('borderColor', '#cccccc');
+					//viewInput.setStyle('borderAlpha', .3);
+					//viewInput.setStyle('backgroundAlpha', 0);
+					viewPassword.focusEnabled = false;
+					
+					parentContainer.addChild(viewPassword);
 					
 				break;
 				
@@ -250,14 +516,14 @@ public class RenderManager implements IEventDispatcher
 				
 					var viewButton:Button = new Button()
 							
-					viewButton.x = item.@left;
-					viewButton.y = item.@top;
-					viewButton.width = item.@width;
-					viewButton.height = item.@height;
-					viewButton.label = item.@label;
+					viewButton.x = itemDescription.@left;
+					viewButton.y = itemDescription.@top;
+					viewButton.width = itemDescription.@width;
+					viewButton.height = itemDescription.@height;
+					viewButton.label = itemDescription.@label;
 					
-					viewButton.setStyle('fontStyle ', item.@font);
-					viewButton.setStyle('color ', item.@color);
+					//viewButton.setStyle('fontStyle ', itemDescription.@font);
+					//viewButton.setStyle('color ', itemDescription.@color);
 					
 					parentContainer.addChild(viewButton);
 					
@@ -265,17 +531,17 @@ public class RenderManager implements IEventDispatcher
 				
 				case 'text':
 					
-					var viewText:TextArea = new TextArea()
+					var viewText:WysiwygText = new WysiwygText()
 					
-					viewText.x = item.@left;
-					viewText.y = item.@top;
-					viewText.width = item.@width;
-					if(item.@height.length())
-						viewText.height = item.@height;
-					viewText.htmlText = item;
+					viewText.x = itemDescription.@left;
+					viewText.y = itemDescription.@top;
+					viewText.width = itemDescription.@width;
+					if(itemDescription.@height.length())
+						viewText.height = itemDescription.@height;
+					viewText.htmlText = itemDescription;
 					viewText.selectable = false;
-					viewText.setStyle('fontStyle', item.@font);
-					viewText.setStyle('color', item.@color);
+					viewText.setStyle('fontStyle', itemDescription.@font);
+					viewText.setStyle('color', itemDescription.@color);
 					
 					viewText.setStyle('borderStyle', 'solid');
 					viewText.setStyle('borderColor', '#cccccc');
@@ -291,10 +557,10 @@ public class RenderManager implements IEventDispatcher
 					
 					var viewImage:Image = new WysiwygImage()
 					
-					viewImage.x = item.@left;
-					viewImage.y = item.@top;
-					viewImage.width = item.@width;
-					viewImage.height = item.@height;
+					viewImage.x = itemDescription.@left;
+					viewImage.y = itemDescription.@top;
+					viewImage.width = itemDescription.@width;
+					viewImage.height = itemDescription.@height;
 					viewImage.maintainAspectRatio = false;
 					
 					resourceManager.loadResource(parentID, objectID, viewImage, 'source', true);
@@ -305,52 +571,21 @@ public class RenderManager implements IEventDispatcher
 			}
 		}
 		
-		if(itemList.length > 1) {
-		
-			var sort:Sort = new Sort();
-			sort.fields = [new SortField('@zindex'), new SortField('@hierarchy')];
-			itemList.sort = sort;
-			itemList.refresh();
+		_items.filterFunction = 
+			function (item:Object):Boolean {
+				return item.parentID == parentID;
 		}
 		
-		for each (var collectionItem:XML in itemList) {
+		var sort:Sort = new Sort();
+		sort.fields = [new SortField('zindex'), new SortField('hierarchy'), new SortField('order')];
+		_items.sort = sort;
+		
+		_items.refresh();
+		
+		for each (var collectionItem:Object in _items) {
 			
-			var objectID1:String = collectionItem.@guid.toString();
-			var parentID1:String = collectionItem.parent().@guid;
-			
-			var viewObject:Container;
-			
-			if(!staticContainer) {
-				
-				viewObject = new Item(objectID1);
-				_items[objectID] = viewObject;
-				
-			} else
-				viewObject = new Canvas();
-				
-			viewObject.setStyle('backgroundColor', '#ffffff');
-			viewObject.setStyle('backgroundAlpha', '0');
-			
-			viewObject.clipContent = true;
-			
-			viewObject.x = collectionItem.@left;
-			viewObject.y = collectionItem.@top;
-			
-			if(collectionItem.@width.length())
-				viewObject.width = collectionItem.@width;
-			
-			if(collectionItem.@height.length())
-						viewObject.height = collectionItem.@height;
-			
-			if(parentID && viewObject is Item)	
-				Item(viewObject).parentID = parentID1;
-			
-			parentContainer.addChild(viewObject);
-			
-			if(staticContainer || collectionItem.@contents == 'static')
-				staticContainer = true;
-			
-			this.render(viewObject, collectionItem, staticContainer);
+			parentContainer.addChild(collectionItem.item);
+			//this.render(viewObject, collectionItem, staticContainer);
 		}
 	}
 		

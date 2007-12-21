@@ -59,20 +59,25 @@ public class ResourceManager implements IEventDispatcher {
 		property:String = 'resource', raw:Boolean = false):void {
 		
 		if(_resourceStorage[resourceID]) {
-			
+			var data:Bitmap = new Bitmap(Bitmap(_resourceStorage[resourceID]).bitmapData);
 			if(raw) {
 				
-				destTarget[property] = _resourceStorage[resourceID];
+				destTarget[property] = data;
 				return
 			}
-			var resourceObject:Object = {resourceID:resourceID, data:_resourceStorage[resourceID]}
+			var resourceObject:Object = {resourceID:resourceID, data:data}
 			destTarget[property] = resourceObject;
 			return;
 		}
 		
-		requestQue[resourceID] = {object:destTarget, property:property, raw:raw};
-		soap.addEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
-		soap.getResource(ownerID, resourceID);
+		if(!requestQue[resourceID]) {
+			
+			requestQue[resourceID] = new Array();
+			soap.addEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
+			soap.getResource(ownerID, resourceID);
+		}
+		
+		requestQue[resourceID].push({object:destTarget, property:property, raw:raw});
 	}
 	
 	
@@ -96,23 +101,24 @@ public class ResourceManager implements IEventDispatcher {
 		_resourceStorage[resourceID] = resource;
 	}
 	
-	
-	
 	private function loadComplete(event:Event):void {
 		
 		var resourceID:String = event.currentTarget.loader.name;
 		_resourceStorage[resourceID] = loader.content;
-		var data:Bitmap = new Bitmap(Bitmap(loader.content).bitmapData);
 		
-		var requestObject:Object = requestQue[resourceID].object;
-		var requestProperty:String = requestQue[resourceID].property;
-		
-		if(requestQue[resourceID].raw) {
-				
-			requestObject[requestProperty] = _resourceStorage[resourceID];	
-		} else {
+		for each(var item:Object in requestQue[resourceID]) {
 			
-			requestObject[requestProperty] = {resourceID:resourceID, data:data};
+			var data:Bitmap = new Bitmap(Bitmap(_resourceStorage[resourceID]).bitmapData);
+			var requestObject:Object = item.object;
+			var requestProperty:String = item.property;
+			
+			if(item.raw) {
+					
+				requestObject[requestProperty] = data;	
+			} else {
+				
+				requestObject[requestProperty] = {resourceID:resourceID, data:data};
+			}
 		}
 		
 		delete requestQue[resourceID];

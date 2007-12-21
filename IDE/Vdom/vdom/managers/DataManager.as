@@ -120,7 +120,7 @@ public class DataManager implements IEventDispatcher {
 		
 		var objectId:String = _objectDescription.@ID;
 		
-		var oldListAttributes:XMLList = _objects.Object.(@ID == objectId).Attributes.Attribute
+		var oldListAttributes:XMLList = _objects..Object.(@ID == objectId).Attributes.Attribute
 		var newListAttributes:XMLList = _objectDescription.Attributes.Attribute;
 		
 		var newOnlyAttributes:XML = <Attributes />;
@@ -132,7 +132,7 @@ public class DataManager implements IEventDispatcher {
 			} 
 		}
 		
-		_objects.Object.(@ID == objectId).Attributes = _objectDescription.Attributes;
+		_objects..Object.(@ID == objectId).Attributes = _objectDescription.Attributes;
 		
 		proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, sendAttributeComplete);
 		proxy.setAttributes(_appId, _objectDescription.@ID, newOnlyAttributes);
@@ -296,6 +296,7 @@ public class DataManager implements IEventDispatcher {
 		//var attributes:XML = <Attributes />;
 		var attributes:XML = result.Object.Attributes[0];
 		
+		var objects:XML = <Objects />
 		/* for each(var prop:XML in objectType.Attributes.Attribute) {
 			
 			attributes.appendChild(<Attribute Name={prop.Name.toString()}>{prop.DefaultValue.toString()}</Attribute>);
@@ -303,6 +304,7 @@ public class DataManager implements IEventDispatcher {
 		
 		newObject.appendChild(attributes);
 		newObject.appendChild(objectType);
+		newObject.appendChild(objects);
 		
 		if(result.Parent.toString() != '')
 			_objects..Object.(@ID == parentId)[0].Objects.appendChild(newObject);
