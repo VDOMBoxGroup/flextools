@@ -24,11 +24,13 @@ public class ControlPanel extends HBox {
 		
 		super.addChild(child);
 		
-		if(child is Button) {
+		if(child is ActionButton) {
+			if(ActionButton(child).switched) {
 			
-			child.addEventListener(MouseEvent.CLICK, clickHandler);
-			Button(child).toggle = true;
-			_buttons.push(child);
+				child.addEventListener(MouseEvent.CLICK, clickHandler);
+				Button(child).toggle = true;
+				_buttons.push(child);
+			}
 		}
 					
 		return child;
@@ -36,7 +38,8 @@ public class ControlPanel extends HBox {
 	
 	private function creationCompleteHandler(event:FlexEvent):void {
 		
-		//trace(_buttons.join('\n'));
+		_selectedItem = _buttons[0];
+		_selectedItem.selected = true;
 	}
 	
 	private function clickHandler(event:MouseEvent):void {
