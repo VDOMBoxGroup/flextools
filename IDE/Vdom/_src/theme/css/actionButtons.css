@@ -1,0 +1,117 @@
+/* CSS file */
+ActionButton {
+	
+	color: #ffffff;
+	textSelectedColor: #ffffff;
+	textRollOverColor: #ffffff;
+	
+	dropShadowEnabled: true;
+	
+	upSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinWhite");
+	overSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinBlack");
+	downSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinBlack");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinBlack");
+
+	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinBlack");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinBlack");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinBlack");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonSkinBlack");
+	
+	shadeSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonShade");
+}
+
+.analyseButton {
+	upIcon: Embed("analyse.png");
+	overIcon: Embed("analyse_s.png");
+	downIcon: Embed("analyse_s.png");
+	disabledIcon: Embed("analyse_s.png");
+
+	selectedUpIcon: Embed("analyse_s.png");
+	selectedOverIcon: Embed("analyse_s.png");
+	selectedDownIcon: Embed("analyse_s.png");
+	selectedDisabledIcon: Embed("analyse_s.png");
+}
+
+.editionButton {
+	upIcon: Embed("edition.png");
+	overIcon: Embed("edition_s.png");
+	downIcon: Embed("edition_s.png");
+	disabledIcon: Embed("edition_s.png");
+
+	selectedUpIcon: Embed("edition_s.png");
+	selectedOverIcon: Embed("edition_s.png");
+	selectedDownIcon: Embed("edition_s.png");
+	selectedDisabledIcon: Embed("edition_s.png");
+}
+
+.eventsButton {
+	upIcon: Embed("events.png");
+	overIcon: Embed("events_s.png");
+	downIcon: Embed("events_s.png");
+	disabledIcon: Embed("events_s.png");
+
+	selectedUpIcon: Embed("events_s.png");
+	selectedOverIcon: Embed("events_s.png");
+	selectedDownIcon: Embed("events_s.png");
+	selectedDisabledIcon: Embed("events_s.png");
+}
+
+.newsButton {
+	upIcon: Embed("news.png");
+	overIcon: Embed("news_s.png");
+	downIcon: Embed("news_s.png");
+	disabledIcon: Embed("news_s.png");
+
+	selectedUpIcon: Embed("news_s.png");
+	selectedOverIcon: Embed("news_s.png");
+	selectedDownIcon: Embed("news_s.png");
+	selectedDisabledIcon: Embed("news_s.png");
+}
+
+.previewButton {
+	upIcon: Embed("preview.png");
+	overIcon: Embed("preview_s.png");
+	downIcon: Embed("preview_s.png");
+	disabledIcon: Embed("preview_s.png");
+
+	selectedUpIcon: Embed("preview_s.png");
+	selectedOverIcon: Embed("preview_s.png");
+	selectedDownIcon: Embed("preview_s.png");
+	selectedDisabledIcon: Embed("preview_s.png");
+}
+
+.scriptButton {
+	upIcon: Embed("script.png");
+	overIcon: Embed("script_s.png");
+	downIcon: Embed("script_s.png");
+	disabledIcon: Embed("script_s.png");
+
+	selectedUpIcon: Embed("script_s.png");
+	selectedOverIcon: Embed("script_s.png");
+	selectedDownIcon: Embed("script_s.png");
+	selectedDisabledIcon: Embed("script_s.png");
+}
+
+.statisticsButton {
+	upIcon: Embed("statistics.png");
+	overIcon: Embed("statistics_s.png");
+	downIcon: Embed("statistics_s.png");
+	disabledIcon: Embed("statistics_s.png");
+
+	selectedUpIcon: Embed("statistics_s.png");
+	selectedOverIcon: Embed("statistics_s.png");
+	selectedDownIcon: Embed("statistics_s.png");
+	selectedDisabledIcon: Embed("statistics_s.png");
+}
+
+.treeButton {
+	upIcon: Embed("tree.png");
+	overIcon: Embed("tree_s.png");
+	downIcon: Embed("tree_s.png");
+	disabledIcon: Embed("tree_s.png");
+
+	selectedUpIcon: Embed("tree_s.png");
+	selectedOverIcon: Embed("tree_s.png");
+	selectedDownIcon: Embed("tree_s.png");
+	selectedDisabledIcon: Embed("tree_s.png");
+}
