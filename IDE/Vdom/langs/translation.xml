@@ -2,10 +2,13 @@
 <root>
 <Language Code="EN" label="English">
 	<!-- Begin Login Form -->
-	<Sentence ID="b1" label="login_username">Username</Sentence>
-	<Sentence ID="b2" label="login_password">Password</Sentence>
-	<Sentence ID="b3" label="login_ip">IP</Sentence>
-	<Sentence ID="b4" label="login_sendbutton">Login</Sentence>
+	<Sentence ID="b1" label="login_title">PLEASE ENTER YOUR USERNAME AND PASSWORD BELOW</Sentence>
+	<Sentence ID="b2" label="login_username">USERNAME:</Sentence>
+	<Sentence ID="b3" label="login_password">PASSWORD:</Sentence>
+	<Sentence ID="b4" label="login_ip">VDOMBOX IP:</Sentence>
+	<Sentence ID="b5" label="login_language">LANGUAGE:</Sentence>
+	<Sentence ID="b6" label="login_okbutton">OK</Sentence>
+	<Sentence ID="b7" label="login_quitbutton">QUIT</Sentence>
 	<!-- End Login Form -->
 	
 	<!-- Begin Main Tab -->
@@ -26,6 +29,7 @@
 	<Sentence ID="d6" label="editor_analyse">Analyse</Sentence>
 	<Sentence ID="d7" label="editor_statistics">Statistics</Sentence>
 	<Sentence ID="d8" label="editor_events">Events</Sentence>
+	<Sentence ID="d8" label="news_events">News</Sentence>
 	<!-- End Edit Tab -->
 	
 	<!-- Begin Multilingual Tab -->
@@ -48,11 +52,14 @@
 	<Sentence ID="i1" label="vdom_title">V.D.O.M</Sentence>
 	<!-- End VDOM Tab -->
 </Language>
+
 <Language Code="RU" label="Русский">
     <!-- Начало Login Form -->
-	<Sentence ID="b1" label="login_username">Логин</Sentence>
-	<Sentence ID="b2" label="login_password">Пароль</Sentence>
-	<Sentence ID="b4" label="login_sendbutton">Отправить</Sentence>
+	<Sentence ID="b1" label="login_title">ВВЕДИТЕ ЛОГИН И ПАРОЛЬ</Sentence>
+	<Sentence ID="b2" label="login_username">ЛОГИН:</Sentence>
+	<Sentence ID="b3" label="login_password">ПАРОЛЬ:</Sentence>
+	<Sentence ID="b5" label="login_language">ЯЗЫК:</Sentence>
+	<Sentence ID="b7" label="login_quitbutton">ВЫХОД</Sentence>
 	<!-- Конец Login Form -->
 	
 	<!-- Начало Main Tab -->
@@ -73,6 +80,7 @@
 	<Sentence ID="d6" label="editor_analyse">Анализ</Sentence>
 	<Sentence ID="d7" label="editor_statistics">Статистика</Sentence>
 	<Sentence ID="d8" label="edit_events">События</Sentence>
+	<Sentence ID="d8" label="news_events">Новости</Sentence>
 	<!-- Конец Edit Tab -->
 	
 	<!-- Начало Multilingual Tab -->
