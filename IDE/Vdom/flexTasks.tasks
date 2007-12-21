@@ -1,3 +1,0 @@
-mxmlc=flex2.ant.MxmlcTask
-compc=flex2.ant.CompcTask
-html-wrapper=flex2.ant.HtmlWrapperTask
