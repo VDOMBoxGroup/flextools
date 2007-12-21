@@ -72,7 +72,7 @@
 		<!-- List of CSS or SWC files to apply as a theme. -->
 		<!-- not set -->
 		<theme>
-			<filename>assets/theme/swc/VdomThemeAssets.swc</filename>
+			<filename>assets/theme/vdomTheme.swc</filename>
 		</theme>
 
 		<!-- Turns on the display of stack traces for uncaught runtime errors. -->
