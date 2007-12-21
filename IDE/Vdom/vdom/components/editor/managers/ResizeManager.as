@@ -247,7 +247,7 @@ public class ResizeManager extends UIComponent {
 		g.drawRect(0, 0, measuredWidth, measuredHeight);
 		g.endFill();
 		graphics.clear();			
-		graphics.lineStyle(2, 0, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+		graphics.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 		graphics.drawRect(0, 0, measuredWidth, measuredHeight);
 		graphics.endFill();
 	}
@@ -263,9 +263,9 @@ public class ResizeManager extends UIComponent {
 		
 		if(item) {
 			
-			//var rect:Rectangle = item.getRect(movingItem.parent)
-			measuredWidth  = item.width;
-			measuredHeight = item.height;
+			var rect:Rectangle = item.getRect(movingItem.parent)
+			measuredWidth  = rect.width;
+			measuredHeight = rect.height;
 			
 			var rectangle:Rectangle = getContentRectangle(item, this);
 			

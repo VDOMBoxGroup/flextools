@@ -92,9 +92,9 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 		
 		resizeManager.visible = false;
 		selectedObjectId = null;
-		createObjects(applicationId, topLevelObjectId, '');
+		renderManager.deleteItem(objectId);
 		
-		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
+		//dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
 	public function updateObject(result:XML):void {
@@ -122,6 +122,7 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 			container.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
 			container.addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
 			container.addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
+			container.addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
 			addChild(container);
 		}
 		
@@ -191,6 +192,7 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 			case Keyboard.DELETE:
 				var we:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.DELETE_OBJECT);
 				we.objectID = selectedObjectId;
+				
 				dispatchEvent(we);
 				event.stopPropagation();
 			break;
@@ -329,8 +331,21 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 		}
 		focusedItem = currentItem;
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
-		trace(typeDescription.aviableContainers.split(',').join('\n'))
-		currentItem.drawFocus(true);
+		
+		var currentItemName:String = 
+			dataManager.getTypeByObjectId(currentItem.objectID).Information.Name;;
+		var aviableContainers:Array = typeDescription.aviableContainers.split(', ');
+		
+		if(aviableContainers.indexOf(currentItemName) != -1) {
+			
+			currentItem.setStyle('themeColor', '#00ff00');
+		} else {
+			
+			currentItem.setStyle('themeColor', '#ff0000');
+		}
+		//trace(typeDescription.aviableContainers.split(',').join('\n'))
+		if(currentItem)
+			currentItem.drawFocus(true);
 		
 		
 	}
@@ -339,10 +354,12 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
 		var currentContainer:Item = focusedItem;
+		if(currentContainer)
+			currentContainer.drawFocus(false);
 		
 		var currentItemName:String = 
 			dataManager.getTypeByObjectId(currentContainer.objectID).Information.Name;;
-		var aviableContainers:Array = typeDescription.aviableContainers.split(',');
+		var aviableContainers:Array = typeDescription.aviableContainers.split(', ');
 		
 		if(aviableContainers.indexOf(currentItemName) != -1) {
 			
@@ -372,6 +389,14 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 				attributes);
 		}
 	}
+	
+	private function dragExitHandler(event:DragEvent):void {
+		
+		//var currentContainer:Object = event.currentTarget;
+		if(focusedItem is Item)
+			Item(focusedItem).drawFocus(false);
+	}
+	
 	private function mouseClickHandler(event:MouseEvent):void {
 		
 		if(!container.contains(DisplayObject(event.target)))

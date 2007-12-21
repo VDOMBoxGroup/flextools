@@ -16,35 +16,66 @@
 	
 	<mx:Script source="includes/loginForm.as"/>
 	
-	<mx:Form 
-		horizontalCenter="0" verticalCenter="0" 
-		borderColor="#808080" borderStyle="solid" backgroundColor="#ffffff" dropShadowEnabled="true">
-		<mx:FormItem label="{languages.language.(@label == 'login_username')}">
-			<mx:TextInput id="_username" 
-				width="140"/>
-		</mx:FormItem>
-		<mx:FormItem label="{languages.language.(@label == 'login_password')}">
-			<mx:TextInput id="_password"
-				width="140" 
-				displayAsPassword="true" text="777"/>
-		</mx:FormItem>
-		<mx:FormItem label="{languages.language.(@label == 'login_ip')}">
-			<mx:TextInput id="_ip"
-				width="140" 
-				text="127.0.0.1:81"/>
-		</mx:FormItem>
-		<mx:FormItem>
-			<mx:ComboBox id="selectLang"
-				width="140"
-				dataProvider="{languageList.Language}"
-				labelField="@label"
-		 		fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
-		 		change="changeLanguageHandler(event);"/>
-		</mx:FormItem>
-		<mx:FormItem>
-			<mx:Button id="submitButton" 
-				label="{languages.language.(@label == 'login_sendbutton')}"
-				click="checkData();"/>
-		</mx:FormItem>
-	</mx:Form>
+	<mx:Style>
+		
+		.loginPanel{
+			headerHeight: 50;
+			titleStyleName: "loginPanelTitle";	
+		}
+		.loginPanelTitle {
+			color: #000000;
+			textAlign: "center";
+			fontWeight: "bold";
+		}
+	</mx:Style>
+
+	<mx:Image right="20" top="20" source="{loginTitle}" autoLoad="true"/>
+	<mx:Image source="{loginCube}" verticalCenter="-4.5" x="10"/>
+	<mx:Panel id="loginFormPanel" styleName="loginPanel" borderColor="#808080" borderStyle="solid" 
+		backgroundColor="#ffffff"
+		title="{languages.language.(@label == 'login_title')}" 
+		mouseUp="mouseUpHdlr(event)" mouseDown="mouseDownHdlr(event)"
+		dropShadowEnabled="true" shadowDirection="right" shadowDistance="5"
+		width="370" height="200" cornerRadius="12" horizontalAlign="center" 
+		borderThickness="1" backgroundAlpha=".20" horizontalCenter="0" verticalCenter="0">
+		<mx:Form 
+			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+			<mx:FormItem
+				label="{languages.language.(@label == 'login_username')}">
+				<mx:TextInput id="_username" 
+					width="140"/>
+			</mx:FormItem>
+			<mx:FormItem 
+				label="{languages.language.(@label == 'login_password')}">
+				<mx:TextInput id="_password"
+					width="140" 
+					displayAsPassword="true" text="777"/>
+			</mx:FormItem>
+			<mx:FormItem 
+				label="{languages.language.(@label == 'login_ip')}">
+				<mx:TextInput id="_ip"
+					width="140" 
+					text="127.0.0.1:81"/>
+			</mx:FormItem>
+			<mx:FormItem
+				label="{languages.language.(@label == 'login_language')}">
+				<mx:ComboBox id="selectLang"
+					width="140"
+					dataProvider="{languageList.Language}"
+					labelField="@label"
+			 		fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
+			 		change="changeLanguageHandler(event);"/>
+			</mx:FormItem>
+		</mx:Form>
+		<mx:ControlBar width="100%" horizontalAlign="center" horizontalGap="0" 
+			paddingBottom="-1"
+			barColor="#ff0066"  alpha="1.0" borderColor="#0000ff">
+			<mx:Button id="submitButton" styleName="loginButtonOK"
+				label="{languages.language.(@label == 'login_okbutton')}"
+				click="checkData();" width="110"/>
+				<mx:Button id="quitButton" styleName="loginButtonQuit"
+				label="{languages.language.(@label == 'login_quitbutton')}"
+				 width="110"/>
+		</mx:ControlBar>
+	</mx:Panel>
 </mx:Canvas>

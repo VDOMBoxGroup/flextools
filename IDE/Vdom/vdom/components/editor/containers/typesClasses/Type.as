@@ -29,7 +29,7 @@ public class Type extends VBox {
 	public function Type(typeDescription:XML) {
 		
 		super();
-		this.visible = false;
+		this.visible = true;
 		this._id = typeDescription.Information.ID;
 		if(typeDescription.Information.Icon != '') {
 			typeIcon = new Image();
