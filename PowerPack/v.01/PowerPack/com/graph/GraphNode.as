@@ -614,7 +614,7 @@ package PowerPack.com.graph
 	            		setStyle( "borderColor", 0xE2E2E2);	
 		            	break;
 	            	case GraphNodeType.INITIAL:
-	            		setStyle( "borderColor", 0xff0000);	
+	            		setStyle( "borderColor", 0x00ff00);	
 	    	       		contextMenu.customItems[3].caption = "· " + contextMenu.customItems[3].caption;
 		            	break;
 	            	case GraphNodeType.TERMINAL:

@@ -128,14 +128,17 @@
 			 */	
 			public function toXML():XML
 			{
-				var tmplXML:XML = new XML();
-				tmplXML.name = "template";
+				var tmplXML:XML = new XML(<template></template>);
 				
 				for each (var child:DisplayObject in vsViewStack.getChildren())
 				{
 					if(child is GraphCanvas)
-						tmplXML.appendChild(GraphCanvas(child).toXML());
-				}	
+					{
+						var graphXML:XML = GraphCanvas(child).toXML();	
+						graphXML.@category = this.name;		
+						tmplXML.appendChild(graphXML);
+					}
+				}
 				
 				return tmplXML;
 			}
