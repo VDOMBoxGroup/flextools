@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" layout="absolute" 
+	creationComplete="complete();">
+	<mx:Script>
+		<![CDATA[
+			import PowerPack.com.Utils;
+			import mx.containers.VBox;
+			import mx.controls.RadioButton;
+			import mx.controls.RadioButtonGroup;
+			import mx.controls.TextArea;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			import mx.core.Application;
+			
+			private var strQuestion:String = "";
+			public var strAnswer:String;
+			private var strTitle:String = "";
+			public var arrAnswers:Array;
+
+			private var txtAnswer:TextArea;
+			
+			private var fCloseHandler:Function;			
+			
+			private function complete():void
+			{
+				btnOk.addEventListener(MouseEvent.CLICK, clickHandler);
+				btnOk.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+				btnOk.setFocus();
+
+		        txtQuestion.text = strQuestion;
+		        title = strTitle;				
+
+		        if (fCloseHandler != null)
+		            addEventListener(CloseEvent.CLOSE, fCloseHandler);
+
+		        setActualSize(getExplicitOrMeasuredWidth(),
+		                      getExplicitOrMeasuredHeight());
+			}
+
+		    public static function show(question:String = "", title:String = "", answers:Array = null,
+		                                parent:Sprite = null, 
+		                                closeHandler:Function = null):Dialog
+		    {
+		
+		        if (!parent)
+		            parent = Sprite(Application.application);   
+		        
+		        var dialog:Dialog = new Dialog();		            
+
+		        dialog.strQuestion = question;
+		        dialog.strTitle = title;
+		        dialog.fCloseHandler = closeHandler;
+		        dialog.arrAnswers = answers;
+		
+		        PopUpManager.addPopUp(dialog, parent, true);
+		        PopUpManager.centerPopUp(dialog);
+		
+		        return dialog;
+		    }
+		    
+	    	override protected function createChildren():void
+			{
+				super.createChildren();
+				
+				if(cnvsAnswer.numChildren==0)
+				{
+					if(!arrAnswers || arrAnswers.length==0)
+					{
+						txtAnswer = new TextArea();
+						txtAnswer.percentWidth = 100;
+						txtAnswer.percentHeight = 100;					
+						cnvsAnswer.addChild(txtAnswer);
+					}
+					else
+					{
+						var vBox:VBox = new VBox();
+						vBox.percentWidth = 100;
+						vBox.percentHeight = 100;
+						cnvsAnswer.addChild(vBox);
+						
+						for(var i:int=0; i<arrAnswers.length; i++)
+						{
+							var radBtn:RadioButton = new RadioButton();							
+							radBtn.groupName = "radioGroup";
+							radBtn.value = radBtn.label = arrAnswers[i];
+							vBox.addChild(radBtn);
+						}
+					}
+				}
+			}
+			
+			override protected function updateDisplayList(unscaledWidth:Number,
+														  unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);				
+			}		    
+			
+			
+			private function closeDialog():void
+			{
+				if(txtAnswer)
+				{
+					strAnswer = txtAnswer.text;
+					
+					strAnswer = Utils.Trim(strAnswer);
+					
+					if(strAnswer.length==0)
+					{
+						txtAnswer.setFocus();
+						txtAnswer.setSelection(0, txtAnswer.length);
+						strAnswer = null;
+						return;
+					}
+				}
+				else if(radioGroup.numRadioButtons>0)
+				{
+					if(!radioGroup.selectedValue)
+						return;
+					strAnswer = radioGroup.selectedValue.toString();
+				}		
+				
+				removeDialog();		
+			}  
+			
+			private function removeDialog():void
+			{
+				visible = false;
+				var closeEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
+				dispatchEvent(closeEvent);
+				mx.managers.PopUpManager.removePopUp(this);
+			}
+			
+			override protected function keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER)
+				{
+					closeDialog();
+				}
+				else if(event.keyCode == Keyboard.ESCAPE)
+				{
+					removeDialog();
+				}
+			}	
+			
+			private function clickHandler(event:MouseEvent):void
+			{
+				closeDialog();
+			}					
+    
+    	]]>
+	</mx:Script>
+	
+	<mx:VBox height="100%" width="100%" x="0" y="0">
+		<mx:Panel width="100%" height="100%" layout="absolute" title="Question">
+			<mx:HBox verticalAlign="top" left="10" top="10" bottom="10" right="10">
+				<mx:Image/>
+				<mx:Text width="100%" height="100%" id="txtQuestion"/>
+			</mx:HBox>
+		</mx:Panel>
+		<mx:Panel width="100%" height="100%" layout="absolute" title="Answer">
+			<mx:HBox left="10" right="10" top="10" bottom="10">
+				<mx:Image/>
+				<mx:Canvas width="100%" height="100%" id="cnvsAnswer">
+					<mx:RadioButtonGroup id="radioGroup"/>
+				</mx:Canvas>
+				<mx:Canvas height="100%">
+					<mx:Button x="0" label="Ok" bottom="0" id="btnOk" height="26" width="100%"/>
+				</mx:Canvas>
+			</mx:HBox>
+		</mx:Panel>
+	</mx:VBox>
+	
+</mx:Panel>

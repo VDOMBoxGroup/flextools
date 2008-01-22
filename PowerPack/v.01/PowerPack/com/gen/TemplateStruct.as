@@ -5,12 +5,27 @@ package PowerPack.com.gen
 	import PowerPack.com.graph.GraphNodeType;
 	import PowerPack.com.parse.NodeParser;	
 	import com.riaone.deval.D;
+	import mx.managers.PopUpManager;
+	import mx.core.Application;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import mx.controls.Alert;
+	import PowerPack.com.Utils;
+	import flash.events.EventDispatcher;
 	
+	[Event(name="generationComplete", type="flash.events.Event")]
 	public class TemplateStruct
 	{
+		public static const INSTANCE:String = "___template_struct";
+		 
 		public var initGraph:GraphStruct;
 		
 		private var context:Dynamic;
+		private var parsedNode:Object;
+		private	var transition:String;		
+		private var step:int;
+		
+		public var dispatcher:EventDispatcher;
 		
 		[ArrayElementType("GraphStruct")]
 		public var graphs:Array;		
@@ -90,6 +105,7 @@ package PowerPack.com.gen
 				}					
 					
 				_graphs.push(graphStruct);
+				dispatcher = new EventDispatcher();
 			}
 			
 			if(!_initGraph)
@@ -101,14 +117,16 @@ package PowerPack.com.gen
 			
 			contextStack = new Array();
 		
-			Clear();
 			Init();
 		}
 		
 		public function Init():void
 		{
+			Clear();
 			var graphContext:GraphContext = new GraphContext(initGraph);
 			contextStack.push(graphContext);
+			
+			context[INSTANCE] = this;
 		}
 		
 		public function Clear():void
@@ -117,120 +135,126 @@ package PowerPack.com.gen
 			context = new Dynamic();
 						
 			contextStack = [];
+			step = 0;
 		}
 		
 		public function Generate():String
 		{		
-			var parsedNode:Object;
-			var transition:String;
 			//var currentContext:GraphContext = contextStack[contextStack.length-1];
-			
+
 			do
-			{					
-				if(GraphContext(contextStack[contextStack.length-1]).curNode.category == GraphNodeCategory.NORMAL)
+			{				
+				switch(step)
 				{
-					parsedNode = NodeParser.NormalNodeParse(
-						GraphContext(contextStack[contextStack.length-1]).curNode.text,
-						context);
-					
-					GraphContext(contextStack[contextStack.length-1]).buffer += 
-						parsedNode.resultString ? parsedNode.resultString :
-						GraphContext(contextStack[contextStack.length-1]).curNode.text;					
-				}
-				else if(GraphContext(contextStack[contextStack.length-1]).curNode.category == GraphNodeCategory.SUBGRAPH)
-				{
-					var subgraph:GraphStruct;
-					
-					for each (var graphStruct:GraphStruct in graphs)
-					{
-						if(graphStruct.name == GraphContext(contextStack[contextStack.length-1]).curNode.text)	
-							subgraph = graphStruct;
-					}
-					
-					if(subgraph)
-					{
-						var graphContext:GraphContext = new GraphContext(subgraph);
-						contextStack.push(graphContext);
-					
-						continue;
-					}
-					else
-					{
-						throw new Error("Undefined graph name: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
-					}						
-				}
-				else
-				{
-					parsedNode = NodeParser.CommandNodeParse(
-						GraphContext(contextStack[contextStack.length-1]).curNode.text,
-						false,
-						GraphContext(contextStack[contextStack.length-1]).varPrefix);
-							
-					if(parsedNode.result && parsedNode.program)
-					{		
-						if(parsedNode.type==NodeParser.CT_OPERATION)
-						{		
-							D.eval(parsedNode.program, null, context);				
-						}
-						else if(parsedNode.type==NodeParser.CT_TEST)
+					case 0:
+						if(GraphContext(contextStack[contextStack.length-1]).curNode.category == GraphNodeCategory.NORMAL)
 						{
-							transition = D.eval(parsedNode.program, null, context).toString();	
+							parsedNode = NodeParser.NormalNodeParse(
+								GraphContext(contextStack[contextStack.length-1]).curNode.text,
+								context);
+						
+							GraphContext(contextStack[contextStack.length-1]).buffer += 
+								parsedNode.resultString ? parsedNode.resultString :
+								GraphContext(contextStack[contextStack.length-1]).curNode.text;					
 						}
-						else
+						else if(GraphContext(contextStack[contextStack.length-1]).curNode.category == GraphNodeCategory.SUBGRAPH)
 						{
-							D.eval(parsedNode.program, null, context);
-						}		
-
-						//GraphContext(contextStack[contextStack.length-1]).buffer += 
-						//	GraphContext(contextStack[contextStack.length-1]).curNode.text;
-					}
-					else
-					{
-						throw new Error("Undefined command: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
-					}					
-				}
-				
-				var index:int = -1;
-				
-				while(	(index=GetArrowIndex(GraphContext(contextStack[contextStack.length-1]).curNode.outArrows, transition)) == -1 ||
-						GraphContext(contextStack[contextStack.length-1]).curNode.type == GraphNodeType.TERMINAL)
-				{
-					transition = null;
-					
-					if(GraphContext(contextStack[contextStack.length-1]).resultVar)
-					{
-						D.eval( GraphContext(contextStack[contextStack.length-1]).resultVar + 
-								"=\"" + GraphContext(contextStack[contextStack.length-1]).buffer + "\";", 
-								null, context);
-					}
-					else if(contextStack.length>1)
-					{
-						GraphContext(contextStack[contextStack.length-2]).buffer +=
-							GraphContext(contextStack[contextStack.length-1]).buffer;
-					}
-					else
-					{
-						buffer +=
-							GraphContext(contextStack[contextStack.length-1]).buffer;
-					}
+							var subgraph:GraphStruct;
 							
-					contextStack.pop();
-
-					if(contextStack.length==0)
-						break;
-				}
-				
-				transition = null;
-				
-				if(contextStack.length==0)
-					break;
+							for each (var graphStruct:GraphStruct in graphs)
+							{
+								if(graphStruct.name == GraphContext(contextStack[contextStack.length-1]).curNode.text)	
+									subgraph = graphStruct;
+							}
+							
+							if(subgraph)
+							{
+								var graphContext:GraphContext = new GraphContext(subgraph);
+								contextStack.push(graphContext);
+								
+								step = 0;						
+								continue;
+							}
+							else
+							{
+								throw new Error("Undefined graph name: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
+							}						
+						}
+						else if(GraphContext(contextStack[contextStack.length-1]).curNode.category == GraphNodeCategory.COMMAND)
+						{
+							parsedNode = NodeParser.CommandNodeParse(
+								GraphContext(contextStack[contextStack.length-1]).curNode.text,
+								false,
+								GraphContext(contextStack[contextStack.length-1]).varPrefix);
+									
+							if(parsedNode.result && parsedNode.program)
+							{		
+								if(parsedNode.type==NodeParser.CT_OPERATION)
+								{		
+									D.eval(parsedNode.program, null, context);				
+								}
+								else if(parsedNode.type==NodeParser.CT_TEST)
+								{
+									transition = D.eval(parsedNode.program, null, context).toString();	
+								}
+								else
+								{							
+									step = 1;
+									D.eval(parsedNode.program, null, context);
+									return null;
+								}		
+							}
+							else
+							{
+								throw new Error("Undefined command: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
+							}					
+						}
 					
-				//
-				GraphContext(contextStack[contextStack.length-1]).curNode = 
-					ArrowStruct(GraphContext(contextStack[contextStack.length-1]).curNode.outArrows[index]).toObj;
-																	
-			} while(contextStack.length>0);
+					case 1:
+						parsedNode = null;
+						
+						var index:int = -1;
+						index = GetArrowIndex(GraphContext(contextStack[contextStack.length-1]).curNode.outArrows, transition);
+						transition = null;
+						
+						if(	index == -1 ||
+							GraphContext(contextStack[contextStack.length-1]).curNode.type == GraphNodeType.TERMINAL )
+						{							
+							if(GraphContext(contextStack[contextStack.length-1]).resultVar)
+							{
+								D.eval( GraphContext(contextStack[contextStack.length-1]).resultVar + 
+										"=\"" + GraphContext(contextStack[contextStack.length-1]).buffer + "\";", 
+										null, context);
+							}
+							else if(contextStack.length>1)
+							{
+								GraphContext(contextStack[contextStack.length-2]).buffer +=
+									GraphContext(contextStack[contextStack.length-1]).buffer;
+							}
+							else
+							{
+								buffer +=
+									GraphContext(contextStack[contextStack.length-1]).buffer;
+							}
+									
+							contextStack.pop();							
+	
+							if(contextStack.length==0)
+								break;
+							
+							step = 1;							
+							continue;
+						}
+							
+						//
+						GraphContext(contextStack[contextStack.length-1]).curNode = 
+							ArrowStruct(GraphContext(contextStack[contextStack.length-1]).curNode.outArrows[index]).toObj;						
+						
+						step = 0;
+				}
+			} while(contextStack.length>0);			
 			
+			dispatcher.dispatchEvent(new Event("generationComplete"));
 			return buffer;
 		}
 		
@@ -249,7 +273,7 @@ package PowerPack.com.gen
 							indexes.push(i);
 					}
 					if(indexes.length>0)
-						index = indexes[Math.round( Math.random() * (indexes.length-1) )];
+						index = indexes[ Math.round( Math.random() * (indexes.length-1) ) ];
 						
 					transition = null;
 				}
@@ -260,7 +284,109 @@ package PowerPack.com.gen
 			}
 			return index;
 		}
+
+		/**
+		 * sub function section
+		 */	
+		public function sub(graph:String):String
+		{
+			var subgraph:GraphStruct;
+			
+			for each (var graphStruct:GraphStruct in graphs)
+			{
+				if(graphStruct.name == graph)	
+					subgraph = graphStruct;
+			}
+			
+			if(subgraph)
+			{
+				var graphContext:GraphContext = new GraphContext(subgraph);
+
+				if(parsedNode.variable)
+					graphContext.resultVar = parsedNode.variable;
+
+				contextStack.push(graphContext);
+				
+				step = 0;
+				
+				Generate();
+			}
+			else
+			{
+				throw new Error("Undefined graph name: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
+			}
+				
+			return null;
+		}
 		
+		/**
+		 * subprefix function section
+		 */	
+		 
+		public function subprefix(graph:String, prefix:String):String
+		{
+			var subgraph:GraphStruct;
+			
+			for each (var graphStruct:GraphStruct in graphs)
+			{
+				if(graphStruct.name == graph)	
+					subgraph = graphStruct;
+			}
+			
+			if(subgraph)
+			{
+				var graphContext:GraphContext = new GraphContext(subgraph);
+
+				if(parsedNode.variable)
+					graphContext.resultVar = parsedNode.variable;
+
+				graphContext.varPrefix = prefix;
+
+				contextStack.push(graphContext);
+				
+				step = 0;
+				
+				Generate();
+			}
+			else
+			{
+				throw new Error("Undefined graph name: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
+			}
+				
+			return null;
+		}
+				 		
+		/**
+		 * question function section
+		 */		
+		 
+		public function question(question:String, answers:String):String
+		{
+			var array:Array = null;
+
+			answers = Utils.Trim(answers);
+
+			if(answers!="*")
+				array = answers.split(/\s*,\s*/);
+									
+			Dialog.show(question, "Question", array, null, questionCloseHandler);
+					
+			return null;
+		}
 		
+		private function questionCloseHandler(event:Event):void
+		{
+			if(parsedNode.variable)
+				context[parsedNode.variable] = event.target.strAnswer;
+			
+			if(parsedNode.print)
+				GraphContext(contextStack[contextStack.length-1]).buffer += 
+					event.target.strAnswer;
+			
+			if(event.target.arrAnswers && event.target.arrAnswers.length>0)
+				transition = event.target.strAnswer;
+				
+			Generate();
+		}		
 	}
 }

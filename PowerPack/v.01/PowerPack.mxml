@@ -35,6 +35,8 @@
             
             private var tmplRequest:URLRequest;
             private var tmplLoader:URLLoader;
+            
+            private var tmplStruct:TemplateStruct;
 
             [Bindable]
             public var settingsXML:XML = new XML(<settings></settings>);
@@ -228,16 +230,20 @@
 				}     
 				else if(event.item.@id == "generate")
 				{
-					var tmplStruct:TemplateStruct = new TemplateStruct(graphsAccordionChild.toXML());
-					var buffer:String = tmplStruct.Generate();
-					
-					Alert.show(buffer);
-					
-					if(buffer)
-						mdm.FileSystem.saveFileUnicode("app.xml", buffer); 
+					tmplStruct = new TemplateStruct(graphsAccordionChild.toXML());
+					tmplStruct.dispatcher.addEventListener("generationComplete", generationComplete);					
+					tmplStruct.Generate();
 				}     
             }
-            	
+            
+           	private function generationComplete(event:Event):void
+           	{
+           		Alert.show(tmplStruct.buffer);
+           		
+				if(tmplStruct.buffer)
+					mdm.FileSystem.saveFileUnicode("app.xml", tmplStruct.buffer);            		
+           	}
+           	
             private function openBrowseHandler(event:Event):void
             {
             	if(event.target.selectedItem.type != "file")

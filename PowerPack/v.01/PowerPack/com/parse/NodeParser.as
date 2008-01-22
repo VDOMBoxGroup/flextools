@@ -2,6 +2,7 @@ package PowerPack.com.parse
 {
 	import PowerPack.com.gen.*;
 	import com.riaone.deval.D;
+	import PowerPack.com.Utils;
 	
 	public class NodeParser
 	{		
@@ -17,7 +18,7 @@ package PowerPack.com.parse
 			var retVal:Object = new Object();
 			
 			retVal.result = false;
-			retVal.resultString = null;			
+			retVal.resultString = null;
 			
         	// '...$123asd...' or '...dfdsf$' is not allowed sequence
         	pattern = /(\$[^_a-z]|\$$)/gi;
@@ -68,13 +69,16 @@ package PowerPack.com.parse
 			var pattern:RegExp;
 			var str:String = new String(_nodeText);
 			var retVal:Object = new Object();
+			var func:String;
 			
 			retVal.result = false;
 			retVal.type = null;
 			retVal.program = null;
 			
+			retVal.print = true;
 			retVal.func = null;
-			retVal.resultArray = null;						
+			retVal.variable = null;
+			retVal.resultArray = null;
 					
        		var bTestCommand:Boolean = false;
        		var bOperationCommand:Boolean = false;
@@ -88,7 +92,7 @@ package PowerPack.com.parse
   		        		
        		/**
        		 * syntax analyzer 
-       		 */			
+       		 */
        		 
 			var strSentence:String = "";       			
 			for(var i:int=0; i<lexem.length; i++)
@@ -102,11 +106,11 @@ package PowerPack.com.parse
 				
 				// remove signs
 				pattern = /(^|3|9|=)[24](v|i|f)/g;						
-				strSentence = strSentence.replace(pattern, "$1$2");  
+				strSentence = strSentence.replace(pattern, "$1$2");
 
 				// split into variable
 				pattern = /[Vvif]1[Vvif]/g;						
-				strSentence = strSentence.replace(pattern, "V");  
+				strSentence = strSentence.replace(pattern, "V");
 				pattern = /[Vvif]2[Vvif]/g;						
 				strSentence = strSentence.replace(pattern, "V");  
 				pattern = /[Vvifsc]4[Vvifsc]/g;						
@@ -160,7 +164,7 @@ package PowerPack.com.parse
 			// parse function
 			if(retVal.result==false && strSentence.search(/\[.+\]/)>=0)
 			{
-				pattern = /^(v=){0,1}\[n[nc]{0,}\]$/;
+				pattern = /^(v=){0,1}\[n[nscvif]{0,}\]$/;
 				
 				if(pattern.test(strSentence))
 				{
@@ -171,78 +175,119 @@ package PowerPack.com.parse
  			
     		if(bFunctionCommand)
     		{				
+				for(i=0;i<lexem.length;i++)
+				{
+					if(lexem[i][0]=='v')
+						lexem[i][1] = String(lexem[i][1]).substring(1);
+					else if(lexem[i][0]=='c')
+						lexem[i][1] = Utils.ReplaceSingleQuotes(lexem[i][1]);
+					else if(lexem[i][0]=='s')
+						lexem[i][1] = Utils.ReplaceDoubleQuotes(lexem[i][1]);
+				}
+					    			
 				// search for function name in lexem array
 				for(i=0;i<lexem.length;i++)
 				{
 					if(lexem[i][0]=='n')
 						break;
 				}						
+
+				for(var j:int=0;j<lexem.length;j++)
+				{
+					if(lexem[j][0]=='v')
+						break;
+				}
+				
+				var bFunc:Boolean = false;
 				
 				// question
 				pattern = /^(v=){0,1}\[ncc\]$/;
-				if(	i+2<lexem.length &&
-					pattern.test(strSentence) && 
-					lexem[i][1].toLowerCase()=="question" )
+				if(	pattern.test(strSentence) && 
+					lexem[i][1]=="question" )
 				{
-					retVal.func = lexem[i][1].toLowerCase();
+					bFunc = true;
+					func = TemplateStruct.INSTANCE + "." + lexem[i][1] + "(" + 
+						Utils.DoubleQuotes(lexem[i+1][1]) + "," + 
+						Utils.DoubleQuotes(lexem[i+2][1]) + ")";
 					
 					// generate transitions if there is question command
 					var strVariations:String = lexem[i+2][1];
-					strVariations = strVariations.replace(/(^'|'$)/g, "");
-					strVariations = strVariations.replace(/\\'/g, "'");
 					
 					if(strVariations!="*")
 						retVal.resultArray = strVariations.split(/\s*,\s*/);
-					
-					retVal.result = true;
 				}
 				// sub
 				pattern = /^(v=){0,1}\[nn\]$/;
 				if(	pattern.test(strSentence) && 
-					lexem[i][1].toLowerCase()=="sub" )
+					lexem[i][1]=="sub" )
 				{
-					retVal.func = lexem[i][1].toLowerCase();					
-					retVal.result = true;
+					bFunc = true;
+					func = TemplateStruct.INSTANCE + "." + lexem[i][1] + "(" + 
+						Utils.DoubleQuotes(lexem[i+1][1]) + ")";
 				}	
 				// subprefix
 				pattern = /^(v=){0,1}\[nnn\]$/;
 				if(	pattern.test(strSentence) && 
-					lexem[i][1].toLowerCase()=="subprefix" )
+					lexem[i][1]=="subprefix" )
 				{
-					retVal.func = lexem[i][1].toLowerCase();					
-					retVal.result = true;
+					bFunc = true;
+					func = TemplateStruct.INSTANCE + "." + lexem[i][1] + "(" + 
+						Utils.DoubleQuotes(lexem[i+1][1]) + "," + 
+						Utils.DoubleQuotes(lexem[i+2][1]) + ")";
 				}	
 				// convert
 				pattern = /^(v=){0,1}\[nc[scvi]\]$/;
 				if(	pattern.test(strSentence) && 
-					lexem[i][1].toLowerCase()=="convert" )
+					lexem[i][1]=="convert" )
 				{
-					retVal.func = lexem[i][1].toLowerCase();					
-					retVal.result = true;
+					bFunc = true;
+					func = TemplateStruct.INSTANCE + "." + lexem[i][1] + "(" + 
+						Utils.DoubleQuotes(lexem[i+1][1]) + "," + 
+						(lexem[i+2][0]=="c" || lexem[i+2][0]=="s")?
+							Utils.DoubleQuotes(lexem[i+2][1]):lexem[i+2][1] + ")";
 				}		
 				// writeTo
 				pattern = /^(v=){0,1}\[n[cv]\]$/;
 				if(	pattern.test(strSentence) && 
-					lexem[i][1].toLowerCase()=="writeTo" )
+					lexem[i][1]=="writeTo" )
 				{
-					retVal.func = lexem[i][1].toLowerCase();					
-					retVal.result = true;
+					bFunc = true;
+					func = TemplateStruct.INSTANCE + "." + lexem[i][1] + "(" + 
+						(lexem[i+1][0]=="c" || lexem[i+1][0]=="s")?
+							Utils.DoubleQuotes(lexem[i+1][1]):lexem[i+1][1] + ")";
 				}			
 				// writeVarTo
 				pattern = /^(v=){0,1}\[n[cv][scvif]\]$/;
 				if(	pattern.test(strSentence) && 
-					lexem[i][1].toLowerCase()=="writeVarTo" )
+					lexem[i][1]=="writeVarTo" )
 				{
-					retVal.func = lexem[i][1].toLowerCase();					
-					retVal.result = true;
+					bFunc = true;
+					func = TemplateStruct.INSTANCE + "." + lexem[i][1] + "(" + 
+						(lexem[i+1][0]=="c" || lexem[i+1][0]=="s")?
+							Utils.DoubleQuotes(lexem[i+1][1]):lexem[i+1][1] + "," + 
+						(lexem[i+2][0]=="c" || lexem[i+2][0]=="s")?
+							Utils.DoubleQuotes(lexem[i+2][1]):lexem[i+2][1] + ")";
 				}					
 				// GUID
 				pattern = /^(v=){0,1}\[n\]$/;
 				if(	pattern.test(strSentence) && 
-					lexem[i][1].toLowerCase()=="GUID" )
+					lexem[i][1]=="GUID" )
 				{
-					retVal.func = lexem[i][1].toLowerCase();					
+					bFunc = true;
+					func = TemplateStruct.INSTANCE + "." + lexem[i][1] + "()";
+				}
+				
+				if(bFunc)
+				{					
 					retVal.result = true;
+					retVal.func = lexem[i][1];					
+
+					if(/^v=/.test(strSentence))
+					{
+						retVal.variable = _varPrefix + lexem[j][1];
+						func = retVal.variable + "=" + func;
+						retVal.print = false;
+					}
 				}		
     		}
     		
@@ -280,10 +325,12 @@ package PowerPack.com.parse
 					{
 						program += lexem[i][1];
 					}
-					retVal.program = program;								
+					retVal.program = program;
 				}	
 				else if(bFunctionCommand)
 				{
+					program = func;
+					retVal.program = program;
 				}	
     		}		
 			

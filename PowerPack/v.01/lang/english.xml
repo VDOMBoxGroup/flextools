@@ -45,6 +45,9 @@
         </menuitem>        
         <menuitem label="Help" data="help">
         </menuitem>
+        <menuitem label="Generator">
+        	<menuitem label="Run" id="generate"/>
+        </menuitem>
     </mainmenu>
     
     <filebrowse>
