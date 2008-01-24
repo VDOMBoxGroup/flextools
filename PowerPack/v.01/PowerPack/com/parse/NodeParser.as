@@ -211,10 +211,13 @@ package PowerPack.com.parse
 						Utils.DoubleQuotes(lexem[i+2][1]) + ")";
 					
 					// generate transitions if there is question command
-					var strVariations:String = lexem[i+2][1];
 					
-					if(strVariations!="*")
-						retVal.resultArray = strVariations.split(/\s*,\s*/);
+					
+					//var strVariations:String = lexem[i+2][1];
+					
+					//if(strVariations!="*")
+					//	retVal.resultArray = strVariations.split(/\s*,\s*/);
+					
 				}
 				// sub
 				pattern = /^(v=){0,1}\[nn\]$/;

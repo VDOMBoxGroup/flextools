@@ -3,6 +3,7 @@
 	creationComplete="complete();">
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.StringUtil;
 			import PowerPack.com.Utils;
 			import mx.containers.VBox;
 			import mx.controls.RadioButton;
@@ -102,7 +103,7 @@
 				{
 					strAnswer = txtAnswer.text;
 					
-					strAnswer = Utils.Trim(strAnswer);
+					strAnswer = StringUtil.trim(strAnswer);
 					
 					if(strAnswer.length==0)
 					{

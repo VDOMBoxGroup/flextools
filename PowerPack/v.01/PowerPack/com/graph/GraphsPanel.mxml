@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
-		label="{langXML.navigatorpanel.graphs.title}"
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
 		initialize="init();"
-		width="100%" height="100%">
-
+		height="100%">
+	
 	<mx:XML id="langXML"></mx:XML>
 	<mx:XML id="templateXML"></mx:XML>
-
+	
 	<mx:Script>
 		<![CDATA[
-            import PowerPack.com.graph.GraphThumb; 
+            import PowerPack.com.graph.GraphThumb;
 			import mx.events.DropdownEvent;
             import mx.events.ListEvent;
 			import mx.collections.ArrayCollection;
 			import mx.containers.ViewStack;
 			import mx.controls.ComboBox;
 			import mx.binding.utils.*;
-            import mx.utils.ObjectProxy;		
+            import mx.utils.ObjectProxy;
 		    
 		    //--------------------------------------------------------------------------
 		    //
@@ -24,7 +23,6 @@
 		    //
 		    //--------------------------------------------------------------------------			
 			
-			public var cbInitialGraph:ComboBox;	
 			public var vsViewStack:ViewStack;	
 			
 			[Bindable]
@@ -50,7 +48,7 @@
 						if(!xml || !initGraphs)
 							return;
 						initGraphs[0].name = xml.none;
-						cbInitialGraph.selectedIndex = cbInitialGraph.selectedIndex;																			
+						cbInitGraph.selectedIndex = cbInitGraph.selectedIndex;																			
 					}, this, "langXML");					
 				
 				// We need to repopulate graphs if templateXML has been changed
@@ -61,7 +59,7 @@
 				btnDelete.addEventListener(MouseEvent.CLICK, btnDeleteClickHandler);	
 				btnHelp.addEventListener(MouseEvent.CLICK, btnHelpClickHandler);	
 				
-				cbInitialGraph.addEventListener(DropdownEvent.CLOSE, cbInitGraphCloseHandler);	
+				cbInitGraph.addEventListener(DropdownEvent.CLOSE, cbInitGraphCloseHandler);	
 			}
 			
 			/** 
@@ -102,22 +100,22 @@
 					newGraph.fromXML(graphXML.toXMLString());
 				}	
 				
-				lstGraphs.labelField = "name";	
-				lstGraphs.dataProvider = graphs;						
+				//lstGraphs.labelField = "name";	
+				//lstGraphs.dataProvider = graphs;						
 				
-				cbInitialGraph.labelField = "name";
-				cbInitialGraph.dataProvider = initGraphs;
+				cbInitGraph.labelField = "name";
+				cbInitGraph.dataProvider = initGraphs;
 				
-				lstGraphs.selectedIndex=0;			
+				//lstGraphs.selectedIndex=0;			
 				vsViewStack.selectedIndex=0;
 				
 				// set initial graph in combobox
-				cbInitialGraph.selectedIndex=0;				
+				cbInitGraph.selectedIndex=0;				
 				for(var i:int=0; i<initGraphs.length; i++)
 				{
 					if(initGraphs[i].id==initialId)
 					{
-						cbInitialGraph.selectedIndex=i;
+						cbInitGraph.selectedIndex=i;
 						break;
 					}
 				}
@@ -198,50 +196,50 @@
 										
 				vsViewStack.addChild(newGraph);
 				
-				lstGraphs.selectedIndex=graphs.length-1;	
+				//lstGraphs.selectedIndex=graphs.length-1;	
 				vsViewStack.selectedIndex=graphs.length-1;
 				
-				lstGraphs.validateNow();
-				lstGraphs.verticalScrollPosition = lstGraphs.maxVerticalScrollPosition;
+				//lstGraphs.validateNow();
+				//lstGraphs.verticalScrollPosition = lstGraphs.maxVerticalScrollPosition;
 				
-				lstGraphs.editable=true; 
-				lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};				
+				//lstGraphs.editable=true; 
+				//lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};				
 			}
 				
 			private function btnRenameClickHandler(event:Object):void
 			{
-				if(!lstGraphs.selectedItem)	
-					return;		
-				lstGraphs.editable=true; 
-				lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};
+				//if(!lstGraphs.selectedItem)	
+				//	return;		
+				//lstGraphs.editable=true; 
+				//lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};
 			}	
 					
 			private function btnDeleteClickHandler(event:MouseEvent):void
 			{
-				if(lstGraphs.selectedIndex < 0 || graphs.length==0)
-					return;
+				//if(lstGraphs.selectedIndex < 0 || graphs.length==0)
+				//	return;
 					
-				var selectedIndex:Number = lstGraphs.selectedIndex;
+				//var selectedIndex:Number = lstGraphs.selectedIndex;
 				
-				if(cbInitialGraph.selectedIndex == selectedIndex + 1)
-					cbInitialGraph.selectedIndex = 0;
+				//if(cbInitialGraph.selectedIndex == selectedIndex + 1)
+				//	cbInitialGraph.selectedIndex = 0;
 				
-				initGraphs.removeItemAt(selectedIndex + 1);
-				graphs.removeItemAt(selectedIndex);				
+				//initGraphs.removeItemAt(selectedIndex + 1);
+				//graphs.removeItemAt(selectedIndex);				
 				GraphCanvas(vsViewStack.selectedChild).destroy();
 				
-				lstGraphs.validateNow();
+				//lstGraphs.validateNow();
 				vsViewStack.validateNow();
 				
-				if(selectedIndex>=graphs.length)
+				//if(selectedIndex>=graphs.length)
 				{
-					lstGraphs.selectedIndex=graphs.length-1;	
+					//lstGraphs.selectedIndex=graphs.length-1;	
 					vsViewStack.selectedIndex=graphs.length-1;				
 				}				
-				else
+				//else
 				{												
-					lstGraphs.selectedIndex=selectedIndex;	
-					vsViewStack.selectedIndex=selectedIndex;				
+					//lstGraphs.selectedIndex=selectedIndex;	
+				//	vsViewStack.selectedIndex=selectedIndex;				
 				}
 			}				    		
 			private function btnHelpClickHandler(event:MouseEvent):void
@@ -251,7 +249,7 @@
 			
             private function beginEdit(event:ListEvent):void 
             { 
-            	lstGraphs.createItemEditor(0, List(event.currentTarget).selectedIndex); 
+            	//lstGraphs.createItemEditor(0, List(event.currentTarget).selectedIndex); 
             	
 				GraphThumb(event.currentTarget.itemEditorInstance).lblThumb.visible = false;            	
 				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.visible = true;
@@ -269,33 +267,44 @@
 				GraphThumb(event.currentTarget.itemEditorInstance).lblThumb.visible = true;
 				
                 // Get new label from editor.
-                lstGraphs.editedItemRenderer.data.name =
-					GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text;
+                //lstGraphs.editedItemRenderer.data.name =
+				//	GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text;
 
                 // Close the cell editor.
-                lstGraphs.destroyItemEditor(); 
+                //lstGraphs.destroyItemEditor(); 
                     
                 // Notify the list control to update its display.
-        		lstGraphs.dataProvider.notifyItemUpdate(lstGraphs.editedItemRenderer); 
+        		//lstGraphs.dataProvider.notifyItemUpdate(lstGraphs.editedItemRenderer); 
         		
-        		lstGraphs.editable=false; 
+        		//lstGraphs.editable=false; 
         		
         		initGraphs[event.rowIndex+1].name = GraphCanvas(vsViewStack.getChildAt(event.rowIndex)).label = graphs[event.rowIndex].name;
-        		cbInitialGraph.selectedIndex = cbInitialGraph.selectedIndex;
+        		cbInitGraph.selectedIndex = cbInitGraph.selectedIndex;
             }
 								
 		]]>
 	</mx:Script>
 	
-	<mx:List width="100%" height="100%" allowMultipleSelection="false" textAlign="center" borderStyle="none" id="lstGraphs" 
-		dragEnabled="true"
-		alternatingItemColors="[#FFFFFF, #f6f6f6]"
-		itemRenderer="PowerPack.com.graph.GraphThumb"
-		rendererIsEditor="true"		
-		change="vsViewStack.selectedIndex=List(event.target).selectedIndex"
-		doubleClickEnabled="true"
-		doubleClick="btnRenameClickHandler(event);"
-		itemEditBegin="beginEdit(event);"
-		itemEditEnd="endEdit(event);"></mx:List>
+	<mx:Panel width="100%" height="100%" layout="absolute" title="{langXML.navigatorpanel.title}">
+				
+		<mx:VBox width="100%" height="100%" verticalGap="0">
+		
+			<mx:ControlBar paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" horizontalGap="0" width="100%" horizontalAlign="center" id="ctrlBar">
+				<mx:Button label="{langXML.navigatorpanel.graphs.btnnew}" labelPlacement="bottom" fontFamily="Arial" textAlign="center" cornerRadius="0" alpha="0.5" id="btnNew" width="100%" paddingRight="0" paddingLeft="0" fontSize="9" icon="@Embed('../../../resources/Button.png')" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="0"/>
+				<mx:Button label="{langXML.navigatorpanel.graphs.btnrename}" labelPlacement="bottom" fontFamily="Arial" cornerRadius="0" alpha="0.5" id="btnRename" width="100%" textAlign="center" paddingLeft="0" paddingRight="0" fontSize="9" icon="@Embed('../../../resources/Button.png')" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="0"/>
+				<mx:Button label="{langXML.navigatorpanel.graphs.btndelete}" fontFamily="Arial" cornerRadius="0" labelPlacement="bottom" alpha="0.5" id="btnDelete" width="100%" paddingLeft="0" paddingRight="0" textAlign="center" fontSize="9" icon="@Embed('../../../resources/Button.png')" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="0"/>
+				<mx:Button label="{langXML.navigatorpanel.graphs.btnhelp}" fontFamily="Arial" cornerRadius="0" labelPlacement="bottom" alpha="0.5" id="btnHelp" width="100%" paddingLeft="0" paddingRight="0" textAlign="center" fontSize="9" icon="@Embed('../../../resources/Button.png')" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="0"/>
+			</mx:ControlBar>
+			
+			<mx:Accordion fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">		
+			</mx:Accordion>
+			
+		</mx:VBox>
 
+	</mx:Panel>
+	
+	<mx:Panel width="100%" layout="absolute" title="{langXML.initialgraphpanel.title}">
+		<mx:ComboBox width="100%" id="cbInitGraph"></mx:ComboBox>
+	</mx:Panel>
+	
 </mx:VBox>

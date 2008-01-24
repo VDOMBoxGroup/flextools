@@ -760,7 +760,7 @@ package PowerPack.com.graph
 			graphics.moveTo( arrPolygon[0].x, arrPolygon[0].y );
 			graphics.lineTo( arrPolygon[1].x, arrPolygon[1].y );
 											
-			if((bOver || bHighlighted || bFocused) && bEnabled && toObj)
+			if((bOver || bHighlighted || focused) && bEnabled && toObj)
 			{
 				// Draw over focus
 				graphics.lineStyle(getStyle("strokeWidth") + getStyle("focusThickness")*2, focusColor, getStyle("focusAlpha"));
@@ -979,12 +979,14 @@ package PowerPack.com.graph
 		}		
 		private function graphArrow_focusInHandler(event:FocusEvent):void
 		{
+			bChanged = true;
 			//systemManager.stage.focus = this;
-			invalidateDisplayList();		
+			invalidateDisplayList();	
 		}			
 		private function graphArrow_focusOutHandler(event:FocusEvent):void
 		{
-			invalidateDisplayList();		
+			bChanged = true;
+			invalidateDisplayList();
 		}
 		
 		//--------------------------------------------------------------------------

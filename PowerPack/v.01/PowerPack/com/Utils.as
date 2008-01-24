@@ -31,14 +31,5 @@ package PowerPack.com
 			
 			return str;
 		}
-		
-		public static function Trim(_str:String):String
-		{
-			var str:String;
-
-			str = _str.replace(/(^\s+|\s+$)/g, "");
-			
-			return str;
-		}
 	}
 }

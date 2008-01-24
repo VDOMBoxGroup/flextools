@@ -12,9 +12,11 @@ package PowerPack.com.gen
 	import mx.controls.Alert;
 	import PowerPack.com.Utils;
 	import flash.events.EventDispatcher;
+	import mx.utils.StringUtil;
+	import mx.utils.Base64Encoder;
 	
 	[Event(name="generationComplete", type="flash.events.Event")]
-	public class TemplateStruct
+	public class TemplateStruct extends EventDispatcher
 	{
 		public static const INSTANCE:String = "___template_struct";
 		 
@@ -24,8 +26,6 @@ package PowerPack.com.gen
 		private var parsedNode:Object;
 		private	var transition:String;		
 		private var step:int;
-		
-		public var dispatcher:EventDispatcher;
 		
 		[ArrayElementType("GraphStruct")]
 		public var graphs:Array;		
@@ -105,7 +105,6 @@ package PowerPack.com.gen
 				}					
 					
 				_graphs.push(graphStruct);
-				dispatcher = new EventDispatcher();
 			}
 			
 			if(!_initGraph)
@@ -254,7 +253,7 @@ package PowerPack.com.gen
 				}
 			} while(contextStack.length>0);			
 			
-			dispatcher.dispatchEvent(new Event("generationComplete"));
+			dispatchEvent(new Event("generationComplete"));
 			return buffer;
 		}
 		
@@ -364,7 +363,7 @@ package PowerPack.com.gen
 		{
 			var array:Array = null;
 
-			answers = Utils.Trim(answers);
+			answers = StringUtil.trim(answers);
 
 			if(answers!="*")
 				array = answers.split(/\s*,\s*/);
@@ -383,10 +382,20 @@ package PowerPack.com.gen
 				GraphContext(contextStack[contextStack.length-1]).buffer += 
 					event.target.strAnswer;
 			
-			if(event.target.arrAnswers && event.target.arrAnswers.length>0)
-				transition = event.target.strAnswer;
+			//if(event.target.arrAnswers && event.target.arrAnswers.length>0)
+			//	transition = event.target.strAnswer;
 				
 			Generate();
-		}		
+		}	
+		
+		/**
+		 * convert function section
+		 */
+		 
+		public function convert(type:String, value:String):void
+		{
+			Generate();
+		}			 
+		 		
 	}
 }

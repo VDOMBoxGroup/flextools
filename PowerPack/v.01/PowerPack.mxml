@@ -177,7 +177,7 @@
                 if(event.item.@id == "new")
                 {
                 	curOpenFile = null;
-	                graphsAccordionChild.clear();
+	                //graphsAccordionChild.clear();
                 }
                 else if(event.item.@id == "open_file")
                 {		
@@ -191,7 +191,7 @@
                 else if(event.item.@id == "close")
                 {		
               		curOpenFile = null;
-	                graphsAccordionChild.clear();
+	                //graphsAccordionChild.clear();
                 }                
     	        else if(event.item.@id == "save")
     	        {
@@ -206,7 +206,7 @@
               		} 
               		else
               		{		            		
-		            	fileData = graphsAccordionChild.toXML().toXMLString();
+		            	//fileData = graphsAccordionChild.toXML().toXMLString();
 		            	mdm.FileSystem.saveFileUnicode(curOpenFile, fileData);             		
               		}	        
     	        }
@@ -230,8 +230,8 @@
 				}     
 				else if(event.item.@id == "generate")
 				{
-					tmplStruct = new TemplateStruct(graphsAccordionChild.toXML());
-					tmplStruct.dispatcher.addEventListener("generationComplete", generationComplete);					
+					//tmplStruct = new TemplateStruct(graphsAccordionChild.toXML());
+					tmplStruct.addEventListener("generationComplete", generationComplete);					
 					tmplStruct.Generate();
 				}     
             }
@@ -265,8 +265,8 @@
             
             private function saveBrowseHandler(event:Event):void
             {
-            	var fileData:String = graphsAccordionChild.toXML().toXMLString();
-            	mdm.FileSystem.saveFileUnicode(event.target.selectedItem.path, fileData);
+            	//var fileData:String = graphsAccordionChild.toXML().toXMLString();
+            	//mdm.FileSystem.saveFileUnicode(event.target.selectedItem.path, fileData);
             	
             	curOpenFile = event.target.selectedItem.path;
             }
@@ -297,19 +297,18 @@
 		<mx:Spacer width="100%"/>
 		
 		<mx:HDividedBox height="100%" width="100%">
-			<mx:VBox height="100%">
-			
-				<mx:Panel width="100%" height="100%" layout="absolute" title="{langXML.navigatorpanel.title}">
+				
+				<!--mx:Panel width="100%" height="100%" layout="absolute" title="{langXML.navigatorpanel.title}">
 					<mx:Accordion fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">
 						
 						<ns4:GraphsAccordionChild 
 							id="graphsAccordionChild"
-							name="application"							
+							name="application"
 							langXML="{langXML}" 
 							templateXML="{templateXML}" 
 							cbInitialGraph="{cbInitGraph}"
 							vsViewStack="{viewstack}">
-						</ns4:GraphsAccordionChild>			
+						</ns4:GraphsAccordionChild>
 
 						<mx:Canvas label="Container" width="100%" height="100%">
 						</mx:Canvas>
@@ -318,13 +317,14 @@
 						</mx:Canvas>
 						
 					</mx:Accordion>
-				</mx:Panel>
+				</mx:Panel-->
 				
-				<mx:Panel width="100%" layout="absolute" title="{langXML.initialgraphpanel.title}">
-					<mx:ComboBox width="100%" id="cbInitGraph"></mx:ComboBox>
-				</mx:Panel>
-				
-			</mx:VBox>
+			<ns4:GraphsPanel
+				id="graphsPanel"
+				langXML="{langXML}" 
+				templateXML="{templateXML}"
+				vsViewStack="{viewstack}">
+			</ns4:GraphsPanel>
 			
 			<mx:Panel width="100%" height="100%" layout="absolute" title="{langXML.designpanel.title}">
 				<mx:ViewStack id="viewstack" width="100%" height="100%">
