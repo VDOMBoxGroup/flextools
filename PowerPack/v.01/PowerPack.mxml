@@ -177,7 +177,7 @@
                 if(event.item.@id == "new")
                 {
                 	curOpenFile = null;
-	                //graphsAccordionChild.clear();
+	                graphsPanel.clear();
                 }
                 else if(event.item.@id == "open_file")
                 {		
@@ -191,7 +191,7 @@
                 else if(event.item.@id == "close")
                 {		
               		curOpenFile = null;
-	                //graphsAccordionChild.clear();
+	                graphsPanel.clear();
                 }                
     	        else if(event.item.@id == "save")
     	        {
@@ -206,7 +206,7 @@
               		} 
               		else
               		{		            		
-		            	//fileData = graphsAccordionChild.toXML().toXMLString();
+		            	fileData = graphsPanel.toXML().toXMLString();
 		            	mdm.FileSystem.saveFileUnicode(curOpenFile, fileData);             		
               		}	        
     	        }
@@ -230,7 +230,7 @@
 				}     
 				else if(event.item.@id == "generate")
 				{
-					//tmplStruct = new TemplateStruct(graphsAccordionChild.toXML());
+					tmplStruct = new TemplateStruct(graphsPanel.toXML());
 					tmplStruct.addEventListener("generationComplete", generationComplete);					
 					tmplStruct.Generate();
 				}     
@@ -265,8 +265,8 @@
             
             private function saveBrowseHandler(event:Event):void
             {
-            	//var fileData:String = graphsAccordionChild.toXML().toXMLString();
-            	//mdm.FileSystem.saveFileUnicode(event.target.selectedItem.path, fileData);
+            	var fileData:String = graphsPanel.toXML().toXMLString();
+            	mdm.FileSystem.saveFileUnicode(event.target.selectedItem.path, fileData);
             	
             	curOpenFile = event.target.selectedItem.path;
             }

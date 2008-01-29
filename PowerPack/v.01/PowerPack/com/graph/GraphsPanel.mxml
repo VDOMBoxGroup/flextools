@@ -237,18 +237,20 @@
 			
 			private function btnNewClickHandler(event:MouseEvent):void
 			{
+				var child:GraphsAccordionChild = GraphsAccordionChild(graphsAccordion.selectedChild);
+
 				var newGraph:GraphCanvas = new GraphCanvas();
 				newGraph.langXML = langXML;
 				BindingUtils.bindProperty(newGraph, "langXML", this, "langXML");
 									
 				newGraph.label = newGraph.name;
+				newGraph.category = child.label;
 
 				initGraphs.addItem( {	id: newGraph.name, 
 										name: newGraph.label, 
 										initial: newGraph.initial.toString(),
 										data: newGraph } );
 
-				var child:GraphsAccordionChild = GraphsAccordionChild(graphsAccordion.selectedChild);
 
 				child.graphs.addItem(  new ObjectProxy({	
 									id: newGraph.name, 
@@ -312,7 +314,26 @@
 				child.lstGraphs.validateNow();
 				vsViewStack.validateNow();
 				
-				//if(selectedIndex>=graphs.length)
+				//if(child.graphs.length==0)
+				{
+					vsViewStack.selectedIndex = 0;
+					
+					for(i=0; i<graphsAccordion.numChildren; i++)
+					{
+						for(var j:int=0; j<GraphsAccordionChild(graphsAccordion.getChildAt(i)).graphs.length; j++)
+						{
+							if(GraphsAccordionChild(graphsAccordion.getChildAt(i)).graphs[j].data == vsViewStack.getChildAt(0))
+							{
+								curAccordionChild = GraphsAccordionChild(graphsAccordion.getChildAt(i));
+
+								graphsAccordion.selectedIndex = i;
+								curAccordionChild.lstGraphs.selectedIndex = j;
+								break;
+							}
+						}
+					}					
+				}
+				//else if(selectedIndex>=graphs.length)
 				//{
 					//lstGraphs.selectedIndex=graphs.length-1;
 					//vsViewStack.selectedIndex=graphs.length-1;			
