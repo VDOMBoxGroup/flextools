@@ -8,6 +8,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.managers.FocusManager;
+			import mx.controls.List;
             import PowerPack.com.graph.GraphThumb;
 			import mx.events.DropdownEvent;
             import mx.events.ListEvent;
@@ -25,12 +27,11 @@
 			
 			public var vsViewStack:ViewStack;	
 			
+			public var curAccordionChild:GraphsAccordionChild;
+			
 			[Bindable]
 			private var initGraphs:ArrayCollection = new ArrayCollection();	
 			
-			[Bindable]
-			private var graphs:ArrayCollection = new ArrayCollection();		
-		
 			//--------------------------------------------------------------------------
 			//
 			//  Class methods
@@ -48,8 +49,8 @@
 						if(!xml || !initGraphs)
 							return;
 						initGraphs[0].name = xml.none;
-						cbInitGraph.selectedIndex = cbInitGraph.selectedIndex;																			
-					}, this, "langXML");					
+						cbInitGraph.selectedIndex = cbInitGraph.selectedIndex;
+					}, this, "langXML");
 				
 				// We need to repopulate graphs if templateXML has been changed
 				BindingUtils.bindSetter(populateGraphs, this, "templateXML");
@@ -69,12 +70,12 @@
 			{	
 				var initialId:String = "";
 				
-				if(!xml)			
+				if(!xml)
 					return;
 
 				clear();				
 				
-				for each (var graphXML:XML in templateXML.elements("graph").(@category.toLowerCase()==this.name.toLowerCase()))
+				for each (var graphXML:XML in templateXML.elements("graph"))
 				{					
 					if(graphXML.@initial.toString().toLowerCase() == "true")
 						initialId = graphXML.@id;
@@ -88,30 +89,51 @@
 											initial: graphXML.@initial,
 											data: newGraph	} );
 
-					graphs.addItem( new ObjectProxy({	id: graphXML.@id, 
+					vsViewStack.addChild(newGraph);
+
+					newGraph.fromXML(graphXML.toXMLString());
+
+					var graphAccordionChild:GraphsAccordionChild = null;
+
+					for(var i:int=0; i<graphsAccordion.numChildren; i++)
+					{
+						if(GraphsAccordionChild(graphsAccordion.getChildAt(i)).label==newGraph.category)
+						{
+							graphAccordionChild = graphsAccordion.getChildAt(i) as GraphsAccordionChild;
+							break;
+						}
+					}
+					
+					if(!graphAccordionChild)
+					{
+						graphAccordionChild = new GraphsAccordionChild();
+						graphAccordionChild.label = newGraph.category;
+						graphsAccordion.addChild(graphAccordionChild);
+
+						graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, changeLstGraphsHandler);
+						graphAccordionChild.lstGraphs.addEventListener("doubleClick", btnRenameClickHandler);
+						graphAccordionChild.lstGraphs.addEventListener("completeEdit", completeEditLstGraphsHandler);
+					
+					}
+
+					graphAccordionChild.graphs.addItem( new ObjectProxy({	id: graphXML.@id, 
 										name: graphXML.@name, 
 										initial: graphXML.@initial,
-										data:newGraph	}) );										
-					
-					newGraph.name = graphXML.@id;
-					newGraph.label = graphXML.@name;
-					newGraph.initial = graphXML.@initial;					
-					vsViewStack.addChild(newGraph);
-					newGraph.fromXML(graphXML.toXMLString());
+										data:newGraph	}) );
+
 				}	
-				
-				//lstGraphs.labelField = "name";	
-				//lstGraphs.dataProvider = graphs;						
 				
 				cbInitGraph.labelField = "name";
 				cbInitGraph.dataProvider = initGraphs;
 				
-				//lstGraphs.selectedIndex=0;			
+				graphsAccordion.selectedIndex = 0;
+				GraphsAccordionChild(graphsAccordion.getChildAt(0)).lstGraphs.selectedIndex=0;
+				curAccordionChild = GraphsAccordionChild(graphsAccordion.getChildAt(0));
 				vsViewStack.selectedIndex=0;
 				
 				// set initial graph in combobox
-				cbInitGraph.selectedIndex=0;				
-				for(var i:int=0; i<initGraphs.length; i++)
+				cbInitGraph.selectedIndex=0;
+				for(i=0; i<initGraphs.length; i++)
 				{
 					if(initGraphs[i].id==initialId)
 					{
@@ -121,6 +143,43 @@
 				}
 			}
 			
+			private function changeLstGraphsHandler(event:Event):void
+			{
+				if(graphsAccordion.selectedChild != curAccordionChild)
+				{
+					curAccordionChild.lstGraphs.selectedIndex = -1;
+					curAccordionChild = GraphsAccordionChild(graphsAccordion.selectedChild);
+				}
+				
+				vsViewStack.selectedChild = List(event.target).selectedItem.data;
+			}
+			
+			private function completeEditLstGraphsHandler(event:ListEvent):void
+			{        	
+				var item:Object = List(event.target).dataProvider[event.rowIndex];				
+				
+				for(var i:int=0; i<initGraphs.length; i++)
+				{
+					if(item.data == initGraphs.getItemAt(i).data)
+					{
+						initGraphs[i].name = List(event.target).dataProvider[event.rowIndex].name;
+						break;
+					}
+				}
+								
+				for(i=0; i<vsViewStack.numChildren; i++)
+				{
+					if(	vsViewStack.getChildAt(i) is GraphCanvas && 
+						item.data == vsViewStack.getChildAt(i) )
+					{
+						GraphCanvas(vsViewStack.getChildAt(event.rowIndex)).label = List(event.target).dataProvider[event.rowIndex].name;
+						break;
+					}
+				}
+
+        		cbInitGraph.selectedIndex = cbInitGraph.selectedIndex;				
+			}
+						
 			/** 
 			 *	Gen XML that represents template
 			 */	
@@ -132,8 +191,7 @@
 				{
 					if(child is GraphCanvas)
 					{
-						var graphXML:XML = GraphCanvas(child).toXML();	
-						graphXML.@category = this.name;		
+						var graphXML:XML = GraphCanvas(child).toXML();		
 						tmplXML.appendChild(graphXML);
 					}
 				}
@@ -143,10 +201,11 @@
 			
 			public function clear():void
 			{
+				// remove all except first 'none' position
 				while(initGraphs.length>1)
 					initGraphs.removeItemAt(1);				
 				
-				graphs.removeAll();			
+				graphsAccordion.removeAllChildren();
 				
 				for each (var child:DisplayObject in vsViewStack.getChildren())
 				{
@@ -174,8 +233,8 @@
 				
 				if(selectedIndex>0)
 					GraphCanvas(vsViewStack.getChildAt(selectedIndex-1)).initial = true;
-			}	    	
-					
+			}
+			
 			private function btnNewClickHandler(event:MouseEvent):void
 			{
 				var newGraph:GraphCanvas = new GraphCanvas();
@@ -189,98 +248,86 @@
 										initial: newGraph.initial.toString(),
 										data: newGraph } );
 
-				graphs.addItem(  new ObjectProxy({	id: newGraph.name, 
+				var child:GraphsAccordionChild = GraphsAccordionChild(graphsAccordion.selectedChild);
+
+				child.graphs.addItem(  new ObjectProxy({	
+									id: newGraph.name, 
 									name: newGraph.label, 
 									initial: newGraph.initial.toString(),
 									data: newGraph }) );
 										
 				vsViewStack.addChild(newGraph);
+
+				curAccordionChild.lstGraphs.selectedIndex = -1;
+				curAccordionChild = GraphsAccordionChild(graphsAccordion.selectedChild);				
 				
-				//lstGraphs.selectedIndex=graphs.length-1;	
-				vsViewStack.selectedIndex=graphs.length-1;
+				child.lstGraphs.selectedIndex = child.graphs.length-1;	
+				vsViewStack.selectedIndex = vsViewStack.numChildren-1;
 				
-				//lstGraphs.validateNow();
-				//lstGraphs.verticalScrollPosition = lstGraphs.maxVerticalScrollPosition;
+				child.lstGraphs.validateNow();
+				child.lstGraphs.verticalScrollPosition = child.lstGraphs.maxVerticalScrollPosition;
 				
-				//lstGraphs.editable=true; 
-				//lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};				
+				child.lstGraphs.editable=true; 
+				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};				
 			}
 				
 			private function btnRenameClickHandler(event:Object):void
 			{
-				//if(!lstGraphs.selectedItem)	
-				//	return;		
-				//lstGraphs.editable=true; 
-				//lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};
+				graphsAccordion.selectedChild = curAccordionChild;
+				
+				var child:GraphsAccordionChild = curAccordionChild;				
+				
+				if(!child.lstGraphs.selectedItem)
+					return;
+					
+				child.lstGraphs.editable=true;
+				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
 			}	
 					
 			private function btnDeleteClickHandler(event:MouseEvent):void
 			{
-				//if(lstGraphs.selectedIndex < 0 || graphs.length==0)
-				//	return;
+				graphsAccordion.selectedChild = curAccordionChild;
+
+				var child:GraphsAccordionChild = curAccordionChild;
+
+				if(child.lstGraphs.selectedIndex < 0 || child.graphs.length==0)
+					return;
 					
-				//var selectedIndex:Number = lstGraphs.selectedIndex;
+				var selectedItem:Object = child.lstGraphs.selectedItem;
 				
-				//if(cbInitialGraph.selectedIndex == selectedIndex + 1)
-				//	cbInitialGraph.selectedIndex = 0;
+				if(cbInitGraph.selectedItem.data == selectedItem.data)
+					cbInitGraph.selectedIndex = 0;
 				
-				//initGraphs.removeItemAt(selectedIndex + 1);
-				//graphs.removeItemAt(selectedIndex);				
+				for(var i:int=0; i<initGraphs.length; i++)
+				{
+					if(selectedItem.data == initGraphs.getItemAt(i).data)
+					{
+						initGraphs.removeItemAt(i);
+						break;
+					}
+				}
+				child.graphs.removeItemAt(child.lstGraphs.selectedIndex);
 				GraphCanvas(vsViewStack.selectedChild).destroy();
 				
-				//lstGraphs.validateNow();
+				child.lstGraphs.validateNow();
 				vsViewStack.validateNow();
 				
 				//if(selectedIndex>=graphs.length)
-				{
-					//lstGraphs.selectedIndex=graphs.length-1;	
-					vsViewStack.selectedIndex=graphs.length-1;				
-				}				
+				//{
+					//lstGraphs.selectedIndex=graphs.length-1;
+					//vsViewStack.selectedIndex=graphs.length-1;			
+				//}
 				//else
-				{												
-					//lstGraphs.selectedIndex=selectedIndex;	
-				//	vsViewStack.selectedIndex=selectedIndex;				
-				}
-			}				    		
+				//{
+					//lstGraphs.selectedIndex=selectedIndex;
+					//vsViewStack.selectedIndex=selectedIndex;
+				//}
+			}	
+						    		
 			private function btnHelpClickHandler(event:MouseEvent):void
 			{
 				// TODO
-			}				
-			
-            private function beginEdit(event:ListEvent):void 
-            { 
-            	//lstGraphs.createItemEditor(0, List(event.currentTarget).selectedIndex); 
-            	
-				GraphThumb(event.currentTarget.itemEditorInstance).lblThumb.visible = false;            	
-				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.visible = true;
-				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.setFocus();
-				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.setSelection(0,
-					GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text.length);					
-            }
-            
-            private function endEdit(event:ListEvent):void 
-            {    
-            	// Disable copying data back to the control.
-                event.preventDefault();
-				
-				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.visible = false;
-				GraphThumb(event.currentTarget.itemEditorInstance).lblThumb.visible = true;
-				
-                // Get new label from editor.
-                //lstGraphs.editedItemRenderer.data.name =
-				//	GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text;
-
-                // Close the cell editor.
-                //lstGraphs.destroyItemEditor(); 
-                    
-                // Notify the list control to update its display.
-        		//lstGraphs.dataProvider.notifyItemUpdate(lstGraphs.editedItemRenderer); 
-        		
-        		//lstGraphs.editable=false; 
-        		
-        		initGraphs[event.rowIndex+1].name = GraphCanvas(vsViewStack.getChildAt(event.rowIndex)).label = graphs[event.rowIndex].name;
-        		cbInitGraph.selectedIndex = cbInitGraph.selectedIndex;
-            }
+			}			
 								
 		]]>
 	</mx:Script>
@@ -296,7 +343,7 @@
 				<mx:Button label="{langXML.navigatorpanel.graphs.btnhelp}" fontFamily="Arial" cornerRadius="0" labelPlacement="bottom" alpha="0.5" id="btnHelp" width="100%" paddingLeft="0" paddingRight="0" textAlign="center" fontSize="9" icon="@Embed('../../../resources/Button.png')" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="0"/>
 			</mx:ControlBar>
 			
-			<mx:Accordion fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">		
+			<mx:Accordion id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">		
 			</mx:Accordion>
 			
 		</mx:VBox>

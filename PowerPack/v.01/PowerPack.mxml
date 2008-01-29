@@ -298,27 +298,6 @@
 		
 		<mx:HDividedBox height="100%" width="100%">
 				
-				<!--mx:Panel width="100%" height="100%" layout="absolute" title="{langXML.navigatorpanel.title}">
-					<mx:Accordion fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">
-						
-						<ns4:GraphsAccordionChild 
-							id="graphsAccordionChild"
-							name="application"
-							langXML="{langXML}" 
-							templateXML="{templateXML}" 
-							cbInitialGraph="{cbInitGraph}"
-							vsViewStack="{viewstack}">
-						</ns4:GraphsAccordionChild>
-
-						<mx:Canvas label="Container" width="100%" height="100%">
-						</mx:Canvas>
-						
-						<mx:Canvas label="Resources" width="100%" height="100%">
-						</mx:Canvas>
-						
-					</mx:Accordion>
-				</mx:Panel-->
-				
 			<ns4:GraphsPanel
 				id="graphsPanel"
 				langXML="{langXML}" 

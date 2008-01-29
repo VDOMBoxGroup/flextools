@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 		label="{langXML.navigatorpanel.graphs.title}"
-		initialize="init();"
 		width="100%" height="100%">
 
 	<mx:XML id="langXML"></mx:XML>
@@ -9,292 +8,97 @@
 
 	<mx:Script>
 		<![CDATA[
-            import PowerPack.com.graph.GraphThumb; 
-			import mx.events.DropdownEvent;
-            import mx.events.ListEvent;
+			import PowerPack.com.parse.NodeParser;
+			import mx.events.ListEventReason;
 			import mx.collections.ArrayCollection;
-			import mx.containers.ViewStack;
-			import mx.controls.ComboBox;
-			import mx.binding.utils.*;
-            import mx.utils.ObjectProxy;		
-		    
-		    //--------------------------------------------------------------------------
-		    //
-		    //  Variables and properties
-		    //
-		    //--------------------------------------------------------------------------			
-			
-			public var cbInitialGraph:ComboBox;	
-			public var vsViewStack:ViewStack;	
+			import mx.events.ListEvent;
 			
 			[Bindable]
-			private var initGraphs:ArrayCollection = new ArrayCollection();	
-			
-			[Bindable]
-			private var graphs:ArrayCollection = new ArrayCollection();		
-		
-			//--------------------------------------------------------------------------
-			//
-			//  Class methods
-			//
-			//--------------------------------------------------------------------------
-					
-			private function init():void
-			{
-				initGraphs.addItem({id: "", name: "none", initial: "false"});	
-				
-				// Binding to first initial combobox element label
-				BindingUtils.bindSetter(
-					function(xml:XML):void 
-					{
-						if(!xml || !initGraphs)
-							return;
-						initGraphs[0].name = xml.none;
-						cbInitialGraph.selectedIndex = cbInitialGraph.selectedIndex;																			
-					}, this, "langXML");					
-				
-				// We need to repopulate graphs if templateXML has been changed
-				BindingUtils.bindSetter(populateGraphs, this, "templateXML");
-				
-				btnNew.addEventListener(MouseEvent.CLICK, btnNewClickHandler);	
-				btnRename.addEventListener(MouseEvent.CLICK, btnRenameClickHandler);	
-				btnDelete.addEventListener(MouseEvent.CLICK, btnDeleteClickHandler);	
-				btnHelp.addEventListener(MouseEvent.CLICK, btnHelpClickHandler);	
-				
-				cbInitialGraph.addEventListener(DropdownEvent.CLOSE, cbInitGraphCloseHandler);	
-			}
-			
-			/** 
-			 *	Fill in viewstack, list and combobox with graphs
-			 */	 
-			public function populateGraphs(xml:XML):void
-			{	
-				var initialId:String = "";
-				
-				if(!xml)			
-					return;
-
-				clear();				
-				
-				for each (var graphXML:XML in templateXML.elements("graph").(@category.toLowerCase()==this.name.toLowerCase()))
-				{					
-					if(graphXML.@initial.toString().toLowerCase() == "true")
-						initialId = graphXML.@id;
-					
-					var newGraph:GraphCanvas = new GraphCanvas();
-					newGraph.langXML = langXML;
-					BindingUtils.bindProperty(newGraph, "langXML", this, "langXML");				
-
-					initGraphs.addItem( {	id: graphXML.@id, 
-											name: graphXML.@name, 
-											initial: graphXML.@initial,
-											data: newGraph	} );
-
-					graphs.addItem( new ObjectProxy({	id: graphXML.@id, 
-										name: graphXML.@name, 
-										initial: graphXML.@initial,
-										data:newGraph	}) );										
-					
-					newGraph.name = graphXML.@id;
-					newGraph.label = graphXML.@name;
-					newGraph.initial = graphXML.@initial;					
-					vsViewStack.addChild(newGraph);
-					newGraph.fromXML(graphXML.toXMLString());
-				}	
-				
-				lstGraphs.labelField = "name";	
-				lstGraphs.dataProvider = graphs;						
-				
-				cbInitialGraph.labelField = "name";
-				cbInitialGraph.dataProvider = initGraphs;
-				
-				lstGraphs.selectedIndex=0;			
-				vsViewStack.selectedIndex=0;
-				
-				// set initial graph in combobox
-				cbInitialGraph.selectedIndex=0;				
-				for(var i:int=0; i<initGraphs.length; i++)
-				{
-					if(initGraphs[i].id==initialId)
-					{
-						cbInitialGraph.selectedIndex=i;
-						break;
-					}
-				}
-			}
-			
-			/** 
-			 *	Gen XML that represents template
-			 */	
-			public function toXML():XML
-			{
-				var tmplXML:XML = new XML(<template></template>);
-				
-				for each (var child:DisplayObject in vsViewStack.getChildren())
-				{
-					if(child is GraphCanvas)
-					{
-						var graphXML:XML = GraphCanvas(child).toXML();	
-						graphXML.@category = this.name;		
-						tmplXML.appendChild(graphXML);
-					}
-				}
-				
-				return tmplXML;
-			}
-			
-			public function clear():void
-			{
-				while(initGraphs.length>1)
-					initGraphs.removeItemAt(1);				
-				
-				graphs.removeAll();			
-				
-				for each (var child:DisplayObject in vsViewStack.getChildren())
-				{
-					if(child is GraphCanvas)
-						GraphCanvas(child).destroy();
-				}
-			}
-		
-			//--------------------------------------------------------------------------
-		    //
-		    //  Event handlers
-		    //
-		    //--------------------------------------------------------------------------		
-	    			
-	    	// Change initial graph
-			private function cbInitGraphCloseHandler(event:DropdownEvent):void
-			{
-				var selectedIndex:int = ComboBox(event.target).selectedIndex;
-				
-				for each (var child:DisplayObject in vsViewStack)
-				{
-					if(child is GraphCanvas)
-						GraphCanvas(child).initial = false;
-				}
-				
-				if(selectedIndex>0)
-					GraphCanvas(vsViewStack.getChildAt(selectedIndex-1)).initial = true;
-			}	    	
-					
-			private function btnNewClickHandler(event:MouseEvent):void
-			{
-				var newGraph:GraphCanvas = new GraphCanvas();
-				newGraph.langXML = langXML;
-				BindingUtils.bindProperty(newGraph, "langXML", this, "langXML");
-									
-				newGraph.label = newGraph.name;
-
-				initGraphs.addItem( {	id: newGraph.name, 
-										name: newGraph.label, 
-										initial: newGraph.initial.toString(),
-										data: newGraph } );
-
-				graphs.addItem(  new ObjectProxy({	id: newGraph.name, 
-									name: newGraph.label, 
-									initial: newGraph.initial.toString(),
-									data: newGraph }) );
-										
-				vsViewStack.addChild(newGraph);
-				
-				lstGraphs.selectedIndex=graphs.length-1;	
-				vsViewStack.selectedIndex=graphs.length-1;
-				
-				lstGraphs.validateNow();
-				lstGraphs.verticalScrollPosition = lstGraphs.maxVerticalScrollPosition;
-				
-				lstGraphs.editable=true; 
-				lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};				
-			}
-				
-			private function btnRenameClickHandler(event:Object):void
-			{
-				if(!lstGraphs.selectedItem)	
-					return;		
-				lstGraphs.editable=true; 
-				lstGraphs.editedItemPosition = {rowIndex: lstGraphs.selectedIndex, columnIndex: 0};
-			}	
-					
-			private function btnDeleteClickHandler(event:MouseEvent):void
-			{
-				if(lstGraphs.selectedIndex < 0 || graphs.length==0)
-					return;
-					
-				var selectedIndex:Number = lstGraphs.selectedIndex;
-				
-				if(cbInitialGraph.selectedIndex == selectedIndex + 1)
-					cbInitialGraph.selectedIndex = 0;
-				
-				initGraphs.removeItemAt(selectedIndex + 1);
-				graphs.removeItemAt(selectedIndex);				
-				GraphCanvas(vsViewStack.selectedChild).destroy();
-				
-				lstGraphs.validateNow();
-				vsViewStack.validateNow();
-				
-				if(selectedIndex>=graphs.length)
-				{
-					lstGraphs.selectedIndex=graphs.length-1;	
-					vsViewStack.selectedIndex=graphs.length-1;				
-				}				
-				else
-				{												
-					lstGraphs.selectedIndex=selectedIndex;	
-					vsViewStack.selectedIndex=selectedIndex;				
-				}
-			}				    		
-			private function btnHelpClickHandler(event:MouseEvent):void
-			{
-				// TODO
-			}				
-			
+			public var graphs:ArrayCollection = new ArrayCollection();	
+            
             private function beginEdit(event:ListEvent):void 
             { 
+            	event.preventDefault();
             	lstGraphs.createItemEditor(0, List(event.currentTarget).selectedIndex); 
             	
 				GraphThumb(event.currentTarget.itemEditorInstance).lblThumb.visible = false;            	
 				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.visible = true;
 				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.setFocus();
-				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.setSelection(0,
-					GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text.length);					
-            }
+				GraphThumb(event.currentTarget.itemEditorInstance).data = 
+					List(event.currentTarget).selectedItem;
+				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.setSelection(0, 
+					GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text.length);
+
+                if(NodeParser.SubgraphNodeParse(GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text).result==false)
+                {	                
+                	GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.errorString =
+	                	"Enter a valid graph name.";
+                }
+           	}
             
             private function endEdit(event:ListEvent):void 
             {    
-            	// Disable copying data back to the control.
-                event.preventDefault();
-				
-				GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.visible = false;
-				GraphThumb(event.currentTarget.itemEditorInstance).lblThumb.visible = true;
-				
-                // Get new label from editor.
-                lstGraphs.editedItemRenderer.data.name =
-					GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text;
+                event.preventDefault();	
 
-                // Close the cell editor.
-                lstGraphs.destroyItemEditor(); 
-                    
-                // Notify the list control to update its display.
-        		lstGraphs.dataProvider.notifyItemUpdate(lstGraphs.editedItemRenderer); 
-        		
-        		lstGraphs.editable=false; 
-        		
-        		initGraphs[event.rowIndex+1].name = GraphCanvas(vsViewStack.getChildAt(event.rowIndex)).label = graphs[event.rowIndex].name;
-        		cbInitialGraph.selectedIndex = cbInitialGraph.selectedIndex;
+                var newData:String = 
+                    GraphThumb(event.currentTarget.itemEditorInstance).txtThumb.text;
+                
+                if (event.reason == ListEventReason.CANCELLED)
+                {
+                    // Do not update item.
+	                // Close the cell editor.
+	                lstGraphs.destroyItemEditor();
+                	return;
+                }
+            	
+            	// Disable copying data back to the control.
+                if(NodeParser.SubgraphNodeParse(newData).result==false)
+                {	      
+	               	//lstGraphs.editedItemPosition = lstGraphs.editedItemPosition;
+            	}            	
+            	else
+				{				
+	                // Get new label from editor.
+	                lstGraphs.editedItemRenderer.data.name =
+						newData;
+	
+	                // Close the cell editor.
+	                lstGraphs.destroyItemEditor();
+	                    
+	                // Notify the list control to update its display.
+	        		lstGraphs.dataProvider.notifyItemUpdate(lstGraphs.editedItemRenderer);
+	        		
+	        		var evnt:ListEvent = new ListEvent(
+	        			"completeEdit", 
+	        			event.bubbles, 
+	        			event.cancelable, 
+	        			event.columnIndex,
+	        			event.rowIndex,
+	        			null,
+	        			event.itemRenderer);
+	        		
+	        		lstGraphs.dispatchEvent(evnt);
+	   			}
             }
-								
+
+            private function BeginningEdit(event:ListEvent):void 
+            {
+            	event.preventDefault();
+            }               
 		]]>
 	</mx:Script>
-	
-	<mx:List width="100%" height="100%" allowMultipleSelection="false" textAlign="center" borderStyle="none" id="lstGraphs" 
+			
+	<mx:List width="100%" height="100%" allowMultipleSelection="false" textAlign="center" borderStyle="none"
+		id="lstGraphs" 
+		dataProvider="{graphs}"
+		labelField="name"
 		dragEnabled="true"
 		alternatingItemColors="[#FFFFFF, #f6f6f6]"
-		itemRenderer="PowerPack.com.graph.GraphThumb"
-		rendererIsEditor="true"		
-		change="vsViewStack.selectedIndex=List(event.target).selectedIndex"
 		doubleClickEnabled="true"
-		doubleClick="btnRenameClickHandler(event);"
+		itemRenderer="PowerPack.com.graph.GraphThumb"
+		itemEditor="PowerPack.com.graph.GraphThumb"
+		editorDataField="returnText"
+		itemEditBeginning="BeginningEdit(event);"
 		itemEditBegin="beginEdit(event);"
 		itemEditEnd="endEdit(event);"></mx:List>
 

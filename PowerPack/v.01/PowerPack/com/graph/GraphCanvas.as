@@ -104,6 +104,7 @@ package PowerPack.com.graph
 		public var addingTransition:Boolean = false;
 		public var currentArrow:GraphArrow;		
 		public var initialNode:GraphNode;
+		public var category:String = "";
     	
     	public var initial:Boolean = false;
 		
@@ -228,6 +229,7 @@ package PowerPack.com.graph
 			graphXML.@id = name;
 			graphXML.@name = label;
 			graphXML.@initial = initial.toString().toLowerCase();
+			graphXML.@category = category;
 			
 			graphXML.appendChild(<states></states>);
 			graphXML.appendChild(<transitions></transitions>);
@@ -276,13 +278,14 @@ package PowerPack.com.graph
 			name = graphXML.@id;
 			label = graphXML.@name;
 			initial = graphXML.@initial.toString().toLowerCase()=="true"?true:false;
+			category = graphXML.@category;
 						
 			for each (var nodeXML:XML in graphXML.states.elements("state"))
 			{
 				var newNode:GraphNode = new GraphNode(nodeXML.@category, nodeXML.@type, nodeXML.text);
 				newNode.name = nodeXML.@name;
-				BindingUtils.bindProperty(newNode, "langXML", this, "langXML");				
-				addChild(newNode);					
+				BindingUtils.bindProperty(newNode, "langXML", this, "langXML");
+				addChild(newNode);
 				newNode.enabled = nodeXML.@enabled;
 				newNode.move(nodeXML.@x, nodeXML.@y);
 			}
@@ -362,6 +365,7 @@ package PowerPack.com.graph
 	    	if(contextMenuOld)
 	    		Application.application.contextMenu = contextMenuOld;	    	
 	    }  
+	    
 	    private function dragEnterHandler(event:DragEvent):void
 	    {
             if (	event.dragSource.hasFormat("items") && 

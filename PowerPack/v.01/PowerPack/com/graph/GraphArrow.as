@@ -324,7 +324,7 @@ package PowerPack.com.graph
 			styleName = this.className;	
 			cacheAsBitmap = true;
 			
-           	addEventListener(FlexEvent.ADD, addHandler);
+           	addEventListener(FlexEvent.CREATION_COMPLETE, createCompleteHandler);
            	addEventListener(FocusEvent.FOCUS_IN, graphArrow_focusInHandler);	
            	addEventListener(FocusEvent.FOCUS_OUT, graphArrow_focusOutHandler);
 		}
@@ -354,7 +354,7 @@ package PowerPack.com.graph
 	  				
 	  		stopDragging();
    			
-            removeEventListener(FlexEvent.ADD, addHandler);
+            removeEventListener(FlexEvent.ADD, createCompleteHandler);
             systemManager.removeEventListener(KeyboardEvent.KEY_DOWN, systemManager_keyDown);            
    			removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
             removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
@@ -864,7 +864,7 @@ package PowerPack.com.graph
 	    //
 	    //--------------------------------------------------------------------------
 	    
-	    private function addHandler(event:FlexEvent):void
+	    private function createCompleteHandler(event:FlexEvent):void
 	    {	    
 			focusManager = Container(parent).focusManager;           	
 	    	
