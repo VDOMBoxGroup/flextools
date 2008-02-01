@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<flex-config>
+		
+	<include-file>
+		<name>actionButtons.css</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\css\actionButtons.css</path>
+	</include-file>
+				
+	<include-file>
+		<name>default.css</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\css\default.css</path>
+	</include-file>
+				
+	<include-file>
+		<name>analyse.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\analyse.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>analyse_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\analyse_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>edition.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\edition.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>edition_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\edition_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>events.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\events.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>events_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\events_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>news.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\news.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>news_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\news_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>preview.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\preview.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>preview_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\preview_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>script.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\script.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>script_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\script_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>statistics.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\statistics.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>statistics_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\statistics_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>tree.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\tree.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>tree_s.png</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\png\editorButtons\tree_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>vdomTheme.swf</name>
+		<path>D:\!Workspaces\Vdom\_src\theme\swf\vdomTheme.swf</path>
+	</include-file>
+				
+</flex-config>
+		

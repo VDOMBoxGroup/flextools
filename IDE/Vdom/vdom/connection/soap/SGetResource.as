@@ -39,7 +39,7 @@ package vdom.connection.soap
 		//	trace(ws.get_resource.lastResult.Result)
 			//trace('loadBeginComplete');
 			resultXML = new XML(<Result />);
-			resultXML.appendChild(XMLList(ws.get_resource.lastResult.Result));
+			resultXML.appendChild(XMLList(event.result));
 			var evt:SoapEvent;
 			var res:String = resultXML.Error;
 			// check Error

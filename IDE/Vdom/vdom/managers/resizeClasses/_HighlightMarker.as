@@ -1,4 +1,4 @@
-package vdom.components.editor.managers {
+package vdom.managers.resizeClasses {
 
 import flash.display.CapsStyle;
 import flash.display.DisplayObject;
@@ -11,45 +11,20 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 import mx.containers.Canvas;
-import mx.controls.ToolTip;
-import mx.core.EdgeMetrics;
 import mx.core.UIComponent;
 import mx.managers.CursorManager;
-import mx.managers.ToolTipManager;
+import vdom.events.TransformMarkerEvent;
+import mx.events.FlexEvent;
+import mx.events.ResizeEvent;
 
-import vdom.components.editor.events.ResizeManagerEvent;
-			
-[Event(name="RESIZE_COMPLETE", type="vdom.events.ResizeManagerEvent")]
 
-[Style(name="boxSize", type="Number", format="Number", inherit="no")]
-
-[Inspectable(name="minWidth", verbose=1)]	
-[Inspectable(name="maxWidth", verbose=1)]	
-[Inspectable(name="minHeigh", verbose=1)]	
-[Inspectable(name="maxHeigh", verbose=1)]	
-
-[IconFile("ResizeTool.png")]
-
-public class ResizeManager extends UIComponent {
+public class HighlightMarker extends UIComponent {
 	
 	public static const RESIZE_NONE:String = '0';
 	public static const RESIZE_WIDTH:String = '1';
 	public static const RESIZE_HEIGHT:String = '2';
 	public static const RESIZE_ALL:String = '3';
 	
-	private var CursorID:uint		
-	
-	private var moving:DisplayObject;
-	private var movingItem:DisplayObject;
-	private var mItemChanged:Boolean;
-	private var modeChanged:Boolean;
-	private var bStyleChanged:Boolean
-	private var boxSize:int = 6;
-	private var borderColor:uint;
-	private var borderAlpha:Number;
-	private var backgroundColor:uint
-	private var backgroundAlpha:Number;
-	private var tip:ToolTip;
 	private var tl_box:Sprite;
 	private var tc_box:Sprite;
 	private var tr_box:Sprite;
@@ -59,21 +34,39 @@ public class ResizeManager extends UIComponent {
 	private var bc_box:Sprite;
 	private var br_box:Sprite;
 	private var cc_box:Sprite;
-	private var mousePosition:Point;
-	private var markerName:String;
-	private var _resizeMode:String;
-	private var _moveMode:Boolean;
 	
-	public function ResizeManager() {
+	private var CursorID:uint
+	
+	private var moving:DisplayObject;
+	
+	private var _moveMode:Boolean;
+	private var _resizeMode:String;
+	
+	private var _selectedItem:UIComponent;
+	
+	private var mousePosition:Point;
+	
+	private var modeChanged:Boolean;
+	private var boxStyleChanged:Boolean;
+	private var itemChanged:Boolean;
+	
+	private var boxSize:int = 6;
+	private var borderColor:uint;
+	private var borderAlpha:Number;
+	private var backgroundColor:uint
+	private var backgroundAlpha:Number;
+	
+	private var bounds:Rectangle;
+	
+	private var isMoved:Boolean;
+	
+	public function HighlightMarker() {
 		
 		super();
-		this.addEventListener(MouseEvent.MOUSE_DOWN, down_handler);
-		//this.addEventListener(ResizeManagerEvent.RESIZE_CHANGING, changingHandler)
-		this.addEventListener(MouseEvent.MOUSE_OVER, over_handler);
-		this.addEventListener(MouseEvent.MOUSE_OUT,  out_handler);
-		modeChanged = false;
-		_resizeMode = RESIZE_ALL;
-		_moveMode = false;
+		
+		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+		addEventListener(MouseEvent.MOUSE_OUT,  mouseOutHandler);
 	}
 	
 	public function get resizeMode():String {
@@ -84,8 +77,11 @@ public class ResizeManager extends UIComponent {
 	public function set resizeMode(modeValue:String):void {
 		
 		if(_resizeMode != modeValue) {
+			
 			_resizeMode = modeValue;
+			
 			modeChanged = true;
+			
 			invalidateDisplayList();
 		}
 	}
@@ -98,22 +94,32 @@ public class ResizeManager extends UIComponent {
 	public function set moveMode(modeValue:Boolean):void {
 		
 		_moveMode = modeValue;
-	}
-	
-	[Inspectable(verbose=1)]
-	public function set item(s:DisplayObject):void {
 		
-		movingItem = s;
-		mItemChanged = true;
-		
-		invalidateProperties();
-		invalidateSize();
+		modeChanged = true;
+			
 		invalidateDisplayList();
 	}
 	
-	public function get item():DisplayObject {
+	public function set item(item:UIComponent):void {
 		
-		return movingItem;
+		//trace('OBJECT CHANGE');
+		_selectedItem = item;
+		//_selectedItem.addEventListener(FlexEvent.UPDATE_COMPLETE, selectedItem_updateCompleteHandler);
+		
+		itemChanged = true;
+		
+		invalidateDisplayList();
+		invalidateSize();
+		
+		//_selectedItem.addEventListener(FlexEvent.UPDATE_COMPLETE, selectedItem_updateCompleteHandler);
+		//invalidateProperties();
+		
+		
+	}
+	
+	public function get item():UIComponent {
+		
+		return _selectedItem;
 	}
 	
 	override protected function createChildren():void {
@@ -150,7 +156,7 @@ public class ResizeManager extends UIComponent {
 		
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
 		
-		if(bStyleChanged) {
+		if(boxStyleChanged) {
 			
 			boxSize         = this.getStyle("boxSize");
 			borderColor     = this.getStyle("borderColor");
@@ -158,7 +164,7 @@ public class ResizeManager extends UIComponent {
 			backgroundAlpha = this.getStyle("backgroundAlpha")
 			borderAlpha     = this.getStyle("borderAlpha");
 			updateBoxes();
-			bStyleChanged = false;
+			boxStyleChanged = false;
 		}
 		
 		if(modeChanged) {
@@ -216,82 +222,80 @@ public class ResizeManager extends UIComponent {
 			cc_box.visible = _moveMode
 		}
 		
-		if(mItemChanged) {
+		if(itemChanged) {
+			//trace(measuredWidth, measuredHeight);
+			//measure();
+			itemChanged = false
 			
-			measure();
-			mItemChanged = false
+			tl_box.x = 0 + boxSize/2;
+			tl_box.y = 0 + boxSize/2;
+			tc_box.x = measuredWidth/2;
+			tc_box.y = 0 + boxSize/2;
+			tr_box.x = measuredWidth - boxSize/2;
+			tr_box.y = 0 + boxSize/2;
+			cl_box.x = 0 + boxSize/2;
+			cl_box.y = measuredHeight/2;
+			cr_box.x = measuredWidth - boxSize/2;
+			cr_box.y = measuredHeight/2;
+			bl_box.x = 0 + boxSize/2;
+			bl_box.y = measuredHeight - boxSize/2;
+			bc_box.x = measuredWidth/2;
+			bc_box.y = measuredHeight - boxSize/2;
+			br_box.x = measuredWidth - boxSize/2;
+			br_box.y = measuredHeight - boxSize/2;
+			cc_box.x = 0 + boxSize/2;
+			cc_box.y = 0 + boxSize/2;
+			
+			var g:Graphics = cc_box.graphics;
+			g.clear();
+			g.lineStyle(getStyle('boxSize'), 1, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			if(_resizeMode == RESIZE_NONE)
+				g.beginFill(0xffffff, .0);
+			g.drawRect(0, 0, measuredWidth, measuredHeight);
+			g.endFill();
+			
+			graphics.clear();			
+			graphics.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER);
+			graphics.drawRect(0, 0, measuredWidth, measuredHeight);
+			graphics.endFill();
+		
 		}
-		
-		tl_box.x = 0;
-		tl_box.y = 0;
-		tc_box.x = measuredWidth/2
-		tc_box.y = 0;
-		tr_box.x = measuredWidth;
-		tr_box.y = 0;
-		cl_box.x = 0;
-		cl_box.y = measuredHeight/2;
-		cr_box.x = measuredWidth;
-		cr_box.y = measuredHeight/2;
-		bl_box.x = 0;
-		bl_box.y = measuredHeight;
-		bc_box.x = measuredWidth/2;
-		bc_box.y = measuredHeight;
-		br_box.x = measuredWidth;
-		br_box.y = measuredHeight;
-		cc_box.x = 0;
-		cc_box.y = 0;
-		
-		var g:Graphics = cc_box.graphics;
-		g.clear();
-		g.lineStyle(getStyle('boxSize'), 1, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		g.drawRect(0, 0, measuredWidth, measuredHeight);
-		g.endFill();
-		graphics.clear();			
-		graphics.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		graphics.drawRect(0, 0, measuredWidth, measuredHeight);
-		graphics.endFill();
 	}
 	
 	override protected function measure():void {
 		
 		super.measure();
-		
+		//trace('measure');
 		measuredMinHeight = minHeight;
 		measuredMinWidth  = minWidth;
 		
 		//var bm:EdgeMetrics =  Canvas(item.parent).viewMetricsAndPadding;
 		
-		if(item) {
+		if(_selectedItem) {
 			
-			var rect:Rectangle = item.getRect(movingItem.parent)
+			var rect:Rectangle = _selectedItem.getRect(_selectedItem.parent)
+			
 			measuredWidth  = rect.width;
 			measuredHeight = rect.height;
 			
-			var rectangle:Rectangle = getContentRectangle(item, this);
+			var rectangle:Rectangle = getContentRectangle(_selectedItem, this);
 			
-			/* var parent:Object = this.parent;
-			var proxyOrigin:Point = new Point();
-			proxyOrigin = item.parent.localToGlobal(
-				new Point(item.x, item.y));
+			//var parent:Object = this.parent;
+			//var proxyOrigin:Point = new Point();
+			//proxyOrigin = _selectedItem.parent.localToGlobal(
+				//new Point(_selectedItem.x, _selectedItem.y));
 				
-			proxyOrigin = parent.globalToLocal(proxyOrigin); */
+			//proxyOrigin = parent.globalToLocal(proxyOrigin);
 			
-			x = rectangle.x; //rect.x - bm.left;
-			y = rectangle.y; //rect.y - bm.top;
+			move(rectangle.x, rectangle.y);
+			//x = rectangle.x; //rect.x - bm.left;
+			//y = rectangle.y; //rect.y - bm.top;
 			
 		} else {
 			
 			//measuredWidth  = maxWidth;
 			//measuredHeight = maxHeight;
 		}
-	}
-			
-	override public function styleChanged(styleProp:String):void {
-		
-		super.styleChanged(styleProp);
-		
-		bStyleChanged = true;
-		invalidateDisplayList()
 	}
 	
 	protected function updateBoxes():void {
@@ -302,7 +306,6 @@ public class ResizeManager extends UIComponent {
 		graphics.drawRect(0,0, measuredWidth, measuredHeight);
 		graphics.endFill();
 	}
-	
 	
 	protected function createBox(name:String):Sprite {
 		
@@ -328,59 +331,44 @@ public class ResizeManager extends UIComponent {
 		return new Rectangle(pt.x, pt.y, measuredWidth, measuredHeight);
 	}
 	
-	private function createToolTip():void {
+	private function mouseDownHandler(event:MouseEvent):void {
+		//trace('resbeg');
 		
-		tip = ToolTip(ToolTipManager.createToolTip("", 0, 0, null, this));
-		tip.setStyle("backgroundColor", 0xFFFFFF);
-		tip.setStyle("fontSize", 9);
-		tip.setStyle("cornerRadius", 0);
-		tip.visible = false;
-	}
-	
-	private function destroyToolTip():void {
-		
-		if(tip) {
-			
-			ToolTipManager.destroyToolTip(tip);
-			tip = null;
-		}
-	}
-	
-	private function down_handler(e:MouseEvent):void {
-		trace('resbeg');
-		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_BEGIN);
-		dispatchEvent(rmEvent);
 		
 		moving = null;
+		isMoved = false;
+		
+		bounds = getContentRectangle(_selectedItem.parent, this);
+		
 		mousePosition = new Point(mouseX, mouseY);
 		
-		if(e.target != this) {
-			
-			moving = DisplayObject(e.target);
-			createToolTip();
-			
-		} else {
-			
+		if(event.target != this)
+			moving = DisplayObject(event.target);
+		else
 			moving = this;
-		}
 		
-		this.stage.addEventListener(MouseEvent.MOUSE_MOVE, move_handler);			
-		this.stage.addEventListener(MouseEvent.MOUSE_UP, up_handler);
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);			
+		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		
+		//event.stopImmediatePropagation();
 	}
 	
-	private function out_handler(e:MouseEvent):void {
+	private function mouseOutHandler(event:MouseEvent):void {
 		
-		if(item)			
-			if(!moving)				
+		if(_selectedItem)			
+			if(!moving){				
 				CursorManager.removeAllCursors();
+				dispatchEvent(new TransformMarkerEvent('markerUnSelected'));
+			}
 	}		
 	
-	private function over_handler(e:MouseEvent):void {
+	private function mouseOverHandler(event:MouseEvent):void {
 		
-		if(item) {
+		if(_selectedItem) {
 			
-			var target:Sprite = Sprite(e.target);
+			var target:Sprite = Sprite(event.target);
 			CursorManager.removeAllCursors();
+			var markerSelected:Boolean = true;
 			
 			switch(target.name) {
 				
@@ -407,28 +395,39 @@ public class ResizeManager extends UIComponent {
 				case "cc":
 					CursorID = CursorManager.setCursor(getStyle('moveCursor'), 2, -10, -10);
 				break;
+				default:
+					markerSelected = false;
+				break
 			}
+			if(markerSelected)
+				dispatchEvent(new TransformMarkerEvent('markerSelected'));
+			else
+				dispatchEvent(new TransformMarkerEvent('markerUnSelected'));
 		}
 	}		
 	
-	private function up_handler(event:MouseEvent):void {
+	private function mouseUpHandler(event:MouseEvent):void {
 		
-		var evt:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_CHANGING);
-	
-		dispatchEvent(evt);
-		this.stage.removeEventListener(MouseEvent.MOUSE_UP, up_handler);
-		this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, move_handler);
+		//var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
+		//dispatchEvent(evt);
+		
+		stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		
 		moving = null;
 		mousePosition = null;
-		out_handler(null);			
-		destroyToolTip();
+		mouseOutHandler(null);			
+		//destroyToolTip();
 		
-		var rectangle:Rectangle = getContentRectangle(this, item);
+		if(!isMoved)
+			return;
+			
+		var rectangle:Rectangle = getContentRectangle(this, _selectedItem);
 		
-		item.x = rectangle.x;
-		item.y = rectangle.y;
-		item.width  = rectangle.width; //measuredWidth;
-		item.height = rectangle.height; //measuredHeight;
+		//_selectedItem.x = rectangle.x;
+		//_selectedItem.y = rectangle.y;
+		//_selectedItem.width  = rectangle.width; //measuredWidth;
+		//_selectedItem.height = rectangle.height; //measuredHeight;
 		
 		var prop:Object = {
 			left : rectangle.x,
@@ -436,8 +435,10 @@ public class ResizeManager extends UIComponent {
 			width : rectangle.width,
 			height : rectangle.height
 		};
-		trace(prop.top+'---'+prop.left);
-		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
+		
+		
+		
+		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
 		rmEvent.properties = prop;
 		dispatchEvent(rmEvent);
 		//trace('rescom');
@@ -446,14 +447,18 @@ public class ResizeManager extends UIComponent {
 	
 	
 	
-	private function move_handler(event:MouseEvent):void {
+	private function mouseMoveHandler(event:MouseEvent):void {
 		
-		CursorManager.removeAllCursors();
+		//CursorManager.removeAllCursors();
 		
-		var rect:Rectangle= new Rectangle(x, y, measuredWidth, measuredHeight);
+		var rect:Rectangle = new Rectangle(x, y, measuredWidth, measuredHeight);
 		var allow:Boolean = true;
 		
 		if(moving && event.buttonDown) {
+			
+			
+			
+			var onlyMove:Boolean = false;
 			
 			var mx:Number = mouseX;
 			var my:Number = mouseY;
@@ -462,7 +467,7 @@ public class ResizeManager extends UIComponent {
 				
 				case "br":
 					rect.width = mouseX;
-					rect.height = mouseY;	
+					rect.height = mouseY;
 				break;
 				
 				case "bc":
@@ -503,10 +508,12 @@ public class ResizeManager extends UIComponent {
 				break;
 				
 				case "cc":
-					if(rect.x + mx - mousePosition.x < 0) {rect.x = 0;}
+					//trace('x: ' + String(rect.x + mx - mousePosition.x));
+					if(rect.x + mx - mousePosition.x - bounds.x < 0) {rect.x = bounds.x;}
 						else {rect.x += mx - mousePosition.x;}				
-					if(rect.y + my - mousePosition.y < 0) {rect.y = 0;}
+					if(rect.y + my - mousePosition.y - bounds.y < 0) {rect.y = bounds.y;}
 						else {rect.y += my - mousePosition.y;}
+					onlyMove = true;
 				break;
 			}
 			
@@ -521,9 +528,22 @@ public class ResizeManager extends UIComponent {
 				if(rect.height < minHeight) rect.height = minHeight;
 				
 				if(allow) {
+					var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);		
+					dispatchEvent(evt);
+					isMoved = true;
+					//trace(mouseX)
 					move(rect.x, rect.y);
+					
+					/* if(onlyMove) {
+						
+						_selectedItem.x = rect.x
+						_selectedItem.y = rect.y
+					} */
+					
+					itemChanged = true;
+					
+					measuredWidth = rect.width;
 					measuredHeight = rect.height;
-					measuredWidth  = rect.width;			
 				}
 			}
 			
@@ -540,13 +560,19 @@ public class ResizeManager extends UIComponent {
 			
 			dispatchEvent(evt); */		
 								
-			event.updateAfterEvent();
+			//event.updateAfterEvent();
 			invalidateDisplayList()
 			
 		} else {
 			
-			up_handler(null);
+			mouseUpHandler(null);
 		} 
 	}
+	
+	/* private function selectedItem_updateCompleteHandler(event:FlexEvent):void {
+		
+		invalidateSize();
+		invalidateDisplayList();
+	} */
 }
 }

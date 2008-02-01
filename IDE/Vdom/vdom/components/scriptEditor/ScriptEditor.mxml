@@ -53,7 +53,6 @@
 	]]>
 	</mx:Script>
 	
-	<containers:TabbedTextArea  />
 	<mx:TextArea text="" width="28" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
 			verticalScrollPolicy="off" textAlign="right" top="0" bottom="0" left="0"/>
 	<containers:TabbedTextArea id="txtArea" 

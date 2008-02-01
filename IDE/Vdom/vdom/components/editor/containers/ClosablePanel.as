@@ -17,22 +17,25 @@ public class ClosablePanel extends Panel {
 	
 	override protected function createChildren():void {
 		
-	    super.createChildren();
-	    if (!collapseButton) {
-	        collapseButton = new Button();
-	        collapseButton.explicitWidth = collapseButton.explicitHeight = 16;
-	        
-	        collapseButton.focusEnabled = false;
-	        collapseButton.setStyle("upSkin", getStyle('CollapseButtonOnButtonUp'));
-	        collapseButton.setStyle("downSkin", getStyle('CollapseButtonOnButtonDown'));
-	        collapseButton.setStyle("overSkin", getStyle('CollapseButtonOnButtonOver'));
-	        collapseButton.setStyle("disabledSkin", getStyle('CollapseButtonOnButtonDisabled'));
-	        collapseButton.enabled = enabled;
-	        collapseButton.styleName = this;	
-	        
-	        collapseButton.addEventListener(MouseEvent.CLICK, collapseButton_clickHandler);
-	       
-	        titleBar.addChild(collapseButton);
+		super.createChildren();
+		
+		if (!collapseButton) {
+			collapseButton = new Button();
+			collapseButton.explicitWidth = collapseButton.explicitHeight = 16;
+			
+			collapseButton.focusEnabled = false;
+			
+			collapseButton.setStyle("upSkin", getStyle('CollapseButtonOnButtonUp'));
+			collapseButton.setStyle("downSkin", getStyle('CollapseButtonOnButtonDown'));
+			collapseButton.setStyle("overSkin", getStyle('CollapseButtonOnButtonOver'));
+			collapseButton.setStyle("disabledSkin", getStyle('CollapseButtonOnButtonDisabled'));
+			
+			collapseButton.enabled = enabled;
+			collapseButton.styleName = this;	
+			
+			collapseButton.addEventListener(MouseEvent.CLICK, collapseButton_clickHandler);
+		   
+			titleBar.addChild(collapseButton);
 			collapseButton.owner = this;
 	   }  
 	}
@@ -40,32 +43,34 @@ public class ClosablePanel extends Panel {
 	override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void {
 		
 		super.layoutChrome(unscaledWidth, unscaledHeight);
+		
 		var bm:EdgeMetrics = borderMetrics;
 
 		collapseButton.setActualSize(
-	        collapseButton.getExplicitOrMeasuredWidth(),
-	        collapseButton.getExplicitOrMeasuredHeight());
+			collapseButton.getExplicitOrMeasuredWidth(),
+			collapseButton.getExplicitOrMeasuredHeight()
+		);
 
-    	collapseButton.move(
-	        unscaledWidth - bm.right - 10 -
-	        collapseButton.getExplicitOrMeasuredWidth(),
-	        (titleBar.height -
-	        collapseButton.getExplicitOrMeasuredHeight()) / 2);
+		collapseButton.move(
+			unscaledWidth - bm.right - 10 -
+			collapseButton.getExplicitOrMeasuredWidth(),
+			(titleBar.height -
+			collapseButton.getExplicitOrMeasuredHeight()) / 2);
 	}
 	
 	private function collapseButton_clickHandler(event:MouseEvent):void {
 		
 		if(switcher) {
 			collapseButton.setStyle("upSkin", getStyle('CollapseButtonOnButtonUp'));
-	        collapseButton.setStyle("downSkin",getStyle('CollapseButtonOnButtonDown'));
-	        collapseButton.setStyle("overSkin",getStyle('CollapseButtonOnButtonOver'));
-	        collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOnButtonDisabled'));
+			collapseButton.setStyle("downSkin",getStyle('CollapseButtonOnButtonDown'));
+			collapseButton.setStyle("overSkin",getStyle('CollapseButtonOnButtonOver'));
+			collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOnButtonDisabled'));
 			height = NaN;
 		} else {
 			collapseButton.setStyle("upSkin", getStyle('CollapseButtonOffButtonUp'));
-	        collapseButton.setStyle("downSkin",getStyle('CollapseButtonOffButtonDown'));
-	        collapseButton.setStyle("overSkin",getStyle('CollapseButtonOffButtonOver'));
-	        collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOffButtonDisabled'));
+			collapseButton.setStyle("downSkin",getStyle('CollapseButtonOffButtonDown'));
+			collapseButton.setStyle("overSkin",getStyle('CollapseButtonOffButtonOver'));
+			collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOffButtonDisabled'));
 			height = getStyle('headerHeight');
 		}
 		switcher = !switcher;

@@ -39,7 +39,7 @@ package vdom.connection.soap
 		{
 			// get result 
 			resultXML = new XML(<Result />);
-			resultXML.appendChild(XMLList(ws.create_object.lastResult.Result));
+			resultXML.appendChild(XMLList(event.result));
 			var evt:SoapEvent;
 			
 			// check Error

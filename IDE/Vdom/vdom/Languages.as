@@ -78,6 +78,15 @@ public class Languages implements IEventDispatcher {
 		//trace((getTimer()-beginT)/1000);
 	}
 	
+	public function getLanguagePhrase(typeID:String, phraseID:String):String {
+		
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		phraseID = phraseID.match(phraseRE)[1];
+		var languageID:String = typeID + '-' + phraseID;
+		
+		return _currentLanguage.(@ID == languageID)[0];
+	}
+	
 	public function changeLanguage(languageLabel:String):void {
 		
 		var newLanguage:XMLList = allLanguages.(@Code == languageLabel);

@@ -116,7 +116,7 @@ public class DataManager implements IEventDispatcher {
 	 * @param selectedObjects описание типа объекта, которое надо сохранить, для последующей отправки на сервер.
 	 * 
 	 */	
-	public function updateAttributes(obdjectDescription:XML):void {
+	public function updateAttributes():void {
 		
 		var objectId:String = _objectDescription.@ID;
 		
@@ -131,6 +131,9 @@ public class DataManager implements IEventDispatcher {
 				newOnlyAttributes.item += attr;
 			} 
 		}
+		
+		if(newOnlyAttributes.*.length() == 0)
+			return;
 		
 		_objects..Object.(@ID == objectId).Attributes = _objectDescription.Attributes;
 		

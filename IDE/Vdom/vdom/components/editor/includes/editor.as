@@ -3,26 +3,27 @@ import flash.events.Event;
 
 import mx.containers.Canvas;
 import mx.controls.Alert;
+import mx.core.Application;
 import mx.core.EdgeMetrics;
 import mx.events.DragEvent;
 import mx.managers.PopUpManager;
 
+import vdom.Languages;
 import vdom.MyLoader;
 import vdom.components.editor.containers.WorkArea;
 import vdom.components.editor.containers.typesClasses.Type;
-import vdom.components.editor.events.ResizeManagerEvent;
+import vdom.components.editor.containers.workAreaClasses.Item;
 import vdom.components.editor.events.WorkAreaEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
 import vdom.managers.VdomDragManager;
-import vdom.components.editor.containers.workAreaClasses.Item;
-import mx.core.Application;
 
 //[Bindable] private var objects:XML;
 [Bindable] private var typesXML:XML;
 [Bindable] private var help:String;
 [Bindable] private var selectedElement:String;
 [Bindable] private var dataManager:DataManager;
+[Bindable] private var languages:Languages;
 
 private var objectsXML:XML;
 private var currInterfaceType:uint;
@@ -31,11 +32,13 @@ private var ppm:Canvas;
 private var applicationId:String;
 private var topLevelObjectId:String;
 
+
 private function creationCompleteHandler():void {
 	
 	ppm = new MyLoader();
 	publicData = Application.application.publicData;
 	dataManager = DataManager.getInstance();
+	languages = Languages.getInstance();
 
 	/*Загрузка типов*/
 	
@@ -64,7 +67,7 @@ private function showHandler():void {
 	}
 	
 	workArea.addEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
-	workArea.addEventListener(WorkAreaEvent.PROPS_CHANGE, attributesChangedHandler);
+	workArea.addEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
 	workArea.addEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
 	
 	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
@@ -78,7 +81,7 @@ private function showHandler():void {
 private function hideHandler():void {
 	
 	workArea.removeEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
-	workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGE, attributesChangedHandler);
+	workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
 	workArea.removeEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
 	
 	dataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
@@ -114,7 +117,9 @@ private function topLevelObjectChange():void {
 private function initCompleteHandler(event:Event):void {
 	
 	pageList.dataProvider = dataManager.topLevelObjects.Object;
-	workArea.createObjects(publicData['applicationId'], publicData['topLevelObjectId']);
+	
+	workArea.showTopLevelContainer(publicData['applicationId'], publicData['topLevelObjectId']);
+	
 	typesXML = publicData['types'];
 	PopUpManager.removePopUp(ppm);
 	workArea.visible = true;
@@ -130,7 +135,7 @@ private function objectCreatedHandler(event:DataManagerEvent):void {
 
 private function attributesChangedHandler(event:Event):void {
 	
-	dataManager.updateAttributes(dataManager.objectDescription);
+	dataManager.updateAttributes();
 	attributesPanel.dataProvider = dataManager.objectDescription; //<-- исправить!!!!!!
 }
 
@@ -139,10 +144,10 @@ private function updateAttributesCompleteHandler(event:DataManagerEvent):void {
 	workArea.updateObject(event.result);
 }
 
-private function typesLoadHandler(event:Event):void {
+/* private function typesLoadHandler(event:Event):void {
 	
 	typesXML = dataManager.types;
-}
+} */
 
 /* private function objectsLoadHandler(event:Event):void {
 	

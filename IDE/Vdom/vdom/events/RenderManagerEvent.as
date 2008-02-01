@@ -21,6 +21,8 @@ public class RenderManagerEvent extends Event {
 
     // Define static constant.
 	public static const RENDER_COMPLETE:String = 'renderComlete';
+	public static const RENDER_ROLL_OVER:String = 'renderItemRollOver';
+	public static const RENDER_ROLL_OUT:String = 'renderItemRollOut';
 
     // Define a public variable to hold the state of the enable property.
 	public var result:Item;

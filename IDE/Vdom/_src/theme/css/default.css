@@ -1,10 +1,19 @@
 Application {
+	
 	backgroundColor: #484848;
 	backgroundGradientColors: "[#000000, #000000]";
-	backgroundImage: Embed(source="vdomTheme.swf", symbol="ApplicationBackground");
 	backgroundAlpha: 1.0;
     backgroundSize: "100%";
 	backgroundGradientAlphas: 1, 1;
+	
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="ApplicationBackground");
+}
+
+ApplicationControlBar {
+	
+	backgroundSize: "100%";
+	
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="ApplicationControlBar");
 }
 
 /*
@@ -13,14 +22,20 @@ Application {
 //------------------------------
 */
 Tab {
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkin");
-	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkin");
-	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkin");
-	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkin");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkin");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkin");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkin");
-	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkin");
+	
+	color: #ffffff;
+	textSelectedColor: #ffffff;
+	textRollOverColor: #ffffff;
+	
+	upSkin: Embed(source="vdomTheme.swf", symbol="EditorTabUp");
+	overSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
+	downSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
+
+	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
 	
 }
 
@@ -36,64 +51,77 @@ FormItemLabel {
 }
 
 .loginButtonOK {
+	
 	color: #ffffff;
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
-	downSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
-	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	
 	upSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	downSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+
 	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");	
 }
 
 .loginButtonQuit {
+	
 	color: #ffffff;
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
-	downSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
-	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	
 	upSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	downSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	
 	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
 }
 
 MainTabNavigator {
+	
 	backgroundColor: #191919;
 	backgroundAlpha: .1;	
 }
 
 AdvancedTabNavigator {
 
-	tabStyleName: "advancedTab";
 	paddingTop: 0;
 	tabBarPosition: "bottom";
+	
+	tabStyleName: "advancedTab";
 }
 
 .advancedTabTop {
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkin");
-	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkin");
-	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkin");
+	
 	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkin");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkin");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkin");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkin");
+	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkin");
+	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkin");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkin");
+	
 	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkin");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkin");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkin");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkin");
 }
 
 .advancedTabBottom {
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkinBottom");
-	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinBottom");
-	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinBottom");
+	
 	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkinBottom");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinBottom");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinBottom");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinBottom");
+	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinBottom");
+	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinBottom");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkinBottom");
+	
 	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkinBottom");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinBottom");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinBottom");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinBottom");
 }
 
 .mainCanvas {
+	
 	borderThickness: 1;
 	borderColor: #ffffff;
 	borderStyle: solid;
@@ -101,15 +129,18 @@ AdvancedTabNavigator {
 }
 
 Types {
+	
 	borderThickness: 1;
 	borderColor: #ffffff;
 	borderStyle: solid;
 	textAlign:center;
 	backgroundColor: #c2c2c2;
-	headerStyleName: typesHeaderStyle ;
+	
+	headerStyleName: "typesHeaderStyle" ;
 }
 
 .typesHeaderStyle {
+	
 	color: #ffffff;
 	highlightAlphas: 0, 0;
 	selectedFillColors: #d91107, #d91107;
@@ -118,18 +149,8 @@ Types {
 	fillAlphas:1, 1;
 	fillColors:#d91107, #d91107;
 }
-Item {
-	
-}
+
 ClosablePanel {
-	CollapseButtonOnButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnUp");
-	CollapseButtonOnButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDown");
-	CollapseButtonOnButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnOver");
-	CollapseButtonOnButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDisabled");
-	CollapseButtonOffButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffUp");
-	CollapseButtonOffButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDown");
-	CollapseButtonOffButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffOver");
-	CollapseButtonOffButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDisabled");
 	
 	paddingTop: 5;
 	paddingBottom: 5;
@@ -137,26 +158,59 @@ ClosablePanel {
 	paddingRight: 5;
 	cornerRadius: 0;
 	headerHeight: 20;
-	backgroundColor: #c2c2c2;
+	backgroundColor: #ffffff;
 	borderThicknessLeft: 0;
 	borderThicknessRight: 0;
+	
+	CollapseButtonOnButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnUp");
+	CollapseButtonOnButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnOver");
+	CollapseButtonOnButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDown");
+	CollapseButtonOnButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDisabled");
+	
+	CollapseButtonOffButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffUp");
+	CollapseButtonOffButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffOver");
+	CollapseButtonOffButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDown");
+	CollapseButtonOffButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDisabled");
+	
 	titleStyleName: closablePanelTitle;
 }
+
 .closablePanelTitle {
+	
 	color: #ffffff;
 }
-ResizeManager {
+
+AttributesPanel {
+	
+	buttonSkin: Embed(source="vdomTheme.swf", symbol="AttributesPanelButton");
+	controlBarStyleName: "attributesControlBar";
+}
+
+.attributesControlBar {
+	
+	paddingTop: 5;
+	paddingBottom: 5;
+	paddingLeft: 5;
+	paddingRight: 5;
+}
+
+TransformMarker, HighlightMarker {
+	
 	boxSize: 6px;
 	borderColor: #ff0000;
 	borderAlpha: 0;
 	backgroundAlpha: 0.9;
-	leftRightCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorLeftRight");
+	
+	moveCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorMove");
+	
 	topDownCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopDown");
+	leftRightCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorLeftRight");
 	topLDownRCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopLDownR");
 	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
-	moveCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorMove");
 }
+
 ActionPanel {
+	
 	color: #ffffff;
 	borderAlpha: 1;	
 	headerColors: #4e84df, #0f6cc3;
@@ -177,7 +231,9 @@ ActionPanel {
 	borderStyle: solid;
 	borderThickness: 1;
 }
+
 WorkArea {
+	
 	dropShadowEnabled: true;
 	backgroundColor: #ffffff;
 	backgroundAlpha: 1.0; 
@@ -185,14 +241,58 @@ WorkArea {
 	borderThickness: 1;
 	borderColor: #000000;
 }
+
 ControlBar {
+	
 	backgroundAlpha: 1;
 	paddingTop: 0;
 	paddingBottom: 0;
 	paddingLeft: 0;
 	paddingRight: 0;
 }
+
 .actionPanlelLabel {
+	
 	fontFamily: Verdana;
 	textAlign: center;
+}
+
+/*
+//------------------------------
+//  ComboBox
+//------------------------------
+*/
+
+ComboBox {
+	
+	arrowButtonWidth: 22;
+	cornerRadius: 5;
+	
+	fontWeight: "bold";
+	leading: 0;
+	paddingLeft: 5;
+	paddingRight: 5;
+	
+	upSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxUpSkin");
+	overSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxOverSkin");
+	downSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxDownSkin");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxDisabledSkin");
+	
+	editableUpSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableUpSkin");
+	editableOverSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableOverSkin");
+	editableDownSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableDownSkin");
+	editableDisabledSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableDisabledSkin");	
+	
+	dropDownStyleName: "comboDropDown";
+}
+
+.comboDropDown {
+	
+	backgroundColor: #FFFFFF;
+	borderThickness: 0;
+	cornerRadius: 0;
+	dropShadowEnabled: true;
+	fontWeight: "normal";
+	shadowDirection: "center";
+	shadowDistance: 1;
 }

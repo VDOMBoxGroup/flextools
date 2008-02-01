@@ -3,84 +3,92 @@
 	name="ThemeCreator" 
 	default="build"
 	basedir=".">
-	
-	<taskdef resource="flexTasks.tasks" classpath="${basedir}/lib/flexTasks.jar" />
-	
-    <property file="${basedir}/local.properties"/>
-	<!-- dirs -->
-	<property name="workspace.dir" location="."/>
-	<property name="source.dir" location="${basedir}/_src/theme"/>
-	<property name="css.dir" location="${source.dir}/css"/>
-	<property name="swf.dir" location="${source.dir}/swf"/>
-	<property name="png.dir" location="${source.dir}/png"/>
-		<property name="editorButtons.dir" location="${png.dir}/editorButtons"/>
-	<property name="build.dir" location="assets/theme"/>
-	
-	<!-- files -->
-	<property name="compc.jar" location="${flex.sdk.dir}/lib/compc.jar"/>
-	<property name="default.css" location="${css.dir}/default.css"/>
-	<property name="actionButtons.css" location="${css.dir}/actionButtons.css"/>
-	<property name="vdomTheme.swf" location="${swf.dir}/vdomTheme.swf"/>
-	<property name="class.ActionPanelBackground" value="vdom.skins.ActionPanelBackground"/>
 
-    <description>
+	<taskdef
+		resource="flexTasks.tasks"
+		classpath="${basedir}/lib/flexTasks.jar" />
+
+	<taskdef
+		resource="net/sf/antcontrib/antlib.xml"
+		classpath="${basedir}/lib/antContrib.jar" />
+
+	<property file="${basedir}/local.properties"/>
+	
+	<!-- dirs -->
+	<property name="source.dir" location="${basedir}/_src/theme"/>
+	<property name="build.dir" location="${basedir}/assets/theme"/>
+
+	<!-- files -->
+	<property name="config.xml" location="${source.dir}/config.xml"/>
+	<property name="compc.exe" location="${FLEX_HOME}/bin/compc.exe"/>
+	<property name="build.file" location="${build.dir}/vdomTheme.swc"/>
+
+	<description>
     	A vdom theme builder
     </description>
 
-    <!-- ================================= 
+	<!-- ================================= 
           target: build              
          ================================= -->
-    <target 
+	<target 
     	name="build" 
-    	depends="clear,compile" 
+    	depends="clear, create.config, compile" 
     	description="--> Simple application">
-    </target>
-
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: compile                      
-         - - - - - - - - - - - - - - - - - -->
-	<target name="compile">
-		<compc output="${build.dir}/vdomTheme.swc">
-			<source-path path-element="${source.dir}"/>
-			
-		<!-- CSS -->
-			<include-file name="default.css" path="${default.css}"/>
-          	<include-file name="actionButtons.css" path="${actionButtons.css}"/>
-		<!-- /CSS -->
-			
-		<!-- Images -->
-			<!-- editorButtons -->
-			<include-file name="analyse.png" path="${editorButtons.dir}/analyse.png"/>
-			<include-file name="analyse_s.png" path="${editorButtons.dir}/analyse_s.png"/>
-			<include-file name="edition.png" path="${editorButtons.dir}/edition.png"/>
-			<include-file name="edition_s.png" path="${editorButtons.dir}/edition_s.png"/>
-			<include-file name="events.png" path="${editorButtons.dir}/events.png"/>
-			<include-file name="events_s.png" path="${editorButtons.dir}/events_s.png"/>
-			<include-file name="news.png" path="${editorButtons.dir}/news.png"/>
-			<include-file name="news_s.png" path="${editorButtons.dir}/news_s.png"/>
-			<include-file name="preview.png" path="${editorButtons.dir}/preview.png"/>
-			<include-file name="preview_s.png" path="${editorButtons.dir}/preview_s.png"/>
-			<include-file name="script.png" path="${editorButtons.dir}/script.png"/>
-			<include-file name="script_s.png" path="${editorButtons.dir}/script_s.png"/>
-			<include-file name="statistics.png" path="${editorButtons.dir}/statistics.png"/>
-			<include-file name="statistics_s.png" path="${editorButtons.dir}/statistics_s.png"/>
-			<include-file name="tree.png" path="${editorButtons.dir}/tree.png"/>
-			<include-file name="tree_s.png" path="${editorButtons.dir}/tree_s.png"/>
-			<!-- /editorButtons -->
-		<!-- /Images -->
-			
-		<!-- Swf -->
-			<include-file name="vdomTheme.swf" path="${vdomTheme.swf}"/>
-		<!-- /Swf -->
-		</compc>       
 	</target>
 	
 	<!-- - - - - - - - - - - - - - - - - - 
           target: clear                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="clear">
-		<delete failonerror="false">
+	<target name="clear">
+		<delete failonerror="false" file="${config.xml}">
 			<fileset dir="${build.dir}" includes="**/*.*" />
 		</delete>
-    </target>
+	</target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: create.config                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="create.config">
+		
+		<echo file="${config.xml}"><![CDATA[<?xml version="1.0"?>
+<flex-config>]]>
+		</echo>
+		
+		<for param="file.path">
+			<path>
+				<fileset dir="${source.dir}">
+					<exclude name="**/*.fla"/>
+					<exclude name="**/*.xml"/>
+				</fileset>
+			</path>
+			<sequential>
+				<propertyregex property="file.name"
+				input="@{file.path}"
+				override="true"
+				regexp=".*\\(.+\.\w{3})"
+				select="\1"
+				casesensitive="false" />
+				<echo file="${config.xml}" append="true">
+	<![CDATA[<include-file>
+		<name>${file.name}</name>
+		<path>@{file.path}</path>
+	</include-file>]]>
+				</echo>
+			</sequential>
+		</for>
+		
+		<echo file="${config.xml}" append="true">
+<![CDATA[</flex-config>]]>
+		</echo>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: compile                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="compile">
+		<compc output="${build.file}">
+			<load-config filename="${config.xml}" />
+		</compc>
+	</target>
+	
 </project>

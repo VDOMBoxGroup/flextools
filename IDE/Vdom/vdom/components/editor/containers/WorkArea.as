@@ -1,8 +1,8 @@
 package vdom.components.editor.containers {
-
+	
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
-import flash.display.Loader;
+import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
@@ -13,22 +13,19 @@ import mx.containers.Canvas;
 import mx.core.Application;
 import mx.core.UIComponent;
 import mx.events.DragEvent;
-import mx.managers.IFocusManagerComponent;
 
 import vdom.components.editor.containers.workAreaClasses.Item;
-import vdom.components.editor.events.ResizeManagerEvent;
 import vdom.components.editor.events.WorkAreaEvent;
-import vdom.components.editor.managers.ResizeManager;
 import vdom.events.RenderManagerEvent;
+import vdom.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
 import vdom.managers.RenderManager;
+import vdom.managers.ResizeManager;
 import vdom.managers.ResourceManager;
 import vdom.managers.VdomDragManager;
-import mx.events.FlexEvent;
+import vdom.utils.DisplayUtil;
 
-public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
-	
-	public var selectedObjectId:String;
+public class WorkArea extends Canvas {
 	
 	private var resizeManager:ResizeManager;
 	private var resourceManager:ResourceManager;
@@ -36,42 +33,81 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	private var dataManager:DataManager;
 	
 	private var itemStack:Array;
-	private var selectedItem:DisplayObject;
+
 	private var selectedIndex:int;
 	private var resetItemStack:Boolean;
 	
-	private var _elements:Object;
 	private var collection:XML;
-	//private var soap:Soap;
-	private var container:Canvas;
 	
 	private var applicationId:String;
-	private var topLevelObjectId:String;
 	
-	private var _images:Object;
-	private var loader:Loader;
+	private var topLevelObjectId:String;
+	private var topLevelItem:Item;
+	private var selectedObject:Item;
 	
 	private var focusedItem:Item;
+	
+	//private var highlighter:Canvas;
+	private var highlightedObject:Item;
+	
+	//private var tip:ToolTip;
+	private var transformMode:Boolean;
+	private var objectUnderMouse:Object;
+	
+	private var resizeBegin:Boolean;
+	
+	private var markerSelected:Boolean
 	
 	public function WorkArea() {
 		
 		super();
 		
-		//tabEnabled = true;
-		
 		dataManager = DataManager.getInstance();
 		resourceManager = ResourceManager.getInstance();
 		renderManager = RenderManager.getInstance();
+		resizeManager = ResizeManager.getInstance();
 		
-		selectedItem = null;
+		//highlighter = new Canvas();
+		
 		selectedIndex = -1;
 		itemStack = [];
+		//transformMode = false;
+		resizeBegin = false;
 		
-		renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 		
-		addEventListener(MouseEvent.CLICK, mouseClickHandler, false);
+		//addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		//addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		//addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		//addEventListener(MouseEvent.ROLL_OUT, mouseRollOutHandler);
+		//addEventListener(MouseEvent.CLICK, mouseClickHandler);
+		
+		resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
+		resizeManager.addEventListener(ResizeManagerEvent.RESIZE_BEGIN, resizeBeginHandler);
+		resizeManager.addEventListener(ResizeManagerEvent.ITEM_SELECTED, itemSelectedHandler);
+		
+		resizeManager.addEventListener('markerSelected', markerSelectedHandler);
+		resizeManager.addEventListener('markerUnSelected', markerUnSelectedHandler);
+		
+		//renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+		
 		addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+		
+		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
+		addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
+		addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
+		addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
 	}
+	
+	public function get selectedObjectId():String {
+		
+		var returnValue:String;
+		
+		if(selectedObject)
+			returnValue = selectedObject.objectID;
+		
+		return returnValue;
+	}
+	
 	/**
 	 * Удаление всех объектов из рабочей области.
 	 * 
@@ -79,7 +115,6 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	
 	public function deleteObjects():void {
 		
-		selectedObjectId = null;
 		removeAllChildren();
 	}
 	
@@ -90,16 +125,16 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	 */	
 	public function deleteObject(objectId:String):void {
 		
-		resizeManager.visible = false;
-		selectedObjectId = null;
+		selectedObject = null;
 		renderManager.deleteItem(objectId);
-		
-		//dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
 	
 	public function updateObject(result:XML):void {
 		
-		renderManager.updateItem(result.Object.@ID, result.Parent);
+		//if(result.Object.@ID == topLevelObjectId)
+			//showTopLevelContainer(applicationId, topLevelObjectId)
+		//else
+			renderManager.updateItem(result.Object.@ID, result.Parent);
 	}
 	
 	public function set dataProvider(attributes:XML):void {
@@ -112,44 +147,15 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 		return XML(collection);
 	}
 	
-	override protected function createChildren():void {
-		
-		super.createChildren();
-		
-		if(!container) {
-			
-			container = new Canvas();
-			container.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
-			container.addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
-			container.addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
-			container.addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
-			addChild(container);
-		}
-		
-		if(!resizeManager) {
-			
-			resizeManager = new ResizeManager();
-			resizeManager.visible = false;
-			resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-			
-			addChild(resizeManager);
-		}
-		
-	}
-	
-	public function createObjects(applicationId:String, topLevelObjectId:String, objectId:String = ''):void {
-		
-		resizeManager.visible = false;
+	public function showTopLevelContainer(applicationId:String, topLevelObjectId:String):void {
 		
 		this.applicationId = applicationId;
 		this.topLevelObjectId = topLevelObjectId;
 		
-		var parentId:String = '';
-		//if(objectId == '') objectId = topLevelObjectId;
+		renderManager.init(this);
 		
 		renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-		renderManager.init(container);
-		renderManager.updateItem(topLevelObjectId, '');
+		topLevelItem = renderManager.addItem(topLevelObjectId);
 	}
 	
 	public function createObject(result:XML):void {
@@ -157,29 +163,96 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 		renderManager.addItem(result.Object.@ID, result.Parent);
 	}
 	
-	private function renderCompleteHandler(event:RenderManagerEvent):void {
+	/* private function selectObject():String {
 		
-		container.removeAllChildren();
-		container.addChild(event.result);
-		if(selectedItem) {
+		if(resetItemStack || itemStack.length == 0) {
 			
-			resizeManager.item = selectedItem;
+			resetItemStack = false;
+			
+			itemStack = DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
+			selectedIndex = -1;
 		}
+		
+		var itemStackLength:uint = itemStack.length;
+		
+		if(itemStackLength == 0) 
+			return null;
+		
+		if(selectedIndex >= itemStackLength - 1 || selectedIndex == -1)
+			selectedIndex = 0;
+		else
+			selectedIndex = selectedIndex + 1;
+		
+		return Item(itemStack[selectedIndex]).objectID;
+	} */
+	
+	/* private function bringOnTop(object:DisplayObject):void {
+		
+		var currIndex:int = getChildIndex(object);
+		var topIndex:int = numChildren - 1;
+		
+		if(currIndex != topIndex)
+			setChildIndex(object, topIndex);
+	} */
+	
+	private function applyChanges(attributes:Object):void {
+		
+		
+		
+		for (var attributeName:String in attributes) {
+			
+			collection.Attribute.(@Name == attributeName)[0] = attributes[attributeName];
+		}
+		
+		//trace('WorkAreaEvent.PROPS_CHANGED');
+		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.PROPS_CHANGED));
+	}
+	
+	private function resizeBeginHandler(event:ResizeManagerEvent):void {
+		
+		resizeBegin = true;
 	}
 	
 	/**
      *  @private
      */
 	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
+		trace('applyChanges');
 		
-		collection.Attribute.(@Name == 'top')[0] = event.properties['top'];
-		collection.Attribute.(@Name == 'left')[0] = event.properties['left'];
-		collection.Attribute.(@Name == 'width')[0] = event.properties['width'];
-		collection.Attribute.(@Name == 'height')[0] = event.properties['height'];
-		trace('top: '+event.properties['top']+' left: '+event.properties['left']);
-		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.PROPS_CHANGE));
+		resizeBegin = false;
+		
+		//selectedObject = event.item;
+		
+		selectedObject.x = event.properties.left;
+		selectedObject.y = event.properties.top;
+		selectedObject.width = event.properties.width;
+		selectedObject.height = event.properties.height;
+		selectedObject.removeAllChildren();
+		//selectedObject.waitMode = true;
+		applyChanges(event.properties);
 	}
 	
+	private function itemSelectedHandler(event:ResizeManagerEvent):void {
+		
+		selectedObject = event.item;
+		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
+	}
+	
+	
+	private function renderCompleteHandler(event:RenderManagerEvent):void {
+		
+		renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+		resizeManager.init(topLevelItem);
+	}
+	
+	private function markerSelectedHandler(event:ResizeManagerEvent):void {
+		trace('markerSelectedHandler');
+		markerSelected = true;
+	}
+	private function markerUnSelectedHandler(event:ResizeManagerEvent):void {
+		trace('markerUnSelectedHandler');
+		markerSelected = false;
+	}
 	/**
      *  @private
      */
@@ -278,43 +351,7 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	
 	
 	
-	private function getObjectsUnderMouse(rootContainer:DisplayObjectContainer, targetClassName:String):Array {
-		
-		var app:Application = Application.application as Application;
 	
-		var allObjectUnderPoint:Array = app.stage.getObjectsUnderPoint( 
-				new Point(app.stage.mouseX, app.stage.mouseY )
-		);
-			
-		var stack:Array = new Array();
-		
-		for (var i:int = allObjectUnderPoint.length-1; i >= 0; i--) {
-			
-			var target:DisplayObject = allObjectUnderPoint[i];
-			
-			if (!rootContainer.contains(target))
-				continue
-			
-			while (target) {
-				
-				var currentClassName:String = getQualifiedClassName(target);
-					
-				if(currentClassName == targetClassName)
-					break;
-					
-				if(target.hasOwnProperty('parent'))
-					target = target.parent;
-									
-				else
-					target = null;
-			}
-			
-			if (target && stack[stack.length - 1] != target)
-				stack.push(target);
-		}
-		//trace(stack.join('\n'));
-		return stack;
-	}
 	private function dragEnterHandler(event:DragEvent):void {
 		
 		VdomDragManager.acceptDragDrop(UIComponent(event.currentTarget));
@@ -322,7 +359,8 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 	
 	private function dragOverHandler(event:DragEvent):void {
 		
-		var stack:Array = getObjectsUnderMouse(container, 'vdom.components.editor.containers.workAreaClasses::Item');
+		var stack:Array = 
+			DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
 		var currentItem:Item = stack[0];
 		
 		if(focusedItem == currentItem) {
@@ -343,7 +381,7 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 			
 			currentItem.setStyle('themeColor', '#ff0000');
 		}
-		//trace(typeDescription.aviableContainers.split(',').join('\n'))
+		
 		if(currentItem)
 			currentItem.drawFocus(true);
 		
@@ -397,47 +435,121 @@ public class WorkArea extends Canvas /* implements IFocusManagerComponent */ {
 			Item(focusedItem).drawFocus(false);
 	}
 	
-	private function mouseClickHandler(event:MouseEvent):void {
-		
-		if(!container.contains(DisplayObject(event.target)))
-			return;
-		if(resetItemStack || itemStack.length == 0) {
-			
-			resetItemStack = false;
-			selectedItem = null;
-			itemStack = getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
-			selectedIndex = -1;
-				
-			addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		}
-		
-		var itemStackLength:uint = itemStack.length;
-		
-		if(itemStackLength == 0) return;
-		
-		if(selectedIndex >= itemStackLength - 1 || selectedIndex == -1)
-			selectedIndex = 0;
-		else
-			selectedIndex = selectedIndex + 1;
-		
-		selectedObjectId = Item(itemStack[selectedIndex]).objectID;
-		Item(itemStack[selectedIndex]).setFocus();
-		
-		var objectType:XML = dataManager.getTypeByObjectId(selectedObjectId);
-		
-		resizeManager.moveMode = objectType.Information.Moveable;
-		resizeManager.resizeMode = objectType.Information.Resizable;
-		
-		resizeManager.item = itemStack[selectedIndex];
-		resizeManager.visible = true;
-		
-		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
-	}
 	
-	private function mouseMoveHandler(event:MouseEvent):void {
+	
+	/* private function mouseClickHandler(event:MouseEvent):void {
 		
-		this.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);	
-		resetItemStack = true;
-	}
+		
+		
+		
+	} */
+	
+	
+	
+	/* private function mouseMoveHandler(event:Event):void {
+		//trace('mouseMoveHandler');
+		//if(objectUnderMouse == event.target)
+			//return;
+		
+		//objectUnderMouse = event.target;
+		if(resizeBegin)
+			return;
+		
+		//trace('resizeBegin');
+		
+		var targetList:Array =
+			DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
+			
+		if(targetList.length == 0)
+			return
+			
+		if(highlightedObject == targetList[0])
+			return
+		
+		highlightedObject = targetList[0];
+		
+		if(
+			topLevelItem != targetList[0] &&
+			selectedObject != targetList[0]
+		  ) {
+				
+			var objectName:String = dataManager.getObject(highlightedObject.objectID).@Name;
+			
+			var tipText:String = "Name:" + objectName;
+			//resizeManager.highlightItem(highlightedObject, true, tipText);
+			
+		} else {
+			
+			//resizeManager.highlightItem(null);	
+		}
+	} */
+	
+	//private function mouseDownHandler(event:MouseEvent):void {
+		
+		//if(!highlightedObject || markerSelected)
+			//return;
+		
+		//selectedObject = highlightedObject;
+		//trace(selectedObject.name);
+		//dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
+		
+		//var selectionResult:Item;
+		
+		//itemStack =	DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
+		
+		//selectionResult = Item(itemStack[0]);
+		
+		//if(!selectionResult) return;
+		
+		
+		//selectedObjectId = highlightedObject.objectID;
+		
+		//selectionResult.setFocus();
+		
+		//if(topLevelObjectId != highlightedObject.objectID) {
+			
+			//var objectType:XML = dataManager.getTypeByObjectId(highlightedObject.objectID);
+			
+			/* resizeManager.selectItem(
+					selectedObject, 
+					objectType.Information.Moveable,
+					objectType.Information.Resizable) */
+		//} else
+			//resizeManager.selectItem(null);
+		
+		//trace('WorkAreaEvent.OBJECT_CHANGE');
+				
+	//}
+	
+	/* private function mouseUpHandler(event:MouseEvent):void {
+		
+		if(highlightedObject != topLevelItem) {
+		
+		highlightedObject = null
+		//resizeManager.highlightItem(null);
+		
+		var objectType:XML = dataManager.getTypeByObjectId(selectedObject.objectID);
+		//trace('SELECT ITEM');
+		resizeManager.selectItem(
+					selectedObject, 
+					objectType.Information.Moveable,
+					objectType.Information.Resizable)
+					
+		} else {
+			
+			resizeManager.selectItem(null);
+		}
+	} */
+	
+	//private function mouseRollOutHandler(event:Event):void {
+		
+		//highlightedObject = null;
+		//resizeManager.highlightItem(null);
+	//}
+	
+	/* private function renderCompleteHandler(event:RenderManagerEvent):void {
+		
+		resizeManager.selectItem(selectedObject);
+	} */
 }
 }

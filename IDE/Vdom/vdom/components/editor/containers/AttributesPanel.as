@@ -1,58 +1,75 @@
 package vdom.components.editor.containers {
 
-import flash.events.Event;
+import flash.display.DisplayObject;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
-import mx.collections.ArrayCollection;
+import mx.collections.IViewCursor;
+import mx.collections.Sort;
+import mx.collections.SortField;
 import mx.collections.XMLListCollection;
+import mx.containers.ControlBar;
 import mx.containers.Grid;
 import mx.containers.GridItem;
 import mx.containers.GridRow;
 import mx.controls.Button;
 import mx.controls.ComboBox;
-import mx.controls.Label;
 import mx.controls.NumericStepper;
 import mx.controls.Text;
 import mx.controls.TextInput;
 import mx.controls.ToolTip;
+import mx.core.ClassFactory;
+import mx.core.EdgeMetrics;
+import mx.core.IUIComponent;
 import mx.events.ValidationResultEvent;
-import mx.managers.ToolTipManager;
-import mx.validators.NumberValidator;
+import mx.skins.Border;
 import mx.validators.RegExpValidator;
-import mx.validators.Validator;
 
 import vdom.Languages;
-import mx.events.FlexEvent;
-import mx.collections.IViewCursor;
-import mx.collections.Sort;
-import mx.collections.SortField;
-import mx.controls.DataGrid;
+import flash.events.Event;
 
-//use namespace mx_internal;
-public class AttributesPanel extends ClosablePanel
-{
+public class AttributesPanel extends ClosablePanel {
 		
-	[Bindable]
-	public var help:String;
+	[Bindable] public var help:String;
+	
+	
+	private var acceptButton:Button;
+	private var cancelButton:Button;
 	
 	private var attributesGrid:Grid;
+	
+	private var attributeRow:ClassFactory;
+	private var attributeItemLabel:ClassFactory;
+	private var attributeItemValue:ClassFactory;
+	private var attributeLabel:ClassFactory;
+	
 	private var applyButton:Button;
 	
-	private var _type:XML;
+	/* private var _type:XML; */
 	private var _typeID:String;
 	private var _collection:XMLListCollection;
+	private var objectDescription:XML;
 	
 	private var fieldsArray:Array;
 	private var languages:Languages;
 	
 	private var _isValid:Boolean;
 	private var _objectChanged:Boolean;
+	private var _objectName:String;
+	
+	private var _acceptLabel:String;
+	private var _cancelLabel:String;
+	
+	private var _pageLink:XMLList;
+	private var _objectList:XMLList;
 	
 	private var cursor:IViewCursor;
 	
 	private var invalidElementsCount:uint;
+	
+	private var attributesVisible:Boolean;
+	private var old_attributesVisible:Boolean;
 	
 	public function AttributesPanel() {
 		
@@ -68,6 +85,27 @@ public class AttributesPanel extends ClosablePanel
 		_isValid = true;
 		
 		invalidElementsCount = 0;
+		attributesVisible = old_attributesVisible = false;
+	}
+	
+	public function get acceptLabel():String {
+		
+		return _acceptLabel;
+	}
+	
+	public function set acceptLabel(newLabel:String):void {
+		
+		acceptButton.label = _acceptLabel = newLabel;
+	}
+	
+	public function get cancelLabel():String {
+		
+		return _acceptLabel;
+	}
+	
+	public function set cancelLabel(newLabel:String):void {
+		
+		cancelButton.label = _cancelLabel = newLabel;
 	}
 	
 	public function get dataProvider():XML {
@@ -75,9 +113,19 @@ public class AttributesPanel extends ClosablePanel
 		return XML(_collection);
 	}
 	
-	public function set dataProvider(objectDescription:XML):void {
+	public function set dataProvider(new_objectDescription:XML):void {
 		
-		if (objectDescription is XML) {
+		if (new_objectDescription is XML) {
+			
+			objectDescription = new_objectDescription;
+			
+			_objectName = objectDescription.@Name;
+			
+			if(objectDescription.ObjectList)
+				_objectList = objectDescription.ObjectList.*;
+				
+			if(objectDescription.PageLink)
+				_pageLink = objectDescription.PageLink.*;
 			
 			var xl:XMLList = new XMLList();
 			xl += objectDescription.Attributes.Attribute;
@@ -90,29 +138,245 @@ public class AttributesPanel extends ClosablePanel
 			
 			cursor = _collection.createCursor();
 			
-			_type = objectDescription.Type[0];
+			//_type = objectDescription.Type[0];
+			
+			attributesVisible = true;
 			
 		} else {
 			
 			_collection = null;
-			_type = null;
+			//_type = null;
+			attributesVisible = false;
 		}
 		
 		_objectChanged = true;
+		invalidateDisplayList();
 		invalidateProperties();
 	}
 	
+	override public function createComponentsFromDescriptors(recurse:Boolean = true):void {
+		
+		var tmpControlBar:ControlBar;
+		 	
+		if (numChildren != 0) {
+			
+			var lastChild:IUIComponent = IUIComponent(getChildAt(numChildren - 1));
+			
+			if (lastChild is ControlBar)
+				tmpControlBar = ControlBar(lastChild);
+				
+			else {
+				
+				tmpControlBar = new ControlBar();
+				addChild(tmpControlBar);
+			}
+				
+				
+		} else {
+			
+			tmpControlBar = new ControlBar();
+			addChild(tmpControlBar);
+		}
+		
+		super.createComponentsFromDescriptors()
+	}
 	
+	override protected function createChildren():void {
+		
+		super.createChildren();
+		
+		/*if(!controlBar) {
+			
+			controlBar = new ControlBar()
+			//controlBar.height = 40;
+		} */
+		/* if(!controlBar) {
+			
+			//rawChildren.addChild(new ControlBar());
+			//controlBar = new ControlBar();
+			
+		} */
+			
+		
+		if (!acceptButton) {
+			
+			acceptButton = new Button();
+			
+			acceptButton.setStyle("upSkin", getStyle('buttonSkin'));
+			acceptButton.setStyle("downSkin", getStyle('buttonSkin'));
+			acceptButton.setStyle("overSkin", getStyle('buttonSkin'));
+			acceptButton.setStyle("disabledSkin", getStyle('buttonSkin'));
+			
+			acceptButton.height = 15;
+			//acceptButton.visible = false;
+			
+			acceptButton.enabled = enabled;
+			//acceptButton.styleName = controlBar;	
+			
+			acceptButton.addEventListener(MouseEvent.CLICK, acceptButton_clickHandler);
+		   	ControlBar(controlBar).addChild(acceptButton);
+		   	
+			acceptButton.owner = ControlBar(controlBar);
+		}
+		
+		if (!cancelButton) {
+			
+			cancelButton = new Button();
+			
+			cancelButton.setStyle("upSkin", getStyle('buttonSkin'));
+			cancelButton.setStyle("downSkin", getStyle('buttonSkin'));
+			cancelButton.setStyle("overSkin", getStyle('buttonSkin'));
+			cancelButton.setStyle("disabledSkin", getStyle('buttonSkin'));
+			
+			cancelButton.height = 15;
+			//cancelButton.visible = false;
+			
+			cancelButton.enabled = enabled;
+			//cancelButton.styleName = controlBar;	
+			
+			cancelButton.addEventListener(MouseEvent.CLICK, chancelButton_clickHandler);
+		   	ControlBar(controlBar).addChild(cancelButton);
+		   	
+			cancelButton.owner = ControlBar(controlBar);
+		}
+		
+		if (!attributesGrid) {
+			attributesGrid = new Grid();
+			attributesGrid.visible = false;
+			attributesGrid.percentWidth = 100;
+			attributesGrid.setStyle('horizontalGap', 0);
+			attributesGrid.setStyle('verticalGap', 0);
+			attributesGrid.setStyle('backgroundColor', '#ffffff');
+			addChild(attributesGrid);
+		}
+		if (!attributeRow) {
+			
+			attributeRow = new ClassFactory(GridRow);
+			attributeRow.properties = {
+				percentWidth:100
+			};
+		}
+		if (!attributeItemLabel) {
+			
+			attributeItemLabel = new ClassFactory(GridItem);
+		}
+		if (!attributeItemValue) {
+			
+			attributeItemValue = new ClassFactory(GridItem);
+			attributeItemValue.properties = {
+				percentWidth:100
+			};
+		}
+		if (!attributeLabel) {
+			
+			attributeLabel = new ClassFactory(Text);
+			attributeLabel.properties = {
+				selectable:false,
+				width:70
+			};
+		}
+		/* if (!applyButton) {
+			applyButton = new Button();
+			applyButton.visible = false;
+			applyButton.label = 'Save';
+			applyButton.enabled = false;
+			//addChild(applyButton);
+		} */
+	}
 	
-	private function applyChanges(event:Event):void {
+	override protected function updateDisplayList(unscaledWidth:Number, 
+												unscaledHeight:Number):void {
+		
+		super.updateDisplayList(unscaledWidth, unscaledHeight);
+		
+		if(attributesVisible != old_attributesVisible) {
+			
+			
+			attributesGrid.visible = attributesVisible;			
+			controlBar.visible = attributesVisible;
+			acceptButton.visible = attributesVisible;
+			cancelButton.visible = attributesVisible;
+			
+			/* if(!attributesVisible) {
+				
+				var attributeGridW:Number = attributesGrid.getExplicitOrMeasuredWidth();
+				var controlBarW:Number = controlBar.getExplicitOrMeasuredWidth();
+				
+				attributesGrid.height = 0;
+				controlBar.height = 0;
+				
+			} else {
+				
+				attributesGrid.height = NaN;
+				controlBar.height = NaN;
+			} */
+			
+			old_attributesVisible = attributesVisible;
+		}
+	}
+	
+	override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void {
+		
+		 super.layoutChrome(unscaledWidth, unscaledHeight);
+		 
+		 var bm:EdgeMetrics = ControlBar(controlBar).viewMetricsAndPadding
+		 
+		 if(controlBar) {
+		 	
+		 	if(acceptButton) {
+		 		
+		 		acceptButton.move(bm.left, bm.top);
+		 	}
+		 	
+		 	if(cancelButton) {
+		 		
+		 		cancelButton.move(
+		 			controlBar.width - 
+		 			cancelButton.width - bm.right,
+		 			bm.top);
+		 	}
+		 }
+	}
+	
+	private function showControlBar(show:Boolean):void {
+		
+		controlBar.visible = show;
+		
+		var n:int = ControlBar(controlBar).numChildren;
+		for (var i:int = 0; i < n; i++) {
+			
+			var child:DisplayObject = ControlBar(controlBar).getChildAt(i);
+			child.visible = show;
+		}
+	}   
+	/* override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void {
+		
+		super.layoutChrome(unscaledWidth, unscaledHeight);
+		
+		var bm:EdgeMetrics = borderMetrics;
+		
+		acceptButton.setActualSize(
+			acceptButton.getExplicitOrMeasuredWidth(),
+			acceptButton.getExplicitOrMeasuredHeight()
+		);
+
+		acceptButton.move(
+			unscaledWidth - bm.right - 10 -
+			acceptButton.getExplicitOrMeasuredWidth(),
+			unscaledHeight - acceptButton.getExplicitOrMeasuredHeight() / 2 
+		);
+	} */
+	
+	/* private function applyChanges(event:Event):void {
 
 		for (var attrName:String in fieldsArray) {
-			cursor.findFirst({'@Name':attrName});
+			if(!cursor.findFirst({'@Name':attrName}))
+				continue;
 			var currentElement:Object = cursor.current;
 			currentElement.*[0] = fieldsArray[attrName][0][fieldsArray[attrName][1]];
 		}
 		dispatchEvent(new Event('propsChanged'));
-	}
+	} */
 	
 	private function createAttributes():void {
 		
@@ -121,34 +385,29 @@ public class AttributesPanel extends ClosablePanel
 		
 		var codeInterface:Object = new Object();
 		
-		var attrRow:GridRow;
-		var attrLabelItem:GridItem;
-		var attrValueItem:GridItem;
+		var valueContainer:*;
+		var valueType:String;
+		var color:String = '';
 		
-		var attrLabel:Text;
+		valueContainer = new TextInput();
+		valueContainer.text = _objectName;
+		valueType = 'text';
+		fieldsArray['Name'] = [valueContainer, valueType];
+		color = '#c2c2c2';
+		insertAttribute('Name', valueContainer, color);
 		
-		var attributes:XMLList = _type.Attributes.Attribute;
+		var attributes:XMLList = objectDescription.Type.Attributes.Attribute;
 		
 		for each(var attributeDescription:XML in attributes) {
 			
+			if(attributeDescription.Visible == 0)
+				return;
+				
 			cursor.findFirst({'@Name':attributeDescription.Name})
 			
 			var currentAttribute:Object = cursor.current;
 			
-			attrRow = new GridRow();
-			attrRow.percentWidth = 100;
-				
-			attrLabelItem = new GridItem();
-			attrLabel = new Text();
-			attrLabel.width = 70;
-			attrLabel.setStyle('textAlign', 'right');
-			
-			attrLabel.selectable = false;
-			attrLabel.text = getLanguagePhrase(_typeID, attributeDescription.DisplayName);	
-			attrLabelItem.addChild(attrLabel);
-			
-			attrValueItem = new GridItem();
-			attrValueItem.percentWidth = 100;
+			var label:String = languages.getLanguagePhrase(_typeID, attributeDescription.DisplayName);
 			
 			var codeInterfaceRE:RegExp = /^(\w*)\((.*)\)/;
 			
@@ -157,11 +416,9 @@ public class AttributesPanel extends ClosablePanel
 			codeInterface['type'] = matches[1].toLowerCase();
 			codeInterface['value'] = matches[2];
 			
-			var valueContainer:*;
-			var valueType:String;
-			
 			switch(codeInterface['type']) {
 				case 'number':
+				
 					valueContainer = new NumericStepper();
 					valueType = 'value';
 					
@@ -177,31 +434,40 @@ public class AttributesPanel extends ClosablePanel
 					valueContainer = new TextInput();
 					valueType = 'text';
 					
-					
-					
 					valueContainer.maxChars = codeInterface['value'];
 					
 					valueContainer.text = currentAttribute;
 				break;
 					
 				case 'dropdown':
+					
 					valueContainer = new ComboBox();
 					valueType = 'value';
+					
 					var comboBoxData:Array = new Array();
 					var codeInterfaceValueRE:RegExp = /\((#Lang\(.*?\))\|(.*?)\)/g;
 					
 					var listValues:Array = codeInterfaceValueRE.exec(codeInterface['value']);
 					while (listValues != null) {
-					    var comboBoxLabel:String = getLanguagePhrase(_typeID, listValues[1]);
+					    var comboBoxLabel:String = languages.getLanguagePhrase(_typeID, listValues[1]);
 					    comboBoxData.push({label:comboBoxLabel, data:listValues[2]});
 					    listValues = codeInterfaceValueRE.exec(codeInterface['value']);
 					}
+					
 					valueContainer.dataProvider = comboBoxData;
 				break;
 				
 				case 'file':
 				case 'color':
+				break;
 				case 'pageLink':
+					
+					valueContainer = new ComboBox();
+					valueType = 'value';
+					
+					valueContainer.dataProvider = _objectList;
+				break;
+				
 				case 'objectlist':
 				case 'linkedbase':
 				case 'externaleditor':
@@ -214,7 +480,8 @@ public class AttributesPanel extends ClosablePanel
 			}
 			
 			valueContainer.percentWidth = 100;
-			valueContainer.minWidth = 0;
+			//valueContainer.minWidth = 0;
+			
 			valueContainer.data = {
 				'elementName':attributeDescription.Name,
 				'helpPhraseID':attributeDescription.Help,
@@ -231,24 +498,47 @@ public class AttributesPanel extends ClosablePanel
 			valueContainer.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
 			valueContainer.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
 			
-			attrValueItem.addChild(valueContainer);
-			
 			fieldsArray[currentAttribute.@Name] = [valueContainer, valueType];
 			
-			attrRow.addChild(attrLabelItem);
-			attrRow.addChild(attrValueItem);
-			
-			attributesGrid.addChild(attrRow);
+			insertAttribute(label, valueContainer, color)
 		}
 	}
 	
-	private function getLanguagePhrase(typeID:String, phraseID:String):String {
+	private function insertAttribute(label:String, element:*, color:String):void {
 		
-		var phraseRE:RegExp = /#Lang\((\w+)\)/;
-		phraseID = phraseID.match(phraseRE)[1];
-		var languageID:String = typeID + '-' + phraseID;
+		var attrRow:GridRow = attributeRow.newInstance();
+		var attrItemLabel:GridItem = attributeItemLabel.newInstance();
+		var attrItemValue:GridItem = attributeItemValue.newInstance();
+		var attrLabel:Text = attributeLabel.newInstance();
 		
-		return languages.language.(@ID == languageID)[0];
+		
+		
+		attrLabel.text = label;
+		
+		attrLabel.setStyle('textAlign', 'right');
+		attrLabel.height = 21;
+		
+		attrItemLabel.addChild(attrLabel);
+		
+		attrItemLabel.setStyle('backgroundColor', color);
+		attrItemLabel.setStyle('paddingTop', 3);
+		attrItemLabel.setStyle('paddingBottom', 3);
+		attrItemLabel.setStyle('paddingRight', 3);
+		attrItemLabel.setStyle('color', '#ffffff');
+		attrItemLabel.setStyle('fontWeight', 'bold');
+		
+		attrItemValue.addChild(element);
+		attrItemValue.setStyle('verticalAlign', 'middle');
+		attrItemValue.setStyle('paddingLeft', 3);
+		element.width = 110;
+		element.height = 21;
+		
+		
+		//attrRow.setStyle('backgroundColor', '#00ff00');
+		attrRow.addChild(attrItemLabel);
+		attrRow.addChild(attrItemValue);
+		
+		attributesGrid.addChild(attrRow);
 	}
 	
 	private function addValidator(valueContainer:Object, valueType:String, regExp:String, errorMsg:String):void {
@@ -264,52 +554,40 @@ public class AttributesPanel extends ClosablePanel
 		validator.expression = '^'+regExp+'$';
 		validator.noMatchError = 
 			validator.requiredFieldError = 
-				getLanguagePhrase(_typeID, errorMsg);
+				languages.getLanguagePhrase(_typeID, errorMsg);
 		
 	}
 	
-	override protected function createChildren():void {
-		
-		super.createChildren();
-		
-		if (!attributesGrid) {
-			attributesGrid = new Grid();
-			attributesGrid.visible = false;
-			attributesGrid.percentWidth = 100;
-			addChild(attributesGrid);
-		}
-		if (!applyButton) {
-			applyButton = new Button();
-			applyButton.visible = false;
-			applyButton.label = 'Save';
-			applyButton.enabled = false;
-			addChild(applyButton);
-		}
-	}
+	
 	
 	override protected function commitProperties():void {
 		
 		if(_objectChanged) {
 			
-			var titleValue:String = 'Attributes';
+			var titleValue:String = 'OBJECT PROPERTIES';
 			
 			if (_collection is XMLListCollection) {
 				
-				_typeID = _type.Information.ID;
-				titleValue += ': ' + _type.Information.Name;
+				_typeID = objectDescription.Type.Information.ID;
+				titleValue += ': ' + objectDescription.Type.Information.Name;
 				
 				createAttributes();
 				
-				applyButton.addEventListener(MouseEvent.CLICK, applyChanges);
+				//showControlBar(true);
+				
+				//applyButton.addEventListener(MouseEvent.CLICK, applyChanges);
+				
 				attributesGrid.visible = true;
-				applyButton.visible = true;
+				
+				//applyButton.visible = true;
 				_isValid = true;
 				
 			} else {
 				
-				applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
-				applyButton.visible = false;
+				//applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
+				//applyButton.visible = false;
 				attributesGrid.visible = false;
+				//showControlBar(false);
 				attributesGrid.removeAllChildren();
 				_isValid = false;
 			}
@@ -321,12 +599,13 @@ public class AttributesPanel extends ClosablePanel
 			_objectChanged = false;
 		}
 		
-		if(_isValid)
-			applyButton.enabled = true;
-		else
-			applyButton.enabled = false;
+		//if(_isValid)
+			//applyButton.enabled = true;
+		//else
+			//applyButton.enabled = false;
 			
-		super.commitProperties();	
+		super.commitProperties();
+		invalidateDisplayList();
 	}
 	
 	private function validateHandler(event:ValidationResultEvent):void {
@@ -348,10 +627,27 @@ public class AttributesPanel extends ClosablePanel
 		if(oldValid !== _isValid) invalidateProperties();
 	}
 	
+	private function acceptButton_clickHandler(event:MouseEvent):void {
+		
+		for (var attrName:String in fieldsArray) {
+			if(!cursor.findFirst({'@Name':attrName}))
+				continue;
+			var currentElement:Object = cursor.current;
+			currentElement.*[0] = fieldsArray[attrName][0][fieldsArray[attrName][1]];
+		}
+		dispatchEvent(new Event('propsChanged'));
+	}
+	
+	private function chancelButton_clickHandler(event:MouseEvent):void {
+		
+		_objectChanged = true;
+		invalidateProperties();
+	}
+	
 	private function focusInEventHandler(event:FocusEvent):void {
 		
 		var phraseID:String = event.currentTarget.data['helpPhraseID'];
-		help = getLanguagePhrase(_typeID, phraseID);
+		help = languages.getLanguagePhrase(_typeID, phraseID);
 	}
 	
 	private function focusOutEventHandler(event:FocusEvent):void {

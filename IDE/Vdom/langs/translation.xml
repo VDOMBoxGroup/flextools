@@ -12,7 +12,7 @@
 	<!-- End Login Form -->
 	
 	<!-- Begin Main Tab -->
-	<Sentence ID="c1" label="main_title">Application(s) management</Sentence>
+	<Sentence ID="c1" label="main_title">APPLICATIONS MANAGMENT</Sentence>
 	<Sentence ID="c2" label="main_new">New</Sentence>
 	<Sentence ID="c3" label="main_steps">5 steps</Sentence>
 	<Sentence ID="c4" label="main_search">Search</Sentence>
@@ -21,7 +21,7 @@
 	<!-- End Main Tab -->
 	
 	<!-- Begin Edit Tab -->
-	<Sentence ID="d1" label="editor_title">Editor</Sentence>
+	<Sentence ID="d1" label="editor_title">EDITOR</Sentence>
 	<Sentence ID="d2" label="editor_edition">Edition</Sentence>
 	<Sentence ID="d3" label="editor_script">Script</Sentence>
 	<Sentence ID="d4" label="editor_preview">Preview</Sentence>
@@ -29,23 +29,25 @@
 	<Sentence ID="d6" label="editor_analyse">Analyse</Sentence>
 	<Sentence ID="d7" label="editor_statistics">Statistics</Sentence>
 	<Sentence ID="d8" label="editor_events">Events</Sentence>
-	<Sentence ID="d8" label="news_events">News</Sentence>
+	<Sentence ID="d9" label="editor_news">News</Sentence>
+	<Sentence ID="d10" label="editor_save">Save</Sentence>
+	<Sentence ID="d11" label="editor_cancel">Cancel</Sentence>
 	<!-- End Edit Tab -->
 	
 	<!-- Begin Multilingual Tab -->
-	<Sentence ID="e1" label="mling_title">Multilingual management</Sentence>
+	<Sentence ID="e1" label="mling_title">MULTILINGUAL MANAGMENT</Sentence>
 	<!-- End Multilingual Tab -->
 	
 	<!-- Begin PortalManagment Tab -->
-	<Sentence ID="f1" label="portal_title">Portal management</Sentence>
+	<Sentence ID="f1" label="portal_title">PORTAL MANAGMENT</Sentence>
 	<!-- End PortalManagment Tab -->
 	
 	<!-- Begin Publish Tab -->
-	<Sentence ID="g1" label="publish_title">Publish</Sentence>
+	<Sentence ID="g1" label="publish_title">PUBLISH</Sentence>
 	<!-- End Publish Tab -->
 	
 	<!-- Begin Safeguard Tab -->
-	<Sentence ID="h1" label="safe_title">Safeguard</Sentence>
+	<Sentence ID="h1" label="safe_title">BACKUP</Sentence>
 	<!-- End Safeguard Tab -->
 	
 	<!-- Begin VDOM Tab -->
@@ -80,7 +82,9 @@
 	<Sentence ID="d6" label="editor_analyse">Анализ</Sentence>
 	<Sentence ID="d7" label="editor_statistics">Статистика</Sentence>
 	<Sentence ID="d8" label="edit_events">События</Sentence>
-	<Sentence ID="d8" label="news_events">Новости</Sentence>
+	<Sentence ID="d9" label="editor_news">Новости</Sentence>
+	<Sentence ID="d10" label="editor_save">Сохранить</Sentence>
+	<Sentence ID="d11" label="editor_cancel">Отменить</Sentence>
 	<!-- Конец Edit Tab -->
 	
 	<!-- Начало Multilingual Tab -->

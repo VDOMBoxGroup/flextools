@@ -22,14 +22,15 @@
 		/>
 		
 		<mx:VBox id="main" width="100%" bottom="0" height="100%">
+		
 			<mainContainers:AdvancedTabNavigator width="100%" height="100%" borderStyle="none">			
 				
-				<containers:WorkArea id="workArea" 
+				<containers:WorkArea id="workArea"
+					horizontalScrollPolicy="off" verticalScrollPolicy="off"
 					visible="false"
 					dataProvider="{dataManager.objectDescription}" />
 					
-				<mx:Canvas  id="XMLEditor" 
-					visible="true"/>
+				<containers:XMLPresentationEditor id="xmlEditor" />
 				
 			</mainContainers:AdvancedTabNavigator>
 		<!-- <containers:Toolbar width="100%" type="{editorDataManager.objectDescription}" id="toolbar"/> -->
@@ -38,21 +39,28 @@
 		<mx:VBox 
 			verticalGap="5" paddingTop="5" paddingLeft="0" paddingRight="25" 
 			minHeight="0" height="100%" width="220"
-			verticalScrollPolicy="auto" horizontalScrollPolicy="off"
-		>
-			<containers:AttributesPanel id="attributesPanel" title="Attributes"  
-				dataProvider="{dataManager.objectDescription}" width="200"
-			/>
+			verticalScrollPolicy="auto" horizontalScrollPolicy="off" >
+			
+			<containers:AttributesPanel id="attributesPanel"
+				title="OBJECT PROPERTIES" 
+				acceptLabel="{languages.language.(@label == 'editor_save')}" 
+				cancelLabel="{languages.language.(@label == 'editor_cancel')}"
+				dataProvider="{dataManager.objectDescription}" width="200" />
+
 			<containers:ClosablePanel id="helpPanel" title="Help" 
-				width="200"
-			>
+				width="200" >
+				
 				<mx:Text htmlText="{attributesPanel.help}" condenseWhite="true" width="100%" minHeight="0"/>
+				
 			</containers:ClosablePanel>
+			
 			<containers:ClosablePanel id="pagePanel" title="Pages" width="200">
+			
 				<mx:List id="pageList"
 					labelField="@Name"
 					width="100%" minHeight="0"
 					change="topLevelObjectChange()"/>
+					
 			</containers:ClosablePanel>
 		</mx:VBox>
 	</mx:HBox>

@@ -33,7 +33,7 @@ package vdom.connection.soap
 		{
 			ws.get_echo.removeEventListener(ResultEvent.RESULT,completeListener);
 			// get result 
-			resultXML = XML(ws.get_echo.lastResult.Result);
+			resultXML = XML(event.result);
 			var evt:SoapEvent;
 			
 			// check Error

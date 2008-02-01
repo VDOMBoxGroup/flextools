@@ -36,7 +36,7 @@ package vdom.connection.soap
 			//trace(ws.set_attributes.lastResult.Result);
 			// get result 
 			resultXML = new XML(<Result />);
-			resultXML.appendChild(XMLList(ws.set_attributes.lastResult.Result));
+			resultXML.appendChild(XMLList(event.result));
 			var evt:SoapEvent;
 			
 			// check Error

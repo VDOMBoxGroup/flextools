@@ -27,8 +27,8 @@
 	
 	<mx:Canvas id="main" creationComplete="mainInitHandler(event)" width="100%" height="100%">
 	<mx:ApplicationControlBar
-		top="0" left="0" right="0" height="40" 
-		fillColors="[#000000, #000000]" fillAlphas="[0.63, 1.0]" cornerRadius="0" dock="true">
+		top="0" left="0" right="0" height="80" 
+		fillColors="#000000" dock="true" cornerRadius="0">
 		<mx:Spacer x="10" y="10" width="100%"/>
 		<!--<mx:ComboBox id="selectTestLang"
 			width="140"
@@ -40,7 +40,7 @@
 		<mx:Button label="Logout" click="viewstack.selectedChild=loginForm"/>
 	</mx:ApplicationControlBar>
 	<controls:MainTabNavigator id="tabPanel"
-		top="60" left="10" right="10"
+		top="90" left="10" right="10"
 		paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" tabPaddingLeft="80"
 	 height="140">
 		
@@ -130,7 +130,7 @@
 					
 				
 				<controls:ActionButton styleName="newsButton"
-					label="{languages.language.(@label == 'news_events')}"
+					label="{languages.language.(@label == 'editor_news')}"
 					labelPlacement="bottom"/>
 
 			</controls:ControlPanel>
@@ -157,7 +157,7 @@
 		</mx:Canvas>
 	</controls:MainTabNavigator>
 	<mx:ViewStack id="placeCanvas"
-		borderStyle="none" left="10" right="10" top="220" bottom="10">
+		borderStyle="none" left="10" right="10" top="240" bottom="10">
 	
 		<main:Main id="mainCanvas"
 			width="100%" height="100%" styleName="mainCanvas"/>

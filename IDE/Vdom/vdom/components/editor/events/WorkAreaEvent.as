@@ -8,7 +8,7 @@ public class WorkAreaEvent extends Event
 	public static const DELETE_OBJECT:String = 'deleteObject';
 	public static const OBJECT_DELETED:String = 'objectDeleted';
 	public static const OBJECT_CHANGE:String = 'objectChange';
-	public static const PROPS_CHANGE:String = 'propsChange';
+	public static const PROPS_CHANGED:String = 'propsChanged';
 	
 	public var objectID:String;
 	
@@ -22,7 +22,7 @@ public class WorkAreaEvent extends Event
 	
 	override public function clone():Event
 	{
-		return new ResizeManagerEvent(type, bubbles, cancelable, objectID);
+		return new WorkAreaEvent(type, bubbles, cancelable, objectID);
 	}		
 }
 }

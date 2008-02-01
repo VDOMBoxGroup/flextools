@@ -24,17 +24,26 @@ package vdom.connection.soap
 			ws.open_session.arguments.pwd_md5 	= MD5.encrypt(password); //- md5-хэш пароля, строка
 			
 			//send data & set listener 
-			ws.open_session();
+			//ws.open_session.resultFormat = 'e4x';
 			ws.open_session.addEventListener(ResultEvent.RESULT,completeListener);
+			//ws.open_session(login, MD5.encrypt(password));
+			ws.open_session();
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void{
 			
 			// get result 
-			resultXML = XML(ws.open_session.lastResult.Result);
-			var evt:SoapEvent;
+			resultXML = XML(event.result);
 			
+			var evt:SoapEvent;
+			/*
+			var resultXML:XML = 
+			<Result>
+				<HashString>{event.result.Session.HashString}</HashString>
+				<SessionKey>{event.result.Session.SessionKey}</SessionKey>
+				<SessionId>{event.result.Session.SessionId}</SessionId>
+			</Result>; */
 			
 			// check Error
 			if(resultXML.name().toString() == 'Error'){

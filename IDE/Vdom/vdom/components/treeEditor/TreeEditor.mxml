@@ -30,7 +30,6 @@
 	private var xml1:XML; 
  	private var massTreeElements:Array = new Array();
 	private var massLines:Array = new Array();
-	private var resizer:ResizeManager;
 	private var selectedTreeEliment:String;
 	private var treeElement:TreeElement = new TreeElement();
 	private var canRectangle:Canvas = new Canvas();
