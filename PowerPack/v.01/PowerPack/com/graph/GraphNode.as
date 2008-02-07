@@ -1,45 +1,45 @@
 package PowerPack.com.graph
 {	
-	import flash.display.Sprite;
+	import PowerPack.com.NodeTextValidator;
+	import PowerPack.com.mdm.*;
+	
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
+	import flash.display.Sprite;
+	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
-	import flash.events.MouseEvent;	
+	import flash.events.FocusEvent;
 	import flash.events.KeyboardEvent;
-	import mx.collections.ArrayCollection;
-	import mx.containers.Canvas;
-	import mx.controls.TextArea;
-	import mx.controls.Alert;
-	import mx.core.Application;
-	import mx.core.EdgeMetrics;
-	import mx.managers.PopUpManager;	
-	import mx.styles.CSSStyleDeclaration;
-	import mx.styles.StyleManager;
-	import mx.events.CloseEvent;
-	import mx.events.FlexMouseEvent;
-	import mx.events.FlexEvent;
-	import flash.events.FocusEvent
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.text.TextLineMetrics;
-	import mx.core.UITextField;
-	import mx.core.mx_internal;
-
-	import PowerPack.com.graph.GraphNodeCategory;
-	import PowerPack.com.graph.GraphNodeType;
-	import PowerPack.com.graph.GraphArrow;
-	
-	import mx.core.Container;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
-	import flash.events.ContextMenuEvent;
-	import mx.core.UIComponent;
+	
 	import mdm.Menu;
-	import PowerPack.com.graph.PowerPackClass;
-	import PowerPack.com.NodeTextValidator;
-	import mx.events.ValidationResultEvent;
+	
 	import mx.binding.utils.*;
-	import mx.managers.ToolTipManager;
+	import mx.collections.ArrayCollection;
+	import mx.containers.Canvas;
+	import mx.controls.Alert;
+	import mx.controls.TextArea;
 	import mx.controls.ToolTip;
+	import mx.core.Application;
+	import mx.core.Container;
+	import mx.core.EdgeMetrics;
+	import mx.core.UIComponent;
+	import mx.core.UITextField;
+	import mx.core.mx_internal;
+	import mx.events.CloseEvent;
+	import mx.events.FlexEvent;
+	import mx.events.FlexMouseEvent;
+	import mx.events.ValidationResultEvent;
+	import mx.managers.PopUpManager;
+	import mx.managers.ToolTipManager;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
+	import PowerPack.com.Global;
+	import PowerPack.com.CustomContextMenu;
 
 	
 	use namespace mx_internal;
@@ -60,13 +60,19 @@ package PowerPack.com.graph
 	    //--------------------------------------------------------------------------
 	    public static const DEFAULT_WIDTH:Number = 30;
 	    public static const DEFAULT_HEIGHT:Number = 20;
-	    public static const OFFSET:Number = 1;
-	    public static const PADDING:Number = 0;
 	    
-	    private static const NEED_CONTEXT:Boolean = true;
-		
+	    /**
+	    * border offset
+	    */
+	    public static const OFFSET:Number = 2;
+	    
+	    /**
+	    * text area right padding
+	    */
+	    public static const PADDING:Number = 0;
+	    		
 		/**
-		 *	Modes
+		 *	defines current node state
 		 */
 	    private static const M_NORMAL:Number = 0;
 	    private static const M_EDITING:Number = 1;
@@ -108,7 +114,7 @@ package PowerPack.com.graph
                 // then create one and set the default value.
                 var newStyleDeclaration:CSSStyleDeclaration;
                 
-                if(!(newStyleDeclaration = StyleManager.getStyleDeclaration("UIComponent")))
+                if(!(newStyleDeclaration = StyleManager.getStyleDeclaration("Canvas")))
                 {
 	                newStyleDeclaration = new CSSStyleDeclaration();
 	                //newStyleDeclaration.setStyle("themeColor", "haloBlue");
@@ -145,11 +151,12 @@ package PowerPack.com.graph
    	    [ArrayElementType("ToolTip")]
 	    public var arrToolTip:Array;
 	    	    
-	    public static var copyNode:GraphNode;
+	   	public static var copyNode:GraphNode;
 	
     	private var _mode:Number = 0;
         
 	    private var contextMenuOld:ContextMenu;
+	    private var customCM:CustomContextMenu;
 	    
 		private var validator:NodeTextValidator;
 		public var bDataValid:Boolean = true;
@@ -285,9 +292,6 @@ package PowerPack.com.graph
 		//
 		//--------------------------------------------------------------------------
 	
-		/** 
-		 *	Constructor
-		 */
     	public function GraphNode(	__category:String = GraphNodeCategory.NORMAL, 
     								__type:String = GraphNodeType.NORMAL, 
     								__text:String = null )
@@ -323,10 +327,7 @@ package PowerPack.com.graph
 						for each (var arrow:GraphArrow in outArrows)
 						{
 							arrow.data = null;
-							arrow.label = 
-								arrow.fromObject.name + 
-								" -> " + 
-								arrow.toObject.name;						
+							arrow.label = null;						
 						}					
 					}
 					else
@@ -351,7 +352,7 @@ package PowerPack.com.graph
 					}					
 				}, this, "arrTrans");
 								
-			addEventListener(FlexEvent.ADD, addHandler);
+			addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 		}		
 		//--------------------------------------------------------------------------
 		//
@@ -364,30 +365,13 @@ package PowerPack.com.graph
 		 */ 
 		public function destroy():void
 		{			
-	        if (contextMenu)
-	        {
-	        	if(contextMenu.customItems.length>0)     	
-		        	contextMenu.customItems[0].removeEventListener(ContextMenuEvent.MENU_ITEM_SELECT, addTransitionHandler);
-				if(contextMenu.customItems.length>1)     	
-		        	contextMenu.customItems[1].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteNodeHandler);
-	        	if(contextMenu.customItems.length>2)     	
-		        	contextMenu.customItems[2].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, copyNodeHandler);
-
-	        	if(contextMenu.customItems.length>3)     	
-		        	contextMenu.customItems[3].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setInitialTypeHandler);
-	        	if(contextMenu.customItems.length>4)     	
-		        	contextMenu.customItems[4].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setTerminalTypeHandler);
-
-	        	if(contextMenu.customItems.length>5)     	
-		        	contextMenu.customItems[5].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setNormalCategoryHandler);
-	        	if(contextMenu.customItems.length>6)     	
-		        	contextMenu.customItems[6].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setSubgraphCategoryHandler);
-	        	if(contextMenu.customItems.length>7)     	
-		        	contextMenu.customItems[7].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setCommandCategoryHandler);
-	        }	  				
+			if(customCM)
+			{	
+				customCM.clear();
+	  		}	  				
 	  		stopDragging();
    			
-			removeEventListener(FlexEvent.ADD, addHandler);
+			removeEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
 
 			removeEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
 			removeEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
@@ -406,6 +390,12 @@ package PowerPack.com.graph
 			while(outArrows.length)
 			{
 				outArrows[0].destroy();
+			}
+			
+			if(copyNode == this)
+			{
+				copyNode = null;
+				Application.application.dispatchEvent(new Event("copyNode"));
 			}
 
 	        if(parent)
@@ -458,12 +448,12 @@ package PowerPack.com.graph
 			var clientWidth:int = unscaledWidth - vm.left - vm.right - (OFFSET + OFFSET);
 			var clientHeight:int = unscaledHeight - vm.top - vm.bottom - (OFFSET + OFFSET);			
             
-            setActualSize(measuredWidth, measuredHeight); 
+            setActualSize(measuredWidth + (_mode==M_EDITING?PADDING:0), measuredHeight); 
             	
 			if(nodeTextArea)
 			{				
 				nodeTextArea.move(OFFSET, OFFSET);
-				nodeTextArea.setActualSize(clientWidth, clientHeight);
+				nodeTextArea.setActualSize(clientWidth + (_mode==M_EDITING?PADDING:0), clientHeight);
 			}
 			
 	    	for(var i:int=0; i<inArrows.length; i++)
@@ -493,29 +483,23 @@ package PowerPack.com.graph
 
 	            addChild(nodeTextArea);
 	        }
-	        if (NEED_CONTEXT && !contextMenu)
+	        if (Global.FLASH_CONTEXT_MENU && !customCM)
 	        {
 	        	contextMenu = new ContextMenu();
-	        	contextMenu.hideBuiltInItems();	        	
+	        	contextMenu.hideBuiltInItems();	  
 	        	
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[0]));	
-	        	contextMenu.customItems[0].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, addTransitionHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[1]));			
-	        	contextMenu.customItems[1].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteNodeHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[2]));			
-	        	contextMenu.customItems[2].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, copyNodeHandler);
+	        	customCM = new CustomContextMenu(contextMenu);       	
+	        	
+	        	customCM.addItem("add", menuItemCaptions[0], addTransitionHandler);
+	        	customCM.addItem("delete", menuItemCaptions[1], deleteNodeHandler);
+	        	customCM.addItem("copy", menuItemCaptions[2], copyNodeHandler);
+	        	
+	        	customCM.addItem("initial_type", menuItemCaptions[3], setInitialTypeHandler, true, true, true, type==GraphNodeType.INITIAL, "type");
+	        	customCM.addItem("terminal_type", menuItemCaptions[4], setTerminalTypeHandler, false, true, true, type==GraphNodeType.TERMINAL, "type");
 
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeType.INITIAL?"· ":"  ")+menuItemCaptions[3], true));			
-	        	contextMenu.customItems[3].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setInitialTypeHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeType.TERMINAL?"· ":"  ")+menuItemCaptions[4]));			
-	        	contextMenu.customItems[4].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setTerminalTypeHandler);
-
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.NORMAL?"· ":"  ")+menuItemCaptions[5], true));			
-	        	contextMenu.customItems[5].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setNormalCategoryHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.SUBGRAPH?"· ":"  ")+menuItemCaptions[6]));			
-	        	contextMenu.customItems[6].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setSubgraphCategoryHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((_type==GraphNodeCategory.COMMAND?"· ":"  ")+menuItemCaptions[7]));			
-	        	contextMenu.customItems[7].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, setCommandCategoryHandler);
+	        	customCM.addItem("normal_category", menuItemCaptions[5], setNormalCategoryHandler, true, true, true, category==GraphNodeCategory.NORMAL, "category");
+	        	customCM.addItem("subfraph_category", menuItemCaptions[6], setSubgraphCategoryHandler, false, true, true, category==GraphNodeCategory.SUBGRAPH, "category");
+	        	customCM.addItem("command_category", menuItemCaptions[7], setCommandCategoryHandler, false, true, true, category==GraphNodeCategory.COMMAND, "category");
 	        }	
 	        if (!validator)
 	        {
@@ -555,59 +539,40 @@ package PowerPack.com.graph
 	    			langXML.graphnode.menuitemsubgraph,
 	    			langXML.graphnode.menuitemcommand );	   
 				
-				for(var i:int=0; i<contextMenu.customItems.length; i++)
-		    		contextMenu.customItems[i].caption = menuItemCaptions[i];   
+				for(var i:int=0; i<customCM.items.length; i++)
+		    		customCM.items[i].name = menuItemCaptions[i];   
 	        }	        
 	        if (_textChanged)
 	        {
 	            _textChanged = false;
 	            nodeTextArea.text = _text;
-	            //nodeTextArea.toolTip = _text;
 	        }	
 	        if (_categoryChanged)
 	        {
 	            _categoryChanged = false;
 	            
-	            if (contextMenu)
-	            {
-	           		contextMenu.customItems[5].caption = menuItemCaptions[5];
-    	       		contextMenu.customItems[6].caption = menuItemCaptions[6];
-        	   		contextMenu.customItems[7].caption = menuItemCaptions[7];
-        	   	}
-
 	            switch(_category)
 	            {
 	            	case GraphNodeCategory.NORMAL:
 	            		nodeTextArea.setStyle( "borderColor",  0x000000);
 	            		nodeTextArea.setStyle( "backgroundColor",  0xffffff);
 	            		nodeTextArea.setStyle( "color",  0x000000);
-	            		if (contextMenu)
-		            		contextMenu.customItems[5].caption = "· " + contextMenu.customItems[5].caption;
 	            		break;
 	            	case GraphNodeCategory.SUBGRAPH:
 	            		nodeTextArea.setStyle( "borderColor",  0x000000);
 	            		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
 	            		nodeTextArea.setStyle( "color",  0x000000);
-	            		if (contextMenu)
-		            		contextMenu.customItems[6].caption = "· " + contextMenu.customItems[6].caption;
 	            		break;	            	
 	            	case GraphNodeCategory.COMMAND:
 	            		nodeTextArea.setStyle( "borderColor",  0xffff00);
 	            		nodeTextArea.setStyle( "backgroundColor",  0x333333);
 	            		nodeTextArea.setStyle( "color",  0xffff00);
-	            		if (contextMenu)
-		            		contextMenu.customItems[7].caption = "· " + contextMenu.customItems[7].caption;
 	            		break;        		
 	            }          
 	        }	
 	        if (_typeChanged)
 	        {
 	            _typeChanged = false;
-	            if (contextMenu)
-	            {
-    	       		contextMenu.customItems[3].caption = menuItemCaptions[3];
-	           		contextMenu.customItems[4].caption = menuItemCaptions[4];
-        	   	}	
 	            switch(_type)
 	            {
 	            	case GraphNodeType.NORMAL:
@@ -615,11 +580,9 @@ package PowerPack.com.graph
 		            	break;
 	            	case GraphNodeType.INITIAL:
 	            		setStyle( "borderColor", 0x00ff00);	
-	    	       		contextMenu.customItems[3].caption = "· " + contextMenu.customItems[3].caption;
 		            	break;
 	            	case GraphNodeType.TERMINAL:
 	            		setStyle( "borderColor", 0x0000ff);	
-    		       		contextMenu.customItems[4].caption = "· " + contextMenu.customItems[4].caption;
 		            	break;
 	            }
 	        }		            
@@ -710,6 +673,7 @@ package PowerPack.com.graph
 	    {
 	    	editMode(true);
 	    }
+	    
 	    private function editMode(_editing:Boolean):void
 	    {
 	    	if( !enabled )
@@ -738,7 +702,9 @@ package PowerPack.com.graph
 	            nodeTextArea.editable = false;
    	            nodeTextArea.setSelection(0, 0);
 				nodeTextArea.focusManager.hideFocus();
-	        }		    	
+	        }
+	        
+	        invalidateDisplayList();		    	
 	    }		
 		public function alertDestroy():void
 		{			
@@ -754,7 +720,7 @@ package PowerPack.com.graph
 	    //
 	    //--------------------------------------------------------------------------	
 	    
-	    private function addHandler(event:FlexEvent):void
+	    private function creationCompleteHandler(event:FlexEvent):void
 	    {
 			addEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
 			addEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
@@ -793,7 +759,7 @@ package PowerPack.com.graph
 		private function copyNodeHandler(event:ContextMenuEvent):void
 		{
 			copyNode = this;
-			dispatchEvent(new Event("copyNode"));
+			Application.application.dispatchEvent(new Event("copyNode"));
 		}
 		private function setInitialTypeHandler(event:ContextMenuEvent):void
 		{
@@ -824,7 +790,7 @@ package PowerPack.com.graph
 
 		private function mouseOverHandler(event:MouseEvent):void
 		{
-	    	PowerPackClass.refreshMenu(this);
+	    	MDMContextMenu.refreshMenu(this);
 	    	event.stopPropagation();
 			
 			contextMenuOld = Application.application.contextMenu;
@@ -843,7 +809,8 @@ package PowerPack.com.graph
 					for each(var arrow:GraphArrow in outArrows)
 					{
 						var point:Point = Container(parent).contentToGlobal(new Point(arrow.x, arrow.y));
-						arrToolTip.push(ToolTipManager.createToolTip(arrow.label, point.x+arrow.width/2, point.y+arrow.height/2));
+						if(arrow.label)
+							arrToolTip.push(ToolTipManager.createToolTip(arrow.label, point.x+arrow.width/2, point.y+arrow.height/2));
 						arrow.highlight = true;
 					}
 				}
@@ -913,10 +880,7 @@ package PowerPack.com.graph
 							(gCanvas.currentArrow.fromObject as GraphNode).outArrows.addItem(gCanvas.currentArrow);
 							(gCanvas.currentArrow.toObject as GraphNode).inArrows.addItem(gCanvas.currentArrow);
 							gCanvas.currentArrow.addEventListener("destroyArrow", destroyArrowHandler);
-							gCanvas.currentArrow.label = 
-								gCanvas.currentArrow.fromObject.name + 
-								" -> " + 
-								gCanvas.currentArrow.toObject.name;
+							gCanvas.currentArrow.beginEdit();
 						}	
 					}						
 					gCanvas.currentArrow = null;
@@ -1111,7 +1075,7 @@ package PowerPack.com.graph
 	    */
 		public static function generateContextMenu():void
 		{
-			PowerPackClass.addMenuItemsByType("GraphNode");
+			MDMContextMenu.addMenuItemsByType("GraphNode");
 		}	    
 	}
 }

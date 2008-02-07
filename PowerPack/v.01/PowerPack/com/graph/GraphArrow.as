@@ -1,5 +1,7 @@
 package PowerPack.com.graph
 {
+	import PowerPack.com.mdm.*;
+	
 	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.events.ContextMenuEvent;
@@ -15,17 +17,19 @@ package PowerPack.com.graph
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
+	import mx.controls.ComboBox;
 	import mx.core.Application;
+	import mx.core.Container;
 	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
+	import mx.events.DropdownEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.IFocusManagerComponent;
+	import mx.managers.PopUpManager;
 	import mx.styles.CSSStyleDeclaration;
 	import mx.styles.StyleManager;
-	import mx.managers.PopUpManager;
-	import mx.controls.ComboBox;
-	import mx.events.DropdownEvent;
-	import mx.core.Container;
+	import PowerPack.com.CustomContextMenu;
+	import PowerPack.com.Global;
 	
 	[Style(name="color", type="uint", format="Color", inherit="yes")]
 	[Style(name="rollOverColor", type="uint", format="Color", inherit="yes")]
@@ -58,8 +62,10 @@ package PowerPack.com.graph
 	    //
 	    //--------------------------------------------------------------------------
 	    
+	    /**
+	    * Defines area offset around an arrow where it can receive focus
+	    */
 	    private static const SELECT_AREA_SIZE:int = 5;
-	    private static const NEED_CONTEXT:Boolean = true;
 	    		
 	    //--------------------------------------------------------------------------
 	    //
@@ -71,9 +77,7 @@ package PowerPack.com.graph
 	    private var alertDeleteTitle:String = "Confirmation";
 	    [Bindable]
 	    private var alertDeleteText:String = "Are you sure want to delete this arrow?";
-	    [Bindable]
-	    private var defaultLbl:String = "Arrow";
-
+	    
 		[Bindable]
 	    [ArrayElementType("String")]
 	    private var menuItemCaptions:Array = new Array(
@@ -126,6 +130,7 @@ package PowerPack.com.graph
 	    private var bOver:Boolean = false;
 	    private var bChanged:Boolean = false;	
 	    private var contextMenuOld:ContextMenu = null; 
+	    private var customCM:CustomContextMenu;
 
 	    [ArrayElementType("Point")]
 	    private var arrPolygon:Array; 
@@ -308,15 +313,11 @@ package PowerPack.com.graph
 		//  Constructor
 		//
 		//--------------------------------------------------------------------------
-	
-		/** 
-		 *	Constructor
-		 */
+
 		public function GraphArrow()
 		{
 			super();
 			
-			label = defaultLbl;
 			doubleClickEnabled = true;
 			focusEnabled = true;
 			mouseFocusEnabled = true;
@@ -334,22 +335,12 @@ package PowerPack.com.graph
 		//  Destructor
 		//
 		//--------------------------------------------------------------------------
-	
-		/**
-		 *	Destructor
-		 */ 
+
 		public function destroy():void
 		{			
-			if(contextMenu)
+			if(customCM)
 			{	
-				if(contextMenu.customItems.length>0)
-					contextMenu.customItems[0].removeEventListener(ContextMenuEvent.MENU_ITEM_SELECT, selectTransHandler);
-				if(contextMenu.customItems.length>1)
-					contextMenu.customItems[1].removeEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteArrowHandler);
-				if(contextMenu.customItems.length>2)
-		        	contextMenu.customItems[2].removeEventListener(ContextMenuEvent.MENU_ITEM_SELECT, enableHandler);
-				if(contextMenu.customItems.length>3)
-		        	contextMenu.customItems[3].removeEventListener(ContextMenuEvent.MENU_ITEM_SELECT, highlightHandler);
+				customCM.clear();
 	  		}	
 	  				
 	  		stopDragging();
@@ -392,19 +383,17 @@ package PowerPack.com.graph
 	    {
 	        super.createChildren();
 
-	        if (NEED_CONTEXT && !contextMenu)
+	        if (Global.FLASH_CONTEXT_MENU && !customCM)
 	        {
 	        	contextMenu = new ContextMenu();
-	        	contextMenu.hideBuiltInItems();	        	
+	        	contextMenu.hideBuiltInItems();	
 	        	
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[0], false, true, false));	
-	        	contextMenu.customItems[0].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, selectTransHandler);	        	
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[1], false, true, false));	
-	        	contextMenu.customItems[1].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, deleteArrowHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((bEnabled?"· ":"") + menuItemCaptions[2], false, true, false));			
-	        	contextMenu.customItems[2].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, enableHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem((bHighlighted?"· ":"") + menuItemCaptions[3], false, true, false));			
-	        	contextMenu.customItems[3].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, highlightHandler);
+	        	customCM = new CustomContextMenu(contextMenu); 
+	        	
+	        	customCM.addItem("select_trans", menuItemCaptions[0], selectTransHandler, false, true, false);       	
+	        	customCM.addItem("delete", menuItemCaptions[1], deleteArrowHandler, false, true, false);  
+	        	customCM.addItem("enable", menuItemCaptions[2], enableHandler, true, true, false, bEnabled);  
+	        	customCM.addItem("highlight", menuItemCaptions[3], highlightHandler, false, true, false, bHighlighted);  
 	        }	        
 	    }
 
@@ -412,13 +401,12 @@ package PowerPack.com.graph
 	    {
 	        super.commitProperties();
 	        	        
-	        if (bLangXMLChanged)
+	        if (bLangXMLChanged&&0)
 	        {	        	
 	        	bLangXMLChanged = false;
 
 				alertDeleteTitle = langXML.grapharrow.alertdeletetitle;
 				alertDeleteText = langXML.grapharrow.alertdeletetext;
-				defaultLbl = langXML.grapharrow.defaultlabel;
 
 	        	bEnabledChanged = true;
 	        	bHighlightChanged = true;
@@ -431,21 +419,17 @@ package PowerPack.com.graph
 	    			langXML.grapharrow.menuitemenable, 
 	    			langXML.grapharrow.menuitemhighlight );	   
 				
-				for(var i:int=0; i<contextMenu.customItems.length; i++)
-		    		contextMenu.customItems[i].caption = menuItemCaptions[i];   
+				for(var i:int=0; i<customCM.items.length; i++)
+		    		customCM.items[i].name = menuItemCaptions[i];   
 	        }
 	        if (bEnabledChanged)
 	        {
 	            bEnabledChanged = false;
-	            if(contextMenu && contextMenu.customItems.length>0)
-		            contextMenu.customItems[2].caption = (bEnabled?"· ":"") + menuItemCaptions[2];
 	            bChanged = true;
 	        }	
 	        if (bHighlightChanged)
 	        {
 	            bHighlightChanged = false;
-	            if(contextMenu && contextMenu.customItems.length>1)
-		            contextMenu.customItems[3].caption = (bHighlighted?"· ":"") + menuItemCaptions[3];
 	            bChanged = true;
 	        }
 	        if (bLabelChanged)
@@ -499,9 +483,13 @@ package PowerPack.com.graph
 			
 				if(toObj && parent)
 				{					
-					stopDragging();
-					beginEdit((parent as Container).contentToGlobal(new Point(x+width/2, y+height/2)));       		
-				}	            
+					stopDragging();       		
+				}
+				if(GraphNode(fromObject).arrTrans && GraphNode(fromObject).arrTrans.length>0)
+	    		{
+	    			data = GraphNode(fromObject).arrTrans[0];
+	    			label = data.toString();
+	    		}			            
 	        }	 	  
 	              
             if(bChanged)
@@ -800,7 +788,7 @@ package PowerPack.com.graph
 	    	invalidateProperties();
 	    }	
 	    
-	    public function beginEdit(point:Point = null):void
+	    public function beginEdit(atCursorPosition:Boolean = true, position:Point = null):void
 	    {	
 	    	if(!(fromObject is GraphNode))
 	    		return;
@@ -830,7 +818,12 @@ package PowerPack.com.graph
 				}
 			}
 			
-			var point:Point = point ? point : localToGlobal(new Point(mouseX, mouseY));
+			var point:Point = atCursorPosition ? localToGlobal(new Point(mouseX, mouseY)) : 
+				Container(parent).contentToGlobal(new Point(x+width/2, y+height/2));
+			
+			if(position)
+				point = position;
+				
 			cbChoise.move(point.x, point.y);			
 	    }	    
 	    
@@ -876,7 +869,7 @@ package PowerPack.com.graph
 	    	bOver = true;
 	    	bChanged = true;
 	    	
-	    	PowerPackClass.refreshMenu(this);
+	    	MDMContextMenu.refreshMenu(this);
 	    	
 			contextMenuOld = Application.application.contextMenu;
 			if(contextMenu)
@@ -917,22 +910,22 @@ package PowerPack.com.graph
 			setFocus();  	
 	    }	
 	        
-		private function selectTransHandler(Event:ContextMenuEvent):void
+		private function selectTransHandler(event:ContextMenuEvent):void
 		{
-			beginEdit((parent as Container).contentToGlobal(new Point(x+width/2, y+height/2)));
+			beginEdit(false);
 		}		
-		private function deleteArrowHandler(Event:ContextMenuEvent):void
+		private function deleteArrowHandler(event:ContextMenuEvent):void
 		{
 			alertDestroy();
 		}
-		private function enableHandler(Event:ContextMenuEvent):void
+		private function enableHandler(event:ContextMenuEvent):void
 		{
 			if(bEnabled)
 				enabled = false;
 			else
 				enabled = true;				
 		}
-		private function highlightHandler(Event:ContextMenuEvent):void
+		private function highlightHandler(event:ContextMenuEvent):void
 		{
 			if(bHighlighted)
 				highlight = false;
@@ -974,13 +967,12 @@ package PowerPack.com.graph
 		    }		 
 		    else if(event.charCode == 13 && event.target==this)
 		    {		    	
-		    	beginEdit((parent as Container).contentToGlobal(new Point(x+width/2, y+height/2)));
+		    	beginEdit(false);
 		    }
 		}		
 		private function graphArrow_focusInHandler(event:FocusEvent):void
 		{
 			bChanged = true;
-			//systemManager.stage.focus = this;
 			invalidateDisplayList();	
 		}			
 		private function graphArrow_focusOutHandler(event:FocusEvent):void
@@ -1000,16 +992,16 @@ package PowerPack.com.graph
 	    */
 		public static function generateContextMenu():void
 		{
-			PowerPackClass.addMenuItemsByType("GraphArrow");
+			MDMContextMenu.addMenuItemsByType("GraphArrow");
 	       	
-	       	mdm.Menu.Context[PowerPackClass.getMenuItemEventName("Delete Arrow")] = function():void{
-				mdm.Dialogs.prompt(PowerPackClass.curObject);				
+	       	mdm.Menu.Context[MDMContextMenu.getMenuItemEventName("Delete Arrow")] = function():void{
+				mdm.Dialogs.prompt(MDMContextMenu.curObject);				
 			};
-	       	mdm.Menu.Context[PowerPackClass.getMenuItemEventName("Enable Arrow")] = function():void{
-				mdm.Dialogs.prompt(PowerPackClass.curObject);				
+	       	mdm.Menu.Context[MDMContextMenu.getMenuItemEventName("Enable Arrow")] = function():void{
+				mdm.Dialogs.prompt(MDMContextMenu.curObject);				
 			};
-	       	mdm.Menu.Context[PowerPackClass.getMenuItemEventName("Highlight Arrow")] = function():void{
-				mdm.Dialogs.prompt(PowerPackClass.curObject);	
+	       	mdm.Menu.Context[MDMContextMenu.getMenuItemEventName("Highlight Arrow")] = function():void{
+				mdm.Dialogs.prompt(MDMContextMenu.curObject);	
 			};
 		}						      			    	    	      
 	}

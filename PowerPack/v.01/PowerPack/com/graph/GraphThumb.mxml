@@ -8,15 +8,14 @@
             public var returnText:String;
         ]]>
     </mx:Script>
-
-
-	<mx:Image scaleContent="true" autoLoad="true" source="resources/Tree.png" id="imgThumb" width="32" height="32"/>
+    
+	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="resources/Tree.png" width="32" height="32"/>
 	
 	<mx:Canvas width="100%">
 		<mx:TextInput id="txtThumb" text="{data.name}" textAlign="center" width="95%" visible="false" horizontalCenter="0" 
 			change="returnText=txtThumb.text;"
 			updateComplete="returnText=txtThumb.text;" />
-		<mx:Label text="{txtThumb.text}" fontWeight="bold" id="lblThumb" textAlign="center" width="95%" horizontalCenter="0"/>
+		<mx:Label id="lblThumb" text="{txtThumb.text}" textAlign="center" fontWeight="bold" width="95%" horizontalCenter="0"/>
 	</mx:Canvas>
 	
 </mx:VBox>

@@ -1,11 +1,12 @@
 package PowerPack.com
 {
+	import PowerPack.com.graph.GraphNode;
+	import PowerPack.com.graph.GraphNodeCategory;
+	import PowerPack.com.parse.*;
+	
+	import mx.controls.Alert;
+	import mx.validators.ValidationResult;
 	import mx.validators.Validator;
-    import mx.validators.ValidationResult;
-    import PowerPack.com.graph.GraphNodeCategory;
-    import PowerPack.com.graph.GraphNode;
-    import PowerPack.com.parse.*;
-    import mx.controls.Alert;
 
 	public class NodeTextValidator extends Validator
 	{
@@ -44,6 +45,7 @@ package PowerPack.com
             
             node = GraphNode(this.source);
             var arrTrans:Array = [];
+        	node.toolTip = null;
         	
         	category = (this.source as GraphNode).category;
        		var pattern:RegExp;
@@ -54,7 +56,6 @@ package PowerPack.com
             	{
                 	results.push(new ValidationResult(true, null, "invalidVarName", 
                     	"Not valid variable name."));
-                	//return results;
             	}       
         	}
         	else if (category == GraphNodeCategory.SUBGRAPH)
@@ -63,7 +64,6 @@ package PowerPack.com
             	{
                 	results.push(new ValidationResult(true, null, "invalidSubgraph", 
                     	"Not valid graph name."));
-                	//return results;
             	}
          	}
         	else if (category == GraphNodeCategory.COMMAND)
@@ -82,11 +82,11 @@ package PowerPack.com
         		{
         			node.toolTip = "test command:\n";
 	    		}
-        		if(nodeDef.type == NodeParser.CT_OPERATION)
+        		else if(nodeDef.type == NodeParser.CT_OPERATION)
         		{
         			node.toolTip = "operation command:\n";
 	    		}	    		
-        		if(nodeDef.type == NodeParser.CT_FUNCTION)
+        		else if(nodeDef.type == NodeParser.CT_FUNCTION)
         		{
         			node.toolTip = "function command:\n";
 	    		}

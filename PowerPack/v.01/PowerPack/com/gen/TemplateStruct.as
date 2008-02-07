@@ -1,24 +1,29 @@
 package PowerPack.com.gen
 {
-	import PowerPack.com.gen.*;
+	import PowerPack.com.Utils;
 	import PowerPack.com.graph.GraphNodeCategory;
 	import PowerPack.com.graph.GraphNodeType;
-	import PowerPack.com.parse.NodeParser;	
+	import PowerPack.com.mdm.filesystem.FileToBase64;
+	import PowerPack.com.parse.NodeParser;
+	
 	import com.riaone.deval.D;
-	import mx.managers.PopUpManager;
-	import mx.core.Application;
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import mx.controls.Alert;
-	import PowerPack.com.Utils;
 	import flash.events.EventDispatcher;
-	import mx.utils.StringUtil;
+	
+	import mdm.FileSystem;
+	
+	import mx.controls.Alert;
+	import mx.core.Application;
+	import mx.managers.PopUpManager;
 	import mx.utils.Base64Encoder;
+	import mx.utils.StringUtil;
 	
 	[Event(name="generationComplete", type="flash.events.Event")]
 	public class TemplateStruct extends EventDispatcher
 	{
-		public static const INSTANCE:String = "___template_struct";
+		public static const CNTXT_INSTANCE:String = "___template_struct";
 		 
 		public var initGraph:GraphStruct;
 		
@@ -125,7 +130,7 @@ package PowerPack.com.gen
 			var graphContext:GraphContext = new GraphContext(initGraph);
 			contextStack.push(graphContext);
 			
-			context[INSTANCE] = this;
+			context[CNTXT_INSTANCE] = this;
 		}
 		
 		public function Clear():void
@@ -151,10 +156,18 @@ package PowerPack.com.gen
 							parsedNode = NodeParser.NormalNodeParse(
 								GraphContext(contextStack[contextStack.length-1]).curNode.text,
 								context);
-						
-							GraphContext(contextStack[contextStack.length-1]).buffer += 
-								parsedNode.resultString ? parsedNode.resultString :
-								GraphContext(contextStack[contextStack.length-1]).curNode.text;					
+
+							if(parsedNode.result && parsedNode.resultString)
+							{
+								GraphContext(contextStack[contextStack.length-1]).buffer += 
+									(parsedNode.resultString ? parsedNode.resultString :
+									GraphContext(contextStack[contextStack.length-1]).curNode.text) +
+									" ";
+							}
+							else
+							{
+								throw new Error("Parse error: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
+							}					
 						}
 						else if(GraphContext(contextStack[contextStack.length-1]).curNode.category == GraphNodeCategory.SUBGRAPH)
 						{
@@ -184,7 +197,8 @@ package PowerPack.com.gen
 							parsedNode = NodeParser.CommandNodeParse(
 								GraphContext(contextStack[contextStack.length-1]).curNode.text,
 								false,
-								GraphContext(contextStack[contextStack.length-1]).varPrefix);
+								GraphContext(contextStack[contextStack.length-1]).varPrefix,
+								context);
 									
 							if(parsedNode.result && parsedNode.program)
 							{		
@@ -205,7 +219,7 @@ package PowerPack.com.gen
 							}
 							else
 							{
-								throw new Error("Undefined command: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
+								throw new Error("Undefined command or parse error: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
 							}					
 						}
 					
@@ -232,7 +246,7 @@ package PowerPack.com.gen
 							}
 							else
 							{
-								buffer +=
+								buffer =
 									GraphContext(contextStack[contextStack.length-1]).buffer;
 							}
 									
@@ -245,7 +259,7 @@ package PowerPack.com.gen
 							continue;
 						}
 							
-						//
+						// select next node
 						GraphContext(contextStack[contextStack.length-1]).curNode = 
 							ArrowStruct(GraphContext(contextStack[contextStack.length-1]).curNode.outArrows[index]).toObj;						
 						
@@ -253,8 +267,28 @@ package PowerPack.com.gen
 				}
 			} while(contextStack.length>0);			
 			
+			// replace special sequences
+			buffer = replaceSpecialSequences(buffer);
+			
 			dispatchEvent(new Event("generationComplete"));
 			return buffer;
+		}
+		
+		public static function replaceSpecialSequences(buffer:String):String
+		{
+			var str:String;
+			
+			str = buffer.concat();
+			
+			str = str.replace(/\\r/g, "\r");
+			str = str.replace(/\\n/g, "\n");
+			str = str.replace(/\\t/g, "\t");
+			str = str.replace(/ ?\\- ?/g, "");
+			str = str.replace(/\\\$/g, "$");
+
+			//str = str.replace(/\\\\/g, "\\");			
+			
+			return str;
 		}
 		
 		private static function GetArrowIndex(arrows:Array, transition:String):int
@@ -380,11 +414,9 @@ package PowerPack.com.gen
 			
 			if(parsedNode.print)
 				GraphContext(contextStack[contextStack.length-1]).buffer += 
-					event.target.strAnswer;
-			
-			//if(event.target.arrAnswers && event.target.arrAnswers.length>0)
-			//	transition = event.target.strAnswer;
-				
+					event.target.strAnswer +
+					" ";
+
 			Generate();
 		}	
 		
@@ -392,10 +424,84 @@ package PowerPack.com.gen
 		 * convert function section
 		 */
 		 
-		public function convert(type:String, value:String):void
+		public function convert(type:String, value:Object):void
 		{
+			var result:String;
+			
+			if(type == "HexColor")
+			{
+				result = int("0x" + value.toString().replace(/^#/g, "")).toString();
+				convertComplete(result);
+			}
+			else if(type == "IntColor")
+			{				
+				result = int(value).toString(16);
+				while(result.length<6)
+				{
+					result = result + "0";
+				}
+				result = "#" + result;
+					
+				convertComplete(result);
+			}
+			else if(type == "Base64")
+			{
+				var fileToBase64:FileToBase64 = new FileToBase64(value.toString());
+				fileToBase64.addEventListener("dataConverted", completeConvertHandler);
+				fileToBase64.loadAndConvert();
+			}
+			else
+			{			
+				Generate();
+			}
+		}
+		
+		private function completeConvertHandler(event:Event):void
+		{
+			convertComplete(event.target.data);
+		}
+		
+		private function convertComplete(value:String):void
+		{
+			if(parsedNode.variable)
+				context[parsedNode.variable] = value;
+			
+			if(parsedNode.print)
+				GraphContext(contextStack[contextStack.length-1]).buffer += 
+					value +
+					" ";
+
+			Generate();
+		}		
+		/**
+		 * writeTo function section
+		 */
+		
+		public function writeTo(filename:String):void
+		{			
+			var data:String = GraphContext(contextStack[0]).buffer;
+			mdm.FileSystem.saveFile(filename, data);
 			Generate();
 		}			 
 		 		
+		/**
+		 * writeVarTo function section
+		 */
+		
+		public function writeVarTo(filename:String, value:Object):void
+		{			
+			var data:String = value.toString();
+			mdm.FileSystem.saveFile(filename, data);
+			Generate();
+		}	
+		
+		/**
+		 * GUID function section
+		 */
+		 
+		public function GUID():void
+		{
+			Generate();
+		}			 		
 	}
 }

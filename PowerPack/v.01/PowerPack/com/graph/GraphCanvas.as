@@ -1,34 +1,36 @@
 package PowerPack.com.graph
 {
-	import mx.controls.HRule;
-	import mx.containers.Panel;
-	import mx.core.Container;	
+	import PowerPack.com.CustomContextMenu;
+	import PowerPack.com.Global;
+	import PowerPack.com.mdm.*;
 	
-	import mx.containers.Canvas;
-	import PowerPack.com.graph.GraphArrow;
-	import mx.events.FlexEvent;
-	import mx.collections.ArrayCollection;
-	import mx.core.Application;
-	import mx.styles.StyleManager;
-	
-	import mdm.Menu;
-	import mx.utils.ArrayUtil;
-	import mx.managers.SystemManager;
-	import flash.geom.Point;
+	import flash.display.DisplayObject;
+	import flash.events.ContextMenuEvent;
 	import flash.events.MouseEvent;
-	import PowerPack.com.graph.PowerPackClass;	
-	
+	import flash.geom.Point;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
-	import flash.events.ContextMenuEvent;
-	import mx.styles.CSSStyleDeclaration;
-	import flash.display.DisplayObject;
-	import mx.core.UIComponent;
+	
+	import mdm.Menu;
+	
 	import mx.binding.utils.*;
-	import mx.events.DragEvent;
-	import mx.managers.DragManager;
-	import mx.core.IUIComponent;
+	import mx.collections.ArrayCollection;
+	import mx.containers.Canvas;
+	import mx.containers.Panel;
 	import mx.controls.Alert;
+	import mx.controls.HRule;
+	import mx.core.Application;
+	import mx.core.Container;
+	import mx.core.IUIComponent;
+	import mx.core.UIComponent;
+	import mx.events.DragEvent;
+	import mx.events.FlexEvent;
+	import mx.managers.DragManager;
+	import mx.managers.SystemManager;
+	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.StyleManager;
+	import mx.utils.ArrayUtil;
+	import flash.events.Event;
 
 	public class GraphCanvas extends Canvas
 	{
@@ -38,7 +40,6 @@ package PowerPack.com.graph
 	    //
 	    //--------------------------------------------------------------------------		
 		
-		private static const NEED_CONTEXT:Boolean = true;
 		
 	    //--------------------------------------------------------------------------
 	    //
@@ -101,6 +102,14 @@ package PowerPack.com.graph
 	    }               	  
 		//--------------------------------------------------------------------------
 				
+		[Bindable]
+		override public function set name(value:String):void
+	    {
+	        super.name = value;
+	        label = value;	
+	    }
+	    
+	    
 		public var addingTransition:Boolean = false;
 		public var currentArrow:GraphArrow;		
 		public var initialNode:GraphNode;
@@ -109,6 +118,7 @@ package PowerPack.com.graph
     	public var initial:Boolean = false;
 		
 		private var contextMenuOld:ContextMenu = null; 
+		private var customCM:CustomContextMenu;
 				
 		//--------------------------------------------------------------------------
 		//
@@ -121,13 +131,13 @@ package PowerPack.com.graph
 		 */		
 		public function GraphCanvas()
 		{
-			//TODO: implement function
 			super();
 			
 			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 			addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
-			addEventListener(DragEvent.DRAG_DROP, dragDropHandler); 
+			addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
+			Application.application.addEventListener("copyNode", copyNodeHandler);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -141,10 +151,15 @@ package PowerPack.com.graph
 		 */ 
 		public function destroy():void
 		{		
+			if(customCM)
+			{	
+				customCM.clear();
+	  		}			
 			removeEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 			removeEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
 			removeEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
 			removeEventListener(DragEvent.DRAG_DROP, dragDropHandler); 
+			Application.application.removeEventListener("copyNode", copyNodeHandler);
        		
        		clear();
        		
@@ -174,8 +189,8 @@ package PowerPack.com.graph
 		    		langXML.graphcanvas.menuitempaste, 
 	    			langXML.graphcanvas.menuitemclear );	   
 				
-				for(var i:int=0; i<contextMenu.customItems.length; i++)
-		    		contextMenu.customItems[i].caption = menuItemCaptions[i];   
+				for(var i:int=0; i<customCM.items.length; i++)
+		    		customCM.items[i].name = menuItemCaptions[i];   
 	        }
 	    }
 	    					
@@ -186,17 +201,16 @@ package PowerPack.com.graph
 	    {
 	        super.createChildren();
 
-	        if (NEED_CONTEXT && !contextMenu)
+	        if (Global.FLASH_CONTEXT_MENU && !customCM)
 	        {
 	        	contextMenu = new ContextMenu();
-	        	contextMenu.hideBuiltInItems();	        	
+	        	contextMenu.hideBuiltInItems();	
 	        	
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[0]));	
-	        	contextMenu.customItems[0].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, addStateHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[1], false, 1||GraphNode.copyNode&&GraphNode.copyNode.parent?true:false));			
-	        	contextMenu.customItems[1].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, pasteHandler);
-	        	contextMenu.customItems.push(new ContextMenuItem(menuItemCaptions[2]));			
-	        	contextMenu.customItems[2].addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, clearHandler);
+	        	customCM = new CustomContextMenu(contextMenu);        	
+	        	
+	        	customCM.addItem("add_state", menuItemCaptions[0], addStateHandler);
+	        	customCM.addItem("paste_state", menuItemCaptions[1], pasteHandler, false, GraphNode.copyNode&&GraphNode.copyNode.parent?true:false);
+	        	customCM.addItem("clear", menuItemCaptions[2], clearHandler);
 	        }	        
 	    }
 		
@@ -226,8 +240,7 @@ package PowerPack.com.graph
 		{
 			var graphXML:XML = new XML(<graph></graph>);
 			var children:Array = getChildren();
-			graphXML.@id = name;
-			graphXML.@name = label;
+			graphXML.@name = name;
 			graphXML.@initial = initial.toString().toLowerCase();
 			graphXML.@category = category;
 			
@@ -275,8 +288,7 @@ package PowerPack.com.graph
 			
 			clear();
 			
-			name = graphXML.@id;
-			label = graphXML.@name;
+			name = graphXML.@name;
 			initial = graphXML.@initial.toString().toLowerCase()=="true"?true:false;
 			category = graphXML.@category;
 						
@@ -285,7 +297,9 @@ package PowerPack.com.graph
 				var newNode:GraphNode = new GraphNode(nodeXML.@category, nodeXML.@type, nodeXML.text);
 				newNode.name = nodeXML.@name;
 				BindingUtils.bindProperty(newNode, "langXML", this, "langXML");
+				
 				addChild(newNode);
+				
 				newNode.enabled = nodeXML.@enabled;
 				newNode.move(nodeXML.@x, nodeXML.@y);
 			}
@@ -301,7 +315,7 @@ package PowerPack.com.graph
 				var newArrow:GraphArrow = new GraphArrow();
 				newArrow.langXML = langXML;
 				BindingUtils.bindProperty(newArrow, "langXML", this, "langXML");				
-				addChildAt(newArrow, 0);
+				
 				newArrow.fromObject = getChildByName(arrowXML.@source) as UIComponent;		
 				newArrow.toObject = getChildByName(arrowXML.@destination) as UIComponent;
 				newArrow.data = arrowXML.data;
@@ -314,6 +328,8 @@ package PowerPack.com.graph
 				
 					newArrow.addEventListener("destroyArrow", (newArrow.toObject as GraphNode).destroyArrowHandler);
 				}
+				
+				addChildAt(newArrow, 0);
 			}				
 			return true;
 		}		
@@ -352,7 +368,7 @@ package PowerPack.com.graph
 				
 	    private function mouseOverHandler(event:MouseEvent):void
 	    {	    	
-	    	PowerPackClass.refreshMenu(this);
+	    	MDMContextMenu.refreshMenu(this);
 	    	
 			contextMenuOld = Application.application.contextMenu;
 			if(contextMenu)
@@ -371,9 +387,10 @@ package PowerPack.com.graph
             if (	event.dragSource.hasFormat("items") && 
 		            event.dragSource.dataForFormat("items") &&
             		(event.dragSource.dataForFormat("items") as Array).length>0 &&
-            		(event.dragSource.dataForFormat("items") as Array)[0].data is GraphCanvas )
+            		(event.dragSource.dataForFormat("items") as Array)[0] is GraphCanvas )
             {
                 DragManager.acceptDragDrop(IUIComponent(event.target));
+                DragManager.showFeedback(DragManager.MOVE);
             }	    	
 	    }
 	    private function dragDropHandler(event:DragEvent):void
@@ -381,14 +398,19 @@ package PowerPack.com.graph
 	    	var items:Array = 
                     event.dragSource.dataForFormat("items") as Array;
 	    	
-	    	var graph:GraphCanvas = items[0].data as GraphCanvas;
+	    	var graph:GraphCanvas = items[0] as GraphCanvas;
 	    	
-			var newNode:GraphNode = new GraphNode( GraphNodeCategory.SUBGRAPH, GraphNodeType.NORMAL, graph.label );
+			var newNode:GraphNode = new GraphNode( GraphNodeCategory.SUBGRAPH, GraphNodeType.NORMAL, graph.name );
 			newNode.langXML = langXML;
 			BindingUtils.bindProperty(newNode, "langXML", this, "langXML");			          
 			addChild(newNode);
 			newNode.move(mouseX, mouseY);
 			newNode.setFocus();	    	
+	    }
+	    
+	    private function copyNodeHandler(event:Event):void
+	    {
+	    	customCM.getItemById("paste_state").contextMenuItem.enabled =  GraphNode.copyNode&&GraphNode.copyNode.parent?true:false;
 	    }
 		//--------------------------------------------------------------------------
 	    //
@@ -401,7 +423,7 @@ package PowerPack.com.graph
 	    */
 		public static function generateContextMenu():void
 		{
-	       	PowerPackClass.addMenuItemsByType("GraphCanvas");
+	       	MDMContextMenu.addMenuItemsByType("GraphCanvas");
 
 	     	/*
 	     	mdm.Menu.Context.onContextMenuClick_Add_State = function():void{	
