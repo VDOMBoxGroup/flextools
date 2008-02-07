@@ -15,11 +15,11 @@ package PowerPack.com.gen
 										_resultVar:String = null,
 										_varPrefix:String = "")
 		{
-			curGraph = _curGraph;
-			curNode = _curNode ? _curNode : curGraph.initNode;
-			buffer = "";
-			varPrefix = _varPrefix;
-			resultVar = _resultVar;
+			curGraph = _curGraph; // current graph
+			curNode = _curNode ? _curNode : curGraph.initNode; // current node
+			buffer = ""; // output data buffer
+			varPrefix = _varPrefix; // left-part variable prefix
+			resultVar = _resultVar; // variable name for storing output data
 		}
 	}
 }

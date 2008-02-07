@@ -3,6 +3,8 @@
 	creationComplete="complete();">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.UIComponent;
+			import mx.controls.Alert;
 			import mx.utils.StringUtil;
 			import PowerPack.com.Utils;
 			import mx.containers.VBox;
@@ -34,8 +36,7 @@
 		        if (fCloseHandler != null)
 		            addEventListener(CloseEvent.CLOSE, fCloseHandler);
 
-		        setActualSize(getExplicitOrMeasuredWidth(),
-		                      getExplicitOrMeasuredHeight());
+		        invalidateDisplayList();
 			}
 
 		    public static function show(question:String = "", title:String = "", answers:Array = null,
@@ -55,7 +56,7 @@
 		
 		        PopUpManager.addPopUp(dialog, parent, true);
 		        PopUpManager.centerPopUp(dialog);
-		
+				
 		        return dialog;
 		    }
 		    
@@ -85,6 +86,9 @@
 							radBtn.groupName = "radioGroup";
 							radBtn.value = radBtn.label = arrAnswers[i];
 							vBox.addChild(radBtn);
+
+							if(i==0)	
+								radBtn.selected = true;
 						}
 					}
 				}
@@ -93,7 +97,25 @@
 			override protected function updateDisplayList(unscaledWidth:Number,
 														  unscaledHeight:Number):void
 			{
-				super.updateDisplayList(unscaledWidth, unscaledHeight);				
+				super.updateDisplayList(unscaledWidth, unscaledHeight);	
+				
+				var dHeight:int = cnvsAnswer.maxVerticalScrollPosition;
+				
+				if(dHeight)
+				{
+					var container:DisplayObjectContainer = cnvsAnswer.parent;
+
+					while(container!=this)
+					{
+						container = container.parent;
+						container.height += dHeight;
+					}
+					
+			        setActualSize(getExplicitOrMeasuredWidth(),
+			                      getExplicitOrMeasuredHeight()+dHeight);
+					
+					//PopUpManager.centerPopUp(this);				
+				}				
 			}		    
 			
 			
