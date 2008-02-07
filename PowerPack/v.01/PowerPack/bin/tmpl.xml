@@ -1,0 +1,124 @@
+<template>
+  <graph name="graph1" initial="true" category="container">
+    <states>
+      <state name="node_1" type="Initial" category="Command" enabled="true" x="89" y="40">
+        <text>$Node1=123; $x1='de'</text>
+      </state>
+      <state name="node_2" type="Normal" category="Command" enabled="true" x="322" y="61">
+        <text>$z=${"No"+$x1+1}</text>
+      </state>
+      <state name="GraphNode349" type="Normal" category="Normal" enabled="true" x="141" y="171">
+        <text>$z \n</text>
+      </state>
+      <state name="GraphNode356" type="Normal" category="Command" enabled="true" x="302" y="239">
+        <text>[question 'how are you?' 'fine,normal, bad']</text>
+      </state>
+      <state name="GraphNode847" type="Normal" category="Command" enabled="true" x="187" y="357">
+        <text>[convert 'Base64' 'tmpl.xml']</text>
+      </state>
+      <state name="GraphNode578" type="Normal" category="Normal" enabled="true" x="375" y="405">
+        <text>e</text>
+      </state>
+      <state name="GraphNode534" type="Normal" category="Subgraph" enabled="true" x="566" y="377">
+        <text>graph_2</text>
+      </state>
+    </states>
+    <transitions>
+      <transition name="GraphArrow331" highlight="false" enabled="true" source="GraphNode578" destination="GraphNode534">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+      <transition name="GraphArrow330" highlight="false" enabled="true" source="node_1" destination="node_2">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+      <transition name="GraphArrow329" highlight="false" enabled="true" source="node_2" destination="GraphNode349">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+      <transition name="GraphArrow328" highlight="false" enabled="true" source="GraphNode349" destination="GraphNode356">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+      <transition name="GraphArrow327" highlight="false" enabled="true" source="GraphNode356" destination="GraphNode847">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+      <transition name="GraphArrow326" highlight="false" enabled="true" source="GraphNode847" destination="GraphNode578">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+    </transitions>
+  </graph>
+  <graph name="graph_2" initial="false" category="application">
+    <states>
+      <state name="node_1" type="Initial" category="Normal" enabled="true" x="448" y="53">
+        <text>Node2</text>
+      </state>
+      <state name="node_2" type="Normal" category="Normal" enabled="true" x="144" y="116">
+        <text>Node3</text>
+      </state>
+    </states>
+    <transitions>
+      <transition name="GraphArrow348" highlight="false" enabled="true" source="node_1" destination="node_2">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+    </transitions>
+  </graph>
+  <graph name="graph_3" initial="false" category="container">
+    <states>
+      <state name="node_1" type="Initial" category="Normal" enabled="true" x="448" y="53">
+        <text>Node2</text>
+      </state>
+      <state name="node_2" type="Normal" category="Normal" enabled="true" x="144" y="116">
+        <text>@variable=20</text>
+      </state>
+    </states>
+    <transitions>
+      <transition name="GraphArrow365" highlight="false" enabled="true" source="node_1" destination="node_2">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+    </transitions>
+  </graph>
+  <graph name="GraphCanvas392" initial="false" category="container">
+    <states>
+      <state name="GraphNode458" type="Normal" category="Normal" enabled="true" x="170" y="318">
+        <text>Node</text>
+      </state>
+      <state name="GraphNode465" type="Normal" category="Normal" enabled="true" x="661" y="186">
+        <text>Node</text>
+      </state>
+      <state name="GraphNode451" type="Initial" category="Normal" enabled="true" x="203" y="46">
+        <text>Node</text>
+      </state>
+    </states>
+    <transitions>
+      <transition name="GraphArrow390" highlight="false" enabled="true" source="GraphNode451" destination="GraphNode465">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+      <transition name="GraphArrow389" highlight="false" enabled="true" source="GraphNode451" destination="GraphNode458">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+    </transitions>
+  </graph>
+  <graph name="GraphCanvas422" initial="false" category="container">
+    <states>
+      <state name="GraphNode473" type="Initial" category="Normal" enabled="true" x="220" y="128">
+        <text>Node</text>
+      </state>
+      <state name="GraphNode480" type="Normal" category="Normal" enabled="true" x="417" y="346">
+        <text>Node</text>
+      </state>
+    </states>
+    <transitions>
+      <transition name="GraphArrow407" highlight="false" enabled="true" source="GraphNode473" destination="GraphNode480">
+        <label>null</label>
+        <data>null</data>
+      </transition>
+    </transitions>
+  </graph>
+</template>
