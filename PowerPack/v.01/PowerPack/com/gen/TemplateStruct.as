@@ -19,6 +19,7 @@ package PowerPack.com.gen
 	import mx.managers.PopUpManager;
 	import mx.utils.Base64Encoder;
 	import mx.utils.StringUtil;
+	import mx.utils.UIDUtil;
 	
 	[Event(name="generationComplete", type="flash.events.Event")]
 	public class TemplateStruct extends EventDispatcher
@@ -501,6 +502,16 @@ package PowerPack.com.gen
 		 
 		public function GUID():void
 		{
+			var guid:String = UIDUtil.createUID();
+			
+			if(parsedNode.variable)
+				context[parsedNode.variable] = guid;
+			
+			if(parsedNode.print)
+				GraphContext(contextStack[contextStack.length-1]).buffer += 
+					guid +
+					" ";
+			
 			Generate();
 		}			 		
 	}
