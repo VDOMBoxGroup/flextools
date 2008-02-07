@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:ns1="http://www.adobe.com/2006/fc"   
-	initialize="init()" xmlns:ns3="PowerPack.com.*" xmlns:ns4="PowerPack.com.graph.*" xmlns:ns5="*">
+	initialize="init()" creationComplete="show()" xmlns:ns3="PowerPack.com.*" xmlns:ns4="PowerPack.com.graph.*" xmlns:ns5="*">
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.graph.GraphAccordionChild;
+			import mx.events.ListEvent;
+			import mx.events.CloseEvent;
+			import PowerPack.com.graph.GraphEditTab;
+			import PowerPack.com.mdm.filesystem.FileBrowser;
+			import PowerPack.com.mdm.filesystem.FileUtils;
+			import PowerPack.Log;
 			import mdm.*;
+			import PowerPack.com.mdm.*;
 
 			import PowerPack.com.*;
-			import PowerPack.com.graph.PowerPackClass;
 			import PowerPack.com.graph.GraphCanvas;
-			import PowerPack.com.graph.GraphNode;			
+			import PowerPack.com.graph.GraphNode;
 			import PowerPack.com.graph.GraphArrow;
 			import PowerPack.com.gen.*;
-		
+			import PowerPack.com.mdm.filesystem.*;
 
 			import mx.events.MenuEvent;
 			import mx.controls.Alert;
@@ -21,6 +28,7 @@
 		    import flash.events.*;
 		    import flash.net.URLLoader;
 		    import flash.net.URLRequest;
+			import PowerPack.com.mdm.*;
 		
 		    //--------------------------------------------------------------------------
 		    //
@@ -57,11 +65,11 @@
 			//--------------------------------------------------------------------------  	
 						
 			private function init():void 
-			{ 
-				var bExists:Boolean = true;
+			{	    	 
+				Init.initialised;				
 				
-				mdm.Application.init(this, mdmInit); 	
-				mdm.FileExplorer.init();
+				application.addEventListener("applicationExiting", exitApplicationHandler);
+				application.addEventListener(ErrorEvent.ERROR, errorHandler);
 				
 				appCtrlBar.height = 0;
 				appCtrlBar.visible = false;			
@@ -83,32 +91,24 @@
 	            tmplRequest.method = URLRequestMethod.POST;
     	        tmplLoader = new URLLoader();
         	    tmplLoader.addEventListener(Event.COMPLETE, completeTemplateHandler);
-       	    
+		    }
+		    
+		    private function show():void
+		    {
+				var bExists:Boolean = true;
+						    	
 				// for MDM Zinc context menu				
 				addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 
-        	    //bExists = mdm.FileSystem.fileExistsUnicode(settingsRequest.url);        	    
+        	    bExists = FileUtils.isFileExists(settingsRequest.url);        	    
         	    if(bExists)
 	               	settingsLoader.load(settingsRequest);
 
-        	    //bExists = mdm.FileSystem.fileExistsUnicode(langRequest.url);
+        	    bExists = FileUtils.isFileExists(langRequest.url);
           	    if(bExists)
-       	   			langLoader.load(langRequest);
+       	   			langLoader.load(langRequest); 
+    	   		      		
 		    }
-		    
-		   	private function mdmInit():void
-	       	{
-	       		mdm.Application.enableExitHandler()
-	       		
-				mdm.Application.onAppExit = function():void{
-	       			exitApplication();
-				}
-
-		       	mdm.Menu.Context.menuType = "function";
-		       	GraphCanvas.generateContextMenu();
-		       	GraphNode.generateContextMenu();
-		    	GraphArrow.generateContextMenu();
-	       	}
 	       	
 	       	public function saveSettings():void
 	       	{
@@ -118,7 +118,16 @@
 	       		settingsXML.lastopenfile = curOpenFile?curOpenFile:"";
 	       		
    	        	var fileData:String = settingsXML.toXMLString();
-            	mdm.FileSystem.saveFileUnicode(settingsRequest.url, fileData);					
+            	mdm.FileSystem.saveFile(settingsRequest.url, fileData);					
+	       	}
+	       	
+	       	private function errorHandler(event:ErrorEvent):void
+	       	{
+	       		Alert.show("Error!!!");
+	       	}
+	       	private function exitApplicationHandler(event:Event):void
+	       	{
+	       		exitApplication();
 	       	}
 	       	
 	       	public function exitApplication():void
@@ -143,7 +152,7 @@
 	            curOpenFile = settingsXML.lastopenfile.toString().length>0 ? settingsXML.lastopenfile : null;
 
             	var exists:Boolean = true;
-            	//exists = mdm.FileSystem.fileExistsUnicode(curOpenFile);
+            	exists = FileUtils.isFileExists(curOpenFile);
             	if(curOpenFile && exists)
             	{
 	            	tmplRequest.url = curOpenFile;
@@ -165,7 +174,7 @@
 	    	    	
 	    	private function mouseOverHandler(event:MouseEvent):void
 	   		{	    	
-	    		PowerPackClass.refreshMenu(this);
+	    		MDMContextMenu.refreshMenu(this);
 	    		event.stopPropagation();
 	    	}
 
@@ -179,6 +188,11 @@
                 {
                 	curOpenFile = null;
 	                graphsPanel.clear();
+                }
+                if(event.item.@id == "new_tab")
+                {
+                	var newTabDialog:GraphEditTab = GraphEditTab.show();
+                	newTabDialog.addEventListener(CloseEvent.CLOSE, newTabDialogCloseHandler);
                 }
                 else if(event.item.@id == "open_file")
                 {		
@@ -208,7 +222,7 @@
               		else
               		{		            		
 		            	fileData = graphsPanel.toXML().toXMLString();
-		            	mdm.FileSystem.saveFileUnicode(curOpenFile, fileData);             		
+		            	mdm.FileSystem.saveFile(curOpenFile, fileData);             		
               		}	        
     	        }
 				else if(event.item.@id == "save_as")
@@ -231,18 +245,38 @@
 				}     
 				else if(event.item.@id == "generate")
 				{
-					tmplStruct = new TemplateStruct(graphsPanel.toXML());
-					tmplStruct.addEventListener("generationComplete", generationComplete);					
-					tmplStruct.Generate();
+					//try
+					{
+						tmplStruct = new TemplateStruct(graphsPanel.toXML());
+						tmplStruct.addEventListener("generationComplete", generationComplete);					
+						tmplStruct.Generate();
+					}
+					//catch(e:Error) 
+					//{
+						//Alert.show(e.message, "Warning!");
+					//}
 				}     
             }
             
+            private function newTabDialogCloseHandler(event:CloseEvent):void
+            {            	
+            	if(event.target.caption)
+            	{
+					var graphAccordionChild:GraphAccordionChild = new GraphAccordionChild();
+					graphAccordionChild.label = event.target.caption;
+					graphsPanel.graphsAccordion.addChild(graphAccordionChild);
+		
+					graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, graphsPanel.changeLstGraphsHandler);
+					graphAccordionChild.lstGraphs.addEventListener("doubleClick", graphsPanel.btnRenameClickHandler);
+					graphAccordionChild.lstGraphs.addEventListener("completeEdit", graphsPanel.completeEditLstGraphsHandler);            	
+            	}
+            }
            	private function generationComplete(event:Event):void
            	{
-           		Alert.show(tmplStruct.buffer);
+           		Log.show("Data saved to app.xml.\n" + tmplStruct.buffer);
            		
 				if(tmplStruct.buffer)
-					mdm.FileSystem.saveFileUnicode("app.xml", tmplStruct.buffer);            		
+					mdm.FileSystem.saveFile("app.xml", tmplStruct.buffer);            		
            	}
            	
             private function openBrowseHandler(event:Event):void
@@ -250,7 +284,7 @@
             	if(event.target.selectedItem.type != "file")
             		return;
             		
-            	var exists:Boolean = mdm.FileSystem.fileExistsUnicode(event.target.selectedItem.path);
+            	var exists:Boolean = FileUtils.isFileExists(event.target.selectedItem.path);
 
             	if(!exists)
             		return;
@@ -258,7 +292,7 @@
             	tmplRequest.url = event.target.selectedItem.path;
         	    tmplLoader.load(tmplRequest);  
             	
-            	//var fileData:String = mdm.FileSystem.loadFileUnicode(event.target.selectedItem.path);
+            	//var fileData:String = mdm.FileSystem.loadFile(event.target.selectedItem.path);
             	//templateXML = new XML(fileData);
 
             	curOpenFile = event.target.selectedItem.path;
@@ -266,8 +300,11 @@
             
             private function saveBrowseHandler(event:Event):void
             {
+            	if(event.target.selectedItem.type != "file")
+            		return;
+            		            	
             	var fileData:String = graphsPanel.toXML().toXMLString();
-            	mdm.FileSystem.saveFileUnicode(event.target.selectedItem.path, fileData);
+            	mdm.FileSystem.saveFile(event.target.selectedItem.path, fileData);
             	
             	curOpenFile = event.target.selectedItem.path;
             }
@@ -299,12 +336,12 @@
 		
 		<mx:HDividedBox height="100%" width="100%">
 				
-			<ns4:GraphsPanel
+			<ns4:GraphPanel
 				id="graphsPanel"
 				langXML="{langXML}" 
 				templateXML="{templateXML}"
 				vsViewStack="{viewstack}">
-			</ns4:GraphsPanel>
+			</ns4:GraphPanel>
 			
 			<mx:Panel width="100%" height="100%" layout="absolute" title="{langXML.designpanel.title}">
 				<mx:ViewStack id="viewstack" width="100%" height="100%">
