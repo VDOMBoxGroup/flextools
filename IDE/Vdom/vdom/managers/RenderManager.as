@@ -49,6 +49,8 @@ public class RenderManager implements IEventDispatcher {
 	private var _source:XML;
 	private var _cursor:IViewCursor;
 	
+	private var tempArray:Array = [];
+	
 	/**
 	 * 
 	 * @return instance of RenderManager class (Singleton)
@@ -276,6 +278,11 @@ public class RenderManager implements IEventDispatcher {
 			
 		_items.filterFunction = 
 			function (ido:Object):Boolean {
+			/*	trace('******************');
+				trace('itemID: ' + itemID);
+				trace('fullPath: ' + ido.fullPath);
+				trace(ido.fullPath.indexOf(itemID+'.') != -1);
+				trace('******************'); */
 				return (ido.fullPath.indexOf(itemID+'.') != -1);
 		}
 		
@@ -285,7 +292,7 @@ public class RenderManager implements IEventDispatcher {
 		_items.filterFunction = null;
 		_items.refresh();
 		
-		render(item, itemXMLDescription, itemDescription.fullPath, staticContainer, item);
+		render(item, itemXMLDescription, itemDescription.fullPath, item.isStatic);
 		
 		if(itemDescription.parentID) {
 			
@@ -343,15 +350,18 @@ public class RenderManager implements IEventDispatcher {
 	} */
 	
 	private function render(
-		parentContainer:Container, 
+		parentItem:Item, 
 		source:XML, 
 		fullPath:String, 
-		staticContainer:Boolean,
-		parentItem:Item):void {
+		staticContent:Boolean /*,
+		parentItem:Item */):void {
 		
 		//var itemList:XMLListCollection = new XMLListCollection();
 		//var count:int = 0;
 		var parentID:String = source.@guid;
+		
+		if(source.@contents == 'static')
+			staticContent = true;
 		
 		for each(var itemXMLDescription:XML in source.*) {
 			
@@ -361,40 +371,39 @@ public class RenderManager implements IEventDispatcher {
 			switch(objectName) {
 				
 				case 'object':
-				
-					var viewObject:Container;
-					var item:Item;
+					
+					var item:Item = new Item(objectID);
+					//var item:Item;
 			
-					if(!staticContainer) {
-						
-						viewObject = item = new Item(objectID);
+					if(staticContent)
+						item.isStatic = true;
 						
 						//viewObject.addEventListener(MouseEvent.MOUSE_OVER, rollOverHandler, false);
 						//viewObject.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
 						
-					} else {
+					/* } else {
 						
-						viewObject = new Canvas();
-						item = parentItem;
-					}
+						viewObject =  new Canvas();
+						//item = _parentItem;
+					} */
 						
 						
-					viewObject.setStyle('backgroundColor', '#ffffff');
-					viewObject.setStyle('backgroundAlpha', '.0');
+					item.setStyle('backgroundColor', '#ffffff');
+					item.setStyle('backgroundAlpha', '.0');
 					
-					viewObject.clipContent = true;
+					item.clipContent = true;
 					
-					viewObject.x = itemXMLDescription.@left;
-					viewObject.y = itemXMLDescription.@top;
+					item.x = itemXMLDescription.@left;
+					item.y = itemXMLDescription.@top;
 					
 					//var zzz:* = itemDescription.@width;
 					
 					if(itemXMLDescription.@width.length())
-						viewObject.width = itemXMLDescription.@width;
+						item.width = itemXMLDescription.@width;
 					
 					if(itemXMLDescription.@height.length()) {
 						//trace('height set!: '+itemDescription.@height)
-						viewObject.height = itemXMLDescription.@height;
+						item.height = itemXMLDescription.@height;
 					}
 						
 					
@@ -402,9 +411,10 @@ public class RenderManager implements IEventDispatcher {
 						Item(viewObject).parentID = parentID; */
 					
 					//parentContainer.addChild(viewObject);
+					var isStatic:Boolean = false;
 					
-					if(staticContainer || itemXMLDescription.@contents == 'static')
-						staticContainer = true;
+					if(itemXMLDescription.@contents == 'static' || staticContent)
+						isStatic = true;
 					
 					var newPath:String = fullPath + '.' + objectID
 					
@@ -412,10 +422,10 @@ public class RenderManager implements IEventDispatcher {
 					
 					itemDescription.objectID = objectID;
 					itemDescription.parentID = parentID;
-					itemDescription.fullPath = fullPath;
-					itemDescription.zindex = 0;
-					itemDescription.hierarchy = 0;
-					itemDescription.order = 0;
+					itemDescription.fullPath = fullPath + '.' + objectID;
+					itemDescription.zindex = itemXMLDescription.@zindex;
+					itemDescription.hierarchy = itemXMLDescription.@hierarchy;;
+					itemDescription.order = itemXMLDescription.@order;;
 					itemDescription.item = item;
 					itemDescription.properties = {};
 					
@@ -423,15 +433,13 @@ public class RenderManager implements IEventDispatcher {
 					//trace('objectID: ' + objectID, 'zindex: '+itemDescription.@zindex);
 					//count++;
 					
-					this.render(viewObject, itemXMLDescription, newPath, staticContainer, item);
+					this.render(item, itemXMLDescription, newPath, isStatic);
 					
 				break;
 				
 				case 'rectangle':
 					
-					var graph:Graphics = parentContainer.graphics;
-					
-					graph.beginFill(Number('0x' + itemXMLDescription.@fill));
+					var graph:Graphics = parentItem.graphics;
 					
 					if(itemXMLDescription.@border > 0) {
 						
@@ -443,7 +451,8 @@ public class RenderManager implements IEventDispatcher {
 					
 					if(itemXMLDescription.@fill.length)
 						graph.beginFill(
-							Number('0x' + itemXMLDescription.@fill));
+							Number('0x' + itemXMLDescription.@fill.toString().substring(1))
+						);
 						
 					graph.drawRect(
 						itemXMLDescription.@left,
@@ -492,7 +501,7 @@ public class RenderManager implements IEventDispatcher {
 					viewRadiobutton.setStyle('fontStyle ', itemXMLDescription.@font);
 					viewRadiobutton.setStyle('color ', itemXMLDescription.@color);
 					
-					parentContainer.addChild(viewRadiobutton);
+					parentItem.addChild(viewRadiobutton);
 					
 				break;
 				
@@ -510,8 +519,8 @@ public class RenderManager implements IEventDispatcher {
 						
 					viewCheckbox.setStyle('fontStyle ', itemXMLDescription.@font);
 					viewCheckbox.setStyle('color ', itemXMLDescription.@color);
-					parentContainer.removeAllChildren();
-					parentContainer.addChild(viewCheckbox);
+					//parentItem.removeAllChildren();
+					parentItem.addChild(viewCheckbox);
 					
 				break;
 				
@@ -544,7 +553,7 @@ public class RenderManager implements IEventDispatcher {
 					//viewInput.setStyle('backgroundAlpha', 0);
 					viewInput.focusEnabled = false;
 					
-					parentContainer.addChild(viewInput);
+					parentItem.addChild(viewInput);
 					
 				break;
 				
@@ -572,7 +581,7 @@ public class RenderManager implements IEventDispatcher {
 					//viewInput.setStyle('backgroundAlpha', 0);
 					viewPassword.focusEnabled = false;
 					
-					parentContainer.addChild(viewPassword);
+					parentItem.addChild(viewPassword);
 					
 				break;
 				
@@ -589,7 +598,7 @@ public class RenderManager implements IEventDispatcher {
 					//viewButton.setStyle('fontStyle ', itemDescription.@font);
 					//viewButton.setStyle('color ', itemDescription.@color);
 					
-					parentContainer.addChild(viewButton);
+					parentItem.addChild(viewButton);
 					
 				break;
 				
@@ -615,7 +624,10 @@ public class RenderManager implements IEventDispatcher {
 					viewText.setStyle('borderAlpha', .3);
 					viewText.setStyle('backgroundAlpha', 0);
 					
-					if(itemXMLDescription.@editable.length()) {
+					if(itemXMLDescription.@editable.length() && parentItem.isStatic == false) {
+						
+						viewText.selectable = true;
+						viewText.editable = true;
 										
 						parentItem.editableAttributes.push(
 							{destName:String(itemXMLDescription.@editable),
@@ -624,7 +636,7 @@ public class RenderManager implements IEventDispatcher {
 						);
 					}
 					
-					parentContainer.addChild(viewText);
+					parentItem.addChild(viewText);
 					
 				break;
 				
@@ -642,12 +654,12 @@ public class RenderManager implements IEventDispatcher {
 						viewImage.height = itemXMLDescription.@height;
 					}
 						
-						
+					tempArray.push(viewImage);
 					viewImage.maintainAspectRatio = false;
-					
+					//trace('LoadImage: ' + objectID);
 					resourceManager.loadResource(parentID, objectID, viewImage, 'source', true);
 					
-					parentContainer.addChild(viewImage);
+					parentItem.addChild(viewImage);
 					
 				break;
 			}
@@ -665,7 +677,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		for each (var collectionItem:Object in _items) {
 			
-			parentContainer.addChild(collectionItem.item);
+			parentItem.addChild(collectionItem.item);
 			//this.render(viewObject, collectionItem, staticContainer);
 		}
 		

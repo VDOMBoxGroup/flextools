@@ -15,7 +15,9 @@ public dynamic class Item extends Canvas {
 	public var moveMode:Boolean;
 	public var contents:String;
 	public var objectID:String;
-	public var containers:String;
+	//public var containers:String;
+	public var isStatic:Boolean;
+	
 	private var _guid:String;
 	public var parentID:String;
 	public var editableAttributes:Array;
@@ -23,6 +25,16 @@ public dynamic class Item extends Canvas {
 	private var _waitMode:Boolean;
 	
 	private var _highlightMarker:Canvas;
+	
+	public function Item(objectID:String) {
+		
+		super();
+		
+		this.objectID = objectID;
+		editableAttributes = [];
+		viewArray = [];
+		isStatic = false;
+	}
 	
 	public function get waitMode():Boolean {
 		
@@ -67,6 +79,7 @@ public dynamic class Item extends Canvas {
 			var graph:Graphics = _highlightMarker.graphics;
 			
 			graph.clear()
+			graph.beginFill(0x00b000, .3);
 			graph.lineStyle(1);
 			graph.drawRect(0, 0, width, height);
 			
@@ -89,14 +102,7 @@ public dynamic class Item extends Canvas {
 		}
 	}
 	
-	public function Item(objectID:String) {
-		
-		super();
-		
-		this.objectID = objectID;
-		editableAttributes = [];
-		viewArray = [];
-	}
+	
 	
 	/* public function addViewChild(child:DisplayObject):void {
 		

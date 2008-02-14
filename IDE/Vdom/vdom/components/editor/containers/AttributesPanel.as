@@ -28,6 +28,8 @@ import mx.validators.RegExpValidator;
 
 import vdom.Languages;
 import flash.events.Event;
+import vdom.controls.colorPicker.ColorPicker;
+import mx.core.UIComponent;
 
 public class AttributesPanel extends ClosablePanel {
 		
@@ -65,7 +67,7 @@ public class AttributesPanel extends ClosablePanel {
 	private var _objectList:XMLList;
 	
 	private var cursor:IViewCursor;
-	
+	private var typeTitle:UIComponent;
 	private var invalidElementsCount:uint;
 	
 	private var attributesVisible:Boolean;
@@ -121,11 +123,11 @@ public class AttributesPanel extends ClosablePanel {
 			
 			_objectName = objectDescription.@Name;
 			
-			if(objectDescription.ObjectList)
-				_objectList = objectDescription.ObjectList.*;
+			if(objectDescription.Objectlist)
+				_objectList = objectDescription.Objectlist.*;
 				
-			if(objectDescription.PageLink)
-				_pageLink = objectDescription.PageLink.*;
+			if(objectDescription.Pagelink)
+				_pageLink = objectDescription.Pagelink.*;
 			
 			var xl:XMLList = new XMLList();
 			xl += objectDescription.Attributes.Attribute;
@@ -185,11 +187,13 @@ public class AttributesPanel extends ClosablePanel {
 		
 		super.createChildren();
 		
-		/*if(!controlBar) {
+		if(!typeTitle) {
 			
-			controlBar = new ControlBar()
-			//controlBar.height = 40;
-		} */
+			typeTitle = new UIComponent();
+			typeTitle.visible = false;
+			
+			rawChildren.addChild(typeTitle);
+		} 
 		/* if(!controlBar) {
 			
 			//rawChildren.addChild(new ControlBar());
@@ -393,28 +397,32 @@ public class AttributesPanel extends ClosablePanel {
 		valueContainer.text = _objectName;
 		valueType = 'text';
 		fieldsArray['Name'] = [valueContainer, valueType];
-		color = '#c2c2c2';
+		
+		color = getColorByGroup(1);
+		
 		insertAttribute('Name', valueContainer, color);
 		
 		var attributes:XMLList = objectDescription.Type.Attributes.Attribute;
 		
-		for each(var attributeDescription:XML in attributes) {
+		for each(var attributeXMLDescription:XML in attributes) {
 			
-			if(attributeDescription.Visible == 0)
+			if(attributeXMLDescription.Visible == 0)
 				return;
 				
-			cursor.findFirst({'@Name':attributeDescription.Name})
+			cursor.findFirst({'@Name':attributeXMLDescription.Name})
 			
 			var currentAttribute:Object = cursor.current;
 			
-			var label:String = languages.getLanguagePhrase(_typeID, attributeDescription.DisplayName);
+			var label:String = languages.getLanguagePhrase(_typeID, attributeXMLDescription.DisplayName);
 			
 			var codeInterfaceRE:RegExp = /^(\w*)\((.*)\)/;
 			
-			var matches:Array = attributeDescription.CodeInterface.match(codeInterfaceRE);
+			var matches:Array = attributeXMLDescription.CodeInterface.match(codeInterfaceRE);
 			
 			codeInterface['type'] = matches[1].toLowerCase();
 			codeInterface['value'] = matches[2];
+			
+			color = getColorByGroup(attributeXMLDescription.Colorgroup);
 			
 			switch(codeInterface['type']) {
 				case 'number':
@@ -438,39 +446,69 @@ public class AttributesPanel extends ClosablePanel {
 					
 					valueContainer.text = currentAttribute;
 				break;
+				
+				//case 'file':
+				
+				case 'color':
+				
+					valueContainer = new ColorPicker();	
+					valueType = 'color';
 					
+					valueContainer.color = currentAttribute;
+				break;
+				
 				case 'dropdown':
 					
 					valueContainer = new ComboBox();
-					valueType = 'value';
+					valueType = 'data';
 					
 					var comboBoxData:Array = new Array();
 					var codeInterfaceValueRE:RegExp = /\((#Lang\(.*?\))\|(.*?)\)/g;
 					
-					var listValues:Array = codeInterfaceValueRE.exec(codeInterface['value']);
-					while (listValues != null) {
-					    var comboBoxLabel:String = languages.getLanguagePhrase(_typeID, listValues[1]);
-					    comboBoxData.push({label:comboBoxLabel, data:listValues[2]});
-					    listValues = codeInterfaceValueRE.exec(codeInterface['value']);
-					}
+					var listValues:Array = [];
+					var selectedItem:Object = {};
+					
+					while (listValues = codeInterfaceValueRE.exec(codeInterface['value'])) {
+						
+						var comboBoxLabel:String = languages.getLanguagePhrase(_typeID, listValues[1]);
+						
+						var listItem:Object = {label:comboBoxLabel, data:listValues[2]}
+						
+						comboBoxData.push({label:comboBoxLabel, data:listValues[2]});
+						if(currentAttribute == listValues[2])
+							selectedItem = comboBoxData[comboBoxData.length - 1];
+
+					} 
 					
 					valueContainer.dataProvider = comboBoxData;
+					valueContainer.selectedItem = selectedItem;
 				break;
 				
-				case 'file':
-				case 'color':
-				break;
-				case 'pageLink':
+				case 'pagelink':
 					
 					valueContainer = new ComboBox();
-					valueType = 'value';
+					valueContainer.labelField = '@Name';
 					
-					valueContainer.dataProvider = _objectList;
+					valueType = '@ID';
+					
+					valueContainer.dataProvider = _pageLink;
+					
+					valueContainer.selectedItem = _pageLink.(@ID == currentAttribute);
 				break;
 				
 				case 'objectlist':
-				case 'linkedbase':
-				case 'externaleditor':
+				
+					valueContainer = new ComboBox();
+					valueContainer.labelField = '@Name';
+					
+					valueType = '@ID';
+					
+					valueContainer.dataProvider = _objectList;
+					
+					valueContainer.selectedItem = _objectList.(@ID == currentAttribute);
+				break
+				
+				//case 'externaleditor':
 				
 				default:
 					valueContainer = new TextInput();
@@ -483,17 +521,17 @@ public class AttributesPanel extends ClosablePanel {
 			//valueContainer.minWidth = 0;
 			
 			valueContainer.data = {
-				'elementName':attributeDescription.Name,
-				'helpPhraseID':attributeDescription.Help,
+				'elementName':attributeXMLDescription.Name,
+				'helpPhraseID':attributeXMLDescription.Help,
 				'valid': true
 			};
 			
-			addValidator(
+			/* addValidator(
 				valueContainer, 
 				valueType, 
-				attributeDescription.RegularExpressionValidation, 
-				attributeDescription.ErrorValidationMessage
-			);
+				attributeXMLDescription.RegularExpressionValidation, 
+				attributeXMLDescription.ErrorValidationMessage
+			); */
 			
 			valueContainer.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
 			valueContainer.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
@@ -502,6 +540,35 @@ public class AttributesPanel extends ClosablePanel {
 			
 			insertAttribute(label, valueContainer, color)
 		}
+	}
+	
+	private function getColorByGroup(groupNumber:uint):String {
+		
+		var colorGroup:String = '';
+		
+		switch(groupNumber) {
+			
+			case 1:
+				colorGroup = '#777777';
+			break
+				
+			case 2:
+				colorGroup = '#00B000';
+			break
+			
+			case 3:
+				colorGroup = '#B00000';
+			break
+			
+			case 4:
+				colorGroup = '#8080ff';
+			break
+			
+			default:
+				colorGroup = '#777777';
+		}
+		
+		return colorGroup;
 	}
 	
 	private function insertAttribute(label:String, element:*, color:String):void {
@@ -516,7 +583,7 @@ public class AttributesPanel extends ClosablePanel {
 		attrLabel.text = label;
 		
 		attrLabel.setStyle('textAlign', 'right');
-		attrLabel.height = 21;
+		//attrLabel.height = 21;
 		
 		attrItemLabel.addChild(attrLabel);
 		
@@ -629,11 +696,22 @@ public class AttributesPanel extends ClosablePanel {
 	
 	private function acceptButton_clickHandler(event:MouseEvent):void {
 		
+		objectDescription.@Name = fieldsArray['Name'][0][fieldsArray['Name'][1]];
+		
 		for (var attrName:String in fieldsArray) {
 			if(!cursor.findFirst({'@Name':attrName}))
 				continue;
 			var currentElement:Object = cursor.current;
-			currentElement.*[0] = fieldsArray[attrName][0][fieldsArray[attrName][1]];
+			
+			var value:String = null;
+				
+			if(fieldsArray[attrName][0] is ComboBox)
+				value = fieldsArray[attrName][0].selectedItem[fieldsArray[attrName][1]];
+			else
+				value = fieldsArray[attrName][0][fieldsArray[attrName][1]];
+				
+			if(value != null)
+			currentElement.*[0] = value;
 		}
 		dispatchEvent(new Event('propsChanged'));
 	}

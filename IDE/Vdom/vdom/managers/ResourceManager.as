@@ -20,9 +20,9 @@ public class ResourceManager implements IEventDispatcher {
 	private var soap:Soap;
 	
 	private var requestQue:Object;
-	private static var _resourceStorage:Object;
+	private var _resourceStorage:Object;
 	
-	private var loader:Loader;
+	//private var loader:Loader;
 	/**
 	 * 
 	 * @return instance of ResourceManager class (Singleton)
@@ -77,7 +77,13 @@ public class ResourceManager implements IEventDispatcher {
 			soap.getResource(ownerID, resourceID);
 		}
 		
-		requestQue[resourceID].push({object:destTarget, property:property, raw:raw});
+		requestQue[resourceID].push(
+			{
+				object:destTarget, 
+				property:property, 
+				raw:raw
+			}
+		);
 	}
 	
 	
@@ -93,7 +99,7 @@ public class ResourceManager implements IEventDispatcher {
 		var imageSource:ByteArray = decoder.drain();
 		imageSource.uncompress();
 		
-		loader = new Loader();
+		var loader:Loader = new Loader();
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 		loader.name = resourceID;
 		loader.loadBytes(imageSource);
@@ -104,7 +110,8 @@ public class ResourceManager implements IEventDispatcher {
 	private function loadComplete(event:Event):void {
 		
 		var resourceID:String = event.currentTarget.loader.name;
-		_resourceStorage[resourceID] = loader.content;
+		
+		_resourceStorage[resourceID] = event.currentTarget.loader.content;
 		
 		for each(var item:Object in requestQue[resourceID]) {
 			

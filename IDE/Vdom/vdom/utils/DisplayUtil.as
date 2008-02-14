@@ -11,7 +11,8 @@ public class DisplayUtil {
 	
 	public static function getObjectsUnderMouse(
 			rootContainer:DisplayObjectContainer, 
-			targetClassName:String):Array {
+			targetClassName:String, 
+			filterFunction:Function = null):Array {
 		
 		var app:Application = Application.application as Application;
 	
@@ -27,14 +28,14 @@ public class DisplayUtil {
 			
 			if (!rootContainer.contains(target))
 				continue
-			
 			while (target) {
 				
 				var currentClassName:String = getQualifiedClassName(target);
 					
 				if(currentClassName == targetClassName)
 					break;
-					
+				
+				
 				if(target.hasOwnProperty('parent'))
 					target = target.parent;
 									
@@ -42,8 +43,16 @@ public class DisplayUtil {
 					target = null;
 			}
 			
-			if (target && stack[stack.length - 1] != target)
-				stack.push(target);
+			if (target && stack[stack.length - 1] != target) {
+			
+				var check:Boolean = true;
+				
+				if(filterFunction != null)
+					check = filterFunction(target);
+				
+				if(check)
+					stack.push(target);
+			}
 		}
 		
 		return stack;

@@ -122,7 +122,8 @@
 		btLine.addEventListener(MouseEvent.CLICK, delButtonOperation);
 		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 			
-		dataManager.getApplactionStructure();
+		dataManager.getApplicationStructure();
+		
 		colorMenu.show();
 			
 		arrAppl = [];

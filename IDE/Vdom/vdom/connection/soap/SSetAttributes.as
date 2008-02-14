@@ -18,16 +18,16 @@ package vdom.connection.soap
 		public function execute(appid:String = '', objid:String = '', attr:String = ''):void
 		{
 			// protect
-			ws.set_attributes.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.set_attributes.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			var sid:String = code.sessionId;		// - идентификатор сессии 
+			var skey:String = code.skey();			//- очередной ключ сессии 
 			
 			//data 
-			ws.set_attributes.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.set_attributes.arguments.objid  	= objid;		//- идентификатор объекта
-			ws.set_attributes.arguments.attr  	= attr;			//- имя атрибута  
+			//ws.set_attributes.arguments.appid  	= appid;		//- идентификатор приложения 
+			//ws.set_attributes.arguments.objid  	= objid;		//- идентификатор объекта
+			//ws.set_attributes.arguments.attr  	= attr;			//- имя атрибута  
 			
 			//send data & set listener 
-			ws.set_attributes();
+			ws.set_attributes(sid, skey, appid, objid, attr);
 			ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);
 		}
 		

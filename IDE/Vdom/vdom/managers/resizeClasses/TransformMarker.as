@@ -438,7 +438,7 @@ public class TransformMarker extends UIComponent {
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
 		rmEvent.properties = prop;
 		dispatchEvent(rmEvent);
-		//trace('rescom');
+		//trace('TM mouseUpHandler');
 		event.stopImmediatePropagation();
 		event.stopPropagation();
 	}

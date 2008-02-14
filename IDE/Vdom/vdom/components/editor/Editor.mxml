@@ -42,7 +42,7 @@
 			verticalScrollPolicy="auto" horizontalScrollPolicy="off" >
 			
 			<containers:AttributesPanel id="attributesPanel"
-				title="OBJECT PROPERTIES" 
+				title="OBJECT PROPERTIES"
 				acceptLabel="{languages.language.(@label == 'editor_save')}" 
 				cancelLabel="{languages.language.(@label == 'editor_cancel')}"
 				dataProvider="{dataManager.objectDescription}" width="200" />

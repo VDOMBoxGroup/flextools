@@ -85,8 +85,8 @@ public class WorkArea extends Canvas {
 		resizeManager.addEventListener(ResizeManagerEvent.RESIZE_BEGIN, resizeBeginHandler);
 		resizeManager.addEventListener(ResizeManagerEvent.ITEM_SELECTED, itemSelectedHandler);
 		
-		resizeManager.addEventListener('markerSelected', markerSelectedHandler);
-		resizeManager.addEventListener('markerUnSelected', markerUnSelectedHandler);
+		/* resizeManager.addEventListener('markerSelected', markerSelectedHandler);
+		resizeManager.addEventListener('markerUnSelected', markerUnSelectedHandler); */
 		
 		//renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 		
@@ -234,6 +234,20 @@ public class WorkArea extends Canvas {
 	
 	private function itemSelectedHandler(event:ResizeManagerEvent):void {
 		
+		if(selectedObject && selectedObject.editableAttributes.length > 0) {
+			
+			var editableAttributes:Array = selectedObject.editableAttributes;
+			
+			var attributes:Object = {}
+			
+			for each(var attribute:Object in editableAttributes) {
+				
+				attributes[attribute.destName] = attribute.sourceObject[attribute.sourceName];
+			}
+			
+			applyChanges(attributes);
+		}
+
 		selectedObject = event.item;
 		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
 	}
@@ -245,14 +259,14 @@ public class WorkArea extends Canvas {
 		resizeManager.init(topLevelItem);
 	}
 	
-	private function markerSelectedHandler(event:ResizeManagerEvent):void {
+/* 	private function markerSelectedHandler(event:ResizeManagerEvent):void {
 		trace('markerSelectedHandler');
 		markerSelected = true;
 	}
 	private function markerUnSelectedHandler(event:ResizeManagerEvent):void {
 		trace('markerUnSelectedHandler');
 		markerSelected = false;
-	}
+	} */
 	/**
      *  @private
      */
@@ -359,19 +373,29 @@ public class WorkArea extends Canvas {
 	
 	private function dragOverHandler(event:DragEvent):void {
 		
+		var filterFunction:Function = function(item:Item):Boolean {
+			
+			return !item.isStatic;
+		}
+		
 		var stack:Array = 
-			DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
+			DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item', filterFunction);
+		
+		if(stack.length == 0)
+			return;
+			
 		var currentItem:Item = stack[0];
 		
-		if(focusedItem == currentItem) {
-			//trace('same');
+		if(focusedItem == currentItem)
 			return;
-		}
+		
 		focusedItem = currentItem;
+		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
 		
 		var currentItemName:String = 
-			dataManager.getTypeByObjectId(currentItem.objectID).Information.Name;;
+			dataManager.getTypeByObjectId(currentItem.objectID).Information.Name;
+			
 		var aviableContainers:Array = typeDescription.aviableContainers.split(', ');
 		
 		if(aviableContainers.indexOf(currentItemName) != -1) {
@@ -382,8 +406,9 @@ public class WorkArea extends Canvas {
 			currentItem.setStyle('themeColor', '#ff0000');
 		}
 		
-		if(currentItem)
-			currentItem.drawFocus(true);
+		//if(currentItem)
+		trace('focus');
+		currentItem.drawFocus(true);
 		
 		
 	}

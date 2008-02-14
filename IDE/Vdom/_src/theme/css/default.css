@@ -1,3 +1,13 @@
+global {
+	
+	moveCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorMove");
+	
+	topDownCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopDown");
+	leftRightCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorLeftRight");
+	topLDownRCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopLDownR");
+	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
+}
+
 Application {
 	
 	backgroundColor: #484848;
@@ -162,6 +172,8 @@ ClosablePanel {
 	borderThicknessLeft: 0;
 	borderThicknessRight: 0;
 	
+	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackground");
+	
 	CollapseButtonOnButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnUp");
 	CollapseButtonOnButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnOver");
 	CollapseButtonOnButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDown");
@@ -192,21 +204,6 @@ AttributesPanel {
 	paddingBottom: 5;
 	paddingLeft: 5;
 	paddingRight: 5;
-}
-
-TransformMarker, HighlightMarker {
-	
-	boxSize: 6px;
-	borderColor: #ff0000;
-	borderAlpha: 0;
-	backgroundAlpha: 0.9;
-	
-	moveCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorMove");
-	
-	topDownCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopDown");
-	leftRightCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorLeftRight");
-	topLDownRCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopLDownR");
-	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
 }
 
 ActionPanel {
