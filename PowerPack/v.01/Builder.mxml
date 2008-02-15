@@ -123,7 +123,7 @@
 	       	
 	       	private function errorHandler(event:ErrorEvent):void
 	       	{
-	       		Alert.show("Error!!!");
+	       		Alert.show("Application Error!!!");
 	       	}
 	       	private function exitApplicationHandler(event:Event):void
 	       	{
@@ -162,6 +162,10 @@
 	        private function completeLangHandler(event:Event):void
 	        {
 	            langXML = XML(event.target.data);
+	            
+	            GraphArrow.langXML = langXML;
+	            GraphNode.langXML = langXML;
+	            GraphCanvas.langXML = langXML;
 	            
         	    Alert.yesLabel = langXML.yes;
                 Alert.noLabel = langXML.no;	 
