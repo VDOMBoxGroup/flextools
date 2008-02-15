@@ -18,6 +18,8 @@
       <sourceAttachmentPathEntry kind="3" path="${FRAMEWORKS}/libs/charts.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
     </sourceAttachmentPath>
   </compiler>
-  <applications/>
+  <applications>
+    <application path="PowerPack.mxml"/>
+  </applications>
   <buildCSSFiles/>
 </actionScriptProperties>
