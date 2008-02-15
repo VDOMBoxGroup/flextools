@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="496" height="380" title="Log window" showCloseButton="true" creationComplete="show();">
+	<mx:TextArea verticalScrollPolicy="auto" horizontalScrollPolicy="auto" id="txtArea" right="10" left="10" top="10" bottom="10"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.core.Application;
+		    
+		    public var _text:String;
+		    
+		    public static function show(text:String = "", parent:Sprite = null):Log
+		    {
+		        if (!parent)
+		            parent = Sprite(Application.application);   
+		        
+		        var log:Log = new Log();		            
+
+		        log._text = text;
+
+		        PopUpManager.addPopUp(log, parent, true);
+		        PopUpManager.centerPopUp(log);
+
+		        return log;
+		    }	
+		    
+			private function show():void
+			{
+		        txtArea.text = _text;
+				
+				addEventListener(CloseEvent.CLOSE, closeHandler);
+		        
+		        setActualSize(getExplicitOrMeasuredWidth(),
+		                      getExplicitOrMeasuredHeight());
+			}	
+			
+			private function closeHandler(event:CloseEvent):void
+			{
+				visible = false;
+				mx.managers.PopUpManager.removePopUp(this);
+			}				    		
+	
+		]]>
+	</mx:Script>
+</mx:TitleWindow>
