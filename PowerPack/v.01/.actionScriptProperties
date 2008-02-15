@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties version="1" mainApplicationPath="PowerPack.mxml">
+<actionScriptProperties version="1" mainApplicationPath="Builder.mxml">
   <compiler additionalCompilerArguments="-locale en_US" copyDependentFiles="true" generateAccessible="false" strict="true" warn="true" htmlGenerate="true" htmlPlayerVersionCheck="true" htmlPlayerVersion="9.0.0" htmlExpressInstall="true" htmlHistoryManagement="true" outputFolderPath="bin">
     <compilerSourcePath/>
     <libraryPath>
@@ -19,7 +19,7 @@
     </sourceAttachmentPath>
   </compiler>
   <applications>
-    <application path="PowerPack.mxml"/>
+    <application path="Builder.mxml"/>
   </applications>
   <buildCSSFiles/>
 </actionScriptProperties>
