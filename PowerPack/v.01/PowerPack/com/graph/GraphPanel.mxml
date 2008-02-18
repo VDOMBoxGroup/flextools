@@ -8,6 +8,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.ArrayUtil;
 			import mx.managers.FocusManager;
 			import mx.controls.List;
             import PowerPack.com.graph.GraphThumb;
@@ -124,6 +125,9 @@
 				vsViewStack.selectedChild = GraphCanvas(curAccordionChild.lstGraphs.selectedItem);
 				
 				// set initial graph in combobox
+				
+				initGraphs.source.sort();
+				
 				cbInitGraph.selectedIndex=0;
 				for(i=0; i<initGraphs.length; i++)
 				{
@@ -148,6 +152,7 @@
 			
 			public function completeEditLstGraphsHandler(event:ListEvent):void
 			{        	
+				initGraphs.source.sort();
 				vsViewStack.invalidateDisplayList();
 				cbInitGraph.invalidateDisplayList();       						
 			}
@@ -207,7 +212,7 @@
 						GraphCanvas(child).initial = false;
 				}
 				
-				if(ComboBox(event.target).selectedIndex > 0)
+				if(ComboBox(event.target).selectedItem is GraphCanvas)
 					GraphCanvas(ComboBox(event.target).selectedItem).initial = true;
 			}
 			
@@ -234,7 +239,9 @@
 				child.lstGraphs.verticalScrollPosition = child.lstGraphs.maxVerticalScrollPosition;
 				
 				child.lstGraphs.editable = true; 
-				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};				
+				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
+				
+				initGraphs.source.sort();
 			}
 				
 			public function btnRenameClickHandler(event:Object):void
@@ -261,14 +268,7 @@
 				if(cbInitGraph.selectedItem == selectedItem)
 					cbInitGraph.selectedIndex = 0;
 				
-				for(var i:int=0; i<initGraphs.length; i++)
-				{
-					if(selectedItem == initGraphs.getItemAt(i))
-					{
-						initGraphs.removeItemAt(i);
-						break;
-					}
-				}
+				initGraphs.removeItemAt(ArrayUtil.getItemIndex(selectedItem, initGraphs.source));
 				
 				child.graphs.removeItemAt(child.lstGraphs.selectedIndex);
 				GraphCanvas(vsViewStack.selectedChild).destroy();
@@ -280,7 +280,7 @@
 				{
 					vsViewStack.selectedIndex = 0;
 					
-					for(i=0; i<graphsAccordion.numChildren; i++)
+					for(var i:int=0; i<graphsAccordion.numChildren; i++)
 					{
 						for(var j:int=0; j<GraphAccordionChild(graphsAccordion.getChildAt(i)).graphs.length; j++)
 						{

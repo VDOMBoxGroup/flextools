@@ -19,6 +19,7 @@
     </sourceAttachmentPath>
   </compiler>
   <applications>
+    <application path="Generator.mxml"/>
     <application path="Builder.mxml"/>
   </applications>
   <buildCSSFiles/>

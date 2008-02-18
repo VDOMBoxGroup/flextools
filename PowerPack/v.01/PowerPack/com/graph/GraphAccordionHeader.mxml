@@ -3,10 +3,13 @@
 	xmlns="flexlib.containers.accordionClasses.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	dragEnter="dragEnterHandler(event);"
-	dragDrop="dragDropHandler(event);">
+	dragDrop="dragDropHandler(event);"
+	doubleClickEnabled="true" xmlns:code="http://code.google.com/p/flexlib/" 
+	creationComplete="show();">
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.ArrayUtil;
 			import mx.containers.Accordion;
 			import mx.core.IUIComponent;
 			import mx.managers.DragManager;
@@ -15,10 +18,79 @@
 			[Bindable]
 			private var _label:String;
 			
-			override public function set label(value:String):void {
+			override public function set label(value:String):void 
+			{
 				super.label = "";
 				
 				_label = value;
+			}
+			
+			private function show():void
+			{
+				lblCaption.percentWidth = 100;
+			}
+			
+			private function doubleClickHandler(event:Event):void
+			{
+				beginEdit();
+			}
+			
+			private function closeHandler(event:Event):void
+			{
+				//event.stopPropagation();
+				EventDispatcher(data).dispatchEvent(new Event("closing"));
+			}
+			
+			public function beginEdit():void
+			{
+				lblCaption.visible = false;
+				lblCaption.width = 0;
+				
+				txtCaption.visible = true;
+				txtCaption.percentWidth = 100;
+				
+				txtCaption.setFocus();				
+			}
+			
+			public function endEdit(event:Event):void
+			{				
+				var bCommit:Boolean = true;
+				var bEndEdit:Boolean = true;
+				
+				if(event is KeyboardEvent)
+				{
+					// escape
+				    if(KeyboardEvent(event).charCode == 27)
+				    {
+		    			bCommit = false;
+						bEndEdit = true;
+		    		}
+		    		// enter
+				    else if(KeyboardEvent(event).charCode == 13)
+				    {
+		    			bCommit = true;
+						bEndEdit = true;
+				    }
+					else
+						bEndEdit = false;
+		  		}
+				
+				if(bEndEdit)
+				{		    	
+					if(bCommit)
+						data.label = txtCaption.text;
+					else
+						txtCaption.text = _label;
+						
+					txtCaption.visible = false;
+					txtCaption.width = 0;
+				
+					lblCaption.visible = true;
+					lblCaption.percentWidth = 100;
+					
+					if(bCommit)
+						EventDispatcher(data).dispatchEvent(new Event("captionChanged"));
+				}
 			}
 			
 		    private function dragEnterHandler(event:DragEvent):void
@@ -33,6 +105,7 @@
 	                DragManager.showFeedback(DragManager.MOVE);
 	            }	    	
 		    }
+		    
 		    private function dragDropHandler(event:DragEvent):void
 		    {
 		    	var items:Array = 
@@ -42,7 +115,7 @@
 		    	var source:GraphAccordionChild = GraphAccordionChild(event.dragInitiator.parent);
 		    	var destination:GraphAccordionChild = GraphAccordionChild(event.target.data);
 				
-				source.graphs.removeItemAt(source.lstGraphs.selectedIndex);
+				source.graphs.removeItemAt(ArrayUtil.getItemIndex(graph, source.graphs.source));
 				graph.category = destination.label;
 				
 				destination.graphs.addItem(graph);	
@@ -57,9 +130,16 @@
 		]]>
 	</mx:Script>
 	
-	<mx:HBox verticalAlign="middle" width="100%" paddingLeft="5">
-		<mx:Label text="{_label}"/>
-		<mx:ControlBar horizontalAlign="right" width="100%">
+	<mx:HBox id="boxHeader" width="100%" verticalAlign="middle" horizontalGap="0">
+		<mx:Label id="lblCaption" text="{_label}" paddingLeft="5" 
+			doubleClickEnabled="true" doubleClick="doubleClickHandler(event);"/>
+		<mx:TextInput id="txtCaption" text="{_label}" width="0" visible="false"
+			focusOut="endEdit(event);" enter="endEdit(event);" keyDown="endEdit(event);" focusIn="event.stopPropagation();"/>
+		<mx:ControlBar id="cbarHeader" horizontalAlign="right" paddingTop="2" paddingBottom="2" paddingRight="2" paddingLeft="2">
+		<code:CanvasButton
+			click="closeHandler(event);">
+			<mx:Label text="x"/>
+		</code:CanvasButton>
 		</mx:ControlBar>
 	</mx:HBox>
 		
