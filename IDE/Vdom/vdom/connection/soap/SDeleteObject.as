@@ -35,7 +35,9 @@ package vdom.connection.soap
 		private  function completeListener(event:ResultEvent):void
 		{
 			// get result 
-			resultXML = XML(event.result);
+			resultXML = <Result>{XMLList(event.result)}</Result>;
+			resultXML = resultXML.Result[0];
+		//	resultXML = XML(event.result);
 			var evt:SoapEvent;
 			
 			// check Error
