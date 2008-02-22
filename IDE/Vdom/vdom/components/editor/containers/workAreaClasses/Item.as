@@ -79,8 +79,7 @@ public dynamic class Item extends Canvas {
 			var graph:Graphics = _highlightMarker.graphics;
 			
 			graph.clear()
-			graph.beginFill(0x00b000, .3);
-			graph.lineStyle(1);
+			graph.lineStyle(2, 0x666666);
 			graph.drawRect(0, 0, width, height);
 			
 			bringOnTop();

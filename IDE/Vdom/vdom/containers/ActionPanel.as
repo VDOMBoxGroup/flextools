@@ -6,6 +6,7 @@ import mx.containers.ControlBar;
 import mx.containers.Panel;
 import mx.controls.Label;
 import mx.core.EdgeMetrics;
+import mx.core.UIComponent;
 
 public class ActionPanel extends Panel {
 	
@@ -30,7 +31,7 @@ public class ActionPanel extends Panel {
 	
 	public function set panelName(name:String):void {
 		
-		_panelName = name;
+		_panelName = name.toUpperCase();;
 		_panelNameChanged = true;
 		invalidateProperties();
 	}
@@ -52,6 +53,14 @@ public class ActionPanel extends Panel {
 			_panelLabel.text = _panelName;
 		}
 	}
+
+	override protected function updateDisplayList(unscaledWidth:Number, 
+ 												unscaledHeight:Number):void {
+ 		
+ 		super.updateDisplayList(unscaledWidth, unscaledHeight);
+	 	
+	 	_panelLabel.move(0, 0);
+ 	}
 	
 	override protected function createChildren():void {
 		
@@ -60,19 +69,22 @@ public class ActionPanel extends Panel {
 		if (!controlBar) {
 			
 			var tempBar:ControlBar = new ControlBar();
+			tempBar.height = 13;
+			
 			
 			_panelLabel = new Label();
 			_panelLabel.percentWidth = 100;
-			_panelLabel.height = 16;
+			//_panelLabel.height = 16;
 			_panelLabel.styleName = 'actionPanlelLabel';
 			
-			tempBar.addChild(_panelLabel);
-			
 			controlBar = tempBar;
+			tempBar.setStyle('paddingTop', -3);
 			
 			controlBar.visible = false;
 			
+			tempBar.addChild(_panelLabel);
 			rawChildren.addChild(DisplayObject(controlBar));
+			
 		}
 	}
 	

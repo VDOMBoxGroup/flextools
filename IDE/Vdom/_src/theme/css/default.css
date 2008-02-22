@@ -224,9 +224,18 @@ ActionPanel {
 	backgroundColor: #484848;
 	layout: absolute;
 	borderColor: #ffffff;
-	dropShadowEnabled: true;
 	borderStyle: solid;
 	borderThickness: 1;
+	controlBarStyleName: actionPanelBar;
+}
+
+.actionPanelBar {
+	paddingTop: 0;
+	paddingBottom: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="ActionPanelBar");
+	backgroundSize: "100%";
 }
 
 WorkArea {

@@ -16,6 +16,8 @@ import mx.managers.CursorManager;
 import vdom.events.TransformMarkerEvent;
 import mx.events.FlexEvent;
 import mx.events.ResizeEvent;
+import mx.core.Application;
+import flash.events.Event;
 
 public class TransformMarker extends UIComponent {
 	
@@ -61,7 +63,7 @@ public class TransformMarker extends UIComponent {
 		
 		super();
 		
-		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		/* addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler); */
 		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 		addEventListener(MouseEvent.MOUSE_OUT,  mouseOutHandler);
 	}
@@ -100,11 +102,44 @@ public class TransformMarker extends UIComponent {
 	public function set item(item:UIComponent):void {
 		
 		//trace('OBJECT CHANGE');
+		if(item == null) {
+			
+			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
+			addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			_selectedItem = null;
+			return;
+		}
+		
 		if(_selectedItem == item || transformation)
 			return;
 			
 		_selectedItem = item;
+		
+		moving = this.cc_box;
+		
+		mousePosition = new Point(_selectedItem.mouseX, _selectedItem.mouseY);
+		
+		
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
+		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		item.addEventListener('refreshComplete', refreshCompleteHandler);
+		
 		//_selectedItem.addEventListener(FlexEvent.UPDATE_COMPLETE, selectedItem_updateCompleteHandler);
+		
+		var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
+		
+		var prop:Object = {
+			left : _selectedItem.x,
+			top : _selectedItem.y,
+			width : _selectedItem.width,
+			height : _selectedItem.height
+		};
+		
+		evt.properties = prop;
+		
+		dispatchEvent(evt);
 		
 		itemChanged = true;
 		
@@ -115,6 +150,13 @@ public class TransformMarker extends UIComponent {
 		//invalidateProperties();
 		
 		
+	}
+	
+	private function refreshCompleteHandler(event:Event):void {
+		
+		itemChanged = true;
+		invalidateSize();
+		invalidateDisplayList();
 	}
 	
 	public function get item():UIComponent {
@@ -248,10 +290,10 @@ public class TransformMarker extends UIComponent {
 			
 			var g:Graphics = cc_box.graphics;
 			g.clear();
-			g.lineStyle(getStyle('boxSize'), 1, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-			if(_resizeMode == RESIZE_NONE)
-				g.beginFill(0xffffff, .0);
-			g.drawRect(0, 0, measuredWidth, measuredHeight);
+			g.lineStyle(6, 0x333333, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			/* if(_resizeMode == RESIZE_NONE)
+				g.beginFill(0xffffff, .0); */
+			g.drawRect(0, 0, measuredWidth-6, measuredHeight-6);
 			g.endFill();
 			
 			graphics.clear();			
@@ -275,8 +317,8 @@ public class TransformMarker extends UIComponent {
 			
 			var rect:Rectangle = _selectedItem.getRect(_selectedItem.parent)
 			
-			measuredWidth  = rect.width;
-			measuredHeight = rect.height;
+			measuredWidth  = _selectedItem.width;
+			measuredHeight = _selectedItem.height;
 			
 			var rectangle:Rectangle = getContentRectangle(_selectedItem, this);
 			
@@ -335,7 +377,20 @@ public class TransformMarker extends UIComponent {
 	
 	private function mouseDownHandler(event:MouseEvent):void {
 		//trace('resbeg');
+		
+		trace('TransformMarker MD');
+		
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
+		
+		var prop:Object = {
+			left : _selectedItem.x,
+			top : _selectedItem.y,
+			width : _selectedItem.width,
+			height : _selectedItem.height
+		};
+		
+		rmEvent.properties = prop;
+		
 		dispatchEvent(rmEvent);
 		
 		moving = null;
@@ -348,7 +403,7 @@ public class TransformMarker extends UIComponent {
 		
 		transformation = true;
 		
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);			
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
 		
 		//event.stopImmediatePropagation();
@@ -400,6 +455,7 @@ public class TransformMarker extends UIComponent {
 					markerSelected = false;
 				break
 			}
+			
 			if(markerSelected)
 				dispatchEvent(new TransformMarkerEvent('markerSelected'));
 			else
@@ -409,11 +465,12 @@ public class TransformMarker extends UIComponent {
 	
 	private function mouseUpHandler(event:MouseEvent):void {
 		
+		Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
+		Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		
+		
 		var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
 		dispatchEvent(evt);
-		
-		stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		
 		moving = null;
 		mousePosition = null;
@@ -448,6 +505,8 @@ public class TransformMarker extends UIComponent {
 	private function mouseMoveHandler(event:MouseEvent):void {
 		
 		//CursorManager.removeAllCursors();
+		if(itemChanged)
+			return;
 		
 		var rect:Rectangle = new Rectangle(x, y, measuredWidth, measuredHeight);
 		
@@ -455,7 +514,7 @@ public class TransformMarker extends UIComponent {
 		
 		if(moving && event.buttonDown) {
 			
-			var onlyMove:Boolean = false;
+			//var onlyMove:Boolean = false;
 			
 			var mx:Number = mouseX;
 			var my:Number = mouseY;
@@ -509,7 +568,7 @@ public class TransformMarker extends UIComponent {
 						else {rect.x += mx - mousePosition.x;}				
 					if(rect.y + my - mousePosition.y < 0) {rect.y = 0;}
 						else {rect.y += my - mousePosition.y;}
-					onlyMove = true;
+					//onlyMove = true;
 				break;
 			}
 			
@@ -527,16 +586,16 @@ public class TransformMarker extends UIComponent {
 					
 					//trace(mouseX)
 					
-					var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);		
-					dispatchEvent(evt);
+					//var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);		
+					//dispatchEvent(evt);
 					
 					move(rect.x, rect.y);
 					
-					/* if(onlyMove) {
+					if(_moveMode) {
 						
 						_selectedItem.x = rect.x
 						_selectedItem.y = rect.y
-					} */
+					}
 					
 					itemChanged = true;
 					

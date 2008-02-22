@@ -18,6 +18,5 @@
 	</mx:Script>
 	
 	<mx:Canvas id="img" width="50" height="50" backgroundColor="#ff0000" borderStyle="none"/>
-	<mx:Label id="thumbLabel" width="50" fontWeight="bold" height="15" text="{labelValue}" textAlign="center" truncateToFit="true"/>
 </mx:VBox>
 

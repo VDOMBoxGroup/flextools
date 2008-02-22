@@ -147,7 +147,7 @@ public class DataManager implements IEventDispatcher {
 		
 		if(attrChanged) {
 			
-			oldXMLDescription.Attributes[0] = newXMLDescription.Attributes[0];
+			oldXMLDescription.Attributes[0] = new XML(newXMLDescription.Attributes[0]);
 			
 			proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, sendAttributeCompleteHandler);
 			proxy.setAttributes(_appId, oldXMLDescription.@ID, newOnlyAttributes);

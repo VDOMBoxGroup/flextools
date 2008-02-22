@@ -263,6 +263,7 @@ public class RenderManager implements IEventDispatcher {
 			staticContainer = true;
 		
 		item.removeAllChildren();
+		item.graphics.clear(); //<--------------- !!!
 		
 		/* var numChildren:uint = item.numChildren;
 		
@@ -326,8 +327,9 @@ public class RenderManager implements IEventDispatcher {
 			_items.refresh();
 		}
 		
-		item.visible = true;
+		item.dispatchEvent(new Event('refreshComplete'));
 		
+		item.visible = true;
 		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
 		rme.result = item;
 		dispatchEvent(rme); 
@@ -386,15 +388,16 @@ public class RenderManager implements IEventDispatcher {
 						viewObject =  new Canvas();
 						//item = _parentItem;
 					} */
-						
+					
+					item.x = itemXMLDescription.@left;
+					item.y = itemXMLDescription.@top;
 						
 					item.setStyle('backgroundColor', '#ffffff');
 					item.setStyle('backgroundAlpha', '.0');
 					
 					item.clipContent = true;
 					
-					item.x = itemXMLDescription.@left;
-					item.y = itemXMLDescription.@top;
+					
 					
 					//var zzz:* = itemDescription.@width;
 					

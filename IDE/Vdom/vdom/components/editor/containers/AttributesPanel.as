@@ -713,6 +713,9 @@ public class AttributesPanel extends ClosablePanel {
 			if(value != null)
 			currentElement.*[0] = value;
 		}
+		
+		trace('Attributes Panel: acceptButtonClick');
+		
 		dispatchEvent(new Event('propsChanged'));
 	}
 	

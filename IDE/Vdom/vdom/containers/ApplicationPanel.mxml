@@ -33,5 +33,5 @@
 		selectedIndex="0" change="changeListEvent()"
 		dataProvider="{dataProvider}" verticalScrollPolicy="auto" paddingRight="15" paddingLeft="5"
 		itemRenderer="vdom.containers.Thumbnail" rowCount="1" direction="horizontal" columnCount="4"
-		 backgroundColor="#808080"/>	
+		backgroundColor="#808080"/>	
 </ActionPanel>

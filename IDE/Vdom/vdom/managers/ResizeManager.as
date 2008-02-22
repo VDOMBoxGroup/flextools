@@ -63,6 +63,10 @@ public class ResizeManager extends EventDispatcher {
 	private var moveCursor:Class;
 	private var cursorID:int;
 	
+	private var beforeTransform:Object;
+	
+	private var markerSelected:Boolean;
+	
 	public function ResizeManager() {
 		
 		styleManager = new StyleManager();
@@ -102,12 +106,13 @@ public class ResizeManager extends EventDispatcher {
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-		_topLevelItem.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+		_topLevelItem.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
 		//highlightMarker.addEventListener(TransformMarkerEvent.TRANSFORM_COMPLETE, resizeCompleteHandler);
 		
 		//highlightMarker.visible = false;
 		
 		
+		CursorManager.removeAllCursors();
 		
 		if(!selectMarker)
 			selectMarker = new TransformMarker();
@@ -118,8 +123,8 @@ public class ResizeManager extends EventDispatcher {
 		
 		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_BEGIN, transformBeginHandler);
 		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler);
-		//selectMarker.addEventListener('markerSelected', markerSelectedHandler);
-		//selectMarker.addEventListener('markerUnSelected', markerUnSelectedHandler);
+		selectMarker.addEventListener('markerSelected', markerSelectedHandler);
+		selectMarker.addEventListener('markerUnSelected', markerUnSelectedHandler);
 		
 		//itemTransform = false;
 		
@@ -148,7 +153,7 @@ public class ResizeManager extends EventDispatcher {
 			
 			if(selectMarker.parent)
 				selectMarker.parent.removeChild(selectMarker)
-			
+				
 			if(showMarker) {
 				
 				item.parent.addChild(selectMarker);
@@ -157,13 +162,16 @@ public class ResizeManager extends EventDispatcher {
 				selectMarker.moveMode = moveMode;
 				selectMarker.item = item;
 				selectMarker.visible = true;
+			} else {
 				
+				selectMarker.item = null;
 			}
 			
 			selectedItem = newSelectedItem = item;
 			
 		} else
 			newSelectedItem = null;
+			//selectMarker.item = null;
 			
 		return newSelectedItem;
 	}
@@ -185,11 +193,18 @@ public class ResizeManager extends EventDispatcher {
 				cursorID = NaN;
 			}
 			
+			if(item == selectedItem) {
+				
+				highlightedItem = null;
+				return;
+			}
+				
+			
 			switch(showMarker) {
 				
 				case 'move':
 					
-					cursorID = CursorManager.setCursor(moveCursor);
+					cursorID = CursorManager.setCursor(moveCursor, 2, -10, -10);
 					
 				case 'select':
 					
@@ -265,23 +280,31 @@ public class ResizeManager extends EventDispatcher {
 	
 	private function mouseDownHandler(event:MouseEvent):void {
 		
+		trace('ResizeManager MD');
+		
 		if(!highlightedItem)
 			return;
 		
+		trace('highlighted');
+		
 		var newSelectedItem:Item;
 		
-		if(_topLevelItem.objectID != highlightedItem.objectID) {
+		if(_topLevelItem != highlightedItem) {
+			
+			trace('not selected');
 			
 			var objectType:XML = dataManager.getTypeByObjectId(highlightedItem.objectID);
 			
 			newSelectedItem = selectItem(	highlightedItem,
 											true,
 											objectType.Information.Moveable,
-											'0');
+											objectType.Information.Resizable);
 						
-		} else
+		} else if(selectedItem == highlightedItem)
+			return;
+			
+		else
 			newSelectedItem = selectItem(highlightedItem, false);
-		
 		
 		if(newSelectedItem) {
 			var rme:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.ITEM_SELECTED);
@@ -337,36 +360,24 @@ public class ResizeManager extends EventDispatcher {
 			tip.y = event.stageY + 15;
 		}
 		
-		var targetList:Array =
-			DisplayUtil.getObjectsUnderMouse(_topLevelItem.parent, 'vdom.components.editor.containers.workAreaClasses::Item', filterFunction);
+		if(itemTransform || markerSelected)
+			return;
 		
-		if(targetList.length == 0)
-			return
+		var itemUnderMouse:Item = getItemUnderMouse();
 		
-		var itemUnderMouse:Item;
+		if(itemUnderMouse == highlightedItem)
+			return;
 		
-		if(highlightedItem == targetList[0]) {
-			
-			if(targetList.length > 1 && targetList[0].contains(targetList[1]))
-				itemUnderMouse = targetList[1];
-			else
-				return;
-				
-		} else
-			itemUnderMouse = targetList[0];
-			
-		if(
-			_topLevelItem != itemUnderMouse &&
-			selectedItem != itemUnderMouse
-		  ) {
+		if(itemUnderMouse && itemUnderMouse != _topLevelItem) {
 			
 			var objectDescription:XML = dataManager.getObject(itemUnderMouse.objectID);
 			
 			var tipText:String = "Name:" + objectDescription.@Name;
 			
-			var moveable:String = objectDescription.Type.Information.Moveable
-			//trace('moveable: ' + moveable);
+			var moveable:String = objectDescription.Type.Information.Moveable;
+				
 			showToolTip(tipText);
+			
 			if(moveable == '1')
 				highlightItem(itemUnderMouse, 'move');
 			else
@@ -375,20 +386,80 @@ public class ResizeManager extends EventDispatcher {
 		} else {
 			
 			showToolTip('');
-			highlightItem(itemUnderMouse);
+			highlightItem(itemUnderMouse, 'none');
+		}
+	}
+	
+	private function getItemUnderMouse():Item {
+		
+		var targetList:Array =
+			DisplayUtil.getObjectsUnderMouse(_topLevelItem.parent, 'vdom.components.editor.containers.workAreaClasses::Item', filterFunction);
+		
+		if(targetList.length == 0)
+			return null;
+		
+		var itemUnderMouse:Item = null;
+		
+		if(targetList.length == 1) {
+			
+			if(targetList[0] == selectedItem)
+				itemUnderMouse = null;
+			
+			else
+				itemUnderMouse = targetList[0];
+			
+		} else if (targetList.length > 1) {
+			
+			if (targetList[0].contains(targetList[1])) {
+					
+				if(targetList[0] == highlightedItem) {
+					
+					if(targetList[1] != selectedItem)
+						itemUnderMouse = targetList[1];
+					else
+						itemUnderMouse = null;
+				
+				} else {
+					
+					if(targetList[1] != selectedItem)
+						itemUnderMouse = targetList[1];
+					else
+						itemUnderMouse = null;
+				}
+			
+			} else if (targetList[1].contains(targetList[0])) {
+				
+				itemUnderMouse = targetList[0];
+				
+			} else {
+				
+				itemUnderMouse = targetList[0];
+			}
 		}
 		
-		
+		return itemUnderMouse;
 	}
 	
 	private function transformBeginHandler(event:TransformMarkerEvent):void {
 		
+		trace('transform begin');
 		itemTransform = true;
+		beforeTransform = event.properties;
 	}
 	
 	private function transformCompleteHandler(event:TransformMarkerEvent):void {
 		
+		trace('transform complete');
+
 		itemTransform = false;
+		
+		if(
+			beforeTransform.top == event.properties.top &&
+			beforeTransform.left == event.properties.left &&
+			beforeTransform.width == event.properties.width &&
+			beforeTransform.height == event.properties.height
+		)
+			return;
 		
 		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
 		
@@ -396,25 +467,19 @@ public class ResizeManager extends EventDispatcher {
 		rmEvent.properties = event.properties;
 		dispatchEvent(rmEvent);
 	}
-	/* private function markerSelectedHandler(event:TransformMarkerEvent):void {
+	private function markerSelectedHandler(event:TransformMarkerEvent):void {
 		
-		dispatchEvent(new ResizeManagerEvent('markerSelected'));
+		//markerSelected = true;
+		highlightItem(null);
 	}
 	private function markerUnSelectedHandler(event:TransformMarkerEvent):void {
 		
-		dispatchEvent(new ResizeManagerEvent('markerUnSelected'));
-	} */
-	private function mouseOutHandler(event:MouseEvent):void {
+		markerSelected = false;
+	}
+	private function rollOutHandler(event:MouseEvent):void {
 		
-		/* if(tip) {
-			
-			_workArea.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-			trace('toolTipText false 3');
+		if(tip)
 			tip.visible = false;
-		}
-		
-		if(highlightMarker.visible)
-			highlightMarker.visible = false; */
 	}
 }
 }
