@@ -40,7 +40,7 @@
 	private var vctTest:Vector = new Vector();
 	private var curLine:Object = new Object();
 	private var btLine:DeleteLineButton;
-	private var temMenu:TreeElementMenu;
+//	private var temMenu:TreeElementMenu;
 	private var levelsMenu:LevelsMenu;
 //	private var soap:Soap = Soap.getInstance();
 	private var publicData:Object;
@@ -63,8 +63,8 @@
 		btLine = new DeleteLineButton();
 		
 		addChild(btLine);
-		temMenu = new TreeElementMenu();
-		addChild(temMenu);
+//		temMenu = new TreeElementMenu();
+//		addChild(temMenu);
 	}
 	
 	private function hideHendler():void
@@ -98,11 +98,11 @@
 		colorMenu.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 		colorMenu.removeEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
-		temMenu.removeEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
-		temMenu.removeEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-		temMenu.removeEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
+//		temMenu.removeEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+//		temMenu.removeEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+//		temMenu.removeEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
 		btLine.removeEventListener(MouseEvent.CLICK, delButtonOperation);
-		removeEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
+	//	removeEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 		
 		colorMenu.hide();
 		
@@ -117,11 +117,11 @@
 		colorMenu.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 		
-		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
-		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
+//		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+//		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+//	temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
 		btLine.addEventListener(MouseEvent.CLICK, delButtonOperation);
-		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
+//		addEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 			
 		dataManager.getApplicationStructure();
 		
@@ -202,17 +202,18 @@
 	}
 	
 
-	
+	/*
 	private function alfaMenu(msEvt:MouseEvent):void
 	{
 		temMenu.alfaMenu(mouseX - temMenu.x,  mouseY - temMenu.y );
 	}
-	
+	*/
+	/*
 	private function treeElementsClick(msEvt:MouseEvent):void
 	{
 		temMenu.position = msEvt.currentTarget;
 	}
-	
+	*/
 	private function delButtonOperation(msEvt:MouseEvent):void
 	{
 		//ссылка на самого себя 
@@ -288,7 +289,7 @@
 					massLines[level][ind1][ind2].updateVector();
 				
 	//	temMenu.position = massTreeElements[strID];
-		temMenu.position = massTreeElements[publicData.topLevelObjectId];
+	//	temMenu.position = massTreeElements[publicData.topLevelObjectId];
 	}
 	
 	/**
@@ -307,7 +308,7 @@
 		redrawLines(curTree.ID);
 		removeChild(canRectangle);
 	
-		temMenu.position = curTree;
+	//	temMenu.position = curTree;
 	}
 	
 	/** 
@@ -425,7 +426,7 @@
 		
 			
 		curTree = massTreeElements[ID];
-		temMenu.position = curTree;
+	//	temMenu.position = curTree;
         
     }
 	
