@@ -583,7 +583,7 @@
 </mx:Script>
 <mx:Canvas id="cnvLevelTop"/>
 <mx:Canvas id="cnvLevelDown"/>
-<mx:Image source="{rMenu}" right="78" top="26"/>
+
 
 <mx:Label text="Select type of Applikation:" right="23" top="255" color="#ffffff"/>
 
@@ -591,7 +591,7 @@
             close="comBoxClose(event.target)" right="23" top="281" /> 
             
 <mx:Button id="btAddTreeElement" label="add element" right="23" top="311"   click="soapAddTreeElement()"/>
-	<ns1:ColorMenu id="colorMenu" right="33" top="26" visible="false"/>
+	<ns1:ColorMenu id="colorMenu" right="33" top="26" visible="true"/>
 
 	
 </mx:Canvas>
