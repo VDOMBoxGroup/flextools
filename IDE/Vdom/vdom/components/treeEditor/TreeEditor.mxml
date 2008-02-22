@@ -52,6 +52,10 @@
    private var arrAppl: Array = new Array();
      [Bindable]
    public var selectedAppl:Object;  
+   
+   	[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='rMenu')]
+		[Bindable]
+	public var rMenu:Class; 
 	
 	private function creationCompleteHandler():void
 	{
@@ -579,13 +583,15 @@
 </mx:Script>
 <mx:Canvas id="cnvLevelTop"/>
 <mx:Canvas id="cnvLevelDown"/>
+<mx:Image source="{rMenu}" right="78" top="26"/>
 
 <mx:Label text="Select type of Applikation:" right="23" top="255" color="#ffffff"/>
+
  <mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
-            close="comBoxClose(event.target)" right="23" top="281"/> 
+            close="comBoxClose(event.target)" right="23" top="281" /> 
             
 <mx:Button id="btAddTreeElement" label="add element" right="23" top="311"   click="soapAddTreeElement()"/>
-	<ns1:ColorMenu id="colorMenu" right="33" top="26"/>
-	
+	<ns1:ColorMenu id="colorMenu" right="33" top="26" visible="false"/>
+
 	
 </mx:Canvas>
