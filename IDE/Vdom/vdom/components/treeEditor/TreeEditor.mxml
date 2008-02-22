@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" 
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundColor="#ffffff"
 			creationComplete="creationCompleteHandler()" hide="hideHendler()" 
 			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*">
 <mx:Script>
@@ -116,6 +116,7 @@
 		colorMenu.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 		colorMenu.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
+		
 		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
 		temMenu.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
 		temMenu.addEventListener(TreeEditorEvent.RESIZE_TREE_ELEMENT, hideTreeElement);	
@@ -172,7 +173,9 @@
 				resMan.loadResource(publicData.applicationId, massTreeElements[obID].resourceID, this);
 			//	trace('Work!');
 			}
-			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
+			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , treeElementLinesReDrawHandler);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			addChild(massTreeElements[obID]);
 		}
@@ -262,10 +265,13 @@
 		btLine.visible = true;
 	}
 	
-	private function mouseHandler(msEvt:TreeEditorEvent):void
+	private function treeElementLinesReDrawHandler(trEvt:TreeEditorEvent):void
 	{
-		redrawLines(msEvt.currentTarget.ID);
+		redrawLines(trEvt.currentTarget.ID);
 	}
+	
+	
+	
 	
 	/***
 	* 
@@ -284,34 +290,6 @@
 	//	temMenu.position = massTreeElements[strID];
 		temMenu.position = massTreeElements[publicData.topLevelObjectId];
 	}
-	
-	/******
-	
-	+ когда  соединяешь, стрелка за мышкой
-	+ цвет по текущему уровню
-	+ Баг верхнего угла
-	+ при нажатии на линиию появлялась становилась видима кнопка
-	+ нармальные картикни
-	+ Выделение текущего елемента
-	+ прозрачность у меню в зависимости от расстоянию до мышки
-	+ свертывание и развертывание елементов
-	+ загрузка данных на сервер
-	+ чтение данных с сервера
-	
-	* меню:
-		- уровни
-		- показывать/скрывать
-		- рисовать в соответсвии выделеного уровня
-	
-	+ корректоное отображение при смене апликухи
-	- оптимизация %)
-	+ получение рисунков
-	- выбор локального рисунка;
-	+ подтверждение на удаление;
-	- нормальные линии между елементами дерева
-	
-	*/
-	
 	
 	/**
 	*
@@ -342,17 +320,17 @@
 	
 	private function mouseDownHandler(evt:MouseEvent):void
 	{
-		btLine.visible = false;
+	//	btLine.visible = false;
 		
 			pnFrom.x = evt.currentTarget.x;
 			pnFrom.y =evt.currentTarget.y;
-			
+		/*	
 			temMenu.position = evt.currentTarget;
 		if(!blDrawLine)
 		{
-		/*---выделяем и перетаскиваем обьект---*/	
-			curLine.mark = false; // снимаем выдиление с текущей линии
-			btLine.visible = false; // прячем кнопку 
+		/*---выделяем и перетаскиваем обьект---
+		//	curLine.mark = false; // снимаем выдиление с текущей линии
+		//	btLine.visible = false; // прячем кнопку 
 			
 			var rect:Rectangle = new Rectangle(this.x, this.y, width, height);
 			
@@ -368,6 +346,8 @@
 			addChild(canRectangle);
 			
 		}
+		*/
+		
 		
 		// проводим линию
 		if(blDrawLine){
@@ -404,10 +384,24 @@
 		}
 
 		// выделяем необходимый елемент дерева
+		evt.currentTarget.startDrag();
+		evt.currentTarget.addEventListener(MouseEvent.MOUSE_UP, treeElementMousUpHandler);
+		addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		
 		curTree = evt.currentTarget;
 		publicData.topLevelObjectId = curTree.ID;
 	}
+	private function treeElementMousUpHandler(msEvt:MouseEvent):void
+	{
+		msEvt.currentTarget.stopDrag();
+		msEvt.currentTarget.removeEventListener(MouseEvent.MOUSE_UP, treeElementMousUpHandler);
+		removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+	}
 	
+	private function mouseMoveHandler(msEvt:MouseEvent):void
+	{
+		redrawLines(publicData.topLevelObjectId);
+	}
 	/**
 	*
 	*		удаляем обьект и все его связи
@@ -534,8 +528,11 @@
 			massTreeElements[obID].x = 0;
 			massTreeElements[obID].y = 0;	
 			
-			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , mouseHandler);	
+			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , treeElementLinesReDrawHandler);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			
 			addChild(massTreeElements[obID]);
 		}
 	
@@ -551,7 +548,7 @@
 	
 	private function dataManagerListenner(soapEvt:DataManagerEvent):void
 	{
-		trace('rez: \n' + soapEvt.result)
+		//trace('rez: \n' + soapEvt.result)
 	}
 	
 	private function comBoxClose(evt:Object):void
@@ -588,4 +585,6 @@
             
 <mx:Button id="btAddTreeElement" label="add element" right="23" top="311"   click="soapAddTreeElement()"/>
 	<ns1:ColorMenu id="colorMenu" right="33" top="26"/>
+	
+	
 </mx:Canvas>

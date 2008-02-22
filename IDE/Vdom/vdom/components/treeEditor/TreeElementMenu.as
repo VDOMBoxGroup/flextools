@@ -115,7 +115,7 @@ package vdom.components.treeEditor
 			this.y = objPosit.y-25;
 			
 			
-			
+		/*	
 			canRect.graphics.clear();
 			canRect.graphics.lineStyle(3, 0xdd1000, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 			graphics.beginFill(0x555555,  0);
@@ -123,6 +123,7 @@ package vdom.components.treeEditor
 		
 			canRect.graphics.drawRect(-1, 23, objPosit.width+2, objPosit.height+2);
 			canMenu.alpha = .9;
+			*/
 		}
 		
 		

@@ -89,7 +89,7 @@ package vdom.components.treeEditor
 				}	
 			}
 			
-			trace(' _XML to server: ' + outXML.toString());
+		//	trace(' _XML to server: ' + outXML.toString());
 			return outXML;
 	}
 		
