@@ -6,7 +6,6 @@ package PowerPack.com.gen
 		{
 			//TODO: implement function
 			super(message, id);
-		}
-		
+		}		
 	}
 }

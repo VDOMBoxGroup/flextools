@@ -50,20 +50,26 @@ package PowerPack.com
         	category = (this.source as GraphNode).category;
        		var pattern:RegExp;
         	
+        	var parseResult:Object;
+        	
         	if (category == GraphNodeCategory.NORMAL)
         	{
-				if(NodeParser.NormalNodeParse(str).result==false)
+        		parseResult = NodeParser.NormalNodeParse(str);
+        		
+				if(parseResult.result==false)
             	{
                 	results.push(new ValidationResult(true, null, "invalidVarName", 
-                    	"Not valid variable name."));
+                    	(parseResult.resultString?parseResult.resultString:"Not valid variable name.")));
             	}       
         	}
         	else if (category == GraphNodeCategory.SUBGRAPH)
         	{
-	        	if(NodeParser.SubgraphNodeParse(str).result==false)
+        		parseResult = NodeParser.SubgraphNodeParse(str);
+
+	        	if(parseResult.result==false)
             	{
                 	results.push(new ValidationResult(true, null, "invalidSubgraph", 
-                    	"Not valid graph name."));
+                    	(parseResult.resultString?parseResult.resultString:"Not valid graph name.")));
             	}
          	}
         	else if (category == GraphNodeCategory.COMMAND)
@@ -94,7 +100,7 @@ package PowerPack.com
 	    		if(nodeDef.result==false)
 	    		{
 	    			results.push(new ValidationResult(true, null, "invalidCommand", 
-                    	"Not valid command."));
+                    	(nodeDef.resultString?nodeDef.resultString:"Not valid command.")));
        			}	    		
         		node.toolTip += node.text;	    		
         	}

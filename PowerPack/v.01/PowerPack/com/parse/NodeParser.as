@@ -7,6 +7,11 @@ package PowerPack.com.parse
 
 	public class NodeParser
 	{		
+		public static const MSG_NN_SYNTAX_ERR:String = "Normal node syntax error";
+		public static const MSG_CN_SYNTAX_ERR:String = "Command node syntax error";
+		public static const MSG_CN_UNKNOWN_TYPE:String = "Unrecognized command node type";
+		public static const MSG_SN_SYNTAX_ERR:String = "Subgraph node syntax error";
+		
 		public static const CT_OPERATION:int = 1;
 		public static const CT_TEST:int = 2;
 		public static const CT_FUNCTION:int = 3;		
@@ -16,7 +21,7 @@ package PowerPack.com.parse
 		 * @param _nodeText - input string
 		 * @param _context - instance of dynamic class
 		 * @return 	result: Boolean - valid or not
-		 * 			resultString: String - parsed string
+		 * 			resultString: String - parsed string or error msg
 		 * 
 		 */
 		public static function NormalNodeParse(	nodeText:String,
@@ -24,10 +29,7 @@ package PowerPack.com.parse
 		{
 			var pattern:RegExp;
 			var str:String = nodeText.concat();
-			var retVal:Object = new Object();
-			
-			retVal.result = true;
-			retVal.resultString = null;
+			var retVal:Object = {result:false, resultString:null};
 
       		var lexem:Array = Parser.getTextLexemArray(str);
       		lexem = Parser.convertLexemArray(lexem);
@@ -35,19 +37,26 @@ package PowerPack.com.parse
         	for(var i:int=0; i<lexem.length; i++)
         	{
         		if(lexem[i][0]=="u")
+        		{
 					retVal.result = false;
+					retVal.resultString = MSG_NN_SYNTAX_ERR;					
+					return retVal;
+        		}
         	}
 			
 			// context - instance of dynamic class that contains global variables
-			if(context && retVal.result)
+			if(context && !retVal.resultString)
 			{
-				lexem = Parser.processConvertedLexemArray(lexem, context);
+				var lexemObj:Object = Parser.processConvertedLexemArray(lexem, context);
+				retVal.result = lexemObj.result;
+				retVal.resultString = lexemObj.resultString;				
+				lexem = lexemObj.resultArray;
 				
-				if(lexem==null)
+				if(!retVal.result)
 				{
-					retVal.result = false;
+					return retVal;
 				}
-				else
+				else				
 				{
 					var buffer:String = "";
 					
@@ -59,10 +68,13 @@ package PowerPack.com.parse
 						buffer += lexem[i][1];
 		        	}
 		        	
+		        	retVal.result = true;
 					retVal.resultString = buffer;
+					return retVal;
 				}
 			}
 			
+			retVal.result = true;
            	return retVal;
 		}
 		
@@ -77,15 +89,16 @@ package PowerPack.com.parse
 		{
 			var pattern:RegExp;
 			var str:String = nodeText.concat();
-			var retVal:Object = new Object();
-			
-			retVal.result = false;
-			retVal.resultString = null;			
+			var retVal:Object = {result:false, resultString:null};
 			
         	pattern = /[^a-z0-9_]/gi;
 			
 			if(pattern.test(str))
+			{
+				retVal.result = false;
+				retVal.resultString = MSG_SN_SYNTAX_ERR;
             	return retVal;
+   			}
 			
 			retVal.result = true;
 			retVal.resultString = str;
@@ -100,6 +113,7 @@ package PowerPack.com.parse
 		 * @param varPrefix - variable prefix for left-part variables
 		 * @param context - instance of dynamic class
 		 * @return 	result: Boolean - valid or not
+		 * 			resultString: String - error code
 		 * 			type: String - command type (operation, test or function)
 		 * 			program: String - executable as3 script
 		 * 
@@ -117,9 +131,9 @@ package PowerPack.com.parse
 			var pattern:RegExp;
 			var str:String = nodeText.concat();
 			var retVal:Object = new Object();
-			var func:String;
 			
 			retVal.result = false;
+			retVal.resultString = null;
 			retVal.type = null;
 			retVal.program = null;
 			
@@ -162,7 +176,7 @@ package PowerPack.com.parse
 			var prevLen:int;
 			
 			// parse test
-			if(retVal.result==false)
+			if(!retVal.type)
 			{
 				obj = Parser.isValidTest(strSentence);
 				strSentence = obj.resultString;			
@@ -177,119 +191,50 @@ package PowerPack.com.parse
 			}
 			
 			// parse function
-			if(retVal.result==false && strSentence.search(/\[.+\]/)>=0)
+			if(!retVal.type)
 			{
-				pattern = /^(v=){0,1}\[n[nscvif]{0,}\]$/;
+				obj = Parser.isValidFunction(strSentence);
+				strSentence = obj.resultString;			
 				
-				if(pattern.test(strSentence))
+				if(obj.result)
 				{
 					bFunctionCommand = true;
 					retVal.type = CT_FUNCTION;
-				}
+				}				
 			}  		     
-	
+			
 			if(!fValidate && context)
 			{
-    			lexem = Parser.processConvertedLexemArray(lexem, context);
+				// process variable definition advanced technique
+				var lexemObj:Object = Parser.processConvertedLexemArray(lexem, context);
+				retVal.result = lexemObj.result;
+				retVal.resultString = lexemObj.resultString;				
+    			lexem = lexemObj.resultArray;
+				
+				// add variable prefix for left-part vars
+				for(i=0;i<lexem.length;i++)
+				{
+					if(lexem[i][0]=='=' && lexem[i-1][0]=='v')
+						lexem[i-1][1] = varPrefix + lexem[i-1][1];							
+				}
    			} 			
     
     		if(bFunctionCommand && lexem)
-    		{				
-    			
-				// search for function name index in lexem array
-				for(i=0;i<lexem.length;i++)
-				{
-					if(lexem[i][0]=='n')
-						break;
-				}						
-				// search for variable index in lexem array
-				for(var j:int=0;j<lexem.length;j++)
-				{
-					if(lexem[j][0]=='v')
-						break;
-				}
-				
-				var bFunc:Boolean = false;
-				
-				// sub
-				pattern = /^(v=){0,1}\[nn\]$/;
-				if(	pattern.test(strSentence) && 
-					lexem[i][1]=="sub" )
-				{
-					bFunc = true;
-					func = TemplateStruct.CNTXT_INSTANCE + "." + lexem[i][1] + "(" + 
-						Utils.doubleQuotes(lexem[i+1][1]) + ")";
-				}	
-				// subprefix
-				pattern = /^(v=){0,1}\[nnn\]$/;
-				if(	pattern.test(strSentence) && 
-					lexem[i][1]=="subprefix" )
-				{
-					bFunc = true;
-					func = TemplateStruct.CNTXT_INSTANCE + "." + lexem[i][1] + "(" + 
-						Utils.doubleQuotes(lexem[i+1][1]) + "," + 
-						Utils.doubleQuotes(lexem[i+2][1]) + ")";
-				}	
-				// question
-				pattern = /^(v=){0,1}\[ncc\]$/;
-				if(	pattern.test(strSentence) && 
-					lexem[i][1]=="question" )
-				{
-					bFunc = true;
-					func = TemplateStruct.CNTXT_INSTANCE + "." + lexem[i][1] + "(" + 
-						lexem[i+1][1] + "," + 
-						lexem[i+2][1] + ")";
-				}
-				// convert
-				pattern = /^(v=){0,1}\[nc[scvi]\]$/;
-				if(	pattern.test(strSentence) && 
-					lexem[i][1]=="convert" )
-				{
-					bFunc = true;
-					func = TemplateStruct.CNTXT_INSTANCE + "." + lexem[i][1] + "(" + 
-						lexem[i+1][1] + "," + 
-						lexem[i+2][1] + ")";
-				}		
-				// writeTo
-				pattern = /^(v=){0,1}\[n[cv]\]$/;
-				if(	pattern.test(strSentence) && 
-					lexem[i][1]=="writeTo" )
-				{
-					bFunc = true;
-					func = TemplateStruct.CNTXT_INSTANCE + "." + lexem[i][1] + "(" + 
-						lexem[i+1][1] + ")";
-				}			
-				// writeVarTo
-				pattern = /^(v=){0,1}\[n[cv][scvif]\]$/;
-				if(	pattern.test(strSentence) && 
-					lexem[i][1]=="writeVarTo" )
-				{
-					bFunc = true;
-					func = TemplateStruct.CNTXT_INSTANCE + "." + lexem[i][1] + "(" + 
-						lexem[i+1][1] + "," + 
-						lexem[i+2][1] + ")";
-				}					
-				// GUID
-				pattern = /^(v=){0,1}\[n\]$/;
-				if(	pattern.test(strSentence) && 
-					lexem[i][1]=="GUID" )
-				{
-					bFunc = true;
-					func = TemplateStruct.CNTXT_INSTANCE + "." + lexem[i][1] + "()";
-				}
-				
-				if(bFunc)
-				{					
-					retVal.result = true;
-					retVal.func = lexem[i][1];					
+    		{			
+				var func:Object = Parser.isFunctionExists(lexem, fValidate);
+				retVal.result = func.result;
+				retVal.variable = func.resultVar;
+				retVal.func = func.resultFunc;
 
-					if(/^v=/.test(strSentence))
-					{
-						retVal.variable = varPrefix + lexem[j][1];
-						func = retVal.variable + "=" + func;
-						retVal.print = false;
-					}
-				}		
+				if(func.resultVar)
+				{					
+					retVal.print = false;
+				}	
+
+				if(!retVal.result)
+				{
+					retVal.resultString = func.resultString;
+				}	
     		}
     		
    			// generate programm code
@@ -301,16 +246,10 @@ package PowerPack.com.parse
     			{
 					for(i=0;i<lexem.length;i++)
 					{
-						if(lexem[i][0]=='=' && lexem[i-1][0]=='v')
-							lexem[i-1][1] = varPrefix + lexem[i-1][1];							
-					}
-					
-					for(i=0;i<lexem.length;i++)
-					{
 						program += lexem[i][1];
 					}
 					retVal.program = program;
-				}				
+				}
 				else if(bTestCommand) // test
 				{					
 					for(i=0;i<lexem.length;i++)
@@ -318,16 +257,17 @@ package PowerPack.com.parse
 						program += lexem[i][1];
 					}
 					retVal.program = program;
-				}	
+				}
 				else if(bFunctionCommand) // function
 				{
-					program = func;
-					retVal.program = program;
-				}	
-    		}		
-			
+					retVal.program = func.resultString;
+				}
+    		}
+    		
+    		if(!retVal.type)
+				retVal.resultString = MSG_CN_SYNTAX_ERR;
+				    		
 			return retVal;
 		}
-
 	}
 }

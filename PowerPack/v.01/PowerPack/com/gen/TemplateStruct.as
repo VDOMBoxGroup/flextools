@@ -1,6 +1,7 @@
 package PowerPack.com.gen
 {
 	import PowerPack.com.Utils;
+	import PowerPack.com.dialog.Question;
 	import PowerPack.com.graph.GraphNodeCategory;
 	import PowerPack.com.graph.GraphNodeType;
 	import PowerPack.com.mdm.filesystem.FileToBase64;
@@ -21,7 +22,6 @@ package PowerPack.com.gen
 	import mx.utils.StringUtil;
 	import mx.utils.UIDUtil;
 	
-	[Event(name="generationComplete", type="flash.events.Event")]
 	public class TemplateStruct extends EventDispatcher
 	{
 		public static const CNTXT_INSTANCE:String = "_template_struct_" + UIDUtil.createUID().replace(/-/g, "_");
@@ -220,7 +220,8 @@ package PowerPack.com.gen
 							}
 							else
 							{
-								throw new Error("Undefined command or parse error: " + GraphContext(contextStack[contextStack.length-1]).curNode.text);
+								throw new Error("Undefined command or parse error: " + GraphContext(contextStack[contextStack.length-1]).curNode.text +
+									"\n\nDetails: " + parsedNode.resultString);
 							}					
 						}
 					
@@ -337,8 +338,7 @@ package PowerPack.com.gen
 		
 		/**
 		 * subprefix function section
-		 */	
-		 
+		 */		 
 		public function subprefix(graph:String, prefix:String):String
 		{
 			var subgraph:GraphStruct;
@@ -374,8 +374,7 @@ package PowerPack.com.gen
 				 		
 		/**
 		 * question function section
-		 */		
-		 
+		 */		 
 		public function question(question:String, answers:String):String
 		{
 			var array:Array = null;
@@ -385,7 +384,7 @@ package PowerPack.com.gen
 			if(answers!="*")
 				array = answers.split(/\s*,\s*/);
 									
-			Dialog.show(question, "Question", array, null, questionCloseHandler);
+			Question.show(question, "Question", array, null, questionCloseHandler);
 					
 			return null;
 		}
@@ -405,8 +404,7 @@ package PowerPack.com.gen
 		
 		/**
 		 * convert function section
-		 */
-		 
+		 */		 
 		public function convert(type:String, value:Object):void
 		{
 			var result:String;
@@ -456,10 +454,10 @@ package PowerPack.com.gen
 
 			Generate();
 		}		
+		
 		/**
 		 * writeTo function section
-		 */
-		
+		 */		
 		public function writeTo(filename:String):void
 		{			
 			var data:String = GraphContext(contextStack[0]).buffer;
@@ -469,19 +467,17 @@ package PowerPack.com.gen
 		 		
 		/**
 		 * writeVarTo function section
-		 */
-		
+		 */		
 		public function writeVarTo(filename:String, value:Object):void
 		{			
 			var data:String = value.toString();
 			mdm.FileSystem.saveFile(filename, data);
 			Generate();
-		}	
+		}
 		
 		/**
 		 * GUID function section
-		 */
-		 
+		 */		 
 		public function GUID():void
 		{
 			var guid:String = UIDUtil.createUID();

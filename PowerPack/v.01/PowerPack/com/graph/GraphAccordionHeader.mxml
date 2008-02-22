@@ -97,12 +97,14 @@
 		    {
 	            if (	event.dragSource.hasFormat("items") && 
 			            event.dragSource.dataForFormat("items") &&
-	            		(event.dragSource.dataForFormat("items") as Array).length>0 &&
-	            		(event.dragSource.dataForFormat("items") as Array)[0] is GraphCanvas &&
-	            		event.target.data.lstGraphs != event.dragInitiator)
+	            		(event.dragSource.dataForFormat("items") as Array).length>0)
 	            {
-	                DragManager.acceptDragDrop(IUIComponent(event.target));
-	                DragManager.showFeedback(DragManager.MOVE);
+	            	if(	(event.dragSource.dataForFormat("items") as Array)[0] is GraphCanvas &&
+	            		event.target.data.lstGraphs != event.dragInitiator)
+	            	{
+	                	DragManager.acceptDragDrop(IUIComponent(event.target));
+		                DragManager.showFeedback(DragManager.MOVE);
+		            }
 	            }	    	
 		    }
 		    
@@ -111,20 +113,23 @@
 		    	var items:Array = 
 	                    event.dragSource.dataForFormat("items") as Array;
 		    	
-		    	var graph:GraphCanvas = items[0] as GraphCanvas;
-		    	var source:GraphAccordionChild = GraphAccordionChild(event.dragInitiator.parent);
-		    	var destination:GraphAccordionChild = GraphAccordionChild(event.target.data);
-				
-				source.graphs.removeItemAt(ArrayUtil.getItemIndex(graph, source.graphs.source));
-				graph.category = destination.label;
-				
-				destination.graphs.addItem(graph);	
-				
-				GraphPanel(destination.parent.parent.parent.parent).curAccordionChild = destination;
-				
-				GraphPanel(destination.parent.parent.parent.parent).vsViewStack.selectedChild = graph;				
-				Accordion(destination.parent).selectedChild = destination;
-				destination.lstGraphs.selectedItem = graph;		
+		    	if(items[0] is GraphCanvas)
+		    	{
+		    		var graph:GraphCanvas = items[0] as GraphCanvas;
+		    		var source:GraphAccordionChild = GraphAccordionChild(event.dragInitiator.parent);
+		    		var destination:GraphAccordionChild = GraphAccordionChild(event.target.data);
+					
+					source.graphs.removeItemAt(ArrayUtil.getItemIndex(graph, source.graphs.source));
+					graph.category = destination.label;
+					
+					destination.graphs.addItem(graph);
+					
+					GraphPanel(destination.parent.parent.parent.parent).curAccordionChild = destination;
+					
+					GraphPanel(destination.parent.parent.parent.parent).vsViewStack.selectedChild = graph;				
+					Accordion(destination.parent).selectedChild = destination;
+					destination.lstGraphs.selectedItem = graph;		
+		    	}
 		    }
 	    			
 		]]>

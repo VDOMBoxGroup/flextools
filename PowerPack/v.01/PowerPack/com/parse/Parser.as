@@ -10,9 +10,16 @@ package PowerPack.com.parse
 	
 	public class Parser
 	{		
+		public static const MSG_VARDEF_SYNTAX_ERROR:String = "Variable definition syntax error";		
+		public static const MSG_LISTDEF_SYNTAX_ERROR:String = "List definition syntax error";		
+		public static const MSG_UNDEFINED_VAR:String = "Variable undefined";		
+		public static const MSG_UNKNOWN_FUNC:String = "Access of undefined function in command node";
+		public static const MSG_INC_ARGS:String = "Incorrect number of function arguments in command node";
+		public static const MSG_FUNC_SYNTAX_ERR:String = "Command node syntax error";
+		
 		public static function getLexemArray(code:String):Array
 		{
-      		// [lexem type, substring]
+      		// [lexem type, substring, start_pos_in_source_text]
        		var lexem:Array = new Array();
        		    		
     		/**
@@ -58,8 +65,19 @@ package PowerPack.com.parse
     						i++;
     						if(i>=code.length)
     							break;
-    					} while(	code.charAt(i)!='"' || 
-    								(code.charAt(i-1)=='\\' && code.charAt(i)=='"') );        						
+    						
+    						if(code.charAt(i)=='"')
+    						{
+    							var j:int = i-1;
+								while(j>=0 && code.charAt(j)=="\\") {	    						
+									j--;
+								}
+				
+								if((i-j)%2==1) {
+	    							break;
+	    						}
+    						}    						
+    					} while( true );        						
 						
     					if(i<code.length)
     						type = 's'; // string constant
@@ -70,8 +88,19 @@ package PowerPack.com.parse
     						i++;
     						if(i>=code.length)
     							break;
-    					} while(	code.charAt(i)!="'" || 
-    								(code.charAt(i-1)=='\\' && code.charAt(i)=="'") );        						
+    							
+   							if(code.charAt(i)=="'")
+    						{
+    							j = i-1;
+								while(j>=0 && code.charAt(j)=="\\") {	    						
+									j--;
+								}
+				
+								if((i-j)%2==1) {
+	    							break;
+	    						}
+    						} 			
+    					} while( true );        						
 						
     					if(i<code.length)
     						type = 'c'; // string constant
@@ -223,7 +252,7 @@ package PowerPack.com.parse
 				
 				if(push)
 				{
- 					lexem.push([type, code.substring(fix, i+1)]);
+ 					lexem.push([type, code.substring(fix, i+1), fix]);
  				} 					
     			i++;        			        				
     		} 
@@ -232,7 +261,7 @@ package PowerPack.com.parse
 		
 		public static function getTextLexemArray(text:String):Array
 		{
-      		// [lexem type, substring]
+      		// [lexem type, substring, start_pos]
        		var lexem:Array = new Array();
        		    		
     		/**
@@ -352,8 +381,19 @@ package PowerPack.com.parse
 	    						i++;
 	    						if(i>=text.length)
 	    							break;
-	    					} while(	text.charAt(i)!='"' || 
-	    								(text.charAt(i-1)=='\\' && text.charAt(i)=='"') );        						
+
+	   							if(text.charAt(i)=='"')
+	    						{
+	    							j = i-1;
+									while(j>=0 && text.charAt(j)=="\\") {	    						
+										j--;
+									}
+					
+									if((i-j)%2==1) {
+		    							break;
+		    						}
+	    						}	    							
+	    					} while( true );        						
 							
 	    					if(i<text.length)
 	    						type = 's'; // string constant
@@ -364,8 +404,19 @@ package PowerPack.com.parse
 	    						i++;
 	    						if(i>=text.length)
 	    							break;
-	    					} while(	text.charAt(i)!="'" || 
-	    								(text.charAt(i-1)=='\\' && text.charAt(i)=="'") );        						
+
+	   							if(text.charAt(i)=="'")
+	    						{
+	    							j = i-1;
+									while(j>=0 && text.charAt(j)=="\\") {	    						
+										j--;
+									}
+					
+									if((i-j)%2==1) {
+		    							break;
+		    						}
+	    						}	    							
+	    					} while( true );        						
 							
 	    					if(i<text.length)
 	    						type = 'c'; // string constant
@@ -439,7 +490,7 @@ package PowerPack.com.parse
 				
 				if(push)
 				{
- 					lexem.push([type, text.substring(fix, i+1)]);
+ 					lexem.push([type, text.substring(fix, i+1), fix]);
  				} 					
     			i++;        			        				
     		} 
@@ -464,12 +515,24 @@ package PowerPack.com.parse
 					case "v": // convert variable names to as3 compatible names
 						converted[i][1] = String(converted[i][1]).substring(1);
 						break;
+					case "n": // convert names to string
+						//converted[i][1] = Utils.doubleQuotes(converted[i][1])
+						break;
 				}
 			}
 			return converted;
 		}
 	
-		public static function processConvertedLexemArray(lexems:Array, context:Dynamic):Array
+		/**
+		 * 
+		 * @param lexems
+		 * @param context
+		 * @return 	result: Boolean - valid or not
+		 * 			resultString: String - error code
+		 * 			resultArray: Array - processed lexem array
+		 * 
+		 */
+		public static function processConvertedLexemArray(lexems:Array, context:Dynamic):Object
 		{
 			var arr:Array = lexems.concat();
 			
@@ -479,51 +542,62 @@ package PowerPack.com.parse
 			{
 				if(arr[index][0]=="{")
 				{
-					var variable:String = recursiveProcessLexemsArray(arr, context, index);
+					var variable:Object = recursiveProcessLexemsArray(arr, context, index);
 					
+					if(variable.result == false)
+						return {result:variable.result, resultString:variable.resultString, resultArray:null};
+						
 					arr[index][0] = "v";
-					arr[index][1] = variable;
-					
-					if(arr[index][1]==null)
-						return null;
+					arr[index][1] = variable.resultString;
 				}
 				
 				index++;
 			}		
 			
-			return arr;
+			return {result:true, resultString:null, resultArray:arr};
 		}
 		
-		private static function recursiveProcessLexemsArray(lexems:Array, context:Dynamic, index:int):String
+		/**
+		 * 
+		 * @param lexems
+		 * @param context
+		 * @param index
+		 * @return 	result: Boolean - valid or not
+		 * 			resultString: String - variable name or error code
+		 * 
+		 */
+		private static function recursiveProcessLexemsArray(lexems:Array, context:Dynamic, index:int):Object
 		{
-			var arrCol:ArrayCollection = new ArrayCollection(lexems);
-			var result:String = null;
+			var arrColLexems:ArrayCollection = new ArrayCollection(lexems);
+			var retVal:Object = {result:false, resultString:null};
+
 			var code:String = "";
-			var command:String;
+			var result:Object;
 			var strLexem:String = "";
 				
-			arrCol.removeItemAt(index);
-			while(index<arrCol.length && lexems[index][0]!="}")
+			arrColLexems.removeItemAt(index);
+			while(index<arrColLexems.length && lexems[index][0]!="}")
 			{
-				command = null;
+				result = null;
 				
+				// search for allowable lexem
 				if(String(lexems[index][0]).search(/[scvif90124{]/)<0)
-					return null;
+					return {result:false, resultString:MSG_VARDEF_SYNTAX_ERROR};
 				
 				if(String(lexems[index][0]).search(/v/)>=0)
 				{
 					if(context[lexems[index][1]]==null)
-						return null;	
+						return {result:false, resultString:MSG_UNDEFINED_VAR + ": " + lexems[index][1]};
 				}				
 				
 				if(lexems[index][0]=="{")
 				{
-					command = recursiveProcessLexemsArray(lexems, context, index);
+					result = recursiveProcessLexemsArray(lexems, context, index);
 					
-					if(command == null)
-						return null;
+					if(result.result == false)
+						return result;
 					
-					code += command;
+					code += result.resultString;
 					strLexem += "V";
 				}
 				else
@@ -532,58 +606,185 @@ package PowerPack.com.parse
 					strLexem += lexems[index][0]
 				}
 				
-				arrCol.removeItemAt(index);
+				arrColLexems.removeItemAt(index);
 			}
 			
-			if(index>=arrCol.length)
-				return null;
+			// '}' not found 
+			if(index>=arrColLexems.length)
+				return {result:false, resultString:MSG_VARDEF_SYNTAX_ERROR};
 				
 			if(!isValidOperation(strLexem).result)
-				return null;
+				return {result:false, resultString:MSG_VARDEF_SYNTAX_ERROR};
 			
-			result = D.eval(code, null, context).toString();
+			retVal.result = true;
+			retVal.resultString = D.eval(code, null, context).toString();
 			
-			return result;
+			return retVal;
 		}
-	
-		public static function isValidOperation(lexemString:String):Object
+		
+		public static function processListsConvertedLexemArray(lexems:Array, context:Dynamic):Object
 		{
-			var strSentence:String = lexemString.concat();  
-			var pattern:RegExp;     			
+			var arr:Array = lexems.concat();
+			
+			var index:int = 0;
+			
+			while(index<arr.length)
+			{
+				if(arr[index][0]=="[")
+				{
+					var variable:Object = recursiveProcessListsLexemsArray(arr, context, index);
+					
+					if(variable.result == false)
+						return {result:variable.result, resultString:variable.resultString, resultArray:null};
+						
+					arr[index][0] = "A";
+					arr[index][1] = variable.resultString;
+				}
+				
+				index++;
+			}		
+			
+			return {result:true, resultString:null, resultArray:arr};
+		}
+		
+		private static function recursiveProcessListsLexemsArray(lexems:Array, context:Dynamic, index:int):Object
+		{
+			var arrColLexems:ArrayCollection = new ArrayCollection(lexems);
+			var retVal:Object = {result:false, resultString:null};
 
+			var code:String = "";
+			var result:Object;
+			var strLexem:String = "";
+				
+			arrColLexems.removeItemAt(index);
+			while(index<arrColLexems.length && lexems[index][0]!="]")
+			{
+				result = null;
+				
+				// search for allowable lexem
+				if(String(lexems[index][0]).search(/[nvscifA90124\]]/)<0)
+					return {result:false, resultString:MSG_LISTDEF_SYNTAX_ERROR};
+				
+				if(String(lexems[index][0]).search(/v/)>=0)
+				{
+					if(context[lexems[index][1]]==null)
+						return {result:false, resultString:MSG_UNDEFINED_VAR + ": " + lexems[index][1]};
+				}				
+				
+				if(lexems[index][0]=="[")
+				{
+					result = recursiveProcessListsLexemsArray(lexems, context, index);
+					
+					if(result.result == false)
+						return result;
+					
+					code += "," + result.resultString;
+					strLexem += "A";
+				}
+				else
+				{
+					code += "," + lexems[index][1];
+					strLexem += lexems[index][0]
+				}
+				
+				arrColLexems.removeItemAt(index);
+			}
+			
+			// ']' not found 
+			if(index>=arrColLexems.length)
+				return {result:false, resultString:MSG_LISTDEF_SYNTAX_ERROR};
+				
+			if(!isValidList(strLexem).result)
+				return {result:false, resultString:MSG_LISTDEF_SYNTAX_ERROR};
+			
+			code = "[" + code.substr(1) + "]";
+			
+			retVal.result = true;
+			retVal.resultString = code;
+			
+			return retVal;
+		}
+					
+		public static function rollLexemString(lexemString:String, patterns:Array):String
+		{
+			var len:int;
 			var prevLen:int;
+			var index:int = 0;
+			var strSentence:String = lexemString.concat();
 			
 			// parse operations
 			do {
-				prevLen = strSentence.length;
+				len = strSentence.length;
+				index = 0;
 				
-				// remove signs
-				pattern = /(^|3|9|=)[24](v|i|f)/g; // '-1...', '...=-2...', '...(-3...'						
-				strSentence = strSentence.replace(pattern, "$1$2");
-
-				// split into variable
-				pattern = /[Vvifo]1[Vvifo]/g; // (*, /, %)			
-				strSentence = strSentence.replace(pattern, "V");
-				pattern = /[Vvifo]2[Vvifo]/g; // '-'			
-				strSentence = strSentence.replace(pattern, "V");  
-				pattern = /[Vvifsco]4[Vvifsco]/g; // '+'				
-				strSentence = strSentence.replace(pattern, "V");
+				do {
+					prevLen = strSentence.length;
+					
+					strSentence = strSentence.replace(patterns[index][0], patterns[index][1]);
+					
+					if(prevLen == strSentence.length)
+						index++;				
+				} while (index<patterns.length && strSentence.length);
 				
-				pattern = /9(V|v|i|f|s|c|o)0/g;						
-				strSentence = strSentence.replace(pattern, "$1");	
-
-				pattern = /\{[Vvsc]\}/g;						
-				strSentence = strSentence.replace(pattern, "v");													  
-
-			} while (prevLen != strSentence.length && strSentence.length);
+			} while	(len!=strSentence.length && strSentence.length)
 			
-			pattern = /^[Vvifsco]$/;
+			return strSentence;
+		}
+		
+		public static function isValidOperation(lexemString:String):Object
+		{
+			var strSentence:String = lexemString.concat();  
+			var patterns:Array = 
+				[
+					[/(^|3|9|=)[24](v|i|f)/g, 	"$1$2"],	// remove signs '-1...', '...=-2...', '...(-3...'
+					[/[Vvifo]1[Vvifo]/g, 		"V"],		// (*, /, %)
+					[/[Vvifo]2[Vvifo]/g, 		"V"],		// '-'
+					[/[Vvifsco]4[Vvifsco]/g,	"V"],		// '+'
+					[/9(V|v|i|f|s|c|o)0/g, 		"$1"],
+					[/\{[Vvsc]\}/g, 			"v"]
+				]
+			;     			
 
-			if(pattern.test(strSentence))
+			// parse operations
+			strSentence = rollLexemString(strSentence, patterns);
+			
+			if(/^[Vvifsco]$/.test(strSentence))
 				return {result: true, resultString: strSentence};
 			
 			return {result: false, resultString: strSentence};
 		}
+		
+		public static function isValidList(lexemString:String):Object
+		{
+			var strSentence:String = isValidOperation(lexemString).resultString;  
+			var pattern:RegExp;
+
+			var patterns:Array = 
+				[
+					[/\[[nvscVA][nvscifVA]{0,}\]/g, "A"]
+				]
+			;
+		
+			strSentence = rollLexemString(strSentence, patterns);
+			
+			if(strSentence=="A")
+				return {result: true, resultString: strSentence};
+			
+			return {result: false, resultString: strSentence};						
+		}	
+		
+		public static function isValidFunction(lexemString:String):Object
+		{
+			var strSentence:String = isValidList(lexemString).resultString;  
+			var pattern:RegExp;     			
+		
+			pattern = /^(v=){0,1}A$/;
+
+			if(pattern.test(strSentence))
+				return {result: true, resultString: strSentence};	
+			
+			return {result: false, resultString: strSentence};						
+		}			
 		
 		public static function isValidCommand(lexemString:String):Object
 		{
@@ -593,42 +794,156 @@ package PowerPack.com.parse
 			pattern = /^v=[Vvifsco](;v=[Vvifsco]){0,}$/;
 
 			if(pattern.test(strSentence))
-				return {result: true, resultString: strSentence};	
+				return {result: true, resultString: strSentence};
 			
-			return {result: false, resultString: strSentence};						
-		}	
-		
+			return {result: false, resultString: strSentence};
+		}
+				
 		public static function isValidTest(lexemString:String):Object
 		{
 			var strSentence:String = isValidOperation(lexemString).resultString;
-			var pattern:RegExp;     			
-			var prevLen:int;
-		
+
+			var patterns:Array = 
+				[
+					[/[Vvifsco]3[Vvifsco]/g, 	"O"],	// operator
+					[/[OL]5[OL]/g, 				"L"],	// logical operator
+					[/9O0/g, 					"O"],	
+					[/9L0/g, 					"L"]
+				]
+			;     			
+
+			// parse operations
 			if(strSentence.search(/[35]/)>=0)
 			{
-				do {
-					prevLen = strSentence.length;
-
-					pattern = /[Vvifsco]3[Vvifsco]/g;						
-					strSentence = strSentence.replace(pattern, "O"); // operator							
-
-					pattern = /[OL]5[OL]/g;
-					strSentence = strSentence.replace(pattern, "L"); // logical operator							
-
-					pattern = /9O0/g;
-					strSentence = strSentence.replace(pattern, "O");							  
-
-					pattern = /9L0/g;
-					strSentence = strSentence.replace(pattern, "L");							  
-					
-				} while (prevLen != strSentence.length && strSentence.length);
+				strSentence = rollLexemString(strSentence, patterns);
 			}
 
 			if(strSentence=="O" || strSentence=="L")
 				return {result: true, resultString: strSentence};	
 			
 			return {result: false, resultString: strSentence};						
-		}			
+		}
+		
+		public static function isFunctionExists(lexems:Array, bValidate:Boolean=true):Object
+		{			
+			var pattern:RegExp;
+			var strSentence:String = "";    
+			var retVal:Object = {result:false, resultString:null, resultVar:null, resultFunc:null};   			
+			
+			for(var i:int=0; i<lexems.length; i++)
+				strSentence = strSentence + lexems[i][0];
+					
+			strSentence = isValidOperation(strSentence).resultString;				
+
+			// search for function name index in lexem array
+			for(var nIndex:int=0; nIndex<lexems.length; nIndex++)
+			{
+				if(lexems[nIndex][0]=='[')
+				{	
+					nIndex++;
+					break;
+				}
+			}				
+					
+			// search for variable index in lexem array
+			for(var vIndex:int=0; vIndex<lexems.length; vIndex++)
+			{
+				if(lexems[vIndex][0]=='=')
+				{
+					vIndex--;
+					break;
+				}
+			}
+			
+			var patterns:Array = 
+				[					
+					// sub
+					[/^(v=){0,1}\[nn\]$/ , "sub", 1],
+					// subprefix
+					[/^(v=){0,1}\[nnn\]$/, "subprefix", 2],
+					// question
+					[/^(v=){0,1}\[n[scvV][scvV]\]$/, "question", 2],
+					// convert
+					[/^(v=){0,1}\[n[scvV][scviV]\]$/, "convert", 2],
+					// writeTo
+					[/^(v=){0,1}\[n[scvV]\]$/, "writeTo", 1],
+					// writeVarTo
+					[/^(v=){0,1}\[n[scvV][scvifV]\]$/, "writeVarTo", 2],
+					// GUID
+					[/^(v=){0,1}\[n\]$/, "GUID", 0],
+					
+					/**
+					* 1st add-on
+					*/
+					
+					//*********************
+					// List manipulation
+					//*********************
+					
+					// Evaluate
+					[/^(v=){0,1}\[n[scvV]\]$/, "Evaluate", 1],
+					// Get
+					[/^(v=){0,1}\[n[viV][scvV]\]$/, "Get", 2],
+					// Put
+					[/^(v=){0,1}\[n[viV][nscvifV][scvV]\]$/, "Put", 3],
+					// Update
+					[/^(v=){0,1}\[n[viV][nscvifV][scvV]\]$/, "Update", 3],
+					// Length
+					[/^(v=){0,1}\[n[scvV]\]$/, "Length", 1]
+									
+				];
+			
+			for(var j:int=0; j<patterns.length; j++)
+			{
+				if(lexems[nIndex][1]==patterns[j][1])
+				{
+					retVal.resultFunc = lexems[nIndex][1];		
+					
+					if(strSentence.indexOf("]")-strSentence.indexOf("[")-2 != patterns[j][2])
+						retVal.resultString = MSG_INC_ARGS;						
+				
+					if(	RegExp(patterns[j][0]).test(strSentence) )
+					{
+						retVal.result = true;
+						
+						retVal.resultString = "";						
+						
+						if(!bValidate)
+						{
+							for(i=nIndex+1; i<lexems.length && lexems[i][0]!="]"; i++)
+								retVal.resultString += "," + (lexems[i][0]=='n'?Utils.doubleQuotes(lexems[i][1]):lexems[i][1]);
+							
+							retVal.resultString = TemplateStruct.CNTXT_INSTANCE + "." + lexems[nIndex][1] + "(" +
+								String(retVal.resultString).substr(1) + ")";
+						}						
+					}
+
+					break;
+				}
+			}
+			
+			if(retVal.result)
+			{
+				if(/^v=/.test(strSentence))
+				{
+					retVal.resultVar = lexems[vIndex][1];
 	
+					if(!bValidate)
+						retVal.resultString = retVal.resultVar + "=" + retVal.resultString;
+				}
+			}
+			else if(retVal.resultFunc && !retVal.resultString)
+			{
+				retVal.resultString = MSG_FUNC_SYNTAX_ERR;
+			}
+			else if(!retVal.resultString)
+			{
+				retVal.resultString = MSG_UNKNOWN_FUNC;
+			}
+			
+			return retVal;
+		}
+		
+			
 	}
 }

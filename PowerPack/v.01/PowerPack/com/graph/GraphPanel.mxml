@@ -63,7 +63,8 @@
 
 					graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, changeLstGraphsHandler);
 					graphAccordionChild.lstGraphs.addEventListener("doubleClick", btnRenameClickHandler);
-					graphAccordionChild.lstGraphs.addEventListener("completeEdit", completeEditLstGraphsHandler);					
+					graphAccordionChild.lstGraphs.addEventListener("completeEdit", completeEditLstGraphsHandler);	
+					graphAccordionChild.addEventListener("captionChanged", captionChangedHandler);				
 				}
 				
 				btnNew.addEventListener(MouseEvent.CLICK, btnNewClickHandler);	
@@ -80,7 +81,7 @@
 			public function populateGraphs(xml:XML):void
 			{	
 				if(!xml)
-					return;
+					return; 
 
 				clear();				
 				
@@ -113,6 +114,7 @@
 						graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, changeLstGraphsHandler);
 						graphAccordionChild.lstGraphs.addEventListener("doubleClick", btnRenameClickHandler);
 						graphAccordionChild.lstGraphs.addEventListener("completeEdit", completeEditLstGraphsHandler);
+						graphAccordionChild.addEventListener("captionChanged", captionChangedHandler);
 					
 					}
 
@@ -126,7 +128,7 @@
 				
 				// set initial graph in combobox
 				
-				initGraphs.source.sort();
+				//initGraphs.source.sort();
 				
 				cbInitGraph.selectedIndex=0;
 				for(i=0; i<initGraphs.length; i++)
@@ -152,7 +154,7 @@
 			
 			public function completeEditLstGraphsHandler(event:ListEvent):void
 			{        	
-				initGraphs.source.sort();
+				//initGraphs.source.sort();
 				vsViewStack.invalidateDisplayList();
 				cbInitGraph.invalidateDisplayList();       						
 			}
@@ -241,7 +243,7 @@
 				child.lstGraphs.editable = true; 
 				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
 				
-				initGraphs.source.sort();
+				//initGraphs.source.sort();
 			}
 				
 			public function btnRenameClickHandler(event:Object):void
@@ -310,8 +312,15 @@
 			private function btnHelpClickHandler(event:MouseEvent):void
 			{
 				// TODO
-			}			
-								
+			}	
+					
+			public function captionChangedHandler(event:Event):void
+			{
+				for each(var graph:GraphCanvas in GraphAccordionChild(event.target).graphs)
+				{
+					graph.category = event.target.label;
+				}
+			}								
 		]]>
 	</mx:Script>
 	
@@ -326,7 +335,7 @@
 				<mx:Button label="{langXML.navigatorpanel.graphs.btnhelp}" fontFamily="Arial" cornerRadius="0" labelPlacement="bottom" alpha="0.5" id="btnHelp" width="100%" paddingLeft="0" paddingRight="0" textAlign="center" fontSize="9" icon="@Embed('../../../resources/Button.png')" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="0"/>
 			</mx:ControlBar>
 			
-			<mx:Accordion id="graphsAccordion" headerRenderer="PowerPack.com.graph.GraphAccordionHeader" fontFamily="Verdana" borderStyle="solid" height="100%" width="100%" >		
+			<mx:Accordion id="graphsAccordion" headerRenderer="PowerPack.com.graph.GraphAccordionHeader" fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">		
 			</mx:Accordion>
 			
 		</mx:VBox>

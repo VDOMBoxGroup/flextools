@@ -9,7 +9,7 @@
         ]]>
     </mx:Script>
     
-	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="resources/Tree.png" width="32" height="32"/>
+	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="@Embed('../../../resources/tree.png')" width="32" height="32"/>
 	
 	<mx:Canvas width="100%">
 		<mx:TextInput id="txtThumb" text="{data.name}" textAlign="center" width="95%" visible="false" horizontalCenter="0" 

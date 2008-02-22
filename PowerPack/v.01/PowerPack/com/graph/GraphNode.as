@@ -496,8 +496,8 @@ package PowerPack.com.graph
 	        	customCM.addItem("delete", menuItemCaptions[1], deleteNodeHandler);
 	        	customCM.addItem("copy", menuItemCaptions[2], copyNodeHandler);
 	        	
-	        	customCM.addItem("initial_type", menuItemCaptions[3], setInitialTypeHandler, true, true, true, type==GraphNodeType.INITIAL, "type");
-	        	customCM.addItem("terminal_type", menuItemCaptions[4], setTerminalTypeHandler, false, true, true, type==GraphNodeType.TERMINAL, "type");
+	        	customCM.addItem("initial_type", menuItemCaptions[3], setInitialTypeHandler, true, true, true, type==GraphNodeType.INITIAL, "type", false);
+	        	customCM.addItem("terminal_type", menuItemCaptions[4], setTerminalTypeHandler, false, true, true, type==GraphNodeType.TERMINAL, "type", false);
 
 	        	customCM.addItem("normal_category", menuItemCaptions[5], setNormalCategoryHandler, true, true, true, category==GraphNodeCategory.NORMAL, "category");
 	        	customCM.addItem("subfraph_category", menuItemCaptions[6], setSubgraphCategoryHandler, false, true, true, category==GraphNodeCategory.SUBGRAPH, "category");
@@ -533,16 +533,31 @@ package PowerPack.com.graph
 	            		nodeTextArea.setStyle( "borderColor",  0x000000);
 	            		nodeTextArea.setStyle( "backgroundColor",  0xffffff);
 	            		nodeTextArea.setStyle( "color",  0x000000);
+	            		if(customCM)
+	            		{
+		            		customCM.getItemById("normal_category").checked = true;
+	    	        		customCM.process();
+	    	        	}
 	            		break;
 	            	case GraphNodeCategory.SUBGRAPH:
 	            		nodeTextArea.setStyle( "borderColor",  0x000000);
 	            		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
 	            		nodeTextArea.setStyle( "color",  0x000000);
+	            		if(customCM)
+	            		{
+		            		customCM.getItemById("subfraph_category").checked = true;
+	    	        		customCM.process();
+	    	        	}
 	            		break;	            	
 	            	case GraphNodeCategory.COMMAND:
 	            		nodeTextArea.setStyle( "borderColor",  0xffff00);
 	            		nodeTextArea.setStyle( "backgroundColor",  0x333333);
 	            		nodeTextArea.setStyle( "color",  0xffff00);
+	            		if(customCM)
+	            		{
+		            		customCM.getItemById("command_category").checked = true;
+	    	        		customCM.process();
+	    	        	}
 	            		break;        		
 	            }          
 	        }	
@@ -553,12 +568,28 @@ package PowerPack.com.graph
 	            {
 	            	case GraphNodeType.NORMAL:
 	            		setStyle( "borderColor", 0xE2E2E2);	
+	            		if(customCM)
+	            		{
+		            		customCM.getItemById("initial_type").checked = false;
+		            		customCM.getItemById("terminal_type").checked = false;
+	    	        		customCM.process();
+	    	        	}
 		            	break;
 	            	case GraphNodeType.INITIAL:
 	            		setStyle( "borderColor", 0x00ff00);	
+	            		if(customCM)
+	            		{
+		            		customCM.getItemById("initial_type").checked = true;
+	    	        		customCM.process();
+	    	        	}
 		            	break;
 	            	case GraphNodeType.TERMINAL:
 	            		setStyle( "borderColor", 0x0000ff);	
+	            		if(customCM)
+	            		{
+		            		customCM.getItemById("terminal_type").checked = true;
+	    	        		customCM.process();
+	    	        	}
 		            	break;
 	            }
 	        }		            
@@ -715,10 +746,27 @@ package PowerPack.com.graph
 			addEventListener(KeyboardEvent.KEY_DOWN, keyDown); 
 			addEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
+			addEventListener("typeChanged" , typeChangedHandler);
 
 			addEventListener(FocusEvent.FOCUS_IN, nodeFocusInHandler);
 			addEventListener(FocusEvent.FOCUS_OUT, nodeFocusOutHandler);
 	    }	    
+	    
+	    private function typeChangedHandler(event:Event):void
+	    {	    	
+	    	if(event.target.type==GraphNodeType.INITIAL && event.target.parent)
+	    	{
+	    		for each (var child:UIComponent in Container(event.target.parent).getChildren())
+	    		{
+	    			if(	child is GraphNode && 
+	    				child!=event.target && 
+	    				GraphNode(child).type==GraphNodeType.INITIAL)
+	    			{
+	    				GraphNode(child).type = GraphNodeType.NORMAL;
+	    			}
+	    		}
+	    	}
+	    }
 	    
 		private function addTransitionHandler(event:ContextMenuEvent):void
 		{

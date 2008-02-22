@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" layout="absolute" 
-	creationComplete="complete();">
+	creationComplete="show();">
 	<mx:Script>
 		<![CDATA[
 			import mx.core.UIComponent;
@@ -24,7 +24,7 @@
 			
 			private var fCloseHandler:Function;			
 			
-			private function complete():void
+			private function show():void
 			{
 				btnOk.addEventListener(MouseEvent.CLICK, clickHandler);
 				btnOk.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
@@ -41,13 +41,13 @@
 
 		    public static function show(question:String = "", title:String = "", answers:Array = null,
 		                                parent:Sprite = null, 
-		                                closeHandler:Function = null):Dialog
+		                                closeHandler:Function = null):Question
 		    {
 		
 		        if (!parent)
 		            parent = Sprite(Application.application);   
 		        
-		        var dialog:Dialog = new Dialog();		            
+		        var dialog:Question = new Question();		            
 
 		        dialog.strQuestion = question;
 		        dialog.strTitle = title;

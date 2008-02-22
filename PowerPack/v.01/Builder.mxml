@@ -3,13 +3,13 @@
 	initialize="init()" creationComplete="show()" xmlns:ns3="PowerPack.com.*" xmlns:ns4="PowerPack.com.graph.*" xmlns:ns5="*">
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.dialog.Log;
+			import PowerPack.com.dialog.EditCaption;
 			import PowerPack.com.graph.GraphAccordionChild;
 			import mx.events.ListEvent;
 			import mx.events.CloseEvent;
-			import PowerPack.com.graph.GraphEditTab;
 			import PowerPack.com.mdm.filesystem.FileBrowser;
 			import PowerPack.com.mdm.filesystem.FileUtils;
-			import PowerPack.Log;
 			import mdm.*;
 			import PowerPack.com.mdm.*;
 
@@ -195,7 +195,7 @@
                 }
                 if(event.item.@id == "new_tab")
                 {
-                	var newTabDialog:GraphEditTab = GraphEditTab.show();
+                	var newTabDialog:EditCaption = EditCaption.show();
                 	newTabDialog.addEventListener(CloseEvent.CLOSE, newTabDialogCloseHandler);
                 }
                 else if(event.item.@id == "open_file")
@@ -249,16 +249,16 @@
 				}     
 				else if(event.item.@id == "generate")
 				{
-					//try
+					try
 					{
 						tmplStruct = new TemplateStruct(graphsPanel.toXML());
 						tmplStruct.addEventListener("generationComplete", generationComplete);					
 						tmplStruct.Generate();
 					}
-					//catch(e:Error) 
-					//{
-						//Alert.show(e.message, "Warning!");
-					//}
+					catch(e:Error) 
+					{
+						Alert.show(e.message, "Warning!");
+					}
 				}     
             }
             
@@ -273,6 +273,7 @@
 					graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, graphsPanel.changeLstGraphsHandler);
 					graphAccordionChild.lstGraphs.addEventListener("doubleClick", graphsPanel.btnRenameClickHandler);
 					graphAccordionChild.lstGraphs.addEventListener("completeEdit", graphsPanel.completeEditLstGraphsHandler);            	
+					graphAccordionChild.addEventListener("captionChanged", graphsPanel.captionChangedHandler);
             	}
             }
            	private function generationComplete(event:Event):void

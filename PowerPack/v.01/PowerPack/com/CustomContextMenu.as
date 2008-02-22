@@ -32,7 +32,8 @@ package PowerPack.com
 									enabled:Boolean = true, 
 									visible:Boolean = true,
 									checked:Boolean = false,
-									group:String = null ):ObjectProxy
+									group:String = null,
+									required:Boolean = true ):ObjectProxy
 		{
 			if(!cm)
 				return null;
@@ -50,6 +51,7 @@ package PowerPack.com
 			objItem.listener = listener;
 			objItem.checked = checked;			
 			objItem.group = group;
+			objItem.required = required;
 
 			if(checked && !group)
 				objItem.group = "";
@@ -107,6 +109,7 @@ package PowerPack.com
 		
 		public function process(item:Object = null):void
 		{
+			// determine what need to be checked
 			if(item)
 			{  			
   				if(item.checked && !item.group)
@@ -119,15 +122,23 @@ package PowerPack.com
   					item.checked = (item.checked ? false : true);
   				}
   					
-  				if(item.group && item.group.length>0 && !item.checked)
+  				if(item.group && item.group.length>0)
   				{
-  					for each(var elm:ObjectProxy in items)
+  					if(!item.checked)
   					{
-  						if(elm.group==item.group)
-  							elm.checked = false;
-  					}
-  					item.checked = true;  					
+	  					for each(var elm:ObjectProxy in items)
+	  					{
+	  						if(elm.group==item.group)
+	  							elm.checked = false;
+	  					}
+	  					item.checked = true;  					
+	  				}
+	  				else if(item.checked && !item.required)
+	  				{
+	  					item.checked = false;
+	  				}
   				}
+  				
   			}
   			
   			for each(elm in items)

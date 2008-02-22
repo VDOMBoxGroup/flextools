@@ -80,7 +80,7 @@
 	        			event.bubbles, 
 	        			event.cancelable, 
 	        			event.columnIndex,
-	        			event.rowIndex,
+	        			event.rowIndex, 
 	        			null,
 	        			event.itemRenderer);
 	        		
