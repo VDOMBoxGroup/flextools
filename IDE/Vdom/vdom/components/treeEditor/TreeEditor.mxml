@@ -4,6 +4,7 @@
 			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*">
 <mx:Script>
 	<![CDATA[
+		import vdom.components.treeEditor.colorMenu02.ColorMenu2;
 		import vdom.Languages;
 		import vdom.components.editor.containers.AttributesPanel;
 		import vdom.events.DataManagerEvent;
@@ -47,6 +48,8 @@
 	private var dataManager:DataManager  = DataManager.getInstance();
 	private var script:TreeEditorScript  = new TreeEditorScript();
 	private var languages:Languages;
+	private var colmen2:ColorMenu2= new ColorMenu2();
+//	private var colorMenu:ColorMenu2 = new ColorMenu2();
 	
 	 [Bindable]
    private var arrAppl: Array = new Array();
@@ -66,6 +69,11 @@
 		
 		btLine = new DeleteLineButton();
 		
+		//colmen2.x = 20;
+		//colmen2.y = 20;
+		colmen2.setStyle('right', 0);
+		colmen2.setStyle('top', 10);
+		addChild(colmen2);
 		addChild(btLine);
 //		temMenu = new TreeElementMenu();
 //		addChild(temMenu);
@@ -99,8 +107,8 @@
 		
 				
 					/** * * *   delete Listeners  * * * * */
-		colorMenu.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
-		colorMenu.removeEventListener(TreeEditorEvent.SHOW_LINES, showLines);
+		colmen2.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
+		colmen2.removeEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 //		temMenu.removeEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
 //		temMenu.removeEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
@@ -108,7 +116,7 @@
 		btLine.removeEventListener(MouseEvent.CLICK, delButtonOperation);
 	//	removeEventListener(MouseEvent.MOUSE_MOVE, alfaMenu);
 		
-		colorMenu.hide();
+	//+	colorMenu.hide();
 		
 	}
 	
@@ -117,8 +125,8 @@
 		
 		/******  	set Listeners  ******/
 		
-		colorMenu.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
-		colorMenu.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
+		colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
+		colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 		
 //		temMenu.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
@@ -129,15 +137,15 @@
 			
 		dataManager.getApplicationStructure();
 		
-		colorMenu.show();
+	//+	colorMenu.show();
 			
 		arrAppl = [];
 		var types:XML = dataManager.getTopLevelTypes();
+		
 		for each(var lavel:XML in types.Type )
 		{
-				var strLabel:String = getLanguagePhrase(lavel.Information.ID, lavel.Information.DisplayName);
+				var strLabel:String = script.getLanguagePhrase(lavel.Information.ID, lavel.Information.DisplayName);
 				var strID:String = lavel.Information.ID;
-
 				arrAppl.push({label:strLabel, data:strID});
 		}
 	//	comBoxAppl.dataProvider = arrAppl;
@@ -145,20 +153,12 @@
 		btAddTreeElement.enabled = false;
 	}
 	
-	private function getLanguagePhrase(typeID:String, phraseID:String):String {
-		
-		var phraseRE:RegExp = /#Lang\((\w+)\)/;
-		phraseID = phraseID.match(phraseRE)[1];
-		var languageID:String = typeID + '-' + phraseID;
-		
-		return languages.language.(@ID == languageID)[0];
-	}
-	
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
+		
 		xml1 = XML(dtManEvt.result);
 	//	trace('_Data from server: ' + xml1);
-		massTreeElements = script.createTreeArr(xml1);
+		massTreeElements = script.createTreeArr(xml1,dataManager.topLevelObjects);
 		createTree();
 		curTree = massTreeElements[publicData.topLevelObjectId];
 		drawLines();
@@ -358,8 +358,13 @@
 		if(blDrawLine){
 			var fromObj:String = curTree.ID.toString();
 			var toObj:String = evt.currentTarget.ID.toString();
-			var necessaryLevel:String = colorMenu.selectedItem.level;
-
+			var necessaryLevel:String = colmen2.selectedItem.level;
+		//	trace('necessaryLevel' + necessaryLevel)
+		//	;
+	//		var tempObj:Object = colmen2.selectedLevel;
+	//		trace(necessaryLevel);
+	
+	
 			if(!massLines[necessaryLevel]) 
 				massLines[necessaryLevel] = new Array();
 			
@@ -494,8 +499,11 @@
 	{
 		var pnTo:Object = script.drLine(mouseX, mouseY, curTree);
 	
+		var obj:Object = new Object()
+		//obj = colorMenu.selectedItem;
 		vctTest.graphics.clear();
-		vctTest.createVector(curTree, pnTo, colorMenu.selectedItem.data);	
+		
+		vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
 	}
 	/**
 	*  
@@ -591,7 +599,7 @@
             close="comBoxClose(event.target)" right="23" top="281" /> 
             
 <mx:Button id="btAddTreeElement" label="add element" right="23" top="311"   click="soapAddTreeElement()"/>
-	<ns1:ColorMenu id="colorMenu" right="33" top="26" visible="true"/>
+	
 
 	
 </mx:Canvas>

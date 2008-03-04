@@ -33,7 +33,7 @@ package vdom.components.treeEditor
 		private var btLessen:Button; 
 		private var txt:Label;
 		private var textArea:TextArea;
-		public var ID:String;
+		public var _ID:String;
 //		private var rect:Canvas = new Canvas();
 		private var min:Boolean = false;
 		public var drag:Boolean = true;
@@ -44,10 +44,11 @@ package vdom.components.treeEditor
 		private var cnvUpLayer	:Canvas = new Canvas();
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
+		private var _type:Label;
 		
 		
 		
-		public var resourceID:String = '';
+		public var _resourceID:String = '';
 		
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='defaultPicture')]
 		[Bindable]
@@ -147,6 +148,11 @@ package vdom.components.treeEditor
 		
 		private function initDownBody():void
 		{
+			imgBackGround = new Image();
+			imgBackGround.source = backGround;
+			imgBackGround.y = 27;
+			cnvDownLayer.addChild(imgBackGround);
+			
 			textArea = new TextArea();
 			textArea.setStyle('fontWeight', "bold"); 
 			textArea.x = 115; // btButton.width;
@@ -158,20 +164,29 @@ package vdom.components.treeEditor
 			textArea.height = 75;
 			textArea.doubleClickEnabled = true;
 			textArea.addEventListener(MouseEvent.DOUBLE_CLICK, textAreaDoubleClickHandler);
+			cnvDownLayer.addChild(textArea);
 			
 			image = new Image();
 			image.source = defaultPicture;
 			image.y = 5;
 			image.height = 80;
+			cnvDownLayer.addChild(image);
 			
-			imgBackGround = new Image();
-			imgBackGround.source = backGround;
-			imgBackGround.y = 27;
+			
 			
 			cnvDownLayer.y = 15;
-			cnvDownLayer.addChild(imgBackGround);
-			cnvDownLayer.addChild(image);
-			cnvDownLayer.addChild(textArea);
+			
+			
+			_type = new Label();
+			_type.text = 'text  ';
+			_type.y = 120;
+			_type.x = 120;
+			_type.width =  100;
+			_type.setStyle('fontSize', "8");
+			_type.setStyle('fontWeight', "bold"); 
+			cnvDownLayer.addChild(_type);
+			
+			
 		}
 		
 		private var isRedraw:Boolean;
@@ -180,7 +195,7 @@ package vdom.components.treeEditor
 			
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if (isRedraw) {
-				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW, ID));
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW, _ID));
 				isRedraw = false;
 			}
 		}
@@ -269,12 +284,12 @@ package vdom.components.treeEditor
 		private function lineClickHandler(msEvt:MouseEvent):void
 		{
 		//	trace('Я нажата');
-			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAW_LINE, ID));
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAW_LINE, _ID));
 		}
 		
 		private function deleteClickHandler(msEvt:MouseEvent):void
 		{
-			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, ID));	
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, _ID));	
 		}
 		
 		public function set sourseImg(obj:Object):void
@@ -307,9 +322,20 @@ package vdom.components.treeEditor
 		override public function set name(names:String):void
 		{
 			txt.text = names;
-			ID = names;
+		//	ID = names;
 		}
 		
+		public function set ID(names:String):void
+		{
+			//txt.text = names;
+			_ID = names;
+		}
+		
+		public function get ID():String
+		{
+			//txt.text = names;
+			return _ID;
+		}
 		
 		private function set current(data:Boolean):void
 		{
@@ -319,9 +345,42 @@ package vdom.components.treeEditor
 				rect.graphics.clear();*/
 		}
 		
+		public function set resourceID(names:String):void
+		{
+			//txt.text = names;
+			_resourceID = names;
+		}
+		
+		public function get resourceID():String
+		{
+			//txt.text = names;
+			return  _resourceID;
+		}
+		
+		
 		private function dispStartDrag(evt:MouseEvent):void
 		{
-			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAG, ID));
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAG, _ID));
+		}
+		 
+		 public function set description(names:String):void
+		{
+			textArea.text = names;
+		}
+		
+		public function get description():String
+		{
+			return  textArea.text;
+		}
+		
+		 public function set type(names:String):void
+		{
+			_type.text = names;
+		}
+		
+		public function get type():String
+		{
+			return  _type.text;
 		}
 		 
 		

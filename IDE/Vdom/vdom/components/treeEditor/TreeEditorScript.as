@@ -1,17 +1,19 @@
 package vdom.components.treeEditor
 {
 	import mx.containers.Canvas;
+	import vdom.Languages;
 
 	public class TreeEditorScript 
 	{
 		private var treeEditor:TreeEditor;
+		private var languages:Languages;
 		
 		public function TreeEditorScript():void
 		{
-			
+			languages = Languages.getInstance();
 		}
 		
-		public function createTreeArr(xml:XML):Array
+		public function createTreeArr(xml:XML, xmlTopLevelObjects:XML):Array
 		{
 		//	trace(xml);
 			var massTreeElements:Array = new Array();
@@ -21,13 +23,31 @@ package vdom.components.treeEditor
 				var obID:String = xmlObj.@ID.toXMLString();
 				massTreeElements[obID] =  new TreeElement();
 				//massTreeElements[obID].setStyle('backgroundColor', '#ffffff');
-				massTreeElements[obID].name = xmlObj.@ID.toXMLString();
+				massTreeElements[obID].ID = xmlObj.@ID.toXMLString();
+//				massTreeElements[obID].name =  xmlTopLevelObjects.Object.(@ID == obID ).@Name;
+				massTreeElements[obID].name =  xmlTopLevelObjects.Object.(@ID == obID ).Attributes.Attribute.(@Name == 'title' );
+				massTreeElements[obID].description = xmlTopLevelObjects.Object.(@ID == obID ).Attributes.Attribute.(@Name == 'description' );
 				massTreeElements[obID].x = xmlObj.@left.toXMLString();
 				massTreeElements[obID].y = xmlObj.@top.toXMLString();	
 				massTreeElements[obID].resourceID = xmlObj.@ResourceID.toXMLString();
+				
+				var typeID:String = xmlTopLevelObjects.Object.(@ID == obID ).@Type;
+			//	massTreeElements[obID].type  =  getType(typeID);
+				
+			/*	trace('********************')
+				trace(obID)
+			//	var tempObj:* = xmlTopLevelObjects.Object.(@ID == obID ).Attribute;
+				trace(xmlTopLevelObjects.Object.(@ID == obID ).Attributes.Attribute.(@Name == 'description' ))*/
 			}
 			return massTreeElements;		
 		}
+		
+	
+	private function getType(ID:String):String
+	{
+		return ID;
+	}
+	
 		
 	public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 	{
@@ -109,7 +129,14 @@ package vdom.components.treeEditor
 				
 			return pnTo;
 		}
-	
+	public function getLanguagePhrase(typeID:String, phraseID:String):String {
+		
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		phraseID = phraseID.match(phraseRE)[1];
+		var languageID:String = typeID + '-' + phraseID;
+		
+		return languages.language.(@ID == languageID)[0];
+	}
 	
 	}
 }
