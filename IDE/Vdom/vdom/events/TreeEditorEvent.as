@@ -12,6 +12,7 @@ public class TreeEditorEvent extends Event
 	public static const RESIZE_TREE_ELEMENT:String = 'resizeTreeElement';
 	public static const SHOW_LINES:String = 'showLine';
 	public static const HIDE_LINES:String = 'hideLine';
+	public static const SELECTED_LEVEL:String = 'selectedLevel';
 //	public static const DELETE:String = 'delete';
 	//canLine.graphics.lineStyle(2, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);	
 	//public static const PROXY_ERROR:String = 'proxyError';
