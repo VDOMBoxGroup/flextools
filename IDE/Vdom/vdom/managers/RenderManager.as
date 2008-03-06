@@ -41,7 +41,7 @@ public class RenderManager implements IEventDispatcher {
 	private var soap:Soap;
 	private var dispatcher:EventDispatcher;
 	private var publicData:Object;
-	private var resourceManager:ResourceManager;
+	private var resourceManager:FileManager;
 	
 	private var _container:Container;
 	private var applicationId:String;
@@ -73,7 +73,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		dispatcher = new EventDispatcher();
 		soap = Soap.getInstance();
-		resourceManager = ResourceManager.getInstance();
+		resourceManager = FileManager.getInstance();
 		
 		publicData = mx.core.Application.application.publicData;
 		

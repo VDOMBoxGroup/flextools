@@ -21,14 +21,14 @@ import vdom.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
 import vdom.managers.RenderManager;
 import vdom.managers.ResizeManager;
-import vdom.managers.ResourceManager;
+import vdom.managers.FileManager;
 import vdom.managers.VdomDragManager;
 import vdom.utils.DisplayUtil;
 
 public class WorkArea extends Canvas {
 	
 	private var resizeManager:ResizeManager;
-	private var resourceManager:ResourceManager;
+	private var fileManager:FileManager;
 	private var renderManager:RenderManager;
 	private var dataManager:DataManager;
 	
@@ -63,7 +63,7 @@ public class WorkArea extends Canvas {
 		super();
 		
 		dataManager = DataManager.getInstance();
-		resourceManager = ResourceManager.getInstance();
+		fileManager = FileManager.getInstance();
 		renderManager = RenderManager.getInstance();
 		resizeManager = ResizeManager.getInstance();
 		

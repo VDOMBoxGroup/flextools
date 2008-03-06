@@ -11,7 +11,7 @@
 		import vdom.Languages;
 		import vdom.components.editor.containers.AttributesPanel;
 		import vdom.events.DataManagerEvent;
-		import vdom.managers.ResourceManager;
+		import vdom.managers.FileManager;
 		import mx.controls.Alert;
 		import mx.events.CloseEvent;
 		import vdom.managers.DataManager;
@@ -183,7 +183,7 @@
 			//trace('Here: ' + massTreeElements[obID].resourceID);
 			if (massTreeElements[obID].resourceID!='') 
 			{
-				var resMan:ResourceManager = ResourceManager.getInstance();
+				var resMan:FileManager = FileManager.getInstance();
 				resMan.loadResource(publicData.applicationId, massTreeElements[obID].resourceID, this);
 			//	trace('Work!');
 			}

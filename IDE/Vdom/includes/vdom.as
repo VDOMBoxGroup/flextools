@@ -79,7 +79,7 @@ private function authComleteHandler(event:Event):void {
 private function mainInitHandler(event:Event):void {
 	
 	//applicationListContainer.selectedIndex = 0;
-	publicData['applicationId'] = applicationListContainer.applicationID;
+	//publicData['applicationId'] = applicationListContainer.applicationID;
 }
 
 private function appChangedHandler(event:ListEvent):void {
@@ -91,6 +91,8 @@ private function listApplicationHandler(event:SoapEvent):void {
 	
 	trace('begin listApplicationHandler');
 	listApplication = event.result;
+	publicData['applicationId'] = listApplication.Application[0].@id.toString();
+	
 	soap.removeEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
 	soap.addEventListener(SoapEvent.GET_ALL_TYPES_OK, getAllTypesHandler);
 	soap.getAllTypes();

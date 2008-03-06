@@ -5,17 +5,17 @@ import mx.containers.Accordion;
 import mx.containers.VBox;
 
 import vdom.components.editor.containers.typesClasses.Type;
-import vdom.managers.ResourceManager;
+import vdom.managers.FileManager;
 	
 public class Types extends Accordion {
 	
-	private var resourceManager:ResourceManager;
+	private var fileManager:FileManager;
 	
 	public function Types()	{
 		
 		super();
 		
-		resourceManager = ResourceManager.getInstance();
+		fileManager = FileManager.getInstance();
 	}
 	
 	public function set dataProvider(typesXML:XML):void {
@@ -45,7 +45,7 @@ public class Types extends Accordion {
 			var resourceRE:RegExp = /#Res\((.*)\)/;
 			resourceID = resourceID.match(resourceRE)[1];
 			
-			resourceManager.loadResource(num.Information.ID, resourceID, et);
+			fileManager.loadResource(num.Information.ID, resourceID, et);
 			cat[num.Information.Category].addChild(et); 
 		}
 	}

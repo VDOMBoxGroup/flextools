@@ -4,13 +4,9 @@
 	default="build"
 	basedir=".">
 
-	<taskdef
-		resource="flexTasks.tasks"
-		classpath="${basedir}/lib/flexTasks.jar" />
+	<taskdef resource="flexTasks.tasks" />
 
-	<taskdef
-		resource="net/sf/antcontrib/antlib.xml"
-		classpath="${basedir}/lib/antContrib.jar" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 
 	<property file="${basedir}/local.properties"/>
 	

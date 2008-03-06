@@ -12,9 +12,9 @@ import mx.utils.Base64Decoder;
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 	
-public class ResourceManager implements IEventDispatcher {
+public class FileManager implements IEventDispatcher {
 	
-	private static var instance:ResourceManager;
+	private static var instance:FileManager;
 	
 	private var dispatcher:EventDispatcher;
 	private var soap:Soap;
@@ -28,11 +28,11 @@ public class ResourceManager implements IEventDispatcher {
 	 * @return instance of ResourceManager class (Singleton)
 	 * 
 	 */	
-	public static function getInstance():ResourceManager
+	public static function getInstance():FileManager
 	{
 		if (!instance) {
 			
-			instance = new ResourceManager();
+			instance = new FileManager();
 		}
 
 		return instance;
@@ -43,7 +43,7 @@ public class ResourceManager implements IEventDispatcher {
 	 * Constructor
 	 * 
 	 */	
-	public function ResourceManager() {
+	public function FileManager() {
 		
 		if (instance)
 			throw new Error("Instance already exists.");
