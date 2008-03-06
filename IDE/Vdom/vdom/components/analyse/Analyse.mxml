@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#ffffff">
-	<mx:Script source="includes/analyse.as" />
-	<mx:Button id="test" x="151" y="101" label="Button" click="testFunction()"/>	
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#ffffff" creationComplete="creationCompleteHendler()" xmlns:objectsPanel="vdom.components.objectsPanel.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import vdom.managers.DataManager;
+			
+			[Bindable]
+			private var dataManager:DataManager;
+	//		[Bindable]
+			private var publicData:Object;
+			
+			private function creationCompleteHendler():void
+			{
+				dataManager = DataManager.getInstance();
+				publicData = Application.application.publicData; 
+		//		trace('publicData: \n'+ publicData)
+				
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Button id="test" x="151" y="101" label="Button" />	
+	<objectsPanel:ObjectsPanel x="262" y="78" dataProvider="{dataManager.topLevelObjects}">
+		
+	</objectsPanel:ObjectsPanel>
 </mx:Canvas>

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundColor="#ffffff"
-			creationComplete="creationCompleteHandler()" hide="hideHendler()" 
-			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundColor="#ffffff" creationComplete="creationCompleteHandler()" hide="hideHendler()" 
+			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*" xmlns:colorMenu02="vdom.components.treeEditor.colorMenu02.*">
+	
+
+<mx:Canvas id="main"  width="100%" height="100%" >
 <mx:Script>
 	<![CDATA[
+		import mx.containers.Canvas;
 		import vdom.components.treeEditor.colorMenu02.ColorMenu2;
 		import vdom.Languages;
 		import vdom.components.editor.containers.AttributesPanel;
@@ -48,9 +51,14 @@
 	private var dataManager:DataManager  = DataManager.getInstance();
 	private var script:TreeEditorScript  = new TreeEditorScript();
 	private var languages:Languages;
-	private var colmen2:ColorMenu2= new ColorMenu2();
+	//private var colmen2:ColorMenu2= new ColorMenu2();
+	private var cnvLevelTop:Canvas = new Canvas();
+	private var cnvLevelDown:Canvas = new Canvas();
 //	private var colorMenu:ColorMenu2 = new ColorMenu2();
-	
+/*
+<mx:Canvas id="cnvLevelTop"/>
+<mx:Canvas id="cnvLevelDown"/>
+*/	
 	 [Bindable]
    private var arrAppl: Array = new Array();
      [Bindable]
@@ -62,6 +70,8 @@
 	
 	private function creationCompleteHandler():void
 	{
+		main.addChild(cnvLevelTop);
+		main.addChild(cnvLevelDown);
 		languages = Languages.getInstance();
 		levelsMenu = new LevelsMenu();
 
@@ -71,10 +81,10 @@
 		
 		//colmen2.x = 20;
 		//colmen2.y = 20;
-		colmen2.setStyle('right', 0);
-		colmen2.setStyle('top', 10);
-		addChild(colmen2);
-		addChild(btLine);
+	//	colmen2.setStyle('right', 0);
+	//	colmen2.setStyle('top', 10);
+	//	addChild(colmen2);
+		main.addChild(btLine);
 //		temMenu = new TreeElementMenu();
 //		addChild(temMenu);
 	}
@@ -99,7 +109,7 @@
 		// delete Elements
 		for (var obID:String in massTreeElements)
 		{
-			removeChild(massTreeElements[obID]);
+			main.removeChild(massTreeElements[obID]);
 			delete massTreeElements[obID];
 		}
 		
@@ -181,7 +191,8 @@
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-			addChild(massTreeElements[obID]);
+			main.addChild(massTreeElements[obID]);
+			/***************************************/
 		}
 	}
 	
@@ -251,10 +262,12 @@
 				for each(var xmlLavelObj:XML in xmlLavel.children())
 				{
 					var toObjID:String = xmlLavelObj.@ID.toXMLString();
-					
-					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
-					massLines[level][obID][toObjID].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
-					cnvLevelDown.addChild(massLines[level][obID][toObjID]);
+					if (obID != toObjID)// избавляемся от зацикливающихся обьектов
+					{
+						massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
+						massLines[level][obID][toObjID].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
+						cnvLevelDown.addChild(massLines[level][obID][toObjID]);
+					}
 				}
 			}
 		}
@@ -310,7 +323,7 @@
 		canRectangle.graphics.clear();
 		canRectangle.removeEventListener(MouseEvent.MOUSE_UP, stopingDrag);
 		redrawLines(curTree.ID);
-		removeChild(canRectangle);
+		main.removeChild(canRectangle);
 	
 	//	temMenu.position = curTree;
 	}
@@ -419,6 +432,7 @@
 	*/
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
+		curTree = massTreeElements[trEvt.ID];
 		Alert.show("Do you want to delete Element?", "Delete Element", 3, this, alertClickDeleteTreeElement);
 	}
 	 
@@ -450,7 +464,7 @@
 						 delete massLines[level][ind1][ind2];
 					}
 		// удаляем сам обьект
-		removeChild(massTreeElements[strID]);
+		main.removeChild(massTreeElements[strID]);
 		delete massTreeElements[strID];
 		
 		curTree = null;
@@ -467,7 +481,7 @@
 	*/
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
-		addChild(vctTest);//--для рисования связывающей линии
+		main.addChild(vctTest);//--для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		
 		blDrawLine = true; //говорим что рисуем линию
@@ -485,7 +499,7 @@
 	{
 		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
-		removeChild(vctTest); ///-------------***********
+		main.removeChild(vctTest); ///-------------***********
 		blDrawLine = false;  //говорим что НЕ рисуем линию
 	}
 	
@@ -540,13 +554,14 @@
 			massTreeElements[obID].name = obID;
 			massTreeElements[obID].x = 0;
 			massTreeElements[obID].y = 0;	
+			massTreeElements[obID].ID = obID;
 			
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , treeElementLinesReDrawHandler);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-			
-			addChild(massTreeElements[obID]);
+			/****************************************/
+			main.addChild(massTreeElements[obID]);
 		}
 	
 	
@@ -589,17 +604,22 @@
 	
 	]]>
 </mx:Script>
-<mx:Canvas id="cnvLevelTop"/>
-<mx:Canvas id="cnvLevelDown"/>
 
 
-<mx:Label text="Select type of Applikation:" right="23" top="255" color="#ffffff"/>
-
- <mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
-            close="comBoxClose(event.target)" right="23" top="281" /> 
-            
-<mx:Button id="btAddTreeElement" label="add element" right="23" top="311"   click="soapAddTreeElement()"/>
-	
-
-	
 </mx:Canvas>
+
+<mx:VBox   height="100%" >
+	<colorMenu02:ColorMenu2 id="colmen2" x="50"/>
+	
+
+	<mx:Label text="Select type of Applikation:"  color="#ffffff"/>
+
+ 	<mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
+            close="comBoxClose(event.target)"  /> 
+            
+	<mx:Button id="btAddTreeElement" label="add element"    click="soapAddTreeElement()"/>
+	
+</mx:VBox>
+	
+
+</mx:HBox>

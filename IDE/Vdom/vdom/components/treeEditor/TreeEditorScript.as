@@ -2,15 +2,19 @@ package vdom.components.treeEditor
 {
 	import mx.containers.Canvas;
 	import vdom.Languages;
+	import vdom.managers.DataManager;
 
 	public class TreeEditorScript 
 	{
 		private var treeEditor:TreeEditor;
 		private var languages:Languages;
+		private var dataManager:DataManager  = DataManager.getInstance();
+		private var topLevelTypes:XML;
 		
 		public function TreeEditorScript():void
 		{
 			languages = Languages.getInstance();
+			topLevelTypes = dataManager.getTopLevelTypes();
 		}
 		
 		public function createTreeArr(xml:XML, xmlTopLevelObjects:XML):Array
@@ -32,7 +36,7 @@ package vdom.components.treeEditor
 				massTreeElements[obID].resourceID = xmlObj.@ResourceID.toXMLString();
 				
 				var typeID:String = xmlTopLevelObjects.Object.(@ID == obID ).@Type;
-			//	massTreeElements[obID].type  =  getType(typeID);
+				massTreeElements[obID].type  =  getType(typeID);
 				
 			/*	trace('********************')
 				trace(obID)
@@ -43,10 +47,19 @@ package vdom.components.treeEditor
 		}
 		
 	
-	private function getType(ID:String):String
-	{
-		return ID;
-	}
+			private function getType(ID:String):String
+			{
+				
+			//	var types:XML = dataManager.getTopLevelTypes();
+		
+				for each(var lavel:XML in topLevelTypes.Type )
+				{
+						var strLabel:String = getLanguagePhrase(lavel.Information.ID, lavel.Information.DisplayName);
+						var strID:String = lavel.Information.ID;
+				//		arrAppl.push({label:strLabel, data:strID});
+				}
+				return ID;
+			}
 	
 		
 	public function dataToXML(massTreeElements:Array, massLines:Array ):XML
