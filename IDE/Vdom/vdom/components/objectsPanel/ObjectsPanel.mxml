@@ -3,8 +3,9 @@
 
 <mx:Script>
 	<![CDATA[
+		import vdom.managers.FileManager;
 		import mx.controls.Image;
-		import vdom.managers.ResourceManager;
+	//	import vdom.managers.ResourceManager;
 		import mx.messaging.management.Attribute;
 		import mx.collections.XMLListCollection;
 		import mx.events.FlexEvent;
@@ -138,7 +139,7 @@
 		private function getIcons ():void
 		{
 			trace('run function getIcon');	
-			var resMan:ResourceManager = ResourceManager.getInstance();
+			var resMan:FileManager = FileManager.getInstance();
 				resMan.loadResource(publicData.applicationId, 'abb9ff5c-71e3-4278-bb8d-d668eAdelfos', this);
 		}
 		

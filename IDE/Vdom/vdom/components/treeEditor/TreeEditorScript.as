@@ -14,11 +14,12 @@ package vdom.components.treeEditor
 		public function TreeEditorScript():void
 		{
 			languages = Languages.getInstance();
-			topLevelTypes = dataManager.getTopLevelTypes();
+			
 		}
 		
 		public function createTreeArr(xml:XML, xmlTopLevelObjects:XML):Array
 		{
+			topLevelTypes = dataManager.getTopLevelTypes();
 		//	trace(xml);
 			var massTreeElements:Array = new Array();
 			//создаем массив с обьектами
