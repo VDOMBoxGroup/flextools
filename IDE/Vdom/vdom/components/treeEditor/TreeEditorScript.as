@@ -58,9 +58,8 @@ package vdom.components.treeEditor
 				//treeElement.description = xmlObj.Object.Attributes.Attribute.(@Name == 'description' );
 				treeElement.x = 0;
 				treeElement.y = 0;	
-				treeElement.resourceID = xmlObj.@Type.toXMLString();
-				
-				var typeID:String = xmlObj.@Type.toXMLString();
+				treeElement.resourceID = xmlObj.Object.@Type.toXMLString();
+				var typeID:String = xmlObj.Object.@Type.toXMLString();
 				treeElement.type  =  getType(typeID);
 			
 			return treeElement;		
@@ -87,11 +86,13 @@ package vdom.components.treeEditor
 		/****         сделать так чтоб нормально возвращалось значение         **/
 				for each(var lavel:XML in topLevelTypes.Type )
 				{
-						var strLabel:String = getLanguagePhrase(lavel.Information.ID, topLevelTypes.Type.Information.DisplayName);
+				
+						var strLabel:String = getLanguagePhrase(ID, topLevelTypes.Type.Information.DisplayName);
 						var strID:String = lavel.Information.ID;
+						//trace(strID+ ' ! '  +ID );
 				//		arrAppl.push({label:strLabel, data:strID});
 				}
-				return strLabel;
+				return  strLabel;
 			}
 	
 		
