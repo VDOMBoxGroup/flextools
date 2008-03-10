@@ -55,7 +55,7 @@
 				label="{languages.language.(@label == 'login_ip')}">
 				<mx:TextInput id="_ip"
 					width="140" 
-					text="127.0.0.1:81"/>
+					text="localhost:81"/>
 			</mx:FormItem>
 			<mx:FormItem
 				label="{languages.language.(@label == 'login_language')}">
