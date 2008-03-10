@@ -1,6 +1,5 @@
 package vdom.components.treeEditor
 {
-	import mx.containers.Canvas;
 	import vdom.Languages;
 	import vdom.managers.DataManager;
 
@@ -47,19 +46,52 @@ package vdom.components.treeEditor
 			return massTreeElements;		
 		}
 		
+		public function createTreeElement(xmlObj:XML):TreeElement
+		{
+				var obID:String = xmlObj.Object.@ID;
+				var treeElement:TreeElement =  new TreeElement();
+				//massTreeElements[obID].setStyle('backgroundColor', '#ffffff');
+				treeElement.ID = obID;
+//				massTreeElements[obID].name =  xmlTopLevelObjects.Object.(@ID == obID ).@Name;
+				treeElement.name =  xmlObj.Object.Attributes.Attribute.(@Name == 'title' );
+				treeElement.description = 'test';
+				//treeElement.description = xmlObj.Object.Attributes.Attribute.(@Name == 'description' );
+				treeElement.x = 0;
+				treeElement.y = 0;	
+				treeElement.resourceID = xmlObj.@Type.toXMLString();
+				
+				var typeID:String = xmlObj.@Type.toXMLString();
+				treeElement.type  =  getType(typeID);
+			
+			return treeElement;		
+		}
+/*<Result>
+  <Object Name="htmlcontainer_1dc7709a_91ef_4516_be6d_04ddea6aa18a" ID="1dc7709a-91ef-4516-be6d-04ddea6aa18a" Type="2330fe83-8cd6-4ed5-907d-11874e7ebcf4">
+    <Attributes>
+      <Attribute Name="hierarchy">0</Attribute>
+      <Attribute Name="visible">1</Attribute>
+      <Attribute Name="zindex">0</Attribute>
+      <Attribute Name="description"/>
+      <Attribute Name="title">1</Attribute>
+    </Attributes>
+    <Script/>
+  </Object>
+  <Parent/>
+  <Key>6629904319_38</Key>
+</Result>*/
 	
 			private function getType(ID:String):String
 			{
 				
 			//	var types:XML = dataManager.getTopLevelTypes();
-		
+		/****         сделать так чтоб нормально возвращалось значение         **/
 				for each(var lavel:XML in topLevelTypes.Type )
 				{
-						var strLabel:String = getLanguagePhrase(lavel.Information.ID, lavel.Information.DisplayName);
+						var strLabel:String = getLanguagePhrase(lavel.Information.ID, topLevelTypes.Type.Information.DisplayName);
 						var strID:String = lavel.Information.ID;
 				//		arrAppl.push({label:strLabel, data:strID});
 				}
-				return ID;
+				return strLabel;
 			}
 	
 		

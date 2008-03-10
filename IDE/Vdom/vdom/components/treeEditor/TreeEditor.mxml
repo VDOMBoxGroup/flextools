@@ -78,27 +78,10 @@
 		if(!main) main = new Canvas();
 	
 		if(!cnvLevelDown)cnvLevelDown = new Canvas();
-		main.addChild(cnvLevelDown);
-	
 		if(!btLine)btLine = new DeleteLineButton();
-		main.addChild(btLine);
-		
+	
 		languages = Languages.getInstance();
-	//	levelsMenu = new LevelsMenu();
-
 		publicData = Application.application.publicData;
-		
-		
-		
-		
-		//colmen2.x = 20;
-		//colmen2.y = 20;
-	//	colmen2.setStyle('right', 0);
-	//	colmen2.setStyle('top', 10);
-	//	addChild(colmen2);
-		
-//		temMenu = new TreeElementMenu();
-//		addChild(temMenu);
 	}
 	
 	private function hideHendler():void
@@ -541,8 +524,8 @@
 	{
 		//trace('CreateObject: '+dmEvt.result);
 		var xml:XML = new XML(dmEvt.result);
-	//	trace('xml new Elem: ' + xml);
-		addTreeElement(xml.Object.@ID);
+		trace('xml new Elem: ' + xml);
+		addTreeElement(xml);
 		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 		
 		saveToServer();
@@ -551,23 +534,27 @@
 	private function soapAddTreeElement():void
 	{
 		var types:XML = dataManager.getTopLevelTypes();
-		var objInitProp:Object = new  Object();
+		/*var objInitProp:Object = new  Object();
 		
 		objInitProp.parentId = '';
 		objInitProp.typeId = selectedAppl.data;
-
+*/
 		dataManager.createObject(selectedAppl.data);
 		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 	}
 		
-		private function addTreeElement(obID:String):void
+		private function addTreeElement(xml:XML):void
 		{
+			var obID:String =  xml.Object.@ID;
+			
 			massTreeElements[obID] =  new TreeElement();
-			massTreeElements[obID].name = obID;
+			massTreeElements[obID] = script.createTreeElement(xml);
+			/*massTreeElements[obID].name = obID;
 			massTreeElements[obID].x = 0;
 			massTreeElements[obID].y = 0;	
 			massTreeElements[obID].ID = obID;
-			
+			massTreeElements[obID]
+			*/
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , treeElementLinesReDrawHandler);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
