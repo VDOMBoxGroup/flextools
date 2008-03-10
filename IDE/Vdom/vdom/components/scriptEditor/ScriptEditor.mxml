@@ -17,6 +17,9 @@
 		
 		private function creationCompleteHandler():void{
 			
+			if(!numStrok) numStrok = new TextArea(); // for fixed Edrror
+			if(!txtArea) txtArea = new TabbedTextArea(); //// for fixed Edrror
+			
 			dataManager = DataManager.getInstance();
 			
 			numStrok.text ="";
