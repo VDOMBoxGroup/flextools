@@ -168,8 +168,12 @@ package vdom.components.treeEditor
 			
 			image = new Image();
 			image.source = defaultPicture;
-			image.y = 5;
-			image.height = 80;
+			image.x = 10;
+			image.y = 35;
+			image.maintainAspectRatio = true;
+			image.scaleContent = true;
+			image.height = 100;
+			image.width = 95;
 			cnvDownLayer.addChild(image);
 			
 			
