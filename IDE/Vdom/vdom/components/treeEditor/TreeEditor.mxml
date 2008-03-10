@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" backgroundColor="#ffffff" creationComplete="creationCompleteHandler()" hide="hideHendler()" 
-			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*" xmlns:colorMenu02="vdom.components.treeEditor.colorMenu02.*">
+			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*" xmlns:colorMenu02="vdom.components.treeEditor.colorMenu02.*" xmlns:treeEditor="vdom.components.treeEditor.*">
 	
 
-<mx:Canvas id="main"  width="100%" height="100%" >
+<mx:Canvas id="main" width="100%" height="100%">
+	<mx:Canvas id="cnvLevelDown" />
+	
+	<treeEditor:DeleteLineButton id="btLine" />
+
 <mx:Script>
 	<![CDATA[
 		import mx.containers.Canvas;
@@ -43,17 +47,18 @@
 	private var blDrawLine:Boolean = false;
 	private var vctTest:Vector = new Vector();
 	private var curLine:Object = new Object();
-	private var btLine:DeleteLineButton;
+	//private var btLine:DeleteLineButton;
 //	private var temMenu:TreeElementMenu;
-	private var levelsMenu:LevelsMenu;
+//	private var levelsMenu:LevelsMenu;
 //	private var soap:Soap = Soap.getInstance();
 	private var publicData:Object;
 	private var dataManager:DataManager  = DataManager.getInstance();
 	private var script:TreeEditorScript  = new TreeEditorScript();
 	private var languages:Languages;
 	//private var colmen2:ColorMenu2= new ColorMenu2();
-	private var cnvLevelTop:Canvas = new Canvas();
-	private var cnvLevelDown:Canvas = new Canvas();
+//	private var cnvLevelTop:Canvas = new Canvas();
+//	private var cnvLevelDown:Canvas;
+//	private var main:Canvas;
 //	private var colorMenu:ColorMenu2 = new ColorMenu2();
 /*
 <mx:Canvas id="cnvLevelTop"/>
@@ -70,21 +75,28 @@
 	
 	private function creationCompleteHandler():void
 	{
-		main.addChild(cnvLevelTop);
+		if(!main) main = new Canvas();
+	
+		if(!cnvLevelDown)cnvLevelDown = new Canvas();
 		main.addChild(cnvLevelDown);
+	
+		if(!btLine)btLine = new DeleteLineButton();
+		main.addChild(btLine);
+		
 		languages = Languages.getInstance();
-		levelsMenu = new LevelsMenu();
+	//	levelsMenu = new LevelsMenu();
 
 		publicData = Application.application.publicData;
 		
-		btLine = new DeleteLineButton();
+		
+		
 		
 		//colmen2.x = 20;
 		//colmen2.y = 20;
 	//	colmen2.setStyle('right', 0);
 	//	colmen2.setStyle('top', 10);
 	//	addChild(colmen2);
-		main.addChild(btLine);
+		
 //		temMenu = new TreeElementMenu();
 //		addChild(temMenu);
 	}
