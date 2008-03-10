@@ -14,6 +14,7 @@ package vdom.components.treeEditor
 		
 		public function DeleteLineButton()
 		{
+			super();
 			bt = new Button();
 			bt.height = 18;
 			bt.width = 18;
