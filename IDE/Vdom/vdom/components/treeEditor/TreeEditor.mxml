@@ -82,6 +82,7 @@
 	
 		languages = Languages.getInstance();
 		publicData = Application.application.publicData;
+		addEventListener(MouseEvent.CLICK, mouseClickHandler);
 	}
 	
 	private function hideHendler():void
@@ -160,7 +161,6 @@
 	
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
-		
 		xml1 = XML(dtManEvt.result);
 	//	trace('_Data from server: ' + xml1);
 		massTreeElements = script.createTreeArr(xml1,dataManager.topLevelObjects);
@@ -260,7 +260,7 @@
 					if (obID != toObjID)// избавляемся от зацикливающихся обьектов
 					{
 						massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
-						massLines[level][obID][toObjID].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
+						massLines[level][obID][toObjID].addEventListener(MouseEvent.CLICK, markLines);
 						cnvLevelDown.addChild(massLines[level][obID][toObjID]);
 					}
 				}
@@ -601,6 +601,14 @@
 				massLines[level][frsTrElem][sknTrElem].visible = true;
 	}
 	
+	private function mouseClickHandler(msEvt:MouseEvent):void
+	{
+		for (var ID:String in massTreeElements)
+				if(massTreeElements[ID].select) 
+					massTreeElements[ID].unSelect();
+	//	trace('Ed: ' + massTreeElements[ID].name)
+		btLine.visible = false;
+	}
 	]]>
 </mx:Script>
 

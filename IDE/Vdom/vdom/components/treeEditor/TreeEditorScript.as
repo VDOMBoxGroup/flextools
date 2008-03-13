@@ -19,7 +19,7 @@ package vdom.components.treeEditor
 		public function createTreeArr(xml:XML, xmlTopLevelObjects:XML):Array
 		{
 			topLevelTypes = dataManager.getTopLevelTypes();
-		//	trace(xml);
+		//	trace(xmlTopLevelObjects);
 			var massTreeElements:Array = new Array();
 			//создаем массив с обьектами
 			for each(var xmlObj:XML in xml.children())
@@ -31,6 +31,7 @@ package vdom.components.treeEditor
 				massTreeElements[obID].description = xmlTopLevelObjects.Object.(@ID == obID ).Attributes.Attribute.(@Name == 'description' );
 				massTreeElements[obID].x = xmlObj.@left.toXMLString();
 				massTreeElements[obID].y = xmlObj.@top.toXMLString();	
+				massTreeElements[obID].state = xmlObj.@state.toXMLString();	
 				massTreeElements[obID].resourceID = xmlObj.@ResourceID.toXMLString();
 				
 				var typeID:String = xmlTopLevelObjects.Object.(@ID == obID ).@Type;
@@ -85,6 +86,7 @@ package vdom.components.treeEditor
 						xmlList.@left = massTreeElements[levels].x;
 						xmlList.@top = massTreeElements[levels].y;
 						xmlList.@ResourceID = massTreeElements[levels].resourceID;
+						xmlList.@state = massTreeElements[levels].state;
 						outXML.appendChild(xmlList.toXMLString());
 						
 	
@@ -105,6 +107,7 @@ package vdom.components.treeEditor
 						object.@left = massTreeElements[ind1].x;
 						object.@top = massTreeElements[ind1].y;
 						object.@ResourceID = massTreeElements[ind1].resourceID;
+						object.@state = massTreeElements[ind1].state;
 						outXML.appendChild(object.toXMLString());
 					}
 					
@@ -126,7 +129,8 @@ package vdom.components.treeEditor
 						object.@ID = ind2;
 						object.@left = massTreeElements[ind2].x;
 						object.@top = massTreeElements[ind2].y;
-						object.@ResourceID = massTreeElements[ind1].resourceID;
+						object.@ResourceID = massTreeElements[ind2].resourceID;
+						object.@state = massTreeElements[ind2].state;
 						outXML.appendChild(object.toXMLString());
 					}	
 				}

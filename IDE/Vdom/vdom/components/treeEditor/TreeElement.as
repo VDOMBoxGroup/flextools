@@ -1,30 +1,18 @@
 package vdom.components.treeEditor
 {
-	import flash.display.CapsStyle;
-	import flash.display.DisplayObject;
-	import flash.display.JointStyle;
-	import flash.display.LineScaleMode;
-	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	import flash.geom.Rectangle;
-	import flash.ui.Mouse;
 	
 	import mx.containers.Canvas;
-	import mx.containers.TitleWindow;
 	import mx.controls.Button;
-	import mx.controls.Label;
-	import mx.controls.Text;
-	import mx.controls.TextArea;
-	import mx.events.DragEvent;
-	import mx.states.AddChild;
-	import mx.states.SetStyle;
-	
-	import vdom.events.TreeEditorEvent;
 	import mx.controls.Image;
-	import vdom.connection.utils.Extract;
-	import vdom.connection.utils.UtilsEvent;
+	import mx.controls.Label;
+	import mx.controls.TextArea;
 	import mx.controls.TextInput;
-	import flash.events.KeyboardEvent;
+	import mx.core.Application;
+	
+	import vdom.connection.Proxy;
+	import vdom.events.TreeEditorEvent;
 	
 	public class TreeElement extends Canvas
 	{
@@ -206,18 +194,8 @@ package vdom.components.treeEditor
 		
 		private function plusClickHandler(msEvt:MouseEvent):void
 		{
-			if (min){
-				removeChild(cnvDownLayer);
-				imgPlus.source = plus;
-				
-				min = false;
-			}else{
-				addChild(cnvDownLayer);
-				imgPlus.source = minus;
-				
-				min = true;
-			}	
-			isRedraw = true;
+			min = !min
+			changeState(min)
 		}
 		
 		
@@ -267,12 +245,16 @@ package vdom.components.treeEditor
 		
 		private function endFormatinfHandler(msEvt:MouseEvent):void
 		{
+			//safeChange();
+			
 			if(txtInp.visible)
 			{
 				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
 				
 				txt.text = txtInp.text;
 				txtInp.visible = false;
+				safeChange();
+				trace('1')
 			}
 			
 			if(textArea.editable  )
@@ -281,6 +263,8 @@ package vdom.components.treeEditor
 				textArea.editable = false;
 				textArea.selectable = false;
 				textArea.setStyle('fontWeight', "bold");
+				safeChange();
+				trace('2');	
 			}
 		}
 		
@@ -303,18 +287,18 @@ package vdom.components.treeEditor
 		
 		
 			// при нажатии кнопки свернуть
-		public function set resize(blHide:Boolean):void
+		private function changeState(blHide:Boolean):void
 		{
-			// убираем "лишнее"
-			if (min){
-				removeChild(cnvDownLayer);
-				min = false;
+			if (!blHide){
+				if(contains(cnvDownLayer))	removeChild(cnvDownLayer);
+				imgPlus.source = plus;
 			}else{
 				addChild(cnvDownLayer);
-				min = true;
-			}
-
+				imgPlus.source = minus;
+			}	
+			min = blHide;
 			isRedraw = true;
+			
 		}
 		
 		private function btLessenOut(muEvt:MouseEvent):void
@@ -328,6 +312,8 @@ package vdom.components.treeEditor
 			txt.text = names;
 		//	ID = names;
 		}
+		
+		/****      ID         ****/
 		
 		public function set ID(names:String):void
 		{
@@ -348,6 +334,9 @@ package vdom.components.treeEditor
 			else 
 				rect.graphics.clear();*/
 		}
+
+		
+		/****      resourceID         ****/
 		
 		public function set resourceID(names:String):void
 		{
@@ -362,10 +351,33 @@ package vdom.components.treeEditor
 		}
 		
 		
+		/****      state         ****/
+		
+		public function set state(names:String):void
+		{
+			//txt.text = names;
+		//	trace('names: ' +names);
+			if(names == 'true')	changeState(true)
+				else changeState(false);
+		}
+		
+		public function get state():String
+		{
+			//txt.text = names;
+			//return '++++';
+		//	trace(contains(cnvDownLayer) + ' ! '+min.toString())
+			return  min.toString();
+		}
+		
+		
+		
 		private function dispStartDrag(evt:MouseEvent):void
 		{
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAG, _ID));
 		}
+		 
+		 
+		 /****      description         ****/
 		 
 		 public function set description(names:String):void
 		{
@@ -377,6 +389,10 @@ package vdom.components.treeEditor
 			return  textArea.text;
 		}
 		
+		
+		
+		/****      type         ****/
+		
 		 public function set type(names:String):void
 		{
 			_type.text = names;
@@ -386,8 +402,36 @@ package vdom.components.treeEditor
 		{
 			return  _type.text;
 		}
-		 
+		private function safeChange():void
+		{
+			/***  
+			 * 
+			 * надо будет через дата мэнаджер переделать
+			 * 
+			 * */
+			 var str:String = 
+			 	'<Attributes>' + 
+			 		' <Attribute Name="description">' + textArea.text+'</Attribute>'+
+			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
+			 	' </Attributes>'
+			 var xmlToSend:XML = XML(str);
+			
+		//	 trace(xmlToSend.toString());
+			var publicData:Object = Application.application.publicData;
+			var proxy:Proxy = Proxy.getInstance();
+			proxy.setAttributes( publicData.applicationId, _ID,xmlToSend); 
+		}
 		
+		public function get select():Boolean
+		{
+			return txtInp.visible || textArea.editable;
+		} 
+		public function unSelect():void
+		{
+			endFormatinfHandler(new MouseEvent(MouseEvent.CLICK));
+			//trace('el: '+name);
+			//trace(': ' + dataManager.objectDescription);
+		}
 		/* 
 		private function draawRect():void
 		{

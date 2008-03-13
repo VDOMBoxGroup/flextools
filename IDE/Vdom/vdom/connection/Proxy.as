@@ -81,8 +81,8 @@ public class Proxy {
 	//	trace('Result:----------- '+ appid + ": \n" + objid + ": \n" +massObj[appid][objid]+ ": \n");
 		dataToSend = true;
 		sender();
-		soap.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, returnData)
-		soap.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, returnData)
+		soap.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, returnData);
+		soap.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, returnData);
 	}
 	
 	private function timeManedger(evt:TimerEvent):void
