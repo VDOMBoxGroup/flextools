@@ -64,6 +64,22 @@
 <mx:Canvas id="cnvLevelTop"/>
 <mx:Canvas id="cnvLevelDown"/>
 */	
+
+/******* 
+ * 
+ * 
+ * 			to Do
+ *		Линии красиво 
+ * 		Картинка менялась
+ * 		Выстраивание дерева
+ * 		Перенос елемента влево и вверх
+ * 		
+ * 
+ * 
+ * 
+ * */
+
+
 	 [Bindable]
    private var arrAppl: Array = new Array();
      [Bindable]
@@ -276,6 +292,7 @@
 		btLine.x = mouseX - btLine.width / 2;
 		btLine.y = mouseY  - btLine.height - 2;
 		btLine.visible = true;
+		muEvt.stopImmediatePropagation();
 	}
 	
 	private function treeElementLinesReDrawHandler(trEvt:TreeEditorEvent):void
