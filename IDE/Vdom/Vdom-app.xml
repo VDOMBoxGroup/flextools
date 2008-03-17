@@ -39,7 +39,7 @@
 		<content>[This value will be overwritten by Flex Builder in the output app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
-		<!-- <title></title> -->
+		<title>Vdom IDE</title>
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
 		<!-- <systemChrome></systemChrome> -->
@@ -72,7 +72,7 @@
 		<!-- <y></y> -->
 
 		<!-- The window's minimum size, specified as a width/height pair, such as "400 200". Optional. -->
-		<!-- <minSize>800 600</minSize> -->
+		<minSize>1000 700</minSize> -->
 
 		<!-- The window's initial maximum size, specified as a width/height pair, such as "1600 1200". Optional. -->
 		<!-- <maxSize></maxSize> -->
@@ -130,5 +130,4 @@
 			
 		<!-- </fileType> -->
 	<!-- </fileTypes> -->
-
 </application>
