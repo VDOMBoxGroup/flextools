@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ActionPanel xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml">
 	<mx:Metadata>
-		[Event(name="applicationChange", type="mx.events.ListEvent")]
+		[Event(name="applicationChanged", type="mx.events.ListEvent")]
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
@@ -23,7 +23,7 @@
 			
 			private function changeListEvent():void {
 				
-				var evt:ListEvent = new ListEvent('applicationChange');
+				var evt:ListEvent = new ListEvent('applicationChanged');
 				dispatchEvent(evt);
 			}
 			

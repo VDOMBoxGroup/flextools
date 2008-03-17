@@ -52,7 +52,7 @@ public class Authentication implements IEventDispatcher {
 		
 		dispatcher = new EventDispatcher();
 		soap = Soap.getInstance();
-		publicData = mx.core.Application.application.publicData;
+		//publicData = mx.core.Application.application.publicData;
 		
 	}
 	

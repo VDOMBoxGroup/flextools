@@ -1,29 +1,21 @@
-import flash.display.DisplayObject;
 import flash.events.Event;
 
 import mx.containers.Canvas;
-import mx.controls.Alert;
 import mx.core.Application;
-import mx.core.EdgeMetrics;
-import mx.events.DragEvent;
 import mx.managers.PopUpManager;
 
-import vdom.Languages;
 import vdom.MyLoader;
-import vdom.components.editor.containers.WorkArea;
-import vdom.components.editor.containers.typesClasses.Type;
-import vdom.components.editor.containers.workAreaClasses.Item;
 import vdom.components.editor.events.WorkAreaEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
-import vdom.managers.VdomDragManager;
+import vdom.managers.LanguageManager;
 
 //[Bindable] private var objects:XML;
 [Bindable] private var typesXML:XML;
 [Bindable] private var help:String;
 [Bindable] private var selectedElement:String;
 [Bindable] private var dataManager:DataManager;
-[Bindable] private var languages:Languages;
+[Bindable] private var languageManager:LanguageManager;
 
 private var objectsXML:XML;
 private var currInterfaceType:uint;
@@ -33,12 +25,12 @@ private var applicationId:String;
 private var topLevelObjectId:String;
 
 
-private function creationCompleteHandler():void {
+private function initializeHandler():void {
 	
 	ppm = new MyLoader();
-	publicData = Application.application.publicData;
+	//publicData = Application.application.publicData;
 	dataManager = DataManager.getInstance();
-	languages = Languages.getInstance();
+	languageManager = LanguageManager.getInstance();
 
 	/*Загрузка типов*/
 	
@@ -54,13 +46,13 @@ private function creationCompleteHandler():void {
 
 private function showHandler():void {
 	
-	if(applicationId != publicData['applicationId'] || topLevelObjectId != publicData['topLevelObjectId']) {
+	if(applicationId != dataManager.currentApplication || topLevelObjectId != dataManager.currentPage) {
 		
-		applicationId = publicData['applicationId'];
-		topLevelObjectId = publicData['topLevelObjectId'];
+		applicationId = dataManager.currentApplication;
+		topLevelObjectId = dataManager.currentPage;
 		PopUpManager.addPopUp(ppm, this, true);
 		PopUpManager.centerPopUp(ppm);
-		dataManager.init(applicationId, topLevelObjectId);	
+		//dataManager.init(applicationId, topLevelObjectId);	
 	} else {
 		
 		workArea.visible = true;
@@ -103,7 +95,7 @@ private function hideHandler():void {
 private function topLevelObjectChange():void {
 	
 	topLevelObjectId = publicData['topLevelObjectId'] = pageList.selectedItem.@ID;
-	dataManager.init(applicationId, topLevelObjectId);
+	//dataManager.init(applicationId, topLevelObjectId);
 }
 
 /* private function createObjects(objectsXML:XML):void {
@@ -116,7 +108,7 @@ private function topLevelObjectChange():void {
 
 private function initCompleteHandler(event:Event):void {
 	
-	pageList.dataProvider = dataManager.topLevelObjects.Object;
+	pageList.dataProvider = dataManager.listPages.Object;
 	
 	workArea.showTopLevelContainer(publicData['applicationId'], publicData['topLevelObjectId']);
 	

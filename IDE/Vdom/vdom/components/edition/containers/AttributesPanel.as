@@ -1,6 +1,7 @@
 package vdom.components.editor.containers {
 
 import flash.display.DisplayObject;
+import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
@@ -22,14 +23,12 @@ import mx.controls.ToolTip;
 import mx.core.ClassFactory;
 import mx.core.EdgeMetrics;
 import mx.core.IUIComponent;
+import mx.core.UIComponent;
 import mx.events.ValidationResultEvent;
-import mx.skins.Border;
 import mx.validators.RegExpValidator;
 
-import vdom.Languages;
-import flash.events.Event;
 import vdom.controls.colorPicker.ColorPicker;
-import mx.core.UIComponent;
+import vdom.managers.LanguageManager;
 
 public class AttributesPanel extends ClosablePanel {
 		
@@ -49,12 +48,11 @@ public class AttributesPanel extends ClosablePanel {
 	private var applyButton:Button;
 	
 	/* private var _type:XML; */
-	private var _typeID:String;
+	private var typeName:String;
 	private var _collection:XMLListCollection;
 	private var objectDescription:XML;
 	
 	private var fieldsArray:Array;
-	private var languages:Languages;
 	
 	private var _isValid:Boolean;
 	private var _objectChanged:Boolean;
@@ -73,12 +71,14 @@ public class AttributesPanel extends ClosablePanel {
 	private var attributesVisible:Boolean;
 	private var old_attributesVisible:Boolean;
 	
+	private var languageManager:LanguageManager;
+	
 	public function AttributesPanel() {
 		
 		super();
 		help = null;
-		_typeID = null;
-		languages = Languages.getInstance();
+		typeName = null;
+		//languages = LanguageManager.getInstance();
 		//this.addEventListener(KeyboardEvent.KEY_UP, enterHandler);
 		horizontalScrollPolicy = 'off';
 		verticalScrollPolicy = 'off';
@@ -88,6 +88,7 @@ public class AttributesPanel extends ClosablePanel {
 		
 		invalidElementsCount = 0;
 		attributesVisible = old_attributesVisible = false;
+		languageManager = LanguageManager.getInstance();
 	}
 	
 	public function get acceptLabel():String {
@@ -413,7 +414,7 @@ public class AttributesPanel extends ClosablePanel {
 			
 			var currentAttribute:Object = cursor.current;
 			
-			var label:String = languages.getLanguagePhrase(_typeID, attributeXMLDescription.DisplayName);
+			var label:String = resourceManager.getString(typeName, attributeXMLDescription.DisplayName);
 			
 			var codeInterfaceRE:RegExp = /^(\w*)\((.*)\)/;
 			
@@ -470,7 +471,7 @@ public class AttributesPanel extends ClosablePanel {
 					
 					while (listValues = codeInterfaceValueRE.exec(codeInterface['value'])) {
 						
-						var comboBoxLabel:String = languages.getLanguagePhrase(_typeID, listValues[1]);
+						var comboBoxLabel:String = ''//languages.getLanguagePhrase(_typeID, listValues[1]);
 						
 						var listItem:Object = {label:comboBoxLabel, data:listValues[2]}
 						
@@ -620,8 +621,8 @@ public class AttributesPanel extends ClosablePanel {
 		validator.property = valueType;
 		validator.expression = '^'+regExp+'$';
 		validator.noMatchError = 
-			validator.requiredFieldError = 
-				languages.getLanguagePhrase(_typeID, errorMsg);
+			validator.requiredFieldError = ''
+				//languages.getLanguagePhrase(_typeID, errorMsg);
 		
 	}
 	
@@ -635,7 +636,7 @@ public class AttributesPanel extends ClosablePanel {
 			
 			if (_collection is XMLListCollection) {
 				
-				_typeID = objectDescription.Type.Information.ID;
+				typeName = objectDescription.Type.Information.Name;
 				titleValue += ': ' + objectDescription.Type.Information.Name;
 				
 				createAttributes();
@@ -728,7 +729,7 @@ public class AttributesPanel extends ClosablePanel {
 	private function focusInEventHandler(event:FocusEvent):void {
 		
 		var phraseID:String = event.currentTarget.data['helpPhraseID'];
-		help = languages.getLanguagePhrase(_typeID, phraseID);
+		help = resourceManager.getString('type',phraseID);
 	}
 	
 	private function focusOutEventHandler(event:FocusEvent):void {

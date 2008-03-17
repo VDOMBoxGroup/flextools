@@ -75,7 +75,7 @@ public class RenderManager implements IEventDispatcher {
 		soap = Soap.getInstance();
 		resourceManager = FileManager.getInstance();
 		
-		publicData = mx.core.Application.application.publicData;
+		//publicData = mx.core.Application.application.publicData;
 		
 		_items = new ArrayCollection();
 		_cursor = _items.createCursor();

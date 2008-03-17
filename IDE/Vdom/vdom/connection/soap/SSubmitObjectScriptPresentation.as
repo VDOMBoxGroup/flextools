@@ -29,20 +29,21 @@ package vdom.connection.soap
 			
 			//send data & set listener 
 			ws.submit_object_script_presentation();
-			ws.submit_object_script_presentation.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.submit_object_script_presentation.addEventListener(ResultEvent.RESULT, completeListener);
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			// get result 
-			resultXML = XML(event.result);
-			var evt:SoapEvent;
+			resultXML = <Result>{XMLList(event.result)}</Result>;
+			resultXML = resultXML.Types[0];
 			
+			var evt:SoapEvent;
+
 			// check Error
 			if(resultXML.name().toString() == 'Error')
 			{
-				evt = new SoapEvent(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, resultXML );
 				dispatchEvent(evt);
 			} else{
 				evt = new SoapEvent(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK, resultXML);

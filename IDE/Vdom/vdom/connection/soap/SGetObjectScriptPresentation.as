@@ -35,13 +35,15 @@ package vdom.connection.soap
 		private  function completeListener(event:ResultEvent):void
 		{
 			// get result 
-			resultXML = XML(event.result);
-			var evt:SoapEvent;
+			resultXML = <Result>{XMLList(event.result)}</Result>;
+			resultXML = resultXML.Result[0];
 			
+			var evt:SoapEvent;
+
 			// check Error
 			if(resultXML.name().toString() == 'Error')
 			{
-				evt = new SoapEvent(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_ERROR, resultXML );
 				dispatchEvent(evt);
 			} else{
 				evt = new SoapEvent(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, resultXML);

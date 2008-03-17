@@ -13,7 +13,6 @@ import mx.core.DragSource;
 import mx.utils.Base64Decoder;
 
 import vdom.managers.VdomDragManager;
-import vdom.Languages;
 
 public class Type extends VBox {
 	protected var _id:String;
@@ -55,8 +54,8 @@ public class Type extends VBox {
 		var phraseRE:RegExp = /#Lang\((\w+)\)/;
 		phraseID = phraseID.match(phraseRE)[1];
 		var languageID:String = typeID + '-' + phraseID;
-		var languages:Languages = Languages.getInstance();
-		return languages.language.(@ID == languageID)[0];
+		//var languages:LanguageManager = LanguageManager.getInstance();
+		return ''//languages.language.(@ID == languageID)[0];
 	}
 	
 	public function set resource(imageResource:Object):void {

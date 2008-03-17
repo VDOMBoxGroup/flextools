@@ -1,12 +1,11 @@
-import mx.core.Application;
-
-import vdom.Languages;
-import vdom.events.AuthenticationEvent;
 import flash.events.Event;
 import flash.events.MouseEvent;
+
 import mx.controls.Button;
-import mx.core.UITextField;
 import mx.controls.TextInput;
+
+import vdom.events.AuthenticationEvent;
+import vdom.managers.LanguageManager;
 
 [Embed(source='/assets/login/vectorGraphic.swf', symbol='LoginCube')]
 [Bindable]
@@ -17,16 +16,29 @@ public var loginCube:Class;
 public var loginTitle:Class;
 
 [Bindable]
-private var languageList:XML;
-[Bindable]
-private var languages:Languages;
+private var languageList:XMLList;
+
+private var languageManager:LanguageManager;
 
 private var dragged:Boolean = false;
 
-private function init():void {
+private function creationCompleteHandler():void {
 	
-	languageList = Application.application.languageList;
-	languages = Languages.getInstance();
+	languageManager = LanguageManager.getInstance();
+	
+	languageList = languageManager.languageList;
+	
+	var currentLocale:String = languageManager.currentLocale;
+	
+	var currentItem:XML = languageList.(@code == currentLocale)[0]
+	
+	if(currentItem)
+		selectLang.selectedItem = currentItem;
+	
+	//resourceManager.localeChain = ['ru_RU', 'en_US'];
+	//resourceManager.getLocales();
+	//languageList = Application.application.languageList;
+	//languages = Languages.getInstance();
 }
 
 private function show():void {
@@ -53,6 +65,11 @@ private function mouseUpHdlr(event:MouseEvent):void {
 	loginFormPanel.stopDrag();
 }
 
+private function languageChangeHandler(event:Event):void {
+	
+	languageManager.changeLocale(event.currentTarget.selectedItem.@code);
+}
+
 private function checkData():void {
 	
 	dispatchEvent(new Event('submitBegin'));
@@ -63,7 +80,7 @@ private function checkData():void {
 	dispatchEvent(ae);
 }
 
-private function changeLanguageHandler(event:Event):void {
+/* private function changeLanguageHandler(event:Event):void {
 	
 	languages.changeLanguage(event.currentTarget.selectedItem.@Code);
-}
+} */

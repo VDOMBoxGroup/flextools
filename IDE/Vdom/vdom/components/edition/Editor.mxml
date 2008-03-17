@@ -8,7 +8,7 @@
 	
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	
-	creationComplete="creationCompleteHandler();"
+	initialize="initializeHandler();"
 	show="showHandler();"
 	hide="hideHandler();"
 >
@@ -43,8 +43,8 @@
 			
 			<containers:AttributesPanel id="attributesPanel"
 				title="OBJECT PROPERTIES"
-				acceptLabel="{languages.language.(@label == 'editor_save')}" 
-				cancelLabel="{languages.language.(@label == 'editor_cancel')}"
+				acceptLabel="{resourceManager.getString('Application','editor_save')}" 
+				cancelLabel="{resourceManager.getString('Application','editor_cancel')}"
 				dataProvider="{dataManager.objectDescription}" width="200" />
 
 			<containers:ClosablePanel id="helpPanel" title="Help" 

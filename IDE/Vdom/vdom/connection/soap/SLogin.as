@@ -17,7 +17,7 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute( login:String, password:String):void
+		public function execute(login:String, password:String):void
 		{
 			// data
 			ws.open_session.arguments.name 		= login; 				 //- имя пользователя, строка

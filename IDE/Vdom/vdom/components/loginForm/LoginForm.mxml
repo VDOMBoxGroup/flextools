@@ -4,11 +4,12 @@
 	
 	width="100%" height="100%"
 	
-	creationComplete="init();"
+	creationComplete="creationCompleteHandler();"
 	show="show();"
 	hide="hide();">
 	
 	<mx:Metadata>
+		[ResourceBundle("LoginForm")]
 		[Exclude(name="alignButtons", kind="property")]
 		[Event(name="authDataChanged", type="vdom.events.AuthenticationEvent")]
 		[Event(name="submitBegin", type="flash.events.Event")]
@@ -28,12 +29,14 @@
 			fontWeight: "bold";
 		}
 	</mx:Style>
-
+	
+	<mx:XML id="locales" source="locale/locales.xml" />
+	
 	<mx:Image right="20" top="20" source="{loginTitle}" autoLoad="true"/>
 	<mx:Image source="{loginCube}" verticalCenter="-4.5" x="10"/>
 	<mx:Panel id="loginFormPanel" styleName="loginPanel" borderColor="#808080" borderStyle="solid" 
 		backgroundColor="#ffffff"
-		title="{languages.language.(@label == 'login_title')}" 
+		title="{resourceManager.getString('LoginForm','title')}" 
 		mouseUp="mouseUpHdlr(event)" mouseDown="mouseDownHdlr(event)"
 		dropShadowEnabled="true" shadowDirection="right" shadowDistance="5"
 		width="370" height="200" cornerRadius="12" horizontalAlign="center" 
@@ -41,40 +44,41 @@
 		<mx:Form 
 			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
 			<mx:FormItem
-				label="{languages.language.(@label == 'login_username')}">
+				label="{resourceManager.getString('LoginForm','username')}">
 				<mx:TextInput id="_username" 
 					width="140"/>
 			</mx:FormItem>
 			<mx:FormItem 
-				label="{languages.language.(@label == 'login_password')}">
+				label="{resourceManager.getString('LoginForm','password')}">
 				<mx:TextInput id="_password"
 					width="140" 
 					displayAsPassword="true" text="777"/>
 			</mx:FormItem>
 			<mx:FormItem 
-				label="{languages.language.(@label == 'login_ip')}">
+				label="{resourceManager.getString('LoginForm','ip')}">
 				<mx:TextInput id="_ip"
 					width="140" 
 					text="localhost:81"/>
 			</mx:FormItem>
 			<mx:FormItem
-				label="{languages.language.(@label == 'login_language')}">
+				label="{resourceManager.getString('LoginForm','language')}">
 				<mx:ComboBox id="selectLang"
 					width="140"
-					dataProvider="{languageList.Language}"
-					labelField="@label"
-			 		fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
-			 		change="changeLanguageHandler(event);"/>
+					fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
+					dataProvider="{languageList}"
+			 		labelField="@label"
+			 		change="languageChangeHandler(event);"
+			 		/>
 			</mx:FormItem>
 		</mx:Form>
 		<mx:ControlBar width="100%" horizontalAlign="center" horizontalGap="0" 
 			paddingBottom="-1"
 			barColor="#ff0066"  alpha="1.0" borderColor="#0000ff">
 			<mx:Button id="submitButton" styleName="loginButtonOK"
-				label="{languages.language.(@label == 'login_okbutton')}"
+				label="{resourceManager.getString('LoginForm','ok_button')}"
 				click="checkData();" width="110"/>
 				<mx:Button id="quitButton" styleName="loginButtonQuit"
-				label="{languages.language.(@label == 'login_quitbutton')}"
+				label="{resourceManager.getString('LoginForm','quit_button')}"
 				 width="110"/>
 		</mx:ControlBar>
 	</mx:Panel>
