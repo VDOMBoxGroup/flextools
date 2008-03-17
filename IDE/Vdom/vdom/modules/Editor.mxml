@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas
+	
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="vdom.containers.*"
+	xmlns:editor="vdom.components.editor.*"
+	
+	label="{resourceManager.getString('Application','edit_title')}" width="100%" height="100%"  
+	show="{placeCanvas.selectedChild=editorCanv}" >
+
+	<controls:ControlPanel 
+		top="0" bottom="0" width="100%" horizontalAlign="left" horizontalGap="5" verticalAlign="middle">
+		
+		<controls:ActionButton styleName="editionButton"
+			label="{resourceManager.getString('Application','edit_edition')}"
+			labelPlacement="bottom"
+			click="{placeCanvas.selectedChild=editorCanv}"/>
+		
+		<controls:ActionButton styleName="scriptButton" 
+			label="{resourceManager.getString('Application','edit_script')}" 
+			labelPlacement="bottom"
+			click="{placeCanvas.selectedChild=scriptCanv}"/>
+		
+		<controls:ActionButton styleName="previewButton" 
+			label="{resourceManager.getString('Application','edit_preview')}"
+			labelPlacement="bottom"
+			switched="false"
+			click="{
+				navigateToURL(
+					new URLRequest('http://vdom:81/'+application.publicData['topLevelObjectId']+'.vdom')
+				)
+			}"/>
+		
+		<controls:ActionButton styleName="treeButton"
+			labelPlacement="bottom"
+			label="{resourceManager.getString('Application','edit_tree')}"
+			click="{placeCanvas.selectedChild=treeCanv}"/>
+			
+		
+		<controls:ActionButton styleName="analyseButton"
+			label="{resourceManager.getString('Application','edit_analyse')}"
+			labelPlacement="bottom"
+			click="{placeCanvas.selectedChild=analyseCanv}"/>
+		
+		<controls:ActionButton styleName="statisticsButton" 
+			label="{resourceManager.getString('Application','edit_statistics')}"
+			labelPlacement="bottom"/>
+		
+		<controls:ActionButton styleName="eventsButton"
+			label="{resourceManager.getString('Application','edit_events')}"
+			labelPlacement="bottom"/>	
+	</controls:ControlPanel>
+	
+	<editor:Editor id="editorCanv" width="100%" height="100%"/>
+</mx:Canvas>
