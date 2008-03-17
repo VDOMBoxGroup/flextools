@@ -369,14 +369,14 @@ package vdom.components.treeEditor
 			return  min.toString();
 		}
 		
-		
+		/*
 		
 		private function dispStartDrag(evt:MouseEvent):void
 		{
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAG, _ID));
 		}
 		 
-		 
+		 */
 		 /****      description         ****/
 		 
 		 public function set description(names:String):void
