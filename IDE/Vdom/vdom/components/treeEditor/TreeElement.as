@@ -2,6 +2,11 @@ package vdom.components.treeEditor
 {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
+	import flash.net.FileFilter;
+	import flash.utils.ByteArray;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Button;
@@ -162,6 +167,8 @@ package vdom.components.treeEditor
 			image.scaleContent = true;
 			image.height = 100;
 			image.width = 95;
+			image.doubleClickEnabled = true;
+			image.addEventListener(MouseEvent.DOUBLE_CLICK, imageDoubleClickHandler);
 			cnvDownLayer.addChild(image);
 			
 			
@@ -280,11 +287,34 @@ package vdom.components.treeEditor
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, _ID));	
 		}
 		
+		private var source:File;
+		private function imageDoubleClickHandler(msEvt:MouseEvent):void
+		{
+			if (source == null) { source = new File(); }
+				source.addEventListener(Event.SELECT, sourceSelectHandler);
+				source.browseForOpen("Choose file to compress", [ new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png")]);
+		}
+		
+		
+		private function sourceSelectHandler(event:Event):void
+		{
+			if (source != null && !source.isDirectory )
+			{
+				var srcStream:FileStream = new FileStream();
+				srcStream.open(source, FileMode.READ);
+				
+				var srcBytes:ByteArray = new ByteArray();
+				srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
+				srcStream.close();
+
+				image.source = srcBytes;
+			}
+		}
+
 		public function set sourseImg(obj:Object):void
 		{
 			image.source = obj;
 		}
-		
 		
 			// при нажатии кнопки свернуть
 		private function changeState(blHide:Boolean):void
