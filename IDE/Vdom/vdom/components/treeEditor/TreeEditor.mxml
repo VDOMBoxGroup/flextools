@@ -58,7 +58,7 @@
  * 
  * 			to Do
  *		Линии красиво 
- * 		Картинка менялась
+ * 	//	Картинка менялась
  * 		Выстраивание дерева
  * 	//	Перенос елемента влево и вверх
  * 		
@@ -238,8 +238,112 @@
 				}
 			}
 		}
+		creatTree();
 	}
 	
+	private function creatTree():void
+	{
+		var massMap:Array = new Array();
+		var massTreeObj:Array = new Array();
+		for each(var xmlObj:XML in xml1.children())
+		{
+			
+			var obID:String = xmlObj.@ID.toXMLString();
+			 massTreeObj[obID] = new TreeObj(obID);
+		}
+		
+		for each( xmlObj in xml1.children())
+		{
+			var fromObID:String = xmlObj.@ID.toXMLString(); 
+			for each(var xmlLavel:XML in xmlObj.children())
+			{
+				for each(var xmlLavelObj:XML in xmlLavel.children())
+				{
+					var toObjID:String = xmlLavelObj.@ID.toXMLString();
+					massTreeObj[fromObID].child = massTreeObj[toObjID];
+					massTreeObj[toObjID].parent = massTreeObj[fromObID];
+					
+				}
+			}
+		}
+		
+		var depth:int = 0;
+		for (var name:String in massTreeObj)
+			if (massTreeObj[name].parent == null)
+			{
+				setPosition(name);	
+			} 
+			/*else 
+			if (massTreeObj[name].childs == null)
+			{
+				setPosition(name);
+			}
+			*/
+		function setPosition(inName:String):void
+		{
+			if (massMap[depth] == null)
+			{
+				massMap[depth] = new Array();
+				
+			}
+			
+			var breadth:int = massMap[depth].length; 
+				 massMap[depth][breadth] = inName;
+			
+			massTreeObj[inName].mapX = breadth;
+			massTreeObj[inName].mapY = depth;
+			massTreeObj[inName].depth = depth;
+		
+			
+			depth++;
+			for (var name:String in massTreeObj[inName].childs)
+			{
+				
+				setPosition(name);
+			}
+			depth--;
+		}
+		
+		for (var str:String in massTreeObj)
+		{
+			massTreeElements[str].x  = massTreeObj[str].mapX * 300;
+			massTreeElements[str].y  = massTreeObj[str].mapY * 100;
+			//trace(str);
+			//trace(massTreeElements[str].ID);
+		//	trace(massMap[str].namE);
+		}
+		
+		//trace(str)
+			// massTreeObj[obID] = new TreeObj(obID);
+		//	var xmlL:XML = xmlObj.Level.(@Index == '0');
+			//trace('******\n' + xmlL.toString());
+		
+			/*
+			
+			<Structure>
+  <Object ID="10000004-0000-0000-0000-000000000000" ResourceID="5037384f-e734-4062-805f-ad2e2bbaa8c4" left="455" state="false" top="331"/>
+  <Object ID="ce81d5c9-c8c2-49f5-8701-8d3d0669a4e9" ResourceID="" left="44" state="false" top="317"/>
+  <Object ID="10000003-0000-0000-0000-000000000000" ResourceID="ada135f0-0c32-4d7f-8217-a7a154be1769" left="788" state="false" top="326"/>
+  <Object ID="10000002-0000-0000-0000-000000000000" ResourceID="73e096f1-9d44-408e-a8d9-d7ca9716a1a9" left="773" state="false" top="175">
+    <Level Index="0">
+      <Object ID="10000003-0000-0000-0000-000000000000"/>
+    </Level>
+  </Object>
+  <Object ID="10000001-0000-0000-0000-000000000000" ResourceID="e3e37d7c-20dd-44c7-bd47-e956dd3541e1" left="270" state="false" top="24">
+    <Level Index="0">
+      <Object ID="10000005-0000-0000-0000-000000000000"/>
+      <Object ID="10000002-0000-0000-0000-000000000000"/>
+    </Level>
+  </Object>
+  <Object ID="10000005-0000-0000-0000-000000000000" ResourceID="589373f0-dde0-4838-996f-f8dee7444973" left="58" state="false" top="171">
+    <Level Index="0">
+      <Object ID="ce81d5c9-c8c2-49f5-8701-8d3d0669a4e9"/>
+      <Object ID="10000004-0000-0000-0000-000000000000"/>
+    </Level>
+  </Object>
+</Structure>*/
+		
+	}
 	private function markLines(muEvt:MouseEvent):void
 	{
 		curLine.mark = false;
@@ -454,7 +558,7 @@
 	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
-		var pnTo:Object = script.drLine(mouseX, mouseY, curTree);
+		var pnTo:Object = script.drLine(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
 	
 		var obj:Object = new Object()
 		//obj = colorMenu.selectedItem;

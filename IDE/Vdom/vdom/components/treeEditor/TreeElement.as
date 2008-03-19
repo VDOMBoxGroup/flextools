@@ -392,7 +392,6 @@ package vdom.components.treeEditor
 		public function get resourceID():String
 		{
 			//txt.text = names;
-			trace(name +" : "+_resourceID);
 			return  _resourceID;
 		}
 		
