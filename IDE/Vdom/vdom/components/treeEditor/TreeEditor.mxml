@@ -60,7 +60,7 @@
  *		Линии красиво 
  * 		Картинка менялась
  * 		Выстраивание дерева
- * 		Перенос елемента влево и вверх
+ * 	//	Перенос елемента влево и вверх
  * 		
  * 
  * 
@@ -347,6 +347,8 @@
 		
 		if(dx || dy)
 		{
+			
+			
 			for (var ID:String in massTreeElements)
 			{
 				massTreeElements[ID].x += dx;
@@ -356,8 +358,12 @@
 			for (var level:String in massLines)
 				for (var frsTrElem:String in massLines[level])
 					for (var sknTrElem:String in massLines[level][frsTrElem])
-					massLines[level][frsTrElem][sknTrElem].updateVector()
+					massLines[level][frsTrElem][sknTrElem].updateVector();
+			
+			if(dx)	main.horizontalScrollPosition += dx;
+			if(dy)	main.verticalScrollPosition	  += dy;
 		}
+		
 		
 	}
 	

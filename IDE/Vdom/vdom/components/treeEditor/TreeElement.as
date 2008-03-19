@@ -15,8 +15,11 @@ package vdom.components.treeEditor
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	import mx.core.Application;
+	import mx.utils.Base64Encoder;
 	
 	import vdom.connection.Proxy;
+	import vdom.connection.soap.Soap;
+	import vdom.connection.soap.SoapEvent;
 	import vdom.events.TreeEditorEvent;
 	
 	public class TreeElement extends Canvas
@@ -38,10 +41,11 @@ package vdom.components.treeEditor
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
 		private var _type:Label;
+		private var publicData:Object = Application.application.publicData;
+		private var soap:Soap = Soap.getInstance();
 		
 		
-		
-		public var _resourceID:String = '';
+		private  var _resourceID:String = '';
 		
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='defaultPicture')]
 		[Bindable]
@@ -261,7 +265,7 @@ package vdom.components.treeEditor
 				txt.text = txtInp.text;
 				txtInp.visible = false;
 				safeChange();
-				trace('1')
+			//	trace('1')
 			}
 			
 			if(textArea.editable  )
@@ -271,7 +275,7 @@ package vdom.components.treeEditor
 				textArea.selectable = false;
 				textArea.setStyle('fontWeight', "bold");
 				safeChange();
-				trace('2');	
+			//	trace('2');	
 			}
 		}
 		
@@ -300,14 +304,25 @@ package vdom.components.treeEditor
 		{
 			if (source != null && !source.isDirectory )
 			{
+				var srcBytes:ByteArray   = new ByteArray();
 				var srcStream:FileStream = new FileStream();
-				srcStream.open(source, FileMode.READ);
 				
-				var srcBytes:ByteArray = new ByteArray();
+				srcStream.open(source, FileMode.READ);
 				srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
 				srcStream.close();
 
 				image.source = srcBytes;
+				var byArr:ByteArray = new ByteArray();
+				byArr.writeBytes(srcBytes);
+				byArr.compress();
+
+				var bs64Encdr:Base64Encoder = new Base64Encoder();
+				bs64Encdr.encodeBytes(byArr);
+			//	trace(bs64Encdr.toString());
+				//послать
+			//	source.type; //.png
+			//	source.name; //name.png
+				setResource(source.type, source.name, bs64Encdr.toString());
 			}
 		}
 
@@ -377,6 +392,7 @@ package vdom.components.treeEditor
 		public function get resourceID():String
 		{
 			//txt.text = names;
+			trace(name +" : "+_resourceID);
 			return  _resourceID;
 		}
 		
@@ -447,7 +463,7 @@ package vdom.components.treeEditor
 			 var xmlToSend:XML = XML(str);
 			
 		//	 trace(xmlToSend.toString());
-			var publicData:Object = Application.application.publicData;
+			
 			var proxy:Proxy = Proxy.getInstance();
 			proxy.setAttributes( publicData.applicationId, _ID,xmlToSend); 
 		}
@@ -456,6 +472,7 @@ package vdom.components.treeEditor
 		{
 			return txtInp.visible || textArea.editable;
 		} 
+		
 		public function unSelect():void
 		{
 			endFormatinfHandler(new MouseEvent(MouseEvent.CLICK));
@@ -469,6 +486,48 @@ package vdom.components.treeEditor
 		//	rect.graphics.drawRect(0, 0, this.width, this.height);
 		}
 		*/
+	/***
+	 * 
+	 * 
+	 * 			set application resource
+	 * 		needed in change for  Orions script
+	 * 
+	 * 
+	 * */
+	 private function setResource(restype:String, resname:String, resdata:String):void
+	 {
+	 	trace(restype+' : '+resname+' : '+resdata);
+	 	
+	 
+	 	soap.setResource(publicData.applicationId,	_resourceID, 
+	 												restype, 
+	 												resname, 
+	 												resdata );
+		soap.addEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+	 	soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	 	
+	 }
 	
+	 private function setResourceOkHandler(spEvt:SoapEvent):void
+	 {
+	 	
+	 	var rez:XML = spEvt.result;
+	 	
+	 	
+	 	_resourceID = rez.Resource.@id;
+	 	trace('setResourceOkHandler: ' + _resourceID);
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	 }
+	 
+	 private function setResourceErrorHandler(spEvt:SoapEvent):void
+	 {
+	 	trace('setResourceErrorHandler: ' + spEvt);
+	 	image.source = defaultPicture;
+	 	
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	 }
+	 
 	}
 }
