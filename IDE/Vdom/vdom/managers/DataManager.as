@@ -357,8 +357,6 @@ public class DataManager implements IEventDispatcher {
 		dispatchEvent(dmEvent);
 	}
 	
-	
-	
 	/**
 	 * 
 	 * @param typeId идетнтификатор типа.
