@@ -136,6 +136,8 @@ public class DataManager implements IEventDispatcher {
 		
 		var pages:XMLList = event.result.Objects.Object;
 		
+		delete pages.Parent;
+		
 		_currentApplication.appendChild = pages;
 		
 		changeCurrentPage(pages[0].@ID);
@@ -431,7 +433,7 @@ public class DataManager implements IEventDispatcher {
 	public function setApplactionStructure(struct:XML):void {
 		
 		soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, setApplicationStructureHandler);
-		soap.setApplicationStructure(_currentApplication, struct);
+		soap.setApplicationStructure(_currentApplicationId, struct);
 	}
 	
 	private function setApplicationStructureHandler(event:SoapEvent):void {
@@ -482,7 +484,7 @@ public class DataManager implements IEventDispatcher {
 		//_objects.appendChild(newObject);
 		
 		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, createObjectCompleteHandler);
-		soap.createObject(_currentApplication, parentId, typeId, attributes, objectName);
+		soap.createObject(_currentApplicationId, parentId, typeId, attributes, objectName);
 		
 		//return objectId;
 	}
@@ -490,14 +492,21 @@ public class DataManager implements IEventDispatcher {
 	private function createObjectCompleteHandler(event:SoapEvent):void {
 		
 		var result:XML = event.result;
-		var objectId:String = result.Object.@ID;
-		var objectName:String = result.Object.@Name;
-		var parentId:String = result.Parent;
-		var objectTypeId:String = result.Object.@Type;
-		var objectType:XML = _listTypes.Type.Information.(ID == objectTypeId).parent();
+		//var objectId:String = result.Object.@ID;
+		//var objectName:String = result.Object.@Name;
+		var parentId:String = result.Object.Parent;
+		//var objectTypeId:String = result.Object.@Type;
+		//var objectType:XML = getTypeByObjectId(obj
+		
+		var parentObject:XML = getObject(parentId);
+		
+		var newObject:XML = new XML(result.Object);
+		delete newObject.Parent
+		
+		parentObject.Objects.appendChild(newObject);
 		
 		
-		var newObject:XML = <Object Name={objectName} ID={objectId} Type={objectType.Information.ID} />;
+		/* var newObject:XML = <Object Name={objectName} ID={objectId} Type={objectType.Information.ID} />;
 
 		//var attributes:XML = <Attributes />;
 		var attributes:XML = result.Object.Attributes[0];
@@ -508,7 +517,7 @@ public class DataManager implements IEventDispatcher {
 			attributes.appendChild(<Attribute Name={prop.Name.toString()}>{prop.DefaultValue.toString()}</Attribute>);
 		} */
 		
-		newObject.appendChild(attributes);
+		/* newObject.appendChild(attributes);
 		newObject.appendChild(objectType);
 		newObject.appendChild(objects);
 		
@@ -518,8 +527,8 @@ public class DataManager implements IEventDispatcher {
 			parentObject.Objects.appendChild(newObject);
 			
 		}
-		else
-			//_objects.Objects.appendChild(newObject);
+		else */
+			//_objects.Objects.appendChild(newObject); */
 		
 		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECTS_CREATED);
