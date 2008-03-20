@@ -1,55 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas
-	
+<mx:ViewStack
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="vdom.containers.*"
-	xmlns:editor="vdom.components.editor.*"
+	xmlns:edit="vdom.components.edit.*"
+	xmlns:scriptEditor="vdom.components.scriptEditor.*"
+	xmlns:treeEditor="vdom.components.treeEditor.*"
+	xmlns:analyse="vdom.components.analyse.*"
 	
-	label="{resourceManager.getString('Application','edit_title')}" width="100%" height="100%"  
-	show="{placeCanvas.selectedChild=editorCanv}" >
-
+	creationComplete="creationCompleteHandler();"
+	show="showHandler();"
+	hide="hideHandler();"
+	
+	creationPolicy="all">
+	
+<mx:Script source="includes/editor.as" />
+<mx:Canvas id="initModule" width="100%" height="100%">
+	<mx:Label text="Loading..." horizontalCenter="0" verticalCenter="0"/>
+</mx:Canvas>
+<mx:VBox id="components">
 	<controls:ControlPanel 
-		top="0" bottom="0" width="100%" horizontalAlign="left" horizontalGap="5" verticalAlign="middle">
+		width="100%" height="90"
+		horizontalAlign="left" verticalAlign="middle"
+		horizontalGap="5">
 		
 		<controls:ActionButton styleName="editionButton"
-			label="{resourceManager.getString('Application','edit_edition')}"
+			label="{resourceManager.getString('Application','editor_edition')}"
 			labelPlacement="bottom"
 			click="{placeCanvas.selectedChild=editorCanv}"/>
 		
 		<controls:ActionButton styleName="scriptButton" 
-			label="{resourceManager.getString('Application','edit_script')}" 
+			label="{resourceManager.getString('Application','editor_script')}" 
 			labelPlacement="bottom"
 			click="{placeCanvas.selectedChild=scriptCanv}"/>
 		
 		<controls:ActionButton styleName="previewButton" 
-			label="{resourceManager.getString('Application','edit_preview')}"
+			label="{resourceManager.getString('Application','editor_preview')}"
 			labelPlacement="bottom"
-			switched="false"
-			click="{
-				navigateToURL(
-					new URLRequest('http://vdom:81/'+application.publicData['topLevelObjectId']+'.vdom')
-				)
-			}"/>
+			switched="false"/>
 		
 		<controls:ActionButton styleName="treeButton"
 			labelPlacement="bottom"
-			label="{resourceManager.getString('Application','edit_tree')}"
+			label="{resourceManager.getString('Application','editor_tree')}"
 			click="{placeCanvas.selectedChild=treeCanv}"/>
 			
 		
 		<controls:ActionButton styleName="analyseButton"
-			label="{resourceManager.getString('Application','edit_analyse')}"
+			label="{resourceManager.getString('Application','editor_analyse')}"
 			labelPlacement="bottom"
 			click="{placeCanvas.selectedChild=analyseCanv}"/>
 		
 		<controls:ActionButton styleName="statisticsButton" 
-			label="{resourceManager.getString('Application','edit_statistics')}"
+			label="{resourceManager.getString('Application','editor_statistics')}"
 			labelPlacement="bottom"/>
 		
 		<controls:ActionButton styleName="eventsButton"
-			label="{resourceManager.getString('Application','edit_events')}"
+			label="{resourceManager.getString('Application','editor_events')}"
 			labelPlacement="bottom"/>	
 	</controls:ControlPanel>
 	
-	<editor:Editor id="editorCanv" width="100%" height="100%"/>
-</mx:Canvas>
+	<mx:ViewStack id="placeCanvas" width="100%" height="100%">
+	
+		<mx:Canvas id="initComponent" width="100%" height="100%">
+			<mx:Label text="Loading..." horizontalCenter="0" verticalCenter="0"/>
+		</mx:Canvas>
+		
+		<edit:Edit id="editorCanv" width="100%" height="100%"/>
+		
+		<scriptEditor:ScriptEditor id="scriptCanv" width="100%" height="100%"/>
+			
+		<treeEditor:TreeEditor id="treeCanv" width="100%" height="100%" />
+		
+		<analyse:Analyse id="analyseCanv" width="100%" height="100%"/>
+		
+	</mx:ViewStack>
+</mx:VBox>
+</mx:ViewStack>

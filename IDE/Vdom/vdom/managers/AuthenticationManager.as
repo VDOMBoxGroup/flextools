@@ -4,15 +4,13 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
-import mx.core.Application;
-
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.events.AuthenticationEvent;
 
-public class Authentication implements IEventDispatcher {
+public class AuthenticationManager implements IEventDispatcher {
 	
-	private static var instance:Authentication;
+	private static var instance:AuthenticationManager;
 	
 	private var dispatcher:EventDispatcher = new EventDispatcher();
 	private var publicData:Object;
@@ -24,17 +22,19 @@ public class Authentication implements IEventDispatcher {
 	private var _password:String;
 	private var _tmpPassword:String;
 	
+	private var _ip:String;
+	
 	
 	/**
 	 * 
 	 * @return instance of DataManager class (Singleton)
 	 * 
 	 */	
-	public static function getInstance():Authentication
+	public static function getInstance():AuthenticationManager
 	{
 		if (!instance) {
 			
-			instance = new Authentication();
+			instance = new AuthenticationManager();
 		}
 
 		return instance;
@@ -45,7 +45,7 @@ public class Authentication implements IEventDispatcher {
 	 * Constructor
 	 * 
 	 */	
-	public function Authentication() {
+	public function AuthenticationManager() {
 		
 		if (instance)
 			throw new Error("Instance already exists.");
@@ -56,14 +56,18 @@ public class Authentication implements IEventDispatcher {
 		
 	}
 	
-	public function login(username:String, password:String):void {
+	public function changeAuthenticationInformation(username:String, password:String, ip:String):void {
 		
 		_tmpUsername = username;
 		_tmpPassword = password;
+		_ip = ip;
+	}
+	
+	public function login():void {
 		
-		soap.addEventListener(SoapEvent.LOGIN_OK, loginHandler);
-		soap.addEventListener(SoapEvent.LOGIN_ERROR, loginErrorHandler);
-		soap.login(username, password);	
+		var wsdl:String= 'http://'+_ip+'/vdom.wsdl';
+		soap.addEventListener('loadWsdlComplete', soapInitComplete);
+		soap.init(wsdl);
 	}
 	
 	public function logout():void {
@@ -82,6 +86,16 @@ public class Authentication implements IEventDispatcher {
 	public function get password():String {
 		
 		return _password;
+	}
+	
+	private function soapInitComplete(event:Event):void {
+		
+		soap.removeEventListener('loadWsdlComplete', soapInitComplete);
+		
+		soap.addEventListener(SoapEvent.LOGIN_OK, loginHandler);
+		soap.addEventListener(SoapEvent.LOGIN_ERROR, loginErrorHandler);
+		
+		soap.login(_tmpUsername, _tmpPassword);
 	}
 	
 	private function loginHandler(event:SoapEvent):void {

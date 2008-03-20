@@ -1,7 +1,8 @@
 package vdom.events {
 
 import flash.events.Event;
-import vdom.components.editor.containers.workAreaClasses.Item;
+
+import vdom.components.edit.containers.workAreaClasses.Item;
 	
 public class ResizeManagerEvent extends Event {
 	

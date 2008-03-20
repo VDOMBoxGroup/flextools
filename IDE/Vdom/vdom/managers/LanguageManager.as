@@ -75,7 +75,7 @@ public class LanguageManager implements IEventDispatcher {
 			
 	}
 	
-	public function parseLanguageData(languageData:XML):void {
+	public function parseLanguageData(languageData:XMLList):void {
 		
 		//var beginT:int = getTimer();
 		var resourceBundles:Object = {}; 
@@ -87,7 +87,7 @@ public class LanguageManager implements IEventDispatcher {
 		var typeName:String = '';
 		var resourceName:String = '';
 		var content:String = '';
-		for each(var sentence:XML in languageData.Type.Languages.Language.Sentence) {
+		for each(var sentence:XML in languageData.Languages.Language.Sentence) {
 			
 			languageCode = sentence.parent().@Code;
 			localeIndex = allLocales.indexOf(languageCode);

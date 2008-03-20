@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:containers="vdom.components.editor.containers.*"
+	xmlns:containers="vdom.components.edit.containers.*"
 	xmlns:mainContainers="vdom.containers.*"
 	
 	width="100%" height="100%"
@@ -9,16 +9,17 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	
 	initialize="initializeHandler();"
+	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
 	hide="hideHandler();"
 >
-	<mx:Script source="includes/editor.as" />
+	<mx:Script source="includes/edit.as" />
 	
 	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">
 	
 		<containers:Types id="types" resizeToContent="true"
 			height="100%" y="100" width="90" minWidth="170" minHeight="0"
-			dataProvider="{typesXML}"
+			dataProvider="{dataManager.listTypes}"
 		/>
 		
 		<mx:VBox id="main" width="100%" bottom="0" height="100%">
@@ -28,7 +29,7 @@
 				<containers:WorkArea id="workArea"
 					horizontalScrollPolicy="off" verticalScrollPolicy="off"
 					visible="false"
-					dataProvider="{dataManager.objectDescription}" />
+					dataProvider="{dataManager.currentObject}" />
 					
 				<containers:XMLPresentationEditor id="xmlEditor" />
 				
@@ -45,7 +46,7 @@
 				title="OBJECT PROPERTIES"
 				acceptLabel="{resourceManager.getString('Application','editor_save')}" 
 				cancelLabel="{resourceManager.getString('Application','editor_cancel')}"
-				dataProvider="{dataManager.objectDescription}" width="200" />
+				dataProvider="{dataManager.currentObject}" width="200" />
 
 			<containers:ClosablePanel id="helpPanel" title="Help" 
 				width="200" >

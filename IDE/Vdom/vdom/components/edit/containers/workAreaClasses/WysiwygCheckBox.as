@@ -1,4 +1,4 @@
-package vdom.components.editor.containers.workAreaClasses {
+package vdom.components.edit.containers.workAreaClasses {
 	
 import flash.events.MouseEvent;
 

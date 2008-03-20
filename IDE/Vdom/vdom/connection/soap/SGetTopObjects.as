@@ -1,9 +1,11 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	
 	public class SGetTopObjects extends EventDispatcher 
@@ -19,28 +21,29 @@ package vdom.connection.soap
 		public function execute(appid:String):void
 		{
 			// protect
-			ws.get_top_objects.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.get_top_objects.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			var sid:String 		= code.sessionId;		// - идентификатор сессии 
+			var skey:String 		= code.skey();			//- очередной ключ сессии 
 			
 			// data
-			ws.get_top_objects.arguments.appid  	= appid;		//- идентификатор приложения 
+			//ws.get_top_objects.arguments.appid  	= appid;		//- идентификатор приложения 
 			
-			//send data & set listener 
-			ws.get_top_objects();
-			ws.get_top_objects.addEventListener(ResultEvent.RESULT,completeListener);
+			//send data & set listener
+			ws.get_top_objects.addEventListener(ResultEvent.RESULT, completeListener);
+			ws.get_top_objects(sid, skey, appid);
+			
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void
+		private function completeListener(event:ResultEvent):void
 		{
 			// get result 
 			resultXML = <Result>{XMLList(event.result)}</Result>;
-			resultXML = resultXML.Objects[0];
+			//resultXML = resultXML.Objects[0];
 			
 			var evt:SoapEvent;
-			
+			var name:String = resultXML.*[0].name().toString();
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
+			if(name == 'Error'){
 				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{

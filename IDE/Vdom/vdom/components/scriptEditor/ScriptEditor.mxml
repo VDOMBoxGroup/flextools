@@ -40,10 +40,10 @@
 			
 			var scriptText:String = '';
 			
-			if(dataManager.objectDescription) {
+			if(dataManager.currentObject) {
 				
 				var pattern:RegExp = /\W+/;
-				scriptText = dataManager.objectDescription.Type.SourceCode;
+				scriptText = dataManager.currentObject.Type.SourceCode;
 				scriptText = scriptText.replace(pattern,'');
 			}
 				

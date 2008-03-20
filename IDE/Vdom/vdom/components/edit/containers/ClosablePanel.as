@@ -1,4 +1,4 @@
-package vdom.components.editor.containers {
+package vdom.components.edit.containers {
 
 import flash.events.MouseEvent;	
 import mx.containers.Panel;

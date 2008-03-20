@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:ns1="vdom.components.scriptEditor.containers.*" xmlns:ns2="vdom.components.editor.containers.XMLPresentationClasses.*" 
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:XMLPresentationClasses="vdom.components.edit.containers.XMLPresentationClasses.*"
+	
 	backgroundColor="#ABABAB"
 	
-	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
 	hide="hideHandler();"
 >
@@ -32,7 +34,7 @@
 				scriptEditor.code = event.result.*.toXMLString();
 				this.enabled = true;
 			}
-			
+			/* 
 			private function creationCompleteHandler():void {
 				
 				this.enabled = false;
@@ -49,7 +51,7 @@
 					
 					insertCode();
 				}
-			}
+			} */
 			
 			private function showHandler():void {
 				
@@ -70,5 +72,5 @@
 		]]>
 	</mx:Script>
 	<mx:Button y="5" label="Save" height="20" x="10" cornerRadius="0"/>
-	<ns2:XMLScriptEditor id="scriptEditor" bottom="10" right="10" left="10" top="30"/>
+	<XMLPresentationClasses:XMLScriptEditor id="scriptEditor" bottom="10" right="10" left="10" top="30"/>
 </mx:Canvas>

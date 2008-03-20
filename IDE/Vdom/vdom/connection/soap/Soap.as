@@ -1,11 +1,11 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
-	import mx.rpc.events.ResultEvent;
+	
 	import mx.rpc.events.FaultEvent;
-	import vdom.connection.utils.FileUpload;
+	import mx.rpc.soap.LoadEvent;
+	import mx.rpc.soap.WebService;
 	
 		
 	public class Soap  extends EventDispatcher
@@ -34,10 +34,14 @@ package vdom.connection.soap
              	ws = new WebService();	
              	ws.wsdl =wsdl;
 				ws.useProxy = false;
+				ws.addEventListener(LoadEvent.LOAD, loadCompleteListener);
+				ws.addEventListener(FaultEvent.FAULT, errorListener);
 				ws.loadWSDL();
-				ws.addEventListener(FaultEvent.FAULT, errorListener  );
 		}
-	
+		private function loadCompleteListener(event:LoadEvent):void {
+			
+			dispatchEvent(new Event('loadWsdlComplete'));
+		}
 		/**
 		 *  1 - open session open_session
 		 */
@@ -174,11 +178,11 @@ package vdom.connection.soap
 		/**
 		 * 11. get application top-level objects  - get_top_objects
 		 */
-		private var sGetTopObjects:SGetTopObjects = new SGetTopObjects(ws);
+		 
 		
 		public  function getTopObjects(appid:String=''):void 
 		{
-			
+			var sGetTopObjects:SGetTopObjects = new SGetTopObjects(ws);
 			sGetTopObjects.execute(appid);
 			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, ldispatchEvent);
 			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_ERROR, ldispatchEvent);
@@ -374,9 +378,10 @@ package vdom.connection.soap
 			sWholeCreatePage.addEventListener(SoapEvent.WHOLE_UPDATE_ERROR, ldispatchEvent);
 		}
 		
-		private var sGetChildObjectsTree:SGetChildObjectsTree = new SGetChildObjectsTree(ws);
+		
 		public  function getChildObjectsTree(appid:String='',objid:String=''):void 
 		{	
+			var sGetChildObjectsTree:SGetChildObjectsTree = new SGetChildObjectsTree(ws);
 			sGetChildObjectsTree.execute(appid, objid);
 			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, ldispatchEvent);
 			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_ERROR, ldispatchEvent);

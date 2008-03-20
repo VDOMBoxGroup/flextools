@@ -1,4 +1,4 @@
-package vdom.components.editor.containers {
+package vdom.components.edit.containers {
 
 import flash.display.DisplayObject;
 import flash.events.Event;
@@ -414,7 +414,9 @@ public class AttributesPanel extends ClosablePanel {
 			
 			var currentAttribute:Object = cursor.current;
 			
-			var label:String = resourceManager.getString(typeName, attributeXMLDescription.DisplayName);
+			var displayName:String = attributeXMLDescription.DisplayName.toString();
+			
+			var label:String = getLanguagePhraseId(displayName);
 			
 			var codeInterfaceRE:RegExp = /^(\w*)\((.*)\)/;
 			
@@ -471,7 +473,7 @@ public class AttributesPanel extends ClosablePanel {
 					
 					while (listValues = codeInterfaceValueRE.exec(codeInterface['value'])) {
 						
-						var comboBoxLabel:String = ''//languages.getLanguagePhrase(_typeID, listValues[1]);
+						var comboBoxLabel:String = getLanguagePhraseId(listValues[1]);
 						
 						var listItem:Object = {label:comboBoxLabel, data:listValues[2]}
 						
@@ -626,8 +628,14 @@ public class AttributesPanel extends ClosablePanel {
 		
 	}
 	
-	
-	
+	private function getLanguagePhraseId(phrase:String):String {
+		
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		var phraseID:String = phrase.match(phraseRE)[1];
+		
+		return resourceManager.getString(typeName, phraseID);
+	}
+		
 	override protected function commitProperties():void {
 		
 		if(_objectChanged) {
@@ -729,7 +737,7 @@ public class AttributesPanel extends ClosablePanel {
 	private function focusInEventHandler(event:FocusEvent):void {
 		
 		var phraseID:String = event.currentTarget.data['helpPhraseID'];
-		help = resourceManager.getString('type',phraseID);
+		help = getLanguagePhraseId(phraseID);
 	}
 	
 	private function focusOutEventHandler(event:FocusEvent):void {

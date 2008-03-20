@@ -1,4 +1,4 @@
-package vdom.components.editor.containers.workAreaClasses {
+package vdom.components.edit.containers.workAreaClasses {
 
 import mx.controls.Image;
 import flash.display.Bitmap;

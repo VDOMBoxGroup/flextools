@@ -1,10 +1,10 @@
-package vdom.components.editor.containers {
+package vdom.components.edit.containers {
 
 import mx.collections.ArrayCollection;
 import mx.containers.Accordion;
 import mx.containers.VBox;
 
-import vdom.components.editor.containers.typesClasses.Type;
+import vdom.components.edit.containers.typesClasses.Type;
 import vdom.managers.FileManager;
 	
 public class Types extends Accordion {
@@ -18,11 +18,11 @@ public class Types extends Accordion {
 		fileManager = FileManager.getInstance();
 	}
 	
-	public function set dataProvider(typesXML:XML):void {
+	public function set dataProvider(typesXML:XMLList):void {
 		
 		var cat:Object = {};
 		var typesCollection:ArrayCollection = new ArrayCollection();
-		for each (var num:XML in typesXML.Type) {
+		for each (var num:XML in typesXML) {
 			
 			if(!cat[num.Information.Category]) {
 				

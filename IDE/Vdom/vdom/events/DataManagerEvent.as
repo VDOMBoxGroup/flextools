@@ -24,11 +24,20 @@ public class DataManagerEvent extends Event
 
     // Define static constant.
     public static const INIT_COMPLETE:String = 'initComplete';
-	public static const TYPES_LOADED:String = 'typesLoaded';
-	public static const OBJECTS_LOADED:String = 'objectsLoaded';
+    
+    public static const APPLICATION_DATA_LOADED:String = 'applicationDataLoaded';
+    public static const TYPES_LOADED:String = 'typesLoaded';
+    public static const PAGE_DATA_LOADED:String = 'pageDataLoaded';
+	
+	public static const CURRENT_PAGE_CHANGED:String = 'currentPageChanged';
+	public static const CURRENT_OBJECT_CHANGED:String = 'currentObjectChanged';
+	
+	//public static const OBJECTS_LOADED:String = 'objectsLoaded';
 	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';
+	
 	public static const OBJECTS_CREATED:String = 'objectCreated';
 	public static const OBJECT_DELETED:String = 'objectDeleted';
+	
 	public static const STRUCTURE_LOADED:String = 'structureLoaded';
 	public static const STRUCTURE_SAVED:String = 'structureSaved';
 	

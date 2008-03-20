@@ -36,7 +36,7 @@ package vdom.connection.soap
 		{
 			// get result 
 			resultXML = <Result>{XMLList(event.result)}</Result>;
-			resultXML = resultXML.Objects[0];
+			resultXML = resultXML.Object[0];
 			
 			var evt:SoapEvent;
 			

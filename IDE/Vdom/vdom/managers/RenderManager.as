@@ -1,37 +1,27 @@
 package vdom.managers {
 
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
+import flash.display.Graphics;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
-import flash.events.MouseEvent;
 
 import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
-import mx.collections.XMLListCollection;
-import mx.containers.Canvas;
 import mx.controls.Button;
 import mx.controls.Image;
-import mx.controls.Text;
-import mx.controls.TextArea;
-import mx.core.Application;
 import mx.core.Container;
-import mx.core.UIComponent;
-import mx.events.DragEvent;
 
-import vdom.components.editor.containers.workAreaClasses.Item;
-import vdom.components.editor.containers.workAreaClasses.WysiwygCheckBox;
-import vdom.components.editor.containers.workAreaClasses.WysiwygImage;
-import vdom.components.editor.containers.workAreaClasses.WysiwygRadioButton;
-import vdom.components.editor.containers.workAreaClasses.WysiwygText;
-import vdom.components.editor.containers.workAreaClasses.WysiwygTextInput;
+import vdom.components.edit.containers.workAreaClasses.Item;
+import vdom.components.edit.containers.workAreaClasses.WysiwygCheckBox;
+import vdom.components.edit.containers.workAreaClasses.WysiwygImage;
+import vdom.components.edit.containers.workAreaClasses.WysiwygRadioButton;
+import vdom.components.edit.containers.workAreaClasses.WysiwygText;
+import vdom.components.edit.containers.workAreaClasses.WysiwygTextInput;
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.events.RenderManagerEvent;
-import flash.display.Graphics;
 import vdom.managers.renderClasses.ItemDescription;
 
 public class RenderManager implements IEventDispatcher {
@@ -39,9 +29,10 @@ public class RenderManager implements IEventDispatcher {
 	private static var instance:RenderManager;
 	
 	private var soap:Soap;
+	private var dataManager:DataManager;
 	private var dispatcher:EventDispatcher;
-	private var publicData:Object;
-	private var resourceManager:FileManager;
+	//private var publicData:Object;
+	private var fileManager:FileManager;
 	
 	private var _container:Container;
 	private var applicationId:String;
@@ -73,7 +64,8 @@ public class RenderManager implements IEventDispatcher {
 		
 		dispatcher = new EventDispatcher();
 		soap = Soap.getInstance();
-		resourceManager = FileManager.getInstance();
+		fileManager = FileManager.getInstance();
+		dataManager = DataManager.getInstance();
 		
 		//publicData = mx.core.Application.application.publicData;
 		
@@ -118,7 +110,7 @@ public class RenderManager implements IEventDispatcher {
 			_items.removeAll(); */
 			
 		if(!applicationId)
-			this.applicationId = publicData['applicationId'];
+			this.applicationId = dataManager.currentApplicationId;
 			
 	}
 	
@@ -176,7 +168,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		parentObject.addChild(item);
 		
-		soap.renderWysiwyg(publicData['applicationId'], objectID, parentID);
+		soap.renderWysiwyg(dataManager.currentApplicationId, objectID, parentID);
 		
 		return item;
 	}
@@ -660,7 +652,7 @@ public class RenderManager implements IEventDispatcher {
 					tempArray.push(viewImage);
 					viewImage.maintainAspectRatio = false;
 					//trace('LoadImage: ' + objectID);
-					resourceManager.loadResource(parentID, objectID, viewImage, 'source', true);
+					fileManager.loadResource(parentID, objectID, viewImage, 'source', true);
 					
 					parentItem.addChild(viewImage);
 					

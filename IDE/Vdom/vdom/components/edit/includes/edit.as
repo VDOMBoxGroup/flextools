@@ -1,21 +1,17 @@
 import flash.events.Event;
 
 import mx.containers.Canvas;
-import mx.core.Application;
+import mx.events.FlexEvent;
 import mx.managers.PopUpManager;
 
-import vdom.MyLoader;
-import vdom.components.editor.events.WorkAreaEvent;
+import vdom.components.edit.events.WorkAreaEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
-import vdom.managers.LanguageManager;
 
 //[Bindable] private var objects:XML;
-[Bindable] private var typesXML:XML;
 [Bindable] private var help:String;
-[Bindable] private var selectedElement:String;
+//[Bindable] private var selectedElement:String;
 [Bindable] private var dataManager:DataManager;
-[Bindable] private var languageManager:LanguageManager;
 
 private var objectsXML:XML;
 private var currInterfaceType:uint;
@@ -24,73 +20,56 @@ private var ppm:Canvas;
 private var applicationId:String;
 private var topLevelObjectId:String;
 
-
 private function initializeHandler():void {
 	
-	ppm = new MyLoader();
-	//publicData = Application.application.publicData;
 	dataManager = DataManager.getInstance();
-	languageManager = LanguageManager.getInstance();
+}
 
-	/*Загрузка типов*/
+private function creationCompleteHandler():void {
 	
-	//addEventListener('objectCreated', objectCreatedHandler);
-	
-	//workArea.addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
-	//workArea.addEventListener(DragEvent.DRAG_DROP, dropHandler);
-	
-	
-	
-	//typesXML = null;
+	//dispatchEvent(new FlexEvent(FlexEvent.SHOW));
 }
 
 private function showHandler():void {
 	
-	if(applicationId != dataManager.currentApplication || topLevelObjectId != dataManager.currentPage) {
-		
-		applicationId = dataManager.currentApplication;
-		topLevelObjectId = dataManager.currentPage;
-		PopUpManager.addPopUp(ppm, this, true);
-		PopUpManager.centerPopUp(ppm);
-		//dataManager.init(applicationId, topLevelObjectId);	
-	} else {
-		
-		workArea.visible = true;
-	}
-	
-	workArea.addEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
-	workArea.addEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
-	workArea.addEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
-	
-	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
-	dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
-	dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
-	dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
-	
-	attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
+	setListeners(true);
+	dataManager.loadPageData();
 }
 
 private function hideHandler():void {
 	
-	workArea.removeEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
-	workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
-	workArea.removeEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
-	
-	dataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, initCompleteHandler);
-	dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
-	dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
-	dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
-	
-	attributesPanel.removeEventListener('propsChanged', attributesChangedHandler);
-	
-	workArea.visible = false;
+	setListeners(false);
 }
 
-/* private function createTypes():void {
+private function setListeners(flag:Boolean):void {
 	
-	typesXML = publicData['types'];
-	PopUpManager.removePopUp(ppm);
-} */
+	if(flag) {
+		
+		workArea.addEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
+		workArea.addEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
+		workArea.addEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
+		
+		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
+		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
+		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
+		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
+		
+		attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
+		
+	} else {
+		
+		workArea.removeEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
+		workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
+		workArea.removeEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
+		
+		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
+		dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
+		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
+		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
+		
+		attributesPanel.removeEventListener('propsChanged', attributesChangedHandler);
+	}
+}
 
 private function topLevelObjectChange():void {
 	
@@ -106,13 +85,13 @@ private function topLevelObjectChange():void {
 	createTypes();
 } */
 
-private function initCompleteHandler(event:Event):void {
+private function pageDataLoadedHandler(event:Event):void {
 	
-	pageList.dataProvider = dataManager.listPages.Object;
+	//pageList.dataProvider = dataManager.listPages.Object;
 	
-	workArea.showTopLevelContainer(publicData['applicationId'], publicData['topLevelObjectId']);
+	workArea.showTopLevelContainer(dataManager.currentApplicationId, dataManager.currentPageId);
 	
-	typesXML = publicData['types'];
+	//typesXML = publicData['types'];
 	PopUpManager.removePopUp(ppm);
 	workArea.visible = true;
 	//dispatchEvent(new Event('objectCreated'));
@@ -128,7 +107,7 @@ private function objectCreatedHandler(event:DataManagerEvent):void {
 private function attributesChangedHandler(event:Event):void {
 	
 	dataManager.updateAttributes();
-	attributesPanel.dataProvider = dataManager.objectDescription; //<-- исправить!!!!!!
+	attributesPanel.dataProvider = dataManager.currentObject; //<-- исправить!!!!!!
 }
 
 private function updateAttributesCompleteHandler(event:DataManagerEvent):void {
@@ -151,10 +130,10 @@ private function objectChangeHandler(event:Event):void {
 	
 	if(workArea.selectedObjectId) {
 		
-		dataManager.setActiveObject(workArea.selectedObjectId);
+		dataManager.changeCurrentObject(workArea.selectedObjectId);
 	} else {
 		
-		dataManager.objectDescription = null;
+		dataManager.changeCurrentObject(null);
 	}
 }
 

@@ -195,10 +195,10 @@
 		<warn-bad-undefined-comparison>true</warn-bad-undefined-comparison>
 
 		<!-- Boolean() with no arguments returns false in ActionScript 3.0. Boolean() returned undefined in ActionScript 2.0. -->
-		<warn-boolean-constructor-with-no-args>false</warn-boolean-constructor-with-no-args>
+		<warn-boolean-constructor-with-no-args>true</warn-boolean-constructor-with-no-args>
 
 		<!-- __resolve is no longer supported. -->
-		<warn-changes-in-resolve>false</warn-changes-in-resolve>
+		<warn-changes-in-resolve>true</warn-changes-in-resolve>
 
 		<!-- Class is sealed. It cannot have members added to it dynamically. -->
 		<warn-class-is-sealed>true</warn-class-is-sealed>
@@ -208,16 +208,16 @@
 
 		<!-- Function used in new expression returns a value. Result will be what the -->
 		<!-- function returns, rather than a new instance of that function.			  -->
-		<warn-constructor-returns-value>false</warn-constructor-returns-value>
+		<warn-constructor-returns-value>true</warn-constructor-returns-value>
 
 		<!-- EventHandler was not added as a listener. -->
-		<warn-deprecated-event-handler-error>false</warn-deprecated-event-handler-error>
+		<warn-deprecated-event-handler-error>true</warn-deprecated-event-handler-error>
 
 		<!-- Unsupported ActionScript 2.0 function. -->
 		<warn-deprecated-function-error>true</warn-deprecated-function-error>
 
 		<!-- Unsupported ActionScript 2.0 property. -->
-		<warn-deprecated-property-error>true</warn-deprecated-property-error>
+		<warn-deprecated-property-error>false</warn-deprecated-property-error>
 
 		<!-- More than one argument by the same name. -->
 		<warn-duplicate-argument-names>true</warn-duplicate-argument-names>

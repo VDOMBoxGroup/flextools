@@ -26,7 +26,7 @@ import vdom.events.TransformMarkerEvent;
 import vdom.managers.resizeClasses.TransformMarker;
 import vdom.events.ResizeManagerEvent;
 import vdom.utils.DisplayUtil;
-import vdom.components.editor.containers.workAreaClasses.Item;
+import vdom.components.edit.containers.workAreaClasses.Item;
 import flash.display.DisplayObjectContainer;
 import mx.styles.StyleManager;
 			
@@ -393,7 +393,7 @@ public class ResizeManager extends EventDispatcher {
 	private function getItemUnderMouse():Item {
 		
 		var targetList:Array =
-			DisplayUtil.getObjectsUnderMouse(_topLevelItem.parent, 'vdom.components.editor.containers.workAreaClasses::Item', filterFunction);
+			DisplayUtil.getObjectsUnderMouse(_topLevelItem.parent, 'vdom.components.edit.containers.workAreaClasses::Item', filterFunction);
 		
 		if(targetList.length == 0)
 			return null;

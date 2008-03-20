@@ -11,8 +11,7 @@
 	<mx:Metadata>
 		[ResourceBundle("LoginForm")]
 		[Exclude(name="alignButtons", kind="property")]
-		[Event(name="authDataChanged", type="vdom.events.AuthenticationEvent")]
-		[Event(name="submitBegin", type="flash.events.Event")]
+		[Event(name="submitBegin", type="vdom.components.loginForm.events.LoginFormEvent")]
 	</mx:Metadata>
 	
 	<mx:Script source="includes/loginForm.as"/>
@@ -58,7 +57,7 @@
 				label="{resourceManager.getString('LoginForm','ip')}">
 				<mx:TextInput id="_ip"
 					width="140" 
-					text="localhost:81"/>
+					text="localhost:80"/>
 			</mx:FormItem>
 			<mx:FormItem
 				label="{resourceManager.getString('LoginForm','language')}">

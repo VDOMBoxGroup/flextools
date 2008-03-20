@@ -1,16 +1,14 @@
-package vdom.components.editor.containers.typesClasses {
+package vdom.components.edit.containers.typesClasses {
 
 import flash.display.Bitmap;
 import flash.display.Loader;
 import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.utils.ByteArray;
 
 import mx.containers.VBox;
 import mx.controls.Image;
 import mx.controls.Label;
 import mx.core.DragSource;
-import mx.utils.Base64Decoder;
 
 import vdom.managers.VdomDragManager;
 
@@ -37,9 +35,13 @@ public class Type extends VBox {
 			typeIcon.setStyle('backgroundColor', '#FF00FF');
 		}
 		
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		var displayName:String = typeDescription.Information.DisplayName.toString();
+		
+		var phraseID:String = displayName.match(phraseRE)[1];
 			
 		typeLabel = new Label();
-		typeLabel.text = getLanguagePhrase(typeDescription.Information.ID, typeDescription.Information.DisplayName);
+		typeLabel.text = resourceManager.getString(typeDescription.Information.Name, phraseID);
 		typeLabel.truncateToFit = true;
 		typeLabel.width = 90;
 		
@@ -49,14 +51,14 @@ public class Type extends VBox {
 		this.addEventListener(MouseEvent.MOUSE_DOWN, dragIt);
 	}
 	
-	private function getLanguagePhrase(typeID:String, phraseID:String):String {
+	/* private function getLanguagePhrase(typeID:String, phraseID:String):String {
 		
 		var phraseRE:RegExp = /#Lang\((\w+)\)/;
 		phraseID = phraseID.match(phraseRE)[1];
 		var languageID:String = typeID + '-' + phraseID;
 		//var languages:LanguageManager = LanguageManager.getInstance();
 		return ''//languages.language.(@ID == languageID)[0];
-	}
+	} */
 	
 	public function set resource(imageResource:Object):void {
 		

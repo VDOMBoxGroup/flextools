@@ -4,6 +4,7 @@ import flash.events.MouseEvent;
 import mx.controls.Button;
 import mx.controls.TextInput;
 
+import vdom.components.loginForm.events.LoginFormEvent;
 import vdom.events.AuthenticationEvent;
 import vdom.managers.LanguageManager;
 
@@ -72,12 +73,14 @@ private function languageChangeHandler(event:Event):void {
 
 private function checkData():void {
 	
-	dispatchEvent(new Event('submitBegin'));
-	var ae:AuthenticationEvent = new AuthenticationEvent(AuthenticationEvent.DATA_CHANGED);
-	ae.username = _username.text;
-	ae.password = _password.text;
-	ae.ip = _ip.text;
-	dispatchEvent(ae);
+	var lfe:LoginFormEvent = new LoginFormEvent(LoginFormEvent.SUBMIT_BEGIN);
+	lfe.formData = {
+		username:_username.text, 
+		password:_password.text, 
+		ip:_ip.text
+	};
+	
+	dispatchEvent(lfe);
 }
 
 /* private function changeLanguageHandler(event:Event):void {

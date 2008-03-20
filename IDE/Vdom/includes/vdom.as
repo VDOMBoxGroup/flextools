@@ -1,12 +1,14 @@
-import mx.events.ListEvent;
-import mx.managers.PopUpManager;
+import flash.events.Event;
+
 import mx.core.Singleton;
+import mx.managers.PopUpManager;
 
 import vdom.MyLoader;
+import vdom.components.loginForm.events.LoginFormEvent;
 import vdom.connection.soap.Soap;
 import vdom.events.AuthenticationEvent;
 import vdom.events.DataManagerEvent;
-import vdom.managers.Authentication;
+import vdom.managers.AuthenticationManager;
 import vdom.managers.DataManager;
 import vdom.managers.LanguageManager;
 
@@ -16,20 +18,30 @@ private var dataManager:DataManager;
 private var languageManager:LanguageManager;
 
 private var soap:Soap;
-private var authentication:Authentication;
+private var authenticationManager:AuthenticationManager;
 
 private var ppm:MyLoader;
 
-private function initalizeHandler():void {
+private var tempStorage:Object;
+
+private function changeLanguageHandler(event:Event):void {
+	
+	languageManager.changeLocale(event.currentTarget.selectedItem.@code);
+}
+
+private function preinitalizeHandler():void {
 	
 	Singleton.registerClass("vdom.managers::IVdomDragManager", 
 		Class(getDefinitionByName("vdom.managers::VdomDragManagerImpl")));
 	
+	authenticationManager = AuthenticationManager.getInstance();
 	languageManager = LanguageManager.getInstance();
-	languageManager.init(languageList);
 	dataManager = DataManager.getInstance();
-	
 	soap = Soap.getInstance();
+	
+	languageManager.init(languageList);
+	
+	tempStorage = {};
 }
 
 private function lockStage():void {
@@ -39,36 +51,38 @@ private function lockStage():void {
 	PopUpManager.centerPopUp(ppm);
 }
 
-private function submitLogin(event:AuthenticationEvent):void {
+private function submitLogin(event:LoginFormEvent):void {
 	
 	trace('begin submitLogin');
 	
-	var wsdl:String= 'http://'+event.ip+'/vdom.wsdl';
+	lockStage();
 	
-	soap.init(wsdl);
+	var username:String = event.formData.username
+	var password:String = event.formData.password
+	var ip:String = event.formData.ip
 	
-	var username:String = event.username;
-	var password:String = event.password;
+	authenticationManager.changeAuthenticationInformation(
+		username,
+		password,
+		ip
+	)
 	
-	authentication = Authentication.getInstance();
-	authentication.addEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
-	authentication.login(username, password);
+	authenticationManager.addEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
+	authenticationManager.login();
 }
 
 private function authComleteHandler(event:Event):void {
 	
 	trace('begin authComleteHandler');
-	authentication.removeEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
+	authenticationManager.removeEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
 	
-	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);//...
+	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
 	dataManager.new_init();
-	
-	//soap.addEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
-	//soap.listApplications();
 }
 
 private function dataManagerInitComplete(event:DataManagerEvent):void {
 	
+	dataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
 	viewstack.selectedChild=main;
 	PopUpManager.removePopUp(ppm);
 }

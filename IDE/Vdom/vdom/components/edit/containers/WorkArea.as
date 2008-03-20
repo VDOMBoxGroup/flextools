@@ -1,27 +1,20 @@
-package vdom.components.editor.containers {
+package vdom.components.edit.containers {
 	
-import flash.display.DisplayObject;
-import flash.display.DisplayObjectContainer;
-import flash.events.Event;
 import flash.events.KeyboardEvent;
-import flash.events.MouseEvent;
-import flash.geom.Point;
 import flash.ui.Keyboard;
-import flash.utils.getQualifiedClassName;
 
 import mx.containers.Canvas;
-import mx.core.Application;
 import mx.core.UIComponent;
 import mx.events.DragEvent;
 
-import vdom.components.editor.containers.workAreaClasses.Item;
-import vdom.components.editor.events.WorkAreaEvent;
+import vdom.components.edit.containers.workAreaClasses.Item;
+import vdom.components.edit.events.WorkAreaEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
+import vdom.managers.FileManager;
 import vdom.managers.RenderManager;
 import vdom.managers.ResizeManager;
-import vdom.managers.FileManager;
 import vdom.managers.VdomDragManager;
 import vdom.utils.DisplayUtil;
 
@@ -62,8 +55,8 @@ public class WorkArea extends Canvas {
 		
 		super();
 		
-		dataManager = DataManager.getInstance();
-		fileManager = FileManager.getInstance();
+		//dataManager = DataManager.getInstance();
+		//fileManager = FileManager.getInstance();
 		renderManager = RenderManager.getInstance();
 		resizeManager = ResizeManager.getInstance();
 		
@@ -196,8 +189,6 @@ public class WorkArea extends Canvas {
 	} */
 	
 	private function applyChanges(attributes:Object):void {
-		
-		
 		
 		for (var attributeName:String in attributes) {
 			

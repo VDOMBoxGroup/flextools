@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ClosablePanel xmlns="vdom.components.editor.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHendler()">
+<ClosablePanel
+	
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="vdom.components.edit.containers.*"
+	
+	creationComplete="creationCompleteHendler()">
 
 <mx:Script>
 	<![CDATA[
@@ -101,7 +106,7 @@
 			}
 		//	trace('++++++++++++++\n '+xmlObjects.Object.Objects);
 			// для текущего обьекта верхнего уровня подгружаем его элементы
-			var xmlObjects:XML = dataManager.getObjects();
+			var xmlObjects:XMLList = new XMLList//dataManager.objects;
 			var strCurObjID:String = xmlObjects.Object.@ID;
 			// findOjects(XML) функция которая рекурсивно ищет обьекты...
  			xmlTreeData.Object.(@ID == strCurObjID).appendChild(findOjects(xmlObjects.Object.Objects));
