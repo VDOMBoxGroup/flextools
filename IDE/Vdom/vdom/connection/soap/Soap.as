@@ -388,9 +388,10 @@ package vdom.connection.soap
 		}
 		
 		
-		private var sGetApplicationStructure:SGetApplicationStructure = new SGetApplicationStructure(ws);
+		//private 
 		public  function getApplicationStructure(appid:String=''):void 
 		{	
+			var sGetApplicationStructure:SGetApplicationStructure = new SGetApplicationStructure(ws);
 			sGetApplicationStructure.execute(appid);
 			sGetApplicationStructure.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, ldispatchEvent);
 			sGetApplicationStructure.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_ERROR, ldispatchEvent);
