@@ -316,7 +316,7 @@ public class DataManager implements IEventDispatcher {
 			oldXMLDescription.Attributes[0] = new XML(newXMLDescription.Attributes[0]);
 			
 			proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, setAttributeCompleteHandler);
-			proxy.setAttributes(_currentApplication, oldXMLDescription.@ID, newOnlyAttributes);
+			proxy.setAttributes(_currentApplicationId, objectId, newOnlyAttributes);
 		}
 		
 		if(nameChanged) {
@@ -376,16 +376,14 @@ public class DataManager implements IEventDispatcher {
 		return getTypeByTypeId(typeId)[0];
 	}
 	
-	public function getTopLevelTypes():XML {
+	public function getTopLevelTypes():XMLList {
 		
-		var topLevelTypes:XML = <Types />;
+		var listTopLeveltTypes:XMLList = new XMLList();
 		
-		for each (var element:XML in _listTypes.Information.(Container == 3)) {
+		for each (var element:XML in _listTypes.Information.(Container == 3))
+			listTopLeveltTypes += element.parent();
 		
-			topLevelTypes.appendChild(element.parent());
-		}
-		
-		return topLevelTypes;
+		return listTopLeveltTypes;
 	}
 	
 	/**

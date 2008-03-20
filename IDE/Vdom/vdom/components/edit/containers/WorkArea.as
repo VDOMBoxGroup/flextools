@@ -407,12 +407,15 @@ public class WorkArea extends Canvas {
 	private function dragDropHandler(event:DragEvent):void {
 		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
+		
 		var currentContainer:Item = focusedItem;
+		
 		if(currentContainer)
 			currentContainer.drawFocus(false);
 		
 		var currentItemName:String = 
-			dataManager.getTypeByObjectId(currentContainer.objectID).Information.Name;;
+			dataManager.getTypeByObjectId(currentContainer.objectID).Information.Name;
+			
 		var aviableContainers:Array = typeDescription.aviableContainers.split(', ');
 		
 		if(aviableContainers.indexOf(currentItemName) != -1) {

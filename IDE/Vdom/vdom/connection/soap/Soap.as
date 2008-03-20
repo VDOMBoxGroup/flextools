@@ -313,10 +313,10 @@ package vdom.connection.soap
 		 *  --------- 21  Set value of several object's attributes -----
 		 * 						--setAttributes --
 		 */ 
-		private var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
+		//private 
 		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):void
 		{
-			
+			var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
 			sSetAttributes.execute(appid, objid, attr);
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);

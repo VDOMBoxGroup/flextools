@@ -10,7 +10,7 @@ package vdom.components.treeEditor
 		private var treeEditor:TreeEditor;
 	//	private var languages:Languages;
 		private var dataManager:DataManager  = DataManager.getInstance();
-		private var topLevelTypes:XML;
+		private var topLevelTypes:XMLList;
 		private var resourceManager:IResourceManager;
 		
 		public function TreeEditorScript():void

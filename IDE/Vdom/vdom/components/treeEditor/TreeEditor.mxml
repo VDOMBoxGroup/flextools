@@ -135,7 +135,7 @@
 		
 			
 		arrAppl = [];
-		var types:XML = dataManager.getTopLevelTypes();
+		var types:XMLList = dataManager.getTopLevelTypes();
 		
 		for each(var lavel:XML in types.Type )
 		{
@@ -614,7 +614,7 @@
 	
 	private function soapAddTreeElement():void
 	{
-		var types:XML = dataManager.getTopLevelTypes();
+		var types:XMLList = dataManager.getTopLevelTypes();
 	
 		dataManager.createObject(selectedAppl.data);
 		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);

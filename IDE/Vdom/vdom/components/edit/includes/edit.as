@@ -12,7 +12,7 @@ import vdom.managers.DataManager;
 [Bindable] private var help:String;
 //[Bindable] private var selectedElement:String;
 [Bindable] private var dataManager:DataManager;
-
+	
 private var objectsXML:XML;
 private var currInterfaceType:uint;
 private var publicData:Object;
@@ -40,6 +40,22 @@ private function hideHandler():void {
 	
 	setListeners(false);
 }
+
+
+
+private function topLevelObjectChange():void {
+	
+	topLevelObjectId = publicData['topLevelObjectId'] = pageList.selectedItem.@ID;
+	//dataManager.init(applicationId, topLevelObjectId);
+}
+
+/* private function createObjects(objectsXML:XML):void {
+	
+	workArea.createObjects(publicData['applicationId'], publicData['topLevelObjectId']);
+	
+	dispatchEvent(new Event('objectCreated'));	
+	createTypes();
+} */
 
 private function setListeners(flag:Boolean):void {
 	
@@ -71,20 +87,6 @@ private function setListeners(flag:Boolean):void {
 	}
 }
 
-private function topLevelObjectChange():void {
-	
-	topLevelObjectId = publicData['topLevelObjectId'] = pageList.selectedItem.@ID;
-	//dataManager.init(applicationId, topLevelObjectId);
-}
-
-/* private function createObjects(objectsXML:XML):void {
-	
-	workArea.createObjects(publicData['applicationId'], publicData['topLevelObjectId']);
-	
-	dispatchEvent(new Event('objectCreated'));	
-	createTypes();
-} */
-
 private function pageDataLoadedHandler(event:Event):void {
 	
 	//pageList.dataProvider = dataManager.listPages.Object;
@@ -107,7 +109,7 @@ private function objectCreatedHandler(event:DataManagerEvent):void {
 private function attributesChangedHandler(event:Event):void {
 	
 	dataManager.updateAttributes();
-	attributesPanel.dataProvider = dataManager.currentObject; //<-- исправить!!!!!!
+	//attributesPanel.dataProvider = dataManager.currentObject; //<-- исправить!!!!!!
 }
 
 private function updateAttributesCompleteHandler(event:DataManagerEvent):void {

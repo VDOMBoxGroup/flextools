@@ -24,6 +24,9 @@ public class Types extends Accordion {
 		var typesCollection:ArrayCollection = new ArrayCollection();
 		for each (var num:XML in typesXML) {
 			
+			if(num.Information.Container == 3)
+				continue;
+			
 			if(!cat[num.Information.Category]) {
 				
 				cat[num.Information.Category] = new VBox();
