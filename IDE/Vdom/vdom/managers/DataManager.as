@@ -380,7 +380,7 @@ public class DataManager implements IEventDispatcher {
 		
 		var topLevelTypes:XML = <Types />;
 		
-		for each (var element:XML in _listTypes.Type.Information.(Container == 3)) {
+		for each (var element:XML in _listTypes.Information.(Container == 3)) {
 		
 			topLevelTypes.appendChild(element.parent());
 		}
