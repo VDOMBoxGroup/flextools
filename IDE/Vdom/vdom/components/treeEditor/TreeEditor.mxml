@@ -281,6 +281,7 @@
 			*/
 		function setPosition(inName:String):void
 		{
+			/*
 			if (massMap[depth] == null)
 			{
 				massMap[depth] = new Array();
@@ -289,8 +290,18 @@
 			
 			var breadth:int = massMap[depth].length; 
 				 massMap[depth][breadth] = inName;
+			*/
+			if (massMap[depth] == null)
+			{
+				if (depth == 0)massMap[depth] = 0;
+					else massMap[depth] = massMap[depth-1];
+			}
+			else
+			{
+				massMap[depth] = distension();
+			} 
 			
-			massTreeObj[inName].mapX = breadth;
+			massTreeObj[inName].mapX = massMap[depth];
 			massTreeObj[inName].mapY = depth;
 			massTreeObj[inName].depth = depth;
 		
@@ -302,6 +313,22 @@
 				setPosition(name);
 			}
 			depth--;
+		}
+		
+		function  distension():int
+		{
+			var maxX:int =  massMap[depth-1];
+			for(var i:int = depth; i< massMap.length; i++)
+			{
+				if (massMap[i] == null)
+				{
+					return maxX;
+				}else
+				{
+					if 	(massMap[i]>= maxX) maxX = massMap[i]+1  ;
+				}
+			}
+			return maxX;
 		}
 		
 		for (var str:String in massTreeObj)
