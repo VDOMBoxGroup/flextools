@@ -165,10 +165,10 @@ package vdom.connection.soap
 		/**
 		 * 10. create object - create_object
 		 */
-		private var sco: SCreateObject =new SCreateObject(ws);
+		//private 
 		public function createObject(appid:String='',parentid:String='',typeid:String = '', attrs:String = '', name:String =''):void
 		{
-			
+			var sco: SCreateObject =new SCreateObject(ws);
 			sco.execute(appid,parentid,typeid, attrs, name);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_OK, ldispatchEvent);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, ldispatchEvent);
@@ -398,9 +398,10 @@ package vdom.connection.soap
 		}
 		
 		
-		private var sSetApplicationStructure:SSetApplicationStructure = new SSetApplicationStructure(ws);
+	//	private
 		public  function setApplicationStructure(appid:String='', struct:String = ''):void 
 		{	
+			 var sSetApplicationStructure:SSetApplicationStructure = new SSetApplicationStructure(ws);
 			sSetApplicationStructure.execute(appid, struct);
 			sSetApplicationStructure.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, ldispatchEvent);
 			sSetApplicationStructure.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, ldispatchEvent);
