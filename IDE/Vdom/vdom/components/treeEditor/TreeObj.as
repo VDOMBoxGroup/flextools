@@ -1,5 +1,7 @@
 package vdom.components.treeEditor
 {
+	import mx.messaging.channels.StreamingAMFChannel;
+	
 	public class TreeObj extends Object
 	{
 		
@@ -15,7 +17,26 @@ package vdom.components.treeEditor
 			name = str;
 			//trace(name);
 		}
-
+// cell flor round
+		public function correctPosition():void
+		{
+			var minX:int = mapX;
+			var maxX:int = -1;
+			
+			if(masChilds == null) return;
+			if(masChilds.length == 1) return;
+			
+			for (var i:String in masChilds)
+			{
+				if(masChilds[i].mapX > maxX) maxX = masChilds[i].mapX;
+				//if(masChilds[i].mapY < minX) minX = masChilds[i].mapY;
+			}
+			
+			mapX = Math.floor((maxX + minX) / 2);
+			trace( minX+' : '+ maxX +' : '+ mapX);
+			
+		}
+		
 		public function set child(trChld:TreeObj):void
 		{
 			if (masChilds == null) masChilds = new Array();

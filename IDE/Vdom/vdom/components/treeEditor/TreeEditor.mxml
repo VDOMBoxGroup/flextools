@@ -313,6 +313,8 @@
 				setPosition(name);
 			}
 			depth--;
+			
+			massTreeObj[inName].correctPosition();
 		}
 		
 		function  distension():int
