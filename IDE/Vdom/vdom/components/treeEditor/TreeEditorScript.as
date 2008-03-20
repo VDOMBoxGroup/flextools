@@ -1,22 +1,26 @@
 package vdom.components.treeEditor
 {
-	import vdom.Languages;
+	import mx.resources.IResourceManager;
+	import mx.resources.ResourceManager;
+	
 	import vdom.managers.DataManager;
 
 	public class TreeEditorScript 
 	{
 		private var treeEditor:TreeEditor;
-		private var languages:Languages;
+	//	private var languages:Languages;
 		private var dataManager:DataManager  = DataManager.getInstance();
 		private var topLevelTypes:XML;
+		private var resourceManager:IResourceManager;
 		
 		public function TreeEditorScript():void
 		{
-			languages = Languages.getInstance();
+			resourceManager = ResourceManager.getInstance();
+			//languages = Languages.getInstance();
 			
 		}
 		
-		public function createTreeArr(xml:XML, xmlTopLevelObjects:XML):Array
+		public function createTreeArr(xml:XML, xmlTopLevelObjects:XMLList):Array
 		{
 			topLevelTypes = dataManager.getTopLevelTypes();
 		//	trace(xmlTopLevelObjects);
@@ -25,16 +29,17 @@ package vdom.components.treeEditor
 			for each(var xmlObj:XML in xml.children())
 			{
 				var obID:String = xmlObj.@ID.toXMLString();
+				var page:XML = xmlTopLevelObjects.(@ID == obID )[0];
 				massTreeElements[obID] =  new TreeElement();
 				massTreeElements[obID].ID = xmlObj.@ID.toXMLString();
-				massTreeElements[obID].name =  xmlTopLevelObjects.Object.(@ID == obID ).Attributes.Attribute.(@Name == 'title' );
-				massTreeElements[obID].description = xmlTopLevelObjects.Object.(@ID == obID ).Attributes.Attribute.(@Name == 'description' );
+				massTreeElements[obID].name =  page.Attributes.Attribute.(@Name == 'title' );
+				massTreeElements[obID].description = page.Attributes.Attribute.(@Name == 'description' );
 				massTreeElements[obID].x = xmlObj.@left.toXMLString();
 				massTreeElements[obID].y = xmlObj.@top.toXMLString();	
 				massTreeElements[obID].state = xmlObj.@state.toXMLString();	
 				massTreeElements[obID].resourceID = xmlObj.@ResourceID.toXMLString();
 				
-				var typeID:String = xmlTopLevelObjects.Object.(@ID == obID ).@Type;
+				var typeID:String = page.@Type;
 				massTreeElements[obID].type  =  getType(typeID);
 			}
 			return massTreeElements;		
@@ -59,18 +64,16 @@ package vdom.components.treeEditor
 	
 		private function getType(ID:String):String
 		{
-			var strLabel:String = getLanguagePhrase(ID, topLevelTypes.Type.Information.DisplayName);
+			var strLabel:String = getLanguagePhrase(topLevelTypes.Type.Information.Name, topLevelTypes.Type.Information.DisplayName);
 			return  strLabel;
 		}
 
-		public function getLanguagePhrase(typeID:String, phraseID:String):String 
-		{
+		public function getLanguagePhrase(name:String, phrase:String):String {
+		
 			var phraseRE:RegExp = /#Lang\((\w+)\)/;
-			phraseID = phraseID.match(phraseRE)[1];
-
-			var languageID:String = typeID + '-' + phraseID;
+			var phraseID:String = phrase.match(phraseRE)[1];
 			
-			return languages.language.(@ID == languageID)[0];
+			return resourceManager.getString(name, phraseID);
 		}
 		
 		public function dataToXML(massTreeElements:Array, massLines:Array ):XML

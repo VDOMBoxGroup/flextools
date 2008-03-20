@@ -14,13 +14,13 @@ package vdom.components.treeEditor
 	import mx.controls.Label;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
-	import mx.core.Application;
 	import mx.utils.Base64Encoder;
 	
 	import vdom.connection.Proxy;
 	import vdom.connection.soap.Soap;
 	import vdom.connection.soap.SoapEvent;
 	import vdom.events.TreeEditorEvent;
+	import vdom.managers.DataManager;
 	
 	public class TreeElement extends Canvas
 	{
@@ -41,8 +41,9 @@ package vdom.components.treeEditor
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
 		private var _type:Label;
-		private var publicData:Object = Application.application.publicData;
+	//	private var publicData:Object = Application.application.publicData;
 		private var soap:Soap = Soap.getInstance();
+		private var dataManager:DataManager;
 		
 		
 		private  var _resourceID:String = '';
@@ -80,7 +81,7 @@ package vdom.components.treeEditor
 		public function TreeElement()
 		{
 			super();
-
+			dataManager = DataManager.getInstance();
 			initUpBody();
 			initDownBody(); 
 			
@@ -464,7 +465,7 @@ package vdom.components.treeEditor
 		//	 trace(xmlToSend.toString());
 			
 			var proxy:Proxy = Proxy.getInstance();
-			proxy.setAttributes( publicData.applicationId, _ID,xmlToSend); 
+			proxy.setAttributes( dataManager.currentApplicationId, _ID,xmlToSend); 
 		}
 		
 		public function get select():Boolean
@@ -498,7 +499,7 @@ package vdom.components.treeEditor
 	 	trace(restype+' : '+resname+' : '+resdata);
 	 	
 	 
-	 	soap.setResource(publicData.applicationId,	_resourceID, 
+	 	soap.setResource(dataManager.currentApplicationId,	_resourceID, 
 	 												restype, 
 	 												resname, 
 	 												resdata );
