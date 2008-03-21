@@ -23,13 +23,14 @@ package vdom.components.treeEditor
 		public function createTreeArr(xml:XML, xmlTopLevelObjects:XMLList):Array
 		{
 			topLevelTypes = dataManager.getTopLevelTypes();
-		//	trace(xmlTopLevelObjects);
+			//trace(xml);
 			var massTreeElements:Array = new Array();
 			//создаем массив с обьектами
 			for each(var xmlObj:XML in xml.children())
 			{
 				var obID:String = xmlObj.@ID.toXMLString();
 				var page:XML = xmlTopLevelObjects.(@ID == obID )[0];
+		//		trace(obID);
 				massTreeElements[obID] =  new TreeElement();
 				massTreeElements[obID].ID = xmlObj.@ID.toXMLString();
 				massTreeElements[obID].name =  page.Attributes.Attribute.(@Name == 'title' );
@@ -57,7 +58,7 @@ package vdom.components.treeEditor
 				treeElement.y = 0;	
 				treeElement.resourceID = xmlObj.Object.@Type.toXMLString();
 				var typeID:String = xmlObj.Object.@Type.toXMLString();
-				treeElement.type  =  getType(typeID);
+				treeElement.type  = '123'// getType(typeID);
 			
 			return treeElement;		
 		}
@@ -69,9 +70,11 @@ package vdom.components.treeEditor
 		}
 
 		public function getLanguagePhrase(name:String, phrase:String):String {
-		
+			//phrase - #Lang(001) typeDescription.Information.Name
+			return '123';
 			var phraseRE:RegExp = /#Lang\((\w+)\)/;
-			var phraseID:String = phrase.match(phraseRE)[1];
+			var phraseID:String = phrase.match(phraseRE)[1]; //001
+			
 			
 			return resourceManager.getString(name, phraseID);
 		}

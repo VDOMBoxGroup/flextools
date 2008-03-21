@@ -16,9 +16,9 @@ package vdom.components.treeEditor
 	import mx.controls.TextInput;
 	import mx.utils.Base64Encoder;
 	
-	import vdom.connection.Proxy;
 	import vdom.connection.soap.Soap;
 	import vdom.connection.soap.SoapEvent;
+	import vdom.events.DataManagerEvent;
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
 	
@@ -259,6 +259,9 @@ package vdom.components.treeEditor
 		{
 			//safeChange();
 			
+			//if (txt.text != txtInp.text || textArea.editable) 
+			//	safeChange();
+			
 			if(txtInp.visible)
 			{
 				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
@@ -303,6 +306,8 @@ package vdom.components.treeEditor
 		
 		private function sourceSelectHandler(event:Event):void
 		{
+			source.removeEventListener(Event.SELECT, sourceSelectHandler);
+			
 			if (source != null && !source.isDirectory )
 			{
 				var srcBytes:ByteArray   = new ByteArray();
@@ -323,7 +328,8 @@ package vdom.components.treeEditor
 				//послать
 			//	source.type; //.png
 			//	source.name; //name.png
-				setResource(source.type, source.name, bs64Encdr.toString());
+				var str:String = bs64Encdr.toString();
+				setResource(source.type, source.name, str);
 			}
 		}
 
@@ -356,6 +362,7 @@ package vdom.components.treeEditor
 		override public function set name(names:String):void
 		{
 			txt.text = names;
+			txtInp.text = txt.text;
 		//	ID = names;
 		}
 		
@@ -450,22 +457,38 @@ package vdom.components.treeEditor
 		}
 		private function safeChange():void
 		{
-			/***  
-			 * 
-			 * надо будет через дата мэнаджер переделать
-			 * 
-			 * */
-			 var str:String = 
+			trace('changeCurrentPage: ' + _ID);
+			 dataManager.changeCurrentPage(_ID);
+			 dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
+		}
+		
+		private function changeAttributes(dmEvt:DataManagerEvent):void
+		{
+			/*var str:String = 
 			 	'<Attributes>' + 
 			 		' <Attribute Name="description">' + textArea.text+'</Attribute>'+
 			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
-			 	' </Attributes>'
-			 var xmlToSend:XML = XML(str);
-			
-		//	 trace(xmlToSend.toString());
-			
-			var proxy:Proxy = Proxy.getInstance();
-			proxy.setAttributes( dataManager.currentApplicationId, _ID,xmlToSend); 
+			 	' </Attributes>'*/
+			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
+			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+			 
+			 var xmlToSend:XML = new XML();
+			 
+			 
+			  dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
+			   dataManager.currentObject.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
+			   
+			   dataManager.updateAttributes();
+			   
+			//xmlToSend.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
+			//xmlToSend.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
+		}
+		
+		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+			trace('updateAttributeCompleted')
+			trace(dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0]);
 		}
 		
 		public function get select():Boolean
@@ -496,14 +519,14 @@ package vdom.components.treeEditor
 	 * */
 	 private function setResource(restype:String, resname:String, resdata:String):void
 	 {
-	 	trace(restype+' : '+resname+' : '+resdata);
+	// 	trace(restype+' : '+resname+' : '+resdata);
 	 	
 	 
 	 	soap.setResource(dataManager.currentApplicationId,	_resourceID, 
 	 												restype, 
 	 												resname, 
 	 												resdata );
-		soap.addEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+		soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
 	 	soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
 	 	
 	 }

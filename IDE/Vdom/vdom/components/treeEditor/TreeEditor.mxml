@@ -87,6 +87,7 @@
 	
 	private function hideHendler():void
 	{
+		//trace();
 		// save current position to server
 		saveToServer();
 
@@ -97,10 +98,11 @@
 				{
 					main.removeChild(massLines[level][frsTrElem][sknTrElem]);
 					delete massLines[level][frsTrElem][sknTrElem];
-					btLine.alpha = 0.5;
-					btLine.visible = false;
+					
 				}
-		
+				
+		btLine.alpha = 0.5;
+		btLine.visible = false;
 		// delete Elements
 		for (var obID:String in massTreeElements)
 		{
@@ -111,6 +113,7 @@
 		
 				
 					/** * * *   delete Listeners  * * * * */
+		removeEventListener(MouseEvent.CLICK, mouseClickHandler);
 		colmen2.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 		colmen2.removeEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
@@ -122,7 +125,7 @@
 		if(!main) main = new Canvas();
 	
 		if(!btLine)btLine = new DeleteLineButton();
-		addEventListener(MouseEvent.CLICK, mouseClickHandler);
+		
 		/******  	set Listeners  ******/
 		
 		colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
@@ -154,6 +157,8 @@
 		createTree();
 		curTree = massTreeElements[dataManager.currentPageId];
 		drawLines();
+		
+		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 	}
 	
 	
@@ -238,7 +243,7 @@
 				}
 			}
 		}
-		creatTree();
+	//	creatTree();
 	}
 	
 	private function creatTree():void
@@ -273,24 +278,9 @@
 			{
 				setPosition(name);	
 			} 
-			/*else 
-			if (massTreeObj[name].childs == null)
-			{
-				setPosition(name);
-			}
-			*/
+			
 		function setPosition(inName:String):void
 		{
-			/*
-			if (massMap[depth] == null)
-			{
-				massMap[depth] = new Array();
-				
-			}
-			
-			var breadth:int = massMap[depth].length; 
-				 massMap[depth][breadth] = inName;
-			*/
 			if (massMap[depth] == null)
 			{
 				if (depth == 0)massMap[depth] = 0;
@@ -337,41 +327,9 @@
 		{
 			massTreeElements[str].x  = massTreeObj[str].mapX * 300;
 			massTreeElements[str].y  = massTreeObj[str].mapY * 100;
-			//trace(str);
-			//trace(massTreeElements[str].ID);
-		//	trace(massMap[str].namE);
 		}
 		
-		//trace(str)
-			// massTreeObj[obID] = new TreeObj(obID);
-		//	var xmlL:XML = xmlObj.Level.(@Index == '0');
-			//trace('******\n' + xmlL.toString());
-		
-			/*
 			
-			<Structure>
-  <Object ID="10000004-0000-0000-0000-000000000000" ResourceID="5037384f-e734-4062-805f-ad2e2bbaa8c4" left="455" state="false" top="331"/>
-  <Object ID="ce81d5c9-c8c2-49f5-8701-8d3d0669a4e9" ResourceID="" left="44" state="false" top="317"/>
-  <Object ID="10000003-0000-0000-0000-000000000000" ResourceID="ada135f0-0c32-4d7f-8217-a7a154be1769" left="788" state="false" top="326"/>
-  <Object ID="10000002-0000-0000-0000-000000000000" ResourceID="73e096f1-9d44-408e-a8d9-d7ca9716a1a9" left="773" state="false" top="175">
-    <Level Index="0">
-      <Object ID="10000003-0000-0000-0000-000000000000"/>
-    </Level>
-  </Object>
-  <Object ID="10000001-0000-0000-0000-000000000000" ResourceID="e3e37d7c-20dd-44c7-bd47-e956dd3541e1" left="270" state="false" top="24">
-    <Level Index="0">
-      <Object ID="10000005-0000-0000-0000-000000000000"/>
-      <Object ID="10000002-0000-0000-0000-000000000000"/>
-    </Level>
-  </Object>
-  <Object ID="10000005-0000-0000-0000-000000000000" ResourceID="589373f0-dde0-4838-996f-f8dee7444973" left="58" state="false" top="171">
-    <Level Index="0">
-      <Object ID="ce81d5c9-c8c2-49f5-8701-8d3d0669a4e9"/>
-      <Object ID="10000004-0000-0000-0000-000000000000"/>
-    </Level>
-  </Object>
-</Structure>*/
-		
 	}
 	private function markLines(muEvt:MouseEvent):void
 	{
@@ -388,9 +346,6 @@
 	{
 		redrawLines(trEvt.currentTarget.ID);
 	}
-	
-	
-	
 	
 	/***
 	* 
@@ -502,7 +457,7 @@
 	
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
-		redrawLines(dataManager.currentPage);
+		redrawLines(curTree.ID);
 	}
 	/**
 	*
@@ -605,7 +560,7 @@
 	{
 		//trace('CreateObject: '+dmEvt.result);
 		var xml:XML = new XML(dmEvt.result);
-		trace('xml new Elem: ' + xml);
+		//trace('xml new Elem: ' + xml);
 		addTreeElement(xml);
 		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 		
@@ -640,11 +595,12 @@
 	{
 		 var dataToServer:XML =  script.dataToXML(massTreeElements, massLines);
 		 dataManager.setApplactionStructure(dataToServer);
+		 dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
 	}
 	
-	private function dataManagerListenner(soapEvt:DataManagerEvent):void
+	private function dataManagerListenner(dmnEvt:DataManagerEvent):void
 	{
-		//trace('rez: \n' + soapEvt.result)
+		//trace('rez: \n' + dmnEvt.result)
 	}
 	
 	private function comBoxClose(evt:Object):void
