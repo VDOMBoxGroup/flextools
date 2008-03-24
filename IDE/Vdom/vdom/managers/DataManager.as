@@ -496,15 +496,23 @@ public class DataManager implements IEventDispatcher {
 		//var objectId:String = result.Object.@ID;
 		//var objectName:String = result.Object.@Name;
 		var parentId:String = result.Object.Parent;
+		
+		if(!parentId)
+			_currentApplication.appendChild(result.Object[0]);
+			
+		else {
+			
+			var parentObject:XML = getObject(parentId);
+		
+			var newObject:XML = new XML(result.Object);
+			delete newObject.Parent
+			
+			parentObject.Objects.appendChild(newObject);
+		}
 		//var objectTypeId:String = result.Object.@Type;
 		//var objectType:XML = getTypeByObjectId(obj
 		
-		var parentObject:XML = getObject(parentId);
 		
-		var newObject:XML = new XML(result.Object);
-		delete newObject.Parent
-		
-		parentObject.Objects.appendChild(newObject);
 		
 		
 		/* var newObject:XML = <Object Name={objectName} ID={objectId} Type={objectType.Information.ID} />;
