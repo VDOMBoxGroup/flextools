@@ -140,9 +140,9 @@
 		arrAppl = [];
 		var types:XMLList = dataManager.getTopLevelTypes();
 		
-		for each(var lavel:XML in types.Type )
-		{
-				var strLabel:String = script.getLanguagePhrase(lavel.Information.ID, lavel.Information.DisplayName);
+		for each(var lavel:XML in types )
+		{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
+				var strLabel:String = script.getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
 				var strID:String = lavel.Information.ID;
 				arrAppl.push({label:strLabel, data:strID});
 		}

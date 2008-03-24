@@ -65,18 +65,29 @@ package vdom.components.treeEditor
 	
 		private function getType(ID:String):String
 		{
-			var strLabel:String = getLanguagePhrase(topLevelTypes.Type.Information.Name, topLevelTypes.Type.Information.DisplayName);
+			
+	
+			for each(var lavel:XML in topLevelTypes )
+			{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
+					if( lavel.Information.ID == ID) 
+					var strLabel:String = getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
+			}
+			//	return '777';
 			return  strLabel;
 		}
 
 		public function getLanguagePhrase(name:String, phrase:String):String {
 			//phrase - #Lang(001) typeDescription.Information.Name
-			return '123';
+		//	return '123';
+			trace('name: '+name+ ' phrase: ' + phrase)
 			var phraseRE:RegExp = /#Lang\((\w+)\)/;
 			var phraseID:String = phrase.match(phraseRE)[1]; //001
 			
+			trace(' phraseID: ' + phraseID)
 			
-			return resourceManager.getString(name, phraseID);
+			var rez:String = resourceManager.getString(name, phraseID)
+			trace(rez)
+			return rez;
 		}
 		
 		public function dataToXML(massTreeElements:Array, massLines:Array ):XML
