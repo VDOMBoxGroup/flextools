@@ -222,9 +222,10 @@ public class DataManager implements IEventDispatcher {
 			_currentPageId = newPage.@ID;
 			_currentPage = newPage;
 			
-			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_PAGE_CHANGED));
 			
 			changeCurrentObject(_currentPageId);
+			
+			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_PAGE_CHANGED));
 		}
 	}
 	
@@ -420,7 +421,7 @@ public class DataManager implements IEventDispatcher {
 	public function getApplicationStructure():void {
 		
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, getApplicationStructureHandler);
-		soap.getApplicationStructure(_currentApplication);
+		soap.getApplicationStructure(_currentApplicationId);
 	}
 	
 	private function getApplicationStructureHandler(event:SoapEvent):void {
