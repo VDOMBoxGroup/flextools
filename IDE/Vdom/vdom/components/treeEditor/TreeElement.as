@@ -85,6 +85,9 @@ package vdom.components.treeEditor
 		public function TreeElement()
 		{
 			super();
+			clipContent = false;
+			cnvUpLayer.clipContent = false;
+			
 			dataManager = DataManager.getInstance();
 			initUpBody();
 			initDownBody(); 
@@ -102,9 +105,6 @@ package vdom.components.treeEditor
 			
 			imgheader.maintainAspectRatio = true;
 			imgheader.scaleContent = true;
-			
-			
-			
 			
 			txt = new Label();
 			txt.setStyle('color', '#ffffff');
@@ -215,34 +215,34 @@ package vdom.components.treeEditor
 			imgheader.height = 43 * _ratio;
 			
 		//	txt
-			txt.y = 20 * _ratio;
+			txt.y = 6 * _ratio;
 			txt.width =  240 * _ratio;
 			
 			 
-			imgLine.y = 2 * _ratio; 
+			imgLine.y = -12 * _ratio; 
 			imgLine.x = 20 * _ratio;	
 			imgLine.width = 10 * _ratio;
 			imgLine.height = 10 * _ratio;
 			
 			//imgDelete 
-			imgDelete.y = 2 * _ratio;
+			imgDelete.y = -12 * _ratio;
 			imgDelete.x = 40 * _ratio;	
 			imgDelete.width = 10 * _ratio;
 			imgDelete.height = 10 * _ratio;
 			
 			 
-			imgPlus.y = 2 * _ratio;
+			imgPlus.y = -12 * _ratio;
 			imgPlus.x = 4 * _ratio;
 			imgPlus.width = 10 * _ratio;
 			imgPlus.height = 10 * _ratio;
 			
 		//	txtInp 
-			txtInp.y = 20 * _ratio;
+			txtInp.y = 6 * _ratio;
 			txtInp.width =  240 * _ratio;
 			
 		//	cnvUpLayer
 			//-----------------------------------
-			cnvDownLayer.y = 15 * _ratio;
+			cnvDownLayer.y = 1 * _ratio;
 			
 			imgBackGround.y = 27 * _ratio;
 			imgBackGround.width = 243 * _ratio;
@@ -319,11 +319,6 @@ package vdom.components.treeEditor
 		
 		private function endFormatinfHandler(msEvt:MouseEvent):void
 		{
-			//safeChange();
-			
-			//if (txt.text != txtInp.text || textArea.editable) 
-			//	safeChange();
-			
 			if(txtInp.visible)
 			{
 				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
@@ -331,7 +326,6 @@ package vdom.components.treeEditor
 				txt.text = txtInp.text;
 				txtInp.visible = false;
 				safeChange();
-			//	trace('1')
 			}
 			
 			if(textArea.editable  )
@@ -341,7 +335,6 @@ package vdom.components.treeEditor
 				textArea.selectable = false;
 				textArea.setStyle('fontWeight', "bold");
 				safeChange();
-			//	trace('2');	
 			}
 		}
 		
@@ -380,25 +373,20 @@ package vdom.components.treeEditor
 				srcStream.close();
 
 				image.source = srcBytes;
+				
 				var byArr:ByteArray = new ByteArray();
 				byArr.writeBytes(srcBytes);
 				byArr.compress();
 
 				var bs64Encdr:Base64Encoder = new Base64Encoder();
 				bs64Encdr.encodeBytes(byArr);
-			//	trace(bs64Encdr.toString());
-				//послать
-			//	source.type; //.png
-			//	source.name; //name.png
+
 				var str:String = bs64Encdr.toString();
 				setResource(source.type, source.name, str);
 			}
 		}
 
-		public function set sourseImg(obj:Object):void
-		{
-			image.source = obj;
-		}
+		
 		
 			// при нажатии кнопки свернуть
 		private function changeState(blHide:Boolean):void
@@ -421,6 +409,70 @@ package vdom.components.treeEditor
 		}
 	
 		
+		private function safeChange():void
+		{
+			 dataManager.changeCurrentPage(_ID);
+			 dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
+		}
+		
+		private function changeAttributes(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
+			
+			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+			 
+			dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
+			dataManager.currentObject.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
+			   
+			dataManager.updateAttributes();
+		}
+		
+		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+			trace('updateAttributeCompleted')
+		}
+		
+		
+	/***
+	 * 
+	 * 
+	 * 			set application resource
+	 * 		needed in change for  Orions script
+	 * 
+	 * 
+	 * */
+	 private function setResource(restype:String, resname:String, resdata:String):void
+	 {
+	 	soap.setResource(dataManager.currentApplicationId,	_resourceID, 
+	 												restype, 
+	 												resname, 
+	 												resdata );
+		soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
+	 	soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	 	
+	 }
+	
+	 private function setResourceOkHandler(spEvt:SoapEvent):void
+	 {
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	 	
+	 	var rez:XML = spEvt.result;
+	 	_resourceID = rez.Resource.@id;
+	 	trace('setResourceOkHandler: ' + _resourceID);
+	 	
+	 }
+	 
+	 private function setResourceErrorHandler(spEvt:SoapEvent):void
+	 {
+	 	image.source = defaultPicture;
+	 	
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	 }
+	 
+	 
 		override public function set name(names:String):void
 		{
 			txt.text = names;
@@ -428,38 +480,28 @@ package vdom.components.treeEditor
 		//	ID = names;
 		}
 		
-		/****      ID         ****/
+		/*     ID         */
 		
 		public function set ID(names:String):void
 		{
-			//txt.text = names;
 			_ID = names;
-			
-		//	imgheader.width  =400 * correlation;
-		//	imgheader.height = 200 * correlation;
-			trace(imgheader.width);
 		}
 		
 		public function get ID():String
 		{
-			//txt.text = names;
 			return _ID;
 		}
 		
 		private function set current(data:Boolean):void
 		{
-		/*	if (data)
-				drawRect();
-			else 
-				rect.graphics.clear();*/
+		
 		}
 
 		
-		/****      resourceID         ****/
+		/*      resourceID         */
 		
 		public function set resourceID(names:String):void
 		{
-			//txt.text = names;
 			_resourceID = names;
 		}
 		
@@ -470,7 +512,7 @@ package vdom.components.treeEditor
 		}
 		
 		
-		/****      state         ****/
+		/*      state         */
 		
 		public function set state(names:String):void
 		{
@@ -482,9 +524,6 @@ package vdom.components.treeEditor
 		
 		public function get state():String
 		{
-			//txt.text = names;
-			//return '++++';
-		//	trace(contains(cnvDownLayer) + ' ! '+min.toString())
 			return  min.toString();
 		}
 		
@@ -496,7 +535,7 @@ package vdom.components.treeEditor
 		}
 		 
 		 */
-		 /****      description         ****/
+		 /*       description         */
 		 
 		 public function set description(names:String):void
 		{
@@ -510,7 +549,7 @@ package vdom.components.treeEditor
 		
 		
 		
-		/****      type         ****/
+			/*      type      */
 		
 		 public function set type(names:String):void
 		{
@@ -521,41 +560,9 @@ package vdom.components.treeEditor
 		{
 			return  _type.text;
 		}
-		private function safeChange():void
-		{
-			trace('changeCurrentPage: ' + _ID);
-			 dataManager.changeCurrentPage(_ID);
-			 dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
-		}
 		
-		private function changeAttributes(dmEvt:DataManagerEvent):void
-		{
-			/*var str:String = 
-			 	'<Attributes>' + 
-			 		' <Attribute Name="description">' + textArea.text+'</Attribute>'+
-			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
-			 	' </Attributes>'*/
-			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
-			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
-			 
-			 var xmlToSend:XML = new XML();
-			 
-			 
-			  dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
-			   dataManager.currentObject.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
-			   
-			   dataManager.updateAttributes();
-			   
-			//xmlToSend.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
-			//xmlToSend.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
-		}
 		
-		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
-		{
-			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
-			trace('updateAttributeCompleted')
-			trace(dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0]);
-		}
+		/*      select      */
 		
 		public function get select():Boolean
 		{
@@ -565,58 +572,14 @@ package vdom.components.treeEditor
 		public function unSelect():void
 		{
 			endFormatinfHandler(new MouseEvent(MouseEvent.CLICK));
-			//trace('el: '+name);
-			//trace(': ' + dataManager.objectDescription);
 		}
-		/* 
-		private function draawRect():void
+		
+		/*      sourseImg      */
+		
+		public function set sourseImg(obj:Object):void
 		{
-		//	rect.graphics.lineStyle(1, 1, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-		//	rect.graphics.drawRect(0, 0, this.width, this.height);
+			image.source = obj;
 		}
-		*/
-	/***
-	 * 
-	 * 
-	 * 			set application resource
-	 * 		needed in change for  Orions script
-	 * 
-	 * 
-	 * */
-	 private function setResource(restype:String, resname:String, resdata:String):void
-	 {
-	// 	trace(restype+' : '+resname+' : '+resdata);
-	 	
-	 
-	 	soap.setResource(dataManager.currentApplicationId,	_resourceID, 
-	 												restype, 
-	 												resname, 
-	 												resdata );
-		soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
-	 	soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
-	 	
-	 }
-	
-	 private function setResourceOkHandler(spEvt:SoapEvent):void
-	 {
-	 	
-	 	var rez:XML = spEvt.result;
-	 	
-	 	
-	 	_resourceID = rez.Resource.@id;
-	 	trace('setResourceOkHandler: ' + _resourceID);
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
-	 }
-	 
-	 private function setResourceErrorHandler(spEvt:SoapEvent):void
-	 {
-	 	trace('setResourceErrorHandler: ' + spEvt);
-	 	image.source = defaultPicture;
-	 	
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
-	 }
 	 
 	}
 }
