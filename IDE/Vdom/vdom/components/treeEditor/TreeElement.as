@@ -37,6 +37,8 @@ package vdom.components.treeEditor
 		private var imgBackGround:Image;
 		private var imgPlus:Image;
 		private var imgheader:Image;
+		private var imgDelete:Image;
+		private var imgLine:Image;
 		private var cnvUpLayer	:Canvas = new Canvas();
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
@@ -44,6 +46,8 @@ package vdom.components.treeEditor
 	//	private var publicData:Object = Application.application.publicData;
 		private var soap:Soap = Soap.getInstance();
 		private var dataManager:DataManager;
+		private var _ratio:Number = 0.8;
+		
 		
 		
 		private  var _resourceID:String = '';
@@ -96,41 +100,42 @@ package vdom.components.treeEditor
 			imgheader = new Image();
 			imgheader.source = header;
 			
+			imgheader.maintainAspectRatio = true;
+			imgheader.scaleContent = true;
+			
+			
+			
+			
 			txt = new Label();
 			txt.setStyle('color', '#ffffff');
 			txt.setStyle('fontWeight', "bold"); 
 			txt.setStyle('textAlign', 'center');
 			
-			txt.y = 20;
-			txt.width =  240;
+			
 			txt.buttonMode = true;
 			txt.doubleClickEnabled = true;
 			txt.addEventListener(MouseEvent.DOUBLE_CLICK, txtDoubleClickHandler)
 			
-			var imgLine:Image = new Image();
+			imgLine = new Image();
 			imgLine.source = line;
-			imgLine.y = 2;
-			imgLine.x = 20;	
+			
 			imgLine.addEventListener(MouseEvent.CLICK, lineClickHandler);
 			
-			var imgDelete:Image = new Image();
-			imgDelete.source = delet;
-			imgDelete.y = 2;
-			imgDelete.x = 40;	
+			imgDelete = new Image();
+			imgDelete.source = delet; 
+			
 			imgDelete.addEventListener(MouseEvent.CLICK, deleteClickHandler);
 			
 			imgPlus = new Image();
 			imgPlus.source = plus;
-			imgPlus.y = 2;
-			imgPlus.x = 4;	
+				
 			imgPlus.addEventListener(MouseEvent.CLICK, plusClickHandler);	
 			
 			txtInp = new TextInput();
 			txtInp.setStyle('borderColor', '#000000');
 			txtInp.setStyle('fontWeight', "bold"); 
 			txtInp.setStyle('textAlign', 'center');
-			txtInp.y = 20;
-			txtInp.width =  240;
+			
 			txtInp.visible = false;
 			
 			cnvUpLayer.addChild(imgheader);
@@ -147,46 +152,44 @@ package vdom.components.treeEditor
 		private function initDownBody():void
 		{
 			imgBackGround = new Image();
+			imgBackGround.maintainAspectRatio = true;
+			imgBackGround.scaleContent = true;
+			
 			imgBackGround.source = backGround;
-			imgBackGround.y = 27;
+			//imgBackGround.source = defaultPicture;
+			
 			cnvDownLayer.addChild(imgBackGround);
 			
 			textArea = new TextArea();
 			textArea.setStyle('fontWeight', "bold"); 
-			textArea.x = 115; // btButton.width;
-			textArea.y = 35  //txt.height;
+			
 			textArea.editable = false;
 			textArea.focusEnabled = true;
 			textArea.text = 'press double click for edit this text';
-			textArea.width =  125;
-			textArea.height = 75;
+			
 			textArea.doubleClickEnabled = true;
 			textArea.addEventListener(MouseEvent.DOUBLE_CLICK, textAreaDoubleClickHandler);
 			cnvDownLayer.addChild(textArea);
 			
 			image = new Image();
 			image.source = defaultPicture;
-			image.x = 10;
-			image.y = 35;
+			
 			image.maintainAspectRatio = true;
 			image.scaleContent = true;
-			image.height = 100;
-			image.width = 95;
+			
 			image.doubleClickEnabled = true;
 			image.addEventListener(MouseEvent.DOUBLE_CLICK, imageDoubleClickHandler);
 			cnvDownLayer.addChild(image);
 			
 			
 			
-			cnvDownLayer.y = 15;
+			
 			
 			
 			_type = new Label();
 			_type.text = 'text  ';
-			_type.y = 120;
-			_type.x = 120;
-			_type.width =  100;
-			_type.setStyle('fontSize', "8");
+			
+			
 			_type.setStyle('fontWeight', "bold"); 
 			cnvDownLayer.addChild(_type);
 			
@@ -199,10 +202,69 @@ package vdom.components.treeEditor
 			
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if (isRedraw) {
+				updateRatio();
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW, _ID));
 				isRedraw = false;
+				
 			}
 		}
+		
+		private function updateRatio():void
+		{
+			imgheader.width = 243 * _ratio;
+			imgheader.height = 43 * _ratio;
+			
+		//	txt
+			txt.y = 20 * _ratio;
+			txt.width =  240 * _ratio;
+			
+			 
+			imgLine.y = 2 * _ratio; 
+			imgLine.x = 20 * _ratio;	
+			imgLine.width = 10 * _ratio;
+			imgLine.height = 10 * _ratio;
+			
+			//imgDelete 
+			imgDelete.y = 2 * _ratio;
+			imgDelete.x = 40 * _ratio;	
+			imgDelete.width = 10 * _ratio;
+			imgDelete.height = 10 * _ratio;
+			
+			 
+			imgPlus.y = 2 * _ratio;
+			imgPlus.x = 4 * _ratio;
+			imgPlus.width = 10 * _ratio;
+			imgPlus.height = 10 * _ratio;
+			
+		//	txtInp 
+			txtInp.y = 20 * _ratio;
+			txtInp.width =  240 * _ratio;
+			
+		//	cnvUpLayer
+			//-----------------------------------
+			cnvDownLayer.y = 15 * _ratio;
+			
+			imgBackGround.y = 27 * _ratio;
+			imgBackGround.width = 243 * _ratio;
+			imgBackGround.height = 115 * _ratio;
+			
+			textArea.x = 115 * _ratio; // btButton.width;
+			textArea.y = 35 * _ratio;  //txt.height;
+			
+			image.x = 10 * _ratio;
+			image.y = 35 * _ratio;
+			image.height = 100 * _ratio;
+			image.width = 95 * _ratio;
+			
+			textArea.width =  125 * _ratio;
+			textArea.height = 75 * _ratio;
+			
+			_type.y = 120 * _ratio;
+			_type.x = 120 * _ratio;
+			_type.width =  100 * _ratio;
+			_type.setStyle('fontSize', "8");
+		}
+		
 		
 		private function plusClickHandler(msEvt:MouseEvent):void
 		{
@@ -372,6 +434,10 @@ package vdom.components.treeEditor
 		{
 			//txt.text = names;
 			_ID = names;
+			
+		//	imgheader.width  =400 * correlation;
+		//	imgheader.height = 200 * correlation;
+			trace(imgheader.width);
 		}
 		
 		public function get ID():String

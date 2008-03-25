@@ -58,7 +58,7 @@ package vdom.components.treeEditor
 				treeElement.y = 0;	
 				treeElement.resourceID = xmlObj.Object.@Type.toXMLString();
 				var typeID:String = xmlObj.Object.@Type.toXMLString();
-				treeElement.type  = '123'// getType(typeID);
+				treeElement.type  =  getType(typeID);
 			
 			return treeElement;		
 		}
@@ -69,25 +69,19 @@ package vdom.components.treeEditor
 	
 			for each(var lavel:XML in topLevelTypes )
 			{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
-					if( lavel.Information.ID == ID) 
+					if( lavel.Information.ID == ID) {
 					var strLabel:String = getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
+					return  strLabel;}
 			}
-			//	return '777';
-			return  strLabel;
+			return  'Void';
 		}
 
-		public function getLanguagePhrase(name:String, phrase:String):String {
-			//phrase - #Lang(001) typeDescription.Information.Name
-		//	return '123';
-			trace('name: '+name+ ' phrase: ' + phrase)
+		public function getLanguagePhrase(name:String, phrase:String):String
+		{
 			var phraseRE:RegExp = /#Lang\((\w+)\)/;
 			var phraseID:String = phrase.match(phraseRE)[1]; //001
 			
-			trace(' phraseID: ' + phraseID)
-			
-			var rez:String = resourceManager.getString(name, phraseID)
-			trace(rez)
-			return rez;
+			return resourceManager.getString(name, phraseID);
 		}
 		
 		public function dataToXML(massTreeElements:Array, massLines:Array ):XML

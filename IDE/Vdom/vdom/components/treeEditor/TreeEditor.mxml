@@ -58,8 +58,11 @@
  * 
  * 			to Do
  *		Линии красиво 
- * 	//	Картинка менялась
- * 	//	Выстраивание дерева
+ * 		Картинка менялась
+ * 		Выстраивание дерева
+ * 		текущий елемент поверх всех..
+ * 		елементы меньшего размера
+ * 		
  * 	//	Перенос елемента влево и вверх
  * 		
  * 
@@ -243,7 +246,7 @@
 				}
 			}
 		}
-	//	creatTree();
+		creatTree();
 	}
 	
 	private function creatTree():void
@@ -325,8 +328,8 @@
 		
 		for (var str:String in massTreeObj)
 		{
-			massTreeElements[str].x  = massTreeObj[str].mapX * 300;
-			massTreeElements[str].y  = massTreeObj[str].mapY * 100;
+			massTreeElements[str].x  = massTreeObj[str].mapX * 150;
+			massTreeElements[str].y  = massTreeObj[str].mapY * 60;
 		}
 		
 			
@@ -556,24 +559,26 @@
 	*
 	*/
 		
-	private function  createObject(dmEvt:DataManagerEvent):void
-	{
-		//trace('CreateObject: '+dmEvt.result);
-		var xml:XML = new XML(dmEvt.result);
-		//trace('xml new Elem: ' + xml);
-		addTreeElement(xml);
-		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
+	
+	
+		private function soapAddTreeElement():void
+		{
+			var types:XMLList = dataManager.getTopLevelTypes();
 		
-		saveToServer();
-	}
-	
-	private function soapAddTreeElement():void
-	{
-		var types:XMLList = dataManager.getTopLevelTypes();
-	
-		dataManager.createObject(selectedAppl.data);
-		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-	}
+			dataManager.createObject(selectedAppl.data);
+			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
+		}
+			
+		private function  createObject(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
+			//trace('CreateObject: '+dmEvt.result);
+			var xml:XML = new XML(dmEvt.result);
+			//trace('xml new Elem: ' + xml);
+			addTreeElement(xml);
+			
+			saveToServer();
+		}
 		
 		private function addTreeElement(xml:XML):void
 		{
