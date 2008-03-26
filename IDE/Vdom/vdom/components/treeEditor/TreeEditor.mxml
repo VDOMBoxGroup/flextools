@@ -45,7 +45,7 @@
 	private var canLine:Canvas = new Canvas();
 	private var pnFrom:Point = new Point();
 	private var blDrawLine:Boolean = false;
-	private var vctTest:Vector = new Vector();
+	private var vctTest:Vector2 = new Vector2();
 	private var curLine:Object = new Object();
 //	private var publicData:Object;
 	private var dataManager:DataManager  = DataManager.getInstance();
@@ -57,11 +57,11 @@
  * 
  * 
  * 			to Do
- *		Линии красиво 
+ *		//Линии красиво 
  * 		Картинка менялась
- * 		Выстраивание дерева
+ * 		//Выстраивание дерева
  * 		текущий елемент поверх всех..
- * 		елементы меньшего размера
+ * 		//елементы меньшего размера
  * 		
  * 	//	Перенос елемента влево и вверх
  * 		
@@ -564,7 +564,7 @@
 		private function soapAddTreeElement():void
 		{
 			var types:XMLList = dataManager.getTopLevelTypes();
-		
+		trace('1231231');
 			dataManager.createObject(selectedAppl.data);
 			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 		}
@@ -572,7 +572,7 @@
 		private function  createObject(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-			//trace('CreateObject: '+dmEvt.result);
+			trace('CreateObject: '+dmEvt.result);
 			var xml:XML = new XML(dmEvt.result);
 			//trace('xml new Elem: ' + xml);
 			addTreeElement(xml);

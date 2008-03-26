@@ -36,6 +36,7 @@ package vdom.components.treeEditor
 		private var image:Image;
 		private var imgBackGround:Image;
 		private var imgPlus:Image;
+		private var imgMenu:Image;
 		private var imgheader:Image;
 		private var imgDelete:Image;
 		private var imgLine:Image;
@@ -80,20 +81,27 @@ package vdom.components.treeEditor
 		[Bindable]
 		public var delet:Class;
 		
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='menu')]
+		[Bindable]
+		public var menu:Class;
+		
 		
 		
 		public function TreeElement()
 		{
 			super();
-			clipContent = false;
+			
+		//	clipContent = false;
 			cnvUpLayer.clipContent = false;
 			
 			dataManager = DataManager.getInstance();
+			
 			initUpBody();
 			initDownBody(); 
 			
 			isRedraw = true;
-			this.buttonMode = true;
+			buttonMode = true;
+			
 			addEventListener(MouseEvent.CLICK, endFormatinfHandler)
 		}
 		
@@ -103,8 +111,8 @@ package vdom.components.treeEditor
 			imgheader = new Image();
 			imgheader.source = header;
 			
-			imgheader.maintainAspectRatio = true;
-			imgheader.scaleContent = true;
+			//imgheader.maintainAspectRatio = true;
+			//imgheader.scaleContent = true;
 			
 			txt = new Label();
 			txt.setStyle('color', '#ffffff');
@@ -115,6 +123,9 @@ package vdom.components.treeEditor
 			txt.buttonMode = true;
 			txt.doubleClickEnabled = true;
 			txt.addEventListener(MouseEvent.DOUBLE_CLICK, txtDoubleClickHandler)
+			
+			imgMenu = new Image();
+			imgMenu.source = menu;
 			
 			imgLine = new Image();
 			imgLine.source = line;
@@ -139,6 +150,7 @@ package vdom.components.treeEditor
 			txtInp.visible = false;
 			
 			cnvUpLayer.addChild(imgheader);
+			cnvUpLayer.addChild(imgMenu);
 			cnvUpLayer.addChild(txt);
 			cnvUpLayer.addChild(imgPlus);
 			cnvUpLayer.addChild(txtInp);
@@ -210,12 +222,15 @@ package vdom.components.treeEditor
 		}
 		
 		private function updateRatio():void
-		{
+		{	
+			//403.4 243 70 43
 			imgheader.width = 243 * _ratio;
-			imgheader.height = 43 * _ratio;
+			imgheader.height = 30 * _ratio;
 			
+			imgMenu.width = 56 * _ratio;
+			imgMenu.height = 14 * _ratio;
 		//	txt
-			txt.y = 6 * _ratio;
+			txt.y = 2 * _ratio;
 			txt.width =  240 * _ratio;
 			
 			 
@@ -237,7 +252,7 @@ package vdom.components.treeEditor
 			imgPlus.height = 10 * _ratio;
 			
 		//	txtInp 
-			txtInp.y = 6 * _ratio;
+			txtInp.y = 2 * _ratio;
 			txtInp.width =  240 * _ratio;
 			
 		//	cnvUpLayer
@@ -382,6 +397,7 @@ package vdom.components.treeEditor
 				bs64Encdr.encodeBytes(byArr);
 
 				var str:String = bs64Encdr.toString();
+			
 				setResource(source.type, source.name, str);
 			}
 		}
@@ -444,7 +460,7 @@ package vdom.components.treeEditor
 	 * */
 	 private function setResource(restype:String, resname:String, resdata:String):void
 	 {
-	 	soap.setResource(dataManager.currentApplicationId,	_resourceID, 
+	 	soap.setResource(dataManager.currentApplicationId,	'', 
 	 												restype, 
 	 												resname, 
 	 												resdata );

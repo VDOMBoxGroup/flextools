@@ -8,7 +8,7 @@ package vdom.components.treeEditor
 	import flash.net.ObjectEncoding;
 	import mx.controls.Button;
 	
-	public class TreeVector extends Vector
+	public class TreeVector extends Vector2
 	{
 		private var trEl0:TreeElement;
 		private var trEl1:TreeElement;
@@ -20,7 +20,7 @@ package vdom.components.treeEditor
 		public function TreeVector(trEl0:TreeElement, trEl1:TreeElement, level:String):void
 		{
 			this.buttonMode = true;
-			this.color = level;
+			color = level;
 			this.curСolor = level;
 			this.trEl0 = trEl0;
 			this.trEl1 = trEl1;
@@ -33,24 +33,22 @@ package vdom.components.treeEditor
 			createVector (trEl0,  trEl1);
 		}
 		
-		
+	/*	
 		public  function set mark(bool:Boolean):void
 		{
 			if(bool)
 			{
 				this._mark = true;
 				drawLine();
-			//	graphics.drawCircle(btX, btY, 2);
 			}
 			else
 			{
 				this._mark = false;
 				drawLine();
-			//	button.visible = false;
 		//	trace('mark = fulse')
 			}
 		}
-		
+		*/
 		
 	}
 }
