@@ -4,10 +4,12 @@ import flash.events.Event;
 
 public class TreeEditorEvent extends Event
 {
-	public static const REDRAW:String = 'reDraw';
+	public static const REDRAW_LINES:String = 'reDraw';
 	public static const START_DRAG:String = 'startDrag';
 	public static const STOP_DRAG:String = 'stopDrag';	
 	public static const DELETE:String = 'delete';
+	public static const START_REDRAW_LINES:String = 'startReDrowLines';
+	public static const STOP_REDRAW_LINES:String = 'stopReDrowLine';
 	public static const START_DRAW_LINE:String = 'startDrowLine';
 	public static const RESIZE_TREE_ELEMENT:String = 'resizeTreeElement';
 	public static const SHOW_LINES:String = 'showLine';

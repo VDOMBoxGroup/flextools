@@ -44,7 +44,6 @@ package vdom.components.treeEditor
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
 		private var _type:Label;
-	//	private var publicData:Object = Application.application.publicData;
 		private var soap:Soap = Soap.getInstance();
 		private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
@@ -85,6 +84,10 @@ package vdom.components.treeEditor
 		[Bindable]
 		public var menu:Class;
 		
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='selected')]
+		[Bindable]
+		public var selected:Class; 
+		
 		
 		
 		public function TreeElement()
@@ -100,7 +103,7 @@ package vdom.components.treeEditor
 			initDownBody(); 
 			
 			isRedraw = true;
-			buttonMode = true;
+		//	buttonMode = true;
 			
 			addEventListener(MouseEvent.CLICK, endFormatinfHandler)
 		}
@@ -110,6 +113,7 @@ package vdom.components.treeEditor
 		{
 			imgheader = new Image();
 			imgheader.source = header;
+			
 			
 			//imgheader.maintainAspectRatio = true;
 			//imgheader.scaleContent = true;
@@ -127,18 +131,22 @@ package vdom.components.treeEditor
 			imgMenu = new Image();
 			imgMenu.source = menu;
 			
+			
 			imgLine = new Image();
 			imgLine.source = line;
+			imgLine.buttonMode = true;
 			
 			imgLine.addEventListener(MouseEvent.CLICK, lineClickHandler);
 			
 			imgDelete = new Image();
 			imgDelete.source = delet; 
+			imgDelete.buttonMode = true;
 			
 			imgDelete.addEventListener(MouseEvent.CLICK, deleteClickHandler);
 			
 			imgPlus = new Image();
 			imgPlus.source = plus;
+			imgPlus.buttonMode = true;
 				
 			imgPlus.addEventListener(MouseEvent.CLICK, plusClickHandler);	
 			
@@ -157,6 +165,8 @@ package vdom.components.treeEditor
 			cnvUpLayer.addChild(imgLine);
 			cnvUpLayer.addChild(imgDelete);
 			
+			cnvUpLayer.addEventListener(MouseEvent.MOUSE_DOWN, startDragHandler);
+			cnvUpLayer.addEventListener(MouseEvent.MOUSE_UP, stopDragHandler)
 			addChild(cnvUpLayer);
 			
 		}
@@ -168,7 +178,6 @@ package vdom.components.treeEditor
 			imgBackGround.scaleContent = true;
 			
 			imgBackGround.source = backGround;
-			//imgBackGround.source = defaultPicture;
 			
 			cnvDownLayer.addChild(imgBackGround);
 			
@@ -193,19 +202,11 @@ package vdom.components.treeEditor
 			image.addEventListener(MouseEvent.DOUBLE_CLICK, imageDoubleClickHandler);
 			cnvDownLayer.addChild(image);
 			
-			
-			
-			
-			
-			
 			_type = new Label();
 			_type.text = 'text  ';
 			
-			
 			_type.setStyle('fontWeight', "bold"); 
 			cnvDownLayer.addChild(_type);
-			
-			
 		}
 		
 		private var isRedraw:Boolean;
@@ -215,21 +216,19 @@ package vdom.components.treeEditor
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if (isRedraw) {
 				updateRatio();
-				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW, _ID));
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW_LINES, _ID));
 				isRedraw = false;
-				
 			}
 		}
 		
 		private function updateRatio():void
 		{	
-			//403.4 243 70 43
 			imgheader.width = 243 * _ratio;
 			imgheader.height = 30 * _ratio;
 			
 			imgMenu.width = 56 * _ratio;
 			imgMenu.height = 14 * _ratio;
-		//	txt
+
 			txt.y = 2 * _ratio;
 			txt.width =  240 * _ratio;
 			
@@ -356,7 +355,7 @@ package vdom.components.treeEditor
 		
 		private function lineClickHandler(msEvt:MouseEvent):void
 		{
-		//	trace('Я нажата');
+			trace('Я нажата');
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAW_LINE, _ID));
 		}
 		
@@ -488,12 +487,25 @@ package vdom.components.treeEditor
 	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
 	 }
 	 
-	 
+	 private function startDragHandler(msEvt:MouseEvent):void
+	 {
+	 	if( txtInp.visible == false)
+	 	{
+	 		dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_REDRAW_LINES, _ID));
+	 		startDrag();
+	 	}
+	 		
+	 }
+	  private function stopDragHandler(msEvt:MouseEvent):void
+	 {
+	  	stopDrag();
+	  	dispatchEvent(new TreeEditorEvent(TreeEditorEvent.STOP_REDRAW_LINES, _ID));	
+	 }
+
 		override public function set name(names:String):void
 		{
 			txt.text = names;
 			txtInp.text = txt.text;
-		//	ID = names;
 		}
 		
 		/*     ID         */
@@ -508,9 +520,11 @@ package vdom.components.treeEditor
 			return _ID;
 		}
 		
-		private function set current(data:Boolean):void
+		public function set current(data:Boolean):void
 		{
-		
+			if(data)imgheader.source = selected;
+				else imgheader.source = header
+			
 		}
 
 		
@@ -596,6 +610,8 @@ package vdom.components.treeEditor
 		{
 			image.source = obj;
 		}
+		
+		
 	 
 	}
 }

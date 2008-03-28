@@ -31,10 +31,6 @@
 		import mx.controls.Button;
 		import mx.events.DragEvent;
 		
-//		var asd:AttributesPanel  = 
-		//hide когда закрываем
-		// show когда открываем снова
-	//данные которые уже есть
 	private var xml1:XML; 
  	private var massTreeElements:Array = new Array();
 	private var massLines:Array = new Array();
@@ -47,10 +43,8 @@
 	private var blDrawLine:Boolean = false;
 	private var vctTest:Vector2 = new Vector2();
 	private var curLine:Object = new Object();
-//	private var publicData:Object;
 	private var dataManager:DataManager  = DataManager.getInstance();
 	private var script:TreeEditorScript  = new TreeEditorScript();
-	//private var languages:Languages;
 	
 
 /******* 
@@ -58,11 +52,14 @@
  * 
  * 			to Do
  *		//Линии красиво 
- * 		Картинка менялась
+ * 		Картинка менялась -  андрей
  * 		//Выстраивание дерева
- * 		текущий елемент поверх всех..
+ * 	//	текущий елемент поверх всех.. 
  * 		//елементы меньшего размера
- * 		
+ * 		строить дерево если это необходимо
+ * 		добавлять новый елемент правее, если есть елемент 0:0
+ * 		линии правильно с самого начала..
+ * 		переделать код..
  * 	//	Перенос елемента влево и вверх
  * 		
  * 
@@ -130,7 +127,7 @@
 		if(!btLine)btLine = new DeleteLineButton();
 		
 		/******  	set Listeners  ******/
-		
+		addEventListener(MouseEvent.CLICK, mouseClickHandler);
 		colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 		colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 		dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
@@ -151,6 +148,8 @@
 		}
 		
 		btAddTreeElement.enabled = false;
+		
+		
 	}
 	
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
@@ -159,7 +158,9 @@
 		massTreeElements = script.createTreeArr(xml1,dataManager.listPages);
 		createTree();
 		curTree = massTreeElements[dataManager.currentPageId];
+		curTree.current = true;
 		drawLines();
+		
 		
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 	}
@@ -175,13 +176,30 @@
 				var resMan:FileManager = FileManager.getInstance();
 				resMan.loadResource(dataManager.currentApplicationId, massTreeElements[obID].resourceID, this);
 			}
-			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , treeElementLinesReDrawHandler);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW_LINES , treeElementLinesReDrawHandler);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
-			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
+			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
+				
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			main.addChild(massTreeElements[obID]);
 			/***************************************/
 		}
+	}
+	
+	private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
+	{
+		main.removeChild(massTreeElements[trEvt.ID]);
+		main.addChild(massTreeElements[trEvt.ID]);
+		
+		main.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+	}
+	
+	private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
+	{
+		main.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		saveToServer();
 	}
 	
 	
@@ -247,6 +265,7 @@
 			}
 		}
 		creatTree();
+		
 	}
 	
 	private function creatTree():void
@@ -281,6 +300,7 @@
 			{
 				setPosition(name);	
 			} 
+		
 			
 		function setPosition(inName:String):void
 		{
@@ -308,6 +328,7 @@
 			depth--;
 			
 			massTreeObj[inName].correctPosition();
+		
 		}
 		
 		function  distension():int
@@ -364,8 +385,11 @@
 				if (strID == ind1 || strID == ind2)
 					massLines[level][ind1][ind2].updateVector();
 	}
-	
-	
+	/*
+	private function redrawLinesHandler(trEvt:TreeEditorEvent):void
+	{
+		redrawLines(trEvt.ID);
+	}*/
 	/** 
 	*
 	*		Кликнули по обьекту, 
@@ -413,14 +437,12 @@
 			massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
 		}
 
-		// выделяем необходимый елемент дерева
-		evt.currentTarget.startDrag();
-		evt.currentTarget.addEventListener(MouseEvent.MOUSE_UP, treeElementMousUpHandler);
-		addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		
+		curTree.current = false;	
+		evt.currentTarget.current = true;
 		curTree = evt.currentTarget;
 		dataManager.changeCurrentPage( curTree.ID);
 	}
+	
 	private function treeElementMousUpHandler(msEvt:MouseEvent):void
 	{
 		msEvt.currentTarget.stopDrag();
@@ -429,17 +451,16 @@
 		
 		var dx:Number = 0;
 		var dy:Number = 0;
-		if(msEvt.currentTarget.x <0){
+		
+		if(msEvt.currentTarget.x <0)
 			dx -=  msEvt.currentTarget.x
-		}
-		if(msEvt.currentTarget.y <0){
+		
+		if(msEvt.currentTarget.y <0)
 			dy -=  msEvt.currentTarget.y
-		} 
+		 
 		
 		if(dx || dy)
 		{
-			
-			
 			for (var ID:String in massTreeElements)
 			{
 				massTreeElements[ID].x += dx;
@@ -483,8 +504,10 @@
         var ID:String = '';
 			for (var nam:String in massTreeElements)
 				if(ID == '') ID = nam; 
-		
+		/**---------------------------------------------------------------------------------*/
 		curTree = massTreeElements[ID];
+		curTree.current = true;
+		dataManager.changeCurrentPage( curTree.ID);
     }
 	
 	private function deleteObject(strID:String):void
@@ -515,12 +538,15 @@
 	*/
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
+		//trace('и Я нажата');
+		
 		main.addChild(vctTest);//--для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		
 		blDrawLine = true; //говорим что рисуем линию
 		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
+		
 	}
 	
 	/**
@@ -564,7 +590,7 @@
 		private function soapAddTreeElement():void
 		{
 			var types:XMLList = dataManager.getTopLevelTypes();
-		trace('1231231');
+	//	trace('1231231');
 			dataManager.createObject(selectedAppl.data);
 			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 		}
@@ -572,7 +598,7 @@
 		private function  createObject(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-			trace('CreateObject: '+dmEvt.result);
+			//trace('CreateObject: '+dmEvt.result);
 			var xml:XML = new XML(dmEvt.result);
 			//trace('xml new Elem: ' + xml);
 			addTreeElement(xml);
@@ -586,7 +612,7 @@
 			
 			massTreeElements[obID] =  new TreeElement();
 			massTreeElements[obID] = script.createTreeElement(xml);
-			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW , treeElementLinesReDrawHandler);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW_LINES , treeElementLinesReDrawHandler);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
@@ -634,7 +660,7 @@
 	private function mouseClickHandler(msEvt:MouseEvent):void
 	{
 		for (var ID:String in massTreeElements)
-				if(massTreeElements[ID].select) 
+				//if(massTreeElements[ID].select) 
 					massTreeElements[ID].unSelect();
 		btLine.visible = false;
 	}

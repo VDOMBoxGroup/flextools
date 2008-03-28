@@ -33,7 +33,7 @@ package vdom.components.treeEditor
 			}
 			
 			mapX = Math.floor((maxX + minX) / 2);
-			trace( minX+' : '+ maxX +' : '+ mapX);
+		//	trace( minX+' : '+ maxX +' : '+ mapX);
 			
 		}
 		
