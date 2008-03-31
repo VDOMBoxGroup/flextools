@@ -284,7 +284,7 @@ public class DataManager implements IEventDispatcher {
 	
 	private function _getObject(objectId:String):XML {
 		
-		var object:XMLList = _currentApplication..Object.(@ID == objectId);
+		var object:XMLList = _currentApplication..Objects.Object.(@ID == objectId);
 		return object[0];
 	}
 	
@@ -535,7 +535,7 @@ public class DataManager implements IEventDispatcher {
 		var parentId:String = result.Object.Parent;
 		
 		if(!parentId)
-			_currentApplication.appendChild(result.Object[0]);
+			_currentApplication.Objects.appendChild(result.Object[0]);
 			
 		else {
 			
@@ -596,9 +596,9 @@ public class DataManager implements IEventDispatcher {
 		var pageData:XML = event.result;
 		var pageId:String = pageData.@ID;
 		
-		delete _currentApplication.Object.(@ID == pageId)[0];
+		delete _currentApplication.Objects.Object.(@ID == pageId)[0];
 		
-		_currentApplication.appendChild(pageData);
+		_currentApplication.Objects.appendChild(pageData);
 		
 		
 		

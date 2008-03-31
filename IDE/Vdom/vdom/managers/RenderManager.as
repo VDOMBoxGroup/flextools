@@ -662,7 +662,7 @@ public class RenderManager implements IEventDispatcher {
 					
 				break;
 				
-				case 'table':
+				/* case 'table':
 					
 					var viewGrid:Grid = new Grid()
 					viewGrid.setStyle('horizontalGap', 0);
@@ -682,9 +682,9 @@ public class RenderManager implements IEventDispatcher {
 					
 					this.render(viewGrid, itemXMLDescription, newPath, false);
 					
-				break;
+				break; */
 				
-				case 'row':
+				/* case 'row':
 					
 					var viewGridRow:GridRow = new GridRow()
 					
@@ -699,13 +699,13 @@ public class RenderManager implements IEventDispatcher {
 					} */
 						
 					//tempArray.push(viewGridRow);
-					parentItem.addChild(viewGridRow);
+					///parentItem.addChild(viewGridRow);
 					
-					this.render(viewGridRow, itemXMLDescription, newPath, false);
+					///this.render(viewGridRow, itemXMLDescription, newPath, false);
 					
-				break;
+				//break; */
 				
-				case 'cell':
+				/* case 'cell':
 					
 					var viewGridItem:GridItem = new GridItem()
 					
@@ -723,12 +723,12 @@ public class RenderManager implements IEventDispatcher {
 					//s.text = 'zzz';
 					//viewGridItem.addChild(s);	
 					//tempArray.push(viewGridItem);
-					parentItem.addChild(viewGridItem);
+					//parentItem.addChild(viewGridItem);
 					
 					
-					this.render(viewGridItem, itemXMLDescription, newPath, false);
+					//this.render(viewGridItem, itemXMLDescription, newPath, false);
 					
-				break;
+				//break; */
 			}
 		}
 		
