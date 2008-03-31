@@ -430,6 +430,8 @@ public class WorkArea extends Canvas {
 		
 		if(currentContainer)
 			currentContainer.drawFocus(false);
+		else
+			return
 		
 		var currentItemName:String = 
 			dataManager.getTypeByObjectId(currentContainer.objectID).Information.Name;

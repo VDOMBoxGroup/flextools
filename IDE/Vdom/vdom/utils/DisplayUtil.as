@@ -26,14 +26,19 @@ public class DisplayUtil {
 			
 			var target:DisplayObject = allObjectUnderPoint[i];
 			
-			if (!rootContainer.contains(target))
-				continue
-			while (target) {
+			//if (!rootContainer.contains(target))
+				//continue
+				
+			while (target is DisplayObject) {
 				
 				var currentClassName:String = getQualifiedClassName(target);
 					
-				if(currentClassName == targetClassName)
+				if(currentClassName == targetClassName) {
+					
+					var z:*;
 					break;
+				}
+					
 				
 				
 				if(target.hasOwnProperty('parent'))

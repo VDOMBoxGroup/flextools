@@ -133,11 +133,13 @@ public class DataManager implements IEventDispatcher {
 		
 		var pages:XMLList = event.result.Objects.Object;
 		
+		_currentApplication.appendChild(<Objects />);
+		
 		delete pages.Parent;
 		
 		if(pages.length() > 0) {
 		
-			_currentApplication.appendChild = <Objects>{pages}</Objects>;
+			_currentApplication.Objects[0].appendChild = pages;
 			changeCurrentPage(pages[0].@ID);
 		} else {
 			
