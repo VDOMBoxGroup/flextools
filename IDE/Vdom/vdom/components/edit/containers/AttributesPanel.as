@@ -28,6 +28,7 @@ import mx.events.ValidationResultEvent;
 import mx.validators.RegExpValidator;
 
 import vdom.controls.colorPicker.ColorPicker;
+import vdom.controls.multiLine.MultiLine;
 import vdom.managers.LanguageManager;
 
 public class AttributesPanel extends ClosablePanel {
@@ -408,7 +409,7 @@ public class AttributesPanel extends ClosablePanel {
 		for each(var attributeXMLDescription:XML in attributes) {
 			
 			if(attributeXMLDescription.Visible == 0)
-				return;
+				continue;
 				
 			cursor.findFirst({'@Name':attributeXMLDescription.Name})
 			
@@ -450,6 +451,15 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.text = currentAttribute;
 				break;
 				
+				case 'multiline':
+				
+					valueContainer = new MultiLine();
+					valueType = 'value';
+					
+					//valueContainer.maxChars = codeInterface['value'];
+					
+					valueContainer.value = currentAttribute;
+				break;
 				//case 'file':
 				
 				case 'color':

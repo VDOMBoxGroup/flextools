@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" height="20" width="100" horizontalAlign="right" initialize="initalizeHandler();" verticalAlign="middle">
+<mx:Script>
+<![CDATA[
+	import vdom.events.MultiLineWindowEvent;
+
+private var _value:String;
+private var _title:String;
+
+private function initalizeHandler():void {
+	
+	addEventListener('apply', completeHandler);
+}
+
+public function set title(attrValue:String):void {
+	
+	_title = attrValue;
+} 
+[Bindable]
+public function get value():String {
+	
+	return _value;
+}
+
+public function set value(attrValue:String):void {
+	
+	_value = attrValue;
+}
+
+private function openWindow():void {
+	
+	MultiLineWindow.show_window(_title, _value, this, true);
+}
+
+private function completeHandler(event:MultiLineWindowEvent):void {
+	
+	_value = event.value;
+}
+
+]]>
+</mx:Script>
+	<mx:Label text="{value}" id="lbl" width="70"/>
+	<mx:Button label="..." height="20" cornerRadius="0" click="openWindow()" width="22" paddingLeft="2" paddingRight="2"/>
+</mx:HBox>

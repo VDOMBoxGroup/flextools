@@ -9,8 +9,12 @@ import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
+import mx.containers.Grid;
+import mx.containers.GridItem;
+import mx.containers.GridRow;
 import mx.controls.Button;
 import mx.controls.Image;
+import mx.controls.TextInput;
 import mx.core.Container;
 
 import vdom.components.edit.containers.workAreaClasses.Item;
@@ -344,7 +348,7 @@ public class RenderManager implements IEventDispatcher {
 	} */
 	
 	private function render(
-		parentItem:Item, 
+		parentItem:*, 
 		source:XML, 
 		fullPath:String, 
 		staticContent:Boolean /*,
@@ -657,8 +661,79 @@ public class RenderManager implements IEventDispatcher {
 					parentItem.addChild(viewImage);
 					
 				break;
+				
+				case 'table':
+					
+					var viewGrid:Grid = new Grid()
+					viewGrid.setStyle('horizontalGap', 0);
+					viewGrid.setStyle('verticalGap', 0);
+					viewGrid.x = itemXMLDescription.@left;
+					viewGrid.y = itemXMLDescription.@top;
+					
+					//if(itemXMLDescription.@width.length())
+						//viewGrid.width = 100// itemXMLDescription.@width;
+					//if(itemXMLDescription.@height.length()) {
+						//trace('image set height!: '+itemDescription.@height)
+						//viewGrid.height = 100// itemXMLDescription.@height;
+					//}
+						
+					//tempArray.push(viewGrid);
+					parentItem.addChild(viewGrid);
+					
+					this.render(viewGrid, itemXMLDescription, newPath, false);
+					
+				break;
+				
+				case 'row':
+					
+					var viewGridRow:GridRow = new GridRow()
+					
+					//viewGridRow.x = itemXMLDescription.@left;
+					//viewGridRow.y = itemXMLDescription.@top;
+					
+					/* if(itemXMLDescription.@width.length())
+						viewGridRow.width = itemXMLDescription.@width;
+					if(itemXMLDescription.@height.length()) {
+						//trace('image set height!: '+itemDescription.@height)
+						viewGridRow.height = itemXMLDescription.@height;
+					} */
+						
+					//tempArray.push(viewGridRow);
+					parentItem.addChild(viewGridRow);
+					
+					this.render(viewGridRow, itemXMLDescription, newPath, false);
+					
+				break;
+				
+				case 'cell':
+					
+					var viewGridItem:GridItem = new GridItem()
+					
+					//viewGridItem.x = itemXMLDescription.@left;
+					//viewGridItem.y = itemXMLDescription.@top;
+					//viewGridItem.width = 50;
+					//viewGridItem.height = 50;
+					/* if(itemXMLDescription.@width.length())
+						viewGridItem.width = itemXMLDescription.@width;
+					if(itemXMLDescription.@height.length()) {
+						//trace('image set height!: '+itemDescription.@height)
+						viewGridItem.height = itemXMLDescription.@height;
+					} */
+					//var s:* = new TextInput();
+					//s.text = 'zzz';
+					//viewGridItem.addChild(s);	
+					//tempArray.push(viewGridItem);
+					parentItem.addChild(viewGridItem);
+					
+					
+					this.render(viewGridItem, itemXMLDescription, newPath, false);
+					
+				break;
 			}
 		}
+		
+		if(!(parentItem is Item))
+			return
 		
 		_items.filterFunction = 
 			function (item:Object):Boolean {

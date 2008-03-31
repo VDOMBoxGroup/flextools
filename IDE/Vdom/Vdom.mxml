@@ -56,11 +56,11 @@
 	 				width="100%" height="100%" />
 		
 				<mx:Canvas id="multilinTab"
-					label="{resourceManager.getString('Application','mling_title')}"
+					label="{resourceManager.getString('Application','multilingual_title')}"
 					width="100%" height="100%" />
 				
 				<mx:Canvas id="portalManTab"
-					label="{resourceManager.getString('Application','portal_title')}"
+					label="{resourceManager.getString('Application','portal_managment_title')}"
 					width="100%" height="100%" />
 				
 				<mx:Canvas id="publishTab"
@@ -68,7 +68,7 @@
 					width="100%" height="100%" />
 				
 				<mx:Canvas id="safeguardTab"
-					label="{resourceManager.getString('Application','safe_title')}"
+					label="{resourceManager.getString('Application','safeguard_title')}"
 					width="100%" height="100%" />
 					
 				<mx:Canvas id="vdomTab"

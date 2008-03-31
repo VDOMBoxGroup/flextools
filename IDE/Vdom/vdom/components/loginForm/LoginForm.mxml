@@ -7,6 +7,11 @@
 	creationComplete="creationCompleteHandler();"
 	show="show();"
 	hide="hide();">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+		]]>
+	</mx:Script>
 	
 	<mx:Metadata>
 		[ResourceBundle("LoginForm")]
@@ -78,7 +83,7 @@
 				click="checkData();" width="110"/>
 				<mx:Button id="quitButton" styleName="loginButtonQuit"
 				label="{resourceManager.getString('LoginForm','quit_button')}"
-				 width="110"/>
+				width="110" click="Application.application.close()"/>
 		</mx:ControlBar>
 	</mx:Panel>
 </mx:Canvas>

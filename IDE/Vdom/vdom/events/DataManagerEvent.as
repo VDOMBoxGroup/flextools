@@ -25,6 +25,8 @@ public class DataManagerEvent extends Event
     // Define static constant.
     public static const INIT_COMPLETE:String = 'initComplete';
     
+    public static const APPLICATION_CREATED:String = 'applicationCreated';
+    
     public static const APPLICATION_DATA_LOADED:String = 'applicationDataLoaded';
     public static const TYPES_LOADED:String = 'typesLoaded';
     public static const PAGE_DATA_LOADED:String = 'pageDataLoaded';

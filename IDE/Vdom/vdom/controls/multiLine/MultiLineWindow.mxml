@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" showCloseButton="true" cornerRadius="0" width="400" height="300">
+<mx:Script>
+<![CDATA[
+	import mx.events.CloseEvent;
+	import mx.core.Application;
+	import mx.managers.PopUpManager;
+	import vdom.events.MultiLineWindowEvent;
+
+private static var wnd:MultiLineWindow;
+private var f_apply_flag:Boolean;
+private var par:DisplayObject;
+
+[Bindable]
+private var attributeValue:String; 
+
+public static function show_window(title:String, attrVal:String, parent:DisplayObject, modal:Boolean):void
+{
+	if (wnd == null) {
+		wnd = new MultiLineWindow();
+		//wnd.addEventListener(CloseEvent.CLOSE, on_close_event);
+	}
+	wnd.addEventListener(mx.events.CloseEvent.CLOSE, on_close_event)
+	wnd.title = title;
+	wnd.par = parent;
+	wnd.attributeValue = attrVal;
+	
+	if (!wnd.isPopUp) {
+		PopUpManager.addPopUp(wnd, DisplayObject(Application.application), modal);
+		PopUpManager.centerPopUp(wnd);
+	}
+	else {
+		PopUpManager.bringToFront(wnd);
+	}
+
+}
+
+/* private function get attrValue():String {
+	
+	return textAreaContainer.text;
+}
+
+private function set attrValue(attrVal:String):void {
+	
+	textAreaContainer.text = attrVal;
+} */
+
+private function ok_close_window():void
+{
+	f_apply_flag = true;
+	close_window();
+}
+
+private function cancel_close_window():void
+{
+	close_window();
+}
+
+public function close_window():void
+{
+	if(f_apply_flag)
+		par.dispatchEvent(new MultiLineWindowEvent("apply", textAreaContainer.text));
+	dispatchEvent(new CloseEvent(mx.events.CloseEvent.CLOSE));
+}
+
+public static function hide_window():void
+{
+	if (wnd != null) {
+		wnd.close_window();
+	}
+}
+private static function on_close_event(event:CloseEvent):void
+{
+	if (wnd == null) return;
+	//App.set_so_prop("color_picker_window_mode", (wnd.mode << 8 | (wnd.mode == 0 ? wnd.sel_rgb: wnd.sel_hsb)).toString() );
+	//wnd.with_last_preved();
+	PopUpManager.removePopUp(wnd);
+	wnd = null;
+}
+]]>
+</mx:Script>
+	<mx:TextArea width="100%" height="100%" id="textAreaContainer" text="{attributeValue}"/>
+	<mx:ControlBar horizontalAlign="right">
+		<mx:Button label="Apply" cornerRadius="0" click="ok_close_window()"/>
+	</mx:ControlBar>
+</mx:TitleWindow>

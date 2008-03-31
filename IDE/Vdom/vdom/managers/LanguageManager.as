@@ -92,7 +92,8 @@ public class LanguageManager implements IEventDispatcher {
 			languageCode = sentence.parent().@Code;
 			localeIndex = allLocales.indexOf(languageCode);
 			
-			if(localeIndex == -1) break;
+			if(localeIndex == -1) 
+				break;
 			
 			typeName = sentence.parent().parent().parent().Information.Name.toString();
 			

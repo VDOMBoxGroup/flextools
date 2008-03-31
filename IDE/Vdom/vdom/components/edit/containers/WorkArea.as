@@ -4,6 +4,7 @@ import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
 
 import mx.containers.Canvas;
+import mx.controls.Label;
 import mx.core.UIComponent;
 import mx.events.DragEvent;
 
@@ -32,9 +33,9 @@ public class WorkArea extends Canvas {
 	
 	private var collection:XML;
 	
-	private var applicationId:String;
+	//private var applicationId:String;
 	
-	private var topLevelObjectId:String;
+	private var _pageId:String;
 	private var topLevelItem:Item;
 	private var selectedObject:Item;
 	
@@ -55,7 +56,7 @@ public class WorkArea extends Canvas {
 		
 		super();
 		
-		//dataManager = DataManager.getInstance();
+		dataManager = DataManager.getInstance();
 		//fileManager = FileManager.getInstance();
 		renderManager = RenderManager.getInstance();
 		resizeManager = ResizeManager.getInstance();
@@ -130,6 +131,25 @@ public class WorkArea extends Canvas {
 			renderManager.updateItem(result.Object.@ID, result.Parent);
 	}
 	
+	public function set pageId(page:String):void {
+	
+		removeAllChildren();
+		
+		if(page) {
+			
+			_pageId = page;
+			renderManager.init(this);
+			renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+			topLevelItem = renderManager.addItem(_pageId);
+				
+		} else {
+				
+			var warning:Label = new Label()
+			warning.text = 'no page selected';
+			addChild(warning);
+		}
+	}
+	
 	public function set dataProvider(attributes:XML):void {
 		
         collection = attributes.Attributes[0];
@@ -140,20 +160,15 @@ public class WorkArea extends Canvas {
 		return XML(collection);
 	}
 	
-	public function showTopLevelContainer(applicationId:String, topLevelObjectId:String):void {
+	/* private function showTopLevelContainer(pageId:String):void {
 		
-		this.applicationId = applicationId;
-		this.topLevelObjectId = topLevelObjectId;
+		//this.applicationId = applicationId;
 		
-		renderManager.init(this);
-		
-		renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-		topLevelItem = renderManager.addItem(topLevelObjectId);
-	}
+	} */
 	
 	public function createObject(result:XML):void {
 
-		renderManager.addItem(result.Object.@ID, result.Parent);
+		renderManager.addItem(result.Object.@ID, result.Object.Parent);
 	}
 	
 	/* private function selectObject():String {
@@ -208,6 +223,7 @@ public class WorkArea extends Canvas {
      *  @private
      */
 	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
+		
 		trace('applyChanges');
 		
 		resizeBegin = false;
@@ -370,7 +386,7 @@ public class WorkArea extends Canvas {
 		}
 		
 		var stack:Array = 
-			DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item', filterFunction);
+			DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.edit.containers.workAreaClasses::Item', filterFunction);
 		
 		if(stack.length == 0)
 			return;
@@ -386,8 +402,9 @@ public class WorkArea extends Canvas {
 		
 		var currentItemName:String = 
 			dataManager.getTypeByObjectId(currentItem.objectID).Information.Name;
-			
-		var aviableContainers:Array = typeDescription.aviableContainers.split(', ');
+		
+		var containersRE:RegExp = /(\w+)/g;
+		var aviableContainers:Array = typeDescription.aviableContainers.match(containersRE);
 		
 		if(aviableContainers.indexOf(currentItemName) != -1) {
 			

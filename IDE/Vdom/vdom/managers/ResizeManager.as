@@ -123,8 +123,8 @@ public class ResizeManager extends EventDispatcher {
 		
 		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_BEGIN, transformBeginHandler);
 		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler);
-		selectMarker.addEventListener('markerSelected', markerSelectedHandler);
-		selectMarker.addEventListener('markerUnSelected', markerUnSelectedHandler);
+		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_MARKER_SELECTED, markerSelectedHandler);
+		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED, markerUnSelectedHandler);
 		
 		//itemTransform = false;
 		
@@ -469,11 +469,12 @@ public class ResizeManager extends EventDispatcher {
 	}
 	private function markerSelectedHandler(event:TransformMarkerEvent):void {
 		
-		//markerSelected = true;
+		trace('marker selected')
+		markerSelected = true;
 		highlightItem(null);
 	}
 	private function markerUnSelectedHandler(event:TransformMarkerEvent):void {
-		
+		trace('marker unselected')
 		markerSelected = false;
 	}
 	private function rollOutHandler(event:MouseEvent):void {

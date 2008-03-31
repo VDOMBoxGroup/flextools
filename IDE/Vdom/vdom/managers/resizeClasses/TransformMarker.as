@@ -6,18 +6,17 @@ import flash.display.Graphics;
 import flash.display.JointStyle;
 import flash.display.LineScaleMode;
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
 import mx.containers.Canvas;
+import mx.core.Application;
 import mx.core.UIComponent;
 import mx.managers.CursorManager;
+
 import vdom.events.TransformMarkerEvent;
-import mx.events.FlexEvent;
-import mx.events.ResizeEvent;
-import mx.core.Application;
-import flash.events.Event;
 
 public class TransformMarker extends UIComponent {
 	
@@ -414,7 +413,7 @@ public class TransformMarker extends UIComponent {
 		if(_selectedItem)			
 			if(!moving){				
 				CursorManager.removeAllCursors();
-				dispatchEvent(new TransformMarkerEvent('markerUnSelected'));
+				dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED));
 			}
 	}		
 	
@@ -457,9 +456,9 @@ public class TransformMarker extends UIComponent {
 			}
 			
 			if(markerSelected)
-				dispatchEvent(new TransformMarkerEvent('markerSelected'));
+				dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_SELECTED));
 			else
-				dispatchEvent(new TransformMarkerEvent('markerUnSelected'));
+				dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED));
 		}
 	}		
 	

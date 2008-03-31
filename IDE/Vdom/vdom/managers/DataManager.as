@@ -138,9 +138,15 @@ public class DataManager implements IEventDispatcher {
 		
 		delete pages.Parent;
 		
-		_currentApplication.appendChild = pages;
+		if(pages.length() > 0) {
 		
-		changeCurrentPage(pages[0].@ID);
+			_currentApplication.appendChild = <Objects>{pages}</Objects>;
+			changeCurrentPage(pages[0].@ID);
+		} else {
+			
+			changeCurrentPage(null);
+			
+		}
 		
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_DATA_LOADED));
 	}
@@ -163,8 +169,8 @@ public class DataManager implements IEventDispatcher {
 	
 	public function get listPages():XMLList {
 		
-		if(_currentApplication.length())
-			return _currentApplication.Object;
+		if(_currentApplication.Objects.Object.length())
+			return _currentApplication.Objects.Object;
 		else
 			return null
 	}
@@ -215,18 +221,26 @@ public class DataManager implements IEventDispatcher {
 	
 	public function changeCurrentPage(pageId:String):void {
 		
-		var newPage:XML = _getPage(pageId);
+		if(!pageId) {
+			
+			_currentPageId = null
+			_currentPage = null;
+			
+		} else {
+			
+			var newPage:XML = _getPage(pageId);
 		
-		if(newPage) {
-			
-			_currentPageId = newPage.@ID;
-			_currentPage = newPage;
-			
-			
-			changeCurrentObject(_currentPageId);
-			
-			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_PAGE_CHANGED));
+			if(newPage) {
+				
+				_currentPageId = newPage.@ID;
+				_currentPage = newPage;
+				
+			}
 		}
+		
+		changeCurrentObject(_currentPageId);
+			
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_PAGE_CHANGED));
 	}
 	
 	/**
@@ -256,7 +270,7 @@ public class DataManager implements IEventDispatcher {
 	
 	private function _getPage(pageId:String):XML {
 		
-		var newPage:XML = _currentApplication.Object.(@ID == pageId)[0];
+		var newPage:XML = _currentApplication.Objects.Object.(@ID == pageId)[0];
 		
 		if(newPage.length())
 			return newPage;
@@ -327,7 +341,7 @@ public class DataManager implements IEventDispatcher {
 			oldXMLDescription.@Name = newXMLDescription.@Name;
 			
 			soap.addEventListener(SoapEvent.SET_NAME_OK, setNameCompleteHandler);
-			soap.setName(_currentApplication, oldXMLDescription.@ID, oldXMLDescription.@Name);
+			soap.setName(_currentApplicationId, oldXMLDescription.@ID, oldXMLDescription.@Name);
 		}
 		
 	}
@@ -450,6 +464,24 @@ public class DataManager implements IEventDispatcher {
 	 * @return XML описание объекта.
 	 * 
 	 */	
+	
+	public function createApplication(name:String, description:String):void {
+		
+		soap.addEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
+		var applicationAttributes:XML = 
+			<Attributes>
+				<Name>{name}</Name>
+				<Description>{description}</Description>
+			</Attributes>
+		
+		soap.createApplication(applicationAttributes);
+	}
+	
+	private function createApplicationHandler(event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
+		dispatcher.dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED));
+	}
 	
 	
 	/**

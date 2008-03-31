@@ -72,11 +72,11 @@ package vdom.connection.soap
 		 * 3 - create application  'create_application'
 		 */ 
 		
-		public  function createApplication():void 
+		public  function createApplication(attr:XML):void 
 		{
 			var sCreateApplication:SCreateApplication = new SCreateApplication(ws); 
 			
-			sCreateApplication.execute();
+			sCreateApplication.execute(attr);
 			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_OK, ldispatchEvent);
 			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_ERROR, ldispatchEvent);
 		}

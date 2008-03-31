@@ -1,9 +1,11 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	public class SCreateApplication extends EventDispatcher
 	{
@@ -15,24 +17,25 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute():void
+		public function execute(attr:XML):void
 		{
 			//  protect
-			ws.create_application.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.create_application.arguments.skey 		= code.skey();	//- очередной ключ сессии 
+			var sid:String = code.sessionId;		// - идентификатор сессии 
+			var skey:String = code.skey();	//- очередной ключ сессии 
 			
 			// no data to send
 			
-			//send data & set listener 
-			ws.create_application();
-			ws.create_application.addEventListener(ResultEvent.RESULT,completeListener);
+			//send data & set listener
+			ws.create_application.addEventListener(ResultEvent.RESULT,completeListener); 
+			ws.create_application(sid, skey, attr);
+			
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void
 		{
 			// get result 
-			resultXML = XML(event.result);
+			resultXML = XML(<Result>{XMLList(event.result)}</Result>);
 			var evt:SoapEvent;
 			
 			// check Error

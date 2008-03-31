@@ -33,15 +33,15 @@ private function creationCompleteHandler():void {
 private function showHandler():void {
 	
 	setListeners(true);
-	dataManager.loadPageData();
+	
+	if(dataManager.currentPageId)
+		dataManager.loadPageData();
 }
 
 private function hideHandler():void {
 	
 	setListeners(false);
 }
-
-
 
 private function topLevelObjectChange():void {
 	
@@ -91,7 +91,7 @@ private function pageDataLoadedHandler(event:Event):void {
 	
 	//pageList.dataProvider = dataManager.listPages.Object;
 	
-	workArea.showTopLevelContainer(dataManager.currentApplicationId, dataManager.currentPageId);
+	//workArea.showTopLevelContainer(dataManager.currentApplicationId, dataManager.currentPageId);
 	
 	//typesXML = publicData['types'];
 	PopUpManager.removePopUp(ppm);
