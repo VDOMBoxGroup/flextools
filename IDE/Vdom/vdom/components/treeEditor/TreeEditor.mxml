@@ -157,10 +157,12 @@
 		xml1 = XML(dtManEvt.result);
 		massTreeElements = script.createTreeArr(xml1,dataManager.listPages);
 		createTree();
+		drawLines();
+	//	trace('creatTree');
+		creatTree();
+		
 		curTree = massTreeElements[dataManager.currentPageId];
 		curTree.current = true;
-		drawLines();
-		
 		
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 	}
@@ -181,8 +183,8 @@
 			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
-				
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			
 			main.addChild(massTreeElements[obID]);
 			/***************************************/
 		}
@@ -199,6 +201,7 @@
 	private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
 	{
 		main.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		treeElementMousUpHandler();
 		saveToServer();
 	}
 	
@@ -264,12 +267,21 @@
 				}
 			}
 		}
-		creatTree();
+		
 		
 	}
 	
 	private function creatTree():void
 	{
+		//massTreeElements.
+		//if(massTreeElements.length <= 1) return; 
+	
+//		trace(;
+		/*
+		if(massTreeElements[0].x != massTreeElements[1].x 
+			&& massTreeElements[0].y != massTreeElements[1].y) 
+			return; 
+		*/
 		var massMap:Array = new Array();
 		var massTreeObj:Array = new Array();
 		for each(var xmlObj:XML in xml1.children())
@@ -328,7 +340,6 @@
 			depth--;
 			
 			massTreeObj[inName].correctPosition();
-		
 		}
 		
 		function  distension():int
@@ -349,8 +360,8 @@
 		
 		for (var str:String in massTreeObj)
 		{
-			massTreeElements[str].x  = massTreeObj[str].mapX * 150;
-			massTreeElements[str].y  = massTreeObj[str].mapY * 60;
+			massTreeElements[str].x  = massTreeObj[str].mapX * 220;
+			massTreeElements[str].y  = massTreeObj[str].mapY * 60 + 40;
 		}
 		
 			
@@ -368,7 +379,9 @@
 	
 	private function treeElementLinesReDrawHandler(trEvt:TreeEditorEvent):void
 	{
-		redrawLines(trEvt.currentTarget.ID);
+		if(trEvt.currentTarget.ID != null)
+			redrawLines(trEvt.currentTarget.ID);
+		//trace(trEvt.currentTarget.ID)
 	}
 	
 	/***
@@ -379,11 +392,12 @@
 	
 	private function redrawLines(strID:String):void
 	{
+		//trace(strID);
 		for (var level:String in massLines)
-		for(var ind1:String in massLines[level])
-			for(var ind2:String in massLines[level][ind1])
-				if (strID == ind1 || strID == ind2)
-					massLines[level][ind1][ind2].updateVector();
+			for(var ind1:String in massLines[level])
+				for(var ind2:String in massLines[level][ind1])
+					if (strID == ind1 || strID == ind2)
+						massLines[level][ind1][ind2].updateVector();
 	}
 	/*
 	private function redrawLinesHandler(trEvt:TreeEditorEvent):void
@@ -443,20 +457,20 @@
 		dataManager.changeCurrentPage( curTree.ID);
 	}
 	
-	private function treeElementMousUpHandler(msEvt:MouseEvent):void
+	private function treeElementMousUpHandler():void
 	{
-		msEvt.currentTarget.stopDrag();
+	/*	msEvt.currentTarget.stopDrag();
 		msEvt.currentTarget.removeEventListener(MouseEvent.MOUSE_UP, treeElementMousUpHandler);
 		removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		
+		*/
 		var dx:Number = 0;
 		var dy:Number = 0;
 		
-		if(msEvt.currentTarget.x <0)
-			dx -=  msEvt.currentTarget.x
+		if(curTree.x <0)
+			dx -=  curTree.x
 		
-		if(msEvt.currentTarget.y <0)
-			dy -=  msEvt.currentTarget.y
+		if(curTree.y <0)
+			dy -=  curTree.y
 		 
 		
 		if(dx || dy)
@@ -612,9 +626,12 @@
 			
 			massTreeElements[obID] =  new TreeElement();
 			massTreeElements[obID] = script.createTreeElement(xml);
+			
 			massTreeElements[obID].addEventListener(TreeEditorEvent.REDRAW_LINES , treeElementLinesReDrawHandler);
 			massTreeElements[obID].addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
-			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);	
+			massTreeElements[obID].addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+			massTreeElements[obID].addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			/****************************************/
 			main.addChild(massTreeElements[obID]);

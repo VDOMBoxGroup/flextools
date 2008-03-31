@@ -101,6 +101,7 @@ package vdom.components.treeEditor
 			
 			initUpBody();
 			initDownBody(); 
+			updateRatio();
 			
 			isRedraw = true;
 		//	buttonMode = true;
@@ -215,7 +216,7 @@ package vdom.components.treeEditor
 			
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			if (isRedraw) {
-				updateRatio();
+				
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW_LINES, _ID));
 				isRedraw = false;
 			}
@@ -333,6 +334,8 @@ package vdom.components.treeEditor
 		
 		private function endFormatinfHandler(msEvt:MouseEvent):void
 		{
+			
+			
 			if(txtInp.visible)
 			{
 				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
