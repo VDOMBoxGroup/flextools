@@ -41,6 +41,8 @@ package vdom.connection.soap
 		public static var SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK 	:String =  "SubmitObjectScriptPresentationOK";
 		public static var GET_OBJECT_SCRIPT_PRESENTATION_OK  	:String =  "GetObjectScriptPresentationOK";
 		public static var GET_ONE_OBJECT_OK			  	:String =  "SGetOneObjectOK"; 
+		public static var LIST_RESOURSES_OK			  	:String =  "ListResourseOK"; 
+		
 		//setAttributes
 		
 		public static var LOGIN_ERROR						:String = "Login ERROR";
@@ -78,6 +80,7 @@ package vdom.connection.soap
 		public static var SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR 	:String =  "SubmitObjectScriptPresentationERROR";
 		public static var GET_OBJECT_SCRIPT_PRESENTATION_ERROR  	:String =  "GetObjectScriptPresentationERROR";
 		public static var GET_ONE_OBJECT_ERROR			  	:String =  "SGetOneObjectERROR";
+		public static var LIST_RESOURSES_ERROR		  	:String =  "ListResourseERROR"; 
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,
