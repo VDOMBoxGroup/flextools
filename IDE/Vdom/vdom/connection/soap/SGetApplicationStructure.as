@@ -33,7 +33,7 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			//ws.get_application_structure.removeEventListener(ResultEvent.RESULT,completeListener);
+			ws.get_application_structure.removeEventListener(ResultEvent.RESULT, completeListener);
 			// get result 
 			resultXML = <Result>{XMLList(event.result)}</Result>;
 			resultXML = resultXML.Structure[0];

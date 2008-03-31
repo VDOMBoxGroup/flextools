@@ -10,26 +10,16 @@
 
 <mx:Script>
 	<![CDATA[
-		import mx.containers.Canvas;
-		import vdom.components.treeEditor.colorMenu02.ColorMenu2;
-		//import vdom.Languages;
-		import vdom.components.edit.containers.AttributesPanel;
-		import vdom.events.DataManagerEvent;
-		import vdom.managers.FileManager;
-		import mx.controls.Alert;
-		import mx.events.CloseEvent;
 		import vdom.managers.DataManager;
-		import vdom.connection.soap.SoapEvent;
-		import vdom.connection.soap.Soap;
-		import mx.core.Application;
-		import mx.events.MoveEvent;
-		import mx.controls.Image;
-		import mx.events.TreeEvent;
+		import vdom.managers.FileManager;
 		import vdom.events.TreeEditorEvent;
-		import mx.states.AddChild;
-		import mx.core.Container;
-		import mx.controls.Button;
-		import mx.events.DragEvent;
+		import vdom.events.DataManagerEvent;
+		import vdom.components.treeEditor.colorMenu02.ColorMenu2;
+	
+		import mx.events.CloseEvent;
+		import mx.controls.Alert;
+		
+		
 		
 	private var xml1:XML; 
  	private var massTreeElements:Array = new Array();
@@ -58,7 +48,7 @@
  * 		//елементы меньшего размера
  * 		строить дерево если это необходимо
  * 		добавлять новый елемент правее, если есть елемент 0:0
- * 		линии правильно с самого начала..
+ * 		//линии правильно с самого начала..
  * 		переделать код..
  * 	//	Перенос елемента влево и вверх
  * 		
@@ -79,15 +69,12 @@
 	
 	private function creationCompleteHandler():void
 	{
-		
 		//languages = Languages.getInstance();
 	///	publicData = Application.application.publicData;
-		
 	}
 	
 	private function hideHendler():void
 	{
-		//trace();
 		// save current position to server
 		saveToServer();
 
@@ -98,7 +85,6 @@
 				{
 					main.removeChild(massLines[level][frsTrElem][sknTrElem]);
 					delete massLines[level][frsTrElem][sknTrElem];
-					
 				}
 				
 		btLine.alpha = 0.5;
@@ -109,8 +95,6 @@
 			main.removeChild(massTreeElements[obID]);
 			delete massTreeElements[obID];
 		}
-		
-		
 				
 					/** * * *   delete Listeners  * * * * */
 		removeEventListener(MouseEvent.CLICK, mouseClickHandler);
@@ -154,20 +138,47 @@
 	
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
+		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 		xml1 = XML(dtManEvt.result);
+		
+		// no tree Elements
+		if(xml1.children().toString() == '')
+			return;
+
 		massTreeElements = script.createTreeArr(xml1,dataManager.listPages);
 		createTree();
 		drawLines();
 	//	trace('creatTree');
-		creatTree();
+		if (needCreatTree == true)
+			creatTree();
 		
 		curTree = massTreeElements[dataManager.currentPageId];
-		curTree.current = true;
 		
-		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
+		if(curTree != null)
+			curTree.current = true;
 	}
 	
-	
+	private function get needCreatTree():Boolean
+	{
+		
+		// x,y == 0;
+		var calc:int = 0;
+		for(var strID:String in massTreeElements)
+			if (massTreeElements[strID].x == 0 && massTreeElements[strID].y == 0) 
+				calc++;
+		trace('test1: '+calc );		
+		if(calc > 2) return true;
+		
+		// only 1 level
+		calc = 0;
+		for(var level:String in massLines)
+			calc++;
+		trace('test2: ' + calc);	
+		if(calc > 1)return true;
+		
+		trace('test3 False');
+		return false;
+	}
 	
 	private function createTree():void
 	{
@@ -186,7 +197,6 @@
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			
 			main.addChild(massTreeElements[obID]);
-			/***************************************/
 		}
 	}
 	
@@ -209,12 +219,8 @@
 	public function set resource (object:Object):void
 	{
 		for (var obID:String in massTreeElements)
-		{
 			if(massTreeElements[obID].resourceID == object.resourceID )
-			{	
 				massTreeElements[obID].sourseImg = object.data;
-			}
-		}
 	}
 	
 	private function hideTreeElement(trEvt:Object):void
@@ -273,7 +279,10 @@
 	
 	private function creatTree():void
 	{
-		//massTreeElements.
+		// если есть другой уровень
+		// если нет нулевых обьектов
+		// если обьектов больше чем 1 шт.
+
 		//if(massTreeElements.length <= 1) return; 
 	
 //		trace(;
@@ -642,8 +651,13 @@
 	private function saveToServer():void
 	{
 		 var dataToServer:XML =  script.dataToXML(massTreeElements, massLines);
+	
+		 if(dataToServer.children().toString() == '')
+			return;
+	 
 		 dataManager.setApplactionStructure(dataToServer);
 		 dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
+	
 	}
 	
 	private function dataManagerListenner(dmnEvt:DataManagerEvent):void
@@ -655,8 +669,7 @@
 	{
 		selectedAppl=ComboBox(evt).selectedItem;
 		btAddTreeElement.enabled = true;
-	//	trace(selectedAppl.data);
-	}
+	}	
 	
 	private function hideLines(treEvt:TreeEditorEvent):void
 	{
