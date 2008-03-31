@@ -28,9 +28,7 @@
 				
 				<containers:WorkArea id="workArea"
 					horizontalScrollPolicy="off" verticalScrollPolicy="off"
-					visible="false"
-					pageId = "{dataManager.currentPageId}"
-					dataProvider="{dataManager.currentObject}" />
+					visible="false" />
 					
 				<containers:XMLPresentationEditor id="xmlEditor" />
 				

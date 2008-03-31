@@ -1,7 +1,8 @@
 import flash.events.Event;
 
+import mx.binding.utils.BindingUtils;
+import mx.binding.utils.ChangeWatcher;
 import mx.containers.Canvas;
-import mx.events.FlexEvent;
 import mx.managers.PopUpManager;
 
 import vdom.components.edit.events.WorkAreaEvent;
@@ -20,6 +21,8 @@ private var ppm:Canvas;
 private var applicationId:String;
 private var topLevelObjectId:String;
 
+private var watchers:Array;
+
 private function initializeHandler():void {
 	
 	dataManager = DataManager.getInstance();
@@ -32,7 +35,16 @@ private function creationCompleteHandler():void {
 
 private function showHandler():void {
 	
+	watchers = [];
+	
 	setListeners(true);
+	
+	watchers.push(
+		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId')
+	);
+	watchers.push(
+		BindingUtils.bindProperty(workArea, 'dataProvider', dataManager, 'currentObject')
+	);
 	
 	if(dataManager.currentPageId)
 		dataManager.loadPageData();
@@ -40,6 +52,9 @@ private function showHandler():void {
 
 private function hideHandler():void {
 	
+	for each(var watcher:ChangeWatcher in watchers)
+		watcher.unwatch();
+		
 	setListeners(false);
 }
 

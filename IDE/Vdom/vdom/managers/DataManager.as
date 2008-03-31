@@ -16,9 +16,6 @@ public class DataManager implements IEventDispatcher {
 	
 	private var languageManager:LanguageManager;
 	
-	//[Bindable]
-	//public var topLevelObjects:XML;
-	
 	private var dispatcher:EventDispatcher;
 	
 	private var soap:Soap;

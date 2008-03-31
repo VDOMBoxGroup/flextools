@@ -132,7 +132,7 @@ public class WorkArea extends Canvas {
 	}
 	
 	public function set pageId(page:String):void {
-	
+		
 		removeAllChildren();
 		
 		if(page) {
@@ -152,7 +152,8 @@ public class WorkArea extends Canvas {
 	
 	public function set dataProvider(attributes:XML):void {
 		
-        collection = attributes.Attributes[0];
+		if(attributes)
+        	collection = attributes.Attributes[0];
 	}
 	
 	public function get dataProvider():XML {
