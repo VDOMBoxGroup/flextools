@@ -54,13 +54,10 @@
 			applicationChanged="applicationChangedHandler(event)"
 			height="86" />
 		
-		<controls:ActionPanel
+		<controls:ApplicationInformation
 			panelName="{resourceManager.getString('Application','main_appinfo')}"
-			visible="true" height="86" dropShadowEnabled="false" id="applicationInformation">
-			<mx:TextArea text="{dataManager.currentApplicationInformation}" />
-		</controls:ActionPanel>
-		
-		<controls:ApplicationInformation dataProvider="{dataManager.currentApplicationInformation}" />
+			height="86" 
+			dataProvider="{dataManager.currentApplicationInformation}" />
 		
 	</controls:ControlPanel>
 	
