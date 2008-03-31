@@ -434,6 +434,15 @@ package vdom.connection.soap
 			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, 		ldispatchEvent);
 			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_ERROR, 	ldispatchEvent);
 		}
+		
+		public function listResources(ownerid:String = ''):void
+		{
+			var sListResources:SListResources = new SListResources(ws);
+			sListResources.execute(ownerid);
+			sListResources.addEventListener(SoapEvent.LIST_RESOURSES_OK, ldispatchEvent);
+			sListResources.addEventListener(SoapEvent.LIST_RESOURSES_ERROR, ldispatchEvent);
+		}
+		
 		/**
 		 *  --------  Event Dispatcher -------------
 		 */
