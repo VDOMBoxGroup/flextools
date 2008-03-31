@@ -14,9 +14,11 @@
 	creationPolicy="all">
 	
 <mx:Script source="includes/editor.as" />
+
 <mx:Canvas id="initModule" width="100%" height="100%">
 	<mx:Label text="Loading..." horizontalCenter="0" verticalCenter="0"/>
 </mx:Canvas>
+
 <mx:VBox id="components">
 	<controls:ControlPanel 
 		width="100%" height="90"

@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox
+<mx:ViewStack
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="vdom.containers.*"
 	xmlns:main="vdom.components.main.*"
+	xmlns:createApplication="vdom.components.createApplication.*"
 	
-	preinitialize="preinitializeHandler();"
 	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
-	hide="hideHandler();"
+	hide="hideHandler();" 
 	
-	width="100%" height="100%" verticalGap="2" xmlns:createApplication="vdom.components.createApplication.*">
+	creationPolicy="all">
 	
-	<mx:Script source="includes/applicationManagment.as" />
+<mx:Script source="includes/applicationManagment.as" />
+
+<mx:Canvas id="initModule" width="100%" height="100%">
+	<mx:Label text="Loading..." horizontalCenter="0" verticalCenter="0"/>
+</mx:Canvas>
+
+<mx:VBox id="components"
+	width="100%" height="100%" verticalGap="2" >
 			
 	<controls:ControlPanel 
 		width="100%" height="90"
@@ -44,18 +51,23 @@
 		<controls:ApplicationPanel id="listApplicationContainer"
 			dropShadowEnabled="false"
 			panelName="{resourceManager.getString('Application','main_applist')}" 
-			dataProvider="{dataManager.listApplication}"
 			applicationChanged="applicationChangedHandler(event)"
 			height="86" />
 		
 		<controls:ActionPanel
 			panelName="{resourceManager.getString('Application','main_appinfo')}"
-			visible="true" height="86" dropShadowEnabled="false"/>
+			visible="true" height="86" dropShadowEnabled="false" id="applicationInformation">
+			<mx:TextArea text="{dataManager.currentApplicationInformation}" />
+		</controls:ActionPanel>
+		
+		<controls:ApplicationInformation dataProvider="{dataManager.currentApplicationInformation}" />
 		
 	</controls:ControlPanel>
+	
 	<mx:ViewStack id="mainViewStack" width="100%" height="100%">
-		<main:Main id="mainCanvas" styleName="mainCanvas" width="100%" height="100%"  />
+		<main:Main id="mainCanvas" styleName="mainCanvas" width="100%" height="100%" />
 		<createApplication:CreateApplication id="createApplicationCanvas" width="100%" height="100%" />
 	</mx:ViewStack>
 	
 </mx:VBox>
+</mx:ViewStack>

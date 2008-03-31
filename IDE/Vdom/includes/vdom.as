@@ -1,6 +1,7 @@
 import flash.events.Event;
 
 import mx.core.Singleton;
+import mx.events.FlexEvent;
 import mx.managers.PopUpManager;
 
 import vdom.MyLoader;
@@ -44,6 +45,11 @@ private function preinitalizeHandler():void {
 	tempStorage = {};
 }
 
+private function showMainHandler():void {
+	
+	applicationManagmentModule.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
+}
+
 private function lockStage():void {
 	
 	ppm = new MyLoader();
@@ -84,6 +90,7 @@ private function dataManagerInitComplete(event:DataManagerEvent):void {
 	
 	dataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
 	viewstack.selectedChild=main;
+	//applicationManagmentModule.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
 	PopUpManager.removePopUp(ppm);
 }
 

@@ -11,6 +11,7 @@ import mx.utils.Base64Decoder;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
+import vdom.events.FileManagerEvent;
 	
 public class FileManager implements IEventDispatcher {
 	
@@ -21,6 +22,8 @@ public class FileManager implements IEventDispatcher {
 	
 	private var requestQue:Object;
 	private var _resourceStorage:Object;
+	
+	private var dataManager:DataManager;
 	
 	//private var loader:Loader;
 	/**
@@ -50,9 +53,25 @@ public class FileManager implements IEventDispatcher {
 		
 		dispatcher = new EventDispatcher();
 		soap = Soap.getInstance();
+		dataManager = DataManager.getInstance();
 		requestQue = {};
 		_resourceStorage = {};
 		
+	}
+	
+	public function getListResources():void {
+		
+		soap.addEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
+		soap.listResources(dataManager.currentApplicationId);
+	}
+	
+	private function listResourcesHandler(event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
+		
+		var fle:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_LIST_LOADED)
+		fle.result = event.result;
+		dispatchEvent(fle);
 	}
 	
 	public function loadResource(ownerID:String, resourceID:String, destTarget:Object, 

@@ -158,7 +158,7 @@ public class DataManager implements IEventDispatcher {
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.TYPES_LOADED));
 	}
 	
-	[Bindable (event="listApplicationChanged")]
+	[Bindable (event='listApplicationChanged')]
 	public function get listApplication():XMLList {
 		
 		return _listApplication;
@@ -187,6 +187,12 @@ public class DataManager implements IEventDispatcher {
 		return _currentApplicationId;
 	}
 	
+	[Bindable (event='currentApplicationChanged')]
+	public function get currentApplicationInformation():XML {
+		
+		return _currentApplication.Information[0];
+	}
+	
 	[Bindable (event='currentPageChanged')]
 	public function get currentPageId():String {
 		
@@ -213,6 +219,7 @@ public class DataManager implements IEventDispatcher {
 			
 			_currentApplicationId = applicationId;
 			_currentApplication = application;
+			dispatchEvent(new DataManagerEvent('currentApplicationChanged'));
 		}
 	}
 	
@@ -464,19 +471,20 @@ public class DataManager implements IEventDispatcher {
 	
 	public function createApplication(name:String, description:String):void {
 		
-		soap.addEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
 		var applicationAttributes:XML = 
 			<Attributes>
 				<Name>{name}</Name>
 				<Description>{description}</Description>
 			</Attributes>
 		
+		soap.addEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
 		soap.createApplication(applicationAttributes);
 	}
 	
 	private function createApplicationHandler(event:SoapEvent):void {
 		
 		soap.removeEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
+		dispatcher.dispatchEvent(new DataManagerEvent('listApplicationChanged'));
 		dispatcher.dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED));
 	}
 	

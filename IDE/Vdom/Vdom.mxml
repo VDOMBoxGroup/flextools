@@ -30,7 +30,7 @@
 	
 		<loginForm:LoginForm id="loginForm" submitBegin="submitLogin(event)"/>
 	
-		<mx:Canvas id="main"  width="100%" height="100%">
+		<mx:Canvas id="main"  width="100%" height="100%" show="showMainHandler();">
 		
 			<mx:ApplicationControlBar
 				top="0" left="0" right="0" height="80" 
@@ -50,7 +50,7 @@
 				top="90" left="10" right="10" bottom="10"
 				paddingBottom="10" paddingTop="10" paddingRight="10" paddingLeft="10" tabPaddingLeft="80">
 		
-	 			<modules:ApplicationManagment label="{resourceManager.getString('Application','main_title')}" />
+	 			<modules:ApplicationManagment id="applicationManagmentModule" label="{resourceManager.getString('Application','main_title')}" />
 	 	
 	 			<modules:Editor label="{resourceManager.getString('Application','editor_title')}" 
 	 				width="100%" height="100%" />

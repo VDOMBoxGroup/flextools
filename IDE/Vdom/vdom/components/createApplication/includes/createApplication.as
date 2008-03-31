@@ -1,4 +1,5 @@
-import vdom.events.DataManagerEvent;
+import flash.events.Event;
+
 import vdom.managers.DataManager;
 
 private var dataManager:DataManager;
@@ -19,4 +20,6 @@ private function createApplication():void {
 	var description:String = applicationDescription.text;
 	
 	dataManager.createApplication(name, description);
+	
+	dispatchEvent(new Event('createApplication'));
 }

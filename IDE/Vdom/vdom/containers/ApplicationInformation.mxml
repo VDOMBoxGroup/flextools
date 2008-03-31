@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionPanel xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			public function set dataProvider(xml:XML):void {
+				
+				//applicationName.text = xml.
+			}
+		]]>
+	</mx:Script>
+	<mx:HBox width="100%">
+		<mx:Label text="Name: "/>
+		<mx:Label width="200" id="applicationName"/>
+	</mx:HBox>
+	<mx:HBox width="100%">
+		<mx:Label text="Description: "/>
+		<mx:Text height="50" width="200" id="applicationDescription"/>
+	</mx:HBox>
+</ActionPanel>

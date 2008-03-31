@@ -40,9 +40,7 @@ private function showHandler():void {
 	setListeners(true);
 	
 	watchers.push(
-		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId')
-	);
-	watchers.push(
+		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId'),
 		BindingUtils.bindProperty(workArea, 'dataProvider', dataManager, 'currentObject')
 	);
 	
