@@ -27,7 +27,7 @@ package vdom.connection.soap
 			
 			//send data & set listener
 			ws.list_resources.addEventListener(ResultEvent.RESULT,completeListener); 
-			ws.list_resources(ownerid);
+			ws.list_resources(sid, skey, ownerid);
 			
 		}
 		
