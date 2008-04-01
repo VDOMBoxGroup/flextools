@@ -1,4 +1,5 @@
 // ActionScript file
+import mx.controls.Alert;
 import mx.managers.PopUpManager;
 
 import vdom.events.FileManagerEvent;
@@ -20,7 +21,7 @@ private function listResourcesQuery():void {
 }
 
 private function getResourcesList(fmEvent:FileManagerEvent):void {	
-	trace("Resources list: " + fmEvent.result.toXMLString());
+	Alert.show(fmEvent.result.toXMLString(), "Resources list");
 }
 
 private function showResource(resourceID:String):void {

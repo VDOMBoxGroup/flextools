@@ -14,16 +14,15 @@
 		>
 	<mx:Label text="Content filter:" fontWeight="bold" />
 	<mx:Tile width="100%" verticalAlign="middle" id="filtersArea">
-		<!-- <mx:CheckBox id="jpegChkBox" label="Jpeg" /> -->
+		<mx:CheckBox id="jpegChkBox" label="Jpeg" />
 	</mx:Tile>
 	<mx:HBox width="100%" height="100%">
-		<mx:VBox width="150" height="100%" horizontalAlign="center">
 		<mx:TileList width="150" height="100%" />
-		<mx:Button width="100%" label="Browse / Add" />	
-		</mx:VBox>
 		<mx:Canvas width="100%" height="100%" />		
 	</mx:HBox>
 	<mx:HBox width="100%" horizontalAlign="right">
+		<mx:Button width="150" label="Browse / Add" />
+		<mx:Spacer width="100%" />
 		<mx:Button label="Done" click="{PopUpManager.removePopUp(this);}" />
 	</mx:HBox>
 	</mx:VBox>
