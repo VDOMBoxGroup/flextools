@@ -261,11 +261,11 @@ package vdom.connection.soap
 		 * 17. set application resource set_resource
 		 */
 		
-		public  function setResource(appid:String='',resid:String='', restype:String='', resname:String='', resdata:String='' ):void 
+		public  function setResource(appid:String='', restype:String='', resname:String='', resdata:String='' ):void 
 		{
 			var sSetResource:SSetResource = new SSetResource(ws);
 			
-			sSetResource.execute(appid, resid, restype, resname, resdata);
+			sSetResource.execute(appid,  restype, resname, resdata);
 			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_OK, ldispatchEvent);
 			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_ERROR, ldispatchEvent);
 		}

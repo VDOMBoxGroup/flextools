@@ -16,7 +16,7 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String, resid:String, restype:String, resname:String, resdata:String  ):void
+		public function execute(appid:String, restype:String, resname:String, resdata:String  ):void
 		{
 			// protect
 			ws.set_resource.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
@@ -26,8 +26,6 @@ package vdom.connection.soap
 			ws.set_resource.arguments.appid  	= appid;		//- идентификатор приложения 
 			ws.set_resource.arguments.restype  	= restype;		//- идентификатор приложения 
 			ws.set_resource.arguments.resname  	= resname;		//- идентификатор приложения 
-			ws.set_resource.arguments.resid  	= resid;		//- идентификатор ресурса: необходимо указывать для изменения существующего ресурса; 
-																	// для добавления нового - пустая строка
 			ws.set_resource.arguments.resdata  	= resdata;		//- текст скрипта 
 
 			//send data & set listener 
