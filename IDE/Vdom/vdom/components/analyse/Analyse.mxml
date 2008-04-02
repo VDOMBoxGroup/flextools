@@ -8,8 +8,12 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import vdom.controls.resourceBrowser.ResourceBrowser;
+			import mx.managers.PopUpManager;
+			import mx.core.IFlexDisplayObject;
 			import mx.core.Application;
 			import vdom.managers.DataManager;
+			import mx.containers.TitleWindow;
 			
 			[Bindable]
 			private var dataManager:DataManager;
@@ -23,9 +27,14 @@
 		//		trace('publicData: \n'+ publicData)
 				
 			} */
+			
+			private function resourceBrowserLauncher():void {
+				PopUpManager.createPopUp(super, ResourceBrowser, true);
+			}
+			
 		]]>
 	</mx:Script>
 	
-	<mx:Button id="test" x="151" y="101" label="Button" />	
-	
+	<mx:Button id="test" x="10" y="10" label="Button" height="20" />
+	<mx:Button x="10" y="35" label="Open resourceBrowser" height="20" click="{resourceBrowserLauncher();}" />
 </mx:Canvas>
