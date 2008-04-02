@@ -166,17 +166,17 @@
 		for(var strID:String in massTreeElements)
 			if (massTreeElements[strID].x == 0 && massTreeElements[strID].y == 0) 
 				calc++;
-		trace('test1: '+calc );		
+		//trace('test1: '+calc );		
 		if(calc > 2) return true;
 		
 		// only 1 level
 		calc = 0;
 		for(var level:String in massLines)
 			calc++;
-		trace('test2: ' + calc);	
+		//trace('test2: ' + calc);	
 		if(calc > 1)return true;
 		
-		trace('test3 False');
+		//trace('test3 False');
 		return false;
 	}
 	
@@ -220,7 +220,10 @@
 	{
 		for (var obID:String in massTreeElements)
 			if(massTreeElements[obID].resourceID == object.resourceID )
+			{
 				massTreeElements[obID].sourseImg = object.data;
+				trace("sourseImg: " + obID);
+			}
 	}
 	
 	private function hideTreeElement(trEvt:Object):void

@@ -399,7 +399,6 @@ package vdom.components.treeEditor
 				bs64Encdr.encodeBytes(byArr);
 
 				var str:String = bs64Encdr.toString();
-			
 				setResource(source.type, source.name, str);
 			}
 		}
@@ -462,7 +461,7 @@ package vdom.components.treeEditor
 	 * */
 	 private function setResource(restype:String, resname:String, resdata:String):void
 	 {
-	 	soap.setResource(dataManager.currentApplicationId,	'', 
+	 	soap.setResource(dataManager.currentApplicationId,	 
 	 												restype, 
 	 												resname, 
 	 												resdata );
@@ -484,6 +483,7 @@ package vdom.components.treeEditor
 	 
 	 private function setResourceErrorHandler(spEvt:SoapEvent):void
 	 {
+	 	trace('ERROR set resourse')
 	 	image.source = defaultPicture;
 	 	
 	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
