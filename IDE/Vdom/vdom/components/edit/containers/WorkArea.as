@@ -1,8 +1,5 @@
 package vdom.components.edit.containers {
 	
-import flash.events.KeyboardEvent;
-import flash.ui.Keyboard;
-
 import mx.containers.Canvas;
 import mx.controls.Label;
 import mx.core.UIComponent;
@@ -379,6 +376,7 @@ public class WorkArea extends Canvas {
 	private function dragEnterHandler(event:DragEvent):void {
 		
 		VdomDragManager.acceptDragDrop(UIComponent(event.currentTarget));
+		focusedItem = null
 	}
 	
 	private function dragOverHandler(event:DragEvent):void {
@@ -436,14 +434,15 @@ public class WorkArea extends Canvas {
 		if(currentContainer)
 			currentContainer.drawFocus(false);
 		else
-			return
+			return;
 		
 		var currentItemName:String = 
 			dataManager.getTypeByObjectId(currentContainer.objectID).Information.Name;
 			
-		var aviableContainers:Array = typeDescription.aviableContainers.split(', ');
+		var aviableContainers:String = typeDescription.aviableContainers.toString();
 		
-		if(aviableContainers.indexOf(currentItemName) != -1) {
+		var bool:Number = aviableContainers.indexOf(currentItemName);
+		if(bool != -1) {
 			
 			var objectLeft:Number = currentContainer.mouseX - 25;// - bm.left;
 			var objectTop:Number = currentContainer.mouseY - 25;// - bm.top;
@@ -469,7 +468,10 @@ public class WorkArea extends Canvas {
 				currentContainer.objectID,
 				'',
 				attributes);
+				
+			focusedItem = null;
 		}
+		
 	}
 	
 	private function dragExitHandler(event:DragEvent):void {
@@ -478,6 +480,7 @@ public class WorkArea extends Canvas {
 		if(focusedItem is Item) {
 			focusedItem.setStyle('themeColor', '#009dff');
 			Item(focusedItem).drawFocus(false);
+			focusedItem = null;
 		}
 	}
 	

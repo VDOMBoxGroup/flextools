@@ -337,9 +337,9 @@ public class DataManager implements IEventDispatcher {
 		
 		if(attrChanged) {
 			
-			oldXMLDescription.Attributes[0] = new XML(newXMLDescription.Attributes[0]);
+			//oldXMLDescription.Attributes[0] = new XML(newXMLDescription.Attributes[0]);
 			
-			proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, setAttributeCompleteHandler);
+			proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
 			proxy.setAttributes(_currentApplicationId, objectId, newOnlyAttributes);
 		}
 		
@@ -370,14 +370,28 @@ public class DataManager implements IEventDispatcher {
 		dispatchEvent(dmEvent);
 	}
 	
-	private function setAttributeCompleteHandler(event:ProxyEvent):void {
+	private function setAttributesCompleteHandler(event:ProxyEvent):void {
 		
-		proxy.removeEventListener(ProxyEvent.PROXY_COMPLETE, setAttributeCompleteHandler);
+		
+		proxy.removeEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
+		
+		var objectId:String = event.xml.Object[0].@ID;
+		var attributes:XML = event.xml.Object.Attributes[0];
+		
+		var object:XML = _getObject(objectId);
+		object.Attributes[0] = new XML(attributes);
+		
+		var newObject:XML = new XML(object);
+		var type:XML = getTypeByObjectId(objectId);
+		newObject.appendChild(type);
+		
+		_currentObject = newObject;
+		_currentobjectId = newObject.@ID;
 		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		dmEvent.objectId = event.xml.Object.@ID;
 		dmEvent.result = event.xml;
-		//dispatchEvent(new Event('objectDescriptionChanged'));
+		dispatchEvent(new Event('currentObjectChanged'));
 		dispatchEvent(dmEvent);
 	}
 	

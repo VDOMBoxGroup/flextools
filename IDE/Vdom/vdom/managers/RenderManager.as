@@ -459,11 +459,17 @@ public class RenderManager implements IEventDispatcher {
 						graph.lineStyle(border, color);
 					}
 					
+					var fillColor:Number = 0x000000;
+					var alpha:Number = 1;
+					 
 					if(itemXMLDescription.@fill.length)
-						graph.beginFill(
-							Number('0x' + itemXMLDescription.@fill.toString().substring(1))
-						);
+						fillColor = Number('0x' + itemXMLDescription.@fill.toString().substring(1))
 						
+					if(itemXMLDescription.@alpha.length)
+						alpha = Number(itemXMLDescription.@alpha)/100
+					
+					graph.beginFill(fillColor, alpha);
+										
 					graph.drawRect(
 						itemXMLDescription.@left,
 						itemXMLDescription.@top,

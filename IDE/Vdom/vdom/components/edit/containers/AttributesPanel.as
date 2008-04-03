@@ -115,10 +115,11 @@ public class AttributesPanel extends ClosablePanel {
 		deleteButton.label = _cancelLabel = newLabel;
 	}
 	
-	public function get dataProvider():XML {
+	//[Bindable]
+	/* public function get dataProvider():XML {
 		
 		return XML(_collection);
-	}
+	} */
 	
 	public function set dataProvider(new_objectDescription:XML):void {
 		

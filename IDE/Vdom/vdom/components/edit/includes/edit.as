@@ -41,7 +41,8 @@ private function showHandler():void {
 	
 	watchers.push(
 		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId'),
-		BindingUtils.bindProperty(workArea, 'dataProvider', dataManager, 'currentObject')
+		BindingUtils.bindProperty(workArea, 'dataProvider', dataManager, 'currentObject'),
+		BindingUtils.bindProperty(attributesPanel, 'dataProvider', dataManager, 'currentObject')
 	);
 	
 	if(dataManager.currentPageId)
