@@ -89,7 +89,7 @@
 					delete massLines[level][frsTrElem][sknTrElem];
 				}
 				
-		btLine.alpha = 0.5;
+		//btLine.alpha = 0.5;
 		btLine.visible = false;
 		// delete Elements
 		for (var obID:String in massTreeElements)
@@ -244,7 +244,7 @@
 							//*	cnvLevelDown.removeChild(massLines[level][frsTrElem][sknTrElem]);
 								main.removeChild(massLines[level][frsTrElem][sknTrElem]);
 								delete massLines[level][frsTrElem][sknTrElem];
-								btLine.alpha = 0.5;
+							//	btLine.alpha = 0.5;
 								btLine.visible = false;
 							}
 	}
@@ -379,7 +379,7 @@
 	private function treeElementLinesReDrawHandler(trEvt:TreeEditorEvent):void
 	{
 		if(trEvt.currentTarget.ID != null)
-			redrawLines(trEvt.currentTarget.ID);
+			redrawLines(trEvt.currentTarget.ID); 
 		//trace(trEvt.currentTarget.ID)
 	}
 	

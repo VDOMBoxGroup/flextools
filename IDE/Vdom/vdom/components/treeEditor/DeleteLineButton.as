@@ -20,23 +20,23 @@ package vdom.components.treeEditor
 		public function DeleteLineButton()
 		{
 			super();
-			bt = new Button();
-			bt.height = 18;
-			bt.width = 18;
-		//	addChild(bt);
 			
 			icons = new Image();
+			icons.maintainAspectRatio = false;
+			icons.scaleContent = true;
+			
 			icons.source = deleteLine;
-			icons.width = 15;
-			icons.height = 15;
+			icons.width = 18;
+			icons.height = 18;
 			icons.x = 2;
 			icons.y = 1
 			addChild(icons);
-			
+			//this.height = 35;
+		//	this.width = 35;
 			visible = false;
 			
-			addEventListener(MouseEvent.MOUSE_OVER, delButtonOperation);
-			addEventListener(MouseEvent.MOUSE_OUT, 	delButtonOperation);
+			//addEventListener(MouseEvent.MOUSE_OVER, delButtonOperation);
+			//addEventListener(MouseEvent.MOUSE_OUT, 	delButtonOperation);
 /*	
 		*/}
 		private function delButtonOperation(msEvt:MouseEvent):void
@@ -45,7 +45,7 @@ package vdom.components.treeEditor
 				alpha = 1;
 			
 			if(msEvt.type == MouseEvent.MOUSE_OUT)
-				alpha = 0.3;
+				alpha = 0.5;
 		}
 		
 	}
