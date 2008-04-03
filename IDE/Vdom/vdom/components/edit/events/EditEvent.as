@@ -3,7 +3,7 @@ package vdom.components.edit.events
 
 import flash.events.Event;
 	
-public class WorkAreaEvent extends Event
+public class EditEvent extends Event
 {
 	public static const DELETE_OBJECT:String = 'deleteObject';
 	public static const OBJECT_DELETED:String = 'objectDeleted';
@@ -12,7 +12,7 @@ public class WorkAreaEvent extends Event
 	
 	public var objectID:String;
 	
-	public function WorkAreaEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false,
+	public function EditEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false,
 		objectID:String = null):void
 	{
 		super(type, bubbles, cancelable);
@@ -22,7 +22,7 @@ public class WorkAreaEvent extends Event
 	
 	override public function clone():Event
 	{
-		return new WorkAreaEvent(type, bubbles, cancelable, objectID);
+		return new EditEvent(type, bubbles, cancelable, objectID);
 	}		
 }
 }

@@ -18,20 +18,22 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String, objid:String, parentid:String, sdynamic:String ):void{
+		public function execute(appid:String, objid:String, parentid:String, sdynamic:String ):String {
 			// protect
-			ws.render_wysiwyg.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.render_wysiwyg.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			var sid:String 		= code.sessionId;		// - идентификатор сессии 
+			var skey:String		= code.skey();			//- очередной ключ сессии 
 			
-			// data
-			ws.render_wysiwyg.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.render_wysiwyg.arguments.objid  	= objid;		//- идентификатор объекта 
-			ws.render_wysiwyg.arguments.parentid  	= parentid;
-			ws.render_wysiwyg.arguments.dynamic  = sdynamic;		//- способ рендеринга: для только что созданных объектов нужно указывать 0, для всех остальных 1
-			
-			//send data & set listener 
-			ws.render_wysiwyg();
-			ws.render_wysiwyg.addEventListener(ResultEvent.RESULT,completeListener);
+			//send data & set listener
+			ws.render_wysiwyg.addEventListener(ResultEvent.RESULT,completeListener); 
+			ws.render_wysiwyg(
+				sid,
+				skey,
+				appid,
+				objid,
+				parentid,
+				sdynamic
+			);
+			return skey;
 		}
 		
 		
@@ -47,7 +49,6 @@ package vdom.connection.soap
 				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				resultXML = resultXML.Result[0];
 				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_OK, resultXML);
 				dispatchEvent(evt);
 			}

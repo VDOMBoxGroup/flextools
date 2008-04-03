@@ -5,9 +5,9 @@
 			public function set dataProvider(xml:XML):void {
 				
 				if(xml) {
-					applicationName.text = xml.name.toString();
-					applicationPage.text = xml.NumberOfPages.toString();
-					applicationObjects.text = xml.NumberOfObjects.toString();
+					applicationName.text = xml.Name.toString();
+					applicationPage.text = xml.Numberofpages.toString();
+					applicationObjects.text = xml.Numberofobjects.toString();
 				}
 			}
 		]]>

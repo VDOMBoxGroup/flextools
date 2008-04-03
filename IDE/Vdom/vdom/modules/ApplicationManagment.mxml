@@ -38,11 +38,11 @@
 			width="250" height="86" dropShadowEnabled="false">
 		
 			<mx:HBox width="100%">
-				<mx:Button label="Find" height="50"/>
-				<mx:VBox width="100%" horizontalAlign="right">
-					<mx:TextInput height="20"/>
-					<mx:ComboBox height="20"></mx:ComboBox>
-					<mx:Button label="Go" height="20"/>
+				<mx:Button label="Find" height="50" cornerRadius="0"/>
+				<mx:VBox width="100%" horizontalAlign="right" verticalGap="4">
+					<mx:TextInput height="18"/>
+					<mx:ComboBox height="18" cornerRadius="0"></mx:ComboBox>
+					<mx:Button label="Go" height="18" cornerRadius="0"/>
 				</mx:VBox>
 			</mx:HBox>
 			
@@ -57,6 +57,7 @@
 		<controls:ApplicationInformation
 			panelName="{resourceManager.getString('Application','main_appinfo')}"
 			height="86" 
+			dropShadowEnabled="false"
 			dataProvider="{dataManager.currentApplicationInformation}" />
 		
 	</controls:ControlPanel>

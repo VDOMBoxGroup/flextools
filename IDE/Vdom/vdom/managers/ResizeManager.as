@@ -1,34 +1,18 @@
 package vdom.managers {
 
-import flash.display.CapsStyle;
-import flash.display.DisplayObject;
-import flash.display.Graphics;
-import flash.display.JointStyle;
-import flash.display.LineScaleMode;
-import flash.display.Sprite;
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
-import flash.geom.Point;
-import flash.geom.Rectangle;
 
-import mx.containers.Canvas;
 import mx.controls.ToolTip;
-import mx.core.Application;
-import mx.core.Container;
-import mx.core.EdgeMetrics;
-import mx.core.IUIComponent;
-import mx.core.UIComponent;
-import mx.events.FlexEvent;
 import mx.managers.CursorManager;
 import mx.managers.ToolTipManager;
+import mx.styles.StyleManager;
 
+import vdom.components.edit.containers.workAreaClasses.Item;
+import vdom.events.ResizeManagerEvent;
 import vdom.events.TransformMarkerEvent;
 import vdom.managers.resizeClasses.TransformMarker;
-import vdom.events.ResizeManagerEvent;
 import vdom.utils.DisplayUtil;
-import vdom.components.edit.containers.workAreaClasses.Item;
-import flash.display.DisplayObjectContainer;
-import mx.styles.StyleManager;
 			
 [Event(name="RESIZE_COMPLETE", type="vdom.events.ResizeManagerEvent")]
 
@@ -165,13 +149,15 @@ public class ResizeManager extends EventDispatcher {
 			} else {
 				
 				selectMarker.item = null;
+				selectMarker.visible = false;
 			}
 			
 			selectedItem = newSelectedItem = item;
 			
-		} else
+		} else {
 			newSelectedItem = null;
-			//selectMarker.item = null;
+			selectMarker.visible = false;
+		}
 			
 		return newSelectedItem;
 	}
@@ -186,7 +172,7 @@ public class ResizeManager extends EventDispatcher {
 		if(item && !itemTransform) {
 			
 			if(highlightedItem)
-				highlightedItem.highlight(false);
+				highlightedItem.drawHighlight('none');
 			
 			if(cursorID) {
 				CursorManager.removeCursor(cursorID);
@@ -198,7 +184,6 @@ public class ResizeManager extends EventDispatcher {
 				highlightedItem = null;
 				return;
 			}
-				
 			
 			switch(showMarker) {
 				
@@ -208,7 +193,7 @@ public class ResizeManager extends EventDispatcher {
 					
 				case 'select':
 					
-					item.highlight(true);
+					item.drawHighlight('0x666666');
 				break
 			}
 			
@@ -217,7 +202,7 @@ public class ResizeManager extends EventDispatcher {
 		} else {
 			
 			if(highlightedItem)
-				highlightedItem.highlight(false);
+				highlightedItem.drawHighlight('none');
 				
 			highlightedItem = null;
 		}

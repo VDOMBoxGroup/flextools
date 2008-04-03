@@ -5,7 +5,7 @@ import mx.binding.utils.ChangeWatcher;
 import mx.containers.Canvas;
 import mx.managers.PopUpManager;
 
-import vdom.components.edit.events.WorkAreaEvent;
+import vdom.components.edit.events.EditEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
 
@@ -74,9 +74,9 @@ private function setListeners(flag:Boolean):void {
 	
 	if(flag) {
 		
-		workArea.addEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
-		workArea.addEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
-		workArea.addEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
+		workArea.addEventListener(EditEvent.OBJECT_CHANGE, objectChangeHandler);
+		workArea.addEventListener(EditEvent.PROPS_CHANGED, attributesChangedHandler);
+		workArea.addEventListener(EditEvent.DELETE_OBJECT, deleteObjectHandler);
 		
 		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
@@ -84,12 +84,13 @@ private function setListeners(flag:Boolean):void {
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
 		
 		attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
+		attributesPanel.addEventListener(EditEvent.DELETE_OBJECT, deleteObjectHandler);
 		
 	} else {
 		
-		workArea.removeEventListener(WorkAreaEvent.OBJECT_CHANGE, objectChangeHandler);
-		workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGED, attributesChangedHandler);
-		workArea.removeEventListener(WorkAreaEvent.DELETE_OBJECT, deleteObjectHandler);
+		workArea.removeEventListener(EditEvent.OBJECT_CHANGE, objectChangeHandler);
+		workArea.removeEventListener(EditEvent.PROPS_CHANGED, attributesChangedHandler);
+		workArea.removeEventListener(EditEvent.DELETE_OBJECT, deleteObjectHandler);
 		
 		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
@@ -97,6 +98,7 @@ private function setListeners(flag:Boolean):void {
 		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
 		
 		attributesPanel.removeEventListener('propsChanged', attributesChangedHandler);
+		attributesPanel.removeEventListener(EditEvent.DELETE_OBJECT, deleteObjectHandler);
 	}
 }
 
@@ -159,7 +161,7 @@ private function objectChangeHandler(event:Event):void {
 	PopUpManager.removePopUp(ppm);
 } */
 
-private function deleteObjectHandler(event:WorkAreaEvent):void {
+private function deleteObjectHandler(event:EditEvent):void {
 	
 	dataManager.deleteObject(event.objectID);
 }

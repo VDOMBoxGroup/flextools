@@ -29,7 +29,7 @@
 			public function get applicationID():String {
 				
 				if(_applicationTitleList.selectedItem != null) {
-					return _applicationTitleList.selectedItem.@id;
+					return _applicationTitleList.selectedItem.@ID;
 				} else {
 					return null;
 				}

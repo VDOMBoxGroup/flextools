@@ -9,7 +9,7 @@ import mx.core.UIComponent;
 import mx.events.DragEvent;
 
 import vdom.components.edit.containers.workAreaClasses.Item;
-import vdom.components.edit.events.WorkAreaEvent;
+import vdom.components.edit.events.EditEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
@@ -84,7 +84,7 @@ public class WorkArea extends Canvas {
 		
 		//renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 		
-		addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+		//addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 		
 		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
 		addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
@@ -109,6 +109,7 @@ public class WorkArea extends Canvas {
 	
 	public function deleteObjects():void {
 		
+		resizeManager.selectItem(null);
 		removeAllChildren();
 	}
 	
@@ -121,6 +122,7 @@ public class WorkArea extends Canvas {
 		
 		selectedObject = null;
 		renderManager.deleteItem(objectId);
+		resizeManager.selectItem(null);
 	}
 	
 	public function updateObject(result:XML):void {
@@ -212,7 +214,7 @@ public class WorkArea extends Canvas {
 		}
 		
 		//trace('WorkAreaEvent.PROPS_CHANGED');
-		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.PROPS_CHANGED));
+		dispatchEvent(new EditEvent(EditEvent.PROPS_CHANGED));
 	}
 	
 	private function resizeBeginHandler(event:ResizeManagerEvent):void {
@@ -257,7 +259,7 @@ public class WorkArea extends Canvas {
 		}
 
 		selectedObject = event.item;
-		dispatchEvent(new WorkAreaEvent(WorkAreaEvent.OBJECT_CHANGE));
+		dispatchEvent(new EditEvent(EditEvent.OBJECT_CHANGE));
 	}
 	
 	
@@ -278,21 +280,21 @@ public class WorkArea extends Canvas {
 	/**
      *  @private
      */
-	override protected function keyDownHandler(event:KeyboardEvent):void {
+	/* override protected function keyDownHandler(event:KeyboardEvent):void {
 		
 		if(!selectedObjectId) return;
 		
 		switch (event.keyCode) {
 			
 			case Keyboard.DELETE:
-				var we:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.DELETE_OBJECT);
+				var we:EditEvent = new EditEvent(EditEvent.DELETE_OBJECT);
 				we.objectID = selectedObjectId;
 				
 				dispatchEvent(we);
 				event.stopPropagation();
 			break;
 		}
-	}
+	} */
 	
 	/**
      *  @private
@@ -405,7 +407,10 @@ public class WorkArea extends Canvas {
 			dataManager.getTypeByObjectId(currentItem.objectID).Information.Name;
 		
 		var containersRE:RegExp = /(\w+)/g;
+		
 		var aviableContainers:Array = typeDescription.aviableContainers.match(containersRE);
+		
+		
 		
 		if(aviableContainers.indexOf(currentItemName) != -1) {
 			
@@ -416,7 +421,7 @@ public class WorkArea extends Canvas {
 		}
 		
 		//if(currentItem)
-		trace('focus');
+		//trace('focus');
 		currentItem.drawFocus(true);
 		
 		
@@ -470,8 +475,10 @@ public class WorkArea extends Canvas {
 	private function dragExitHandler(event:DragEvent):void {
 		
 		//var currentContainer:Object = event.currentTarget;
-		if(focusedItem is Item)
+		if(focusedItem is Item) {
+			focusedItem.setStyle('themeColor', '#009dff');
 			Item(focusedItem).drawFocus(false);
+		}
 	}
 	
 	

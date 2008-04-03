@@ -215,9 +215,9 @@ public class DataManager implements IEventDispatcher {
 	
 	public function changeCurrentApplication(applicationId:String):void {
 		
-		var application:XML = new XML(_listApplication.(@id == applicationId)[0]);
+		var application:XML = new XML(_listApplication.(@ID == applicationId)[0]);
 		
-		if(application.name()) {
+		if(application && application.Information.Name) {
 			
 			_currentApplicationId = applicationId;
 			_currentApplication = application;
@@ -267,6 +267,7 @@ public class DataManager implements IEventDispatcher {
 			newObject.appendChild(type);
 			
 			_currentObject = newObject;
+			_currentobjectId = newObject.@ID;
 		} 
 			
 		
@@ -421,7 +422,7 @@ public class DataManager implements IEventDispatcher {
 		
 		
 		soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
-		soap.deleteObject(_currentApplication, objectId);
+		soap.deleteObject(_currentApplicationId, objectId);
 		
 	}
 	
@@ -433,6 +434,15 @@ public class DataManager implements IEventDispatcher {
 		var objectID:String = event.result;
 		
 		delete _getObject(objectID);
+		
+		if(objectID == _currentPageId)
+			changeCurrentPage(null);
+		
+		if(objectID == _currentobjectId)
+			changeCurrentObject(null);
+		
+		
+		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
 		dme.objectId = event.result;
 		dispatchEvent(dme);
@@ -486,6 +496,9 @@ public class DataManager implements IEventDispatcher {
 	private function createApplicationHandler(event:SoapEvent):void {
 		
 		soap.removeEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
+		
+		_listApplication += event.result.Application[0];
+		
 		dispatcher.dispatchEvent(new DataManagerEvent('listApplicationChanged'));
 		dispatcher.dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED));
 	}
@@ -600,7 +613,7 @@ public class DataManager implements IEventDispatcher {
 		
 		delete _currentApplication.Objects.Object.(@ID == pageId)[0];
 		
-		_currentApplication.Objects.appendChild(pageData);
+		_currentApplication.Objects[0].appendChild(pageData);
 		
 		
 		

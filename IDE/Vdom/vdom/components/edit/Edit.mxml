@@ -44,7 +44,7 @@
 			<containers:AttributesPanel id="attributesPanel"
 				title="OBJECT PROPERTIES"
 				acceptLabel="{resourceManager.getString('Application','editor_save')}" 
-				cancelLabel="{resourceManager.getString('Application','editor_cancel')}"
+				deleteLabel="{resourceManager.getString('Application','editor_delete')}"
 				dataProvider="{dataManager.currentObject}" width="200" />
 
 			<containers:ClosablePanel id="helpPanel" title="Help" 

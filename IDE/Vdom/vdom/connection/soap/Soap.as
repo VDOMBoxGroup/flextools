@@ -154,11 +154,13 @@ package vdom.connection.soap
 		 * 9. render object to xml presentation  - render_wysiwyg
 		 */
 		private var sRenderWysiwig:SRenderWysiwyg = new SRenderWysiwyg(ws);
-		public  function renderWysiwyg(appid:String='',objid:String='', parentid:String='' ,sdynamic:String  = '0'):void 
+		public  function renderWysiwyg(appid:String='',objid:String='', parentid:String='' ,sdynamic:String  = '0'):String 
 		{	
-			sRenderWysiwig.execute(appid, objid, parentid, sdynamic);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, ldispatchEvent);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, ldispatchEvent);
+			var key:String = sRenderWysiwig.execute(appid, objid, parentid, sdynamic);
+			return key;
+			
 		}
 		
 		

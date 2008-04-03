@@ -3,11 +3,13 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	
 	creationComplete="creationCompleteHandler();"
-	show="showHandler();">
+	show="showHandler();"
+	hide="hideHandler();">
 
 	<mx:Script source="includes/createApplication.as" />
 	
-	<mx:Form x="10" y="10">
+	<mx:Form id="createApplicationForm" 
+		x="10" y="10" >
 		<mx:FormHeading label="Create Application"/>
 		<mx:FormItem label="Name">
 			<mx:TextInput id="applicationName"/>

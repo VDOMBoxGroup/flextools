@@ -35,6 +35,7 @@ private function openWindow():void {
 private function completeHandler(event:MultiLineWindowEvent):void {
 	
 	_value = event.value;
+	lbl.text = _value;
 }
 
 ]]>

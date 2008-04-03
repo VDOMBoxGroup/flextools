@@ -14,6 +14,12 @@ private function showHandler():void {
 	
 }
 
+private function hideHandler():void {
+	
+	applicationName.text = '';
+	applicationDescription.text = '';
+}
+
 private function createApplication():void {
 	
 	var name:String = applicationName.text;

@@ -1,9 +1,11 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	
 	public class SSetName extends EventDispatcher 
@@ -37,7 +39,7 @@ package vdom.connection.soap
 		private  function completeListener(event:ResultEvent):void
 		{
 			// get result 
-			resultXML = XML(event.result);
+			resultXML = XML(<Result>{XMLList(event.result)}</Result>);
 			var evt:SoapEvent;
 			
 			// check Error

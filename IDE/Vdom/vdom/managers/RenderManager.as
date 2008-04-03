@@ -14,7 +14,6 @@ import mx.containers.GridItem;
 import mx.containers.GridRow;
 import mx.controls.Button;
 import mx.controls.Image;
-import mx.controls.TextInput;
 import mx.core.Container;
 
 import vdom.components.edit.containers.workAreaClasses.Item;
@@ -44,7 +43,7 @@ public class RenderManager implements IEventDispatcher {
 	private var _source:XML;
 	private var _cursor:IViewCursor;
 	
-	private var tempArray:Array = [];
+	private var waitArray:Array = [];
 	
 	/**
 	 * 
@@ -213,14 +212,23 @@ public class RenderManager implements IEventDispatcher {
 		//currentItem.removeAllChildren();
 		//currentItem.waitMode = true;
 		//parentID = _cursor.current.parentID
-			
-		soap.renderWysiwyg(applicationId, objectID, parentID);
-			
+		
+		
+		//_cursor.current = null;
+		_cursor.findAny({objectID:objectID});
+		if(_cursor.current)
+			Item(_cursor.current.item).waitMode = true;
+		 
+		
+		var key:String = soap.renderWysiwyg(applicationId, objectID, parentID);
+		waitArray[key] = _cursor.current.item;
 	}
 	
 	private function renderWysiwygOkHandler(event:SoapEvent):void {
 		
-		var itemXMLDescription:XML = /*_source = */event.result.object[0];
+		var itemXMLDescription:XML = /*_source = */event.result.Result.object[0];
+		
+		var key:String = event.result.Key[0];
 		
 		var itemID:String = itemXMLDescription.@guid;
 		
@@ -288,6 +296,9 @@ public class RenderManager implements IEventDispatcher {
 		
 		_items.filterFunction = null;
 		_items.refresh();
+		
+		if(waitArray[key])
+			Item(waitArray[key]).waitMode = false;
 		
 		render(item, itemXMLDescription, itemDescription.fullPath, item.isStatic);
 		
@@ -653,7 +664,7 @@ public class RenderManager implements IEventDispatcher {
 						viewImage.height = itemXMLDescription.@height;
 					}
 						
-					tempArray.push(viewImage);
+					//tempArray.push(viewImage);
 					viewImage.maintainAspectRatio = false;
 					//trace('LoadImage: ' + objectID);
 					fileManager.loadResource(parentID, objectID, viewImage, 'source', true);
@@ -662,7 +673,7 @@ public class RenderManager implements IEventDispatcher {
 					
 				break;
 				
-				/* case 'table':
+				case 'table':
 					
 					var viewGrid:Grid = new Grid()
 					viewGrid.setStyle('horizontalGap', 0);
@@ -682,9 +693,9 @@ public class RenderManager implements IEventDispatcher {
 					
 					this.render(viewGrid, itemXMLDescription, newPath, false);
 					
-				break; */
+				break;
 				
-				/* case 'row':
+				case 'row':
 					
 					var viewGridRow:GridRow = new GridRow()
 					
@@ -699,13 +710,13 @@ public class RenderManager implements IEventDispatcher {
 					} */
 						
 					//tempArray.push(viewGridRow);
-					///parentItem.addChild(viewGridRow);
+					parentItem.addChild(viewGridRow);
 					
-					///this.render(viewGridRow, itemXMLDescription, newPath, false);
+					this.render(viewGridRow, itemXMLDescription, newPath, false);
 					
-				//break; */
+				break;
 				
-				/* case 'cell':
+				case 'cell':
 					
 					var viewGridItem:GridItem = new GridItem()
 					
@@ -723,12 +734,12 @@ public class RenderManager implements IEventDispatcher {
 					//s.text = 'zzz';
 					//viewGridItem.addChild(s);	
 					//tempArray.push(viewGridItem);
-					//parentItem.addChild(viewGridItem);
+					parentItem.addChild(viewGridItem);
 					
 					
-					//this.render(viewGridItem, itemXMLDescription, newPath, false);
+					this.render(viewGridItem, itemXMLDescription, newPath, false);
 					
-				//break; */
+				break;
 			}
 		}
 		

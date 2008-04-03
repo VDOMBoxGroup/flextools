@@ -14,6 +14,7 @@ import mx.containers.ControlBar;
 import mx.containers.Grid;
 import mx.containers.GridItem;
 import mx.containers.GridRow;
+import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.ComboBox;
 import mx.controls.NumericStepper;
@@ -24,9 +25,11 @@ import mx.core.ClassFactory;
 import mx.core.EdgeMetrics;
 import mx.core.IUIComponent;
 import mx.core.UIComponent;
+import mx.events.CloseEvent;
 import mx.events.ValidationResultEvent;
 import mx.validators.RegExpValidator;
 
+import vdom.components.edit.events.EditEvent;
 import vdom.controls.colorPicker.ColorPicker;
 import vdom.controls.multiLine.MultiLine;
 import vdom.managers.LanguageManager;
@@ -37,7 +40,7 @@ public class AttributesPanel extends ClosablePanel {
 	
 	
 	private var acceptButton:Button;
-	private var cancelButton:Button;
+	private var deleteButton:Button;
 	
 	private var attributesGrid:Grid;
 	
@@ -102,14 +105,14 @@ public class AttributesPanel extends ClosablePanel {
 		acceptButton.label = _acceptLabel = newLabel;
 	}
 	
-	public function get cancelLabel():String {
+	public function get deleteLabel():String {
 		
 		return _acceptLabel;
 	}
 	
-	public function set cancelLabel(newLabel:String):void {
+	public function set deleteLabel(newLabel:String):void {
 		
-		cancelButton.label = _cancelLabel = newLabel;
+		deleteButton.label = _cancelLabel = newLabel;
 	}
 	
 	public function get dataProvider():XML {
@@ -208,10 +211,12 @@ public class AttributesPanel extends ClosablePanel {
 			
 			acceptButton = new Button();
 			
-			acceptButton.setStyle("upSkin", getStyle('buttonSkin'));
+			/* acceptButton.setStyle("upSkin", getStyle('buttonSkin'));
 			acceptButton.setStyle("downSkin", getStyle('buttonSkin'));
 			acceptButton.setStyle("overSkin", getStyle('buttonSkin'));
-			acceptButton.setStyle("disabledSkin", getStyle('buttonSkin'));
+			acceptButton.setStyle("disabledSkin", getStyle('buttonSkin')); */
+			
+			acceptButton.setStyle("cornerRadius", 0);
 			
 			acceptButton.height = 15;
 			//acceptButton.visible = false;
@@ -225,25 +230,26 @@ public class AttributesPanel extends ClosablePanel {
 			acceptButton.owner = ControlBar(controlBar);
 		}
 		
-		if (!cancelButton) {
+		if (!deleteButton) {
 			
-			cancelButton = new Button();
+			deleteButton = new Button();
 			
-			cancelButton.setStyle("upSkin", getStyle('buttonSkin'));
-			cancelButton.setStyle("downSkin", getStyle('buttonSkin'));
-			cancelButton.setStyle("overSkin", getStyle('buttonSkin'));
-			cancelButton.setStyle("disabledSkin", getStyle('buttonSkin'));
+			//deleteButton.setStyle("upSkin", getStyle('buttonSkin'));
+			//deleteButton.setStyle("downSkin", getStyle('buttonSkin'));
+			//deleteButton.setStyle("overSkin", getStyle('buttonSkin'));
+			//deleteButton.setStyle("disabledSkin", getStyle('buttonSkin'));
+			deleteButton.setStyle("cornerRadius", 0);
 			
-			cancelButton.height = 15;
-			//cancelButton.visible = false;
+			deleteButton.height = 15;
+			//deleteButton.visible = false;
 			
-			cancelButton.enabled = enabled;
-			//cancelButton.styleName = controlBar;	
+			deleteButton.enabled = enabled;
+			//deleteButton.styleName = controlBar;	
 			
-			cancelButton.addEventListener(MouseEvent.CLICK, chancelButton_clickHandler);
-		   	ControlBar(controlBar).addChild(cancelButton);
+			deleteButton.addEventListener(MouseEvent.CLICK, deleteButton_clickHandler);
+		   	ControlBar(controlBar).addChild(deleteButton);
 		   	
-			cancelButton.owner = ControlBar(controlBar);
+			deleteButton.owner = ControlBar(controlBar);
 		}
 		
 		if (!attributesGrid) {
@@ -301,7 +307,7 @@ public class AttributesPanel extends ClosablePanel {
 			attributesGrid.visible = attributesVisible;			
 			controlBar.visible = attributesVisible;
 			acceptButton.visible = attributesVisible;
-			cancelButton.visible = attributesVisible;
+			deleteButton.visible = attributesVisible;
 			
 			/* if(!attributesVisible) {
 				
@@ -334,11 +340,11 @@ public class AttributesPanel extends ClosablePanel {
 		 		acceptButton.move(bm.left, bm.top);
 		 	}
 		 	
-		 	if(cancelButton) {
+		 	if(deleteButton) {
 		 		
-		 		cancelButton.move(
+		 		deleteButton.move(
 		 			controlBar.width - 
-		 			cancelButton.width - bm.right,
+		 			deleteButton.width - bm.right,
 		 			bm.top);
 		 	}
 		 }
@@ -725,12 +731,15 @@ public class AttributesPanel extends ClosablePanel {
 			var value:String = null;
 				
 			if(fieldsArray[attrName][0] is ComboBox)
-				value = fieldsArray[attrName][0].selectedItem[fieldsArray[attrName][1]];
+				if(fieldsArray[attrName][0].selectedItem)
+					value = fieldsArray[attrName][0].selectedItem[fieldsArray[attrName][1]];
+				else
+					value = '';
 			else
 				value = fieldsArray[attrName][0][fieldsArray[attrName][1]];
 				
 			if(value != null)
-			currentElement.*[0] = value;
+			currentElement.*[0] = XML('<![CDATA['+value+']'+']>');
 		}
 		
 		trace('Attributes Panel: acceptButtonClick');
@@ -738,10 +747,22 @@ public class AttributesPanel extends ClosablePanel {
 		dispatchEvent(new Event('propsChanged'));
 	}
 	
-	private function chancelButton_clickHandler(event:MouseEvent):void {
+	private function deleteButton_clickHandler(event:MouseEvent):void {
 		
-		_objectChanged = true;
-		invalidateProperties();
+		
+		//_objectChanged = true;
+		Alert.show('Delete?', 'Delete', Alert.YES | Alert.NO, null, closeButtonAlertHandler, null, Alert.NO);
+	}
+	
+	private function closeButtonAlertHandler(event:CloseEvent):void {
+		
+		if(event.detail == Alert.NO)
+			return;
+		
+		if(event.detail == Alert.YES)
+			var ee:EditEvent = new EditEvent(EditEvent.DELETE_OBJECT)
+			ee.objectID = objectDescription.@ID;
+			dispatchEvent(ee);
 	}
 	
 	private function focusInEventHandler(event:FocusEvent):void {

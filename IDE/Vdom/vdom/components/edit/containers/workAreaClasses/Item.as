@@ -1,11 +1,12 @@
 package vdom.components.edit.containers.workAreaClasses {
 
-import mx.containers.Canvas;
-import flash.display.DisplayObject;
-import mx.core.UIComponent;
 import flash.display.Graphics;
-import vdom.managers.renderClasses.WaitCanvas;
+
+import mx.containers.Canvas;
 import mx.controls.Button;
+import mx.core.UIComponent;
+
+import vdom.managers.renderClasses.WaitCanvas;
 Button
 
 
@@ -69,26 +70,23 @@ public dynamic class Item extends Canvas {
 		return _highlightMarker.visible;
 	} */
 	
-	public function highlight(flag:Boolean):void {
+	public function drawHighlight(color:String):void {
 		
-		if(_highlightMarker.visible == flag)
-			return
-		
-		if(flag) {
+		if(color && color == 'none') {
 			
-			var graph:Graphics = _highlightMarker.graphics;
-			
-			graph.clear()
-			graph.lineStyle(2, 0x666666);
-			graph.drawRect(0, 0, width, height);
-			
-			bringOnTop();
-			
-			_highlightMarker.visible = true;
-			
-		} else {
-			_highlightMarker.visible = false;;
+			_highlightMarker.visible = false;
+			return;
 		}
+			
+		var graph:Graphics = _highlightMarker.graphics;
+		
+		graph.clear()
+		graph.lineStyle(2, Number(color));
+		graph.drawRect(0, 0, width, height);
+		
+		bringOnTop();
+		
+		_highlightMarker.visible = true;
 	}
 	
 	private function bringOnTop():void {
@@ -100,8 +98,6 @@ public dynamic class Item extends Canvas {
 			rawChildren.setChildIndex(_highlightMarker, topIndex);
 		}
 	}
-	
-	
 	
 	/* public function addViewChild(child:DisplayObject):void {
 		
