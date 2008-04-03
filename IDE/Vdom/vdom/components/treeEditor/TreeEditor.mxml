@@ -142,8 +142,7 @@
 		xml1 = XML(dtManEvt.result);
 		
 		// no tree Elements
-		if(xml1.children().toString() == '')
-			return;
+		//if(xml1.children().toString() == '')	return;
 
 		massTreeElements = script.createTreeArr(xml1,dataManager.listPages);
 		createTree();
@@ -222,7 +221,6 @@
 			if(massTreeElements[obID].resourceID == object.resourceID )
 			{
 				massTreeElements[obID].sourseImg = object.data;
-				trace("sourseImg: " + obID);
 			}
 	}
 	
@@ -463,7 +461,7 @@
 			massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
 		}
 
-		curTree.current = false;	
+		if (curTree != null)curTree.current = false;	
 		evt.currentTarget.current = true;
 		curTree = evt.currentTarget;
 		dataManager.changeCurrentPage( curTree.ID);
@@ -471,7 +469,9 @@
 	
 	private function treeElementMousUpHandler():void
 	{
-	/*	msEvt.currentTarget.stopDrag();
+	
+	/*	
+		msEvt.currentTarget.stopDrag();
 		msEvt.currentTarget.removeEventListener(MouseEvent.MOUSE_UP, treeElementMousUpHandler);
 		removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		*/
@@ -617,8 +617,9 @@
 		{
 			var types:XMLList = dataManager.getTopLevelTypes();
 	//	trace('1231231');
-			dataManager.createObject(selectedAppl.data);
+			
 			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
+			dataManager.createObject(selectedAppl.data);
 		}
 			
 		private function  createObject(dmEvt:DataManagerEvent):void
@@ -626,8 +627,9 @@
 			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 			//trace('CreateObject: '+dmEvt.result);
 			var xml:XML = new XML(dmEvt.result);
-			//trace('xml new Elem: ' + xml);
+//			trace('xml new Elem: ' + xml);
 			addTreeElement(xml);
+			
 			
 			saveToServer();
 		}
@@ -647,24 +649,28 @@
 			massTreeElements[obID].addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			/****************************************/
 			main.addChild(massTreeElements[obID]);
+			if (curTree == null)
+			{
+				curTree = massTreeElements[obID];
+				curTree.current = true;
+			} 
 		}
 	
 	
 	
 	private function saveToServer():void
 	{
-		 var dataToServer:XML =  script.dataToXML(massTreeElements, massLines);
-	
-		 if(dataToServer.children().toString() == '')
-			return;
-	 
-		 dataManager.setApplactionStructure(dataToServer);
-		 dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
-	
+		var dataToServer:XML =  script.dataToXML(massTreeElements, massLines);
+		if(dataToServer.*.length() > 0)
+		{										
+		 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
+			dataManager.setApplactionStructure(dataToServer);
+		}
 	}
 	
 	private function dataManagerListenner(dmnEvt:DataManagerEvent):void
 	{
+		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
 		//trace('rez: \n' + dmnEvt.result)
 	}
 	
