@@ -12,6 +12,11 @@ package vdom.components.treeEditor
 		private var icons:Image;
 		private var bt:Button;
 		
+		
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='deleteLine')]
+			[Bindable]
+		public var deleteLine:Class;
+		
 		public function DeleteLineButton()
 		{
 			super();
@@ -21,7 +26,7 @@ package vdom.components.treeEditor
 		//	addChild(bt);
 			
 			icons = new Image();
-			icons.source='assets/TreeEditor/vdom2_treeEditor_delete_05.png';
+			icons.source = deleteLine;
 			icons.width = 15;
 			icons.height = 15;
 			icons.x = 2;

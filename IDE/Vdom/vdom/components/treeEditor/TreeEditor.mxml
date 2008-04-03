@@ -4,9 +4,9 @@
 	
 
 <mx:Canvas id="main" width="100%" height="100%">
-	<mx:Canvas id="cnvLevelDown1" />
 	
-	<treeEditor:DeleteLineButton id="btLine" />
+	
+	<treeEditor:DeleteLineButton id="btLine"  />
 
 <mx:Script>
 	<![CDATA[
@@ -46,7 +46,7 @@
  * 		//Выстраивание дерева
  * 	//	текущий елемент поверх всех.. 
  * 		//елементы меньшего размера
- * 		строить дерево если это необходимо
+ * 		//строить дерево если это необходимо
  * 		добавлять новый елемент правее, если есть елемент 0:0
  * 		//линии правильно с самого начала..
  * 		переделать код..
@@ -64,8 +64,10 @@
    public var selectedAppl:Object;  
    
    	[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='rMenu')]
-		[Bindable]
+	[Bindable]
 	public var rMenu:Class; 
+	
+	
 	
 	private function creationCompleteHandler():void
 	{
@@ -280,18 +282,6 @@
 	
 	private function creatTree():void
 	{
-		// если есть другой уровень
-		// если нет нулевых обьектов
-		// если обьектов больше чем 1 шт.
-
-		//if(massTreeElements.length <= 1) return; 
-	
-//		trace(;
-		/*
-		if(massTreeElements[0].x != massTreeElements[1].x 
-			&& massTreeElements[0].y != massTreeElements[1].y) 
-			return; 
-		*/
 		var massMap:Array = new Array();
 		var massTreeObj:Array = new Array();
 		for each(var xmlObj:XML in xml1.children())
@@ -311,7 +301,6 @@
 					var toObjID:String = xmlLavelObj.@ID.toXMLString();
 					massTreeObj[fromObID].child = massTreeObj[toObjID];
 					massTreeObj[toObjID].parent = massTreeObj[fromObID];
-					
 				}
 			}
 		}
@@ -381,8 +370,8 @@
 		curLine.mark = false;
 		curLine = muEvt.currentTarget;
 		curLine.mark = true;
-		btLine.x = mouseX - btLine.width / 2;
-		btLine.y = mouseY  - btLine.height - 2;
+		btLine.x = main.horizontalScrollPosition + mouseX - btLine.width / 2;
+		btLine.y = main.verticalScrollPosition + mouseY  - btLine.height - 2;
 		btLine.visible = true;
 		muEvt.stopImmediatePropagation();
 	}
