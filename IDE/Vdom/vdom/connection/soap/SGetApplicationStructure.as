@@ -24,7 +24,7 @@ package vdom.connection.soap
 			
 			// data
 			ws.get_application_structure.arguments.appid  	= appid;		//- идентификатор типа 
-			trace('send soap');
+			trace('1 - get_application_structure');
 			//send data & set listener 
 			ws.get_application_structure();
 			ws.get_application_structure.addEventListener(ResultEvent.RESULT,completeListener);
@@ -39,7 +39,7 @@ package vdom.connection.soap
 			resultXML = resultXML.Structure[0];
 			//resultXML = XML(event.result);
 			var evt:SoapEvent;
-			trace('get soap');
+			trace('2 - get_application_structure Resoult \n');
 			// check Error
 			if(resultXML.name().toString() == 'Error')
 			{

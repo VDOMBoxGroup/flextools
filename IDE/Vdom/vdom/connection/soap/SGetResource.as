@@ -25,6 +25,7 @@ package vdom.connection.soap
 			// data
 			ws.get_resource.arguments.ownerid  	= ownerid;				//- идентификатор типа
 			ws.get_resource.arguments.resid  	= resid;				//- идентификатор ресурса
+		//	trace('SOAP get_resource as: '+resid )
 			
 			//send data & set listener 
 			ws.get_resource();
@@ -40,6 +41,7 @@ package vdom.connection.soap
 			//trace('loadBeginComplete');
 			resultXML = new XML(<Result />);
 			resultXML.appendChild(XMLList(event.result));
+		//	trace('SOAP get_resource: '+event.result)
 			var evt:SoapEvent;
 			var res:String = resultXML.Error;
 			// check Error
