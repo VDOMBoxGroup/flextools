@@ -41,7 +41,7 @@ private function showHandler():void {
 	
 	watchers.push(
 		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId'),
-		BindingUtils.bindProperty(workArea, 'dataProvider', dataManager, 'currentObject'),
+		//BindingUtils.bindProperty(workArea, 'dataProvider', dataManager, 'currentObject'),
 		BindingUtils.bindProperty(attributesPanel, 'dataProvider', dataManager, 'currentObject')
 	);
 	
@@ -53,7 +53,9 @@ private function hideHandler():void {
 	
 	for each(var watcher:ChangeWatcher in watchers)
 		watcher.unwatch();
-		
+	
+	mainArea.selectedChild = workArea;
+	
 	setListeners(false);
 }
 
@@ -76,7 +78,7 @@ private function setListeners(flag:Boolean):void {
 	if(flag) {
 		
 		workArea.addEventListener(EditEvent.OBJECT_CHANGE, objectChangeHandler);
-		workArea.addEventListener(EditEvent.PROPS_CHANGED, attributesChangedHandler);
+		workArea.addEventListener(EditEvent.PROPS_CHANGED, workAreaAttributeChangedHandler);
 		workArea.addEventListener(EditEvent.DELETE_OBJECT, deleteObjectHandler);
 		
 		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
@@ -90,7 +92,7 @@ private function setListeners(flag:Boolean):void {
 	} else {
 		
 		workArea.removeEventListener(EditEvent.OBJECT_CHANGE, objectChangeHandler);
-		workArea.removeEventListener(EditEvent.PROPS_CHANGED, attributesChangedHandler);
+		workArea.removeEventListener(EditEvent.PROPS_CHANGED, workAreaAttributeChangedHandler);
 		workArea.removeEventListener(EditEvent.DELETE_OBJECT, deleteObjectHandler);
 		
 		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
@@ -128,6 +130,11 @@ private function attributesChangedHandler(event:Event):void {
 	//attributesPanel.dataProvider = dataManager.currentObject; //<-- исправить!!!!!!
 }
 
+private function workAreaAttributeChangedHandler(event:EditEvent):void {
+	
+	dataManager.updateAttributes(event.objectId, event.props);
+}
+
 private function updateAttributesCompleteHandler(event:DataManagerEvent):void {
 	
 	workArea.updateObject(event.result);
@@ -144,11 +151,11 @@ private function updateAttributesCompleteHandler(event:DataManagerEvent):void {
 	createObjects(objectsXML);
 } */
 
-private function objectChangeHandler(event:Event):void {
+private function objectChangeHandler(event:EditEvent):void {
 	
-	if(workArea.selectedObjectId) {
+	if(event.objectId) {
 		
-		dataManager.changeCurrentObject(workArea.selectedObjectId);
+		dataManager.changeCurrentObject(event.objectId);
 	} else {
 		
 		dataManager.changeCurrentObject(null);
@@ -164,7 +171,7 @@ private function objectChangeHandler(event:Event):void {
 
 private function deleteObjectHandler(event:EditEvent):void {
 	
-	dataManager.deleteObject(event.objectID);
+	dataManager.deleteObject(event.objectId);
 }
 
 private function objectDeletedHandler(event:DataManagerEvent):void {

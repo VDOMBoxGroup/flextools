@@ -17,6 +17,7 @@ import mx.core.UIComponent;
 import mx.managers.CursorManager;
 
 import vdom.events.TransformMarkerEvent;
+import vdom.managers.ResizeManager;
 
 public class TransformMarker extends UIComponent {
 	
@@ -57,12 +58,17 @@ public class TransformMarker extends UIComponent {
 	private var backgroundAlpha:Number;
 	
 	private var transformation:Boolean;
+	
+	private var resizeManager:ResizeManager;
 		
-	public function TransformMarker() {
+	public function TransformMarker(rm:ResizeManager) {
 		
 		super();
 		
 		/* addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler); */
+		
+		resizeManager = rm;
+		
 		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 		addEventListener(MouseEvent.MOUSE_OUT,  mouseOutHandler);
 	}
@@ -378,7 +384,7 @@ public class TransformMarker extends UIComponent {
 		//trace('resbeg');
 		
 		trace('TransformMarker MD');
-		
+		resizeManager.itemTransform = true;
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
 		
 		var prop:Object = {
@@ -492,8 +498,10 @@ public class TransformMarker extends UIComponent {
 		};
 		
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
+		rmEvent.item = _selectedItem;
 		rmEvent.properties = prop;
 		dispatchEvent(rmEvent);
+		resizeManager.itemTransform = false;
 		//trace('TM mouseUpHandler');
 		event.stopImmediatePropagation();
 		event.stopPropagation();

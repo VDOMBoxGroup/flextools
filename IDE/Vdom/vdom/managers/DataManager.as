@@ -33,7 +33,7 @@ public class DataManager implements IEventDispatcher {
 	private var _currentPageId:String;
 	
 	private var _currentObject:XML;
-	private var _currentobjectId:String;
+	//private var _currentobjectId:String;
 
 	/**
 	 * 
@@ -213,6 +213,11 @@ public class DataManager implements IEventDispatcher {
 		return _currentObject;
 	}
 	
+	private function get currentObjectId():String {
+		
+		return _currentObject.@ID;
+	}
+	
 	public function changeCurrentApplication(applicationId:String):void {
 		
 		var application:XML = new XML(_listApplication.(@ID == applicationId)[0]);
@@ -267,7 +272,7 @@ public class DataManager implements IEventDispatcher {
 			newObject.appendChild(type);
 			
 			_currentObject = newObject;
-			_currentobjectId = newObject.@ID;
+			//_currentobjectId = newObject.@ID;
 		} 
 			
 		
@@ -306,17 +311,37 @@ public class DataManager implements IEventDispatcher {
 	 * @param selectedObjects описание типа объекта, которое надо сохранить, для последующей отправки на сервер.
 	 * 
 	 */	
-	public function updateAttributes():void {
+	public function updateAttributes(newObjectId:String = 'none', attributes:XML = null):void {
 		
-		var objectId:String = _currentObject.@ID;
+		var objectId:String;
+		var newXMLDescription:XML;
+		var newListAttributes:XMLList;
 		
+		if(newObjectId != 'none') {
+			
+			objectId = newObjectId;
+			newXMLDescription = _getObject(newObjectId);
+			newListAttributes = attributes.Attribute;
+			
+		} else {
+			
+			objectId = _currentObject.@ID;
+			newXMLDescription = _currentObject;
+			newListAttributes = newXMLDescription.Attributes.Attribute;
+		}
+			
 		var oldXMLDescription:XML = _getObject(objectId);
-		var newXMLDescription:XML = _currentObject;
-		
 		var oldListAttributes:XMLList = oldXMLDescription.Attributes.Attribute
-		var newListAttributes:XMLList = newXMLDescription.Attributes.Attribute;
 		
-		var newOnlyAttributes:XML = <Attributes />;
+		//
+		//var newListAttributes:XMLList = newXMLDescription.Attributes.Attribute;
+		
+		var newOnlyAttributes:XML = extractNewValues(
+					oldListAttributes,
+					newListAttributes
+				);
+		
+		//var newOnlyAttributes:XML = <Attributes />;
 		
 		var nameChanged:Boolean = false;
 		var attrChanged:Boolean = false;
@@ -324,18 +349,7 @@ public class DataManager implements IEventDispatcher {
 		if(oldXMLDescription.@Name != newXMLDescription.@Name)
 			nameChanged = true;
 		
-		for each(var attr:XML in newListAttributes) {
-			
-			if(oldListAttributes.(@Name == attr.@Name) != attr) {	
-				newOnlyAttributes.item += attr;
-			} 
-		}
-		
-		if(newOnlyAttributes.*.length() > 0)
-			attrChanged = true;
-		
-		
-		if(attrChanged) {
+		if(newOnlyAttributes) {
 			
 			//oldXMLDescription.Attributes[0] = new XML(newXMLDescription.Attributes[0]);
 			
@@ -351,6 +365,23 @@ public class DataManager implements IEventDispatcher {
 			soap.setName(_currentApplicationId, oldXMLDescription.@ID, oldXMLDescription.@Name);
 		}
 		
+	}
+	
+	private function extractNewValues(oldAttributes:XMLList, newAttributes:XMLList):XML {
+		
+		var newOnlyAttributes:XML = <Attributes />
+		
+		for each(var attr:XML in newAttributes) {
+			
+			if(oldAttributes.(@Name == attr.@Name) != attr) {	
+				newOnlyAttributes.item += attr;
+			} 
+		}
+		
+		if(newOnlyAttributes.*.length() > 0)
+			return newOnlyAttributes;
+		else
+			return null;
 	}
 	
 	private function setNameCompleteHandler(event:SoapEvent):void {
@@ -386,7 +417,7 @@ public class DataManager implements IEventDispatcher {
 		newObject.appendChild(type);
 		
 		_currentObject = newObject;
-		_currentobjectId = newObject.@ID;
+		//_currentobjectId = newObject.@ID;
 		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		dmEvent.objectId = event.xml.Object.@ID;
@@ -452,7 +483,7 @@ public class DataManager implements IEventDispatcher {
 		if(objectID == _currentPageId)
 			changeCurrentPage(null);
 		
-		if(objectID == _currentobjectId)
+		if(objectID == currentObjectId)
 			changeCurrentObject(null);
 		
 		

@@ -762,7 +762,7 @@ public class AttributesPanel extends ClosablePanel {
 		
 		if(event.detail == Alert.YES)
 			var ee:EditEvent = new EditEvent(EditEvent.DELETE_OBJECT)
-			ee.objectID = objectDescription.@ID;
+			ee.objectId = objectDescription.@ID;
 			dispatchEvent(ee);
 	}
 	

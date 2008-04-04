@@ -28,13 +28,13 @@ public class WorkArea extends Canvas {
 	private var selectedIndex:int;
 	private var resetItemStack:Boolean;
 	
-	private var collection:XML;
+	//private var collection:XML;
 	
 	//private var applicationId:String;
 	
 	private var _pageId:String;
 	private var topLevelItem:Item;
-	private var selectedObject:Item;
+	private var _selectedObject:Item;
 	
 	private var focusedItem:Item;
 	
@@ -89,7 +89,7 @@ public class WorkArea extends Canvas {
 		addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
 	}
 	
-	public function get selectedObjectId():String {
+	/* public function get selectedObjectId():String {
 		
 		var returnValue:String;
 		
@@ -97,7 +97,7 @@ public class WorkArea extends Canvas {
 			returnValue = selectedObject.objectID;
 		
 		return returnValue;
-	}
+	} */
 	
 	/**
 	 * Удаление всех объектов из рабочей области.
@@ -117,7 +117,7 @@ public class WorkArea extends Canvas {
 	 */	
 	public function deleteObject(objectId:String):void {
 		
-		selectedObject = null;
+		//selectedObject = null;
 		renderManager.deleteItem(objectId);
 		resizeManager.selectItem(null);
 	}
@@ -149,16 +149,16 @@ public class WorkArea extends Canvas {
 		}
 	}
 	
-	public function set dataProvider(attributes:XML):void {
+	/* public function set dataProvider(attributes:XML):void {
 		
 		if(attributes)
         	collection = attributes.Attributes[0];
-	}
+	} */
 	
-	public function get dataProvider():XML {
+	/* public function get dataProvider():XML {
 		
 		return XML(collection);
-	}
+	} */
 	
 	/* private function showTopLevelContainer(pageId:String):void {
 		
@@ -203,15 +203,20 @@ public class WorkArea extends Canvas {
 			setChildIndex(object, topIndex);
 	} */
 	
-	private function applyChanges(attributes:Object):void {
+	private function applyChanges(objectId:String, attributes:Object):void {
+		
+		var newAttributes:XML = <Attributes />
 		
 		for (var attributeName:String in attributes) {
 			
-			collection.Attribute.(@Name == attributeName)[0] = attributes[attributeName];
+			newAttributes.appendChild(<Attribute Name = {attributeName}>{attributes[attributeName]}</Attribute>);
 		}
 		
 		//trace('WorkAreaEvent.PROPS_CHANGED');
-		dispatchEvent(new EditEvent(EditEvent.PROPS_CHANGED));
+		var ee:EditEvent = new EditEvent(EditEvent.PROPS_CHANGED);
+		ee.objectId = objectId;
+		ee.props = newAttributes;
+		dispatchEvent(ee);
 	}
 	
 	private function resizeBeginHandler(event:ResizeManagerEvent):void {
@@ -228,6 +233,8 @@ public class WorkArea extends Canvas {
 		
 		resizeBegin = false;
 		
+		
+		var selectedObject:Item = Item(event.item);
 		//selectedObject = event.item;
 		
 		selectedObject.x = event.properties.left;
@@ -235,15 +242,15 @@ public class WorkArea extends Canvas {
 		selectedObject.width = event.properties.width;
 		selectedObject.height = event.properties.height;
 		selectedObject.removeAllChildren();
-		//selectedObject.waitMode = true;
-		applyChanges(event.properties);
+		selectedObject.waitMode = true;
+		applyChanges(selectedObject.objectID, event.properties);
 	}
 	
 	private function itemSelectedHandler(event:ResizeManagerEvent):void {
 		
-		if(selectedObject && selectedObject.editableAttributes.length > 0) {
+		if(_selectedObject && _selectedObject.editableAttributes.length > 0) {
 			
-			var editableAttributes:Array = selectedObject.editableAttributes;
+			var editableAttributes:Array = _selectedObject.editableAttributes;
 			
 			var attributes:Object = {}
 			
@@ -252,11 +259,14 @@ public class WorkArea extends Canvas {
 				attributes[attribute.destName] = attribute.sourceObject[attribute.sourceName];
 			}
 			
-			applyChanges(attributes);
+			applyChanges(_selectedObject.objectID, attributes);
 		}
 
-		selectedObject = event.item;
-		dispatchEvent(new EditEvent(EditEvent.OBJECT_CHANGE));
+		_selectedObject = Item(event.item);
+		
+		var ee:EditEvent = new EditEvent(EditEvent.OBJECT_CHANGE);
+		ee.objectId = _selectedObject.objectID;
+		dispatchEvent(ee);
 	}
 	
 	

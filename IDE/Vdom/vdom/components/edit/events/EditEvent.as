@@ -10,19 +10,22 @@ public class EditEvent extends Event
 	public static const OBJECT_CHANGE:String = 'objectChange';
 	public static const PROPS_CHANGED:String = 'propsChanged';
 	
-	public var objectID:String;
+	public var objectId:String;
+	public var props:XML;
 	
 	public function EditEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false,
-		objectID:String = null):void
+		objectId:String = null,
+		props:XML = null):void
 	{
 		super(type, bubbles, cancelable);
 		
-		this.objectID = objectID;
+		this.objectId = objectId;
+		this.props = props;
 	}
 	
 	override public function clone():Event
 	{
-		return new EditEvent(type, bubbles, cancelable, objectID);
+		return new EditEvent(type, bubbles, cancelable, objectId, props);
 	}		
 }
 }

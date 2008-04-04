@@ -462,10 +462,10 @@ public class RenderManager implements IEventDispatcher {
 					var fillColor:Number = 0x000000;
 					var alpha:Number = 1;
 					 
-					if(itemXMLDescription.@fill.length)
+					if(itemXMLDescription.@fill.length())
 						fillColor = Number('0x' + itemXMLDescription.@fill.toString().substring(1))
 						
-					if(itemXMLDescription.@alpha.length)
+					if(itemXMLDescription.@alpha.length())
 						alpha = Number(itemXMLDescription.@alpha)/100
 					
 					graph.beginFill(fillColor, alpha);

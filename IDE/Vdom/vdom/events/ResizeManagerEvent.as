@@ -2,6 +2,8 @@ package vdom.events {
 
 import flash.events.Event;
 
+import mx.core.UIComponent;
+
 import vdom.components.edit.containers.workAreaClasses.Item;
 	
 public class ResizeManagerEvent extends Event {
@@ -11,11 +13,11 @@ public class ResizeManagerEvent extends Event {
 	public static const RESIZE_COMPLETE:String = "complete";
 	public static const ITEM_SELECTED:String = "item selected";
 	
-	public var item:Item;
+	public var item:UIComponent;
 	public var properties:Object;
 	
 	public function ResizeManagerEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false,
-		item:Item = null,
+		item:UIComponent = null,
 		properties:Object = null):void {
 		
 		super(type, bubbles, cancelable);

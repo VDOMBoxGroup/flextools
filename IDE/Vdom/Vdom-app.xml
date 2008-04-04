@@ -79,19 +79,19 @@
 	</initialWindow>
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
-	<!-- <installFolder></installFolder> -->
+	<installFolder>Vdom IDE</installFolder>
 
 	<!-- The subpath of the Windows Start/Programs menu to use. Optional. -->
 	<!-- <programMenuFolder></programMenuFolder> -->
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
-	<!-- <icon>
-		<image16x16></image16x16>
-		<image32x32></image32x32>
-		<image48x48></image48x48>
-		<image128x128></image128x128>
-	</icon> -->
+	<icon>
+		<image16x16>assets/ideIcons/cube16.png</image16x16>
+		<image32x32>assets/ideIcons/cube32.png</image32x32>
+		<image48x48>assets/ideIcons/cube48.png</image48x48>
+		<image128x128>assets/ideIcons/cube128.png</image128x128>
+	</icon>
 
 	<!-- Whether the application handles the update when a user double-clicks an update version
 	of the AIR file (true), or the default AIR application installer handles the update (false).

@@ -31,7 +31,7 @@ public class ResizeManager extends EventDispatcher {
 	
 	private var selectMarker:TransformMarker;
 	
-	private var itemTransform:Boolean;
+	public var itemTransform:Boolean;
 	
 	//private var highlightedObject:Item;
 	
@@ -99,7 +99,7 @@ public class ResizeManager extends EventDispatcher {
 		CursorManager.removeAllCursors();
 		
 		if(!selectMarker)
-			selectMarker = new TransformMarker();
+			selectMarker = new TransformMarker(this);
 		
 		selectMarker.visible = false;
 		
@@ -448,7 +448,7 @@ public class ResizeManager extends EventDispatcher {
 		
 		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
 		
-		rmEvent.item = selectedItem;
+		rmEvent.item = event.item;
 		rmEvent.properties = event.properties;
 		dispatchEvent(rmEvent);
 	}
