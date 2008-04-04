@@ -6,7 +6,7 @@
 	creationComplete="{creationComplete();}"
 	>
 			
-	<mx:Script source="FormController.as" />
+	<mx:Script source="ResourceBrowser_s.as" />
 	
 	<mx:VBox 
 		width="100%" height="100%"
