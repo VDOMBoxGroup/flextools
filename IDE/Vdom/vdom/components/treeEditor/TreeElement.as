@@ -244,8 +244,11 @@ package vdom.components.treeEditor
 				var bs64Encdr:Base64Encoder = new Base64Encoder();
 				bs64Encdr.encodeBytes(byArr);
 
-				var str:String = bs64Encdr.toString();
-				setResource(source.type, source.name, str);
+				var strBs64:String = bs64Encdr.toString();
+				var strType:String = source.type;
+				strType = strType.substr(1, strType.length);
+				
+				setResource(strType, source.name, strBs64);
 			}
 		}
 
@@ -313,6 +316,7 @@ package vdom.components.treeEditor
 	 * */
 	 private function setResource(restype:String, resname:String, resdata:String):void
 	 {
+	 	trace('restype: '+ restype);
 	 	soap.setResource(dataManager.currentApplicationId,	 
 	 												restype, 
 	 												resname, 

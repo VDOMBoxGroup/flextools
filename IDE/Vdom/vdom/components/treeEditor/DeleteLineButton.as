@@ -31,22 +31,7 @@ package vdom.components.treeEditor
 			icons.x = 2;
 			icons.y = 1
 			addChild(icons);
-			//this.height = 35;
-		//	this.width = 35;
 			visible = false;
-			
-			//addEventListener(MouseEvent.MOUSE_OVER, delButtonOperation);
-			//addEventListener(MouseEvent.MOUSE_OUT, 	delButtonOperation);
-/*	
-		*/}
-		private function delButtonOperation(msEvt:MouseEvent):void
-		{
-			if(msEvt.type == MouseEvent.MOUSE_OVER)
-				alpha = 1;
-			
-			if(msEvt.type == MouseEvent.MOUSE_OUT)
-				alpha = 0.5;
 		}
-		
 	}
 }
