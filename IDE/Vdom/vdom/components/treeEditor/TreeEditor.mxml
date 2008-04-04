@@ -306,12 +306,19 @@
 		}
 		
 		var depth:int = 0;
+		var itIsCorrectTree:Boolean = false;
 		for (var name:String in massTreeObj)
 			if (massTreeObj[name].parent == null)
 			{
 				setPosition(name);	
+				itIsCorrectTree = true;
 			} 
-		
+		if(itIsCorrectTree)
+			for (var str:String in massTreeObj)
+			{
+				massTreeElements[str].x  = massTreeObj[str].mapX * 220;
+				massTreeElements[str].y  = massTreeObj[str].mapY * 60 + 40;
+			}
 			
 		function setPosition(inName:String):void
 		{
@@ -357,11 +364,7 @@
 			return maxX;
 		}
 		
-		for (var str:String in massTreeObj)
-		{
-			massTreeElements[str].x  = massTreeObj[str].mapX * 220;
-			massTreeElements[str].y  = massTreeObj[str].mapY * 60 + 40;
-		}
+		
 		
 			
 	}

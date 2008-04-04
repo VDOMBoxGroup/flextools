@@ -9,6 +9,7 @@ package vdom.components.treeEditor
 		public var depth:int;
 		public var mapX:int;
 		public var mapY:int;
+		public var marked:Boolean = false;
 		private var masChilds:Array = null ;
 		private var _parent:TreeObj = null;
 		

@@ -290,9 +290,16 @@ package vdom.components.treeEditor
 			
 			trace('1) '+dataManager.currentObject.Attributes);
 			
-			dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
-			dataManager.currentObject.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
+			//dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
+			//dataManager.currentObject.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
 			
+			var str:String = 
+			 	'<Attributes>' + 
+			 		' <Attribute Name="description">' + textArea.text+'</Attribute>'+
+			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
+			 	' </Attributes>';
+			var xml:XML = XML(str)	
+			dataManager.currentObject.Attributes = xml;
 			trace('2) '+dataManager.currentObject.Attributes);   
 			
 			dataManager.updateAttributes();
