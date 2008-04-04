@@ -37,8 +37,6 @@ private function getResourcesList(fmEvent:FileManagerEvent):void {
 	for each (var resource:XML in _resources.Resource) {
 		if (resource.@type.toString() == "jpg") {
 			var _thumb:Thumbnail = new Thumbnail();
-						
-			// trace (resource.@id.toString() + " --> " + __thumb + "(" + resource.toXMLString() + ")");
 
 			thumbsList.addChild(_thumb);
 			_thumb.text = resource.@name.toString();
