@@ -5,7 +5,7 @@
 	
 		<!-- Turn on generation of accessible SWFs. -->
 		<accessible>false</accessible>
-
+		
 		<!-- Specifies the locales for internationalization. -->
 		<locale>
 			 <locale-element>en_US</locale-element>
@@ -16,12 +16,10 @@
 			<filename>assets/theme/vdomTheme.swc</filename> 
 		</theme>
 		<!-- List of path elements that form the roots of ActionScript class hierarchies. -->
-		<!-- not set -->
-		<!--
+		
 		<source-path>
-			<path-element>string</path-element>
-		</source-path>
-		-->
+       		<path-element>locale/{locale}</path-element>
+    	</source-path>
 
 	  <!-- Allow the source-path to have path-elements which contain other path-elements -->
 	  <allow-source-path-overlap>true</allow-source-path-overlap>

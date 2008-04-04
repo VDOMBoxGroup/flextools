@@ -30,8 +30,8 @@ public class Type extends VBox {
 		this._id = typeDescription.Information.ID;
 		if(typeDescription.Information.Icon != '') {
 			typeIcon = new Image();
-			typeIcon.width = 40;
-			typeIcon.height = 40;
+			typeIcon.width = 58;
+			typeIcon.height = 58;
 			typeIcon.setStyle('backgroundColor', '#FF00FF');
 		}
 		
@@ -98,8 +98,8 @@ public class Type extends VBox {
 		
 		var proxy:Image = new Image();
 		//proxy.setStyle('backgroundColor', '#FF00FF');
-		proxy.width = 40;
-		proxy.height = 40;
+		proxy.width = 58;
+		proxy.height = 58;
 		proxy.source = new Bitmap(iconData.bitmapData);
 		
 		VdomDragManager.doDrag(
