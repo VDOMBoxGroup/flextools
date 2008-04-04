@@ -3,9 +3,9 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" width="640" height="480"
 	title="Resource Manager"
-	creationComplete="{creationComplete();}"  
+	creationComplete="{creationComplete();}"
 	>
-	
+			
 	<mx:Script source="FormController.as" />
 	
 	<mx:VBox 
@@ -14,14 +14,20 @@
 		>
 	<mx:Label text="Content filter:" fontWeight="bold" />
 	<mx:Tile width="100%" verticalAlign="middle" id="filtersArea">
-		<mx:CheckBox id="jpegChkBox" label="Jpeg" />
+		<!-- <mx:CheckBox id="jpegChkBox" label="Jpeg" /> -->
 	</mx:Tile>
 	<mx:HBox width="100%" height="100%">
-		<mx:TileList width="150" height="100%" />
-		<mx:Canvas width="100%" height="100%" />		
+		<mx:Tile id="thumbsList"
+			width="120" height="100%" 
+			direction="horizontal" borderStyle="solid"
+			verticalScrollPolicy="on" horizontalScrollPolicy="off"
+			horizontalAlign="center"
+			/>
+			
+		<mx:Canvas id="previewCanvas" width="100%" height="100%" borderStyle="solid" />		
 	</mx:HBox>
 	<mx:HBox width="100%" horizontalAlign="right">
-		<mx:Button width="150" label="Browse / Add" />
+		<mx:Button id="browseBtn" width="150" label="Browse / Add" />
 		<mx:Spacer width="100%" />
 		<mx:Button label="Done" click="{PopUpManager.removePopUp(this);}" />
 	</mx:HBox>

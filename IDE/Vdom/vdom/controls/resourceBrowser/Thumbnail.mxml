@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="113" height="132" 
+	horizontalAlign="center" borderStyle="solid" 
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
+	>
+	
+	<mx:Image id="__thumb" width="100" height="100" verticalAlign="middle" horizontalAlign="center" />
+	<mx:Label id="__name" text="img"  width="100%" textAlign="center" />	
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.controls.Image;
+
+			public function set resource(data:Object):void {
+					__thumb.source = data.data;
+			}
+			
+			public function set text(text:String):void {
+				if (text.length >= 20) {
+					__name.text = text.substr(0, 20) + "...";	
+				} else {
+					__name.text = text;
+				}
+			}
+	
+		]]>
+	</mx:Script>
+
+</mx:VBox>
