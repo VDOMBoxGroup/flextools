@@ -1,6 +1,7 @@
 // ActionScript file
 import flash.events.MouseEvent;
 
+import mx.containers.VBox;
 import mx.managers.PopUpManager;
 
 import vdom.controls.resourceBrowser.ListItem;
@@ -62,6 +63,8 @@ private function isViewable(extension:String):Boolean {
 
 private function showResourcesList(viewClass:String):void {
 	thumbsList.removeAllChildren();
+	
+	/* We create instances of objects below just in case to access to their properties */
 	var tItem:ThumbnailItem = new ThumbnailItem();
 	var lItem:ListItem = new ListItem();
 
@@ -77,38 +80,29 @@ private function showResourcesList(viewClass:String):void {
 			break;
 	}
 	
-	var viewItem:Object;
+	var viewItem:*;
 	
 	for each (var resource:XML in _resources.Resource) {
 		switch (viewClass.toLowerCase()) {
 			case "thumbnail":
-				
-				if (isViewable(resource.@type)) {
-					tItem = new ThumbnailItem();
-	
-					thumbsList.addChild(tItem);
-					tItem.objName = resource.@name;
-					tItem.objType = resource.@type;
-					tItem.objID = resource.@id.toString();
-					tItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
-					fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), tItem);
-				}
+				viewItem = new ThumbnailItem();
 				break;
 			case "list":
-				if (isViewable(resource.@type)) {
-					lItem = new ListItem();
-	
-					thumbsList.addChild(lItem);
-					lItem.objName = resource.@name;
-					lItem.objType = resource.@type;
-					lItem.objID = resource.@id.toString();
-					lItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
-					fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), lItem);
-				}
+				viewItem = new ListItem();	
 				break;
 		}
+		
+		if (isViewable(resource.@type)) {
+			thumbsList.addChild(viewItem);
+			viewItem.objName = resource.@name;
+			viewItem.objType = resource.@type;
+			viewItem.objID = resource.@id.toString();
+			viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
+			fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
+		} else { // if not viewable
+			
+		}
 	}
-	
 }
 
 private function selectThumbnail(mEvent:MouseEvent):void {
