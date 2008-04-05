@@ -20,15 +20,18 @@
 			verticalAlign="middle" paddingLeft="5" paddingRight="5"
 			backgroundColor="#e5e5e5"
 			>
+			<mx:ButtonBar height="24" itemClick="{changeView(event);}">          			
+				<mx:Array>
+					<mx:String id="tView">Thumbnails view</mx:String>
+					<mx:String id="lView">List view</mx:String>
+				</mx:Array>					
+			</mx:ButtonBar>
+			
 			<mx:HBox
 				backgroundColor="#FFF6EA" borderStyle="solid" 
 				cornerRadius="2" verticalAlign="middle"
-				paddingLeft="10" paddingRight="10"
+				paddingLeft="10" paddingRight="10" height="24" width="150"
 				>
-				<mx:RadioButton groupName="viewClass" label="Thumbnails"
-					id="thumbsRBtn" selected="true" click="{changeView();}" />
-				<mx:RadioButton groupName="viewClass" label="List"
-					id="listRBtn" click="{changeView();}" />
 			</mx:HBox>
 		</mx:HBox>
 		
@@ -41,13 +44,12 @@
 				paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
 				/>
 			<mx:VBox width="100%" height="100%" minWidth="375" borderStyle="solid" >
-			
+
 				<mx:Canvas id="previewCanvas" width="100%" height="100%" />	
 			</mx:VBox>	
 		</mx:DividedBox>
 	
 		<mx:HBox width="100%" horizontalAlign="right">
-			<!-- <mx:Button id="browseBtn" width="150" label="Browse / Add" /> -->
 			<mx:Spacer width="100%" />
 			<mx:Button label="Done" click="{PopUpManager.removePopUp(this);}" />
 		</mx:HBox>

@@ -9,6 +9,7 @@
 	backgroundColor="#FFF6EA" cornerRadius="3"
 	verticalGap="1" horizontalGap="1"
 	>
+	
 	<mx:Spacer height="50%" />
 	<mx:Image id="__image" maxWidth="100" maxHeight="100" verticalAlign="middle" horizontalAlign="center" />
 	<mx:Spacer height="50%" />

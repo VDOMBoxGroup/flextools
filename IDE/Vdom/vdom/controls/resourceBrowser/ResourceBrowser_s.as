@@ -1,6 +1,8 @@
 // ActionScript file
 import flash.events.MouseEvent;
 
+import mx.controls.Alert;
+import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 
 import vdom.controls.resourceBrowser.ListItem;
@@ -103,13 +105,16 @@ private function showResourcesList(viewClass:String):void {
 		if (isViewable(resource.@type)) {
 			fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
 		} else { // if not viewable
-			viewItem.imageSource = typesIcons[resource.@type];
+			if (typesIcons[resource.@type] != null) {
+				viewItem.imageSource = typesIcons[resource.@type];	
+			} else {
+				viewItem.imageSource = blank_Icon;
+			}
 		}
 	}
 }
 
 private function selectThumbnail(mEvent:MouseEvent):void {
-	// Alert.show("Object with id " + mEvent.currentTarget.objID + " selected.", "");
 	if (_selectedThumb != null) {
 		_selectedThumb.selected = false;
 	}
@@ -117,11 +122,11 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	_selectedThumb = mEvent.currentTarget;
 }
 
-private function changeView():void {
-	if (thumbsRBtn.selected) {
+private function changeView(event:ItemClickEvent):void {
+	if (event.index == 0) {
 		showResourcesList("thumbnail");
 	} else {
-		if (listRBtn.selected) {
+		if (event.index == 1) {
 			showResourcesList("list");
 		}
 	}
