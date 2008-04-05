@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="113" height="132" 
+	horizontalAlign="center" borderStyle="solid" 
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
+	backgroundColor="#FFF6EA" cornerRadius="3"
+	verticalGap="1" horizontalGap="1"
+	>
+	<mx:Spacer height="50%" />
+	<mx:Image id="__image" maxWidth="100" maxHeight="100" verticalAlign="middle" horizontalAlign="center" />
+	<mx:Spacer height="50%" />
+	<mx:HBox width="100" horizontalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<mx:Label id="__type" text="JPG:" textAlign="left" fontWeight="bold" />
+		<mx:Label id="__name" text="img" textAlign="left" maxWidth="65"/>	
+	</mx:HBox>
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.controls.Image;
+			
+			private var __id:String;
+			private var __selected:Boolean = false;
+
+			public function set resource(data:Object):void { __image.source = data.data; }
+			
+			public function set objName(text:String):void { __name.text = text; }
+
+			public function set objID(objID:String):void { __id = objID; }
+			
+			public function set objType(objType:String):void { __type.text = objType.toUpperCase() + ":"; }
+			
+			public function get objID():String { return __id; }	
+			
+			public function set selected(value:Boolean):void {
+				if (value == true) {
+					__selected = true;
+					this.setStyle('backgroundColor', "#D8D8D8");
+				} else { 
+					__selected = false;
+					this.setStyle('backgroundColor', "#FFF6EA");
+				}
+			}
+			
+			public function get selected():Boolean {
+				return __selected;
+			}
+			
+		]]>
+	</mx:Script>
+</mx:VBox>
