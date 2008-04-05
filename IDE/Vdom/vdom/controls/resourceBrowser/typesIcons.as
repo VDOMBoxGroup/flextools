@@ -2,22 +2,22 @@
 
 private var typesIcons:Array = new Array(); 
 
-[Embed(source="assets/ttf.png")]
+[Embed(source="icons/ttf.png")]
 private var ttf_Icon:Class;
 
-[Embed(source="assets/doc.png")]
+[Embed(source="icons/doc.png")]
 private var doc_Icon:Class;
 
-[Embed(source="assets/mid.png")]
+[Embed(source="icons/mid.png")]
 private var mid_Icon:Class;
 
-[Embed(source="assets/mp3.png")]
+[Embed(source="icons/mp3.png")]
 private var mp3_Icon:Class;
 
-[Embed(source="assets/pdf.png")]
+[Embed(source="icons/pdf.png")]
 private var pdf_Icon:Class;
 
-[Embed(source="assets/wav.png")]
+[Embed(source="icons/wav.png")]
 private var wav_Icon:Class;
 
 /* Creating array with embeded icons of resources types */
