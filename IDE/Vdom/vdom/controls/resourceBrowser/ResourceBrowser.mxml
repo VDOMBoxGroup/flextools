@@ -6,15 +6,20 @@
 	creationComplete="{creationComplete();}"
 	showCloseButton="true"
 	>
-
+	
 	<!-- Main Class Scripting File -->			
 	<mx:Script source="ResourceBrowser_s.as" />
 	
 	<mx:VBox 
 		width="100%" height="100%"
 		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5"
+		horizontalGap="3" verticalGap="3"
 		>
-		<mx:HBox width="100%" height="30" cornerRadius="0" verticalAlign="middle">
+		<mx:HBox
+			width="100%" height="30" cornerRadius="0"
+			verticalAlign="middle" paddingLeft="5" paddingRight="5"
+			backgroundColor="#e5e5e5"
+			>
 			<mx:HBox
 				backgroundColor="#FFF6EA" borderStyle="solid" 
 				cornerRadius="2" verticalAlign="middle"

@@ -1,7 +1,6 @@
 // ActionScript file
 import flash.events.MouseEvent;
 
-import mx.containers.VBox;
 import mx.managers.PopUpManager;
 
 import vdom.controls.resourceBrowser.ListItem;
@@ -9,6 +8,8 @@ import vdom.controls.resourceBrowser.ThumbnailItem;
 import vdom.events.FileManagerEvent;
 import vdom.managers.DataManager;
 import vdom.managers.FileManager;
+
+include "typesIcons.as";
 
 /*
 	Selected resource ID sets by property "selectedItemID" from the outside the Class.
@@ -32,6 +33,7 @@ public function get selectedItemID():String {
 }
 
 private function creationComplete():void {
+	loadTypesIcons();
 	PopUpManager.centerPopUp(this)
 	listResourcesQuery();
 }
@@ -91,16 +93,17 @@ private function showResourcesList(viewClass:String):void {
 				viewItem = new ListItem();	
 				break;
 		}
+
+		thumbsList.addChild(viewItem);
+		viewItem.objName = resource.@name;
+		viewItem.objType = resource.@type;
+		viewItem.objID = resource.@id;
+		viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);		
 		
 		if (isViewable(resource.@type)) {
-			thumbsList.addChild(viewItem);
-			viewItem.objName = resource.@name;
-			viewItem.objType = resource.@type;
-			viewItem.objID = resource.@id.toString();
-			viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
 			fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
 		} else { // if not viewable
-			
+			viewItem.imageSource = typesIcons[resource.@type];
 		}
 	}
 }
