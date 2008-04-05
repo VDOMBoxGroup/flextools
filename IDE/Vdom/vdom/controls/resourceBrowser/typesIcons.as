@@ -60,7 +60,7 @@ private function loadTypesIcons():void {
 	typesIcons["blank"] = blank_Icon;
 	typesIcons["bmp"]	= bmp_Icon;
 	typesIcons["c"]		= c_Icon;
-	typesIcons["css"]		= css_Icon;
+	typesIcons["css"]	= css_Icon;
 	typesIcons["cfg"]	= cfg_Icon;
 	typesIcons["cpp"]	= cpp_Icon;
 	typesIcons["dll"]	= dll_Icon;
