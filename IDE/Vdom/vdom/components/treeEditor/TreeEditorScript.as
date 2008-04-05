@@ -48,12 +48,13 @@ package vdom.components.treeEditor
 		
 		public function createTreeElement(xmlObj:XML):TreeElement
 		{
+			trace(xmlObj);
 				var obID:String = xmlObj.Object.@ID;
 				var treeElement:TreeElement =  new TreeElement();
 				treeElement.ID = obID;
 				treeElement.name =  xmlObj.Object.Attributes.Attribute.(@Name == 'title' );
 				
-				treeElement.description = 'test';
+				treeElement.description = '';
 				treeElement.x = 0;
 				treeElement.y = 0;	
 				treeElement.resourceID = xmlObj.Object.@Type.toXMLString();
