@@ -53,6 +53,9 @@ private var mid_Icon:Class;
 [Embed(source="icons/wav.png")]
 private var wav_Icon:Class;
 
+[Embed(source="icons/waiting.swf")]
+private var waiting_Icon:Class;
+
 /* Creating array with embeded icons of resources types */
 private function loadTypesIcons():void {
 	typesIcons["avi"]	= avi_Icon;
@@ -64,7 +67,8 @@ private function loadTypesIcons():void {
 	typesIcons["cfg"]	= cfg_Icon;
 	typesIcons["cpp"]	= cpp_Icon;
 	typesIcons["dll"]	= dll_Icon;
-	typesIcons["doc"]	= dll_Icon;
+	typesIcons["doc"]	= doc_Icon;
+	typesIcons["docx"]	= doc_Icon;
 	typesIcons["dvi"]	= dvi_Icon;
 	typesIcons["gif"]	= gif_Icon;
 	typesIcons["htm"]	= htm_Icon;

@@ -1,4 +1,14 @@
 // ActionScript file
+
+/**
+ * Current tasks:
+ * 1. Low down resolution on waiting.swf
+ * 2. Make preview mode
+ * 3. Make filters
+ * 4. Make search
+ * 5. Make done
+**/
+
 import flash.events.MouseEvent;
 
 import mx.controls.Alert;
@@ -72,7 +82,7 @@ private function showResourcesList(viewClass:String):void {
 	var tItem:ThumbnailItem = new ThumbnailItem();
 	var lItem:ListItem = new ListItem();
 
-	/* Select ThumbsArea initial width with ViewClass */
+	/* Select ThumbsArea initial width depending on ViewClass */
 	switch (viewClass.toLowerCase()) {
 		case "thumbnail":
 			thumbsList.width = tItem.width + 28;
@@ -97,6 +107,7 @@ private function showResourcesList(viewClass:String):void {
 		}
 
 		thumbsList.addChild(viewItem);
+		viewItem.imageSource = waiting_Icon;
 		viewItem.objName = resource.@name;
 		viewItem.objType = resource.@type;
 		viewItem.objID = resource.@id;
