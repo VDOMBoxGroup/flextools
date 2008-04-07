@@ -66,8 +66,6 @@ package vdom.components.treeEditor
 	
 		private function getType(ID:String):String
 		{
-			
-	
 			for each(var lavel:XML in topLevelTypes )
 			{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
 					if( lavel.Information.ID == ID) {
@@ -100,8 +98,6 @@ package vdom.components.treeEditor
 						xmlList.@ResourceID = massTreeElements[levels].resourceID;
 						xmlList.@state = massTreeElements[levels].state;
 						outXML.appendChild(xmlList.toXMLString());
-						
-	
 			}
 			
 		//	trace('1 XML to server: ' + outXML.toString())

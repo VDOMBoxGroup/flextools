@@ -475,6 +475,11 @@ package vdom.components.treeEditor
 			image.source = obj;
 		}
 		
+		public function set resource(obj:Object):void
+		{
+			image.source = obj.data;
+		}
+		
 		private function initUpBody():void
 		{
 			imgheader = new Image();
