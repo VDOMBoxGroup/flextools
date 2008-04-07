@@ -47,6 +47,9 @@ private var swf_Icon:Class;
 [Embed(source="icons/pdf.png")]
 private var pdf_Icon:Class;
 
+[Embed(source="icons/txt.png")]
+private var txt_Icon:Class;
+
 [Embed(source="icons/mid.png")]
 private var mid_Icon:Class;
 
@@ -79,6 +82,7 @@ private function loadTypesIcons():void {
 	typesIcons["mht"]	= htm_Icon;
 	typesIcons["swf"]	= swf_Icon;
 	typesIcons["pdf"]	= pdf_Icon;
+	typesIcons["txt"]	= txt_Icon;
 	typesIcons["mid"]	= mid_Icon;
 	typesIcons["xls"]	= xls_Icon;
 	typesIcons["xlsx"]	= xls_Icon;

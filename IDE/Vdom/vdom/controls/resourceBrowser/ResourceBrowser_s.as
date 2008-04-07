@@ -165,7 +165,7 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 private function showResource():void {
 	/* Fill in resource information in the info area */
 	__rName.text = _selectedThumb.objName;
-	__rType.text = _selectedThumb.objType;
+	__rType.text = _selectedThumb.objType.toUpperCase();
 	
 	/* Show large preview of the image */
 	var preview:PreviewContainer = new PreviewContainer();
