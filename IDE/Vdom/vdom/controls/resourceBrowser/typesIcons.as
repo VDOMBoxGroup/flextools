@@ -76,9 +76,11 @@ private function loadTypesIcons():void {
 	typesIcons["gif"]	= gif_Icon;
 	typesIcons["htm"]	= htm_Icon;
 	typesIcons["html"]	= htm_Icon;
+	typesIcons["mht"]	= htm_Icon;
 	typesIcons["swf"]	= swf_Icon;
 	typesIcons["pdf"]	= pdf_Icon;
 	typesIcons["mid"]	= mid_Icon;
 	typesIcons["xls"]	= xls_Icon;
+	typesIcons["xlsx"]	= xls_Icon;
 	typesIcons["wav"]	= wav_Icon;
 }

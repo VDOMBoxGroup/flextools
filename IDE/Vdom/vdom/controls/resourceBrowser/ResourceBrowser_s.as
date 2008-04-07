@@ -2,6 +2,7 @@
 
 /**
  * Current tasks:
+ * 0. Keep selection on view change
  * 1. Low down resolution on waiting.swf
  * 2. Make preview mode
  * 3. Make filters
@@ -11,10 +12,10 @@
 
 import flash.events.MouseEvent;
 
-import mx.controls.Alert;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 
+import vdom.controls.resourceBrowser.FilterItem;
 import vdom.controls.resourceBrowser.ListItem;
 import vdom.controls.resourceBrowser.ThumbnailItem;
 import vdom.events.FileManagerEvent;
@@ -30,8 +31,12 @@ include "typesIcons.as";
 private var _selectedItemID:String; 
 
 private var _resources:XML;				// Getting by FileManager Class instance
-private var _types:Array;				// Avalible resources types (get during resources scanning)
-private var _selectedThumb:Object;		// Currently selected Thumbnail (visual component) 
+private var _selectedThumb:Object;		// Currently selected Thumbnail (visual component)
+private var _rTypes:Array;				// Avalible resources types (get during resources scanning)
+private var _objects:Array;				// Associative (by id) array of resource objects	
+
+[Bindable]
+private var _totalResources:int = 0;
 
 private var fileManager:FileManager = FileManager.getInstance();	// FileManager global Class instance
 private var dataManager:DataManager = DataManager.getInstance();	// DataManager global Class instance
@@ -57,8 +62,28 @@ private function listResourcesQuery():void {
 
 private function getResourcesList(fmEvent:FileManagerEvent):void {	
 	_resources = new XML(fmEvent.result.Resources.toXMLString());
-	_types = new Array();
-	showResourcesList("thumbnail");	
+	showResourcesList("thumbnail");
+	determineResourcesTypes();	
+}
+
+private function determineResourcesTypes():void {
+	_rTypes = new Array();
+
+	for each (var resource:XML in _resources.Resource) {
+		_rTypes[resource.@type] = resource.@type;
+	}
+	createFiltersPanel();
+}
+
+private function createFiltersPanel():void {
+	filtersArea.removeAllChildren();
+	
+	for each (var ext:String in _rTypes) {
+		var filterItem:FilterItem = new FilterItem();
+		
+		filtersArea.addChild(filterItem);
+		filterItem.text = ext;	
+	}
 }
 
 private function isViewable(extension:String):Boolean {
@@ -77,6 +102,8 @@ private function isViewable(extension:String):Boolean {
 
 private function showResourcesList(viewClass:String):void {
 	thumbsList.removeAllChildren();
+	_objects = new Array();
+	_totalResources = 0;
 	
 	/* We create instances of objects below just in case to access to their properties */
 	var tItem:ThumbnailItem = new ThumbnailItem();
@@ -97,6 +124,8 @@ private function showResourcesList(viewClass:String):void {
 	var viewItem:*;
 	
 	for each (var resource:XML in _resources.Resource) {
+		_totalResources++;
+		
 		switch (viewClass.toLowerCase()) {
 			case "thumbnail":
 				viewItem = new ThumbnailItem();
@@ -111,7 +140,10 @@ private function showResourcesList(viewClass:String):void {
 		viewItem.objName = resource.@name;
 		viewItem.objType = resource.@type;
 		viewItem.objID = resource.@id;
-		viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);		
+		viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
+		
+		/* To have access to view element by resource id, add element to the array */
+		_objects[resource.@id] = viewItem;		
 		
 		if (isViewable(resource.@type)) {
 			fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
@@ -131,6 +163,7 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 		_selectedThumb.selected = false;
 	}
 	mEvent.currentTarget.selected = true;
+	_selectedItemID = mEvent.currentTarget.objID;
 	_selectedThumb = mEvent.currentTarget;
 	
 	/* Show large preview of the image */
@@ -145,6 +178,10 @@ private function changeView(event:ItemClickEvent):void {
 			showResourcesList("list");
 		}
 	}
+	
+	/* Selecting active element */
+	_selectedThumb = _objects[_selectedItemID];
+	_objects[_selectedItemID].selected = true;
 }
 
 private function dividerRelease():void {
