@@ -50,6 +50,9 @@ private var pdf_Icon:Class;
 [Embed(source="icons/mid.png")]
 private var mid_Icon:Class;
 
+[Embed(source="icons/xls.png")]
+private var xls_Icon:Class;
+
 [Embed(source="icons/wav.png")]
 private var wav_Icon:Class;
 
@@ -76,5 +79,6 @@ private function loadTypesIcons():void {
 	typesIcons["swf"]	= swf_Icon;
 	typesIcons["pdf"]	= pdf_Icon;
 	typesIcons["mid"]	= mid_Icon;
+	typesIcons["xls"]	= xls_Icon;
 	typesIcons["wav"]	= wav_Icon;
 }
