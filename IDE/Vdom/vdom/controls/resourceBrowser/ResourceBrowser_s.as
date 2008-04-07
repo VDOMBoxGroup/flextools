@@ -10,6 +10,7 @@
  * 5. Make done
 **/
 
+import flash.display.BitmapData;
 import flash.events.MouseEvent;
 
 import mx.events.ItemClickEvent;
