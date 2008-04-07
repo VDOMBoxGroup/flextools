@@ -2,8 +2,6 @@
 
 /**
  * Current tasks:
- * 0. Keep selection on view change
- * 2. Make preview mode
  * 3. Make filters
  * 4. Make search
  * 5. Make done
@@ -14,7 +12,6 @@ import flash.events.MouseEvent;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 
-import vdom.controls.resourceBrowser.FilterItem;
 import vdom.controls.resourceBrowser.ListItem;
 import vdom.controls.resourceBrowser.PreviewContainer;
 import vdom.controls.resourceBrowser.ThumbnailItem;
@@ -52,8 +49,6 @@ public function get selectedItemID():String {
 
 private function creationComplete():void {
 	loadTypesIcons();
-	//__largePreviw.maxHeight = __previewArea.height - 20;
-	//__largePreviw.maxWidth = __previewArea.width - 20;
 	PopUpManager.centerPopUp(this)
 	listResourcesQuery();
 }
@@ -75,18 +70,12 @@ private function determineResourcesTypes():void {
 	for each (var resource:XML in _resources.Resource) {
 		_rTypes[resource.@type] = resource.@type;
 	}
-	//createFiltersPanel();
+	
+	createFilters();
 }
 
-private function createFiltersPanel():void {
-	//filtersArea.removeAllChildren();
+private function createFilters():void {
 	
-	for each (var ext:String in _rTypes) {
-		var filterItem:FilterItem = new FilterItem();
-		
-		//filtersArea.addChild(filterItem);
-		filterItem.text = ext;	
-	}
 }
 
 private function isViewable(extension:String):Boolean {
@@ -169,19 +158,24 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	_selectedItemID = mEvent.currentTarget.objID;
 	_selectedThumb = mEvent.currentTarget;
 	
+	/* Fill in resource information in the info area */
+	__rName.text = _selectedThumb.objName;
+	__rType.text = _selectedThumb.objType;
+	
 	/* Show large preview of the image */
 	var preview:PreviewContainer = new PreviewContainer();
 	__previewArea.removeAllChildren();
 	__previewArea.addChild(preview);
-	
 	preview.heightLimit = 350;
 	preview.widthLimit = 350;
 	
 	if (isViewable(_selectedThumb.objType)) {
 		preview.imageSource = waiting_Icon;
 		fileManager.loadResource(dataManager.currentApplicationId, _selectedItemID, preview);
+		__iResolution.text = _selectedThumb.imageWidth.toString() + " x " + _selectedThumb.imageHeight.toString();
 	} else {
 		preview.imageSource = _selectedThumb.imageSource;
+		__iResolution.text = "Can not determine";
 	}
 }
 

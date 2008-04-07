@@ -51,12 +51,16 @@
 				
 			<mx:VBox width="100%" height="100%" minWidth="375" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 				<mx:VBox width="100%" height="100%" verticalGap="2">
-					<mx:Label text="Resource Name:" />
 					<mx:HBox width="100%">
+						<mx:Label text="Resource Name:" />
+						<mx:Label id="__rName" text="" fontWeight="bold" />
+					</mx:HBox>
+					<mx:HBox width="100%" verticalAlign="middle">
 						<mx:Label text="Resource Type:" />
-						<mx:Label id="__rType" text="" />
+						<mx:Label id="__rType" text="" fontWeight="bold" />
+						<mx:VRule height="18" />
 						<mx:Label text="Image Resolution:" />
-						<mx:Label id="__iResolution" text="" />					
+						<mx:Label id="__iResolution" text="" fontWeight="bold" />					
 					</mx:HBox>
 					
 					<mx:VBox id="__previewArea" 

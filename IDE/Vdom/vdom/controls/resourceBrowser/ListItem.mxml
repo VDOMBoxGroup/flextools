@@ -45,6 +45,8 @@
 			}
 			
 			public function set objName(text:String):void { __name.text = text; }
+			
+			public function get objName():String { return __name.text; }
 
 			public function set objID(objID:String):void { __id = objID; }
 			
