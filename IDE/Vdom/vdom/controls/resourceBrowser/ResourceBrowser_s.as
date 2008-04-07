@@ -167,6 +167,7 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	_selectedThumb = mEvent.currentTarget;
 	
 	/* Show large preview of the image */
+	__largePreviw.source = _selectedThumb.imageSource;
 	/* ... */ 
 }
 

@@ -27,7 +27,9 @@
 			private var __id:String;
 			private var __selected:Boolean = false;
 
-			public function set resource(data:Object):void { __image.source = data.data; }
+			public function set resource(data:Object):void {
+				__image.source = data.data;
+			}
 			
 			public function set objName(text:String):void { __name.text = text; }
 
@@ -49,6 +51,10 @@
 			
 			public function set imageSource(source:Object):void {
 				__image.source = source;
+			}
+			
+			public function get imageSource():Object {
+				return __image.source;
 			}
 			
 			public function get selected():Boolean {

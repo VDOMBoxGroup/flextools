@@ -24,7 +24,7 @@
 					this.setStyle('backgroundColor', '#DD0000');
 					this.setStyle('borderColor', '#FF0000')
 				} else {
-					this.setStyle('color', '#000000');
+					this.setStyle('color', '#666666');
 					this.setStyle('backgroundColor', '#FFFFFF');
 					this.setStyle('borderColor', '#666666')					
 				}	
