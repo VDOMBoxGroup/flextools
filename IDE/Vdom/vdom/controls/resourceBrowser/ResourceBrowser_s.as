@@ -3,14 +3,12 @@
 /**
  * Current tasks:
  * 0. Keep selection on view change
- * 1. Low down resolution on waiting.swf
  * 2. Make preview mode
  * 3. Make filters
  * 4. Make search
  * 5. Make done
 **/
 
-import flash.display.BitmapData;
 import flash.events.MouseEvent;
 
 import mx.events.ItemClickEvent;
@@ -18,12 +16,14 @@ import mx.managers.PopUpManager;
 
 import vdom.controls.resourceBrowser.FilterItem;
 import vdom.controls.resourceBrowser.ListItem;
+import vdom.controls.resourceBrowser.PreviewContainer;
 import vdom.controls.resourceBrowser.ThumbnailItem;
 import vdom.events.FileManagerEvent;
 import vdom.managers.DataManager;
 import vdom.managers.FileManager;
 
 include "typesIcons.as";
+private const defaultView:String = "list";
 
 /*
 	Selected resource ID sets by property "selectedItemID" from the outside the Class.
@@ -52,6 +52,8 @@ public function get selectedItemID():String {
 
 private function creationComplete():void {
 	loadTypesIcons();
+	//__largePreviw.maxHeight = __previewArea.height - 20;
+	//__largePreviw.maxWidth = __previewArea.width - 20;
 	PopUpManager.centerPopUp(this)
 	listResourcesQuery();
 }
@@ -63,7 +65,7 @@ private function listResourcesQuery():void {
 
 private function getResourcesList(fmEvent:FileManagerEvent):void {	
 	_resources = new XML(fmEvent.result.Resources.toXMLString());
-	showResourcesList("thumbnail");
+	showResourcesList(defaultView);
 	determineResourcesTypes();	
 }
 
@@ -73,16 +75,16 @@ private function determineResourcesTypes():void {
 	for each (var resource:XML in _resources.Resource) {
 		_rTypes[resource.@type] = resource.@type;
 	}
-	createFiltersPanel();
+	//createFiltersPanel();
 }
 
 private function createFiltersPanel():void {
-	filtersArea.removeAllChildren();
+	//filtersArea.removeAllChildren();
 	
 	for each (var ext:String in _rTypes) {
 		var filterItem:FilterItem = new FilterItem();
 		
-		filtersArea.addChild(filterItem);
+		//filtersArea.addChild(filterItem);
 		filterItem.text = ext;	
 	}
 }
@@ -168,8 +170,19 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	_selectedThumb = mEvent.currentTarget;
 	
 	/* Show large preview of the image */
-	__largePreviw.source = _selectedThumb.imageSource;
-	/* ... */ 
+	var preview:PreviewContainer = new PreviewContainer();
+	__previewArea.removeAllChildren();
+	__previewArea.addChild(preview);
+	
+	preview.heightLimit = 350;
+	preview.widthLimit = 350;
+	
+	if (isViewable(_selectedThumb.objType)) {
+		preview.imageSource = waiting_Icon;
+		fileManager.loadResource(dataManager.currentApplicationId, _selectedItemID, preview);
+	} else {
+		preview.imageSource = _selectedThumb.imageSource;
+	}
 }
 
 private function changeView(event:ItemClickEvent):void {
@@ -183,11 +196,13 @@ private function changeView(event:ItemClickEvent):void {
 	
 	/* Selecting active element */
 	_selectedThumb = _objects[_selectedItemID];
-	_objects[_selectedItemID].selected = true;
+	if (_selectedThumb != null) {
+		_objects[_selectedItemID].selected = true;
+	}
 }
 
 private function dividerRelease():void {
-	
+
 }
 
 

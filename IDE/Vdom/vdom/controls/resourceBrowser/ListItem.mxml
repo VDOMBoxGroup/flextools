@@ -24,6 +24,7 @@
 	</mx:VBox>
 	<mx:Script>
 		<![CDATA[
+			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.controls.Text;
 		
 			import mx.controls.Image;
@@ -31,6 +32,7 @@
 			
 			private var __id:String;
 			private var __selected:Boolean = false;
+			private var __objType:String = "";
 			
 			public var imageWidth:int = 0;
 			public var imageHeight:int = 0;
@@ -46,8 +48,15 @@
 
 			public function set objID(objID:String):void { __id = objID; }
 			
-			public function set objType(objType:String):void { __type.text = objType.toUpperCase() + ":"; }
+			public function set objType(objType:String):void {
+				__type.text = objType.toUpperCase() + ":";
+				__objType = objType;
+			}
 			
+			public function get objType():String {
+				return __objType;
+			}
+
 			public function get objID():String { return __id; }	
 			
 			public function set selected(value:Boolean):void {

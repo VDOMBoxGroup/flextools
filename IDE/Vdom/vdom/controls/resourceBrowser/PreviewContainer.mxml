@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	borderStyle="solid" backgroundColor="#FFF6EA" cornerRadius="3"
+	paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+ 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
+ 
+	<resourceBrowser:SmoothImage id="__image" horizontalAlign="center" verticalAlign="middle"
+		maintainAspectRatio="true" scaleContent="true" 
+	/>
+
+	<mx:Script>
+		<![CDATA[
+		
+			public var imageWidth:int = 0;
+			public var imageHeight:int = 0;
+
+			public function set resource(source:Object):void {
+				__image.source = source.data;				
+				imageWidth = source.data.bitmapData.width;
+				imageHeight = source.data.bitmapData.height;
+				//this.toolTip = imageWidth.toString() + "x" + imageHeight.toString();
+				this.toolTip = __image.width.toString() + "x" + __image.height.toString();
+				//this.width = __image.width + 20;
+				//this.height = __image.height + 20;
+			}
+			
+			public function set imageSource(source:Object):void {
+				__image.source = source;
+			}
+			
+			public function get imageSource():Object {
+				return __image.source;
+			}
+			
+			public function set heightLimit(value:int):void {
+				__image.maxHeight = value;
+			}
+			
+			public function set widthLimit(value:int):void {
+				__image.maxWidth = value;
+			}
+		]]>
+	</mx:Script>
+
+
+</mx:Box>
