@@ -107,7 +107,7 @@ private function showResourcesList(viewClass:String):void {
 		}
 
 		thumbsList.addChild(viewItem);
-		viewItem.imageSource = waiting_Icon;
+		viewItem.imageSource = waiting_Icon;	// default, 'till new image is unknown 
 		viewItem.objName = resource.@name;
 		viewItem.objType = resource.@type;
 		viewItem.objID = resource.@id;
@@ -126,11 +126,15 @@ private function showResourcesList(viewClass:String):void {
 }
 
 private function selectThumbnail(mEvent:MouseEvent):void {
+	/* Highlight selected thumbnail */
 	if (_selectedThumb != null) {
 		_selectedThumb.selected = false;
 	}
 	mEvent.currentTarget.selected = true;
 	_selectedThumb = mEvent.currentTarget;
+	
+	/* Show large preview of the image */
+	/* ... */ 
 }
 
 private function changeView(event:ItemClickEvent):void {

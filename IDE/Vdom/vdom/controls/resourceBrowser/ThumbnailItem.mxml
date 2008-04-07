@@ -8,10 +8,10 @@
 	paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
 	backgroundColor="#FFF6EA" cornerRadius="3"
 	verticalGap="1" horizontalGap="1"
-	>
+	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
 	
 	<mx:Spacer height="50%" />
-	<mx:Image id="__image" maxWidth="100" maxHeight="100" verticalAlign="middle" horizontalAlign="center" />
+	<resourceBrowser:SmoothImage id="__image" maxWidth="100" maxHeight="100" verticalAlign="middle" horizontalAlign="center" />
 	<mx:Spacer height="50%" />
 	<mx:HBox width="100" horizontalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 		<mx:Label id="__type" text="JPG:" textAlign="left" fontWeight="bold" />

@@ -9,9 +9,12 @@
 	paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
 	backgroundColor="#FFF6EA" cornerRadius="3"
 	verticalGap="1" horizontalGap="3"
-	>
+	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
 	
-	<mx:Image id="__image" height="42" width="42" verticalAlign="middle" horizontalAlign="center" />
+	<resourceBrowser:SmoothImage id="__image" height="42" width="42"
+		verticalAlign="middle" horizontalAlign="center" maintainAspectRatio="true"
+		scaleContent="true" 
+		/>
 	<mx:VBox width="122" horizontalGap="0" verticalGap="1" horizontalScrollPolicy="off" verticalScrollPolicy="off" verticalAlign="middle">
 		<mx:HBox width="100%" horizontalAlign="left" horizontalGap="3" >
 			<mx:Label id="__type" text="JPG:" textAlign="left" fontWeight="bold" />
@@ -24,6 +27,7 @@
 			import mx.controls.Text;
 		
 			import mx.controls.Image;
+			import vdom.controls.resourceBrowser.SmoothImage;
 			
 			private var __id:String;
 			private var __selected:Boolean = false;
