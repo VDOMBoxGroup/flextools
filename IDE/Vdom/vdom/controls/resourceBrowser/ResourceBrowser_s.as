@@ -9,6 +9,7 @@
 
 import flash.events.MouseEvent;
 
+import mx.controls.Label;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 
@@ -158,6 +159,10 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	_selectedItemID = mEvent.currentTarget.objID;
 	_selectedThumb = mEvent.currentTarget;
 	
+	showResource();	
+}
+
+private function showResource():void {
 	/* Fill in resource information in the info area */
 	__rName.text = _selectedThumb.objName;
 	__rType.text = _selectedThumb.objType;
@@ -176,6 +181,9 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	} else {
 		preview.imageSource = _selectedThumb.imageSource;
 		__iResolution.text = "Can not determine";
+		var msg:Label = new Label();
+		__previewArea.addChild(msg);
+		msg.text = "No preview avalible for this type."
 	}
 }
 
@@ -197,9 +205,4 @@ private function changeView(event:ItemClickEvent):void {
 
 private function dividerRelease():void {
 
-}
-
-
-private function showResource():void {
-	
 }
