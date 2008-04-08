@@ -16,7 +16,7 @@
 			public var imageHeight:int = 0;
 
 			public function set resource(source:Object):void {
-				__image.source = source.data;				
+				__image.source = source.data;			
 				imageWidth = source.data.bitmapData.width;
 				imageHeight = source.data.bitmapData.height;
 				//this.toolTip = imageWidth.toString() + "x" + imageHeight.toString();

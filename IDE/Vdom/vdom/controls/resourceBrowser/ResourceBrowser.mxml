@@ -22,15 +22,21 @@
 			backgroundColor="#e5e5e5" borderStyle="solid"
 		>
 			
-			<mx:ButtonBar height="24" itemClick="{changeView(event);}">          			
+			<mx:ButtonBar height="24" itemClick="{changeView(event);}" >          			
 				<mx:Array>
 					<mx:String id="tView">Thumbnails view</mx:String>
 					<mx:String id="lView">List view</mx:String>
 				</mx:Array>					
 			</mx:ButtonBar>
 			
-			<mx:Label text="Search:" fontWeight="bold" />
+			<mx:Button id="__expandBtn" height="24" label="Expand" toggle="true" click="{expandHandler();}" />
 			
+			<mx:VRule height="100%" />
+			
+			<mx:Button height="24" label="Upload File..." />
+			
+			<!--
+			<mx:Label text="Search:" fontWeight="bold" />
 			<mx:HBox
 				backgroundColor="#FFF6EA" borderStyle="solid" 
 				cornerRadius="3" verticalAlign="middle"
@@ -38,11 +44,12 @@
 			>
 				<mx:TextInput width="100%" height="20" borderStyle="none" />
 			</mx:HBox>
+			-->
 		</mx:HBox>
 		
-		<mx:DividedBox direction="horizontal" width="100%" height="100%" dividerRelease="{dividerRelease();}">
+		<mx:HBox width="100%" height="100%" horizontalGap="2">
 			<mx:Tile id="thumbsList"
-				width="141" height="100%" minWidth="141" 
+				width="100%" height="100%" minWidth="141" 
 				direction="horizontal" borderStyle="solid"
 				verticalScrollPolicy="on" horizontalScrollPolicy="off"
 				horizontalAlign="center"
@@ -50,26 +57,26 @@
 			/>
 				
 			<mx:VBox width="100%" height="100%" minWidth="375" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-				<mx:VBox width="100%" height="100%" verticalGap="2">
-					<mx:HBox width="100%">
-						<mx:Label text="Resource Name:"  width="110"/>
-						<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid"><mx:Label id="__rName" text="" fontWeight="bold" width="300" /></mx:Box>
-					</mx:HBox>
-					<mx:HBox width="100%" verticalAlign="middle">
-						<mx:Label text="Resource Type:"  width="110"/>
-						<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid"><mx:Label id="__rType" text="" fontWeight="bold" /></mx:Box>
-						<mx:VRule height="18" />
-						<mx:Label text="Image Resolution:" />
-						<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid"><mx:Label id="__iResolution" text="" fontWeight="bold" /></mx:Box>					
-					</mx:HBox>
-					
+				<mx:VBox width="100%" height="100%" verticalGap="2" horizontalAlign="center">
 					<mx:VBox id="__previewArea" 
 						width="100%" height="100%"
 						verticalAlign="middle" horizontalAlign="center"
+						mouseOver="{__previewArea.toolTip = __previewArea.width.toString() + ' x ' + __previewArea.height.toString();}"
 					/>
+					
+					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid"><mx:Label id="__rName" text="" fontWeight="bold" width="260" textAlign="center" /></mx:Box>
+					<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center">
+						<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
+							<mx:Label id="__rType" text="" fontWeight="bold" />
+						</mx:Box>
+						<mx:VRule height="18" />
+						<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
+							<mx:Label id="__iResolution" text="" fontWeight="bold" />
+						</mx:Box>					
+					</mx:HBox>
 				</mx:VBox>				
 			</mx:VBox>	
-		</mx:DividedBox>
+		</mx:HBox>
 	
 		<mx:HBox width="100%" horizontalAlign="right" verticalAlign="middle">
 			<mx:Label text="Total Resources:" />

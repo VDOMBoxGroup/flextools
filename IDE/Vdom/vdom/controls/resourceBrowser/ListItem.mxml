@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="175" height="50" 
+	width="174" height="50" 
 	horizontalAlign="left" borderStyle="solid"
 	verticalAlign="middle" 
 	verticalScrollPolicy="off"

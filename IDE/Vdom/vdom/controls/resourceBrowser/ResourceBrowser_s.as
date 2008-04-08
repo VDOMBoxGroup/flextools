@@ -33,6 +33,7 @@ private var _resources:XML;				// Getting by FileManager Class instance
 private var _selectedThumb:Object;		// Currently selected Thumbnail (visual component)
 private var _rTypes:Array;				// Avalible resources types (get during resources scanning)
 private var _objects:Array;				// Associative (by id) array of resource objects	
+private var _currentView:String;
 
 [Bindable]
 private var _totalResources:int = 0;
@@ -61,7 +62,8 @@ private function listResourcesQuery():void {
 
 private function getResourcesList(fmEvent:FileManagerEvent):void {	
 	_resources = new XML(fmEvent.result.Resources.toXMLString());
-	showResourcesList(defaultView);
+	_currentView = defaultView;
+	showResourcesList();
 	determineResourcesTypes();	
 }
 
@@ -93,33 +95,20 @@ private function isViewable(extension:String):Boolean {
 	}
 }
 
-private function showResourcesList(viewClass:String):void {
+private function showResourcesList():void {
 	thumbsList.removeAllChildren();
 	_objects = new Array();
 	_totalResources = 0;
 	
-	/* We create instances of objects below just in case to access to their properties */
-	var tItem:ThumbnailItem = new ThumbnailItem();
-	var lItem:ListItem = new ListItem();
-
 	/* Select ThumbsArea initial width depending on ViewClass */
-	switch (viewClass.toLowerCase()) {
-		case "thumbnail":
-			thumbsList.width = tItem.width + 28;
-			thumbsList.minWidth = tItem.width + 28;
-			break;
-		case "list":
-			thumbsList.width = lItem.width + 28;
-			thumbsList.minWidth = lItem.width + 28;
-			break;
-	}
-	
+	expandHandler();
+		
 	var viewItem:*;
 	
 	for each (var resource:XML in _resources.Resource) {
 		_totalResources++;
 		
-		switch (viewClass.toLowerCase()) {
+		switch (_currentView.toLowerCase()) {
 			case "thumbnail":
 				viewItem = new ThumbnailItem();
 				break;
@@ -189,10 +178,12 @@ private function showResource():void {
 
 private function changeView(event:ItemClickEvent):void {
 	if (event.index == 0) {
-		showResourcesList("thumbnail");
+		_currentView = "thumbnail";
+		showResourcesList();
 	} else {
 		if (event.index == 1) {
-			showResourcesList("list");
+			_currentView = "list";
+			showResourcesList();
 		}
 	}
 	
@@ -203,6 +194,20 @@ private function changeView(event:ItemClickEvent):void {
 	}
 }
 
-private function dividerRelease():void {
-
+private function expandHandler():void {
+	/* We create instances of objects below just in case to access to their properties */
+	if (__expandBtn.selected) {
+		thumbsList.percentWidth = 100;		
+	} else {
+		switch (_currentView.toLowerCase()) {
+			case "thumbnail":
+				var tItem:ThumbnailItem = new ThumbnailItem();
+				thumbsList.width = tItem.width + 28;
+				break;
+			case "list":
+				var lItem:ListItem = new ListItem();
+				thumbsList.width = lItem.width + 28;
+				break;
+		}
+	}
 }
