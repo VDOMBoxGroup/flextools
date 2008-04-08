@@ -165,7 +165,7 @@ public class DataManager implements IEventDispatcher {
 		
 		return _listApplication;
 	}
-	
+	[Bindable (event='listPagesChanged')]
 	public function get listPages():XMLList {
 		
 		if(_currentApplication.Objects.Object.length())
@@ -660,10 +660,9 @@ public class DataManager implements IEventDispatcher {
 		
 		_currentApplication.Objects[0].appendChild(pageData);
 		
-		
-		
 		changeCurrentObject(pageId);
 		
+		dispatcher.dispatchEvent(new DataManagerEvent('listPagesChanged'));
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 	}
 	
