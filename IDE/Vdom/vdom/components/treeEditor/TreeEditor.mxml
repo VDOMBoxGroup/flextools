@@ -18,12 +18,8 @@
 		include "test.as";
 		
 		
-	private var xml1:XML; 
  	private var massTreeElements:Array = new Array();
 	private var massLines:Array = new Array();
-	private var selectedTreeEliment:String;
-	private var treeElement:TreeElement = new TreeElement();
-	private var canRectangle:Canvas = new Canvas();
 	private var curTree:Object = new Object();
 	private var canLine:Canvas = new Canvas();
 	private var pnFrom:Point = new Point();
@@ -31,27 +27,14 @@
 	private var vctTest:Vector2 = new Vector2();
 	private var curLine:Object = new Object();
 	private var dataManager:DataManager  = DataManager.getInstance();
-	private var script:TreeEditorScript  = new TreeEditorScript();
 	
 
 /******* 
- * 
- * 
  * 			to Do
- *		//Линии красиво 
  * 		Картинка менялась -  андрей
- * 		//Выстраивание дерева
- * 	//	текущий елемент поверх всех.. 
- * 		//елементы меньшего размера
- * 		//строить дерево если это необходимо
  * 		добавлять новый елемент правее, если есть елемент 0:0
- * 		//линии правильно с самого начала..
  * 		переделать код..
- * 	//	Перенос елемента влево и вверх
  * 		
- * 
- * 
- * 
  * */
 	
 	private var fileManager:FileManager = FileManager.getInstance();
@@ -63,9 +46,11 @@
 	
 	private function showHnadler():void
 	{
-		if(!main) main = new Canvas();
+		if(!main) 
+			main = new Canvas();
 	
-		if(!btLine)btLine = new DeleteLineButton();
+		if(!btLine)
+			btLine = new DeleteLineButton();
 		
 		addTreeEditorListeners();
 			
@@ -77,13 +62,10 @@
 	private function hideHendler():void
 	{
 		saveToServer();
-
 		removeAllLines();
-		
 		removeMassTreeElements();
-				
 		removeTreeEditorListeners();
-		
+	
 		btLine.visible = false;
 	}
 	
@@ -105,12 +87,9 @@
 			curTree.current = true;
 	}
 	
-	
-	
-	
-	
 	private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
 	{
+		// object to Top
 		main.removeChild(massTreeElements[trEvt.ID]);
 		main.addChild(massTreeElements[trEvt.ID]);
 		
@@ -124,13 +103,6 @@
 		saveToServer();
 	}
 	
-	
-	public function set resource (object:Object):void
-	{
-		for (var obID:String in massTreeElements)
-			if(massTreeElements[obID].resourceID == object.resourceID )
-				massTreeElements[obID].sourseImg = object.data;
-	}
 	
 	private function hideTreeElement(trEvt:Object):void
 	{
@@ -161,8 +133,6 @@
 			redrawLines(trEvt.currentTarget.ID); 
 	}
 	
-	
-	
 	/** 
 	*
 	*		Кликнули по обьекту, 
@@ -182,6 +152,7 @@
 
 		if (curTree != null)
 			curTree.current = false;	
+		
 		evt.currentTarget.current = true;
 		curTree = evt.currentTarget;
 		dataManager.changeCurrentPage( curTree.ID);
@@ -205,7 +176,8 @@
 	}
 	 
             // Event handler function for displaying the selected Alert button.
-    private function alertClickDeleteTreeElement(event:CloseEvent):void {
+    private function alertClickDeleteTreeElement(event:CloseEvent):void 
+    {
         if (event.detail==Alert.YES)
         {
            	dataManager.deleteObject(curTree.ID)
@@ -227,15 +199,12 @@
 	*/
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
-		//trace('и Я нажата');
-		
 		main.addChild(vctTest);//--для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		
 		blDrawLine = true; //говорим что рисуем линию
 		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
-		
 	}
 	
 	/**
@@ -260,12 +229,10 @@
 	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
-		var pnTo:Object = script.drLine(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
-	
-		var obj:Object = new Object()
-		//obj = colorMenu.selectedItem;
-		vctTest.graphics.clear();
+		var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
+		var obj:Object = new Object(); 
 		
+		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
 	}
 	/**
@@ -273,13 +240,9 @@
 	*		получаем из существующей структуры данных XML 
 	*
 	*/
-		
-	
-	
 		private function soapAddTreeElement():void
 		{
 			var types:XMLList = dataManager.getTopLevelTypes();
-	//	trace('1231231');
 			
 			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
 			dataManager.createObject(selectedAppl.data);
@@ -288,21 +251,17 @@
 		private function  createObject(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-			//trace('CreateObject: '+dmEvt.result);
 			var xml:XML = new XML(dmEvt.result);
-//			trace('xml new Elem: ' + xml);
+		
 			addTreeElement(xml);
-			
-			
 			saveToServer();
 		}
 		
 		private function addTreeElement(xml:XML):void
 		{
-			
 			var treeElement:TreeElement = new TreeElement();
 			
-			treeElement = script.createTreeElement(xml);
+			treeElement = createTreeElement(xml);
 			treeElement = addEventListenerToTreeElement(treeElement);
 			
 			var obID:String =  xml.Object.@ID;
@@ -316,22 +275,9 @@
 			} 
 		}
 	
-	
-	
-	private function saveToServer():void
-	{
-		var dataToServer:XML =  script.dataToXML(massTreeElements, massLines);
-		if(dataToServer.*.length() > 0)
-		{										
-		 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
-			dataManager.setApplactionStructure(dataToServer);
-		}
-	}
-	
 	private function dataManagerListenner(dmnEvt:DataManagerEvent):void
 	{
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
-		//trace('rez: \n' + dmnEvt.result)
 	}
 	
 	private function comBoxClose(evt:Object):void
@@ -366,21 +312,13 @@
 	]]>
 </mx:Script>
 
-
 </mx:Canvas>
 
 <mx:VBox   height="100%" >
 	<colorMenu02:ColorMenu2 id="colmen2" x="50"/>
-	
-
 	<mx:Label text="Select type of Applikation:"  color="#ffffff"/>
-
  	<mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
             close="comBoxClose(event.target)"  /> 
-            
 	<mx:Button id="btAddTreeElement" label="add element"    click="soapAddTreeElement()"/>
-	
 </mx:VBox>
-	
-
 </mx:HBox>

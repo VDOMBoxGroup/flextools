@@ -50,7 +50,7 @@ private function setDisplayNames():void
 	var types:XMLList = dataManager.getTopLevelTypes();
 	for each(var lavel:XML in types )
 	{																
-			var strLabel:String = script.getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
+			var strLabel:String = getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
 			var strID:String = lavel.Information.ID;
 			arrAppl.push({label:strLabel, data:strID});
 	}
@@ -403,4 +403,93 @@ private function  removeLine():void
 						delete massLines[level][frsTrElem][sknTrElem];
 						btLine.visible = false;
 					}
+}
+
+private function saveToServer():void
+{
+	var dataToServer:XML =  dataToXML(massTreeElements, massLines);
+	if(dataToServer.*.length() > 0)
+	{										
+	 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
+		dataManager.setApplactionStructure(dataToServer);
+	}
+}
+
+public function dataToXML(massTreeElements:Array, massLines:Array ):XML
+{
+	var outXML:XML = <Structure/> ;
+	
+	for (var levels:String in massTreeElements)
+	{
+		var xmlList:XMLList = new XMLList('<Object/>');
+		xmlList.@ID = levels;
+				xmlList.@left = massTreeElements[levels].x;
+				xmlList.@top = massTreeElements[levels].y;
+				xmlList.@ResourceID = massTreeElements[levels].resourceID;
+				xmlList.@state = massTreeElements[levels].state;
+				outXML.appendChild(xmlList.toXMLString());
+	}
+
+//	trace('1 XML to server: ' + outXML.toString())
+	for (var level:String in massLines)
+	for(var ind1:String in massLines[level])
+		for(var ind2:String in massLines[level][ind1])
+		{
+
+			// создаем все елементы дерева
+			var object:XMLList = new XMLList('<Object/>');
+
+			if (outXML.Object.(@ID == ind1).@ID != ind1 )
+			{
+				object.@ID = ind1;
+				object.@left = massTreeElements[ind1].x;
+				object.@top = massTreeElements[ind1].y;
+				object.@ResourceID = massTreeElements[ind1].resourceID;
+				object.@state = massTreeElements[ind1].state;
+				outXML.appendChild(object.toXMLString());
+			}
+			
+	//		trace('2 XML to server: ' + outXML.toString());
+			var levelXMLList:XMLList = new XMLList('<Level/>');
+			if(outXML.Object.(@ID == ind1).Level.(@Index == level).@Index != level)
+			{
+				levelXMLList.@Index = level;
+				outXML.Object.(@ID == ind1).appendChild(levelXMLList);
+			}
+			
+			var myXMLList:XMLList = new XMLList('<Object/>') ;
+			myXMLList.@ID = ind2;
+			outXML.Object.(@ID == ind1).Level.(@Index == level).appendChild(myXMLList);
+			
+			
+			if (outXML.Object.(@ID == ind2).@ID != ind2 )
+			{
+				object.@ID = ind2;
+				object.@left = massTreeElements[ind2].x;
+				object.@top = massTreeElements[ind2].y;
+				object.@ResourceID = massTreeElements[ind2].resourceID;
+				object.@state = massTreeElements[ind2].state;
+				outXML.appendChild(object.toXMLString());
+			}	
+		}
+		
+	//	trace(' _XML to server: ' + outXML.toString());
+		return outXML;
+}
+		
+private function calculatePointTo(mouseX:Number, mouseY:Number, curTree:Object):Object
+{
+	var tX:int = mouseX - curTree.x;
+	var tY:int = mouseY - curTree.y;
+	
+	var pnTo:Object = new Object();
+	// чтоб мышка не кликала по своей линии
+	
+	if((tX>0))	pnTo.x = mouseX - 10;
+		else pnTo.x = mouseX + 10;
+	
+	if( (tY>0))	pnTo.y = mouseY - 10;
+		else pnTo.y = mouseY + 10;
+		
+	return pnTo;
 }

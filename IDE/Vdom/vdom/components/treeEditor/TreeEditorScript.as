@@ -147,22 +147,7 @@ package vdom.components.treeEditor
 				return outXML;
 		}
 		
-		public function drLine(mouseX:Number, mouseY:Number, curTree:Object):Object
-		{
-			var tX:int = mouseX - curTree.x;
-			var tY:int = mouseY - curTree.y;
-			
-			var pnTo:Object = new Object();
-			// чтоб мышка не кликала по своей линии
-			
-			if((tX>0))	pnTo.x = mouseX - 10;
-				else pnTo.x = mouseX + 10;
-			
-			if( (tY>0))	pnTo.y = mouseY - 10;
-				else pnTo.y = mouseY + 10;
-				
-			return pnTo;
-		}
+		
 	
 	
 	}
