@@ -66,7 +66,6 @@ private var waiting_Icon:Class;
 private function loadTypesIcons():void {
 	typesIcons["avi"]	= avi_Icon;
 	typesIcons["bin"]	= bin_Icon;
-	typesIcons["blank"] = blank_Icon;
 	typesIcons["bmp"]	= bmp_Icon;
 	typesIcons["c"]		= c_Icon;
 	typesIcons["css"]	= css_Icon;
