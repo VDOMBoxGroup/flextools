@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	Preview Container component for Resource Browser
+	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+-->
 <mx:Box 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	borderStyle="solid" backgroundColor="#FFF6EA" cornerRadius="3"

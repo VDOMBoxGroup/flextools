@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	ThumbnailItem component for Resource Browser
+	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+-->
 <mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	width="113" height="132" 

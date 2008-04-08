@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	Resource Browser component for VDOM Box IDE
+	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+-->
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" width="800" height="600"

@@ -1,10 +1,14 @@
 // ActionScript file
+/**
+ * Resource Browser component action script file.
+ * Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+**/
 
 /**
  * Current tasks:
- * 3. Make filters
- * 4. Make search
- * 5. Make done
+ * 1. Implement upload resource to server
+ * 2. Implement delete resource from server
+ * 3. Correct PreviewContainer Component
 **/
 
 import flash.events.MouseEvent;
@@ -112,7 +116,7 @@ private function isViewable(extension:String):Boolean {
 	}
 }
 
-private function showResourcesList(filter:String = "*"):void {
+private function showResourcesList(filter:String = "*"):void {	
 	thumbsList.removeAllChildren();
 	_objects = new Array();
 	_totalResources = 0;

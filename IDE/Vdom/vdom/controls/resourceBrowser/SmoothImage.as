@@ -1,3 +1,7 @@
+/**
+ * SmoothImage class (extended from standart Image class).
+ * Implemented by Vadim A. Usoltsev, Tomsk, Russia, 2008
+**/
 package vdom.controls.resourceBrowser
 {
 	import flash.display.Bitmap;
