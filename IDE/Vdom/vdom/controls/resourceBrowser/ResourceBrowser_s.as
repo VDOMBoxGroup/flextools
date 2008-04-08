@@ -10,6 +10,7 @@
 import flash.events.MouseEvent;
 
 import mx.controls.Label;
+import mx.events.CloseEvent;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 
@@ -36,7 +37,13 @@ private var _objects:Array;				// Associative (by id) array of resource objects
 private var _currentView:String;
 
 [Bindable]
+private var _filterDataProvider:Array;
+
+[Bindable]
 private var _totalResources:int = 0;
+
+[Bindable]
+private var _filteredResources:int = 0;
 
 private var fileManager:FileManager = FileManager.getInstance();	// FileManager global Class instance
 private var dataManager:DataManager = DataManager.getInstance();	// DataManager global Class instance
@@ -50,6 +57,7 @@ public function get selectedItemID():String {
 }
 
 private function creationComplete():void {
+	this.addEventListener(CloseEvent.CLOSE, closeHandler); 
 	loadTypesIcons();
 	PopUpManager.centerPopUp(this)
 	listResourcesQuery();
@@ -78,7 +86,16 @@ private function determineResourcesTypes():void {
 }
 
 private function createFilters():void {
+	_filterDataProvider = new Array();
 	
+	_filterDataProvider.push({label:"None", data:"*"});
+	
+	for each (var type:String in _rTypes) {
+		_filterDataProvider.push({label:type.toUpperCase(), data:type.toLowerCase()});
+	}
+	
+	__filterCBx.selectedIndex = 0;
+	__filterCBx.selectedItem = __filterCBx.selectedItem;	// :-) Don't worry, it's ok! Just in case...
 }
 
 private function isViewable(extension:String):Boolean {
@@ -95,10 +112,11 @@ private function isViewable(extension:String):Boolean {
 	}
 }
 
-private function showResourcesList():void {
+private function showResourcesList(filter:String = "*"):void {
 	thumbsList.removeAllChildren();
 	_objects = new Array();
 	_totalResources = 0;
+	_filteredResources = 0;
 	
 	/* Select ThumbsArea initial width depending on ViewClass */
 	expandHandler();
@@ -107,6 +125,14 @@ private function showResourcesList():void {
 	
 	for each (var resource:XML in _resources.Resource) {
 		_totalResources++;
+		
+		if (filter != "*") {
+			if (resource.@type.toLowerCase() == filter) {
+				_filteredResources++;
+			} else {
+				continue;
+			}
+		}
 		
 		switch (_currentView.toLowerCase()) {
 			case "thumbnail":
@@ -210,4 +236,17 @@ private function expandHandler():void {
 				break;
 		}
 	}
+}
+
+private function doneHandler():void {
+	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
+	this.dispatchEvent(cEvent);
+}
+
+private function closeHandler(cEvent:CloseEvent):void {
+	PopUpManager.removePopUp(this);
+}
+
+private function filterCBxHandler():void {
+	showResourcesList(__filterCBx.selectedItem.data);	
 }
