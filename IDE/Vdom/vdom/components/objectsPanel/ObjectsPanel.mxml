@@ -18,7 +18,7 @@
 			
 		//	[Embed(source="/icons/ScrollableMenu.png"  )] 
          //   public var menu_icon:Image; 
-          
+       /*   
             [Embed(source="/icons/HSlider.png")]
             public var slider_icon:Class; 
             [Embed(source="/icons/SuperTabNavigator.png")]
@@ -35,7 +35,7 @@
             [Embed(source="/icons/ConvertibleTreeList.png")]
             public var ctree_icon:Class;
             
-           
+         */  
             
 		import vdom.managers.DataManager;
 		import mx.core.Application;
@@ -166,7 +166,7 @@
 </mx:Script>
 	<mx:Button label="asdsad" click="work()"/>
 	
-	<mx:Image id="imageName" source = "@Embed(source='/icons/ScrollableMenu.png')"/>
+	<mx:Image id="imageName" />
 		
 
 </ClosablePanel>

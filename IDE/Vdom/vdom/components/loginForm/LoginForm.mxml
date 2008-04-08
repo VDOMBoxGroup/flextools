@@ -62,7 +62,11 @@
 				label="{resourceManager.getString('LoginForm','ip')}">
 				<mx:TextInput id="_ip"
 					width="140" 
+
 					text="localhost:80"/>
+
+					
+ 
 			</mx:FormItem>
 			<mx:FormItem
 				label="{resourceManager.getString('LoginForm','language')}">

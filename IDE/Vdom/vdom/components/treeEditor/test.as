@@ -1,10 +1,12 @@
 // ActionScript file
 		
+		import flash.events.MouseEvent;
+		
 		import vdom.components.treeEditor.TreeElement;
 		import vdom.events.DataManagerEvent;
 		import vdom.events.TreeEditorEvent;
 		
-		 [Bindable]
+	 [Bindable]
    private var arrAppl: Array = new Array();
      [Bindable]
    public var selectedAppl:Object;  
@@ -13,7 +15,6 @@
 	[Bindable]
 	public var rMenu:Class; 
 
-private var temp:Boolean = true;
 private function removeAllLines():void
 {
 	for (var level:String in massLines)
@@ -118,7 +119,7 @@ private function drawLine(obj:Object):void
 	new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
 	
 	main.addChildAt(massLines[necessaryLevel][fromObj][toObj], 0);
-	massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.MOUSE_DOWN, markLines);
+	massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.CLICK, markLines);
 }
 
 private function adjustmentTree(xml1:XML):void

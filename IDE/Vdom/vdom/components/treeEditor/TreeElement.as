@@ -219,6 +219,7 @@ package vdom.components.treeEditor
 			if (source == null) { source = new File(); }
 				source.addEventListener(Event.SELECT, sourceSelectHandler);
 				source.browseForOpen("Choose file to compress", [ new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png; *.*;")]);
+			trace('+')
 		}
 		
 		
