@@ -301,7 +301,7 @@
 			for (var sknTrElem:String in massLines[level][frsTrElem])
 				massLines[level][frsTrElem][sknTrElem].visible = true;
 	}
-	
+
 	private function mouseClickHandler(msEvt:MouseEvent):void
 	{
 		for (var ID:String in massTreeElements)
@@ -309,6 +309,7 @@
 					massTreeElements[ID].unSelect();
 		btLine.visible = false;
 	}
+
 	]]>
 </mx:Script>
 
@@ -320,5 +321,6 @@
  	<mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
             close="comBoxClose(event.target)"  /> 
 	<mx:Button id="btAddTreeElement" label="add element"    click="soapAddTreeElement()"/>
+
 </mx:VBox>
 </mx:HBox>
