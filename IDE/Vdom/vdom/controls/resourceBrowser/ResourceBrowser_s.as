@@ -13,6 +13,7 @@
 
 import flash.events.MouseEvent;
 
+import mx.containers.Box;
 import mx.controls.Label;
 import mx.events.CloseEvent;
 import mx.events.ItemClickEvent;
@@ -26,6 +27,7 @@ import vdom.managers.DataManager;
 import vdom.managers.FileManager;
 
 include "typesIcons.as";
+
 private const defaultView:String = "list";
 
 /*
@@ -190,8 +192,8 @@ private function showResource():void {
 	var preview:PreviewContainer = new PreviewContainer();
 	__previewArea.removeAllChildren();
 	__previewArea.addChild(preview);
-	preview.heightLimit = 350;
-	preview.widthLimit = 350;
+	preview.heightLimit = __previewArea.height - 15;
+	preview.widthLimit = __previewArea.width - 15;
 	
 	if (isViewable(_selectedThumb.objType)) {
 		preview.imageSource = waiting_Icon;
@@ -227,6 +229,7 @@ private function changeView(event:ItemClickEvent):void {
 private function expandHandler():void {
 	/* We create instances of objects below just in case to access to their properties */
 	if (__expandBtn.selected) {
+		__previewArea.width = 380; // ~
 		thumbsList.percentWidth = 100;		
 	} else {
 		switch (_currentView.toLowerCase()) {
@@ -239,7 +242,11 @@ private function expandHandler():void {
 				thumbsList.width = lItem.width + 28;
 				break;
 		}
+		__previewArea.width = __midArea.width - thumbsList.width - 2;
 	}
+	
+	/* Redraw preview */
+	if (_selectedThumb != null) showResource(); 
 }
 
 private function doneHandler():void {

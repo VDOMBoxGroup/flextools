@@ -8,7 +8,8 @@
 	layout="absolute" width="800" height="600"
 	title="Resource Manager"
 	creationComplete="{creationComplete();}"
-	showCloseButton="true" 
+	showCloseButton="true"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 >
 	<mx:Script>
@@ -56,41 +57,42 @@
 		</mx:HBox>
 		<!-- End of top panel -->
 		
-		<mx:HBox width="100%" height="100%" horizontalGap="2">
+		<mx:HBox id="__midArea" width="100%" height="100%" horizontalGap="2">
 			<mx:Tile id="thumbsList"
-				width="100%" height="100%" minWidth="141" 
+				height="100%" width="150"
 				direction="horizontal" borderStyle="solid"
 				verticalScrollPolicy="on" horizontalScrollPolicy="off"
 				horizontalAlign="center"
 				paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
 			/>
 				
-			<mx:VBox width="100%" height="100%" minWidth="375" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-				<mx:VBox width="100%" height="100%" verticalGap="2" horizontalAlign="center">
-					<mx:VBox id="__previewArea" 
-						width="100%" height="100%"
-						verticalAlign="middle" horizontalAlign="center"
-						mouseOver="{__previewArea.toolTip = __previewArea.width.toString() + ' x ' + __previewArea.height.toString();}"
-					/>
-					
-					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid"><mx:Label id="__rName" text="" fontWeight="bold" width="260" textAlign="center" /></mx:Box>
-					<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center">
-						<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-							<mx:Label id="__rType" text="" fontWeight="bold" />
-						</mx:Box>
-						<mx:VRule height="18" />
-						<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-							<mx:Label id="__iResolution" text="" fontWeight="bold" />
-						</mx:Box>					
-					</mx:HBox>
-				</mx:VBox>				
-			</mx:VBox>	
+			<mx:VBox width="100%" height="100%" verticalGap="2" horizontalAlign="center">
+				<mx:Box id="__previewArea"
+					width="100%" height="100%"
+					verticalAlign="middle" horizontalAlign="center"
+					mouseOver="{__previewArea.toolTip = __previewArea.width.toString() + ' x ' + __previewArea.height.toString();}"
+				/>
+				
+				<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
+					<mx:Label id="__rName" text="" height="18" fontWeight="bold" maxWidth="350" textAlign="center" />
+				</mx:Box>
+				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center">
+					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
+						<mx:Label id="__rType" text="" height="18" fontWeight="bold" />
+					</mx:Box>
+					<mx:VRule height="18" />
+					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
+						<mx:Label id="__iResolution" text="" height="18" fontWeight="bold" />
+					</mx:Box>					
+				</mx:HBox>
+			</mx:VBox>				
+
 		</mx:HBox>
 	
 		<mx:HBox width="100%" horizontalAlign="right" verticalAlign="middle" height="24">
 			<mx:Label text="Total Resources:" />
 			<mx:Label text="{_totalResources}" fontWeight="bold" />
-			<mx:VRule height="100%" />
+			<mx:VRule height="18" />
 			<mx:Label text="Filtered:" />
 			<mx:Label text="{_filteredResources}" fontWeight="bold" />
 
