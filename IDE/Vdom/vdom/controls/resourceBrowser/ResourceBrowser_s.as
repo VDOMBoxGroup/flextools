@@ -190,6 +190,7 @@ private function showResource():void {
 	
 	/* Show large preview of the image */
 	var preview:PreviewContainer = new PreviewContainer();
+	
 	__previewArea.removeAllChildren();
 	__previewArea.addChild(preview);
 	preview.heightLimit = __previewArea.height - 15;
