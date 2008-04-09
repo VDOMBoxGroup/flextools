@@ -49,7 +49,7 @@
 			
 			<mx:VRule height="100%" />
 			
-			<mx:Button height="24" label="Upload File..." />
+			<mx:Button height="24" label="Upload File..." click="{fileUploadHandler();}" />
 			
 			<mx:VRule height="100%" />
 			
@@ -70,7 +70,6 @@
 				<mx:Box id="__previewArea"
 					width="100%" height="100%"
 					verticalAlign="middle" horizontalAlign="center"
-					mouseOver="{__previewArea.toolTip = __previewArea.width.toString() + ' x ' + __previewArea.height.toString();}"
 				/>
 				
 				<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">

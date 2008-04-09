@@ -11,13 +11,15 @@
  * 3. Correct PreviewContainer Component
 **/
 
+import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.filesystem.File;
 
-import mx.containers.Box;
 import mx.controls.Label;
 import mx.events.CloseEvent;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
+import mx.utils.Base64Encoder;
 
 import vdom.controls.resourceBrowser.ListItem;
 import vdom.controls.resourceBrowser.PreviewContainer;
@@ -41,6 +43,7 @@ private var _selectedThumb:Object;		// Currently selected Thumbnail (visual comp
 private var _rTypes:Array;				// Avalible resources types (get during resources scanning)
 private var _objects:Array;				// Associative (by id) array of resource objects	
 private var _currentView:String;
+private var _fileForUpload:File;
 
 [Bindable]
 private var _filterDataProvider:Array;
@@ -261,4 +264,36 @@ private function closeHandler(cEvent:CloseEvent):void {
 
 private function filterCBxHandler():void {
 	showResourcesList(__filterCBx.selectedItem.data);	
+}
+
+
+private function fileUploadHandler():void {
+	if (_fileForUpload == null) {
+		_fileForUpload = new File();
+	}
+	
+	_fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
+	_fileForUpload.browseForOpen("Choose file to upload", [ new FileFilter("All FIles", "*.*") ]);
+}
+
+private function fileSelectHandler(event:Event):void {
+	_fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
+
+	if (_fileForUpload != null && !_fileForUpload.isDirectory) {
+		var srcBytes:ByteArray = new ByteArray();
+		var srcStream:FileStream = new FileStream();
+		
+		srcStream.open(_fileForUpload, FileMode.READ);
+		srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
+		srcStream.close();
+		
+		var compressedData:ByteArray = new ByteArray();
+		compressedData.writeBytes(srcBytes);
+		compressedData.compress();
+		
+		var base64Data:Base64Encoder = new Base64Encoder();
+		base64Data.encodeBytes(compressedData);
+		
+		trace(base64Data.toString());
+	}	
 }
