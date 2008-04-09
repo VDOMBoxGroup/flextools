@@ -4,7 +4,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"  
 	xmlns:objectsPanel="vdom.components.objectsPanel.*"
 	
-	backgroundColor="#ffffff">
+	backgroundColor="#ffffff" creationComplete="creationCompleteHendler();">
 	
 	<mx:Script>
 		<![CDATA[
@@ -20,13 +20,15 @@
 	//		[Bindable]
 			private var publicData:Object;
 			
-			/* private function creationCompleteHendler():void
+			private function creationCompleteHendler():void
 			{
 				dataManager = DataManager.getInstance();
-				publicData = Application.application.publicData; 
+				//publicData = Application.application.publicData; 
 		//		trace('publicData: \n'+ publicData)
 				
-			} */
+			}
+			
+			
 			
 			private function resourceBrowserLauncher():void {
 				PopUpManager.createPopUp(super, ResourceBrowser, true);
@@ -37,4 +39,7 @@
 	
 	<mx:Button id="test" x="10" y="10" label="Button" height="20" />
 	<mx:Button x="10" y="35" label="Open resourceBrowser" height="20" click="{resourceBrowserLauncher();}" />
+	<objectsPanel:ObjectsPanel y="50" width="300" height="100%" dataProvider="{dataManager.listPages}"/>
+		
+	
 </mx:Canvas>

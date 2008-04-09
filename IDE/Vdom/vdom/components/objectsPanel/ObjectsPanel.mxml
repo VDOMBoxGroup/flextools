@@ -4,10 +4,18 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns="vdom.components.edit.containers.*"
 	
-	creationComplete="creationCompleteHendler()">
+	creationComplete="creationCompleteHendler()"
+	width="100%">
+
+<mx:Metadata>
+		[Event(name="change", type="mx.events.ListEvent")]
+</mx:Metadata>
 
 <mx:Script>
 	<![CDATA[
+		import mx.events.ListEvent;
+	//implements Event;
+		import mx.controls.listClasses.ListBase;
 		import vdom.managers.FileManager;
 		import mx.controls.Image;
 	//	import vdom.managers.ResourceManager;
@@ -16,9 +24,14 @@
 		import mx.events.FlexEvent;
 		import mx.controls.Tree;
 			
+			
 		//	[Embed(source="/icons/ScrollableMenu.png"  )] 
          //   public var menu_icon:Image; 
-       /*   
+         
+         // public static const CHANGE:String = "change";
+          
+	
+	
             [Embed(source="/icons/HSlider.png")]
             public var slider_icon:Class; 
             [Embed(source="/icons/SuperTabNavigator.png")]
@@ -35,15 +48,13 @@
             [Embed(source="/icons/ConvertibleTreeList.png")]
             public var ctree_icon:Class;
             
-         */  
+           
             
 		import vdom.managers.DataManager;
 		import mx.core.Application;
 		
 		[Bindable]
 		private var publicData:Object;
-		
-		[Bindable]
 		private var dataManager:DataManager;
 		private var tree:Tree = new Tree();
 		private var xmlTreeData:XML;
@@ -51,71 +62,85 @@
 		private var topLevelObjectId:Object;
 		private var arrPicture:Array = new Array();
 		
+		public var selectedItem:XMLList;
 		
 		private function creationCompleteHendler():void
 		{
 			 
 			dataManager = DataManager.getInstance();
-			publicData = Application.application.publicData; 
-			       tree.width = 200;
-			 //      treeList.resizeEffect ="Resize"
-				tree.minWidth = 32; 
-				tree.maxWidth = 240;
-				tree.width = 240;	
-				tree.height = 160;  
+		//trace('ObjPanel: '+dataManager.listPages);
+			    tree.percentHeight = 100;//width = 200;
+			    tree.percentWidth = 100;
 				tree.showRoot = false; 
 				tree.iconField = "@icon"; 
 				tree.labelField = "@label";
+				
+			
 				tree.addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 				tree.addEventListener(Event.CHANGE, treeChangeLister);
 			    
 			    addChild(tree);
 		}
 		
+		public function set dataProvider(xmlData:XMLList):void {
+			
+			if(xmlData) 
+			{
+				// создаем обьекты верхнего уровня
+				 xmlTreeData = <root/>;
+				for each(var xmlLabel:XML in xmlData)
+				{
+					if (xmlLabel.name() == 'Parent') continue;
+					
+					var xmlList:XMLList = new XMLList('<Object/>');
+					xmlList.@label = xmlLabel.@Name;
+					xmlList.@showInList = 'true';
+					xmlList.@ID = xmlLabel.@ID;
+					
+					xmlList.appendChild(findOjects(xmlLabel.Objects));
+				//	trace(xmlLabel.Objects)
+					
+					xmlTreeData.appendChild(xmlList);
+			} 
+		//	trace('++++++++++++++\n '+xmlObjects.Object.Objects);
+			// для текущего обьекта верхнего уровня подгружаем его элементы
+		/*	var xmlObjects:XMLList = dataManager.currentObject;
+			var strCurObjID:String = xmlObjects.Object.@ID;
+			// findOjects(XML) функция которая рекурсивно ищет обьекты...
+ 			xmlTreeData.Object.(@ID == strCurObjID).appendChild(findOjects(xmlObjects.Object.Objects));
+		//	trace('**** xmlTreeData: \n'+xmlTreeData);
+			*/
+			tree.dataProvider = xmlTreeData;
+			getIcons();
+			}
+		}
+		
+	
+	
 		private function treeUpdateComletLister(evt:Event):void
 		{	
-				topLevelObjectId = publicData.topLevelObjectId;
-				tree.selectedItem = xmlTreeData.Object.(@ID == topLevelObjectId)[0];
+				topLevelObjectId = dataManager.currentPageId //publicData.topLevelObjectId;
+				if(topLevelObjectId && xmlTreeData) 
+					tree.selectedItem = xmlTreeData.Object.(@ID == topLevelObjectId)[0];
 		}
 		
 		private function treeChangeLister(evt:Event):void
 		{
 			  var selectedNode:XML = Tree(evt.target).selectedItem as XML;
+              var ID:String = selectedNode.@ID;
+            //  trace('selected: ' + ID);
+              if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
+              {
+          		   	dataManager.changeCurrentPage(selectedNode.@ID);
+              } else
+              {
+              		dataManager.changeCurrentObject(ID);
+              }
               
-              trace('selected: ' + selectedNode.@ID);
-        //      publicData.topLevelObjectId = selectedNode.@ID;
+		}
 
-		}
-		public function set dataProvider(xmlData:XML):void
-		{
-		//	trace('Get data: \n' + xmlData);
-			// создаем обьекты верхнего уровня
-			 xmlTreeData = <root/>;
-			for each(var xmlLabel:XML in xmlData.children())
-			{
-				if (xmlLabel.name() == 'Parent') continue;
-				
-				var xmlList:XMLList = new XMLList('<Object/>');
-				xmlList.@label = xmlLabel.@Name;
-				xmlList.@showInList = 'true';
-				xmlList.@ID = xmlLabel.@ID;
-				
-				
-				
-				xmlTreeData.appendChild(xmlList);
-			}
-		//	trace('++++++++++++++\n '+xmlObjects.Object.Objects);
-			// для текущего обьекта верхнего уровня подгружаем его элементы
-			var xmlObjects:XMLList = new XMLList//dataManager.objects;
-			var strCurObjID:String = xmlObjects.Object.@ID;
-			// findOjects(XML) функция которая рекурсивно ищет обьекты...
- 			xmlTreeData.Object.(@ID == strCurObjID).appendChild(findOjects(xmlObjects.Object.Objects));
-		//	trace('**** xmlTreeData: \n'+xmlTreeData);
-			tree.dataProvider = xmlTreeData;
-			getIcons();
-		}
-		
-		
+	//	public var  change:String = Event.CHANGE; 
+	
 		private function findOjects(xmlIn:XMLList):XMLList
 		{
 			var xmllReturn:XMLList  = new XMLList();
@@ -144,8 +169,8 @@
 		private function getIcons ():void
 		{
 			trace('run function getIcon');	
-			var resMan:FileManager = FileManager.getInstance();
-				resMan.loadResource(publicData.applicationId, 'abb9ff5c-71e3-4278-bb8d-d668eAdelfos', this);
+		//	var resMan:FileManager = FileManager.getInstance();
+		//		resMan.loadResource(publicData.applicationId, 'abb9ff5c-71e3-4278-bb8d-d668eAdelfos', this);
 		}
 		
 		public function set resource (object:Object):void
@@ -158,15 +183,8 @@
 		
 	
 		}
-		private function work():void
-		{
-			
-		}
+		
 	]]>
 </mx:Script>
-	<mx:Button label="asdsad" click="work()"/>
 	
-	<mx:Image id="imageName" />
-		
-
 </ClosablePanel>

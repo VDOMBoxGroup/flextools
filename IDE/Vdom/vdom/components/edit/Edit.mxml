@@ -12,7 +12,7 @@
 	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
 	hide="hideHandler();"
->
+xmlns:objectsPanel="vdom.components.objectsPanel.*">
 	<mx:Script source="includes/edit.as" />
 	
 	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">
@@ -54,14 +54,20 @@
 				
 			</containers:ClosablePanel>
 			
+			<!--
 			<containers:ClosablePanel id="pagePanel" title="Pages" width="200">
 			
-				<mx:List id="pageList"
+				<mx:List id="pageListAAA"
 					labelField="@Name"
 					width="100%" minHeight="0"
 					change="topLevelObjectChange()"/>
 					
 			</containers:ClosablePanel>
+			-->
+			<objectsPanel:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" 
+				dataProvider="{dataManager.listPages}"
+				/>
+			
 		</mx:VBox>
 	</mx:HBox>
 </mx:Canvas>

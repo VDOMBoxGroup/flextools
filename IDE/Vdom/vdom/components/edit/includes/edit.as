@@ -61,7 +61,9 @@ private function hideHandler():void {
 
 private function topLevelObjectChange():void {
 	
-	topLevelObjectId = publicData['topLevelObjectId'] = pageList.selectedItem.@ID;
+	//trace('Edit Work: ' + pageList.selectedItem.@ID);
+	//topLevelObjectId = publicData['topLevelObjectId'] = pageList.selectedItem.@ID;
+	
 	//dataManager.init(applicationId, topLevelObjectId);
 }
 
