@@ -2,7 +2,7 @@ package vdom.events {
 
 import flash.events.Event;
 
-import mx.core.UIComponent;
+import mx.core.Container;
 	
 public class TransformMarkerEvent extends Event {
 	
@@ -13,10 +13,10 @@ public class TransformMarkerEvent extends Event {
 	public static const TRANSFORM_COMPLETE:String = "complete";
 	
 	public var properties:Object;
-	public var item:UIComponent;
+	public var item:Container;
 	
 	public function TransformMarkerEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false,
-		item:UIComponent = null,
+		item:Container = null,
 		properties:Object = null):void {
 		
 		super(type, bubbles, cancelable);

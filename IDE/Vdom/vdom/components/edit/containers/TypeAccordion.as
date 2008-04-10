@@ -2,16 +2,16 @@ package vdom.components.edit.containers {
 
 import mx.collections.ArrayCollection;
 import mx.containers.Accordion;
-import mx.containers.VBox;
 
-import vdom.components.edit.containers.typesClasses.Type;
+import vdom.components.edit.containers.typeAccordionClasses.Type;
+import vdom.components.edit.containers.typeAccordionClasses.Types;
 import vdom.managers.FileManager;
 	
-public class Types extends Accordion {
+public class TypeAccordion extends Accordion {
 	
 	private var fileManager:FileManager;
 	
-	public function Types()	{
+	public function TypeAccordion()	{
 		
 		super();
 		
@@ -29,7 +29,7 @@ public class Types extends Accordion {
 			
 			if(!cat[num.Information.Category]) {
 				
-				cat[num.Information.Category] = new VBox();
+				cat[num.Information.Category] = new Types();
 				addChild(cat[num.Information.Category]);
 			}
 			

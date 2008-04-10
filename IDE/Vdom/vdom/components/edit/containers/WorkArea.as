@@ -2,11 +2,12 @@ package vdom.components.edit.containers {
 	
 import mx.containers.Canvas;
 import mx.controls.Label;
+import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.DragEvent;
 
-import vdom.components.edit.containers.workAreaClasses.Item;
 import vdom.components.edit.events.EditEvent;
+import vdom.containers.IItem;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
 import vdom.managers.DataManager;
@@ -33,13 +34,13 @@ public class WorkArea extends Canvas {
 	//private var applicationId:String;
 	
 	private var _pageId:String;
-	private var topLevelItem:Item;
-	private var _selectedObject:Item;
+	private var topLevelItem:Container;
+	private var _selectedObject:Container;
 	
-	private var focusedItem:Item;
+	private var focusedItem:Container;
 	
 	//private var highlighter:Canvas;
-	private var highlightedObject:Item;
+	private var highlightedObject:Container;
 	
 	//private var tip:ToolTip;
 	private var transformMode:Boolean;
@@ -73,7 +74,7 @@ public class WorkArea extends Canvas {
 		//addEventListener(MouseEvent.CLICK, mouseClickHandler);
 		
 		resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-		resizeManager.addEventListener(ResizeManagerEvent.RESIZE_BEGIN, resizeBeginHandler);
+		//resizeManager.addEventListener(ResizeManagerEvent.RESIZE_BEGIN, resizeBeginHandler);
 		resizeManager.addEventListener(ResizeManagerEvent.ITEM_SELECTED, itemSelectedHandler);
 		
 		/* resizeManager.addEventListener('markerSelected', markerSelectedHandler);
@@ -139,7 +140,7 @@ public class WorkArea extends Canvas {
 			_pageId = page;
 			renderManager.init(this);
 			renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-			topLevelItem = renderManager.addItem(_pageId);
+			topLevelItem = renderManager.createItem(_pageId);
 				
 		} else {
 				
@@ -148,6 +149,8 @@ public class WorkArea extends Canvas {
 			addChild(warning);
 		}
 	}
+	
+	
 	
 	/* public function set dataProvider(attributes:XML):void {
 		
@@ -168,7 +171,7 @@ public class WorkArea extends Canvas {
 	
 	public function createObject(result:XML):void {
 
-		renderManager.addItem(result.Object.@ID, result.Object.Parent);
+		renderManager.createItem(result.Object.@ID, result.Object.Parent);
 	}
 	
 	/* private function selectObject():String {
@@ -219,38 +222,40 @@ public class WorkArea extends Canvas {
 		dispatchEvent(ee);
 	}
 	
-	private function resizeBeginHandler(event:ResizeManagerEvent):void {
+	/* private function resizeBeginHandler(event:ResizeManagerEvent):void {
 		
 		resizeBegin = true;
-	}
+	} */
 	
 	/**
      *  @private
      */
 	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
 		
-		trace('applyChanges');
+		//trace('applyChanges');
 		
-		resizeBegin = false;
+		//resizeBegin = false;
 		
 		
-		var selectedObject:Item = Item(event.item);
+		var selectedObject:Container = event.item;
 		//selectedObject = event.item;
 		
 		selectedObject.x = event.properties.left;
 		selectedObject.y = event.properties.top;
 		selectedObject.width = event.properties.width;
 		selectedObject.height = event.properties.height;
-		selectedObject.removeAllChildren();
-		selectedObject.waitMode = true;
-		applyChanges(selectedObject.objectID, event.properties);
+		//selectedObject.removeAllChildren();
+		//selectedObject.waitMode = true;
+		//renderManager.lockItem();
+		applyChanges(IItem(selectedObject).objectId, event.properties);
+		
 	}
 	
 	private function itemSelectedHandler(event:ResizeManagerEvent):void {
 		
-		if(_selectedObject && _selectedObject.editableAttributes.length > 0) {
+		if(_selectedObject && IItem(_selectedObject).editableAttributes.length > 0) {
 			
-			var editableAttributes:Array = _selectedObject.editableAttributes;
+			var editableAttributes:Array = IItem(_selectedObject).editableAttributes;
 			
 			var attributes:Object = {}
 			
@@ -259,13 +264,13 @@ public class WorkArea extends Canvas {
 				attributes[attribute.destName] = attribute.sourceObject[attribute.sourceName];
 			}
 			
-			applyChanges(_selectedObject.objectID, attributes);
+			applyChanges(IItem(_selectedObject).objectId, attributes);
 		}
 
-		_selectedObject = Item(event.item);
+		_selectedObject = event.item;
 		
 		var ee:EditEvent = new EditEvent(EditEvent.OBJECT_CHANGE);
-		ee.objectId = _selectedObject.objectID;
+		ee.objectId = IItem(_selectedObject).objectId;
 		dispatchEvent(ee);
 	}
 	
@@ -391,18 +396,18 @@ public class WorkArea extends Canvas {
 	
 	private function dragOverHandler(event:DragEvent):void {
 		
-		var filterFunction:Function = function(item:Item):Boolean {
+		var filterFunction:Function = function(item:IItem):Boolean {
 			
 			return !item.isStatic;
 		}
 		
 		var stack:Array = 
-			DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.edit.containers.workAreaClasses::Item', filterFunction);
+			DisplayUtil.getObjectsUnderMouse(this, 'vdom.containers::IItem', filterFunction);
 		
 		if(stack.length == 0)
 			return;
 			
-		var currentItem:Item = stack[0];
+		var currentItem:Container = stack[0];
 		
 		if(focusedItem == currentItem)
 			return;
@@ -412,7 +417,7 @@ public class WorkArea extends Canvas {
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
 		
 		var currentItemName:String = 
-			dataManager.getTypeByObjectId(currentItem.objectID).Information.Name;
+			dataManager.getTypeByObjectId(IItem(currentItem).objectId).Information.Name;
 		
 		var containersRE:RegExp = /(\w+)/g;
 		
@@ -439,7 +444,7 @@ public class WorkArea extends Canvas {
 		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
 		
-		var currentContainer:Item = focusedItem;
+		var currentContainer:Container = focusedItem;
 		
 		if(currentContainer)
 			currentContainer.drawFocus(false);
@@ -447,7 +452,7 @@ public class WorkArea extends Canvas {
 			return;
 		
 		var currentItemName:String = 
-			dataManager.getTypeByObjectId(currentContainer.objectID).Information.Name;
+			dataManager.getTypeByObjectId(IItem(currentContainer).objectId).Information.Name;
 			
 		var aviableContainers:String = typeDescription.aviableContainers.toString();
 		
@@ -475,7 +480,7 @@ public class WorkArea extends Canvas {
 			
 			dataManager.createObject(
 				typeDescription.typeId,
-				currentContainer.objectID,
+				IItem(currentContainer).objectId,
 				'',
 				attributes);
 				
@@ -487,9 +492,9 @@ public class WorkArea extends Canvas {
 	private function dragExitHandler(event:DragEvent):void {
 		
 		//var currentContainer:Object = event.currentTarget;
-		if(focusedItem is Item) {
+		if(focusedItem is IItem) {
 			focusedItem.setStyle('themeColor', '#009dff');
-			Item(focusedItem).drawFocus(false);
+			focusedItem.drawFocus(false);
 			focusedItem = null;
 		}
 	}

@@ -1,4 +1,4 @@
-package vdom.components.edit.containers.typesClasses {
+package vdom.components.edit.containers.typeAccordionClasses{
 
 import flash.display.Bitmap;
 import flash.display.Loader;

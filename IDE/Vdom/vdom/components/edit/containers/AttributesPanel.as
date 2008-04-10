@@ -349,6 +349,17 @@ public class AttributesPanel extends ClosablePanel {
 		 			bm.top);
 		 	}
 		 }
+		 
+		 titleTextField.move(8, 2);
+		 
+		 collapseButton.move(
+			collapseButton.x,
+			4);
+		
+		 statusTextField.setActualSize(unscaledWidth, statusTextField.textHeight);
+		 statusTextField.move(0, titleTextField.y + titleTextField.textHeight + 6);
+		 setStyle('headerHeight', statusTextField.y + statusTextField.textHeight + 2);
+		 
 	}
 	
 	private function showControlBar(show:Boolean):void {
@@ -658,11 +669,12 @@ public class AttributesPanel extends ClosablePanel {
 		if(_objectChanged) {
 			
 			var titleValue:String = 'OBJECT PROPERTIES';
-			
+			var objectName:String;
 			if (_collection is XMLListCollection) {
 				
 				typeName = objectDescription.Type.Information.Name;
-				titleValue += ': ' + objectDescription.Type.Information.Name;
+				//titleValue += ': ' + objectDescription.Type.Information.Name;
+				objectName = objectDescription.Type.Information.Name;
 				
 				createAttributes();
 				
@@ -686,6 +698,7 @@ public class AttributesPanel extends ClosablePanel {
 			}
 			
 			title = titleValue;
+			status = objectName;
 			help = '';
 			invalidElementsCount = 0;
 			

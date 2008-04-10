@@ -3,7 +3,7 @@ package vdom.utils {
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.geom.Point;
-import flash.utils.getQualifiedClassName;
+import flash.utils.getDefinitionByName;
 
 import mx.core.Application;
 
@@ -19,27 +19,19 @@ public class DisplayUtil {
 		var allObjectUnderPoint:Array = app.stage.getObjectsUnderPoint( 
 				new Point(app.stage.mouseX, app.stage.mouseY )
 		);
-			
+		
 		var stack:Array = new Array();
+		
+		var targetClass:Class = getDefinitionByName(targetClassName) as Class;
 		
 		for (var i:int = allObjectUnderPoint.length-1; i >= 0; i--) {
 			
 			var target:DisplayObject = allObjectUnderPoint[i];
-			
-			//if (!rootContainer.contains(target))
-				//continue
 				
 			while (target is DisplayObject) {
-				
-				var currentClassName:String = getQualifiedClassName(target);
 					
-				if(currentClassName == targetClassName) {
-					
-					var z:*;
+				if(target is targetClass)
 					break;
-				}
-					
-				
 				
 				if(target.hasOwnProperty('parent'))
 					target = target.parent;
@@ -61,7 +53,6 @@ public class DisplayUtil {
 		}
 		
 		return stack;
-	}
-	
+	}	
 }
 }

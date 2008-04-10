@@ -4,11 +4,12 @@ import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 
 import mx.controls.ToolTip;
+import mx.core.Container;
 import mx.managers.CursorManager;
 import mx.managers.ToolTipManager;
 import mx.styles.StyleManager;
 
-import vdom.components.edit.containers.workAreaClasses.Item;
+import vdom.containers.IItem;
 import vdom.events.ResizeManagerEvent;
 import vdom.events.TransformMarkerEvent;
 import vdom.managers.resizeClasses.TransformMarker;
@@ -27,7 +28,7 @@ public class ResizeManager extends EventDispatcher {
 	
 	private var dataManager:DataManager;
 	
-	private var _topLevelItem:Item;
+	private var _topLevelItem:Container;
 	
 	private var selectMarker:TransformMarker;
 	
@@ -35,11 +36,11 @@ public class ResizeManager extends EventDispatcher {
 	
 	//private var highlightedObject:Item;
 	
-	private var highlightedItem:Item;
+	private var highlightedItem:Container;
 	
-	private var caughtItem:Item;
+	private var caughtItem:Container;
 	
-	private var selectedItem:Item;
+	private var selectedItem:Container;
 	
 	private var filterFunction:Function;
 	
@@ -77,7 +78,7 @@ public class ResizeManager extends EventDispatcher {
 		return instance;
 	}
 	
-	public function init(topLevelItem:Item):void {
+	public function init(topLevelItem:Container):void {
 		
 		_topLevelItem = topLevelItem;
 		
@@ -114,7 +115,7 @@ public class ResizeManager extends EventDispatcher {
 		
 		
 		
-		filterFunction = function(item:Item):Boolean {
+		filterFunction = function(item:IItem):Boolean {
 			
 			return !item.isStatic;
 		}
@@ -126,12 +127,12 @@ public class ResizeManager extends EventDispatcher {
 		//
 	}
 	
-	public function selectItem( item:Item, 
+	public function selectItem( item:Container, 
 								showMarker:Boolean = false, 
 								moveMode:Boolean = false, 
-								resizeMode:String = '0'):Item {
+								resizeMode:String = '0'):Container {
 									
-		var newSelectedItem:Item;
+		var newSelectedItem:Container;
 		
 		if(item && item.parent) {
 			
@@ -162,7 +163,7 @@ public class ResizeManager extends EventDispatcher {
 		return newSelectedItem;
 	}
 	
-	public function highlightItem(item:Item, showMarker:String = 'none'):void {
+	public function highlightItem(item:Container, showMarker:String = 'none'):void {
 		
 		if(cursorID) {
 			CursorManager.removeCursor(cursorID);
@@ -172,7 +173,7 @@ public class ResizeManager extends EventDispatcher {
 		if(item && !itemTransform) {
 			
 			if(highlightedItem)
-				highlightedItem.drawHighlight('none');
+				IItem(highlightedItem).drawHighlight('none');
 			
 			if(cursorID) {
 				CursorManager.removeCursor(cursorID);
@@ -193,7 +194,7 @@ public class ResizeManager extends EventDispatcher {
 					
 				case 'select':
 					
-					item.drawHighlight('0x666666');
+					IItem(item).drawHighlight('0x666666');
 				break
 			}
 			
@@ -202,7 +203,7 @@ public class ResizeManager extends EventDispatcher {
 		} else {
 			
 			if(highlightedItem)
-				highlightedItem.drawHighlight('none');
+				IItem(highlightedItem).drawHighlight('none');
 				
 			highlightedItem = null;
 		}
@@ -272,13 +273,13 @@ public class ResizeManager extends EventDispatcher {
 		
 		trace('highlighted');
 		
-		var newSelectedItem:Item;
+		var newSelectedItem:Container;
 		
 		if(_topLevelItem != highlightedItem) {
 			
 			trace('not selected');
 			
-			var objectType:XML = dataManager.getTypeByObjectId(highlightedItem.objectID);
+			var objectType:XML = dataManager.getTypeByObjectId(IItem(highlightedItem).objectId);
 			
 			newSelectedItem = selectItem(	highlightedItem,
 											true,
@@ -348,14 +349,14 @@ public class ResizeManager extends EventDispatcher {
 		if(itemTransform || markerSelected)
 			return;
 		
-		var itemUnderMouse:Item = getItemUnderMouse();
+		var itemUnderMouse:Container = getItemUnderMouse();
 		
 		if(itemUnderMouse == highlightedItem)
 			return;
 		
 		if(itemUnderMouse && itemUnderMouse != _topLevelItem) {
 			
-			var objectDescription:XML = dataManager.getObject(itemUnderMouse.objectID);
+			var objectDescription:XML = dataManager.getObject(IItem(itemUnderMouse).objectId);
 			
 			var tipText:String = "Name:" + objectDescription.@Name;
 			
@@ -375,15 +376,15 @@ public class ResizeManager extends EventDispatcher {
 		}
 	}
 	
-	private function getItemUnderMouse():Item {
+	private function getItemUnderMouse():Container {
 		
 		var targetList:Array =
-			DisplayUtil.getObjectsUnderMouse(_topLevelItem.parent, 'vdom.components.edit.containers.workAreaClasses::Item', filterFunction);
+			DisplayUtil.getObjectsUnderMouse(_topLevelItem.parent, 'vdom.containers::IItem', filterFunction);
 		
 		if(targetList.length == 0)
 			return null;
 		
-		var itemUnderMouse:Item = null;
+		var itemUnderMouse:Container = null;
 		
 		if(targetList.length == 1) {
 			

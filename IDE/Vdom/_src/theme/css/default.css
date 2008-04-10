@@ -54,6 +54,8 @@ LoginForm {
 	backgroundSize: "100%";
 }
 
+
+
 FormItemLabel {
 			
 	color: #ffffff;
@@ -137,7 +139,7 @@ AdvancedTabNavigator {
 	backgroundColor: #c2c2c2;
 }
 
-Types {
+TypeAccordion {
 	
 	borderThickness: 1;
 	borderColor: #ffffff;
@@ -146,6 +148,10 @@ Types {
 	backgroundColor: #c2c2c2;
 	
 	headerStyleName: "typesHeaderStyle" ;
+}
+
+.typeVScrollBar {
+	themeColor: #ff0000;	
 }
 
 .typesHeaderStyle {
@@ -171,7 +177,7 @@ ClosablePanel {
 	borderThicknessLeft: 0;
 	borderThicknessRight: 0;
 	
-	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackground");
+	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackgroundSmall");
 	
 	CollapseButtonOnButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnUp");
 	CollapseButtonOnButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnOver");
@@ -187,14 +193,28 @@ ClosablePanel {
 }
 
 .closablePanelTitle {
-	
+	fontWeight: "bold"; 
 	color: #ffffff;
 }
 
 AttributesPanel {
-	
+	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackground");
 	buttonSkin: Embed(source="vdomTheme.swf", symbol="AttributesPanelButton");
 	controlBarStyleName: "attributesControlBar";
+	statusStyleName: "attributesStatusField";
+	titleStyleName: "attributesTitlesField";
+}
+
+.attributesStatusField {
+	
+	color: #ffffff;
+	textAlign: center;
+}
+
+.attributesTitlesField {
+	
+	color: #ffffff;
+	fontWeight: "bold"; 
 }
 
 .attributesControlBar {

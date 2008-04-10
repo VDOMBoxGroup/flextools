@@ -7,7 +7,7 @@ import mx.core.EdgeMetrics;
 
 public class ClosablePanel extends Panel {
 	
-	private var collapseButton:Button;
+	protected var collapseButton:Button;
 	protected var switcher:Boolean;
 	private var _dataProvider:Object;
 	

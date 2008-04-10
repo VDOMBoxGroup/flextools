@@ -1,8 +1,9 @@
-package vdom.components.edit.containers.workAreaClasses {
+package vdom.managers.renderClasses {
+
+import flash.events.Event;
+import flash.events.FocusEvent;
 
 import mx.controls.TextArea;
-import flash.events.FocusEvent;
-import flash.events.Event;
 import mx.events.FlexEvent;
 
 public class WysiwygText extends TextArea {

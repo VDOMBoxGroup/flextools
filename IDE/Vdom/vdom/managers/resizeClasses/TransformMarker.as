@@ -13,6 +13,7 @@ import flash.geom.Rectangle;
 
 import mx.containers.Canvas;
 import mx.core.Application;
+import mx.core.Container;
 import mx.core.UIComponent;
 import mx.managers.CursorManager;
 
@@ -43,7 +44,7 @@ public class TransformMarker extends UIComponent {
 	private var _moveMode:Boolean;
 	private var _resizeMode:String;
 	
-	private var _selectedItem:UIComponent;
+	private var _selectedItem:Container;
 	
 	private var mousePosition:Point;
 	
@@ -104,7 +105,12 @@ public class TransformMarker extends UIComponent {
 		invalidateDisplayList();
 	}
 	
-	public function set item(item:UIComponent):void {
+	public function get item():Container {
+		
+		return _selectedItem;
+	}
+	
+	public function set item(item:Container):void {
 		
 		//trace('OBJECT CHANGE');
 		if(item == null) {
@@ -164,10 +170,7 @@ public class TransformMarker extends UIComponent {
 		invalidateDisplayList();
 	}
 	
-	public function get item():UIComponent {
-		
-		return _selectedItem;
-	}
+	
 	
 	override protected function createChildren():void {
 		

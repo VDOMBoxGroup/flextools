@@ -17,7 +17,7 @@ xmlns:objectsPanel="vdom.components.objectsPanel.*">
 	
 	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">
 	
-		<containers:Types id="types" resizeToContent="true"
+		<containers:TypeAccordion id="types" resizeToContent="true"
 			height="100%" y="100" width="90" minWidth="170" minHeight="0"
 			dataProvider="{dataManager.listTypes}"
 		/>
@@ -42,7 +42,7 @@ xmlns:objectsPanel="vdom.components.objectsPanel.*">
 			verticalScrollPolicy="auto" horizontalScrollPolicy="off" >
 			
 			<containers:AttributesPanel id="attributesPanel"
-				title="OBJECT PROPERTIES"
+				title="OBJECT PROPERTIES" headerHeight="30"
 				acceptLabel="{resourceManager.getString('Application','editor_save')}" 
 				deleteLabel="{resourceManager.getString('Application','editor_delete')}"
 				dataProvider="{dataManager.currentObject}" width="200" />

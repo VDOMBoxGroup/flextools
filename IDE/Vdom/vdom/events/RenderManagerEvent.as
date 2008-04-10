@@ -2,13 +2,13 @@ package vdom.events {
 
 import flash.events.Event;
 
-import vdom.components.edit.containers.workAreaClasses.Item;
+import mx.core.Container;
 	
 public class RenderManagerEvent extends Event {
 	
     // Public constructor.
 	public function RenderManagerEvent(
-		type:String, result:Item=null, 
+		type:String, result:Container=null, 
 		bubbles:Boolean=false, cancelable:Boolean=false){
 			
 			// Call the constructor of the superclass.
@@ -24,7 +24,7 @@ public class RenderManagerEvent extends Event {
 	public static const RENDER_ROLL_OUT:String = 'renderItemRollOut';
 
     // Define a public variable to hold the state of the enable property.
-	public var result:Item;
+	public var result:Container;
 	
     // Override the inherited clone() method.
     override public function clone():Event {
