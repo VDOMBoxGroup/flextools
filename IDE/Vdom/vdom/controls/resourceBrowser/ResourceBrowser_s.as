@@ -37,7 +37,7 @@ private const defaultView:String = "list";
 */ 
 private var _selectedItemID:String; 
 
-private var _resources:XML;				// Getting by FileManager Class instance
+private var _resources:XML;				// XML, Getting by FileManager Class instance
 private var _selectedThumb:Object;		// Currently selected Thumbnail (visual component)
 private var _rTypes:Array;				// Avalible resources types (get during resources scanning)
 private var _objects:Array;				// Associative (by id) array of resource objects	
@@ -67,7 +67,7 @@ public function get selectedItemID():String {
 private function creationComplete():void {
 	this.addEventListener(CloseEvent.CLOSE, closeHandler); 
 	loadTypesIcons();
-	PopUpManager.centerPopUp(this)
+	PopUpManager.centerPopUp(this);
 	listResourcesQuery();
 }
 
@@ -76,7 +76,8 @@ private function listResourcesQuery():void {
 	fileManager.getListResources();
 }
 
-private function getResourcesList(fmEvent:FileManagerEvent):void {	
+private function getResourcesList(fmEvent:FileManagerEvent):void {
+	fileManager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);	
 	_resources = new XML(fmEvent.result.Resources.toXMLString());
 	_currentView = defaultView;
 	showResourcesList();
@@ -127,6 +128,7 @@ private function showResourcesList(filter:String = "*"):void {
 	_filteredResources = 0;
 	
 	/* Select ThumbsArea initial width depending on ViewClass */
+	/* By default Expand button is turned off */
 	expandHandler();
 		
 	var viewItem:*;
@@ -151,8 +153,8 @@ private function showResourcesList(filter:String = "*"):void {
 				break;
 		}
 
-		thumbsList.addChild(viewItem);
-		viewItem.imageSource = waiting_Icon;	// default, 'till new image is unknown 
+		thumbsList.addChild(viewItem);			// add viewItem as child to initialise it
+		viewItem.imageSource = waiting_Icon;	// set default, 'till new image is unknown (or while it is loading) 
 		viewItem.objName = resource.@name;
 		viewItem.objType = resource.@type;
 		viewItem.objID = resource.@id;
@@ -179,6 +181,7 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 		_selectedThumb.selected = false;
 	}
 	mEvent.currentTarget.selected = true;
+	
 	_selectedItemID = mEvent.currentTarget.objID;
 	_selectedThumb = mEvent.currentTarget;
 	
@@ -190,10 +193,10 @@ private function showResource():void {
 	__rName.text = _selectedThumb.objName;
 	__rType.text = _selectedThumb.objType.toUpperCase();
 	
-	/* Show large preview of the image */
+	/* Create & Show large preview of the image */	
+	__previewArea.removeAllChildren();	// Clear up the space
+
 	var preview:PreviewContainer = new PreviewContainer();
-	
-	__previewArea.removeAllChildren();
 	__previewArea.addChild(preview);
 	preview.heightLimit = __previewArea.height - 15;
 	preview.widthLimit = __previewArea.width - 15;
@@ -214,13 +217,12 @@ private function showResource():void {
 private function changeView(event:ItemClickEvent):void {
 	if (event.index == 0) {
 		_currentView = "thumbnail";
-		showResourcesList();
 	} else {
 		if (event.index == 1) {
 			_currentView = "list";
-			showResourcesList();
 		}
 	}
+	showResourcesList();
 	
 	/* Selecting active element */
 	_selectedThumb = _objects[_selectedItemID];
