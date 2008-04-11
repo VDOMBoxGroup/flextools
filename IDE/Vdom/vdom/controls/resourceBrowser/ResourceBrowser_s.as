@@ -44,6 +44,8 @@ private var _objects:Array;				// Associative (by id) array of resource objects
 private var _currentView:String;
 private var _fileForUpload:File;
 
+public var result:String;
+
 [Bindable]
 private var _filterDataProvider:Array;
 
@@ -255,6 +257,7 @@ private function expandHandler():void {
 }
 
 private function doneHandler():void {
+	result = _selectedItemID;
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
 	this.dispatchEvent(cEvent);
 }
