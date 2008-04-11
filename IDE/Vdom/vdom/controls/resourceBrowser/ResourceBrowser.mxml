@@ -33,7 +33,7 @@
 			backgroundColor="#e5e5e5" borderStyle="solid"
 		>
 			
-			<mx:ButtonBar height="24" itemClick="{changeView(event);}">          			
+			<mx:ButtonBar height="24" itemClick="{applyView(event);}">          			
 				<mx:Array>
 					<mx:String id="tView">Thumbnails view</mx:String>
 					<mx:String id="lView">List view</mx:String>

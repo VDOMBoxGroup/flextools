@@ -14,6 +14,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.filesystem.File;
 
+import mx.controls.Alert;
 import mx.controls.Label;
 import mx.events.CloseEvent;
 import mx.events.ItemClickEvent;
@@ -36,7 +37,7 @@ private const defaultView:String = "list";
 	Selected resource ID sets by property "selectedItemID" from the outside the Class.
 	It is used to show which item is currently selected (or not, if it is null).
 */ 
-private var _selectedItemID:String; 
+private var _selectedItemID:String = ""; 
 
 private var _resources:XML;				// XML, Getting by FileManager Class instance
 private var _selectedThumb:Object;		// Currently selected Thumbnail (visual component)
@@ -44,6 +45,8 @@ private var _rTypes:Array;				// Avalible resources types (get during resources 
 private var _objects:Array;				// Associative (by id) array of resource objects	
 private var _currentView:String;
 private var _fileForUpload:File;
+
+private var _resourcesListLoadedFlag:Boolean = false;
 
 [Bindable]
 private var _filterDataProvider:Array;
@@ -59,6 +62,11 @@ private var dataManager:DataManager = DataManager.getInstance();	// DataManager 
 
 public function set selectedItemID(itemID:String):void {
 	_selectedItemID = itemID;
+	if (_resourcesListLoadedFlag) {
+		if (_objects[_selectedItemID] == null) {
+			Alert.show("Selected Resource is not found on the server!", "Resource Browser error"); 
+		} 
+	}
 }
 
 public function get selectedItemID():String {
@@ -80,8 +88,13 @@ private function listResourcesQuery():void {
 private function getResourcesList(fmEvent:FileManagerEvent):void {
 	fileManager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);	
 	_resources = new XML(fmEvent.result.Resources.toXMLString());
+	
 	_currentView = defaultView;
-	showResourcesList();
+	createResourcesViewObjects();
+	_resourcesListLoadedFlag = true;
+	if (_selectedItemID != "" && _objects[_selectedItemID] == null) {
+		Alert.show("Selected Resource is not found on the server!", "Resource Browser error"); 
+	}
 	determineResourcesTypes();	
 }
 
@@ -122,7 +135,7 @@ private function isViewable(extension:String):Boolean {
 	}
 }
 
-private function showResourcesList(filter:String = "*"):void {	
+private function createResourcesViewObjects(filter:String = "*"):void {	
 	thumbsList.removeAllChildren();
 	_objects = new Array();
 	_totalResources = 0;
@@ -215,19 +228,23 @@ private function showResource():void {
 	}
 }
 
-private function changeView(event:ItemClickEvent):void {
-	if (event.index == 0) {
-		_currentView = "thumbnail";
-	} else {
-		if (event.index == 1) {
-			_currentView = "list";
-		}
+private function applyView(event:ItemClickEvent = null):void {
+	if (event != null) {
+		if (event.index == 0) {
+			_currentView = "thumbnail";
+		} else {
+			if (event.index == 1) {
+				_currentView = "list";
+			} else {
+				_currentView = defaultView;
+			}
+		}		
+		createResourcesViewObjects();
 	}
-	showResourcesList();
 	
 	/* Selecting active element */
-	_selectedThumb = _objects[_selectedItemID];
-	if (_selectedThumb != null) {
+	if (_objects[_selectedItemID] != null) {
+		_selectedThumb = _objects[_selectedItemID];
 		_objects[_selectedItemID].selected = true;
 	}
 }
@@ -252,7 +269,10 @@ private function expandHandler():void {
 	}
 	
 	/* Redraw preview */
-	if (_selectedThumb != null) showResource(); 
+	if (_objects[_selectedItemID] != null) {
+		_selectedThumb = _objects[_selectedItemID];
+		showResource();
+	} 
 }
 
 private function doneHandler():void {
@@ -266,7 +286,7 @@ private function closeHandler(cEvent:CloseEvent):void {
 }
 
 private function filterCBxHandler():void {
-	showResourcesList(__filterCBx.selectedItem.data);	
+	createResourcesViewObjects(__filterCBx.selectedItem.data);	
 }
 
 
