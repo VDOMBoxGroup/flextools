@@ -8,7 +8,6 @@
  * Current tasks:
  * 1. Implement upload resource to server
  * 2. Implement delete resource from server
- * 3. Correct PreviewContainer Component
 **/
 
 import flash.events.Event;
