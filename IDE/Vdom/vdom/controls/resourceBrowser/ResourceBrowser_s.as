@@ -63,9 +63,7 @@ private var dataManager:DataManager = DataManager.getInstance();	// DataManager 
 public function set selectedItemID(itemID:String):void {
 	_selectedItemID = itemID;
 	if (_resourcesListLoadedFlag) {
-		if (_objects[_selectedItemID] == null) {
-			Alert.show("Selected Resource is not found on the server!", "Resource Browser error"); 
-		} 
+		showResourceSelection();
 	}
 }
 
@@ -92,9 +90,7 @@ private function getResourcesList(fmEvent:FileManagerEvent):void {
 	_currentView = defaultView;
 	createResourcesViewObjects();
 	_resourcesListLoadedFlag = true;
-	if (_selectedItemID != "" && _objects[_selectedItemID] == null) {
-		Alert.show("Selected Resource is not found on the server!", "Resource Browser error"); 
-	}
+	showResourceSelection();
 	determineResourcesTypes();	
 }
 
@@ -202,6 +198,18 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	showResource();	
 }
 
+private function showResourceSelection():void { 	// uses when property set
+	if (_selectedItemID != "") {
+		if (_objects[_selectedItemID] == null) {
+			Alert.show("Selected Resource is not found on the server!", "Resource Browser error"); 
+		} else {
+			_selectedThumb = _objects[_selectedItemID];
+			_selectedThumb.selected = true;
+			showResource(); 
+		}
+	}
+}
+
 private function showResource():void {
 	/* Fill in resource information in the info area */
 	__rName.text = _selectedThumb.objName;
@@ -233,6 +241,7 @@ private function applyView(event:ItemClickEvent = null):void {
 		if (event.index == 0) {
 			_currentView = "thumbnail";
 		} else {
+		
 			if (event.index == 1) {
 				_currentView = "list";
 			} else {
