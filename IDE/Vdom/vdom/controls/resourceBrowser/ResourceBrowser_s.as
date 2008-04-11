@@ -24,6 +24,7 @@ import vdom.controls.resourceBrowser.ListItem;
 import vdom.controls.resourceBrowser.PreviewContainer;
 import vdom.controls.resourceBrowser.ThumbnailItem;
 import vdom.events.FileManagerEvent;
+import vdom.events.ResourceBrowserEvent;
 import vdom.managers.DataManager;
 import vdom.managers.FileManager;
 
@@ -43,8 +44,6 @@ private var _rTypes:Array;				// Avalible resources types (get during resources 
 private var _objects:Array;				// Associative (by id) array of resource objects	
 private var _currentView:String;
 private var _fileForUpload:File;
-
-public var result:String;
 
 [Bindable]
 private var _filterDataProvider:Array;
@@ -257,7 +256,7 @@ private function expandHandler():void {
 }
 
 private function doneHandler():void {
-	result = _selectedItemID;
+	this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID)));
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
 	this.dispatchEvent(cEvent);
 }
