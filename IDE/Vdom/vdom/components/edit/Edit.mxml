@@ -65,8 +65,7 @@ xmlns:objectsPanel="vdom.components.objectsPanel.*">
 			</containers:ClosablePanel>
 			-->
 			<objectsPanel:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" 
-				dataProvider="{dataManager.listPages}"
-				/>
+				dataProvider="{dataManager.listPages}" currentObject = "{dataManager.currentObject}"/> 					
 			
 		</mx:VBox>
 	</mx:HBox>

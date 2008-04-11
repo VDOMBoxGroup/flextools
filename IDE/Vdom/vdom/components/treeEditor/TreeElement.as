@@ -243,6 +243,7 @@ package vdom.components.treeEditor
 				byArr.compress();
 
 				var bs64Encdr:Base64Encoder = new Base64Encoder();
+				//bs64Encdr.encodeBytes(srcBytes);
 				bs64Encdr.encodeBytes(byArr);
 
 				var strBs64:String = bs64Encdr.toString();

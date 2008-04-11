@@ -10,6 +10,7 @@
 
 <mx:Script>
 	<![CDATA[
+		import mx.managers.PopUpManager;
 		import mx.controls.Alert;
 		import vdom.managers.FileManager;
 		import vdom.managers.DataManager;
@@ -56,7 +57,7 @@
 			
 		dataManager.getApplicationStructure();
 		
-		setDisplayNames();
+	//	setDisplayNames();
 	}
 	
 	private function hideHendler():void
@@ -235,56 +236,15 @@
 		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
 	}
-	/**
-	*  
-	*		получаем из существующей структуры данных XML 
-	*
-	*/
-		private function soapAddTreeElement():void
-		{
-			var types:XMLList = dataManager.getTopLevelTypes();
-			
-			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-			dataManager.createObject(selectedAppl.data);
-		}
-			
-		private function  createObject(dmEvt:DataManagerEvent):void
-		{
-			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-			var xml:XML = new XML(dmEvt.result);
-		
-			addTreeElement(xml);
-			saveToServer();
-		}
-		
-		private function addTreeElement(xml:XML):void
-		{
-			var treeElement:TreeElement = new TreeElement();
-			
-			treeElement = createTreeElement(xml);
-			treeElement = addEventListenerToTreeElement(treeElement);
-			
-			var obID:String =  xml.Object.@ID;
-			massTreeElements[obID] = treeElement;
-			
-			main.addChild(massTreeElements[obID]);
-			if (curTree == null)
-			{
-				curTree = massTreeElements[obID];
-				curTree.current = true;
-			} 
-		}
 	
+		
+		
 	private function dataManagerListenner(dmnEvt:DataManagerEvent):void
 	{
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
 	}
 	
-	private function comBoxClose(evt:Object):void
-	{
-		selectedAppl=ComboBox(evt).selectedItem;
-		btAddTreeElement.enabled = true;
-	}	
+	
 	
 	private function hideLines(treEvt:TreeEditorEvent):void
 	{
@@ -308,8 +268,12 @@
 				if(massTreeElements[ID].select) 
 					massTreeElements[ID].unSelect();
 		btLine.visible = false;
+	
 	}
-
+	private function addTreeElementLauncher():void 
+	{
+				PopUpManager.createPopUp(super, AddTreeElementWindow, true);
+	}
 	]]>
 </mx:Script>
 
@@ -318,9 +282,9 @@
 <mx:VBox   height="100%" >
 	<colorMenu02:ColorMenu2 id="colmen2" x="50"/>
 	<mx:Label text="Select type of Applikation:"  color="#ffffff"/>
- 	<mx:ComboBox id="comBoxAppl"  width="150"   dataProvider="{arrAppl}" 
-            close="comBoxClose(event.target)"  /> 
-	<mx:Button id="btAddTreeElement" label="add element"    click="soapAddTreeElement()"/>
+ 	
+	
+	<mx:Button  label="add element"    click="addTreeElementLauncher()"/>
 
 </mx:VBox>
 </mx:HBox>

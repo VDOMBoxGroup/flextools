@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Resource Browser component for VDOM Box IDE
+	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+-->
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" width="500" height="350"
+	title="Resource Manager"
+	creationComplete="creationComplete()"
+	showCloseButton="true"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
+>
+	<mx:Script>
+		<![CDATA[
+			import vdom.events.ResourceBrowserEvent;
+			import vdom.controls.resourceBrowser.ResourceBrowser;
+			import vdom.managers.DataManager;
+			import vdom.events.DataManagerEvent;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			
+			private var selectedResourceID:String = "777";
+			
+			   [Bindable]
+   			public var selectedAppl:Object; 
+   				[Bindable]
+   			private var arrAppl: Array = new Array();
+   		
+   			[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='cube')]
+				[Bindable]
+			public var cube:Class;
+			
+			private var dataManager:DataManager  = DataManager.getInstance();
+			
+			private function creationComplete():void 
+			{
+				addEventListener(CloseEvent.CLOSE, closeHandler); 
+	//			loadTypesIcons();
+				PopUpManager.centerPopUp(this)
+				setDisplayNames();
+				image.source = cube;
+			}
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+				PopUpManager.removePopUp(this);
+			}
+	
+			private function comBoxClose(evt:Object):void
+			{
+				selectedAppl=ComboBox(evt).selectedItem;
+				//btAddTreeElement.enabled = true;
+			}	
+			private function soapAddTreeElement():void
+			{
+			//	var types:XMLList = dataManager.getTopLevelTypes();
+				dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
+				dataManager.createObject(selectedAppl.data);
+			}
+			/**
+			*  
+			*		получаем из существующей структуры данных XML 
+			*
+			*/
+				
+				
+			private function  createObject(dmEvt:DataManagerEvent):void
+			{
+				dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
+				var xml:XML = new XML(dmEvt.result);
+			
+				addTreeElement(xml);
+			//	saveToServer();
+			}
+			private function addTreeElement(xml:XML):void
+			{
+				
+				var treeElement:TreeElement = new TreeElement();
+				
+				treeElement = createTreeElement(xml);
+				/*treeElement = addEventListenerToTreeElement(treeElement);
+				
+				var obID:String =  xml.Object.@ID;
+				massTreeElements[obID] = treeElement;
+				
+				main.addChild(massTreeElements[obID]);
+				if (curTree == null)
+				{
+					curTree = massTreeElements[obID];
+					curTree.current = true;
+				}
+			*/	
+			}
+
+			private function createTreeElement(xmlObj:XML):TreeElement
+			{
+						//trace(xmlObj);
+				var obID:String = xmlObj.Object.@ID;
+				var treeElement:TreeElement =  new TreeElement();
+				treeElement.ID = obID;
+				treeElement.name =  xmlObj.Object.Attributes.Attribute.(@Name == 'title' );
+				
+				treeElement.description = '';
+				treeElement.x = 0;
+				treeElement.y = 0;	
+				treeElement.resourceID = xmlObj.Object.@Type.toXMLString();
+				var typeID:String = xmlObj.Object.@Type.toXMLString();
+	//			treeElement.type  =  getType(typeID);
+			
+				return treeElement;		
+			}
+		
+		private function setDisplayNames():void
+		{
+			arrAppl = [];
+			var types:XMLList = dataManager.getTopLevelTypes();
+			for each(var lavel:XML in types )
+			{																
+					var strLabel:String = getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
+					var strID:String = lavel.Information.ID;
+					arrAppl.push({label:strLabel, data:strID});
+			}
+			comBoxAppl.selectedIndex = 0;
+		}
+		public function getLanguagePhrase(name:String, phrase:String):String
+		{
+			var phraseRE:RegExp = /#Lang\((\w+)\)/;
+			var phraseID:String = phrase.match(phraseRE)[1]; //001
+			
+			return resourceManager.getString(name, phraseID);
+		}
+		private var resourceID:String = 'qwe';
+		private function resourceBrowserLauncher():void 
+		{
+			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
+	//		rbWnd.result = selectedResourceID;
+			rbWnd.selectedItemID = resourceID;
+			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
+		
+		}
+		
+		
+		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
+		{
+				trace('selectedResourceID: '+rbEvt.resourceID);
+				resourceID = rbEvt.resourceID;
+		}	
+		
+		private function cancelPressed():void 
+		{
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+		}	
+		
+		private function okPressed():void 
+		{
+			//create treeElement
+			soapAddTreeElement();			
+		}	
+		
+		private function returntData():void 
+		{
+			
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+		}	
+		]]>
+		
+	
+		
+	</mx:Script>
+	
+	
+	<mx:Canvas 	width="100%" height="100%"
+		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5">
+    	
+    	<mx:ComboBox id="comBoxAppl"     dataProvider="{arrAppl}" 
+    	  	     close="comBoxClose(event.target)"   x="255" y="204" width="167"/>
+    	<mx:Image id="image" x="20" y="15" width="207" height="246"/>
+    	<mx:Button id="btAddTreeElemen" label="Ok"    click="cancelPressed()" x="330" y="272"/>
+    	<mx:Button x="20" y="275" label="Select image" click="resourceBrowserLauncher()"/>
+    	<mx:Button x="407" y="271" label="Cancel" click="cancelPressed()"/>
+    	<mx:Label x="250" y="15" text="Title:" width="75" height="19"/>
+    	<mx:Label x="254" y="67" text="Description:"/>
+    	<mx:Label x="254" y="186" text="Tipe:" width="80"/>
+    	<mx:TextInput x="254" y="31" width="201"/>
+    	<mx:TextArea x="254" y="86" height="88" width="201"/>
+	</mx:Canvas>
+</mx:TitleWindow>

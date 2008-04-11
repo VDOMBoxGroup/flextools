@@ -13,6 +13,7 @@
 
 <mx:Script>
 	<![CDATA[
+		import vdom.managers.DataManager;
 		import mx.events.ListEvent;
 	//implements Event;
 		import mx.controls.listClasses.ListBase;
@@ -50,7 +51,7 @@
             
            
             
-		import vdom.managers.DataManager;
+	//	import vdom.managers.DataMoanager;
 		import mx.core.Application;
 		
 		[Bindable]
@@ -96,6 +97,7 @@
 					xmlList.@label = xmlLabel.@Name;
 					xmlList.@showInList = 'true';
 					xmlList.@ID = xmlLabel.@ID;
+					xmlList.@icon	= 'accordion_icon';
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
 				//	trace(xmlLabel.Objects)
@@ -178,11 +180,15 @@
 			trace('run function set Resource: ' + object.resourceID);	
 	//		this[object.resourceID] = Class;
 			arrPicture[object.resourceID] = object.data;
-		//	trace('source: '+object.data.source);
-		//	trace('1object.guid' + object.resourceID);
-		
-	
 		}
+		
+		public function set currentObject(xml:XML):void
+		{
+			var ID:String = xml.@ID;
+			trace('currentObject: \n'+xml.@ID);
+			tree.selectedItem = xmlTreeData..*.Object.(@ID == ID)[0];
+		}
+		
 		
 	]]>
 </mx:Script>

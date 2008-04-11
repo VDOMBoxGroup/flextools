@@ -6,10 +6,8 @@
 		import vdom.events.DataManagerEvent;
 		import vdom.events.TreeEditorEvent;
 		
-	 [Bindable]
-   private var arrAppl: Array = new Array();
-     [Bindable]
-   public var selectedAppl:Object;  
+	 
+   
    
    	[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='rMenu')]
 	[Bindable]
@@ -45,19 +43,7 @@ private function deleteObject(strID:String):void
 	saveToServer();
 }
 
-private function setDisplayNames():void
-{
-	arrAppl = [];
-	var types:XMLList = dataManager.getTopLevelTypes();
-	for each(var lavel:XML in types )
-	{																
-			var strLabel:String = getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
-			var strID:String = lavel.Information.ID;
-			arrAppl.push({label:strLabel, data:strID});
-	}
-	
-	btAddTreeElement.enabled = false;
-}
+
 private function treeElementMousUpHandler():void
 {
 		var dx:Number = 0;
@@ -317,23 +303,7 @@ private function get needCreatTree():Boolean
 		return false;
 	}
 	
-private function createTreeElement(xmlObj:XML):TreeElement
-{
-			//trace(xmlObj);
-	var obID:String = xmlObj.Object.@ID;
-	var treeElement:TreeElement =  new TreeElement();
-	treeElement.ID = obID;
-	treeElement.name =  xmlObj.Object.Attributes.Attribute.(@Name == 'title' );
-	
-	treeElement.description = '';
-	treeElement.x = 0;
-	treeElement.y = 0;	
-	treeElement.resourceID = xmlObj.Object.@Type.toXMLString();
-	var typeID:String = xmlObj.Object.@Type.toXMLString();
-	treeElement.type  =  getType(typeID);
 
-	return treeElement;		
-}
 
 private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 {
