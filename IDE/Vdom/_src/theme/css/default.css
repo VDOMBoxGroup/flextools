@@ -8,21 +8,22 @@ global {
 	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
 }
 
-Application {
+WindowedApplication {
 	
-	backgroundColor: #484848;
-	backgroundAlpha: 1.0;
-    backgroundSize: "100%";
-	backgroundGradientAlphas: 1, 1;
-	
-	backgroundImage: Embed(source="vdomTheme.swf", symbol="ApplicationBackground");
+	statusBarBackgroundColor: #000000;
+	backgroundAlpha: 0;
+	borderStyle: none;	
 }
 
-ApplicationControlBar {
+VdomTitleBar {
 	
 	backgroundSize: "100%";
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="TitleBarBackground");
 	
-	backgroundImage: Embed(source="vdomTheme.swf", symbol="ApplicationControlBar");
+	minimizeButtonSkin: ClassReference("vdom.skins.TitleBarMinimizeButtonSkin");
+	maximizeButtonSkin: ClassReference("vdom.skins.TitleBarMaximizeButtonSkin");
+	restoreButtonSkin: ClassReference("vdom.skins.TitleBarRestoreButtonSkin");
+	closeButtonSkin: ClassReference("vdom.skins.TitleBarCloseButtonSkin");
 }
 
 /*
@@ -91,35 +92,39 @@ FormItemLabel {
 	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
 }
 
+ControlPanel, .vdomBackground {
+	
+	backgroundAlpha: 1.0;
+    backgroundSize: "100%";
+	backgroundGradientAlphas: 1, 1;
+	
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="ApplicationBackground");
+}
+
 MainTabNavigator {
 	
-	backgroundColor: #191919;
-	backgroundAlpha: .1;	
+	paddingTop: 0;
+	paddingBottom: 0;
+	paddingRight: 0;
+	paddingLeft: 0;
 }
 
 AdvancedTabNavigator {
 
 	paddingTop: 0;
 	tabBarPosition: "bottom";
-	
-	tabStyleName: "advancedTab";
+	tabHeight: 20;
+	selectedTabTextStyleName: "selectedAdvancedTab";
 }
 
-.advancedTabTop {
-	
-	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkin");
-	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkin");
-	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkin");
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkin");
-	
-	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkin");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkin");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkin");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkin");
+.selectedAdvancedTab {
+	color: #000000;
+	textRollOverColor: #000000;
 }
 
 .advancedTabBottom {
-	
+	color: #444444;
+	textRollOverColor: #444444;
 	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkinBottom");
 	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinBottom");
 	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinBottom");
@@ -133,10 +138,7 @@ AdvancedTabNavigator {
 
 .mainCanvas {
 	
-	borderThickness: 1;
-	borderColor: #ffffff;
-	borderStyle: solid;
-	backgroundColor: #c2c2c2;
+	borderStyle: none;
 }
 
 TypeAccordion {

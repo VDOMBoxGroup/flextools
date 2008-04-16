@@ -1,6 +1,6 @@
 package vdom.managers {
 
-import flash.display.Graphics;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
@@ -9,9 +9,8 @@ import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
-import mx.containers.Grid;
-import mx.containers.GridItem;
-import mx.containers.GridRow;
+import mx.containers.Canvas;
+import mx.controls.Image;
 import mx.core.Container;
 
 import vdom.connection.soap.Soap;
@@ -20,6 +19,9 @@ import vdom.containers.IItem;
 import vdom.containers.Item;
 import vdom.events.RenderManagerEvent;
 import vdom.managers.renderClasses.ItemDescription;
+import vdom.managers.renderClasses.WysiwygTableClasses.Table;
+import vdom.managers.renderClasses.WysiwygTableClasses.TableCell;
+import vdom.managers.renderClasses.WysiwygTableClasses.TableRow;
 import vdom.managers.renderClasses.WysiwygText;
 
 public class RenderManager implements IEventDispatcher {
@@ -70,7 +72,7 @@ public class RenderManager implements IEventDispatcher {
 		var sort:Sort = new Sort();
 		
 		_items.sort = sort;
-		_items.sort.fields = [new SortField('objectId')];
+		_items.sort.fields = [new SortField('itemId')];
 		
 		_items.refresh();
 		
@@ -86,9 +88,7 @@ public class RenderManager implements IEventDispatcher {
 			
 	}
 	
-	private function addItem(objectId:String, parentId:String = ''):Container {
-		
-		var item:Item = new Item(objectId);
+	/* private function addItem(item:Container, itemId:String, parentId:String = ''):Container {
 		
 		var fullPath:String = '';
 		
@@ -96,7 +96,7 @@ public class RenderManager implements IEventDispatcher {
 			
 			_items.removeAll();
 						
-			fullPath = objectId;
+			fullPath = itemId;
 			
 			item.visible = false;
 			
@@ -105,8 +105,8 @@ public class RenderManager implements IEventDispatcher {
 			
 		} else {
 			
-			_cursor.findFirst({objectId:parentId});
-			fullPath = _cursor.current.fullPath + '.' + objectId;
+			_cursor.findFirst({itemId:parentId});
+			fullPath = _cursor.current.fullPath + '.' + itemId;
 		}
 		
 		item.setStyle('backgroundColor', '#ffffff');
@@ -115,7 +115,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		var itemDescription:ItemDescription = new ItemDescription();
 		
-			itemDescription.objectId = objectId;
+			itemDescription.itemId = itemId;
 			itemDescription.parentId = parentId;
 			itemDescription.fullPath = fullPath;
 			itemDescription.zindex = 0;
@@ -126,38 +126,64 @@ public class RenderManager implements IEventDispatcher {
 		_items.addItem(itemDescription);
 		
 		return item;
-	}
+	} */
 	
-	public function createItem(objectId:String, parentId:String = ''):Container {
+	private function createItemDescription(itemId:String, parentId:String = ''):ItemDescription {
 		
-		var item:Container = addItem(objectId, parentId);
+		var fullPath:String = '';
 		
-		if(parentId) {
+		if(parentId == '') {
 			
-			_cursor.findFirst({objectId:parentId});
-			_cursor.current.item.addChild(item)
-			
+			fullPath = itemId;
 		} else {
 			
-			_container.removeAllChildren();
-			_container.addChild(item);
+			fullPath = getItemDescriptionById(parentId).fullPath;
+			fullPath = fullPath + '.' + itemId;
 		}
 		
-		soap.renderWysiwyg(applicationId, objectId, parentId);
+		var itemDescription:ItemDescription = new ItemDescription();
 		
-		return item;
+			itemDescription.itemId = itemId;
+			itemDescription.parentId = parentId;
+			itemDescription.fullPath = fullPath;
+			itemDescription.zindex = 0;
+			itemDescription.hierarchy = 0;
+			itemDescription.order = 0;
+			itemDescription.item = null;
+		
+		_items.addItem(itemDescription);
+		
+		return itemDescription;
 	}
 	
-	public function deleteItem(objectId:String):void {
+	public function createItem(itemId:String, parentId:String = ''):void {
+		
+		if(!parentId) {
+			
+			_container.removeAllChildren();
+			_items.removeAll();
+		}
+		
+		createItemDescription(itemId, parentId);
+	
+		soap.renderWysiwyg(applicationId, itemId, parentId);
+	}
+	
+	public function updateItem(itemId:String, parentId:String):void {
+		
+		soap.renderWysiwyg(applicationId, itemId, parentId);
+	}
+	
+	public function deleteItem(itemId:String):void {
 		
 		_items.filterFunction = 
 			function (item:Object):Boolean {
-				return (item.fullPath.indexOf(objectId) != -1);
+				return (item.fullPath.indexOf(itemId) != -1);
 		}
 		
 		_items.refresh();
 		
-		_cursor.findAny({objectId:objectId});
+		_cursor.findAny({itemId:itemId});
 		
 		var currentItem:Container = ItemDescription(_cursor.current).item;
 		
@@ -169,66 +195,18 @@ public class RenderManager implements IEventDispatcher {
 		_items.refresh();
 	}
 	
-	public function updateItem(objectId:String, parentId:String):void {
-		
-		/* _items.filterFunction = null;
-		_items.sort = new Sort();
-		_items.sort.fields = [new SortField('objectId')];
-		_items.refresh(); */
-		
-		//_cursor.findAny({objectId:objectId});
-		
-		//var currentItem:Item = Item(_cursor.current.item);
-		//currentItem.graphics.clear();
-		//currentItem.removeAllChildren();
-		//currentItem.waitMode = true;
-		//parentId = _cursor.current.parentId
-		
-		
-		//_cursor.current = null;
-		_cursor.findAny({objectId:objectId});
-		if(_cursor.current)
-			IItem(_cursor.current.item).waitMode = true;
-		 
-		
-		var key:String = soap.renderWysiwyg(applicationId, objectId, parentId);
-		//waitArray[key] = _cursor.current.item;
-	}
-	
-	private function updateItemDescription(objectId:String, itemXMLDescription:XML):ItemDescription {
-		
-		_cursor.findFirst({objectId:objectId});
-		
-		var itemDescription:ItemDescription = ItemDescription(_cursor.current);
-		
-		itemDescription.zindex = uint(itemXMLDescription.@zindex);
-		itemDescription.hierarchy = uint(itemXMLDescription.@hierarchy);
-		itemDescription.order = uint(itemXMLDescription.@order);
-		
-		return itemDescription;
-	}
-	
-	public function lockItem(objectId:String):void {
-		
-		
-	}
-	
 	private function renderWysiwygOkHandler(event:SoapEvent):void {
 		
-		var itemXMLDescription:XML = event.result.Result.object[0];
+		var itemXMLDescription:XML = event.result.Result.*[0];
 		var key:String = event.result.Key[0];
 				
+		var itemName:String = itemXMLDescription.name().localName;
 		var itemId:String = itemXMLDescription.@guid;
 		
+		deleteItemChildren(itemId);
+		
+		var item:Container = insertNewItem(itemName, itemId);
 		var itemDescription:ItemDescription = updateItemDescription(itemId, itemXMLDescription);
-		
-		if(!itemDescription) {
-			
-			trace('Alert Render Manager - cant find item description');
-			return	
-		}
-		
-		var item:Container = itemDescription.item;
 		
 		var isStatic:Boolean = false;
 		
@@ -249,6 +227,21 @@ public class RenderManager implements IEventDispatcher {
 			}
 		}
 		
+		if(itemDescription.parentId) {
+			
+			if(itemDescription.item && !itemDescription.item.parent) {
+			
+				var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
+				parentDescription.item.addChild(item);
+			}
+		} else {
+			
+			item.percentWidth = 100;
+			item.percentHeight = 100;
+			
+			_container.addChild(item);
+		}
+			
 		item.visible = true;
 		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
 		rme.result = item;
@@ -256,7 +249,7 @@ public class RenderManager implements IEventDispatcher {
 		dispatchEvent(rme);
 	}
 	
-	private function render(item:Container, itemXMLDescription:XML, isStatic:Boolean):void {
+	private function render(item:Container, itemXMLDescription:XML, staticChildren:Boolean):void {
 		
 		item.removeAllChildren();
 		item.graphics.clear();
@@ -265,15 +258,18 @@ public class RenderManager implements IEventDispatcher {
 		item.y = Number(itemXMLDescription.@top);
 		
 		if(itemXMLDescription.@width.length())
-			item.width = itemXMLDescription.@width;
+			item.width =  Number(itemXMLDescription.@width);
 			
 		if(itemXMLDescription.@height.length())
-			item.height = itemXMLDescription.@height;
+			item.height =  Number(itemXMLDescription.@height);
 		
 		var itemId:String = itemXMLDescription.@guid;
 		
 		if(itemXMLDescription.@contents == 'static')
-			isStatic = true;
+			IItem(item).isStatic = true;
+		
+		item.setStyle('backgroundColor', '#555555');
+		item.setStyle('backgroundAlpha', .0);
 		
 		for each(var childXMLDescription:XML in itemXMLDescription.*) {
 			
@@ -282,18 +278,68 @@ public class RenderManager implements IEventDispatcher {
 			
 			switch(childName) {
 				
-			case 'object':
+			// Containers --------------------------------------
+			
+			case 'container':
 				
-				var newItem:Container = addItem(childId, itemId)
+				createItemDescription(childId, itemId);
+				
+				var newItem:Container = insertNewItem(childName, childId);
+				
 				updateItemDescription(childId, childXMLDescription);
 				
-				if(isStatic)
+				if(IItem(item).isStatic)
 					IItem(newItem).isStatic = true;
 				
-				newItem.clipContent = true;
-				
-				render(newItem, childXMLDescription, isStatic);
+				render(newItem, childXMLDescription, staticChildren);
 			break;
+			
+			case 'table':
+				
+				createItemDescription(childId, itemId);
+				
+				var newTable:Container = insertNewItem(childName, childId);
+				
+				newTable.setStyle('borderStyle', 'solid');
+				newTable.setStyle('borderColor', '#cccccc');
+				
+				updateItemDescription(childId, childXMLDescription);
+				
+				if(IItem(item).isStatic)
+					IItem(newItem).isStatic = true;
+				
+				render(newTable, childXMLDescription, staticChildren);
+			break;
+			
+			case 'row':
+				
+				createItemDescription(childId, itemId);
+				
+				var newRow:Container = insertNewItem(childName, childId);
+				
+				updateItemDescription(childId, childXMLDescription);
+				
+				if(IItem(item).isStatic)
+					IItem(newRow).isStatic = true;
+				
+				render(newRow, childXMLDescription, staticChildren);
+			break;
+			
+			case 'cell':
+				
+				createItemDescription(childId, itemId);
+				
+				var newCell:Container = insertNewItem(childName, childId);
+				
+				updateItemDescription(childId, childXMLDescription);
+				
+				if(IItem(item).isStatic)
+					IItem(newCell).isStatic = true;
+				
+				render(newCell, childXMLDescription, staticChildren);
+			break;
+			
+			// --------------------------------------
 			
 			case 'text':
 				
@@ -303,7 +349,7 @@ public class RenderManager implements IEventDispatcher {
 				viewText.y = childXMLDescription.@top;
 				viewText.width = childXMLDescription.@width;
 				
-				viewText.condenseWhite = true;	
+				viewText.condenseWhite = true;
 				viewText.height = childXMLDescription.@height;
 				viewText.htmlText = childXMLDescription;
 				
@@ -334,13 +380,8 @@ public class RenderManager implements IEventDispatcher {
 			
 			case 'graphics':
 				
-				renderGraphics(item.graphics, childXMLDescription);
+				renderGraphics(item, childXMLDescription);
 			break
-			
-			case 'table':
-				
-				renderTable(item, childXMLDescription, isStatic);
-			break;
 			}
 		}
 		
@@ -354,12 +395,16 @@ public class RenderManager implements IEventDispatcher {
 		}
 	}
 	
-	private function renderGraphics(graphics:Graphics, graphicsXMLDescription:XML):void {
+	private function renderGraphics(item:Container, graphicsXMLDescription:XML):void {
+		
+		var itemId:String = IItem(item).objectId;
+		var graphicsLayer:Canvas = IItem(item).graphicsLayer;
+		
+		var currentSprite:Sprite = new Sprite();
 		
 		for each(var childXMLDescription:XML in graphicsXMLDescription.*) {
-			
+		
 		var childName:String = childXMLDescription.name().localName;
-		var childId:String = childXMLDescription.@guid.toString();
 		
 			switch(childName) {
 			
@@ -370,7 +415,7 @@ public class RenderManager implements IEventDispatcher {
 					var border:uint = childXMLDescription.@border;
 					var color:uint = Number('0x' + childXMLDescription.@color);
 					
-					graphics.lineStyle(border, color);
+					currentSprite.graphics.lineStyle(border, color);
 				}
 				
 				var fillColor:Number = 0x000000;
@@ -382,110 +427,113 @@ public class RenderManager implements IEventDispatcher {
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100
 				
-				graphics.beginFill(fillColor, alpha);
+				currentSprite.graphics.beginFill(fillColor, alpha);
 									
-				graphics.drawRect(
+				currentSprite.graphics.drawRect(
 					childXMLDescription.@left,
 					childXMLDescription.@top,
 					childXMLDescription.@width,
 					childXMLDescription.@height
 				);
-				graphics.endFill();
-				//var viewRectangle:Canvas = new Canvas()
+				currentSprite.graphics.endFill();
 				
-				//properties
-				// viewRectangle.x = itemDescription.@left;
-				//viewRectangle.y = itemDescription.@top;
-				//viewRectangle.width = itemDescription.@width;
-				//viewRectangle.height = itemDescription.@height;
-				//viewRectangle.setStyle('borderStyle', 'solid');
-				//viewRectangle.setStyle('borderThickness', itemDescription.@border);
-				//viewRectangle.setStyle('borderColor', itemDescription.@color);
-				//viewRectangle.setStyle('backgroundColor', '#'+itemDescription.@fill);
-				
-				//parentContainer.addChild(viewRectangle);
-				
-				// if(parentContainer is Item)					
-					//Item(parentContainer).addViewChild(viewRectangle);
-					
-				//else
-					//item.rawChildren.addChild(viewRectangle);
+				graphicsLayer.rawChildren.addChild(currentSprite);
 						
 				break;
 				
-				/* case 'image':
+				case 'image':
 					
-					var viewImage:Image = new WysiwygImage()
+					var resourceId:String = childXMLDescription.@resid;
+					var img:Image = new Image();
 					
-					viewImage.x = childXMLDescription.@left;
-					viewImage.y = childXMLDescription.@top;
-					
+					img.x = childXMLDescription.@left;
+					img.y = childXMLDescription.@top;
+					 
 					if(childXMLDescription.@width.length())
-						viewImage.width = childXMLDescription.@width;
-					if(childXMLDescription.@height.length()) {
-						//trace('image set height!: '+itemDescription.@height)
-						viewImage.height = childXMLDescription.@height;
-					}
+						img.width = childXMLDescription.@width;
 						
-					//tempArray.push(viewImage);
-					viewImage.maintainAspectRatio = false;
-					//trace('LoadImage: ' + objectId);
-					fileManager.loadResource(parentId, objectId, viewImage, 'source', true);
+					if(childXMLDescription.@height.length())
+						img.height = childXMLDescription.@height;
 					
-					parentItem.addChild(viewImage);
+					img.maintainAspectRatio = false;
+					graphicsLayer.rawChildren.addChild(img);
 					
-				break; */
+					fileManager.loadResource(itemId, resourceId, img, 'source', true);
+					//parentItem.addChild(viewImage);
+					
+				break;
 			}
 		}
 	}
 	
-	private function renderTable(item:Container, tableXMLDescription:XML, isStatic:Boolean):void {
+	private function insertNewItem(itemName:String, itemId:String):Container {
 		
-		var viewGrid:Grid = new Grid()
 		
-		viewGrid.setStyle('horizontalGap', 0);
-		viewGrid.setStyle('verticalGap', 0);
+		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		
-		viewGrid.x = tableXMLDescription.@left;
-		viewGrid.y = tableXMLDescription.@top;
-					
-		for each(var rowXMLDescription:XML in tableXMLDescription.*) {
+		if(itemDescription.item && itemDescription.item.parent)
+			return itemDescription.item;
 			
-			var rowChildName:String = rowXMLDescription.name().localName;
+		var container:Container;
+		
+		switch (itemName) {
 			
-			switch(rowChildName) {
-				
-			case 'object':
-				
-				var rowId:String = rowXMLDescription.@guid.toString();
-				rowXMLDescription = rowXMLDescription.*[0];
-			
-			case 'row':
-				
-				var viewGridRow:GridRow = new GridRow()
-			break;
-			}
-				
-			for each(var cellXMLDescription:XML in rowXMLDescription.*) {
-				
-				var cellChildName:String = cellXMLDescription.name().localName;
-	
-				switch(cellChildName) {
-				
-				case 'object':
-					
-					var cellId:String = cellXMLDescription.@guid.toString();
-					cellXMLDescription = cellXMLDescription.*[0];
-									
-				case 'cell':
-					
-					var viewGridItem:GridItem = new GridItem()
-				break;
-				}
-				
-				render(viewGridItem, cellXMLDescription, isStatic);
-			}
+		case 'container':
+		 
+			container = new Item(itemId);
+		break;
+		
+		case 'table':
+		 
+			container = new Table(itemId);
+		break;
+		
+		case 'row':
+		 
+			container = new TableRow(itemId);
+		break;
+		
+		case 'cell':
+		 
+			container = new TableCell(itemId);
+		break;
 		}
+		
+		itemDescription.item = container;
+		
+		return container;
+	}
+	
+	private function deleteItemChildren(itemId:String):void {
+		
+		var result:Container = getItemDescriptionById(itemId).item;
+		
+		if(!result)
+			return
+		
+		_items.filterFunction = 
+			function (item:Object):Boolean {
+				return (item.fullPath.indexOf(itemId+'.') != -1);
+		}
+	
+		_items.refresh();
+	 
+		result.removeAllChildren();
+		_items.removeAll();
+		
+		_items.filterFunction = null;
+		_items.refresh();
+	}
+	
+	private function updateItemDescription(itemId:String, itemXMLDescription:XML):ItemDescription {
+		
+		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
+		
+		itemDescription.zindex = uint(itemXMLDescription.@zindex);
+		itemDescription.hierarchy = uint(itemXMLDescription.@hierarchy);
+		itemDescription.order = uint(itemXMLDescription.@order);
+		
+		return itemDescription;
 	}
 	
 	private function sortItems(parentId:String):Array {
@@ -507,7 +555,7 @@ public class RenderManager implements IEventDispatcher {
 		}
 		
 		_items.filterFunction = null;
-		_items.sort.fields = [new SortField('objectId')]
+		_items.sort.fields = [new SortField('itemId')]
 			
 		_items.refresh();
 		
@@ -520,7 +568,7 @@ public class RenderManager implements IEventDispatcher {
 	
 	private function getItemDescriptionById(itemId:String):ItemDescription {
 		
-		var findItemResult:Boolean = _cursor.findAny({objectId:itemId});
+		var findItemResult:Boolean = _cursor.findAny({itemId:itemId});
 		
 		if(findItemResult)
 			return ItemDescription(_cursor.current);

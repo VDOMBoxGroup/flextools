@@ -3,8 +3,6 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:XMLPresentationClasses="vdom.components.edit.containers.XMLPresentationClasses.*"
 	
-	backgroundColor="#ABABAB"
-	
 	show="showHandler();"
 	hide="hideHandler();"
 >
@@ -72,5 +70,5 @@
 		]]>
 	</mx:Script>
 	<mx:Button y="5" label="Save" height="20" x="10" cornerRadius="0"/>
-	<XMLPresentationClasses:XMLScriptEditor id="scriptEditor" bottom="10" right="10" left="10" top="30"/>
+	<XMLPresentationClasses:XMLScriptEditor id="scriptEditor" bottom="10" right="10" left="10" top="30" borderStyle="solid" borderColor="#000000"/>
 </mx:Canvas>

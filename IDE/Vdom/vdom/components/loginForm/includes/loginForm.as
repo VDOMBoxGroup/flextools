@@ -3,9 +3,9 @@ import flash.events.MouseEvent;
 
 import mx.controls.Button;
 import mx.controls.TextInput;
+import mx.core.IWindow;
 
 import vdom.components.loginForm.events.LoginFormEvent;
-import vdom.events.AuthenticationEvent;
 import vdom.managers.LanguageManager;
 
 [Embed(source='/assets/login/vectorGraphic.swf', symbol='LoginCube')]
@@ -23,7 +23,14 @@ private var languageManager:LanguageManager;
 
 private var dragged:Boolean = false;
 
+private function get window():IWindow {
+				
+	return IWindow(Application.application);
+}
+
 private function creationCompleteHandler():void {
+	
+	addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 	
 	languageManager = LanguageManager.getInstance();
 	
@@ -56,6 +63,8 @@ private function mouseDownHdlr(event:MouseEvent):void {
 		return
 			
 	loginFormPanel.startDrag();
+	
+	event.stopImmediatePropagation();
 }
 
 private function mouseUpHdlr(event:MouseEvent):void {
@@ -81,6 +90,13 @@ private function checkData():void {
 	};
 	
 	dispatchEvent(lfe);
+}
+
+private function mouseDownHandler(event:MouseEvent):void {
+				
+	window.nativeWindow.startMove();
+	
+	event.stopPropagation();
 }
 
 /* private function changeLanguageHandler(event:Event):void {

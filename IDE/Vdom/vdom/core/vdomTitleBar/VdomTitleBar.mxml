@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationComplete="creationCompleteHandler();"
+	height="50">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.WindowedApplication;
+			import mx.core.Application;
+			import mx.core.IWindow;
+			private function creationCompleteHandler():void {
+				
+				addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+				
+				minimizeButton.setStyle('skin', getStyle('minimizeButtonSkin'));
+				minimizeButton.focusEnabled = false;
+	            minimizeButton.enabled = window.minimizable;
+				minimizeButton.addEventListener(MouseEvent.MOUSE_DOWN,
+												button_mouseDownHandler);
+				minimizeButton.addEventListener(MouseEvent.CLICK,
+												minimizeButton_clickHandler);
+				
+				
+				maximizeButton.setStyle('skin', getStyle('maximizeButtonSkin'));
+				maximizeButton.focusEnabled = false;
+		        maximizeButton.enabled = window.maximizable;
+				maximizeButton.addEventListener(MouseEvent.MOUSE_DOWN,
+												button_mouseDownHandler);
+				maximizeButton.addEventListener(MouseEvent.CLICK,
+												maximizeButton_clickHandler);
+				
+				
+				closeButton.setStyle('skin', getStyle('closeButtonSkin'));
+				closeButton.focusEnabled = false;
+				closeButton.addEventListener(MouseEvent.MOUSE_DOWN,
+											 button_mouseDownHandler);
+				closeButton.addEventListener(MouseEvent.CLICK,
+											 closeButton_clickHandler);
+			}
+			
+			private function get window():IWindow {
+				
+				return IWindow(Application.application);
+			}
+			
+			private static function isMac():Boolean {
+			
+				return Capabilities.os.substring(0, 3) == "Mac";
+			}
+			
+			override protected function updateDisplayList(unscaledWidth:Number,
+												  unscaledHeight:Number):void {
+												  	
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				if (!isMac()) {
+					
+					if (window.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED) {
+						
+						if (getStyle('restoreButtonSkin'))
+							maximizeButton.setStyle("skin", getStyle('restoreButtonSkin'));
+					
+					} else
+						maximizeButton.setStyle("skin", getStyle('maximizeButtonSkin'));
+				}						  	
+			}
+			
+			private function minimizeButton_clickHandler(event:Event):void {
+				
+				window.minimize();
+			}
+			
+			private function maximizeButton_clickHandler(event:Event):void {
+				if (window.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED)
+					window.restore();
+				
+				else {
+					window.maximize();
+					// work around bug  Bug SDK-9547
+					maximizeButton.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT));
+				}
+			}
+			
+			private function closeButton_clickHandler(event:Event):void {
+				
+				window.close();
+			}
+			
+			private function mouseDownHandler(event:MouseEvent):void {
+				
+				window.nativeWindow.startMove();
+				
+				event.stopPropagation();
+			}
+			
+			private function button_mouseDownHandler(event:MouseEvent):void {
+				
+				event.stopPropagation();
+			}
+		]]>
+	</mx:Script>
+	<mx:Button id="minimizeButton" y="1" width="21" height="16" right="45"/>
+	<mx:Button id="maximizeButton" y="1" width="21" height="16" right="24"/>
+	<mx:Button id="closeButton" y="1" width="24" height="16" right="1"/>
+</mx:Canvas>

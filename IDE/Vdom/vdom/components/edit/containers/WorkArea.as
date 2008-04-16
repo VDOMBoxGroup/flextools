@@ -34,7 +34,7 @@ public class WorkArea extends Canvas {
 	//private var applicationId:String;
 	
 	private var _pageId:String;
-	private var topLevelItem:Container;
+	//private var topLevelItem:Container;
 	private var _selectedObject:Container;
 	
 	private var focusedItem:Container;
@@ -140,7 +140,8 @@ public class WorkArea extends Canvas {
 			_pageId = page;
 			renderManager.init(this);
 			renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-			topLevelItem = renderManager.createItem(_pageId);
+			renderManager.createItem(_pageId);
+			
 				
 		} else {
 				
@@ -278,7 +279,7 @@ public class WorkArea extends Canvas {
 	private function renderCompleteHandler(event:RenderManagerEvent):void {
 		
 		renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-		resizeManager.init(topLevelItem);
+		resizeManager.init(this);
 	}
 	
 /* 	private function markerSelectedHandler(event:ResizeManagerEvent):void {
@@ -453,8 +454,10 @@ public class WorkArea extends Canvas {
 		
 		var currentItemName:String = 
 			dataManager.getTypeByObjectId(IItem(currentContainer).objectId).Information.Name;
-			
-		var aviableContainers:String = typeDescription.aviableContainers.toString();
+		
+		var re:RegExp = /\s+/g;
+		
+		var aviableContainers:Array = typeDescription.aviableContainers.replace(re, '').split(',');
 		
 		var bool:Number = aviableContainers.indexOf(currentItemName);
 		if(bool != -1) {

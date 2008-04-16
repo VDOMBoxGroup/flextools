@@ -12,13 +12,16 @@ public class Item extends Canvas implements IItem {
 	private var _objectId:String;
 	private var _waitMode:Boolean;
 	private var _highlightMarker:Canvas;
+	private var _graphicsLayer:Canvas;
 	private var _isStatic:Boolean;
 	private var _editableAttributes:Array;
+	
 	
 	public function Item(objectId:String) {
 		
 		super();
 		
+		_graphicsLayer = new Canvas();
 		_objectId = objectId;
 		editableAttributes = [];
 		_isStatic = false;
@@ -69,12 +72,32 @@ public class Item extends Canvas implements IItem {
 		
 		super.createChildren();
 		
+		if(!_graphicsLayer)
+			_graphicsLayer = new Canvas();
+		
+		rawChildren.addChild(_graphicsLayer);
+		
 		if(!_highlightMarker)
 			_highlightMarker = new Canvas();
 		
 		_highlightMarker.visible = false;
 		
 		rawChildren.addChild(_highlightMarker);
+	}
+	
+	override public function removeAllChildren():void {
+		
+		super.removeAllChildren();
+		
+		var count:uint = graphicsLayer.rawChildren.numChildren;
+		
+		for (var i:uint = 0; i < count; i++)
+			graphicsLayer.rawChildren.removeChildAt(i);
+	}
+	
+	public function get graphicsLayer():Canvas {
+		
+		return _graphicsLayer;
 	}
 	
 	public function drawHighlight(color:String):void {

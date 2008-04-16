@@ -70,7 +70,7 @@ public class AdvancedTabNavigator extends TabNavigator {
 				tabBar.move(bm.left, bm.top);
 				
 			else
-				tabBar.move(bm.left, unscaledHeight - bm.bottom - tabBarHeight - 1);
+				tabBar.move(bm.left, unscaledHeight - bm.bottom - tabBarHeight - 2);
 		}
 	}
 	

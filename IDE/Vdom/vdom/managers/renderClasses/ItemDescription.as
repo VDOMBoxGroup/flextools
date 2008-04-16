@@ -4,7 +4,7 @@ import mx.core.Container;
 
 public class ItemDescription {
 	
-	public var objectId:String;
+	public var itemId:String;
 	public var parentId:String;
 	public var fullPath:String;
 	public var zindex:uint;

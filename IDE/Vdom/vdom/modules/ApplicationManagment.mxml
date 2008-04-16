@@ -18,12 +18,14 @@
 </mx:Canvas>
 
 <mx:VBox id="components"
-	width="100%" height="100%" verticalGap="2" >
+	width="100%" height="100%" verticalGap="7" >
 			
 	<controls:ControlPanel 
-		width="100%" height="90"
+		width="100%" height="104"
+		paddingTop="7" paddingBottom="7" paddingLeft="7" paddingRight="7"
+		dropShadowEnabled="true"
 		horizontalAlign="left" verticalAlign="middle"
-		horizontalGap="5">
+		horizontalGap="5" borderStyle="solid" borderColor="#000000">
 		
 		<controls:ActionButton styleName="newsButton"
 			label="{resourceManager.getString('Application','main_new')}"
@@ -62,8 +64,10 @@
 		
 	</controls:ControlPanel>
 	
-	<mx:ViewStack id="mainViewStack" width="100%" height="100%">
-		<main:Main id="mainCanvas" styleName="mainCanvas" width="100%" height="100%" />
+	<mx:ViewStack id="mainViewStack" width="100%" height="100%" styleName="vdomBackground"
+			dropShadowEnabled="true" borderStyle="solid"  borderColor="#000000">
+		<main:Main id="mainCanvas" styleName="mainCanvas" width="100%" height="100%" 
+			borderStyle="none"/>
 		<createApplication:CreateApplication id="createApplicationCanvas" width="100%" height="100%" />
 	</mx:ViewStack>
 	

@@ -2,6 +2,7 @@ import flash.events.Event;
 
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
+import mx.core.Application;
 import mx.events.ListEvent;
 
 import vdom.managers.DataManager;
@@ -20,6 +21,8 @@ private function creationCompleteHandler():void {
 
 private function showHandler():void {
 	
+	Application.application.showStatusBar = true;
+	Application.application.showGripper = true;
 	watchers = [];
 	
 	listApplicationContainer.applicationID;

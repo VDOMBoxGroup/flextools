@@ -1,6 +1,7 @@
 import flash.events.Event;
 
 import mx.core.Singleton;
+import mx.core.windowClasses.TitleBar;
 import mx.events.FlexEvent;
 import mx.managers.PopUpManager;
 
@@ -24,6 +25,11 @@ private var authenticationManager:AuthenticationManager;
 private var ppm:MyLoader;
 
 private var tempStorage:Object;
+
+private function applicationCompleteHandler():void {
+	
+	//this.stage.nativeWindow.maximize();
+}
 
 private function changeLanguageHandler(event:Event):void {
 	

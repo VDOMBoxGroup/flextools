@@ -42,10 +42,10 @@
 		<title>Vdom IDE</title>
 
 		<!-- The type of system chrome to use (either "standard" or "none"). Optional. Default standard. -->
-		<!-- <systemChrome></systemChrome> -->
+		<systemChrome>none</systemChrome>
 
 		<!-- Whether the window is transparent. Only applicable when systemChrome is false. Optional. Default false. -->
-		<!-- <transparent></transparent> -->
+		<transparent>true</transparent>
 
 		<!-- Whether the window is initially visible. Optional. Default false. -->
 		<!-- <visible></visible> -->
@@ -54,16 +54,16 @@
 		<!-- <minimizable></minimizable> -->
 
 		<!-- Whether the user can maximize the window. Optional. Default true. -->
-		<!-- <maximizable></maximizable> -->
+		<!-- <maximizable>true</maximizable> -->
 
 		<!-- Whether the user can resize the window. Optional. Default true. -->
-		<!-- <resizable></resizable> -->
+		<!--<resizable>true</resizable> -->
 
 		<!-- The window's initial width. Optional. -->
-		<width>1000</width>
+		<width>800</width>
 
 		<!-- The window's initial height. Optional. -->
-		<height>700</height>
+		<height>600</height>
 
 		<!-- The window's initial x position. Optional. -->
 		<!-- <x></x> -->
@@ -72,7 +72,7 @@
 		<!-- <y></y> -->
 
 		<!-- The window's minimum size, specified as a width/height pair, such as "400 200". Optional. -->
-		<!--<minSize>1000 700</minSize> -->
+		<!--<minSize>600 600</minSize>-->
 
 		<!-- The window's initial maximum size, specified as a width/height pair, such as "1600 1200". Optional. -->
 		<!-- <maxSize></maxSize> -->

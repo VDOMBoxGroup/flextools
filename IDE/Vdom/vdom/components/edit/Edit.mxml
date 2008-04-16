@@ -19,26 +19,27 @@ xmlns:objectsPanel="vdom.components.objectsPanel.*">
 	
 		<containers:TypeAccordion id="types" resizeToContent="true"
 			height="100%" y="100" width="90" minWidth="170" minHeight="0"
-			dataProvider="{dataManager.listTypes}"
+			dataProvider="{dataManager.listTypes}" dropShadowEnabled="true"
 		/>
 		
 		<mx:VBox id="main" width="100%" bottom="0" height="100%">
 		
 			<mainContainers:AdvancedTabNavigator id="mainArea" width="100%" height="100%" borderStyle="none">			
 				
-				<containers:WorkArea id="workArea"
-					horizontalScrollPolicy="off" verticalScrollPolicy="off"
+				<containers:WorkArea id="workArea" label="WYSIWYG" focusEnabled="false"
+					horizontalScrollPolicy="off" verticalScrollPolicy="off" clipContent="true"
 					visible="false" />
 					
-				<containers:XMLPresentationEditor id="xmlEditor" />
+				<containers:XMLPresentationEditor id="xmlEditor" label="VDOM XML"
+					dropShadowEnabled="true" borderStyle="solid"/>
 				
 			</mainContainers:AdvancedTabNavigator>
 		<!-- <containers:Toolbar width="100%" type="{editorDataManager.objectDescription}" id="toolbar"/> -->
 		</mx:VBox>
 		
 		<mx:VBox 
-			verticalGap="5" paddingTop="5" paddingLeft="0" paddingRight="25" 
-			minHeight="0" height="100%" width="220"
+			verticalGap="5" 
+			minHeight="0" height="100%" width="200"
 			verticalScrollPolicy="auto" horizontalScrollPolicy="off" >
 			
 			<containers:AttributesPanel id="attributesPanel"

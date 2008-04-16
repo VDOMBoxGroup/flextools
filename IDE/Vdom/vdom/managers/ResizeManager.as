@@ -137,11 +137,11 @@ public class ResizeManager extends EventDispatcher {
 		if(item && item.parent) {
 			
 			if(selectMarker.parent)
-				selectMarker.parent.removeChild(selectMarker)
+				Container(selectMarker.parent).removeChild(selectMarker)
 				
 			if(showMarker) {
 				
-				item.parent.addChild(selectMarker);
+				_topLevelItem.addChild(selectMarker);
 				
 				selectMarker.resizeMode = resizeMode;
 				selectMarker.moveMode = moveMode;
@@ -275,7 +275,7 @@ public class ResizeManager extends EventDispatcher {
 		
 		var newSelectedItem:Container;
 		
-		if(_topLevelItem != highlightedItem) {
+		if(_topLevelItem != highlightedItem.parent) {
 			
 			trace('not selected');
 			
@@ -354,7 +354,7 @@ public class ResizeManager extends EventDispatcher {
 		if(itemUnderMouse == highlightedItem)
 			return;
 		
-		if(itemUnderMouse && itemUnderMouse != _topLevelItem) {
+		if(itemUnderMouse && itemUnderMouse.parent != _topLevelItem) {
 			
 			var objectDescription:XML = dataManager.getObject(IItem(itemUnderMouse).objectId);
 			
