@@ -21,6 +21,8 @@ import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 import mx.utils.Base64Encoder;
 
+import vdom.connection.soap.Soap;
+import vdom.connection.soap.SoapEvent;
 import vdom.controls.resourceBrowser.ListItem;
 import vdom.controls.resourceBrowser.PreviewContainer;
 import vdom.controls.resourceBrowser.ThumbnailItem;
@@ -59,6 +61,7 @@ private var _filteredResources:int = 0;
 
 private var fileManager:FileManager = FileManager.getInstance();	// FileManager global Class instance
 private var dataManager:DataManager = DataManager.getInstance();	// DataManager global Class instance
+private var soap:Soap = Soap.getInstance();
 
 public function set selectedItemID(itemID:String):void {
 	_selectedItemID = itemID;
@@ -326,6 +329,30 @@ private function fileSelectHandler(event:Event):void {
 		var base64Data:Base64Encoder = new Base64Encoder();
 		base64Data.encodeBytes(compressedData);
 		
-		trace(base64Data.toString());
+		var fileType:String = _fileForUpload.type.substr(1);
+		var fileName:String = _fileForUpload.name.substr(0, _fileForUpload.name.length - _fileForUpload.type.length);
+		setResource(fileType, fileName, base64Data.toString());
 	}	
+}
+
+private function setResource(resType:String, resName:String, resData:String):void {
+	soap.setResource(dataManager.currentApplicationId, resType, resName, resData);
+	soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
+	soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+}
+
+private function setResourceOkHandler(spEvt:SoapEvent):void {
+	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	listResourcesQuery();
+	//var result:XML = spEvt.result;
+	//_resourceID = result.Resource.@id;
+}
+
+private function setResourceErrorHandler(spEvt:SoapEvent):void {
+	trace('Resource browser: ERROR at sending resource');
+	//image.source = defaultPicture;
+	 	
+	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
+	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
 }
