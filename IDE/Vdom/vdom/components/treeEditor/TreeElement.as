@@ -1,5 +1,6 @@
 package vdom.components.treeEditor
 {
+	import flash.display.Bitmap;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
@@ -29,7 +30,7 @@ package vdom.components.treeEditor
 		private var btLessen:Button; 
 		private var txt:Label;
 		private var textArea:TextArea;
-		public var _ID:String;
+		private var _ID:String;
 //		private var rect:Canvas = new Canvas();
 		private var min:Boolean = false;
 		public var drag:Boolean = true;
@@ -472,7 +473,7 @@ package vdom.components.treeEditor
 		
 		/*      sourseImg      */
 		
-		public function set sourseImg(obj:Object):void
+		public function set sourseImg(obj:Bitmap):void
 		{
 			image.source = obj;
 		}

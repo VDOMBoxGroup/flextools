@@ -14,14 +14,17 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import vdom.events.AddTreeElementEvent;
+			import vdom.managers.FileManager;
 			import vdom.events.ResourceBrowserEvent;
 			import vdom.controls.resourceBrowser.ResourceBrowser;
 			import vdom.managers.DataManager;
 			import vdom.events.DataManagerEvent;
 			import mx.managers.PopUpManager;
 			import mx.events.CloseEvent;
+			import flash.utils.ByteArray;
 			
-			private var selectedResourceID:String = "777";
+			
 			
 			   [Bindable]
    			public var selectedAppl:Object; 
@@ -30,87 +33,32 @@
    		
    			[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='cube')]
 				[Bindable]
-			public var cube:Class;
+			private var cube:Class;
+		
 			
 			private var dataManager:DataManager  = DataManager.getInstance();
+			private var fileManager:FileManager = FileManager.getInstance();
+			
+			
+			private var treeElementID:String;
+			private var trElementType:String;
+			private var resourceID:String = '';
 			
 			private function creationComplete():void 
 			{
 				addEventListener(CloseEvent.CLOSE, closeHandler); 
-	//			loadTypesIcons();
 				PopUpManager.centerPopUp(this)
 				setDisplayNames();
 				image.source = cube;
 			}
-			private function closeHandler(cEvent:CloseEvent):void 
-			{
-				PopUpManager.removePopUp(this);
-			}
-	
-			private function comBoxClose(evt:Object):void
-			{
-				selectedAppl=ComboBox(evt).selectedItem;
-				//btAddTreeElement.enabled = true;
-			}	
-			private function soapAddTreeElement():void
-			{
-			//	var types:XMLList = dataManager.getTopLevelTypes();
-				dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-				dataManager.createObject(selectedAppl.data);
-			}
-			/**
-			*  
-			*		получаем из существующей структуры данных XML 
-			*
-			*/
-				
-				
-			private function  createObject(dmEvt:DataManagerEvent):void
-			{
-				dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObject);
-				var xml:XML = new XML(dmEvt.result);
-			
-				addTreeElement(xml);
-			//	saveToServer();
-			}
-			private function addTreeElement(xml:XML):void
-			{
-				
-				var treeElement:TreeElement = new TreeElement();
-				
-				treeElement = createTreeElement(xml);
-				/*treeElement = addEventListenerToTreeElement(treeElement);
-				
-				var obID:String =  xml.Object.@ID;
-				massTreeElements[obID] = treeElement;
-				
-				main.addChild(massTreeElements[obID]);
-				if (curTree == null)
-				{
-					curTree = massTreeElements[obID];
-					curTree.current = true;
-				}
-			*/	
-			}
-
-			private function createTreeElement(xmlObj:XML):TreeElement
-			{
-						//trace(xmlObj);
-				var obID:String = xmlObj.Object.@ID;
-				var treeElement:TreeElement =  new TreeElement();
-				treeElement.ID = obID;
-				treeElement.name =  xmlObj.Object.Attributes.Attribute.(@Name == 'title' );
-				
-				treeElement.description = '';
-				treeElement.x = 0;
-				treeElement.y = 0;	
-				treeElement.resourceID = xmlObj.Object.@Type.toXMLString();
-				var typeID:String = xmlObj.Object.@Type.toXMLString();
-	//			treeElement.type  =  getType(typeID);
-			
-				return treeElement;		
-			}
 		
+		/****
+		 * 
+		 * 
+		 *        comBox 
+		 * 
+		 * 
+		 * */
 		private function setDisplayNames():void
 		{
 			arrAppl = [];
@@ -122,7 +70,9 @@
 					arrAppl.push({label:strLabel, data:strID});
 			}
 			comBoxAppl.selectedIndex = 0;
+			selectedAppl = comBoxAppl.selectedItem;
 		}
+		
 		public function getLanguagePhrase(name:String, phrase:String):String
 		{
 			var phraseRE:RegExp = /#Lang\((\w+)\)/;
@@ -130,39 +80,113 @@
 			
 			return resourceManager.getString(name, phraseID);
 		}
-		private var resourceID:String = 'qwe';
+		
+		private function comBoxClose(evt:Object):void
+		{
+			selectedAppl = ComboBox(evt).selectedItem;
+		}
+		
+		/****
+		 * 
+		 * 
+		 *   creation tree Element
+		 * 
+		 * 
+		 * */
+		private function okPressed():void 
+		{
+			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObjectHandler);
+			dataManager.createObject(selectedAppl.data);		
+		}	
+		
+		
+		
+		private function  createObjectHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObjectHandler);
+			var xmlObj:XML = new XML(dmEvt.result);
+			var obID:String = xmlObj.Object.@ID;
+			var typeID:String = xmlObj.Object.@Type.toXMLString();
+			
+			treeElementID = obID;
+			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
+			dataManager.changeCurrentPage(obID);
+		}
+		
+		private function changeAttributesHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
+
+			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+		
+			var str:String = 
+			 	'<Attributes>' + 
+			 		' <Attribute Name="description">' + descript.text+'</Attribute>'+
+			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
+			 	' </Attributes>';
+			var xml:XML = XML(str)	
+			dataManager.currentObject.Attributes = xml;
+			
+			dataManager.updateAttributes();
+		}
+		
+		
+		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+			dispatchEvent(new AddTreeElementEvent(AddTreeElementEvent.TREE_ELEMENT_ADDED,treeElementID,resourceID,
+																				txt.text, descript.text, selectedAppl.label));
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+		}
+		
+		
+		
+		/****
+		 * 
+		 * 			resource Browser Launcher
+		 * 
+		 * 
+		 * */
 		private function resourceBrowserLauncher():void 
 		{
 			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
-	//		rbWnd.result = selectedResourceID;
 			rbWnd.selectedItemID = resourceID;
 			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
-		
 		}
 		
 		
 		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
 		{
-				trace('selectedResourceID: '+rbEvt.resourceID);
 				resourceID = rbEvt.resourceID;
+				fileManager.loadResource(dataManager.currentApplicationId,  resourceID, this);
 		}	
 		
+		public function set resource(data:Object):void
+		{
+				image.source = data.data;
+		}
+		
+		/***
+		 * 
+		 * 
+		 *    close
+		 * 
+		 * 
+		 * */
 		private function cancelPressed():void 
 		{
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-		}	
-		
-		private function okPressed():void 
-		{
-			//create treeElement
-			soapAddTreeElement();			
-		}	
-		
-		private function returntData():void 
-		{
+		}
 			
-			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-		}	
+		
+		private function closeHandler(cEvent:CloseEvent):void 
+		{
+			PopUpManager.removePopUp(this);
+		}
+
+
+		
+		
 		]]>
 		
 	
@@ -176,13 +200,16 @@
     	<mx:ComboBox id="comBoxAppl"     dataProvider="{arrAppl}" 
     	  	     close="comBoxClose(event.target)"   x="255" y="204" width="167"/>
     	<mx:Image id="image" x="20" y="15" width="207" height="246"/>
-    	<mx:Button id="btAddTreeElemen" label="Ok"    click="cancelPressed()" x="330" y="272"/>
+    	
+    	<mx:Button id="btAddTreeElemen" label="Ok"    click="okPressed()" x="330" y="272"/>
     	<mx:Button x="20" y="275" label="Select image" click="resourceBrowserLauncher()"/>
     	<mx:Button x="407" y="271" label="Cancel" click="cancelPressed()"/>
+    	
     	<mx:Label x="250" y="15" text="Title:" width="75" height="19"/>
     	<mx:Label x="254" y="67" text="Description:"/>
     	<mx:Label x="254" y="186" text="Tipe:" width="80"/>
-    	<mx:TextInput x="254" y="31" width="201"/>
-    	<mx:TextArea x="254" y="86" height="88" width="201"/>
+    	
+    	<mx:TextInput id="txt" x="254" y="31" width="201"/>
+    	<mx:TextArea id="descript" x="254" y="86" height="88" width="201"/>
 	</mx:Canvas>
 </mx:TitleWindow>

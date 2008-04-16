@@ -24,7 +24,7 @@ public class TreeEditorEvent extends Event
 	public function TreeEditorEvent(type:String, ID:String='', bubbles:Boolean=false, cancelable:Boolean=false)
 	{
 		super(type, bubbles, cancelable);
-		
+		 
 		this.ID = ID;
 	}
 }

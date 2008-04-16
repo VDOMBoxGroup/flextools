@@ -10,6 +10,7 @@
 
 <mx:Script>
 	<![CDATA[
+		import vdom.events.AddTreeElementEvent;
 		import mx.managers.PopUpManager;
 		import mx.controls.Alert;
 		import vdom.managers.FileManager;
@@ -270,9 +271,32 @@
 		btLine.visible = false;
 	
 	}
+	
+	private var treeElement:TreeElement = new TreeElement();
 	private function addTreeElementLauncher():void 
 	{
-				PopUpManager.createPopUp(super, AddTreeElementWindow, true);
+			//	PopUpManager.createPopUp(super, AddTreeElementWindow, true);
+				var rbWnd:AddTreeElementWindow = AddTreeElementWindow(PopUpManager.createPopUp(this, AddTreeElementWindow, true));
+			//rbWnd.treeElement = treeElement;
+			rbWnd.addEventListener(AddTreeElementEvent.TREE_ELEMENT_ADDED, addTreeElementHandler);
+	}
+
+	private function addTreeElementHandler(adTrEvt:AddTreeElementEvent):void 
+	{
+		//rbWnd.removeEventListener(AddTreeElementEvent.TREE_ELEMENT_ADDED, addTreeElementHandler);
+		
+		var ID:String = adTrEvt.treeElementID
+		var trEl:TreeElement = new TreeElement();
+		
+		trEl.ID =  ID;
+		trEl.name =  adTrEvt.title
+		trEl.resourceID =  adTrEvt.resourceID
+		trEl.description =  adTrEvt.description
+		trEl.type =  adTrEvt.trElementType;
+		 
+		massTreeElements[ID] = addEventListenerToTreeElement(trEl);
+		main.addChild(massTreeElements[ID]);
+		fileManager.loadResource(dataManager.currentApplicationId,  trEl.resourceID, massTreeElements[ID]);
 	}
 	]]>
 </mx:Script>
