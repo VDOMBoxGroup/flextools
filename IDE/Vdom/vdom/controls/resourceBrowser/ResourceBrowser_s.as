@@ -335,6 +335,8 @@ private function fileSelectHandler(event:Event):void {
 	}	
 }
 
+
+/* Functions below will be replaced with new ones when fileManager will support such operations */
 private function setResource(resType:String, resName:String, resData:String):void {
 	soap.setResource(dataManager.currentApplicationId, resType, resName, resData);
 	soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
@@ -344,6 +346,8 @@ private function setResource(resType:String, resName:String, resData:String):voi
 private function setResourceOkHandler(spEvt:SoapEvent):void {
 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	var result:XML = spEvt.result;
+	_selectedItemID = result.Resource.@id.toString();
 	listResourcesQuery();
 	//var result:XML = spEvt.result;
 	//_resourceID = result.Resource.@id;
