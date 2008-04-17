@@ -12,6 +12,7 @@ import mx.collections.SortField;
 import mx.containers.Canvas;
 import mx.controls.Image;
 import mx.core.Container;
+import mx.utils.UIDUtil;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
@@ -199,13 +200,18 @@ public class RenderManager implements IEventDispatcher {
 		
 		var itemXMLDescription:XML = event.result.Result.*[0];
 		var key:String = event.result.Key[0];
-				
+		
 		var itemName:String = itemXMLDescription.name().localName;
-		var itemId:String = itemXMLDescription.@guid;
+		var itemId:String = '';
 		
-		deleteItemChildren(itemId);
+		if(itemXMLDescription.@id.length() != 0) { 
+			
+			itemId = itemXMLDescription.@id;
+			deleteItemChildren(itemId);
+		} else
+			return;
 		
-		var item:Container = insertNewItem(itemName, itemId);
+		var item:Container = insertItem(itemName, itemId);
 		var itemDescription:ItemDescription = updateItemDescription(itemId, itemXMLDescription);
 		
 		var isStatic:Boolean = false;
@@ -263,18 +269,18 @@ public class RenderManager implements IEventDispatcher {
 		if(itemXMLDescription.@height.length())
 			item.height =  Number(itemXMLDescription.@height);
 		
-		var itemId:String = itemXMLDescription.@guid;
+		var itemId:String = itemXMLDescription.@id;
 		
 		if(itemXMLDescription.@contents == 'static')
 			IItem(item).isStatic = true;
 		
-		item.setStyle('backgroundColor', '#555555');
+		item.setStyle('backgroundColor', '#ffffff');
 		item.setStyle('backgroundAlpha', .0);
 		
 		for each(var childXMLDescription:XML in itemXMLDescription.*) {
 			
 			var childName:String = childXMLDescription.name().localName;
-			var childId:String = childXMLDescription.@guid.toString(); 
+			var childId:String = childXMLDescription.@id.toString(); 
 			
 			switch(childName) {
 				
@@ -284,7 +290,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				createItemDescription(childId, itemId);
 				
-				var newItem:Container = insertNewItem(childName, childId);
+				var newItem:Container = insertItem(childName, childId);
 				
 				updateItemDescription(childId, childXMLDescription);
 				
@@ -298,7 +304,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				createItemDescription(childId, itemId);
 				
-				var newTable:Container = insertNewItem(childName, childId);
+				var newTable:Container = insertItem(childName, childId);
 				
 				newTable.setStyle('borderStyle', 'solid');
 				newTable.setStyle('borderColor', '#cccccc');
@@ -315,7 +321,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				createItemDescription(childId, itemId);
 				
-				var newRow:Container = insertNewItem(childName, childId);
+				var newRow:Container = insertItem(childName, childId);
 				
 				updateItemDescription(childId, childXMLDescription);
 				
@@ -329,7 +335,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				createItemDescription(childId, itemId);
 				
-				var newCell:Container = insertNewItem(childName, childId);
+				var newCell:Container = insertItem(childName, childId);
 				
 				updateItemDescription(childId, childXMLDescription);
 				
@@ -466,13 +472,26 @@ public class RenderManager implements IEventDispatcher {
 		}
 	}
 	
-	private function insertNewItem(itemName:String, itemId:String):Container {
+	private function insertItem(itemName:String, itemId:String):Container {
+		
+		var itemDescription:ItemDescription;
+		var isStatic:Boolean = false;
+		
+		if(itemId == '') {
+			
+			itemId = UIDUtil.createUID();
+			isStatic = true;
+			
+		} else {
+		
+			itemDescription = getItemDescriptionById(itemId);
+		}
 		
 		
-		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		
-		if(itemDescription.item && itemDescription.item.parent)
-			return itemDescription.item;
+			if(itemDescription.item && itemDescription.item.parent)
+				return itemDescription.item;
+		
 			
 		var container:Container;
 		
