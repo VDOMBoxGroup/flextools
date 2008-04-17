@@ -25,7 +25,6 @@ package vdom.connection.soap
 			// data
 			ws.set_application_structure.arguments.appid  	= appid;		//- идентификатор типа 
 			ws.set_application_structure.arguments.struct  	= struct;		//- идентификатор типа 
-			trace('1 - SSetApplicationStructure: ')
 			//send data & set listener 
 			ws.set_application_structure();
 			ws.set_application_structure.addEventListener(ResultEvent.RESULT,completeListener);
@@ -41,7 +40,6 @@ package vdom.connection.soap
 		//	resultXML = XML(event.result);
 		
 			var evt:SoapEvent; 
-			trace('2 - SSetApplicationStructure \n')
 			// check Error
 			if(resultXML.name().toString() == 'Error')
 			{	

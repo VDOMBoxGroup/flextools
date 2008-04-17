@@ -29,6 +29,7 @@
 	private var vctTest:Vector2 = new Vector2();
 	private var curLine:Object = new Object();
 	private var dataManager:DataManager  = DataManager.getInstance();
+	private var xmlApplicationStructure:XML;
 	
 
 /******* 
@@ -77,11 +78,12 @@
 	{
 		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 		
-		createTreeArr(dtManEvt.result);
-		drawLines(dtManEvt.result);
+		xmlApplicationStructure = dtManEvt.result;
+		createTreeArr(xmlApplicationStructure);
+		drawLines(xmlApplicationStructure);
 		
 		if (needCreatTree == true)
-			adjustmentTree(dtManEvt.result);
+			adjustmentTree(xmlApplicationStructure);
 		
 		curTree = massTreeElements[dataManager.currentPageId];
 		
@@ -289,14 +291,22 @@
 		var trEl:TreeElement = new TreeElement();
 		
 		trEl.ID =  ID;
-		trEl.name =  adTrEvt.title
-		trEl.resourceID =  adTrEvt.resourceID
-		trEl.description =  adTrEvt.description
+		trEl.name =  adTrEvt.title;
 		trEl.type =  adTrEvt.trElementType;
-		 
+		trEl.resourceID  =  adTrEvt.resourceID;
+		trEl.description =  adTrEvt.description;
+		
 		massTreeElements[ID] = addEventListenerToTreeElement(trEl);
 		main.addChild(massTreeElements[ID]);
 		fileManager.loadResource(dataManager.currentApplicationId,  trEl.resourceID, massTreeElements[ID]);
+	}
+	
+	private function autoSpacing():void
+	{
+		adjustmentTree(xmlApplicationStructure);
+		hideHendler();
+		showHnadler();
+		
 	}
 	]]>
 </mx:Script>
@@ -309,6 +319,7 @@
  	
 	
 	<mx:Button  label="add element"    click="addTreeElementLauncher()"/>
+	<mx:Button  label="auto spacing"    click="autoSpacing()"/>
 
 </mx:VBox>
 </mx:HBox>

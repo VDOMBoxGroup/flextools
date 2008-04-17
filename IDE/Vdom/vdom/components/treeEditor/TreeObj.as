@@ -10,8 +10,10 @@ package vdom.components.treeEditor
 		public var mapX:int;
 		public var mapY:int;
 		public var marked:Boolean = false;
+		
 		private var masChilds:Array = null ;
 		private var _parent:TreeObj = null;
+		
 		
 		public function TreeObj(str:String)
 		{

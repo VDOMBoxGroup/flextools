@@ -134,6 +134,7 @@ private function adjustmentTree(xml1:XML):void
 	}
 	
 	var depth:int = 0;
+	massMap[depth] = 0;
 	var itIsCorrectTree:Boolean = false;
 	for (var name:String in massTreeObj)
 		if (massTreeObj[name].parent == null)
@@ -141,6 +142,7 @@ private function adjustmentTree(xml1:XML):void
 			setPosition(name);	
 			itIsCorrectTree = true;
 		} 
+	
 	if(itIsCorrectTree)
 		for (var str:String in massTreeObj)
 		{
@@ -148,8 +150,14 @@ private function adjustmentTree(xml1:XML):void
 			massTreeElements[str].y  = massTreeObj[str].mapY * 60 + 40;
 		}
 		
-	function setPosition(inName:String):void
+	function setPosition(inName:String):Boolean
 	{
+		//были ли у этого обьекта
+		if (massTreeObj[inName].marked == true)
+				return false;
+		// помечаем что были
+		massTreeObj[inName].marked = true;
+		
 		if (massMap[depth] == null)
 		{
 			if (depth == 0)massMap[depth] = 0;
@@ -168,12 +176,12 @@ private function adjustmentTree(xml1:XML):void
 		depth++;
 		for (var name:String in massTreeObj[inName].childs)
 		{
-			
-			setPosition(name);
+			if(setPosition(name)== true)
+				massTreeObj[inName].correctPosition();;
 		}
 		depth--;
 		
-		massTreeObj[inName].correctPosition();
+		return true;
 	}
 	
 	function  distension():int
@@ -186,7 +194,7 @@ private function adjustmentTree(xml1:XML):void
 				return maxX;
 			}else
 			{
-				if 	(massMap[i]>= maxX) maxX = massMap[i]+1  ;
+				if 	(massMap[i]>= maxX) maxX = massMap[i]+1;
 			}
 		}
 		return maxX;
