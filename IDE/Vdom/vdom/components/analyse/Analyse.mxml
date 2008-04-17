@@ -8,6 +8,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import vdom.controls.databaseEditor.dbStructureEditor;
 			import vdom.controls.resourceBrowser.ResourceBrowser;
 			import mx.managers.PopUpManager;
 			import mx.core.IFlexDisplayObject;
@@ -34,12 +35,16 @@
 				PopUpManager.createPopUp(super, ResourceBrowser, true);
 			}
 			
+			private function dbStructureEditorLauncher():void {
+				PopUpManager.createPopUp(super, dbStructureEditor, true);
+			}
+			
 		]]>
 	</mx:Script>
 	
 	<mx:Button id="test" x="10" y="10" label="Button" height="20" />
 	<mx:Button x="10" y="35" label="Open resourceBrowser" height="20" click="{resourceBrowserLauncher();}" />
-	<objectsPanel:ObjectsPanel y="50" width="300" height="100%" dataProvider="{dataManager.listPages}"/>
+	<mx:Button x="174" y="35" label="Open DB Structure Editor" height="20" click="{dbStructureEditorLauncher();}" />
 		
 	
 </mx:Canvas>
