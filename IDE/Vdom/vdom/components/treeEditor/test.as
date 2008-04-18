@@ -452,7 +452,7 @@ public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 			}	
 		}
 		
-	//	trace(' _XML to server: ' + outXML.toString());
+		trace(' _XML to server: \n' + outXML.toString());
 		return outXML;
 }
 		

@@ -33,22 +33,27 @@
           
 	
 	
-            [Embed(source="/icons/HSlider.png")]
+    /*        [Embed(source="/icons/HSlider.png")]
             public var slider_icon:Class; 
-            [Embed(source="/icons/SuperTabNavigator.png")]
+    */
+     /*       [Embed(source="/icons/SuperTabNavigator.png")]
             public var tab_icon:Class; 
-			[Embed(source="/icons/HAccordion.png")]
+	*/
+			[Embed(source="/assets/objectsPanel/HAccordion.png")]
             public var accordion_icon:Class; 
-            [Embed(source="/icons/DragScrollingCanvas.png")]
+    
+            [Embed(source="/assets/objectsPanel/DragScrollingCanvas.png")]
             public var drag_icon:Class;
-            [Embed(source="/icons/VerticalMenuBar.png")]
+    
+     /*       [Embed(source="/icons/VerticalMenuBar.png")]
             public var vmenu_icon:Class;
-            [Embed(source="/icons/UtilIcon.png")]
+    */
+     /*       [Embed(source="/icons/UtilIcon.png")]
             public var util_icon:Class;
-            
-            [Embed(source="/icons/ConvertibleTreeList.png")]
+      */      
+       /*     [Embed(source="/icons/ConvertibleTreeList.png")]
             public var ctree_icon:Class;
-            
+        */    
            
             
 	//	import vdom.managers.DataMoanager;
