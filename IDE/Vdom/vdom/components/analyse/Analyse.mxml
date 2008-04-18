@@ -36,7 +36,7 @@
 			}
 			
 			private function dbStructureEditorLauncher():void {
-			//	PopUpManager.createPopUp(super, dbStructureEditor, true);
+				PopUpManager.createPopUp(super, dbStructureEditor, true);
 			}
 			
 		]]>
