@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	width="640" height="480" showCloseButton="true"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	verticalGap="2" horizontalGap="0" creationComplete="{creationComplete();}"
+	title="Database Structure Editor"
+>
+
+	<!-- Main Class Scripting File -->	
+	<mx:Script source="dbStructureEditor_s.as" />
+	
+	<mx:HBox width="100%" height="100%" horizontalGap="5" verticalGap="0">
+		<mx:VBox height="100%" width="250" verticalGap="0">
+			<mx:Label text="Columns:" />
+			<mx:List id="__propList" width="100%" height="100%" dataProvider="{_propertiesProvider}"
+				change="{listChangeHandler();}" click="{listChangeHandler();}" />
+		</mx:VBox>
+
+		<mx:VBox height="100%" width="100%" verticalGap="0">
+			<mx:Label text="Properties:" />
+			<mx:VBox borderStyle="solid" width="100%" height="100%" paddingTop="2" paddingRight="2">
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Name:" />
+					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__apply.enabled = true;}" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="ID:" />
+					<mx:Label id="__id" width="100%" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Type:" />
+					<mx:ComboBox id="__type" width="200" change="{__apply.enabled = true;}">
+						<mx:ArrayCollection>
+							<mx:Object label="TEXT"		data="text"/>
+							<mx:Object label="INTEGER"	data="integer"/>
+							<mx:Object label="REAL"		data="real"/>
+							<mx:Object label="BLOB"		data="blob"/>
+						</mx:ArrayCollection>
+					</mx:ComboBox>
+					
+				</mx:HBox>
+				
+				<!--
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Primary key:" />
+					<mx:CheckBox id="__pKey" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Auto increment:" />
+					<mx:CheckBox id="__aIncrement" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Can be null:" />
+					<mx:CheckBox id="__null" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Default value:" />
+					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" />
+				</mx:HBox>
+				-->				
+				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
+					<mx:Button id="__apply" enabled="false" label="Apply changes"/>
+				</mx:HBox>				
+			</mx:VBox>
+		</mx:VBox>		
+	</mx:HBox>
+
+	<mx:HBox width="100%" paddingTop="2">
+		<mx:Button label="Add" />
+		<mx:Button label="Remove" />
+	</mx:HBox>
+
+	<mx:HBox width="100%" height="24" horizontalAlign="right" verticalAlign="middle">
+		
+	</mx:HBox> 
+</mx:TitleWindow>
