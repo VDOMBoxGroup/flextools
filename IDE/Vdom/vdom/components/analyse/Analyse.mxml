@@ -8,6 +8,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import vdom.controls.databaseEditor.dbStructureEditor;
 			//import vdom.controls.databaseEditor.dbStructureEditor;
 			import vdom.controls.resourceBrowser.ResourceBrowser;
 			import mx.managers.PopUpManager;
