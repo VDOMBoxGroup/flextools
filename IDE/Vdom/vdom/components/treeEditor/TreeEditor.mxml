@@ -81,7 +81,7 @@
 		xmlApplicationStructure = dtManEvt.result;
 		createTreeArr(xmlApplicationStructure);
 		drawLines(xmlApplicationStructure);
-		
+//			trace("xmlApplicationStructure: \n" + xmlApplicationStructure);
 		if (needCreatTree == true)
 			adjustmentTree(xmlApplicationStructure);
 		
@@ -209,6 +209,7 @@
 		blDrawLine = true; //говорим что рисуем линию
 		addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
+		vctTest.graphics.clear();
 	}
 	
 	/**
@@ -221,6 +222,7 @@
 	{
 		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+		
 		main.removeChild(vctTest); ///-------------***********
 		blDrawLine = false;  //говорим что НЕ рисуем линию
 	}
@@ -304,8 +306,13 @@
 	private function autoSpacing():void
 	{
 		adjustmentTree(xmlApplicationStructure);
-		hideHendler();
-		showHnadler();
+		removeAllLines();
+		removeMassTreeElements();
+		
+		createTreeArr(xmlApplicationStructure);
+		drawLines(xmlApplicationStructure);
+		
+		//showHnadler();
 		
 	}
 	]]>

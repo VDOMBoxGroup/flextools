@@ -90,6 +90,7 @@ private function drawLine(obj:Object):void
 	if(toObj == fromObj)return;
 	
 	// может эта линия уже есть?
+/*
 	for (var level:String in massLines)
 		for (var frsTrElem:String in massLines[level])
 			for (var sknTrElem:String in massLines[level][frsTrElem])
@@ -100,12 +101,23 @@ private function drawLine(obj:Object):void
 						return;
 					}
 	
+	*/
+		// вдруг противоположная линия уже есть..
 	
-	massLines[necessaryLevel][fromObj][toObj] 	= 
-	new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
-	
-	main.addChildAt(massLines[necessaryLevel][fromObj][toObj], 0);
-	massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.CLICK, markLines);
+	if(massLines[necessaryLevel])
+		if(massLines[necessaryLevel][toObj])
+			if(massLines[necessaryLevel][toObj][fromObj])
+				return;
+		
+		// вдруг эта линия уже есть..
+	if(massLines[necessaryLevel][fromObj][toObj] == null)
+	{
+		massLines[necessaryLevel][fromObj][toObj] 	= 
+		new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
+		
+		main.addChildAt(massLines[necessaryLevel][fromObj][toObj], 0);
+		massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.CLICK, markLines);
+	}
 }
 
 private function adjustmentTree(xml1:XML):void
@@ -114,7 +126,6 @@ private function adjustmentTree(xml1:XML):void
 	var massTreeObj:Array = new Array();
 	for each(var xmlObj:XML in xml1.children())
 	{
-		
 		var obID:String = xmlObj.@ID.toXMLString();
 		 massTreeObj[obID] = new TreeObj(obID);
 	}
@@ -134,7 +145,7 @@ private function adjustmentTree(xml1:XML):void
 	}
 	
 	var depth:int = 0;
-	massMap[depth] = 0;
+	massMap[depth] = -1;
 	var itIsCorrectTree:Boolean = false;
 	for (var name:String in massTreeObj)
 		if (massTreeObj[name].parent == null)
@@ -144,12 +155,15 @@ private function adjustmentTree(xml1:XML):void
 		} 
 	
 	if(itIsCorrectTree)
+	{
 		for (var str:String in massTreeObj)
 		{
 			massTreeElements[str].x  = massTreeObj[str].mapX * 220;
 			massTreeElements[str].y  = massTreeObj[str].mapY * 60 + 40;
 		}
 		
+		saveToServer();
+	}	
 	function setPosition(inName:String):Boolean
 	{
 		//были ли у этого обьекта
@@ -296,17 +310,21 @@ private function get needCreatTree():Boolean
 		var calc:int = 0;
 		for(var strID:String in massTreeElements)
 			if (massTreeElements[strID].x == 0 && massTreeElements[strID].y == 0) 
+			{
 				calc++;
+				if(calc > 2) return true;
+			}
 		//trace('test1: '+calc );		
-		if(calc > 2) return true;
+		
 		
 		// only 1 level
-		calc = 0;
+	
+	/*	calc = 0;
 		for(var level:String in massLines)
 			calc++;
 		//trace('test2: ' + calc);	
 		if(calc > 1)return true;
-		
+	*/
 		//trace('test3 False');
 		return false;
 	}
@@ -387,6 +405,7 @@ private function  removeLine():void
 private function saveToServer():void
 {
 	var dataToServer:XML =  dataToXML(massTreeElements, massLines);
+	xmlApplicationStructure = dataToServer;
 	if(dataToServer.*.length() > 0)
 	{										
 	 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
@@ -452,7 +471,7 @@ public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 			}	
 		}
 		
-		trace(' _XML to server: \n' + outXML.toString());
+	//	trace(' _XML to server: \n' + outXML.toString());
 		return outXML;
 }
 		
