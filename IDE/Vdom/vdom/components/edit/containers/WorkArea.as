@@ -1,6 +1,9 @@
 package vdom.components.edit.containers {
 	
+import flash.events.MouseEvent;
+
 import mx.containers.Canvas;
+import mx.controls.HTML;
 import mx.controls.Label;
 import mx.core.Container;
 import mx.core.UIComponent;
@@ -84,10 +87,14 @@ public class WorkArea extends Canvas {
 		
 		//addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 		
+		addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
+		
 		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
 		addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
 		addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
 		addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
+		
+		
 	}
 	
 	/* public function get selectedObjectId():String {
@@ -133,16 +140,18 @@ public class WorkArea extends Canvas {
 	
 	public function set pageId(page:String):void {
 		
-		removeAllChildren();
+		//removeAllChildren();
 		
 		if(page) {
 			
-			_pageId = page;
-			renderManager.init(this);
-			renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-			renderManager.createItem(_pageId);
+			if(page != _pageId) {
 			
-				
+				_pageId = page;
+				renderManager.init(this);
+				renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+				renderManager.createItem(_pageId);
+			}
+			
 		} else {
 				
 			var warning:Label = new Label()
@@ -262,7 +271,13 @@ public class WorkArea extends Canvas {
 			
 			for each(var attribute:Object in editableAttributes) {
 				
-				attributes[attribute.destName] = attribute.sourceObject[attribute.sourceName];
+				if(attribute.sourceObject is HTML) {
+					attributes[attribute.destName] = 
+						HTML(attribute.sourceObject).domWindow.document.getElementsByTagName('body')[0].innerHTML
+						
+				} else { 
+					attributes[attribute.destName] = attribute.sourceObject[attribute.sourceName];
+				}
 			}
 			
 			applyChanges(IItem(_selectedObject).objectId, attributes);
@@ -502,7 +517,10 @@ public class WorkArea extends Canvas {
 		}
 	}
 	
-	
+	private function mouseWheelHandler(event:MouseEvent):void {
+		
+		event.stopPropagation();
+	}
 	
 	/* private function mouseClickHandler(event:MouseEvent):void {
 		

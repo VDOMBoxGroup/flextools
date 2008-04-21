@@ -8,7 +8,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import vdom.controls.databaseEditor.dbStructureEditor;
+			//import vdom.controls.databaseEditor.dbStructureEditor;
 			//import vdom.controls.databaseEditor.dbStructureEditor;
 			import vdom.controls.resourceBrowser.ResourceBrowser;
 			import mx.managers.PopUpManager;
@@ -37,7 +37,7 @@
 			}
 			
 			private function dbStructureEditorLauncher():void {
-				PopUpManager.createPopUp(super, dbStructureEditor, true);
+				//PopUpManager.createPopUp(super, dbStructureEditor, true);
 			}
 			
 		]]>

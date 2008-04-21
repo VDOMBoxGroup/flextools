@@ -101,4 +101,5 @@
 	<mx:Button id="minimizeButton" y="1" width="21" height="16" right="45"/>
 	<mx:Button id="maximizeButton" y="1" width="21" height="16" right="24"/>
 	<mx:Button id="closeButton" y="1" width="24" height="16" right="1"/>
+	<mx:Button visible="false" y="1" width="24" height="16" right="69" cornerRadius="0" fillAlphas="[1.0, 1.0]" fillColors="[#FF0000, #FF0000]"/>
 </mx:Canvas>

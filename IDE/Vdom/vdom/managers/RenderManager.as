@@ -10,6 +10,7 @@ import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
 import mx.containers.Canvas;
+import mx.controls.HTML;
 import mx.controls.Image;
 import mx.core.Container;
 import mx.utils.UIDUtil;
@@ -23,7 +24,6 @@ import vdom.managers.renderClasses.ItemDescription;
 import vdom.managers.renderClasses.WysiwygTableClasses.Table;
 import vdom.managers.renderClasses.WysiwygTableClasses.TableCell;
 import vdom.managers.renderClasses.WysiwygTableClasses.TableRow;
-import vdom.managers.renderClasses.WysiwygText;
 
 public class RenderManager implements IEventDispatcher {
 	
@@ -277,6 +277,8 @@ public class RenderManager implements IEventDispatcher {
 				childId = childDescription.itemId;
 				
 				var childItem:Container = insertItem(childName, childId);
+				childItem.clipContent = true;
+				
 				item.addChild(childItem);
 				
 				updateItemDescription(childId, childXMLDescription);
@@ -287,6 +289,61 @@ public class RenderManager implements IEventDispatcher {
 			// --------------------------------------
 			
 			case 'text':
+				
+				var viewText:HTML = new HTML()
+				var isEditable:Boolean = false;
+				viewText.x = childXMLDescription.@left;
+				viewText.y = childXMLDescription.@top;
+				
+				if(childXMLDescription.@width.length())
+					viewText.width = childXMLDescription.@width;
+				//viewText.htmlLoader.textEncodingOverride = "UTF-8";
+				viewText.paintsDefaultBackground = false;
+				var HTMLText:String = childXMLDescription;
+				//viewText.condenseWhite = true;
+				//viewText.height = childXMLDescription.@height;
+				//viewText.htmlText = childXMLDescription;
+				
+				//viewText.selectable = false;
+				
+				viewText.setStyle('fontStyle', childXMLDescription.@font);
+				viewText.setStyle('color', childXMLDescription.@color);
+				
+				//viewText.setStyle('borderStyle', 'solid');
+				//viewText.setStyle('borderColor', '#cccccc');
+				//viewText.setStyle('borderAlpha', .3);
+				viewText.setStyle('backgroundAlpha', .0);
+				
+				if(childXMLDescription.@editable.length() && IItem(item).isStatic == false) {
+					
+					
+					 isEditable = true;
+						
+					
+					//viewText.domWindow.designMode = true;
+					//viewText.editable = true;
+									
+					IItem(item).editableAttributes.push(
+						{destName:String(childXMLDescription.@editable),
+						sourceObject:viewText,
+						sourceName:'htmlText'}
+					);
+				}
+				
+				HTMLText = 
+						'<html><head>' + 
+						'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
+						'</head>' +
+						'<body contentEditable="' + 
+						isEditable +'">' +
+						HTMLText +
+						'</body></html>';
+				
+				viewText.htmlText = HTMLText;
+				item.addChild(viewText);
+			break;
+			
+			/* case 'text':
 				
 				var viewText:WysiwygText = new WysiwygText()
 				
@@ -321,7 +378,7 @@ public class RenderManager implements IEventDispatcher {
 				}
 				
 				item.addChild(viewText);
-			break;
+			break; */
 			
 			case 'graphics':
 				
@@ -336,32 +393,38 @@ public class RenderManager implements IEventDispatcher {
 		var arrayOfItems:Array = sortItems(itemId);
 		var count:uint = 0;
 		
-		for each (var collectionItem:Container in arrayOfItems) {
+		/* for each (var collectionItem:Container in arrayOfItems) {
 			
 			if(collectionItem.parent) {
 				
 				collectionItem.parent.setChildIndex(collectionItem, count);
 				count++;
 			}
-		}
+		} */
 	}
 	
 	private function renderGraphics(item:Container, graphicsXMLDescription:XML):void {
 		
 		var itemId:String = IItem(item).objectId;
 		var graphicsLayer:Canvas = IItem(item).graphicsLayer;
-		
+
 		var currentSprite:Sprite = new Sprite();
 		
 		for each(var childXMLDescription:XML in graphicsXMLDescription.*) {
+		
+		var x1:Number = 0, x2:Number = 0;
+		var y1:Number = 0, y2:Number = 0;
+		
+		var alpha:Number = 1;
+		var thickness:Number = 1;
+		var fillColor:Number = 0xFFFFFF;
+		var lineColor:Number = 0xFFFFFF;
 		
 		var childName:String = childXMLDescription.name().localName;
 		
 			switch(childName) {
 			
 			case 'rectangle':
-				
-				var alpha:Number = 1;
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100
@@ -373,8 +436,6 @@ public class RenderManager implements IEventDispatcher {
 					
 					currentSprite.graphics.lineStyle(borderThickness, borderColor, alpha);
 				}
-				
-				var fillColor:Number = 0xFFFFFF;
 				
 				if(childXMLDescription.@color.length())
 					fillColor = Number('0x' + childXMLDescription.@color.toString().substring(1))
@@ -414,6 +475,40 @@ public class RenderManager implements IEventDispatcher {
 					graphicsLayer.rawChildren.addChild(img);
 					
 					fileManager.loadResource(itemId, resourceId, img, 'source', true);
+				break;
+				
+				case 'line':
+				
+				if(childXMLDescription.@alpha.length())
+					alpha = Number(childXMLDescription.@alpha)/100;
+				
+				if(childXMLDescription.@left.length())
+					x1 = x2 = Number(childXMLDescription.@left)
+				
+				if(childXMLDescription.@top.length())
+					y1 = y2 = Number(childXMLDescription.@top);
+				
+				if(childXMLDescription.@width.length())
+					x2 = x1 + Number(childXMLDescription.@width)
+				
+				if(childXMLDescription.@height.length())
+					y2 = y1 + Number(childXMLDescription.@height);
+				
+				if(childXMLDescription.@size.length())
+					thickness = Number(childXMLDescription.@size);
+				
+				if(childXMLDescription.@color.length())
+					lineColor = Number('0x' + childXMLDescription.@color.toString().substring(1))
+				else
+					alpha = .0;	
+				
+				currentSprite.graphics.lineStyle(thickness, lineColor, alpha);;
+				currentSprite.graphics.moveTo(x1, y1);
+				currentSprite.graphics.lineTo(x2, y2);
+				currentSprite.graphics.moveTo(0, 0);
+				
+				graphicsLayer.rawChildren.addChild(currentSprite);
+						
 				break;
 			}
 		}

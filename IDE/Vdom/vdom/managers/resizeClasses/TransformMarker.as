@@ -115,7 +115,7 @@ public class TransformMarker extends UIComponent {
 		//trace('OBJECT CHANGE');
 		if(item == null) {
 			
-			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
 			addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			_selectedItem = null;
@@ -132,7 +132,7 @@ public class TransformMarker extends UIComponent {
 		mousePosition = new Point(_selectedItem.mouseX, _selectedItem.mouseY);
 		
 		
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
 		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		item.addEventListener('refreshComplete', refreshCompleteHandler);
@@ -411,7 +411,7 @@ public class TransformMarker extends UIComponent {
 		
 		transformation = true;
 		
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
 		
 		//event.stopImmediatePropagation();
@@ -474,7 +474,7 @@ public class TransformMarker extends UIComponent {
 	private function mouseUpHandler(event:MouseEvent):void {
 		
 		Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 		
 		
 		var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
@@ -514,6 +514,7 @@ public class TransformMarker extends UIComponent {
 	
 	private function mouseMoveHandler(event:MouseEvent):void {
 		
+		trace('mm');
 		//CursorManager.removeAllCursors();
 		if(itemChanged)
 			return;

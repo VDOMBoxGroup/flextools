@@ -45,8 +45,8 @@ private function showHandler():void {
 		BindingUtils.bindProperty(attributesPanel, 'dataProvider', dataManager, 'currentObject')
 	);
 	
-	if(dataManager.currentPageId)
-		dataManager.loadPageData();
+	//if(dataManager.currentPageId)
+	//dataManager.loadPageData();
 }
 
 private function hideHandler():void {
@@ -180,4 +180,3 @@ private function objectDeletedHandler(event:DataManagerEvent):void {
 	
 	workArea.deleteObject(event.objectId);
 }
-

@@ -93,10 +93,11 @@ private function checkData():void {
 }
 
 private function mouseDownHandler(event:MouseEvent):void {
-				
-	window.nativeWindow.startMove();
-	
-	event.stopPropagation();
+	if(event.target == this) {
+			
+		window.nativeWindow.startMove();
+		event.stopPropagation();
+	}
 }
 
 /* private function changeLanguageHandler(event:Event):void {

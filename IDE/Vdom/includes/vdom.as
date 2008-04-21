@@ -1,7 +1,7 @@
 import flash.events.Event;
 
+import mx.core.Application;
 import mx.core.Singleton;
-import mx.core.windowClasses.TitleBar;
 import mx.events.FlexEvent;
 import mx.managers.PopUpManager;
 
@@ -54,6 +54,8 @@ private function preinitalizeHandler():void {
 private function showMainHandler():void {
 	
 	applicationManagmentModule.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
+	Application.application.minWidth = 1000;
+	Application.application.minHeight = 800;
 }
 
 private function lockStage():void {

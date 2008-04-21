@@ -121,10 +121,10 @@ public class DataManager implements IEventDispatcher {
 		soap.getAllTypes();
 	}
 	
-	public function loadPageData():void {
+	public function loadPageData(pageId:String):void {
 		
 		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, loadPageDataHandler);
-		soap.getChildObjectsTree(_currentApplicationId, _currentPageId);
+		soap.getChildObjectsTree(_currentApplicationId, pageId);
 	}
 	
 	private function getTopObjectsHandler(event:SoapEvent):void {
@@ -204,7 +204,7 @@ public class DataManager implements IEventDispatcher {
 	[Bindable (event='currentPageChanged')]
 	public function get currentPage():XML {
 		
-		return _currentPage
+		return _currentApplication.Objects.Object.(@ID == _currentPageId)[0];
 	}
 	
 	[Bindable (event='currentObjectChanged')]
@@ -239,19 +239,21 @@ public class DataManager implements IEventDispatcher {
 			
 		} else {
 			
-			var newPage:XML = _getPage(pageId);
+			loadPageData(pageId);
+			
+			//var newPage:XML = _getPage(pageId);
 		
-			if(newPage) {
+			//if(newPage) {
 				
-				_currentPageId = newPage.@ID;
-				_currentPage = newPage;
+				//_currentPageId = newPage.@ID;
+				//_currentPage = newPage;
 				
-			}
+			//}
 		}
 		
-		changeCurrentObject(_currentPageId);
+		//changeCurrentObject(_currentPageId);
 			
-		dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_PAGE_CHANGED));
+		//dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_PAGE_CHANGED));
 	}
 	
 	/**
@@ -660,9 +662,12 @@ public class DataManager implements IEventDispatcher {
 		
 		_currentApplication.Objects[0].appendChild(pageData);
 		
+		_currentPageId = pageId;
+		
 		changeCurrentObject(pageId);
 		
 		dispatcher.dispatchEvent(new DataManagerEvent('listPagesChanged'));
+		dispatcher.dispatchEvent(new DataManagerEvent('currentPageChanged'));
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 	}
 	
