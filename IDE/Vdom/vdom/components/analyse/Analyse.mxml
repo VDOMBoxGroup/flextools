@@ -8,8 +8,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			//import vdom.controls.databaseEditor.dbStructureEditor;
-			//import vdom.controls.databaseEditor.dbStructureEditor;
+			import vdom.controls.databaseEditor.dbStructureEditor;
 			import vdom.controls.resourceBrowser.ResourceBrowser;
 			import mx.managers.PopUpManager;
 			import mx.core.IFlexDisplayObject;
@@ -33,11 +32,11 @@
 			
 			
 			private function resourceBrowserLauncher():void {
-				PopUpManager.createPopUp(super, ResourceBrowser, true);
+				PopUpManager.createPopUp(this, ResourceBrowser, true);
 			}
 			
 			private function dbStructureEditorLauncher():void {
-				//PopUpManager.createPopUp(super, dbStructureEditor, true);
+				PopUpManager.createPopUp(this, dbStructureEditor, true);
 			}
 			
 		]]>
