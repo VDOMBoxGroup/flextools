@@ -39,7 +39,8 @@ private const defaultView:String = "list";
 	Selected resource ID sets by property "selectedItemID" from the outside the Class.
 	It is used to show which item is currently selected (or not, if it is null).
 */ 
-private var _selectedItemID:String = ""; 
+private var _selectedItemID:String = "";
+private var _selectedItemName:String = ""; 
 
 private var _resources:XML;				// XML, Getting by FileManager Class instance
 private var _selectedThumb:Object;		// Currently selected Thumbnail (visual component)
@@ -196,6 +197,7 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 	mEvent.currentTarget.selected = true;
 	
 	_selectedItemID = mEvent.currentTarget.objID;
+	_selectedItemName = mEvent.currentTarget.objName;
 	_selectedThumb = mEvent.currentTarget;
 	
 	showResource();	
@@ -288,7 +290,7 @@ private function expandHandler():void {
 }
 
 private function doneHandler():void {
-	this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID)));
+	this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID, _selectedItemName)));
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
 	this.dispatchEvent(cEvent);
 }
