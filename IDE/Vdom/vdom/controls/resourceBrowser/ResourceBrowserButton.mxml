@@ -37,7 +37,7 @@
 			}
 	
 			private function completeHandler(event:ResourceBrowserEvent):void {
-				_value = "#Res(" + event.resourceName + ")";
+				_value = "#Res(" + event.resourceID + ")";
 				lbl.text = event.resourceName;
 			}
 	
