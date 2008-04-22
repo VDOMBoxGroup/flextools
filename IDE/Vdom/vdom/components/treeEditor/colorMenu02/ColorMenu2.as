@@ -40,6 +40,7 @@ package vdom.components.treeEditor.colorMenu02
 				masLevels[i].addEventListener(TreeEditorEvent.SELECTED_LEVEL, selectedLevelHandler);
 				addChild(masLevels[i]);
 			}
+			masLevels[slctLevel].select(); 
 		}
 		
 		public function get  selectedItem():Object
@@ -49,7 +50,6 @@ package vdom.components.treeEditor.colorMenu02
 		public function showLevel(level:String):Boolean
 		{
 			var intLevel:Number = Number(level);
-		//	trace('lev: ' + intLevel);
 			return masLevels[intLevel].status;
 		}
 		

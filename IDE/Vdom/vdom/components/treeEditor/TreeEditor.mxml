@@ -236,7 +236,6 @@
 	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
-		trace(curTree.ID);
 		var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
 		var obj:Object = new Object(); 
 		
@@ -313,6 +312,10 @@
 		
 		createTreeArr(xmlApplicationStructure);
 		drawLines(xmlApplicationStructure);
+		
+		curTree = massTreeElements[dataManager.currentPageId];
+		if(curTree != null)
+			curTree.current = true;
 		
 		//showHnadler();
 		

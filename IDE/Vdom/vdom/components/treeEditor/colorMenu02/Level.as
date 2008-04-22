@@ -80,7 +80,6 @@ package vdom.components.treeEditor.colorMenu02
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SHOW_LINES, _data.level));
 			}	
 			eyeFlag = !eyeFlag;
-			trace('>>>' + eyeFlag);
 			msEvt.stopImmediatePropagation();
 		}
 		
@@ -95,6 +94,13 @@ package vdom.components.treeEditor.colorMenu02
 		public  function unSelect():void
 		{
 			imgBackGround.source = level;
+			//dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SELECTED_LEVEL, _data.level));
+			//trace('Lavel: ' + _data.level  );
+		}
+		
+		public  function select():void
+		{
+			imgBackGround.source = selectedLevel;
 			//dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SELECTED_LEVEL, _data.level));
 			//trace('Lavel: ' + _data.level  );
 		}

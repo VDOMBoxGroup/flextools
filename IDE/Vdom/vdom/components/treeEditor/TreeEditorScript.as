@@ -89,19 +89,7 @@ private function drawLine(obj:Object):void
 	// обьект сам на себя
 	if(toObj == fromObj)return;
 	
-	// может эта линия уже есть?
-/*
-	for (var level:String in massLines)
-		for (var frsTrElem:String in massLines[level])
-			for (var sknTrElem:String in massLines[level][frsTrElem])
-				if((frsTrElem == fromObj && sknTrElem == toObj ) ||
-					(frsTrElem == toObj && sknTrElem ==  fromObj ))
-					{	
-						curTree = obj;
-						return;
-					}
 	
-	*/
 		// вдруг противоположная линия уже есть..
 	
 	if(massLines[necessaryLevel])
@@ -314,18 +302,7 @@ private function get needCreatTree():Boolean
 				calc++;
 				if(calc > 2) return true;
 			}
-		//trace('test1: '+calc );		
-		
-		
-		// only 1 level
 	
-	/*	calc = 0;
-		for(var level:String in massLines)
-			calc++;
-		//trace('test2: ' + calc);	
-		if(calc > 1)return true;
-	*/
-		//trace('test3 False');
 		return false;
 	}
 	
@@ -364,7 +341,6 @@ private function drawLines(xml1:XML):void
 				{
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
 					massLines[level][obID][toObjID].addEventListener(MouseEvent.CLICK, markLines);
-					trace(colmen2.showLevel(level)+' : '+ level)
 					massLines[level][obID][toObjID].visible = colmen2.showLevel(level);
 					main.addChildAt(massLines[level][obID][toObjID], 0);
 					
