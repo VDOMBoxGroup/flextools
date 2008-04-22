@@ -30,7 +30,7 @@
 				_rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
 				_rBrowserInstance.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
 				
-				var resRegExp:RegExp = /^#Res\(([0-9]*)\)/;
+				var resRegExp:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
 				if (_value.match(resRegExp) != null) {
 					_rBrowserInstance.selectedItemID = _value.match(resRegExp)[1];
 					trace("Resource browser: selected resource id is " + _rBrowserInstance.selectedItemID);
@@ -40,6 +40,7 @@
 			private function completeHandler(event:ResourceBrowserEvent):void {
 				_value = "#Res(" + event.resourceID + ")";
 				lbl.text = event.resourceName;
+				trace("Resource browser: now selected resource id is " + _value);
 			}
 	
 		]]>
