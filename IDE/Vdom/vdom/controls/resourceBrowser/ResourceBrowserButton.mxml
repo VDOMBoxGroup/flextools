@@ -29,12 +29,16 @@
 			private function openWindow():void {
 				_rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
 				_rBrowserInstance.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
-				_rBrowserInstance.selectedItemID = _value;
+				
+				var resRegExp:RegExp = /^#Res\(([0-9]*)\)/;
+				if (_value.match(resRegExp) != null) {
+					_rBrowserInstance.selectedItemID = _value.match(resRegExp)[1];
+				}
 			}
 	
 			private function completeHandler(event:ResourceBrowserEvent):void {
-				_value = event.resourceName;
-				lbl.text = _value;
+				_value = "#Res(" + event.resourceName + ")";
+				lbl.text = event.resourceName;
 			}
 	
 		]]>
