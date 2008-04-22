@@ -364,8 +364,10 @@ private function drawLines(xml1:XML):void
 				{
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
 					massLines[level][obID][toObjID].addEventListener(MouseEvent.CLICK, markLines);
-
+					trace(colmen2.showLevel(level)+' : '+ level)
+					massLines[level][obID][toObjID].visible = colmen2.showLevel(level);
 					main.addChildAt(massLines[level][obID][toObjID], 0);
+					
 				}
 			}
 		}

@@ -1,8 +1,8 @@
 package vdom.components.treeEditor.colorMenu02
 {
 	import mx.containers.Canvas;
-	import mx.controls.Button;
 	import mx.controls.Image;
+	
 	import vdom.events.TreeEditorEvent;
 
 	public class ColorMenu2 extends Canvas
@@ -34,19 +34,23 @@ package vdom.components.treeEditor.colorMenu02
 				masLevels[i] = new Level(levels.getLevel(i));
 				masLevels[i].y = i * 25 + 25;
 				masLevels[i].x = 2;
-				
 			
 				masLevels[i].addEventListener(TreeEditorEvent.HIDE_LINES, dispasher);
 				masLevels[i].addEventListener(TreeEditorEvent.SHOW_LINES, dispasher);
 				masLevels[i].addEventListener(TreeEditorEvent.SELECTED_LEVEL, selectedLevelHandler);
 				addChild(masLevels[i]);
-				
 			}
 		}
 		
 		public function get  selectedItem():Object
 		{
 			return levels.getLevel(slctLevel);
+		}
+		public function showLevel(level:String):Boolean
+		{
+			var intLevel:Number = Number(level);
+		//	trace('lev: ' + intLevel);
+			return masLevels[intLevel].status;
 		}
 		
 		private function selectedLevelHandler(trEvt:TreeEditorEvent):void

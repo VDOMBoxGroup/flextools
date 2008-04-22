@@ -6,7 +6,6 @@ package vdom.components.treeEditor
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
 	
 	import mx.containers.Canvas;
@@ -15,13 +14,17 @@ package vdom.components.treeEditor
 	import mx.controls.Label;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
+	import mx.managers.PopUpManager;
 	import mx.utils.Base64Encoder;
 	
 	import vdom.connection.soap.Soap;
 	import vdom.connection.soap.SoapEvent;
+	import vdom.controls.resourceBrowser.ResourceBrowser;
 	import vdom.events.DataManagerEvent;
+	import vdom.events.ResourceBrowserEvent;
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
+	import vdom.managers.FileManager;
 	
 	public class TreeElement extends Canvas
 	{
@@ -214,49 +217,34 @@ package vdom.components.treeEditor
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, _ID));	
 		}
 		
-		private var source:File;
-		private function imageDoubleClickHandler(msEvt:MouseEvent):void
+	
+		
+		
+		/****
+		 * 
+		 * 			resource Browser Launcher
+		 * 
+		 * 
+		 * */
+		private function imageDoubleClickHandler(msEvt:MouseEvent):void 
 		{
-			if (source == null) { source = new File(); }
-				source.addEventListener(Event.SELECT, sourceSelectHandler);
-				source.browseForOpen("Choose file to compress", [ new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png; *.*;")]);
-			trace('+')
+			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
+			rbWnd.selectedItemID = _resourceID;
+			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
 		}
 		
-		
-		private function sourceSelectHandler(event:Event):void
+		private var fileManager:FileManager = FileManager.getInstance();
+		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
 		{
-			source.removeEventListener(Event.SELECT, sourceSelectHandler);
-			
-			if (source != null && !source.isDirectory )
-			{
-				var srcBytes:ByteArray   = new ByteArray();
-				var srcStream:FileStream = new FileStream();
-				
-				srcStream.open(source, FileMode.READ);
-				srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
-				srcStream.close();
-
-				image.source = srcBytes;
-				
-				var byArr:ByteArray = new ByteArray();
-				byArr.writeBytes(srcBytes);
-				byArr.compress();
-
-				var bs64Encdr:Base64Encoder = new Base64Encoder();
-				//bs64Encdr.encodeBytes(srcBytes);
-				bs64Encdr.encodeBytes(byArr);
-
-				var strBs64:String = bs64Encdr.toString();
-				var strType:String = source.type;
-				strType = strType.substr(1, strType.length);
-				
-				setResource(strType, source.name, strBs64);
-			}
+				_resourceID = rbEvt.resourceID;
+				fileManager.loadResource(dataManager.currentApplicationId,  _resourceID, this);
+		}	
+		
+		public function set resource(data:Object):void
+		{
+				image.source = data.data;
 		}
-
-		
-		
+				
 			// при нажатии кнопки свернуть
 		private function changeState(blHide:Boolean):void
 		{
@@ -477,12 +465,12 @@ package vdom.components.treeEditor
 		{
 			image.source = obj;
 		}
-		
+		/*
 		public function set resource(obj:Object):void
 		{
 			image.source = obj.data;
 		}
-		
+		*/
 		private function initUpBody():void
 		{
 			imgheader = new Image();

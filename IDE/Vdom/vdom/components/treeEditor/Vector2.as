@@ -15,6 +15,8 @@ package vdom.components.treeEditor
 		private var _numColor:Number;
 	//	private var _strColor:String;
 		private var _mark:Boolean = false;
+		private var fromObj:Object;
+		private var toObj:Object;
 		
 		public function Vector2()
 		{
@@ -23,9 +25,11 @@ package vdom.components.treeEditor
 		
 		public function createVector (fromObj:Object,  toObj:Object = null, color:Number = 0):void
 		{
+			this.fromObj = fromObj;
+			this.toObj = toObj;
 			if( color!= 0)
 			_numColor = color;
-			calculatePoints(fromObj, toObj);
+			calculatePoints();
 			
 			
 			drawLine();
@@ -113,7 +117,7 @@ package vdom.components.treeEditor
 		private var nTop	:Number;
 		private var nBottom	:Number;
 		
-		private function calculatePoints(fromObj:Object,  toObj:Object ):void
+		private function calculatePoints( ):void
 		{
 			var _pFromObj:Point;
 			var _pToObj:Point;
@@ -263,6 +267,14 @@ package vdom.components.treeEditor
 	   
 			}
 			
+		}
+		
+		public function clear():void
+		{
+			trace('vector2 - clear ');
+			graphics.clear();
+			this.fromObj = null;
+			this.toObj = null;
 		}
 			
 	}

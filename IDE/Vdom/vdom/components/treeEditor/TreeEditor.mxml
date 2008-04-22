@@ -17,7 +17,7 @@
 		import vdom.managers.DataManager;
 		import mx.events.CloseEvent;
 		
-		include "test.as";
+		include "TreeEditorScript.as";
 		
 		
  	private var massTreeElements:Array = new Array();
@@ -223,6 +223,7 @@
 		removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 		
+		vctTest.clear();
 		main.removeChild(vctTest); ///-------------***********
 		blDrawLine = false;  //говорим что НЕ рисуем линию
 	}
@@ -235,6 +236,7 @@
 	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
+		trace(curTree.ID);
 		var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
 		var obj:Object = new Object(); 
 		

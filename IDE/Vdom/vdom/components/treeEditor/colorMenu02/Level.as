@@ -1,12 +1,14 @@
 package vdom.components.treeEditor.colorMenu02
 {
-	import mx.containers.Canvas;
-	import mx.controls.Image;
-	import flash.display.LineScaleMode;
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
-	import mx.controls.Label;
+	import flash.display.LineScaleMode;
 	import flash.events.MouseEvent;
+	
+	import mx.containers.Canvas;
+	import mx.controls.Image;
+	import mx.controls.Label;
+	
 	import vdom.events.TreeEditorEvent;
 
 	public class Level extends Canvas
@@ -30,7 +32,7 @@ package vdom.components.treeEditor.colorMenu02
 		
 		 
 		private var _data:Object = new Object();
-		private var eyeFlag:Boolean = false;
+		private var eyeFlag:Boolean = true;
 		private var imgEye:Image = new Image();
 		private var imgBackGround:Image;
 		
@@ -71,14 +73,14 @@ package vdom.components.treeEditor.colorMenu02
 		private function imgEyeClickHandler(msEvt:MouseEvent):void
 		{
 			if(eyeFlag){
-				imgEye.source = openEye;
-				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SHOW_LINES, _data.level));
-				
-			}else{
 				imgEye.source = closeEye;
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.HIDE_LINES, _data.level));
+			}else{
+				imgEye.source = openEye;
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SHOW_LINES, _data.level));
 			}	
 			eyeFlag = !eyeFlag;
+			trace('>>>' + eyeFlag);
 			msEvt.stopImmediatePropagation();
 		}
 		
@@ -95,6 +97,11 @@ package vdom.components.treeEditor.colorMenu02
 			imgBackGround.source = level;
 			//dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SELECTED_LEVEL, _data.level));
 			//trace('Lavel: ' + _data.level  );
+		}
+		
+		public function get status():Boolean
+		{
+			return eyeFlag;
 		}
 		
 		/*
