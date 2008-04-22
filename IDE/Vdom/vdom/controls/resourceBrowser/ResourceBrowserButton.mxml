@@ -8,9 +8,9 @@
 			
 			private var _value:String;
 			private var _title:String;
+			private var _rBrowserInstance:ResourceBrowser;
 	
 			private function initalizeHandler():void {
-				this.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
 			}
 	
 			public function set title(attrValue:String):void {
@@ -27,7 +27,9 @@
 			}
 	
 			private function openWindow():void {
-				PopUpManager.createPopUp(this, ResourceBrowser, true);
+				_rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
+				_rBrowserInstance.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
+				_rBrowserInstance.selectedItemID = _value;
 			}
 	
 			private function completeHandler(event:ResourceBrowserEvent):void {

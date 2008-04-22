@@ -78,7 +78,7 @@ public function get selectedItemID():String {
 private function creationComplete():void {
 	this.addEventListener(CloseEvent.CLOSE, closeHandler); 
 	loadTypesIcons();
-	PopUpManager.centerPopUp(this);
+	//PopUpManager.centerPopUp(super);
 	listResourcesQuery();
 }
 
