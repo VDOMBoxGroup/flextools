@@ -34,9 +34,10 @@
 
 /******* 
  * 			to Do
- * 		Картинка менялась -  андрей
- * 		добавлять новый елемент правее, если есть елемент 0:0
- * 		переделать код..
+ * 	
+ * 		добавлять новый елемент в самый низ 
+ * 		у трее елемента сменить по умолчанию картинку
+ * 		у трии елемента картинка в соответстви с его типом.
  * 		
  * */
 	
@@ -298,6 +299,14 @@
 		trEl.type =  adTrEvt.trElementType;
 		trEl.resourceID  =  adTrEvt.resourceID;
 		trEl.description =  adTrEvt.description;
+		trEl.typeID = adTrEvt.typeResourse;
+		
+		var maxY:Number = 0;
+		for (var tID:String in massTreeElements)
+				if(massTreeElements[tID].y > maxY) 
+					maxY = massTreeElements[tID].y;
+		trEl.y = maxY + 100;
+		//trEl.height
 		
 		massTreeElements[ID] = addEventListenerToTreeElement(trEl);
 		main.addChild(massTreeElements[ID]);

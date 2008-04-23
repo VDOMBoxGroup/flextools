@@ -11,6 +11,8 @@ public class AddTreeElementEvent extends Event
 	public var title:String;
 	public var description:String;
 	public var trElementType:String;
+	public var typeResourse:String;
+	
 	
 	
 	public function AddTreeElementEvent(type:String, treeElementID:String='', 
@@ -18,6 +20,7 @@ public class AddTreeElementEvent extends Event
 												title:String='',
 												description:String='',
 												treeElementType:String='', 
+												typeResourse:String = '',
 												bubbles:Boolean=false, cancelable:Boolean=false)
 	{
 		super(type, bubbles, cancelable);
@@ -27,6 +30,7 @@ public class AddTreeElementEvent extends Event
 		this.title = title;
 		this.description = description;
 		this.trElementType = treeElementType;
+		this.typeResourse = typeResourse;
 	}
 }
 }

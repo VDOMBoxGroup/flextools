@@ -265,6 +265,7 @@ private function createTreeArr(xml:XML):void
 		
 		var typeID:String = page.@Type;
 		treeElement.type  =  getType(typeID);
+		treeElement.typeID =  getIcon(typeID);
 		treeElement = addEventListenerToTreeElement(treeElement);
 		
 		massTreeElements[ID] =  treeElement;
@@ -289,6 +290,23 @@ public function getLanguagePhrase(name:String, phrase:String):String
 	var phraseID:String = phrase.match(phraseRE)[1]; //001
 	
 	return resourceManager.getString(name, phraseID);
+}
+/***
+ * 
+ * -------------------------------------------------
+ * 
+ * ***/
+private function getIcon(ID:String):String
+{
+	for each(var lavel:XML in topLevelTypes )
+	{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
+			if( lavel.Information.ID == ID) 
+			{
+				var strLabel:String = lavel.Information.Icon;
+				return  strLabel.substr(5, 36);
+			}
+	}
+	return  '';
 }
 
 private function get needCreatTree():Boolean

@@ -3,10 +3,7 @@ package vdom.components.treeEditor
 	import flash.display.Bitmap;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	import flash.filesystem.File;
-	import flash.filesystem.FileMode;
-	import flash.filesystem.FileStream;
-	import flash.utils.ByteArray;
+	import flash.net.ObjectEncoding;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Button;
@@ -15,7 +12,6 @@ package vdom.components.treeEditor
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	import mx.managers.PopUpManager;
-	import mx.utils.Base64Encoder;
 	
 	import vdom.connection.soap.Soap;
 	import vdom.connection.soap.SoapEvent;
@@ -43,6 +39,7 @@ package vdom.components.treeEditor
 		private var imgMenu:Image;
 		private var imgheader:Image;
 		private var imgDelete:Image;
+		private var imgType:Image;
 		private var imgLine:Image;
 		private var cnvUpLayer	:Canvas = new Canvas();
 		private var cnvDownLayer:Canvas = new Canvas();		
@@ -56,10 +53,14 @@ package vdom.components.treeEditor
 		
 		private  var _resourceID:String = '';
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='defaultPicture')]
-		[Bindable]
-		public var defaultPicture:Class;
-		
+	//	[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='defaultPicture')]
+	//	[Bindable]
+	//	public var defaultPicture:Class;
+	
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='cube')]
+				[Bindable]
+		private var defaultPicture:Class;
+	
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='backGround')]
 		[Bindable]
 		public var backGround:Class;
@@ -446,6 +447,17 @@ package vdom.components.treeEditor
 			return  _type.text;
 		}
 		
+		/*      type ID resourse     */
+		
+		 public function set typeID(resID:String):void
+		{
+			fileManager.loadResource(dataManager.currentApplicationId,  resID, this, 'typeResourse');
+		}
+		
+		public function set typeResourse(data:Object):void
+		{
+			imgType.source = data.data;
+		}
 		
 		/*      select      */
 		
@@ -561,8 +573,13 @@ package vdom.components.treeEditor
 			image.scaleContent = true;
 			
 			image.doubleClickEnabled = true;
-			image.addEventListener(MouseEvent.DOUBLE_CLICK, imageDoubleClickHandler);
+			image.addEventListener(MouseEvent.CLICK, imageDoubleClickHandler);
 			cnvDownLayer.addChild(image);
+			
+			imgType = new Image();
+			imgType.maintainAspectRatio = true;
+			imgType.scaleContent = true;
+			cnvDownLayer.addChild(imgType);
 			
 			_type = new Label();
 			_type.text = 'text  ';
@@ -621,6 +638,12 @@ package vdom.components.treeEditor
 			image.height = 100 * _ratio;
 			image.width = 95 * _ratio;
 			
+			imgType.x = _ratio * 217;
+			imgType.y = _ratio * 118;
+			imgType.height = _ratio * 20; 
+			imgType.width = _ratio * 20;
+			
+			
 			textArea.width =  125 * _ratio;
 			textArea.height = 75 * _ratio;
 			
@@ -628,6 +651,7 @@ package vdom.components.treeEditor
 			_type.x = 120 * _ratio;
 			_type.width =  100 * _ratio;
 			_type.setStyle('fontSize', "8");
+			
 		}
 		
 	 

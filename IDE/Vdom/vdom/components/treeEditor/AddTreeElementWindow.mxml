@@ -43,6 +43,7 @@
 			private var treeElementID:String;
 			private var trElementType:String;
 			private var resourceID:String = '';
+			private var typeResourse:String = '';
 			
 			private function creationComplete():void 
 			{
@@ -109,8 +110,23 @@
 			var typeID:String = xmlObj.Object.@Type.toXMLString();
 			
 			treeElementID = obID;
+			typeResourse = getIcon(typeID);
 			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
 			dataManager.changeCurrentPage(obID);
+		}
+		
+		private function getIcon(ID:String):String
+		{
+			var types:XMLList = dataManager.getTopLevelTypes();
+			for each(var lavel:XML in types )
+			{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
+					if( lavel.Information.ID == ID) 
+					{
+						var strLabel:String = lavel.Information.Icon;
+						return  strLabel.substr(5, 36);
+					}
+			}
+			return  '';
 		}
 		
 		private function changeAttributesHandler(dmEvt:DataManagerEvent):void
@@ -135,7 +151,7 @@
 		{
 			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
 			dispatchEvent(new AddTreeElementEvent(AddTreeElementEvent.TREE_ELEMENT_ADDED,treeElementID,resourceID,
-																				txt.text, descript.text, selectedAppl.label));
+																				txt.text, descript.text, selectedAppl.label, typeResourse));
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 		}
 		
