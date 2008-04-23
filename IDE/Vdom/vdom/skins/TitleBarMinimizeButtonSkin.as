@@ -33,28 +33,28 @@ public class TitleBarMinimizeButtonSkin extends UIComponent
 	//
 	//--------------------------------------------------------------------------
 	
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
     private static var macMinUpSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
     private static var winMinUpSkin:Class;
 	   
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinOver")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinOver")]
 	private static var macMinOverSkin:Class;
 	
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinOver")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinOver")]
 	private static var winMinOverSkin:Class;
 
-  	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinDown")]
+  	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinDown")]
     private static var macMinDownSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinDown")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinDown")]
     private static var winMinDownSkin:Class;
     
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
     private static var macMinDisabledSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
     private static var winMinDisabledSkin:Class;
 	
 	//--------------------------------------------------------------------------

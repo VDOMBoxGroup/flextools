@@ -33,13 +33,13 @@ public class TitleBarRestoreButtonSkin extends UIComponent
 	//
 	//--------------------------------------------------------------------------
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinUp")]
     private static var winRestoreUpSkin:Class;
     
-   	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDown")]
+   	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDown")]
     private static var winRestoreDownSkin:Class;
     
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinOver")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinOver")]
     private static var winRestoreOverSkin:Class;
 	
 	//--------------------------------------------------------------------------

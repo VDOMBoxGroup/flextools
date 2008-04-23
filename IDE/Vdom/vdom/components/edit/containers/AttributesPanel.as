@@ -32,7 +32,7 @@ import mx.validators.RegExpValidator;
 import vdom.components.edit.events.EditEvent;
 import vdom.controls.colorPicker.ColorPicker;
 import vdom.controls.multiLine.MultiLine;
-import vdom.controls.resourceBrowser.ResourceBrowser;
+import vdom.controls.resourceBrowser.ResourceBrowserButton;
 import vdom.managers.LanguageManager;
 
 public class AttributesPanel extends ClosablePanel {
@@ -480,15 +480,15 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.value = currentAttribute;
 				break;
 				
-				/* case 'file':
+				case 'file':
 				
-					valueContainer = new ResourceBrowser();
-					valueType = 'selectedItemID';
+					valueContainer = new ResourceBrowserButton();
+					valueType = 'value';
 					
 					//valueContainer.maxChars = codeInterface['value'];
 					
-					valueContainer.selectedItemID = currentAttribute;
-				break; */
+					valueContainer.value = currentAttribute;
+				break;
 				
 				case 'color':
 				

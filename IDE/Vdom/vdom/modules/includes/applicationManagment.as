@@ -21,8 +21,7 @@ private function creationCompleteHandler():void {
 
 private function showHandler():void {
 	
-	Application.application.showStatusBar = true;
-	Application.application.showGripper = true;
+	
 	watchers = [];
 	
 	listApplicationContainer.applicationID;

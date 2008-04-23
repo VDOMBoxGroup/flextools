@@ -33,28 +33,28 @@ public class TitleBarCloseButtonSkin extends UIComponent
 	//
 	//--------------------------------------------------------------------------
 
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
     private static var macCloseUpSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
     private static var winCloseUpSkin:Class;
 	   
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinOver")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinOver")]
 	private static var macCloseOverSkin:Class;
 	
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinOver")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinOver")]
 	private static var winCloseOverSkin:Class;
 
-  	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinDown")]
+  	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinDown")]
     private static var macCloseDownSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinDown")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinDown")]
     private static var winCloseDownSkin:Class;
 	
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
     private static var macCloseDisabledSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="closeButtonSkinUp")]
     private static var winCloseDisabledSkin:Class;
 	
 	//--------------------------------------------------------------------------

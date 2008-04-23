@@ -1,9 +1,11 @@
 import flash.events.Event;
+import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
 import mx.controls.Button;
 import mx.controls.TextInput;
 import mx.core.IWindow;
+import mx.events.FlexEvent;
 
 import vdom.components.loginForm.events.LoginFormEvent;
 import vdom.managers.LanguageManager;
@@ -23,14 +25,14 @@ private var languageManager:LanguageManager;
 
 private var dragged:Boolean = false;
 
+private var _isListenersEnabled:Boolean;
+
 private function get window():IWindow {
 				
 	return IWindow(Application.application);
 }
 
 private function creationCompleteHandler():void {
-	
-	addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 	
 	languageManager = LanguageManager.getInstance();
 	
@@ -43,36 +45,41 @@ private function creationCompleteHandler():void {
 	if(currentItem)
 		selectLang.selectedItem = currentItem;
 	
-	//resourceManager.localeChain = ['ru_RU', 'en_US'];
-	//resourceManager.getLocales();
-	//languageList = Application.application.languageList;
-	//languages = Languages.getInstance();
+	_isListenersEnabled = false;
+	
+	dispatchEvent(new FlexEvent(FlexEvent.SHOW));
+}
+
+private function setListeners(flag:Boolean):void {
+	
+	if(flag == _isListenersEnabled)
+		return;
+	
+	if(flag) {
+		
+		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		addEventListener(KeyboardEvent.KEY_DOWN, loginForm_keyDownHandler);
+		_isListenersEnabled = true;
+		
+	} else {
+		
+		removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+		removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+		removeEventListener(KeyboardEvent.KEY_DOWN, loginForm_keyDownHandler);
+		_isListenersEnabled = false;
+	}
 }
 
 private function show():void {
 	
+	setListeners(true);
+	_username.setFocus();
 }
 
 private function hide():void {
-		
-}
-
-private function mouseDownHdlr(event:MouseEvent):void {
 	
-	if(event.target is Button || event.target.parent is TextInput)
-		return
-			
-	loginFormPanel.startDrag();
-	
-	event.stopImmediatePropagation();
-}
-
-private function mouseUpHdlr(event:MouseEvent):void {
-	
-	loginFormPanel.setStyle('horizontalCenter', undefined);
-	loginFormPanel.setStyle('verticalCenter', undefined);
-			
-	loginFormPanel.stopDrag();
+	setListeners(false);	
 }
 
 private function languageChangeHandler(event:Event):void {
@@ -92,15 +99,31 @@ private function checkData():void {
 	dispatchEvent(lfe);
 }
 
+private function loginForm_keyDownHandler(event:KeyboardEvent):void {
+	
+	if(event.keyCode == 13)
+		checkData();
+}
+
 private function mouseDownHandler(event:MouseEvent):void {
 	if(event.target == this) {
 			
 		window.nativeWindow.startMove();
 		event.stopPropagation();
 	}
+	
+	if(event.target is Button || event.target.parent is TextInput)
+		return
+			
+	loginFormPanel.startDrag();
+	
+	event.stopImmediatePropagation();
 }
 
-/* private function changeLanguageHandler(event:Event):void {
+private function mouseUpHandler(event:MouseEvent):void {
 	
-	languages.changeLanguage(event.currentTarget.selectedItem.@Code);
-} */
+	loginFormPanel.setStyle('horizontalCenter', undefined);
+	loginFormPanel.setStyle('verticalCenter', undefined);
+			
+	loginFormPanel.stopDrag();
+}

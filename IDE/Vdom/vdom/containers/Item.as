@@ -97,8 +97,11 @@ public class Item extends Canvas implements IItem {
 		
 		var count:uint = graphicsLayer.rawChildren.numChildren;
 		
-		for (var i:uint = 0; i < count; i++)
-			graphicsLayer.rawChildren.removeChildAt(i);
+		while (count > 0) {
+			graphicsLayer.rawChildren.removeChildAt(0);
+			count--;
+		}
+			
 	}
 	
 	public function get graphicsLayer():Canvas {

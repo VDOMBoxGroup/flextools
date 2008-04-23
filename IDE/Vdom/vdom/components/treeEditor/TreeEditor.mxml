@@ -10,6 +10,8 @@
 
 <mx:Script>
 	<![CDATA[
+		import vdom.events.TreeEditorEvent;
+		import vdom.events.DataManagerEvent;
 		import vdom.events.AddTreeElementEvent;
 		import mx.managers.PopUpManager;
 		import mx.controls.Alert;

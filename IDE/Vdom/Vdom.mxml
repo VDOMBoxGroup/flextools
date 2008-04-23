@@ -71,7 +71,7 @@
 					-->
 				</controls:MainTabNavigator>
 			</mx:Canvas>
-			<mx:Image x="10" y="10" width="62" height="62" source="assets/main/vdom_logo.png"/>
+			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>
 		</mx:Canvas>
 	</mx:ViewStack>
 </mx:WindowedApplication>

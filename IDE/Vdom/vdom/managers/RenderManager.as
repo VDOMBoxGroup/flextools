@@ -219,7 +219,8 @@ public class RenderManager implements IEventDispatcher {
 			
 			_container.addChild(item);
 		}
-			
+		
+		item.dispatchEvent(new Event('refreshComplete'));
 		item.visible = true;
 		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
 		rme.result = item;
@@ -292,13 +293,24 @@ public class RenderManager implements IEventDispatcher {
 				
 				var viewText:HTML = new HTML()
 				var isEditable:Boolean = false;
+				var fontStyle:String = '12px Tahoma';
+				var colorStyle:String = '#000000';
+				
+				viewText.paintsDefaultBackground = false;
+				
 				viewText.x = childXMLDescription.@left;
 				viewText.y = childXMLDescription.@top;
+				
+				if(childXMLDescription.@color.length())
+					colorStyle = childXMLDescription.@color;
+				
+				if(childXMLDescription.@font.length())
+					fontStyle = childXMLDescription.@font;
 				
 				if(childXMLDescription.@width.length())
 					viewText.width = childXMLDescription.@width;
 				//viewText.htmlLoader.textEncodingOverride = "UTF-8";
-				viewText.paintsDefaultBackground = false;
+				
 				var HTMLText:String = childXMLDescription;
 				//viewText.condenseWhite = true;
 				//viewText.height = childXMLDescription.@height;
@@ -306,8 +318,8 @@ public class RenderManager implements IEventDispatcher {
 				
 				//viewText.selectable = false;
 				
-				viewText.setStyle('fontStyle', childXMLDescription.@font);
-				viewText.setStyle('color', childXMLDescription.@color);
+				//viewText.setStyle('fontStyle', childXMLDescription.@font);
+				//viewText.setStyle('color', childXMLDescription.@color);
 				
 				//viewText.setStyle('borderStyle', 'solid');
 				//viewText.setStyle('borderColor', '#cccccc');
@@ -335,7 +347,10 @@ public class RenderManager implements IEventDispatcher {
 						'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
 						'</head>' +
 						'<body contentEditable="' + 
-						isEditable +'">' +
+						isEditable +'" ' + 
+						//'style="font: '+ fontStyle +';' + 
+						//'color="'+colorStyle+'"' + 
+						'>' +
 						HTMLText +
 						'</body></html>';
 				
@@ -419,7 +434,7 @@ public class RenderManager implements IEventDispatcher {
 		var thickness:Number = 1;
 		var fillColor:Number = 0xFFFFFF;
 		var lineColor:Number = 0xFFFFFF;
-		
+		var borderColor:Number = 0x000000;
 		var childName:String = childXMLDescription.name().localName;
 		
 			switch(childName) {
@@ -429,12 +444,12 @@ public class RenderManager implements IEventDispatcher {
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100
 				
-				if(childXMLDescription.@size > 0) {
-					
-					var borderThickness:uint = childXMLDescription.@size;
-					var borderColor:uint = Number('0x' + childXMLDescription.@stroke);
-					
-					currentSprite.graphics.lineStyle(borderThickness, borderColor, alpha);
+				if(childXMLDescription.@size.length())
+					thickness = childXMLDescription.@size;
+				
+				if(childXMLDescription.@stroke.length()) {
+					borderColor = Number('0x' + childXMLDescription.@stroke.toString().substring(1));
+					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
 				}
 				
 				if(childXMLDescription.@color.length())
@@ -455,9 +470,42 @@ public class RenderManager implements IEventDispatcher {
 				
 				graphicsLayer.rawChildren.addChild(currentSprite);
 						
-				break;
+			break;
 				
-				case 'picture':
+			case 'ellipse':
+				
+				if(childXMLDescription.@alpha.length())
+					alpha = Number(childXMLDescription.@alpha)/100
+				
+				if(childXMLDescription.@size.length())
+					thickness = childXMLDescription.@size;
+				
+				if(childXMLDescription.@stroke.length()) {
+					borderColor = Number('0x' + childXMLDescription.@stroke.toString().substring(1));
+					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
+				}
+				
+				if(childXMLDescription.@color.length())
+					fillColor = Number('0x' + childXMLDescription.@color.toString().substring(1))
+				else
+					alpha = .0;	
+				
+				
+				currentSprite.graphics.beginFill(fillColor, alpha);
+									
+				currentSprite.graphics.drawEllipse(
+					childXMLDescription.@left,
+					childXMLDescription.@top,
+					childXMLDescription.@width,
+					childXMLDescription.@height
+				);
+				currentSprite.graphics.endFill();
+				
+				graphicsLayer.rawChildren.addChild(currentSprite);
+				
+			break
+				
+			case 'picture':
 					
 					var resourceId:String = childXMLDescription.@resource;
 					var img:Image = new Image();
@@ -475,9 +523,9 @@ public class RenderManager implements IEventDispatcher {
 					graphicsLayer.rawChildren.addChild(img);
 					
 					fileManager.loadResource(itemId, resourceId, img, 'source', true);
-				break;
+			break;
 				
-				case 'line':
+			case 'line':
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100;
@@ -509,7 +557,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				graphicsLayer.rawChildren.addChild(currentSprite);
 						
-				break;
+			break;
 			}
 		}
 	}

@@ -13,6 +13,8 @@
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.filesystem.File;
+import flash.filesystem.FileMode;
+import flash.filesystem.FileStream;
 
 import mx.controls.Alert;
 import mx.controls.Label;

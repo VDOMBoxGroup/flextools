@@ -33,37 +33,37 @@ public class TitleBarMaximizeButtonSkin extends UIComponent
 	//
 	//--------------------------------------------------------------------------
 
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
     private static var macMaxUpSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
     private static var winMaxUpSkin:Class;
 	   
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinOver")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinOver")]
 	private static var macMaxOverSkin:Class;
 	
-	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinOver")]
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinOver")]
 	private static var winMaxOverSkin:Class;
 
-  	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinDown")]
+  	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinDown")]
     private static var macMaxDownSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinDown")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinDown")]
     private static var winMaxDownSkin:Class;
     
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
     private static var macMaxDisabledSkin:Class;
 
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
     private static var winMaxDisabledSkin:Class;
     
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinUp")]
     private static var winRestoreUpSkin:Class;
     
-   	[Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDown")]
+   	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDown")]
     private static var winRestoreDownSkin:Class;
     
-    [Embed(source="assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinOver")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinOver")]
     private static var winRestoreOverSkin:Class;
 	
 	//--------------------------------------------------------------------------

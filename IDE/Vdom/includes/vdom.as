@@ -14,6 +14,10 @@ import vdom.managers.AuthenticationManager;
 import vdom.managers.DataManager;
 import vdom.managers.LanguageManager;
 
+[Embed(source='/assets/main/vdom_logo.png')]
+[Bindable]
+public var vdomLogo:Class;
+
 [Bindable]
 private var dataManager:DataManager;
 
@@ -54,6 +58,8 @@ private function preinitalizeHandler():void {
 private function showMainHandler():void {
 	
 	applicationManagmentModule.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
+	Application.application.showStatusBar = true;
+	Application.application.showGripper = true;
 	Application.application.minWidth = 1000;
 	Application.application.minHeight = 800;
 }

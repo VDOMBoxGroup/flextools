@@ -36,18 +36,18 @@
 		}
 	</mx:Style>
 	
-	<mx:XML id="locales" source="locale/locales.xml" />
+	<mx:XML id="locales" source="/locale/locales.xml" />
 	
 	<mx:Image right="20" top="20" source="{loginTitle}" autoLoad="true"/>
 	<mx:Image source="{loginCube}" verticalCenter="-4.5" x="10"/>
 	<mx:Panel id="loginFormPanel" styleName="loginPanel" borderColor="#808080" borderStyle="solid" 
 		backgroundColor="#ffffff"
 		title="{resourceManager.getString('LoginForm','title')}" 
-		mouseUp="mouseUpHdlr(event)" mouseDown="mouseDownHdlr(event)"
+		mouseUp="mouseUpHandler(event)" mouseDown="mouseDownHandler(event)"
 		dropShadowEnabled="true" shadowDirection="right" shadowDistance="5"
 		width="370" height="200" cornerRadius="12" horizontalAlign="center" 
 		borderThickness="1" backgroundAlpha=".20" horizontalCenter="0" verticalCenter="0">
-		<mx:Form 
+		<mx:Form
 			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
 			<mx:FormItem
 				label="{resourceManager.getString('LoginForm','username')}">
