@@ -2,6 +2,7 @@
 import mx.controls.Alert;
 import mx.events.CloseEvent;
 import mx.managers.PopUpManager;
+import mx.utils.UIDUtil;
 
 private var _sourceXML:XML;		// XML got by vdom IDE (of existing table)
 
@@ -9,7 +10,7 @@ private var _tableID:String;
 private var _tableName:String;
 
 [Bindable]
-private var _propertiesProvider:Array;
+private var _propertiesProvider:Array = [];
 
 private function creationComplete():void {
 	this.addEventListener(CloseEvent.CLOSE, closeHandler);
@@ -26,7 +27,6 @@ private function creationComplete():void {
 	
 	loadXMLData();
 }
-
 
 public function set source(src:XML):void {
 	_sourceXML = src;
@@ -49,6 +49,8 @@ private function loadXMLData():void {
 	for each (columnDef in _sourceXML.tabledef.columndef) {
 		_propertiesProvider.push({label:columnDef.@name.toString(), data:columnDef.@id.toString(), type:columnDef.@type.toString()});
 	}
+	
+	_propertiesProvider.push({label:'new', data:UIDUtil.createUID().toLowerCase(), type:'text'});
 }
 
 private function listChangeHandler():void {
@@ -68,7 +70,22 @@ private function listChangeHandler():void {
 	}
 } 
 
-private function applyBtnHandler():void {
+private function doneHandler():void {
+	//this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID)));
+	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
+	this.dispatchEvent(cEvent);
+}
+
+private function applyBtnHandler():void {	
+}
+
+private function addBtnHandler():void {
+	trace ("UIDUtil: ", UIDUtil.createUID());
+	_propertiesProvider.push({label:'new', data:UIDUtil.createUID().toLowerCase(), type:'text'});
+
+}
+
+private function removeBtnHandler():void {
 	
 }
 

@@ -41,24 +41,24 @@
 					
 				</mx:HBox>
 				
-				<!--
-				<mx:HBox width="100%" verticalAlign="middle">
-					<mx:Label text="Primary key:" />
+				
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+					<mx:Label text="Primary key:" width="40%" />
 					<mx:CheckBox id="__pKey" />
 				</mx:HBox>
-				<mx:HBox width="100%" verticalAlign="middle">
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
 					<mx:Label text="Auto increment:" />
 					<mx:CheckBox id="__aIncrement" />
 				</mx:HBox>
-				<mx:HBox width="100%" verticalAlign="middle">
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
 					<mx:Label text="Can be null:" />
 					<mx:CheckBox id="__null" />
 				</mx:HBox>
-				<mx:HBox width="100%" verticalAlign="middle">
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
 					<mx:Label text="Default value:" />
 					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" />
 				</mx:HBox>
-				-->				
+								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
 					<mx:Button id="__apply" enabled="false" label="Apply changes"/>
 				</mx:HBox>				
@@ -67,11 +67,11 @@
 	</mx:HBox>
 
 	<mx:HBox width="100%" paddingTop="2">
-		<mx:Button label="Add" />
-		<mx:Button label="Remove" />
+		<mx:Button label="Add" click="{addBtnHandler();}" />
+		<mx:Button label="Remove" click="{removeBtnHandler();}" />
 	</mx:HBox>
 
 	<mx:HBox width="100%" height="24" horizontalAlign="right" verticalAlign="middle">
-		
+		<mx:Button label="Done" click="{doneHandler();}" />
 	</mx:HBox> 
 </mx:TitleWindow>
