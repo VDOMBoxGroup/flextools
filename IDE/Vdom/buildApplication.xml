@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<project>
+<project
+	name="AIR-file creator">
+	
 	<!-- SDK properties -->
 	<property name="SDK_HOME" value="D:/FBP3/sdks/3.0.0" />
 	<property name="mxmlc.jar" value="${SDK_HOME}/lib/mxmlc.jar" />
@@ -20,8 +22,7 @@
 	
 	<property name="source.file" value="${application.dir}/${application.name}.mxml" />
 	
-	<property name="air.name" value="${application.name}.air" />
-	<property name="air.file" value="${release.dir}/${air.name}" />
+	<property name="air.file" value="${application.name}.air" />
 	
 	<property name="storetype" value="pkcs12" />
 	<property name="keystore" value="cert.p12" />
@@ -77,7 +78,7 @@
 			<arg value="q" />
 			<arg value="-tsa" />
 			<arg value="none" />
-			<arg value="${air.file}" />
+			<arg value="${air.name}" />
 			<arg value="${application.descriptor}" />
 			<arg value="icons" />
 			<arg value="-C" />
@@ -87,8 +88,7 @@
 	</target>
 
 	<target name="clean" description="clean up">
-		<delete dir="${build.dir}" />
-		<delete dir="${debug.dir}" />
-		<delete dir="${release.dir}" />
+		<delete failonerror="false" file="${release.dir}/${application.file}" />
+		<delete failonerror="false" file="${release.dir}/${air.file}" />
 	</target>
 </project>
