@@ -78,7 +78,7 @@
 			<arg value="q" />
 			<arg value="-tsa" />
 			<arg value="none" />
-			<arg value="${air.name}" />
+			<arg value="${air.file}" />
 			<arg value="${application.descriptor}" />
 			<arg value="icons" />
 			<arg value="-C" />
