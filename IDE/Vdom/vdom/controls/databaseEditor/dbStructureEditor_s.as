@@ -54,7 +54,7 @@ private function loadXMLData():void {
 }
 
 private function listChangeHandler():void {
-	__apply.enabled = false;
+	__applyBtn.enabled = false;
 	if (__propList.selectedItem != null) {
 		__name.text	= __propList.selectedItem.label;
 		__id.text	= __propList.selectedItem.data;
@@ -78,21 +78,34 @@ private function doneHandler():void {
 
 private function applyBtnHandler():void {
 	/* Checking data */
-	
+	/* ... */
 	
 	/* Updating data */
-	
-			
+	__propList.selectedItem.label = __name.text;
+	__propList.selectedItem.type = __type.selectedItem.data;
+	__applyBtn.enabled = false;
+	__propList.dataProvider = _propertiesProvider;
 }
 
 private function addBtnHandler():void {
 	trace ("UIDUtil: ", UIDUtil.createUID());
 	_propertiesProvider.push({label:'new', data:UIDUtil.createUID().toLowerCase(), type:'text'});
 	__propList.dataProvider = _propertiesProvider;
+	__propList.selectedIndex = _propertiesProvider.length - 1;
+	listChangeHandler();
 }
 
 private function removeBtnHandler():void {
-	
+	var newPropProvider:Array = new Array();
+	var i:int = 0;
+	for each (var item:Object in _propertiesProvider) {
+		if (i != __propList.selectedIndex) {
+			newPropProvider.push(item);
+		}
+		i++;
+	}
+	_propertiesProvider = newPropProvider;
+	__propList.dataProvider = _propertiesProvider;
 }
 
 private function closeHandler(cEvent:CloseEvent):void {

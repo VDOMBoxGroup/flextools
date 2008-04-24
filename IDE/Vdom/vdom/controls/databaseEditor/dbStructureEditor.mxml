@@ -22,15 +22,15 @@
 			<mx:VBox borderStyle="solid" width="100%" height="100%" paddingTop="2" paddingRight="2">
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Name:" width="100" />
-					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__apply.enabled = true;}" />
+					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__applyBtn.enabled = true;}" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="ID:" />
-					<mx:Label id="__id" width="100%" />
+					<mx:Label id="__id" width="100%" textAlign="right" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Type:" width="100" />
-					<mx:ComboBox id="__type" width="200" change="{__apply.enabled = true;}">
+					<mx:ComboBox id="__type" width="200" change="{__applyBtn.enabled = true;}">
 						<mx:ArrayCollection>
 							<mx:Object label="TEXT"		data="text"/>
 							<mx:Object label="INTEGER"	data="integer"/>
@@ -60,7 +60,7 @@
 				</mx:HBox>
 								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
-					<mx:Button id="__apply" enabled="false" label="Apply changes" click="{applyBtnHandler();}"/>
+					<mx:Button id="__applyBtn" enabled="false" label="Apply changes" click="{applyBtnHandler();}"/>
 				</mx:HBox>				
 			</mx:VBox>
 		</mx:VBox>		
