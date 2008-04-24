@@ -66,8 +66,7 @@
 					
 			</containers:ClosablePanel>
 			-->
-			<objectsPanel:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" 
-				dataProvider="{dataManager.listPages}" currentObject = "{dataManager.currentObject}"/> 					
+			<objectsPanel:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" /> 					
 			
 		</mx:VBox>
 	</mx:HBox>

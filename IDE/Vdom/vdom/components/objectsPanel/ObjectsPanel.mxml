@@ -189,6 +189,8 @@
 		
 		public function set currentObject(xml:XML):void
 		{
+			if(!xml) return;
+			
 			var ID:String = xml.@ID;
 			trace('currentObject: \n'+xml.@ID);
 			tree.selectedItem = xmlTreeData..*.Object.(@ID == ID)[0];

@@ -32,6 +32,8 @@ private function showHandler():void {
 	setListeners(true);
 	
 	watchers.push(
+		BindingUtils.bindProperty(pageList, 'dataProvider', dataManager, 'listPages'),
+		BindingUtils.bindProperty(pageList, 'currentObject', dataManager, 'currentObject'),
 		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId'),
 		BindingUtils.bindProperty(attributesPanel, 'dataProvider', dataManager, 'currentObject')
 	);
