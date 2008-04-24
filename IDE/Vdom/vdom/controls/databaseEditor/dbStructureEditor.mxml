@@ -21,7 +21,7 @@
 			<mx:Label text="Properties:" />
 			<mx:VBox borderStyle="solid" width="100%" height="100%" paddingTop="2" paddingRight="2">
 				<mx:HBox width="100%" verticalAlign="middle">
-					<mx:Label text="Name:" />
+					<mx:Label text="Name:" width="100" />
 					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__apply.enabled = true;}" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
@@ -29,7 +29,7 @@
 					<mx:Label id="__id" width="100%" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
-					<mx:Label text="Type:" />
+					<mx:Label text="Type:" width="100" />
 					<mx:ComboBox id="__type" width="200" change="{__apply.enabled = true;}">
 						<mx:ArrayCollection>
 							<mx:Object label="TEXT"		data="text"/>
@@ -43,24 +43,24 @@
 				
 				
 				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
-					<mx:Label text="Primary key:" width="40%" />
+					<mx:Label text="Primary key:" width="100" />
 					<mx:CheckBox id="__pKey" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
-					<mx:Label text="Auto increment:" />
+					<mx:Label text="Auto increment:" width="100" />
 					<mx:CheckBox id="__aIncrement" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
-					<mx:Label text="Can be null:" />
+					<mx:Label text="Can be null:" width="100" />
 					<mx:CheckBox id="__null" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
-					<mx:Label text="Default value:" />
+					<mx:Label text="Default value:" width="100" />
 					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" />
 				</mx:HBox>
 								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
-					<mx:Button id="__apply" enabled="false" label="Apply changes"/>
+					<mx:Button id="__apply" enabled="false" label="Apply changes" click="{applyBtnHandler();}"/>
 				</mx:HBox>				
 			</mx:VBox>
 		</mx:VBox>		
