@@ -33,12 +33,12 @@ public class RenderManager implements IEventDispatcher {
 	private var dataManager:DataManager;
 	private var dispatcher:EventDispatcher;
 	private var fileManager:FileManager;
-		
-	private var _container:Container;
+	
 	private var applicationId:String;
-	private var _items:ArrayCollection;
-	private var _source:XML;
-	private var _cursor:IViewCursor;
+	private var rootContainer:Container;
+	private var items:ArrayCollection;
+	private var cursor:IViewCursor;
+	private var lockedItems:Object;
 	
 	/**
 	 * 
@@ -60,83 +60,37 @@ public class RenderManager implements IEventDispatcher {
 		if (instance)
 			throw new Error("Instance already exists.");
 		
+		items = new ArrayCollection();
 		dispatcher = new EventDispatcher();
+		
 		soap = Soap.getInstance();
 		fileManager = FileManager.getInstance();
 		dataManager = DataManager.getInstance();
 		
-		//publicData = mx.core.Application.application.publicData;
+		cursor = items.createCursor();
 		
-		_items = new ArrayCollection();
-		_cursor = _items.createCursor();
-		
-		var sort:Sort = new Sort();
-		
-		_items.sort = sort;
-		_items.sort.fields = [new SortField('itemId')];
-		
-		_items.refresh();
+		items.sort = new Sort();
+		items.sort.fields = [new SortField('itemId')];
+		items.refresh();
 		
 		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
 	}
 	
 	public function init(destContainer:Container, applicationId:String = null):void {
 		
-		_container = destContainer;
+		rootContainer = destContainer;
 		
 		if(!applicationId)
 			this.applicationId = dataManager.currentApplicationId;
 			
 	}
 	
-	/* private function addItem(item:Container, itemId:String, parentId:String = ''):Container {
-		
-		var fullPath:String = '';
-		
-		if(parentId == '') {
-			
-			_items.removeAll();
-						
-			fullPath = itemId;
-			
-			item.visible = false;
-			
-			item.percentWidth = 100;
-			item.percentHeight = 100;
-			
-		} else {
-			
-			_cursor.findFirst({itemId:parentId});
-			fullPath = _cursor.current.fullPath + '.' + itemId;
-		}
-		
-		item.setStyle('backgroundColor', '#ffffff');
-		item.setStyle('backgroundAlpha', .0);
-		
-		
-		var itemDescription:ItemDescription = new ItemDescription();
-		
-			itemDescription.itemId = itemId;
-			itemDescription.parentId = parentId;
-			itemDescription.fullPath = fullPath;
-			itemDescription.zindex = 0;
-			itemDescription.hierarchy = 0;
-			itemDescription.order = 0;
-			itemDescription.item = item;
-		
-		_items.addItem(itemDescription);
-		
-		return item;
-	} */
-	
-	
-	
 	public function createItem(itemId:String, parentId:String = ''):void {
 		
 		if(!parentId) {
 			
-			_container.removeAllChildren();
-			_items.removeAll();
+			rootContainer.removeAllChildren();
+			items.removeAll();
 		}
 		
 		createItemDescription(itemId, parentId);
@@ -151,81 +105,206 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function deleteItem(itemId:String):void {
 		
-		_items.filterFunction = 
+		items.filterFunction = 
 			function (item:Object):Boolean {
 				return (item.fullPath.indexOf(itemId) != -1);
 		}
 		
-		_items.refresh();
+		items.refresh();
 		
-		_cursor.findAny({itemId:itemId});
+		cursor.findAny({itemId:itemId});
 		
-		var currentItem:Container = ItemDescription(_cursor.current).item;
+		var currentItem:Container = ItemDescription(cursor.current).item;
 		
 		currentItem.parent.removeChild(currentItem);
 		
-		_items.removeAll();
+		items.removeAll();
 		
-		_items.filterFunction = null;
-		_items.refresh();
+		items.filterFunction = null;
+		items.refresh();
 	}
 	
-	private function renderWysiwygOkHandler(event:SoapEvent):void {
+	public function lockItem(itemId:String):void {
 		
-		var itemXMLDescription:XML = event.result.Result.*[0];
-		
-		if(itemXMLDescription.@id.length() == 0) 
+		if(!itemId)
 			return;
 		
-		var key:String = event.result.Key[0];
+		var itemDescription:ItemDescription= getItemDescriptionById(itemId);
+	}
+	
+	private function insertItem(itemName:String, itemId:String):Container {
 		
-		var itemId:String = itemXMLDescription.@id;
-		var itemName:String = itemXMLDescription.name().localName;
+		var itemDescription:ItemDescription;
+		var isStatic:Boolean = false;
 		
-		deleteItemChildren(itemId);
+		itemDescription = getItemDescriptionById(itemId);
 		
-		var item:Container = insertItem(itemName, itemId);
+		if(!itemDescription)
+			return null
 		
-		if(!item)
-			return;
+		if(itemDescription.item && itemDescription.item.parent)
+			return itemDescription.item;
 		
-		var itemDescription:ItemDescription = updateItemDescription(itemId, itemXMLDescription);
+		var container:Container;
 		
-		render(itemId, itemXMLDescription);
-		
-		var arrayOfItems:Array = sortItems(itemId);
-		var count:uint = 0;
-		
-		for each (var collectionItem:Container in arrayOfItems) {
+		switch (itemName) {
 			
-			if(collectionItem.parent) {
-				
-				collectionItem.parent.setChildIndex(collectionItem, count);
-				count++;
-			}
+		case 'container':
+		 
+			container = new Item(itemId);
+		break;
+		
+		case 'table':
+		 
+			container = new Table(itemId);
+		break;
+		
+		case 'row':
+		 
+			container = new TableRow(itemId);
+		break;
+		
+		case 'cell':
+		 
+			container = new TableCell(itemId);
+		break;
+		
+		default:
+			var kosyak:* = '';
+		break
 		}
+		
+		itemDescription.item = container;
+		
+		return container;
+	}
+	
+	private function deleteItemChildren(itemId:String):void {
+		
+		var result:Container = getItemDescriptionById(itemId).item;
+		
+		if(!result)
+			return
+		
+		items.filterFunction = 
+			function (item:Object):Boolean {
+				return (item.fullPath.indexOf(itemId+'.') != -1);
+		}
+	
+		items.refresh();
+	 
+		result.removeAllChildren();
+		items.removeAll();
+		
+		items.filterFunction = null;
+		items.refresh();
+	}
+	
+	private function createItemDescription(itemId:String = '', parentId:String = ''):ItemDescription {
+		
+		var fullPath:String = '';
+		var staticFlag:String = 'none';
+		
+		if(itemId == '') {
+			itemId = UIDUtil.createUID();
+			staticFlag = 'self';
+		}
+		
+		if(parentId == '') {
+			
+			fullPath = itemId;
+		} else {
+			
+			fullPath = getItemDescriptionById(parentId).fullPath;
+			fullPath = fullPath + '.' + itemId;
+		}
+		
+		var itemDescription:ItemDescription = new ItemDescription();
+		
+			itemDescription.itemId = itemId;
+			itemDescription.staticFlag = staticFlag;
+			itemDescription.parentId = parentId;
+			itemDescription.fullPath = fullPath;
+			itemDescription.zindex = 0;
+			itemDescription.hierarchy = 0;
+			itemDescription.order = 0;
+			itemDescription.item = null;
+		
+		items.addItem(itemDescription);
+		
+		return itemDescription;
+	}
+	
+	private function updateItemDescription(itemId:String, itemXMLDescription:XML):ItemDescription {
+		
+		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
+		var parentDescription:ItemDescription;
+		var newStaticFlag:String = itemDescription.staticFlag;
 		
 		if(itemDescription.parentId) {
 			
-			if(itemDescription.item && !itemDescription.item.parent) {
+			parentDescription = getItemDescriptionById(itemDescription.parentId);
+		
+		
+			if(parentDescription.staticFlag == 'children' || parentDescription.staticFlag == 'all')
+				newStaticFlag = 'all';
+				
+			else if(itemXMLDescription.@contents == 'static')
+				newStaticFlag = 'children';
 			
-				var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
-				parentDescription.item.addChild(item);
-			}
-		} else {
-			
-			item.percentWidth = 100;
-			item.percentHeight = 100;
-			
-			_container.addChild(item);
+		} else 
+			if(itemXMLDescription.@contents == 'static')
+				newStaticFlag = 'children';
+		
+		itemDescription.zindex = uint(itemXMLDescription.@zindex);
+		itemDescription.hierarchy = uint(itemXMLDescription.@hierarchy);
+		itemDescription.order = uint(itemXMLDescription.@order);
+		itemDescription.staticFlag = newStaticFlag; 
+		
+		return itemDescription;
+	}
+	
+	private function getItemDescriptionById(itemId:String):ItemDescription {
+		
+		var searchObject:Object = {itemId:itemId};
+		
+		var isResult:Boolean = cursor.findAny(searchObject);
+		var result:ItemDescription;
+		
+		if(isResult)
+			result = ItemDescription(cursor.current);
+		
+		return result;
+	}
+	
+	private function sortItems(parentId:String):Array {
+		
+		items.filterFunction = 
+			function (item:Object):Boolean {
+				return item.parentId == parentId;
 		}
 		
-		item.dispatchEvent(new Event('refreshComplete'));
-		item.visible = true;
-		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
-		rme.result = item;
+		items.sort.fields = [new SortField('zindex'), new SortField('hierarchy'), new SortField('order')];
 		
-		dispatchEvent(rme);
+		items.refresh();
+		
+		var arrayOfSortedItems:Array = [];
+		
+		for each (var collectionItem:Object in items) {
+			
+			arrayOfSortedItems.push(collectionItem.item);
+		}
+		
+		items.filterFunction = null;
+		items.sort.fields = [new SortField('itemId')];
+			
+		items.refresh();
+		
+		if(arrayOfSortedItems.length > 0)
+			return arrayOfSortedItems
+		else
+			return null
+		
 	}
 	
 	private function render(itemId:String, itemXMLDescription:XML):void {
@@ -262,8 +341,6 @@ public class RenderManager implements IEventDispatcher {
 				childId = childXMLDescription.@id; 
 			
 			switch(childName) {
-				
-			// Containers --------------------------------------
 			
 			case 'container':
 			
@@ -309,31 +386,14 @@ public class RenderManager implements IEventDispatcher {
 				
 				if(childXMLDescription.@width.length())
 					viewText.width = childXMLDescription.@width;
-				//viewText.htmlLoader.textEncodingOverride = "UTF-8";
 				
 				var HTMLText:String = childXMLDescription;
-				//viewText.condenseWhite = true;
-				//viewText.height = childXMLDescription.@height;
-				//viewText.htmlText = childXMLDescription;
 				
-				//viewText.selectable = false;
-				
-				//viewText.setStyle('fontStyle', childXMLDescription.@font);
-				//viewText.setStyle('color', childXMLDescription.@color);
-				
-				//viewText.setStyle('borderStyle', 'solid');
-				//viewText.setStyle('borderColor', '#cccccc');
-				//viewText.setStyle('borderAlpha', .3);
 				viewText.setStyle('backgroundAlpha', .0);
 				
 				if(childXMLDescription.@editable.length() && IItem(item).isStatic == false) {
 					
-					
 					 isEditable = true;
-						
-					
-					//viewText.domWindow.designMode = true;
-					//viewText.editable = true;
 									
 					IItem(item).editableAttributes.push(
 						{destName:String(childXMLDescription.@editable),
@@ -348,8 +408,6 @@ public class RenderManager implements IEventDispatcher {
 						'</head>' +
 						'<body contentEditable="' + 
 						isEditable +'" ' + 
-						//'style="font: '+ fontStyle +';' + 
-						//'color="'+colorStyle+'"' + 
 						'>' +
 						HTMLText +
 						'</body></html>';
@@ -357,43 +415,6 @@ public class RenderManager implements IEventDispatcher {
 				viewText.htmlText = HTMLText;
 				item.addChild(viewText);
 			break;
-			
-			/* case 'text':
-				
-				var viewText:WysiwygText = new WysiwygText()
-				
-				viewText.x = childXMLDescription.@left;
-				viewText.y = childXMLDescription.@top;
-				viewText.width = childXMLDescription.@width;
-				
-				viewText.condenseWhite = true;
-				viewText.height = childXMLDescription.@height;
-				viewText.text = childXMLDescription;
-				
-				viewText.selectable = false;
-				
-				viewText.setStyle('fontStyle', childXMLDescription.@font);
-				viewText.setStyle('color', childXMLDescription.@color);
-				
-				viewText.setStyle('borderStyle', 'solid');
-				viewText.setStyle('borderColor', '#cccccc');
-				viewText.setStyle('borderAlpha', .3);
-				viewText.setStyle('backgroundAlpha', 0);
-				
-				if(childXMLDescription.@editable.length() && IItem(item).isStatic == false) {
-					
-					viewText.selectable = true;
-					viewText.editable = true;
-									
-					IItem(item).editableAttributes.push(
-						{destName:String(childXMLDescription.@editable),
-						sourceObject:viewText,
-						sourceName:'text'}
-					);
-				}
-				
-				item.addChild(viewText);
-			break; */
 			
 			case 'graphics':
 				
@@ -562,180 +583,62 @@ public class RenderManager implements IEventDispatcher {
 		}
 	}
 	
-	private function createItemDescription(itemId:String = '', parentId:String = ''):ItemDescription {
+	private function renderWysiwygOkHandler(event:SoapEvent):void {
 		
-		var fullPath:String = '';
-		var staticFlag:String = 'none';
+		var itemXMLDescription:XML = event.result.Result.*[0];
 		
-		if(itemId == '') {
-			itemId = UIDUtil.createUID();
-			staticFlag = 'self';
-		}
+		if(itemXMLDescription.@id.length() == 0) 
+			return;
 		
-		if(parentId == '') {
+		var key:String = event.result.Key[0];
+		
+		var itemId:String = itemXMLDescription.@id;
+		var itemName:String = itemXMLDescription.name().localName;
+		
+		deleteItemChildren(itemId);
+		
+		var item:Container = insertItem(itemName, itemId);
+		
+		if(!item)
+			return;
+		
+		var itemDescription:ItemDescription = updateItemDescription(itemId, itemXMLDescription);
+		
+		render(itemId, itemXMLDescription);
+		
+		var arrayOfItems:Array = sortItems(itemId);
+		var count:uint = 0;
+		
+		for each (var collectionItem:Container in arrayOfItems) {
 			
-			fullPath = itemId;
-		} else {
-			
-			fullPath = getItemDescriptionById(parentId).fullPath;
-			fullPath = fullPath + '.' + itemId;
+			if(collectionItem.parent) {
+				
+				collectionItem.parent.setChildIndex(collectionItem, count);
+				count++;
+			}
 		}
-		
-		var itemDescription:ItemDescription = new ItemDescription();
-		
-			itemDescription.itemId = itemId;
-			itemDescription.staticFlag = staticFlag;
-			itemDescription.parentId = parentId;
-			itemDescription.fullPath = fullPath;
-			itemDescription.zindex = 0;
-			itemDescription.hierarchy = 0;
-			itemDescription.order = 0;
-			itemDescription.item = null;
-		
-		_items.addItem(itemDescription);
-		
-		return itemDescription;
-	}
-	
-	private function insertItem(itemName:String, itemId:String):Container {
-		
-		var itemDescription:ItemDescription;
-		var isStatic:Boolean = false;
-		
-		itemDescription = getItemDescriptionById(itemId);
-		
-		if(!itemDescription)
-			return null
-		
-		if(itemDescription.item && itemDescription.item.parent)
-			return itemDescription.item;
-		
-		var container:Container;
-		
-		switch (itemName) {
-			
-		case 'container':
-		 
-			container = new Item(itemId);
-		break;
-		
-		case 'table':
-		 
-			container = new Table(itemId);
-		break;
-		
-		case 'row':
-		 
-			container = new TableRow(itemId);
-		break;
-		
-		case 'cell':
-		 
-			container = new TableCell(itemId);
-		break;
-		
-		default:
-			var kosyak:* = '';
-		break
-		}
-		
-		itemDescription.item = container;
-		
-		return container;
-	}
-	
-	private function deleteItemChildren(itemId:String):void {
-		
-		var result:Container = getItemDescriptionById(itemId).item;
-		
-		if(!result)
-			return
-		
-		_items.filterFunction = 
-			function (item:Object):Boolean {
-				return (item.fullPath.indexOf(itemId+'.') != -1);
-		}
-	
-		_items.refresh();
-	 
-		result.removeAllChildren();
-		_items.removeAll();
-		
-		_items.filterFunction = null;
-		_items.refresh();
-	}
-	
-	private function updateItemDescription(itemId:String, itemXMLDescription:XML):ItemDescription {
-		
-		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
-		var parentDescription:ItemDescription;
-		var newStaticFlag:String = itemDescription.staticFlag;
 		
 		if(itemDescription.parentId) {
 			
-			parentDescription = getItemDescriptionById(itemDescription.parentId);
-		
-		
-			if(parentDescription.staticFlag == 'children' || parentDescription.staticFlag == 'all')
-				newStaticFlag = 'all';
-				
-			else if(itemXMLDescription.@contents == 'static')
-				newStaticFlag = 'children';
+			if(itemDescription.item && !itemDescription.item.parent) {
 			
-		} else 
-			if(itemXMLDescription.@contents == 'static')
-				newStaticFlag = 'children';
-		
-		itemDescription.zindex = uint(itemXMLDescription.@zindex);
-		itemDescription.hierarchy = uint(itemXMLDescription.@hierarchy);
-		itemDescription.order = uint(itemXMLDescription.@order);
-		itemDescription.staticFlag = newStaticFlag; 
-		
-		return itemDescription;
-	}
-	
-	private function sortItems(parentId:String):Array {
-		
-		_items.filterFunction = 
-			function (item:Object):Boolean {
-				return item.parentId == parentId;
+				var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
+				parentDescription.item.addChild(item);
+			}
+		} else {
+			
+			item.percentWidth = 100;
+			item.percentHeight = 100;
+			
+			rootContainer.addChild(item);
 		}
 		
-		_items.sort.fields = [new SortField('zindex'), new SortField('hierarchy'), new SortField('order')];
+		item.dispatchEvent(new Event('refreshComplete'));
+		item.visible = true;
+		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
+		rme.result = item;
 		
-		_items.refresh();
-		
-		var arrayOfSortedItems:Array = [];
-		
-		for each (var collectionItem:Object in _items) {
-			
-			arrayOfSortedItems.push(collectionItem.item);
-		}
-		
-		_items.filterFunction = null;
-		_items.sort.fields = [new SortField('itemId')];
-			
-		_items.refresh();
-		
-		if(arrayOfSortedItems.length > 0)
-			return arrayOfSortedItems
-		else
-			return null
-		
-	}
-	
-	private function getItemDescriptionById(itemId:String):ItemDescription {
-		
-	
-		var searchObject:Object = {itemId:itemId};
-		
-		var isResult:Boolean = _cursor.findAny(searchObject);
-		var result:ItemDescription;
-		
-		if(isResult)
-			result = ItemDescription(_cursor.current);
-		
-		return result;
+		dispatchEvent(rme);
 	}
 	
 	/**

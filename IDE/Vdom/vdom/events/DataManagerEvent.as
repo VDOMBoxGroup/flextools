@@ -34,6 +34,7 @@ public class DataManagerEvent extends Event
 	
 	public static const CURRENT_PAGE_CHANGED:String = 'currentPageChanged';
 	public static const CURRENT_OBJECT_CHANGED:String = 'currentObjectChanged';
+	public static const OBJECT_XML_SCRIPT_LOADED:String = 'objectXMLScriptLoaded';
 	
 	//public static const OBJECTS_LOADED:String = 'objectsLoaded';
 	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';

@@ -23,33 +23,34 @@
     	A vdom theme builder
     </description>
 
-	<!-- ================================= 
-          target: build              
-         ================================= -->
+	<!-- ============================== 
+			target: build              
+		 ============================== -->
+	
 	<target 
     	name="build" 
     	depends="clear, create.config, compile" 
     	description="--> Simple application">
 	</target>
 	
-	<!-- - - - - - - - - - - - - - - - - - 
-          target: clear                      
-         - - - - - - - - - - - - - - - - - -->
+	<!-- ============================== 
+			target: clear              
+		 ============================== -->
+	
 	<target name="clear">
 		<delete failonerror="false" file="${config.xml}">
 			<fileset dir="${build.dir}" includes="**/*.*" />
 		</delete>
 	</target>
 	
-	<!-- - - - - - - - - - - - - - - - - - 
-          target: create.config                      
-         - - - - - - - - - - - - - - - - - -->
+	<!-- ============================== 
+			target: create.config              
+		 ============================== -->
+	
 	<target name="create.config">
-		
 		<echo file="${config.xml}"><![CDATA[<?xml version="1.0"?>
 <flex-config>]]>
 		</echo>
-		
 		<for param="file.path">
 			<path>
 				<fileset dir="${source.dir}">
@@ -72,15 +73,15 @@
 				</echo>
 			</sequential>
 		</for>
-		
 		<echo file="${config.xml}" append="true">
 <![CDATA[</flex-config>]]>
 		</echo>
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
-          target: compile                      
-         - - - - - - - - - - - - - - - - - -->
+	<!-- ============================== 
+			target: compile              
+		 ============================== -->
+	
 	<target name="compile">
 		<compc output="${build.file}">
 			<load-config filename="${config.xml}" />

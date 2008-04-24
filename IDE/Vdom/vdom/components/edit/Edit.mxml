@@ -3,16 +3,17 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:containers="vdom.components.edit.containers.*"
 	xmlns:mainContainers="vdom.containers.*"
-	
-	width="100%" height="100%"
-	
-	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	xmlns:objectsPanel="vdom.components.objectsPanel.*"
 	
 	initialize="initializeHandler();"
-	creationComplete="creationCompleteHandler();"
+	
 	show="showHandler();"
 	hide="hideHandler();"
-xmlns:objectsPanel="vdom.components.objectsPanel.*">
+	
+	width="100%" height="100%"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+>
+	
 	<mx:Script source="includes/edit.as" />
 	
 	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">

@@ -3,72 +3,13 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:XMLPresentationClasses="vdom.components.edit.containers.XMLPresentationClasses.*"
 	
+	initialize="initalizeHandler();"
+	
 	show="showHandler();"
 	hide="hideHandler();"
 >
-	<mx:Script>
-		<![CDATA[
-			import vdom.connection.soap.SoapEvent;
-			import vdom.connection.soap.Soap;
-			import mx.core.Application;
-			
-			private var soap:Soap;
-			private var publicData:Object;
-			
-			private function insertCode():void {
-				
-				var selectedObject:String = publicData['selectedObject'];
-				
-				if(selectedObject) {
-					
-					soap.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, getScriptHandler);
-					soap.getObjectScriptPresentation(publicData['applicationId'], publicData['selectedObject']);
-				} 
-					 
-			}
-			
-			private function getScriptHandler(event:SoapEvent):void {
-				
-				scriptEditor.code = event.result.*.toXMLString();
-				this.enabled = true;
-			}
-			/* 
-			private function creationCompleteHandler():void {
-				
-				this.enabled = false;
-				
-				publicData = Application.application.publicData;
-				
-				soap = Soap.getInstance();
-				
-				
-				if(!scriptEditor.loaded) {
-					
-					scriptEditor.addEventListener(Event.COMPLETE, completeHandler);
-				} else {
-					
-					insertCode();
-				}
-			} */
-			
-			private function showHandler():void {
-				
-				var a:* = Application.application;
-			}
-			
-			private function hideHandler():void {
-				
-				
-			}
-			
-			private function completeHandler(event:Event):void {
-				
-				scriptEditor.removeEventListener(Event.COMPLETE, completeHandler);
-				insertCode();
-			}
-			
-		]]>
-	</mx:Script>
+	<mx:Script source="includes/XMLPresentationEditor.as" />
+	
 	<mx:Button y="5" label="Save" height="20" x="10" cornerRadius="0"/>
 	<XMLPresentationClasses:XMLScriptEditor id="scriptEditor" bottom="10" right="10" left="10" top="30" borderStyle="solid" borderColor="#000000"/>
 </mx:Canvas>

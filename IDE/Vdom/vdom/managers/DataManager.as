@@ -40,8 +40,8 @@ public class DataManager implements IEventDispatcher {
 	 * @return instance of DataManager class (Singleton)
 	 * 
 	 */	
-	public static function getInstance():DataManager
-	{
+	public static function getInstance():DataManager {
+		
 		if (!instance) {
 			
 			instance = new DataManager();
@@ -201,11 +201,11 @@ public class DataManager implements IEventDispatcher {
 		return _currentPageId;
 	}
 	
-	[Bindable (event='currentPageChanged')]
+	/* [Bindable (event='currentPageChanged')]
 	public function get currentPage():XML {
 		
 		return _currentApplication.Objects.Object.(@ID == _currentPageId)[0];
-	}
+	} */
 	
 	[Bindable (event='currentObjectChanged')]
 	public function get currentObject():XML {
@@ -521,6 +521,19 @@ public class DataManager implements IEventDispatcher {
 		dispatchEvent(dme);
 	}
 	
+	public function getObjectXMLScript():void {
+		
+		soap.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, objectScriptPresentationHandler);
+		soap.getObjectScriptPresentation(currentApplicationId, currentObjectId)
+		
+	}
+	
+	private function objectScriptPresentationHandler(event:SoapEvent):void {
+		
+		var result:XML = event.result.*[0];
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, result));
+	}
+	
 	/**
 	 * 
 	 * @param objectId идентификатор объекта
@@ -658,9 +671,10 @@ public class DataManager implements IEventDispatcher {
 		var pageData:XML = event.result;
 		var pageId:String = pageData.@ID;
 		
-		delete _currentApplication.Objects.Object.(@ID == pageId)[0];
+		//delete _currentApplication.Objects.Object.(@ID == pageId)[0];
 		
-		_currentApplication.Objects[0].appendChild(pageData);
+		_currentApplication.Objects.Object.(@ID == pageId)[0] = pageData;
+		//_currentApplication.Objects[0].appendChild(pageData);
 		
 		_currentPageId = pageId;
 		

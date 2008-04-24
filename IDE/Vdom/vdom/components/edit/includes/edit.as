@@ -9,28 +9,20 @@ import vdom.components.edit.events.EditEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
 
-//[Bindable] private var objects:XML;
-[Bindable] private var help:String;
-//[Bindable] private var selectedElement:String;
 [Bindable] private var dataManager:DataManager;
+[Bindable] private var help:String;
 	
 private var objectsXML:XML;
-private var currInterfaceType:uint;
+//private var currInterfaceType:uint;
 private var publicData:Object;
 private var ppm:Canvas;
 private var applicationId:String;
 private var topLevelObjectId:String;
-
 private var watchers:Array;
 
 private function initializeHandler():void {
 	
 	dataManager = DataManager.getInstance();
-}
-
-private function creationCompleteHandler():void {
-	
-	//dispatchEvent(new FlexEvent(FlexEvent.SHOW));
 }
 
 private function showHandler():void {
@@ -41,12 +33,8 @@ private function showHandler():void {
 	
 	watchers.push(
 		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId'),
-		//BindingUtils.bindProperty(workArea, 'dataProvider', dataManager, 'currentObject'),
 		BindingUtils.bindProperty(attributesPanel, 'dataProvider', dataManager, 'currentObject')
 	);
-	
-	//if(dataManager.currentPageId)
-	//dataManager.loadPageData();
 }
 
 private function hideHandler():void {
@@ -58,22 +46,6 @@ private function hideHandler():void {
 	
 	setListeners(false);
 }
-
-private function topLevelObjectChange():void {
-	
-	//trace('Edit Work: ' + pageList.selectedItem.@ID);
-	//topLevelObjectId = publicData['topLevelObjectId'] = pageList.selectedItem.@ID;
-	
-	//dataManager.init(applicationId, topLevelObjectId);
-}
-
-/* private function createObjects(objectsXML:XML):void {
-	
-	workArea.createObjects(publicData['applicationId'], publicData['topLevelObjectId']);
-	
-	dispatchEvent(new Event('objectCreated'));	
-	createTypes();
-} */
 
 private function setListeners(flag:Boolean):void {
 	
@@ -109,16 +81,8 @@ private function setListeners(flag:Boolean):void {
 
 private function pageDataLoadedHandler(event:Event):void {
 	
-	//pageList.dataProvider = dataManager.listPages.Object;
-	
-	//workArea.showTopLevelContainer(dataManager.currentApplicationId, dataManager.currentPageId);
-	
-	//typesXML = publicData['types'];
 	PopUpManager.removePopUp(ppm);
 	workArea.visible = true;
-	//dispatchEvent(new Event('objectCreated'));
-	//createTypes();
-	//createObjects(dataManager.getObjects());
 }
 
 private function objectCreatedHandler(event:DataManagerEvent):void {
@@ -142,17 +106,6 @@ private function updateAttributesCompleteHandler(event:DataManagerEvent):void {
 	workArea.updateObject(event.result);
 }
 
-/* private function typesLoadHandler(event:Event):void {
-	
-	typesXML = dataManager.types;
-} */
-
-/* private function objectsLoadHandler(event:Event):void {
-	
-	objectsXML = dataManager.getObjects();
-	createObjects(objectsXML);
-} */
-
 private function objectChangeHandler(event:EditEvent):void {
 	
 	if(event.objectId) {
@@ -163,13 +116,6 @@ private function objectChangeHandler(event:EditEvent):void {
 		dataManager.changeCurrentObject(null);
 	}
 }
-
-/* private function objectCreatedHandler(event:Event):void {
-	
-	//objects = dataManager.getObjects();
-	workArea.visible = true;
-	PopUpManager.removePopUp(ppm);
-} */
 
 private function deleteObjectHandler(event:EditEvent):void {
 	

@@ -1,53 +1,47 @@
 <?xml version="1.0" ?>
 <project
-	name="AIR-file creator">
+	name="AIR-file builder"
+	default="package">
 	
 	<!-- SDK properties -->
 	<property name="SDK_HOME" value="D:/FBP3/sdks/3.0.0" />
 	<property name="mxmlc.jar" value="${SDK_HOME}/lib/mxmlc.jar" />
-	<property name="adl.exe" value="${SDK_HOME}/bin/adl.exe" />
 	<property name="adt.jar" value="${SDK_HOME}/lib/adt.jar" />
 	
-	<!-- dirs -->
+	<!-- Dirs -->
 	<property name="application.dir" value="${basedir}" />
-	
-	<property name="debug.dir" location="${application.dir}/bin-debug" />
 	<property name="build.dir" location="${application.dir}/bin-release" />
 	<property name="release.dir" location="${application.dir}/bin-release" />
 	
 	<!-- Project properties -->
 	<property name="application.name" value="Vdom" />
-	<property name="application.file" value="${application.name}.swf" />
-	<property name="application.descriptor" value="${application.name}-app.xml" />
-	
-	<property name="source.file" value="${application.dir}/${application.name}.mxml" />
-	
-	<property name="air.file" value="${application.name}.air" />
-	
 	<property name="storetype" value="pkcs12" />
 	<property name="keystore" value="cert.p12" />
 	
+	<!-- Files -->
+	<property name="application.file" value="${application.name}.swf" />
+	<property name="application.descriptor" value="${application.name}-app.xml" />
+	<property name="source.file" value="${application.dir}/${application.name}.mxml" />
+	<property name="air.file" value="${application.name}.air" />
+		
+	<!-- Description -->
+	<description>
+		A vdom AIR-file builder
+	</description>
+	
+	<!-- ============================== 
+			target: init              
+		 ============================== -->
+	
 	 <target name="init" depends="clean">
 		<mkdir dir="${build.dir}" />
-		<mkdir dir="${debug.dir}" />
 		<mkdir dir="${release.dir}" />
 	</target>
-
-	<target name="debugcompile" depends="init">
-		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
-			<arg value="-debug=true" />
-			<arg value="-source-path+=${application.dir}" />
-			<arg value="+flexlib=${SDK_HOME}/frameworks" />
-			<arg value="+configname=air" />
-			<arg value="-load-config+=config/flex-config.xml" />
-			<arg value="-file-specs=${source.file}" />
-			<arg value="-output=${debug.dir}/${application.file}" />
-		</java>
-		<!--<copy todir="${debug}">
-				<fileset dir="${assets}" />
-		</copy>-->
-	</target>
-
+	
+	<!-- ============================== 
+			target: releasecompile              
+		 ============================== -->
+	
 	<target name="releasecompile" depends="init">
 		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
 			<arg value="-debug=false" />
@@ -59,14 +53,11 @@
 			<arg value="-output=${build.dir}/${application.file}" />
 		</java>
 	</target>
-
-	<target name="test" depends="debugcompile">
-		<exec executable="${adl.exe}">
-				<arg value="${application.descriptor}" />
-			<arg value="${debug.dir}" />
-		 </exec> 
-	</target>
-
+	
+	<!-- ============================== 
+			target: package              
+		 ============================== -->
+	
 	<target name="package" depends="releasecompile">
 		<java jar="${adt.jar}" fork="true" failonerror="true">
 			<arg value="-package" />
@@ -78,7 +69,7 @@
 			<arg value="q" />
 			<arg value="-tsa" />
 			<arg value="none" />
-			<arg value="${air.file}" />
+			<arg value="${release.dir}/${air.file}" />
 			<arg value="${application.descriptor}" />
 			<arg value="icons" />
 			<arg value="-C" />
@@ -86,9 +77,14 @@
 			<arg value="${application.file}" />
 		</java>
 	</target>
-
+	
+	<!-- ============================== 
+			target: clean              
+		 ============================== -->
+	
 	<target name="clean" description="clean up">
 		<delete failonerror="false" file="${release.dir}/${application.file}" />
 		<delete failonerror="false" file="${release.dir}/${air.file}" />
 	</target>
+	
 </project>

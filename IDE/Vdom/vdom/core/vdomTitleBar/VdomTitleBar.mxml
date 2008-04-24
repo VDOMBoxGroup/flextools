@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
 	creationComplete="creationCompleteHandler();"
+	doubleClickEnabled="true"
 	height="50">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.windowClasses.TitleBar;
 			import mx.core.WindowedApplication;
 			import mx.core.Application;
 			import mx.core.IWindow;
 			private function creationCompleteHandler():void {
 				
 				addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+				addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 				
 				minimizeButton.setStyle('skin', getStyle('minimizeButtonSkin'));
 				minimizeButton.focusEnabled = false;
@@ -90,6 +93,24 @@
 				window.nativeWindow.startMove();
 				
 				event.stopPropagation();
+			}
+			
+			private function doubleClickHandler(event:MouseEvent):void {
+				
+				if (isMac())
+					window.minimize();
+					
+				else {
+					
+					if (window.nativeWindow.displayState ==
+						NativeWindowDisplayState.MAXIMIZED)
+							
+			    			window.restore();
+			    	
+			    	else
+			    		window.maximize();
+				
+				}
 			}
 			
 			private function button_mouseDownHandler(event:MouseEvent):void {

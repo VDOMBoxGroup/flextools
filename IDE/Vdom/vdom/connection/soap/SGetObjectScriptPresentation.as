@@ -1,9 +1,11 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	
 	public class SGetObjectScriptPresentation extends EventDispatcher 
@@ -19,16 +21,12 @@ package vdom.connection.soap
 		public function execute( appid:String = '', objid:String = '' ):void
 		{
 			// protect
-			ws.get_object_script_presentation.arguments.sid 			= code.sessionId; 		// - идентификатор сессии 
-			ws.get_object_script_presentation.arguments.skey 		= code.skey();			//- очередной ключ сессии 
-			
-			// data
-			ws.get_object_script_presentation.arguments.appid  		= appid;				//- идентификатор приложения 
-			ws.get_object_script_presentation.arguments.objid  		= objid;				//- идентификатор объекта
-			
+			var sid:String 			= code.sessionId; 		// - идентификатор сессии 
+			var skey:String 		= code.skey();			//- очередной ключ сессии
+			 
 			//send data & set listener 
-			ws.get_object_script_presentation();
 			ws.get_object_script_presentation.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.get_object_script_presentation(sid, skey, appid, objid);
 		}
 		
 		

@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <flex-config>
-
 	<compiler>
 	
 		<!-- Turn on generation of accessible SWFs. -->

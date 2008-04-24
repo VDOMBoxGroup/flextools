@@ -428,10 +428,9 @@ package vdom.connection.soap
 			sGetOneObject.addEventListener(SoapEvent.GET_ONE_OBJECT_ERROR, ldispatchEvent);
 		}
 		
-		
-		private var sGetObjectScriptPresentation:SGetObjectScriptPresentation = new SGetObjectScriptPresentation(ws);
 		public  function getObjectScriptPresentation(appid:String='', struct:String = ''):void 
 		{	
+			var sGetObjectScriptPresentation:SGetObjectScriptPresentation = new SGetObjectScriptPresentation(ws);
 			sGetObjectScriptPresentation.execute(appid, struct);
 			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, 		ldispatchEvent);
 			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_ERROR, 	ldispatchEvent);
