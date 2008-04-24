@@ -135,6 +135,7 @@ public class WorkArea extends Canvas {
 		//if(result.Object.@ID == topLevelObjectId)
 			//showTopLevelContainer(applicationId, topLevelObjectId)
 		//else
+			renderManager.lockItem(result.Object.@ID);
 			renderManager.updateItem(result.Object.@ID, result.Parent);
 	}
 	
