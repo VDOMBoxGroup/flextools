@@ -54,10 +54,9 @@
 			    tree.percentWidth = 100;
 			    tree.itemRenderer = new ClassFactory(ItCanvas);
 				tree.showRoot = false; 
-				tree.iconField = "@icon"; 
-				tree.labelField = "@label";
+				//tree.iconField = "@icon"; 
 				
-			
+				tree.labelField = "@label";
 				tree.addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 				tree.addEventListener(Event.CHANGE, treeChangeLister);
 			    
