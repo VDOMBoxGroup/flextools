@@ -67,13 +67,15 @@ public class RenderManager implements IEventDispatcher {
 		fileManager = FileManager.getInstance();
 		dataManager = DataManager.getInstance();
 		
+		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
+		
 		cursor = items.createCursor();
 		
 		items.sort = new Sort();
 		items.sort.fields = [new SortField('itemId')];
 		items.refresh();
 		
-		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
+		lockedItems = {};
 	}
 	
 	public function init(destContainer:Container, applicationId:String = null):void {
@@ -100,7 +102,12 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function updateItem(itemId:String, parentId:String):void {
 		
-		soap.renderWysiwyg(applicationId, itemId, parentId);
+		var key:String = soap.renderWysiwyg(applicationId, itemId, parentId);
+		
+		trace(key)
+		
+		if(lockedItems[itemId])
+			lockedItems[itemId] = key;
 	}
 	
 	public function deleteItem(itemId:String):void {
@@ -126,7 +133,7 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function lockItem(itemId:String):void {
 		
-		if(!itemId)
+		if(!itemId && lockedItems[itemId])
 			return;
 		
 		var itemDescription:ItemDescription= getItemDescriptionById(itemId);
@@ -597,6 +604,9 @@ public class RenderManager implements IEventDispatcher {
 		var itemId:String = itemXMLDescription.@id;
 		var itemName:String = itemXMLDescription.name().localName;
 		
+		if(lockedItems[itemId] && lockedItems[itemId] != key)
+			return;
+			
 		deleteItemChildren(itemId);
 		
 		var item:Container = insertItem(itemName, itemId);

@@ -48,6 +48,7 @@ public class Item extends Canvas implements IItem {
 		if(mode) {
 			
 			var waitLayout:UIComponent = new WaitCanvas();
+			removeAllChildren();
 			addChild(waitLayout);
 			
 		}

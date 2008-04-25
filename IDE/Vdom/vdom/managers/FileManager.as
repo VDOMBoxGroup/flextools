@@ -78,15 +78,22 @@ public class FileManager implements IEventDispatcher {
 		property:String = 'resource', raw:Boolean = false):void {
 		
 		if(_resourceStorage[resourceID]) {
-			var data:Bitmap = new Bitmap(Bitmap(_resourceStorage[resourceID]).bitmapData);
-			if(raw) {
+			
+			if(_resourceStorage[resourceID] is Bitmap) {
+			
+				var data:Bitmap = new Bitmap(Bitmap(_resourceStorage[resourceID]).bitmapData);
 				
-				destTarget[property] = data;
-				return
+				if(raw) {
+					
+					destTarget[property] = data;
+					return
+				}
+			
+			
+				var resourceObject:Object = {resourceID:resourceID, data:data}
+				destTarget[property] = resourceObject;
+				return;
 			}
-			var resourceObject:Object = {resourceID:resourceID, data:data}
-			destTarget[property] = resourceObject;
-			return;
 		}
 		
 		if(!requestQue[resourceID]) {

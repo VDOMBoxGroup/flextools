@@ -11,12 +11,12 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-import mx.containers.Canvas;
 import mx.core.Application;
 import mx.core.Container;
 import mx.core.UIComponent;
 import mx.managers.CursorManager;
 
+import vdom.containers.IItem;
 import vdom.events.TransformMarkerEvent;
 import vdom.managers.ResizeManager;
 
@@ -499,7 +499,7 @@ public class TransformMarker extends UIComponent {
 			width : rectangle.width,
 			height : rectangle.height
 		};
-		
+		IItem(_selectedItem).waitMode = true;
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
 		rmEvent.item = _selectedItem;
 		rmEvent.properties = prop;
