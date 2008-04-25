@@ -9,6 +9,8 @@ private var _sourceXML:XML;		// XML got by vdom IDE (of existing table)
 private var _tableID:String;
 private var _tableName:String;
 
+private var _selectedListItem:Object;
+
 [Bindable]
 private var _propertiesProvider:Array = [];
 
@@ -54,12 +56,30 @@ private function loadXMLData():void {
 }
 
 private function listChangeHandler():void {
+	if (__applyBtn.enabled) {
+		Alert.show("Do you want to save your changes?", "Save Changes", 3, this, alertClickHandler);
+	} else {
+		listChanger();		
+	}
+}
+
+private function alertClickHandler(event:CloseEvent):void {
+	if (event.detail == Alert.YES) {
+		applyBtnHandler();
+		listChanger();
+	} else {
+		listChanger();	
+	}
+}
+
+private function listChanger():void {
 	__applyBtn.enabled = false;
-	if (__propList.selectedItem != null) {
-		__name.text	= __propList.selectedItem.label;
-		__id.text	= __propList.selectedItem.data;
+	_selectedListItem = __propList.selectedItem;
+	if (_selectedListItem != null) {
+		__name.text	= _selectedListItem.label;
+		__id.text	= _selectedListItem.data;
 		
-		switch (__propList.selectedItem.type.toLowerCase()) {
+		switch (_selectedListItem.type.toLowerCase()) {
 			case "text":	__type.selectedIndex = 0; break;	
 			case "integer":	__type.selectedIndex = 1; break;
 			case "real":	__type.selectedIndex = 2; break;
@@ -67,13 +87,7 @@ private function listChangeHandler():void {
 			default:
 				Alert.show("Unknown column type in table definition XML", "Unexpected error!");
 		}
-	}
-} 
-
-private function doneHandler():void {
-	//this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID)));
-	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
-	this.dispatchEvent(cEvent);
+	}	
 }
 
 private function applyBtnHandler():void {
@@ -81,14 +95,23 @@ private function applyBtnHandler():void {
 	/* ... */
 	
 	/* Updating data */
-	__propList.selectedItem.label = __name.text;
-	__propList.selectedItem.type = __type.selectedItem.data;
+	_selectedListItem.label = __name.text;
+	_selectedListItem.type = __type.selectedItem.data;
 	__applyBtn.enabled = false;
+	
+	/* Update List Data Provider */
+	_selectedListItem = __propList.selectedItem;
 	__propList.dataProvider = _propertiesProvider;
+	__propList.selectedItem = _selectedListItem;
+}
+
+private function doneHandler():void {
+	//this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID)));
+	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
+	this.dispatchEvent(cEvent);
 }
 
 private function addBtnHandler():void {
-	trace ("UIDUtil: ", UIDUtil.createUID());
 	_propertiesProvider.push({label:'new', data:UIDUtil.createUID().toLowerCase(), type:'text'});
 	__propList.dataProvider = _propertiesProvider;
 	__propList.selectedIndex = _propertiesProvider.length - 1;
