@@ -71,7 +71,7 @@
 		removeAllLines();
 		removeMassTreeElements();
 		removeTreeEditorListeners();
-	
+	dataManager.changeCurrentPage(curTree.ID);
 		btLine.visible = false;
 	}
 	
@@ -162,7 +162,7 @@
 		
 		evt.currentTarget.current = true;
 		curTree = evt.currentTarget;
-		dataManager.changeCurrentPage( curTree.ID);
+		//dataManager.changeCurrentPage( curTree.ID);
 	}
 	
 	
@@ -195,7 +195,7 @@
 				if(ID == '') ID = nam; 
 		curTree = massTreeElements[ID];
 		curTree.current = true;
-		dataManager.changeCurrentPage( curTree.ID);
+	//	dataManager.changeCurrentPage( curTree.ID);
     }
 	
 	/**

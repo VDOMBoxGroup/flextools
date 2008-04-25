@@ -83,7 +83,7 @@
 					
 					/// завести массивчик ID-шников.
 					
-					 xmlList.@sourceID = getSourceID(xmlLabel.@Type); 
+					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
 					xmlList.@icon	= 'accordion_icon';
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
@@ -143,6 +143,7 @@
 					xmlTemp.@label 	= xmlLabel.@Name;
 					xmlTemp.@ID 	= xmlLabel.@ID;
 					xmlTemp.@Type 	= xmlLabel.@Type;
+					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
 					
 					xmlTemp.@icon	= 'drag_icon';
 				// проверяем есть ли еще обьекты в нутри

@@ -114,7 +114,8 @@
 			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
 			dataManager.changeCurrentPage(obID);
 		}
-		
+	
+	//	resourse brouser
 		private function getIcon(ID:String):String
 		{
 			var types:XMLList = dataManager.getTopLevelTypes();
