@@ -19,17 +19,12 @@ package vdom.connection.soap
 		public function execute(appid:String, sourceid:String):void
 		{
 			// protect
-			ws.whole_create_page.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.whole_create_page.arguments.skey 		= code.skey();			//- очередной ключ сессии 
-			
-			// data
-			ws.whole_create_page.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.whole_create_page.arguments.sourceid  	= sourceid;		//-  идентификатор объекта, используемого 
-																		//   в качестве шаблона для новой страницы 
-
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
+		
 			//send data & set listener 
-			ws.whole_create_page();
 			ws.whole_create_page.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.whole_create_page(sid, skey, appid, sourceid);
 		}
 		
 		

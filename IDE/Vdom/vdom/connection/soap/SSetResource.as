@@ -19,25 +19,19 @@ package vdom.connection.soap
 		public function execute(appid:String, restype:String, resname:String, resdata:String  ):void
 		{
 			// protect
-			ws.set_resource.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.set_resource.arguments.skey 		= code.skey();			//- очередной ключ сессии 
-			
-			// data
-			ws.set_resource.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.set_resource.arguments.restype  	= restype;		//- идентификатор приложения 
-			ws.set_resource.arguments.resname  	= resname;		//- идентификатор приложения 
-			ws.set_resource.arguments.resdata  	= resdata;		//- текст скрипта 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 
 			//send data & set listener 
-			ws.set_resource();
 			ws.set_resource.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.set_resource(sid, skey, appid,  restype, resname, resdata);
 			
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			trace(event.result)
+		//	trace(event.result)
 			resultXML = <Result>{XMLList(event.result)}</Result>;
 			//resultXML = resultXML.Result[0];
 		//	resultXML = XML(event.result);

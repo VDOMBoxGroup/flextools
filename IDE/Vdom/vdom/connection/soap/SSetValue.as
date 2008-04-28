@@ -15,18 +15,14 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String,objid:String, value:String):void{
+		public function execute(appid:String,objid:String, value:String):void
+		{
 			// protect
-			ws.set_value.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.set_value.arguments.skey 	= code.skey();			//- очередной ключ сессии 
-			
-			//data
-			ws.set_value.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.set_value.arguments.objid  	= objid;		//- идентификатор объекта
-			ws.set_value.arguments.value  	= value;		//- имя атрибута  
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.set_value();
+			ws.set_value(sid, skey, appid, objid, value);
 			ws.set_value.addEventListener(ResultEvent.RESULT,completeListener);
 		}
 		

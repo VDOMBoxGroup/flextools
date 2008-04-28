@@ -1,9 +1,11 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	
 	public class SSetApplicationInfo extends EventDispatcher 
@@ -19,16 +21,13 @@ package vdom.connection.soap
 		public function execute(appid:String, attrname:String, attrvalue:String ):void
 		{
 			// protect
-			ws.set_application_info.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.set_application_info.arguments.skey 		= code.skey();	//- очередной ключ сессии 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 
-			// data
-			ws.set_application_info.arguments.appid  	= appid;		//- идентификатор приложения;
-			ws.set_application_info.arguments.attrname 	= attrname;		//- имя атрибута приложения из раздела information
-			ws.set_application_info.arguments.attrvalue = attrvalue;	//- значение атрибута
+			
 			
 			//send data & set listener 
-			ws.set_application_info();
+			ws.set_application_info(sid, skey, appid, attrname, attrvalue);
 			ws.set_application_info.addEventListener(ResultEvent.RESULT,completeListener);
 		}
 		

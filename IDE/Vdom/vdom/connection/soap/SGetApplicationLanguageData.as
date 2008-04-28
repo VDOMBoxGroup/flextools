@@ -18,15 +18,13 @@ package vdom.connection.soap
 		public function execute(appid:String):void
 		{
 			//  protect
-			ws.get_application_language_data.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.get_application_language_data.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
-			// data 
-			ws.get_application_language_data.arguments.appid  	= appid;		//- идентификатор приложения 
-			
+		
 			//send data & set listener 
-			ws.get_application_language_data();
 			ws.get_application_language_data.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.get_application_language_data(sid, skey, appid);
 		}
 		
 		

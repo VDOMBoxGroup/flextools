@@ -23,11 +23,6 @@ package vdom.connection.soap
 			var sid:String = code.sessionId;		// - идентификатор сессии 
 			var skey:String = code.skey();			//- очередной ключ сессии 
 			
-			//data 
-			//ws.set_attributes.arguments.appid  	= appid;		//- идентификатор приложения 
-			//ws.set_attributes.arguments.objid  	= objid;		//- идентификатор объекта
-			//ws.set_attributes.arguments.attr  	= attr;			//- имя атрибута  
-			
 			//send data & set listener 
 			ws.set_attributes(sid, skey, appid, objid, attr);
 			ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);

@@ -1,10 +1,12 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
 	import vdom.connection.protect.Code;
+
 	
 	
 	public class SCloseSession extends EventDispatcher 
@@ -20,13 +22,13 @@ package vdom.connection.soap
 		public function execute():void
 		{
 			// protect
-			ws.close_session.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
+			var sid:String		= code.sessionId;		// - идентификатор сессии 
 			
 			// no data
 			
 			//send data & set listener 
-			ws.close_session();
 			ws.close_session.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.close_session();
 		}
 		
 		

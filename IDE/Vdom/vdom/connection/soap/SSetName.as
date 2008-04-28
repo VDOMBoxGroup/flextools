@@ -21,17 +21,12 @@ package vdom.connection.soap
 		public function execute(appid:String, objid:String, name:String):void
 		{
 			// protect
-			ws.set_name.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.set_name.arguments.skey 		= code.skey();			//- очередной ключ сессии 
-			
-			// data
-			ws.set_name.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.set_name.arguments.objid  	= objid;		//- идентификатор объекта 
-			ws.set_name.arguments.name  	= name;			//- новое имя объекта 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 
 			//send data & set listener 
-			ws.set_name();
 			ws.set_name.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.set_name(sid, skey, appid, objid, name);
 			
 		}
 		

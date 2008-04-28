@@ -19,14 +19,14 @@ package vdom.connection.soap
 		public function execute():void
 		{
 			// protect
-			ws.get_all_types.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.get_all_types.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			// no data to send
 			
 			//send data & set listener 
-			ws.get_all_types();
 			ws.get_all_types.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.get_all_types(sid, skey);
 		}
 		
 		

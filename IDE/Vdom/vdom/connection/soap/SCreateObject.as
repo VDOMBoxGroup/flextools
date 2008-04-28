@@ -19,19 +19,13 @@ package vdom.connection.soap
 		public function execute(appid:String='',parentid:String='',typeid:String = '', attrs:String = '', name:String =''):void
 		{
 			// protect
-			ws.create_object.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.create_object.arguments.skey 	= code.skey(); 			//- очередной ключ сессии 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
-			// data
-			ws.create_object.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.create_object.arguments.parentid = parentid;		//- идентификатор объекта 
-			ws.create_object.arguments.typeid  	= typeid;
-			ws.create_object.arguments.attr = attrs;		//- идентификатор типа
-			ws.create_object.arguments.name = name;
 			
 			//send data & set listener 
-			ws.create_object();
 			ws.create_object.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.create_object(sid, skey, appid, parentid, typeid, attrs, name);
 		}
 		
 		

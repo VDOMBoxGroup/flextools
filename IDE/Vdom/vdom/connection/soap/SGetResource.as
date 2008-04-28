@@ -19,34 +19,26 @@ package vdom.connection.soap
 		public function execute(ownerid:String, resid:String):void
 		{
 			// protect
-			ws.get_resource.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.get_resource.arguments.skey 		= code.skey();		//- очередной ключ сессии 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
-			// data
-			ws.get_resource.arguments.ownerid  	= ownerid;				//- идентификатор типа
-			ws.get_resource.arguments.resid  	= resid;				//- идентификатор ресурса
-		//	trace('SOAP get_resource as: '+resid )
 			
 			//send data & set listener 
-			ws.get_resource();
 			ws.get_resource.addEventListener(ResultEvent.RESULT,completeListener);
-			//trace('loadBegin');
+			ws.get_resource(sid, skey, ownerid, resid);
 		}
 		
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			// get result 
-		//	trace(ws.get_resource.lastResult.Result)
-			//trace('loadBeginComplete');
 			resultXML = new XML(<Result />);
 			resultXML.appendChild(XMLList(event.result));
-		//	trace('SOAP get_resource: '+event.result)
+
 			var evt:SoapEvent;
 			var res:String = resultXML.Error;
 			// check Error
-			if(res != ''){
-
+			if(res != '')
+			{
 				evt = new SoapEvent(SoapEvent.GET_RESOURCE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{

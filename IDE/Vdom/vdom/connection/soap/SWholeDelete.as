@@ -19,16 +19,13 @@ package vdom.connection.soap
 		public function execute(appid:String, objid:String):void
 		{
 			// protect
-			ws.whole_delete.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.whole_delete.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			var sid:String			= code.sessionId;		// - идентификатор сессии 
+			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
-			// data
-			ws.whole_delete.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.whole_delete.arguments.objid  	= objid;		//- идентификатор объекта 
-
 			//send data & set listener 
-			ws.whole_delete();
+			
 			ws.whole_delete.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.whole_delete(sid, skey, appid, objid);
 		}
 		
 		
