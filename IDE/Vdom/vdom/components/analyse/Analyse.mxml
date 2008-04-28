@@ -4,7 +4,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"  
 	xmlns:objectsPanel="vdom.components.objectsPanel.*"
 	
-	backgroundColor="#ffffff" creationComplete="creationCompleteHendler();">
+	backgroundColor="#ffffff" creationComplete="creationCompleteHendler();" xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
 	
 	<mx:Script>
 		<![CDATA[
@@ -18,7 +18,7 @@
 			
 			[Bindable]
 			private var dataManager:DataManager;
-	//		[Bindable]
+		//	[Bindable]
 			private var publicData:Object;
 			
 			private function creationCompleteHendler():void
@@ -43,8 +43,7 @@
 	</mx:Script>
 	
 	<mx:Button id="test" x="10" y="10" label="Button" height="20" />
-	<mx:Button x="10" y="35" label="Open resourceBrowser" height="20" click="{resourceBrowserLauncher();}" />
+	<resourceBrowser:ResourceBrowserButton x="10" y="35" />
 	<mx:Button x="174" y="35" label="Open DB Structure Editor" height="20" click="{dbStructureEditorLauncher();}" />
-		
-	
+			
 </mx:Canvas>
