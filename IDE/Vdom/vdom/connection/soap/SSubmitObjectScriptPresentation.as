@@ -22,13 +22,13 @@ package vdom.connection.soap
 			ws.submit_object_script_presentation.arguments.sid 			= code.sessionId; 		// - идентификатор сессии 
 			ws.submit_object_script_presentation.arguments.skey 		= code.skey();			//- очередной ключ сессии 
 			
-			// data
+	/*		// data
 			ws.submit_object_script_presentation.arguments.appid  		= appid;				//- идентификатор приложения 
 			ws.submit_object_script_presentation.arguments.objid  		= objid;				//- идентификатор объекта
 			ws.submit_object_script_presentation.arguments.pres  		= pres;
-			
+		*/	
 			//send data & set listener 
-			ws.submit_object_script_presentation();
+			ws.submit_object_script_presentation(appid, objid, pres);
 			ws.submit_object_script_presentation.addEventListener(ResultEvent.RESULT, completeListener);
 		}
 		
