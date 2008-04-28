@@ -53,7 +53,7 @@
 			
 			<mx:VRule height="100%" />
 			
-			<mx:Button height="24" label="Delete File..." />
+			<mx:Button height="24" label="Delete File..." enabled="false" />
 		</mx:HBox>
 		<!-- End of top panel -->
 		
