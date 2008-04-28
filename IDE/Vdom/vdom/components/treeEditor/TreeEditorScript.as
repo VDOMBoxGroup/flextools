@@ -284,6 +284,7 @@ private function getType(ID:String):String
 	}
 	return  'Void';
 }
+
 public function getLanguagePhrase(name:String, phrase:String):String
 {
 	var phraseRE:RegExp = /#Lang\((\w+)\)/;
@@ -296,14 +297,18 @@ public function getLanguagePhrase(name:String, phrase:String):String
  * -------------------------------------------------
  * 
  * ***/
+private var massIconResouceID:Array = new Array(); 
 private function getIcon(ID:String):String
 {
+	if (massIconResouceID[ID])
+		return massIconResouceID[ID]
+		
 	for each(var lavel:XML in topLevelTypes )
 	{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
 			if( lavel.Information.ID == ID) 
 			{
 				var strLabel:String = lavel.Information.Icon;
-				return  strLabel.substr(5, 36);
+				return  massIconResouceID[ID] = strLabel.substr(5, 36);
 			}
 	}
 	return  '';
