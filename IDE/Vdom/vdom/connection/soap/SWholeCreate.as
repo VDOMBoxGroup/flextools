@@ -30,16 +30,14 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			// get result 
-		//	trace(ws.get_resource.lastResult.Result)
-			resultXML = <Result />
-			resultXML.appendChild(ws.whole_create.lastResult.Result);
-			
-			var evt:SoapEvent;
-			
-			// check Error
-			if(resultXML.name().toString() == 'Error'){
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
 
+			var evt:SoapEvent;
+			var res:String = resultXML.Error;
+			// check Error
+			if(res != '')
+			{
 				evt = new SoapEvent(SoapEvent.WHOLE_CREATE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{

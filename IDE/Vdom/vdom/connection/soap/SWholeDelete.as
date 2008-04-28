@@ -31,12 +31,13 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			// get result 
-			resultXML = XML(ws.whole_delete.lastResult.Result);
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
+
 			var evt:SoapEvent;
-			
+			var res:String = resultXML.Error;
 			// check Error
-			if(resultXML.name().toString() == 'Error')
+			if(res != '')
 			{
 				evt = new SoapEvent(SoapEvent.WHOLE_DELETE_ERROR, resultXML);
 				dispatchEvent(evt);

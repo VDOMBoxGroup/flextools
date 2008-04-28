@@ -29,18 +29,22 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			// get result 
-			resultXML = <Result>{XMLList(event.result)}</Result>;
-			resultXML = resultXML.Applications[0];
-			var evt:SoapEvent;
 			
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
+			
+			// old
+			//resultXML = <Result>{XMLList(event.result)}</Result>;
+			//resultXML = resultXML.Applications[0];
+
+			var evt:SoapEvent;
+			var res:String = resultXML.Error;
 			// check Error
-			if(resultXML.name().toString() == 'Error')
+			if(res != '')
 			{
 				evt = new SoapEvent(SoapEvent.LIST_APLICATION_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-
 				evt = new SoapEvent(SoapEvent.LIST_APLICATION_OK, resultXML);
 				dispatchEvent(evt);
 			}

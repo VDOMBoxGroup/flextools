@@ -36,14 +36,17 @@ package vdom.connection.soap
 		
 		private function completeListener(event:ResultEvent):void
 		{
-			// get result 
-			resultXML = <Result>{XMLList(event.result)}</Result>;
-			//resultXML = resultXML.Objects[0];
+			//old
+		//	resultXML = <Result>{XMLList(event.result)}</Result>;
 			
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
+
 			var evt:SoapEvent;
-			var name:String = resultXML.*[0].name().toString();
+			var res:String = resultXML.Error;
 			// check Error
-			if(name == 'Error'){
+			if(res != '')
+			{
 				evt = new SoapEvent(SoapEvent.GET_TOP_OBJECTS_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{

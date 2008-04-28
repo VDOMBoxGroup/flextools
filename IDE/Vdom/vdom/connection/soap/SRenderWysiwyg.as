@@ -40,11 +40,13 @@ package vdom.connection.soap
 		private  function completeListener(event:ResultEvent):void
 		{
 			
-			resultXML = <Result>{XMLList(event.result)}</Result>;
-			//resultXML = resultXML.Objects[0];
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
+
 			var evt:SoapEvent;
+			var res:String = resultXML.Error;
 			// check Error
-			if(resultXML.Error.length() > 0)
+			if(res != '')
 			{
 				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_ERROR, resultXML);
 				dispatchEvent(evt);

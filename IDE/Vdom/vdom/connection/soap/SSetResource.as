@@ -31,19 +31,15 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-		//	trace(event.result)
-			resultXML = <Result>{XMLList(event.result)}</Result>;
-			//resultXML = resultXML.Result[0];
-		//	resultXML = XML(event.result);
-			// get result 
-		//	resultXML = XML(event.result);
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
+
 			var evt:SoapEvent;
-			
+			var res:String = resultXML.Error;
 			// check Error
-			if(resultXML == null)
+			if(res != '')
 			{
-				
-				evt = new SoapEvent(SoapEvent.SET_RESOURCE_ERROR, new XML('<error/>'));
+				evt = new SoapEvent(SoapEvent.SET_RESOURCE_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
 				evt = new SoapEvent(SoapEvent.SET_RESOURCE_OK, resultXML);

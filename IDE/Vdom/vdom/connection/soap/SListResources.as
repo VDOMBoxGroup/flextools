@@ -34,18 +34,18 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			// get result 
-			resultXML = XML(<Result>{XMLList(event.result)}</Result>);
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
+
 			var evt:SoapEvent;
-			
+			var res:String = resultXML.Error;
 			// check Error
-			if(resultXML.name().toString() == 'Error')
+			if(res != '')
 			{
 				evt = new SoapEvent(SoapEvent.LIST_RESOURSES_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
 				evt = new SoapEvent(SoapEvent.LIST_RESOURSES_OK, resultXML);
-				evt.result = resultXML;
 				dispatchEvent(evt);
 			}
 		}

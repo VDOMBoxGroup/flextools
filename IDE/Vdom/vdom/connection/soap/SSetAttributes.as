@@ -31,15 +31,16 @@ package vdom.connection.soap
 		}
 		
 		
-		private  function completeListener(event:ResultEvent):void{
-			//trace(ws.set_attributes.lastResult.Result);
-			// get result 
-			resultXML = <Result>{XMLList(event.result)}</Result>;
-			var evt:SoapEvent;
-			
-			// check Error
-			if(resultXML.name().toString() == 'Error'){
+		private  function completeListener(event:ResultEvent):void
+		{
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
 
+			var evt:SoapEvent;
+			var res:String = resultXML.Error;
+			// check Error
+			if(res != '')
+			{
 				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_S_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{

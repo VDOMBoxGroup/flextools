@@ -31,14 +31,14 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
-			ws.get_echo.removeEventListener(ResultEvent.RESULT,completeListener);
-			// get result 
-			resultXML = XML(event.result);
-			var evt:SoapEvent;
-			
-			// check Error
-			if(resultXML.name().toString() == 'Error'){
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
 
+			var evt:SoapEvent;
+			var res:String = resultXML.Error;
+			// check Error
+			if(res != '')
+			{
 				evt = new SoapEvent(SoapEvent.GET_ECHO_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
