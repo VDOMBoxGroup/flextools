@@ -311,11 +311,12 @@ private function fileUploadHandler():void {
 		_fileForUpload = new File();
 	}
 	
-	var imagesFilter:FileFilter = new FileFilter("Images", "*.jpg;*.gif;*.png");
+	var allFilesFilter:FileFilter = new FileFilter("All Files", "*.*");
+	var imagesFilter:FileFilter = new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png;*.bmp");
 	var docFilter:FileFilter = new FileFilter("Documents", "*.pdf;*.doc;*.txt");
 	
 	_fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
-	_fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter]);
+	_fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
 }
 
 private function fileSelectHandler(event:Event):void {
