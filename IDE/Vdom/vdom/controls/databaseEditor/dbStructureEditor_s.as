@@ -1,5 +1,4 @@
 // ActionScript file
-import mx.charts.series.ColumnSet;
 import mx.controls.Alert;
 import mx.events.CloseEvent;
 import mx.managers.PopUpManager;
@@ -75,7 +74,7 @@ private function applyAlertClickHandler(event:CloseEvent):void {
 
 private function listChanger():void {
 	__applyBtn.enabled = false;
-	__doneBtn.enabled = true;
+	controlsEnable(true);
 	_selectedListItem = __propList.selectedItem;
 	if (_selectedListItem != null) {
 		__name.text	= _selectedListItem.label;
@@ -93,6 +92,12 @@ private function listChanger():void {
 	__propDetailsPanel.enabled = true;	
 }
 
+private function controlsEnable(value:Boolean):void {
+	__doneBtn.enabled = value;
+	__addBtn.enabled = value;
+	__removeBtn.enabled = value;
+}
+
 private function applyBtnHandler():void {
 	/* Checking data */
 	/* ... */
@@ -101,7 +106,7 @@ private function applyBtnHandler():void {
 	_selectedListItem.label = __name.text;
 	_selectedListItem.type = __type.selectedItem.data;
 	__applyBtn.enabled = false;
-	__doneBtn.enabled = true;
+	controlsEnable(true);
 
 	/* Write changelog */
 	if (_selectedListItem.fnew) {
