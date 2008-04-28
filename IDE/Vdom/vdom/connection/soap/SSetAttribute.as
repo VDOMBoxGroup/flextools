@@ -1,9 +1,11 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	
 	public class SSetAttribute extends EventDispatcher 
@@ -16,20 +18,16 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String,objid:String, attr:String, value:String):void{
+		public function execute(appid:String, objid:String, attr:String, value:String):void{
 			// protect
-			ws.set_attribute.arguments.sid 		= code.sessionId;		// - идентификатор сессии 
-			ws.set_attribute.arguments.skey 		= code.skey();			//- очередной ключ сессии 
+			var sid:String 		= code.sessionId;		// - идентификатор сессии 
+			var skey:String		= code.skey();			//- очередной ключ сессии 
 			
-			// data
-			ws.set_attribute.arguments.appid  	= appid;		//- идентификатор приложения 
-			ws.set_attribute.arguments.objid  	= objid;		//- идентификатор объекта
-			ws.set_attribute.arguments.attr  	= attr;			//- имя атрибута  
-			ws.set_attribute.arguments.value 	= value;		//- значение атрибута
+			ws.set_attribute.addEventListener(ResultEvent.RESULT,completeListener);
 			
 			//send data & set listener 
-			ws.set_attribute();
-			ws.set_attribute.addEventListener(ResultEvent.RESULT,completeListener);
+			ws.set_attribute(sid, skey, appid, objid, attr, value);
+			
 		}
 		
 		

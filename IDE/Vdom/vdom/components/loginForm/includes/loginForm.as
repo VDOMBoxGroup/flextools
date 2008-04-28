@@ -101,8 +101,10 @@ private function checkData():void {
 
 private function loginForm_keyDownHandler(event:KeyboardEvent):void {
 	
-	if(event.keyCode == 13)
+	if(event.keyCode == 13) {
+		removeEventListener(KeyboardEvent.KEY_DOWN, loginForm_keyDownHandler);
 		checkData();
+	}
 }
 
 private function mouseDownHandler(event:MouseEvent):void {

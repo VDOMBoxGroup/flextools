@@ -11,7 +11,8 @@ public class DataManagerEvent extends Event
 		type:String,
 		result:* = null,
 		isEnabled:Boolean=false,
-		objectId:String=null){
+		objectId:String=null,
+		key:String=''){
 			
 			// Call the constructor of the superclass.
 			super(type);
@@ -20,6 +21,7 @@ public class DataManagerEvent extends Event
 			this.isEnabled = isEnabled;
 			this.objectId = objectId;
 			this.result = result;
+			this.key = key;
 	}
 
     // Define static constant.
@@ -37,6 +39,7 @@ public class DataManagerEvent extends Event
 	public static const OBJECT_XML_SCRIPT_LOADED:String = 'objectXMLScriptLoaded';
 	
 	//public static const OBJECTS_LOADED:String = 'objectsLoaded';
+	public static const UPDATE_ATTRIBUTES_BEGIN:String = 'updateAttributesBegin';
 	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';
 	
 	public static const OBJECTS_CREATED:String = 'objectCreated';
@@ -50,6 +53,7 @@ public class DataManagerEvent extends Event
 	public var isEnabled:Boolean;
 	public var objectId:String;
 	public var result:XML;
+	public var key:String;
 	
     // Override the inherited clone() method.
     override public function clone():Event {

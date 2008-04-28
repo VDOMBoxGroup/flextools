@@ -225,10 +225,10 @@ package vdom.connection.soap
 		public  function setAttribute(appid:String='',objid:String='', attr:String='',value:String='' ):void 
 		{
 			var sSetAttribute:SSetAttribute = new SSetAttribute(ws);
-
-			sSetAttribute.execute(appid, objid,attr, value);
+			
 			sSetAttribute.addEventListener(SoapEvent.SET_ATTRIBUTE_OK, ldispatchEvent);
 			sSetAttribute.addEventListener(SoapEvent.SET_ATTRIBUTE_ERROR, ldispatchEvent);
+			sSetAttribute.execute(appid, objid, attr, value);
 		}
 		
 		/**
@@ -316,12 +316,15 @@ package vdom.connection.soap
 		 * 						--setAttributes --
 		 */ 
 		//private 
-		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):void
+		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):String
 		{
 			var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
-			sSetAttributes.execute(appid, objid, attr);
+			
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);
+			
+			var key:String = sSetAttributes.execute(appid, objid, attr);
+			return key;
 		}
 		
 		/**

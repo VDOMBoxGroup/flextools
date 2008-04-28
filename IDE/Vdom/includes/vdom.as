@@ -97,7 +97,7 @@ private function authComleteHandler(event:Event):void {
 	authenticationManager.removeEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
 	
 	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
-	dataManager.new_init();
+	dataManager.init();
 }
 
 private function dataManagerInitComplete(event:DataManagerEvent):void {

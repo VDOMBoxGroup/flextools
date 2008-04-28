@@ -19,6 +19,7 @@ import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.containers.IItem;
 import vdom.containers.Item;
+import vdom.events.DataManagerEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.managers.renderClasses.ItemDescription;
 import vdom.managers.renderClasses.WysiwygTableClasses.Table;
@@ -68,6 +69,8 @@ public class RenderManager implements IEventDispatcher {
 		dataManager = DataManager.getInstance();
 		
 		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
+		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, updateAttributesBeginHandler);
+		
 		
 		cursor = items.createCursor();
 		
@@ -102,12 +105,14 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function updateItem(itemId:String, parentId:String):void {
 		
+		
+		
+		//dataManager.updateAttributes(event.objectId, event.props);
+		
 		var key:String = soap.renderWysiwyg(applicationId, itemId, parentId);
 		
-		trace(key)
-		
-		if(lockedItems[itemId])
-			lockedItems[itemId] = key;
+		//if(lockedItems[itemId])
+			//lockedItems[itemId] = key;
 	}
 	
 	public function deleteItem(itemId:String):void {
@@ -138,7 +143,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		var itemDescription:ItemDescription= getItemDescriptionById(itemId);
 		IItem(itemDescription.item).waitMode = true;
-		lockedItems[itemId] = itemDescription;
+		lockedItems[itemId] = '';
 	}
 	
 	private function insertItem(itemName:String, itemId:String):Container {
@@ -314,6 +319,12 @@ public class RenderManager implements IEventDispatcher {
 		else
 			return null
 		
+	}
+	
+	private function updateAttributesBeginHandler(event:DataManagerEvent):void {
+		
+		if(lockedItems[event.objectId] !== null)
+			lockedItems[event.objectId] = event.key;
 	}
 	
 	private function render(itemId:String, itemXMLDescription:XML):void {

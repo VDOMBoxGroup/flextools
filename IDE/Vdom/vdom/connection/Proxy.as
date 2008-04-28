@@ -107,7 +107,8 @@ public class Proxy {
 			{
 				for(var objid:String in massObj[appid])
 				{
-					soap.setAttributes(appid,objid,massObj[appid][objid].toXMLString());
+					var key:String = soap.setAttributes(appid, objid, massObj[appid][objid].toXMLString());
+					dispatchEvent(new ProxyEvent(ProxyEvent.PROXY_SEND, null, objid, key));
 					delete massObj[appid][objid];
 				}
 			}

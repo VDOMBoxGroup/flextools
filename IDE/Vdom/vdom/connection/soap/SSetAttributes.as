@@ -17,7 +17,7 @@ package vdom.connection.soap
 			this.ws = ws;
 		}
 		
-		public function execute(appid:String = '', objid:String = '', attr:String = ''):void
+		public function execute(appid:String = '', objid:String = '', attr:String = ''):String
 		{
 			// protect
 			var sid:String = code.sessionId;		// - идентификатор сессии 
@@ -31,6 +31,8 @@ package vdom.connection.soap
 			//send data & set listener 
 			ws.set_attributes(sid, skey, appid, objid, attr);
 			ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);
+			
+			return skey;
 		}
 		
 		

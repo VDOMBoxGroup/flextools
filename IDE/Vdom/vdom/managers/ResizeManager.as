@@ -266,18 +266,18 @@ public class ResizeManager extends EventDispatcher {
 	
 	private function mouseDownHandler(event:MouseEvent):void {
 		
-		trace('ResizeManager MD');
+		//trace('ResizeManager MD');
 		
 		if(!highlightedItem)
 			return;
 		
-		trace('highlighted');
+		//trace('highlighted');
 		
 		var newSelectedItem:Container;
 		
 		if(_topLevelItem != highlightedItem.parent) {
 			
-			trace('not selected');
+			//trace('not selected');
 			
 			var objectType:XML = dataManager.getTypeByObjectId(IItem(highlightedItem).objectId);
 			
@@ -428,14 +428,14 @@ public class ResizeManager extends EventDispatcher {
 	
 	private function transformBeginHandler(event:TransformMarkerEvent):void {
 		
-		trace('transform begin');
+		//trace('transform begin');
 		itemTransform = true;
 		beforeTransform = event.properties;
 	}
 	
 	private function transformCompleteHandler(event:TransformMarkerEvent):void {
 		
-		trace('transform complete');
+		//trace('transform complete');
 
 		itemTransform = false;
 		
@@ -455,12 +455,12 @@ public class ResizeManager extends EventDispatcher {
 	}
 	private function markerSelectedHandler(event:TransformMarkerEvent):void {
 		
-		trace('marker selected')
+		//trace('marker selected')
 		markerSelected = true;
 		highlightItem(null);
 	}
 	private function markerUnSelectedHandler(event:TransformMarkerEvent):void {
-		trace('marker unselected')
+		//trace('marker unselected')
 		markerSelected = false;
 	}
 	private function rollOutHandler(event:MouseEvent):void {

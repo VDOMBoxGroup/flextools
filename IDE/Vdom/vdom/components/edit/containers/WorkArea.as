@@ -254,6 +254,7 @@ public class WorkArea extends Canvas {
 		selectedObject.y = event.properties.top;
 		selectedObject.width = event.properties.width;
 		selectedObject.height = event.properties.height;
+		renderManager.lockItem(IItem(selectedObject).objectId);
 		//selectedObject.removeAllChildren();
 		//selectedObject.waitMode = true;
 		//renderManager.lockItem();

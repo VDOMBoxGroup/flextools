@@ -386,7 +386,7 @@ public class TransformMarker extends UIComponent {
 	private function mouseDownHandler(event:MouseEvent):void {
 		//trace('resbeg');
 		
-		trace('TransformMarker MD');
+		//trace('TransformMarker MD');
 		resizeManager.itemTransform = true;
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
 		
@@ -499,7 +499,7 @@ public class TransformMarker extends UIComponent {
 			width : rectangle.width,
 			height : rectangle.height
 		};
-		IItem(_selectedItem).waitMode = true;
+
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
 		rmEvent.item = _selectedItem;
 		rmEvent.properties = prop;
@@ -514,7 +514,7 @@ public class TransformMarker extends UIComponent {
 	
 	private function mouseMoveHandler(event:MouseEvent):void {
 		
-		trace('mm');
+		//trace('mm');
 		//CursorManager.removeAllCursors();
 		if(itemChanged)
 			return;
