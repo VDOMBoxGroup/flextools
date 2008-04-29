@@ -293,7 +293,7 @@ public class ResizeManager extends EventDispatcher {
 			newSelectedItem = selectItem(highlightedItem, false);
 		
 		if(newSelectedItem) {
-			var rme:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.ITEM_SELECTED);
+			var rme:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.OBJECT_SELECT);
 			rme.item = newSelectedItem;
 			dispatchEvent(rme);
 		}

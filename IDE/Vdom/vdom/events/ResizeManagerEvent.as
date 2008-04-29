@@ -9,7 +9,7 @@ public class ResizeManagerEvent extends Event {
 	public static const RESIZE_CHANGING:String = "changing";
 	public static const RESIZE_BEGIN:String = "begin";
 	public static const RESIZE_COMPLETE:String = "complete";
-	public static const ITEM_SELECTED:String = "item selected";
+	public static const OBJECT_SELECT:String = "object select";
 	
 	public var item:Container;
 	public var properties:Object;
