@@ -4,6 +4,7 @@ import flash.display.Bitmap;
 import flash.display.Loader;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.utils.ByteArray;
 
 import mx.containers.VBox;
 import mx.controls.Image;
@@ -19,7 +20,7 @@ public class Type extends VBox {
 	private var typeLabel:Label;
 	
 	private var loader:Loader;
-	private var iconData:Bitmap;
+	private var iconData:ByteArray;
 	
 	public var aviableContainers:String;
 	
@@ -76,11 +77,11 @@ public class Type extends VBox {
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete); */
 	}
 	
-	private function loadComplete(event:Event):void {
+	/* private function loadComplete(event:Event):void {
 		
 		iconData = Bitmap(loader.content);
 		typeIcon.source = Bitmap(iconData);
-	}
+	} */
 	
 	private function dragIt(event:MouseEvent):void {
 		
@@ -100,7 +101,7 @@ public class Type extends VBox {
 		//proxy.setStyle('backgroundColor', '#FF00FF');
 		proxy.width = 58;
 		proxy.height = 58;
-		proxy.source = new Bitmap(iconData.bitmapData);
+		proxy.source = iconData;
 		
 		VdomDragManager.doDrag(
 			dragInitiator, 

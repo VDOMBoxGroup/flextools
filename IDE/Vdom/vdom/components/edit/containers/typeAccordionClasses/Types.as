@@ -20,6 +20,7 @@ public class Types extends VBox {
 	public function Types() {
 		
 		super();
+		verticalLineScrollSize = 40;
 	}
 	
 	 override public function validateDisplayList():void {
@@ -28,9 +29,7 @@ public class Types extends VBox {
 	 	
 	 	if(contentPane && verticalScrollBar) {
 	 		
-	 		var r:Rectangle = contentPane.scrollRect
-	 		//r.width += verticalScrollBar.width;
-	 		
+	 		var r:Rectangle = contentPane.scrollRect	 		
 	 		contentPane.scrollRect = r;
 	 	}
 	 }

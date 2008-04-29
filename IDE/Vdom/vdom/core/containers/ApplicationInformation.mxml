@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionPanel xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Script>
+		<![CDATA[
+			public function set dataProvider(xml:XML):void {
+				
+				if(xml) {
+					applicationName.text = xml.Name.toString();
+					applicationPage.text = xml.Numberofpages.toString();
+					applicationObjects.text = xml.Numberofobjects.toString();
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas width="50" height="50" x="0" y="0" backgroundColor="#4AEA61" borderStyle="none">
+	</mx:Canvas>
+	<mx:Label width="100" id="applicationName" y="50" height="15"/>
+	<mx:Label width="51" y="0" x="58" text="Pages" textAlign="right"/>
+	<mx:Label width="51" y="17" x="58" text="Objects" textAlign="right"/>
+	<mx:Label width="41" id="applicationPage" y="0" height="15" x="117"/>
+	<mx:Label width="41" id="applicationObjects" y="17" height="15" x="117"/>
+</ActionPanel>

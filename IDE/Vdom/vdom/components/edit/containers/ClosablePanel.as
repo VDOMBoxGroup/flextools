@@ -40,6 +40,12 @@ public class ClosablePanel extends Panel {
 	   }  
 	}
 	
+	override public function set title(value:String):void {
+		
+		value = value.toUpperCase();
+		super.title = value;
+	}
+	
 	override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void {
 		
 		super.layoutChrome(unscaledWidth, unscaledHeight);

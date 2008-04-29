@@ -31,12 +31,12 @@ public class IconUtil extends BitmapAsset {
 	}
 	
 	public function set resource(resource:*):void {
-		if(!parent)
+		/* if(!parent)
 			return;
 		bitmapData = resource.data.bitmapData;
 		
 		var component:UIComponent = parent as UIComponent;
-		component.invalidateSize();
+		component.invalidateSize(); */
 	}
 	
 	private function addedHandler(event:Event):void {

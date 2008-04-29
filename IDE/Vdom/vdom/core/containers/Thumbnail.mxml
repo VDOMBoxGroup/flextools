@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	horizontalAlign="center" 
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	verticalGap="0" horizontalGap="0">
+	
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			private var labelValue:String
+			
+			override public function set data(value:Object):void {
+				
+				super.data = value;
+				labelValue = value.@id;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Canvas id="img" width="50" height="50" backgroundColor="#ff0000" borderStyle="none"/>
+</mx:VBox>
+

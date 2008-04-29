@@ -150,19 +150,20 @@ TypeAccordion {
 	headerStyleName: "typesHeaderStyle" ;
 }
 
-.typeVScrollBar {
-	themeColor: #ff0000;	
-}
-
 .typesHeaderStyle {
 	
 	color: #ffffff;
-	highlightAlphas: 0, 0;
+	highlightAlphas: .3, .3;
 	selectedFillColors: #d91107, #d91107;
 	textRollOverColor:#ffffff;
 	textSelectedColor:#ffffff; 
 	fillAlphas:1, 1;
 	fillColors:#d91107, #d91107;
+	textAlign: center;
+}
+
+.typeVScrollBar {
+	themeColor: #ff0000;	
 }
 
 ClosablePanel {

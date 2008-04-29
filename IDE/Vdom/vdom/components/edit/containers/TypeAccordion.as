@@ -10,33 +10,32 @@ import vdom.managers.FileManager;
 public class TypeAccordion extends Accordion {
 	
 	private var fileManager:FileManager;
+	private var categories:Object;
 	
 	public function TypeAccordion()	{
 		
 		super();
 		
 		fileManager = FileManager.getInstance();
+		categories = {};
 	}
 	
 	public function set dataProvider(typesXML:XMLList):void {
 		
-		var cat:Object = {};
 		var typesCollection:ArrayCollection = new ArrayCollection();
+		
+		var standardCategory:Array = ['STANDARD', 'FORM', 'TABLE', 'DATABASE'];
+		
+		for each (var category:String in standardCategory)
+			insertCategory(category);
+		
 		for each (var num:XML in typesXML) {
 			
 			if(num.Information.Container == 3)
 				continue;
 			
-			if(!cat[num.Information.Category]) {
-				
-				cat[num.Information.Category] = new Types();
-				addChild(cat[num.Information.Category]);
-			}
-			
-			cat[num.Information.Category].label = num.Information.Category;
-			cat[num.Information.Category].setStyle('horizontalAlign', 'center');
-			cat[num.Information.Category].horizontalScrollPolicy = 'off';
-			cat[num.Information.Category].percentWidth = 100;
+			var categoryName:String = String(num.Information.Category).toUpperCase();
+			var currentCategory:Types = insertCategory(categoryName);
 			
 			var et:Type = new Type(num);
 			
@@ -49,8 +48,32 @@ public class TypeAccordion extends Accordion {
 			resourceID = resourceID.match(resourceRE)[1];
 			
 			fileManager.loadResource(num.Information.ID, resourceID, et);
-			cat[num.Information.Category].addChild(et); 
+			currentCategory.addChild(et); 
 		}
+	}
+	
+	private function insertCategory(categoryName:String):Types {
+		
+		var currentCategory:Types;
+		
+		if(!categories[categoryName]) {
+			
+			currentCategory	= new Types();
+			
+			categories[categoryName] = currentCategory;
+			addChild(currentCategory);
+			
+			currentCategory.label = categoryName;
+			currentCategory.setStyle('horizontalAlign', 'center');
+			currentCategory.horizontalScrollPolicy = 'off';
+			currentCategory.percentWidth = 100;
+			
+		} else {
+			
+			currentCategory = categories[categoryName];
+		}
+
+		return currentCategory;
 	}
 }
 }

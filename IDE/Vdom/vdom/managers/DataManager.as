@@ -4,6 +4,8 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
+import mx.controls.Image;
+
 import vdom.connection.Proxy;
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
@@ -458,13 +460,26 @@ public class DataManager implements IEventDispatcher {
 		
 		soap.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, getObjectXMLScriptHandler);
 		soap.getObjectScriptPresentation(currentApplicationId, currentObjectId)
-		
 	}
 	
 	private function getObjectXMLScriptHandler(event:SoapEvent):void {
 		
+		soap.removeEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, getObjectXMLScriptHandler);
 		var result:XML = event.result.*[0];
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, result));
+	}
+	
+	public function setObjectXMLScript(objectXMLScript:String):void {
+		
+		soap.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, setObjectXMLScriptHandler);
+		soap.submitObjectScriptPresentation(currentApplicationId, currentObjectId)
+	}
+	
+	private function setObjectXMLScriptHandler(event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, setObjectXMLScriptHandler);
+		var result:XML = event.result.*[0];
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, result));
 	}
 	
 	/**

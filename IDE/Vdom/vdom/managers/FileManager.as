@@ -1,7 +1,6 @@
 package vdom.managers {
 
 import flash.display.Bitmap;
-import flash.display.Loader;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
@@ -85,8 +84,14 @@ public class FileManager implements IEventDispatcher {
 				
 				if(raw) {
 					
-					destTarget[property] = data;
-					return
+					try {
+						destTarget[property] = data;
+					} catch (error:Error) {
+						var zzz:String = '';
+					}
+					
+					return;
+					
 				}
 			
 			
@@ -112,8 +117,6 @@ public class FileManager implements IEventDispatcher {
 		);
 	}
 	
-	
-	
 	private function resourceLoadedHandler(event:SoapEvent):void {
 		
 		var resourceID:String = event.result.ResourceID;
@@ -123,17 +126,32 @@ public class FileManager implements IEventDispatcher {
 		decoder.decode(resource);
 		
 		var imageSource:ByteArray = decoder.drain();
+		
 		imageSource.uncompress();
 		
-		var loader:Loader = new Loader();
-		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
-		loader.name = resourceID;
-		loader.loadBytes(imageSource);
+		_resourceStorage[resourceID] = imageSource;
 		
-		_resourceStorage[resourceID] = resource;
+		for each(var item:Object in requestQue[resourceID]) {
+			
+			var data:ByteArray = new ByteArray();
+			_resourceStorage[resourceID].readBytes(data);
+			//ByteArray(_resourceStorage[resourceID]).writeBytes(data);
+			var requestObject:Object = item.object;
+			var requestProperty:String = item.property;
+			
+			if(item.raw) {
+					
+				requestObject[requestProperty] = data;	
+			} else {
+				
+				requestObject[requestProperty] = {resourceID:resourceID, data:data};
+			}
+		}
+		
+		delete requestQue[resourceID];
 	}
 	
-	private function loadComplete(event:Event):void {
+	/* private function loadComplete(event:Event):void {
 		
 		var resourceID:String = event.currentTarget.loader.name;
 		
@@ -155,7 +173,7 @@ public class FileManager implements IEventDispatcher {
 		}
 		
 		delete requestQue[resourceID];
-	}
+	} */
 	
 	// Реализация диспатчера
 	
