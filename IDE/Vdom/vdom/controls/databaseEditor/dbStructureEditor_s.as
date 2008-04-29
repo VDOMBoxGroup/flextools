@@ -4,6 +4,8 @@ import mx.events.CloseEvent;
 import mx.managers.PopUpManager;
 import mx.utils.UIDUtil;
 
+import vdom.events.DBEditorEvent;
+
 private var _sourceXML:XML;		// XML got by vdom IDE (of existing table)
 
 private var _tableID:String;
@@ -127,11 +129,6 @@ private function applyBtnHandler():void {
 }
 
 private function doneHandler():void {
-	//this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID)));
-	
-	/* Initialize save data */
-	listChangeHandler();
-	
 	/* Writing new table definition */
 	_sourceXML.TableDef = new XML();
 	var columnDef:Object;
@@ -142,6 +139,8 @@ private function doneHandler():void {
 	
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
 	this.dispatchEvent(cEvent);
+	
+	this.dispatchEvent(DBEditorEvent(new DBEditorEvent(DBEditorEvent.DONE, _sourceXML)));
 }
 
 private function addBtnHandler():void {
