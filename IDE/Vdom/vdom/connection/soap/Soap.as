@@ -10,7 +10,7 @@ package vdom.connection.soap
 		
 	public class Soap  extends EventDispatcher
 	{
-		private static var ws			:WebService = new WebService();
+		public static var ws			:WebService;
 		private static 	var instance	:Soap;
 //FileUpload
 		/**
@@ -37,7 +37,8 @@ package vdom.connection.soap
 				ws.addEventListener(LoadEvent.LOAD, loadCompleteListener);
 				ws.addEventListener(FaultEvent.FAULT, errorListener);
 				ws.loadWSDL();
-		}
+		}		
+		
 		private function loadCompleteListener(event:LoadEvent):void {
 			
 			dispatchEvent(new Event('loadWsdlComplete'));
@@ -150,7 +151,7 @@ package vdom.connection.soap
 		
 		public  function getResource(ownerid:String='',resid:String=''):void 
 		{
-			var sGetTypeResource:SGetResource = new SGetResource(ws);
+			var sGetTypeResource:SGetResource = SGetResource.getInstance();
 			
 			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_OK, ldispatchEvent);
 			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_ERROR, ldispatchEvent);
@@ -165,7 +166,7 @@ package vdom.connection.soap
 		
 		public  function renderWysiwyg(appid:String='',objid:String='', parentid:String='' ,sdynamic:String  = '0'):String 
 		{	
-			var sRenderWysiwig:SRenderWysiwyg = new SRenderWysiwyg(ws);
+			var sRenderWysiwig:SRenderWysiwyg = SRenderWysiwyg.getInstance();
 			
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, ldispatchEvent);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, ldispatchEvent);

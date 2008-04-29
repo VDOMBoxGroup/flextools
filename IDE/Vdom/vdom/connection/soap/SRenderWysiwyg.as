@@ -10,12 +10,27 @@ package vdom.connection.soap
 	
 	public class SRenderWysiwyg extends EventDispatcher 
 	{
+		private static 	var instance:SRenderWysiwyg;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SRenderWysiwyg(ws:WebService):void{
-			this.ws = ws;
+		public function SRenderWysiwyg() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.render_wysiwyg.addEventListener(ResultEvent.RESULT,completeListener); 
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SRenderWysiwyg 
+		{
+			if (!instance)
+				instance = new SRenderWysiwyg();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, objid:String, parentid:String, sdynamic:String ):String {
@@ -24,7 +39,7 @@ package vdom.connection.soap
 			var skey:String		= code.skey();			//- очередной ключ сессии 
 			
 			//send data & set listener
-			ws.render_wysiwyg.addEventListener(ResultEvent.RESULT,completeListener); 
+			
 			ws.render_wysiwyg(
 				sid,
 				skey,
