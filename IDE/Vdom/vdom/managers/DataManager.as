@@ -172,7 +172,7 @@ public class DataManager implements IEventDispatcher {
 	
 	private function listApplicationHandler(event:SoapEvent):void {
 
-		_listApplication = event.result.*;
+		_listApplication = event.result.Applications.*;
 		
 		soap.removeEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
 		
@@ -195,6 +195,8 @@ public class DataManager implements IEventDispatcher {
 		soap.removeEventListener(SoapEvent.GET_TOP_OBJECTS_OK, loadApplicationDataHandler);
 		
 		var pages:XMLList = event.result.Objects.Object;
+		
+		delete _currentApplication.* 
 		
 		_currentApplication.appendChild(<Objects />);
 		
@@ -219,7 +221,7 @@ public class DataManager implements IEventDispatcher {
 	
 	private function getAllTypesHandler(event:SoapEvent):void {
 	
-		_listTypes = event.result.*;
+		_listTypes = event.result.Types.*;
 		_typeLoaded = true;
 		soap.removeEventListener(SoapEvent.GET_ALL_TYPES_OK, getAllTypesHandler);
 		languageManager.parseLanguageData(_listTypes);
@@ -263,7 +265,7 @@ public class DataManager implements IEventDispatcher {
 		
 		soap.removeEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, changeCurrentPageHandler);
 		
-		var pageData:XML = event.result;
+		var pageData:XML = event.result.Object[0];
 		var pageId:String = pageData.@ID;
 		
 		_currentApplication.Objects.Object.(@ID == pageId)[0] = pageData;
@@ -439,7 +441,7 @@ public class DataManager implements IEventDispatcher {
 	private function getApplicationStructureHandler(event:SoapEvent):void {
 		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.STRUCTURE_LOADED);
-		dme.result = event.result;
+		dme.result = event.result.Structure[0];
 		dispatchEvent(dme);
 	}
 	
