@@ -8,12 +8,26 @@ package vdom.connection.soap
 	
 	public class SWholeCreate extends EventDispatcher 
 	{
+		private static 	var instance:SWholeCreate;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SWholeCreate(ws:WebService):void{
-			this.ws = ws;
+		public function SWholeCreate() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.whole_create.addEventListener(ResultEvent.RESULT,completeListener);
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SWholeCreate 
+		{
+			if (!instance)
+				instance = new SWholeCreate();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, parentid:String, name:String, data:String):void
@@ -23,7 +37,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.whole_create.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.whole_create(sid, skey, appid, parentid, name, data);
 		}
 		

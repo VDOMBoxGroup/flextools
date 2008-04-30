@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SGetEcho extends EventDispatcher
 	{
+		private static 	var instance:SGetEcho;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetEcho(ws:WebService):void{
-			this.ws = ws;
+		public function SGetEcho() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.get_echo.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SGetEcho 
+		{
+			if (!instance)
+				instance = new SGetEcho();
+	
+			return instance;
 		}
 		
 		public function execute():void
@@ -25,7 +40,7 @@ package vdom.connection.soap
 			
 			//send data & set listener 
 			ws.get_echo();
-			ws.get_echo.addEventListener(ResultEvent.RESULT,completeListener);
+			
 		}
 		
 		

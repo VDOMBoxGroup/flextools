@@ -168,7 +168,7 @@ public class ResizeManager extends EventDispatcher {
 			cursorID = NaN;
 		}
 		
-		if(item && !itemTransform) {
+		if(item && !(selectMarker.item && itemTransform)) {
 			
 			if(highlightedItem)
 				IItem(highlightedItem).drawHighlight('none');
@@ -344,7 +344,7 @@ public class ResizeManager extends EventDispatcher {
 			tip.y = event.stageY + 15;
 		}
 		
-		if(itemTransform || markerSelected)
+		if(selectMarker.item && itemTransform || markerSelected)
 			return;
 		
 		var itemUnderMouse:Container = getItemUnderMouse();
@@ -358,7 +358,10 @@ public class ResizeManager extends EventDispatcher {
 			
 			var tipText:String = "Name:" + objectDescription.@Name;
 			
-			var moveable:String = objectDescription.Type.Information.Moveable;
+			var type:XML = dataManager.getTypeByObjectId(IItem(itemUnderMouse).objectId); 
+			
+			var moveable:String = type.Information.Moveable;
+				
 				
 			showToolTip(tipText);
 			

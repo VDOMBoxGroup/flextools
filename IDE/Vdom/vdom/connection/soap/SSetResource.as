@@ -1,19 +1,36 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	
 	public class SSetResource extends EventDispatcher 
 	{
+		private static 	var instance:SSetResource;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetResource(ws:WebService):void{
-			this.ws = ws;
+		public function SSetResource() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.set_resource.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SSetResource 
+		{
+			if (!instance)
+				instance = new SSetResource();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, restype:String, resname:String, resdata:String  ):void
@@ -23,7 +40,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 
 			//send data & set listener 
-			ws.set_resource.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.set_resource(sid, skey, appid,  restype, resname, resdata);
 			
 		}

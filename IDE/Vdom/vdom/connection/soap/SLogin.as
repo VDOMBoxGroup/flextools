@@ -11,12 +11,27 @@ package vdom.connection.soap
 	
 	public class SLogin extends EventDispatcher 
 	{
+		private static 	var instance:SLogin;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SLogin(ws:WebService):void{
-			this.ws = ws;
+		public function SLogin() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.open_session.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SLogin 
+		{
+			if (!instance)
+				instance = new SLogin();
+	
+			return instance;
 		}
 		
 		public function execute(login:String, password:String):void
@@ -27,7 +42,6 @@ package vdom.connection.soap
 			
 			//send data & set listener 
 			//ws.open_session.resultFormat = 'e4x';
-			ws.open_session.addEventListener(ResultEvent.RESULT,completeListener);
 			//ws.open_session(login, MD5.encrypt(password));
 			ws.open_session(login, pwd_md5);
 		}

@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SCreateObject extends EventDispatcher
 	{
+		private static 	var instance:SCreateObject;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SCreateObject(ws:WebService):void{
-			this.ws = ws;
+		public function SCreateObject() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.create_object.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SCreateObject 
+		{
+			if (!instance)
+				instance = new SCreateObject();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String='',parentid:String='',typeid:String = '', attrs:String = '', name:String =''):void
@@ -24,8 +39,7 @@ package vdom.connection.soap
 			
 			
 			//send data & set listener 
-			ws.create_object.addEventListener(ResultEvent.RESULT,completeListener);
-			ws.create_object(sid, skey, appid, parentid, typeid, attrs, name);
+			ws.create_object(sid, skey, appid, parentid, typeid, name, attrs);
 		}
 		
 		

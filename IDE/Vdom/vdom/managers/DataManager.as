@@ -467,19 +467,19 @@ public class DataManager implements IEventDispatcher {
 	private function getObjectXMLScriptHandler(event:SoapEvent):void {
 		
 		soap.removeEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, getObjectXMLScriptHandler);
-		var result:XML = event.result.*[0];
+		var result:XML = event.result.Result.*[0];
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, result));
 	}
 	
 	public function setObjectXMLScript(objectXMLScript:String):void {
 		
-		soap.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, setObjectXMLScriptHandler);
-		soap.submitObjectScriptPresentation(currentApplicationId, currentObjectId)
+		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK, setObjectXMLScriptHandler);
+		soap.submitObjectScriptPresentation(currentApplicationId, currentObjectId, objectXMLScript);
 	}
 	
 	private function setObjectXMLScriptHandler(event:SoapEvent):void {
 		
-		soap.removeEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, setObjectXMLScriptHandler);
+		soap.removeEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK, setObjectXMLScriptHandler);
 		var result:XML = event.result.*[0];
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, result));
 	}

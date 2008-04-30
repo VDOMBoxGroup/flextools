@@ -9,12 +9,27 @@ package vdom.connection.soap
 	
 	public class SListResources extends EventDispatcher
 	{
+		private static 	var instance:SListResources;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SListResources(ws:WebService):void{
-			this.ws = ws;
+		public function SListResources() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.list_resources.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SListResources 
+		{
+			if (!instance)
+				instance = new SListResources();
+	
+			return instance;
 		}
 		
 		public function execute(ownerid:String = ''):void
@@ -25,8 +40,7 @@ package vdom.connection.soap
 			
 			// no data to send
 			
-			//send data & set listener
-			ws.list_resources.addEventListener(ResultEvent.RESULT,completeListener); 
+			//send data & set listener 
 			ws.list_resources(sid, skey, ownerid);
 			
 		}

@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SWholeDelete extends EventDispatcher 
 	{
+		private static 	var instance:SWholeDelete;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SWholeDelete(ws:WebService):void{
-			this.ws = ws;
+		public function SWholeDelete() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.whole_delete.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SWholeDelete 
+		{
+			if (!instance)
+				instance = new SWholeDelete();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, objid:String):void
@@ -23,8 +38,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			
-			ws.whole_delete.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.whole_delete(sid, skey, appid, objid);
 		}
 		

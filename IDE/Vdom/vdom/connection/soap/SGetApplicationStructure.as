@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SGetApplicationStructure extends EventDispatcher 
 	{
+		private static 	var instance:SGetApplicationStructure;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetApplicationStructure(ws:WebService):void{
-				this.ws = ws;
+		public function SGetApplicationStructure() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.get_application_structure.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SGetApplicationStructure 
+		{
+			if (!instance)
+				instance = new SGetApplicationStructure();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String):void
@@ -23,7 +38,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.get_application_structure.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.get_application_structure(sid, skey, appid);
 		}
 		

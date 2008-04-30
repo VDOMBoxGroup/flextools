@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SListApplications extends EventDispatcher 
 	{
+		private static 	var instance:SListApplications;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SListApplications(ws:WebService):void{
-			this.ws = ws;
+		public function SListApplications() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.list_applications.addEventListener(ResultEvent.RESULT, completeListener);	
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SListApplications 
+		{
+			if (!instance)
+				instance = new SListApplications();
+	
+			return instance;
 		}
 		
 		public function execute():void
@@ -21,8 +36,6 @@ package vdom.connection.soap
 			// protect
 			var sid:String			= code.sessionId;		// - идентификатор сессии 
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
-			
-			ws.list_applications.addEventListener(ResultEvent.RESULT,completeListener);	
 			
 			ws.list_applications(sid, skey);
 		}

@@ -10,12 +10,27 @@ package vdom.connection.soap
 	
 	public class SGetTopObjects extends EventDispatcher 
 	{
+		private static 	var instance:SGetTopObjects;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetTopObjects(ws:WebService):void{
-			this.ws = ws;
+		public function SGetTopObjects() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.get_top_objects.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SGetTopObjects 
+		{
+			if (!instance)
+				instance = new SGetTopObjects();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String):void
@@ -28,7 +43,6 @@ package vdom.connection.soap
 			//ws.get_top_objects.arguments.appid  	= appid;		//- идентификатор приложения 
 			
 			//send data & set listener
-			ws.get_top_objects.addEventListener(ResultEvent.RESULT, completeListener);
 			ws.get_top_objects(sid, skey, appid);
 			
 		}

@@ -194,11 +194,16 @@ public class WorkArea extends Canvas {
 		
 		if(stack.length == 0)
 			return;
-			
+		
 		var currentItem:Container = stack[0];
+		
+		trace('WorkArea - dragOverHandler ' + stack.length)
 		
 		if(focusedObject == currentItem)
 			return;
+		
+		if(focusedObject)
+			IItem(focusedObject).drawHighlight('none');
 		
 		focusedObject = currentItem;
 		
@@ -211,17 +216,16 @@ public class WorkArea extends Canvas {
 		
 		var aviableContainers:Array = typeDescription.aviableContainers.match(containersRE);
 		
-		
-		
 		if(aviableContainers.indexOf(currentItemName) != -1) {
 			
-			currentItem.setStyle('themeColor', '#00ff00');
+			IItem(currentItem).drawHighlight('0x00FF00');
 		} else {
 			
-			currentItem.setStyle('themeColor', '#ff0000');
+			IItem(currentItem).drawHighlight('0xFF0000');
 		}
+			
 		
-		currentItem.drawFocus(true);
+		//currentItem.drawFocus(true);
 	}
 	
 	private function dragDropHandler(event:DragEvent):void {
@@ -270,11 +274,8 @@ public class WorkArea extends Canvas {
 	
 	private function dragExitHandler(event:DragEvent):void {
 		
-		if(focusedObject is IItem) {
-			focusedObject.setStyle('themeColor', '#009dff');
-			focusedObject.drawFocus(false);
-			focusedObject = null;
-		}
+		if(focusedObject is IItem)
+			IItem(focusedObject).drawHighlight('none');
 	}
 	
 	private function mouseWheelHandler(event:MouseEvent):void {

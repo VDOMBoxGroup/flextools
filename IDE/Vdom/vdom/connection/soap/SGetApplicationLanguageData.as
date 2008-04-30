@@ -7,12 +7,27 @@ package vdom.connection.soap
 	
 	public class SGetApplicationLanguageData extends EventDispatcher 
 	{
+		private static 	var instance:SGetApplicationLanguageData;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetApplicationLanguageData(ws:WebService):void{
-			this.ws = ws;
+		public function SGetApplicationLanguageData() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.get_application_language_data.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SGetApplicationLanguageData 
+		{
+			if (!instance)
+				instance = new SGetApplicationLanguageData();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String):void
@@ -23,7 +38,6 @@ package vdom.connection.soap
 			
 		
 			//send data & set listener 
-			ws.get_application_language_data.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.get_application_language_data(sid, skey, appid);
 		}
 		

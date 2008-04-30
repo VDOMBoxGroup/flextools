@@ -10,12 +10,26 @@ package vdom.connection.soap
 	
 	public class SSetName extends EventDispatcher 
 	{
+		private static 	var instance:SSetName;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetName(ws:WebService):void{
-			this.ws = ws;
+		public function SSetName() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.set_name.addEventListener(ResultEvent.RESULT, completeListener);
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SSetName 
+		{
+			if (!instance)
+				instance = new SSetName();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, objid:String, name:String):void
@@ -25,7 +39,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 
 			//send data & set listener 
-			ws.set_name.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.set_name(sid, skey, appid, objid, name);
 			
 		}

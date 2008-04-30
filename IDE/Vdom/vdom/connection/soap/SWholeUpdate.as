@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SWholeUpdate extends EventDispatcher 
 	{
+		private static 	var instance:SWholeUpdate;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SWholeUpdate(ws:WebService):void{
-			this.ws = ws;
+		public function SWholeUpdate() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.whole_update.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SWholeUpdate 
+		{
+			if (!instance)
+				instance = new SWholeUpdate();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, objid:String, data:String):void
@@ -23,7 +38,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.whole_update.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.whole_update(sid, skey, appid, objid, data);
 		}
 		

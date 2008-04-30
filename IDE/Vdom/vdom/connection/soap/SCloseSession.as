@@ -11,12 +11,27 @@ package vdom.connection.soap
 	
 	public class SCloseSession extends EventDispatcher 
 	{
+		private static 	var instance:SCloseSession;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SCloseSession(ws:WebService):void{
-			this.ws = ws;
+		public function SCloseSession() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.close_session.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SCloseSession 
+		{
+			if (!instance)
+				instance = new SCloseSession();
+	
+			return instance;
 		}
 		
 		public function execute():void
@@ -24,10 +39,7 @@ package vdom.connection.soap
 			// protect
 			var sid:String		= code.sessionId;		// - идентификатор сессии 
 			
-			// no data
-			
-			//send data & set listener 
-			ws.close_session.addEventListener(ResultEvent.RESULT,completeListener);
+			//send data
 			ws.close_session();
 		}
 		

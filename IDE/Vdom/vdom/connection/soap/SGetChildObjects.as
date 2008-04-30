@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SGetChildObjects extends EventDispatcher 
 	{
+		private static 	var instance:SGetChildObjects;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetChildObjects(ws:WebService):void{
-			this.ws = ws;
+		public function SGetChildObjects() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.get_child_objects.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SGetChildObjects 
+		{
+			if (!instance)
+				instance = new SGetChildObjects();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, objid:String):void
@@ -23,7 +38,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.get_child_objects.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.get_child_objects( sid, skey, appid, objid);
 		}
 		

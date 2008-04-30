@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SSubmitObjectScriptPresentation extends EventDispatcher 
 	{
+		private static 	var instance:SSubmitObjectScriptPresentation;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSubmitObjectScriptPresentation(ws:WebService):void{
-			this.ws = ws;
+		public function SSubmitObjectScriptPresentation() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.submit_object_script_presentation.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SSubmitObjectScriptPresentation 
+		{
+			if (!instance)
+				instance = new SSubmitObjectScriptPresentation();
+	
+			return instance;
 		}
 		
 		public function execute( appid:String = '', objid:String = '', pres:String = '' ):void
@@ -23,7 +38,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.submit_object_script_presentation.addEventListener(ResultEvent.RESULT, completeListener);
 			ws.submit_object_script_presentation(sid, skey, appid, objid, pres);
 		}
 		

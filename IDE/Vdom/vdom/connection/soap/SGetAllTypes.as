@@ -8,12 +8,27 @@ package vdom.connection.soap
 	
 	public class SGetAllTypes extends EventDispatcher 
 	{
+		private static 	var instance:SGetAllTypes;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SGetAllTypes(ws:WebService):void{
-			this.ws = ws;
+		public function SGetAllTypes() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.get_all_types.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SGetAllTypes 
+		{
+			if (!instance)
+				instance = new SGetAllTypes();
+	
+			return instance;
 		}
 		
 		public function execute():void
@@ -25,7 +40,6 @@ package vdom.connection.soap
 			// no data to send
 			
 			//send data & set listener 
-			ws.get_all_types.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.get_all_types(sid, skey);
 		}
 		

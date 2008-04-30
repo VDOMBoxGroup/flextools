@@ -7,12 +7,27 @@ package vdom.connection.soap
 	
 	public class SSetValue extends EventDispatcher 
 	{
+		private static 	var instance:SSetValue;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetValue(ws:WebService):void{
-			this.ws = ws;
+		public function SSetValue() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.set_value.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SSetValue 
+		{
+			if (!instance)
+				instance = new SSetValue();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String,objid:String, value:String):void
@@ -23,7 +38,6 @@ package vdom.connection.soap
 			
 			//send data & set listener 
 			ws.set_value(sid, skey, appid, objid, value);
-			ws.set_value.addEventListener(ResultEvent.RESULT,completeListener);
 		}
 		
 		

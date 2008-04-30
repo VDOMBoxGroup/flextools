@@ -9,7 +9,7 @@ package vdom.connection.soap
 	
 	
 	public class SGetResource extends EventDispatcher 
-	{
+	{	
 		private static 	var instance:SGetResource;
 		
 		private var ws			:WebService;

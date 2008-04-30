@@ -122,7 +122,7 @@ public class TransformMarker extends UIComponent {
 			return;
 		}
 		
-		if(_selectedItem == item || transformation)
+		if(_selectedItem == item || (transformation && _selectedItem))
 			return;
 			
 		_selectedItem = item;

@@ -120,7 +120,7 @@ public class Item extends Canvas implements IItem {
 		var graph:Graphics = _highlightMarker.graphics;
 		
 		graph.clear()
-		graph.beginFill(0xFFFFFF, .0);
+		//graph.beginFill(0xFFFFFF, .0);
 		graph.lineStyle(2, Number(color));
 		graph.drawRect(0, 0, width, height);
 		

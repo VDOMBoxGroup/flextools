@@ -1,19 +1,36 @@
 package vdom.connection.soap
 {
-	import mx.rpc.soap.WebService;
 	import flash.events.EventDispatcher;
-	import vdom.connection.protect.Code;
+	
 	import mx.rpc.events.ResultEvent;
+	import mx.rpc.soap.WebService;
+	
+	import vdom.connection.protect.Code;
 	
 	
 	public class SSetApplicationStructure extends EventDispatcher 
 	{
+		private static 	var instance:SSetApplicationStructure;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetApplicationStructure(ws:WebService):void{
-				this.ws = ws;
+		public function SSetApplicationStructure() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.set_application_structure.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SSetApplicationStructure 
+		{
+			if (!instance)
+				instance = new SSetApplicationStructure();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String, struct:String):void
@@ -23,7 +40,6 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.set_application_structure.addEventListener(ResultEvent.RESULT,completeListener);
 			ws.set_application_structure(sid, skey, appid, struct);
 		}
 		

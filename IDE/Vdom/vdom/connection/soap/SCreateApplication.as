@@ -9,12 +9,27 @@ package vdom.connection.soap
 	
 	public class SCreateApplication extends EventDispatcher
 	{
+		private static 	var instance:SCreateApplication;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SCreateApplication(ws:WebService):void{
-			this.ws = ws;
+		public function SCreateApplication() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.create_application.addEventListener(ResultEvent.RESULT, completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SCreateApplication 
+		{
+			if (!instance)
+				instance = new SCreateApplication();
+	
+			return instance;
 		}
 		
 		public function execute(attr:XML):void
@@ -26,7 +41,6 @@ package vdom.connection.soap
 			// no data to send
 			
 			//send data & set listener
-			ws.create_application.addEventListener(ResultEvent.RESULT,completeListener); 
 			ws.create_application(sid, skey, attr);
 			
 		}
