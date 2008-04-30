@@ -8,13 +8,28 @@ package vdom.connection.soap
 	import vdom.connection.protect.Code;
 	
 	public class SSetAttributes extends EventDispatcher 
-	{
+	{	
+		private static 	var instance:SSetAttributes;
+		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SSetAttributes(ws:WebService):void{
-			this.ws = ws;
+		public function SSetAttributes() 
+		{	
+	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+	 		ws = Soap.ws;
+	 		ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);
+ 
+		} 		
+		 
+		 // initialization		
+		public static function getInstance():SSetAttributes 
+		{
+			if (!instance)
+				instance = new SSetAttributes();
+	
+			return instance;
 		}
 		
 		public function execute(appid:String = '', objid:String = '', attr:String = ''):String
@@ -25,7 +40,7 @@ package vdom.connection.soap
 			
 			//send data & set listener 
 			ws.set_attributes(sid, skey, appid, objid, attr);
-			ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);
+			
 			
 			return skey;
 		}

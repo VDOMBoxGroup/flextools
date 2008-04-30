@@ -34,8 +34,6 @@ public class ResizeManager extends EventDispatcher {
 	
 	public var itemTransform:Boolean;
 	
-	//private var highlightedObject:Item;
-	
 	private var highlightedItem:Container;
 	
 	private var caughtItem:Container;

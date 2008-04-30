@@ -75,6 +75,11 @@ public class WorkArea extends Canvas {
 	
 	public function updateObject(result:XML):void {
 		
+		var objectId:String = result.Object.@ID;
+		
+		if(objectId == IItem(_selectedObject).objectId && resizeManager.itemTransform)
+			return;
+			
 		renderManager.updateItem(result.Object.@ID, result.Parent);
 	}
 	

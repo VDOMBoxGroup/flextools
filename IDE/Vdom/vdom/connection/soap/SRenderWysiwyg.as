@@ -20,7 +20,7 @@ package vdom.connection.soap
 		{	
 	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
-	 		ws.render_wysiwyg.addEventListener(ResultEvent.RESULT,completeListener); 
+	 		ws.render_wysiwyg.addEventListener(ResultEvent.RESULT, completeListener); 
  
 		} 		
 		 

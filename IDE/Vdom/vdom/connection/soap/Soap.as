@@ -346,7 +346,7 @@ package vdom.connection.soap
 		//private 
 		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):String
 		{
-			var sSetAttributes:SSetAttributes = new SSetAttributes(ws);
+			var sSetAttributes:SSetAttributes = SSetAttributes.getInstance();
 			
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
 			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);
