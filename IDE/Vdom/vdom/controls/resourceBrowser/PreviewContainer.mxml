@@ -18,15 +18,22 @@
 	<mx:Script>
 		<![CDATA[
 		
+			private var loader:Loader = new Loader();
+	
 			public var imageWidth:int = 0;
 			public var imageHeight:int = 0;
 			private var _heightLimit:int = 0;
 			private var _widthLimit:int = 0;
 
 			public function set resource(source:Object):void {
-				__image.source = source.data;			
-				imageWidth = source.data.bitmapData.width;
-				imageHeight = source.data.bitmapData.height;
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+				loader.loadBytes(source.data);
+			}
+			
+			private function imageLoadComplete(event:Event):void {
+				__image.source = loader.content;			
+				imageWidth = loader.width;
+				imageHeight = loader.height;
 				
 				if (imageWidth > _widthLimit || imageHeight > _heightLimit) {
 					if (_heightLimit >= int(Math.round(_widthLimit * imageHeight / imageWidth))) {
@@ -44,10 +51,7 @@
 				this.height = __image.height + 22;
 				this.width = __image.width + 22;
 				
-				//this.toolTip = imageWidth.toString() + "x" + imageHeight.toString();
-				this.toolTip = __image.width.toString() + "x" + __image.height.toString();
-				//this.width = __image.width + 20;
-				//this.height = __image.height + 20;
+				this.toolTip = __image.width.toString() + "x" + __image.height.toString();				
 			}
 			
 			public function set imageSource(source:Object):void {

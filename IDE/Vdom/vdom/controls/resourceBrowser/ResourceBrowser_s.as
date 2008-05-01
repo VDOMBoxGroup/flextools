@@ -130,7 +130,6 @@ private function isViewable(extension:String):Boolean {
 		case "png":
 		case "gif":
 		case "svg":
-		case "swf":
 			return true;
 		default:
 			return false;
@@ -305,15 +304,14 @@ private function filterCBxHandler():void {
 	createResourcesViewObjects(__filterCBx.selectedItem.data);	
 }
 
-
 private function fileUploadHandler():void {
 	if (_fileForUpload == null) {
 		_fileForUpload = new File();
 	}
 	
-	var allFilesFilter:FileFilter = new FileFilter("All Files", "*.*");
-	var imagesFilter:FileFilter = new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png;*.bmp");
-	var docFilter:FileFilter = new FileFilter("Documents", "*.pdf;*.doc;*.txt");
+	var allFilesFilter:FileFilter = new FileFilter("All Files (*.*)", "*.*");
+	var imagesFilter:FileFilter = new FileFilter("Images (*.jpg;*.jpeg;*.gif;*.png)", "*.jpg;*.jpeg;*.gif;*.png");
+	var docFilter:FileFilter = new FileFilter("Documents (*.pdf;*.doc;*.txt)", "*.pdf;*.doc;*.txt");
 	
 	_fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
 	_fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
@@ -357,14 +355,10 @@ private function setResourceOkHandler(spEvt:SoapEvent):void {
 	var result:XML = spEvt.result;
 	_selectedItemID = result.Resource.@id.toString();
 	listResourcesQuery();
-	//var result:XML = spEvt.result;
-	//_resourceID = result.Resource.@id;
 }
 
 private function setResourceErrorHandler(spEvt:SoapEvent):void {
 	trace('Resource browser: ERROR at sending resource');
-	//image.source = defaultPicture;
-	 	
 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
 }

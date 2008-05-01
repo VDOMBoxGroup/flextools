@@ -34,6 +34,8 @@
 			import mx.controls.Image;
 			import vdom.controls.resourceBrowser.SmoothImage;
 			
+			private var loader:Loader = new Loader();
+			
 			private var __id:String;
 			private var __selected:Boolean = false;
 			private var __objType:String = "";
@@ -42,10 +44,16 @@
 			public var imageHeight:int = 0;
 
 			public function set resource(source:Object):void {
-				__image.source = source.data;				
-				imageWidth = source.data.bitmapData.width;
-				imageHeight = source.data.bitmapData.height;
-				__res.text = imageWidth.toString() + "x" + imageHeight.toString();
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+				loader.loadBytes(source.data);
+			}
+			
+			private function imageLoadComplete(event:Event):void {
+				loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoadComplete);
+				__image.source = loader.content				
+				imageWidth = loader.width;
+				imageHeight = loader.height;
+				__res.text = imageWidth.toString() + "x" + imageHeight.toString();				
 			}
 			
 			public function set objName(text:String):void { __name.text = text; }
