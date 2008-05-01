@@ -178,10 +178,23 @@
 				fileManager.loadResource(dataManager.currentApplicationId,  resourceID, this);
 		}	
 		
+				
+		private var loader:Loader = new Loader();
 		public function set resource(data:Object):void
 		{
-				image.source = data.data;
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+			loader.loadBytes(data.data);
+			//image.source = data.data;
 		}
+		
+		
+		private function loadComplete(evt:Event):void 
+		{
+   			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
+   			//image.width = loader.width;
+   			//image.height = loader.height;
+   			image.source = loader.content;
+   		}
 		
 		/***
 		 * 

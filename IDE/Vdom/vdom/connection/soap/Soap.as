@@ -516,7 +516,7 @@ package vdom.connection.soap
 			var soapEvent:SoapEvent = new SoapEvent(evt.type);
 			soapEvent.result = evt.result;
 			dispatchEvent(soapEvent);
-			trace(evt.type)
+			//trace(evt.type)
     	}	
 	}
 }

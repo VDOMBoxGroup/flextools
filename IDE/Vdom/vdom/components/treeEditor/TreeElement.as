@@ -1,9 +1,9 @@
 package vdom.components.treeEditor
 {
 	import flash.display.Bitmap;
+	import flash.display.Loader;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	import flash.net.ObjectEncoding;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Button;
@@ -241,10 +241,22 @@ package vdom.components.treeEditor
 				fileManager.loadResource(dataManager.currentApplicationId,  _resourceID, this);
 		}	
 		
+		private var loader:Loader = new Loader();
 		public function set resource(data:Object):void
 		{
-				image.source = data.data;
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+			loader.loadBytes(data.data);
+			//image.source = data.data;
 		}
+		
+		
+		private function loadComplete(evt:Event):void 
+		{
+   			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
+   			//image.width = loader.width;
+   			//image.height = loader.height;
+   			image.source = loader.content;
+   		}
 				
 			// при нажатии кнопки свернуть
 		private function changeState(blHide:Boolean):void
