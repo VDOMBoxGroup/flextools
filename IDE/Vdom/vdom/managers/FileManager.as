@@ -135,6 +135,7 @@ public class FileManager implements IEventDispatcher {
 			
 			var data:ByteArray = new ByteArray();
 			_resourceStorage[resourceID].readBytes(data);
+			_resourceStorage[resourceID].position = 0;
 			//ByteArray(_resourceStorage[resourceID]).writeBytes(data);
 			var requestObject:Object = item.object;
 			var requestProperty:String = item.property;
