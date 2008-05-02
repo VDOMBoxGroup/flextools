@@ -49,9 +49,7 @@
 				}
 				
 				this.height = __image.height + 22;
-				this.width = __image.width + 22;
-				
-				this.toolTip = __image.width.toString() + "x" + __image.height.toString();				
+				this.width = __image.width + 22;			
 			}
 			
 			public function set imageSource(source:Object):void {
