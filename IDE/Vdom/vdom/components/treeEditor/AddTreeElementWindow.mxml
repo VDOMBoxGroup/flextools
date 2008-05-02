@@ -96,6 +96,8 @@
 		 * */
 		private function okPressed():void 
 		{
+							 
+			OK.enabled = false;
 			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObjectHandler);
 			dataManager.createObject(selectedAppl.data);		
 		}	
@@ -168,6 +170,7 @@
 		{
 			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
 			rbWnd.selectedItemID = resourceID;
+			trace('1resourceID: ' + resourceID)
 			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
 		}
 		
@@ -175,6 +178,7 @@
 		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
 		{
 				resourceID = rbEvt.resourceID;
+				trace('2resourceID: ' + resourceID)
 				fileManager.loadResource(dataManager.currentApplicationId,  resourceID, this);
 		}	
 		
@@ -230,16 +234,17 @@
     	<mx:ComboBox id="comBoxAppl"     dataProvider="{arrAppl}" 
     	  	     close="comBoxClose(event.target)"   x="255" y="204" width="167"/>
     	<mx:Image id="image" x="20" y="15" width="207" height="246"/>
-    	
-    	<mx:Button id="btAddTreeElemen" label="Ok"    click="okPressed()" x="330" y="272"/>
     	<mx:Button x="20" y="275" label="Select image" click="resourceBrowserLauncher()"/>
-    	<mx:Button x="407" y="271" label="Cancel" click="cancelPressed()"/>
     	
     	<mx:Label x="250" y="15" text="Title:" width="75" height="19"/>
     	<mx:Label x="254" y="67" text="Description:"/>
     	<mx:Label x="254" y="186" text="Tipe:" width="80"/>
     	
-    	<mx:TextInput id="txt" x="254" y="31" width="201"/>
-    	<mx:TextArea id="descript" x="254" y="86" height="88" width="201"/>
+    	<mx:TextInput id="txt" x="254" y="31" width="201" text="name"/>
+    	<mx:TextArea id="descript" x="254" y="86" height="88" width="201" text="description"/>
+    	<mx:HBox y="278" width="100%" horizontalAlign="right" right="20">
+    		<mx:Button id="OK" label="Ok"    click="okPressed()"/>
+    		<mx:Button label="Cancel" click="cancelPressed()"/>
+    	</mx:HBox>
 	</mx:Canvas>
 </mx:TitleWindow>

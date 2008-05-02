@@ -245,6 +245,7 @@ package vdom.components.treeEditor
 		public function set resource(data:Object):void
 		{
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+			
 			loader.loadBytes(data.data);
 			//image.source = data.data;
 		}
@@ -465,11 +466,29 @@ package vdom.components.treeEditor
 		{
 			fileManager.loadResource(dataManager.currentApplicationId,  resID, this, 'typeResourse');
 		}
-		
+	/*	
 		public function set typeResourse(data:Object):void
 		{
 			imgType.source = data.data;
 		}
+		*/
+		private var loaderTypeRes:Loader = new Loader();
+		public function set typeResourse(data:Object):void
+		{
+			loaderTypeRes.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderTypeResComplete);
+			
+			loaderTypeRes.loadBytes(data.data);
+			//image.source = data.data;
+		}
+		
+		
+		private function loaderTypeResComplete(evt:Event):void 
+		{
+   			loaderTypeRes.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
+   			//image.width = loader.width;
+   			//image.height = loader.height;
+   			imgType.source = loaderTypeRes.content;
+   		}
 		
 		/*      select      */
 		

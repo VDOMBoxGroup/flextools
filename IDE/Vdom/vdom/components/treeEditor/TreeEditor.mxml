@@ -6,7 +6,7 @@
 <mx:Canvas id="main" width="100%" height="100%">
 	
 	
-	<treeEditor:DeleteLineButton id="btLine"  />
+	
 
 <mx:Script>
 	<![CDATA[
@@ -32,7 +32,7 @@
 	private var curLine:Object = new Object();
 	private var dataManager:DataManager  = DataManager.getInstance();
 	private var xmlApplicationStructure:XML;
-	
+	private var btLine:DeleteLineButton = new DeleteLineButton();
 
 /******* 
  * 			to Do
@@ -40,6 +40,9 @@
  * 		добавлять новый елемент в самый низ 
  * 		у трее елемента сменить по умолчанию картинку
  * 		у трии елемента картинка в соответстви с его типом.
+ * 		массив элементов строить из другого места(массив "сортируемегого дерева" строить так же)
+ * 		* делетеБТ должен исчезать когда нажимается другой елемент
+ * 		* при создании нового елемента блокировать кнопку "ок"
  * 		
  * */
 	
@@ -54,10 +57,10 @@
 	{
 		if(!main) 
 			main = new Canvas();
-	
+	/*
 		if(!btLine)
 			btLine = new DeleteLineButton();
-		
+		*/
 		addTreeEditorListeners();
 			
 		dataManager.getApplicationStructure();
@@ -71,8 +74,10 @@
 		removeAllLines();
 		removeMassTreeElements();
 		removeTreeEditorListeners();
-	dataManager.changeCurrentPage(curTree.ID);
-		btLine.visible = false;
+		dataManager.changeCurrentPage(curTree.ID);
+	//	btLine.visible = false;
+		if (main.contains(btLine))
+			main.removeChild(btLine);
 	}
 	
 	
@@ -131,6 +136,13 @@
 		btLine.x = main.horizontalScrollPosition + mouseX - btLine.width / 2;
 		btLine.y = main.verticalScrollPosition + mouseY  - btLine.height - 2;
 		btLine.visible = true;
+		
+		if (!main.contains(btLine))
+		{
+				trace(main.contains(btLine))
+			main.addChild(btLine);
+			
+		}
 		muEvt.stopImmediatePropagation();
 	}
 	
@@ -276,7 +288,9 @@
 		for (var ID:String in massTreeElements)
 				if(massTreeElements[ID].select) 
 					massTreeElements[ID].unSelect();
-		btLine.visible = false;
+
+		if (main.contains(btLine))
+			main.removeChild(btLine);
 	
 	}
 	

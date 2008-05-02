@@ -2,7 +2,7 @@
 <mx:Canvas 
 	
 	xmlns:mx="http://www.adobe.com/2006/mxml"  
-	xmlns:objectsPanel="vdom.components.objectsPanel.*"
+	
 	
 	backgroundColor="#ffffff" creationComplete="creationCompleteHendler();" xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
 	

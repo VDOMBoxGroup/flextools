@@ -205,8 +205,8 @@ private function adjustmentTree(xml1:XML):void
 
 private function addTreeEditorListeners():void
 {
-	addEventListener(MouseEvent.CLICK, mouseClickHandler);
-	
+	//addEventListener(MouseEvent.CLICK, mouseClickHandler);
+	addEventListener(MouseEvent.MOUSE_DOWN, mouseClickHandler);
 	colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 	colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 	
@@ -237,6 +237,47 @@ private  function removeMassTreeElements():void
 }
 
 private var topLevelTypes:XMLList;
+/*
+private function createTreeArr(xml:XML):void
+{
+	//topLevelTypes = dataManager.getTopLevelTypes();
+	var xmlTopLevelObjects:XMLList = dataManager.listPages;
+	for each(var page:XML in xmlTopLevelObjects)
+	{
+		var ID:String = page.@ID.toXMLString();
+		var xmlObj:XML = xml.Object.(@ID == ID )[0];
+		var treeElement:TreeElement = new TreeElement();
+			
+		//massTreeElements[ID] =  new TreeElement();
+
+		treeElement.ID 			= ID;
+		if (xmlObj != null)
+		{
+			treeElement.x 			= xmlObj.@left.toXMLString();
+			treeElement.y 			= xmlObj.@top.toXMLString();	
+			treeElement.state 		= xmlObj.@state.toXMLString();	
+			treeElement.resourceID 	= xmlObj.@ResourceID.toXMLString();
+		}
+		
+		if (treeElement.resourceID!='') 
+				fileManager.loadResource(dataManager.currentApplicationId, treeElement.resourceID, treeElement);
+
+		treeElement.name =  page.Attributes.Attribute.(@Name == 'title' );
+		treeElement.description = page.Attributes.Attribute.(@Name == 'description' );
+		
+		
+		
+		var typeID:String = page.@Type;
+		treeElement.type  =  getType(typeID);
+		treeElement.typeID =  getIcon(typeID);
+		treeElement = addEventListenerToTreeElement(treeElement);
+		
+		massTreeElements[ID] =  treeElement;
+		main.addChild(massTreeElements[ID]);
+
+	}
+}*/
+
 private function createTreeArr(xml:XML):void
 {
 	topLevelTypes = dataManager.getTopLevelTypes();
@@ -399,8 +440,11 @@ private function  removeLine():void
 					{
 						main.removeChild(massLines[level][frsTrElem][sknTrElem]);
 						delete massLines[level][frsTrElem][sknTrElem];
-						btLine.visible = false;
+						//btLine.visible = false;
+						
 					}
+	if (main.contains(btLine))
+		main.removeChild(btLine);
 }
 
 private function saveToServer():void
@@ -434,7 +478,6 @@ public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 	for(var ind1:String in massLines[level])
 		for(var ind2:String in massLines[level][ind1])
 		{
-
 			// создаем все елементы дерева
 			var object:XMLList = new XMLList('<Object/>');
 
