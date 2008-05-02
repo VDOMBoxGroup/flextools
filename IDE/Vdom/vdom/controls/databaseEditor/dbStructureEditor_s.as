@@ -18,18 +18,6 @@ private var _columnsProvider:Array = [];
 
 private function creationComplete():void {
 	this.addEventListener(CloseEvent.CLOSE, closeHandler);
-	
-	_sourceXML = 
-	<TableStructure>
-		<TableDef id="ac73b296-d4f0-4a3e-b64c-19fe3fde0a5b" name="dbtable_ac73b296_d4f0_4a3e_b64c_19fe3fde0a5b">
-			<ColumnDef id="djhgfkshdgfkjds" name="id" type="text"/>
-			<ColumnDef id="iueyhri843rhskj" name="name" type="text"/>
-			<ColumnDef id="dkjhgkdjfhgkjfv" name="pic" type="blob"/>
-		</TableDef>
-		<ChangeLog />
-	</TableStructure>;
-	
-	loadXMLData();
 }
 
 public function set XMLData(src:XML):void {
