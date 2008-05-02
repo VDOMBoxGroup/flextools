@@ -205,8 +205,7 @@ private function adjustmentTree(xml1:XML):void
 
 private function addTreeEditorListeners():void
 {
-	//addEventListener(MouseEvent.CLICK, mouseClickHandler);
-	addEventListener(MouseEvent.MOUSE_DOWN, mouseClickHandler);
+	addEventListener(MouseEvent.CLICK, mouseClickHandler);
 	colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 	colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 	
@@ -423,6 +422,9 @@ private function drawLines(xml1:XML):void
 	
 private function redrawLines(strID:String):void
 {
+	if (main.contains(btLine))
+			main.removeChild(btLine);
+			
 	//trace(strID);
 	for (var level:String in massLines)
 		for(var ind1:String in massLines[level])
