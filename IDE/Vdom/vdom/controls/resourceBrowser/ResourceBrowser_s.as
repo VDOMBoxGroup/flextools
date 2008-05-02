@@ -10,7 +10,6 @@
  * 2. Implement delete resource from server
 **/
 
-import flash.display.BitmapData;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.filesystem.File;
@@ -19,6 +18,7 @@ import flash.filesystem.FileStream;
 
 import mx.controls.Alert;
 import mx.controls.Label;
+import mx.core.Application;
 import mx.events.CloseEvent;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
@@ -79,7 +79,8 @@ public function get selectedItemID():String {
 }
 
 private function creationComplete():void {
-	this.addEventListener(CloseEvent.CLOSE, closeHandler); 
+	this.addEventListener(CloseEvent.CLOSE, closeHandler);
+	//this.whiteBox.alpha = 1; 
 	loadTypesIcons();
 	//PopUpManager.centerPopUp(super);
 	listResourcesQuery();

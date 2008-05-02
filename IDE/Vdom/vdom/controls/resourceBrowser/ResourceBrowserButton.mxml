@@ -3,6 +3,7 @@
 	<mx:Script>
 	
 		<![CDATA[
+			import mx.core.Application;
 			import mx.managers.PopUpManager;
 			import vdom.events.ResourceBrowserEvent;
 			
