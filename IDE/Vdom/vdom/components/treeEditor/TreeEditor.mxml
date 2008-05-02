@@ -193,7 +193,9 @@
 	*/
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
+		curTree.current = false;
 		curTree = massTreeElements[trEvt.ID];
+		curTree.current = true;
 		Alert.show("Do you want to delete Element?", "Delete Element", 3, this, alertClickDeleteTreeElement);
 	}
 	 
@@ -204,12 +206,19 @@
         {
            	dataManager.deleteObject(curTree.ID)
            	deleteObject(curTree.ID);
-        }
-        var ID:String = '';
+           	
+           	var ID:String = '';
 			for (var nam:String in massTreeElements)
-				if(ID == '') ID = nam; 
-		curTree = massTreeElements[ID];
-		curTree.current = true;
+				if(ID == '')
+				{
+					curTree = massTreeElements[nam];
+					curTree.current = true;
+					return;
+				}  
+        }
+        //select random element 
+        
+		
 	//	dataManager.changeCurrentPage( curTree.ID);
     }
 	
@@ -330,6 +339,14 @@
 		massTreeElements[ID] = addEventListenerToTreeElement(trEl);
 		main.addChild(massTreeElements[ID]);
 		fileManager.loadResource(dataManager.currentApplicationId,  trEl.resourceID, massTreeElements[ID]);
+		
+		//select new object
+		curTree.current = false;
+		curTree = massTreeElements[ID];
+		if(curTree != null)
+			curTree.current = true;
+		
+		
 	}
 	
 	private function autoSpacing():void
