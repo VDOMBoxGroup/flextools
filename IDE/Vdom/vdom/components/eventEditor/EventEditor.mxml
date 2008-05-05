@@ -1,13 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
-	<mx:HDividedBox>
-		 <mx:Canvas label="Canvas 1" width="100%" height="100%" backgroundColor="#FFFFCC">
-                <mx:Label text="Add components here" fontWeight="bold"/>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" >
+	 
+	 <mx:XMLList id="treeData">
+	    <node label="Mail Box">
+	        <node label="Inbox">
+	            <node label="Marketing"/>
+	            <node label="Product Management"/>
+	            <node label="Personal"/>
+	        </node>
+	        <node label="Outbox">
+	            <node label="Professional"/>
+	            <node label="Personal"/>
+	        </node>
+	        <node label="Spam"/>
+	        <node label="Sent"/>
+		</node>	
+    </mx:XMLList>
+	
+	<mx:HDividedBox width="100%" height="100%">
+		 <mx:Canvas label="Canvas 1" width="100%" height="100%" >
+                <mx:TabNavigator id="tn"  width="100%" height="100%">
+		            <!-- Define each panel using a VBox container. -->
+					
+					<mx:Canvas label="Container"  width="100%" height="100%" >
+			             <mx:Tree id="trContainer" width="100%" height="100%" labelField="@label"
+                			showRoot="false" dataProvider="{treeData}" />
+			        </mx:Canvas>
+			        
+			        <mx:Canvas label="Events"  width="100%" height="100%" >
+			             <mx:Tree id="trEvents" width="100%" height="100%" labelField="@label"
+                			showRoot="false" dataProvider="{treeData}" />
+			        </mx:Canvas>
+			        
+			        <mx:Canvas label="Actions"  width="100%" height="100%" >
+			             <mx:Tree id="trActions" width="100%" height="100%" labelField="@label"
+                			showRoot="false" dataProvider="{treeData}" />
+			        </mx:Canvas>
+
+		        </mx:TabNavigator>
             </mx:Canvas>
 
-            <mx:Canvas label="Canvas 2" width="100%" height="100%" backgroundColor="#99CCFF">
-                <mx:Label text="Add components here" fontWeight="bold"/>
-            </mx:Canvas>
+            <mx:VBox  width="100%" height="100%" >
+                <mx:Label text="Current container: selected container" fontWeight="bold"  color="0xFFFFFF"/>
+                <mx:Canvas width="100%" height="100%" backgroundColor="#09FC09"/>
+            </mx:VBox>
 	</mx:HDividedBox>
 		
 
