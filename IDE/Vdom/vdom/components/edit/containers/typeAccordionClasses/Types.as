@@ -44,7 +44,9 @@ public class Types extends VBox {
 		if(value) {
 			if(value is VScrollBar)
 				mySB = new CustomVScrollBar();
-		}
+				mySB.owner = value.owner;
+		} else 
+			mySB = value;
 	}
 }
 }

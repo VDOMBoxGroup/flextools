@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml" htmlDOMInitialize="htmlDOMInitializeHandler();">
 	<mx:Script>
 	<![CDATA[
 		
 		public function set code(code:String):void {
 			
+			if(!code) return;
+			
 			this.domWindow.CodePress.setCode(code);
 			this.domWindow.CodePress.syntaxHighlight('init');
+		}
+		
+		private function htmlDOMInitializeHandler():void {
+			
+			domWindow.innerPasteCode = innerPasteCode;
+		}
+		
+		private function innerPasteCode(value:*):void {
+			
+			code = value;
 		}
 		
 		public function get code():String {
 			
 			return this.domWindow.CodePress.getCode() 
 		}
+		
+		private function initalizeHandler():void {
+			
+			//addEventListener(KeyboardEvent.KEY_DOWN, kdh, false, 0);
+		}
+		
+		/* private function kdh(event:KeyboardEvent):void {
+			
+			if(event.charCode == 118 && event.controlKey) {
+				
+				this.domWindow.CodePress.syntaxHighlight('init');
+			}
+				
+		} */
+		
+		
 	]]>
 	</mx:Script>
 	
@@ -40,9 +68,9 @@
 					body.show-line-numbers {background-image:url("images/line-numbers.png");margin-left:32px;}
 					
 					ins {color:#000000;}
-					s {color:#ffcc00;} /* tags */
+					s {color:#ff6600;} /* tags */
 					b {color:#0022ff; font-weight:bold} /* script */
-					u b{color:#ffcc00; font-weight:bold} /* script */
+					u b{color:#ff6600; font-weight:bold} /* script */
 					strong {color:#000000; font-weight:normal} /* tags */
 					strong s {color:#000000;} /* tags */
 					strong b {color:#000000; font-weight:normal} /* script */
@@ -50,6 +78,14 @@
 				</style>
 				
 				<script type="text/javascript">
+					
+					function onPaste(event){
+			            var cd = event.clipboardData;
+			            innerPasteCode(event.clipboardData.getData(cd.types[0]));
+			            event.preventDefault();	
+			        }
+					
+					
 					CodePress = {
 						disabled : false,
 						readOnly : false,
@@ -81,6 +117,7 @@
 					    	keyCode = evt.keyCode;	
 							charCode = evt.charCode;
 							fromChar = String.fromCharCode(charCode);
+							
 							if((evt.ctrlKey || evt.metaKey) && evt.shiftKey && charCode!=90)  { // shortcuts = ctrl||appleKey+shift+key!=z(undo) 
 								CodePress.shortcuts(charCode?charCode:keyCode);
 							}
@@ -344,7 +381,7 @@
 					Language.complete = []
 					Language.shortcuts = []
 				</script>
-			</head><body></body></html>
+			</head><body onPaste="onPaste(event)"></body></html>
 	
 		]]>
 		</mx:htmlText>
