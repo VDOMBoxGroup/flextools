@@ -1,5 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" >
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()">
+	 <mx:Script>
+	 	<![CDATA[
+	 		import mx.collections.ArrayCollection;
+	 		import mx.controls.DataGrid;
+	 		import mx.controls.Text;
+	 		import mx.core.DragSource;
+	 		import mx.events.DragEvent;
+	 		import mx.managers.DragManager;
+	 		import vdom.components.treeEditor.TreeElement;
+	 		
+	 		
+	 		
+	 		private function creationCompleteHandler():void
+	 		{
+	 		
+	 			trContainer.dragEnabled = true;
+	 //			trContainer.selecte
+	 		}
+	 		
+	 	
+	 		
+	 		 private function dragEnterHandler(event:DragEvent):void 
+	 		 {
+	 		/* 
+	 		   if( event.dragInitiator is Tree ) {
+	                    var ds:DragSource = event.dragSource;
+	                    if( !ds.hasFormat("treeItems") ) return;     // no useful data
+	
+	                    var items:Array = ds.dataForFormat("treeItems") as Array;
+	                    for(var i:Number=0; i < items.length; i++) {
+	
+	                        var item:XML = XML(items[i]);
+	                    //    if( item.@type != "restaurant" ) return; // not what we want
+	
+	                    }
+	                } 
+	          */
+	            // Accept the drag only if the user is dragging data 
+	            // identified by the 'color' format value.
+	          //  if (event.dragSource.hasFormat('color')) 
+	           // {
+	                // Get the drop target component from the event object.
+	                var dropTarget:Canvas=Canvas(event.currentTarget);
+	                // Accept the drop.
+	                DragManager.acceptDragDrop(dropTarget);
+	           // }
+	        }
+                
+	        // Called if the target accepts the dragged object and the user 
+	        // releases the mouse button while over the Canvas container. 
+	        private function dragDropHandler(event:DragEvent):void 
+	        {
+	        	
+	        //	 event.preventDefault();
+	        //	 event.currentTarget.hideDropFeedback(event);
+	        	var treeElement:TreeElement = new TreeElement();
+	        	treeElement.x = event.localX;
+	        	treeElement.y = event.localY;
+	 			can.addChild(treeElement); 
+	 			
+	 			var ds:DragSource = event.dragSource;
+             //   var dropTarget:DataGrid = DataGrid(event.currentTarget);
+                var arr:Array;
+                if( ds.hasFormat("items") ) {
+
+                    arr = ds.dataForFormat("items") as Array;
+                } else if( ds.hasFormat("treeItems") ) {
+
+                    arr = ds.dataForFormat("treeItems") as Array;
+                }
+                for(var i:Number=0; i < arr.length; i++) {
+
+                    var node:XML = XML(arr[i]);
+                    var item:Object = new Object();
+                    item.label = node.@label;
+                    item.type  = node.@type;
+               //     dataGridProvider.addItem(item);
+                }
+
+             //   onDragExit(event); 
+	 		/*
+	 		 if (event.dragSource.hasFormat("items"))
+              {                
+              	trace("items");
+                // Explicitly handle the dragDrop event.            
+                event.preventDefault();
+
+                // Since you are explicitly handling the dragDrop event,
+                // call hideDropFeedback(event) to have the drop target
+                // hide the drop indicator. 
+                // The drop indicator is created
+                // automatically for the list controls by the built-in 
+                // event handler for the dragOver event.
+                event.currentTarget.hideDropFeedback(event);
+              }
+	 			*/
+	            // Get the data identified by the color format 
+	            // from the drag source.
+	      //      var data:Object = event.dragSource.dataForFormat('color');
+	            // Set the canvas color.
+	       //     myCanvas.setStyle("backgroundColor", data);
+	        }   
+	        
+	        
+	        private function onTreeDragComplete(event:DragEvent):void {
+
+                event.preventDefault();
+            }    
+	 	]]>
+	 </mx:Script>
+	 
 	 
 	 <mx:XMLList id="treeData">
 	    <node label="Mail Box">
@@ -22,8 +133,10 @@
                 <mx:TabNavigator id="tn"  width="100%" height="100%">
 		            <!-- Define each panel using a VBox container. -->
 					
-					<mx:Canvas label="Container"  width="100%" height="100%" >
+					<mx:Canvas label="Container"  width="100%" height="100%"  >
 			             <mx:Tree id="trContainer" width="100%" height="100%" labelField="@label"
+			             	dragDrop="dragDropHandler(event);"
+			             	dragComplete="onTreeDragComplete(event)"
                 			showRoot="false" dataProvider="{treeData}" />
 			        </mx:Canvas>
 			        
@@ -42,7 +155,10 @@
 
             <mx:VBox  width="100%" height="100%" >
                 <mx:Label text="Current container: selected container" fontWeight="bold"  color="0xFFFFFF"/>
-                <mx:Canvas width="100%" height="100%" backgroundColor="#09FC09"/>
+                <mx:Canvas id="can" width="100%" height="100%" 
+                		backgroundColor="#09FC09"
+                	 	dragEnter="dragEnterHandler(event);" 
+        				dragDrop="dragDropHandler(event);"/>
             </mx:VBox>
 	</mx:HDividedBox>
 		
