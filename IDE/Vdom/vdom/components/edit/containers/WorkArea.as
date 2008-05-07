@@ -43,6 +43,7 @@ public class WorkArea extends Canvas {
 		resizeManager.addEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
 		
 		addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
+		addEventListener(MouseEvent.ROLL_OUT, mouseRollOutHandler);
 		
 		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
 		addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
@@ -178,6 +179,7 @@ public class WorkArea extends Canvas {
 
 	private function dragEnterHandler(event:DragEvent):void {
 		
+		resizeManager.itemDrag = true;
 		VdomDragManager.acceptDragDrop(UIComponent(event.currentTarget));
 		focusedObject = null
 	}
@@ -197,7 +199,7 @@ public class WorkArea extends Canvas {
 		
 		var currentItem:Container = stack[0];
 		
-		trace('WorkArea - dragOverHandler ' + stack.length)
+		//trace('WorkArea - dragOverHandler ' + stack.length)
 		
 		if(focusedObject == currentItem)
 			return;
@@ -230,9 +232,14 @@ public class WorkArea extends Canvas {
 	
 	private function dragDropHandler(event:DragEvent):void {
 		
+		resizeManager.itemDrag = false;
+		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
 		
 		var currentContainer:Container = focusedObject;
+		
+		if(focusedObject is IItem)
+			IItem(focusedObject).drawHighlight('none');
 		
 		if(currentContainer)
 			currentContainer.drawFocus(false);
@@ -249,8 +256,8 @@ public class WorkArea extends Canvas {
 		var bool:Number = aviableContainers.indexOf(currentItemName);
 		if(bool != -1) {
 			
-			var objectLeft:Number = currentContainer.mouseX - 25;// - bm.left;
-			var objectTop:Number = currentContainer.mouseY - 25;// - bm.top;
+			var objectLeft:Number = currentContainer.mouseX - 25;
+			var objectTop:Number = currentContainer.mouseY - 25;
 		
 			objectLeft = (objectLeft < 0) ? 0 : objectLeft;
 			objectTop = (objectTop < 0) ? 0 : objectTop;
@@ -269,10 +276,11 @@ public class WorkArea extends Canvas {
 				
 			focusedObject = null;
 		}
-		
 	}
 	
 	private function dragExitHandler(event:DragEvent):void {
+		
+		resizeManager.itemDrag = false;
 		
 		if(focusedObject is IItem)
 			IItem(focusedObject).drawHighlight('none');
@@ -281,6 +289,11 @@ public class WorkArea extends Canvas {
 	private function mouseWheelHandler(event:MouseEvent):void {
 		
 		event.stopPropagation();
+	}
+	
+	private function mouseRollOutHandler(event:MouseEvent):void {
+		
+		cursorManager.removeAllCursors();
 	}
 }
 }

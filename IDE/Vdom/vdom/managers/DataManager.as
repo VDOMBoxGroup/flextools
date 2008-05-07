@@ -402,33 +402,30 @@ public class DataManager implements IEventDispatcher {
 			dispatchEvent(dmEvent);
 		}
 		dispatchEvent(new Event('currentObjectChanged'));
-		
 	}
 	
 	public function deleteObject(objectId:String):void {
 		
-		
 		soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
 		soap.deleteObject(_currentApplicationId, objectId);
-		
 	}
 	
 	private function objectDeletedHandler (event:SoapEvent):void {
 		
 		soap.removeEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
 		
-		var objectID:String = event.result;
+		var objectId:String = event.result.Result;
 		
-		delete getObject(objectID);
+		delete getObject(objectId);
 		
-		if(objectID == _currentPageId)
+		if(objectId == _currentPageId)
 			changeCurrentPage(null);
 		
-		if(objectID == currentObjectId)
-			changeCurrentObject(null);
+		if(objectId == currentObjectId)
+			changeCurrentObject(_currentPageId);
 		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
-		dme.objectId = event.result;
+		dme.objectId = objectId;
 		dispatchEvent(dme);
 	}
 	

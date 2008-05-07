@@ -32,8 +32,6 @@ public class ResizeManager extends EventDispatcher {
 	
 	private var selectMarker:TransformMarker;
 	
-	public var itemTransform:Boolean;
-	
 	private var highlightedItem:Container;
 	
 	private var caughtItem:Container;
@@ -42,6 +40,8 @@ public class ResizeManager extends EventDispatcher {
 	
 	private var filterFunction:Function;
 	
+	private var _itemTransform:Boolean;
+	
 	private var styleManager:StyleManager;
 	private var moveCursor:Class;
 	private var cursorID:int;
@@ -49,6 +49,8 @@ public class ResizeManager extends EventDispatcher {
 	private var beforeTransform:Object;
 	
 	private var markerSelected:Boolean;
+	
+	public var itemDrag:Boolean;
 	
 	public function ResizeManager() {
 		
@@ -74,6 +76,16 @@ public class ResizeManager extends EventDispatcher {
 			instance = new ResizeManager();
 
 		return instance;
+	}
+	
+	public function get itemTransform():Boolean {
+	
+	 return _itemTransform;
+	}
+	
+	public function set itemTransform(value:Boolean):void {
+		
+		_itemTransform = value;
 	}
 	
 	public function init(topLevelItem:Container):void {
@@ -168,8 +180,7 @@ public class ResizeManager extends EventDispatcher {
 			cursorID = NaN;
 		}
 		
-		if(item && !(selectMarker.item && itemTransform)) {
-			
+		if(item && !itemDrag && !(itemTransform && selectMarker.item)) {
 			if(highlightedItem)
 				IItem(highlightedItem).drawHighlight('none');
 			
@@ -344,7 +355,7 @@ public class ResizeManager extends EventDispatcher {
 			tip.y = event.stageY + 15;
 		}
 		
-		if(selectMarker.item && itemTransform || markerSelected)
+		if(selectMarker.item && itemTransform || itemDrag || markerSelected)
 			return;
 		
 		var itemUnderMouse:Container = getItemUnderMouse();

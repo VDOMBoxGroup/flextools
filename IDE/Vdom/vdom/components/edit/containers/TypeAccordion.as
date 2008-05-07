@@ -1,6 +1,9 @@
 package vdom.components.edit.containers {
 
 import mx.collections.ArrayCollection;
+import mx.collections.IViewCursor;
+import mx.collections.Sort;
+import mx.collections.SortField;
 import mx.containers.Accordion;
 
 import vdom.components.edit.containers.typeAccordionClasses.Type;
@@ -11,6 +14,7 @@ public class TypeAccordion extends Accordion {
 	
 	private var fileManager:FileManager;
 	private var categories:Object;
+	private var types:ArrayCollection;
 	
 	public function TypeAccordion()	{
 		
@@ -18,38 +22,95 @@ public class TypeAccordion extends Accordion {
 		
 		fileManager = FileManager.getInstance();
 		categories = {};
+		types = new ArrayCollection();
 	}
 	
 	public function set dataProvider(typesXML:XMLList):void {
 		
-		var typesCollection:ArrayCollection = new ArrayCollection();
+		if(!typesXML) return;
+		
+		var typeId:String, displayName:String, phraseId:String, resourceId:String, 
+			typeName:String, categoryName:String, aviableContainers:String;
+		
+		var phraseRE:RegExp = /#Lang\((\w+)\)/;
+		var resourceRE:RegExp = /#Res\((.*)\)/;
+		
+		for each (var typeDescription:XML in typesXML) {
+			
+			if(typeDescription.Information.Container == 3)
+				continue;
+			
+			typeId = typeDescription.Information.ID;
+			
+			displayName = typeDescription.Information.DisplayName;
+		
+			phraseId = displayName.match(phraseRE)[1];
+			
+			resourceId = typeDescription.Information.Icon;
+			resourceId = resourceId.match(resourceRE)[1];
+			
+			typeName = resourceManager.getString(typeDescription.Information.Name, phraseId);
+			categoryName = String(typeDescription.Information.Category).toUpperCase();
+			
+			aviableContainers = typeDescription.Information.Containers;
+			
+			types.addItem({
+				typeName:typeName, 
+				categoryName:categoryName, 
+				typeId:typeId, 
+				resourceId:resourceId,
+				aviableContainers:aviableContainers
+			});
+		}
+		
+		types.sort = new Sort();
+		types.sort.fields = [new SortField('typeName')];
+		types.refresh();
 		
 		var standardCategory:Array = ['STANDARD', 'FORM', 'TABLE', 'DATABASE'];
 		
 		for each (var category:String in standardCategory)
 			insertCategory(category);
 		
-		for each (var num:XML in typesXML) {
+		var type:Type, currentCategory:Types;		
+		
+		var cursor:IViewCursor = types.createCursor();
+		
+		var currentDescription:Object;
+		
+		while(!cursor.afterLast) {
 			
-			if(num.Information.Container == 3)
-				continue;
+			currentDescription = cursor.current;
 			
-			var categoryName:String = String(num.Information.Category).toUpperCase();
-			var currentCategory:Types = insertCategory(categoryName);
+			currentCategory = insertCategory(currentDescription.categoryName);
 			
-			var et:Type = new Type(num);
+			type = new Type(currentDescription);
 			
-			et.setStyle('horizontalAlign', 'center');
-			et.width = 90;
-			et.aviableContainers = num.Information.Containers;
+			type.setStyle('horizontalAlign', 'center');
+			type.width = 90;
+			type.typeLabel = currentDescription.typeName;
 			
-			var resourceID:String = num.Information.Icon;
-			var resourceRE:RegExp = /#Res\((.*)\)/;
+			fileManager.loadResource(currentDescription.typeId, currentDescription.resourceId, type);
+			currentCategory.addChild(type);
+			cursor.moveNext();
+		}
+			
+		
+		/* for each (var num:XML in typesXML) {
+			 
+			currentCategory = insertCategory(categoryName);
+			
+			type = new Type(num);
+			
+			type.setStyle('horizontalAlign', 'center');
+			type.width = 90;
+			
+			resourceID = num.Information.Icon;
 			resourceID = resourceID.match(resourceRE)[1];
 			
-			fileManager.loadResource(num.Information.ID, resourceID, et);
-			currentCategory.addChild(et); 
-		}
+			fileManager.loadResource(num.Information.ID, resourceID, type);
+			currentCategory.addChild(type);
+		} */
 	}
 	
 	private function insertCategory(categoryName:String):Types {
@@ -61,12 +122,13 @@ public class TypeAccordion extends Accordion {
 			currentCategory	= new Types();
 			
 			categories[categoryName] = currentCategory;
-			addChild(currentCategory);
 			
 			currentCategory.label = categoryName;
 			currentCategory.setStyle('horizontalAlign', 'center');
 			currentCategory.horizontalScrollPolicy = 'off';
 			currentCategory.percentWidth = 100;
+			
+			addChild(currentCategory);
 			
 		} else {
 			

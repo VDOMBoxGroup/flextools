@@ -31,11 +31,16 @@ VdomTitleBar {
 //  Tab
 //------------------------------
 */
-Tab {
+TabNavigator {
 	
-	color: #ffffff;
-	textSelectedColor: #ffffff;
-	textRollOverColor: #ffffff;
+	color: #444444;
+	textSelectedColor: #444444;
+	textRollOverColor: #444444;
+	
+	selectedTabTextStyleName: "selectedTab";	
+}
+
+Tab {
 	
 	upSkin: Embed(source="vdomTheme.swf", symbol="EditorTabUp");
 	overSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
@@ -47,6 +52,13 @@ Tab {
 	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
 	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
 	
+}
+
+.selectedTab {
+	
+	color: #000000;
+	textSelectedColor: #000000;
+	textRollOverColor: #000000;
 }
 
 LoginForm {

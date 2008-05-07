@@ -643,10 +643,24 @@ public class RenderManager implements IEventDispatcher {
 		
 		if(itemDescription.parentId) {
 			
-			if(itemDescription.item && !itemDescription.item.parent) {
-			
-				var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
-				parentDescription.item.addChild(item);
+			if(itemDescription.item) {
+				
+				if(!itemDescription.item.parent) {
+					var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
+					parentDescription.item.addChild(item);
+				}
+				
+				var p_arrayOfItems:Array = sortItems(itemDescription.parentId);
+				var p_count:uint = 0;
+				
+				for each (var p_collectionItem:Container in p_arrayOfItems) {
+					
+					if(p_collectionItem.parent) {
+						//trace(p_collectionItem.parent.getChildIndex(p_collectionItem))
+						p_collectionItem.parent.setChildIndex(p_collectionItem, p_count);
+						p_count++;
+					}
+				}
 			}
 		} else {
 			

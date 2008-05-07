@@ -18,6 +18,7 @@ import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.ComboBox;
 import mx.controls.NumericStepper;
+import mx.controls.Spacer;
 import mx.controls.Text;
 import mx.controls.TextInput;
 import mx.controls.ToolTip;
@@ -39,9 +40,12 @@ public class AttributesPanel extends ClosablePanel {
 		
 	[Bindable] public var help:String;
 	
+	private var languageManager:LanguageManager;
 	
 	private var acceptButton:Button;
 	private var deleteButton:Button;
+	private var buttonSpacer:Spacer;
+	
 	
 	private var attributesGrid:Grid;
 	
@@ -50,9 +54,6 @@ public class AttributesPanel extends ClosablePanel {
 	private var attributeItemValue:ClassFactory;
 	private var attributeLabel:ClassFactory;
 	
-	private var applyButton:Button;
-	
-	/* private var _type:XML; */
 	private var typeName:String;
 	private var _collection:XMLListCollection;
 	private var objectDescription:XML;
@@ -62,6 +63,7 @@ public class AttributesPanel extends ClosablePanel {
 	private var _isValid:Boolean;
 	private var _objectChanged:Boolean;
 	private var _objectName:String;
+	private var attributesVisible:Boolean;
 	
 	private var _acceptLabel:String;
 	private var _cancelLabel:String;
@@ -73,18 +75,15 @@ public class AttributesPanel extends ClosablePanel {
 	private var typeTitle:UIComponent;
 	private var invalidElementsCount:uint;
 	
-	private var attributesVisible:Boolean;
-	private var old_attributesVisible:Boolean;
 	
-	private var languageManager:LanguageManager;
+	private var old_attributesVisible:Boolean;
 	
 	public function AttributesPanel() {
 		
 		super();
 		help = null;
 		typeName = null;
-		//languages = LanguageManager.getInstance();
-		//this.addEventListener(KeyboardEvent.KEY_UP, enterHandler);
+
 		horizontalScrollPolicy = 'off';
 		verticalScrollPolicy = 'off';
 		ToolTip.maxWidth = 120;
@@ -116,12 +115,6 @@ public class AttributesPanel extends ClosablePanel {
 		deleteButton.label = _cancelLabel = newLabel;
 	}
 	
-	//[Bindable]
-	/* public function get dataProvider():XML {
-		
-		return XML(_collection);
-	} */
-	
 	public function set dataProvider(new_objectDescription:XML):void {
 		
 		if (new_objectDescription is XML) {
@@ -147,19 +140,16 @@ public class AttributesPanel extends ClosablePanel {
 			
 			cursor = _collection.createCursor();
 			
-			//_type = objectDescription.Type[0];
-			
 			attributesVisible = true;
 			
 		} else {
 			
 			_collection = null;
-			//_type = null;
 			attributesVisible = false;
 		}
 		
 		_objectChanged = true;
-		invalidateDisplayList();
+		
 		invalidateProperties();
 	}
 	
@@ -179,8 +169,7 @@ public class AttributesPanel extends ClosablePanel {
 				tmpControlBar = new ControlBar();
 				addChild(tmpControlBar);
 			}
-				
-				
+
 		} else {
 			
 			tmpControlBar = new ControlBar();
@@ -200,31 +189,17 @@ public class AttributesPanel extends ClosablePanel {
 			typeTitle.visible = false;
 			
 			rawChildren.addChild(typeTitle);
-		} 
-		/* if(!controlBar) {
-			
-			//rawChildren.addChild(new ControlBar());
-			//controlBar = new ControlBar();
-			
-		} */
-			
+		}
 		
 		if (!acceptButton) {
 			
 			acceptButton = new Button();
 			
-			/* acceptButton.setStyle("upSkin", getStyle('buttonSkin'));
-			acceptButton.setStyle("downSkin", getStyle('buttonSkin'));
-			acceptButton.setStyle("overSkin", getStyle('buttonSkin'));
-			acceptButton.setStyle("disabledSkin", getStyle('buttonSkin')); */
-			
 			acceptButton.setStyle("cornerRadius", 0);
 			
 			acceptButton.height = 15;
-			//acceptButton.visible = false;
-			
-			acceptButton.enabled = enabled;
-			//acceptButton.styleName = controlBar;	
+			acceptButton.enabled = enabled;	
+			acceptButton.visible = false;
 			
 			acceptButton.addEventListener(MouseEvent.CLICK, acceptButton_clickHandler);
 		   	ControlBar(controlBar).addChild(acceptButton);
@@ -232,21 +207,25 @@ public class AttributesPanel extends ClosablePanel {
 			acceptButton.owner = ControlBar(controlBar);
 		}
 		
+		if(!buttonSpacer) {
+			
+			buttonSpacer = new Spacer();
+		
+			buttonSpacer.percentWidth = 100;
+		
+		   	ControlBar(controlBar).addChild(buttonSpacer);
+		   	
+			buttonSpacer.owner = ControlBar(controlBar);
+		}
+		
 		if (!deleteButton) {
 			
 			deleteButton = new Button();
-			
-			//deleteButton.setStyle("upSkin", getStyle('buttonSkin'));
-			//deleteButton.setStyle("downSkin", getStyle('buttonSkin'));
-			//deleteButton.setStyle("overSkin", getStyle('buttonSkin'));
-			//deleteButton.setStyle("disabledSkin", getStyle('buttonSkin'));
 			deleteButton.setStyle("cornerRadius", 0);
 			
 			deleteButton.height = 15;
-			//deleteButton.visible = false;
-			
 			deleteButton.enabled = enabled;
-			//deleteButton.styleName = controlBar;	
+			deleteButton.visible = false;
 			
 			deleteButton.addEventListener(MouseEvent.CLICK, deleteButton_clickHandler);
 		   	ControlBar(controlBar).addChild(deleteButton);
@@ -273,6 +252,9 @@ public class AttributesPanel extends ClosablePanel {
 		if (!attributeItemLabel) {
 			
 			attributeItemLabel = new ClassFactory(GridItem);
+			attributeItemLabel.properties = {
+				percentWidth:100
+			};
 		}
 		if (!attributeItemValue) {
 			
@@ -286,16 +268,10 @@ public class AttributesPanel extends ClosablePanel {
 			attributeLabel = new ClassFactory(Text);
 			attributeLabel.properties = {
 				selectable:false,
-				width:70
+				minWidth:70,
+				percentWidth:100
 			};
 		}
-		/* if (!applyButton) {
-			applyButton = new Button();
-			applyButton.visible = false;
-			applyButton.label = 'Save';
-			applyButton.enabled = false;
-			//addChild(applyButton);
-		} */
 	}
 	
 	override protected function updateDisplayList(unscaledWidth:Number, 
@@ -305,62 +281,91 @@ public class AttributesPanel extends ClosablePanel {
 		
 		if(attributesVisible != old_attributesVisible) {
 			
-			
 			attributesGrid.visible = attributesVisible;			
 			controlBar.visible = attributesVisible;
 			acceptButton.visible = attributesVisible;
+	
+			old_attributesVisible = attributesVisible;
+		}
+		
+		if(objectDescription && objectDescription.Type.Information.Container == 3)
+			deleteButton.visible = false;
+		else
 			deleteButton.visible = attributesVisible;
+	}
+	
+	override protected function commitProperties():void {
+		
+		if(_objectChanged) {
 			
-			/* if(!attributesVisible) {
+			var titleValue:String = 'OBJECT PROPERTIES';
+			var objectName:String;
+			
+			if (_collection is XMLListCollection) {
 				
-				var attributeGridW:Number = attributesGrid.getExplicitOrMeasuredWidth();
-				var controlBarW:Number = controlBar.getExplicitOrMeasuredWidth();
+				typeName = objectDescription.Type.Information.Name;
+				objectName = objectDescription.Type.Information.Name;
 				
-				attributesGrid.height = 0;
-				controlBar.height = 0;
+				createAttributes();
+				
+				attributesGrid.visible = true;
+				_isValid = true;
 				
 			} else {
 				
-				attributesGrid.height = NaN;
-				controlBar.height = NaN;
-			} */
+				attributesGrid.visible = false;
+				attributesGrid.removeAllChildren();
+				_isValid = false;
+			}
 			
-			old_attributesVisible = attributesVisible;
+			title = titleValue;
+			status = objectName;
+			help = '';
+			invalidElementsCount = 0;
+			
+			_objectChanged = false;
+			
+			invalidateDisplayList();
 		}
+		
+		super.commitProperties();
 	}
 	
 	override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void {
 		
 		 super.layoutChrome(unscaledWidth, unscaledHeight);
 		 
-		 var bm:EdgeMetrics = ControlBar(controlBar).viewMetricsAndPadding
+		// var bm:EdgeMetrics = ControlBar(controlBar).viewMetricsAndPadding
 		 
-		 if(controlBar) {
+		/*  if(controlBar) {
 		 	
 		 	if(acceptButton) {
 		 		
 		 		acceptButton.move(bm.left, bm.top);
 		 	}
 		 	
+		 	var cbw:Number = controlBar.width;
+		 	var dbw:Number = deleteButton.width;
+		 	var bbr:Number = bm.right;
+		 	var bbt:Number = bm.top;
+		 	var ax:Number = controlBar.width - deleteButton.width - bm.right;
+		 	
 		 	if(deleteButton) {
 		 		
 		 		deleteButton.move(
-		 			controlBar.width - 
+		 			unscaledWidth - 
 		 			deleteButton.width - bm.right,
 		 			bm.top);
 		 	}
 		 }
-		 
+		  */
 		 titleTextField.move(8, 2);
 		 
-		 collapseButton.move(
-			collapseButton.x,
-			4);
+		 collapseButton.move(collapseButton.x, 4);
 		
 		 statusTextField.setActualSize(unscaledWidth, statusTextField.textHeight);
 		 statusTextField.move(0, titleTextField.y + titleTextField.textHeight + 6);
 		 setStyle('headerHeight', statusTextField.y + statusTextField.textHeight + 2);
-		 
 	}
 	
 	private function showControlBar(show:Boolean):void {
@@ -373,39 +378,12 @@ public class AttributesPanel extends ClosablePanel {
 			var child:DisplayObject = ControlBar(controlBar).getChildAt(i);
 			child.visible = show;
 		}
-	}   
-	/* override protected function layoutChrome(unscaledWidth:Number, unscaledHeight:Number):void {
-		
-		super.layoutChrome(unscaledWidth, unscaledHeight);
-		
-		var bm:EdgeMetrics = borderMetrics;
-		
-		acceptButton.setActualSize(
-			acceptButton.getExplicitOrMeasuredWidth(),
-			acceptButton.getExplicitOrMeasuredHeight()
-		);
-
-		acceptButton.move(
-			unscaledWidth - bm.right - 10 -
-			acceptButton.getExplicitOrMeasuredWidth(),
-			unscaledHeight - acceptButton.getExplicitOrMeasuredHeight() / 2 
-		);
-	} */
-	
-	/* private function applyChanges(event:Event):void {
-
-		for (var attrName:String in fieldsArray) {
-			if(!cursor.findFirst({'@Name':attrName}))
-				continue;
-			var currentElement:Object = cursor.current;
-			currentElement.*[0] = fieldsArray[attrName][0][fieldsArray[attrName][1]];
-		}
-		dispatchEvent(new Event('propsChanged'));
-	} */
+	}
 	
 	private function createAttributes():void {
 		
 		attributesGrid.removeAllChildren();
+			
 		fieldsArray = [];
 		
 		var codeInterface:Object = new Object();
@@ -475,8 +453,6 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer = new MultiLine();
 					valueType = 'value';
 					
-					//valueContainer.maxChars = codeInterface['value'];
-					
 					valueContainer.value = currentAttribute;
 				break;
 				
@@ -484,8 +460,6 @@ public class AttributesPanel extends ClosablePanel {
 				
 					valueContainer = new ResourceBrowserButton();
 					valueType = 'value';
-					
-					//valueContainer.maxChars = codeInterface['value'];
 					
 					valueContainer.value = currentAttribute;
 				break;
@@ -518,7 +492,6 @@ public class AttributesPanel extends ClosablePanel {
 						comboBoxData.push({label:comboBoxLabel, data:listValues[2]});
 						if(currentAttribute == listValues[2])
 							selectedItem = comboBoxData[comboBoxData.length - 1];
-
 					} 
 					
 					valueContainer.dataProvider = comboBoxData;
@@ -549,8 +522,6 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.selectedItem = _objectList.(@ID == currentAttribute);
 				break
 				
-				//case 'externaleditor':
-				
 				default:
 					valueContainer = new TextInput();
 					valueType = 'text';
@@ -559,20 +530,12 @@ public class AttributesPanel extends ClosablePanel {
 			}
 			
 			valueContainer.percentWidth = 100;
-			//valueContainer.minWidth = 0;
 			
 			valueContainer.data = {
 				'elementName':attributeXMLDescription.Name,
 				'helpPhraseID':attributeXMLDescription.Help,
 				'valid': true
 			};
-			
-			/* addValidator(
-				valueContainer, 
-				valueType, 
-				attributeXMLDescription.RegularExpressionValidation, 
-				attributeXMLDescription.ErrorValidationMessage
-			); */
 			
 			valueContainer.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
 			valueContainer.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
@@ -624,7 +587,6 @@ public class AttributesPanel extends ClosablePanel {
 		attrLabel.text = label;
 		
 		attrLabel.setStyle('textAlign', 'right');
-		//attrLabel.height = 21;
 		
 		attrItemLabel.addChild(attrLabel);
 		
@@ -638,11 +600,11 @@ public class AttributesPanel extends ClosablePanel {
 		attrItemValue.addChild(element);
 		attrItemValue.setStyle('verticalAlign', 'middle');
 		attrItemValue.setStyle('paddingLeft', 3);
-		element.width = 110;
+
+		element.minWidth = 110;
+		element.percentWidth = 100;
 		element.height = 21;
 		
-		
-		//attrRow.setStyle('backgroundColor', '#00ff00');
 		attrRow.addChild(attrItemLabel);
 		attrRow.addChild(attrItemValue);
 		
@@ -661,8 +623,8 @@ public class AttributesPanel extends ClosablePanel {
 		validator.property = valueType;
 		validator.expression = '^'+regExp+'$';
 		validator.noMatchError = 
-			validator.requiredFieldError = ''
-				//languages.getLanguagePhrase(_typeID, errorMsg);
+		validator.requiredFieldError = ''
+		//languages.getLanguagePhrase(_typeID, errorMsg);
 		
 	}
 	
@@ -672,56 +634,6 @@ public class AttributesPanel extends ClosablePanel {
 		var phraseID:String = phrase.match(phraseRE)[1];
 		
 		return resourceManager.getString(typeName, phraseID);
-	}
-		
-	override protected function commitProperties():void {
-		
-		if(_objectChanged) {
-			
-			var titleValue:String = 'OBJECT PROPERTIES';
-			var objectName:String;
-			if (_collection is XMLListCollection) {
-				
-				typeName = objectDescription.Type.Information.Name;
-				//titleValue += ': ' + objectDescription.Type.Information.Name;
-				objectName = objectDescription.Type.Information.Name;
-				
-				createAttributes();
-				
-				//showControlBar(true);
-				
-				//applyButton.addEventListener(MouseEvent.CLICK, applyChanges);
-				
-				attributesGrid.visible = true;
-				
-				//applyButton.visible = true;
-				_isValid = true;
-				
-			} else {
-				
-				//applyButton.removeEventListener(MouseEvent.CLICK, applyChanges);
-				//applyButton.visible = false;
-				attributesGrid.visible = false;
-				//showControlBar(false);
-				attributesGrid.removeAllChildren();
-				_isValid = false;
-			}
-			
-			title = titleValue;
-			status = objectName;
-			help = '';
-			invalidElementsCount = 0;
-			
-			_objectChanged = false;
-		}
-		
-		//if(_isValid)
-			//applyButton.enabled = true;
-		//else
-			//applyButton.enabled = false;
-			
-		super.commitProperties();
-		invalidateDisplayList();
 	}
 	
 	private function validateHandler(event:ValidationResultEvent):void {
@@ -766,15 +678,11 @@ public class AttributesPanel extends ClosablePanel {
 			currentElement.*[0] = XML('<![CDATA['+value+']'+']>');
 		}
 		
-		trace('Attributes Panel: acceptButtonClick');
-		
 		dispatchEvent(new Event('propsChanged'));
 	}
 	
 	private function deleteButton_clickHandler(event:MouseEvent):void {
 		
-		
-		//_objectChanged = true;
 		Alert.show('Delete?', 'Delete', Alert.YES | Alert.NO, null, closeButtonAlertHandler, null, Alert.NO);
 	}
 	

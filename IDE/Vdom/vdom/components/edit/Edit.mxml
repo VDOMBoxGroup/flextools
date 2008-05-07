@@ -16,10 +16,12 @@
 	
 	<mx:Script source="includes/edit.as" />
 	
-	<mx:HBox verticalScrollPolicy="off" left="0" right="0" top="0" bottom="0">
+	<mx:HDividedBox 
+		verticalScrollPolicy="off" 
+		left="0" right="0" top="0" bottom="0">
 	
 		<containers:TypeAccordion id="types" resizeToContent="true"
-			height="100%" y="100" width="90" minWidth="170" minHeight="0"
+			height="100%" y="100" width="90" minWidth="90" minHeight="0"
 			dataProvider="{dataManager.listTypes}" dropShadowEnabled="true"
 		/>
 		
@@ -40,14 +42,14 @@
 		
 		<mx:VBox 
 			verticalGap="5" 
-			minHeight="0" height="100%" width="200"
+			width="200" minWidth="200" minHeight="0" height="100%" 
 			verticalScrollPolicy="auto" horizontalScrollPolicy="off" >
 			
 			<containers:AttributesPanel id="attributesPanel"
 				title="OBJECT PROPERTIES" headerHeight="30"
 				acceptLabel="{resourceManager.getString('Application','editor_save')}" 
 				deleteLabel="{resourceManager.getString('Application','editor_delete')}"
-				dataProvider="{dataManager.currentObject}" width="200" />
+				dataProvider="{dataManager.currentObject}" width="100%" />
 
 			<containers:ClosablePanel id="helpPanel" title="Help" 
 				width="200" >
@@ -69,5 +71,5 @@
 			<objectsPanel:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" /> 					
 			
 		</mx:VBox>
-	</mx:HBox>
+	</mx:HDividedBox>
 </mx:Canvas>

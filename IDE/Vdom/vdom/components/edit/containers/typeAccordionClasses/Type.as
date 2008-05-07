@@ -1,10 +1,6 @@
 package vdom.components.edit.containers.typeAccordionClasses{
 
-import flash.display.Bitmap;
-import flash.display.Loader;
-import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.utils.ByteArray;
 
 import mx.containers.VBox;
 import mx.controls.Image;
@@ -14,74 +10,35 @@ import mx.core.DragSource;
 import vdom.managers.VdomDragManager;
 
 public class Type extends VBox {
-	protected var _id:String;
+	
+	private var typeId:String;
 	
 	private var typeIcon:Image;
-	private var typeLabel:Label;
+	private var _typeLabel:Label;
+	private var _typeLabelText:String;
 	
-	private var loader:Loader;
-	private var iconData:ByteArray;
+	private var aviableContainers:String;
 	
-	public var aviableContainers:String;
-	
-	public function Type(typeDescription:XML) {
+	public function Type(value:Object) {
 		
 		super();
-		this.visible = true;
-		this._id = typeDescription.Information.ID;
-		if(typeDescription.Information.Icon != '') {
-			typeIcon = new Image();
-			typeIcon.width = 58;
-			typeIcon.height = 58;
-			typeIcon.setStyle('backgroundColor', '#FF00FF');
-		}
 		
-		var phraseRE:RegExp = /#Lang\((\w+)\)/;
-		var displayName:String = typeDescription.Information.DisplayName.toString();
+		addEventListener(MouseEvent.MOUSE_DOWN, dragIt);
 		
-		var phraseID:String = displayName.match(phraseRE)[1];
-			
-		typeLabel = new Label();
-		typeLabel.text = resourceManager.getString(typeDescription.Information.Name, phraseID);
-		typeLabel.truncateToFit = true;
-		typeLabel.width = 90;
-		
-		addChild(typeIcon);
-		addChild(typeLabel);
-		
-		this.addEventListener(MouseEvent.MOUSE_DOWN, dragIt);
+		typeId = value.typeId;
+		aviableContainers = value.aviableContainers;
 	}
-	
-	/* private function getLanguagePhrase(typeID:String, phraseID:String):String {
-		
-		var phraseRE:RegExp = /#Lang\((\w+)\)/;
-		phraseID = phraseID.match(phraseRE)[1];
-		var languageID:String = typeID + '-' + phraseID;
-		//var languages:LanguageManager = LanguageManager.getInstance();
-		return ''//languages.language.(@ID == languageID)[0];
-	} */
 	
 	public function set resource(imageResource:Object):void {
 		
-		iconData = imageResource.data;
-		typeIcon.source = iconData;
-		this.visible = true;
-		/* var decoder:Base64Decoder = new Base64Decoder();
-		decoder.decode(imageResource);
-		
-		var imageSource:ByteArray = decoder.drain();
-		imageSource.uncompress();
-		
-		loader = new Loader();
-		loader.loadBytes(imageSource);
-		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete); */
+		typeIcon.source = imageResource.data;
+		visible = true;
 	}
 	
-	/* private function loadComplete(event:Event):void {
+	public function set typeLabel(value:String):void {
 		
-		iconData = Bitmap(loader.content);
-		typeIcon.source = Bitmap(iconData);
-	} */
+		_typeLabelText = value;
+	}
 	
 	private function dragIt(event:MouseEvent):void {
 		
@@ -89,7 +46,7 @@ public class Type extends VBox {
 		var ds:DragSource = new DragSource();
 		
 		var dataObject:Object = {
-			typeId:_id, 
+			typeId:typeId, 
 			aviableContainers:aviableContainers, 
 			offX:dragInitiator.mouseX, 
 			offY:dragInitiator.mouseY
@@ -98,10 +55,10 @@ public class Type extends VBox {
 		ds.addData(dataObject, 'typeDescription');
 		
 		var proxy:Image = new Image();
-		//proxy.setStyle('backgroundColor', '#FF00FF');
+		
 		proxy.width = 58;
 		proxy.height = 58;
-		proxy.source = iconData;
+		proxy.source = typeIcon.source;
 		
 		VdomDragManager.doDrag(
 			dragInitiator, 
@@ -112,6 +69,39 @@ public class Type extends VBox {
 			proxy.height/2 - dragInitiator.mouseY
 		);
 		
+	}
+	
+	override protected function createChildren():void {
+		
+		super.createChildren();
+		
+		if(!typeIcon) {
+			
+			typeIcon = new Image();
+			
+			typeIcon.width = 58;
+			typeIcon.height = 58;
+			typeIcon.setStyle('backgroundColor', '#FF00FF');
+			
+			addChild(typeIcon);
+		}
+		if(!_typeLabel) {
+			
+			_typeLabel = new Label();
+			
+			_typeLabel.truncateToFit = true;
+			_typeLabel.width = 90;
+			
+			addChild(_typeLabel);
+		}
+	}
+	
+	override protected function commitProperties():void {
+		
+		super.commitProperties();
+		
+		if(_typeLabel && _typeLabel.text != _typeLabelText)
+			_typeLabel.text = _typeLabelText;
 	}
 }
 }
