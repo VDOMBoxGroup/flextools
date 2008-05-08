@@ -284,6 +284,9 @@ private function createTreeArr(xml:XML):void
 	for each(var xmlObj:XML in xml.children())
 	{
 		var ID:String = xmlObj.@ID.toXMLString();
+	
+	//	if(ID == '')  continue; // not tested !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
 		var page:XML = xmlTopLevelObjects.(@ID == ID )[0];
 		var treeElement:TreeElement = new TreeElement();
 			
