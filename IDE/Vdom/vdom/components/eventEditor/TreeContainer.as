@@ -1,7 +1,7 @@
 package vdom.components.eventEditor
 {
 	import mx.controls.Tree;
-	import mx.events.DragEvent;
+	
 	import mx.events.FlexEvent;
 	
 	import vdom.managers.DataManager;
@@ -16,23 +16,29 @@ package vdom.components.eventEditor
 			super();
 			
 			dataManager = DataManager.getInstance();
+			dataProvider = dataManager.listPages;
 			
-			dragEnabled = true;
+			dragEnabled = false;
 			labelField = "@label";
 			showRoot = false;
 			percentHeight = 100;//width = 200;
 			percentWidth = 100;
+	
 	//		itemRenderer = new ClassFactory(ItCanvas);
 			
-		  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
+		//  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
 		//	addEventListener(FlexEvent.SHOW, showHandler);	
 		//	addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 		//	addEventListener(Event.CHANGE, treeChangeLister);
 		}
 	
 		override public function set dataProvider(value:Object):void
-		//override public function set dataProvider(xmlData:XMLList):void
 		 {
+		 	
+		 	// needed to delete
+		 	super.dataProvider = value;
+		 	return;
+		 		
 		 	 if (typeof(value)=="string")
            		 value = new XML(value);
 			
@@ -100,11 +106,12 @@ package vdom.components.eventEditor
 			return xmllReturn;
 		}
 		
-		
+	/*	
 		
 		private function onTreeDragComplete(drEvt:DragEvent):void
 		{
 			drEvt.preventDefault();
 		}
+		*/
 	}
 }

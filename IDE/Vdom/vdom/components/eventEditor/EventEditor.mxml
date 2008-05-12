@@ -16,16 +16,17 @@
 	 		
 	 		private function creationCompleteHandler():void
 	 		{
-	 			trContainer.dragEnabled = true;
+	 			
 	 		}
-	 		
 	 	
 	 		
 	 		 private function dragEnterHandler(event:DragEvent):void 
 	 		 {
-			
-	 		 /*
-	 		   if( event.dragInitiator is Tree ) {
+	 		 
+	 		   if( event.dragInitiator is TreeActions ) {
+	 		   	trace('event.dragInitiator is TreeActions ')
+	                    
+	                    /*
 	                    var ds:DragSource = event.dragSource;
 	                    if( !ds.hasFormat("treeItems") ) return;     // no useful data
 	
@@ -36,23 +37,25 @@
 	                        if( item.@label != "Personal" ) return; // not what we want
 	
 	                    }
+	                    */
 	                } 
-				*/
+				
 	                var dropTarget:Canvas=Canvas(event.currentTarget);
 	                DragManager.acceptDragDrop(dropTarget);
 	        }
                 
 	        private function dragDropHandler(event:DragEvent):void 
 	        {
-	        	var treeElement:TreeElement = new TreeElement();
-	        	treeElement.x = event.localX;
-	        	treeElement.y = event.localY;
-	 			can.addChild(treeElement); 
+	        	var evEdEvent:EventEditorEvent = new EventEditorEvent('123');
+	        	
+	        	evEdEvent.x = event.localX;
+	        	evEdEvent.y = event.localY;
+	        	
+	 			can.addChild(evEdEvent); 
 	        }   
 	        
-	        
-	        private function onTreeDragComplete(event:DragEvent):void {
-
+	        private function onTreeDragComplete(event:DragEvent):void 
+	        {
                 event.preventDefault();
             }    
 	 	]]>
@@ -76,25 +79,25 @@
     </mx:XMLList>
 	
 	<mx:HDividedBox width="100%" height="100%">
-		 <mx:Canvas label="Canvas 1" width="100%" height="100%" >
+		 <mx:Canvas label="Canvas 1" width="200" height="100%" >
                 <mx:TabNavigator id="tn"  width="100%" height="100%">
 		            <!-- Define each panel using a VBox container. -->
 					
 					<mx:Canvas label="Container"  width="100%" height="100%"  >
 			             <eventEditor:TreeContainer id="trContainer" width="100%" height="100%" 
-			             	
-                			 dataProvider="{dataManager.listPages}" />
+                			 dataProvider="{treeData}" />
 			        </mx:Canvas>
 			        
 			        <mx:Canvas label="Events"  width="100%" height="100%" >
-			             <mx:Tree id="trEvents" width="100%" height="100%" labelField="@label"
-                			showRoot="false" dataProvider="{treeData}" />
+			             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" 
+                			dataProvider="{treeData}" />
 			        </mx:Canvas>
 			        
 			        <mx:Canvas label="Actions"  width="100%" height="100%" >
-			             <mx:Tree id="trActions" width="100%" height="100%" labelField="@label"
-                			showRoot="false" dataProvider="{treeData}" />
+			             <eventEditor:TreeActions id="trActions" width="100%" height="100%" 
+                			 dataProvider="{treeData}" />
 			        </mx:Canvas>
+			        
 
 		        </mx:TabNavigator>
             </mx:Canvas>
