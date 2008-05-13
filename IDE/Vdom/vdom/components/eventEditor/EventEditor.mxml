@@ -2,6 +2,8 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:eventEditor="vdom.components.eventEditor.*">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.controls.Tree;
+	 		import vdom.components.treeEditor.Vector2;
 	 		import vdom.managers.DataManager;
 	 		import mx.collections.ArrayCollection;
 	 		import mx.controls.DataGrid;
@@ -14,9 +16,11 @@
 	 		[Bindable]
 	 		private var dataManager:DataManager;
 	 		
+	 		
+	 		
 	 		private function creationCompleteHandler():void
 	 		{
-	 			
+	 			dataManager = DataManager.getInstance();
 	 		}
 	 	
 	 		
@@ -46,18 +50,90 @@
                 
 	        private function dragDropHandler(event:DragEvent):void 
 	        {
-	        	var evEdEvent:EventEditorEvent = new EventEditorEvent('123');
+	        	var newElement:*;
+	        	  if( event.dragInitiator is TreeActions ) 
+	        	  {
+	        		 newElement =  new EventEditorAction('123');
+	        	  } 
+	        	  else if (event.dragInitiator is TreeEvents ) 
+	        	  {
+	        	  	newElement = new EventEditorEvent('123');
+	        	  }
+	        	  
+	        	newElement.x = event.localX;
+	        	newElement.y = event.localY;
 	        	
-	        	evEdEvent.x = event.localX;
-	        	evEdEvent.y = event.localY;
-	        	
-	 			can.addChild(evEdEvent); 
+	 			can.addChild(newElement); 
 	        }   
 	        
 	        private function onTreeDragComplete(event:DragEvent):void 
 	        {
                 event.preventDefault();
             }    
+          
+          
+            /******
+            * 
+            *	Рисуем линию... 
+            * 
+            */
+            private var blDrawLine:Boolean = false;
+            private var line:Vector2 = new Vector2();
+        /*
+            private function startDrawLine(trEvt:TreeEditorEvent):void
+			{
+				can.addChild(vctTest);//--для рисования связывающей линии
+				addEventListener(MouseEvent.MOUSE_MOVE, drLine);
+				
+				blDrawLine = true; //говорим что рисуем линию
+				addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+				drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
+				vctTest.graphics.clear();
+			}
+			
+			private var curEvent:Object;
+			private function drLine (mEvt:MouseEvent):void
+			{
+				var pnTo:Object = calculatePointTo(mouseX + can.horizontalScrollPosition, mouseY + can.verticalScrollPosition , curEvent);
+				
+				line.graphics.clear();
+				line.createVector(curEvent, pnTo);	
+			}
+			
+			private function calculatePointTo(mouseX:Number, mouseY:Number, curTree:Object):Object
+			{
+				var tX:int = mouseX - curTree.x;
+				var tY:int = mouseY - curTree.y;
+				
+				var pnTo:Object = new Object();
+				// чтоб мышка не кликала по своей линии
+				
+				if((tX>0))	pnTo.x = mouseX - 10;
+					else pnTo.x = mouseX + 10;
+				
+				if( (tY>0))	pnTo.y = mouseY - 10;
+					else pnTo.y = mouseY + 10;
+					
+				return pnTo;
+			}
+			
+			private function stopDrawLine(msEvt:MouseEvent):void
+			{
+				removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
+				removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+				
+				vctTest.clear();
+				main.removeChild(vctTest); ///-------------***********
+				blDrawLine = false;  //говорим что НЕ рисуем линию
+			}
+			*/
+			
+			private function treeContainerChangeHandler(evt:Event):void
+			{
+				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
+              	 var ID:String = selectedNode.@ID;
+              	 trace(ID);
+			}
 	 	]]>
 	 </mx:Script>
 	 
@@ -85,7 +161,7 @@
 					
 					<mx:Canvas label="Container"  width="100%" height="100%"  >
 			             <eventEditor:TreeContainer id="trContainer" width="100%" height="100%" 
-                			 dataProvider="{treeData}" />
+                			 dataProvider="{dataManager.listPages}" change="treeContainerChangeHandler(event)" />
 			        </mx:Canvas>
 			        
 			        <mx:Canvas label="Events"  width="100%" height="100%" >

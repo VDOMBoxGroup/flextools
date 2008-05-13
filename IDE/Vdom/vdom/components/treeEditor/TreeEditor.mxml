@@ -264,7 +264,7 @@
 	private function drLine (mEvt:MouseEvent):void
 	{
 		var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
-		var obj:Object = new Object(); 
+	//	var obj:Object = new Object(); 
 		
 		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	

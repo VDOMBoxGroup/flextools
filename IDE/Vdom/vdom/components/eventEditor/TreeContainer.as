@@ -1,7 +1,6 @@
 package vdom.components.eventEditor
 {
 	import mx.controls.Tree;
-	
 	import mx.events.FlexEvent;
 	
 	import vdom.managers.DataManager;
@@ -16,7 +15,7 @@ package vdom.components.eventEditor
 			super();
 			
 			dataManager = DataManager.getInstance();
-			dataProvider = dataManager.listPages;
+		//	dataProvider = dataManager.listPages;
 			
 			dragEnabled = false;
 			labelField = "@label";
@@ -27,23 +26,22 @@ package vdom.components.eventEditor
 	//		itemRenderer = new ClassFactory(ItCanvas);
 			
 		//  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
-		//	addEventListener(FlexEvent.SHOW, showHandler);	
+			addEventListener(FlexEvent.SHOW, showHandler);	
 		//	addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 		//	addEventListener(Event.CHANGE, treeChangeLister);
+		}
+		
+		private function showHandler(evt:FlexEvent):void
+		{
+			
 		}
 	
 		override public function set dataProvider(value:Object):void
 		 {
-		 	
-		 	// needed to delete
-		 	super.dataProvider = value;
-		 	return;
-		 		
-		 	 if (typeof(value)=="string")
-           		 value = new XML(value);
-			
-			if (value is XML)
+			if (value )
 			{
+				//trace('*********\n' + value)
+				value = value as XMLList;
 				// создаем обьекты верхнего уровня
 				 xmlTreeData = <root/>;
 				for each(var xmlLabel:XML in value)
@@ -60,6 +58,7 @@ package vdom.components.eventEditor
 					
 					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
 				//	xmlList.@icon	= 'accordion_icon';
+					var type:XML = dataManager.getTypeByTypeId(xmlLabel.@Type);
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
 				//	trace(xmlLabel.Objects)
@@ -91,27 +90,26 @@ package vdom.components.eventEditor
 			for each(var xmlLabel:XML in xmlIn.children())
 			{
 				var xmlTemp:XML = new XML('<Object/>');
+				var type:XML = dataManager.getTypeByTypeId(xmlLabel.@Type);
+			
 					xmlTemp.@label 	= xmlLabel.@Name;
 					xmlTemp.@ID 	= xmlLabel.@ID;
 					xmlTemp.@Type 	= xmlLabel.@Type;
 					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
 					
-					xmlTemp.@icon	= 'drag_icon';
+				//	xmlTemp.@icon	= 'drag_icon';
 				// проверяем есть ли еще обьекты в нутри
 				var numObjects:int = xmlLabel.Objects.*.length(); 
-				if(numObjects > 0)	xmlTemp.appendChild(findOjects(xmlLabel.Objects));
+				if(numObjects > 0)
+				if (type.Information.Container == '2' || type.Information.Container == '3')
+				{	
+					trace('2 || 3')	
+					xmlTemp.appendChild(findOjects(xmlLabel.Objects));
+					xmllReturn += xmlTemp;
+				}
 				
-				xmllReturn += xmlTemp;
 			}
 			return xmllReturn;
 		}
-		
-	/*	
-		
-		private function onTreeDragComplete(drEvt:DragEvent):void
-		{
-			drEvt.preventDefault();
-		}
-		*/
 	}
 }
