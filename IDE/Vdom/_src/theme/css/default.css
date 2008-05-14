@@ -26,21 +26,38 @@ VdomTitleBar {
 	closeButtonSkin: ClassReference("vdom.skins.TitleBarCloseButtonSkin");
 }
 
-/*
-//------------------------------
-//  Tab
-//------------------------------
-*/
 TabNavigator {
+		
+	tabStyleName: "tabStyle";
+}
+
+.tabStyle {
+	
+	color: #444444;
+	textRollOverColor: #444444;
+	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkinTop");
+	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinTop");
+	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinTop");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkinTop");
+	
+	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkinTop");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinTop");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinTop");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinTop");
+}
+
+MainTabNavigator {
 	
 	color: #444444;
 	textSelectedColor: #444444;
 	textRollOverColor: #444444;
 	
+		
+	tabStyleName: "mainTabStyle";
 	selectedTabTextStyleName: "selectedTab";	
 }
 
-Tab {
+.mainTabStyle {
 	
 	upSkin: Embed(source="vdomTheme.swf", symbol="EditorTabUp");
 	overSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
@@ -144,6 +161,20 @@ AdvancedTabNavigator {
 	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinBottom");
 	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinBottom");
 	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinBottom");
+}
+
+.advancedTabUp {
+	color: #444444;
+	textRollOverColor: #444444;
+	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkinTop");
+	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinTop");
+	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinTop");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkinTop");
+	
+	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkinTop");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinTop");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinTop");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinTop");
 }
 
 .mainCanvas {
@@ -293,44 +324,4 @@ ControlBar {
 	
 	fontFamily: Verdana;
 	textAlign: center;
-}
-
-/*
-//------------------------------
-//  ComboBox
-//------------------------------
-*/
-
-ComboBox {
-	
-	arrowButtonWidth: 22;
-	cornerRadius: 5;
-	
-	fontWeight: "bold";
-	leading: 0;
-	paddingLeft: 5;
-	paddingRight: 5;
-	
-	upSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxUpSkin");
-	overSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxOverSkin");
-	downSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxDownSkin");
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxDisabledSkin");
-	
-	editableUpSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableUpSkin");
-	editableOverSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableOverSkin");
-	editableDownSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableDownSkin");
-	editableDisabledSkin: Embed(source="vdomTheme.swf", symbol="ComboBoxEditableDisabledSkin");	
-	
-	dropDownStyleName: "comboDropDown";
-}
-
-.comboDropDown {
-	
-	backgroundColor: #FFFFFF;
-	borderThickness: 0;
-	cornerRadius: 0;
-	dropShadowEnabled: true;
-	fontWeight: "normal";
-	shadowDirection: "center";
-	shadowDistance: 1;
 }

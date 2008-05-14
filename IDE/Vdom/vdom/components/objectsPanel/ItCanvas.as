@@ -22,7 +22,8 @@ package vdom.components.objectsPanel
             
             var data:Object = {typeId:value.@Type, resourceId:value.@resourceID}
             
-            TreeListData(super.listData).icon  = IconUtil.getClass(this, data);
+            TreeListData(super.listData).icon = IconUtil.getClass(this, data, 24, 24);
+            
         }  
 	}
 }

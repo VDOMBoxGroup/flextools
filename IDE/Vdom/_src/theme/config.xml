@@ -92,6 +92,11 @@
 	</include-file>
 				
 	<include-file>
+		<name>vdomTheme.swc</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\swf\vdomTheme.swc</path>
+	</include-file>
+				
+	<include-file>
 		<name>vdomTheme.swf</name>
 		<path>D:\_Workspaces\VdomIDE\_src\theme\swf\vdomTheme.swf</path>
 	</include-file>

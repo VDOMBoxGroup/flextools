@@ -78,7 +78,7 @@ public class WorkArea extends Canvas {
 		
 		var objectId:String = result.Object.@ID;
 		
-		if(objectId == IItem(_selectedObject).objectId && resizeManager.itemTransform)
+		if(_selectedObject && objectId == IItem(_selectedObject).objectId && resizeManager.itemTransform)
 			return;
 			
 		renderManager.updateItem(result.Object.@ID, result.Parent);
@@ -129,16 +129,16 @@ public class WorkArea extends Canvas {
      */
 	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
 		
-		var selectedObject:Container = event.item;
+		var currentObject:Container = event.item;
 		
-		selectedObject.x = event.properties.left;
-		selectedObject.y = event.properties.top;
-		selectedObject.width = event.properties.width;
-		selectedObject.height = event.properties.height;
+		currentObject.x = event.properties.left;
+		currentObject.y = event.properties.top;
+		currentObject.width = event.properties.width;
+		currentObject.height = event.properties.height;
 		
-		renderManager.lockItem(IItem(selectedObject).objectId);
+		renderManager.lockItem(IItem(currentObject).objectId);
 		
-		applyChanges(IItem(selectedObject).objectId, event.properties);
+		applyChanges(IItem(currentObject).objectId, event.properties);
 		
 	}
 	

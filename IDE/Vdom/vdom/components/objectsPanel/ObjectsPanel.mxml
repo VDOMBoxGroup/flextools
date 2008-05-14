@@ -22,16 +22,15 @@
 		import mx.collections.XMLListCollection;
 		import mx.events.FlexEvent;
 		import mx.controls.Tree;
+		import mx.core.Application;
 			
-			
-	
-			[Embed(source="/assets/objectsPanel/HAccordion.png")]
-            public var accordion_icon:Class; 
+		[Embed(source="/assets/objectsPanel/HAccordion.png")]
+        public var accordion_icon:Class; 
+
+        [Embed(source="/assets/objectsPanel/DragScrollingCanvas.png")]
+        public var drag_icon:Class;
     
-            [Embed(source="/assets/objectsPanel/DragScrollingCanvas.png")]
-            public var drag_icon:Class;
-    
-  		import mx.core.Application;
+  		
 		
 		[Bindable]
 		private var publicData:Object;
@@ -155,16 +154,16 @@
 			return xmllReturn;
 		}
 		
-		private function getIcons ():void
+		/* private function getIcons ():void
 		{
 			trace('run function getIcon');	
-		}
+		} */
 		
-		public function set resource (object:Object):void
+		/* public function set resource (object:Object):void
 		{
 		//	trace('run function set Resource: ' + object.resourceID);	
 			arrPicture[object.resourceID] = object.data;
-		}
+		} */
 		
 		public function set currentObject(xml:XML):void
 		{

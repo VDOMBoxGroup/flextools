@@ -672,6 +672,9 @@ public class RenderManager implements IEventDispatcher {
 		
 		item.dispatchEvent(new Event('refreshComplete'));
 		item.visible = true;
+		
+		IItem(item).waitMode = false;
+		
 		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
 		rme.result = item;
 		

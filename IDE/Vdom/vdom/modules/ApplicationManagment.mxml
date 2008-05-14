@@ -32,9 +32,9 @@
 			labelPlacement="bottom"
 			click="mainViewStack.selectedChild = createApplicationCanvas"/>
 		
-		<controls:ActionButton styleName="newsButton"
+		<!--<controls:ActionButton styleName="newsButton"
 			label="{resourceManager.getString('Application','main_steps')}"
-			labelPlacement="bottom"/>
+			labelPlacement="bottom"/>-->
 
 		<controls:ActionPanel panelName="{resourceManager.getString('Application','main_search')}"
 			width="250" height="86" dropShadowEnabled="false">

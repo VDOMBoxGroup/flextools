@@ -48,19 +48,21 @@
 			click="{placeCanvas.selectedChild=treeCanv}"/>
 			
 		
-		<controls:ActionButton styleName="analyseButton"
-			label="{resourceManager.getString('Application','editor_analyse')}"
-			labelPlacement="bottom"
-			click="{placeCanvas.selectedChild=analyseCanv}"/>
-		
-		<controls:ActionButton styleName="statisticsButton" 
-			label="{resourceManager.getString('Application','editor_statistics')}"
-			labelPlacement="bottom"/>
-		
 		<controls:ActionButton styleName="eventsButton"
 			label="{resourceManager.getString('Application','editor_events')}"
 			labelPlacement="bottom"
-			click="{placeCanvas.selectedChild=eventCanv}"/>	
+			click="{placeCanvas.selectedChild=eventCanv}"/>
+		
+		<controls:ActionButton styleName="analyseButton"
+			label="Debug"
+			labelPlacement="bottom"
+			click="{placeCanvas.selectedChild=analyseCanv}"/>
+		
+		<!--<controls:ActionButton styleName="statisticsButton" 
+			label="{resourceManager.getString('Application','editor_statistics')}"
+			labelPlacement="bottom"/>-->
+		
+			
 	</controls:ControlPanel>
 	
 	<mx:ViewStack id="placeCanvas" 

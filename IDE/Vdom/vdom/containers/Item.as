@@ -6,10 +6,9 @@ import flash.display.Sprite;
 
 import mx.containers.Canvas;
 import mx.core.FlexSprite;
-import mx.core.IUIComponent;
 import mx.core.UIComponent;
 
-import vdom.managers.renderClasses.WaitCanvas;	
+import vdom.managers.wc;	
 
 use namespace mx.core.mx_internal;
 
@@ -19,6 +18,7 @@ public class Item extends Canvas implements IItem {
 	private var _waitMode:Boolean;
 	private var _highlightMarker:Canvas;
 	private var _graphicsLayer:Canvas;
+	private var _waitLayout:UIComponent;
 	private var _isStatic:Boolean;
 	private var _editableAttributes:Array;
 	
@@ -47,10 +47,14 @@ public class Item extends Canvas implements IItem {
 		
 		if(mode) {
 			
-			var waitLayout:UIComponent = new WaitCanvas();
 			removeAllChildren();
-			addChild(waitLayout);
+			_waitLayout.width = width;
+			_waitLayout.height = height;
+			_waitLayout.visible = true;
 			
+		} else {
+			
+			_waitLayout.visible = false;
 		}
 	}
 	
@@ -89,6 +93,15 @@ public class Item extends Canvas implements IItem {
 		_highlightMarker.visible = false;
 		
 		rawChildren.addChild(_highlightMarker);
+		
+		if(!_waitLayout)
+			_waitLayout = new wc();
+		
+		
+		_waitLayout.visible = true;
+		rawChildren.addChild(_waitLayout);
+		_waitLayout.width = 0;
+		_waitLayout.height = 0;
 	}
 	
 	override public function removeAllChildren():void {
@@ -129,8 +142,8 @@ public class Item extends Canvas implements IItem {
 		_highlightMarker.visible = true;
 	}
 	
-	override mx.core.mx_internal function createContentPane():void
-    {
+	override mx.core.mx_internal function createContentPane():void {
+		
         if (contentPane)
             return;
 

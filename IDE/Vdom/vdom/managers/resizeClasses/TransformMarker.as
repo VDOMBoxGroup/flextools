@@ -66,8 +66,6 @@ public class TransformMarker extends UIComponent {
 		
 		super();
 		
-		/* addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler); */
-		
 		resizeManager = rm;
 		
 		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
@@ -112,7 +110,6 @@ public class TransformMarker extends UIComponent {
 	
 	public function set item(item:Container):void {
 		
-		//trace('OBJECT CHANGE');
 		if(item == null) {
 			
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
@@ -137,9 +134,7 @@ public class TransformMarker extends UIComponent {
 		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		item.addEventListener('refreshComplete', refreshCompleteHandler);
 		
-		//_selectedItem.addEventListener(FlexEvent.UPDATE_COMPLETE, selectedItem_updateCompleteHandler);
-		
-		var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
+		/* var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
 		
 		var prop:Object = {
 			left : _selectedItem.x,
@@ -150,7 +145,9 @@ public class TransformMarker extends UIComponent {
 		
 		evt.properties = prop;
 		
-		dispatchEvent(evt);
+		dispatchEvent(evt); */
+		
+		resizeManager.itemTransform = true;
 		
 		itemChanged = true;
 		
@@ -273,8 +270,7 @@ public class TransformMarker extends UIComponent {
 		}
 		
 		if(itemChanged) {
-			//trace(measuredWidth, measuredHeight);
-			//measure();
+
 			itemChanged = false
 			
 			tl_box.x = 0 + boxSize/2;
@@ -299,8 +295,6 @@ public class TransformMarker extends UIComponent {
 			var g:Graphics = cc_box.graphics;
 			g.clear();
 			g.lineStyle(6, 0x333333, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-			/* if(_resizeMode == RESIZE_NONE)
-				g.beginFill(0xffffff, .0); */
 			g.drawRect(0, 0, measuredWidth-6, measuredHeight-6);
 			g.endFill();
 			
@@ -315,39 +309,21 @@ public class TransformMarker extends UIComponent {
 	override protected function measure():void {
 		
 		super.measure();
-		//trace('measure');
+		
 		measuredMinHeight = minHeight;
 		measuredMinWidth  = minWidth;
 		
-		//var bm:EdgeMetrics =  Canvas(item.parent).viewMetricsAndPadding;
+		if(!_selectedItem)
+			return
+
+		var rect:Rectangle = _selectedItem.getRect(_selectedItem.parent)
 		
-		if(_selectedItem) {
-			
-			var rect:Rectangle = _selectedItem.getRect(_selectedItem.parent)
-			
-			measuredWidth  = _selectedItem.width;
-			measuredHeight = _selectedItem.height;
-			
-			var rectangle:Rectangle = getContentRectangle(_selectedItem, this);
-			
-			//var parent:Object = this.parent;
-			//var proxyOrigin:Point = new Point();
-			//proxyOrigin = _selectedItem.parent.localToGlobal(
-				//new Point(_selectedItem.x, _selectedItem.y));
-				
-			//proxyOrigin = parent.globalToLocal(proxyOrigin);
-			
-			move(rectangle.x, rectangle.y);
-			//dispatchEvent(new FlexEvent(FlexEvent.UPDATE_COMPLETE));
-			
-			//x = rectangle.x; //rect.x - bm.left;
-			//y = rectangle.y; //rect.y - bm.top;
-			
-		} else {
-			//trace('==else')
-			//measuredWidth  = maxWidth;
-			//measuredHeight = maxHeight;
-		}
+		measuredWidth  = _selectedItem.width;
+		measuredHeight = _selectedItem.height;
+		
+		var rectangle:Rectangle = getContentRectangle(_selectedItem, this);
+		
+		move(rectangle.x, rectangle.y);
 	}
 	
 	protected function updateBoxes():void {
@@ -384,11 +360,9 @@ public class TransformMarker extends UIComponent {
 	}
 	
 	private function mouseDownHandler(event:MouseEvent):void {
-		//trace('resbeg');
-		
-		//trace('TransformMarker MD');
+
 		resizeManager.itemTransform = true;
-		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
+		/* var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
 		
 		var prop:Object = {
 			left : _selectedItem.x,
@@ -399,7 +373,7 @@ public class TransformMarker extends UIComponent {
 		
 		rmEvent.properties = prop;
 		
-		dispatchEvent(rmEvent);
+		dispatchEvent(rmEvent); */
 		
 		moving = null;
 		mousePosition = new Point(mouseX, mouseY);
@@ -413,8 +387,6 @@ public class TransformMarker extends UIComponent {
 		
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		
-		//event.stopImmediatePropagation();
 	}
 	
 	private function mouseOutHandler(event:MouseEvent):void {
@@ -484,14 +456,8 @@ public class TransformMarker extends UIComponent {
 		mousePosition = null;
 		mouseOutHandler(null);
 		transformation = false;		
-		//destroyToolTip();
 		
 		var rectangle:Rectangle = getContentRectangle(this, _selectedItem);
-		
-		//_selectedItem.x = rectangle.x;
-		//_selectedItem.y = rectangle.y;
-		//_selectedItem.width  = rectangle.width; //measuredWidth;
-		//_selectedItem.height = rectangle.height; //measuredHeight;
 		
 		var prop:Object = {
 			left : rectangle.x,
@@ -505,17 +471,12 @@ public class TransformMarker extends UIComponent {
 		rmEvent.properties = prop;
 		dispatchEvent(rmEvent);
 		resizeManager.itemTransform = false;
-		//trace('TM mouseUpHandler');
-		//event.stopImmediatePropagation();
-		//event.stopPropagation();
 	}
 	
 	
 	
 	private function mouseMoveHandler(event:MouseEvent):void {
 		
-		//trace('mm');
-		//CursorManager.removeAllCursors();
 		if(itemChanged)
 			return;
 		
@@ -525,8 +486,6 @@ public class TransformMarker extends UIComponent {
 		var allow:Boolean = true;
 		
 		if(moving && event.buttonDown) {
-			
-			//var onlyMove:Boolean = false;
 			
 			var mx:Number = mouseX;
 			var my:Number = mouseY;
@@ -590,7 +549,7 @@ public class TransformMarker extends UIComponent {
 						rect.y += my - mousePosition.y;
 						rect1.y += my - mousePosition.y;
 					}
-					//onlyMove = true;
+					
 				break;
 			}
 			
@@ -605,11 +564,6 @@ public class TransformMarker extends UIComponent {
 				if(rect.height < minHeight) rect.height = minHeight;
 				
 				if(allow) {
-					
-					//trace(mouseX)
-					
-					//var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);		
-					//dispatchEvent(evt);
 					
 					move(rect.x, rect.y);
 					
@@ -626,20 +580,6 @@ public class TransformMarker extends UIComponent {
 				}
 			}
 			
-			/* if(tip)
-			{
-				tip.visible = true;
-				tip.x = stage.mouseX + 15;
-				tip.y = stage.mouseY +15;
-				tip.text = measuredWidth.toString()+"x"+measuredHeight.toString();
-			} */
-			
-			// finally dispatch event
-			/* var evt:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_CHANGING);
-			
-			dispatchEvent(evt); */		
-								
-			//event.updateAfterEvent();
 			invalidateDisplayList();
 			
 		} else {
@@ -647,11 +587,5 @@ public class TransformMarker extends UIComponent {
 			mouseUpHandler(null);
 		} 
 	}
-	
-	/* private function selectedItem_updateCompleteHandler(event:FlexEvent):void {
-		trace('SOURCE OBJECT CHANGE');
-		invalidateSize();
-		invalidateDisplayList();
-	} */
 }
 }

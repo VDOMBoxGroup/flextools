@@ -21,44 +21,33 @@ public class ResizeManager extends EventDispatcher {
 	
 	private static var instance:ResizeManager;
 	
-	private var tip:ToolTip;
-	
-	private var _resizeMode:String;
-	private var _moveMode:Boolean;
+	public var itemDrag:Boolean;
 	
 	private var dataManager:DataManager;
 	
 	private var _topLevelItem:Container;
-	
-	private var selectMarker:TransformMarker;
-	
-	private var highlightedItem:Container;
-	
-	private var caughtItem:Container;
-	
-	private var selectedItem:Container;
-	
-	private var filterFunction:Function;
-	
-	private var _itemTransform:Boolean;
-	
-	private var styleManager:StyleManager;
+
+	private var highlightedItem:IItem;
+	private var activeItem:IItem;
+	private var selectedItem:IItem;	
+
 	private var moveCursor:Class;
 	private var cursorID:int;
 	
+	private var selectMarker:TransformMarker;
+	private var filterFunction:Function;
+	private var tip:ToolTip;
+	
+	private var _itemTransform:Boolean;
 	private var beforeTransform:Object;
-	
 	private var markerSelected:Boolean;
+	private var itemMoved:Boolean;
 	
-	public var itemDrag:Boolean;
 	
 	public function ResizeManager() {
 		
-		styleManager = new StyleManager();
-		
-		moveCursor = StyleManager.getStyleDeclaration('global').getStyle('moveCursor');
-		
 		dataManager = DataManager.getInstance();
+		moveCursor = StyleManager.getStyleDeclaration('global').getStyle('moveCursor');
 	}
 	
 	//--------------------------------------------------------------------------
@@ -80,32 +69,60 @@ public class ResizeManager extends EventDispatcher {
 	
 	public function get itemTransform():Boolean {
 	
-	 return _itemTransform;
+		return _itemTransform;
 	}
 	
 	public function set itemTransform(value:Boolean):void {
 		
 		_itemTransform = value;
+		
+		if(!selectMarker.item)
+			return;
+		
+		var item:Container = selectMarker.item;
+		
+		if(value) {
+
+			beforeTransform = {
+				left : item.x,
+				top : item.y,
+				width : item.width,
+				height : item.height
+			};
+			
+		} else {
+			
+			if(
+				beforeTransform.top == item.x &&
+				beforeTransform.left == item.y &&
+				beforeTransform.width == item.width &&
+				beforeTransform.height == item.height
+			)
+				return;
+		
+			var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
+			
+			var properties:Object = {
+				left : item.x,
+				top : item.y,
+				width : item.width,
+				height : item.height
+			};
+			
+			rmEvent.item = item;
+			rmEvent.properties = properties;
+			dispatchEvent(rmEvent);
+		}
 	}
 	
 	public function init(topLevelItem:Container):void {
 		
 		_topLevelItem = topLevelItem;
 		
-		//_workArea = topLevelItem.parent;
-		
-		//if(!highlightMarker)
-			//highlightMarker = new Canvas();
-		
-		//highlightMarker.visible = false;
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 		_topLevelItem.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
-		//highlightMarker.addEventListener(TransformMarkerEvent.TRANSFORM_COMPLETE, resizeCompleteHandler);
-		
-		//highlightMarker.visible = false;
-		
 		
 		CursorManager.removeAllCursors();
 		
@@ -114,40 +131,28 @@ public class ResizeManager extends EventDispatcher {
 		
 		selectMarker.visible = false;
 		
-		//_topLevelItem.addChild(selectMarker);
-		
-		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_BEGIN, transformBeginHandler);
-		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler);
+//		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_BEGIN, transformBeginHandler);
+//		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler);
 		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_MARKER_SELECTED, markerSelectedHandler);
 		selectMarker.addEventListener(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED, markerUnSelectedHandler);
 		
-		//itemTransform = false;
-		
-		
-		
-		filterFunction = function(item:IItem):Boolean {
-			
-			return !item.isStatic;
-		}
+		filterFunction = function(item:IItem):Boolean { return !item.isStatic;}
 		
 		destroyToolTip();
 		createToolTip();
-		
-		//_topLevelItem.rawChildren.addChild(highlightMarker);
-		//
 	}
 	
-	public function selectItem( item:Container, 
+	public function selectItem( item:IItem, 
 								showMarker:Boolean = false, 
 								moveMode:Boolean = false, 
-								resizeMode:String = '0'):Container {
+								resizeMode:String = '0'):IItem {
 									
-		var newSelectedItem:Container;
+		var newSelectedItem:IItem;
 		
-		if(item && item.parent) {
+		if(item && Container(item).parent) {
 			
 			if(selectMarker.parent)
-				Container(selectMarker.parent).removeChild(selectMarker)
+				selectMarker.parent.removeChild(selectMarker)
 				
 			if(showMarker) {
 				
@@ -155,7 +160,7 @@ public class ResizeManager extends EventDispatcher {
 				
 				selectMarker.resizeMode = resizeMode;
 				selectMarker.moveMode = moveMode;
-				selectMarker.item = item;
+				selectMarker.item = Container(item);
 				selectMarker.visible = true;
 			} else {
 				
@@ -163,17 +168,20 @@ public class ResizeManager extends EventDispatcher {
 				selectMarker.visible = false;
 			}
 			
-			selectedItem = newSelectedItem = item;
+			newSelectedItem = item;
 			
 		} else {
 			newSelectedItem = null;
 			selectMarker.visible = false;
+			selectMarker.item = null;
 		}
 			
 		return newSelectedItem;
 	}
 	
-	public function highlightItem(item:Container, showMarker:String = 'none'):void {
+	public function highlightItem(item:IItem, showMarker:String = 'none'):IItem {
+		
+		var newHighlightedItem:IItem;
 		
 		if(cursorID) {
 			CursorManager.removeCursor(cursorID);
@@ -181,19 +189,14 @@ public class ResizeManager extends EventDispatcher {
 		}
 		
 		if(item && !itemDrag && !(itemTransform && selectMarker.item)) {
+			
 			if(highlightedItem)
-				IItem(highlightedItem).drawHighlight('none');
+				highlightedItem.drawHighlight('none');
 			
-			if(cursorID) {
-				CursorManager.removeCursor(cursorID);
-				cursorID = NaN;
-			}
-			
-			if(item == selectedItem) {
-				
-				highlightedItem = null;
-				return;
-			}
+			if(item == selectedItem) 
+				showMarker = 'none';
+			else
+				newHighlightedItem = item;
 			
 			switch(showMarker) {
 				
@@ -203,56 +206,41 @@ public class ResizeManager extends EventDispatcher {
 					
 				case 'select':
 					
-					IItem(item).drawHighlight('0x666666');
-				break
+					item.drawHighlight('0x666666');
 			}
 			
-			highlightedItem = item;
 			
 		} else {
 			
 			if(highlightedItem)
-				IItem(highlightedItem).drawHighlight('none');
-				
-			highlightedItem = null;
+				highlightedItem.drawHighlight('none');
 		}
+		
+		return newHighlightedItem;
 	}
 	
 	private function showToolTip(text:String = ''):void {
 		
 		if(text != '') {
 				
-				tip.text = text;
-				tip.visible = true;
-				
-			} else {
-				
-				tip.visible = false;
-			}
+			tip.text = text;
+			tip.visible = true;
+			
+		} else {
+			
+			tip.visible = false;
+		}
 	}
 	
 	private function bringOnTop():void {
 		
 		var selectMarkerIndex:int = _topLevelItem.getChildIndex(selectMarker);
-		//var highlightMarkerIndex:int = _topLevelItem.rawChildren.getChildIndex(highlightMarker);
-		var topIndex:int = _topLevelItem.numChildren-1;
-		//var one:* = _topLevelItem.numChildren;
-		//var two:* = _topLevelItem.rawChildren.numChildren;
-		//var three:* = _topLevelItem.rawChildren;
-		//var four:* = _topLevelItem._topLevelItem.getChildAt(_topLevelItem.numChildren);
-		//var five:* = _topLevelItem.getChildAt(_topLevelItem.numChildren-1);
-		//var one:* = _topLevelItem.numChildren - 1;
-
-		
+		var topIndex:int = _topLevelItem.numChildren-1;		
 		
 		if(selectMarkerIndex != topIndex) {
 			
 			_topLevelItem.setChildIndex(selectMarker, topIndex);
 		}
-		
-		/* if(highlightMarkerIndex != topIndex) {
-			_topLevelItem.rawChildren.setChildIndex(highlightMarker, topIndex);
-		} */
 	}
 	
 	private function createToolTip():void {
@@ -275,76 +263,46 @@ public class ResizeManager extends EventDispatcher {
 	
 	private function mouseDownHandler(event:MouseEvent):void {
 		
-		//trace('ResizeManager MD');
-		
-		if(!highlightedItem)
+		if(!highlightedItem || selectedItem == highlightedItem)
 			return;
 		
-		//trace('highlighted');
+		activeItem = highlightedItem;
 		
-		var newSelectedItem:Container;
-		
-		if(_topLevelItem != highlightedItem.parent) {
-			
-			//trace('not selected');
+		/* if(_topLevelItem != highlightedItem.parent) {
 			
 			var objectType:XML = dataManager.getTypeByObjectId(IItem(highlightedItem).objectId);
 			
-			newSelectedItem = selectItem(	highlightedItem,
-											true,
-											objectType.Information.Moveable,
-											objectType.Information.Resizable);
+			selectItem(	highlightedItem,
+						true,
+						objectType.Information.Moveable,
+						objectType.Information.Resizable);
 						
-		} else if(selectedItem == highlightedItem)
-			return;
-			
-		else
-			newSelectedItem = selectItem(highlightedItem, false);
-		
-		if(newSelectedItem) {
-			var rme:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.OBJECT_SELECT);
-			rme.item = newSelectedItem;
-			dispatchEvent(rme);
 		}
+		else
+			selectItem(highlightedItem, false); */
 	}
 	
 	private function mouseUpHandler(event:MouseEvent):void {
 		
-		if(!highlightedItem)
-			return;
-		
-		//
-		
-		//var selectionResult:Item;
-		
-		//itemStack =	DisplayUtil.getObjectsUnderMouse(this, 'vdom.components.editor.containers.workAreaClasses::Item');
-		
-		//selectionResult = Item(itemStack[0]);
-		
-		//if(!selectionResult) return;
-		
-		//selectionResult.setFocus();
-		
-		/* var newSelectedItem:Item;
-		
-		if(_topLevelItem.objectID != highlightedItem.objectID) {
+		if(activeItem) {
 			
-			var objectType:XML = dataManager.getTypeByObjectId(highlightedItem.objectID);
+			if(itemMoved)
+				selectItem(null);
 			
-			newSelectedItem = selectItem(	highlightedItem,
+			else {
+				
+				var objectType:XML = dataManager.getTypeByObjectId(activeItem.objectId);
+				
+				selectedItem = selectItem(	activeItem,
 											true,
 											objectType.Information.Moveable,
 											objectType.Information.Resizable);
-						
-		} else
-			newSelectedItem = selectItem(highlightedItem, false);
-		
-		
-		if(newSelectedItem) {
-			var rme:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.ITEM_SELECTED);
-			rme.item = newSelectedItem;
-			dispatchEvent(rme);
-		} */
+			}
+			
+			activeItem = null;
+		}
+
+		itemMoved = false;
 	}
 	
 	private function mouseMoveHandler(event:MouseEvent):void {
@@ -355,40 +313,49 @@ public class ResizeManager extends EventDispatcher {
 			tip.y = event.stageY + 15;
 		}
 		
-		if(selectMarker.item && itemTransform || itemDrag || markerSelected)
+		if(selectMarker.item && itemTransform || itemDrag || markerSelected )
 			return;
 		
-		var itemUnderMouse:Container = getItemUnderMouse();
+		if(activeItem && Container(activeItem).parent != _topLevelItem) {
+			
+			var objectType:XML = dataManager.getTypeByObjectId(activeItem.objectId);
+			selectItem(activeItem, true, objectType.Information.Moveable);
+			itemMoved = true;
+			return;
+		}
+		
+		var itemUnderMouse:IItem = getItemUnderMouse();
 		
 		if(itemUnderMouse == highlightedItem)
 			return;
 		
-		if(itemUnderMouse && itemUnderMouse.parent != _topLevelItem) {
+		if(itemUnderMouse && Container(itemUnderMouse).parent != _topLevelItem) {
 			
-			var objectDescription:XML = dataManager.getObject(IItem(itemUnderMouse).objectId);
+			var objectDescription:XML = dataManager.getObject(itemUnderMouse.objectId);
 			
 			var tipText:String = "Name:" + objectDescription.@Name;
 			
-			var type:XML = dataManager.getTypeByObjectId(IItem(itemUnderMouse).objectId); 
+			var type:XML = dataManager.getTypeByObjectId(itemUnderMouse.objectId); 
 			
 			var moveable:String = type.Information.Moveable;
-				
 				
 			showToolTip(tipText);
 			
 			if(moveable == '1')
-				highlightItem(itemUnderMouse, 'move');
+				moveable = 'move';		
 			else
-				highlightItem(itemUnderMouse, 'select');
+				moveable = 'select';
+				
+			highlightedItem = highlightItem(itemUnderMouse, moveable);
 			
 		} else {
 			
-			showToolTip('');
-			highlightItem(itemUnderMouse, 'none');
+			showToolTip();
+			highlightedItem = highlightItem(itemUnderMouse);
 		}
 	}
 	
-	private function getItemUnderMouse():Container {
+	private function getItemUnderMouse():IItem {
 		
 		var targetList:Array =
 			DisplayUtil.getObjectsUnderMouse(_topLevelItem.parent, 'vdom.containers::IItem', filterFunction);
@@ -396,7 +363,7 @@ public class ResizeManager extends EventDispatcher {
 		if(targetList.length == 0)
 			return null;
 		
-		var itemUnderMouse:Container = null;
+		var itemUnderMouse:IItem;
 		
 		if(targetList.length == 1) {
 			
@@ -438,17 +405,14 @@ public class ResizeManager extends EventDispatcher {
 		return itemUnderMouse;
 	}
 	
-	private function transformBeginHandler(event:TransformMarkerEvent):void {
+	/* private function transformBeginHandler(event:TransformMarkerEvent):void {
 		
-		//trace('transform begin');
 		itemTransform = true;
 		beforeTransform = event.properties;
-	}
+	} */
 	
-	private function transformCompleteHandler(event:TransformMarkerEvent):void {
+	/* private function transformCompleteHandler(event:TransformMarkerEvent):void {
 		
-		//trace('transform complete');
-
 		itemTransform = false;
 		
 		if(
@@ -464,15 +428,14 @@ public class ResizeManager extends EventDispatcher {
 		rmEvent.item = event.item;
 		rmEvent.properties = event.properties;
 		dispatchEvent(rmEvent);
-	}
+	} */
 	private function markerSelectedHandler(event:TransformMarkerEvent):void {
 		
-		//trace('marker selected')
 		markerSelected = true;
-		highlightItem(null);
+		highlightedItem = highlightItem(null);
 	}
 	private function markerUnSelectedHandler(event:TransformMarkerEvent):void {
-		//trace('marker unselected')
+		
 		markerSelected = false;
 	}
 	private function rollOutHandler(event:MouseEvent):void {
