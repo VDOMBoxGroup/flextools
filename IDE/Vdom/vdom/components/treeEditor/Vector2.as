@@ -25,6 +25,7 @@ package vdom.components.treeEditor
 		
 		public function createVector (fromObj:Object,  toObj:Object = null, color:Number = 0):void
 		{
+			
 			this.fromObj = fromObj;
 			this.toObj = toObj;
 			if( color!= 0)

@@ -65,13 +65,15 @@ package vdom.components.eventEditor
 		private var _type:Label;
 		//private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
+	
+		public var ID:String = '123';
 		
 		public function EventEditorAction(data:Object)
 		{
 			super();
 	//		if (typeof(data)=="string")
 	//			trace (data)
-			
+			ID = data.toString();
 			cnvUpLayer.clipContent = false;
 			
 			//dataManager = DataManager.getInstance();

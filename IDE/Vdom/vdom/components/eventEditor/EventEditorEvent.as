@@ -66,11 +66,14 @@ package vdom.components.eventEditor
 		//private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
 		
+	//	public var ID:String = '123';
+		
 		public function EventEditorEvent(data:Object)
 		{
 			super();
-			if (typeof(data)=="string")
-				trace (data)
+		//	if (typeof(data)=="string")
+		//		trace (data)
+			_ID = data.toString();
 			
 			cnvUpLayer.clipContent = false;
 			
@@ -269,6 +272,11 @@ package vdom.components.eventEditor
 			
 		//	cnvUpLayer
 			//-----------------------------------
+		}
+		
+		public function get ID():String
+		{
+			return _ID;
 		}
 	}
 }
