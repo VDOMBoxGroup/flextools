@@ -1,23 +1,17 @@
 package vdom.components.treeEditor
 {
 	import mx.core.Container;
-	import flash.display.LineScaleMode;
-	import flash.display.CapsStyle;
-	import flash.display.JointStyle;
-	import flash.geom.Point;
-	import flash.net.ObjectEncoding;
-	import mx.controls.Button;
 	
 	public class TreeVector extends Vector2
 	{
-		private var trEl0:TreeElement;
-		private var trEl1:TreeElement;
+		private var trEl0:Object;
+		private var trEl1:Object;
 		private var vector:Container = new Container();
 		private var curСolor:String = '';
 		//private var button:Button;
 		
 		
-		public function TreeVector(trEl0:TreeElement, trEl1:TreeElement, level:String):void
+		public function TreeVector(trEl0:Object, trEl1:Object, level:String = '1'):void
 		{
 			this.buttonMode = true;
 			color = level;

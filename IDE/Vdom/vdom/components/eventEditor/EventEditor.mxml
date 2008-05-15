@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:eventEditor="vdom.components.eventEditor.*">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import vdom.components.treeEditor.TreeVector;
 	 		import vdom.events.TreeEditorEvent;
 	 		import mx.controls.Tree;
 	 		import vdom.components.treeEditor.Vector2;
@@ -27,25 +28,7 @@
 	 		
 	 		 private function dragEnterHandler(event:DragEvent):void 
 	 		 {
-	 		 
-	 		   if( event.dragInitiator is TreeActions ) {
-	 		   	trace('event.dragInitiator is TreeActions ')
-	                    
-	                    /*
-	                    var ds:DragSource = event.dragSource;
-	                    if( !ds.hasFormat("treeItems") ) return;     // no useful data
-	
-	                    var items:Array = ds.dataForFormat("treeItems") as Array;
-	                    for(var i:Number=0; i < items.length; i++) {
-	
-	                        var item:XML = XML(items[i]);
-	                        if( item.@label != "Personal" ) return; // not what we want
-	
-	                    }
-	                    */
-	                } 
-				
-	                var dropTarget:Canvas=Canvas(event.currentTarget);
+	 		        var dropTarget:Canvas=Canvas(event.currentTarget);
 	                DragManager.acceptDragDrop(dropTarget);
 	        }
             
@@ -54,21 +37,32 @@
                 
 	        private function dragDropHandler(event:DragEvent):void 
 	        {
+	        	var ds:DragSource = event.dragSource;
+                if( !ds.hasFormat("treeItems") ) return;     // no useful data
+
+                var items:Array = ds.dataForFormat("treeItems") as Array;
+                for(var i:Number=0; i < items.length; i++) {
+
+                    var item:XML = XML(items[i]);
+                //   trace('item: '+ item.toXMLString());
+                //    if( item.@label != "Personal" ) return; // not what we want
+
+                }
+	                    
 	        	var newElement:*;
 	        	  if( event.dragInitiator is TreeActions ) 
 	        	  {
-	        		 newElement =  new EventEditorAction(Math.random());
-	        		 newElement.addEventListener(MouseEvent.CLICK, stopDrawLine);
-	        		 eventsArray[newElement.ID] = newElement;
+	        		 newElement =  new EventEditorAction(item.@label);
+	        		 newElement.addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+	        		 actionsArray[newElement.ID] = newElement;
 	        	  } 
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
-	        	  	newElement = new EventEditorEvent(Math.random());
+	        	  	newElement = new EventEditorEvent(item.@label);
 	        	  	newElement.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-	        	  	actionsArray[newElement.ID] = newElement;
+	        	  	eventsArray[newElement.ID] = newElement;
 	        	  }
-	        	  
-	        	trace('Created new element: '+newElement.ID);
+	        	 
 	        	newElement.x = event.localX;
 	        	newElement.y = event.localY;
 	        	
@@ -95,9 +89,9 @@
 				can.addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 				
 				blDrawLine = true; //говорим что рисуем линию
-				addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+			//	addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 				
-				curEvent = actionsArray[trEvt.ID]
+				curEvent = eventsArray[trEvt.ID]
 	//			drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
 	//			line.graphics.clear();
 			}
@@ -138,30 +132,35 @@
 			
 			private function stopDrawLine(msEvt:MouseEvent):void
 			{
+				if (!blDrawLine)
+					return;
+					
 				can.removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 				removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 				
 				line.clear();
 				can.removeChild(line); ///-------------***********
 				blDrawLine = false;  //говорим что НЕ рисуем линию
+				var evtID:String = curEvent.ID;
+				var actID:String = msEvt.currentTarget.ID;
+
+				if(!linesArray[evtID]) linesArray[curEvent.ID] = new Array();
+				//if(!msEvt.hasOwnProperty('ID')) return;
+				if(linesArray[evtID][actID]) return;
+				
+				linesArray[evtID][actID] = 
+					new TreeVector(eventsArray[evtID], actionsArray[actID], '2');
+					trace(eventsArray[evtID].x + ' : '
+					+ actionsArray[actID].x )
+				can.addChild(linesArray[evtID][actID]);
+				trace (can.owns(linesArray[evtID][actID]));
+			
+			//*******************
+			//	line.createVector(eventsArray[evtID], actionsArray[actID]);
+			//	can.addChild(line);	
+				////////////********************
 			}
 			
-			private function stopDrawLine(msEvt:MouseEvent):void
-			{
-				
-				if (!blDrawLine)
-					return;
-					
-				can.removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
-				removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);	
-				line.clear();
-				can.removeChild(line);
-				blDrawLine = false; 
-				
-				linesArray
-				
-					
-			}
 			
 			
 			private function treeContainerChangeHandler(evt:Event):void
@@ -191,7 +190,7 @@
     </mx:XMLList>
 	
 	<mx:HDividedBox width="100%" height="100%">
-		 <mx:Canvas label="Canvas 1" width="200" height="100%" >
+		 <mx:Canvas label="canvas1" width="200" height="100%" >
                 <mx:TabNavigator id="tn"  width="100%" height="100%">
 		            <!-- Define each panel using a VBox container. -->
 					

@@ -66,20 +66,23 @@ package vdom.components.eventEditor
 		//private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
 	
-		public var ID:String = '123';
+		//public var ID:String = '123';
 		
 		public function EventEditorAction(data:Object)
 		{
 			super();
 	//		if (typeof(data)=="string")
 	//			trace (data)
-			ID = data.toString();
+			
+			_ID = Math.random().toString();
+			
 			cnvUpLayer.clipContent = false;
 			
 			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
-			 
+			
+			txt.text += ': ' + data.toString(); 
 			updateRatio();
 			
 			isRedraw = true;
@@ -271,6 +274,11 @@ package vdom.components.eventEditor
 			
 		//	cnvUpLayer
 			//-----------------------------------
+		}
+		
+		public function get ID():String
+		{
+			return _ID;
 		}
 	}
 }

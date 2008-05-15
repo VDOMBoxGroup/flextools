@@ -73,14 +73,14 @@ package vdom.components.eventEditor
 			super();
 		//	if (typeof(data)=="string")
 		//		trace (data)
-			_ID = data.toString();
 			
+			_ID = Math.random().toString();
 			cnvUpLayer.clipContent = false;
 			
 			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
-			 
+			txt.text += ': ' + data.toString(); 
 			updateRatio();
 			
 			isRedraw = true;
