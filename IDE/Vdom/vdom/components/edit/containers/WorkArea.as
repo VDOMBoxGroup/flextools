@@ -3,12 +3,14 @@ package vdom.components.edit.containers {
 import flash.events.MouseEvent;
 
 import mx.containers.Canvas;
+import mx.containers.VBox;
 import mx.controls.HTML;
 import mx.controls.Label;
 import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.DragEvent;
 
+import vdom.components.edit.containers.toolbarClasses.ImageTools;
 import vdom.components.edit.events.EditEvent;
 import vdom.containers.IItem;
 import vdom.events.RenderManagerEvent;
@@ -20,7 +22,7 @@ import vdom.managers.ResizeManager;
 import vdom.managers.VdomDragManager;
 import vdom.utils.DisplayUtil;
 
-public class WorkArea extends Canvas {
+public class WorkArea extends VBox {
 	
 	private var resizeManager:ResizeManager;
 	private var fileManager:FileManager;
@@ -30,6 +32,8 @@ public class WorkArea extends Canvas {
 	private var _pageId:String;
 	private var _selectedObject:Container;
 	private var focusedObject:Container;
+	private var _contentHolder:Canvas;
+	private var _contentToolbar:Canvas;
 	
 	public function WorkArea() {
 		
@@ -91,7 +95,7 @@ public class WorkArea extends Canvas {
 			if(page != _pageId) {
 			
 				_pageId = page;
-				renderManager.init(this);
+				renderManager.init(_contentHolder);
 				renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 				renderManager.createItem(_pageId);
 			}
@@ -100,13 +104,31 @@ public class WorkArea extends Canvas {
 				
 			var warning:Label = new Label()
 			warning.text = 'no page selected';
-			addChild(warning);
+			_contentHolder.addChild(warning);
 		}
 	}
 	
 	public function createObject(result:XML):void {
 
 		renderManager.createItem(result.Object.@ID, result.Object.Parent);
+	}
+	
+	override protected function createChildren():void {
+		
+		super.createChildren();
+		
+		if(!_contentHolder) {
+			
+			_contentHolder = new Canvas();
+		}
+		
+		_contentHolder.clipContent = true;
+		_contentHolder.horizontalScrollPolicy = "off"; 
+		_contentHolder.verticalScrollPolicy = "off";
+		_contentHolder.percentWidth = 100;
+		_contentHolder.percentHeight = 100;
+		
+		addChild(_contentHolder);
 	}
 	
 	private function applyChanges(objectId:String, attributes:Object):void {
@@ -156,14 +178,45 @@ public class WorkArea extends Canvas {
 					attributes[attribute.destName] = 
 						HTML(attribute.sourceObject).domWindow.document.getElementsByTagName('body')[0].innerHTML
 						
-				} else { 
+				} else
 					attributes[attribute.destName] = attribute.sourceObject[attribute.sourceName];
-				}
 			}
 			
 			applyChanges(IItem(_selectedObject).objectId, attributes);
 		}
-
+		
+		var selectedObjectId:String = IItem(event.item).objectId;
+		
+		var type:XML = dataManager.getTypeByObjectId(selectedObjectId);
+		var interfaceType:uint = type.Information.InterfaceType;
+		
+		if(_contentToolbar && _contentToolbar.parent) {
+			
+			removeChild(_contentToolbar);
+			_contentToolbar = null;
+		}
+		
+		
+		switch(interfaceType) {
+		
+		case 2:
+			
+			
+		break
+		
+		case 3:
+		
+		break
+		
+		case 4:
+			
+			_contentToolbar = new ImageTools();
+		break
+		}
+		
+		if(_contentToolbar)
+			addChild(_contentToolbar);
+		
 		_selectedObject = event.item;
 		
 		var ee:EditEvent = new EditEvent(EditEvent.OBJECT_CHANGE);
@@ -174,7 +227,7 @@ public class WorkArea extends Canvas {
 	private function renderCompleteHandler(event:RenderManagerEvent):void {
 		
 		renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-		resizeManager.init(this);
+		resizeManager.init(event.result);
 	}
 
 	private function dragEnterHandler(event:DragEvent):void {

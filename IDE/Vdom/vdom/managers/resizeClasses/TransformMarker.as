@@ -14,12 +14,14 @@ import flash.geom.Rectangle;
 import mx.core.Application;
 import mx.core.Container;
 import mx.core.UIComponent;
+import mx.events.FlexEvent;
 import mx.managers.CursorManager;
 
-import vdom.containers.IItem;
 import vdom.events.TransformMarkerEvent;
 import vdom.managers.ResizeManager;
 
+use namespace mx.core.mx_internal;
+ 
 public class TransformMarker extends UIComponent {
 	
 	public static const RESIZE_NONE:String = '0';
@@ -46,6 +48,8 @@ public class TransformMarker extends UIComponent {
 	
 	private var _selectedItem:Container;
 	
+	private var _markerSelected:Boolean;
+	
 	private var mousePosition:Point;
 	
 	private var modeChanged:Boolean;
@@ -61,6 +65,8 @@ public class TransformMarker extends UIComponent {
 	private var transformation:Boolean;
 	
 	private var resizeManager:ResizeManager;
+	
+	private var beforeTransform:Object;
 		
 	public function TransformMarker(rm:ResizeManager) {
 		
@@ -103,6 +109,11 @@ public class TransformMarker extends UIComponent {
 		invalidateDisplayList();
 	}
 	
+	public function get markerSelected():Boolean {
+		
+		return _markerSelected;
+	}
+	
 	public function get item():Container {
 		
 		return _selectedItem;
@@ -114,7 +125,7 @@ public class TransformMarker extends UIComponent {
 			
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-			addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			_selectedItem = null;
 			return;
 		}
@@ -128,11 +139,12 @@ public class TransformMarker extends UIComponent {
 		
 		mousePosition = new Point(_selectedItem.mouseX, _selectedItem.mouseY);
 		
-		
+		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 		item.addEventListener('refreshComplete', refreshCompleteHandler);
+		if(parent)
+			parent.addEventListener(FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler);
 		
 		/* var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
 		
@@ -147,12 +159,22 @@ public class TransformMarker extends UIComponent {
 		
 		dispatchEvent(evt); */
 		
+		beforeTransform = {
+			left : item.x,
+			top : item.y,
+			width : item.width,
+			height : item.height
+		};
+		
 		resizeManager.itemTransform = true;
 		
 		itemChanged = true;
 		
-		invalidateDisplayList();
-		invalidateSize();
+		/* if(!invalidateSizeFlag) {
+			
+			invalidateDisplayList();
+			invalidateSize();
+		} */
 		
 		//_selectedItem.addEventListener(FlexEvent.UPDATE_COMPLETE, selectedItem_updateCompleteHandler);
 		//invalidateProperties();
@@ -162,12 +184,18 @@ public class TransformMarker extends UIComponent {
 	
 	private function refreshCompleteHandler(event:Event):void {
 		
+		if(invalidateSizeFlag)
+			return;
+	}
+	
+	public function refresh():void {
+		
+		if(!visible)
+			return;
 		itemChanged = true;
 		invalidateSize();
 		invalidateDisplayList();
 	}
-	
-	
 	
 	override protected function createChildren():void {
 		
@@ -310,20 +338,26 @@ public class TransformMarker extends UIComponent {
 		
 		super.measure();
 		
-		measuredMinHeight = minHeight;
-		measuredMinWidth  = minWidth;
+		//measuredMinHeight = minHeight;
+		//measuredMinWidth  = minWidth;
 		
 		if(!_selectedItem)
 			return
 
-		var rect:Rectangle = _selectedItem.getRect(_selectedItem.parent)
+		//var rect:Rectangle = _selectedItem.getRect(_selectedItem.parent)
 		
-		measuredWidth  = _selectedItem.width;
-		measuredHeight = _selectedItem.height;
+		if(measuredWidth  != _selectedItem.width)
+			measuredWidth  = _selectedItem.width;
+			
+		if(measuredHeight != _selectedItem.height)
+			measuredHeight = _selectedItem.height;
 		
 		var rectangle:Rectangle = getContentRectangle(_selectedItem, this);
 		
-		move(rectangle.x, rectangle.y);
+		if(rectangle) {
+			if(x != rectangle.x || y != rectangle.y)
+				move(rectangle.x, rectangle.y);
+		}
 	}
 	
 	protected function updateBoxes():void {
@@ -353,6 +387,8 @@ public class TransformMarker extends UIComponent {
 		var pt:Point = new Point(sourceContainer.x, sourceContainer.y);
 		var sc:Container = Container(sourceContainer.parent);
 		var dc:Container = Container(destinationContainer.parent);
+		if(!sc && !dc)
+			return null;
 		pt = sc.contentToGlobal(pt);
 		pt = dc.globalToContent(pt);
 		
@@ -360,7 +396,14 @@ public class TransformMarker extends UIComponent {
 	}
 	
 	private function mouseDownHandler(event:MouseEvent):void {
-
+		
+		beforeTransform = {
+			left : item.x,
+			top : item.y,
+			width : item.width,
+			height : item.height
+		};
+		
 		resizeManager.itemTransform = true;
 		/* var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
 		
@@ -391,11 +434,10 @@ public class TransformMarker extends UIComponent {
 	
 	private function mouseOutHandler(event:MouseEvent):void {
 		
-		if(_selectedItem)			
-			if(!moving){				
-				CursorManager.removeAllCursors();
-				dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED));
-			}
+		if(_selectedItem && !moving)			
+			CursorManager.removeAllCursors();
+			_markerSelected = false;
+//			dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED));
 	}		
 	
 	private function mouseOverHandler(event:MouseEvent):void {
@@ -404,7 +446,7 @@ public class TransformMarker extends UIComponent {
 			
 			var target:Sprite = Sprite(event.target);
 			CursorManager.removeAllCursors();
-			var markerSelected:Boolean = true;
+			_markerSelected = true;
 			
 			switch(target.name) {
 				
@@ -432,14 +474,12 @@ public class TransformMarker extends UIComponent {
 					CursorID = CursorManager.setCursor(getStyle('moveCursor'), 2, -10, -10);
 				break;
 				default:
-					markerSelected = false;
+					_markerSelected = false;
 				break
 			}
 			
 			if(markerSelected)
 				dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_SELECTED));
-			else
-				dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED));
 		}
 	}		
 	
@@ -449,13 +489,15 @@ public class TransformMarker extends UIComponent {
 		Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 		
 		
-		var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
-		dispatchEvent(evt);
+		//var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
+		//dispatchEvent(evt);
 		
 		moving = null;
 		mousePosition = null;
 		mouseOutHandler(null);
 		transformation = false;		
+		
+		resizeManager.itemTransform = false;
 		
 		var rectangle:Rectangle = getContentRectangle(this, _selectedItem);
 		
@@ -465,12 +507,20 @@ public class TransformMarker extends UIComponent {
 			width : rectangle.width,
 			height : rectangle.height
 		};
-
+		
+		if(
+			beforeTransform.top == prop.top &&
+			beforeTransform.left == prop.left &&
+			beforeTransform.width == prop.width &&
+			beforeTransform.height == prop.height
+		)
+			return;
+		
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
 		rmEvent.item = _selectedItem;
 		rmEvent.properties = prop;
 		dispatchEvent(rmEvent);
-		resizeManager.itemTransform = false;
+		
 	}
 	
 	
@@ -577,6 +627,9 @@ public class TransformMarker extends UIComponent {
 					
 					measuredWidth = rect.width;
 					measuredHeight = rect.height;
+					
+					var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
+					dispatchEvent(evt);
 				}
 			}
 			

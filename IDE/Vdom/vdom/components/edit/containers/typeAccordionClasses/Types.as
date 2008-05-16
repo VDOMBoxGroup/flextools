@@ -11,8 +11,6 @@ import vdom.controls.CustomVScrollBar;
 
 use namespace mx.core.mx_internal;
 
-
-
 public class Types extends VBox {
 	
 	private var mySB:ScrollBar;

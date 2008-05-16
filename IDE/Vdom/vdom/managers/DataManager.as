@@ -391,7 +391,7 @@ public class DataManager implements IEventDispatcher {
 		var type:XML = getTypeByObjectId(objectId);
 		newObject.appendChild(type);
 		
-		_currentObject = newObject;
+		//_currentObject = newObject;
 			
 		if(requestQue[objectId] !== null && requestQue[objectId] == key) {
 			

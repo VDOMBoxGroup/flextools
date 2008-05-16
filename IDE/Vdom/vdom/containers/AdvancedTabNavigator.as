@@ -70,7 +70,7 @@ public class AdvancedTabNavigator extends TabNavigator {
 				tabBar.move(bm.left, bm.top);
 				
 			else
-				tabBar.move(bm.left, unscaledHeight - bm.bottom - tabBarHeight - 2);
+				tabBar.move(bm.left, unscaledHeight - bm.bottom - tabBarHeight - 1);
 		}
 	}
 	
@@ -96,7 +96,7 @@ public class AdvancedTabNavigator extends TabNavigator {
 		if (isNaN(tabHeight))
 			tabHeight = tabBar.getExplicitOrMeasuredHeight();
 		
-		return tabHeight - 1;
+		return tabHeight;
     }
 }
 }

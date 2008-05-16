@@ -176,16 +176,13 @@ public class RenderManager implements IEventDispatcher {
 		case 'row':
 		 
 			container = new TableRow(itemId);
+			container.percentWidth = 100;
 		break;
 		
 		case 'cell':
 		 
 			container = new TableCell(itemId);
 		break;
-		
-		default:
-			var kosyak:* = '';
-		break
 		}
 		
 		itemDescription.item = container;
@@ -388,7 +385,7 @@ public class RenderManager implements IEventDispatcher {
 			
 			case 'text':
 				
-				var viewText:HTML = new HTML()
+				var viewText:HTML = new HTML();
 				var isEditable:Boolean = false;
 				var fontStyle:String = '12px Tahoma';
 				var colorStyle:String = '#000000';
@@ -413,7 +410,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				if(childXMLDescription.@editable.length() && IItem(item).isStatic == false) {
 					
-					 isEditable = true;
+					isEditable = false;
 									
 					IItem(item).editableAttributes.push(
 						{destName:String(childXMLDescription.@editable),
