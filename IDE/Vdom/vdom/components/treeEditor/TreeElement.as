@@ -682,7 +682,6 @@ package vdom.components.treeEditor
 			_type.x = 120 * _ratio;
 			_type.width =  100 * _ratio;
 			_type.setStyle('fontSize', "8");
-			
 		}
 		
 	 

@@ -2,6 +2,15 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:eventEditor="vdom.components.eventEditor.*">
 	 <mx:Script>
 	 	<![CDATA[
+	 	
+	 	/***
+	 	 * 
+	 	 * 
+	 	 * 	заполнить еветЕлементы.
+	 	 * 
+	 	 * 
+	 	 * 
+	 	 * */
 	 		import vdom.components.treeEditor.TreeVector;
 	 		import vdom.events.TreeEditorEvent;
 	 		import mx.controls.Tree;
@@ -53,7 +62,7 @@
 	        	  if( event.dragInitiator is TreeActions ) 
 	        	  {
 	        		 newElement =  new EventEditorAction(item.@label);
-	        		 newElement.addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+	        		 newElement.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
 	        		 actionsArray[newElement.ID] = newElement;
 	        	  } 
 	        	  else if (event.dragInitiator is TreeEvents ) 
@@ -85,11 +94,14 @@
         	private var curEvent:Object;
             private function startDrawLine(trEvt:TreeEditorEvent):void
 			{
+				//чтоб 2жды не запускать
+				if(can.owns(line)) 
+					return;
 				can.addChild(line);//--для рисования связывающей линии
 				can.addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 				
 				blDrawLine = true; //говорим что рисуем линию
-			//	addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+				addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 				
 				curEvent = eventsArray[trEvt.ID]
 	//			drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
@@ -130,7 +142,7 @@
 				return pnTo;
 			}
 			
-			private function stopDrawLine(msEvt:MouseEvent):void
+			private function creatingAssociationLine(msEvt:MouseEvent):void
 			{
 				if (!blDrawLine)
 					return;
@@ -143,7 +155,7 @@
 				blDrawLine = false;  //говорим что НЕ рисуем линию
 				var evtID:String = curEvent.ID;
 				var actID:String = msEvt.currentTarget.ID;
-
+				
 				if(!linesArray[evtID]) linesArray[curEvent.ID] = new Array();
 				//if(!msEvt.hasOwnProperty('ID')) return;
 				if(linesArray[evtID][actID]) return;
@@ -153,7 +165,30 @@
 					trace(eventsArray[evtID].x + ' : '
 					+ actionsArray[actID].x )
 				can.addChild(linesArray[evtID][actID]);
-				trace (can.owns(linesArray[evtID][actID]));
+				//trace (can.owns(linesArray[evtID][actID]));
+			}
+			
+			private function stopDrawLine(msEvt:MouseEvent):void
+			{
+				if (!blDrawLine)
+					return;
+			/*
+				if (!msEvt.currentTarget.hasOwnProperty('ID'))
+				{
+					trace('Netu^(')
+					return;
+				}
+				*/
+				can.removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
+				removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+				
+				line.clear();
+				can.removeChild(line); ///-------------***********
+				blDrawLine = false;  //говорим что НЕ рисуем линию
+		//		var evtID:String = curEvent.ID;
+		//		var actID:String = msEvt.currentTarget.ID;
+
+				
 			
 			//*******************
 			//	line.createVector(eventsArray[evtID], actionsArray[actID]);
@@ -167,7 +202,7 @@
 			{
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
               	 var ID:String = selectedNode.@ID;
-              	 trace(ID);
+            //  	 trace(ID);
 			}
 	 	]]>
 	 </mx:Script>

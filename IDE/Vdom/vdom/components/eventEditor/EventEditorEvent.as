@@ -3,11 +3,15 @@ package vdom.components.eventEditor
 	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
+	import mx.containers.Grid;
+	import mx.containers.GridItem;
+	import mx.containers.GridRow;
 	import mx.controls.Button;
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
+	import mx.controls.VRule;
 	
 	import vdom.events.TreeEditorEvent;
 	
@@ -49,7 +53,7 @@ package vdom.components.eventEditor
 		private var textArea:TextArea;
 		private var _ID:String;
 //		private var rect:Canvas = new Canvas();
-		private var min:Boolean = false;
+		private var min:Boolean = true;
 		public var drag:Boolean = true;
 		private var image:Image;
 		private var imgBackGround:Image;
@@ -80,7 +84,10 @@ package vdom.components.eventEditor
 			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
+			initDownBody();
 			txt.text += ': ' + data.toString(); 
+			event.text = data.toString(); 
+			
 			updateRatio();
 			
 			isRedraw = true;
@@ -205,7 +212,7 @@ package vdom.components.eventEditor
 			imgDelete.addEventListener(MouseEvent.CLICK, deleteClickHandler);
 			
 			imgPlus = new Image();
-			imgPlus.source = plus;
+			imgPlus.source = minus;
 			imgPlus.buttonMode = true;
 				
 			imgPlus.addEventListener(MouseEvent.CLICK, plusClickHandler);	
@@ -231,9 +238,77 @@ package vdom.components.eventEditor
 			
 		}
 		
+		private var event:Label;
+		private var grid:Grid; 
+		private var gridRow1: GridRow;
+		private var gridRow2: GridRow;
+		private var gridRow3: GridRow;
 		private function initDownBody():void
 		{
-
+			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
+			//addChild(cnvDownLayer);
+			
+			
+			
+			grid = new Grid();
+			grid.percentWidth = 100;  
+			//grid.setStyle('borderColor', '0x000000');
+			cnvDownLayer.addChild(grid);
+			
+				gridRow1 = new GridRow();
+				gridRow1.percentWidth = 100;
+				gridRow1.setStyle('borderStyle', 'inset');  
+				gridRow1.setStyle('borderColor', '0x000000');
+				grid.addChild(gridRow1);
+				
+					var  gridItem1_1:GridItem = new GridItem();
+					gridItem1_1.width = 30;
+					gridItem1_1.setStyle('horizontalAlign', "center")
+					gridItem1_1.setStyle('borderStyle', 'inset');  
+					gridItem1_1.setStyle('borderColor', '0x000000');
+					gridRow1.addChild(gridItem1_1);
+					
+						var img1:Image = new Image()
+						img1.source = delet;
+						gridItem1_1.addChild(img1);
+				
+					var  gridItem1_2:GridItem = new GridItem();
+					gridItem1_2.percentWidth =100;
+					gridItem1_2.setStyle('horizontalAlign', "center")
+					gridRow1.addChild(gridItem1_2);
+					
+						var label1:Label = new Label()
+						label1.text = 'MyButton';
+						gridItem1_2.addChild(label1);
+				
+				gridRow2 = new GridRow();
+				gridRow2.setStyle('borderStyle', 'inset');  
+				gridRow2.setStyle('borderColor', '0x000000');
+				grid.addChild(gridRow2);
+				
+					var  gridItem2_1:GridItem = new GridItem();
+					gridRow2.addChild(gridItem2_1);
+						
+						var img2:Image = new Image()
+						img2.source = delet;
+						gridItem2_1.addChild(img2);
+					
+					
+					var  gridItem2_2:GridItem = new GridItem();
+					gridRow2.addChild(gridItem2_2);
+						var vRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+						vRule.x = 35;
+						
+							vRule.percentHeight = 100;
+						cnvDownLayer.addChild(vRule);    
+						
+						event = new Label();
+						gridItem2_2.addChild(event);
+				
+				gridRow3 = new GridRow();
+				grid.addChild(gridRow3);
+				
+				addChild(cnvDownLayer);
 		}
 		
 
@@ -271,7 +346,10 @@ package vdom.components.eventEditor
 			txtInp.width =  240 * _ratio;
 			
 		//	cnvUpLayer
-			//-----------------------------------
+			//----
+			
+			cnvDownLayer.y = 30 * _ratio;
+			cnvDownLayer.width = 243 * _ratio;
 		}
 		
 		public function get ID():String
