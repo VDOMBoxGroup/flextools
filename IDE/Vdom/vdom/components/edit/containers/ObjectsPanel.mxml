@@ -13,6 +13,7 @@
 
 <mx:Script>
 	<![CDATA[
+		import vdom.controls.IconTreeItemRenderer;
 		import vdom.managers.DataManager;
 		import mx.events.ListEvent;
 		import mx.controls.listClasses.ListBase;
@@ -51,7 +52,7 @@
 			dataManager = DataManager.getInstance();
 			    tree.percentHeight = 100;//width = 200;
 			    tree.percentWidth = 100;
-			    tree.itemRenderer = new ClassFactory(ItCanvas);
+			    tree.itemRenderer = new ClassFactory(IconTreeItemRenderer);
 				tree.showRoot = false; 
 				//tree.iconField = "@icon"; 
 				

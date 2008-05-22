@@ -24,10 +24,13 @@ use namespace mx.core.mx_internal;
  
 public class TransformMarker extends UIComponent {
 	
-	public static const RESIZE_NONE:String = '0';
-	public static const RESIZE_WIDTH:String = '1';
-	public static const RESIZE_HEIGHT:String = '2';
-	public static const RESIZE_ALL:String = '3';
+	public static const RESIZE_NONE:uint = 0;
+	public static const RESIZE_WIDTH:uint = 1;
+	public static const RESIZE_HEIGHT:uint = 2;
+	public static const RESIZE_ALL:uint = 3;
+	
+	public static const MOVE_TRUE:Boolean = true;
+	public static const MOVE_FALSE:Boolean = false;
 	
 	private var tl_box:Sprite;
 	private var tc_box:Sprite;
@@ -44,7 +47,7 @@ public class TransformMarker extends UIComponent {
 	private var moving:DisplayObject;
 	
 	private var _moveMode:Boolean;
-	private var _resizeMode:String;
+	private var _resizeMode:uint;
 	
 	private var _selectedItem:Container;
 	
@@ -78,12 +81,12 @@ public class TransformMarker extends UIComponent {
 		addEventListener(MouseEvent.MOUSE_OUT,  mouseOutHandler);
 	}
 	
-	public function get resizeMode():String {
+	public function get resizeMode():uint {
 		
 		return _resizeMode;
 	}
 	
-	public function set resizeMode(modeValue:String):void {
+	public function set resizeMode(modeValue:uint):void {
 		
 		if(_resizeMode != modeValue) {
 			
@@ -103,9 +106,11 @@ public class TransformMarker extends UIComponent {
 	public function set moveMode(modeValue:Boolean):void {
 		
 		_moveMode = modeValue;
+		if(!modeValue)
+			moving = null;
 		
 		modeChanged = true;
-			
+		
 		invalidateDisplayList();
 	}
 	
@@ -135,7 +140,7 @@ public class TransformMarker extends UIComponent {
 			
 		_selectedItem = item;
 		
-		moving = this.cc_box;
+		moving = cc_box;
 		
 		mousePosition = new Point(_selectedItem.mouseX, _selectedItem.mouseY);
 		
@@ -317,14 +322,18 @@ public class TransformMarker extends UIComponent {
 			bc_box.y = measuredHeight - boxSize/2;
 			br_box.x = measuredWidth - boxSize/2;
 			br_box.y = measuredHeight - boxSize/2;
-			cc_box.x = 0 + boxSize/2;
-			cc_box.y = 0 + boxSize/2;
+//			cc_box.x = 0 + boxSize/2;
+//			cc_box.y = 0 + boxSize/2;
 			
-			var g:Graphics = cc_box.graphics;
-			g.clear();
-			g.lineStyle(6, 0x333333, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-			g.drawRect(0, 0, measuredWidth-6, measuredHeight-6);
-			g.endFill();
+			if(cc_box.visible) {
+				var g:Graphics = cc_box.graphics;
+				g.clear();
+				g.lineStyle(6, 0x333333, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				g.drawRect(0, 0, measuredWidth-6, measuredHeight-6);
+//				g.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER);
+//				g.drawRect(0, 0, measuredWidth, measuredHeight);
+				g.endFill(); 
+			}
 			
 			graphics.clear();			
 			graphics.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER);
@@ -378,6 +387,7 @@ public class TransformMarker extends UIComponent {
 		b.graphics.endFill();
 		b.buttonMode = true
 		b.useHandCursor = false;
+		b.visible = false;
 		b.name = name
 		return b;
 	}

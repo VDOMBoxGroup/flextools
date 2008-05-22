@@ -23,17 +23,16 @@ import mx.controls.Text;
 import mx.controls.TextInput;
 import mx.controls.ToolTip;
 import mx.core.ClassFactory;
-import mx.core.EdgeMetrics;
 import mx.core.IUIComponent;
 import mx.core.UIComponent;
 import mx.events.CloseEvent;
 import mx.events.ValidationResultEvent;
 import mx.validators.RegExpValidator;
 
-import vdom.components.edit.events.EditEvent;
 import vdom.controls.colorPicker.ColorPicker;
 import vdom.controls.multiLine.MultiLine;
 import vdom.controls.resourceBrowser.ResourceBrowserButton;
+import vdom.events.AttributesPanelEvent;
 import vdom.managers.LanguageManager;
 
 public class AttributesPanel extends ClosablePanel {
@@ -692,7 +691,7 @@ public class AttributesPanel extends ClosablePanel {
 			return;
 		
 		if(event.detail == Alert.YES)
-			var ee:EditEvent = new EditEvent(EditEvent.DELETE_OBJECT)
+			var ee:AttributesPanelEvent = new AttributesPanelEvent(AttributesPanelEvent.DELETE_OBJECT)
 			ee.objectId = objectDescription.@ID;
 			dispatchEvent(ee);
 	}

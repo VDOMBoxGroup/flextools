@@ -3,6 +3,7 @@ package vdom.components.edit.containers {
 import flash.events.MouseEvent;
 
 import mx.containers.Canvas;
+import mx.containers.ControlBar;
 import mx.containers.VBox;
 import mx.controls.HTML;
 import mx.controls.Label;
@@ -11,10 +12,10 @@ import mx.core.UIComponent;
 import mx.events.DragEvent;
 
 import vdom.components.edit.containers.toolbarClasses.ImageTools;
-import vdom.components.edit.events.EditEvent;
 import vdom.containers.IItem;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
+import vdom.events.WorkAreaEvent;
 import vdom.managers.DataManager;
 import vdom.managers.FileManager;
 import vdom.managers.RenderManager;
@@ -33,7 +34,7 @@ public class WorkArea extends VBox {
 	private var _selectedObject:Container;
 	private var focusedObject:Container;
 	private var _contentHolder:Canvas;
-	private var _contentToolbar:Canvas;
+	private var _contentToolbar:ControlBar;
 	
 	public function WorkArea() {
 		
@@ -108,6 +109,17 @@ public class WorkArea extends VBox {
 		}
 	}
 	
+	public function set objectId(value:String):void {
+		
+		if(!value || _selectedObject && IItem(_selectedObject).objectId == value)
+			return;
+	
+		var item:IItem = renderManager.getItemById(value);
+		
+		if(item)	
+			resizeManager.selectItem(item)
+	}
+	
 	public function createObject(result:XML):void {
 
 		renderManager.createItem(result.Object.@ID, result.Object.Parent);
@@ -140,10 +152,10 @@ public class WorkArea extends VBox {
 			newAttributes.appendChild(<Attribute Name = {attributeName}>{attributes[attributeName]}</Attribute>);
 		}
 		
-		var ee:EditEvent = new EditEvent(EditEvent.PROPS_CHANGED);
-		ee.objectId = objectId;
-		ee.props = newAttributes;
-		dispatchEvent(ee);
+		var wae:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.PROPS_CHANGED);
+		wae.objectId = objectId;
+		wae.props = newAttributes;
+		dispatchEvent(wae);
 	}
 	
 	/**
@@ -219,15 +231,15 @@ public class WorkArea extends VBox {
 		
 		_selectedObject = event.item;
 		
-		var ee:EditEvent = new EditEvent(EditEvent.OBJECT_CHANGE);
-		ee.objectId = IItem(_selectedObject).objectId;
-		dispatchEvent(ee);
+		var wae:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.CHANGE_OBJECT);
+		wae.objectId = IItem(_selectedObject).objectId;
+		dispatchEvent(wae);
 	}
 	
 	private function renderCompleteHandler(event:RenderManagerEvent):void {
 		
 		renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-		resizeManager.init(event.result);
+		resizeManager.init(_contentHolder);
 	}
 
 	private function dragEnterHandler(event:DragEvent):void {
@@ -254,33 +266,47 @@ public class WorkArea extends VBox {
 		
 		//trace('WorkArea - dragOverHandler ' + stack.length)
 		
-		if(focusedObject == currentItem)
+		if(focusedObject == currentItem || IItem(currentItem).waitMode)
 			return;
 		
 		if(focusedObject)
 			IItem(focusedObject).drawHighlight('none');
 		
-		focusedObject = currentItem;
-		
 		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
-		
-		var currentItemName:String = 
-			dataManager.getTypeByObjectId(IItem(currentItem).objectId).Information.Name;
-		
 		var containersRE:RegExp = /(\w+)/g;
-		
 		var aviableContainers:Array = typeDescription.aviableContainers.match(containersRE);
+		
+		var currentItemDescription:XML = 
+					dataManager.getTypeByObjectId(IItem(currentItem).objectId);
+		
+		var currentItemName:String = currentItemDescription.Information.Name;
+		
 		
 		if(aviableContainers.indexOf(currentItemName) != -1) {
 			
 			IItem(currentItem).drawHighlight('0x00FF00');
-		} else {
+			
+		} else if(currentItemDescription.Information.Container != 1) {
 			
 			IItem(currentItem).drawHighlight('0xFF0000');
-		}
 			
+		} else if(currentItem.parent is IItem) {
+				
+				currentItem = Container(currentItem.parent);
+				
+				currentItemDescription = 
+					dataManager.getTypeByObjectId(IItem(currentItem).objectId);
+					
+				currentItemName = currentItemDescription.Information.Name;
+					
+				if(aviableContainers.indexOf(currentItemName) != -1)
+					
+					IItem(currentItem).drawHighlight('0x00FF00');
+				else	
+					IItem(currentItem).drawHighlight('0xFF0000');
+		}
 		
-		//currentItem.drawFocus(true);
+		focusedObject = currentItem;
 	}
 	
 	private function dragDropHandler(event:DragEvent):void {
@@ -321,11 +347,12 @@ public class WorkArea extends VBox {
         			<Attribute Name="left">{objectLeft}</Attribute>
     			</Attributes>
 			
-			dataManager.createObject(
-				typeDescription.typeId,
-				IItem(currentContainer).objectId,
-				'',
-				attributes);
+			var wae:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.CREATE_OBJECT)
+			wae.typeId = typeDescription.typeId;
+			wae.objectId = IItem(currentContainer).objectId;
+			wae.props = attributes;
+			
+			dispatchEvent(wae);
 				
 			focusedObject = null;
 		}

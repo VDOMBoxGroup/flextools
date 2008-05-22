@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="50" xmlns:ns1="source.mx.controls.*">
-	<mx:Button x="108" y="18" label="Action #1"/>
-	<mx:Button x="204" y="18" label="Action #2"/>
-	<mx:Label x="10" y="10" text="Sample toolbar "/>
-</mx:Canvas>
+<mx:ControlBar xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%"
+	paddingBottom="5" paddingTop="5" paddingRight="5" paddingLeft="5">
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/insert_image.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/reset_size.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/bring_front.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/send_back.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_left.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_right.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/flip_vertical.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/flip_horizontal.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_up.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_down.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/brightness_up.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/brightness_down.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/crop.png')"/>
+		<mx:Button width="20" height="20" icon="@Embed(source='assets/toolbars/imageToolbar/grayscale.png')"/>
+</mx:ControlBar>

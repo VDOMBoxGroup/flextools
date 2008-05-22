@@ -4,7 +4,7 @@ package vdom.components.eventEditor
 	import mx.core.ClassFactory;
 	import mx.events.DragEvent;
 	
-	import vdom.components.objectsPanel.ItCanvas;
+	import vdom.controls.IconTreeItemRenderer;
 
 	public class DragTree extends Tree
 	{
@@ -17,7 +17,7 @@ package vdom.components.eventEditor
 			showRoot = false;
 			percentHeight = 100;//width = 200;
 			percentWidth = 100;
-			itemRenderer = new ClassFactory(ItCanvas);
+			itemRenderer = new ClassFactory(IconTreeItemRenderer);
 			
 		  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
 		}

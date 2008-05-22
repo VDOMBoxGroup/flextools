@@ -40,6 +40,7 @@ public class RenderManager implements IEventDispatcher {
 	private var items:ArrayCollection;
 	private var cursor:IViewCursor;
 	private var lockedItems:Object;
+	private var lastKey:String;
 	
 	/**
 	 * 
@@ -100,16 +101,14 @@ public class RenderManager implements IEventDispatcher {
 		
 		createItemDescription(itemId, parentId);
 	
-		soap.renderWysiwyg(applicationId, itemId, parentId);
+		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
 	}
 	
 	public function updateItem(itemId:String, parentId:String):void {
 		
-		
-		
 		//dataManager.updateAttributes(event.objectId, event.props);
 		
-		var key:String = soap.renderWysiwyg(applicationId, itemId, parentId);
+		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
 		
 		//if(lockedItems[itemId])
 			//lockedItems[itemId] = key;
@@ -126,7 +125,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		cursor.findAny({itemId:itemId});
 		
-		var currentItem:Container = ItemDescription(cursor.current).item;
+		var currentItem:Container = ItemDescription(cursor.current).item as Container;
 		
 		currentItem.parent.removeChild(currentItem);
 		
@@ -146,7 +145,20 @@ public class RenderManager implements IEventDispatcher {
 		lockedItems[itemId] = '';
 	}
 	
-	private function insertItem(itemName:String, itemId:String):Container {
+	public function getItemById(itemId:String):IItem {
+		
+		if(itemId) {
+			
+			var itemDescription:ItemDescription = getItemDescriptionById(itemId);
+			
+			if(itemDescription)
+				return 	itemDescription.item;
+		}
+		
+		return null;
+	}
+	
+	private function insertItem(itemName:String, itemId:String):IItem {
 		
 		var itemDescription:ItemDescription;
 		var isStatic:Boolean = false;
@@ -156,10 +168,10 @@ public class RenderManager implements IEventDispatcher {
 		if(!itemDescription)
 			return null
 		
-		if(itemDescription.item && itemDescription.item.parent)
+		if(itemDescription.item && Container(itemDescription.item).parent)
 			return itemDescription.item;
 		
-		var container:Container;
+		var container:IItem;
 		
 		switch (itemName) {
 			
@@ -176,7 +188,7 @@ public class RenderManager implements IEventDispatcher {
 		case 'row':
 		 
 			container = new TableRow(itemId);
-			container.percentWidth = 100;
+			Container(container).percentWidth = 100;
 		break;
 		
 		case 'cell':
@@ -192,7 +204,11 @@ public class RenderManager implements IEventDispatcher {
 	
 	private function deleteItemChildren(itemId:String):void {
 		
-		var result:Container = getItemDescriptionById(itemId).item;
+		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
+		
+		//if(!itemDescription)
+		
+		var result:Container = itemDescription.item as Container;
 		
 		if(!result)
 			return
@@ -328,7 +344,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		
-		var item:Container = itemDescription.item;
+		var item:Container = itemDescription.item as Container;
 		var itemStaticFlag:String = itemDescription.staticFlag;
 		
 		item.removeAllChildren();
@@ -371,8 +387,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				childId = childDescription.itemId;
 				
-				var childItem:Container = insertItem(childName, childId);
-				childItem.clipContent = true;
+				var childItem:Container = insertItem(childName, childId) as Container;
 				
 				item.addChild(childItem);
 				
@@ -609,6 +624,9 @@ public class RenderManager implements IEventDispatcher {
 		
 		var key:String = event.result.Key[0];
 		
+		if(key != lastKey)
+			return;
+		
 		var itemId:String = itemXMLDescription.@id;
 		var itemName:String = itemXMLDescription.name().localName;
 		
@@ -617,7 +635,7 @@ public class RenderManager implements IEventDispatcher {
 			
 		deleteItemChildren(itemId);
 		
-		var item:Container = insertItem(itemName, itemId);
+		var item:IItem = insertItem(itemName, itemId);
 		
 		if(!item)
 			return;
@@ -638,42 +656,42 @@ public class RenderManager implements IEventDispatcher {
 			}
 		}
 		
+		var itemAsContainer:Container = item as Container;
+		
 		if(itemDescription.parentId) {
 			
-			if(itemDescription.item) {
+			if(!itemAsContainer.parent) {
 				
-				if(!itemDescription.item.parent) {
-					var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
-					parentDescription.item.addChild(item);
-				}
+				var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
+				Container(parentDescription.item).addChild(itemAsContainer);
+			}
+			
+			var p_arrayOfItems:Array = sortItems(itemDescription.parentId);
+			var p_count:uint = 0;
+			
+			for each (var p_collectionItem:Container in p_arrayOfItems) {
 				
-				var p_arrayOfItems:Array = sortItems(itemDescription.parentId);
-				var p_count:uint = 0;
-				
-				for each (var p_collectionItem:Container in p_arrayOfItems) {
-					
-					if(p_collectionItem.parent) {
-						//trace(p_collectionItem.parent.getChildIndex(p_collectionItem))
-						p_collectionItem.parent.setChildIndex(p_collectionItem, p_count);
-						p_count++;
-					}
+				if(p_collectionItem.parent) {
+					//trace(p_collectionItem.parent.getChildIndex(p_collectionItem))
+					p_collectionItem.parent.setChildIndex(p_collectionItem, p_count);
+					p_count++;
 				}
 			}
 		} else {
 			
-			item.percentWidth = 100;
-			item.percentHeight = 100;
+			itemAsContainer.percentWidth = 100;
+			itemAsContainer.percentHeight = 100;
 			
-			rootContainer.addChild(item);
+			rootContainer.addChild(itemAsContainer);
 		}
 		
-		item.dispatchEvent(new Event('refreshComplete'));
-		item.visible = true;
+		itemAsContainer.dispatchEvent(new Event('refreshComplete'));
+		itemAsContainer.visible = true;
 		
-		IItem(item).waitMode = false;
+		item.waitMode = false;
 		
 		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
-		rme.result = item;
+		rme.result = itemAsContainer;
 		
 		dispatchEvent(rme);
 	}

@@ -4,8 +4,6 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
-import mx.controls.Image;
-
 import vdom.connection.Proxy;
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
@@ -130,7 +128,10 @@ public class DataManager implements IEventDispatcher {
 	[Bindable (event='currentObjectChanged')]
 	public function get currentObjectId():String {
 		
-		return _currentObject.@ID;
+		if(_currentObject)
+			return _currentObject.@ID;
+		else
+			return null;
 	}
 	
 	public function getTypeByTypeId(typeId:String):XML {
@@ -140,8 +141,17 @@ public class DataManager implements IEventDispatcher {
 	
 	public function getTypeByObjectId(objectId:String):XML {
 		
-		var typeId:String = getObject(objectId).@Type;
-		return getTypeByTypeId(typeId)[0];
+		var object:XML = getObject(objectId);
+		
+		if(!object)
+			return null;
+		
+		var type:XML = getTypeByTypeId(object.@Type);
+		
+		if(!type)
+			return null
+			 
+		return type[0];
 	}
 	
 	public function getTopLevelTypes():XMLList {
@@ -404,31 +414,6 @@ public class DataManager implements IEventDispatcher {
 		dispatchEvent(new Event('currentObjectChanged'));
 	}
 	
-	public function deleteObject(objectId:String):void {
-		
-		soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
-		soap.deleteObject(_currentApplicationId, objectId);
-	}
-	
-	private function objectDeletedHandler (event:SoapEvent):void {
-		
-		soap.removeEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
-		
-		var objectId:String = event.result.Result;
-		
-		delete getObject(objectId);
-		
-		if(objectId == _currentPageId)
-			changeCurrentPage(null);
-		
-		if(objectId == currentObjectId)
-			changeCurrentObject(_currentPageId);
-		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
-		dme.objectId = objectId;
-		dispatchEvent(dme);
-	}
-	
 	public function getApplicationStructure():void {
 		
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, getApplicationStructureHandler);
@@ -479,6 +464,7 @@ public class DataManager implements IEventDispatcher {
 		soap.removeEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK, setObjectXMLScriptHandler);
 		var result:XML = event.result.*[0];
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, result));
+		dispatchEvent(new Event('currentObjectChanged'));
 	}
 	
 	/**
@@ -519,6 +505,7 @@ public class DataManager implements IEventDispatcher {
 	 */	
 	public function createObject(typeId:String, parentId:String = '', objectName:String = '', attributes:String = ''):void {
 		
+		proxy.flush();
 		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, createObjectCompleteHandler);
 		soap.createObject(_currentApplicationId, parentId, typeId, attributes, objectName);
 	}
@@ -543,6 +530,33 @@ public class DataManager implements IEventDispatcher {
 
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECTS_CREATED);
 		dme.result = event.result;
+		dispatchEvent(dme);
+	}
+	
+	public function deleteObject(objectId:String):void {
+		
+		soap.addEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
+		soap.deleteObject(_currentApplicationId, objectId);
+	}
+	
+	private function objectDeletedHandler (event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.DELETE_OBJECT_OK, objectDeletedHandler);
+		
+		var objectId:String = event.result.Result;
+		
+		var deleteNodes:XMLList = _currentApplication..Objects.Object.(@ID == objectId)
+		for (var i:int = deleteNodes.length() - 1; i >= 0; i--)
+			delete deleteNodes[i]; 
+		
+		if(objectId == _currentPageId)
+			changeCurrentPage(null);
+		
+		if(objectId == currentObjectId)
+			changeCurrentObject(_currentPageId);
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
+		dme.objectId = objectId;
 		dispatchEvent(dme);
 	}
 	

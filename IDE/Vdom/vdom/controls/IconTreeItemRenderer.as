@@ -1,4 +1,4 @@
-package vdom.components.objectsPanel
+package vdom.controls
 {
 	import mx.controls.treeClasses.TreeItemRenderer;
 	import mx.controls.treeClasses.TreeListData;
@@ -6,11 +6,11 @@ package vdom.components.objectsPanel
 	import vdom.managers.FileManager;
 	import vdom.utils.IconUtil;
 
-	public class ItCanvas extends TreeItemRenderer
+	public class IconTreeItemRenderer extends TreeItemRenderer
 	{
 		private var fileManager:FileManager;
 		
-		public function ItCanvas()
+		public function IconTreeItemRenderer()
 		{
 			super();
 			fileManager = FileManager.getInstance();
@@ -22,7 +22,7 @@ package vdom.components.objectsPanel
             
             var data:Object = {typeId:value.@Type, resourceId:value.@resourceID}
             
-            TreeListData(super.listData).icon = IconUtil.getClass(this, data, 24, 24);
+            TreeListData(super.listData).icon = IconUtil.getClass(this, data, 16, 16);
             
         }  
 	}

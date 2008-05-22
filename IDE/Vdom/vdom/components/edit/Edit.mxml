@@ -3,7 +3,6 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:containers="vdom.components.edit.containers.*"
 	xmlns:mainContainers="vdom.containers.*"
-	xmlns:objectsPanel="vdom.components.objectsPanel.*"
 	
 	initialize="initializeHandler();"
 	
@@ -68,7 +67,7 @@
 					
 			</containers:ClosablePanel>
 			-->
-			<objectsPanel:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" /> 					
+			<containers:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" /> 					
 			
 		</mx:VBox>
 	</mx:HDividedBox>

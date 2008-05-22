@@ -1,6 +1,6 @@
 package vdom.managers.renderClasses {
 
-import mx.core.Container;		
+import vdom.containers.IItem;		
 
 public class ItemDescription {
 	
@@ -11,6 +11,6 @@ public class ItemDescription {
 	public var zindex:uint;
 	public var hierarchy:uint;
 	public var order:uint;
-	public var item:Container;
+	public var item:IItem;
 }
 }
