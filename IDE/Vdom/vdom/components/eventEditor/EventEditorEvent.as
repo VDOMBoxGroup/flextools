@@ -4,9 +4,9 @@ package vdom.components.eventEditor
 	
 	import mx.containers.Canvas;
 	import mx.containers.Grid;
-	import mx.containers.GridItem;
 	import mx.containers.GridRow;
 	import mx.controls.Button;
+	import mx.controls.HRule;
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.TextArea;
@@ -246,69 +246,111 @@ package vdom.components.eventEditor
 		private function initDownBody():void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
+			addChild(cnvDownLayer);
 			//addChild(cnvDownLayer);
 			
+			//draw vertical Line
+			var leftVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+				//vRule.x = 35;
+				leftVRule.percentHeight = 100;
+			cnvDownLayer.addChild(leftVRule);   
 			
+			var middleVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+				middleVRule.x = 25;
+				middleVRule.percentHeight = 100;
+			cnvDownLayer.addChild(middleVRule);   
+
 			
-			grid = new Grid();
-			grid.percentWidth = 100;  
-			//grid.setStyle('borderColor', '0x000000');
-			cnvDownLayer.addChild(grid);
-			
-				gridRow1 = new GridRow();
-				gridRow1.percentWidth = 100;
-				gridRow1.setStyle('borderStyle', 'inset');  
-				gridRow1.setStyle('borderColor', '0x000000');
-				grid.addChild(gridRow1);
-				
-					var  gridItem1_1:GridItem = new GridItem();
-					gridItem1_1.width = 30;
-					gridItem1_1.setStyle('horizontalAlign', "center")
-					gridItem1_1.setStyle('borderStyle', 'inset');  
-					gridItem1_1.setStyle('borderColor', '0x000000');
-					gridRow1.addChild(gridItem1_1);
-					
+			var rightVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+				rightVRule.x = 100;
+				rightVRule.setStyle('right', 0);
+				rightVRule.percentHeight = 100;
+			cnvDownLayer.addChild(rightVRule);   
+
+			///         -- 1 --
 						var img1:Image = new Image()
-						img1.source = delet;
-						gridItem1_1.addChild(img1);
-				
-					var  gridItem1_2:GridItem = new GridItem();
-					gridItem1_2.percentWidth =100;
-					gridItem1_2.setStyle('horizontalAlign', "center")
-					gridRow1.addChild(gridItem1_2);
+							img1.source = delet;
+							img1.x = 5;
+							img1.y = 3;
+						cnvDownLayer.addChild(img1);
 					
 						var label1:Label = new Label()
-						label1.text = 'MyButton';
-						gridItem1_2.addChild(label1);
-				
-				gridRow2 = new GridRow();
-				gridRow2.setStyle('borderStyle', 'inset');  
-				gridRow2.setStyle('borderColor', '0x000000');
-				grid.addChild(gridRow2);
-				
-					var  gridItem2_1:GridItem = new GridItem();
-					gridRow2.addChild(gridItem2_1);
+							label1.text = 'MyButton';
+							label1.x = middleVRule.x;
+							label1.y = 0;
+							label1.width = 165;
+							label1.setStyle('textAlign', 'center');
+						cnvDownLayer.addChild(label1);
 						
-						var img2:Image = new Image()
-						img2.source = delet;
-						gridItem2_1.addChild(img2);
-					
-					
-					var  gridItem2_2:GridItem = new GridItem();
-					gridRow2.addChild(gridItem2_2);
-						var vRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
-						vRule.x = 35;
-						
-							vRule.percentHeight = 100;
-						cnvDownLayer.addChild(vRule);    
+						var hRule1:HRule =new HRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+							hRule1.y = 17;
+							//trace('hRule1.y: ' + hRule1.y );
+							hRule1.percentWidth = 100;
+						cnvDownLayer.addChild(hRule1);   
+							
+			///         -- 2 --
+						var img2:Image = new Image();
+							img2.source = delet;
+							img2.x = 5;
+							img2.y = hRule1.y + 3;
+						cnvDownLayer.addChild(img2);
 						
 						event = new Label();
-						gridItem2_2.addChild(event);
+							event.width = 165;
+							event.x = middleVRule.x;
+							event.y = hRule1.y; 
+							event.setStyle('textAlign', 'center');
+						cnvDownLayer.addChild(event);
+						
+						var hRule2:HRule =new HRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+							hRule2.percentWidth = 100;
+							hRule2.y = event.y + 17;
+						cnvDownLayer.addChild(hRule2);
+						
+						  
+			///         -- 3 --
+			
+						var img3:Image = new Image();
+							img3.source = delet;
+							img3.x = 5;
+							img3.y = hRule2.y + 3;
+						cnvDownLayer.addChild(img3);
+						
+						var labelX:Label = new Label();
+							labelX.text = 'X';
+							labelX.x = middleVRule.x;
+							labelX.y = hRule2.y ; 
+							labelX.width = 165;
+							labelX.setStyle('textAlign', 'center');
+						cnvDownLayer.addChild(labelX);
+						
+						var hRule3:HRule =new HRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+							hRule3.y = labelX.y + 17;
+							hRule3.percentWidth = 100;
+						cnvDownLayer.addChild(hRule3);
+						
+			///         -- 4 --
+			
+						var img4:Image = new Image();
+							img4.source = delet;
+							img4.x = 5;
+							img4.y =  hRule3.y + 3;
+						cnvDownLayer.addChild(img4);
+						
+						var labelY:Label = new Label();
+							labelY.text = 'Y';
+							labelY.x = middleVRule.x;
+							labelY.y = hRule3.y; 
+							labelY.width = 165;
+							labelY.setStyle('textAlign', 'center');
+						cnvDownLayer.addChild(labelY);
+						
+						var hRule4:HRule =new HRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+							hRule4.y = labelY.y + 17;
+							hRule4.percentWidth = 100;
+						cnvDownLayer.addChild(hRule4);
 				
-				gridRow3 = new GridRow();
-				grid.addChild(gridRow3);
 				
-				addChild(cnvDownLayer);
 		}
 		
 
@@ -350,6 +392,7 @@ package vdom.components.eventEditor
 			
 			cnvDownLayer.y = 30 * _ratio;
 			cnvDownLayer.width = 243 * _ratio;
+			
 		}
 		
 		public function get ID():String
