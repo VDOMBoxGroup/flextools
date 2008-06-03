@@ -40,7 +40,8 @@
 		<controls:ActionButton styleName="previewButton" 
 			label="{resourceManager.getString('Application','editor_preview')}"
 			labelPlacement="bottom"
-			switched="false"/>
+			switched="false"
+			click="showPreview();"/>
 		
 		<controls:ActionButton styleName="treeButton"
 			labelPlacement="bottom"
@@ -58,9 +59,9 @@
 			labelPlacement="bottom"
 			click="{placeCanvas.selectedChild=analyseCanv}"/>
 		
-		<!--<controls:ActionButton styleName="statisticsButton" 
+		<controls:ActionButton styleName="statisticsButton" 
 			label="{resourceManager.getString('Application','editor_statistics')}"
-			labelPlacement="bottom"/>-->
+			labelPlacement="bottom"/>
 		
 			
 	</controls:ControlPanel>
