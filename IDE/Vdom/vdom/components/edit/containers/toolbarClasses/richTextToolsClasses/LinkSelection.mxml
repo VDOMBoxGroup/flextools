@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="vertical"
+	close="closeHandler();"
+	showCloseButton="true"
+	title="Insert Link"
+	titleStyleName="titleStyle" height="160">
+	
+<mx:Style>
+	.titleStyle {
+		textAlign: center;	
+	}
+</mx:Style>
+<mx:Script>
+	<![CDATA[
+		import mx.managers.PopUpManager;
+		
+		public function get url():String {
+			
+			return linkURL.text;
+		}
+		
+		private function closeHandler():void {
+				
+			PopUpManager.removePopUp(this);
+		}
+		
+		private function closeWithSave():void {
+			
+			if(linkURL.text != '')
+				dispatchEvent(new Event('linkSelected'));
+			else
+				closeHandler();
+		}
+	]]>
+</mx:Script>
+	<mx:Form width="100%">
+		<mx:FormItem label="Link URL: " width="100%" horizontalAlign="right">
+			<mx:TextInput id="linkURL" textAlign="left" width="250"/>
+		</mx:FormItem>
+		<mx:FormItem label="Pages List: " width="100%" horizontalAlign="right">
+			<mx:ComboBox width="250" cornerRadius="0"></mx:ComboBox>
+		</mx:FormItem>
+		<mx:FormItem horizontalAlign="right" direction="horizontal" width="100%">
+			<mx:Button label="Insert" cornerRadius="0" 
+				click="closeWithSave();"/>
+			<mx:Button label="Cancel" cornerRadius="0" 
+				click="closeHandler();"/>
+		</mx:FormItem>
+	</mx:Form>
+	
+</mx:TitleWindow>

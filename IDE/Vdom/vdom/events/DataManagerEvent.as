@@ -34,6 +34,8 @@ public class DataManagerEvent extends Event
     public static const TYPES_LOADED:String = 'typesLoaded';
     public static const PAGE_DATA_LOADED:String = 'pageDataLoaded';
 	
+	public static const LIST_PAGES_CHANGED:String = 'listPagesChanged'
+	
 	public static const CURRENT_PAGE_CHANGED:String = 'currentPageChanged';
 	public static const CURRENT_OBJECT_CHANGED:String = 'currentObjectChanged';
 	

@@ -1,6 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="50" xmlns:ns1="source.mx.controls.*">
-	<mx:Button x="108" y="18" label="Action #3"/>
-	<mx:Button x="204" y="18" label="Action #4"/>
-	<mx:Label x="10" y="10" text="Sample toolbar"/>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="com.yahoo.astra.mx.controls.*"
+	width="100%"
+	focusEnabled="false" backgroundColor="#F0F0F0">
+	<mx:Style>
+		.toolbarButton {
+			cornerRadius:0;
+			alpha:0;
+			borderColor:#F0F0F0;
+			fillAlphas: 0,0,0,0;
+		}
+		.toolbarComboBox {
+			cornerRadius:0;
+			borderColor:#CCCCCC;
+			arrowButtonWidth: 15;
+		}
+	</mx:Style>
+	
+	<mx:Script source="includes/richTextTools.as"/>
+	
+	<mx:VBox left="5" top="5" right="5" bottom="5">
+		<mx:HBox horizontalGap="0">
+			<mx:Button styleName="toolbarButton" label="Save" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_save.png')"
+				height="24"  focusEnabled="false"/>
+			<mx:VRule height="24"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_select_all.png')"
+				click="execCommand('selectall');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_rem_formatting.png')"
+				click="execCommand('removeformat');"/>
+			<mx:VRule height="24"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_ins_link.png')"
+				click="insertLink()"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_rem_link.png')"
+				click="execCommand('unlink');"/>
+			<!--<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_ins_image.png')"/>-->
+			<!--<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_ins_table.png')"/>-->
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_rule.png')"
+				click="execCommand('inserthorizontalrule');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_ins_char.png')"
+				click="insertChar();" alpha="1.0"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_bold.png')"
+				click="execCommand('Bold');" fontWeight="bold"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_italic.png')"
+				click="execCommand('Italic');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_underline.png')"
+				click="execCommand('Underline');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_strikethrough.png')"
+				click="execCommand('Strikethrough');"/>
+			<mx:VRule height="24"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_left.png')"
+				click="execCommand('JustifyLeft');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_center.png')"
+				click="execCommand('JustifyCenter');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_right.png')"
+				click="execCommand('JustifyRight');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_block.png')"
+				click="execCommand('JustifyFull');"/>
+			<mx:VRule height="24"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_numlist.png')"
+				click="execCommand('InsertOrderedList');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_bullist.png')"
+				click="execCommand('InsertUnorderedList');"/>
+			<mx:VRule height="24"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_outdent.png')"
+				click="execCommand('Outdent');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_indent.png')"
+				click="execCommand('Indent');" />
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="Style"/>
+			<mx:ComboBox id="styleSelector" styleName="toolbarComboBox"
+				height="24" width="100"
+				change="{sample.window.tinyMCE.execCommand('FormatBlock', false, styleSelector.selectedItem.data)}" >
+				<mx:dataProvider>
+				  <mx:ArrayCollection>
+			        <mx:Object label="Paragraph" data="p"/>
+			        <mx:Object label="Address" data="address"/>
+			        <mx:Object label="Preformatted" data="pre"/>
+			        <mx:Object label="Heading 1" data="h1"/>
+			        <mx:Object label="Heading 2" data="h2"/>
+			        <mx:Object label="Heading 3" data="h3"/>
+			        <mx:Object label="Heading 4" data="h4"/>
+			        <mx:Object label="Heading 5" data="h5"/>
+			        <mx:Object label="Heading 6" data="h6"/>
+			        <mx:Object label="Div" data="div"/>
+			        <mx:Object label="Blockquote" data="blockquote"/>
+			        <mx:Object label="Code" data="code"/>
+			        <mx:Object label="Definition term" data="dt"/>
+			        <mx:Object label="Definition description" data="dd"/>
+			        <mx:Object label="Code sample" data="samp"/>
+			      </mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:VRule height="24"/>
+			<mx:Label text="Font"/>
+			<mx:ComboBox id="fontSelector" styleName="toolbarComboBox"
+				height="24" width="100" dataProvider="{font}" focusEnabled="false" 
+				change="changeFont(event)"/>
+			<mx:VRule height="24"/>
+			<mx:Label text="Size"/>
+			<mx:ComboBox id="sizeSelector" styleName="toolbarComboBox"
+				height="24" width="100"
+				change="{sample.window.tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data)}">
+				<mx:dataProvider>
+				  <mx:ArrayCollection>
+			        <mx:Object label="1 (8 pt)" data="1"/>
+			        <mx:Object label="1 (10 pt)" data="2"/>
+			        <mx:Object label="1 (12 pt)" data="3"/>
+			        <mx:Object label="1 (14 pt)" data="4"/>
+			        <mx:Object label="1 (18 pt)" data="5"/>
+			        <mx:Object label="1 (24 pt)" data="6"/>
+			        <mx:Object label="1 (36 pt)" data="7"/>
+			      </mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+			<mx:VRule height="24"/>
+			<controls:DropDownColorPicker width="36" height="24" 
+				viewerRenderer="vdom.components.edit.containers.toolbarClasses.richTextToolsClasses.ColorTextButton" viewerStyleName="" focusEnabled="false"
+				change="colorFillChanged(event)"/>
+			<controls:DropDownColorPicker width="36" height="24" 
+				viewerRenderer="vdom.components.edit.containers.toolbarClasses.richTextToolsClasses.ColorFillButton" viewerStyleName="" focusEnabled="false"
+				change="colorTextChanged(event)"/>
+			<mx:VRule height="24"/>
+			<mx:Button styleName="toolbarButton" label="Source" height="24"
+				click="openCodeEditor();"/>
+		</mx:HBox>
+	</mx:VBox>
 </mx:Canvas>

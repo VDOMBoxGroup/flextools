@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResizableTitleWindow xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="400" height="300"
+	showCloseButton="true" cornerRadius="0"
+	title="HTML Source Editor"
+	close="closeWithoutSave();"
+	titleStyleName="titleStyle">
+	<mx:Style>
+		.titleStyle {
+			textAlign: center;	
+		}
+	</mx:Style>
+	<mx:Script>
+	<![CDATA[
+		import mx.managers.PopUpManager;
+		[Bindable]
+		private var _codeText:String
+		public function set code(value:String):void {
+			
+			_codeText = value;
+		}
+		
+		public function get code():String {
+			
+			return _code.text;
+		}
+		
+		private function closeWithSave():void {
+			
+			dispatchEvent(new Event('updateCode'));
+		}
+		
+		private function closeWithoutSave():void {
+			
+			PopUpManager.removePopUp(this);
+		}
+	]]>
+	</mx:Script>
+	<mx:TextArea width="100%" height="100%" id="_code" text="{_codeText}" focusEnabled="false"/>
+	<mx:ControlBar>
+		<mx:Button label="Update" click="closeWithSave();" cornerRadius="0"/>
+		<mx:Spacer width="100%"/>
+		<mx:Button label="Cancel" click="closeWithoutSave();" cornerRadius="0"/>
+	</mx:ControlBar>
+</ResizableTitleWindow>

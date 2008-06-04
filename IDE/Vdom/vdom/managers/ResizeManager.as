@@ -213,6 +213,8 @@ public class ResizeManager extends EventDispatcher {
 		
 		if(item && Container(item).parent) {
 			
+			highlightItem(null);
+			
 			if(selectMarker.parent)
 				selectMarker.parent.removeChild(selectMarker)
 				
@@ -246,6 +248,8 @@ public class ResizeManager extends EventDispatcher {
 			selectMarker.visible = false;
 			selectMarker.item = null;
 		}
+		
+		selectedItem = newSelectedItem;
 			
 		return newSelectedItem;
 	}
@@ -253,6 +257,8 @@ public class ResizeManager extends EventDispatcher {
 	private function moveItem(item:IItem):void {
 		
 		if(item && Container(item).parent) {
+			
+			highlightItem(null);
 			
 			if(moveMarker.parent)
 				moveMarker.parent.removeChild(moveMarker)
@@ -339,7 +345,7 @@ public class ResizeManager extends EventDispatcher {
 		
 		if(activeItem && Container(activeItem).parent != _topLevelItem) {
 			
-			highlightItem(null);
+//			highlightItem(null);
 			moveItem(activeItem);
 			itemMoved = true;
 			return;
@@ -388,10 +394,9 @@ public class ResizeManager extends EventDispatcher {
 				
 				if(Container(activeItem).parent != _topLevelItem) {
 				
-					highlightItem(null);
-					selectedItem = selectItem(activeItem);
+					selectItem(activeItem);
 						
-				} else selectedItem = selectItem(activeItem, false);
+				} else selectItem(activeItem, false);
 			}
 			
 			activeItem = null;

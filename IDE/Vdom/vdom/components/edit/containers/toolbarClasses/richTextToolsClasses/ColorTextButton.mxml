@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Button xmlns:mx="http://www.adobe.com/2006/mxml" 
+	implements="com.yahoo.astra.mx.controls.colorPickerClasses.IColorViewer"
+	overSkin="vdom.skins.ToolbarButtonSkin"
+	upSkin="vdom.skins.ToolbarButtonSkin"
+	downSkin="vdom.skins.ToolbarButtonSkin"
+	borderColor="#F0F0F0"
+	icon="{myIcon}"
+	cornerRadius="0"
+	fillAlphas="0,0,0,0">
+<mx:Script>
+	<![CDATA[
+	import com.yahoo.astra.mx.events.ColorRequestEvent;
+	
+	[Embed(source="/assets/toolbars/richTextToolbar/icon_color_text.png")]
+	[Bindable]
+	private var myIcon:Class;
+	
+	private var _color:uint;
+		
+	public function get color():uint {
+			
+		return _color;
+	};
+	
+	/**
+	 * @private
+	 */
+	public function set color(value:uint):void {
+		
+		_color = value;
+	};
+	
+	override protected function clickHandler(event:MouseEvent):void
+	{
+		super.clickHandler(event);
+		dispatchEvent(new ColorRequestEvent(ColorRequestEvent.REQUEST_COLOR, false, false, this.color));
+	}
+	]]>
+</mx:Script>
+</mx:Button>

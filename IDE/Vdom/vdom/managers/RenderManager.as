@@ -206,8 +206,8 @@ public class RenderManager implements IEventDispatcher {
 		
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		
-		//if(!itemDescription)
-		
+		if(!itemDescription)
+			return
 		var result:Container = itemDescription.item as Container;
 		
 		if(!result)
@@ -440,9 +440,9 @@ public class RenderManager implements IEventDispatcher {
 						'</head>' +
 						'<body contentEditable="' + 
 						isEditable +'" ' + 
-						'>' +
+						'><span id="xEditingArea">' +
 						HTMLText +
-						'</body></html>';
+						'</span></body></html>';
 				
 				viewText.htmlText = HTMLText;
 				item.addChild(viewText);

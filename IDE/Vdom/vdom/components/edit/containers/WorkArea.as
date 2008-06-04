@@ -3,7 +3,6 @@ package vdom.components.edit.containers {
 import flash.events.MouseEvent;
 
 import mx.containers.Canvas;
-import mx.containers.ControlBar;
 import mx.containers.VBox;
 import mx.controls.HTML;
 import mx.controls.Label;
@@ -12,6 +11,7 @@ import mx.core.UIComponent;
 import mx.events.DragEvent;
 
 import vdom.components.edit.containers.toolbarClasses.ImageTools;
+import vdom.components.edit.containers.toolbarClasses.RichTextTools;
 import vdom.containers.IItem;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
@@ -34,7 +34,7 @@ public class WorkArea extends VBox {
 	private var _selectedObject:Container;
 	private var focusedObject:Container;
 	private var _contentHolder:Canvas;
-	private var _contentToolbar:ControlBar;
+	private var _contentToolbar:Canvas;
 	
 	public function WorkArea() {
 		
@@ -76,7 +76,7 @@ public class WorkArea extends VBox {
 		
 		//selectedObject = null;
 		renderManager.deleteItem(objectId);
-		resizeManager.selectItem(null);
+		//resizeManager.selectItem(null);
 	}
 	
 	public function updateObject(result:XML):void {
@@ -111,7 +111,7 @@ public class WorkArea extends VBox {
 	
 	public function set objectId(value:String):void {
 		
-		if(!value || _selectedObject && IItem(_selectedObject).objectId == value)
+		if(!value /* || _selectedObject && IItem(_selectedObject).objectId == value */)
 			return;
 	
 		var item:IItem = renderManager.getItemById(value);
@@ -217,7 +217,9 @@ public class WorkArea extends VBox {
 		break
 		
 		case 3:
-		
+			_contentToolbar = new RichTextTools();
+			var obj:HTML = HTML(IItem(event.item).editableAttributes[0].sourceObject);
+			RichTextTools(_contentToolbar).init(obj);
 		break
 		
 		case 4:

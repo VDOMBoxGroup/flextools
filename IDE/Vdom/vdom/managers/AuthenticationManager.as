@@ -88,6 +88,11 @@ public class AuthenticationManager implements IEventDispatcher {
 		return _password;
 	}
 	
+	public function get ip():String {
+		
+		return _ip;
+	}
+	
 	private function soapInitComplete(event:Event):void {
 		
 		soap.removeEventListener('loadWsdlComplete', soapInitComplete);

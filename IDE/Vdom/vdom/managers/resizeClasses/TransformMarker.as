@@ -126,7 +126,7 @@ public class TransformMarker extends UIComponent {
 	
 	public function set item(item:Container):void {
 		
-		if(item == null) {
+		if(item == null || item.parent == null) {
 			
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
@@ -394,10 +394,12 @@ public class TransformMarker extends UIComponent {
 	
 	private function getContentRectangle(sourceContainer:DisplayObject, destinationContainer:DisplayObject):Rectangle {
 		
+		if(!sourceContainer)
+			return null;
 		var pt:Point = new Point(sourceContainer.x, sourceContainer.y);
 		var sc:Container = Container(sourceContainer.parent);
 		var dc:Container = Container(destinationContainer.parent);
-		if(!sc && !dc)
+		if(!sc || !dc)
 			return null;
 		pt = sc.contentToGlobal(pt);
 		pt = dc.globalToContent(pt);
@@ -509,6 +511,9 @@ public class TransformMarker extends UIComponent {
 		
 		resizeManager.itemTransform = false;
 		
+		if(!event)
+			return;
+		
 		var rectangle:Rectangle = getContentRectangle(this, _selectedItem);
 		
 		var prop:Object = {
@@ -539,6 +544,11 @@ public class TransformMarker extends UIComponent {
 		
 		if(itemChanged)
 			return;
+		
+		if(!_selectedItem || !_selectedItem.parent) {
+			mouseUpHandler(null);
+			return;
+		}
 		
 		var rect:Rectangle = new Rectangle(x, y, measuredWidth, measuredHeight);
 		var rect1:Rectangle = getContentRectangle(this, _selectedItem);
