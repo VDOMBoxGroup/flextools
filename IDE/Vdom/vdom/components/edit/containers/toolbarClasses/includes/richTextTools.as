@@ -1,4 +1,5 @@
 import flash.events.Event;
+import flash.events.KeyboardEvent;
 import flash.html.HTMLLoader;
 
 import mx.collections.ArrayCollection;
@@ -14,50 +15,62 @@ import vdom.components.edit.containers.toolbarClasses.richTextToolsClasses.LinkS
 
 private var sample:HTMLLoader;
 private var editableElement:HTML;
+
 private var tinyMCE:*;
+private var iFrame:*;
+private var contentDocument:*
+
 [Bindable]
 private var font:ArrayCollection;
 public function init(container:HTML):void {
 		
 	editableElement = container;
-	var fontString:String = 
-			'Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;' + 
-			'Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;' + 
-			'Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;' + 
-			'Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;' + 
-			'Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;' + 
-			'Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats';
-	var fontArray:Array = fontString.split(';');
-	var fontArrayLength:uint = fontArray.length
-	font = new ArrayCollection();
-	for (var i:uint=0; i<fontArrayLength; i++) {
-		if (fontArray[i] != '') {
-			var parts:Array = fontArray[i].split('=');
-			font.addItem({label:parts[0], data:parts[1]});
-		}
-	}
+	
 	sample = new HTMLLoader();
-	sample.addEventListener(Event.HTML_DOM_INITIALIZE, cHandler);
+	sample.addEventListener(Event.HTML_DOM_INITIALIZE, HtmlDomInitalizeHandler);
 	sample.loadString( 
 		'<html><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /><title>Script</title>' + 
 		'<script language="javascript" type="text/javascript" src="libs/tinymce/jscripts/tiny_mce/tiny_mce_src.js"></script>' + 
-		'<script>tinyMCE.init({mode : "none", theme : "advanced", browsers : "gecko", dialog_type : "modal", ' + 
-		'src_mode: "_src", width:\'100%\', height:\'100%\'});</script>' + 
-		'</head><body><div><textarea id="content" name="content" /></div></body></html>');
-	
-	//(new URLRequest('sample.html'));
+		'<script>tinyMCE.init({mode : "none", theme : "advanced", browsers : "gecko", dialog_type : "modal", /*auto_resize:"true",*/ src_mode: "_src", height:\'100%\',  width:\'100%\'});</script>' + 
+		'</head><body><div><textarea id="content" name="content" /></div></body></html>'
+	);
 }
-
-private function cHandler(e:Event):void {
+private function HtmlDomInitalizeHandler(e:Event):void {
 	
+	sample.removeEventListener(Event.HTML_DOM_INITIALIZE, HtmlDomInitalizeHandler)
 	sample.window.www = editableElement.domWindow.document.getElementById('xEditingArea');
-	sample.addEventListener(Event.COMPLETE, compHandler);
+	sample.window.setIFrame = setIFrame;
+	sample.addEventListener(Event.COMPLETE, completeHandler);
 }
 
-private function compHandler(e:Event):void {
-
+private function completeHandler(e:Event):void {
+	
+	sample.removeEventListener(Event.COMPLETE, completeHandler);
 	sample.window.tinyMCE.execCommand("mceAddControl", true, "content");
+	
 	tinyMCE = sample.window.tinyMCE;
+	
+	editableElement.addEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
+}
+
+private function editableElement_KeyUpHandler(event:KeyboardEvent):void {
+	
+	var newHeight:Number = contentDocument.documentElement.offsetHeight;
+	
+	if(editableElement.height != newHeight) {
+		
+		editableElement.height = newHeight + 1;
+		iFrame.style.height = newHeight + 'px'
+	}
+}
+
+private function setIFrame(iFrameValue:*, contentDocumentValue:*):void {
+	
+	if(iFrameValue)
+		iFrame = iFrameValue;
+	
+	if(contentDocumentValue)
+		contentDocument = contentDocumentValue;
 }
 
 private function execCommand(commandName:String, commandAttributes:String = null):void {

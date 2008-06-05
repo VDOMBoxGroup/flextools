@@ -108,7 +108,6 @@ TinyMCE_Engine.prototype = {
 						tinyMCE.baseURL = baseHREF + src;
 					else
 						tinyMCE.baseURL = src;
-					///alert('base url ' + tinyMCE.baseURL)
 					break;
 				}
 			}
@@ -419,8 +418,6 @@ TinyMCE_Engine.prototype = {
 
 	loadScript : function(url) {
 		var i;
-		///alert('loadScript --> ' + url)
-		///alert(url)
 		for (i=0; i<this.loadedFiles.length; i++) {
 			if (this.loadedFiles[i] == url)
 				return;
@@ -554,7 +551,6 @@ TinyMCE_Engine.prototype = {
 		
 		inst.editorId = id;
 		this.instances[id] = inst;
-		alert('addMCEControl--> ' + this.instances[id].settings.width);
 		inst._onAdd(replace_element, form_element_name, target_document);
 	},
 
@@ -676,7 +672,6 @@ TinyMCE_Engine.prototype = {
 	execInstanceCommand : function(editor_id, command, user_interface, value, focus) {
 		
 		var inst = tinyMCE.getInstanceById(editor_id), r;
-		////alert('execInstanceCommand --> ' + inst.settings.width) ////alert
 		if (inst) {
 			r = inst.selection.getRng();
 
@@ -821,7 +816,6 @@ TinyMCE_Engine.prototype = {
 		}
 
 		if (inst) {
-			////alert('inst.execCommand')////alert
 			inst.execCommand(command, user_interface, value);
 		} else if (tinyMCE.settings.focus_alert)
 			alert(tinyMCELang.lang_focus_alert);
@@ -887,7 +881,6 @@ TinyMCE_Engine.prototype = {
 			replace_element.outerHTML = iframe.outerHTML;
 		else
 			replace_element.parentNode.replaceChild(iframe, replace_element);
-		alert('_createIFrame --> ' + iframe.innerHTML)///alert
 		if (tinyMCE.isRealIE)
 			return win.frames[id];
 		else
@@ -905,7 +898,6 @@ TinyMCE_Engine.prototype = {
 			content = content.replace(/&quot;/g, '"');
 			content = content.replace(/&amp;/g, '&');
 		}
-		alert('setupContent --> ' + content)///alert
 		tinyMCE.selectedInstance = inst;
 		inst.switchSettings();
 		
@@ -1472,8 +1464,7 @@ TinyMCE_Engine.prototype = {
 			h += '<a id="{$editor_id}_' + id + '" href="#" onclick="' + cmd + 'return false;" onmousedown="return false;" ' + io + ' class="mceButtonNormal" target="_self">';
 			h += '<img src="' + img + '" alt="{$'+lang+'}" title="{$' + lang + '}" />';
 			h += '</a>';
-		}
-		///alert(h);		
+		}	
 		return h;
 	},
 
@@ -2188,7 +2179,6 @@ TinyMCE_Engine.prototype = {
 		var inst = this.instances[editor_id], n;
 		
 		if (!inst) {
-			///alert('aaa' + inst)
 			for (n in tinyMCE.instances) {
 				inst = tinyMCE.instances[n];
 
@@ -2674,8 +2664,7 @@ TinyMCE_Control.prototype = {
 
 	resizeToContent : function() {
 		var d = this.getDoc(), b = d.body, de = d.documentElement;
-
-		this.iframeElement.style.height = (tinyMCE.isRealIE) ? b.scrollHeight : de.offsetHeight + 'px';
+		//this.iframeElement.style.height = (tinyMCE.isRealIE) ? b.scrollHeight : de.offsetHeight + 'px';
 	},
 
 	addShortcut : function(m, k, d, cmd, ui, va) {
@@ -3746,14 +3735,12 @@ TinyMCE_Control.prototype = {
 
 	_onAdd : function(replace_element, form_element_name, target_document) {
 		
-		///alert(replace_element);
 		var hc, th, tos, editorTemplate, targetDoc, deltaWidth, deltaHeight, html, rng, fragment;
 		var dynamicIFrame, tElm, doc, parentElm;
 		
 		th = this.settings.theme;
 		tos = tinyMCE.themes[th];
 		targetDoc = target_document ? target_document : document;
-		///alert('td '+target_document)
 		this.targetDoc = targetDoc;
 
 		tinyMCE.themeURL = tinyMCE.baseURL + "/themes/" + this.settings.theme;
@@ -3767,7 +3754,6 @@ TinyMCE_Control.prototype = {
 		if (tos.getEditorTemplate)
 			editorTemplate = tos.getEditorTemplate(this.settings, this.editorId);
 		
-//		/alert(tos.getEditorTemplate+' aaa');
 		deltaWidth = editorTemplate.delta_width ? editorTemplate.delta_width : 0;
 		
 		deltaHeight = editorTemplate.delta_height ? editorTemplate.delta_height : 0;
@@ -3775,8 +3761,6 @@ TinyMCE_Control.prototype = {
 		html = '<span id="' + this.editorId + '_parent" class="mceEditorContainer">' + editorTemplate.html;
 		
 		html = tinyMCE.replaceVar(html, "editor_id", this.editorId);
-		
-		
 		
 		if (!this.settings.default_document)
 			this.settings.default_document = tinyMCE.baseURL + "/blank.htm";
@@ -3835,21 +3819,21 @@ TinyMCE_Control.prototype = {
 			this.settings.area_height = "100%";
 			this.settings.height_style = "100%";
 		}
+		
 		html = tinyMCE.applyTemplate(html);
+		
 		this.settings.width = this.settings.old_width;
 		this.settings.height = this.settings.old_height;
 
 		this.visualAid = this.settings.visual;
 		this.formTargetElementId = form_element_name;
 		
-		///alert('_onAdd --> ' + www.innerHTML)
-		
 		// Get replace_element contents
 		if (replace_element.nodeName == "TEXTAREA" || replace_element.nodeName == "INPUT")
 			this.startContent = www.innerHTML///replace_element.value;
 		else
 			this.startContent = www.innerHTML///replace_element.innerHTML;
-		///alert('_onAdd --> ' + this.startContent)
+			
 		// If not text area or input
 		if (replace_element.nodeName != "TEXTAREA" && replace_element.nodeName != "INPUT") {
 			this.oldTargetElement = replace_element;
@@ -3881,8 +3865,6 @@ TinyMCE_Control.prototype = {
 			// Just hide the textarea element
 			this.oldTargetElement = replace_element;
 			
-			
-			
 			this.oldTargetDisplay = tinyMCE.getStyle(this.oldTargetElement, 'display', 'inline');
 			this.oldTargetElement.style.display = "none";
 
@@ -3909,16 +3891,15 @@ TinyMCE_Control.prototype = {
 				
 				tElm = tinyMCE._createIFrame(tElm, targetDoc);
 				dynamicIFrame = true;
-				///alert('qq' + tElm.contentWindow.document.getElementsByTagName('html')[0].innerHTML);
 			}
 
 			this.targetElement = tElm;
 			this.iframeElement = tElm;
 			this.contentDocument = tElm.contentDocument;
-			///alert(' ' + tElm)
 			this.contentWindow = tElm.contentWindow;
-			///alert('!!!!!!!' + tElm.window + '!!!!!!!')
-			//var zzz = tElm.innerHTML;
+			
+			setIFrame(this.iframeElement, tElm.contentWindow.document);
+			
 			//this.getDoc().designMode = "on";
 		} else {
 			if (tElm && tElm.nodeName == "SPAN")
@@ -3927,8 +3908,6 @@ TinyMCE_Control.prototype = {
 			else
 				tElm = targetDoc.frames[this.editorId];
 				
-			
-
 			this.targetElement = tElm;
 			this.iframeElement = targetDoc.getElementById(this.editorId);
 
@@ -3965,9 +3944,7 @@ TinyMCE_Control.prototype = {
 		}*/
 		
 		//this.getDoc().location.href = tinyMCE.baseURL + "/blsnk.htm";
-		///alert('b')
-		///alert(this.getDoc().document)
-		///alert('e')
+
 		// This timeout is needed in MSIE 5.5 for some odd reason
 		// it seems that the document.frames isn't initialized yet?
 		if (tinyMCE.isIE)
@@ -3976,13 +3953,8 @@ TinyMCE_Control.prototype = {
 		// Setup element references
 		parentElm = this.targetDoc.getElementById(this.editorId + '_parent');
 		this.formElement = tinyMCE.isGecko ? parentElm.previousSibling : parentElm.nextSibling;
-		///alert(this.formElement.innerHTML);
 		
 		tinyMCE.setupContent(this.editorId, true);
-		
-		///alert(this.targetDoc.body.innerHTML+' ')
-		//var sss = this.getDoc();
-		///alert('add end');
 		return true;
 	},
 
@@ -4000,7 +3972,6 @@ TinyMCE_Control.prototype = {
 			
 			if(!h) {
 				h =	d.createElement("head");
-				///alert('ping: ' + d.getElementsByTagName('html')[0].innerHTML)
 				d.getElementsByTagName('html')[0].appendChild(h);
 			}
 			
@@ -4044,6 +4015,7 @@ TinyMCE_Control.prototype = {
 	},
 
 	getRng : function() {
+		
 		return this.selection.getRng();
 	},
 
@@ -6803,7 +6775,6 @@ TinyMCE_Selection.prototype = {
 
 	getRng : function() {
 		var s = this.getSel();
-		
 		if (s == null || this.instance.contentWindow.getSelection() == '')
 			return null;
 
@@ -7283,7 +7254,8 @@ var TinyMCE_ForceParagraphs = {
 	},
 
 	_handleBackSpace : function(inst) {
-		var r = inst.getRng(), sn = r.startContainer, nv, s = false;
+		
+		var r = inst.getRng(), sn = r ? r.startContainer : null, nv, s = false;
 
 		// Added body check for bug #1527787
 		if (sn && sn.nextSibling && sn.nextSibling.nodeName == "BR" && sn.parentNode.nodeName != "BODY") {
