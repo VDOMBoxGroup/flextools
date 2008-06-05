@@ -28,7 +28,8 @@
 			}
 	
 			private function openWindow():void {
-				_rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
+				_rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(DisplayObject(Application.application), ResourceBrowser, true));
+				PopUpManager.centerPopUp(_rBrowserInstance);
 				_rBrowserInstance.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
 				
 				var resRegExp:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;

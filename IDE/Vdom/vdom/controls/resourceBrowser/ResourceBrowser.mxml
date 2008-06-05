@@ -9,7 +9,8 @@
 	title="Resource Manager"
 	creationComplete="{creationComplete();}"
 	showCloseButton="true"
-	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	borderAlpha="1" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 >
 	<mx:Script>
