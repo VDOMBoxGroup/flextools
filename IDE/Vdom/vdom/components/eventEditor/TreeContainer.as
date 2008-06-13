@@ -1,8 +1,11 @@
 package vdom.components.eventEditor
 {
-	import mx.controls.Tree;
-	import mx.events.FlexEvent;
+	import flash.events.Event;
 	
+	import mx.controls.Tree;
+	import mx.core.ClassFactory;
+	
+	import vdom.controls.IconTreeItemRenderer;
 	import vdom.managers.DataManager;
 
 	public class TreeContainer extends Tree
@@ -23,17 +26,42 @@ package vdom.components.eventEditor
 			percentHeight = 100;//width = 200;
 			percentWidth = 100;
 	
-	//		itemRenderer = new ClassFactory(ItCanvas);
+			itemRenderer = new ClassFactory(IconTreeItemRenderer);
 			
 		//  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
-			addEventListener(FlexEvent.SHOW, showHandler);	
+		//	addEventListener(FlexEvent.SHOW, showHandler);	
+		//	addEventListener(FlexEvent.HIDE, hideHandler);	
 		//	addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
-		//	addEventListener(Event.CHANGE, treeChangeLister);
+			addEventListener(Event.CHANGE, treeChangeLister);
 		}
-		
+	/*	
 		private function showHandler(evt:FlexEvent):void
 		{
+			addEventListener(Event.CHANGE, treeChangeLister);
+		}
+		
+		
+		private function hideHandler(evt:FlexEvent):void
+		{
+			removeEventListener(Event.CHANGE, treeChangeLister);
+		}
+		*/
+		private var selectedNode:XML;
+		private function treeChangeLister(evt:Event):void
+		{
 			
+			 selectedNode = Tree(evt.target).selectedItem as XML;
+			 var ID:String = selectedNode.@ID;
+			 //trace('--- '+ID);
+			 if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
+              {
+          		   	dataManager.changeCurrentPage(ID);
+          		   
+              } else
+              {
+              		//dataManager.changeCurrentObject(ID);
+              }
+           //   this.selectedItem = xmlTreeData..*.Object.(@ID == ID)[0];
 		}
 	
 		override public function set dataProvider(value:Object):void
@@ -66,6 +94,14 @@ package vdom.components.eventEditor
 					xmlTreeData.appendChild(xmlList);
 			} 
 				super.dataProvider = xmlTreeData;
+				
+				//*********************************
+			//	trace(xmlTreeData.Object.(@ID == dataManager.currentPageId)[0])
+			if(selectedNode)
+				this.selectedItem = selectedNode;
+				
+				
+				
 			//getIcons();
 			}
 		}
@@ -103,7 +139,7 @@ package vdom.components.eventEditor
 				if(numObjects > 0)
 				if (type.Information.Container == '2' || type.Information.Container == '3')
 				{	
-					trace('2 || 3')	
+				//	trace('2 || 3')	
 					xmlTemp.appendChild(findOjects(xmlLabel.Objects));
 					xmllReturn += xmlTemp;
 				}

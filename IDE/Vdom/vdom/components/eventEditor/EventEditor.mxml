@@ -2,12 +2,12 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:eventEditor="vdom.components.eventEditor.*">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
 	 	
 	 	/***
 	 	 * 
 	 	 * 
 	 	 * 	заполнить еветЕлементы.
-	 	 * 
 	 	 * 
 	 	 * 
 	 	 * */
@@ -82,8 +82,8 @@
 	        {
                 event.preventDefault();
             }    
-          
-          
+       
+        
             /******
             * 
             *	Рисуем линию... 
@@ -114,6 +114,8 @@
 			
 			private function drLine (mEvt:MouseEvent):void
 			{
+			//	var a:AutoCompleteManager = AutoCompleteManager();
+				
 			// нормализуем mouseX mouseY
 				 var pt:Point = new Point(mEvt.localX, mEvt.localY);
             		pt = mEvt.target.localToGlobal(pt);
@@ -200,8 +202,10 @@
 			
 			private function treeContainerChangeHandler(evt:Event):void
 			{
+				
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
-              	 var ID:String = selectedNode.@ID;
+				 if (selectedNode)
+              	 	var ID:String = selectedNode.@ID;
             //  	 trace(ID);
 			}
 	 	]]>

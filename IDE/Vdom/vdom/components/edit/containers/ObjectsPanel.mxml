@@ -171,7 +171,7 @@
 			if(!xml) return;
 			
 			var ID:String = xml.@ID;
-		//	trace('currentObject: \n'+xml.@ID);
+			trace('currentObject: \n'+xmlTreeData..*.Object.(@ID == ID)[0]);
 			tree.selectedItem = xmlTreeData..*.Object.(@ID == ID)[0];
 		}
 		

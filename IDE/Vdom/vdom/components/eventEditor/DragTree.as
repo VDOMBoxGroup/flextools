@@ -4,6 +4,7 @@ package vdom.components.eventEditor
 	import mx.core.ClassFactory;
 	import mx.events.DragEvent;
 	
+	
 	import vdom.controls.IconTreeItemRenderer;
 
 	public class DragTree extends Tree
