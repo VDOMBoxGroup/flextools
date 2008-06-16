@@ -505,7 +505,8 @@ package vdom.connection.soap
 														attrname:String = '', 
 														operation:String = ''):void 
 		{	
-			var sModifyResource:SModifyResource = SModifyResource.getInstance();
+			var sModifyResource:SModifyResource 
+				= SModifyResource.getInstance();
 			
 			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_OK, 		ldispatchEvent);
 			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_ERROR, 	ldispatchEvent);

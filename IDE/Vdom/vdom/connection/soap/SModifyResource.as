@@ -10,7 +10,7 @@ package vdom.connection.soap
 	
 	public class SModifyResource extends EventDispatcher 
 	{
-		private static 	var instance:SGetOneObject;
+		private static 	var instance:SModifyResource;
 		
 		private var ws			:WebService;
 		private var resultXML	:XML;
@@ -20,15 +20,15 @@ package vdom.connection.soap
 		{	
 	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
-	 		ws.get_one_object.addEventListener(ResultEvent.RESULT, completeListener);
+	 		ws.modify_resource.addEventListener(ResultEvent.RESULT, completeListener);
  
 		} 		
 		 
 		 // initialization		
-		public static function getInstance():SGetOneObject 
+		public static function getInstance():SModifyResource 
 		{
 			if (!instance)
-				instance = new SGetOneObject();
+				instance = new SModifyResource();
 	
 			return instance;
 		}
