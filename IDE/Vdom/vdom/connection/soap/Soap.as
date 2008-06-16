@@ -500,6 +500,19 @@ package vdom.connection.soap
 			sListResources.execute(ownerid);
 		}
 		
+		public  function modifyResource(appid:String = '', objid:String = '', 
+														resid:String = '', 
+														attrname:String = '', 
+														operation:String = ''):void 
+		{	
+			var sModifyResource:SModifyResource = SModifyResource.getInstance();
+			
+			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_OK, 		ldispatchEvent);
+			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_ERROR, 	ldispatchEvent);
+			
+			sModifyResource.execute(appid, objid, resid, attrname,operation);
+		}
+		
 		/**
 		 *  --------  Event Dispatcher -------------
 		 */
