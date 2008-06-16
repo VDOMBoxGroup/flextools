@@ -53,26 +53,33 @@ package vdom.components.eventEditor
 			 selectedNode = Tree(evt.target).selectedItem as XML;
 			 var ID:String = selectedNode.@ID;
 			 //trace('--- '+ID);
+			 
+			 trace(_data.Object.(@ID == ID));
+			 trace('++++++++++\n'+xmlTreeData.Object.(@ID == ID).toXMLString());
 			 if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
               {
           		   	dataManager.changeCurrentPage(ID);
+          		   	trace(ID)
           		   
               } else
               {
               		//dataManager.changeCurrentObject(ID);
               }
+              
            //   this.selectedItem = xmlTreeData..*.Object.(@ID == ID)[0];
 		}
-	
+		private var _data:XML = new XML(<root/>) ;
 		override public function set dataProvider(value:Object):void
 		 {
 			if (value )
 			{
 				//trace('*********\n' + value)
+				_data.appendChild(XMLList(value));
+				
 				value = value as XMLList;
 				// создаем обьекты верхнего уровня
 				 xmlTreeData = <root/>;
-				for each(var xmlLabel:XML in value)
+				for each(var xmlLabel:XML in _data.children())
 				{
 					if (xmlLabel.name() == 'Parent') continue;
 					
@@ -84,13 +91,11 @@ package vdom.components.eventEditor
 					
 					/// завести массивчик ID-шников.
 					
-					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
-				//	xmlList.@icon	= 'accordion_icon';
+					xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
+					
 					var type:XML = dataManager.getTypeByTypeId(xmlLabel.@Type);
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
-				//	trace(xmlLabel.Objects)
-					
 					xmlTreeData.appendChild(xmlList);
 			} 
 				super.dataProvider = xmlTreeData;
@@ -143,9 +148,26 @@ package vdom.components.eventEditor
 					xmlTemp.appendChild(findOjects(xmlLabel.Objects));
 					xmllReturn += xmlTemp;
 				}
-				
 			}
 			return xmllReturn;
+		}
+		
+		private function craetTreeData(xmlIn:XMLList):XMLList
+		{
+			var xmllReturn:XMLList  = new XMLList();
+			for each(var xmlLabel:XML in xmlIn.children())
+			{
+				var xmlTemp:XML = new XML('<Object/>');
+				var type:XML = dataManager.getTypeByTypeId(xmlLabel.@Type);
+			
+					xmlTemp.@label 	= xmlLabel.@Name;
+					xmlTemp.@ID 	= xmlLabel.@ID;
+					xmlTemp.@Type 	= xmlLabel.@Type;
+					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
+					
+					trace('----------\n' + xmllReturn);
+				
+			}return xmllReturn;
 		}
 	}
 }

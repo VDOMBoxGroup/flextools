@@ -42,6 +42,7 @@ package vdom.connection.soap
 		public static var GET_OBJECT_SCRIPT_PRESENTATION_OK  	:String =  "GetObjectScriptPresentationOK";
 		public static var GET_ONE_OBJECT_OK			  	:String =  "SGetOneObjectOK"; 
 		public static var LIST_RESOURSES_OK			  	:String =  "ListResourseOK"; 
+		public static var MODIFY_RESOURSE_OK  			:String =  "modifyResourceOK"; 
 		
 		//setAttributes
 		
@@ -76,11 +77,12 @@ package vdom.connection.soap
 		public static var WHOLE_CREATE_PAGE_ERROR			:String =  "wholeCreatePageERROR"; 			//26
 		public static var GET_CHILD_OBJECTS_TREE_ERROR		:String =  "Get child objects tree ERROR";
 		public static var GET_APPLICATION_STRUCTURE_ERROR			:String =  "GetApplicationStructureERROR";
-		public static var SET_APPLICATION_STRUCTURE_ERROR		:String =  "SetApplicationStructureERROR";
+		public static var SET_APPLICATION_STRUCTURE_ERROR			:String =  "SetApplicationStructureERROR";
 		public static var SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR 	:String =  "SubmitObjectScriptPresentationERROR";
 		public static var GET_OBJECT_SCRIPT_PRESENTATION_ERROR  	:String =  "GetObjectScriptPresentationERROR";
 		public static var GET_ONE_OBJECT_ERROR			  	:String =  "SGetOneObjectERROR";
-		public static var LIST_RESOURSES_ERROR		  	:String =  "ListResourseERROR"; 
+		public static var LIST_RESOURSES_ERROR		  		:String =  "ListResourseERROR"; 
+		public static var MODIFY_RESOURSE_ERROR 			:String =  "modifyResourceERROR"; 
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,
