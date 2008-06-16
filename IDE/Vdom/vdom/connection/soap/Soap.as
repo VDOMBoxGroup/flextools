@@ -503,7 +503,8 @@ package vdom.connection.soap
 		public  function modifyResource(appid:String = '', objid:String = '', 
 														resid:String = '', 
 														attrname:String = '', 
-														operation:String = ''):void 
+														operation:String = '',
+														attr:String = ''):void 
 		{	
 			var sModifyResource:SModifyResource 
 				= SModifyResource.getInstance();
@@ -511,7 +512,7 @@ package vdom.connection.soap
 			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_OK, 		ldispatchEvent);
 			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_ERROR, 	ldispatchEvent);
 			
-			sModifyResource.execute(appid, objid, resid, attrname,operation);
+			sModifyResource.execute(appid, objid, resid, attrname,operation, attr);
 		}
 		
 		/**

@@ -36,14 +36,15 @@ package vdom.connection.soap
 		public function execute( appid:String = '', objid:String = '', 
 													resid:String = '', 
 													attrname:String = '', 
-													operation:String = '' ):void
+													operation:String = '',
+													attr:String = ''	 ):void
 		{
 			// protect
 			var sid:String			= code.sessionId;		// - идентификатор сессии 
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.modify_resource(sid, skey, appid, objid, resid, attrname, operation);
+			ws.modify_resource(sid, skey, appid, objid, resid, attrname, operation, attr);
 		}
 		
 		
