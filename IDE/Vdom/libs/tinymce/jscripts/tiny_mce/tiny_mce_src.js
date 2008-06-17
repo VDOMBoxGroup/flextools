@@ -3333,7 +3333,6 @@ TinyMCE_Control.prototype = {
 				var cmdFailed = false;
 				
 				// Try executing command
-				alert('this.getDoc() ' + this.getDoc() + ' val ' + value)
 				try {
 					this.getDoc().execCommand(command, user_interface, value);
 				} catch (e) {
@@ -3470,7 +3469,7 @@ TinyMCE_Control.prototype = {
 				// Force empty string
 				if (!value)
 					value = '';
-
+				
 				var insertHTMLFailed = false;
 
 				// Removed since it produced problems in IE
@@ -3480,11 +3479,14 @@ TinyMCE_Control.prototype = {
 					try {
 						// Is plain text or HTML, &amp;, &nbsp; etc will be encoded wrong in FF
 						if (value.indexOf('<') == -1 && !value.match(/(&#38;|&#160;|&#60;|&#62;)/g)) {
-							var r = this.getRng();
+							
+							//var r = this.getRng();
+							var r = this.contentWindow.getSelection().getRangeAt(0)
 							var n = this.getDoc().createTextNode(tinyMCE.entityDecode(value));
 							var s = this.getSel();
+							//alert('mceInsertContent-->' +  this.contentWindow.getSelection().getRangeAt(0));///alert
 							var r2 = r.cloneRange();
-
+							
 							// Insert text at cursor position
 							s.removeAllRanges();
 							r.deleteContents();
@@ -3503,8 +3505,9 @@ TinyMCE_Control.prototype = {
 					} catch (ex) {
 						insertHTMLFailed = true;
 					}
-
+					
 					if (!insertHTMLFailed) {
+						
 						tinyMCE.triggerNodeChange();
 						return;
 					}
@@ -3591,7 +3594,7 @@ TinyMCE_Control.prototype = {
 						e.parentNode.removeChild(e);
 					}
 				}
-
+				
 				tinyMCE.execCommand("mceAddUndoLevel");
 				tinyMCE.triggerNodeChange();
 			break;
@@ -3882,7 +3885,6 @@ TinyMCE_Control.prototype = {
 		// Setup iframe
 		dynamicIFrame = false;
 		//tElm = targetDoc.getElementById(this.editorId);
-		
 		tElm = www;
 		
 		if (!tinyMCE.isIE) {
