@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" xmlns:eventEditor="vdom.components.eventEditor.*">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" 
+	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.binding.utils.BindingUtils;
 	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
 	 	
 	 	/***
@@ -23,6 +25,7 @@
 	 		import mx.events.DragEvent;
 	 		import mx.managers.DragManager;
 	 		import vdom.components.treeEditor.TreeElement;
+	 		import vdom.events.EventEditorEvent;
 	 		
 	 		[Bindable]
 	 		private var dataManager:DataManager;
@@ -34,6 +37,24 @@
 	 			dataManager = DataManager.getInstance();
 	 		}
 	 	
+	 		private function showHandler():void
+	 		{
+	 			BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
+	 			trContainer.showHandler();
+	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+	 		}
+	 		
+	 		private function hideHandler():void
+	 		{
+	 			//BindingUtils.bindProperty(pageList, 'dataProvider', dataManager, 'listPages')
+	 			trContainer.hideHandler();
+	 		}
+	 		
+	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
+	 		{
+	 			trEvents.dataProvider = eeEvt.data;
+	 			trActions.dataProvider = eeEvt.data;
+	 		}
 	 		
 	 		 private function dragEnterHandler(event:DragEvent):void 
 	 		 {
@@ -53,21 +74,21 @@
                 for(var i:Number=0; i < items.length; i++) {
 
                     var item:XML = XML(items[i]);
-                //   trace('item: '+ item.toXMLString());
-                //    if( item.@label != "Personal" ) return; // not what we want
+                 //  trace('item: '+ item.name().toString());
+                    if( item.name().toString() == "Object" ) return; // not what we want
 
                 }
 	                    
 	        	var newElement:*;
 	        	  if( event.dragInitiator is TreeActions ) 
 	        	  {
-	        		 newElement =  new EventEditorAction(item.@label);
+	        		 newElement =  new EventEditorAction(item);
 	        		 newElement.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
 	        		 actionsArray[newElement.ID] = newElement;
 	        	  } 
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
-	        	  	newElement = new EventEditorEvent(item.@label);
+	        	  	newElement = new EventEditorEvents(item);
 	        	  	newElement.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
 	        	  	eventsArray[newElement.ID] = newElement;
 	        	  }
@@ -164,8 +185,8 @@
 				
 				linesArray[evtID][actID] = 
 					new TreeVector(eventsArray[evtID], actionsArray[actID], '2');
-					trace(eventsArray[evtID].x + ' : '
-					+ actionsArray[actID].x )
+		//			trace(eventsArray[evtID].x + ' : '
+		//			+ actionsArray[actID].x )
 				can.addChild(linesArray[evtID][actID]);
 				//trace (can.owns(linesArray[evtID][actID]));
 			}
@@ -198,15 +219,12 @@
 				////////////********************
 			}
 			
-			
-			
 			private function treeContainerChangeHandler(evt:Event):void
 			{
-				
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
 				 if (selectedNode)
-              	 	var ID:String = selectedNode.@ID;
-            //  	 trace(ID);
+              	 	var ID:String = selectedNode.@ID; 
+             	 //trace('123: '+ID);
 			}
 	 	]]>
 	 </mx:Script>
@@ -235,12 +253,11 @@
 					
 					<mx:Canvas label="Container"  width="100%" height="100%"  >
 			             <eventEditor:TreeContainer id="trContainer" width="100%" height="100%" 
-                			 dataProvider="{dataManager.listPages}" change="treeContainerChangeHandler(event)" />
+                			 change="treeContainerChangeHandler(event)" />
 			        </mx:Canvas>
 			        
 			        <mx:Canvas label="Events"  width="100%" height="100%" >
-			             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" 
-                			dataProvider="{treeData}" />
+			             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" />
 			        </mx:Canvas>
 			        
 			        <mx:Canvas label="Actions"  width="100%" height="100%" >

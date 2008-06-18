@@ -5,7 +5,6 @@ package vdom.components.eventEditor
 	import mx.containers.Canvas;
 	import mx.containers.VBox;
 	import mx.controls.Button;
-	import mx.controls.HRule;
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.TextArea;
@@ -13,10 +12,11 @@ package vdom.components.eventEditor
 	import mx.controls.VRule;
 	
 	import vdom.events.TreeEditorEvent;
+	import vdom.managers.DataManager;
 	
 	
 
-	public class EventEditorEvent extends Canvas
+	public class EventEditorEvents extends Canvas
 	{
 					
 		
@@ -68,12 +68,16 @@ package vdom.components.eventEditor
 		private var _type:Label;
 		//private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
+		private var dataManager:DataManager;
 		
 	//	public var ID:String = '123';
 		
-		public function EventEditorEvent(data:Object)
+		public function EventEditorEvents(data:Object)
 		{
+			
 			super();
+			
+			dataManager = DataManager.getInstance();
 		//	if (typeof(data)=="string")
 		//		trace (data)
 			
@@ -83,7 +87,7 @@ package vdom.components.eventEditor
 			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
-			initDownBody();
+			initDownBody(data);
 			txt.text += ': ' + data.toString(); 
 	//		event.text = data.toString(); 
 			
@@ -237,16 +241,16 @@ package vdom.components.eventEditor
 			
 		}
 		
-		private function initDownBody():void
+		private function initDownBody(data:Object):void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
 			addChild(cnvDownLayer);
 			
 			var vBox:VBox = new VBox();
-			vBox.x = 3;
-			vBox.setStyle('verticalGap', 0);
-			cnvDownLayer.addChild(vBox);
-			
+				vBox.x = 3;
+				vBox.setStyle('verticalGap', 0);
+				cnvDownLayer.addChild(vBox);
+				
 			var leftVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
 				leftVRule.percentHeight = 100;
 			cnvDownLayer.addChild(leftVRule);   
@@ -257,14 +261,31 @@ package vdom.components.eventEditor
 				rightVRule.percentHeight = 100;
 			cnvDownLayer.addChild(rightVRule);  
 			
+		/*	<Event label="TEXT own" parentID="f3b5ffa2-4d8d-4732-b188-fa215c7bb6eb" 
+				parentType="73a54f2e-4001-4676-93a0-804048a57081"/>
+			*/
+			data = data as XML;
 			
-			var x:SimpleLayer = new SimpleLayer('X');
-			vBox.addChild(x);
+			var object:XML = dataManager.getObject(data.@parentID);
+			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
+			vBox.addChild(objectName);
 			
+			var type:XML = dataManager.getTypeByObjectId(data.@parentID);
+			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
+			vBox.addChild(objectEvent);
+			
+			/*
 			var hRule:HRule = new HRule();
 				hRule.percentWidth = 100;
+			*/
 		//	vBox.addChild(hRule);
 			
+			var parametrs:XML = type.E2vdom.Events..Event.(@Name = data.@label)[0];
+			for each(var child:XML in parametrs.children())
+			{
+				var parametr:SimpleLayer = new SimpleLayer(child.@Name);
+				vBox.addChild(parametr);
+			}
 			var y:SimpleLayer = new SimpleLayer('Y');
 			vBox.addChild(y);
 			

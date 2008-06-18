@@ -7,5 +7,9 @@ package vdom.components.eventEditor
 			super();
 		}
 		
+		override public function set dataProvider(value:Object):void
+		{
+			super.dataProvider = value;
+		}
 	}
 }
