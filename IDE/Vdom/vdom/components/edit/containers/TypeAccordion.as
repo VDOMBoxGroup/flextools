@@ -90,8 +90,8 @@ public class TypeAccordion extends Accordion {
 			type.width = 90;
 			type.typeLabel = currentDescription.typeName;
 			
-			fileManager.loadResource(currentDescription.typeId, currentDescription.resourceId, type);
 			currentCategory.addChild(type);
+			fileManager.loadResource(currentDescription.typeId, currentDescription.resourceId, type, 'resource', true);
 			cursor.moveNext();
 		}
 			

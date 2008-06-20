@@ -1,18 +1,20 @@
 package vdom.components.edit.containers {
 	
+import flash.display.DisplayObject;
 import flash.events.MouseEvent;
 
 import mx.containers.Canvas;
 import mx.containers.VBox;
-import mx.controls.HTML;
 import mx.controls.Label;
 import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.DragEvent;
 
-import vdom.components.edit.containers.toolbarClasses.ImageTools;
-import vdom.components.edit.containers.toolbarClasses.RichTextTools;
 import vdom.containers.IItem;
+import vdom.controls.EditableHTML;
+import vdom.controls.IToolBar;
+import vdom.controls.ImageToolBar;
+import vdom.controls.RichTextToolBar;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
 import vdom.events.WorkAreaEvent;
@@ -34,7 +36,8 @@ public class WorkArea extends VBox {
 	private var _selectedObject:Container;
 	private var focusedObject:Container;
 	private var _contentHolder:Canvas;
-	private var _contentToolbar:Canvas;
+	
+	private var _contentToolbar:IToolBar;
 	
 	public function WorkArea() {
 		
@@ -45,6 +48,7 @@ public class WorkArea extends VBox {
 		resizeManager = ResizeManager.getInstance();
 		
 		resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
+		renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 		resizeManager.addEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
 		
 		addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
@@ -79,14 +83,22 @@ public class WorkArea extends VBox {
 		//resizeManager.selectItem(null);
 	}
 	
+	public function lockItem(objectId:String):void {
+		
+		renderManager.lockItem(objectId);
+	}
+	
 	public function updateObject(result:XML):void {
 		
 		var objectId:String = result.Object.@ID;
 		
 		if(_selectedObject && objectId == IItem(_selectedObject).objectId && resizeManager.itemTransform)
 			return;
-			
-		renderManager.updateItem(result.Object.@ID, result.Parent);
+		
+		var item:IItem = renderManager.getItemById(objectId);
+		
+		if(item && item.waitMode)
+			renderManager.updateItem(result.Object.@ID, result.Parent);
 	}
 	
 	public function set pageId(page:String):void {
@@ -97,8 +109,8 @@ public class WorkArea extends VBox {
 			
 				_pageId = page;
 				renderManager.init(_contentHolder);
-				renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 				renderManager.createItem(_pageId);
+				resizeManager.selectItem(null);
 			}
 			
 		} else {
@@ -113,10 +125,10 @@ public class WorkArea extends VBox {
 		
 		if(!value /* || _selectedObject && IItem(_selectedObject).objectId == value */)
 			return;
-	
+		
 		var item:IItem = renderManager.getItemById(value);
 		
-		if(item)	
+		if(item)
 			resizeManager.selectItem(item)
 	}
 	
@@ -164,74 +176,106 @@ public class WorkArea extends VBox {
 	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
 		
 		var currentObject:Container = event.item;
+		var changeFlag:Boolean = false;
 		
-		currentObject.x = event.properties.left;
-		currentObject.y = event.properties.top;
-		currentObject.width = event.properties.width;
-		currentObject.height = event.properties.height;
+		if (currentObject.x != event.properties.left) 
+			currentObject.x = event.properties.left;
+			
+		if (currentObject.y != event.properties.top)
+			currentObject.y = event.properties.top;
 		
-		renderManager.lockItem(IItem(currentObject).objectId);
+		if (currentObject.width != event.properties.width) {
+			
+			currentObject.width = event.properties.width;
+			changeFlag = true;
+		}
+			
+		if (currentObject.height != event.properties.height) {
+			
+			currentObject.height = event.properties.height;
+			changeFlag = true;
+		}
+		
+		if (changeFlag)
+			lockItem(IItem(currentObject).objectId);
 		
 		applyChanges(IItem(currentObject).objectId, event.properties);
-		
 	}
 	
 	private function objectSelectHandler(event:ResizeManagerEvent):void {
 		
-		if(_selectedObject && IItem(_selectedObject).editableAttributes.length > 0) {
+		var currentToolBar:IToolBar;
+		
+		if(_contentToolbar && DisplayObject(_contentToolbar).parent)
+			currentToolBar = _contentToolbar;
 			
-			var editableAttributes:Array = IItem(_selectedObject).editableAttributes;
 			
-			var attributes:Object = {}
+		
+		if(
+			_selectedObject &&
+			IItem(_selectedObject).editableAttributes[0] &&
+			currentToolBar && 
+			!currentToolBar.selfChanged
+		) {
 			
-			for each(var attribute:Object in editableAttributes) {
+			var attribute:Object = IItem(_selectedObject).editableAttributes[0];
+			var attributeValue:String = attribute.sourceObject[attribute.sourceName];
+			
+			var newAttribute:Object = {};
+			
+			var xmlCharRegExp:RegExp = /[<>&"]+/;
+			
+			if(attributeValue.search(xmlCharRegExp) != -1)
+				newAttribute[attribute.destName] = XML('<![CDATA['+attributeValue+']'+']>');
 				
-				if(attribute.sourceObject is HTML) {
-					attributes[attribute.destName] = 
-						HTML(attribute.sourceObject).domWindow.document.getElementsByTagName('body')[0].innerHTML
-						
-				} else
-					attributes[attribute.destName] = attribute.sourceObject[attribute.sourceName];
-			}
+			else
+				newAttribute[attribute.destName] = attributeValue;
 			
-			applyChanges(IItem(_selectedObject).objectId, attributes);
+			applyChanges(IItem(_selectedObject).objectId, newAttribute);
 		}
 		
-		var selectedObjectId:String = IItem(event.item).objectId;
-		
-		var type:XML = dataManager.getTypeByObjectId(selectedObjectId);
-		var interfaceType:uint = type.Information.InterfaceType;
-		
-		if(_contentToolbar && _contentToolbar.parent) {
+		if(_contentToolbar && DisplayObject(_contentToolbar).parent) {
 			
-			removeChild(_contentToolbar);
+			_contentToolbar.close();
+			removeChild(DisplayObject(_contentToolbar));
 			_contentToolbar = null;
 		}
 		
-		
-		switch(interfaceType) {
-		
-		case 2:
-			
-			
-		break
-		
-		case 3:
-			_contentToolbar = new RichTextTools();
-			var obj:HTML = HTML(IItem(event.item).editableAttributes[0].sourceObject);
-			RichTextTools(_contentToolbar).init(obj);
-		break
-		
-		case 4:
-			
-			_contentToolbar = new ImageTools();
-		break
-		}
-		
-		if(_contentToolbar)
-			addChild(_contentToolbar);
+		if(!event.item)
+			return;
 		
 		_selectedObject = event.item;
+		
+		if(IItem(_selectedObject).editableAttributes[0] != undefined) {
+			
+			var type:XML = dataManager.getTypeByObjectId(IItem(_selectedObject).objectId);
+			
+			var interfaceType:uint = type.Information.InterfaceType;
+			
+			switch(interfaceType) {
+			
+			case 2: {
+				_contentToolbar = new RichTextToolBar();
+				var obj:EditableHTML = EditableHTML(IItem(event.item).editableAttributes[0].sourceObject);
+				_contentToolbar.init(IItem(_selectedObject), obj);
+				break
+			}
+			case 3: {
+				
+				break
+			}
+			case 4: {
+				var obj1:Object = IItem(event.item).editableAttributes[0].sourceObject
+				_contentToolbar = new ImageToolBar();
+				_contentToolbar.init(IItem(_selectedObject), obj1);
+			break
+			}
+			}
+			
+			if(_contentToolbar)
+				addChild(DisplayObject(_contentToolbar));
+				
+		}
 		
 		var wae:WorkAreaEvent = new WorkAreaEvent(WorkAreaEvent.CHANGE_OBJECT);
 		wae.objectId = IItem(_selectedObject).objectId;
@@ -240,8 +284,17 @@ public class WorkArea extends VBox {
 	
 	private function renderCompleteHandler(event:RenderManagerEvent):void {
 		
-		renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-		resizeManager.init(_contentHolder);
+		if(!event.result)
+			return;
+		
+		if(IItem(event.result).objectId == _pageId)
+			resizeManager.init(_contentHolder);
+
+		if(event.result == _selectedObject && _contentToolbar) {
+			
+			var obj:* = IItem(event.result).editableAttributes[0].sourceObject;
+			_contentToolbar.init(IItem(event.result), obj);
+		}
 	}
 
 	private function dragEnterHandler(event:DragEvent):void {

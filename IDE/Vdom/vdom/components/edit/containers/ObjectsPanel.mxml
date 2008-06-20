@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ClosablePanel
-	
+<ClosablePanel	
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns="vdom.components.edit.containers.*"
+	xmlns="vdom.containers.*"
 	
-	creationComplete="creationCompleteHendler()"
-	width="100%">
+	creationComplete="creationCompleteHendler();"
+	
+	width="100%"
+>
 
 <mx:Metadata>
 		[Event(name="change", type="mx.events.ListEvent")]
@@ -66,11 +67,11 @@
 		}
 		
 		public function set dataProvider(xmlData:XMLList):void {
-			
+
 			if(xmlData) 
 			{
 				// создаем обьекты верхнего уровня
-				 xmlTreeData = <root/>;
+				 xmlTreeData = <rootz/>;
 				for each(var xmlLabel:XML in xmlData)
 				{
 					if (xmlLabel.name() == 'Parent') continue;

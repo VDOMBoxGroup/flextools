@@ -1,6 +1,7 @@
 package vdom.components.edit.containers.typeAccordionClasses{
 
 import flash.events.MouseEvent;
+import flash.utils.ByteArray;
 
 import mx.containers.VBox;
 import mx.controls.Image;
@@ -29,9 +30,9 @@ public class Type extends VBox {
 		aviableContainers = value.aviableContainers;
 	}
 	
-	public function set resource(imageResource:Object):void {
+	public function set resource(imageResource:ByteArray):void {
 		
-		typeIcon.source = imageResource.data;
+		typeIcon.source = imageResource;
 		visible = true;
 	}
 	

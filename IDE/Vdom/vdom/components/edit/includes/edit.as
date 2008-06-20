@@ -64,6 +64,7 @@ private function setListeners(flag:Boolean):void {
 		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
 		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
+		dataManager.addEventListener(DataManagerEvent.RESOURCE_MODIFIED, updateAttributesCompleteHandler);
 		
 		attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 		attributesPanel.addEventListener(AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler);
@@ -97,6 +98,7 @@ private function objectCreatedHandler(event:DataManagerEvent):void {
 
 private function attributesChangedHandler(event:Event):void {
 	
+	workArea.lockItem(dataManager.currentObjectId);
 	dataManager.updateAttributes();
 	//attributesPanel.dataProvider = dataManager.currentObject; //<-- исправить!!!!!!
 }

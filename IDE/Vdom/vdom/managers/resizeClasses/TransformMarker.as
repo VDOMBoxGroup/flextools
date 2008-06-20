@@ -130,6 +130,8 @@ public class TransformMarker extends UIComponent {
 			
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 			Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
+			if(_selectedItem)
+				_selectedItem.removeEventListener('refreshComplete', refreshCompleteHandler);
 			removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			_selectedItem = null;
 			return;
@@ -137,7 +139,9 @@ public class TransformMarker extends UIComponent {
 		
 		if(_selectedItem == item || (transformation && _selectedItem))
 			return;
-			
+		if(_selectedItem)
+			_selectedItem.removeEventListener('refreshComplete', refreshCompleteHandler);
+		
 		_selectedItem = item;
 		
 		moving = cc_box;
@@ -145,9 +149,9 @@ public class TransformMarker extends UIComponent {
 		mousePosition = new Point(_selectedItem.mouseX, _selectedItem.mouseY);
 		
 		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
-		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		item.addEventListener('refreshComplete', refreshCompleteHandler);
+		Application.application.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
+		Application.application.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
+		_selectedItem.addEventListener('refreshComplete', refreshCompleteHandler);
 		if(parent)
 			parent.addEventListener(FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler);
 		
@@ -191,6 +195,8 @@ public class TransformMarker extends UIComponent {
 		
 		if(invalidateSizeFlag)
 			return;
+		
+		refresh();
 	}
 	
 	public function refresh():void {
@@ -440,8 +446,9 @@ public class TransformMarker extends UIComponent {
 		
 		transformation = true;
 		
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
-		stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
+		Application.application.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
+		Application.application.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
+		_selectedItem.addEventListener('refreshComplete', refreshCompleteHandler);
 	}
 	
 	private function mouseOutHandler(event:MouseEvent):void {
@@ -499,7 +506,6 @@ public class TransformMarker extends UIComponent {
 		
 		Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
 		Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
-		
 		
 		//var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
 		//dispatchEvent(evt);

@@ -12,6 +12,7 @@ import vdom.events.AuthenticationEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.AuthenticationManager;
 import vdom.managers.DataManager;
+import vdom.managers.FileManager;
 import vdom.managers.LanguageManager;
 
 [Embed(source='/assets/main/vdom_logo.png')]
@@ -22,9 +23,10 @@ public var vdomLogo:Class;
 private var dataManager:DataManager;
 
 private var languageManager:LanguageManager;
-
-private var soap:Soap;
 private var authenticationManager:AuthenticationManager;
+private var fileManager:FileManager;
+private var soap:Soap;
+
 
 private var ppm:MyLoader;
 
@@ -49,6 +51,7 @@ private function preinitalizeHandler():void {
 	languageManager = LanguageManager.getInstance();
 	dataManager = DataManager.getInstance();
 	soap = Soap.getInstance();
+	fileManager = FileManager.getInstance();
 	
 	languageManager.init(languageList);
 	

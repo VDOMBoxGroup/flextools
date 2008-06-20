@@ -4,12 +4,16 @@ import flash.display.Bitmap;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
+import flash.filesystem.File;
+import flash.filesystem.FileMode;
+import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
 import mx.utils.Base64Decoder;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
+import vdom.events.DataManagerEvent;
 import vdom.events.FileManagerEvent;
 	
 public class FileManager implements IEventDispatcher {
@@ -19,12 +23,16 @@ public class FileManager implements IEventDispatcher {
 	private var dispatcher:EventDispatcher;
 	private var soap:Soap;
 	
-	private var requestQue:Object;
-	private var _resourceStorage:Object;
+	private var requestQue:Object = {};
+	private var _resourceStorage:Object = {};
 	
 	private var dataManager:DataManager;
 	
-	//private var loader:Loader;
+	private var applicationId:String;
+	
+	private var cacheDirectory:File = File.applicationStorageDirectory.resolvePath('cache');
+	private var fileStream:FileStream = new FileStream();
+	
 	/**
 	 * 
 	 * @return instance of ResourceManager class (Singleton)
@@ -36,7 +44,7 @@ public class FileManager implements IEventDispatcher {
 			
 			instance = new FileManager();
 		}
-
+		
 		return instance;
 	}
 	
@@ -53,9 +61,17 @@ public class FileManager implements IEventDispatcher {
 		dispatcher = new EventDispatcher();
 		soap = Soap.getInstance();
 		dataManager = DataManager.getInstance();
-		requestQue = {};
-		_resourceStorage = {};
 		
+		dataManager.addEventListener('currentApplicationChanged', dataManager_applicationChangeHandler);
+		
+		if(dataManager.currentApplicationId) {
+			
+			applicationId = dataManager.currentApplicationId;
+			cacheDirectory = cacheDirectory.resolvePath(applicationId);
+			/* if(!cacheDirectory.exists)
+				cacheDirectory.createDirectory(); */
+		}
+			
 	}
 	
 	public function getListResources():void {
@@ -75,8 +91,32 @@ public class FileManager implements IEventDispatcher {
 	
 	public function loadResource(ownerID:String, resourceID:String, destTarget:Object, 
 		property:String = 'resource', raw:Boolean = false):void {
+			
+		if(!resourceID)
+			return;
 		
-		if(_resourceStorage[resourceID]) {
+		var resourceFile:File = cacheDirectory.resolvePath(resourceID); 
+		
+		/* if(resourceFile.exists) {
+			
+			var file:ByteArray = new ByteArray();
+			
+			fileStream.open(resourceFile, FileMode.READ);
+			fileStream.readBytes(file);
+			
+			if(file.bytesAvailable > 0) {
+				
+				if(raw)
+					destTarget[property] = file;
+				else
+					destTarget[property] = {resourceID:resourceID, data:file}
+			}
+				
+		} */
+		
+		
+		
+		/* if(_resourceStorage[resourceID]) {
 			
 			if(_resourceStorage[resourceID] is Bitmap) {
 			
@@ -99,7 +139,7 @@ public class FileManager implements IEventDispatcher {
 				destTarget[property] = resourceObject;
 				return;
 			}
-		}
+		} */
 		
 		if(!requestQue[resourceID]) {
 			
@@ -117,6 +157,17 @@ public class FileManager implements IEventDispatcher {
 		);
 	}
 	
+	private function dataManager_applicationChangeHandler(event:DataManagerEvent):void {
+		
+		if(dataManager.currentApplicationId) {
+			
+			applicationId = dataManager.currentApplicationId;
+			cacheDirectory = cacheDirectory.resolvePath(applicationId);
+			if(!cacheDirectory.exists)
+				cacheDirectory.createDirectory();
+		}
+	}
+	
 	private function resourceLoadedHandler(event:SoapEvent):void {
 		
 		var resourceID:String = event.result.ResourceID;
@@ -129,6 +180,12 @@ public class FileManager implements IEventDispatcher {
 		
 		imageSource.uncompress();
 		
+		var file:File = cacheDirectory.resolvePath(resourceID);
+		
+		fileStream.open(file, FileMode.WRITE);
+
+		fileStream.writeBytes(imageSource);
+		imageSource.position = 0;
 		_resourceStorage[resourceID] = imageSource;
 		
 		for each(var item:Object in requestQue[resourceID]) {
@@ -136,7 +193,7 @@ public class FileManager implements IEventDispatcher {
 			var data:ByteArray = new ByteArray();
 			_resourceStorage[resourceID].readBytes(data);
 			_resourceStorage[resourceID].position = 0;
-			//ByteArray(_resourceStorage[resourceID]).writeBytes(data);
+			
 			var requestObject:Object = item.object;
 			var requestProperty:String = item.property;
 			

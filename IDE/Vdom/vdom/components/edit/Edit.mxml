@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:containers="vdom.components.edit.containers.*"
-	xmlns:mainContainers="vdom.containers.*"
+	xmlns:containers="vdom.containers.*"
+	xmlns:editContainers="vdom.components.edit.containers.*"
 	
 	initialize="initializeHandler();"
 	
@@ -19,23 +19,23 @@
 		verticalScrollPolicy="off" 
 		left="0" right="0" top="0" bottom="0">
 	
-		<containers:TypeAccordion id="types" resizeToContent="true"
+		<editContainers:TypeAccordion id="types" resizeToContent="true"
 			height="100%" y="100" width="90" minWidth="90" minHeight="0"
 			dataProvider="{dataManager.listTypes}" dropShadowEnabled="true"
 		/>
 		
 		<mx:VBox id="main" width="100%" bottom="0" height="100%">
 		
-			<mainContainers:AdvancedTabNavigator id="mainArea" width="100%" height="100%" borderStyle="none">			
+			<containers:AdvancedTabNavigator id="mainArea" width="100%" height="100%" borderStyle="none">			
 				
-				<containers:WorkArea id="workArea" label="WYSIWYG" focusEnabled="false"
+				<editContainers:WorkArea id="workArea" label="WYSIWYG" focusEnabled="false"
 					horizontalScrollPolicy="off" verticalScrollPolicy="off" clipContent="true"
 					visible="false" />
 					
-				<containers:XMLPresentationEditor id="xmlEditor" label="VDOM XML"
+				<editContainers:XMLPresentationEditor id="xmlEditor" label="VDOM XML"
 					dropShadowEnabled="true" borderStyle="solid"/>
 				
-			</mainContainers:AdvancedTabNavigator>
+			</containers:AdvancedTabNavigator>
 		<!-- <containers:Toolbar width="100%" type="{editorDataManager.objectDescription}" id="toolbar"/> -->
 		</mx:VBox>
 		
@@ -44,7 +44,7 @@
 			width="200" minWidth="200" minHeight="0" height="100%" 
 			verticalScrollPolicy="auto" horizontalScrollPolicy="off" >
 			
-			<containers:AttributesPanel id="attributesPanel"
+			<editContainers:AttributesPanel id="attributesPanel"
 				title="OBJECT PROPERTIES" headerHeight="30"
 				acceptLabel="{resourceManager.getString('Application','editor_save')}" 
 				deleteLabel="{resourceManager.getString('Application','editor_delete')}"
@@ -67,7 +67,7 @@
 					
 			</containers:ClosablePanel>
 			-->
-			<containers:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" /> 					
+			<editContainers:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" /> 					
 			
 		</mx:VBox>
 	</mx:HDividedBox>

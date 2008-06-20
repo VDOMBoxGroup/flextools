@@ -69,7 +69,7 @@ public class DataManager implements IEventDispatcher {
 		proxy.addEventListener(ProxyEvent.PROXY_SEND, proxySendedHandler);
 		proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
 		
-		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
+//		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
 		
 		requestQue = {};
 		
@@ -88,9 +88,11 @@ public class DataManager implements IEventDispatcher {
 	}
 	[Bindable (event='listPagesChanged')]
 	public function get listPages():XMLList {
+		if(!_currentApplication)
+			return null;
 		
 		if(_currentApplication.Objects.Object.length())
-			return _currentApplication.Objects.Object;
+			return new XMLList(_currentApplication.Objects.Object);
 		else
 			return null
 	}
@@ -113,7 +115,10 @@ public class DataManager implements IEventDispatcher {
 	[Bindable (event='currentApplicationChanged')]
 	public function get currentApplicationInformation():XML {
 		
-		return _currentApplication.Information[0];
+		if(_currentApplication)
+			return _currentApplication.Information[0];
+		
+		return null
 	}
 	
 	[Bindable (event='currentPageChanged')]
@@ -122,7 +127,7 @@ public class DataManager implements IEventDispatcher {
 		return _currentPageId;
 	}
 	
-	[Bindable (event='currentObjectChanged')]
+	[Bindable (event='currentObjectRefreshed')]
 	public function get currentObject():XML {
 		
 		return _currentObject;
@@ -217,7 +222,7 @@ public class DataManager implements IEventDispatcher {
 		
 		if(pages.length() > 0) {
 		
-			_currentApplication.Objects[0].appendChild = pages;
+			_currentApplication.Objects[0].appendChild(pages);
 			changeCurrentPage(pages[0].@ID);
 			
 		} else
@@ -276,21 +281,25 @@ public class DataManager implements IEventDispatcher {
 	
  	private function getChildObjectsTreeHandler(event:SoapEvent):void {
 		
-//		soap.removeEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
+		soap.removeEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
 		
 		var objectData:XML = event.result.Object[0];
 		var objectId:String = objectData.@ID;
 		
-		_currentApplication..Objects.Object.(@ID == objectId)[0] = objectData;
-		changeCurrentObject(objectId);
+		var ddd:XMLList = _currentApplication.Objects.Object.(@ID == objectId);
+		var zzz:* = ddd.parent();
+		ddd[0] = objectData;
 		
-		if(listPages.(@ID == objectId).length() != 0) {
+		if(_currentApplication.Objects.Object.(@ID == objectId).length() != 0) {
 		
 			_currentPageId = objectId;
-			dispatcher.dispatchEvent(new DataManagerEvent(DataManagerEvent.LIST_PAGES_CHANGED));
-			dispatcher.dispatchEvent(new DataManagerEvent('currentPageChanged'));
+			
+			dispatchEvent(new Event('listPagesChanged'));
+			dispatchEvent(new DataManagerEvent('currentPageChanged'));
 			dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 		}
+		
+		changeCurrentObject(objectId);
 	}
 	
 	/**
@@ -312,12 +321,10 @@ public class DataManager implements IEventDispatcher {
 			
 			_currentObject = newObject;
 		} 
-			
 		
-		dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_OBJECT_CHANGED));
+		dispatchEvent(new Event('currentObjectChanged'));
+		dispatchEvent(new Event('currentObjectRefreshed'));
 	}
-	
-	
 	
 	/**
 	 * 
@@ -401,7 +408,6 @@ public class DataManager implements IEventDispatcher {
 	
 	private function setAttributesCompleteHandler(event:ProxyEvent):void {
 		
-		//proxy.removeEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
 		var key:String = event.xml.Key[0];
 		var objectId:String = event.xml.Object[0].@ID;
 		var attributes:XML = event.xml.Object.Attributes[0];
@@ -409,12 +415,17 @@ public class DataManager implements IEventDispatcher {
 		var object:XML = getObject(objectId);
 		object.Attributes[0] = new XML(attributes);
 		
-		var newObject:XML = new XML(object);
-		var type:XML = getTypeByObjectId(objectId);
-		newObject.appendChild(type);
+		if(_currentObject && _currentObject.@ID == objectId) {
 		
-		//_currentObject = newObject;
+			var newObject:XML = new XML(object);
+			var type:XML = getTypeByObjectId(objectId);
+			newObject.appendChild(type);
 			
+			_currentObject = newObject;
+			
+			dispatchEvent(new Event('currentObjectRefreshed'));		
+		}
+		
 		if(requestQue[objectId] !== null && requestQue[objectId] == key) {
 			
 			delete requestQue[objectId];
@@ -423,7 +434,39 @@ public class DataManager implements IEventDispatcher {
 			dmEvent.result = event.xml;
 			dispatchEvent(dmEvent);
 		}
-		dispatchEvent(new Event('currentObjectChanged'));
+	}
+	
+	public function modifyResource(resourceId:String, operation:String, attributeName:String, attributes:XML):void {
+		
+		soap.addEventListener(SoapEvent.MODIFY_RESOURSE_OK, modifyResourceHandler);
+		soap.modifyResource(_currentApplicationId, currentObjectId, resourceId, attributeName, operation, attributes);
+	}
+	
+	private function modifyResourceHandler(event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.MODIFY_RESOURSE_OK, modifyResourceHandler);
+		
+		var objectId:String = event.result.Object[0].@ID;
+		var attributes:XML = event.result.Object.Attributes[0];
+		
+		var object:XML = getObject(objectId);
+		object.Attributes[0] = new XML(attributes);
+		
+		if(_currentObject && _currentObject.@ID == objectId) {
+			
+			var newObject:XML = new XML(object);
+			var type:XML = getTypeByObjectId(objectId);
+			newObject.appendChild(type);
+			
+			_currentObject = newObject;
+				
+			dispatchEvent(new Event('currentObjectRefreshed'));
+		}
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.RESOURCE_MODIFIED);
+		dme.result = event.result;
+		
+		dispatchEvent(dme);
 	}
 	
 	public function getApplicationStructure():void {

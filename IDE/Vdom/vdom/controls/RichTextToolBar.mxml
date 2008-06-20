@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="com.yahoo.astra.mx.controls.*"
+	implements="vdom.controls.IToolBar"
 	width="100%"
-	focusEnabled="false" backgroundColor="#F0F0F0" xmlns:local="*" xmlns:controls="com.yahoo.astra.mx.controls.*">
+	focusEnabled="false" backgroundColor="#F0F0F0" xmlns:local="*" >
 	<mx:Style>
 		.toolbarButton {
 			cornerRadius:0;
@@ -17,12 +20,12 @@
 		}
 	</mx:Style>
 	
-	<mx:Script source="includes/richTextTools.as"/>
+	<mx:Script source="includes/richTextToolBar.as"/>
 	
 	<mx:VBox left="5" top="5" right="5" bottom="5">
 		<mx:HBox horizontalGap="0">
-			<mx:Button styleName="toolbarButton" label="Save" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_save.png')"
-				height="24"  focusEnabled="false"/>
+			<!--<mx:Button styleName="toolbarButton" label="Save" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_save.png')"
+				height="24"  focusEnabled="false"/>-->
 			<mx:VRule height="24"/>
 			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_select_all.png')"
 				click="execCommand('selectall');"/>
@@ -33,12 +36,11 @@
 				click="insertLink()"/>
 			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_rem_link.png')"
 				click="execCommand('unlink');"/>
-			<!--<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_ins_image.png')"/>-->
-			<!--<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_ins_table.png')"/>-->
 			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_rule.png')"
 				click="execCommand('inserthorizontalrule');"/>
 			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_ins_char.png')"
-				click="insertChar();" alpha="1.0"/>
+				focusEnabled="false"
+				click="insertChar();"/>
 		</mx:HBox>
 		<mx:HBox>
 			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_bold.png')"
@@ -140,10 +142,10 @@
 			</mx:ComboBox>
 			<mx:VRule height="24"/>
 			<controls:DropDownColorPicker width="36" height="24" 
-				viewerRenderer="vdom.components.edit.containers.toolbarClasses.richTextToolsClasses.ColorTextButton" viewerStyleName="" focusEnabled="false"
+				viewerRenderer="vdom.controls.richTextToolBarClasses.ColorTextButton" viewerStyleName="" focusEnabled="false"
 				change="colorFillChanged(event)"/>
 			<controls:DropDownColorPicker width="36" height="24" 
-				viewerRenderer="vdom.components.edit.containers.toolbarClasses.richTextToolsClasses.ColorFillButton"
+				viewerRenderer="vdom.controls.richTextToolBarClasses.ColorFillButton"
 				viewerStyleName="" focusEnabled="false"
 				change="colorTextChanged(event)"/>
 			<mx:VRule height="24"/>

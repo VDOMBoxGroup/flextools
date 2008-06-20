@@ -22,6 +22,8 @@ public class Item extends Canvas implements IItem {
 	private var _isStatic:Boolean;
 	private var _editableAttributes:Array;
 	
+	private var _child:DisplayObject;
+	
 	
 	public function Item(objectId:String) {
 		
@@ -43,19 +45,26 @@ public class Item extends Canvas implements IItem {
 		return _waitMode;
 	}
 	
-	public function set waitMode(mode:Boolean):void {
+	public function set waitMode(value:Boolean):void {
 		
-		if(mode) {
+		if(value) {
 			
-			removeAllChildren();
+			//while(numChildren > 0)
+				//removeChildAt(0);
+			setChildIndex(_waitLayout, numChildren-1);
+			
 			_waitLayout.width = width;
 			_waitLayout.height = height;
+			_graphicsLayer.visible = false;
 			_waitLayout.visible = true;
 			
-		} else {
+			removeAllChildren();
 			
+		} else {
+			_graphicsLayer.visible = true;
 			_waitLayout.visible = false;
 		}
+		_waitMode = value;
 	}
 	
 	public function get editableAttributes():Array {
@@ -98,15 +107,28 @@ public class Item extends Canvas implements IItem {
 			_waitLayout = new wc();
 		
 		
-		_waitLayout.visible = true;
-		rawChildren.addChild(_waitLayout);
+		_waitLayout.visible = true;		
 		_waitLayout.width = 0;
 		_waitLayout.height = 0;
+		addChild(_waitLayout);
 	}
 	
 	override public function removeAllChildren():void {
 		
-		super.removeAllChildren();
+		var offset:int = 0;
+		var itemChild:DisplayObject;
+		
+		while (numChildren > offset) {
+			itemChild = getChildAt(offset);
+			
+			if(itemChild == _waitLayout) {
+				
+				offset++
+				continue;
+			}
+			
+            removeChildAt(offset);
+        }
 		
 		var count:uint = graphicsLayer.rawChildren.numChildren;
 		

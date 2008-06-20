@@ -29,6 +29,16 @@
 		A vdom AIR-file builder
 	</description>
 	
+	
+	<!-- ============================== 
+			target: clean              
+		 ============================== -->
+	
+	<target name="clean" description="clean up">
+		<delete failonerror="false" file="${release.dir}/${application.file}" />
+		<delete failonerror="false" file="${release.dir}/${air.file}" />
+	</target>
+	
 	<!-- ============================== 
 			target: init              
 		 ============================== -->
@@ -42,23 +52,25 @@
 			target: releasecompile              
 		 ============================== -->
 	
-	<target name="releasecompile" depends="init">
+	<target name="releasecompile">
 		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
 			<arg value="-debug=false" />
 			<arg value="-source-path+=${basedir}" />
 			<arg value="+flexlib=${SDK_HOME}/frameworks" />
+			<arg value="+basedir=${basedir}" />
 			<arg value="+configname=air" />
-			<arg value="-load-config+=config/flex-config.xml" />
+			<arg value="-load-config=config/flex-config.xml" />
 			<arg value="-file-specs=${source.file}" />
 			<arg value="-output=${build.dir}/${application.file}" />
 		</java>
 	</target>
 	
 	<!-- ============================== 
-			target: package              
+			target: package
+			depends="releasecompile"              
 		 ============================== -->
 	
-	<target name="package" depends="releasecompile">
+	<target name="package" >
 		<java jar="${adt.jar}" fork="true" failonerror="true">
 			<arg value="-package" />
 			<arg value="-storetype" />
@@ -72,19 +84,10 @@
 			<arg value="${release.dir}/${air.file}" />
 			<arg value="${application.descriptor}" />
 			<arg value="icons" />
+			<arg value="libs/tinymce" />
 			<arg value="-C" />
 			<arg value="${build.dir}" />
 			<arg value="${application.file}" />
 		</java>
 	</target>
-	
-	<!-- ============================== 
-			target: clean              
-		 ============================== -->
-	
-	<target name="clean" description="clean up">
-		<delete failonerror="false" file="${release.dir}/${application.file}" />
-		<delete failonerror="false" file="${release.dir}/${air.file}" />
-	</target>
-	
 </project>

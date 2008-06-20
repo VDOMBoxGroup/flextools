@@ -824,7 +824,6 @@ TinyMCE_Engine.prototype = {
 	_createIFrame : function(replace_element, doc, win) {
 		var iframe, id = replace_element.getAttribute("id");
 		var aw, ah;
-		
 		if (typeof(doc) == "undefined")
 			doc = document;
 
@@ -3889,11 +3888,11 @@ TinyMCE_Control.prototype = {
 		
 		if (!tinyMCE.isIE) {
 			// Node case is preserved in XML strict mode
-			if (tElm && (tElm.nodeName == "SPAN" || tElm.nodeName == "span")) {
+			///if (tElm && (tElm.nodeName == "SPAN" || tElm.nodeName == "span")) {
 				
 				tElm = tinyMCE._createIFrame(tElm, targetDoc);
 				dynamicIFrame = true;
-			}
+			///}
 
 			this.targetElement = tElm;
 			this.iframeElement = tElm;

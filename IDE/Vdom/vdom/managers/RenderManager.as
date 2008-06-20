@@ -10,7 +10,6 @@ import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
 import mx.containers.Canvas;
-import mx.controls.HTML;
 import mx.controls.Image;
 import mx.core.Container;
 import mx.utils.UIDUtil;
@@ -19,6 +18,7 @@ import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.containers.IItem;
 import vdom.containers.Item;
+import vdom.controls.EditableHTML;
 import vdom.events.DataManagerEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.managers.renderClasses.ItemDescription;
@@ -34,6 +34,7 @@ public class RenderManager implements IEventDispatcher {
 	private var dataManager:DataManager;
 	private var dispatcher:EventDispatcher;
 	private var fileManager:FileManager;
+	private var cacheManager:CacheManager;
 	
 	private var applicationId:String;
 	private var rootContainer:Container;
@@ -53,7 +54,7 @@ public class RenderManager implements IEventDispatcher {
 			
 			instance = new RenderManager();
 		}
-
+		
 		return instance;
 	}
 	
@@ -106,12 +107,7 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function updateItem(itemId:String, parentId:String):void {
 		
-		//dataManager.updateAttributes(event.objectId, event.props);
-		
 		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
-		
-		//if(lockedItems[itemId])
-			//lockedItems[itemId] = key;
 	}
 	
 	public function deleteItem(itemId:String):void {
@@ -349,15 +345,16 @@ public class RenderManager implements IEventDispatcher {
 		
 		item.removeAllChildren();
 		item.graphics.clear();
+		IItem(item).editableAttributes = [];
 		
 		item.x = Number(itemXMLDescription.@left);
 		item.y = Number(itemXMLDescription.@top);
 		
 		if(itemXMLDescription.@width.length())
-			item.width =  Number(itemXMLDescription.@width);
+			item.width = Number(itemXMLDescription.@width);
 			
 		if(itemXMLDescription.@height.length())
-			item.height =  Number(itemXMLDescription.@height);
+			item.height = Number(itemXMLDescription.@height);
 		
 		if(itemDescription.staticFlag =='self' || itemDescription.staticFlag =='all')
 			IItem(item).isStatic = true;
@@ -400,13 +397,12 @@ public class RenderManager implements IEventDispatcher {
 			
 			case 'text':
 				
-				var viewText:HTML = new HTML();
+				var viewText:EditableHTML = new EditableHTML();
 				var isEditable:Boolean = false;
 				var fontStyle:String = '12px Tahoma';
 				var colorStyle:String = '#000000';
 				
 				viewText.paintsDefaultBackground = false;
-				
 				viewText.x = childXMLDescription.@left;
 				viewText.y = childXMLDescription.@top;
 				
@@ -430,19 +426,18 @@ public class RenderManager implements IEventDispatcher {
 					IItem(item).editableAttributes.push(
 						{destName:String(childXMLDescription.@editable),
 						sourceObject:viewText,
-						sourceName:'htmlText'}
+						sourceName:'editabledText'}
 					);
 				}
-				
-				HTMLText = 
+				if(HTMLText == '')
+					HTMLText = '<div>simple text </div>';
+				HTMLText =
 						'<html><head>' + 
 						'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
 						'</head>' +
-						'<body contentEditable="' + 
-						isEditable +'" ' + 
-						'><span id="xEditingArea">' +
+						'<body style="margin:5px;">' +
 						HTMLText +
-						'</span></body></html>';
+						'</body></html>';
 				
 				viewText.htmlText = HTMLText;
 				item.addChild(viewText);
@@ -571,6 +566,19 @@ public class RenderManager implements IEventDispatcher {
 						
 					if(childXMLDescription.@height.length())
 						img.height = childXMLDescription.@height;
+					
+					if(childXMLDescription.@editable.length()) {
+						
+						var tempObject:Object = {value:'#Res('+resourceId+')'};
+						
+						IItem(item).editableAttributes.push( 
+							{
+								destName:String(childXMLDescription.@editable),
+								sourceObject:tempObject,
+								sourceName:'value'
+							}
+						)
+					}
 					
 					img.maintainAspectRatio = false;
 					graphicsLayer.rawChildren.addChild(img);

@@ -29,6 +29,7 @@ import mx.events.CloseEvent;
 import mx.events.ValidationResultEvent;
 import mx.validators.RegExpValidator;
 
+import vdom.containers.ClosablePanel;
 import vdom.controls.colorPicker.ColorPicker;
 import vdom.controls.multiLine.MultiLine;
 import vdom.controls.resourceBrowser.ResourceBrowserButton;
@@ -673,8 +674,14 @@ public class AttributesPanel extends ClosablePanel {
 			else
 				value = fieldsArray[attrName][0][fieldsArray[attrName][1]];
 				
-			if(value != null)
-			currentElement.*[0] = XML('<![CDATA['+value+']'+']>');
+			if(value != null) {
+				var xmlCharRegExp:RegExp = /[<>&"]+/;
+			
+				if(value.search(xmlCharRegExp) != -1)
+					currentElement.*[0] = XML('<![CDATA['+value+']'+']>');
+				else 
+					currentElement.*[0] = value;
+			}
 		}
 		
 		dispatchEvent(new Event('propsChanged'));

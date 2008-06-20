@@ -210,6 +210,8 @@ public class ResizeManager extends EventDispatcher {
 	public function selectItem(item:IItem, showMarker:Boolean = true):IItem {
 									
 		var newSelectedItem:IItem;
+		if(_selectedItem && item && _selectedItem.objectId == item.objectId)
+			return _selectedItem;
 		
 		if(item && Container(item).parent) {
 			
@@ -245,8 +247,10 @@ public class ResizeManager extends EventDispatcher {
 		} else {
 			
 			newSelectedItem = null;
-			selectMarker.visible = false;
-			selectMarker.item = null;
+			if(selectMarker) {
+				selectMarker.visible = false;
+				selectMarker.item = null;
+			}
 		}
 		
 		selectedItem = newSelectedItem;
@@ -339,7 +343,7 @@ public class ResizeManager extends EventDispatcher {
 			tip.x = event.stageX + 15;
 			tip.y = event.stageY + 15;
 		}
-			
+		
 		if(selectMarker.item && itemTransform || itemDrag || selectMarker.markerSelected )
 			return;
 		
@@ -359,6 +363,9 @@ public class ResizeManager extends EventDispatcher {
 		if(itemUnderMouse && Container(itemUnderMouse).parent != _topLevelItem) {
 			
 			var objectDescription:XML = dataManager.getObject(itemUnderMouse.objectId);
+			
+			if(!objectDescription)
+				return;
 			
 			var tipText:String = "Name:" + objectDescription.@Name;
 			
@@ -380,7 +387,7 @@ public class ResizeManager extends EventDispatcher {
 			showToolTip();
 			highlightedItem = highlightItem(itemUnderMouse);
 		}
-		event.stopImmediatePropagation();
+		//event.stopImmediatePropagation();
 	}
 	
 	private function mouseUpHandler(event:MouseEvent):void {
@@ -403,6 +410,7 @@ public class ResizeManager extends EventDispatcher {
 		}
 
 		itemMoved = false;
+		//event.stopImmediatePropagation();
 	}
 	
 	private function getItemUnderMouse():IItem {
