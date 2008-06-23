@@ -168,7 +168,8 @@ package vdom.components.eventEditor
 				{
 					var type:XML = dataManager.getTypeByTypeId(xmlLabel.@Type);
 					
-					if (type.Information.Container == '2' || type.Information.Container == '3')
+					if (type.Information.Container == '2' || 
+						type.Information.Container == '3')
 					{	
 					//	trace('2 || 3')	
 						xmlTemp.appendChild(findOjects(xmlLabel.Objects));
@@ -191,6 +192,7 @@ package vdom.components.eventEditor
 					xmlTemp.@ID 	= xmlLabel.@ID;
 					xmlTemp.@Type 	= xmlLabel.@Type;
 					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
+					xmlTemp.@containerID = selectedNode.@ID;
 					
 					xmllReturn += xmlTemp;
 			}

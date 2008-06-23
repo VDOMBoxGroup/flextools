@@ -3,13 +3,17 @@ package vdom.components.eventEditor
 	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
+	import mx.containers.VBox;
 	import mx.controls.Button;
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
+	import mx.controls.VRule;
+	import mx.utils.UIDUtil;
 	
 	import vdom.events.TreeEditorEvent;
+	import vdom.managers.DataManager;
 	
 	
 
@@ -63,33 +67,29 @@ package vdom.components.eventEditor
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
 		private var _type:Label;
-		//private var dataManager:DataManager;
+		private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
 	
-		//public var ID:String = '123';
 		
 		public function EventEditorAction(data:Object)
 		{
 			super();
-	//		if (typeof(data)=="string")
-	//			trace (data)
-			
-			_ID = Math.random().toString();
-			
+			dataManager = DataManager.getInstance();
+	
+			_ID = UIDUtil.createUID();
 			cnvUpLayer.clipContent = false;
 			
 			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
+			initDownBody(data);
 			
-			txt.text += ': ' + data.toString(); 
 			updateRatio();
 			
 			isRedraw = true;
 		}
 		
 		private var isRedraw:Boolean;
-		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -134,13 +134,20 @@ package vdom.components.eventEditor
 			// при нажатии кнопки свернуть
 		private function changeState(blHide:Boolean):void
 		{
-			if (!blHide){
-				if(contains(cnvDownLayer))	removeChild(cnvDownLayer);
+			if (!blHide)
+			{
+				if(contains(cnvDownLayer))	
+					removeChild(cnvDownLayer);
+				
 				imgPlus.source = plus;
-			}else{
+				txt.text = _eventType +' : '+_name;
+			}else
+			{
 				addChild(cnvDownLayer);
 				imgPlus.source = minus;
+				txt.text = "Action";
 			}	
+
 			min = blHide;
 			isRedraw = true;
 			
@@ -233,9 +240,53 @@ package vdom.components.eventEditor
 			
 		}
 		
-		private function initDownBody():void
+		private var _name:String;
+		private var _eventType:String;
+		private function initDownBody(data:Object):void
 		{
-
+			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
+			addChild(cnvDownLayer);
+			
+			var vBox:VBox = new VBox();
+				vBox.x = 3;
+				vBox.setStyle('verticalGap', 0);
+				cnvDownLayer.addChild(vBox);
+				
+			var leftVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+				leftVRule.percentHeight = 100;
+			cnvDownLayer.addChild(leftVRule);   
+			
+			var rightVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+	//			rightVRule.x = 100;
+				rightVRule.setStyle('right', 0);
+				rightVRule.percentHeight = 100;
+			cnvDownLayer.addChild(rightVRule);  
+			
+		/*	 data = "<Event label='' ObjSrcID='' parentType='' />"
+			*/
+			data = data as XML;
+			
+			var object:XML = dataManager.getObject(data.@ObjSrcID);
+			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
+			vBox.addChild(objectName);
+			_name = object.@Name;
+			
+			var type:XML = dataManager.getTypeByObjectId(data.@ObjSrcID);
+			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
+			vBox.addChild(objectEvent);
+			_eventType = data.@label
+			
+			
+			/*
+			var parametrs:XML = type.E2vdom.Events..Event.(@Name = data.@Name).Parameters[0];
+			for each(var child:XML in parametrs.children())
+			{
+				var parametr:SimpleLayer = new SimpleLayer(child.@Name);
+				vBox.addChild(parametr);
+			}
+			*/
+			var y:SimpleLayer = new SimpleLayer('Y');
+			vBox.addChild(y);
 		}
 		
 
@@ -274,6 +325,9 @@ package vdom.components.eventEditor
 			
 		//	cnvUpLayer
 			//-----------------------------------
+			
+			cnvDownLayer.y = 30 * _ratio;
+			cnvDownLayer.width = 243 * _ratio;
 		}
 		
 		public function get ID():String

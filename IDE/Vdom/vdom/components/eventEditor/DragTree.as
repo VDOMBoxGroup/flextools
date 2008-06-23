@@ -1,8 +1,9 @@
 package vdom.components.eventEditor
 {
 	import mx.controls.Tree;
-	import mx.core.ClassFactory;
 	import mx.events.DragEvent;
+	
+	import vdom.utils.IconUtil;
 
 	public class DragTree extends Tree
 	{
@@ -15,6 +16,8 @@ package vdom.components.eventEditor
 			showRoot = false;
 			percentHeight = 100;//width = 200;
 			percentWidth = 100;
+			
+			iconFunction = getIcon;
 			//itemRenderer = new ClassFactory(IconTreeItemRenderer);
 			
 		  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
@@ -23,6 +26,14 @@ package vdom.components.eventEditor
 		private function onTreeDragComplete(drEvt:DragEvent):void
 		{
 			drEvt.preventDefault();
+		}
+		
+		private function getIcon(value:Object):Class {
+			
+			var xmlData:XML = XML(value);
+			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+		 	
+	 		return IconUtil.getClass(this, data, 16, 16);
 		}
 		
 	}

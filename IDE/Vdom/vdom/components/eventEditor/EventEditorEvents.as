@@ -10,6 +10,7 @@ package vdom.components.eventEditor
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	import mx.controls.VRule;
+	import mx.utils.UIDUtil;
 	
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
@@ -66,11 +67,9 @@ package vdom.components.eventEditor
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
 		private var _type:Label;
-		//private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
 		private var dataManager:DataManager;
 		
-	//	public var ID:String = '123';
 		
 		public function EventEditorEvents(data:Object)
 		{
@@ -78,18 +77,13 @@ package vdom.components.eventEditor
 			super();
 			
 			dataManager = DataManager.getInstance();
-		//	if (typeof(data)=="string")
-		//		trace (data)
 			
-			_ID = Math.random().toString();
+			_ID = UIDUtil.createUID();
 			cnvUpLayer.clipContent = false;
 			
-			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
 			initDownBody(data);
-			txt.text += ': ' + data.toString(); 
-	//		event.text = data.toString(); 
 			
 			updateRatio();
 			
@@ -97,7 +91,6 @@ package vdom.components.eventEditor
 		}
 		
 		private var isRedraw:Boolean;
-		
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -119,7 +112,6 @@ package vdom.components.eventEditor
 		
 		private function lineClickHandler(msEvt:MouseEvent):void
 		{
-		//	trace('Я нажата');
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAW_LINE, _ID));
 		}
 		
@@ -142,13 +134,20 @@ package vdom.components.eventEditor
 			// при нажатии кнопки свернуть
 		private function changeState(blHide:Boolean):void
 		{
-			if (!blHide){
-				if(contains(cnvDownLayer))	removeChild(cnvDownLayer);
+			if (!blHide)
+			{
+				if(contains(cnvDownLayer))	
+					removeChild(cnvDownLayer);
+				
 				imgPlus.source = plus;
-			}else{
+				txt.text = _eventType +' : '+_name;
+			}else
+			{
 				addChild(cnvDownLayer);
 				imgPlus.source = minus;
+				txt.text = "Event";
 			}	
+
 			min = blHide;
 			isRedraw = true;
 			
@@ -183,10 +182,6 @@ package vdom.components.eventEditor
 			imgheader = new Image();
 			imgheader.source = header;
 			
-			
-			//imgheader.maintainAspectRatio = true;
-			//imgheader.scaleContent = true;
-			
 			txt = new Label();
 			txt.setStyle('color', '#ffffff');
 			txt.setStyle('fontWeight', "bold"); 
@@ -196,7 +191,6 @@ package vdom.components.eventEditor
 			txt.buttonMode = true;
 			txt.doubleClickEnabled = true;
 			txt.text = 'Event';
-			//txt.addEventListener(MouseEvent.DOUBLE_CLICK, txtDoubleClickHandler)
 			
 			imgMenu = new Image();
 			imgMenu.source = menu;
@@ -240,7 +234,8 @@ package vdom.components.eventEditor
 			addChild(cnvUpLayer);
 			
 		}
-		
+		private var _name:String;
+		private var _eventType:String;
 		private function initDownBody(data:Object):void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
@@ -261,26 +256,23 @@ package vdom.components.eventEditor
 				rightVRule.percentHeight = 100;
 			cnvDownLayer.addChild(rightVRule);  
 			
-		/*	<Event label="TEXT own" parentID="f3b5ffa2-4d8d-4732-b188-fa215c7bb6eb" 
-				parentType="73a54f2e-4001-4676-93a0-804048a57081"/>
+		/*	 data = "<Event label='' parentID='' parentType='' />"
 			*/
 			data = data as XML;
 			
-			var object:XML = dataManager.getObject(data.@parentID);
+			var object:XML = dataManager.getObject(data.@ObjSrcID);
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
 			vBox.addChild(objectName);
+			_name = object.@Name;
 			
-			var type:XML = dataManager.getTypeByObjectId(data.@parentID);
+			var type:XML = dataManager.getTypeByObjectId(data.@ObjSrcID);
 			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
 			vBox.addChild(objectEvent);
+			_eventType = data.@label
 			
-			/*
-			var hRule:HRule = new HRule();
-				hRule.percentWidth = 100;
-			*/
-		//	vBox.addChild(hRule);
 			
-			var parametrs:XML = type.E2vdom.Events..Event.(@Name = data.@label)[0];
+			
+			var parametrs:XML = type.E2vdom.Events..Event.(@Name = data.@Name).Parameters[0];
 			for each(var child:XML in parametrs.children())
 			{
 				var parametr:SimpleLayer = new SimpleLayer(child.@Name);
