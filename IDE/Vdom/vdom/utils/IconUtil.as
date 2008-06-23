@@ -78,11 +78,11 @@ package vdom.utils
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
 			loader.loadBytes(value.data);
 			
-			var resId:String = XML(TreeItemRenderer(this.parent).data).@resourceID;
+			//var resId:String = XML(TreeItemRenderer(this.parent).data).@resourceID;
 			
-			if(dictionary[resId]) {
+			if(dictionary[value.resourceID]) {
 				
-				dictionary[resId].source = loader;
+				dictionary[value.resourceID].source = loader;
 			}
 		}
 		
