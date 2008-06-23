@@ -77,7 +77,7 @@
 			if(xmlData) 
 			{
 				// создаем обьекты верхнего уровня
-				 xmlTreeData = <rootz/>;
+				 xmlTreeData = <root/>;
 				for each(var xmlLabel:XML in xmlData)
 				{
 					if (xmlLabel.name() == 'Parent') continue;
