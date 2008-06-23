@@ -3,6 +3,7 @@
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import vdom.utils.IconUtil;
 	 		import mx.binding.utils.BindingUtils;
 	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
 	 	
@@ -226,6 +227,13 @@
               	 	var ID:String = selectedNode.@ID; 
              	 //trace('123: '+ID);
 			}
+			private function getIcon(value:Object):Class {
+			
+				var xmlData:XML = XML(value);
+				var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+			 	
+		 		return IconUtil.getClass(trContainer, data, 16, 16);
+			}
 	 	]]>
 	 </mx:Script>
 	 
@@ -252,7 +260,7 @@
 		            <!-- Define each panel using a VBox container. -->
 					
 					<mx:Canvas label="Container"  width="100%" height="100%"  >
-			             <eventEditor:TreeContainer id="trContainer" width="100%" height="100%" 
+			             <eventEditor:TreeContainer iconFunction="getIcon" id="trContainer" width="100%" height="100%" 
                 			 change="treeContainerChangeHandler(event)" />
 			        </mx:Canvas>
 			        
