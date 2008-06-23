@@ -393,7 +393,6 @@ public class ResizeManager extends EventDispatcher {
 			showToolTip();
 			highlightedItem = highlightItem(itemUnderMouse);
 		}
-		//event.stopImmediatePropagation();
 	}
 	
 	private function mouseUpHandler(event:MouseEvent):void {
@@ -416,7 +415,6 @@ public class ResizeManager extends EventDispatcher {
 		}
 
 		itemMoved = false;
-		//event.stopImmediatePropagation();
 	}
 	
 	private function getItemUnderMouse():IItem {

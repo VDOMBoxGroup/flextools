@@ -6,7 +6,7 @@ package vdom.components.eventEditor
 	import mx.core.ClassFactory;
 	import mx.events.FlexEvent;
 	
-	import vdom.controls.IconTreeItemRenderer;
+
 	import vdom.events.DataManagerEvent;
 	import vdom.events.EventEditorEvent;
 	import vdom.managers.DataManager;
@@ -29,7 +29,7 @@ package vdom.components.eventEditor
 			percentHeight = 100;//width = 200;
 			percentWidth = 100;
 	
-			itemRenderer = new ClassFactory(IconTreeItemRenderer);
+			//itemRenderer = new ClassFactory(IconTreeItemRenderer);
 			
 		//  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
 			addEventListener(FlexEvent.SHOW, showHandler);	

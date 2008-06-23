@@ -14,7 +14,7 @@
 
 <mx:Script>
 	<![CDATA[
-		import vdom.controls.IconTreeItemRenderer;
+		import vdom.utils.IconUtil;
 		import vdom.managers.DataManager;
 		import mx.events.ListEvent;
 		import mx.controls.listClasses.ListBase;
@@ -46,6 +46,13 @@
 		
 		public var selectedItem:XMLList;
 		
+		private function getIcon(value:Object):Class {
+			
+			var xmlData:XML = XML(value);
+			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+		 	
+	 		return IconUtil.getClass(tree, data, 16, 16);
+		}
 		
 		private function creationCompleteHendler():void
 		{
@@ -53,13 +60,12 @@
 			dataManager = DataManager.getInstance();
 			    tree.percentHeight = 100;//width = 200;
 			    tree.percentWidth = 100;
-			    tree.itemRenderer = new ClassFactory(IconTreeItemRenderer);
 				tree.showRoot = false; 
-				//tree.iconField = "@icon"; 
 				
 				tree.labelField = "@label";
 				tree.addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 				tree.addEventListener(Event.CHANGE, treeChangeLister);
+				tree.iconFunction = getIcon;
 			    
 			    addChild(tree);
 			    

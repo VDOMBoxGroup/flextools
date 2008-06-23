@@ -17,11 +17,10 @@ package vdom.utils
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.geom.Matrix;
-	import flash.utils.ByteArray;
-	import flash.utils.Dictionary;
 	
 	import mx.containers.accordionClasses.AccordionHeader;
 	import mx.controls.tabBarClasses.Tab;
+	import mx.controls.treeClasses.TreeItemRenderer;
 	import mx.core.BitmapAsset;
 	import mx.core.UIComponent;
 	
@@ -33,7 +32,7 @@ package vdom.utils
 	public class IconUtil extends BitmapAsset
 	{
 		
-		private static var dictionary:Dictionary;
+		private static var dictionary:Object;
 		
 		/**
 		 * Used to associate run-time graphics with a target
@@ -47,7 +46,7 @@ package vdom.utils
 		public static function getClass( target:UIComponent, source:Object, width:Number = NaN, height:Number = NaN ):Class {
 			
 			if(!dictionary) {
-				dictionary = new Dictionary(false);
+				dictionary = {};
 			}
 			//if(source is String) {
 				
@@ -55,7 +54,7 @@ package vdom.utils
 //				loader.load(new URLRequest(source as String), new LoaderContext(true));
 				//source = loader;
 			//}
-			dictionary[target] = { 
+			dictionary[source.resourceId] = { 
 				typeId:source.typeId, 
 				resourceId:source.resourceId, 
 				width:width, 
@@ -78,9 +77,12 @@ package vdom.utils
 			
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
 			loader.loadBytes(value.data);
-			if(dictionary[this.parent]) {
+			
+			var resId:String = XML(TreeItemRenderer(this.parent).data).@resourceID;
+			
+			if(dictionary[resId]) {
 				
-				dictionary[this.parent].source = loader;
+				dictionary[resId].source = loader;
 			}
 		}
 		
@@ -100,7 +102,9 @@ package vdom.utils
 		
 		private function getData(object:Object):void {
 			
-			var data:Object = dictionary[object];
+			var resId:String = XML(object.data).@resourceID;
+			
+			var data:Object = dictionary[resId];
 			
 			if(data) {
 				
@@ -128,10 +132,10 @@ package vdom.utils
 				bitmapData = new BitmapData(loader.content.width, loader.content.height, true, 0x00FFFFFF);
 			}
 			bitmapData.draw(loader, new Matrix(bitmapData.width/loader.width, 0, 0, bitmapData.height/loader.height, 0, 0));
-			if(parent is UIComponent) {
+			/* if(parent is UIComponent) {
 				var component:UIComponent = parent as UIComponent;
 				component.invalidateSize();
-			}
+			} */
 		}
 		
 		private function completeHandler(event:Event):void {
