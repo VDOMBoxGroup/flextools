@@ -17,7 +17,7 @@
 	xmlns:treeEditor="vdom.components.treeEditor.*"
 	
 	preinitialize="preinitalizeHandler();"
-	applicationComplete="applicationCompleteHandler()"
+	
 	layout="absolute"
 	verticalScrollPolicy="off"
 	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*">
@@ -32,7 +32,8 @@
 	
 	<mx:ViewStack id="viewstack" width="100%" height="100%">
 	
-		<loginForm:LoginForm id="loginForm" submitBegin="submitLogin(event)"/>
+		<loginForm:LoginForm id="loginForm" show="showLoginFormHandler();" submitBegin="submitLogin(event)"
+			horizontalScrollPolicy="off" verticalScrollPolicy="off"/>
 	
 		<mx:Canvas id="main"  width="100%" height="100%" show="showMainHandler();">
 		
@@ -46,29 +47,7 @@
 		 			<modules:ApplicationManagment id="applicationManagmentModule" label="{resourceManager.getString('Application','main_title')}" />
 		 	
 		 			<modules:Editor label="{resourceManager.getString('Application','editor_title')}" 
-		 				width="100%"    height="100%"  borderStyle="solid" borderColor="#000000"/>
-					
-					<!--
-					<mx:Canvas id="multilinTab"
-						label="{resourceManager.getString('Application','multilingual_title')}"
-						width="100%" height="100%" />
-					
-					<mx:Canvas id="portalManTab"
-						label="{resourceManager.getString('Application','portal_managment_title')}"
-						width="100%" height="100%" />
-					
-					<mx:Canvas id="publishTab"
-						label="{resourceManager.getString('Application','publish_title')}"
-						width="100%" height="100%" />
-					
-					<mx:Canvas id="safeguardTab"
-						label="{resourceManager.getString('Application','safeguard_title')}"
-						width="100%" height="100%" />
-						
-					<mx:Canvas id="vdomTab"
-						label="{resourceManager.getString('Application','vdom_title')}"
-						width="100%" height="100%" />
-					-->
+		 				width="100%" height="100%"  borderStyle="solid" borderColor="#000000"/>
 				</controls:MainTabNavigator>
 			</mx:Canvas>
 			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>

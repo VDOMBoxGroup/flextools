@@ -8,7 +8,7 @@ package vdom.connection.soap
 	import mx.rpc.soap.WebService;
 	
 		
-	public class Soap  extends EventDispatcher
+	public class Soap extends EventDispatcher
 	{
 		public static var ws			:WebService;
 		private static 	var instance	:Soap;
@@ -23,10 +23,13 @@ package vdom.connection.soap
         } 		
 		 
 		 // initialization		
-		 public static function getInstance():Soap 
-		 {
-             return instance||new Soap() ;
-         }		
+		public static function getInstance():Soap {
+			
+			if (!instance)
+				instance = new Soap();
+	
+			return instance;
+		}	
 		//app_text
 		public function init(wsdl:String= 'http://192.168.0.23:82/vdom.wsdl'):void
 		{
@@ -523,9 +526,11 @@ package vdom.connection.soap
 		
 		//Error
 		private  function errorListener(event:FaultEvent):void{
-			//ed.dispatchEvent(event);
-			trace('Блина, SOAP GLOBaL ERROR: \n' + event);
+			
+			var fe:FaultEvent = FaultEvent.createEvent(event.fault, null, event.message);
+			dispatchEvent(fe);
 		}
+		
     	public function ldispatchEvent(evt:SoapEvent):void{
       		//trace(evt.result);
 			var soapEvent:SoapEvent = new SoapEvent(evt.type);

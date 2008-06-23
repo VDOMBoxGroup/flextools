@@ -152,6 +152,7 @@ public class TransformMarker extends UIComponent {
 		Application.application.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
 		Application.application.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
 		_selectedItem.addEventListener('refreshComplete', refreshCompleteHandler);
+		
 		if(parent)
 			parent.addEventListener(FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler);
 		
@@ -193,7 +194,7 @@ public class TransformMarker extends UIComponent {
 	
 	private function refreshCompleteHandler(event:Event):void {
 		
-		if(invalidateSizeFlag)
+		if(invalidateSizeFlag || transformation)
 			return;
 		
 		refresh();
@@ -643,7 +644,7 @@ public class TransformMarker extends UIComponent {
 					
 					move(rect.x, rect.y);
 					
-					if(_moveMode) {
+					if(_moveMode && moving.name == 'cc') {
 						
 						_selectedItem.x = rect1.x;
 						_selectedItem.y = rect1.y;

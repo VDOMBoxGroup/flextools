@@ -208,8 +208,9 @@ public class WorkArea extends VBox {
 		
 		if(_contentToolbar && DisplayObject(_contentToolbar).parent)
 			currentToolBar = _contentToolbar;
-			
-			
+		
+		if(currentToolBar)
+			currentToolBar.close();
 		
 		if(
 			_selectedObject &&
@@ -236,7 +237,6 @@ public class WorkArea extends VBox {
 		
 		if(_contentToolbar && DisplayObject(_contentToolbar).parent) {
 			
-			_contentToolbar.close();
 			removeChild(DisplayObject(_contentToolbar));
 			_contentToolbar = null;
 		}

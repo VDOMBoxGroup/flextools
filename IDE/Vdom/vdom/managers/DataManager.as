@@ -63,13 +63,7 @@ public class DataManager implements IEventDispatcher {
 		
 		soap = Soap.getInstance();
 		proxy = Proxy.getInstance();
-		
 		languageManager = LanguageManager.getInstance();
-		
-		proxy.addEventListener(ProxyEvent.PROXY_SEND, proxySendedHandler);
-		proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
-		
-//		soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
 		
 		requestQue = {};
 		
@@ -79,6 +73,8 @@ public class DataManager implements IEventDispatcher {
 		_currentObject = null;
 		
 		_typeLoaded = false;
+		
+		setListeners(true);
 	}
 	
 	[Bindable (event='listApplicationChanged')]
@@ -106,7 +102,7 @@ public class DataManager implements IEventDispatcher {
 		
 		return _typeLoaded;
 	}
-	
+
 	public function get currentApplicationId():String {
 		
 		return _currentApplicationId;
@@ -201,6 +197,23 @@ public class DataManager implements IEventDispatcher {
 	
 // ----------------------- end init action -----------------------
 	
+// ----------------------- start close action -----------------------
+
+	public function close():void {
+		
+		setListeners(false);
+		
+		requestQue = {};
+		
+		_currentApplication = null;
+		_currentApplicationId = null;
+		_currentPageId = null;
+		_currentObject = null;
+		
+		_typeLoaded = false;
+	}
+
+// ----------------------- end close action -----------------------
 	
 	public function loadApplicationData():void {
 		
@@ -247,6 +260,10 @@ public class DataManager implements IEventDispatcher {
 	}
 	
 	public function changeCurrentApplication(applicationId:String):void {
+		
+		_currentObject = null;
+		_currentPage = null;
+		_currentPageId = null;
 		
 		var application:XML = new XML(_listApplication.(@ID == applicationId)[0]);
 		
@@ -622,6 +639,7 @@ public class DataManager implements IEventDispatcher {
 		dme.objectId = objectId;
 		dispatchEvent(dme);
 	}
+	
 	private function deleteXMLNodes(objectId:String):void {
 		
 		if(!objectId)
@@ -632,6 +650,7 @@ public class DataManager implements IEventDispatcher {
 		for (var i:int = deleteNodes.length() - 1; i >= 0; i--)
 			delete deleteNodes[i];
 	}
+	
 	private function proxySendedHandler(event:ProxyEvent):void {
 		
 		var objectId:String = event.objectId;
@@ -639,6 +658,20 @@ public class DataManager implements IEventDispatcher {
 		
 		if(requestQue[objectId] !== null) {
 			requestQue[objectId] = key;
+		}
+	}
+	
+	private function setListeners(flag:Boolean):void {
+	
+		if(flag) {
+			
+			proxy.addEventListener(ProxyEvent.PROXY_SEND, proxySendedHandler);
+			proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
+			
+		} else {
+			
+			proxy.removeEventListener(ProxyEvent.PROXY_SEND, proxySendedHandler);
+			proxy.removeEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
 		}
 	}
 	

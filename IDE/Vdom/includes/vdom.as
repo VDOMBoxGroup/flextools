@@ -1,9 +1,11 @@
 import flash.events.Event;
 
+import mx.controls.Alert;
 import mx.core.Application;
 import mx.core.Singleton;
 import mx.events.FlexEvent;
 import mx.managers.PopUpManager;
+import mx.rpc.events.FaultEvent;
 
 import vdom.MyLoader;
 import vdom.components.loginForm.events.LoginFormEvent;
@@ -11,6 +13,7 @@ import vdom.connection.soap.Soap;
 import vdom.events.AuthenticationEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.AuthenticationManager;
+import vdom.managers.CacheManager;
 import vdom.managers.DataManager;
 import vdom.managers.FileManager;
 import vdom.managers.LanguageManager;
@@ -25,17 +28,13 @@ private var dataManager:DataManager;
 private var languageManager:LanguageManager;
 private var authenticationManager:AuthenticationManager;
 private var fileManager:FileManager;
+private var cacheManager:CacheManager;
 private var soap:Soap;
 
 
 private var ppm:MyLoader;
 
 private var tempStorage:Object;
-
-private function applicationCompleteHandler():void {
-	
-	//this.stage.nativeWindow.maximize();
-}
 
 private function changeLanguageHandler(event:Event):void {
 	
@@ -52,10 +51,24 @@ private function preinitalizeHandler():void {
 	dataManager = DataManager.getInstance();
 	soap = Soap.getInstance();
 	fileManager = FileManager.getInstance();
+	cacheManager = CacheManager.getInstance();
 	
 	languageManager.init(languageList);
+	cacheManager.init();
 	
 	tempStorage = {};
+	
+	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
+}
+
+private function showLoginFormHandler():void {
+	
+	Application.application.showStatusBar = false;
+	Application.application.showGripper = false;
+	Application.application.minWidth = 800;
+	Application.application.minHeight = 600;
+	Application.application.width = 800;
+	Application.application.height = 600;
 }
 
 private function showMainHandler():void {
@@ -70,14 +83,15 @@ private function showMainHandler():void {
 private function lockStage():void {
 	
 	ppm = new MyLoader();
+	ppm.setStyle('modalTransparencyDuration', 0);
+	ppm.setStyle('modalTransparencyBlur', 0);
+	ppm.setStyle('modalTransparency', 0);
 	PopUpManager.addPopUp(ppm, this, true);
 	PopUpManager.centerPopUp(ppm);
 }
 
 private function submitLogin(event:LoginFormEvent):void {
-	
-	trace('begin submitLogin');
-	
+		
 	lockStage();
 	
 	var username:String = event.formData.username
@@ -96,7 +110,6 @@ private function submitLogin(event:LoginFormEvent):void {
 
 private function authComleteHandler(event:Event):void {
 	
-	trace('begin authComleteHandler');
 	authenticationManager.removeEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
 	
 	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
@@ -107,48 +120,15 @@ private function dataManagerInitComplete(event:DataManagerEvent):void {
 	
 	dataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
 	viewstack.selectedChild=main;
-	//applicationManagmentModule.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
 	PopUpManager.removePopUp(ppm);
 }
 
-/* private function mainInitHandler(event:Event):void {
+private function soap_faultHandler(event:FaultEvent):void {
 	
-	//applicationListContainer.selectedIndex = 0;
-	//publicData['applicationId'] = applicationListContainer.applicationID;
-} */
-
-/* private function applicationChangedHandler(event:ListEvent):void {
-	
-	dataManager.changeApplication(listApplicationContainer.applicationID);
-} */
-
-/* private function listApplicationHandler(event:SoapEvent):void {
-	
-	trace('begin ;Handler');
-	listApplication = event.result;
-	publicData['applicationId'] = listApplication.Application[0].@id.toString();
-	
-	soap.removeEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
-	soap.addEventListener(SoapEvent.GET_ALL_TYPES_OK, getAllTypesHandler);
-	soap.getAllTypes();
-	trace('end listApplicationHandler');
-} */
-
-/* private function getAllTypesHandler(event:SoapEvent):void {
-	
-	trace('begin getAllTypesHandler');
-	publicData['types'] = event.result;
-	//trace(publicData['types'])
-	soap.removeEventListener(SoapEvent.GET_ALL_TYPES_OK, getAllTypesHandler);
-	languages.parseLanguageData(publicData['types']);
-	
-	viewstack.selectedChild=main;
+	Alert.show(event.fault.faultString, 'Error');
 	
 	PopUpManager.removePopUp(ppm);
-	trace('end getAllTypesHandler');
-} */
-
-/* private function changeLanguageHandler(event:Event):void {
-	
-	languages.changeLanguage(event.currentTarget.selectedItem.@Code);
-} */
+	dataManager.close();
+	authenticationManager.changeAuthenticationInformation(null, null, null);
+	viewstack.selectedChild=loginForm;
+}

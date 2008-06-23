@@ -112,13 +112,7 @@ private function mouseDownHandler(event:MouseEvent):void {
 	if(event.target is Button || event.target.parent is TextInput)
 		return
 	
-	//if(event.target == this) {
-			
-		window.nativeWindow.startMove();
-		//event.stopPropagation();
-	//}
-			
-	//loginFormPanel.startDrag();
+	window.nativeWindow.startMove();
 	
 	event.stopImmediatePropagation();
 }
@@ -127,6 +121,4 @@ private function mouseUpHandler(event:MouseEvent):void {
 	
 	loginFormPanel.setStyle('horizontalCenter', undefined);
 	loginFormPanel.setStyle('verticalCenter', undefined);
-			
-	//loginFormPanel.stopDrag();
 }

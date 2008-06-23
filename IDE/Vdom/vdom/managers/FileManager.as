@@ -1,19 +1,14 @@
 package vdom.managers {
 
-import flash.display.Bitmap;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
 import mx.utils.Base64Decoder;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
-import vdom.events.DataManagerEvent;
 import vdom.events.FileManagerEvent;
 	
 public class FileManager implements IEventDispatcher {
@@ -27,11 +22,9 @@ public class FileManager implements IEventDispatcher {
 	private var _resourceStorage:Object = {};
 	
 	private var dataManager:DataManager;
+	private var cacheManager:CacheManager = CacheManager.getInstance();
 	
 	private var applicationId:String;
-	
-	private var cacheDirectory:File = File.applicationStorageDirectory.resolvePath('cache');
-	private var fileStream:FileStream = new FileStream();
 	
 	/**
 	 * 
@@ -62,15 +55,13 @@ public class FileManager implements IEventDispatcher {
 		soap = Soap.getInstance();
 		dataManager = DataManager.getInstance();
 		
-		dataManager.addEventListener('currentApplicationChanged', dataManager_applicationChangeHandler);
-		
-		if(dataManager.currentApplicationId) {
+		/* if(dataManager.currentApplicationId) {
 			
 			applicationId = dataManager.currentApplicationId;
 			cacheDirectory = cacheDirectory.resolvePath(applicationId);
 			/* if(!cacheDirectory.exists)
-				cacheDirectory.createDirectory(); */
-		}
+				cacheDirectory.createDirectory();
+		} */
 			
 	}
 	
@@ -95,7 +86,18 @@ public class FileManager implements IEventDispatcher {
 		if(!resourceID)
 			return;
 		
-		var resourceFile:File = cacheDirectory.resolvePath(resourceID); 
+		var result:ByteArray = cacheManager.getCachedFileById(resourceID);
+		
+		if(result) {
+			
+			if(raw)
+				destTarget[property] = result;
+			else
+				destTarget[property] = {resourceID:resourceID, data:result}
+			return;
+		}
+		
+		//var resourceFile:File = cacheDirectory.resolvePath(resourceID); 
 		
 		/* if(resourceFile.exists) {
 			
@@ -157,17 +159,6 @@ public class FileManager implements IEventDispatcher {
 		);
 	}
 	
-	private function dataManager_applicationChangeHandler(event:DataManagerEvent):void {
-		
-		if(dataManager.currentApplicationId) {
-			
-			applicationId = dataManager.currentApplicationId;
-			cacheDirectory = cacheDirectory.resolvePath(applicationId);
-			if(!cacheDirectory.exists)
-				cacheDirectory.createDirectory();
-		}
-	}
-	
 	private function resourceLoadedHandler(event:SoapEvent):void {
 		
 		var resourceID:String = event.result.ResourceID;
@@ -180,11 +171,8 @@ public class FileManager implements IEventDispatcher {
 		
 		imageSource.uncompress();
 		
-		var file:File = cacheDirectory.resolvePath(resourceID);
-		
-		fileStream.open(file, FileMode.WRITE);
+		cacheManager.cacheFile(resourceID, imageSource);
 
-		fileStream.writeBytes(imageSource);
 		imageSource.position = 0;
 		_resourceStorage[resourceID] = imageSource;
 		

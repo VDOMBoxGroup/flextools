@@ -15,6 +15,20 @@ WindowedApplication {
 	borderStyle: none;	
 }
 
+Alert {
+	
+	modalTransparencyDuration:0;
+	modalTransparencyBlur:0;
+	modalTransparency:0;
+}
+
+TitleWindow {
+	
+	modalTransparencyDuration:0;
+	modalTransparencyBlur:0;
+	modalTransparency:0;
+}
+
 VdomTitleBar {
 	
 	backgroundSize: "100%";

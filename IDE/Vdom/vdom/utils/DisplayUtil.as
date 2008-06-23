@@ -5,6 +5,7 @@ import flash.display.DisplayObjectContainer;
 import flash.geom.Point;
 import flash.utils.getDefinitionByName;
 
+import mx.controls.scrollClasses.ScrollBar;
 import mx.core.Application;
 
 public class DisplayUtil {
@@ -20,7 +21,7 @@ public class DisplayUtil {
 				new Point(app.stage.mouseX, app.stage.mouseY )
 		);
 		
-		var stack:Array = new Array();
+		var stack:Array = [];
 		
 		var targetClass:Class = getDefinitionByName(targetClassName) as Class;
 		
@@ -29,7 +30,10 @@ public class DisplayUtil {
 			var target:DisplayObject = allObjectUnderPoint[i];
 				
 			while (target is DisplayObject) {
-					
+				
+				if(target is ScrollBar)
+					return [];
+				
 				if(target is targetClass)
 					break;
 				

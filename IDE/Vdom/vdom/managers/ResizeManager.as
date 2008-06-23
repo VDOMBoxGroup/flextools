@@ -2,6 +2,7 @@ package vdom.managers {
 
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
+import flash.utils.getQualifiedClassName;
 
 import mx.controls.ToolTip;
 import mx.core.Container;
@@ -344,7 +345,12 @@ public class ResizeManager extends EventDispatcher {
 			tip.y = event.stageY + 15;
 		}
 		
-		if(selectMarker.item && itemTransform || itemDrag || selectMarker.markerSelected )
+		if(
+			selectMarker.item && 
+			itemTransform || 
+			itemDrag || 
+			selectMarker.markerSelected
+		)
 			return;
 		
 		if(activeItem && Container(activeItem).parent != _topLevelItem) {
