@@ -144,7 +144,7 @@
 			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
 			 	' </Attributes>';
 			var xml:XML = XML(str)	
-			dataManager.currentObject.Attributes = xml;
+				dataManager.currentObject.Attributes = xml;
 			
 			dataManager.updateAttributes();
 		}
@@ -170,7 +170,6 @@
 		{
 			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
 			rbWnd.selectedItemID = resourceID;
-			trace('1resourceID: ' + resourceID)
 			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
 		}
 		
@@ -178,7 +177,6 @@
 		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
 		{
 				resourceID = rbEvt.resourceID;
-				trace('2resourceID: ' + resourceID)
 				fileManager.loadResource(dataManager.currentApplicationId,  resourceID, this);
 		}	
 		
@@ -188,15 +186,13 @@
 		{
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 			loader.loadBytes(data.data);
-			//image.source = data.data;
 		}
 		
 		
 		private function loadComplete(evt:Event):void 
 		{
    			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
-   			//image.width = loader.width;
-   			//image.height = loader.height;
+   		
    			image.source = loader.content;
    		}
 		

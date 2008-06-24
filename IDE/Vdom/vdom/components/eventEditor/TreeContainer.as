@@ -46,7 +46,8 @@ package vdom.components.eventEditor
 		
 		public function hideHandler():void
 		{
-			dataManager.changeCurrentPage(selectedNode.@ID);
+			if(selectedNode)
+				dataManager.changeCurrentPage(selectedNode.@ID);
 		}
 		
 		private var selectedNode:XML;

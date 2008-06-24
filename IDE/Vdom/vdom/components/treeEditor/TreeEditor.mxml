@@ -75,7 +75,8 @@
 		removeAllLines();
 		removeMassTreeElements();
 		removeTreeEditorListeners();
-		dataManager.changeCurrentPage(curTree.ID);
+		if(curTree)
+			dataManager.changeCurrentPage(curTree.ID);
 	//	btLine.visible = false;
 		if (main.contains(btLine))
 			main.removeChild(btLine);
