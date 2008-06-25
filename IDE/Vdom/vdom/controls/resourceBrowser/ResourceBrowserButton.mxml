@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" height="20" width="100" horizontalAlign="right" initialize="initalizeHandler();" verticalAlign="middle">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" height="20" width="100" horizontalAlign="right" initialize="initaliseHandler();" verticalAlign="middle">
 	<mx:Script>
 	
 		<![CDATA[
@@ -11,7 +11,7 @@
 			private var _title:String = "";
 			private var _rBrowserInstance:ResourceBrowser;
 	
-			private function initalizeHandler():void {
+			private function initaliseHandler():void {
 			}
 	
 			public function set title(attrValue:String):void {

@@ -79,11 +79,10 @@ public function get selectedItemID():String {
 }
 
 private function creationComplete():void {
-	this.addEventListener(CloseEvent.CLOSE, closeHandler);
-	//this.whiteBox.alpha = 1; 
+	this.addEventListener(CloseEvent.CLOSE, closeHandler); 
 	loadTypesIcons();
-	//PopUpManager.centerPopUp(super);
 	listResourcesQuery();
+	this.visible = true;
 }
 
 private function listResourcesQuery():void {

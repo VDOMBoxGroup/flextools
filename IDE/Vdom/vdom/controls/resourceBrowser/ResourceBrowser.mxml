@@ -10,9 +10,10 @@
 	creationComplete="{creationComplete();}"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	borderAlpha="1" 
+	borderAlpha="0.9" cornerRadius="1" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
->
+	visible="false">
+	
 	<mx:Script>
 		<![CDATA[
 			import mx.events.CloseEvent;
