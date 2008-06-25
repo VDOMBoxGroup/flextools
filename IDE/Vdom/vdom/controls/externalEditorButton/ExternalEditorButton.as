@@ -27,6 +27,8 @@ package vdom.controls.externalEditorButton
 		private var exEditor:*;
 		private var exEditorPopUpInstance:*;
 		private var titleWnd:TitleWindow;
+		
+		private var _value:String; 
 
 		public function ExternalEditorButton(applicationID:String, typeID:String) {
 			super();
@@ -38,6 +40,10 @@ package vdom.controls.externalEditorButton
 
 			_applicationID = applicationID;
 			_typeID = typeID;
+		}
+		
+		public function set value(param:String):void {
+			_valueLabel.text = _value;
 		}
 		
 		override protected function createChildren():void {			
