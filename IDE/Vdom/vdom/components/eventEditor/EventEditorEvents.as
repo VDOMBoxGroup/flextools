@@ -78,7 +78,7 @@ package vdom.components.eventEditor
 			
 			dataManager = DataManager.getInstance();
 			
-			_ID = UIDUtil.createUID();
+		//	_ID = UIDUtil.createUID();
 			cnvUpLayer.clipContent = false;
 			
 			
@@ -234,7 +234,8 @@ package vdom.components.eventEditor
 			addChild(cnvUpLayer);
 			
 		}
-		private var _name:String;
+		
+		
 		private var _eventType:String;
 		private function initDownBody(data:Object):void
 		{
@@ -256,19 +257,24 @@ package vdom.components.eventEditor
 				rightVRule.percentHeight = 100;
 			cnvDownLayer.addChild(rightVRule);  
 			
-		/*	 data = "<Event label='' parentID='' parentType='' />"
+		/*	 data = "<Event label='' parentID='' parentType=''  ObjSrcID=''/>"
 			*/
 			data = data as XML;
 			
 			var object:XML = dataManager.getObject(data.@ObjSrcID);
+			
+			_name = data.@Name;
+			_eventType = data.@label;
+			_objTgtID = data.@ObjSrcID;
+			_ID = _objTgtID + _name;
+			
+			
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
 			vBox.addChild(objectName);
-			_name = object.@Name;
 			
 			var type:XML = dataManager.getTypeByObjectId(data.@ObjSrcID);
 			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
 			vBox.addChild(objectEvent);
-			_eventType = data.@label
 			
 			
 			
@@ -328,5 +334,18 @@ package vdom.components.eventEditor
 		{
 			return _ID;
 		}
+		
+		private var _objTgtID:String;
+		public function getObjTgtID():String
+		{
+			return _objTgtID;
+		}
+		
+		private var _name:String;
+		public function getName():String
+		{
+			return _name;
+		}
+	
 	}
 }

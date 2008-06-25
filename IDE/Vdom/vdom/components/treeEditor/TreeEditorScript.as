@@ -341,6 +341,7 @@ private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 			treEl.addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
 			treEl.addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);
 			treEl.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+			// можно его подключать по необходимости
 			treEl.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 			treEl.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			

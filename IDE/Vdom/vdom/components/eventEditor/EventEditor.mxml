@@ -99,6 +99,7 @@
 	        	 
 	        	newElement.x = event.localX;
 	        	newElement.y = event.localY;
+	        	newElement.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)
 	        	
 	 			can.addChild(newElement); 
 	        }   
@@ -236,6 +237,37 @@
 				var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 			 	
 		 		return IconUtil.getClass(trContainer, data, 16, 16);
+			}
+			/***
+			 * 
+			 *  for ReDraw line when one of objects moved
+			 *
+			 */
+			private var  curID:String;
+			private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				// object to Top
+			//	main.removeChild(massTreeElements[trEvt.ID]);
+			//	main.addChild(massTreeElements[trEvt.ID]);
+				curID = trEvt.ID;
+				addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			}
+			
+			private function mouseMoveHandler(msEvt:MouseEvent):void
+			{
+			//!!!!	redrawLines(curTree.ID);
+				for(var evID:String in linesArray)
+					for(var acID:String in linesArray[evID])
+					{
+						if(evID == curID || acID == curID)
+							linesArray[evID][acID].updateVector();
+					}
+			}
+			
+			private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+			//  проверка если перетащили за границы :	treeElementMousUpHandler();
 			}
 	 	]]>
 	 </mx:Script>
