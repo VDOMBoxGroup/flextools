@@ -291,7 +291,7 @@ package vdom.connection.soap
 			sGetScript.addEventListener(SoapEvent.GET_SCRIPT_OK, ldispatchEvent);
 			sGetScript.addEventListener(SoapEvent.GET_SCRIPT_ERROR, ldispatchEvent);
 			
-			sGetScript.execute(appid, objid, lang,);
+			sGetScript.execute(appid, objid, lang);
 		}
 		
 		/**
