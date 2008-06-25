@@ -86,10 +86,10 @@ package vdom.connection.soap
 		public static var MODIFY_RESOURSE_ERROR 			:String =  "modifyResourceERROR"; 
 		public static var GET_SCRIPT_ERROR					:String =  "Get Script ERROR" 	
 		
+		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,
-								 	cancelable:Boolean = true
-								  )
+								 	cancelable:Boolean = true)
 		{
 			super(type, bubbles, cancelable);
 	
