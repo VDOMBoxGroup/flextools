@@ -49,6 +49,9 @@ public class DataManagerEvent extends Event
 	public static const OBJECTS_CREATED:String = 'objectCreated';
 	public static const OBJECT_DELETED:String = 'objectDeleted';
 	
+	public static const OBJECT_SCRIPT_LOADED:String = 'objectScriptLoaded';
+	public static const OBJECT_SCRIPT_SAVED:String = 'objectScriptSaved';
+	
 	public static const RESOURCE_MODIFIED:String = 'resurceModified';
 	
 	public static const STRUCTURE_LOADED:String = 'structureLoaded';

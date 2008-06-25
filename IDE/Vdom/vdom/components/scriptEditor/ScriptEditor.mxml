@@ -11,6 +11,7 @@
 >
 	<mx:Script>
 	<![CDATA[
+		import vdom.events.DataManagerEvent;
 		import vdom.managers.DataManager;
 		
 		private var dataManager:DataManager;
@@ -38,26 +39,52 @@
 		
 		private function show():void {
 			
+			txtArea.enabled = false;
 			var scriptText:String = '';
 			
 			if(dataManager.currentObject) {
 				
-				var pattern:RegExp = /\W+/;
-				scriptText = dataManager.currentObject.Type.SourceCode;
-				scriptText = scriptText.replace(pattern,'');
-			}
+				var objId:String = dataManager.currentObjectId; 
 				
-			txtArea.text = scriptText;
+				dataManager.addEventListener(DataManagerEvent.OBJECT_SCRIPT_LOADED, objectScriptLoaded)
+				dataManager.getObjectScript(objId);
+			}
+		}
+		
+		private function objectScriptLoaded(event:DataManagerEvent):void {
+			
+			dataManager.removeEventListener(DataManagerEvent.OBJECT_SCRIPT_LOADED, objectScriptLoaded)
+			txtArea.text = event.result.Script;
+			txtArea.enabled = true;
+			txtArea.editable = true;
+		}
+		
+		private function saveScript():void {
+			
+			txtArea.editable = false;
+			txtArea.enabled = false;
+			dataManager.addEventListener(DataManagerEvent.OBJECT_SCRIPT_SAVED, objectScriptSaved);
+			dataManager.setObjectScript(txtArea.text);  
+		}
+		
+		private function objectScriptSaved(event:DataManagerEvent):void {
+			
+			dataManager.removeEventListener(DataManagerEvent.OBJECT_SCRIPT_SAVED, objectScriptSaved)
+			//txtArea.text = event.result.Script;
+			txtArea.enabled = true;
+			txtArea.editable = true;
 		}
 		
 		private function hide():void {
 			
+			txtArea.text = '';
 		}
 	]]>
 	</mx:Script>
 	
 	<mx:TextArea text="" width="28" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
-			verticalScrollPolicy="off" textAlign="right" top="0" bottom="0" left="0"/>
+			verticalScrollPolicy="off" textAlign="right" top="40" bottom="0" left="0"/>
 	<containers:TabbedTextArea id="txtArea" 
-		allowTabKey="true"  x="{numStrok.width}" height="100%" width="100%" />
+		allowTabKey="true"  x="{numStrok.width}" width="100%" top="40" bottom="0"/>
+	<mx:Button x="10" y="10" label="Save" height="20" cornerRadius="0" click="saveScript()"/>
 </mx:Canvas>

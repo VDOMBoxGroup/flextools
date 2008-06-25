@@ -29,7 +29,7 @@ Next session:  1058970637
 Next session:  8122681760
 Next session:  1629876353	
 */
-	import mx.charts.chartClasses.ChartBase;
+	
 	import mx.controls.Alert;
 	
 	public class VDOM_session_protector

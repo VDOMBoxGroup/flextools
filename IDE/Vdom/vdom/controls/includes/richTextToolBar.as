@@ -8,6 +8,7 @@ import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.ColorPickerEvent;
 import mx.events.ListEvent;
+import mx.managers.FocusManager;
 import mx.managers.PopUpManager;
 
 import vdom.containers.IItem;
@@ -47,7 +48,7 @@ public function init(item:IItem, container:*):void {
 	if(!editableElement.loaded)
 		editableElement.addEventListener(Event.COMPLETE, editableElement_completeHandler);
 	else
-		editableElement_completeHandler(new Event('true'))
+		editableElement_completeHandler(new Event('true'));
 }
 
 public function get selfChanged():Boolean {

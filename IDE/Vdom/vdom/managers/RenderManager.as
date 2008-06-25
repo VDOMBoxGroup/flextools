@@ -212,7 +212,7 @@ public class RenderManager implements IEventDispatcher {
 		items.filterFunction = 
 			function (item:Object):Boolean {
 				return (item.fullPath.indexOf(itemId+'.') != -1);
-		}
+			}
 	
 		items.refresh();
 	 
@@ -690,7 +690,8 @@ public class RenderManager implements IEventDispatcher {
 			itemAsContainer.percentWidth = 100;
 			itemAsContainer.percentHeight = 100;
 			
-			rootContainer.addChild(itemAsContainer);
+			if(!itemAsContainer.parent)
+				rootContainer.addChild(itemAsContainer);
 		}
 		
 		itemAsContainer.dispatchEvent(new Event('refreshComplete'));

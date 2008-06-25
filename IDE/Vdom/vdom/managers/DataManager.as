@@ -651,6 +651,47 @@ public class DataManager implements IEventDispatcher {
 			delete deleteNodes[i];
 	}
 	
+	public function getObjectScript(objectId:String = ''):void {
+		
+		if(objectId == '')
+			objectId = currentObjectId;
+		
+		var applicationId:String = _currentApplicationId;
+		var language:String = 'vbscript';
+		
+		soap.addEventListener(SoapEvent.GET_SCRIPT_OK, soap_getScriptHandler)
+		soap.getScript(applicationId, objectId, language);
+	}
+	
+	private function soap_getScriptHandler(event:SoapEvent):void {
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_SCRIPT_LOADED);
+		dme.result = event.result.Result[0];
+		
+		dispatcher.dispatchEvent(dme);
+	}
+	
+	public function setObjectScript(script:String, objectId:String = ''):void {
+		
+		if(objectId == '')
+			objectId = currentObjectId;
+		
+		var applicationId:String = _currentApplicationId;
+		var language:String = 'vbscript';
+		
+		
+		soap.addEventListener(SoapEvent.SET_SCRIPT_OK, soap_setScriptHandler)
+		soap.setScript(applicationId, objectId, script, language);
+	}
+	
+	private function soap_setScriptHandler(event:SoapEvent):void {
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_SCRIPT_SAVED);
+		dme.result = event.result.Result[0];
+		
+		dispatcher.dispatchEvent(dme);
+	}
+	
 	private function proxySendedHandler(event:ProxyEvent):void {
 		
 		var objectId:String = event.objectId;
