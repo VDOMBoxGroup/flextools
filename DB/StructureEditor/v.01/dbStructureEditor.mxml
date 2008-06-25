@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	width="640" height="480"
+	paddingBottom="10" paddingRight="10" paddingLeft="10" paddingTop="10"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	verticalGap="2" horizontalGap="0" creationComplete="{creationComplete();}"
+	backgroundAlpha="1" backgroundColor="#FFFFFF"
+>
+
+	<!-- Main Class Scripting File -->	
+	<mx:Script source="dbStructureEditor_s.as" />
+	
+	<mx:HBox id="__mainHBox" width="100%" height="100%" horizontalGap="5" verticalGap="0">
+		<mx:VBox height="100%" width="250" verticalGap="0">
+			<mx:Label text="Columns:" />
+			<mx:List id="__propList" width="100%" height="100%" dataProvider="{_columnsProvider}"
+				change="{listChangeHandler();}" />
+		</mx:VBox>
+
+		<mx:VBox height="100%" width="100%" verticalGap="0">
+			<mx:Label text="Properties:" />
+			<mx:VBox id="__propDetailsPanel" borderStyle="solid" width="100%" height="100%" paddingTop="2" paddingRight="2" enabled="false">
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Name:" width="100" />
+					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__applyBtn.enabled = true; controlsEnable(false);}" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="ID:" />
+					<mx:Label id="__id" width="100%" textAlign="right" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Type:" width="100" />
+					<mx:ComboBox id="__type" width="200" change="{__applyBtn.enabled = true; controlsEnable(false);}">
+						<mx:ArrayCollection>
+							<mx:Object label="TEXT"		data="text"/>
+							<mx:Object label="INTEGER"	data="integer"/>
+							<mx:Object label="REAL"		data="real"/>
+							<mx:Object label="BLOB"		data="blob"/>
+						</mx:ArrayCollection>
+					</mx:ComboBox>
+					
+				</mx:HBox>
+				
+				
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+					<mx:Label text="Primary key:" width="100" />
+					<mx:CheckBox id="__pKey" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+					<mx:Label text="Auto increment:" width="100" />
+					<mx:CheckBox id="__aIncrement" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+					<mx:Label text="Can be null:" width="100" />
+					<mx:CheckBox id="__null" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+					<mx:Label text="Default value:" width="100" />
+					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" />
+				</mx:HBox>
+								
+				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
+					<mx:Button id="__applyBtn" enabled="false" label="Apply changes" click="{applyBtnHandler();}"/>
+				</mx:HBox>				
+			</mx:VBox>
+		</mx:VBox>		
+	</mx:HBox>
+
+	<mx:HBox id="__addRemoveBtns" width="100%" paddingTop="2" enabled="false">
+		<mx:Button id="__addBtn" label="Add" click="{addBtnHandler();}" />
+		<mx:Button id="__removeBtn" label="Remove" click="{removeBtnHandler();}" />
+		<mx:Spacer width="100%" />
+	</mx:HBox> 
+</mx:Application>
