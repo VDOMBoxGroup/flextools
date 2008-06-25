@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
+	cornerRadius="1" title="External Editor" horizontalAlign="center" verticalAlign="middle"
+	verticalGap="0" horizontalGap="0" borderAlpha="0.9" showCloseButton="true" shadowDistance="0" shadowDirection="right">
+
+	<mx:ControlBar paddingTop="1" paddingBottom="3" paddingRight="10" paddingLeft="10">
+		<mx:Spacer width="100%"/>
+		<mx:Button label="Done" click="{doneClickHandler();}"/>
+	</mx:ControlBar>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			private function doneClickHandler():void {
+				var closeEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
+				this.dispatchEvent(closeEvent);
+			}
+		]]>
+	</mx:Script>
+	
+</mx:TitleWindow>

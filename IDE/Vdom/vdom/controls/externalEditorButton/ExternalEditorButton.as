@@ -3,9 +3,9 @@ package vdom.controls.externalEditorButton
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.utils.ByteArray;
 	
 	import mx.containers.HBox;
-	import mx.containers.TitleWindow;
 	import mx.controls.Button;
 	import mx.controls.Label;
 	import mx.controls.SWFLoader;
@@ -18,15 +18,13 @@ package vdom.controls.externalEditorButton
 	{
 		private var _applicationID:String = "";
 		private var _typeID:String = "";
-		private var _defaultValue:String = "";
 		
 		private var _valueLabel:Label;
 		private var _openBtn:Button;
 		
 		private var ldr:SWFLoader;
 		private var exEditor:*;
-		private var exEditorPopUpInstance:*;
-		private var titleWnd:TitleWindow;
+		private var applWindow:ApplicationWindow;
 		
 		private var _value:String; 
 
@@ -35,7 +33,9 @@ package vdom.controls.externalEditorButton
 
 			this.horizontalScrollPolicy = "off";
 			this.verticalScrollPolicy = "off";
-			this.setStyle("horisontalGap", 1);
+			this.setStyle("horizontalGap", 1);
+			this.setStyle("paddingLeft", 0);
+			this.setStyle("paddingRight", 0);
 			this.setStyle("verticalAlign", "middle");
 
 			_applicationID = applicationID;
@@ -43,7 +43,9 @@ package vdom.controls.externalEditorButton
 		}
 		
 		public function set value(param:String):void {
-			_valueLabel.text = _value;
+			_value = param;
+			if (_valueLabel)
+				_valueLabel.text = _value;
 		}
 		
 		override protected function createChildren():void {			
@@ -51,16 +53,14 @@ package vdom.controls.externalEditorButton
 			
 			if (!_valueLabel) {
 				_valueLabel = new Label(); 
-				_valueLabel.percentWidth = 100;
-				_valueLabel.percentHeight = 100;
-				_valueLabel.text = _applicationID;
+				_valueLabel.width = this.width - 23;
 				addChild(_valueLabel);
 			}
 			
 			if (!_openBtn) {
 				_openBtn = new Button();
 				_openBtn.width = 22;
-				_openBtn.percentHeight = 100;
+				_openBtn.height = 20;
 				_openBtn.setStyle("cornerRadius", 0);
 				_openBtn.setStyle("paddingLeft", 1);
 				_openBtn.setStyle("paddingRight", 1);
@@ -70,66 +70,46 @@ package vdom.controls.externalEditorButton
 			} 
 		}
 
-//		--------------------------------------------------------------------------------------
+//		----- Loading and executing external application methods -----------------------------
 				
-        private function loadNestedAppl():void {
-        	var manager:String = "C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf";
+        private function loadNestedAppl(appl:ByteArray):void {
+//        	var editor:String = "C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf";
         	ldr = new SWFLoader();
         	
         	ldr.addEventListener(Event.COMPLETE, applicationLoaded);  
-        	ldr.load(manager);
+        	ldr.source = appl;
         }
         
 		private function applicationLoaded(event:Event):void {
-			titleWnd = new TitleWindow();
-			titleWnd.visible = false;
-			titleWnd.setStyle("paddingLeft", 0);	
-			titleWnd.setStyle("paddingRight", 0);
-			titleWnd.setStyle("paddingTop", 0);
-			titleWnd.setStyle("paddingBottom", 0);
-			titleWnd.setStyle("cornerRadius", 1);
-						
-    		titleWnd.title = "External Editor";
-    		titleWnd.setStyle("horisontalAlign", "center");
-    		titleWnd.setStyle("verticalAlign", "middle");
-    		titleWnd.setStyle("borderAlpha", 0.9);
+			/* create popup window and set its visual properties */
+			applWindow = new ApplicationWindow();
+			applWindow.visible = false;
+			
+	   		event.currentTarget.content.addEventListener(FlexEvent.APPLICATION_COMPLETE, applicationComplete);
+    		applWindow.addChild(ldr);
     		
-    		event.currentTarget.content.addEventListener(FlexEvent.APPLICATION_COMPLETE, applicationComplete);
-    		titleWnd.addChild(ldr);
-    		ldr.setStyle("dropShadowEnabled", "false");
-    		exEditorPopUpInstance = PopUpManager.addPopUp(titleWnd, DisplayObject(Application.application), true);
-    		
+    		/* Add control bar to the window */
+    		PopUpManager.addPopUp(applWindow, DisplayObject(Application.application), false);
+    		applWindow.addEventListener(CloseEvent.CLOSE, applCloseHandler);
 		}
  
 		private function applicationComplete(event:Event):void {
 			exEditor = event.target.application;
 			
-			titleWnd.width = exEditor['width'] + 20;
-			titleWnd.height = exEditor['height'] + 40;
-			PopUpManager.centerPopUp(titleWnd);
-			titleWnd.visible = true;
+			PopUpManager.centerPopUp(applWindow);
+			applWindow.visible = true;
 			
 			exEditor.addEventListener(CloseEvent.CLOSE, applCloseHandler);
-
-    		exEditor['externalManager'] = null;
-			exEditor['value'] = 
-				<TableStructure>
-					<TableDef id="ac73b296-d4f0-4a3e-b64c-19fe3fde0a5b" name="dbtable_ac73b296_d4f0_4a3e_b64c_19fe3fde0a5b">
-						<ColumnDef id="djhgfkshdgfkjds" name="id" type="text"/>
-						<ColumnDef id="iueyhri843rhskj" name="name" type="text"/>
-						<ColumnDef id="dkjhgkdjfhgkjfv" name="pic" type="blob"/>
-					</TableDef>
-					<ChangeLog />
-				</TableStructure>;
-
+    		exEditor['externalManager'] = null;		// not implemented yet
+			exEditor['value'] = _value;
 		}
 
 		private function openWindow(event:Event):void {
-			loadNestedAppl();
+			loadNestedAppl(null);
 		}
 		
 		private function applCloseHandler(event:Event):void {
-			PopUpManager.removePopUp(titleWnd);
+			PopUpManager.removePopUp(applWindow);
 		}
 	}
 }
