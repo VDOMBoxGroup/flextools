@@ -114,7 +114,7 @@
 	{
 		main.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		treeElementMousUpHandler();
-		saveToServer();
+		// saveToServer();
 	}
 	
 	
@@ -205,22 +205,27 @@
     {
         if (event.detail==Alert.YES)
         {
+        	dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
            	dataManager.deleteObject(curTree.ID)
-           	deleteObject(curTree.ID);
            	
-           	var ID:String = '';
-			for (var nam:String in massTreeElements)
-				if(ID == '')
-				{
-					curTree = massTreeElements[nam];
-					curTree.current = true;
-					return;
-				}  
         }
-        //select random element 
-        
-		
-	//	dataManager.changeCurrentPage( curTree.ID);
+    }
+    
+    private function deleteObjectHandler(dmEvt:DataManagerEvent):void
+    {
+    	dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
+    	deleteObject(curTree.ID);
+           	
+       	var ID:String = '';
+		for (var nam:String in massTreeElements)
+		{
+			if(ID == '')
+			{
+				curTree = massTreeElements[nam];
+				curTree.current = true;
+				return;
+			}  
+		}
     }
 	
 	/**
@@ -342,7 +347,8 @@
 		fileManager.loadResource(dataManager.currentApplicationId,  trEl.resourceID, massTreeElements[ID]);
 		
 		//select new object
-		curTree.current = false;
+		if(curTree != null)
+			curTree.current = false;
 		curTree = massTreeElements[ID];
 		if(curTree != null)
 			curTree.current = true;

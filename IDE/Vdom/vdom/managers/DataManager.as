@@ -502,7 +502,7 @@ public class DataManager implements IEventDispatcher {
 	public function setApplactionStructure(struct:XML):void {
 		
 		soap.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, setApplicationStructureHandler);
-		soap.setApplicationStructure(_currentApplicationId, struct);
+		soap.setApplicationStructure(_currentApplicationId, struct.toXMLString() );
 	}
 	
 	private function setApplicationStructureHandler(event:SoapEvent):void {

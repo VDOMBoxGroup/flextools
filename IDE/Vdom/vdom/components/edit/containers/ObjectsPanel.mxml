@@ -162,7 +162,7 @@
 			return xmllReturn;
 		}
 		
-		/* private function getIcons ():void
+		/* private function ge	tIcons ():void
 		{
 			trace('run function getIcon');	
 		} */

@@ -53,7 +53,7 @@ package vdom.components.eventEditor
 		private var textArea:TextArea;
 		private var _ID:String;
 //		private var rect:Canvas = new Canvas();
-		private var min:Boolean = false;
+		private var min:Boolean = true;
 		public var drag:Boolean = true;
 		private var image:Image;
 		private var imgBackGround:Image;
@@ -214,7 +214,7 @@ package vdom.components.eventEditor
 			imgDelete.addEventListener(MouseEvent.CLICK, deleteClickHandler);
 			
 			imgPlus = new Image();
-			imgPlus.source = plus;
+			imgPlus.source = minus;
 			imgPlus.buttonMode = true;
 				
 			imgPlus.addEventListener(MouseEvent.CLICK, plusClickHandler);	
@@ -276,15 +276,13 @@ package vdom.components.eventEditor
 			vBox.addChild(objectEvent);
 			_eventType = data.@label
 			
-			
-			/*
-			var parametrs:XML = type.E2vdom.Events..Event.(@Name = data.@Name).Parameters[0];
+			var parametrs:XML = type.E2vdom.Actions.Container.(@ID == data.@containerID).Action.(@MethodName = data.@MethodName).Parameters[0];
 			for each(var child:XML in parametrs.children())
 			{
-				var parametr:SimpleLayer = new SimpleLayer(child.@Name);
+				var parametr:SimpleLayer = new SimpleLayer(child.@ScriptName);
 				vBox.addChild(parametr);
 			}
-			*/
+			
 			var y:SimpleLayer = new SimpleLayer('Y');
 			vBox.addChild(y);
 		}

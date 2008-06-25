@@ -113,7 +113,7 @@
 			
 			treeElementID = obID;
 			typeResourse = getIcon(typeID);
-			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
+			dataManager.addEventListener('currentObjectChanged', changeAttributesHandler);
 			dataManager.changeCurrentPage(obID);
 		}
 	
@@ -132,9 +132,13 @@
 			return  '';
 		}
 		
-		private function changeAttributesHandler(dmEvt:DataManagerEvent):void
+		private function changeAttributesHandler(dmEvt:Event):void
 		{
-			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
+			dataManager.removeEventListener('currentObjectChanged', changeAttributesHandler);
+			//dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
+			
+			if(!dataManager.currentObject)
+				return;
 
 			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
 		

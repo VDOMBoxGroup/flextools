@@ -10,7 +10,10 @@
 	 	/***
 	 	 * 
 	 	 * 
-	 	 * 	заполнить еветЕлементы.
+	 	 * 	- перерисовывались линии.
+	 	 *  - собрать структуру из дерева
+	 	 *  - из структуры собрать дерево
+	 	 *  - 
 	 	 * 
 	 	 * 
 	 	 * */
@@ -204,7 +207,7 @@
 				}
 				*/
 				can.removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
-				removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+					removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 				
 				line.clear();
 				can.removeChild(line); ///-------------***********

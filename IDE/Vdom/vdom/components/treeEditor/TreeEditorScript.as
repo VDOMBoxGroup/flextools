@@ -40,7 +40,7 @@ private function deleteObject(strID:String):void
 	
 	curTree = null;
 	
-	saveToServer();
+	//saveToServer();
 }
 
 
@@ -236,46 +236,7 @@ private  function removeMassTreeElements():void
 }
 
 private var topLevelTypes:XMLList;
-/*
-private function createTreeArr(xml:XML):void
-{
-	//topLevelTypes = dataManager.getTopLevelTypes();
-	var xmlTopLevelObjects:XMLList = dataManager.listPages;
-	for each(var page:XML in xmlTopLevelObjects)
-	{
-		var ID:String = page.@ID.toXMLString();
-		var xmlObj:XML = xml.Object.(@ID == ID )[0];
-		var treeElement:TreeElement = new TreeElement();
-			
-		//massTreeElements[ID] =  new TreeElement();
 
-		treeElement.ID 			= ID;
-		if (xmlObj != null)
-		{
-			treeElement.x 			= xmlObj.@left.toXMLString();
-			treeElement.y 			= xmlObj.@top.toXMLString();	
-			treeElement.state 		= xmlObj.@state.toXMLString();	
-			treeElement.resourceID 	= xmlObj.@ResourceID.toXMLString();
-		}
-		
-		if (treeElement.resourceID!='') 
-				fileManager.loadResource(dataManager.currentApplicationId, treeElement.resourceID, treeElement);
-
-		treeElement.name =  page.Attributes.Attribute.(@Name == 'title' );
-		treeElement.description = page.Attributes.Attribute.(@Name == 'description' );
-		
-		
-		
-		var typeID:String = page.@Type;
-		treeElement.type  =  getType(typeID);
-		treeElement.typeID =  getIcon(typeID);
-		treeElement = addEventListenerToTreeElement(treeElement);
-		
-		massTreeElements[ID] =  treeElement;
-		main.addChild(massTreeElements[ID]);
-
-	}
-}*/
 
 private function createTreeArr(xml:XML):void
 {
@@ -409,7 +370,6 @@ private function drawLines(xml1:XML):void
 					massLines[level][obID][toObjID].addEventListener(MouseEvent.CLICK, markLines);
 					massLines[level][obID][toObjID].visible = colmen2.showLevel(level);
 					main.addChildAt(massLines[level][obID][toObjID], 0);
-					
 				}
 			}
 		}
@@ -456,11 +416,11 @@ private function saveToServer():void
 {
 	var dataToServer:XML =  dataToXML(massTreeElements, massLines);
 	xmlApplicationStructure = dataToServer;
-	if(dataToServer.*.length() > 0)
-	{										
+//	if(dataToServer.*.length() > 0)
+											
 	 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
 		dataManager.setApplactionStructure(dataToServer);
-	}
+	
 }
 
 public function dataToXML(massTreeElements:Array, massLines:Array ):XML

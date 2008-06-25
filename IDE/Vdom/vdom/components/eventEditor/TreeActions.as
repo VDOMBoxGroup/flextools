@@ -41,6 +41,7 @@ package vdom.components.eventEditor
 					tempXML.@label = child.@MethodName;
 					tempXML.@MethodName  = child.@MethodName;
 					tempXML.@ObjSrcID = inXML.@ID;
+					tempXML.@containerID = inXML.@containerID;
 					
 					outXML.appendChild(tempXML);
 				} 
