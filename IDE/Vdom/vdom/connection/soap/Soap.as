@@ -274,16 +274,25 @@ package vdom.connection.soap
 		 * 16. set object script set_script
 		 */
 		
-		public  function setScript(appid:String='',objid:String='', script:String='' ):void 
+		public  function setScript(appid:String='',objid:String='', script:String='', lang:String=''):void 
 		{
 			var sSetScript:SSetScript = SSetScript.getInstance();
 			
 			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_OK, ldispatchEvent);
 			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_ERROR, ldispatchEvent);
 			
-			sSetScript.execute(appid, objid, script);
+			sSetScript.execute(appid, objid, script, lang);
 		}
 		
+		public  function getScript(appid:String='',objid:String='', lang:String='' ):void 
+		{
+			var sGetScript:SGetScript = SGetScript.getInstance();
+			
+			sGetScript.addEventListener(SoapEvent.GET_SCRIPT_OK, ldispatchEvent);
+			sGetScript.addEventListener(SoapEvent.GET_SCRIPT_ERROR, ldispatchEvent);
+			
+			sGetScript.execute(appid, objid, lang,);
+		}
 		
 		/**
 		 * 17. set application resource set_resource

@@ -43,6 +43,7 @@ package vdom.connection.soap
 		public static var GET_ONE_OBJECT_OK			  	:String =  "SGetOneObjectOK"; 
 		public static var LIST_RESOURSES_OK			  	:String =  "ListResourseOK"; 
 		public static var MODIFY_RESOURSE_OK  			:String =  "modifyResourceOK"; 
+		public static var GET_SCRIPT_OK					:String =  "Get Script OK" 	
 		
 		//setAttributes
 		
@@ -83,6 +84,7 @@ package vdom.connection.soap
 		public static var GET_ONE_OBJECT_ERROR			  	:String =  "SGetOneObjectERROR";
 		public static var LIST_RESOURSES_ERROR		  		:String =  "ListResourseERROR"; 
 		public static var MODIFY_RESOURSE_ERROR 			:String =  "modifyResourceERROR"; 
+		public static var GET_SCRIPT_ERROR					:String =  "Get Script ERROR" 	
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,
