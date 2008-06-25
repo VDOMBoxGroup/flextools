@@ -23,7 +23,7 @@ package vdom.connection.soap
 		} 		
 		 
 		 // initialization		
-		public static function getInstance():SSetScript 
+		public static function getInstance():SGetScript 
 		{
 			if (!instance)
 				instance = new SGetScript();
