@@ -705,7 +705,7 @@ public class DataManager implements IEventDispatcher {
 		
 		soap.removeEventListener(SoapEvent.GET_APPLICATION_EVENTS_OK, soap_getApplicationEventsHandler);
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_LOADED)
-		dme.result = event.result.Result[0];
+		dme.result = event.result;
 	}
 	
 	public function setApplicationEvents(objectId:String, eventsValue:String):void {
@@ -721,7 +721,7 @@ public class DataManager implements IEventDispatcher {
 		
 		soap.removeEventListener(SoapEvent.SET_APPLICATION_EVENTS_OK, soap_getApplicationEventsHandler);
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_SAVED)
-		dme.result = event.result.Result[0];
+		dme.result = event.result;
 	}
 	
 	private function proxySendedHandler(event:ProxyEvent):void {
