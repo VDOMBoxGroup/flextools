@@ -60,7 +60,7 @@ package vdom.components.eventEditor
 			 
 			 if(loadedPages[ID])
 			 {
-			 	dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID]))
+			 	dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
 			 	return;
 			 }
 			 
@@ -74,7 +74,7 @@ package vdom.components.eventEditor
               {
               		loadedPages[ID] = craetTreeData(_data..*.Object.(@ID == ID).Objects);
 			
-					dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID]))
+					dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
               }
 		}
 		
@@ -86,7 +86,7 @@ package vdom.components.eventEditor
 			
 			loadedPages[ID] = craetTreeData(_data.(@ID == ID).Objects);
 			
-			dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID]))
+			dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
 		}
 		
 		private function treeUpdateComletLister(evt:Event):void

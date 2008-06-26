@@ -236,6 +236,7 @@
 	*/
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
+		vctTest = new Vector2();
 		main.addChild(vctTest);//--для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 		

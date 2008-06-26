@@ -547,6 +547,18 @@ package vdom.connection.soap
 			sGetApplicationEvents.execute(appid, objid);
 		}
 		
+		public  function getThumbnail( appid:String = '', 	resid:String = '', 
+															width:String = '', 
+															height:String = ''):void 
+		{	
+			var sGetThumbnail:SGetThumbnail = SGetThumbnail.getInstance();
+			
+			sGetThumbnail.addEventListener(SoapEvent.GET_THUMBNAIL_OK, ldispatchEvent);
+			sGetThumbnail.addEventListener(SoapEvent.GET_THUMBNAIL_ERROR, ldispatchEvent);
+			
+			sGetThumbnail.execute(appid, resid, width, height);
+		}
+		
 		/**
 		 *  --------  Event Dispatcher -------------
 		 */

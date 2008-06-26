@@ -3,6 +3,7 @@
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import vdom.events.DataManagerEvent;
 	 		import vdom.utils.IconUtil;
 	 		import mx.binding.utils.BindingUtils;
 	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
@@ -10,7 +11,7 @@
 	 	/***
 	 	 * 
 	 	 * 
-	 	 * 	- перерисовывались линии.
+	 	 * 	+ перерисовывались линии.
 	 	 *  - собрать структуру из дерева
 	 	 *  - из структуры собрать дерево
 	 	 *  - 
@@ -56,8 +57,16 @@
 	 		
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
+	 			dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
+	 			dataManager.getApplicationEvents(eeEvt.objID)
 	 			trEvents.dataProvider = eeEvt.data;
 	 			trActions.dataProvider = eeEvt.data;
+	 		}
+	 		
+	 		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
+	 		{
+	 			dataManager.removeEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
+	 			trace(dmEvt.result.toXMLString());
 	 		}
 	 		
 	 		 private function dragEnterHandler(event:DragEvent):void 
@@ -123,6 +132,9 @@
 				//чтоб 2жды не запускать
 				if(can.owns(line)) 
 					return;
+					
+				line = new Vector2();	
+								
 				can.addChild(line);//--для рисования связывающей линии
 				can.addEventListener(MouseEvent.MOUSE_MOVE, drLine);
 				
@@ -181,6 +193,7 @@
 				line.clear();
 				can.removeChild(line); ///-------------***********
 				blDrawLine = false;  //говорим что НЕ рисуем линию
+			
 				var evtID:String = curEvent.ID;
 				var actID:String = msEvt.currentTarget.ID;
 				
@@ -229,7 +242,6 @@
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
 				 if (selectedNode)
               	 	var ID:String = selectedNode.@ID; 
-             	 //trace('123: '+ID);
 			}
 			private function getIcon(value:Object):Class {
 			
@@ -238,6 +250,7 @@
 			 	
 		 		return IconUtil.getClass(trContainer, data, 16, 16);
 			}
+			
 			/***
 			 * 
 			 *  for ReDraw line when one of objects moved
