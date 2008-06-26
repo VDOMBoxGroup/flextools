@@ -30,6 +30,9 @@ public class DataManagerEvent extends Event
     public static const APPLICATION_CREATED:String = 'applicationCreated';
     public static const APPLICATION_CHANGED:String = 'applicationChanged';
     
+    public static const APPLICATION_EVENT_LOADED:String = 'applicationEventLoaded';
+    public static const APPLICATION_EVENT_SAVED:String = 'applicationEventSaved';
+    
     public static const APPLICATION_DATA_LOADED:String = 'applicationDataLoaded';
     public static const TYPES_LOADED:String = 'typesLoaded';
     public static const PAGE_DATA_LOADED:String = 'pageDataLoaded';
