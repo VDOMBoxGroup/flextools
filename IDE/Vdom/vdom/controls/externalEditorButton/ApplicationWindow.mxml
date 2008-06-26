@@ -7,7 +7,7 @@
 
 	<mx:ControlBar paddingTop="1" paddingBottom="3" paddingRight="10" paddingLeft="10">
 		<mx:Spacer width="100%"/>
-		<mx:Button label="Done" click="{doneClickHandler();}"/>
+		<mx:Button label="Close" click="{doneClickHandler();}"/>
 	</mx:ControlBar>
 	
 	<mx:Script>

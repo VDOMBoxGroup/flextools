@@ -11,6 +11,7 @@ package vdom.controls.externalEditorButton
 	import mx.controls.SWFLoader;
 	import mx.core.Application;
 	import mx.events.CloseEvent;
+	import mx.events.EffectEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 
@@ -109,8 +110,9 @@ package vdom.controls.externalEditorButton
 		}
 		
 		private function applCloseHandler(event:Event):void {
-			value = exEditor['value'];
+			applWindow.visible = false;
 			PopUpManager.removePopUp(applWindow);
-		}
+			value = exEditor['value'];
+		}		
 	}
 }
