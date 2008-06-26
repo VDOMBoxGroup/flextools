@@ -692,6 +692,38 @@ public class DataManager implements IEventDispatcher {
 		dispatcher.dispatchEvent(dme);
 	}
 	
+	public function getApplicationEvents(objectId:String):void {
+		
+		if(!objectId)
+			return;
+		
+		soap.addEventListener(SoapEvent.GET_APPLICATION_EVENTS_OK, soap_getApplicationEventsHandler);
+		soap.getApplicationEvents(_currentApplicationId, objectId); 
+	}
+	
+	private function soap_getApplicationEventsHandler(event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.GET_APPLICATION_EVENTS_OK, soap_getApplicationEventsHandler);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_LOADED)
+		dme.result = event.result.Result;
+	}
+	
+	public function setApplicationEvents(objectId:String, eventsValue:String):void {
+		
+		if(!objectId)
+			return;
+		
+		soap.addEventListener(SoapEvent.SET_APPLICATION_EVENTS_OK, soap_setApplicationEventsHandler);
+		soap.setApplicationEvents(_currentApplicationId, objectId, eventsValue); 
+	}
+	
+	private function soap_setApplicationEventsHandler(event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.SET_APPLICATION_EVENTS_OK, soap_getApplicationEventsHandler);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_SAVED)
+		dme.result = event.result.Result;
+	}
+	
 	private function proxySendedHandler(event:ProxyEvent):void {
 		
 		var objectId:String = event.objectId;
