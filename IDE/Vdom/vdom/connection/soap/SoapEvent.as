@@ -45,6 +45,9 @@ package vdom.connection.soap
 		public static var MODIFY_RESOURSE_OK  			:String =  "modifyResourceOK"; 
 		public static var GET_SCRIPT_OK					:String =  "Get Script OK" 	
 		
+		public static var GET_APPLICATION_EVENTS_OK 	:String = "getApplicationEventsOK";
+		public static var SET_APPLICATION_EVENTS_OK 	:String = "setApplicationEventsOK";
+		
 		//setAttributes
 		
 		public static var LOGIN_ERROR						:String = "Login ERROR";
@@ -86,6 +89,8 @@ package vdom.connection.soap
 		public static var MODIFY_RESOURSE_ERROR 			:String =  "modifyResourceERROR"; 
 		public static var GET_SCRIPT_ERROR					:String =  "Get Script ERROR" 	
 		
+		public static var GET_APPLICATION_EVENTS_ERROR :String = "getApplicationEventsERROR";
+		public static var SET_APPLICATION_EVENTS_ERROR :String = "setApplicationEventsERROR"; 
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,

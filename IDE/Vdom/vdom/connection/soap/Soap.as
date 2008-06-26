@@ -54,7 +54,7 @@ package vdom.connection.soap
 		{	
 			var sLogin:SLogin = SLogin.getInstance(); 
 			
-			sLogin.addEventListener(SoapEvent.LOGIN_OK,    ldispatchEvent  );
+			sLogin.addEventListener(SoapEvent.LOGIN_OK,    ldispatchEvent);
 			sLogin.addEventListener(SoapEvent.LOGIN_ERROR, ldispatchEvent);
 			
 			sLogin.execute(login,password);
@@ -525,6 +525,26 @@ package vdom.connection.soap
 			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_ERROR, 	ldispatchEvent);
 			
 			sModifyResource.execute(appid, objid, resid, attrname,operation, attr);
+		}
+		
+		public  function setApplicationEvents(appid:String='', objid:String = '', events:String=''):void 
+		{	
+			var sSetApplicationEvents:SSetApplicationEvents = SSetApplicationEvents.getInstance();
+			
+			sSetApplicationEvents.addEventListener(SoapEvent.SET_APPLICATION_EVENTS_OK, ldispatchEvent);
+			sSetApplicationEvents.addEventListener(SoapEvent.SET_APPLICATION_EVENTS_ERROR, ldispatchEvent);
+			
+			sSetApplicationEvents.execute(appid, objid, events);
+		}
+		
+		public  function getApplicationEvents(appid:String='', objid:String = ''):void 
+		{	
+			var sGetApplicationEvents:SGetApplicationEvents = SGetApplicationEvents.getInstance();
+			
+			sGetApplicationEvents.addEventListener(SoapEvent.GET_APPLICATION_EVENTS_OK, ldispatchEvent);
+			sGetApplicationEvents.addEventListener(SoapEvent.GET_APPLICATION_EVENTS_ERROR, ldispatchEvent);
+			
+			sGetApplicationEvents.execute(appid, objid);
 		}
 		
 		/**
