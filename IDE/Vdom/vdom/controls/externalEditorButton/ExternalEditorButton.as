@@ -73,11 +73,12 @@ package vdom.controls.externalEditorButton
 //		----- Loading and executing external application methods -----------------------------
 				
         private function loadNestedAppl(appl:ByteArray):void {
-//        	var editor:String = "C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf";
+        	var editorUrl:String = "C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf";
         	ldr = new SWFLoader();
         	
         	ldr.addEventListener(Event.COMPLETE, applicationLoaded);  
-        	ldr.source = appl;
+//        	ldr.source = appl;
+			ldr.load(editorUrl);
         }
         
 		private function applicationLoaded(event:Event):void {
@@ -88,7 +89,6 @@ package vdom.controls.externalEditorButton
 	   		event.currentTarget.content.addEventListener(FlexEvent.APPLICATION_COMPLETE, applicationComplete);
     		applWindow.addChild(ldr);
     		
-    		/* Add control bar to the window */
     		PopUpManager.addPopUp(applWindow, DisplayObject(Application.application), false);
     		applWindow.addEventListener(CloseEvent.CLOSE, applCloseHandler);
 		}
@@ -109,6 +109,7 @@ package vdom.controls.externalEditorButton
 		}
 		
 		private function applCloseHandler(event:Event):void {
+			value = exEditor['value'];
 			PopUpManager.removePopUp(applWindow);
 		}
 	}
