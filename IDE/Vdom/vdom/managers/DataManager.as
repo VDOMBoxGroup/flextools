@@ -572,8 +572,8 @@ public class DataManager implements IEventDispatcher {
 		
 		_listApplication += event.result.Application[0];
 		
-		dispatcher.dispatchEvent(new DataManagerEvent('listApplicationChanged'));
-		dispatcher.dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED));
+		dispatchEvent(new DataManagerEvent('listApplicationChanged'));
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED));
 	}
 	
 	
@@ -668,7 +668,7 @@ public class DataManager implements IEventDispatcher {
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_SCRIPT_LOADED);
 		dme.result = event.result.Result[0];
 		
-		dispatcher.dispatchEvent(dme);
+		dispatchEvent(dme);
 	}
 	
 	public function setObjectScript(script:String, objectId:String = ''):void {
@@ -689,7 +689,7 @@ public class DataManager implements IEventDispatcher {
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_SCRIPT_SAVED);
 		dme.result = event.result.Result[0];
 		
-		dispatcher.dispatchEvent(dme);
+		dispatchEvent(dme);
 	}
 	
 	public function getApplicationEvents(objectId:String):void {
@@ -706,6 +706,7 @@ public class DataManager implements IEventDispatcher {
 		soap.removeEventListener(SoapEvent.GET_APPLICATION_EVENTS_OK, soap_getApplicationEventsHandler);
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_LOADED)
 		dme.result = event.result;
+		dispatchEvent(dme);
 	}
 	
 	public function setApplicationEvents(objectId:String, eventsValue:String):void {
@@ -722,6 +723,8 @@ public class DataManager implements IEventDispatcher {
 		soap.removeEventListener(SoapEvent.SET_APPLICATION_EVENTS_OK, soap_getApplicationEventsHandler);
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_SAVED)
 		dme.result = event.result;
+		
+		dispatchEvent(dme);
 	}
 	
 	private function proxySendedHandler(event:ProxyEvent):void {
