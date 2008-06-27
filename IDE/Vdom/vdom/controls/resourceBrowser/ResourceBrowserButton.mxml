@@ -35,14 +35,14 @@
 				var resRegExp:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
 				if (_value.match(resRegExp) != null) {
 					_rBrowserInstance.selectedItemID = _value.match(resRegExp)[1];
-					trace("Resource browser: selected resource id is " + _rBrowserInstance.selectedItemID);
+//					trace("Resource browser: selected resource id is " + _rBrowserInstance.selectedItemID);
 				}
 			}
 	
 			private function completeHandler(event:ResourceBrowserEvent):void {
 				_value = "#Res(" + event.resourceID + ")";
 				lbl.text = event.resourceName;
-				trace("Resource browser: now selected resource id is " + _value);
+//				trace("Resource browser: now selected resource id is " + _value);
 			}
 	
 		]]>
