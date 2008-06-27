@@ -53,7 +53,7 @@
 				this.height = __image.height + 22;
 				this.width = __image.width + 22;
 				
-				var completeEvent:FlexEvent = new FlexEvent(FlexEvent.UPDATE_COMPLETE);
+				var completeEvent:Event = new Event(Event.COMPLETE);
 				this.dispatchEvent(completeEvent);			
 			}
 			

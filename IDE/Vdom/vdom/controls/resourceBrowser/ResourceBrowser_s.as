@@ -19,7 +19,6 @@ import flash.filesystem.FileStream;
 import mx.controls.Alert;
 import mx.controls.Label;
 import mx.events.CloseEvent;
-import mx.events.FlexEvent;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 import mx.utils.Base64Encoder;
@@ -232,7 +231,7 @@ private function showResource():void {
 	
 	if (isViewable(_selectedThumb.objType)) {
 		preview.imageSource = waiting_Icon;
-		preview.addEventListener(FlexEvent.UPDATE_COMPLETE, setImageProperties);
+		preview.addEventListener(Event.COMPLETE, setImageProperties);
 		fileManager.loadResource(dataManager.currentApplicationId, _selectedItemID, preview);
 	} else {
 		preview.imageSource = _selectedThumb.imageSource;
@@ -243,7 +242,7 @@ private function showResource():void {
 	}
 }
 
-private function setImageProperties(event:FlexEvent):void {
+private function setImageProperties(event:Event):void {
 	__iResolution.text = event.currentTarget.imageWidth.toString() + " x " + event.currentTarget.imageHeight.toString();
 }
 
