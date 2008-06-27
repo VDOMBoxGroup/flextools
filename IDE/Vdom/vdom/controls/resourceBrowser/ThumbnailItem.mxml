@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	ThumbnailItem component for Resource Browser
+	ThumbnailItem component for Resource Browser, VDOM2 Box component
 	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
 -->
 <mx:VBox

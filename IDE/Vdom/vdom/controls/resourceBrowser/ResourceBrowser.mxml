@@ -12,7 +12,7 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	borderAlpha="0.9" cornerRadius="1" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
-	visible="false" shadowDirection="right">
+	visible="true" shadowDirection="right">
 	
 	<mx:Script>
 		<![CDATA[
@@ -48,20 +48,20 @@
 			
 			<mx:Label text="Filter:" fontWeight="bold"/>
 			<mx:ComboBox id="__filterCBx" width="100%" dataProvider="{_filterDataProvider}" change="{filterCBxHandler();}" />
-			
 			<mx:VRule height="100%" />
-			
+			<mx:Spacer width="150" />
 			<mx:Button height="24" label="Upload File..." click="{fileUploadHandler();}" />
 			
+			<!--
 			<mx:VRule height="100%" />
-			
 			<mx:Button height="24" label="Delete File..." enabled="false" />
+			-->
 		</mx:HBox>
 		<!-- End of top panel -->
 		
 		<mx:HBox id="__midArea" width="100%" height="100%" horizontalGap="2">
 			<mx:Tile id="thumbsList"
-				height="100%" width="150"
+				height="100%" width="174"
 				direction="horizontal" borderStyle="solid"
 				verticalScrollPolicy="on" horizontalScrollPolicy="off"
 				horizontalAlign="center"
@@ -73,6 +73,7 @@
 					width="100%" height="100%"
 					verticalAlign="middle" horizontalAlign="center"
 				/>
+				
 				
 				<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
 					<mx:Label id="__rName" text="" height="18" fontWeight="bold" maxWidth="350" textAlign="center" />

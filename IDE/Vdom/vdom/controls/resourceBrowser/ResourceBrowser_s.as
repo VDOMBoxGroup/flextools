@@ -18,8 +18,8 @@ import flash.filesystem.FileStream;
 
 import mx.controls.Alert;
 import mx.controls.Label;
-import mx.core.Application;
 import mx.events.CloseEvent;
+import mx.events.FlexEvent;
 import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 import mx.utils.Base64Encoder;
@@ -232,8 +232,8 @@ private function showResource():void {
 	
 	if (isViewable(_selectedThumb.objType)) {
 		preview.imageSource = waiting_Icon;
+		preview.addEventListener(FlexEvent.UPDATE_COMPLETE, setImageProperties);
 		fileManager.loadResource(dataManager.currentApplicationId, _selectedItemID, preview);
-		__iResolution.text = _selectedThumb.imageWidth.toString() + " x " + _selectedThumb.imageHeight.toString();
 	} else {
 		preview.imageSource = _selectedThumb.imageSource;
 		__iResolution.text = "Can not determine";
@@ -243,12 +243,15 @@ private function showResource():void {
 	}
 }
 
+private function setImageProperties(event:FlexEvent):void {
+	__iResolution.text = event.currentTarget.imageWidth.toString() + " x " + event.currentTarget.imageHeight.toString();
+}
+
 private function applyView(event:ItemClickEvent = null):void {
 	if (event != null) {
 		if (event.index == 0) {
 			_currentView = "thumbnail";
-		} else {
-		
+		} else {	
 			if (event.index == 1) {
 				_currentView = "list";
 			} else {
@@ -268,7 +271,7 @@ private function applyView(event:ItemClickEvent = null):void {
 private function expandHandler():void {
 	/* We create instances of objects below just in case to access to their properties */
 	if (__expandBtn.selected) {
-		__previewArea.width = 380; // ~
+		__previewArea.width = 380;	// ~
 		thumbsList.percentWidth = 100;		
 	} else {
 		switch (_currentView.toLowerCase()) {

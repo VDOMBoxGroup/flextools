@@ -12,11 +12,13 @@
  	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
  
 	<resourceBrowser:SmoothImage id="__image" horizontalAlign="center" verticalAlign="middle"
-		maintainAspectRatio="true" scaleContent="true" 
-	/>
+		maintainAspectRatio="true" scaleContent="true" />
 
 	<mx:Script>
 		<![CDATA[
+			import mx.core.FlexLoader;
+			import mx.rpc.soap.LoadEvent;
+			import mx.events.FlexEvent;
 		
 			private var loader:Loader = new Loader();
 	
@@ -49,7 +51,10 @@
 				}
 				
 				this.height = __image.height + 22;
-				this.width = __image.width + 22;			
+				this.width = __image.width + 22;
+				
+				var completeEvent:FlexEvent = new FlexEvent(FlexEvent.UPDATE_COMPLETE);
+				this.dispatchEvent(completeEvent);			
 			}
 			
 			public function set imageSource(source:Object):void {
