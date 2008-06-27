@@ -211,6 +211,7 @@ private function showResourceSelection():void { 	// uses when property set
 		} else {
 			_selectedThumb = _objects[_selectedItemID];
 			_selectedThumb.selected = true;
+			_selectedItemName = _selectedThumb.objName;
 			showResource(); 
 		}
 	}
