@@ -4,7 +4,9 @@ package vdom.controls.externalEditorButton
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.utils.ByteArray;
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	
 	import mx.containers.HBox;
 	import mx.controls.Button;
@@ -82,12 +84,20 @@ package vdom.controls.externalEditorButton
 
 //		----- Loading and executing external application methods ----------------------------- 
 
-		private function set resource(resource:Object):void {
+		public function set resource(resource:Object):void {
 			objLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, loadNestedAppl);
-			objLdr.loadBytes(resource.data);
+			
+			var fi:File = File.applicationStorageDirectory;
+			fi = fi.resolvePath('zzz.swf');
+			var fs:FileStream = new FileStream();
+			fs.open(fi, FileMode.WRITE);
+			fs.writeBytes(resource.data);
+			fs.close();
+			
+//			objLdr.loadBytes(resource.data);
 		}
-				
-        private function loadNestedAppl(appl:ByteArray):void {
+					
+        private function loadNestedAppl(event:Event):void {
 //        	var editorUrl:String = "C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf";
 			objLdr.removeEventListener(Event.COMPLETE, loadNestedAppl);
         	if (!ldr)
