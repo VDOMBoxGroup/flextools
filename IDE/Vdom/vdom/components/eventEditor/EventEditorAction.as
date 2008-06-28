@@ -269,7 +269,7 @@ package vdom.components.eventEditor
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
 			vBox.addChild(objectName);
 			
-			var type:XML = dataManager.getTypeByObjectId(data.@ObjSrcID);
+			var type:XML = new XML(dataManager.getTypeByObjectId(data.@ObjSrcID).toXMLString());
 			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
 			vBox.addChild(objectEvent);
 			
@@ -278,7 +278,7 @@ package vdom.components.eventEditor
 	//		_eventType  = data.@label;
 			_methodName = data.@label;
 			
-			var parametrs:XML = type.E2vdom.Actions.Container.(@ID == data.@containerID).Action.(@MethodName = data.@MethodName).Parameters[0];
+			var parametrs:XML = type.E2vdom.Actions.Container.(@ID == data.@containerID).Action.(@MethodName = data.@MethodName).Parameters; 
 			for each(var child:XML in parametrs.children())
 			{
 				var parametr:SimpleLayer = new SimpleLayer(child.@ScriptName);
@@ -287,6 +287,9 @@ package vdom.components.eventEditor
 			
 			var y:SimpleLayer = new SimpleLayer('Y');
 			vBox.addChild(y);
+			type = new XML(dataManager.getTypeByObjectId(data.@ObjSrcID).toXMLString());
+
+			
 		}
 		
 

@@ -68,8 +68,8 @@ package vdom.components.eventEditor
 			
 			 if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
               {
-              	   		dataManager.changeCurrentPage(ID);
           		   		dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener)
+              	   		dataManager.changeCurrentPage(ID);
               } else
               {
               		loadedPages[ID] = craetTreeData(_data..*.Object.(@ID == ID).Objects);
