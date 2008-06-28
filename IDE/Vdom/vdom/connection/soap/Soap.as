@@ -564,8 +564,8 @@ package vdom.connection.soap
 		{	
 			var sRemoteMethodCall:SRemoteMethodCall = SRemoteMethodCall.getInstance();
 			
-			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METOD_CALL_OK, ldispatchEvent);
-			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METOD_CALL_ERROR, ldispatchEvent);
+			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METHOD_CALL_OK, ldispatchEvent);
+			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METHOD_CALL_ERROR, ldispatchEvent);
 			
 			sRemoteMethodCall.execute(appid, objid, funcName, xmlParam);
 		}
