@@ -278,7 +278,7 @@ package vdom.components.eventEditor
 			
 			
 			
-			var parametrs:XML = type.E2vdom.Events..Event.(@Name = data.@Name).Parameters[0];
+			var parametrs:XML = type.E2vdom.Events..Event.(@Name == data.@Name).Parameters[0];
 			for each(var child:XML in parametrs.children())
 			{
 				var parametr:SimpleLayer = new SimpleLayer(child.@Name);

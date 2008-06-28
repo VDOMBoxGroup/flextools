@@ -12,7 +12,7 @@
 	 	 *  - удаление линий
 	 	 *  - баг с повторяющимися параметрами
 	 	 *  - перенести вниз дерево евентов/акшинов 
-	 	 * 
+	 	 *  - удаленные евенты должны появляться на старом месте
 	 	 * 
 	 	 * */
 	 	 
@@ -116,8 +116,11 @@
 	        	  	newElement = new EventEditorEvents(item);
 	        	  	newElement.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
 	        	  	eventsArray[newElement.ID] = newElement;
+	        	  	
+	        	//  	trEvents.removeDataEffectItem(item);
+	
 	        	  }
-	        	 
+	        	
 	        	newElement.x = event.localX;
 	        	newElement.y = event.localY;
 	        	newElement.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)

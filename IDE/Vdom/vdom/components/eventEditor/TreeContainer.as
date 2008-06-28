@@ -3,10 +3,8 @@ package vdom.components.eventEditor
 	import flash.events.Event;
 	
 	import mx.controls.Tree;
-	import mx.core.ClassFactory;
 	import mx.events.FlexEvent;
 	
-
 	import vdom.events.DataManagerEvent;
 	import vdom.events.EventEditorEvent;
 	import vdom.managers.DataManager;
@@ -127,11 +125,14 @@ package vdom.components.eventEditor
 				
 			if(selectedNode)
 				this.selectedItem = selectedNode;
-				
-				
-				
-			//getIcons();
 			}
+		}
+		
+		public function removeItem(remXML:XML):void
+		{
+			
+			//super.dataProvider = xmlTreeData;
+		//	super.removeChild(remXML);
 		}
 		
 		private var masResourceID:Array = new Array();
