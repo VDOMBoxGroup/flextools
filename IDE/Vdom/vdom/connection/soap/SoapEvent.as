@@ -47,7 +47,8 @@ package vdom.connection.soap
 		
 		public static var GET_APPLICATION_EVENTS_OK 	:String = "getApplicationEventsOK";
 		public static var SET_APPLICATION_EVENTS_OK 	:String = "setApplicationEventsOK";
-		public static var GET_THUMBNAIL_OK					:String = "getThumbnailOK";
+		public static var GET_THUMBNAIL_OK				:String = "getThumbnailOK";
+		public static var EXECUTE_OBJECT_OK				:String = "executeObjectOK";
 		
 		//setAttributes
 		
@@ -93,6 +94,7 @@ package vdom.connection.soap
 		public static var GET_APPLICATION_EVENTS_ERROR 		:String = "getApplicationEventsERROR";
 		public static var SET_APPLICATION_EVENTS_ERROR 		:String = "setApplicationEventsERROR"; 
 		public static var GET_THUMBNAIL_ERROR				:String = "getThumbnailERROR";
+		public static var EXECUTE_OBJECT_ERROR				:String = "executeObjectERROR";
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,

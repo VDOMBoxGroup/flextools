@@ -559,6 +559,17 @@ package vdom.connection.soap
 			sGetThumbnail.execute(appid, resid, width, height);
 		}
 		
+		
+		public  function executeObject(appid:String='', objid:String = '', funcName:String = '', xmlParam:String = ''):void 
+		{	
+			var sExecuteObject:SExecuteObject = SExecuteObject.getInstance();
+			
+			sExecuteObject.addEventListener(SoapEvent.EXECUTE_OBJECT_OK, ldispatchEvent);
+			sExecuteObject.addEventListener(SoapEvent.EXECUTE_OBJECT_ERROR, ldispatchEvent);
+			
+			sExecuteObject.execute(appid, objid, funcName, xmlParam);
+		}
+		
 		/**
 		 *  --------  Event Dispatcher -------------
 		 */
