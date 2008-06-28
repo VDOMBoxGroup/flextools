@@ -3,34 +3,45 @@
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
-	 		import vdom.events.DataManagerEvent;
-	 		import vdom.utils.IconUtil;
-	 		import mx.binding.utils.BindingUtils;
-	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
-	 	
 	 	/***
 	 	 * 
 	 	 * 
-	 	 * 	+ перерисовывались линии.
 	 	 *  - собрать структуру из дерева
-	 	 *  - из структуры собрать дерево
-	 	 *  - 
+	 	 *  + из структуры собрать дерево
+	 	 *  - удаление евентов
+	 	 *  - удаление линий
+	 	 *  - баг с повторяющимися параметрами
+	 	 *  - перенести вниз дерево евентов/акшинов 
 	 	 * 
 	 	 * 
 	 	 * */
-	 		import vdom.components.treeEditor.TreeVector;
+	 	 
+	 	 /*
+	 	 	в каких случаях посылать данные на сервер?
+	 	 	 - когда переключаешься по веткам (если были изменения)
+	 	 	 - на hide
+	 	 	делать ли заготовку для посылки на сервер 
+	 	 
+	 	 */
+	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
+	 	
+	 		import vdom.events.DataManagerEvent;
+	 		import vdom.events.EventEditorEvent;
 	 		import vdom.events.TreeEditorEvent;
-	 		import mx.controls.Tree;
+	 		import vdom.components.treeEditor.TreeElement;
+	 		import vdom.components.treeEditor.TreeVector;
 	 		import vdom.components.treeEditor.Vector2;
 	 		import vdom.managers.DataManager;
-	 		import mx.collections.ArrayCollection;
+	 		import vdom.utils.IconUtil;
+	 	 
+	 		import mx.binding.utils.BindingUtils;
 	 		import mx.controls.DataGrid;
 	 		import mx.controls.Text;
 	 		import mx.core.DragSource;
+	 		import mx.controls.Tree;
+	 		import mx.collections.ArrayCollection;
 	 		import mx.events.DragEvent;
 	 		import mx.managers.DragManager;
-	 		import vdom.components.treeEditor.TreeElement;
-	 		import vdom.events.EventEditorEvent;
 	 		
 	 		[Bindable]
 	 		private var dataManager:DataManager;
@@ -51,15 +62,16 @@
 	 		
 	 		private function hideHandler():void
 	 		{
-	 			//BindingUtils.bindProperty(pageList, 'dataProvider', dataManager, 'listPages')
 	 			trContainer.hideHandler();
 	 		}
 	 		
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
 	 			dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
-	 			dataManager.getApplicationEvents(eeEvt.objID)
-	 			trEvents.dataProvider = eeEvt.data;
+	 			trace('get: '+ eeEvt.objID);
+	 			dataManager.getApplicationEvents(eeEvt.objID);
+	 			
+	 			trEvents.dataProvider  = eeEvt.data;
 	 			trActions.dataProvider = eeEvt.data;
 	 		}
 	 		
@@ -67,6 +79,7 @@
 	 		{
 	 			dataManager.removeEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
 	 			trace(dmEvt.result.toXMLString());
+	 		//	can.removeAllChildren();
 	 		}
 	 		
 	 		 private function dragEnterHandler(event:DragEvent):void 
@@ -87,7 +100,6 @@
                 for(var i:Number=0; i < items.length; i++) {
 
                     var item:XML = XML(items[i]);
-                 //  trace('item: '+ item.name().toString());
                     if( item.name().toString() == "Object" ) return; // not what we want
 
                 }
@@ -142,18 +154,12 @@
 				addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 				
 				curEvent = eventsArray[trEvt.ID]
-	//			drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
-	//			line.graphics.clear();
 			}
 			// 7-701-249-68-36 cancho 
 			// 7-702-153-44-95 vascho
-			// 
-
 			
 			private function drLine (mEvt:MouseEvent):void
 			{
-			//	var a:AutoCompleteManager = AutoCompleteManager();
-				
 			// нормализуем mouseX mouseY
 				 var pt:Point = new Point(mEvt.localX, mEvt.localY);
             		pt = mEvt.target.localToGlobal(pt);
@@ -203,48 +209,51 @@
 				
 				linesArray[evtID][actID] = 
 					new TreeVector(eventsArray[evtID], actionsArray[actID], '2');
-		//			trace(eventsArray[evtID].x + ' : '
-		//			+ actionsArray[actID].x )
 				can.addChild(linesArray[evtID][actID]);
-				//trace (can.owns(linesArray[evtID][actID]));
 			}
 			
 			private function stopDrawLine(msEvt:MouseEvent):void
 			{
 				if (!blDrawLine)
 					return;
-			/*
-				if (!msEvt.currentTarget.hasOwnProperty('ID'))
-				{
-					trace('Netu^(')
-					return;
-				}
-				*/
 				can.removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
 					removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
 				
 				line.clear();
 				can.removeChild(line); ///-------------***********
 				blDrawLine = false;  //говорим что НЕ рисуем линию
-		//		var evtID:String = curEvent.ID;
-		//		var actID:String = msEvt.currentTarget.ID;
-
-				
-			
-			//*******************
-			//	line.createVector(eventsArray[evtID], actionsArray[actID]);
-			//	can.addChild(line);	
-				////////////********************
 			}
 			
+			private var curContainerID:String;
+			private var dataToServer:XML = 
+	<E2vdom>
+		<Events>
+	      <Event ObjSrcID='321' Name='123'>
+	         <Action ID='333'/>
+	      </Event>
+	   </Events>
+	   <Actions>
+	      <Action ID='333' ObjTgtID='123' MethodName='name'>
+	         <Parameter ScriptName='MyParameter'>33</Parameter>
+	      </Action>
+	   </Actions>
+   </E2vdom>
+
+
+
 			private function treeContainerChangeHandler(evt:Event):void
 			{
+				// send structure of events to server
+//				trace(dataToServer);
+			//	dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
+				
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
 				 if (selectedNode)
-              	 	var ID:String = selectedNode.@ID; 
+              	 	curContainerID = selectedNode.@ID; 
 			}
-			private function getIcon(value:Object):Class {
 			
+			private function getIcon(value:Object):Class 
+			{
 				var xmlData:XML = XML(value);
 				var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 			 	
@@ -259,16 +268,12 @@
 			private var  curID:String;
 			private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
 			{
-				// object to Top
-			//	main.removeChild(massTreeElements[trEvt.ID]);
-			//	main.addChild(massTreeElements[trEvt.ID]);
 				curID = trEvt.ID;
 				addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			}
 			
 			private function mouseMoveHandler(msEvt:MouseEvent):void
 			{
-			//!!!!	redrawLines(curTree.ID);
 				for(var evID:String in linesArray)
 					for(var acID:String in linesArray[evID])
 					{
@@ -282,55 +287,83 @@
 				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			//  проверка если перетащили за границы :	treeElementMousUpHandler();
 			}
+			
+			private function creatDataToServer():void
+			{
+				dataToServer = <E2vdom>	<Actions/> 	<Events/> </E2vdom>;
+				
+				var temXML:XML;
+				 
+				for (var actID:String in actionsArray)
+				{	
+					temXML = <Action/>;
+					
+					temXML.@ID 		 	= actionsArray[actID].ID;
+					temXML.@ObjTgtID 	= actionsArray[actID].ObjTgtID;
+					temXML.@MethodName 	= actionsArray[actID].MethodName;
+					
+					dataToServer.Actions.appendChild(temXML);
+				}
+				
+				for (var evtID:String in eventsArray)
+				{
+					temXML = <Event/>;
+					
+					temXML.@Name 	 = eventsArray[evtID].Name;
+					temXML.@ObjSrcID = eventsArray[evtID].ObjSrcID;
+					
+					dataToServer.Events.appendChild(temXML);
+				}
+				
+				for(evtID in linesArray)
+				{ 
+					var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
+					
+					for(actID in linesArray[evtID])
+					{
+						temXML = <Action/>;
+						temXML.@ID = actionsArray[actID].ID;
+
+						dataToServer.Events.Event.(@ObjSrcID == ObjSrcID).appendChild(temXML);
+					}
+				}
+				trace('----toServer---\n '+curContainerID+'\n'+ dataToServer.toXMLString())
+				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
+			}
 	 	]]>
 	 </mx:Script>
 	 
 	 
-	 <mx:XMLList id="treeData">
-	    <node label="Mail Box">
-	        <node label="Inbox">
-	            <node label="Marketing"/>
-	            <node label="Product Management"/>
-	            <node label="Personal"/>
-	        </node>
-	        <node label="Outbox">
-	            <node label="Professional"/>
-	            <node label="Personal"/>
-	        </node>
-	        <node label="Spam"/>
-	        <node label="Sent"/>
-		</node>	
-    </mx:XMLList>
+	
 	
 	<mx:HDividedBox width="100%" height="100%">
-		 <mx:Canvas label="canvas1" width="200" height="100%" >
-                <mx:TabNavigator id="tn"  width="100%" height="100%">
-		            <!-- Define each panel using a VBox container. -->
-					
-					<mx:Canvas label="Container"  width="100%" height="100%"  >
-			             <eventEditor:TreeContainer iconFunction="getIcon" id="trContainer" width="100%" height="100%" 
-                			 change="treeContainerChangeHandler(event)" />
-			        </mx:Canvas>
-			        
-			        <mx:Canvas label="Events"  width="100%" height="100%" >
-			             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" />
-			        </mx:Canvas>
-			        
-			        <mx:Canvas label="Actions"  width="100%" height="100%" >
-			             <eventEditor:TreeActions id="trActions" width="100%" height="100%" 
-                			 dataProvider="{treeData}" />
-			        </mx:Canvas>
-			        
-
-		        </mx:TabNavigator>
-            </mx:Canvas>
-
+		<mx:VDividedBox width="200" height="100%">
+			<mx:VBox  width="100%" height="100%" >
+				<mx:Label text="Current container: selected container" fontWeight="bold"  color="0xFFFFFF"/>
+            	 <eventEditor:TreeContainer iconFunction="getIcon" id="trContainer" width="100%" height="100%" 
+    			 	change="treeContainerChangeHandler(event)" />
+    		</mx:VBox>
+			 <mx:Canvas label="canvas1" width="100%" height="100%" >
+	                <mx:TabNavigator id="tn"  width="100%" height="100%">
+			            <!-- Define each panel using a VBox container. -->
+				        <mx:Canvas label="Events"  width="100%" height="100%" >
+				             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" />
+				        </mx:Canvas>
+				        
+				        <mx:Canvas label="Actions"  width="100%" height="100%" >
+				             <eventEditor:TreeActions id="trActions" width="100%" height="100%"	 />
+				        </mx:Canvas>
+			        </mx:TabNavigator>
+	          </mx:Canvas>
+		</mx:VDividedBox>
             <mx:VBox id="vBox" width="100%" height="100%" >
-                <mx:Label text="Current container: selected container" fontWeight="bold"  color="0xFFFFFF"/>
+           <!--     <mx:Label text="Current container: selected container" fontWeight="bold"  color="0xFFFFFF"/> -->
                 <mx:Canvas id="can" width="100%" height="100%" 
                 		backgroundColor="#cccccc"
                 	 	dragEnter="dragEnterHandler(event);" 
-        				dragDrop="dragDropHandler(event);"/>
+        				dragDrop="dragDropHandler(event);">
+                    <mx:Button label="Button" right="33" bottom="10" click="creatDataToServer()"/>
+                </mx:Canvas>
             </mx:VBox>
 	</mx:HDividedBox>
 		

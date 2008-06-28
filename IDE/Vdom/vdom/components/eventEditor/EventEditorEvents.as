@@ -265,8 +265,8 @@ package vdom.components.eventEditor
 			
 			_name = data.@Name;
 			_eventType = data.@label;
-			_objTgtID = data.@ObjSrcID;
-			_ID = _objTgtID + _name;
+			_objSrcID = data.@ObjSrcID;
+			_ID = _objSrcID + _name;
 			
 			
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
@@ -335,14 +335,14 @@ package vdom.components.eventEditor
 			return _ID;
 		}
 		
-		private var _objTgtID:String;
-		public function getObjTgtID():String
+		private var _objSrcID:String;
+		public function get ObjSrcID():String 
 		{
-			return _objTgtID;
+			return _objSrcID;
 		}
 		
 		private var _name:String;
-		public function getName():String
+		public function get Name():String
 		{
 			return _name;
 		}

@@ -19,8 +19,6 @@ package vdom.components.eventEditor
 
 	public class EventEditorAction extends Canvas
 	{
-					
-		
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='header')]
 		[Bindable]
 		public var header:Class;
@@ -140,7 +138,7 @@ package vdom.components.eventEditor
 					removeChild(cnvDownLayer);
 				
 				imgPlus.source = plus;
-				txt.text = _eventType +' : '+_name;
+				txt.text = _name +' : '+_methodName ;
 			}else
 			{
 				addChild(cnvDownLayer);
@@ -241,7 +239,7 @@ package vdom.components.eventEditor
 		}
 		
 		private var _name:String;
-		private var _eventType:String;
+	//	private var _eventType:String; to _methodName
 		private function initDownBody(data:Object):void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
@@ -266,15 +264,19 @@ package vdom.components.eventEditor
 			*/
 			data = data as XML;
 			
+			
 			var object:XML = dataManager.getObject(data.@ObjSrcID);
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
 			vBox.addChild(objectName);
-			_name = object.@Name;
 			
 			var type:XML = dataManager.getTypeByObjectId(data.@ObjSrcID);
 			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
 			vBox.addChild(objectEvent);
-			_eventType = data.@label
+			
+			_name = object.@Name;
+			_objTgtID 	= data.@ObjSrcID;
+	//		_eventType  = data.@label;
+			_methodName = data.@label;
 			
 			var parametrs:XML = type.E2vdom.Actions.Container.(@ID == data.@containerID).Action.(@MethodName = data.@MethodName).Parameters[0];
 			for each(var child:XML in parametrs.children())
@@ -331,6 +333,19 @@ package vdom.components.eventEditor
 		public function get ID():String
 		{
 			return _ID;
+		}
+		
+		
+		private var _objTgtID:String;
+		public function get ObjTgtID():String
+		{
+			return _objTgtID;
+		}
+		
+		private var _methodName:String;
+		public function get MethodName():String
+		{
+			return _methodName;
 		}
 	}
 }
