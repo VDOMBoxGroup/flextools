@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box
+	xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" 
+	backgroundColor="#FFFFFF" backgroundAlpha="0.0"
+	horizontalAlign="center" verticalAlign="middle"
+	visible="false">
+	
+	<mx:Image source="@Embed(source='/assets/resourceBrowserIcons/spinner.swf')" />
+	<mx:Spacer height="20" />
+	<mx:Label text="Загружаем редактор. В рот мне ноги!..." />
+</mx:Box>
