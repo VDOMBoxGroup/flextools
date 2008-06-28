@@ -8,27 +8,27 @@ package vdom.connection.soap
 	import vdom.connection.protect.Code;
 	
 	
-	public class SExecuteObject extends EventDispatcher 
+	public class SRemoteMethodCall extends EventDispatcher 
 	{
-		private static 	var instance:SExecuteObject;
+		private static 	var instance:SRemoteMethodCall;
 		
 		private var ws			:WebService;
 		private var resultXML	:XML;
 		private var code		:Code =  Code.getInstance();
    
-		public function SExecuteObject() 
+		public function SRemoteMethodCall() 
 		{	
 	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
-	 		ws.execute_object .addEventListener(ResultEvent.RESULT, completeListener);
+	 		ws.remote_method_call.addEventListener(ResultEvent.RESULT, completeListener);
  
 		} 		
 		 
 		 // initialization		
-		public static function getInstance():SExecuteObject 
+		public static function getInstance():SRemoteMethodCall 
 		{
 			if (!instance)
-				instance = new SExecuteObject();
+				instance = new SRemoteMethodCall();
 	
 			return instance;
 		}
@@ -42,7 +42,7 @@ package vdom.connection.soap
 			// no data to send
 			
 			//send data & set listener 
-			ws.execute_object(sid, skey, appid, objid, func_name, xml_param);
+			ws.remote_method_call(sid, skey, appid, objid, func_name, xml_param);
 		}
 		
 		
@@ -60,10 +60,10 @@ package vdom.connection.soap
 			// check Error
 			if(res != '')
 			{
-				evt = new SoapEvent(SoapEvent.EXECUTE_OBJECT_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.REMOTE_METOD_CALL_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.EXECUTE_OBJECT_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.REMOTE_METOD_CALL_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}
