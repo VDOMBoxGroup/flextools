@@ -60,10 +60,10 @@ package vdom.connection.soap
 			// check Error
 			if(res != '')
 			{
-				evt = new SoapEvent(SoapEvent.REMOTE_METOD_CALL_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.REMOTE_METHOD_CALL_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.REMOTE_METOD_CALL_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.REMOTE_METHOD_CALL_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}
