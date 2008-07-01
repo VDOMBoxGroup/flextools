@@ -9,6 +9,8 @@ package vdom.components.eventEditor
 		{
 			super();
 			dataManager = DataManager.getInstance();
+		//	this.itemRenderer = EventItemRender;
+	//		addEventListener(MouseEvent.MOUSE_DOWN, changeItemHandler)
 			
 		}
 		
@@ -48,14 +50,49 @@ package vdom.components.eventEditor
 			
 				outXML.appendChild(tempXML);
 			} 
-		/*	
-			<Object label="header_image" ID='' Type='' resourceID=''>
-				<Event label="onmousedown" parentID="" parentType=""/>
-				<Event label="onmousedown2"/>
-			</Object>		
-			*/	
-			
+
 			return outXML;
 		}
+		
+		/*
+		public class MyTIR extends TreeItemRenderer
+		{
+			public function MyTIR()
+			{
+				super();
+			}
+			
+			public override function set enabled(value:Boolean):void {
+				
+				if(!data) {
+					super.enabled = value;
+					return;
+				}
+				
+				var val:XML = XML(data);
+				
+				if(val.@enabled[0] && val.(@enabled == false))
+					super.enabled = false;
+				else
+					super.enabled = value;
+			}
+		}
+		}
+*/
+
+
+	/*	
+		private var _selectedItem:Object;
+		private function changeItemHandler(evt:Event):void
+		{
+			_selectedItem = evt.currentTarget;
+		}
+		
+		public function enabledItem():void
+		{
+			_selectedItem.enabled = false;
+		}
+		*/
+		
 	}
 }

@@ -28,9 +28,12 @@ package vdom.components.eventEditor
 		  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
 		}
 		
+	//	public var dragItemEnabled:Boolean = true;
 		private function onTreeDragComplete(drEvt:DragEvent):void
 		{
-			drEvt.preventDefault();
+		//	if(!dragItemEnabled)
+				drEvt.preventDefault();
+			//else	dragItemEnabled = true;
 		}
 		
 		private function getIcon(value:Object):Class 

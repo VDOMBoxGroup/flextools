@@ -1,7 +1,5 @@
 package vdom.components.eventEditor
 {
-	import mx.utils.UIDUtil;
-	
 	import vdom.managers.DataManager;
 	
 	public class TreeActions extends DragTree
@@ -31,7 +29,8 @@ package vdom.components.eventEditor
 		{
 			var outXML:XML = new XML(inXML.toXMLString());
 			var type:XML = dataManager.getTypeByTypeId(inXML.@Type);
-			var actions:XML = type.E2vdom.Actions.Container.(@ID == inXML.@containerID)[0]; 
+			var curContainerTypeID:String = dataManager.getTypeByObjectId(inXML.@containerID).Information.ID.toString();
+			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0]; 
 			var tempXML:XML;
 			
 			if(actions != null)		
@@ -40,7 +39,7 @@ package vdom.components.eventEditor
 				 	tempXML = <Event/>;
 					tempXML.@label = child.@MethodName;
 					tempXML.@MethodName  = child.@MethodName;
-					tempXML.@ObjSrcID = inXML.@ID;
+					tempXML.@ObjTgtID = inXML.@ID;
 					tempXML.@containerID = inXML.@containerID;
 					
 					outXML.appendChild(tempXML);

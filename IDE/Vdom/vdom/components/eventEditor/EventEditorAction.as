@@ -69,7 +69,7 @@ package vdom.components.eventEditor
 		private var _ratio:Number = 0.8;
 	
 		
-		public function EventEditorAction(data:Object)
+		public function EventEditorAction(data:Object, containerID:String)
 		{
 			super();
 			dataManager = DataManager.getInstance();
@@ -80,11 +80,20 @@ package vdom.components.eventEditor
 			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
-			initDownBody(data);
+			initDownBody(data, containerID);
 			
 			updateRatio();
 			
 			isRedraw = true;
+			// set x, y
+			
+			if (data.@Top[0])
+			{
+				this.y = data.@Top;
+				this.x = data.@Left;
+				_ID  = data.@ID;
+			}
+			
 		}
 		
 		private var isRedraw:Boolean;
@@ -240,7 +249,7 @@ package vdom.components.eventEditor
 		
 		private var _name:String;
 	//	private var _eventType:String; to _methodName
-		private function initDownBody(data:Object):void
+		private function initDownBody(data:Object, containerID:String):void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
 			addChild(cnvDownLayer);
@@ -250,11 +259,11 @@ package vdom.components.eventEditor
 				vBox.setStyle('verticalGap', 0);
 				cnvDownLayer.addChild(vBox);
 				
-			var leftVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+			var leftVRule:VRule =new VRule(); 
 				leftVRule.percentHeight = 100;
 			cnvDownLayer.addChild(leftVRule);   
 			
-			var rightVRule:VRule =new VRule(); // rollOverEffect="WipeUp" strokeWidth="1" strokeColor="red"/>   
+			var rightVRule:VRule =new VRule();   
 	//			rightVRule.x = 100;
 				rightVRule.setStyle('right', 0);
 				rightVRule.percentHeight = 100;
@@ -265,21 +274,21 @@ package vdom.components.eventEditor
 			data = data as XML;
 			
 			
-			var object:XML = dataManager.getObject(data.@ObjSrcID);
+			var object:XML = dataManager.getObject(data.@ObjTgtID);
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
 			vBox.addChild(objectName);
 			
-			var type_TEMP:String = dataManager.getTypeByObjectId(data.@ObjSrcID).toXMLString();
+			var type_TEMP:String = dataManager.getTypeByObjectId(data.@ObjTgtID).toXMLString();
 			var type:XML = new XML(type_TEMP);
-			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
+			var objectEvent:SimpleLayer = new SimpleLayer(data.@MethodName);
 			vBox.addChild(objectEvent);
 			
 			_name = object.@Name;
-			_objTgtID 	= data.@ObjSrcID;
+			_objTgtID 	= data.@ObjTgtID;
 	//		_eventType  = data.@label;
-			_methodName = data.@label;
+			_methodName = data.@MethodName;
 			
-			var parametrs:* = type.E2vdom.Actions.Container.(@ID == data.@containerID)[0];
+			var parametrs:* = type.E2vdom.Actions.Container.(@ID == containerID)[0];
 			parametrs = parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
 			for each(var child:XML in parametrs.children())
 			{
@@ -289,10 +298,7 @@ package vdom.components.eventEditor
 			
 			var y:SimpleLayer = new SimpleLayer('Y');
 			vBox.addChild(y);
-			type = new XML(dataManager.getTypeByObjectId(data.@ObjSrcID).toXMLString());
-			
-
-			
+		//	type = new XML(dataManager.getTypeByObjectId(data.@ObjSrcID).toXMLString());
 		}
 		
 

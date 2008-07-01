@@ -3,6 +3,7 @@
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.collections.XMLListCollection;
 	 	/***
 	 	 * 
 	 	 * 
@@ -79,6 +80,7 @@
 	 		{
 	 			dataManager.removeEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
 	 			trace(dmEvt.result.toXMLString());
+	 			cretDat(dmEvt.result);
 	 		//	can.removeAllChildren();
 	 		}
 	 		
@@ -102,31 +104,47 @@
                     var item:XML = XML(items[i]);
                     if( item.name().toString() == "Object" ) return; // not what we want
 
-                }
+                }	  
 	                    
 	        	var newElement:*;
 	        	  if( event.dragInitiator is TreeActions ) 
 	        	  {
-	        		 newElement =  new EventEditorAction(item);
-	        		 newElement.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
-	        		 actionsArray[newElement.ID] = newElement;
+	        		 newElement =  new EventEditorAction(item, curContainerTypeID);
+	        		 
+	        		 actionsArray[newElement.ID] = setListeners4Action(newElement);
 	        	  } 
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
-	        	  	newElement = new EventEditorEvents(item);
-	        	  	newElement.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-	        	  	eventsArray[newElement.ID] = newElement;
+	        	  	newElement = new EventEditorEvents(item, curContainerTypeID);
+	        	  
+	        	  	if (eventsArray[newElement.ID])
+	        	  			return;
 	        	  	
-	        	//  	trEvents.removeDataEffectItem(item);
-	
+	        	  	eventsArray[newElement.ID] = setListeners4Event(newElement);
 	        	  }
 	        	
 	        	newElement.x = event.localX;
 	        	newElement.y = event.localY;
-	        	newElement.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)
 	        	
-	 			can.addChild(newElement); 
+	        	can.addChild(newElement); 
+	 					
 	        }   
+	        
+	        private function  setListeners4Action(el:EventEditorAction):EventEditorAction
+	        {
+	        	el.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
+	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)
+	        	
+	        	return el;
+	        }
+	        
+	        private function setListeners4Event(el:EventEditorEvents):EventEditorEvents
+	        {
+	        	el.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)
+	        	
+	        	return el;
+	        }
 	        
 	        private function onTreeDragComplete(event:DragEvent):void 
 	        {
@@ -203,10 +221,12 @@
 				can.removeChild(line); ///-------------***********
 				blDrawLine = false;  //говорим что НЕ рисуем линию
 			
-				var evtID:String = curEvent.ID;
-				var actID:String = msEvt.currentTarget.ID;
-				
-				if(!linesArray[evtID]) linesArray[curEvent.ID] = new Array();
+				createLine(curEvent.ID, msEvt.currentTarget.ID)
+			}
+			
+			private function createLine(evtID:String, actID:String):void
+			{
+				if(!linesArray[evtID]) linesArray[evtID] = new Array();
 				//if(!msEvt.hasOwnProperty('ID')) return;
 				if(linesArray[evtID][actID]) return;
 				
@@ -228,19 +248,8 @@
 			}
 			
 			private var curContainerID:String;
-			private var dataToServer:XML = 
-	<E2vdom>
-		<Events>
-	      <Event ObjSrcID='321' Name='123'>
-	         <Action ID='333'/>
-	      </Event>
-	   </Events>
-	   <Actions>
-	      <Action ID='333' ObjTgtID='123' MethodName='name'>
-	         <Parameter ScriptName='MyParameter'>33</Parameter>
-	      </Action>
-	   </Actions>
-   </E2vdom>
+			public var curContainerTypeID:String;
+			private var dataToServer:XML; 
 
 
 
@@ -252,7 +261,10 @@
 				
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
 				 if (selectedNode)
-              	 	curContainerID = selectedNode.@ID; 
+				 {
+              	 	curContainerID = selectedNode.@ID;
+              	 	curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+     			 } 
 			}
 			
 			private function getIcon(value:Object):Class 
@@ -304,6 +316,8 @@
 					temXML.@ID 		 	= actionsArray[actID].ID;
 					temXML.@ObjTgtID 	= actionsArray[actID].ObjTgtID;
 					temXML.@MethodName 	= actionsArray[actID].MethodName;
+					temXML.@Top 		= actionsArray[actID].y;
+					temXML.@Left 		= actionsArray[actID].x;
 					
 					dataToServer.Actions.appendChild(temXML);
 				}
@@ -314,6 +328,8 @@
 					
 					temXML.@Name 	 = eventsArray[evtID].Name;
 					temXML.@ObjSrcID = eventsArray[evtID].ObjSrcID;
+					temXML.@Top 	 = eventsArray[evtID].y;
+					temXML.@Left 	 = eventsArray[evtID].x;
 					
 					dataToServer.Events.appendChild(temXML);
 				}
@@ -321,17 +337,71 @@
 				for(evtID in linesArray)
 				{ 
 					var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
+					var Name:String = eventsArray[evtID].Name;
 					
 					for(actID in linesArray[evtID])
 					{
 						temXML = <Action/>;
 						temXML.@ID = actionsArray[actID].ID;
 
-						dataToServer.Events.Event.(@ObjSrcID == ObjSrcID).appendChild(temXML);
+						dataToServer.Events.Event.(@ObjSrcID == ObjSrcID && @Name == Name).appendChild(temXML);
 					}
 				}
+				
 				trace('----toServer---\n '+curContainerID+'\n'+ dataToServer.toXMLString())
 				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
+			}
+			
+			private function cretDat(xmlToTree:XML=null):void
+			{
+				can.removeAllChildren();
+			/*	var xmlToTree:XML = 
+						<E2vdom>
+						  <Actions>
+						    <Action ID="CDFD4AB5-85A8-051F-B647-D8ADA79092C2" ObjTgtID="d3fe27c0-819d-4538-ab74-9050257f1fc0" MethodName="name1" />
+						    <Action ID="6313B67D-E0DB-556E-6E60-D8ADBFEB647A" ObjTgtID="de79cc9c-a40b-4325-8025-951f33a74191" MethodName="name2" Top="20" Left="300"/>
+						  </Actions>
+						  <Events>
+						    <Event Name="onmousedown" ObjSrcID="d3fe27c0-819d-4538-ab74-9050257f1fc0">
+						      <Action ID="6313B67D-E0DB-556E-6E60-D8ADBFEB647A"/>
+						      <Action ID="CDFD4AB5-85A8-051F-B647-D8ADA79092C2"/>
+						    </Event>
+						    <Event Name="onmousedown" ObjSrcID="b76aa2a7-33b9-4a38-9a81-cfb910f61ca0">
+						      <Action ID="CDFD4AB5-85A8-051F-B647-D8ADA79092C2"/>
+						    </Event>
+						  </Events>
+						</E2vdom>;
+			*/	
+				actionsArray = [];		
+				for each(var actID:XML in xmlToTree.E2vdom.Actions.children())
+				{
+					var objAct:EventEditorAction = new EventEditorAction(actID, curContainerTypeID);
+					 actionsArray[actID.@ID] = setListeners4Action(objAct);
+					can.addChild(actionsArray [actID.@ID]);
+				}
+				
+				eventsArray = [];		
+				for each(var evt:XML in xmlToTree.E2vdom.Events.children())
+				{
+					//var ID:String = evt.@ObjSrcID + '_' + evt.@Name;
+					var objEv:EventEditorEvents = new EventEditorEvents(evt, curContainerTypeID);
+					eventsArray[objEv.ID] = setListeners4Event(objEv);
+					can.addChild(eventsArray[objEv.ID]);
+				}
+				
+				linesArray = [];
+				for (var evtID:String in eventsArray )//xmlToTree.E2vdom.Events.children()
+				{
+					var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
+					var Name: String = eventsArray[evtID].Name;
+					 
+					evt = xmlToTree.E2vdom.Events.Event.(@ObjSrcID == ObjSrcID && @Name ==Name)[0];
+					for each(actID in evt.children())
+					{
+						createLine(evtID, actID.@ID);
+					}
+					//can.addChild(linesArray[ID]);
+				}
 			}
 	 	]]>
 	 </mx:Script>
@@ -356,6 +426,7 @@
 				        </mx:Canvas>
 			        </mx:TabNavigator>
 			        <mx:Button label="Send to server" right="33" bottom="10" click="creatDataToServer()"/>
+			        <mx:Button label="to tree" right="33" bottom="10" click="cretDat()"/>
 			      </mx:VBox>
 	          </mx:Canvas>
 		</mx:VDividedBox>

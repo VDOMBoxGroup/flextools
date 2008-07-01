@@ -10,7 +10,6 @@ package vdom.components.eventEditor
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	import mx.controls.VRule;
-	import mx.utils.UIDUtil;
 	
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
@@ -19,8 +18,6 @@ package vdom.components.eventEditor
 
 	public class EventEditorEvents extends Canvas
 	{
-					
-		
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='header')]
 		[Bindable]
 		public var header:Class;
@@ -71,14 +68,14 @@ package vdom.components.eventEditor
 		private var dataManager:DataManager;
 		
 		
-		public function EventEditorEvents(data:Object)
+		public function EventEditorEvents(data:Object, curContainerID:String)
 		{
-			
 			super();
 			
 			dataManager = DataManager.getInstance();
 			
 		//	_ID = UIDUtil.createUID();
+			_ID = data.@ObjSrcID + '_' + data.@Name;
 			cnvUpLayer.clipContent = false;
 			
 			
@@ -88,6 +85,12 @@ package vdom.components.eventEditor
 			updateRatio();
 			
 			isRedraw = true;
+			
+			if (data.@Top[0])
+			{
+				this.y = data.@Top;
+				this.x = data.@Left;
+			}
 		}
 		
 		private var isRedraw:Boolean;
@@ -263,17 +266,17 @@ package vdom.components.eventEditor
 			
 			var object:XML = dataManager.getObject(data.@ObjSrcID);
 			
-			_name = data.@Name;
-			_eventType = data.@label;
+			_name = object.@Name;
+			_eventType = data.@Name;
 			_objSrcID = data.@ObjSrcID;
-			_ID = _objSrcID + _name;
+			_ID = _objSrcID +"_"+ _name;
 			
 			
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
 			vBox.addChild(objectName);
 			
 			var type:XML = dataManager.getTypeByObjectId(data.@ObjSrcID);
-			var objectEvent:SimpleLayer = new SimpleLayer(data.@label);
+			var objectEvent:SimpleLayer = new SimpleLayer(data.@Name);
 			vBox.addChild(objectEvent);
 			
 			
@@ -281,11 +284,14 @@ package vdom.components.eventEditor
 			var parametrs:XML = type.E2vdom.Events..Event.(@Name == data.@Name).Parameters[0];
 			for each(var child:XML in parametrs.children())
 			{
-				var parametr:SimpleLayer = new SimpleLayer(child.@Name);
-				vBox.addChild(parametr);
+				if(child.name() == 'Parameter')
+				{ 
+					var parametr:SimpleLayer = new SimpleLayer(child.@Name);
+					vBox.addChild(parametr);
+				}
 			}
-			var y:SimpleLayer = new SimpleLayer('Y');
-			vBox.addChild(y);
+	//		var y:SimpleLayer = new SimpleLayer('Y');
+	//		vBox.addChild(y);
 			
 		}
 
@@ -344,7 +350,7 @@ package vdom.components.eventEditor
 		private var _name:String;
 		public function get Name():String
 		{
-			return _name;
+			return _eventType;
 		}
 	
 	}
