@@ -4,15 +4,13 @@ package vdom.controls.externalEditorButton
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.filesystem.File;
-	import flash.filesystem.FileMode;
-	import flash.filesystem.FileStream;
+	import flash.system.LoaderContext;
 	
 	import mx.containers.HBox;
 	import mx.controls.Button;
 	import mx.controls.Label;
-	import mx.controls.SWFLoader;
 	import mx.core.Application;
+	import mx.core.UIComponent;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
@@ -31,10 +29,10 @@ package vdom.controls.externalEditorButton
 		private var __valueLabel:Label;
 		private var __openBtn:Button;
 		
-		private var ldr:SWFLoader;
-		private var objLdr:Loader = new Loader();
+		private var ldr:Loader;
 		private var exEditor:*;
 		private var applWindow:ApplicationWindow;
+		private var applUIComponent:UIComponent;
 		private var spinner:SpinnerScreen;
 		
 		private var _value:String; 
@@ -85,28 +83,16 @@ package vdom.controls.externalEditorButton
 //		----- Loading and executing external application methods ----------------------------- 
 
 		public function set resource(resource:Object):void {
-			objLdr.contentLoaderInfo.addEventListener(Event.COMPLETE, loadNestedAppl);
+			/* Loading nested application */
+			if (!ldr)
+        		ldr = new Loader();
+			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, applicationLoaded);
 			
-			var fi:File = File.applicationStorageDirectory;
-			fi = fi.resolvePath('zzz.swf');
-			var fs:FileStream = new FileStream();
-			fs.open(fi, FileMode.WRITE);
-			fs.writeBytes(resource.data);
-			fs.close();
+			var loaderContext:LoaderContext = new LoaderContext();
+			loaderContext.allowLoadBytesCodeExecution = true;
 			
-//			objLdr.loadBytes(resource.data);
+			ldr.loadBytes(resource.data, loaderContext);
 		}
-					
-        private function loadNestedAppl(event:Event):void {
-//        	var editorUrl:String = "C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf";
-			objLdr.removeEventListener(Event.COMPLETE, loadNestedAppl);
-        	if (!ldr)
-        		ldr = new SWFLoader();
-        	
-        	ldr.addEventListener(Event.COMPLETE, applicationLoaded);  
-        	ldr.source = objLdr.content;
-//			ldr.load(editorUrl);
-        }
         
 		private function applicationLoaded(event:Event):void {
 			ldr.removeEventListener(Event.COMPLETE, applicationLoaded);
@@ -119,8 +105,14 @@ package vdom.controls.externalEditorButton
 			applWindow.visible = false;
 			
 	   		event.currentTarget.content.addEventListener(FlexEvent.APPLICATION_COMPLETE, applicationComplete);
-    		applWindow.addChild(ldr);
-    		
+	   		
+ 	   		applUIComponent = new UIComponent();
+ 	   		applUIComponent.width = ldr.content.width;
+ 	   		applUIComponent.height = ldr.content.height;
+			
+			applWindow.addChild(applUIComponent);
+	   		applUIComponent.addChild(ldr);
+     		
     		PopUpManager.addPopUp(applWindow, DisplayObject(Application.application), false);
     		applWindow.addEventListener(CloseEvent.CLOSE, applCloseHandler);
 		}
@@ -132,6 +124,7 @@ package vdom.controls.externalEditorButton
 			applWindow.visible = true;
 			
 			exEditor.addEventListener(CloseEvent.CLOSE, applCloseHandler);
+			
     		exEditor['externalManager'] = null;		// not implemented yet
 			exEditor['value'] = _value;
 		}
