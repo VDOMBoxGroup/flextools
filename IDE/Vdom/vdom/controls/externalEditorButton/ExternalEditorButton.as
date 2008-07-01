@@ -16,6 +16,7 @@ package vdom.controls.externalEditorButton
 	import mx.managers.PopUpManager;
 	
 	import vdom.managers.DataManager;
+	import vdom.managers.ExternalManager;
 	import vdom.managers.FileManager;
 
 	public class ExternalEditorButton extends HBox
@@ -34,6 +35,7 @@ package vdom.controls.externalEditorButton
 		private var applWindow:ApplicationWindow;
 		private var applUIComponent:UIComponent;
 		private var spinner:SpinnerScreen;
+		private var externalManager:ExternalManager;
 		
 		private var _value:String; 
 
@@ -125,7 +127,10 @@ package vdom.controls.externalEditorButton
 			
 			exEditor.addEventListener(CloseEvent.CLOSE, applCloseHandler);
 			
-    		exEditor['externalManager'] = null;		// not implemented yet
+			if (!externalManager)
+				externalManager = new ExternalManager(applicationID, objectID);
+			
+    		exEditor['externalManager'] = externalManager;
 			exEditor['value'] = _value;
 		}
 
