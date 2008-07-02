@@ -7,23 +7,17 @@
 	 	/***
 	 	 * 
 	 	 * 
-	 	 *  - собрать структуру из дерева
+	 	 *  + собрать структуру из дерева
 	 	 *  + из структуры собрать дерево
-	 	 *  - удаление евентов
 	 	 *  - удаление линий
-	 	 *  - баг с повторяющимися параметрами
-	 	 *  - перенести вниз дерево евентов/акшинов 
-	 	 *  - удаленные евенты должны появляться на старом месте
+	 	 *  + баг с повторяющимися параметрами
+	 	 *  + перенести вниз дерево евентов/акшинов 
+	 	 *  + удалени елементов
+	 	 *  - чтоб серыми становились вынесенные евенты
+	 	 *  - запоминание состояния
 	 	 * 
 	 	 * */
 	 	 
-	 	 /*
-	 	 	в каких случаях посылать данные на сервер?
-	 	 	 - когда переключаешься по веткам (если были изменения)
-	 	 	 - на hide
-	 	 	делать ли заготовку для посылки на сервер 
-	 	 
-	 	 */
 	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
 	 	
 	 		import vdom.events.DataManagerEvent;
@@ -64,10 +58,16 @@
 	 		private function hideHandler():void
 	 		{
 	 			trContainer.hideHandler();
+	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 		}
 	 		
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
+	 			if(dataChanged)
+	 				creatDataToServer();
+	 			
+	 			dataChanged = false;
+	 			
 	 			dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
 	 			trace('get: '+ eeEvt.objID);
 	 			dataManager.getApplicationEvents(eeEvt.objID);
@@ -81,7 +81,6 @@
 	 			dataManager.removeEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
 	 			trace(dmEvt.result.toXMLString());
 	 			cretDat(dmEvt.result);
-	 		//	can.removeAllChildren();
 	 		}
 	 		
 	 		 private function dragEnterHandler(event:DragEvent):void 
@@ -112,7 +111,10 @@
 	        		 newElement =  new EventEditorAction(item, curContainerTypeID);
 	        		 
 	        		 actionsArray[newElement.ID] = setListeners4Action(newElement);
+	        		 
+	        		 can.addChild(actionsArray[newElement.ID] ); 
 	        	  } 
+	        		 
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
 	        	  	newElement = new EventEditorEvents(item, curContainerTypeID);
@@ -121,19 +123,23 @@
 	        	  			return;
 	        	  	
 	        	  	eventsArray[newElement.ID] = setListeners4Event(newElement);
+	        	  	can.addChild(eventsArray[newElement.ID] ); 
 	        	  }
 	        	
 	        	newElement.x = event.localX;
 	        	newElement.y = event.localY;
 	        	
-	        	can.addChild(newElement); 
-	 					
+	 			dataChanged = true;		
 	        }   
 	        
 	        private function  setListeners4Action(el:EventEditorAction):EventEditorAction
 	        {
 	        	el.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
+	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)
+	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
+	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
 	        	
 	        	return el;
 	        }
@@ -141,9 +147,50 @@
 	        private function setListeners4Event(el:EventEditorEvents):EventEditorEvents
 	        {
 	        	el.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)
+	        	
+	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
+	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
 	        	
 	        	return el;
+	        }
+	        
+	        private function objectClickHandler(mEvt:MouseEvent):void
+	        {
+	        	dataChanged = true;
+	        }
+	        
+	        private function deletElementHandler(trEvt:TreeEditorEvent):void
+	        {
+	        	var ID:String = trEvt.ID;
+	        	if(actionsArray[ID])
+	        	{
+	        		can.removeChild(actionsArray[ID]);
+	        		delete actionsArray[ID];
+	        		
+	        	}else if(eventsArray[ID])
+	        	{
+	        		if(can.contains(eventsArray[ID]))
+	        			can.removeChild(eventsArray[ID]);
+	        		delete eventsArray[ID];
+	        	}
+	        	
+	        	 deleteLines(ID);
+	        	 
+	        }
+	        
+	        private function deleteLines(ID:String):void
+	        {
+	        	for(var evtID:String in linesArray)
+	        		for(var actID:String in linesArray[evtID])
+	        		{
+    					if (evtID == ID || actID == ID)
+    					{
+    						can.removeChild(linesArray[evtID][actID])
+    						delete linesArray[evtID][actID];
+    					}    		
+	        		}
 	        }
 	        
 	        private function onTreeDragComplete(event:DragEvent):void 
@@ -222,6 +269,8 @@
 				blDrawLine = false;  //говорим что НЕ рисуем линию
 			
 				createLine(curEvent.ID, msEvt.currentTarget.ID)
+				
+				//dataChanged = true;
 			}
 			
 			private function createLine(evtID:String, actID:String):void
@@ -250,15 +299,10 @@
 			private var curContainerID:String;
 			public var curContainerTypeID:String;
 			private var dataToServer:XML; 
-
-
+			private var dataChanged:Boolean = false;
 
 			private function treeContainerChangeHandler(evt:Event):void
 			{
-				// send structure of events to server
-//				trace(dataToServer);
-			//	dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
-				
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
 				 if (selectedNode)
 				 {
@@ -289,6 +333,16 @@
 			
 			private function mouseMoveHandler(msEvt:MouseEvent):void
 			{
+				reDrawLines();
+			}
+			
+			private function reDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				reDrawLines();
+			}
+			
+			private function reDrawLines():void
+			{
 				for(var evID:String in linesArray)
 					for(var acID:String in linesArray[evID])
 					{
@@ -318,6 +372,7 @@
 					temXML.@MethodName 	= actionsArray[actID].MethodName;
 					temXML.@Top 		= actionsArray[actID].y;
 					temXML.@Left 		= actionsArray[actID].x;
+					temXML.@State		= actionsArray[actID].State;
 					
 					dataToServer.Actions.appendChild(temXML);
 				}
@@ -330,6 +385,7 @@
 					temXML.@ObjSrcID = eventsArray[evtID].ObjSrcID;
 					temXML.@Top 	 = eventsArray[evtID].y;
 					temXML.@Left 	 = eventsArray[evtID].x;
+					temXML.@State	 = eventsArray[evtID].State;
 					
 					dataToServer.Events.appendChild(temXML);
 				}
@@ -355,35 +411,18 @@
 			private function cretDat(xmlToTree:XML=null):void
 			{
 				can.removeAllChildren();
-			/*	var xmlToTree:XML = 
-						<E2vdom>
-						  <Actions>
-						    <Action ID="CDFD4AB5-85A8-051F-B647-D8ADA79092C2" ObjTgtID="d3fe27c0-819d-4538-ab74-9050257f1fc0" MethodName="name1" />
-						    <Action ID="6313B67D-E0DB-556E-6E60-D8ADBFEB647A" ObjTgtID="de79cc9c-a40b-4325-8025-951f33a74191" MethodName="name2" Top="20" Left="300"/>
-						  </Actions>
-						  <Events>
-						    <Event Name="onmousedown" ObjSrcID="d3fe27c0-819d-4538-ab74-9050257f1fc0">
-						      <Action ID="6313B67D-E0DB-556E-6E60-D8ADBFEB647A"/>
-						      <Action ID="CDFD4AB5-85A8-051F-B647-D8ADA79092C2"/>
-						    </Event>
-						    <Event Name="onmousedown" ObjSrcID="b76aa2a7-33b9-4a38-9a81-cfb910f61ca0">
-						      <Action ID="CDFD4AB5-85A8-051F-B647-D8ADA79092C2"/>
-						    </Event>
-						  </Events>
-						</E2vdom>;
-			*/	
+			
 				actionsArray = [];		
 				for each(var actID:XML in xmlToTree.E2vdom.Actions.children())
 				{
 					var objAct:EventEditorAction = new EventEditorAction(actID, curContainerTypeID);
-					 actionsArray[actID.@ID] = setListeners4Action(objAct);
+					 actionsArray[objAct.ID] = setListeners4Action(objAct);
 					can.addChild(actionsArray [actID.@ID]);
 				}
 				
 				eventsArray = [];		
 				for each(var evt:XML in xmlToTree.E2vdom.Events.children())
 				{
-					//var ID:String = evt.@ObjSrcID + '_' + evt.@Name;
 					var objEv:EventEditorEvents = new EventEditorEvents(evt, curContainerTypeID);
 					eventsArray[objEv.ID] = setListeners4Event(objEv);
 					can.addChild(eventsArray[objEv.ID]);
@@ -400,7 +439,6 @@
 					{
 						createLine(evtID, actID.@ID);
 					}
-					//can.addChild(linesArray[ID]);
 				}
 			}
 	 	]]>

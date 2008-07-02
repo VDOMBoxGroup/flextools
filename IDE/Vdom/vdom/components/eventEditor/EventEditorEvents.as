@@ -90,6 +90,7 @@ package vdom.components.eventEditor
 			{
 				this.y = data.@Top;
 				this.x = data.@Left;
+				changeState(data.@State =="true");
 			}
 		}
 		
@@ -143,10 +144,11 @@ package vdom.components.eventEditor
 					removeChild(cnvDownLayer);
 				
 				imgPlus.source = plus;
-				txt.text = _eventType +' : '+_name;
+				txt.text = _name +' : '+ _eventType ;
 			}else
 			{
-				addChild(cnvDownLayer);
+				if(!contains(cnvDownLayer))
+					addChild(cnvDownLayer);
 				imgPlus.source = minus;
 				txt.text = "Event";
 			}	
@@ -269,7 +271,7 @@ package vdom.components.eventEditor
 			_name = object.@Name;
 			_eventType = data.@Name;
 			_objSrcID = data.@ObjSrcID;
-			_ID = _objSrcID +"_"+ _name;
+		//	_ID = _objSrcID +"_"+ _name;
 			
 			
 			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
@@ -351,6 +353,11 @@ package vdom.components.eventEditor
 		public function get Name():String
 		{
 			return _eventType;
+		}
+		
+		public function get State():String
+		{
+			return min.toString();
 		}
 	
 	}

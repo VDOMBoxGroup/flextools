@@ -92,8 +92,8 @@ package vdom.components.eventEditor
 				this.y = data.@Top;
 				this.x = data.@Left;
 				_ID  = data.@ID;
+				changeState(data.@State =="true");
 			}
-			
 		}
 		
 		private var isRedraw:Boolean;
@@ -124,7 +124,7 @@ package vdom.components.eventEditor
 		
 		private function deleteClickHandler(msEvt:MouseEvent):void
 		{
-			parent.removeChild(this);
+		//	parent.removeChild(this);
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, _ID));	
 		}
 		
@@ -150,12 +150,14 @@ package vdom.components.eventEditor
 				txt.text = _name +' : '+_methodName ;
 			}else
 			{
-				addChild(cnvDownLayer);
+				if(!contains(cnvDownLayer))	
+					addChild(cnvDownLayer);
 				imgPlus.source = minus;
 				txt.text = "Action";
 			}	
 
 			min = blHide;
+			trace(min.toString())
 			isRedraw = true;
 			
 		}
@@ -358,6 +360,12 @@ package vdom.components.eventEditor
 		public function get MethodName():String
 		{
 			return _methodName;
+		}
+		
+		public function get State():String
+		{
+			trace('return: '+min.toString());
+			return min.toString();
 		}
 	}
 }
