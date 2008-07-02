@@ -18,8 +18,8 @@ public class ExternalManager implements IExternalManager  {
 	
 	public function ExternalManager(applicationId:String, objectId:String) {
 		
-		addEventListener(SoapEvent.REMOTE_METHOD_CALL_OK, callHandler);
-		addEventListener(SoapEvent.REMOTE_METHOD_CALL_ERROR, errorHandler);
+		soap.addEventListener(SoapEvent.REMOTE_METHOD_CALL_OK, callHandler);
+		soap.addEventListener(SoapEvent.REMOTE_METHOD_CALL_ERROR, errorHandler);
 		_applicationId = applicationId;
 		_objectId = objectId;
 	}
