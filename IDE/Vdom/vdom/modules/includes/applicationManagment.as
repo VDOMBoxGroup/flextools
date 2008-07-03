@@ -21,7 +21,6 @@ private function creationCompleteHandler():void {
 
 private function showHandler():void {
 	
-	
 	watchers = [];
 	
 	listApplicationContainer.applicationID;
@@ -29,7 +28,6 @@ private function showHandler():void {
 	watchers.push(
 		BindingUtils.bindProperty(listApplicationContainer, 'dataProvider', dataManager, 'listApplication')
 	);
-	
 	
 	createApplicationCanvas.addEventListener('createApplication', createApplicationHandler);
 	
@@ -54,4 +52,5 @@ private function createApplicationHandler(event:Event):void {
 private function applicationChangedHandler(event:ListEvent):void {
 	
 	dataManager.changeCurrentApplication(listApplicationContainer.applicationID);
+	mainViewStack.selectedChild = applicationProperties;
 }
