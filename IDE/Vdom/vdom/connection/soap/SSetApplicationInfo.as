@@ -33,7 +33,7 @@ package vdom.connection.soap
 			return instance;
 		}
 		
-		public function execute(appid:String, attrname:String, attrvalue:String ):void
+		public function execute(appid:String, attr:String ):void
 		{
 			// protect
 			var sid:String			= code.sessionId;		// - идентификатор сессии 
@@ -42,7 +42,7 @@ package vdom.connection.soap
 			
 			
 			//send data & set listener 
-			ws.set_application_info(sid, skey, appid, attrname, attrvalue);
+			ws.set_application_info(sid, skey, appid, attr);
 		}
 		
 		

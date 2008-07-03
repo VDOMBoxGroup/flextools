@@ -97,14 +97,14 @@ package vdom.connection.soap
 		 *  4 - set application general information 'set_application_info'
 		 */
 		
-		public  function setApplicationInfo(appid:String='',attrname:String='',attrvalue:String=''):void 
+		public  function setApplicationInfo(appid:String='',attr:String=''):void 
 		{
 			var  sSetApplicationInfo:SSetApplicationInfo = SSetApplicationInfo.getInstance();
 			
 			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_OK, ldispatchEvent);
 			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_ERROR, ldispatchEvent);
 			
-			sSetApplicationInfo.execute(appid, attrname, attrvalue);
+			sSetApplicationInfo.execute(appid, attr);
 		}
 
 		/**
