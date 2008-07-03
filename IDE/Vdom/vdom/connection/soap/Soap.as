@@ -101,8 +101,8 @@ package vdom.connection.soap
 		{
 			var  sSetApplicationInfo:SSetApplicationInfo = SSetApplicationInfo.getInstance();
 			
-			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_OK, ldispatchEvent);
-			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_ERROR, ldispatchEvent);
+			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_INFO_OK, ldispatchEvent);
+			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_INFO_ERROR, ldispatchEvent);
 			
 			sSetApplicationInfo.execute(appid, attr);
 		}

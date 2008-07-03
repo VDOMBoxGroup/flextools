@@ -56,10 +56,10 @@ package vdom.connection.soap
 			// check Error
 			if(res != '')
 			{
-				evt = new SoapEvent(SoapEvent.SET_APLICATION_ERROR, resultXML);
+				evt = new SoapEvent(SoapEvent.SET_APLICATION_INFO_ERROR, resultXML);
 				dispatchEvent(evt);
 			} else{
-				evt = new SoapEvent(SoapEvent.SET_APLICATION_OK, resultXML);
+				evt = new SoapEvent(SoapEvent.SET_APLICATION_INFO_OK, resultXML);
 				dispatchEvent(evt);
 			}
 		}
