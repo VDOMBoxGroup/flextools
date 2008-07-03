@@ -12,6 +12,66 @@
 	</include-file>
 				
 	<include-file>
+		<name>app_icon_book.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_book.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_books.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_books.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_communicate.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_communicate.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_cubes.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_cubes.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_diagram.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_diagram.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_file.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_file.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_host.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_host.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_molecule.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_molecule.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_order.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_order.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_pen.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_pen.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_setting.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_setting.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app_icon_shoppingl.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_shoppingl.png</path>
+	</include-file>
+				
+	<include-file>
 		<name>analyse.png</name>
 		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\analyse.png</path>
 	</include-file>
@@ -39,6 +99,16 @@
 	<include-file>
 		<name>events_s.png</name>
 		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\events_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>new.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\new.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>new_s.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\new_s.png</path>
 	</include-file>
 				
 	<include-file>

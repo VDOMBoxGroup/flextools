@@ -6,6 +6,19 @@ global {
 	leftRightCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorLeftRight");
 	topLDownRCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopLDownR");
 	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
+	
+	appIconFile: Embed("app_icon_file.png");
+	appIconBook: Embed("app_icon_book.png");
+	appIconBooks: Embed("app_icon_books.png");
+	appIconCommunicate: Embed("app_icon_communicate.png");
+	appIconCubes: Embed("app_icon_cubes.png");
+	appIconDiagram: Embed("app_icon_diagram.png");
+	appIconHost: Embed("app_icon_host.png");
+	appIconMolecule: Embed("app_icon_molecule.png");
+	appIconOrder: Embed("app_icon_order.png");
+	appIconPen: Embed("app_icon_pen.png");
+	appIconSetting: Embed("app_icon_setting.png");
+	appIconShoppingl: Embed("app_icon_shoppingl.png");
 }
 
 WindowedApplication {

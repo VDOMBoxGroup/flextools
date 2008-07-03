@@ -20,6 +20,18 @@ ActionButton {
 	shadeSkin: Embed(source="vdomTheme.swf", symbol="ActionButtonShade");
 }
 
+.newButton {
+	upIcon: Embed("new.png");
+	overIcon: Embed("new_s.png");
+	downIcon: Embed("new_s.png");
+	disabledIcon: Embed("new_s.png");
+
+	selectedUpIcon: Embed("new_s.png");
+	selectedOverIcon: Embed("new_s.png");
+	selectedDownIcon: Embed("new_s.png");
+	selectedDisabledIcon: Embed("new_s.png");
+}
+
 .analyseButton {
 	upIcon: Embed("analyse.png");
 	overIcon: Embed("analyse_s.png");
