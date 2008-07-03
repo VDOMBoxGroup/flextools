@@ -97,19 +97,21 @@ package vdom.components.treeEditor
 			this.graphics.lineTo(x1, y1);
 			
 		//	this.graphics.beginFill(_numColor);
+			if (_mark)
+			{
+				
+				this.graphics.lineStyle(5, 0x00FFFF, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			
+				this.graphics.moveTo(x0, y0);	
+				this.graphics.lineTo(x1, y1);
+			}
 		
 			this.graphics.lineTo(x1 + Math.cos(alf+dA)*dDist, y1 + Math.sin(alf+dA)*dDist );
 			this.graphics.lineTo(x1 + Math.cos(alf-dA)*dDist, y1 + Math.sin(alf-dA)*dDist);
 			this.graphics.lineTo(x1,y1);
 			//this.graphics.endFill();
 			
-			if (_mark)
-			{
-				this.graphics.lineStyle(5, _numColor, .3, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 			
-				this.graphics.moveTo(x0, y0);
-				this.graphics.lineTo(x1, y1);
-			}
 		}
 		//private var arrPolygon:Array;
 	
@@ -177,6 +179,7 @@ package vdom.components.treeEditor
 			   			toObj.y );
 				}
    			}
+   			
 			if(_pFromObj)
 				pFromObj = new Point( _pFromObj.x, _pFromObj.y );
 			if(_pToObj)
@@ -272,7 +275,6 @@ package vdom.components.treeEditor
 		
 		public function clear():void
 		{
-			trace('vector2 - clear ');
 			graphics.clear();
 			this.fromObj = null;
 			this.toObj = null;

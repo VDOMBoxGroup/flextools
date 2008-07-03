@@ -13,8 +13,10 @@
 	 	 *  + баг с повторяющимися параметрами
 	 	 *  + перенести вниз дерево евентов/акшинов 
 	 	 *  + удалени елементов
-	 	 *  - чтоб серыми становились вынесенные евенты
-	 	 *  - запоминание состояния
+	 	 *  + чтоб серыми становились вынесенные евенты
+	 	 *  - при удаление евента в дереве востанавливались евенты...
+	 	 *  + запоминание состояния
+	 	 *  - у акшина редактировались параметры
 	 	 * 
 	 	 * */
 	 	 
@@ -118,6 +120,8 @@
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
 	        	  	newElement = new EventEditorEvents(item, curContainerTypeID);
+	        	 	
+	        	 	item.@enabled = false;
 	        	  
 	        	  	if (eventsArray[newElement.ID])
 	        	  			return;
@@ -463,8 +467,6 @@
 				             <eventEditor:TreeActions id="trActions" width="100%" height="100%"	 />
 				        </mx:Canvas>
 			        </mx:TabNavigator>
-			        <mx:Button label="Send to server" right="33" bottom="10" click="creatDataToServer()"/>
-			        <mx:Button label="to tree" right="33" bottom="10" click="cretDat()"/>
 			      </mx:VBox>
 	          </mx:Canvas>
 		</mx:VDividedBox>

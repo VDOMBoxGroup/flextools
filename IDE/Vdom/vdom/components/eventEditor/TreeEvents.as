@@ -1,5 +1,7 @@
 package vdom.components.eventEditor
 {
+	import mx.core.ClassFactory;
+	
 	import vdom.managers.DataManager;
 
 	public class TreeEvents extends DragTree
@@ -9,7 +11,9 @@ package vdom.components.eventEditor
 		{
 			super();
 			dataManager = DataManager.getInstance();
-		//	this.itemRenderer = EventItemRender;
+			var productRenderer:ClassFactory = new ClassFactory(EventItemRender);
+
+			this.itemRenderer  = productRenderer;
 	//		addEventListener(MouseEvent.MOUSE_DOWN, changeItemHandler)
 			
 		}
@@ -54,32 +58,7 @@ package vdom.components.eventEditor
 			return outXML;
 		}
 		
-		/*
-		public class MyTIR extends TreeItemRenderer
-		{
-			public function MyTIR()
-			{
-				super();
-			}
-			
-			public override function set enabled(value:Boolean):void {
-				
-				if(!data) {
-					super.enabled = value;
-					return;
-				}
-				
-				var val:XML = XML(data);
-				
-				if(val.@enabled[0] && val.(@enabled == false))
-					super.enabled = false;
-				else
-					super.enabled = value;
-			}
-		}
-		}
-*/
-
+		
 
 	/*	
 		private var _selectedItem:Object;

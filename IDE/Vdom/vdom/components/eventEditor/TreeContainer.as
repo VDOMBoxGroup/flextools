@@ -39,6 +39,9 @@ package vdom.components.eventEditor
 		public function showHandler():void
 		{
 			loadedPages = [];
+			
+			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener)
+            dataManager.changeCurrentPage(dataManager.currentPageId);
 		}
 		
 		
@@ -48,14 +51,19 @@ package vdom.components.eventEditor
 				dataManager.changeCurrentPage(selectedNode.@ID);
 		}
 		
-		private var selectedNode:XML;
-		private var loadedPages:Array = []; /*of Boolean*/
 		private function treeChangeLister(evt:Event):void
 		{
-			
 			 selectedNode = Tree(evt.target).selectedItem as XML;
-			 var ID:String = selectedNode.@ID;
-			 
+			 containerChange(selectedNode.@ID);
+		}
+		
+		private var selectedNode:XML;
+		private var loadedPages:Array = []; /*of XML*/
+		private function containerChange(ID:String):void
+		{
+			if(!xmlTreeData)
+				return;
+				
 			 if(loadedPages[ID])
 			 {
 			 	dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
@@ -75,16 +83,21 @@ package vdom.components.eventEditor
 					dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
               }
 		}
-		
+		private var curId:String;
 		private function changeCurrentPageListener(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener);
 			
-			var ID:String = selectedNode.@ID;
+			//var ID:String;
+			if(selectedNode)
+				curId = selectedNode.@ID;
+			else
+				curId = dataManager.currentPageId;
+				
 			
-			loadedPages[ID] = craetTreeData(_data.(@ID == ID).Objects);
+			loadedPages[curId] = craetTreeData(_data.(@ID == curId).Objects);
 			
-			dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
+			dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[curId], curId))
 		}
 		
 		private function treeUpdateComletLister(evt:Event):void
@@ -193,8 +206,9 @@ package vdom.components.eventEditor
 					xmlTemp.@label 	= xmlLabel.@Name;
 					xmlTemp.@ID 	= xmlLabel.@ID;
 					xmlTemp.@Type 	= xmlLabel.@Type;
-					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
-					xmlTemp.@containerID = selectedNode.@ID;
+					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type);
+					 
+					xmlTemp.@containerID = curId;
 					
 					xmllReturn += xmlTemp;
 			}

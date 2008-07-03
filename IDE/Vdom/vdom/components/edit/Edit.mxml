@@ -67,7 +67,7 @@
 					
 			</containers:ClosablePanel>
 			-->
-			<editContainers:ObjectsPanel id="pageList" title="Pages" y="50" width="200" height="100%" /> 					
+			<editContainers:ObjectsPanel id="pageList" title="Pages" y="50" width="100%" height="100%" /> 					
 			
 		</mx:VBox>
 	</mx:HDividedBox>

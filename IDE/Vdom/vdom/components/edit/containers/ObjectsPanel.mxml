@@ -51,9 +51,8 @@
 		
 		private function creationCompleteHendler():void
 		{
-			 
 			dataManager = DataManager.getInstance();
-			    tree.percentHeight = 100;//width = 200;
+			    tree.percentHeight = 100;
 			    tree.percentWidth = 100;
 				tree.showRoot = false; 
 				
@@ -63,8 +62,6 @@
 				tree.iconFunction = getIcon;
 			    
 			    addChild(tree);
-			    
-			    
 		}
 		
 		public function set dataProvider(xmlData:XMLList):void {
@@ -83,17 +80,13 @@
 					xmlList.@ID = xmlLabel.@ID;
 					xmlList.@Type = xmlLabel.@Type;
 					
-					/// завести массивчик ID-шников.
-					
 					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
-				//	trace(xmlLabel.Objects)
 					
 					xmlTreeData.appendChild(xmlList);
 			} 
 				tree.dataProvider = xmlTreeData;
-			//getIcons();
 			}
 		}
 		
@@ -113,8 +106,6 @@
 	
 		private function treeUpdateComletLister(evt:Event):void
 		{	
-	//		trace('*treeUpdateComletLister');
-			
 			if(!xmlTreeData)
 				return;
 				
@@ -125,27 +116,19 @@
 			//select current Page;
 			if(!tree.selectedItem )
 				tree.selectedItem = xmlTreeData.Object.(@ID == dataManager.currentPageId)[0];
-				
 		}
 		
 		private function treeChangeLister(evt:Event):void
 		{
-		//	trace('treeChangeLister')
 			  var selectedNode:XML = Tree(evt.target).selectedItem as XML;
               var ID:String = selectedNode.@ID;
-            //  trace('selected: ' + ID);
+
               if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
-              {
           		   	dataManager.changeCurrentPage(selectedNode.@ID);
-              } else
-              {
+              	else
               		dataManager.changeCurrentObject(ID);
-              }
-              
-           //   thisInitiator = true;
 		}
 
-	//	public var  change:String = Event.CHANGE; 
 	
 		private function findOjects(xmlIn:XMLList):XMLList
 		{
@@ -167,34 +150,12 @@
 			return xmllReturn;
 		}
 		
-		/* private function ge	tIcons ():void
-		{
-			trace('run function getIcon');	
-		} */
-		
-		/* public function set resource (object:Object):void
-		{
-		//	trace('run function set Resource: ' + object.resourceID);	
-			arrPicture[object.resourceID] = object.data;
-		} */
-	//	private var thisInitiator:Boolean;
 		public function set currentObject(xml:XML):void
 		{
+			if(!xml) 
+				return;
 			
-			if(!xml) return;
-		//	trace('currentObject: \n' + xml.@ID);
-		/*	
-			if(thisInitiator)
-			{
-				thisInitiator = false;
-				return;	
-			}
-		*/	
-			var ID:String = xml.@ID;
-			//trace('currentObject: \n'+xmlTreeData..*.Object.(@ID == ID)[0]);
-			tree.selectedItem = xmlTreeData..*.Object.(@ID == ID)[0];
-			if(tree.selectedItem)
-		//	trace('tree.selectedItem: \n'+tree.selectedItem.@ID);
+			tree.selectedItem = xmlTreeData..*.Object.(@ID == xml.@ID)[0];
 		}
 		
 		
