@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Script>
+	<![CDATA[
+		import mx.core.BitmapAsset;
+		
+		[Bindable]
+		private var _source:Class;
+		
+		public override function set data(value:Object):void {
+			
+			super.data = value;
+			
+			if(value.source)
+				_source =  getStyle(value.source);
+		}
+		
+		public function get source():Object {
+			
+//			var d:BitmapAsset = new _source();
+//			var r:Rectangle = d.bitmapData.rect
+//			var f:ByteArray = d.bitmapData.getPixels(r);
+//			f.position = 0;
+			return img.source;
+		}
+		
+	]]>
+</mx:Script>
+	<mx:Image id="img" width="50" height="50" horizontalCenter="0" source="{_source}"/>
+</mx:Canvas>

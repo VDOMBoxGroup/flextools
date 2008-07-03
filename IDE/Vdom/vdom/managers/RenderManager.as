@@ -484,7 +484,7 @@ public class RenderManager implements IEventDispatcher {
 		var lineColor:Number = 0xFFFFFF;
 		var borderColor:Number = 0x000000;
 		var childName:String = childXMLDescription.name().localName;
-		
+		currentSprite.graphics.lineStyle(NaN);
 			switch(childName) {
 			
 			case 'rectangle':

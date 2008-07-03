@@ -69,8 +69,11 @@
 				<script type="text/javascript">
 					
 					function onPaste(event){
-			            var cd = event.clipboardData;
-			            innerPasteCode(event.clipboardData.getData(cd.types[0]));
+						var insertion = document.createTextNode(event.clipboardData.getData(event.clipboardData.types[0]));
+             			window.getSelection().getRangeAt(0).insertNode(insertion);
+             			           
+             			CodePress.syntaxHighlight('generic');
+             			
 			            event.preventDefault();	
 			        }
 					
@@ -159,7 +162,9 @@
 						
 						// syntax highlighting parser
 						syntaxHighlight : function(flag) {
-							if(flag != 'init') { window.getSelection().getRangeAt(0).insertNode(document.createTextNode(cc));}
+							if(flag != 'init') {
+								window.getSelection().getRangeAt(0).insertNode(document.createTextNode(cc));
+							}
 							
 							editor = CodePress.getEditor();
 							o = editor.innerHTML;

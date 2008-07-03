@@ -554,16 +554,10 @@ public class DataManager implements IEventDispatcher {
 	 * 
 	 */	
 	
-	public function createApplication(name:String, description:String):void {
-		
-		var applicationAttributes:XML = 
-			<Attributes>
-				<Name>{name}</Name>
-				<Description>{description}</Description>
-			</Attributes>
+	public function createApplication():void {
 		
 		soap.addEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
-		soap.createApplication(applicationAttributes);
+		soap.createApplication();
 	}
 	
 	private function createApplicationHandler(event:SoapEvent):void {
@@ -573,9 +567,34 @@ public class DataManager implements IEventDispatcher {
 		_listApplication += event.result.Application[0];
 		
 		dispatchEvent(new DataManagerEvent('listApplicationChanged'));
-		dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED));
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED);
+		dme.result = event.result;
+		dispatchEvent(dme);
 	}
 	
+	public function setApplicationInformation(applicationId:String, attributes:XML):void {
+		
+		soap.addEventListener(SoapEvent.SET_APLICATION_INFO_OK, setApplicationInfoHandler);
+		soap.setApplicationInfo(applicationId, attributes);
+	}
+	
+	private function setApplicationInfoHandler(event:SoapEvent):void {
+		
+		soap.removeEventListener(SoapEvent.SET_APLICATION_INFO_OK, setApplicationInfoHandler);
+		
+		var information:XML = event.result.Information[0];
+		var applicationId:String = information.Id;
+		var application:XML;
+		
+		if(applicationId)
+			application = listApplication.(@ID == applicationId)[0];
+			
+		if(application)
+			application.Information[0] = information;
+			
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_CHANGED);
+		dispatchEvent(dme);
+	}
 	
 	/**
 	 * Создание нового объекта.

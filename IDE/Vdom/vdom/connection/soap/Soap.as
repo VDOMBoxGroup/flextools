@@ -78,7 +78,7 @@ package vdom.connection.soap
 		 * 3 - create application  'create_application'
 		 */ 
 		
-		public  function createApplication(attr:XML):void 
+		public  function createApplication(attr:XML = null):void 
 		{
 			var sCreateApplication:SCreateApplication = SCreateApplication.getInstance(); 
 			

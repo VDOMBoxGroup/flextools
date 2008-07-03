@@ -6,17 +6,34 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import vdom.managers.FileManager;
+			import mx.core.Application;
 			[Bindable]
 			private var labelValue:String
+			
+			[Bindable]
+			private var _source:Object;
 			
 			override public function set data(value:Object):void {
 				
 				super.data = value;
-				labelValue = value.@id;
+				labelValue = value.Information.Name;
+				if(value.Information.Icon == '')
+					_source = Application.application.getStyle('appIconFile');
+				else {
+					
+					var fileManager:FileManager = FileManager.getInstance();
+					fileManager.loadResource(value.Information.Id, value.Information.Icon, this, 'resource', true);
+				} 
+			}
+			
+			public function set resource(value:Object):void {
+				
+				_source = value;
 			}
 		]]>
 	</mx:Script>
 	
-	<mx:Canvas id="img" width="50" height="50" backgroundColor="#ff0000" borderStyle="none"/>
+	<mx:Image id="img" width="50" height="50" source="{_source}" toolTip="{labelValue}"/>
 </mx:VBox>
 

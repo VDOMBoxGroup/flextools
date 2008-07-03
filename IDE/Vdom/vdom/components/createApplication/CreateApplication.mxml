@@ -4,22 +4,32 @@
 	
 	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
-	hide="hideHandler();">
+	hide="hideHandler();" xmlns:ns1="vdom.controls.*">
 
 	<mx:Script source="includes/createApplication.as" />
 	
 	<mx:Form id="createApplicationForm" 
-		x="10" y="10" >
-		<mx:FormHeading label="Create Application"/>
-		<mx:FormItem label="Name">
-			<mx:TextInput id="applicationName"/>
+		horizontalCenter="0" y="10">
+		<mx:HBox width="100%" >
+			<mx:Label text="Create Application" fontWeight="bold" fontSize="12" width="100%" textAlign="center"/>
+		</mx:HBox>
+		<mx:FormItem label="Name" width="100%" horizontalAlign="right" required="true">
+			<mx:TextInput id="applicationName" textAlign="left" width="200"/>
 		</mx:FormItem>
-		<mx:FormItem label="Description">
-			<mx:TextArea id="applicationDescription"/>
+		<mx:FormItem label="Description" width="100%" horizontalAlign="right">
+			<mx:TextArea id="applicationDescription" width="200"/>
 		</mx:FormItem>
-		<mx:FormItem direction="horizontal">
-			<mx:Button label="Create" click="createApplication();"/>
-			<mx:Button label="Cancel"/>
+		<mx:FormItem label="Image" width="100%" direction="horizontal" horizontalGap="0" borderThickness="1" horizontalAlign="left">
+			<mx:Canvas  borderStyle="solid">
+				<mx:Image width="50" height="50" id="applicationImage" source="{_source}"/>
+			</mx:Canvas>
+			<mx:Spacer width="100%"/>
+			<mx:Button label="Change" 
+				cornerRadius="0" fontSize="10" fontWeight="bold" click="changeImage();"/>
+		</mx:FormItem>
+		<mx:FormItem direction="horizontal" width="100%" horizontalAlign="right">
+			<mx:Button label="Create" click="createApplication();" cornerRadius="0"/>
+			<mx:Button label="Cancel" cornerRadius="0"/>
 		</mx:FormItem>
 	</mx:Form>
 	

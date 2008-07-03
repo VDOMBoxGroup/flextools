@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	backgroundColor="#FFFFFF" width="350" showCloseButton="true" cornerRadius="0"
+	
+	close="closeHandler(false);" title="Change Application Icon" borderAlpha="1">
+<mx:Script>
+	<![CDATA[
+		import mx.managers.PopUpManager;
+		import mx.core.BitmapAsset;
+		import vdom.events.ImageChooserEvent;
+		import mx.core.Application;
+		import mx.events.ListEvent;
+		
+		[Bindable]
+		private var listArray:Array = [
+			{source:'appIconFile', imageName:'File'}, {source:'appIconBook', imageName:'Book'},
+			{source:'appIconBooks', imageName:'Books'}, {source:'appIconCommunicate', imageName:'Communicate'},
+			{source:'appIconCubes', imageName:'Cubes'}, {source:'appIconDiagram', imageName:'Diagram'},
+			{source:'appIconHost', imageName:'Host'}, {source:'appIconMolecule', imageName:'File'},
+			{source:'appIconOrder', imageName:'File'}, {source:'appIconPen', imageName:'File'},
+			{source:'appIconSetting', imageName:'File'}, {source:'appIconShoppingl', imageName:'File'}
+		]
+		
+		private var _selectedImage:Object = Application.application.getStyle('appIconFile');;
+		
+		private var loader:Loader;
+		private var tempName:String;
+		
+		[Bindable]
+		private var _imageName:String = 'File';
+		
+		[Bindable (event='imageChanged')]
+		private function get selectedImage():Object {
+			
+			return _selectedImage;
+		}
+		
+		private function changeHandler(event:ListEvent):void {
+			
+			_selectedImage = MyImage(event.itemRenderer).source;
+			_imageName = MyImage(event.itemRenderer).data.imageName;
+			dispatchEvent(new Event('imageChanged'));
+		}
+		
+		private function closeHandler(saveSelection:Boolean):void {
+			
+			if(saveSelection) {
+				
+				var bitmap:Bitmap;
+				
+				if(selectedImage is Class)
+					bitmap = new selectedImage();
+				else if(selectedImage is Bitmap)
+					bitmap = Bitmap(selectedImage);
+				
+				var ice:ImageChooserEvent = new ImageChooserEvent(ImageChooserEvent.APPLY);
+				ice.name = _imageName;
+				ice.resource = bitmap;
+				dispatchEvent(ice);
+			}
+			
+			PopUpManager.removePopUp(this);
+		}
+		
+		private function loadFile():void {
+			
+			var file:File = new File();
+			var fileFilter:FileFilter = new FileFilter('Image', "*.jpg;*.jpeg;*.gif;*.png");
+			file.addEventListener(Event.SELECT, selectFileHandler);
+			file.browseForOpen('Load image', [fileFilter]);
+		}
+		
+		private function selectFileHandler(event:Event):void {
+			
+			if(event.currentTarget is File && event.currentTarget.exists) {
+				
+				var file:File = File(event.currentTarget);
+				var fileStream:FileStream = new FileStream();
+				var byteArray:ByteArray = new ByteArray();
+				
+				try {
+					
+					fileStream.open(file, FileMode.READ);				
+					fileStream.readBytes(byteArray);
+					
+				} catch(error:Error) {
+					
+				}
+				
+				if(byteArray.length > 0) {
+					
+					if(file.name)
+						tempName = file.name.substring(-1, file.name.lastIndexOf('.')); 
+									
+					loader = new Loader();
+				
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loader_completeHandler);
+					loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, loader_progressHandler);
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, loader_ioErrorHandler);
+					
+					loader.loadBytes(byteArray);
+				}
+			}
+		}
+		
+		private function loader_completeHandler(event:Event):void {
+				
+				var image:Bitmap = Bitmap(loader.content);
+				var m:Matrix = new Matrix();
+				var sx:Number = 50/image.width;
+				var sy:Number = 50/image.height;
+
+				m.scale(sx, sy);
+				var scaledImage:Bitmap = 
+					new Bitmap(
+						new BitmapData(50, 50, true, 0x00ffffff), 
+						PixelSnapping.AUTO,
+						true
+					); 
+				scaledImage.bitmapData.draw(image.bitmapData, m);
+				_selectedImage = scaledImage;
+				if(tempName)
+					_imageName = tempName;
+				else
+					_imageName == 'Image';
+				
+				dispatchEvent(new Event('imageChanged'));
+				
+			}
+			
+			private function loader_progressHandler(event:ProgressEvent):void {
+				
+			}
+			
+			private function loader_ioErrorHandler(event:IOError):void {
+				
+			}
+	]]>
+</mx:Script>
+
+<mx:VBox width="100%" horizontalAlign="center" borderStyle="solid" paddingTop="5" paddingBottom="5">
+	<mx:Canvas borderStyle="solid">
+		<mx:Image width="50" height="50" source="{selectedImage}"/>
+	</mx:Canvas>
+	<mx:Label id="imageName" text="{_imageName}" />
+</mx:VBox>
+
+<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5">
+	<mx:Spacer width="100%"/>
+	<mx:Label text="Load from computer"/>
+	<mx:Button label="..." cornerRadius="0" click="loadFile();"/>
+</mx:HBox>
+
+<mx:HorizontalList paddingTop="5"
+	change="changeHandler(event);"
+	 
+	width="100%" height="75" columnCount="4" selectedIndex="0" 
+	dataProvider="{listArray}" itemRenderer="vdom.controls.MyImage">
+</mx:HorizontalList>
+	<mx:HBox width="100%" horizontalAlign="right">
+		<mx:Button label="OK" cornerRadius="0" click="closeHandler(true);"/>
+		<mx:Button label="Chancel" cornerRadius="0" click="closeHandler(false);"/>
+	</mx:HBox>
+</mx:TitleWindow>

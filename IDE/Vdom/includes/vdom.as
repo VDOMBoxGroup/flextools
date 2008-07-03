@@ -80,7 +80,7 @@ private function showMainHandler():void {
 	Application.application.minHeight = 800;
 }
 
-private function lockStage():void {
+private function lockStage(value:String):void {
 	
 	ppm = new MyLoader();
 	ppm.setStyle('modalTransparencyDuration', 0);
@@ -88,11 +88,12 @@ private function lockStage():void {
 	ppm.setStyle('modalTransparency', 0);
 	PopUpManager.addPopUp(ppm, this, true);
 	PopUpManager.centerPopUp(ppm);
+	ppm.showText = value;
 }
 
 private function submitLogin(event:LoginFormEvent):void {
 		
-	lockStage();
+	lockStage('Authentication process');
 	
 	var username:String = event.formData.username
 	var password:String = event.formData.password

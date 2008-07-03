@@ -8,20 +8,25 @@ import mx.containers.Accordion;
 
 import vdom.components.edit.containers.typeAccordionClasses.Type;
 import vdom.components.edit.containers.typeAccordionClasses.Types;
+import vdom.managers.ExternalManager;
 import vdom.managers.FileManager;
-	
+
 public class TypeAccordion extends Accordion {
 	
 	private var fileManager:FileManager;
-	private var categories:Object;
+	private var categories:Object = {};
 	private var types:ArrayCollection;
+	
+	private var phraseRE:RegExp = /#lang\((\w+)\)/;
+	private var resourceRE:RegExp = /#Res\((.*)\)/;
+	
+	private var standardCategories:Array = ['standard', 'form', 'table', 'database', 'debug'];
 	
 	public function TypeAccordion()	{
 		
 		super();
 		
 		fileManager = FileManager.getInstance();
-		categories = {};
 		types = new ArrayCollection();
 	}
 	
@@ -30,10 +35,7 @@ public class TypeAccordion extends Accordion {
 		if(!typesXML) return;
 		
 		var typeId:String, displayName:String, phraseId:String, resourceId:String, 
-			typeName:String, categoryName:String, aviableContainers:String;
-		
-		var phraseRE:RegExp = /#Lang\((\w+)\)/;
-		var resourceRE:RegExp = /#Res\((.*)\)/;
+			typeName:String, typeNameLocalized:String, categoryName:String, aviableContainers:String;
 		
 		for each (var typeDescription:XML in typesXML) {
 			
@@ -42,22 +44,24 @@ public class TypeAccordion extends Accordion {
 			
 			typeId = typeDescription.Information.ID;
 			
-			displayName = typeDescription.Information.DisplayName;
+			displayName = typeDescription.Information.DisplayName.toLowerCase();
 		
 			phraseId = displayName.match(phraseRE)[1];
 			
 			resourceId = typeDescription.Information.Icon;
 			resourceId = resourceId.match(resourceRE)[1];
 			
-			typeName = resourceManager.getString(typeDescription.Information.Name, phraseId);
-			categoryName = String(typeDescription.Information.Category).toUpperCase();
+			typeName = typeDescription.Information.Name;
+			typeNameLocalized = resourceManager.getString(typeName, phraseId);
+			categoryName = String(typeDescription.Information.Category)
 			
 			aviableContainers = typeDescription.Information.Containers;
 			
 			types.addItem({
-				typeName:typeName, 
+				typeName:typeName,
+				typeNameLocalized:typeNameLocalized,
 				categoryName:categoryName, 
-				typeId:typeId, 
+				typeId:typeId,
 				resourceId:resourceId,
 				aviableContainers:aviableContainers
 			});
@@ -67,10 +71,13 @@ public class TypeAccordion extends Accordion {
 		types.sort.fields = [new SortField('typeName')];
 		types.refresh();
 		
-		var standardCategory:Array = ['STANDARD', 'FORM', 'TABLE', 'DATABASE'];
+		var labelValue:String;
 		
-		for each (var category:String in standardCategory)
-			insertCategory(category);
+		for each (var category:String in standardCategories) {
+			
+			labelValue = resourceManager.getString('Edit', category);
+			insertCategory(category, labelValue);
+		}
 		
 		var type:Type, currentCategory:Types;		
 		
@@ -81,49 +88,53 @@ public class TypeAccordion extends Accordion {
 		while(!cursor.afterLast) {
 			
 			currentDescription = cursor.current;
+			categoryName = currentDescription.categoryName.toLowerCase();
 			
-			currentCategory = insertCategory(currentDescription.categoryName);
+			labelValue = null;
+			
+			if(standardCategories.indexOf(categoryName) != -1)
+				labelValue = resourceManager.getString('Edit', categoryName);
+				
+			else if (categoryName.match(phraseRE)) {
+				
+				phraseId = categoryName.match(phraseRE)[1];
+				categoryName = 'lang_' + phraseId;
+				labelValue = resourceManager.getString(currentDescription.typeName, phraseId);
+			}
+			
+			if(!labelValue) {
+				cursor.moveNext();
+				continue;
+			}
+				
+			
+			currentCategory = insertCategory(categoryName, labelValue);
 			
 			type = new Type(currentDescription);
 			
 			type.setStyle('horizontalAlign', 'center');
 			type.width = 90;
-			type.typeLabel = currentDescription.typeName;
+			type.typeLabel = currentDescription.typeNameLocalized;
 			
 			currentCategory.addChild(type);
 			fileManager.loadResource(currentDescription.typeId, currentDescription.resourceId, type, 'resource', true);
 			cursor.moveNext();
 		}
-			
-		
-		/* for each (var num:XML in typesXML) {
-			 
-			currentCategory = insertCategory(categoryName);
-			
-			type = new Type(num);
-			
-			type.setStyle('horizontalAlign', 'center');
-			type.width = 90;
-			
-			resourceID = num.Information.Icon;
-			resourceID = resourceID.match(resourceRE)[1];
-			
-			fileManager.loadResource(num.Information.ID, resourceID, type);
-			currentCategory.addChild(type);
-		} */
 	}
 	
-	private function insertCategory(categoryName:String):Types {
+	private function insertCategory(categoryName:String, label:String):Types {
 		
 		var currentCategory:Types;
+		
+		
 		
 		if(!categories[categoryName]) {
 			
 			currentCategory	= new Types();
 			
 			categories[categoryName] = currentCategory;
-			
-			currentCategory.label = categoryName;
+	
+			currentCategory.label = label;
 			currentCategory.setStyle('horizontalAlign', 'center');
 			currentCategory.horizontalScrollPolicy = 'off';
 			currentCategory.percentWidth = 100;

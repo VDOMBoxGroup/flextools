@@ -89,7 +89,7 @@ public class CacheManager {
 	
 	public function getCachedFileById(resourceId:String):ByteArray {
 		
-		var fileName:String = applicationPrefix + '-' + resourceId;
+		var fileName:String = resourceId;
 		
 		var result:Boolean = cursor.findFirst({name:fileName});
 		if(result) {
@@ -113,7 +113,7 @@ public class CacheManager {
 		if(fileSize > 90000000)
 			return;
 		
-		var newFileName:String = applicationPrefix + '-' + contentName;
+		var newFileName:String = contentName;
 		
 		if(cursor.findAny({name:applicationPrefix + '' + contentName})) {
 			

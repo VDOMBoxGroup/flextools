@@ -14,6 +14,7 @@
 		import vdom.events.DataManagerEvent;
 		import vdom.managers.DataManager;
 		
+		[Bindable]
 		private var dataManager:DataManager;
 		
 		private function creationCompleteHandler():void{
@@ -45,7 +46,6 @@
 			if(dataManager.currentObject) {
 				
 				var objId:String = dataManager.currentObjectId; 
-				
 				dataManager.addEventListener(DataManagerEvent.OBJECT_SCRIPT_LOADED, objectScriptLoaded)
 				dataManager.getObjectScript(objId);
 			}
@@ -70,7 +70,7 @@
 		private function objectScriptSaved(event:DataManagerEvent):void {
 			
 			dataManager.removeEventListener(DataManagerEvent.OBJECT_SCRIPT_SAVED, objectScriptSaved)
-			//txtArea.text = event.result.Script;
+			txtArea.text = event.result.Script;
 			txtArea.enabled = true;
 			txtArea.editable = true;
 		}
@@ -87,4 +87,5 @@
 	<containers:TabbedTextArea id="txtArea" 
 		allowTabKey="true"  x="{numStrok.width}" width="100%" top="40" bottom="0"/>
 	<mx:Button x="10" y="10" label="Save" height="20" cornerRadius="0" click="saveScript()"/>
+	<mx:Label x="101" y="11" width="289" text="{dataManager.currentObject.@Name}"/>
 </mx:Canvas>

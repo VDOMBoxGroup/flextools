@@ -12,7 +12,9 @@
 	width="100%" height="100%"
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 >
-	
+	<mx:Metadata>
+		[ResourceBundle("Edit")]
+	</mx:Metadata>
 	<mx:Script source="includes/edit.as" />
 	
 	<mx:HDividedBox 
@@ -20,7 +22,7 @@
 		left="0" right="0" top="0" bottom="0">
 	
 		<editContainers:TypeAccordion id="types" resizeToContent="true"
-			height="100%" y="100" width="90" minWidth="90" minHeight="0"
+			height="100%" y="100" width="90" minWidth="90" maxWidth="90"
 			dataProvider="{dataManager.listTypes}" dropShadowEnabled="true"
 		/>
 		
@@ -49,9 +51,9 @@
 				acceptLabel="{resourceManager.getString('Application','editor_save')}" 
 				deleteLabel="{resourceManager.getString('Application','editor_delete')}"
 				dataProvider="{dataManager.currentObject}" width="100%" />
-
+			
 			<containers:ClosablePanel id="helpPanel" title="Help" 
-				width="200" >
+				width="100%" >
 				
 				<mx:Text htmlText="{attributesPanel.help}" condenseWhite="true" width="100%" minHeight="0"/>
 				

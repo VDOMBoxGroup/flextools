@@ -18,6 +18,8 @@ public class FileManagerEvent extends Event {
 
     // Define static constant.
 	public static const RESOURCE_LIST_LOADED:String = 'resourceListLoaded';
+	
+	public static const RESOURCE_SAVED:String = 'resourceSaved';
 
     // Define a public variable to hold the state of the enable property.
 	public var result:Object;

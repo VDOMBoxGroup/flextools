@@ -6,6 +6,7 @@ import flash.events.IEventDispatcher;
 import flash.utils.ByteArray;
 
 import mx.utils.Base64Decoder;
+import mx.utils.Base64Encoder;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
@@ -97,52 +98,6 @@ public class FileManager implements IEventDispatcher {
 			return;
 		}
 		
-		//var resourceFile:File = cacheDirectory.resolvePath(resourceID); 
-		
-		/* if(resourceFile.exists) {
-			
-			var file:ByteArray = new ByteArray();
-			
-			fileStream.open(resourceFile, FileMode.READ);
-			fileStream.readBytes(file);
-			
-			if(file.bytesAvailable > 0) {
-				
-				if(raw)
-					destTarget[property] = file;
-				else
-					destTarget[property] = {resourceID:resourceID, data:file}
-			}
-				
-		} */
-		
-		
-		
-		/* if(_resourceStorage[resourceID]) {
-			
-			if(_resourceStorage[resourceID] is Bitmap) {
-			
-				var data:Bitmap = new Bitmap(Bitmap(_resourceStorage[resourceID]).bitmapData);
-				
-				if(raw) {
-					
-					try {
-						destTarget[property] = data;
-					} catch (error:Error) {
-						var zzz:String = '';
-					}
-					
-					return;
-					
-				}
-			
-			
-				var resourceObject:Object = {resourceID:resourceID, data:data}
-				destTarget[property] = resourceObject;
-				return;
-			}
-		} */
-		
 		if(!requestQue[resourceID]) {
 			
 			requestQue[resourceID] = new Array();
@@ -167,7 +122,7 @@ public class FileManager implements IEventDispatcher {
 		var decoder:Base64Decoder = new Base64Decoder();
 		decoder.decode(resource);
 		
-		var imageSource:ByteArray = decoder.drain();
+		var imageSource:ByteArray = decoder.toByteArray();
 		
 		imageSource.uncompress();
 		
@@ -197,29 +152,26 @@ public class FileManager implements IEventDispatcher {
 		delete requestQue[resourceID];
 	}
 	
-	/* private function loadComplete(event:Event):void {
+	public function setResource(resType:String, resName:String, resData:ByteArray, applicationId:String = ''):void {
 		
-		var resourceID:String = event.currentTarget.loader.name;
+		resData.compress();
 		
-		_resourceStorage[resourceID] = event.currentTarget.loader.content;
+		var base64Data:Base64Encoder = new Base64Encoder();
+		base64Data.encodeBytes(resData);
 		
-		for each(var item:Object in requestQue[resourceID]) {
-			
-			var data:Bitmap = new Bitmap(Bitmap(_resourceStorage[resourceID]).bitmapData);
-			var requestObject:Object = item.object;
-			var requestProperty:String = item.property;
-			
-			if(item.raw) {
-					
-				requestObject[requestProperty] = data;	
-			} else {
-				
-				requestObject[requestProperty] = {resourceID:resourceID, data:data};
-			}
-		}
+		if(!applicationId)
+			applicationId = dataManager.currentApplicationId;
 		
-		delete requestQue[resourceID];
-	} */
+		soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
+		soap.setResource(applicationId, resType, resName, base64Data.toString());
+	}
+	
+	private function setResourceOkHandler(event:SoapEvent):void {
+		
+		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED)
+		fme.result = event.result;
+		dispatchEvent(fme);
+	}
 	
 	// Реализация диспатчера
 	
