@@ -26,12 +26,7 @@
 		import mx.controls.Tree;
 		import mx.core.Application;
 			
-		[Embed(source="/assets/objectsPanel/HAccordion.png")]
-        public var accordion_icon:Class; 
-
-        [Embed(source="/assets/objectsPanel/DragScrollingCanvas.png")]
-        public var drag_icon:Class;
-    
+		    
   		
 		
 		[Bindable]
@@ -91,7 +86,6 @@
 					/// завести массивчик ID-шников.
 					
 					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
-					xmlList.@icon	= 'accordion_icon';
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
 				//	trace(xmlLabel.Objects)
@@ -119,13 +113,24 @@
 	
 		private function treeUpdateComletLister(evt:Event):void
 		{	
-				topLevelObjectId = dataManager.currentPageId //publicData.topLevelObjectId;
-				if(topLevelObjectId && xmlTreeData) 
-					tree.selectedItem = xmlTreeData.Object.(@ID == topLevelObjectId)[0];
+	//		trace('*treeUpdateComletLister');
+			
+			if(!xmlTreeData)
+				return;
+				
+			//select current Object;
+			if(topLevelObjectId) 
+				tree.selectedItem = xmlTreeData..*.Object.(@ID == dataManager.currentObjectId)[0];
+			
+			//select current Page;
+			if(!tree.selectedItem )
+				tree.selectedItem = xmlTreeData.Object.(@ID == dataManager.currentPageId)[0];
+				
 		}
 		
 		private function treeChangeLister(evt:Event):void
 		{
+		//	trace('treeChangeLister')
 			  var selectedNode:XML = Tree(evt.target).selectedItem as XML;
               var ID:String = selectedNode.@ID;
             //  trace('selected: ' + ID);
@@ -137,6 +142,7 @@
               		dataManager.changeCurrentObject(ID);
               }
               
+           //   thisInitiator = true;
 		}
 
 	//	public var  change:String = Event.CHANGE; 
@@ -152,7 +158,6 @@
 					xmlTemp.@Type 	= xmlLabel.@Type;
 					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
 					
-					xmlTemp.@icon	= 'drag_icon';
 				// проверяем есть ли еще обьекты в нутри
 				var numObjects:int = xmlLabel.Objects.*.length(); 
 				if(numObjects > 0)	xmlTemp.appendChild(findOjects(xmlLabel.Objects));
@@ -172,14 +177,24 @@
 		//	trace('run function set Resource: ' + object.resourceID);	
 			arrPicture[object.resourceID] = object.data;
 		} */
-		
+	//	private var thisInitiator:Boolean;
 		public function set currentObject(xml:XML):void
 		{
-			if(!xml) return;
 			
+			if(!xml) return;
+		//	trace('currentObject: \n' + xml.@ID);
+		/*	
+			if(thisInitiator)
+			{
+				thisInitiator = false;
+				return;	
+			}
+		*/	
 			var ID:String = xml.@ID;
 			//trace('currentObject: \n'+xmlTreeData..*.Object.(@ID == ID)[0]);
 			tree.selectedItem = xmlTreeData..*.Object.(@ID == ID)[0];
+			if(tree.selectedItem)
+		//	trace('tree.selectedItem: \n'+tree.selectedItem.@ID);
 		}
 		
 		
