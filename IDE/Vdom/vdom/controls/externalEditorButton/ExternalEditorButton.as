@@ -15,6 +15,7 @@ package vdom.controls.externalEditorButton
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
+	import vdom.events.ExternalManagerEvent;
 	import vdom.managers.DataManager;
 	import vdom.managers.ExternalManager;
 	import vdom.managers.FileManager;
@@ -84,7 +85,7 @@ package vdom.controls.externalEditorButton
 
 //		----- Loading and executing external application methods ----------------------------- 
 
-		public function set resource(resource:Object):void {
+		public function set resource(resource:Object):void {			
 			/* Loading nested application */
 			if (!ldr)
         		ldr = new Loader();
@@ -130,11 +131,36 @@ package vdom.controls.externalEditorButton
 			if (!externalManager)
 				externalManager = new ExternalManager(applicationID, objectID);
 			
+			externalManager.addEventListener(ExternalManagerEvent.CALL_COMPLETE, callCompleteHandler);
+			externalManager.addEventListener(ExternalManagerEvent.CALL_ERROR, callErrorHandler); 
+			externalManager.remoteMethodCall("get_structute", "");
+			
     		exEditor['externalManager'] = externalManager;
 			exEditor['value'] = _value;
 		}
+		
+		/* Temporary method */
+		private function callCompleteHandler(result:ExternalManagerEvent):void {
+			trace(result);
+		}
+		
+		/* Temporary method */
+		private function callErrorHandler(result:ExternalManagerEvent):void {
+			trace(result);
+		} 
 
 		private function openWindow(event:Event):void {
+			/* ************************* */
+			
+			if (!externalManager)
+				externalManager = new ExternalManager(applicationID, objectID);
+			
+			externalManager.addEventListener(ExternalManagerEvent.CALL_COMPLETE, callCompleteHandler); 
+			externalManager.remoteMethodCall("get_structure", "");
+
+			/* ************************* */
+
+			
 			/* Pop up spinner while external application is loading... */
 			if (!spinner)
 				spinner = new SpinnerScreen();
