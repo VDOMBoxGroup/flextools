@@ -3,6 +3,7 @@
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import vdom.components.treeEditor.DeleteLineButton;
 	 		import mx.collections.XMLListCollection;
 	 	/***
 	 	 * 
@@ -56,6 +57,10 @@
 	 			BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
 	 			trContainer.showHandler();
 	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+	 			
+	 			btLine.addEventListener(MouseEvent.CLICK, lineClikHandler );
+	 			
+	 			addEventListener(MouseEvent.CLICK, mouseClickHandler);
 	 			
 	 			curContainerID = dataManager.currentPageId;
 	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
@@ -147,7 +152,8 @@
 	        {
 	        	el.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
 	        	
-	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler)
+	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
@@ -160,6 +166,7 @@
 	        	el.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
@@ -292,6 +299,9 @@
 				
 				linesArray[evtID][actID] = 
 					new TreeVector(eventsArray[evtID], actionsArray[actID], '2');
+					
+				linesArray[evtID][actID].addEventListener(MouseEvent.CLICK, markLines);	
+				
 				can.addChild(linesArray[evtID][actID]);
 			}
 			
@@ -344,11 +354,17 @@
 			
 			private function mouseMoveHandler(msEvt:MouseEvent):void
 			{
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+					
 				reDrawLines();
 			}
 			
 			private function reDrawLineHandler(trEvt:TreeEditorEvent):void
 			{
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+					
 				reDrawLines();
 			}
 			
@@ -457,6 +473,54 @@
 						createLine(evtID, actID.@ID);
 					}
 				}
+			}
+			
+			private var curLine:Object = new Object();
+			private var btLine:DeleteLineButton = new DeleteLineButton();
+
+			private function markLines(muEvt:MouseEvent):void
+			{
+				curLine.mark = false;
+				curLine = muEvt.currentTarget;
+				curLine.mark = true;
+				btLine.x =  muEvt.localX - btLine.width / 2;
+				btLine.y =  muEvt.localY - btLine.height - 2;
+				btLine.visible = true;
+				
+				if (!can.contains(btLine))
+				{
+					can.addChild(btLine);
+				}
+				muEvt.stopImmediatePropagation();
+			}
+			
+			private function lineClikHandler(msEvt:MouseEvent):void
+			{
+				removeLine();
+			}
+			
+			private function  removeLine():void
+			{
+				for (var evID:String in linesArray)
+					for (var actID:String in linesArray[evID])
+						if(curLine  == linesArray[evID][actID] )
+						{
+							can.removeChild(linesArray[evID][actID]);
+							delete linesArray[evID][actID] ;
+						}
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+			}
+			
+			private function mouseClickHandler(msEvt:MouseEvent):void
+			{
+				for (var evID:String in linesArray)
+					for (var actID:String in linesArray[evID])
+						linesArray[evID][actID].mark = false;
+						
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+			
 			}
 	 	]]>
 	 </mx:Script>

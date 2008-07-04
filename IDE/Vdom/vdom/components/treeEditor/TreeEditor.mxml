@@ -141,7 +141,7 @@
 		
 		if (!main.contains(btLine))
 		{
-				trace(main.contains(btLine))
+			//	trace(main.contains(btLine))
 			main.addChild(btLine);
 			
 		}
