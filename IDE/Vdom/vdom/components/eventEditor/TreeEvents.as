@@ -1,5 +1,6 @@
 package vdom.components.eventEditor
 {
+	import mx.collections.XMLListCollection;
 	import mx.core.ClassFactory;
 	
 	import vdom.managers.DataManager;
@@ -18,13 +19,14 @@ package vdom.components.eventEditor
 			
 		}
 		
+		private var dataXML:XMLListCollection ;
 		override public function set dataProvider(value:Object):void
 		{
 		
-		  var dataXML:XML = <root/>;	
+		  dataXML = new XMLListCollection();	
 		  for each(var child:XML in value)
 		  {
-		  		dataXML.appendChild(getChilds(child))
+		  		dataXML.addItem(getChilds(child))
 		  }
 			super.dataProvider = dataXML;
 		}
@@ -53,25 +55,22 @@ package vdom.components.eventEditor
 				tempXML.@ObjSrcID = inXML.@ID;
 			
 				outXML.appendChild(tempXML);
-			} 
+			} 	
 
 			return outXML;
 		}
 		
-		
-
-	/*	
-		private var _selectedItem:Object;
-		private function changeItemHandler(evt:Event):void
+		public function  set enabledItem(obj:Object):void
 		{
-			_selectedItem = evt.currentTarget;
-		}
+			
+			dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'true';
+			selectedItem = dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
+		}		
 		
-		public function enabledItem():void
+		public function  set disabledItem(obj:Object):void
 		{
-			_selectedItem.enabled = false;
-		}
-		*/
-		
+			dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'false';
+			//selectedItem = dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
+		}	
 	}
 }

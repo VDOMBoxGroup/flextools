@@ -18,7 +18,10 @@ package vdom.components.eventEditor
 				
 				var val:XML = XML(data);
 				
-				if(val.@enabled[0] && val.(@enabled == false))
+				var enableFlag:String = val.@enabled[0];
+				
+				
+				if(enableFlag == 'false')
 					super.enabled = false;
 				else
 					super.enabled = value;
