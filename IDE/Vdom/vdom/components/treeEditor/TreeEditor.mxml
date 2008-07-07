@@ -275,6 +275,7 @@
 		
 		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
+		saveToServer();
 	}
 	
 		
@@ -314,6 +315,7 @@
 	}
 	
 	private var treeElement:TreeElement = new TreeElement();
+	
 	private function addTreeElementLauncher():void 
 	{
 			//	PopUpManager.createPopUp(super, AddTreeElementWindow, true);
@@ -354,7 +356,7 @@
 		if(curTree != null)
 			curTree.current = true;
 		
-		
+		saveToServer();
 	}
 	
 	private function autoSpacing():void
@@ -370,6 +372,7 @@
 		if(curTree != null)
 			curTree.current = true;
 		
+		saveToServer();
 		//showHnadler();
 		
 	}

@@ -38,9 +38,11 @@ private function deleteObject(strID:String):void
 	main.removeChild(massTreeElements[strID]);
 	delete massTreeElements[strID];
 	
+	dataManager.deleteObject(strID);
+	
 	curTree = null;
 	
-	//saveToServer();
+	saveToServer();
 }
 
 
@@ -106,6 +108,8 @@ private function drawLine(obj:Object):void
 		main.addChildAt(massLines[necessaryLevel][fromObj][toObj], 0);
 		massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.CLICK, markLines);
 	}
+	
+	saveToServer();
 }
 
 private function adjustmentTree(xml1:XML):void
@@ -411,6 +415,8 @@ private function  removeLine():void
 					}
 	if (main.contains(btLine))
 		main.removeChild(btLine);
+		
+	saveToServer();
 }
 
 private function saveToServer():void
