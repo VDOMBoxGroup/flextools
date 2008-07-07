@@ -574,6 +574,7 @@ package vdom.components.treeEditor
 			cnvUpLayer.addEventListener(MouseEvent.MOUSE_UP, stopDragHandler)
 			addChild(cnvUpLayer);
 			
+			
 		}
 		
 		private function initDownBody():void

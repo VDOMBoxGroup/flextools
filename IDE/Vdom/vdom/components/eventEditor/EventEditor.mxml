@@ -17,8 +17,8 @@
 	 	 *  + чтоб серыми становились вынесенные евенты
 	 	 *  + при удаление евента в дереве востанавливались евенты...
 	 	 *  + запоминание состояния
-	 	 *  - у акшина редактировались параметры
-	 	 *  - посылать на сервер измененные параметры у акшинов
+	 	 *  + у акшина редактировались параметры
+	 	 *  + посылать на сервер измененные параметры у акшинов
 	 	 * 
 	 	 * */
 	 	 
@@ -364,7 +364,7 @@
 			{
 				if (can.contains(btLine))
 					can.removeChild(btLine);
-					
+				trace('reDrawLineHandler: '+ trEvt.ID)	
 				reDrawLines();
 			}
 			
@@ -373,7 +373,7 @@
 				for(var evID:String in linesArray)
 					for(var acID:String in linesArray[evID])
 					{
-						if(evID == curID || acID == curID)
+		//				if(evID == curID || acID == curID)
 							linesArray[evID][acID].updateVector();
 					}
 			}
@@ -433,13 +433,13 @@
 					}
 				}
 				
-				trace('----toServer---\n '+curContainerID+'\n'+ dataToServer.toXMLString())
+		//		trace('----toServer---\n '+curContainerID+'\n'+ dataToServer.toXMLString())
 				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
 			}
 			
 			private function cretDat(xmlToTree:XML=null):void
 			{
-				trace(xmlToTree.toXMLString());
+				//trace(xmlToTree.toXMLString());
 				can.removeAllChildren();
 			
 				actionsArray = [];		
@@ -476,6 +476,8 @@
 						createLine(evtID, actID.@ID);
 					}
 				}
+				
+			//	reDrawLines();
 			}
 			
 			private var curLine:Object = new Object();

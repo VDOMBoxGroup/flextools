@@ -353,6 +353,8 @@ package vdom.components.eventEditor
 			
 			cnvDownLayer.y = 30 * _ratio;
 			cnvDownLayer.width = 243 * _ratio;
+			
+			isRedraw = true;
 		}
 		
 		public function get ID():String

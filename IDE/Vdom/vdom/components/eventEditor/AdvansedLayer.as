@@ -22,13 +22,13 @@ package vdom.components.eventEditor
 		private var inputText:TextInput = new TextInput();
 		private var _scriptName:String;
 		
-		public function AdvansedLayer(inXMK:XML, typeName:String)
+		public function AdvansedLayer(inXML:XML, typeName:String)
 		{
 			super();
 			
 			this.typeName = typeName;
-			_scriptName = inXMK.@ScriptName;
-			_data = inXMK.@DefaultValue
+			_scriptName = inXML.@ScriptName;
+			_data = inXML.@DefaultValue
 			
 			var img:Image = new Image();
 				img.source = delet;
@@ -72,10 +72,12 @@ package vdom.components.eventEditor
 			var regExpValidator:RegExpValidator = new RegExpValidator();
 				regExpValidator.source = inputText;
 				regExpValidator.property = 'text';
-				regExpValidator.expression = "[0-9]+"
+			//	regExpValidator.flags = "g";
+			//	regExpValidator.
+				regExpValidator.expression = inXML.@RegularExpressionValidation;// "[0-9]+";
 				regExpValidator.trigger = inputText;
 				regExpValidator.addEventListener(ValidationResultEvent.VALID, validHandler);
-				regExpValidator.noMatchError =getLanguagePhraseId(inXMK.@Help);
+				regExpValidator.noMatchError =getLanguagePhraseId(inXML.@Help);
 				regExpValidator.triggerEvent = Event.CHANGE;
 		}
 		
@@ -93,7 +95,6 @@ package vdom.components.eventEditor
 		{
 			if (vdEvt.type == ValidationResultEvent.VALID)
 	           	_data = inputText.text;
-	           	
 		}
 
 		public function get xmlData():XML
