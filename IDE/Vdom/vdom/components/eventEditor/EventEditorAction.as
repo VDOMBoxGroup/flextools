@@ -93,15 +93,17 @@ package vdom.components.eventEditor
 				this.x = data.@Left;
 				_ID  = data.@ID;
 				changeState(data.@State =="true");
+				setValue(data);
 			}
 		}
 		
 		private var isRedraw:Boolean;
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
-			
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void 
+		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
-			if (isRedraw) {
-				
+			
+			if (isRedraw) 
+			{
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.REDRAW_LINES, _ID));
 				isRedraw = false;
 			}
@@ -250,6 +252,7 @@ package vdom.components.eventEditor
 		}
 		
 		private var _name:String;
+		private var scriptNamesArray:Array = []; /* of advansedLayer*/
 	//	private var _eventType:String; to _methodName
 		private function initDownBody(data:Object, containerID:String):void
 		{
@@ -295,12 +298,22 @@ package vdom.components.eventEditor
 			for each(var child:XML in parametrs.children())
 			{
 				var parametr:AdvansedLayer = new AdvansedLayer(child, type.Information.Name.toString());
+				scriptNamesArray[parametr.scriptName] = parametr;
 				vBox.addChild(parametr);
 			}
 			
+		//	vBox.addChild(y);
 		//	type = new XML(dataManager.getTypeByObjectId(data.@ObjSrcID).toXMLString());
 		}
 		
+		private function setValue(obj:Object):void
+		{
+			obj = obj as XML;
+			for each(var child:XML in  obj.children())
+			{
+				scriptNamesArray[child.@ScriptName].value = child;
+			}
+		}
 
 		private function updateRatio():void
 		{	
@@ -349,12 +362,15 @@ package vdom.components.eventEditor
 		
 		
 		private var _objTgtID:String;
+		
 		public function get ObjTgtID():String
 		{
 			return _objTgtID;
 		}
 		
+	
 		private var _methodName:String;
+		
 		public function get MethodName():String
 		{
 			return _methodName;
@@ -364,6 +380,19 @@ package vdom.components.eventEditor
 		{
 			trace('return: '+min.toString());
 			return min.toString();
+		}
+		
+		public function get parametrs():XMLList
+		{
+			var outXMLList:XMLList = new XMLList();
+			
+			for(var par:String in scriptNamesArray)
+			{
+				trace(scriptNamesArray[par].xmlData.toXMLString);
+				outXMLList += scriptNamesArray[par].xmlData;
+			}
+			
+			return outXMLList;
 		}
 	}
 }

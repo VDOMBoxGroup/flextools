@@ -2,7 +2,6 @@
 package vdom.components.eventEditor
 {
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
 	import mx.controls.HRule;
@@ -10,6 +9,7 @@ package vdom.components.eventEditor
 	import mx.controls.Label;
 	import mx.controls.TextInput;
 	import mx.controls.VRule;
+	import mx.events.ValidationResultEvent;
 	import mx.validators.RegExpValidator;
 
 	public class AdvansedLayer extends Canvas
@@ -19,12 +19,16 @@ package vdom.components.eventEditor
 		public var delet:Class;
 		
 		private var typeName:String;
+		private var inputText:TextInput = new TextInput();
+		private var _scriptName:String;
 		
 		public function AdvansedLayer(inXMK:XML, typeName:String)
 		{
 			super();
 			
 			this.typeName = typeName;
+			_scriptName = inXMK.@ScriptName;
+			_data = inXMK.@DefaultValue
 			
 			var img:Image = new Image();
 				img.source = delet;
@@ -37,34 +41,22 @@ package vdom.components.eventEditor
 				vRule.percentHeight = 100;
 			addChild(vRule);
 			
+			
 			var label:Label = new Label();
-				label.text = inXMK.@ScriptName + ": ";
+				label.text = _scriptName + ": ";
 				label.width = 75;
 				label.x = vRule.x;
 				label.setStyle('textAlign', 'right')
 			//	label.setStyle("fontWeight", 'bold');
 			addChild(label);		
-			/*
-			var vRule2:VRule = new VRule();
-				vRule2.x = 130;
-				vRule2.percentHeight = 100;
-			addChild(vRule2);
-			/*
-			var label2:Label = new Label();
-				label2.text = inXMK.@DefaultValue;
-				label2.width = 45;
-				label2.x = vRule2.x;
-				label2.setStyle('textAlign', 'center');
-			addChild(label2);
-			label2.addEventListener(MouseEvent.CLICK, labelClickHandler);
-			*/
+		
 			
-			var inputText:TextInput = new TextInput();
-				inputText.text = inXMK.@DefaultValue;
+		//	var inputText:TextInput = new TextInput();
+				
+				inputText.text = _data;
 				inputText.width = 65;
 				inputText.height = 18;
 				inputText.x = 100;
-				//inputText.y = -1;
 				inputText.setStyle("fontSize", '8');
 				inputText.setStyle("fontWeight", 'bold');
 				inputText.setStyle("textAlign", 'center');
@@ -82,6 +74,7 @@ package vdom.components.eventEditor
 				regExpValidator.property = 'text';
 				regExpValidator.expression = "[0-9]+"
 				regExpValidator.trigger = inputText;
+				regExpValidator.addEventListener(ValidationResultEvent.VALID, validHandler);
 				regExpValidator.noMatchError =getLanguagePhraseId(inXMK.@Help);
 				regExpValidator.triggerEvent = Event.CHANGE;
 		}
@@ -94,11 +87,33 @@ package vdom.components.eventEditor
 			
 			return resourceManager.getString(typeName, phraseID);
 		}
-
-		//private 
-		private function labelClickHandler(msEvt:MouseEvent):void
+		
+		private var _data:String = '';
+		private function validHandler(vdEvt:ValidationResultEvent):void
 		{
-			//inputText.visible = true;
+			if (vdEvt.type == ValidationResultEvent.VALID)
+	           	_data = inputText.text;
+	           	
 		}
+
+		public function get xmlData():XML
+		{
+			var outXML:XML = new XML("<Parameter>" + _data+ "</Parameter>");
+			outXML.@ScriptName = _scriptName;
+			return outXML;
+		}
+		
+		public function set value(str:String):void
+		{
+			_data = str;
+			inputText.text = str;
+		}
+		
+		public function get scriptName():String
+		{
+			return _scriptName;
+		}
+
+	
 	}
 }
