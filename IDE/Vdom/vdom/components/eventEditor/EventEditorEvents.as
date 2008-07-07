@@ -64,7 +64,7 @@ package vdom.components.eventEditor
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
 		private var _type:Label;
-		private var _ratio:Number = 0.8;
+		private var _ratio:Number = 0.7;
 		private var dataManager:DataManager;
 		
 		
@@ -292,9 +292,6 @@ package vdom.components.eventEditor
 					vBox.addChild(parametr);
 				}
 			}
-	//		var y:SimpleLayer = new SimpleLayer('Y');
-	//		vBox.addChild(y);
-			
 		}
 
 

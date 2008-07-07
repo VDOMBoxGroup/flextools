@@ -29,7 +29,7 @@ package vdom.components.eventEditor
 			
 			var label:Label = new Label();
 				label.text = str;
-				label.width = 165;
+				label.width = 140;
 				label.x = vRule.x;
 				label.setStyle('textAlign', 'center');
 			addChild(label);		

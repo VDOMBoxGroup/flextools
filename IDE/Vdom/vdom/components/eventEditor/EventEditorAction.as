@@ -66,7 +66,7 @@ package vdom.components.eventEditor
 		private var txtInp:TextInput;
 		private var _type:Label;
 		private var dataManager:DataManager;
-		private var _ratio:Number = 0.8;
+		private var _ratio:Number = 0.7;
 	
 		
 		public function EventEditorAction(data:Object, containerID:String)
@@ -294,12 +294,10 @@ package vdom.components.eventEditor
 			parametrs = parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
 			for each(var child:XML in parametrs.children())
 			{
-				var parametr:SimpleLayer = new SimpleLayer(child.@ScriptName);
+				var parametr:AdvansedLayer = new AdvansedLayer(child, type.Information.Name.toString());
 				vBox.addChild(parametr);
 			}
 			
-			var y:SimpleLayer = new SimpleLayer('Y');
-			vBox.addChild(y);
 		//	type = new XML(dataManager.getTypeByObjectId(data.@ObjSrcID).toXMLString());
 		}
 		
