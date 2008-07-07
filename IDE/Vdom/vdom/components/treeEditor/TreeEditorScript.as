@@ -107,9 +107,11 @@ private function drawLine(obj:Object):void
 		
 		main.addChildAt(massLines[necessaryLevel][fromObj][toObj], 0);
 		massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.CLICK, markLines);
+		
+		saveToServer();
 	}
 	
-	saveToServer();
+	
 }
 
 private function adjustmentTree(xml1:XML):void
@@ -127,8 +129,10 @@ private function adjustmentTree(xml1:XML):void
 		var fromObID:String = xmlObj.@ID.toXMLString(); 
 		for each(var xmlLavel:XML in xmlObj.children())
 		{
+			if(colmen2.showLevel(xmlLavel.@Index)) // сортируем только видимые линии
 			for each(var xmlLavelObj:XML in xmlLavel.children())
 			{
+				
 				var toObjID:String = xmlLavelObj.@ID.toXMLString();
 				massTreeObj[fromObID].child = massTreeObj[toObjID];
 				massTreeObj[toObjID].parent = massTreeObj[fromObID];

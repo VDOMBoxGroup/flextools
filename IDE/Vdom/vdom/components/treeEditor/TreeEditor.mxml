@@ -275,7 +275,7 @@
 		
 		vctTest.graphics.clear();
 		vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
-		saveToServer();
+		//saveToServer();
 	}
 	
 		
