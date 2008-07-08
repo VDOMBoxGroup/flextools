@@ -113,7 +113,22 @@
 	private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
 	{
 		main.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-		treeElementMousUpHandler();
+		
+		var curID:String = curTree.ID;
+		
+		if (massTreeElements[curID].x < 0)
+		{
+			 massTreeElements[curID].x = 0;
+			 massTreeElements[curID].stopDrag();
+		}
+		
+		if (massTreeElements[curID].y < 10)
+		{
+			 massTreeElements[curID].y = 10;
+			 massTreeElements[curID].stopDrag();
+		}
+		redrawLines(curID);
+		//treeElementMousUpHandler();+++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// saveToServer();
 	}
 	
@@ -185,7 +200,9 @@
 	
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
-		redrawLines(curTree.ID);
+		var curID:String = curTree.ID;
+		
+		redrawLines(curID);
 	}
 	/**
 	*

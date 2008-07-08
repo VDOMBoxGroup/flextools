@@ -45,7 +45,7 @@ private function deleteObject(strID:String):void
 	saveToServer();
 }
 
-
+/*
 private function treeElementMousUpHandler():void
 {
 		var dx:Number = 0;
@@ -75,7 +75,7 @@ private function treeElementMousUpHandler():void
 		}
 }
 
-
+*/
 private function drawLine(obj:Object):void
 {
 	var fromObj:String = curTree.ID.toString();
@@ -132,7 +132,6 @@ private function adjustmentTree(xml1:XML):void
 			if(colmen2.showLevel(xmlLavel.@Index)) // сортируем только видимые линии
 			for each(var xmlLavelObj:XML in xmlLavel.children())
 			{
-				
 				var toObjID:String = xmlLavelObj.@ID.toXMLString();
 				massTreeObj[fromObID].child = massTreeObj[toObjID];
 				massTreeObj[toObjID].parent = massTreeObj[fromObID];

@@ -349,6 +349,7 @@
 			private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
 			{
 				curID = trEvt.ID;
+				
 				addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 			}
 			
@@ -364,7 +365,7 @@
 			{
 				if (can.contains(btLine))
 					can.removeChild(btLine);
-				trace('reDrawLineHandler: '+ trEvt.ID)	
+			//	trace('reDrawLineHandler: '+ trEvt.ID)	
 				reDrawLines();
 			}
 			
@@ -381,6 +382,37 @@
 			private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
 			{
 				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+					
+				if(eventsArray[curID]) 
+				{
+					if (eventsArray[curID].x < 0)
+					{
+						 eventsArray[curID].x = 0;
+						 eventsArray[curID].stopDrag();
+					}
+					
+					if (eventsArray[curID].y < 10)
+					{
+						 eventsArray[curID].y = 10;
+						 eventsArray[curID].stopDrag();
+					}
+				} 
+				else if(actionsArray[curID]) 
+				{
+					if (actionsArray[curID].x < 0)
+					{
+						 actionsArray[curID].x = 0;
+						 actionsArray[curID].stopDrag();
+					}
+					
+					if (actionsArray[curID].y < 10)
+					{
+						 actionsArray[curID].y = 10;
+						 actionsArray[curID].stopDrag();
+					}
+				}
+				
+				reDrawLines();
 			//  проверка если перетащили за границы :	treeElementMousUpHandler();
 			}
 			
