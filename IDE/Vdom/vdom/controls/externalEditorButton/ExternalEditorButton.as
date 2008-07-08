@@ -4,9 +4,11 @@ package vdom.controls.externalEditorButton
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	
 	import mx.containers.HBox;
+	import mx.controls.Alert;
 	import mx.controls.Button;
 	import mx.controls.Label;
 	import mx.core.Application;
@@ -15,7 +17,6 @@ package vdom.controls.externalEditorButton
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
 	
-	import vdom.events.ExternalManagerEvent;
 	import vdom.managers.DataManager;
 	import vdom.managers.ExternalManager;
 	import vdom.managers.FileManager;
@@ -94,7 +95,13 @@ package vdom.controls.externalEditorButton
 			var loaderContext:LoaderContext = new LoaderContext();
 			loaderContext.allowLoadBytesCodeExecution = true;
 			
-			ldr.loadBytes(resource.data, loaderContext);
+			/* Temporary procedures for testing local external components */ 
+//			var dbExtEditor:URLRequest = new URLRequest("C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf");
+			var dbExtEditor:URLRequest = new URLRequest("C:/Users/koldoon/Documents/Flex Builder 3/dbDataEditor/bin-debug/dbDataEditor.swf");
+			ldr.load(dbExtEditor, loaderContext);
+			/* end of -- Temporary procedures for testing local external components */
+			
+//			ldr.loadBytes(resource.data, loaderContext);
 		}
         
 		private function applicationLoaded(event:Event):void {
@@ -128,39 +135,21 @@ package vdom.controls.externalEditorButton
 			
 			exEditor.addEventListener(CloseEvent.CLOSE, applCloseHandler);
 			
+			/* Create external manager for this component */
 			if (!externalManager)
 				externalManager = new ExternalManager(applicationID, objectID);
 			
-			externalManager.addEventListener(ExternalManagerEvent.CALL_COMPLETE, callCompleteHandler);
-			externalManager.addEventListener(ExternalManagerEvent.CALL_ERROR, callErrorHandler); 
-			externalManager.remoteMethodCall("get_structute", "");
-			
-    		exEditor['externalManager'] = externalManager;
-			exEditor['value'] = _value;
+			/* Applying properties to external components */
+			try {
+    			exEditor['externalManager'] = externalManager;
+				exEditor['value'] = _value;
+			}
+			catch (err:Error) {
+				Alert.show("Can not write 'externalManager' or 'value' property: Aceess Denied.", "External Editor Error!");
+			}
 		}
-		
-		/* Temporary method */
-		private function callCompleteHandler(result:ExternalManagerEvent):void {
-			trace(result);
-		}
-		
-		/* Temporary method */
-		private function callErrorHandler(result:ExternalManagerEvent):void {
-			trace(result);
-		} 
 
 		private function openWindow(event:Event):void {
-			/* ************************* */
-			
-			if (!externalManager)
-				externalManager = new ExternalManager(applicationID, objectID);
-			
-			externalManager.addEventListener(ExternalManagerEvent.CALL_COMPLETE, callCompleteHandler); 
-			externalManager.remoteMethodCall("get_structure", "");
-
-			/* ************************* */
-
-			
 			/* Pop up spinner while external application is loading... */
 			if (!spinner)
 				spinner = new SpinnerScreen();
@@ -175,7 +164,12 @@ package vdom.controls.externalEditorButton
 		private function applCloseHandler(event:Event):void {
 			applWindow.visible = false;
 			PopUpManager.removePopUp(applWindow);
-			value = exEditor['value'];
+			try {
+				value = exEditor['value'];
+			}
+			catch (err:Error) {
+				Alert.show("External Editor doesnt allow to read from 'value' property!", "External Editor Error!");
+			}
 		}		
 	}
 }

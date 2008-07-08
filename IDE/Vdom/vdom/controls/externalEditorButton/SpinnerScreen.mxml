@@ -7,5 +7,5 @@
 	
 	<mx:Image source="@Embed(source='/assets/resourceBrowserIcons/spinner.swf')" />
 	<mx:Spacer height="20" />
-	<mx:Label text="Загружаем редактор. В рот мне ноги!..." />
+	<mx:Label text="Please wait..." />
 </mx:Box>
