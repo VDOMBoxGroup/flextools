@@ -1,18 +1,34 @@
+import flash.display.DisplayObject;
 import flash.events.Event;
+import flash.utils.ByteArray;
 
+import mx.core.Application;
 import mx.events.FlexEvent;
+import mx.managers.PopUpManager;
 
+import vdom.MyLoader;
 import vdom.controls.ApplicationDescription;
 import vdom.events.ApplicationEditorEvent;
+import vdom.events.DataManagerEvent;
+import vdom.events.FileManagerEvent;
 import vdom.managers.DataManager;
+import vdom.managers.FileManager;
 
 private var dataManager:DataManager = DataManager.getInstance();
+private var fileManager:FileManager = FileManager.getInstance();
+private var ppm:MyLoader;
+
+private var defaultValues:ApplicationDescription;
+private var newValues:ApplicationDescription;
+
+private var changeResource:Boolean = false;
+private var changeInformation:Boolean = false;
 
 private function showHandler():void
 {
 	registerEvent(true);
 	
-	var defaultValues:ApplicationDescription = new ApplicationDescription();
+	defaultValues = new ApplicationDescription();
 	
 	defaultValues.id = dataManager.currentApplicationInformation.Id;
 	defaultValues.name = dataManager.currentApplicationInformation.Name;
@@ -54,12 +70,87 @@ private function registerEvent(flag:Boolean):void
 	}
 }
 
+private function setResource():void
+{
+	ppm.showText = 'Send icon';
+	
+	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED, fileManager_resourceSavedHandler);
+	fileManager.setResource('png', 'applicationIcon', newValues.icon, newValues.id);
+}
+
+private function setInformation():void
+{
+	ppm.showText = 'Send information';
+	
+	var attributes:XML = <Attributes />;
+	
+	if(newValues.name != defaultValues.name)
+		attributes.appendChild(<Name>{newValues.name}</Name>);
+	
+	if(newValues.description != defaultValues.description)
+		attributes.appendChild(<Description>{newValues.description}</Description>);
+	
+	if(newValues.iconId != defaultValues.iconId)
+		attributes.appendChild(<Icon>{newValues.iconId}</Icon>);
+	
+	dataManager.addEventListener(
+		DataManagerEvent.APPLICATION_INFO_CHANGED, 
+		dataManager_applicationInfoChangedHandler
+	);
+	
+	dataManager.setApplicationInformation(newValues.id, attributes);
+}
+
 private function applicationEditorChangedHandler(event:ApplicationEditorEvent):void
 {
-	var d:* = '';
+	newValues = event.applicationDescription;
+	
+	if(newValues.icon)
+		changeResource = changeInformation = true;
+	
+	if(
+		newValues.name != defaultValues.name ||
+		newValues.description != defaultValues.description
+	)
+		changeInformation = true;
+	
+	ppm = new MyLoader();
+	PopUpManager.addPopUp(ppm, DisplayObject(Application.application));
+	PopUpManager.centerPopUp(ppm);
+	
+	if(changeResource) {
+		
+		setResource();
+		return;
+	}
+	
+	if(changeInformation) {
+		
+		setInformation();
+		return;
+	}
+	
+	dispatchEvent(new Event('applicationEdited'));
 }
 
 private function applicationEditorChanceledHandler(event:ApplicationEditorEvent):void
 {
+	dispatchEvent(new Event('applicationEdited'));
+}
+
+private function fileManager_resourceSavedHandler(event:FileManagerEvent):void
+{
+	changeResource = false;
+	newValues.iconId = event.result.Resource.@id;
+	
+	setInformation();
+}
+
+private function dataManager_applicationInfoChangedHandler(event:DataManagerEvent):void
+{
+	changeInformation = false;
+	
+	ppm.showText = '';
+	PopUpManager.removePopUp(ppm);
 	dispatchEvent(new Event('applicationEdited'));
 }

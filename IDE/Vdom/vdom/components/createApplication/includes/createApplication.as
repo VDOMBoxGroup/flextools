@@ -87,9 +87,9 @@ private function fileManager_resourceSavedHandler(event:FileManagerEvent):void
 	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, fileManager_resourceSavedHandler);
 	applicationDescription.iconId = event.result.Resource.@id;
 	
-	ppm.showText = 'Apply properties';
+	ppm.showText = 'Send information';
 	
-	var attibutes:XML = 
+	var attributes:XML = 
 		<Attributes>
     		<Name>{applicationDescription.name}</Name>
     		<Description>{applicationDescription.description}</Description>
@@ -101,7 +101,7 @@ private function fileManager_resourceSavedHandler(event:FileManagerEvent):void
 		dataManager_applicationInfoChangedHandler
 	);
 	
-	dataManager.setApplicationInformation(applicationDescription.id, attibutes);
+	dataManager.setApplicationInformation(applicationDescription.id, attributes);
 } 
 
 private function dataManager_applicationInfoChangedHandler(event:DataManagerEvent):void 

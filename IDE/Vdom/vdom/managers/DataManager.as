@@ -264,7 +264,9 @@ public class DataManager implements IEventDispatcher {
 		_currentPage = null;
 		_currentPageId = null;
 		
-		var application:XML = new XML(_listApplication.(@ID == applicationId)[0]);
+//		var application:XML = new XML(_listApplication.(@ID == applicationId)[0]);
+		
+		var application:XML = _listApplication.(@ID == applicationId)[0];
 		
 		if(application && application.Information.Name) {
 			
@@ -590,7 +592,7 @@ public class DataManager implements IEventDispatcher {
 			
 		if(application)
 			application.Information[0] = information;
-			
+		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_CHANGED);
 		dispatchEvent(dme);
 	}
