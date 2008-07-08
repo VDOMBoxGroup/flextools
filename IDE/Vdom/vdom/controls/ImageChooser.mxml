@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
-	backgroundColor="#FFFFFF" width="350" showCloseButton="true" cornerRadius="0"
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="vdom.controls.*"
 	
-	close="closeHandler(false);" title="Change Application Icon" borderAlpha="1">
+	styleName="imageChooser"
+	
+	title="Change Application Icon"
+	
+	 width="350" showCloseButton="true"
+	
+	close="closeHandler(false);"
+	add="addedHandler();">
+
+<mx:Style>
+	.imageChooser {
+		backgroundColor:#FFFFFF;
+		cornerRadius:0px;
+		borderAlpha:1;
+	}
+</mx:Style>
 <mx:Script>
 	<![CDATA[
+		import mx.controls.Alert;
+		import mx.events.FlexEvent;
+		import mx.graphics.codec.PNGEncoder;
 		import mx.managers.PopUpManager;
 		import mx.core.BitmapAsset;
 		import vdom.events.ImageChooserEvent;
@@ -21,57 +40,70 @@
 			{source:'appIconSetting', imageName:'File'}, {source:'appIconShoppingl', imageName:'File'}
 		]
 		
-		private var _selectedImage:Object = Application.application.getStyle('appIconFile');;
+		private var _selectedImage:ByteArray;
 		
 		private var loader:Loader;
 		private var tempName:String;
 		
-		[Bindable]
-		private var _imageName:String = 'File';
-		
 		[Bindable (event='imageChanged')]
-		private function get selectedImage():Object {
-			
+		private function get selectedImage():Object
+		{	
 			return _selectedImage;
 		}
 		
-		private function changeHandler(event:ListEvent):void {
-			
+		private function changeHandler(event:ListEvent):void
+		{	
 			_selectedImage = MyImage(event.itemRenderer).source;
-			_imageName = MyImage(event.itemRenderer).data.imageName;
 			dispatchEvent(new Event('imageChanged'));
 		}
 		
-		private function closeHandler(saveSelection:Boolean):void {
-			
+		private function addedHandler():void 
+		{
+			var iconClass:Class = Application.application.getStyle('appIconFile');
+			var ba:BitmapAsset = new iconClass();
+			var pnge:PNGEncoder = new PNGEncoder();
+			_selectedImage = pnge.encode(ba.bitmapData);
+			 
+		}
+		
+		private function closeHandler(saveSelection:Boolean):void
+		{
 			if(saveSelection) {
 				
-				var bitmap:Bitmap;
+				var byteArray:ByteArray;
 				
-				if(selectedImage is Class)
-					bitmap = new selectedImage();
-				else if(selectedImage is Bitmap)
-					bitmap = Bitmap(selectedImage);
+				if(selectedImage is ByteArray) {
+				
+					byteArray = ByteArray(selectedImage);
+				}
+				else if(selectedImage is Class) {
+					
+					var bitmap:BitmapAsset = new selectedImage();
+					byteArray = bitmap.bitmapData.getPixels(bitmap.bitmapData.rect);
+				}
+				else if(selectedImage is Bitmap) {
+					
+					byteArray = Bitmap(selectedImage).bitmapData.getPixels(Bitmap(selectedImage).bitmapData.rect);
+				}
 				
 				var ice:ImageChooserEvent = new ImageChooserEvent(ImageChooserEvent.APPLY);
-				ice.name = _imageName;
-				ice.resource = bitmap;
+				ice.resource = byteArray;
 				dispatchEvent(ice);
 			}
 			
 			PopUpManager.removePopUp(this);
 		}
 		
-		private function loadFile():void {
-			
+		private function loadFile():void
+		{
 			var file:File = new File();
 			var fileFilter:FileFilter = new FileFilter('Image', "*.jpg;*.jpeg;*.gif;*.png");
 			file.addEventListener(Event.SELECT, selectFileHandler);
 			file.browseForOpen('Load image', [fileFilter]);
 		}
 		
-		private function selectFileHandler(event:Event):void {
-			
+		private function selectFileHandler(event:Event):void
+		{
 			if(event.currentTarget is File && event.currentTarget.exists) {
 				
 				var file:File = File(event.currentTarget);
@@ -85,6 +117,8 @@
 					
 				} catch(error:Error) {
 					
+					Alert.show("Can't open file");
+					return;
 				}
 				
 				if(byteArray.length > 0) {
@@ -103,46 +137,46 @@
 			}
 		}
 		
-		private function loader_completeHandler(event:Event):void {
-				
-				var image:Bitmap = Bitmap(loader.content);
-				var m:Matrix = new Matrix();
-				var sx:Number = 50/image.width;
-				var sy:Number = 50/image.height;
+		private function loader_completeHandler(event:Event):void
+		{
+			var image:Bitmap = Bitmap(loader.content);
+			var m:Matrix = new Matrix();
+			var sx:Number = 50/image.width;
+			var sy:Number = 50/image.height;
 
-				m.scale(sx, sy);
-				var scaledImage:Bitmap = 
-					new Bitmap(
-						new BitmapData(50, 50, true, 0x00ffffff), 
-						PixelSnapping.AUTO,
-						true
-					); 
-				scaledImage.bitmapData.draw(image.bitmapData, m);
-				_selectedImage = scaledImage;
-				if(tempName)
-					_imageName = tempName;
-				else
-					_imageName == 'Image';
-				
-				dispatchEvent(new Event('imageChanged'));
-				
-			}
+			m.scale(sx, sy);
+			var scaledImage:Bitmap = 
+				new Bitmap(
+					new BitmapData(50, 50, true, 0x00ffffff), 
+					PixelSnapping.AUTO,
+					true
+				); 
+			scaledImage.bitmapData.draw(image.bitmapData, m);
 			
-			private function loader_progressHandler(event:ProgressEvent):void {
-				
-			}
+			var pnge:PNGEncoder = new PNGEncoder();
+			var iconByteArray:ByteArray = pnge.encode(scaledImage.bitmapData);
 			
-			private function loader_ioErrorHandler(event:IOError):void {
+			_selectedImage = iconByteArray;
+			
+			dispatchEvent(new Event('imageChanged'));
 				
-			}
+		}
+			
+		private function loader_progressHandler(event:ProgressEvent):void
+		{
+			
+		}
+		
+		private function loader_ioErrorHandler(event:IOErrorEvent):void
+		{
+			Alert.show('Wrong format!');
+			return;
+		}
 	]]>
 </mx:Script>
 
 <mx:VBox width="100%" horizontalAlign="center" borderStyle="solid" paddingTop="5" paddingBottom="5">
-	<mx:Canvas borderStyle="solid">
-		<mx:Image width="50" height="50" source="{selectedImage}"/>
-	</mx:Canvas>
-	<mx:Label id="imageName" text="{_imageName}" />
+	<controls:BorderImage width="50" height="50" source="{selectedImage}" borderThickness="1"/>
 </mx:VBox>
 
 <mx:HBox width="100%" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5">
@@ -151,11 +185,11 @@
 	<mx:Button label="..." cornerRadius="0" click="loadFile();"/>
 </mx:HBox>
 
-<mx:HorizontalList paddingTop="5"
-	change="changeHandler(event);"
-	 
-	width="100%" height="75" columnCount="4" selectedIndex="0" 
-	dataProvider="{listArray}" itemRenderer="vdom.controls.MyImage">
+<mx:HorizontalList 
+	id="hl"
+	width="100%" height="75" columnCount="4" selectedIndex="0" paddingTop="5"
+	dataProvider="{listArray}" itemRenderer="vdom.controls.MyImage"
+	change="changeHandler(event);">
 </mx:HorizontalList>
 	<mx:HBox width="100%" horizontalAlign="right">
 		<mx:Button label="OK" cornerRadius="0" click="closeHandler(true);"/>

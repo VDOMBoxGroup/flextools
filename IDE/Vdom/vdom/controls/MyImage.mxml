@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 <mx:Script>
 	<![CDATA[
+		import mx.graphics.codec.PNGEncoder;
 		import mx.core.BitmapAsset;
 		
 		[Bindable]
@@ -15,13 +16,27 @@
 				_source =  getStyle(value.source);
 		}
 		
-		public function get source():Object {
+		public function get source():ByteArray {
 			
-//			var d:BitmapAsset = new _source();
-//			var r:Rectangle = d.bitmapData.rect
-//			var f:ByteArray = d.bitmapData.getPixels(r);
-//			f.position = 0;
-			return img.source;
+			var result:ByteArray; 
+			if(img.source is Class) {
+				
+				var iconClass:Class = Class(img.source);
+				var icon:BitmapAsset = new iconClass(); 
+				var pnge:PNGEncoder = new PNGEncoder();
+				result = pnge.encode(icon.bitmapData);
+			}
+			else if(img.source is ByteArray) {
+				
+				result = ByteArray(img.source);
+			}
+			else if(img.source is BitmapAsset) {
+				
+				var bd:BitmapData = BitmapAsset(img.source).bitmapData;
+				result = bd.getPixels(bd.rect);
+			}
+			
+			return result;
 		}
 		
 	]]>

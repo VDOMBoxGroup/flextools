@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:Canvas
+	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:applicationEditor="vdom.controls.applicationEditor.*"
 	
-	show="showHandler();"
-	hide="hideHandler();" >
+	show="showHandler();">
 	
-	<mx:Script source="includes/createApplication.as" />
+	<mx:Script source="includes/editApplication.as" />
 	
 	<applicationEditor:ApplicationEditor id="applicationEditor" horizontalCenter="0"/>
 </mx:Canvas>

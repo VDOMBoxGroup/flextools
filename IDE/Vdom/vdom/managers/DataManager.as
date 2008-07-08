@@ -185,13 +185,12 @@ public class DataManager implements IEventDispatcher {
 	}
 	
 	private function listApplicationHandler(event:SoapEvent):void {
-
-		_listApplication = event.result.Applications.*;
 		
 		soap.removeEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
 		
-		dispatchEvent(new Event('listApplicationChanged'));
+		_listApplication = event.result.Applications.*;
 		
+		dispatchEvent(new Event('listApplicationChanged'));
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.INIT_COMPLETE));
 	}	
 	

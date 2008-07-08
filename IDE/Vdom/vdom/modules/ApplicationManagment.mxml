@@ -10,7 +10,7 @@
 	show="showHandler();"
 	hide="hideHandler();" 
 	
-	creationPolicy="all" >
+	creationPolicy="all" xmlns:editApplication="vdom.components.editApplication.*">
 	
 <mx:Script source="includes/applicationManagment.as" />
 
@@ -31,7 +31,7 @@
 		<controls:ActionButton styleName="newButton"
 			label="{resourceManager.getString('Application','main_new')}"
 			labelPlacement="bottom"
-			click="mainViewStack.selectedChild = createApplicationCanvas"/>
+			click="mainViewStack.selectedChild = createApplication"/>
 		
 		<!--<controls:ActionButton styleName="newsButton"
 			label="{resourceManager.getString('Application','main_steps')}"
@@ -54,7 +54,6 @@
 		<controls:ApplicationPanel id="listApplicationContainer"
 			dropShadowEnabled="false"
 			panelName="{resourceManager.getString('Application','main_applist')}" 
-			applicationChanged="applicationChangedHandler(event)"
 			height="86" />
 		
 		<controls:ApplicationInformation
@@ -67,12 +66,17 @@
 	
 	<mx:ViewStack id="mainViewStack" width="100%" height="100%" styleName="vdomBackground"
 			dropShadowEnabled="true" borderStyle="solid"  borderColor="#000000">
+			
 		<main:Main id="mainCanvas" styleName="mainCanvas" width="100%" height="100%" 
 			borderStyle="none"/>
-		<createApplication:CreateApplication id="createApplicationCanvas"
+			
+		<createApplication:CreateApplication id="createApplication"
 			width="100%" height="100%" />
 		
 		<applicationProperties:applicationProperties id="applicationProperties" 
+			width="100%" height="100%" />
+			
+		<editApplication:editApplication id="editApplication"
 			width="100%" height="100%" />
 	</mx:ViewStack>
 	

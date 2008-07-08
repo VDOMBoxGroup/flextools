@@ -622,8 +622,8 @@ public class AttributesPanel extends ClosablePanel {
 		validator.source = valueContainer;
 		validator.property = valueType;
 		validator.expression = '^'+regExp+'$';
-		validator.noMatchError = 
-		validator.requiredFieldError = ''
+		validator.noMatchError = '';
+		validator.requiredFieldError = '';
 		//languages.getLanguagePhrase(_typeID, errorMsg);
 		
 	}

@@ -22,7 +22,7 @@
 	verticalScrollPolicy="off"
 	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*">
 	
-	<mx:Script source="includes/Vdom.as"/>
+	<mx:Script source="vdom.as"/>
 	
 	<mx:Metadata>
 		[ResourceBundle("Application")]

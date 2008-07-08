@@ -22,13 +22,13 @@
 				_applicationTitleList.dataProvider = _dataProvider = listApplication;
 				_applicationTitleList.selectedIndex = 0;
 				
-//				var evt:ListEvent = new ListEvent('applicationChanged');
-//				dispatchEvent(evt);
+				var evt:ListEvent = new ListEvent('applicationChanged');
+				dispatchEvent(evt);
 			}
 			
 			public function get applicationID():String {
 				
-				if(_applicationTitleList.selectedItem != null) {
+				if(_applicationTitleList.selectedItem) {
 					return _applicationTitleList.selectedItem.@ID;
 				} else {
 					return null;
@@ -45,7 +45,7 @@
 		]]>
 	</mx:Script>
 	<mx:TileList id="_applicationTitleList"
-		selectedIndex="0" change="changeListEvent()"
+		selectedIndex="0" change="changeListEvent()" 
 		verticalScrollPolicy="auto" paddingRight="15" paddingLeft="5"
 		itemRenderer="vdom.containers.Thumbnail" rowCount="1" direction="horizontal" columnCount="4"
 		backgroundColor="#808080"/>	
