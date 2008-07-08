@@ -14,6 +14,8 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Application;
+			import vdom.controls.externalEditorButton.SpinnerScreen;
 			import vdom.events.AddTreeElementEvent;
 			import vdom.managers.FileManager;
 			import vdom.events.ResourceBrowserEvent;
@@ -94,9 +96,14 @@
 		 * 
 		 * 
 		 * */
+		 
+		private var spinner:SpinnerScreen;
 		private function okPressed():void 
 		{
-							 
+			/* PopUp spinner while something doing... */
+			spinner = new SpinnerScreen();
+			PopUpManager.addPopUp(spinner, DisplayObject(Application.application), true);				 
+
 			OK.enabled = false;
 			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObjectHandler);
 			dataManager.createObject(selectedAppl.data);		
@@ -160,6 +167,9 @@
 			dispatchEvent(new AddTreeElementEvent(AddTreeElementEvent.TREE_ELEMENT_ADDED,treeElementID,resourceID,
 																				txt.text, descript.text, selectedAppl.label, typeResourse));
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			
+			/* Remove spinner in case that all is done */
+			PopUpManager.removePopUp(spinner);
 		}
 		
 		
