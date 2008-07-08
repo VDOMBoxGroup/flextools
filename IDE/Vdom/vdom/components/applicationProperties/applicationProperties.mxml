@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
-	<mx:Script>
-		<![CDATA[
-			import vdom.managers.DataManager;
-			
-			[Bindable]
-			private var dataManager:DataManager = DataManager.getInstance();
-		]]>
-	</mx:Script>
-	<mx:Image width="50" height="50" x="10" y="36"/>
-	<mx:Label x="10" y="10" text="{dataManager.currentApplicationInformation.Name}"/>
-	<mx:TextArea height="100" borderStyle="solid" borderColor="#000000" right="175" top="94" left="10" 
-		text="{dataManager.currentApplicationInformation.Description}"/>
-</mx:Canvas>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:Script source="includes/applicationProperties.as" />
+	
+	<mx:Image width="50" height="50" x="10" y="10" />
+	<mx:Label text="Application Name" fontWeight="bold" fontSize="12"/>
+	<mx:Label x="10" y="68" text="{dataManager.currentApplicationInformation.Name}" width="200"/>
+	<mx:Label text="Application Description" fontWeight="bold" fontSize="12"/>
+	<mx:TextArea borderColor="#000000" backgroundAlpha="0" right="175" top="94" left="10" 
+		text="{dataManager.currentApplicationInformation.Description}" editable="false" width="200" borderStyle="none"/>
+	<mx:Button label="Edit Application" 
+		cornerRadius="0"
+		click="dispatchEvent(new Event('editCurrentApplication'))"/>
+</mx:VBox>
