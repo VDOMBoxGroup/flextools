@@ -3,6 +3,8 @@
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.managers.CursorManagerPriority;
+	 		import mx.managers.CursorManager;
 	 		import vdom.components.treeEditor.DeleteLineButton;
 	 		import mx.collections.XMLListCollection;
 	 	/***
@@ -19,7 +21,9 @@
 	 	 *  + запоминание состояния
 	 	 *  + у акшина редактировались параметры
 	 	 *  + посылать на сервер измененные параметры у акшинов
+	 	 *
 	 	 * 
+	 	 *  
 	 	 * */
 	 	 
 	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
@@ -44,6 +48,23 @@
 	 		
 	 		[Bindable]
 	 		private var dataManager:DataManager;
+	 		/*
+	 		 [Embed(source='/assets/treeEditor/treeEditor.swf', symbol='plus')]
+			 [Bindable]
+			 public var plus:Class;
+			 
+			 [Embed(source='/assets/treeEditor/treeEditor.swf', symbol='delete')]
+			[Bindable]
+			public var delet:Class;
+			*/
+			 [Embed(source='/assets/eventEditor/eventEditor.swf', symbol='copyCursor')]
+			 [Bindable]
+			 public var plus:Class;
+			 
+			 [Embed(source='/assets/eventEditor/eventEditor.swf', symbol='rejectCursor')]
+			[Bindable]
+			public var delet:Class;
+			
 	 		
 	 		private var linesArray:Array = new Array();
 	 		
@@ -151,12 +172,14 @@
 	        private function  setListeners4Action(el:EventEditorAction):EventEditorAction
 	        {
 	        	el.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
+	        	el.addEventListener(MouseEvent.MOUSE_OVER, actionMouseOverHandler);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
+	        	el.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	        	
 	        	return el;
 	        }
@@ -164,16 +187,45 @@
 	        private function setListeners4Event(el:EventEditorEvents):EventEditorEvents
 	        {
 	        	el.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+	        	el.addEventListener(MouseEvent.MOUSE_OVER, eventMouseOverHandler);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
+	        	el.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	        	
 	        	return el;
 	        }
 	        
+	        private var cursorID:Number = 0;
+
+	       	private function actionMouseOverHandler(mEvt:MouseEvent):void
+	        {
+	        	if( blDrawLine)
+	        		if(possibleDrawLine(mEvt.currentTarget.ID))
+	        			cursorID = CursorManager.setCursor(plus);
+	        		else
+	        			cursorID = CursorManager.setCursor(delet);
+//	        	trace('-+-')
+	        } 
+	        
+	        private function eventMouseOverHandler(mEvt:MouseEvent):void
+	        {
+	        	if(blDrawLine)
+	        		cursorID = CursorManager.setCursor(delet);
+//	        	trace('+-+')
+	        } 
+	        
+	        private function mouseOutHandler(mEvt:MouseEvent):void
+	        {
+//	        	if(!blDrawLine)
+	        		CursorManager.removeCursor(cursorID);
+	        	cursorID = 0;
+// 	        	trace('++++')
+	        }
+ 	        
 	        private function objectClickHandler(mEvt:MouseEvent):void
 	        {
 	        	dataChanged = true;
@@ -288,21 +340,33 @@
 				can.removeChild(line); ///-------------***********
 				blDrawLine = false;  //говорим что НЕ рисуем линию
 			
-				createLine(curEvent.ID, msEvt.currentTarget.ID)
+				if(possibleDrawLine(msEvt.currentTarget.ID))
+					createLine(curEvent.ID, msEvt.currentTarget.ID)
 			}
 			
 			private function createLine(evtID:String, actID:String):void
 			{
 				if(!linesArray[evtID]) linesArray[evtID] = new Array();
-				//if(!msEvt.hasOwnProperty('ID')) return;
-				if(linesArray[evtID][actID]) return;
 				
 				linesArray[evtID][actID] = 
-					new TreeVector(eventsArray[evtID], actionsArray[actID], '2');
+					new TreeVector(eventsArray[evtID], actionsArray[actID], '-1');
 					
 				linesArray[evtID][actID].addEventListener(MouseEvent.CLICK, markLines);	
 				
 				can.addChild(linesArray[evtID][actID]);
+			}
+			
+			private function possibleDrawLine(actID:String):Boolean
+			{
+				var evtID:String = curEvent.ID;
+				
+				if(!linesArray[evtID]) 
+					return true;
+
+				if(linesArray[evtID][actID]) 
+					return false;
+				
+				return true;
 			}
 			
 			private function stopDrawLine(msEvt:MouseEvent):void
@@ -357,33 +421,8 @@
 			{
 				if (can.contains(btLine))
 					can.removeChild(btLine);
-					
-				reDrawLines();
-			}
-			
-			private function reDrawLineHandler(trEvt:TreeEditorEvent):void
-			{
-				if (can.contains(btLine))
-					can.removeChild(btLine);
-			//	trace('reDrawLineHandler: '+ trEvt.ID)	
-				reDrawLines();
-			}
-			
-			private function reDrawLines():void
-			{
-				for(var evID:String in linesArray)
-					for(var acID:String in linesArray[evID])
-					{
-		//				if(evID == curID || acID == curID)
-							linesArray[evID][acID].updateVector();
-					}
-			}
-			
-			private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
-			{
-				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-					
-				if(eventsArray[curID]) 
+				
+							if(eventsArray[curID]) 
 				{
 					if (eventsArray[curID].x < 0)
 					{
@@ -412,6 +451,34 @@
 					}
 				}
 				
+		
+					
+				reDrawLines();
+			}
+			
+			private function reDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+			//	trace('reDrawLineHandler: '+ trEvt.ID)	
+			
+				reDrawLines();
+			}
+			
+			private function reDrawLines():void
+			{
+				for(var evID:String in linesArray)
+					for(var acID:String in linesArray[evID])
+					{
+		//				if(evID == curID || acID == curID)
+							linesArray[evID][acID].updateVector();
+					}
+			}
+			
+			private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+					
 				reDrawLines();
 			//  проверка если перетащили за границы :	treeElementMousUpHandler();
 			}

@@ -114,7 +114,5 @@ package vdom.components.eventEditor
 		{
 			return _scriptName;
 		}
-
-	
 	}
 }

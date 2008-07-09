@@ -32,6 +32,8 @@ package vdom.components.treeEditor.colorMenu02
 		
 		public function getColor(str:String):Number
 		{
+			if(!dataArr[Number(str)])
+				return 0xCC0000;
 			return dataArr[Number(str)].data;
 		}
 		

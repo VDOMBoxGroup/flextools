@@ -115,20 +115,8 @@
 		main.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		
 		var curID:String = curTree.ID;
-		
-		if (massTreeElements[curID].x < 0)
-		{
-			 massTreeElements[curID].x = 0;
-			 massTreeElements[curID].stopDrag();
-		}
-		
-		if (massTreeElements[curID].y < 10)
-		{
-			 massTreeElements[curID].y = 10;
-			 massTreeElements[curID].stopDrag();
-		}
 		redrawLines(curID);
-		//treeElementMousUpHandler();+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		//treeElementMousUpHandler();
 		// saveToServer();
 	}
 	
@@ -202,6 +190,20 @@
 	{
 		var curID:String = curTree.ID;
 		
+		
+		
+		if (massTreeElements[curID].x < 0)
+		{
+			 massTreeElements[curID].x = 0;
+			 massTreeElements[curID].stopDrag();
+		}
+		
+		if (massTreeElements[curID].y < 10)
+		{
+			 massTreeElements[curID].y = 10;
+			 massTreeElements[curID].stopDrag();
+		}
+		
 		redrawLines(curID);
 	}
 	/**
@@ -224,7 +226,6 @@
         {
         	dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
            	dataManager.deleteObject(curTree.ID)
-           	
         }
     }
     
@@ -391,7 +392,6 @@
 		
 		saveToServer();
 		//showHnadler();
-		
 	}
 	]]>
 </mx:Script>
