@@ -36,13 +36,13 @@ private var ppm:MyLoader;
 
 private var tempStorage:Object;
 
-private function changeLanguageHandler(event:Event):void {
-	
+private function changeLanguageHandler(event:Event):void
+{	
 	languageManager.changeLocale(event.currentTarget.selectedItem.@code);
 }
 
-private function preinitalizeHandler():void {
-	
+private function preinitalizeHandler():void
+{	
 	Singleton.registerClass("vdom.managers::IVdomDragManager", 
 		Class(getDefinitionByName("vdom.managers::VdomDragManagerImpl")));
 	
@@ -61,8 +61,8 @@ private function preinitalizeHandler():void {
 	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
 }
 
-private function showLoginFormHandler():void {
-	
+private function showLoginFormHandler():void
+{	
 	Application.application.showStatusBar = false;
 	Application.application.showGripper = false;
 	Application.application.minWidth = 800;
@@ -71,8 +71,8 @@ private function showLoginFormHandler():void {
 	Application.application.height = 600;
 }
 
-private function showMainHandler():void {
-	
+private function showMainHandler():void
+{	
 	applicationManagmentModule.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
 	Application.application.showStatusBar = true;
 	Application.application.showGripper = true;
@@ -80,8 +80,8 @@ private function showMainHandler():void {
 	Application.application.minHeight = 800;
 }
 
-private function lockStage(value:String):void {
-	
+private function lockStage(value:String):void
+{	
 	ppm = new MyLoader();
 	ppm.setStyle('modalTransparencyDuration', 0);
 	ppm.setStyle('modalTransparencyBlur', 0);
@@ -91,8 +91,8 @@ private function lockStage(value:String):void {
 	ppm.showText = value;
 }
 
-private function submitLogin(event:LoginFormEvent):void {
-		
+private function submitLogin(event:LoginFormEvent):void
+{		
 	lockStage('Authentication process');
 	
 	var username:String = event.formData.username
@@ -105,22 +105,41 @@ private function submitLogin(event:LoginFormEvent):void {
 		ip
 	)
 	
-	authenticationManager.addEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
+	authenticationManager.addEventListener(
+		AuthenticationEvent.LOGIN_COMPLETE, 
+		authenticationManager_loginComleteHandler
+	);
+	
 	authenticationManager.login();
 }
 
-private function authComleteHandler(event:Event):void {
+private function authenticationManager_loginComleteHandler(event:Event):void
+{	
+	authenticationManager.removeEventListener(
+		AuthenticationEvent.LOGIN_COMPLETE, 
+		authenticationManager_loginComleteHandler
+	);
 	
-	authenticationManager.removeEventListener(AuthenticationEvent.LOGIN_COMPLETE, authComleteHandler);
-	
-	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
+	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManager_initCompleteHandler);
 	dataManager.init();
 }
 
-private function dataManagerInitComplete(event:DataManagerEvent):void {
+private function dataManager_initCompleteHandler(event:DataManagerEvent):void
+{
+	dataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, dataManager_initCompleteHandler);
 	
-	dataManager.removeEventListener(DataManagerEvent.INIT_COMPLETE, dataManagerInitComplete);
+	ppm.showText = 'Load Types';
+	
+	dataManager.addEventListener(DataManagerEvent.TYPES_LOADED, dataManager_typesLoadedHandler);
+	dataManager.loadTypes();	
+}
+
+private function dataManager_typesLoadedHandler(event:DataManagerEvent):void
+{
+	dataManager.removeEventListener(DataManagerEvent.TYPES_LOADED, dataManager_typesLoadedHandler);
+	
 	viewstack.selectedChild=main;
+	ppm.showText = '';
 	PopUpManager.removePopUp(ppm);
 }
 

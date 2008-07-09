@@ -3,6 +3,7 @@ import flash.events.Event;
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
 import mx.containers.Canvas;
+import mx.events.FlexEvent;
 import mx.managers.PopUpManager;
 
 import vdom.events.AttributesPanelEvent;
@@ -14,12 +15,20 @@ import vdom.managers.DataManager;
 [Bindable] private var help:String;
 	
 private var objectsXML:XML;
-//private var currInterfaceType:uint;
 private var publicData:Object;
 private var ppm:Canvas;
 private var applicationId:String;
 private var topLevelObjectId:String;
 private var watchers:Array;
+
+override protected function updateDisplayList(unscaledWidth:Number, 
+													unscaledHeight:Number):void
+{
+	super.updateDisplayList(unscaledWidth, unscaledHeight);
+	types.height = unscaledHeight;
+	mainArea.height = unscaledHeight;
+	panelContainer.height = unscaledHeight;
+}
 
 private function initializeHandler():void {
 	

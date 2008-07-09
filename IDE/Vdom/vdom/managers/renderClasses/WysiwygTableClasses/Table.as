@@ -10,7 +10,7 @@ import mx.core.FlexSprite;
 import mx.core.UIComponent;
 
 import vdom.containers.IItem;
-import vdom.managers.renderClasses.WaitCanvas;	
+import vdom.managers.wc;	
 
 use namespace mx.core.mx_internal;
 
@@ -19,20 +19,18 @@ public class Table extends Grid implements IItem {
 	private var _objectId:String;
 	private var _waitMode:Boolean;
 	private var _highlightMarker:Canvas;
-	private var _graphicsLayer:Canvas;
+	private var _graphicsLayer:Canvas = new Canvas();;
 	private var _waitLayout:UIComponent;
-	private var _isStatic:Boolean;
-	private var _editableAttributes:Array;
+	private var _isStatic:Boolean = false;
+	private var _editableAttributes:Array = [];
 	
 	
-	public function Table(objectId:String) {
+	public function Table(objectId:String)
+	{
 		
 		super();
 		
-		_graphicsLayer = new Canvas();
 		_objectId = objectId;
-		editableAttributes = [];
-		_isStatic = false;
 	}
 	
 	public function get objectId():String {
@@ -45,43 +43,51 @@ public class Table extends Grid implements IItem {
 		return _waitMode;
 	}
 	
-	public function set waitMode(mode:Boolean):void {
-		
-		if(mode) {
+	public function set waitMode(value:Boolean):void
+	{	
+		if(value) {
 			
-			removeAllChildren();
+			setChildIndex(_waitLayout, numChildren-1);
+			
 			_waitLayout.width = width;
 			_waitLayout.height = height;
+			_graphicsLayer.visible = false;
 			_waitLayout.visible = true;
 			
-		} else {
+			removeAllChildren();
 			
+		}
+		else {
+			
+			_graphicsLayer.visible = true;
 			_waitLayout.visible = false;
 		}
+		
+		_waitMode = value;
 	}
 	
-	public function get editableAttributes():Array {
-		
+	public function get editableAttributes():Array
+	{	
 		return _editableAttributes;
 	}
 	
-	public function set editableAttributes(attributesArray:Array):void {
-		
+	public function set editableAttributes(attributesArray:Array):void
+	{	
 		_editableAttributes = attributesArray;
 	}
 	
-	public function get isStatic():Boolean {
-		
+	public function get isStatic():Boolean
+	{	
 		return _isStatic;
 	}
 	
-	public function set isStatic(flag:Boolean):void {
-		
+	public function set isStatic(flag:Boolean):void
+	{
 		_isStatic = flag;
 	}
 	
-	override protected function createChildren():void {
-		
+	override protected function createChildren():void
+	{	
 		super.createChildren();
 		
 		if(!_graphicsLayer)
@@ -97,33 +103,47 @@ public class Table extends Grid implements IItem {
 		rawChildren.addChild(_highlightMarker);
 		
 		if(!_waitLayout)
-			_waitLayout = new WaitCanvas();
+			_waitLayout = new wc();
 		
-		_waitLayout.visible = false;
-		rawChildren.addChild(_waitLayout);
+		_waitLayout.visible = true;		
+		_waitLayout.width = 0;
+		_waitLayout.height = 0;
 		
+		addChild(_waitLayout);
 	}
 	
-	override public function removeAllChildren():void {
+	override public function removeAllChildren():void
+	{	
+		var offset:int = 0;
+		var itemChild:DisplayObject;
 		
-		super.removeAllChildren();
+		while (numChildren > offset) {
+			itemChild = getChildAt(offset);
+			
+			if(itemChild == _waitLayout) {
+				
+				offset++
+				continue;
+			}
+			
+			removeChildAt(offset);
+		}
 		
 		var count:uint = graphicsLayer.rawChildren.numChildren;
 		
 		while (count > 0) {
 			graphicsLayer.rawChildren.removeChildAt(0);
 			count--;
-		}
-			
+		}		
 	}
 	
-	public function get graphicsLayer():Canvas {
-		
+	public function get graphicsLayer():Canvas
+	{	
 		return _graphicsLayer;
 	}
 	
-	public function drawHighlight(color:String):void {
-		
+	public function drawHighlight(color:String):void
+	{	
 		if(color && color == 'none') {
 			
 			_highlightMarker.visible = false;
@@ -133,7 +153,6 @@ public class Table extends Grid implements IItem {
 		var graph:Graphics = _highlightMarker.graphics;
 		
 		graph.clear()
-		//graph.beginFill(0xFFFFFF, .0);
 		graph.lineStyle(2, Number(color));
 		graph.drawRect(0, 0, width, height);
 		
@@ -142,59 +161,56 @@ public class Table extends Grid implements IItem {
 		_highlightMarker.visible = true;
 	}
 	
-	override mx.core.mx_internal function createContentPane():void {
+	override mx.core.mx_internal function createContentPane():void
+	{
+		if (contentPane)
+			return;
+
+		creatingContentPane = true;
 		
-        if (contentPane)
-            return;
+		// Reparent the children.  Get the number before we create contentPane
+		// because that changes logic of how many children we have
+		var n:int = numChildren;
 
-        creatingContentPane = true;
-        
-        // Reparent the children.  Get the number before we create contentPane
-        // because that changes logic of how many children we have
-        var n:int = numChildren;
+		var newPane:Sprite = new FlexSprite();
+		newPane.name = "contentPane";
+		newPane.tabChildren = true;
 
-        var newPane:Sprite = new FlexSprite();
-        newPane.name = "contentPane";
-        newPane.tabChildren = true;
-
-        // Place content pane above border and background image but below
-        // all other chrome.
-        var childIndex:int;
-    
-        childIndex = rawChildren.getChildIndex(DisplayObject(graphicsLayer)) + 1;
-        
-        rawChildren.addChildAt(newPane, childIndex);
-        
-        var allChildren:Array = getChildren();
-        
-        for each(var ch:* in allChildren)
-        {
-            // use super because contentPane now exists and messes up getChildAt();
-            //var child:IUIComponent =
-               // IUIComponent(super.getChildAt(0));
-            newPane.addChild(DisplayObject(ch));
-            ch.parentChanged(newPane);
-            _numChildren--; // required
-        }
-
-        contentPane = newPane;
-
-        creatingContentPane = false
-
-        // UIComponent sets $visible to false. If we don't make it true here,
-        // nothing shows up. Making this true should be harmless, as the
-        // container itself should be false, and so should all its children.
-        contentPane.visible = true;
-    }
+		// Place content pane above border and background image but below
+		// all other chrome.
+		var childIndex:int;
 	
-	private function bringOnTop():void {
+		childIndex = rawChildren.getChildIndex(DisplayObject(graphicsLayer)) + 1;
 		
+		rawChildren.addChildAt(newPane, childIndex);
+		
+		var allChildren:Array = getChildren();
+		
+		for each(var ch:* in allChildren)
+		{
+			// use super because contentPane now exists and messes up getChildAt();
+			newPane.addChild(DisplayObject(ch));
+			ch.parentChanged(newPane);
+			_numChildren--; // required
+		}
+
+		contentPane = newPane;
+
+		creatingContentPane = false
+
+		// UIComponent sets $visible to false. If we don't make it true here,
+		// nothing shows up. Making this true should be harmless, as the
+		// container itself should be false, and so should all its children.
+		contentPane.visible = true;
+	}
+	
+	private function bringOnTop():void
+	{	
 		var highlightMarkerIndex:int = rawChildren.getChildIndex(_highlightMarker);
 		var topIndex:int = rawChildren.numChildren-1;
 		
-		if(highlightMarkerIndex != topIndex) {
+		if(highlightMarkerIndex != topIndex)
 			rawChildren.setChildIndex(_highlightMarker, topIndex);
-		}
 	}
 }
 }

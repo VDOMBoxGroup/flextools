@@ -76,6 +76,8 @@ private function dataManager_applicationCreatedHandler(event:DataManagerEvent):v
 	dataManager.removeEventListener(DataManagerEvent.APPLICATION_CREATED, dataManager_applicationCreatedHandler);
 	applicationDescription.id = event.result.Application.@ID;
 	
+	dataManager.changeCurrentApplication(applicationDescription.id);
+	
 	ppm.showText = 'Send icon';
 	
 	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED, fileManager_resourceSavedHandler);
@@ -110,8 +112,24 @@ private function dataManager_applicationInfoChangedHandler(event:DataManagerEven
 		DataManagerEvent.APPLICATION_INFO_CHANGED, 
 		dataManager_applicationInfoChangedHandler
 	);
-	ppm.showText = '';
-	PopUpManager.removePopUp(ppm);
 	
-	dispatchEvent(new Event('applicationCreated'));
+	ppm.showText = 'Create Page';
+	
+	var topLevelTypes:XMLList = dataManager.getTopLevelTypes();
+	var HTMLType:XML = topLevelTypes.Information.(Name == 'htmlcontainer').parent();
+	var typeId:String = HTMLType.Information.ID;
+	
+	dataManager.addEventListener(
+		DataManagerEvent.OBJECTS_CREATED, 
+		dataManager_objectsCreatedHandler
+	);
+	
+	dataManager.createObject(typeId, '', 'Home_Page');
 } 
+
+private function dataManager_objectsCreatedHandler(event:DataManagerEvent):void
+{
+	
+	PopUpManager.removePopUp(ppm);
+	dispatchEvent(new Event('applicationCreated'));
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalAlign="center">
+<mx:Script>
+	<![CDATA[
+	import vdom.managers.VdomDragManager;
+	import mx.core.DragSource;
+	
+	[Bindable]
+	private var _source:ByteArray;
+	
+	[Bindable]
+	private var _typeLabelText:String
+	
+	private var typeId:String;
+	private var aviableContainers:String;
+	
+	
+	public function set typeDescription(value:Object):void
+	{
+		typeId = value.typeId;
+		aviableContainers = value.aviableContainers;
+	}
+	
+	public function set resource(imageResource:ByteArray):void
+	{
+		_source = imageResource;
+	}
+	
+	public function set typeLabel(value:String):void
+	{	
+		_typeLabelText = value;
+	}
+	
+	private function dragIt(event:MouseEvent):void {
+		
+		var dragInitiator:Type = Type(event.currentTarget);
+		var ds:DragSource = new DragSource();
+		
+		var dataObject:Object = {
+			typeId:typeId, 
+			aviableContainers:aviableContainers, 
+			offX:dragInitiator.mouseX, 
+			offY:dragInitiator.mouseY
+		};
+		
+		ds.addData(dataObject, 'typeDescription');
+		
+		var proxy:Image = new Image();
+		
+		proxy.width = 58;
+		proxy.height = 58;
+		proxy.source = typeIcon.source;
+		
+		VdomDragManager.doDrag(
+			dragInitiator, 
+			ds, 
+			event, 
+			proxy, 
+			proxy.width/2 - dragInitiator.mouseX, 
+			proxy.height/2 - dragInitiator.mouseY
+		);
+		
+	}
+	]]>
+</mx:Script>
+	<mx:Image id="typeIcon" source="{_source}"
+		width="58" height="58"/>
+	<mx:Label id="_typeLabel" text="{_typeLabelText}"
+		width="90" truncateToFit="true"/>
+</mx:VBox>

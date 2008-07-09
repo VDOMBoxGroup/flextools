@@ -7,7 +7,6 @@
 	xmlns:treeEditor="vdom.components.treeEditor.*"
 	xmlns:analyse="vdom.components.analyse.*"
 	
-	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
 	hide="hideHandler();"
 	
@@ -19,7 +18,9 @@
 	<mx:Label text="Loading..." horizontalCenter="0" verticalCenter="0"/>
 </mx:Canvas>
 
-<mx:VBox id="components">
+<mx:VBox id="components"
+	width="100%" height="100%" verticalGap="7">
+	
 	<controls:ControlPanel 
 		width="100%" height="104"
 		paddingTop="7" paddingBottom="7" paddingLeft="7" paddingRight="7"
@@ -67,10 +68,8 @@
 	</controls:ControlPanel>
 	
 	<mx:ViewStack id="placeCanvas" 
-		width="100%" height="100%"
-		styleName="vdomBackground"
-		dropShadowEnabled="true" borderStyle="solid"  borderColor="#000000"
-		paddingTop="7" paddingBottom="7" paddingLeft="7" paddingRight="7">
+		width="100%" height="100%" styleName="vdomBackground"
+		dropShadowEnabled="true" borderStyle="solid"  borderColor="#000000">
 	
 		<mx:Canvas id="initComponent" width="100%" height="100%">
 			<mx:Label text="Loading..." horizontalCenter="0" verticalCenter="0" />

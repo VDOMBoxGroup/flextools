@@ -617,7 +617,8 @@ public class DataManager implements IEventDispatcher {
 		
 		if(!parentId) {
 			
-			_currentApplication.Objects.appendChild(result.Object[0]);
+			if(_currentApplication.Objects[0]) ///<---- Fix for first page creation in Application Managment !!! 
+				_currentApplication.Objects.appendChild(result.Object[0]);
 			
 			
 		} else {

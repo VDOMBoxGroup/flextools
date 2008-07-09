@@ -75,15 +75,22 @@ private function createApplicationHandler(event:Event):void
 private function applicationChangedHandler(event:ListEvent):void
 {	
 	dataManager.changeCurrentApplication(listApplicationContainer.applicationID);
-	mainViewStack.selectedChild = applicationProperties;
+}
+
+private function switchToCreate():void
+{
+	listApplicationContainer.enabled = false;
+	mainViewStack.selectedChild = createApplication
 }
 
 private function switchToEdit(event:Event):void
 {
+	listApplicationContainer.enabled = false;
 	mainViewStack.selectedChild = editApplication;
 }
 
 private function switchToProperties(event:Event):void
 {
+	listApplicationContainer.enabled = true;
 	mainViewStack.selectedChild = applicationProperties;
 }

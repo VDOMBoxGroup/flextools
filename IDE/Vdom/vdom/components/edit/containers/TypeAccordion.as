@@ -5,15 +5,16 @@ import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
 import mx.containers.Accordion;
+import mx.containers.VBox;
 
 import vdom.components.edit.containers.typeAccordionClasses.Type;
 import vdom.components.edit.containers.typeAccordionClasses.Types;
-import vdom.managers.ExternalManager;
 import vdom.managers.FileManager;
 
 public class TypeAccordion extends Accordion {
 	
 	private var fileManager:FileManager;
+	private var _dataProvider:XMLList;
 	private var categories:Object = {};
 	private var types:ArrayCollection;
 	
@@ -27,50 +28,112 @@ public class TypeAccordion extends Accordion {
 		super();
 		
 		fileManager = FileManager.getInstance();
-		types = new ArrayCollection();
 	}
 	
-	public function set dataProvider(typesXML:XMLList):void {
+	public function set dataProvider(value:XMLList):void
+	{	
+		if(!value || _dataProvider == value)
+			return;
 		
-		if(!typesXML) return;
+		_dataProvider = value;
 		
-		var typeId:String, displayName:String, phraseId:String, resourceId:String, 
-			typeName:String, typeNameLocalized:String, categoryName:String, aviableContainers:String;
+		types = new ArrayCollection();
+		types = createTypeDescriptions(value);
 		
-		for each (var typeDescription:XML in typesXML) {
+		createStandartCategories();
+		
+		var currentDescription:Object, currentCategory:Object, type:Type;
+		var cursor:IViewCursor = types.createCursor();
+		
+		while(!cursor.afterLast) {
+			
+			currentDescription = cursor.current;
+			
+			currentCategory = insertCategory(
+				currentDescription.categoryName, 
+				currentDescription.categoryNameLocalized
+			);
+			
+			type = new Type();
+			
+			type.setStyle('horizontalAlign', 'center');
+			type.width = 90;
+			type.typeLabel = currentDescription.typeNameLocalized;
+			
+			currentCategory.addChild(type);
+			
+			fileManager.loadResource(
+				currentDescription.typeId,
+				currentDescription.resourceId, 
+				type, 
+				'resource', 
+				true
+			);
+			cursor.moveNext();
+		}
+	}
+	
+	private function createTypeDescriptions(value:XMLList):ArrayCollection
+	{
+		var typesArrayCollection:ArrayCollection = new ArrayCollection();
+		var categoryName:String, categoryNameLocalized:String, categoryPhraseId:String;
+		var typeId:String, typeName:String, typeNameLocalized:String;
+		var displayName:String, phraseId:String, resourceId:String, aviableContainers:String;
+		
+		for each (var typeDescription:XML in value) {
 			
 			if(typeDescription.Information.Container == 3)
 				continue;
 			
+			categoryName = typeDescription.Information.Category.toLowerCase();
+			categoryNameLocalized = '';
+			
+			if(standardCategories.indexOf(categoryName) != -1)
+				categoryNameLocalized = resourceManager.getString('Edit', categoryName);
+				
+			else if (categoryNameLocalized.match(phraseRE)) {
+				
+				categoryPhraseId = categoryNameLocalized.match(phraseRE)[1];
+				categoryName = 'lang_' + phraseId;
+				categoryNameLocalized = resourceManager.getString(typeDescription.typeName, categoryPhraseId);
+			}
+			
+			if(!categoryNameLocalized)
+				continue;
+			
 			typeId = typeDescription.Information.ID;
-			
 			displayName = typeDescription.Information.DisplayName.toLowerCase();
-		
-			phraseId = displayName.match(phraseRE)[1];
 			
-			resourceId = typeDescription.Information.Icon;
-			resourceId = resourceId.match(resourceRE)[1];
+			phraseId = displayName.match(phraseRE)[1];
+			resourceId = typeDescription.Information.Icon.match(resourceRE)[1];
 			
 			typeName = typeDescription.Information.Name;
 			typeNameLocalized = resourceManager.getString(typeName, phraseId);
-			categoryName = String(typeDescription.Information.Category)
 			
 			aviableContainers = typeDescription.Information.Containers;
 			
-			types.addItem({
-				typeName:typeName,
-				typeNameLocalized:typeNameLocalized,
-				categoryName:categoryName, 
-				typeId:typeId,
-				resourceId:resourceId,
-				aviableContainers:aviableContainers
-			});
+			typesArrayCollection.addItem(
+				{
+					categoryName:categoryName,
+					categoryNameLocalized:categoryNameLocalized,
+					typeName:typeName,
+					typeNameLocalized:typeNameLocalized,
+					typeId:typeId,
+					resourceId:resourceId,
+					aviableContainers:aviableContainers
+				}
+			);
 		}
 		
-		types.sort = new Sort();
-		types.sort.fields = [new SortField('typeName')];
-		types.refresh();
+		typesArrayCollection.sort = new Sort();
+		typesArrayCollection.sort.fields = [new SortField('typeName')];
+		typesArrayCollection.refresh();
 		
+		return typesArrayCollection;
+	}
+	
+	private function createStandartCategories():void
+	{
 		var labelValue:String;
 		
 		for each (var category:String in standardCategories) {
@@ -78,55 +141,11 @@ public class TypeAccordion extends Accordion {
 			labelValue = resourceManager.getString('Edit', category);
 			insertCategory(category, labelValue);
 		}
-		
-		var type:Type, currentCategory:Types;		
-		
-		var cursor:IViewCursor = types.createCursor();
-		
-		var currentDescription:Object;
-		
-		while(!cursor.afterLast) {
-			
-			currentDescription = cursor.current;
-			categoryName = currentDescription.categoryName.toLowerCase();
-			
-			labelValue = null;
-			
-			if(standardCategories.indexOf(categoryName) != -1)
-				labelValue = resourceManager.getString('Edit', categoryName);
-				
-			else if (categoryName.match(phraseRE)) {
-				
-				phraseId = categoryName.match(phraseRE)[1];
-				categoryName = 'lang_' + phraseId;
-				labelValue = resourceManager.getString(currentDescription.typeName, phraseId);
-			}
-			
-			if(!labelValue) {
-				cursor.moveNext();
-				continue;
-			}
-				
-			
-			currentCategory = insertCategory(categoryName, labelValue);
-			
-			type = new Type(currentDescription);
-			
-			type.setStyle('horizontalAlign', 'center');
-			type.width = 90;
-			type.typeLabel = currentDescription.typeNameLocalized;
-			
-			currentCategory.addChild(type);
-			fileManager.loadResource(currentDescription.typeId, currentDescription.resourceId, type, 'resource', true);
-			cursor.moveNext();
-		}
 	}
 	
-	private function insertCategory(categoryName:String, label:String):Types {
-		
+	private function insertCategory(categoryName:String, label:String):Types
+	{	
 		var currentCategory:Types;
-		
-		
 		
 		if(!categories[categoryName]) {
 			
@@ -140,8 +159,8 @@ public class TypeAccordion extends Accordion {
 			currentCategory.percentWidth = 100;
 			
 			addChild(currentCategory);
-			
-		} else {
+		}
+		else {
 			
 			currentCategory = categories[categoryName];
 		}
