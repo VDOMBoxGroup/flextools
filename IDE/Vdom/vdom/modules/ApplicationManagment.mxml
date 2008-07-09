@@ -31,7 +31,7 @@
 		<controls:ActionButton styleName="newButton"
 			label="{resourceManager.getString('Application','main_new')}"
 			labelPlacement="bottom"
-			click="mainViewStack.selectedChild = createApplication"/>
+			click="switchToCreate()"/>
 		
 		<!--<controls:ActionButton styleName="newsButton"
 			label="{resourceManager.getString('Application','main_steps')}"

@@ -59,7 +59,7 @@ private function propertiesChangedHandler(event:ApplicationEditorEvent):void
 	
 	ppm = new MyLoader();
 	ppm.showText = 'Create Application';
-	PopUpManager.addPopUp(ppm, DisplayObject(Application.application));
+	PopUpManager.addPopUp(ppm, DisplayObject(Application.application), true);
 	PopUpManager.centerPopUp(ppm);
 	
 	dataManager.addEventListener(DataManagerEvent.APPLICATION_CREATED, dataManager_applicationCreatedHandler);
@@ -75,8 +75,6 @@ private function dataManager_applicationCreatedHandler(event:DataManagerEvent):v
 {	
 	dataManager.removeEventListener(DataManagerEvent.APPLICATION_CREATED, dataManager_applicationCreatedHandler);
 	applicationDescription.id = event.result.Application.@ID;
-	
-	dataManager.changeCurrentApplication(applicationDescription.id);
 	
 	ppm.showText = 'Send icon';
 	
@@ -118,17 +116,22 @@ private function dataManager_applicationInfoChangedHandler(event:DataManagerEven
 	var topLevelTypes:XMLList = dataManager.getTopLevelTypes();
 	var HTMLType:XML = topLevelTypes.Information.(Name == 'htmlcontainer').parent();
 	var typeId:String = HTMLType.Information.ID;
+	var attributes:XML =
+		<Attributes>
+    		<Attribute Name="title">Home Page</Attribute>
+		</Attributes>;
 	
 	dataManager.addEventListener(
 		DataManagerEvent.OBJECTS_CREATED, 
 		dataManager_objectsCreatedHandler
 	);
 	
-	dataManager.createObject(typeId, '', 'Home_Page');
+	dataManager.createObject(typeId, '', 'Home_Page', attributes, applicationDescription.id);
 } 
 
 private function dataManager_objectsCreatedHandler(event:DataManagerEvent):void
 {
+	dataManager.changeCurrentApplication(applicationDescription.id);
 	
 	PopUpManager.removePopUp(ppm);
 	dispatchEvent(new Event('applicationCreated'));

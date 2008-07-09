@@ -92,7 +92,7 @@ public class DataManager implements IEventDispatcher {
 		else
 			return null
 	}
-	[Bindable (event='typesLoaded')]
+	
 	public function get listTypes():XMLList {
 		
 		return _listTypes;
@@ -102,10 +102,10 @@ public class DataManager implements IEventDispatcher {
 		
 		return _typeLoaded;
 	}
-
+	[Bindable (event='currentApplicationChanged')]
 	public function get currentApplicationId():String {
 		
-		return _currentApplicationId;
+		return _currentApplicationId;	
 	}
 	
 	[Bindable (event='currentApplicationChanged')]
@@ -603,11 +603,16 @@ public class DataManager implements IEventDispatcher {
 	 * @return идентификатор объекта
 	 * 
 	 */	
-	public function createObject(typeId:String, parentId:String = '', objectName:String = '', attributes:String = ''):void {
+	public function createObject(typeId:String, parentId:String = '', 
+								objectName:String = '', attributes:String = '', 
+								applicationId:String = ''):void {
 		
 		proxy.flush();
 		soap.addEventListener(SoapEvent.CREATE_OBJECT_OK, createObjectCompleteHandler);
-		soap.createObject(_currentApplicationId, parentId, typeId, attributes, objectName);
+		if(currentApplicationId)
+			soap.createObject(_currentApplicationId, parentId, typeId, attributes, objectName);
+		else
+			soap.createObject(applicationId, parentId, typeId, attributes, objectName);
 	}
 	
 	private function createObjectCompleteHandler(event:SoapEvent):void {
@@ -617,11 +622,15 @@ public class DataManager implements IEventDispatcher {
 		
 		if(!parentId) {
 			
-			if(_currentApplication.Objects[0]) ///<---- Fix for first page creation in Application Managment !!! 
-				_currentApplication.Objects.appendChild(result.Object[0]);
+			var applicationId:String = event.result.ApplicationID;
+			var application:XML = _listApplication.(@ID == applicationId)[0]
+			
+			if(application && application.Objects[0]) ///<---- Fix for first page creation in Application Managment !!! 
+				application.Objects.appendChild(result.Object[0]);
 			
 			
-		} else {
+		}
+		else {
 			
 			var parentObject:XML = getObject(parentId);
 		

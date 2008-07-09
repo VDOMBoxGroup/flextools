@@ -25,15 +25,28 @@ private function showHandler():void
 	watchers = [];
 	
 	watchers.push(
-		BindingUtils.bindProperty(listApplicationContainer, 'dataProvider', dataManager, 'listApplication')
+		BindingUtils.bindProperty(listApplicationContainer, 'dataProvider', dataManager, 'listApplication'),
+		BindingUtils.bindProperty(listApplicationContainer, 'applicationId', dataManager, 'currentApplicationId')
 	);
 	
 	selectedChild = components;
 	
-	if(listApplicationContainer.applicationID)
+	if(listApplicationContainer.applicationId)
 		mainViewStack.selectedChild = applicationProperties;
 	else
 		mainViewStack.selectedIndex = 0;
+}
+
+private function hideHandler():void
+{
+	for each(var watcher:ChangeWatcher in watchers){
+		watcher.unwatch();
+	}
+	
+	registerEvent(false);
+	
+	mainViewStack.selectedIndex = 0;
+	selectedChild = initModule;
 }
 
 private function registerEvent(flag:Boolean):void
@@ -55,18 +68,6 @@ private function registerEvent(flag:Boolean):void
 	}
 }
 
-private function hideHandler():void
-{	
-	for each(var watcher:ChangeWatcher in watchers){
-		watcher.unwatch();
-	}
-	
-	registerEvent(false);
-	
-	mainViewStack.selectedIndex = 0;
-	selectedChild = initModule;
-}
-
 private function createApplicationHandler(event:Event):void
 {	
 	mainViewStack.selectedChild = mainCanvas;
@@ -74,7 +75,7 @@ private function createApplicationHandler(event:Event):void
 
 private function applicationChangedHandler(event:ListEvent):void
 {	
-	dataManager.changeCurrentApplication(listApplicationContainer.applicationID);
+	dataManager.changeCurrentApplication(listApplicationContainer.applicationId);
 }
 
 private function switchToCreate():void

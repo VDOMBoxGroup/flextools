@@ -115,7 +115,7 @@ private function applicationEditorChangedHandler(event:ApplicationEditorEvent):v
 		changeInformation = true;
 	
 	ppm = new MyLoader();
-	PopUpManager.addPopUp(ppm, DisplayObject(Application.application));
+	PopUpManager.addPopUp(ppm, DisplayObject(Application.application), true);
 	PopUpManager.centerPopUp(ppm);
 	
 	if(changeResource) {

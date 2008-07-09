@@ -7,42 +7,64 @@
 	<mx:Metadata>
 		[Event(name="applicationChanged", type="mx.events.ListEvent")]
 	</mx:Metadata>
+	
 	<mx:Script>
-		<![CDATA[
-			import mx.events.ListEvent;
-			import mx.controls.TileList;
+	<![CDATA[
+		import mx.collections.XMLListCollection;
+		import mx.collections.IViewCursor;
+		import mx.events.ListEvent;
+		import mx.controls.TileList;
+		
+		private var oldXMLList:XMLList;
+		private var _dataProvider:XMLListCollection;
+		
+		private var _applicationId:String;
+		
+		public function set dataProvider(value:XMLList):void
+		{	
+			if(!value || value == oldXMLList)
+				return;
 			
-			private var _dataProvider:XMLList;
+			oldXMLList = value;
+			_applicationTitleList.dataProvider = _dataProvider = new XMLListCollection(value);
 			
-			public function set dataProvider(listApplication:XMLList):void {
-				
-				if(!listApplication || listApplication == _dataProvider)
-					return;
-				
-				_applicationTitleList.dataProvider = _dataProvider = listApplication;
-				_applicationTitleList.selectedIndex = 0;
-				
-				var evt:ListEvent = new ListEvent('applicationChanged');
-				dispatchEvent(evt);
+			var evt:ListEvent = new ListEvent('applicationChanged');
+			dispatchEvent(evt);
+		}
+		
+		public function get applicationId():String
+		{	
+			if(_applicationTitleList.selectedItem) {
+				return _applicationTitleList.selectedItem.@ID;
+			} else {
+				return null;
 			}
-			
-			public function get applicationID():String {
 				
-				if(_applicationTitleList.selectedItem) {
-					return _applicationTitleList.selectedItem.@ID;
-				} else {
-					return null;
-				}
-					
-			}
+		}
+		
+		public function set applicationId(value:String):void
+		{	
+			if(!value)
+				return;
 			
-			private function changeListEvent():void {
+			if(_applicationId != value) {
 				
-				var evt:ListEvent = new ListEvent('applicationChanged');
-				dispatchEvent(evt);
+				var currentElement:XML = oldXMLList.(@ID == value)[0];
+				var index:int = _dataProvider.getItemIndex(currentElement);
+				_applicationTitleList.selectedIndex = index;
+				_applicationTitleList.scrollToIndex(index);
 			}
-			
-		]]>
+				
+			_applicationId = value;
+		}
+		
+		private function changeListEvent():void
+		{	
+			var evt:ListEvent = new ListEvent('applicationChanged');
+			dispatchEvent(evt);
+		}
+		
+	]]>
 	</mx:Script>
 	<mx:TileList id="_applicationTitleList"
 		selectedIndex="0" change="changeListEvent()" 

@@ -10,8 +10,8 @@
 	hide="hideHandler();"
 	
 	width="100%" height="100%"
-	horizontalScrollPolicy="off" verticalScrollPolicy="off"
->
+	horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	
 	<mx:Metadata>
 		[ResourceBundle("Edit")]
 	</mx:Metadata>
@@ -33,10 +33,10 @@
 			
 		</containers:AdvancedTabNavigator>
 	
-	<mx:VBox 
+	<mx:VBox id="panelContainer"
 		verticalGap="5" 
 		width="200" minWidth="200" minHeight="0" 
-		verticalScrollPolicy="auto" horizontalScrollPolicy="off"  id="panelContainer">
+		verticalScrollPolicy="auto" horizontalScrollPolicy="off"  >
 		
 		<editContainers:AttributesPanel id="attributesPanel"
 			title="OBJECT PROPERTIES" headerHeight="30"
