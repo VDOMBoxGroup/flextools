@@ -60,6 +60,9 @@
 
 	<mx:Label text="{_labelText}" id="__label" width="{this.width - 43}" />
 	<mx:LinkButton id="__clearBtn"
-		enabled="{clearBtnEnabled}" label="X" height="20" cornerRadius="5" click="{this.value = '';}" width="20" paddingLeft="1" paddingRight="1" />
-	<mx:Button label="..." height="20" cornerRadius="0" click="{openWindow();}" width="22" paddingLeft="2" paddingRight="2"/>
+		enabled="{clearBtnEnabled}" label="X" height="20" cornerRadius="5" click="{this.value = '';}" width="20" paddingLeft="1" paddingRight="1"
+		toolTip="Clear field" />
+	<mx:Button
+		label="..." height="20" cornerRadius="0" click="{openWindow();}" width="22" paddingLeft="2" paddingRight="2"
+		toolTip="Browse for resource" />
 </mx:HBox>
