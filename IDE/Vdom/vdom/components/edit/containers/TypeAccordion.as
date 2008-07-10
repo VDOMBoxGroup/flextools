@@ -55,6 +55,7 @@ public class TypeAccordion extends Accordion {
 			);
 			
 			type = new Type();
+			type.typeDescription = currentDescription;
 			
 			type.setStyle('horizontalAlign', 'center');
 			type.width = 90;
