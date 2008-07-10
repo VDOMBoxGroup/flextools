@@ -43,7 +43,8 @@ private function saveXMLScript():void {
 	enableElement(false);
 	saveButton.label = 'Saving...';
 	dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
-	dataManager.setObjectXMLScript(scriptEditor.code);
+	var code:String = scriptEditor.code;
+	dataManager.setObjectXMLScript(code);
 }
 
 private function saveXMLScriptHandler(event:DataManagerEvent):void {

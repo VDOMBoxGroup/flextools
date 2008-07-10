@@ -102,7 +102,7 @@ public class Item extends Canvas implements IItem
 		if(!_waitLayout)
 			_waitLayout = new wc();
 		
-		_waitLayout.visible = true;		
+		_waitLayout.visible = false;		
 		_waitLayout.width = 0;
 		_waitLayout.height = 0;
 		

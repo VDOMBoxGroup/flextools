@@ -30,17 +30,17 @@ public class RenderManager implements IEventDispatcher {
 	
 	private static var instance:RenderManager;
 	
-	private var soap:Soap;
-	private var dataManager:DataManager;
-	private var dispatcher:EventDispatcher;
-	private var fileManager:FileManager;
-	private var cacheManager:CacheManager;
+	private var soap:Soap = Soap.getInstance();
+	private var dataManager:DataManager = DataManager.getInstance();
+	private var dispatcher:EventDispatcher = new EventDispatcher();
+	private var fileManager:FileManager = FileManager.getInstance();
+	private var cacheManager:CacheManager = CacheManager.getInstance();
 	
 	private var applicationId:String;
 	private var rootContainer:Container;
-	private var items:ArrayCollection;
+	private var items:ArrayCollection = new ArrayCollection();;
 	private var cursor:IViewCursor;
-	private var lockedItems:Object;
+	private var lockedItems:Object = {};
 	private var lastKey:String;
 	
 	/**
@@ -48,43 +48,31 @@ public class RenderManager implements IEventDispatcher {
 	 * @return instance of RenderManager class (Singleton)
 	 * 
 	 */
-	public static function getInstance():RenderManager {
-		
-		if (!instance) {
-			
+	public static function getInstance():RenderManager
+	{
+		if (!instance)
 			instance = new RenderManager();
-		}
 		
 		return instance;
 	}
 	
-	public function RenderManager() {
-		
+	public function RenderManager()
+	{
 		if (instance)
 			throw new Error("Instance already exists.");
 		
-		items = new ArrayCollection();
-		dispatcher = new EventDispatcher();
-		
-		soap = Soap.getInstance();
-		fileManager = FileManager.getInstance();
-		dataManager = DataManager.getInstance();
-		
 		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, updateAttributesBeginHandler);
-		
 		
 		cursor = items.createCursor();
 		
 		items.sort = new Sort();
 		items.sort.fields = [new SortField('itemId')];
 		items.refresh();
-		
-		lockedItems = {};
 	}
 	
-	public function init(destContainer:Container, applicationId:String = null):void {
-		
+	public function init(destContainer:Container, applicationId:String = null):void
+	{
 		rootContainer = destContainer;
 		
 		if(!applicationId)
@@ -92,8 +80,8 @@ public class RenderManager implements IEventDispatcher {
 			
 	}
 	
-	public function createItem(itemId:String, parentId:String = ''):void {
-		
+	public function createItem(itemId:String, parentId:String = ''):void
+	{
 		if(!parentId) {
 			
 			rootContainer.removeAllChildren();
@@ -105,13 +93,13 @@ public class RenderManager implements IEventDispatcher {
 		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
 	}
 	
-	public function updateItem(itemId:String, parentId:String):void {
-		
+	public function updateItem(itemId:String, parentId:String):void
+	{
 		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
 	}
 	
-	public function deleteItem(itemId:String):void {
-		
+	public function deleteItem(itemId:String):void
+	{
 		items.filterFunction = 
 			function (item:Object):Boolean {
 				return (item.fullPath.indexOf(itemId) != -1);
@@ -131,8 +119,8 @@ public class RenderManager implements IEventDispatcher {
 		items.refresh();
 	}
 	
-	public function lockItem(itemId:String):void {
-		
+	public function lockItem(itemId:String):void
+	{
 		if(!itemId && lockedItems[itemId])
 			return;
 		
@@ -141,8 +129,8 @@ public class RenderManager implements IEventDispatcher {
 		lockedItems[itemId] = '';
 	}
 	
-	public function getItemById(itemId:String):IItem {
-		
+	public function getItemById(itemId:String):IItem
+	{	
 		if(itemId) {
 			
 			var itemDescription:ItemDescription = getItemDescriptionById(itemId);
@@ -154,8 +142,8 @@ public class RenderManager implements IEventDispatcher {
 		return null;
 	}
 	
-	private function insertItem(itemName:String, itemId:String):IItem {
-		
+	private function insertItem(itemName:String, itemId:String):IItem
+	{	
 		var itemDescription:ItemDescription;
 		var isStatic:Boolean = false;
 		
@@ -198,8 +186,8 @@ public class RenderManager implements IEventDispatcher {
 		return container;
 	}
 	
-	private function deleteItemChildren(itemId:String):void {
-		
+	private function deleteItemChildren(itemId:String):void
+	{
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		
 		if(!itemDescription)
@@ -223,8 +211,8 @@ public class RenderManager implements IEventDispatcher {
 		items.refresh();
 	}
 	
-	private function createItemDescription(itemId:String = '', parentId:String = ''):ItemDescription {
-		
+	private function createItemDescription(itemId:String = '', parentId:String = ''):ItemDescription
+	{
 		var fullPath:String = '';
 		var staticFlag:String = 'none';
 		
@@ -258,8 +246,8 @@ public class RenderManager implements IEventDispatcher {
 		return itemDescription;
 	}
 	
-	private function updateItemDescription(itemId:String, itemXMLDescription:XML):ItemDescription {
-		
+	private function updateItemDescription(itemId:String, itemXMLDescription:XML):ItemDescription
+	{
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		var parentDescription:ItemDescription;
 		var newStaticFlag:String = itemDescription.staticFlag;
@@ -287,8 +275,8 @@ public class RenderManager implements IEventDispatcher {
 		return itemDescription;
 	}
 	
-	private function getItemDescriptionById(itemId:String):ItemDescription {
-		
+	private function getItemDescriptionById(itemId:String):ItemDescription
+	{
 		var searchObject:Object = {itemId:itemId};
 		
 		var isResult:Boolean = cursor.findAny(searchObject);
@@ -300,8 +288,8 @@ public class RenderManager implements IEventDispatcher {
 		return result;
 	}
 	
-	private function sortItems(parentId:String):Array {
-		
+	private function sortItems(parentId:String):Array
+	{
 		items.filterFunction = 
 			function (item:Object):Boolean {
 				return item.parentId == parentId;
@@ -330,14 +318,14 @@ public class RenderManager implements IEventDispatcher {
 		
 	}
 	
-	private function updateAttributesBeginHandler(event:DataManagerEvent):void {
-		
+	private function updateAttributesBeginHandler(event:DataManagerEvent):void
+	{
 		if(lockedItems[event.objectId] !== null)
 			lockedItems[event.objectId] = event.key;
 	}
 	
-	private function render(itemId:String, itemXMLDescription:XML):void {
-		
+	private function render(itemId:String, itemXMLDescription:XML):void
+	{	
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		
 		var item:Container = itemDescription.item as Container;
@@ -359,8 +347,7 @@ public class RenderManager implements IEventDispatcher {
 		if(itemDescription.staticFlag =='self' || itemDescription.staticFlag =='all')
 			IItem(item).isStatic = true;
 		
-		item.setStyle('backgroundColor', '#ffffff');
-		item.setStyle('backgroundAlpha', .0);
+		applyStyles(item, itemXMLDescription);
 		
 		for each(var childXMLDescription:XML in itemXMLDescription.*) {
 			
@@ -375,7 +362,7 @@ public class RenderManager implements IEventDispatcher {
 			case 'container':
 			
 			case 'table':
-			
+				
 			case 'row':
 			
 			case 'cell':
@@ -455,19 +442,10 @@ public class RenderManager implements IEventDispatcher {
 		
 		var arrayOfItems:Array = sortItems(itemId);
 		var count:uint = 0;
-		
-		/* for each (var collectionItem:Container in arrayOfItems) {
-			
-			if(collectionItem.parent) {
-				
-				collectionItem.parent.setChildIndex(collectionItem, count);
-				count++;
-			}
-		} */
 	}
 	
-	private function renderGraphics(item:Container, graphicsXMLDescription:XML):void {
-		
+	private function renderGraphics(item:Container, graphicsXMLDescription:XML):void
+	{	
 		var itemId:String = IItem(item).objectId;
 		var graphicsLayer:Canvas = IItem(item).graphicsLayer;
 
@@ -487,7 +465,7 @@ public class RenderManager implements IEventDispatcher {
 		currentSprite.graphics.lineStyle(NaN);
 			switch(childName) {
 			
-			case 'rectangle':
+			case 'rectangle': {
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100
@@ -518,9 +496,9 @@ public class RenderManager implements IEventDispatcher {
 				
 				graphicsLayer.rawChildren.addChild(currentSprite);
 						
-			break;
-				
-			case 'ellipse':
+				break;
+			}
+			case 'ellipse': {
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100
@@ -551,9 +529,9 @@ public class RenderManager implements IEventDispatcher {
 				
 				graphicsLayer.rawChildren.addChild(currentSprite);
 				
-			break
-				
-			case 'picture':
+				break
+			}
+			case 'picture': {
 					
 					var resourceId:String = childXMLDescription.@resource;
 					var img:Image = new Image();
@@ -584,9 +562,9 @@ public class RenderManager implements IEventDispatcher {
 					graphicsLayer.rawChildren.addChild(img);
 					
 					fileManager.loadResource(itemId, resourceId, img, 'source', true);
-			break;
-				
-			case 'line':
+				break;
+			}
+			case 'line': {
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100;
@@ -618,13 +596,51 @@ public class RenderManager implements IEventDispatcher {
 				
 				graphicsLayer.rawChildren.addChild(currentSprite);
 						
-			break;
+				break;
+			}
 			}
 		}
 	}
 	
-	private function renderWysiwygOkHandler(event:SoapEvent):void {
+	private function applyStyles(item:Container, itemXMLDescription:XML):void
+	{
+		var setBorder:Boolean = false;
 		
+		var alpha:Number = 1
+		var backgroundColor:Number = 0xFFFFFF;
+		
+		var borderThickness:Number = 1;
+		var borderColor:Number = 0x000000;
+		
+		if(itemXMLDescription.@color[0]) {
+			
+			alpha = 1;
+			backgroundColor = Number('0x' + itemXMLDescription.@color.toString().substring(1));
+		}
+		
+		if(itemXMLDescription.@stroke[0]) {
+			
+			setBorder = true;
+			borderColor = Number('0x' + itemXMLDescription.@stroke.toString().substring(1));
+		}
+		
+		
+		if(itemXMLDescription.@alpha[0])
+			alpha = Number(itemXMLDescription.@alpha)/100
+		
+		if(setBorder) {
+			
+			item.setStyle("borderStyle", "solid");
+			item.setStyle("borderThickness", borderThickness);
+			item.setStyle("borderColor", borderColor);
+		}
+		
+		item.setStyle('alpha', alpha);
+		item.setStyle('backgroundColor', backgroundColor);
+	}
+	
+	private function renderWysiwygOkHandler(event:SoapEvent):void
+	{
 		var itemXMLDescription:XML = event.result.Result.*[0];
 		
 		if(itemXMLDescription.@id.length() == 0) 
@@ -680,12 +696,12 @@ public class RenderManager implements IEventDispatcher {
 			for each (var p_collectionItem:Container in p_arrayOfItems) {
 				
 				if(p_collectionItem.parent) {
-					//trace(p_collectionItem.parent.getChildIndex(p_collectionItem))
 					p_collectionItem.parent.setChildIndex(p_collectionItem, p_count);
 					p_count++;
 				}
 			}
-		} else {
+		}
+		else {
 			
 			itemAsContainer.percentWidth = 100;
 			itemAsContainer.percentHeight = 100;
@@ -708,39 +724,41 @@ public class RenderManager implements IEventDispatcher {
 	/**
      *  @private
      */
-	public function addEventListener(
-		type:String, 
-		listener:Function, 
-		useCapture:Boolean = false, 
-		priority:int = 0, 
-		useWeakReference:Boolean = false):void {
-			dispatcher.addEventListener(type, listener, useCapture, priority);
+	public function addEventListener(	type:String, listener:Function, 
+										useCapture:Boolean = false, priority:int = 0, 
+										useWeakReference:Boolean = false):void
+	{
+		dispatcher.addEventListener(type, listener, useCapture, priority);
 	}
     /**
      *  @private
      */
-	public function dispatchEvent(evt:Event):Boolean{
+	public function dispatchEvent(evt:Event):Boolean
+	{
 		return dispatcher.dispatchEvent(evt);
 	}
     
 	/**
      *  @private
      */
-	public function hasEventListener(type:String):Boolean{
+	public function hasEventListener(type:String):Boolean
+	{
 		return dispatcher.hasEventListener(type);
 	}
     
 	/**
      *  @private
      */
-	public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void{
+	public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
+	{
 		dispatcher.removeEventListener(type, listener, useCapture);
 	}
     
     /**
      *  @private
      */            
-	public function willTrigger(type:String):Boolean {
+	public function willTrigger(type:String):Boolean
+	{
 		return dispatcher.willTrigger(type);
 	}
 }
