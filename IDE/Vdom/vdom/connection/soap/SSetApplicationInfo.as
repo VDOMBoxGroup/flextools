@@ -58,6 +58,7 @@ package vdom.connection.soap
 			{
 				evt = new SoapEvent(SoapEvent.SET_APLICATION_INFO_ERROR, resultXML);
 				dispatchEvent(evt);
+				trace(event.result);
 			} else{
 				evt = new SoapEvent(SoapEvent.SET_APLICATION_INFO_OK, resultXML);
 				dispatchEvent(evt);

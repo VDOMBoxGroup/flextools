@@ -570,6 +570,17 @@ package vdom.connection.soap
 			sRemoteMethodCall.execute(appid, objid, funcName, xmlParam);
 		}
 		
+		public  function search(appid:String='', pattern:String = ''):void 
+		{	
+			var sSearch:SSearch = SSearch.getInstance();
+			
+			sSearch.addEventListener(SoapEvent.SEARCH_OK, ldispatchEvent);
+			sSearch.addEventListener(SoapEvent.SEARCH_ERROR, ldispatchEvent);
+			
+			sSearch.execute(appid, pattern);
+		}
+		
+		
 		/**
 		 *  --------  Event Dispatcher -------------
 		 */

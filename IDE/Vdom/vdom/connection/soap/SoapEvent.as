@@ -49,6 +49,7 @@ package vdom.connection.soap
 		public static var SET_APPLICATION_EVENTS_OK 	:String = "setApplicationEventsOK";
 		public static var GET_THUMBNAIL_OK				:String = "getThumbnailOK";
 		public static var REMOTE_METHOD_CALL_OK			:String = "remoteMethodCallOK";
+		public static var SEARCH_OK						:String = "searchOK";
 		
 		//setAttributes
 		
@@ -95,6 +96,8 @@ package vdom.connection.soap
 		public static var SET_APPLICATION_EVENTS_ERROR 		:String = "setApplicationEventsERROR"; 
 		public static var GET_THUMBNAIL_ERROR				:String = "getThumbnailERROR";
 		public static var REMOTE_METHOD_CALL_ERROR			:String = "remoteMethodCallERROR";
+		public static var SEARCH_ERROR						:String = "searchERROR";
+		
 		
 		public function SoapEvent(type:String, 
 									result:XML = null, bubbles:Boolean = false,

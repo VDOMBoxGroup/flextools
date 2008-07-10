@@ -66,6 +66,7 @@ package vdom.connection.soap
 				evt = new SoapEvent(SoapEvent.LOGIN_ERROR);
 				evt.result = resultXML;
 				dispatchEvent(evt);
+				trace(event.result);
 				//Alert.show("ERROR!\nFrom: " + this.toString() )
 			} else{
 				

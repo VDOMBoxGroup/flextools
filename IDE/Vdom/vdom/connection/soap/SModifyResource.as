@@ -60,6 +60,7 @@ package vdom.connection.soap
 			{
 				evt = new SoapEvent(SoapEvent.MODIFY_RESOURSE_ERROR, resultXML);
 				dispatchEvent(evt);
+				trace(event.result);
 			} else{
 				evt = new SoapEvent(SoapEvent.MODIFY_RESOURSE_OK, resultXML);
 				dispatchEvent(evt);

@@ -54,6 +54,7 @@ package vdom.connection.soap
 			{
 				evt = new SoapEvent(SoapEvent.GET_CHILD_OBJECTS_TREE_ERROR, resultXML);
 				dispatchEvent(evt);
+				trace(event.result);
 			} else{
 				evt = new SoapEvent(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, resultXML);
 				dispatchEvent(evt);

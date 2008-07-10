@@ -62,6 +62,7 @@ package vdom.connection.soap
 			{
 				evt = new SoapEvent(SoapEvent.REMOTE_METHOD_CALL_ERROR, resultXML);
 				dispatchEvent(evt);
+				trace(event.result);
 			} else{
 				evt = new SoapEvent(SoapEvent.REMOTE_METHOD_CALL_OK, resultXML);
 				dispatchEvent(evt);
