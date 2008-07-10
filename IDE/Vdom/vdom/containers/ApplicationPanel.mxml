@@ -27,7 +27,9 @@
 			
 			oldXMLList = value;
 			_applicationTitleList.dataProvider = _dataProvider = new XMLListCollection(value);
-			
+			_applicationTitleList.selectedIndex = 0;
+		
+			switchSelection(value[0].@ID);
 			var evt:ListEvent = new ListEvent('applicationChanged');
 			dispatchEvent(evt);
 		}
@@ -39,22 +41,27 @@
 			} else {
 				return null;
 			}
-				
 		}
 		
 		public function set applicationId(value:String):void
 		{	
-			if(!value)
+			if(!value || _applicationId == value)
 				return;
 			
-			if(_applicationId != value) {
-				
-				var currentElement:XML = oldXMLList.(@ID == value)[0];
-				var index:int = _dataProvider.getItemIndex(currentElement);
-				_applicationTitleList.selectedIndex = index;
-				_applicationTitleList.scrollToIndex(index);
-			}
-				
+			switchSelection(value);
+		}
+		
+		private function switchSelection(value:String):void
+		{
+			var currentElement:XML = oldXMLList.(@ID == value)[0];
+			var index:int = _dataProvider.getItemIndex(currentElement);
+			
+			if(_applicationTitleList.selectedIndex == index)
+				return;
+			
+			_applicationTitleList.selectedIndex = index;
+			_applicationTitleList.scrollToIndex(index);
+			
 			_applicationId = value;
 		}
 		

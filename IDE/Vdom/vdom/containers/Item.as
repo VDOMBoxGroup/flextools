@@ -12,8 +12,8 @@ import vdom.managers.wc;
 
 use namespace mx.core.mx_internal;
 
-public class Item extends Canvas implements IItem {
-	
+public class Item extends Canvas implements IItem
+{	
 	private var _objectId:String;
 	private var _waitMode:Boolean;
 	private var _highlightMarker:Canvas;
@@ -22,12 +22,8 @@ public class Item extends Canvas implements IItem {
 	private var _isStatic:Boolean = false;
 	private var _editableAttributes:Array = [];
 	
-	private var _child:DisplayObject;
-	
-	
 	public function Item(objectId:String)
 	{
-		
 		super();
 		
 		_objectId = objectId;

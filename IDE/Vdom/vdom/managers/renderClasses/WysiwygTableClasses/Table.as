@@ -14,8 +14,8 @@ import vdom.managers.wc;
 
 use namespace mx.core.mx_internal;
 
-public class Table extends Grid implements IItem {
-	
+public class Table extends Grid implements IItem
+{	
 	private var _objectId:String;
 	private var _waitMode:Boolean;
 	private var _highlightMarker:Canvas;
@@ -23,7 +23,6 @@ public class Table extends Grid implements IItem {
 	private var _waitLayout:UIComponent;
 	private var _isStatic:Boolean = false;
 	private var _editableAttributes:Array = [];
-	
 	
 	public function Table(objectId:String)
 	{
@@ -47,7 +46,7 @@ public class Table extends Grid implements IItem {
 	{	
 		if(value) {
 			
-			setChildIndex(_waitLayout, numChildren-1);
+			bringOnTop();
 			
 			_waitLayout.width = width;
 			_waitLayout.height = height;
@@ -105,11 +104,11 @@ public class Table extends Grid implements IItem {
 		if(!_waitLayout)
 			_waitLayout = new wc();
 		
-		_waitLayout.visible = true;		
+		_waitLayout.visible = false;		
 		_waitLayout.width = 0;
 		_waitLayout.height = 0;
 		
-		addChild(_waitLayout);
+		rawChildren.addChild(_waitLayout);
 	}
 	
 	override public function removeAllChildren():void
@@ -211,6 +210,11 @@ public class Table extends Grid implements IItem {
 		
 		if(highlightMarkerIndex != topIndex)
 			rawChildren.setChildIndex(_highlightMarker, topIndex);
+		
+		var waitLayoutIndex:int = rawChildren.getChildIndex(_waitLayout);
+		
+		if(waitLayoutIndex != topIndex-1)
+			rawChildren.setChildIndex(_waitLayout, topIndex-1);
 	}
 }
 }
