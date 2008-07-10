@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalAlign="center">
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	horizontalAlign="center"
+	
+	mouseDown="dragIt(event);">
+	
 <mx:Script>
 	<![CDATA[
 	import vdom.managers.VdomDragManager;
