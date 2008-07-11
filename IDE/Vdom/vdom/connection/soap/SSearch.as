@@ -38,7 +38,7 @@ package vdom.connection.soap
 			var skey:String  		= code.skey();	//- очередной ключ сессии 
 			
 			//send data & set listener 
-			ws.search(sid, skey, pattern);
+			ws.search(sid, skey, appid, pattern);
 		}
 		
 		
