@@ -84,7 +84,7 @@ package vdom.controls.externalEditorButton
 			} 
 		}
 
-//		----- Loading and executing external application methods ----------------------------- 
+//		----- Loading and executing external application ------------------------------------- 
 
 		public function set resource(resource:Object):void {			
 			/* Loading nested application */
@@ -97,11 +97,11 @@ package vdom.controls.externalEditorButton
 			
 			/* Temporary procedures for testing local external components */ 
 //			var dbExtEditor:URLRequest = new URLRequest("C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf");
-			var dbExtEditor:URLRequest = new URLRequest("C:/Users/koldoon/Documents/Flex Builder 3/dbDataEditor/bin-debug/dbDataEditor.swf");
-			ldr.load(dbExtEditor, loaderContext);
+//			var dbExtEditor:URLRequest = new URLRequest("C:/Users/koldoon/Documents/Flex Builder 3/dbDataEditor/bin-debug/dbDataEditor.swf");
+//			ldr.load(dbExtEditor, loaderContext);
 			/* end of -- Temporary procedures for testing local external components */
 			
-//			ldr.loadBytes(resource.data, loaderContext);
+			ldr.loadBytes(resource.data, loaderContext);
 		}
         
 		private function applicationLoaded(event:Event):void {
