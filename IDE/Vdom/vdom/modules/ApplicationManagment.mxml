@@ -5,12 +5,13 @@
 	xmlns:main="vdom.components.main.*"
 	xmlns:createApplication="vdom.components.createApplication.*"
 	xmlns:applicationProperties="vdom.components.applicationProperties.*"
+	xmlns:editApplication="vdom.components.editApplication.*"
 	
 	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
 	hide="hideHandler();" 
 	
-	creationPolicy="all" xmlns:editApplication="vdom.components.editApplication.*">
+	creationPolicy="all" xmlns:searchResult="vdom.components.searchResult.*">
 	
 <mx:Script source="includes/applicationManagment.as" />
 
@@ -30,36 +31,19 @@
 		
 		<controls:ActionButton styleName="newButton"
 			label="{resourceManager.getString('Application','main_new')}"
-			labelPlacement="bottom"
 			click="switchToCreate()"/>
 		
-		<!--<controls:ActionButton styleName="newsButton"
-			label="{resourceManager.getString('Application','main_steps')}"
-			labelPlacement="bottom"/>-->
-
-		<controls:ActionPanel panelName="{resourceManager.getString('Application','main_search')}"
-			width="250" height="86" dropShadowEnabled="false">
-		
-			<mx:HBox width="100%">
-				<mx:Button label="Find" height="50" cornerRadius="0"/>
-				<mx:VBox width="100%" horizontalAlign="right" verticalGap="4">
-					<mx:TextInput height="18"/>
-					<mx:ComboBox height="18" cornerRadius="0"></mx:ComboBox>
-					<mx:Button label="Go" height="18" cornerRadius="0"/>
-				</mx:VBox>
-			</mx:HBox>
-			
-		</controls:ActionPanel>
+		<controls:searchPanel id="searchPanel"
+			panelName="{resourceManager.getString('Application','main_search')}"
+			width="250" height="86" />
 		
 		<controls:ApplicationPanel id="listApplicationContainer"
-			dropShadowEnabled="false"
 			panelName="{resourceManager.getString('Application','main_applist')}" 
 			height="86" />
 		
 		<controls:ApplicationInformation
 			panelName="{resourceManager.getString('Application','main_appinfo')}"
 			height="86" 
-			dropShadowEnabled="false"
 			dataProvider="{dataManager.currentApplicationInformation}" />
 		
 	</controls:ControlPanel>
@@ -74,10 +58,13 @@
 		<createApplication:CreateApplication id="createApplication"
 			width="100%" height="100%" />
 		
-		<applicationProperties:applicationProperties id="applicationProperties" 
+		<applicationProperties:ApplicationProperties id="applicationProperties" 
 			width="100%" height="100%" />
 			
-		<editApplication:editApplication id="editApplication"
+		<editApplication:EditApplication id="editApplication"
+			width="100%" height="100%" />
+		
+		<searchResult:SearchResult id="searchResult"
 			width="100%" height="100%" />
 	</mx:ViewStack>
 	

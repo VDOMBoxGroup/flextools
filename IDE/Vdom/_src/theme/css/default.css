@@ -28,6 +28,12 @@ WindowedApplication {
 	borderStyle: none;	
 }
 
+AdvancedDataGrid {
+	
+	disclosureClosedIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureClosedIcon");
+	disclosureOpenIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureOpenIcon");
+}
+
 Alert {
 	
 	modalTransparencyDuration:0;
@@ -209,135 +215,6 @@ AdvancedTabNavigator {
 	borderStyle: none;
 }
 
-TypeAccordion {
-	
-	borderThickness: 1;
-	borderColor: #ffffff;
-	borderStyle: solid;
-	textAlign:center;
-	backgroundColor: #c2c2c2;
-	
-	headerStyleName: "typesHeaderStyle" ;
-}
-
-.typesHeaderStyle {
-	
-	color: #ffffff;
-	highlightAlphas: .3, .3;
-	selectedFillColors: #d91107, #d91107;
-	textRollOverColor:#ffffff;
-	textSelectedColor:#ffffff; 
-	fillAlphas:1, 1;
-	fillColors:#d91107, #d91107;
-	textAlign: center;
-}
-
-.typeVScrollBar {
-	themeColor: #ff0000;	
-}
-
-ClosablePanel {
-	
-	paddingTop: 5;
-	paddingBottom: 5;
-	paddingLeft: 5;
-	paddingRight: 5;
-	cornerRadius: 0;
-	headerHeight: 20;
-	backgroundColor: #ffffff;
-	borderThicknessLeft: 0;
-	borderThicknessRight: 0;
-	
-	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackgroundSmall");
-	
-	CollapseButtonOnButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnUp");
-	CollapseButtonOnButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnOver");
-	CollapseButtonOnButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDown");
-	CollapseButtonOnButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDisabled");
-	
-	CollapseButtonOffButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffUp");
-	CollapseButtonOffButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffOver");
-	CollapseButtonOffButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDown");
-	CollapseButtonOffButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDisabled");
-	
-	titleStyleName: closablePanelTitle;
-}
-
-.closablePanelTitle {
-	fontWeight: "bold"; 
-	color: #ffffff;
-}
-
-AttributesPanel {
-	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackground");
-	buttonSkin: Embed(source="vdomTheme.swf", symbol="AttributesPanelButton");
-	controlBarStyleName: "attributesControlBar";
-	statusStyleName: "attributesStatusField";
-	titleStyleName: "attributesTitlesField";
-}
-
-.attributesStatusField {
-	
-	color: #ffffff;
-	textAlign: center;
-}
-
-.attributesTitlesField {
-	
-	color: #ffffff;
-	fontWeight: "bold"; 
-}
-
-.attributesControlBar {
-	
-	paddingTop: 5;
-	paddingBottom: 5;
-	paddingLeft: 5;
-	paddingRight: 5;
-}
-
-ActionPanel {
-	
-	color: #ffffff;
-	borderAlpha: 1;	
-	headerColors: #4e84df, #0f6cc3;
-	footerColors: #d91107, #d91107;
-	headerHeight: 0;
-	fontWeight: bold;
-	roundedBottomCorners: true;
-	cornerRadius: 0;
-	paddingTop: 5;
-	paddingBottom: 0;
-	paddingLeft: 0;
-	paddingRight: 0;
-	highlightAlphas: 0, 0.12;
-	backgroundColor: #484848;
-	layout: absolute;
-	borderColor: #ffffff;
-	borderStyle: solid;
-	borderThickness: 1;
-	controlBarStyleName: actionPanelBar;
-}
-
-.actionPanelBar {
-	paddingTop: 0;
-	paddingBottom: 0;
-	paddingLeft: 0;
-	paddingRight: 0;
-	backgroundImage: Embed(source="vdomTheme.swf", symbol="ActionPanelBar");
-	backgroundSize: "100%";
-}
-
-WorkArea {
-	
-	dropShadowEnabled: true;
-	backgroundColor: #ffffff;
-	backgroundAlpha: 1.0; 
-	borderStyle: solid; 
-	borderThickness: 1;
-	borderColor: #000000;
-}
-
 ControlBar {
 	
 	backgroundAlpha: 1;
@@ -345,10 +222,4 @@ ControlBar {
 	paddingBottom: 0;
 	paddingLeft: 0;
 	paddingRight: 0;
-}
-
-.actionPanlelLabel {
-	
-	fontFamily: Verdana;
-	textAlign: center;
 }

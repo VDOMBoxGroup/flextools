@@ -290,7 +290,11 @@ public class WorkArea extends VBox {
 		if(IItem(event.result).objectId == _pageId)
 			resizeManager.init(_contentHolder);
 
-		if(event.result == _selectedObject && _contentToolbar) {
+		if(
+			event.result == _selectedObject && 
+			_contentToolbar && 
+			IItem(event.result).editableAttributes[0]
+		) {
 			
 			var obj:* = IItem(event.result).editableAttributes[0].sourceObject;
 			_contentToolbar.init(IItem(event.result), obj);

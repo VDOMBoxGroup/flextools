@@ -560,14 +560,16 @@ package vdom.connection.soap
 		}
 		
 		
-		public  function remoteMethodCall(appid:String='', objid:String = '', funcName:String = '', xmlParam:String = ''):void 
+		public  function remoteMethodCall(appid:String='', objid:String = '', funcName:String = '', xmlParam:String = ''):String 
 		{	
 			var sRemoteMethodCall:SRemoteMethodCall = SRemoteMethodCall.getInstance();
 			
 			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METHOD_CALL_OK, ldispatchEvent);
 			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METHOD_CALL_ERROR, ldispatchEvent);
 			
-			sRemoteMethodCall.execute(appid, objid, funcName, xmlParam);
+			var key:String = sRemoteMethodCall.execute(appid, objid, funcName, xmlParam);
+			
+			return key;
 		}
 		
 		public  function search(appid:String='', pattern:String = ''):void 

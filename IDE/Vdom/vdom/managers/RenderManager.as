@@ -111,7 +111,8 @@ public class RenderManager implements IEventDispatcher {
 		
 		var currentItem:Container = ItemDescription(cursor.current).item as Container;
 		
-		currentItem.parent.removeChild(currentItem);
+		if(currentItem && currentItem.parent)
+			currentItem.parent.removeChild(currentItem);
 		
 		items.removeAll();
 		
@@ -167,6 +168,8 @@ public class RenderManager implements IEventDispatcher {
 		case 'table':
 		 
 			container = new Table(itemId);
+			Table(container).setStyle("horizontalGap", 0);
+			Table(container).setStyle("verticalGap", 0);
 		break;
 		
 		case 'row':
@@ -422,7 +425,7 @@ public class RenderManager implements IEventDispatcher {
 						'<html><head>' + 
 						'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
 						'</head>' +
-						'<body style="margin:5px;">' +
+						'<body style="margin:0px;">' +
 						HTMLText +
 						'</body></html>';
 				

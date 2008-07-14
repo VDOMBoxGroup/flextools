@@ -61,6 +61,7 @@ public class DataManagerEvent extends Event
 	public static const STRUCTURE_LOADED:String = 'structureLoaded';
 	public static const STRUCTURE_SAVED:String = 'structureSaved';
 	
+	public static const SEARCH_COMPLETE:String = 'searchComplete';
 
     // Define a public variable to hold the state of the enable property.
 	public var isEnabled:Boolean;

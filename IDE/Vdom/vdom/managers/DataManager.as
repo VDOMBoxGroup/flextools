@@ -188,7 +188,14 @@ public class DataManager implements IEventDispatcher {
 		
 		soap.removeEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
 		
-		_listApplication = event.result.Applications.*;
+		var tempApplicationList:XMLList = event.result.Applications.*;
+		
+		for each(var applicationNode:XML in tempApplicationList) {
+			
+			applicationNode.@Name = applicationNode.Information.Name[0];
+			applicationNode.@IconID = applicationNode.Information.Icon[0];
+		}
+		_listApplication = tempApplicationList;
 		
 		dispatchEvent(new Event('listApplicationChanged'));
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.INIT_COMPLETE));
@@ -264,8 +271,6 @@ public class DataManager implements IEventDispatcher {
 		_currentPage = null;
 		_currentPageId = null;
 		
-//		var application:XML = new XML(_listApplication.(@ID == applicationId)[0]);
-		
 		var application:XML = _listApplication.(@ID == applicationId)[0];
 		
 		if(application && application.Information.Name) {
@@ -288,6 +293,19 @@ public class DataManager implements IEventDispatcher {
 			soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
 			soap.getChildObjectsTree(_currentApplicationId, pageId);
 		}
+	}
+	
+	public function search(applicationId:String, searchString:String):void
+	{
+		soap.addEventListener(SoapEvent.SEARCH_OK, searchHandler);
+		soap.search(applicationId, searchString);
+	}
+	
+	private function searchHandler(event:SoapEvent):void
+	{
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.SEARCH_COMPLETE);
+		dme.result = event.result.SearchResult[0];
+		dispatchEvent(dme);
 	}
 	
 	/**
@@ -420,7 +438,7 @@ public class DataManager implements IEventDispatcher {
 		
 		
 		dmEvent.objectId = objectId
-		dmEvent.result = <Result> {result} </Result>;
+		dmEvent.result = <Result>{result}</Result>;
 		dispatchEvent(dmEvent);
 	}
 	
@@ -592,6 +610,12 @@ public class DataManager implements IEventDispatcher {
 			
 		if(application)
 			application.Information[0] = information;
+		
+		if(information.Name[0] && application.@Name[0] != information.Name[0])
+			application.@Name = information.Name[0];
+			
+		if(information.Icon[0] && application.@IconID[0] != information.Icon[0])
+			application.@IconID = information.Icon[0];
 		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_CHANGED);
 		dispatchEvent(dme);

@@ -33,7 +33,7 @@ package vdom.connection.soap
 			return instance;
 		}
 		
-		public function execute(appid:String, objid:String, func_name:String, xml_param:String):void
+		public function execute(appid:String, objid:String, func_name:String, xml_param:String):String
 		{
 			// protect
 			var sid:String			= code.sessionId;		// - идентификатор сессии 
@@ -43,6 +43,7 @@ package vdom.connection.soap
 			
 			//send data & set listener 
 			ws.remote_method_call(sid, skey, appid, objid, func_name, xml_param);
+			return skey;
 		}
 		
 		

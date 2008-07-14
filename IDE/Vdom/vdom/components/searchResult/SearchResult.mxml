@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:containers="vdom.containers.*"
+	
+	show="showHandler();" >
+	
+	<mx:Script source="includes/searchResult.as" />
+	<mx:HBox width="100%"
+		paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5">
+		<mx:Button label="Expand All" cornerRadius="0" click="expandAll();"/>
+		<mx:Button label="Collapse All" cornerRadius="0" click="collapseAll();"/>
+		<mx:Button label="Go to Editor" cornerRadius="0" click="goToEdit();"/>
+	</mx:HBox>
+	<mx:Label fontSize="14" fontWeight="bold" id="applicationName"/>
+	<containers:SearchDataGrid id="searchDataGrid" 
+		showHeaders="false" sortableColumns="false" width="100%" height="100%" borderStyle="none" backgroundAlpha="0.0"
+		folderClosedIcon="{null}"
+		folderOpenIcon="{null}"
+		defaultLeafIcon="{null}"
+		verticalSeparatorSkin="{null}"
+		selectionMode="singleRow">
+		<containers:columns>
+			<mx:AdvancedDataGridColumn dataField="" width="30"/>
+			<mx:AdvancedDataGridColumn dataField="@Name"/>
+		</containers:columns>
+	</containers:SearchDataGrid>
+</mx:VBox>

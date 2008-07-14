@@ -20,6 +20,8 @@ public class ActionButton extends Button {
 	public function ActionButton() {
 		
 		super();
+		
+		labelPlacement = "bottom";
 	}
 	
 	override protected function commitProperties():void {

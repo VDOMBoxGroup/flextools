@@ -48,7 +48,7 @@
 		 			<modules:ApplicationManagment id="applicationManagmentModule"
 		 				label="{resourceManager.getString('Application','main_title')}"/>
 		 	
-		 			<modules:Editor
+		 			<modules:Editor id="editorModule"
 		 				label="{resourceManager.getString('Application','editor_title')}" 
 		 				width="100%" height="100%"/>
 				</controls:MainTabNavigator>

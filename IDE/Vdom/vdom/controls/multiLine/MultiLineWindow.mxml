@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" showCloseButton="true" cornerRadius="0" width="400" height="300">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" showCloseButton="true" cornerRadius="0" width="500" height="300">
 <mx:Script>
 <![CDATA[
-	import mx.events.CloseEvent;
-	import mx.core.Application;
-	import mx.managers.PopUpManager;
-	import vdom.events.MultiLineWindowEvent;
+import mx.core.IUITextField;
+import vdom.managers.DataManager;
+
+import mx.events.CloseEvent;
+import mx.core.Application;
+import mx.managers.PopUpManager;
+import vdom.events.MultiLineWindowEvent;
+
+[Bindable]
+private var dataManager:DataManager = DataManager.getInstance();
 
 private static var wnd:MultiLineWindow;
+
 private var f_apply_flag:Boolean;
 private var par:DisplayObject;
 
@@ -18,8 +25,8 @@ public static function show_window(title:String, attrVal:String, parent:DisplayO
 {
 	if (wnd == null) {
 		wnd = new MultiLineWindow();
-		//wnd.addEventListener(CloseEvent.CLOSE, on_close_event);
 	}
+	
 	wnd.addEventListener(mx.events.CloseEvent.CLOSE, on_close_event)
 	wnd.title = title;
 	wnd.par = parent;
@@ -35,15 +42,11 @@ public static function show_window(title:String, attrVal:String, parent:DisplayO
 
 }
 
-/* private function get attrValue():String {
-	
-	return textAreaContainer.text;
+private function init():void
+{
+	var tf:IUITextField = textAreaContainer.mx_internal::getTextField();
+	tf.alwaysShowSelection = true;
 }
-
-private function set attrValue(attrVal:String):void {
-	
-	textAreaContainer.text = attrVal;
-} */
 
 private function ok_close_window():void
 {
@@ -79,8 +82,13 @@ private static function on_close_event(event:CloseEvent):void
 }
 ]]>
 </mx:Script>
-	<mx:TextArea width="100%" height="100%" id="textAreaContainer" text="{attributeValue}"/>
+	<mx:TextArea width="100%" height="100%" id="textAreaContainer" creationComplete="init();" text="{attributeValue}"/>
 	<mx:ControlBar horizontalAlign="right">
+		<mx:Label text="Pages"/>
+		<mx:ComboBox width="130" cornerRadius="0" dataProvider="{dataManager.listPages}" labelField="@Name"/>
+		<mx:Label text="Resources"/>
+		<mx:ComboBox width="130" cornerRadius="0"></mx:ComboBox>
+		<mx:Spacer width="100%"/>
 		<mx:Button label="Apply" cornerRadius="0" click="ok_close_window()"/>
 	</mx:ControlBar>
 </mx:TitleWindow>

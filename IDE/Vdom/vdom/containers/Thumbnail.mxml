@@ -17,13 +17,13 @@
 			override public function set data(value:Object):void {
 				
 				super.data = value;
-				labelValue = value.Information.Name;
-				if(value.Information.Icon == '')
+				labelValue = value.@Name;
+				if(value.@IconID == '')
 					_source = Application.application.getStyle('appIconFile');
 				else {
 					
 					var fileManager:FileManager = FileManager.getInstance();
-					fileManager.loadResource(value.Information.Id, value.Information.Icon, this, 'resource', true);
+					fileManager.loadResource(value.Information.Id, value.@IconID, this, 'resource', true);
 				} 
 			}
 			

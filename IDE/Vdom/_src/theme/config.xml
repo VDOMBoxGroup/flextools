@@ -7,8 +7,18 @@
 	</include-file>
 				
 	<include-file>
+		<name>applicationManagment.css</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\css\applicationManagment.css</path>
+	</include-file>
+				
+	<include-file>
 		<name>default.css</name>
 		<path>D:\_Workspaces\VdomIDE\_src\theme\css\default.css</path>
+	</include-file>
+				
+	<include-file>
+		<name>editor.css</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\css\editor.css</path>
 	</include-file>
 				
 	<include-file>
@@ -159,6 +169,11 @@
 	<include-file>
 		<name>tree_s.png</name>
 		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\tree_s.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>vdomTheme.swc</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\swf\vdomTheme.swc</path>
 	</include-file>
 				
 	<include-file>

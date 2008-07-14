@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionPanel xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Script>
+	<![CDATA[
+		import vdom.events.SearchPanelEvent;
+	import mx.utils.StringUtil;
+	import mx.collections.XMLListCollection;
+	
+	[Bindable]
+	private var _listApplication:XMLListCollection;
+	
+	public function set listApplication(value:XMLList):void
+	{
+		if(!value)
+			return;
+			
+		_listApplication = new XMLListCollection(value);
+	}
+	
+	private function search():void
+	{
+		var searchString:String = StringUtil.trim(searchField.text);
+		
+		if(!searchString || 
+			!applicationList.selectedItem || 
+			!applicationList.selectedItem.@ID[0]
+		)
+			return;
+		
+		var spe:SearchPanelEvent = new SearchPanelEvent(
+			SearchPanelEvent.SEARCH_PARAM_CHANGED
+		);
+		
+		spe.applicationId = applicationList.selectedItem.@ID[0];
+		spe.searchString = searchString;
+		
+		dispatchEvent(spe);
+	}
+	]]>
+</mx:Script>
+<mx:HBox width="100%">
+	<mx:VBox horizontalAlign="left" verticalGap="4" width="100%">
+		<mx:TextInput id="searchField"/>
+		<mx:ComboBox id="applicationList"
+			dataProvider="{_listApplication}"
+			labelField="@Name"
+			cornerRadius="0"/>
+	</mx:VBox>
+	<mx:Button label="Find" height="50" cornerRadius="0" click="search();"/>
+</mx:HBox>
+</ActionPanel>

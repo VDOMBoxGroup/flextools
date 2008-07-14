@@ -1,0 +1,96 @@
+TypeAccordion {
+	
+	borderThickness: 1;
+	borderColor: #ffffff;
+	borderStyle: solid;
+	textAlign:center;
+	backgroundColor: #c2c2c2;
+	
+	headerStyleName: "typesHeaderStyle" ;
+}
+
+.typesHeaderStyle {
+	
+	color: #ffffff;
+	highlightAlphas: .3, .3;
+	selectedFillColors: #d91107, #d91107;
+	textRollOverColor:#ffffff;
+	textSelectedColor:#ffffff; 
+	fillAlphas:1, 1;
+	fillColors:#d91107, #d91107;
+	textAlign: center;
+}
+
+.typeVScrollBar {
+	themeColor: #ff0000;	
+}
+
+ClosablePanel {
+	
+	paddingTop: 5;
+	paddingBottom: 5;
+	paddingLeft: 5;
+	paddingRight: 5;
+	cornerRadius: 0;
+	headerHeight: 20;
+	backgroundColor: #ffffff;
+	borderThicknessLeft: 0;
+	borderThicknessRight: 0;
+	
+	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackgroundSmall");
+	
+	CollapseButtonOnButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnUp");
+	CollapseButtonOnButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnOver");
+	CollapseButtonOnButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDown");
+	CollapseButtonOnButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOnDisabled");
+	
+	CollapseButtonOffButtonUp: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffUp");
+	CollapseButtonOffButtonOver: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffOver");
+	CollapseButtonOffButtonDown: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDown");
+	CollapseButtonOffButtonDisabled: Embed(source="vdomTheme.swf", symbol="CollapseButtonOffDisabled");
+	
+	titleStyleName: closablePanelTitle;
+}
+
+.closablePanelTitle {
+	fontWeight: "bold"; 
+	color: #ffffff;
+}
+
+AttributesPanel {
+	titleBackgroundSkin: Embed(source="vdomTheme.swf", symbol="TitleBackground");
+	buttonSkin: Embed(source="vdomTheme.swf", symbol="AttributesPanelButton");
+	controlBarStyleName: "attributesControlBar";
+	statusStyleName: "attributesStatusField";
+	titleStyleName: "attributesTitlesField";
+}
+
+.attributesStatusField {
+	
+	color: #ffffff;
+	textAlign: center;
+}
+
+.attributesTitlesField {
+	
+	color: #ffffff;
+	fontWeight: "bold"; 
+}
+
+.attributesControlBar {
+	
+	paddingTop: 5;
+	paddingBottom: 5;
+	paddingLeft: 5;
+	paddingRight: 5;
+}
+
+WorkArea {
+	
+	dropShadowEnabled: true;
+	backgroundColor: #ffffff;
+	backgroundAlpha: 1.0; 
+	borderStyle: solid; 
+	borderThickness: 1;
+	borderColor: #000000;
+}
