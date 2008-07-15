@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="GeomLib.GeomUtils"/>
+<classEntry path="GeomLib._2D.Circle"/>
+<classEntry path="GeomLib._2D.Ellipse"/>
+<classEntry path="GeomLib._2D.I2DObject"/>
+<classEntry path="GeomLib._2D.LineSegment"/>
+<classEntry path="GeomLib._2D.Polygon"/>
+<classEntry path="GeomLib._3D.Point3D"/>
+</includeClasses>
+<includeResources/>
+<namespaceManifests/>
+</flexLibProperties>
