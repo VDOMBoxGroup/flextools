@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="DiagramAPI.com.Connector"/>
+<classEntry path="DiagramAPI.com.baseClasses.BaseConnector"/>
+<classEntry path="DiagramAPI.com.baseClasses.InteractivePoint"/>
+<classEntry path="DiagramAPI.com.baseClasses.InteractiveContext"/>
+<classEntry path="DiagramAPI.com.ConnectorEvent"/>
+<classEntry path="DiagramAPI.com.InteractiveConnector"/>
+<classEntry path="DiagramAPI.com.baseClasses.MoveEvent"/>
+<classEntry path="DiagramAPI.com.baseClasses.BaseBoundContainer"/>
+<classEntry path="DiagramAPI.com.NodeContainer"/>
+</includeClasses>
+<includeResources/>
+<namespaceManifests/>
+</flexLibProperties>
