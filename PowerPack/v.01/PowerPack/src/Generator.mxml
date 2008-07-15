@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:ExtendedAPI="ExtendedAPI.com.controls.*"
+	xmlns:resources="PowerPack.customize.*"
+	width="770" height="450" verticalAlign="middle" horizontalAlign="center" layout="absolute"	 
+	showStatusBar="false" showGripper="false"
+	title="{LanguageManager.sentences.app_title}"
+	titleIcon="@Embed(source='assets/icons/icon_16.png')" 
+	titleBarFactory="PowerPack.customize.core.windowClasses.GeneratorTitleBar"
+	statusBarFactory="PowerPack.customize.core.windowClasses.SuperStatusBar"	
+	initialize="init()" 
+	applicationComplete="show()">
+	
+	<mx:Style source="style/generator.css"/>
+	<mx:Fade alphaFrom="0.0" alphaTo="1.0" duration="300" id="canvasShow"/>
+	<mx:Fade alphaFrom="1.0" alphaTo="0.0" duration="300" id="canvasHide"/>
+
+ 	<mx:Parallel id="picShow">
+    	<mx:Move xBy="20" xTo="{tplPic.x}" duration="400"/>
+    	<mx:Fade alphaFrom="0" alphaTo="1" duration="400"/>
+  	</mx:Parallel>	
+
+	<resources:GeneratorResources id="resources"/>
+	
+    <mx:XML format="e4x" id="fileMenuData">
+        <root> 
+	        <menuitem label="{LanguageManager.sentences.menu_file}" id="file">
+	            <menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file"/>
+	            <!--menuitem label="{LanguageManager.sentences.menu_run_template}" id="run_template" enabled="false"/-->
+	            <menuitem type="separator"/>
+	            <menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>                                                
+	        </menuitem>
+	        <menuitem label="{LanguageManager.sentences.menu_parameters}" id="parameters">
+	            <menuitem label="{LanguageManager.sentences.menu_language}" id="language"/>        
+	            <menuitem label="{LanguageManager.sentences.menu_connection}" id="connection"/>        
+	            <menuitem label="{LanguageManager.sentences.menu_properties}" id="properties"/>        
+	        </menuitem>        
+	        <menuitem label="?" id="help"/>
+        </root>
+    </mx:XML>
+    	
+	<mx:Script>
+		<![CDATA[
+			import PowerPack.com.menu.MenuGeneral;
+			import PowerPack.com.dialog.GenConnection;
+			import PowerPack.com.dialog.GenProperties;
+			import mx.events.EffectEvent;
+			import mx.events.IndexChangedEvent;
+			import PowerPack.com.gen.Template;
+			import PowerPack.com.dialog.ModalDialog;
+			import PowerPack.com.dialog.TemplateKey;
+			import PowerPack.com.gen.structs.TemplateStruct;
+			import PowerPack.com.managers.ProgressManager;
+			import ExtendedAPI.com.utils.FileUtils;
+			import mx.utils.StringUtil;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import PowerPack.com.managers.ContextManager;
+			import PowerPack.com.managers.LanguageManager;			
+			import mx.controls.ProgressBarMode;
+			
+			private var vsLastChanged:DisplayObject;
+			
+			private function init():void 
+			{
+				var defaultCaptions:Object = {
+
+					app_title:"Power Pack Player",
+					msg_input_template_key: "Please, input valid template key",	
+					msg_exit_app:"Are you sure want to exit?",
+					msg_tpl_proceed_with_errs: "Error(s) exist in template\nProceed with launch?",
+					msg_gen_welcome: "Lorem ipsum dolor sit amet",
+					msg_gen_finish: "Lorem ipsum dolor sit amet",
+					
+					prgrs_gen_tpl: "Generating application xml. Progress %3%%",
+					prgrs_save_to_server_tpl: "Saving to server. Progress %3%%",
+					prgrs_save_to_file_tpl: "Saving to file. Progress %3%%",
+					prgrs_launch_app: "Launching %3%%",
+					
+					errs_in_tpl: "Errors in template",
+					menu_run_template:"_Run",
+					gen_result: "Result"
+				};
+				
+				LanguageManager.setSentences(defaultCaptions);				
+			}
+			
+			private function show():void
+			{
+				addEventListener(Event.CLOSING, closingApplicationHandler);
+	       		
+	       		function closingApplicationHandler(event:Event):void {
+	       			event.preventDefault();
+	       			exitApplication();	   
+	       		}
+	       					
+				var file:File;
+				var fileStream:FileStream;
+				
+        	    for each ( file in [ContextManager.instance.dataStorage, 
+        	    					ContextManager.instance.settingStorage] )
+        	    {
+        	    	if(!file.exists)
+        	    		file.createDirectory();
+        	    }
+        	    
+				// Load application settings
+	            ContextManager.loadSettings();
+	            
+	            // Fill language menu
+	            MenuGeneral.updateLangMenu(fileMenuData);
+	            
+	            // fill last files menu
+	            MenuGeneral.updateLastFilesMenu(fileMenuData);
+	            
+				// Load language file
+				file = File.applicationDirectory.resolvePath("lang/"+ContextManager.instance.lang.file);
+	            if(file && file.exists)
+	            {
+					fileStream = new FileStream();									
+					fileStream.addEventListener(Event.COMPLETE, onLanguageLoad);
+					fileStream.openAsync(file, FileMode.READ);
+	            }
+			}
+
+	       	private function exitApplication(event:Event=null):void
+	       	{
+       			Alert.show(
+       				LanguageManager.sentences['msg_exit_app'],
+       				LanguageManager.sentences['confirmation'], 
+       				Alert.YES|Alert.NO, this, alertExitHandler, null, Alert.NO);
+
+			    function alertExitHandler(event:CloseEvent):void {
+		        	if(event.detail==Alert.YES) {   
+						ContextManager.saveSettings();
+		       			exit();
+		   	     	}
+				}	
+	       	}
+			
+			private function labelFunction(item:Object):String
+			{
+				var _item:XML = XML(item);				
+				return _item.@label.toString().replace("_", "");
+			}
+						
+			//--------------------------------------------------------------------------
+		    //
+		    //  Event handlers
+		    //
+		    //--------------------------------------------------------------------------
+		    
+	        private function onLanguageLoad(event:Event):void
+	        {
+        		var fileStream:FileStream = event.target as FileStream;
+        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+				fileStream.close();
+        		
+				LanguageManager.languageXML = xml;
+				
+				ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase();
+				ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
+	        }		
+	            
+	        private function onTemplateLoad(event:Event):void
+	        {
+        		var fileStream:FileStream = event.target as FileStream;
+        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+				fileStream.close();
+				
+				var template:TemplateStruct = new TemplateStruct(xml);
+				
+        		if(ContextManager.instance.templates.length==0)
+	    			ContextManager.instance.templates.addItem(template);
+    			else
+    				ContextManager.instance.templates[0] = template;
+
+   				if(ContextManager.instance.templates[0].picture) {
+					tplPic.visible = false;
+   					tplPic.source = ContextManager.instance.templates[0].picture;
+					tplPic.visible = true;
+   				}
+
+				if(template.isEncoded)
+				{
+					processStep(cKeyRequest);
+				}
+				else
+				{
+        			openTemplate();				
+				}
+	        }	        
+            
+            private function onKeyAccept(event:Event):void
+            {            	
+            	openTemplate(txtKey.text);        	
+            }
+            
+            private function openTemplate(key:String=null):void
+            {
+    			var tpl:TemplateStruct = ContextManager.instance.templates[0];
+    			
+    			if(tpl.isEncoded)
+    				tpl.key = key;    			
+    				
+    			tpl.decode();
+    			
+    			if(!tpl.xmlTemplate)
+    			{
+    				Alert.show(LanguageManager.sentences['msg_cannot_open_tpl']);
+					closeTemplate();    				
+       			}
+       			else
+       			{
+       				if(fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0])
+       					fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0].@enabled = 'true';
+       				processStep(cGeneral);
+       				
+       			}
+            } 
+            
+			// Event handler for the MenuBar control's itemClick event.
+            private function onMenuClick(event:Object):void  
+            {
+            	var file:File = ContextManager.instance.lastDir;
+				var fileStream:FileStream = new FileStream();
+            	var tmplFilter:FileFilter = new FileFilter(
+            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
+            		"*.xml");
+            	var filter:FileFilter = new FileFilter(
+            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
+            		"*.*");
+
+                if(event.item.@id == "open_file")
+                {		
+                	openTemplateFile(null, onOpenBrowseSelect, [tmplFilter, filter]);
+                }
+                else if(event.item.@id == "run_template")
+                {		
+                	processStep(1);
+                }
+				else if(event.item.@tag == "lastfiles")
+				{
+	            	file.url = FileUtils.pathToUrl(event.item.@data);
+                	openTemplateFile(file, onTemplateLoad);
+				}     
+				else if(event.item.@id == "exit")
+				{
+					exitApplication();
+				}     
+				else if(event.item.@id == "connection")
+				{
+					GenConnection.show();
+				}     
+				else if(event.item.@id == "properties")
+				{
+					GenProperties.show();
+				}     
+				
+				if(event.item.@tag == "language")
+				{				
+					file = File.applicationDirectory.resolvePath("lang/"+event.item.@data);	
+					fileStream.addEventListener(Event.COMPLETE, onLanguageLoad);
+					fileStream.openAsync(file, FileMode.READ);
+				}
+            }		    			
+            
+            private function vsChange(event:IndexChangedEvent):void
+            {            	
+            	var child:DisplayObject;
+            	
+            	if(!vsLastChanged || vsLastChanged==event.target)
+            	{
+	            	if(event.target==vsProcess) {
+	            		child = vsProcess.getChildAt(event.newIndex);
+	            	}
+	            	else if(event.target==vsImages)
+	            		child = vsImages.getChildAt(event.newIndex);
+	            	
+	            	if(child)            	
+	            		child.addEventListener(EffectEvent.EFFECT_END, onEffectEnd);
+	            	
+	            	vsLastChanged=null;
+	            }
+            }
+            
+            private function onEffectEnd(event:Event):void
+            {
+            	event.target.removeEventListener(EffectEvent.EFFECT_END, onEffectEnd);
+            	
+            	switch(vsProcess.selectedChild)
+            	{
+            		case cProcess:
+            			switch(vsImages.selectedIndex)
+            			{
+            				case 0:
+            					runingTemplate();
+            					break;
+            				case 1:
+            					saveToServer();
+            					break;
+            				case 2:
+            					saveToFile();
+            					break;
+            				case 3:
+            					launchApp();
+            					break;
+            			}
+            			break;	
+            			
+            		case cComplete:
+            			txtResultBuf.text = '';
+            			txtResultBuf.text = ContextManager.instance.templateStruct.buffer;
+            			txtResultBuf.verticalScrollPosition = 0;
+            			break;
+            	}            	            	      	
+            }
+            
+            private function processStep(step:*):void
+            {
+            	switch(typeof step)
+            	{
+            		case 'number':
+            			switch(step)
+            			{
+	            			case 1:
+				           		vsProcess.selectedChild = cProcess;
+				           		vsLastChanged = vsImages.selectedIndex == 0 ? vsProcess : vsImages;
+				           		vsImages.selectedIndex = 0;
+								progressBar.mode = ProgressBarMode.MANUAL;
+								progressBar.setProgress(0, 100);
+								LanguageManager.bindSentence('prgrs_gen_tpl', progressBar);
+		            			break;
+		            		case 2:          
+				           		vsProcess.selectedChild = cProcess;
+								vsLastChanged = vsImages.selectedIndex == 1 ? vsProcess : vsImages;				           		
+				           		vsImages.selectedIndex = 1;
+								LanguageManager.bindSentence('prgrs_save_to_server_tpl', progressBar);
+		            			break
+		            		case 3:
+				           		vsProcess.selectedChild = cProcess;
+				           		vsLastChanged = vsImages.selectedIndex == 2 ? vsProcess : vsImages;
+				           		vsImages.selectedIndex = 2;
+								LanguageManager.bindSentence('prgrs_save_to_file_tpl', progressBar);
+		            			break;
+		            		case 4:
+				           		vsProcess.selectedChild = cProcess;
+				           		vsLastChanged = vsImages.selectedIndex == 3 ? vsProcess : vsImages;
+				           		vsImages.selectedIndex = 3;
+				           		vsLastChanged = vsImages;
+								LanguageManager.bindSentence('prgrs_launch_app', progressBar);
+		            			break;
+	            		}
+	            		break;
+	            	default:
+            			switch(step)
+            			{	            			
+	            			case cWelcome:
+	            				vsProcess.selectedChild = cWelcome;
+	            				break;
+	            			case cKeyRequest:
+	            				vsProcess.selectedChild = cKeyRequest;
+	            				break;
+	            			case cGeneral:
+	            				vsProcess.selectedChild = cGeneral;
+	            				break;
+	            			case cProcess:
+	            				vsProcess.selectedChild = cProcess;
+	            				break;
+	            			case cComplete:
+	            				vsProcess.selectedChild = cComplete;
+	            				break;
+	            			case cFinal:
+	            				vsProcess.selectedChild = cFinal;
+	            				break;
+	            		}
+	            		break;
+            	}
+            }
+            
+            private function runingTemplate():void
+            {
+        		try
+				{
+	        		var tpl:TemplateStruct;
+    	
+    	    		tpl = ContextManager.instance.templates.getItemAt(0) as TemplateStruct;
+		
+					ContextManager.instance.templateStruct = new Template(tpl.xmlTemplate);
+					
+					var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
+					
+					if(validateArr && validateArr.length>0)
+						alertProceedRun();
+					else
+						runTemplate();
+				}
+				catch(e:Error) 
+				{
+					processStep(cGeneral);
+					ContextManager.instance.templateStruct = null;
+					Alert.show(e.message, LanguageManager.sentences['warning']);
+				}
+            }
+            		
+			public function alertProceedRun():void
+			{			
+	     		Alert.show(
+	     			LanguageManager.sentences['msg_tpl_proceed_with_errs'], 
+	     			LanguageManager.sentences['errs_in_tpl'], 
+	     			Alert.YES|Alert.NO, this, alertProceedRunHandler, null, Alert.NO);			     	
+
+				function alertProceedRunHandler(event:CloseEvent):void {
+		        	if(event.detail==Alert.YES) {    
+		        		runTemplate();
+		   	     	}
+		   	     	else {
+						processStep(cGeneral);
+						ContextManager.instance.templateStruct = null;
+			    	}
+				}
+			}
+			
+            private function runTemplate():void
+            {
+        		try
+        		{
+					progressBar.mode = ProgressBarMode.MANUAL;
+        			progressBar.maximum = ContextManager.instance.templateStruct.nodes.length + 1;            
+				        			
+					ContextManager.instance.templateStruct.addEventListener("error", debugErrorHandler);
+					ContextManager.instance.templateStruct.addEventListener("processNode", stepCompleteHandler);
+					ContextManager.instance.templateStruct.addEventListener("generationComplete", generationComplete);					
+					ContextManager.instance.templateStruct.generate();
+				}
+				catch(e:Error) 
+				{
+					processStep(cGeneral);
+					ContextManager.instance.templateStruct = null;
+					Alert.show(e.message, LanguageManager.sentences['warning']);
+				}            	
+
+	           	function debugErrorHandler(event:Event):void {           		
+	           		var error:* = event.target.error;     
+	           		Alert.show(error.message, LanguageManager.sentences['error']);
+	           		processStep(cGeneral);   
+	           		ContextManager.instance.templateStruct = null;   		
+	           	}            						            
+
+	            function stepCompleteHandler(event:Event):void {
+	            	if(progressBar.value+1<progressBar.maximum/2+1);
+	            		progressBar.setProgress(progressBar.value+1, progressBar.maximum);
+	            }	           	
+	           	
+	           	function generationComplete(event:Event):void {
+					if(ContextManager.instance.templateStruct.buffer) {
+						if(ContextManager.instance.saveToServer)					
+							processStep(2);
+						else if(ContextManager.instance.saveToFile)
+							processStep(3);
+						else
+							processStep(cComplete);
+	    			}
+	    			else {
+	    				processStep(cComplete);
+	    			}        							           		
+	           	}
+            }	
+           	
+           	private function saveToServer():void
+           	{
+           		if(ContextManager.instance.saveToFile)
+					processStep(3);
+				else
+					processStep(4);
+           	}
+           	
+           	private function saveToFile():void
+           	{
+        		var file:File = ContextManager.instance.file;
+       			var stream:FileStream = new FileStream();        	
+    			
+        		stream.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress);        		
+        		stream.addEventListener(IOErrorEvent.IO_ERROR, onFileStreamError);
+        		stream.addEventListener(Event.CLOSE, onFileStreamClose);
+    		
+    			stream.openAsync(file, FileMode.WRITE);
+    			stream.writeUTFBytes(ContextManager.instance.templateStruct.buffer);
+    			stream.close();
+    			
+	    		function onFileStreamProgress(event:Event):void {
+	    			var stream:FileStream = event.target as FileStream;
+	    			var total:Number = OutputProgressEvent(event).bytesTotal;
+	    			var pending:Number = OutputProgressEvent(event).bytesPending;
+					progressBar.setProgress(total+(total-pending), total*2+1);      
+					progressBar.validateNow();	
+	    		}
+	    		        		
+	    		function onFileStreamError(event:Event):void {
+	    			var stream:FileStream = event.target as FileStream;
+	    			closeStream(stream);
+	    			
+					ContextManager.instance.templateStruct = null;
+					processStep(cGeneral);   
+					Alert.show(
+						LanguageManager.sentences['msg_ioerror_occurs'], 
+						LanguageManager.sentences['error']);     			
+	    		}
+	        	
+	        	function closeStream(stream:FileStream):void {
+		    		stream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress);
+	        		stream.removeEventListener(IOErrorEvent.IO_ERROR, onFileStreamError);
+		    		stream.removeEventListener(Event.CLOSE, onFileStreamClose);
+					stream.close();           		
+	    		}				        		
+	    		    			
+				function onFileStreamClose(event:Event):void {
+	    			var stream:FileStream = event.target as FileStream;
+	    			closeStream(stream);    			
+	    			
+	           		if(ContextManager.instance.saveToServer)
+						processStep(4);
+					else
+						processStep(cComplete);
+	    		}
+           	}           	        
+    		            
+    		private function launchApp():void
+    		{
+    			processStep(cComplete);
+    		}
+
+            private function onOpenBrowseSelect(event:Event):void
+            {
+               	openTemplateFile(event.target as File, onTemplateLoad);
+            }
+                       	            
+            private function openTemplateFile(file:File, handler:Function, fileFilters:Array=null):*
+            {
+            	var _file:File = file;
+            	var stream:FileStream = new FileStream();
+            	
+            	if(!_file)
+            	{
+            		_file = new File();
+					_file.addEventListener(Event.SELECT, handler);
+					_file.browseForOpen(LanguageManager.sentences['open_file'], fileFilters);
+            		return _file;
+            	}
+            	else
+            	{
+            		if(_file.isDirectory)
+            			return null;
+            			
+	            	if(!_file.exists) {
+	            		Alert.show(
+	            			LanguageManager.sentences['msg_file_not_exists'], 
+	            			LanguageManager.sentences['error']);
+	            		return null; 
+	            	}
+
+					ProgressManager.source = stream;
+					ProgressManager.start();
+				
+					stream.addEventListener(Event.COMPLETE, handler);
+    				stream.openAsync(_file, FileMode.READ);
+
+            		ContextManager.updateLastFiles(_file);            	
+            		MenuGeneral.updateLastFilesMenu(fileMenuData);            		            			
+            	}
+            	
+            	return stream;
+            }
+            
+            private function closeTemplate():void
+            {
+				ContextManager.instance.lastFile = false;
+				if(ContextManager.instance.templates.length>0)
+           			ContextManager.instance.templates.removeItemAt(0);
+           		if(fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0])
+    				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0].@enabled = 'false';
+    			processStep(cWelcome);
+            }
+            				       				
+		]]>
+	</mx:Script>
+	
+	<mx:VBox height="100%" width="100%">
+		
+		<mx:MenuBar width="100%" dataProvider="{fileMenuData.menuitem}" labelFunction="labelFunction" showRoot="false"
+			itemClick="onMenuClick(event);"></mx:MenuBar>
+			
+		<mx:HBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="left" 
+			paddingTop="10" paddingRight="10" paddingLeft="10" paddingBottom="10">
+			<ExtendedAPI:Base64Image id="tplPic" source="{resources.strLogo}" horizontalAlign="right" width="220"
+				showEffect="{picShow}"/>
+			<mx:VBox height="100%" width="100%" horizontalAlign="right">
+				
+				<mx:ViewStack id="vsProcess" width="100%" height="100%" creationPolicy="all" change="vsChange(event)">
+
+					<mx:VBox id="cWelcome" height="100%" width="100%" 
+						verticalAlign="middle" horizontalAlign="center"
+						showEffect="{canvasShow}" hideEffect="{canvasHide}">
+						<mx:Text  styleName="infoTextStyle"
+							text="{LanguageManager.sentences.msg_gen_welcome}">
+						</mx:Text>							
+					</mx:VBox>
+
+					<mx:VBox id="cKeyRequest" height="100%" width="100%" 
+						verticalAlign="middle" horizontalAlign="center"
+						showEffect="{canvasShow}" hideEffect="{canvasHide}">
+						<mx:TextInput width="90%" editable="false" 
+							text="{ContextManager.instance.templates.getItemAt(0).name}" 
+							styleName="edtTextStyle"/>							
+						<mx:TextArea editable="false" width="90%" height="150" 
+							text="{ContextManager.instance.templates.getItemAt(0).description}"/>
+						<mx:Label text="{LanguageManager.sentences.msg_input_template_key}:"/>
+						<mx:TextInput width="90%" id="txtKey" styleName="edtTextStyle"/>
+						<mx:Button id="btnAcceptKey" label="{LanguageManager.sentences.accept}" 
+							click="onKeyAccept(event)"/>							
+					</mx:VBox>					
+
+					<mx:VBox id="cGeneral" height="100%" width="100%" 
+						verticalAlign="middle" horizontalAlign="center"
+						showEffect="{canvasShow}" hideEffect="{canvasHide}">
+						<mx:TextInput width="90%" editable="false" 
+							text="{ContextManager.instance.templates.getItemAt(0).name}" 
+							styleName="edtTextStyle"/>							
+						<mx:TextArea editable="false" width="90%" height="150" 
+							text="{ContextManager.instance.templates.getItemAt(0).description}"/>
+						<mx:Button id="btnRun" label="{LanguageManager.sentences.run}" 
+							click="processStep(1)"/>
+					</mx:VBox>
+
+					<mx:VBox id="cProcess" height="100%" width="100%" 
+						verticalAlign="middle" horizontalAlign="center"
+						showEffect="{canvasShow}" hideEffect="{canvasHide}">					
+						<mx:TextInput width="90%" editable="false" 
+							text="{ContextManager.instance.templates.getItemAt(0).name}" 
+							styleName="edtTextStyle"/>						
+						
+						<mx:Spacer width="100%" height="40"/>
+						
+						<mx:ViewStack id="vsImages" width="100%" height="100%" 
+							change="vsChange(event)">
+							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
+								showEffect="canvasShow" hideEffect="canvasHide">
+								<mx:Image source="@Embed(source='../resources/Question-on.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='../resources/Install-off.png')"/>
+								<mx:Image source="@Embed(source='../resources/File-off.png')"/>
+								<mx:Image source="@Embed(source='../resources/web-site-off.png')"/>
+							</mx:HBox>
+
+							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
+								showEffect="canvasShow" hideEffect="canvasHide">
+								<mx:Image source="@Embed(source='../resources/Question-off.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='../resources/Install-on.png')"/>
+								<mx:Image source="@Embed(source='../resources/File-off.png')"/>
+								<mx:Image source="@Embed(source='../resources/web-site-off.png')"/>
+							</mx:HBox>
+
+							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
+								showEffect="canvasShow" hideEffect="canvasHide">
+								<mx:Image source="@Embed(source='../resources/Question-off.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='../resources/Install-off.png')"/>
+								<mx:Image source="@Embed(source='../resources/File-on.png')"/>
+								<mx:Image source="@Embed(source='../resources/web-site-off.png')"/>
+							</mx:HBox>
+
+							<mx:HBox width="100%" horizontalAlign="center" verticalAlign="bottom" horizontalGap="0"
+								showEffect="canvasShow" hideEffect="canvasHide">
+								<mx:Image source="@Embed(source='../resources/Question-off.png')" scaleContent="false"/>
+								<mx:Image source="@Embed(source='../resources/Install-off.png')"/>
+								<mx:Image source="@Embed(source='../resources/File-off.png')"/>
+								<mx:Image source="@Embed(source='../resources/web-site-on.png')"/>
+							</mx:HBox>
+						</mx:ViewStack>
+						<mx:Spacer width="100%" height="10"/>
+						<mx:ProgressBar width="90%" minimum="0" maximum="100" id="progressBar"/>
+					</mx:VBox>
+					
+					<mx:VBox id="cComplete" height="100%" width="100%" 
+						verticalAlign="middle" horizontalAlign="center"
+						showEffect="{canvasShow}" hideEffect="{canvasHide}">
+						<mx:Label text="{LanguageManager.sentences.gen_result}:"/>
+						<mx:TextArea id="txtResultBuf" editable="false" width="90%" height="250" 
+							text=""/>
+						<mx:Button id="btnNext" label="{LanguageManager.sentences.next}" 
+							click="processStep(cFinal)"/>
+					</mx:VBox>
+					
+					<mx:VBox id="cFinal" height="100%" width="100%" 
+						verticalAlign="middle" horizontalAlign="center"
+						showEffect="{canvasShow}" hideEffect="{canvasHide}">
+						<mx:Text styleName="infoTextStyle"
+							text="{LanguageManager.sentences.msg_gen_finish}">
+						</mx:Text>
+						<mx:Button id="btnExit" 
+							label="{LanguageManager.sentences.exit}" 
+							click="exitApplication();"/>
+					</mx:VBox>
+
+				</mx:ViewStack>
+				
+				<mx:HBox width="100%" horizontalAlign="right" verticalAlign="bottom" paddingBottom="10" paddingRight="10">
+					<mx:Image source="@Embed(source='../resources/txt_logo.png')"/>
+				</mx:HBox>
+			</mx:VBox>
+		</mx:HBox>
+	</mx:VBox>
+
+</mx:WindowedApplication>

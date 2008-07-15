@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModalDialog 
+	xmlns="PowerPack.com.dialog.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="ExtendedAPI.com.controls.*" 
+	width="450" height="460"
+	modal="false"
+	title="{LanguageManager.sentences.lbl_import}" 
+	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*">
+	<mx:Script>
+		<![CDATA[
+			import vdom.connection.protect.Code;
+			import mx.rpc.events.ResultEvent;
+			import PowerPack.com.utils.CryptUtils;
+			import com.hurlant.crypto.hash.MD5;
+			import mx.controls.Alert;
+			import mx.rpc.soap.WebService;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.soap.LoadEvent;
+			import vdom.connection.soap.SoapEvent;
+			import vdom.connection.soap.Soap;
+			import mx.events.ItemClickEvent;
+			import mx.utils.StringUtil;
+			import PowerPack.com.managers.ContextManager;
+			import PowerPack.com.managers.LanguageManager;
+			
+			private static var _dialog:Import;
+			
+			static public function show(closeHandler:Function = null):Import
+			{
+				if(!_dialog || _dialog.closed) 
+				{
+					_dialog = new Import();	
+					_dialog.open();
+					_dialog.show(CANCEL, closeHandler, null, CANCEL);		
+												
+					var defaultCaptions:Object = {
+						lbl_import: "Import",
+						import_template: "Import template"
+					};
+					
+					LanguageManager.setSentences(defaultCaptions);
+				}				
+				else 
+				{
+					_dialog.activate();
+				}	
+				
+				return _dialog;
+			}
+			
+			private function nextHandler(event:Event):void
+			{
+				switch(vsStep.selectedChild)
+				{
+					case step1:
+						connect();		
+						break;
+				}
+				
+				if(vsStep.numChildren-1>vsStep.selectedIndex)
+					vsStep.selectedIndex++;					
+			}
+			
+			private function backHandler(event:Event):void
+			{
+				if(vsStep.selectedIndex>0)
+					vsStep.selectedIndex--;
+			}
+			
+			private function connect():void
+			{
+             	var ws:WebService = ContextManager.instance.ws;	
+             	ws.wsdl = ContextManager.instance.host+":"+
+             		(ContextManager.instance.use_def_port?ContextManager.instance.default_port:ContextManager.instance.port)+
+             		"/vdom.wsdl";
+				ws.useProxy = false;
+				ws.addEventListener(LoadEvent.LOAD, loadCompleteHandler);
+				ws.addEventListener(FaultEvent.FAULT, faultHandler);
+				ws.loadWSDL();
+			}
+			
+			private  function faultHandler(event:FaultEvent):void 
+			{
+				Alert.show(event.message.toString());
+			}			
+			
+			private function loadCompleteHandler(event:LoadEvent):void 
+			{
+				var ws:WebService = ContextManager.instance.ws;	
+				ws.removeEventListener(LoadEvent.LOAD, loadCompleteHandler);
+				login();
+			}
+			
+			private function login():void
+			{	
+             	var ws:WebService = ContextManager.instance.ws;
+             	var login:String = ContextManager.instance.login;
+				var pwd_md5:String = CryptUtils.MD5(ContextManager.instance.pass);   
+				
+             	ws.open_session.addEventListener(ResultEvent.RESULT, onLogin);			
+				ws.open_session(login, pwd_md5);
+			}	
+			
+			private  function onLogin(event:ResultEvent):void
+			{
+				var resultXML:XML = XML(event.result);
+				
+				if(resultXML.name().toString() == 'Error') {
+					Alert.show(resultXML)
+				} 
+				else {					
+					// run session protector
+					var code:Code = Code.getInstance();
+					code.init(resultXML.HashString);
+					code.inputSKey(resultXML.SessionKey);
+					code.sessionId = resultXML.SessionId;
+					
+					getAppList();
+				}
+			}
+			
+			private function logout():void
+			{	
+             	var ws:WebService = ContextManager.instance.ws;
+				var code:Code = Code.getInstance();
+				var sid:String = code.sessionId; 
+				
+				ws.close_session.addEventListener(ResultEvent.RESULT, onLogout);
+				ws.close_session(sid);
+			}						
+
+			private  function onLogout(event:ResultEvent):void
+			{
+				var resultXML:XML = XML(event.result);
+				
+				if(resultXML.name().toString() == 'Error') {
+					Alert.show(resultXML)
+				} 
+				else {					
+				}
+			}
+			
+			private function getAppList():void
+			{
+				var ws:WebService = ContextManager.instance.ws;
+				var code:Code = Code.getInstance();
+				var sid:String			= code.sessionId; 
+				var skey:String  		= code.skey(); 
+			
+				ws.list_applications.addEventListener(ResultEvent.RESULT, onGetAppList);
+				ws.list_applications(sid, skey);
+			}
+
+			private  function onGetAppList(event:ResultEvent):void
+			{
+				var resultXML:XML = XML(event.result);
+				
+				if(resultXML.name().toString() == 'Error') {
+					Alert.show(resultXML);
+				} 
+				else {	
+					logout();		
+				}
+			}			
+		
+		]]>
+	</mx:Script>
+	
+	<mx:VBox styleName="dlgHeader" width="100%">
+		<mx:Label text="{LanguageManager.sentences.import_template}" styleName="headerLabel"/>
+	</mx:VBox>
+	
+	<mx:HRule width="100%"/>
+	
+	<mx:ViewStack width="100%" height="100%" selectedIndex="0" id="vsStep">
+
+		<dialogClasses:ImportStep1 styleName="dlgContent" width="100%" height="100%" id="step1"/>
+		
+	</mx:ViewStack>
+
+	<mx:HRule width="100%"/>
+	
+	<mx:ControlBar width="100%" styleName="dlgFooter">
+		<mx:Button label="&lt; {LanguageManager.sentences.back}" click="backHandler(event)"/>
+		<mx:Button label="{LanguageManager.sentences.next} &gt;" click="nextHandler(event)"/>
+	</mx:ControlBar>
+	
+</ModalDialog>

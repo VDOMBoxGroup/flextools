@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" layout="absolute" 
+	horizontalAlign="center"
+	showCloseButton="true"
+	creationComplete="show();">
+	<mx:Script>
+		<![CDATA[
+			import PowerPack.com.managers.LanguageManager;
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.events.FlexEvent;
+			import mx.containers.HBox;
+			import mx.controls.TextInput;
+			import mx.core.UIComponent;
+			import mx.controls.Alert;
+			import mx.utils.StringUtil;
+			import mx.containers.VBox;
+			import mx.controls.RadioButton;
+			import mx.controls.RadioButtonGroup;
+			import mx.controls.TextArea;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			import mx.core.Application;
+			
+			public static const QM_QUESTION:int	= 1;
+			public static const QM_CHOICE:int	= 2;
+			public static const QM_BROWSE:int	= 3;
+
+			static private var defaultCaptions:Object = {
+				question: "Question",
+				answer: "Answer"
+			}
+			
+			static private var _classConstructed:Boolean = classConstruct(); 
+			
+			static private function classConstruct():Boolean
+			{
+				LanguageManager.setSentences(defaultCaptions);
+				return true
+			}
+						
+			public var mode:int;
+			private var strQuestion:String = "";
+			private var strTitle:String = "";
+			public var arrAnswers:Array;
+
+			public var strAnswer:String;
+			public var strFilter:String;
+
+			private var txtAnswer:TextArea;
+			private var txtInput:TextInput;
+			
+			private var fCloseHandler:Function;			
+			
+			private function show():void
+			{
+				btnOk.addEventListener(MouseEvent.CLICK, clickHandler);
+				addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+				btnOk.setFocus();
+
+		        txtQuestion.text = strQuestion;
+		        title = strTitle;		
+		        
+		        if(mode == QM_QUESTION)
+					txtAnswer.setFocus();		
+				else if(mode == QM_BROWSE)
+					txtInput.setFocus();
+					
+				addEventListener(CloseEvent.CLOSE, onClosing);
+				
+		        invalidateDisplayList();
+			}
+
+		    public static function show(	question:String = "", 
+		    								title:String = "", 
+		    								mode:int = QM_QUESTION, 
+		    								answers:Array = null,
+		    								filter:String = null,
+		                                	parent:Sprite = null, 
+		                                	closeHandler:Function = null):Question
+		    {
+		
+		        if (!parent)
+		            parent = Sprite(Application.application);   
+		        
+		        var dialog:Question = new Question();		            
+
+		        dialog.strQuestion = question;
+		        dialog.strTitle = title;
+		        dialog.fCloseHandler = closeHandler;
+		        dialog.arrAnswers = answers;
+		        
+		        dialog.mode = mode;
+		        dialog.strFilter = filter?StringUtil.trim(filter):null;
+		
+		        PopUpManager.addPopUp(dialog, parent, true);
+		        PopUpManager.centerPopUp(dialog);
+				
+		        return dialog;
+		    }
+		    
+	    	override protected function createChildren():void
+			{
+				super.createChildren();
+				
+				if(cnvsAnswer.numChildren==0)
+				{
+					if(mode == QM_QUESTION)
+					{
+						txtAnswer = new TextArea();
+						txtAnswer.percentWidth = 100;
+						txtAnswer.percentHeight = 100;					
+						cnvsAnswer.addChild(txtAnswer);
+					}
+					else if(mode == QM_CHOICE)
+					{
+						var vBox:VBox = new VBox();
+						vBox.percentWidth = 100;
+						vBox.percentHeight = 100;
+						cnvsAnswer.addChild(vBox);
+						
+						for(var i:int=0; i<arrAnswers.length; i++)
+						{
+							var radBtn:RadioButton = new RadioButton();							
+							radBtn.groupName = "radioGroup";
+							radBtn.value = radBtn.label = arrAnswers[i];
+							vBox.addChild(radBtn);
+
+							if(i==0)	
+								radBtn.selected = true;
+						}
+					}
+					else if(mode == QM_BROWSE)
+					{
+						var hBox:HBox = new HBox();
+						hBox.percentWidth = 100;
+						hBox.percentHeight = 100;
+						hBox.setStyle('horizontalGap', 4);
+						cnvsAnswer.addChild(hBox);
+						
+						txtInput = new TextInput();
+						txtInput.percentWidth = 100;							
+						hBox.addChild(txtInput);
+						
+						var btnBrowse:Button = new Button();
+						btnBrowse.setStyle('paddingLeft', 2);
+						btnBrowse.setStyle('paddingRight', 2);
+						btnBrowse.setStyle('paddingTop', 0);
+						btnBrowse.setStyle('paddingBottom', 0);
+						btnBrowse.label = LanguageManager.sentences.browse + "...";
+						btnBrowse.addEventListener(MouseEvent.CLICK, browseClickHandler);			
+						hBox.addChild(btnBrowse);
+					}
+				}
+			}
+			
+			override protected function updateDisplayList(unscaledWidth:Number,
+														  unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);	
+				
+				var dHeight:int = cnvsAnswer.maxVerticalScrollPosition;
+				
+				if(dHeight)
+				{
+					var container:DisplayObjectContainer = cnvsAnswer.parent;
+
+					while(container!=this)
+					{
+						container = container.parent;
+						container.height += dHeight;
+					}
+					
+					callLater(PopUpManager.centerPopUp,[this]);				
+				}				
+			}		    
+			
+			
+			private function closeDialog():void
+			{
+				if(txtAnswer || txtInput)
+				{
+					var txtObj:Object = txtAnswer ? txtAnswer : txtInput;
+					strAnswer = txtObj.text;
+					
+					strAnswer = StringUtil.trim(strAnswer);
+					
+					if(strAnswer.length==0)
+					{
+						txtObj.setFocus();
+						txtObj.setSelection(0, txtObj.length);
+						strAnswer = null;
+						return;
+					}
+				}
+				else if(radioGroup.numRadioButtons>0)
+				{
+					if(!radioGroup.selectedValue)
+						return;
+					strAnswer = radioGroup.selectedValue.toString();
+				}		
+				
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));	
+			}  
+			
+			private function onClosing(event:Event):void
+			{
+				removeEventListener(CloseEvent.CLOSE, onClosing);
+				
+				event.preventDefault();
+				event.stopPropagation();
+				event.stopImmediatePropagation();
+				
+				removeDialog();
+				
+		        if (fCloseHandler != null) {
+		            addEventListener(CloseEvent.CLOSE, fCloseHandler);
+		            dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+		        }
+			}
+			
+			private function removeDialog():void
+			{
+				visible = false;
+				mx.managers.PopUpManager.removePopUp(this);
+			}
+			
+			override protected function keyDownHandler(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER)
+				{
+					closeDialog();
+				}
+				else if(event.keyCode == Keyboard.ESCAPE)
+				{
+					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				}
+			}	
+			
+			private function browseClickHandler(event:MouseEvent):void
+			{
+				var filter:FileFilter = new FileFilter(
+					StringUtil.substitute(LanguageManager.sentences.file+" ({0})", strFilter?strFilter:'*.*'), 
+					strFilter?strFilter:'*.*');
+				
+				var file:File = new File();
+				
+				if(strFilter)
+ 					file.browseForOpen(LanguageManager.sentences.select_file+'...', [filter]);
+ 				else
+ 					file.browseForSave(LanguageManager.sentences.select_file+'...');
+ 					
+ 				file.addEventListener(Event.SELECT, fileSelectHandler);
+			}					
+			private function fileSelectHandler(event:Event):void
+			{
+				txtInput.text = event.target.nativePath;
+			}					
+
+			private function clickHandler(event:MouseEvent):void
+			{
+				closeDialog();
+			}					
+    
+    	]]>
+	</mx:Script>
+	
+	<mx:VBox height="100%" width="100%" horizontalAlign="center">
+		<mx:Canvas width="100%" height="100%" label="{LanguageManager.sentences.question}">
+			<mx:HBox verticalAlign="top" left="10" top="10" bottom="10" right="10">
+				<mx:Image source="@Embed('../../../../resources/question.png')"/>
+				<mx:Text width="100%" height="100%" id="txtQuestion"/>
+			</mx:HBox>
+		</mx:Canvas>
+		<mx:HRule width="95%"/>
+		<mx:Canvas width="100%" height="100%" label="{LanguageManager.sentences.answer}">
+			<mx:HBox left="10" right="10" top="10" bottom="10">
+				<mx:Image source="@Embed('../../../../resources/user.png')" autoLoad="true"/>
+				<mx:Canvas width="100%" height="100%" id="cnvsAnswer">
+					<mx:RadioButtonGroup id="radioGroup"/>
+				</mx:Canvas>
+				<mx:Canvas height="100%">
+					<mx:Button label="Ok" bottom="0" id="btnOk" width="100%"/>
+				</mx:Canvas>
+			</mx:HBox>
+		</mx:Canvas>
+	</mx:VBox>
+	
+</mx:TitleWindow>

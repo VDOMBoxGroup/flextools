@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	title="{LanguageManager.sentences.app_title}"
+	titleIcon="@Embed(source='assets/icons/icon_16.png')" 
+	layout="absolute" 
+	statusBarFactory="PowerPack.customize.core.windowClasses.SuperStatusBar"
+	preinitialize="preinit()"
+	initialize="init()" 
+	applicationComplete="show()" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:ns4="PowerPack.com.graph.*" 
+	xmlns:extended="ExtendedAPI.com.containers.*"
+	xmlns:controls="ExtendedAPI.com.controls.*" 
+	xmlns:ui="ExtendedAPI.com.ui.*" 
+	xmlns:panel="PowerPack.com.panel.*">
+    
+    <mx:Style source="style/builder.css"/>
+    <mx:Move duration="100" id="DockerMove"/>
+	<mx:Fade duration="100" id="DockerFade"/>
+    
+    <mx:menu>
+    	<ui:SuperFlexNativeMenu id="flexNativeMenu" 
+    		dataProvider="{fileMenuData}" 
+        	labelField="@label" 
+        	keyEquivalentField="@keyEquivalent"
+        	showRoot="false"
+        	itemClick="menuHandler(event);" />        
+    </mx:menu>
+    
+    <mx:XML format="e4x" id="fileMenuData">
+        <root> 
+	        <menuitem label="{LanguageManager.sentences.menu_file}" id="file">
+	            <menuitem label="{LanguageManager.sentences.menu_new_template}" id="new" keyEquivalent="n" ctrlKey="true"/>
+	            <menuitem label="{LanguageManager.sentences.menu_new_tab}" id="new_tab" keyEquivalent="t" ctrlKey="true"/>
+	            <menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file" keyEquivalent="." ctrlKey="true"/>
+	            <menuitem type="separator" id="separator"/>
+	            <menuitem label="{LanguageManager.sentences.menu_close}" id="close" keyEquivalent="w" ctrlKey="true"/>
+	            <menuitem type="separator"/>
+	            <menuitem label="{LanguageManager.sentences.menu_save}" id="save" keyEquivalent="s" ctrlKey="true"/>
+	            <menuitem label="{LanguageManager.sentences.menu_save_as}" id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true"/> 
+	            <menuitem type="separator"/>
+	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import"/> 
+	            <menuitem type="separator"/>
+	            <menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>                                                
+	        </menuitem>
+
+	        <menuitem label="{LanguageManager.sentences.menu_template}" id="template">
+	        	<menuitem label="{LanguageManager.sentences.menu_validate}" id="validate"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_properties}" id="properties"/>
+	        </menuitem>
+	        
+	        <menuitem label="{LanguageManager.sentences.menu_run}" id="run">
+	        	<menuitem label="{LanguageManager.sentences.menu_run_template}" id="run" keyEquivalent="r" ctrlKey="true"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_debug}" id="debug" keyEquivalent="d" ctrlKey="true"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_step_by_step}" id="step_by_step" keyEquivalent="d" ctrlKey="true" altKey="true"/>
+	            <menuitem type="separator"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_resume}" id="resume" enabled="false" keyEquivalent="m" ctrlKey="true"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_step_into}" id="step_into" enabled="false" keyEquivalent="i" ctrlKey="true"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_step_over}" id="step_over" enabled="false" keyEquivalent="o" ctrlKey="true"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_step_return}" id="step_return" enabled="false" keyEquivalent="e" ctrlKey="true"/>
+	        	<menuitem label="{LanguageManager.sentences.menu_break}" id="break" enabled="false" keyEquivalent="b" ctrlKey="true"/>
+	        </menuitem>
+	        
+	        <menuitem label="{LanguageManager.sentences.menu_settings}" id="settings">
+	            <menuitem label="{LanguageManager.sentences.menu_language}" id="language" enabled="false"/>
+	        </menuitem>
+
+	        <menuitem label="{LanguageManager.sentences.menu_help}" id="help"/>
+        </root>
+    </mx:XML>
+    	
+	<mx:Script>
+		<![CDATA[
+			import ExtendedAPI.com.controls.SuperDataGrid;
+			import ExtendedAPI.com.controls.tabBarClasses.SuperTab;
+			import ExtendedAPI.com.ui.SuperFlexNativeMenu;
+			import ExtendedAPI.com.ui.SuperNativeMenu;
+			import ExtendedAPI.com.utils.FileUtils;
+			import ExtendedAPI.com.utils.Utils;
+			
+			import flash.utils.describeType;
+			import flash.utils.setTimeout;
+			
+			import flexlib.controls.Highlighter;
+			
+			import mx.binding.utils.BindingUtils;
+			import mx.collections.ArrayCollection;
+			import mx.collections.HierarchicalData;
+			import mx.controls.Alert;
+			import mx.controls.FlexNativeMenu;
+			import mx.controls.ProgressBarMode;
+			import mx.core.Application;
+			import mx.core.Singleton;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.FlexNativeMenuEvent;
+			import mx.events.ListEvent;
+			import mx.events.MenuEvent;
+			import mx.managers.CursorManager;
+			import mx.managers.PopUpManager;
+			import mx.utils.StringUtil;
+			
+			import PowerPack.com.*;
+			import PowerPack.com.dialog.EditCaption;
+			import PowerPack.com.dialog.Import;
+			import PowerPack.com.dialog.ModalDialog;
+			import PowerPack.com.dialog.TemplateKey;
+			import PowerPack.com.dialog.TemplateProperties;
+			import PowerPack.com.dialog.ValidateDialog;
+			import PowerPack.com.gen.*;
+			import PowerPack.com.gen.parse.CodeParser;
+			import PowerPack.com.gen.structs.TemplateStruct;
+			import PowerPack.com.graph.Connector;
+			import PowerPack.com.graph.GraphCanvas;
+			import PowerPack.com.graph.Node;
+			import PowerPack.com.graph.NodeCategory;
+			import PowerPack.com.managers.ContextManager;
+			import PowerPack.com.managers.LanguageManager;
+			import PowerPack.com.managers.ProgressManager;
+			import PowerPack.com.menu.MenuGeneral;
+			import PowerPack.com.panel.Console;
+			import PowerPack.com.panel.graphsClasses.AccordionChild;
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Class methods
+			//
+			//--------------------------------------------------------------------------  	
+			
+			private var curDebugNode:Node = null;
+						
+			private function preinit():void
+			{
+				maximize();	
+				
+            	Connector.classConstructed;
+				Node.classConstructed;
+				GraphCanvas.classConstructed;
+				
+				Connector.connectMode = Connector.CM_CENTER;				
+				
+				var defaultCaptions:Object = {
+
+					app_title:"Power Pack Builder",
+					
+					menu_run:"_Run",
+					menu_run_template:"_Run",
+					menu_debug:"_Debug",
+					menu_step_by_step:"_Step By Step",
+					menu_resume:"Resu_me",
+					menu_step_into:"Step _Into",
+					menu_step_over:"Step _Over",
+					menu_step_return:"Step _Return",
+					menu_break:"_Break"
+				};
+				
+				LanguageManager.setSentences(defaultCaptions);
+			}
+			
+			private function init():void 
+			{	            	
+		    }
+		    
+		    private function show():void
+		    {
+				addEventListener(Event.CLOSING, closingApplicationHandler);					
+				pnl_problems.grid.addEventListener(MouseEvent.DOUBLE_CLICK, onProblemsDoubleClick);			
+				
+				var file:File;
+				var fileStream:FileStream;
+				
+        	    for each ( file in [ContextManager.instance.dataStorage, 
+        	    					ContextManager.instance.settingStorage] )
+        	    {
+        	    	if(!file.exists)
+        	    		file.createDirectory();
+        	    }
+        	    
+				// Load application settings
+	            ContextManager.loadSettings();
+	            
+	            // Fill language menu
+	            MenuGeneral.updateLangMenu(fileMenuData);
+	            
+	            // fill last files menu
+	            MenuGeneral.updateLastFilesMenu(fileMenuData);
+	            
+				// Load language file
+				file = File.applicationDirectory.resolvePath("lang/"+ContextManager.instance.lang.file);
+	            if(file && file.exists)
+	            {
+					fileStream = new FileStream();	
+									
+					fileStream.addEventListener(Event.COMPLETE, completeLangHandler);
+					fileStream.openAsync(file, FileMode.READ);
+	            }
+	            	            
+	            // Load template  
+	            if(ContextManager.instance.lastFile && ContextManager.instance.files[0])
+    	        {
+					file = ContextManager.instance.files[0];
+					
+		            if(file.exists)
+		            {
+						fileStream = new FileStream();
+						
+						ProgressManager.source = fileStream;
+						ProgressManager.start();
+
+						fileStream.addEventListener(Event.COMPLETE, completeTemplateHandler);
+						fileStream.openAsync(file, FileMode.READ);
+		            }
+            	}
+            	
+            	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
+		    }
+		    		    
+		    private function onProblemsDoubleClick(event:MouseEvent):void
+		    {
+		    	var object:Object = event.target;
+		    	while(object.parent) 
+		    	{
+		    		if(object is SuperDataGrid)
+		    			break;
+		    			
+		    		object = object.parent;
+		    	}
+		    	
+		    	var grid:SuperDataGrid = object as SuperDataGrid;
+		    	
+		    	if(!grid || !grid.selectedItem || !grid.selectedItem.data)
+		    		return;
+		    	
+		    	if(grid.selectedItem.data.node)
+		    	{
+		    		var node:Node = pnl_graphs.showNodeByName(grid.selectedItem.data.node.id);
+		    		node.setFocus();
+		    	}
+		    	else if(grid.selectedItem.data.graph)
+		    	{
+		    		pnl_graphs.showGraphByName(grid.selectedItem.data.graph.id);
+		    	}
+		    }
+		    	       	
+	       	private function closingApplicationHandler(event:Event):void
+	       	{
+	       		event.preventDefault();
+	       		exitApplication();	   
+	       	}
+	       	
+	       	public function exitApplication(event:Event=null):void
+	       	{
+	       		if(ContextManager.instance.lastFile)
+	       		{
+       				Alert.show(
+       					"Do you want to save file before exit?", 
+       					LanguageManager.sentences['confirmation'], 
+       					Alert.YES|Alert.NO|Alert.CANCEL, this, alertSaveHandler, null, Alert.YES);
+       			}
+       			else
+       			{
+	       			Alert.show(
+	       				"Are you sure want to exit?", 
+	       				LanguageManager.sentences['confirmation'], 
+	       				Alert.YES|Alert.NO, this, alertExitHandler, null, Alert.NO);
+       			}
+	       	}
+	       	
+		    private function alertSaveHandler(event:CloseEvent):void 
+		    {
+	        	if(event.detail==Alert.YES)
+	        	{   
+              		if(ContextManager.instance.lastFile && ContextManager.instance.files[0])
+              		{
+              			var file:File = ContextManager.instance.files[0];
+              			var fileStream:FileStream = new FileStream();
+              			
+              			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+              			ContextManager.instance.templates[0].encode();
+              			ContextManager.instance.templates[0].loadPicture();
+              			
+              			fileStream.open(file, FileMode.WRITE);
+        				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
+        				fileStream.close();					
+              		}
+	        	}
+	       		
+	       		if(event.detail!=Alert.CANCEL)
+	       		{
+					ContextManager.saveSettings();
+	       			exit();	       		
+	       		}	   	     	
+			}	       	
+
+		    private function alertExitHandler(event:CloseEvent):void 
+		    {
+	        	if(event.detail==Alert.YES)
+	        	{   
+					ContextManager.saveSettings();
+	       			exit();
+	   	     	}
+			}	       	
+	    	    
+			//--------------------------------------------------------------------------
+		    //
+		    //  Event handlers
+		    //
+		    //--------------------------------------------------------------------------
+		    
+	        private function completeLangHandler(event:Event):void
+	        {
+        		var fileStream:FileStream = event.target as FileStream;
+        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+				fileStream.close();
+        		
+				LanguageManager.languageXML = xml;
+				
+				ContextManager.instance.lang.label = LanguageManager.languageXML.@label.toLowerCase();
+				ContextManager.instance.lang.file = LanguageManager.languageXML.@data;
+	        }
+	        
+	        private function completeTemplateHandler(event:Event):void
+	        {
+        		var fileStream:FileStream = event.target as FileStream;
+        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+				fileStream.close();
+				
+				var template:TemplateStruct = new TemplateStruct(xml);
+				
+        		if(ContextManager.instance.templates.length==0)
+	    			ContextManager.instance.templates.addItem(template);
+    			else
+    				ContextManager.instance.templates[0] = template;
+
+				if(template.isEncoded)
+				{
+					TemplateKey.show(onKeyDialogClose);
+				}
+				else
+				{
+        			var tpl:TemplateStruct = ContextManager.instance.templates[0];        			
+        			tpl.decode();					
+				}
+
+                workStage.visible = true;
+                workStage.includeInLayout = true;
+
+	        }	        
+            
+            private function onKeyDialogClose(event:Event):void
+            {            	
+            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	{
+            		if(event.target.txtKey.text)
+            		{
+            			var tpl:TemplateStruct = ContextManager.instance.templates[0];
+            			
+            			tpl.key = event.target.txtKey.text;
+            			tpl.decode();
+            			if(tpl.xmlTemplate)
+							return;        					
+            		}
+					
+					ContextManager.instance.lastFile = false;
+            		ContextManager.instance.templates.removeItemAt(0);
+            	}         	
+            }
+            	    	    	
+            // Event handler for the MenuBar control's itemClick event.
+            private function menuHandler(event:Object):void  
+            {
+            	var file:File = ContextManager.instance.lastDir;
+				var fileStream:FileStream = new FileStream();
+            	
+            	var tmplFilter:FileFilter = new FileFilter(
+            		StringUtil.substitute("{0} ({1})", "Template", "*.xml"), 
+            		"*.xml");
+            	
+            	var filter:FileFilter = new FileFilter(
+            		StringUtil.substitute("{0} ({1})", "All", "*.*"), 
+            		"*.*");
+
+                if(event.item.@id == "new")
+                {
+                	ContextManager.instance.lastFile = false;
+	                pnl_graphs.clear();
+	                
+	                var template:TemplateStruct = new TemplateStruct();
+
+	                if(ContextManager.instance.templates.length==0)
+	    				ContextManager.instance.templates.addItem(template);
+    				else
+    					ContextManager.instance.templates[0] = template;
+    					
+	                workStage.visible = true;
+	                workStage.includeInLayout = true;    				
+                }
+                else if(event.item.@id == "new_tab")
+                {
+                	EditCaption.show("New tab", onTabDialogClose);
+                }
+                else if(event.item.@id == "open_file")
+                {		
+					file.addEventListener(Event.SELECT, openBrowseHandler);
+					file.browseForOpen("Open file", [tmplFilter, filter])
+                }
+                else if(event.item.@id == "close")
+                {		
+              		ContextManager.instance.lastFile = false;
+	                pnl_graphs.clear();
+	                workStage.visible = false;
+	                workStage.includeInLayout = false;
+                }                
+    	        else if(event.item.@id == "save")
+    	        {
+    	        	if(!ContextManager.instance.lastFile || !ContextManager.instance.files[0])
+    	        	{
+						file.addEventListener(Event.SELECT, saveBrowseHandler);
+						file.browseForSave("Save file");
+              		} 
+              		else
+              		{		    
+              			file = ContextManager.instance.files[0];
+						
+						ProgressManager.source = fileStream;
+						ProgressManager.start();
+					              			
+              			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+              			ContextManager.instance.templates[0].encode();
+              			ContextManager.instance.templates[0].loadPicture();
+              			
+              			fileStream.open(file, FileMode.WRITE);
+        				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
+        				fileStream.close();	        				
+        				
+        				ProgressManager.complete();
+              		}	        
+    	        }
+				else if(event.item.@id == "save_as")
+				{
+					file.addEventListener(Event.SELECT, saveBrowseHandler);
+					file.browseForSave("Save file");				
+				}
+				else if(event.item.@id == "import")
+				{
+					Import.show();
+				}
+				else if(event.item.@tag == "lastfiles")
+				{
+	            	file.url = FileUtils.pathToUrl(event.item.@data);
+	            	
+	            	if(file.isDirectory)
+	            		return;
+	            	
+	            	if(!file.exists) {
+	            		Alert.show('File doesn`t exist.', 'Error!');
+	            		return; 
+	            	}
+					
+					ProgressManager.source = fileStream;
+					ProgressManager.start();	            	
+	            	
+					fileStream.addEventListener(Event.COMPLETE, completeTemplateHandler);
+	    			fileStream.openAsync(file, FileMode.READ);
+	            	
+	            	ContextManager.updateLastFiles(file);
+	            	MenuGeneral.updateLastFilesMenu(fileMenuData);
+				}     
+				else if(event.item.@id == "exit")
+				{
+					exitApplication();
+				}     
+				else if(event.item.@id == "properties")
+				{
+					TemplateProperties.show();
+				} 				
+				else if(event.item.@id == "validate")
+				{
+					//ValidateDialog.show(onValidate);
+					onValidate( new CloseEvent(CloseEvent.CLOSE, false, false, ModalDialog.OK));		
+				}  				
+				else if(event.item.@id == "run" || event.item.@id == "debug" || event.item.@id == "step_by_step")
+				{
+					try
+					{
+						ContextManager.instance.templateStruct = new Template(pnl_graphs.toXML());
+						switch(event.item.@id.toString())
+						{
+							case 'run':
+								ContextManager.instance.templateStruct.isDebug = false;
+								ContextManager.instance.templateStruct.isStepDebug = false;
+								break;
+							case 'debug':
+								ContextManager.instance.templateStruct.isDebug = true;
+								ContextManager.instance.templateStruct.isStepDebug = false;
+								break;
+							case 'step_by_step':
+								ContextManager.instance.templateStruct.isDebug = true;
+								ContextManager.instance.templateStruct.isStepDebug = true;
+								break;
+						}
+						
+						var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
+						
+						pnl_problems.array = validateArr;
+						
+						if(validateArr && validateArr.length>0)
+						{
+							alertProceedRun();
+						}
+						else
+						{
+							switchDebug(true);
+							
+							ContextManager.instance.templateStruct.addEventListener("generationComplete", generationComplete);					
+							ContextManager.instance.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
+							ContextManager.instance.templateStruct.addEventListener("error", debugErrorHandler);
+							ContextManager.instance.templateStruct.generate();
+						}
+					}
+					catch(e:Error) 
+					{
+						switchDebug(false);
+						ContextManager.instance.templateStruct = null;
+						Alert.show(e.message, "Warning!");
+					}
+				}
+				else if(event.item.@id == "resume" || 
+					event.item.@id == "step_into" || 
+					event.item.@id == "step_over" ||
+					event.item.@id == "step_return" ||
+					event.item.@id == "break")
+				{
+					if(!ContextManager.instance.templateStruct)
+						return;
+												
+					try {
+						switch(event.item.@id.toString())
+						{
+							case 'resume':
+								ContextManager.instance.templateStruct.isStepDebug = false;
+								ContextManager.instance.templateStruct.generate(true);
+								break;
+							case 'step_into':
+								ContextManager.instance.templateStruct.isStepDebug = true;
+								ContextManager.instance.templateStruct.generate(true);
+								break;
+							case 'step_over':
+								ContextManager.instance.templateStruct.isStepDebug = true;
+								ContextManager.instance.templateStruct.generate(true, true);
+								break;
+							case 'step_return':
+								ContextManager.instance.templateStruct.isStepDebug = true;
+								ContextManager.instance.templateStruct.generate(true, true, true);
+								break;
+							case 'break':
+								ContextManager.instance.templateStruct = null;
+								switchDebug(false);
+								break;
+						}							
+					} catch(e:Error) {
+						ContextManager.instance.templateStruct = null;
+						switchDebug(false);
+						Alert.show(e.message, "Warning!");
+					}									
+				}
+				
+				if(event.item.@tag == "language")
+				{				
+					file = File.applicationDirectory.resolvePath("lang/"+event.item.@data);	
+					fileStream.addEventListener(Event.COMPLETE, completeLangHandler);
+					fileStream.openAsync(file, FileMode.READ);
+				}
+				
+            }
+            
+            private function onValidate(event:Event):void
+            {
+            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	{
+            		var dialog:ValidateDialog = event.target as ValidateDialog;
+            		
+            		var flags:uint = 0;
+            		
+            		if(dialog)
+            		{
+	            		if(dialog.chkClean) 	flags|=TemplateValidateOptions.CLEAN;
+	            		if(dialog.chkInitGr) 	flags|=TemplateValidateOptions.SET_INIT_GRAPH;
+	            		if(dialog.chkInitNode) 	flags|=TemplateValidateOptions.SET_INIT_NODES;
+	            		if(dialog.chkID) 		flags|=TemplateValidateOptions.SET_UIDS;
+	            		if(dialog.chkAttr) 		flags|=TemplateValidateOptions.SET_ATTRIBUTES;
+	            		if(dialog.chkNames) 	flags|=TemplateValidateOptions.SET_UNIQ_NAMES;
+	            	}
+            		            		
+					ContextManager.instance.templateStruct = new Template(ContextManager.instance.templates.getItemAt(0).xmlTemplate as XML);
+					var validateArr:Array = ContextManager.instance.templateStruct.validate(flags).array;
+	
+					pnl_problems.array = validateArr;
+            	}            
+            }
+			
+			public function alertProceedRun():void
+			{			
+	     		Alert.show("Error(s) exist in template\nProceed with launch?", "Errors in template", Alert.YES|Alert.NO, this, alertProceedRunHandler, null, Alert.NO);			     	
+			}
+			
+			private function alertProceedRunHandler(event:CloseEvent):void 
+		    {
+	        	if(event.detail==Alert.YES)
+	        	{    
+	        		try
+	        		{
+		       			switchDebug(true);
+								
+						ContextManager.instance.templateStruct.addEventListener("generationComplete", generationComplete);					
+						ContextManager.instance.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
+						ContextManager.instance.templateStruct.addEventListener("error", debugErrorHandler);
+						ContextManager.instance.templateStruct.generate();
+					}
+					catch(e:Error) 
+					{
+						switchDebug(false);
+						ContextManager.instance.templateStruct = null;
+						Alert.show(e.message, "Warning!");
+					}
+	   	     	}
+	   	     	else
+	   	     		ContextManager.instance.templateStruct = null;
+			}
+				            
+            private function stepCompleteHandler(event:Event):void
+            {
+            	showDebugDetails();
+            }
+            
+            public function showDebugDetails():void
+            {
+				if(!ContextManager.instance.templateStruct || ContextManager.instance.templateStruct.contextStack.length==0)
+					return;
+            	
+            	var curNode:Node = pnl_graphs.showNodeByName(GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).curNode.id);
+            	curNode.setFocus();
+            	
+            	if(curDebugNode)
+            	{
+            		curDebugNode.filters = [];
+            		for each(var arrow:Connector in curDebugNode.inArrows)
+            			Connector(arrow).highlighted = false;            		
+            	}
+            	
+            	curNode.filters = [new GlowFilter(0xff00ff)];  	
+				
+            	curDebugNode = curNode;
+            	
+            	if(ContextManager.instance.templateStruct.nodeStack.length==0)
+            		return;
+            		
+				var nodeContext:NodeContext = ContextManager.instance.templateStruct.nodeStack[ContextManager.instance.templateStruct.nodeStack.length-1];
+
+            	var prevNode:Node = pnl_graphs.getNodeByName(nodeContext.node.id);
+
+           		for each(var arrow1:Connector in prevNode.outArrows)
+		           	for each(var arrow2:Connector in curNode.inArrows)
+        	   			if(arrow1==arrow2)
+           					Connector(arrow1).highlighted = true;
+
+            	// fill variables
+            	            	
+				var subArr:Array = [];
+				for (var obj:String in GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).context) {
+					subArr.push( { Name:"$"+obj, 
+						Value:GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).context[obj].toString() } );						
+				}					
+
+				var arr:Array = [];
+				for (obj in ContextManager.instance.templateStruct.context) {
+					if(!(ContextManager.instance.templateStruct.context[obj] is Template))
+						arr.push( { Name:"$"+obj, Value:ContextManager.instance.templateStruct.context[obj] } );						
+				}			
+				arr.push( { Name:"this", Value: GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).curGraph.name, children:subArr } );
+				
+				pnl_variables.grid.dataProvider = new HierarchicalData(arr);
+				pnl_variables.grid.invalidateList();
+
+				// fill output
+				
+				var str:String="";
+				
+				str = GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).buffer;
+				pnl_output.text = str;
+				pnl_output.textArea.validateNow();
+				
+				var myformat:TextFormat = new TextFormat();
+				myformat.color = 0x000000;
+				
+				if(str.length>0)
+					pnl_output.textArea.field.setTextFormat(myformat, 0, str.length) 
+					
+				if(	nodeContext.node.parsedNode && 
+					nodeContext.node.parsedNode.hasOwnProperty('string') && nodeContext.node.parsedNode.string &&
+					nodeContext.node.parsedNode.print)
+				{
+					myformat.color = 0xFF0000;
+				
+					pnl_output.textArea.field.setTextFormat(myformat,
+						str.length - nodeContext.node.parsedNode.string.toString().length-1,
+						str.length);
+				}
+					
+				// fill node values
+				
+				if(!pnl_node_value.array) {
+					pnl_node_value.array = [];
+				}					
+				
+				var nodeCategory:String = nodeContext.node.category;
+				var nodeSubCategory:String = "";
+				str = "";
+				switch(nodeCategory)
+				{
+					case NodeCategory.NORMAL:
+					case NodeCategory.SUBGRAPH:
+						str = nodeContext.node.parsedNode.string;
+						break;
+					case NodeCategory.COMMAND:
+						switch(nodeContext.node.parsedNode.type)
+						{
+							case CodeParser.CT_OPERATION:
+								nodeSubCategory = "Operation ";
+								str = nodeContext.node.text;
+								break;
+							case CodeParser.CT_TEST:
+								nodeSubCategory = "Test ";
+								str = nodeContext.node.text + 
+									" => " + nodeContext.node.parsedNode.string;
+								break;
+							case CodeParser.CT_FUNCTION:
+								nodeSubCategory = "Function ";
+								str = nodeContext.node.parsedNode.func +
+									" => " + nodeContext.node.parsedNode.string;
+								break;
+						}
+						break;
+				}
+				
+				pnl_node_value.array.push( { label:
+					StringUtil.substitute("State ({0}{1}): {2}", 
+						nodeSubCategory,
+						nodeCategory,
+						str), data: nodeContext.node } );
+						
+				pnl_node_value.list.invalidateList();
+				pnl_node_value.list.selectedIndex = pnl_node_value.array.length-1;
+				pnl_node_value.list.callLater(pnl_node_value.list.scrollToIndex, [pnl_node_value.array.length]);
+				
+            }
+            
+            public function switchDebug(enable:Boolean=true):void
+            {
+            	fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "resume")[0].@enabled = enable?"true":"false";
+				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "step_into")[0].@enabled = enable?"true":"false";
+				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "step_over")[0].@enabled = enable?"true":"false";
+				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "step_return")[0].@enabled = enable?"true":"false";
+				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "break")[0].@enabled = enable?"true":"false";
+				
+				//if(!enable)
+				{
+					pnl_variables.grid.dataProvider = null;
+					pnl_node_value.array = [];
+					pnl_output.text = "";
+            		
+            		if(curDebugNode)
+            		{
+            			curDebugNode.filters = [];
+            			
+            			for each(var arrow:Connector in curDebugNode.inArrows)
+            				Connector(arrow).highlighted = false;
+            				     
+            			curDebugNode = null;       		
+            		}					
+				}
+            }
+            
+            private function onTabDialogClose(event:Event):void
+            {            	
+            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	{
+            		if(event.target.txtCaption.text)
+            			pnl_graphs.createCategoryTab(event.target.txtCaption.text);
+            	}
+            }
+            
+           	private function generationComplete(event:Event):void
+           	{
+           		switchDebug(false);
+           		
+           		Console.show("Data saved to app.xml.\n" + ContextManager.instance.templateStruct.buffer, "Result");
+           		
+				if(ContextManager.instance.templateStruct.buffer)
+				{            	
+            		var file:File = ContextManager.instance.file;
+           			var stream:FileStream = new FileStream();
+            	
+        			stream.open(file, FileMode.WRITE);
+        			stream.writeUTFBytes(ContextManager.instance.templateStruct.buffer);
+        			stream.close();
+    			}
+    			
+    			ContextManager.instance.templateStruct = null;        							           		
+           	}
+
+           	private function debugErrorHandler(event:Event):void
+           	{           		
+           		var error:* = event.target.error;           		
+           		
+           		showDebugDetails();           		
+           		Alert.show(error.message, "Error!", 4, null, onErrAlertClose);
+           	}
+           	
+           	private function onErrAlertClose(event:Event):void
+           	{           		
+           		switchDebug(false);
+    			ContextManager.instance.templateStruct = null;        							           		
+           	}
+           	
+            private function openBrowseHandler(event:Event):void
+            {
+            	var file:File = event.target as File;
+           		var stream:FileStream = new FileStream();
+            	
+            	if(file.isDirectory)
+            		return;
+            	
+				ProgressManager.source = stream;
+				ProgressManager.start();
+				
+				stream.addEventListener(Event.COMPLETE, completeTemplateHandler);
+    			stream.openAsync(file, FileMode.READ);
+            	
+            	ContextManager.updateLastFiles(file);            	
+            	MenuGeneral.updateLastFilesMenu(fileMenuData);
+            }
+            
+            private function saveBrowseHandler(event:Event):void
+            {
+            	var file:File = event.target as File;
+           		var fileStream:FileStream = new FileStream();
+            	
+            	if(file.isDirectory)
+            		return;
+            		            	
+				ProgressManager.source = fileStream;
+				ProgressManager.start();
+				            		            	
+     			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+      			ContextManager.instance.templates[0].encode();
+      			ContextManager.instance.templates[0].loadPicture();
+      			
+      			fileStream.open(file, FileMode.WRITE);
+				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
+				fileStream.close();	
+        				        		
+        		ProgressManager.complete();
+        
+            	ContextManager.updateLastFiles(file);            	
+            	MenuGeneral.updateLastFilesMenu(fileMenuData);
+            }
+
+		]]>
+	</mx:Script>
+	<mx:VBox width="100%" height="100%">
+	
+	<!--mx:MenuBar width="100%"
+    	dataProvider="{fileMenuData}"
+    	labelField="@label"
+    	showRoot="false"
+    	itemClick="menuHandler(event);">    	
+    </mx:MenuBar-->
+	
+	<extended:Docker>
+
+	<mx:VBox width="100%" height="100%" id="workStage" visible="false" includeInLayout="false">
+    
+		<mx:HDividedBox height="100%" width="100%">
+				
+			<panel:Graphs creationIndex="2"
+				id="pnl_graphs"
+				templateXML="{ContextManager.instance.templates.getItemAt(0).xmlTemplate as XML}"
+				vsViewStack="{viewstack}">
+			</panel:Graphs>
+			
+			<mx:Panel creationIndex="1" width="100%" height="100%" layout="absolute" 
+				title="{LanguageManager.instance._languageXML.designpanel.title}" backgroundAlpha="0.5">
+				
+				<mx:VDividedBox height="100%" width="100%">
+				
+					<mx:HDividedBox height="100%" width="100%">
+						
+						<mx:ViewStack id="viewstack" width="100%" height="100%" borderStyle="solid"/>						
+						
+						<extended:SuperTabNavigator creationPolicy="all" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
+						
+							<panel:Variables id="pnl_variables"  minWidth="150"/>
+							
+						</extended:SuperTabNavigator>
+						
+					</mx:HDividedBox>
+					
+					<mx:HDividedBox width="100%">
+						
+						<extended:SuperTabNavigator creationPolicy="all" width="100%" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
+							
+							<panel:Problems id="pnl_problems"/>
+							
+							<!--panel:Properties id="pnl_properties"/-->
+							
+							<panel:Output id="pnl_output"/>
+							
+						</extended:SuperTabNavigator>
+
+						<extended:SuperTabNavigator creationPolicy="all" width="100%" height="100%" dragEnabled="true" dropEnabled="true" closePolicy="{SuperTab.CLOSE_NEVER}">
+							
+							<panel:NodeValue id="pnl_node_value"/>
+							
+						</extended:SuperTabNavigator>
+						
+					</mx:HDividedBox>
+					
+				</mx:VDividedBox>
+			</mx:Panel>
+			
+		</mx:HDividedBox>
+
+	</mx:VBox>
+
+	</extended:Docker>
+	</mx:VBox>
+
+</mx:WindowedApplication>
