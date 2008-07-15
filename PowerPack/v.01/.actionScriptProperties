@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties version="1" mainApplicationPath="Builder.mxml">
-  <compiler additionalCompilerArguments="-locale en_US" copyDependentFiles="true" generateAccessible="false" strict="true" warn="true" htmlGenerate="true" htmlPlayerVersionCheck="true" htmlPlayerVersion="9.0.0" htmlExpressInstall="true" htmlHistoryManagement="true" outputFolderPath="bin">
-    <compilerSourcePath/>
-    <libraryPath>
-      <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/playerglobal.swc" linkType="2"/>
-      <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/utilities.swc" linkType="1"/>
-      <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/flex.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
-      <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/framework.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
-      <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/rpc.swc" linkType="1"/>
-      <libraryPathEntry kind="3" path="${FRAMEWORKS}/libs/charts.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
-      <libraryPathEntry kind="1" path="${FRAMEWORKS}/locale/{locale}" linkType="1"/>
-      <libraryPathEntry kind="1" path="\PowerPack\lib" linkType="1"/>
-    </libraryPath>
-    <sourceAttachmentPath>
-      <sourceAttachmentPathEntry kind="3" path="${FRAMEWORKS}/libs/flex.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
-      <sourceAttachmentPathEntry kind="3" path="${FRAMEWORKS}/libs/framework.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
-      <sourceAttachmentPathEntry kind="3" path="${FRAMEWORKS}/libs/charts.swc" linkType="1" sourcepath="${FRAMEWORKS}/source"/>
-    </sourceAttachmentPath>
-  </compiler>
-  <applications>
-    <application path="Generator.mxml"/>
-    <application path="Builder.mxml"/>
-  </applications>
-  <buildCSSFiles/>
+<actionScriptProperties mainApplicationPath="Builder.mxml" version="3">
+<compiler additionalCompilerArguments="-locale en_US" copyDependentFiles="true" enableModuleDebug="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="9.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
+<compilerSourcePath/>
+<libraryPath defaultLinkType="1">
+<libraryPathEntry kind="4" path="">
+<modifiedEntries>
+<libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/framework.swc" sourcepath="${PROJECT_FRAMEWORKS}/source" useDefaultLinkType="true"/>
+</modifiedEntries>
+<excludedEntries>
+<libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" useDefaultLinkType="false"/>
+<libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
+<libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/qtp.swc" useDefaultLinkType="false"/>
+<libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" useDefaultLinkType="false"/>
+</excludedEntries>
+</libraryPathEntry>
+<libraryPathEntry kind="1" linkType="1" path="/PowerPack/lib"/>
+</libraryPath>
+<sourceAttachmentPath>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" sourcepath="${PROJECT_FRAMEWORKS}/source" useDefaultLinkType="false"/>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/framework.swc" sourcepath="${PROJECT_FRAMEWORKS}/source" useDefaultLinkType="false"/>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" sourcepath="${PROJECT_FRAMEWORKS}/source" useDefaultLinkType="false"/>
+</sourceAttachmentPath>
+</compiler>
+<applications/>
+<modules/>
+<buildCSSFiles/>
 </actionScriptProperties>
