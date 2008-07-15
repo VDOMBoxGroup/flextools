@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="ExtendedAPI.com.containers.ButtonScrollingCanvas"/>
+<classEntry path="ExtendedAPI.com.containers.DockableToolBar"/>
+<classEntry path="ExtendedAPI.com.containers.Docker"/>
+<classEntry path="ExtendedAPI.com.containers.FlowBox"/>
+<classEntry path="ExtendedAPI.com.containers.FlowContainer"/>
+<classEntry path="ExtendedAPI.com.containers.PopUpToolBar"/>
+<classEntry path="ExtendedAPI.com.containers.SuperTabNavigator"/>
+<classEntry path="ExtendedAPI.com.containers.SuperWindow"/>
+<classEntry path="ExtendedAPI.com.containers.utilityClasses.AdobeFlowLayout"/>
+<classEntry path="ExtendedAPI.com.containers.utilityClasses.FlowLayout"/>
+<classEntry path="ExtendedAPI.com.controls.Base64Image"/>
+<classEntry path="ExtendedAPI.com.controls.FileBrowseBox"/>
+<classEntry path="ExtendedAPI.com.controls.HDivider"/>
+<classEntry path="ExtendedAPI.com.controls.SuperDataGrid"/>
+<classEntry path="ExtendedAPI.com.controls.SuperTabBar"/>
+<classEntry path="ExtendedAPI.com.controls.SuperTextArea"/>
+<classEntry path="ExtendedAPI.com.controls.tabBarClasses.SuperTab"/>
+<classEntry path="ExtendedAPI.com.controls.tabBarClasses.SuperUIComponent"/>
+<classEntry path="ExtendedAPI.com.events.SuperTabEvent"/>
+<classEntry path="ExtendedAPI.com.events.TabReorderEvent"/>
+<classEntry path="ExtendedAPI.com.graphics.codec.BMPEncoder"/>
+<classEntry path="ExtendedAPI.com.ui.SuperFlexNativeMenu"/>
+<classEntry path="ExtendedAPI.com.ui.SuperNativeMenu"/>
+<classEntry path="ExtendedAPI.com.ui.SuperNativeMenuItem"/>
+<classEntry path="ExtendedAPI.com.utils.FileToBase64"/>
+<classEntry path="ExtendedAPI.com.utils.FileUtils"/>
+<classEntry path="ExtendedAPI.com.utils.GeomUtils"/>
+<classEntry path="ExtendedAPI.com.utils.ObjectUtils"/>
+<classEntry path="ExtendedAPI.com.utils.Utils"/>
+</includeClasses>
+<includeResources>
+<resourceEntry destPath="ExtendedAPI/assets/dragStripIcon.png" sourcePath="ExtendedAPI/assets/dragStripIcon.png"/>
+<resourceEntry destPath="ExtendedAPI/assets/assets.swf" sourcePath="ExtendedAPI/assets/assets.swf"/>
+<resourceEntry destPath="ExtendedAPI/assets/assets.fla" sourcePath="ExtendedAPI/assets/assets.fla"/>
+</includeResources>
+<namespaceManifests/>
+</flexLibProperties>
