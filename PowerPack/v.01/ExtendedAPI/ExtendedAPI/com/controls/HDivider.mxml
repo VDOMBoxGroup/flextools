@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalAlign="middle" width="100%">
-	<mx:HRule width="50%"/>
-	<mx:Label text="{label}"/>
-	<mx:HRule width="50%"/>
-</mx:HBox>
