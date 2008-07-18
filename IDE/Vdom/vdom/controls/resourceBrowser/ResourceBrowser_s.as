@@ -339,8 +339,14 @@ private function fileSelectHandler(event:Event):void {
 		var base64Data:Base64Encoder = new Base64Encoder();
 		base64Data.encodeBytes(compressedData);
 		
-		var fileType:String = _fileForUpload.type.substr(1);
-		var fileName:String = _fileForUpload.name.substr(0, _fileForUpload.name.length - _fileForUpload.type.length);
+		var fileType:String = "";
+		try {		
+			fileType = _fileForUpload.type.substr(1);
+		}
+		catch (err:Error) {
+			fileType = _fileForUpload.extension;
+		}
+		var fileName:String = _fileForUpload.name.substr(0, _fileForUpload.name.length - fileType.length - 1);
 		setResource(fileType, fileName, base64Data.toString());
 	}	
 }
