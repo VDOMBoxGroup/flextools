@@ -10,6 +10,8 @@
 
 <mx:Script>
 	<![CDATA[
+		import vdom.containers.ApplicationPanel;
+		import mx.core.Application;
 		import vdom.events.TreeEditorEvent;
 		import vdom.events.DataManagerEvent;
 		import vdom.events.AddTreeElementEvent;
@@ -101,13 +103,24 @@
 			curTree.current = true;
 	}
 	
+//	var asdp:ApplicationPanel
+	
+	private var dX:Number;
+	private var dY:Number;
 	private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
 	{
 		// object to Top
 		main.removeChild(massTreeElements[trEvt.ID]);
 		main.addChild(massTreeElements[trEvt.ID]);
 		
-		main.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+//		dX = massTreeElements[curID].x;
+//		dY = massTreeElements[curID].y;
+		
+		dX = main.mouseX - massTreeElements[trEvt.ID].x;
+		dY = main.mouseY - massTreeElements[trEvt.ID].y;
+		
+		Application.application.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		Application.application.addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 	}
 	
 	private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
@@ -146,7 +159,6 @@
 		{
 			//	trace(main.contains(btLine))
 			main.addChild(btLine);
-			
 		}
 		muEvt.stopImmediatePropagation();
 	}
@@ -155,8 +167,6 @@
 	{
 		if(trEvt.currentTarget.ID != null)
 			redrawLines(trEvt.currentTarget.ID); 
-		
-		
 	}
 	
 	/** 
@@ -186,24 +196,46 @@
 	
 	
 	
+	private function mouseUpHandler(msEvt:MouseEvent):void
+	{
+		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
+	}
+	
+	
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
 		var curID:String = curTree.ID;
 		
+		if (main.mouseX < dX)
+			 	massTreeElements[curID].x = 0;
+			else
+				massTreeElements[curID].x = main.mouseX - dX;
 		
-		
-		if (massTreeElements[curID].x < 0)
-		{
-			 massTreeElements[curID].x = 0;
-			 massTreeElements[curID].stopDrag();
-		}
-		
-		if (massTreeElements[curID].y < 10)
-		{
-			 massTreeElements[curID].y = 10;
-			 massTreeElements[curID].stopDrag();
-		}
-		
+//		trace('y: '+ massTreeElements[curID].y)
+		if ((main.mouseY -dY ) < 10)
+			 	massTreeElements[curID].y = 10;
+			else
+				massTreeElements[curID].y = main.mouseY - dY;
+		/*
+		if (can.mouseX < dX)
+					{
+						 eventsArray[curID].x = 0;
+//						 eventsArray[curID].stopDrag();
+					}else
+					{
+						eventsArray[curID].x = can.mouseX - dX;
+					}
+					
+					if ((can.mouseY - dY) < 10)
+					{
+						 eventsArray[curID].y = 10;
+//						 eventsArray[curID].stopDrag();
+					}else
+					{
+						eventsArray[curID].y = can.mouseY - dY;	
+					}
+		*/
 		redrawLines(curID);
 	}
 	/**

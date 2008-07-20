@@ -11,6 +11,7 @@ package vdom.components.eventEditor
 		public function TreeEvents()
 		{
 			super();
+			
 			dataManager = DataManager.getInstance();
 			var productRenderer:ClassFactory = new ClassFactory(EventItemRender);
 
@@ -19,14 +20,15 @@ package vdom.components.eventEditor
 			
 		}
 		
-		private var dataXML:XMLListCollection ;
+		private var dataXML:XML ;
 		override public function set dataProvider(value:Object):void
 		{
 		
-		  dataXML = new XMLListCollection();	
+		  dataXML =  <root/>;	
+		  
 		  for each(var child:XML in value)
 		  {
-		  		dataXML.addItem(getChilds(child))
+		  	dataXML.appendChild(getChilds(child))
 		  }
 			super.dataProvider = dataXML;
 		}
@@ -62,15 +64,13 @@ package vdom.components.eventEditor
 		
 		public function  set enabledItem(obj:Object):void
 		{
-			
-			dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'true';
-			selectedItem = dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
+			dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'true';
+			selectedItem = dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
 		}		
 		
 		public function  set disabledItem(obj:Object):void
 		{
-			dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'false';
-			//selectedItem = dataXML.source.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
+			dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'false';
 		}	
 	}
 }

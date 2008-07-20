@@ -14,6 +14,8 @@
 
 <mx:Script>
 	<![CDATA[
+		import mx.validators.ValidationResult;
+		import mx.messaging.AbstractConsumer;
 		import vdom.utils.IconUtil;
 		import vdom.managers.DataManager;
 		import mx.events.ListEvent;
@@ -33,7 +35,7 @@
 		private var publicData:Object;
 		private var dataManager:DataManager;
 		private var tree:Tree = new Tree();
-		private var xmlTreeData:XML;
+		private var xmlTreeData:XMLListCollection;
 		[Bindable]
 		private var topLevelObjectId:Object;
 		private var arrPicture:Array = new Array();
@@ -54,7 +56,7 @@
 			dataManager = DataManager.getInstance();
 			    tree.percentHeight = 100;
 			    tree.percentWidth = 100;
-				tree.showRoot = false; 
+				tree.showRoot = true; 
 				
 				tree.labelField = "@label";
 				tree.addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
@@ -69,7 +71,7 @@
 			if(xmlData) 
 			{
 				// создаем обьекты верхнего уровня
-				 xmlTreeData = <root/>;
+				 xmlTreeData = new XMLListCollection;
 				for each(var xmlLabel:XML in xmlData)
 				{
 					if (xmlLabel.name() == 'Parent') continue;
@@ -84,10 +86,12 @@
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
 					
-					xmlTreeData.appendChild(xmlList);
+					xmlTreeData.addItem(xmlList);
 			} 
 				tree.dataProvider = xmlTreeData;
-			}
+			} 
+			
+			
 		}
 		
 		private var masResourceID:Array = new Array();
@@ -111,11 +115,10 @@
 				
 			//select current Object;
 			if(topLevelObjectId) 
-				tree.selectedItem = xmlTreeData..*.Object.(@ID == dataManager.currentObjectId)[0];
-			
-			//select current Page;
+				tree.selectedItem = xmlTreeData.source.*.(@ID == dataManager.currentObjectId)[0];
+				//select current Page;
 			if(!tree.selectedItem )
-				tree.selectedItem = xmlTreeData.Object.(@ID == dataManager.currentPageId)[0];
+				tree.selectedItem = xmlTreeData.source.(@ID == dataManager.currentPageId)[0];
 		}
 		
 		private function treeChangeLister(evt:Event):void
@@ -123,7 +126,7 @@
 			  var selectedNode:XML = Tree(evt.target).selectedItem as XML;
               var ID:String = selectedNode.@ID;
 
-              if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
+              if(xmlTreeData.source.(@ID == ID).toXMLString() != "" )
           		   	dataManager.changeCurrentPage(selectedNode.@ID);
               	else
               		dataManager.changeCurrentObject(ID);
@@ -155,9 +158,29 @@
 			if(!xml) 
 				return;
 			
-			tree.selectedItem = xmlTreeData..*.Object.(@ID == xml.@ID)[0];
+			var currentElement:XML = xmlTreeData.source..*.(@ID == xml.@ID)[0];
+			
+			openTree(currentElement);
+			
+			
+			
+			tree.selectedItem = currentElement;
+			
+			var index:int =  tree.getItemIndex(tree.selectedItem);
+//			tree.selectedIndex = index;
+			tree.scrollToIndex(index);
 		}
 		
+		private function openTree(item:Object):void
+		{
+			var parentItem:Object = XML(item).parent();
+			if (parentItem)
+			{
+				 openTree(parentItem);
+				tree.expandItem(parentItem, true, false);
+				tree.validateNow();
+			}
+		}
 		
 	]]>
 </mx:Script>

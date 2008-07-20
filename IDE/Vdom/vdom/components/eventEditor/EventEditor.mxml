@@ -3,6 +3,7 @@
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.core.Application;
 	 		import mx.managers.CursorManagerPriority;
 	 		import mx.managers.CursorManager;
 	 		import vdom.components.treeEditor.DeleteLineButton;
@@ -175,7 +176,7 @@
 	        	el.addEventListener(MouseEvent.MOUSE_OVER, actionMouseOverHandler);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
-	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
+//	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
@@ -190,7 +191,7 @@
 	        	el.addEventListener(MouseEvent.MOUSE_OVER, eventMouseOverHandler);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
-	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
+//	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
@@ -410,11 +411,36 @@
 			 *
 			 */
 			private var  curID:String;
+			private var dX:Number;
+			private var dY:Number;
 			private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
 			{
 				curID = trEvt.ID;
 				
-				addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+				if(eventsArray[curID])
+				{ 
+					dX = eventsArray[curID].x;
+					dY = eventsArray[curID].y;
+				}
+				
+				if(actionsArray[curID])
+				{ 
+					dX = actionsArray[curID].x;
+					dY = actionsArray[curID].y;
+				}
+				
+				dX = can.mouseX -dX;
+				dY = can.mouseY -dY;
+				
+//				trace('dX: ' + dX);
+				Application.application.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+				Application.application.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			}
+			
+			private function mouseUpHandler(msEvt:MouseEvent):void
+			{
+				Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+				Application.application.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			}
 			
 			private function mouseMoveHandler(msEvt:MouseEvent):void
@@ -422,37 +448,50 @@
 				if (can.contains(btLine))
 					can.removeChild(btLine);
 				
-							if(eventsArray[curID]) 
+				if(eventsArray[curID]) 
 				{
-					if (eventsArray[curID].x < 0)
+//					eventsArray[curID].x = can.mouseX; //msEvt.localX;
+//					eventsArray[curID].y = can.mouseY;//  msEvt.localY;
+					
+					if (can.mouseX < dX)
 					{
 						 eventsArray[curID].x = 0;
-						 eventsArray[curID].stopDrag();
+//						 eventsArray[curID].stopDrag();
+					}else
+					{
+						eventsArray[curID].x = can.mouseX - dX;
 					}
 					
-					if (eventsArray[curID].y < 10)
+					if ((can.mouseY - dY) < 10)
 					{
 						 eventsArray[curID].y = 10;
-						 eventsArray[curID].stopDrag();
+//						 eventsArray[curID].stopDrag();
+					}else
+					{
+						eventsArray[curID].y = can.mouseY - dY;	
 					}
 				} 
 				else if(actionsArray[curID]) 
 				{
-					if (actionsArray[curID].x < 0)
+					if (can.mouseX < dX)
 					{
 						 actionsArray[curID].x = 0;
-						 actionsArray[curID].stopDrag();
+//						 actionsArray[curID].stopDrag();
+					}else
+					{
+						actionsArray[curID].x = can.mouseX - dX;
 					}
 					
-					if (actionsArray[curID].y < 10)
+					if ((can.mouseY - dY) < 10)
 					{
 						 actionsArray[curID].y = 10;
-						 actionsArray[curID].stopDrag();
+//						 actionsArray[curID].stopDrag();
+					}else
+					{
+						 actionsArray[curID].y = can.mouseY - dY;
 					}
 				}
 				
-		
-					
 				reDrawLines();
 			}
 			

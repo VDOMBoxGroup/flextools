@@ -170,7 +170,7 @@ package vdom.components.eventEditor
 	 	if( txtInp.visible == false)
 	 	{
 	 		dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_REDRAW_LINES, _ID));
-	 		startDrag();
+//	 		startDrag();
 	 	}
 	 		
 	 }
@@ -235,7 +235,7 @@ package vdom.components.eventEditor
 			cnvUpLayer.addChild(imgDelete);
 			
 			cnvUpLayer.addEventListener(MouseEvent.MOUSE_DOWN, startDragHandler);
-			cnvUpLayer.addEventListener(MouseEvent.MOUSE_UP, stopDragHandler)
+//			cnvUpLayer.addEventListener(MouseEvent.MOUSE_UP, stopDragHandler)
 			addChild(cnvUpLayer);
 			
 		}
