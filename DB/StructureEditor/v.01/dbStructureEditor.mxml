@@ -4,9 +4,8 @@
 	width="640" height="480"
 	paddingBottom="10" paddingRight="10" paddingLeft="10" paddingTop="10"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	verticalGap="2" horizontalGap="0" creationComplete="{creationComplete();}"
-	backgroundAlpha="1" backgroundColor="#FFFFFF"
->
+	verticalGap="2" horizontalGap="0" creationComplete="{}"
+	backgroundAlpha="1" backgroundColor="#FFFFFF">
 
 	<!-- Main Class Scripting File -->	
 	<mx:Script source="dbStructureEditor_s.as" />
@@ -20,18 +19,18 @@
 
 		<mx:VBox height="100%" width="100%" verticalGap="0">
 			<mx:Label text="Properties:" />
-			<mx:VBox id="__propDetailsPanel" borderStyle="solid" width="100%" height="100%" paddingTop="2" paddingRight="2" enabled="false">
+			<mx:VBox borderStyle="solid" width="100%" height="100%" paddingTop="2" paddingRight="2">
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Name:" width="100" />
-					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__applyBtn.enabled = true; controlsEnable(false);}" />
+					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__applyBtn.enabled = true; controlsEnable(false);}" enabled="false" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
-					<mx:Label text="ID:" />
-					<mx:Label id="__id" width="100%" textAlign="right" />
+					<mx:Label text="ID:" width="100" />
+					<mx:Label id="__id" width="100%" enabled="false" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Type:" width="100" />
-					<mx:ComboBox id="__type" width="200" change="{__applyBtn.enabled = true; controlsEnable(false);}">
+					<mx:ComboBox id="__type" width="200" change="{__applyBtn.enabled = true; controlsEnable(false);}" enabled="false">
 						<mx:ArrayCollection>
 							<mx:Object label="TEXT"		data="text"/>
 							<mx:Object label="INTEGER"	data="integer"/>
@@ -41,35 +40,45 @@
 					</mx:ComboBox>
 					
 				</mx:HBox>
-				
-				
-				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+
+				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Primary key:" width="100" />
-					<mx:CheckBox id="__pKey" />
+					<mx:CheckBox id="__pKey" enabled="false" />
 				</mx:HBox>
-				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Auto increment:" width="100" />
-					<mx:CheckBox id="__aIncrement" />
+					<mx:CheckBox id="__aIncrement" enabled="false" />
 				</mx:HBox>
-				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Can be null:" width="100" />
-					<mx:CheckBox id="__null" />
+					<mx:CheckBox id="__null" enabled="false" />
 				</mx:HBox>
-				<mx:HBox width="100%" verticalAlign="middle" enabled="false">
+				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Default value:" width="100" />
-					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" />
+					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" enabled="false" />
 				</mx:HBox>
 								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
-					<mx:Button id="__applyBtn" enabled="false" label="Apply changes" click="{applyBtnHandler();}"/>
+					<mx:Button id="__applyBtn" label="Apply changes" click="{applyBtnHandler();}" enabled="false"/>
 				</mx:HBox>				
 			</mx:VBox>
 		</mx:VBox>		
 	</mx:HBox>
 
-	<mx:HBox id="__addRemoveBtns" width="100%" paddingTop="2" enabled="false">
-		<mx:Button id="__addBtn" label="Add" click="{addBtnHandler();}" />
-		<mx:Button id="__removeBtn" label="Remove" click="{removeBtnHandler();}" />
-		<mx:Spacer width="100%" />
-	</mx:HBox> 
+	<mx:ViewStack id="__alertArea" width="100%" height="24" paddingTop="0" paddingBottom="0">
+		<mx:Canvas id="__normal" width="100%" height="24">
+			<mx:HBox id="__addRemoveBtns" width="100%" height="24" verticalAlign="middle">
+				<mx:Button id="__addBtn" label="Add" click="{addBtnHandler();}" height="20" />
+				<mx:Button id="__removeBtn" label="Remove" click="{removeBtnHandler();}" height="20" enabled="false" />
+				<mx:Spacer width="100%" />
+			</mx:HBox> 		
+		</mx:Canvas>
+		<mx:Canvas id="__alert">
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
+				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+				<mx:Button id="__alertYesBtn" label="Yes" height="18" click="{alertClickHandler('Yes');}" />
+				<mx:Button id="__alertNoBtn" label="No" height="18" click="{alertClickHandler('No');}" />
+			</mx:HBox> 					
+		</mx:Canvas>
+	</mx:ViewStack>
 </mx:Application>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	width="640" height="480"
+	paddingBottom="10" paddingRight="10" paddingLeft="10" paddingTop="10"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	verticalGap="2" horizontalGap="0" backgroundAlpha="1" backgroundColor="#FFFFFF">
+
+	<!-- Main Class Scripting File -->	
+	<mx:Script source="dbDataEditor_s.as" />
+	
+	<mx:DataGrid id="__dg"
+		width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
+		click="{rowClickHandler();}" itemEditEnd="{itemEditEnd(event);}" editable="true"/>
+	<mx:HBox width="100%" horizontalAlign="right" horizontalGap="0" paddingBottom="0" paddingTop="0">
+		<mx:Label text="Total rows:" fontSize="9" />
+		<mx:Label id="__rowsCount" text="{totalRecords}" fontSize="9" fontWeight="bold" />	
+	</mx:HBox>
+	<mx:HBox width="100%" height="20" horizontalAlign="left" verticalAlign="middle" horizontalGap="0" paddingRight="0" paddingLeft="0">
+		<mx:Label text="Pages:" />
+		<mx:HBox id="__pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0" />
+	</mx:HBox>
+	
+
+	<mx:ViewStack id="__alertArea" width="100%" height="24" paddingTop="0" paddingBottom="0">
+		<mx:Canvas id="__normal" width="100%" height="24">
+			<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingRight="0" paddingLeft="0">
+				<mx:Button label="add line" height="20" click="{addRow();}" />
+				<mx:Button label="remove line" height="20" enabled="false" />		
+				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" />
+				<mx:Spacer width="100%" />
+				<mx:HBox horizontalGap="0">
+					<mx:Label id="__operCount" fontWeight="bold" text="0" textAlign="right" />
+					<mx:Label text="operation(s) in queue" />
+				</mx:HBox>
+			</mx:HBox>
+		</mx:Canvas>
+		<mx:Canvas id="__alert">
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
+				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+				<mx:Button id="__alertYesBtn" label="Yes" height="18" click="{alertClickHandler('Yes');}" />
+				<mx:Button id="__alertNoBtn" label="No" height="18" click="{alertClickHandler('No');}" />
+			</mx:HBox> 					
+		</mx:Canvas>
+	</mx:ViewStack>
+
+	
+</mx:Application>
+	
