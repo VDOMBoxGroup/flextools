@@ -293,7 +293,8 @@ package com.yahoo.astra.mx.controls.colorPickerClasses
 			super.commitProperties();
 			
 			this.viewer.visible = this.getStyle("showColorViewer");
-			this.hexInput.visible = this.getStyle("showColorInput");
+			this.hexInput.visible = false;//this.getStyle("showColorInput");
+			
 			this.viewer.color = this.hexInput.selectedColor = this.previewColor;
 			
 			this.selectedColorChanged = false;

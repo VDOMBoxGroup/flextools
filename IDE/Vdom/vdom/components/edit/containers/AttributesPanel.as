@@ -657,9 +657,12 @@ public class AttributesPanel extends ClosablePanel {
 	
 	private function acceptButton_clickHandler(event:MouseEvent):void {
 		
-		objectDescription.@Name = fieldsArray['Name'][0][fieldsArray['Name'][1]];
-		
 		var objectChanged:Boolean = false;
+		if(objectDescription.@Name != fieldsArray['Name'][0][fieldsArray['Name'][1]])
+		{
+			objectDescription.@Name = fieldsArray['Name'][0][fieldsArray['Name'][1]];
+			objectChanged = true;
+		}
 	
 		for (var attrName:String in fieldsArray) {
 			if(!cursor.findFirst({'@Name':attrName}))

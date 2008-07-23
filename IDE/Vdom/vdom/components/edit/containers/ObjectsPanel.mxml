@@ -13,6 +13,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 
 <mx:Script>
 	<![CDATA[
+		import mx.collections.XMLListCollection;
 		import mx.validators.ValidationResult;
 		import mx.messaging.AbstractConsumer;
 		import vdom.utils.IconUtil;
@@ -22,7 +23,6 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		import vdom.managers.FileManager;
 		import mx.controls.Image;
 		import mx.messaging.management.Attribute;
-		import mx.collections.XMLListCollection;
 		import mx.events.FlexEvent;
 		import mx.controls.Tree;
 		import mx.core.Application;

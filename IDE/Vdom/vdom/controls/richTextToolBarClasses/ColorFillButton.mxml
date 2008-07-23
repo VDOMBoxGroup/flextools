@@ -36,6 +36,11 @@
 		super.clickHandler(event);
 		dispatchEvent(new ColorRequestEvent(ColorRequestEvent.REQUEST_COLOR, false, false, this.color));
 	}
+	
+	override protected function mouseDownHandler(event:MouseEvent):void {
+		
+		event.stopImmediatePropagation();
+	}
 	]]>
 </mx:Script>
 </mx:Button>

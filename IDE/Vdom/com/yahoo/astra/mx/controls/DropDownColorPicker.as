@@ -706,7 +706,7 @@ package com.yahoo.astra.mx.controls
 			}
 			else
 			{
-				UIComponent(this.picker).setFocus();
+//				UIComponent(this.picker).setFocus();
 				this.picker.enabled = true;
 				this.dispatchEvent(new DropdownEvent(DropdownEvent.OPEN, false, false, this.dropDownTriggerEvent));
 			}

@@ -11,9 +11,9 @@ public class MBtn extends Button {
 		super();
 	}
 	
-	override protected function mouseDownHandler(event:MouseEvent):void {
+	/* override protected function mouseDownHandler(event:MouseEvent):void {
 		
 		event.stopImmediatePropagation();
-	}
+	} */
 }
 }

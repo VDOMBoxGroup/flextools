@@ -1,5 +1,6 @@
 import flash.events.Event;
 import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
 import flash.html.HTMLLoader;
 
 import mx.collections.ArrayCollection;
@@ -45,6 +46,7 @@ private function set editableElement(value:EditableHTML):void {
 public function init(item:IItem, container:*):void {
 	
 //	trace("--> init");
+	this.addEventListener(MouseEvent.MOUSE_DOWN, zzz);
 	oldValue = container.editabledText;
 	loaded = false;
 	editableElement = container;
@@ -55,7 +57,10 @@ public function init(item:IItem, container:*):void {
 	else
 		editableElement_completeHandler(new Event('true'));
 }
-
+private function zzz(event:MouseEvent):void
+{
+	event.stopImmediatePropagation();
+}
 public function get selfChanged():Boolean {
 	
 	return _selfChanged;

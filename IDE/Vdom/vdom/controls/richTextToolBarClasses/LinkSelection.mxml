@@ -5,7 +5,8 @@
 	close="closeHandler();"
 	showCloseButton="true"
 	title="Insert Link"
-	titleStyleName="titleStyle" height="160">
+	titleStyleName="titleStyle" height="160"
+	creationComplete="s();" xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*">
 	
 <mx:Style>
 	.titleStyle {
@@ -21,6 +22,10 @@
 			return linkURL.text;
 		}
 		
+		private function s():void
+		{
+			addEventListener(MouseEvent.MOUSE_DOWN, zzz, true);
+		}
 		private function closeHandler():void {
 				
 			PopUpManager.removePopUp(this);
@@ -33,11 +38,15 @@
 			else
 				closeHandler();
 		}
+		private function zzz(event:MouseEvent):void
+		{
+			event.stopImmediatePropagation();
+		}
 	]]>
 </mx:Script>
 	<mx:Form width="100%">
 		<mx:FormItem label="Link URL: " width="100%" horizontalAlign="right">
-			<mx:TextInput id="linkURL" textAlign="left" width="250"/>
+			<richTextToolBarClasses:sTextInput id="linkURL" textAlign="left" width="250"/>
 		</mx:FormItem>
 		<mx:FormItem label="Pages List: " width="100%" horizontalAlign="right">
 			<mx:ComboBox width="250" cornerRadius="0"></mx:ComboBox>

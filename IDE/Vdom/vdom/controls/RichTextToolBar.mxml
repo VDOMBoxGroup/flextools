@@ -49,8 +49,6 @@
 				click="execCommand('Italic');"/>
 			<richTextToolBarClasses:MBtn styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_underline.png')"
 				click="execCommand('Underline');" focusEnabled="false"/>
-			<richTextToolBarClasses:MBtn styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_underline.png')"
-				click="execCommand('Underline');" focusEnabled="false"/>
 			<richTextToolBarClasses:MBtn styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_strikethrough.png')"
 				click="execCommand('Strikethrough');"/>
 			<mx:VRule height="24"/>
@@ -146,7 +144,7 @@
 			<controls:DropDownColorPicker width="36" height="24" 
 				viewerRenderer="vdom.controls.richTextToolBarClasses.ColorTextButton" viewerStyleName="" focusEnabled="false"
 				change="colorFillChanged(event)"/>
-			<controls:DropDownColorPicker width="36" height="24" 
+			<controls:DropDownColorPicker width="36" height="24"
 				viewerRenderer="vdom.controls.richTextToolBarClasses.ColorFillButton"
 				viewerStyleName="" focusEnabled="false"
 				change="colorTextChanged(event)"/>

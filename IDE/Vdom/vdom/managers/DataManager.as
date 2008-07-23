@@ -435,6 +435,9 @@ public class DataManager implements IEventDispatcher {
 			nameChanged = true;
 		
 		if(newOnlyAttributes)
+			dispatchEvent(new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN));
+		
+		if(newOnlyAttributes)
 		{
 			requestQue[objectId] = "empty key";	
 			proxy.setAttributes(_currentApplicationId, objectId, newOnlyAttributes);
@@ -447,7 +450,6 @@ public class DataManager implements IEventDispatcher {
 			soap.addEventListener(SoapEvent.SET_NAME_OK, setNameCompleteHandler);
 			soap.setName(_currentApplicationId, oldXMLDescription.@ID, oldXMLDescription.@Name);
 		}
-		
 	}
 	
 	private function setNameCompleteHandler(event:SoapEvent):void
