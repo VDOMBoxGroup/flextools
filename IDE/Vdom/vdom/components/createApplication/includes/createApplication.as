@@ -76,6 +76,15 @@ private function dataManager_applicationCreatedHandler(event:DataManagerEvent):v
 	dataManager.removeEventListener(DataManagerEvent.APPLICATION_CREATED, dataManager_applicationCreatedHandler);
 	applicationDescription.id = event.result.Application.@ID;
 	
+	dataManager.changeCurrentApplication(applicationDescription.id);
+	
+	dataManager.addEventListener(DataManagerEvent.APPLICATION_DATA_LOADED, dataManager_applicationLoadedHandler);
+	dataManager.loadApplication(applicationDescription.id);
+}
+
+private function dataManager_applicationLoadedHandler(event:DataManagerEvent):void
+{
+	dataManager.removeEventListener(DataManagerEvent.APPLICATION_DATA_LOADED, dataManager_applicationLoadedHandler);
 	ppm.showText = 'Send icon';
 	
 	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED, fileManager_resourceSavedHandler);
@@ -131,7 +140,7 @@ private function dataManager_applicationInfoChangedHandler(event:DataManagerEven
 
 private function dataManager_objectsCreatedHandler(event:DataManagerEvent):void
 {
-	dataManager.changeCurrentApplication(applicationDescription.id);
+//	dataManager.changeCurrentApplication(applicationDescription.id);
 	
 	PopUpManager.removePopUp(ppm);
 	dispatchEvent(new Event('applicationCreated'));

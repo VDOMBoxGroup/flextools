@@ -20,7 +20,6 @@ package vdom.utils
 	
 	import mx.containers.accordionClasses.AccordionHeader;
 	import mx.controls.tabBarClasses.Tab;
-	import mx.controls.treeClasses.TreeItemRenderer;
 	import mx.core.BitmapAsset;
 	import mx.core.UIComponent;
 	
@@ -34,6 +33,7 @@ package vdom.utils
 		
 		private static var dictionary:Object;
 		
+		private var resourceId:String;
 		/**
 		 * Used to associate run-time graphics with a target
 		 * @param target A reference to the component associated with this icon
@@ -74,6 +74,8 @@ package vdom.utils
 		public function set resource(value:Object):void {
 			
 			var loader:Loader = new Loader();
+			
+			resourceId = value.resourceID;
 			
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
 			loader.loadBytes(value.data);

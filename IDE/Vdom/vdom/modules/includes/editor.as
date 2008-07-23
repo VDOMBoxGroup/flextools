@@ -1,15 +1,17 @@
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-import mx.containers.Canvas;
+import mx.managers.PopUpManager;
 
+import vdom.MyLoader;
 import vdom.events.DataManagerEvent;
+import vdom.managers.AlertManager;
 import vdom.managers.AuthenticationManager;
 import vdom.managers.DataManager;
 
 private var dataManager:DataManager = DataManager.getInstance();
 private var authenticationManager:AuthenticationManager = AuthenticationManager.getInstance();
-private var defaultComponent:Canvas;
+private var alertManager:AlertManager = AlertManager.getInstance();
 
 private function showPreview():void
 {	
@@ -19,14 +21,84 @@ private function showPreview():void
 	navigateToURL(new URLRequest('http://' + ip + '/' + applicationId + '/' + pageId), '_blank');
 }
 
+private function registerEvent(flag:Boolean):void 
+{
+	if(flag)
+	{
+		dataManager.addEventListener(
+			DataManagerEvent.APPLICATION_DATA_LOADED,
+			dataManager_applicationDataLoaded
+		);
+		
+		dataManager.addEventListener(
+			DataManagerEvent.CURRENT_PAGE_CHANGED,
+			dataManager_pageChanged
+		);
+		
+		dataManager.addEventListener(
+			DataManagerEvent.CURRENT_OBJECT_CHANGED,
+			dataManager_objectChanged
+		);
+	}
+	else
+	{
+		dataManager.removeEventListener(
+			DataManagerEvent.APPLICATION_DATA_LOADED,
+			dataManager_applicationDataLoaded
+		);
+		
+		dataManager.removeEventListener(
+			DataManagerEvent.CURRENT_PAGE_CHANGED,
+			dataManager_pageChanged
+		);
+		
+		dataManager.removeEventListener(
+			DataManagerEvent.CURRENT_OBJECT_CHANGED,
+			dataManager_objectChanged
+		);
+	}
+}
+
+private function switchToEdit():void
+{	
+	alertManager.showMessage('');
+	registerEvent(false);
+	selectedChild = components;
+	placeCanvas.selectedIndex = 1;
+}
+
 private function showHandler():void
-{		
-	dataManager.addEventListener(
-		DataManagerEvent.APPLICATION_DATA_LOADED,
-		dataManager_applicationDataLoadedHandler
-	);
+{	
+	registerEvent(true);
 	
-	dataManager.loadApplicationData();
+	var applicationId:String = dataManager.currentApplicationId;
+	
+	if(!applicationId)
+		return;
+	
+	if(!dataManager.applicationStatus(applicationId))
+	{
+		loadApplicationData();
+		return;
+	}
+	
+	var pageId:String = dataManager.currentPageId;
+	
+	if(!pageId && !dataManager.pageStatus(applicationId, pageId))
+	{
+		selectPage();
+		return;
+	}
+	
+	var objectId:String = dataManager.currentObjectId;
+	
+	if(!objectId)
+	{
+		selectObject();
+		return;
+	}
+	
+	switchToEdit();
 }
 
 private function hideHandler():void {
@@ -35,13 +107,45 @@ private function hideHandler():void {
 	selectedChild = initModule;
 }
 
-private function dataManager_applicationDataLoadedHandler(event:DataManagerEvent):void
+private function loadApplicationData():void
+{
+	alertManager.showMessage("Load Application Data");
+	dataManager.loadApplication(dataManager.currentApplicationId);
+}
+
+private function selectPage():void
 {	
-	dataManager.removeEventListener(
-		DataManagerEvent.APPLICATION_DATA_LOADED, 
-		dataManager_applicationDataLoadedHandler
-	);
+	if(dataManager.listPages.length() > 0)
+	{
+		var page:XML = dataManager.listPages[0]
+		dataManager.changeCurrentPage(page.@ID);
+	}
+}
+
+private function selectObject():void
+{	
+	if(dataManager.currentPageId)
+		dataManager.changeCurrentObject(dataManager.currentPageId);
+}
+
+private function dataManager_applicationDataLoaded(event:DataManagerEvent):void
+{	
+	if(!dataManager.listPages || dataManager.listPages.length() == 0)
+		return;
 	
-	selectedChild = components;
-	placeCanvas.selectedIndex = 1;
+	var pageId:String = dataManager.listPages[0].@ID;
+	
+	alertManager.showMessage("Load Page Data");
+	
+	selectPage();
+}
+
+private function dataManager_pageChanged(event:DataManagerEvent):void
+{	
+	selectObject();
+}
+
+private function dataManager_objectChanged(event:DataManagerEvent):void
+{	
+	switchToEdit();
 }

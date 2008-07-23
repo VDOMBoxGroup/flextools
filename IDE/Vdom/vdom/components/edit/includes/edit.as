@@ -39,7 +39,7 @@ private function showHandler():void {
 	
 	watchers = [];
 	
-	setListeners(true);
+	registerEvent(true);
 	
 	watchers.push(
 		BindingUtils.bindProperty(pageList, 'dataProvider', dataManager, 'listPages'),
@@ -57,14 +57,13 @@ private function hideHandler():void {
 	
 	mainArea.selectedChild = workArea;
 	
-	setListeners(false);
+	registerEvent(false);
 }
 
-private function setListeners(flag:Boolean):void {
+private function registerEvent(flag:Boolean):void {
 	
-	if(flag) {
-		
-		
+	if(flag)
+	{
 		workArea.addEventListener(WorkAreaEvent.CREATE_OBJECT, workArea_createObjectHandler);
 		workArea.addEventListener(WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler);
 		workArea.addEventListener(WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler);
@@ -77,9 +76,9 @@ private function setListeners(flag:Boolean):void {
 		
 		attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 		attributesPanel.addEventListener(AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler);
-		
-	} else {
-		
+	}
+	else 
+	{	
 		workArea.removeEventListener(WorkAreaEvent.CREATE_OBJECT, workArea_createObjectHandler);
 		workArea.removeEventListener(WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler);
 		workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler);
@@ -94,8 +93,8 @@ private function setListeners(flag:Boolean):void {
 	}
 }
 
-private function pageDataLoadedHandler(event:Event):void {
-	
+private function pageDataLoadedHandler(event:Event):void
+{
 	PopUpManager.removePopUp(ppm);
 	workArea.visible = true;
 }
@@ -121,11 +120,7 @@ private function workArea_createObjectHandler(event:Event):void {
 	
 	var evt:WorkAreaEvent = WorkAreaEvent(event);
 	
-	dataManager.createObject(
-				evt.typeId,
-				evt.objectId,
-				'',
-				evt.props);
+	dataManager.createObject(evt.typeId, evt.objectId, '', evt.props);
 }
 
 private function workArea_changeObjectHandler(event:WorkAreaEvent):void {

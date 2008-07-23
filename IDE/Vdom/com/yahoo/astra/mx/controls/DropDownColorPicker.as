@@ -437,7 +437,8 @@ package com.yahoo.astra.mx.controls
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			this.viewer.setActualSize(unscaledWidth, unscaledHeight);
+			if(this.viewer)
+				this.viewer.setActualSize(unscaledWidth, unscaledHeight);
 			
 			//picker may not be created until it is needed
 			if(this.picker)

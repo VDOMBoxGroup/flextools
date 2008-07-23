@@ -69,54 +69,6 @@ public class ResizeManager extends EventDispatcher {
 		return instance;
 	}
 	
-	/* public function get itemTransform():Boolean {
-	
-		return _itemTransform;
-	}
-	
-	public function set itemTransform(value:Boolean):void {
-		
-		_itemTransform = value;
-		
-		if(!selectMarker.item)
-			return;
-		
-		var item:Container = selectMarker.item;
-		
-		 if(value) {
-
-			beforeTransform = {
-				left : item.x,
-				top : item.y,
-				width : item.width,
-				height : item.height
-			};
-			
-		} else {
-			
-			if(
-				beforeTransform.top == item.x &&
-				beforeTransform.left == item.y &&
-				beforeTransform.width == item.width &&
-				beforeTransform.height == item.height
-			)
-				return;
-		 
-		var rmEvent:ResizeManagerEvent = new ResizeManagerEvent(ResizeManagerEvent.RESIZE_COMPLETE);
-		
-		var properties:Object = {
-			left : item.x,
-			top : item.y,
-			width : item.width,
-			height : item.height
-		};
-		
-		rmEvent.item = item;
-		rmEvent.properties = properties;
-		dispatchEvent(rmEvent);
-		
-	} */
-	
 	private function get selectedItem():IItem {
 		
 		return _selectedItem;

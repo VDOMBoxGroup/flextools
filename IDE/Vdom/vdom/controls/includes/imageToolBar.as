@@ -26,7 +26,12 @@ public function init(item:IItem, container:*):void {
 	
 	var resRegExp:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
 	
-	resourceId = container['value'].match(resRegExp)[1]
+	var result:Array = container['value'].match(resRegExp);
+	
+	if(result && result[1])
+		resourceId = container['value'].match(resRegExp)[1]
+	else
+		enabled = false;
 }
 
 public function close():void {

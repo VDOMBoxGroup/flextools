@@ -67,7 +67,7 @@ public class RenderManager implements IEventDispatcher {
 		cursor = items.createCursor();
 		
 		items.sort = new Sort();
-		items.sort.fields = [new SortField('itemId')];
+		items.sort.fields = [new SortField("itemId")];
 		items.refresh();
 	}
 	
@@ -80,7 +80,7 @@ public class RenderManager implements IEventDispatcher {
 			
 	}
 	
-	public function createItem(itemId:String, parentId:String = ''):void
+	public function createItem(itemId:String, parentId:String = ""):void
 	{
 		if(!parentId) {
 			
@@ -127,7 +127,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		var itemDescription:ItemDescription= getItemDescriptionById(itemId);
 		IItem(itemDescription.item).waitMode = true;
-		lockedItems[itemId] = '';
+		lockedItems[itemId] = "";
 	}
 	
 	public function getItemById(itemId:String):IItem
@@ -160,25 +160,25 @@ public class RenderManager implements IEventDispatcher {
 		
 		switch (itemName) {
 			
-		case 'container':
+		case "container":
 		 
 			container = new Item(itemId);
 		break;
 		
-		case 'table':
+		case "table":
 		 
 			container = new Table(itemId);
 			Table(container).setStyle("horizontalGap", 0);
 			Table(container).setStyle("verticalGap", 0);
 		break;
 		
-		case 'row':
+		case "row":
 		 
 			container = new TableRow(itemId);
 			Container(container).percentWidth = 100;
 		break;
 		
-		case 'cell':
+		case "cell":
 		 
 			container = new TableCell(itemId);
 		break;
@@ -202,7 +202,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		items.filterFunction = 
 			function (item:Object):Boolean {
-				return (item.fullPath.indexOf(itemId+'.') != -1);
+				return (item.fullPath.indexOf(itemId+".") != -1);
 			}
 	
 		items.refresh();
@@ -214,23 +214,23 @@ public class RenderManager implements IEventDispatcher {
 		items.refresh();
 	}
 	
-	private function createItemDescription(itemId:String = '', parentId:String = ''):ItemDescription
+	private function createItemDescription(itemId:String = "", parentId:String = ""):ItemDescription
 	{
-		var fullPath:String = '';
-		var staticFlag:String = 'none';
+		var fullPath:String = "";
+		var staticFlag:String = "none";
 		
-		if(itemId == '') {
+		if(itemId == "") {
 			itemId = UIDUtil.createUID();
-			staticFlag = 'self';
+			staticFlag = "self";
 		}
 		
-		if(parentId == '') {
+		if(parentId == "") {
 			
 			fullPath = itemId;
 		} else {
 			
 			fullPath = getItemDescriptionById(parentId).fullPath;
-			fullPath = fullPath + '.' + itemId;
+			fullPath = fullPath + "." + itemId;
 		}
 		
 		var itemDescription:ItemDescription = new ItemDescription();
@@ -260,15 +260,15 @@ public class RenderManager implements IEventDispatcher {
 			parentDescription = getItemDescriptionById(itemDescription.parentId);
 		
 		
-			if(parentDescription.staticFlag == 'children' || parentDescription.staticFlag == 'all')
-				newStaticFlag = 'all';
+			if(parentDescription.staticFlag == "children" || parentDescription.staticFlag == "all")
+				newStaticFlag = "all";
 				
-			else if(itemXMLDescription.@contents == 'static')
-				newStaticFlag = 'children';
+			else if(itemXMLDescription.@contents == "static")
+				newStaticFlag = "children";
 			
 		} else 
-			if(itemXMLDescription.@contents == 'static')
-				newStaticFlag = 'children';
+			if(itemXMLDescription.@contents == "static")
+				newStaticFlag = "children";
 		
 		itemDescription.zindex = uint(itemXMLDescription.@zindex);
 		itemDescription.hierarchy = uint(itemXMLDescription.@hierarchy);
@@ -298,7 +298,7 @@ public class RenderManager implements IEventDispatcher {
 				return item.parentId == parentId;
 		}
 		
-		items.sort.fields = [new SortField('zindex'), new SortField('hierarchy'), new SortField('order')];
+		items.sort.fields = [new SortField("zindex"), new SortField("hierarchy"), new SortField("order")];
 		
 		items.refresh();
 		
@@ -310,7 +310,7 @@ public class RenderManager implements IEventDispatcher {
 		}
 		
 		items.filterFunction = null;
-		items.sort.fields = [new SortField('itemId')];
+		items.sort.fields = [new SortField("itemId")];
 			
 		items.refresh();
 		
@@ -347,7 +347,7 @@ public class RenderManager implements IEventDispatcher {
 		if(itemXMLDescription.@height.length())
 			item.height = Number(itemXMLDescription.@height);
 		
-		if(itemDescription.staticFlag =='self' || itemDescription.staticFlag =='all')
+		if(itemDescription.staticFlag =="self" || itemDescription.staticFlag =="all")
 			IItem(item).isStatic = true;
 		
 		applyStyles(item, itemXMLDescription);
@@ -355,20 +355,20 @@ public class RenderManager implements IEventDispatcher {
 		for each(var childXMLDescription:XML in itemXMLDescription.*) {
 			
 			var childName:String = childXMLDescription.name().localName;
-			var childId:String = '';
+			var childId:String = "";
 			
-			if(childXMLDescription.@id.length != 0 && itemStaticFlag != 'children' && itemStaticFlag != 'all')
+			if(childXMLDescription.@id.length != 0 && itemStaticFlag != "children" && itemStaticFlag != "all")
 				childId = childXMLDescription.@id; 
 			
 			switch(childName) {
 			
-			case 'container':
+			case "container":
 			
-			case 'table':
+			case "table":
 				
-			case 'row':
+			case "row":
 			
-			case 'cell':
+			case "cell":
 				
 				var childDescription:ItemDescription = createItemDescription(childId, itemId);
 				
@@ -385,29 +385,35 @@ public class RenderManager implements IEventDispatcher {
 			
 			// --------------------------------------
 			
-			case 'text':
+			case "text":
 				
+				var style:String = "";
 				var viewText:EditableHTML = new EditableHTML();
 				var isEditable:Boolean = false;
-				var fontStyle:String = '12px Tahoma';
-				var colorStyle:String = '#000000';
+				var fontStyle:String = "font:Tahoma, 12px;";
+				var colorStyle:String = "color:#000000;";
 				
 				viewText.paintsDefaultBackground = false;
 				viewText.x = childXMLDescription.@left;
 				viewText.y = childXMLDescription.@top;
 				
 				if(childXMLDescription.@color.length())
-					colorStyle = childXMLDescription.@color;
+					colorStyle = "color:#" + childXMLDescription.@color + ";";
 				
 				if(childXMLDescription.@font.length())
-					fontStyle = childXMLDescription.@font;
+					fontStyle = "font:" + childXMLDescription.@font + ";";
+				
+				style = colorStyle + fontStyle;
 				
 				if(childXMLDescription.@width.length())
 					viewText.width = childXMLDescription.@width;
 				
+				if(childXMLDescription.@height.length())
+					viewText.height = childXMLDescription.@height;
+				
 				var HTMLText:String = childXMLDescription;
 				
-				viewText.setStyle('backgroundAlpha', .0);
+				viewText.setStyle("backgroundAlpha", .0);
 				
 				if(childXMLDescription.@editable.length() && IItem(item).isStatic == false) {
 					
@@ -416,24 +422,25 @@ public class RenderManager implements IEventDispatcher {
 					IItem(item).editableAttributes.push(
 						{destName:String(childXMLDescription.@editable),
 						sourceObject:viewText,
-						sourceName:'editabledText'}
+						sourceName:"editabledText"}
 					);
 				}
-				if(HTMLText == '')
-					HTMLText = '<div>simple text </div>';
+				if(HTMLText == "")
+					HTMLText = "<div>simple text</div>";
 				HTMLText =
-						'<html><head>' + 
-						'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
-						'</head>' +
-						'<body style="margin:0px;">' +
+						"<html><head>" + 
+						"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+						"</head>" +
+						"<body style=\"margin:0px; " + style + "\" \>" +
 						HTMLText +
-						'</body></html>';
-				
+						"</body></html>";
+						
 				viewText.htmlText = HTMLText;
+				 
 				item.addChild(viewText);
 			break;
 			
-			case 'graphics':
+			case "graphics":
 				
 				renderGraphics(item, childXMLDescription);
 			break
@@ -468,7 +475,7 @@ public class RenderManager implements IEventDispatcher {
 		currentSprite.graphics.lineStyle(NaN);
 			switch(childName) {
 			
-			case 'rectangle': {
+			case "rectangle": {
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100
@@ -477,14 +484,14 @@ public class RenderManager implements IEventDispatcher {
 					thickness = childXMLDescription.@size;
 				
 				if(childXMLDescription.@stroke.length()) {
-					borderColor = Number('0x' + childXMLDescription.@stroke.toString().substring(1));
+					borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
 					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
 				}
 				
 				if(childXMLDescription.@color.length())
-					fillColor = Number('0x' + childXMLDescription.@color.toString().substring(1))
+					fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
 				else
-					alpha = .0;	
+					alpha = 0;	
 				
 				
 				currentSprite.graphics.beginFill(fillColor, alpha);
@@ -501,7 +508,7 @@ public class RenderManager implements IEventDispatcher {
 						
 				break;
 			}
-			case 'ellipse': {
+			case "ellipse": {
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100
@@ -510,12 +517,12 @@ public class RenderManager implements IEventDispatcher {
 					thickness = childXMLDescription.@size;
 				
 				if(childXMLDescription.@stroke.length()) {
-					borderColor = Number('0x' + childXMLDescription.@stroke.toString().substring(1));
+					borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
 					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
 				}
 				
 				if(childXMLDescription.@color.length())
-					fillColor = Number('0x' + childXMLDescription.@color.toString().substring(1))
+					fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
 				else
 					alpha = .0;	
 				
@@ -534,7 +541,7 @@ public class RenderManager implements IEventDispatcher {
 				
 				break
 			}
-			case 'picture': {
+			case "picture": {
 					
 					var resourceId:String = childXMLDescription.@resource;
 					var img:Image = new Image();
@@ -550,13 +557,13 @@ public class RenderManager implements IEventDispatcher {
 					
 					if(childXMLDescription.@editable.length()) {
 						
-						var tempObject:Object = {value:'#Res('+resourceId+')'};
+						var tempObject:Object = {value:"#Res("+resourceId+")"};
 						
 						IItem(item).editableAttributes.push( 
 							{
 								destName:String(childXMLDescription.@editable),
 								sourceObject:tempObject,
-								sourceName:'value'
+								sourceName:"value"
 							}
 						)
 					}
@@ -564,10 +571,11 @@ public class RenderManager implements IEventDispatcher {
 					img.maintainAspectRatio = false;
 					graphicsLayer.rawChildren.addChild(img);
 					
-					fileManager.loadResource(itemId, resourceId, img, 'source', true);
+					fileManager.loadResource(itemId, resourceId, img, "source", true);
+//					fileManager.loadResource(applicationId, resourceId, img, "source", true);
 				break;
 			}
-			case 'line': {
+			case "line": {
 				
 				if(childXMLDescription.@alpha.length())
 					alpha = Number(childXMLDescription.@alpha)/100;
@@ -588,7 +596,7 @@ public class RenderManager implements IEventDispatcher {
 					thickness = Number(childXMLDescription.@size);
 				
 				if(childXMLDescription.@color.length())
-					lineColor = Number('0x' + childXMLDescription.@color.toString().substring(1))
+					lineColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
 				else
 					alpha = .0;	
 				
@@ -609,7 +617,7 @@ public class RenderManager implements IEventDispatcher {
 	{
 		var setBorder:Boolean = false;
 		
-		var alpha:Number = 1
+		var alpha:Number = 0
 		var backgroundColor:Number = 0xFFFFFF;
 		
 		var borderThickness:Number = 1;
@@ -618,15 +626,14 @@ public class RenderManager implements IEventDispatcher {
 		if(itemXMLDescription.@color[0]) {
 			
 			alpha = 1;
-			backgroundColor = Number('0x' + itemXMLDescription.@color.toString().substring(1));
+			backgroundColor = Number("0x" + itemXMLDescription.@color.toString().substring(1));
 		}
 		
 		if(itemXMLDescription.@stroke[0]) {
 			
 			setBorder = true;
-			borderColor = Number('0x' + itemXMLDescription.@stroke.toString().substring(1));
+			borderColor = Number("0x" + itemXMLDescription.@stroke.toString().substring(1));
 		}
-		
 		
 		if(itemXMLDescription.@alpha[0])
 			alpha = Number(itemXMLDescription.@alpha)/100
@@ -638,15 +645,15 @@ public class RenderManager implements IEventDispatcher {
 			item.setStyle("borderColor", borderColor);
 		}
 		
-		item.setStyle('alpha', alpha);
-		item.setStyle('backgroundColor', backgroundColor);
+		item.setStyle("backgroundAlpha",  alpha);
+		item.setStyle("backgroundColor", backgroundColor);
 	}
 	
 	private function renderWysiwygOkHandler(event:SoapEvent):void
 	{
 		var itemXMLDescription:XML = event.result.Result.*[0];
 		
-		if(itemXMLDescription.@id.length() == 0) 
+		if(itemXMLDescription.@id.length() == 0)
 			return;
 		
 		var key:String = event.result.Key[0];
@@ -674,10 +681,10 @@ public class RenderManager implements IEventDispatcher {
 		var arrayOfItems:Array = sortItems(itemId);
 		var count:uint = 0;
 		
-		for each (var collectionItem:Container in arrayOfItems) {
-			
-			if(collectionItem.parent) {
-				
+		for each (var collectionItem:Container in arrayOfItems)
+		{
+			if(collectionItem.parent)
+			{
 				collectionItem.parent.setChildIndex(collectionItem, count);
 				count++;
 			}
@@ -696,16 +703,17 @@ public class RenderManager implements IEventDispatcher {
 			var p_arrayOfItems:Array = sortItems(itemDescription.parentId);
 			var p_count:uint = 0;
 			
-			for each (var p_collectionItem:Container in p_arrayOfItems) {
-				
-				if(p_collectionItem.parent) {
+			for each (var p_collectionItem:Container in p_arrayOfItems)
+			{
+				if(p_collectionItem.parent)
+				{
 					p_collectionItem.parent.setChildIndex(p_collectionItem, p_count);
 					p_count++;
 				}
 			}
 		}
-		else {
-			
+		else
+		{
 			itemAsContainer.percentWidth = 100;
 			itemAsContainer.percentHeight = 100;
 			
@@ -713,7 +721,7 @@ public class RenderManager implements IEventDispatcher {
 				rootContainer.addChild(itemAsContainer);
 		}
 		
-		itemAsContainer.dispatchEvent(new Event('refreshComplete'));
+		itemAsContainer.dispatchEvent(new Event("refreshComplete"));
 		itemAsContainer.visible = true;
 		
 		item.waitMode = false;

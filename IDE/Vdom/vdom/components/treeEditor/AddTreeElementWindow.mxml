@@ -120,7 +120,7 @@
 			
 			treeElementID = obID;
 			typeResourse = getIcon(typeID);
-			dataManager.addEventListener('currentObjectChanged', changeAttributesHandler);
+			dataManager.addEventListener('currentPageChanged', changeAttributesHandler);
 			dataManager.changeCurrentPage(obID);
 		}
 	

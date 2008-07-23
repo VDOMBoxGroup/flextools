@@ -23,18 +23,23 @@ import vdom.managers.LanguageManager;
 public var vdomLogo:Class;
 
 [Bindable]
-private var dataManager:DataManager;
+private var dataManager:DataManager = DataManager.getInstance();
 
-private var languageManager:LanguageManager;
-private var authenticationManager:AuthenticationManager;
-private var fileManager:FileManager;
-private var cacheManager:CacheManager;
-private var soap:Soap;
+private var languageManager:LanguageManager = LanguageManager.getInstance();
+private var authenticationManager:AuthenticationManager = AuthenticationManager.getInstance();
+private var fileManager:FileManager = FileManager.getInstance();
+private var cacheManager:CacheManager = CacheManager.getInstance();
+private var soap:Soap = Soap.getInstance();
 
 
 private var ppm:MyLoader;
 
-private var tempStorage:Object;
+private var tempStorage:Object = {};
+
+public function switchToEditor():void
+{
+	tabPanel.selectedChild = editorModule;
+}
 
 private function changeLanguageHandler(event:Event):void
 {	
@@ -46,19 +51,11 @@ private function preinitalizeHandler():void
 	Singleton.registerClass("vdom.managers::IVdomDragManager", 
 		Class(getDefinitionByName("vdom.managers::VdomDragManagerImpl")));
 	
-	authenticationManager = AuthenticationManager.getInstance();
-	languageManager = LanguageManager.getInstance();
-	dataManager = DataManager.getInstance();
-	soap = Soap.getInstance();
-	fileManager = FileManager.getInstance();
-	cacheManager = CacheManager.getInstance();
-	
 	languageManager.init(languageList);
 	cacheManager.init();
 	
-	tempStorage = {};
-	
 	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
+	dataManager.addEventListener(DataManagerEvent.CLOSE, dataManager_close);
 }
 
 private function showLoginFormHandler():void
@@ -113,6 +110,12 @@ private function submitLogin(event:LoginFormEvent):void
 	authenticationManager.login();
 }
 
+private function switchToLogin():void
+{
+	authenticationManager.changeAuthenticationInformation(null, null, null);
+	viewstack.selectedChild=loginForm;
+}
+
 private function authenticationManager_loginComleteHandler(event:Event):void
 {	
 	authenticationManager.removeEventListener(
@@ -137,18 +140,20 @@ private function dataManager_initCompleteHandler(event:DataManagerEvent):void
 private function dataManager_typesLoadedHandler(event:DataManagerEvent):void
 {
 	dataManager.removeEventListener(DataManagerEvent.TYPES_LOADED, dataManager_typesLoadedHandler);
-	
-	viewstack.selectedChild=main;
 	ppm.showText = '';
 	PopUpManager.removePopUp(ppm);
+	viewstack.selectedChild=main;
 }
 
-private function soap_faultHandler(event:FaultEvent):void {
-	
+private function dataManager_close(event:DataManagerEvent):void
+{
+	switchToLogin();
+}
+
+private function soap_faultHandler(event:FaultEvent):void
+{
 	Alert.show(event.fault.faultString, 'Error');
-	
+	ppm.showText = '';
 	PopUpManager.removePopUp(ppm);
 	dataManager.close();
-	authenticationManager.changeAuthenticationInformation(null, null, null);
-	viewstack.selectedChild=loginForm;
 }

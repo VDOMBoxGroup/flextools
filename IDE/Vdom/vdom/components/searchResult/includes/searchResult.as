@@ -1,19 +1,24 @@
 import mx.collections.HierarchicalData;
 
 import vdom.events.SearchResultEvent;
+import vdom.managers.DataManager;
 
 [Bindable]
 private var resultList:XMLList;
 
+[Bindable]
+public var _applicationName:String;
+
 private var applicationId:String;
 
+private var dataManager:DataManager = DataManager.getInstance();
 
 public function set dataProvider(value:XMLList):void
 {
 	if(!value.length())
 		return;
 	
-	applicationName.text = value.Name;
+	_applicationName = value.@Name;
 	applicationId = value[0].@ID;
 	
 	searchDataGrid.dataProvider = new HierarchicalData(value.*);
@@ -33,8 +38,8 @@ private function collapseAll():void
 
 private function goToEdit():void
 {
-	var element:XML = XML(searchDataGrid.selectedItem);
-	var pageId:String, objectId:String; 
+	var element:XML = XML(searchDataGrid.selectedItem); 
+	var pageId:String, objectId:String;
 	
 	if(element.name() == 'Object') {
 		
@@ -45,10 +50,8 @@ private function goToEdit():void
 		
 		pageId = objectId = element.@ID;
 	}
-		
-	var sre:SearchResultEvent = 
-		new SearchResultEvent(SearchResultEvent.SEARCH_OBJECT_SELECTED);
 	
+	var sre:SearchResultEvent = new SearchResultEvent(SearchResultEvent.SEARCH_OBJECT_SELECTED);
 	sre.applicationId = applicationId;
 	sre.pageId = pageId;
 	sre.objectId = objectId;
@@ -56,8 +59,12 @@ private function goToEdit():void
 	dispatchEvent(sre);
 }
 
+private function clear():void
+{
+	dispatchEvent(new SearchResultEvent(SearchResultEvent.SEARCH_CLOSE));
+}
+
 private function showHandler():void
 {
 	
 }
-

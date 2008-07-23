@@ -41,10 +41,9 @@
 			panelName="{resourceManager.getString('Application','main_applist')}" 
 			height="86" />
 		
-		<controls:ApplicationInformation
+		<controls:ApplicationInformation id="applicationInformation"
 			panelName="{resourceManager.getString('Application','main_appinfo')}"
-			height="86" 
-			dataProvider="{dataManager.currentApplicationInformation}" />
+			height="86" />
 		
 	</controls:ControlPanel>
 	

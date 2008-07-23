@@ -8,14 +8,14 @@
 	<mx:Image id="applicationIcon"
 		width="50" height="50" />
 		
-	<mx:Label text="Application Name" fontWeight="bold" fontSize="12"/>
+	<mx:Label text="Application Name" fontWeight="normal" fontSize="10"/>
 	<mx:Label id="applicationName"
-		width="200"/>
+		width="200" fontSize="12" fontWeight="bold"/>
 		
-	<mx:Label text="Application Description" fontWeight="bold" fontSize="12"/>
+	<mx:Label text="Application Description" fontWeight="normal" fontSize="10"/>
 	<mx:TextArea id="applicationDescription"
 		borderColor="#000000" backgroundAlpha="0" 
-		editable="false" width="200" borderStyle="none"/>
+		editable="false" width="200" borderStyle="none" fontWeight="bold" fontSize="12"/>
 		
 	<mx:Button label="Edit Application" 
 		cornerRadius="0"

@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:Canvas
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
 	creationComplete="creationCompleteHandler();"
+	
 	doubleClickEnabled="true"
 	height="50">
 	<mx:Script>
 		<![CDATA[
+			import vdom.managers.DataManager;
 			import mx.core.windowClasses.TitleBar;
 			import mx.core.WindowedApplication;
 			import mx.core.Application;
 			import mx.core.IWindow;
-			private function creationCompleteHandler():void {
-				
+			
+			private var dataManager:DataManager = DataManager.getInstance();
+			
+			private function creationCompleteHandler():void
+			{	
 				addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 				addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 				
@@ -40,19 +47,19 @@
 											 closeButton_clickHandler);
 			}
 			
-			private function get window():IWindow {
-				
+			private function get window():IWindow
+			{
 				return IWindow(Application.application);
 			}
 			
-			private static function isMac():Boolean {
-			
+			private static function isMac():Boolean
+			{
 				return Capabilities.os.substring(0, 3) == "Mac";
 			}
 			
 			override protected function updateDisplayList(unscaledWidth:Number,
-												  unscaledHeight:Number):void {
-												  	
+												  unscaledHeight:Number):void
+			{
 				super.updateDisplayList(unscaledWidth, unscaledHeight);
 				
 				if (!isMac()) {
@@ -67,12 +74,13 @@
 				}						  	
 			}
 			
-			private function minimizeButton_clickHandler(event:Event):void {
-				
+			private function minimizeButton_clickHandler(event:Event):void
+			{
 				window.minimize();
 			}
 			
-			private function maximizeButton_clickHandler(event:Event):void {
+			private function maximizeButton_clickHandler(event:Event):void
+			{
 				if (window.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED)
 					window.restore();
 				
@@ -83,20 +91,20 @@
 				}
 			}
 			
-			private function closeButton_clickHandler(event:Event):void {
-				
+			private function closeButton_clickHandler(event:Event):void
+			{
 				window.close();
 			}
 			
-			private function mouseDownHandler(event:MouseEvent):void {
-				
+			private function mouseDownHandler(event:MouseEvent):void
+			{
 				window.nativeWindow.startMove();
 				
 				event.stopPropagation();
 			}
 			
-			private function doubleClickHandler(event:MouseEvent):void {
-				
+			private function doubleClickHandler(event:MouseEvent):void
+			{
 				if (isMac())
 					window.minimize();
 					
@@ -113,9 +121,15 @@
 				}
 			}
 			
-			private function button_mouseDownHandler(event:MouseEvent):void {
+			private function button_mouseDownHandler(event:MouseEvent):void
+			{
 				
 				event.stopPropagation();
+			}
+			
+			private function logout():void
+			{
+				dataManager.close();
 			}
 		]]>
 	</mx:Script>
@@ -123,4 +137,5 @@
 	<mx:Button id="maximizeButton" y="1" width="21" height="16" right="24"/>
 	<mx:Button id="closeButton" y="1" width="24" height="16" right="1"/>
 	<mx:Button visible="false" y="1" width="24" height="16" right="69" cornerRadius="0" fillAlphas="[1.0, 1.0]" fillColors="[#FF0000, #FF0000]"/>
+	<mx:Button label="Logout" right="20" top="22" cornerRadius="0" click="logout();"/>
 </mx:Canvas>

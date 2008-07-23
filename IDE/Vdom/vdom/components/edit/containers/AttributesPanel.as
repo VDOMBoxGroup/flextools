@@ -659,6 +659,8 @@ public class AttributesPanel extends ClosablePanel {
 		
 		objectDescription.@Name = fieldsArray['Name'][0][fieldsArray['Name'][1]];
 		
+		var objectChanged:Boolean = false;
+	
 		for (var attrName:String in fieldsArray) {
 			if(!cursor.findFirst({'@Name':attrName}))
 				continue;
@@ -674,7 +676,10 @@ public class AttributesPanel extends ClosablePanel {
 			else
 				value = fieldsArray[attrName][0][fieldsArray[attrName][1]];
 				
-			if(value != null) {
+			if(value != null && currentElement != value) {
+				
+				objectChanged = true;
+				
 				var xmlCharRegExp:RegExp = /[<>&"]+/;
 			
 				if(value.search(xmlCharRegExp) != -1)
@@ -683,8 +688,8 @@ public class AttributesPanel extends ClosablePanel {
 					currentElement.*[0] = value;
 			}
 		}
-		
-		dispatchEvent(new Event('propsChanged'));
+		if(objectChanged)
+			dispatchEvent(new Event('propsChanged'));
 	}
 	
 	private function deleteButton_clickHandler(event:MouseEvent):void {

@@ -8,7 +8,6 @@ import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.ColorPickerEvent;
 import mx.events.ListEvent;
-import mx.managers.FocusManager;
 import mx.managers.PopUpManager;
 
 import vdom.containers.IItem;
@@ -27,6 +26,9 @@ private var contentDocument:*
 
 private var _selfChanged:Boolean = false;
 
+private var oldValue:String = '';
+private var loaded:Boolean;
+
 [Bindable]
 private var font:ArrayCollection;
 
@@ -42,6 +44,9 @@ private function set editableElement(value:EditableHTML):void {
 
 public function init(item:IItem, container:*):void {
 	
+//	trace("--> init");
+	oldValue = container.editabledText;
+	loaded = false;
 	editableElement = container;
 	selectedItem = Container(item);
 	
@@ -71,8 +76,17 @@ private function editableElement_completeHandler(event:Event):void {
 }
 
 public function close():void {
+//	trace("--> close");
 	
-	var value:* = tinyMCE.getContent();
+	registerEvent(false);
+	var value:*;
+	
+	if(loaded)
+		value = tinyMCE.getContent();
+	else
+		value = oldValue;
+	
+	loaded = false;
 	/* var xEditingArea:* = editableElement.domWindow.document.getElementById('xEditingArea');
 	xEditingArea.parentNode.removeChild(xEditingArea);
 	var eee:* = editableElement.domWindow.document.getElementsByTagName('body')[0];
@@ -121,6 +135,8 @@ private function completeHandler(e:Event):void {
 		iFrame.style.height = newHeight + 'px'
 		selectedItem.dispatchEvent(new Event('refreshComplete'));
 	}
+	
+	loaded = true;
 }
 
 private function editableElement_KeyUpHandler(event:KeyboardEvent):void {
@@ -231,4 +247,14 @@ private function updateCodeHandler(event:Event):void {
 	event.currentTarget.removeEventListener('updateCode', updateCodeHandler);
 	tinyMCE.setContent(event.currentTarget.code);
 	PopUpManager.removePopUp(UIComponent(event.currentTarget));
+}
+
+private function registerEvent(flag:Boolean):void
+{	
+	if(!flag) {
+		editableElement.removeEventListener(Event.COMPLETE, editableElement_completeHandler);
+		editableElement.removeEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
+		sample.removeEventListener(Event.HTML_DOM_INITIALIZE, HtmlDomInitalizeHandler);
+		sample.removeEventListener(Event.COMPLETE, completeHandler);
+	} 
 }

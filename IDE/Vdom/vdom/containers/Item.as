@@ -6,11 +6,13 @@ import flash.display.Sprite;
 
 import mx.containers.Canvas;
 import mx.core.FlexSprite;
+import mx.core.IRectangularBorder;
 import mx.core.UIComponent;
+import mx.core.mx_internal;
 
 import vdom.managers.wc;	
 
-use namespace mx.core.mx_internal;
+use namespace mx_internal;
 
 public class Item extends Canvas implements IItem
 {	
@@ -58,6 +60,8 @@ public class Item extends Canvas implements IItem
 			
 			_graphicsLayer.visible = true;
 			_waitLayout.visible = false;
+			_waitLayout.width = 0;
+			_waitLayout.height = 0;
 		}
 		
 		_waitMode = value;
@@ -85,12 +89,26 @@ public class Item extends Canvas implements IItem
 	
 	override protected function createChildren():void
 	{	
+		
 		super.createChildren();
 		
 		if(!_graphicsLayer)
 			_graphicsLayer = new Canvas();
 		
-		rawChildren.addChild(_graphicsLayer);
+		var childIndex:int;
+		
+		if (border)
+		{
+			childIndex = rawChildren.getChildIndex(DisplayObject(border)) + 1;
+			if (border is IRectangularBorder && IRectangularBorder(border).hasBackgroundImage)
+				childIndex++;
+		}
+		else
+		{
+			childIndex = 0;
+		}
+		
+		rawChildren.addChildAt(_graphicsLayer, childIndex);
 		
 		if(!_highlightMarker)
 			_highlightMarker = new Canvas();
@@ -158,7 +176,7 @@ public class Item extends Canvas implements IItem
 		_highlightMarker.visible = true;
 	}
 	
-	override mx.core.mx_internal function createContentPane():void
+	override mx_internal function createContentPane():void
 	{
 		if (contentPane)
 			return;
@@ -168,7 +186,7 @@ public class Item extends Canvas implements IItem
 		// Reparent the children.  Get the number before we create contentPane
 		// because that changes logic of how many children we have
 		var n:int = numChildren;
-
+		
 		var newPane:Sprite = new FlexSprite();
 		newPane.name = "contentPane";
 		newPane.tabChildren = true;
@@ -176,10 +194,24 @@ public class Item extends Canvas implements IItem
 		// Place content pane above border and background image but below
 		// all other chrome.
 		var childIndex:int;
-	
-		childIndex = rawChildren.getChildIndex(DisplayObject(graphicsLayer)) + 1;
+		
+		if (border)
+		{
+			childIndex = rawChildren.getChildIndex(DisplayObject(border)) + 1;
+			if (border is IRectangularBorder && IRectangularBorder(border).hasBackgroundImage)
+				childIndex++;
+		}
+		else
+		{
+			childIndex = 0;
+		}
+		
+		if(graphicsLayer && graphicsLayer.parent == this)
+			childIndex = rawChildren.getChildIndex(DisplayObject(graphicsLayer)) + 1;
 		
 		rawChildren.addChildAt(newPane, childIndex);
+		
+		
 		
 		var allChildren:Array = getChildren();
 		

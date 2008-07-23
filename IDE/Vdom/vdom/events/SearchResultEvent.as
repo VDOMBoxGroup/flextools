@@ -6,6 +6,7 @@ public class SearchResultEvent extends Event {
 	
 	// Define static constant.
 	public static const SEARCH_OBJECT_SELECTED:String = 'searchObjectSelected';
+	public static const SEARCH_CLOSE:String = 'searchClose';
 	
 	// Define a public variable to hold the state of the enable property.
 	public var applicationId:String;

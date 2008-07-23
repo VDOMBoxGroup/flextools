@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	implements="vdom.controls.IToolBar"
 	width="100%"
-	paddingBottom="5" paddingTop="5" paddingRight="5" paddingLeft="5">
+	paddingBottom="5" paddingTop="5" paddingRight="5" paddingLeft="5" backgroundColor="#F0F0F0">
 	<mx:Style>
 		.toolbarButton {
 			cornerRadius:0;
@@ -21,7 +21,7 @@
 	
 	<mx:Script source="includes/imageToolBar.as"/>
 	
-	<mx:HBox>	
+	<mx:HBox left="5" right="5" bottom="5" top="2">	
 		<mx:Button
 			styleName="toolbarButton" 
 			width="20" height="20"

@@ -1,6 +1,5 @@
 import flash.display.DisplayObject;
 import flash.events.Event;
-import flash.utils.ByteArray;
 
 import mx.core.Application;
 import mx.events.FlexEvent;
@@ -30,10 +29,12 @@ private function showHandler():void
 	
 	defaultValues = new ApplicationDescription();
 	
-	defaultValues.id = dataManager.currentApplicationInformation.Id;
-	defaultValues.name = dataManager.currentApplicationInformation.Name;
-	defaultValues.description = dataManager.currentApplicationInformation.Description;
-	defaultValues.iconId = dataManager.currentApplicationInformation.Icon;
+	var applicationInformation:XML = dataManager.applicationInformation();
+	
+	defaultValues.id = applicationInformation.Id;
+	defaultValues.name = applicationInformation.Name;
+	defaultValues.description = applicationInformation.Description;
+	defaultValues.iconId = applicationInformation.Icon;
 	
 	applicationEditor.defaultValues = defaultValues;
 	applicationEditor.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
@@ -90,7 +91,7 @@ private function setInformation():void
 	if(newValues.description != defaultValues.description)
 		attributes.appendChild(<Description>{newValues.description}</Description>);
 	
-	if(newValues.iconId != defaultValues.iconId)
+	if(newValues.iconId && newValues.iconId != defaultValues.iconId)
 		attributes.appendChild(<Icon>{newValues.iconId}</Icon>);
 	
 	dataManager.addEventListener(

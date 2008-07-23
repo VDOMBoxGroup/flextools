@@ -1,22 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ActionPanel xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+<ActionPanel
+	xmlns="vdom.containers.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="vdom.controls.*"
+	
+	layout="absolute" >
 	<mx:Script>
 		<![CDATA[
-			public function set dataProvider(xml:XML):void {
+			import vdom.managers.FileManager;
+			import mx.core.Application;
+			
+			[Bindable]
+			private var _source:Object;
+			
+			public function set dataProvider(value:XML):void
+			{
+				if(!value)
+					return;
+			
+				applicationName.text = value.Name.toString();
+				applicationPage.text = value.Numberofpages.toString();
+				applicationObjects.text = value.Numberofobjects.toString();
 				
-				if(xml) {
-					applicationName.text = xml.Name.toString();
-					applicationPage.text = xml.Numberofpages.toString();
-					applicationObjects.text = xml.Numberofobjects.toString();
+				if(value.Icon == '') {
+					
+					_source = Application.application.getStyle('appIconFile');
+				}
+				else {
+					
+					var fileManager:FileManager = FileManager.getInstance();
+					fileManager.loadResource(value.Id, value.Icon, applicationIcon, 'source', true);
 				}
 			}
 		]]>
 	</mx:Script>
-	<mx:Canvas width="50" height="50" x="0" y="0" backgroundColor="#4AEA61" borderStyle="none">
-	</mx:Canvas>
-	<mx:Label width="100" id="applicationName" y="50" height="15"/>
-	<mx:Label width="51" y="0" x="58" text="Pages" textAlign="right"/>
-	<mx:Label width="51" y="17" x="58" text="Objects" textAlign="right"/>
-	<mx:Label width="41" id="applicationPage" y="0" height="15" x="117"/>
-	<mx:Label width="41" id="applicationObjects" y="17" height="15" x="117"/>
+	<controls:BorderImage id="applicationIcon"
+		source="{_source}"
+		width="50" height="50" x="0" y="0" />
+	<mx:Label width="100" id="applicationName" y="50" height="15" color="#FFFFFF"/>
+	<mx:Label width="51" y="0" x="58" text="Pages" textAlign="right" color="#FFFFFF"/>
+	<mx:Label width="51" y="17" x="58" text="Objects" textAlign="right" color="#FFFFFF"/>
+	<mx:Label width="41" id="applicationPage" y="0" height="15" x="117" color="#FFFFFF"/>
+	<mx:Label width="41" id="applicationObjects" y="17" height="15" x="117" color="#FFFFFF"/>
 </ActionPanel>
