@@ -25,13 +25,41 @@ package vdom.components.eventEditor
 		override public function set dataProvider(value:Object):void
 		{
 		/* <Object label="header_image" ID='' Type='' resourceID='' containerID=''/>*/
-		  dataXML =  <root/>;	
+		  	dataXML  = new XML('<Object/>');
+			dataXML.@label 	= value.@label;
+			dataXML.@resourceID = value.@resourceID;
 		  
-		  for each(var child:XML in value)
+		  
+		  var type:XML = dataManager.getTypeByTypeId(value.@Type);
+			var tempXML:XML;
+			
+			for each(var child:XML in type.E2vdom.Events.Userinterfaceevents.children() )
+			{
+			 	tempXML = <Event/>;
+				tempXML.@label = child.@Name;
+				tempXML.@Name = child.@Name;
+				tempXML.@ObjSrcID = value.@ID;
+				
+				dataXML.appendChild(tempXML);
+			} 
+			
+			for each(child in type.E2vdom.Events.Objectevents.children() )
+			{
+				tempXML = <Event/>;
+				tempXML.@label = child.@Name;
+				tempXML.@Name  = child.@Name;
+				tempXML.@ObjSrcID = value.@ID;
+			
+				dataXML.appendChild(tempXML);
+			} 	
+		  
+		 value = value as XML;
+		  for each(child in value.children())
 		  {
 		  	dataXML.appendChild(getChilds(child))
 		  }
-			super.dataProvider = dataXML;
+		  
+		  super.dataProvider = dataXML;
 		}
 		
 		private function getChilds(inXML:XML):XML
