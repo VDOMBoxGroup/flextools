@@ -44,7 +44,7 @@ package vdom.components.eventEditor
 				} 
 			
 			value = value as XML;
-			for each(var child:XML in value.children())
+			for each(child in value.children())
 			{
 				dataXML.appendChild(getChilds(child))
 			}
