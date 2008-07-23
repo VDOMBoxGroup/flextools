@@ -110,20 +110,29 @@
 		}	
 		
 		
-		
+		private var obID:String;
 		private function  createObjectHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObjectHandler);
 			var xmlObj:XML = new XML(dmEvt.result);
-			var obID:String = xmlObj.Object.@ID;
+				obID = xmlObj.Object.@ID;
 			var typeID:String = xmlObj.Object.@Type.toXMLString();
 			
 			treeElementID = obID;
 			typeResourse = getIcon(typeID);
-			dataManager.addEventListener('currentPageChanged', changeAttributesHandler);
+			dataManager.addEventListener('currentPageChanged', changePagesHandler);
 			dataManager.changeCurrentPage(obID);
 		}
 	
+		private function changePagesHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener('currentPageChanged', changePagesHandler);
+			
+			dataManager.addEventListener("currentObjectChanged", changeObjectHandler);
+			
+			dataManager.changeCurrentObject(obID);
+		}
+		
 	//	resourse brouser
 		private function getIcon(ID:String):String
 		{
@@ -139,13 +148,16 @@
 			return  '';
 		}
 		
-		private function changeAttributesHandler(dmEvt:Event):void
+		private function changeObjectHandler(dmEvt:Event):void
 		{
-			dataManager.removeEventListener('currentObjectChanged', changeAttributesHandler);
+			dataManager.removeEventListener("currentObjectChanged", changeObjectHandler)
 			//dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
 			
 			if(!dataManager.currentObject)
+			{
+				PopUpManager.removePopUp(spinner);
 				return;
+			}
 
 			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
 		
