@@ -282,18 +282,26 @@ package vdom.components.treeEditor
 		
 		private function saveChange():void
 		{
-			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
+			dataManager.addEventListener('currentPageChanged', changePagesHandler);
 			dataManager.changeCurrentPage(_ID);
-			 
 		}
 		
-		private function changeAttributes(dmEvt:DataManagerEvent):void
+		private function changePagesHandler(dmEvt:DataManagerEvent):void
 		{
-			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributes);
+			dataManager.removeEventListener('currentPageChanged', changePagesHandler);
+			
+			dataManager.addEventListener("currentObjectChanged", changeObjectHandler);
+			
+			dataManager.changeCurrentObject(_ID);
+		}
+		
+		private function changeObjectHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener("currentObjectChanged", changeObjectHandler);
 			
 			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
 			
-			trace('1) '+dataManager.currentObject.Attributes);
+//			trace('1) '+dataManager.currentObject.Attributes);
 			
 			//dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
 			//dataManager.currentObject.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
@@ -305,16 +313,16 @@ package vdom.components.treeEditor
 			 	' </Attributes>';
 			var xml:XML = XML(str)	
 			dataManager.currentObject.Attributes = xml;
-			trace('2) '+dataManager.currentObject.Attributes);   
+//			trace('2) '+dataManager.currentObject.Attributes);   
 			
 			dataManager.updateAttributes();
-			trace('changeAttributes');
+//			trace('changeAttributes');
 		}
 		
 		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
-			trace('updateAttributeCompleted')
+//			trace('updateAttributeCompleted')
 		}
 		
 		
@@ -328,7 +336,7 @@ package vdom.components.treeEditor
 	 * */
 	 private function setResource(restype:String, resname:String, resdata:String):void
 	 {
-	 	trace('restype: '+ restype);
+//	 	trace('restype: '+ restype);
 	 	soap.setResource(dataManager.currentApplicationId,	 
 	 												restype, 
 	 												resname, 
@@ -361,7 +369,7 @@ package vdom.components.treeEditor
 	 	if( txtInp.visible == false)
 	 	{
 	 		dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_REDRAW_LINES, _ID));
-	 		startDrag();
+	 		//startDrag();
 	 	}
 	 		
 	 }

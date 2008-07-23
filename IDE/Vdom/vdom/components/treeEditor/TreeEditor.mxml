@@ -119,6 +119,7 @@
 		dX = main.mouseX - massTreeElements[trEvt.ID].x;
 		dY = main.mouseY - massTreeElements[trEvt.ID].y;
 		
+//		trace('Start');
 		Application.application.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 	}
@@ -198,6 +199,7 @@
 	
 	private function mouseUpHandler(msEvt:MouseEvent):void
 	{
+//		trace('App');
 		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 	}
@@ -206,7 +208,7 @@
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
 		var curID:String = curTree.ID;
-		
+//		trace('MOve');
 		if (main.mouseX < dX)
 			 	massTreeElements[curID].x = 0;
 			else
