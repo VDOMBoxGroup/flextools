@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalGap="4" horizontalAlign="right" xmlns:events="flash.events.*">
+	
+	<mx:String id="browseTitle">Select file...</mx:String>
+	<mx:String id="browseLabel">Browse...</mx:String>
+	<mx:String id="text"></mx:String>
+	<mx:String id="mode">open</mx:String>
+	<mx:String id="filterAll">All</mx:String>
+ 	
+ 	<mx:Metadata> 
+        [Event(name="change", type="flash.events.Event")] 
+    </mx:Metadata> 
+
+	<mx:Script>
+		<![CDATA[
+			import ExtendedAPI.com.utils.FileUtils;
+			import mx.utils.StringUtil;
+			
+			public var files:Array = [];
+			
+			public var filterArray:Array = [];
+		
+			private function onBrowseClick(event:MouseEvent):void
+			{				
+            	var file:File = new File(File.documentsDirectory.nativePath);
+            	
+            	if(text)
+            	{
+            		if(FileUtils.isValidPath(text))            		
+            		file.url = FileUtils.pathToUrl(text);
+            		if(!file.exists)
+            			file = new File(File.documentsDirectory.nativePath);
+            	}
+            	
+            	var filter:FileFilter = new FileFilter(
+            		StringUtil.substitute("{0} ({1})", filterAll, "*.*"), 
+            		"*.*");
+            		
+            	var filters:Array = filterArray.length>0 ? filterArray : [filter];
+            		            	
+				file.addEventListener(Event.SELECT, onSelect);
+				file.addEventListener(FileListEvent.SELECT_MULTIPLE, onMultiSelect);
+				
+				switch(mode.toLowerCase())
+				{
+					case 'save':
+						file.browseForSave(browseTitle);
+						break;
+					case 'dir':
+						file.browseForDirectory(browseTitle);
+						break;
+					case 'multi':
+						file.browseForOpenMultiple(browseTitle, filters);
+						break;						
+					default:
+						file.browseForOpen(browseTitle, filters);	
+				}
+			}
+				    
+		    private function onSelect(event:Event):void
+            {
+            	var file:File = event.target as File;
+           			
+				txtInput.text = file.nativePath;
+				txtInput.dispatchEvent(new Event(Event.CHANGE));
+				
+				files = [];
+				files.push(file);     	
+            }
+
+		    private function onMultiSelect(event:FileListEvent):void
+            {
+            	files = event.files;
+            }					
+            
+		]]>
+	</mx:Script>
+	
+	<mx:TextInput width="100%" id="txtInput" text="{text}"  
+		change="text=txtInput.text; dispatchEvent(new Event(Event.CHANGE));"/>
+	<mx:Button label="{browseLabel}" 
+		paddingLeft="2" paddingRight="2" paddingTop="0" paddingBottom="0" 
+		id="btnBrowse"
+		click="onBrowseClick(event)"/>
+</mx:HBox>
