@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<flex-config>
+	<!--exclude-classes>
+		<class>DrawingAPI.com.Version</class>
+	</exclude-classes-->
+	
+	<compiler>
+		<library-path>
+			<path-element>C:\Documents and Settings\user\My Documents\Flex Builder 3\Singularity\bin</path-element>
+			<path-element>C:\Program Files\Adobe\Flex Builder 3\sdks\3.0.0\frameworks\libs</path-element>
+		</library-path>
+	</compiler>
+	
+	<main-title>DrawingAPI Documentation</main-title>
+	<window-title>DrawingAPI Documentation</window-title>
+	<version>true</version>
+	<footer><![CDATA[2008 Developed by Eugene Lee (alert83@gmail.com)]]></footer>
+</flex-config>
