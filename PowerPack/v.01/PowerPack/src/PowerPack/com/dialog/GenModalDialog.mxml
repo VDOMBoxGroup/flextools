@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModalDialog xmlns="PowerPack.com.dialog.*" xmlns:mx="http://www.adobe.com/2006/mxml"		
+	showStatusBar="false"
+	showGripper="false"
+	systemChrome="none"
+	transparent="true">		
+	<mx:Script>
+		<![CDATA[
+			import PowerPack.customize.core.windowClasses.GeneratorTitleBar;
+
+		    //----------------------------------
+		    //  titleBarFactory
+		    //----------------------------------
+			
+			/**
+			 *  @private
+			 *  Storage for the titleBarFactory property
+			 */
+			private var _titleBarFactory:IFactory = new ClassFactory(GeneratorTitleBar);
+			
+			/**
+		     *  @private
+		     */
+			private var titleBarFactoryChanged:Boolean = false;
+			
+			[Bindable("titleBarFactoryChanged")]
+			
+			/**
+		     *  The IFactory that creates an instance to use
+		     *  as the title bar.
+		     *  The default value is an IFactory for TitleBar.
+		     *
+		     *  <p>If you write a custom title bar class, it should expose
+		     *  public properties named <code>titleIcon</code>
+		     *  and <code>title</code>.</p>
+		     */
+		    override public function get titleBarFactory():IFactory
+		    {
+		        return _titleBarFactory;
+		    }
+		
+		    /**
+		     *  @private
+		     */
+		    override public function set titleBarFactory(value:IFactory):void
+		    {
+		        _titleBarFactory = value;
+				titleBarFactoryChanged = true;
+		
+				invalidateProperties();
+		
+		        dispatchEvent(new Event("titleBarFactoryChanged"));
+		    }			
+			
+		]]>		
+	</mx:Script>
+	
+	
+</ModalDialog>

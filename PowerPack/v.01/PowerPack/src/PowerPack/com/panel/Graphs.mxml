@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		initialize="init();"
+		height="100%">
+	
+	<mx:XML id="templateXML"></mx:XML>
+	
+	<mx:Script>
+		<![CDATA[
+			import PowerPack.com.managers.ContextManager;
+			import mx.events.CollectionEventKind;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.events.CollectionEvent;
+			import mx.managers.DragManager;
+			import PowerPack.com.managers.LanguageManager;
+			import PowerPack.com.panel.graphsClasses.AccordionHeader;
+			import PowerPack.com.panel.graphsClasses.AccordionChild;
+			import PowerPack.com.graph.GraphCanvas;
+			import PowerPack.com.graph.Node;
+			import mx.utils.ArrayUtil;
+			import mx.managers.FocusManager;
+			import mx.controls.List;
+			import mx.events.DropdownEvent;
+            import mx.events.ListEvent;
+			import mx.collections.ArrayCollection;
+			import mx.containers.ViewStack;
+			import mx.controls.ComboBox;
+			import mx.binding.utils.*;
+            import mx.utils.ObjectProxy;
+
+
+			static private var defaultCaptions:Object = {
+				none:"none",
+				lbl_new:"New",
+				lbl_rename:"Rename",
+				lbl_delete:"Delete",
+				lbl_help:"Help",
+				initial_graph:"Initial graph:",
+				graphs_title:"VDOM Application"
+			}
+			
+			static private var _classConstructed:Boolean = classConstruct(); 
+			
+			static private function classConstruct():Boolean
+			{
+				LanguageManager.setSentences(defaultCaptions);
+				return true
+			}
+				    
+		    //--------------------------------------------------------------------------
+		    //
+		    //  Variables and properties
+		    //
+		    //--------------------------------------------------------------------------			
+			
+			public var vsViewStack:ViewStack;	
+			
+			public var curTab:AccordionChild;
+			public var curGraph:GraphCanvas;
+			
+			[Bindable]
+			private var initGraphs:ArrayCollection = new ArrayCollection();	
+			
+			//--------------------------------------------------------------------------
+			//
+			//  Class methods
+			//
+			//--------------------------------------------------------------------------
+					
+			private function init():void
+			{
+				initGraphs.addItem(new ObjectProxy({	name: LanguageManager.sentences['none'], 
+														initial: false,
+														className: 'ObjectProxy' }));	
+				
+				// Binding to first initial combobox element label				
+				LanguageManager.bindSentence('none', initGraphs.getItemAt(0), 'name');
+				
+				// We need to repopulate graphs if templateXML has been changed
+				BindingUtils.bindSetter(populateGraphs, this, "templateXML");
+				
+				for each(var label:String in ["application", "container", "resources"])
+				{
+					createCategoryTab(label);			
+				}
+				
+				btnNew.addEventListener(MouseEvent.CLICK, btnNewClickHandler);	
+				btnRename.addEventListener(MouseEvent.CLICK, btnRenameClickHandler);	
+				btnDelete.addEventListener(MouseEvent.CLICK, btnDeleteClickHandler);	
+				btnHelp.addEventListener(MouseEvent.CLICK, btnHelpClickHandler);	
+				
+				cbInitGraph.addEventListener(DropdownEvent.CLOSE, cbInitGraphCloseHandler);
+					
+				initGraphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);				
+			}
+			
+			public function clear():void
+			{
+				// remove all except first 'none' position
+				while(initGraphs.length>1)
+					initGraphs.removeItemAt(1);				
+
+				for each (var child:DisplayObject in graphsAccordion.getChildren())
+				{
+					AccordionChild(child).graphs.removeAll();
+				}
+
+				//graphsAccordion.removeAllChildren();
+				
+				for each (child in vsViewStack.getChildren())
+				{
+					if(child is GraphCanvas)
+						GraphCanvas(child).dispose();
+				}
+				
+				selectGraph(null);
+				
+				vsViewStack.validateNow();
+				validateNow();					
+			}
+			
+			public function createCategoryTab(label:String):AccordionChild
+			{
+				var graphAccordionChild:AccordionChild = new AccordionChild();
+				graphAccordionChild.label = label;
+				graphsAccordion.addChild(graphAccordionChild);
+
+				graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, changeLstGraphsHandler);
+				graphAccordionChild.lstGraphs.addEventListener(MouseEvent.DOUBLE_CLICK, btnRenameClickHandler);
+				graphAccordionChild.lstGraphs.addEventListener("editingComplete", completeEditLstGraphsHandler);	
+				
+				graphAccordionChild.addEventListener("captionChanged", captionChangedHandler);	
+				
+				return graphAccordionChild;
+			}	
+			
+			public function findFirstGraph():GraphCanvas
+			{
+				for each(var child:AccordionChild in graphsAccordion.getChildren())
+				{
+					if(child.graphs.length>0)
+						return child.graphs.getItemAt(0) as GraphCanvas;
+				}
+				return null;				
+			}
+			
+			public function selectGraph(graph:GraphCanvas):void
+			{
+				if(!graph)
+				{
+					if(curTab)
+						curTab.lstGraphs.selectedIndex = -1;												
+					curTab = null;
+					curGraph = null;									
+					graphsAccordion.selectedIndex = -1;
+					vsViewStack.selectedIndex = -1;
+				}
+				else
+				{					
+					for each(var child:AccordionChild in graphsAccordion.getChildren())
+					{
+						var index:int = child.graphs.getItemIndex(graph);
+						if(index>=0)
+						{
+							curGraph = graph;
+							if(curTab && curTab!=child)
+								curTab.lstGraphs.selectedIndex = -1;
+							curTab = child;
+							graphsAccordion.selectedChild = curTab;
+							curTab.lstGraphs.selectedIndex = index;
+							vsViewStack.selectedChild = graph;
+							break;
+						}
+					}
+				}					
+			}
+			
+			public function populateGraph(xml:XML):void
+			{
+				if(!xml)
+					return; 
+
+				var graphXML:XML = xml;
+				var newGraph:GraphCanvas = new GraphCanvas();				
+
+				initGraphs.addItem(newGraph);
+				vsViewStack.addChild(newGraph);
+
+				newGraph.fromXML(graphXML.toXMLString());
+
+				var graphAccordionChild:AccordionChild = null;
+
+				for(var i:int=0; i<graphsAccordion.numChildren; i++)
+				{
+					if(AccordionChild(graphsAccordion.getChildAt(i)).label==newGraph.category)
+					{
+						graphAccordionChild = graphsAccordion.getChildAt(i) as AccordionChild;
+						break;
+					}
+				}
+				
+				if(!graphAccordionChild)
+					graphAccordionChild = createCategoryTab(newGraph.category); 
+
+				graphAccordionChild.graphs.addItem(newGraph);
+
+			}
+			
+			/** 
+			 *	Fill in viewstack, list and combobox with graphs
+			 */	 
+			public function populateGraphs(xml:XML):void
+			{	
+				if(!xml)
+					return; 
+
+				clear();
+				
+				for each (var graphXML:XML in templateXML.elements("graph"))
+				{			
+					populateGraph(graphXML);
+				}	
+				
+				selectGraph(findFirstGraph());
+				
+				// set initial graph in combobox
+				
+				cbInitGraph.selectedIndex = 0;
+				for(var i:int=0; i<initGraphs.length; i++)
+				{
+					if(initGraphs.getItemAt(i).initial)
+					{
+						cbInitGraph.selectedIndex = i;
+						break;
+					}
+				}
+			}
+						
+			/** 
+			 *	Gen XML that represents template
+			 */	
+			public function toXML():XML
+			{
+				var tmplXML:XML = new XML(<structure></structure>);
+				
+				for each (var child:DisplayObject in vsViewStack.getChildren())
+				{
+					if(child is GraphCanvas)
+					{
+						var graphXML:XML = GraphCanvas(child).toXML();		
+						tmplXML.appendChild(graphXML);
+					}
+				} 
+				
+				return tmplXML;
+			}
+			
+			public function getNodeByName(name:String):Node
+			{
+				var node:Node;
+				for each(var graph:GraphCanvas in vsViewStack.getChildren())
+				{
+					var obj:Object = graph.getChildByName(name);
+					if(obj && obj is Node)
+					{
+						node = obj as Node;
+						break;
+					} 
+				}				
+				return node;
+			}
+
+			public function showNodeByName(name:String):Node
+			{
+				var node:Node;
+				for each(var graph:GraphCanvas in vsViewStack.getChildren())
+				{
+					var obj:Object = graph.getChildByName(name);
+					if(obj && obj is Node)
+					{
+						showGraphByName(graph.name);
+						node = obj as Node;
+						node.scrollToNode();
+						graph.validateNow();
+						break;
+					} 
+				}				
+				return node;
+			}
+
+			public function getGraphByName(name:String):GraphCanvas
+			{
+				var object:Object = vsViewStack.getChildByName(name);
+				if(object is GraphCanvas)
+					return object as GraphCanvas;
+				return null;
+			}
+
+			public function showGraphByName(name:String):GraphCanvas
+			{
+				var graph:GraphCanvas = getGraphByName(name);
+				if(!graph)
+					return null;
+				
+				selectGraph(graph);
+				
+				validateNow();
+				vsViewStack.validateNow();
+				
+				curTab.lstGraphs.validateNow();
+				curTab.lstGraphs.scrollToIndex(curTab.graphs.getItemIndex(graph));
+				
+				return graph;
+			}
+
+			//--------------------------------------------------------------------------
+		    //
+		    //  Event handlers
+		    //
+		    //--------------------------------------------------------------------------	
+		    
+		    private function onInitGraphsChange(event:CollectionEvent):void
+		    {	
+	    	    if(!event || event.kind != CollectionEventKind.REFRESH)
+	    	    {
+	    	    	var sort:Sort = new Sort();
+     				sort.fields = [new SortField('className', true, true), new SortField('name', true)];
+     			
+     				initGraphs.sort = sort;
+       				initGraphs.refresh();
+       			}
+		    }
+			
+			private function changeLstGraphsHandler(event:Event):void
+			{
+				if(!DragManager.isDragging)
+					selectGraph(GraphCanvas(List(event.target).selectedItem));
+				//else
+					//callLater(selectGraph, [GraphCanvas(vsViewStack.selectedChild)]);
+			}
+
+			private function completeEditLstGraphsHandler(event:ListEvent):void
+			{        	
+				vsViewStack.invalidateDisplayList();
+				cbInitGraph.invalidateDisplayList();       						
+			}
+				    			
+	    	// Change initial graph
+			private function cbInitGraphCloseHandler(event:DropdownEvent):void
+			{
+				for each (var child:DisplayObject in vsViewStack.getChildren())
+				{
+					if(child is GraphCanvas)
+						GraphCanvas(child).initial = false;
+				}
+				
+				if(ComboBox(event.target).selectedItem is GraphCanvas)
+					GraphCanvas(ComboBox(event.target).selectedItem).initial = true;
+			}
+			
+			private function btnNewClickHandler(event:MouseEvent):void
+			{
+				var child:AccordionChild = AccordionChild(graphsAccordion.selectedChild);
+				
+				if(!child)
+					return;
+				
+				var newGraph:GraphCanvas = new GraphCanvas();
+									
+				newGraph.label = newGraph.name;
+				newGraph.category = child.label;
+
+				initGraphs.addItem(newGraph);
+				child.graphs.addItem(newGraph);										
+				vsViewStack.addChild(newGraph);				
+				
+				selectGraph(newGraph);
+				
+				child.lstGraphs.validateNow();
+				child.lstGraphs.scrollToIndex(child.graphs.getItemIndex(newGraph));
+				
+				child.lstGraphs.editable = true; 
+				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
+			}
+				
+			private function btnRenameClickHandler(event:Object):void
+			{				
+				if(!curGraph)
+					return;
+				
+				selectGraph(curGraph);
+				
+				curTab.lstGraphs.editable = true;
+				curTab.lstGraphs.editedItemPosition = {rowIndex: curTab.lstGraphs.selectedIndex, columnIndex: 0};
+			}	
+					
+			private function btnDeleteClickHandler(event:MouseEvent):void
+			{
+				if(!curGraph)
+					return;
+				
+				selectGraph(curGraph);
+
+				var newIndex:int = curTab.lstGraphs.selectedIndex-1;
+				newIndex = newIndex<0 ? 0 : newIndex;
+				
+				if(cbInitGraph.selectedItem == curGraph)
+					cbInitGraph.selectedIndex = 0;
+				
+				initGraphs.removeItemAt(initGraphs.getItemIndex(curGraph));
+				curTab.graphs.removeItemAt(curTab.lstGraphs.selectedIndex);
+				GraphCanvas(curGraph).dispose();
+				
+				curTab.lstGraphs.validateNow();
+				vsViewStack.validateNow();
+				
+				if(curTab.graphs.length>0)
+				{
+					selectGraph(curTab.graphs[newIndex]);
+				}				
+				else
+				{
+					selectGraph(findFirstGraph());
+				}
+			}	
+						    		
+			private function btnHelpClickHandler(event:MouseEvent):void
+			{
+				// TODO
+			}	
+					
+			private function captionChangedHandler(event:Event):void
+			{
+				for each(var graph:GraphCanvas in AccordionChild(event.target).graphs)
+				{
+					graph.category = event.target.label;
+				}
+			}								
+		]]>
+	</mx:Script>
+	
+	<mx:Panel width="100%" height="100%" layout="absolute" title="{LanguageManager.sentences.graphs_title}">
+				
+		<mx:VBox width="100%" height="100%" verticalGap="0">
+		
+			<mx:ControlBar paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" horizontalGap="1" width="100%" horizontalAlign="center" id="ctrlBar">
+				<mx:Button toolTip="{LanguageManager.sentences.lbl_new}" labelPlacement="bottom" fontFamily="Arial" textAlign="center" cornerRadius="3" alpha="0.9" id="btnNew" width="100%" paddingRight="0" paddingLeft="0" fontSize="9" icon="{ContextManager.addClass}" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="3" borderColor="#CCD1D5"/>
+				<mx:Button toolTip="{LanguageManager.sentences.lbl_rename}" labelPlacement="bottom" fontFamily="Arial" cornerRadius="3" alpha="0.9" id="btnRename" width="100%" textAlign="center" paddingLeft="0" paddingRight="0" fontSize="9" icon="{ContextManager.editClass}" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="3" borderColor="#CCD1D5"/>
+				<mx:Button toolTip="{LanguageManager.sentences.lbl_delete}" fontFamily="Arial" cornerRadius="3" labelPlacement="bottom" alpha="0.9" id="btnDelete" width="100%" paddingLeft="0" paddingRight="0" textAlign="center" fontSize="9" icon="{ContextManager.deleteClass}" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="3" borderColor="#CCD1D5"/>
+				<mx:Button toolTip="{LanguageManager.sentences.lbl_help}" fontFamily="Arial" cornerRadius="3" labelPlacement="bottom" alpha="0.9" id="btnHelp" width="100%" paddingLeft="0" paddingRight="0" textAlign="center" fontSize="9" icon="{ContextManager.helpClass}" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="3" borderColor="#CCD1D5"/>
+			</mx:ControlBar>
+			
+			<mx:Accordion 
+				headerRenderer="PowerPack.com.panel.graphsClasses.AccordionHeader" 
+				id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">		
+			</mx:Accordion>
+			
+		</mx:VBox>
+
+	</mx:Panel>
+	
+	<mx:Panel width="100%" layout="absolute" title="{LanguageManager.sentences.initial_graph}">
+		<mx:ComboBox width="100%" id="cbInitGraph" dataProvider="{initGraphs}" labelField="name"></mx:ComboBox>
+	</mx:Panel>
+	
+</mx:VBox>
