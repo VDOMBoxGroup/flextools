@@ -1,9 +1,9 @@
 package vdom.components.eventEditor
 {
-	import mx.collections.XMLListCollection;
 	import mx.core.ClassFactory;
 	
 	import vdom.managers.DataManager;
+	import vdom.utils.IconUtil;
 
 	public class TreeEvents extends DragTree
 	{
@@ -11,6 +11,7 @@ package vdom.components.eventEditor
 		public function TreeEvents()
 		{
 			super();
+			iconFunction = getIcon;
 			
 			dataManager = DataManager.getInstance();
 			var productRenderer:ClassFactory = new ClassFactory(EventItemRender);
@@ -23,7 +24,7 @@ package vdom.components.eventEditor
 		private var dataXML:XML ;
 		override public function set dataProvider(value:Object):void
 		{
-		
+		/* <Object label="header_image" ID='' Type='' resourceID='' containerID=''/>*/
 		  dataXML =  <root/>;	
 		  
 		  for each(var child:XML in value)
@@ -72,5 +73,17 @@ package vdom.components.eventEditor
 		{
 			dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'false';
 		}	
+		
+		private function getIcon(value:Object):Class 
+		{
+			var xmlData:XML = XML(value);
+		
+			if (xmlData.@resourceID.toXMLString() =='')
+				return event;
+		
+			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+		 	
+	 		return IconUtil.getClass(this, data, 16, 16);
+		}
 	}
 }

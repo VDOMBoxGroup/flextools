@@ -1,14 +1,20 @@
 package vdom.components.eventEditor
 {
 	import vdom.managers.DataManager;
+	import vdom.utils.IconUtil;
 	
 	public class TreeActions extends DragTree
 	{
 		private var dataManager:DataManager ;
-		
+	/*	
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='event')]
+		[Bindable]
+		public var event:Class;
+		*/
 		public function TreeActions()
 		{
 			super();
+			iconFunction = getIcon;
 			
 			dataManager = DataManager.getInstance();
 		}
@@ -46,6 +52,18 @@ package vdom.components.eventEditor
 				} 
 			
 			return outXML;
+		}
+		
+		 private function getIcon(value:Object):Class 
+		{
+			var xmlData:XML = XML(value);
+		
+			if (xmlData.@resourceID.toXMLString() =='')
+				return action;
+		
+			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+		 	
+	 		return IconUtil.getClass(this, data, 16, 16);
 		}
 	}
 }

@@ -14,9 +14,9 @@ package vdom.components.eventEditor
 
 	public class AdvansedLayer extends Canvas
 	{
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='delete')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='advansedLayer')]
 		[Bindable]
-		public var delet:Class;
+		public var advansedLayer:Class;
 		
 		private var typeName:String;
 		private var inputText:TextInput = new TextInput();
@@ -27,24 +27,28 @@ package vdom.components.eventEditor
 			super();
 			
 			this.typeName = typeName;
+		//	this.height = 40;
+			
 			_scriptName = inXML.@ScriptName;
 			_data = inXML.@DefaultValue
 			
 			var img:Image = new Image();
-				img.source = delet;
+				img.source = advansedLayer;
 				img.x = 3;
 				img.y = 2;
+				img.width = 13;
+				img.height = 13;
 			addChild(img);
 
 			var vRule:VRule = new VRule();
-				vRule.x = 25;
+				vRule.x = 20;
 				vRule.percentHeight = 100;
 			addChild(vRule);
 			
 			
 			var label:Label = new Label();
 				label.text = _scriptName + ": ";
-				label.width = 75;
+				label.width = 80;
 				label.x = vRule.x;
 				label.setStyle('textAlign', 'right')
 			//	label.setStyle("fontWeight", 'bold');
@@ -54,9 +58,11 @@ package vdom.components.eventEditor
 		//	var inputText:TextInput = new TextInput();
 				
 				inputText.text = _data;
-				inputText.width = 65;
+				inputText.width = 64;
 				inputText.height = 18;
 				inputText.x = 100;
+				inputText.setStyle("borderColor", "#DDDDDD");
+				inputText.setStyle("borderStyle", "solid");
 				inputText.setStyle("fontSize", '8');
 				inputText.setStyle("fontWeight", 'bold');
 				inputText.setStyle("textAlign", 'center');
@@ -65,7 +71,7 @@ package vdom.components.eventEditor
 				
 			
 			var hRule:HRule = new HRule();
-				hRule.y = 17;
+				hRule.y = 19;
 				hRule.percentWidth = 100;
 			addChild(hRule);
 			

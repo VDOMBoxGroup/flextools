@@ -1,5 +1,6 @@
 package vdom.components.eventEditor 
 {
+	import flash.display.Loader;
 	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
@@ -14,34 +15,39 @@ package vdom.components.eventEditor
 	
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
+	import vdom.managers.FileManager;
 	
 	
 
 	public class EventEditorAction extends Canvas
 	{
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='header')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='header_action')]
 		[Bindable]
 		public var header:Class;
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='plus')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='plus')]
 		[Bindable]
 		public var plus:Class;
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='minus')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='minus')]
 		[Bindable]
 		public var minus:Class;
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='line')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='line')]
 		[Bindable]
 		public var line:Class;
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='delete')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='delete')]
 		[Bindable]
 		public var delet:Class;
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='menu')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='menu')]
 		[Bindable]
 		public var menu:Class;
+		
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='action')]
+		[Bindable]
+		public var action:Class;
 		
 	
 		private var btLine:Button;
@@ -60,7 +66,7 @@ package vdom.components.eventEditor
 		private var imgheader:Image;
 		private var imgDelete:Image;
 		private var imgType:Image;
-		private var imgLine:Image;
+//		private var imgLine:Image;
 		private var cnvUpLayer	:Canvas = new Canvas();
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
@@ -159,7 +165,7 @@ package vdom.components.eventEditor
 			}	
 
 			min = blHide;
-			trace(min.toString())
+//			trace(min.toString())
 			isRedraw = true;
 			
 		}
@@ -210,14 +216,16 @@ package vdom.components.eventEditor
 			
 			imgMenu = new Image();
 			imgMenu.source = menu;
+			imgMenu.maintainAspectRatio = false;
+			imgMenu.scaleContent = true;
 			
-			
+		/*	
 			imgLine = new Image();
 			imgLine.source = line;
 			imgLine.buttonMode = true;
 			
 			imgLine.addEventListener(MouseEvent.CLICK, lineClickHandler);
-			
+			*/
 			imgDelete = new Image();
 			imgDelete.source = delet; 
 			imgDelete.buttonMode = true;
@@ -242,7 +250,7 @@ package vdom.components.eventEditor
 			cnvUpLayer.addChild(txt);
 			cnvUpLayer.addChild(imgPlus);
 			cnvUpLayer.addChild(txtInp);
-			cnvUpLayer.addChild(imgLine);
+//			cnvUpLayer.addChild(imgLine);
 			cnvUpLayer.addChild(imgDelete);
 			
 			cnvUpLayer.addEventListener(MouseEvent.MOUSE_DOWN, startDragHandler);
@@ -253,7 +261,7 @@ package vdom.components.eventEditor
 		
 		private var _name:String;
 		private var scriptNamesArray:Array = []; /* of advansedLayer*/
-	//	private var _eventType:String; to _methodName
+		private var objectName:SimpleLayer;
 		private function initDownBody(data:Object, containerID:String):void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
@@ -280,13 +288,23 @@ package vdom.components.eventEditor
 			
 			
 			var object:XML = dataManager.getObject(data.@ObjTgtID);
-			var objectName:SimpleLayer = new SimpleLayer(object.@Name);
+			objectName = new SimpleLayer(object.@Name);
 			vBox.addChild(objectName);
 			
 			var type_TEMP:String = dataManager.getTypeByObjectId(data.@ObjTgtID).toXMLString();
 			var type:XML = new XML(type_TEMP);
+			
 			var objectEvent:SimpleLayer = new SimpleLayer(data.@MethodName);
+			objectEvent.source = action;
 			vBox.addChild(objectEvent);
+			
+			
+			var fileManager:FileManager = FileManager.getInstance();
+			var  regResource:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
+			var _value:String =  type.Information.StructureIcon;
+			var matchResult:Array = _value.match(regResource);
+			var resID:String = matchResult[1];
+			fileManager.loadResource(dataManager.currentApplicationId,  resID, this);
 			
 			_name = object.@Name;
 			_objTgtID 	= data.@ObjTgtID;
@@ -320,21 +338,21 @@ package vdom.components.eventEditor
 			imgheader.width = 243 * _ratio;
 			imgheader.height = 30 * _ratio;
 			
-			imgMenu.width = 56 * _ratio;
+			imgMenu.width = 36 * _ratio;
 			imgMenu.height = 14 * _ratio;
 
 			txt.y = 2 * _ratio;
 			txt.width =  240 * _ratio;
 			
-			 
+			 /*
 			imgLine.y = -12 * _ratio; 
 			imgLine.x = 20 * _ratio;	
 			imgLine.width = 10 * _ratio;
 			imgLine.height = 10 * _ratio;
-			
+			*/
 			//imgDelete 
 			imgDelete.y = -12 * _ratio;
-			imgDelete.x = 40 * _ratio;	
+			imgDelete.x = 20 * _ratio;	
 			imgDelete.width = 10 * _ratio;
 			imgDelete.height = 10 * _ratio;
 			
@@ -380,7 +398,7 @@ package vdom.components.eventEditor
 		
 		public function get State():String
 		{
-			trace('return: '+min.toString());
+//			trace('return: '+min.toString());
 			return min.toString();
 		}
 		
@@ -396,5 +414,23 @@ package vdom.components.eventEditor
 			
 			return outXMLList;
 		}
+		
+		private var loader:Loader = new Loader();
+		public function set resource(data:Object):void
+		{
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+			
+			loader.loadBytes(data.data);
+			//image.source = data.data;
+		}
+		
+		
+		private function loadComplete(evt:Event):void 
+		{
+   			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
+   			//image.width = loader.width;
+   			//image.height = loader.height;
+   			objectName.source = loader.content;
+   		}
 	}
 }

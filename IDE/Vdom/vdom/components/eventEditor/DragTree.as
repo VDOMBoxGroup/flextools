@@ -7,10 +7,13 @@ package vdom.components.eventEditor
 
 	public class DragTree extends Tree
 	{
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='plus')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='action')]
 		[Bindable]
-		public var plus:Class;
+		public var action:Class;
 		
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='event')]
+		[Bindable]
+		public var event:Class;
 
 	
 		public function DragTree()
@@ -21,8 +24,8 @@ package vdom.components.eventEditor
 			labelField = "@label";
 			showRoot = false;
 			percentHeight = 100;//width = 200;
-			percentWidth = 100;
-			iconFunction = getIcon;
+//			percentWidth = 100;
+			
 			//itemRenderer = new ClassFactory(IconTreeItemRenderer);
 			
 		  	addEventListener(DragEvent.DRAG_COMPLETE, onTreeDragComplete);
@@ -36,17 +39,7 @@ package vdom.components.eventEditor
 			//else	dragItemEnabled = true;
 		}
 		
-		private function getIcon(value:Object):Class 
-		{
-			var xmlData:XML = XML(value);
-		
-			if (xmlData.@resourceID.toXMLString() =='')
-				return plus;
-		
-			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
-		 	
-	 		return IconUtil.getClass(this, data, 16, 16);
-		}
+	
 	
 	}
 }
