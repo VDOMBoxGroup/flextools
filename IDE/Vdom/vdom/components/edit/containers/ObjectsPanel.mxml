@@ -4,7 +4,8 @@
 	xmlns="vdom.containers.*"
 	
 	creationComplete="creationCompleteHendler();"
-xmlns:containers="vdom.components.edit.containers.*">
+
+xmlns:containers="vdom.components.edit.containers.*" >
 
 <mx:Metadata>
 		[Event(name="change", type="mx.events.ListEvent")]
@@ -85,7 +86,7 @@ xmlns:containers="vdom.components.edit.containers.*">
 				tree.validateNow();
 			} 
 			
-			
+		
 		}
 		
 		private var masResourceID:Array = new Array();
@@ -152,11 +153,13 @@ xmlns:containers="vdom.components.edit.containers.*">
 			if(!xml) 
 				return;
 			
-			var currentElement:XML = xmlTreeData.source..*.(@ID == xml.@ID)[0];
 			
+			var currentElement:XML = xmlTreeData.source..Object.(@ID == xml.@ID)[0];
+			
+//			if(!currentElement)
+//				return;
+//			
 			openTree(currentElement);
-			
-			
 			
 			tree.selectedItem = currentElement;
 			
