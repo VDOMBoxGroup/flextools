@@ -4,9 +4,7 @@
 	xmlns="vdom.containers.*"
 	
 	creationComplete="creationCompleteHendler();"
-	
-	width="100%"
->
+xmlns:containers="vdom.components.edit.containers.*">
 
 <mx:Metadata>
 		[Event(name="change", type="mx.events.ListEvent")]
@@ -34,7 +32,6 @@
 		[Bindable]
 		private var publicData:Object;
 		private var dataManager:DataManager;
-		private var tree:Tree = new Tree();
 		private var xmlTreeData:XMLListCollection;
 		[Bindable]
 		private var topLevelObjectId:Object;
@@ -54,16 +51,12 @@
 		private function creationCompleteHendler():void
 		{
 			dataManager = DataManager.getInstance();
-			    tree.percentHeight = 100;
-			    tree.percentWidth = 100;
 				tree.showRoot = true; 
 				
 				tree.labelField = "@label";
 				tree.addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 				tree.addEventListener(Event.CHANGE, treeChangeLister);
 				tree.iconFunction = getIcon;
-			    
-			    addChild(tree);
 		}
 		
 		public function set dataProvider(xmlData:XMLList):void {
@@ -89,6 +82,7 @@
 					xmlTreeData.addItem(xmlList);
 			} 
 				tree.dataProvider = xmlTreeData;
+				tree.validateNow();
 			} 
 			
 			
@@ -168,7 +162,9 @@
 			
 			var index:int =  tree.getItemIndex(tree.selectedItem);
 //			tree.selectedIndex = index;
+			tree.rowCount
 			tree.scrollToIndex(index);
+			
 		}
 		
 		private function openTree(item:Object):void
@@ -181,8 +177,8 @@
 				tree.validateNow();
 			}
 		}
-		
 	]]>
 </mx:Script>
+	<containers:OTree id="tree"  width="100%" />
 	
 </ClosablePanel>
