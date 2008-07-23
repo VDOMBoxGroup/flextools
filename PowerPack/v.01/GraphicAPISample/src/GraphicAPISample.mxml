@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:com="DrawingAPI.com.*"
+	layout="absolute"
+	applicationComplete="applyStroke();">
+	
+	<mx:Script>
+		<![CDATA[
+			import GraphicAPI.drawing.Draw;
+			import GraphicAPI.drawing.BrushPatternStyle;
+			import GraphicAPI.drawing.StrokePatternStyle;
+			import GraphicAPI.drawing.PStroke;
+			import flash.utils.describeType;
+			import mx.utils.ObjectUtil;
+			import flash.utils.getTimer;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			private var stroke:PStroke = new PStroke();
+			private var stroke1:PStroke = new PStroke(0x339933, 7, StrokePatternStyle.INSIDEFRAME);
+			
+			private var bMove:Boolean = false;
+			
+			[Bindable]
+			private var PATTERN_ARRAY:Array = 
+           		[	
+           			StrokePatternStyle.NONE,
+           			StrokePatternStyle.SOLID,
+           			StrokePatternStyle.DOT,
+           			StrokePatternStyle.DASH,
+           			StrokePatternStyle.DASHDOT,
+           			StrokePatternStyle.DASHDOTDOT,
+           			StrokePatternStyle.INSIDEFRAME
+           		];
+           		
+           	[Bindable]
+           	public var points:Array = [];
+
+			private function draw(_p:Point=null, _len:int=-1, clear:Boolean=false):void
+			{
+				if(points.length==0)
+					return;
+					
+				var len:int = _len>=0?_len:points.length;
+				var p:Point = _p?_p:points[len-1];
+				var d:int = p==points[len-1] ? 2 : 1;
+				
+				var brush:BitmapData = BrushPatternStyle.DiagCross();
+				switch(_brushStyle.selectedLabel)
+				{
+					case "BDiagonal":
+						brush = BrushPatternStyle.BDiagonal();
+						break;
+					case "FDiagonal":
+						brush = BrushPatternStyle.FDiagonal();
+						break;
+					case "Cross":
+						brush = BrushPatternStyle.Cross();
+						break;
+					case "DiagCross":
+						brush = BrushPatternStyle.DiagCross();
+						break;
+					case "Horizontal":
+						brush = BrushPatternStyle.Horizontal();
+						break;
+					case "Vertical":
+						brush = BrushPatternStyle.Vertical();
+						break;
+				}
+				
+				if(clear)
+				{
+					img.graphics.clear();
+					cnvs.graphics.clear();
+				}		
+
+				var timer:int = getTimer();
+				switch(action.dataProvider[action.selectedIndex].action)
+				{
+					case 'lineTo':
+						bMove = true;
+						if(len>0 || bMove)
+						{
+							Draw.lineTo(img.graphics, p.x, p.y);
+						}
+						break;
+					case 'polygon':
+						img.graphics.clear();
+						
+						Draw.applyStroke(img.graphics, stroke1);
+						Draw.polygon(img.graphics, points);									
+						
+						if(_fill.selected)
+							img.graphics.beginBitmapFill(brush);
+						
+						Draw.applyStroke(img.graphics, stroke);
+						Draw.polygon(img.graphics, points);
+						
+						if(_fill.selected)
+							img.graphics.endFill();
+
+						Draw.applyStroke(img.graphics, stroke);
+						break;
+					case 'roundedPolygon':
+						img.graphics.clear();
+						
+						Draw.applyStroke(img.graphics, stroke1);
+						Draw.roundPolygon(img.graphics, points, radius.value);
+
+						if(_fill.selected)
+							img.graphics.beginBitmapFill(brush);
+
+						Draw.applyStroke(img.graphics, stroke);
+						Draw.roundPolygon(img.graphics, points, radius.value);
+
+						if(_fill.selected)
+							img.graphics.endFill();
+						
+						Draw.applyStroke(img.graphics, stroke);
+						break;
+					case 'circle':
+						if(liveMode.selected)
+						{
+							img.graphics.clear();
+							cnvs.graphics.clear();
+						}
+															
+						if(len%2 || bMove || clear)
+						{	
+							
+							Draw.applyStroke(img.graphics, stroke1);			
+							Draw.circle(img.graphics, points[len-d].x, points[len-d].y, Math.round(Point.distance(points[len-d], p)));
+														
+							if(_fill.selected)
+								img.graphics.beginBitmapFill(brush);
+
+							Draw.applyStroke(img.graphics, stroke);
+							Draw.circle(img.graphics, points[len-d].x, points[len-d].y, Math.round(Point.distance(points[len-d], p)));
+
+							if(_fill.selected)
+								img.graphics.endFill();
+							
+							Draw.applyStroke(img.graphics, stroke);
+						}
+						
+						if(len%2==0 && !bMove)
+						{
+							Draw.moveTo(img.graphics, p.x, p.y);
+							bMove = true;
+						}
+						break;					
+					case 'ellipse':
+						if(liveMode.selected)
+						{
+							img.graphics.clear();
+							cnvs.graphics.clear();
+						}
+															
+						if(len%2 || bMove || clear)
+						{	
+							Draw.applyStroke(img.graphics, stroke1);			
+							Draw.ellipse(img.graphics, points[len-d].x, points[len-d].y, 
+								Math.abs(p.x-points[len-d].x)*2, Math.abs(p.y-points[len-d].y)*2);
+														
+							if(_fill.selected)
+								img.graphics.beginBitmapFill(brush);
+
+							Draw.applyStroke(img.graphics, stroke);
+							Draw.ellipse(img.graphics, points[len-d].x, points[len-d].y, 
+								Math.abs(p.x-points[len-d].x)*2, Math.abs(p.y-points[len-d].y)*2);
+
+							if(_fill.selected)
+								img.graphics.endFill();
+							
+							Draw.applyStroke(img.graphics, stroke);
+						}
+						
+						if(len%2==0 && !bMove)
+						{
+							Draw.moveTo(img.graphics, p.x, p.y);
+							bMove = true;
+						}					
+						break;
+					case 'arc':
+						if(liveMode.selected)
+						{
+							img.graphics.clear();
+							cnvs.graphics.clear();
+						}
+															
+						if(len%2 || bMove || clear)
+						{	
+							Draw.applyStroke(img.graphics, stroke1);						
+							Draw.arc(img.graphics, 
+								points[len-d].x, points[len-d].y, 
+								Number(sAngle.value),
+								Number(eAngle.value),
+								Math.abs(p.x-points[len-d].x)*2, Math.abs(p.y-points[len-d].y)*2,								
+								Number(angle.value)
+								);
+															
+							if(_fill.selected)
+								img.graphics.beginBitmapFill(brush);
+									
+							Draw.applyStroke(img.graphics, stroke);						
+							Draw.arc(img.graphics, 
+								points[len-d].x, points[len-d].y, 
+								Number(sAngle.value),
+								Number(eAngle.value),
+								Math.abs(p.x-points[len-d].x)*2, Math.abs(p.y-points[len-d].y)*2,								
+								Number(angle.value)
+								);
+
+							if(_fill.selected)
+								img.graphics.endFill();
+								
+							Draw.applyStroke(img.graphics, stroke);
+						}
+						
+						if(len%2==0 && !bMove)
+						{
+							Draw.moveTo(img.graphics, p.x, p.y);
+							bMove = true;
+						}						
+						break;						
+					case 'pie':
+						if(liveMode.selected)
+						{
+							img.graphics.clear();
+							cnvs.graphics.clear();
+						}
+															
+						if(len%2 || bMove || clear)
+						{
+							Draw.applyStroke(img.graphics, stroke1);						
+							Draw.pie(img.graphics, 
+								points[len-d].x, points[len-d].y, 
+								Number(sAngle.value),
+								Number(eAngle.value),
+								Math.abs(p.x-points[len-d].x)*2, Math.abs(p.y-points[len-d].y)*2,								
+								Number(angle.value)
+								);
+															
+							if(_fill.selected)
+								img.graphics.beginBitmapFill(brush);
+									
+							Draw.applyStroke(img.graphics, stroke);						
+							Draw.pie(img.graphics, 
+								points[len-d].x, points[len-d].y, 
+								Number(sAngle.value),
+								Number(eAngle.value),
+								Math.abs(p.x-points[len-d].x)*2, Math.abs(p.y-points[len-d].y)*2,								
+								Number(angle.value)
+								);
+
+							if(_fill.selected)
+								img.graphics.endFill();
+								
+							Draw.applyStroke(img.graphics, stroke);
+						}
+						
+						if(len%2==0 && !bMove)
+						{
+							Draw.moveTo(img.graphics, p.x, p.y);
+							bMove = true;
+						}						
+						break;						
+					case 'curveTo':
+						if(len>1 && points.length%2==1)
+						{
+							Draw.moveTo(img.graphics, points[len-2].x, points[len-2].y);
+							Draw.curveTo(img.graphics, points[len-1].x, points[len-1].y, p.x, p.y);
+						}
+						break;					
+					case 'polyBezier':
+						img.graphics.clear();
+						
+						Draw.applyStroke(img.graphics, stroke);						
+						Draw.polyBezier(img.graphics, points);
+						
+						break;
+					case 'Catmull-Rom':
+						img.graphics.clear();
+						
+						Draw.applyStroke(img.graphics,stroke);						
+						Draw.catmullRom(img.graphics, points);
+						
+						break;
+					case 'shape':
+						img.graphics.clear();
+						
+						Draw.applyStroke(img.graphics, stroke1);
+						Draw.closedBezier(img.graphics, points);
+
+						Draw.applyStroke(img.graphics, stroke);
+
+						if(_fill.selected)
+							img.graphics.beginBitmapFill(brush);
+						Draw.closedBezier(img.graphics, points);
+						
+						if(_fill.selected)
+							img.graphics.endFill();
+
+						Draw.applyStroke(img.graphics, stroke);
+						break;
+				}
+				
+				timer = getTimer()-timer;
+				elapsedTime.text = timer.toString() + "ms";
+	
+			}			
+			
+			private function createPoint(event:MouseEvent):void
+			{
+				var p:Point = new Point(event.localX, event.localY);
+				var len:int = points.length; 
+
+				if(!bMove)
+				{
+					points.push(p);
+				
+					cnvs.graphics.lineStyle(1,0xcc0000,1);
+					cnvs.graphics.drawCircle(event.localX, event.localY, 1);
+					
+					if(len==0)
+						Draw.moveTo(img.graphics, p.x, p.y);
+				}
+				
+				draw(p, len);				
+			}
+			
+			private function clearPoints():void
+			{
+				points = []				
+				cnvs.graphics.clear();	
+				img.graphics.clear();	
+				bMove = false; 
+				Draw.applyStroke(img.graphics, stroke);	
+			}	
+			
+			private function applyStroke():void
+			{
+				stroke.weight = _size.value;
+				stroke.color = _color.selectedColor;
+				stroke.pattern = _pattern.selectedItem;
+				stroke.alpha = _alpha.value;
+				stroke.pixelHinting = _pixelHinting.selected;
+				stroke.scaleMode = _scaleMode.selectedLabel;
+				stroke.caps = _caps.selectedLabel;
+				stroke.joints = _joints.selectedLabel;
+				stroke.miterLimit = _miterLimit.value;
+				
+				Draw.applyStroke(img.graphics, stroke);
+				
+				draw();
+			}				
+		]]>
+	</mx:Script>
+ 
+	<mx:Canvas right="10" left="10" top="10" bottom="10" id="canvas">
+		<mx:VBox width="100%" height="100%">
+			<mx:ApplicationControlBar width="100%">
+				<mx:Label text="Stroke:"/>
+				<mx:ColorPicker toolTip="color" id="_color" change="applyStroke()"/>
+				<mx:NumericStepper toolTip="weight" value="3" minimum="0" maximum="100" stepSize="1" id="_size" change="applyStroke()"/>
+				<mx:ComboBox toolTip="pattern" editable="false" labelField="name" 
+					dataProvider="{PATTERN_ARRAY}" id="_pattern" selectedIndex="1" change="applyStroke()">
+				</mx:ComboBox>
+				<mx:NumericStepper toolTip="alpha" value="1" maximum="1" minimum="0" stepSize="0.1" id="_alpha" change="applyStroke()"/>
+				<mx:CheckBox toolTip="pixel hinting" id="_pixelHinting" change="applyStroke()"/>
+				<mx:ComboBox toolTip="scale mode" selectedIndex="1" id="_scaleMode" change="applyStroke()">
+					<mx:dataProvider>
+						<mx:String>none</mx:String>
+						<mx:String>normal</mx:String>
+						<mx:String>horizontal</mx:String>
+						<mx:String>vertical</mx:String>					
+					</mx:dataProvider>
+				</mx:ComboBox>
+				<mx:ComboBox toolTip="caps" selectedIndex="0" id="_caps" change="applyStroke()">
+					<mx:dataProvider>
+						<mx:String>none</mx:String>
+						<mx:String>round</mx:String>
+						<mx:String>square</mx:String>
+					</mx:dataProvider>
+				</mx:ComboBox>
+				<mx:ComboBox toolTip="joints" selectedIndex="0" id="_joints" change="applyStroke()">
+					<mx:dataProvider>
+						<mx:String>miter</mx:String>
+						<mx:String>round</mx:String>
+						<mx:String>bevel</mx:String>
+					</mx:dataProvider>
+				</mx:ComboBox>
+				<mx:NumericStepper toolTip="miter limit" value="3" id="_miterLimit" change="applyStroke()"/>
+				<mx:VRule height="15"/>
+				<mx:Button label="Clear Stage" click="clearPoints()"/>
+			</mx:ApplicationControlBar>
+			<mx:ApplicationControlBar width="100%">
+				<mx:ToggleButtonBar id="action" itemClick="bMove=false; draw(null, -1, true)">
+					<mx:dataProvider>
+						<mx:Array> 
+							<mx:Object label="lineTo" action="lineTo"/>
+							<mx:Object label="polygon" action="polygon"/>
+							<mx:Object label="roundedPolygon" action="roundedPolygon"/>
+							<mx:Object label="circle" action="circle"/>
+							<mx:Object label="ellipse" action="ellipse"/>
+							<mx:Object label="arc" action="arc"/>
+							<mx:Object label="pie" action="pie"/>
+							<mx:Object label="curveTo" action="curveTo"/>
+							<mx:Object label="polyBezier" action="polyBezier"/>
+							<mx:Object label="Catmull-Rom" action="Catmull-Rom"/>
+							<mx:Object label="shape" action="shape"/>
+						</mx:Array>
+					</mx:dataProvider>
+				</mx:ToggleButtonBar>			
+				<mx:VRule height="15"/>
+				<mx:CheckBox label="Drag mode" id="liveMode"/>
+			</mx:ApplicationControlBar>
+			<mx:ControlBar width="100%" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+				<mx:CheckBox label="Fill" toolTip="fill figure" id="_fill" change="draw()"/>
+				<mx:ComboBox toolTip="brush style" id="_brushStyle" change="draw()" selectedIndex="0">
+					<mx:Object label="BDiagonal"/>
+					<mx:Object label="FDiagonal"/>
+					<mx:Object label="Cross"/>
+					<mx:Object label="DiagCross"/>
+					<mx:Object label="Horizontal"/>
+					<mx:Object label="Vertical"/>
+				</mx:ComboBox>
+				<mx:VRule height="15"/>
+				<mx:Label text="Corner radius ({radius.value}):" width="130"/>
+				<mx:HSlider id="radius" value="20" minimum="0" maximum="100" snapInterval="1" liveDragging="true" allowTrackClick="true" width="119" change="draw()"/>
+				<mx:VRule height="15"/>
+				<mx:Label text="Angles:"/>
+				
+				<mx:HSlider id="sAngle" value="0" minimum="-360" maximum="360" liveDragging="true" allowTrackClick="true" width="140" change="draw(null, -1, true)"/>
+				<mx:HSlider id="eAngle" value="90" minimum="-360" maximum="360" liveDragging="true" allowTrackClick="true" width="140" change="draw(null, -1, true)"/>
+				<mx:HSlider id="angle" value="0" minimum="-360" maximum="360" liveDragging="true" allowTrackClick="true" width="140" change="draw(null, -1, true)"/>
+				
+				<mx:VRule height="15"/>
+				<mx:Label text="Elapsed time:"/>
+				<mx:Label id="elapsedTime"/>
+			</mx:ControlBar>
+			<mx:Canvas width="100%" height="100%" id="cnvs" mouseMove="if(liveMode.selected) if(bMove) createPoint(event);" click="bMove=false; createPoint(event)">
+				<mx:Image id="img" width="100%" height="100%" scaleContent="false"/>
+			</mx:Canvas>
+			</mx:VBox>
+	</mx:Canvas>	
+</mx:Application>
