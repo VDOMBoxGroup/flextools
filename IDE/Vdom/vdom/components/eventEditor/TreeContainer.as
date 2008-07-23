@@ -195,9 +195,19 @@ package vdom.components.eventEditor
 			return xmllReturn;
 		}
 		
-		private function craetTreeData(xmlIn:XMLList):XMLList
+		private function craetTreeData(xmlIn:XMLList):XML
 		{
-			var xmllReturn:XMLList  = new XMLList();
+			var ID:String;
+			if(selectedNode)
+				ID = selectedNode.@ID;
+			else
+				ID = curId;
+				
+			var xmllReturn:XML  = new XML('<Object/>');
+				xmllReturn.@label 	= xmlTreeData..Object.(@ID == ID).@label;
+				xmllReturn.@ID 		= ID;
+				xmllReturn.@Type 	= xmlTreeData..Object.(@ID == ID).@Type;
+				xmllReturn.@resourceID = xmlTreeData..Object.(@ID == ID).@resourceID;
 			
 			for each(var xmlLabel:XML in xmlIn.children())
 			{
@@ -210,7 +220,7 @@ package vdom.components.eventEditor
 					 
 					xmlTemp.@containerID = curId;
 					
-					xmllReturn += xmlTemp;
+					xmllReturn.appendChild(xmlTemp)	;
 			}
 			return xmllReturn;
 		}

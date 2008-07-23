@@ -30,7 +30,7 @@ package vdom.components.eventEditor
 			dataXML.@resourceID = value.@resourceID;
 		  
 		  
-		  var type:XML = dataManager.getTypeByTypeId(value.@Type);
+		  	var type:XML = dataManager.getTypeByTypeId(value.@Type);
 			var tempXML:XML;
 			
 			for each(var child:XML in type.E2vdom.Events.Userinterfaceevents.children() )

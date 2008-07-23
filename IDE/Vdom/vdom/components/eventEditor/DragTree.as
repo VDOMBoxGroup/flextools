@@ -22,7 +22,7 @@ package vdom.components.eventEditor
 								
 			dragEnabled = true;
 			labelField = "@label";
-			showRoot = false;
+			showRoot = true;
 			percentHeight = 100;//width = 200;
 //			percentWidth = 100;
 			
