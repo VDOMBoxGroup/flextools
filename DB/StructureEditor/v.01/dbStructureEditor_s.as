@@ -2,15 +2,15 @@
 import mx.controls.Alert;
 import mx.utils.UIDUtil;
 
-private var tableStructure:XML;		/* XML got by vdom IDE (of existing table) */
+private var tableStructure:XML;				/* XML got by vdom IDE (of existing table) */
 
 private var _tableID:String;
 private var _tableName:String;
 private var _selectedListItem:Object;
-private var _manager:*;					/* External Manager */
+private var _manager:*;						/* External Manager */
 
 [Bindable]
-private var _columnsProvider:Array = [];
+private var _columnsProvider:Array = [];	/* of Object */
 
 
 public function set externalManager(ref:*):void {
@@ -77,7 +77,7 @@ private function loadXMLData(event:*):void {
 		return;
 	}
 
-	_columnsProvider = new Array();
+	_columnsProvider = []; /* Array of Object */
 	_tableID = tableStructure.table.@id;
 	_tableName = tableStructure.table.@name;
 	
@@ -171,6 +171,18 @@ private function controlsEnable(value:Boolean):void {
 }
 
 private function applyBtnHandler():void {
+	/* Check if the column with the same name is already exists */
+	var nameExists:Boolean = false;
+	for each (var column:Object in _columnsProvider) {
+		if (column.label == __name.text)
+			nameExists = true; 
+	}
+	
+	if (nameExists) {
+		showMessage("The column with the same name is already exists!");
+		return;
+	}
+	
 	/* Updating data */
 	_selectedListItem.label = __name.text;
 	_selectedListItem.type = __type.selectedItem.data;
@@ -226,7 +238,19 @@ private function applyBtnHandler():void {
 private function standartRMCMessageHandler(event:*):void {
 	try {
 		var result:XML = new XML(event.result);
-		showMessage(result.toString());
+		try {
+			var errorXML:XML = new XML(result.Error);
+			showMessage(errorXML.toString());
+		}
+		catch (err:Error) {
+			try {
+				var resultXML:XML = new XML(result.Result);
+				trace("Server response:" + resultXML.toString());				
+			}
+			catch (err:Error) {
+				return;
+			}
+		}
 	}
 	catch (err:Error) {
 		return;
