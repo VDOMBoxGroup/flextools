@@ -44,6 +44,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.BasicError;
 			import GraphicAPI.imageProcessing.Filters;
 			import GraphicAPI.GraphicUtils;
 			import mx.utils.GraphicsUtil;
@@ -416,12 +417,16 @@
 					
 					var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
 					
-					if(validateArr && validateArr.length>0)
+					if(validateArr && validateArr.filter(isError).length>0)
 						alertProceedRun();
 					else
 						runTemplate();
+						
+					function isError(element:*, index:int, arr:Array):Boolean {
+            			return (element.error.severity == BasicError.FATAL);
+        			}						
 				}
-				catch(e:Error) 
+				catch(e:Error)
 				{
 					processStep(cGeneral);
 					ContextManager.instance.templateStruct = null;

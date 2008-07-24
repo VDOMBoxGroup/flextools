@@ -147,7 +147,7 @@ public function _drawEllipse( pic:Bitmap,
 					pen:String, fill:String, alpha:int ):Object
 {
 	var ret:* = __drawFigure( pic, Draw.ellipse, 
-					[x1, y1, x2-x1, y2-y1, 0],
+					[x1+(x2-x1)/2, y1+(y2-y1)/2, x2-x1, y2-y1, 0],
 					pen, fill, alpha );
 
 	Application.application.callLater(generate);

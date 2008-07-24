@@ -6,7 +6,6 @@ import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
-import PowerPack.com.managers.SelectionManager;
 
 import flash.display.DisplayObject;
 import flash.display.NativeMenuItem;
@@ -43,6 +42,8 @@ public class GraphCanvas extends Canvas
     	graph_add_state:"Add state", 
     	graph_paste_state:"Paste state", 
     	graph_clear:"Clear",
+    	graph_expand_space:"Expand space",
+    	graph_collapse_space:"Collapse space",    	
     	graph_alert_clear_title:"Confirmation",
     	graph_alert_clear_text:"Are you sure want to clear stage?" };
     
@@ -167,6 +168,9 @@ public class GraphCanvas extends Canvas
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_add_state'], 'add_state'));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_paste_state'], 'paste_state', false, null, false, Node.copyNode&&Node.copyNode.parent?true:false));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_clear'], 'clear'));
+			contextMenu.addItem(new SuperNativeMenuItem('separator'));
+        	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_expand_space'], 'expand_space'));
+        	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_collapse_space'], 'collapse_space'));
 			
 			for each (var item:NativeMenuItem in contextMenu.items) {
 	       		LanguageManager.bindSentence('graph_'+item.name, item);
@@ -207,6 +211,34 @@ public class GraphCanvas extends Canvas
 		}
 		removeAllChildren();
 	}
+	
+	public function expandSpace():void
+	{
+		var children:Array = getChildren();
+		for each(var child:DisplayObject in children)
+		{
+			if(child is Node)
+			{
+				var node:Node = child as Node;
+				if(node.y >= contentMouseY)
+					node.y += node.height*2;		
+			}
+		}	
+	}
+	
+	public function collapseSpace():void
+	{
+		var children:Array = getChildren();
+		for each(var child:DisplayObject in children)
+		{
+			if(child is Node)
+			{
+				var node:Node = child as Node;
+				if(node.y >= contentMouseY)
+					node.y -= node.height;		
+			}
+		}	
+	}	
 	
 	// gen XML that represents graph structure
 	public function toXML():XML
@@ -347,6 +379,15 @@ public class GraphCanvas extends Canvas
 			case "clear":
 				alertClear();
 				break;
+				
+			case "expand_space":
+				expandSpace();
+				break;
+
+			case "collapse_space":
+				collapseSpace();
+				break;
+
 		}
 	}
 	

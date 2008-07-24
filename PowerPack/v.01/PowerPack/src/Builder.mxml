@@ -518,8 +518,12 @@
 						var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
 						
 						pnl_problems.array = validateArr;
-						
-						if(validateArr && validateArr.length>0)
+					
+						function isError(element:*, index:int, arr:Array):Boolean {
+            				return (element.error.severity == BasicError.FATAL);
+	        			}	
+        									
+						if(validateArr && validateArr.filter(isError).length>0)
 						{
 							alertProceedRun();
 						}

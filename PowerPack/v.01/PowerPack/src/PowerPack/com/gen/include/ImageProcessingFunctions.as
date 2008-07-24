@@ -103,10 +103,12 @@ public function _loadImage(filename:String):void
  * createPicture function section
  */		
 
-public function _createImage(width:int, height:int, bgColor:uint):Object
+public function _createImage(width:int, height:int, bgColor:int):Object
 {
 	if(bgColor<0x01000000)
 		bgColor += 0xff000000;
+	if(bgColor<0)
+		bgColor = 0x00000000;
 	
 	var bitmapData:BitmapData = new BitmapData( width, height, true, bgColor );
 	var bitmap:Bitmap = new Bitmap(bitmapData);
@@ -454,7 +456,7 @@ public function _resizeImage( pic:Bitmap, w:int, h:int ):Object
 	var matrix:Matrix = new Matrix();
 	matrix.scale( w/pic.width, h/pic.height );
 	
-	bd1.draw( pic, matrix );
+	bd1.draw( pic.bitmapData, matrix );
 	
 	Application.application.callLater(generate);
 	
@@ -464,7 +466,7 @@ public function _resizeImage( pic:Bitmap, w:int, h:int ):Object
 /**
  * function section
  */
-public function _rotateImage( pic:Bitmap, angle:int, bgColor:uint ):Object 
+public function _rotateImage( pic:Bitmap, angle:int, bgColor:int ):Object 
 {	
 	var matrix:Matrix = new Matrix();
 	matrix.rotate( angle / 360 * Math.PI * 2 );
@@ -488,7 +490,7 @@ public function _rotateImage( pic:Bitmap, angle:int, bgColor:uint ):Object
 	
 	var bd1:BitmapData = new BitmapData( rect.width, rect.height, true, bgColor );	
 
-	bd1.draw( pic, matrix, null, null, null, true );
+	bd1.draw( pic.bitmapData, matrix, null, null, null, true );
 	
 	Application.application.callLater(generate);
 	

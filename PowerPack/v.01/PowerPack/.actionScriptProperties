@@ -18,7 +18,7 @@
 <libraryPathEntry kind="1" linkType="1" path="libs"/>
 <libraryPathEntry kind="3" linkType="1" path="/ExtendedAPI/bin/ExtendedAPI.swc" useDefaultLinkType="false"/>
 <libraryPathEntry kind="3" linkType="1" path="/GeomLib/bin/GeomLib.swc" useDefaultLinkType="false"/>
-<libraryPathEntry autoExtract="true" kind="3" linkType="3" path="/GraphicAPI/bin/GraphicAPI.swc" rslUrl="GraphicAPI.swf" useDefaultLinkType="false"/>
+<libraryPathEntry kind="3" linkType="1" path="/GraphicAPI/bin/GraphicAPI.swc" useDefaultLinkType="false"/>
 </libraryPath>
 <sourceAttachmentPath/>
 </compiler>

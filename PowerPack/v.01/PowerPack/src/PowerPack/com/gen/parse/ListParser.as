@@ -413,12 +413,18 @@ public class ListParser
 				var gCol1:uint = uint(getElmValue(sublist, 2, contexts));
 				var gCol2:uint = uint(getElmValue(sublist, 3, contexts));
 				var gAngle:int = int(getElmValue(sublist, 4, contexts));
-			
+				
+				var alpha1:Number = 1.0; 
+				var alpha2:Number = 1.0;
+				
+				alpha1 = gCol1>0x00ffffff ? ((gCol1&0xff000000)>>>24)/255 : (gCol1==0 ? 0.0 : 1.0);
+				alpha2 = gCol2>0x00ffffff ? ((gCol2&0xff000000)>>>24)/255 : (gCol2==0 ? 0.0 : 1.0);
+				
 				ret = new Object();
 				ret.name = strVal.toLowerCase();
 				ret.type = GradientType.LINEAR;
 				ret.colors = [gCol1, gCol2];
-				ret.alphas = [1, 1];
+				ret.alphas = [alpha1, alpha2];
 				ret.ratios = [0, 255];
 				ret.rotation = 2*Math.PI * (gAngle/360);
 				ret.spreadMethod = SpreadMethod.REFLECT;			
@@ -902,11 +908,10 @@ public class ListParser
 		
 		var listObj:Object = Parser.processList(list);
 			
-		if(!listObj.result) {
-			throw listObj.error;
-		}
-		
-		length = listObj.string.length-2;
+		if(listObj.result)
+			length = listObj.string.length-2;
+		else
+			length = list.length	
 		
 		return length;	
 	}
