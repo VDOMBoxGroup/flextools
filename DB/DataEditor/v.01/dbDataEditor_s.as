@@ -8,7 +8,8 @@ private const AMOUNT:int = 500;
 private const MAX_PAGES:int = 10;
 
 private var dataGridCollection:ArrayCollection = new ArrayCollection();
-private var dataGridColumns:Array = new Array();
+private var dataGridColumns:Array = []; /* of DataGridColumns */
+private var dataGridColumnsProps:Array = [];
 private var manager:*;	/* SuperManager */
 private var _value:String;
 private var structureXML:XML;
@@ -114,6 +115,30 @@ private function setTableHeaders():void {
 	dataGridColumns = new Array();
 	for each (var xmlHeader:XML in structureXML.table.header.column) {
 		var _header:DataGridColumn = new DataGridColumn();
+		var columnProps:Object = {
+			id:xmlHeader.@id.toString(),
+			name:xmlHeader.@name.toString(),
+			type:xmlHeader.@type.toString(),
+			notnull:xmlHeader.@notnull.toString(),
+			primary:xmlHeader.@primary.toString(),
+			autoincrement:xmlHeader.@autoincrement.toString(),
+			unique:xmlHeader.@unique.toString(),
+			defvalue:xmlHeader.@default.toString()
+		};
+		
+		/* CHecking recieved data */
+		if (columnProps.autoincrement == "")
+			columnProps.autoincrement = "False";
+		if (columnProps.notnull == "")
+			columnProps.notnull = "False";
+		if (columnProps.primary == "")
+			columnProps.primary = "False";
+		if (columnProps.type == "")
+			columnProps.type = "TEXT";
+		if (columnProps.unique == "")
+			columnProps.unique = "False";
+		
+		dataGridColumnsProps.push(columnProps);
 		_header.dataField = xmlHeader.@name;
 		dataGridColumns.push(_header);
 	}

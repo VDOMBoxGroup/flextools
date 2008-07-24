@@ -54,6 +54,10 @@
 					<mx:CheckBox id="__null" enabled="false" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
+					<mx:Label text="Unique:" width="100" />
+					<mx:CheckBox id="__unique" enabled="false" />
+				</mx:HBox>
+				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Default value:" width="100" />
 					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" enabled="false" />
 				</mx:HBox>
@@ -78,6 +82,12 @@
 				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
 				<mx:Button id="__alertYesBtn" label="Yes" height="18" click="{alertClickHandler('Yes');}" />
 				<mx:Button id="__alertNoBtn" label="No" height="18" click="{alertClickHandler('No');}" />
+			</mx:HBox> 					
+		</mx:Canvas>
+		<mx:Canvas id="__message">
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
+				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+				<mx:Button id="__msgOkBtn" label="Yes" height="18" click="{messageOkClickHandler();}" />
 			</mx:HBox> 					
 		</mx:Canvas>
 	</mx:ViewStack>
