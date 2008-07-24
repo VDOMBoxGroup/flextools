@@ -9,6 +9,10 @@
 	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*">
 	<mx:Script>
 		<![CDATA[
+			import generated.webservices.List_applicationsResultEvent;
+			import generated.webservices.Close_sessionResultEvent;
+			import generated.webservices.Open_sessionResultEvent;
+			import generated.webservices.Vdom;
 			import vdom.connection.protect.Code;
 			import mx.rpc.events.ResultEvent;
 			import PowerPack.com.utils.CryptUtils;
@@ -78,11 +82,20 @@
 				ws.addEventListener(LoadEvent.LOAD, loadCompleteHandler);
 				ws.addEventListener(FaultEvent.FAULT, faultHandler);
 				ws.loadWSDL();
+				
+				//ContextManager.instance.vdom = new Vdom(null, 'http://192.168.0.65:80');
+				//var ws:Vdom = ContextManager.instance.vdom;				
+             	
+             	//ws.addVdomFaultEventListener(faultHandler);
+             	
+             	//login();
 			}
 			
 			private  function faultHandler(event:FaultEvent):void 
 			{
-				Alert.show(event.message.toString());
+				Alert.show("A fault occured contacting the server. Fault message is: " + event.fault.faultString+
+				"\n"+event.fault.faultDetail+
+				"\n"+event.fault.rootCause+'\n'+event.headers);
 			}			
 			
 			private function loadCompleteHandler(event:LoadEvent):void 
@@ -95,14 +108,18 @@
 			private function login():void
 			{	
              	var ws:WebService = ContextManager.instance.ws;
+				//var ws:Vdom = ContextManager.instance.vdom;
              	var login:String = ContextManager.instance.login;
 				var pwd_md5:String = CryptUtils.MD5(ContextManager.instance.pass);   
 				
-             	ws.open_session.addEventListener(ResultEvent.RESULT, onLogin);			
+				//ws.addopen_sessionEventListener(loginHandler);
+				//ws.open_session(login, pwd_md5);
+				
+             	ws.open_session.addEventListener(ResultEvent.RESULT, loginHandler);			
 				ws.open_session(login, pwd_md5);
 			}	
 			
-			private  function onLogin(event:ResultEvent):void
+			private  function loginHandler(event:ResultEvent):void
 			{
 				var resultXML:XML = XML(event.result);
 				
@@ -122,15 +139,19 @@
 			
 			private function logout():void
 			{	
-             	var ws:WebService = ContextManager.instance.ws;
+             	//var ws:WebService = ContextManager.instance.ws;
+             	var ws:Vdom = ContextManager.instance.vdom;
 				var code:Code = Code.getInstance();
 				var sid:String = code.sessionId; 
 				
-				ws.close_session.addEventListener(ResultEvent.RESULT, onLogout);
+				ws.addclose_sessionEventListener(logoutHandler);
 				ws.close_session(sid);
+				
+				//ws.close_session.addEventListener(ResultEvent.RESULT, onLogout);
+				//ws.close_session(sid);
 			}						
 
-			private  function onLogout(event:ResultEvent):void
+			private  function logoutHandler(event:Close_sessionResultEvent):void
 			{
 				var resultXML:XML = XML(event.result);
 				
@@ -143,16 +164,19 @@
 			
 			private function getAppList():void
 			{
-				var ws:WebService = ContextManager.instance.ws;
+				//var ws:WebService = ContextManager.instance.ws;
+				var ws:Vdom = ContextManager.instance.vdom;
 				var code:Code = Code.getInstance();
 				var sid:String			= code.sessionId; 
 				var skey:String  		= code.skey(); 
-			
-				ws.list_applications.addEventListener(ResultEvent.RESULT, onGetAppList);
+				
+				ws.addlist_applicationsEventListener(getAppListHandler);
 				ws.list_applications(sid, skey);
+				//ws.list_applications.addEventListener(ResultEvent.RESULT, onGetAppList);
+				//ws.list_applications(sid, skey);
 			}
 
-			private  function onGetAppList(event:ResultEvent):void
+			private  function getAppListHandler(event:List_applicationsResultEvent):void
 			{
 				var resultXML:XML = XML(event.result);
 				

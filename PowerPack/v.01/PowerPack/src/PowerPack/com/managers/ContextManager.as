@@ -12,6 +12,8 @@ import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
+import generated.webservices.Vdom;
+
 import mx.collections.ArrayCollection;
 import mx.core.Application;
 import mx.rpc.soap.WebService;
@@ -175,7 +177,10 @@ public class ContextManager extends EventDispatcher
     public var templates:ArrayCollection = new ArrayCollection();
     
     [Bindable]
-    public var ws:WebService = new WebService();	
+    public var ws:WebService = new WebService();
+    
+    [Bindable]
+    public var vdom:Vdom = new Vdom();
     
     public var dataStorage:File;
     public var settingStorage:File;
@@ -362,7 +367,10 @@ public class ContextManager extends EventDispatcher
 		 
  		tmpStr = (Utils.getStringOrDefault(instance.settingsXML.savepass, "false")).toString();
  		instance.save_pass = tmpStr.toLowerCase()=="true"?true:false;
-	
+		
+		//instance.vdom = new Vdom(null, instance.host+":" + 
+		//	(instance.use_def_port ? instance.default_port : instance.port) + "");
+		
  		// get ...        	
     }	
         

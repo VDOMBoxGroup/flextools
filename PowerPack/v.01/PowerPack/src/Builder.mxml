@@ -39,7 +39,7 @@
 	            <menuitem label="{LanguageManager.sentences.menu_save}" id="save" keyEquivalent="s" ctrlKey="true"/>
 	            <menuitem label="{LanguageManager.sentences.menu_save_as}" id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true"/> 
 	            <menuitem type="separator"/>
-	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import" enabled="false"/> 
+	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import" enabled="true"/> 
 	            <menuitem type="separator"/>
 	            <menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>                                                
 	        </menuitem>

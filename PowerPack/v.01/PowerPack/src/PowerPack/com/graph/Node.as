@@ -348,8 +348,8 @@ public class Node extends Canvas
 	//
 	//--------------------------------------------------------------------------
 
-	public function Node(	category:String = NodeCategory.NORMAL, 
-							type:String = NodeType.NORMAL, 
+	public function Node(	category:String = 'Normal',//NodeCategory.NORMAL, 
+							type:String = 'Normal',//NodeType.NORMAL, 
 							text:String = null )
 	{
 		super();
