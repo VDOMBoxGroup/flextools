@@ -111,7 +111,7 @@ package vdom.components.treeEditor
 			this.graphics.lineTo(x1,y1);
 			//this.graphics.endFill();
 			
-			
+		
 		}
 		//private var arrPolygon:Array;
 	
@@ -122,6 +122,11 @@ package vdom.components.treeEditor
 		
 		private function calculatePoints( ):void
 		{
+			nLeft = 0;
+			nRight = 0;
+			nTop = 0;
+			nBottom = 0;
+			
 			var _pFromObj:Point;
 			var _pToObj:Point;
 			var pFromObj:Point;
@@ -264,13 +269,8 @@ package vdom.components.treeEditor
 					nRight = parent.mouseX;
 					nTop = parent.mouseY;
 					nBottom = parent.mouseY;
-					
-		//			nWidth = 0;
-		//			nHeight = 0;
 				}
-	   
 			}
-			
 		}
 		
 		public function clear():void

@@ -24,61 +24,6 @@ package vdom.components.treeEditor
 			//trace('1');
 		}
 		
-		public function createVector (trEl0:Object, trEl1:Object, color:Number = 0 ):void
-		{
-			if( color!= 0)
-			_numColor = color;
-			
-			fromObj = trEl0;
-		 	toObj = trEl1;
-			//calcSize();
-			//drawLine();
-			
-			curLine = pointTo(trEl0, trEl1)
-			drawLine(curLine);
-		}
-		/*
-		public function pointTo(trEl0:Object, trEl1:Object):Object
-		{
-			
-			
-			
-			var objFrom:Object 	;
-			var objTo:Object 		= new Object();
-			var objReturn:Object	= new Object();
-			
-			/****---- temp ----****
-			//objReturn.x1 = trEl0.x;
-			//objReturn.y1 = trEl0.y;
-			objReturn.x2 = trEl1.x;
-			objReturn.y2 = trEl1.y;
-		
-			/****---- end of temp ----****
-			
-			objFrom = getPoint(trEl0, trEl1);
-			objReturn.x1 = objFrom.x;
-			objReturn.y1 = objFrom.y;
-			
-			
-			return  objReturn;
-			
-			
-			if(trEl1.className != 'TreeElement')
-			{
-				trace('5a pointTo');
-				objReturn.x2 = trEl1.x;
-				objReturn.y2 = trEl1.y;
-			}else{
-				trace('5b pointTo');
-				objTo = getPoint(trEl1, trEl0);
-				objReturn.x2 = objTo.x;
-				objReturn.y2 = objTo.y;
-			}
-			trace('6 pointTo');
-			
-			return objReturn;	
-		}
-		*/
 		private function getPoint(pointFrom:Object, pointTo:Object):Object
 		{	
 			var objReturn:Object = new Object();  
@@ -159,50 +104,7 @@ package vdom.components.treeEditor
 		//	trace('objReturn.x ' + objReturn.x);
 			return  objReturn;
 		}
-		
-					
-		public function pointTo(trEl0:Object, trEl1:Object):Object
-		{
-			var masPoint:Array = new Array();
-			var min:uint = 0; 
-		//	trace(trEl1.className);
-			if(trEl1.className != 'TreeElement')
-			{
-				masPoint[0] = getObg( trEl0.x+trEl0.width/2, trEl0.y,					trEl1.x, 	trEl1.y);// верхний
-				masPoint[1] = getObg( trEl0.x, trEl0.y+trEl0.height/2,					trEl1.x, 	trEl1.y);//левый 
-				masPoint[2] = getObg( trEl0.x+trEl0.width, trEl0.y+trEl0.height/2,		trEl1.x,	trEl1.y);// правый
-				masPoint[3] = getObg(  trEl0.x+trEl0.width/2, 	trEl0.y+trEl0.height,	trEl1.x, 	trEl1.y);// нижний
-			
-			} else{
-			///
-				masPoint[0] = getObg( trEl0.x+trEl0.width/2, trEl0.y,		trEl1.x+trEl1.width/2, 	trEl1.y);// верхний
-				masPoint[1] = getObg( trEl0.x+trEl0.width/2, trEl0.y,		trEl1.x, 				trEl1.y+trEl1.height/2);//левый 
-				masPoint[2] = getObg( trEl0.x+trEl0.width/2, trEl0.y,		trEl1.x+trEl1.width,	trEl1.y+trEl1.height/2);// правый
-				masPoint[3] = getObg( trEl0.x+trEl0.width/2, trEl0.y,		trEl1.x+trEl1.width/2, 	trEl1.y+trEl1.height);// нижний
-				
-				masPoint[4] = getObg( trEl0.x, trEl0.y+trEl0.height/2,		trEl1.x+trEl1.width/2, 	trEl1.y);// верхний
-				masPoint[5] = getObg( trEl0.x, trEl0.y+trEl0.height/2,		trEl1.x, 				trEl1.y+trEl1.height/2);//левый 
-				masPoint[6] = getObg( trEl0.x, trEl0.y+trEl0.height/2,		trEl1.x+trEl1.width,	trEl1.y+trEl1.height/2);// правый
-				masPoint[7] = getObg( trEl0.x, trEl0.y+trEl0.height/2,		trEl1.x+trEl1.width/2, 	trEl1.y+trEl1.height);// нижний
-				
-				masPoint[8] = getObg( trEl0.x+trEl0.width, trEl0.y+trEl0.height/2,		trEl1.x+trEl1.width/2, 	trEl1.y);// верхний
-				masPoint[9] = getObg( trEl0.x+trEl0.width, trEl0.y+trEl0.height/2,		trEl1.x, 				trEl1.y+trEl1.height/2);//левый 
-				masPoint[10] = getObg( trEl0.x+trEl0.width, trEl0.y+trEl0.height/2,		trEl1.x+trEl1.width,	trEl1.y+trEl1.height/2);// правый
-				masPoint[11] = getObg( trEl0.x+trEl0.width, trEl0.y+trEl0.height/2,		trEl1.x+trEl1.width/2, 	trEl1.y+trEl1.height);// нижний
-				
-				masPoint[12] = getObg( trEl0.x+trEl0.width/2, 	trEl0.y+trEl0.height,		trEl1.x+trEl1.width/2, 	trEl1.y);// верхний
-				masPoint[13] = getObg( trEl0.x+trEl0.width/2, 	trEl0.y+trEl0.height,		trEl1.x, 				trEl1.y+trEl1.height/2);//левый 
-				masPoint[14] = getObg( trEl0.x+trEl0.width/2, 	trEl0.y+trEl0.height,		trEl1.x+trEl1.width,	trEl1.y+trEl1.height/2);// правый
-				masPoint[15] = getObg( trEl0.x+trEl0.width/2, 	trEl0.y+trEl0.height,		trEl1.x+trEl1.width/2, 	trEl1.y+trEl1.height);// нижний
-			}
-			
-			// find min distase
-			for (var i:int= 1; i<masPoint.length; i++)
-				if (masPoint[i].distanse < masPoint[min].distanse)
-				min = i;
-			return masPoint[min];
-		}			
-		
+	/*
 		// вычисляем расстояние между 2-мя точками
 		private function getObg(x1:Number, y1:Number, x2:Number, y2:Number):Object
 		{
@@ -220,11 +122,11 @@ package vdom.components.treeEditor
 			obj.y1 = y1;
 			obj.x2 = x2;
 			obj.y2 = y2;
-			
+			trace('distanse: ' + obj.distanse);
 			return obj;
 		}
 		
-		
+		*/
 		
 		public function drawLine( trEl1:Object = null):void
 		{
@@ -293,7 +195,7 @@ package vdom.components.treeEditor
 		{
 			return _strColor;
 		}
-		
+		/*
 		
 		public function drawLineS( trEl1:Object = null):void
 		{
@@ -314,6 +216,8 @@ package vdom.components.treeEditor
 			alf = Math.atan(dY/dX);
 			if (dX<0) alf+=Math.PI;
 			
+			trace('==========\n'+dX);
+			trace(dY);
 			
 			btX = x0 - dX/2;
 			btY = y0 - dY/2;
@@ -345,7 +249,7 @@ package vdom.components.treeEditor
 			}
 
 		}
-		
+		*/
 		
 		private var arrPolygon:Array;
 	
