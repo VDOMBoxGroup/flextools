@@ -3,6 +3,7 @@ import mx.collections.ArrayCollection;
 import mx.controls.Alert;
 import mx.controls.LinkButton;
 import mx.controls.dataGridClasses.DataGridColumn;
+import mx.events.DataGridEvent;
 
 private const AMOUNT:int = 500;
 private const MAX_PAGES:int = 10;
@@ -268,8 +269,8 @@ private function rowClickHandler():void {
 	trace(__dg.selectedItem);
 }
 
-private function itemEditEnd(event:*):void {
-	
+private function itemEditEnd(event:DataGridEvent):void {
+	trace(event.rowIndex);
 }
 
 private function addRow():void {
