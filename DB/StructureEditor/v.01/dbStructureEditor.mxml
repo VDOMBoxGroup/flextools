@@ -50,7 +50,7 @@
 					<mx:CheckBox id="__aIncrement" enabled="false" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
-					<mx:Label text="Can be null:" width="100" />
+					<mx:Label text="Not Null:" width="100" />
 					<mx:CheckBox id="__null" enabled="false" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">

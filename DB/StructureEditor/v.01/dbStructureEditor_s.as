@@ -96,16 +96,11 @@ private function loadXMLData(event:*):void {
 		}
 		
 		/* CHecking recieved data */
-		if (column.aincrement == "")
-			column.aincrement = "False";
-		if (column.notnull == "")
-			column.notnull = "False";
-		if (column.primary == "")
-			column.primary = "False";
-		if (column.type == "")
-			column.type = "TEXT";
-		if (column.unique == "")
-			column.unique = "False";
+		if (column.aincrement == "") column.aincrement = "False";
+		if (column.notnull == "") column.notnull = "False";
+		if (column.primary == "") column.primary = "False";
+		if (column.type == "") column.type = "TEXT";
+		if (column.unique == "") column.unique = "False";
 
 		_columnsProvider.push(column);		
 	}
@@ -147,7 +142,7 @@ private function listChanger():void {
 		
 		__pKey.selected = _selectedListItem.primary.toLowerCase() == "true";
 		__aIncrement.selected = _selectedListItem.aincrement.toLowerCase() == "true";
-		__null.selected = _selectedListItem.notnull.toLowerCase() == "false";
+		__null.selected = _selectedListItem.notnull.toLowerCase() == "true";
 		__defValue.text = _selectedListItem.defvalue.toString();
 		__unique.selected = _selectedListItem.unique.toLowerCase() == "true";
 	}
