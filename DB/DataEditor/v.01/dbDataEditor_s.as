@@ -127,16 +127,11 @@ private function setTableHeaders():void {
 		};
 		
 		/* CHecking recieved data */
-		if (columnProps.autoincrement == "")
-			columnProps.autoincrement = "False";
-		if (columnProps.notnull == "")
-			columnProps.notnull = "False";
-		if (columnProps.primary == "")
-			columnProps.primary = "False";
-		if (columnProps.type == "")
-			columnProps.type = "TEXT";
-		if (columnProps.unique == "")
-			columnProps.unique = "False";
+		if (columnProps.autoincrement == "") columnProps.autoincrement = "False";
+		if (columnProps.notnull == "") columnProps.notnull = "False";
+		if (columnProps.primary == "") columnProps.primary = "False";
+		if (columnProps.type == "")	columnProps.type = "TEXT";
+		if (columnProps.unique == "") columnProps.unique = "False";
 		
 		dataGridColumnsProps.push(columnProps);
 		_header.dataField = xmlHeader.@name;
@@ -202,6 +197,7 @@ private function showPageData(page:int):void {
 		}
 		
 		tableRow["fnew"] = false;
+		tableRow["changed"] = false;
 		dataGridCollection.addItem(tableRow);
 	}
 	__dg.dataProvider = dataGridCollection;
@@ -279,11 +275,19 @@ private function itemEditEnd(event:*):void {
 private function addRow():void {
 	/* Create tableRow object */
 	var tableRow:Object = new Object();
+	var columnIndex:int = 0;
 	for each (var dgColumn:DataGridColumn in dataGridColumns) {
-		tableRow[dgColumn.dataField] = "Null";
+		if (dataGridColumnsProps[columnIndex].autoincrement.toLowerCase() == "false") {
+			if (dataGridColumnsProps[columnIndex].notnull.toLowerCase() == "true")
+				tableRow[dgColumn.dataField] = "Required";
+			else
+				tableRow[dgColumn.dataField] = "Null";
+		}
+		columnIndex++;
 	}
 	
 	tableRow["fnew"] = true;
+	tableRow["changed"] = false;
 	dataGridCollection.addItem(tableRow);
 	__dg.selectedIndex = dataGridCollection.length;
 	__commitBtn.enabled = true;
