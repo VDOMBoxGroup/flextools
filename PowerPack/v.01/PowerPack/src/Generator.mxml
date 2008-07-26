@@ -681,15 +681,31 @@
 				
 				var appxml:String = ContextManager.instance.templateStruct.buffer;
 				
-				/*
-				appxml =    <Application>
-							   <Information>							    
-						        <Description>lee demo application</Description>						        
-						        <Serverversion/>
-						        <Active>1</Active>    
-						      </Information>
-						    </Application>;
-				*/
+				
+				/*appxml =  
+<Application>
+    <Information>
+      <ID>58963343-afe9-4320-a6d5-fd2880aadf33</ID>      
+      <Name>test</Name>
+      <Description/>
+    </Information>
+    
+    <Objects/>
+    
+    <Structure>
+    </Structure>
+    
+    <E2vdom>
+      <Events/>
+      <Actions/>
+    </E2vdom>
+    
+    <Resources>
+    </Resources>
+    
+    <Databases/>
+  </Application>;*/
+				
     
 				ws.addinstall_applicationEventListener(installAppHandler);				
 				ws.install_application(sid, skey, txtVHName.text, appxml);
