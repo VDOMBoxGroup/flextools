@@ -1927,7 +1927,7 @@
   </binding>
   <service name="vdom">
     <port binding="s0:vdomService" name="vdomService">
-      <soap:address location="http://192.168.0.65:80/SOAP"/>
+      <soap:address location="http://192.168.0.24:80/SOAP"/>
     </port>
   </service>
 </definitions>

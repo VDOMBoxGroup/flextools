@@ -307,7 +307,7 @@ public class ProgressManager extends EventDispatcher
 				instance._bar.setStyle("barSkin", ProgressBarSkin);
 				if(showProgress)
 					instance._winBox.addChildAt(instance._bar, 1);
-				PopUpManager.addPopUp(instance._window, instance._win as DisplayObject);
+				PopUpManager.addPopUp(instance._window, instance._win as DisplayObject, true);
 				PopUpManager.centerPopUp(instance._window);
 				instance._window.validateNow();
 				viewMode = WINDOW_MODE;

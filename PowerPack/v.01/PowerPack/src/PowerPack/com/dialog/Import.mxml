@@ -29,6 +29,7 @@
 			import PowerPack.com.managers.LanguageManager;
 			
 			private static var _dialog:Import;
+			private var soap:Soap;
 			
 			static public function show(closeHandler:Function = null):Import
 			{
@@ -78,15 +79,17 @@
              	ws.wsdl = ContextManager.instance.host+":"+
              		(ContextManager.instance.use_def_port?ContextManager.instance.default_port:ContextManager.instance.port)+
              		"/vdom.wsdl";
+             	ws.wsdl = "http://192.168.0.24:80/vdom.wsdl"
 				ws.useProxy = false;
 				ws.addEventListener(LoadEvent.LOAD, loadCompleteHandler);
 				ws.addEventListener(FaultEvent.FAULT, faultHandler);
 				ws.loadWSDL();
 				
-				//ContextManager.instance.vdom = new Vdom(null, 'http://192.168.0.65:80');
+				//ContextManager.instance.vdom = new Vdom();
 				//var ws:Vdom = ContextManager.instance.vdom;				
              	
              	//ws.addVdomFaultEventListener(faultHandler);
+             	//
              	
              	//login();
 			}
@@ -98,7 +101,7 @@
 				"\n"+event.fault.rootCause+'\n'+event.headers);
 			}			
 			
-			private function loadCompleteHandler(event:LoadEvent):void 
+			private function loadCompleteHandler(event:Event):void 
 			{
 				var ws:WebService = ContextManager.instance.ws;	
 				ws.removeEventListener(LoadEvent.LOAD, loadCompleteHandler);
@@ -110,7 +113,7 @@
              	var ws:WebService = ContextManager.instance.ws;
 				//var ws:Vdom = ContextManager.instance.vdom;
              	var login:String = ContextManager.instance.login;
-				var pwd_md5:String = CryptUtils.MD5(ContextManager.instance.pass);   
+				var pwd_md5:String = CryptUtils.hex(CryptUtils.MD5(ContextManager.instance.pass));   
 				
 				//ws.addopen_sessionEventListener(loginHandler);
 				//ws.open_session(login, pwd_md5);
@@ -136,7 +139,13 @@
 					getAppList();
 				}
 			}
-			
+	
+	private function loginErrorHandler(event:SoapEvent):void {
+		
+		trace('error! \r\n');
+		trace(event.result);
+	}
+				
 			private function logout():void
 			{	
              	//var ws:WebService = ContextManager.instance.ws;

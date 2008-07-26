@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectRoot>
-<url value="http://192.168.0.65/vdom.wsdl">
+<url value="http://192.168.0.24:80/vdom.wsdl">
 <service name="vdom">
 <port name="vdomService">
 <operations>
@@ -75,7 +75,6 @@
 <otherAsClass name="Whole_update_request.as"/>
 <otherAsClass name="Delete_objectResultEvent.as"/>
 <otherAsClass name="Export_applicationResultEvent.as"/>
-<otherAsClass name="BaseVdom.as"/>
 <otherAsClass name="Set_attribute_request.as"/>
 <otherAsClass name="Get_application_structureResultEvent.as"/>
 <otherAsClass name="Get_top_objectsResultEvent.as"/>
@@ -93,7 +92,6 @@
 <otherAsClass name="Modify_resource_request.as"/>
 <otherAsClass name="Get_application_structure_request.as"/>
 <otherAsClass name="Set_application_info_request.as"/>
-<otherAsClass name="IVdom.as"/>
 <otherAsClass name="Send_eventResultEvent.as"/>
 <otherAsClass name="Create_guid_request.as"/>
 <otherAsClass name="Get_script_request.as"/>
@@ -128,6 +126,8 @@
 <otherAsClass name="Execute_sql_request.as"/>
 <otherAsClass name="Install_applicationResultEvent.as"/>
 <otherAsClass name="List_typesResultEvent.as"/>
+<otherAsClass name="BasevdomSchema.as"/>
+<otherAsClass name="Ivdom.as"/>
 <otherAsClass name="Create_applicationResultEvent.as"/>
 <otherAsClass name="Get_type_request.as"/>
 <otherAsClass name="Search_request.as"/>
@@ -138,8 +138,8 @@
 <otherAsClass name="Render_wysiwyg_request.as"/>
 <otherAsClass name="Whole_createResultEvent.as"/>
 <otherAsClass name="Set_attributes_request.as"/>
+<otherAsClass name="Basevdom.as"/>
 <otherAsClass name="Get_typeResultEvent.as"/>
-<otherAsClass name="BaseVdomSchema.as"/>
 <otherAsClass name="Get_child_objects_request.as"/>
 <otherAsClass name="Close_session_request.as"/>
 <otherAsClass name="Get_all_typesResultEvent.as"/>

@@ -5,6 +5,7 @@ import com.hurlant.crypto.hash.IHash;
 import com.hurlant.crypto.symmetric.ICipher;
 import com.hurlant.crypto.symmetric.IPad;
 import com.hurlant.crypto.symmetric.PKCS5;
+import com.hurlant.util.Hex;
 
 import flash.utils.ByteArray;
 	
@@ -21,6 +22,11 @@ public final class CryptUtils
 		bytes.position = 0;
 		
 		return bytes.readUTFBytes(bytes.length);
+	}
+	
+	public static function hex(value:String):String
+	{
+		return Hex.fromString(value);		
 	}
 	
 	public static function encrypt(data:Object, key:Object=KEY):ByteArray

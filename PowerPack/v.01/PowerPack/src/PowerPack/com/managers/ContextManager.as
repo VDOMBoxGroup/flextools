@@ -200,7 +200,7 @@ public class ContextManager extends EventDispatcher
 	public var saveToServer:Boolean;
 	
 	[Bindable]
-	public var host:String = "http://192.168.0.65";
+	public var host:String = "http://192.168.0.24";
 	[Bindable]
 	public var default_port:String = "80";
 	[Bindable]
@@ -209,9 +209,9 @@ public class ContextManager extends EventDispatcher
 	public var use_def_port:Boolean = true;
 
 	[Bindable]
-	public var login:String = "";
+	public var login:String = "root";
 	[Bindable]
-	public var pass:String = "777";
+	public var pass:String = "root";
 	[Bindable]
 	public var save_pass:Boolean = false;
     
@@ -281,7 +281,8 @@ public class ContextManager extends EventDispatcher
 		// load settings
 		file = instance.settingStorage.resolvePath("settings.xml");
 		if(!file.exists)
-			return;			
+			return;	
+					
 		fileStream.open(file, FileMode.READ);
 		instance.settingsXML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
 		fileStream.close();					

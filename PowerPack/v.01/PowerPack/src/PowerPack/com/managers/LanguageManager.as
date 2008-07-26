@@ -42,6 +42,7 @@ public class LanguageManager extends EventDispatcher
 			_instance = new LanguageManager();
 		
 			var defaultCaptions:Object = {
+				// button titles
 				ok:"OK",
 				yes:"Yes",
 				no:"No",					
@@ -58,23 +59,27 @@ public class LanguageManager extends EventDispatcher
 				next: "Next",
 				back: "Back",
 				
+				// titles
 				confirmation:"Confirmation",					
 				error:"Error",
 				warning:"Warning",
 				info:"Information",
 				result:"Result",
+				unnamed:"Unnamed",				
+
 				all:"All",
 				none:"none",
 				noname:"noname",
-				unnamed:"Unnamed",				
 				
 				language:"Language",
 				connection:"Connection",
 				authentication: "Authentication",
 				parameters:"Parameters",
 				properties:"Properties",
+				preferences:"Preferences",
 				template:"Template",
 				file:"File",
+				folder:"Folder",
 				help:"Help",
 				host:"Host",
 				port:"Port",
@@ -94,6 +99,7 @@ public class LanguageManager extends EventDispatcher
 				menu_template:"_Template",
 				menu_validate:"_Validate",
 				menu_properties:"_Properties",
+				menu_preferences:"_Preferences",
 				
 				menu_settings:"_Settings",
 				menu_language:"_Language",
@@ -104,10 +110,14 @@ public class LanguageManager extends EventDispatcher
 				open_file:"Open file",
 				save_file:"Save file",
 				select_file:"Select file",
+				select_folder:"Select folder",
+
 				select_all: "Select all",
 				select_none: "Select none",
 				
+				// common messages
 				msg_file_not_exists: "File doesn't exist.",
+				msg_cannot_save_file: "Cannot save to this location.",
 				msg_ioerror_occurs: "IOError exception occurs.",
 				msg_cannot_open_tpl: "Cannot open template.",
 				msg_enter_valid_graph_name: "Enter a valid graph name.",
@@ -125,7 +135,6 @@ public class LanguageManager extends EventDispatcher
 			LanguageManager.bindSentence('yes', ModalDialog, "yesLabel");
 			LanguageManager.bindSentence('no', ModalDialog, "noLabel");
 			LanguageManager.bindSentence('cancel', ModalDialog, "cancelLabel");	    
-		
 		}
 
 		return _instance;
