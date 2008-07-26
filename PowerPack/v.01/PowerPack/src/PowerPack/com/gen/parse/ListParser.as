@@ -862,14 +862,11 @@ public class ListParser
 		{ 
 			ret = arr.getItemAt(_position+1).origValue;
 			ret = StringUtil.trim(ret);
-			if(	listObj.string.charAt(_position+1)=='c' ||
-				listObj.string.charAt(_position+1)=='s')
-				ret = Utils.replaceQuotes(ret);	
 			
-			if(listObj.string.charAt(_position+1)=='A' || Parser.processList( ret ).result)
+			/*if(listObj.string.charAt(_position+1)=='A' || Parser.processList( ret ).result)
 			{
 				ret = StringUtil.trim(ret);
-			}
+			}*/
 		}
 		else if(operation=="getType")
 		{
@@ -881,22 +878,22 @@ public class ListParser
 				case 'i':
 				case 'f':
 				case 'w':
-					ret = 1;
+					ret = 1; // word
 					break;
 				case 's':
 				case 'c':
-					ret = 2;
+					ret = 2; // string
 					if( Parser.processList( arr.getItemAt(_position+1).origValue ).result )
-						ret = 3;
+						ret = 3; // list
 					break;
 				case 'A':			
-					ret = 3;
+					ret = 3; // list
 					break;
 				case 'v':
-					ret = 4;
+					ret = 4; // variable
 					break;
 				default:
-					ret = 0;
+					ret = 0; // undefined
 			}
 		}
 		return ret;

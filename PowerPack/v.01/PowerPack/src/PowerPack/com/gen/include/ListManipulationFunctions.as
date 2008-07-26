@@ -1,4 +1,6 @@
 // ActionScript file
+import ExtendedAPI.com.utils.Utils;
+
 import PowerPack.com.gen.parse.ListParser;
 import PowerPack.com.gen.parse.Parser;
 
@@ -17,10 +19,15 @@ public function _length(list:String):int
  */		 
 public function _get(position:Object, list:String):*
 {
-	var ret:* = ListParser.getElm(list, position);
+	var type:int = ListParser.getType(list, position);
+	var ret:String = ListParser.getElm(list, position);	
 	
 	if(!ret)
 		ret = '';
+	else if(type==2)
+		ret = Utils.replaceQuotes(ret);
+	else if(type==4)
+		ret = ret.substr(1);
 		
 	Application.application.callLater(generate);
 	return ret;
