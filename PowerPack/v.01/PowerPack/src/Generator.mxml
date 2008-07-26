@@ -680,20 +680,16 @@
 				var skey:String = code.skey(); 
 				
 				var appxml:String = ContextManager.instance.templateStruct.buffer;
+				
+				/*
 				appxml =    <Application>
-							   <Information>
-							    <Index>d596b4bd-e4ec-4924-968a-750c114b2e5e</Index>
-						        <Description>lee demo application</Description>
-						        <Icon>9c79f029-e591-4e63-afcb-16d2f1f32ff0</Icon>
+							   <Information>							    
+						        <Description>lee demo application</Description>						        
 						        <Serverversion/>
-						        <Active>1</Active>
-						        <Owner/>
-						        <Password/>
-						        <Name>lee test</Name>
-						        <Numberofpages>15</Numberofpages>
-						        <Numberofobjects>190</Numberofobjects>
+						        <Active>1</Active>    
 						      </Information>
 						    </Application>;
+				*/
     
 				ws.addinstall_applicationEventListener(installAppHandler);				
 				ws.install_application(sid, skey, txtVHName.text, appxml);
@@ -789,7 +785,7 @@
 	        	function closeStream(stream:FileStream):void {
 		    		stream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, onFileStreamProgress);
 	        		stream.removeEventListener(IOErrorEvent.IO_ERROR, onFileStreamError);
-	        		stream.removeEventListener(IOErrorEvent.IO_ERROR, onFileStreamError);
+	        		stream.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onFileStreamError);
 		    		stream.removeEventListener(Event.CLOSE, onFileStreamClose);
 					stream.close();           		
 	    		}				        		
