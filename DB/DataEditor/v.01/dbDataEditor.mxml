@@ -12,7 +12,7 @@
 	
 	<mx:DataGrid id="__dg"
 		width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
-		click="{rowClickHandler();}" itemEditEnd="{itemEditEnd(event);}" editable="true"/>
+		click="{rowClickHandler();}" itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"/>
 	<mx:HBox width="100%" horizontalAlign="right" horizontalGap="0" paddingBottom="0" paddingTop="0">
 		<mx:Label text="Total rows:" fontSize="9" />
 		<mx:Label id="__rowsCount" text="{totalRecords}" fontSize="9" fontWeight="bold" />	

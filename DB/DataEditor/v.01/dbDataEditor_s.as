@@ -21,6 +21,7 @@ private var pages:Array = []; /* of XML */
 private var currentPage:int = 0;
 private var pageOffset:int = 0;
 private var queryResult:XML;
+private var editableValue:String = "";
 
 private var queue:XMLList;
 
@@ -269,7 +270,13 @@ private function rowClickHandler():void {
 	trace(__dg.selectedItem);
 }
 
+private function itemEditBegin(event:DataGridEvent):void {
+	editableValue = dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex]].to;
+	trace(editableValue);
+}
+
 private function itemEditEnd(event:DataGridEvent):void {
+	dataGridCollection[event.rowIndex].changed = true;
 	trace(event.rowIndex);
 }
 
