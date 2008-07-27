@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModalDialog 
+	xmlns="PowerPack.com.dialog.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="500" height="360"
+	title="{LanguageManager.sentences.lbl_import}" 
+	modal="false"
+	creationComplete="onShow(event)" 
+	xmlns:controls="ExtendedAPI.com.controls.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import PowerPack.com.graph.GraphCanvas;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import PowerPack.com.gen.structs.TemplateStruct;
+			import PowerPack.com.managers.ProgressManager;
+			import mx.events.CloseEvent;
+			import mx.utils.StringUtil;
+			import PowerPack.com.managers.ContextManager;
+			import PowerPack.com.managers.LanguageManager;
+			
+			private static var _dialog:ImportFromTpl;
+			private var template:TemplateStruct;
+			public var xmlGraphs:XMLListCollection;
+			
+			static public function show(closeHandler:Function = null):ImportFromTpl
+			{
+				if(!_dialog || _dialog.closed) 
+				{
+					_dialog = new ImportFromTpl();	
+					_dialog.open();
+					_dialog.addEventListener(CloseEvent.CLOSE, _dialog.onClose);
+					_dialog.show(OK | CANCEL, closeHandler, null, OK);		
+					
+					var defaultCaptions:Object = {
+						lbl_import: "Import",
+						import_from_template: "Import from template",
+						template_path: "Template path"
+					};
+					
+					LanguageManager.setSentences(defaultCaptions);	
+				}				
+				else 
+				{
+					_dialog.activate();
+				}
+				
+				return _dialog;
+			}
+			
+			private function onShow(event:Event):void
+			{
+				tplBrowse.setFocus();		
+			}
+			
+			private function onClose(event:Event):void
+			{
+				xmlGraphs = new XMLListCollection();
+				var xmlListCol:XMLListCollection = new XMLListCollection();
+				
+				ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+				
+				if(template && template.xmlTemplate && tplTree.selectedItems.length>0)
+				{
+					for each(var item:Object in tplTree.selectedItems)	
+					{
+						var xml:XMLList = template.xmlTemplate..graph.(@category==item.category && @name==item.name);
+
+						if(xml.length())		
+							xmlListCol.addItem(xml[0]);
+					}
+				}
+				
+				for each (var itm:XML in xmlListCol) {
+					var graph:GraphCanvas = new GraphCanvas();
+					graph.fromXML(itm);
+					
+					var newGraph:GraphCanvas = graph.clone();
+					newGraph.initial = false;
+					newGraph.name = "Imported_" + graph.name;
+					xmlGraphs.addItem(newGraph.toXML());
+				}				
+            }
+
+			private function onOpenClick(event:Event):void
+			{
+            	var file:File = new File(tplBrowse.text);
+           		var stream:FileStream = new FileStream();
+           						
+				ProgressManager.source = stream;
+				ProgressManager.start(ProgressManager.WINDOW_MODE);
+				
+				tplTree.dataProvider = [];
+				
+				stream.addEventListener(Event.COMPLETE, completeTemplateHandler);
+    			stream.openAsync(file, FileMode.READ);				
+            }
+            
+	        private function completeTemplateHandler(event:Event):void
+	        {
+        		var fileStream:FileStream = event.target as FileStream;
+        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+				fileStream.close();
+				
+				template = new TemplateStruct(xml);
+				
+				if(template.isEncoded)
+				{
+					TemplateKey.show(onKeyDialogClose);
+				}
+				else
+				{
+        			template.decode();		
+        			populateList();			
+				}
+	        }    
+       
+            private function onKeyDialogClose(event:Event):void
+            {            	
+            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	{
+            		if(event.target.txtKey.text)
+            		{
+            			template.key = event.target.txtKey.text;
+            			template.decode();
+            			if(template.xmlTemplate)
+            			{
+            				populateList();	
+							return;        					
+            			}
+            		}
+					template = null;
+            		Alert.show("Invalid secret key.");
+            	}         	
+            }
+            
+            private function populateList():void
+            {            	
+            	var arr:Array = [];            	
+            	var xmlList:XMLList = template.xmlTemplate..graph;
+            	
+            	for each (var item:XML in xmlList) {
+ 				   arr.push({category:item.@category, name:item.@name, 
+ 				   	label:item.@category.toString()+' '+item.@name.toString()});
+				}
+				
+            	arr = arr.sortOn(['category', 'name']);
+            	
+            	tplTree.labelField = 'label';
+            	tplTree.dataProvider = arr;
+            }
+               			
+		]]>
+	</mx:Script>
+	<mx:VBox styleName="dlgHeader" width="100%">
+		<mx:Label text="{LanguageManager.sentences.import_from_template}" styleName="headerLabel"/>
+	</mx:VBox>
+	
+	<mx:HRule width="100%"/>
+		
+	<mx:VBox styleName="dlgContent" width="100%" height="100%">
+		<mx:Grid width="100%">
+			<mx:GridRow width="100%" height="100%">
+				<mx:GridItem width="100%" height="100%">
+					<mx:Label text="{LanguageManager.sentences.template_path}:"/>
+				</mx:GridItem>
+				<mx:GridItem width="100%" height="100%">
+					<controls:FileBrowseBox id="tplBrowse" width="300" mode="open" 
+						browseLabel="{LanguageManager.sentences.browse}..." 
+						browseTitle="{LanguageManager.sentences.open_file}..."
+						filterAll="{LanguageManager.sentences.all}"/>
+				</mx:GridItem>
+			</mx:GridRow>
+		</mx:Grid>
+		
+		<mx:ControlBar width="100%" horizontalAlign="right" paddingBottom="0" paddingTop="0" paddingRight="0" paddingLeft="0">
+			<mx:Button id="btnLoad" label="{LanguageManager.sentences.open}" click="onOpenClick(event)"/>
+		</mx:ControlBar>		
+			
+		<mx:HRule width="100%"/>
+		
+		<mx:Tree id="tplTree" width="100%" height="100%" allowMultipleSelection="true" showRoot="true"/>
+		
+	</mx:VBox>
+
+	<mx:HRule width="100%"/>
+	
+	<mx:ControlBar width="100%" styleName="dlgFooter">
+	</mx:ControlBar>
+	
+</ModalDialog>

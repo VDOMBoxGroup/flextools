@@ -121,15 +121,15 @@ public class ListParser
 		return _position;	
 	}
 
-	public static function processElmValue(value:*):String
+	public static function processElmValue(value:Object):String
 	{
 		var str:String = "";
 		
-		if(value && value.hasOwnProperty('type') && value.hasOwnProperty('value'))
+		if(value!=null && value.hasOwnProperty('type') && value.hasOwnProperty('value'))
 		{
 			str = value.value;
 		}
-		else if(value)
+		else if(value!=null)
 		{
 			str = value.toString();
 		}

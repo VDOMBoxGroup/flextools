@@ -2,6 +2,7 @@ package PowerPack.com.graph
 {
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
+import ExtendedAPI.com.utils.ObjectUtils;
 
 import GeomLib.GeomUtils;
 
@@ -605,7 +606,17 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	//  Class methods
 	//
 	//--------------------------------------------------------------------------
-				
+	
+	public function clone():Connector
+	{
+		var newConnector:Connector = new Connector();
+		newConnector.enabled = enabled;
+		newConnector.highlighted = highlighted;
+		newConnector.label = label;
+		//newConnector.data = ObjectUtils.baseClone(data);
+		return newConnector; 
+	}
+	
 	public function alertDestroy():void
 	{			
  		if(parent)

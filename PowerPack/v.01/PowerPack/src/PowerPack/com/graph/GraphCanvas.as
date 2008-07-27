@@ -10,6 +10,7 @@ import PowerPack.com.managers.LanguageManager;
 import flash.display.DisplayObject;
 import flash.display.NativeMenuItem;
 import flash.events.Event;
+import flash.utils.Dictionary;
 
 import mx.binding.utils.*;
 import mx.containers.Canvas;
@@ -22,6 +23,7 @@ import mx.managers.DragManager;
 import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.ArrayUtil;
+import mx.utils.NameUtil;
 
 public class GraphCanvas extends Canvas
 {
@@ -90,8 +92,11 @@ public class GraphCanvas extends Canvas
     }			
 	override public function set name(value:String):void
     {
-        super.name = value;
-        label = value;	
+    	if(super.name!=value)
+    	{
+        	super.name = value;
+        	label = value;
+     	}	
     }	    
     
 	public var addingTransition:Boolean;
@@ -113,6 +118,8 @@ public class GraphCanvas extends Canvas
 	public function GraphCanvas()
 	{
 		super();
+		
+		name = NameUtil.createUniqueName(this);
 		
 		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
 		addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
@@ -240,6 +247,64 @@ public class GraphCanvas extends Canvas
 		}	
 	}	
 	
+	public function clone():GraphCanvas
+	{
+		var newCanvas:GraphCanvas = new GraphCanvas();
+		
+		newCanvas.category = category;
+		newCanvas.initial = initial;
+		
+		var dict:Dictionary = new Dictionary(true);
+		for each (var obj:Object in getChildren())
+		{
+			if(obj is Node)
+			{
+				var newNode:Node = Node(obj).clone();				 
+				dict[obj] = newNode; 
+				newCanvas.addChild(newNode);
+				newNode.validateProperties();
+			}
+		}
+		
+		if(newCanvas.parent)
+		{
+			newCanvas.validateNow();
+		
+			for each(var node:Node in newCanvas.getChildren()) {
+				node.validateNow();
+			}
+		}
+		
+		for each (obj in getChildren())
+		{
+			if(obj is Connector)
+			{
+				var newArrow:Connector = Connector(obj).clone();
+				
+				newArrow.fromObject = dict[Connector(obj).fromObject];		
+				newArrow.toObject = dict[Connector(obj).toObject];	
+    			
+    			newArrow.data = Node(newArrow.fromObject).arrTrans;
+				newArrow.label = Connector(obj).label;
+										
+				if(newArrow.fromObject && newArrow.toObject)											
+				{
+					(newArrow.fromObject as Node).outArrows.addItem(newArrow);
+					(newArrow.toObject as Node).inArrows.addItem(newArrow);
+				
+					newArrow.addEventListener(ConnectorEvent.DISPOSED, (newArrow.toObject as Node).destroyArrowHandler);
+					BindingUtils.bindProperty(newArrow, 'data',
+						newArrow.fromObject, 'arrTrans');
+				
+					newCanvas.addChildAt(newArrow, 0);
+					
+				}
+			}	
+		}				
+				
+		return newCanvas; 
+	}
+	
 	// gen XML that represents graph structure
 	public function toXML():XML
 	{
@@ -308,12 +373,17 @@ public class GraphCanvas extends Canvas
 			newNode.y = nodeXML.@y;
 			
 			addChild(newNode);
+			
+			newNode.validateProperties();
 		}
 		
-		validateNow();
+		if(parent)
+		{
+			validateNow();
 		
-		for each(var node:Node in getChildren()) {
-			node.validateNow();
+			for each(var node:Node in getChildren()) {
+				node.validateNow();
+			}
 		}
 		
 		for each (var arrowXML:XML in graphXML.transitions.elements("transition"))
@@ -348,6 +418,7 @@ public class GraphCanvas extends Canvas
 			
 				addChildAt(newArrow, 0);
 			}
+			
 		}				
 		return true;
 	}		

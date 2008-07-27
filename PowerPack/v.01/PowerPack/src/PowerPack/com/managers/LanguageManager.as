@@ -58,6 +58,8 @@ public class LanguageManager extends EventDispatcher
 				finish:"Finish",
 				next: "Next",
 				back: "Back",
+				open: "Open",
+				load: "Load",
 				
 				// titles
 				confirmation:"Confirmation",					

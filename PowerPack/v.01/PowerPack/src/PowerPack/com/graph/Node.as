@@ -544,7 +544,8 @@ public class Node extends Canvas
             		if(contextMenu)
 	            		contextMenu.getItemByName("normal").checked = true;
             		break;            }          
-
+			
+			styleChanged(null);
     		invalidateDisplayList();
         }	
 
@@ -577,7 +578,8 @@ public class Node extends Canvas
     	        	}
 	            	break;
             }
-
+			
+			styleChanged(null);
     		invalidateDisplayList();
         }	
         
@@ -644,6 +646,16 @@ public class Node extends Canvas
 	//
 	//--------------------------------------------------------------------------		
 	
+	public function clone():Node
+	{
+		var newNode:Node = new Node(category, type, text);
+		newNode.enabled = enabled;
+		newNode.breakpoint = breakpoint;		
+		newNode.x = x;
+		newNode.y = y;
+		return newNode;		
+	}
+	
 	public function duplicate(target:Container):Node		
 	{
 		if(!parent)
@@ -655,7 +667,7 @@ public class Node extends Canvas
 		if(target is Node)
 			return null;			
 		
-		var newNode:Node = new Node(category, NodeType.NORMAL, text);
+		var newNode:Node = clone();
 		target.addChild(newNode);
 		newNode.type = type;
 		newNode.move( target.contentMouseX, target.contentMouseY );			
@@ -745,8 +757,8 @@ public class Node extends Canvas
         	nodeTextArea.setSelection(0, 0);
         }
         
-        invalidateDisplayList();
-     		    	
+        styleChanged(null);
+        invalidateDisplayList();     		    	
     }
     
 	public function alertDestroy():void
@@ -1073,6 +1085,8 @@ public class Node extends Canvas
 	    {
 	    	editMode(false);
 	    	nodeTextArea.text = _text;
+	    	invalidateSize();
+	    	invalidateDisplayList();
 	    }		    
 	}
      

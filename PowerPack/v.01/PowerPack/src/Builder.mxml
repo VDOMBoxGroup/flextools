@@ -39,7 +39,8 @@
 	            <menuitem label="{LanguageManager.sentences.menu_save}" id="save" keyEquivalent="s" ctrlKey="true"/>
 	            <menuitem label="{LanguageManager.sentences.menu_save_as}" id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true"/> 
 	            <menuitem type="separator"/>
-	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import" enabled="true"/> 
+	            <!--menuitem label="{LanguageManager.sentences.menu_import}" id="import" enabled="false"/--> 
+	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import_from_tpl" enabled="true"/> 
 	            <menuitem type="separator"/>
 	            <menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>                                                
 	        </menuitem>
@@ -71,6 +72,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.dialog.ImportFromTpl;
 			import ExtendedAPI.com.controls.SuperDataGrid;
 			import ExtendedAPI.com.controls.tabBarClasses.SuperTab;
 			import ExtendedAPI.com.ui.SuperFlexNativeMenu;
@@ -460,6 +462,10 @@
 				{
 					Import.show();
 				}
+				else if(event.item.@id == "import_from_tpl")
+				{
+					ImportFromTpl.show(onImportFromTplClose);
+				}
 				else if(event.item.@tag == "lastfiles")
 				{
 	            	file.url = FileUtils.pathToUrl(event.item.@data);
@@ -687,8 +693,9 @@
             	            	
 				var subArr:Array = [];
 				for (var obj:String in GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).context) {
-					subArr.push( { Name:"$"+obj, 
-						Value:GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).context[obj].toString() } );						
+					var value:Object = GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).context[obj];
+					subArr.push( { 	Name: "$"+obj, 
+									Value: value!=null ? value.toString() : 'null' } );						
 				}					
 
 				var arr:Array = [];
@@ -808,6 +815,20 @@
             			pnl_graphs.createCategoryTab(event.target.txtCaption.text);
             	}
             }
+            
+            private function onImportFromTplClose(event:Event):void
+            {            	
+            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	{
+            		var xmlList:XMLList = event.target.xmlGraphs.source;
+            		
+            		for each (var item:XML in xmlList) {
+            			pnl_graphs.populateGraph(item);
+					}
+            	}
+            	
+            	ProgressManager.complete();
+            }            
             
            	private function generationComplete(event:Event):void
            	{

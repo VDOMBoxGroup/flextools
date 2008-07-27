@@ -76,8 +76,11 @@ public class CodeParser
 	        				break;
 	        			}
 	        		}
-		        }	
-				buffer += (value!=null ? value.toString() : lexems[i].origValue);
+	        		
+	        		buffer += (value!=null ? value.toString() : lexems[i].origValue);
+		        }
+		        else		        	
+					buffer += lexems[i].value;
 			}
         	
         	retVal.result = true;	

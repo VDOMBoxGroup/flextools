@@ -45,6 +45,10 @@ public class Parser
 			[/^(v=){0,1}\[n[vscVSA]\]$/, "evaluate", 1],
 			[/^(v=){0,1}\[n[vscVSA]\]$/, "execute", 1],
 							
+			[/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, "addStructure", 4],
+			[/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, "updateStructure", 4],
+			[/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, "deleteStructure", 4],
+
 			//*********************
 			// Graphic functions
 			//*********************
