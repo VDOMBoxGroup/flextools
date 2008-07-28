@@ -22,8 +22,8 @@ private var currentPage:int = 0;
 private var pageOffset:int = 0;
 private var queryResult:XML;
 private var editableValue:String = "";
-private var editableValueColumn:int = 0;
-private var editableValueRow:int = 0;
+private var editableValueColumn:int = -1;
+private var editableValueRow:int = -1;
 
 private var queue:XMLList;
 
@@ -269,6 +269,13 @@ private function pageClickHandler(mEvent:MouseEvent):void {
 // ----- Edit data processing methods ---------------------------------------------------
 
 private function itemEditBegin(event:DataGridEvent):void {
+//	if (editableValueRow >= 0 && editableValueColumn >= 0) {
+//		if (dataGridCollection[editableValueRow][dataGridColumns[editableValueColumn].dataField].toString() != editableValue) {
+//			dataGridCollection[editableValueRow].changed = true;
+//			__commitBtn.enabled = true;
+//		}
+//	}
+
 	editableValue = dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex].dataField].toString();
 	editableValueColumn = event.columnIndex;
 	editableValueRow = event.rowIndex;
