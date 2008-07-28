@@ -118,13 +118,21 @@ private function adjustmentTree(xml1:XML):void
 {
 	var massMap:Array = new Array();
 	var massTreeObj:Array = new Array();
+	
+	for(var obID:String in massTreeElements)
+	{
+		massTreeObj[obID] = new TreeObj(obID);
+		massTreeObj[obID].parent = null;
+	}
+	
+	/*
 	for each(var xmlObj:XML in xml1.children())
 	{
 		var obID:String = xmlObj.@ID.toXMLString();
 		 massTreeObj[obID] = new TreeObj(obID);
 	}
-	
-	for each( xmlObj in xml1.children())
+	*/
+	for each( var xmlObj:XML in xml1.children())
 	{
 		var fromObID:String = xmlObj.@ID.toXMLString(); 
 		for each(var xmlLavel:XML in xmlObj.children())
@@ -249,6 +257,49 @@ private function createTreeArr(xml:XML):void
 {
 	topLevelTypes = dataManager.getTopLevelTypes();
 	var xmlTopLevelObjects:XMLList = dataManager.listPages;
+	
+	for each(var page:XML in xmlTopLevelObjects)
+	{
+		var ID:String = page.@ID.toXMLString();
+		var xmlObj:XML = xml.Object.(@ID == ID)[0];
+		var treeElement:TreeElement = new TreeElement();
+		
+		treeElement.ID 	= ID;
+		treeElement.name =  page.Attributes.Attribute.(@Name == 'title' );
+		treeElement.description = page.Attributes.Attribute.(@Name == 'description' );
+		
+		var typeID:String = page.@Type;
+		treeElement.type  =  getType(typeID);
+		treeElement.typeID =  getIcon(typeID);
+		treeElement = addEventListenerToTreeElement(treeElement);
+		
+		/*  проверить если они есть */
+		if(xmlObj)
+		{
+			treeElement.x 			= xmlObj.@left.toXMLString();
+			treeElement.y 			= xmlObj.@top.toXMLString();	
+			treeElement.state 		= xmlObj.@state.toXMLString();	
+			treeElement.resourceID 	= xmlObj.@ResourceID.toXMLString();
+			
+			if (treeElement.resourceID!='') 
+					fileManager.loadResource(dataManager.currentApplicationId, treeElement.resourceID, treeElement);
+		} else
+		{
+			treeElement.x = 0;
+			treeElement.y = 0;	
+		}
+		
+		massTreeElements[ID] =  treeElement;
+		main.addChild(massTreeElements[ID]);
+	}
+}
+
+
+/*  **************** O L D ***************
+private function createTreeArr(xml:XML):void
+{
+	topLevelTypes = dataManager.getTopLevelTypes();
+	var xmlTopLevelObjects:XMLList = dataManager.listPages;
 	for each(var xmlObj:XML in xml.children())
 	{
 		var ID:String = xmlObj.@ID.toXMLString();
@@ -284,7 +335,7 @@ private function createTreeArr(xml:XML):void
 
 	}
 }
-
+*/
 private function getType(ID:String):String
 {
 	for each(var lavel:XML in topLevelTypes )

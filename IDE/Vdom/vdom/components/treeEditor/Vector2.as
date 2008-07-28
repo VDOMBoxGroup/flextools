@@ -29,7 +29,7 @@ package vdom.components.treeEditor
 			this.fromObj = fromObj;
 			this.toObj = toObj;
 			if( color!= 0)
-			_numColor = color;
+				_numColor = color;
 			calculatePoints();
 			
 			
@@ -56,6 +56,9 @@ package vdom.components.treeEditor
 			return _strColor;
 		}
 		*/
+		public var middleX:Number;
+		public var middleY:Number;
+		
 		private function drawLine():void
 		{/*
 			graphics.clear();
@@ -77,6 +80,10 @@ package vdom.components.treeEditor
 			
 			dX = x0-x1;
 			dY = y0-y1; 
+			
+			middleX = x0 - dX / 2;
+			middleY = y0 - dY / 2;
+			
 			alf = Math.atan(dY/dX);
 			if (dX<0) alf+=Math.PI;
 			
@@ -111,7 +118,7 @@ package vdom.components.treeEditor
 			this.graphics.lineTo(x1,y1);
 			//this.graphics.endFill();
 			
-		
+			
 		}
 		//private var arrPolygon:Array;
 	

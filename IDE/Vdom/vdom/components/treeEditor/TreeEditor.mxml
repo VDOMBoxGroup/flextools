@@ -429,7 +429,15 @@
 	}
 	]]>
 </mx:Script>
-
+<!--
+	<mx:ComboBox x="28" y="46" >
+	 <mx:ArrayCollection>
+         <mx:String>1</mx:String>
+         <mx:String>2</mx:String>
+         <mx:String>3</mx:String>
+      </mx:ArrayCollection>
+	</mx:ComboBox>
+-->
 </mx:Canvas>
 
 <mx:VBox   height="100%" >
