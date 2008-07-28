@@ -98,12 +98,6 @@ package vdom.components.treeEditor
 			this.graphics.moveTo(x0, y0);
 			this.graphics.lineTo(x1, y1);
 			
-			this.graphics.lineStyle(2, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-			
-			this.graphics.moveTo(x0, y0);
-			this.graphics.lineTo(x1, y1);
-			
-		//	this.graphics.beginFill(_numColor);
 			if (_mark)
 			{
 				
@@ -112,6 +106,14 @@ package vdom.components.treeEditor
 				this.graphics.moveTo(x0, y0);	
 				this.graphics.lineTo(x1, y1);
 			}
+			
+			this.graphics.lineStyle(2, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			
+			this.graphics.moveTo(x0, y0);
+			this.graphics.lineTo(x1, y1);
+			
+		//	this.graphics.beginFill(_numColor);
+			
 		
 			this.graphics.lineTo(x1 + Math.cos(alf+dA)*dDist, y1 + Math.sin(alf+dA)*dDist );
 			this.graphics.lineTo(x1 + Math.cos(alf-dA)*dDist, y1 + Math.sin(alf-dA)*dDist);
