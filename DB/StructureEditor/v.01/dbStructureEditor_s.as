@@ -60,7 +60,8 @@ private function rmcErrorHandler(event:*):void {
 		result = XML(event.result);
 	}
 	catch (err:Error) {
-		showAlert("Remote Method Call error: " + result.toString(), voidfunc, voidfunc);
+		/* error01 */
+		showAlert("Remote Method Call error (01): " + result.toString(), voidfunc, voidfunc);
 	}
 }
 
@@ -73,7 +74,8 @@ private function loadXMLData(event:*):void {
 		tableStructure = new XML(queryResult.Result.tablestructure);		
 	}
 	catch (err:Error) {
-		showAlert("Unexpected External Manager error: Can not get Structure data", voidfunc, voidfunc);
+		/* error02 */
+		showAlert("Unexpected External Manager error (02): Can not get Structure data", voidfunc, voidfunc);
 		return;
 	}
 
@@ -278,6 +280,8 @@ private function removeBtnHandler():void {
 private function removeSelectedProp():void {
 	/* Applying changes */
 //	_sourceXML.ChangeLog.appendChild(<ColumnDelete id={_selectedListItem.data} />);
+	
+	_manager.remoteMethodCall("delete_column", "<delete><column id='" + _selectedListItem.data + "' /></delete>");
 
 	/* Remove the element */
 	var newColsProvider:Array = new Array();
