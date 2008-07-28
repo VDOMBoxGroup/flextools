@@ -131,6 +131,9 @@ private function completeHandler(e:Event):void {
 	sample.removeEventListener(Event.COMPLETE, completeHandler);
 	sample.window.tinyMCE.execCommand("mceAddControl", true, "content");
 	
+	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
+	d.focus();
+	
 	tinyMCE = sample.window.tinyMCE;
 	
 	editableElement.addEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
@@ -196,6 +199,7 @@ private function linkSelectedHandler(event:Event):void {
 	
 	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
 	var f:* = d.contentWindow.getSelection();
+	
 	f.addRange(w);
 	
 	tinyMCE.themes['advanced']._insertLink(event.currentTarget.url, '_blank');
@@ -244,7 +248,14 @@ private function colorTextChanged(event:ColorPickerEvent):void {
 private function charSelectedHandler(event:Event):void {
 	
 	event.currentTarget.removeEventListener('charSelected', charSelectedHandler);
-	tinyMCE.execCommand("mceInsertContent", false, event.currentTarget.charCode);
+	try
+	{
+		tinyMCE.execCommand("mceInsertContent", false, event.currentTarget.charCode);
+	}
+	catch(error:Error)
+	{
+		var d:* = "";
+	}
 	PopUpManager.removePopUp(UIComponent(event.currentTarget));
 }
 

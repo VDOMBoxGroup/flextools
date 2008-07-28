@@ -126,8 +126,11 @@ public class RenderManager implements IEventDispatcher {
 			return;
 		
 		var itemDescription:ItemDescription= getItemDescriptionById(itemId);
-		IItem(itemDescription.item).waitMode = true;
-		lockedItems[itemId] = "";
+		if(itemDescription && itemDescription.item)
+		{
+			IItem(itemDescription.item).waitMode = true;
+			lockedItems[itemId] = "";
+		}
 	}
 	
 	public function getItemById(itemId:String):IItem

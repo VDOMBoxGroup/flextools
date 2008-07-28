@@ -210,6 +210,12 @@ public class ResizeManager extends EventDispatcher {
 		return newSelectedItem;
 	}
 	
+	public function refresh():void
+	{
+		if(selectMarker && selectMarker.item)
+			selectMarker.refresh();
+	}
+	
 	private function moveItem(item:IItem):void {
 		
 		if(item && Container(item).parent) {

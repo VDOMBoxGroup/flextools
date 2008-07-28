@@ -105,6 +105,7 @@ private function hideHandler():void {
 	
 	placeCanvas.selectedIndex = 0;
 	selectedChild = initModule;
+	registerEvent(false);
 }
 
 private function loadApplicationData():void

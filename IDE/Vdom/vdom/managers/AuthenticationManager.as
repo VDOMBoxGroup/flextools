@@ -78,9 +78,14 @@ public class AuthenticationManager implements IEventDispatcher {
 		dispatcher.dispatchEvent(event);
 	}
 	
+	[Bindable]
 	public function get username():String {
 		
 		return _username;
+	}
+	
+	public function set username(value:String):void
+	{
 	}
 	
 	public function get password():String {

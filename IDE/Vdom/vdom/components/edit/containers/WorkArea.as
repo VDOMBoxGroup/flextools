@@ -148,8 +148,25 @@ public class WorkArea extends VBox {
 		if(_contentToolbar)
 			_contentToolbar.close();
 		
-		if(item && item.waitMode)
-			renderManager.updateItem(result.Object.@ID, result.Parent);
+		if(item)
+		{
+			if(!item.waitMode)
+			{
+				var itemDescription:XML = dataManager.getObject(item.objectId);
+				
+				if(itemDescription)
+				{
+					DisplayObject(item).x = itemDescription.Attributes.Attribute.(@Name == "left")[0];
+					DisplayObject(item).y = itemDescription.Attributes.Attribute.(@Name == "top")[0];
+					
+					resizeManager.refresh();
+				}
+			}	
+			else
+			{
+				renderManager.updateItem(result.Object.@ID, result.Parent);
+			}
+		}
 	}
 	
 	public function createObject(result:XML):void {

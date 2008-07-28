@@ -34,8 +34,8 @@
 		</containers:AdvancedTabNavigator>
 	
 	<mx:VBox id="panelContainer"
+		paddingRight="2" width="220" minWidth="220"
 		verticalGap="5" 
-		width="200" minWidth="200" minHeight="0" 
 		verticalScrollPolicy="auto" horizontalScrollPolicy="off"  >
 		
 		<editContainers:AttributesPanel id="attributesPanel"

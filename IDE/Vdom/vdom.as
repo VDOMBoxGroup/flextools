@@ -25,8 +25,11 @@ public var vdomLogo:Class;
 [Bindable]
 private var dataManager:DataManager = DataManager.getInstance();
 
-private var languageManager:LanguageManager = LanguageManager.getInstance();
+[Bindable]
 private var authenticationManager:AuthenticationManager = AuthenticationManager.getInstance();
+
+private var languageManager:LanguageManager = LanguageManager.getInstance();
+
 private var fileManager:FileManager = FileManager.getInstance();
 private var cacheManager:CacheManager = CacheManager.getInstance();
 private var soap:Soap = Soap.getInstance();
@@ -112,8 +115,17 @@ private function submitLogin(event:LoginFormEvent):void
 
 private function switchToLogin():void
 {
-	authenticationManager.changeAuthenticationInformation(null, null, null);
+	if(tabPanel.selectedChild)
+		tabPanel.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
+		
+	tabPanel.selectedChild = applicationManagmentModule
+	
+	if(viewstack.selectedChild)
+		viewstack.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
+	
 	viewstack.selectedChild=loginForm;
+	
+	authenticationManager.changeAuthenticationInformation(null, null, null);
 }
 
 private function authenticationManager_loginComleteHandler(event:Event):void

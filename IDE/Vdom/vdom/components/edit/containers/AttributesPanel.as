@@ -31,9 +31,11 @@ import mx.validators.RegExpValidator;
 
 import vdom.containers.ClosablePanel;
 import vdom.controls.colorPicker.ColorPicker;
+import vdom.controls.externalEditorButton.ExternalEditorButton;
 import vdom.controls.multiLine.MultiLine;
 import vdom.controls.resourceBrowser.ResourceBrowserButton;
 import vdom.events.AttributesPanelEvent;
+import vdom.managers.DataManager;
 import vdom.managers.LanguageManager;
 
 public class AttributesPanel extends ClosablePanel {
@@ -41,6 +43,8 @@ public class AttributesPanel extends ClosablePanel {
 	[Bindable] public var help:String;
 	
 	private var languageManager:LanguageManager;
+	
+	private var dataManager:DataManager = DataManager.getInstance();
 	
 	private var acceptButton:Button;
 	private var deleteButton:Button;
@@ -522,6 +526,22 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.selectedItem = _objectList.(@ID == currentAttribute);
 				break
 				
+				case 'externaleditor':
+					var d:* = "";
+					var resId:String = String(codeInterface["value"]).split(",")[1];
+					
+					valueContainer = new ExternalEditorButton(
+						dataManager.currentApplicationId, 
+						objectDescription.@ID,
+						resId);
+					
+					valueContainer.minWidth = 110;
+					valueContainer.percentWidth = 100;
+					valueContainer.height = 21;
+					
+					valueType = "value";
+				break
+				
 				default:
 					valueContainer = new TextInput();
 					valueType = 'text';
@@ -581,8 +601,6 @@ public class AttributesPanel extends ClosablePanel {
 		var attrItemLabel:GridItem = attributeItemLabel.newInstance();
 		var attrItemValue:GridItem = attributeItemValue.newInstance();
 		var attrLabel:Text = attributeLabel.newInstance();
-		
-		
 		
 		attrLabel.text = label;
 		

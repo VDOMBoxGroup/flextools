@@ -54,6 +54,10 @@
 				</controls:MainTabNavigator>
 			</mx:Canvas>
 			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>
+			<mx:Label id="userName"
+				text="USER: {authenticationManager.username.toUpperCase()} - VDOM IDE"
+				y="15" horizontalCenter="0" fontWeight="bold" color="#FFFFFF"
+				/>
 		</mx:Canvas>
 	</mx:ViewStack>
 </mx:WindowedApplication>
