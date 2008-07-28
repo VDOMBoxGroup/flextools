@@ -61,29 +61,29 @@
         </state>
       </states>
       <transitions>
-        <transition name="Connector2745" highlighted="false" enabled="true" source="Node1856" destination="GraphNode316"/>
-        <transition name="Connector2744" highlighted="false" enabled="true" source="GraphNode826" destination="Node1856"/>
-        <transition name="Connector2743" highlighted="false" enabled="true" source="Node1811" destination="GraphNode803"/>
-        <transition name="Connector2742" highlighted="false" enabled="true" source="GraphNode721" destination="Node1811"/>
-        <transition name="Connector2741" highlighted="false" enabled="true" source="Node5617" destination="GraphNode721"/>
-        <transition name="Connector2740" highlighted="false" enabled="true" source="GraphNode803" destination="GraphNode826"/>
-        <transition name="Connector2739" highlighted="false" enabled="true" source="GraphNode305" destination="GraphNode712"/>
-        <transition name="Connector2738" highlighted="false" enabled="true" source="GraphNode677" destination="GraphNode305"/>
-        <transition name="Connector2737" highlighted="false" enabled="true" source="Node1927" destination="Node1936"/>
-        <transition name="Connector2736" highlighted="false" enabled="true" source="Node1936" destination="Node1982"/>
-        <transition name="Connector2735" highlighted="false" enabled="true" source="Node1982" destination="Node1992">
-          <label>false</label>
-        </transition>
-        <transition name="Connector2734" highlighted="false" enabled="true" source="Node1982" destination="Node2072">
+        <transition name="Connector8340" highlighted="false" enabled="true" source="Node2952" destination="Node1927"/>
+        <transition name="Connector8339" highlighted="false" enabled="true" source="Node2988" destination="Node2952"/>
+        <transition name="Connector8338" highlighted="false" enabled="true" source="GraphNode712" destination="Node2988"/>
+        <transition name="Connector8337" highlighted="false" enabled="true" source="Node55981" destination="Node5617"/>
+        <transition name="Connector8336" highlighted="false" enabled="true" source="Node2000" destination="Node55981"/>
+        <transition name="Connector8335" highlighted="false" enabled="true" source="Node2072" destination="Node2000"/>
+        <transition name="Connector8334" highlighted="false" enabled="true" source="Node1992" destination="Node2000"/>
+        <transition name="Connector8333" highlighted="false" enabled="true" source="Node1982" destination="Node2072">
           <label>true</label>
         </transition>
-        <transition name="Connector2733" highlighted="false" enabled="true" source="Node1992" destination="Node2000"/>
-        <transition name="Connector2732" highlighted="false" enabled="true" source="Node2072" destination="Node2000"/>
-        <transition name="Connector2731" highlighted="false" enabled="true" source="Node2000" destination="Node55981"/>
-        <transition name="Connector2730" highlighted="false" enabled="true" source="Node55981" destination="Node5617"/>
-        <transition name="Connector2729" highlighted="false" enabled="true" source="GraphNode712" destination="Node2988"/>
-        <transition name="Connector2728" highlighted="false" enabled="true" source="Node2988" destination="Node2952"/>
-        <transition name="Connector2727" highlighted="false" enabled="true" source="Node2952" destination="Node1927"/>
+        <transition name="Connector8332" highlighted="false" enabled="true" source="Node1982" destination="Node1992">
+          <label>false</label>
+        </transition>
+        <transition name="Connector8331" highlighted="false" enabled="true" source="Node1936" destination="Node1982"/>
+        <transition name="Connector8330" highlighted="false" enabled="true" source="Node1927" destination="Node1936"/>
+        <transition name="Connector8329" highlighted="false" enabled="true" source="GraphNode677" destination="GraphNode305"/>
+        <transition name="Connector8328" highlighted="false" enabled="true" source="GraphNode305" destination="GraphNode712"/>
+        <transition name="Connector8327" highlighted="false" enabled="true" source="GraphNode803" destination="GraphNode826"/>
+        <transition name="Connector8326" highlighted="false" enabled="true" source="Node5617" destination="GraphNode721"/>
+        <transition name="Connector8325" highlighted="false" enabled="true" source="GraphNode721" destination="Node1811"/>
+        <transition name="Connector8324" highlighted="false" enabled="true" source="Node1811" destination="GraphNode803"/>
+        <transition name="Connector8323" highlighted="false" enabled="true" source="GraphNode826" destination="Node1856"/>
+        <transition name="Connector8322" highlighted="false" enabled="true" source="Node1856" destination="GraphNode316"/>
       </transitions>
     </graph>
     <graph name="HTMLContainer" initial="false" category="container">
@@ -126,22 +126,22 @@
         </state>
       </states>
       <transitions>
-        <transition name="Connector2894" highlighted="false" enabled="true" source="GraphNode2388" destination="GraphNode5571">
-          <label>true</label>
-        </transition>
-        <transition name="Connector2893" highlighted="false" enabled="true" source="GraphNode2487" destination="GraphNode5571"/>
-        <transition name="Connector2892" highlighted="false" enabled="true" source="GraphNode2388" destination="GraphNode2487">
+        <transition name="Connector8489" highlighted="false" enabled="true" source="GraphNode5571" destination="GraphNode2336"/>
+        <transition name="Connector8488" highlighted="false" enabled="true" source="GraphNode2336" destination="GraphNode2316"/>
+        <transition name="Connector8487" highlighted="false" enabled="true" source="GraphNode2316" destination="GraphNode2327"/>
+        <transition name="Connector8486" highlighted="false" enabled="true" source="GraphNode2327" destination="GraphNode2347"/>
+        <transition name="Connector8485" highlighted="false" enabled="true" source="GraphNode2347" destination="GraphNode2438"/>
+        <transition name="Connector8484" highlighted="false" enabled="true" source="GraphNode2438" destination="GraphNode5630"/>
+        <transition name="Connector8483" highlighted="false" enabled="true" source="GraphNode5630" destination="GraphNode2471"/>
+        <transition name="Connector8482" highlighted="false" enabled="true" source="GraphNode2471" destination="GraphNode5622"/>
+        <transition name="Connector8481" highlighted="false" enabled="true" source="GraphNode5579" destination="GraphNode2388"/>
+        <transition name="Connector8480" highlighted="false" enabled="true" source="GraphNode2388" destination="GraphNode2487">
           <label>false</label>
         </transition>
-        <transition name="Connector2891" highlighted="false" enabled="true" source="GraphNode5579" destination="GraphNode2388"/>
-        <transition name="Connector2890" highlighted="false" enabled="true" source="GraphNode2471" destination="GraphNode5622"/>
-        <transition name="Connector2889" highlighted="false" enabled="true" source="GraphNode5630" destination="GraphNode2471"/>
-        <transition name="Connector2888" highlighted="false" enabled="true" source="GraphNode2438" destination="GraphNode5630"/>
-        <transition name="Connector2887" highlighted="false" enabled="true" source="GraphNode2347" destination="GraphNode2438"/>
-        <transition name="Connector2886" highlighted="false" enabled="true" source="GraphNode2327" destination="GraphNode2347"/>
-        <transition name="Connector2885" highlighted="false" enabled="true" source="GraphNode2316" destination="GraphNode2327"/>
-        <transition name="Connector2884" highlighted="false" enabled="true" source="GraphNode2336" destination="GraphNode2316"/>
-        <transition name="Connector2883" highlighted="false" enabled="true" source="GraphNode5571" destination="GraphNode2336"/>
+        <transition name="Connector8479" highlighted="false" enabled="true" source="GraphNode2487" destination="GraphNode5571"/>
+        <transition name="Connector8478" highlighted="false" enabled="true" source="GraphNode2388" destination="GraphNode5571">
+          <label>true</label>
+        </transition>
       </transitions>
     </graph>
     <graph name="Image" initial="false" category="container">
@@ -200,8 +200,8 @@
         </state>
       </states>
       <transitions>
-        <transition name="Connector2985" highlighted="false" enabled="true" source="Node2149" destination="Node2158"/>
-        <transition name="Connector2984" highlighted="false" enabled="true" source="Node2158" destination="Node2180"/>
+        <transition name="Connector8580" highlighted="false" enabled="true" source="Node2158" destination="Node2180"/>
+        <transition name="Connector8579" highlighted="false" enabled="true" source="Node2149" destination="Node2158"/>
       </transitions>
     </graph>
     <graph name="Objects" initial="false" category="application">
@@ -212,7 +212,7 @@
       </states>
       <transitions/>
     </graph>
-    <graph name="Structure" initial="true" category="application">
+    <graph name="Structure" initial="false" category="application">
       <states>
         <state name="Node2448" type="Initial" category="Command" enabled="true" breakpoint="false" x="21" y="14">
           <text>$StructureList = '[]'</text>
@@ -225,9 +225,6 @@
         </state>
         <state name="Node4062" type="Normal" category="Command" enabled="true" breakpoint="false" x="27" y="313">
           <text>$StructureList = [addStructure $Obj_01 $Obj_04 0 $StructureList]</text>
-        </state>
-        <state name="Node4077" type="Normal" category="Command" enabled="true" breakpoint="false" x="24" y="372">
-          <text>$StructureList = [addStructure $Obj_02 $Obj_01 0 $StructureList]</text>
         </state>
         <state name="Node3640" type="Normal" category="Command" enabled="true" breakpoint="false" x="22" y="413">
           <text>$StructureList = [addStructure $Obj_02 $Obj_03 0 $StructureList]</text>
@@ -246,15 +243,6 @@
         </state>
         <state name="Node5692" type="Normal" category="Command" enabled="true" breakpoint="false" x="154" y="653">
           <text>$ObjectSrcList = [get 1 $TopLevelList]</text>
-        </state>
-        <state name="Node4180" type="Normal" category="Command" enabled="true" breakpoint="false" x="46" y="62">
-          <text>$Obj_01 = [sub StructureObject null 10 10 null]</text>
-        </state>
-        <state name="Node5267" type="Normal" category="Command" enabled="true" breakpoint="false" x="49" y="101">
-          <text>$Obj_02 = [sub StructureObject null 20 20 null]</text>
-        </state>
-        <state name="Node5282" type="Normal" category="Command" enabled="true" breakpoint="false" x="50" y="144">
-          <text>$Obj_03 = [sub StructureObject null 30 30 null]</text>
         </state>
         <state name="Node5297" type="Normal" category="Command" enabled="true" breakpoint="false" x="51" y="187">
           <text>$Obj_04 = [sub StructureObject null 40 40 null]</text>
@@ -286,12 +274,6 @@
         <state name="Node14601" type="Normal" category="Command" enabled="true" breakpoint="false" x="456" y="971">
           <text>$len&gt;3</text>
         </state>
-        <state name="Node5517" type="Normal" category="Normal" enabled="true" breakpoint="true" x="69" y="475">
-          <text>\n&lt;Structure&gt;</text>
-        </state>
-        <state name="Node5929" type="Normal" category="Normal" enabled="true" breakpoint="false" x="205" y="1179">
-          <text>\n\t&lt;/Object&gt;</text>
-        </state>
         <state name="Node5530" type="Normal" category="Normal" enabled="true" breakpoint="false" x="62" y="1325">
           <text>\n&lt;/Structure&gt;</text>
         </state>
@@ -301,56 +283,74 @@
         <state name="Node5825" type="Normal" category="Normal" enabled="true" breakpoint="false" x="192" y="1035">
           <text>\n\t&lt;Object ID="$id" Top="$top" Left="$left" ResourceID="$resId"&gt;</text>
         </state>
+        <state name="Node5517" type="Normal" category="Normal" enabled="true" breakpoint="true" x="67" y="477">
+          <text>\n&lt;Structure&gt;</text>
+        </state>
+        <state name="Node4077" type="Normal" category="Command" enabled="true" breakpoint="false" x="25" y="372">
+          <text>$StructureList = [addStructure $Obj_02 $Obj_01 0 $StructureList]</text>
+        </state>
+        <state name="Node5929" type="Normal" category="Normal" enabled="true" breakpoint="false" x="205" y="1195">
+          <text>\n\t&lt;/Object&gt;</text>
+        </state>
+        <state name="Node4180" type="Normal" category="Command" enabled="true" breakpoint="false" x="46" y="62">
+          <text>$Obj_01 = [sub StructureObject null 10 10 null]</text>
+        </state>
+        <state name="Node5267" type="Normal" category="Command" enabled="true" breakpoint="false" x="49" y="101">
+          <text>$Obj_02 = [sub StructureObject null 20 20 null]</text>
+        </state>
+        <state name="Node5282" type="Normal" category="Command" enabled="true" breakpoint="false" x="49" y="144">
+          <text>$Obj_03 = [sub StructureObject null 30 30 null]</text>
+        </state>
       </states>
       <transitions>
-        <transition name="Connector3357" highlighted="false" enabled="true" source="Node14601" destination="Node7433">
+        <transition name="Connector8952" highlighted="false" enabled="true" source="Node4077" destination="Node3640"/>
+        <transition name="Connector8951" highlighted="false" enabled="true" source="Node4062" destination="Node4077"/>
+        <transition name="Connector8950" highlighted="false" enabled="true" source="Node4047" destination="Node4062"/>
+        <transition name="Connector8949" highlighted="false" enabled="true" source="Node4140" destination="Node4047"/>
+        <transition name="Connector8948" highlighted="false" enabled="true" source="Node5297" destination="Node4140"/>
+        <transition name="Connector8947" highlighted="false" enabled="true" source="Node5282" destination="Node5297"/>
+        <transition name="Connector8946" highlighted="false" enabled="true" source="Node5267" destination="Node5282"/>
+        <transition name="Connector8945" highlighted="false" enabled="true" source="Node4180" destination="Node5267"/>
+        <transition name="Connector8944" highlighted="false" enabled="true" source="Node2448" destination="Node4180"/>
+        <transition name="Connector8943" highlighted="false" enabled="true" source="Node5517" destination="Node5579"/>
+        <transition name="Connector8942" highlighted="false" enabled="true" source="Node5598" destination="Node5612">
           <label>true</label>
         </transition>
-        <transition name="Connector3356" highlighted="false" enabled="true" source="Node7410" destination="Node14601"/>
-        <transition name="Connector3355" highlighted="false" enabled="true" source="Node14601" destination="Node5825">
+        <transition name="Connector8941" highlighted="false" enabled="true" source="Node5579" destination="Node5598"/>
+        <transition name="Connector8940" highlighted="false" enabled="true" source="Node5612" destination="Node5692"/>
+        <transition name="Connector8939" highlighted="false" enabled="true" source="Node5692" destination="Node5706"/>
+        <transition name="Connector8938" highlighted="false" enabled="true" source="Node5946" destination="Node5598"/>
+        <transition name="Connector8937" highlighted="false" enabled="true" source="Node5598" destination="Node5530">
           <label>false</label>
         </transition>
-        <transition name="Connector3354" highlighted="false" enabled="true" source="Node14530" destination="Node5825">
-          <label>false</label>
-        </transition>
-        <transition name="Connector3353" highlighted="false" enabled="true" source="Node14530" destination="Node7410">
+        <transition name="Connector8936" highlighted="false" enabled="true" source="Node5929" destination="Node5946"/>
+        <transition name="Connector8935" highlighted="false" enabled="true" source="Node3640" destination="Node5517"/>
+        <transition name="Connector8934" highlighted="false" enabled="true" source="Node7433" destination="Node5825"/>
+        <transition name="Connector8933" highlighted="false" enabled="true" source="Node5825" destination="Node5929"/>
+        <transition name="Connector8932" highlighted="false" enabled="true" source="Node5706" destination="Node13077"/>
+        <transition name="Connector8931" highlighted="false" enabled="true" source="Node13149" destination="Node7386">
           <label>true</label>
         </transition>
-        <transition name="Connector3352" highlighted="false" enabled="true" source="Node7386" destination="Node14530"/>
-        <transition name="Connector3351" highlighted="false" enabled="true" source="Node13149" destination="Node5825">
+        <transition name="Connector8930" highlighted="false" enabled="true" source="Node13077" destination="Node13170"/>
+        <transition name="Connector8929" highlighted="false" enabled="true" source="Node13170" destination="Node5861"/>
+        <transition name="Connector8928" highlighted="false" enabled="true" source="Node5861" destination="Node13149"/>
+        <transition name="Connector8927" highlighted="false" enabled="true" source="Node13149" destination="Node5825">
           <label>false</label>
         </transition>
-        <transition name="Connector3350" highlighted="false" enabled="true" source="Node5861" destination="Node13149"/>
-        <transition name="Connector3349" highlighted="false" enabled="true" source="Node13170" destination="Node5861"/>
-        <transition name="Connector3348" highlighted="false" enabled="true" source="Node13077" destination="Node13170"/>
-        <transition name="Connector3347" highlighted="false" enabled="true" source="Node13149" destination="Node7386">
+        <transition name="Connector8926" highlighted="false" enabled="true" source="Node7386" destination="Node14530"/>
+        <transition name="Connector8925" highlighted="false" enabled="true" source="Node14530" destination="Node7410">
           <label>true</label>
         </transition>
-        <transition name="Connector3346" highlighted="false" enabled="true" source="Node5706" destination="Node13077"/>
-        <transition name="Connector3345" highlighted="false" enabled="true" source="Node5825" destination="Node5929"/>
-        <transition name="Connector3344" highlighted="false" enabled="true" source="Node7433" destination="Node5825"/>
-        <transition name="Connector3343" highlighted="false" enabled="true" source="Node3640" destination="Node5517"/>
-        <transition name="Connector3342" highlighted="false" enabled="true" source="Node5929" destination="Node5946"/>
-        <transition name="Connector3341" highlighted="false" enabled="true" source="Node5598" destination="Node5530">
+        <transition name="Connector8924" highlighted="false" enabled="true" source="Node14530" destination="Node5825">
           <label>false</label>
         </transition>
-        <transition name="Connector3340" highlighted="false" enabled="true" source="Node5946" destination="Node5598"/>
-        <transition name="Connector3339" highlighted="false" enabled="true" source="Node5692" destination="Node5706"/>
-        <transition name="Connector3338" highlighted="false" enabled="true" source="Node5612" destination="Node5692"/>
-        <transition name="Connector3337" highlighted="false" enabled="true" source="Node5579" destination="Node5598"/>
-        <transition name="Connector3336" highlighted="false" enabled="true" source="Node5598" destination="Node5612">
+        <transition name="Connector8923" highlighted="false" enabled="true" source="Node14601" destination="Node5825">
+          <label>false</label>
+        </transition>
+        <transition name="Connector8922" highlighted="false" enabled="true" source="Node7410" destination="Node14601"/>
+        <transition name="Connector8921" highlighted="false" enabled="true" source="Node14601" destination="Node7433">
           <label>true</label>
         </transition>
-        <transition name="Connector3335" highlighted="false" enabled="true" source="Node5517" destination="Node5579"/>
-        <transition name="Connector3334" highlighted="false" enabled="true" source="Node2448" destination="Node4180"/>
-        <transition name="Connector3333" highlighted="false" enabled="true" source="Node4180" destination="Node5267"/>
-        <transition name="Connector3332" highlighted="false" enabled="true" source="Node5267" destination="Node5282"/>
-        <transition name="Connector3331" highlighted="false" enabled="true" source="Node5282" destination="Node5297"/>
-        <transition name="Connector3330" highlighted="false" enabled="true" source="Node5297" destination="Node4140"/>
-        <transition name="Connector3329" highlighted="false" enabled="true" source="Node4140" destination="Node4047"/>
-        <transition name="Connector3328" highlighted="false" enabled="true" source="Node4047" destination="Node4062"/>
-        <transition name="Connector3327" highlighted="false" enabled="true" source="Node4062" destination="Node4077"/>
-        <transition name="Connector3326" highlighted="false" enabled="true" source="Node4077" destination="Node3640"/>
       </transitions>
     </graph>
     <graph name="StructureObject" initial="false" category="application">
@@ -384,24 +384,835 @@
         </state>
       </states>
       <transitions>
-        <transition name="Connector3471" highlighted="false" enabled="true" source="Node6589" destination="Node6614">
-          <label>true</label>
-        </transition>
-        <transition name="Connector3470" highlighted="false" enabled="true" source="Node6589" destination="Node7571">
+        <transition name="Connector9066" highlighted="false" enabled="true" source="Node10388" destination="Node11472"/>
+        <transition name="Connector9065" highlighted="false" enabled="true" source="Node9320" destination="Node11472"/>
+        <transition name="Connector9064" highlighted="false" enabled="true" source="Node9150" destination="Node10388">
           <label>false</label>
         </transition>
-        <transition name="Connector3469" highlighted="false" enabled="true" source="Node9483" destination="Node6589"/>
-        <transition name="Connector3468" highlighted="false" enabled="true" source="Node6614" destination="Node9599"/>
-        <transition name="Connector3467" highlighted="false" enabled="true" source="Node7571" destination="Node9599"/>
-        <transition name="Connector3466" highlighted="false" enabled="true" source="Node9599" destination="Node9150"/>
-        <transition name="Connector3465" highlighted="false" enabled="true" source="Node9150" destination="Node9320">
+        <transition name="Connector9063" highlighted="false" enabled="true" source="Node9150" destination="Node9320">
           <label>true</label>
         </transition>
-        <transition name="Connector3464" highlighted="false" enabled="true" source="Node9150" destination="Node10388">
+        <transition name="Connector9062" highlighted="false" enabled="true" source="Node9599" destination="Node9150"/>
+        <transition name="Connector9061" highlighted="false" enabled="true" source="Node7571" destination="Node9599"/>
+        <transition name="Connector9060" highlighted="false" enabled="true" source="Node6614" destination="Node9599"/>
+        <transition name="Connector9059" highlighted="false" enabled="true" source="Node9483" destination="Node6589"/>
+        <transition name="Connector9058" highlighted="false" enabled="true" source="Node6589" destination="Node7571">
           <label>false</label>
         </transition>
-        <transition name="Connector3463" highlighted="false" enabled="true" source="Node9320" destination="Node11472"/>
-        <transition name="Connector3462" highlighted="false" enabled="true" source="Node10388" destination="Node11472"/>
+        <transition name="Connector9057" highlighted="false" enabled="true" source="Node6589" destination="Node6614">
+          <label>true</label>
+        </transition>
+      </transitions>
+    </graph>
+    <graph name="CreateHeader" initial="false" category="sample03 design (header)">
+      <states>
+        <state name="Node2350" type="Normal" category="Command" enabled="true" breakpoint="false" x="72" y="216">
+          <text>$bg_img = [loadImage $bg_file]</text>
+        </state>
+        <state name="Node2358" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="122" y="317">
+          <text>CreateLogo</text>
+        </state>
+        <state name="Node2366" type="Initial" category="Command" enabled="true" breakpoint="false" x="86" y="21">
+          <text>$path = 'c:/output/'</text>
+        </state>
+        <state name="Node2375" type="Normal" category="Command" enabled="true" breakpoint="false" x="67" y="168">
+          <text>$cube_file = $path+'cube.png'</text>
+        </state>
+        <state name="Node2383" type="Normal" category="Command" enabled="true" breakpoint="false" x="75" y="267">
+          <text>$cube_img = [loadImage $cube_file]</text>
+        </state>
+        <state name="Node2391" type="Normal" category="Command" enabled="true" breakpoint="false" x="89" y="365">
+          <text>$loc_w = [getWidth $cube_img]</text>
+        </state>
+        <state name="Node2399" type="Normal" category="Command" enabled="true" breakpoint="false" x="91" y="415">
+          <text>$loc_h = [getHeight $cube_img]</text>
+        </state>
+        <state name="Node2407" type="Normal" category="Command" enabled="true" breakpoint="false" x="10" y="468">
+          <text>$cube_img = [drawRect $cube_img 0 0 $loc_w $loc_h [pen 0 none 0] [filter DropShadowFilter] 100]</text>
+        </state>
+        <state name="Node2415" type="Normal" category="Command" enabled="true" breakpoint="false" x="12" y="509">
+          <text>$cube_img = [addImage $bg_img $cube_img 140 90 100 (-1)]</text>
+        </state>
+        <state name="Node2423" type="Normal" category="Command" enabled="true" breakpoint="false" x="14" y="721">
+          <text>[writeVarTo $path+'header.jpg' $img]</text>
+        </state>
+        <state name="Node2431" type="Normal" category="Command" enabled="true" breakpoint="false" x="63" y="596">
+          <text>$loc_w = [getWidth $img]</text>
+        </state>
+        <state name="Node2439" type="Normal" category="Command" enabled="true" breakpoint="false" x="62" y="632">
+          <text>$loc_h = [getHeight $img]</text>
+        </state>
+        <state name="Node2447" type="Normal" category="Command" enabled="true" breakpoint="false" x="112" y="116">
+          <text>$loc_f = "[font 'Arial' 20 0xffffff bold right]"</text>
+        </state>
+        <state name="Node2455" type="Normal" category="Command" enabled="true" breakpoint="false" x="13" y="686">
+          <text>$img = [writeText $img 'V.D.O.M. (Visual Dynamic Object Model)' 350 230 780 40 $loc_f 100]</text>
+        </state>
+        <state name="Node2463" type="Normal" category="Command" enabled="true" breakpoint="false" x="14" y="555">
+          <text>$img = [addImage $cube_img $logo_img 70 30 80 (-1)]</text>
+        </state>
+        <state name="Node2471" type="Normal" category="Command" enabled="true" breakpoint="false" x="63" y="70">
+          <text>$bg_file = [question 'Select background image:' '#*.png;*.jpg;*.gif;*.bmp']</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector9262" highlighted="false" enabled="true" source="Node2439" destination="Node2455"/>
+        <transition name="Connector9261" highlighted="false" enabled="true" source="Node2431" destination="Node2439"/>
+        <transition name="Connector9260" highlighted="false" enabled="true" source="Node2463" destination="Node2431"/>
+        <transition name="Connector9259" highlighted="false" enabled="true" source="Node2455" destination="Node2423"/>
+        <transition name="Connector9258" highlighted="false" enabled="true" source="Node2447" destination="Node2375"/>
+        <transition name="Connector9257" highlighted="false" enabled="true" source="Node2471" destination="Node2447"/>
+        <transition name="Connector9256" highlighted="false" enabled="true" source="Node2350" destination="Node2383"/>
+        <transition name="Connector9255" highlighted="false" enabled="true" source="Node2375" destination="Node2350"/>
+        <transition name="Connector9254" highlighted="false" enabled="true" source="Node2383" destination="Node2358"/>
+        <transition name="Connector9253" highlighted="false" enabled="true" source="Node2358" destination="Node2391"/>
+        <transition name="Connector9252" highlighted="false" enabled="true" source="Node2391" destination="Node2399"/>
+        <transition name="Connector9251" highlighted="false" enabled="true" source="Node2399" destination="Node2407"/>
+        <transition name="Connector9250" highlighted="false" enabled="true" source="Node2407" destination="Node2415"/>
+        <transition name="Connector9249" highlighted="false" enabled="true" source="Node2366" destination="Node2471"/>
+        <transition name="Connector9248" highlighted="false" enabled="true" source="Node2415" destination="Node2463"/>
+      </transitions>
+    </graph>
+    <graph name="CreateWing" initial="false" category="sample02 design (logo)">
+      <states>
+        <state name="Node2723" type="Normal" category="Command" enabled="true" breakpoint="false" x="27" y="173">
+          <text>$up_left_wing = '[[70 100] [45 30] [0 0] [0 60]]'</text>
+        </state>
+        <state name="Node2731" type="Normal" category="Command" enabled="true" breakpoint="false" x="25" y="217">
+          <text>$low_left_wing = '[[67 65] [12 80] [12 110] [47 110]]'</text>
+        </state>
+        <state name="Node2739" type="Normal" category="Command" enabled="true" breakpoint="false" x="26" y="340">
+          <text>$up_left_wing = [update 3 3 '[15 25]' $up_left_wing]</text>
+        </state>
+        <state name="Node2747" type="Initial" category="Command" enabled="true" breakpoint="false" x="35" y="10">
+          <text>$img1 = [createImage 100 110 0]</text>
+        </state>
+        <state name="Node2756" type="Normal" category="Command" enabled="true" breakpoint="false" x="15" y="257">
+          <text>$img1 = [fillBezier $img1 $up_left_wing [pen $c1 solid 1] [brush solid $c1] 100]</text>
+        </state>
+        <state name="Node2764" type="Normal" category="Command" enabled="true" breakpoint="false" x="15" y="294">
+          <text>$img2 = [fillBezier $img2 $low_left_wing [pen $c1 solid 1] [brush solid $c1] 100]</text>
+        </state>
+        <state name="Node2772" type="Normal" category="Command" enabled="true" breakpoint="false" x="24" y="379">
+          <text>$low_left_wing = [update 3 2 '[19 75]' $low_left_wing]</text>
+        </state>
+        <state name="Node2780" type="Normal" category="Command" enabled="true" breakpoint="false" x="25" y="414">
+          <text>$low_left_wing = [update 3 3 '[12 100]' $low_left_wing]</text>
+        </state>
+        <state name="Node2788" type="Normal" category="Command" enabled="true" breakpoint="false" x="39" y="53">
+          <text>$img2 = [createImage 100 110 0]</text>
+        </state>
+        <state name="Node2796" type="Normal" category="Command" enabled="true" breakpoint="false" x="38" y="128">
+          <text>$img22 = [createImage 100 110 0]</text>
+        </state>
+        <state name="Node2804" type="Normal" category="Command" enabled="true" breakpoint="false" x="36" y="89">
+          <text>$img11 = [createImage 100 110 0]</text>
+        </state>
+        <state name="Node2812" type="Normal" category="Command" enabled="true" breakpoint="false" x="23" y="491">
+          <text>$img22 = [fillBezier $img22 $low_left_wing [pen $c1 solid 1] [brush solid $c2] 100]</text>
+        </state>
+        <state name="Node2820" type="Normal" category="Command" enabled="true" breakpoint="false" x="21" y="457">
+          <text>$img11 = [fillBezier $img11 $up_left_wing [pen $c1 solid 1] [brush solid $c2] 100]</text>
+        </state>
+        <state name="Node2828" type="Normal" category="Command" enabled="true" breakpoint="false" x="31" y="621">
+          <text>$img11 = [drawRect $img11 0 0 100 110 [pen 0 none 0] $filter1 100]</text>
+        </state>
+        <state name="Node2836" type="Normal" category="Command" enabled="true" breakpoint="false" x="45" y="711">
+          <text>$filter1 = '[filter DropShadowFilter 6 45+90 $c3 100 0 0 1 true]'</text>
+        </state>
+        <state name="Node2844" type="Normal" category="Command" enabled="true" breakpoint="false" x="31" y="752">
+          <text>$filter2 = '[filter DropShadowFilter 4 (45+270) $c3 100 0 0 1 true]'</text>
+        </state>
+        <state name="Node2852" type="Normal" category="Command" enabled="true" breakpoint="false" x="29" y="802">
+          <text>$img22 = [drawRect $img22 0 0 100 110 [pen 0 none 0] $filter1 100]</text>
+        </state>
+        <state name="Node2860" type="Normal" category="Command" enabled="true" breakpoint="false" x="31" y="847">
+          <text>$img22 = [drawRect $img22 0 0 100 110 [pen 0 none 0] $filter2 100]</text>
+        </state>
+        <state name="Node2868" type="Normal" category="Command" enabled="true" breakpoint="false" x="40" y="579">
+          <text>$filter2 = '[filter DropShadowFilter 6 (45+180) $c3 100 0 0 1 true]'</text>
+        </state>
+        <state name="Node2876" type="Normal" category="Command" enabled="true" breakpoint="false" x="52" y="539">
+          <text>$filter1 = '[filter DropShadowFilter 6 45 $c3 100 0 0 1 true]'</text>
+        </state>
+        <state name="Node2884" type="Normal" category="Command" enabled="true" breakpoint="false" x="26" y="666">
+          <text>$img11 = [drawRect $img11 0 0 100 110 [pen 0 none 0] $filter2 100]</text>
+        </state>
+        <state name="Node2892" type="Normal" category="Command" enabled="true" breakpoint="false" x="118" y="1023">
+          <text>$left_low_wing = [cropImage $left_low_wing 0 10 58 100]</text>
+        </state>
+        <state name="Node2900" type="Normal" category="Command" enabled="true" breakpoint="false" x="109" y="985">
+          <text>$left_up_wing = [cropImage $left_up_wing 0 10 58 100]</text>
+        </state>
+        <state name="Node2908" type="Normal" category="Command" enabled="true" breakpoint="false" x="100" y="940">
+          <text>$left_up_wing = [addImage $img1 $img11 0 0 100 (-1)]</text>
+        </state>
+        <state name="Node2916" type="Normal" category="Command" enabled="true" breakpoint="false" x="80" y="903">
+          <text>$left_low_wing = [addImage $img2 $img22 0 0 100 (-1)]</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector9566" highlighted="false" enabled="true" source="Node2900" destination="Node2892"/>
+        <transition name="Connector9565" highlighted="false" enabled="true" source="Node2868" destination="Node2828"/>
+        <transition name="Connector9564" highlighted="false" enabled="true" source="Node2844" destination="Node2852"/>
+        <transition name="Connector9563" highlighted="false" enabled="true" source="Node2836" destination="Node2844"/>
+        <transition name="Connector9562" highlighted="false" enabled="true" source="Node2852" destination="Node2860"/>
+        <transition name="Connector9561" highlighted="false" enabled="true" source="Node2796" destination="Node2723"/>
+        <transition name="Connector9560" highlighted="false" enabled="true" source="Node2804" destination="Node2796"/>
+        <transition name="Connector9559" highlighted="false" enabled="true" source="Node2788" destination="Node2804"/>
+        <transition name="Connector9558" highlighted="false" enabled="true" source="Node2876" destination="Node2868"/>
+        <transition name="Connector9557" highlighted="false" enabled="true" source="Node2820" destination="Node2812"/>
+        <transition name="Connector9556" highlighted="false" enabled="true" source="Node2723" destination="Node2731"/>
+        <transition name="Connector9555" highlighted="false" enabled="true" source="Node2731" destination="Node2756"/>
+        <transition name="Connector9554" highlighted="false" enabled="true" source="Node2756" destination="Node2764"/>
+        <transition name="Connector9553" highlighted="false" enabled="true" source="Node2739" destination="Node2772"/>
+        <transition name="Connector9552" highlighted="false" enabled="true" source="Node2772" destination="Node2780"/>
+        <transition name="Connector9551" highlighted="false" enabled="true" source="Node2780" destination="Node2820"/>
+        <transition name="Connector9550" highlighted="false" enabled="true" source="Node2747" destination="Node2788"/>
+        <transition name="Connector9549" highlighted="false" enabled="true" source="Node2884" destination="Node2836"/>
+        <transition name="Connector9548" highlighted="false" enabled="true" source="Node2916" destination="Node2908"/>
+        <transition name="Connector9547" highlighted="false" enabled="true" source="Node2908" destination="Node2900"/>
+        <transition name="Connector9546" highlighted="false" enabled="true" source="Node2764" destination="Node2739"/>
+        <transition name="Connector9545" highlighted="false" enabled="true" source="Node2812" destination="Node2876"/>
+        <transition name="Connector9544" highlighted="false" enabled="true" source="Node2828" destination="Node2884"/>
+        <transition name="Connector9543" highlighted="false" enabled="true" source="Node2860" destination="Node2916"/>
+      </transitions>
+    </graph>
+    <graph name="CreateLogo" initial="false" category="sample02 design (logo)">
+      <states>
+        <state name="Node3151" type="Initial" category="Command" enabled="true" breakpoint="false" x="30" y="6">
+          <text>$path = 'c:/output/';</text>
+        </state>
+        <state name="Node3160" type="Normal" category="Command" enabled="true" breakpoint="false" x="73" y="68">
+          <text>$c1 == null</text>
+        </state>
+        <state name="Node3168" type="Normal" category="Command" enabled="true" breakpoint="false" x="35" y="220">
+          <text>$right_up_wing = [flipImage $left_up_wing 0]</text>
+        </state>
+        <state name="Node3176" type="Normal" category="Command" enabled="true" breakpoint="false" x="33" y="266">
+          <text>$right_low_wing = [flipImage $left_low_wing 0]</text>
+        </state>
+        <state name="Node3184" type="Normal" category="Command" enabled="true" breakpoint="false" x="45" y="315">
+          <text>$loc_w = [getWidth $right_up_wing]</text>
+        </state>
+        <state name="Node3192" type="Normal" category="Command" enabled="true" breakpoint="false" x="46" y="352">
+          <text>$loc_h = [getHeight $right_low_wing]</text>
+        </state>
+        <state name="Node3200" type="Normal" category="Command" enabled="true" breakpoint="false" x="62" y="701">
+          <text>$img = [createImage $loc_w+$loc_w/2 $loc_h 0]</text>
+        </state>
+        <state name="Node3208" type="Normal" category="Command" enabled="true" breakpoint="false" x="28" y="656">
+          <text>$right_low_wing = [resizeImage $right_low_wing $loc_w/2 $loc_h]</text>
+        </state>
+        <state name="Node3216" type="Normal" category="Command" enabled="true" breakpoint="false" x="32" y="618">
+          <text>$right_up_wing = [resizeImage $right_up_wing $loc_w/2 $loc_h]</text>
+        </state>
+        <state name="Node3224" type="Normal" category="Command" enabled="true" breakpoint="false" x="52" y="423">
+          <text>$left_up_wing = [drawRect $left_up_wing 0 0 100 110 [pen 0 none 0] $filter 100]</text>
+        </state>
+        <state name="Node3232" type="Normal" category="Command" enabled="true" breakpoint="false" x="54" y="465">
+          <text>$left_low_wing = [drawRect $left_low_wing 0 0 100 110 [pen 0 none 0] $filter 100]</text>
+        </state>
+        <state name="Node3240" type="Normal" category="Command" enabled="true" breakpoint="false" x="51" y="511">
+          <text>$right_up_wing = [drawRect $right_up_wing 0 0 100 110 [pen 0 none 0] $filter 100]</text>
+        </state>
+        <state name="Node3248" type="Normal" category="Command" enabled="true" breakpoint="false" x="52" y="550">
+          <text>$right_low_wing = [drawRect $right_low_wing 0 0 100 110 [pen 0 none 0] $filter 100]</text>
+        </state>
+        <state name="Node3256" type="Normal" category="Command" enabled="true" breakpoint="false" x="63" y="741">
+          <text>$img = [addImage $img $right_low_wing $loc_w 0 100 (-1)]</text>
+        </state>
+        <state name="Node3264" type="Normal" category="Command" enabled="true" breakpoint="false" x="61" y="780">
+          <text>$img = [addImage $img $right_up_wing $loc_w 0 100 (-1)]</text>
+        </state>
+        <state name="Node3272" type="Normal" category="Command" enabled="true" breakpoint="false" x="62" y="823">
+          <text>$img = [addImage $img $left_low_wing 0 0 100 (-1)]</text>
+        </state>
+        <state name="Node3280" type="Normal" category="Command" enabled="true" breakpoint="false" x="62" y="866">
+          <text>$img = [addImage $img $left_up_wing 0 0 100 (-1)]</text>
+        </state>
+        <state name="Node3288" type="Normal" category="Command" enabled="true" breakpoint="false" x="131" y="120">
+          <text>$c1 = 0xff000000; $c2 = 0xff0000; $c3 = 0x920000</text>
+        </state>
+        <state name="Node3296" type="Normal" category="Command" enabled="true" breakpoint="false" x="76" y="911">
+          <text>$logo_img = [rotateImage $img 25 (-1)]</text>
+        </state>
+        <state name="Node3304" type="Normal" category="Command" enabled="true" breakpoint="false" x="64" y="961">
+          <text>[writeVarTo $path+'logo.png' $logo_img]</text>
+        </state>
+        <state name="Node3312" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="74" y="173">
+          <text>CreateWing</text>
+        </state>
+        <state name="Node3320" type="Normal" category="Command" enabled="true" breakpoint="false" x="72" y="388">
+          <text>$filter = '[filter DropShadowFilter 10 45 0xffffff 60  0 0 1 true]'</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector9835" highlighted="false" enabled="true" source="Node3240" destination="Node3248"/>
+        <transition name="Connector9834" highlighted="false" enabled="true" source="Node3232" destination="Node3240"/>
+        <transition name="Connector9833" highlighted="false" enabled="true" source="Node3224" destination="Node3232"/>
+        <transition name="Connector9832" highlighted="false" enabled="true" source="Node3320" destination="Node3224"/>
+        <transition name="Connector9831" highlighted="false" enabled="true" source="Node3288" destination="Node3312"/>
+        <transition name="Connector9830" highlighted="false" enabled="true" source="Node3312" destination="Node3168"/>
+        <transition name="Connector9829" highlighted="false" enabled="true" source="Node3184" destination="Node3192"/>
+        <transition name="Connector9828" highlighted="false" enabled="true" source="Node3200" destination="Node3256"/>
+        <transition name="Connector9827" highlighted="false" enabled="true" source="Node3151" destination="Node3160"/>
+        <transition name="Connector9826" highlighted="false" enabled="true" source="Node3160" destination="Node3288">
+          <label>true</label>
+        </transition>
+        <transition name="Connector9825" highlighted="false" enabled="true" source="Node3160" destination="Node3312">
+          <label>false</label>
+        </transition>
+        <transition name="Connector9824" highlighted="false" enabled="true" source="Node3168" destination="Node3176"/>
+        <transition name="Connector9823" highlighted="false" enabled="true" source="Node3176" destination="Node3184"/>
+        <transition name="Connector9822" highlighted="false" enabled="true" source="Node3216" destination="Node3208"/>
+        <transition name="Connector9821" highlighted="false" enabled="true" source="Node3208" destination="Node3200"/>
+        <transition name="Connector9820" highlighted="false" enabled="true" source="Node3264" destination="Node3272"/>
+        <transition name="Connector9819" highlighted="false" enabled="true" source="Node3272" destination="Node3280"/>
+        <transition name="Connector9818" highlighted="false" enabled="true" source="Node3296" destination="Node3304"/>
+        <transition name="Connector9817" highlighted="false" enabled="true" source="Node3192" destination="Node3320"/>
+        <transition name="Connector9816" highlighted="false" enabled="true" source="Node3248" destination="Node3216"/>
+        <transition name="Connector9815" highlighted="false" enabled="true" source="Node3256" destination="Node3264"/>
+        <transition name="Connector9814" highlighted="false" enabled="true" source="Node3280" destination="Node3296"/>
+      </transitions>
+    </graph>
+    <graph name="SaveSample" initial="false" category="sample01 design (nav)">
+      <states>
+        <state name="Node3741" type="Normal" category="Command" enabled="true" breakpoint="false" x="73" y="118">
+          <text>$i &gt; 0</text>
+        </state>
+        <state name="Node3749" type="Normal" category="Command" enabled="true" breakpoint="false" x="384" y="231">
+          <text>$loc_btns == null</text>
+        </state>
+        <state name="Node3757" type="Normal" category="Command" enabled="true" breakpoint="false" x="527" y="237">
+          <text>$loc_btns = [createImage $all_btns_w+$i*5+10 35+10 0]</text>
+        </state>
+        <state name="Node3765" type="Normal" category="Command" enabled="true" breakpoint="false" x="378" y="285">
+          <text>$loc_btns = [addImage $loc_btns $loc_btn $x_offset+5 0+5 100 (-1)]</text>
+        </state>
+        <state name="Node3773" type="Normal" category="Command" enabled="true" breakpoint="false" x="20" y="66">
+          <text>$i = [length $buttons]</text>
+        </state>
+        <state name="Node3781" type="Normal" category="Command" enabled="true" breakpoint="false" x="21" y="422">
+          <text>$i = [length $menus]</text>
+        </state>
+        <state name="Node3789" type="Normal" category="Command" enabled="true" breakpoint="false" x="182" y="478">
+          <text>$loc_menu = [get $i $menus]</text>
+        </state>
+        <state name="Node3797" type="Normal" category="Command" enabled="true" breakpoint="false" x="315" y="517">
+          <text>$loc_menu = ${$loc_menu}</text>
+        </state>
+        <state name="Node3805" type="Normal" category="Command" enabled="true" breakpoint="false" x="318" y="560">
+          <text>[writeVarTo $path+'menu_'+$i+'.png' $loc_menu]</text>
+        </state>
+        <state name="Node3813" type="Normal" category="Command" enabled="true" breakpoint="false" x="544" y="611">
+          <text>$loc_menus = [createImage $all_menus_w+$i+10 35+10 0]</text>
+        </state>
+        <state name="Node3821" type="Normal" category="Command" enabled="true" breakpoint="false" x="437" y="754">
+          <text>$x_offset = $x_offset + $loc_w</text>
+        </state>
+        <state name="Node3829" type="Normal" category="Command" enabled="true" breakpoint="false" x="311" y="655">
+          <text>$loc_menus = [addImage $loc_menus $loc_menu $x_offset+5 0+5 100 (-1)]</text>
+        </state>
+        <state name="Node3837" type="Normal" category="Command" enabled="true" breakpoint="false" x="188" y="1318">
+          <text>$loc_img = [addImage $loc_img $loc_btns 0 0 100 (-1)]</text>
+        </state>
+        <state name="Node3845" type="Normal" category="Command" enabled="true" breakpoint="false" x="102" y="1422">
+          <text>$loc_menus != null</text>
+        </state>
+        <state name="Node3853" type="Normal" category="Command" enabled="true" breakpoint="false" x="47" y="1551">
+          <text>[writeVarTo $path+'sample.png' $loc_img]</text>
+        </state>
+        <state name="Node3861" type="Normal" category="Command" enabled="true" breakpoint="false" x="200" y="1466">
+          <text>$loc_img = [addImage $loc_img $loc_menus 0 $offset 100 (-1)]</text>
+        </state>
+        <state name="Node3869" type="Normal" category="Command" enabled="true" breakpoint="false" x="35" y="375">
+          <text>$x_offset = 0;</text>
+        </state>
+        <state name="Node3877" type="Normal" category="Command" enabled="true" breakpoint="false" x="97" y="870">
+          <text>$loc_btns != null</text>
+        </state>
+        <state name="Node3885" type="Normal" category="Command" enabled="true" breakpoint="false" x="189" y="913">
+          <text>$loc_btns_w = [getWidth $loc_btns]</text>
+        </state>
+        <state name="Node3893" type="Normal" category="Command" enabled="true" breakpoint="false" x="167" y="122">
+          <text>$loc_btn = [get $i $buttons]</text>
+        </state>
+        <state name="Node3901" type="Normal" category="Command" enabled="true" breakpoint="false" x="313" y="180">
+          <text>[writeVarTo $path+'btn_'+$i+'.png' $loc_btn]</text>
+        </state>
+        <state name="Node3909" type="Normal" category="Command" enabled="true" breakpoint="false" x="367" y="127">
+          <text>$loc_btn = ${$loc_btn}</text>
+        </state>
+        <state name="Node3917" type="Normal" category="Command" enabled="true" breakpoint="false" x="379" y="391">
+          <text>$i = $i - 1</text>
+        </state>
+        <state name="Node3925" type="Normal" category="Command" enabled="true" breakpoint="false" x="476" y="365">
+          <text>$x_offset = $x_offset + $loc_w + 5</text>
+        </state>
+        <state name="Node3933" type="Normal" category="Command" enabled="true" breakpoint="false" x="487" y="320">
+          <text>$loc_w = [getWidth $loc_btn]</text>
+        </state>
+        <state name="Node3941" type="Normal" category="Command" enabled="true" breakpoint="false" x="402" y="606">
+          <text>$loc_menus == null</text>
+        </state>
+        <state name="Node3949" type="Normal" category="Command" enabled="true" breakpoint="false" x="424" y="704">
+          <text>$loc_w = [getWidth $loc_menu]</text>
+        </state>
+        <state name="Node3957" type="Normal" category="Command" enabled="true" breakpoint="false" x="73" y="475">
+          <text>$i &gt; 0</text>
+        </state>
+        <state name="Node3965" type="Normal" category="Command" enabled="true" breakpoint="false" x="357" y="789">
+          <text>$i = $i - 1</text>
+        </state>
+        <state name="Node3973" type="Normal" category="Command" enabled="true" breakpoint="false" x="9" y="826">
+          <text>$loc_btns_w = 0; $loc_btns_h = 0; $loc_menus_w = 0; $loc_menus_h = 0; $offset = 0; $loc_w=0</text>
+        </state>
+        <state name="Node3981" type="Normal" category="Command" enabled="true" breakpoint="false" x="192" y="956">
+          <text>$loc_btns_h = [getHeight $loc_btns]</text>
+        </state>
+        <state name="Node3989" type="Normal" category="Command" enabled="true" breakpoint="false" x="83" y="1037">
+          <text>$loc_menus != null</text>
+        </state>
+        <state name="Node3997" type="Normal" category="Command" enabled="true" breakpoint="false" x="221" y="998">
+          <text>$loc_w = $loc_btns_w</text>
+        </state>
+        <state name="Node4005" type="Normal" category="Command" enabled="true" breakpoint="false" x="227" y="1058">
+          <text>$loc_menus_w = [getWidth $loc_menus]</text>
+        </state>
+        <state name="Node4013" type="Normal" category="Command" enabled="true" breakpoint="false" x="224" y="1098">
+          <text>$loc_menus_h = [getHeight $loc_menus]</text>
+        </state>
+        <state name="Node4021" type="Normal" category="Command" enabled="true" breakpoint="false" x="352" y="1177">
+          <text>$loc_w = $loc_menus_w</text>
+        </state>
+        <state name="Node4029" type="Normal" category="Command" enabled="true" breakpoint="false" x="260" y="1137">
+          <text>$loc_w &lt; $loc_menus_w</text>
+        </state>
+        <state name="Node4037" type="Normal" category="Command" enabled="true" breakpoint="false" x="25" y="1221">
+          <text>$loc_img = [createImage $loc_w $loc_btns_h+$loc_menus_h 0]</text>
+        </state>
+        <state name="Node4045" type="Normal" category="Command" enabled="true" breakpoint="false" x="113" y="1276">
+          <text>$loc_btns != null</text>
+        </state>
+        <state name="Node4053" type="Normal" category="Command" enabled="true" breakpoint="false" x="244" y="1362">
+          <text>$offset = $offset + $loc_btns_h</text>
+        </state>
+        <state name="Node4061" type="Normal" category="Command" enabled="true" breakpoint="false" x="236" y="1508">
+          <text>$offset = $offset + $loc_btns_h</text>
+        </state>
+        <state name="Node4069" type="Initial" category="Command" enabled="true" breakpoint="false" x="9" y="14">
+          <text>$path = 'c:/output/'; $x_offset = 0</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector10352" highlighted="false" enabled="true" source="Node4029" destination="Node4037">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10351" highlighted="false" enabled="true" source="Node4021" destination="Node4037"/>
+        <transition name="Connector10350" highlighted="false" enabled="true" source="Node4029" destination="Node4021">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10349" highlighted="false" enabled="true" source="Node4013" destination="Node4029"/>
+        <transition name="Connector10348" highlighted="false" enabled="true" source="Node3997" destination="Node3989"/>
+        <transition name="Connector10347" highlighted="false" enabled="true" source="Node3981" destination="Node3997"/>
+        <transition name="Connector10346" highlighted="false" enabled="true" source="Node3869" destination="Node3781"/>
+        <transition name="Connector10345" highlighted="false" enabled="true" source="Node3741" destination="Node3869">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10344" highlighted="false" enabled="true" source="Node4045" destination="Node3837">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10343" highlighted="false" enabled="true" source="Node4037" destination="Node4045"/>
+        <transition name="Connector10342" highlighted="false" enabled="true" source="Node3989" destination="Node4037">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10341" highlighted="false" enabled="true" source="Node4005" destination="Node4013"/>
+        <transition name="Connector10340" highlighted="false" enabled="true" source="Node3989" destination="Node4005">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10339" highlighted="false" enabled="true" source="Node3877" destination="Node3989">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10338" highlighted="false" enabled="true" source="Node3797" destination="Node3805"/>
+        <transition name="Connector10337" highlighted="false" enabled="true" source="Node3789" destination="Node3797"/>
+        <transition name="Connector10336" highlighted="false" enabled="true" source="Node3957" destination="Node3789">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10335" highlighted="false" enabled="true" source="Node3781" destination="Node3957"/>
+        <transition name="Connector10334" highlighted="false" enabled="true" source="Node3917" destination="Node3741"/>
+        <transition name="Connector10333" highlighted="false" enabled="true" source="Node3909" destination="Node3901"/>
+        <transition name="Connector10332" highlighted="false" enabled="true" source="Node3893" destination="Node3909"/>
+        <transition name="Connector10331" highlighted="false" enabled="true" source="Node3741" destination="Node3893">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10330" highlighted="false" enabled="true" source="Node3773" destination="Node3741"/>
+        <transition name="Connector10329" highlighted="false" enabled="true" source="Node4069" destination="Node3773"/>
+        <transition name="Connector10328" highlighted="false" enabled="true" source="Node3901" destination="Node3749"/>
+        <transition name="Connector10327" highlighted="false" enabled="true" source="Node3749" destination="Node3757">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10326" highlighted="false" enabled="true" source="Node3757" destination="Node3765"/>
+        <transition name="Connector10325" highlighted="false" enabled="true" source="Node3765" destination="Node3933"/>
+        <transition name="Connector10324" highlighted="false" enabled="true" source="Node3933" destination="Node3925"/>
+        <transition name="Connector10323" highlighted="false" enabled="true" source="Node3925" destination="Node3917"/>
+        <transition name="Connector10322" highlighted="false" enabled="true" source="Node3749" destination="Node3765">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10321" highlighted="false" enabled="true" source="Node3805" destination="Node3941"/>
+        <transition name="Connector10320" highlighted="false" enabled="true" source="Node3941" destination="Node3813">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10319" highlighted="false" enabled="true" source="Node3941" destination="Node3829">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10318" highlighted="false" enabled="true" source="Node3813" destination="Node3829"/>
+        <transition name="Connector10317" highlighted="false" enabled="true" source="Node3829" destination="Node3949"/>
+        <transition name="Connector10316" highlighted="false" enabled="true" source="Node3949" destination="Node3821"/>
+        <transition name="Connector10315" highlighted="false" enabled="true" source="Node3821" destination="Node3965"/>
+        <transition name="Connector10314" highlighted="false" enabled="true" source="Node3965" destination="Node3957"/>
+        <transition name="Connector10313" highlighted="false" enabled="true" source="Node3957" destination="Node3973">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10312" highlighted="false" enabled="true" source="Node3973" destination="Node3877"/>
+        <transition name="Connector10311" highlighted="false" enabled="true" source="Node3877" destination="Node3885">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10310" highlighted="false" enabled="true" source="Node3885" destination="Node3981"/>
+        <transition name="Connector10309" highlighted="false" enabled="true" source="Node3837" destination="Node4053"/>
+        <transition name="Connector10308" highlighted="false" enabled="true" source="Node4045" destination="Node3845">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10307" highlighted="false" enabled="true" source="Node3845" destination="Node3853">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10306" highlighted="false" enabled="true" source="Node3845" destination="Node3861">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10305" highlighted="false" enabled="true" source="Node4053" destination="Node3845"/>
+        <transition name="Connector10304" highlighted="false" enabled="true" source="Node3861" destination="Node4061"/>
+        <transition name="Connector10303" highlighted="false" enabled="true" source="Node4061" destination="Node3853"/>
+      </transitions>
+    </graph>
+    <graph name="DesignNavigationElms" initial="false" category="sample01 design (nav)">
+      <states>
+        <state name="Node4269" type="Normal" category="Command" enabled="true" breakpoint="false" x="108" y="251">
+          <text>$loc_schs == 'Blue-Yellow-Orange'</text>
+        </state>
+        <state name="Node4277" type="Normal" category="Command" enabled="true" breakpoint="false" x="100" y="149">
+          <text>$titles = "['Home' 'About' 'News' 'Portfolio' 'Contacts']"</text>
+        </state>
+        <state name="Node4285" type="Normal" category="Command" enabled="true" breakpoint="false" x="512" y="196">
+          <text>$titles = [split ',' $loc_q]</text>
+        </state>
+        <state name="Node4293" type="Normal" category="Command" enabled="true" breakpoint="false" x="287" y="300">
+          <text>$loc_schs == 'Red-White-Black'</text>
+        </state>
+        <state name="Node4301" type="Normal" category="Command" enabled="true" breakpoint="false" x="10" y="332">
+          <text>$c1 = 0x0000ff; $c2 = 0xffff00; $c3 = 0xf7941d</text>
+        </state>
+        <state name="Node4309" type="Normal" category="Command" enabled="true" breakpoint="false" x="196" y="372">
+          <text>$c1 = 0xff0000; $c3 = 0xff000000; $c2 = 0xffffff</text>
+        </state>
+        <state name="Node4317" type="Normal" category="Command" enabled="true" breakpoint="false" x="421" y="409">
+          <text>$c1 = 0xff00ff; $c2 = 0xffffff; $c3 = 0x662d91</text>
+        </state>
+        <state name="Node4325" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="243" y="481">
+          <text>CreateButtons</text>
+        </state>
+        <state name="Node4341" type="Initial" category="Command" enabled="true" breakpoint="false" x="13" y="10">
+          <text>$loc_schs = [question 'Choose color scheme:' 'Blue-Yellow-Orange, Red-White-Black, Magenta-White-Purple']</text>
+        </state>
+        <state name="Node4350" type="Normal" category="Command" enabled="true" breakpoint="false" x="38" y="54">
+          <text>$loc_q = [question 'Section titles:' 'Use predefined titles, Input...']</text>
+        </state>
+        <state name="Node4358" type="Normal" category="Command" enabled="true" breakpoint="false" x="228" y="97">
+          <text>$loc_q == 'Input...'</text>
+        </state>
+        <state name="Node4366" type="Normal" category="Command" enabled="true" breakpoint="false" x="385" y="149">
+          <text>$loc_q = [question 'Input section titles of your site:' '*']</text>
+        </state>
+        <state name="Node4333" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="236" y="545">
+          <text>CreateMenuItems</text>
+        </state>
+        <state name="Node4261" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="249" y="614">
+          <text>SaveSample</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector10527" highlighted="false" enabled="true" source="Node4333" destination="Node4261"/>
+        <transition name="Connector10526" highlighted="false" enabled="true" source="Node4285" destination="Node4269"/>
+        <transition name="Connector10525" highlighted="false" enabled="true" source="Node4277" destination="Node4269"/>
+        <transition name="Connector10524" highlighted="false" enabled="true" source="Node4366" destination="Node4285"/>
+        <transition name="Connector10523" highlighted="false" enabled="true" source="Node4358" destination="Node4277">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10522" highlighted="false" enabled="true" source="Node4269" destination="Node4293">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10521" highlighted="false" enabled="true" source="Node4269" destination="Node4301">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10520" highlighted="false" enabled="true" source="Node4293" destination="Node4317">
+          <label>false</label>
+        </transition>
+        <transition name="Connector10519" highlighted="false" enabled="true" source="Node4293" destination="Node4309">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10518" highlighted="false" enabled="true" source="Node4341" destination="Node4350"/>
+        <transition name="Connector10517" highlighted="false" enabled="true" source="Node4350" destination="Node4358"/>
+        <transition name="Connector10516" highlighted="false" enabled="true" source="Node4358" destination="Node4366">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10515" highlighted="false" enabled="true" source="Node4301" destination="Node4325"/>
+        <transition name="Connector10514" highlighted="false" enabled="true" source="Node4309" destination="Node4325"/>
+        <transition name="Connector10513" highlighted="false" enabled="true" source="Node4317" destination="Node4325"/>
+        <transition name="Connector10512" highlighted="false" enabled="true" source="Node4325" destination="Node4333"/>
+      </transitions>
+    </graph>
+    <graph name="CreateMenuItems" initial="false" category="sample01 design (nav)">
+      <states>
+        <state name="Node4611" type="Initial" category="Command" enabled="true" breakpoint="false" x="34" y="17">
+          <text>$menus = '[]'; $all_menus_w = 0;</text>
+        </state>
+        <state name="Node4620" type="Normal" category="Command" enabled="true" breakpoint="false" x="74" y="122">
+          <text>$loc_menu_h = 35;</text>
+        </state>
+        <state name="Node4628" type="Normal" category="Command" enabled="true" breakpoint="false" x="70" y="168">
+          <text>$i = [length $titles]</text>
+        </state>
+        <state name="Node4636" type="Normal" category="Command" enabled="true" breakpoint="false" x="90" y="217">
+          <text>$i &gt; 0</text>
+        </state>
+        <state name="Node4644" type="Normal" category="Command" enabled="true" breakpoint="false" x="139" y="252">
+          <text>$loc_title = [get $i $titles]</text>
+        </state>
+        <state name="Node4652" type="Normal" category="Command" enabled="true" breakpoint="false" x="11" y="68">
+          <text>$loc_f = "[font 'Courier' 24 $c2 bold center]"</text>
+        </state>
+        <state name="Node4660" type="Normal" category="Command" enabled="true" breakpoint="false" x="236" y="332">
+          <text>$loc_menu_w = $loc_len*15 + 20; $all_menus_w = $all_menus_w + $loc_menu_w</text>
+        </state>
+        <state name="Node4668" type="Normal" category="Command" enabled="true" breakpoint="false" x="210" y="290">
+          <text>$loc_len = [length $loc_title]</text>
+        </state>
+        <state name="Node4676" type="Normal" category="Command" enabled="true" breakpoint="false" x="285" y="377">
+          <text>$loc_menu = [createImage $loc_menu_w $loc_menu_h 0x00000000]</text>
+        </state>
+        <state name="Node4684" type="Normal" category="Command" enabled="true" breakpoint="false" x="191" y="423">
+          <text>$loc_menu = [drawRect $loc_menu 0 0 $loc_menu_w $loc_menu_h [pen $c1 solid 1]  [brush solid $c1] 100]</text>
+        </state>
+        <state name="Node4700" type="Normal" category="Command" enabled="true" breakpoint="false" x="220" y="512">
+          <text>$loc_menu = [drawLine $loc_menu 2 2 2 $loc_menu_h-3  [pen 0xffffff solid 2] 40]</text>
+        </state>
+        <state name="Node4708" type="Normal" category="Command" enabled="true" breakpoint="false" x="207" y="559">
+          <text>$loc_menu = [drawLine $loc_menu 2 2 $loc_menu_w-3 2  [pen 0xffffff solid 2] 40]</text>
+        </state>
+        <state name="Node4716" type="Normal" category="Command" enabled="true" breakpoint="false" x="177" y="606">
+          <text>$loc_menu = [drawLine $loc_menu $loc_menu_w-2 2 $loc_menu_w-2 $loc_menu_h-2  [pen 0 solid 2] 40]</text>
+        </state>
+        <state name="Node4724" type="Normal" category="Command" enabled="true" breakpoint="false" x="182" y="650">
+          <text>$loc_menu = [drawLine $loc_menu $loc_menu_w-2 $loc_menu_h-2 2 $loc_menu_h-2  [pen 0 solid 2] 40]</text>
+        </state>
+        <state name="Node4732" type="Normal" category="Command" enabled="true" breakpoint="false" x="175" y="695">
+          <text>$loc_menu = [drawRect $loc_menu 0 0 $loc_menu_w $loc_menu_h [pen 0 none 0]  [brush fDiagonal $c3] 50]</text>
+        </state>
+        <state name="Node4740" type="Normal" category="Command" enabled="true" breakpoint="false" x="256" y="743">
+          <text>$loc_img = [createImage $loc_menu_w $loc_menu_h 0x00000000]</text>
+        </state>
+        <state name="Node4748" type="Normal" category="Command" enabled="true" breakpoint="false" x="201" y="793">
+          <text>$loc_img = [writeText $loc_img $loc_title 0 2 $loc_menu_w $loc_menu_h-2 $loc_f 90]</text>
+        </state>
+        <state name="Node4756" type="Normal" category="Command" enabled="true" breakpoint="false" x="289" y="843">
+          <text>$loc_txt_f = '[filter GlowFilter $c2 20]'</text>
+        </state>
+        <state name="Node4764" type="Normal" category="Command" enabled="true" breakpoint="false" x="208" y="886">
+          <text>$loc_img = [drawRect $loc_img 0 0 $loc_menu_w $loc_menu_h [pen 0 none 0] $loc_txt_f 100]</text>
+        </state>
+        <state name="Node4772" type="Normal" category="Command" enabled="true" breakpoint="false" x="230" y="934">
+          <text>$loc_menu = [addImage $loc_menu $loc_img 0 0 100 (-1)]</text>
+        </state>
+        <state name="Node4780" type="Normal" category="Command" enabled="true" breakpoint="false" x="280" y="982">
+          <text>${'menu' + $i} = $loc_menu</text>
+        </state>
+        <state name="Node4788" type="Normal" category="Command" enabled="true" breakpoint="false" x="209" y="1033">
+          <text>$menus = [put 2 head 'menu'+$i $menus]</text>
+        </state>
+        <state name="Node4796" type="Normal" category="Command" enabled="true" breakpoint="false" x="122" y="1080">
+          <text>$i=$i - 1</text>
+        </state>
+        <state name="Node4692" type="Normal" category="Command" enabled="true" breakpoint="false" x="138" y="467">
+          <text>$loc_menu = [drawRect $loc_menu 0 0 $loc_menu_w $loc_menu_h/2 [pen 0 none 0]  [gradientOneWay 0x7fffffff 0x3fffffff 90] 100]</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector10820" highlighted="false" enabled="true" source="Node4724" destination="Node4732"/>
+        <transition name="Connector10819" highlighted="false" enabled="true" source="Node4716" destination="Node4724"/>
+        <transition name="Connector10818" highlighted="false" enabled="true" source="Node4708" destination="Node4716"/>
+        <transition name="Connector10817" highlighted="false" enabled="true" source="Node4700" destination="Node4708"/>
+        <transition name="Connector10816" highlighted="false" enabled="true" source="Node4764" destination="Node4772"/>
+        <transition name="Connector10815" highlighted="false" enabled="true" source="Node4756" destination="Node4764"/>
+        <transition name="Connector10814" highlighted="false" enabled="true" source="Node4628" destination="Node4636"/>
+        <transition name="Connector10813" highlighted="false" enabled="true" source="Node4620" destination="Node4628"/>
+        <transition name="Connector10812" highlighted="false" enabled="true" source="Node4652" destination="Node4620"/>
+        <transition name="Connector10811" highlighted="false" enabled="true" source="Node4611" destination="Node4652"/>
+        <transition name="Connector10810" highlighted="false" enabled="true" source="Node4636" destination="Node4644">
+          <label>true</label>
+        </transition>
+        <transition name="Connector10809" highlighted="false" enabled="true" source="Node4644" destination="Node4668"/>
+        <transition name="Connector10808" highlighted="false" enabled="true" source="Node4668" destination="Node4660"/>
+        <transition name="Connector10807" highlighted="false" enabled="true" source="Node4796" destination="Node4636"/>
+        <transition name="Connector10806" highlighted="false" enabled="true" source="Node4660" destination="Node4676"/>
+        <transition name="Connector10805" highlighted="false" enabled="true" source="Node4676" destination="Node4684"/>
+        <transition name="Connector10804" highlighted="false" enabled="true" source="Node4740" destination="Node4748"/>
+        <transition name="Connector10803" highlighted="false" enabled="true" source="Node4780" destination="Node4788"/>
+        <transition name="Connector10802" highlighted="false" enabled="true" source="Node4788" destination="Node4796"/>
+        <transition name="Connector10801" highlighted="false" enabled="true" source="Node4772" destination="Node4780"/>
+        <transition name="Connector10800" highlighted="false" enabled="true" source="Node4748" destination="Node4756"/>
+        <transition name="Connector10799" highlighted="false" enabled="true" source="Node4732" destination="Node4740"/>
+        <transition name="Connector10798" highlighted="false" enabled="true" source="Node4684" destination="Node4692"/>
+        <transition name="Connector10797" highlighted="false" enabled="true" source="Node4692" destination="Node4700"/>
+      </transitions>
+    </graph>
+    <graph name="CreateButtons" initial="false" category="sample01 design (nav)">
+      <states>
+        <state name="Node5022" type="Normal" category="Command" enabled="true" breakpoint="false" x="72" y="893">
+          <text>$i=$i - 1</text>
+        </state>
+        <state name="Node5030" type="Initial" category="Command" enabled="true" breakpoint="false" x="14" y="8">
+          <text>$buttons = '[]'; $all_btns_w = 0;</text>
+        </state>
+        <state name="Node5039" type="Normal" category="Command" enabled="true" breakpoint="false" x="77" y="199">
+          <text>$i &gt; 0</text>
+        </state>
+        <state name="Node5047" type="Normal" category="Command" enabled="true" breakpoint="false" x="57" y="105">
+          <text>$loc_btn_h = 35;</text>
+        </state>
+        <state name="Node5055" type="Normal" category="Command" enabled="true" breakpoint="false" x="49" y="151">
+          <text>$i = [length $titles]</text>
+        </state>
+        <state name="Node5063" type="Normal" category="Command" enabled="true" breakpoint="false" x="144" y="230">
+          <text>$loc_title = [get $i $titles]</text>
+        </state>
+        <state name="Node5071" type="Normal" category="Command" enabled="true" breakpoint="false" x="217" y="272">
+          <text>$loc_len = [length $loc_title]</text>
+        </state>
+        <state name="Node5079" type="Normal" category="Command" enabled="true" breakpoint="false" x="237" y="353">
+          <text>$loc_btn = [createImage $loc_btn_w $loc_btn_h 0x00000000]</text>
+        </state>
+        <state name="Node5087" type="Normal" category="Command" enabled="true" breakpoint="false" x="185" y="311">
+          <text>$loc_btn_w = $loc_len*15 + 12; $all_btns_w = $all_btns_w + $loc_btn_w</text>
+        </state>
+        <state name="Node5095" type="Normal" category="Command" enabled="true" breakpoint="false" x="158" y="400">
+          <text>$loc_btn = [drawRoundRect $loc_btn 0 0 $loc_btn_w $loc_btn_h 15 [pen $c1 solid 1]  [brush solid $c1] 100]</text>
+        </state>
+        <state name="Node5103" type="Normal" category="Command" enabled="true" breakpoint="false" x="147" y="447">
+          <text>$loc_btn = [drawRoundRect $loc_btn 0 0 $loc_btn_w $loc_btn_h 15 [pen $c1 solid 1]  [gradientOneWay $c1 $c3 90] 20]</text>
+        </state>
+        <state name="Node5111" type="Normal" category="Command" enabled="true" breakpoint="false" x="139" y="491">
+          <text>$loc_btn = [drawRoundRect $loc_btn 0 0 $loc_btn_w $loc_btn_h 15 [pen $c1 solid 1]  [gradientOneWay $c1 0xffffff 90] 10]</text>
+        </state>
+        <state name="Node5119" type="Normal" category="Command" enabled="true" breakpoint="false" x="184" y="536">
+          <text>$loc_img = [createImage $loc_btn_w $loc_btn_h 0x00000000]</text>
+        </state>
+        <state name="Node5127" type="Normal" category="Command" enabled="true" breakpoint="false" x="229" y="628">
+          <text>$loc_txt_f = '[filter GlowFilter $c3 50]'</text>
+        </state>
+        <state name="Node5135" type="Normal" category="Command" enabled="true" breakpoint="false" x="148" y="669">
+          <text>$loc_img = [drawRect $loc_img 0 0 $loc_btn_w $loc_btn_h [pen 0 none 0] $loc_txt_f 100]</text>
+        </state>
+        <state name="Node5143" type="Normal" category="Command" enabled="true" breakpoint="false" x="214" y="713">
+          <text>$loc_btn = [addImage $loc_btn $loc_img 0 0 100 (-1)]</text>
+        </state>
+        <state name="Node5151" type="Normal" category="Command" enabled="true" breakpoint="false" x="123" y="752">
+          <text>$loc_btn = [drawRoundRect $loc_btn 3 1 $loc_btn_w-3 $loc_btn_h-12 10 [pen 0xffffff none 0]  [gradientOneWay 0xffffff 0x1fffffff 90] 90]</text>
+        </state>
+        <state name="Node5159" type="Normal" category="Command" enabled="true" breakpoint="false" x="296" y="795">
+          <text>${'btn' + $i} = $loc_btn</text>
+        </state>
+        <state name="Node5167" type="Normal" category="Command" enabled="true" breakpoint="false" x="153" y="848">
+          <text>$buttons = [put 2 head 'btn'+$i $buttons]</text>
+        </state>
+        <state name="Node5175" type="Normal" category="Command" enabled="true" breakpoint="false" x="11" y="58">
+          <text>$loc_f = "[font 'Courier' 24 $c2 bold center]"</text>
+        </state>
+        <state name="Node5183" type="Normal" category="Command" enabled="true" breakpoint="false" x="145" y="578">
+          <text>$loc_img = [writeText $loc_img $loc_title 0 2 $loc_btn_w $loc_btn_h-2 $loc_f 100]</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector11077" highlighted="false" enabled="true" source="Node5151" destination="Node5159"/>
+        <transition name="Connector11076" highlighted="false" enabled="true" source="Node5143" destination="Node5151"/>
+        <transition name="Connector11075" highlighted="false" enabled="true" source="Node5135" destination="Node5143"/>
+        <transition name="Connector11074" highlighted="false" enabled="true" source="Node5127" destination="Node5135"/>
+        <transition name="Connector11073" highlighted="false" enabled="true" source="Node5183" destination="Node5127"/>
+        <transition name="Connector11072" highlighted="false" enabled="true" source="Node5119" destination="Node5183"/>
+        <transition name="Connector11071" highlighted="false" enabled="true" source="Node5103" destination="Node5111"/>
+        <transition name="Connector11070" highlighted="false" enabled="true" source="Node5095" destination="Node5103"/>
+        <transition name="Connector11069" highlighted="false" enabled="true" source="Node5079" destination="Node5095"/>
+        <transition name="Connector11068" highlighted="false" enabled="true" source="Node5022" destination="Node5039"/>
+        <transition name="Connector11067" highlighted="false" enabled="true" source="Node5167" destination="Node5022"/>
+        <transition name="Connector11066" highlighted="false" enabled="true" source="Node5159" destination="Node5167"/>
+        <transition name="Connector11065" highlighted="false" enabled="true" source="Node5030" destination="Node5175"/>
+        <transition name="Connector11064" highlighted="false" enabled="true" source="Node5087" destination="Node5079"/>
+        <transition name="Connector11063" highlighted="false" enabled="true" source="Node5063" destination="Node5071"/>
+        <transition name="Connector11062" highlighted="false" enabled="true" source="Node5071" destination="Node5087"/>
+        <transition name="Connector11061" highlighted="false" enabled="true" source="Node5175" destination="Node5047"/>
+        <transition name="Connector11060" highlighted="false" enabled="true" source="Node5047" destination="Node5055"/>
+        <transition name="Connector11059" highlighted="false" enabled="true" source="Node5039" destination="Node5063">
+          <label>true</label>
+        </transition>
+        <transition name="Connector11058" highlighted="false" enabled="true" source="Node5055" destination="Node5039"/>
+        <transition name="Connector11057" highlighted="false" enabled="true" source="Node5111" destination="Node5119"/>
+      </transitions>
+    </graph>
+    <graph name="SampleIndex" initial="true" category="application">
+      <states>
+        <state name="Node5297" type="Normal" category="Command" enabled="true" breakpoint="false" x="23" y="139">
+          <text>$q == '1. Create navigation elements from scratch'</text>
+        </state>
+        <state name="Node5305" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="33" y="242">
+          <text>DesignNavigationElms</text>
+        </state>
+        <state name="Node5313" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="532" y="378">
+          <text>CreateHeader</text>
+        </state>
+        <state name="Node5321" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="530" y="319">
+          <text>CreateLogo</text>
+        </state>
+        <state name="Node5329" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="260" y="317">
+          <text>CreateLogo</text>
+        </state>
+        <state name="Node5337" type="Normal" category="Command" enabled="true" breakpoint="false" x="241" y="192">
+          <text>$q == '2. Create advance composition'</text>
+        </state>
+        <state name="Node5345" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="52" y="338">
+          <text>CreateLogo</text>
+        </state>
+        <state name="Node5353" type="Normal" category="Command" enabled="true" breakpoint="false" x="17" y="65">
+          <text>$q = [question "All data would be saved to 'c:/output/'\nPut 'cube.png' to 'c:/output/'\nSelect sample below:" '1. Create navigation elements from scratch, 2. Create advance composition, 3. Merging external data to some graphic inside']</text>
+        </state>
+        <state name="Node5361" type="Initial" category="Normal" enabled="true" breakpoint="false" x="35" y="10">
+          <text>START</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector11189" highlighted="false" enabled="true" source="Node5353" destination="Node5297"/>
+        <transition name="Connector11188" highlighted="false" enabled="true" source="Node5297" destination="Node5305">
+          <label>true</label>
+        </transition>
+        <transition name="Connector11187" highlighted="false" enabled="true" source="Node5297" destination="Node5337">
+          <label>false</label>
+        </transition>
+        <transition name="Connector11186" highlighted="false" enabled="true" source="Node5337" destination="Node5329">
+          <label>true</label>
+        </transition>
+        <transition name="Connector11185" highlighted="false" enabled="true" source="Node5305" destination="Node5345"/>
+        <transition name="Connector11184" highlighted="false" enabled="true" source="Node5337" destination="Node5321">
+          <label>false</label>
+        </transition>
+        <transition name="Connector11183" highlighted="false" enabled="true" source="Node5321" destination="Node5313"/>
+        <transition name="Connector11182" highlighted="false" enabled="true" source="Node5361" destination="Node5353"/>
       </transitions>
     </graph>
   </structure>
