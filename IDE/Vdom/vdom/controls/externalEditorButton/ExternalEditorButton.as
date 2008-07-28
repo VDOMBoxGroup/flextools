@@ -66,13 +66,15 @@ package vdom.controls.externalEditorButton
 			super.createChildren();
 			
 			if (!__valueLabel) {
-				__valueLabel = new Label(); 
-				__valueLabel.width = this.width - 23;
-				addChild(__valueLabel);
+				__valueLabel = new Label();
+				addChild(__valueLabel); 
+				__valueLabel.percentWidth = 100;
+				__valueLabel.truncateToFit = true;
 			}
 			
 			if (!__openBtn) {
 				__openBtn = new Button();
+				addChild(__openBtn);
 				__openBtn.width = 22;
 				__openBtn.height = 20;
 				__openBtn.setStyle("cornerRadius", 0);
@@ -80,8 +82,10 @@ package vdom.controls.externalEditorButton
 				__openBtn.setStyle("paddingRight", 1);
 				__openBtn.label = "...";
 				__openBtn.addEventListener(MouseEvent.CLICK, openWindow);
-				addChild(__openBtn);
-			} 
+			}
+			
+			invalidateDisplayList();
+			invalidateSize();
 		}
 
 //		----- Loading and executing external application ------------------------------------- 
