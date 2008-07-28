@@ -22,8 +22,6 @@ private var currentPage:int = 0;
 private var pageOffset:int = 0;
 private var queryResult:XML;
 private var editableValue:String = "";
-private var editableValueColumn:int = -1;
-private var editableValueRow:int = -1;
 
 private var queue:XMLList;
 
@@ -59,13 +57,13 @@ private function onLoadInit():void {
 // ----- Table get Rows count processing methods ----------------------------------------
 
 private function requestRowsCount():void {
-	manager.addEventListener("callComplete", resultTableRowsHandler);
-	
 	try {
+		manager.addEventListener("callComplete", resultTableRowsHandler);
 		manager.remoteMethodCall("get_count", "");
 	}
 	catch (err:Error) {
-		showAlert("External Manager error: Specified method haven't found on the externalManager!", voidfunc, voidfunc);		
+		/* error01 */
+		showMessage("External Manager error (01): Specified method haven't found on the externalManager!");		
 	}
 }
 
@@ -80,7 +78,8 @@ private function resultTableRowsHandler(event:*):void {
 		showPageData(1);
 	}
 	catch (err:Error) {
-		Alert.show("Can not convert result into XML or result error!", "External Manager error");
+		/* error02 */
+		showMessage("External Manager error (02): Can not convert result into XML or result error!");
 		queryResult = new XML();
 		totalRecords = 0;
 	}
@@ -89,13 +88,13 @@ private function resultTableRowsHandler(event:*):void {
 // ----- Table Structure processing methods ---------------------------------------------
 
 private function requestTableStructure():void {
-	manager.addEventListener("callComplete", resultTableStructureHandler);
-	
 	try {
+		manager.addEventListener("callComplete", resultTableStructureHandler);
 		manager.remoteMethodCall("get_structure", "");
 	}
 	catch (err:Error) {
-		showAlert("External Manager error: Specified method haven't found on the externalManager!", voidfunc, voidfunc);		
+		/* error03 */
+		showMessage("External Manager error (03): Specified method haven't found on the externalManager!");		
 	}
 }
 
@@ -110,13 +109,14 @@ private function resultTableStructureHandler(event:*):void {
 		requestRowsCount();
 	}
 	catch (err:Error) {
-		Alert.show("Can not convert result into XML or result error!", "External Manager error");
+		/* error04 */
+		showMessage("External Manager error (04): Can not convert result into XML or result error!");
 		queryResult = new XML();
 	}
 }
 
 private function setTableHeaders():void {
-	dataGridColumns = new Array();
+	dataGridColumns = [];
 	for each (var xmlHeader:XML in structureXML.table.header.column) {
 		var _header:DataGridColumn = new DataGridColumn();
 		var columnProps:Object = {
@@ -148,23 +148,26 @@ private function setTableHeaders():void {
 
 private function errorRMCHandler(event:*):void {
 	try {
-		showAlert("RMC error: " + event.result.Error.toString(), voidfunc, voidfunc);
+		/* error05 */
+		var resultXML:XML = new XML(event.result);
+		showMessage("RMC error (05): |" + resultXML.Error.toString());
 	}
 	catch (err:Error) {
-		showAlert("Specified error occur: " + err.message, voidfunc, voidfunc);
+		/* error06 */
+		showMessage("Specified error occur (06): |" + err.message);
 	}
 }
 
 // ----- Get data methods ---------------------------------------------------------------
 
 private function getPageRequest(page:int):void {
-	manager.addEventListener("callComplete", getPageHandler);
-
 	try {
+		manager.addEventListener("callComplete", getPageHandler);
 		manager.remoteMethodCall("get_data", "<range><limit>" + AMOUNT.toString() + "</limit><offset>" + String(AMOUNT * (page - 1)) + "</offset></range>");
 	}
 	catch (err:Error) {
-		showAlert("External Manager error: Specified method haven't found on the externalManager!", voidfunc, voidfunc);		
+		/* error07 */
+		showMessage("External Manager error (07): Specified method haven't found on the externalManager!");		
 	}
 }
 
@@ -177,7 +180,8 @@ private function getPageHandler(event:*):void {
 		showPageData(currentPage);
 	}
 	catch (err:Error) {
-		Alert.show("Can not convert result into XML or result error!", "External Manager error");
+		/* error08 */
+		showMessage("External Manager error (08): Can not convert result into XML or result error!");
 		queryResult = new XML();
 	}
 } 
@@ -269,28 +273,17 @@ private function pageClickHandler(mEvent:MouseEvent):void {
 // ----- Edit data processing methods ---------------------------------------------------
 
 private function itemEditBegin(event:DataGridEvent):void {
-//	if (editableValueRow >= 0 && editableValueColumn >= 0) {
-//		if (dataGridCollection[editableValueRow][dataGridColumns[editableValueColumn].dataField].toString() != editableValue) {
-//			dataGridCollection[editableValueRow].changed = true;
-//			__commitBtn.enabled = true;
-//		}
-//	}
-
 	editableValue = dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex].dataField].toString();
-	editableValueColumn = event.columnIndex;
-	editableValueRow = event.rowIndex;
-	trace ("--> Stored value: " + editableValue + " at " + editableValueRow + "x" + editableValueColumn);
 }
 
 private function itemEditEnd(event:DataGridEvent):void {
-	trace ("--> New value: " + dataGridCollection[editableValueRow][dataGridColumns[editableValueColumn].dataField] + " at " + editableValueRow + "x" + editableValueColumn);	
-	if (dataGridCollection[editableValueRow][dataGridColumns[editableValueColumn].dataField].toString() != editableValue) {
-		dataGridCollection[editableValueRow].changed = true;
+	if (event.currentTarget.itemEditorInstance.text != editableValue) {
+		dataGridCollection[event.rowIndex].changed = true;
 		__commitBtn.enabled = true;
 	}
 }
 
-private function addRow():void {
+private function addRowBtnClickHandler():void {
 	/* Create tableRow object */
 	var tableRow:Object = new Object();
 	var columnIndex:int = 0;
@@ -299,7 +292,9 @@ private function addRow():void {
 			if (dataGridColumnsProps[columnIndex].notnull.toLowerCase() == "true")
 				tableRow[dgColumn.dataField] = "Required";
 			else
-				tableRow[dgColumn.dataField] = "Null";
+				tableRow[dgColumn.dataField] = "NULL";
+		} else {
+			tableRow[dgColumn.dataField] = "NULL";
 		}
 		columnIndex++;
 	}
@@ -313,10 +308,10 @@ private function addRow():void {
 
 private function commitBtnClickHandler():void {
 	var requestXMLParam:XML = new XML("<data />");
-	var thereAreChanges:Boolean = false;
+	var thereAreNew:Boolean = false;
 	for each (var dataGridRow:Object in dataGridCollection) {
-		if (dataGridRow.changed) {
-			thereAreChanges = true;
+		if (dataGridRow.fnew) {
+			thereAreNew = true;
 			var xmlRow:XML = new XML("<row />");
 			
 			for each (var dataGridCell:Object in dataGridColumns) {
@@ -325,7 +320,30 @@ private function commitBtnClickHandler():void {
 			requestXMLParam.appendChild(xmlRow);
 		}
 	}
-	trace (requestXMLParam);
+	if (thereAreNew) {
+		try {
+	//		manager.addEventListener("callComplete", someFunc);
+			manager.remoteMethodCall("add_row", requestXMLParam.toXMLString());
+		}
+		catch (err:Error) {
+			/* error09 */
+			showMessage("External Manager error (09): Specified method haven't found on the externalManager!");		
+		}
+	}
+	
+	__commitBtn.enabled = false;
+}
+
+private function deleteBtnClickHandler():void {
+	try {
+//		manager.addEventListener("callComplete", someFunc);
+		manager.remoteMethodCall("delete_row", "<delete><row><column name='id'>" + dataGridCollection[__dg.selectedIndex]["id"] + "</column></row></delete>");
+		dataGridCollection.removeItemAt(__dg.selectedIndex);
+	}
+	catch (err:Error) {
+		/* error09 */
+		showMessage("External Manager error (09): Specified method haven't found on the externalManager!");		
+	}
 }
 
 // ----- Alert processing methods -------------------------------------------------------
@@ -351,3 +369,14 @@ private function alertClickHandler(key:String):void {
 }
 
 private function voidfunc():void {}
+
+//	----- Message processing methods -----------------------------------------------------
+
+private function showMessage(message:String):void {
+	alertMessage = message;
+	__alertArea.selectedChild = __message;
+}
+
+private function messageOkClickHandler():void {
+	__alertArea.selectedChild = __normal;
+}

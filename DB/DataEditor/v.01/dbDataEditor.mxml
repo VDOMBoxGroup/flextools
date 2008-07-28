@@ -26,8 +26,8 @@
 	<mx:ViewStack id="__alertArea" width="100%" height="24" paddingTop="0" paddingBottom="0">
 		<mx:Canvas id="__normal" width="100%" height="24">
 			<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingRight="0" paddingLeft="0">
-				<mx:Button label="add line" height="20" click="{addRow();}" />
-				<mx:Button label="remove line" height="20" enabled="false" />		
+				<mx:Button id="__addBtn" label="add line" height="20" click="{addRowBtnClickHandler();}" />
+				<mx:Button id="__deleteBtn" label="delete line" height="20" click="{deleteBtnClickHandler();}" />		
 				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}" />
 				<mx:Spacer width="100%" />
 				<mx:HBox horizontalGap="0">
@@ -41,6 +41,12 @@
 				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
 				<mx:Button id="__alertYesBtn" label="Yes" height="18" click="{alertClickHandler('Yes');}" />
 				<mx:Button id="__alertNoBtn" label="No" height="18" click="{alertClickHandler('No');}" />
+			</mx:HBox> 					
+		</mx:Canvas>
+		<mx:Canvas id="__message">
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
+				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+				<mx:Button id="__msgOkBtn" label="Ok" height="18" click="{messageOkClickHandler();}" />
 			</mx:HBox> 					
 		</mx:Canvas>
 	</mx:ViewStack>
