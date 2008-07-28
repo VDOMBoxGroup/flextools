@@ -96,8 +96,8 @@ package vdom.controls.externalEditorButton
 			loaderContext.allowLoadBytesCodeExecution = true;
 			
 			/* Temporary procedures for testing local external components */ 
-//			var dbExtEditor:URLRequest = new URLRequest("C:/Users/koldoon/Documents/Flex Builder 3/dbStructureEditor/bin-debug/dbStructureEditor.swf");
-//			var dbExtEditor:URLRequest = new URLRequest("C:/Users/koldoon/Documents/Flex Builder 3/dbDataEditor/bin-debug/dbDataEditor.swf");
+//			var dbExtEditor:URLRequest = new URLRequest("/home/CSD/koldoon/workspace/dbStructureEditor/bin-debug/dbStructureEditor.swf");
+//			var dbExtEditor:URLRequest = new URLRequest("/home/CSD/koldoon/workspace/dbDataEditor/bin-debug/dbDataEditor.swf");
 //			ldr.load(dbExtEditor, loaderContext);
 			/* end of -- Temporary procedures for testing local external components */
 			
