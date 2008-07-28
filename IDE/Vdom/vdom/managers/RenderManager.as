@@ -175,12 +175,15 @@ public class RenderManager implements IEventDispatcher {
 		case "row":
 		 
 			container = new TableRow(itemId);
-			Container(container).percentWidth = 100;
+			TableRow(container).percentWidth = 100;
+			TableRow(container).minHeight = 10;
 		break;
 		
 		case "cell":
 		 
 			container = new TableCell(itemId);
+			TableCell(container).minWidth = 10;
+			TableCell(container).minHeight = 10;
 		break;
 		}
 		
@@ -497,7 +500,7 @@ public class RenderManager implements IEventDispatcher {
 				currentSprite.graphics.beginFill(fillColor, alpha);
 									
 				currentSprite.graphics.drawRect(
-					childXMLDescription.@left,
+					Number(childXMLDescription.@left),
 					childXMLDescription.@top,
 					childXMLDescription.@width,
 					childXMLDescription.@height

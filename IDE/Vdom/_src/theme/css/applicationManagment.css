@@ -36,3 +36,9 @@ ActionPanel {
 	fontFamily: Verdana;
 	textAlign: center;
 }
+Thumbnail {
+	
+	thumbBackground: Embed(source="vdomTheme.swf", symbol="ThumbBackground");
+	thumbBackgroundSelected: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
+	backgroundSize: "100%";
+}

@@ -48,7 +48,7 @@ private function changeImage():void
 
 private function resetImage():void
 {
-	var iconClass:Class = Application.application.getStyle('appIconFile');
+	var iconClass:Class = Application.application.getStyle('appIconPersonalPages');
 	var ba:BitmapAsset = new iconClass();
 	var pnge:PNGEncoder = new PNGEncoder();
 	_source = pnge.encode(ba.bitmapData);
@@ -59,11 +59,11 @@ private function resetImage():void
 private function showHandler():void 
 {	
 	if(!defaultValues) {
-		submitButton.label = "Create";
+		submitButton.label = "CREATE";
 		defaultValues = new ApplicationDescription();
 	} else {
 		
-		submitButton.label = "Edit";
+		submitButton.label = "EDIT";
 	}
 		
 	applicationName.text = defaultValues.name;
@@ -76,7 +76,7 @@ private function showHandler():void
 		fileManager.loadResource(defaultValues.id, defaultValues.iconId, this, 'source', true);
 	} else {
 		
-		var iconClass:Class = Application.application.getStyle('appIconFile'); 
+		var iconClass:Class = Application.application.getStyle('appIconPersonalPages'); 
 		var ba:BitmapAsset = new iconClass();
 		var pnge:PNGEncoder = new PNGEncoder();
 		var byteArray:ByteArray = pnge.encode(ba.bitmapData);

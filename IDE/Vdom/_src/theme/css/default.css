@@ -7,18 +7,21 @@ global {
 	topLDownRCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopLDownR");
 	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
 	
-	appIconFile: Embed("app_icon_file.png");
-	appIconBook: Embed("app_icon_book.png");
-	appIconBooks: Embed("app_icon_books.png");
-	appIconCommunicate: Embed("app_icon_communicate.png");
-	appIconCubes: Embed("app_icon_cubes.png");
-	appIconDiagram: Embed("app_icon_diagram.png");
-	appIconHost: Embed("app_icon_host.png");
-	appIconMolecule: Embed("app_icon_molecule.png");
-	appIconOrder: Embed("app_icon_order.png");
-	appIconPen: Embed("app_icon_pen.png");
-	appIconSetting: Embed("app_icon_setting.png");
-	appIconShoppingl: Embed("app_icon_shoppingl.png");
+	appIconPersonalPages: Embed("app-personalpages.png");
+	appIconAssociation: Embed("app-association.png");
+	appIconBuild: Embed("app-build.png");
+	appIconComputer: Embed("app-computer.png");
+	appIconCulture: Embed("app-culture.png");
+	appIconEducation: Embed("app-education.png");
+	appIconElectronic: Embed("app-electronic.png");
+	appIconFashion: Embed("app-fashion.png");
+	appIconHealth: Embed("app-health.png");
+	appIconHotels: Embed("app-hotels.png");
+	appIconHousing: Embed("app-housing.png");
+	appIconRestaurant: Embed("app-restaurant.png");
+	appIconSport: Embed("app-sport.png");
+	appIconStoreShop: Embed("app-storeshop.png");
+	appIconTransportation: Embed("app-transportation.png");
 }
 
 WindowedApplication {

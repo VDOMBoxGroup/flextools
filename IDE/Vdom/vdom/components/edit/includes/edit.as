@@ -15,7 +15,6 @@ import vdom.managers.DataManager;
 	
 private var objectsXML:XML;
 private var publicData:Object;
-private var ppm:Canvas;
 private var applicationId:String;
 private var topLevelObjectId:String;
 private var watchers:Array;
@@ -29,13 +28,13 @@ override protected function updateDisplayList(unscaledWidth:Number,
 	panelContainer.height = unscaledHeight;
 }
 
-private function initializeHandler():void {
-	
+private function initializeHandler():void
+{	
 	dataManager = DataManager.getInstance();
 }
 
-private function showHandler():void {
-	
+private function showHandler():void
+{	
 	watchers = [];
 	
 	registerEvent(true);
@@ -49,8 +48,8 @@ private function showHandler():void {
 	);
 }
 
-private function hideHandler():void {
-	
+private function hideHandler():void
+{	
 	for each(var watcher:ChangeWatcher in watchers)
 		watcher.unwatch();
 	
@@ -59,8 +58,8 @@ private function hideHandler():void {
 	registerEvent(false);
 }
 
-private function registerEvent(flag:Boolean):void {
-	
+private function registerEvent(flag:Boolean):void
+{	
 	if(flag)
 	{
 		workArea.addEventListener(WorkAreaEvent.CREATE_OBJECT, workArea_createObjectHandler);
@@ -68,8 +67,11 @@ private function registerEvent(flag:Boolean):void {
 		workArea.addEventListener(WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler);
 		
 		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
-		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
-		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
+		
+		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, dataManager_objectCreatedHandler);
+		dataManager.addEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
+		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
+		
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, updateAttributesBeginHandler);
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
 		dataManager.addEventListener(DataManagerEvent.RESOURCE_MODIFIED, updateAttributesCompleteHandler);
@@ -84,8 +86,11 @@ private function registerEvent(flag:Boolean):void {
 		workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler);
 		
 		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
-		dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, objectDeletedHandler);
-		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, objectCreatedHandler);
+		
+		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, dataManager_objectCreatedHandler);
+		dataManager.removeEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
+		dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
+		
 		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, updateAttributesBeginHandler);
 		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
 		
@@ -96,40 +101,43 @@ private function registerEvent(flag:Boolean):void {
 
 private function pageDataLoadedHandler(event:Event):void
 {
-	PopUpManager.removePopUp(ppm);
 	workArea.visible = true;
 }
 
-private function objectCreatedHandler(event:DataManagerEvent):void {
-	
-	workArea.createObject(event.result);
-}
-
-private function attributesChangedHandler(event:Event):void {
-	
+private function attributesChangedHandler(event:Event):void
+{	
 	dataManager.updateAttributes();
 	//attributesPanel.dataProvider = dataManager.currentObject; //<-- исправить!!!!!!
 }
 
 private function updateAttributesBeginHandler(event:DataManagerEvent):void
 {
-	workArea.lockItem(dataManager.currentObjectId);
+	var attrName:String;
+	
+	for each(var attr:XML in event.result.*)
+	{
+		attrName = attr.@Name;
+		if(attrName == "top" || attrName  == "left")
+			continue;
+		
+		workArea.lockItem(dataManager.currentObjectId);
+		break;
+	}
 }
 
-private function updateAttributesCompleteHandler(event:DataManagerEvent):void {
-	
+private function updateAttributesCompleteHandler(event:DataManagerEvent):void
+{	
 	workArea.updateObject(event.result);
 }
 
-private function workArea_createObjectHandler(event:Event):void {
-	
+private function workArea_createObjectHandler(event:Event):void
+{	
 	var evt:WorkAreaEvent = WorkAreaEvent(event);
-	
 	dataManager.createObject(evt.typeId, evt.objectId, '', evt.props);
 }
 
-private function workArea_changeObjectHandler(event:WorkAreaEvent):void {
-	
+private function workArea_changeObjectHandler(event:WorkAreaEvent):void
+{	
 	if(event.objectId) {
 		
 		dataManager.changeCurrentObject(event.objectId);
@@ -139,18 +147,32 @@ private function workArea_changeObjectHandler(event:WorkAreaEvent):void {
 	}
 }
 
-private function workArea_attributeChangedHandler(event:WorkAreaEvent):void {
-	
+private function workArea_attributeChangedHandler(event:WorkAreaEvent):void
+{	
 	dataManager.updateAttributes(event.objectId, event.props);
 }
 
-private function deleteObjectHandler(event:AttributesPanelEvent):void {
-	
+private function deleteObjectHandler(event:AttributesPanelEvent):void
+{	
 	if(event.objectId);
 		dataManager.deleteObject(event.objectId);
 }
 
-private function objectDeletedHandler(event:DataManagerEvent):void {
+private function dataManager_objectCreatedHandler(event:DataManagerEvent):void
+{	
+	workArea.createObject(event.result);
+}
+
+private function dataManager_objectChangedHandler(event:DataManagerEvent):void
+{
+	if(!dataManager.currentPageId)
+		return;
 	
+	if(!dataManager.currentObjectId)
+		dataManager.changeCurrentObject(dataManager.currentPageId);
+}
+
+private function dataManager_objectDeletedHandler(event:DataManagerEvent):void
+{	
 	workArea.deleteObject(event.objectId);
 }

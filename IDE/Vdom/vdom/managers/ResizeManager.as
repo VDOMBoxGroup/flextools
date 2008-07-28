@@ -150,7 +150,6 @@ public class ResizeManager extends EventDispatcher {
 					item.drawHighlight('0x666666');
 			}
 			
-			
 		} else {
 			
 			if(highlightedItem)

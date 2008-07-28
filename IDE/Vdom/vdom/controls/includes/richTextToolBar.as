@@ -33,6 +33,8 @@ private var loaded:Boolean;
 [Bindable]
 private var font:ArrayCollection;
 
+private var w:*;
+
 private function get editableElement():EditableHTML {
 
 	return _editableElement;
@@ -179,6 +181,9 @@ private function execCommand(commandName:String, commandAttributes:String = null
 
 private function insertLink():void {
 	
+	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
+	var f:* = d.contentWindow.getSelection();
+	w = f.getRangeAt(0);
 	var aaa:LinkSelection = new LinkSelection();
 	aaa.addEventListener('linkSelected', linkSelectedHandler);
 	PopUpManager.addPopUp(aaa, DisplayObject(Application.application), true);
@@ -188,6 +193,11 @@ private function insertLink():void {
 private function linkSelectedHandler(event:Event):void {
 	
 	event.currentTarget.removeEventListener('linkSelected', linkSelectedHandler);
+	
+	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
+	var f:* = d.contentWindow.getSelection();
+	f.addRange(w);
+	
 	tinyMCE.themes['advanced']._insertLink(event.currentTarget.url, '_blank');
 	PopUpManager.removePopUp(UIComponent(event.currentTarget));
 	

@@ -1,3 +1,5 @@
+import mx.controls.Alert;
+
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
 
@@ -40,6 +42,11 @@ private function objectXMLScriptHandler(event:DataManagerEvent):void {
 
 private function saveXMLScript():void {
 	
+	if(!scriptEditor.code)
+	{
+		Alert.show("Empty description", "Alert");
+		return;
+	}
 	enableElement(false);
 	saveButton.label = 'Saving...';
 	dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);

@@ -11,7 +11,6 @@ import mx.core.UIComponent;
 import mx.events.DragEvent;
 
 import vdom.containers.IItem;
-import vdom.controls.EditableHTML;
 import vdom.controls.IToolBar;
 import vdom.controls.ImageToolBar;
 import vdom.controls.RichTextToolBar;
@@ -206,31 +205,35 @@ public class WorkArea extends VBox {
 		}
 		
 		var flag:Boolean = false;
+		var newContentToolBar:IToolBar;
+		var object:*;
 		
-		switch(interfaceType) {
-		
-		case 2: {
-			
+		switch(interfaceType)
+		{
+		case 2:
+		{
 			if(!(_contentToolbar is RichTextToolBar))
-				_contentToolbar = new RichTextToolBar();
+				newContentToolBar = new RichTextToolBar();
+			else
+				newContentToolBar = _contentToolbar;
 			
-			var obj:EditableHTML = EditableHTML(item.editableAttributes[0].sourceObject);
-			_contentToolbar.init(IItem(_selectedObject), obj);
-			
+			object = item.editableAttributes[0].sourceObject;
 			flag = true;
-			break
-		}
-		case 3: {
 			
 			break
 		}
-		case 4: {
-			
+		case 3:
+		{
+			break
+		}
+		case 4:
+		{
 			if(!(_contentToolbar is ImageToolBar))
-				_contentToolbar = new ImageToolBar();
-				
-			var obj1:Object = item.editableAttributes[0].sourceObject
-			_contentToolbar.init(IItem(_selectedObject), obj1);
+				newContentToolBar = new ImageToolBar();
+			else
+				newContentToolBar = _contentToolbar;
+			
+			object = item.editableAttributes[0].sourceObject
 			
 			flag = true;
 		break;
@@ -243,9 +246,19 @@ public class WorkArea extends VBox {
 			_contentToolbar = null;
 			return;
 		}
+		
+		if(flag)
+		{
+			if(!DisplayObject(newContentToolBar).parent && _contentToolbar && DisplayObject(_contentToolbar).parent)
+				removeChild(DisplayObject(_contentToolbar));
 			
-		if(_contentToolbar && !DisplayObject(_contentToolbar).parent)
-			addChild(DisplayObject(_contentToolbar));
+			_contentToolbar = newContentToolBar;
+			
+			if(_contentToolbar && !DisplayObject(_contentToolbar).parent)
+				addChild(DisplayObject(_contentToolbar));
+			
+			_contentToolbar.init(IItem(_selectedObject), object);
+		}
 	}
 	
 	/**

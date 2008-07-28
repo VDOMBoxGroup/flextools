@@ -1,23 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox
+<mx:Canvas
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	show="showHandler();">
+	show="showHandler();" xmlns:controls="vdom.controls.*">
 	
 	<mx:Script source="includes/applicationProperties.as" />
 	
-	<mx:Image id="applicationIcon"
-		width="50" height="50" />
+	<mx:Style>
+		.zzz {
+			titleBackgroundSkin: Embed(source="vdomTheme.swf",symbol="PanelTitleBackground");
+			backgroundSize: "100%";	
+		}
+		.titleNamez {
+			color: #FFFFFF;
+			textAlign: "center";
+			fontWeight: "bold";			
+		}
 		
-	<mx:Label text="Application Name" fontWeight="normal" fontSize="10"/>
-	<mx:Label id="applicationName"
-		width="200" fontSize="12" fontWeight="bold"/>
+		.thumb {
+			backgroundImage: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
+		}
 		
-	<mx:Label text="Application Description" fontWeight="normal" fontSize="10"/>
-	<mx:TextArea id="applicationDescription"
-		borderColor="#000000" backgroundAlpha="0" 
-		editable="false" width="200" borderStyle="none" fontWeight="bold" fontSize="12"/>
+		.buttonStyle {
+			
+			color: #000000;
+			textRollOverColor: #FFFFFF;
+			disabledColor: #92BB47;
+			
+			upSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			overSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			downSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			disabledSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
 		
-	<mx:Button label="Edit Application" 
-		cornerRadius="0"
-		click="dispatchEvent(new Event('editCurrentApplication'))"/>
-</mx:VBox>
+			selectedUpSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			selectedOverSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			selectedDownSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+		}
+	</mx:Style>
+	<mx:Panel 
+		title="APPLICATION PROPERTIES"
+		color="#FFFFFF"
+		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
+		borderAlpha="1"
+		left="15" top="15" width="500" height="400" shadowDirection="right" layout="absolute">
+		
+		<mx:VBox 
+			backgroundColor="#C2C2C2" width="230" color="#000000"
+			paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10" left="20" top="20">
+	
+			<mx:HBox width="100%" verticalAlign="middle">
+				<mx:Canvas styleName="thumb"
+					width="60" height="60">
+					<mx:Image id="applicationIcon"
+						width="55" height="55" horizontalCenter="0" verticalCenter="0"/>
+				</mx:Canvas>
+				<mx:Label text="Illustration" fontWeight="bold"/>
+			</mx:HBox>
+	
+			<mx:HBox>
+				<mx:Label text="Name" fontWeight="bold"/>
+				<controls:PromptingTextInput id="applicationName"
+					prompt="Application Name" editable="false"/>
+			</mx:HBox>
+		
+			<mx:Label text="Description"  fontWeight="bold"/>
+			<mx:HBox width="100%" horizontalAlign="center">
+				<controls:PromptingTextArea id="applicationDescription"
+					prompt="Application Description" height="125" width="100%" textAlign="left" editable="false"/>
+			</mx:HBox>
+			
+			<mx:HBox width="100%" horizontalAlign="center">
+				<mx:Button label="EDIT APPLICATION" styleName="buttonStyle"
+					cornerRadius="0"
+					click="dispatchEvent(new Event('editCurrentApplication'))"/>
+			</mx:HBox>
+		</mx:VBox>
+	</mx:Panel>
+</mx:Canvas>

@@ -20,7 +20,7 @@ private var applicationDescription:ApplicationDescription;
 
 private function showHandler():void
 {
-	applicationEditor.formName = 'Create Application';
+	//applicationEditor.formName = 'Create Application';
 	registerEvent(true);
 	applicationEditor.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
 }

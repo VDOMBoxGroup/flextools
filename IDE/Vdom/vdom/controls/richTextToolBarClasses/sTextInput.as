@@ -1,6 +1,7 @@
 package vdom.controls.richTextToolBarClasses
 {
 import flash.events.FocusEvent;
+import flash.events.MouseEvent;
 
 import mx.controls.TextInput;
 
@@ -13,11 +14,12 @@ public class sTextInput extends TextInput
 	override protected function createChildren():void
 	{
 		super.createChildren();
-		textField.addEventListener(FocusEvent.FOCUS_OUT, zzz);
+		textField.addEventListener(MouseEvent.MOUSE_UP, zzz, true);
 	}
 	
-	private function zzz(event:FocusEvent):void
+	private function zzz(event:MouseEvent):void
 	{
+		var d:* = "";
 		event.stopImmediatePropagation();
 	} 
 }

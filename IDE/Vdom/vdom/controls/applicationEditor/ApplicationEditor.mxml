@@ -1,36 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Form
+<mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="vdom.controls.*"
 	
 	show="showHandler();"
 	hide="hideHandler();"
 	
-	textAlign="left">
+	backgroundColor="#C2C2C2" width="230" color="#000000"
+	paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10"
+>
 	
 	<mx:Script source="includes/applicationEditor.as" />
+	
+	<mx:Style>
+		.thumb {
+			backgroundImage: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
+		}
+		
+		.buttonStyle {
+			
+			color: #000000;
+			textRollOverColor: #FFFFFF;
+			disabledColor: #92BB47;
+			
+			upSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			overSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			downSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			disabledSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+		
+			selectedUpSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			selectedOverSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			selectedDownSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+			selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
+		}
+	</mx:Style>
 	
 	<mx:RegExpValidator id="nREV"
 		source="{applicationName}" property="text"
 		expression="^[a-zA-Z_]+$"
 		valid="handleValid(event);"
 		invalid="handleValid(event);"/>
+		
+	<mx:VBox width="100%">
 	
-	<mx:FormHeading label="{formName}"/>
-	
-	<mx:FormItem label="Name" required="true" >
-		<controls:PromptingTextInput id="applicationName"
-			prompt="Application Name"/>
-	</mx:FormItem>
-	
-	<mx:FormItem label="Description">
-		<controls:PromptingTextArea id="applicationDescription"
-			prompt="Application Description"/>
-	</mx:FormItem>
-	
-	<mx:FormItem label="Image">
-		<controls:BorderImage id="applicationImage" source="{_source}"
-			width="50" height="50" borderThickness="1" brokenImageSkin="{Application.application.getStyle('appIconFile')}"/>
+		<mx:HBox width="100%" verticalAlign="middle">
+			<mx:Canvas styleName="thumb"
+				width="60" height="60">
+				<mx:Image id="applicationImage" source="{_source}"
+					width="55" height="55" horizontalCenter="0" verticalCenter="0"/>
+			</mx:Canvas>
+			<mx:Label text="Illustration" fontWeight="bold"/>
+		</mx:HBox>
+		
 		<mx:HBox>
 			<mx:Button label="X"
 				cornerRadius="0" width="35" click="resetImage();"/>
@@ -38,14 +59,28 @@
 				cornerRadius="0" width="35"
 				click="changeImage();"/>
 		</mx:HBox>
-	</mx:FormItem>
+	</mx:VBox>
 	
-	<mx:FormItem direction="horizontal">
-		<mx:Button id="submitButton" label="Create"
+	<mx:HBox>
+		<mx:Label  text="Name" fontWeight="bold"/>
+		<controls:PromptingTextInput id="applicationName"
+			prompt="Application Name"/>
+	</mx:HBox>
+		
+	<mx:Label text="Description"  fontWeight="bold"/>
+	<mx:HBox width="100%" horizontalAlign="center">
+		<controls:PromptingTextArea id="applicationDescription"
+			prompt="Application Description" height="125" width="100%" textAlign="left"/>
+	</mx:HBox>
+	
+	<mx:HBox width="100%" horizontalAlign="center">
+		<mx:Button id="submitButton" label="CREATE"
+			styleName="buttonStyle"
 			cornerRadius="0" 
 			click="processValues();" />
-		<mx:Button label="Cancel"
+		<mx:Button label="CANCEL"
+			styleName="buttonStyle"
 			cornerRadius="0" 
 			click="chancelValues();"/>
-	</mx:FormItem>
-</mx:Form>
+	</mx:HBox>
+</mx:VBox>

@@ -39,10 +39,10 @@
 		verticalScrollPolicy="auto" horizontalScrollPolicy="off"  >
 		
 		<editContainers:AttributesPanel id="attributesPanel"
-			title="OBJECT PROPERTIES" headerHeight="30"
+			title="OBJECT PROPERTIES"
 			acceptLabel="{resourceManager.getString('Application','editor_save')}" 
 			deleteLabel="{resourceManager.getString('Application','editor_delete')}"
-			dataProvider="{dataManager.currentObject}" width="100%" />
+			width="100%" headerHeight="30"/>
 		
 		<containers:ClosablePanel id="helpPanel" title="Help" 
 			width="100%" >

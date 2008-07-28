@@ -321,15 +321,15 @@ public class DataManager implements IEventDispatcher {
 	
 	public function changeCurrentPage(pageId:String):void
 	{
-		if(!pageId) {
-			
+		if(!pageId)
+		{	
 			_currentPageId = null;
 			_currentPage = null;
 			_currentObject = null;
 			
-		} else {
-			
-			soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
+		}
+		else
+		{
 			soap.getChildObjectsTree(_currentApplicationId, pageId);
 		}
 	}
@@ -343,10 +343,10 @@ public class DataManager implements IEventDispatcher {
 	
  	private function getChildObjectsTreeHandler(event:SoapEvent):void
  	{
-		soap.removeEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
-		
 		var objectData:XML = event.result.Object[0];
 		var objectId:String = objectData.@ID;
+		
+		var currObj:XML = _currentApplication.Objects.Object.(@ID == objectId)[0];
 		
 		_currentApplication.Objects.Object.(@ID == objectId)[0] = objectData;
 		
@@ -358,10 +358,9 @@ public class DataManager implements IEventDispatcher {
 			dispatchEvent(new Event("listPagesChanged"));
 			dispatchEvent(new DataManagerEvent("currentPageChanged"));
 			dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
+			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_OBJECT_CHANGED));
 			dispatchEvent(new DataManagerEvent("currentObjectRefreshed"));
 		}
-		
-		
 	}
 	
 	/**
@@ -372,6 +371,9 @@ public class DataManager implements IEventDispatcher {
 	 */	
 	public function changeCurrentObject(objectId:String):void
 	{
+		if(_currentObject && objectId &&_currentObject.@ID[0] == objectId)
+			return;
+		
 		if(!objectId)
 			_currentObject = null;
 			
@@ -435,7 +437,12 @@ public class DataManager implements IEventDispatcher {
 			nameChanged = true;
 		
 		if(newOnlyAttributes)
-			dispatchEvent(new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN));
+		{
+			var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN)
+			dme.result = newOnlyAttributes;
+			dispatchEvent(dme);
+		}
+			
 		
 		if(newOnlyAttributes)
 		{
@@ -830,12 +837,17 @@ public class DataManager implements IEventDispatcher {
 	
 	private function registerEvent(flag:Boolean):void
 	{
-		if(flag) {
+		if(flag)
+		{
+			soap.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
 			
 			proxy.addEventListener(ProxyEvent.PROXY_SEND, proxySendedHandler);
 			proxy.addEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
 			
-		} else {
+		}
+		else
+		{
+			soap.removeEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, getChildObjectsTreeHandler);
 			
 			proxy.removeEventListener(ProxyEvent.PROXY_SEND, proxySendedHandler);
 			proxy.removeEventListener(ProxyEvent.PROXY_COMPLETE, setAttributesCompleteHandler);
@@ -845,10 +857,15 @@ public class DataManager implements IEventDispatcher {
 	private function extractNewValues(oldAttributes:XMLList, newAttributes:XMLList):XML
 	{
 		var newOnlyAttributes:XML = <Attributes />
-		
-		for each(var attr:XML in newAttributes) {
+		var oldAttribute:XML;
+		for each(var attr:XML in newAttributes)
+		{
+			oldAttribute = oldAttributes.(@Name == attr.@Name)[0];
+			if(!oldAttribute)
+				continue;
 			
-			if(oldAttributes.(@Name == attr.@Name) != attr) {	
+			if(oldAttribute != attr)
+			{	
 				newOnlyAttributes.item += attr;
 			} 
 		}

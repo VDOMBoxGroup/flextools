@@ -39,7 +39,7 @@
 		
 		<controls:ApplicationPanel id="listApplicationContainer"
 			panelName="{resourceManager.getString('Application','main_applist')}" 
-			height="86" />
+			height="86"  width="280"/>
 		
 		<controls:ApplicationInformation id="applicationInformation"
 			panelName="{resourceManager.getString('Application','main_appinfo')}"

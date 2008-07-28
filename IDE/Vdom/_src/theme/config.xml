@@ -22,63 +22,78 @@
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_book.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_book.png</path>
+		<name>app-association.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-association.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_books.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_books.png</path>
+		<name>app-build.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-build.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_communicate.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_communicate.png</path>
+		<name>app-computer.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-computer.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_cubes.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_cubes.png</path>
+		<name>app-culture.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-culture.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_diagram.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_diagram.png</path>
+		<name>app-education.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-education.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_file.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_file.png</path>
+		<name>app-electronic.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-electronic.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_host.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_host.png</path>
+		<name>app-fashion.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-fashion.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_molecule.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_molecule.png</path>
+		<name>app-health.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-health.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_order.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_order.png</path>
+		<name>app-hotels.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-hotels.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_pen.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_pen.png</path>
+		<name>app-housing.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-housing.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_setting.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_setting.png</path>
+		<name>app-personalpages.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-personalpages.png</path>
 	</include-file>
 				
 	<include-file>
-		<name>app_icon_shoppingl.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app_icon_shoppingl.png</path>
+		<name>app-restaurant.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-restaurant.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-sport.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-sport.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-storeshop.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-storeshop.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-transportation.png</name>
+		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-transportation.png</path>
 	</include-file>
 				
 	<include-file>
@@ -169,11 +184,6 @@
 	<include-file>
 		<name>tree_s.png</name>
 		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\tree_s.png</path>
-	</include-file>
-				
-	<include-file>
-		<name>vdomTheme.swc</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\swf\vdomTheme.swc</path>
 	</include-file>
 				
 	<include-file>

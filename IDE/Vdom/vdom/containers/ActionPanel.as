@@ -78,7 +78,8 @@ public class ActionPanel extends Panel {
 			_panelLabel.styleName = 'actionPanlelLabel';
 			
 			controlBar = tempBar;
-			tempBar.setStyle('paddingTop', -3);
+			_panelLabel.setStyle('paddingTop', -3);
+//			tempBar.setStyle('paddingTop', -3);
 			
 			controlBar.visible = false;
 			

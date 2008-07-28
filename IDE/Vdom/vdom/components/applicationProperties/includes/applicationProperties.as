@@ -29,5 +29,5 @@ public function set dataProvider(value:XML):void
 	if(value.Icon.toString())
 		fileManager.loadResource(value.Id, value.Icon, applicationIcon, 'source', true);
 	else
-		applicationIcon.source = Application.application.getStyle('appIconFile');
+		applicationIcon.source = Application.application.getStyle('appIconPersonalPages');
 }

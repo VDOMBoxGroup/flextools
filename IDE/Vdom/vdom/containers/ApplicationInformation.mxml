@@ -5,6 +5,13 @@
 	xmlns:controls="vdom.controls.*"
 	
 	layout="absolute" >
+	
+	<mx:Style>
+		.thumb {
+			backgroundImage: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
+		}
+	</mx:Style>
+	
 	<mx:Script>
 		<![CDATA[
 			import vdom.managers.FileManager;
@@ -18,28 +25,27 @@
 				if(!value)
 					return;
 			
-				applicationName.text = value.Name.toString();
 				applicationPage.text = value.Numberofpages.toString();
 				applicationObjects.text = value.Numberofobjects.toString();
 				
-				if(value.Icon == '') {
-					
-					_source = Application.application.getStyle('appIconFile');
+				if(value.Icon == '')
+				{
+					_source = Application.application.getStyle('appIconPersonalPages');
 				}
-				else {
-					
+				else
+				{
 					var fileManager:FileManager = FileManager.getInstance();
 					fileManager.loadResource(value.Id, value.Icon, applicationIcon, 'source', true);
 				}
 			}
 		]]>
 	</mx:Script>
-	<controls:BorderImage id="applicationIcon"
-		source="{_source}"
-		width="50" height="50" x="0" y="0" />
-	<mx:Label width="100" id="applicationName" y="50" height="15" color="#FFFFFF"/>
-	<mx:Label width="51" y="0" x="58" text="Pages" textAlign="right" color="#FFFFFF"/>
-	<mx:Label width="51" y="17" x="58" text="Objects" textAlign="right" color="#FFFFFF"/>
-	<mx:Label width="41" id="applicationPage" y="0" height="15" x="117" color="#FFFFFF"/>
-	<mx:Label width="41" id="applicationObjects" y="17" height="15" x="117" color="#FFFFFF"/>
+	<mx:Canvas width="60" height="60" styleName="thumb" top="3">
+		<mx:Image id="applicationIcon" source="{_source}"
+			width="50" height="50" horizontalCenter="0" verticalCenter="0"/>
+	</mx:Canvas>
+	<mx:Label width="55" y="12" x="68" text="Pages:" textAlign="left" color="#FFFFFF"/>
+	<mx:Label width="55" y="29" x="68" text="Objects:" textAlign="left" color="#FFFFFF"/>
+	<mx:Label width="41" id="applicationPage" y="12" height="15" x="127" color="#FFFFFF"/>
+	<mx:Label width="41" id="applicationObjects" y="29" height="15" x="127" color="#FFFFFF"/>
 </ActionPanel>

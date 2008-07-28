@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" showCloseButton="true" cornerRadius="0" width="500" height="300">
+<ResizableTitleWindow 
+	
+	xmlns="vdom.containers.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	title="Multiline Window"
+	titleStyleName="titleStyle"
+	
+	width="500" height="300"
+	borderAlpha="1"
+	layout="absolute" showCloseButton="true" cornerRadius="0">
+
+<mx:Style>
+	.titleStyle {
+		textAlign: center;	
+	}
+</mx:Style>
+
 <mx:Script>
 <![CDATA[
+	import vdom.events.FileManagerEvent;
+	import vdom.managers.FileManager;
+	import mx.resources.ResourceManager;
 import mx.core.IUITextField;
 import vdom.managers.DataManager;
 
@@ -12,7 +32,7 @@ import vdom.events.MultiLineWindowEvent;
 
 [Bindable]
 private var dataManager:DataManager = DataManager.getInstance();
-
+private var fileManager:FileManager = FileManager.getInstance();
 private static var wnd:MultiLineWindow;
 
 private var f_apply_flag:Boolean;
@@ -28,7 +48,7 @@ public static function show_window(title:String, attrVal:String, parent:DisplayO
 	}
 	
 	wnd.addEventListener(mx.events.CloseEvent.CLOSE, on_close_event)
-	wnd.title = title;
+//	wnd.title = title;
 	wnd.par = parent;
 	wnd.attributeValue = attrVal;
 	
@@ -46,6 +66,23 @@ private function init():void
 {
 	var tf:IUITextField = textAreaContainer.mx_internal::getTextField();
 	tf.alwaysShowSelection = true;
+	
+	fileManager.addEventListener(
+		FileManagerEvent.RESOURCE_LIST_LOADED, 
+		fileManager_resourceListLoaded
+	);
+	fileManager.getListResources();
+}
+
+private function fileManager_resourceListLoaded(event:FileManagerEvent):void
+{
+	fileManager.removeEventListener(
+		FileManagerEvent.RESOURCE_LIST_LOADED, 
+		fileManager_resourceListLoaded
+	);
+	
+	resourceList.dataProvider = event.result.Resources.*
+	resourceList.enabled = true;
 }
 
 private function ok_close_window():void
@@ -63,6 +100,7 @@ public function close_window():void
 {
 	if(f_apply_flag)
 		par.dispatchEvent(new MultiLineWindowEvent("apply", textAreaContainer.text));
+	resourceList.enabled = false;
 	dispatchEvent(new CloseEvent(mx.events.CloseEvent.CLOSE));
 }
 
@@ -75,20 +113,51 @@ public static function hide_window():void
 private static function on_close_event(event:CloseEvent):void
 {
 	if (wnd == null) return;
-	//App.set_so_prop("color_picker_window_mode", (wnd.mode << 8 | (wnd.mode == 0 ? wnd.sel_rgb: wnd.sel_hsb)).toString() );
-	//wnd.with_last_preved();
 	PopUpManager.removePopUp(wnd);
 	wnd = null;
 }
+
+private function insertPageLink():void
+{
+	var textFiled:TextField = textAreaContainer.mx_internal::getTextField();
+	var index:int = textFiled.selectionBeginIndex;
+	
+	textFiled.text = textFiled.text.substring(0, index) + "/" + XML(pageList.selectedItem).@ID + ".vdom" + textFiled.text.substring(index);
+	textFiled.setSelection(index, index);
+}
+
+private function insertResourceLink():void
+{
+	var textFiled:TextField = textAreaContainer.mx_internal::getTextField();
+	var index:int = textFiled.selectionBeginIndex;
+	
+	textFiled.text = textFiled.text.substring(0, index) + "#Res(" + XML(resourceList.selectedItem).@id + ")" + textFiled.text.substring(index);
+	textFiled.setSelection(index, index);
+}
+
 ]]>
 </mx:Script>
-	<mx:TextArea width="100%" height="100%" id="textAreaContainer" creationComplete="init();" text="{attributeValue}"/>
-	<mx:ControlBar horizontalAlign="right">
-		<mx:Label text="Pages"/>
-		<mx:ComboBox width="130" cornerRadius="0" dataProvider="{dataManager.listPages}" labelField="@Name"/>
-		<mx:Label text="Resources"/>
-		<mx:ComboBox width="130" cornerRadius="0"></mx:ComboBox>
-		<mx:Spacer width="100%"/>
-		<mx:Button label="Apply" cornerRadius="0" click="ok_close_window()"/>
-	</mx:ControlBar>
-</mx:TitleWindow>
+
+<mx:TextArea width="100%" height="100%" id="textAreaContainer" creationComplete="init();" text="{attributeValue}"/>
+
+<mx:ControlBar horizontalAlign="right"
+	paddingLeft="8" paddingRight="8" paddingBottom="5">
+	<mx:VBox horizontalAlign="right">
+		<mx:HBox>
+			<mx:Label text="Pages:"/>
+			<mx:ComboBox id="pageList"
+				width="130" cornerRadius="0" dataProvider="{dataManager.listPages}" labelField="@Name"/>
+			<mx:Button label="ok" cornerRadius="0" click="insertPageLink();"/>
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="Resources:"/>
+			<mx:ComboBox id="resourceList" labelField="@name"
+				width="130" cornerRadius="0" enabled="false"/>
+			<mx:Button label="ok" cornerRadius="0" click="insertResourceLink();"/>
+		</mx:HBox>
+	</mx:VBox>
+	<mx:Spacer width="100%"/>
+	<mx:Button label="Apply" cornerRadius="0" click="ok_close_window()" width="70" height="50"/>
+</mx:ControlBar>
+
+</ResizableTitleWindow>

@@ -1,62 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	layout="vertical"
-	close="closeHandler();"
-	showCloseButton="true"
-	title="Insert Link"
-	titleStyleName="titleStyle" height="160"
-	creationComplete="s();" xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*">
+	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*"
+	
+	width="400" height="160" 
+	layout="vertical" showCloseButton="true" title="Insert Link" titleStyleName="titleStyle" 
+	backgroundAlpha="1" borderAlpha="1" cornerRadius="0" 
+	
+	creationComplete="creationCompleteHandler();"
+	close="closeHandler();" >
 	
 <mx:Style>
 	.titleStyle {
 		textAlign: center;	
 	}
 </mx:Style>
+
 <mx:Script>
 	<![CDATA[
+		import vdom.managers.DataManager;
 		import mx.managers.PopUpManager;
 		
-		public function get url():String {
-			
-			return linkURL.text;
+		private var dataManager:DataManager = DataManager.getInstance();
+		private var currentValue:String;
+		
+		public function get url():String
+		{
+			return currentValue;
 		}
 		
-		private function s():void
+		private function closeWithSave():void
 		{
-			addEventListener(MouseEvent.MOUSE_DOWN, zzz, true);
-		}
-		private function closeHandler():void {
+			if(linkURL.enabled)
+			{
+				if(!linkURL.text)
+				{
+					closeHandler();
+					return;
+				}
+					
+				currentValue = "http://" + linkURL.text;
+			}
+			else
+			{
+				currentValue = "/"+XML(pageURL.selectedItem).@data+".vdom";
+			}
 				
+			dispatchEvent(new Event('linkSelected'));
+		}
+		
+		private function closeHandler():void
+		{
 			PopUpManager.removePopUp(this);
 		}
 		
-		private function closeWithSave():void {
-			
-			if(linkURL.text != '')
-				dispatchEvent(new Event('linkSelected'));
-			else
-				closeHandler();
-		}
-		private function zzz(event:MouseEvent):void
+		private function creationCompleteHandler():void
 		{
-			event.stopImmediatePropagation();
+			var dataProvider:XMLList =  new XMLList();
+			
+			var lp:XMLList = dataManager.listPages;
+			for each(var elem:XML in lp)
+			{
+				dataProvider += <element label={elem.@Name} data={elem.@ID} />
+			}
+			
+			pageURL.dataProvider = dataProvider;
 		}
 	]]>
 </mx:Script>
-	<mx:Form width="100%">
-		<mx:FormItem label="Link URL: " width="100%" horizontalAlign="right">
-			<richTextToolBarClasses:sTextInput id="linkURL" textAlign="left" width="250"/>
-		</mx:FormItem>
-		<mx:FormItem label="Pages List: " width="100%" horizontalAlign="right">
-			<mx:ComboBox width="250" cornerRadius="0"></mx:ComboBox>
-		</mx:FormItem>
-		<mx:FormItem horizontalAlign="right" direction="horizontal" width="100%">
-			<mx:Button label="Insert" cornerRadius="0" 
-				click="closeWithSave();"/>
-			<mx:Button label="Cancel" cornerRadius="0" 
-				click="closeHandler();"/>
-		</mx:FormItem>
-	</mx:Form>
+
+<mx:Form width="100%">
+
+	<mx:HBox width="100%"  label="Link URL" horizontalGap="0" verticalAlign="middle">
+		<mx:RadioButton label="Link URL" groupName="rGroup" selected="true" width="100%"
+			click="{
+				linkURL.enabled = true;
+				linkURL.setFocus();
+				pageURL.enabled = false;
+			}"/>
+		<mx:Label  text="http://" fontWeight="bold"/>
+		<mx:TextInput id="linkURL" width="200" fontWeight="bold" enabled="true"/>
+	</mx:HBox>
+	
+	<mx:HBox width="100%" label="Link URL:">
+		<mx:RadioButton label="Pages List" groupName="rGroup" width="100%"
+			click="{
+				linkURL.enabled = false;
+				pageURL.enabled = true;
+			}"/>
+		<mx:ComboBox id="pageURL"
+			labelField="@label"
+			cornerRadius="0" width="200" textAlign="left" enabled="false"/>
+	</mx:HBox>
+	
+	<mx:FormItem horizontalAlign="right" direction="horizontal" width="100%">
+		<mx:Button label="Insert" cornerRadius="0" 
+			click="closeWithSave();"/>
+		<mx:Button label="Cancel" cornerRadius="0" 
+			click="closeHandler();"/>
+	</mx:FormItem>
+</mx:Form>
 	
 </mx:TitleWindow>

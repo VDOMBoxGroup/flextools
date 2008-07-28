@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas 
+<mx:Canvas
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:applicationEditor="vdom.controls.applicationEditor.*"
 	
 	show="showHandler();"
-	hide="hideHandler();" >
+	hide="hideHandler();">
 	
 	<mx:Script source="includes/createApplication.as" />
 	
-	<applicationEditor:ApplicationEditor id="applicationEditor" horizontalCenter="0"/>
+	<mx:Style>
+		.zzz {
+			titleBackgroundSkin: Embed(source="vdomTheme.swf",symbol="PanelTitleBackground");
+			backgroundSize: "100%";	
+		}
+		.titleNamez {
+			textAlign: "center";
+			fontWeight: "bold";			
+		}
+	</mx:Style>
+	<mx:Panel 
+		title="CREATE APPLICATION"
+		
+		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
+		borderAlpha="1"
+		color="#FFFFFF" left="15" top="15" width="500" height="400" shadowDirection="right" layout="absolute">
+		
+		<applicationEditor:ApplicationEditor id="applicationEditor" left="20" top="20"/>
+	</mx:Panel>
 </mx:Canvas>
