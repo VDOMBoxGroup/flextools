@@ -530,15 +530,10 @@ public class AttributesPanel extends ClosablePanel {
 					var d:* = "";
 					var resId:String = String(codeInterface["value"]).split(",")[1];
 					
-					/* valueContainer = new ExternalEditorButton(
+					valueContainer = new ExternalEditorButton(
 						dataManager.currentApplicationId, 
 						objectDescription.@ID,
-						resId);  */
-						
-					valueContainer = new ExternalEditorButton(
-						"58a4358d-2dce-4bd3-ace9-62a72316d84d", 
-						"d80c2af8-312c-43d3-bb1a-518f07cf698b",
-						"192ae814-2258-481c-aaf9-c9a59aa0165c"); 
+						resId);  
 					
 					valueContainer.minWidth = 110;
 					valueContainer.percentWidth = 100;

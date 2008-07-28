@@ -20,7 +20,7 @@
 </mx:Canvas>
 
 <mx:VBox id="components"
-	width="100%" height="100%" verticalGap="7" >
+	width="100%" height="100%" verticalGap="7">
 			
 	<controls:ControlPanel 
 		width="100%" height="104"
