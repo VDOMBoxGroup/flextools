@@ -62,6 +62,7 @@ public class LanguageManager extends EventDispatcher
 				load: "Load",
 				
 				// titles
+				graph_editor: "Graph Editor",
 				confirmation:"Confirmation",					
 				error:"Error",
 				warning:"Warning",
@@ -91,6 +92,7 @@ public class LanguageManager extends EventDispatcher
 				menu_file:"_File",
 				menu_new_template:"_New Template",
 				menu_new_tab:"New _Tab",
+				menu_new_category:"New Ca_tegory",
 				menu_open_file:"_Open File...",
 				menu_close:"_Close",
 				menu_save:"_Save",

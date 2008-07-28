@@ -31,7 +31,7 @@
         <root> 
 	        <menuitem label="{LanguageManager.sentences.menu_file}" id="file">
 	            <menuitem label="{LanguageManager.sentences.menu_new_template}" id="new" keyEquivalent="n" ctrlKey="true"/>
-	            <menuitem label="{LanguageManager.sentences.menu_new_tab}" id="new_tab" keyEquivalent="t" ctrlKey="true"/>
+	            <menuitem label="{LanguageManager.sentences.menu_new_category}" id="new_category" keyEquivalent="t" ctrlKey="true"/>
 	            <menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file" keyEquivalent="." ctrlKey="true"/>
 	            <menuitem type="separator" id="separator"/>
 	            <menuitem label="{LanguageManager.sentences.menu_close}" id="close" keyEquivalent="w" ctrlKey="true"/>
@@ -411,9 +411,9 @@
 	                workStage.visible = true;
 	                workStage.includeInLayout = true;    				
                 }
-                else if(event.item.@id == "new_tab")
+                else if(event.item.@id == "new_category")
                 {
-                	EditCaption.show("New tab", onTabDialogClose);
+                	EditCaption.show("New category", onCatDialogClose);
                 }
                 else if(event.item.@id == "open_file")
                 {		
@@ -807,7 +807,7 @@
 				}
             }
             
-            private function onTabDialogClose(event:Event):void
+            private function onCatDialogClose(event:Event):void
             {            	
             	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
             	{
@@ -888,7 +888,10 @@
             	
             	if(file.isDirectory)
             		return;
-            		            	
+            		          
+            	if(!file.extension || file.extension.toLowerCase() != 'xml')            	
+            		file.url = FileUtils.pathToUrl(file.nativePath+'.xml');            		
+            	  	
 				ProgressManager.source = fileStream;
 				ProgressManager.start();
 				            		            	
@@ -930,7 +933,7 @@
 			</panel:Graphs>
 			
 			<mx:Panel creationIndex="1" width="100%" height="100%" layout="absolute" 
-				title="{LanguageManager.instance._languageXML.designpanel.title}" backgroundAlpha="0.5">
+				title="{LanguageManager.sentences.graph_editor}" backgroundAlpha="0.5">
 				
 				<mx:VDividedBox height="100%" width="100%">
 				

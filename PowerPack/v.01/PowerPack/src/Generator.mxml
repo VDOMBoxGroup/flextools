@@ -822,6 +822,7 @@
     		private function launchApp():void
     		{
     			var url:String = txtVHName.text;
+    			url = /^http:\/\/.*/i.test(url) ? url : 'http://' + url;
             	var request:URLRequest = new URLRequest(url);
             	//var variables:URLVariables = new URLVariables();
             	//variables.exampleSessionId = new Date().getTime();

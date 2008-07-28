@@ -1,582 +1,408 @@
 <template>
-<structure>
-  <graph name="SampleApplication" initial="false" category="application">
-    <states>
-      <state name="GraphNode677" type="Initial" category="Normal" enabled="true" x="44" y="41">
-        <text>&lt;?xml version="1.0" ?&gt;</text>
-      </state>
-      <state name="GraphNode712" type="Normal" category="Normal" enabled="true" x="144" y="151">
-        <text>&lt;Information&gt;</text>
-      </state>
-      <state name="GraphNode721" type="Normal" category="Normal" enabled="true" x="146" y="235">
-        <text>&lt;/Information&gt;</text>
-      </state>
-      <state name="GraphNode803" type="Normal" category="Subgraph" enabled="true" x="150" y="295">
-        <text>Objects</text>
-      </state>
-      <state name="GraphNode316" type="Normal" category="Normal" enabled="true" x="101" y="429">
-        <text>&lt;/Application&gt;</text>
-      </state>
-      <state name="GraphNode826" type="Normal" category="Subgraph" enabled="true" x="154" y="355">
-        <text>Structure</text>
-      </state>
-      <state name="GraphNode305" type="Normal" category="Normal" enabled="true" x="93" y="84">
-        <text>&lt;Application&gt;</text>
-      </state>
-    </states>
-    <transitions>
-      <transition name="GraphArrow848" highlight="false" enabled="true" source="GraphNode677" destination="GraphNode305">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow847" highlight="false" enabled="true" source="GraphNode305" destination="GraphNode712">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow846" highlight="false" enabled="true" source="GraphNode721" destination="GraphNode803">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow845" highlight="false" enabled="true" source="GraphNode803" destination="GraphNode826">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow844" highlight="false" enabled="true" source="GraphNode826" destination="GraphNode316">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow843" highlight="false" enabled="true" source="GraphNode712" destination="GraphNode721">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-    </transitions>
-  </graph>
-  <graph name="Objects" initial="false" category="application">
-    <states>
-      <state name="GraphNode838" type="Initial" category="Normal" enabled="true" x="83" y="132">
-        <text>&lt;Objects&gt;</text>
-      </state>
-      <state name="GraphNode846" type="Normal" category="Normal" enabled="true" x="86" y="268">
-        <text>&lt;/Objects&gt;</text>
-      </state>
-    </states>
-    <transitions>
-      <transition name="GraphArrow865" highlight="false" enabled="true" source="GraphNode838" destination="GraphNode846">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-    </transitions>
-  </graph>
-  <graph name="Structure" initial="false" category="application">
-    <states>
-      <state name="GraphNode868" type="Normal" category="Normal" enabled="true" x="41" y="245">
-        <text>&lt;/Structure&gt;</text>
-      </state>
-      <state name="GraphNode860" type="Initial" category="Normal" enabled="true" x="36" y="52">
-        <text>&lt;Structure&gt;</text>
-      </state>
-    </states>
-    <transitions>
-      <transition name="GraphArrow882" highlight="false" enabled="true" source="GraphNode860" destination="GraphNode868">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-    </transitions>
-  </graph>
-  <graph name="GUID" initial="true" category="resources">
-    <states>
-      <state name="GraphNode2240" type="Normal" category="Command" enabled="true" x="151" y="176">
-        <text>$cpt=0</text>
-      </state>
-      <state name="GraphNode3086" type="Normal" category="Command" enabled="true" x="329" y="232">
-        <text>$cpt==$seq2</text>
-      </state>
-      <state name="GraphNode2488" type="Normal" category="Command" enabled="true" x="291" y="174">
-        <text>$cpt=0</text>
-      </state>
-      <state name="GraphNode2354" type="Normal" category="Command" enabled="true" x="94" y="219">
-        <text>$cpt==$seq1</text>
-      </state>
-      <state name="GraphNode2370" type="Normal" category="Command" enabled="true" x="9" y="283">
-        <text>$cpt=$cpt+1</text>
-      </state>
-      <state name="GraphNode1525" type="Initial" category="Command" enabled="true" x="131" y="99">
-        <text>$seq1=8;$seq2=4;$seq3=4;$seq4=4;$seq5=12</text>
-      </state>
-      <state name="GraphNode3393" type="Normal" category="Normal" enabled="true" x="233" y="190">
-        <text>\--</text>
-      </state>
-      <state name="GraphNode3338" type="Normal" category="Subgraph" enabled="true" x="352" y="367">
-        <text>GetRandomChar</text>
-      </state>
-      <state name="GraphNode3452" type="Normal" category="Command" enabled="true" x="583" y="236">
-        <text>$cpt==$seq3</text>
-      </state>
-      <state name="GraphNode3124" type="Normal" category="Command" enabled="true" x="254" y="284">
-        <text>$cpt=$cpt+1</text>
-      </state>
-      <state name="GraphNode3752" type="Normal" category="Subgraph" enabled="true" x="597" y="373">
-        <text>GetRandomChar</text>
-      </state>
-      <state name="GraphNode3010" type="Normal" category="Normal" enabled="true" x="448" y="186">
-        <text>\--</text>
-      </state>
-      <state name="GraphNode3403" type="Normal" category="Command" enabled="true" x="536" y="180">
-        <text>$cpt=0</text>
-      </state>
-      <state name="GraphNode4120" type="Normal" category="Command" enabled="true" x="791" y="238">
-        <text>$cpt==$seq4</text>
-      </state>
-      <state name="GraphNode3470" type="Normal" category="Command" enabled="true" x="502" y="287">
-        <text>$cpt=$cpt+1</text>
-      </state>
-      <state name="GraphNode4150" type="Normal" category="Command" enabled="true" x="715" y="285">
-        <text>$cpt=$cpt+1</text>
-      </state>
-      <state name="GraphNode4442" type="Normal" category="Subgraph" enabled="true" x="820" y="374">
-        <text>GetRandomChar</text>
-      </state>
-      <state name="GraphNode3786" type="Normal" category="Normal" enabled="true" x="715" y="182">
-        <text>\--</text>
-      </state>
-      <state name="GraphNode4079" type="Normal" category="Command" enabled="true" x="800" y="174">
-        <text>$cpt=0</text>
-      </state>
-      <state name="GraphNode4767" type="Normal" category="Command" enabled="true" x="1033" y="174">
-        <text>$cpt=0</text>
-      </state>
-      <state name="GraphNode4800" type="Normal" category="Command" enabled="true" x="1034" y="240">
-        <text>$cpt==$seq5</text>
-      </state>
-      <state name="GraphNode4825" type="Normal" category="Command" enabled="true" x="950" y="288">
-        <text>$cpt=$cpt+1</text>
-      </state>
-      <state name="GraphNode5131" type="Normal" category="Subgraph" enabled="true" x="1058" y="373">
-        <text>GetRandomChar</text>
-      </state>
-      <state name="GraphNode4477" type="Normal" category="Normal" enabled="true" x="945" y="172">
-        <text>\--</text>
-      </state>
-      <state name="GraphNode5154" type="Normal" category="Normal" enabled="true" x="1179" y="241">
-        <text>\-</text>
-      </state>
-      <state name="GraphNode2398" type="Normal" category="Subgraph" enabled="true" x="89" y="370">
-        <text>GetRandomChar</text>
-      </state>
-    </states>
-    <transitions>
-      <transition name="GraphArrow1096" highlight="false" enabled="true" source="GraphNode4800" destination="GraphNode5154">
-        <label>true</label>
-        <data>true</data>
-      </transition>
-      <transition name="GraphArrow1095" highlight="false" enabled="true" source="GraphNode5131" destination="GraphNode4800">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1094" highlight="false" enabled="true" source="GraphNode4825" destination="GraphNode5131">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1093" highlight="false" enabled="true" source="GraphNode4800" destination="GraphNode4825">
-        <label>false</label>
-        <data>false</data>
-      </transition>
-      <transition name="GraphArrow1092" highlight="false" enabled="true" source="GraphNode4767" destination="GraphNode4800">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1091" highlight="false" enabled="true" source="GraphNode4477" destination="GraphNode4767">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1090" highlight="false" enabled="true" source="GraphNode4120" destination="GraphNode4477">
-        <label>true</label>
-        <data>true</data>
-      </transition>
-      <transition name="GraphArrow1089" highlight="false" enabled="true" source="GraphNode4442" destination="GraphNode4120">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1088" highlight="false" enabled="true" source="GraphNode4150" destination="GraphNode4442">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1087" highlight="false" enabled="true" source="GraphNode4120" destination="GraphNode4150">
-        <label>false</label>
-        <data>false</data>
-      </transition>
-      <transition name="GraphArrow1086" highlight="false" enabled="true" source="GraphNode4079" destination="GraphNode4120">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1085" highlight="false" enabled="true" source="GraphNode3786" destination="GraphNode4079">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1084" highlight="false" enabled="true" source="GraphNode3452" destination="GraphNode3786">
-        <label>true</label>
-        <data>true</data>
-      </transition>
-      <transition name="GraphArrow1083" highlight="false" enabled="true" source="GraphNode3752" destination="GraphNode3452">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1082" highlight="false" enabled="true" source="GraphNode3470" destination="GraphNode3752">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1081" highlight="false" enabled="true" source="GraphNode3452" destination="GraphNode3470">
-        <label>false</label>
-        <data>false</data>
-      </transition>
-      <transition name="GraphArrow1080" highlight="false" enabled="true" source="GraphNode3403" destination="GraphNode3452">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1079" highlight="false" enabled="true" source="GraphNode3010" destination="GraphNode3403">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1078" highlight="false" enabled="true" source="GraphNode3086" destination="GraphNode3010">
-        <label>true</label>
-        <data>true</data>
-      </transition>
-      <transition name="GraphArrow1077" highlight="false" enabled="true" source="GraphNode2488" destination="GraphNode3086">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1076" highlight="false" enabled="true" source="GraphNode2398" destination="GraphNode2354">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1075" highlight="false" enabled="true" source="GraphNode2354" destination="GraphNode2370">
-        <label>false</label>
-        <data>false</data>
-      </transition>
-      <transition name="GraphArrow1074" highlight="false" enabled="true" source="GraphNode3393" destination="GraphNode2488">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1073" highlight="false" enabled="true" source="GraphNode2354" destination="GraphNode3393">
-        <label>true</label>
-        <data>true</data>
-      </transition>
-      <transition name="GraphArrow1072" highlight="false" enabled="true" source="GraphNode3338" destination="GraphNode3086">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1071" highlight="false" enabled="true" source="GraphNode3124" destination="GraphNode3338">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1070" highlight="false" enabled="true" source="GraphNode3086" destination="GraphNode3124">
-        <label>false</label>
-        <data>false</data>
-      </transition>
-      <transition name="GraphArrow1069" highlight="false" enabled="true" source="GraphNode2240" destination="GraphNode2354">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1068" highlight="false" enabled="true" source="GraphNode2370" destination="GraphNode2398">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1067" highlight="false" enabled="true" source="GraphNode1525" destination="GraphNode2240">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-    </transitions>
-  </graph>
-  <graph name="GetRandomChar" initial="false" category="resources">
-    <states>
-      <state name="GraphNode2291" type="Normal" category="Normal" enabled="true" x="28" y="228">
-        <text>0</text>
-      </state>
-      <state name="GraphNode2299" type="Normal" category="Normal" enabled="true" x="74" y="228">
-        <text>1</text>
-      </state>
-      <state name="GraphNode2309" type="Normal" category="Normal" enabled="true" x="126" y="229">
-        <text>2</text>
-      </state>
-      <state name="GraphNode2318" type="Normal" category="Normal" enabled="true" x="173" y="229">
-        <text>3</text>
-      </state>
-      <state name="GraphNode2542" type="Normal" category="Normal" enabled="true" x="222" y="229">
-        <text>4</text>
-      </state>
-      <state name="GraphNode2550" type="Normal" category="Normal" enabled="true" x="264" y="229">
-        <text>5</text>
-      </state>
-      <state name="GraphNode2558" type="Normal" category="Normal" enabled="true" x="309" y="229">
-        <text>6</text>
-      </state>
-      <state name="GraphNode2566" type="Normal" category="Normal" enabled="true" x="351" y="229">
-        <text>7</text>
-      </state>
-      <state name="GraphNode2575" type="Normal" category="Normal" enabled="true" x="394" y="229">
-        <text>8</text>
-      </state>
-      <state name="GraphNode2583" type="Normal" category="Normal" enabled="true" x="437" y="229">
-        <text>9</text>
-      </state>
-      <state name="GraphNode2591" type="Normal" category="Normal" enabled="true" x="480" y="229">
-        <text>a</text>
-      </state>
-      <state name="GraphNode2622" type="Normal" category="Normal" enabled="true" x="521" y="229">
-        <text>b</text>
-      </state>
-      <state name="GraphNode2630" type="Normal" category="Normal" enabled="true" x="564" y="229">
-        <text>c</text>
-      </state>
-      <state name="GraphNode2638" type="Normal" category="Normal" enabled="true" x="605" y="230">
-        <text>d</text>
-      </state>
-      <state name="GraphNode2646" type="Normal" category="Normal" enabled="true" x="646" y="231">
-        <text>e</text>
-      </state>
-      <state name="GraphNode2709" type="Normal" category="Normal" enabled="true" x="688" y="232">
-        <text>f</text>
-      </state>
-      <state name="GraphNode2283" type="Initial" category="Normal" enabled="true" x="671" y="60">
-        <text>\-</text>
-      </state>
-    </states>
-    <transitions>
-      <transition name="GraphArrow1393" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2669">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1392" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2877">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1391" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2869">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1390" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2861">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1389" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2853">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1388" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2845">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1387" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2837">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1386" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2829">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1385" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2821">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1384" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2813">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1383" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2805">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1382" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2797">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1381" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2789">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1380" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2781">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1379" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2757">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1378" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2749">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1377" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2741">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1376" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2733">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1375" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2725">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1374" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2717">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1373" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2709">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1372" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2646">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1371" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2638">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1370" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2630">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1369" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2622">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1368" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2591">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1367" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2583">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1366" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2575">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1365" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2566">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1364" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2558">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1363" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2550">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1362" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2542">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1361" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2318">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1360" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2309">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1359" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2299">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1358" highlight="false" enabled="true" source="GraphNode2283" destination="GraphNode2291">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-    </transitions>
-  </graph>
-  <graph name="HTMLContainer" initial="false" category="container">
-    <states>
-      <state name="GraphNode5571" type="Normal" category="Normal" enabled="true" x="61" y="205">
-        <text>&lt;Object ID="$GUID" Name="$ObjectName" Type="81d947af-1548-4a96-a1e0-d8a4c67c6ec2"&gt;</text>
-      </state>
-      <state name="GraphNode2336" type="Normal" category="Normal" enabled="true" x="81" y="246">
-        <text>&lt;Attributes&gt;</text>
-      </state>
-      <state name="GraphNode2347" type="Normal" category="Normal" enabled="true" x="85" y="361">
-        <text>&lt;/Attributes&gt;</text>
-      </state>
-      <state name="GraphNode2327" type="Normal" category="Normal" enabled="true" x="156" y="314">
-        <text>&lt;Attribute Name="visible"&gt;$visible&lt;/Attribute&gt;</text>
-      </state>
-      <state name="GraphNode2316" type="Normal" category="Normal" enabled="true" x="159" y="276">
-        <text>&lt;Attribute Name="title"&gt;$Title&lt;/Attribute&gt;</text>
-      </state>
-      <state name="GraphNode5579" type="Initial" category="Command" enabled="true" x="66" y="31">
-        <text>$GUID=[sub GUID]</text>
-      </state>
-      <state name="GraphNode5630" type="Normal" category="Normal" enabled="true" x="166" y="454">
-        <text>$SubObjects</text>
-      </state>
-      <state name="GraphNode2438" type="Normal" category="Normal" enabled="true" x="111" y="407">
-        <text>&lt;Objects&gt;</text>
-      </state>
-      <state name="GraphNode2471" type="Normal" category="Normal" enabled="true" x="118" y="510">
-        <text>&lt;/Objects&gt;</text>
-      </state>
-      <state name="GraphNode5622" type="Normal" category="Normal" enabled="true" x="86" y="561">
-        <text>&lt;/Object&gt;</text>
-      </state>
-      <state name="GraphNode2388" type="Normal" category="Command" enabled="true" x="134" y="82">
-        <text>$ObjectName==""</text>
-      </state>
-      <state name="GraphNode2487" type="Normal" category="Normal" enabled="true" x="294" y="117">
-        <text>$ObjectName="HTMLContainer"</text>
-      </state>
-    </states>
-    <transitions>
-      <transition name="GraphArrow1491" highlight="false" enabled="true" source="GraphNode5571" destination="GraphNode2336">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1490" highlight="false" enabled="true" source="GraphNode2336" destination="GraphNode2316">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1489" highlight="false" enabled="true" source="GraphNode2316" destination="GraphNode2327">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1488" highlight="false" enabled="true" source="GraphNode2327" destination="GraphNode2347">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1487" highlight="false" enabled="true" source="GraphNode2347" destination="GraphNode2438">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1486" highlight="false" enabled="true" source="GraphNode2438" destination="GraphNode5630">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1485" highlight="false" enabled="true" source="GraphNode5630" destination="GraphNode2471">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1484" highlight="false" enabled="true" source="GraphNode2471" destination="GraphNode5622">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1483" highlight="false" enabled="true" source="GraphNode5579" destination="GraphNode2388">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1482" highlight="false" enabled="true" source="GraphNode2388" destination="GraphNode2487">
-        <label>true</label>
-        <data>true</data>
-      </transition>
-      <transition name="GraphArrow1481" highlight="false" enabled="true" source="GraphNode2487" destination="GraphNode5571">
-        <label>null</label>
-        <data>null</data>
-      </transition>
-      <transition name="GraphArrow1480" highlight="false" enabled="true" source="GraphNode2388" destination="GraphNode5571">
-        <label>false</label>
-        <data>false</data>
-      </transition>
-    </transitions>
-  </graph>
- </structure>
+  <structure>
+    <graph name="SampleApplication" initial="false" category="application">
+      <states>
+        <state name="GraphNode677" type="Initial" category="Normal" enabled="true" breakpoint="false" x="293" y="9">
+          <text>&lt;?xml version="1.0" ?&gt;</text>
+        </state>
+        <state name="GraphNode305" type="Normal" category="Normal" enabled="true" breakpoint="false" x="317" y="49">
+          <text>&lt;Application&gt;</text>
+        </state>
+        <state name="GraphNode712" type="Normal" category="Normal" enabled="true" breakpoint="false" x="312" y="91">
+          <text>&lt;Information&gt;</text>
+        </state>
+        <state name="Node1992" type="Normal" category="Command" enabled="true" breakpoint="false" x="124" y="325">
+          <text>$Description = 'VDOM XML File Data ...'</text>
+        </state>
+        <state name="GraphNode803" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="347" y="622">
+          <text>Objects</text>
+        </state>
+        <state name="GraphNode826" type="Normal" category="Subgraph" enabled="true" breakpoint="false" x="344" y="663">
+          <text>Structure</text>
+        </state>
+        <state name="GraphNode721" type="Normal" category="Normal" enabled="true" breakpoint="false" x="328" y="487">
+          <text>&lt;/Information&gt;</text>
+        </state>
+        <state name="GraphNode316" type="Terminal" category="Normal" enabled="true" breakpoint="false" x="327" y="740">
+          <text>&lt;/Application&gt;</text>
+        </state>
+        <state name="Node1856" type="Normal" category="Normal" enabled="true" breakpoint="false" x="252" y="700">
+          <text>&lt;Resources&gt;$ResourcesSection&lt;/Resources&gt;</text>
+        </state>
+        <state name="Node2000" type="Normal" category="Normal" enabled="true" breakpoint="false" x="229" y="368">
+          <text>&lt;Description&gt;&lt;![CDATA[$Description]]&gt;&lt;/Description&gt;</text>
+        </state>
+        <state name="Node1927" type="Normal" category="Normal" enabled="true" breakpoint="false" x="299" y="207">
+          <text>&lt;Active&gt;1&lt;/Active&gt;</text>
+        </state>
+        <state name="Node55981" type="Normal" category="Command" enabled="true" breakpoint="false" x="324" y="409">
+          <text>$Index = [GUID]</text>
+        </state>
+        <state name="Node2988" type="Normal" category="Command" enabled="true" breakpoint="false" x="319" y="130">
+          <text>$id = [GUID]</text>
+        </state>
+        <state name="Node2952" type="Normal" category="Normal" enabled="true" breakpoint="false" x="315" y="167">
+          <text>&lt;ID&gt;$id&lt;/ID&gt;</text>
+        </state>
+        <state name="Node5617" type="Normal" category="Normal" enabled="true" breakpoint="false" x="302" y="448">
+          <text>&lt;Index&gt;$Index&lt;/Index&gt;</text>
+        </state>
+        <state name="Node1982" type="Normal" category="Command" enabled="true" breakpoint="false" x="321" y="285">
+          <text>$Rep=='Yes'</text>
+        </state>
+        <state name="Node1811" type="Normal" category="Command" enabled="true" breakpoint="false" x="261" y="575">
+          <text>$ResourcesSection = ''; $StructureList = '[]';</text>
+        </state>
+        <state name="Node1936" type="Normal" category="Command" enabled="true" breakpoint="false" x="160" y="244">
+          <text>$Rep = [question 'Do you want to personalize the Application Description?' 'Yes,No']</text>
+        </state>
+        <state name="Node2072" type="Normal" category="Command" enabled="true" breakpoint="false" x="356" y="321">
+          <text>$Description = [question 'Describe application:' '*']</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector2745" highlighted="false" enabled="true" source="Node1856" destination="GraphNode316"/>
+        <transition name="Connector2744" highlighted="false" enabled="true" source="GraphNode826" destination="Node1856"/>
+        <transition name="Connector2743" highlighted="false" enabled="true" source="Node1811" destination="GraphNode803"/>
+        <transition name="Connector2742" highlighted="false" enabled="true" source="GraphNode721" destination="Node1811"/>
+        <transition name="Connector2741" highlighted="false" enabled="true" source="Node5617" destination="GraphNode721"/>
+        <transition name="Connector2740" highlighted="false" enabled="true" source="GraphNode803" destination="GraphNode826"/>
+        <transition name="Connector2739" highlighted="false" enabled="true" source="GraphNode305" destination="GraphNode712"/>
+        <transition name="Connector2738" highlighted="false" enabled="true" source="GraphNode677" destination="GraphNode305"/>
+        <transition name="Connector2737" highlighted="false" enabled="true" source="Node1927" destination="Node1936"/>
+        <transition name="Connector2736" highlighted="false" enabled="true" source="Node1936" destination="Node1982"/>
+        <transition name="Connector2735" highlighted="false" enabled="true" source="Node1982" destination="Node1992">
+          <label>false</label>
+        </transition>
+        <transition name="Connector2734" highlighted="false" enabled="true" source="Node1982" destination="Node2072">
+          <label>true</label>
+        </transition>
+        <transition name="Connector2733" highlighted="false" enabled="true" source="Node1992" destination="Node2000"/>
+        <transition name="Connector2732" highlighted="false" enabled="true" source="Node2072" destination="Node2000"/>
+        <transition name="Connector2731" highlighted="false" enabled="true" source="Node2000" destination="Node55981"/>
+        <transition name="Connector2730" highlighted="false" enabled="true" source="Node55981" destination="Node5617"/>
+        <transition name="Connector2729" highlighted="false" enabled="true" source="GraphNode712" destination="Node2988"/>
+        <transition name="Connector2728" highlighted="false" enabled="true" source="Node2988" destination="Node2952"/>
+        <transition name="Connector2727" highlighted="false" enabled="true" source="Node2952" destination="Node1927"/>
+      </transitions>
+    </graph>
+    <graph name="HTMLContainer" initial="false" category="container">
+      <states>
+        <state name="GraphNode5630" type="Normal" category="Normal" enabled="true" breakpoint="false" x="166" y="454">
+          <text>$SubObjects</text>
+        </state>
+        <state name="GraphNode2471" type="Normal" category="Normal" enabled="true" breakpoint="false" x="118" y="510">
+          <text>&lt;/Objects&gt;</text>
+        </state>
+        <state name="GraphNode5622" type="Normal" category="Normal" enabled="true" breakpoint="false" x="86" y="561">
+          <text>&lt;/Object&gt;</text>
+        </state>
+        <state name="GraphNode2487" type="Normal" category="Command" enabled="true" breakpoint="false" x="294" y="117">
+          <text>$ObjectName="HTMLContainer"</text>
+        </state>
+        <state name="GraphNode2336" type="Normal" category="Normal" enabled="true" breakpoint="false" x="81" y="246">
+          <text>&lt;Attributes&gt;\n</text>
+        </state>
+        <state name="GraphNode2316" type="Normal" category="Normal" enabled="true" breakpoint="false" x="159" y="276">
+          <text>&lt;Attribute Name="title"&gt;$Title&lt;/Attribute&gt;\n</text>
+        </state>
+        <state name="GraphNode2327" type="Normal" category="Normal" enabled="true" breakpoint="false" x="156" y="314">
+          <text>&lt;Attribute Name="visible"&gt;$visible&lt;/Attribute&gt;\n</text>
+        </state>
+        <state name="GraphNode2347" type="Normal" category="Normal" enabled="true" breakpoint="false" x="85" y="361">
+          <text>&lt;/Attributes&gt;\n</text>
+        </state>
+        <state name="GraphNode2438" type="Normal" category="Normal" enabled="true" breakpoint="false" x="111" y="407">
+          <text>&lt;Objects&gt;\n</text>
+        </state>
+        <state name="GraphNode5579" type="Initial" category="Command" enabled="true" breakpoint="false" x="66" y="31">
+          <text>$GUID=[sub GUID]</text>
+        </state>
+        <state name="GraphNode2388" type="Normal" category="Command" enabled="true" breakpoint="false" x="134" y="82">
+          <text>$ObjectName==null</text>
+        </state>
+        <state name="GraphNode5571" type="Normal" category="Normal" enabled="true" breakpoint="false" x="20" y="176">
+          <text>&lt;Object ID="$GUID" Name="$ObjectName" Type="81d947af-1548-4a96-a1e0-d8a4c67c6ec2"&gt;\n</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector2894" highlighted="false" enabled="true" source="GraphNode2388" destination="GraphNode5571">
+          <label>true</label>
+        </transition>
+        <transition name="Connector2893" highlighted="false" enabled="true" source="GraphNode2487" destination="GraphNode5571"/>
+        <transition name="Connector2892" highlighted="false" enabled="true" source="GraphNode2388" destination="GraphNode2487">
+          <label>false</label>
+        </transition>
+        <transition name="Connector2891" highlighted="false" enabled="true" source="GraphNode5579" destination="GraphNode2388"/>
+        <transition name="Connector2890" highlighted="false" enabled="true" source="GraphNode2471" destination="GraphNode5622"/>
+        <transition name="Connector2889" highlighted="false" enabled="true" source="GraphNode5630" destination="GraphNode2471"/>
+        <transition name="Connector2888" highlighted="false" enabled="true" source="GraphNode2438" destination="GraphNode5630"/>
+        <transition name="Connector2887" highlighted="false" enabled="true" source="GraphNode2347" destination="GraphNode2438"/>
+        <transition name="Connector2886" highlighted="false" enabled="true" source="GraphNode2327" destination="GraphNode2347"/>
+        <transition name="Connector2885" highlighted="false" enabled="true" source="GraphNode2316" destination="GraphNode2327"/>
+        <transition name="Connector2884" highlighted="false" enabled="true" source="GraphNode2336" destination="GraphNode2316"/>
+        <transition name="Connector2883" highlighted="false" enabled="true" source="GraphNode5571" destination="GraphNode2336"/>
+      </transitions>
+    </graph>
+    <graph name="Image" initial="false" category="container">
+      <states>
+        <state name="GraphNode2529" type="Normal" category="Normal" enabled="true" breakpoint="false" x="7" y="170">
+          <text>&lt;Object Type="0d36c35d-9508-440f-bfec-668f3db8cfeb" ID="606d6890-3967-4ba1-aba8-1fa68a5b31ec" Name="object_606d6890_3967_4ba1_aba8_1fa68a5b31ec"&gt;</text>
+        </state>
+        <state name="GraphNode2551" type="Normal" category="Command" enabled="true" breakpoint="false" x="112" y="95">
+          <text>$GUID=[GUID]</text>
+        </state>
+      </states>
+      <transitions/>
+    </graph>
+    <graph name="Text" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="Bar" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="Button" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="HTML" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="Sensitive" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="Menu" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="Richtext" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="Copy" initial="false" category="container">
+      <states/>
+      <transitions/>
+    </graph>
+    <graph name="Resource" initial="false" category="resources">
+      <states>
+        <state name="Node2149" type="Initial" category="Normal" enabled="true" breakpoint="false" x="244" y="107">
+          <text>&lt;Resource Type="$param1" ID="$param2" Name="$param3"&gt;</text>
+        </state>
+        <state name="Node2158" type="Normal" category="Normal" enabled="true" breakpoint="false" x="341" y="168">
+          <text>&lt;![CDATA[$param4]]&gt;</text>
+        </state>
+        <state name="Node2180" type="Terminal" category="Normal" enabled="true" breakpoint="false" x="365" y="220">
+          <text>&lt;/Resource&gt;</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector2985" highlighted="false" enabled="true" source="Node2149" destination="Node2158"/>
+        <transition name="Connector2984" highlighted="false" enabled="true" source="Node2158" destination="Node2180"/>
+      </transitions>
+    </graph>
+    <graph name="Objects" initial="false" category="application">
+      <states>
+        <state name="Node2380" type="Initial" category="Normal" enabled="true" breakpoint="false" x="35" y="35">
+          <text>&lt;Objects/&gt;</text>
+        </state>
+      </states>
+      <transitions/>
+    </graph>
+    <graph name="Structure" initial="true" category="application">
+      <states>
+        <state name="Node2448" type="Initial" category="Command" enabled="true" breakpoint="false" x="21" y="14">
+          <text>$StructureList = '[]'</text>
+        </state>
+        <state name="Node4140" type="Normal" category="Command" enabled="true" breakpoint="false" x="22" y="229">
+          <text>$StructureList = [addStructure $Obj_01 $Obj_02 0 $StructureList]</text>
+        </state>
+        <state name="Node4047" type="Normal" category="Command" enabled="true" breakpoint="false" x="25" y="271">
+          <text>$StructureList = [addStructure $Obj_01 $Obj_03 0 $StructureList]</text>
+        </state>
+        <state name="Node4062" type="Normal" category="Command" enabled="true" breakpoint="false" x="27" y="313">
+          <text>$StructureList = [addStructure $Obj_01 $Obj_04 0 $StructureList]</text>
+        </state>
+        <state name="Node4077" type="Normal" category="Command" enabled="true" breakpoint="false" x="24" y="372">
+          <text>$StructureList = [addStructure $Obj_02 $Obj_01 0 $StructureList]</text>
+        </state>
+        <state name="Node3640" type="Normal" category="Command" enabled="true" breakpoint="false" x="22" y="413">
+          <text>$StructureList = [addStructure $Obj_02 $Obj_03 0 $StructureList]</text>
+        </state>
+        <state name="Node5579" type="Normal" category="Command" enabled="true" breakpoint="false" x="33" y="522">
+          <text>$i = [length $StructureList]</text>
+        </state>
+        <state name="Node5598" type="Normal" category="Command" enabled="true" breakpoint="false" x="79" y="569">
+          <text>$i&gt;0</text>
+        </state>
+        <state name="Node5612" type="Normal" category="Command" enabled="true" breakpoint="false" x="153" y="609">
+          <text>$TopLevelList = [get $i $StructureList]</text>
+        </state>
+        <state name="Node5706" type="Normal" category="Command" enabled="true" breakpoint="false" x="157" y="697">
+          <text>$LevelLinkList = [get 2 $TopLevelList]</text>
+        </state>
+        <state name="Node5692" type="Normal" category="Command" enabled="true" breakpoint="false" x="154" y="653">
+          <text>$ObjectSrcList = [get 1 $TopLevelList]</text>
+        </state>
+        <state name="Node4180" type="Normal" category="Command" enabled="true" breakpoint="false" x="46" y="62">
+          <text>$Obj_01 = [sub StructureObject null 10 10 null]</text>
+        </state>
+        <state name="Node5267" type="Normal" category="Command" enabled="true" breakpoint="false" x="49" y="101">
+          <text>$Obj_02 = [sub StructureObject null 20 20 null]</text>
+        </state>
+        <state name="Node5282" type="Normal" category="Command" enabled="true" breakpoint="false" x="50" y="144">
+          <text>$Obj_03 = [sub StructureObject null 30 30 null]</text>
+        </state>
+        <state name="Node5297" type="Normal" category="Command" enabled="true" breakpoint="false" x="51" y="187">
+          <text>$Obj_04 = [sub StructureObject null 40 40 null]</text>
+        </state>
+        <state name="Node13077" type="Normal" category="Command" enabled="true" breakpoint="false" x="245" y="753">
+          <text>$len = [length $ObjectSrcList]</text>
+        </state>
+        <state name="Node13170" type="Normal" category="Command" enabled="true" breakpoint="false" x="246" y="795">
+          <text>$top = 0; $left = 0; $resId = ''</text>
+        </state>
+        <state name="Node5861" type="Normal" category="Command" enabled="true" breakpoint="false" x="250" y="840">
+          <text>$id = [get 1 $ObjectSrcList]</text>
+        </state>
+        <state name="Node13149" type="Normal" category="Command" enabled="true" breakpoint="false" x="299" y="885">
+          <text>$len&gt;1</text>
+        </state>
+        <state name="Node7386" type="Normal" category="Command" enabled="true" breakpoint="false" x="372" y="886">
+          <text>$top = [get 2  $ObjectSrcList]</text>
+        </state>
+        <state name="Node14530" type="Normal" category="Command" enabled="true" breakpoint="false" x="376" y="927">
+          <text>$len&gt;2</text>
+        </state>
+        <state name="Node7410" type="Normal" category="Command" enabled="true" breakpoint="false" x="449" y="928">
+          <text>$left = [get 3 $ObjectSrcList]</text>
+        </state>
+        <state name="Node7433" type="Normal" category="Command" enabled="true" breakpoint="false" x="521" y="972">
+          <text>$resId = [get 4 $ObjectSrcList]</text>
+        </state>
+        <state name="Node14601" type="Normal" category="Command" enabled="true" breakpoint="false" x="456" y="971">
+          <text>$len&gt;3</text>
+        </state>
+        <state name="Node5517" type="Normal" category="Normal" enabled="true" breakpoint="true" x="69" y="475">
+          <text>\n&lt;Structure&gt;</text>
+        </state>
+        <state name="Node5929" type="Normal" category="Normal" enabled="true" breakpoint="false" x="205" y="1179">
+          <text>\n\t&lt;/Object&gt;</text>
+        </state>
+        <state name="Node5530" type="Normal" category="Normal" enabled="true" breakpoint="false" x="62" y="1325">
+          <text>\n&lt;/Structure&gt;</text>
+        </state>
+        <state name="Node5946" type="Normal" category="Command" enabled="true" breakpoint="false" x="134" y="1243">
+          <text>$i = $i -1</text>
+        </state>
+        <state name="Node5825" type="Normal" category="Normal" enabled="true" breakpoint="false" x="192" y="1035">
+          <text>\n\t&lt;Object ID="$id" Top="$top" Left="$left" ResourceID="$resId"&gt;</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector3357" highlighted="false" enabled="true" source="Node14601" destination="Node7433">
+          <label>true</label>
+        </transition>
+        <transition name="Connector3356" highlighted="false" enabled="true" source="Node7410" destination="Node14601"/>
+        <transition name="Connector3355" highlighted="false" enabled="true" source="Node14601" destination="Node5825">
+          <label>false</label>
+        </transition>
+        <transition name="Connector3354" highlighted="false" enabled="true" source="Node14530" destination="Node5825">
+          <label>false</label>
+        </transition>
+        <transition name="Connector3353" highlighted="false" enabled="true" source="Node14530" destination="Node7410">
+          <label>true</label>
+        </transition>
+        <transition name="Connector3352" highlighted="false" enabled="true" source="Node7386" destination="Node14530"/>
+        <transition name="Connector3351" highlighted="false" enabled="true" source="Node13149" destination="Node5825">
+          <label>false</label>
+        </transition>
+        <transition name="Connector3350" highlighted="false" enabled="true" source="Node5861" destination="Node13149"/>
+        <transition name="Connector3349" highlighted="false" enabled="true" source="Node13170" destination="Node5861"/>
+        <transition name="Connector3348" highlighted="false" enabled="true" source="Node13077" destination="Node13170"/>
+        <transition name="Connector3347" highlighted="false" enabled="true" source="Node13149" destination="Node7386">
+          <label>true</label>
+        </transition>
+        <transition name="Connector3346" highlighted="false" enabled="true" source="Node5706" destination="Node13077"/>
+        <transition name="Connector3345" highlighted="false" enabled="true" source="Node5825" destination="Node5929"/>
+        <transition name="Connector3344" highlighted="false" enabled="true" source="Node7433" destination="Node5825"/>
+        <transition name="Connector3343" highlighted="false" enabled="true" source="Node3640" destination="Node5517"/>
+        <transition name="Connector3342" highlighted="false" enabled="true" source="Node5929" destination="Node5946"/>
+        <transition name="Connector3341" highlighted="false" enabled="true" source="Node5598" destination="Node5530">
+          <label>false</label>
+        </transition>
+        <transition name="Connector3340" highlighted="false" enabled="true" source="Node5946" destination="Node5598"/>
+        <transition name="Connector3339" highlighted="false" enabled="true" source="Node5692" destination="Node5706"/>
+        <transition name="Connector3338" highlighted="false" enabled="true" source="Node5612" destination="Node5692"/>
+        <transition name="Connector3337" highlighted="false" enabled="true" source="Node5579" destination="Node5598"/>
+        <transition name="Connector3336" highlighted="false" enabled="true" source="Node5598" destination="Node5612">
+          <label>true</label>
+        </transition>
+        <transition name="Connector3335" highlighted="false" enabled="true" source="Node5517" destination="Node5579"/>
+        <transition name="Connector3334" highlighted="false" enabled="true" source="Node2448" destination="Node4180"/>
+        <transition name="Connector3333" highlighted="false" enabled="true" source="Node4180" destination="Node5267"/>
+        <transition name="Connector3332" highlighted="false" enabled="true" source="Node5267" destination="Node5282"/>
+        <transition name="Connector3331" highlighted="false" enabled="true" source="Node5282" destination="Node5297"/>
+        <transition name="Connector3330" highlighted="false" enabled="true" source="Node5297" destination="Node4140"/>
+        <transition name="Connector3329" highlighted="false" enabled="true" source="Node4140" destination="Node4047"/>
+        <transition name="Connector3328" highlighted="false" enabled="true" source="Node4047" destination="Node4062"/>
+        <transition name="Connector3327" highlighted="false" enabled="true" source="Node4062" destination="Node4077"/>
+        <transition name="Connector3326" highlighted="false" enabled="true" source="Node4077" destination="Node3640"/>
+      </transitions>
+    </graph>
+    <graph name="StructureObject" initial="false" category="application">
+      <states>
+        <state name="Node9483" type="Initial" category="Normal" enabled="true" breakpoint="false" x="27" y="12">
+          <text>[</text>
+        </state>
+        <state name="Node6589" type="Normal" category="Command" enabled="true" breakpoint="false" x="8" y="65">
+          <text>$param1==null</text>
+        </state>
+        <state name="Node7571" type="Normal" category="Normal" enabled="true" breakpoint="false" x="72" y="113">
+          <text>$param1</text>
+        </state>
+        <state name="Node6614" type="Normal" category="Command" enabled="true" breakpoint="false" x="6" y="113">
+          <text>[GUID]</text>
+        </state>
+        <state name="Node9599" type="Normal" category="Normal" enabled="true" breakpoint="false" x="10" y="164">
+          <text>$param2 $param3</text>
+        </state>
+        <state name="Node9150" type="Normal" category="Command" enabled="true" breakpoint="false" x="15" y="217">
+          <text>$param4==null</text>
+        </state>
+        <state name="Node9320" type="Normal" category="Normal" enabled="true" breakpoint="false" x="9" y="268">
+          <text>''</text>
+        </state>
+        <state name="Node10388" type="Normal" category="Normal" enabled="true" breakpoint="false" x="75" y="267">
+          <text>$param4</text>
+        </state>
+        <state name="Node11472" type="Normal" category="Normal" enabled="true" breakpoint="false" x="41" y="319">
+          <text>]</text>
+        </state>
+      </states>
+      <transitions>
+        <transition name="Connector3471" highlighted="false" enabled="true" source="Node6589" destination="Node6614">
+          <label>true</label>
+        </transition>
+        <transition name="Connector3470" highlighted="false" enabled="true" source="Node6589" destination="Node7571">
+          <label>false</label>
+        </transition>
+        <transition name="Connector3469" highlighted="false" enabled="true" source="Node9483" destination="Node6589"/>
+        <transition name="Connector3468" highlighted="false" enabled="true" source="Node6614" destination="Node9599"/>
+        <transition name="Connector3467" highlighted="false" enabled="true" source="Node7571" destination="Node9599"/>
+        <transition name="Connector3466" highlighted="false" enabled="true" source="Node9599" destination="Node9150"/>
+        <transition name="Connector3465" highlighted="false" enabled="true" source="Node9150" destination="Node9320">
+          <label>true</label>
+        </transition>
+        <transition name="Connector3464" highlighted="false" enabled="true" source="Node9150" destination="Node10388">
+          <label>false</label>
+        </transition>
+        <transition name="Connector3463" highlighted="false" enabled="true" source="Node9320" destination="Node11472"/>
+        <transition name="Connector3462" highlighted="false" enabled="true" source="Node10388" destination="Node11472"/>
+      </transitions>
+    </graph>
+  </structure>
 </template>
