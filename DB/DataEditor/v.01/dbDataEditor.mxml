@@ -12,7 +12,7 @@
 	
 	<mx:DataGrid id="__dg"
 		width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
-		click="{rowClickHandler();}" itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"/>
+		itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"/>
 	<mx:HBox width="100%" horizontalAlign="right" horizontalGap="0" paddingBottom="0" paddingTop="0">
 		<mx:Label text="Total rows:" fontSize="9" />
 		<mx:Label id="__rowsCount" text="{totalRecords}" fontSize="9" fontWeight="bold" />	
@@ -28,7 +28,7 @@
 			<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingRight="0" paddingLeft="0">
 				<mx:Button label="add line" height="20" click="{addRow();}" />
 				<mx:Button label="remove line" height="20" enabled="false" />		
-				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" />
+				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}" />
 				<mx:Spacer width="100%" />
 				<mx:HBox horizontalGap="0">
 					<mx:Label id="__operCount" fontWeight="bold" text="0" textAlign="right" />

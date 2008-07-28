@@ -22,6 +22,8 @@ private var currentPage:int = 0;
 private var pageOffset:int = 0;
 private var queryResult:XML;
 private var editableValue:String = "";
+private var editableValueColumn:int = 0;
+private var editableValueRow:int = 0;
 
 private var queue:XMLList;
 
@@ -266,18 +268,19 @@ private function pageClickHandler(mEvent:MouseEvent):void {
 
 // ----- Edit data processing methods ---------------------------------------------------
 
-private function rowClickHandler():void {
-	trace(__dg.selectedItem);
-}
-
 private function itemEditBegin(event:DataGridEvent):void {
-	editableValue = dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex]].to;
-	trace(editableValue);
+	editableValue = dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex].dataField].toString();
+	editableValueColumn = event.columnIndex;
+	editableValueRow = event.rowIndex;
+	trace ("--> Stored value: " + editableValue + " at " + editableValueRow + "x" + editableValueColumn);
 }
 
 private function itemEditEnd(event:DataGridEvent):void {
-	dataGridCollection[event.rowIndex].changed = true;
-	trace(event.rowIndex);
+	trace ("--> New value: " + dataGridCollection[editableValueRow][dataGridColumns[editableValueColumn].dataField] + " at " + editableValueRow + "x" + editableValueColumn);	
+	if (dataGridCollection[editableValueRow][dataGridColumns[editableValueColumn].dataField].toString() != editableValue) {
+		dataGridCollection[editableValueRow].changed = true;
+		__commitBtn.enabled = true;
+	}
 }
 
 private function addRow():void {
@@ -302,7 +305,20 @@ private function addRow():void {
 }
 
 private function commitBtnClickHandler():void {
-	
+	var requestXMLParam:XML = new XML("<data />");
+	var thereAreChanges:Boolean = false;
+	for each (var dataGridRow:Object in dataGridCollection) {
+		if (dataGridRow.changed) {
+			thereAreChanges = true;
+			var xmlRow:XML = new XML("<row />");
+			
+			for each (var dataGridCell:Object in dataGridColumns) {
+				xmlRow.appendChild(<cell>{dataGridRow[dataGridCell.dataField]}</cell>);
+			}
+			requestXMLParam.appendChild(xmlRow);
+		}
+	}
+	trace (requestXMLParam);
 }
 
 // ----- Alert processing methods -------------------------------------------------------
