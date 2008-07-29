@@ -56,10 +56,14 @@ package vdom.controls.externalEditorButton
 			this.resourceID = resourceID;
 		}
 		
-		public function set value(param:String):void {
-			_value = param;
+		public function set value(value:String):void {
+			_value = value;
 			if (__valueLabel)
 				__valueLabel.text = _value;
+		}
+		
+		public function get value():String {
+			return _value;
 		}
 		
 		override protected function createChildren():void {			
