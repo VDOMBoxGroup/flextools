@@ -63,7 +63,7 @@
 				</mx:HBox>
 								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
-					<mx:Button id="__applyBtn" label="Apply changes" click="{applyBtnHandler();}" enabled="false"/>
+					<mx:Button id="__applyBtn" label="Apply changes" click="{applyBtnClickHandler();}" enabled="false"/>
 				</mx:HBox>				
 			</mx:VBox>
 		</mx:VBox>		
