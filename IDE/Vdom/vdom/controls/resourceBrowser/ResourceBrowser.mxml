@@ -26,14 +26,13 @@
 	<mx:VBox 
 		width="100%" height="100%"
 		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5"
-		horizontalGap="3" verticalGap="3"
-	>
+		horizontalGap="3" verticalGap="3">
+		
 		<!-- Top Panel -->
 		<mx:HBox
 			width="100%" height="30" cornerRadius="0"
 			verticalAlign="middle" paddingLeft="5" paddingRight="5"
-			backgroundColor="#e5e5e5" borderStyle="solid"
-		>
+			backgroundColor="#e5e5e5" borderStyle="solid">
 			
 			<mx:ButtonBar height="24" itemClick="{applyView(event);}">          			
 				<mx:Array>
@@ -65,14 +64,12 @@
 				direction="horizontal" borderStyle="solid"
 				verticalScrollPolicy="on" horizontalScrollPolicy="off"
 				horizontalAlign="center"
-				paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
-			/>
+				paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
 				
 			<mx:VBox width="100%" height="100%" verticalGap="2" horizontalAlign="center">
 				<mx:Box id="__previewArea"
 					width="100%" height="100%"
-					verticalAlign="middle" horizontalAlign="center"
-				/>
+					verticalAlign="middle" horizontalAlign="center"/>
 				
 				
 				<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
