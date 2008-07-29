@@ -43,18 +43,18 @@ package vdom.components.treeEditor
 		
 		public function updateVector():void
 		{
-			if(!index)
-				createIndex();
+//			if(!index)
+//				createIndex();
 			graphics.clear();
 			createVector (trEl0,  trEl1);
 			
-			index.visible = false;
-			
-		 	if(index.visible )
-			{ 
-				index.x = middleX;
-				index.y = middleY;
-		 	}
+		//	index.visible = false;
+//			
+//		 	if(index.visible )
+//			{ 
+//				index.x = middleX;
+//				index.y = middleY;
+//		 	}
 //		 	trace('middleX: '+ middleX); 
 //			trace(' index.x: '+  index.x);
 			//changeStatus();

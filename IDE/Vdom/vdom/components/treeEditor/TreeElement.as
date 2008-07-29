@@ -98,7 +98,7 @@ package vdom.components.treeEditor
 		public function TreeElement()
 		{
 			super();
-			
+			super.cacheAsBitmap = true;
 		//	clipContent = false;
 			cnvUpLayer.clipContent = false;
 			

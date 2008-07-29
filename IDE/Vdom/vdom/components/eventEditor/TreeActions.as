@@ -1,5 +1,7 @@
 package vdom.components.eventEditor
 {
+	import mx.collections.XMLListCollection;
+	
 	import vdom.managers.DataManager;
 	import vdom.utils.IconUtil;
 	
@@ -50,6 +52,15 @@ package vdom.components.eventEditor
 			}
 			
 			super.dataProvider = dataXML;
+			validateNow();
+			var item:Object =  XMLListCollection(dataProvider).source[0];
+			
+		//	super.selectedIndex = 0;
+			
+			
+			expandItem(item, true, false);
+			
+			
 		}
 		
 		private function getChilds(inXML:XML):XML

@@ -2,6 +2,7 @@ package vdom.components.treeEditor.colorMenu02
 {
 	import mx.containers.Canvas;
 	import mx.controls.Image;
+	import mx.controls.Label;
 	
 	import vdom.events.TreeEditorEvent;
 
@@ -23,6 +24,12 @@ package vdom.components.treeEditor.colorMenu02
 			addChild(imgBackGround);
 			slctLevel = 0;
 			creatLevels();
+			var textLabel:Label = new Label();
+				textLabel.text = "Labels";
+				textLabel.x = 15;
+				textLabel.y = 2;
+//		****		textLabel.setStyle("textColor", "FFFFFF");
+				addChild(textLabel);
 		}
 		
 		

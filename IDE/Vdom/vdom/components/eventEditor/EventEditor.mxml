@@ -675,7 +675,6 @@
 			 	change="treeContainerChangeHandler(event)" />
 			 <mx:Canvas label="canvas1" width="100%" height="100%"  >
 			    <mx:VBox  width="100%" height="100%" >
-			       <mx:Label text="Current container: selected container" fontWeight="bold"  color="0xFFFFFF"/>
 	                <mx:TabNavigator id="tn"  width="100%" height="100%">
 				        <mx:Canvas label="Events"  width="100%" height="100%" >
 				             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" />

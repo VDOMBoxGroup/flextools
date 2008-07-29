@@ -104,7 +104,10 @@ package vdom.components.eventEditor
 		{	
 				var topLevelObjectId:String = dataManager.currentPageId //publicData.topLevelObjectId;
 				if(topLevelObjectId && xmlTreeData) 
+				{
 					selectedItem = xmlTreeData.Object.(@ID == topLevelObjectId)[0];
+					this.scrollToIndex(getItemIndex(selectedItem));
+				}
 		}
 		
 		private var _data:Object;
@@ -136,8 +139,11 @@ package vdom.components.eventEditor
 			} 
 				super.dataProvider = xmlTreeData;
 				
-			if(selectedNode)
-				this.selectedItem = selectedNode;
+				if(selectedNode)
+				{
+					this.selectedItem = selectedNode;
+					this.scrollToIndex(getItemIndex(selectedItem));
+				}
 			}
 		}
 		
@@ -192,12 +198,14 @@ package vdom.components.eventEditor
 					}
 				}
 			}
+			
 			return xmllReturn;
 		}
 		
 		private function craetTreeData(xmlIn:XMLList):XML
 		{
 			var ID:String;
+			
 			if(selectedNode)
 				ID = selectedNode.@ID;
 			else
@@ -222,6 +230,7 @@ package vdom.components.eventEditor
 					
 					xmllReturn.appendChild(xmlTemp)	;
 			}
+			
 			return xmllReturn;
 		}
 	}

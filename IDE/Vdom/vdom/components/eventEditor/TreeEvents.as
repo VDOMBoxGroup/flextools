@@ -60,6 +60,14 @@ package vdom.components.eventEditor
 		  }
 		  
 		  super.dataProvider = dataXML;
+		  
+		  validateNow();
+	//		var item:Object =  XMLListCollection(dataProvider).source[0];
+			
+		//	super.selectedIndex = 0;
+			
+			
+			expandItem(dataProvider.source[0], true, false);
 		}
 		
 		private function getChilds(inXML:XML):XML
