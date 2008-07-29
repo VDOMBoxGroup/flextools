@@ -25,10 +25,13 @@ package vdom.components.treeEditor.colorMenu02
 			slctLevel = 0;
 			creatLevels();
 			var textLabel:Label = new Label();
-				textLabel.text = "Labels";
-				textLabel.x = 15;
+				textLabel.text = "Levels";
+				//textLabel.x = ;
 				textLabel.y = 2;
-//		****		textLabel.setStyle("textColor", "FFFFFF");
+				textLabel.width = 190;
+				textLabel.setStyle("color", "0xFFFFFF");
+				textLabel.setStyle('fontWeight', "bold"); 
+				textLabel.setStyle('textAlign', 'center');
 				addChild(textLabel);
 		}
 		
@@ -54,6 +57,7 @@ package vdom.components.treeEditor.colorMenu02
 		{
 			return levels.getLevel(slctLevel);
 		}
+		
 		public function showLevel(level:String):Boolean
 		{
 			var intLevel:Number = Number(level);

@@ -150,13 +150,28 @@ private function adjustmentTree(xml1:XML):void
 	var depth:int = 0;
 	massMap[depth] = -1;
 	var itIsCorrectTree:Boolean = false;
+	/*  creating tree for top level conteiner whith child */
 	for (var name:String in massTreeObj)
-		if (massTreeObj[name].parent == null)
+		if (massTreeObj[name].parent == null && massTreeObj[name].childs != null)
 		{
 			setPosition(name);	
 			itIsCorrectTree = true;
 		} 
 	
+	/*  placement top level conteiner whithout child */ 
+	var lavel:int = massMap.length;
+		massMap[lavel] = 0;
+	for (name in massTreeObj)
+		if (massTreeObj[name].parent == null && massTreeObj[name].childs == null)
+		{
+			massTreeObj[name].mapX = massMap[lavel]++;
+			massTreeObj[name].mapY = lavel;
+			
+			if(massMap[lavel] == 5) massMap[++lavel] = 0;
+//			setPosition(name);	
+//			itIsCorrectTree = true;
+		} 
+		
 	if(itIsCorrectTree)
 	{
 		for (var str:String in massTreeObj)
@@ -167,6 +182,7 @@ private function adjustmentTree(xml1:XML):void
 		
 		saveToServer();
 	}	
+	
 	function setPosition(inName:String):Boolean
 	{
 		//были ли у этого обьекта
