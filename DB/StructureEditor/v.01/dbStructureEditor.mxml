@@ -4,7 +4,8 @@
 	width="640" height="480"
 	paddingBottom="10" paddingRight="10" paddingLeft="10" paddingTop="10"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	verticalGap="2" horizontalGap="0" creationComplete="{}"
+	verticalGap="2" horizontalGap="0"
+	creationComplete="{trace('DB Structure Editor Debugger connected!');}"
 	backgroundAlpha="1" backgroundColor="#FFFFFF">
 
 	<!-- Main Class Scripting File -->	
