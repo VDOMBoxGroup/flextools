@@ -47,7 +47,7 @@
 			<mx:VRule height="100%" />
 			
 			<mx:Label text="Filter:" fontWeight="bold"/>
-			<mx:ComboBox id="__filterCBx" width="100%" dataProvider="{_filterDataProvider}" change="{filterCBxHandler();}" />
+			<mx:ComboBox id="__filterCBx" width="100%" dataProvider="{filterDataProvider}" change="{filterCBxHandler();}" />
 			<mx:VRule height="100%" />
 			<mx:Spacer width="150" />
 			<mx:Button height="24" label="Upload File..." click="{fileUploadHandler();}" />
@@ -93,10 +93,10 @@
 	</mx:VBox>
 	<mx:ControlBar height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10">
 		<mx:Label text="Total Resources:" />
-		<mx:Label text="{_totalResources}" fontWeight="bold" />
+		<mx:Label text="{totalResources}" fontWeight="bold" />
 		<mx:VRule height="18" />
 		<mx:Label text="Filtered:" />
-		<mx:Label text="{_filteredResources}" fontWeight="bold" />
+		<mx:Label text="{filteredResources}" fontWeight="bold" />
 		<mx:Spacer width="100%" />
 		<mx:Button label="Done" click="{doneHandler();}" />
 	</mx:ControlBar>

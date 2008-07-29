@@ -42,25 +42,25 @@ private const defaultView:String = "list";
 	It is used to show which item is currently selected (or not, if it is null).
 */ 
 private var _selectedItemID:String = "";
-private var _selectedItemName:String = ""; 
+private var selectedItemName:String = ""; 
 
-private var _resources:XML;				// XML, Getting by FileManager Class instance
-private var _selectedThumb:Object;		// Currently selected Thumbnail (visual component)
-private var _rTypes:Array;				// Avalible resources types (get during resources scanning)
-private var _objects:Array;				// Associative (by id) array of resource objects	
-private var _currentView:String;
-private var _fileForUpload:File;
+private var resources:XML;				// XML, Getting by FileManager Class instance
+private var selectedThumb:Object;		// Currently selected Thumbnail (visual component)
+private var rTypes:Array;				// Avalible resources types (get during resources scanning)
+private var objects:Array;				// Associative (by id) array of resource objects	
+private var currentView:String;
+private var fileForUpload:File;
 
-private var _resourcesListLoadedFlag:Boolean = false;
-
-[Bindable]
-private var _filterDataProvider:Array;
+private var resourcesListLoadedFlag:Boolean = false;
 
 [Bindable]
-private var _totalResources:int = 0;
+private var filterDataProvider:Array;
 
 [Bindable]
-private var _filteredResources:int = 0;
+private var totalResources:int = 0;
+
+[Bindable]
+private var filteredResources:int = 0;
 
 private var fileManager:FileManager = FileManager.getInstance();	// FileManager global Class instance
 private var dataManager:DataManager = DataManager.getInstance();	// DataManager global Class instance
@@ -68,7 +68,7 @@ private var soap:Soap = Soap.getInstance();
 
 public function set selectedItemID(itemID:String):void {
 	_selectedItemID = itemID;
-	if (_resourcesListLoadedFlag) {
+	if (resourcesListLoadedFlag) {
 		showResourceSelection();
 	}
 }
@@ -91,32 +91,35 @@ private function listResourcesQuery():void {
 
 private function getResourcesList(fmEvent:FileManagerEvent):void {
 	fileManager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);	
-	_resources = new XML(fmEvent.result.Resources.toXMLString());
+	resources = new XML(fmEvent.result.Resources.toXMLString());
 	
-	_currentView = defaultView;
+	currentView = defaultView;
 	createResourcesViewObjects();
-	_resourcesListLoadedFlag = true;
+	resourcesListLoadedFlag = true;
 	showResourceSelection();
 	determineResourcesTypes();	
 }
 
 private function determineResourcesTypes():void {
-	_rTypes = new Array();
-
-	for each (var resource:XML in _resources.Resource) {
-		_rTypes[resource.@type] = resource.@type;
+	rTypes = [];
+	
+	try {
+		for each (var resource:XML in resources.Resource) {
+			rTypes[resource.@type] = resource.@type;
+		}
 	}
+	catch (err:Error) { return; }
 	
 	createFilters();
 }
 
 private function createFilters():void {
-	_filterDataProvider = new Array();
+	filterDataProvider = [];
 	
-	_filterDataProvider.push({label:"None", data:"*"});
+	filterDataProvider.push( {label:'None', data:'*'} );
 	
-	for each (var type:String in _rTypes) {
-		_filterDataProvider.push({label:type.toUpperCase(), data:type.toLowerCase()});
+	for each (var type:String in rTypes) {
+		filterDataProvider.push( {label:type.toUpperCase(), data:type.toLowerCase()} );
 	}
 	
 	__filterCBx.selectedIndex = 0;
@@ -138,80 +141,89 @@ private function isViewable(extension:String):Boolean {
 
 private function createResourcesViewObjects(filter:String = "*"):void {	
 	thumbsList.removeAllChildren();
-	_objects = new Array();
-	_totalResources = 0;
-	_filteredResources = 0;
+	objects = [];
+	totalResources = 0;
+	filteredResources = 0;
 	
 	/* Select ThumbsArea initial width depending on ViewClass */
 	/* By default Expand button is turned off */
 	expandHandler();
 		
 	var viewItem:*;
-	
-	for each (var resource:XML in _resources.Resource) {
-		_totalResources++;
-		
-		if (filter != "*") {
-			if (resource.@type.toLowerCase() == filter) {
-				_filteredResources++;
-			} else {
-				continue;
-			}
-		}
-		
-		switch (_currentView.toLowerCase()) {
-			case "thumbnail":
-				viewItem = new ThumbnailItem();
-				break;
-			case "list":
-				viewItem = new ListItem();	
-				break;
-		}
 
-		thumbsList.addChild(viewItem);			// add viewItem as child to initialise it
-		viewItem.imageSource = waiting_Icon;	// set default, 'till new image is unknown (or while it is loading) 
-		viewItem.objName = resource.@name;
-		viewItem.objType = resource.@type;
-		viewItem.objID = resource.@id;
-		viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
+	try {
 		
-		/* To have access to view element by resource id, add element to the array */
-		_objects[resource.@id] = viewItem;		
-		
-		if (isViewable(resource.@type)) {
-			fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
-		} else { // if not viewable
-			if (typesIcons[resource.@type] != null) {
-				viewItem.imageSource = typesIcons[resource.@type];	
-			} else {
-				viewItem.imageSource = blank_Icon;
+		for each (var resource:XML in resources.Resource) {
+			totalResources++;
+			
+			if (filter != "*") {
+				if (resource.@type.toLowerCase() == filter) {
+					filteredResources++;
+				} else {
+					continue;
+				}
+			}
+			
+			switch (currentView.toLowerCase()) {
+				case "thumbnail":
+					viewItem = new ThumbnailItem();
+					break;
+				case "list":
+					viewItem = new ListItem();	
+					break;
+			}
+	
+			thumbsList.addChild(viewItem);			// add viewItem as child to initialise it
+			viewItem.imageSource = waiting_Icon;	// set default, 'till new image is unknown (or while it is loading) 
+			viewItem.objName = resource.@name;
+			viewItem.objType = resource.@type;
+			viewItem.objID = resource.@id;
+			viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
+			
+			/* To have access to view element by resource id, add element to the array */
+			objects[resource.@id] = viewItem;		
+			
+			if (isViewable(resource.@type)) {
+				fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
+			} else { // if not viewable
+				if (typesIcons[resource.@type] != null) {
+					viewItem.imageSource = typesIcons[resource.@type];	
+				} else {
+					viewItem.imageSource = blank_Icon;
+				}
 			}
 		}
+		
+	}
+	catch (err:Error) {
+		/* error01 */
+		Alert.show("Unexpected error (01). Please reopen Resource browser.", "Getting resources error"); 
+		return;
 	}
 }
 
 private function selectThumbnail(mEvent:MouseEvent):void {
 	/* Highlight selected thumbnail */
-	if (_selectedThumb != null) {
-		_selectedThumb.selected = false;
+	if (selectedThumb != null) {
+		selectedThumb.selected = false;
 	}
 	mEvent.currentTarget.selected = true;
 	
 	_selectedItemID = mEvent.currentTarget.objID;
-	_selectedItemName = mEvent.currentTarget.objName;
-	_selectedThumb = mEvent.currentTarget;
+	selectedItemName = mEvent.currentTarget.objName;
+	selectedThumb = mEvent.currentTarget;
 	
 	showResource();	
 }
 
 private function showResourceSelection():void { 	// uses when property set
 	if (_selectedItemID != "") {
-		if (_objects[_selectedItemID] == null) {
+		if (objects[_selectedItemID] == null) {
 			Alert.show("Selected Resource is not found on the server!", "Resource Browser error"); 
 		} else {
-			_selectedThumb = _objects[_selectedItemID];
-			_selectedThumb.selected = true;
-			_selectedItemName = _selectedThumb.objName;
+			selectedThumb = objects[_selectedItemID];
+			selectedThumb.selected = true;
+			selectedItemName = selectedThumb.objName;
 			showResource(); 
 		}
 	}
@@ -219,8 +231,8 @@ private function showResourceSelection():void { 	// uses when property set
 
 private function showResource():void {
 	/* Fill in resource information in the info area */
-	__rName.text = _selectedThumb.objName;
-	__rType.text = _selectedThumb.objType.toUpperCase();
+	__rName.text = selectedThumb.objName;
+	__rType.text = selectedThumb.objType.toUpperCase();
 	
 	/* Create & Show large preview of the image */	
 	__previewArea.removeAllChildren();	// Clear up the space
@@ -230,12 +242,12 @@ private function showResource():void {
 	preview.heightLimit = __previewArea.height - 15;
 	preview.widthLimit = __previewArea.width - 15;
 	
-	if (isViewable(_selectedThumb.objType)) {
+	if (isViewable(selectedThumb.objType)) {
 		preview.imageSource = waiting_Icon;
 		preview.addEventListener(Event.COMPLETE, setImageProperties);
 		fileManager.loadResource(dataManager.currentApplicationId, _selectedItemID, preview);
 	} else {
-		preview.imageSource = _selectedThumb.imageSource;
+		preview.imageSource = selectedThumb.imageSource;
 		__iResolution.text = "Can not determine";
 		var msg:Label = new Label();
 		__previewArea.addChild(msg);
@@ -250,21 +262,21 @@ private function setImageProperties(event:Event):void {
 private function applyView(event:ItemClickEvent = null):void {
 	if (event != null) {
 		if (event.index == 0) {
-			_currentView = "thumbnail";
+			currentView = "thumbnail";
 		} else {	
 			if (event.index == 1) {
-				_currentView = "list";
+				currentView = "list";
 			} else {
-				_currentView = defaultView;
+				currentView = defaultView;
 			}
 		}		
 		createResourcesViewObjects();
 	}
 	
 	/* Selecting active element */
-	if (_objects[_selectedItemID] != null) {
-		_selectedThumb = _objects[_selectedItemID];
-		_objects[_selectedItemID].selected = true;
+	if (objects[_selectedItemID] != null) {
+		selectedThumb = objects[_selectedItemID];
+		objects[_selectedItemID].selected = true;
 	}
 }
 
@@ -274,7 +286,7 @@ private function expandHandler():void {
 		__previewArea.width = 380;	// ~
 		thumbsList.percentWidth = 100;		
 	} else {
-		switch (_currentView.toLowerCase()) {
+		switch (currentView.toLowerCase()) {
 			case "thumbnail":
 				var tItem:ThumbnailItem = new ThumbnailItem();
 				thumbsList.width = tItem.width + 28;
@@ -288,14 +300,18 @@ private function expandHandler():void {
 	}
 	
 	/* Redraw preview */
-	if (_objects[_selectedItemID] != null) {
-		_selectedThumb = _objects[_selectedItemID];
+	if (objects[_selectedItemID] != null) {
+		selectedThumb = objects[_selectedItemID];
 		showResource();
 	} 
 }
 
 private function doneHandler():void {
-	this.dispatchEvent(ResourceBrowserEvent(new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID, _selectedItemName)));
+	this.dispatchEvent(
+		ResourceBrowserEvent(
+			new ResourceBrowserEvent(ResourceBrowserEvent.RESOURCE_SELECTED, _selectedItemID, selectedItemName)
+		)
+	);
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
 	this.dispatchEvent(cEvent);
 }
@@ -309,26 +325,26 @@ private function filterCBxHandler():void {
 }
 
 private function fileUploadHandler():void {
-	if (_fileForUpload == null) {
-		_fileForUpload = new File();
+	if (fileForUpload == null) {
+		fileForUpload = new File();
 	}
 	
 	var allFilesFilter:FileFilter = new FileFilter("All Files (*.*)", "*.*");
 	var imagesFilter:FileFilter = new FileFilter("Images (*.jpg;*.jpeg;*.gif;*.png)", "*.jpg;*.jpeg;*.gif;*.png");
 	var docFilter:FileFilter = new FileFilter("Documents (*.pdf;*.doc;*.txt)", "*.pdf;*.doc;*.txt");
 	
-	_fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
-	_fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
+	fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
+	fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
 }
 
 private function fileSelectHandler(event:Event):void {
-	_fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
+	fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
 
-	if (_fileForUpload != null && !_fileForUpload.isDirectory) {
+	if (fileForUpload != null && !fileForUpload.isDirectory) {
 		var srcBytes:ByteArray = new ByteArray();
 		var srcStream:FileStream = new FileStream();
 		
-		srcStream.open(_fileForUpload, FileMode.READ);
+		srcStream.open(fileForUpload, FileMode.READ);
 		srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
 		srcStream.close();
 		
@@ -341,12 +357,12 @@ private function fileSelectHandler(event:Event):void {
 		
 		var fileType:String = "";
 		try {		
-			fileType = _fileForUpload.type.substr(1);
+			fileType = fileForUpload.type.substr(1);
 		}
 		catch (err:Error) {
-			fileType = _fileForUpload.extension;
+			fileType = fileForUpload.extension;
 		}
-		var fileName:String = _fileForUpload.name.substr(0, _fileForUpload.name.length - fileType.length - 1);
+		var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
 		setResource(fileType, fileName, base64Data.toString());
 	}	
 }
