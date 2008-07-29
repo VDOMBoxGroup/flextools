@@ -5,7 +5,7 @@
 	paddingBottom="10" paddingRight="10" paddingLeft="10" paddingTop="10"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	verticalGap="2" horizontalGap="0" backgroundAlpha="1" backgroundColor="#FFFFFF"
-	creationComplete="{trace('Debugger connected!');}">
+	creationComplete="{trace('DB Data Editor Debugger connected!');}">
 
 	<!-- Main Class Scripting File -->	
 	<mx:Script source="dbDataEditor_s.as" />
