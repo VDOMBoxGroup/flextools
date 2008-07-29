@@ -59,7 +59,7 @@ package vdom.components.treeEditor.colorMenu02
 			addChild(canColorSquare);
 			
 			var label:Label = new Label;
-			label.text = _data.label;
+			label.text =  resourceManager.getString('Tree','level') + ' '+ _data.level;
 			label.x = 30;
 			label.y = 3;
 			label.width = 120;

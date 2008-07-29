@@ -25,7 +25,7 @@ package vdom.components.treeEditor.colorMenu02
 			slctLevel = 0;
 			creatLevels();
 			var textLabel:Label = new Label();
-				textLabel.text = "Levels";
+				textLabel.text = resourceManager.getString('Tree','levels');
 				//textLabel.x = ;
 				textLabel.y = 2;
 				textLabel.width = 190;

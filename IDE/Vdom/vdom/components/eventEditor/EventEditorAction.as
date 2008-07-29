@@ -161,7 +161,7 @@ package vdom.components.eventEditor
 				if(!contains(cnvDownLayer))	
 					addChild(cnvDownLayer);
 				imgPlus.source = minus;
-				txt.text = "Action";
+				txt.text = resourceManager.getString('Event','action');
 			}	
 
 			min = blHide;
@@ -211,7 +211,7 @@ package vdom.components.eventEditor
 			
 			txt.buttonMode = true;
 			txt.doubleClickEnabled = true;
-			txt.text = 'Action';
+			txt.text = resourceManager.getString('Event','action');
 			//txt.addEventListener(MouseEvent.DOUBLE_CLICK, txtDoubleClickHandler)
 			
 			imgMenu = new Image();

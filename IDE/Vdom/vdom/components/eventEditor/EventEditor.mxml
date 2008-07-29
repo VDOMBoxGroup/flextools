@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" 
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()">
+	<mx:Metadata>
+		[ResourceBundle("Event")]
+	</mx:Metadata>
+		
 	 <mx:Script>
 	 	<![CDATA[
 	 		import mx.core.Application;
@@ -350,7 +354,7 @@
 				if(!linesArray[evtID]) linesArray[evtID] = new Array();
 				
 				linesArray[evtID][actID] = 
-					new TreeVector(eventsArray[evtID], actionsArray[actID], '-1');
+					new TreeVector(eventsArray[evtID], actionsArray[actID], '0');
 					
 				linesArray[evtID][actID].addEventListener(MouseEvent.CLICK, markLines);	
 				
@@ -671,15 +675,18 @@
 	<mx:HDividedBox width="100%" height="100%">
 		
 		<mx:VDividedBox width="250" height="100%">
-        	 <eventEditor:TreeContainer iconFunction="getIcon" id="trContainer" width="100%" height="40%" 
-			 	change="treeContainerChangeHandler(event)" />
+		 	<mx:VBox  width="100%"  height="40%" >
+				<mx:Label text="Pages:" color="0xFFFFFF" fontWeight="bold"/>
+	        	 <eventEditor:TreeContainer iconFunction="getIcon" id="trContainer" width="100%" height="100%" 
+				 	change="treeContainerChangeHandler(event)" />
+			 </mx:VBox>
 			 <mx:Canvas label="canvas1" width="100%" height="100%"  >
 			    <mx:VBox  width="100%" height="100%" >
 	                <mx:TabNavigator id="tn"  width="100%" height="100%">
-				        <mx:Canvas label="Events"  width="100%" height="100%" >
+				        <mx:Canvas label="{resourceManager.getString('Event','events')}"  width="100%" height="100%" >
 				             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" />
 				        </mx:Canvas>
-				        <mx:Canvas label="Actions"  width="100%" height="100%" >
+				        <mx:Canvas label="{resourceManager.getString('Event','actions')}"  width="100%" height="100%" >
 				             <eventEditor:TreeActions id="trActions" width="100%" height="100%"	 />
 				        </mx:Canvas>
 			        </mx:TabNavigator>

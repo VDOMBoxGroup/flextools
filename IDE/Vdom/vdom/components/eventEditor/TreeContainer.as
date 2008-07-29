@@ -39,7 +39,7 @@ package vdom.components.eventEditor
 		public function showHandler():void
 		{
 			loadedPages = [];
-			
+			selectedNode = null;
 			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener)
             dataManager.changeCurrentPage(dataManager.currentPageId);
 		}

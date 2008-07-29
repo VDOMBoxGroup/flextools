@@ -136,7 +136,7 @@ public class DataManager implements IEventDispatcher {
 		return null
 	}
 	
-	public function getTypeByTypeId(typeId:String):XML
+	public function getTypeByTypeId(typeId:String):XML 
 	{
 		return _listTypes.Information.(ID == typeId)[0].parent();
 	}

@@ -160,7 +160,7 @@ package vdom.components.eventEditor
 				if(!contains(cnvDownLayer))
 					addChild(cnvDownLayer);
 				imgPlus.source = minus;
-				txt.text = "Event";
+				txt.text = resourceManager.getString('Event','event');
 			}	
 
 			min = blHide;
@@ -205,7 +205,7 @@ package vdom.components.eventEditor
 			
 			txt.buttonMode = true;
 			txt.doubleClickEnabled = true;
-			txt.text = 'Event';
+			txt.text = resourceManager.getString('Event','event');
 			
 			imgMenu = new Image();
 			imgMenu.source = menu;

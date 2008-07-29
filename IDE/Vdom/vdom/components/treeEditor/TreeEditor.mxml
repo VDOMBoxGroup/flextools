@@ -2,9 +2,11 @@
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="creationCompleteHandler()" hide="hideHendler()" 
 			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*" xmlns:colorMenu02="vdom.components.treeEditor.colorMenu02.*" xmlns:treeEditor="vdom.components.treeEditor.*">
 	
-
+<mx:Metadata>
+		[ResourceBundle("Tree")]
+</mx:Metadata>	
 <mx:Canvas id="main" width="100%" height="100%" backgroundColor="#ffffff">
-	
+
 	
 	
 
@@ -445,8 +447,8 @@
 	
  	
 	
-	<mx:Button  label="add element"    click="addTreeElementLauncher()"/>
-	<mx:Button  label="auto spacing"    click="autoSpacing()"/>
+	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"    click="addTreeElementLauncher()"/>
+	<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
 
 </mx:VBox>
 </mx:HBox>

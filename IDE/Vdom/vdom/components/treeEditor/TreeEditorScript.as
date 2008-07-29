@@ -123,6 +123,7 @@ private function adjustmentTree(xml1:XML):void
 	{
 		massTreeObj[obID] = new TreeObj(obID);
 		massTreeObj[obID].parent = null;
+		massTreeObj[obID].child = null;
 	}
 	
 	/*
@@ -172,13 +173,13 @@ private function adjustmentTree(xml1:XML):void
 //			itIsCorrectTree = true;
 		} 
 		
-	if(itIsCorrectTree)
-	{
+//	if(itIsCorrectTree)
+//	{
 		for (var str:String in massTreeObj)
 		{
 			massTreeElements[str].x  = massTreeObj[str].mapX * 220;
 			massTreeElements[str].y  = massTreeObj[str].mapY * 60 + 40;
-		}
+//		}
 		
 		saveToServer();
 	}	

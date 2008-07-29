@@ -42,8 +42,11 @@ package vdom.components.treeEditor
 		
 		public function set child(trChld:TreeObj):void
 		{
-			if (masChilds == null) masChilds = new Array();
-			masChilds[trChld.name] = trChld;
+			if(trChld)
+			{
+				if (masChilds == null) masChilds = new Array();
+				masChilds[trChld.name] = trChld;
+			}
 			//trace(name +' have child: ' + masChilds[trChld.name].name);
 		}
 		
