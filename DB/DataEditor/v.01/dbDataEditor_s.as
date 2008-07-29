@@ -4,6 +4,7 @@ import mx.controls.Alert;
 import mx.controls.LinkButton;
 import mx.controls.dataGridClasses.DataGridColumn;
 import mx.events.DataGridEvent;
+import mx.formatters.SwitchSymbolFormatter;
 
 private const AMOUNT:int = 500;
 private const MAX_PAGES:int = 10;
@@ -12,7 +13,7 @@ private var dataGridCollection:ArrayCollection = new ArrayCollection();
 private var dataGridColumns:Array = []; /* of DataGridColumns */
 private var dataGridColumnsProps:Array = [];
 private var manager:*;	/* SuperManager */
-private var _value:String;
+private var externalValue:String;
 private var structureXML:XML;
 
 [Bindable]
@@ -24,6 +25,7 @@ private var queryResult:XML;
 private var editableValue:String = "";
 
 private var queue:XMLList;
+private var thereAreGlobalChanges:Boolean = false;
 
 /**
  * Async connection needs the folowing functions to be executed in specified way:
@@ -40,17 +42,20 @@ public function set externalManager(ref:*):void {
 	onLoadInit();
 }
 
-public function set value(_value:String):void {
-	this._value = _value;
+public function set value(value:String):void {
+	externalValue = value;
 }
 
 public function get value():String {
-	return this._value;
+	if (thereAreGlobalChanges)
+		return "modified";
+	else
+		return externalValue;
 }
 
 private function onLoadInit():void {
 	requestTableStructure();
-	manager.addEventListener("callError", errorRMCHandler);
+	manager.addEventListener("callError", remoteMethodCallErrorMsgHandler);
 }
 
 
@@ -63,7 +68,7 @@ private function requestRowsCount():void {
 	}
 	catch (err:Error) {
 		/* error01 */
-		showMessage("External Manager error (01): Specified method haven't found on the externalManager!");		
+		showMessage("External Manager error (01)");		
 	}
 }
 
@@ -72,17 +77,16 @@ private function resultTableRowsHandler(event:*):void {
 
 	try {
 		queryResult = new XML(event.result);
-		totalRecords = queryResult.Result;
-		
-		/* Trying to open first page */
-		showPageData(1);
+		totalRecords = queryResult.Result;		
 	}
 	catch (err:Error) {
 		/* error02 */
-		showMessage("External Manager error (02): Can not convert result into XML or result error!");
-		queryResult = new XML();
-		totalRecords = 0;
+		showMessage("Server response error (02)");
+		return;
 	}
+
+	/* Open first page */
+	showPageData(1);
 }
 
 // ----- Table Structure processing methods ---------------------------------------------
@@ -94,7 +98,7 @@ private function requestTableStructure():void {
 	}
 	catch (err:Error) {
 		/* error03 */
-		showMessage("External Manager error (03): Specified method haven't found on the externalManager!");		
+		showMessage("External Manager error (03)");		
 	}
 }
 
@@ -307,12 +311,61 @@ private function addRowBtnClickHandler():void {
 }
 
 private function commitBtnClickHandler():void {
-	var requestXMLParam:XML = new XML("<data />");
+	/* Check for new and changed objects. First - for changes, then for new */
+
+	var requestXMLParam:XML = new XML(<update />);
+	var thereAreChanged:Boolean = false;
+
+	/* Update rows */
+	for each (var dataGridRow:Object in dataGridCollection) {
+		if (dataGridRow.changed && !dataGridRow.fnew) {
+			thereAreChanged = true;
+			var xmlRow:XML = new XML(<row id={dataGridRow["id"]} />);
+			
+			for each (var dataGridCell:Object in dataGridColumns) {
+				xmlRow.appendChild("<cell name='" + dataGridCell.dataField + "'>" + dataGridRow[dataGridCell.dataField] + "</cell>");
+			}
+			requestXMLParam.appendChild(xmlRow);
+		}
+	}
+	if (thereAreChanged) {
+		try {
+			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+			remoteMethodCallOkfunction = updateRowsOkHandler;
+			manager.remoteMethodCall("update_row", requestXMLParam.toXMLString());
+		}
+		catch (err:Error) {
+			/* error090 */
+			showMessage("External Manager error (090)");		
+		}
+	} else {
+		addNewRowsRequest();
+	}
+}
+
+private function updateRowsOkHandler():void {
+	__commitBtn.enabled = false;
+	
+	/* Remove "changed" label from rows */
+	for each (var dataGridRow:Object in dataGridCollection) {
+		dataGridRow.changed = false;	
+	}
+	
+	addNewRowsRequest();
+	thereAreGlobalChanges = true;
+}
+
+private function addNewRowsRequest():void {
+	/* Check for new objects */
+
+	var requestXMLParam:XML = new XML(<insert />);
 	var thereAreNew:Boolean = false;
+
+	/* Insert rows */
 	for each (var dataGridRow:Object in dataGridCollection) {
 		if (dataGridRow.fnew) {
 			thereAreNew = true;
-			var xmlRow:XML = new XML("<row />");
+			var xmlRow:XML = new XML(<row />);
 			
 			for each (var dataGridCell:Object in dataGridColumns) {
 				xmlRow.appendChild(<cell>{dataGridRow[dataGridCell.dataField]}</cell>);
@@ -321,28 +374,105 @@ private function commitBtnClickHandler():void {
 		}
 	}
 	if (thereAreNew) {
+		__commitBtn.enabled = true;
+		
 		try {
-	//		manager.addEventListener("callComplete", someFunc);
+			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+			remoteMethodCallOkfunction = addRowsOkHandler;
 			manager.remoteMethodCall("add_row", requestXMLParam.toXMLString());
 		}
 		catch (err:Error) {
-			/* error09 */
-			showMessage("External Manager error (09): Specified method haven't found on the externalManager!");		
+			/* error009 */
+			showMessage("External Manager error (009)");		
 		}
 	}
-	
-	__commitBtn.enabled = false;
 }
+
+private function addRowsOkHandler():void {
+	__commitBtn.enabled = false;
+
+	/* Remove "new" label from rows */
+	for each (var dataGridRow:Object in dataGridCollection) {
+		dataGridRow.fnew = false;	
+	}
+	
+	thereAreGlobalChanges = true;
+}
+
 
 private function deleteBtnClickHandler():void {
 	try {
-//		manager.addEventListener("callComplete", someFunc);
-		manager.remoteMethodCall("delete_row", "<delete><row><column name='id'>" + dataGridCollection[__dg.selectedIndex]["id"] + "</column></row></delete>");
-		dataGridCollection.removeItemAt(__dg.selectedIndex);
+		manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+		remoteMethodCallOkfunction = deleteSelectedDGrowOk;
+	
+		var requestXMLParam:XML = new XML(<delete />);
+		requestXMLParam.appendChild(<row id={dataGridCollection[__dg.selectedIndex]["id"]} />);
+		
+		manager.remoteMethodCall("delete_row", requestXMLParam.toXMLString());
 	}
 	catch (err:Error) {
-		/* error09 */
-		showMessage("External Manager error (09): Specified method haven't found on the externalManager!");		
+		/* error091 */
+		showMessage("External Manager error (091)");		
+	}
+}
+
+private function deleteSelectedDGrowOk():void {
+	dataGridCollection.removeItemAt(__dg.selectedIndex);
+	
+	thereAreGlobalChanges = true;
+}
+
+// ----- Server Messages processing methods ---------------------------------------------
+
+private var remoteMethodCallOkfunction:Function;
+
+private function remoteMethodCallStandartMsgHandler(event:*):void {
+/*
+	There are may be 2 responses from server in this section: response that
+	everything is OK and standart error message (something wrong with remote
+	method parameters).
+*/
+
+	manager.removeEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+	
+	var xmlResult:XML;
+	try { 
+		xmlResult = new XML(event.result);
+	}
+	catch (err:Error) {	return;	}
+	
+	switch (xmlResult.name().toString()) {
+		case "Result":
+			trace (xmlResult);
+			if (remoteMethodCallOkfunction != null)
+				remoteMethodCallOkfunction();
+			break;
+		case "Error":
+			showMessage("ERROR: " + xmlResult);
+			break;
+	}
+}
+
+private function remoteMethodCallErrorMsgHandler(event:*):void {
+/*
+	This function handles responses displaying that method could not be executed
+	for some reason(s) (may be privilegies reason or method is absent?). 
+*/
+	var xmlResult:XML;
+	try { 
+		xmlResult = new XML(event.result);
+	}
+	catch (err:Error) {	return;	}
+	
+	if (xmlResult.name().toString() == "Result") {
+		try {
+			showMessage("SOAP EXCEPTION: " + xmlResult.Error);
+		}
+		catch (err:Error) {
+			showMessage("UNKNOWN SOAP EXCEPTION: " + xmlResult);
+		}
+	} else {
+		showMessage("UNKNOWN ERROR OCCURED: " + xmlResult.toString());
 	}
 }
 

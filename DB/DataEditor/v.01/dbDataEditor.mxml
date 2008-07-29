@@ -9,7 +9,7 @@
 
 	<!-- Main Class Scripting File -->	
 	<mx:Script source="dbDataEditor_s.as" />
-	
+		
 	<mx:DataGrid id="__dg"
 		width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
 		itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"/>
@@ -21,7 +21,6 @@
 		<mx:Label text="Pages:" />
 		<mx:HBox id="__pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0" />
 	</mx:HBox>
-	
 
 	<mx:ViewStack id="__alertArea" width="100%" height="24" paddingTop="0" paddingBottom="0">
 		<mx:Canvas id="__normal" width="100%" height="24">
@@ -37,15 +36,15 @@
 			</mx:HBox>
 		</mx:Canvas>
 		<mx:Canvas id="__alert">
-			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
-				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center" horizontalScrollPolicy="off">
+				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" width="100%" maxWidth="550" />
 				<mx:Button id="__alertYesBtn" label="Yes" height="18" click="{alertClickHandler('Yes');}" />
 				<mx:Button id="__alertNoBtn" label="No" height="18" click="{alertClickHandler('No');}" />
 			</mx:HBox> 					
 		</mx:Canvas>
 		<mx:Canvas id="__message">
-			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
-				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center" horizontalScrollPolicy="off">
+				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" width="100%" maxWidth="600" />
 				<mx:Button id="__msgOkBtn" label="Ok" height="18" click="{messageOkClickHandler();}" />
 			</mx:HBox> 					
 		</mx:Canvas>
