@@ -2,21 +2,21 @@
 import mx.controls.Alert;
 import mx.utils.UIDUtil;
 
-private var tableStructure:XML;				/* XML got by vdom IDE (of existing table) */
+private var tableStructure:XML;			/* XML got by vdom IDE (of existing table) */
 
-private var _tableID:String;
-private var _tableName:String;
-private var _selectedListItem:Object;
-private var _manager:*;						/* External Manager */
+private var tableID:String;
+private var tableName:String;
+private var selectedListItem:Object;
+private var manager:*;					/* External Manager */
 
 [Bindable]
-private var _columnsProvider:Array = [];	/* of Object */
+private var columnsProvider:Array = [];	/* of Object */
 
 
 public function set externalManager(ref:*):void {
 	try {
-		_manager = ref;
-		_manager.addEventListener("callError", rmcErrorHandler);	/* add permanent event listener */
+		manager = ref;
+		manager.addEventListener("callError", rmcErrorHandler);	/* add permanent event listener */
 		requestTableStructure();
 		__addRemoveBtns.enabled = true;
 	}
@@ -33,7 +33,7 @@ public function get value():String {
 	var tableStructure:XML = new XML(<tablestructure />);
 	
 	var columnDef:Object;
-	for each (columnDef in _columnsProvider) {
+	for each (columnDef in columnsProvider) {
 		if (!columnDef.fnew)
 			tableStructure.appendChild(<columndef id={columnDef.data} name={columnDef.label} type={columnDef.type} />);
 	}
@@ -44,10 +44,9 @@ public function get value():String {
 
 private function requestTableStructure():void {
 	/* Init getting data from External Manager */
-	_manager.addEventListener("callComplete", loadXMLData);
-	
 	try {
-		_manager.remoteMethodCall("get_structure", "");
+		manager.addEventListener("callComplete", loadXMLData);
+		manager.remoteMethodCall("get_structure", "");
 	}
 	catch (err:Error) {
 		return;
@@ -66,7 +65,7 @@ private function rmcErrorHandler(event:*):void {
 }
 
 private function loadXMLData(event:*):void {
-	_manager.removeEventListener("callComplete", loadXMLData);
+	manager.removeEventListener("callComplete", loadXMLData);
 	
 	/* Applying structure data after 'get_structure' remote method */
 	try {
@@ -79,9 +78,9 @@ private function loadXMLData(event:*):void {
 		return;
 	}
 
-	_columnsProvider = []; /* Array of Object */
-	_tableID = tableStructure.table.@id;
-	_tableName = tableStructure.table.@name;
+	columnsProvider = []; /* Array of Object */
+	tableID = tableStructure.table.@id;
+	tableName = tableStructure.table.@name;
 	
 	var columnDef:XML;
 	for each (columnDef in tableStructure.table.header.column) {
@@ -104,10 +103,10 @@ private function loadXMLData(event:*):void {
 		if (column.type == "") column.type = "TEXT";
 		if (column.unique == "") column.unique = "False";
 
-		_columnsProvider.push(column);		
+		columnsProvider.push(column);		
 	}
 	
-	__propList.dataProvider = _columnsProvider;
+	__propList.dataProvider = columnsProvider;
 }
 
 private function listChangeHandler():void {
@@ -128,25 +127,26 @@ private function listChanger():void {
 	__applyBtn.enabled = false;
 	__removeBtn.enabled = true;
 	controlsEnable(true);
-	_selectedListItem = __propList.selectedItem;
-	if (_selectedListItem != null) {
-		__name.text	= _selectedListItem.label;
-		__id.text	= _selectedListItem.data;
+	selectedListItem = __propList.selectedItem;
+	if (selectedListItem != null) {
+		__name.text	= selectedListItem.label;
+		__id.text	= selectedListItem.data;
 		
-		switch (_selectedListItem.type.toLowerCase()) {	
+		switch (selectedListItem.type.toLowerCase()) {	
 			case "text":	__type.selectedIndex = 0; break;
 			case "integer":	__type.selectedIndex = 1; break;
 			case "real":	__type.selectedIndex = 2; break;
 			case "blob":	__type.selectedIndex = 3; break;
 			default:
-				Alert.show("Unknown column type in table definition XML", "Unexpected error!");
+				/* error03 */
+				showMessage("Unexpected error! (03)| Unknown column type in table definition XML");
 		}
 		
-		__pKey.selected = _selectedListItem.primary.toLowerCase() == "true";
-		__aIncrement.selected = _selectedListItem.aincrement.toLowerCase() == "true";
-		__null.selected = _selectedListItem.notnull.toLowerCase() == "true";
-		__defValue.text = _selectedListItem.defvalue.toString();
-		__unique.selected = _selectedListItem.unique.toLowerCase() == "true";
+		__pKey.selected = selectedListItem.primary.toLowerCase() == "true";
+		__aIncrement.selected = selectedListItem.aincrement.toLowerCase() == "true";
+		__null.selected = selectedListItem.notnull.toLowerCase() == "true";
+		__defValue.text = selectedListItem.defvalue.toString();
+		__unique.selected = selectedListItem.unique.toLowerCase() == "true";
 	}
 	enablePropertiesPanel(true);	
 }
@@ -170,7 +170,7 @@ private function controlsEnable(value:Boolean):void {
 private function applyBtnHandler():void {
 	/* Check if the column with the same name is already exists */
 	var nameExists:Boolean = false;
-	for each (var column:Object in _columnsProvider) {
+	for each (var column:Object in columnsProvider) {
 		if (column.label == __name.text)
 			nameExists = true; 
 	}
@@ -181,39 +181,39 @@ private function applyBtnHandler():void {
 	}
 	
 	/* Updating data */
-	_selectedListItem.label = __name.text;
-	_selectedListItem.type = __type.selectedItem.data;
-	_selectedListItem.notnull = Boolean(!__null.selected).toString();
-	_selectedListItem.primary = __pKey.selected.toString();
-	_selectedListItem.aincrement = __aIncrement.selected.toString();
-	_selectedListItem.unique = __unique.selected.toString();
-	_selectedListItem.defvalue = __defValue.text;
+	selectedListItem.label = __name.text;
+	selectedListItem.type = __type.selectedItem.data;
+	selectedListItem.notnull = Boolean(!__null.selected).toString();
+	selectedListItem.primary = __pKey.selected.toString();
+	selectedListItem.aincrement = __aIncrement.selected.toString();
+	selectedListItem.unique = __unique.selected.toString();
+	selectedListItem.defvalue = __defValue.text;
 	__applyBtn.enabled = false;
 	controlsEnable(true);
 
 	/* Applying changes */
 	
 	/* if selected column is new, add it */
-	if (_selectedListItem.fnew) {
-		_selectedListItem.fnew = false;
+	if (selectedListItem.fnew) {
+		selectedListItem.fnew = false;
 		
 		var request:XML = 
 			<tableStructure>
 				<column 
-					id={_selectedListItem.data}
-					name={_selectedListItem.label}
-					type={_selectedListItem.type}
-					notnull={_selectedListItem.notnull.toString()}
-					primary={_selectedListItem.primary.toString()}
-					autoincrement={_selectedListItem.aincrement.toString()}
-					unique={_selectedListItem.unique.toString()}
-					default={_selectedListItem.defvalue}
+					id={selectedListItem.data}
+					name={selectedListItem.label}
+					type={selectedListItem.type}
+					notnull={selectedListItem.notnull.toString()}
+					primary={selectedListItem.primary.toString()}
+					autoincrement={selectedListItem.aincrement.toString()}
+					unique={selectedListItem.unique.toString()}
+					default={selectedListItem.defvalue}
 				/>
 			</tableStructure>;
 			
-		_manager.addEventListener("callComplete", standartRMCMessageHandler);	
 		try {
-			_manager.remoteMethodCall("add_column ", request.toXMLString());
+			manager.addEventListener("callComplete", standartRMCMessageHandler);
+			manager.remoteMethodCall("add_column ", request.toXMLString());
 		}
 		catch (err:Error) {
 			return;
@@ -228,8 +228,8 @@ private function applyBtnHandler():void {
 	}
 	
 	/* Update List Data Provider */
-	__propList.dataProvider = _columnsProvider;
-	__propList.selectedItem = _selectedListItem;	
+	__propList.dataProvider = columnsProvider;
+	__propList.selectedItem = selectedListItem;	
 }
 
 private function standartRMCMessageHandler(event:*):void {
@@ -255,7 +255,7 @@ private function standartRMCMessageHandler(event:*):void {
 }
 
 private function addBtnHandler():void {
-	_columnsProvider.push({
+	columnsProvider.push({
 		label:'* new',
 		data:UIDUtil.createUID().toLowerCase(),
 		type:'text',
@@ -267,9 +267,9 @@ private function addBtnHandler():void {
 		fnew:true
 	});
 	
-	__propList.dataProvider = _columnsProvider;
-	__propList.selectedIndex = _columnsProvider.length - 1;
-	_selectedListItem = __propList.selectedItem;
+	__propList.dataProvider = columnsProvider;
+	__propList.selectedIndex = columnsProvider.length - 1;
+	selectedListItem = __propList.selectedItem;
 	listChangeHandler();
 }
 
@@ -281,19 +281,19 @@ private function removeSelectedProp():void {
 	/* Applying changes */
 //	_sourceXML.ChangeLog.appendChild(<ColumnDelete id={_selectedListItem.data} />);
 	
-	_manager.remoteMethodCall("delete_column", "<delete><column id='" + _selectedListItem.data + "' /></delete>");
+	manager.remoteMethodCall("delete_column", "<delete><column id='" + selectedListItem.data + "' /></delete>");
 
 	/* Remove the element */
 	var newColsProvider:Array = new Array();
 	var i:int = 0;
-	for each (var item:Object in _columnsProvider) {
+	for each (var item:Object in columnsProvider) {
 		if (i != __propList.selectedIndex) {
 			newColsProvider.push(item);
 		}
 		i++;
 	}
-	_columnsProvider = newColsProvider;
-	__propList.dataProvider = _columnsProvider;
+	columnsProvider = newColsProvider;
+	__propList.dataProvider = columnsProvider;
 	enablePropertiesPanel(false);
 	__removeBtn.enabled = false;
 }

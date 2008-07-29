@@ -13,7 +13,7 @@
 	<mx:HBox id="__mainHBox" width="100%" height="100%" horizontalGap="5" verticalGap="0">
 		<mx:VBox height="100%" width="250" verticalGap="0">
 			<mx:Label text="Columns:" />
-			<mx:List id="__propList" width="100%" height="100%" dataProvider="{_columnsProvider}"
+			<mx:List id="__propList" width="100%" height="100%" dataProvider="{columnsProvider}"
 				change="{listChangeHandler();}" />
 		</mx:VBox>
 
@@ -78,15 +78,15 @@
 			</mx:HBox> 		
 		</mx:Canvas>
 		<mx:Canvas id="__alert">
-			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
-				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center" horizontalScrollPolicy="off">
+				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" maxWidth="550" />
 				<mx:Button id="__alertYesBtn" label="Yes" height="18" click="{alertClickHandler('Yes');}" />
 				<mx:Button id="__alertNoBtn" label="No" height="18" click="{alertClickHandler('No');}" />
 			</mx:HBox> 					
 		</mx:Canvas>
 		<mx:Canvas id="__message">
-			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center">
-				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" />
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center" horizontalScrollPolicy="off">
+				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" maxWidth="600" />
 				<mx:Button id="__msgOkBtn" label="Ok" height="18" click="{messageOkClickHandler();}" />
 			</mx:HBox> 					
 		</mx:Canvas>
