@@ -247,7 +247,7 @@ private function showPageData(page:int):void {
 		__pagesArea.addChild(pageItem);
 	}
 	
-	/*
+/*
 	if (pagesCount > MAX_PAGES) {
 		pageItem = new LinkButton();
 		pageItem.label = "...";
@@ -258,15 +258,8 @@ private function showPageData(page:int):void {
 		pageItem.addEventListener(MouseEvent.CLICK, shiftPagesToRight);				
 		__pagesArea.addChild(pageItem);
 	}
-	*/
-}
+*/
 
-private function shiftPagesToRight():void {
-	
-}
-
-private function shiftPagesToLeft():void {
-	
 }
 
 private function pageClickHandler(mEvent:MouseEvent):void {
@@ -331,7 +324,7 @@ private function commitBtnClickHandler():void {
 	if (thereAreChanged) {
 		try {
 			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-			remoteMethodCallOkfunction = updateRowsOkHandler;
+			remoteMethodCallOkFunction = updateRowsOkHandler;
 			manager.remoteMethodCall("update_row", requestXMLParam.toXMLString());
 		}
 		catch (err:Error) {
@@ -351,8 +344,8 @@ private function updateRowsOkHandler():void {
 		dataGridRow.changed = false;	
 	}
 	
-	addNewRowsRequest();
 	thereAreGlobalChanges = true;
+	addNewRowsRequest();
 }
 
 private function addNewRowsRequest():void {
@@ -374,11 +367,12 @@ private function addNewRowsRequest():void {
 		}
 	}
 	if (thereAreNew) {
+		/* Turn on "Commit" button again in case if errors will occur */
 		__commitBtn.enabled = true;
 		
 		try {
 			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-			remoteMethodCallOkfunction = addRowsOkHandler;
+			remoteMethodCallOkFunction = addRowsOkHandler;
 			manager.remoteMethodCall("add_row", requestXMLParam.toXMLString());
 		}
 		catch (err:Error) {
@@ -399,11 +393,15 @@ private function addRowsOkHandler():void {
 	thereAreGlobalChanges = true;
 }
 
-
 private function deleteBtnClickHandler():void {
+	if (dataGridCollection[__dg.selectedIndex]["fnew"]) {
+		dataGridCollection.removeItemAt(__dg.selectedIndex);
+		return;
+	}
+	
 	try {
 		manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-		remoteMethodCallOkfunction = deleteSelectedDGrowOk;
+		remoteMethodCallOkFunction = deleteSelectedDGRowOk;
 	
 		var requestXMLParam:XML = new XML(<delete />);
 		requestXMLParam.appendChild(<row id={dataGridCollection[__dg.selectedIndex]["id"]} />);
@@ -416,7 +414,7 @@ private function deleteBtnClickHandler():void {
 	}
 }
 
-private function deleteSelectedDGrowOk():void {
+private function deleteSelectedDGRowOk():void {
 	dataGridCollection.removeItemAt(__dg.selectedIndex);
 	
 	thereAreGlobalChanges = true;
@@ -424,7 +422,7 @@ private function deleteSelectedDGrowOk():void {
 
 // ----- Server Messages processing methods ---------------------------------------------
 
-private var remoteMethodCallOkfunction:Function;
+private var remoteMethodCallOkFunction:Function;
 
 private function remoteMethodCallStandartMsgHandler(event:*):void {
 /*
@@ -444,8 +442,8 @@ private function remoteMethodCallStandartMsgHandler(event:*):void {
 	switch (xmlResult.name().toString()) {
 		case "Result":
 			trace (xmlResult);
-			if (remoteMethodCallOkfunction != null)
-				remoteMethodCallOkfunction();
+			if (remoteMethodCallOkFunction != null)
+				remoteMethodCallOkFunction();
 			break;
 		case "Error":
 			showMessage("ERROR: " + xmlResult);
