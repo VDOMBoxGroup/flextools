@@ -34,6 +34,8 @@ import vdom.managers.DataManager;
 import vdom.managers.FileManager;
 import mx.charts.CategoryAxis;
 import flash.utils.ByteArray;
+import flash.events.KeyboardEvent;
+import mx.core.Application;
 
 include "typesIcons.as";
 
@@ -84,6 +86,7 @@ private function creationComplete():void {
 	loadTypesIcons();
 	listResourcesQuery();
 	this.visible = true;
+	Application.application.addEventListener(KeyboardEvent.KEY_DOWN, keyPressHandler);
 }
 
 private function listResourcesQuery():void {
@@ -317,6 +320,20 @@ private function doneHandler():void {
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
 	this.dispatchEvent(cEvent);
 }
+
+private function keyPressHandler(keybEvent:KeyboardEvent):void {
+	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, keyPressHandler);
+	
+	switch (keybEvent.keyCode) {
+		case 27: /* Escape Press */
+			closeHandler(new CloseEvent(CloseEvent.CLOSE));
+			break;
+		case 13: /* Enter Press */
+			doneHandler();
+			break;
+	}
+}
+
 
 private function closeHandler(cEvent:CloseEvent):void {
 	PopUpManager.removePopUp(this);
