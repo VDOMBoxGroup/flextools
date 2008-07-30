@@ -6,11 +6,11 @@
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" width="800" height="600"
-	title="Resource Manager"
+	title="Resource Browser"
 	creationComplete="{creationComplete();}"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	borderAlpha="0.9" cornerRadius="1" 
+	borderAlpha="0.95" cornerRadius="1" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 	visible="true" shadowDirection="right">
 	
