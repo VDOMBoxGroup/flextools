@@ -34,14 +34,18 @@
 			verticalAlign="middle" paddingLeft="5" paddingRight="5"
 			backgroundColor="#e5e5e5" borderStyle="solid">
 			
-			<mx:ButtonBar height="24" itemClick="{applyView(event);}">          			
+			<mx:ButtonBar height="24" itemClick="{applyView(event);}" iconField="icon" labelField="label">          			
 				<mx:Array>
-					<mx:String id="tView">Thumbnails view</mx:String>
-					<mx:String id="lView">List view</mx:String>
+					<mx:Object id="tView" label="Thumbnails view" 
+						icon="@Embed(source='/assets/resourceBrowserIcons/interface/thumbsview.png')" />
+					<mx:Object id="lView" label="List view"
+						icon="@Embed(source='/assets/resourceBrowserIcons/interface/listview.png')" />
 				</mx:Array>					
 			</mx:ButtonBar>
 			
-			<mx:Button id="__expandBtn" height="24" label="Expand" toggle="true" click="{expandHandler();}" />			
+			<mx:Button id="__expandBtn" 
+				height="24" label="Expand" toggle="true" click="{expandHandler();}"
+				icon="@Embed(source='/assets/resourceBrowserIcons/interface/expand.png')" />			
 			
 			<mx:VRule height="100%" />
 			
@@ -49,7 +53,8 @@
 			<mx:ComboBox id="__filterCBx" width="100%" dataProvider="{filterDataProvider}" change="{filterCBxHandler();}" />
 			<mx:VRule height="100%" />
 			<mx:Spacer width="150" />
-			<mx:Button height="24" label="Upload File..." click="{fileUploadHandler();}" />
+			<mx:Button height="24" label="Upload File..." click="{fileUploadHandler();}"
+				icon="@Embed(source='/assets/resourceBrowserIcons/interface/upload.png')" />
 			
 			<!--
 			<mx:VRule height="100%" />
@@ -95,6 +100,6 @@
 		<mx:Label text="Filtered:" />
 		<mx:Label text="{filteredResources}" fontWeight="bold" />
 		<mx:Spacer width="100%" />
-		<mx:Button label="Done" click="{doneHandler();}" />
+		<mx:Button label="Done" click="{doneHandler();}" icon="@Embed(source='/assets/resourceBrowserIcons/interface/done.png')" />
 	</mx:ControlBar>
 </mx:TitleWindow>

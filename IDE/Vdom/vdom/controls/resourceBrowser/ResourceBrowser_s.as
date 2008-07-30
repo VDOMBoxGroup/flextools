@@ -32,6 +32,8 @@ import vdom.events.FileManagerEvent;
 import vdom.events.ResourceBrowserEvent;
 import vdom.managers.DataManager;
 import vdom.managers.FileManager;
+import mx.charts.CategoryAxis;
+import flash.utils.ByteArray;
 
 include "typesIcons.as";
 
@@ -345,15 +347,14 @@ private function fileSelectHandler(event:Event):void {
 		var srcStream:FileStream = new FileStream();
 		
 		srcStream.open(fileForUpload, FileMode.READ);
+		
+		if (srcStream.bytesAvailable == 0) {
+			Alert.show("File is empty", "Could not send file");
+			return; 
+		}
+		
 		srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
 		srcStream.close();
-		
-		var compressedData:ByteArray = new ByteArray();
-		compressedData.writeBytes(srcBytes);
-		compressedData.compress();
-		
-		var base64Data:Base64Encoder = new Base64Encoder();
-		base64Data.encodeBytes(compressedData);
 		
 		var fileType:String = "";
 		try {		
@@ -363,28 +364,32 @@ private function fileSelectHandler(event:Event):void {
 			fileType = fileForUpload.extension;
 		}
 		var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
-		setResource(fileType, fileName, base64Data.toString());
+		setResource(fileType, fileName, srcBytes);
 	}	
 }
 
-
-/* Functions below will be replaced with new ones when fileManager will support such operations */
-private function setResource(resType:String, resName:String, resData:String):void {
-	soap.setResource(dataManager.currentApplicationId, resType, resName, resData);
-	soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
-	soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+private function setResource(resType:String, resName:String, resData:ByteArray):void {
+	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
+	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);
+	fileManager.setResource(resType, resName, resData);	
 }
 
-private function setResourceOkHandler(spEvt:SoapEvent):void {
-	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
-	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
-	var result:XML = spEvt.result;
-	_selectedItemID = result.Resource.@id.toString();
-	listResourcesQuery();
+private function setResourceOkHandler(fmEvent:FileManagerEvent):void {
+	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
+	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);	
+
+	try {
+		var result:XML = XML(fmEvent.result);
+		_selectedItemID = result.Resource.@id.toString();
+		listResourcesQuery();
+	}
+	catch (err:Error) {
+		Alert.show("Unknown response from server", "Resource Id getting error");
+	}
 }
 
 private function setResourceErrorHandler(spEvt:SoapEvent):void {
 	trace('Resource browser: ERROR at sending resource');
-	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
-	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
+	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
+	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);	
 }

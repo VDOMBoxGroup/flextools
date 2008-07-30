@@ -2,64 +2,64 @@
 
 private var typesIcons:Array = new Array(); 
 
-[Embed(source="/assets/resourceBrowserIcons/avi.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/avi.png")]
 private var avi_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/bin.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/bin.png")]
 private var bin_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/blank.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/blank.png")]
 private var blank_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/bmp.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/bmp.png")]
 private var bmp_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/c.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/c.png")]
 private var c_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/css.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/css.png")]
 private var css_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/cfg.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/cfg.png")]
 private var cfg_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/cpp.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/cpp.png")]
 private var cpp_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/dll.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/dll.png")]
 private var dll_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/doc.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/doc.png")]
 private var doc_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/dvi.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/dvi.png")]
 private var dvi_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/gif.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/gif.png")]
 private var gif_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/htm.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/htm.png")]
 private var htm_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/swf.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/swf.png")]
 private var swf_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/pdf.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/pdf.png")]
 private var pdf_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/txt.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/txt.png")]
 private var txt_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/mid.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/mid.png")]
 private var mid_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/xls.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/xls.png")]
 private var xls_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/wav.png")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/wav.png")]
 private var wav_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/spinner.swf")]
+[Embed(source="/assets/resourceBrowserIcons/resourceType/spinner.swf")]
 private var waiting_Icon:Class;
 
 /* Creating array with embeded icons of resources types */
