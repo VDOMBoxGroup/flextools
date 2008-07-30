@@ -153,15 +153,31 @@ private function adjustmentTree(xml1:XML):void
 	var itIsCorrectTree:Boolean = false;
 	/*  creating tree for top level conteiner whith child */
 	for (var name:String in massTreeObj)
+	{
 		if (massTreeObj[name].parent == null && massTreeObj[name].childs != null)
 		{
 			setPosition(name);	
 			itIsCorrectTree = true;
 		} 
+	}
 	
+	if(!itIsCorrectTree)
+	{
+		if (massTreeObj[name].parent != null && massTreeObj[name].childs != null)
+		setPosition(name);	
+	}
 	/*  placement top level conteiner whithout child */ 
-	var lavel:int = massMap.length;
+	var lavel:int
+	if(massMap.length == 1)
+	{
+		lavel = 0;
+	}else 
+	{
+		lavel = massMap.length;
 		massMap[lavel] = 0;
+	}
+		
+		
 	for (name in massTreeObj)
 		if (massTreeObj[name].parent == null && massTreeObj[name].childs == null)
 		{
@@ -178,7 +194,7 @@ private function adjustmentTree(xml1:XML):void
 		for (var str:String in massTreeObj)
 		{
 			massTreeElements[str].x  = massTreeObj[str].mapX * 220;
-			massTreeElements[str].y  = massTreeObj[str].mapY * 60 + 40;
+			massTreeElements[str].y  = massTreeObj[str].mapY * 130 + 20;
 //		}
 		
 		saveToServer();
@@ -311,48 +327,6 @@ private function createTreeArr(xml:XML):void
 	}
 }
 
-
-/*  **************** O L D ***************
-private function createTreeArr(xml:XML):void
-{
-	topLevelTypes = dataManager.getTopLevelTypes();
-	var xmlTopLevelObjects:XMLList = dataManager.listPages;
-	for each(var xmlObj:XML in xml.children())
-	{
-		var ID:String = xmlObj.@ID.toXMLString();
-	
-	//	if(ID == '')  continue; // not tested !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	
-		var page:XML = xmlTopLevelObjects.(@ID == ID )[0];
-		var treeElement:TreeElement = new TreeElement();
-			
-		//massTreeElements[ID] =  new TreeElement();
-
-		treeElement.ID 			= xmlObj.@ID.toXMLString();
-		treeElement.x 			= xmlObj.@left.toXMLString();
-		treeElement.y 			= xmlObj.@top.toXMLString();	
-		treeElement.state 		= xmlObj.@state.toXMLString();	
-		treeElement.resourceID 	= xmlObj.@ResourceID.toXMLString();
-
-		if (treeElement.resourceID!='') 
-				fileManager.loadResource(dataManager.currentApplicationId, treeElement.resourceID, treeElement);
-
-		treeElement.name =  page.Attributes.Attribute.(@Name == 'title' );
-		treeElement.description = page.Attributes.Attribute.(@Name == 'description' );
-		
-		
-		
-		var typeID:String = page.@Type;
-		treeElement.type  =  getType(typeID);
-		treeElement.typeID =  getIcon(typeID);
-		treeElement = addEventListenerToTreeElement(treeElement);
-		
-		massTreeElements[ID] =  treeElement;
-		main.addChild(massTreeElements[ID]);
-
-	}
-}
-*/
 private function getType(ID:String):String
 {
 	for each(var lavel:XML in topLevelTypes )
