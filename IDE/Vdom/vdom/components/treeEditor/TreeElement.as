@@ -133,8 +133,8 @@ package vdom.components.treeEditor
 		
 		private function plusClickHandler(msEvt:MouseEvent):void
 		{
-			min = !min
-			changeState(min)
+//			min = !min
+			changeState(!min)
 		}
 		
 		
@@ -262,6 +262,9 @@ package vdom.components.treeEditor
 			// при нажатии кнопки свернуть
 		private function changeState(blHide:Boolean):void
 		{
+			if(min == blHide)
+				return;
+				
 			if (!blHide){
 				if(contains(cnvDownLayer))	removeChild(cnvDownLayer);
 				imgPlus.source = plus;
@@ -425,8 +428,10 @@ package vdom.components.treeEditor
 		{
 			//txt.text = names;
 		//	trace('names: ' +names);
-			if(names == 'true')	changeState(true)
-				else changeState(false);
+//			if(names == 'true')	changeState(true)
+//				else changeState(false);
+				
+			changeState(names == 'true');
 		}
 		
 		public function get state():String
@@ -474,6 +479,12 @@ package vdom.components.treeEditor
 		{
 			fileManager.loadResource(dataManager.currentApplicationId,  resID, this, 'typeResourse');
 		}
+		/*
+		public function set state(bl:Boolean):void
+		{
+			changeState(bl);
+		}
+		*/
 	/*	
 		public function set typeResourse(data:Object):void
 		{

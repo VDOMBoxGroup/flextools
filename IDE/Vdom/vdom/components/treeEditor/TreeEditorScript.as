@@ -40,8 +40,10 @@ private function deleteObject(strID:String):void
 	main.removeChild(massTreeElements[strID]);
 	delete massTreeElements[strID];
 	
-	dataManager.deleteObject(strID);
+
+	//dataManager.deleteObject(strID);
 	
+
 	curTree = null;
 	
 	saveToServer();
@@ -120,6 +122,7 @@ private function adjustmentTree(xml1:XML):void
 {
 	var massMap:Array = new Array();
 	var massTreeObj:Array = new Array();
+
 	
 	for(var obID:String in massTreeElements)
 	{
@@ -128,7 +131,12 @@ private function adjustmentTree(xml1:XML):void
 		massTreeObj[obID].child = null;
 	}
 	
+	if(!xml1.*.length())
+		return;
+
+	
 	/*
+
 	for each(var xmlObj:XML in xml1.children())
 	{
 		var obID:String = xmlObj.@ID.toXMLString();
@@ -165,8 +173,12 @@ private function adjustmentTree(xml1:XML):void
 	
 	if(!itIsCorrectTree)
 	{
-		if (massTreeObj[name].parent != null && massTreeObj[name].childs != null)
-		setPosition(name);	
+
+		for (name in massTreeObj)
+		{
+			if (massTreeObj[name].parent != null && massTreeObj[name].childs != null)
+			setPosition(name);
+		}	
 	}
 	/*  placement top level conteiner whithout child */ 
 	var lavel:int
@@ -193,6 +205,7 @@ private function adjustmentTree(xml1:XML):void
 		
 //	if(itIsCorrectTree)
 //	{
+
 		for (var str:String in massTreeObj)
 		{
 		//	var move:Move = new Move();

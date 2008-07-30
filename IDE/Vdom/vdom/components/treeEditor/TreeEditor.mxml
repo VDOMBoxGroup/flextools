@@ -252,12 +252,13 @@
 		curTree.current = false;
 		curTree = massTreeElements[trEvt.ID];
 		curTree.current = true;
-		Alert.show("Do you want to delete Element?", "Delete Element", 3, this, alertClickDeleteTreeElement);
+		Alert.show(resourceManager.getString('Tree','do_you_want_to_delete_element'), resourceManager.getString('Tree','delete_element'), 3, this, alertClickDeleteTreeElement);
 	}
 	 
             // Event handler function for displaying the selected Alert button.
     private function alertClickDeleteTreeElement(event:CloseEvent):void 
     {
+//    	trace('click delete');
         if (event.detail==Alert.YES)
         {
         	dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
@@ -429,6 +430,17 @@
 		saveToServer();
 		//showHnadler();
 	}
+	
+	private var expand:Boolean;
+	private function expandAll():void
+	{
+		expand = !expand;
+		for (var tID:String in massTreeElements)
+		{
+			massTreeElements[tID].state = expand.toString();
+		}
+		
+	} 
 	]]>
 </mx:Script>
 <!--
@@ -449,6 +461,7 @@
 	
 	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"    click="addTreeElementLauncher()"/>
 	<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
+	<mx:Button  label="{resourceManager.getString('Tree','expand_all')}"    click="expandAll()"/>
 
 </mx:VBox>
 </mx:HBox>

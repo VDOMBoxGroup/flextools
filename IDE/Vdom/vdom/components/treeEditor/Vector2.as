@@ -77,9 +77,12 @@ package vdom.components.treeEditor
 			var alf:Number;
 			var dA:Number = 0.2;
 			var dDist:Number = 10;
-			
+//			 trace(x0+' : '+ y0+' : '+  x1+' : '+  y1);
 			dX = x0-x1;
 			dY = y0-y1; 
+			
+			
+			if(!dX && !dY)		return;
 			
 			middleX = x0 - dX / 2;
 			middleY = y0 - dY / 2;

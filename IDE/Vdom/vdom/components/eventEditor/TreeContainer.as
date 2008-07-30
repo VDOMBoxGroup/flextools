@@ -40,7 +40,7 @@ package vdom.components.eventEditor
 		{
 			loadedPages = [];
 			selectedNode = null;
-			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener)
+			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener);
             dataManager.changeCurrentPage(dataManager.currentPageId);
 		}
 		
@@ -49,6 +49,13 @@ package vdom.components.eventEditor
 		{
 			if(selectedNode)
 				dataManager.changeCurrentPage(selectedNode.@ID);
+		}
+		
+		private function changeCurrentPageListener(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener);
+			dataManager.addEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED,  changeCurrentObjectListener);
+			
 		}
 		
 		private function treeChangeLister(evt:Event):void
@@ -84,7 +91,7 @@ package vdom.components.eventEditor
               }
 		}
 		private var curId:String;
-		private function changeCurrentPageListener(dmEvt:DataManagerEvent):void
+		private function changeCurrentObjectListener(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener);
 			
@@ -106,6 +113,7 @@ package vdom.components.eventEditor
 				if(topLevelObjectId && xmlTreeData) 
 				{
 					selectedItem = xmlTreeData.Object.(@ID == topLevelObjectId)[0];
+					trace('selectedItem: '+selectedItem.toXMLString());
 					this.scrollToIndex(getItemIndex(selectedItem));
 				}
 		}
@@ -138,11 +146,14 @@ package vdom.components.eventEditor
 					xmlTreeData.appendChild(xmlList);
 			} 
 				super.dataProvider = xmlTreeData;
+				trace('***********************');
+				trace(xmlTreeData.toXMLString());
 				
 				if(selectedNode)
 				{
 					this.selectedItem = selectedNode;
 					this.scrollToIndex(getItemIndex(selectedItem));
+					trace('selectedItem: '+selectedItem.toXMLString());
 				}
 			}
 		}

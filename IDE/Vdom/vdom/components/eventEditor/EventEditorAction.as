@@ -77,6 +77,7 @@ package vdom.components.eventEditor
 		
 		public function EventEditorAction(data:Object, containerID:String)
 		{
+			trace('containerID: '+containerID);
 			super();
 			dataManager = DataManager.getInstance();
 	

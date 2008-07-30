@@ -101,7 +101,7 @@
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
 	 			if(dataChanged)
-	 				creatDataToServer();
+	 				creatDataToServer(eeEvt.objID);
 	 			
 	 			dataChanged = false;
 	 			
@@ -526,8 +526,10 @@
 			//  проверка если перетащили за границы :	treeElementMousUpHandler();
 			}
 			
-			private function creatDataToServer():void
+			private function creatDataToServer(contrID:String):void
 			{
+				trace('SEND curContainerID: '+contrID);
+				return;
 				dataToServer = <E2vdom>	<Actions/> 	<Events/> </E2vdom>;
 				
 				var temXML:XML;
@@ -576,7 +578,8 @@
 				}
 				
 		//		trace('----toServer---\n '+curContainerID+'\n'+ dataToServer.toXMLString())
-				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
+		     	
+				dataManager.setApplicationEvents(contrID, dataToServer.toXMLString());
 			}
 			
 			private function cretDat(xmlToTree:XML=null):void
