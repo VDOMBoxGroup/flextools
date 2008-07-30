@@ -64,7 +64,8 @@
 				</mx:HBox>
 								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
-					<mx:Button id="__applyBtn" label="Apply changes" click="{applyBtnClickHandler();}" enabled="false"/>
+					<mx:Button id="__applyBtn" label="Apply changes" click="{applyBtnClickHandler();}" enabled="false"
+						icon="@Embed(source='/icons/commit.png')"/>
 				</mx:HBox>				
 			</mx:VBox>
 		</mx:VBox>		
@@ -73,8 +74,10 @@
 	<mx:ViewStack id="__alertArea" width="100%" height="24" paddingTop="0" paddingBottom="0">
 		<mx:Canvas id="__normal" width="100%" height="24">
 			<mx:HBox id="__addRemoveBtns" width="100%" height="24" verticalAlign="middle">
-				<mx:Button id="__addBtn" label="Add" click="{addBtnHandler();}" height="20" />
-				<mx:Button id="__removeBtn" label="Remove" click="{removeBtnHandler();}" height="20" enabled="false" />
+				<mx:Button id="__addBtn" label="Add" click="{addBtnHandler();}" height="20"
+					icon="@Embed(source='/icons/list-add.png')" />
+				<mx:Button id="__removeBtn" label="Remove" click="{removeBtnHandler();}" height="20" enabled="false"
+					icon="@Embed(source='/icons/list-remove.png')"/>
 				<mx:Spacer width="100%" />
 			</mx:HBox> 		
 		</mx:Canvas>
