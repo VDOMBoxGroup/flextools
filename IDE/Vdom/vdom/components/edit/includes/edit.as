@@ -2,8 +2,7 @@ import flash.events.Event;
 
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
-import mx.containers.Canvas;
-import mx.managers.PopUpManager;
+import mx.events.FlexEvent;
 
 import vdom.events.AttributesPanelEvent;
 import vdom.events.DataManagerEvent;
@@ -44,8 +43,11 @@ private function showHandler():void
 		BindingUtils.bindProperty(pageList, 'currentObject', dataManager, 'currentObject'),
 		BindingUtils.bindProperty(workArea, 'pageId', dataManager, 'currentPageId'),
 		BindingUtils.bindProperty(workArea, 'objectId', dataManager, 'currentObjectId'),
+		BindingUtils.bindProperty(xmlEditor, 'objectId', dataManager, 'currentObjectId'),
 		BindingUtils.bindProperty(attributesPanel, 'dataProvider', dataManager, 'currentObject')
 	);
+	
+	mainArea.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
 }
 
 private function hideHandler():void
@@ -54,6 +56,7 @@ private function hideHandler():void
 		watcher.unwatch();
 	
 	mainArea.selectedChild = workArea;
+	mainArea.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
 	
 	registerEvent(false);
 }
@@ -66,7 +69,7 @@ private function registerEvent(flag:Boolean):void
 		workArea.addEventListener(WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler);
 		workArea.addEventListener(WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler);
 		
-		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
+//		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		
 		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, dataManager_objectCreatedHandler);
 		dataManager.addEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
@@ -85,7 +88,7 @@ private function registerEvent(flag:Boolean):void
 		workArea.removeEventListener(WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler);
 		workArea.removeEventListener(WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler);
 		
-		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
+//		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		
 		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, dataManager_objectCreatedHandler);
 		dataManager.removeEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
@@ -99,10 +102,10 @@ private function registerEvent(flag:Boolean):void
 	}
 }
 
-private function pageDataLoadedHandler(event:Event):void
+/* private function pageDataLoadedHandler(event:Event):void
 {
 	workArea.visible = true;
-}
+} */
 
 private function attributesChangedHandler(event:Event):void
 {	

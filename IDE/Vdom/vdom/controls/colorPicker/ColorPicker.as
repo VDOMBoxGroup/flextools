@@ -2,11 +2,11 @@ package vdom.controls.colorPicker {
 
 import flash.events.MouseEvent;
 
-import mx.containers.Box;
+import mx.containers.Canvas;
 
 import vdom.events.ColorPickerEvent;
 
-public class ColorPicker extends Box {
+public class ColorPicker extends Canvas {
 	
 	private var _color:String;
 	
@@ -14,14 +14,15 @@ public class ColorPicker extends Box {
 		
 		super();
 		
-		//addEventListener("change", colorChangeHandler);
-		
 		buttonMode = true;
 		
 		addEventListener(MouseEvent.CLICK, mouseClickandler);
 		
 		addEventListener("apply",  colorCompleteHandler);
-		addEventListener("cancel", colorCompleteHandler);	
+		addEventListener("cancel", colorCompleteHandler);
+		
+		setStyle("borderStyle", "solid");
+		
 	}
 	
 	public function get color():String {
@@ -32,10 +33,9 @@ public class ColorPicker extends Box {
 	public function set color(colorValue:String):void {
 		
 		setStyle(
-			'backgroundColor', 
-			Number('0x' + colorValue.toString().substring(1))
+			'backgroundColor',
+			Number('0x' + colorValue.toString())
 		);
-		
 		_color = colorValue;
 	}
 	
@@ -49,7 +49,7 @@ public class ColorPicker extends Box {
 		
 		if(event.type == 'apply') {
 			
-			color = '#' + event.hexcolor;
+			color =/*  '#' +  */event.hexcolor;
 		}
 		
 	}

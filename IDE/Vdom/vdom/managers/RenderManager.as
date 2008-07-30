@@ -404,10 +404,10 @@ public class RenderManager implements IEventDispatcher {
 				viewText.y = childXMLDescription.@top;
 				
 				if(childXMLDescription.@color.length())
-					colorStyle = "color:#" + childXMLDescription.@color + ";";
+					colorStyle = "color:#" + childXMLDescription.@color + "; ";
 				
 				if(childXMLDescription.@font.length())
-					fontStyle = "font:" + childXMLDescription.@font + ";";
+					fontStyle = "font:" + childXMLDescription.@font + "; ";
 				
 				style = colorStyle + fontStyle;
 				
@@ -490,14 +490,26 @@ public class RenderManager implements IEventDispatcher {
 					thickness = childXMLDescription.@size;
 				
 				if(childXMLDescription.@stroke.length()) {
-					borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
+					
+					if(childXMLDescription.@stroke.toString().substr(0,1) == "#")
+						borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
+					else
+						borderColor = Number("0x" + childXMLDescription.@stroke.toString());
+					
 					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
 				}
 				
 				if(childXMLDescription.@color.length())
-					fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
+				{
+					if(childXMLDescription.@color.substr(0,1) == "#")
+						fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
+					else
+						fillColor = Number("0x" + childXMLDescription.@color.toString())
+				}
 				else
-					alpha = 0;	
+				{
+					alpha = 0;
+				}	
 				
 				
 				currentSprite.graphics.beginFill(fillColor, alpha);
@@ -523,14 +535,26 @@ public class RenderManager implements IEventDispatcher {
 					thickness = childXMLDescription.@size;
 				
 				if(childXMLDescription.@stroke.length()) {
-					borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
+					
+					if(childXMLDescription.@stroke.toString().substr(0,1) == "#")
+						borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
+					else
+						borderColor = Number("0x" + childXMLDescription.@stroke.toString());
+					
 					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
 				}
 				
 				if(childXMLDescription.@color.length())
-					fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
+				{
+					if(childXMLDescription.@color.substr(0,1) == "#")
+						fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
+					else
+						fillColor = Number("0x" + childXMLDescription.@color.toString())
+				}
 				else
-					alpha = .0;	
+				{
+					alpha = 0;
+				}	
 				
 				
 				currentSprite.graphics.beginFill(fillColor, alpha);
@@ -599,12 +623,19 @@ public class RenderManager implements IEventDispatcher {
 					y2 = y1 + Number(childXMLDescription.@height);
 				
 				if(childXMLDescription.@size.length())
-					thickness = Number(childXMLDescription.@size);
+					thickness = Number(childXMLDescription.@size);	
 				
 				if(childXMLDescription.@color.length())
-					lineColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
+				{
+					if(childXMLDescription.@color.substr(0,1) == "#")
+						lineColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
+					else
+						lineColor = Number("0x" + childXMLDescription.@color.toString())
+				}
 				else
-					alpha = .0;	
+				{
+					alpha = 0;
+				}	
 				
 				currentSprite.graphics.lineStyle(thickness, lineColor, alpha);;
 				currentSprite.graphics.moveTo(x1, y1);
@@ -629,16 +660,26 @@ public class RenderManager implements IEventDispatcher {
 		var borderThickness:Number = 1;
 		var borderColor:Number = 0x000000;
 		
-		if(itemXMLDescription.@color[0]) {
-			
+		
+		
+		if(itemXMLDescription.@color[0])
+		{	
 			alpha = 1;
-			backgroundColor = Number("0x" + itemXMLDescription.@color.toString().substring(1));
+			
+			if(itemXMLDescription.@color[0].substr(0,1) == "#")
+				backgroundColor = Number("0x" + itemXMLDescription.@color[0].substring(1));
+			else
+				backgroundColor = Number("0x" + itemXMLDescription.@color[0]);
 		}
 		
-		if(itemXMLDescription.@stroke[0]) {
-			
+		if(itemXMLDescription.@stroke[0])
+		{	
 			setBorder = true;
-			borderColor = Number("0x" + itemXMLDescription.@stroke.toString().substring(1));
+			
+			if(itemXMLDescription.@stroke[0].substr(0,1) == "#")
+				borderColor = Number("0x" + itemXMLDescription.@stroke[0].substring(1));
+			else
+				borderColor = Number("0x" + itemXMLDescription.@stroke[0]);
 		}
 		
 		if(itemXMLDescription.@alpha[0])

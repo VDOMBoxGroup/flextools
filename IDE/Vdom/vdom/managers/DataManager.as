@@ -138,7 +138,10 @@ public class DataManager implements IEventDispatcher {
 	
 	public function getTypeByTypeId(typeId:String):XML 
 	{
-		return _listTypes.Information.(ID == typeId)[0].parent();
+		if(typeId)
+			return _listTypes.Information.(ID == typeId)[0].parent();
+		else
+			return null;
 	}
 	
 	public function getTypeByObjectId(objectId:String):XML
@@ -346,9 +349,9 @@ public class DataManager implements IEventDispatcher {
 		var objectData:XML = event.result.Object[0];
 		var objectId:String = objectData.@ID;
 		
-		var currObj:XML = _currentApplication.Objects.Object.(@ID == objectId)[0];
+		var currObj:XML = _currentApplication..Objects.Object.(@ID == objectId)[0];
 		
-		_currentApplication.Objects.Object.(@ID == objectId)[0] = objectData;
+		_currentApplication..Objects.Object.(@ID == objectId)[0] = objectData;
 		
 		if(_currentApplication.Objects.Object.(@ID == objectId).length() != 0) {
 		

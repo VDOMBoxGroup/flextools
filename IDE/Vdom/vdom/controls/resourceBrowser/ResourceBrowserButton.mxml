@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox 
-	xmlns:mx="http://www.adobe.com/2006/mxml" height="20" width="100" horizontalAlign="right"
-	verticalAlign="middle" horizontalGap="1">
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	horizontalAlign="right" verticalAlign="middle" horizontalGap="1" borderStyle="solid">
 
 	<mx:Script>
 		<![CDATA[
@@ -58,11 +58,11 @@
 		]]>
 	</mx:Script>
 
-	<mx:Label text="{_labelText}" id="__label" width="{this.width - 43}" />
+	<mx:TextInput text="{_labelText}" id="__label" width="100%" borderStyle="none" editable="false" height="20"/>
 	<mx:LinkButton id="__clearBtn"
 		enabled="{clearBtnEnabled}" label="X" height="20" cornerRadius="5" click="{this.value = '';}" width="20" paddingLeft="1" paddingRight="1"
 		toolTip="Clear field" />
 	<mx:Button
-		label="..." height="20" cornerRadius="0" click="{openWindow();}" width="22" paddingLeft="2" paddingRight="2"
+		label="..." height="19" cornerRadius="0" click="{openWindow();}" width="22" paddingLeft="2" paddingRight="2"
 		toolTip="Browse for resource" />
 </mx:HBox>

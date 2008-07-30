@@ -9,6 +9,7 @@ import mx.controls.Label;
 import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.DragEvent;
+import mx.events.FlexEvent;
 
 import vdom.containers.IItem;
 import vdom.controls.IToolBar;
@@ -26,10 +27,10 @@ import vdom.utils.DisplayUtil;
 
 public class WorkArea extends VBox {
 	
-	private var resizeManager:ResizeManager = ResizeManager.getInstance();;
+	private var resizeManager:ResizeManager = ResizeManager.getInstance();
 	private var fileManager:FileManager;
-	private var renderManager:RenderManager = RenderManager.getInstance();;
-	private var dataManager:DataManager = DataManager.getInstance();;
+	private var renderManager:RenderManager = RenderManager.getInstance();
+	private var dataManager:DataManager = DataManager.getInstance();
 	
 	private var _pageId:String;
 	private var _objectId:String;
@@ -39,31 +40,39 @@ public class WorkArea extends VBox {
 	private var _contentHolder:Canvas;
 	
 	private var _contentToolbar:IToolBar;
+	private var showed:Boolean;
+	
 	
 	public function WorkArea() {
 		
 		super();
-		registerEvent(true);
+		
+		addEventListener(FlexEvent.SHOW, showHandler);
+		addEventListener(FlexEvent.HIDE, hideHandler)
 	}
 	
-	public function set pageId(value:String):void {
-	
-		if(value) {
-			
-			if(value != _pageId) {
-			
-				_pageId = value;
-				renderManager.init(_contentHolder);
-				renderManager.createItem(_pageId);
-				resizeManager.selectItem(null);
-			}
-			
-		} else {
-				
+	public function set pageId(value:String):void
+	{
+		if(value && !showed)
+			_pageId = value;
+		
+		if(!showed)
+			return;
+		
+		if(value != _pageId) {
+			_pageId = value;
+			renderManager.init(_contentHolder);
+			renderManager.createItem(_pageId);
+			resizeManager.selectItem(null);
+		}
+		
+		if(!value)
+		{		
 			var warning:Label = new Label()
 			warning.text = 'no page selected';
 			_contentHolder.addChild(warning);
 		}
+		
 	}
 	
 	public function set objectId(value:String):void {
@@ -73,41 +82,13 @@ public class WorkArea extends VBox {
 		
 		_objectId = value;
 		
+		if(!showed)
+			return;
+		
 		var item:IItem = renderManager.getItemById(value);
 		
 		if(item)
 			resizeManager.selectItem(item);
-	}
-	
-	private function registerEvent(flag:Boolean):void
-	{	
-		if(flag) {
-			
-			resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-			renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-			resizeManager.addEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
-			
-			addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
-			addEventListener(MouseEvent.ROLL_OUT, mouseRollOutHandler);
-			
-			addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
-			addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
-			addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
-			addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
-		} else {
-			
-			resizeManager.removeEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
-			renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
-			resizeManager.removeEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
-			
-			removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
-			removeEventListener(MouseEvent.ROLL_OUT, mouseRollOutHandler);
-			
-			removeEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
-			removeEventListener(DragEvent.DRAG_OVER, dragOverHandler);
-			removeEventListener(DragEvent.DRAG_DROP, dragDropHandler);
-			removeEventListener(DragEvent.DRAG_EXIT, dragExitHandler);		
-		}
 	}
 	
 	/**
@@ -116,6 +97,9 @@ public class WorkArea extends VBox {
 	 */
 	
 	public function deleteObjects():void {
+		
+		if(!showed)
+			return;
 		
 		resizeManager.selectItem(null);
 		removeAllChildren();
@@ -126,18 +110,27 @@ public class WorkArea extends VBox {
 	 * @param objectId идентификатор объекта
 	 * 
 	 */	
-	public function deleteObject(objectId:String):void {
+	public function deleteObject(objectId:String):void
+	{
+		if(!showed)
+			return;
 		
 		renderManager.deleteItem(objectId);
 	}
 	
-	public function lockItem(objectId:String):void {
+	public function lockItem(objectId:String):void
+	{
+		if(!showed)
+			return;
 		
 		renderManager.lockItem(objectId);
 	}
 	
-	public function updateObject(result:XML):void {
-		
+	public function updateObject(result:XML):void
+	{
+		if(!showed)
+			return;
+			
 		var objectId:String = result.Object.@ID;
 		
 		if(_selectedObject && objectId == IItem(_selectedObject).objectId && resizeManager.itemTransform)
@@ -169,8 +162,11 @@ public class WorkArea extends VBox {
 		}
 	}
 	
-	public function createObject(result:XML):void {
-
+	public function createObject(result:XML):void
+	{
+		if(!showed)
+			return;
+		
 		renderManager.createItem(result.Object.@ID, result.Object.Parent);
 	}
 	
@@ -276,6 +272,56 @@ public class WorkArea extends VBox {
 			
 			_contentToolbar.init(IItem(_selectedObject), object);
 		}
+	}
+	
+	private function registerEvent(flag:Boolean):void
+	{	
+		if(flag) {
+			
+			resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
+			renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+			resizeManager.addEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
+			
+			addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
+			addEventListener(MouseEvent.ROLL_OUT, mouseRollOutHandler);
+			
+			addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
+			addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
+			addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
+			addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
+		} else {
+			
+			resizeManager.removeEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
+			renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
+			resizeManager.removeEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
+			
+			removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, true);
+			removeEventListener(MouseEvent.ROLL_OUT, mouseRollOutHandler);
+			
+			removeEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
+			removeEventListener(DragEvent.DRAG_OVER, dragOverHandler);
+			removeEventListener(DragEvent.DRAG_DROP, dragDropHandler);
+			removeEventListener(DragEvent.DRAG_EXIT, dragExitHandler);		
+		}
+	}
+	
+	private function showHandler(event:FlexEvent):void
+	{
+		registerEvent(true);
+		showed = true;
+		
+		if(_pageId)
+		{
+			renderManager.init(_contentHolder);
+			renderManager.createItem(_pageId);
+			resizeManager.selectItem(null);
+		}
+	}
+	
+	private function hideHandler(event:FlexEvent):void
+	{
+		registerEvent(false);
+		showed = false;
 	}
 	
 	/**

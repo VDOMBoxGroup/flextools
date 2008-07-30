@@ -54,7 +54,7 @@
 		]]>
 	</mx:Script>
 	<mx:Canvas id="cnv" width="60" height="60"  horizontalCenter="0" verticalCenter="0">
-		<mx:Image source="{_source}" width="55" height="55" horizontalCenter="0" verticalCenter="0" scaleContent="true"/>
+		<mx:Image source="{_source}" toolTip="{labelValue}" width="55" height="55" horizontalCenter="0" verticalCenter="0" scaleContent="true"/>
 	</mx:Canvas>
 </mx:Canvas>
 

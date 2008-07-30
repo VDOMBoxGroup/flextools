@@ -1,36 +1,78 @@
 import mx.controls.Alert;
 
+import vdom.connection.soap.Soap;
+import vdom.connection.soap.SoapEvent;
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
 
-private var dataManager:DataManager
+private var _objectId:String
+
+private var soap:Soap = Soap.getInstance();
+
+public function set objectId(value:String):void
+{
+	_objectId = value;
+	
+	if(!visible)
+		return;
+		
+	if(_objectId)
+	{
+		enableElement(false);
+		loadXMLPresentation();
+	}
+}
+
+private var dataManager:DataManager = DataManager.getInstance();
 
 private var _enabledElements:Boolean;
 
-private function initalizeHandler():void {
-	
-	dataManager = DataManager.getInstance();
+private function initalizeHandler():void
+{	
 	_enabledElements = true;
+}
+
+private function loadXMLPresentation():void
+{
+	if(_objectId)
+		dataManager.getObjectXMLScript();
+}
+
+private function registerEvent(flag:Boolean):void
+{	
+	if(flag)
+	{	
+		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);	
+		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
+		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
+	}
+	else 
+	{	
+		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
+		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
+		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
+	}
 }
 
 private function showHandler():void {
 	
-	enableElement(false)
-	saveButton.label = 'Loading...'
-	dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
-	dataManager.getObjectXMLScript();
+	enableElement(false);
+	registerEvent(true);
+	if(_objectId)
+	{
+		saveButton.label = 'Loading...'
+		loadXMLPresentation();
+	}
 }
 
 private function hideHandler():void {
 	
-	setListeners(false);
+	registerEvent(false);
 	enableElement(false);
 	scriptEditor.code = '';
 }
 
 private function objectXMLScriptHandler(event:DataManagerEvent):void {
-	
-	dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
 	
 	XML.prettyPrinting = true;
 	XML.prettyIndent = 4;
@@ -49,15 +91,16 @@ private function saveXMLScript():void {
 	}
 	enableElement(false);
 	saveButton.label = 'Saving...';
-	dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
 	var code:String = scriptEditor.code;
 	dataManager.setObjectXMLScript(code);
 }
 
-private function saveXMLScriptHandler(event:DataManagerEvent):void {
+private function saveXMLScriptHandler(event:Event):void {
+	
+	if(event is SoapEvent && SoapEvent(event).result.Error[0])
+		Alert.show("Data not saved.", "Description Error");
 	
 	enableElement(true);
-	dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
 	saveButton.label = 'Save';
 }
 
@@ -73,17 +116,4 @@ private function enableElement(flag:Boolean):void {
 		saveButton.enabled = false;
 		scriptEditor.enabled = false;
 	} 
-}
-
-private function setListeners(flag:Boolean):void {
-	
-	if(flag) {
-		
-		
-		
-	} else {
-		
-		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
-		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
-	}
 }

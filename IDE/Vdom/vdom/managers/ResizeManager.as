@@ -2,11 +2,11 @@ package vdom.managers {
 
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
-import flash.utils.getQualifiedClassName;
+import flash.events.Event;
 
+import mx.containers.Canvas;
 import mx.controls.ToolTip;
 import mx.core.Container;
-import mx.events.ScrollEvent;
 import mx.managers.CursorManager;
 import mx.managers.ToolTipManager;
 import mx.styles.StyleManager;
@@ -26,7 +26,7 @@ public class ResizeManager extends EventDispatcher {
 	
 	private var dataManager:DataManager;
 	
-	private var _topLevelItem:Container;
+	private var _topLevelItem:Canvas;
 
 	private var highlightedItem:IItem;
 	private var activeItem:IItem;
@@ -87,7 +87,7 @@ public class ResizeManager extends EventDispatcher {
 		}
 	}
 	
-	public function init(topLevelItem:Container):void {
+	public function init(topLevelItem:Canvas):void {
 		
 		_topLevelItem = topLevelItem;
 		
@@ -95,7 +95,7 @@ public class ResizeManager extends EventDispatcher {
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, true);
 		_topLevelItem.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 		_topLevelItem.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
-		_topLevelItem.getChildAt(0).addEventListener(ScrollEvent.SCROLL, scrollHandler);
+		_topLevelItem.getChildAt(0).addEventListener("vdomScroll", scrollHandler, true);
 		
 		CursorManager.removeAllCursors();
 		
@@ -181,7 +181,7 @@ public class ResizeManager extends EventDispatcher {
 					
 				var itemResizable:uint = uint(objectType.Information.Resizable)								
 				
-				_topLevelItem.addChild(selectMarker);
+				Container(_topLevelItem.getChildAt(0)).addChild(selectMarker); //_topLevelItem.addChild(selectMarker);
 				
 				selectMarker.item = Container(item);
 				selectMarker.resizeMode = itemResizable;
@@ -230,7 +230,7 @@ public class ResizeManager extends EventDispatcher {
 			var activeItemMoveable:Boolean = 
 				(objectType.Information.Moveable == "1") ? TransformMarker.MOVE_TRUE : TransformMarker.MOVE_FALSE;
 			
-			_topLevelItem.addChild(moveMarker);
+			Container(_topLevelItem.getChildAt(0)).addChild(moveMarker);//_topLevelItem.addChild(moveMarker);
 			
 			moveMarker.item = Container(item);
 			moveMarker.resizeMode = TransformMarker.RESIZE_NONE;
@@ -447,8 +447,7 @@ public class ResizeManager extends EventDispatcher {
 		markerSelected = false;
 	} */
 	
-	private function scrollHandler(event:ScrollEvent):void {
-		trace('scroll');
+	private function scrollHandler(event:Event):void {
 		if(selectMarker && selectMarker.item)
 			selectMarker.refresh();
 	}

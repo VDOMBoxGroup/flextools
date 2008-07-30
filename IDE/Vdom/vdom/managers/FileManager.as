@@ -1,4 +1,5 @@
-package vdom.managers {
+package vdom.managers
+{
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -12,17 +13,17 @@ import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.events.FileManagerEvent;
 	
-public class FileManager implements IEventDispatcher {
-	
+public class FileManager implements IEventDispatcher
+{	
 	private static var instance:FileManager;
 	
-	private var dispatcher:EventDispatcher;
-	private var soap:Soap;
+	private var dispatcher:EventDispatcher = new EventDispatcher();
+	private var soap:Soap = Soap.getInstance();
 	
 	private var requestQue:Object = {};
 	private var _resourceStorage:Object = {};
 	
-	private var dataManager:DataManager;
+	private var dataManager:DataManager = DataManager.getInstance();
 	private var cacheManager:CacheManager = CacheManager.getInstance();
 	
 	private var applicationId:String;
@@ -47,50 +48,52 @@ public class FileManager implements IEventDispatcher {
 	 * Constructor
 	 * 
 	 */	
-	public function FileManager() {
-		
+	public function FileManager()
+	{
 		if (instance)
 			throw new Error("Instance already exists.");
 		
-		dispatcher = new EventDispatcher();
-		soap = Soap.getInstance();
-		dataManager = DataManager.getInstance();
-		
-		/* if(dataManager.currentApplicationId) {
-			
-			applicationId = dataManager.currentApplicationId;
-			cacheDirectory = cacheDirectory.resolvePath(applicationId);
-			/* if(!cacheDirectory.exists)
-				cacheDirectory.createDirectory();
-		} */
-			
+		registerEvent(true);
 	}
 	
-	public function getListResources():void {
-		
-		soap.addEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
+	public function getListResources():void
+	{	
 		soap.listResources(dataManager.currentApplicationId);
 	}
 	
-	private function listResourcesHandler(event:SoapEvent):void {
-		
-		soap.removeEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
-		
+	private function registerEvent(flag:Boolean):void
+	{
+		if(flag)
+		{
+			soap.addEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
+			soap.addEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
+			soap.addEventListener(SoapEvent.GET_RESOURCE_ERROR, resourceLoadedErrorHandler);
+		}
+		else
+		{
+			soap.removeEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
+			soap.removeEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
+			soap.removeEventListener(SoapEvent.GET_RESOURCE_ERROR, resourceLoadedErrorHandler);
+		}
+	}
+	
+	private function listResourcesHandler(event:SoapEvent):void
+	{
 		var fle:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_LIST_LOADED)
 		fle.result = event.result;
 		dispatchEvent(fle);
 	}
 	
 	public function loadResource(ownerID:String, resourceID:String, destTarget:Object, 
-		property:String = 'resource', raw:Boolean = false):void {
-			
+		property:String = 'resource', raw:Boolean = false):void
+	{		
 		if(!resourceID)
 			return;
 		
 		var result:ByteArray = cacheManager.getCachedFileById(resourceID);
 		
-		if(result) {
-			
+		if(result)
+		{	
 			if(raw)
 				destTarget[property] = result;
 			else
@@ -98,10 +101,9 @@ public class FileManager implements IEventDispatcher {
 			return;
 		}
 		
-		if(!requestQue[resourceID]) {
-			
+		if(!requestQue[resourceID])
+		{	
 			requestQue[resourceID] = new Array();
-			soap.addEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
 			soap.getResource(ownerID, resourceID);
 		}
 		
@@ -114,8 +116,8 @@ public class FileManager implements IEventDispatcher {
 		);
 	}
 	
-	private function resourceLoadedHandler(event:SoapEvent):void {
-		
+	private function resourceLoadedHandler(event:SoapEvent):void
+	{	
 		var resourceID:String = event.result.ResourceID;
 		var resource:String = event.result.Resource;
 		
@@ -131,8 +133,8 @@ public class FileManager implements IEventDispatcher {
 		imageSource.position = 0;
 		_resourceStorage[resourceID] = imageSource;
 		
-		for each(var item:Object in requestQue[resourceID]) {
-			
+		for each(var item:Object in requestQue[resourceID])
+		{	
 			var data:ByteArray = new ByteArray();
 			_resourceStorage[resourceID].readBytes(data);
 			_resourceStorage[resourceID].position = 0;
@@ -140,20 +142,24 @@ public class FileManager implements IEventDispatcher {
 			var requestObject:Object = item.object;
 			var requestProperty:String = item.property;
 			
-			if(item.raw) {
-					
+			if(item.raw)		
 				requestObject[requestProperty] = data;	
-			} else {
-				
+			else
 				requestObject[requestProperty] = {resourceID:resourceID, data:data};
-			}
 		}
 		
 		delete requestQue[resourceID];
 	}
 	
-	public function setResource(resType:String, resName:String, resData:ByteArray, applicationId:String = ''):void {
-		
+	private function resourceLoadedErrorHandler(event:SoapEvent):void
+	{
+		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_LOADING_ERROR);
+		fme.result = event.result;
+		dispatchEvent(fme);
+	}
+	
+	public function setResource(resType:String, resName:String, resData:ByteArray, applicationId:String = ''):void
+	{
 		resData.compress();
 		
 		var base64Data:Base64Encoder = new Base64Encoder();
@@ -166,8 +172,8 @@ public class FileManager implements IEventDispatcher {
 		soap.setResource(applicationId, resType, resName, base64Data.toString());
 	}
 	
-	private function setResourceOkHandler(event:SoapEvent):void {
-		
+	private function setResourceOkHandler(event:SoapEvent):void
+	{
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED)
 		fme.result = event.result;
 		dispatchEvent(fme);
@@ -178,40 +184,42 @@ public class FileManager implements IEventDispatcher {
 	/**
      *  @private
      */
-	public function addEventListener(
-		type:String, 
-		listener:Function, 
-		useCapture:Boolean = false, 
-		priority:int = 0, 
-		useWeakReference:Boolean = false):void {
-			dispatcher.addEventListener(type, listener, useCapture, priority);
+	public function addEventListener(type:String, listener:Function, 
+									useCapture:Boolean = false, priority:int = 0, 
+									useWeakReference:Boolean = false):void
+	{
+		dispatcher.addEventListener(type, listener, useCapture, priority);
     }
     
     /**
      *  @private
      */
-    public function dispatchEvent(evt:Event):Boolean{
+    public function dispatchEvent(evt:Event):Boolean
+    {
         return dispatcher.dispatchEvent(evt);
     }
     
 	/**
      *  @private
      */
-    public function hasEventListener(type:String):Boolean{
+    public function hasEventListener(type:String):Boolean
+    {
         return dispatcher.hasEventListener(type);
     }
     
 	/**
      *  @private
      */
-    public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void{
+    public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
+    {
         dispatcher.removeEventListener(type, listener, useCapture);
     }
     
     /**
      *  @private
      */            
-    public function willTrigger(type:String):Boolean {
+    public function willTrigger(type:String):Boolean
+    {
         return dispatcher.willTrigger(type);
     }
 }

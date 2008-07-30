@@ -3,12 +3,14 @@ package vdom.containers {
 import flash.display.DisplayObject;
 import flash.display.Graphics;
 import flash.display.Sprite;
+import flash.events.Event;
 
 import mx.containers.Canvas;
 import mx.core.FlexSprite;
 import mx.core.IRectangularBorder;
 import mx.core.UIComponent;
 import mx.core.mx_internal;
+import mx.events.ScrollEvent;
 
 import vdom.managers.wc;	
 
@@ -28,6 +30,7 @@ public class Item extends Canvas implements IItem
 	{
 		super();
 		
+		addEventListener(ScrollEvent.SCROLL, scrollHandler);
 		_objectId = objectId;
 	}
 	
@@ -240,6 +243,10 @@ public class Item extends Canvas implements IItem
 		
 		if(highlightMarkerIndex != topIndex)
 			rawChildren.setChildIndex(_highlightMarker, topIndex);
+	}
+	private function scrollHandler(event:ScrollEvent):void
+	{	
+		dispatchEvent(new Event("vdomScroll"));
 	}
 }
 }

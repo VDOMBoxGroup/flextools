@@ -24,7 +24,8 @@
 		<containers:AdvancedTabNavigator id="mainArea"
 			width="100%" borderStyle="none">			
 			
-			<editContainers:WorkArea id="workArea" label="WYSIWYG" focusEnabled="false"
+			<editContainers:WorkArea id="workArea" label="WYSIWYG" 
+				focusEnabled="false"
 				horizontalScrollPolicy="off" verticalScrollPolicy="off"
 				visible="false" />
 				

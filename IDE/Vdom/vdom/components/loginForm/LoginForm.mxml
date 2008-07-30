@@ -51,8 +51,8 @@
 			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
 			<mx:FormItem
 				label="{resourceManager.getString('LoginForm','username')}">
-				<mx:TextInput id="_username" text="root"
-					width="140"/>
+				<mx:TextInput id="_username"
+					width="140" text="root"/>
 			</mx:FormItem>
 			<mx:FormItem 
 				label="{resourceManager.getString('LoginForm','password')}">
@@ -65,7 +65,7 @@
 				<mx:TextInput id="_ip"
 					width="140" 
 
-					text="localhost:80"/>
+ text="localhost"/>
 
 					
  
