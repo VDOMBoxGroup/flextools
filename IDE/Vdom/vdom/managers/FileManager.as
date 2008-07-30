@@ -171,6 +171,7 @@ public class FileManager implements IEventDispatcher
 		resData.compress();
 		
 		var base64Data:Base64Encoder = new Base64Encoder();
+		base64Data.insertNewLines = false;
 		base64Data.encodeBytes(resData);
 		
 		if(!applicationId)
@@ -181,6 +182,11 @@ public class FileManager implements IEventDispatcher
 	
 	private function setResourceOkHandler(event:SoapEvent):void
 	{
+		var resourceId:String = event.result.ResourceID[0];
+		
+		if(requestQue[resourceId])
+			delete requestQue[resourceId];
+		
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED)
 		fme.result = event.result;
 		dispatchEvent(fme);
