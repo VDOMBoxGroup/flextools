@@ -44,9 +44,6 @@ package vdom.controls.externalEditorButton
 		private var _value:String; 
 
 		public function ExternalEditorButton(applicationID:String, objectID:String, resourceID:String) {
-			
-			resourceID = "lefjsdkjfhksdj-fks";
-			
 			super();
 
 			this.horizontalScrollPolicy = "off";
