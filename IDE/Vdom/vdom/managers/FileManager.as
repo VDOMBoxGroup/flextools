@@ -66,14 +66,22 @@ public class FileManager implements IEventDispatcher
 		if(flag)
 		{
 			soap.addEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
+			
 			soap.addEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
 			soap.addEventListener(SoapEvent.GET_RESOURCE_ERROR, resourceLoadedErrorHandler);
+			
+			soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
+			soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR , setResourceErrorHandler);
 		}
 		else
 		{
 			soap.removeEventListener(SoapEvent.LIST_RESOURSES_OK, listResourcesHandler);
+			
 			soap.removeEventListener(SoapEvent.GET_RESOURCE_OK, resourceLoadedHandler);
 			soap.removeEventListener(SoapEvent.GET_RESOURCE_ERROR, resourceLoadedErrorHandler);
+			
+			soap.removeEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
+			soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR , setResourceErrorHandler);
 		}
 	}
 	
@@ -168,13 +176,19 @@ public class FileManager implements IEventDispatcher
 		if(!applicationId)
 			applicationId = dataManager.currentApplicationId;
 		
-		soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
 		soap.setResource(applicationId, resType, resName, base64Data.toString());
 	}
 	
 	private function setResourceOkHandler(event:SoapEvent):void
 	{
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED)
+		fme.result = event.result;
+		dispatchEvent(fme);
+	}
+	
+	private function setResourceErrorHandler(event:SoapEvent):void
+	{
+		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED_ERROR)
 		fme.result = event.result;
 		dispatchEvent(fme);
 	}
