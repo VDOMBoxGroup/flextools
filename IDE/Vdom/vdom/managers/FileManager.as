@@ -161,6 +161,11 @@ public class FileManager implements IEventDispatcher
 	
 	private function resourceLoadedErrorHandler(event:SoapEvent):void
 	{
+		var resourceId:String = event.result.ResourceID[0];
+		
+		if(requestQue[resourceId])
+			delete requestQue[resourceId];
+		
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_LOADING_ERROR);
 		fme.result = event.result;
 		dispatchEvent(fme);
@@ -182,11 +187,6 @@ public class FileManager implements IEventDispatcher
 	
 	private function setResourceOkHandler(event:SoapEvent):void
 	{
-		var resourceId:String = event.result.ResourceID[0];
-		
-		if(requestQue[resourceId])
-			delete requestQue[resourceId];
-		
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED)
 		fme.result = event.result;
 		dispatchEvent(fme);
