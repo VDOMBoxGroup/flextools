@@ -38,15 +38,15 @@ package vdom.components.eventEditor
 		
 		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='delete')]
 		[Bindable]
-		public var delet:Class;
+		private var delet:Class;
 		
 		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='menu')]
 		[Bindable]
-		public var menu:Class;
+		private var menu:Class;
 		
-		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='event')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='icon_event')]
 		[Bindable]
-		public var event:Class;
+		private var event:Class;
 		
 		
 		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='simpleLayer')]

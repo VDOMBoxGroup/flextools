@@ -72,15 +72,32 @@ package vdom.components.treeEditor.colorMenu02
 		
 		private function imgEyeClickHandler(msEvt:MouseEvent):void
 		{
-			if(eyeFlag){
+//			trace('mouse down'+ eyeFlag);
+			eyeFlag = !eyeFlag;
+			if(!eyeFlag){
+				imgEye.source = closeEye;
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.HIDE_LINES, _data.level));
+//				trace('mouse down'+ eyeFlag);
+			}else{
+				imgEye.source = openEye;
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SHOW_LINES, _data.level));
+			}	
+			
+			msEvt.stopImmediatePropagation();
+//			trace('mouse down');
+		}
+		
+		public function set status(bl:Boolean):void
+		{
+			eyeFlag = bl;
+			
+			if(!eyeFlag){
 				imgEye.source = closeEye;
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.HIDE_LINES, _data.level));
 			}else{
 				imgEye.source = openEye;
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SHOW_LINES, _data.level));
 			}	
-			eyeFlag = !eyeFlag;
-			msEvt.stopImmediatePropagation();
 		}
 		
 		private function mouseClickHandler(msEvt:MouseEvent):void

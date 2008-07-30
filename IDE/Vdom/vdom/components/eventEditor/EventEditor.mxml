@@ -66,7 +66,7 @@
 			 [Bindable]
 			 public var plus:Class;
 			 
-			 [Embed(source='/assets/eventEditor/eventEditor.swf', symbol='rejectCursor')]
+			[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='rejectCursor')]
 			[Bindable]
 			public var delet:Class;
 			

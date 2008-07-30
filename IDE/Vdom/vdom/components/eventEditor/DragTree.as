@@ -11,7 +11,7 @@ package vdom.components.eventEditor
 		[Bindable]
 		public var action:Class;
 		
-		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='event')]
+		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='icon_event')]
 		[Bindable]
 		public var event:Class;
 

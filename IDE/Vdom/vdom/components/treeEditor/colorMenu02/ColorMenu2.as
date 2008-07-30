@@ -1,5 +1,7 @@
 package vdom.components.treeEditor.colorMenu02
 {
+	import flash.events.MouseEvent;
+	
 	import mx.containers.Canvas;
 	import mx.controls.Image;
 	import mx.controls.Label;
@@ -11,10 +13,20 @@ package vdom.components.treeEditor.colorMenu02
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='rMenu')]
 		[Bindable]
 		public var rMenu:Class;
+		
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='openEye')]
+		[Bindable]
+		public var openEye:Class;
+		
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='closeEye')]
+		[Bindable]
+		public var closeEye:Class; 
+		
 		public var masLevels:Array;
 		private var levels:Levels = new Levels();
 		private var slctLevel:Number;
-			
+		private var eye:Image;	
+		private var eyeOpend:Boolean = true;
 		public function ColorMenu2()
 		{
 			//TODO: implement function
@@ -24,6 +36,7 @@ package vdom.components.treeEditor.colorMenu02
 			addChild(imgBackGround);
 			slctLevel = 0;
 			creatLevels();
+			
 			var textLabel:Label = new Label();
 				textLabel.text = resourceManager.getString('Tree','levels');
 				//textLabel.x = ;
@@ -32,9 +45,38 @@ package vdom.components.treeEditor.colorMenu02
 				textLabel.setStyle("color", "0xFFFFFF");
 				textLabel.setStyle('fontWeight', "bold"); 
 				textLabel.setStyle('textAlign', 'center');
-				addChild(textLabel);
+			addChild(textLabel);
+			
+			eye = new Image();
+			eye.x = 5;
+			eye.y = 5;
+			eye.width = 20;
+			eye.height = 10;
+			eye.source = openEye;
+			eye.addEventListener(MouseEvent.CLICK, eyeClickHandler);
+			addChild(eye);
+			
 		}
 		
+		private function eyeClickHandler (msEvt:MouseEvent):void
+		{
+			eyeOpend = !eyeOpend;
+			if(eyeOpend)
+			{
+				eye.source = openEye;
+				
+			}else
+			{
+				eye.source = closeEye;
+			}
+			
+			for(var i:String in masLevels)
+			{
+				masLevels[i].status = eyeOpend;
+			}
+			
+			
+		}
 		
 		private function creatLevels():void
 		{

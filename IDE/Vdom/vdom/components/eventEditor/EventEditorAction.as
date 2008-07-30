@@ -313,6 +313,7 @@ package vdom.components.eventEditor
 			
 			var parametrs:* = type.E2vdom.Actions.Container.(@ID == containerID)[0];
 			parametrs = parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
+			///
 			for each(var child:XML in parametrs.children())
 			{
 				var parametr:AdvansedLayer = new AdvansedLayer(child, type.Information.Name.toString());
