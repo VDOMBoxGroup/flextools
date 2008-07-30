@@ -115,15 +115,21 @@ private function submitLogin(event:LoginFormEvent):void
 
 private function switchToLogin():void
 {
-	if(tabPanel.selectedChild)
-		tabPanel.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
-		
-	tabPanel.selectedChild = applicationManagmentModule
+	if(tabPanel)
+	{
+		if(tabPanel.selectedChild)
+			tabPanel.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
+			
+		tabPanel.selectedChild = applicationManagmentModule
+	}
 	
-	if(viewstack.selectedChild)
-		viewstack.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
+	if(viewstack)
+	{ 
+		if(viewstack.selectedChild)
+			viewstack.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
 	
-	viewstack.selectedChild=loginForm;
+		viewstack.selectedChild=loginForm;
+	}
 	
 	authenticationManager.changeAuthenticationInformation(null, null, null);
 }

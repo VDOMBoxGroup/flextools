@@ -198,6 +198,6 @@
 </mx:HorizontalList>
 	<mx:HBox width="100%" horizontalAlign="right">
 		<mx:Button label="OK" cornerRadius="0" click="closeHandler(true);"/>
-		<mx:Button label="Chancel" cornerRadius="0" click="closeHandler(false);"/>
+		<mx:Button label="Cancel" cornerRadius="0" click="closeHandler(false);"/>
 	</mx:HBox>
 </mx:TitleWindow>

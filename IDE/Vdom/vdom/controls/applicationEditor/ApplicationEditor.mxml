@@ -81,6 +81,6 @@
 		<mx:Button label="CANCEL"
 			styleName="buttonStyle"
 			cornerRadius="0" 
-			click="chancelValues();"/>
+			click="cancelValues();"/>
 	</mx:HBox>
 </mx:VBox>

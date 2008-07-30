@@ -32,8 +32,8 @@ private var ppm:MyLoader;
 
 private var iconChanged:Boolean;
 
-public function set source(value:ByteArray):void {
-	
+public function set source(value:ByteArray):void
+{
 	_source = value;
 }
 
@@ -58,12 +58,14 @@ private function resetImage():void
 
 private function showHandler():void 
 {	
-	if(!defaultValues) {
+	if(!defaultValues)
+	{
 		submitButton.label = "CREATE";
 		defaultValues = new ApplicationDescription();
-	} else {
-		
-		submitButton.label = "EDIT";
+	}
+	else
+	{	
+		submitButton.label = "OK";
 	}
 		
 	applicationName.text = defaultValues.name;
@@ -71,11 +73,12 @@ private function showHandler():void
 	iconChanged = false;
 	
 	
-	if(defaultValues.id && defaultValues.iconId){
-		
+	if(defaultValues.id && defaultValues.iconId)
+	{
 		fileManager.loadResource(defaultValues.id, defaultValues.iconId, this, 'source', true);
-	} else {
-		
+	}
+	else
+	{
 		var iconClass:Class = Application.application.getStyle('appIconPersonalPages'); 
 		var ba:BitmapAsset = new iconClass();
 		var pnge:PNGEncoder = new PNGEncoder();
@@ -123,7 +126,7 @@ private function processValues():void
 	dispatchEvent(aee);
 }
 
-private function chancelValues():void
+private function cancelValues():void
 {
 	dispatchEvent(
 		new ApplicationEditorEvent(

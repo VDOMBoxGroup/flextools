@@ -56,7 +56,7 @@ private function registerEvent(flag:Boolean):void
 		);
 		applicationEditor.addEventListener(
 			ApplicationEditorEvent.APPLICATION_PROPERTIES_CANCELED, 
-			applicationEditorChanceledHandler
+			applicationEditorCanceledHandler
 		);
 	} else {
 		
@@ -66,7 +66,7 @@ private function registerEvent(flag:Boolean):void
 		);
 		applicationEditor.removeEventListener(
 			ApplicationEditorEvent.APPLICATION_PROPERTIES_CANCELED, 
-			applicationEditorChanceledHandler
+			applicationEditorCanceledHandler
 		);
 	}
 }
@@ -134,7 +134,7 @@ private function applicationEditorChangedHandler(event:ApplicationEditorEvent):v
 	dispatchEvent(new Event('applicationEdited'));
 }
 
-private function applicationEditorChanceledHandler(event:ApplicationEditorEvent):void
+private function applicationEditorCanceledHandler(event:ApplicationEditorEvent):void
 {
 	dispatchEvent(new Event('applicationEdited'));
 }
