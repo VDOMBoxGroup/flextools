@@ -177,6 +177,7 @@ private function applyBtnClickHandler():void {
 	
 	/* if selected column is new, add it */
 	if (selectedListItem.fnew) {
+		
 		var requestXML:XML = 
 			<tableStructure>
 				<column 
@@ -196,7 +197,8 @@ private function applyBtnClickHandler():void {
 			remoteMethodCallOkFunction = applyChangesOkHandler;
 			manager.remoteMethodCall("add_column ", requestXML.toXMLString());
 		}
-		catch (err:Error) {	return;	}
+		catch (err:Error) {	return;	trace (err.message); }
+		
 	} else {
 //		if (_selectedListItem.label != _sourceXML.TableDef.ColumnDef.(@id == _selectedListItem.data).@name) {
 //			_sourceXML.ChangeLog.appendChild(<ColumnRename id={_selectedListItem.data} name={_selectedListItem.label} />);
@@ -257,15 +259,8 @@ private function removeSelectedColRequest():void {
 
 private function removeSelectedColOkHandler():void {
 	/* Remove the element */
-	var newColsProvider:Array = new Array();
-	var i:int = 0;
-	for each (var item:Object in columnsProvider) {
-		if (i != __propList.selectedIndex) {
-			newColsProvider.push(item);
-		}
-		i++;
-	}
-	columnsProvider = newColsProvider;
+	delete columnsProvider[__propList.selectedIndex];
+	
 	__propList.dataProvider = columnsProvider;
 	enablePropertiesPanel(false);
 	__removeBtn.enabled = false;
