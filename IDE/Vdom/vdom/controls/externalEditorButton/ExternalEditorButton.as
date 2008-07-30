@@ -20,6 +20,8 @@ package vdom.controls.externalEditorButton
 	import vdom.managers.DataManager;
 	import vdom.managers.ExternalManager;
 	import vdom.managers.FileManager;
+	import vdom.events.FileManagerEvent;
+	import flash.filesystem.File;
 
 	public class ExternalEditorButton extends HBox
 	{
@@ -42,6 +44,9 @@ package vdom.controls.externalEditorButton
 		private var _value:String; 
 
 		public function ExternalEditorButton(applicationID:String, objectID:String, resourceID:String) {
+			
+			resourceID = "lefjsdkjfhksdj-fks";
+			
 			super();
 
 			this.horizontalScrollPolicy = "off";
@@ -98,6 +103,7 @@ package vdom.controls.externalEditorButton
 			/* Loading nested application */
 			if (!ldr)
         		ldr = new Loader();
+        		
 			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, applicationLoaded);
 			
 			var loaderContext:LoaderContext = new LoaderContext();
@@ -161,13 +167,23 @@ package vdom.controls.externalEditorButton
 			/* Pop up spinner while external application is loading... */
 			if (!spinner)
 				spinner = new SpinnerScreen();
+				
 			PopUpManager.addPopUp(spinner, DisplayObject(Application.application), true);
 			PopUpManager.centerPopUp(spinner);
 			spinner.visible = true;
 			
 			/* Init loading application */
+			fileManager.addEventListener(FileManagerEvent.RESOURCE_LOADING_ERROR, resourceLoadingErrorHandler); 
 			fileManager.loadResource(dataManager.currentApplicationId, resourceID, this)
 		}
+		
+		private function resourceLoadingErrorHandler(event:FileManagerEvent):void {
+			fileManager.removeEventListener(FileManagerEvent.RESOURCE_LOADING_ERROR, resourceLoadingErrorHandler);
+
+			PopUpManager.removePopUp(spinner);
+			Alert.show("External editor not found for this type!", "Resource loading error!");
+		}
+		
 		
 		private function applCloseHandler(event:Event):void {
 			applWindow.visible = false;
