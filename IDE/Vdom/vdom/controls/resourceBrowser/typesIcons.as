@@ -59,7 +59,7 @@ private var xls_Icon:Class;
 [Embed(source="/assets/resourceBrowserIcons/resourceType/wav.png")]
 private var wav_Icon:Class;
 
-[Embed(source="/assets/resourceBrowserIcons/resourceType/spinner.swf")]
+[Embed(source="/assets/common/spinner.swf")]
 private var waiting_Icon:Class;
 
 /* Creating array with embeded icons of resources types */
