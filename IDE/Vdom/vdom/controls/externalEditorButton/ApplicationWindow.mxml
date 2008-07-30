@@ -7,8 +7,8 @@
 
 	<mx:ControlBar paddingTop="1" paddingBottom="3" paddingRight="10" paddingLeft="10">
 		<mx:Spacer width="100%"/>
-		<mx:Button label="Close" click="{doneClickHandler();}" height="20"
-			icon="@Embed(source='/assets/common/closewnd.png')" />
+		<mx:Button label="Done" click="{doneClickHandler();}" height="20"
+			icon="@Embed(source='/assets/common/done.png')" />
 	</mx:ControlBar>
 	
 	<mx:Script>
