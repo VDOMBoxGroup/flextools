@@ -12,7 +12,9 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	borderAlpha="0.95" cornerRadius="1" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
-	visible="true" shadowDirection="right">
+	visible="true" shadowDirection="right"
+	borderColor="#636363" titleStyleName="externalApplTitle"
+	titleIcon="@Embed(source='/assets/common/resourcebrowser.png')">
 	
 	<mx:Script>
 		<![CDATA[
