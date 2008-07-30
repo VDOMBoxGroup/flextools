@@ -5,7 +5,7 @@
 	horizontalAlign="center" verticalAlign="middle"
 	visible="false">
 	
-	<mx:Image source="@Embed(source='/assets/resourceBrowserIcons/spinner.swf')" />
+	<mx:Image source="@Embed(source='/assets/common/spinner.swf')" />
 	<mx:Spacer height="20" />
 	<mx:Label text="Please wait..." />
 </mx:Box>
