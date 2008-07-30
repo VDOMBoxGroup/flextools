@@ -2,6 +2,8 @@
 		
 		import flash.events.MouseEvent;
 		
+		import mx.effects.Move;
+		
 		import vdom.components.treeEditor.TreeElement;
 		import vdom.events.DataManagerEvent;
 		import vdom.events.TreeEditorEvent;
@@ -174,9 +176,9 @@ private function adjustmentTree(xml1:XML):void
 	}else 
 	{
 		lavel = massMap.length;
-		massMap[lavel] = 0;
-	}
 		
+	}
+	massMap[lavel] = 0;
 		
 	for (name in massTreeObj)
 		if (massTreeObj[name].parent == null && massTreeObj[name].childs == null)
@@ -193,12 +195,19 @@ private function adjustmentTree(xml1:XML):void
 //	{
 		for (var str:String in massTreeObj)
 		{
-			massTreeElements[str].x  = massTreeObj[str].mapX * 220;
-			massTreeElements[str].y  = massTreeObj[str].mapY * 130 + 20;
-//		}
+		//	var move:Move = new Move();
+				
+//				move.xTo = Number( massTreeObj[str].mapX * 220);
+//				move.yTo = Number(massTreeObj[str].mapY * 130 + 20);
+//				move.target = massTreeElements[str];
+				
+				massTreeElements[str].x  = massTreeObj[str].mapX * 220;
+				massTreeElements[str].y  = massTreeObj[str].mapY * 130 + 20;
+//				move.play();
+		}
 		
 		saveToServer();
-	}	
+		
 	
 	function setPosition(inName:String):Boolean
 	{
