@@ -104,7 +104,7 @@ private function applyChanges():void {
 }
 
 private function listChanger():void {
-	__applyBtn.enabled = false;
+	__attentionImg.visible = false;
 	__removeBtn.enabled = true;
 	controlsEnable(true);
 	enablePropertiesPanel(false);
@@ -211,7 +211,7 @@ private function applyBtnClickHandler():void {
 }
 
 private function applyChangesOkHandler():void {
-	__applyBtn.enabled = false;
+	__attentionImg.enabled = false;
 	controlsEnable(true);
 	selectedListItem.fnew = false;
 

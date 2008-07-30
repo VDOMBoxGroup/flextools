@@ -64,8 +64,10 @@
 				</mx:HBox>
 								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
+					<mx:Image id="__attentionImg"
+						source="@Embed(source='/icons/important.png')" visible="{__applyBtn.enabled}" />
 					<mx:Button id="__applyBtn" label="Apply changes" click="{applyBtnClickHandler();}" enabled="false"
-						icon="@Embed(source='/icons/commit.png')"/>
+						icon="@Embed(source='/icons/commit.png')" />
 				</mx:HBox>				
 			</mx:VBox>
 		</mx:VBox>		
