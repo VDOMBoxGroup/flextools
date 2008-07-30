@@ -26,7 +26,8 @@
 		<mx:Canvas id="__normal" width="100%" height="24">
 			<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingRight="0" paddingLeft="0">
 				<mx:Button id="__addBtn" label="add line" height="20" click="{addRowBtnClickHandler();}" />
-				<mx:Button id="__deleteBtn" label="delete line" height="20" click="{deleteBtnClickHandler();}" />		
+				<mx:Button id="__deleteBtn" label="delete line" height="20" click="{deleteBtnClickHandler();}" />
+				<mx:VRule height="20" />		
 				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}" />
 				<mx:Spacer width="100%" />
 				<mx:HBox horizontalGap="0">
