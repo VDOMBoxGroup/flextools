@@ -26,9 +26,9 @@
 		<mx:Canvas id="__normal" width="100%" height="24">
 			<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingRight="0" paddingLeft="0">
 				<mx:Button id="__addBtn" label="add line" height="20" click="{addRowBtnClickHandler();}"
-					icon="@Embed(source='/icons/insert.png')" />
+					icon="@Embed(source='/icons/list-add.png')" />
 				<mx:Button id="__deleteBtn" label="delete line" height="20" click="{deleteBtnClickHandler();}"
-					icon="@Embed(source='/icons/remove.png')" />
+					icon="@Embed(source='/icons/list-remove.png')" />
 				<mx:VRule height="20" />		
 				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}"
 					icon="@Embed(source='/icons/commit.png')" />
