@@ -12,7 +12,8 @@
 		
 	<mx:DataGrid id="__dg"
 		width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
-		itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"/>
+		itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"
+		doubleClickEnabled="true" doubleClick="{addRowBtnClickHandler(event);}"/>
 	<mx:HBox width="100%" horizontalAlign="right" horizontalGap="0" paddingBottom="0" paddingTop="0">
 		<mx:Label text="Total rows:" fontSize="9" />
 		<mx:Label id="__rowsCount" text="{totalRecords}" fontSize="9" fontWeight="bold" />	
@@ -25,13 +26,15 @@
 	<mx:ViewStack id="__alertArea" width="100%" height="24" paddingTop="0" paddingBottom="0">
 		<mx:Canvas id="__normal" width="100%" height="24">
 			<mx:HBox width="100%" height="100%" verticalAlign="middle" paddingRight="0" paddingLeft="0">
-				<mx:Button id="__addBtn" label="add line" height="20" click="{addRowBtnClickHandler();}"
+				<mx:Button id="__addBtn" label="add line" height="20" click="{addRowBtnClickHandler(event);}"
 					icon="@Embed(source='/icons/list-add.png')" />
 				<mx:Button id="__deleteBtn" label="delete line" height="20" click="{deleteBtnClickHandler();}"
 					icon="@Embed(source='/icons/list-remove.png')" />
 				<mx:VRule height="20" />		
 				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}"
 					icon="@Embed(source='/icons/commit.png')" />
+				<mx:Button id="__discardBtn" label="discard" height="20" enabled="{__commitBtn.enabled}" click="{commitBtnClickHandler();}"
+					icon="@Embed(source='/icons/discard.png')" />
 				<mx:Spacer width="100%" />
 				<mx:HBox horizontalGap="0">
 					<mx:Label id="__operCount" fontWeight="bold" text="0" textAlign="right" />
@@ -53,7 +56,6 @@
 			</mx:HBox> 					
 		</mx:Canvas>
 	</mx:ViewStack>
-
 	
 </mx:Application>
 	

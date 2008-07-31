@@ -5,6 +5,8 @@ import mx.controls.LinkButton;
 import mx.controls.dataGridClasses.DataGridColumn;
 import mx.events.DataGridEvent;
 import mx.formatters.SwitchSymbolFormatter;
+import flash.events.MouseEvent;
+import mx.core.UITextField;
 
 private const AMOUNT:int = 500;
 private const MAX_PAGES:int = 10;
@@ -23,6 +25,7 @@ private var currentPage:int = 0;
 private var pageOffset:int = 0;
 private var queryResult:XML;
 private var editableValue:String = "";
+private var rowIndex:int = -1;
 
 private var queue:XMLList;
 private var thereAreGlobalChanges:Boolean = false;
@@ -280,7 +283,10 @@ private function itemEditEnd(event:DataGridEvent):void {
 	}
 }
 
-private function addRowBtnClickHandler():void {
+private function addRowBtnClickHandler(event:MouseEvent):void {
+	if (event.target is UITextField)
+		return;
+	
 	/* Create tableRow object */
 	var tableRow:Object = new Object();
 	var columnIndex:int = 0;
@@ -394,12 +400,17 @@ private function addRowsOkHandler():void {
 }
 
 private function deleteBtnClickHandler():void {
+	if (!dataGridCollection[__dg.selectedIndex])
+		return;
+		
 	if (dataGridCollection[__dg.selectedIndex]["fnew"]) {
 		dataGridCollection.removeItemAt(__dg.selectedIndex);
 		return;
 	}
 	
 	try {
+		rowIndex = __dg.selectedIndex;
+		__deleteBtn.enabled = false; 
 		manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
 		remoteMethodCallOkFunction = deleteSelectedDGRowOk;
 	
@@ -415,7 +426,8 @@ private function deleteBtnClickHandler():void {
 }
 
 private function deleteSelectedDGRowOk():void {
-	dataGridCollection.removeItemAt(__dg.selectedIndex);
+	dataGridCollection.removeItemAt(rowIndex);
+	__deleteBtn.enabled = true;
 	
 	thereAreGlobalChanges = true;
 }
