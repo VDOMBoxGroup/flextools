@@ -61,7 +61,10 @@ package vdom.components.eventEditor
 		private function treeChangeLister(evt:Event):void
 		{
 			 selectedNode = Tree(evt.target).selectedItem as XML;
+			 trace('------------------')
+			  trace('selectedNode ID: '+selectedNode.@ID)
 			 containerChange(selectedNode.@ID);
+			
 		}
 		
 		private var selectedNode:XML;
@@ -89,6 +92,7 @@ package vdom.components.eventEditor
 			
 					dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
               }
+              
 		}
 		private var curId:String;
 		private function changeCurrentObjectListener(dmEvt:DataManagerEvent):void
@@ -113,7 +117,7 @@ package vdom.components.eventEditor
 				if(topLevelObjectId && xmlTreeData) 
 				{
 					selectedItem = xmlTreeData.Object.(@ID == topLevelObjectId)[0];
-					trace('selectedItem: '+selectedItem.toXMLString());
+//					trace('selectedItem ID: '+selectedItem.@ID);
 					this.scrollToIndex(getItemIndex(selectedItem));
 				}
 		}
@@ -146,14 +150,14 @@ package vdom.components.eventEditor
 					xmlTreeData.appendChild(xmlList);
 			} 
 				super.dataProvider = xmlTreeData;
-				trace('***********************');
-				trace(xmlTreeData.toXMLString());
+//				trace('***********************');
+//				trace(xmlTreeData.toXMLString());
 				
 				if(selectedNode)
 				{
 					this.selectedItem = selectedNode;
 					this.scrollToIndex(getItemIndex(selectedItem));
-					trace('selectedItem: '+selectedItem.toXMLString());
+//					trace('selectedItem: '+selectedItem.toXMLString());
 				}
 			}
 		}

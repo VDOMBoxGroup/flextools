@@ -7,6 +7,7 @@
 		
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.binding.utils.ChangeWatcher;
 	 		import mx.core.Application;
 	 		import mx.managers.CursorManagerPriority;
 	 		import mx.managers.CursorManager;
@@ -77,10 +78,11 @@
 	 		{
 	 			dataManager = DataManager.getInstance();
 	 		}
-	 	
+	 		
+	 		private var changeWatcher:ChangeWatcher ;
 	 		private function showHandler():void
 	 		{
-	 			BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
+	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
 	 			trContainer.showHandler();
 	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 			
@@ -90,25 +92,38 @@
 	 			
 	 			curContainerID = dataManager.currentPageId;
 	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+//	 			trace('EvenEditor SHOW');
 	 		}
 	 		
 	 		private function hideHandler():void
 	 		{
+	 			changeWatcher.unwatch();
 	 			trContainer.hideHandler();
 	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+//	 			trace('EvenEditor HIDE');
 	 		}
 	 		
+	 		private var getApplEventID:String;
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
+	 			dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
+	 		
 	 			if(dataChanged)
-	 				creatDataToServer(eeEvt.objID);
-	 			
+	 			{
+	 				creatDataToServer(); //eeEvt.objID
+	 				getApplEventID = eeEvt.objID;
+	 			}else
+	 			{
+	 				
+	 				dataManager.getApplicationEvents(eeEvt.objID);
+	 			}
 	 			dataChanged = false;
 	 			
-	 			dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
-	 			//trace('get: '+ eeEvt.objID);
-	 			dataManager.getApplicationEvents(eeEvt.objID);
 	 			
+	 			//trace('get: '+ eeEvt.objID);
+	 			
+	 			
+	 			can.removeAllChildren();
 	 			trEvents.dataProvider  = eeEvt.data;
 	 			trActions.dataProvider = eeEvt.data;
 	 		}
@@ -526,10 +541,10 @@
 			//  проверка если перетащили за границы :	treeElementMousUpHandler();
 			}
 			
-			private function creatDataToServer(contrID:String):void
+			private function creatDataToServer():void
 			{
-				trace('SEND curContainerID: '+contrID);
-				return;
+//				trace('SEND curContainerID: '+contrID);
+//				return;
 				dataToServer = <E2vdom>	<Actions/> 	<Events/> </E2vdom>;
 				
 				var temXML:XML;
@@ -577,15 +592,20 @@
 					}
 				}
 				
-		//		trace('----toServer---\n '+curContainerID+'\n'+ dataToServer.toXMLString())
-		     	
-				dataManager.setApplicationEvents(contrID, dataToServer.toXMLString());
+//				trace('curContainerID TO server: '+curContainerID+'\n'+ dataToServer.toXMLString());
+		     	dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_SAVED, applEventSevedHandler)
+				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
+			}
+			
+			private function applEventSevedHandler(dmEvt:DataManagerEvent):void
+			{
+				dataManager.getApplicationEvents(getApplEventID);
 			}
 			
 			private function cretDat(xmlToTree:XML=null):void
 			{
 				//trace(xmlToTree.toXMLString());
-				can.removeAllChildren();
+//				can.removeAllChildren();
 			
 				actionsArray = [];		
 				for each(var actID:XML in xmlToTree.E2vdom.Actions.children())
