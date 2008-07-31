@@ -34,6 +34,7 @@ package vdom.components.eventEditor
 			var tempXML:XML;
 			
 			if(actions != null)		
+			{
 				for each(var child:XML in actions.children() )
 				{
 				 	tempXML = <Event/>;
@@ -43,7 +44,8 @@ package vdom.components.eventEditor
 					tempXML.@containerID = value.@containerID;
 					
 					dataXML.appendChild(tempXML);
-				} 
+				}
+			} 
 			
 			value = value as XML;
 			for each(child in value.children())

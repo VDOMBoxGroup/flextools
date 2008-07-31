@@ -14,6 +14,7 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.core.Application;
 			import vdom.controls.externalEditorButton.SpinnerScreen;
 			import vdom.events.AddTreeElementEvent;
@@ -72,7 +73,18 @@
 					var strID:String = lavel.Information.ID;
 					arrAppl.push({label:strLabel, data:strID});
 			}
-			comBoxAppl.selectedIndex = 0;
+			
+			function searchIndex():int
+			{
+				for(var i:String in arrAppl)
+				{
+					if (arrAppl[i].data == '2330fe83-8cd6-4ed5-907d-11874e7ebcf4') 
+						return Number(i);	
+				}
+				return 0;
+			}
+			comBoxAppl.selectedIndex = searchIndex();
+		//	if(!comBoxAppl.selectedIndex) comBoxAppl.selectedIndex = 0;
 			selectedAppl = comBoxAppl.selectedItem;
 		}
 		
