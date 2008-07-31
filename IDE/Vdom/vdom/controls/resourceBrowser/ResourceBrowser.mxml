@@ -13,8 +13,15 @@
 	borderAlpha="0.95" cornerRadius="1" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 	visible="true" shadowDirection="right"
-	borderColor="#636363" titleStyleName="externalApplTitle"
+	borderColor="#636363" titleStyleName="resourceBrowserTitle"
 	titleIcon="@Embed(source='/assets/common/resourcebrowser.png')">
+	
+	<mx:Style>
+		.resourceBrowserTitle {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
 	
 	<mx:Script>
 		<![CDATA[
