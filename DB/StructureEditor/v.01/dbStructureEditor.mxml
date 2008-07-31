@@ -33,10 +33,10 @@
 					<mx:Label text="Type:" width="100" />
 					<mx:ComboBox id="__type" width="200" change="{__applyBtn.enabled = true; controlsEnable(false);}" enabled="false">
 						<mx:ArrayCollection>
-							<mx:Object label="TEXT"		data="text"/>
-							<mx:Object label="INTEGER"	data="integer"/>
-							<mx:Object label="REAL"		data="real"/>
-							<mx:Object label="BLOB"		data="blob"/>
+							<mx:Object label="TEXT"		data="TEXT"/>
+							<mx:Object label="INTEGER"	data="INTEGER"/>
+							<mx:Object label="REAL"		data="REAL"/>
+							<mx:Object label="BLOB"		data="BLOB"/>
 						</mx:ArrayCollection>
 					</mx:ComboBox>
 					
