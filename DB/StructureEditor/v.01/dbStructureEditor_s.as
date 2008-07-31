@@ -103,6 +103,11 @@ private function applyChanges():void {
 	listChanger();
 }
 
+private function discardChanges():void {
+	__applyBtn.enabled = false;
+	listChanger();
+}
+
 private function listChanger():void {
 	__attentionImg.visible = false;
 	__removeBtn.enabled = true;

@@ -66,8 +66,10 @@
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">
 					<mx:Image id="__attentionImg"
 						source="@Embed(source='/icons/important.png')" visible="{__applyBtn.enabled}" />
-					<mx:Button id="__applyBtn" label="Apply changes" click="{applyBtnClickHandler();}" enabled="false"
+					<mx:Button id="__applyBtn" label="apply changes" click="{applyBtnClickHandler();}" enabled="false"
 						icon="@Embed(source='/icons/commit.png')" />
+					<mx:Button id="__discardBtn" label="discard" click="{discardChanges();}" enabled="{__applyBtn.enabled}"
+						icon="@Embed(source='/icons/discard.png')" />
 				</mx:HBox>				
 			</mx:VBox>
 		</mx:VBox>		
