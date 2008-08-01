@@ -9,6 +9,7 @@
 	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*">
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.managers.ConnectionManager;
 			import generated.webservices.Export_applicationResultEvent;
 			import vdom.connection.protect.MD5;
 			import generated.webservices.List_applicationsResultEvent;
@@ -59,7 +60,7 @@
 				switch(vsStep.selectedChild)
 				{
 					case step1:
-						connect();		
+						ConnectionManager.exec('list_applications', getAppListHandler);  
 						break;
 				}
 				
@@ -72,108 +73,7 @@
 				if(vsStep.selectedIndex>0)
 					vsStep.selectedIndex--;
 			}
-			
-			private function connect():void
-			{
-             	/*
-             	var ws:WebService = ContextManager.instance.ws;	
-             	ws.wsdl = ContextManager.instance.host+":"+
-             		(ContextManager.instance.use_def_port?ContextManager.instance.default_port:ContextManager.instance.port)+
-             		"/vdom.wsdl";
-             	ws.wsdl = "http://192.168.0.24:80/vdom.wsdl"
-				ws.useProxy = false;
-				ws.addEventListener(LoadEvent.LOAD, loadCompleteHandler);
-				ws.addEventListener(FaultEvent.FAULT, faultHandler);
-				ws.loadWSDL();
-				*/
-				
-				ContextManager.instance.vdom = new Vdom(null, 
-					ContextManager.instance.host+":"+
-             		(ContextManager.instance.use_def_port?ContextManager.instance.default_port:ContextManager.instance.port)+
-             		"/SOAP");
-             		
-				var ws:Vdom = ContextManager.instance.vdom;             	
-             	ws.addVdomFaultEventListener(faultHandler);
-             	
-             	login();
-			}
-			
-			private  function faultHandler(event:FaultEvent):void 
-			{
-				Alert.show("A fault occured contacting the server. Fault message is: " + event.fault.faultString+
-				"\n"+event.fault.faultDetail+
-				"\n"+event.fault.rootCause+'\n'+event.headers);
-			}			
-			
-			/*
-			private function loadCompleteHandler(event:Event):void 
-			{
-				var ws:WebService = ContextManager.instance.ws;	
-				ws.removeEventListener(LoadEvent.LOAD, loadCompleteHandler);
-				login();
-			}
-			*/
-			
-			private function login():void
-			{	
-             	//var ws:WebService = ContextManager.instance.ws;
-				var ws:Vdom = ContextManager.instance.vdom;
-             	var login:String = ContextManager.instance.login;
-				var pwd_md5:String = MD5.encrypt(ContextManager.instance.pass);   
-				
-				ws.addopen_sessionEventListener(loginHandler);
-				ws.open_session(login, pwd_md5);
-				
-             	//ws.open_session.addEventListener(ResultEvent.RESULT, loginHandler);			
-				//ws.open_session(login, pwd_md5);
-			}	
-			
-			private  function loginHandler(event:Open_sessionResultEvent):void
-			{
-				var resultXML:XML = new XML(<Result />);
-				resultXML.appendChild(XMLList(event.result));				
-				
-				if(resultXML.Error.toString()) {
-					Alert.show(resultXML.Error)
-				} 
-				else {					
-					// run session protector
-					var code:Code = Code.getInstance();
-					code.init(resultXML.Session.HashString);
-					code.inputSKey(resultXML.Session.SessionKey);
-					code.sessionId = resultXML.Session.SessionId;
-					
-					getAppList();
-				}
-			}
-	
-			private function logout():void
-			{	
-             	//var ws:WebService = ContextManager.instance.ws;
-             	var ws:Vdom = ContextManager.instance.vdom;
-				var code:Code = Code.getInstance();
-				var sid:String = code.sessionId; 
-				
-				//ws.addclose_sessionEventListener(logoutHandler);
-				ws.close_session(sid);
-				
-				//ws.close_session.addEventListener(ResultEvent.RESULT, onLogout);
-				//ws.close_session(sid);
-			}
-			
-			private function getAppList():void
-			{
-				//var ws:WebService = ContextManager.instance.ws;
-				var ws:Vdom = ContextManager.instance.vdom;
-				var code:Code = Code.getInstance();
-				var sid:String			= code.sessionId; 
-				var skey:String  		= code.skey(); 
-				
-				ws.addlist_applicationsEventListener(getAppListHandler);
-				ws.list_applications(sid, skey);
-				//ws.list_applications.addEventListener(ResultEvent.RESULT, onGetAppList);
-				//ws.list_applications(sid, skey);
-			}
+
 
 			private  function getAppListHandler(event:List_applicationsResultEvent):void
 			{
@@ -184,18 +84,14 @@
 					Alert.show(resultXML.Error);
 				} 
 				else {	
-					trace(resultXML)
+					trace(resultXML);					
 					importApp();
 				}
 			}
 			
 			private function importApp():void
 			{
-				//var ws:WebService = ContextManager.instance.ws;
-				var ws:Vdom = ContextManager.instance.vdom;
-				var code:Code = Code.getInstance();
-				var sid:String = code.sessionId; 
-				var skey:String	= code.skey();
+				var ws:Vdom = ConnectionManager.instance.vdom;
 				var appid:String;
 				
 				var resultXML:XML = new XML(<Result />);				
@@ -204,8 +100,7 @@
 				appid = resultXML..Application[0].@ID;
 				appid = '58a4358d-2dce-4bd3-ace9-62a72316d84d';
 				
-				ws.addexport_applicationEventListener(importAppHandler);
-				ws.export_application(sid, skey, appid);
+				ConnectionManager.exec('export_application', importAppHandler);  
 			}						
 
 			private  function importAppHandler(event:Export_applicationResultEvent):void
@@ -225,7 +120,7 @@
 						fileStream.close();	
 					
 					//trace(resultXML);
-					logout();
+					ConnectionManager.logout();
 				}
 			}
 					

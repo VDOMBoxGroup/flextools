@@ -45,6 +45,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.managers.ConnectionManager;
 			import generated.webservices.Install_applicationResultEvent;
 			import vdom.connection.protect.MD5;
 			import vdom.connection.protect.Code;
@@ -595,8 +596,8 @@
 				appInstalled = false;
 				progressBar.setProgress(progressBar.maximum/5, progressBar.maximum);
 				
-				ContextManager.instance.vdom = new Vdom(null, txtHost.text + ":" + txtPort.text + '/SOAP');
-				var ws:Vdom = ContextManager.instance.vdom;
+				ConnectionManager.instance.vdom = new Vdom(null, txtHost.text + ":" + txtPort.text + '/SOAP');
+				var ws:Vdom = ConnectionManager.instance.vdom;
              	ws.addVdomFaultEventListener(faultHandler);
              	
 				function faultHandler(event:FaultEvent):void {
@@ -613,7 +614,7 @@
 			{	
 				progressBar.setProgress(progressBar.maximum/3, progressBar.maximum);
 				
-				var ws:Vdom = ContextManager.instance.vdom;
+				var ws:Vdom = ConnectionManager.instance.vdom;
              	var login:String = txtLogin.text;
 				//var pwd_md5:String = CryptUtils.hex(CryptUtils.MD5(txtPass.text));   
 				var pwd_md5:String = MD5.encrypt(txtPass.text);
@@ -645,7 +646,7 @@
 			{
 				progressBar.setProgress(progressBar.maximum/2, progressBar.maximum);
 				
-				var ws:Vdom = ContextManager.instance.vdom;
+				var ws:Vdom = ConnectionManager.instance.vdom;
 				var code:Code = Code.getInstance();
 				var sid:String = code.sessionId; 
 				var skey:String = code.skey(); 
@@ -674,7 +675,7 @@
 			{
 				progressBar.setProgress(progressBar.maximum/1.5, progressBar.maximum);
 				
-				var ws:Vdom = ContextManager.instance.vdom;
+				var ws:Vdom = ConnectionManager.instance.vdom;
 				var code:Code = Code.getInstance();
 				var sid:String = code.sessionId; 
 				var skey:String = code.skey(); 
@@ -732,7 +733,7 @@
 
 			private function logout():void
 			{	
-             	var ws:Vdom = ContextManager.instance.vdom;
+             	var ws:Vdom = ConnectionManager.instance.vdom;
 				var code:Code = Code.getInstance();
 				var sid:String = code.sessionId; 
 				
