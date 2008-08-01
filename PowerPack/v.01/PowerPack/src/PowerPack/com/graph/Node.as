@@ -543,9 +543,12 @@ public class Node extends Canvas
             		nodeTextArea.setStyle( "color",  0x000000);
             		if(contextMenu)
 	            		contextMenu.getItemByName("normal").checked = true;
-            		break;            }          
+            		break;            
+            }          
 			
 			styleChanged(null);
+			nodeTextArea.styleChanged(null);
+			nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	
 
@@ -580,6 +583,7 @@ public class Node extends Canvas
             }
 			
 			styleChanged(null);
+			nodeTextArea.styleChanged(null);
     		invalidateDisplayList();
         }	
         
@@ -1147,6 +1151,9 @@ public class Node extends Canvas
 		if(initialized)
 		{
 			var node:Node = event.target.parent;
+			
+			node._categoryChanged = true;
+			node.invalidateProperties();
 			node.invalidateSize();
 			node.invalidateDisplayList();		
 		}

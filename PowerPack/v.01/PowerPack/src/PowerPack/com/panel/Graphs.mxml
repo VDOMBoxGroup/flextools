@@ -7,6 +7,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.managers.ProgressManager;
 			import PowerPack.com.managers.ContextManager;
 			import mx.events.CollectionEventKind;
 			import mx.collections.Sort;
@@ -219,6 +220,8 @@
 
 				clear();
 				
+				ProgressManager.show(null, false);
+				
 				for each (var graphXML:XML in templateXML.elements("graph"))
 				{			
 					populateGraph(graphXML);
@@ -237,6 +240,8 @@
 						break;
 					}
 				}
+				
+				ProgressManager.complete();
 			}
 						
 			/** 

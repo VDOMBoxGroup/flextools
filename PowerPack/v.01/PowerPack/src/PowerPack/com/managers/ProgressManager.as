@@ -12,7 +12,6 @@ import flash.events.MouseEvent;
 import flash.events.OutputProgressEvent;
 import flash.events.ProgressEvent;
 import flash.filesystem.FileStream;
-import flash.utils.setTimeout;
 
 import mx.containers.Box;
 import mx.containers.ControlBar;
@@ -116,7 +115,7 @@ public class ProgressManager extends EventDispatcher
 	//--------------------------------------------------------------------------	
 
 	private var _sm:SystemManager;
-	private var _win:*;
+	private var _win:Object;
 
 	private var _window:TitleWindow;
 	private var _winBox:Box;
@@ -283,7 +282,7 @@ public class ProgressManager extends EventDispatcher
 				if(showProgress)
 					instance._panel.addChild(instance._bar);
 				/* TODO: restore position or set default position */
-				instance._panel.validateNow();
+				//instance._panel.validateNow();
 				break;
 			case STATUS_MODE:
 				if(!instance._win.statusBar || !(instance._win.statusBar is SuperStatusBar))
@@ -297,7 +296,7 @@ public class ProgressManager extends EventDispatcher
 				if(showProgress)
 					instance._statusBar.addChild(instance._bar);
 				SuperStatusBar(instance._win.statusBar).statusHBox.addChildAt(instance._statusBar, 0);
-				SuperStatusBar(instance._win.statusBar).validateNow();
+				//SuperStatusBar(instance._win.statusBar).validateNow();
 				break;		
 			default:
 				instance._bar.label = LanguageManager.sentences['progress_full_label'];
@@ -309,12 +308,12 @@ public class ProgressManager extends EventDispatcher
 					instance._winBox.addChildAt(instance._bar, 1);
 				PopUpManager.addPopUp(instance._window, instance._win as DisplayObject, true);
 				PopUpManager.centerPopUp(instance._window);
-				instance._window.validateNow();
+				//instance._window.validateNow();
 				viewMode = WINDOW_MODE;
 				break;								
 		}
 		
-		Application.application.validateNow();
+		//Application.application.validateNow();
 				
 		instance._viewMode = viewMode;
 		instance.dispatchEvent(new Event("modeChange"));
@@ -345,7 +344,7 @@ public class ProgressManager extends EventDispatcher
 				break;						
 		}
 		
-		Application.application.validateNow();
+		//Application.application.validateNow();
 		
 		instance._isShown = false;
 	}
