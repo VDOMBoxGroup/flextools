@@ -3832,9 +3832,9 @@ TinyMCE_Control.prototype = {
 		
 		// Get replace_element contents
 		if (replace_element.nodeName == "TEXTAREA" || replace_element.nodeName == "INPUT")
-			this.startContent = www.innerHTML///replace_element.value;
+			this.startContent = elementForEditing.innerHTML///replace_element.value;
 		else
-			this.startContent = www.innerHTML///replace_element.innerHTML;
+			this.startContent = elementForEditing.innerHTML///replace_element.innerHTML;
 			
 		// If not text area or input
 		if (replace_element.nodeName != "TEXTAREA" && replace_element.nodeName != "INPUT") {
@@ -3884,7 +3884,7 @@ TinyMCE_Control.prototype = {
 		// Setup iframe
 		dynamicIFrame = false;
 		//tElm = targetDoc.getElementById(this.editorId);
-		tElm = www;
+		tElm = elementForEditing;
 		
 		if (!tinyMCE.isIE) {
 			// Node case is preserved in XML strict mode

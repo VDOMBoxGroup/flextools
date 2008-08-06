@@ -4,6 +4,7 @@ import flash.display.DisplayObject;
 import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.events.Event;
+import flash.html.HTMLLoader;
 
 import mx.containers.Canvas;
 import mx.core.FlexSprite;
@@ -59,8 +60,8 @@ public class Item extends Canvas implements IItem
 			removeAllChildren();
 			
 		}
-		else {
-			
+		else
+		{
 			_graphicsLayer.visible = true;
 			_waitLayout.visible = false;
 			_waitLayout.width = 0;
@@ -143,8 +144,11 @@ public class Item extends Canvas implements IItem
 				offset++
 				continue;
 			}
-			
-			removeChildAt(offset);
+			if(itemChild is HTMLLoader)
+			{
+				HTMLLoader(itemChild).loadString("");
+			}
+			removeChild(itemChild);
 		}
 		
 		var count:uint = graphicsLayer.rawChildren.numChildren;

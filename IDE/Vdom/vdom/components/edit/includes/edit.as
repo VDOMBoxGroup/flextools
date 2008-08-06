@@ -75,9 +75,9 @@ private function registerEvent(flag:Boolean):void
 		dataManager.addEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
 		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
 		
-		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, updateAttributesBeginHandler);
-		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
-		dataManager.addEventListener(DataManagerEvent.RESOURCE_MODIFIED, updateAttributesCompleteHandler);
+		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler);
+		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, dataManager_updateAttributesCompleteHandler);
+		dataManager.addEventListener(DataManagerEvent.RESOURCE_MODIFIED, dataManager_updateAttributesCompleteHandler);
 		
 		attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 		attributesPanel.addEventListener(AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler);
@@ -94,8 +94,8 @@ private function registerEvent(flag:Boolean):void
 		dataManager.removeEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
 		
-		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, updateAttributesBeginHandler);
-		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributesCompleteHandler);
+		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler);
+		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, dataManager_updateAttributesCompleteHandler);
 		
 		attributesPanel.removeEventListener('propsChanged', attributesChangedHandler);
 		attributesPanel.removeEventListener(AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler);
@@ -111,26 +111,6 @@ private function attributesChangedHandler(event:Event):void
 {	
 	dataManager.updateAttributes();
 	//attributesPanel.dataProvider = dataManager.currentObject; //<-- исправить!!!!!!
-}
-
-private function updateAttributesBeginHandler(event:DataManagerEvent):void
-{
-	var attrName:String;
-	
-	for each(var attr:XML in event.result.*)
-	{
-		attrName = attr.@Name;
-		if(attrName == "top" || attrName  == "left")
-			continue;
-		
-		workArea.lockItem(dataManager.currentObjectId);
-		break;
-	}
-}
-
-private function updateAttributesCompleteHandler(event:DataManagerEvent):void
-{	
-	workArea.updateObject(event.result);
 }
 
 private function workArea_createObjectHandler(event:Event):void
@@ -159,6 +139,32 @@ private function deleteObjectHandler(event:AttributesPanelEvent):void
 {	
 	if(event.objectId);
 		dataManager.deleteObject(event.objectId);
+}
+
+private function dataManager_updateAttributesBeginHandler(event:DataManagerEvent):void
+{
+	var attrName:String;
+	
+	if(!event.result)
+	{
+		workArea.lockItem(dataManager.currentObjectId);
+		return;
+	}
+	
+	for each(var attr:XML in event.result.*)
+	{
+		attrName = attr.@Name;
+		if(attrName == "top" || attrName  == "left")
+			continue;
+		
+		workArea.lockItem(dataManager.currentObjectId);
+		break;
+	}
+}
+
+private function dataManager_updateAttributesCompleteHandler(event:DataManagerEvent):void
+{	
+	workArea.updateObject(event.result);
 }
 
 private function dataManager_objectCreatedHandler(event:DataManagerEvent):void

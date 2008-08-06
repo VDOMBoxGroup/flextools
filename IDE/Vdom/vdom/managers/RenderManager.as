@@ -11,7 +11,9 @@ import mx.collections.Sort;
 import mx.collections.SortField;
 import mx.containers.Canvas;
 import mx.controls.Image;
+import mx.controls.Text;
 import mx.core.Container;
+import mx.core.UIComponent;
 import mx.utils.UIDUtil;
 
 import vdom.connection.soap.Soap;
@@ -19,6 +21,7 @@ import vdom.connection.soap.SoapEvent;
 import vdom.containers.IItem;
 import vdom.containers.Item;
 import vdom.controls.EditableHTML;
+import vdom.controls.EditableText;
 import vdom.events.DataManagerEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.managers.renderClasses.ItemDescription;
@@ -393,23 +396,34 @@ public class RenderManager implements IEventDispatcher {
 			
 			case "text":
 				
-				var style:String = "";
-				var viewText:EditableHTML = new EditableHTML();
-				var isEditable:Boolean = false;
-				var fontStyle:String = "font:Tahoma, 12px;";
-				var colorStyle:String = "color:#000000;";
+				var viewText:UIComponent;
 				
-				viewText.paintsDefaultBackground = false;
+				if(childXMLDescription.@editable[0] && !IItem(item).isStatic)
+				{
+					viewText = new EditableText();
+					
+					
+					/* IItem(item).editableAttributes.push(
+						{destName:String(childXMLDescription.@editable),
+						sourceObject:viewText,
+						sourceName:"text"}
+					); */
+//					isEditable = false;
+				}
+				else
+				{
+					viewText = new Text();
+				}
+				
+				var color:String = "#000000";
+				var alpha:Number = 1;
+				var fontFamily:String = "Tahoma";
+				var fontSize:String = "12";
+				var fontStyle:String = "normal";
+				var fontWeight:String = "normal";
+				
 				viewText.x = childXMLDescription.@left;
 				viewText.y = childXMLDescription.@top;
-				
-				if(childXMLDescription.@color.length())
-					colorStyle = "color:#" + childXMLDescription.@color + "; ";
-				
-				if(childXMLDescription.@font.length())
-					fontStyle = "font:" + childXMLDescription.@font + "; ";
-				
-				style = colorStyle + fontStyle;
 				
 				if(childXMLDescription.@width.length())
 					viewText.width = childXMLDescription.@width;
@@ -417,33 +431,83 @@ public class RenderManager implements IEventDispatcher {
 				if(childXMLDescription.@height.length())
 					viewText.height = childXMLDescription.@height;
 				
-				var HTMLText:String = childXMLDescription;
+				if(childXMLDescription.@color[0])
+					color = "#" + childXMLDescription.@color;
 				
-				viewText.setStyle("backgroundAlpha", .0);
+				if(childXMLDescription.@alpha[0])
+					alpha = childXMLDescription.@alpha / 100;
 				
-				if(childXMLDescription.@editable.length() && IItem(item).isStatic == false) {
+				if(childXMLDescription.@fontfamily[0])
+					fontFamily = childXMLDescription.@fontfamily;
+				
+				if(childXMLDescription.@fontsize[0])
+					fontSize = childXMLDescription.@fontsize;
 					
-					isEditable = false;
+				if(childXMLDescription.@fontstyle[0])
+					fontStyle = childXMLDescription.@fontstyle;
+				
+				if(childXMLDescription.@fontweight[0])
+					fontWeight = childXMLDescription.@fontweight;
+					
+				viewText.setStyle("backgroundAlpha", .0);
+				viewText.setStyle("color", color);
+				viewText.setStyle("alpha", alpha);
+				viewText.setStyle("fontFamily", fontFamily);
+				viewText.setStyle("fontSize", fontSize);
+				viewText.setStyle("fontStyle", fontStyle);
+				viewText.setStyle("fontWeight", fontWeight);
+				
+				var text:String = childXMLDescription.text().toString();
+				
+				viewText["text"] = text;
+				viewText["selectable"] = false;
+				item.addChild(viewText);
+			break;
+			
+			case "htmltext":
+				
+				var viewHTMLText:EditableHTML = new EditableHTML();
+								
+				viewHTMLText.paintsDefaultBackground = false;
+				
+				viewHTMLText.x = childXMLDescription.@left;
+				viewHTMLText.y = childXMLDescription.@top;
+				
+				if(childXMLDescription.@width.length())
+					viewHTMLText.width = childXMLDescription.@width;
+				
+				if(childXMLDescription.@height.length())
+					viewHTMLText.height = childXMLDescription.@height;
+				
+				var HTMLText:String =childXMLDescription.text().toString();
+				
+				viewHTMLText.setStyle("backgroundAlpha", .0);
+				
+				if(childXMLDescription.@editable[0] && IItem(item).isStatic == false) {
 									
 					IItem(item).editableAttributes.push(
 						{destName:String(childXMLDescription.@editable),
-						sourceObject:viewText,
+						sourceObject:viewHTMLText,
 						sourceName:"editabledText"}
 					);
 				}
+				
 				if(HTMLText == "")
 					HTMLText = "<div>simple text</div>";
+				
 				HTMLText =
-						"<html><head>" + 
-						"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-						"</head>" +
-						"<body style=\"margin:0px; " + style + "\" \>" +
-						HTMLText +
-						"</body></html>";
+						"<html>" + 
+							"<head>" + 
+								"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+							"</head>" +
+							"<body style=\"margin:0px;\" >" +
+								HTMLText +
+							"</body>" + 
+						"</html>";
 						
-				viewText.htmlText = HTMLText;
+				viewHTMLText.htmlText = HTMLText;
 				 
-				item.addChild(viewText);
+				item.addChild(viewHTMLText);
 			break;
 			
 			case "graphics":

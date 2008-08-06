@@ -14,7 +14,7 @@ import vdom.connection.soap.SoapEvent;
 import vdom.events.FileManagerEvent;
 	
 public class FileManager implements IEventDispatcher
-{	
+{
 	private static var instance:FileManager;
 	
 	private var dispatcher:EventDispatcher = new EventDispatcher();

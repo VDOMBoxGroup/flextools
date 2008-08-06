@@ -121,6 +121,10 @@ private function selectPage():void
 		var page:XML = dataManager.listPages[0]
 		dataManager.changeCurrentPage(page.@ID);
 	}
+	else
+	{
+		switchToEdit();
+	}
 }
 
 private function selectObject():void
@@ -131,13 +135,7 @@ private function selectObject():void
 
 private function dataManager_applicationDataLoaded(event:DataManagerEvent):void
 {	
-	if(!dataManager.listPages || dataManager.listPages.length() == 0)
-		return;
-	
-	var pageId:String = dataManager.listPages[0].@ID;
-	
 	alertManager.showMessage("Load Page Data");
-	
 	selectPage();
 }
 

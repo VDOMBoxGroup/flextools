@@ -21,6 +21,7 @@
 	</mx:Style>
 	
 	<mx:Script source="includes/richTextToolBar.as"/>
+	<mx:Script source="includes/richTextToolBarTemplate.as"/>
 	
 	<mx:VBox left="5" top="5" right="5" bottom="5">
 		<mx:HBox horizontalGap="0">
@@ -127,7 +128,7 @@
 			<mx:Label text="Size"/>
 			<mx:ComboBox id="sizeSelector" styleName="toolbarComboBox"
 				height="24" width="100"
-				change="{tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data)}">
+				change="{tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data); recalculateSize();}">
 				<mx:dataProvider>
 				  <mx:ArrayCollection>
 			        <mx:Object label="1 (8 pt)" data="1"/>

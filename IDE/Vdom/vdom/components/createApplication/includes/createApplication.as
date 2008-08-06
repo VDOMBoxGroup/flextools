@@ -20,10 +20,9 @@ private var applicationDescription:ApplicationDescription;
 
 private function showHandler():void
 {
-	//applicationEditor.formName = 'Create Application';
 	registerEvent(true);
 	applicationEditor.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
-}
+}		
 
 private function hideHandler():void
 {
@@ -31,19 +30,19 @@ private function hideHandler():void
 	applicationEditor.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
 }
 
-private function registerEvent(flag:Boolean):void 
+private function registerEvent(flag:Boolean):void
 {	
-	if(flag) {
-		
+	if(flag)
+	{
 		applicationEditor.addEventListener(
 			ApplicationEditorEvent.APPLICATION_PROPERTIES_CHANGED, propertiesChangedHandler
 		);
 		applicationEditor.addEventListener(
 			ApplicationEditorEvent.APPLICATION_PROPERTIES_CANCELED, propertiesCanceledHandler
-		);
-		
-	} else {
-		
+		);	
+	}
+	else
+	{
 		applicationEditor.removeEventListener(
 			ApplicationEditorEvent.APPLICATION_PROPERTIES_CHANGED, propertiesChangedHandler
 		);

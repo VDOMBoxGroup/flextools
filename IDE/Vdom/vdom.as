@@ -12,6 +12,7 @@ import vdom.components.loginForm.events.LoginFormEvent;
 import vdom.connection.soap.Soap;
 import vdom.events.AuthenticationEvent;
 import vdom.events.DataManagerEvent;
+import vdom.managers.AlertManager;
 import vdom.managers.AuthenticationManager;
 import vdom.managers.CacheManager;
 import vdom.managers.DataManager;
@@ -57,7 +58,7 @@ private function preinitalizeHandler():void
 	languageManager.init(languageList);
 	cacheManager.init();
 	
-	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
+//	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
 	dataManager.addEventListener(DataManagerEvent.CLOSE, dataManager_close);
 }
 
@@ -92,7 +93,8 @@ private function lockStage(value:String):void
 }
 
 private function submitLogin(event:LoginFormEvent):void
-{		
+{	
+	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
 	lockStage('Authentication process');
 	
 	var username:String = event.formData.username
@@ -173,5 +175,8 @@ private function soap_faultHandler(event:FaultEvent):void
 	Alert.show(event.fault.faultString, 'Error');
 	ppm.showText = '';
 	PopUpManager.removePopUp(ppm);
+	soap.removeEventListener(FaultEvent.FAULT, soap_faultHandler);
+	var am:AlertManager = AlertManager.getInstance();
+	am.showMessage("");
 	dataManager.close();
 }

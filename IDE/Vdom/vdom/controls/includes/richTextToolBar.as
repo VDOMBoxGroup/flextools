@@ -1,11 +1,9 @@
+import flash.display.DisplayObject;
 import flash.events.Event;
-import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.html.HTMLLoader;
 
-import mx.collections.ArrayCollection;
 import mx.core.Application;
-import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.ColorPickerEvent;
 import mx.events.ListEvent;
@@ -17,216 +15,230 @@ import vdom.controls.richTextToolBarClasses.CharMap;
 import vdom.controls.richTextToolBarClasses.CodeEditor;
 import vdom.controls.richTextToolBarClasses.LinkSelection;
 
-private var sample:HTMLLoader;
-private var _editableElement:EditableHTML;
-private var selectedItem:Container;
-
-private var tinyMCE:*;
-private var iFrame:*;
-private var contentDocument:*
-
-private var _selfChanged:Boolean = false;
+private var HTMLEditorLoader:HTMLLoader;
+private var editableHTML:EditableHTML;
+private var selectedItem:IItem;
 
 private var oldValue:String = '';
-private var loaded:Boolean;
 
-[Bindable]
-private var font:ArrayCollection;
+private var editableHTMLLoaded:Boolean;
 
-private var w:*;
+private var tinyMCE:*;
+private var elementForEditing:*;
+//private var iFrame:*;
+//private var contentDocument:*
+//
+private var _selfChanged:Boolean = false;
 
-private function get editableElement():EditableHTML {
+//
+//[Bindable]
+//private var font:ArrayCollection;
 
-	return _editableElement;
-}
+private var currentRange:*;
 
-private function set editableElement(value:EditableHTML):void {
-	
-	_editableElement = value;
-}
-
-public function init(item:IItem, container:*):void {
-	
-//	trace("--> init");
-	this.addEventListener(MouseEvent.MOUSE_DOWN, zzz);
-	oldValue = container.editabledText;
-	loaded = false;
-	editableElement = container;
-	selectedItem = Container(item);
-	
-	if(!editableElement.loaded)
-		editableElement.addEventListener(Event.COMPLETE, editableElement_completeHandler);
-	else
-		editableElement_completeHandler(new Event('true'));
-}
-private function zzz(event:MouseEvent):void
-{
-	event.stopImmediatePropagation();
-}
 public function get selfChanged():Boolean {
 	
 	return _selfChanged;
 }
 
-private function editableElement_completeHandler(event:Event):void {
-	
-	editableElement.removeEventListener(Event.COMPLETE, editableElement_completeHandler);
-	
-	sample = new HTMLLoader();
-	sample.addEventListener(Event.HTML_DOM_INITIALIZE, HtmlDomInitalizeHandler);
-	sample.loadString( 
-		'<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Script</title>' + 
-		'<script language="javascript" type="text/javascript" src="libs/tinymce/jscripts/tiny_mce/tiny_mce_src.js"></script>' + 
-		'<script>tinyMCE.init({mode : "none", force_br_newlines : "true", theme : "advanced", browsers : "gecko", dialog_type : "modal", src_mode: "_src", height:\'100%\',  width:\'100%\'});</script>' + 
-		'</head><body><div><textarea id="content" name="content" /></div></body></html>'
-	);
+/* private function get editableElement():EditableHTML
+{
+	return _editableElement;
 }
 
-public function close():void {
-//	trace("--> close");
+private function set editableElement(value:EditableHTML):void
+{
+	_editableElement = value;
+} */
+
+public function init(item:IItem, container:*):void
+{
+	addEventListener(MouseEvent.MOUSE_DOWN, zzz);
 	
+	oldValue = container.editabledText;
+	editableHTMLLoaded = false;
+	
+	editableHTML = EditableHTML(container);
+	selectedItem = item;
+	
+	if(!editableHTML.loaded)
+		editableHTML.addEventListener(Event.COMPLETE, editableHTML_completeHandler);
+	else
+		editableHTML_completeHandler(new Event('true'));
+}
+
+private function zzz(event:MouseEvent):void
+{
+	event.stopImmediatePropagation();	
+}
+
+public function close():void
+{	
 	registerEvent(false);
+	
 	var value:*;
 	
-	if(loaded)
+	if(editableHTMLLoaded)
 		value = tinyMCE.getContent();
 	else
 		value = oldValue;
 	
-	loaded = false;
-	/* var xEditingArea:* = editableElement.domWindow.document.getElementById('xEditingArea');
-	xEditingArea.parentNode.removeChild(xEditingArea);
-	var eee:* = editableElement.domWindow.document.getElementsByTagName('body')[0];
-	eee.innerHTML = '<span id="xEditingArea">' + value + '</span>';
-	//editableElement.domWindow.document.firstChild.lastChild.innerHtml = '<span id="xEditingArea">' + value + '</span>';;
-	editableElement.htmlText = editableElement.domWindow.document.firstChild.innerHTML; */
-	/* editableElement.htmlText = 
-		'<html><head>' + 
-		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
-		'</head>' +
-		'<body style="padding:5px;" id="xEditingArea">' +
-		value +
-		'</body></html>'; */
-	editableElement.editabledText = value;
+	editableHTMLLoaded = false;
+	
+	editableHTML.editabledText = value;
 }
 
-private function HtmlDomInitalizeHandler(e:Event):void {
-	
-	sample.removeEventListener(Event.HTML_DOM_INITIALIZE, HtmlDomInitalizeHandler)
-	
-	var content:* = editableElement.domWindow.document.getElementsByTagName('body')[0];
-	
-	content.innerHTML = '<span id="xEditingArea">' + content.innerHTML + '</span>';
-	
-	var www:* = content.firstChild;
-	sample.window.www = www;
-	sample.window.setIFrame = setIFrame;
-	sample.window.setHTML = setHTML;
-	
-	sample.addEventListener(Event.COMPLETE, completeHandler);
-}
-
-private function completeHandler(e:Event):void {
-	
-	sample.removeEventListener(Event.COMPLETE, completeHandler);
-	sample.window.tinyMCE.execCommand("mceAddControl", true, "content");
-	
-	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
-	d.focus();
-	
-	tinyMCE = sample.window.tinyMCE;
-	
-	editableElement.addEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
-	
-	var newHeight:Number = contentDocument.documentElement.offsetHeight;
-	if(editableElement.height != newHeight) {
+private function registerEvent(flag:Boolean):void
+{	
+	if(!flag)
+	{
+		editableHTML.removeEventListener(Event.COMPLETE, editableHTML_completeHandler);
+		editableHTML.removeEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
 		
-		editableElement.height = newHeight + 10;
-		iFrame.style.height = newHeight + 'px'
-		selectedItem.dispatchEvent(new Event('refreshComplete'));
-	}
-	
-	loaded = true;
+		HTMLEditorLoader.removeEventListener(
+			Event.HTML_DOM_INITIALIZE,
+			HTMLEditorLoader_HTMLDomInitalizeHandler
+		);
+		HTMLEditorLoader.removeEventListener(Event.COMPLETE, HTMLEditorLoader_completeHandler);
+	} 
 }
 
-private function editableElement_KeyUpHandler(event:KeyboardEvent):void {
-	
-	
-	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
-	var newHeight:Number = d.contentDocument.documentElement.offsetHeight;
-	if(editableElement.height != newHeight) {
-		
-		editableElement.height = newHeight + 10;
-		iFrame.style.height = newHeight + 'px'
-		selectedItem.dispatchEvent(new Event('refreshComplete'));
-	}
-}
-
-private function setIFrame(iFrameValue:*, contentDocumentValue:*):void {
-	
+private function setIFrame(iFrameValue:*, contentDocumentValue:*):void
+{	
 	if(iFrameValue)
-		iFrame = iFrameValue;
+		var iFrame:* = iFrameValue;
 	
 	if(contentDocumentValue)
-		contentDocument = contentDocumentValue;
+		var contentDocument:* = contentDocumentValue;
 }
 
-private function setHTML(value:*):void {
-	
-	editableElement.domWindow.document.getElementsByTagName('body').innerHTML = 
+private function setHTML(value:*):void
+{	
+	editableHTML.domWindow.document.getElementsByTagName('body').innerHTML = 
 		'<span id="xEditingArea">' + value + '</span>';
 }
 
-private function execCommand(commandName:String, commandAttributes:String = null):void {
+private function recalculateSize():void
+{
+	if(!elementForEditing || !elementForEditing.contentDocument)
+		return;
 	
+	var newHeight:Number = elementForEditing.contentDocument.documentElement.offsetHeight;
+	
+	if(editableHTML.height != newHeight && newHeight > 10)
+	{	
+		editableHTML.height = newHeight;
+		DisplayObject(selectedItem).dispatchEvent(new Event('refreshComplete'));
+	}
+}
+
+private function editableHTML_completeHandler(event:Event):void
+{	
+	editableHTML.removeEventListener(Event.COMPLETE, editableHTML_completeHandler);
+	
+	HTMLEditorLoader = new HTMLLoader();
+	HTMLEditorLoader.addEventListener(
+		Event.HTML_DOM_INITIALIZE,
+		HTMLEditorLoader_HTMLDomInitalizeHandler
+	);
+	HTMLEditorLoader.loadString(template);
+}
+
+private function HTMLEditorLoader_HTMLDomInitalizeHandler(event:Event):void
+{	
+	HTMLEditorLoader.removeEventListener(
+		Event.HTML_DOM_INITIALIZE, 
+		HTMLEditorLoader_HTMLDomInitalizeHandler
+	)
+	
+	var content:* = editableHTML.domWindow.document.getElementsByTagName('body')[0];
+	content.innerHTML = '<span id="xEditingArea">' + content.innerHTML + '</span>';
+	
+	elementForEditing = content.firstChild;
+	HTMLEditorLoader.window.elementForEditing = elementForEditing;
+	HTMLEditorLoader.window.setIFrame = setIFrame;
+	HTMLEditorLoader.window.setHTML = setHTML;
+	
+	HTMLEditorLoader.addEventListener(Event.COMPLETE, HTMLEditorLoader_completeHandler);
+}
+
+private function HTMLEditorLoader_completeHandler(event:Event):void
+{	
+	HTMLEditorLoader.removeEventListener(Event.COMPLETE, HTMLEditorLoader_completeHandler);
+	HTMLEditorLoader.window.tinyMCE.execCommand("mceAddControl", true, "content");
+	
+	elementForEditing = editableHTML.domWindow.document.getElementById('xEditingArea');
+	elementForEditing.focus();
+	
+	tinyMCE = HTMLEditorLoader.window.tinyMCE;
+	editableHTML.addEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
+	
+	var body:* = elementForEditing.contentWindow.document.getElementsByTagName('body')[0];
+	body.style.paddingTop = "5px";
+	body.style.paddingBottom = "5px";
+		
+	this.callLater(recalculateSize);
+	
+	editableHTMLLoaded = true;
+}
+
+private function editableElement_KeyUpHandler(event:KeyboardEvent):void
+{	
+	recalculateSize();
+}
+
+private function execCommand(commandName:String, commandAttributes:String = null):void
+{	
 	tinyMCE.execCommand(commandName, false, commandAttributes);
 }
 
-private function insertLink():void {
+private function insertLink():void
+{	
+	var currentSelection:* = elementForEditing.contentWindow.getSelection();
+	currentRange = currentSelection.getRangeAt(0);
 	
-	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
-	var f:* = d.contentWindow.getSelection();
-	w = f.getRangeAt(0);
-	var aaa:LinkSelection = new LinkSelection();
-	aaa.addEventListener('linkSelected', linkSelectedHandler);
-	PopUpManager.addPopUp(aaa, DisplayObject(Application.application), true);
-	PopUpManager.centerPopUp(aaa);
+	var linkSelection:LinkSelection = new LinkSelection();
+	linkSelection.addEventListener('linkSelected', linkSelection_linkSelectedHandler);
+	
+	PopUpManager.addPopUp(linkSelection, DisplayObject(Application.application), true);
+	PopUpManager.centerPopUp(linkSelection);
 }
 
-private function linkSelectedHandler(event:Event):void {
+private function linkSelection_linkSelectedHandler(event:Event):void
+{	
+	event.currentTarget.removeEventListener('linkSelected', linkSelection_linkSelectedHandler);
 	
-	event.currentTarget.removeEventListener('linkSelected', linkSelectedHandler);
-	
-	var d:* = editableElement.domWindow.document.getElementById('xEditingArea');
-	var f:* = d.contentWindow.getSelection();
-	
-	f.addRange(w);
+	var currentSelection:* = elementForEditing.contentWindow.getSelection();
+	currentSelection.addRange(currentRange);
 	
 	tinyMCE.themes['advanced']._insertLink(event.currentTarget.url, '_blank');
-	PopUpManager.removePopUp(UIComponent(event.currentTarget));
 	
+	PopUpManager.removePopUp(UIComponent(event.currentTarget));	
 }
 
-private function unLink():void {
-	
+private function unLink():void
+{	
 	tinyMCE.execCommand("unlink", false);
 }
-private function insertChar():void {
+
+private function insertChar():void
+{	
+	var charMap:CharMap = new CharMap();
+	charMap.addEventListener('charSelected', charSelectedHandler);
 	
-	var www:CharMap = new CharMap();
-	www.addEventListener('charSelected', charSelectedHandler);
-	PopUpManager.addPopUp(www, DisplayObject(Application.application), true);
-	PopUpManager.centerPopUp(www);
+	PopUpManager.addPopUp(charMap, DisplayObject(Application.application), true);
+	PopUpManager.centerPopUp(charMap);
 }
 
-private function changeFont(event:ListEvent):void {
-	
-	var val:String //= fontSelector.selectedItem.data
-	tinyMCE.execCommand('FontName', false, val)
+private function changeFont(event:ListEvent):void
+{	
+	var val:String = fontSelector.selectedItem.data
+	tinyMCE.execCommand('FontName', false, val);
+	recalculateSize();
 }
 
-private function colorFillChanged(event:ColorPickerEvent):void {
-	
+private function colorFillChanged(event:ColorPickerEvent):void
+{	
 	var hexValue:String = event.color.toString(16); 
 	var hexLength:int = hexValue.length;
 	for (var i:int = hexLength; i < 6; i++)
@@ -235,12 +247,15 @@ private function colorFillChanged(event:ColorPickerEvent):void {
 	tinyMCE.execCommand('HiliteColor', false, hexValue);
 }
 
-private function colorTextChanged(event:ColorPickerEvent):void {
-	
+private function colorTextChanged(event:ColorPickerEvent):void
+{	
 	var hexValue:String = event.color.toString(16); 
 	var hexLength:int = hexValue.length;
+	
 	for (var i:int = hexLength; i < 6; i++)
+	{
 		hexValue = '0' + hexValue;
+	}
 	
 	tinyMCE.execCommand('forecolor', false, hexValue);
 }
@@ -248,39 +263,27 @@ private function colorTextChanged(event:ColorPickerEvent):void {
 private function charSelectedHandler(event:Event):void {
 	
 	event.currentTarget.removeEventListener('charSelected', charSelectedHandler);
-	try
-	{
-		tinyMCE.execCommand("mceInsertContent", false, event.currentTarget.charCode);
-	}
-	catch(error:Error)
-	{
-		var d:* = "";
-	}
+	
+	tinyMCE.execCommand("mceInsertContent", false, event.currentTarget.charCode);
 	PopUpManager.removePopUp(UIComponent(event.currentTarget));
+	recalculateSize();
 }
 
-private function openCodeEditor():void {
+private function openCodeEditor():void
+{	
+	var codeEditor:CodeEditor = new CodeEditor();
+	codeEditor.code = tinyMCE.getContent(tinyMCE.getWindowArg('editor_id'));
+	codeEditor.addEventListener('updateCode', updateCodeHandler);
 	
-	var aaa:CodeEditor = new CodeEditor();
-	aaa.code = tinyMCE.getContent(tinyMCE.getWindowArg('editor_id'));
-	aaa.addEventListener('updateCode', updateCodeHandler);
-	PopUpManager.addPopUp(aaa, DisplayObject(Application.application), true);
-	PopUpManager.centerPopUp(aaa);
+	PopUpManager.addPopUp(codeEditor, DisplayObject(Application.application), true);
+	PopUpManager.centerPopUp(codeEditor);
 }
 
-private function updateCodeHandler(event:Event):void {
-	
+private function updateCodeHandler(event:Event):void
+{	
 	event.currentTarget.removeEventListener('updateCode', updateCodeHandler);
+	
 	tinyMCE.setContent(event.currentTarget.code);
 	PopUpManager.removePopUp(UIComponent(event.currentTarget));
-}
-
-private function registerEvent(flag:Boolean):void
-{	
-	if(!flag) {
-		editableElement.removeEventListener(Event.COMPLETE, editableElement_completeHandler);
-		editableElement.removeEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
-		sample.removeEventListener(Event.HTML_DOM_INITIALIZE, HtmlDomInitalizeHandler);
-		sample.removeEventListener(Event.COMPLETE, completeHandler);
-	} 
+	recalculateSize();
 }

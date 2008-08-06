@@ -523,19 +523,19 @@ public class TransformMarker extends UIComponent {
 		
 		var rectangle:Rectangle = getContentRectangle(this, _selectedItem);
 		
-		var prop:Object = {
-			left : rectangle.x,
-			top : rectangle.y,
-			width : rectangle.width,
-			height : rectangle.height
-		};
+		var changeFlag:Boolean = false;
+		var prop:Object = {};
 		
-		if(
-			beforeTransform.top == prop.top &&
-			beforeTransform.left == prop.left &&
-			beforeTransform.width == prop.width &&
-			beforeTransform.height == prop.height
-		)
+		for (var name:String in beforeTransform)
+		{
+			if(rectangle[name] != beforeTransform[name])
+			{
+				prop[name] = rectangle[name];
+				changeFlag = true;
+			}
+		}
+		
+		if(!changeFlag)
 			return;
 		
 		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
@@ -579,36 +579,86 @@ public class TransformMarker extends UIComponent {
 				break;
 				
 				case "bl":
-					if(rect1.x + mx < 0) {rect.width += 0; rect.x = _selectedItem.parent.x;}
-						else {rect.x += mx; rect.width -= mx;}	
+					if(rect1.x + mx < 0)
+					{
+						rect.width += rect.x - rect2.x;
+						rect.x = rect2.x;
+					}
+					else
+					{
+						rect.x += mx;
+						rect.width -= mx;
+					}
 					rect.height = mouseY;	
 				break;
 				
 				case "cr":
-					rect.width = mouseX;	
+					rect.width = mouseX;
 				break;
 				
 				case "cl":
-					if(rect1.x + mx < 0) {rect.width += 0; rect.x = _selectedItem.parent.x;}
-						else {rect.x += mx; rect.width -= mx;}
+					if(rect1.x + mx < 0)
+					{
+						rect.width += rect.x - rect2.x;
+						rect.x = rect2.x;
+					}
+					else
+					{
+						rect.x += mx;
+						rect.width -= mx;
+					}
 				break;
 				
 				case "tl":
-					if(rect1.x + mx < 0) {rect.width += 0; rect.x = _selectedItem.parent.x;}
-						else {rect.x += mx; rect.width -= mx;}			
-					if(rect1.y + my < 0) {rect.height += 0; rect.y = _selectedItem.parent.y;}
-						else {rect.y += my; rect.height -= my;}		
+					if(rect1.x + mx < 0)
+					{
+						rect.width += rect.x - rect2.x;
+						rect.x = rect2.x;
+					}
+					else
+					{
+						rect.x += mx;
+						rect.width -= mx;
+					}
+					
+					if(rect1.y + my < 0)
+					{
+						rect.height += rect.y - rect2.y;
+						rect.y = rect2.y;
+					}
+					else
+					{
+						rect.y += my;
+						rect.height -= my;
+					}
 				break;
 					
 				case "tc":
-					if(rect1.y + my < 0) {rect.height += 0; rect.y = _selectedItem.parent.y;}
-						else {rect.y += my; rect.height -= my;}
+					if(rect1.y + my < 0)
+					{
+						rect.height += rect.y - rect2.y;
+						rect.y = rect2.y;
+					}
+					else
+					{
+						rect.y += my;
+						rect.height -= my;
+					}
 				break;
 				
 				case "tr":
+					if(rect1.y + my < 0)
+					{
+						rect.height += rect.y - rect2.y;
+						rect.y = rect2.y;
+					}
+					else
+					{
+						rect.y += my;
+						rect.height -= my;
+					}
 					rect.width = mouseX;
-					if(rect1.y + my < 0) {rect.height += 0; rect.y = _selectedItem.parent.y;}
-						else {rect.y += my; rect.height -= my;}		
+						
 				break;
 				
 				case "cc":
@@ -644,7 +694,7 @@ public class TransformMarker extends UIComponent {
 					
 					move(rect.x, rect.y);
 					
-					if(_moveMode && moving.name == 'cc') {
+					if(_moveMode && (moving.name == 'cc')/*  || moving.name == 'cl' || moving.name == 'tc' || moving.name == 'tl') */) {
 						
 						_selectedItem.x = rect1.x;
 						_selectedItem.y = rect1.y;

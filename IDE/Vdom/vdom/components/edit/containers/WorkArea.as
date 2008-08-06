@@ -138,8 +138,8 @@ public class WorkArea extends VBox {
 		
 		var item:IItem = renderManager.getItemById(objectId);
 		
-		if(_contentToolbar)
-			_contentToolbar.close();
+//		if(_contentToolbar)
+//			_contentToolbar.close();
 		
 		if(item)
 		{
@@ -332,22 +332,26 @@ public class WorkArea extends VBox {
 		var currentObject:Container = event.item;
 		var changeFlag:Boolean = false;
 		
-		if (currentObject.x != event.properties.left) 
-			currentObject.x = event.properties.left;
-			
-		if (currentObject.y != event.properties.top)
-			currentObject.y = event.properties.top;
+		var objectDescription:XML = dataManager.getObject(IItem(currentObject).objectId);
 		
-		if (currentObject.width != event.properties.width) {
+		for(var name:String in event.properties)
+		{
+			if(
+				name == "width" && objectDescription.Attributes.Attribute.(@Name == name)[0] ||
+				name == "height" && objectDescription.Attributes.Attribute.(@Name == name)[0]
+			)
+			{
+				currentObject[name] = event.properties[name];
+				changeFlag = true;
+			}
 			
-			currentObject.width = event.properties.width;
-			changeFlag = true;
-		}
-			
-		if (currentObject.height != event.properties.height) {
-			
-			currentObject.height = event.properties.height;
-			changeFlag = true;
+			if(changeFlag)
+			{
+				if(event.properties["top"])
+					currentObject.y = event.properties["top"];
+				if(event.properties["left"])
+					currentObject.x = event.properties["left"];
+			}
 		}
 		
 		if (changeFlag)
@@ -373,17 +377,20 @@ public class WorkArea extends VBox {
 			var attribute:Object = IItem(_selectedObject).editableAttributes[0];
 			var attributeValue:String = attribute.sourceObject[attribute.sourceName];
 			
-			var newAttribute:Object = {};
+			if(attributeValue)
+			{
+				var newAttribute:Object = {};
 			
-			var xmlCharRegExp:RegExp = /[<>&"]+/;
-			
-			if(attributeValue.search(xmlCharRegExp) != -1)
-				newAttribute[attribute.destName] = XML('<![CDATA['+attributeValue+']'+']>');
+				var xmlCharRegExp:RegExp = /[<>&"]+/;
 				
-			else
-				newAttribute[attribute.destName] = attributeValue;
-			
-			applyChanges(IItem(_selectedObject).objectId, newAttribute);
+				if(attributeValue.search(xmlCharRegExp) != -1)
+					newAttribute[attribute.destName] = XML('<![CDATA['+attributeValue+']'+']>');
+					
+				else
+					newAttribute[attribute.destName] = attributeValue;
+				
+				applyChanges(IItem(_selectedObject).objectId, newAttribute);
+			}
 		}
 		
 		_selectedObject = event.item;

@@ -439,7 +439,7 @@ public class DataManager implements IEventDispatcher {
 		if(oldXMLDescription.@Name != newXMLDescription.@Name)
 			nameChanged = true;
 		
-		if(newOnlyAttributes)
+		if(newOnlyAttributes || nameChanged)
 		{
 			var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN)
 			dme.result = newOnlyAttributes;
@@ -466,7 +466,7 @@ public class DataManager implements IEventDispatcher {
 	{
 		soap.removeEventListener(SoapEvent.SET_NAME_OK, setNameCompleteHandler);
 		
-		var objectId:String = event.result.@ID;
+		var objectId:String = event.result.Object.@ID;
 		
 		var result:XML = getObject(objectId);
 		
@@ -625,7 +625,11 @@ public class DataManager implements IEventDispatcher {
 	public function createApplication():void
 	{
 		soap.addEventListener(SoapEvent.CREATE_APPLICATION_OK, createApplicationHandler);
-		soap.createApplication();
+		soap.createApplication(
+			<Information>
+				<Active>1</Active>
+			</Information>
+		);
 	}
 	
 	private function createApplicationHandler(event:SoapEvent):void
