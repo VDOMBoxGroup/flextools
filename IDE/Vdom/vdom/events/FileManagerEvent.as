@@ -19,6 +19,7 @@ public class FileManagerEvent extends Event {
     // Define static constant.
 	public static const RESOURCE_LIST_LOADED:String = 'resourceListLoaded';
 	
+	public static const RESOURCE_LOADING_OK:String = 'resourceLoadingOk';
 	public static const RESOURCE_LOADING_ERROR:String = 'resourceLoadingError';
 	
 	public static const RESOURCE_SAVED:String = 'resourceSaved';

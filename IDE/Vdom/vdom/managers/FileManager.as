@@ -56,9 +56,12 @@ public class FileManager implements IEventDispatcher
 		registerEvent(true);
 	}
 	
-	public function getListResources():void
+	public function getListResources(ownerId:String = ""):void
 	{	
-		soap.listResources(dataManager.currentApplicationId);
+		if(ownerId == "")
+			ownerId = dataManager.currentApplicationId;
+		
+		soap.listResources(ownerId);
 	}
 	
 	private function registerEvent(flag:Boolean):void
@@ -157,6 +160,10 @@ public class FileManager implements IEventDispatcher
 		}
 		
 		delete requestQue[resourceID];
+		
+		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_LOADING_OK);
+		fme.result = event.result;
+		dispatchEvent(fme);
 	}
 	
 	private function resourceLoadedErrorHandler(event:SoapEvent):void

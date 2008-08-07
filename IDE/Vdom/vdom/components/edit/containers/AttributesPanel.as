@@ -332,6 +332,11 @@ public class AttributesPanel extends ClosablePanel {
 			invalidateDisplayList();
 		}
 		
+		if(_isValid)
+			acceptButton.enabled = true;
+		else
+			acceptButton.enabled = false;
+		
 		super.commitProperties();
 	}
 	
@@ -479,7 +484,7 @@ public class AttributesPanel extends ClosablePanel {
 				case 'dropdown':
 					
 					valueContainer = new ComboBox();
-					valueType = 'data';
+					valueType = 'value';
 					
 					var comboBoxData:Array = new Array();
 					var codeInterfaceValueRE:RegExp = /\((#Lang\(.*?\))\|(.*?)\)/g;
@@ -562,6 +567,13 @@ public class AttributesPanel extends ClosablePanel {
 			
 			fieldsArray[currentAttribute.@Name] = [valueContainer, valueType];
 			
+			addValidator(
+				valueContainer, 
+				valueType, 
+				attributeXMLDescription.RegularExpressionValidation,
+				attributeXMLDescription.ErrorValidationMessage
+			);
+				
 			insertAttribute(label, valueContainer, color)
 		}
 	}
@@ -639,10 +651,11 @@ public class AttributesPanel extends ClosablePanel {
 		
 		validator.source = valueContainer;
 		validator.property = valueType;
-		validator.expression = '^'+regExp+'$';
-		validator.noMatchError = '';
-		validator.requiredFieldError = '';
-		//languages.getLanguagePhrase(_typeID, errorMsg);
+		validator.expression = regExp;
+		
+		validator.noMatchError = validator.requiredFieldError = getLanguagePhraseId(errorMsg);
+//		validator.requiredFieldError = '';
+//		languages.getLanguagePhrase(_typeID, errorMsg);
 		
 	}
 	
@@ -667,8 +680,10 @@ public class AttributesPanel extends ClosablePanel {
 			invalidElementsCount++;
 		}
 		
-		if(invalidElementsCount > 0) _isValid = false;
-			else _isValid = true;
+		if(invalidElementsCount > 0) 
+			_isValid = false;
+		else 
+			_isValid = true;
 		
 		if(oldValid !== _isValid) invalidateProperties();
 	}
@@ -691,7 +706,7 @@ public class AttributesPanel extends ClosablePanel {
 				
 			if(fieldsArray[attrName][0] is ComboBox)
 				if(fieldsArray[attrName][0].selectedItem)
-					value = fieldsArray[attrName][0].selectedItem[fieldsArray[attrName][1]];
+					value = fieldsArray[attrName][0].selectedItem["data"];
 				else
 					value = '';
 			else
