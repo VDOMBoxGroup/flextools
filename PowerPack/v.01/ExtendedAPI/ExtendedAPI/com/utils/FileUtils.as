@@ -69,13 +69,13 @@ package ExtendedAPI.com.utils
 			return true;			
 		}		
 		
-		public static function isValidPath(path:String):Boolean
+		public static function isValidPath(fullpath:String):Boolean
 		{
 			var str:String;			
 			var pattern:RegExp;
 			var files:Array;
 			
-			str = StringUtil.trim(path);
+			str = StringUtil.trim(fullpath);
 
   			pattern = /(\\|\/){2,}/;
   			

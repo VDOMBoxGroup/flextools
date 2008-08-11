@@ -132,13 +132,58 @@ public class SuperWindow extends Window implements IWindow
 	{
 		return getIndex(this.nativeWindow);
 	}
+
+    //----------------------------------
+    //  windows
+    //----------------------------------
+    		
+	public static function get windows():Array
+	{
+		var windows:Array = NativeApplication.nativeApplication.openedWindows;
+		var superWindows:Array = [];		
+
+		for(var i:int=0; i<windows.length; i++) {			
+			if( (windows[i] as NativeWindow).stage.numChildren>0 )
+			{
+				var sm:WindowedSystemManager = (windows[i] as NativeWindow).stage.getChildAt(0) as WindowedSystemManager;
+				if(!sm)
+					continue;
+					
+				var win:SuperWindow = sm.window as SuperWindow;
+				if(!win)
+					continue;
+					
+				superWindows.push(win);				
+			}
+		}
+		
+		return superWindows; 	
+	}	
 	
     //--------------------------------------------------------------------------
     //
     //  Methods
     //
     //--------------------------------------------------------------------------
-
+	
+	public static function getWindow(value:NativeWindow):Window
+	{
+		if( value && value.stage.numChildren>0 )
+		{
+			var sm:WindowedSystemManager = (value as NativeWindow).stage.getChildAt(0) as WindowedSystemManager;
+			if(!sm)
+				return null;
+				
+			var win:Window = sm.window as Window;
+			if(!win)
+				return null;
+				
+			return win			
+		}
+		
+		return null;		
+	}
+	
 	private function setStartPosition():void
 	{
 		if(!nativeWindow || nativeWindow.closed)
@@ -185,7 +230,68 @@ public class SuperWindow extends Window implements IWindow
 		}
 		return -1;
 	}
+	
+	public function getBranch():Array
+	{
+		var superWins:Array = SuperWindow.windows;
+		var branch:Array = [];
+		var wins:Array = [];	
+		
+		for(var i:int=0; i<superWins.length; i++)
+			wins.push( {'window':superWins[i], 'checked':false} );		
+		
+		getBranchRecursive(this.nativeWindow, wins, branch);
+		
+		return branch;
+	}
+	
+	private function getBranchRecursive(window:NativeWindow, windows:Array, branch:Array):void
+	{
+		for(var i:int=0; i<windows.length; i++)
+		{
+			if(window == windows[i].window.nativeWindow && !windows[i].checked)
+			{
+				branch.unshift(window);
+				windows[i].checked = true;
+				if(windows[i].window.parentWindow)
+					getBranchRecursive(windows[i].window.parentWindow.nativeWindow, windows, branch);		
+			}
+		}
+	}
 
+	public function bringToFrontBranch():void
+	{
+		var branch:Array = this.getBranch();
+		
+		for(var i:int=0; i<branch.length; i++)
+			NativeWindow(branch[i]).orderToFront();
+	}
+	
+	public function bringToFrontChildren():void
+	{
+		var superWins:Array = SuperWindow.windows;
+		var wins:Array = [];	
+		
+		for(var i:int=0; i<superWins.length; i++)
+			wins.push( {'window':superWins[i], 'checked':false} );	
+		
+		bringToFrontChildrenRecursive(this.nativeWindow, wins);
+	}
+	
+	private function bringToFrontChildrenRecursive(window:NativeWindow, windows:Array):void
+	{
+		window.orderToFront();		
+		
+		for(var i:int=0; i<windows.length; i++)
+		{
+			if(window == windows[i].window.parentWindow && !windows[i].checked)
+			{
+				windows[i].checked = true;								
+				bringToFrontChildrenRecursive(windows[i].window.nativeWindow, windows);		
+			}
+		}
+	}
+		
     //--------------------------------------------------------------------------
     //
     //  Event handlers
@@ -200,47 +306,17 @@ public class SuperWindow extends Window implements IWindow
 			inactive.parent && inactive._modal) {
 			var indexA:int = getIndex(active);
 			var indexI:int = inactive.index;
-			if(indexI>=0 && indexI>indexA) {
+			if(indexA>=0 && indexI>=0 && indexI>indexA) {
 				inactive.activate();
 				inactive.nativeWindow.notifyUser(NotificationType.CRITICAL);
 			}		
 		}				
 	}
 
-	private function onActivate(event:Event):void {					
-		var active:NativeWindow = NativeApplication.nativeApplication.activeWindow;
-		var windows:Array = NativeApplication.nativeApplication.openedWindows;
-		var superWindows:Array = [];		
-
-		for(var i:int=0; i<windows.length; i++) {			
-			if( (windows[i] as NativeWindow).stage.numChildren>0 )
-			{
-				var sm:WindowedSystemManager = (windows[i] as NativeWindow).stage.getChildAt(0) as WindowedSystemManager;
-				if(!sm)
-					continue;
-					
-				var win:SuperWindow = sm.window as SuperWindow;
-				if(!win)
-					continue;
-					
-				superWindows.push({'window':win, 'checked':false});				
-			}
-		}
-		
-		bringToFrontChildren(active, superWindows);
-	}
-	
-	public static function bringToFrontChildren(window:NativeWindow, windows:Array):void
-	{
-		for(var i:int=0; i<windows.length; i++)
-		{
-			if(window == windows[i].window.parentWindow && !windows[i].checked)
-			{
-				windows[i].checked = true;
-				SuperWindow(windows[i].window).orderToFront();
-				bringToFrontChildren(SuperWindow(windows[i].window).nativeWindow, windows);				
-			}
-		}
+	private function onActivate(event:Event):void {
+		if(nativeWindow)					
+			bringToFrontChildren();
 	}	
+	
 }
 }
