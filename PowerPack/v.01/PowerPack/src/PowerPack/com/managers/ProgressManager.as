@@ -1,9 +1,11 @@
 package PowerPack.com.managers
 {
+import ExtendedAPI.com.containers.SuperWindow;
 import ExtendedAPI.com.controls.HDivider;
 
 import PowerPack.customize.core.windowClasses.SuperStatusBar;
 
+import flash.desktop.NativeApplication;
 import flash.display.DisplayObject;
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -25,6 +27,7 @@ import mx.controls.ProgressBarMode;
 import mx.controls.Text;
 import mx.controls.TextArea;
 import mx.core.Application;
+import mx.core.Window;
 import mx.managers.PopUpManager;
 import mx.managers.SystemManager;
 import mx.skins.halo.ProgressBarSkin;
@@ -41,6 +44,7 @@ public class ProgressManager extends EventDispatcher
 	public static const STATUS_MODE:String = "status";
 	public static const WINDOW_MODE:String = "window";
 	public static const PANEL_MODE:String = "panel";
+	public static const DIALOG_MODE:String = "dialog";
 	
 	private static var defaultCaptions:Object = {
 		progress_title:"Progress",
@@ -118,6 +122,7 @@ public class ProgressManager extends EventDispatcher
 	private var _win:Object;
 
 	private var _window:TitleWindow;
+	private var _dialog:SuperWindow;
 	private var _winBox:Box;
 	private var _panel:VBox;
 	private var _statusBar:HBox;
@@ -306,7 +311,13 @@ public class ProgressManager extends EventDispatcher
 				instance._bar.setStyle("barSkin", ProgressBarSkin);
 				if(showProgress)
 					instance._winBox.addChildAt(instance._bar, 1);
-				PopUpManager.addPopUp(instance._window, instance._win as DisplayObject, true);
+				
+				var activeWin:Window = SuperWindow.getWindow(NativeApplication.nativeApplication.activeWindow);
+				if(activeWin)
+					PopUpManager.addPopUp(instance._window, activeWin as DisplayObject, true);
+				else
+					PopUpManager.addPopUp(instance._window, instance._win as DisplayObject, true);				
+				
 				PopUpManager.centerPopUp(instance._window);
 				//instance._window.validateNow();
 				viewMode = WINDOW_MODE;
@@ -369,6 +380,14 @@ public class ProgressManager extends EventDispatcher
 				//setTimeout(complete, 100);
 				complete();
 			}			
+		}
+		if(!_dialog)
+		{
+			_dialog = new SuperWindow(_sm.topLevelSystemManager.stage.nativeWindow);
+			_dialog.modal = true;
+			_dialog.startPosition = SuperWindow.POS_CENTER_SCREEN;
+			
+			
 		}
 		if(!_window)
 		{

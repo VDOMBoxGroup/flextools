@@ -4,11 +4,16 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
 	width="450" height="460"
-	modal="false"
+	modal="true"
 	title="{LanguageManager.sentences.lbl_import}" 
-	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*">
+	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*"
+	close="ConnectionManager.instance.window = null">
+	
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.utils.FileUtils;
+			import generated.webservices.Get_all_typesResultEvent;
+			import PowerPack.com.managers.ProgressManager;
 			import PowerPack.com.managers.ConnectionManager;
 			import generated.webservices.Export_applicationResultEvent;
 			import vdom.connection.protect.MD5;
@@ -30,7 +35,8 @@
 			import PowerPack.com.managers.LanguageManager;
 			
 			private static var _dialog:Import;
-			private var soap:Soap;
+			private var appsXML:XMLList;
+			private var appXML:XML;
 			
 			static public function show(closeHandler:Function = null):Import
 			{
@@ -39,6 +45,7 @@
 					_dialog = new Import();	
 					_dialog.open();
 					_dialog.show(CANCEL, closeHandler, null, CANCEL);		
+					ConnectionManager.instance.window = _dialog;
 												
 					var defaultCaptions:Object = {
 						lbl_import: "Import",
@@ -57,24 +64,96 @@
 			
 			private function nextHandler(event:Event):void
 			{
-				switch(vsStep.selectedChild)
-				{
-					case step1:
-						ConnectionManager.exec('list_applications', getAppListHandler);  
-						break;
-				}
-				
 				if(vsStep.numChildren-1>vsStep.selectedIndex)
-					vsStep.selectedIndex++;					
+				{
+					switch(vsStep.selectedChild)
+					{
+						case step1:
+							if(step1.radServer.selected)
+							{
+								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+								ContextManager.instance.host = step1.txtHost.text;
+								ContextManager.instance.port = step1.txtPort.text;
+								ContextManager.instance.login = step1.txtLogin.text;
+								ContextManager.instance.pass = step1.txtPass.text;
+								ContextManager.instance.save_pass = step1.chkSavePass.selected;					
+							
+								ConnectionManager.endpointURI = step1.txtHost.text + ":" + 
+									(step1.radDefPort.selected ? ContextManager.instance.default_port : step1.txtPort.text) + 
+									"/SOAP"
+											
+								ConnectionManager.exec('list_applications', getAppListHandler); 								
+							}
+							else if(step1.radFile.selected && FileUtils.isValidPath(step1.fileBrowse.text))
+							{
+								var file:File = new File(step1.fileBrowse.text);
+					            if(file && file.exists)
+					            {
+									var fileStream:FileStream = new FileStream();									
+
+					            	ProgressManager.source = fileStream;
+									ProgressManager.start();
+					
+									fileStream.addEventListener(Event.COMPLETE, onAppFileLoad);
+									fileStream.openAsync(file, FileMode.READ);
+					            }								
+							}  
+							break;
+							
+						case step2:
+							if(step2.lstApps.selectedItem)
+							{
+								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+								var appID:String = XML(step2.lstApps.selectedItem).@ID;				
+								ConnectionManager.exec('export_application', importAppHandler, appID);
+							}												
+							break;
+							
+						case step3:
+							//Import application
+							vsStep.selectedIndex++;
+							break;						
+					}				
+				}					
 			}
 			
 			private function backHandler(event:Event):void
 			{
-				if(vsStep.selectedIndex>0)
+				if(vsStep.selectedIndex==2 && step1.radFile.selected)
+					vsStep.selectedIndex-=2;
+				else if(vsStep.selectedIndex>0)
 					vsStep.selectedIndex--;
 			}
 
 
+			private  function getAllTypesHandler(event:Get_all_typesResultEvent):void
+			{
+				var resultXML:XML = new XML(<Result />);
+				resultXML.appendChild(XMLList(event.result));	
+				
+				if(resultXML.Error.toString() == 'Error') {
+					Alert.show(resultXML.Error);
+				} 
+				else {	
+					ConnectionManager.logout();
+					vsStep.selectedIndex = 2;
+					ProgressManager.complete();	
+				}
+			}
+
+	        private function onAppFileLoad(event:Event):void
+	        {
+        		var fileStream:FileStream = event.target as FileStream;
+        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+				fileStream.close();
+        		
+				appXML = xml..Application[0];
+				
+				//trace(appXML);
+				vsStep.selectedIndex = 2;
+				ProgressManager.complete();	
+	        }	
+	        
 			private  function getAppListHandler(event:List_applicationsResultEvent):void
 			{
 				var resultXML:XML = new XML(<Result />);
@@ -84,25 +163,45 @@
 					Alert.show(resultXML.Error);
 				} 
 				else {	
-					trace(resultXML);					
-					importApp();
+					//trace(resultXML);
+					appsXML = resultXML..Application;
+
+					vsStep.selectedIndex++;
+					ProgressManager.complete();				
 				}
 			}
 			
-			private function importApp():void
+			private function onStep2Show():void
 			{
-				var ws:Vdom = ConnectionManager.instance.vdom;
-				var appid:String;
+				step2.lstApps.dataProvider = appsXML;									
+				step2.lstApps.labelFunction = labelFunction;
+				step2.lstApps.iconFunction = iconFunction;
 				
-				var resultXML:XML = new XML(<Result />);				
-				resultXML.appendChild(XMLList(ws.list_applications_lastResult));
+				function labelFunction(item:Object):String {
+					var _item:XML = XML(item);
+					var label:String = String(_item.Information.Name[0]);
+					label = StringUtil.trim(label) ? label : LanguageManager.sentences['noname'];				
+					
+					return label + " (" + _item.@ID + ")";				
+				}				
 				
-				appid = resultXML..Application[0].@ID;
-				appid = '58a4358d-2dce-4bd3-ace9-62a72316d84d';
-				
-				ConnectionManager.exec('export_application', importAppHandler);  
-			}						
-
+				function iconFunction(item:Object):Class {
+					var _item:XML = XML(item);				
+					return ContextManager.iconClass;				
+				}				
+			}
+			
+			private function onStep3Show():void
+			{
+				step3.txtName.text = appXML.Information.Name[0];				
+			}	
+					
+			private function onStep4Show():void
+			{
+				btnBack.enabled = false;
+				Button(ctrlBar.getChildByName("CANCEL")).label = LanguageManager.sentences["finish"];							
+			}	
+			
 			private  function importAppHandler(event:Export_applicationResultEvent):void
 			{
 				var resultXML:XML = new XML(<Result />);
@@ -112,16 +211,15 @@
 					Alert.show(resultXML.Error);
 				} 
 				else {
-            			var file:File = new File('c:/output/app.xml');
-           				var fileStream:FileStream = new FileStream();					
-      					
-      					fileStream.open(file, FileMode.WRITE);
-						fileStream.writeUTFBytes(resultXML.toXMLString());
-						fileStream.close();	
-					
-					//trace(resultXML);
-					ConnectionManager.logout();
+					appXML = resultXML.Application[0];
+        			ConnectionManager.exec('get_all_types', getAllTypesHandler);
 				}
+			}
+			
+			private function onVSChange():void
+			{
+				btnBack.enabled = vsStep.selectedIndex==0 ? false : true;
+				btnNext.enabled = vsStep.selectedIndex==vsStep.numChildren-1 ? false : true;
 			}
 					
 		]]>
@@ -133,17 +231,23 @@
 	
 	<mx:HRule width="100%"/>
 	
-	<mx:ViewStack width="100%" height="100%" selectedIndex="0" id="vsStep">
+	<mx:ViewStack width="100%" height="100%" selectedIndex="0" id="vsStep" change="onVSChange()">
 
 		<dialogClasses:ImportStep1 styleName="dlgContent" width="100%" height="100%" id="step1"/>
+		
+		<dialogClasses:ImportStep2 styleName="dlgContent" width="100%" height="100%" id="step2" show="onStep2Show()"/>
+		
+		<dialogClasses:ImportStep3 styleName="dlgContent" width="100%" height="100%" id="step3" show="onStep3Show()"/>
+		
+		<dialogClasses:ImportStep4 styleName="dlgContent" width="100%" height="100%" id="step4" show="onStep4Show()"/>
 		
 	</mx:ViewStack>
 
 	<mx:HRule width="100%"/>
 	
-	<mx:ControlBar width="100%" styleName="dlgFooter">
-		<mx:Button label="&lt; {LanguageManager.sentences.back}" click="backHandler(event)"/>
-		<mx:Button label="{LanguageManager.sentences.next} &gt;" click="nextHandler(event)"/>
+	<mx:ControlBar width="100%" styleName="dlgFooter" id="ctrlBar">
+		<mx:Button id="btnBack" label="&lt; {LanguageManager.sentences.back}" click="backHandler(event)" enabled="false"/>
+		<mx:Button id="btnNext" label="{LanguageManager.sentences.next} &gt;" click="nextHandler(event)"/>
 	</mx:ControlBar>
 	
 </ModalDialog>

@@ -12,11 +12,10 @@ import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
-import generated.webservices.Vdom;
-
 import mx.collections.ArrayCollection;
 import mx.core.Application;
-import mx.rpc.soap.WebService;
+import mx.utils.Base64Decoder;
+import mx.utils.Base64Encoder;
 
 public class ContextManager extends EventDispatcher
 {
@@ -114,6 +113,10 @@ public class ContextManager extends EventDispatcher
 	//  Variables
 	//
 	//--------------------------------------------------------------------------			
+	[Embed(source="assets/icons/icon_16.png")]
+	[Bindable]
+ 	public static var iconClass:Class;
+
 	[Embed(source="assets/icons/info_16.png")]
 	[Bindable]
  	public static var infoClass:Class;
@@ -358,7 +361,10 @@ public class ContextManager extends EventDispatcher
 		tmpStr = Utils.getStringOrDefault(instance.settingsXML.pass, '');
 		if(tmpStr)
 		{
-			var bytes:ByteArray = CryptUtils.decrypt(tmpStr);	
+			var base64Dec:Base64Decoder = new Base64Decoder();	
+			base64Dec.decode(tmpStr);
+			
+			var bytes:ByteArray = CryptUtils.decrypt(base64Dec.flush());	
 			bytes.position = 0;
 			tmpStr = bytes.readUTFBytes(bytes.length);					
 			instance.pass = instance.pass ? instance.pass : tmpStr;
@@ -406,7 +412,9 @@ public class ContextManager extends EventDispatcher
 		{
 			var bytes:ByteArray = CryptUtils.encrypt(instance.pass);	
 			bytes.position = 0;
-			instance.settingsXML.pass = bytes.readUTFBytes(bytes.length);
+			var base64Enc:Base64Encoder = new Base64Encoder();			
+			base64Enc.encodeBytes(bytes, 0, bytes.length);
+			instance.settingsXML.pass = base64Enc.flush();
 		}
 
    		instance.settingsXML.savepass = (instance.save_pass ? "true" : "false");

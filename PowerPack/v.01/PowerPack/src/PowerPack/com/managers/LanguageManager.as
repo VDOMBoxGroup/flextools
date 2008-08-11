@@ -100,6 +100,7 @@ public class LanguageManager extends EventDispatcher
 				menu_exit:"E_xit",
 				
 				menu_import:"Import",
+				import_from_tpl:"Import from template",
 				menu_template:"_Template",
 				menu_validate:"_Validate",
 				menu_properties:"_Properties",

@@ -1,5 +1,7 @@
 package PowerPack.com.managers
 {
+import flash.desktop.NativeApplication;
+import flash.display.Sprite;
 import flash.events.EventDispatcher;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
@@ -9,6 +11,7 @@ import generated.webservices.Open_sessionResultEvent;
 import generated.webservices.Vdom;
 
 import mx.controls.Alert;
+import mx.core.Window;
 import mx.rpc.events.FaultEvent;
 
 import vdom.connection.protect.Code;
@@ -74,6 +77,8 @@ public class ConnectionManager extends EventDispatcher
 			(ContextManager.instance.use_def_port ? ContextManager.instance.default_port : ContextManager.instance.port) + 
 			"/SOAP");			
        	
+		//vdom = new Vdom(null, "http://192.168.0.19:80/SOAP");	
+			       	
        	vdom.addVdomFaultEventListener(faultHandler);       	
        	timer.addEventListener(TimerEvent.TIMER, timerHandler);
 	}
@@ -86,6 +91,7 @@ public class ConnectionManager extends EventDispatcher
 
     [Bindable]
     public var vdom:Vdom = new Vdom();
+    public var window:Window;
     
     private var timer:Timer = new Timer(5*60*1000, 0);
     
@@ -100,6 +106,12 @@ public class ConnectionManager extends EventDispatcher
 	//  Class methods
 	//
 	//--------------------------------------------------------------------------
+	
+	public static function set endpointURI(value:String):void
+	{
+		instance.vdom = new Vdom(null, value);       	
+       	instance.vdom.addVdomFaultEventListener(instance.faultHandler);       	
+	}
 	
 	public static function login(listener:Function, login:String=null, pass:String=null):void
 	{
@@ -185,10 +197,11 @@ public class ConnectionManager extends EventDispatcher
 			{
 				case 'list_applications':
 				case 'export_application':
+				case 'get_all_types':
 					instance.args.unshift(sid, skey);
 					break;
 			}
-			
+						
 			instance.timer.reset();
 			
 			ws['add'+instance.proc+'EventListener'].apply(ws, [instance.listener]);
@@ -220,7 +233,10 @@ public class ConnectionManager extends EventDispatcher
 			
 			loggedIn = false;
 			
-			Alert.show(resultXML.Error)
+			Alert.show(resultXML.Error,
+			LanguageManager.sentences["fault"],
+			4,
+			Sprite(window))
 		} 
 		else {					
 			// run session protector
@@ -259,7 +275,12 @@ public class ConnectionManager extends EventDispatcher
 		Alert.show("A fault occured contacting the server. Fault message is: "+event.fault.faultString+
 		"\n"+event.fault.faultDetail+
 		"\n"+event.fault.rootCause+
-		"\n"+event.headers);
+		"\n"+event.headers,
+		LanguageManager.sentences["fault"],
+		4,
+		Sprite(window));
+		
+		ProgressManager.complete();
 	}
 	    
 }
