@@ -489,7 +489,7 @@ package PowerPack.com.importation
 			
 			newGraph.createArrow(node, memNode1);
 
-			xOffset -=100;
+			xOffset -=200;
 			yOffset +=40;
 							
 			prev = node;
@@ -515,7 +515,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 			
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '<!-- Objects -->');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- Objects -->');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 			
@@ -536,7 +536,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 			
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '<!-- Databases -->');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- Databases -->');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 			
@@ -557,7 +557,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 			
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '<!-- Resources -->');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- Resources -->');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 			
@@ -578,7 +578,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 			
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '<!-- E2vdom -->');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- E2vdom -->');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 			

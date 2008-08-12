@@ -241,6 +241,16 @@
 				} 
 				else {
 					appXML = resultXML.Application[0];
+					
+					//
+					var file:File = File.documentsDirectory.resolvePath('application.xml');
+
+					var stream:FileStream = new FileStream();					
+					stream.open(file, FileMode.WRITE);
+					stream.writeUTFBytes(appXML.toXMLString());
+					stream.close();
+					//
+					
         			ConnectionManager.exec('get_all_types', getAllTypesHandler);
 				}
 			}
