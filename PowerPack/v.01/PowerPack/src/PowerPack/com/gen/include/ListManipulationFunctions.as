@@ -214,7 +214,7 @@ private function _processStructure(src:String, tgt:String, level:int, listStruct
 	{
 		var topLevelList:String = ListParser.getElm(listStruct, i);
 		var objSrcList:String = ListParser.getElm(topLevelList, 1);		
-		var idObjSrc:String = ListParser.getElm(objSrcList, 1);
+		var idObjSrc:String = ListParser.getElmValue(objSrcList, 1, contexts);
 	
 		if(idObjSrc == idSrc)
 			break;		
@@ -228,7 +228,7 @@ private function _processStructure(src:String, tgt:String, level:int, listStruct
 		for(var j:int=1; j<=lvlLinkListLen; j++)
 		{
 			var lvlObjTgtList:String = ListParser.getElm(lvlLinkList, j);
-			var lvl:int = int(ListParser.getElm(lvlObjTgtList, 1));
+			var lvl:int = int(ListParser.getElmValue(lvlObjTgtList, 1, contexts));
 			
 			if(level == lvl)
 				break;
@@ -241,7 +241,7 @@ private function _processStructure(src:String, tgt:String, level:int, listStruct
 			
 			for(var k:int=1; k<=objTgtListLen; k++)
 			{
-				var idObjTgt:String = ListParser.getElm(objTgtList, k);
+				var idObjTgt:String = ListParser.getElmValue(objTgtList, k, contexts);
 				
 				if(idObjTgt == idTgt)
 					break;
@@ -268,7 +268,7 @@ private function _processStructure(src:String, tgt:String, level:int, listStruct
 				switch(action)
 				{
 					case 'add':
-						objTgtList = ListParser.put(objTgtList, 'tail', 'word', idTgt);
+						objTgtList = ListParser.put(objTgtList, 'tail', 'string', idTgt);
 						lvlObjTgtList = ListParser.update(lvlObjTgtList, 2, 'list', objTgtList);
 						lvlLinkList = ListParser.update(lvlLinkList, j, 'list', lvlObjTgtList);
 						topLevelList = ListParser.update(topLevelList, 2, 'list', lvlLinkList);
@@ -285,7 +285,7 @@ private function _processStructure(src:String, tgt:String, level:int, listStruct
 			switch(action)
 			{
 				case 'add':
-					objTgtList = ListParser.put('[]', 'tail', 'word', idTgt);
+					objTgtList = ListParser.put('[]', 'tail', 'string', idTgt);
 					lvlObjTgtList = ListParser.put('[]', 'head', 'word', level);				
 					lvlObjTgtList = ListParser.put(lvlObjTgtList, 'tail', 'list', objTgtList);				
 					lvlLinkList = ListParser.put(lvlLinkList, 'tail', 'list', lvlObjTgtList);
@@ -305,7 +305,7 @@ private function _processStructure(src:String, tgt:String, level:int, listStruct
 				{
 					objSrcList = ListParser.update(objSrcList, 2, 'word', ListParser.getElmValue(src, 2, contexts));
 					objSrcList = ListParser.update(objSrcList, 3, 'word', ListParser.getElmValue(src, 3, contexts));
-					objSrcList = ListParser.update(objSrcList, 4, 'word', ListParser.getElmValue(src, 4, contexts));
+					objSrcList = ListParser.update(objSrcList, 4, 'string', ListParser.getElmValue(src, 4, contexts));
 					
 					topLevelList = ListParser.update(topLevelList, 1, 'list', objSrcList);
 					listStruct = ListParser.update(listStruct, i, 'list', topLevelList);
@@ -321,17 +321,17 @@ private function _processStructure(src:String, tgt:String, level:int, listStruct
 		switch(action)
 		{
 			case 'add':
-				objTgtList = ListParser.put('[]', 'tail', 'word', idTgt);
+				objTgtList = ListParser.put('[]', 'tail', 'string', idTgt);
 				lvlObjTgtList = ListParser.put('[]', 'head', 'word', level);				
 				lvlObjTgtList = ListParser.put(lvlObjTgtList, 'tail', 'list', objTgtList);								
 				lvlLinkList = ListParser.put('[]', 'tail', 'list', lvlObjTgtList);				
 				
-				objSrcList = ListParser.put('[]', 'head', 'word', idSrc);
+				objSrcList = ListParser.put('[]', 'head', 'string', idSrc);
 				if(listSrcObj.result)
 				{
 					objSrcList = ListParser.put(objSrcList, 'tail', 'word', ListParser.getElmValue(src, 2, contexts));
 					objSrcList = ListParser.put(objSrcList, 'tail', 'word', ListParser.getElmValue(src, 3, contexts));
-					objSrcList = ListParser.put(objSrcList, 'tail', 'word', ListParser.getElmValue(src, 4, contexts));
+					objSrcList = ListParser.put(objSrcList, 'tail', 'string', ListParser.getElmValue(src, 4, contexts));
 				}
 								
 				topLevelList = ListParser.put('[]', 'head', 'list', objSrcList);

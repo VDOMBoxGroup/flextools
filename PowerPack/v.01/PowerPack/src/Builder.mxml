@@ -460,7 +460,7 @@
 				}
 				else if(event.item.@id == "import")
 				{
-					Import.show();
+					Import.show(onImportClose);
 				}
 				else if(event.item.@id == "import_from_tpl")
 				{
@@ -829,7 +829,24 @@
             	
             	ProgressManager.complete();
             }            
-            
+
+            private function onImportClose(event:Event):void
+            {            	
+            	if(event is CloseEvent)
+            	{
+            		var graphs:Array = event.target.graphs;
+            		
+            		if(graphs.length>0)
+            		{
+	            		for each (var graph:GraphCanvas in graphs) {
+	            			pnl_graphs.addGraph(graph);
+						}
+            		}
+            	}
+            	
+            	ProgressManager.complete();
+            }  
+                        
            	private function generationComplete(event:Event):void
            	{
            		switchDebug(false);

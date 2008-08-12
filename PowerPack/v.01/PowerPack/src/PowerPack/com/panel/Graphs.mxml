@@ -136,7 +136,29 @@
 				graphAccordionChild.addEventListener("captionChanged", captionChangedHandler);	
 				
 				return graphAccordionChild;
-			}	
+			}
+			
+			public function addGraph(graph:GraphCanvas):void
+			{
+				initGraphs.addItem(graph);
+				vsViewStack.addChild(graph);	
+				
+				var graphAccordionChild:AccordionChild = null;
+
+				for(var i:int=0; i<graphsAccordion.numChildren; i++)
+				{
+					if(AccordionChild(graphsAccordion.getChildAt(i)).label==graph.category)
+					{
+						graphAccordionChild = graphsAccordion.getChildAt(i) as AccordionChild;
+						break;
+					}
+				}
+				
+				if(!graphAccordionChild)
+					graphAccordionChild = createCategoryTab(graph.category); 
+
+				graphAccordionChild.graphs.addItem(graph);			
+			}
 			
 			public function findFirstGraph():GraphCanvas
 			{
@@ -378,9 +400,7 @@
 				newGraph.label = newGraph.name;
 				newGraph.category = child.label;
 
-				initGraphs.addItem(newGraph);
-				child.graphs.addItem(newGraph);										
-				vsViewStack.addChild(newGraph);				
+				addGraph(newGraph);				
 				
 				selectGraph(newGraph);
 				
@@ -415,11 +435,7 @@
 				newGraph.label = newGraph.name;
 				newGraph.initial = false;
 
-				initGraphs.addItem(newGraph);
-				child.graphs.addItem(newGraph);										
-				vsViewStack.addChild(newGraph);				
-				
-				child.graphs.refresh();
+				addGraph(newGraph);	
 				
 				selectGraph(newGraph);
 				

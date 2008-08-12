@@ -101,7 +101,7 @@ public class GraphCanvas extends Canvas
     
 	public var addingTransition:Boolean;
 	public var currentArrow:Connector;		
-	public var initialNode:Node;
+	//public var initialNode:Node;
 	public var category:String = "";
 	
 	public var initial:Boolean;
@@ -305,6 +305,36 @@ public class GraphCanvas extends Canvas
 		return newCanvas; 
 	}
 	
+	public function createArrow(fromNode:Node, toNode:Node, label:String=null):void
+	{
+		var newArrow:Connector = new Connector();
+				
+		newArrow.fromObject = fromNode;		
+		newArrow.toObject = toNode;	
+		
+		newArrow.data = Node(newArrow.fromObject).arrTrans;
+		if(label)
+			newArrow.label = label;
+		
+		addArrow(newArrow);
+	}
+	
+	public function addArrow(arrow:Connector):void
+	{
+		if(arrow.fromObject && arrow.toObject)											
+		{
+			(arrow.fromObject as Node).outArrows.addItem(arrow);
+			(arrow.toObject as Node).inArrows.addItem(arrow);
+		
+			arrow.addEventListener(ConnectorEvent.DISPOSED, (arrow.toObject as Node).destroyArrowHandler);
+			
+			BindingUtils.bindProperty(arrow, 'data',
+				arrow.fromObject, 'arrTrans');
+		
+			addChildAt(arrow, 0);			
+		}		
+	}
+	
 	// gen XML that represents graph structure
 	public function toXML():XML
 	{
@@ -369,8 +399,8 @@ public class GraphCanvas extends Canvas
 			newNode.name = Utils.getStringOrDefault(nodeXML.@name, '');
 			newNode.enabled = Utils.getBooleanOrDefault(nodeXML.@enabled);
 			newNode.breakpoint = Utils.getBooleanOrDefault(nodeXML.@breakpoint); 
-			newNode.x = nodeXML.@x;
-			newNode.y = nodeXML.@y;
+			newNode.x = Number(nodeXML.@x);
+			newNode.y = Number(nodeXML.@y);
 			
 			addChild(newNode);
 			

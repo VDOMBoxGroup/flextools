@@ -11,6 +11,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.importation.ImportApp;
 			import ExtendedAPI.com.utils.FileUtils;
 			import generated.webservices.Get_all_typesResultEvent;
 			import PowerPack.com.managers.ProgressManager;
@@ -37,6 +38,7 @@
 			private static var _dialog:Import;
 			private var appsXML:XMLList;
 			private var appXML:XML;
+			public var graphs:Array = [];
 			
 			static public function show(closeHandler:Function = null):Import
 			{
@@ -111,6 +113,33 @@
 							
 						case step3:
 							//Import application
+							graphs = [];
+							ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+							var imprt:ImportApp = new ImportApp(appXML);
+							
+							graphs.push(imprt.parseIndex());
+							
+							var arr:Array = imprt.parseStructure();
+							for each (var elm:Object in arr)
+								graphs.push(elm);
+							
+							arr = imprt.parseObjects();
+							for each (elm in arr)
+								graphs.push(elm);
+							
+							arr = imprt.parseE2vdom();
+							for each (elm in arr)
+								graphs.push(elm);
+
+							arr = imprt.parseResources();
+							for each (elm in arr)
+								graphs.push(elm);
+
+							arr = imprt.parseDatabases();
+							for each (elm in arr)
+								graphs.push(elm);
+
+							ProgressManager.complete();
 							vsStep.selectedIndex++;
 							break;						
 					}				
