@@ -82,7 +82,7 @@
 				// We need to repopulate graphs if templateXML has been changed
 				BindingUtils.bindSetter(populateGraphs, this, "templateXML");
 				
-				for each(var label:String in ["application", "container", "resources"])
+				for each(var label:String in ["application", "objects", "structure", "resources"])
 				{
 					createCategoryTab(label);			
 				}

@@ -13,14 +13,63 @@ package PowerPack.com.importation
 
 	public class ImportApp extends EventDispatcher
 	{
-		public function ImportApp(app:XML)
+		public function ImportApp(app:XML, types:XML)
 		{
 			super();
 			
 			this.appXML = app;
+			this.typesXML = types;
 		}
 		
 		public var appXML:XML;
+		
+		public var typesXML:XML;
+
+		public var objNames:Object = {
+				'bar':'Bar',
+				'bgmusic':'BgMusic',
+				'button':'Button',
+				'calendar':'Calendar',
+				'contact':'Contact',
+				'container':'Container',
+				'copy':'Copy',
+				'database':'Database',
+				'dbhtmlview':'DbHtmlView',
+				'dbschema':'DbSchema',
+				'dbtable':'DbTable',
+				'debug':'Debug',
+				'flashanimation':'FlashAnimation',
+				'flashbook':'FlashBook',
+				'form':'Form',
+				'formbutton':'FormButton',
+				'formcheckbox':'FormCheckBox',
+				'formdropdown':'FormDropDown',
+				'formpassword':'FormPassword',
+				'formradiobutton':'FormRadioButton',
+				'formradiogroup':'FormRadioGroup',
+				'formtext':'FormText',
+				'htmlcontainer':'HtmlContainer',
+				'hypertext':'HyperText',
+				'image':'Image',
+				'menu':'Menu',
+				'menucontainer':'MenuContainer',
+				'menufooter':'MenuFooter',
+				'menuheader':'MenuHeader',
+				'menuitem':'MenuItem',
+				'password':'Password',
+				'printtowebcontainer':'PrintToWebContainer',
+				'printtowebscript':'PrintToWebScript',
+				'sensitive':'Sensitive',
+				'table':'Table',
+				'tablecell':'TableCell',
+				'tablerow':'TableRow',
+				'text':'Text',
+				'time':'Time',
+				'whole':'Whole',
+				'wire':'Wire'
+			}
+			
+		public var objCounter:Object = {};
 		
 		public function parseIndex():GraphCanvas
 		{
@@ -102,6 +151,15 @@ package PowerPack.com.importation
 			return newGraph;
 			
 			function parseInformation():void {
+
+				yOffset += 40;
+
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n<Information>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+						
 				for each(var infElm:XML in elm.elements('*'))
 				{
 					if(dynElms[infElm.name()])
@@ -164,7 +222,16 @@ package PowerPack.com.importation
 						newGraph.addChild(node);
 						newGraph.createArrow(prev, node);
 					}	
-				}			
+				}	
+
+				yOffset += 40;
+
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n</Information>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+						
 			}
 		}		
 		
@@ -353,7 +420,7 @@ package PowerPack.com.importation
 				'\n\t<Object ID="$srcID" Top="$srcTop" Left="$srcLeft" ResourceID="$srcResId">');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
-			newGraph.createArrow(prev, node);				
+			newGraph.createArrow(prev, node);
 
 			//////////////////////////////////////////
 			
@@ -503,9 +570,161 @@ package PowerPack.com.importation
 			return arr;
 		}
 		
-		public function parseObjects():Array
+		private function setBaseObject():Array
 		{
 			var arr:Array = [];
+			
+			// PARSE OBJECT 
+			
+			var newGraph:GraphCanvas = new GraphCanvas();
+			newGraph.category = 'objects';
+			newGraph.name = 'Object';
+
+			var xOffset:Number = 10;
+			var yOffset:Number = 10;
+			
+			var prev:Node;
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
+				'\n\t<Object Type="$param1" ID="$param2" Name="$param3">');
+			node.x = xOffset; node.y = yOffset;			
+			newGraph.addChild(node);
+			
+			yOffset +=40;
+
+			prev = node;
+			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, '[sub ParseAttributes $param4]');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);			
+			
+			yOffset +=40;
+			
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n\t</Object>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);			
+
+			arr.push(newGraph);
+			
+			// PARSE ATTRIBUTE
+			
+			newGraph = new GraphCanvas();
+			newGraph.category = 'objects';
+			newGraph.name = 'ParseAttributes';
+
+			xOffset = 10;
+			yOffset = 10;
+			
+			var memNode1:Node;
+			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
+				'\n\t<Attributes>');
+			node.x = xOffset; node.y = yOffset;			
+			newGraph.addChild(node);
+			
+			yOffset +=40;
+
+			prev = node;
+			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+				'$attrLstLen = [length $param1]');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);			
+
+			yOffset +=40;
+
+			prev = node;
+			memNode1 = node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+				'$attrLstLen > 1');
+			node.arrTrans = ['true', 'false'];
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);			
+			
+			xOffset +=100;
+			yOffset +=40;
+
+			prev = node;
+			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+				'$attrName = [get $attrLstLen-1 $param1]');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node, 'true');
+			
+			yOffset +=40;
+
+			prev = node;
+			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+				'$attrValue = [get $attrLstLen $param1]');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node, 'true');
+					
+			yOffset +=40;
+
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
+				'\n\t\t<Attribute Name="$attrName">$attrValue</Attribute>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+
+			yOffset +=40;
+
+			prev = node;
+			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+				'$attrLstLen = $attrLstLen - 2');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+			
+			newGraph.createArrow(node, memNode1);
+			
+			xOffset -=100;
+			yOffset +=40;
+
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n\t</Attributes>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(memNode1, node, 'false');			
+
+			arr.push(newGraph);			
+						
+			return arr;			
+		}		 
+		
+		private function setObjects():Array
+		{
+			var arr:Array = setBaseObject();
+			
+			for each (var type:XML in typesXML.Type)
+			{
+				if(int(type.Information.Container) == 1)
+				{
+					var newGraph:GraphCanvas = new GraphCanvas();
+					newGraph.category = 'objects';
+					newGraph.name = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
+		
+					var xOffset:Number = 10;
+					var yOffset:Number = 10;
+					
+					var prev:Node;
+					var node:Node = new Node(NodeCategory.COMMAND, NodeType.INITIAL, 
+						StringUtil.substitute('[sub Object "{0}" $param1 $param2 $param3]', type.Information.ID));
+					node.x = xOffset; node.y = yOffset;			
+					newGraph.addChild(node);
+					
+					arr.push(newGraph);					
+				}				
+			}
+						
+			return arr;
+		}
+		
+		public function parseObjects():Array
+		{
+			var arr:Array = setObjects();
 			
 			var newGraph:GraphCanvas = new GraphCanvas();
 			newGraph.category = 'objects';
@@ -515,13 +734,188 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 			
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- Objects -->');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<Objects>');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
+
+			if(XMLList(appXML.Objects).length()>0)
+				var objs:XML = appXML.Objects[0];			 
+			
+			if(objs)
+			{		
+				for each (var obj:XML in objs.Object)
+				{
+					var type:XML = getType(obj.@Type);
+					var objGraphName:String = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
+					 
+					if(type && int(type.Information.Container) == 1)
+					{
+						yOffset +=40;
+						
+						var attrLst:String = '[';						
+						for each (var attr:XML in obj.Attributes.Attribute) {
+							attrLst += ' "'+attr.@Name+'" '+Utils.doubleQuotes(attr);	
+						}						
+						attrLst += ' ]'; 
+						
+						prev = node;
+						node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+							StringUtil.substitute('[sub {0} "{1}" "{2}" {3}]', 
+								objGraphName,
+								Utils.getStringOrDefault(obj.@ID, ''),
+								Utils.getStringOrDefault(obj.@Name, ''),
+								Utils.doubleQuotes(attrLst)));
+						node.x = xOffset; node.y = yOffset;
+						newGraph.addChild(node);
+						newGraph.createArrow(prev, node);					
+					}
+					else
+					{
+						objCounter[type.Information.Name] = objCounter[type.Information.Name] ? objCounter[type.Information.Name]+1 : 1; 
+						var contName:String = objGraphName+'_'+objCounter[type.Information.Name];
+						
+						yOffset +=40;
+						
+						prev = node;
+						node = new Node(NodeCategory.SUBGRAPH, NodeType.NORMAL, contName);
+						node.x = xOffset; node.y = yOffset;
+						newGraph.addChild(node);
+						newGraph.createArrow(prev, node);					
+
+						parseObjectsRecursive(contName, obj, arr);					
+					}						
+				}
+			}	
+					
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Objects>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
 			
 			arr.push(newGraph);
 						
 			return arr;
+		}
+		
+		private function getType(objType:String):XML
+		{
+			return typesXML.Type.(Information.ID == objType)[0];	
+		} 
+		
+		private function parseObjectsRecursive(graphName:String, curObj:XML, graphs:Array, category:String=null):void
+		{
+			var newGraph:GraphCanvas = new GraphCanvas();
+			newGraph.category = category ? category : (curObj.@Name ? curObj.@Name : graphName);
+			newGraph.name = graphName;
+
+			var xOffset:Number = 10;
+			var yOffset:Number = 10;
+			
+			var prev:Node;
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
+				StringUtil.substitute('\n\t<Object ID="{0}" Name="{1}" Type="{2}">',
+					Utils.getStringOrDefault(curObj.@ID, ''),
+					Utils.getStringOrDefault(curObj.@Name, ''), 
+					Utils.getStringOrDefault(curObj.@Type, '')));
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			
+			// Parse Attributes
+			
+			var attrLst:String = '[';			
+			for each (var attr:XML in curObj.Attributes.Attribute) {
+				attrLst += ' "'+attr.@Name+'" '+Utils.doubleQuotes(attr);	
+			}			
+			attrLst += ' ]';
+			
+			yOffset +=40;
+			
+			prev = node;
+			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+				StringUtil.substitute('[sub ParseAttributes {0}]',
+					Utils.doubleQuotes(attrLst)));
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+
+			// Parse objects
+			
+			if(XMLList(curObj.Objects).length()>0)
+				var objs:XML = curObj.Objects[0];			
+			
+			if(objs)
+			{			
+				yOffset +=40;
+			
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t<Objects>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+							
+				for each (var obj:XML in objs.Object)
+				{
+					var type:XML = getType(obj.@Type);
+					var objGraphName:String = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
+					 
+					if(int(type.Information.Container) == 1)
+					{
+						yOffset +=40;
+						
+						attrLst = '[';						
+						for each (attr in obj.Attributes.Attribute) {
+							attrLst += ' "'+attr.@Name+'" '+Utils.doubleQuotes(attr);	
+						}						
+						attrLst += ' ]';
+						
+						prev = node;
+						node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+							StringUtil.substitute('[sub {0} "{1}" "{2}" {3}]', 
+								objGraphName,
+								Utils.getStringOrDefault(obj.@ID, ''),
+								Utils.getStringOrDefault(obj.@Name, ''),
+								Utils.doubleQuotes(attrLst)));
+						node.x = xOffset; node.y = yOffset;
+						newGraph.addChild(node);
+						newGraph.createArrow(prev, node);					
+					}
+					else
+					{
+						objCounter[type.Information.Name] = objCounter[type.Information.Name] ? objCounter[type.Information.Name]+1 : 1; 
+						var contName:String = objGraphName+'_'+objCounter[type.Information.Name];
+						
+						yOffset +=40;
+						
+						prev = node;
+						node = new Node(NodeCategory.SUBGRAPH, NodeType.NORMAL, contName);
+						node.x = xOffset; node.y = yOffset;
+						newGraph.addChild(node);
+						newGraph.createArrow(prev, node);					
+	
+						parseObjectsRecursive(contName, obj, graphs, newGraph.category);					
+					}						
+				}
+				yOffset +=40;
+			
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t</Objects>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+			}
+			
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n\t</Object>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+			
+			graphs.push(newGraph);					
 		}
 		
 		public function parseDatabases():Array
@@ -534,14 +928,94 @@ package PowerPack.com.importation
 
 			var xOffset:Number = 10;
 			var yOffset:Number = 10;
-			
+
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- Databases -->');
-			node.x = xOffset; node.y = yOffset;			
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<Databases>');
+			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			
+			if(XMLList(appXML.Databases).length()>0)
+				var dbs:XML = appXML.Databases[0];			 
+			
+			if(dbs)
+			{			
+				for each(var objDB:XML in dbs.elements('Database'))
+				{
+					yOffset += 40;
+					
+					prev = node;
+					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+						StringUtil.substitute('$dbType = "{0}"; $dbID = "{1}"; $dbName = "{2}"', 
+							Utils.getStringOrDefault(objDB.@Type, ''),
+							Utils.getStringOrDefault(objDB.@ID, ''),
+							Utils.getStringOrDefault(objDB.@Name, '')));
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);
+					
+					yOffset += 30;
+					
+					prev = node;
+					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+						StringUtil.substitute('$dbData = "{0}"', 
+							Utils.getStringOrDefault(objDB, '')));
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);
+
+					yOffset += 30;
+					
+					prev = node;
+					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+						'[sub ParseDatabase $dbType $dbID $dbName $dbData]');
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);
+				}			
+			}
+			
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Databases>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+									
 			arr.push(newGraph);
-						
+
+			// PARSE DATABASE
+			
+			newGraph = new GraphCanvas();
+			newGraph.category = 'databases';
+			newGraph.name = 'ParseDatabase';
+
+			xOffset = 10;
+			yOffset = 10;
+
+			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
+				'\n\t<Database Type="$param1" ID="$param2" Name="$param3">\\-');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '<![CDATA[$param4]]>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+									
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\-</Database>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+			
+			arr.push(newGraph);
+
 			return arr;
 		}
 		
@@ -555,14 +1029,94 @@ package PowerPack.com.importation
 
 			var xOffset:Number = 10;
 			var yOffset:Number = 10;
-			
+
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- Resources -->');
-			node.x = xOffset; node.y = yOffset;			
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<Resources>');
+			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			
+			if(XMLList(appXML.Resources).length()>0)
+				var ress:XML = appXML.Resources[0];			 
+			
+			if(ress)
+			{			
+				for each(var objRes:XML in ress.elements('Resource'))
+				{
+					yOffset += 40;
+					
+					prev = node;
+					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+						StringUtil.substitute('$resType = "{0}"; $resID = "{1}"; $resName = "{2}"', 
+							Utils.getStringOrDefault(objRes.@Type, ''),
+							Utils.getStringOrDefault(objRes.@ID, ''),
+							Utils.getStringOrDefault(objRes.@Name, '')));
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);
+					
+					yOffset += 30;
+					
+					prev = node;
+					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+						StringUtil.substitute('$resData = "{0}"', 
+							Utils.getStringOrDefault(objRes, '')));
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);
+
+					yOffset += 30;
+					
+					prev = node;
+					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
+						'[sub ParseResource $resType $resID $resName $resData]');
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);
+				}			
+			}
+			
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Resources>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+									
 			arr.push(newGraph);
-						
+
+			// PARSE RESOURCE
+			
+			newGraph = new GraphCanvas();
+			newGraph.category = 'resources';
+			newGraph.name = 'ParseResource';
+
+			xOffset = 10;
+			yOffset = 10;
+
+			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
+				'\n\t<Resource Type="$param1" ID="$param2" Name="$param3">\\-');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '<![CDATA[$param4]]>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+									
+			yOffset +=40;
+							
+			prev = node;
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\-</Resource>');
+			node.x = xOffset; node.y = yOffset;
+			newGraph.addChild(node);
+			newGraph.createArrow(prev, node);
+			
+			arr.push(newGraph);
+
 			return arr;
 		}
 			
@@ -585,6 +1139,7 @@ package PowerPack.com.importation
 			arr.push(newGraph);
 						
 			return arr;
-		}			
+		}
+					
 	}
 }

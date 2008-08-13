@@ -851,7 +851,6 @@
            	{
            		switchDebug(false);
            		
-           		Console.show("Data saved to app.xml.\n" + ContextManager.instance.templateStruct.buffer, "Result");
            		
 				if(ContextManager.instance.templateStruct.buffer)
 				{            	
@@ -861,6 +860,9 @@
         			stream.open(file, FileMode.WRITE);
         			stream.writeUTFBytes(ContextManager.instance.templateStruct.buffer);
         			stream.close();
+           			
+           			Console.show(StringUtil.substitute("Data saved to {0}.\n{1}", ContextManager.instance.file.nativePath, 
+           				ContextManager.instance.templateStruct.buffer), "Result");
     			}
     			
     			ContextManager.instance.templateStruct = null;        							           		

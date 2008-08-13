@@ -38,6 +38,7 @@
 			private static var _dialog:Import;
 			private var appsXML:XMLList;
 			private var appXML:XML;
+			private var typesXML:XML;
 			public var graphs:Array = [];
 			
 			static public function show(closeHandler:Function = null):Import
@@ -115,7 +116,7 @@
 							//Import application
 							graphs = [];
 							ProgressManager.start(ProgressManager.WINDOW_MODE, false);
-							var imprt:ImportApp = new ImportApp(appXML);
+							var imprt:ImportApp = new ImportApp(appXML, typesXML);
 							
 							graphs.push(imprt.parseIndex());
 							
@@ -164,6 +165,7 @@
 					Alert.show(resultXML.Error);
 				} 
 				else {	
+					typesXML = resultXML.Types[0];
 					ConnectionManager.logout();
 					vsStep.selectedIndex = 2;
 					ProgressManager.complete();	
@@ -242,14 +244,14 @@
 				else {
 					appXML = resultXML.Application[0];
 					
-					//
+					/*
 					var file:File = File.documentsDirectory.resolvePath('application.xml');
 
 					var stream:FileStream = new FileStream();					
 					stream.open(file, FileMode.WRITE);
 					stream.writeUTFBytes(appXML.toXMLString());
 					stream.close();
-					//
+					*/
 					
         			ConnectionManager.exec('get_all_types', getAllTypesHandler);
 				}
