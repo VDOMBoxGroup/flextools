@@ -26,48 +26,48 @@ package PowerPack.com.importation
 		public var typesXML:XML;
 
 		public var objNames:Object = {
-				'bar':'Bar',
-				'bgmusic':'BgMusic',
-				'button':'Button',
-				'calendar':'Calendar',
-				'contact':'Contact',
-				'container':'Container',
-				'copy':'Copy',
-				'database':'Database',
-				'dbhtmlview':'DbHtmlView',
-				'dbschema':'DbSchema',
-				'dbtable':'DbTable',
-				'debug':'Debug',
-				'flashanimation':'FlashAnimation',
-				'flashbook':'FlashBook',
-				'form':'Form',
-				'formbutton':'FormButton',
-				'formcheckbox':'FormCheckBox',
-				'formdropdown':'FormDropDown',
-				'formpassword':'FormPassword',
-				'formradiobutton':'FormRadioButton',
-				'formradiogroup':'FormRadioGroup',
-				'formtext':'FormText',
-				'htmlcontainer':'HtmlContainer',
-				'hypertext':'HyperText',
-				'image':'Image',
-				'menu':'Menu',
-				'menucontainer':'MenuContainer',
-				'menufooter':'MenuFooter',
-				'menuheader':'MenuHeader',
-				'menuitem':'MenuItem',
-				'password':'Password',
-				'printtowebcontainer':'PrintToWebContainer',
-				'printtowebscript':'PrintToWebScript',
-				'sensitive':'Sensitive',
-				'table':'Table',
-				'tablecell':'TableCell',
-				'tablerow':'TableRow',
-				'text':'Text',
-				'time':'Time',
-				'whole':'Whole',
-				'wire':'Wire'
-			}
+			'bar':'Bar',
+			'bgmusic':'BgMusic',
+			'button':'Button',
+			'calendar':'Calendar',
+			'contact':'Contact',
+			'container':'Container',
+			'copy':'Copy',
+			'database':'Database',
+			'dbhtmlview':'DbHtmlView',
+			'dbschema':'DbSchema',
+			'dbtable':'DbTable',
+			'debug':'Debug',
+			'flashanimation':'FlashAnimation',
+			'flashbook':'FlashBook',
+			'form':'Form',
+			'formbutton':'FormButton',
+			'formcheckbox':'FormCheckBox',
+			'formdropdown':'FormDropDown',
+			'formpassword':'FormPassword',
+			'formradiobutton':'FormRadioButton',
+			'formradiogroup':'FormRadioGroup',
+			'formtext':'FormText',
+			'htmlcontainer':'HtmlContainer',
+			'hypertext':'HyperText',
+			'image':'Image',
+			'menu':'Menu',
+			'menucontainer':'MenuContainer',
+			'menufooter':'MenuFooter',
+			'menuheader':'MenuHeader',
+			'menuitem':'MenuItem',
+			'password':'Password',
+			'printtowebcontainer':'PrintToWebContainer',
+			'printtowebscript':'PrintToWebScript',
+			'sensitive':'Sensitive',
+			'table':'Table',
+			'tablecell':'TableCell',
+			'tablerow':'TableRow',
+			'text':'Text',
+			'time':'Time',
+			'whole':'Whole',
+			'wire':'Wire'
+		}
 			
 		public var objCounter:Object = {};
 		
@@ -939,38 +939,54 @@ package PowerPack.com.importation
 			
 			if(dbs)
 			{			
-				for each(var objDB:XML in dbs.elements('Database'))
+				var i:int = 1;
+				for each(var objDb:XML in dbs.elements('Database'))
 				{
 					yOffset += 40;
 					
 					prev = node;
 					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-						StringUtil.substitute('$dbType = "{0}"; $dbID = "{1}"; $dbName = "{2}"', 
-							Utils.getStringOrDefault(objDB.@Type, ''),
-							Utils.getStringOrDefault(objDB.@ID, ''),
-							Utils.getStringOrDefault(objDB.@Name, '')));
+						StringUtil.substitute('[sub Database_{0} "{1}" "{2}" "{3}"]',
+							i, 
+							Utils.getStringOrDefault(objDb.@Type, ''),
+							Utils.getStringOrDefault(objDb.@ID, ''),
+							Utils.getStringOrDefault(objDb.@Name, '')));
 					node.x = xOffset; node.y = yOffset;
 					newGraph.addChild(node);
 					newGraph.createArrow(prev, node);
 					
-					yOffset += 30;
-					
-					prev = node;
-					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-						StringUtil.substitute('$dbData = "{0}"', 
-							Utils.getStringOrDefault(objDB, '')));
-					node.x = xOffset; node.y = yOffset;
-					newGraph.addChild(node);
-					newGraph.createArrow(prev, node);
-
-					yOffset += 30;
-					
-					prev = node;
-					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-						'[sub ParseDatabase $dbType $dbID $dbName $dbData]');
-					node.x = xOffset; node.y = yOffset;
-					newGraph.addChild(node);
-					newGraph.createArrow(prev, node);
+					var dbGraph:GraphCanvas = new GraphCanvas();
+					dbGraph.category = 'databases';
+					dbGraph.name = 'Database_'+i;
+				
+					var xxOffset:Number = 10;
+					var yyOffset:Number = 10;
+				
+					var _prev:Node;
+					var _node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
+						'\n\t<Database Type="$param1" ID="$param2" Name="$param3"><![CDATA[\\-');
+					_node.x = xxOffset; _node.y = yyOffset;
+					dbGraph.addChild(_node);					
+			
+					yyOffset +=40;
+							
+					_prev = _node;
+					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, objDb);
+					_node.x = xxOffset; _node.y = yyOffset;
+					dbGraph.addChild(_node);
+					dbGraph.createArrow(_prev, _node);
+									
+					yyOffset +=40;
+									
+					_prev = _node;
+					_node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\-]]></Database>');
+					_node.x = xxOffset; _node.y = yyOffset;
+					dbGraph.addChild(_node);
+					dbGraph.createArrow(_prev, _node);
+			
+					arr.push(dbGraph);
+								
+					i++;
 				}			
 			}
 			
@@ -982,38 +998,6 @@ package PowerPack.com.importation
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
 									
-			arr.push(newGraph);
-
-			// PARSE DATABASE
-			
-			newGraph = new GraphCanvas();
-			newGraph.category = 'databases';
-			newGraph.name = 'ParseDatabase';
-
-			xOffset = 10;
-			yOffset = 10;
-
-			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
-				'\n\t<Database Type="$param1" ID="$param2" Name="$param3">\\-');
-			node.x = xOffset; node.y = yOffset;
-			newGraph.addChild(node);
-			
-			yOffset +=40;
-							
-			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '<![CDATA[$param4]]>');
-			node.x = xOffset; node.y = yOffset;
-			newGraph.addChild(node);
-			newGraph.createArrow(prev, node);
-									
-			yOffset +=40;
-							
-			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\-</Database>');
-			node.x = xOffset; node.y = yOffset;
-			newGraph.addChild(node);
-			newGraph.createArrow(prev, node);
-			
 			arr.push(newGraph);
 
 			return arr;
@@ -1040,13 +1024,15 @@ package PowerPack.com.importation
 			
 			if(ress)
 			{			
+				var i:int = 1;
 				for each(var objRes:XML in ress.elements('Resource'))
 				{
 					yOffset += 40;
 					
 					prev = node;
 					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-						StringUtil.substitute('$resType = "{0}"; $resID = "{1}"; $resName = "{2}"', 
+						StringUtil.substitute('[sub Resource_{0} "{1}" "{2}" "{3}"]',
+							i, 
 							Utils.getStringOrDefault(objRes.@Type, ''),
 							Utils.getStringOrDefault(objRes.@ID, ''),
 							Utils.getStringOrDefault(objRes.@Name, '')));
@@ -1054,24 +1040,38 @@ package PowerPack.com.importation
 					newGraph.addChild(node);
 					newGraph.createArrow(prev, node);
 					
-					yOffset += 30;
-					
-					prev = node;
-					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-						StringUtil.substitute('$resData = "{0}"', 
-							Utils.getStringOrDefault(objRes, '')));
-					node.x = xOffset; node.y = yOffset;
-					newGraph.addChild(node);
-					newGraph.createArrow(prev, node);
-
-					yOffset += 30;
-					
-					prev = node;
-					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-						'[sub ParseResource $resType $resID $resName $resData]');
-					node.x = xOffset; node.y = yOffset;
-					newGraph.addChild(node);
-					newGraph.createArrow(prev, node);
+					var resGraph:GraphCanvas = new GraphCanvas();
+					resGraph.category = 'resources';
+					resGraph.name = 'Resource_'+i;
+				
+					var xxOffset:Number = 10;
+					var yyOffset:Number = 10;
+				
+					var _prev:Node;
+					var _node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
+						'\n\t<Resource Type="$param1" ID="$param2" Name="$param3"><![CDATA[\\-');
+					_node.x = xxOffset; _node.y = yyOffset;
+					resGraph.addChild(_node);					
+			
+					yyOffset +=40;
+							
+					_prev = _node;
+					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, objRes);
+					_node.x = xxOffset; _node.y = yyOffset;
+					resGraph.addChild(_node);
+					resGraph.createArrow(_prev, _node);
+									
+					yyOffset +=40;
+									
+					_prev = _node;
+					_node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\-]]></Resource>');
+					_node.x = xxOffset; _node.y = yyOffset;
+					resGraph.addChild(_node);
+					resGraph.createArrow(_prev, _node);
+			
+					arr.push(resGraph);
+								
+					i++;
 				}			
 			}
 			
@@ -1083,38 +1083,6 @@ package PowerPack.com.importation
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
 									
-			arr.push(newGraph);
-
-			// PARSE RESOURCE
-			
-			newGraph = new GraphCanvas();
-			newGraph.category = 'resources';
-			newGraph.name = 'ParseResource';
-
-			xOffset = 10;
-			yOffset = 10;
-
-			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
-				'\n\t<Resource Type="$param1" ID="$param2" Name="$param3">\\-');
-			node.x = xOffset; node.y = yOffset;
-			newGraph.addChild(node);
-			
-			yOffset +=40;
-							
-			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '<![CDATA[$param4]]>');
-			node.x = xOffset; node.y = yOffset;
-			newGraph.addChild(node);
-			newGraph.createArrow(prev, node);
-									
-			yOffset +=40;
-							
-			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\-</Resource>');
-			node.x = xOffset; node.y = yOffset;
-			newGraph.addChild(node);
-			newGraph.createArrow(prev, node);
-			
 			arr.push(newGraph);
 
 			return arr;

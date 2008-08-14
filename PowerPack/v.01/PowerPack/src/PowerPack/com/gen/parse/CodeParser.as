@@ -1,8 +1,8 @@
 package PowerPack.com.gen.parse
 {
 import PowerPack.com.gen.*;
-
-import r1.deval.D;
+import PowerPack.com.gen.errorClasses.CompilerError;
+import PowerPack.com.gen.errorClasses.ValidationError;
 
 public class CodeParser
 {		

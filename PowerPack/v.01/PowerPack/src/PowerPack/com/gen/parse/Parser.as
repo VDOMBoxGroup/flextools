@@ -2,9 +2,10 @@ package PowerPack.com.gen.parse
 {
 import ExtendedAPI.com.utils.Utils;
 
-import PowerPack.com.gen.CompilerError;
-import PowerPack.com.gen.RunTimeError;
 import PowerPack.com.gen.Template;
+import PowerPack.com.gen.errorClasses.CompilerError;
+import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.parse.parseClasses.LexemStruct;
 
 import mx.collections.ArrayCollection;
 import mx.utils.UIDUtil;

@@ -537,6 +537,8 @@
 						{
 							switchDebug(true);
 							
+							ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+							
 							ContextManager.instance.templateStruct.addEventListener("generationComplete", generationComplete);					
 							ContextManager.instance.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
 							ContextManager.instance.templateStruct.addEventListener("error", debugErrorHandler);
@@ -545,6 +547,8 @@
 					}
 					catch(e:Error) 
 					{
+						ProgressManager.complete();
+						
 						switchDebug(false);
 						ContextManager.instance.templateStruct = null;
 						Alert.show(e.message, "Warning!");
@@ -563,27 +567,33 @@
 						switch(event.item.@id.toString())
 						{
 							case 'resume':
+								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 								ContextManager.instance.templateStruct.isStepDebug = false;
 								ContextManager.instance.templateStruct.generate(true);
 								break;
 							case 'step_into':
+								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 								ContextManager.instance.templateStruct.isStepDebug = true;
 								ContextManager.instance.templateStruct.generate(true);
 								break;
 							case 'step_over':
+								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 								ContextManager.instance.templateStruct.isStepDebug = true;
 								ContextManager.instance.templateStruct.generate(true, true);
 								break;
 							case 'step_return':
+								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 								ContextManager.instance.templateStruct.isStepDebug = true;
 								ContextManager.instance.templateStruct.generate(true, true, true);
 								break;
 							case 'break':
+								ProgressManager.complete();
 								ContextManager.instance.templateStruct = null;
 								switchDebug(false);
 								break;
 						}							
 					} catch(e:Error) {
+						ProgressManager.complete();
 						ContextManager.instance.templateStruct = null;
 						switchDebug(false);
 						Alert.show(e.message, "Warning!");
@@ -636,6 +646,8 @@
 	        		try
 	        		{
 		       			switchDebug(true);
+		       			
+		       			ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 								
 						ContextManager.instance.templateStruct.addEventListener("generationComplete", generationComplete);					
 						ContextManager.instance.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
@@ -644,6 +656,8 @@
 					}
 					catch(e:Error) 
 					{
+						ProgressManager.complete();
+						
 						switchDebug(false);
 						ContextManager.instance.templateStruct = null;
 						Alert.show(e.message, "Warning!");
@@ -655,6 +669,7 @@
 				            
             private function stepCompleteHandler(event:Event):void
             {
+            	ProgressManager.complete();
             	showDebugDetails();
             }
             
@@ -849,6 +864,8 @@
                         
            	private function generationComplete(event:Event):void
            	{
+           		ProgressManager.complete();
+           		
            		switchDebug(false);
            		
            		
@@ -871,6 +888,8 @@
            	private function debugErrorHandler(event:Event):void
            	{           		
            		var error:* = event.target.error;           		
+           		
+           		ProgressManager.complete();
            		
            		showDebugDetails();           		
            		Alert.show(error.message, "Error!", 4, null, onErrAlertClose);

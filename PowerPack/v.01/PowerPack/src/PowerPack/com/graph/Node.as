@@ -432,8 +432,7 @@ public class Node extends Canvas
 
            	nodeTextArea.enabled = enabled;
          	nodeTextArea.text = text;
-         	nodeTextArea.wordWrap = false;
-			nodeTextArea.addEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut); 
+         	nodeTextArea.wordWrap = false; 
 
             addChild(nodeTextArea);
         }
@@ -504,7 +503,16 @@ public class Node extends Canvas
         {
         	_needValidate = true;
             _textChanged = false;
-            nodeTextArea.text = text;
+            
+            if(text.length>255)
+            {
+	        	_needValidate = false;         
+	        	nodeTextArea.text = text.substr(0, 255) + '...';   	
+            }
+            else
+            {            
+            	nodeTextArea.text = text;
+            }
             
             _categoryChanged = true;
 
@@ -742,6 +750,9 @@ public class Node extends Canvas
 		if( _editing && _mode==M_EDITING )
 			return;
 			
+		if(text.length > 500)
+			return;
+			
         if(_editing)
         {
             _mode = M_EDITING;
@@ -750,12 +761,14 @@ public class Node extends Canvas
          	nodeTextArea.setSelection(0, nodeTextArea.text.length);
 			systemManager.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true);
 			nodeTextArea.addEventListener(Event.CHANGE, textAreaChange); 
+			nodeTextArea.addEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);			
         }
         else
         {
             _mode = M_NORMAL;
 			systemManager.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true);
 			nodeTextArea.removeEventListener(Event.CHANGE, textAreaChange); 
+            nodeTextArea.removeEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);
             nodeTextArea.selectable = false;
             nodeTextArea.editable = false;
         	nodeTextArea.setSelection(0, 0);

@@ -178,11 +178,13 @@
         		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
 				fileStream.close();
         		
-				appXML = xml..Application[0];
+        		ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+				appXML = xml;
 				
 				//trace(appXML);
-				vsStep.selectedIndex = 2;
-				ProgressManager.complete();	
+				//vsStep.selectedIndex = 2;
+				//ProgressManager.complete();	
+				ConnectionManager.exec('get_all_types', getAllTypesHandler);
 	        }	
 	        
 			private  function getAppListHandler(event:List_applicationsResultEvent):void

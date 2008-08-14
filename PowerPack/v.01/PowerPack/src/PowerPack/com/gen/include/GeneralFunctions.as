@@ -213,7 +213,7 @@ public function _writeVarTo(filename:String, value:Object):void
 }
 
 /**
- * writeTo function section
+ * loadDataFrom function section
  */		
 public function _loadDataFrom(filename:String):void
 {	
@@ -259,7 +259,6 @@ public function _loadDataFrom(filename:String):void
 		Application.application.callLater(generate);
 	}
 }
-
 
 /**
  * GUID function section

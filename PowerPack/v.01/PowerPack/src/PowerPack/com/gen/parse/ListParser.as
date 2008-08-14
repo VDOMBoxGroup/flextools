@@ -6,7 +6,8 @@ package PowerPack.com.gen.parse
 	import GraphicAPI.drawing.PStroke;
 	import GraphicAPI.drawing.StrokePatternStyle;
 	
-	import PowerPack.com.gen.RunTimeError;
+	import PowerPack.com.gen.errorClasses.RunTimeError;
+	import PowerPack.com.gen.parse.parseClasses.LexemStruct;
 	
 	import flash.display.GradientType;
 	import flash.display.SpreadMethod;

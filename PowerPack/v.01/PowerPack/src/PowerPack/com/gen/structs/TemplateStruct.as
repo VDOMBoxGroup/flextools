@@ -11,6 +11,7 @@ package PowerPack.com.gen.structs
 	
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
+	import mx.utils.UIDUtil;
 	
 	public class TemplateStruct
 	{
@@ -29,9 +30,16 @@ package PowerPack.com.gen.structs
 		public function TemplateStruct(xml:XML=null)
 		{
 			if(xml)
+			{
 				this.xml = xml;
+				if(!Utils.getStringOrDefault(this.xml.@ID, ''))
+					this.xml.@ID = UIDUtil.createUID();	
+			}
 			else
+			{
 				this.xml = new XML(<template></template>);
+				this.xml.@ID = UIDUtil.createUID();
+			}
 		}
 
 		private var _xml:XML;		
@@ -64,6 +72,11 @@ package PowerPack.com.gen.structs
 			_xml.description = value;	
 		}		
 		
+		public function get ID():String
+		{
+			return _xml.@ID;	
+		}		
+
 		[Bindable]
 		public function get picture():String
 		{

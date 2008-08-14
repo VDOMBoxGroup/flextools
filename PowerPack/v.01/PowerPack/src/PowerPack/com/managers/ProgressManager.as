@@ -47,10 +47,10 @@ public class ProgressManager extends EventDispatcher
 	public static const DIALOG_MODE:String = "dialog";
 	
 	private static var defaultCaptions:Object = {
-		progress_title:"Progress",
+		progress_title:"Processing...",
 		progress_details:"Details",
-		progress_desc:"Progress",
-		progress_full_desc:"Current progress",
+		progress_desc:"Processing...",
+		progress_full_desc:"Processing...",
 		progress_label:"%3%%",
 		progress_full_label:"Current progress %3%%",
 		run_in_background:"run in background",

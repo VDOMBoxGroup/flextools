@@ -2,6 +2,9 @@ package PowerPack.com.gen
 {
 import ExtendedAPI.com.utils.Utils;
 
+import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.errorClasses.ValidationError;
+import PowerPack.com.gen.errorClasses.ValidationWarning;
 import PowerPack.com.gen.parse.CodeParser;
 import PowerPack.com.gen.structs.*;
 import PowerPack.com.graph.NodeCategory;
