@@ -103,6 +103,7 @@ package ExtendedAPI.com.utils
 					if((i-j)%2==1) {
 						str += "\\";
 					}
+					
 				}
 				str += _str.charAt(i);					
 			}
@@ -111,7 +112,12 @@ package ExtendedAPI.com.utils
 			
 			return str;
 		}
-		
+
+		public static function getNumberOrDefault(object:Object, default_val:Number = 0):Number
+		{
+			return (object && StringUtil.trim(object.toString()) && !isNaN(Number(object)) ? Number(object) : default_val);
+		}
+				
 		public static function getStringOrDefault(object:Object, default_val:String=null):String
 		{
 			return (object && StringUtil.trim(object.toString()) ? object.toString() : default_val);
