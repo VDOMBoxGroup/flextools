@@ -461,8 +461,9 @@ public class Node extends Canvas
         	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['node_enabled'], 'enabled', enabled));
         	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['node_breakpoint'], 'breakpoint', breakpoint));
 
-			for each (var item:NativeMenuItem in contextMenu.items)
-	       		LanguageManager.bindSentence('node_'+item.name, item);
+			for each (var item:NativeMenuItem in contextMenu.items) {
+	       		//LanguageManager.bindSentence('node_'+item.name, item);
+	  		}
 			
         	contextMenu.addEventListener(Event.SELECT, contextMenuSelectHandler);        	 
         }	

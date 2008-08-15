@@ -470,7 +470,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['connector_highlight'], 'highlight', _highlighted, null, false, false));
         	
 	       	for each (var item:NativeMenuItem in contextMenu.items) {
-	       		LanguageManager.bindSentence('connector_'+item.name, item);
+	       		//LanguageManager.bindSentence('connector_'+item.name, item);
 	       	}
 			        	
         	contextMenu.addEventListener(Event.SELECT, contextMenuSelectHandler);	        	 

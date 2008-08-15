@@ -180,7 +180,7 @@ public class GraphCanvas extends Canvas
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_collapse_space'], 'collapse_space'));
 			
 			for each (var item:NativeMenuItem in contextMenu.items) {
-	       		LanguageManager.bindSentence('graph_'+item.name, item);
+	       		//LanguageManager.bindSentence('graph_'+item.name, item);
 			}
 				
         	contextMenu.addEventListener(Event.SELECT, contextMenuSelectHandler);	        	 
