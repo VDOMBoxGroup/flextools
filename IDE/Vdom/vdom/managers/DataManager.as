@@ -695,7 +695,7 @@ public class DataManager implements IEventDispatcher {
 	private function createObjectCompleteHandler(event:SoapEvent):void
 	{
 		var result:XML = event.result;
-		var parentId:String = result.Object.Parent;
+		var parentId:String = result.ParentId;
 		
 		if(!parentId) {
 			

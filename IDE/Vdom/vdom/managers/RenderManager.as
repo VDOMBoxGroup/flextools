@@ -1,6 +1,7 @@
 package vdom.managers {
 
-import flash.display.Sprite;
+import com.zavoo.svg.SVGViewer;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
@@ -9,29 +10,50 @@ import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
-import mx.containers.Canvas;
-import mx.controls.Image;
-import mx.controls.Text;
 import mx.core.Container;
 import mx.core.UIComponent;
+import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.containers.IItem;
 import vdom.containers.Item;
-import vdom.controls.EditableHTML;
-import vdom.controls.EditableText;
+import vdom.controls.wysiwyg.EditableHTML;
+import vdom.controls.wysiwyg.EditableText;
+import vdom.controls.wysiwyg.SimpleText;
+import vdom.controls.wysiwyg.table.Table;
+import vdom.controls.wysiwyg.table.TableCell;
+import vdom.controls.wysiwyg.table.TableRow;
 import vdom.events.DataManagerEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.managers.renderClasses.ItemDescription;
-import vdom.managers.renderClasses.WysiwygTableClasses.Table;
-import vdom.managers.renderClasses.WysiwygTableClasses.TableCell;
-import vdom.managers.renderClasses.WysiwygTableClasses.TableRow;
 
 public class RenderManager implements IEventDispatcher {
 	
 	private static var instance:RenderManager;
+	
+	public static const styleList:Array = 
+	[
+		["opacity", "backgroundAlpha"], 
+		["backgroundcolor", "backgroundColor"], 
+		["borderwidth", "borderThickness"], 
+		["bordercolor", "borderColor"],
+		["color", "color"],
+		["fontfamily", "fontFamily"],
+		["fontsize", "fontSize"],
+		["fontweight", "fontWeight"],
+		["fontstyle", "fontStyle"],
+		["textalign", "textAlign"]
+	];
+	
+	public static const propertyList:Array = 
+	[
+		["left", "x"], 
+		["top", "y"], 
+		["width", "width"], 
+		["height", "height"]
+	];
 	
 	private var soap:Soap = Soap.getInstance();
 	private var dataManager:DataManager = DataManager.getInstance();
@@ -91,7 +113,7 @@ public class RenderManager implements IEventDispatcher {
 			items.removeAll();
 		}
 		
-		createItemDescription(itemId, parentId);
+//		createItemDescription(itemId, parentId);
 	
 		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
 	}
@@ -156,10 +178,10 @@ public class RenderManager implements IEventDispatcher {
 		
 		itemDescription = getItemDescriptionById(itemId);
 		
-		if(!itemDescription)
-			return null
+//		if(!itemDescription)
+//			return null
 		
-		if(itemDescription.item && Container(itemDescription.item).parent)
+		if(itemDescription && itemDescription.item && Container(itemDescription.item).parent)
 			return itemDescription.item;
 		
 		var container:IItem;
@@ -192,8 +214,10 @@ public class RenderManager implements IEventDispatcher {
 			TableCell(container).minHeight = 10;
 		break;
 		}
+		container.editableAttributes = [];
 		
-		itemDescription.item = container;
+		if(itemDescription)
+			itemDescription.item = container;
 		
 		return container;
 	}
@@ -228,12 +252,12 @@ public class RenderManager implements IEventDispatcher {
 		var fullPath:String = "";
 		var staticFlag:String = "none";
 		
-		if(itemId == "") {
+		if(!itemId || itemId == "") {
 			itemId = UIDUtil.createUID();
 			staticFlag = "self";
 		}
 		
-		if(parentId == "") {
+		if(!parentId || parentId == "") {
 			
 			fullPath = itemId;
 		} else {
@@ -260,6 +284,9 @@ public class RenderManager implements IEventDispatcher {
 	
 	private function updateItemDescription(itemId:String, itemXMLDescription:XML):ItemDescription
 	{
+		if(!itemId)
+			return null;
+		
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		var parentDescription:ItemDescription;
 		var newStaticFlag:String = itemDescription.staticFlag;
@@ -289,6 +316,9 @@ public class RenderManager implements IEventDispatcher {
 	
 	private function getItemDescriptionById(itemId:String):ItemDescription
 	{
+		if(!itemId)
+			return null;
+		
 		var searchObject:Object = {itemId:itemId};
 		
 		var isResult:Boolean = cursor.findAny(searchObject);
@@ -326,7 +356,7 @@ public class RenderManager implements IEventDispatcher {
 		if(arrayOfSortedItems.length > 0)
 			return arrayOfSortedItems
 		else
-			return null
+			return []
 		
 	}
 	
@@ -336,435 +366,308 @@ public class RenderManager implements IEventDispatcher {
 			lockedItems[event.objectId] = event.key;
 	}
 	
-	private function render(itemId:String, itemXMLDescription:XML):void
-	{	
-		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
+	private function arrangeItem(itemId:String):void
+	{
+		var arrayOfItems:Array = sortItems(itemId);
 		
-		var item:Container = itemDescription.item as Container;
-		var itemStaticFlag:String = itemDescription.staticFlag;
+		if(!arrayOfItems)
+			return;
 		
-		item.removeAllChildren();
-		item.graphics.clear();
-		IItem(item).editableAttributes = [];
+		var collectionItem:UIComponent;
+		var indexArray:Array = [];
 		
-		item.x = Number(itemXMLDescription.@left);
-		item.y = Number(itemXMLDescription.@top);
-		
-		if(itemXMLDescription.@width.length())
-			item.width = Number(itemXMLDescription.@width);
-			
-		if(itemXMLDescription.@height.length())
-			item.height = Number(itemXMLDescription.@height);
-		
-		if(itemDescription.staticFlag =="self" || itemDescription.staticFlag =="all")
-			IItem(item).isStatic = true;
-		
-		applyStyles(item, itemXMLDescription);
-		
-		for each(var childXMLDescription:XML in itemXMLDescription.*) {
-			
-			var childName:String = childXMLDescription.name().localName;
-			var childId:String = "";
-			
-			if(childXMLDescription.@id.length != 0 && itemStaticFlag != "children" && itemStaticFlag != "all")
-				childId = childXMLDescription.@id; 
-			
-			switch(childName) {
-			
-			case "container":
-			
-			case "table":
-				
-			case "row":
-			
-			case "cell":
-				
-				var childDescription:ItemDescription = createItemDescription(childId, itemId);
-				
-				childId = childDescription.itemId;
-				
-				var childItem:Container = insertItem(childName, childId) as Container;
-				
-				item.addChild(childItem);
-				
-				updateItemDescription(childId, childXMLDescription);
-				
-				render(childId, childXMLDescription);
-			break;
-			
-			// --------------------------------------
-			
-			case "text":
-				
-				var viewText:UIComponent;
-				
-				if(childXMLDescription.@editable[0] && !IItem(item).isStatic)
-				{
-					viewText = new EditableText();
-					
-					
-					/* IItem(item).editableAttributes.push(
-						{destName:String(childXMLDescription.@editable),
-						sourceObject:viewText,
-						sourceName:"text"}
-					); */
-//					isEditable = false;
-				}
-				else
-				{
-					viewText = new Text();
-				}
-				
-				var color:String = "#000000";
-				var alpha:Number = 1;
-				var fontFamily:String = "Tahoma";
-				var fontSize:String = "12";
-				var fontStyle:String = "normal";
-				var fontWeight:String = "normal";
-				
-				viewText.x = childXMLDescription.@left;
-				viewText.y = childXMLDescription.@top;
-				
-				if(childXMLDescription.@width.length())
-					viewText.width = childXMLDescription.@width;
-				
-				if(childXMLDescription.@height.length())
-					viewText.height = childXMLDescription.@height;
-				
-				if(childXMLDescription.@color[0])
-					color = "#" + childXMLDescription.@color;
-				
-				if(childXMLDescription.@alpha[0])
-					alpha = childXMLDescription.@alpha / 100;
-				
-				if(childXMLDescription.@fontfamily[0])
-					fontFamily = childXMLDescription.@fontfamily;
-				
-				if(childXMLDescription.@fontsize[0])
-					fontSize = childXMLDescription.@fontsize;
-					
-				if(childXMLDescription.@fontstyle[0])
-					fontStyle = childXMLDescription.@fontstyle;
-				
-				if(childXMLDescription.@fontweight[0])
-					fontWeight = childXMLDescription.@fontweight;
-					
-				viewText.setStyle("backgroundAlpha", .0);
-				viewText.setStyle("color", color);
-				viewText.setStyle("alpha", alpha);
-				viewText.setStyle("fontFamily", fontFamily);
-				viewText.setStyle("fontSize", fontSize);
-				viewText.setStyle("fontStyle", fontStyle);
-				viewText.setStyle("fontWeight", fontWeight);
-				
-				var text:String = childXMLDescription.text().toString();
-				
-				viewText["text"] = text;
-				viewText["selectable"] = false;
-				item.addChild(viewText);
-			break;
-			
-			case "htmltext":
-				
-				var viewHTMLText:EditableHTML = new EditableHTML();
-								
-				viewHTMLText.paintsDefaultBackground = false;
-				
-				viewHTMLText.x = childXMLDescription.@left;
-				viewHTMLText.y = childXMLDescription.@top;
-				
-				if(childXMLDescription.@width.length())
-					viewHTMLText.width = childXMLDescription.@width;
-				
-				if(childXMLDescription.@height.length())
-					viewHTMLText.height = childXMLDescription.@height;
-				
-				var HTMLText:String =childXMLDescription.text().toString();
-				
-				viewHTMLText.setStyle("backgroundAlpha", .0);
-				
-				if(childXMLDescription.@editable[0] && IItem(item).isStatic == false) {
-									
-					IItem(item).editableAttributes.push(
-						{destName:String(childXMLDescription.@editable),
-						sourceObject:viewHTMLText,
-						sourceName:"editabledText"}
-					);
-				}
-				
-				if(HTMLText == "")
-					HTMLText = "<div>simple text</div>";
-				
-				HTMLText =
-						"<html>" + 
-							"<head>" + 
-								"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-							"</head>" +
-							"<body style=\"margin:0px;\" >" +
-								HTMLText +
-							"</body>" + 
-						"</html>";
-						
-				viewHTMLText.htmlText = HTMLText;
-				 
-				item.addChild(viewHTMLText);
-			break;
-			
-			case "graphics":
-				
-				renderGraphics(item, childXMLDescription);
-			break
+		for each(collectionItem in arrayOfItems)
+		{
+			if(collectionItem.parent)
+			{
+				indexArray.push(collectionItem.parent.getChildIndex(collectionItem));
 			}
 		}
 		
-		if(!(item is IItem))
-			return
+		indexArray.sort();
 		
-		var arrayOfItems:Array = sortItems(itemId);
 		var count:uint = 0;
+		for each(collectionItem in arrayOfItems)
+		{
+			if(collectionItem.parent)
+			{
+				collectionItem.parent.setChildIndex(collectionItem, indexArray[count]);
+				count++;
+			}
+		}
 	}
 	
-	private function renderGraphics(item:Container, graphicsXMLDescription:XML):void
-	{	
-		var itemId:String = IItem(item).objectId;
-		var graphicsLayer:Canvas = IItem(item).graphicsLayer;
-
-		var currentSprite:Sprite = new Sprite();
+	private function newRender(parentId:String, itemXMLDescription:XML):UIComponent
+	{
+		var itemName:String = itemXMLDescription.name().localName;
+		var item:UIComponent;
+		var itemId:String;
 		
-		for each(var childXMLDescription:XML in graphicsXMLDescription.*) {
+		var parentItemDescription:ItemDescription;
+		var parentItem:IItem;
 		
-		var x1:Number = 0, x2:Number = 0;
-		var y1:Number = 0, y2:Number = 0;
+		var isStatic:Boolean = false;
 		
-		var alpha:Number = 1;
-		var thickness:Number = 1;
-		var fillColor:Number = 0xFFFFFF;
-		var lineColor:Number = 0xFFFFFF;
-		var borderColor:Number = 0x000000;
-		var childName:String = childXMLDescription.name().localName;
-		currentSprite.graphics.lineStyle(NaN);
-			switch(childName) {
-			
-			case "rectangle": {
-				
-				if(childXMLDescription.@alpha.length())
-					alpha = Number(childXMLDescription.@alpha)/100
-				
-				if(childXMLDescription.@size.length())
-					thickness = childXMLDescription.@size;
-				
-				if(childXMLDescription.@stroke.length()) {
+		if(parentId == "static")
+		{
+			isStatic = true;
+		}
+		else if(parentId)
+		{
+			parentItemDescription = getItemDescriptionById(parentId);
+			parentItem = parentItemDescription.item;
+		}
+		
+		var hasChildren:Boolean = false;
+		
+		switch(itemName)
+			{
+				case "container":
+				{
 					
-					if(childXMLDescription.@stroke.toString().substr(0,1) == "#")
-						borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
-					else
-						borderColor = Number("0x" + childXMLDescription.@stroke.toString());
-					
-					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
 				}
 				
-				if(childXMLDescription.@color.length())
+				case "table":
 				{
-					if(childXMLDescription.@color.substr(0,1) == "#")
-						fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
-					else
-						fillColor = Number("0x" + childXMLDescription.@color.toString())
-				}
-				else
-				{
-					alpha = 0;
-				}	
-				
-				
-				currentSprite.graphics.beginFill(fillColor, alpha);
-									
-				currentSprite.graphics.drawRect(
-					Number(childXMLDescription.@left),
-					childXMLDescription.@top,
-					childXMLDescription.@width,
-					childXMLDescription.@height
-				);
-				currentSprite.graphics.endFill();
-				
-				graphicsLayer.rawChildren.addChild(currentSprite);
-						
-				break;
-			}
-			case "ellipse": {
-				
-				if(childXMLDescription.@alpha.length())
-					alpha = Number(childXMLDescription.@alpha)/100
-				
-				if(childXMLDescription.@size.length())
-					thickness = childXMLDescription.@size;
-				
-				if(childXMLDescription.@stroke.length()) {
 					
-					if(childXMLDescription.@stroke.toString().substr(0,1) == "#")
-						borderColor = Number("0x" + childXMLDescription.@stroke.toString().substring(1));
-					else
-						borderColor = Number("0x" + childXMLDescription.@stroke.toString());
-					
-					currentSprite.graphics.lineStyle(thickness, borderColor, alpha);
 				}
 				
-				if(childXMLDescription.@color.length())
+				case "row":
 				{
-					if(childXMLDescription.@color.substr(0,1) == "#")
-						fillColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
-					else
-						fillColor = Number("0x" + childXMLDescription.@color.toString())
+					
 				}
-				else
+				
+				case "cell":
 				{
-					alpha = 0;
-				}	
-				
-				
-				currentSprite.graphics.beginFill(fillColor, alpha);
-									
-				currentSprite.graphics.drawEllipse(
-					childXMLDescription.@left,
-					childXMLDescription.@top,
-					childXMLDescription.@width,
-					childXMLDescription.@height
-				);
-				currentSprite.graphics.endFill();
-				
-				graphicsLayer.rawChildren.addChild(currentSprite);
-				
-				break
-			}
-			case "picture": {
+					itemId = isStatic ? null : itemXMLDescription.@id[0];
 					
-					var resourceId:String = childXMLDescription.@resource;
-					var img:Image = new Image();
+					var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 					
-					img.x = childXMLDescription.@left;
-					img.y = childXMLDescription.@top;
-					 
-					if(childXMLDescription.@width.length())
-						img.width = childXMLDescription.@width;
+					if(itemDescription && itemDescription.item)
+					{
+						item = Container(itemDescription.item);
+						Container(item).removeAllChildren();
+						item.graphics.clear();
+					}
+					else
+					{
+						if(itemId)
+						{
+							itemDescription = createItemDescription(itemId, parentId);
+							itemId = itemDescription.itemId;
+						}
 						
-					if(childXMLDescription.@height.length())
-						img.height = childXMLDescription.@height;
-					
-					if(childXMLDescription.@editable.length()) {
-						
-						var tempObject:Object = {value:"#Res("+resourceId+")"};
-						
-						IItem(item).editableAttributes.push( 
-							{
-								destName:String(childXMLDescription.@editable),
-								sourceObject:tempObject,
-								sourceName:"value"
-							}
-						)
+						item = insertItem(itemName, itemId) as UIComponent;
 					}
 					
-					img.maintainAspectRatio = false;
-					graphicsLayer.rawChildren.addChild(img);
+					itemDescription = updateItemDescription(itemId, itemXMLDescription);
 					
-					fileManager.loadResource(itemId, resourceId, img, "source", true);
-//					fileManager.loadResource(applicationId, resourceId, img, "source", true);
-				break;
-			}
-			case "line": {
-				
-				if(childXMLDescription.@alpha.length())
-					alpha = Number(childXMLDescription.@alpha)/100;
-				
-				if(childXMLDescription.@left.length())
-					x1 = x2 = Number(childXMLDescription.@left)
-				
-				if(childXMLDescription.@top.length())
-					y1 = y2 = Number(childXMLDescription.@top);
-				
-				if(childXMLDescription.@width.length())
-					x2 = x1 + Number(childXMLDescription.@width)
-				
-				if(childXMLDescription.@height.length())
-					y2 = y1 + Number(childXMLDescription.@height);
-				
-				if(childXMLDescription.@size.length())
-					thickness = Number(childXMLDescription.@size);	
-				
-				if(childXMLDescription.@color.length())
-				{
-					if(childXMLDescription.@color.substr(0,1) == "#")
-						lineColor = Number("0x" + childXMLDescription.@color.toString().substring(1))
-					else
-						lineColor = Number("0x" + childXMLDescription.@color.toString())
+					if(!itemDescription || itemDescription.staticFlag =="self" || itemDescription.staticFlag =="all")
+						IItem(item).isStatic = true;
+					
+					hasChildren = true;
+					break;
 				}
-				else
+			
+				case "text":
 				{
-					alpha = 0;
-				}	
+					if(itemXMLDescription.@editable[0] && parentItem && !parentItem.isStatic)
+					{
+						item = new EditableText();
+						insertEditableAttributes(parentItem, item, itemXMLDescription);
+					}
+					else
+					{
+						item = new SimpleText();
+					}
+					
+					var text:String = itemXMLDescription.text().toString();
+					
+					item["text"] = text;
+					item["selectable"] = false;
+					
+					break;
+				}
+			
+				case "htmltext":
+				{
+					item = new EditableHTML();
+					
+					if(itemXMLDescription.@editable[0] && !parentItem.isStatic)
+					{
+						insertEditableAttributes(parentItem, item, itemXMLDescription);
+					}
+							
+					item["paintsDefaultBackground"] = false;
+					
+					var HTMLText:String =itemXMLDescription.text().toString();
+					
+					item.setStyle("backgroundAlpha", .0);
+					
+					if(HTMLText == "")
+						HTMLText = "<div>simple text</div>";
+					
+					HTMLText =
+							"<html>" + 
+								"<head>" + 
+									"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+								"</head>" +
+								"<body style=\"margin:0px;\" >" +
+									HTMLText +
+								"</body>" + 
+							"</html>";
+							
+					item["htmlText"] = HTMLText;
+					
+					break;
+				}
 				
-				currentSprite.graphics.lineStyle(thickness, lineColor, alpha);;
-				currentSprite.graphics.moveTo(x1, y1);
-				currentSprite.graphics.lineTo(x2, y2);
-				currentSprite.graphics.moveTo(0, 0);
+				case "svg":
+				{
+					item = new SVGViewer()
+					SVGViewer(item).xml = itemXMLDescription;
+					
+					break
+				}
+			}
+		
+		if(!item)
+			return null;
+		
+		applyProperties(item, itemXMLDescription);
+		applyStyles(item, itemXMLDescription);
+		
+		if(!hasChildren)
+			return item;
+		
+		var childList:XMLList = itemXMLDescription.*;
+		
+		var graphArr:Array = [];
+		
+		var parId:String = "";
+		
+		if(itemXMLDescription.@contents == "static")
+			parId = "static";
+		else if(itemId)
+			parId = itemId;
+		else
+			parId = parentId;
+		
+		var elm:UIComponent;
+		
+		for each(var child:XML in childList)
+		{
+			if(child.nodeKind() == "element")
+			{
+				elm = newRender(parId, child);
 				
-				graphicsLayer.rawChildren.addChild(currentSprite);
-						
-				break;
+				if(!(elm is IItem) || IItem(elm).isStatic)
+					graphArr.push(elm);
 			}
-			}
+		}
+		
+		var length:uint = graphArr.length;
+		var i:uint = 0;
+		
+		for (i ; i < length; i++)
+			item.addChild(graphArr[i]);
+		
+		
+		var itemArr:Array = sortItems(itemId);
+		length = itemArr.length;
+		i = 0;
+		
+		for (i; i < length; i++)
+			item.addChild(itemArr[i]);
+		
+		return item;
+	}
+	
+	private function insertEditableAttributes(item:IItem, childItem:UIComponent, childXMLDescription:XML):void
+	{
+		var str:String = StringUtil.trimArrayElements(childXMLDescription.@editable, ",");
+		var atrArray:Array = str.split(",");
+		
+		var attributes:Object = {};
+		
+		for each(var atrName:String in atrArray)
+		{
+			attributes[atrName] = "";
+		}
+		
+		if(childXMLDescription.@editable[0] && item.isStatic == false)
+		{
+			item.editableAttributes.push(
+				{
+					attributes:attributes,
+					sourceObject:childItem
+				}
+			);
 		}
 	}
 	
-	private function applyStyles(item:Container, itemXMLDescription:XML):void
+	private function applyStyles(item:UIComponent, itemXMLDescription:XML):void
 	{
-		var setBorder:Boolean = false;
+		var _style:Object = {};
+		var hasStyle:Boolean = false;
 		
-		var alpha:Number = 0
-		var backgroundColor:Number = 0xFFFFFF;
+		item.styleName = "WYSIWYGItem";
 		
-		var borderThickness:Number = 1;
-		var borderColor:Number = 0x000000;
-		
-		
-		
-		if(itemXMLDescription.@color[0])
-		{	
-			alpha = 1;
-			
-			if(itemXMLDescription.@color[0].substr(0,1) == "#")
-				backgroundColor = Number("0x" + itemXMLDescription.@color[0].substring(1));
-			else
-				backgroundColor = Number("0x" + itemXMLDescription.@color[0]);
+		var xmlList:XMLList;
+		for each (var attribute:Array in styleList)
+		{
+			xmlList = itemXMLDescription.attribute(attribute[0]);
+			if (xmlList.length() > 0)
+			{
+				_style[attribute[1]] = xmlList[0].toString();
+				hasStyle = true;
+			}
 		}
 		
-		if(itemXMLDescription.@stroke[0])
-		{	
-			setBorder = true;
+		if(!hasStyle)
+			return;
+		
+		if(_style.hasOwnProperty("backgroundColor") && !_style.hasOwnProperty("backgroundAlpha"))
+			_style["backgroundAlpha"] = 1;
 			
-			if(itemXMLDescription.@stroke[0].substr(0,1) == "#")
-				borderColor = Number("0x" + itemXMLDescription.@stroke[0].substring(1));
-			else
-				borderColor = Number("0x" + itemXMLDescription.@stroke[0]);
+		if(_style.hasOwnProperty("borderColor"))
+			_style["borderStyle"] = "solid";
+		
+		for(var atrName:String in _style)
+		{
+			item.setStyle(atrName, _style[atrName])
+		}
+	}
+	
+	private function applyProperties(item:UIComponent, itemXMLDescription:XML):void
+	{
+		var _properties:Object = {};
+		var hasProperties:Boolean = false;
+		
+		var xmlList:XMLList;
+		for each (var attribute:Array in propertyList)
+		{
+			xmlList = itemXMLDescription.attribute(attribute[0]);
+			if (xmlList.length() > 0)
+			{
+				_properties[attribute[1]] = xmlList[0].toString();
+				hasProperties = true;
+			}
 		}
 		
-		if(itemXMLDescription.@alpha[0])
-			alpha = Number(itemXMLDescription.@alpha)/100
-		
-		if(setBorder) {
-			
-			item.setStyle("borderStyle", "solid");
-			item.setStyle("borderThickness", borderThickness);
-			item.setStyle("borderColor", borderColor);
+		for(var atrName:String in _properties)
+		{
+			item[atrName] = _properties[atrName];
 		}
-		
-		item.setStyle("backgroundAlpha",  alpha);
-		item.setStyle("backgroundColor", backgroundColor);
 	}
 	
 	private function renderWysiwygOkHandler(event:SoapEvent):void
 	{
 		var itemXMLDescription:XML = event.result.Result.*[0];
+		var itemId:String = itemXMLDescription.@id[0];
+		var parentId:String = event.result.ParentId[0];
 		
-		if(itemXMLDescription.@id.length() == 0)
+		if(!itemId)
 			return;
 		
 		var key:String = event.result.Key[0];
@@ -772,73 +675,42 @@ public class RenderManager implements IEventDispatcher {
 		if(key != lastKey)
 			return;
 		
-		var itemId:String = itemXMLDescription.@id;
-		var itemName:String = itemXMLDescription.name().localName;
-		
 		if(lockedItems[itemId] && lockedItems[itemId] != key)
 			return;
-			
-		deleteItemChildren(itemId);
 		
-		var item:IItem = insertItem(itemName, itemId);
+		deleteItemChildren(itemId);
+
+		var item:UIComponent = newRender(parentId, itemXMLDescription);
+		
+		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		
 		if(!item)
 			return;
 		
-		var itemDescription:ItemDescription = updateItemDescription(itemId, itemXMLDescription);
-		
-		render(itemId, itemXMLDescription);
-		
-		var arrayOfItems:Array = sortItems(itemId);
-		var count:uint = 0;
-		
-		for each (var collectionItem:Container in arrayOfItems)
-		{
-			if(collectionItem.parent)
-			{
-				collectionItem.parent.setChildIndex(collectionItem, count);
-				count++;
-			}
-		}
-		
-		var itemAsContainer:Container = item as Container;
-		
 		if(itemDescription.parentId) {
 			
-			if(!itemAsContainer.parent) {
-				
+			if(!item.parent) {
 				var parentDescription:ItemDescription = getItemDescriptionById(itemDescription.parentId);
-				Container(parentDescription.item).addChild(itemAsContainer);
+				Container(parentDescription.item).addChild(item);
 			}
-			
-			var p_arrayOfItems:Array = sortItems(itemDescription.parentId);
-			var p_count:uint = 0;
-			
-			for each (var p_collectionItem:Container in p_arrayOfItems)
-			{
-				if(p_collectionItem.parent)
-				{
-					p_collectionItem.parent.setChildIndex(p_collectionItem, p_count);
-					p_count++;
-				}
-			}
+			arrangeItem(parentId);
 		}
 		else
 		{
-			itemAsContainer.percentWidth = 100;
-			itemAsContainer.percentHeight = 100;
+			item.percentWidth = 100;
+			item.percentHeight = 100;
 			
-			if(!itemAsContainer.parent)
-				rootContainer.addChild(itemAsContainer);
+			if(!item.parent)
+				rootContainer.addChild(item);
 		}
 		
-		itemAsContainer.dispatchEvent(new Event("refreshComplete"));
-		itemAsContainer.visible = true;
+		item.dispatchEvent(new Event("refreshComplete"));
+		item.visible = true;
 		
-		item.waitMode = false;
+		IItem(item).waitMode = false;
 		
 		var rme:RenderManagerEvent = new RenderManagerEvent(RenderManagerEvent.RENDER_COMPLETE);
-		rme.result = itemAsContainer;
+		rme.result = Container(item);
 		
 		dispatchEvent(rme);
 	}

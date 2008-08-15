@@ -59,7 +59,7 @@ private function hideHandler():void
 	for each(var watcher:ChangeWatcher in watchers){
 		watcher.unwatch();
 	}
-	
+	listApplicationContainer.dataProvider = null;
 	mainViewStack.selectedIndex = 0;
 	selectedChild = initModule;
 }

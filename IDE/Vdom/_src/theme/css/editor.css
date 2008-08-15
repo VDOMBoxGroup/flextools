@@ -88,9 +88,15 @@ AttributesPanel {
 WorkArea {
 	
 	dropShadowEnabled: true;
-	backgroundColor: #ffffff;
+	backgroundColor: #FFFFFF;
 	backgroundAlpha: 1.0; 
 	borderStyle: solid; 
 	borderThickness: 1;
 	borderColor: #000000;
+}
+
+.WYSIWYGItem {
+	
+	backgroundColor: #FFFFFF;
+	backgroundAlpha: .0;
 }

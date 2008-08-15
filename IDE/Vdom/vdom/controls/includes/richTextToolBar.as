@@ -10,10 +10,10 @@ import mx.events.ListEvent;
 import mx.managers.PopUpManager;
 
 import vdom.containers.IItem;
-import vdom.controls.EditableHTML;
 import vdom.controls.richTextToolBarClasses.CharMap;
 import vdom.controls.richTextToolBarClasses.CodeEditor;
 import vdom.controls.richTextToolBarClasses.LinkSelection;
+import vdom.controls.wysiwyg.EditableHTML;
 
 private var HTMLEditorLoader:HTMLLoader;
 private var editableHTML:EditableHTML;
@@ -51,9 +51,11 @@ private function set editableElement(value:EditableHTML):void
 	_editableElement = value;
 } */
 
-public function init(item:IItem, container:*):void
+public function init(item:IItem):void
 {
 	addEventListener(MouseEvent.MOUSE_DOWN, zzz);
+	
+	var container:Object = item.editableAttributes[0].sourceObject;
 	
 	oldValue = container.editabledText;
 	editableHTMLLoaded = false;
@@ -86,6 +88,8 @@ public function close():void
 	editableHTMLLoaded = false;
 	
 	editableHTML.editabledText = value;
+	
+	selectedItem.editableAttributes[0].attributes["value"] = value;
 }
 
 private function registerEvent(flag:Boolean):void

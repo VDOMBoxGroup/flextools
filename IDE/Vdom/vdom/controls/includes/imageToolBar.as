@@ -14,9 +14,11 @@ private var resourceId:String;
 
 private var _selfChanged:Boolean = true;
 
-public function init(item:IItem, container:*):void {
+public function init(item:IItem):void {
 	
 	this.item = item;
+	
+	var container:Object = item.editableAttributes[0].sourceObject;
 	
 	attributeName = item.editableAttributes[0].destName;
 	

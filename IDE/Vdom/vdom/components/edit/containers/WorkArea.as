@@ -15,6 +15,7 @@ import vdom.containers.IItem;
 import vdom.controls.IToolBar;
 import vdom.controls.ImageToolBar;
 import vdom.controls.RichTextToolBar;
+import vdom.controls.TextToolBar;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
 import vdom.events.WorkAreaEvent;
@@ -157,7 +158,7 @@ public class WorkArea extends VBox {
 			}	
 			else
 			{
-				renderManager.updateItem(result.Object.@ID, result.Parent);
+				renderManager.updateItem(result.Object.@ID, result.ParentId);
 			}
 		}
 	}
@@ -167,7 +168,7 @@ public class WorkArea extends VBox {
 		if(!showed)
 			return;
 		
-		renderManager.createItem(result.Object.@ID, result.Object.Parent);
+		renderManager.createItem(result.Object.@ID, result.ParentId);
 	}
 	
 	override protected function createChildren():void {
@@ -219,7 +220,6 @@ public class WorkArea extends VBox {
 		
 		var flag:Boolean = false;
 		var newContentToolBar:IToolBar;
-		var object:*;
 		
 		switch(interfaceType)
 		{
@@ -230,13 +230,19 @@ public class WorkArea extends VBox {
 			else
 				newContentToolBar = _contentToolbar;
 			
-			object = item.editableAttributes[0].sourceObject;
 			flag = true;
 			
 			break
 		}
 		case 3:
 		{
+			if(!(_contentToolbar is TextToolBar))
+				newContentToolBar = new TextToolBar();
+			else
+				newContentToolBar = _contentToolbar;
+			
+			flag = true;
+			
 			break
 		}
 		case 4:
@@ -245,8 +251,6 @@ public class WorkArea extends VBox {
 				newContentToolBar = new ImageToolBar();
 			else
 				newContentToolBar = _contentToolbar;
-			
-			object = item.editableAttributes[0].sourceObject
 			
 			flag = true;
 		break;
@@ -270,7 +274,7 @@ public class WorkArea extends VBox {
 			if(_contentToolbar && !DisplayObject(_contentToolbar).parent)
 				addChild(DisplayObject(_contentToolbar));
 			
-			_contentToolbar.init(IItem(_selectedObject), object);
+			_contentToolbar.init(IItem(_selectedObject));
 		}
 	}
 	
@@ -371,23 +375,22 @@ public class WorkArea extends VBox {
 			currentToolBar.close();
 		
 		if(_selectedObject && IItem(_selectedObject).editableAttributes[0] &&
-			currentToolBar && !currentToolBar.selfChanged
-		) {
+			currentToolBar && !currentToolBar.selfChanged)
+		{
 			
-			var attribute:Object = IItem(_selectedObject).editableAttributes[0];
-			var attributeValue:String = attribute.sourceObject[attribute.sourceName];
+			var attributes:Object = IItem(_selectedObject).editableAttributes[0].attributes;
+			var attributeValue:String;
+			var xmlCharRegExp:RegExp = /[<>&"]+/;
+			var newAttribute:Object = {};
 			
-			if(attributeValue)
+			for (var attributeName:String in attributes)
 			{
-				var newAttribute:Object = {};
-			
-				var xmlCharRegExp:RegExp = /[<>&"]+/;
+				attributeValue = attributes[attributeName];
 				
 				if(attributeValue.search(xmlCharRegExp) != -1)
-					newAttribute[attribute.destName] = XML('<![CDATA['+attributeValue+']'+']>');
-					
+					newAttribute[attributeName] = XML('<![CDATA['+attributeValue+']'+']>');
 				else
-					newAttribute[attribute.destName] = attributeValue;
+					newAttribute[attributeName] = attributeValue;
 				
 				applyChanges(IItem(_selectedObject).objectId, newAttribute);
 			}

@@ -12,7 +12,7 @@ function set editableAttributes(attributesArray:Array):void
 function get waitMode():Boolean 	
 function set waitMode(mode:Boolean):void
 
-function get graphicsLayer():Canvas
+//function get graphicsLayer():Canvas
 
 function get isStatic():Boolean 	
 function set isStatic(mode:Boolean):void

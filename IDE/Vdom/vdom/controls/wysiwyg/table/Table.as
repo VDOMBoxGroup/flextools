@@ -1,4 +1,4 @@
-package vdom.managers.renderClasses.WysiwygTableClasses {
+package vdom.controls.wysiwyg.table {
 
 import flash.display.DisplayObject;
 import flash.display.Graphics;
@@ -21,7 +21,7 @@ public class Table extends Grid implements IItem
 	private var _objectId:String;
 	private var _waitMode:Boolean;
 	private var _highlightMarker:Canvas;
-	private var _graphicsLayer:Canvas = new Canvas();;
+//	private var _graphicsLayer:Canvas = new Canvas();;
 	private var _waitLayout:UIComponent;
 	private var _isStatic:Boolean = false;
 	private var _editableAttributes:Array = [];
@@ -52,7 +52,7 @@ public class Table extends Grid implements IItem
 			
 			_waitLayout.width = width;
 			_waitLayout.height = height;
-			_graphicsLayer.visible = false;
+//			_graphicsLayer.visible = false;
 			_waitLayout.visible = true;
 			
 			removeAllChildren();
@@ -60,7 +60,7 @@ public class Table extends Grid implements IItem
 		}
 		else {
 			
-			_graphicsLayer.visible = true;
+//			_graphicsLayer.visible = true;
 			_waitLayout.visible = false;
 		}
 		
@@ -91,8 +91,8 @@ public class Table extends Grid implements IItem
 	{	
 		super.createChildren();
 		
-		if(!_graphicsLayer)
-			_graphicsLayer = new Canvas();
+		/* if(!_graphicsLayer)
+			_graphicsLayer = new Canvas(); */
 		
 		var childIndex:int;
 		
@@ -107,9 +107,9 @@ public class Table extends Grid implements IItem
 			childIndex = 0;
 		}
 		
-		rawChildren.addChildAt(_graphicsLayer, childIndex);
+//		rawChildren.addChildAt(_graphicsLayer, childIndex);
 		
-		rawChildren.addChild(_graphicsLayer);
+//		rawChildren.addChild(_graphicsLayer);
 		
 		if(!_highlightMarker)
 			_highlightMarker = new Canvas();
@@ -145,18 +145,18 @@ public class Table extends Grid implements IItem
 			removeChildAt(offset);
 		}
 		
-		var count:uint = graphicsLayer.rawChildren.numChildren;
+		/* var count:uint = graphicsLayer.rawChildren.numChildren;
 		
 		while (count > 0) {
 			graphicsLayer.rawChildren.removeChildAt(0);
 			count--;
-		}		
+		} */		
 	}
 	
-	public function get graphicsLayer():Canvas
+	/* public function get graphicsLayer():Canvas
 	{	
 		return _graphicsLayer;
-	}
+	} */
 	
 	public function drawHighlight(color:String):void
 	{	
@@ -177,7 +177,7 @@ public class Table extends Grid implements IItem
 		_highlightMarker.visible = true;
 	}
 	
-	override mx_internal function createContentPane():void
+	/* override mx_internal function createContentPane():void
 	{
 		if (contentPane)
 			return;
@@ -232,7 +232,7 @@ public class Table extends Grid implements IItem
 		// nothing shows up. Making this true should be harmless, as the
 		// container itself should be false, and so should all its children.
 		contentPane.visible = true;
-	}
+	} */
 	
 	private function bringOnTop():void
 	{	

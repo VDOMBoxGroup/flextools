@@ -1,11 +1,11 @@
-package vdom.managers.renderClasses.WysiwygTableClasses {
+package vdom.controls.wysiwyg.table {
 
 import flash.display.DisplayObject;
 import flash.display.Graphics;
 import flash.display.Sprite;
 
 import mx.containers.Canvas;
-import mx.containers.GridItem;
+import mx.containers.GridRow;
 import mx.core.FlexSprite;
 import mx.core.IRectangularBorder;
 import mx.core.UIComponent;
@@ -16,30 +16,36 @@ import mx.core.mx_internal;
 
 use namespace mx_internal;
 
-public class TableCell extends GridItem implements IItem
-{	
+public class TableRow extends GridRow implements IItem {
+	
 	private var _objectId:String;
 	private var _waitMode:Boolean;
 	private var _highlightMarker:Canvas;
-	private var _graphicsLayer:Canvas = new Canvas();;
+//	private var _graphicsLayer:Canvas = new Canvas();;
 	private var _waitLayout:UIComponent;
 	private var _isStatic:Boolean = false;
 	private var _editableAttributes:Array = [];
 	
-	public function TableCell(objectId:String)
-	{
+	private var _child:DisplayObject;
+	
+	public function TableRow(objectId:String) {
+		
 		super();
 		
+//		_graphicsLayer = new Canvas();
 		_objectId = objectId;
+		editableAttributes = [];
+		_isStatic = false;
 	}
 	
-	public function get objectId():String {
+	public function get objectId():String
+	{
 		
 		return _objectId;
 	}
 	
-	public function get waitMode():Boolean {
-		
+	public function get waitMode():Boolean
+	{
 		return _waitMode;
 	}
 	
@@ -47,11 +53,11 @@ public class TableCell extends GridItem implements IItem
 	{	
 		if(value) {
 			
-			bringOnTop();
+			bringOnTop();//setChildIndex(_waitLayout, numChildren-1);
 			
 			_waitLayout.width = width;
 			_waitLayout.height = height;
-			_graphicsLayer.visible = false;
+//			_graphicsLayer.visible = false;
 			_waitLayout.visible = true;
 			
 			removeAllChildren();
@@ -59,7 +65,7 @@ public class TableCell extends GridItem implements IItem
 		}
 		else {
 			
-			_graphicsLayer.visible = true;
+//			_graphicsLayer.visible = true;
 			_waitLayout.visible = false;
 		}
 		
@@ -72,7 +78,7 @@ public class TableCell extends GridItem implements IItem
 	}
 	
 	public function set editableAttributes(attributesArray:Array):void
-	{	
+	{
 		_editableAttributes = attributesArray;
 	}
 	
@@ -82,7 +88,7 @@ public class TableCell extends GridItem implements IItem
 	}
 	
 	public function set isStatic(flag:Boolean):void
-	{
+	{	
 		_isStatic = flag;
 	}
 	
@@ -90,8 +96,8 @@ public class TableCell extends GridItem implements IItem
 	{	
 		super.createChildren();
 		
-		if(!_graphicsLayer)
-			_graphicsLayer = new Canvas();
+//		if(!_graphicsLayer)
+//			_graphicsLayer = new Canvas();
 		
 		var childIndex:int;
 		
@@ -106,9 +112,9 @@ public class TableCell extends GridItem implements IItem
 			childIndex = 0;
 		}
 		
-		rawChildren.addChildAt(_graphicsLayer, childIndex);
-		
-		rawChildren.addChild(_graphicsLayer);
+//		rawChildren.addChildAt(_graphicsLayer, childIndex);
+//		
+//		rawChildren.addChild(_graphicsLayer);
 		
 		if(!_highlightMarker)
 			_highlightMarker = new Canvas();
@@ -120,7 +126,7 @@ public class TableCell extends GridItem implements IItem
 		if(!_waitLayout)
 			_waitLayout = new wc();
 		
-		_waitLayout.visible = false;		
+		_waitLayout.visible = false;	
 		_waitLayout.width = 0;
 		_waitLayout.height = 0;
 		
@@ -144,18 +150,18 @@ public class TableCell extends GridItem implements IItem
 			removeChildAt(offset);
 		}
 		
-		var count:uint = graphicsLayer.rawChildren.numChildren;
-		
-		while (count > 0) {
-			graphicsLayer.rawChildren.removeChildAt(0);
-			count--;
-		}		
+//		var count:uint = graphicsLayer.rawChildren.numChildren;
+//		
+//		while (count > 0) {
+//			graphicsLayer.rawChildren.removeChildAt(0);
+//			count--;
+//		}		
 	}
 	
-	public function get graphicsLayer():Canvas
+	/* public function get graphicsLayer():Canvas
 	{	
 		return _graphicsLayer;
-	}
+	} */
 	
 	public function drawHighlight(color:String):void
 	{	
@@ -176,7 +182,7 @@ public class TableCell extends GridItem implements IItem
 		_highlightMarker.visible = true;
 	}
 	
-	override mx_internal function createContentPane():void
+	/* override mx_internal function createContentPane():void
 	{
 		if (contentPane)
 			return;
@@ -231,7 +237,7 @@ public class TableCell extends GridItem implements IItem
 		// nothing shows up. Making this true should be harmless, as the
 		// container itself should be false, and so should all its children.
 		contentPane.visible = true;
-	}
+	} */
 	
 	private function bringOnTop():void
 	{	

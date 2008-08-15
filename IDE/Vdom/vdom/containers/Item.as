@@ -164,6 +164,11 @@ public class Item extends Canvas implements IItem
 		return _graphicsLayer;
 	}
 	
+	public function get highlighted():Boolean
+	{
+		return _graphicsLayer.visible;
+	}
+	
 	public function drawHighlight(color:String):void
 	{	
 		if(color && color == 'none') {

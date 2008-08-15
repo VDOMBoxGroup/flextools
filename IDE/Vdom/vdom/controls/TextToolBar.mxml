@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:controls="com.yahoo.astra.mx.controls.*"
+	implements="vdom.controls.IToolBar"
+	width="100%"
+	focusEnabled="false" backgroundColor="#F0F0F0" xmlns:local="*" xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*">
+	<mx:Script source="includes/textToolBar.as"/>
+	<mx:Style>
+		.toolbarButton {
+			cornerRadius:0;
+			alpha:0;
+			borderColor:#F0F0F0;
+			skin:ClassReference("vdom.skins.ToolbarButtonSkin");
+			fillAlphas: 0,0,0,0;
+		}
+		.toolbarComboBox {
+			cornerRadius:0;
+			borderColor:#CCCCCC;
+			arrowButtonWidth: 15;
+		}
+	</mx:Style>
+	<mx:VBox left="5" top="5" right="5" bottom="5">
+	
+		<mx:HBox>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_bold.png')"
+				click="execCommand('Bold');" fontWeight="bold"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_italic.png')"
+				click="execCommand('Italic');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_underline.png')"
+				click="execCommand('Underline');" focusEnabled="false"/>
+			<mx:VRule height="24"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_left.png')"
+				click="execCommand('JustifyLeft');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_center.png')"
+				click="execCommand('JustifyCenter');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_right.png')"
+				click="execCommand('JustifyRight');"/>
+			<mx:Button styleName="toolbarButton" width="24" height="24" icon="@Embed(source='/assets/toolbars/richTextToolbar/icon_block.png')"
+				click="execCommand('JustifyFull');"/>
+			<mx:VRule height="24"/>
+			<mx:Label text="Font"/>
+			<mx:ComboBox id="fontSelector" styleName="toolbarComboBox"
+				height="24" width="100" focusEnabled="false">
+				<mx:dataProvider>
+				  <mx:ArrayCollection>
+			        <mx:Object label="Andale Mono" data="andale mono,times"/>
+			        <mx:Object label="Arial" data="arial,helvetica,sans-serif"/>
+			        <mx:Object label="Arial Black" data="arial black,avant garde"/>
+			        <mx:Object label="Book Antiqua" data="book antiqua,palatino"/>
+			        <mx:Object label="Comic Sans MS" data="comic sans ms,sans-serif"/>
+			        <mx:Object label="Courier New" data="courier new,courier"/>
+			        <mx:Object label="Georgia" data="georgia,palatino"/>
+			        <mx:Object label="Helvetica" data="helvetica"/>
+			        <mx:Object label="Impact" data="impact,chicago"/>
+			        <mx:Object label="Symbol" data="symbol"/>
+			        <mx:Object label="Tahoma" data="tahoma,arial,helvetica,sans-serif"/>
+			        <mx:Object label="Terminal" data="terminal,monaco"/>
+			        <mx:Object label="Times New Roman" data="times new roman,times"/>
+			        <mx:Object label="Trebuchet MS" data="trebuchet ms,geneva"/>
+			        <mx:Object label="Verdana" data="verdana,geneva"/>
+			        <mx:Object label="Webdings" data="webdings"/>
+			        <mx:Object label="Wingdings" data="wingdings,zapf dingbats"/>
+			      </mx:ArrayCollection>
+				</mx:dataProvider>			
+			</mx:ComboBox>
+			<mx:VRule height="24"/>
+			<mx:Label text="Size"/>
+			<mx:ComboBox id="sizeSelector" styleName="toolbarComboBox"
+				height="24" width="100">
+				<mx:dataProvider>
+				  <mx:ArrayCollection>
+			        <mx:Object label="1 (8 pt)" data="1"/>
+			        <mx:Object label="2 (10 pt)" data="2"/>
+			        <mx:Object label="3 (12 pt)" data="3"/>
+			        <mx:Object label="4 (14 pt)" data="4"/>
+			        <mx:Object label="5 (18 pt)" data="5"/>
+			        <mx:Object label="6 (24 pt)" data="6"/>
+			        <mx:Object label="7 (36 pt)" data="7"/>
+			      </mx:ArrayCollection>
+				</mx:dataProvider>
+			</mx:ComboBox>
+		</mx:HBox>
+	</mx:VBox>
+</mx:Canvas>

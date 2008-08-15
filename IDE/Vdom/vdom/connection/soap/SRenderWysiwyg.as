@@ -8,7 +8,7 @@ package vdom.connection.soap
 	import vdom.connection.protect.Code;
 	
 	
-	public class SRenderWysiwyg extends EventDispatcher 
+	public class SRenderWysiwyg extends EventDispatcher
 	{
 		private static 	var instance:SRenderWysiwyg;
 		
@@ -65,7 +65,6 @@ package vdom.connection.soap
 			{
 				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_ERROR, resultXML);
 				dispatchEvent(evt);
-				trace(event.result);
 			} else{
 				evt = new SoapEvent(SoapEvent.RENDER_WYSIWYG_OK, resultXML);
 				dispatchEvent(evt);
