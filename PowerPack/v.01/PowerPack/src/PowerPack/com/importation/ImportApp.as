@@ -748,7 +748,7 @@ package PowerPack.com.importation
 					var type:XML = getType(obj.@Type);
 					var objGraphName:String = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
 					 
-					if(type && int(type.Information.Container) == 1)
+					/*if(type && int(type.Information.Container) == 1)
 					{
 						yOffset +=40;
 						
@@ -770,6 +770,7 @@ package PowerPack.com.importation
 						newGraph.createArrow(prev, node);					
 					}
 					else
+					*/
 					{
 						objCounter[type.Information.Name] = objCounter[type.Information.Name] ? objCounter[type.Information.Name]+1 : 1; 
 						var contName:String = objGraphName+'_'+objCounter[type.Information.Name];
@@ -861,6 +862,7 @@ package PowerPack.com.importation
 					var type:XML = getType(obj.@Type);
 					var objGraphName:String = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
 					 
+					/*
 					if(int(type.Information.Container) == 1)
 					{
 						yOffset +=40;
@@ -883,6 +885,7 @@ package PowerPack.com.importation
 						newGraph.createArrow(prev, node);					
 					}
 					else
+					*/
 					{
 						objCounter[type.Information.Name] = objCounter[type.Information.Name] ? objCounter[type.Information.Name]+1 : 1; 
 						var contName:String = objGraphName+'_'+objCounter[type.Information.Name];
@@ -906,7 +909,63 @@ package PowerPack.com.importation
 				newGraph.addChild(node);
 				newGraph.createArrow(prev, node);
 			}
+
+			yOffset +=20;
 			
+			// Parse scripts
+			
+			if(XMLList(curObj.Scripts).length()>0)
+				var scrpts:XML = curObj.Scripts[0];			
+			
+			if(scrpts)
+			{			
+				yOffset +=40;
+			
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t<Scripts>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+							
+				for each (var scrpt:XML in scrpts.Script)
+				{
+					yOffset +=40;
+						
+					prev = node;
+					node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
+						'<Script Language="' + scrpt.@Language + '"><![CDATA[\-');
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);					
+	
+					yOffset +=40;
+						
+					prev = node;
+					node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
+						scrpt);
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);
+										
+					yOffset +=40;
+						
+					prev = node;
+					node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
+						'\-]]></Script>');
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);										
+				}
+
+				yOffset +=40;
+			
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t</Scripts>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+			}
+						
 			yOffset +=40;
 							
 			prev = node;
