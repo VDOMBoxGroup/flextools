@@ -847,7 +847,7 @@ package PowerPack.com.importation
 			if(XMLList(curObj.Objects).length()>0)
 				var objs:XML = curObj.Objects[0];			
 			
-			if(objs)
+			if(objs && XMLList(curObj.Objects.Object).length())
 			{			
 				yOffset +=40;
 			
@@ -917,7 +917,7 @@ package PowerPack.com.importation
 			if(XMLList(curObj.Scripts).length()>0)
 				var scrpts:XML = curObj.Scripts[0];			
 			
-			if(scrpts)
+			if(scrpts && XMLList(curObj.Scripts.Script).length())
 			{			
 				yOffset +=40;
 			
