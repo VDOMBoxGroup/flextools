@@ -264,7 +264,15 @@ private function removeSelectedColRequest():void {
 
 private function removeSelectedColOkHandler():void {
 	/* Remove the element */
-	delete columnsProvider[__propList.selectedIndex];
+	var newColsProvider:Array = [];
+	var i:int = 0;
+	for each (var item:Object in columnsProvider) {
+		if (i != __propList.selectedIndex) {
+			newColsProvider.push(item);
+		}
+		i++;
+	}
+	columnsProvider = newColsProvider;
 	
 	__propList.dataProvider = columnsProvider;
 	enablePropertiesPanel(false);
