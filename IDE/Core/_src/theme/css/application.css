@@ -1,0 +1,104 @@
+WindowedApplication {
+	
+	statusBarBackgroundColor: #000000;
+	backgroundAlpha: 0;
+	borderStyle: none;	
+}
+
+Alert {
+	
+	modalTransparencyDuration:0;
+	modalTransparencyBlur:0;
+	modalTransparency:0;
+}
+
+TitleWindow {
+	
+	modalTransparencyDuration:0;
+	modalTransparencyBlur:0;
+	modalTransparency:0;
+}
+
+VdomTitleBar {
+	
+	backgroundSize: "100%";
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="TitleBarBackground");
+	
+	minimizeButtonSkin: ClassReference("vdom.skins.TitleBarMinimizeButtonSkin");
+	maximizeButtonSkin: ClassReference("vdom.skins.TitleBarMaximizeButtonSkin");
+	restoreButtonSkin: ClassReference("vdom.skins.TitleBarRestoreButtonSkin");
+	closeButtonSkin: ClassReference("vdom.skins.TitleBarCloseButtonSkin");
+}
+
+MainTabNavigator {
+	
+	paddingTop: 0;
+	paddingBottom: 0;
+	paddingRight: 0;
+	paddingLeft: 0;
+	
+	color: #444444;
+	textSelectedColor: #444444;
+	textRollOverColor: #444444;
+	
+		
+	tabStyleName: "mainTabStyle";
+	selectedTabTextStyleName: "selectedTab";	
+}
+
+.mainTabStyle {
+	
+	upSkin: Embed(source="vdomTheme.swf", symbol="MainTabUp");
+	overSkin: Embed(source="vdomTheme.swf", symbol="MainTabSelect");
+	downSkin: Embed(source="vdomTheme.swf", symbol="MainTabSelect");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="MainTabSelect");
+
+	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="MainTabSelect");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="MainTabSelect");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="MainTabSelect");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="MainTabSelect");
+	
+}
+
+.selectedTab {
+	
+	color: #000000;
+	textSelectedColor: #000000;
+	textRollOverColor: #000000;
+}
+
+LoginForm {
+	
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="LoginBackground");
+	backgroundSize: "100%";
+}
+
+.loginButtonOK {
+	
+	color: #FFFFFF;
+	
+	upSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	downSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+
+	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");	
+}
+
+.loginButtonQuit {
+	
+	color: #FFFFFF;
+	
+	upSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	downSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	disabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	
+	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
+}

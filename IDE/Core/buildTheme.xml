@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<project 
+	name="ThemeCreator" 
+	default="build"
+	basedir=".">
+
+	<taskdef resource="flexTasks.tasks" classpath="${basedir}/libs/flexTasks.jar" />
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+	<property file="${basedir}/local.properties"/>
+	
+	<!-- dirs -->
+	<property name="source.dir" location="${basedir}/_src/theme"/>
+	<property name="build.dir" location="${basedir}/assets/theme"/>
+
+	<!-- files -->
+	<property name="config.xml" location="${source.dir}/config.xml"/>
+	<property name="compc.exe" location="${FLEX_HOME}/bin/compc.exe"/>
+	<property name="build.file" location="${build.dir}/vdomTheme.swc"/>
+
+	<description>
+    	A vdom theme builder
+    </description>
+
+	<!-- ============================== 
+			target: build              
+		 ============================== -->
+	
+	<target 
+    	name="build" 
+    	depends="clear, create.config, compile" 
+    	description="--> Simple application">
+	</target>
+	
+	<!-- ============================== 
+			target: clear              
+		 ============================== -->
+	
+	<target name="clear">
+		<delete failonerror="false" file="${config.xml}">
+			<fileset dir="${build.dir}" includes="**/*.*" />
+		</delete>
+	</target>
+	
+	<!-- ============================== 
+			target: create.config              
+		 ============================== -->
+	
+	<target name="create.config">
+		<echo file="${config.xml}"><![CDATA[<?xml version="1.0"?>
+<flex-config>]]>
+		</echo>
+		<for param="file.path">
+			<path>
+				<fileset dir="${source.dir}">
+					<exclude name="**/*.fla"/>
+					<exclude name="**/*.xml"/>
+				</fileset>
+			</path>
+			<sequential>
+				<propertyregex property="file.name"
+				input="@{file.path}"
+				override="true"
+				regexp=".*\\(.+\.\w{3})"
+				select="\1"
+				casesensitive="false" />
+				<echo file="${config.xml}" append="true">
+	<![CDATA[<include-file>
+		<name>${file.name}</name>
+		<path>@{file.path}</path>
+	</include-file>]]>
+				</echo>
+			</sequential>
+		</for>
+		<echo file="${config.xml}" append="true">
+<![CDATA[</flex-config>]]>
+		</echo>
+	</target>
+
+	<!-- ============================== 
+			target: compile              
+		 ============================== -->
+	
+	<target name="compile">
+		<compc output="${build.file}">
+			<load-config filename="${config.xml}" />
+		</compc>
+	</target>
+	
+</project>

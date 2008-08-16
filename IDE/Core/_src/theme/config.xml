@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<flex-config>
+		
+	<include-file>
+		<name>application.css</name>
+		<path>D:\_Workspaces\IDECore\_src\theme\css\application.css</path>
+	</include-file>
+				
+	<include-file>
+		<name>vdomTheme.swf</name>
+		<path>D:\_Workspaces\IDECore\_src\theme\swf\vdomTheme.swf</path>
+	</include-file>
+				
+</flex-config>
+		
