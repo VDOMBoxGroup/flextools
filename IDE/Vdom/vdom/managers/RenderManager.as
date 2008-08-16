@@ -448,6 +448,7 @@ public class RenderManager implements IEventDispatcher {
 						item = Container(itemDescription.item);
 						Container(item).removeAllChildren();
 						item.graphics.clear();
+						itemDescription.item.editableAttributes = [];
 					}
 					else
 					{
@@ -524,8 +525,11 @@ public class RenderManager implements IEventDispatcher {
 				
 				case "svg":
 				{
-					item = new SVGViewer()
-					SVGViewer(item).xml = itemXMLDescription;
+					item = new SVGViewer();
+					var d:Array = SVGViewer(item).setXML(itemXMLDescription);
+					parentItem.editableAttributes = 
+						parentItem.editableAttributes.concat(d);
+//					SVGViewer(item).xml = itemXMLDescription;
 					
 					break
 				}

@@ -14,7 +14,9 @@ package com.zavoo.svg.nodes
 	{		
 		private var bitmap:Bitmap;
 		private var orignalBitmap:Bitmap;
-                   
+		
+		public var value:String;
+		
 		public function SVGImageNode(xml:XML):void {
 			super(xml);
 		}	
@@ -29,11 +31,16 @@ package com.zavoo.svg.nodes
 			
 			var ea:String = getAttribute("editable");
 			
-//			if(ea)
-//				svgRoot.editableElements.push(ea);
+			var obj:Object = {};
+			obj[ea] = "";
+			
+			if(ea)
+				svgRoot.editableElements.push({attributes:obj, sourceObject:this});
 				
 			var href:String = _xml.@href[0].toString();
+			value = href;
 			href = href.substring(5, href.length - 1);
+			
 			
 			var fileManager:FileManager = FileManager.getInstance();
 			fileManager.loadResource("123123", href, this, "resource", true);

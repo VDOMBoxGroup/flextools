@@ -141,7 +141,7 @@ package com.zavoo.svg
 		{
 			this.xml = value;
 			
-			return [];
+			return this._svgRoot.editableElements;
 		}
 		
 	}

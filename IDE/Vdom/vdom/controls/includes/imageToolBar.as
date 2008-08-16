@@ -20,9 +20,9 @@ public function init(item:IItem):void {
 	
 	var container:Object = item.editableAttributes[0].sourceObject;
 	
-	attributeName = item.editableAttributes[0].destName;
+	attributeName = "value";
 	
-	item.editableAttributes[0].destName = '';
+//	item.editableAttributes[0].destName = '';
 	
 	objectId = item.objectId;
 	
