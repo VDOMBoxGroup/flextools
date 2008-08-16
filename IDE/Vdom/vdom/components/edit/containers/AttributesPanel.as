@@ -523,20 +523,20 @@ public class AttributesPanel extends ClosablePanel {
 					var pagelinkData:Array = [];
 					
 					var listValues1:XML;
-					var selectedItem:Object = {};
+					var selectedItem1:Object = {};
 					var count:uint = 0;
 					for each (listValues1 in _pageLink) {
 						
-						var listItem:Object = {label:listValues1.@Name.toString(), data:listValues1.@ID.toString()}
+						var listItem1:Object = {label:listValues1.@Name.toString(), data:listValues1.@ID.toString()}
 						
-						pagelinkData.push(listItem);
+						pagelinkData.push(listItem1);
 						if(currentAttribute.toString() == listValues1.@ID.toString())
-							selectedItem = pagelinkData[count];
+							selectedItem1 = pagelinkData[count];
 						count++
 					} 
 					
 					valueContainer.dataProvider = pagelinkData;
-					valueContainer.selectedItem = selectedItem;
+					valueContainer.selectedItem = selectedItem1;
 					
 				break;
 				
@@ -545,24 +545,24 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer = new ComboBox();
 					valueType = "value";
 					
-					var pagelinkData:Array = [];
+					var pagelinkData1:Array = [];
 					
 					var listValues2:XML;
-					var selectedItem:Object = {};
-					var count:uint = 0;
+					var selectedItem2:Object = {};
+					var count2:uint = 0;
 					for each (listValues2 in _objectList) {
 						
-						var listItem:Object = {label:listValues2.@Name, data:listValues2.@ID}
+						var listItem2:Object = {label:listValues2.@Name, data:listValues2.@ID}
 						
-						pagelinkData.push(listItem);
+						pagelinkData.push(listItem2);
 						if(currentAttribute == listValues2.@ID)
-							selectedItem = pagelinkData[count];
+							selectedItem2 = pagelinkData[count];
 						
 						count++
 					}
 					
 					valueContainer.dataProvider = pagelinkData;
-					valueContainer.selectedItem = selectedItem;
+					valueContainer.selectedItem = selectedItem2;
 				break
 				
 				case "externaleditor":
