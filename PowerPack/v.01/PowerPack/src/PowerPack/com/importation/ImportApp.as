@@ -933,7 +933,7 @@ package PowerPack.com.importation
 						
 					prev = node;
 					node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
-						'<Script Language="' + scrpt.@Language + '"><![CDATA[\-');
+						'<Script Language="' + scrpt.@Language + '"><![CDATA[\\-');
 					node.x = xOffset; node.y = yOffset;
 					newGraph.addChild(node);
 					newGraph.createArrow(prev, node);					
@@ -951,7 +951,7 @@ package PowerPack.com.importation
 						
 					prev = node;
 					node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
-						'\-]]></Script>');
+						'\\-]]></Script>');
 					node.x = xOffset; node.y = yOffset;
 					newGraph.addChild(node);
 					newGraph.createArrow(prev, node);										
