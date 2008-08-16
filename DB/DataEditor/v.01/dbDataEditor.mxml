@@ -33,7 +33,7 @@
 				<mx:VRule height="20" />		
 				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}"
 					icon="@Embed(source='/icons/commit.png')" />
-				<mx:Button id="__discardBtn" label="discard" height="20" enabled="{__commitBtn.enabled}" click="{commitBtnClickHandler();}"
+				<mx:Button id="__discardBtn" label="discard" height="20" enabled="{__commitBtn.enabled}" click="{discardBtnClickHandler();}"
 					icon="@Embed(source='/icons/discard.png')" />
 				<mx:Spacer width="100%" />
 				<mx:HBox horizontalGap="0">

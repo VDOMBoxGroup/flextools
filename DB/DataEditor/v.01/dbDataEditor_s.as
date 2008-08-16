@@ -168,6 +168,7 @@ private function errorRMCHandler(event:*):void {
 // ----- Get data methods ---------------------------------------------------------------
 
 private function getPageRequest(page:int):void {
+	currentPage = page;
 	try {
 		manager.addEventListener("callComplete", getPageHandler);
 		manager.remoteMethodCall("get_data", "<range><limit>" + AMOUNT.toString() + "</limit><offset>" + String(AMOUNT * (page - 1)) + "</offset></range>");
@@ -249,6 +250,8 @@ private function showPageData(page:int):void {
 		
 		__pagesArea.addChild(pageItem);
 	}
+	
+	__commitBtn.enabled = false;
 	
 /*
 	if (pagesCount > MAX_PAGES) {
@@ -341,6 +344,12 @@ private function commitBtnClickHandler():void {
 		addNewRowsRequest();
 	}
 }
+
+private function discardBtnClickHandler():void {
+	getPageRequest(currentPage);
+	showPageData(currentPage);
+}
+
 
 private function updateRowsOkHandler():void {
 	__commitBtn.enabled = false;
