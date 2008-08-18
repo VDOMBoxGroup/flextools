@@ -23,7 +23,7 @@
 			<mx:VBox borderStyle="solid" width="100%" height="100%" paddingTop="2" paddingRight="2">
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Name:" width="100" />
-					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__applyBtn.enabled = true; controlsEnable(false);}" enabled="false" />
+					<mx:TextInput id="__name" width="100%" borderStyle="solid" change="{__applyBtn.enabled = true; addRemoveButtonsEnable(false);}" enabled="false" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="ID:" width="100" />
@@ -31,7 +31,7 @@
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Type:" width="100" />
-					<mx:ComboBox id="__type" width="200" change="{__applyBtn.enabled = true; controlsEnable(false);}" enabled="false">
+					<mx:ComboBox id="__type" width="200" change="{__applyBtn.enabled = true; addRemoveButtonsEnable(false);}" enabled="false">
 						<mx:ArrayCollection>
 							<mx:Object label="TEXT"		data="TEXT"/>
 							<mx:Object label="INTEGER"	data="INTEGER"/>
@@ -44,23 +44,23 @@
 
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Primary key:" width="100" />
-					<mx:CheckBox id="__pKey" enabled="false" />
+					<mx:CheckBox id="__pKey" enabled="false" change="{__applyBtn.enabled = true; addRemoveButtonsEnable(false);}" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Auto increment:" width="100" />
-					<mx:CheckBox id="__aIncrement" enabled="false" />
+					<mx:CheckBox id="__aIncrement" enabled="false" change="{__applyBtn.enabled = true; addRemoveButtonsEnable(false);}" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Not Null:" width="100" />
-					<mx:CheckBox id="__null" enabled="false" />
+					<mx:CheckBox id="__notNull" enabled="false" change="{__applyBtn.enabled = true; addRemoveButtonsEnable(false);}" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Unique:" width="100" />
-					<mx:CheckBox id="__unique" enabled="false" />
+					<mx:CheckBox id="__unique" enabled="false" change="{__applyBtn.enabled = true; addRemoveButtonsEnable(false);}" />
 				</mx:HBox>
 				<mx:HBox width="100%" verticalAlign="middle">
 					<mx:Label text="Default value:" width="100" />
-					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" enabled="false" />
+					<mx:TextInput id="__defValue" width="100%" borderStyle="solid" enabled="false" change="{__applyBtn.enabled = true; addRemoveButtonsEnable(false);}" />
 				</mx:HBox>
 								
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="right">

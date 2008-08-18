@@ -111,8 +111,9 @@ private function discardChanges():void {
 private function listChanger():void {
 	__attentionImg.visible = false;
 	__removeBtn.enabled = true;
-	controlsEnable(true);
+	addRemoveButtonsEnable(true);
 	enablePropertiesPanel(false);
+	
 	selectedListItem = __propList.selectedItem;
 	if (selectedListItem != null) {
 		/* Prevent editing of "id" field */
@@ -134,7 +135,7 @@ private function listChanger():void {
 		
 		__pKey.selected = selectedListItem.primary.toLowerCase() == "true";
 		__aIncrement.selected = selectedListItem.aincrement.toLowerCase() == "true";
-		__null.selected = selectedListItem.notnull.toLowerCase() == "true";
+		__notNull.selected = selectedListItem.notnull.toLowerCase() == "true";
 		__defValue.text = selectedListItem.defvalue.toString();
 		__unique.selected = selectedListItem.unique.toLowerCase() == "true";
 	}
@@ -146,78 +147,88 @@ private function enablePropertiesPanel(value:Boolean):void {
 	__type.enabled = value;
 	__pKey.enabled = value;
 	__aIncrement.enabled = value;
-	__null.enabled = value;
+	__notNull.enabled = value;
 	__unique.enabled = value;
 	__defValue.enabled = value;
 }
 
-private function controlsEnable(value:Boolean):void {
+private function addRemoveButtonsEnable(value:Boolean):void {
 	__addBtn.enabled = value;
 	__removeBtn.enabled = value;
 }
 
-private function applyBtnClickHandler():void { 
-	/* Check if the column with the same name is already exists */
-	var nameExists:Boolean = false;
-	for each (var column:Object in columnsProvider) {
-		if (column.label == __name.text)
-			nameExists = true; 
+private function applyBtnClickHandler():void {
+	/* Lock controls during operation */
+	__propList.enabled = false;
+	addRemoveButtonsEnable(false);
+	 
+	if (selectedListItem.fnew) {
+		/* Check if the column with the same name is already exists */
+		var nameExists:Boolean = false;
+		for each (var column:Object in columnsProvider) {
+			if (column.label == __name.text)
+				nameExists = true; 
+		}
+		
+		if (nameExists) {
+			showMessage("The column with the same name is already exists!");
+			return;
+		}
 	}
+
+	/* trying to Apply changes */
 	
-	if (nameExists) {
-		showMessage("The column with the same name is already exists!");
-		return;
+	/* if selected column is new, add it */
+	var requestXML:XML =
+			<tableStructure>
+				<column 
+					id={selectedListItem.data}
+					name={__name.text}
+					type={__type.selectedItem.data}
+					notnull={Boolean(__notNull.selected).toString()}
+					primary={__pKey.selected.toString()}
+					autoincrement={__aIncrement.selected.toString()}
+					unique={__unique.selected.toString()}
+					default={__defValue.text}
+				/>
+			</tableStructure>;
+
+	if (selectedListItem.fnew) {
+			
+		try {
+			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+			remoteMethodCallOkFunction = applyChangesOkHandler;
+			manager.remoteMethodCall("add_column", requestXML.toXMLString());
+		}
+		catch (err:Error) {	return;	trace (err.message); }
+		
+	} else {
+		
+		try {
+			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+			remoteMethodCallOkFunction = applyChangesOkHandler;
+			manager.remoteMethodCall("update_column ", requestXML.toXMLString());
+		}
+		catch (err:Error) {	return;	trace (err.message); }
+		
 	}
-	
+}
+
+private function applyChangesOkHandler():void {
+	/* UnLock controls  */
+	__propList.enabled = true;
+	addRemoveButtonsEnable(true);
+	__applyBtn.enabled = false;
+
 	/* Updating data */
 	selectedListItem.label = __name.text;
 	selectedListItem.type = __type.selectedItem.data;
-	selectedListItem.notnull = Boolean(!__null.selected).toString();
+	selectedListItem.notnull = Boolean(__notNull.selected).toString();
 	selectedListItem.primary = __pKey.selected.toString();
 	selectedListItem.aincrement = __aIncrement.selected.toString();
 	selectedListItem.unique = __unique.selected.toString();
 	selectedListItem.defvalue = __defValue.text;
 
-	/* Applying changes */
-	
-	/* if selected column is new, add it */
-	if (selectedListItem.fnew) {
-		
-		var requestXML:XML = 
-			<tableStructure>
-				<column 
-					id={selectedListItem.data}
-					name={selectedListItem.label}
-					type={selectedListItem.type}
-					notnull={selectedListItem.notnull.toString()}
-					primary={selectedListItem.primary.toString()}
-					autoincrement={selectedListItem.aincrement.toString()}
-					unique={selectedListItem.unique.toString()}
-					default={selectedListItem.defvalue}
-				/>
-			</tableStructure>;
-			
-		try {
-			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-			remoteMethodCallOkFunction = applyChangesOkHandler;
-			manager.remoteMethodCall("add_column ", requestXML.toXMLString());
-		}
-		catch (err:Error) {	return;	trace (err.message); }
-		
-	} else {
-//		if (_selectedListItem.label != _sourceXML.TableDef.ColumnDef.(@id == _selectedListItem.data).@name) {
-//			_sourceXML.ChangeLog.appendChild(<ColumnRename id={_selectedListItem.data} name={_selectedListItem.label} />);
-//		}
-//		if (_selectedListItem.type != _sourceXML.tabledef.columndef.(@id == _selectedListItem.data).@type) {
-//			_sourceXML.ChangeLog.appendChild(<ColumnChangeType id={_selectedListItem.data} type={_selectedListItem.type} />);
-//		}
-	}
-	
-}
-
-private function applyChangesOkHandler():void {
-	__attentionImg.enabled = false;
-	controlsEnable(true);
 	selectedListItem.fnew = false;
 
 	/* Update List Data Provider */
