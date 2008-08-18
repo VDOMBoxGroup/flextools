@@ -458,7 +458,7 @@ public class ProgressManager extends EventDispatcher
 				details.includeInLayout = !details.includeInLayout;
 			}
 			
-			controlBar.addChild(btnHide);
+			//controlBar.addChild(btnHide);
 			//controlBar.addChild(btnCancel);
 			//controlBar.addChild(btnDetails);
 			

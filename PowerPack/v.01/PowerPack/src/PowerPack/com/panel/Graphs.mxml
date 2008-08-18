@@ -140,7 +140,7 @@
 			
 			public function addGraph(graph:GraphCanvas):void
 			{
-				initGraphs.addItem(graph);
+				initGraphs.addItem(graph);				
 				vsViewStack.addChild(graph);	
 				
 				var graphAccordionChild:AccordionChild = null;
@@ -157,7 +157,10 @@
 				if(!graphAccordionChild)
 					graphAccordionChild = createCategoryTab(graph.category); 
 
-				graphAccordionChild.graphs.addItem(graph);			
+				graphAccordionChild.graphs.addItem(graph);
+				
+				if(graph.initial)
+					cbInitGraph.selectedItem = graph;			
 			}
 			
 			public function findFirstGraph():GraphCanvas

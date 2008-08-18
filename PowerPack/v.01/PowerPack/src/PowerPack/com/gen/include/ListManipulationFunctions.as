@@ -23,11 +23,13 @@ public function _get(position:Object, list:String):*
 	
 	if(!ret)
 		ret = '';
+	
 	//else if(type==2)
 		//ret = Utils.replaceQuotes(ret);
-	else if(type==4 || type==2)
+	//else if(type==4 || type==2)
 		//ret = ret.substr(1);
-		ret = ListParser.getElmValue(list, position, contexts);	
+	
+	ret = ListParser.getElmValue(list, position, contexts);	
 		
 	Application.application.callLater(generate);
 	return ret;

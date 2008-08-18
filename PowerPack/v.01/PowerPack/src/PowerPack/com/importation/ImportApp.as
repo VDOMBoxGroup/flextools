@@ -82,7 +82,7 @@ package PowerPack.com.importation
 			var newGraph:GraphCanvas = new GraphCanvas();
 			newGraph.category = 'application';
 			newGraph.initial = true;
-			newGraph.name = 'IndexApplication';
+			newGraph.name = 'ApplicationIndex';
 			
 			var xOffset:Number = 10;
 			var yOffset:Number = 10;
@@ -664,7 +664,7 @@ package PowerPack.com.importation
 
 			prev = node;
 			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
-				'\n\t\t<Attribute Name="$attrName">$attrValue</Attribute>');
+				'\n\t\t<Attribute Name="$attrName"><![CDATA[$attrValue]]></Attribute>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -748,7 +748,8 @@ package PowerPack.com.importation
 					var type:XML = getType(obj.@Type);
 					var objGraphName:String = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
 					 
-					/*if(type && int(type.Information.Container) == 1)
+					/*
+					if(type && int(type.Information.Container) == 1)
 					{
 						yOffset +=40;
 						
@@ -771,6 +772,7 @@ package PowerPack.com.importation
 					}
 					else
 					*/
+					
 					{
 						objCounter[type.Information.Name] = objCounter[type.Information.Name] ? objCounter[type.Information.Name]+1 : 1; 
 						var contName:String = objGraphName+'_'+objCounter[type.Information.Name];
@@ -826,11 +828,12 @@ package PowerPack.com.importation
 			
 			// Parse Attributes
 			
+			
 			var attrLst:String = '[';			
 			for each (var attr:XML in curObj.Attributes.Attribute) {
 				attrLst += ' "'+attr.@Name+'" '+Utils.doubleQuotes(attr);	
 			}			
-			attrLst += ' ]';
+			attrLst += ' ]';						
 			
 			yOffset +=40;
 			
@@ -840,14 +843,73 @@ package PowerPack.com.importation
 					Utils.doubleQuotes(attrLst)));
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
-			newGraph.createArrow(prev, node);
+			newGraph.createArrow(prev, node);			
+			
+			/*
+			// Parse attributes
+			
+			if(XMLList(curObj.Attributes).length()>0)
+				var attrs:XML = curObj.Attributes[0];			
+			
+			if(attrs && XMLList(curObj.Attributes.Attribute).length()>0)
+			{			
+				yOffset +=40;
+			
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t<Attributes>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+							
+				for each (var attr:XML in attrs.Attribute)
+				{
+					yOffset +=40;
+						
+					prev = node;
+					node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
+						'<Attribute Name="' + attr.@Name + '"><![CDATA[\\-');
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);					
+					
+					if(attr && 0)
+					{
+						yOffset +=40;
+						
+						prev = node;
+						node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
+							attr);
+						node.x = xOffset; node.y = yOffset;
+						newGraph.addChild(node);
+						newGraph.createArrow(prev, node);
+					}
+										
+					yOffset +=40;
+						
+					prev = node;
+					node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
+						'\\-]]></Attribute>');
+					node.x = xOffset; node.y = yOffset;
+					newGraph.addChild(node);
+					newGraph.createArrow(prev, node);										
+				}
+
+				yOffset +=40;
+			
+				prev = node;
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t</Attributes>');
+				node.x = xOffset; node.y = yOffset;
+				newGraph.addChild(node);
+				newGraph.createArrow(prev, node);
+			}
+			*/
 
 			// Parse objects
 			
 			if(XMLList(curObj.Objects).length()>0)
 				var objs:XML = curObj.Objects[0];			
 			
-			if(objs && XMLList(curObj.Objects.Object).length())
+			if(objs && XMLList(curObj.Objects.Object).length()>0)
 			{			
 				yOffset +=40;
 			
@@ -917,7 +979,7 @@ package PowerPack.com.importation
 			if(XMLList(curObj.Scripts).length()>0)
 				var scrpts:XML = curObj.Scripts[0];			
 			
-			if(scrpts && XMLList(curObj.Scripts.Script).length())
+			if(scrpts && XMLList(curObj.Scripts.Script).length()>0 && 0)
 			{			
 				yOffset +=40;
 			

@@ -864,10 +864,12 @@ public class ListParser
 			ret = arr.getItemAt(_position+1).origValue;
 			ret = StringUtil.trim(ret);
 			
-			/*if(listObj.string.charAt(_position+1)=='A' || Parser.processList( ret ).result)
+			/*
+			if(listObj.string.charAt(_position+1)=='A' || Parser.processList( ret ).result)
 			{
 				ret = StringUtil.trim(ret);
-			}*/
+			}
+			*/
 		}
 		else if(operation=="getType")
 		{
@@ -936,10 +938,17 @@ public class ListParser
 		
 		var evalRes:*;
 		
-		try {
-			evalRes = Parser.eval(prog, contexts);
-		} catch(e:*) {
-			evalRes = strElm;
+		if(lexems.length==1 && (lexems[0].type=='c' || lexems[0].type=='s'))
+		{
+			evalRes = Utils.replaceQuotes(lexems[0].value);
+		}
+		else
+		{
+			try {
+				evalRes = Parser.eval(prog, contexts);
+			} catch(e:*) {
+				evalRes = strElm;
+			}
 		}
 		
 		return evalRes;
