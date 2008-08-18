@@ -62,36 +62,6 @@ private function onLoadInit():void {
 }
 
 
-// ----- Table get Rows count processing methods ----------------------------------------
-
-private function requestRowsCount():void {
-	try {
-		manager.addEventListener("callComplete", resultTableRowsHandler);
-		manager.remoteMethodCall("get_count", "");
-	}
-	catch (err:Error) {
-		/* error01 */
-		showMessage("External Manager error (01)");		
-	}
-}
-
-private function resultTableRowsHandler(event:*):void {
-	manager.removeEventListener("callComplete", resultTableRowsHandler);
-
-	try {
-		queryResult = new XML(event.result);
-		totalRecords = queryResult.Result;		
-	}
-	catch (err:Error) {
-		/* error02 */
-		showMessage("Server response error (02)");
-		return;
-	}
-
-	/* Open first page */
-	showPageData(1);
-}
-
 // ----- Table Structure processing methods ---------------------------------------------
 
 private function requestTableStructure():void {
@@ -122,6 +92,38 @@ private function resultTableStructureHandler(event:*):void {
 	}
 }
 
+// ----- Table get Rows count processing methods ----------------------------------------
+
+private function requestRowsCount():void {
+	try {
+		manager.addEventListener("callComplete", resultTableRowsHandler);
+		manager.remoteMethodCall("get_count", "");
+	}
+	catch (err:Error) {
+		/* error01 */
+		showMessage("External Manager error (01)");		
+	}
+}
+
+private function resultTableRowsHandler(event:*):void {
+	manager.removeEventListener("callComplete", resultTableRowsHandler);
+
+	try {
+		queryResult = new XML(event.result);
+		totalRecords = queryResult.Result;		
+	}
+	catch (err:Error) {
+		/* error02 */
+		showMessage("Server response error (02)");
+		return;
+	}
+
+	/* Open first page */
+	showPageData(currentPage);
+}
+
+// --------------------------------------------------------------------------------------
+
 private function setTableHeaders():void {
 	dataGridColumns = [];
 	for each (var xmlHeader:XML in structureXML.table.header.column) {
@@ -151,27 +153,13 @@ private function setTableHeaders():void {
 	__dg.columns = dataGridColumns;
 }
 
-// ----- Default RMC error processing ---------------------------------------------------
-
-private function errorRMCHandler(event:*):void {
-	try {
-		/* error05 */
-		var resultXML:XML = new XML(event.result);
-		showMessage("RMC error (05): |" + resultXML.Error.toString());
-	}
-	catch (err:Error) {
-		/* error06 */
-		showMessage("Specified error occur (06): |" + err.message);
-	}
-}
-
 // ----- Get data methods ---------------------------------------------------------------
 
 private function getPageRequest(page:int):void {
 	currentPage = page;
 	try {
 		manager.addEventListener("callComplete", getPageHandler);
-		manager.remoteMethodCall("get_data", "<range><limit>" + AMOUNT.toString() + "</limit><offset>" + String(AMOUNT * (page - 1)) + "</offset></range>");
+		manager.remoteMethodCall("get_data", "<range><limit>" + AMOUNT.toString() + "</limit><offset>" + String(AMOUNT * page) + "</offset></range>");
 	}
 	catch (err:Error) {
 		/* error07 */
@@ -185,6 +173,7 @@ private function getPageHandler(event:*):void {
 	try {
 		queryResult = new XML(event.result);
 		pages[currentPage] = new XML(queryResult.Result.queryresult.table.data);
+		
 		showPageData(currentPage);
 	}
 	catch (err:Error) {
@@ -230,7 +219,7 @@ private function showPageData(page:int):void {
 		pageItem.height = 18;
 		pageItem.setStyle("paddingLeft", 1);
 		pageItem.setStyle("paddingRight", 1);
-		if (p == currentPage)
+		if (p - 1 == currentPage)
 			pageItem.setStyle("textDecoration", "underline");
 		else
 			pageItem.addEventListener(MouseEvent.CLICK, pageClickHandler);
@@ -270,7 +259,7 @@ private function showPageData(page:int):void {
 
 private function pageClickHandler(mEvent:MouseEvent):void {
 	/* Handle page number click */
-	showPageData(int(mEvent.currentTarget.label));
+	showPageData(int(mEvent.currentTarget.label) - 1);
 }
 
 // ----- Edit data processing methods ---------------------------------------------------
@@ -312,16 +301,19 @@ private function addRowBtnClickHandler(event:MouseEvent):void {
 	__commitBtn.enabled = true;
 }
 
+
+private var thereAreChangedRows:Boolean = false;
+private var thereAreNewRows:Boolean = false;
+
 private function commitBtnClickHandler():void {
 	/* Check for new and changed objects. First - for changes, then for new */
 
 	var requestXMLParam:XML = new XML(<update />);
-	var thereAreChanged:Boolean = false;
 
 	/* Update rows */
 	for each (var dataGridRow:Object in dataGridCollection) {
 		if (dataGridRow.changed && !dataGridRow.fnew) {
-			thereAreChanged = true;
+			thereAreChangedRows = true;
 			var xmlRow:XML = new XML(<row id={dataGridRow["id"]} />);
 			
 			for each (var dataGridCell:Object in dataGridColumns) {
@@ -329,8 +321,12 @@ private function commitBtnClickHandler():void {
 			}
 			requestXMLParam.appendChild(xmlRow);
 		}
+		
+		if (dataGridRow.fnew)
+			thereAreNewRows = true;
 	}
-	if (thereAreChanged) {
+	
+	if (thereAreChangedRows) {
 		try {
 			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
 			remoteMethodCallOkFunction = updateRowsOkHandler;
@@ -341,15 +337,13 @@ private function commitBtnClickHandler():void {
 			showMessage("External Manager error (090)");		
 		}
 	} else {
-		addNewRowsRequest();
+		if (thereAreNewRows) {
+			addNewRowsRequest();
+		} else {
+			__commitBtn.enabled = false;
+		}
 	}
 }
-
-private function discardBtnClickHandler():void {
-	getPageRequest(currentPage);
-	showPageData(currentPage);
-}
-
 
 private function updateRowsOkHandler():void {
 	__commitBtn.enabled = false;
@@ -360,19 +354,21 @@ private function updateRowsOkHandler():void {
 	}
 	
 	thereAreGlobalChanges = true;
-	addNewRowsRequest();
+	if (thereAreNewRows) {
+		addNewRowsRequest();
+	} else {
+		delete pages[currentPage];
+		requestRowsCount();
+	}
 }
 
 private function addNewRowsRequest():void {
 	/* Check for new objects */
-
 	var requestXMLParam:XML = new XML(<insert />);
-	var thereAreNew:Boolean = false;
 
-	/* Insert rows */
+	/* Insert rows | Conctruct XML request */
 	for each (var dataGridRow:Object in dataGridCollection) {
 		if (dataGridRow.fnew) {
-			thereAreNew = true;
 			var xmlRow:XML = new XML(<row />);
 			
 			for each (var dataGridCell:Object in dataGridColumns) {
@@ -381,7 +377,8 @@ private function addNewRowsRequest():void {
 			requestXMLParam.appendChild(xmlRow);
 		}
 	}
-	if (thereAreNew) {
+	
+	if (thereAreNewRows) {
 		/* Turn on "Commit" button again in case if errors will occur */
 		__commitBtn.enabled = true;
 		
@@ -406,16 +403,23 @@ private function addRowsOkHandler():void {
 	}
 	
 	thereAreGlobalChanges = true;
+	
+	/* Update visual components data */
+	delete pages[currentPage];
+	requestRowsCount();
 }
 
 private function deleteBtnClickHandler():void {
-	if (!dataGridCollection[__dg.selectedIndex])
+	if (__dg.selectedIndex == -1 || !dataGridCollection[__dg.selectedIndex])
 		return;
 		
 	if (dataGridCollection[__dg.selectedIndex]["fnew"]) {
 		dataGridCollection.removeItemAt(__dg.selectedIndex);
 		return;
 	}
+	
+	/* Lock Data Grid control */
+	__dg.enabled = false;
 	
 	try {
 		rowIndex = __dg.selectedIndex;
@@ -439,6 +443,15 @@ private function deleteSelectedDGRowOk():void {
 	__deleteBtn.enabled = true;
 	
 	thereAreGlobalChanges = true;
+	__dg.enabled = true;
+	totalRecords--;
+}
+
+private function discardBtnClickHandler():void {
+	/* Update visual table Data */
+	delete pages[currentPage];
+	requestRowsCount();
+	__dg.enabled = true;
 }
 
 // ----- Server Messages processing methods ---------------------------------------------
