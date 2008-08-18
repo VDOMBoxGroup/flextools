@@ -63,6 +63,7 @@ package ExtendedAPI.com.utils
 			return str;
 		}
 				
+		/*
 		public static function replaceQuotes(_str:String):String
 		{
 			var str:String;
@@ -84,7 +85,48 @@ package ExtendedAPI.com.utils
 			
 			return str;
 		}
-
+		*/
+		
+		public static function replaceQuotes(_str:String):String
+		{
+			var str:String;
+			var char:String;
+			var buf:String;
+						
+			if(_str.charAt(0) == '"')
+			{
+				str = _str.replace(/(^"|"$)/g, "");
+				char = '"';
+			}
+			else if(_str.charAt(0) == "'")
+			{
+				str = _str.replace(/(^'|'$)/g, "");
+				char = "'";
+			}
+			else
+			{
+				buf = _str.concat();
+			}			
+			
+			if(char)
+			{
+				buf = "";
+			
+				for(var i:int=0; i<str.length; i++)
+				{
+					if(str.charAt(i)=='\\')
+					{
+						if(str.charAt(i+1)=='\\' || str.charAt(i+1)==char)
+							i++;
+					}
+					
+					buf += str.charAt(i);					
+				}
+			}
+			
+			return buf;
+		}
+		
 		public static function doubleQuotes(_str:String):String
 		{
 			var str:String;
@@ -95,6 +137,7 @@ package ExtendedAPI.com.utils
 			{
 				if(_str.charAt(i)=='"')
 				{
+					/*
 					var j:int = i-1;
 					while(j>=0 && _str.charAt(j)=="\\") {	    						
 						j--;
@@ -103,8 +146,15 @@ package ExtendedAPI.com.utils
 					if((i-j)%2==1) {
 						str += "\\";
 					}
+					*/
 					
+					str += '\\';					
 				}
+				else if(_str.charAt(i)=='\\')
+				{
+					str += '\\';
+				}
+				
 				str += _str.charAt(i);					
 			}
 			

@@ -74,7 +74,7 @@ public class SuperNativeMenuItem extends NativeMenuItem
 		
    		keyEquivalentModifiers = [];
    		
-   		Application.application.addEventListener(FlexEvent.APPLICATION_COMPLETE, onAppComplete);
+   		//Application.application.addEventListener(FlexEvent.APPLICATION_COMPLETE, onAppComplete);
 	}
 	
     //--------------------------------------------------------------------------
@@ -551,9 +551,11 @@ public class SuperNativeMenuItem extends NativeMenuItem
     	{
     		_keyEquivalentChanged = false;
     		
+    		/*
     		var sm:ISystemManager = Application.application.systemManager;
     		var stg:Stage = Application.application.stage;
     		sm = sm.topLevelSystemManager;
+    		
     		
     		if(stg)
     		{	
@@ -563,6 +565,7 @@ public class SuperNativeMenuItem extends NativeMenuItem
     				stg.addEventListener(KeyboardEvent.KEY_DOWN, keyDown, true, EventPriority.CURSOR_MANAGEMENT);
     			}
     		}
+    		*/
     	}
     	
     	if(_dataChanged || _enabledChanged || _labelChanged)

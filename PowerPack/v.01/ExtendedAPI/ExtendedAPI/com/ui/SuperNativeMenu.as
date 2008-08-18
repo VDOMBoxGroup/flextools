@@ -192,7 +192,7 @@ public class SuperNativeMenu extends NativeMenu
          	}
 		}
 
-  		if(type=='radio')
+  		if(type=='radio' && item.menu)
   		{
 			for each(var elm:NativeMenuItem in item.menu.items)
   			{
