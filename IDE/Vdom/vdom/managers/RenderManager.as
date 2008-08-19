@@ -384,7 +384,7 @@ public class RenderManager implements IEventDispatcher {
 			}
 		}
 		
-		indexArray.sort();
+		indexArray.sort(Array.NUMERIC);
 		
 		var count:uint = 0;
 		for each(collectionItem in arrayOfItems)
@@ -527,8 +527,11 @@ public class RenderManager implements IEventDispatcher {
 				{
 					item = new SVGViewer();
 					var d:Array = SVGViewer(item).setXML(itemXMLDescription);
-					parentItem.editableAttributes = 
-						parentItem.editableAttributes.concat(d);
+					if(parentItem)
+					{
+						parentItem.editableAttributes = 
+							parentItem.editableAttributes.concat(d);
+					}
 //					SVGViewer(item).xml = itemXMLDescription;
 					
 					break
@@ -639,7 +642,8 @@ public class RenderManager implements IEventDispatcher {
 		
 		for(var atrName:String in _style)
 		{
-			item.setStyle(atrName, _style[atrName])
+			if(_style[atrName] != "")
+				item.setStyle(atrName, _style[atrName])
 		}
 	}
 	
