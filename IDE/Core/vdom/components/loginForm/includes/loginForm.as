@@ -1,6 +1,7 @@
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.net.SharedObject;
 
 import mx.controls.Button;
 import mx.controls.TextInput;
@@ -27,6 +28,9 @@ private var dragged:Boolean = false;
 
 private var _isListenersEnabled:Boolean;
 
+[Bindable]
+private var userData:Object = {};
+
 private function get window():IWindow {
 				
 	return IWindow(Application.application);
@@ -41,6 +45,9 @@ private function creationCompleteHandler():void {
 	var currentLocale:String = languageManager.currentLocale;
 	
 	var currentItem:XML = languageList.(@code == currentLocale)[0]
+	
+	var so:SharedObject = SharedObject.getLocal("userData");
+	userData = so.data;
 	
 	if(currentItem)
 		selectLang.selectedItem = currentItem;
@@ -93,8 +100,12 @@ private function checkData():void {
 	lfe.formData = {
 		username:_username.text, 
 		password:_password.text, 
-		ip:_ip.text
+		hostname:_ip.text
 	};
+	var so:SharedObject = SharedObject.getLocal("userData");
+	so.data["username"] = _username.text;
+	so.data["password"] = _password.text;
+	so.data["hostname"] = _ip.text;
 	
 	dispatchEvent(lfe);
 }

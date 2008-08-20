@@ -1,4 +1,5 @@
-package vdom.managers {
+package vdom.managers
+{
 	
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -8,13 +9,13 @@ import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
 import vdom.events.AuthenticationEvent;
 
-public class AuthenticationManager implements IEventDispatcher {
-	
+public class AuthenticationManager implements IEventDispatcher
+{	
 	private static var instance:AuthenticationManager;
 	
 	private var dispatcher:EventDispatcher = new EventDispatcher();
-	private var publicData:Object;
-	private var soap:Soap;
+	private var soap:Soap = Soap.getInstance();
+	
 	
 	private var _username:String;
 	private var _tmpUsername:String;
@@ -22,7 +23,7 @@ public class AuthenticationManager implements IEventDispatcher {
 	private var _password:String;
 	private var _tmpPassword:String;
 	
-	private var _ip:String;
+	private var _hostname:String;
 	
 	
 	/**
@@ -45,79 +46,58 @@ public class AuthenticationManager implements IEventDispatcher {
 	 * Constructor
 	 * 
 	 */	
-	public function AuthenticationManager() {
-		
+	public function AuthenticationManager()
+	{	
 		if (instance)
 			throw new Error("Instance already exists.");
-		
-		dispatcher = new EventDispatcher();
-		soap = Soap.getInstance();
-		//publicData = mx.core.Application.application.publicData;
-		
 	}
 	
-	public function changeAuthenticationInformation(username:String, password:String, ip:String):void {
+	public function get username():String
+	{
+		return _username;
+	}
+	
+	public function get password():String
+	{
+		return _password;
+	}
+	
+	public function get hostname():String
+	{
+		return _hostname;
+	}
+	
+/* 	public function changeAuthenticationInformation(username:String, password:String, ip:String):void {
 		
 		_tmpUsername = username;
 		_tmpPassword = password;
 		_ip = ip;
-	}
+	} */
 	
-	public function login():void {
+	public function login(hostname:String, username:String, password:String):void {
 		
-		var wsdl:String= 'http://'+_ip+'/vdom.wsdl';
-		soap.addEventListener('loadWsdlComplete', soapInitComplete);
-		soap.init(wsdl);
+		soap.addEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
+		soap.addEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
+		
+		_hostname = hostname;
+		soap.login(username, password);
 	}
 	
 	public function logout():void {
 		
 		_username = _password = null;
-		
-		var event:AuthenticationEvent = new AuthenticationEvent(AuthenticationEvent.LOGOUT)
-		dispatcher.dispatchEvent(event);
 	}
 	
-	[Bindable]
-	public function get username():String {
+	private function soap_loginOKHandler(event:SoapEvent):void {
 		
-		return _username;
-	}
-	
-	public function set username(value:String):void
-	{
-	}
-	
-	public function get password():String {
+		_username = event.result.Username;
+//		_password = _tmpPassword;
 		
-		return _password;
-	}
-	
-	public function get ip():String {
-		
-		return _ip;
-	}
-	
-	private function soapInitComplete(event:Event):void {
-		
-		soap.removeEventListener('loadWsdlComplete', soapInitComplete);
-		
-		soap.addEventListener(SoapEvent.LOGIN_OK, loginHandler);
-		soap.addEventListener(SoapEvent.LOGIN_ERROR, loginErrorHandler);
-		
-		soap.login(_tmpUsername, _tmpPassword);
-	}
-	
-	private function loginHandler(event:SoapEvent):void {
-		
-		_username = _tmpUsername;
-		_password = _tmpPassword;
-		
-		soap.removeEventListener(SoapEvent.LOGIN_OK, loginHandler);
+		soap.removeEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
 		dispatchEvent(new Event(AuthenticationEvent.LOGIN_COMPLETE));
 	}
 	
-	private function loginErrorHandler(event:SoapEvent):void {
+	private function soap_loginErrorHandler(event:SoapEvent):void {
 		
 		trace('error! \r\n');
 		trace(event.result);
