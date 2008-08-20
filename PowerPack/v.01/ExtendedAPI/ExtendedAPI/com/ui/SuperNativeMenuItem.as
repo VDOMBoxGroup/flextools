@@ -541,9 +541,6 @@ public class SuperNativeMenuItem extends NativeMenuItem
     		}
     		_keyEquivalentModifiers = arr;   		
     		
-    		//arr.push(isMac ? Keyboard.CONTROL : Keyboard.COMMAND);
-    		
-    		_keyEquivalentModifiers = arr;
     		super.keyEquivalentModifiers = arr;
     	}
 
