@@ -379,9 +379,9 @@
 	 */
     [Event(name="fault", type="mx.rpc.events.FaultEvent")]
 
-	public class Vdom extends EventDispatcher implements Ivdom
+	public class Vdom extends EventDispatcher implements IVdom
 	{
-    	private var _baseService:Basevdom;
+    	private var _baseService:BaseVdom;
         
         /**
          * Constructor for the facade; sets the destination and create a baseService instance
@@ -389,7 +389,7 @@
          */  
         public function Vdom(destination:String=null,rootURL:String=null)
         {
-        	_baseService = new Basevdom(destination,rootURL);
+        	_baseService = new BaseVdom(destination,rootURL);
         }
         
 		//stub functions for the get_echo operation
@@ -4454,7 +4454,7 @@
 		/**
 		 * @see IVdom#getWebService()
 		 */
-		public function getWebService():Basevdom
+		public function getWebService():BaseVdom
 		{
 			return _baseService;
 		}
