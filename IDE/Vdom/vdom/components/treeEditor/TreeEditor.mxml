@@ -100,6 +100,9 @@
 			adjustmentTree(xmlApplicationStructure);
 		
 		curTree = massTreeElements[dataManager.currentPageId];
+		startPage = dataManager.currentApplicationInformation.Index;
+		
+		massTreeElements[startPage].selected = true;
 		
 		if(curTree != null)
 			curTree.current = true;
@@ -369,6 +372,31 @@
 	
 	}
 	
+	private var startPage:String;
+	private function changeStartPageHandler(treEvt:TreeEditorEvent):void
+	{
+		if(startPage)
+			massTreeElements[startPage].selected = false;
+			
+		startPage = treEvt.ID
+		
+		var data:XML = new XML( 
+		'<Information>' + 
+			'<Index>' + startPage +	'</Index>' + 
+		'</Information>');
+
+		dataManager.addEventListener(DataManagerEvent.APPLICATION_INFO_CHANGED, applicationInfoChangeHAndler); 
+		dataManager.setApplicationInformation( dataManager.currentApplicationId, data);
+	}
+	
+	private function applicationInfoChangeHAndler(dmEvt:DataManagerEvent):void
+	{
+		dataManager.removeEventListener(DataManagerEvent.APPLICATION_INFO_CHANGED, applicationInfoChangeHAndler);
+		
+		 massTreeElements[startPage].selected = true;
+	}
+	
+	
 	private var treeElement:TreeElement = new TreeElement();
 	
 	private function addTreeElementLauncher():void 
@@ -424,8 +452,10 @@
 		drawLines(xmlApplicationStructure);
 		
 		curTree = massTreeElements[dataManager.currentPageId];
-		if(curTree != null)
-			curTree.current = true;
+		
+		if(curTree != null)	curTree.current = true;
+		
+		massTreeElements[startPage].selected = true;
 		
 		saveToServer();
 		//showHnadler();

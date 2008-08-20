@@ -38,9 +38,11 @@ package vdom.components.treeEditor
 		private var imgPlus:Image;
 		private var imgMenu:Image;
 		private var imgheader:Image;
+		private var imgSelected:Image;
 		private var imgDelete:Image;
 		private var imgType:Image;
 		private var imgLine:Image;
+		private var imgStart:Image;
 		private var cnvUpLayer	:Canvas = new Canvas();
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
@@ -89,9 +91,18 @@ package vdom.components.treeEditor
 		[Bindable]
 		public var menu:Class;
 		
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='start_page')]
+		[Bindable]
+		public var start_page:Class; 
+		
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='selected')]
 		[Bindable]
-		public var selected:Class; 
+		public var _selected:Class; 
+		
+		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='bt_start_page')]
+		[Bindable]
+		public var bt_start_page:Class; 
+		
 		
 		
 		
@@ -137,6 +148,11 @@ package vdom.components.treeEditor
 			changeState(!min)
 		}
 		
+		private function startPageClickHandler(msEvt:MouseEvent):void
+		{
+//			selected = true;
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.CHANGE_START_PAGE, _ID));
+		}
 		
 		
 		private function txtDoubleClickHandler(msEvt:MouseEvent):void
@@ -185,8 +201,6 @@ package vdom.components.treeEditor
 		
 		private function endFormatinfHandler(msEvt:MouseEvent):void
 		{
-			
-			
 			if(txtInp.visible)
 			{
 				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
@@ -402,9 +416,24 @@ package vdom.components.treeEditor
 		
 		public function set current(data:Boolean):void
 		{
-			if(data)imgheader.source = selected;
+			if(data)
+			{
+				txt.setStyle('color', '#FFFF00');
+				if(!cnvUpLayer.contains(imgSelected))
+					cnvUpLayer.addChild(imgSelected);
+			}else
+			{	
+				txt.setStyle('color', '#ffffff');
+				if(cnvUpLayer.contains(imgSelected))
+					cnvUpLayer.removeChild(imgSelected);
+			}
+		}
+		
+		public function set selected(data:Boolean):void
+		{
+			if(data)imgheader.source = start_page;
 				else imgheader.source = header
-			
+//			trace('prassed');
 		}
 
 		
@@ -538,6 +567,9 @@ package vdom.components.treeEditor
 			imgheader = new Image();
 			imgheader.source = header;
 			
+			imgSelected = new Image();
+			imgSelected.source = _selected;
+			
 			
 			//imgheader.maintainAspectRatio = true;
 			//imgheader.scaleContent = true;
@@ -574,6 +606,14 @@ package vdom.components.treeEditor
 				
 			imgPlus.addEventListener(MouseEvent.CLICK, plusClickHandler);	
 			
+			
+			imgStart = new Image();
+			imgStart.source = bt_start_page;
+			imgStart.buttonMode = true;
+				
+			imgStart.addEventListener(MouseEvent.CLICK, startPageClickHandler);	
+			
+			
 			txtInp = new TextInput();
 			txtInp.setStyle('borderColor', '#000000');
 			txtInp.setStyle('fontWeight', "bold"); 
@@ -582,9 +622,11 @@ package vdom.components.treeEditor
 			txtInp.visible = false;
 			
 			cnvUpLayer.addChild(imgheader);
+		//	cnvUpLayer.addChild(imgSelected);
 			cnvUpLayer.addChild(imgMenu);
 			cnvUpLayer.addChild(txt);
 			cnvUpLayer.addChild(imgPlus);
+			cnvUpLayer.addChild(imgStart);
 			cnvUpLayer.addChild(txtInp);
 			cnvUpLayer.addChild(imgLine);
 			cnvUpLayer.addChild(imgDelete);
@@ -645,7 +687,10 @@ package vdom.components.treeEditor
 			imgheader.width = 243 * _ratio;
 			imgheader.height = 30 * _ratio;
 			
-			imgMenu.width = 56 * _ratio;
+			imgSelected.width = 243 * _ratio;
+			imgSelected.height = 30 * _ratio;
+			
+			imgMenu.width = 76 * _ratio;
 			imgMenu.height = 14 * _ratio;
 
 			txt.y = 2 * _ratio;
@@ -669,9 +714,16 @@ package vdom.components.treeEditor
 			imgPlus.width = 10 * _ratio;
 			imgPlus.height = 10 * _ratio;
 			
+			
+			imgStart.y = -12 * _ratio;
+			imgStart.x = 60 * _ratio;
+			imgStart.width = 10 * _ratio;
+			imgStart.height = 10 * _ratio;
+			
 		//	txtInp 
 			txtInp.y = 2 * _ratio;
 			txtInp.width =  240 * _ratio;
+			
 			
 		//	cnvUpLayer
 			//-----------------------------------

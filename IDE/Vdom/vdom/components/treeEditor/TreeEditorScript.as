@@ -415,6 +415,7 @@ private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 			// можно его подключать по необходимости
 			treEl.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 			treEl.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			treEl.addEventListener(TreeEditorEvent.CHANGE_START_PAGE, changeStartPageHandler);
 			
 			return treEl;
 }

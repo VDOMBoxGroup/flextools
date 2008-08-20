@@ -612,6 +612,8 @@
 				actionsArray = [];		
 				for each(var actID:XML in xmlToTree.E2vdom.Actions.children())
 				{
+					///curContainerTypeID 
+					
 					var type:XML = dataManager.getTypeByObjectId(actID.@ObjTgtID)
 					var tupeID:String = type.Information.ID;
 					if(tupeID == curContainerTypeID)
