@@ -16,8 +16,12 @@
 			import ExtendedAPI.com.utils.FileUtils;
 			import mx.utils.StringUtil;
 			
-			public var files:Array = [];
+			public static const MODE_OPEN:String = "open";
+			public static const MODE_SAVE:String = "save";
+			public static const MODE_DIR:String = "dir";
+			public static const MODE_MULTI:String = "multi";
 			
+			public var files:Array = [];			
 			public var filterArray:Array = [];
 		
 			private function onBrowseClick(event:MouseEvent):void

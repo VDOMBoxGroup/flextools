@@ -63,8 +63,11 @@ public class SuperNativeMenu extends NativeMenu
 	{
 		for each (var item:NativeMenuItem in items)
 		{
-			item.removeEventListener("propertyChange", itemPropertyChangeHandler);
-			removeItem(item);
+			if(item)
+			{			
+				item.removeEventListener("propertyChange", itemPropertyChangeHandler);
+				removeItem(item);
+			}
 		}
 		
 		this.removeEventListener(Event.SELECT, menuSelectHandler);
