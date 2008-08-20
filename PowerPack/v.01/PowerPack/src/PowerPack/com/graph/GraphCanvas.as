@@ -200,7 +200,7 @@ public class GraphCanvas extends Canvas
      		Alert.show(
      			LanguageManager.sentences['graph_alert_clear_text'],
      			LanguageManager.sentences['graph_alert_clear_title'],
-     			Alert.YES|Alert.NO, this, alertRemoveHandler, null, Alert.NO);			     	
+     			Alert.YES|Alert.NO, this, alertRemoveHandler, null, Alert.YES);			     	
      	}
 	}	
 		

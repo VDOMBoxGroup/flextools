@@ -2,7 +2,6 @@ package PowerPack.com.graph
 {
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
-import ExtendedAPI.com.utils.ObjectUtils;
 
 import GeomLib.GeomUtils;
 
@@ -19,6 +18,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.ui.Keyboard;
+import flash.utils.Dictionary;
 
 import mx.collections.ListCollectionView;
 import mx.controls.Alert;
@@ -98,13 +98,16 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     private static var modalTransparencyBlur:Number;
     private static var modalTransparency:Number;
     
+    public static var connectors:Dictionary = new Dictionary(); 
+    
     private static var defaultCaptions:Object = {
     	connector_select_trans: "Edit transition",
     	connector_delete:"Delete transition", 
     	connector_enable:"Enable transition", 
     	connector_highlight:"Highlight transition",
     	connector_alert_delete_title: "Confirmation",
-    	connector_alert_delete_text: "Are you sure want to delete this transition?"};
+    	connector_alert_delete_text: "Are you sure want to delete this transition?"
+    };
 
     // Define a static variable.
     private static var _classConstructed:Boolean = classConstruct();
@@ -174,6 +177,8 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		tabChildren = false;
 		styleName = this.className;	
 		cacheAsBitmap = true;
+		
+		connectors[this] = this;
 	}
 
 	//--------------------------------------------------------------------------
@@ -208,6 +213,8 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         }
            	
        	dispatchEvent(new ConnectorEvent(ConnectorEvent.DISPOSED));
+       	
+       	delete connectors[this];
 	}	
 
     //--------------------------------------------------------------------------
@@ -624,7 +631,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
      		Alert.show(
      			LanguageManager.sentences['connector_alert_delete_text'], 
      			LanguageManager.sentences['connector_alert_delete_title'], 
-     			Alert.YES|Alert.NO, this, alertRemoveHandler, null, Alert.NO);			     	
+     			Alert.YES|Alert.NO, this, alertRemoveHandler, null, Alert.YES);			     	
      	}
 	}	
 			

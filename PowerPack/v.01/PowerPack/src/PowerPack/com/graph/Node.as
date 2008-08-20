@@ -786,7 +786,7 @@ public class Node extends Canvas
      		Alert.show(
      			LanguageManager.sentences['node_alert_delete_text'],
      			LanguageManager.sentences['node_alert_delete_title'],
-     			Alert.YES|Alert.NO,this,alertRemoveHandler,null,Alert.NO);			     	
+     			Alert.YES|Alert.NO,this,alertRemoveHandler,null,Alert.YES);			     	
      	}
 	}	
 	
