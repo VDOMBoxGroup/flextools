@@ -7,6 +7,7 @@ import mx.events.DataGridEvent;
 import mx.formatters.SwitchSymbolFormatter;
 import flash.events.MouseEvent;
 import mx.core.UITextField;
+import mx.utils.UIDUtil;
 
 private const AMOUNT:int = 500;
 private const MAX_PAGES:int = 10;
@@ -14,6 +15,7 @@ private const MAX_PAGES:int = 10;
 private var dataGridCollection:ArrayCollection = new ArrayCollection();
 private var dataGridColumns:Array = []; /* of DataGridColumns */
 private var dataGridColumnsProps:Array = [];
+
 private var manager:*;	/* SuperManager */
 private var externalValue:String;
 private var structureXML:XML;
@@ -22,12 +24,11 @@ private var structureXML:XML;
 private var totalRecords:int = 0;
 private var pages:Array = []; /* of XML */
 private var currentPage:int = 0;
-private var pageOffset:int = 0;
 private var queryResult:XML;
 private var editableValue:String = "";
 private var rowIndex:int = -1;
 
-private var queue:XMLList;
+private var queue:Array = []; /* of XML */
 private var thereAreGlobalChanges:Boolean = false;
 
 /**
@@ -203,12 +204,13 @@ private function showPageData(page:int):void {
 		
 		tableRow["fnew"] = false;
 		tableRow["changed"] = false;
+		tableRow["GUID"] = UIDUtil.createUID(); 
 		dataGridCollection.addItem(tableRow);
 	}
 	__dg.dataProvider = dataGridCollection;
 	
 	
-	/* (Re)Build pages */
+	/* (Re)Build pages tickets */
 	__pagesArea.removeAllChildren();
 	var p:int = 1;
 	var pagesCount:int = int(totalRecords / AMOUNT); 			
