@@ -23,14 +23,14 @@
 				return true
 			}			
 			
-			private function handleImport(event:ItemClickEvent):void 
+			private function handleImport():void 
 			{
-            	if(event.currentTarget.selectedValue == "File")
+            	if(importType.selectedValue == "File")
             	{
             		fileBrowse.enabled = true;
             		gridServer.enabled = false;
             	} 
-            	else if(event.currentTarget.selectedValue == "Server") 
+            	else if(importType.selectedValue == "Server") 
             	{
             		fileBrowse.enabled = false;
             		gridServer.enabled = true;
@@ -44,17 +44,17 @@
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
 				<controls:HDivider label="{LanguageManager.sentences.import_from}:"/>
-				<mx:RadioButtonGroup id="importType" itemClick="handleImport(event);"/>
+				<mx:RadioButtonGroup id="importType" change="handleImport();" itemClick="handleImport();"/>
 			</mx:GridItem>
 		</mx:GridRow>
 				
-		<mx:GridRow>
+		<mx:GridRow visible="false" includeInLayout="false">
 			<mx:GridItem>
-				<mx:RadioButton groupName="importType" id="radFile" selected="true" value="File"
+				<mx:RadioButton groupName="importType" id="radFile" selected="false" value="File"
 			        label="{LanguageManager.sentences.import_from_file}:"/>    			        
 			</mx:GridItem>
 			<mx:GridItem>
-				<controls:FileBrowseBox id="fileBrowse" width="300" mode="open" 
+				<controls:FileBrowseBox id="fileBrowse" width="300" mode="open" enabled="false"
 						browseLabel="{LanguageManager.sentences.browse}..." 
 						browseTitle="{LanguageManager.sentences.open_file}..."
 						filterAll="{LanguageManager.sentences.all}">
@@ -70,14 +70,14 @@
 		
 		<mx:GridRow>
 			<mx:GridItem colSpan="2">
-				<mx:RadioButton groupName="importType" id="radServer" value="Server"
+				<mx:RadioButton groupName="importType" id="radServer" value="Server" selected="true"
 			        label="{LanguageManager.sentences.import_from_server}:"/>
 			</mx:GridItem>
 		</mx:GridRow>
 
 	</mx:Grid>	
 	
-	<mx:Grid width="100%" id="gridServer" enabled="false" disabledOverlayAlpha="0.0">
+	<mx:Grid width="100%" id="gridServer" enabled="true" disabledOverlayAlpha="0.0">
 		
 		<!-- CONNECTION -->
 		
