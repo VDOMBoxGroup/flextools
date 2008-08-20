@@ -5,7 +5,6 @@
 	xmlns:control="PowerPack.com.control.*"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
 	title="{LanguageManager.sentences.properties}"
-	modal="false"
 	width="450" height="240" 
 	creationComplete="onShow()">
 	

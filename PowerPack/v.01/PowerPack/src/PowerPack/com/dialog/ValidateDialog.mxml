@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ModalDialog xmlns="PowerPack.com.dialog.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
+<ModalDialog 
+	xmlns="PowerPack.com.dialog.*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="322" height="248"
-	title="{LanguageManager.sentences.validate}" xmlns:control="PowerPack.com.control.*">
+	title="{LanguageManager.sentences.validate}" 
+	xmlns:control="PowerPack.com.control.*">
 	
 	<mx:Script>
 		<![CDATA[

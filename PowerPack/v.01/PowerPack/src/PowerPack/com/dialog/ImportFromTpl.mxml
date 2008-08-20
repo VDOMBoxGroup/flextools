@@ -4,7 +4,6 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="500" height="360"
 	title="{LanguageManager.sentences.lbl_import}" 
-	modal="false"
 	creationComplete="onShow(event)" 
 	xmlns:controls="ExtendedAPI.com.controls.*">
 	

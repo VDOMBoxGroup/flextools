@@ -3,10 +3,9 @@
 	xmlns="PowerPack.com.dialog.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
-	width="450" height="460"
-	modal="true"
-	title="{LanguageManager.sentences.lbl_import}" 
 	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*"
+	width="450" height="460"
+	title="{LanguageManager.sentences.lbl_import}" 
 	close="ConnectionManager.instance.window = null">
 	
 	<mx:Script>
@@ -28,8 +27,6 @@
 			import mx.rpc.soap.WebService;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.soap.LoadEvent;
-			import vdom.connection.soap.SoapEvent;
-			import vdom.connection.soap.Soap;
 			import mx.events.ItemClickEvent;
 			import mx.utils.StringUtil;
 			import PowerPack.com.managers.ContextManager;

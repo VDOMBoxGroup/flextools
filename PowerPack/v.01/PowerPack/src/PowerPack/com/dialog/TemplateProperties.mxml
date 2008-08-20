@@ -4,8 +4,6 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	width="500" height="360"
 	title="{LanguageManager.sentences.properties}" 
-	modal="false"
-	alwaysInFront="true"
 	creationComplete="onShow(event)" 
 	xmlns:controls="ExtendedAPI.com.controls.*">
 	
