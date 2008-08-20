@@ -306,7 +306,7 @@ public class SuperWindow extends Window implements IWindow
 			inactive.parent && inactive._modal) {
 			var indexA:int = getIndex(active);
 			var indexI:int = inactive.index;
-			if(indexA>=0 && indexI>=0 && indexI>indexA) {
+			if(indexA>=0 && indexI>=0 && indexI>indexA) {				
 				inactive.activate();
 				inactive.nativeWindow.notifyUser(NotificationType.CRITICAL);
 			}		
