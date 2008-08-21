@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionPanel
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns="vdom.containers.*"
+	
+	layout="absolute" >
+	
+	<mx:Style>
+		.thumb {
+			backgroundImage: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import vdom.managers.FileManager;
+			import mx.core.Application;
+			
+			[Bindable]
+			private var _source:Object;
+			
+			public function set dataProvider(value:XML):void
+			{
+				if(!value)
+					return;
+			
+				applicationPage.text = value.Numberofpages.toString();
+				applicationObjects.text = value.Numberofobjects.toString();
+				
+				if(value.Icon == '')
+				{
+					_source = Application.application.getStyle('appIconPersonalPages');
+				}
+				else
+				{
+					var fileManager:FileManager = FileManager.getInstance();
+					fileManager.loadResource(value.Id, value.Icon, applicationIcon, 'source', true);
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas width="60" height="60" styleName="thumb" top="3">
+		<mx:Image id="applicationIcon" source="{_source}"
+			width="50" height="50" horizontalCenter="0" verticalCenter="0"/>
+	</mx:Canvas>
+	<mx:Label width="55" y="12" x="68" text="Pages:" textAlign="left" color="#FFFFFF"/>
+	<mx:Label width="55" y="29" x="68" text="Objects:" textAlign="left" color="#FFFFFF"/>
+	<mx:Label width="41" id="applicationPage" y="12" height="15" x="127" color="#FFFFFF"/>
+	<mx:Label width="41" id="applicationObjects" y="29" height="15" x="127" color="#FFFFFF"/>
+</ActionPanel>
