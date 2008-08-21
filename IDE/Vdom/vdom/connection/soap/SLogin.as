@@ -50,37 +50,29 @@ package vdom.connection.soap
 		private  function completeListener(event:ResultEvent):void{
 			
 			// get result 
-			resultXML = XML(event.result);
 			
-			var evt:SoapEvent;
-			/*
-			var resultXML:XML = 
-			<Result>
-				<HashString>{event.result.Session.HashString}</HashString>
-				<SessionKey>{event.result.Session.SessionKey}</SessionKey>
-				<SessionId>{event.result.Session.SessionId}</SessionId>
-			</Result>; */
+			resultXML = new XML(<Result />);
+			resultXML.appendChild(XMLList(event.result));
+			
+			var se:SoapEvent;
+			var errorResult:String = resultXML.Error;
 			
 			// check Error
-			if(resultXML.name().toString() == 'Error'){
-				evt = new SoapEvent(SoapEvent.LOGIN_ERROR);
-				evt.result = resultXML;
-				dispatchEvent(evt);
-				trace(event.result);
-				//Alert.show("ERROR!\nFrom: " + this.toString() )
-			} else{
+			if(errorResult != "")
+			{
+				se = new SoapEvent(SoapEvent.LOGIN_ERROR);
+				se.result = resultXML;
+				dispatchEvent(se);
+			}
+			else
+			{
+				code.init(resultXML.Session.HashString);
+				code.inputSKey(resultXML.Session.SessionKey);  
+				code.sessionId = resultXML.Session.SessionId;
 				
-				// run session protector
-				code.init(resultXML.HashString);
-				code.inputSKey(resultXML.SessionKey);  
-				code.sessionId = resultXML.SessionId;
-		
-			//	Alert.show("Password and User correct\nsid: "+ code.sessionId );
-			//trace("Password and User correct\nsid: "+ code.sessionId);
-		//	trace(this.toString() );
-				evt = new SoapEvent(SoapEvent.LOGIN_OK);
-				evt.result = resultXML;
-				dispatchEvent(evt);
+				se = new SoapEvent(SoapEvent.LOGIN_OK);
+				se.result = resultXML;
+				dispatchEvent(se);
 			}
 		}
 		

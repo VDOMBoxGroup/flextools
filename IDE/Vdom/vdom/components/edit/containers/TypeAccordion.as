@@ -87,16 +87,16 @@ public class TypeAccordion extends Accordion {
 				continue;
 			
 			categoryName = typeDescription.Information.Category.toLowerCase();
-			categoryNameLocalized = '';
+			categoryNameLocalized = "";
 			
 			if(standardCategories.indexOf(categoryName) != -1)
 				categoryNameLocalized = resourceManager.getString('Edit', categoryName);
 				
-			else if (categoryNameLocalized.match(phraseRE)) {
+			else if (categoryName.match(phraseRE)) {
 				
-				categoryPhraseId = categoryNameLocalized.match(phraseRE)[1];
-				categoryName = 'lang_' + phraseId;
-				categoryNameLocalized = resourceManager.getString(typeDescription.typeName, categoryPhraseId);
+				categoryPhraseId = categoryName.match(phraseRE)[1];
+				categoryName = 'lang_' + categoryPhraseId;
+				categoryNameLocalized = resourceManager.getString(typeDescription.Information.Name, categoryPhraseId);
 			}
 			
 			if(!categoryNameLocalized)

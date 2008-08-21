@@ -67,6 +67,18 @@ public function close():void
 	for (var attributeName:String in _style)
 		attributes[attributeName] = _style[attributeName];
 	
+	//color fix
+	
+	if(attributes["color"])
+	{
+		var hexColor:String = Number(attributes["color"]).toString(16).toUpperCase();
+		
+		var i:int = 6 - hexColor.length;
+		while (--i >= 0) hexColor = "0" + hexColor;
+		
+		attributes["color"] = hexColor;
+	}
+	
 	registerEvent(false);
 	elementForEditing.editable = false;
 	elementForEditing.selectable = false;

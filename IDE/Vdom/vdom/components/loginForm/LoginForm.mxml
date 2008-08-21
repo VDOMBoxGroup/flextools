@@ -17,7 +17,7 @@
 	
 	<mx:Metadata>
 		[ResourceBundle("LoginForm")]
-		[Exclude(name="alignButtons", kind="property")]
+		[Exclude(name="quitButton", kind="property")]
 		[Event(name="submitBegin", type="vdom.components.loginForm.events.LoginFormEvent")]
 	</mx:Metadata>
 	
