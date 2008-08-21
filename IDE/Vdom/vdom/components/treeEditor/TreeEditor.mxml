@@ -102,10 +102,13 @@
 		curTree = massTreeElements[dataManager.currentPageId];
 		startPage = dataManager.currentApplicationInformation.Index;
 		
-		massTreeElements[startPage].selected = true;
+		
+		setStartPage();
+		
 		
 		if(curTree != null)
 			curTree.current = true;
+			
 	}
 	
 //	var asdp:ApplicationPanel
@@ -118,13 +121,9 @@
 		main.removeChild(massTreeElements[trEvt.ID]);
 		main.addChild(massTreeElements[trEvt.ID]);
 		
-//		dX = massTreeElements[curID].x;
-//		dY = massTreeElements[curID].y;
-		
 		dX = main.mouseX - massTreeElements[trEvt.ID].x;
 		dY = main.mouseY - massTreeElements[trEvt.ID].y;
 		
-//		trace('Start');
 		Application.application.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 	}
@@ -224,25 +223,7 @@
 			 	massTreeElements[curID].y = 10;
 			else
 				massTreeElements[curID].y = main.mouseY - dY;
-		/*
-		if (can.mouseX < dX)
-					{
-						 eventsArray[curID].x = 0;
-//						 eventsArray[curID].stopDrag();
-					}else
-					{
-						eventsArray[curID].x = can.mouseX - dX;
-					}
-					
-					if ((can.mouseY - dY) < 10)
-					{
-						 eventsArray[curID].y = 10;
-//						 eventsArray[curID].stopDrag();
-					}else
-					{
-						eventsArray[curID].y = can.mouseY - dY;	
-					}
-		*/
+	
 		redrawLines(curID);
 	}
 	/**
@@ -274,16 +255,10 @@
     	dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
     	deleteObject(curTree.ID);
            	
-       	var ID:String = '';
-		for (var nam:String in massTreeElements)
-		{
-			if(ID == '')
-			{
-				curTree = massTreeElements[nam];
-				curTree.current = true;
-				return;
-			}  
-		}
+		curTree = massTreeElements[randomTreeElement];
+		curTree.current = true;
+		
+		setStartPage();
     }
 	
 	/**
@@ -375,7 +350,7 @@
 	private var startPage:String;
 	private function changeStartPageHandler(treEvt:TreeEditorEvent):void
 	{
-		if(startPage)
+		if(massTreeElements[startPage])
 			massTreeElements[startPage].selected = false;
 			
 		startPage = treEvt.ID
@@ -393,7 +368,7 @@
 	{
 		dataManager.removeEventListener(DataManagerEvent.APPLICATION_INFO_CHANGED, applicationInfoChangeHAndler);
 		
-		 massTreeElements[startPage].selected = true;
+		setStartPage();
 	}
 	
 	
@@ -455,7 +430,7 @@
 		
 		if(curTree != null)	curTree.current = true;
 		
-		massTreeElements[startPage].selected = true;
+		setStartPage();
 		
 		saveToServer();
 		//showHnadler();

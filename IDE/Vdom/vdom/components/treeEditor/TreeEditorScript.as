@@ -2,8 +2,6 @@
 		
 		import flash.events.MouseEvent;
 		
-		import mx.effects.Move;
-		
 		import vdom.components.treeEditor.TreeElement;
 		import vdom.events.DataManagerEvent;
 		import vdom.events.TreeEditorEvent;
@@ -574,4 +572,27 @@ private function calculatePointTo(mouseX:Number, mouseY:Number, curTree:Object):
 		else pnTo.y = mouseY + 10;
 		
 	return pnTo;
+}
+
+private function get randomTreeElement():String
+{
+	for (var ID:String in massTreeElements)
+	{
+		return ID;
+	}	
+	
+	return '';
+}
+
+private function setStartPage():void
+{
+	if(!massTreeElements[startPage])
+	{
+		startPage = randomTreeElement;
+		if(startPage)
+			massTreeElements[startPage].selected = true;
+	} else
+	{
+		massTreeElements[startPage].selected = true;
+	}
 }
