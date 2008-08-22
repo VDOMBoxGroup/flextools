@@ -37,7 +37,7 @@
 					icon="@Embed(source='/icons/discard.png')" />
 				<mx:Spacer width="100%" />
 				<mx:HBox horizontalGap="0">
-					<mx:Label id="__operCount" fontWeight="bold" text="0" textAlign="right" />
+					<mx:Label id="__queueLenght" fontWeight="bold" text="0" textAlign="right" />
 					<mx:Label text="operation(s) in queue" />
 				</mx:HBox>
 			</mx:HBox>

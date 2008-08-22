@@ -4,6 +4,7 @@ import mx.controls.dataGridClasses.DataGridColumn;
 import mx.core.UITextField;
 import mx.events.DataGridEvent;
 import mx.controls.LinkButton;
+import mx.utils.StringUtil;
 
 private const AMOUNT:int = 500;
 private const MAX_PAGES:int = 10;
@@ -21,11 +22,10 @@ private var totalRecords:int = 0;
 private var pages:Array = []; /* of XML */
 private var currentPage:int;
 private var queryResult:XML;
-private var editableValue:String = "";
-private var rowIndex:int = -1;
-
+private var editableValue:String = '';
 private var queue:QueueManager; /* of XML */
 private var thereAreGlobalChanges:Boolean = false;
+private var selectedRowIndexStore:int = -1;
 
 /* -------------------- Public properties --------------------------------------------------------- */
 
@@ -51,6 +51,10 @@ public function get value():String {
 private function onLoadInit():void {
 	queue = new QueueManager(manager);
 	
+	/* Permanent event listener */
+	queue.addEventListener(QueueEvent.QUEUE_INTERRUPT, errorHandler);	
+
+	queue.reset();
 	queue.addRequest(UIDUtil.createUID(), 'get_structure', '', structureResponseHandler, null);
 	queue.addRequest(UIDUtil.createUID(), 'get_count', '', countResponseHandler, null);
 	
@@ -62,17 +66,30 @@ private function onLoadInit():void {
 		'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
 		getPageResponseHandler, null);
 	
+	queue.addEventListener(QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler);
+	updateQueueLenght();
 	queue.execute();
 }
 
+private function queueOnLoadCompleteHandler(message:String):void {
+	queue.removeEventListener(QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler);
+	updateQueueLenght();
+}
+
+private function errorHandler(event:QueueEvent):void {
+	showMessage(event.message);
+	updateQueueLenght();	
+}
+
 private function getPageRequest():void {
-	queue.clear();
+	queue.reset();
 	queue.addRequest(
 		UIDUtil.createUID(),
 		'get_data',
 		'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
 		getPageResponseHandler, null);
-		
+	
+	updateQueueLenght();
 	queue.execute();
 }
 
@@ -83,11 +100,10 @@ private function getPageResponseHandler(message:String):void {
 		
 		showPageData();
 	}
-	catch (err:Error) {
-		/* error08 */
-		showMessage("External Manager error (08): Can not convert result into XML or result error!");
-		queryResult = new XML();
-	}
+	catch (err:Error) {	queryResult = new XML(); }
+	
+	queue.reset();
+	updateQueueLenght();
 } 
 
 private function showPageData():void {
@@ -187,7 +203,8 @@ private function structureResponseHandler(message:String):void {
 		showMessage("External Manager error (04): Can not convert result into XML or result error!");
 		queryResult = new XML();
 	}
-	
+
+	updateQueueLenght();
 }
 
 private function setTableHeaders():void {
@@ -205,7 +222,7 @@ private function setTableHeaders():void {
 			defvalue:xmlHeader.@default.toString()
 		};
 		
-		/* CHecking recieved data */
+		/* Checking recieved data */
 		if (columnProps.autoincrement == "") columnProps.autoincrement = "False";
 		if (columnProps.notnull == "") columnProps.notnull = "False";
 		if (columnProps.primary == "") columnProps.primary = "False";
@@ -226,6 +243,8 @@ private function countResponseHandler(message:String):void {
 		totalRecords = queryResult.Result;		
 	}
 	catch (err:Error) { return;	}
+	
+	updateQueueLenght();
 }
 
 // ----- Alert processing methods -------------------------------------------------------
@@ -266,6 +285,7 @@ private function messageOkClickHandler():void {
 // ----- Visual components handlers -----------------------------------------------------
 
 private function addRowBtnClickHandler(event:MouseEvent):void {
+	/* Check position of user click */
 	if (event.target is UITextField)
 		return;
 	
@@ -273,22 +293,41 @@ private function addRowBtnClickHandler(event:MouseEvent):void {
 	var tableRow:Object = new Object();
 	var columnIndex:int = 0;
 	for each (var dgColumn:DataGridColumn in dataGridColumns) {
-		if (dataGridColumnsProps[columnIndex].autoincrement.toLowerCase() == "false") {
-			if (dataGridColumnsProps[columnIndex].notnull.toLowerCase() == "true")
-				tableRow[dgColumn.dataField] = "Required";
+		if (dataGridColumnsProps[columnIndex].autoincrement.toLowerCase() == 'false') {
+			if (dataGridColumnsProps[columnIndex].notnull.toLowerCase() == 'true')
+				tableRow[dgColumn.dataField] = 'REQUIRED';
 			else
-				tableRow[dgColumn.dataField] = "NULL";
+				tableRow[dgColumn.dataField] = 'NULL';
 		} else {
-			tableRow[dgColumn.dataField] = "NULL";
+			tableRow[dgColumn.dataField] = 'NULL';
 		}
 		columnIndex++;
 	}
+
+	tableRow['fnew'] = true;
+	tableRow['changed'] = false;
+	tableRow['GUID'] = UIDUtil.createUID();
+
+	/* Construct request */
+	var requestXMLParam:XML = new XML(<data />);
+	var xmlRow:XML = new XML(<row id='NULL' />);						
+	for each (var dataGridCell:Object in dataGridColumns) {
+		xmlRow.appendChild(
+			<cell name={dataGridCell.dataField}>
+				{tableRow[dataGridCell.dataField]}
+			</cell>);
+	}
+	requestXMLParam.appendChild(xmlRow);
+
+	queue.addRequest(
+		tableRow['GUID'],
+		'add_row',
+		requestXMLParam.toXMLString());
 	
-	tableRow["fnew"] = true;
-	tableRow["changed"] = false;
 	dataGridCollection.addItem(tableRow);
 	__dg.selectedIndex = dataGridCollection.length;
 	__commitBtn.enabled = true;
+	updateQueueLenght();
 }
 
 private function itemEditBegin(event:DataGridEvent):void {
@@ -298,8 +337,23 @@ private function itemEditBegin(event:DataGridEvent):void {
 private function itemEditEnd(event:DataGridEvent):void {
 	if (event.currentTarget.itemEditorInstance.text != editableValue) {
 
+		/* check entered data over database integrity */
+		if (dataGridColumnsProps[event.columnIndex]['autoincrement'].toLowerCase() == 'true') {
+			event.currentTarget.itemEditorInstance.text = editableValue;
+		} else {
+			if (StringUtil.trim(event.currentTarget.itemEditorInstance.text) == '') {
+				if (dataGridColumnsProps[event.columnIndex]['notnull'].toLowerCase() == 'true')
+					event.currentTarget.itemEditorInstance.text = 'REQUIRED';
+				else
+					event.currentTarget.itemEditorInstance.text = '';
+			}
+		}
+
+		/* Apply changed data */		
+		dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex].dataField] = event.currentTarget.itemEditorInstance.text;
+
 		/* Construct request */
-		var requestXMLParam:XML = new XML(<update />);
+		var requestXMLParam:XML = new XML(<data />);
 		var xmlRow:XML = new XML(<row id={dataGridCollection[event.rowIndex]['id']} />);						
 		for each (var dataGridCell:Object in dataGridColumns) {
 			xmlRow.appendChild(
@@ -307,31 +361,112 @@ private function itemEditEnd(event:DataGridEvent):void {
 					{dataGridCollection[event.rowIndex][dataGridCell.dataField]}
 				</cell>);
 		}
+		
 		requestXMLParam.appendChild(xmlRow);
 		
-		if (dataGridCollection[event.rowIndex].changed) {
+		/* Apply reqest to the queue */
+		if (dataGridCollection[event.rowIndex]['changed']) {
 			
-			queue.updateRequest(
-				dataGridCollection[event.rowIndex]['GUID'],
-				'update_row',
-				requestXMLParam.toXMLString());
+			if (dataGridCollection[event.rowIndex]['fnew']) {
+
+				queue.updateRequest(
+					dataGridCollection[event.rowIndex]['GUID'],
+					'add_row',
+					requestXMLParam.toXMLString());
+			} else {
+				
+				queue.updateRequest(
+					dataGridCollection[event.rowIndex]['GUID'],
+					'update_row',
+					requestXMLParam.toXMLString());
+			}
 		} else {
 			
-			dataGridCollection[event.rowIndex].changed = true;
+			/* If new changed item appeared... */
+			dataGridCollection[event.rowIndex]['changed'] = true;
 			__commitBtn.enabled = true;
-			queue.addRequest(
-				dataGridCollection[event.rowIndex]['GUID'],
-				'update_row',
-				requestXMLParam.toXMLString());
+
+			if (dataGridCollection[event.rowIndex]['fnew']) {
+				
+				queue.updateRequest(
+					dataGridCollection[event.rowIndex]['GUID'],
+					'add_row',
+					requestXMLParam.toXMLString());
+			} else {
+				
+				queue.addRequest(
+					dataGridCollection[event.rowIndex]['GUID'],
+					'update_row',
+					requestXMLParam.toXMLString());
+			}
 		}
 	}
+	
+	updateQueueLenght();
 }
 
 private function commitBtnClickHandler():void {
+	queue.addEventListener(QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler);
+	queue.execute();
+}
+
+private function queueCommitCompleteHandler(event:QueueEvent):void {
+	queue.removeEventListener(QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler);
+	__commitBtn.enabled = false;
+	
+	/* ReRequest rows count */
+	queue.reset();
+	queue.addRequest(UIDUtil.createUID(), 'get_count', '', countResponseHandler, null);
+	
+	/* ReRequest page */
+	queue.addRequest(
+		UIDUtil.createUID(),
+		'get_data',
+		'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
+		refreshDataGrid, null);
+	
+	selectedRowIndexStore = __dg.selectedIndex;
+	
+	queue.execute();
+}
+
+private function refreshDataGrid(message:String):void {
+	getPageResponseHandler(message);
+	__dg.scrollToIndex(selectedRowIndexStore);
+
+	updateQueueLenght();
 }
 
 private function deleteBtnClickHandler():void {
+	var selectedRowIndex:int = 0;
+	
+	try {
+		selectedRowIndex = __dg.selectedIndex;
+		if (selectedRowIndex == -1)
+			return;
+	}
+	catch (err:Error) { return; }
+	
+	if (dataGridCollection[selectedRowIndex]['fnew']) {
+		queue.removeRequest(dataGridCollection[selectedRowIndex]['GUID']);
+	} else {
+		var requestXMLParam:XML = new XML(<data><row id={dataGridCollection[selectedRowIndex]['id']} /></data>);
+
+		queue.addRequest(
+			dataGridCollection[selectedRowIndex]['GUID'].toString(),
+			'delete_row',
+			requestXMLParam.toXMLString());
+	}
+		
+	dataGridCollection.removeItemAt(selectedRowIndex);
+	updateQueueLenght();
+	__commitBtn.enabled = true;
 }
 
 private function discardBtnClickHandler():void {
+	
+}
+
+private function updateQueueLenght():void {
+	__queueLenght.text = queue.length.toString();
 }

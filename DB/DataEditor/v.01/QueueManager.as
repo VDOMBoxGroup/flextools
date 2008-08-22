@@ -52,7 +52,7 @@ package
 			var i:int = 0;
 			while (i < queue.length && queue[i]['GUID'] != GUID) { i++;	}
 			
-			if (queue[i]['GUID'] == GUID) {
+			if (i < queue.length && queue[i]['GUID'] == GUID) {
 				queue[i]['method'] = methodName;
 				queue[i]['params'] = methodParams;
 				queue[i]['functionOnSuccess'] = functionOnSuccess;
@@ -73,14 +73,12 @@ package
 			queue = newQueue;
 		}
 		
-		public function clear():void {
+		public function reset():void {
 			queue = [];
 			currentRequestInQueue = 0;
 		}
 		
 		public function execute():void {
-			currentRequestInQueue = 0;
-			
 			/* Initialise executing the Queue - execute first request */
 			try {
 				externalManager.remoteMethodCall(queue[currentRequestInQueue]['method'], queue[currentRequestInQueue]['params']);
@@ -91,7 +89,9 @@ package
 		private function queueRequestSuccesHandler(event:QueueEvent):void {
 			currentRequestInQueue++;
 			if (currentRequestInQueue >= queue.length) {
-				this.dispatchEvent(new QueueEvent(QueueEvent.FINISH));
+				
+				reset();
+				this.dispatchEvent(new QueueEvent(QueueEvent.QUEUE_COMPLETE));
 				return;
 			}
 			
@@ -118,11 +118,12 @@ package
 			catch (err:Error) {	return;	}
 			
 			switch (xmlResult.name().toString()) {
+
 				case "Result":
 					try {
 						queue[currentRequestInQueue]['functionOnSuccess'](xmlResult);
 					}
-					catch (err:Error) { return; }
+					catch (err:Error) { }
 					
 					this.dispatchEvent(new QueueEvent(QueueEvent.SUCCESS_RESPONSE, xmlResult));
 					break;
@@ -131,9 +132,10 @@ package
 					try {
 						queue[currentRequestInQueue]['functionOnFault'](xmlResult);
 					}
-					catch (err:Error) { return; }
+					catch (err:Error) { }
 					
 					this.dispatchEvent(new QueueEvent(QueueEvent.STANDART_ERROR, xmlResult));
+					truncateAndInterrupt(xmlResult);
 					break;
 			}
 		}
@@ -151,17 +153,38 @@ package
 			catch (err:Error) {	return;	}
 			
 			if (xmlResult.name().toString() == "Result") {
+
 				try {
-					this.dispatchEvent(new QueueEvent(QueueEvent.SOAP_EXCEPTION, xmlResult.Error));
+					this.dispatchEvent(new QueueEvent(QueueEvent.SOAP_EXCEPTION, xmlResult.Error, currentRequestInQueue));
+					truncateAndInterrupt(xmlResult.Error);
+					return;
 				}
 				catch (err:Error) {
 					/* Unknown Soap Exception */
 					this.dispatchEvent(new QueueEvent(QueueEvent.SOAP_EXCEPTION, xmlResult));
 				}
 			} else {
-				this.dispatchEvent(new QueueEvent(QueueEvent.UNKNOWN_ERROR, xmlResult));
+
+				this.dispatchEvent(new QueueEvent(QueueEvent.UNKNOWN_ERROR, xmlResult, currentRequestInQueue));
 			}
+			
+			truncateAndInterrupt(xmlResult);
 		}
 		
+		
+		private function truncateAndInterrupt(message:String):void {
+			this.dispatchEvent(new QueueEvent(QueueEvent.QUEUE_INTERRUPT, message, currentRequestInQueue));
+			
+			/* Truncate queue completed requests */
+			var newQueue:Array = [];
+			var i:int = currentRequestInQueue;
+			
+			while (i < queue.length) { 
+				newQueue.push(queue[i]);
+				i++;
+			}
+			queue = newQueue;
+			currentRequestInQueue = 0;
+		}
 	}
 }
