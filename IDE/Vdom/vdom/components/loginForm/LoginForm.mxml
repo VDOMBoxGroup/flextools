@@ -4,22 +4,20 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	
 	width="100%" height="100%"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	
 	creationComplete="creationCompleteHandler();"
 	
-	show="show();"
-	hide="hide();" >
-	<mx:Script>
-		<![CDATA[
-			import mx.core.Application;
-		]]>
-	</mx:Script>
+	show="showHandler();"
+	hide="hideHandler();" >
 	
 	<mx:Metadata>
 		[ResourceBundle("LoginForm")]
-		[Exclude(name="quitButton", kind="property")]
-		[Event(name="submitBegin", type="vdom.components.loginForm.events.LoginFormEvent")]
+		[Exclude(name="alignButtons", kind="property")]
+		[Event(name="submitBegin", type="vdom.events.LoginFormEvent")]
 	</mx:Metadata>
+	
+	<mx:XML id="locales" source="/locale/locales.xml" />
 	
 	<mx:Script source="includes/loginForm.as"/>
 	
@@ -36,12 +34,10 @@
 		}
 	</mx:Style>
 	
-	<mx:XML id="locales" source="/locale/locales.xml" />
-	
 	<mx:Image right="20" top="20" source="{loginTitle}" autoLoad="true"/>
 	<mx:Image source="{loginCube}" verticalCenter="-4.5" x="10"/>
 	<mx:Panel id="loginFormPanel" styleName="loginPanel" borderColor="#808080" borderStyle="solid" 
-		backgroundColor="#ffffff"
+		backgroundColor="#FFFFFF"
 		title="{resourceManager.getString('LoginForm','title')}" 
 		mouseUp="mouseUpHandler(event)" mouseDown="mouseDownHandler(event)"
 		dropShadowEnabled="true" shadowDirection="right" shadowDistance="5"
@@ -52,29 +48,25 @@
 			<mx:FormItem
 				label="{resourceManager.getString('LoginForm','username')}">
 				<mx:TextInput id="_username"
-					width="140" text="root"/>
+					width="140"/>
 			</mx:FormItem>
 			<mx:FormItem 
 				label="{resourceManager.getString('LoginForm','password')}">
 				<mx:TextInput id="_password"
 					width="140" 
-					displayAsPassword="true" text="root"/>
+					displayAsPassword="true"/>
 			</mx:FormItem>
 			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','ip')}">
-				<mx:TextInput id="_ip"
-					width="140" 
+				label="{resourceManager.getString('LoginForm','hostname')}">
+				<mx:TextInput id="_hostname" 
+					width="140"/>
 
- text="localhost"/>
-
-					
- 
 			</mx:FormItem>
 			<mx:FormItem
 				label="{resourceManager.getString('LoginForm','language')}">
 				<mx:ComboBox id="selectLang"
 					width="140"
-					fillColors="[#ffffff, #ffffff]" fillAlphas="[1.0, 0.59]"
+					fillColors="[#FFFFFF, #FFFFFF]" fillAlphas="[1.0, 0.59]"
 					dataProvider="{languageList}"
 			 		labelField="@label"
 			 		change="languageChangeHandler(event);"
@@ -83,7 +75,7 @@
 		</mx:Form>
 		<mx:ControlBar width="100%" horizontalAlign="center" horizontalGap="0" 
 			paddingBottom="-1"
-			barColor="#ff0066"  alpha="1.0" borderColor="#0000ff">
+			barColor="#ff0066"  alpha="1.0" borderColor="#0000FF">
 			<mx:Button id="submitButton" styleName="loginButtonOK"
 				label="{resourceManager.getString('LoginForm','ok_button')}"
 				click="checkData();" width="110"/>

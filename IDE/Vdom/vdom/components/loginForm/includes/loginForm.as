@@ -1,13 +1,15 @@
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.net.SharedObject;
 
 import mx.controls.Button;
 import mx.controls.TextInput;
+import mx.core.Application;
 import mx.core.IWindow;
 import mx.events.FlexEvent;
 
-import vdom.components.loginForm.events.LoginFormEvent;
+import vdom.events.LoginFormEvent;
 import vdom.managers.LanguageManager;
 
 [Embed(source='/assets/login/vectorGraphic.swf', symbol='LoginCube')]
@@ -71,15 +73,25 @@ private function setListeners(flag:Boolean):void {
 	}
 }
 
-private function show():void {
+private function showHandler():void {
 	
 	setListeners(true);
 	_username.setFocus();
+	
+	var so:SharedObject = SharedObject.getLocal("userData");
+	
+	_username.text = so.data["username"];
+	_password.text = so.data["password"];
+	_hostname.text = so.data["hostname"];
 }
 
-private function hide():void {
+private function hideHandler():void {
 	
-	setListeners(false);	
+	setListeners(false);
+	
+	_username.text = "";
+	_password.text = "";
+	_hostname.text = "";
 }
 
 private function languageChangeHandler(event:Event):void {
@@ -93,8 +105,12 @@ private function checkData():void {
 	lfe.formData = {
 		username:_username.text, 
 		password:_password.text, 
-		ip:_ip.text
+		hostname:_hostname.text
 	};
+	var so:SharedObject = SharedObject.getLocal("userData");
+	so.data["username"] = _username.text;
+	so.data["password"] = _password.text;
+	so.data["hostname"] = _hostname.text;
 	
 	dispatchEvent(lfe);
 }

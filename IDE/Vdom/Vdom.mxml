@@ -5,22 +5,15 @@
 	showStatusBar="false"
 	showGripper="false"
 	
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:vdom="vdom.*"
-	xmlns:modules="vdom.modules.*"
-	xmlns:controls="vdom.containers.*" 
-	xmlns:editor="vdom.components.editor.*"
-	xmlns:scriptEditor="vdom.components.scriptEditor.*"
-	xmlns:loginForm="vdom.components.loginForm.*" 
-	xmlns:main="vdom.components.main.*"
-	xmlns:analyse="vdom.components.analyse.*" 
-	xmlns:treeEditor="vdom.components.treeEditor.*"
-	
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
+	xmlns:loginForm="vdom.components.loginForm.*"
+		
 	preinitialize="preinitalizeHandler();"
 	
 	layout="absolute"
 	verticalScrollPolicy="off"
-	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*">
+	xmlns:containers="vdom.containers.*" xmlns:modules="vdom.modules.*">
 	
 	<mx:Script source="vdom.as"/>
 	
@@ -32,35 +25,39 @@
 	
 	<mx:ViewStack id="viewstack" width="100%" height="100%">
 	
-		<loginForm:LoginForm id="loginForm" show="showLoginFormHandler();" submitBegin="submitLogin(event)"
-			horizontalScrollPolicy="off" verticalScrollPolicy="off"/>
+		<loginForm:LoginForm id="loginForm" 
+			show="showLoginFormHandler();" 
+			submitBegin="submitBeginHandler(event)"/>
 	
 		<mx:Canvas id="main"  width="100%" height="100%" show="showMainHandler();">
-		
+			
+			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>
+			
+			<mx:HBox y="21" width="606" horizontalCenter="0" horizontalAlign="center" verticalAlign="bottom">
+			
+				<mx:Label id="userName"
+					text="USER: {authenticationManager.username.toUpperCase()} - VDOM IDE"
+					fontWeight="bold" color="#FFFFFF"/>
+				<mx:Label text="Beta" fontWeight="bold" color="#8C8C8C"/>
+			</mx:HBox>
+			
 			<vdomTitleBar:VdomTitleBar  left="0" right="0"/>
 			
-			<mx:Canvas backgroundColor="#ffffff" top="50" right="0" bottom="0" left="0" borderStyle="solid" borderColor="#000000">
-				<controls:MainTabNavigator id="tabPanel"
+			<mx:Canvas backgroundColor="#FFFFFF" top="50" right="0" bottom="0" left="0" borderStyle="solid" borderColor="#000000">
+				<containers:MainTabNavigator id="tabPanel"
 					right="5" bottom="5" left="5" top="5"
 					borderStyle="none" 
 					tabHeight="25" tabPaddingLeft="80">
-			
-		 			<modules:ApplicationManagment id="applicationManagmentModule"
+					
+					<modules:ApplicationManagment id="applicationManagmentModule"
 		 				label="{resourceManager.getString('Application','main_title')}"/>
 		 	
 		 			<modules:Editor id="editorModule"
 		 				label="{resourceManager.getString('Application','editor_title')}" 
 		 				width="100%" height="100%"/>
-				</controls:MainTabNavigator>
+					
+				</containers:MainTabNavigator>
 			</mx:Canvas>
-			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>
-			<mx:HBox y="21" width="606" horizontalCenter="0" horizontalAlign="center" verticalAlign="bottom">
-				<mx:Label id="userName"
-					text="USER: {authenticationManager.username.toUpperCase()} - VDOM IDE"
-					fontWeight="bold" color="#FFFFFF"
-					/>
-				<mx:Label text="Beta" fontWeight="bold" color="#8C8C8C"/>
-			</mx:HBox>
 		</mx:Canvas>
 	</mx:ViewStack>
 </mx:WindowedApplication>

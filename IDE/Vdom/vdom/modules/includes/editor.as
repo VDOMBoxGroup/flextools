@@ -15,10 +15,10 @@ private var alertManager:AlertManager = AlertManager.getInstance();
 
 private function showPreview():void
 {	
-	var ip:String = authenticationManager.ip;
+	var hostname:String = authenticationManager.hostname;
 	var applicationId:String = dataManager.currentApplicationId;
 	var pageId:String = dataManager.currentPageId;
-	navigateToURL(new URLRequest('http://' + ip + '/' + applicationId + '/' + pageId), '_blank');
+	navigateToURL(new URLRequest('http://' + hostname + '/' + applicationId + '/' + pageId), '_blank');
 }
 
 private function registerEvent(flag:Boolean):void 

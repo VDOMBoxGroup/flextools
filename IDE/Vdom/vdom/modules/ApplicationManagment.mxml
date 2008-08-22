@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:ViewStack
+	
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="vdom.containers.*"
 	xmlns:main="vdom.components.main.*"
 	xmlns:createApplication="vdom.components.createApplication.*"
 	xmlns:applicationProperties="vdom.components.applicationProperties.*"
 	xmlns:editApplication="vdom.components.editApplication.*"
+	xmlns:searchResult="vdom.components.searchResult.*"
 	
 	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
-	hide="hideHandler();" 
-	
-	creationPolicy="all" xmlns:searchResult="vdom.components.searchResult.*">
+	hide="hideHandler();">
 	
 <mx:Script source="includes/applicationManagment.as" />
 
