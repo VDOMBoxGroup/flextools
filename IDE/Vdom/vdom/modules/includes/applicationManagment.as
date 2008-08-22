@@ -123,13 +123,6 @@ private function searchPanel_searchHandler(event:SearchPanelEvent):void
 	dataManager.search(event.applicationId, event.searchString);
 }
 
-private function dataManager_searchCompleteHandler(event:DataManagerEvent):void
-{
-	dataManager.removeEventListener(DataManagerEvent.SEARCH_COMPLETE, dataManager_searchCompleteHandler);
-	searchResult.dataProvider = event.result.*;
-	mainViewStack.selectedChild = searchResult;
-}
-
 private function searchResult_searchHandler(event:SearchResultEvent):void
 {
 	mainViewStack.selectedIndex = 0;
@@ -149,6 +142,13 @@ private function searchResult_searchHandler(event:SearchResultEvent):void
 //	PopUpManager.centerPopUp(ppm);
 	
 //	dataManager.loadApplication(applicationId);
+}
+
+private function dataManager_searchCompleteHandler(event:DataManagerEvent):void
+{
+	dataManager.removeEventListener(DataManagerEvent.SEARCH_COMPLETE, dataManager_searchCompleteHandler);
+	searchResult.dataProvider = event.result.*;
+	mainViewStack.selectedChild = searchResult;
 }
 
 private function dataManager_applicationDataLoaded(event:DataManagerEvent):void

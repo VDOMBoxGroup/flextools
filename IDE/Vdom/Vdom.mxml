@@ -35,8 +35,6 @@
 			
 			<vdomTitleBar:VdomTitleBar  left="0" right="0" logout="logoutHandler();"/>
 			
-			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>
-			
 			<mx:HBox y="21" width="606" horizontalCenter="0" horizontalAlign="center" verticalAlign="bottom">
 			
 				<mx:Label id="userName"
@@ -60,6 +58,8 @@
 					
 				</containers:MainTabNavigator>
 			</mx:Canvas>
+			
+			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>
 		</mx:Canvas>
 	</mx:ViewStack>
 </mx:WindowedApplication>

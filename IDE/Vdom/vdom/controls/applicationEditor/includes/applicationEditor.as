@@ -1,5 +1,4 @@
 import flash.display.DisplayObject;
-import flash.utils.ByteArray;
 
 import mx.core.Application;
 import mx.core.BitmapAsset;
@@ -7,7 +6,6 @@ import mx.events.ValidationResultEvent;
 import mx.graphics.codec.PNGEncoder;
 import mx.managers.PopUpManager;
 
-import vdom.MyLoader;
 import vdom.controls.ApplicationDescription;
 import vdom.controls.ImageChooser;
 import vdom.events.ApplicationEditorEvent;
@@ -28,7 +26,7 @@ private var _name:String = "Application Icon";
 private var _applicationId:String;
 
 private var imageChooser:ImageChooser;
-private var ppm:MyLoader;
+//private var ppm:MyLoader;
 
 private var iconChanged:Boolean;
 

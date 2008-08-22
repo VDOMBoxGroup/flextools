@@ -554,14 +554,14 @@ public class AttributesPanel extends ClosablePanel {
 						
 						var listItem2:Object = {label:listValues2.@Name, data:listValues2.@ID}
 						
-						pagelinkData.push(listItem2);
+						pagelinkData1.push(listItem2);
 						if(currentAttribute == listValues2.@ID)
-							selectedItem2 = pagelinkData[count];
+							selectedItem2 = pagelinkData1[count];
 						
 						count++
 					}
 					
-					valueContainer.dataProvider = pagelinkData;
+					valueContainer.dataProvider = pagelinkData1;
 					valueContainer.selectedItem = selectedItem2;
 				break
 				

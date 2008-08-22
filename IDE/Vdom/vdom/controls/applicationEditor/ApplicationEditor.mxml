@@ -69,15 +69,18 @@
 		
 	<mx:Label text="Description"  fontWeight="bold"/>
 	<mx:HBox width="100%" horizontalAlign="center">
+	
 		<controls:PromptingTextArea id="applicationDescription"
 			prompt="Application Description" height="125" width="100%" textAlign="left"/>
 	</mx:HBox>
 	
 	<mx:HBox width="100%" horizontalAlign="center">
+	
 		<mx:Button id="submitButton" label="CREATE"
 			styleName="buttonStyle"
 			cornerRadius="0" 
 			click="processValues();" />
+			
 		<mx:Button label="CANCEL"
 			styleName="buttonStyle"
 			cornerRadius="0" 
