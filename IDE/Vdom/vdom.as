@@ -40,7 +40,7 @@ private function switchToLogin():void
 {	
 	if(viewstack)
 	{ 
-		if(viewstack.selectedChild)
+		if(viewstack.selectedChild != loginForm)
 			viewstack.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
 		
 		viewstack.selectedChild = loginForm;

@@ -91,7 +91,7 @@ private function hideHandler():void {
 	
 	_username.text = "";
 	_password.text = "";
-	_hostname.text = "";
+	_hostname.text = ""; 
 }
 
 private function languageChangeHandler(event:Event):void {
