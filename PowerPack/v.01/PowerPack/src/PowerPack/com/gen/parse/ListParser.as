@@ -931,9 +931,13 @@ public class ListParser
 		var lexemObj:Object = Parser.processConvertedLexemArray(lexems, contexts);
 		lexems = lexemObj.array;
 		
+    	var strSentence:String = "";
+		for(var i:int=0; i<lexems.length; i++)
+			strSentence = strSentence + lexems[i].type;	
+		
 		var prog:String = '';
 		
-		for (var i:int=0; i<lexems.length; i++)		
+		for (i=0; i<lexems.length; i++)		
 			prog += ' '+(lexems[i].type=='n' ? Utils.doubleQuotes(lexems[i].value) : lexems[i].value);
 		
 		var evalRes:*;
@@ -942,13 +946,17 @@ public class ListParser
 		{
 			evalRes = Utils.replaceQuotes(lexems[0].value);
 		}
-		else
+		else if(Parser.isValidOperation(strSentence).result)
 		{
 			try {
 				evalRes = Parser.eval(prog, contexts);
 			} catch(e:*) {
 				evalRes = strElm;
 			}
+		}
+		else
+		{
+			evalRes = strElm;
 		}
 		
 		return evalRes;
