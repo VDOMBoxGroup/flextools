@@ -37,7 +37,7 @@
 	
 	<mx:RegExpValidator id="nREV"
 		source="{applicationName}" property="text"
-		expression="^[a-zA-Z_]+$"
+		expression="^[a-zA-Z_0-9]+$"
 		valid="handleValid(event);"
 		invalid="handleValid(event);"/>
 		

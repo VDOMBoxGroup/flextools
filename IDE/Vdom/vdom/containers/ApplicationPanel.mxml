@@ -25,17 +25,15 @@
 		
 		public function set dataProvider(value:XMLList):void
 		{	
-			if(!value || value == oldXMLList)
+			if(value == oldXMLList)
 				return;
 			
 			oldXMLList = value;
 			_applicationTitleList.dataProvider = _dataProvider = new XMLListCollection(value);
 			_applicationTitleList.validateNow();
-			_applicationTitleList.selectedIndex = 0;
-		
-			switchSelection(value[0].@ID);
-			var evt:ListEvent = new ListEvent('applicationChanged');
-			dispatchEvent(evt);
+			
+			if(value == null)
+				_applicationId = null;
 		}
 		
 		public function get applicationId():String
@@ -49,8 +47,11 @@
 		
 		public function set applicationId(value:String):void
 		{	
-			if(!value || _applicationId == value)
+			if(value != null && _applicationId == value)
 				return;
+			
+			if(value == null && _dataProvider.length > 0)
+				value = _dataProvider[0].@ID;
 			
 			switchSelection(value);
 		}
@@ -72,6 +73,9 @@
 			
 			if(selectedRenderer && XML(selectedRenderer.data).@ID == value)
 				selectedRenderer.selected = true;
+			
+			if(_applicationId)
+				dispatchEvent(new ListEvent("applicationChanged"));
 		}
 		
 		private function changeListEvent(event:ListEvent):void

@@ -6,6 +6,11 @@
 	
 	doubleClickEnabled="true"
 	height="50">
+	
+	<mx:Metadata>
+		[Event(name="logout", type="flash.events.Event")]
+	</mx:Metadata>
+	
 	<mx:Script>
 		<![CDATA[
 			import vdom.managers.DataManager;
@@ -129,7 +134,8 @@
 			
 			private function logout():void
 			{
-				dataManager.close();
+//				dataManager.close();
+				dispatchEvent(new Event("logout"));
 			}
 		]]>
 	</mx:Script>

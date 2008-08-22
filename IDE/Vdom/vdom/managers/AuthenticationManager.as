@@ -16,12 +16,11 @@ public class AuthenticationManager implements IEventDispatcher
 	private var dispatcher:EventDispatcher = new EventDispatcher();
 	private var soap:Soap = Soap.getInstance();
 	
-	
 	private var _username:String;
-	private var _tmpUsername:String;
+//	private var _tmpUsername:String;
 	
 	private var _password:String;
-	private var _tmpPassword:String;
+//	private var _tmpPassword:String;
 	
 	private var _hostname:String;
 	
@@ -52,9 +51,15 @@ public class AuthenticationManager implements IEventDispatcher
 			throw new Error("Instance already exists.");
 	}
 	
+	[Bindable]
 	public function get username():String
 	{
 		return _username;
+	}
+	
+	public function set username(value:String):void
+	{
+		
 	}
 	
 	public function get password():String

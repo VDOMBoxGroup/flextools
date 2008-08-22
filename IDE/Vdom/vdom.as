@@ -41,7 +41,7 @@ private function switchToLogin():void
 	if(viewstack)
 	{ 
 		if(viewstack.selectedChild != loginForm)
-			viewstack.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
+			moduleTabNavigator.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
 		
 		viewstack.selectedChild = loginForm;
 	}
@@ -128,7 +128,16 @@ private function dataManager_typesLoadedHandler(event:DataManagerEvent):void
 {
 	dataManager.removeEventListener(DataManagerEvent.TYPES_LOADED, dataManager_typesLoadedHandler);
 	alertManager.showMessage("");
+	
 	viewstack.selectedChild = main;
+	
+	if(moduleTabNavigator)
+	{
+		if(moduleTabNavigator.selectedIndex != 0)
+			moduleTabNavigator.selectedIndex = 0;
+		else
+			moduleTabNavigator.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
+	}
 }
 
 private function dataManager_close(event:DataManagerEvent):void
@@ -154,7 +163,14 @@ private function soap_initCompleteHandler(event:Event):void
 	
 	authenticationManager.login(hostname, username, password);
 }
-	
+
+private function logoutHandler():void
+{
+	if(moduleTabNavigator && moduleTabNavigator.selectedChild)
+		moduleTabNavigator.selectedChild.dispatchEvent(new FlexEvent(FlexEvent.HIDE));
+	dataManager.close();
+} 
+
 private function soap_faultHandler(event:FaultEvent):void
 {
 	Alert.show(event.fault.faultString, "Error");

@@ -17,14 +17,14 @@ import vdom.managers.FileManager;
 private var fileManager:FileManager = FileManager.getInstance();
 
 [Bindable]
-public var formName:String = '';
+public var formName:String = "";
 
 public var defaultValues:ApplicationDescription;
 
 [Bindable]
 private var _source:ByteArray;
 
-private var _name:String = 'Application Icon';
+private var _name:String = "Application Icon";
 private var _applicationId:String;
 
 private var imageChooser:ImageChooser;
@@ -48,7 +48,7 @@ private function changeImage():void
 
 private function resetImage():void
 {
-	var iconClass:Class = Application.application.getStyle('appIconPersonalPages');
+	var iconClass:Class = Application.application.getStyle("appIconPersonalPages");
 	var ba:BitmapAsset = new iconClass();
 	var pnge:PNGEncoder = new PNGEncoder();
 	_source = pnge.encode(ba.bitmapData);
@@ -75,11 +75,11 @@ private function showHandler():void
 	
 	if(defaultValues.id && defaultValues.iconId)
 	{
-		fileManager.loadResource(defaultValues.id, defaultValues.iconId, this, 'source', true);
+		fileManager.loadResource(defaultValues.id, defaultValues.iconId, this, "source", true);
 	}
 	else
 	{
-		var iconClass:Class = Application.application.getStyle('appIconPersonalPages'); 
+		var iconClass:Class = Application.application.getStyle("appIconPersonalPages"); 
 		var ba:BitmapAsset = new iconClass();
 		var pnge:PNGEncoder = new PNGEncoder();
 		var byteArray:ByteArray = pnge.encode(ba.bitmapData);

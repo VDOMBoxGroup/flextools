@@ -23,10 +23,10 @@ private var watchers:Array;
 //private var pageId:String;
 //private var objectId:String;
 
-private function creationCompleteHandler():void
+/* private function creationCompleteHandler():void
 {	
 	dispatchEvent(new FlexEvent(FlexEvent.SHOW));
-}
+} */
 
 private function showHandler():void
 {	
@@ -56,6 +56,7 @@ private function hideHandler():void
 	for each(var watcher:ChangeWatcher in watchers){
 		watcher.unwatch();
 	}
+	
 	listApplicationContainer.dataProvider = null;
 	mainViewStack.selectedIndex = 0;
 	selectedChild = initModule;

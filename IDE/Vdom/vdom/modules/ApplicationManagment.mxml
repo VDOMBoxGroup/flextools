@@ -9,7 +9,6 @@
 	xmlns:editApplication="vdom.components.editApplication.*"
 	xmlns:searchResult="vdom.components.searchResult.*"
 	
-	creationComplete="creationCompleteHandler();"
 	show="showHandler();"
 	hide="hideHandler();"
 	
