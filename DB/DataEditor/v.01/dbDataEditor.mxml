@@ -13,14 +13,19 @@
 	<mx:DataGrid id="__dg"
 		width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
 		itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"
-		doubleClickEnabled="true" doubleClick="{addRowBtnClickHandler(event);}" />
+		doubleClickEnabled="true" doubleClick="{addRowBtnClickHandler(event);}"
+		dataProvider="{dataGridProvider}" draggableColumns="false" sortableColumns="false" />
 	<mx:HBox width="100%" horizontalAlign="right" horizontalGap="0" paddingBottom="0" paddingTop="0">
 		<mx:Label text="Total rows in table:" fontSize="9" />
 		<mx:Label id="__rowsCount" text="{totalRecords}" fontSize="9" fontWeight="bold" />	
 	</mx:HBox>
 	<mx:HBox width="100%" height="20" horizontalAlign="left" verticalAlign="middle" horizontalGap="0" paddingRight="0" paddingLeft="0">
 		<mx:Label text="Pages:" />
-		<mx:HBox id="__pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0" />
+		<mx:HBox id="__pagesArea" width="100%" height="20" verticalAlign="middle" horizontalGap="0" enabled="{!__commitBtn.enabled}"
+			disabledOverlayAlpha="0.1" />
+		<mx:Label text="Records per page:" fontSize="9" />
+		<mx:TextInput id="__amount" borderColor="#999999" borderStyle="solid" height="20" fontSize="9" width="45" enabled="{!__commitBtn.enabled}" />
+		<mx:Button height="20" label="apply" cornerRadius="0" click="{amountApplyBtnClickHandler();}" enabled="{!__commitBtn.enabled}" />
 	</mx:HBox>
 
 	<mx:ViewStack id="__alertArea" width="100%" height="24" paddingTop="0" paddingBottom="0">
@@ -31,11 +36,13 @@
 				<mx:Button id="__deleteBtn" label="delete line" height="20" click="{deleteBtnClickHandler();}"
 					icon="@Embed(source='/icons/list-remove.png')" />
 				<mx:VRule height="20" />		
-				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="commitBtnClickHandler()"
+				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}"
 					icon="@Embed(source='/icons/commit.png')" />
 				<mx:Button id="__discardBtn" label="discard" height="20" enabled="{__commitBtn.enabled}" click="{discardBtnClickHandler();}"
 					icon="@Embed(source='/icons/discard.png')" />
+
 				<mx:Spacer width="100%" />
+				
 				<mx:HBox horizontalGap="0">
 					<mx:Label id="__queueLenght" fontWeight="bold" text="0" textAlign="right" />
 					<mx:Label text="operation(s) in queue" />
@@ -44,16 +51,22 @@
 		</mx:Canvas>
 		<mx:Canvas id="__alert">
 			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center" horizontalScrollPolicy="off">
-				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" width="100%" maxWidth="550" />
+				<mx:Label id="__alertText" text="{alertMessage}" fontWeight="bold" color="#FF0000" maxWidth="550" />
 				<mx:Button id="__alertYesBtn" label="Yes" height="18" click="{alertClickHandler('Yes');}" />
 				<mx:Button id="__alertNoBtn" label="No" height="18" click="{alertClickHandler('No');}" />
 			</mx:HBox> 					
 		</mx:Canvas>
 		<mx:Canvas id="__message">
 			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center" horizontalScrollPolicy="off">
-				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" width="100%" maxWidth="600" />
+				<mx:Label id="__msgText" text="{alertMessage}" fontWeight="bold" color="#FF0000" maxWidth="550" />
 				<mx:Button id="__msgOkBtn" label="Ok" height="18" click="{messageOkClickHandler();}" />
 			</mx:HBox> 					
+		</mx:Canvas>
+		<mx:Canvas id="__inProgress">
+			<mx:HBox width="100%" height="24" verticalAlign="middle" horizontalAlign="center" horizontalScrollPolicy="off">
+				<mx:Image id="__spinner" source="@Embed(source='/icons/spinner.swf')" height="18" width="18" />
+				<mx:Label text="Operation(s) in progress..." fontWeight="bold" />
+			</mx:HBox>
 		</mx:Canvas>
 	</mx:ViewStack>
 	

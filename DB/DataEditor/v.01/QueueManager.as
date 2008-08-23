@@ -10,6 +10,7 @@ package
 		private var externalManager:*;
 		private var queue:Array = [];
 		private var currentRequestInQueue:int = 0;
+		private var inProgress:Boolean = false;
 		
 		public function QueueManager(externalManager:*)
 		{
@@ -76,9 +77,13 @@ package
 
 			queue = [];
 			currentRequestInQueue = 0;
+			inProgress = false;
 		}
 		
 		public function execute():void {
+			if (inProgress)
+				return;
+				
 			this.externalManager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
 			this.externalManager.addEventListener("callError", remoteMethodCallErrorMsgHandler);
 			this.addEventListener(QueueEvent.SUCCESS_RESPONSE, queueRequestSuccesHandler);
@@ -88,14 +93,16 @@ package
 				externalManager.remoteMethodCall(queue[currentRequestInQueue]['method'], queue[currentRequestInQueue]['params']);
 			}
 			catch (err:Error) { return; }
+			
+			inProgress = true;
 		}
 
 		private function queueRequestSuccesHandler(event:QueueEvent):void {
 			currentRequestInQueue++;
 			if (currentRequestInQueue >= queue.length) {
-				
 				reset();
 				this.dispatchEvent(new QueueEvent(QueueEvent.QUEUE_COMPLETE));
+				inProgress = false;
 				return;
 			}
 			
@@ -179,6 +186,7 @@ package
 		
 		
 		private function truncateAndInterrupt(message:String):void {
+			inProgress = false;
 			this.dispatchEvent(new QueueEvent(QueueEvent.QUEUE_INTERRUPT, message, currentRequestInQueue));
 			
 			/* Truncate queue completed requests */
