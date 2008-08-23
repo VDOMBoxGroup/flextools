@@ -44,13 +44,15 @@ private function deleteObject(strID:String):void
 					}else{ trace('NON');}
 					
 					main.removeChildAt(chInd);
-					 main.validateDisplayList();
+					 
 					 delete masIndex[level][ind1][ind2];
 					
 					 main.removeChild( massLines[level][ind1][ind2]);
 					 delete massLines[level][ind1][ind2];
 					 
-					 
+					main.validateDisplayList();
+					main.invalidateDisplayList();
+					main.validateNow(); 
 				}
 	
 	// удаляем сам обьект
