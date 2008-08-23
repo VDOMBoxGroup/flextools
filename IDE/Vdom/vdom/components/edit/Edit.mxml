@@ -19,7 +19,7 @@
 	
 	<editContainers:TypeAccordion id="types"
 		y="100" width="90" minWidth="90" maxWidth="90"
-		dataProvider="{dataManager.listTypes}" dropShadowEnabled="true"/>
+		dropShadowEnabled="true"/>
 	
 		<containers:AdvancedTabNavigator id="mainArea"
 			width="100%" borderStyle="none">			
