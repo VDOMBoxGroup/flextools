@@ -6,6 +6,8 @@
 		[ResourceBundle("Tree")]
 </mx:Metadata>	
 <mx:Canvas id="main" width="100%" height="100%" backgroundColor="#ffffff">
+<mx:Canvas id="cnForIndex" width="100%" height="100%" >
+
 
 	
 	
@@ -400,6 +402,7 @@
 		for (var tID:String in massTreeElements)
 				if(massTreeElements[tID].y > maxY) 
 					maxY = massTreeElements[tID].y;
+					
 		trEl.y = maxY + 100;
 		//trEl.height
 		
@@ -431,7 +434,7 @@
 		if(curTree != null)	curTree.current = true;
 		
 		setStartPage();
-		
+//		drawIndex();
 		saveToServer();
 		//showHnadler();
 	}
@@ -444,7 +447,6 @@
 		{
 			massTreeElements[tID].state = expand.toString();
 		}
-		
 	} 
 	]]>
 </mx:Script>
@@ -458,11 +460,10 @@
 	</mx:ComboBox>
 -->
 </mx:Canvas>
+</mx:Canvas>
 
-<mx:VBox    >
+<mx:VBox>
 	<colorMenu02:ColorMenu2 id="colmen2" />
-	
- 	
 	
 	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"    click="addTreeElementLauncher()"/>
 	<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>

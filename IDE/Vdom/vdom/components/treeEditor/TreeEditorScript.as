@@ -2,6 +2,7 @@
 		
 		import flash.events.MouseEvent;
 		
+		import vdom.components.treeEditor.Index;
 		import vdom.components.treeEditor.TreeElement;
 		import vdom.events.DataManagerEvent;
 		import vdom.events.TreeEditorEvent;
@@ -19,8 +20,13 @@ private function removeAllLines():void
 			for (var frsTrElem:String in massLines[level])
 				for (var sknTrElem:String in massLines[level][frsTrElem])
 				{
+					main.removeChild(masIndex[level][frsTrElem][sknTrElem]);
+					delete masIndex[level][frsTrElem][sknTrElem];
+					
 					main.removeChild(massLines[level][frsTrElem][sknTrElem]);
 					delete massLines[level][frsTrElem][sknTrElem];
+					
+					main.validateDisplayList();
 				}
 }
 
@@ -31,14 +37,28 @@ private function deleteObject(strID:String):void
 			for(var ind2:String in massLines[level][ind1])
 				if (strID == ind1 || strID == ind2)
 				{
+					if(main.contains(masIndex[level][ind1][ind2]))
+					{
+							var chInd:int =  main.getChildIndex(masIndex[level][ind1][ind2]);
+							trace(chInd);
+					}else{ trace('NON');}
+					
+					main.removeChildAt(chInd);
+					 main.validateDisplayList();
+					 delete masIndex[level][ind1][ind2];
+					
 					 main.removeChild( massLines[level][ind1][ind2]);
 					 delete massLines[level][ind1][ind2];
+					 
+					 
 				}
+	
 	// удаляем сам обьект
 	main.removeChild(massTreeElements[strID]);
 	delete massTreeElements[strID];
 	
-
+	main.validateDisplayList();
+	
 	//dataManager.deleteObject(strID);
 	
 
@@ -218,7 +238,14 @@ private function adjustmentTree(xml1:XML):void
 		}
 		
 		saveToServer();
-		
+		/*
+		var move:Move = new Move();
+		move.xTo = 0;
+		move.yTo = 0;
+		move.target = massTreeElements[randomTreeElement];
+		move.repeatDelay   = 3000;
+		move.play();
+	*/
 	
 	function setPosition(inName:String):Boolean
 	{
@@ -444,6 +471,10 @@ private function drawLines(xml1:XML):void
 				}
 			}
 		}
+		
+		drawIndex();
+		
+		
 	}
 }
 
@@ -476,9 +507,12 @@ private function  removeLine():void
 					{
 						main.removeChild(massLines[level][frsTrElem][sknTrElem]);
 						delete massLines[level][frsTrElem][sknTrElem];
-						//btLine.visible = false;
 						
+						main.removeChild(masIndex[level][frsTrElem][sknTrElem]);
+						delete masIndex[level][frsTrElem][sknTrElem];
+						//btLine.visible = false;
 					}
+					
 	if (main.contains(btLine))
 		main.removeChild(btLine);
 		
@@ -493,7 +527,6 @@ private function saveToServer():void
 											
 	 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
 		dataManager.setApplactionStructure(dataToServer);
-	
 }
 
 public function dataToXML(massTreeElements:Array, massLines:Array ):XML
@@ -596,3 +629,35 @@ private function setStartPage():void
 		massTreeElements[startPage].selected = true;
 	}
 }
+
+private var masIndex:Array = new Array();
+
+
+private function drawIndex():void
+{
+	for (var level:String in massLines)
+	{
+		masIndex[level] = new Array();
+		
+		for(var ind1:String in massLines[level])
+		{
+			masIndex[level][ind1] = new Array();
+			
+			for(var ind2:String in massLines[level][ind1])
+			{
+				var index:Index = new Index();
+					index.level = level;
+					index.targetLine = massLines[level][ind1][ind2];
+				
+				masIndex[level][ind1][ind2] = index;	
+				main.addChild(masIndex[level][ind1][ind2]);
+				
+		//		main.removeChild(masIndex[level][ind1][ind2]);
+			}
+		}
+	}
+}
+
+
+
+

@@ -3,6 +3,7 @@ package vdom.components.treeEditor
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
+	import flash.events.Event;
 	import flash.geom.Point;
 	
 	import mx.containers.Canvas;
@@ -86,6 +87,11 @@ package vdom.components.treeEditor
 			
 			middleX = x0 - dX / 2;
 			middleY = y0 - dY / 2;
+			
+			dispatchEvent(new Event
+			(Event.CHANGE));
+//			dispatchEvent(new Event(Event.CHANGE));
+
 			
 			alf = Math.atan(dY/dX);
 			if (dX<0) alf+=Math.PI;
@@ -308,5 +314,11 @@ package vdom.components.treeEditor
 			this.toObj = null;
 		}
 			
+		override public function set visible(value:Boolean):void
+		{
+			super.visible = value;
+			
+			dispatchEvent(new Event(Event.CHANGE));
+		}
 	}
 }
