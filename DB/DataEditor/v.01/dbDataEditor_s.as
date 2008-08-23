@@ -9,7 +9,7 @@ import mx.utils.StringUtil;
 private const AMOUNT:int = 500;
 private const MAX_PAGES:int = 10;
 
-private var dataGridCollection:ArrayCollection = new ArrayCollection();
+private var dataGridProvider:Array = [];
 private var dataGridColumns:Array = []; /* of DataGridColumns */
 private var dataGridColumnsProps:Array = [];
 
@@ -25,7 +25,7 @@ private var queryResult:XML;
 private var editableValue:String = '';
 private var queue:QueueManager; /* of XML */
 private var thereAreGlobalChanges:Boolean = false;
-private var selectedRowIndexStore:int = -1;
+private var verticalScrollPositionStore:int = 0;
 
 /* -------------------- Public properties --------------------------------------------------------- */
 
@@ -49,6 +49,8 @@ public function get value():String {
 /* ------------------------------------------------------------------------------------------------ */
 
 private function onLoadInit():void {
+	trace (':: Start load script');
+	
 	queue = new QueueManager(manager);
 	
 	/* Permanent event listener */
@@ -67,21 +69,31 @@ private function onLoadInit():void {
 		getPageResponseHandler, null);
 	
 	queue.addEventListener(QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler);
-	updateQueueLenght();
+	
+	updateQueueLength();
+	
+	trace (':: Executing queue (' + String(queue.length) + ')');
 	queue.execute();
 }
 
 private function queueOnLoadCompleteHandler(message:String):void {
+	trace (':: Queue complete handler recieved');
+	
 	queue.removeEventListener(QueueEvent.QUEUE_COMPLETE, queueOnLoadCompleteHandler);
-	updateQueueLenght();
+	updateQueueLength();
 }
 
 private function errorHandler(event:QueueEvent):void {
+	trace (':: Queue error handler recieved');
+	
 	showMessage(event.message);
-	updateQueueLenght();	
+	updateQueueLength();	
 }
 
 private function getPageRequest():void {
+	trace (':: Adding Get Page request');
+	
+	__pagesArea.enabled = false;
 	queue.reset();
 	queue.addRequest(
 		UIDUtil.createUID(),
@@ -89,31 +101,43 @@ private function getPageRequest():void {
 		'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
 		getPageResponseHandler, null);
 	
-	updateQueueLenght();
+	updateQueueLength();
+	
+	trace (':: Executing Get Page request');
 	queue.execute();
 }
 
 private function getPageResponseHandler(message:String):void {
+	trace (':: Get page Response handler');
+	
 	try {
 		queryResult = new XML(message);
 		pages[currentPage] = new XML(queryResult.Result.queryresult.table.data);
 		
 		showPageData();
 	}
-	catch (err:Error) {	queryResult = new XML(); }
+	catch (err:Error) {
+		trace (':: Exception 01: ' + err.message);	
+		queryResult = new XML();
+	}
 	
+	__pagesArea.enabled = true;
+	
+	trace (':: Resetting queue');
 	queue.reset();
-	updateQueueLenght();
+	updateQueueLength();
 } 
 
 private function showPageData():void {
+	trace (':: Show page data function executed');
 	if (!pages[currentPage]) {
 		getPageRequest();
 		return;		
 	}
 	
 	/* Show current page */
-	dataGridCollection = new ArrayCollection();
+	trace (':: Constuct DataGrid data provider');
+	dataGridProvider = [];
 	for each (var xmlRow:XML in pages[currentPage].row) {
 		/* Create tableRow object */
 		var tableRow:Object = new Object();
@@ -126,15 +150,17 @@ private function showPageData():void {
 		tableRow["fnew"] = false;
 		tableRow["changed"] = false;
 		tableRow["GUID"] = UIDUtil.createUID(); 
-		dataGridCollection.addItem(tableRow);
+		dataGridProvider.push(tableRow);
 	}
-	__dg.dataProvider = dataGridCollection;
 	
+	trace (':: Applying DataGrid data provider');
+	__dg.dataProvider = dataGridProvider;
 	buildPagesTickets();
 }
 
 
 private function buildPagesTickets():void {
+	trace (':: Building pages tickets');
 	/* (Re)Build pages tickets */
 	__pagesArea.removeAllChildren();
 	var p:int = 1;
@@ -185,6 +211,8 @@ private function buildPagesTickets():void {
 }
 
 private function pageClickHandler(mEvent:MouseEvent):void {
+	trace (':: Page click handler executed');
+	
 	/* Handle page number click */
 	currentPage = int(mEvent.currentTarget.label) - 1; 
 	showPageData();
@@ -192,6 +220,8 @@ private function pageClickHandler(mEvent:MouseEvent):void {
 
 
 private function structureResponseHandler(message:String):void {
+	trace (':: Structure response handler executed');
+	
 	try {
 		queryResult = new XML(message);
 		tableStructureXML = new XML(queryResult.Result.tablestructure);
@@ -204,10 +234,13 @@ private function structureResponseHandler(message:String):void {
 		queryResult = new XML();
 	}
 
-	updateQueueLenght();
+	trace (':: Structure response handler ended');
+	updateQueueLength();
 }
 
 private function setTableHeaders():void {
+	trace (':: Set Table headers executed');
+	
 	dataGridColumns = [];
 	for each (var xmlHeader:XML in tableStructureXML.table.header.column) {
 		var _header:DataGridColumn = new DataGridColumn();
@@ -231,20 +264,24 @@ private function setTableHeaders():void {
 		
 		dataGridColumnsProps.push(columnProps);
 		_header.dataField = xmlHeader.@name;
+		
 		dataGridColumns.push(_header);
 	}
+	
+	trace (':: Applying DataGrid columns');
 	__dg.columns = dataGridColumns;
 }
 
 
 private function countResponseHandler(message:String):void {
+	trace (':: Count Response handler executed');
 	try {
 		queryResult = new XML(message);
-		totalRecords = queryResult.Result;		
+		totalRecords = int(queryResult.Result);		
 	}
 	catch (err:Error) { return;	}
 	
-	updateQueueLenght();
+	updateQueueLength();
 }
 
 // ----- Alert processing methods -------------------------------------------------------
@@ -285,11 +322,14 @@ private function messageOkClickHandler():void {
 // ----- Visual components handlers -----------------------------------------------------
 
 private function addRowBtnClickHandler(event:MouseEvent):void {
+	trace (':: On Add row Button mouse click handler executed');
+	
 	/* Check position of user click */
 	if (event.target is UITextField)
 		return;
 	
 	/* Create tableRow object */
+	trace (':: Creating table object');
 	var tableRow:Object = new Object();
 	var columnIndex:int = 0;
 	for each (var dgColumn:DataGridColumn in dataGridColumns) {
@@ -309,6 +349,7 @@ private function addRowBtnClickHandler(event:MouseEvent):void {
 	tableRow['GUID'] = UIDUtil.createUID();
 
 	/* Construct request */
+	trace (':: Constructing add row request');
 	var requestXMLParam:XML = new XML(<data />);
 	var xmlRow:XML = new XML(<row id='NULL' />);						
 	for each (var dataGridCell:Object in dataGridColumns) {
@@ -324,14 +365,17 @@ private function addRowBtnClickHandler(event:MouseEvent):void {
 		'add_row',
 		requestXMLParam.toXMLString());
 	
-	dataGridCollection.addItem(tableRow);
-	__dg.selectedIndex = dataGridCollection.length;
+	trace (':: Update visual components [add row]');
+	dataGridProvider.push(tableRow);
+	
+	__dg.dataProvider = dataGridProvider;
+	__dg.selectedIndex = dataGridProvider.length;
 	__commitBtn.enabled = true;
-	updateQueueLenght();
+	updateQueueLength();
 }
 
 private function itemEditBegin(event:DataGridEvent):void {
-	editableValue = dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex].dataField].toString();
+	editableValue = dataGridProvider[event.rowIndex][dataGridColumns[event.columnIndex].dataField].toString();
 }
 
 private function itemEditEnd(event:DataGridEvent):void {
@@ -350,94 +394,107 @@ private function itemEditEnd(event:DataGridEvent):void {
 		}
 
 		/* Apply changed data */		
-		dataGridCollection[event.rowIndex][dataGridColumns[event.columnIndex].dataField] = event.currentTarget.itemEditorInstance.text;
+		dataGridProvider[event.rowIndex][dataGridColumns[event.columnIndex].dataField] = event.currentTarget.itemEditorInstance.text;
 
 		/* Construct request */
 		var requestXMLParam:XML = new XML(<data />);
-		var xmlRow:XML = new XML(<row id={dataGridCollection[event.rowIndex]['id']} />);						
+		var xmlRow:XML = new XML(<row id={dataGridProvider[event.rowIndex]['id']} />);						
 		for each (var dataGridCell:Object in dataGridColumns) {
 			xmlRow.appendChild(
 				<cell name={dataGridCell.dataField}>
-					{dataGridCollection[event.rowIndex][dataGridCell.dataField]}
+					{dataGridProvider[event.rowIndex][dataGridCell.dataField]}
 				</cell>);
 		}
 		
 		requestXMLParam.appendChild(xmlRow);
 		
 		/* Apply reqest to the queue */
-		if (dataGridCollection[event.rowIndex]['changed']) {
+		if (dataGridProvider[event.rowIndex]['changed']) {
 			
-			if (dataGridCollection[event.rowIndex]['fnew']) {
+			if (dataGridProvider[event.rowIndex]['fnew']) {
 
 				queue.updateRequest(
-					dataGridCollection[event.rowIndex]['GUID'],
+					dataGridProvider[event.rowIndex]['GUID'],
 					'add_row',
 					requestXMLParam.toXMLString());
 			} else {
 				
 				queue.updateRequest(
-					dataGridCollection[event.rowIndex]['GUID'],
+					dataGridProvider[event.rowIndex]['GUID'],
 					'update_row',
 					requestXMLParam.toXMLString());
 			}
 		} else {
 			
 			/* If new changed item appeared... */
-			dataGridCollection[event.rowIndex]['changed'] = true;
+			dataGridProvider[event.rowIndex]['changed'] = true;
 			__commitBtn.enabled = true;
 
-			if (dataGridCollection[event.rowIndex]['fnew']) {
+			if (dataGridProvider[event.rowIndex]['fnew']) {
 				
 				queue.updateRequest(
-					dataGridCollection[event.rowIndex]['GUID'],
+					dataGridProvider[event.rowIndex]['GUID'],
 					'add_row',
 					requestXMLParam.toXMLString());
 			} else {
 				
 				queue.addRequest(
-					dataGridCollection[event.rowIndex]['GUID'],
+					dataGridProvider[event.rowIndex]['GUID'],
 					'update_row',
 					requestXMLParam.toXMLString());
 			}
 		}
 	}
 	
-	updateQueueLenght();
+	updateQueueLength();
 }
 
 private function commitBtnClickHandler():void {
+	trace (':: On Commit Button mouse click handler executed');
+	trace (':: Adding queue complete event listener');
 	queue.addEventListener(QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler);
+	trace (':: Executing the Queue (' + String(queue.length) + ')');
 	queue.execute();
 }
 
 private function queueCommitCompleteHandler(event:QueueEvent):void {
+	trace (':: Queue Commit Queue event handler recieved');
 	queue.removeEventListener(QueueEvent.QUEUE_COMPLETE, queueCommitCompleteHandler);
 	__commitBtn.enabled = false;
 	
 	/* ReRequest rows count */
+	trace (':: Resetting the Queue');
 	queue.reset();
+	trace (':: Adding Get Count request');
 	queue.addRequest(UIDUtil.createUID(), 'get_count', '', countResponseHandler, null);
 	
 	/* ReRequest page */
+	trace (':: Adding Get Data request');
 	queue.addRequest(
 		UIDUtil.createUID(),
 		'get_data',
 		'<range><limit>' + AMOUNT.toString() + '</limit><offset>' + String(AMOUNT * currentPage) + '</offset></range>',
 		refreshDataGrid, null);
 	
-	selectedRowIndexStore = __dg.selectedIndex;
+	trace (':: Storing DataGrid position');	
+	verticalScrollPositionStore = __dg.verticalScrollPosition;
 	
+	trace (':: Executing the Queue (' + String(queue.length) + ')');
 	queue.execute();
 }
 
 private function refreshDataGrid(message:String):void {
+	trace (':: Refresh Data Grid function executed');	
 	getPageResponseHandler(message);
-	__dg.scrollToIndex(selectedRowIndexStore);
+	
+	trace (':: Scroll Data Grid to stored index');
+	__dg.verticalScrollPosition = verticalScrollPositionStore;
 
-	updateQueueLenght();
+	updateQueueLength()
 }
 
 private function deleteBtnClickHandler():void {
+	trace (':: On Delete Button mouse click handler executed');
 	var selectedRowIndex:int = 0;
 	
 	try {
@@ -447,19 +504,33 @@ private function deleteBtnClickHandler():void {
 	}
 	catch (err:Error) { return; }
 	
-	if (dataGridCollection[selectedRowIndex]['fnew']) {
-		queue.removeRequest(dataGridCollection[selectedRowIndex]['GUID']);
+	if (dataGridProvider[selectedRowIndex]['fnew']) {
+		trace (':: Remove request from queue because row is new');
+		queue.removeRequest(dataGridProvider[selectedRowIndex]['GUID']);
 	} else {
-		var requestXMLParam:XML = new XML(<data><row id={dataGridCollection[selectedRowIndex]['id']} /></data>);
-
+		trace (':: Construct Delete Row request');
+		var requestXMLParam:XML = new XML(<data><row id={dataGridProvider[selectedRowIndex]['id']} /></data>);
+		
+		trace (':: Add Delete Row Request');
 		queue.addRequest(
-			dataGridCollection[selectedRowIndex]['GUID'].toString(),
+			dataGridProvider[selectedRowIndex]['GUID'].toString(),
 			'delete_row',
 			requestXMLParam.toXMLString());
 	}
-		
-	dataGridCollection.removeItemAt(selectedRowIndex);
-	updateQueueLenght();
+	
+	trace (':: Remove row from Data Grid collection');
+	var newDataGridProvider:Array = [];
+	for (var i:int = 0; i < dataGridProvider.length; i++) {
+		if (i != selectedRowIndex)
+			newDataGridProvider.push(dataGridProvider[i]);
+	}
+	
+	trace (':: Updating Data Grid provider');
+	verticalScrollPositionStore = __dg.verticalScrollPosition;
+	dataGridProvider = newDataGridProvider;
+	__dg.dataProvider = dataGridProvider;
+	__dg.verticalScrollPosition = verticalScrollPositionStore;
+	updateQueueLength();
 	__commitBtn.enabled = true;
 }
 
@@ -467,6 +538,6 @@ private function discardBtnClickHandler():void {
 	
 }
 
-private function updateQueueLenght():void {
+private function updateQueueLength():void {
 	__queueLenght.text = queue.length.toString();
 }

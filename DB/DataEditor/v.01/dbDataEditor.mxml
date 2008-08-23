@@ -13,7 +13,7 @@
 	<mx:DataGrid id="__dg"
 		width="100%" height="100%" horizontalScrollPolicy="auto" verticalScrollPolicy="auto"
 		itemEditEnd="{itemEditEnd(event);}" itemEditBegin="{itemEditBegin(event);}" editable="true"
-		doubleClickEnabled="true" doubleClick="{addRowBtnClickHandler(event);}"/>
+		doubleClickEnabled="true" doubleClick="{addRowBtnClickHandler(event);}" />
 	<mx:HBox width="100%" horizontalAlign="right" horizontalGap="0" paddingBottom="0" paddingTop="0">
 		<mx:Label text="Total rows in table:" fontSize="9" />
 		<mx:Label id="__rowsCount" text="{totalRecords}" fontSize="9" fontWeight="bold" />	
@@ -31,7 +31,7 @@
 				<mx:Button id="__deleteBtn" label="delete line" height="20" click="{deleteBtnClickHandler();}"
 					icon="@Embed(source='/icons/list-remove.png')" />
 				<mx:VRule height="20" />		
-				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="{commitBtnClickHandler();}"
+				<mx:Button id="__commitBtn" label="commit" height="20" enabled="false" click="commitBtnClickHandler()"
 					icon="@Embed(source='/icons/commit.png')" />
 				<mx:Button id="__discardBtn" label="discard" height="20" enabled="{__commitBtn.enabled}" click="{discardBtnClickHandler();}"
 					icon="@Embed(source='/icons/discard.png')" />

@@ -17,10 +17,6 @@ package
 			super(null);
 
 			this.externalManager = externalManager;
-
-			this.externalManager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-			this.externalManager.addEventListener("callError", remoteMethodCallErrorMsgHandler);
-			this.addEventListener(QueueEvent.SUCCESS_RESPONSE, queueRequestSuccesHandler);
 		}
 		
 		public function get length():int {
@@ -34,9 +30,9 @@ package
 					
 			var request:Object = new Object;
 			
-			request['GUID'] = GUID;
-			request['method'] = methodName;
-			request['params'] = methodParams;
+			request['GUID'] = String(GUID);
+			request['method'] = String(methodName);
+			request['params'] = String(methodParams);
 			request['functionOnSuccess'] = functionOnSuccess;
 			request['functionOnFault'] = functionOnFault;
 			
@@ -74,11 +70,19 @@ package
 		}
 		
 		public function reset():void {
+			this.externalManager.removeEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+			this.externalManager.removeEventListener("callError", remoteMethodCallErrorMsgHandler);
+			this.removeEventListener(QueueEvent.SUCCESS_RESPONSE, queueRequestSuccesHandler);
+
 			queue = [];
 			currentRequestInQueue = 0;
 		}
 		
 		public function execute():void {
+			this.externalManager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+			this.externalManager.addEventListener("callError", remoteMethodCallErrorMsgHandler);
+			this.addEventListener(QueueEvent.SUCCESS_RESPONSE, queueRequestSuccesHandler);
+
 			/* Initialise executing the Queue - execute first request */
 			try {
 				externalManager.remoteMethodCall(queue[currentRequestInQueue]['method'], queue[currentRequestInQueue]['params']);
@@ -121,7 +125,8 @@ package
 
 				case "Result":
 					try {
-						queue[currentRequestInQueue]['functionOnSuccess'](xmlResult);
+						if (queue[currentRequestInQueue]['functionOnSuccess'])
+							queue[currentRequestInQueue]['functionOnSuccess'](xmlResult);
 					}
 					catch (err:Error) { }
 					
@@ -130,7 +135,8 @@ package
 					
 				case "Error":
 					try {
-						queue[currentRequestInQueue]['functionOnFault'](xmlResult);
+						if (queue[currentRequestInQueue]['functionOnFault'])
+							queue[currentRequestInQueue]['functionOnFault'](xmlResult);
 					}
 					catch (err:Error) { }
 					
