@@ -5,8 +5,9 @@
 <mx:Metadata>
 		[ResourceBundle("Tree")]
 </mx:Metadata>	
-<mx:Canvas id="main" width="100%" height="100%" backgroundColor="#ffffff">
 <mx:Canvas id="cnForIndex" width="100%" height="100%" >
+<mx:Canvas id="main" width="100%" height="100%" backgroundColor="#ffffff">
+
 
 
 	
@@ -30,6 +31,7 @@
 		
  	private var massTreeElements:Array = new Array();
 	private var massLines:Array = new Array();
+	private var masIndex:Array = new Array();
 	private var curTree:Object = new Object();
 	private var canLine:Canvas = new Canvas();
 	private var pnFrom:Point = new Point();

@@ -37,7 +37,8 @@ private function deleteObject(strID:String):void
 			for(var ind2:String in massLines[level][ind1])
 				if (strID == ind1 || strID == ind2)
 				{
-					if(main.contains(masIndex[level][ind1][ind2]))
+					
+					if(masIndex[level][ind1][ind2].visible && main.contains(masIndex[level][ind1][ind2]))
 					{
 							var chInd:int =  main.getChildIndex(masIndex[level][ind1][ind2]);
 							trace(chInd);
@@ -50,9 +51,11 @@ private function deleteObject(strID:String):void
 					 main.removeChild( massLines[level][ind1][ind2]);
 					 delete massLines[level][ind1][ind2];
 					 
-					main.validateDisplayList();
-					main.invalidateDisplayList();
 					main.validateNow(); 
+					 
+//					main.validateDisplayList();
+//					main.invalidateDisplayList();
+					
 				}
 	
 	// удаляем сам обьект
@@ -474,10 +477,11 @@ private function drawLines(xml1:XML):void
 			}
 		}
 		
-		drawIndex();
+		
 		
 		
 	}
+	drawIndex();
 }
 
 
@@ -632,28 +636,29 @@ private function setStartPage():void
 	}
 }
 
-private var masIndex:Array = new Array();
+
 
 
 private function drawIndex():void
 {
+//	trace('DrawIndex');
 	for (var level:String in massLines)
 	{
-		masIndex[level] = new Array();
+		if(!masIndex[level]) masIndex[level] = new Array();
 		
 		for(var ind1:String in massLines[level])
 		{
-			masIndex[level][ind1] = new Array();
+			 if(!masIndex[level][ind1]) masIndex[level][ind1] = new Array();
 			
 			for(var ind2:String in massLines[level][ind1])
 			{
-				var index:Index = new Index();
-					index.level = level;
-					index.targetLine = massLines[level][ind1][ind2];
+				masIndex[level][ind1][ind2] = new Index();
+				masIndex[level][ind1][ind2].level = level;
+				masIndex[level][ind1][ind2].targetLine = massLines[level][ind1][ind2];
 				
-				masIndex[level][ind1][ind2] = index;	
+//				masIndex[level][ind1][ind2] = index;	
 				main.addChild(masIndex[level][ind1][ind2]);
-				
+//				trace('Creating Index: ');
 		//		main.removeChild(masIndex[level][ind1][ind2]);
 			}
 		}
