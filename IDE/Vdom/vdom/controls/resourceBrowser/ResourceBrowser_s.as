@@ -4,12 +4,6 @@
  * Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
 **/
 
-/**
- * Current tasks:
- * 1. Implement upload resource to server
- * 2. Implement delete resource from server
-**/
-
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.filesystem.File;
@@ -23,8 +17,6 @@ import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 import mx.utils.Base64Encoder;
 
-import vdom.connection.soap.Soap;
-import vdom.connection.soap.SoapEvent;
 import vdom.controls.resourceBrowser.ListItem;
 import vdom.controls.resourceBrowser.PreviewContainer;
 import vdom.controls.resourceBrowser.ThumbnailItem;
@@ -68,7 +60,6 @@ private var filteredResources:int = 0;
 
 private var fileManager:FileManager = FileManager.getInstance();	// FileManager global Class instance
 private var dataManager:DataManager = DataManager.getInstance();	// DataManager global Class instance
-private var soap:Soap = Soap.getInstance();
 
 public function set selectedItemID(itemID:String):void {
 	_selectedItemID = itemID;
@@ -96,7 +87,7 @@ private function listResourcesQuery():void {
 
 private function getResourcesList(fmEvent:FileManagerEvent):void {
 	fileManager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);	
-	resources = new XML(fmEvent.result.Resources.toXMLString());
+	resources = new XML(fmEvent.result.Resources);
 	
 	currentView = defaultView;
 	createResourcesViewObjects();
@@ -156,55 +147,46 @@ private function createResourcesViewObjects(filter:String = "*"):void {
 		
 	var viewItem:*;
 
-	try {
+	for each (var resource:XML in resources.Resource) {
+		totalResources++;
 		
-		for each (var resource:XML in resources.Resource) {
-			totalResources++;
-			
-			if (filter != "*") {
-				if (resource.@type.toLowerCase() == filter) {
-					filteredResources++;
-				} else {
-					continue;
-				}
-			}
-			
-			switch (currentView.toLowerCase()) {
-				case "thumbnail":
-					viewItem = new ThumbnailItem();
-					break;
-				case "list":
-					viewItem = new ListItem();	
-					break;
-			}
-	
-			thumbsList.addChild(viewItem);			// add viewItem as child to initialise it
-			viewItem.imageSource = waiting_Icon;	// set default, 'till new image is unknown (or while it is loading) 
-			viewItem.objName = resource.@name;
-			viewItem.objType = resource.@type;
-			viewItem.objID = resource.@id;
-			viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
-			
-			/* To have access to view element by resource id, add element to the array */
-			objects[resource.@id] = viewItem;		
-			
-			if (isViewable(resource.@type)) {
-				fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
-			} else { // if not viewable
-				if (typesIcons[resource.@type] != null) {
-					viewItem.imageSource = typesIcons[resource.@type];	
-				} else {
-					viewItem.imageSource = blank_Icon;
-				}
+		if (filter != '*') {
+			if (resource.@type.toLowerCase() == filter) {
+				filteredResources++;
+			} else {
+				continue;
 			}
 		}
 		
-	}
-	catch (err:Error) {
-		/* error01 */
-		Alert.show("Unexpected error (01). Please reopen Resource browser.", "Getting resources error"); 
-		return;
-	}
+		switch (currentView.toLowerCase()) {
+			case "thumbnail":
+				viewItem = new ThumbnailItem();
+				break;
+			case "list":
+				viewItem = new ListItem();	
+				break;
+		}
+
+		/* To have access to view element by resource id, add element to the array */
+		objects[resource.@id] = viewItem;		
+
+		thumbsList.addChild(viewItem);			// add viewItem as child to initialise it
+		viewItem.imageSource = waiting_Icon;	// set default, 'till new image is unknown (or while it is loading) 
+		viewItem.objName = resource.@name;
+		viewItem.objType = resource.@type;
+		viewItem.objID = resource.@id;
+		viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
+		
+		if (isViewable(resource.@type)) {
+			fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
+		} else { // if not viewable
+			if (typesIcons[resource.@type] != null) {
+				viewItem.imageSource = typesIcons[resource.@type];	
+			} else {
+				viewItem.imageSource = blank_Icon;
+			}
+		}
+	}		
 }
 
 private function selectThumbnail(mEvent:MouseEvent):void {
@@ -222,14 +204,15 @@ private function selectThumbnail(mEvent:MouseEvent):void {
 }
 
 private function showResourceSelection():void { 	// uses when property set
-	if (_selectedItemID != "") {
-		if (objects[_selectedItemID] == null) {
-			Alert.show("Selected Resource is not found on the server!", "Resource Browser error"); 
-		} else {
+	if (_selectedItemID != '') {
+		try {
 			selectedThumb = objects[_selectedItemID];
 			selectedThumb.selected = true;
 			selectedItemName = selectedThumb.objName;
 			showResource(); 
+		}
+		catch (err:Error) {
+			Alert.show("Selected Resource is not found on the server!", "Resource Browser error");
 		}
 	}
 }
@@ -405,8 +388,9 @@ private function setResourceOkHandler(fmEvent:FileManagerEvent):void {
 	}
 }
 
-private function setResourceErrorHandler(spEvt:SoapEvent):void {
+private function setResourceErrorHandler(fmEvent:FileManagerEvent):void {
 	trace('Resource browser: ERROR at sending resource');
 	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);	
+	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);
+	Alert.show("Could not send resource to server!", "Sending resource error");	
 }
