@@ -44,7 +44,10 @@
 				{
 					_dialog = new Import();	
 					_dialog.open();
-					_dialog.show(CANCEL, closeHandler, null, CANCEL);		
+					_dialog.show(CANCEL|OK, closeHandler, null, CANCEL);					
+					_dialog.defaultButton = _dialog.btnNext;
+					Button(_dialog.ctrlBar.getChildByName("OK")).label = LanguageManager.sentences["finish"];
+					Button(_dialog.ctrlBar.getChildByName("OK")).enabled = false;
 					ConnectionManager.instance.window = _dialog;
 												
 					var defaultCaptions:Object = {
@@ -62,6 +65,11 @@
 				return _dialog;
 			}
 			
+			private function onShow():void
+			{				
+				
+			}
+						
 			private function nextHandler(event:Event):void
 			{
 				if(vsStep.numChildren-1>vsStep.selectedIndex)
@@ -229,7 +237,9 @@
 			private function onStep4Show():void
 			{
 				btnBack.enabled = false;
-				Button(ctrlBar.getChildByName("CANCEL")).label = LanguageManager.sentences["finish"];							
+				Button(ctrlBar.getChildByName("CANCEL")).enabled = true;
+				Button(ctrlBar.getChildByName("OK")).enabled = true;
+				defaultButton = Button(ctrlBar.getChildByName("OK"));	
 			}	
 			
 			private  function importAppHandler(event:Export_applicationResultEvent):void

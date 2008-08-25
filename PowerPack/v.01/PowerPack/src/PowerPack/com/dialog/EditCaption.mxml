@@ -2,7 +2,8 @@
 <ModalDialog 
 	xmlns="PowerPack.com.dialog.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	width="300" height="130">
+	width="300" height="130"
+	creationComplete="onShow()">
 	<mx:Script>
 		<![CDATA[
 			import PowerPack.com.managers.LanguageManager;
@@ -26,6 +27,10 @@
 				return _dialog;
 			}	
 			
+			private function onShow():void
+			{
+				txtCaption.setFocus();
+			}				
 		]]>
 	</mx:Script>	
 	

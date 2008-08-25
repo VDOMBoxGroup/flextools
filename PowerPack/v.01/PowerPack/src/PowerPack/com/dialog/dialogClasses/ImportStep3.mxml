@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="ExtendedAPI.com.controls.*">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="ExtendedAPI.com.controls.*"
+	creationComplete="onShow()">
 
 	<mx:Script>
 		<![CDATA[
@@ -17,8 +18,11 @@
 			{
 				LanguageManager.setSentences(defaultCaptions);
 				return true
-			}	
-            
+			}
+				
+			private function onShow():void
+			{								
+			}            
 		]]>
 	</mx:Script>
 
