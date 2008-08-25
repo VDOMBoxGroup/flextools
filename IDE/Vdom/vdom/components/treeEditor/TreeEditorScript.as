@@ -37,83 +37,53 @@ private function deleteObject(strID:String):void
 			for(var ind2:String in massLines[level][ind1])
 				if (strID == ind1 || strID == ind2)
 				{
+					var curIndex:int = masIndex[level][ind1][ind2].index;
 					
-					if(masIndex[level][ind1][ind2].visible && main.contains(masIndex[level][ind1][ind2]))
-					{
-							var chInd:int =  main.getChildIndex(masIndex[level][ind1][ind2]);
-							trace(chInd);
-					}else{ trace('NON');}
-					
-					main.removeChildAt(chInd);
+					 masMaxOfIndex[level][ind1] = masMaxOfIndex[level][ind1] - 1;
 					 
+					 for(var upDate:String in massLines[level][ind1])
+					 {
+						masIndex[level][ind1][upDate].maxIndex = masMaxOfIndex[level][ind1];
+						
+						if(masIndex[level][ind1][upDate].index > curIndex)
+							 masIndex[level][ind1][upDate].index = masIndex[level][ind1][upDate].index - 1;
+					 }
+					
+					main.removeChild(masIndex[level][ind1][ind2]);
 					 delete masIndex[level][ind1][ind2];
 					
 					 main.removeChild( massLines[level][ind1][ind2]);
 					 delete massLines[level][ind1][ind2];
-					 
-					main.validateNow(); 
-					 
-//					main.validateDisplayList();
-//					main.invalidateDisplayList();
-					
 				}
 	
 	// удаляем сам обьект
 	main.removeChild(massTreeElements[strID]);
 	delete massTreeElements[strID];
-	
-	main.validateDisplayList();
-	
-	//dataManager.deleteObject(strID);
-	
 
 	curTree = null;
 	
 	saveToServer();
 }
 
-/*
-private function treeElementMousUpHandler():void
-{
-		var dx:Number = 0;
-		var dy:Number = 0;
-		
-		if(curTree.x <0)
-			dx -=  curTree.x
-		
-		if(curTree.y <0)
-			dy -=  curTree.y
-		
-		if(dx || dy)
-		{
-			for (var ID:String in massTreeElements)
-			{
-				massTreeElements[ID].x += dx;
-				massTreeElements[ID].y += dy; 
-			}
-			
-			for (var level:String in massLines)
-				for (var frsTrElem:String in massLines[level])
-					for (var sknTrElem:String in massLines[level][frsTrElem])
-					massLines[level][frsTrElem][sknTrElem].updateVector();
-			
-			if(dx)	main.horizontalScrollPosition += dx;
-			if(dy)	main.verticalScrollPosition	  += dy;
-		}
-}
-
-*/
 private function drawLine(obj:Object):void
 {
 	var fromObj:String = curTree.ID.toString();
 	var toObj:String = obj.ID.toString();
-	var necessaryLevel:String = colmen2.selectedItem.level;
+	var level:String = colmen2.selectedItem.level;
 
-	if(!massLines[necessaryLevel]) 
-		massLines[necessaryLevel] = new Array();
+	if(!massLines[level]) 
+	{
+		massLines[level] = new Array();
+		masIndex[level] = new Array();
+		masMaxOfIndex[level] = new Array();
+	}
 	
-	if(!massLines[necessaryLevel][curTree.ID.toString()]) 
-		massLines[necessaryLevel][curTree.ID.toString()] = new Array();
+	if(!massLines[level][curTree.ID.toString()]) 
+	{
+		massLines[level][curTree.ID.toString()] = new Array();
+		masIndex[level][curTree.ID.toString()] = new Array();
+		masMaxOfIndex[level][curTree.ID.toString()] = 0;
+	}
 	
 	// обьект сам на себя
 	if(toObj == fromObj)return;
@@ -121,22 +91,33 @@ private function drawLine(obj:Object):void
 	
 		// вдруг противоположная линия уже есть..
 	
-	if(massLines[necessaryLevel])
-		if(massLines[necessaryLevel][toObj])
-			if(massLines[necessaryLevel][toObj][fromObj])
+	if(massLines[level])
+		if(massLines[level][toObj])
+			if(massLines[level][toObj][fromObj])
 				return;
 		
 		// вдруг эта линия уже есть..
-	if(massLines[necessaryLevel][fromObj][toObj] == null)
+	if(massLines[level][fromObj][toObj] == null)
 	{
-		massLines[necessaryLevel][fromObj][toObj] 	= 
-		new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], necessaryLevel);
+		massLines[level][fromObj][toObj] 	= 
+		new TreeVector(massTreeElements[fromObj], massTreeElements[toObj], level);
 		
-		main.addChildAt(massLines[necessaryLevel][fromObj][toObj], 0);
-		massLines[necessaryLevel][fromObj][toObj].addEventListener(MouseEvent.CLICK, markLines);
+		main.addChildAt(massLines[level][fromObj][toObj], 0);
+		massLines[level][fromObj][toObj].addEventListener(MouseEvent.CLICK, markLines);
+		
+		var index:Index = new Index();
+					index.level = level;
+					index.targetLine = massLines[level][fromObj][toObj];
+					index.maxIndex = index.index = masMaxOfIndex[level][fromObj] = masMaxOfIndex[level][fromObj]+ 1;
+				
+				masIndex[level][fromObj][toObj] = index;	
+				main.addChild(masIndex[level][fromObj][toObj]);
 		
 		saveToServer();
 	}
+	
+	for(var upDate:String in massLines[level][fromObj])
+		masIndex[level][fromObj][upDate].maxIndex = masMaxOfIndex[level][fromObj];
 	
 	
 }
@@ -461,10 +442,27 @@ private function drawLines(xml1:XML):void
 		{
 			var level:String = xmlLavel.@Index.toXMLString();
 			// mass of levels where  level  consist of numbers betvin 0-9
-			if (!massLines[level]) massLines[level] = new Array();
-			if (!massLines[level][obID]) massLines[level][obID] = new Array();
+			if (!massLines[level])
+			{
+				massLines[level] = new Array();
+				masIndex[level] = new Array();
+				masMaxOfIndex[level] = new Array();
+			} 
+			if (!massLines[level][obID])
+			{	 
+				massLines[level][obID] = new Array();
+				masIndex[level][obID] = new Array();
+				
+			}
 			
+			masMaxOfIndex[level][obID] = 0;
 			for each(var xmlLavelObj:XML in xmlLavel.children())
+			{
+					masMaxOfIndex[level][obID]++;
+			}
+			
+			var counter:int = 0;
+			for each(xmlLavelObj in xmlLavel.children())
 			{
 				var toObjID:String = xmlLavelObj.@ID.toXMLString();
 				if (obID != toObjID)// избавляемся от зацикливающихся обьектов
@@ -473,15 +471,25 @@ private function drawLines(xml1:XML):void
 					massLines[level][obID][toObjID].addEventListener(MouseEvent.CLICK, markLines);
 					massLines[level][obID][toObjID].visible = colmen2.showLevel(level);
 					main.addChildAt(massLines[level][obID][toObjID], 0);
+					
+					
+					var index:Index = new Index();
+						index.level = level;
+						if(xmlLavelObj.@Index[0])
+							index.index = xmlLavelObj.@Index.toXMLString();
+						else
+							index.index = ++counter;
+							
+						index.maxIndex = masMaxOfIndex[level][obID];	
+						index.targetLine = massLines[level][obID][toObjID];
+				
+					masIndex[level][obID][toObjID] = index;	
+					main.addChild(masIndex[level][obID][toObjID]);
 				}
 			}
 		}
-		
-		
-		
-		
 	}
-	drawIndex();
+//	drawIndex();
 }
 
 
@@ -578,6 +586,7 @@ public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 			
 			var myXMLList:XMLList = new XMLList('<Object/>') ;
 			myXMLList.@ID = ind2;
+			myXMLList.@Index = masIndex[level][ind1][ind2].index;
 			outXML.Object.(@ID == ind1).Level.(@Index == level).appendChild(myXMLList);
 			
 			
@@ -592,7 +601,7 @@ public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 			}	
 		}
 		
-	//	trace(' _XML to server: \n' + outXML.toString());
+//		trace(' _XML to server: \n' + outXML.toString());
 		return outXML;
 }
 		
@@ -652,19 +661,12 @@ private function drawIndex():void
 			
 			for(var ind2:String in massLines[level][ind1])
 			{
-				masIndex[level][ind1][ind2] = new Index();
-				masIndex[level][ind1][ind2].level = level;
-				masIndex[level][ind1][ind2].targetLine = massLines[level][ind1][ind2];
 				
-//				masIndex[level][ind1][ind2] = index;	
-				main.addChild(masIndex[level][ind1][ind2]);
-//				trace('Creating Index: ');
-		//		main.removeChild(masIndex[level][ind1][ind2]);
 			}
 		}
 	}
 }
-
+//data.@Top[0]
 
 
 

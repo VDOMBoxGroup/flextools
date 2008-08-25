@@ -17,7 +17,10 @@ package vdom.components.treeEditor
 			super();
 			
 			lbIndex = new Label();
-			lbIndex.text = '1'; 
+			
+//			lbIndex.text = '3'; 
+//			index = '3';
+			
 			lbIndex.addEventListener(MouseEvent.CLICK, indexClickHandler);
 			addChild(lbIndex);
 		}
@@ -25,17 +28,47 @@ package vdom.components.treeEditor
 		private function creatingComboBox():void
 		{
 			cmBox = new ComboBox();
-			cmBox.visible = false;
+//			cmBox.visible = false;
 			cmBox.width = 50;
+			cmBox.x = 15;
+			cmBox.visible = false;
+			
+			if(comboBoxData)
+			{	cmBox.dataProvider = comboBoxData;
+				cmBox.validateNow();
+			}
+			cmBox.addEventListener(Event.CLOSE, comboBoxCloseHandler);
+			cmBox.addEventListener(Event.CHANGE, comboBoxChangeHandler);
 			addChild(cmBox);
 		}
 		
+		private function comboBoxChangeHandler(evt:Event):void
+		{
+			index =  ComboBox(evt.currentTarget).selectedIndex + 1;
+//			trace('comboBoxChangeHandler')
+		}
+		
+		private function comboBoxCloseHandler(evt:Event):void
+		{
+			cmBox.visible = false;
+		}
+		
+		
 		private function indexClickHandler(msEvt:MouseEvent):void
 		{
-			if(!cmBox) 
+			
+			if(!cmBox)
 				creatingComboBox();
+			if(cmBox.visible)
+				return;
 			
 			cmBox.visible = true;
+//			maxIndex = '30';
+			cmBox.dataProvider = comboBoxData;
+			cmBox.validateProperties();
+			invalidateDisplayList();
+			cmBox.selectedIndex = Number(index) - 1;
+			cmBox.callLater(cmBox.open);
 		}
 		
 		private function targetLineChangeHandler(evt:Event):void
@@ -81,16 +114,29 @@ package vdom.components.treeEditor
 		 * 		 maxIndex
 		 * 
 		 */
-		private var _maxIndex:String;
-		public function get maxIndex():String
+		private var _maxIndex:int;
+		public function get maxIndex():int
 		{
 			return _maxIndex;
 		}
 		
-		public function set maxIndex(str:String):void
+		private var comboBoxData:Array = new Array(); 
+		public function set maxIndex(num:int):void
 		{
-			_maxIndex = str;
+			_maxIndex = num;
+			
+			comboBoxData = [];
+			for(var i:int = 0; i < _maxIndex; i++)
+			{
+				comboBoxData[i] = new Array();
+				comboBoxData[i]['label'] = i+1;
+				comboBoxData[i]['data'] = i+1;
+			}
+//			cmBox.dataProvider = comboBoxData;
+//			cmBox.validateNow();
 		}
+		
+		
 		
 		
 		/***
@@ -98,15 +144,17 @@ package vdom.components.treeEditor
 		 * 		 index
 		 * 
 		 */
-		private var _index:String;
-		public function get index():String
+		private var _index:int;
+		public function get index():int
 		{
-			return index;
+			return _index;
 		}
 		
-		public function set index(str:String):void
+		public function set index(num:int):void
 		{
-			_index = str;
+			
+			_index = num;
+			lbIndex.text = _index.toString(); 
 		}
 		
 		
@@ -124,7 +172,6 @@ package vdom.components.treeEditor
 			_targetLine.addEventListener(Event.CHANGE, targetLineChangeHandler);
 			
 			updateXY();
-			
 		}
 		
 		
@@ -154,7 +201,6 @@ package vdom.components.treeEditor
 			visible = false;
 		 	parent.removeChild(this);
 		 	
-		 	trace('removed');
 		 }
 	}
 }
