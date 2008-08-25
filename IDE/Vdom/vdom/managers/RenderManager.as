@@ -44,6 +44,7 @@ public class RenderManager implements IEventDispatcher {
 		["fontsize", "fontSize"],
 		["fontweight", "fontWeight"],
 		["fontstyle", "fontStyle"],
+		["textdecoration", "textDecoration"],
 		["textalign", "textAlign"]
 	];
 	

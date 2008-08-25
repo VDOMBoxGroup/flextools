@@ -2,6 +2,7 @@ import flash.events.Event;
 
 import mx.controls.Alert;
 import mx.core.Application;
+import mx.core.Singleton;
 import mx.events.FlexEvent;
 import mx.rpc.events.FaultEvent;
 
@@ -49,6 +50,9 @@ private function switchToLogin():void
 
 private function preinitalizeHandler():void
 {	
+	Singleton.registerClass("vdom.managers::IVdomDragManager", 
+		Class(getDefinitionByName("vdom.managers::VdomDragManagerImpl")));
+	
 	languageManager.init(languageList);
 	cacheManager.init();
 	
