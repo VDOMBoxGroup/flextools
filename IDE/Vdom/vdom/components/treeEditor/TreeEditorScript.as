@@ -5,6 +5,7 @@
 		import vdom.components.treeEditor.Index;
 		import vdom.components.treeEditor.TreeElement;
 		import vdom.events.DataManagerEvent;
+		import vdom.events.IndexEvent;
 		import vdom.events.TreeEditorEvent;
 		
 	 
@@ -107,8 +108,11 @@ private function drawLine(obj:Object):void
 		
 		var index:Index = new Index();
 					index.level = level;
+					index.fromObjectID = fromObj;
 					index.targetLine = massLines[level][fromObj][toObj];
 					index.maxIndex = index.index = masMaxOfIndex[level][fromObj] = masMaxOfIndex[level][fromObj]+ 1;
+					
+					index.addEventListener(IndexEvent.CHANGE, indexChangeHandler);
 				
 				masIndex[level][fromObj][toObj] = index;	
 				main.addChild(masIndex[level][fromObj][toObj]);
@@ -475,6 +479,7 @@ private function drawLines(xml1:XML):void
 					
 					var index:Index = new Index();
 						index.level = level;
+						index.fromObjectID = obID;
 						if(xmlLavelObj.@Index[0])
 							index.index = xmlLavelObj.@Index.toXMLString();
 						else
@@ -482,6 +487,8 @@ private function drawLines(xml1:XML):void
 							
 						index.maxIndex = masMaxOfIndex[level][obID];	
 						index.targetLine = massLines[level][obID][toObjID];
+						index.addEventListener(IndexEvent.CHANGE, indexChangeHandler);
+						
 				
 					masIndex[level][obID][toObjID] = index;	
 					main.addChild(masIndex[level][obID][toObjID]);
@@ -663,6 +670,44 @@ private function drawIndex():void
 			{
 				
 			}
+		}
+	}
+}
+
+private function indexChangeHandler(inEvt:IndexEvent):void
+{
+//	trace('work');
+	if(inEvt.newIndex < inEvt.lastIndex)
+	{
+		for(var toID:String in masIndex[inEvt.level][inEvt.fromObjectID])
+		{  
+//			trace( inEvt.lastIndex +' > '+masIndex[inEvt.level][inEvt.fromObjectID][toID].index+ ' > '+ inEvt.newIndex);
+			if (masIndex[inEvt.level][inEvt.fromObjectID][toID].index >= inEvt.newIndex &&
+				 masIndex[inEvt.level][inEvt.fromObjectID][toID].index <= inEvt.lastIndex)
+			{
+//				trace('change!!!! : ' + masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
+				masIndex[inEvt.level][inEvt.fromObjectID][toID].index = 
+					masIndex[inEvt.level][inEvt.fromObjectID][toID].index + 1;
+					
+//				trace('change!!!! to: '+ masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
+				
+			}	 
+		}
+	}else
+	{
+		for(var toID:String in masIndex[inEvt.level][inEvt.fromObjectID])
+		{  
+//			trace( inEvt.lastIndex +' > '+masIndex[inEvt.level][inEvt.fromObjectID][toID].index+ ' > '+ inEvt.newIndex);
+			if (masIndex[inEvt.level][inEvt.fromObjectID][toID].index <= inEvt.newIndex &&
+				 masIndex[inEvt.level][inEvt.fromObjectID][toID].index >= inEvt.lastIndex)
+			{
+//				trace('change!!!! : ' + masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
+				masIndex[inEvt.level][inEvt.fromObjectID][toID].index = 
+					masIndex[inEvt.level][inEvt.fromObjectID][toID].index - 1;
+					
+//				trace('change!!!! to: '+ masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
+				
+			}	 
 		}
 	}
 }

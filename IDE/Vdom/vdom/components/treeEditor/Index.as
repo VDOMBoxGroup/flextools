@@ -6,6 +6,8 @@ package vdom.components.treeEditor
 	import mx.containers.Canvas;
 	import mx.controls.ComboBox;
 	import mx.controls.Label;
+	
+	import vdom.events.IndexEvent;
 
 	public class Index extends Canvas
 	{
@@ -17,6 +19,7 @@ package vdom.components.treeEditor
 			super();
 			
 			lbIndex = new Label();
+			buttonMode = true;
 			
 //			lbIndex.text = '3'; 
 //			index = '3';
@@ -44,7 +47,9 @@ package vdom.components.treeEditor
 		
 		private function comboBoxChangeHandler(evt:Event):void
 		{
-			index =  ComboBox(evt.currentTarget).selectedIndex + 1;
+			var newIndex:int = ComboBox(evt.currentTarget).selectedIndex + 1
+			dispatchEvent(new IndexEvent(IndexEvent.CHANGE, newIndex, index, _level, _fromObjectID)); 
+			index =  newIndex;
 //			trace('comboBoxChangeHandler')
 		}
 		
@@ -153,8 +158,11 @@ package vdom.components.treeEditor
 		public function set index(num:int):void
 		{
 			
+			
 			_index = num;
 			lbIndex.text = _index.toString(); 
+			trace('new: '+lbIndex.text)
+			
 		}
 		
 		
