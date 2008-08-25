@@ -476,6 +476,7 @@ public class RenderManager implements IEventDispatcher {
 					if(itemXMLDescription.@editable[0] && parentItem && !parentItem.isStatic)
 					{
 						item = new EditableText();
+						item.setStyle("borderStyle", "none");
 						insertEditableAttributes(parentItem, item, itemXMLDescription);
 					}
 					else

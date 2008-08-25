@@ -2,9 +2,12 @@
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="com.yahoo.astra.mx.controls.*"
+	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*"
+	xmlns:local="*"
+	
 	implements="vdom.controls.IToolBar"
 	width="100%"
-	focusEnabled="false" backgroundColor="#F0F0F0" xmlns:local="*" xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*">
+	focusEnabled="false" backgroundColor="#F0F0F0" >
 	<mx:Script source="includes/textToolBar.as"/>
 	<mx:Style>
 		.toolbarButton {
@@ -39,23 +42,17 @@
 			<mx:VRule height="24"/>
 			<mx:Label text="Font"/>
 			<mx:ComboBox id="fontSelector" styleName="toolbarComboBox"
-				height="24" width="100" focusEnabled="false" />
+				height="24" width="100" focusEnabled="false"
+				change="changeFamily(fontSelector.selectedItem)"/>
 			<mx:VRule height="24"/>
 			<mx:Label text="Size"/>
 			<mx:ComboBox id="sizeSelector" styleName="toolbarComboBox"
-				height="24" width="100">
-				<mx:dataProvider>
-				  <mx:ArrayCollection>
-			        <mx:Object label="1 (8 pt)" data="1"/>
-			        <mx:Object label="2 (10 pt)" data="2"/>
-			        <mx:Object label="3 (12 pt)" data="3"/>
-			        <mx:Object label="4 (14 pt)" data="4"/>
-			        <mx:Object label="5 (18 pt)" data="5"/>
-			        <mx:Object label="6 (24 pt)" data="6"/>
-			        <mx:Object label="7 (36 pt)" data="7"/>
-			      </mx:ArrayCollection>
-				</mx:dataProvider>
-			</mx:ComboBox>
+				height="24" width="100"
+				change="changeSize(sizeSelector.selectedItem)"/>
+			<controls:DropDownColorPicker width="36" height="24"
+				viewerRenderer="vdom.controls.richTextToolBarClasses.ColorFillButton"
+				viewerStyleName="" focusEnabled="false"
+				change="colorTextChanged(event)"/>
 		</mx:HBox>
 	</mx:VBox>
 </mx:Canvas>

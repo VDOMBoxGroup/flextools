@@ -4,6 +4,7 @@ import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
+import mx.events.ColorPickerEvent;
 
 import vdom.containers.IItem;
 import vdom.controls.wysiwyg.EditableText;
@@ -40,6 +41,19 @@ private var fonts:ArrayCollection = new ArrayCollection(
 		{label:"Wingdings", data:"wingdings"}
 	]
 );
+
+private var fontSize:ArrayCollection = new ArrayCollection(
+	[
+		{label:"8 px", data:"8"},
+		{label:"10 px", data:"10"},
+		{label:"12 px", data:"12"},
+		{label:"14 px", data:"14"},
+		{label:"18 px", data:"18"},
+		{label:"24 px", data:"24"},
+		{label:"36 px", data:"36"},
+	]
+);
+
 private var selectedItem:IItem;
 
 private var oldValue:String = '';
@@ -88,6 +102,24 @@ public function init(item:IItem):void
 	{
 		if(cursor.findFirst({data:_style["fontfamily"].toLowerCase()}))
 			fontSelector.selectedItem = cursor.current;
+	}
+	
+	
+	fontSize.sort = new Sort();
+	fontSize.sort.fields = [new SortField("data")];
+	fontSize.refresh();
+	
+	sizeSelector.dataProvider = fontSize;
+	sizeSelector.validateNow();
+	
+	var cursor1:IViewCursor = fontSize.createCursor();
+	
+	if(_style.hasOwnProperty("fontsize"))
+	{
+		if(cursor1.findFirst({data:_style["fontsize"].toLowerCase()}))
+			sizeSelector.selectedItem = cursor1.current;
+		else
+			sizeSelector.selectedItem = null;
 	}
 	
 	if(_style.hasOwnProperty("fontweight"))
@@ -212,6 +244,19 @@ private function changeAlign(value:String):void
 	}
 }
 
+private function colorTextChanged(event:ColorPickerEvent):void
+{	
+	var hexValue:String = event.color.toString(16); 
+	var hexLength:int = hexValue.length;
+	
+	for (var i:int = hexLength; i < 6; i++)
+	{
+		hexValue = '0' + hexValue;
+	}
+	
+	elementForEditing.setStyle("color", event.color);
+}
+
 private function zzz(event:MouseEvent):void
 {
 	event.stopImmediatePropagation();	
@@ -221,8 +266,16 @@ public function close():void
 {	
 	attributes["value"] = elementForEditing.text;
 	
-	for (var attributeName:String in _style)
-		attributes[attributeName] = _style[attributeName];
+	var attributeValue:String;
+	for each (var attribute:Array in editableStyles)
+	{
+		if (attributes.hasOwnProperty([attribute[0]]))
+		{
+			 attributeValue = elementForEditing.getStyle(attribute[1]);
+			 if(attributeValue)
+			 	attributes[attribute[0]] = attributeValue;
+		}
+	}
 	
 	//color fix
 	
@@ -238,22 +291,19 @@ public function close():void
 		attributes["color"] = hexColor;
 	}
 	
-	registerEvent(false);
+//	registerEvent(false);
 	elementForEditing.editable = false;
 	elementForEditing.selectable = false;
 }
 
-private function invalidateStyles():void
+private function changeFamily(value:Object):void
 {
-	
+	if(value && value.data)
+		elementForEditing.setStyle("fontFamily", value.data);
 }
 
-private function registerEvent(flag:Boolean):void
-{	
-	
-}
-
-private function execCommand(commandName:String, commandAttributes:String = null):void
-{	
-	
+private function changeSize(value:Object):void
+{
+	if(value && value.data)
+		elementForEditing.setStyle("fontSize", value.data);
 }
