@@ -1,5 +1,8 @@
 package vdom.components.treeEditor
 {
+	import flash.display.CapsStyle;
+	import flash.display.JointStyle;
+	import flash.display.LineScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
@@ -7,6 +10,7 @@ package vdom.components.treeEditor
 	import mx.controls.ComboBox;
 	import mx.controls.Label;
 	
+	import vdom.components.treeEditor.colorMenu02.Levels;
 	import vdom.events.IndexEvent;
 
 	public class Index extends Canvas
@@ -18,8 +22,13 @@ package vdom.components.treeEditor
 		{
 			super();
 			
+			
+			
 			lbIndex = new Label();
-			buttonMode = true;
+			lbIndex.width = 19;
+			lbIndex.setStyle('textAlign', 'center');
+			lbIndex.buttonMode = true;
+			
 			
 //			lbIndex.text = '3'; 
 //			index = '3';
@@ -28,6 +37,11 @@ package vdom.components.treeEditor
 			addChild(lbIndex);
 		}
 		
+		override public function set visible(value:Boolean):void
+	    {
+	        super.visible = value;
+//	        trace('11');
+	    }
 		private function creatingComboBox():void
 		{
 			cmBox = new ComboBox();
@@ -49,8 +63,13 @@ package vdom.components.treeEditor
 		{
 			var newIndex:int = ComboBox(evt.currentTarget).selectedIndex + 1
 			dispatchEvent(new IndexEvent(IndexEvent.CHANGE, newIndex, index, _level, _fromObjectID)); 
-			index =  newIndex;
-//			trace('comboBoxChangeHandler')
+			
+			callLater(setData);
+			
+			function setData():void
+			{
+				index =  newIndex;
+			} 
 		}
 		
 		private function comboBoxCloseHandler(evt:Event):void
@@ -95,6 +114,18 @@ package vdom.components.treeEditor
 		public function set level(str:String):void
 		{
 			_level = str;
+			
+			var levels:Levels = new Levels();
+			var color:Number = levels.getColor(_level);
+			
+			graphics.lineStyle(1, color, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			
+			graphics.beginFill(0xffffff);
+			graphics.drawCircle(9, 8, 10);
+			graphics.endFill();
+			
+//			this.buttonMode = true;
+//			this.validateDisplayList();
 		}
 		
 		/***
@@ -161,7 +192,7 @@ package vdom.components.treeEditor
 			
 			_index = num;
 			lbIndex.text = _index.toString(); 
-			trace('new: '+lbIndex.text)
+//			trace('new: '+lbIndex.text)
 			
 		}
 		
@@ -193,7 +224,7 @@ package vdom.components.treeEditor
 			this.x = _targetLine.middleX;
 			this.y = _targetLine.middleY;
 			
-			this.visible = _targetLine.visible;
+//			this.visible = _targetLine.visible;
 		}
 		
 		/***

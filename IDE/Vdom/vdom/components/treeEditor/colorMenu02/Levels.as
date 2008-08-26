@@ -7,11 +7,11 @@ package vdom.components.treeEditor.colorMenu02
 				{label:'level 0', data:0xddd000, level:0},
 				{label:'level 1', data:0x7ddd00, level:1},
 				{label:'level 2', data:0xdd00c0, level:2},
-				{label:'level 3', data:0x0034dd, level:3},
+				{label:'level 3', data:0x00ddc6, level:3},
 				{label:'level 4', data:0xdd0044, level:4},
 				{label:'level 5', data:0xb100dd, level:5},
-				{label:'level 6', data:0x489d0a, level:6},
-				{label:'level 7', data:0x0a9b9d, level:7}
+				{label:'level 6', data:0x49dd00, level:6},
+				{label:'level 7', data:0x00d0dd, level:7}
 			//	{label:'level 8', data:0xff0000, level:8}
 				]
 		

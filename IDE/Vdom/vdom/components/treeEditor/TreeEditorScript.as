@@ -113,6 +113,7 @@ private function drawLine(obj:Object):void
 					index.maxIndex = index.index = masMaxOfIndex[level][fromObj] = masMaxOfIndex[level][fromObj]+ 1;
 					
 					index.addEventListener(IndexEvent.CHANGE, indexChangeHandler);
+					index.visible = chShowSignature.selected && colmen2.showLevel(level);
 				
 				masIndex[level][fromObj][toObj] = index;	
 				main.addChild(masIndex[level][fromObj][toObj]);
@@ -484,9 +485,12 @@ private function drawLines(xml1:XML):void
 							index.index = xmlLavelObj.@Index.toXMLString();
 						else
 							index.index = ++counter;
+						
 							
 						index.maxIndex = masMaxOfIndex[level][obID];	
 						index.targetLine = massLines[level][obID][toObjID];
+						index.visible = chShowSignature.selected && colmen2.showLevel(level);
+//						trace(index.visible);
 						index.addEventListener(IndexEvent.CHANGE, indexChangeHandler);
 						
 				
@@ -526,6 +530,19 @@ private function  removeLine():void
 				for (var sknTrElem:String in massLines[level][frsTrElem])
 					if(curLine  == massLines[level][frsTrElem][sknTrElem] )
 					{
+						masMaxOfIndex[level][frsTrElem] = masMaxOfIndex[level][frsTrElem] - 1;
+						
+						var curIndex:int = masIndex[level][frsTrElem][sknTrElem].index;
+					
+						
+						 for(var upDate:String in massLines[level][frsTrElem])
+						 {
+							masIndex[level][frsTrElem][upDate].maxIndex = masMaxOfIndex[level][frsTrElem];
+							
+							if(masIndex[level][frsTrElem][upDate].index > curIndex)
+								 masIndex[level][frsTrElem][upDate].index = masIndex[level][frsTrElem][upDate].index - 1;
+						 }
+						
 						main.removeChild(massLines[level][frsTrElem][sknTrElem]);
 						delete massLines[level][frsTrElem][sknTrElem];
 						
@@ -653,7 +670,7 @@ private function setStartPage():void
 }
 
 
-
+/*
 
 private function drawIndex():void
 {
@@ -673,43 +690,31 @@ private function drawIndex():void
 		}
 	}
 }
-
+*/
 private function indexChangeHandler(inEvt:IndexEvent):void
 {
 //	trace('work');
-	if(inEvt.newIndex < inEvt.lastIndex)
-	{
+	
 		for(var toID:String in masIndex[inEvt.level][inEvt.fromObjectID])
 		{  
-//			trace( inEvt.lastIndex +' > '+masIndex[inEvt.level][inEvt.fromObjectID][toID].index+ ' > '+ inEvt.newIndex);
-			if (masIndex[inEvt.level][inEvt.fromObjectID][toID].index >= inEvt.newIndex &&
-				 masIndex[inEvt.level][inEvt.fromObjectID][toID].index <= inEvt.lastIndex)
+			var index:Index = masIndex[inEvt.level][inEvt.fromObjectID][toID];
+			
+			if(inEvt.newIndex < inEvt.lastIndex)
 			{
-//				trace('change!!!! : ' + masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
-				masIndex[inEvt.level][inEvt.fromObjectID][toID].index = 
-					masIndex[inEvt.level][inEvt.fromObjectID][toID].index + 1;
-					
-//				trace('change!!!! to: '+ masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
-				
-			}	 
-		}
-	}else
-	{
-		for(var toID:String in masIndex[inEvt.level][inEvt.fromObjectID])
-		{  
-//			trace( inEvt.lastIndex +' > '+masIndex[inEvt.level][inEvt.fromObjectID][toID].index+ ' > '+ inEvt.newIndex);
-			if (masIndex[inEvt.level][inEvt.fromObjectID][toID].index <= inEvt.newIndex &&
-				 masIndex[inEvt.level][inEvt.fromObjectID][toID].index >= inEvt.lastIndex)
+				if (index.index >= inEvt.newIndex &&  index.index <= inEvt.lastIndex)
+				{
+					index.index = index.index + 1;
+				}
+			} else
 			{
-//				trace('change!!!! : ' + masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
-				masIndex[inEvt.level][inEvt.fromObjectID][toID].index = 
-					masIndex[inEvt.level][inEvt.fromObjectID][toID].index - 1;
-					
-//				trace('change!!!! to: '+ masIndex[inEvt.level][inEvt.fromObjectID][toID].index);
-				
-			}	 
+				if (index.index <= inEvt.newIndex &&	index.index >= inEvt.lastIndex)
+				{
+					index.index = index.index - 1;
+				}
+			}
 		}
-	}
+	
+	
 }
 //data.@Top[0]
 

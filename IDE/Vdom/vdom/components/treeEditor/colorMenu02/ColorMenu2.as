@@ -99,6 +99,10 @@ package vdom.components.treeEditor.colorMenu02
 		{
 			return levels.getLevel(slctLevel);
 		}
+		public function get openedEyeOfSelectedLevel():Boolean
+		{
+			return masLevels[slctLevel].status;
+		}
 		
 		public function showLevel(level:String):Boolean
 		{

@@ -89,6 +89,10 @@
 	//	btLine.visible = false;
 		if (main.contains(btLine))
 			main.removeChild(btLine);
+			
+		masIndex = [];
+		masMaxOfIndex = [];
+		massLines = [];
 	}
 	
 	
@@ -261,7 +265,9 @@
     	deleteObject(curTree.ID);
            	
 		curTree = massTreeElements[randomTreeElement];
-		curTree.current = true;
+		
+		if(curTree)
+			curTree.current = true;
 		
 		setStartPage();
     }
@@ -274,6 +280,9 @@
 	*/
 	private function startDrawLine(trEvt:TreeEditorEvent):void
 	{
+		if(!colmen2.openedEyeOfSelectedLevel)
+			return;
+			
 		vctTest = new Vector2();
 		main.addChild(vctTest);//--для рисования связывающей линии
 		addEventListener(MouseEvent.MOUSE_MOVE, drLine);
@@ -330,15 +339,22 @@
 		var level:String = treEvt.ID;
 		for (var frsTrElem:String in massLines[level])
 			for (var sknTrElem:String in massLines[level][frsTrElem])
+			{
 				massLines[level][frsTrElem][sknTrElem].visible = false;
+				masIndex[level][frsTrElem][sknTrElem].visible  = false;
+			}
 	}
 	
 	private function showLines(treEvt:TreeEditorEvent):void
 	{
 		var level:String = treEvt.ID;
+//		trace('level: '+ level);
 		for (var frsTrElem:String in massLines[level])
 			for (var sknTrElem:String in massLines[level][frsTrElem])
+			{
 				massLines[level][frsTrElem][sknTrElem].visible = true;
+				masIndex[level][frsTrElem][sknTrElem].visible  = true && chShowSignature.selected;;
+			}
 	}
 
 	private function mouseClickHandler(msEvt:MouseEvent):void
@@ -445,12 +461,32 @@
 	private var expand:Boolean;
 	private function expandAll():void
 	{
-		expand = !expand;
+		expand = chExpandAll.selected;
+		
 		for (var tID:String in massTreeElements)
 		{
 			massTreeElements[tID].state = expand.toString();
 		}
+		
 	} 
+	
+	private function showSignature():void
+	{
+		
+		for(var level:String in massLines)
+		{
+			if(colmen2.showLevel(level) == true)
+			{
+				for(var ind1:String in massLines[level])
+				{
+					for(var ind2:String in massLines[level][ind1])
+					{
+						masIndex[level][ind1][ind2].visible = chShowSignature.selected;
+					}
+				}
+			}
+		}
+	}
 	]]>
 </mx:Script>
 <!--
@@ -466,11 +502,14 @@
 </mx:Canvas>
 
 <mx:VBox>
-	<colorMenu02:ColorMenu2 id="colmen2" />
+	<colorMenu02:ColorMenu2 id="colmen2"  />
+	<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>
+	<mx:CheckBox id="chShowSignature" label= "{resourceManager.getString('Tree','expand_all')}"
+		  click="showSignature()"/>
+<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
+	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
+		  click="addTreeElementLauncher()"/>
 	
-	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"    click="addTreeElementLauncher()"/>
-	<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
-	<mx:Button  label="{resourceManager.getString('Tree','expand_all')}"    click="expandAll()"/>
 
 </mx:VBox>
 </mx:HBox>
