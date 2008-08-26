@@ -81,10 +81,14 @@ xmlns:containers="vdom.components.edit.containers.*" >
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
 					
 					xmlTreeData.addItem(xmlList);
-			} 
+				} 
+				
 				tree.dataProvider = xmlTreeData;
 				tree.validateNow();
-			} 
+			} else
+			{
+				tree.dataProvider = null;
+			}
 			
 		
 		}
