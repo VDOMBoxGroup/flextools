@@ -1,5 +1,6 @@
 package vdom.controls.wysiwyg
 {
+import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 
@@ -29,6 +30,7 @@ public class EditableText extends TextArea
         callLater(recalculateSize);
         textField.addEventListener(KeyboardEvent.KEY_UP,
         	textField_keyUpHandler);
+        textField.addEventListener(Event.RENDER, zzz);
     }
 	
 	public function get textContainer():IUITextField
@@ -49,12 +51,18 @@ public class EditableText extends TextArea
 		recalculateSize();
 	}
 	
+	private function zzz(event:Event):void
+	{
+		explicitHeight = textField.measuredHeight + 10;
+	}
+	
 	private function recalculateSize():void
 	{	
 		if(!textField || !flexible)
 			return;
 		
-		explicitHeight = textField.textHeight + 10;
+		explicitHeight = textField.measuredHeight + 10;
+//		trace(textField.measuredHeight);
 	}
 }
 }

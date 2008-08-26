@@ -4,6 +4,8 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
+import mx.controls.Alert;
+
 import vdom.connection.Proxy;
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
@@ -458,6 +460,7 @@ public class DataManager implements IEventDispatcher {
 			oldXMLDescription.@Name = newXMLDescription.@Name;
 			
 			soap.addEventListener(SoapEvent.SET_NAME_OK, setNameCompleteHandler);
+			soap.addEventListener(SoapEvent.SET_NAME_ERROR, setNameCompleteHandler);
 			soap.setName(_currentApplicationId, oldXMLDescription.@ID, oldXMLDescription.@Name);
 		}
 	}
@@ -465,13 +468,24 @@ public class DataManager implements IEventDispatcher {
 	private function setNameCompleteHandler(event:SoapEvent):void
 	{
 		soap.removeEventListener(SoapEvent.SET_NAME_OK, setNameCompleteHandler);
+		soap.removeEventListener(SoapEvent.SET_NAME_ERROR, setNameCompleteHandler);
+		
+		if(event.result.Error[0])
+			Alert.show(event.result.Error[0], "Alert");
 		
 		var objectId:String = event.result.Object.@ID;
 		
 		var result:XML = getObject(objectId);
 		
+		if(result)
+			result.@Name = event.result.Object.@Name;
+		
+		if(_currentObject && _currentObject.@ID == objectId)
+			_currentObject.@Name = event.result.Object.@Name;
+		
 		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		
+		dispatchEvent(new Event("currentObjectRefreshed"));
 		
 		dmEvent.objectId = objectId
 		dmEvent.result = <Result>{result}</Result>;
@@ -670,7 +684,7 @@ public class DataManager implements IEventDispatcher {
 		if(information.Icon[0] && application.@IconID[0] != information.Icon[0])
 			application.@IconID = information.Icon[0];
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_CHANGED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE);
 		dispatchEvent(dme);
 	}
 	
@@ -739,7 +753,9 @@ public class DataManager implements IEventDispatcher {
 		
 		if(objectId == currentObjectId)
 			changeCurrentObject(_currentPageId);
+		
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.LIST_PAGES_CHANGED));
+		
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
 		dme.objectId = objectId;
 		dispatchEvent(dme);

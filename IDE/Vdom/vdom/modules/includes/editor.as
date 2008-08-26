@@ -116,7 +116,7 @@ private function loadApplicationData():void
 
 private function selectPage():void
 {	
-	if(dataManager.listPages.length() > 0)
+	if(dataManager.listPages && dataManager.listPages.length() > 0)
 	{
 		var page:XML = dataManager.listPages[0]
 		dataManager.changeCurrentPage(page.@ID);

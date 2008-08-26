@@ -135,6 +135,9 @@ public class RenderManager implements IEventDispatcher {
 		
 		cursor.findAny({itemId:itemId});
 		
+		if(!cursor.current)
+			return;
+		
 		var currentItem:Container = ItemDescription(cursor.current).item as Container;
 		
 		if(currentItem && currentItem.parent)
@@ -508,7 +511,7 @@ public class RenderManager implements IEventDispatcher {
 					item.setStyle("backgroundAlpha", .0);
 					
 					if(HTMLText == "")
-						HTMLText = "<div>simple text</div>";
+						HTMLText = "";//"<div>simple text</div>";
 					
 					HTMLText =
 							"<html>" + 
@@ -628,7 +631,7 @@ public class RenderManager implements IEventDispatcher {
 			xmlList = itemXMLDescription.attribute(attribute[0]);
 			if (xmlList.length() > 0)
 			{
-				_style[attribute[1]] = xmlList[0].toString();
+				_style[attribute[1]] = xmlList[0].toString().toLowerCase();
 				hasStyle = true;
 			}
 		}
@@ -641,6 +644,17 @@ public class RenderManager implements IEventDispatcher {
 			
 		if(_style.hasOwnProperty("borderColor"))
 			_style["borderStyle"] = "solid";
+		
+		if(_style.hasOwnProperty("textDecoration"))
+			if(
+				!(
+				_style["textDecoration"] != "none" ||
+				_style["textDecoration"] != "underline"
+				)
+			)
+			{
+				_style["textDecoration"] = "none";
+			}
 		
 		for(var atrName:String in _style)
 		{

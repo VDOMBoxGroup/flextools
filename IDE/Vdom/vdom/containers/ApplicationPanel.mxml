@@ -46,7 +46,7 @@
 		}
 		
 		public function set applicationId(value:String):void
-		{	
+		{
 			if(value != null && _applicationId == value)
 				return;
 			
@@ -108,6 +108,7 @@
 		selectionColor="#777777"
 		borderThickness="0"
 		width="100%"
+		focusEnabled="false"
 		change="changeListEvent(event)"
 		verticalScrollPolicy="auto"
 		itemRenderer="vdom.containers.Thumbnail" rowCount="1" direction="horizontal" columnCount="4" scroll="{sss()}"

@@ -169,6 +169,7 @@ private function HTMLEditorLoader_HTMLDomInitalizeHandler(event:Event):void
 private function HTMLEditorLoader_completeHandler(event:Event):void
 {	
 	HTMLEditorLoader.removeEventListener(Event.COMPLETE, HTMLEditorLoader_completeHandler);
+//	var d:* = HTMLEditorLoader.window.tinyMCE;
 	HTMLEditorLoader.window.tinyMCE.execCommand("mceAddControl", true, "content");
 	
 	elementForEditing = editableHTML.domWindow.document.getElementById('xEditingArea');
@@ -199,7 +200,12 @@ private function execCommand(commandName:String, commandAttributes:String = null
 private function insertLink():void
 {	
 	var currentSelection:* = elementForEditing.contentWindow.getSelection();
-	currentRange = currentSelection.getRangeAt(0);
+	try
+	{
+		currentRange = currentSelection.getRangeAt(0);
+	}
+	catch(error:Error)
+	{}
 	
 	var linkSelection:LinkSelection = new LinkSelection();
 	linkSelection.addEventListener('linkSelected', linkSelection_linkSelectedHandler);

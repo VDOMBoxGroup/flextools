@@ -5,10 +5,10 @@ import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
 import mx.containers.Accordion;
-import mx.containers.VBox;
 
 import vdom.components.edit.containers.typeAccordionClasses.Type;
 import vdom.components.edit.containers.typeAccordionClasses.Types;
+import vdom.connection.protect.MD5;
 import vdom.managers.FileManager;
 
 public class TypeAccordion extends Accordion {
@@ -95,8 +95,9 @@ public class TypeAccordion extends Accordion {
 			else if (categoryName.match(phraseRE)) {
 				
 				categoryPhraseId = categoryName.match(phraseRE)[1];
-				categoryName = 'lang_' + categoryPhraseId;
 				categoryNameLocalized = resourceManager.getString(typeDescription.Information.Name, categoryPhraseId);
+				if(categoryNameLocalized)
+					categoryName = 'lang_' + MD5.encrypt(categoryNameLocalized);
 			}
 			
 			if(!categoryNameLocalized)

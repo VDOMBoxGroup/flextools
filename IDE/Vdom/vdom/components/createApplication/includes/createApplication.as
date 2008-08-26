@@ -43,7 +43,7 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.APPLICATION_INFO_CHANGED, 
+			DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, 
 			dataManager_applicationInfoChangedHandler
 		);
 		
@@ -79,7 +79,7 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.APPLICATION_INFO_CHANGED, 
+			DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, 
 			dataManager_applicationInfoChangedHandler
 		);
 		

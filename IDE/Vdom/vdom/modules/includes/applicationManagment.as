@@ -41,6 +41,9 @@ private function showHandler():void
 		BindingUtils.bindProperty(applicationInformation, "dataProvider", dataManager, "currentApplicationInformation")
 	);
 	
+	listApplicationContainer.enabled = true;
+	searchPanel.enabled = true;
+	
 	selectedChild = components;
 	
 	if(listApplicationContainer.applicationId)

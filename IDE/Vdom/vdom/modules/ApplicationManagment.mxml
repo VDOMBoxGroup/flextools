@@ -39,7 +39,8 @@
 			width="250" height="86" />
 		
 		<controls:ApplicationPanel id="listApplicationContainer"
-			panelName="{resourceManager.getString('Application','main_applist')}" 
+			panelName="{resourceManager.getString('Application','main_applist')}"
+			focusEnabled="false"
 			height="86"  width="280"/>
 		
 		<controls:ApplicationInformation id="applicationInformation"

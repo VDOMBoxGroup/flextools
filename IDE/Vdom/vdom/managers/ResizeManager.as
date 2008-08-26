@@ -167,6 +167,9 @@ public class ResizeManager extends EventDispatcher {
 		
 		if(item && Container(item).parent) {
 			
+			if(Container(item).parent == _topLevelItem)
+				showMarker = false;
+			
 			highlightItem(null);
 			
 			if(selectMarker.parent)
@@ -201,6 +204,8 @@ public class ResizeManager extends EventDispatcher {
 			newSelectedItem = null;
 			if(selectMarker) {
 				selectMarker.visible = false;
+				selectMarker.width = 0;
+				selectMarker.height = 0
 				selectMarker.item = null;
 			}
 		}
