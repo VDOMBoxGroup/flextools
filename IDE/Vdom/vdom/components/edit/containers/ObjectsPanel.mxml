@@ -123,6 +123,8 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		private function treeChangeLister(evt:Event):void
 		{
 			  var selectedNode:XML = Tree(evt.target).selectedItem as XML;
+			  if(!selectedNode)
+			  	return;
               var ID:String = selectedNode.@ID;
 
               if(xmlTreeData.source.(@ID == ID).toXMLString() != "" )
