@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" xmlns:controls="qs.controls.*" creationComplete="{creationComplete();}">
+	
+	<mx:Style>
+		.FlexBook {
+			color: #000000;
+			textRollOverColor: #000000;
+			border-thickness: 1;
+			border-style: solid;
+			border-color: #222222;
+			page-slope: .3;
+			active-grab-area: page;
+			page-shadow-strength: 3;
+			curve-shadow-strength: 5;
+			auto-turn-duration: 1500;
+			transparency-depth: 999;
+		}
+		
+		Application {
+			color: #F1F1CC;
+			textRollOverColor: 	#FFFFFF;
+			backgroundGradientColors: #000000, #282828;
+			backgroundColor: #282828;
+		}
+		
+	</mx:Style>
+	
+	
+	<mx:Canvas width="100%" height="100%">
+		<controls:FlexBook id="flexBook"
+			animateCurrentPageIndex="true" animatePagesOnTurn="true" activeGrabArea="corner" edgeAndCornerSize="50" itemSize="halfPage"
+			styleName="FlexBook" width="100%" height="100%" />
+					
+	</mx:Canvas>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Image;
+			import mx.states.SetStyle;
+			import mx.containers.VBox;
+			import mx.containers.Canvas;
+			
+			private function creationComplete():void {
+				var sources:String = Application.application.parameters['sources'];
+				var paddings:int = int(Application.application.parameters['paddings']);
+				var bgColor:String = Application.application.parameters['bgcolor'];
+				
+				var pageObjects:Array = sources.split(';');
+				
+				for each (var page:String in pageObjects) {
+					var pageCanvas:VBox = new VBox();
+					
+					flexBook.addChild(pageCanvas);
+					
+					if (bgColor != 'transparent')
+						pageCanvas.setStyle('backgroundColor', bgColor);
+						
+					pageCanvas.setStyle('paddingLeft', paddings);
+					pageCanvas.setStyle('paddingRight', paddings);
+					pageCanvas.setStyle('paddingTop', paddings);
+					pageCanvas.setStyle('paddingBottom', paddings);
+					
+					var pageImage:Image = new Image();
+					pageCanvas.addChild(pageImage);
+					pageImage.percentWidth = 100;
+					pageImage.percentHeight = 100;
+					pageImage.source = pageCanvas;
+        		}				
+			}
+		]]>
+	</mx:Script>
+</mx:Application>
