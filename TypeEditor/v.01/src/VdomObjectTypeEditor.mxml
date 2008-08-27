@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication
+	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+	
+	<mx:Script>
+		<![CDATA[
+			[Bindable] [Embed("/icons/save.png")]
+			public var saveIcon:Class; 
+			
+			[Bindable] [Embed("/icons/open.png")]
+			public var openIcon:Class;
+			 
+			[Bindable] [Embed("/icons/exit.png")]
+			public var exitIcon:Class;
+		]]>
+	</mx:Script>
+	
+	<mx:Binding source="menuDataProvider" destination="__mainMenuBar.dataProvider" />
+	<mx:XML id="menuDataProvider" xmlns="">
+		<root>
+			<menuItem label="File">
+				<listItem label="Open type XML..." icon="openIcon"/>
+				<listItem label="Save type XML..." icon="saveIcon" />
+				<listItem type="separator" />
+				<listItem label="Exit" icon="exitIcon" />
+				
+			</menuItem>
+		</root>
+	</mx:XML>
+	
+	<mx:MenuBar id="__mainMenuBar" width="100%" labelField="@label" iconField="@icon" showRoot="false" />
+		
+	<mx:TabNavigator width="100%" height="100%">
+		<mx:Canvas id="__infoCanvas" label="Object Information" width="100%" height="100%" />
+		<mx:Canvas id="__attrsCanvas" label="Object Information" width="100%" height="100%" />
+	</mx:TabNavigator>	
+	<mx:HBox>
+			
+	</mx:HBox>
+</mx:WindowedApplication>
