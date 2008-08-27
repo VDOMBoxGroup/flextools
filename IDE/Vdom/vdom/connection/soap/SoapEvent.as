@@ -11,6 +11,7 @@ package vdom.connection.soap
 		public static var CLOSE_SESSION_OK				:String = "Close session OK"; 			//2
 		public static var CREATE_APPLICATION_OK 		:String = "Create Application OK"; 		//3
 		public static var SET_APLICATION_INFO_OK		:String = "Set application info OK"; 	//4
+		public static var GET_APLICATION_INFO_OK		:String = "getApplicationInfoOK"; 	//4
 		public static var LIST_APLICATION_OK 			:String = "List applications OK"; 		//5
 		public static var LIST_TYPES_OK 				:String = "List types OK"; 				//6
 		public static var GET_TYPE_OK 					:String = "Get type OK"; 				//7
@@ -58,6 +59,7 @@ package vdom.connection.soap
 		public static var CLOSE_SESSION_ERROR				:String = "Close session ERROR"; 			//2
 		public static var CREATE_APPLICATION_ERROR 			:String = "Create Application ERROR"; 		//3
 		public static var SET_APLICATION_INFO_ERROR			:String = "Set application info ERROR"; 	//4
+		public static var GET_APLICATION_INFO_ERROR			:String = "getApplicationInfoERROR"; 	//4
 		public static var LIST_APLICATION_ERROR 			:String = "List applications ERROR"; 		//5
 		public static var LIST_TYPES_ERROR					:String = "List types ERROR"; 				//6
 		public static var GET_TYPE_ERROR 					:String = "Get type ERROR"; 				//7
