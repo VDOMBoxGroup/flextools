@@ -125,16 +125,18 @@ public class DataManager implements IEventDispatcher {
 			return null;
 	}
 	
-	 public function getApplicationInformation(applicationId:String = ""):XML
+	public function getApplicationInformation(applicationId:String = ""):XML
 	{
 		if(applicationId == "")
 			applicationId = _currentApplicationId;
+			
+//		soap.get
 		
 		if(applicationId)
 			return _listApplication.(@ID == applicationId).Information[0];
 		else
 			return _currentApplication.Information[0];
-	} 
+	}
 	
 	public function getTypeByTypeId(typeId:String):XML 
 	{
@@ -495,7 +497,19 @@ public class DataManager implements IEventDispatcher {
 	
 	private function setAttributesCompleteHandler(event:ProxyEvent):void
 	{
+		
+		
 		var key:String = event.xml.Key[0];
+		
+		var res:String = event.xml.Error;
+			// check Error
+		if(res != "")
+		{
+			if(res == "'Application not found'")
+				close();
+			return;
+		}
+		
 		var objectId:String = event.xml.Object[0].@ID;
 		var attributes:XML = event.xml.Object.Attributes[0];
 		
@@ -767,6 +781,8 @@ public class DataManager implements IEventDispatcher {
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
 		dme.objectId = objectId;
 		dispatchEvent(dme);
+		
+		getApplicationInformation();
 	}
 	
 	private function deleteXMLNodes(objectId:String):void

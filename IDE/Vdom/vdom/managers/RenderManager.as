@@ -582,7 +582,8 @@ public class RenderManager implements IEventDispatcher {
 		var i:uint = 0;
 		
 		for (i ; i < length; i++)
-			item.addChild(graphArr[i]);
+			if(graphArr[i])
+				item.addChild(graphArr[i]);
 		
 		
 		var itemArr:Array = sortItems(itemId);

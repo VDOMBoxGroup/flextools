@@ -205,7 +205,7 @@ public class ResizeManager extends EventDispatcher {
 			if(selectMarker) {
 				selectMarker.visible = false;
 //				selectMarker.width = 0;
-//				selectMarker.height = 0
+//				selectMarker.height = 0;
 				selectMarker.item = null;
 			}
 		}
