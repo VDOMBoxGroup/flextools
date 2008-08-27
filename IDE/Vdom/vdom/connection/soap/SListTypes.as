@@ -16,7 +16,7 @@ package vdom.connection.soap
    
 		public function SListTypes() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.list_types.addEventListener(ResultEvent.RESULT,completeListener);
 		} 		
@@ -24,7 +24,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SListTypes 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SListTypes();
 	
 			return instance;

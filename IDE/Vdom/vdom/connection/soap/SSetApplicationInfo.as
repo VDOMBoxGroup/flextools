@@ -18,7 +18,7 @@ package vdom.connection.soap
    
 		public function SSetApplicationInfo() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.set_application_info.addEventListener(ResultEvent.RESULT, completeListener);
  
@@ -27,7 +27,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SSetApplicationInfo 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SSetApplicationInfo();
 	
 			return instance;

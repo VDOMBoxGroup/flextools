@@ -16,7 +16,7 @@ package vdom.connection.soap
    
 		public function SGetApplicationStructure() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.get_application_structure.addEventListener(ResultEvent.RESULT, completeListener);
  
@@ -25,7 +25,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SGetApplicationStructure 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SGetApplicationStructure();
 	
 			return instance;

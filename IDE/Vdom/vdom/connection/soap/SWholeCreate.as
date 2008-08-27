@@ -16,7 +16,7 @@ package vdom.connection.soap
    
 		public function SWholeCreate() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.whole_create.addEventListener(ResultEvent.RESULT,completeListener);
 		} 		
@@ -24,7 +24,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SWholeCreate 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SWholeCreate();
 	
 			return instance;

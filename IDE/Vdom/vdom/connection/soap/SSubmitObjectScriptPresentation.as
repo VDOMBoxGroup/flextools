@@ -16,7 +16,7 @@ package vdom.connection.soap
    
 		public function SSubmitObjectScriptPresentation() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.submit_object_script_presentation.addEventListener(ResultEvent.RESULT, completeListener);
  
@@ -25,7 +25,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SSubmitObjectScriptPresentation 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SSubmitObjectScriptPresentation();
 	
 			return instance;

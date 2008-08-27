@@ -18,7 +18,7 @@ package vdom.connection.soap
    
 		public function SGetTopObjects() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.get_top_objects.addEventListener(ResultEvent.RESULT, completeListener);
  
@@ -27,7 +27,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SGetTopObjects 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SGetTopObjects();
 	
 			return instance;

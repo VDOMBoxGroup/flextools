@@ -18,7 +18,7 @@ package vdom.connection.soap
    
 		public function SModifyResource() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.modify_resource.addEventListener(ResultEvent.RESULT, completeListener);
  
@@ -27,7 +27,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SModifyResource 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SModifyResource();
 	
 			return instance;

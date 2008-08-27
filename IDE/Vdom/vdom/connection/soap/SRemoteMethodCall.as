@@ -18,7 +18,7 @@ package vdom.connection.soap
    
 		public function SRemoteMethodCall() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.remote_method_call.addEventListener(ResultEvent.RESULT, completeListener);
  
@@ -27,7 +27,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SRemoteMethodCall 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SRemoteMethodCall();
 	
 			return instance;

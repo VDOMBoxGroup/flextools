@@ -16,7 +16,7 @@ package vdom.connection.soap
    
 		public function SWholeDelete() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.whole_delete.addEventListener(ResultEvent.RESULT,completeListener);
  
@@ -25,7 +25,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SWholeDelete 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SWholeDelete();
 	
 			return instance;

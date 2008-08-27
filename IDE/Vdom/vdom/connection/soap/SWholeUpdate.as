@@ -16,7 +16,7 @@ package vdom.connection.soap
    
 		public function SWholeUpdate() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.whole_update.addEventListener(ResultEvent.RESULT,completeListener);
  
@@ -25,7 +25,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SWholeUpdate 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SWholeUpdate();
 	
 			return instance;

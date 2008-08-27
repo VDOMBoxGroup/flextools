@@ -19,7 +19,7 @@ package vdom.connection.soap
    
 		public function SLogin() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.open_session.addEventListener(ResultEvent.RESULT,completeListener);
  
@@ -28,7 +28,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SLogin 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SLogin();
 	
 			return instance;

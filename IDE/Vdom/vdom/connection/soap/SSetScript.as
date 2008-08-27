@@ -18,7 +18,7 @@ package vdom.connection.soap
    
 		public function SSetScript() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.set_script.addEventListener(ResultEvent.RESULT,completeListener);
 		} 		
@@ -26,7 +26,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SSetScript 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SSetScript();
 	
 			return instance;

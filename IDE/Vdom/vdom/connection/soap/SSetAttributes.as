@@ -17,7 +17,7 @@ package vdom.connection.soap
    
 		public function SSetAttributes() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);
  
@@ -26,7 +26,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SSetAttributes 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SSetAttributes();
 	
 			return instance;

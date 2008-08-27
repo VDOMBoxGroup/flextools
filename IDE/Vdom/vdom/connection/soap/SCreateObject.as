@@ -16,7 +16,7 @@ package vdom.connection.soap
    
 		public function SCreateObject() 
 		{	
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.create_object.addEventListener(ResultEvent.RESULT,completeListener);
  
@@ -25,7 +25,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SCreateObject 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SCreateObject();
 	
 			return instance;

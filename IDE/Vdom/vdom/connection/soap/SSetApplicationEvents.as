@@ -19,7 +19,7 @@ package vdom.connection.soap
    
 		public function SSetApplicationEvents()
 		{
-	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
+//	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
 	 		ws.set_application_events.addEventListener(ResultEvent.RESULT,completeListener);
 		} 		
@@ -27,7 +27,7 @@ package vdom.connection.soap
 		 // initialization		
 		public static function getInstance():SSetApplicationEvents 
 		{
-			if (!instance)
+//			if (!instance)
 				instance = new SSetApplicationEvents();
 	
 			return instance;
