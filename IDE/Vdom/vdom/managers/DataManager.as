@@ -305,6 +305,9 @@ public class DataManager implements IEventDispatcher {
 	
 	public function changeCurrentApplication(applicationId:String):void
 	{
+		if(_currentApplicationId == applicationId)
+			return;
+		
 		_currentApplicationId = null;
 		_currentApplication = null;
 		
@@ -569,7 +572,7 @@ public class DataManager implements IEventDispatcher {
 	public function getApplicationStructure(applicationId:String = ""):void
 	{
 		if(applicationId == "")
-			applicationId == _currentApplicationId;
+			applicationId = _currentApplicationId;
 			
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, getApplicationStructureHandler);
 		soap.getApplicationStructure(applicationId);
