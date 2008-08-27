@@ -22,8 +22,6 @@ package vdom.components.treeEditor
 		{
 			super();
 			
-			
-			
 			lbIndex = new Label();
 			lbIndex.width = 19;
 			lbIndex.setStyle('textAlign', 'center');
@@ -188,12 +186,9 @@ package vdom.components.treeEditor
 		
 		public function set index(num:int):void
 		{
-			
-			
 			_index = num;
 			lbIndex.text = _index.toString(); 
 //			trace('new: '+lbIndex.text)
-			
 		}
 		
 		

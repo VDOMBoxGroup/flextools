@@ -504,7 +504,7 @@
 <mx:VBox>
 	<colorMenu02:ColorMenu2 id="colmen2"  />
 	<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>
-	<mx:CheckBox id="chShowSignature" label= "{resourceManager.getString('Tree','expand_all')}"
+	<mx:CheckBox id="chShowSignature" label= "{resourceManager.getString('Tree','show_signature')}"
 		  click="showSignature()"/>
 <mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
 	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
