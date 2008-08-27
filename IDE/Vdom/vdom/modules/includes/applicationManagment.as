@@ -2,7 +2,6 @@ import flash.events.Event;
 
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
-import mx.events.FlexEvent;
 import mx.events.ListEvent;
 
 import vdom.events.DataManagerEvent;
@@ -95,19 +94,29 @@ private function registerEvent(flag:Boolean):void
 private function switchToCreate():void
 {
 	listApplicationContainer.enabled = false;
+	searchPanel.enabled = false;
 	mainViewStack.selectedChild = createApplication
 }
 
 private function switchToEdit(event:Event):void
 {
 	listApplicationContainer.enabled = false;
+	searchPanel.enabled = false;
 	mainViewStack.selectedChild = editApplication;
 }
 
 private function switchToProperties(event:Event):void
 {
 	listApplicationContainer.enabled = true;
+	searchPanel.enabled = true;
 	mainViewStack.selectedChild = applicationProperties;
+}
+
+private function switchToSearch(event:Event):void
+{
+	listApplicationContainer.enabled = false;
+	searchPanel.enabled = true;
+	mainViewStack.selectedChild = searchResult;
 }
 
 private function createApplicationHandler(event:Event):void
@@ -151,7 +160,7 @@ private function dataManager_searchCompleteHandler(event:DataManagerEvent):void
 {
 	dataManager.removeEventListener(DataManagerEvent.SEARCH_COMPLETE, dataManager_searchCompleteHandler);
 	searchResult.dataProvider = event.result.*;
-	mainViewStack.selectedChild = searchResult;
+	switchToSearch(new Event("z"));
 }
 
 private function dataManager_applicationDataLoaded(event:DataManagerEvent):void

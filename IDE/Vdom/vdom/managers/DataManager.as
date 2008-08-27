@@ -125,18 +125,16 @@ public class DataManager implements IEventDispatcher {
 			return null;
 	}
 	
-	public function getApplicationInformation(applicationId:String = ""):XML
+	 public function getApplicationInformation(applicationId:String = ""):XML
 	{
-		if(!applicationId && !_currentApplication)
-			return null;
+		if(applicationId == "")
+			applicationId = _currentApplicationId;
 		
 		if(applicationId)
 			return _listApplication.(@ID == applicationId).Information[0];
 		else
 			return _currentApplication.Information[0];
-		
-		return null
-	}
+	} 
 	
 	public function getTypeByTypeId(typeId:String):XML 
 	{
@@ -568,10 +566,13 @@ public class DataManager implements IEventDispatcher {
 		dispatchEvent(dme);
 	}
 	
-	public function getApplicationStructure():void
+	public function getApplicationStructure(applicationId:String = ""):void
 	{
+		if(applicationId == "")
+			applicationId == _currentApplicationId;
+			
 		soap.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, getApplicationStructureHandler);
-		soap.getApplicationStructure(_currentApplicationId);
+		soap.getApplicationStructure(applicationId);
 	}
 	
 	private function getApplicationStructureHandler(event:SoapEvent):void
@@ -684,8 +685,10 @@ public class DataManager implements IEventDispatcher {
 		if(information.Icon[0] && application.@IconID[0] != information.Icon[0])
 			application.@IconID = information.Icon[0];
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE);
-		dispatchEvent(dme);
+		var dme1:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE);
+		dispatchEvent(dme1);
+		var dme2:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_CHANGED);
+		dispatchEvent(dme2);
 	}
 	
 	/**
@@ -718,6 +721,8 @@ public class DataManager implements IEventDispatcher {
 			
 			if(application && application.Objects[0]) ///<---- Fix for first page creation in Application Managment !!! 
 				application.Objects.appendChild(result.Object[0]);
+			
+			getApplicationInformation(applicationId);
 		}
 		else {
 			
