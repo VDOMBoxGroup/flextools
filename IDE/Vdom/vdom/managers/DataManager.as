@@ -125,17 +125,40 @@ public class DataManager implements IEventDispatcher {
 			return null;
 	}
 	
-	public function getApplicationInformation(applicationId:String = ""):XML
+	public function getApplicationInformation(applicationId:String = ""):void
 	{
 		if(applicationId == "")
 			applicationId = _currentApplicationId;
 			
-//		soap.get
+		soap.addEventListener(SoapEvent.GET_APLICATION_INFO_OK, soap_getApplicationInfoHandler);
+		soap.addEventListener(SoapEvent.GET_APLICATION_INFO_ERROR, soap_getApplicationInfoHandler);
+		soap.getApplicationInfo(applicationId);
+	}
+	
+	private function soap_getApplicationInfoHandler(event:SoapEvent):void
+	{
+		soap.removeEventListener(
+			SoapEvent.GET_APLICATION_INFO_OK,
+			soap_getApplicationInfoHandler
+		);
 		
-		if(applicationId)
-			return _listApplication.(@ID == applicationId).Information[0];
-		else
-			return _currentApplication.Information[0];
+		soap.removeEventListener(
+			SoapEvent.GET_APLICATION_INFO_ERROR, 
+			soap_getApplicationInfoHandler
+		);
+		
+		var result:XML = event.result.Information[0];
+		
+		if(!result)
+			return;
+		
+		var applicationId:String = result.Id;
+		
+		var application:XML = _listApplication.(@ID == applicationId)[0]
+		if(application)
+			application.Information[0] = result;
+		
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_CHANGED));
 	}
 	
 	public function getTypeByTypeId(typeId:String):XML 

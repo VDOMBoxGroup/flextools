@@ -19,9 +19,11 @@
 	
 	<editContainers:TypeAccordion id="types"
 		y="100" width="90" minWidth="90" maxWidth="90"
+		focusEnabled="false"
 		dropShadowEnabled="true"/>
 	
 		<containers:AdvancedTabNavigator id="mainArea"
+			focusEnabled="false"
 			width="100%" borderStyle="none">			
 			
 			<editContainers:WorkArea id="workArea" label="WYSIWYG" 
@@ -30,6 +32,7 @@
 				visible="false" />
 				
 			<editContainers:XMLPresentationEditor id="xmlEditor" label="VDOM XML"
+				focusEnabled="false"
 				dropShadowEnabled="true" borderStyle="solid"/>
 			
 		</containers:AdvancedTabNavigator>
