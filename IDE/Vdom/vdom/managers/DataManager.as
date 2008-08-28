@@ -509,13 +509,17 @@ public class DataManager implements IEventDispatcher {
 		if(_currentObject && _currentObject.@ID == objectId)
 			_currentObject.@Name = event.result.Object.@Name;
 		
-		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		
 		dispatchEvent(new Event("currentObjectRefreshed"));
 		
-		dmEvent.objectId = objectId
-		dmEvent.result = <Result>{result}</Result>;
-		dispatchEvent(dmEvent);
+		dme.objectId = objectId
+		dme.result = <Result>{result}</Result>;
+		dispatchEvent(dme);
+		
+		dme = new DataManagerEvent(DataManagerEvent.LIST_PAGES_CHANGED);
+		dme.result = event.result;
+		dispatchEvent(dme);
 	}
 	
 	private function setAttributesCompleteHandler(event:ProxyEvent):void
@@ -779,6 +783,11 @@ public class DataManager implements IEventDispatcher {
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECTS_CREATED);
 		dme.result = event.result;
 		dispatchEvent(dme);
+		
+		dme = new DataManagerEvent(DataManagerEvent.LIST_PAGES_CHANGED);
+		dme.result = event.result;
+		dispatchEvent(dme);
+		
 	}
 	
 	public function deleteObject(objectId:String):void

@@ -80,13 +80,20 @@ package com.zavoo.svg.nodes
 			var sy:Number = _xml.@height/content.height;
 
 			m.scale(sx, sy);
+			
+			try
+			{
 			var scaledImage:Bitmap = 
 				new Bitmap(
 					new BitmapData(_xml.@width, _xml.@height, true, 0x00000000), 
 					PixelSnapping.AUTO,
 					true
 				);
-			 
+			}
+			catch(erroe:Error)
+			{
+				return;
+			}
 			scaledImage.bitmapData.draw(BitmapData(content.bitmapData), m);
 			
 			scaledImage.opaqueBackground = null;
