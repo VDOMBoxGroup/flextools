@@ -2,17 +2,18 @@ package vdom.controls.wysiwyg.table {
 
 import flash.display.DisplayObject;
 import flash.display.Graphics;
-import flash.display.Sprite;
 
+import mx.containers.BoxDirection;
 import mx.containers.Canvas;
 import mx.containers.GridItem;
-import mx.core.FlexSprite;
+import mx.containers.VBox;
 import mx.core.IRectangularBorder;
 import mx.core.UIComponent;
+import mx.core.mx_internal;
 
 import vdom.containers.IItem;
+import vdom.containers.Item;
 import vdom.managers.wc;
-import mx.core.mx_internal;
 
 use namespace mx_internal;
 
@@ -26,10 +27,12 @@ public class TableCell extends GridItem implements IItem
 	private var _isStatic:Boolean = false;
 	private var _editableAttributes:Array = [];
 	
+	private var cont:VBox = new VBox();;
+	
 	public function TableCell(objectId:String)
 	{
 		super();
-		
+		mx_internal::layoutObject.direction = BoxDirection.VERTICAL;
 		_objectId = objectId;
 	}
 	
@@ -125,7 +128,22 @@ public class TableCell extends GridItem implements IItem
 		_waitLayout.height = 0;
 		
 		rawChildren.addChild(_waitLayout);
+		
+		//addChild(cont);
 	}
+	
+	/* override public function addChild(child:DisplayObject):DisplayObject
+	{
+		if(child is Item)
+		{
+			cont.addChild(child);
+			return null;
+		}
+		else
+		{
+			return super.addChild(child);
+		}
+	} */
 	
 	override public function removeAllChildren():void
 	{	

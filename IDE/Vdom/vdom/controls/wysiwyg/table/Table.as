@@ -2,14 +2,14 @@ package vdom.controls.wysiwyg.table {
 
 import flash.display.DisplayObject;
 import flash.display.Graphics;
-import flash.display.Sprite;
+import flash.events.Event;
 
 import mx.containers.Canvas;
 import mx.containers.Grid;
-import mx.core.FlexSprite;
 import mx.core.IRectangularBorder;
 import mx.core.UIComponent;
 import mx.core.mx_internal;
+import mx.events.ScrollEvent;
 
 import vdom.containers.IItem;
 import vdom.managers.wc;	
@@ -30,7 +30,7 @@ public class Table extends Grid implements IItem
 	{
 		
 		super();
-		
+		addEventListener(ScrollEvent.SCROLL, scrollHandler);
 		_objectId = objectId;
 	}
 	
@@ -246,6 +246,11 @@ public class Table extends Grid implements IItem
 		
 		if(waitLayoutIndex != topIndex-1)
 			rawChildren.setChildIndex(_waitLayout, topIndex-1);
+	}
+	
+	private function scrollHandler(event:ScrollEvent):void
+	{	
+		dispatchEvent(new Event("vdomScroll"));
 	}
 }
 }

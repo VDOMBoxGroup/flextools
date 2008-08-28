@@ -20,6 +20,9 @@
 			[Bindable]
 			private var _source:Object;
 			
+			private var defaultImage:Class =
+				Application.application.getStyle('appIconPersonalPages');
+			
 			public function set dataProvider(value:XML):void
 			{
 				if(!value)
@@ -30,7 +33,8 @@
 				
 				if(value.Icon == '')
 				{
-					_source = Application.application.getStyle('appIconPersonalPages');
+					_source = null; //<---- Error
+					_source = defaultImage;
 				}
 				else
 				{
