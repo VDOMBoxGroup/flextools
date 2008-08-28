@@ -81,7 +81,7 @@ private function showHandler():void {
 	var so:SharedObject = SharedObject.getLocal("userData");
 	
 	_username.text = so.data["username"];
-	_password.text = so.data["password"];
+//	_password.text = so.data["password"];
 	_hostname.text = so.data["hostname"];
 }
 
@@ -109,7 +109,7 @@ private function checkData():void {
 	};
 	var so:SharedObject = SharedObject.getLocal("userData");
 	so.data["username"] = _username.text;
-	so.data["password"] = _password.text;
+//	so.data["password"] = _password.text;
 	so.data["hostname"] = _hostname.text;
 	
 	dispatchEvent(lfe);

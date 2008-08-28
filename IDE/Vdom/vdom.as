@@ -94,6 +94,8 @@ private function showMainHandler():void
 	Application.application.showGripper = true;
 	Application.application.minWidth = 1000;
 	Application.application.minHeight = 800;
+	
+	userName.text = "USER: " + authenticationManager.username.toUpperCase()+ " - VDOM IDE";
 }
 
 private function changeLanguageHandler(event:Event):void

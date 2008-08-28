@@ -59,7 +59,7 @@ public class AuthenticationManager implements IEventDispatcher
 	
 	public function set username(value:String):void
 	{
-		
+		_username = value;
 	}
 	
 	public function get password():String
@@ -78,6 +78,7 @@ public class AuthenticationManager implements IEventDispatcher
 		soap.addEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
 		
 		_hostname = hostname;
+		_username = username;
 		soap.login(username, password);
 	}
 	
