@@ -19,6 +19,7 @@ package vdom.connection.soap
 		{	
 //	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
+	 		trace(''+ws.set_attributes.willTrigger(ResultEvent.RESULT));
 	 		ws.set_attributes.addEventListener(ResultEvent.RESULT,completeListener);
  
 		} 		
@@ -48,6 +49,9 @@ package vdom.connection.soap
 		
 		private  function completeListener(event:ResultEvent):void
 		{
+			trace('SET Atr returned' );
+//			ws.set_attributes.removeEventListener(ResultEvent.RESULT,completeListener);
+			
 			resultXML = new XML(<Result />);
 			resultXML.appendChild(XMLList(event.result));
 
@@ -62,6 +66,7 @@ package vdom.connection.soap
 			} else{
 				evt = new SoapEvent(SoapEvent.SET_ATTRIBUTE_S_OK, resultXML);
 				dispatchEvent(evt);
+				
 			}
 		}
 	}

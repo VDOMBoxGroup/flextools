@@ -85,6 +85,24 @@ xmlns:containers="vdom.components.edit.containers.*" >
 				
 				tree.dataProvider = xmlTreeData;
 				tree.validateNow();
+				
+//				trace(dataManager.currentObjectId +' : '+dataManager.currentApplicationId)
+				if(dataManager.currentObjectId == dataManager.currentApplicationId)
+				{
+					var currentElement:XML = xmlTreeData.source..Object.(@ID == dataManager.currentObjectId)[0];
+					openTree(currentElement);
+				
+					tree.selectedItem = currentElement;
+				
+				}else
+				{	
+					
+				}	
+				
+				var index:int =  tree.getItemIndex(tree.selectedItem);
+				tree.scrollToIndex(index);
+					
+				
 			} else
 			{
 				tree.dataProvider = null;
@@ -171,7 +189,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 			
 			var index:int =  tree.getItemIndex(tree.selectedItem);
 //			tree.selectedIndex = index;
-			tree.rowCount;
+//			tree.rowCount;
 			tree.scrollToIndex(index);
 			
 		}

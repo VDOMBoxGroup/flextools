@@ -21,7 +21,9 @@ package vdom.connection.soap
 		{	
 //	 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	 		ws = Soap.ws;
+	 		trace('login: '+ws.open_session.willTrigger(ResultEvent.RESULT))
 	 		ws.open_session.addEventListener(ResultEvent.RESULT,completeListener);
+	 		trace('login: '+ws.open_session.willTrigger(ResultEvent.RESULT))
  
 		} 		
 		 
@@ -50,7 +52,7 @@ package vdom.connection.soap
 		private  function completeListener(event:ResultEvent):void{
 			
 			// get result 
-			
+			trace('login: '+ws.open_session.willTrigger(ResultEvent.RESULT))
 			resultXML = new XML(<Result />);
 			resultXML.appendChild(XMLList(event.result));
 			
@@ -73,6 +75,7 @@ package vdom.connection.soap
 				se = new SoapEvent(SoapEvent.LOGIN_OK);
 				se.result = resultXML;
 				dispatchEvent(se);
+				trace('Logined');
 			}
 		}
 		

@@ -40,6 +40,45 @@ package vdom.connection.soap
 				ws.addEventListener(LoadEvent.LOAD, loadCompleteListener);
 				ws.addEventListener(FaultEvent.FAULT, errorListener);
 				ws.loadWSDL();
+				
+				sLogin = SLogin.getInstance(); 
+				sSetAttributes = SSetAttributes.getInstance();
+				sCloseSession = SCloseSession.getInstance(); 
+				sCreateApplication = SCreateApplication.getInstance(); 
+				sSetApplicationInfo = SSetApplicationInfo.getInstance();
+				sGetApplicationInfo = SGetApplicationInfo.getInstance();
+				istApplications = SListApplications.getInstance();
+				sListTipes = SListTypes.getInstance();
+				sGetType = SGetType.getInstance();
+				sGetTypeResource = SGetResource.getInstance();
+				sRenderWysiwig = SRenderWysiwyg.getInstance();
+				sco = SCreateObject.getInstance();
+				sGetTopObjects = SGetTopObjects.getInstance();
+				sGetChildObjects = SGetChildObjects.getInstance();
+				sGetApplicationLanguageData= SGetApplicationLanguageData.getInstance();
+				 sSetAttribute= SSetAttribute.getInstance();
+				 sSetValue = SSetValue.getInstance();
+				 sSetScript = SSetScript.getInstance();
+				 sGetScript = SGetScript.getInstance();
+				sSetName = SSetName.getInstance();
+				sSetResource = SSetResource.getInstance();
+				sWholeCreate = SWholeCreate.getInstance();
+				sWholeDelete = SWholeDelete.getInstance();
+				sWholeUpdate = SWholeUpdate.getInstance();
+				sWholeCreatePage = SWholeCreatePage.getInstance();
+				sGetChildObjectsTree = SGetChildObjectsTree.getInstance();
+				sGetApplicationStructure = SGetApplicationStructure.getInstance();
+				sSetApplicationStructure  = SSetApplicationStructure.getInstance();
+				sSubmitObjectScriptPresentation = SSubmitObjectScriptPresentation.getInstance();
+				sGetOneObject = SGetOneObject.getInstance();
+				sGetObjectScriptPresentation = SGetObjectScriptPresentation.getInstance();
+				sListResources = SListResources.getInstance();
+				sModifyResource	= SModifyResource.getInstance();
+				sSetApplicationEvents = SSetApplicationEvents.getInstance();
+				sGetApplicationEvents = SGetApplicationEvents.getInstance();
+				sGetThumbnail = SGetThumbnail.getInstance();
+				sRemoteMethodCall = SRemoteMethodCall.getInstance();
+			
 		}		
 		
 		private function loadCompleteListener(event:LoadEvent):void {
@@ -49,10 +88,10 @@ package vdom.connection.soap
 		/**
 		 *  1 - open session open_session
 		 */
-		
+		private var sLogin:SLogin;
 		public   function login( login:String='', password:String='' ):void 
 		{	
-			var sLogin:SLogin = SLogin.getInstance(); 
+			
 			
 			sLogin.addEventListener(SoapEvent.LOGIN_OK,    ldispatchEvent);
 			sLogin.addEventListener(SoapEvent.LOGIN_ERROR, ldispatchEvent);
@@ -63,10 +102,10 @@ package vdom.connection.soap
 		/**
 		 *  2 - close_session  
 		 */
-		
+		private var sCloseSession:SCloseSession;
 		public  function closeSession():void 
 		{
-			var sCloseSession:SCloseSession = SCloseSession.getInstance(); 
+			
 			
 			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_OK, ldispatchEvent);
 			sCloseSession.addEventListener(SoapEvent.CLOSE_SESSION_ERROR, ldispatchEvent);
@@ -77,10 +116,10 @@ package vdom.connection.soap
 		/**
 		 * 3 - create application  'create_application'
 		 */ 
-		
+		private var sCreateApplication:SCreateApplication;
 		public  function createApplication(attr:XML = null):void 
 		{
-			var sCreateApplication:SCreateApplication = SCreateApplication.getInstance(); 
+			
 			
 			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_OK, ldispatchEvent);
 			sCreateApplication.addEventListener(SoapEvent.CREATE_APPLICATION_ERROR, ldispatchEvent);
@@ -96,10 +135,10 @@ package vdom.connection.soap
 		/**
 		 *  4 - set application general information 'set_application_info'
 		 */
-		
+		private var  sSetApplicationInfo:SSetApplicationInfo;
 		public  function setApplicationInfo(appid:String='',attr:String=''):void 
 		{
-			var  sSetApplicationInfo:SSetApplicationInfo = SSetApplicationInfo.getInstance();
+			
 			
 			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_INFO_OK, ldispatchEvent);
 			sSetApplicationInfo.addEventListener(SoapEvent.SET_APLICATION_INFO_ERROR, ldispatchEvent);
@@ -107,10 +146,9 @@ package vdom.connection.soap
 			sSetApplicationInfo.execute(appid, attr);
 		}
 		
+		private var  sGetApplicationInfo:SGetApplicationInfo;
 		public  function getApplicationInfo(appid:String='',attr:String=''):void 
 		{
-			var  sGetApplicationInfo:SGetApplicationInfo = SGetApplicationInfo.getInstance();
-			
 			sGetApplicationInfo.addEventListener(SoapEvent.GET_APLICATION_INFO_OK, ldispatchEvent);
 			sGetApplicationInfo.addEventListener(SoapEvent.GET_APLICATION_INFO_ERROR, ldispatchEvent);
 			
@@ -121,9 +159,10 @@ package vdom.connection.soap
 		/**
 		 *  5 - get the list of all applications  'list_applications'
 		 */
+		 private var istApplications:SListApplications;
 		public  function listApplications():void 
 		{
-			var istApplications:SListApplications = SListApplications.getInstance();
+			
 		
 			istApplications.addEventListener(SoapEvent.LIST_APLICATION_OK, ldispatchEvent);
 			istApplications.addEventListener(SoapEvent.LIST_APLICATION_ERROR, ldispatchEvent);
@@ -134,10 +173,10 @@ package vdom.connection.soap
 		/**
 		 *  6 - get the list of all types 'list_types'
 		 */
-		
+		private var sListTipes:SListTypes;
 		public  function listTypes():void 
 		{
-			var sListTipes:SListTypes = SListTypes.getInstance();
+			
 			
 			sListTipes.addEventListener(SoapEvent.LIST_TYPES_OK, ldispatchEvent);
 			sListTipes.addEventListener(SoapEvent.LIST_TYPES_ERROR, ldispatchEvent);
@@ -148,10 +187,10 @@ package vdom.connection.soap
 		/**
 		 *  7 - get type description get_type
 		 */
-		
+		private var sGetType:SGetType;
 		public  function getType(typeid:String=''):void 
 		{
-			var sGetType:SGetType = SGetType.getInstance();
+			
 			
 			sGetType.addEventListener(SoapEvent.GET_TYPE_OK, ldispatchEvent);
 			sGetType.addEventListener(SoapEvent.GET_TYPE_ERROR, ldispatchEvent);
@@ -162,10 +201,10 @@ package vdom.connection.soap
 		/** 
 		 *  8 - get type resource get_resource
 		 */
-		
+		private var sGetTypeResource:SGetResource;
 		public  function getResource(ownerid:String='',resid:String=''):void 
 		{
-			var sGetTypeResource:SGetResource = SGetResource.getInstance();
+			
 			
 			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_OK, ldispatchEvent);
 			sGetTypeResource.addEventListener(SoapEvent.GET_RESOURCE_ERROR, ldispatchEvent);
@@ -177,10 +216,10 @@ package vdom.connection.soap
 		/**
 		 * 9. render object to xml presentation  - render_wysiwyg
 		 */
-		
+		private var sRenderWysiwig:SRenderWysiwyg;
 		public  function renderWysiwyg(appid:String='',objid:String='', parentid:String='' ,sdynamic:String  = '0'):String 
 		{	
-			var sRenderWysiwig:SRenderWysiwyg = SRenderWysiwyg.getInstance();
+			
 			
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, ldispatchEvent);
 			sRenderWysiwig.addEventListener(SoapEvent.RENDER_WYSIWYG_ERROR, ldispatchEvent);
@@ -194,10 +233,10 @@ package vdom.connection.soap
 		/**
 		 * 10. create object - create_object
 		 */
-		//private 
+		private var sco: SCreateObject
 		public function createObject(appid:String='',parentid:String='',typeid:String = '', attrs:String = '', name:String =''):void
 		{
-			var sco: SCreateObject = SCreateObject.getInstance();
+			
 			
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_OK, ldispatchEvent);
 			sco.addEventListener(SoapEvent.CREATE_OBJECT_ERROR, ldispatchEvent);
@@ -210,10 +249,10 @@ package vdom.connection.soap
 		 * 11. get application top-level objects  - get_top_objects
 		 */
 		 
-		
+		private var sGetTopObjects:SGetTopObjects ;
 		public  function getTopObjects(appid:String=''):void 
 		{
-			var sGetTopObjects:SGetTopObjects = SGetTopObjects.getInstance();
+			
 			
 			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_OK, ldispatchEvent);
 			sGetTopObjects.addEventListener(SoapEvent.GET_TOP_OBJECTS_ERROR, ldispatchEvent);
@@ -226,10 +265,10 @@ package vdom.connection.soap
 		 * 12. get object's child objects'  - get_child_objects
 		 */
 		
-		
+		private var sGetChildObjects:SGetChildObjects ;
 		public  function getChildObjects(appid:String='',objid:String=''):void 
 		{
-			var sGetChildObjects:SGetChildObjects = SGetChildObjects.getInstance();
+			
 			
 			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_OK, ldispatchEvent);
 			sGetChildObjects.addEventListener(SoapEvent.GET_CHILD_OBJECTS_ERROR, ldispatchEvent);
@@ -240,10 +279,10 @@ package vdom.connection.soap
 		/**
 		 * 13. get application language data - get_application_language_data
 		 */
-		
+		private var sGetApplicationLanguageData:SGetApplicationLanguageData;
 		public  function getApplicationLanguageData(appid:String=''):void 
 		{
-			var sGetApplicationLanguageData:SGetApplicationLanguageData = SGetApplicationLanguageData.getInstance();
+			
 			
 			sGetApplicationLanguageData.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_OK, ldispatchEvent);
 			sGetApplicationLanguageData.addEventListener(SoapEvent.GET_APPLICATION_LANGUAGE_DATA_ERROR, ldispatchEvent);
@@ -255,10 +294,10 @@ package vdom.connection.soap
 		/**
 		 * 14. set object attribute value - set_attribute
 		 */
-		
+		private var sSetAttribute:SSetAttribute;
 		public  function setAttribute(appid:String='',objid:String='', attr:String='',value:String='' ):void 
 		{
-			var sSetAttribute:SSetAttribute = SSetAttribute.getInstance();
+			
 			
 			sSetAttribute.addEventListener(SoapEvent.SET_ATTRIBUTE_OK, ldispatchEvent);
 			sSetAttribute.addEventListener(SoapEvent.SET_ATTRIBUTE_ERROR, ldispatchEvent);
@@ -270,10 +309,10 @@ package vdom.connection.soap
 		 * 15. set object value set_value
 		 */
 		
-		
+		private var sSetValue:SSetValue;
 		public  function setValue(appid:String='',objid:String='', value:String='' ):void 
 		{
-			var sSetValue:SSetValue = SSetValue.getInstance();
+			
 			
 			sSetValue.addEventListener(SoapEvent.SET_VALUE_OK, ldispatchEvent);
 			sSetValue.addEventListener(SoapEvent.SET_VALUE_ERROR, ldispatchEvent);
@@ -284,10 +323,10 @@ package vdom.connection.soap
 		/**
 		 * 16. set object script set_script
 		 */
-		
+		private var sSetScript:SSetScript;
 		public  function setScript(appid:String='',objid:String='', script:String='', lang:String=''):void 
 		{
-			var sSetScript:SSetScript = SSetScript.getInstance();
+			
 			
 			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_OK, ldispatchEvent);
 			sSetScript.addEventListener(SoapEvent.SET_SCRIPT_ERROR, ldispatchEvent);
@@ -295,9 +334,10 @@ package vdom.connection.soap
 			sSetScript.execute(appid, objid, script, lang);
 		}
 		
+		private var sGetScript:SGetScript;
 		public  function getScript(appid:String='',objid:String='', lang:String='' ):void 
 		{
-			var sGetScript:SGetScript = SGetScript.getInstance();
+			
 			
 			sGetScript.addEventListener(SoapEvent.GET_SCRIPT_OK, ldispatchEvent);
 			sGetScript.addEventListener(SoapEvent.GET_SCRIPT_ERROR, ldispatchEvent);
@@ -308,10 +348,10 @@ package vdom.connection.soap
 		/**
 		 * 17. set application resource set_resource
 		 */
-		
+		private var sSetResource:SSetResource;
 		public  function setResource(appid:String='', restype:String='', resname:String='', resdata:String='' ):void 
 		{
-			var sSetResource:SSetResource = SSetResource.getInstance();
+			
 			
 			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_OK, ldispatchEvent);
 			sSetResource.addEventListener(SoapEvent.SET_RESOURCE_ERROR, ldispatchEvent);
@@ -366,14 +406,13 @@ package vdom.connection.soap
 		 *  --------- 21  Set value of several object's attributes -----
 		 * 						--setAttributes --
 		 */ 
-		//private 
+		private var sSetAttributes:SSetAttributes; 
 		public function setAttributes(appid:String = '', objid:String = '', attr:String = ''):String
 		{
-			var sSetAttributes:SSetAttributes = SSetAttributes.getInstance();
-			
-			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
-			sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);
-			
+				
+				sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_OK, ldispatchEvent);
+				sSetAttributes.addEventListener(SoapEvent.SET_ATTRIBUTE_S_ERROR, ldispatchEvent);
+				
 			var key:String = sSetAttributes.execute(appid, objid, attr);
 			return key;
 		}
@@ -381,9 +420,10 @@ package vdom.connection.soap
 		/**
 		 * 		22. set object name  'set_name' 
 		 */
+		 private var sSetName:SSetName;
 		public function setName(appid:String = '', objid:String = '', name:String = ''):void
 		{
-			var sSetName:SSetName = SSetName.getInstance();
+			
 			
 			sSetName.addEventListener(SoapEvent.SET_NAME_OK, ldispatchEvent);
 			sSetName.addEventListener(SoapEvent.SET_NAME_ERROR, ldispatchEvent);
@@ -394,9 +434,10 @@ package vdom.connection.soap
 		/**
 		 * 		23. Create WHOLE object - 'whole_create'
 		 */
+		 private var sWholeCreate:SWholeCreate;
 		public function wholeCreate(appid:String = '', parentid:String = '', name:String = '', data:String = ''):void
 		{
-			var sWholeCreate:SWholeCreate = SWholeCreate.getInstance();
+			
 			
 			sWholeCreate.addEventListener(SoapEvent.WHOLE_CREATE_OK, ldispatchEvent);
 			sWholeCreate.addEventListener(SoapEvent.WHOLE_CREATE_ERROR, ldispatchEvent);
@@ -407,9 +448,10 @@ package vdom.connection.soap
 		/**
 		 * 		24. Delete WHOLE object - 'whole_delete'
 		 */
+		 private var sWholeDelete:SWholeDelete
 		public function wholeDelete(appid:String = '', objid:String = ''):void
 		{
-			var sWholeDelete:SWholeDelete = SWholeDelete.getInstance();
+			
 			
 			sWholeDelete.addEventListener(SoapEvent.WHOLE_DELETE_OK, ldispatchEvent);
 			sWholeDelete.addEventListener(SoapEvent.WHOLE_DELETE_ERROR, ldispatchEvent);
@@ -420,9 +462,10 @@ package vdom.connection.soap
 		/**
 		 * 		25.  Update WHOLE object - 'whole_update'
 		 */
+		 private var sWholeUpdate:SWholeUpdate;
 		public function wholeUpdate(appid:String = '', objid:String = '', data:String = ''):void
 		{
-			var sWholeUpdate:SWholeUpdate = SWholeUpdate.getInstance();
+			
 			
 			sWholeUpdate.addEventListener(SoapEvent.WHOLE_UPDATE_OK, ldispatchEvent);
 			sWholeUpdate.addEventListener(SoapEvent.WHOLE_UPDATE_ERROR, ldispatchEvent);
@@ -433,9 +476,10 @@ package vdom.connection.soap
 		/**
 		 * 		26. Create new page for placing WHOLE objects - 'whole_create_page'
 		 */
+		 private var sWholeCreatePage:SWholeCreatePage ;
 		public function wholeCreatePage(appid:String = '', sourceid:String = ''):void
 		{
-			var sWholeCreatePage:SWholeCreatePage = SWholeCreatePage.getInstance();
+			
 			
 			sWholeCreatePage.addEventListener(SoapEvent.WHOLE_UPDATE_OK, ldispatchEvent);
 			sWholeCreatePage.addEventListener(SoapEvent.WHOLE_UPDATE_ERROR, ldispatchEvent);
@@ -443,10 +487,10 @@ package vdom.connection.soap
 			sWholeCreatePage.execute(appid, sourceid);
 		}
 		
-		
+		private var sGetChildObjectsTree:SGetChildObjectsTree;
 		public  function getChildObjectsTree(appid:String='',objid:String=''):void 
 		{	
-			var sGetChildObjectsTree:SGetChildObjectsTree = SGetChildObjectsTree.getInstance();
+			
 			
 			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_OK, ldispatchEvent);
 			sGetChildObjectsTree.addEventListener(SoapEvent.GET_CHILD_OBJECTS_TREE_ERROR, ldispatchEvent);
@@ -455,10 +499,9 @@ package vdom.connection.soap
 		}
 		
 		
-		//private 
+		private var sGetApplicationStructure:SGetApplicationStructure
 		public  function getApplicationStructure(appid:String=''):void 
 		{	
-			var sGetApplicationStructure:SGetApplicationStructure = SGetApplicationStructure.getInstance();
 			
 			sGetApplicationStructure.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_OK, ldispatchEvent);
 			sGetApplicationStructure.addEventListener(SoapEvent.GET_APPLICATION_STRUCTURE_ERROR, ldispatchEvent);
@@ -467,10 +510,10 @@ package vdom.connection.soap
 		}
 		
 		
-	//	private
+		private var sSetApplicationStructure:SSetApplicationStructure;
 		public  function setApplicationStructure(appid:String='', struct:String = ''):void 
 		{	
-			 var sSetApplicationStructure:SSetApplicationStructure = SSetApplicationStructure.getInstance();
+			
 			
 			sSetApplicationStructure.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_OK, ldispatchEvent);
 			sSetApplicationStructure.addEventListener(SoapEvent.SET_APPLICATION_STRUCTURE_ERROR, ldispatchEvent);
@@ -479,10 +522,10 @@ package vdom.connection.soap
 		}
 		
 		
-	
+		private var sSubmitObjectScriptPresentation:SSubmitObjectScriptPresentation ;
 		public  function submitObjectScriptPresentation(appid:String='', objid:String = '', pres:String = ''):void 
 		{	
-			var sSubmitObjectScriptPresentation:SSubmitObjectScriptPresentation = SSubmitObjectScriptPresentation.getInstance();
+			
 			
 			sSubmitObjectScriptPresentation.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_OK, ldispatchEvent);
 			sSubmitObjectScriptPresentation.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, ldispatchEvent);
@@ -492,10 +535,10 @@ package vdom.connection.soap
 		
 	
 		
-		
+		private var sGetOneObject:SGetOneObject;
 		public  function getOneObject(appid:String='', struct:String = ''):void 
 		{	
-			var sGetOneObject:SGetOneObject = SGetOneObject.getInstance();
+			
 			
 			sGetOneObject.addEventListener(SoapEvent.GET_ONE_OBJECT_OK, ldispatchEvent);
 			sGetOneObject.addEventListener(SoapEvent.GET_ONE_OBJECT_ERROR, ldispatchEvent);
@@ -503,9 +546,10 @@ package vdom.connection.soap
 			sGetOneObject.execute(appid, struct);
 		}
 		
+		private var sGetObjectScriptPresentation:SGetObjectScriptPresentation;
 		public  function getObjectScriptPresentation(appid:String='', struct:String = ''):void 
 		{	
-			var sGetObjectScriptPresentation:SGetObjectScriptPresentation = SGetObjectScriptPresentation.getInstance();
+			
 			
 			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_OK, 		ldispatchEvent);
 			sGetObjectScriptPresentation.addEventListener(SoapEvent.GET_OBJECT_SCRIPT_PRESENTATION_ERROR, 	ldispatchEvent);
@@ -513,9 +557,10 @@ package vdom.connection.soap
 			sGetObjectScriptPresentation.execute(appid, struct);
 		}
 		
+		private var sListResources:SListResources ;
 		public function listResources(ownerid:String = ''):void
 		{
-			var sListResources:SListResources = SListResources.getInstance();
+			
 			
 			sListResources.addEventListener(SoapEvent.LIST_RESOURSES_OK, ldispatchEvent);
 			sListResources.addEventListener(SoapEvent.LIST_RESOURSES_ERROR, ldispatchEvent);
@@ -523,14 +568,15 @@ package vdom.connection.soap
 			sListResources.execute(ownerid);
 		}
 		
+		private var sModifyResource:SModifyResource;
 		public  function modifyResource(appid:String = '', objid:String = '', 
 														resid:String = '', 
 														attrname:String = '', 
 														operation:String = '',
 														attr:String = ''):void 
 		{	
-			var sModifyResource:SModifyResource 
-				= SModifyResource.getInstance();
+			
+			
 			
 			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_OK, 		ldispatchEvent);
 			sModifyResource.addEventListener(SoapEvent.MODIFY_RESOURSE_ERROR, 	ldispatchEvent);
@@ -538,9 +584,10 @@ package vdom.connection.soap
 			sModifyResource.execute(appid, objid, resid, attrname,operation, attr);
 		}
 		
+		private var sSetApplicationEvents:SSetApplicationEvents;
 		public  function setApplicationEvents(appid:String='', objid:String = '', events:String=''):void 
 		{	
-			var sSetApplicationEvents:SSetApplicationEvents = SSetApplicationEvents.getInstance();
+			
 			
 			sSetApplicationEvents.addEventListener(SoapEvent.SET_APPLICATION_EVENTS_OK, ldispatchEvent);
 			sSetApplicationEvents.addEventListener(SoapEvent.SET_APPLICATION_EVENTS_ERROR, ldispatchEvent);
@@ -548,9 +595,10 @@ package vdom.connection.soap
 			sSetApplicationEvents.execute(appid, objid, events);
 		}
 		
+		private var sGetApplicationEvents:SGetApplicationEvents;
 		public  function getApplicationEvents(appid:String='', objid:String = ''):void 
 		{	
-			var sGetApplicationEvents:SGetApplicationEvents = SGetApplicationEvents.getInstance();
+			
 			
 			sGetApplicationEvents.addEventListener(SoapEvent.GET_APPLICATION_EVENTS_OK, ldispatchEvent);
 			sGetApplicationEvents.addEventListener(SoapEvent.GET_APPLICATION_EVENTS_ERROR, ldispatchEvent);
@@ -558,6 +606,7 @@ package vdom.connection.soap
 			sGetApplicationEvents.execute(appid, objid);
 		}
 		
+		private var sGetThumbnail:SGetThumbnail;
 		public  function getThumbnail( appid:String = '', 	resid:String = '', 
 															width:String = '', 
 															height:String = ''):void 
@@ -570,10 +619,10 @@ package vdom.connection.soap
 			sGetThumbnail.execute(appid, resid, width, height);
 		}
 		
-		
+		private var sRemoteMethodCall:SRemoteMethodCall;
 		public  function remoteMethodCall(appid:String='', objid:String = '', funcName:String = '', xmlParam:String = ''):String 
 		{	
-			var sRemoteMethodCall:SRemoteMethodCall = SRemoteMethodCall.getInstance();
+			
 			
 			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METHOD_CALL_OK, ldispatchEvent);
 			sRemoteMethodCall.addEventListener(SoapEvent.REMOTE_METHOD_CALL_ERROR, ldispatchEvent);
@@ -583,9 +632,10 @@ package vdom.connection.soap
 			return key;
 		}
 		
+		private var sSearch:SSearch;
 		public  function search(appid:String='', pattern:String = ''):void 
 		{	
-			var sSearch:SSearch = SSearch.getInstance();
+			sSearch = SSearch.getInstance();
 			
 			sSearch.addEventListener(SoapEvent.SEARCH_OK, ldispatchEvent);
 			sSearch.addEventListener(SoapEvent.SEARCH_ERROR, ldispatchEvent);
