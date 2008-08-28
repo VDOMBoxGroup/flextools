@@ -184,7 +184,7 @@ public class SuperWindow extends Window implements IWindow
 		return null;		
 	}
 	
-	private function setStartPosition():void
+	public function setPosition():void
 	{
 		if(!nativeWindow || nativeWindow.closed)
 			return;
@@ -214,9 +214,23 @@ public class SuperWindow extends Window implements IWindow
 	override public function open(openWindowAcive:Boolean=true):void
 	{
 		super.open(openWindowAcive);
-		setStartPosition();
+		setPosition();
 	} 
 	
+	public static function getChildren(window:NativeWindow):Array
+	{
+		var wins:Array = SuperWindow.windows;
+		var _children:Array = [];
+		
+		for each(var win:SuperWindow in wins)
+		{
+			if(win.parentWindow == window)
+				_children.push(win);		
+		}
+		
+		return _children;
+	}
+		
 	public static function getIndex(window:Object):int
 	{
 		if(window is Window)
@@ -254,7 +268,7 @@ public class SuperWindow extends Window implements IWindow
 				branch.unshift(window);
 				windows[i].checked = true;
 				if(windows[i].window.parentWindow)
-					getBranchRecursive(windows[i].window.parentWindow.nativeWindow, windows, branch);		
+					getBranchRecursive(windows[i].window.parentWindow, windows, branch);		
 			}
 		}
 	}
@@ -302,7 +316,8 @@ public class SuperWindow extends Window implements IWindow
 		var active:NativeWindow = NativeApplication.nativeApplication.activeWindow;
 		var inactive:SuperWindow = event.target as SuperWindow;
 		
-		if(inactive && inactive.nativeWindow && !inactive.nativeWindow.closed && 
+		if(	inactive && inactive.nativeWindow && 
+			!inactive.nativeWindow.closed && 
 			inactive.parent && inactive._modal) {
 			var indexA:int = getIndex(active);
 			var indexI:int = inactive.index;
@@ -314,8 +329,21 @@ public class SuperWindow extends Window implements IWindow
 	}
 
 	private function onActivate(event:Event):void {
-		if(nativeWindow)					
+		
+		for each (var win:SuperWindow in SuperWindow.windows)
+		{
+			if(win.modal && !win.closed && win.nativeWindow && win.parent && SuperWindow.getIndex(win)>SuperWindow.getIndex(this))
+			{
+				win.activate();
+				return;
+			}			
+		}
+		
+		if(nativeWindow)
+		{
+			bringToFrontBranch();				
 			bringToFrontChildren();
+		}
 	}	
 	
 }

@@ -9,6 +9,8 @@
  	
  	<mx:Metadata> 
         [Event(name="change", type="flash.events.Event")] 
+        [Event(name="select", type="flash.events.Event")] 
+        [Event(name="selectMultiple", type="flash.events.FileListEvent")] 
     </mx:Metadata> 
 
 	<mx:Script>
@@ -25,7 +27,7 @@
 			public var filterArray:Array = [];
 		
 			private function onBrowseClick(event:MouseEvent):void
-			{				
+			{			
             	var file:File = new File(File.documentsDirectory.nativePath);
             	
             	if(text)
@@ -45,20 +47,25 @@
 				file.addEventListener(Event.SELECT, onSelect);
 				file.addEventListener(FileListEvent.SELECT_MULTIPLE, onMultiSelect);
 				
-				switch(mode.toLowerCase())
+				try
 				{
-					case 'save':
-						file.browseForSave(browseTitle);
-						break;
-					case 'dir':
-						file.browseForDirectory(browseTitle);
-						break;
-					case 'multi':
-						file.browseForOpenMultiple(browseTitle, filters);
-						break;						
-					default:
-						file.browseForOpen(browseTitle, filters);	
-				}
+					switch(mode.toLowerCase())
+					{
+						case 'save':
+							file.browseForSave(browseTitle);
+							break;
+						case 'dir':
+							file.browseForDirectory(browseTitle);
+							break;
+						case 'multi':
+							file.browseForOpenMultiple(browseTitle, filters);
+							break;						
+						default:
+							file.browseForOpen(browseTitle, filters);
+					}
+				} 
+				catch(e:*) 
+				{}
 			}
 				    
 		    private function onSelect(event:Event):void
@@ -69,12 +76,15 @@
 				txtInput.dispatchEvent(new Event(Event.CHANGE));
 				
 				files = [];
-				files.push(file);     	
+				files.push(file);
+				
+				dispatchEvent(new Event(Event.SELECT));
             }
 
 		    private function onMultiSelect(event:FileListEvent):void
             {
             	files = event.files;
+            	dispatchEvent(new FileListEvent(FileListEvent.SELECT_MULTIPLE));
             }					
             
 		]]>
