@@ -106,7 +106,7 @@ package vdom.components.treeEditor
 		
 		
 		
-		public function TreeElement()
+		public function TreeElement(str:String ='')
 		{
 			super();
 			super.cacheAsBitmap = true;
@@ -122,7 +122,8 @@ package vdom.components.treeEditor
 			isRedraw = true;
 		//	buttonMode = true;
 			
-			addEventListener(MouseEvent.CLICK, endFormatinfHandler)
+			addEventListener(MouseEvent.CLICK, endFormatinfHandler);
+			
 		}
 		
 		
@@ -418,21 +419,26 @@ package vdom.components.treeEditor
 		{
 			if(data)
 			{
+				imgheader.source = _selected;
+				/*
 				txt.setStyle('color', '#FFFF00');
 				if(!cnvUpLayer.contains(imgSelected))
 					cnvUpLayer.addChild(imgSelected);
+					*/
 			}else
 			{	
-				txt.setStyle('color', '#ffffff');
+				imgheader.source = header;
+				/*txt.setStyle('color', '#ffffff');
 				if(cnvUpLayer.contains(imgSelected))
 					cnvUpLayer.removeChild(imgSelected);
+					*/
 			}
 		}
 		
 		public function set selected(data:Boolean):void
 		{
-			if(data)imgheader.source = start_page;
-				else imgheader.source = header
+			if(data)imgStart.source = start_page;
+				else imgStart.source = bt_start_page;
 //			trace('prassed');
 		}
 
