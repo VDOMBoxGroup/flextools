@@ -32,15 +32,17 @@
 	        <menuitem label="{LanguageManager.sentences.menu_file}" id="file">
 	            <menuitem label="{LanguageManager.sentences.menu_new_template}" id="new" keyEquivalent="n" ctrlKey="true"/>
 	            <menuitem label="{LanguageManager.sentences.menu_new_category}" id="new_category" keyEquivalent="t" ctrlKey="true"/>
-	            <menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file" keyEquivalent="." ctrlKey="true"/>
+	            <menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file" keyEquivalent="o" ctrlKey="true"/>
 	            <menuitem type="separator" id="separator"/>
 	            <menuitem label="{LanguageManager.sentences.menu_close}" id="close" keyEquivalent="w" ctrlKey="true"/>
 	            <menuitem type="separator"/>
 	            <menuitem label="{LanguageManager.sentences.menu_save}" id="save" keyEquivalent="s" ctrlKey="true"/>
 	            <menuitem label="{LanguageManager.sentences.menu_save_as}" id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true"/> 
 	            <menuitem type="separator"/>
-	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import" enabled="true"/> 
-	            <menuitem label="{LanguageManager.sentences.import_from_tpl}" id="import_from_tpl" enabled="true"/> 
+	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import">
+	            	<menuitem label="{LanguageManager.sentences.import_from_app}" id="import_from_app"/>
+	            	<menuitem label="{LanguageManager.sentences.import_from_tpl}" id="import_from_tpl"/> 
+				</menuitem>
 	            <menuitem type="separator"/>
 	            <menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>                                                
 	        </menuitem>
@@ -72,6 +74,9 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.containers.SuperAlert;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Tree;
 			import PowerPack.com.dialog.ImportFromTpl;
 			import ExtendedAPI.com.controls.SuperDataGrid;
 			import ExtendedAPI.com.controls.tabBarClasses.SuperTab;
@@ -264,10 +269,10 @@
        			}
        			else
        			{
-	       			Alert.show(
+	       			SuperAlert.show(
 	       				"Are you sure want to exit?", 
 	       				LanguageManager.sentences['confirmation'], 
-	       				Alert.YES|Alert.NO, this, alertExitHandler, null, Alert.NO);
+	       				Alert.YES|Alert.NO, this.nativeWindow, alertExitHandler, null, Alert.NO);
        			}
 	       	}
 	       	
@@ -458,7 +463,7 @@
 					file.addEventListener(Event.SELECT, saveBrowseHandler);
 					file.browseForSave("Save file");				
 				}
-				else if(event.item.@id == "import")
+				else if(event.item.@id == "import_from_app")
 				{
 					Import.show(onImportClose);
 				}
@@ -835,14 +840,51 @@
             {            	
             	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
             	{
-            		var xmlList:XMLList = event.target.xmlGraphs.source;
+            		var tree:Tree = event.target.tplTree;
+            		var tpl:TemplateStruct = event.target.template;
+					var xmlListCol:XMLListCollection = new XMLListCollection();
             		
-            		for each (var item:XML in xmlList) {
-            			pnl_graphs.populateGraph(item);
+					ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+					
+					if(tpl && tpl.xmlTemplate && tree.selectedItems.length>0)
+					{
+						for each(var node:Object in tree.selectedItems)	
+						{
+							if(node.@isBranch=='true')
+							{
+								var catList:XMLList = tpl.xmlTemplate..graph.(@category==node.@label);
+								
+								for each(var xml:XML in catList)
+									if(xmlListCol.source.(@category==xml.@category && @name==xml.@name).length()==0)
+										xmlListCol.addItem(xml);
+							}
+							else
+							{
+								xml = null;
+								var lst:XMLList = tpl.xmlTemplate..graph.(@category==node.@category && @name==node.@label);
+								if(lst.length()>0)
+									xml = lst[0];
+	
+								if(xml && xmlListCol.source.(@category==xml.@category && @name==xml.@name).length()==0)
+									xmlListCol.addItem(xml);
+							}
+							
+						}
 					}
+					
+					for each (var itm:XML in xmlListCol) 
+					{
+						var graph:GraphCanvas = new GraphCanvas();
+						graph.fromXML(itm);
+						
+						var newGraph:GraphCanvas = graph.clone();
+						newGraph.initial = false;
+						newGraph.name = "Imported_" + graph.name;
+						pnl_graphs.addGraph(newGraph);
+					}    		
             	}
             	
-            	ProgressManager.complete();
+            	//ProgressManager.complete();
             }            
 
             private function onImportClose(event:Event):void

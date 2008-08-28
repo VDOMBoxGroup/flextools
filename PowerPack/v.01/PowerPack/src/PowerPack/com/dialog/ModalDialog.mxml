@@ -6,7 +6,7 @@
 	startPosition="centerParent" 
 	alwaysInFront="false"
 	modal="true"
-	parentWindow="{Application.application.nativeWindow}"
+	parentWindow="{NativeApplication.nativeApplication.activeWindow}"
 	showStatusBar="false"
 	minimizable="false"
 	resizable="false">
@@ -106,6 +106,7 @@
 				
          		if (closeHandler != null)
             		addEventListener(CloseEvent.CLOSE, closeHandler);
+            		
          	}
          	
          	private var buttonFlags:uint;

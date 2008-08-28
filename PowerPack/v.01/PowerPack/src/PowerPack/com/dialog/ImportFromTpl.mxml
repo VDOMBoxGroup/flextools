@@ -9,6 +9,10 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.containers.SuperAlert;
+			import mx.collections.SortField;
+			import mx.collections.Sort;
+			import ExtendedAPI.com.utils.FileUtils;
 			import PowerPack.com.graph.GraphCanvas;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
@@ -20,8 +24,7 @@
 			import PowerPack.com.managers.LanguageManager;
 			
 			private static var _dialog:ImportFromTpl;
-			private var template:TemplateStruct;
-			public var xmlGraphs:XMLListCollection;
+			public var template:TemplateStruct;
 			
 			static public function show(closeHandler:Function = null):ImportFromTpl
 			{
@@ -29,7 +32,6 @@
 				{
 					_dialog = new ImportFromTpl();	
 					_dialog.open();
-					_dialog.addEventListener(CloseEvent.CLOSE, _dialog.onClose);
 					_dialog.show(OK | CANCEL, closeHandler, null, OK);		
 					
 					var defaultCaptions:Object = {
@@ -50,43 +52,34 @@
 			
 			private function onShow(event:Event):void
 			{
-				tplBrowse.setFocus();		
+				tplBrowse.txtInput.setFocus();		
 			}
 			
-			private function onClose(event:Event):void
+			///////////////////////////////////////////////////////
+			
+			private function onSelectTemplate():void
 			{
-				xmlGraphs = new XMLListCollection();
-				var xmlListCol:XMLListCollection = new XMLListCollection();
-				
-				ProgressManager.start(ProgressManager.WINDOW_MODE, false);
-				
-				if(template && template.xmlTemplate && tplTree.selectedItems.length>0)
+				if(!FileUtils.isValidPath(tplBrowse.text))
 				{
-					for each(var item:Object in tplTree.selectedItems)	
-					{
-						var xml:XMLList = template.xmlTemplate..graph.(@category==item.category && @name==item.name);
-
-						if(xml.length())		
-							xmlListCol.addItem(xml[0]);
-					}
+   					SuperAlert.show(
+						LanguageManager.sentences['msg_file_not_exists'], 
+						LanguageManager.sentences['warning'], 
+						4, this.nativeWindow);
+					return;
 				}
 				
-				for each (var itm:XML in xmlListCol) {
-					var graph:GraphCanvas = new GraphCanvas();
-					graph.fromXML(itm);
-					
-					var newGraph:GraphCanvas = graph.clone();
-					newGraph.initial = false;
-					newGraph.name = "Imported_" + graph.name;
-					xmlGraphs.addItem(newGraph.toXML());
-				}				
-            }
-
-			private function onOpenClick(event:Event):void
-			{
             	var file:File = new File(tplBrowse.text);
            		var stream:FileStream = new FileStream();
-           						
+				
+           		if(!file.exists)
+   				{
+   					Alert.show(
+						LanguageManager.sentences['msg_file_not_exists'], 
+						LanguageManager.sentences['warning'], 
+						4, this);
+   					return;
+   				}	
+   					
 				ProgressManager.source = stream;
 				ProgressManager.start(ProgressManager.WINDOW_MODE);
 				
@@ -111,7 +104,11 @@
 				else
 				{
         			template.decode();		
-        			populateList();			
+          			if(template.xmlTemplate)
+        			{
+        				populateList();	
+						return;        					
+        			}		
 				}
 	        }    
        
@@ -136,18 +133,33 @@
             
             private function populateList():void
             {            	
-            	var arr:Array = [];            	
             	var xmlList:XMLList = template.xmlTemplate..graph;
+            	var treeXML:XML = <tree/>;
             	
-            	for each (var item:XML in xmlList) {
- 				   arr.push({category:item.@category, name:item.@name, 
- 				   	label:item.@category.toString()+' '+item.@name.toString()});
+            	for each (var item:XML in xmlList) { 				   
+ 					if(treeXML.node.(hasOwnProperty('@label') && @label == item.@category).length()==0)
+ 					{
+ 						var nodeCat:XML = <node/>;
+ 						nodeCat.@label = item.@category;
+ 						nodeCat.@isBranch = 'true';
+ 						treeXML.appendChild(nodeCat);
+ 					}
+ 					
+ 					
+ 					var node:XML = <node/>;
+ 					node.@label = item.@name;
+ 					node.@category = item.@category;
+ 					treeXML.node.(hasOwnProperty('@label') && @label == item.@category)[0].appendChild(node);
 				}
 				
-            	arr = arr.sortOn(['category', 'name']);
-            	
-            	tplTree.labelField = 'label';
-            	tplTree.dataProvider = arr;
+            	var tree:XMLListCollection = new XMLListCollection(treeXML.elements('*'));
+				var sort:Sort = new Sort();
+				sort.fields = [new SortField("label",true)];
+				tree.sort = sort;
+				tree.refresh();
+				
+            	tplTree.labelField = '@label';
+            	tplTree.dataProvider = tree;
             }
                			
 		]]>
@@ -160,22 +172,27 @@
 		
 	<mx:VBox styleName="dlgContent" width="100%" height="100%">
 		<mx:Grid width="100%">
-			<mx:GridRow width="100%" height="100%">
-				<mx:GridItem width="100%" height="100%">
-					<mx:Label text="{LanguageManager.sentences.template_path}:"/>
-				</mx:GridItem>
-				<mx:GridItem width="100%" height="100%">
-					<controls:FileBrowseBox id="tplBrowse" width="300" mode="open" 
-						browseLabel="{LanguageManager.sentences.browse}..." 
-						browseTitle="{LanguageManager.sentences.open_file}..."
-						filterAll="{LanguageManager.sentences.all}"/>
+		
+			<mx:GridRow width="100%">
+				<mx:GridItem width="100%">
+					<mx:HBox width="100%">
+						<mx:Label text="{LanguageManager.sentences.template_path}:"/>
+						<controls:FileBrowseBox id="tplBrowse" width="100%" mode="open" 
+							browseLabel="{LanguageManager.sentences.browse}..." 
+							browseTitle="{LanguageManager.sentences.open_file}..."
+							filterAll="{LanguageManager.sentences.all}" 
+							select="onSelectTemplate()"/>
+					</mx:HBox>
 				</mx:GridItem>
 			</mx:GridRow>
+			
+			<mx:GridRow width="100%">
+				<mx:GridItem width="100%" horizontalAlign="right">
+					<mx:Button id="btnLoad" label="{LanguageManager.sentences.open}" click="onSelectTemplate()"/>
+				</mx:GridItem>
+			</mx:GridRow>
+			
 		</mx:Grid>
-		
-		<mx:ControlBar width="100%" horizontalAlign="right" paddingBottom="0" paddingTop="0" paddingRight="0" paddingLeft="0">
-			<mx:Button id="btnLoad" label="{LanguageManager.sentences.open}" click="onOpenClick(event)"/>
-		</mx:ControlBar>		
 			
 		<mx:HRule width="100%"/>
 		
