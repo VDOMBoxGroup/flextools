@@ -29,7 +29,15 @@
 
 			public function set resource(source:Object):void {
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 				loader.loadBytes(source.data);
+			}
+			
+			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
+				[Embed(source="/assets/resourceBrowserIcons/resourceType/blank.png")]
+				var blank_Icon:Class;
+				
+				__image.source = blank_Icon; 
 			}
 			
 			private function imageLoadComplete(event:Event):void {

@@ -45,6 +45,7 @@
 
 			public function set resource(source:Object):void {
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 				loader.loadBytes(source.data);
 			}
 			
@@ -56,6 +57,13 @@
 				__res.text = imageWidth.toString() + "x" + imageHeight.toString();				
 			}
 			
+			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
+				[Embed(source="/assets/resourceBrowserIcons/resourceType/blank.png")]
+				var blank_Icon:Class;
+				
+				__image.source = blank_Icon; 
+			}
+
 			public function set objName(text:String):void { __name.text = text; }
 			
 			public function get objName():String { return __name.text; }
