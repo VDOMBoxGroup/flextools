@@ -128,7 +128,7 @@ private function isViewable(extension:String):Boolean {
 		case "jpeg":
 		case "png":
 		case "gif":
-		case "svg":
+//		case "svg":
 			return true;
 		default:
 			return false;
