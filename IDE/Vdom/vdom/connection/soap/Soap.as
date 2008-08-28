@@ -106,6 +106,17 @@ package vdom.connection.soap
 			
 			sSetApplicationInfo.execute(appid, attr);
 		}
+		
+		public  function getApplicationInfo(appid:String='',attr:String=''):void 
+		{
+			var  sGetApplicationInfo:SGetApplicationInfo = SGetApplicationInfo.getInstance();
+			
+			sGetApplicationInfo.addEventListener(SoapEvent.GET_APLICATION_INFO_OK, ldispatchEvent);
+			sGetApplicationInfo.addEventListener(SoapEvent.GET_APLICATION_INFO_ERROR, ldispatchEvent);
+			
+			sGetApplicationInfo.execute(appid, attr);
+		}
+
 
 		/**
 		 *  5 - get the list of all applications  'list_applications'
