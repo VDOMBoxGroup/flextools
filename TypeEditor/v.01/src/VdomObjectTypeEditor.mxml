@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication
 	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
-	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
+	width="640" height="480" minHeight="480" minWidth="640">
+	
+	<mx:Style>
+		.iconBox {
+			paddingRight:5;
+			paddingTop:5;
+			paddingLeft:5;
+			paddingBottom:5;
+			borderStyle:"solid";	
+		}
+		
+		
+	</mx:Style>
 	
 	<mx:Script>
 		<![CDATA[
@@ -16,24 +29,145 @@
 		]]>
 	</mx:Script>
 	
+	<mx:Script source="typeEditor.as" />
+	
 	<mx:Binding source="menuDataProvider" destination="__mainMenuBar.dataProvider" />
 	<mx:XML id="menuDataProvider" xmlns="">
 		<root>
 			<menuItem label="File">
-				<listItem label="Open type XML..." icon="openIcon"/>
-				<listItem label="Save type XML..." icon="saveIcon" />
+				<listItem label="Create new type" icon="openIcon" data="new" />
 				<listItem type="separator" />
-				<listItem label="Exit" icon="exitIcon" />
-				
+				<listItem label="Open type XML..." icon="openIcon" data="open"/>
+				<listItem label="Save type XML..." icon="saveIcon" data="save"/>
+				<listItem type="separator" />
+				<listItem label="Exit" icon="exitIcon" data="close" />
 			</menuItem>
 		</root>
 	</mx:XML>
 	
-	<mx:MenuBar id="__mainMenuBar" width="100%" labelField="@label" iconField="@icon" showRoot="false" />
+	<mx:MenuBar id="__mainMenuBar"
+		width="100%" labelField="@label" iconField="@icon" showRoot="false" 
+		itemClick="{mainMenuHandler(event);}" />
 		
 	<mx:TabNavigator width="100%" height="100%">
-		<mx:Canvas id="__infoCanvas" label="Object Information" width="100%" height="100%" />
-		<mx:Canvas id="__attrsCanvas" label="Object Information" width="100%" height="100%" />
+	
+		<mx:Canvas id="__infoCanvas" label="Object Information" 
+			width="100%" height="100%" horizontalScrollPolicy="off">
+			
+			<mx:HBox width="100%" height="100%">
+				<mx:VBox width="100%" height="100%" 
+					paddingLeft="10" paddingRight="20" paddingTop="10" paddingBottom="10"
+					verticalGap="10">
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Object Name" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Display Name" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Object Name in XML Scripts" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Render Type" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Description" />
+						<mx:TextArea width="100%" height="80" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Class Name" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Object ID" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Container type" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+					
+					<mx:HBox verticalGap="0" width="100%" borderStyle="solid" borderColor="#DDDDDD" 
+						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10">
+						
+						<mx:CheckBox label="Moviable" />
+						<mx:CheckBox label="Resizable" />
+						<mx:CheckBox label="Dynamic" />
+					</mx:HBox>
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Optimization Priority" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Version" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Containers supported" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Remote methods" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+	
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Handlers" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+					
+					<mx:HBox width="100%" borderColor="#DDDDDD" borderStyle="solid"
+						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10">
+	
+						<mx:VBox horizontalAlign="center">
+							<mx:Label text="Object Icon" />
+							<mx:Box styleName="iconBox" borderColor="#666666">
+								<mx:Image width="64" height="64" />					
+							</mx:Box>
+						</mx:VBox>
+						
+						<mx:VBox horizontalAlign="center">
+							<mx:Label text="Editor WYSIWYG Icon" />
+							<mx:Box styleName="iconBox" borderColor="#666666">
+								<mx:Image width="64" height="64" />					
+							</mx:Box>
+						</mx:VBox>
+	
+						<mx:VBox horizontalAlign="center">
+							<mx:Label text="Structure Icon" />
+							<mx:Box styleName="iconBox" borderColor="#666666">
+								<mx:Image width="64" height="64" />					
+							</mx:Box>
+						</mx:VBox>
+					</mx:HBox>
+				</mx:VBox>
+				
+				<mx:VBox width="200" height="100%">
+					<mx:Label text="Supported languages" />
+					<mx:Label text="Interface Type" />
+					<mx:Label text="Category" />
+				</mx:VBox>
+			</mx:HBox>
+		</mx:Canvas>
+		
+		<mx:Canvas id="__attrsCanvas" label="Object Attributes" width="100%" height="100%" />
+		
 	</mx:TabNavigator>	
 	<mx:HBox>
 			
