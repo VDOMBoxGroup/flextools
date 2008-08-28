@@ -37,8 +37,26 @@ private var soap:Soap = Soap.getInstance();
 
 private var tempStorage:Object = {};
 
+public function switchToModule(moduleName:String):void
+{
+	switch(moduleName.toLowerCase())
+	{
+		case "applicationmanagment":
+		{
+			moduleTabNavigator.selectedChild = applicationManagmentModule;
+			break;	
+		}
+		
+		case "editor":
+		{
+			moduleTabNavigator.selectedChild = editorModule;
+			break;
+		}
+	}
+}
+
 private function switchToLogin():void
-{	
+{
 	if(viewstack)
 	{ 
 		if(viewstack.selectedChild != loginForm)

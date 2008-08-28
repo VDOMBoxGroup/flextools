@@ -2,11 +2,13 @@ import flash.events.Event;
 
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
+import mx.core.Application;
 import mx.events.ListEvent;
 
 import vdom.events.DataManagerEvent;
 import vdom.events.SearchPanelEvent;
 import vdom.events.SearchResultEvent;
+import vdom.managers.AlertManager;
 import vdom.managers.DataManager;
 
 [Bindable]
@@ -18,9 +20,11 @@ private var watchers:Array;
 //
 //private var ppm:MyLoader;
 //
-//private var applicationId:String;
-//private var pageId:String;
-//private var objectId:String;
+private var alertManager:AlertManager = AlertManager.getInstance();
+
+private var applicationId:String;
+private var pageId:String;
+private var objectId:String;
 
 /* private function creationCompleteHandler():void
 {	
@@ -139,21 +143,18 @@ private function searchResult_searchHandler(event:SearchResultEvent):void
 {
 	mainViewStack.selectedIndex = 0;
 	
-//	applicationId = event.applicationId;
-//	pageId = event.pageId;
-//	objectId = event.objectId;
+	applicationId = event.applicationId;
+	pageId = event.pageId;
+	objectId = event.objectId;
 	
 	dataManager.addEventListener(
 		DataManagerEvent.APPLICATION_DATA_LOADED,
 		dataManager_applicationDataLoaded
 	);
 	
-//	ppm = new MyLoader();
-//	ppm.showText = 'Load Application Data';
-//	PopUpManager.addPopUp(ppm, DisplayObject(Application.application), true);
-//	PopUpManager.centerPopUp(ppm);
+	alertManager.showMessage("Load Application Data");
 	
-//	dataManager.loadApplication(applicationId);
+	dataManager.loadApplication(applicationId);
 }
 
 private function dataManager_searchCompleteHandler(event:DataManagerEvent):void
@@ -170,14 +171,17 @@ private function dataManager_applicationDataLoaded(event:DataManagerEvent):void
 		dataManager_applicationDataLoaded
 	);
 	
+	if(!pageId)
+		Application.application.switchToModule("editor");
+	
 	dataManager.addEventListener(
 		DataManagerEvent.CURRENT_PAGE_CHANGED,
 		dataManager_pageChanged
 	);
 	
-//	ppm.showText = 'Load Page Data';
+	alertManager.showMessage("Load Page Data");
 	
-//	dataManager.changeCurrentPage(pageId);
+	dataManager.changeCurrentPage(pageId);
 }
 
 private function dataManager_pageChanged(event:DataManagerEvent):void
@@ -192,7 +196,7 @@ private function dataManager_pageChanged(event:DataManagerEvent):void
 		dataManager_objectChanged
 	);
 	
-//	dataManager.changeCurrentObject(objectId);
+	dataManager.changeCurrentObject(objectId);
 }
 
 private function dataManager_objectChanged(event:DataManagerEvent):void
@@ -204,7 +208,7 @@ private function dataManager_objectChanged(event:DataManagerEvent):void
 	
 	dispatchEvent(new SearchResultEvent(SearchResultEvent.SEARCH_OBJECT_SELECTED));
 	
-//	PopUpManager.removePopUp(ppm);
+	alertManager.showMessage("");
 	
-//	Application.application.switchToEditor();
+	Application.application.switchToModule("editor");
 }
