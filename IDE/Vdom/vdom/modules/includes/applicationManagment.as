@@ -39,6 +39,7 @@ private function showHandler():void
 	
 	watchers.push(
 		BindingUtils.bindProperty(searchPanel, "listApplication", dataManager, "listApplication"),
+		BindingUtils.bindProperty(searchPanel, "applicationId", dataManager, "currentApplicationId"),
 		BindingUtils.bindProperty(listApplicationContainer, "dataProvider", dataManager, "listApplication"),
 		BindingUtils.bindProperty(listApplicationContainer, "applicationId", dataManager, "currentApplicationId"),
 		BindingUtils.bindProperty(applicationInformation, "dataProvider", dataManager, "currentApplicationInformation")

@@ -751,6 +751,8 @@ public class DataManager implements IEventDispatcher {
 	
 	private function createObjectCompleteHandler(event:SoapEvent):void
 	{
+		soap.removeEventListener(SoapEvent.CREATE_OBJECT_OK, createObjectCompleteHandler);
+		
 		var result:XML = event.result;
 		var parentId:String = result.ParentId;
 		

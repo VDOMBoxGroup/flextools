@@ -5,6 +5,7 @@ package com.zavoo.svg.nodes
 	import flash.display.Loader;
 	import flash.display.PixelSnapping;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
@@ -50,7 +51,8 @@ package com.zavoo.svg.nodes
 		{
 			var d:* ="";
 			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );			
+			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );		
 			loader.loadBytes( value );
 		}
 		
@@ -69,7 +71,8 @@ package com.zavoo.svg.nodes
 		 **/
 		private function onBytesLoaded( event:Event ) :void
 		{
-			
+			if(event.type == IOErrorEvent.IO_ERROR)
+				return;
 			var content:Bitmap = Bitmap(event.target.content);
 			
 			var m:Matrix = new Matrix();

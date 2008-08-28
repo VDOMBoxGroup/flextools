@@ -2,7 +2,7 @@
 <ActionPanel xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="250">
 <mx:Script>
 	<![CDATA[
-		import vdom.events.SearchPanelEvent;
+	import vdom.events.SearchPanelEvent;
 	import mx.utils.StringUtil;
 	import mx.collections.XMLListCollection;
 	
@@ -15,6 +15,11 @@
 			return;
 			
 		_listApplication = new XMLListCollection(value);
+	}
+	
+	public function set applicationId(value:String):void
+	{
+		applicationList.selectedItem = applicationList.dataProvider.source.(@ID == value)[0];
 	}
 	
 	private function search():void
