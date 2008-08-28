@@ -346,16 +346,22 @@ private function fileSelectHandler(event:Event):void {
 		var srcBytes:ByteArray = new ByteArray();
 		var srcStream:FileStream = new FileStream();
 		
-		srcStream.open(fileForUpload, FileMode.READ);
-		
-		if (srcStream.bytesAvailable == 0) {
-			Alert.show("File is empty", "Could not send file");
-			return; 
+		try {
+
+			srcStream.open(fileForUpload, FileMode.READ);
+			
+			if (srcStream.bytesAvailable == 0) {
+				Alert.show("File is empty", "Could not send file");
+				return; 
+			}
+			
+			srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
+			srcStream.close();
 		}
-		
-		srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
-		srcStream.close();
-		
+		catch (err:Error) {
+			Alert.show('Could not open file!', 'IO Error');
+			return;
+		}
 		var fileType:String = "";
 		try {		
 			fileType = fileForUpload.type.substr(1);
