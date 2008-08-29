@@ -16,6 +16,7 @@ package vdom.utils
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.geom.Matrix;
 	
 	import mx.containers.accordionClasses.AccordionHeader;
@@ -78,6 +79,7 @@ package vdom.utils
 			resourceId = value.resourceID;
 			
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, completeHandler );
 			loader.loadBytes(value.data);
 			
 			//var resId:String = XML(TreeItemRenderer(this.parent).data).@resourceID;
@@ -141,6 +143,9 @@ package vdom.utils
 		}
 		
 		private function completeHandler(event:Event):void {
+			
+			if(event.type == IOErrorEvent.IO_ERROR)
+				return;
 			if(event && event.target && event.target is LoaderInfo) {
 				displayLoader(event.target.loader as Loader);
 			}
