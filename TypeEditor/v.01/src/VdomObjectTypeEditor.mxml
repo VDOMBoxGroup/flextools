@@ -13,6 +13,13 @@
 			borderStyle:"solid";	
 		}
 		
+		.colorField {
+			borderColor:"#000000";
+			borderStyle:"solid";
+			horizontalAlign:"center";
+			verticalAlign:"middle";
+		}
+		
 		
 	</mx:Style>
 	
@@ -29,7 +36,8 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Script source="typeEditor.as" />
+	<mx:Script source="componentsHandlers.as" />
+	<mx:Script source="programLogic.as" />
 	
 	<mx:Binding source="menuDataProvider" destination="__mainMenuBar.dataProvider" />
 	<mx:XML id="menuDataProvider" xmlns="">
@@ -50,14 +58,15 @@
 		itemClick="{mainMenuHandler(event);}" />
 		
 	<mx:TabNavigator width="100%" height="100%">
-	
-		<mx:Canvas id="__infoCanvas" label="Object Information" 
+		
+		<!-- Object Properties tab -->
+		<mx:Canvas id="__infoCanvas" label="Object Properties" 
 			width="100%" height="100%" horizontalScrollPolicy="off">
 			
-			<mx:HBox width="100%" height="100%">
+			<mx:HBox width="100%" height="100%" paddingBottom="10" paddingTop="10">
+				<!-- Left Side, where text inputs -->
 				<mx:VBox width="100%" height="100%" 
-					paddingLeft="10" paddingRight="20" paddingTop="10" paddingBottom="10"
-					verticalGap="10">
+					paddingLeft="10" paddingRight="20" verticalGap="10">
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Object Name" />
@@ -99,14 +108,6 @@
 						<mx:TextInput width="100%" />	
 					</mx:VBox>
 					
-					<mx:HBox verticalGap="0" width="100%" borderStyle="solid" borderColor="#DDDDDD" 
-						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10">
-						
-						<mx:CheckBox label="Moviable" />
-						<mx:CheckBox label="Resizable" />
-						<mx:CheckBox label="Dynamic" />
-					</mx:HBox>
-					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Optimization Priority" />
 						<mx:TextInput width="100%" />	
@@ -132,42 +133,197 @@
 						<mx:TextInput width="100%" />	
 					</mx:VBox>
 					
-					<mx:HBox width="100%" borderColor="#DDDDDD" borderStyle="solid"
+				</mx:VBox>
+				
+				<!-- Right Side, where comboBoxes and Icons -->
+				<mx:VBox width="200" height="100%" 
+					paddingLeft="10" paddingRight="25" verticalGap="10">
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Supported languages" />
+						<mx:ComboBox width="100%" cornerRadius="1" />
+						<mx:HBox width="100%" paddingTop="2">
+							<mx:Button label="Add" cornerRadius="1" />
+							<mx:Button label="Remove" cornerRadius="1" />
+						</mx:HBox>
+					</mx:VBox>
+
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Interface Type" />
+						<mx:ComboBox width="100%" cornerRadius="1">
+							<mx:Array>
+					            <mx:Object data="1" label="Standard" />
+					            <mx:Object data="2" label="RichText Editor" />
+					            <mx:Object data="3" label="Text Editor" />
+					            <mx:Object data="4" label="Picture" />
+					            <mx:Object data="5" label="Special Table" />
+							</mx:Array>
+						</mx:ComboBox>
+					</mx:VBox>
+
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Category" />
+						<mx:ComboBox width="100%" cornerRadius="1" />
+					</mx:VBox>
+
+					<mx:VBox verticalGap="0" width="100%" borderStyle="solid" borderColor="#DDDDDD" 
 						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10">
+						
+						<mx:CheckBox label="Moviable" />
+						<mx:CheckBox label="Resizable" />
+						<mx:CheckBox label="Dynamic" />
+					</mx:VBox>
+
+					<mx:VBox width="100%" borderColor="#DDDDDD" borderStyle="solid" horizontalAlign="center"
+						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10"
+						verticalGap="20">
 	
-						<mx:VBox horizontalAlign="center">
+						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Object Icon" />
-							<mx:Box styleName="iconBox" borderColor="#666666">
+							<mx:Box styleName="iconBox" borderColor="#EEEEEE">
 								<mx:Image width="64" height="64" />					
 							</mx:Box>
 						</mx:VBox>
 						
-						<mx:VBox horizontalAlign="center">
+						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Editor WYSIWYG Icon" />
-							<mx:Box styleName="iconBox" borderColor="#666666">
+							<mx:Box styleName="iconBox" borderColor="#EEEEEE">
 								<mx:Image width="64" height="64" />					
 							</mx:Box>
 						</mx:VBox>
 	
-						<mx:VBox horizontalAlign="center">
+						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Structure Icon" />
-							<mx:Box styleName="iconBox" borderColor="#666666">
+							<mx:Box styleName="iconBox" borderColor="#EEEEEE">
 								<mx:Image width="64" height="64" />					
 							</mx:Box>
 						</mx:VBox>
-					</mx:HBox>
-				</mx:VBox>
-				
-				<mx:VBox width="200" height="100%">
-					<mx:Label text="Supported languages" />
-					<mx:Label text="Interface Type" />
-					<mx:Label text="Category" />
+					</mx:VBox>
 				</mx:VBox>
 			</mx:HBox>
 		</mx:Canvas>
 		
-		<mx:Canvas id="__attrsCanvas" label="Object Attributes" width="100%" height="100%" />
+		<!-- Attributes tab -->
+		<mx:Canvas id="__attrsCanvas" label="Object Attributes" 
+			width="100%" height="100%" horizontalScrollPolicy="off">
+			
+			<mx:HDividedBox id="__mainContainer" width="100%" height="100%" verticalScrollPolicy="off"
+				paddingBottom="10" paddingTop="5">
+				
+				<!-- Left Side -->
+				<mx:VBox id="__leftSideContainer" width="200" minWidth="200" height="100%" horizontalScrollPolicy="off"
+					paddingLeft="10" paddingRight="0" verticalGap="5">
+					
+					<mx:Label text="Attributes list" />
+					<mx:List width="100%" height="100%" />
+					<mx:HBox width="100%" horizontalGap="5">
+						<mx:Spacer width="100%" />
+						<mx:Button width="80" label="Add" cornerRadius="1" />
+						<mx:Button width="80" label="Remove" cornerRadius="1" />
+						<mx:Spacer width="100%" />
+					</mx:HBox>	
+				</mx:VBox>			
+				
+				<!-- Right Side -->
+				<mx:VBox width="100%" minWidth="430" horizontalScrollPolicy="off" height="{__leftSideContainer.height}"
+					paddingLeft="5" paddingRight="10" verticalGap="10">
 		
+					<mx:Label text="Selected attribute properties" />
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Attribute name" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Attribute display name" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Default value" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+					
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Regular expression validation string" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+
+					<mx:VBox verticalGap="0" width="100%">
+						<mx:Label text="Validation error message" />
+						<mx:TextInput width="100%" />	
+					</mx:VBox>
+
+					
+					<mx:HBox width="100%">
+						<mx:VBox width="100%" verticalGap="20" paddingRight="5">
+							<mx:VBox verticalGap="0" width="100%">
+								<mx:Label text="Interface type" />
+								<mx:ComboBox width="100%" cornerRadius="1">
+							        <mx:Array>
+							            <mx:Object data="0" label="Standart" />
+							            <mx:Object data="1" label="Extended" />
+							        </mx:Array>
+								</mx:ComboBox>	
+							</mx:VBox>
+		
+							<mx:VBox verticalGap="0" width="100%">
+								<mx:Label text="Panel interface" />
+								<mx:HBox width="100%">
+									<mx:ComboBox width="100%" cornerRadius="1">
+								        <mx:Array>
+								            <mx:Object data="0" label="TextField(Length)" />
+								            <mx:Object data="0" label="Number(minValue, maxValue)" />
+								            <mx:Object data="0" label="MultiLine(Length)" />
+								            <mx:Object data="0" label="Font()" />
+								            <mx:Object data="0" label="DropDown(Values)" />
+								            <mx:Object data="0" label="File()" />
+								            <mx:Object data="0" label="Color()" />
+								            <mx:Object data="0" label="PageLink()" />
+								            <mx:Object data="0" label="LinkedBase()" />
+								            <mx:Object data="0" label="ObjectList()" />
+								            <mx:Object data="0" label="ObjectList(type_id)" />
+								            <mx:Object data="0" label="ExternalEditor(Title, Info)" />
+								        </mx:Array>
+									</mx:ComboBox>	
+									<mx:Button label="Parameters" cornerRadius="1" />
+								</mx:HBox>
+							</mx:VBox>
+						</mx:VBox>
+	
+						<mx:VBox width="100%" verticalGap="20" paddingLeft="5">
+							<mx:VBox verticalGap="0" width="100%">
+								<mx:Label text="Panel colour group" />
+								<mx:HBox>
+									<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" />
+									<mx:Box id="__redColor" backgroundColor="#B00000" width="23" height="23" styleName="colorField" />
+									<mx:Box id="__greenColor" backgroundColor="#00B000" width="23" height="23" styleName="colorField" />
+									<mx:Box id="__blueColor" backgroundColor="#0000B0" width="23" height="23" styleName="colorField" />
+								</mx:HBox>
+							</mx:VBox>
+
+							<mx:VBox verticalGap="0" width="100%">
+								<mx:Label text="Visible in Editor" />
+								<mx:ComboBox width="100%" cornerRadius="1">
+							        <mx:Array>
+							            <mx:Object data="1" label="Yes (default)" />
+							            <mx:Object data="2" label="No" />
+							        </mx:Array>
+								</mx:ComboBox>	
+							</mx:VBox>
+						</mx:VBox>
+					</mx:HBox>
+				</mx:VBox>
+			</mx:HDividedBox>
+			
+			
+		</mx:Canvas>
+		
+		<!-- Resources tab -->
+		<mx:Canvas id="__resourcesCanvas" label="Object Resources" 
+			width="100%" height="100%" horizontalScrollPolicy="off" />
+
 	</mx:TabNavigator>	
 	<mx:HBox>
 			
