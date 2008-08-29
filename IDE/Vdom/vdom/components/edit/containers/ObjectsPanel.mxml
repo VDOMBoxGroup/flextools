@@ -86,17 +86,20 @@ xmlns:containers="vdom.components.edit.containers.*" >
 				tree.dataProvider = xmlTreeData;
 				tree.validateNow();
 				
-//				trace(dataManager.currentObjectId +' : '+dataManager.currentApplicationId)
-				if(dataManager.currentObjectId == dataManager.currentApplicationId)
+//				trace(dataManager.currentObjectId +' : '+dataManager.currentPageId)
+				if(dataManager.currentObjectId != dataManager.currentPageId)
 				{
 					var currentElement:XML = xmlTreeData.source..Object.(@ID == dataManager.currentObjectId)[0];
 					openTree(currentElement);
 				
 					tree.selectedItem = currentElement;
+//					trace('obj: \n'+currentElement.toXMLString());
 				
 				}else
-				{	
-					
+				{
+					var item:XML = xmlTreeData.source.(@ID == dataManager.currentPageId)[0];
+					tree.expandItem(item, true);
+//					trace('page: \n'+item.toXMLString());
 				}	
 				
 				var index:int =  tree.getItemIndex(tree.selectedItem);
@@ -135,7 +138,10 @@ xmlns:containers="vdom.components.edit.containers.*" >
 				tree.selectedItem = xmlTreeData.source.*.(@ID == dataManager.currentObjectId)[0];
 				//select current Page;
 			if(!tree.selectedItem )
+			{
 				tree.selectedItem = xmlTreeData.source.(@ID == dataManager.currentPageId)[0];
+				tree.expandItem(tree.selectedItem, true);
+			}
 		}
 		
 		private function treeChangeLister(evt:Event):void
