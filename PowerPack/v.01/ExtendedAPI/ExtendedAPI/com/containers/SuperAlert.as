@@ -2,6 +2,7 @@ package ExtendedAPI.com.containers
 {
 import flash.display.NativeWindow;
 import flash.display.NativeWindowSystemChrome;
+import flash.display.NativeWindowType;
 import flash.events.Event;
 import flash.geom.Rectangle;
 
@@ -42,7 +43,9 @@ public class SuperAlert extends SuperWindow
 		Application.application.setStyle("modalTransparencyBlur", 0);
 		Application.application.setStyle("modalTransparency", 0);
 		
-		alert.open();		
+		alert.open();	
+		alert.activate();	
+
 		alert.panel = Alert.show(text, title, flags, alert, alert.closeHandler, iconClass, defaultButtonFlag);
 		alert.panel.addEventListener(ResizeEvent.RESIZE, alert.resizeHandler);
 		alert.panel.addEventListener(MoveEvent.MOVE, alert.moveHandler);
@@ -66,6 +69,7 @@ public class SuperAlert extends SuperWindow
 	{
 		super(parentWindow);
 		title = "";
+		//type = NativeWindowType.LIGHTWEIGHT;
 		systemChrome = NativeWindowSystemChrome.NONE;
 		transparent = true;
 		showTitleBar = false;
@@ -73,7 +77,7 @@ public class SuperAlert extends SuperWindow
 		showGripper = false;
 		resizable = false;
 		
-		setStyle("showFlexChrome", false);
+		setStyle('showFlexChrome' , false);
 		
 		startPosition = SuperWindow.POS_CENTER_PARENT;
 	}
@@ -116,11 +120,15 @@ public class SuperAlert extends SuperWindow
     override protected function measure():void
     {   
         super.measure();		
+
+    	if(panel)
+    	{
+    		var rect:Rectangle = panel.getBounds(this);
         
-        var rect:Rectangle = panel.getBounds(this);
-        
-        measuredMinWidth = measuredWidth = rect.width;        
-        measuredMinHeight = measuredHeight = rect.height;
+        	measuredMinWidth = measuredWidth = rect.width;        
+        	measuredMinHeight = measuredHeight = rect.height;
+     	}
+     	  	
     }
 
     /**
@@ -131,11 +139,8 @@ public class SuperAlert extends SuperWindow
     {
         super.updateDisplayList(unscaledWidth, unscaledHeight);
         
-        setActualSize(			measuredWidth+5,
-                                measuredHeight+5);
-                                
-		nativeWindow.width = measuredWidth+5;
-		nativeWindow.height = measuredHeight+5;	
+		width = measuredWidth+5;
+		height = measuredHeight+5;	
 		
 		if(!positioned)
 		{
@@ -159,8 +164,9 @@ public class SuperAlert extends SuperWindow
     	removeEventListener(Event.CLOSE, alertCloseHandler);
     	
     	if(_closeHandler!=null)
-    		addEventListener(CloseEvent.CLOSE, _closeHandler);    	
-    	var closeEvent:CloseEvent = _event;
+    		addEventListener(CloseEvent.CLOSE, _closeHandler); 
+    		   	
+    	var closeEvent:CloseEvent = _event ? _event : new CloseEvent(CloseEvent.CLOSE);
     	dispatchEvent(closeEvent);    	
     } 
        
