@@ -52,7 +52,7 @@ package com.zavoo.svg.nodes
 			var d:* ="";
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );		
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );	
 			loader.loadBytes( value );
 		}
 		

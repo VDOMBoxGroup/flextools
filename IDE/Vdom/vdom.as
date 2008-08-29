@@ -6,6 +6,7 @@ import mx.core.Singleton;
 import mx.events.FlexEvent;
 import mx.rpc.events.FaultEvent;
 
+import vdom.connection.NewSOAP;
 import vdom.connection.soap.Soap;
 import vdom.events.AuthenticationEvent;
 import vdom.events.DataManagerEvent;
@@ -34,6 +35,7 @@ private var cacheManager:CacheManager = CacheManager.getInstance();
 private var alertManager:AlertManager= AlertManager.getInstance();
 
 private var soap:Soap = Soap.getInstance();
+private var newSOAP:NewSOAP = NewSOAP.getInstance();
 
 private var tempStorage:Object = {};
 
@@ -105,7 +107,8 @@ private function changeLanguageHandler(event:Event):void
 
 private function submitBeginHandler(event:LoginFormEvent):void
 {	
-	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
+	//soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
+	newSOAP.addEventListener(FaultEvent.FAULT, soap_faultHandler);
 	alertManager.showMessage("Authentication process");
 	
 	var hostname:String = event.formData.hostname;
@@ -113,8 +116,10 @@ private function submitBeginHandler(event:LoginFormEvent):void
 	tempStorage = event.formData;
 	
 	var wsdl:String = "http://" + hostname + "/vdom.wsdl";
-	soap.addEventListener("loadWsdlComplete", soap_initCompleteHandler);
-	soap.init(wsdl);
+//	soap.addEventListener("loadWsdlComplete", soap_initCompleteHandler);
+	newSOAP.addEventListener("loadWsdlComplete", soap_initCompleteHandler);
+//	soap.init(wsdl);
+	newSOAP.init(wsdl);
 }
 
 private function authenticationManager_loginComleteHandler(event:Event):void
@@ -176,7 +181,7 @@ private function soap_initCompleteHandler(event:Event):void
 	var hostname:String = tempStorage.hostname;
 	
 	authenticationManager.addEventListener(
-		AuthenticationEvent.LOGIN_COMPLETE, 
+		AuthenticationEvent.LOGIN_COMPLETE,
 		authenticationManager_loginComleteHandler
 	);
 	
