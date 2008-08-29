@@ -31,6 +31,7 @@
 			public static var cancelLabel:String = "Cancel";
 			
 			private var closeEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
+			private var _closeHandler:Function;
 
 		 	public function show(
                                 flags:uint = 0x4 /* Alert.OK */, 
@@ -101,11 +102,11 @@
 				if(iconClass)
 					titleIcon = iconClass;
          		
-           		addEventListener(Event.CLOSING, onClosing);
+           		addEventListener(Event.CLOSE, onClose);
 				addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 				
          		if (closeHandler != null)
-            		addEventListener(CloseEvent.CLOSE, closeHandler);
+            		_closeHandler = closeHandler;
             		
          	}
          	
@@ -158,8 +159,14 @@
 				close();		
 			}
 			
-			private function onClosing(event:Event):void
+			private function onClose(event:Event):void
 			{
+				event.stopImmediatePropagation();
+				removeEventListener(Event.CLOSE, onClose);
+				
+				if (_closeHandler != null)
+            		addEventListener(CloseEvent.CLOSE, _closeHandler);
+            		
 				dispatchEvent(closeEvent);
 			}
 			

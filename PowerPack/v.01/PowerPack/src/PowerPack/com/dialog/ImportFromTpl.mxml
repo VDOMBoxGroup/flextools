@@ -24,7 +24,6 @@
 			import PowerPack.com.managers.LanguageManager;
 			
 			private static var _dialog:ImportFromTpl;
-			public var template:TemplateStruct;
 			
 			static public function show(closeHandler:Function = null):ImportFromTpl
 			{
@@ -50,9 +49,22 @@
 				return _dialog;
 			}
 			
+			public var template:TemplateStruct;
+			private var filterArray:Array = 
+				[
+					new FileFilter(
+            			StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
+            			"*.xml"),
+            	
+            		new FileFilter(
+            			StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
+            			"*.*")
+				];
+
 			private function onShow(event:Event):void
 			{
 				tplBrowse.txtInput.setFocus();		
+				tplBrowse.filterArray = filterArray;
 			}
 			
 			///////////////////////////////////////////////////////
@@ -73,10 +85,10 @@
 				
            		if(!file.exists)
    				{
-   					Alert.show(
+   					SuperAlert.show(
 						LanguageManager.sentences['msg_file_not_exists'], 
 						LanguageManager.sentences['warning'], 
-						4, this);
+						4, this.nativeWindow);
    					return;
    				}	
    					
@@ -92,7 +104,22 @@
 	        private function completeTemplateHandler(event:Event):void
 	        {
         		var fileStream:FileStream = event.target as FileStream;
-        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+        		
+        		try
+        		{
+        			var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+        		}
+        		catch(e:*)
+        		{
+   					SuperAlert.show(
+						LanguageManager.sentences['msg_not_valid_tpl_file'], 
+						LanguageManager.sentences['error'], 
+						4, this.nativeWindow);
+					
+					fileStream.close();
+   					return;        				
+        		}
+        		
 				fileStream.close();
 				
 				template = new TemplateStruct(xml);
@@ -127,7 +154,7 @@
             			}
             		}
 					template = null;
-            		Alert.show("Invalid secret key.");
+            		SuperAlert.show("Invalid secret key.");
             	}         	
             }
             

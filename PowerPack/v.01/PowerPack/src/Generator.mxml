@@ -45,6 +45,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.containers.SuperAlert;
 			import PowerPack.com.managers.ConnectionManager;
 			import generated.webservices.Install_applicationResultEvent;
 			import vdom.connection.protect.MD5;
@@ -178,10 +179,10 @@
 
 	       	private function exitApplication(event:Event=null):void
 	       	{
-       			Alert.show(
+       			SuperAlert.show(
        				LanguageManager.sentences['msg_exit_app'],
        				LanguageManager.sentences['confirmation'], 
-       				Alert.YES|Alert.NO, this, alertExitHandler, null, Alert.NO);
+       				Alert.YES|Alert.NO, null, alertExitHandler, null, Alert.NO);
 
 			    function alertExitHandler(event:CloseEvent):void {
 		        	if(event.detail==Alert.YES) {   
@@ -260,7 +261,7 @@
     			
     			if(!tpl.xmlTemplate)
     			{
-    				Alert.show(LanguageManager.sentences['msg_cannot_open_tpl']);
+    				SuperAlert.show(LanguageManager.sentences['msg_cannot_open_tpl']);
 					closeTemplateFile();    				
        			}
        			else
@@ -501,7 +502,7 @@
 				}
 				catch(e:Error)
 				{
-					Alert.show(e.message, LanguageManager.sentences['warning']);
+					SuperAlert.show(e.message, LanguageManager.sentences['warning']);
 					clearTemplateDebug();
 					processStep(cGeneral);
 				}
@@ -509,10 +510,10 @@
             		
 			public function alertProceedRun():void
 			{			
-	     		Alert.show(
+	     		SuperAlert.show(
 	     			LanguageManager.sentences['msg_tpl_proceed_with_errs'], 
 	     			LanguageManager.sentences['errs_in_tpl'], 
-	     			Alert.YES|Alert.NO, this, alertProceedRunHandler, null, Alert.NO);			     	
+	     			Alert.YES|Alert.NO, null, alertProceedRunHandler, null, Alert.NO);			     	
 
 				function alertProceedRunHandler(event:CloseEvent):void {
 		        	if(event.detail==Alert.YES) {    
@@ -551,7 +552,7 @@
             
            	private function debugErrorHandler(event:Event):void {           		
            		var error:* = event.target.error;     
-           		Alert.show(error.message, LanguageManager.sentences['error']);
+           		SuperAlert.show(error.message, LanguageManager.sentences['error']);
            		clearTemplateDebug();		
            		processStep(cGeneral);
            	}            						            
@@ -861,7 +862,7 @@
             			return null;
             			
 	            	if(!_file.exists) {
-	            		Alert.show(
+	            		SuperAlert.show(
 	            			LanguageManager.sentences['msg_file_not_exists'], 
 	            			LanguageManager.sentences['error']);
 	            		return null; 
@@ -897,10 +898,10 @@
 				if(!appGenerated && ContextManager.instance.templateStruct)
 					ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
 				
-	     		Alert.show(
+	     		SuperAlert.show(
 	     			LanguageManager.sentences['msg_proceed_interrupt_app_installing'], 
 	     			LanguageManager.sentences['question'], 
-	     			Alert.YES|Alert.NO, this, alertProceedInterruptHandler, null, Alert.NO);			     	
+	     			Alert.YES|Alert.NO, null, alertProceedInterruptHandler, null, Alert.NO);			     	
 
 				function alertProceedInterruptHandler(event:CloseEvent):void {
 		        	if(event.detail==Alert.YES) {    

@@ -74,6 +74,8 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.containers.SuperWindow;
+			import mx.core.Window;
 			import ExtendedAPI.com.containers.SuperAlert;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Tree;
@@ -223,6 +225,7 @@
             	}
             	
             	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
+            	
 		    }
 		    		    
 		    private function onProblemsDoubleClick(event:MouseEvent):void
@@ -262,10 +265,10 @@
 	       	{
 	       		if(ContextManager.instance.lastFile)
 	       		{
-       				Alert.show(
+       				SuperAlert.show(
        					"Do you want to save file before exit?", 
        					LanguageManager.sentences['confirmation'], 
-       					Alert.YES|Alert.NO|Alert.CANCEL, this, alertSaveHandler, null, Alert.YES);
+       					Alert.YES|Alert.NO|Alert.CANCEL, this.nativeWindow, alertSaveHandler, null, Alert.YES);
        			}
        			else
        			{
@@ -383,7 +386,7 @@
 					
 					ContextManager.instance.lastFile = false;
             		ContextManager.instance.templates.removeItemAt(0);
-            		Alert.show("Invalid secret key.");
+            		SuperAlert.show("Invalid secret key.");
             	}         	
             }
             	    	    	
@@ -394,11 +397,11 @@
 				var fileStream:FileStream = new FileStream();
             	
             	var tmplFilter:FileFilter = new FileFilter(
-            		StringUtil.substitute("{0} ({1})", "Template", "*.xml"), 
+            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
             		"*.xml");
             	
             	var filter:FileFilter = new FileFilter(
-            		StringUtil.substitute("{0} ({1})", "All", "*.*"), 
+            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
             		"*.*");
 
                 if(event.item.@id == "new")
@@ -479,13 +482,13 @@
 	            		return;
 	            	
 	            	if(!file.exists) {
-	            		Alert.show('File doesn`t exist.', 'Error!');
+	            		SuperAlert.show('File doesn`t exist.', 'Error!');
 	            		return; 
 	            	}
 					
 					ProgressManager.source = fileStream;
-					ProgressManager.start();	            	
-	            	
+					ProgressManager.start();	  
+					
 					fileStream.addEventListener(Event.COMPLETE, completeTemplateHandler);
 	    			fileStream.openAsync(file, FileMode.READ);
 	            	
@@ -601,7 +604,7 @@
 						ProgressManager.complete();
 						ContextManager.instance.templateStruct = null;
 						switchDebug(false);
-						Alert.show(e.message, "Warning!");
+						SuperAlert.show(e.message, "Warning!");
 					}									
 				}
 				
@@ -641,7 +644,7 @@
 			
 			public function alertProceedRun():void
 			{			
-	     		Alert.show("Error(s) exist in template\nProceed with launch?", "Errors in template", Alert.YES|Alert.NO, this, alertProceedRunHandler, null, Alert.NO);			     	
+	     		SuperAlert.show("Error(s) exist in template\nProceed with launch?", "Errors in template", Alert.YES|Alert.NO, null, alertProceedRunHandler, null, Alert.NO);			     	
 			}
 			
 			private function alertProceedRunHandler(event:CloseEvent):void 
@@ -665,7 +668,7 @@
 						
 						switchDebug(false);
 						ContextManager.instance.templateStruct = null;
-						Alert.show(e.message, "Warning!");
+						SuperAlert.show(e.message, "Warning!");
 					}
 	   	     	}
 	   	     	else
@@ -884,7 +887,7 @@
 					}    		
             	}
             	
-            	//ProgressManager.complete();
+            	ProgressManager.complete();
             }            
 
             private function onImportClose(event:Event):void
@@ -934,7 +937,7 @@
            		ProgressManager.complete();
            		
            		showDebugDetails();           		
-           		Alert.show(error.message, "Error!", 4, null, onErrAlertClose);
+           		SuperAlert.show(error.message, "Error!", 4, null, onErrAlertClose);
            	}
            	
            	private function onErrAlertClose(event:Event):void

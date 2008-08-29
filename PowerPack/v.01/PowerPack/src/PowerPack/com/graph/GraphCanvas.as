@@ -1,5 +1,6 @@
 package PowerPack.com.graph
 {
+import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
 import ExtendedAPI.com.utils.Utils;
@@ -197,10 +198,10 @@ public class GraphCanvas extends Canvas
 	{			
  		if(parent)
  		{
-     		Alert.show(
+     		SuperAlert.show(
      			LanguageManager.sentences['graph_alert_clear_text'],
      			LanguageManager.sentences['graph_alert_clear_title'],
-     			Alert.YES|Alert.NO, this, alertRemoveHandler, null, Alert.YES);			     	
+     			Alert.YES|Alert.NO, null, alertRemoveHandler, null, Alert.YES);			     	
      	}
 	}	
 		

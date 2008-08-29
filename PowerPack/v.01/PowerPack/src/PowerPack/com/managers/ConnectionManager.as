@@ -1,7 +1,7 @@
 package PowerPack.com.managers
 {
-import flash.desktop.NativeApplication;
-import flash.display.Sprite;
+import ExtendedAPI.com.containers.SuperAlert;
+
 import flash.events.EventDispatcher;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
@@ -10,7 +10,6 @@ import generated.webservices.Close_sessionResultEvent;
 import generated.webservices.Open_sessionResultEvent;
 import generated.webservices.Vdom;
 
-import mx.controls.Alert;
 import mx.core.Window;
 import mx.rpc.events.FaultEvent;
 
@@ -233,10 +232,9 @@ public class ConnectionManager extends EventDispatcher
 			
 			loggedIn = false;
 			
-			Alert.show(resultXML.Error,
+			SuperAlert.show(resultXML.Error,
 			LanguageManager.sentences["fault"],
-			4,
-			Sprite(window))
+			4)
 		} 
 		else {					
 			// run session protector
@@ -272,13 +270,12 @@ public class ConnectionManager extends EventDispatcher
 		loggedIn = false;
 		timer.stop();
 		
-		Alert.show("A fault occured contacting the server. Fault message is: "+event.fault.faultString+
+		SuperAlert.show("A fault occured contacting the server. Fault message is: "+event.fault.faultString+
 		"\n"+event.fault.faultDetail+
 		"\n"+event.fault.rootCause+
 		"\n"+event.headers,
 		LanguageManager.sentences["fault"],
-		4,
-		Sprite(window));
+		4);
 		
 		ProgressManager.complete();
 	}

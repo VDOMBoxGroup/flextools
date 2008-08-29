@@ -13,6 +13,14 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.core.FlexTextField;
+			import mx.managers.PopUpManager;
+			import mx.events.FlexEvent;
+			import mx.controls.TextInput;
+			import mx.binding.utils.BindingUtils;
+			import mx.core.UITextField;
+			import mx.core.IUITextField;
+			import ExtendedAPI.com.containers.SuperAlert;
 			import PowerPack.com.managers.LanguageManager;
 			import PowerPack.com.panel.Graphs;
 			import PowerPack.com.graph.GraphCanvas;
@@ -22,6 +30,18 @@
 			import mx.core.IUIComponent;
 			import mx.managers.DragManager;
 			import mx.events.DragEvent;
+			
+			//----------------------------------
+		    //  statusTextField
+		    //----------------------------------
+		
+			/**
+		     *  A reference to the UITextField that displays the status bar's text.
+		     */
+		    private var labelTextField:IUITextField;
+		    public var txtInput:TextInput;	
+		    
+		    private var editing:Boolean;		
 			
 			[Bindable]
 			private var _label:String;
@@ -35,7 +55,6 @@
 			
 			private function show():void
 			{
-				lblCaption.percentWidth = 100;
 			}
 			
 			private function doubleClickHandler(event:Event):void
@@ -49,7 +68,7 @@
 				
 				if(accordChild.graphs && accordChild.graphs.length>0)
 				{	
-					Alert.show(LanguageManager.sentences['msg_cannot_remove_nonempty_cat']);					
+					SuperAlert.show(LanguageManager.sentences['msg_cannot_remove_nonempty_cat']);					
 					return;
 				}
 					
@@ -59,17 +78,25 @@
 			
 			public function beginEdit():void
 			{
-				lblCaption.visible = false;
-				lblCaption.width = 0;
+				if(editing)
+					return;
 				
-				txtCaption.visible = true;
-				txtCaption.percentWidth = 100;
+				editing = true;
 				
-				txtCaption.setFocus();				
+				if(labelTextField.parent)
+					boxHeader.removeChild(DisplayObject(labelTextField));
+				boxHeader.addChildAt(txtInput, 0);
+				txtInput.visible = true;
+				txtInput.setFocus();				
+
+				invalidateDisplayList();
 			}
 			
 			public function endEdit(event:Event):void
 			{				
+				if(!editing)
+					return;
+				
 				var bCommit:Boolean = true;
 				var bEndEdit:Boolean = true;
 				
@@ -92,17 +119,24 @@
 		  		}
 				
 				if(bEndEdit)
-				{		    	
+				{		   
+					editing = false;
+					 	
 					if(bCommit)
-						data.label = txtCaption.text;
+						data.label = txtInput.text;
 					else
-						txtCaption.text = _label;
-						
-					txtCaption.visible = false;
-					txtCaption.width = 0;
-				
-					lblCaption.visible = true;
-					lblCaption.percentWidth = 100;
+						txtInput.text = _label;
+					
+					txtInput.visible = false;
+					
+					txtInput.validateNow();
+
+					if(txtInput.parent)
+						boxHeader.removeChild(txtInput);
+					
+					boxHeader.addChildAt(DisplayObject(labelTextField), 0);
+					
+					invalidateDisplayList();
 					
 					if(bCommit)
 						EventDispatcher(data).dispatchEvent(new Event("captionChanged"));
@@ -142,18 +176,106 @@
 					Graphs(destination.parent.parent.parent.parent).selectGraph(graph);
 		    	}
 		    }
+		    
+			override protected function createChildren():void
+			{
+       			super.createChildren();
+       			
+       			if (!labelTextField)
+			    {
+			        labelTextField = IUITextField(createInFontContext(UITextField));
+			        labelTextField.text = _label;
+			        labelTextField.styleName = getStyle("labelTextStyleName");
+			        labelTextField.enabled = true;
+			        labelTextField.doubleClickEnabled = true;
+			        labelTextField.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
+			        
+			        boxHeader.addChildAt(DisplayObject(labelTextField), 0);
+		    	}
+		    	if(!txtInput)
+		    	{
+		    		txtInput = new TextInput();
+		    		txtInput.text = _label;
+		    		txtInput.addEventListener(FocusEvent.FOCUS_OUT, endEdit);
+		    		txtInput.addEventListener(FlexEvent.ENTER, endEdit);
+		    		txtInput.addEventListener(KeyboardEvent.KEY_DOWN, endEdit);
+		    		txtInput.addEventListener(FocusEvent.FOCUS_IN, onFocus);
+		    		
+		    		function onFocus(event:Event):void {
+		    			event.stopPropagation();
+		    		}
+		    	}
+   			}
+   			
+   			override protected function measure():void
+			{
+				super.measure();
+				
+				measuredWidth = parent.width;
+   			}
+
+		    /**
+		     *  @private
+		     */
+			override protected function updateDisplayList(unscaledWidth:Number,
+														  unscaledHeight:Number):void
+			{
+				unscaledWidth = parent.width;
+
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				width = unscaledWidth;	
+				
+				boxHeader.width = width;
+				boxHeader.height = height;
+				
+				cbarHeader.x = boxHeader.width - cbarHeader.width;
+				
+				
+				if(labelTextField.parent)
+					lblFieldResize();
+				
+				if(txtInput.parent)
+					edtFieldResize();				
+
+				boxHeader.validateNow();
+			}
+			   
+   			private function getTxtFieldWidth():int
+   			{
+   				var width:int = boxHeader.getExplicitOrMeasuredWidth() - cbarHeader.getExplicitOrMeasuredWidth()-
+   					boxHeader.getStyle('paddingLeft') - boxHeader.getStyle('paddingRight');
+   				
+   				return width;
+   			}
+   			
+   			private function lblFieldResize():void
+   			{
+   				var lblWidth:int = getTxtFieldWidth();
+   				
+   				labelTextField.text = _label;
+   				labelTextField.x = 2;
+   				labelTextField.y = (boxHeader.getExplicitOrMeasuredHeight() - labelTextField.textHeight) / 2-2;
+   				labelTextField.width = lblWidth-labelTextField.x;
+   				
+   				if(labelTextField.x+labelTextField.textWidth>lblWidth)
+   					labelTextField.truncateToFit("...");
+   					
+   				labelTextField.validateNow();   				  					
+   			}
+   			
+   			private function edtFieldResize():void
+   			{
+   				var edtWidth:int = getTxtFieldWidth();
+   				
+   				txtInput.width = edtWidth;
+   			}   			
 	    			
 		]]>
 	</mx:Script>
 	
-	<mx:HBox id="boxHeader" width="100%" verticalAlign="middle" horizontalGap="0">
+	<mx:Canvas id="boxHeader">
 
-		<mx:Label id="lblCaption" text="{_label}" paddingLeft="5" 
-			doubleClickEnabled="true" doubleClick="doubleClickHandler(event);"/>
-		
-		<mx:TextInput id="txtCaption" text="{_label}" width="0" visible="false"
-			focusOut="endEdit(event);" enter="endEdit(event);" keyDown="endEdit(event);" focusIn="event.stopPropagation();"/>
-		
 		<mx:ControlBar id="cbarHeader" horizontalAlign="right" paddingTop="2" paddingBottom="2" paddingRight="2" paddingLeft="2">
 		
 			<flexlib:CanvasButton
@@ -163,6 +285,6 @@
 		
 		</mx:ControlBar>
 		
-	</mx:HBox>
+	</mx:Canvas>
 		
 </CanvasButtonAccordionHeader>

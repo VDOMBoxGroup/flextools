@@ -1,5 +1,6 @@
 package PowerPack.com.graph
 {	
+import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
 
@@ -783,10 +784,10 @@ public class Node extends Canvas
 	{			
  		if(parent && _mode==M_NORMAL)
  		{
-     		Alert.show(
+     		SuperAlert.show(
      			LanguageManager.sentences['node_alert_delete_text'],
      			LanguageManager.sentences['node_alert_delete_title'],
-     			Alert.YES|Alert.NO,this,alertRemoveHandler,null,Alert.YES);			     	
+     			Alert.YES|Alert.NO,null,alertRemoveHandler,null,Alert.YES);			     	
      	}
 	}	
 	

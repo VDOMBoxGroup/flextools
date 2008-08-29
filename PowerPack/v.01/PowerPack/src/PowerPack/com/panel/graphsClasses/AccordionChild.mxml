@@ -51,7 +51,7 @@
 
             	var editInst:GraphThumb = GraphThumb(list.itemEditorInstance);
             	
-				editInst.lblThumb.visible = false;            	
+				editInst.labelTextField.visible = false;            	
 				editInst.txtThumb.visible = true;
 				editInst.txtThumb.setFocus();
 				editInst.data = list.selectedItem;
@@ -69,7 +69,7 @@
                 
                 if(CodeParser.ParseSubgraphNode(newData).result==false)
                 {	                
-                	editInst.lblThumb.errorString = LanguageManager.sentences['msg_enter_valid_graph_name'];
+                	editInst.errorString = LanguageManager.sentences['msg_enter_valid_graph_name'];
                 }                
                 
                 if (event.reason == ListEventReason.CANCELLED)

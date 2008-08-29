@@ -10,6 +10,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.containers.SuperAlert;
 			import PowerPack.com.importation.ImportApp;
 			import ExtendedAPI.com.utils.FileUtils;
 			import generated.webservices.Get_all_typesResultEvent;
@@ -167,7 +168,7 @@
 				resultXML.appendChild(XMLList(event.result));	
 				
 				if(resultXML.Error.toString() == 'Error') {
-					Alert.show(resultXML.Error);
+					SuperAlert.show(resultXML.Error);
 				} 
 				else {	
 					typesXML = resultXML.Types[0];
@@ -198,7 +199,7 @@
 				resultXML.appendChild(XMLList(event.result));	
 				
 				if(resultXML.Error.toString() == 'Error') {
-					Alert.show(resultXML.Error);
+					SuperAlert.show(resultXML.Error);
 				} 
 				else {	
 					//trace(resultXML);
@@ -248,7 +249,7 @@
 				resultXML.appendChild(XMLList(event.result));	
 				
 				if(resultXML.Error.toString() == 'Error') {
-					Alert.show(resultXML.Error);
+					SuperAlert.show(resultXML.Error);
 				} 
 				else {
 					appXML = resultXML.Application[0];

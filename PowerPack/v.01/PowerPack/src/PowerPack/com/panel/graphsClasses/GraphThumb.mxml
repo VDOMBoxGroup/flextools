@@ -7,20 +7,58 @@
 	backgroundAlpha="0.0">
 	
     <mx:Script>
-        <![CDATA[           
+        <![CDATA[
+        	import mx.core.UITextField;
+        	import mx.core.IUITextField;           
             // Define a property for returning the new value to the item.
             [Bindable]
             public var returnText:String;
+            
+            public var labelTextField:IUITextField;
+            
+			override protected function createChildren():void
+			{
+       			super.createChildren();
+       			
+       			if (!labelTextField)
+			    {
+			    	setStyle("fontWeight", "bold");
+			        labelTextField = IUITextField(createInFontContext(UITextField));
+			        labelTextField.text = txtThumb.text;
+			        labelTextField.styleName = getStyle("labelTextStyleName");
+			        labelTextField.enabled = true;
+			        
+			        cnvs.addChildAt(DisplayObject(labelTextField), 0);
+		    	}
+   			}    
+   			
+		    /**
+		     *  @private
+		     */
+			override protected function updateDisplayList(unscaledWidth:Number,
+														  unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				var lblWidth:int = cnvs.width - cnvs.getStyle('paddingLeft') - cnvs.getStyle('paddingRight') - 10;
+				labelTextField.text = txtThumb.text;
+				labelTextField.width = lblWidth;
+				
+				if(labelTextField.textWidth>lblWidth) {
+					labelTextField.truncateToFit("...");
+				}
+
+				cnvs.validateNow();
+			}   			        
         ]]>
     </mx:Script>
     
 	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="@Embed('../../../../../resources/tree.png')" width="32" height="32"/>
 	
-	<mx:Canvas width="100%">
-		<mx:TextInput id="txtThumb" text="{data.name}" textAlign="center" width="95%" visible="false" horizontalCenter="0" 
+	<mx:Canvas id="cnvs" width="99%">
+		<mx:TextInput id="txtThumb" text="{data.name}" textAlign="center" width="100%" visible="false" horizontalCenter="0" 
 			change="returnText=txtThumb.text;"
 			updateComplete="returnText=txtThumb.text;" />
-		<mx:Label id="lblThumb" text="{txtThumb.text}" textAlign="center" fontWeight="bold" width="95%" horizontalCenter="0"/>
 	</mx:Canvas>
 	
 </mx:VBox>

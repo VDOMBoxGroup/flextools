@@ -498,7 +498,7 @@
 				
 		<mx:VBox width="100%" height="100%" verticalGap="0">
 		
-			<mx:ControlBar paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" horizontalGap="1" width="100%" horizontalAlign="center" id="ctrlBar">
+			<mx:ControlBar id="ctrlBar" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" horizontalGap="1" width="100%" horizontalAlign="center">
 				<mx:Button toolTip="{LanguageManager.sentences.lbl_new}" labelPlacement="bottom" fontFamily="Arial" textAlign="center" cornerRadius="3" alpha="0.9" id="btnNew" width="100%" paddingRight="0" paddingLeft="0" fontSize="9" icon="{ContextManager.addClass}" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="3" borderColor="#CCD1D5"/>
 				<mx:Button toolTip="{LanguageManager.sentences.lbl_rename}" labelPlacement="bottom" fontFamily="Arial" cornerRadius="3" alpha="0.9" id="btnRename" width="100%" textAlign="center" paddingLeft="0" paddingRight="0" fontSize="9" icon="{ContextManager.editClass}" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="3" borderColor="#CCD1D5"/>
 				<mx:Button toolTip="{LanguageManager.sentences.lbl_copy}" labelPlacement="bottom" fontFamily="Arial" cornerRadius="3" alpha="0.9" id="btnCopy" width="100%" textAlign="center" paddingLeft="0" paddingRight="0" fontSize="9" icon="{ContextManager.copyClass}" paddingBottom="3" horizontalGap="0" verticalGap="0" paddingTop="3" borderColor="#CCD1D5"/>
@@ -509,7 +509,7 @@
 			
 			<mx:Accordion 
 				headerRenderer="PowerPack.com.panel.graphsClasses.AccordionHeader" 
-				id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" height="100%" width="100%">		
+				id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" width="100%" height="100%">		
 			</mx:Accordion>
 			
 		</mx:VBox>
