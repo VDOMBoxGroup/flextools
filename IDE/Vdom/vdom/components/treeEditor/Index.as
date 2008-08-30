@@ -89,8 +89,10 @@ package vdom.components.treeEditor
 			cmBox.dataProvider = comboBoxData;
 			cmBox.validateProperties();
 			invalidateDisplayList();
+			cmBox.setFocus();
 			cmBox.selectedIndex = Number(index) - 1;
 			cmBox.callLater(cmBox.open);
+			
 		}
 		
 		private function targetLineChangeHandler(evt:Event):void

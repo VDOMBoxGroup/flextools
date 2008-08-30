@@ -193,31 +193,62 @@
 	
 	private function mouseDownHandler(evt:MouseEvent):void
 	{
-			pnFrom.x = evt.currentTarget.x;
-			pnFrom.y =evt.currentTarget.y;
+//		trace('object');
 		
 		// проводим линию
 		if(blDrawLine)
-			drawLine(evt.currentTarget);		
+		{
+//			evt.currentTarget.availabled = false;
+			
+			pnFrom.x = evt.currentTarget.x; 
+			pnFrom.y =evt.currentTarget.y;
+			
+			drawLine(evt.currentTarget);
+			
+		}		
 
 		if (curTree != null)
 			curTree.current = false;	
 		
 		evt.currentTarget.current = true;
 		curTree = evt.currentTarget;
+		dataManager.changeCurrentPage(curTree.ID);
+		
+//		evt.currentTarget.availabled = true; 
 		//dataManager.changeCurrentPage( curTree.ID);
 	}
 	
 	
 	
 	private function mouseUpHandler(msEvt:MouseEvent):void
-	{
+	{	
+	
+		
 //		trace('App');
 		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 	}
 	
+	//---------------------
+	private var treeElemenUnderMouse:Object;
+	private function treeElementMouseOutHandler(msEvt:MouseEvent):void
+	{
+		treeElemenUnderMouse = null;
+		msEvt.currentTarget.availabled = true;
+		
+	}
 	
+	private function treeElementMouseOverHandler(msEvt:MouseEvent):void
+	{
+		if(blDrawLine)
+		{
+			msEvt.currentTarget.availabled = false;
+		}
+		treeElemenUnderMouse = msEvt.currentTarget;
+	}
+	
+	
+	//--------------------------
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
 		var curID:String = curTree.ID;
@@ -245,6 +276,7 @@
 		curTree.current = false;
 		curTree = massTreeElements[trEvt.ID];
 		curTree.current = true;
+		dataManager.changeCurrentPage(curTree.ID);
 		Alert.show(resourceManager.getString('Tree','do_you_want_to_delete_element'), resourceManager.getString('Tree','delete_element'), 3, this, alertClickDeleteTreeElement);
 	}
 	 
@@ -267,7 +299,10 @@
 		curTree = massTreeElements[randomTreeElement];
 		
 		if(curTree)
+		{
 			curTree.current = true;
+			dataManager.changeCurrentPage(curTree.ID);
+		}
 		
 		setStartPage();
     }
@@ -317,12 +352,23 @@
 	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
-		var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
-	//	var obj:Object = new Object(); 
-		
+		if(mouseX > main.width)
+			return;
+			
 		vctTest.graphics.clear();
-		vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
-		//saveToServer();
+		
+		if(treeElemenUnderMouse)
+		{
+			vctTest.createVector(curTree, treeElemenUnderMouse, colmen2.selectedItem.data);	
+		}else
+		{
+			var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
+		
+			vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
+		}
+//		var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
+//		
+//			vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
 	}
 	
 		
@@ -434,7 +480,10 @@
 			curTree.current = false;
 		curTree = massTreeElements[ID];
 		if(curTree != null)
+		{
 			curTree.current = true;
+			dataManager.changeCurrentPage(curTree.ID);
+		}
 		
 		saveToServer();
 	}

@@ -432,6 +432,8 @@ private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 			treEl.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 			treEl.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			treEl.addEventListener(TreeEditorEvent.CHANGE_START_PAGE, changeStartPageHandler);
+			treEl.addEventListener(MouseEvent.MOUSE_OUT, treeElementMouseOutHandler);
+			treEl.addEventListener(MouseEvent.MOUSE_OVER, treeElementMouseOverHandler);
 			
 			return treEl;
 }
@@ -637,11 +639,11 @@ private function calculatePointTo(mouseX:Number, mouseY:Number, curTree:Object):
 	var pnTo:Object = new Object();
 	// чтоб мышка не кликала по своей линии
 	
-	if((tX>0))	pnTo.x = mouseX - 10;
-		else pnTo.x = mouseX + 10;
+	if((tX>0))	pnTo.x = mouseX - 4;
+		else pnTo.x = mouseX + 4;
 	
-	if( (tY>0))	pnTo.y = mouseY - 10;
-		else pnTo.y = mouseY + 10;
+	if( (tY>0))	pnTo.y = mouseY - 4;
+		else pnTo.y = mouseY + 4;
 		
 	return pnTo;
 }

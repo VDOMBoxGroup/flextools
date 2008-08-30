@@ -145,12 +145,16 @@ package vdom.components.treeEditor
 		
 		private function plusClickHandler(msEvt:MouseEvent):void
 		{
+			if(!_availabled)
+				return;
 //			min = !min
 			changeState(!min)
 		}
 		
 		private function startPageClickHandler(msEvt:MouseEvent):void
 		{
+			if(!_availabled)
+				return;
 //			selected = true;
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.CHANGE_START_PAGE, _ID));
 		}
@@ -186,7 +190,9 @@ package vdom.components.treeEditor
 		
 		private function textAreaDoubleClickHandler(msEvt:MouseEvent):void
 		{
-			
+			if(!_availabled)
+				return;
+				
 			textArea.editable = true;
 			textArea.selectable = true;
 			textArea.focusEnabled = true;
@@ -224,12 +230,17 @@ package vdom.components.treeEditor
 		
 		private function lineClickHandler(msEvt:MouseEvent):void
 		{
-		//	trace('Я нажата');
+			if(!_availabled)
+				return;
+				
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_DRAW_LINE, _ID));
 		}
 		
 		private function deleteClickHandler(msEvt:MouseEvent):void
 		{
+			if(!_availabled)
+				return;
+				
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, _ID));	
 		}
 		
@@ -244,6 +255,11 @@ package vdom.components.treeEditor
 		 * */
 		private function imageDoubleClickHandler(msEvt:MouseEvent):void 
 		{
+//			trace('image0');
+			if(!_availabled)
+				return;
+				
+//			trace('image1');	
 			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
 			rbWnd.selectedItemID = _resourceID;
 			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
@@ -252,6 +268,7 @@ package vdom.components.treeEditor
 		private var fileManager:FileManager = FileManager.getInstance();
 		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
 		{
+			
 				_resourceID = rbEvt.resourceID;
 				fileManager.loadResource(dataManager.currentApplicationId,  _resourceID, this);
 		}	
@@ -384,6 +401,9 @@ package vdom.components.treeEditor
 	 
 	 private function startDragHandler(msEvt:MouseEvent):void
 	 {
+	 	if(!_availabled)
+				return;
+				
 	 	if( txtInp.visible == false)
 	 	{
 	 		dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_REDRAW_LINES, _ID));
@@ -554,6 +574,15 @@ package vdom.components.treeEditor
 		public function unSelect():void
 		{
 			endFormatinfHandler(new MouseEvent(MouseEvent.CLICK));
+		}
+		
+		/*      availabled      */
+		
+		private var _availabled:Boolean = true;
+		public function set availabled(bl:Boolean):void
+		{
+//			trace('availabled'+ bl)
+			_availabled = bl;
 		}
 		
 		/*      sourseImg      */
