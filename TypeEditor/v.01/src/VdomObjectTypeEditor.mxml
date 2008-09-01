@@ -18,6 +18,7 @@
 			borderStyle:"solid";
 			horizontalAlign:"center";
 			verticalAlign:"middle";
+			borderThickness:0;
 		}
 		
 		
@@ -296,10 +297,10 @@
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Panel colour group" />
 								<mx:HBox>
-									<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" />
-									<mx:Box id="__redColor" backgroundColor="#B00000" width="23" height="23" styleName="colorField" />
-									<mx:Box id="__greenColor" backgroundColor="#00B000" width="23" height="23" styleName="colorField" />
-									<mx:Box id="__blueColor" backgroundColor="#0000B0" width="23" height="23" styleName="colorField" />
+									<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
+									<mx:Box id="__redColor" backgroundColor="#B00000" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
+									<mx:Box id="__greenColor" backgroundColor="#00B000" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
+									<mx:Box id="__blueColor" backgroundColor="#0000B0" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
 								</mx:HBox>
 							</mx:VBox>
 
