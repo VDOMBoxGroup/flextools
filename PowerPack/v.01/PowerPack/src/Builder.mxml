@@ -68,7 +68,7 @@
 	            <menuitem label="{LanguageManager.sentences.menu_language}" id="language" enabled="false"/>
 	        </menuitem>
 
-	        <menuitem label="{LanguageManager.sentences.menu_help}" id="help"/>
+	        <menuitem label="{LanguageManager.sentences.menu_help}" id="help" enabled="false"/>
         </root>
     </mx:XML>
     	
@@ -190,6 +190,8 @@
         	    
 				// Load application settings
 	            ContextManager.loadSettings();
+	            
+	            MenuGeneral.noTemplate(fileMenuData);
 	            
 	            // Fill language menu
 	            MenuGeneral.updateLangMenu(fileMenuData);
@@ -345,6 +347,7 @@
     			else
     				ContextManager.instance.templates[0] = template;
 //
+			MenuGeneral.noTemplate(fileMenuData);
       		ContextManager.instance.lastFile = false;
             pnl_graphs.clear();
             workStage.visible = false;
@@ -356,12 +359,14 @@
 				}
 				else
 				{
+					
         			var tpl:TemplateStruct = ContextManager.instance.templates[0];        			
         			tpl.decode();					
 
 	                workStage.visible = true;
     	            workStage.includeInLayout = true;
     	            ContextManager.instance.lastFile = true;
+    	            MenuGeneral.openedTemplate(fileMenuData);
 				}
 	        }	        
             
@@ -417,7 +422,8 @@
     					ContextManager.instance.templates[0] = template;
     					
 	                workStage.visible = true;
-	                workStage.includeInLayout = true;    				
+	                workStage.includeInLayout = true;   
+	                MenuGeneral.newTemplate(fileMenuData); 				
                 }
                 else if(event.item.@id == "new_category")
                 {
@@ -430,6 +436,8 @@
                 }
                 else if(event.item.@id == "close")
                 {		
+                	MenuGeneral.noTemplate(fileMenuData);
+                	
               		ContextManager.instance.lastFile = false;
 	                pnl_graphs.clear();
 	                ContextManager.instance.templates.removeItemAt(0);
@@ -445,6 +453,8 @@
               		} 
               		else
               		{		    
+        				MenuGeneral.openedTemplate(fileMenuData);
+
               			file = ContextManager.instance.files[0];
 						
 						ProgressManager.source = fileStream;
@@ -459,6 +469,7 @@
         				fileStream.close();	        				
         				
         				ProgressManager.complete();
+        				
               		}	        
     	        }
 				else if(event.item.@id == "save_as")
@@ -849,6 +860,23 @@
             		
 					ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 					
+            		if(!ContextManager.instance.lastFile || !ContextManager.instance.files[0])
+    	        	{
+	                	ContextManager.instance.lastFile = false;
+		                pnl_graphs.clear();
+		                
+		                var template:TemplateStruct = new TemplateStruct();
+	
+		                if(ContextManager.instance.templates.length==0)
+		    				ContextManager.instance.templates.addItem(template);
+	    				else
+	    					ContextManager.instance.templates[0] = template;
+	    					
+		                workStage.visible = true;
+		                workStage.includeInLayout = true;   
+		                MenuGeneral.newTemplate(fileMenuData);    	        		
+            		}
+            		
 					if(tpl && tpl.xmlTemplate && tree.selectedItems.length>0)
 					{
 						for each(var node:Object in tree.selectedItems)	
@@ -895,6 +923,23 @@
             	if(event is CloseEvent)
             	{
             		var graphs:Array = event.target.graphs;
+            		
+            		if(!ContextManager.instance.lastFile || !ContextManager.instance.files[0])
+    	        	{
+	                	ContextManager.instance.lastFile = false;
+		                pnl_graphs.clear();
+		                
+		                var template:TemplateStruct = new TemplateStruct();
+	
+		                if(ContextManager.instance.templates.length==0)
+		    				ContextManager.instance.templates.addItem(template);
+	    				else
+	    					ContextManager.instance.templates[0] = template;
+	    					
+		                workStage.visible = true;
+		                workStage.includeInLayout = true;   
+		                MenuGeneral.newTemplate(fileMenuData);    	        		
+            		}
             		
             		if(graphs.length>0)
             		{
@@ -987,7 +1032,8 @@
 				fileStream.close();	
         				        		
         		ProgressManager.complete();
-        
+        		
+  				MenuGeneral.openedTemplate(fileMenuData);      
             	ContextManager.updateLastFiles(file);            	
             	MenuGeneral.updateLastFilesMenu(fileMenuData);
             }

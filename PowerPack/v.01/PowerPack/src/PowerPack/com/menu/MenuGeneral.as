@@ -3,7 +3,6 @@ package PowerPack.com.menu
 import PowerPack.com.managers.ContextManager;
 
 import flash.events.EventDispatcher;
-import flash.events.IEventDispatcher;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
@@ -12,6 +11,131 @@ public class MenuGeneral extends EventDispatcher
 {	
 	public static const LANG_FOLDER:String = "lang";
 	
+	public static function noTemplate(menu:XML):void
+    {
+    	var item:XML;
+    	
+    	// process file menu
+    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
+    	
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'false';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'false';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'false';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'false';
+
+    	// process template menu
+    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
+    	templateItem.@enabled = 'false';
+    	for each(item in templateItem.menuitem)
+    	{
+    		item.@enabled = 'false';
+    	}
+
+    	// process run menu
+    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
+    	runItem.@enabled = 'false';
+    	for each(item in runItem.menuitem)
+    	{
+    		item.@enabled = 'false';
+    	}
+    }
+
+	public static function newTemplate(menu:XML):void
+	{
+    	var item:XML;
+    	
+    	// process file menu
+    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
+    	
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'true';
+
+    	// process template menu
+    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
+    	templateItem.@enabled = 'true';
+    	for each(item in templateItem.menuitem)
+    	{
+    		item.@enabled = 'true';
+    	}
+
+    	// process run menu
+    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
+    	runItem.@enabled = 'true';
+    	for each(item in runItem.menuitem)
+    	{
+    		item.@enabled = 'false';
+    	}
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "run")[0].@enabled = 'true';
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "debug")[0].@enabled = 'true';
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "step_by_step")[0].@enabled = 'true';
+    }
+	
+	public static function modifiedTemplate(menu:XML):void
+    {
+    	var item:XML;
+    	
+    	// process file menu
+    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
+    	
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'true';
+
+    	// process template menu
+    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
+    	templateItem.@enabled = 'true';
+    	for each(item in templateItem.menuitem)
+    	{
+    		item.@enabled = 'true';
+    	}
+
+    	// process run menu
+    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
+    	runItem.@enabled = 'true';
+    	for each(item in runItem.menuitem)
+    	{
+    		item.@enabled = 'false';
+    	}
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "run")[0].@enabled = 'true';
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "debug")[0].@enabled = 'true';
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "step_by_step")[0].@enabled = 'true';    	
+    }
+    
+    public static function openedTemplate(menu:XML):void
+    {
+    	var item:XML;
+    	
+    	// process file menu
+    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
+    	
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'true';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'false';
+    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'true';
+
+    	// process template menu
+    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
+    	templateItem.@enabled = 'true';
+    	for each(item in templateItem.menuitem)
+    	{
+    		item.@enabled = 'true';
+    	}
+
+    	// process run menu
+    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
+    	runItem.@enabled = 'true';
+    	for each(item in runItem.menuitem)
+    	{
+    		item.@enabled = 'false';
+    	}
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "run")[0].@enabled = 'true';
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "debug")[0].@enabled = 'true';
+    	runItem.menuitem.(hasOwnProperty('@id') && @id == "step_by_step")[0].@enabled = 'true';    	
+    }
+
 	public static function updateLangMenu(menu:XML):void
     {
         // get language folder
@@ -21,7 +145,7 @@ public class MenuGeneral extends EventDispatcher
         {
 			var fileList:Array = langsDir.getDirectoryListing();					
 			var langsItemXML:XML = menu..menuitem.(hasOwnProperty('@id') && @id == "language")[0];
-			var langList:XML = new XML(<list></list>);
+			var langList:XML = new XML(<list/>);
 			
 			// get language files
 			for (var i:int = 0; i < fileList.length; i++) 
@@ -35,7 +159,7 @@ public class MenuGeneral extends EventDispatcher
 				if(langXML.name()!="language" || !langXML.@id.toString() || !langXML.@label.toString())
 					continue;
 									
-				var item:XML = new XML(<menuitem></menuitem>);
+				var item:XML = new XML(<menuitem/>);
 				item.@label = langXML.@label;
 				item.@id = langXML.@id;
 				item.@data = fileList[i].name;
@@ -75,7 +199,7 @@ public class MenuGeneral extends EventDispatcher
 			
         	for (var i:int = 0; i < ContextManager.instance.files.length; i++) 
 			{
-				var fileItemXML:XML = new XML(<menuitem></menuitem>); 
+				var fileItemXML:XML = new XML(<menuitem/>); 
 				fileItemXML.@label = (i+1)+" "+(ContextManager.instance.files[i] as File).name + 
 									 " ["+(ContextManager.instance.files[i] as File).parent.nativePath+"]";
 				fileItemXML.@id = "lastfile"+i;
