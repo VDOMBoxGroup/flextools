@@ -94,7 +94,29 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 	
 	private function resultHandler(event:ResultEvent):void
 	{
-		var d:* = "";
+		var resultXML:XML = new XML(<Result />);
+		resultXML.appendChild(XMLList(event.result));
+		
+		var errorResult:String = resultXML.Error;
+		
+		// check Error
+		if(errorResult != "")
+		{
+			se = new SoapEvent(SoapEvent.LOGIN_ERROR);
+			se.result = resultXML;
+			dispatchEvent(se);
+		}
+		else
+		{
+			code.init(resultXML.Session.HashString);
+			code.inputSKey(resultXML.Session.SessionKey);  
+			code.sessionId = resultXML.Session.SessionId;
+			
+			se = new SoapEvent(SoapEvent.LOGIN_OK);
+			se.result = resultXML;
+			dispatchEvent(se);
+//			trace('Logined');
+		}
 	}
 	
 	// Реализация диспатчера
