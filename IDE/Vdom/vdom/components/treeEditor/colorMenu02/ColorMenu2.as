@@ -116,6 +116,7 @@ package vdom.components.treeEditor.colorMenu02
 				masLevels[slctLevel].unSelect();
 				slctLevel =  Number(trEvt.ID);
 			}
+			
 		//	trace('Color menu: ' +  slctLevel);
 		}
 	

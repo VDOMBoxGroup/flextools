@@ -116,10 +116,10 @@ private function submitBeginHandler(event:LoginFormEvent):void
 	tempStorage = event.formData;
 	
 	var wsdl:String = "http://" + hostname + "/vdom.wsdl";
-//	soap.addEventListener("loadWsdlComplete", soap_initCompleteHandler);
-	newSOAP.addEventListener("loadWsdlComplete", soap_initCompleteHandler);
-//	soap.init(wsdl);
-	newSOAP.init(wsdl);
+	soap.addEventListener("loadWsdlComplete", soap_initCompleteHandler);
+//	newSOAP.addEventListener("loadWsdlComplete", soap_initCompleteHandler);
+	soap.init(wsdl);
+//	newSOAP.init(wsdl);
 }
 
 private function authenticationManager_loginComleteHandler(event:Event):void
