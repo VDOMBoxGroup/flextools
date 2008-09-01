@@ -294,6 +294,7 @@ private function addTreeEditorListeners():void
 	addEventListener(MouseEvent.CLICK, mouseClickHandler);
 	colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 	colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
+	colmen2.addEventListener(TreeEditorEvent.SELECTED_LEVEL, chengeSelectedLevelHandler);
 	
 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
 	

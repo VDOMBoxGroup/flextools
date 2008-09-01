@@ -22,7 +22,11 @@ package vdom.components.treeEditor
 		{
 			super();
 			
+			clipContent = false;
+			
 			lbIndex = new Label();
+			lbIndex.x = -8;
+			lbIndex.y = -8;
 			lbIndex.width = 19;
 			lbIndex.setStyle('textAlign', 'center');
 			lbIndex.buttonMode = true;
@@ -121,7 +125,7 @@ package vdom.components.treeEditor
 			graphics.lineStyle(1, color, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 			
 			graphics.beginFill(0xffffff);
-			graphics.drawCircle(9, 8, 10);
+			graphics.drawCircle(0, 0, 10);
 			graphics.endFill();
 			
 //			this.buttonMode = true;

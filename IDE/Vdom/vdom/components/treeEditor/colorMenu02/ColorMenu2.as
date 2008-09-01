@@ -112,11 +112,12 @@ package vdom.components.treeEditor.colorMenu02
 		
 		private function selectedLevelHandler(trEvt:TreeEditorEvent):void
 		{
-			if(slctLevel.toString() != trEvt.ID){
+			if(slctLevel.toString() != trEvt.ID)
+			{
 				masLevels[slctLevel].unSelect();
 				slctLevel =  Number(trEvt.ID);
 			}
-			
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SELECTED_LEVEL, trEvt.ID));
 		//	trace('Color menu: ' +  slctLevel);
 		}
 	

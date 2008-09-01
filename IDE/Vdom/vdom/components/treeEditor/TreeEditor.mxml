@@ -379,7 +379,6 @@
 	}
 	
 	
-	
 	private function hideLines(treEvt:TreeEditorEvent):void
 	{
 		var level:String = treEvt.ID;
@@ -401,6 +400,34 @@
 				massLines[level][frsTrElem][sknTrElem].visible = true;
 				masIndex[level][frsTrElem][sknTrElem].visible  = true && chShowSignature.selected;;
 			}
+	}
+
+	private function chengeSelectedLevelHandler(trEvt:TreeEditorEvent):void
+	{
+		/// if showing
+		var level:String = trEvt.ID;
+		for(var fromObj:String in massLines[level])
+			for(var toObj:String in massLines[level][fromObj])
+			{
+				main.removeChild(massLines[level][fromObj][toObj]);
+				main.addChild(massLines[level][fromObj][toObj]);
+			}
+			
+//				
+		for(fromObj in massLines[level])
+			for( toObj in massLines[level][fromObj])
+			{
+				main.addChild(masIndex[level][fromObj][toObj]);		
+				main.addChild(masIndex[level][fromObj][toObj]);
+			}
+//			
+				
+		for (var ID:String in massTreeElements)
+		{
+				main.removeChild(massTreeElements[ID]);
+				main.addChild(massTreeElements[ID]);
+		}
+		
 	}
 
 	private function mouseClickHandler(msEvt:MouseEvent):void
