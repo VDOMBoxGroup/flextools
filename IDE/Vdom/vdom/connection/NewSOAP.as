@@ -7,12 +7,16 @@ import flash.events.IEventDispatcher;
 import flash.utils.Proxy;
 import flash.utils.flash_proxy;
 
+import mx.resources.IResourceManager;
+import mx.resources.ResourceManager;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 import mx.rpc.soap.LoadEvent;
 import mx.rpc.soap.WebService;
 
+import vdom.connection.protect.Code;
 import vdom.connection.protect.MD5;
+import vdom.connection.soap.SoapEvent;
 
 public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 {
@@ -20,7 +24,12 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 	
 	private var ws:WebService;
 	private var dispatcher:EventDispatcher = new EventDispatcher();
-
+	
+	private var code:Code =  Code.getInstance();
+	
+	private var resourceManager:IResourceManager = 
+	 									ResourceManager.getInstance();
+	
 	public function NewSOAP()
 	{
 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
@@ -48,25 +57,37 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 	{
 		var password:String = MD5.encrypt(password);
 		
-		ws.open_session.addEventListener(ResultEvent.RESULT, resultHandler);
+		ws.open_session.addEventListener(ResultEvent.RESULT, loginHandler);	
 		ws.open_session(login, password);
 	}
 	
 	override flash_proxy function getProperty(name:*):*
 	{
-		return "zzz";
+		var functionName:String = getLocalName(name);
+		var operation:* = ws[functionName];
+		
+		if(functionName && operation)
+			return operation;
+		else
+			return null;
+//		 
 	}
 	
 	override flash_proxy function setProperty(name:*, value:*):void
 	{
-		var z:* = "";
+		var message:String = resourceManager.getString(
+            "rpc", "operationsNotAllowedInService", [ getLocalName(name) ]);
+        throw new Error(message);
 	}
 	
 	override flash_proxy function callProperty(name:*, ... args:Array):*
 	{
-		var name:* = getLocalName(name);
+		var functionName:String = getLocalName(name);
+		var operation:* = ws[functionName];
 		
-		return name;
+		args.unshift(code.sessionId, code.skey());
+		operation.addEventListener(ResultEvent.RESULT, resultHandler)
+		return operation.send.apply(null, args);
 	}
 	
 	private function getLocalName(name:Object):String
@@ -92,31 +113,29 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 		dispatchEvent(fe);
 	}
 	
+	private function loginHandler(event:ResultEvent):void
+	{
+		var resultXML:XML = new XML(<Result />);
+		resultXML.appendChild(XMLList(event.result));
+		
+		code.init(resultXML.Session.HashString);
+		code.inputSKey(resultXML.Session.SessionKey);  
+		code.sessionId = resultXML.Session.SessionId;
+		
+		var se:SoapEvent = new SoapEvent(SoapEvent.LOGIN_OK);
+		se.result = resultXML;
+		dispatchEvent(se);
+	}
+	
 	private function resultHandler(event:ResultEvent):void
 	{
 		var resultXML:XML = new XML(<Result />);
 		resultXML.appendChild(XMLList(event.result));
 		
-		var errorResult:String = resultXML.Error;
-		
-		// check Error
-		if(errorResult != "")
-		{
-			se = new SoapEvent(SoapEvent.LOGIN_ERROR);
-			se.result = resultXML;
-			dispatchEvent(se);
-		}
-		else
-		{
-			code.init(resultXML.Session.HashString);
-			code.inputSKey(resultXML.Session.SessionKey);  
-			code.sessionId = resultXML.Session.SessionId;
-			
-			se = new SoapEvent(SoapEvent.LOGIN_OK);
-			se.result = resultXML;
-			dispatchEvent(se);
-//			trace('Logined');
-		}
+		var se:SoapEvent = new SoapEvent(SoapEvent.RESULT);
+		se.result = resultXML;
+		 
+		event.target.dispatchEvent(se);
 	}
 	
 	// Реализация диспатчера

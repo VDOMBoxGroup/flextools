@@ -5,7 +5,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
-import vdom.connection.soap.Soap;
+import vdom.connection.NewSOAP;
 import vdom.connection.soap.SoapEvent;
 import vdom.events.AuthenticationEvent;
 
@@ -14,7 +14,7 @@ public class AuthenticationManager implements IEventDispatcher
 	private static var instance:AuthenticationManager;
 	
 	private var dispatcher:EventDispatcher = new EventDispatcher();
-	private var soap:Soap = Soap.getInstance();
+	private var newSoap:NewSOAP = NewSOAP.getInstance();
 	
 	private var _username:String;
 //	private var _tmpUsername:String;
@@ -74,12 +74,12 @@ public class AuthenticationManager implements IEventDispatcher
 	
 	public function login(hostname:String, username:String, password:String):void {
 		
-		soap.addEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
-		soap.addEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
+		newSoap.addEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
+		newSoap.addEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
 		
 		_hostname = hostname;
 		_username = username;
-		soap.login(username, password);
+		newSoap.login(username, password);
 	}
 	
 	public function logout():void {
@@ -91,13 +91,14 @@ public class AuthenticationManager implements IEventDispatcher
 		
 		_username = event.result.Username;
 		
-		soap.removeEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
+		newSoap.removeEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
+		
 		dispatchEvent(new Event(AuthenticationEvent.LOGIN_COMPLETE));
 	}
 	
 	private function soap_loginErrorHandler(event:SoapEvent):void {
 		
-		soap.removeEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
+		newSoap.removeEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
 		dispatchEvent(new Event(AuthenticationEvent.LOGIN_ERROR));
 	}
 	

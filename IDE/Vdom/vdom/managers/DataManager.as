@@ -6,6 +6,7 @@ import flash.events.IEventDispatcher;
 
 import mx.controls.Alert;
 
+import vdom.connection.NewSOAP;
 import vdom.connection.Proxy;
 import vdom.connection.soap.Soap;
 import vdom.connection.soap.SoapEvent;
@@ -17,6 +18,7 @@ public class DataManager implements IEventDispatcher {
 	private static var instance:DataManager;
 	
 	private var soap:Soap = Soap.getInstance();
+	private var newSoap:NewSOAP = NewSOAP.getInstance();
 	private var proxy:Proxy = Proxy.getInstance();
 	private var languageManager:LanguageManager = LanguageManager.getInstance();
 	
@@ -206,22 +208,23 @@ public class DataManager implements IEventDispatcher {
 	{	
 		registerEvent(true);
 		
-		soap.addEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
-		soap.listApplications();
+		newSoap.list_applications.addEventListener(SoapEvent.RESULT, listApplicationHandler);
+		newSoap.list_applications();
 	}
 	
 	private function listApplicationHandler(event:SoapEvent):void
 	{
-		soap.removeEventListener(SoapEvent.LIST_APLICATION_OK, listApplicationHandler);
+		newSoap.list_applications.removeEventListener(SoapEvent.RESULT, listApplicationHandler);
 		
 		var tempApplicationList:XMLList = event.result.Applications.*;
 		
-		for each(var applicationNode:XML in tempApplicationList) {
-			
+		for each(var applicationNode:XML in tempApplicationList)
+		{
 			applicationNode.@Name = applicationNode.Information.Name[0];
 			applicationNode.@IconID = applicationNode.Information.Icon[0];
 			applicationNode.@Status = "";
 		}
+		
 		_listApplication = tempApplicationList;
 		
 		dispatchEvent(new Event("listApplicationChanged"));

@@ -6,6 +6,7 @@ package vdom.connection.soap
 	
 	public class SoapEvent extends Event
 	{
+		public static var RESULT						:String = "Result";
 		public static var LOGIN_OK						:String = "Login OK";
 		public static var OPEN_SESSION_OK				:String = "Open session OK"; 			//1
 		public static var CLOSE_SESSION_OK				:String = "Close session OK"; 			//2
