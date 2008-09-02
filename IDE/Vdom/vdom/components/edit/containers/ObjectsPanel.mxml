@@ -51,6 +51,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		
 		private function creationCompleteHendler():void
 		{
+//			trace('creationCompleteHendler');
 			dataManager = DataManager.getInstance();
 				tree.showRoot = true; 
 				
@@ -62,6 +63,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		
 		public function set dataProvider(xmlData:XMLList):void {
 
+//trace('dataProvider');
 			if(xmlData) 
 			{
 				// создаем обьекты верхнего уровня
@@ -99,6 +101,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 				{
 					var item:XML = xmlTreeData.source.(@ID == dataManager.currentPageId)[0];
 					tree.expandItem(item, true);
+					tree.selectedItem = item;
 //					trace('page: \n'+item.toXMLString());
 				}	
 				
@@ -117,6 +120,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		private var masResourceID:Array = new Array();
 		private function getSourceID(ID:String):String
 		{
+//			trace('getSourceID');
 			if (masResourceID[ID]) 
 				return masResourceID[ID];
 				
@@ -130,6 +134,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 	
 		private function treeUpdateComletLister(evt:Event):void
 		{	
+//			trace('treeUpdateComletLister');
 			if(!xmlTreeData)
 				return;
 				
@@ -146,6 +151,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		
 		private function treeChangeLister(evt:Event):void
 		{
+//			trace('treeChangeLister');
 			  var selectedNode:XML = Tree(evt.target).selectedItem as XML;
 			  if(!selectedNode)
 			  	return;
@@ -160,6 +166,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 	
 		private function findOjects(xmlIn:XMLList):XMLList
 		{
+//			trace('findOjects');
 			var xmllReturn:XMLList  = new XMLList();
 			for each(var xmlLabel:XML in xmlIn.children())
 			{
@@ -180,11 +187,14 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		
 		public function set currentObject(xml:XML):void
 		{
+//			trace('currentObject');
 			if(!xml) 
 				return;
 			
 			
 			var currentElement:XML = xmlTreeData.source..Object.(@ID == xml.@ID)[0];
+			if(!currentElement)
+				currentElement = xmlTreeData.source.(@ID == dataManager.currentPageId)[0];
 			
 //			if(!currentElement)
 //				return;
@@ -202,6 +212,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		
 		private function openTree(item:Object):void
 		{
+//			trace('openTree');
 			var parentItem:Object = XML(item).parent();
 			if (parentItem)
 			{
