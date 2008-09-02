@@ -795,9 +795,9 @@ public class DataManager implements IEventDispatcher {
 		);
 		
 		if(applicationId)
-			soap.create_object(applicationId, parentId, typeId, attributes, objectName);
+			soap.create_object(applicationId, parentId, typeId, objectName, attributes);
 		else if (_currentApplicationId)
-			soap.create_object(_currentApplicationId, parentId, typeId, attributes, objectName);
+			soap.create_object(_currentApplicationId, parentId, typeId, objectName, attributes);
 	}
 	
 	private function createObjectCompleteHandler(event:SOAPEvent):void
