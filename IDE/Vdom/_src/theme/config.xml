@@ -3,192 +3,192 @@
 		
 	<include-file>
 		<name>actionButtons.css</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\css\actionButtons.css</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\css\actionButtons.css</path>
 	</include-file>
 				
 	<include-file>
 		<name>applicationManagment.css</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\css\applicationManagment.css</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\css\applicationManagment.css</path>
 	</include-file>
 				
 	<include-file>
 		<name>default.css</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\css\default.css</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\css\default.css</path>
 	</include-file>
 				
 	<include-file>
 		<name>editor.css</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\css\editor.css</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\css\editor.css</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-association.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-association.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-association.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-build.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-build.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-build.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-computer.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-computer.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-computer.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-culture.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-culture.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-culture.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-education.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-education.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-education.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-electronic.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-electronic.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-electronic.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-fashion.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-fashion.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-fashion.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-health.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-health.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-health.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-hotels.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-hotels.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-hotels.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-housing.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-housing.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-housing.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-personalpages.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-personalpages.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-personalpages.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-restaurant.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-restaurant.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-restaurant.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-sport.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-sport.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-sport.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-storeshop.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-storeshop.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-storeshop.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>app-transportation.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\applicationIcons\app-transportation.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\applicationIcons\app-transportation.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>analyse.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\analyse.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\analyse.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>analyse_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\analyse_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\analyse_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>edition.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\edition.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\edition.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>edition_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\edition_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\edition_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>events.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\events.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\events.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>events_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\events_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\events_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>new.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\new.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\new.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>new_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\new_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\new_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>news.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\news.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\news.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>news_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\news_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\news_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>preview.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\preview.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\preview.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>preview_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\preview_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\preview_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>script.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\script.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\script.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>script_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\script_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\script_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>statistics.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\statistics.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\statistics.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>statistics_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\statistics_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\statistics_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>tree.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\tree.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\tree.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>tree_s.png</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\png\editorButtons\tree_s.png</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\tree_s.png</path>
 	</include-file>
 				
 	<include-file>
 		<name>vdomTheme.swf</name>
-		<path>D:\_Workspaces\VdomIDE\_src\theme\swf\vdomTheme.swf</path>
+		<path>D:\!Workspace\VdomIDE\_src\theme\swf\vdomTheme.swf</path>
 	</include-file>
 				
 </flex-config>

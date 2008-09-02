@@ -226,3 +226,7 @@ ControlBar {
 	paddingLeft: 0;
 	paddingRight: 0;
 }
+
+ComboBox {
+	cornerRadius: 0;
+}
