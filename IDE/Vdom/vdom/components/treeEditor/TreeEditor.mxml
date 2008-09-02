@@ -405,21 +405,28 @@
 	private function chengeSelectedLevelHandler(trEvt:TreeEditorEvent):void
 	{
 		/// if showing
+	
 		var level:String = trEvt.ID;
+		if(!massLines[level])
+			return;
+		
 		for(var fromObj:String in massLines[level])
 			for(var toObj:String in massLines[level][fromObj])
 			{
 				main.removeChild(massLines[level][fromObj][toObj]);
 				main.addChild(massLines[level][fromObj][toObj]);
+				
+				main.removeChild(masIndex[level][fromObj][toObj]);		
+				main.addChild(masIndex[level][fromObj][toObj]);
 			}
 			
-//				
+//			
+	/*
 		for(fromObj in massLines[level])
 			for( toObj in massLines[level][fromObj])
 			{
-				main.addChild(masIndex[level][fromObj][toObj]);		
-				main.addChild(masIndex[level][fromObj][toObj]);
-			}
+			} 
+			*/
 //			
 				
 		for (var ID:String in massTreeElements)
