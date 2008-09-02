@@ -13,8 +13,8 @@ package vdom.components.treeEditor
 	import mx.controls.TextInput;
 	import mx.managers.PopUpManager;
 	
-	import vdom.connection.soap.Soap;
-	import vdom.connection.soap.SoapEvent;
+//	import vdom.connection.soap.Soap;
+//	import vdom.connection.soap.SoapEvent;
 	import vdom.controls.resourceBrowser.ResourceBrowser;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ResourceBrowserEvent;
@@ -47,7 +47,7 @@ package vdom.components.treeEditor
 		private var cnvDownLayer:Canvas = new Canvas();		
 		private var txtInp:TextInput;
 		private var _type:Label;
-		private var soap:Soap = Soap.getInstance();
+//		private var soap:Soap = Soap.getInstance();
 		private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
 		
@@ -369,6 +369,7 @@ package vdom.components.treeEditor
 	 * 
 	 * 
 	 * */
+	 /*
 	 private function setResource(restype:String, resname:String, resdata:String):void
 	 {
 //	 	trace('restype: '+ restype);
@@ -398,6 +399,7 @@ package vdom.components.treeEditor
 	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
 	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
 	 }
+	 */
 	 
 	 private function startDragHandler(msEvt:MouseEvent):void
 	 {
