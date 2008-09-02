@@ -1,13 +1,10 @@
 import mx.controls.Alert;
 
-import vdom.connection.soap.Soap;
-import vdom.connection.soap.SoapEvent;
 import vdom.events.DataManagerEvent;
+import vdom.events.SOAPEvent;
 import vdom.managers.DataManager;
 
 private var _objectId:String
-
-private var soap:Soap = Soap.getInstance();
 
 public function set objectId(value:String):void
 {
@@ -44,13 +41,13 @@ private function registerEvent(flag:Boolean):void
 	{	
 		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);	
 		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
-		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
+//		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
 	}
 	else 
 	{	
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
-		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
+//		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
 	}
 }
 
@@ -97,7 +94,7 @@ private function saveXMLScript():void {
 
 private function saveXMLScriptHandler(event:Event):void {
 	
-	if(event is SoapEvent && SoapEvent(event).result.Error[0])
+	if(event is SOAPEvent && SOAPEvent(event).result.Error[0])
 		Alert.show("Data not saved.", "Description Error");
 	
 	enableElement(true);

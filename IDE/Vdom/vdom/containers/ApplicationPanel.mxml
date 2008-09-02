@@ -60,7 +60,10 @@
 		{
 			if(selectedRenderer)
 				selectedRenderer.selected = false;
-						
+			
+			if(!oldXMLList)
+				return;
+				
 			var currentElement:XML = oldXMLList.(@ID == value)[0];
 			var index:int = _dataProvider.getItemIndex(currentElement);
 			

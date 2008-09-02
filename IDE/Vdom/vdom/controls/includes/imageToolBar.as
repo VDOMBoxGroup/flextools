@@ -1,10 +1,7 @@
-
-import vdom.connection.soap.Soap;
 import vdom.containers.IItem;
 import vdom.events.DataManagerEvent;
 import vdom.managers.DataManager;
 
-private var soap:Soap = Soap.getInstance();
 private var dataManager:DataManager = DataManager.getInstance();
 
 private var item:IItem;
@@ -21,8 +18,6 @@ public function init(item:IItem):void {
 	var container:Object = item.editableAttributes[0].sourceObject;
 	
 	attributeName = "value";
-	
-//	item.editableAttributes[0].destName = '';
 	
 	objectId = item.objectId;
 	

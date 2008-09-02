@@ -5,16 +5,16 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
-import vdom.connection.NewSOAP;
-import vdom.connection.soap.SoapEvent;
+import vdom.connection.SOAP;
 import vdom.events.AuthenticationEvent;
+import vdom.events.SOAPEvent;
 
 public class AuthenticationManager implements IEventDispatcher
 {	
 	private static var instance:AuthenticationManager;
 	
 	private var dispatcher:EventDispatcher = new EventDispatcher();
-	private var newSoap:NewSOAP = NewSOAP.getInstance();
+	private var soap:SOAP = SOAP.getInstance();
 	
 	private var _username:String;
 //	private var _tmpUsername:String;
@@ -72,33 +72,33 @@ public class AuthenticationManager implements IEventDispatcher
 		return _hostname;
 	}
 	
-	public function login(hostname:String, username:String, password:String):void {
-		
-		newSoap.addEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
-		newSoap.addEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
+	public function login(hostname:String, username:String, password:String):void
+	{
+		soap.addEventListener(SOAPEvent.LOGIN_OK, soap_loginOKHandler);
+		soap.addEventListener(SOAPEvent.LOGIN_ERROR, soap_loginErrorHandler);
 		
 		_hostname = hostname;
 		_username = username;
-		newSoap.login(username, password);
+		soap.login(username, password);
 	}
 	
-	public function logout():void {
-		
+	public function logout():void
+	{
 		_username = _password = null;
 	}
 	
-	private function soap_loginOKHandler(event:SoapEvent):void {
-		
+	private function soap_loginOKHandler(event:SOAPEvent):void
+	{
 		_username = event.result.Username;
 		
-		newSoap.removeEventListener(SoapEvent.LOGIN_OK, soap_loginOKHandler);
+		soap.removeEventListener(SOAPEvent.LOGIN_OK, soap_loginOKHandler);
 		
 		dispatchEvent(new Event(AuthenticationEvent.LOGIN_COMPLETE));
 	}
 	
-	private function soap_loginErrorHandler(event:SoapEvent):void {
-		
-		newSoap.removeEventListener(SoapEvent.LOGIN_ERROR, soap_loginErrorHandler);
+	private function soap_loginErrorHandler(event:SOAPEvent):void
+	{
+		soap.removeEventListener(SOAPEvent.LOGIN_ERROR, soap_loginErrorHandler);
 		dispatchEvent(new Event(AuthenticationEvent.LOGIN_ERROR));
 	}
 	
@@ -112,35 +112,40 @@ public class AuthenticationManager implements IEventDispatcher
 		listener:Function, 
 		useCapture:Boolean = false, 
 		priority:int = 0, 
-		useWeakReference:Boolean = false):void {
+		useWeakReference:Boolean = false):void
+	{
 			dispatcher.addEventListener(type, listener, useCapture, priority);
     }
     
     /**
      *  @private
      */
-    public function dispatchEvent(evt:Event):Boolean{
+    public function dispatchEvent(evt:Event):Boolean
+    {
         return dispatcher.dispatchEvent(evt);
     }
     
 	/**
      *  @private
      */
-    public function hasEventListener(type:String):Boolean{
+    public function hasEventListener(type:String):Boolean
+    {
         return dispatcher.hasEventListener(type);
     }
     
 	/**
      *  @private
      */
-    public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void{
+    public function removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void
+    {
         dispatcher.removeEventListener(type, listener, useCapture);
     }
     
     /**
      *  @private
      */            
-    public function willTrigger(type:String):Boolean {
+    public function willTrigger(type:String):Boolean
+    {
         return dispatcher.willTrigger(type);
     }
 }

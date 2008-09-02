@@ -31,6 +31,9 @@
 				
 				super.data = value;
 				
+				if(!value)
+					return;
+				
 				labelValue = value.@Name;
 				
 				if(value.@IconID == '')

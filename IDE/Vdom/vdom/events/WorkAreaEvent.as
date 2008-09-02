@@ -12,11 +12,10 @@ public class WorkAreaEvent extends Event {
 	public var objectId:String;
 	public var props:XML;
 	
-	public function WorkAreaEvent(type:String, bubbles:Boolean = false, cancelable:Boolean = false,
-		typeId:String = null,
-		objectId:String = null,
-		props:XML = null):void {
-		
+	public function WorkAreaEvent(type:String, bubbles:Boolean = false,
+								cancelable:Boolean = false,	typeId:String = null, 
+								objectId:String = null, props:XML = null):void
+	{
 		super(type, bubbles, cancelable);
 		
 		this.typeId = typeId;
@@ -24,9 +23,9 @@ public class WorkAreaEvent extends Event {
 		this.props = props;
 	}
 	
-	override public function clone():Event {
-		
+	override public function clone():Event
+	{
 		return new WorkAreaEvent(type, bubbles, cancelable, typeId, objectId, props);
-	}		
+	}
 }
 }

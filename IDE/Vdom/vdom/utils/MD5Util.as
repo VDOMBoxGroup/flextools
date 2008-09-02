@@ -1,5 +1,5 @@
-package vdom.connection.protect {	
-	public class MD5 {
+package vdom.utils {	
+	public class MD5Util {
 		/*
 		 * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
 		 * Digest Algorithm, as defined in RFC 1321.

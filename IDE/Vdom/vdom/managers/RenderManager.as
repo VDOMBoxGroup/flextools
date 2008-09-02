@@ -15,8 +15,7 @@ import mx.core.UIComponent;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-import vdom.connection.soap.Soap;
-import vdom.connection.soap.SoapEvent;
+import vdom.connection.SOAP;
 import vdom.containers.IItem;
 import vdom.containers.Item;
 import vdom.controls.wysiwyg.EditableHTML;
@@ -27,6 +26,7 @@ import vdom.controls.wysiwyg.table.TableCell;
 import vdom.controls.wysiwyg.table.TableRow;
 import vdom.events.DataManagerEvent;
 import vdom.events.RenderManagerEvent;
+import vdom.events.SOAPEvent;
 import vdom.managers.renderClasses.ItemDescription;
 
 public class RenderManager implements IEventDispatcher {
@@ -56,7 +56,7 @@ public class RenderManager implements IEventDispatcher {
 		["height", "height"]
 	];
 	
-	private var soap:Soap = Soap.getInstance();
+	private var soap:SOAP = SOAP.getInstance();
 	private var dataManager:DataManager = DataManager.getInstance();
 	private var dispatcher:EventDispatcher = new EventDispatcher();
 	private var fileManager:FileManager = FileManager.getInstance();
@@ -87,7 +87,7 @@ public class RenderManager implements IEventDispatcher {
 		if (instance)
 			throw new Error("Instance already exists.");
 		
-		soap.addEventListener(SoapEvent.RENDER_WYSIWYG_OK, renderWysiwygOkHandler);
+//		soap.render_wysiwyg.addEventListener(SOAPEvent.RESULT, renderWysiwygOkHandler);
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, updateAttributesBeginHandler);
 		
 		cursor = items.createCursor();
@@ -99,6 +99,8 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function init(destContainer:Container, applicationId:String = null):void
 	{
+		soap.render_wysiwyg.addEventListener(SOAPEvent.RESULT, renderWysiwygOkHandler);
+		
 		rootContainer = destContainer;
 		
 		if(!applicationId)
@@ -116,12 +118,12 @@ public class RenderManager implements IEventDispatcher {
 		
 //		createItemDescription(itemId, parentId);
 	
-		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
+		lastKey = soap.render_wysiwyg(applicationId, itemId, parentId, 0);
 	}
 	
 	public function updateItem(itemId:String, parentId:String):void
 	{
-		lastKey = soap.renderWysiwyg(applicationId, itemId, parentId);
+		lastKey = soap.render_wysiwyg(applicationId, itemId, parentId, 0);
 	}
 	
 	public function deleteItem(itemId:String):void
@@ -686,7 +688,7 @@ public class RenderManager implements IEventDispatcher {
 		}
 	}
 	
-	private function renderWysiwygOkHandler(event:SoapEvent):void
+	private function renderWysiwygOkHandler(event:SOAPEvent):void
 	{
 		var itemXMLDescription:XML = event.result.Result.*[0];
 		var itemId:String = itemXMLDescription.@id[0];

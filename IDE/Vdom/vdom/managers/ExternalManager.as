@@ -4,14 +4,16 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.utils.ByteArray;
 
-import vdom.connection.soap.Soap;
-import vdom.connection.soap.SoapEvent;
+import mx.rpc.events.FaultEvent;
+
+import vdom.connection.SOAP;
 import vdom.events.ExternalManagerEvent;
-import vdom.events.FileManagerEvent;	
+import vdom.events.FileManagerEvent;
+import vdom.events.SOAPEvent;	
 
 public class ExternalManager implements IExternalManager  {
 	
-	private var soap:Soap = Soap.getInstance();
+	private var soap:SOAP = SOAP.getInstance();
 	private var fileManager:FileManager = FileManager.getInstance();
 	private var dispatcher:EventDispatcher = new EventDispatcher();
 	
@@ -20,8 +22,8 @@ public class ExternalManager implements IExternalManager  {
 	
 	public function ExternalManager(applicationId:String, objectId:String) {
 		
-		soap.addEventListener(SoapEvent.REMOTE_METHOD_CALL_OK, callHandler);
-		soap.addEventListener(SoapEvent.REMOTE_METHOD_CALL_ERROR, errorHandler);
+		soap.remote_method_call.addEventListener(SOAPEvent.RESULT, callHandler);
+		soap.remote_method_call.addEventListener(FaultEvent.FAULT, errorHandler);
 		_applicationId = applicationId;
 		_objectId = objectId;
 	}
@@ -72,49 +74,49 @@ public class ExternalManager implements IExternalManager  {
 		}
 	}
 	
-	private function callHandler(event:SoapEvent):void {
+	private function callHandler(event:SOAPEvent):void {
 		
 		var eme:ExternalManagerEvent = new ExternalManagerEvent(ExternalManagerEvent.CALL_COMPLETE);
 		eme.result = event.result;
 		dispatchEvent(eme);
 	}
 	
-	private function errorHandler(event:SoapEvent):void {
+	private function errorHandler(event:SOAPEvent):void {
 		
 		var eme:ExternalManagerEvent = new ExternalManagerEvent(ExternalManagerEvent.CALL_ERROR);
 		eme.result = event.result;
 		dispatchEvent(eme);
 	}
 	
-	private function listResourcesHandler(event:SoapEvent):void
+	private function listResourcesHandler(event:SOAPEvent):void
 	{
 		var eme:ExternalManagerEvent = new ExternalManagerEvent(ExternalManagerEvent.RESOURCE_LIST_LOADED)
 		eme.result = event.result;
 		dispatchEvent(eme);
 	}
 	
-	private function resourceLoadedHandler(event:SoapEvent):void
+	private function resourceLoadedHandler(event:SOAPEvent):void
 	{
 		var eme:ExternalManagerEvent = new ExternalManagerEvent(ExternalManagerEvent.RESOURCE_LOADING_OK);
 		eme.result = event.result;
 		dispatchEvent(eme);
 	}
 	
-	private function resourceLoadedErrorHandler(event:SoapEvent):void
+	private function resourceLoadedErrorHandler(event:SOAPEvent):void
 	{	
 		var eme:ExternalManagerEvent = new ExternalManagerEvent(ExternalManagerEvent.RESOURCE_LOADING_ERROR);
 		eme.result = event.result;
 		dispatchEvent(eme);
 	}
 	
-	private function setResourceOkHandler(event:SoapEvent):void
+	private function setResourceOkHandler(event:SOAPEvent):void
 	{
 		var eme:ExternalManagerEvent = new ExternalManagerEvent(ExternalManagerEvent.RESOURCE_SAVED)
 		eme.result = event.result;
 		dispatchEvent(eme);
 	}
 	
-	private function setResourceErrorHandler(event:SoapEvent):void
+	private function setResourceErrorHandler(event:SOAPEvent):void
 	{
 		var eme:ExternalManagerEvent = new ExternalManagerEvent(ExternalManagerEvent.RESOURCE_SAVED_ERROR)
 		eme.result = event.result;

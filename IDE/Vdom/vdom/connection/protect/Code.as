@@ -10,7 +10,7 @@ package vdom.connection.protect
 
 		public var sessionId: String;
 		
-		private var protector:VDOM_session_protector;
+		private var protector:VDOMSessionProtector;
 		private var key:String;
 		private var counter:int = -1;
 		
@@ -50,7 +50,7 @@ package vdom.connection.protect
 		public function init(hstr:String):void{
 		//	trace('hesh:' + hstr)
 			counter = -1;
-			protector = new VDOM_session_protector(hstr);
+			protector = new VDOMSessionProtector(hstr);
 		}
 		
 		

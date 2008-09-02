@@ -15,12 +15,12 @@ import mx.rpc.soap.LoadEvent;
 import mx.rpc.soap.WebService;
 
 import vdom.connection.protect.Code;
-import vdom.connection.protect.MD5;
-import vdom.connection.soap.SoapEvent;
+import vdom.events.SOAPEvent;
+import vdom.utils.MD5Util;
 
-public dynamic class NewSOAP extends Proxy implements IEventDispatcher
+public dynamic class SOAP extends Proxy implements IEventDispatcher
 {
-	private static var instance:NewSOAP;
+	private static var instance:SOAP;
 	
 	private var ws:WebService;
 	private var dispatcher:EventDispatcher = new EventDispatcher();
@@ -30,15 +30,15 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 	private var resourceManager:IResourceManager = 
 	 									ResourceManager.getInstance();
 	
-	public function NewSOAP()
+	public function SOAP()
 	{
 		if( instance ) throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 	}
 	
-	public static function getInstance():NewSOAP
+	public static function getInstance():SOAP
 	{
 		if (!instance)
-			instance = new NewSOAP();
+			instance = new SOAP();
 
 		return instance;
 	}
@@ -55,9 +55,11 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 	
 	public function login(login:String, password:String):*
 	{
-		var password:String = MD5.encrypt(password);
+		var password:String = MD5Util.encrypt(password);
 		
-		ws.open_session.addEventListener(ResultEvent.RESULT, loginHandler);	
+		ws.open_session.addEventListener(ResultEvent.RESULT, loginCompleteHandler);
+		ws.open_session.addEventListener(FaultEvent.FAULT, loginErrorHandler);
+			
 		ws.open_session(login, password);
 	}
 	
@@ -84,10 +86,13 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 	{
 		var functionName:String = getLocalName(name);
 		var operation:* = ws[functionName];
+		var key:String = code.skey();
 		
-		args.unshift(code.sessionId, code.skey());
-		operation.addEventListener(ResultEvent.RESULT, resultHandler)
-		return operation.send.apply(null, args);
+		args.unshift(code.sessionId,key);
+		operation.addEventListener(ResultEvent.RESULT, operationResultHandler)
+//		operation.addEventListener(FaultEvent.FAULT, operationFaultHandler);
+		operation.send.apply(null, args)
+		return key;
 	}
 	
 	private function getLocalName(name:Object):String
@@ -113,7 +118,7 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 		dispatchEvent(fe);
 	}
 	
-	private function loginHandler(event:ResultEvent):void
+	private function loginCompleteHandler(event:ResultEvent):void
 	{
 		var resultXML:XML = new XML(<Result />);
 		resultXML.appendChild(XMLList(event.result));
@@ -122,21 +127,32 @@ public dynamic class NewSOAP extends Proxy implements IEventDispatcher
 		code.inputSKey(resultXML.Session.SessionKey);  
 		code.sessionId = resultXML.Session.SessionId;
 		
-		var se:SoapEvent = new SoapEvent(SoapEvent.LOGIN_OK);
+		var se:SOAPEvent = new SOAPEvent(SOAPEvent.LOGIN_OK);
 		se.result = resultXML;
 		dispatchEvent(se);
 	}
 	
-	private function resultHandler(event:ResultEvent):void
+	private function loginErrorHandler(event:FaultEvent):void
+	{
+		var se:SOAPEvent = new SOAPEvent(SOAPEvent.LOGIN_ERROR);
+		dispatchEvent(se);
+	}
+	
+	private function operationResultHandler(event:ResultEvent):void
 	{
 		var resultXML:XML = new XML(<Result />);
 		resultXML.appendChild(XMLList(event.result));
 		
-		var se:SoapEvent = new SoapEvent(SoapEvent.RESULT);
+		var se:SOAPEvent = new SOAPEvent(SOAPEvent.RESULT);
 		se.result = resultXML;
 		 
 		event.target.dispatchEvent(se);
 	}
+	
+	/* private function operationFaultHandler(event:FaultEvent):void
+	{
+		var d:* = "";
+	} */
 	
 	// Реализация диспатчера
 	
