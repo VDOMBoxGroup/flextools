@@ -26,6 +26,8 @@ import vdom.managers.ResizeManager;
 import vdom.managers.VdomDragManager;
 import vdom.utils.DisplayUtil;
 
+use namespace mx.core.mx_internal;
+
 public class WorkArea extends VBox {
 	
 	private var resizeManager:ResizeManager = ResizeManager.getInstance();
@@ -42,8 +44,7 @@ public class WorkArea extends VBox {
 	
 	private var _contentToolbar:IToolBar;
 	private var showed:Boolean;
-	
-	
+		
 	public function WorkArea() {
 		
 		super();
@@ -178,6 +179,7 @@ public class WorkArea extends VBox {
 		if(!_contentHolder) {
 			
 			_contentHolder = new Canvas();
+			_contentHolder.forceClipping = true;
 		}
 		
 		_contentHolder.clipContent = true;
