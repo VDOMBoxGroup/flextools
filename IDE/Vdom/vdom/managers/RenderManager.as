@@ -686,6 +686,12 @@ public class RenderManager implements IEventDispatcher {
 		{
 			item[atrName] = _properties[atrName];
 		}
+		
+		if(!_properties["width"])
+			item.explicitWidth = NaN;
+		
+		if(!_properties["height"])
+			item.explicitHeight = NaN;
 	}
 	
 	private function renderWysiwygOkHandler(event:SOAPEvent):void
