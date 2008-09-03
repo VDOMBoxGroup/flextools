@@ -70,7 +70,7 @@ public class WorkArea extends VBox {
 		
 		if(!value)
 		{		
-			var warning:Label = new Label()
+			var warning:Label = new Label();
 			warning.text = 'no page selected';
 			_contentHolder.addChild(warning);
 		}
