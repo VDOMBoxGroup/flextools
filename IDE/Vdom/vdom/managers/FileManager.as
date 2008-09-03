@@ -170,15 +170,15 @@ public class FileManager implements IEventDispatcher
 		dispatchEvent(fme);
 	}
 	
-	private function resourceLoadedErrorHandler(event:SOAPEvent):void
+	private function resourceLoadedErrorHandler(event:FaultEvent):void
 	{
-		var resourceId:String = event.result.ResourceID[0];
+//		var resourceId:String = event.result.ResourceID[0];
 		
-		if(requestQue[resourceId])
-			delete requestQue[resourceId];
+//		if(requestQue[resourceId])
+//			delete requestQue[resourceId];
 		
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_LOADING_ERROR);
-		fme.result = event.result;
+//		fme.result = event.result;
 		dispatchEvent(fme);
 	}
 	
@@ -203,10 +203,10 @@ public class FileManager implements IEventDispatcher
 		dispatchEvent(fme);
 	}
 	
-	private function setResourceErrorHandler(event:SOAPEvent):void
+	private function setResourceErrorHandler(event:FaultEvent):void
 	{
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED_ERROR)
-		fme.result = event.result;
+//		fme.result = event.result;
 		dispatchEvent(fme);
 	}
 	

@@ -28,7 +28,8 @@ import vdom.utils.DisplayUtil;
 
 use namespace mx.core.mx_internal;
 
-public class WorkArea extends VBox {
+public class WorkArea extends VBox
+{
 	
 	private var resizeManager:ResizeManager = ResizeManager.getInstance();
 	private var fileManager:FileManager;
@@ -45,8 +46,8 @@ public class WorkArea extends VBox {
 	private var _contentToolbar:IToolBar;
 	private var showed:Boolean;
 		
-	public function WorkArea() {
-		
+	public function WorkArea()
+	{
 		super();
 		
 		addEventListener(FlexEvent.SHOW, showHandler);
@@ -61,7 +62,8 @@ public class WorkArea extends VBox {
 		if(!showed)
 			return;
 		
-		if(value != _pageId) {
+		if(value != _pageId)
+		{
 			_pageId = value;
 			renderManager.init(_contentHolder);
 			renderManager.createItem(_pageId);
@@ -74,11 +76,10 @@ public class WorkArea extends VBox {
 			warning.text = 'no page selected';
 			_contentHolder.addChild(warning);
 		}
-		
 	}
 	
-	public function set objectId(value:String):void {
-		
+	public function set objectId(value:String):void
+	{
 		if(!value)
 			return;
 		
@@ -98,8 +99,8 @@ public class WorkArea extends VBox {
 	 * 
 	 */
 	
-	public function deleteObjects():void {
-		
+	public function deleteObjects():void
+	{
 		if(!showed)
 			return;
 		
@@ -191,12 +192,12 @@ public class WorkArea extends VBox {
 		addChild(_contentHolder);
 	}
 	
-	private function applyChanges(objectId:String, attributes:Object):void {
-		
+	private function applyChanges(objectId:String, attributes:Object):void
+	{
 		var newAttributes:XML = <Attributes />
 		
-		for (var attributeName:String in attributes) {
-			
+		for (var attributeName:String in attributes)
+		{
 			newAttributes.appendChild(<Attribute Name = {attributeName}>{attributes[attributeName]}</Attribute>);
 		}
 		
@@ -210,12 +211,13 @@ public class WorkArea extends VBox {
 	{	
 		var interfaceType:uint;
 		
-		if(item && item.editableAttributes.length && item.objectId) {
-			
+		if(item && item.editableAttributes.length && item.objectId)
+		{
 			var type:XML = dataManager.getTypeByObjectId(IItem(_selectedObject).objectId);
 			interfaceType = type.Information.InterfaceType;
 		}
-		else {
+		else
+		{
 			
 			interfaceType = 0;
 		}
@@ -259,8 +261,8 @@ public class WorkArea extends VBox {
 		}
 		}
 		
-		if(!flag && _contentToolbar && DisplayObject(_contentToolbar).parent) {
-			
+		if(!flag && _contentToolbar && DisplayObject(_contentToolbar).parent)
+		{
 			removeChild(DisplayObject(_contentToolbar));
 			_contentToolbar = null;
 			return;
@@ -282,8 +284,8 @@ public class WorkArea extends VBox {
 	
 	private function registerEvent(flag:Boolean):void
 	{	
-		if(flag) {
-			
+		if(flag)
+		{
 			resizeManager.addEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
 			renderManager.addEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 			resizeManager.addEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
@@ -295,8 +297,9 @@ public class WorkArea extends VBox {
 			addEventListener(DragEvent.DRAG_OVER, dragOverHandler);
 			addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
 			addEventListener(DragEvent.DRAG_EXIT, dragExitHandler);
-		} else {
-			
+		}
+		else
+		{
 			resizeManager.removeEventListener(ResizeManagerEvent.RESIZE_COMPLETE, resizeCompleteHandler);
 			renderManager.removeEventListener(RenderManagerEvent.RENDER_COMPLETE, renderCompleteHandler);
 			resizeManager.removeEventListener(ResizeManagerEvent.OBJECT_SELECT, objectSelectHandler);
@@ -333,8 +336,8 @@ public class WorkArea extends VBox {
 	/**
      *  @private
      */
-	private function resizeCompleteHandler(event:ResizeManagerEvent):void {
-		
+	private function resizeCompleteHandler(event:ResizeManagerEvent):void
+	{
 		var currentObject:Container = event.item;
 		var changeFlag:Boolean = false;
 		
@@ -415,8 +418,8 @@ public class WorkArea extends VBox {
 		if(!event.result)
 			return;
 		
-		if(IItem(event.result).objectId == _pageId) {
-			
+		if(IItem(event.result).objectId == _pageId)
+		{
 			resizeManager.init(_contentHolder);
 		}
 		
@@ -447,8 +450,8 @@ public class WorkArea extends VBox {
 		}
 	}
 
-	private function dragEnterHandler(event:DragEvent):void {
-		
+	private function dragEnterHandler(event:DragEvent):void
+	{
 		resizeManager.itemDrag = true;
 		VdomDragManager.acceptDragDrop(UIComponent(event.currentTarget));
 		focusedObject = null
@@ -456,8 +459,8 @@ public class WorkArea extends VBox {
 	
 	private function dragOverHandler(event:DragEvent):void {
 		
-		var filterFunction:Function = function(item:IItem):Boolean {
-			
+		var filterFunction:Function = function(item:IItem):Boolean
+		{
 			return !item.isStatic;
 		}
 		
@@ -487,28 +490,28 @@ public class WorkArea extends VBox {
 		var currentItemName:String = currentItemDescription.Information.Name;
 		
 		
-		if(aviableContainers.indexOf(currentItemName) != -1) {
-			
+		if(aviableContainers.indexOf(currentItemName) != -1)
+		{
 			IItem(currentItem).drawHighlight('0x00FF00');
+		}
+		else if(currentItemDescription.Information.Container != 1)
+		{
+			IItem(currentItem).drawHighlight('0xFF0000');	
+		}
+		else if(currentItem.parent is IItem)
+		{
+			currentItem = Container(currentItem.parent);
 			
-		} else if(currentItemDescription.Information.Container != 1) {
-			
-			IItem(currentItem).drawHighlight('0xFF0000');
-			
-		} else if(currentItem.parent is IItem) {
+			currentItemDescription = 
+				dataManager.getTypeByObjectId(IItem(currentItem).objectId);
 				
-				currentItem = Container(currentItem.parent);
+			currentItemName = currentItemDescription.Information.Name;
 				
-				currentItemDescription = 
-					dataManager.getTypeByObjectId(IItem(currentItem).objectId);
-					
-				currentItemName = currentItemDescription.Information.Name;
-					
-				if(aviableContainers.indexOf(currentItemName) != -1)
-					
-					IItem(currentItem).drawHighlight('0x00FF00');
-				else	
-					IItem(currentItem).drawHighlight('0xFF0000');
+			if(aviableContainers.indexOf(currentItemName) != -1)
+				
+				IItem(currentItem).drawHighlight('0x00FF00');
+			else	
+				IItem(currentItem).drawHighlight('0xFF0000');
 		}
 		
 		focusedObject = currentItem;
@@ -538,6 +541,7 @@ public class WorkArea extends VBox {
 		var aviableContainers:Array = typeDescription.aviableContainers.replace(re, '').split(',');
 		
 		var bool:Number = aviableContainers.indexOf(currentItemName);
+		
 		if(bool != -1) {
 			
 			var objectLeft:Number = currentContainer.mouseX - 25;
@@ -563,21 +567,21 @@ public class WorkArea extends VBox {
 		}
 	}
 	
-	private function dragExitHandler(event:DragEvent):void {
-		
+	private function dragExitHandler(event:DragEvent):void
+	{
 		resizeManager.itemDrag = false;
 		
 		if(focusedObject is IItem)
 			IItem(focusedObject).drawHighlight('none');
 	}
 	
-	private function mouseWheelHandler(event:MouseEvent):void {
-		
+	private function mouseWheelHandler(event:MouseEvent):void
+	{
 		event.stopPropagation();
 	}
 	
-	private function mouseRollOutHandler(event:MouseEvent):void {
-		
+	private function mouseRollOutHandler(event:MouseEvent):void
+	{
 		cursorManager.removeAllCursors();
 	}
 }
