@@ -1,9 +1,6 @@
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-import mx.managers.PopUpManager;
-
-import vdom.MyLoader;
 import vdom.events.DataManagerEvent;
 import vdom.managers.AlertManager;
 import vdom.managers.AuthenticationManager;
@@ -118,8 +115,17 @@ private function selectPage():void
 {	
 	if(dataManager.listPages && dataManager.listPages.length() > 0)
 	{
-		var page:XML = dataManager.listPages[0]
-		dataManager.changeCurrentPage(page.@ID);
+		var pageIndex:String = "";
+		
+		if(dataManager.currentApplicationInformation)
+			pageIndex = dataManager.currentApplicationInformation.Index[0];
+		
+		var page:XML = dataManager.listPages.(@ID == pageIndex)[0];
+		
+		if(page)
+			dataManager.changeCurrentPage(pageIndex);
+		else
+			dataManager.listPages[0].@ID
 	}
 	else
 	{
