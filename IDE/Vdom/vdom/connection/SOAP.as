@@ -135,6 +135,7 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	private function loginErrorHandler(event:FaultEvent):void
 	{
 		var se:SOAPEvent = new SOAPEvent(SOAPEvent.LOGIN_ERROR);
+		se.result = new XML(event.fault.faultDetail)
 		dispatchEvent(se);
 	}
 	

@@ -172,10 +172,11 @@ public class FileManager implements IEventDispatcher
 	
 	private function resourceLoadedErrorHandler(event:FaultEvent):void
 	{
-//		var resourceId:String = event.result.ResourceID[0];
+		var faultDetail:XML = new XML(event.fault.faultDetail);
+		var resourceId:String = faultDetail.ResourceID[0];
 		
-//		if(requestQue[resourceId])
-//			delete requestQue[resourceId];
+		if(requestQue[resourceId])
+			delete requestQue[resourceId];
 		
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_LOADING_ERROR);
 //		fme.result = event.result;
