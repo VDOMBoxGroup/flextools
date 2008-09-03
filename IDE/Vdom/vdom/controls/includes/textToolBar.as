@@ -106,7 +106,7 @@ public function init(item:IItem):void
 	
 	
 	fontSize.sort = new Sort();
-	fontSize.sort.fields = [new SortField("data")];
+	fontSize.sort.fields = [new SortField("data", false, false, true)];
 	fontSize.refresh();
 	
 	sizeSelector.dataProvider = fontSize;
