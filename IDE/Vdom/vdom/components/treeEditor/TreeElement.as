@@ -273,9 +273,10 @@ package vdom.components.treeEditor
 				fileManager.loadResource(dataManager.currentApplicationId,  _resourceID, this);
 		}	
 		
-		private var loader:Loader = new Loader();
+		private var loader:Loader;
 		public function set resource(data:Object):void
 		{
+			loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 			
 			loader.loadBytes(data.data);
