@@ -125,7 +125,7 @@ private function selectPage():void
 		if(page)
 			dataManager.changeCurrentPage(pageIndex);
 		else
-			dataManager.listPages[0].@ID
+			dataManager.changeCurrentPage(dataManager.listPages[0].@ID)
 	}
 	else
 	{
