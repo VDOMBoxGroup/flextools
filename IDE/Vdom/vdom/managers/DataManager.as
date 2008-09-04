@@ -393,14 +393,28 @@ public class DataManager implements IEventDispatcher {
 		
 		_currentApplication..Objects.Object.(@ID == objectId)[0] = objectData;
 		
-		if(_currentApplication.Objects.Object.(@ID == objectId).length() != 0) {
+		var isPage:Boolean = false;
 		
-			_currentPageId = objectId;
-			_currentObject = null;
+		if(listPages && listPages.(@ID == objectId)[0])
+			isPage = true;
+		
+		if(currObj) {
+		
+			if(isPage)
+			{
+				_currentPageId = objectId;
+				_currentObject = null;
+				dispatchEvent(new DataManagerEvent("currentPageChanged"));
+				dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
+			}
+			else
+			{
+				var type:XML = getTypeByObjectId(objectId);
+				objectData.appendChild(type);
+				_currentObject = objectData;
+			}
 			
 			dispatchEvent(new Event("listPagesChanged"));
-			dispatchEvent(new DataManagerEvent("currentPageChanged"));
-			dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_OBJECT_CHANGED));
 			dispatchEvent(new DataManagerEvent("currentObjectRefreshed"));
 		}
@@ -700,6 +714,11 @@ public class DataManager implements IEventDispatcher {
 		
 		soap.get_child_objects_tree(currentApplicationId, newObjectId); //<----
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, result));
+		
+//		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
+//		dmEvent.objectId = newObjectId;
+//		dmEvent.result = event.xml;
+//		dispatchEvent(dmEvent);
 	}
 	
 	/**
