@@ -408,9 +408,9 @@ public class DataManager implements IEventDispatcher {
 				dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 			}
 			
-			var type:XML = getTypeByObjectId(objectId);
-			objectData.appendChild(type);
-			_currentObject = objectData;
+			//var type:XML = getTypeByObjectId(objectId);
+			//objectData.appendChild(type);
+			//_currentObject = objectData;
 			
 			dispatchEvent(new Event("listPagesChanged"));
 			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_OBJECT_CHANGED));
@@ -435,8 +435,12 @@ public class DataManager implements IEventDispatcher {
 		else {
 			
 			var newObject:XML = new XML(getObject(objectId));
-			var type:XML = getTypeByObjectId(objectId);
-			newObject.appendChild(type);
+			
+			if(newObject && newObject.Type.length() == 0)
+			{
+				var type:XML = getTypeByObjectId(objectId);
+				newObject.appendChild(type);
+			}
 			
 			_currentObject = newObject;
 		} 
@@ -548,8 +552,6 @@ public class DataManager implements IEventDispatcher {
 	
 	private function setAttributesCompleteHandler(event:ProxyEvent):void
 	{
-		
-		
 		var key:String = event.xml.Key[0];
 		
 		var res:String = event.xml.Error;
@@ -570,8 +572,12 @@ public class DataManager implements IEventDispatcher {
 		if(_currentObject && _currentObject.@ID == objectId) {
 		
 			var newObject:XML = new XML(object);
-			var type:XML = getTypeByObjectId(objectId);
-			newObject.appendChild(type);
+			
+			if(newObject && newObject.Type.length() == 0)
+			{
+				var type:XML = getTypeByObjectId(objectId);
+				newObject.appendChild(type);
+			}
 			
 			_currentObject = newObject;
 			
@@ -622,8 +628,12 @@ public class DataManager implements IEventDispatcher {
 		if(_currentObject && _currentObject.@ID == objectId) {
 			
 			var newObject:XML = new XML(object);
-			var type:XML = getTypeByObjectId(objectId);
-			newObject.appendChild(type);
+			
+			if(newObject && newObject.Type.length() == 0)
+			{
+				var type:XML = getTypeByObjectId(objectId);
+				newObject.appendChild(type);
+			}
 			
 			_currentObject = newObject;
 				
