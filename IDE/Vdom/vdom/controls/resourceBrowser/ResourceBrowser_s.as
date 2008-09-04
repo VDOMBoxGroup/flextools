@@ -342,7 +342,7 @@ private function fileUploadHandler():void {
 private function fileSelectHandler(event:Event):void {
 	fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
 
-	if (fileForUpload != null && !fileForUpload.isDirectory) {
+	if (fileForUpload  && !fileForUpload.isDirectory) {
 		var srcBytes:ByteArray = new ByteArray();
 		var srcStream:FileStream = new FileStream();
 		
@@ -362,6 +362,7 @@ private function fileSelectHandler(event:Event):void {
 			Alert.show('Could not open file!', 'IO Error');
 			return;
 		}
+		
 		var fileType:String = "";
 		try {		
 			fileType = fileForUpload.type.substr(1);
@@ -369,8 +370,15 @@ private function fileSelectHandler(event:Event):void {
 		catch (err:Error) {
 			fileType = fileForUpload.extension;
 		}
-		var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
-		setResource(fileType, fileName, srcBytes);
+		
+		try {
+			var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
+			setResource(fileType, fileName, srcBytes);
+		}
+		catch (err:Error) {
+			Alert.show ('Unexpected error', 'Could not upload selected resource!');
+			return;
+		}
 	}	
 }
 
