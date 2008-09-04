@@ -407,12 +407,10 @@ public class DataManager implements IEventDispatcher {
 				dispatchEvent(new DataManagerEvent("currentPageChanged"));
 				dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 			}
-			else
-			{
-				var type:XML = getTypeByObjectId(objectId);
-				objectData.appendChild(type);
-				_currentObject = objectData;
-			}
+			
+			var type:XML = getTypeByObjectId(objectId);
+			objectData.appendChild(type);
+			_currentObject = objectData;
 			
 			dispatchEvent(new Event("listPagesChanged"));
 			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_OBJECT_CHANGED));
