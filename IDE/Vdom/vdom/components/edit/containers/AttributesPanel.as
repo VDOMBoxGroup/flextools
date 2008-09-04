@@ -27,7 +27,6 @@ import mx.core.UIComponent;
 import mx.events.CloseEvent;
 import mx.events.ValidationResultEvent;
 import mx.utils.StringUtil;
-import mx.validators.RegExpValidator;
 
 import vdom.containers.ClosablePanel;
 import vdom.controls.NumberField;
@@ -38,6 +37,7 @@ import vdom.controls.resourceBrowser.ResourceBrowserButton;
 import vdom.events.AttributesPanelEvent;
 import vdom.managers.DataManager;
 import vdom.managers.LanguageManager;
+import vdom.validators.AttributeValidator;
 
 public class AttributesPanel extends ClosablePanel {
 		
@@ -678,8 +678,8 @@ public class AttributesPanel extends ClosablePanel {
 	private function addValidator(valueContainer:Object, valueType:String, regExp:String, errorMsg:String):void {
 		
 		if (regExp == "") return;
-		var validator:RegExpValidator = new RegExpValidator();
-		
+		var validator:AttributeValidator = new AttributeValidator();
+		validator.required = false;
 		validator.addEventListener(ValidationResultEvent.INVALID, validateHandler);
 		validator.addEventListener(ValidationResultEvent.VALID, validateHandler);
 		
