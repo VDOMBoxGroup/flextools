@@ -600,6 +600,8 @@ public class AttributesPanel extends ClosablePanel {
 			valueContainer.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
 			
 			fieldsArray[currentAttribute.@Name] = [valueContainer, valueType];
+				
+			insertAttribute(label, valueContainer, color);
 			
 			addValidator(
 				valueContainer, 
@@ -607,8 +609,6 @@ public class AttributesPanel extends ClosablePanel {
 				attributeXMLDescription.RegularExpressionValidation,
 				attributeXMLDescription.ErrorValidationMessage
 			);
-				
-			insertAttribute(label, valueContainer, color)
 		}
 	}
 	
@@ -688,6 +688,8 @@ public class AttributesPanel extends ClosablePanel {
 		validator.expression = regExp;
 		
 		validator.noMatchError = validator.requiredFieldError = getLanguagePhraseId(errorMsg);
+		
+		validator.validate();
 //		validator.requiredFieldError = "";
 //		languages.getLanguagePhrase(_typeID, errorMsg);
 		

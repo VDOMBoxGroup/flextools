@@ -408,9 +408,14 @@ public class DataManager implements IEventDispatcher {
 				dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 			}
 			
-			//var type:XML = getTypeByObjectId(objectId);
-			//objectData.appendChild(type);
-			//_currentObject = objectData;
+			
+			if(objectData && objectData.Type.length() == 0)
+			{
+				var type:XML = getTypeByObjectId(objectId);
+				objectData.appendChild(type);
+			}
+			
+			_currentObject = objectData;
 			
 			dispatchEvent(new Event("listPagesChanged"));
 			dispatchEvent(new DataManagerEvent(DataManagerEvent.CURRENT_OBJECT_CHANGED));
@@ -537,9 +542,9 @@ public class DataManager implements IEventDispatcher {
 		if(_currentObject && _currentObject.@ID == objectId)
 			_currentObject.@Name = event.result.Object.@Name;
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
-		
 		dispatchEvent(new Event("currentObjectRefreshed"));
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 		
 		dme.objectId = objectId
 		dme.result = <Result>{result}</Result>;

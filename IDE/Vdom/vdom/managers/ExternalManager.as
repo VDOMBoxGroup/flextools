@@ -30,7 +30,7 @@ public class ExternalManager implements IExternalManager  {
 	
 	public function remoteMethodCall(functionName:String, value:String):String {
 		
-		var key:String = soap.remoteMethodCall(_applicationId, _objectId, functionName, value); 
+		var key:String = soap.remote_method_call(_applicationId, _objectId, functionName, value); 
 		return key;
 	}
 	
