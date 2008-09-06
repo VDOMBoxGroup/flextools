@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	horizontalAlign="right" verticalAlign="middle" horizontalGap="1" borderStyle="solid">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import mx.managers.PopUpManager;
+			import vdom.events.ResourceBrowserEvent;
+			
+			private const regResource:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
+			private var _value:String = "";
+			private var _title:String = "";
+			private var rBrowserInstance:ResourceBrowser;
+			[Bindable]
+			private var _labelText:String = "";
+			[Bindable]
+			private var clearBtnEnabled:Boolean = false;
+	
+			public function set title(attrValue:String):void {
+				_title = attrValue;
+			} 
+			
+			[Bindable]
+			public function get value():String {
+				return _value;
+			}
+	
+			public function set value(attrValue:String):void {
+				_value = attrValue;
+				var matchResult:Array = _value.match(regResource);
+				if (matchResult) {
+					_labelText = "Resource ID: " + matchResult[1];
+					clearBtnEnabled = true;
+				} else {
+					_labelText = "";
+					_value = "";
+					clearBtnEnabled = false;
+				}
+			}
+	
+			private function openWindow():void {
+				rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(DisplayObject(Application.application), ResourceBrowser, true));
+				rBrowserInstance.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
+				PopUpManager.centerPopUp(rBrowserInstance);
+				
+				var matchResult:Array = _value.match(regResource);
+				if (matchResult)
+					rBrowserInstance.selectedItemID = matchResult[1];
+			}
+	
+			private function completeHandler(event:ResourceBrowserEvent):void {
+				this.value = "#Res(" + event.resourceID + ")";
+				_labelText = event.resourceName;
+			}
+	
+		]]>
+	</mx:Script>
+
+	<mx:TextInput text="{_labelText}" id="__label" width="100%" borderStyle="none" editable="false" height="20"/>
+	<mx:LinkButton id="__clearBtn"
+		enabled="{clearBtnEnabled}" label="X" height="20" cornerRadius="5" click="{this.value = '';}" width="20" paddingLeft="1" paddingRight="1"
+		toolTip="Clear field" />
+	<mx:Button
+		label="..." height="19" cornerRadius="0" click="{openWindow();}" width="22" paddingLeft="2" paddingRight="2"
+		toolTip="Browse for resource" />
+</mx:HBox>

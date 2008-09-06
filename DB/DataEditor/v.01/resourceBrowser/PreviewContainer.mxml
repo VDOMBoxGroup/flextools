@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Preview Container component for Resource Browser
+	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+-->
+<mx:Box 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	borderStyle="solid" backgroundColor="#FFF6EA" cornerRadius="3"
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	horizontalAlign="center" verticalAlign="middle"
+	paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
+ 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
+ 
+	<resourceBrowser:SmoothImage id="__image" horizontalAlign="center" verticalAlign="middle"
+		maintainAspectRatio="true" scaleContent="true" />
+
+	<mx:Script>
+		<![CDATA[
+			import mx.core.FlexLoader;
+			import mx.rpc.soap.LoadEvent;
+			import mx.events.FlexEvent;
+		
+			private var loader:Loader = new Loader();
+	
+			public var imageWidth:int = 0;
+			public var imageHeight:int = 0;
+			private var _heightLimit:int = 0;
+			private var _widthLimit:int = 0;
+
+			public function set resource(source:Object):void {
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				loader.loadBytes(source.data);
+			}
+			
+			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
+				[Embed(source="/assets/resourceBrowserIcons/resourceType/blank.png")]
+				var blank_Icon:Class;
+
+				__image.source = blank_Icon; 
+			}
+			
+			private function imageLoadComplete(event:Event):void {
+				__image.source = loader.content;			
+				imageWidth = loader.width;
+				imageHeight = loader.height;
+				
+				if (imageWidth > _widthLimit || imageHeight > _heightLimit) {
+					if (_heightLimit >= int(Math.round(_widthLimit * imageHeight / imageWidth))) {
+						__image.width = _widthLimit;
+						__image.height = int(Math.round(_widthLimit * imageHeight / imageWidth));
+					} else {
+						__image.height = _heightLimit;
+						__image.width = int(Math.round(_heightLimit * imageWidth / imageHeight));
+					}					
+				} else {
+					__image.height = imageHeight;
+					__image.width = imageWidth;
+				}
+				
+				this.height = __image.height + 22;
+				this.width = __image.width + 22;
+				
+				var completeEvent:Event = new Event(Event.COMPLETE);
+				this.dispatchEvent(completeEvent);			
+			}
+			
+			public function set imageSource(source:Object):void {
+				__image.source = source;
+			}
+			
+			public function get imageSource():Object {
+				return __image.source;
+			}
+			
+			public function set heightLimit(value:int):void {
+				_heightLimit = value - 22;
+			}
+			
+			public function set widthLimit(value:int):void {
+				_widthLimit = value - 22;
+			}
+		]]>
+	</mx:Script>
+
+
+</mx:Box>

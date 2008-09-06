@@ -115,7 +115,7 @@ private function getPageRequest():void {
 
 private function getPageResponseHandler(message:String):void {
 	trace (':: Get page Response handler');
-	
+
 	try {
 		queryResult = new XML(message);
 		pages[currentPage] = new XML(queryResult.Result.queryresult.table.data);
@@ -124,6 +124,8 @@ private function getPageResponseHandler(message:String):void {
 	}
 	catch (err:Error) {
 		trace (':: Exception 01: ' + err.message);	
+		
+		showMessage('Programm Error! :: Exception 01: ' + err.message);
 		queryResult = new XML();
 	}
 	
