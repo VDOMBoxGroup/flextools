@@ -1,5 +1,6 @@
 package vdom.controls.colorPicker {
 
+import flash.events.Event;
 import flash.events.MouseEvent;
 
 import mx.containers.Canvas;
@@ -25,6 +26,7 @@ public class ColorPicker extends Canvas {
 		
 	}
 	
+	[Bindable (event="valueCommit")]
 	public function get color():String {
 		
 		return _color;
@@ -37,6 +39,8 @@ public class ColorPicker extends Canvas {
 			Number('0x' + colorValue.toString())
 		);
 		_color = colorValue;
+		
+		dispatchEvent(new Event("valueCommit"));
 	}
 	
 	private function mouseClickandler(event:MouseEvent) :void {

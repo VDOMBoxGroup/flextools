@@ -688,7 +688,6 @@ public class AttributesPanel extends ClosablePanel {
 		validator.expression = regExp;
 		
 		validator.noMatchError = validator.requiredFieldError = getLanguagePhraseId(errorMsg);
-		
 		validator.validate();
 //		validator.requiredFieldError = "";
 //		languages.getLanguagePhrase(_typeID, errorMsg);
