@@ -78,7 +78,7 @@ public class AttributesPanel extends ClosablePanel {
 	
 	private var cursor:IViewCursor;
 	private var typeTitle:UIComponent;
-	private var invalidElementsCount:uint;
+	private var invalidElements:Object = {};
 	
 	
 	private var old_attributesVisible:Boolean;
@@ -95,7 +95,6 @@ public class AttributesPanel extends ClosablePanel {
 		
 		_isValid = true;
 		
-		invalidElementsCount = 0;
 		attributesVisible = old_attributesVisible = false;
 		languageManager = LanguageManager.getInstance();
 	}
@@ -125,6 +124,10 @@ public class AttributesPanel extends ClosablePanel {
 		if (new_objectDescription is XML) {
 			
 			objectDescription = new_objectDescription;
+			
+			invalidElements = {};
+			invalidElements["_currentCount"] = 0;
+			
 			
 			_objectName = objectDescription.@Name;
 			
@@ -305,8 +308,6 @@ public class AttributesPanel extends ClosablePanel {
 		{
 			var titleValue:String = "OBJECT PROPERTIES";
 			var objectName:String;
-			
-			invalidElementsCount = 0
 			
 			if (_collection is XMLListCollection)
 			{	
@@ -594,17 +595,18 @@ public class AttributesPanel extends ClosablePanel {
 			valueContainer.percentWidth = 100;
 			
 			valueContainer.data = {
-				"elementName":attributeXMLDescription.Name,
-				"helpPhraseID":attributeXMLDescription.Help,
+				"elementName":attributeXMLDescription.Name[0].toString(),
+				"helpPhraseID":attributeXMLDescription.Help[0].toString(),
 				"valid": false
 			};
-			
-			invalidElementsCount++;
 			
 			valueContainer.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
 			valueContainer.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
 			
 			fieldsArray[currentAttribute.@Name] = [valueContainer, valueType];
+			
+			invalidElements[attributeXMLDescription.Name[0].toString()] = "Add";
+			invalidElements["_currentCount"] += 1;
 				
 			insertAttribute(label, valueContainer, color);
 			
@@ -682,9 +684,13 @@ public class AttributesPanel extends ClosablePanel {
 	
 	private function addValidator(valueContainer:Object, valueType:String, regExp:String, errorMsg:String):void {
 		
-		if (regExp == "") return;
+		//if (regExp == "")
+			//return;
+		
 		var validator:AttributeValidator = new AttributeValidator();
+		
 		validator.required = false;
+		
 		validator.addEventListener(ValidationResultEvent.INVALID, validateHandler);
 		validator.addEventListener(ValidationResultEvent.VALID, validateHandler);
 		
@@ -693,6 +699,7 @@ public class AttributesPanel extends ClosablePanel {
 		validator.expression = regExp;
 		
 		validator.noMatchError = validator.requiredFieldError = getLanguagePhraseId(errorMsg);
+		
 		validator.validate();
 //		validator.requiredFieldError = "";
 //		languages.getLanguagePhrase(_typeID, errorMsg);
@@ -712,20 +719,28 @@ public class AttributesPanel extends ClosablePanel {
 		var element:Object = event.currentTarget.source.data;
 		var oldValid:Boolean = _isValid;
 		
-		if (event.type == ValidationResultEvent.VALID && element["valid"] == false)
+		if (event.type == ValidationResultEvent.VALID && invalidElements.hasOwnProperty(element["elementName"]))
 		{
-			element["valid"] = true;
-			invalidElementsCount--;
+			delete invalidElements[element["elementName"]];
+			
+			if(invalidElements["_currentCount"] > 0)
+				invalidElements["_currentCount"] -=1;
+			
+//			element["valid"] = true;
+//			invalidElementsCount--;
 //			UIComponent(event.currentTarget.source).setFocus();
 		}
-		else if(event.type == ValidationResultEvent.INVALID && element["valid"] == true)
+		else if(event.type == ValidationResultEvent.INVALID && !invalidElements.hasOwnProperty(element["elementName"]))
 		{
-			element["valid"] = false;
-			invalidElementsCount++;
+			invalidElements[element["elementName"]] = "here";
+			
+			invalidElements["_currentCount"] +=1;
+//			element["valid"] = false;
+//			invalidElementsCount++;
 //			UIComponent(event.currentTarget.source).setFocus();
 		}
 		
-		if(invalidElementsCount > 0) 
+		if(invalidElements["_currentCount"] > 0) 
 			_isValid = false;
 		else 
 			_isValid = true;

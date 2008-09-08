@@ -22,7 +22,7 @@
 				_title = attrValue;
 			} 
 			
-			[Bindable]
+			[Bindable (event="valueCommit")]
 			public function get value():String {
 				return _value;
 			}
@@ -38,6 +38,7 @@
 					_value = "";
 					clearBtnEnabled = false;
 				}
+				dispatchEvent(new Event("valueCommit"));
 			}
 	
 			private function openWindow():void {
