@@ -25,15 +25,11 @@ package vdom.components.treeEditor
 			clipContent = false;
 			
 			lbIndex = new Label();
-			lbIndex.x = -8;
+			lbIndex.x = -9;
 			lbIndex.y = -8;
 			lbIndex.width = 19;
 			lbIndex.setStyle('textAlign', 'center');
 			lbIndex.buttonMode = true;
-			
-			
-//			lbIndex.text = '3'; 
-//			index = '3';
 			
 			lbIndex.addEventListener(MouseEvent.CLICK, indexClickHandler);
 			addChild(lbIndex);
@@ -42,12 +38,10 @@ package vdom.components.treeEditor
 		override public function set visible(value:Boolean):void
 	    {
 	        super.visible = value;
-//	        trace('11');
 	    }
 		private function creatingComboBox():void
 		{
 			cmBox = new ComboBox();
-//			cmBox.visible = false;
 			cmBox.width = 50;
 			cmBox.x = 15;
 			cmBox.visible = false;
@@ -89,7 +83,6 @@ package vdom.components.treeEditor
 				return;
 			
 			cmBox.visible = true;
-//			maxIndex = '30';
 			cmBox.dataProvider = comboBoxData;
 			cmBox.validateProperties();
 			invalidateDisplayList();
@@ -127,9 +120,6 @@ package vdom.components.treeEditor
 			graphics.beginFill(0xffffff);
 			graphics.drawCircle(0, 0, 10);
 			graphics.endFill();
-			
-//			this.buttonMode = true;
-//			this.validateDisplayList();
 		}
 		
 		/***
@@ -172,8 +162,6 @@ package vdom.components.treeEditor
 				comboBoxData[i]['label'] = i+1;
 				comboBoxData[i]['data'] = i+1;
 			}
-//			cmBox.dataProvider = comboBoxData;
-//			cmBox.validateNow();
 		}
 		
 		
@@ -194,7 +182,6 @@ package vdom.components.treeEditor
 		{
 			_index = num;
 			lbIndex.text = _index.toString(); 
-//			trace('new: '+lbIndex.text)
 		}
 		
 		
@@ -224,8 +211,6 @@ package vdom.components.treeEditor
 		{
 			this.x = _targetLine.middleX;
 			this.y = _targetLine.middleY;
-			
-//			this.visible = _targetLine.visible;
 		}
 		
 		/***
@@ -236,7 +221,6 @@ package vdom.components.treeEditor
 		 public function remove():void
 		 {
 		 	_fromObjectID = null;
-//		 	parent.rawChildren.removeChild(this);
 			
 			visible = false;
 		 	parent.removeChild(this);

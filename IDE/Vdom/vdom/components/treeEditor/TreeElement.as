@@ -294,7 +294,7 @@ package vdom.components.treeEditor
    			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);
 			loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, loadError);
             
-            image.source = defaultPicture;
+//            image.source = defaultPicture;
    		}
 		
 		private function loadComplete(evt:Event):void 
@@ -350,11 +350,6 @@ package vdom.components.treeEditor
 			
 			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
 			
-//			trace('1) '+dataManager.currentObject.Attributes);
-			
-			//dataManager.currentObject.Attributes.Attribute.(@Name ==  "description")[0] = textArea.text;
-			//dataManager.currentObject.Attributes.Attribute.(@Name ==  "title")[0] = txt.text;
-			
 			var str:String = 
 			 	'<Attributes>' + 
 			 		' <Attribute Name="description">' + textArea.text+'</Attribute>'+
@@ -374,46 +369,7 @@ package vdom.components.treeEditor
 //			trace('updateAttributeCompleted')
 		}
 		
-		
-	/***
-	 * 
-	 * 
-	 * 			set application resource
-	 * 		needed in change for  Orions script
-	 * 
-	 * 
-	 * */
-	 /*
-	 private function setResource(restype:String, resname:String, resdata:String):void
-	 {
-//	 	trace('restype: '+ restype);
-	 	soap.setResource(dataManager.currentApplicationId,	 
-	 												restype, 
-	 												resname, 
-	 												resdata );
-		soap.addEventListener(SoapEvent.SET_RESOURCE_OK , setResourceOkHandler);
-	 	soap.addEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
-	 	
-	 }
-	
-	 private function setResourceOkHandler(spEvt:SoapEvent):void
-	 {
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
-	 	
-	 	var rez:XML = spEvt.result;
-	 	_resourceID = rez.Resource.@id;
-	 }
-	 
-	 private function setResourceErrorHandler(spEvt:SoapEvent):void
-	 {
-	 	trace('ERROR set resourse')
-	 	image.source = defaultPicture;
-	 	
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_OK, setResourceOkHandler);
-	 	soap.removeEventListener(SoapEvent.SET_RESOURCE_ERROR, setResourceErrorHandler);
-	 }
-	 */
+
 	 
 	 private function startDragHandler(msEvt:MouseEvent):void
 	 {
@@ -456,18 +412,10 @@ package vdom.components.treeEditor
 			if(data)
 			{
 				imgheader.source = _selected;
-				/*
-				txt.setStyle('color', '#FFFF00');
-				if(!cnvUpLayer.contains(imgSelected))
-					cnvUpLayer.addChild(imgSelected);
-					*/
+			
 			}else
 			{	
 				imgheader.source = header;
-				/*txt.setStyle('color', '#ffffff');
-				if(cnvUpLayer.contains(imgSelected))
-					cnvUpLayer.removeChild(imgSelected);
-					*/
 			}
 		}
 		
