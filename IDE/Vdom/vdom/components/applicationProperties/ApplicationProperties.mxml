@@ -3,6 +3,10 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	show="showHandler();" xmlns:controls="vdom.controls.*">
 	
+	<mx:Metadata>
+		[ResourceBundle("ApplicationManagment")]
+	</mx:Metadata>
+	
 	<mx:Script source="includes/applicationProperties.as" />
 	
 	<mx:Style>
@@ -54,23 +58,26 @@
 					<mx:Image id="applicationIcon"
 						width="55" height="55" horizontalCenter="0" verticalCenter="0"/>
 				</mx:Canvas>
-				<mx:Label text="Illustration" fontWeight="bold"/>
+				<mx:Label text="{resourceManager.getString('ApplicationManagment','properties_icon')}" fontWeight="bold"/>
 			</mx:HBox>
 	
 			<mx:HBox>
-				<mx:Label text="Name" fontWeight="bold"/>
+				<mx:Label 
+					text="{resourceManager.getString('ApplicationManagment','properties_name')}" fontWeight="bold"/>
 				<controls:PromptingTextInput id="applicationName"
-					prompt="Application Name" editable="false"/>
+					prompt="{resourceManager.getString('ApplicationManagment','properties_name_prompt')}" editable="false"/>
 			</mx:HBox>
 		
-			<mx:Label text="Description"  fontWeight="bold"/>
+			<mx:Label 
+				text="{resourceManager.getString('ApplicationManagment','properties_description')}"  fontWeight="bold"/>
 			<mx:HBox width="100%" horizontalAlign="center">
 				<controls:PromptingTextArea id="applicationDescription"
-					prompt="Application Description" height="125" width="100%" textAlign="left" editable="false"/>
+					prompt="{resourceManager.getString('ApplicationManagment','properties_description_prompt')}" height="125" width="100%" textAlign="left" editable="false"/>
 			</mx:HBox>
 			
 			<mx:HBox width="100%" horizontalAlign="center">
-				<mx:Button label="EDIT APPLICATION" styleName="buttonStyle"
+				<mx:Button 
+					label="{resourceManager.getString('ApplicationManagment','properties_edit')}" styleName="buttonStyle"
 					cornerRadius="0"
 					click="dispatchEvent(new Event('editCurrentApplication'))"/>
 			</mx:HBox>

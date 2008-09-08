@@ -19,23 +19,23 @@
 		
 		private function creationCompleteHandler():void{
 			
-			if(!numStrok) numStrok = new TextArea(); // for fixed Edrror
+//			if(!numStrok) numStrok = new TextArea(); // for fixed Edrror
 			if(!txtArea) txtArea = new TabbedTextArea(); //// for fixed Edrror
 			
 			dataManager = DataManager.getInstance();
 			
-			numStrok.text ="";
-			for(var i:Number =1; i <= txtArea.height / 14; i++){
-				numStrok.text += (i + txtArea.verticalScrollPosition).toString() + "\n";				
-			}
+//			numStrok.text ="";
+//			for(var i:Number =1; i <= txtArea.height / 14; i++){
+//				numStrok.text += (i + txtArea.verticalScrollPosition).toString() + "\n";				
+//			}
 			
-			var yPosition:int = 1;
-			var currentPosition:int = 0;
-			while (currentPosition < txtArea.selectionBeginIndex) {
-				if (txtArea.text.charCodeAt(currentPosition) == 13)
-					yPosition++;
-				currentPosition++;
-			}
+//			var yPosition:int = 1;
+//			var currentPosition:int = 0;
+//			while (currentPosition < txtArea.selectionBeginIndex) {
+//				if (txtArea.text.charCodeAt(currentPosition) == 13)
+//					yPosition++;
+//				currentPosition++;
+//			}
 		}
 		
 		private function show():void {
@@ -82,10 +82,10 @@
 	]]>
 	</mx:Script>
 	
-	<mx:TextArea text="" width="28" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
-			verticalScrollPolicy="off" textAlign="right" top="40" bottom="0" left="0"/>
+	<!--<mx:TextArea text="" width="28" id="numStrok"  backgroundColor="#dddddd" color="#777777" 
+			verticalScrollPolicy="off" textAlign="right" top="40" bottom="0" left="0"/>-->
 	<containers:TabbedTextArea id="txtArea" 
-		allowTabKey="true"  x="{numStrok.width}" width="100%" top="40" bottom="0"/>
+		allowTabKey="true"   width="100%" top="40" bottom="0"/>
 	<mx:Button x="10" y="10" label="Save" height="20" cornerRadius="0" click="saveScript()"/>
 	<mx:Label x="101" y="11" width="289" text="{dataManager.currentObject.@Name}"/>
 </mx:Canvas>

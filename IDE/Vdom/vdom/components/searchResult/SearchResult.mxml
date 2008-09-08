@@ -57,13 +57,17 @@
 			backgroundColor="#C2C2C2" color="#000000"
 			left="20" top="20" height="320" borderStyle="solid" borderColor="#C2C2C2">
 			<mx:HBox width="100%" styleName="bg">
-				<mx:Button id="expandButton" styleName="invBtn" label="Expand All" cornerRadius="0" click="expandAll();"   alpha="0.0"/>
-				<mx:Button id="collapseButton" styleName="invBtn" label="Collapse All" cornerRadius="0" click="collapseAll();" alpha="0.0"/>
-				<mx:Button id="goToEditorButton" styleName="invBtn" label="Go to Editor" cornerRadius="0" click="goToEdit();" alpha="0.0"/>
+				<mx:Button id="expandButton" styleName="invBtn" 
+					label="{resourceManager.getString('ApplicationManagment','expand_label')}" cornerRadius="0" click="expandAll();"   alpha="0.0"/>
+				<mx:Button id="collapseButton" styleName="invBtn" 
+					label="{resourceManager.getString('ApplicationManagment','collapse_label')}" cornerRadius="0" click="collapseAll();" alpha="0.0"/>
+				<mx:Button id="goToEditorButton" styleName="invBtn" 
+					label="{resourceManager.getString('ApplicationManagment','goto_label')}" cornerRadius="0" click="goToEdit();" alpha="0.0"/>
 				<mx:Button styleName="invBtn" label="Close" cornerRadius="0" click="clear();" alpha="0.0"/>
 			</mx:HBox>
 			<mx:HBox>
-				<mx:Label fontSize="14" fontWeight="bold" text="Application Name:"/>
+				<mx:Label fontSize="14" fontWeight="bold" 
+					text="{resourceManager.getString('ApplicationManagment','name_label')}"/>
 				<mx:Label fontSize="14" fontWeight="bold" id="applicationName" text="{_applicationName}"/>
 			</mx:HBox>
 			<containers:SearchDataGrid id="searchDataGrid" selectedIndex="0"

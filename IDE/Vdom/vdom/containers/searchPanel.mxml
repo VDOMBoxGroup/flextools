@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ActionPanel xmlns="vdom.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="250">
+
+<mx:Metadata>
+	[ResourceBundle("ApplicationManagment")]
+</mx:Metadata>
+
 <mx:Script>
 	<![CDATA[
 	import vdom.events.SearchPanelEvent;
@@ -51,6 +56,6 @@
 			labelField="@Name"
 			cornerRadius="0" width="160"/>
 	</mx:VBox>
-	<mx:Button label="Find" height="50" cornerRadius="0" click="search();"/>
+	<mx:Button label="{resourceManager.getString('ApplicationManagment','search_find')}" height="50" cornerRadius="0" click="search();"/>
 </mx:HBox>
 </ActionPanel>

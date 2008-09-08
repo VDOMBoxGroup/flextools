@@ -49,7 +49,8 @@
 				<mx:Image id="applicationImage" source="{_source}"
 					width="55" height="55" horizontalCenter="0" verticalCenter="0"/>
 			</mx:Canvas>
-			<mx:Label text="Illustration" fontWeight="bold"/>
+			<mx:Label 
+				text="{resourceManager.getString('ApplicationManagment','icon_title')}" fontWeight="bold"/>
 		</mx:HBox>
 		
 		<mx:HBox>
@@ -62,26 +63,28 @@
 	</mx:VBox>
 	
 	<mx:HBox>
-		<mx:Label  text="Name" fontWeight="bold"/>
+		<mx:Label  text="{resourceManager.getString('ApplicationManagment','name_title')}" fontWeight="bold"/>
 		<controls:PromptingTextInput id="applicationName"
-			prompt="Application Name"/>
+			prompt="{resourceManager.getString('ApplicationManagment','name_prompt')}"/>
 	</mx:HBox>
 		
-	<mx:Label text="Description"  fontWeight="bold"/>
+	<mx:Label text="{resourceManager.getString('ApplicationManagment','description_title')}"  fontWeight="bold"/>
 	<mx:HBox width="100%" horizontalAlign="center">
 	
 		<controls:PromptingTextArea id="applicationDescription"
-			prompt="Application Description" height="125" width="100%" textAlign="left"/>
+			prompt="{resourceManager.getString('ApplicationManagment','description_prompt')}" height="125" width="100%" textAlign="left"/>
 	</mx:HBox>
 	
 	<mx:HBox width="100%" horizontalAlign="center">
 	
-		<mx:Button id="submitButton" label="CREATE"
+		<mx:Button id="submitButton" 
+			label="{resourceManager.getString('ApplicationManagment','submit_label')}"
 			styleName="buttonStyle"
 			cornerRadius="0" 
 			click="processValues();" />
 			
-		<mx:Button label="CANCEL"
+		<mx:Button 
+			label="{resourceManager.getString('ApplicationManagment','cancel_label')}"
 			styleName="buttonStyle"
 			cornerRadius="0" 
 			click="cancelValues();"/>

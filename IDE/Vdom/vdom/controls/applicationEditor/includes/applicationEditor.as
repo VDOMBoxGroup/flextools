@@ -58,12 +58,12 @@ private function showHandler():void
 {	
 	if(!defaultValues)
 	{
-		submitButton.label = "CREATE";
+//		submitButton.label = "CREATE";
 		defaultValues = new ApplicationDescription();
 	}
 	else
 	{	
-		submitButton.label = "OK";
+//		submitButton.label = "OK";
 	}
 		
 	applicationName.text = defaultValues.name;

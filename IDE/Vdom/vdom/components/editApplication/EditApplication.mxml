@@ -5,6 +5,10 @@
 	
 	show="showHandler();">
 	
+	<mx:Metadata>
+		[ResourceBundle("ApplicationManagment")]
+	</mx:Metadata>
+	
 	<mx:Script source="includes/editApplication.as" />
 	
 	<mx:Style>
@@ -18,7 +22,7 @@
 		}
 	</mx:Style>
 	<mx:Panel 
-		title="EDIT APPLICATION"
+		title="{resourceManager.getString('ApplicationManagment','edit_title')}"
 		
 		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
 		borderAlpha="1"
