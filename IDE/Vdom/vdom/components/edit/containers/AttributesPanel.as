@@ -301,13 +301,15 @@ public class AttributesPanel extends ClosablePanel {
 	
 	override protected function commitProperties():void {
 		
-		if(_objectChanged) {
-			
+		if(_objectChanged)
+		{
 			var titleValue:String = "OBJECT PROPERTIES";
 			var objectName:String;
 			
-			if (_collection is XMLListCollection) {
-				
+			invalidElementsCount = 0
+			
+			if (_collection is XMLListCollection)
+			{	
 				typeName = objectDescription.Type.Information.Name;
 				objectName = objectDescription.Type.Information.Name;
 				
@@ -316,8 +318,9 @@ public class AttributesPanel extends ClosablePanel {
 				attributesGrid.visible = true;
 				_isValid = true;
 				
-			} else {
-				
+			}
+			else
+			{
 				attributesGrid.visible = false;
 				attributesGrid.removeAllChildren();
 				_isValid = false;
@@ -326,7 +329,7 @@ public class AttributesPanel extends ClosablePanel {
 			title = titleValue;
 			status = objectName;
 			help = "";
-			invalidElementsCount = 0;
+//			invalidElementsCount = 0;
 			
 			_objectChanged = false;
 			
@@ -593,8 +596,10 @@ public class AttributesPanel extends ClosablePanel {
 			valueContainer.data = {
 				"elementName":attributeXMLDescription.Name,
 				"helpPhraseID":attributeXMLDescription.Help,
-				"valid": true
+				"valid": false
 			};
+			
+			invalidElementsCount++;
 			
 			valueContainer.addEventListener(FocusEvent.FOCUS_IN, focusInEventHandler);
 			valueContainer.addEventListener(FocusEvent.FOCUS_OUT, focusOutEventHandler);
@@ -711,13 +716,13 @@ public class AttributesPanel extends ClosablePanel {
 		{
 			element["valid"] = true;
 			invalidElementsCount--;
-			UIComponent(event.currentTarget.source).setFocus();
+//			UIComponent(event.currentTarget.source).setFocus();
 		}
 		else if(event.type == ValidationResultEvent.INVALID && element["valid"] == true)
 		{
 			element["valid"] = false;
 			invalidElementsCount++;
-			UIComponent(event.currentTarget.source).setFocus();
+//			UIComponent(event.currentTarget.source).setFocus();
 		}
 		
 		if(invalidElementsCount > 0) 
@@ -725,7 +730,8 @@ public class AttributesPanel extends ClosablePanel {
 		else 
 			_isValid = true;
 		
-		if(oldValid !== _isValid) invalidateProperties();
+		if(oldValid !== _isValid)
+			invalidateProperties();
 	}
 	
 	private function acceptButton_clickHandler(event:MouseEvent):void {
