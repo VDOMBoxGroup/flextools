@@ -516,7 +516,10 @@ private function drawLines(xml1:XML):void
 private function redrawLines(strID:String):void
 {
 	if (main.contains(btLine))
+	{
 			main.removeChild(btLine);
+			curLine.mark = false;
+	}
 			
 	//trace(strID);
 	for (var level:String in massLines)
@@ -555,7 +558,10 @@ private function  removeLine():void
 					}
 					
 	if (main.contains(btLine))
+	{
 		main.removeChild(btLine);
+		curLine.mark = false;
+	}
 		
 	saveToServer();
 }

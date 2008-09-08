@@ -615,17 +615,22 @@
 					///curContainerTypeID 
 					
 					var type:XML = dataManager.getTypeByObjectId(actID.@ObjTgtID)
-					var tupeID:String = type.Information.ID;
-					if(tupeID == curContainerTypeID)
-					{  
+					//var tupeID:String = type.Information.ID;
+					
+					var parametrs:* = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
+					parametrs = parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
+			
+				//	if(tupeID == curContainerTypeID)
+//					{  
 //					de79cc9c-a40b-4325-8025-951f33a74191 / 
 //					4e3f096d-f18d-44ae-9d5b-7a13ff40963d
+						
 						var objAct:EventEditorAction = new EventEditorAction(actID, curContainerTypeID);
 						
 						 actionsArray[objAct.ID] = setListeners4Action(objAct);
 						
 						can.addChild(actionsArray [actID.@ID]);
-					}
+//					}
 				}
 				
 				eventsArray = [];		

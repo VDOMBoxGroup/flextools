@@ -2,6 +2,8 @@ package vdom.components.treeEditor
 {
 	import flash.display.Bitmap;
 	import flash.display.Loader;
+	import flash.errors.EOFError;
+	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
@@ -13,8 +15,6 @@ package vdom.components.treeEditor
 	import mx.controls.TextInput;
 	import mx.managers.PopUpManager;
 	
-//	import vdom.connection.soap.Soap;
-//	import vdom.connection.soap.SoapEvent;
 	import vdom.controls.resourceBrowser.ResourceBrowser;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ResourceBrowserEvent;
@@ -277,18 +277,28 @@ package vdom.components.treeEditor
 		public function set resource(data:Object):void
 		{
 			loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 			
-			loader.loadBytes(data.data);
-			//image.source = data.data;
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, loadError);
+			
+            loader.loadBytes(data.data);
 		}
 		
 		
+		private function loadError(evt:IOErrorEvent):void 
+		{
+   			
+   			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);
+			loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, loadError);
+            
+            image.source = defaultPicture;
+   		}
+		
 		private function loadComplete(evt:Event):void 
 		{
-   			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
-   			//image.width = loader.width;
-   			//image.height = loader.height;
+			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);
+			loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, loadError);
+   			
    			image.source = loader.content;
    		}
 				

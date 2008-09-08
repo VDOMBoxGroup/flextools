@@ -88,7 +88,10 @@
 			dataManager.changeCurrentPage(curTree.ID);
 	//	btLine.visible = false;
 		if (main.contains(btLine))
+		{
 			main.removeChild(btLine);
+			curLine.mark = false;
+		}
 			
 		masIndex = [];
 		masMaxOfIndex = [];
@@ -444,7 +447,10 @@
 					massTreeElements[ID].unSelect();
 
 		if (main.contains(btLine))
+		{
 			main.removeChild(btLine);
+			curLine.mark = false;
+		}
 	
 	}
 	

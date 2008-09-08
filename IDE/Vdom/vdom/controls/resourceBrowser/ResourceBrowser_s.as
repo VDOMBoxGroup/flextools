@@ -301,7 +301,7 @@ private function doneHandler():void {
 		)
 	);
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
-	this.dispatchEvent(cEvent);
+	this.dispatchEvent(cEvent); 
 }
 
 private function keyPressHandler(keybEvent:KeyboardEvent):void {

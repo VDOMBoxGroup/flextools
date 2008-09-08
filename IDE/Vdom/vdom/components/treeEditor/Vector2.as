@@ -86,7 +86,7 @@ package vdom.components.treeEditor
 			if(!dX && !dY)		return;
 			var dist:Number = dX*dX + dY*dY;
 //			trace(dist);
-			if( dist < 50)
+			if( dist < 55)
 				return;
 			middleX = x0 - dX / 2;
 			middleY = y0 - dY / 2;
