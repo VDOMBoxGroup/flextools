@@ -502,6 +502,7 @@
 		trEl.resourceID  =  adTrEvt.resourceID;
 		trEl.description =  adTrEvt.description;
 		trEl.typeID = adTrEvt.typeResourse;
+		trEl.state = chExpandAll.selected.toString();
 		
 		var maxY:Number = 0;
 		for (var tID:String in massTreeElements)

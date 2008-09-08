@@ -362,7 +362,7 @@ private function createTreeArr(xml:XML):void
 		}
 		
 		massTreeElements[ID] =  treeElement;
-		main.addChild(massTreeElements[ID]);
+//		main.addChild(massTreeElements[ID]);
 	}
 }
 
@@ -502,6 +502,12 @@ private function drawLines(xml1:XML):void
 				}
 			}
 		}
+	}
+	// tree Elements to top	
+	for (var ID:String in massTreeElements)
+	{
+//		main.removeChild(massTreeElements[ID]);
+		main.addChild(massTreeElements[ID]);
 	}
 //	drawIndex();
 }

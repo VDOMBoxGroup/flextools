@@ -346,12 +346,7 @@ package vdom.components.eventEditor
 			txt.y = 2 * _ratio;
 			txt.width =  240 * _ratio;
 			
-			 /*
-			imgLine.y = -12 * _ratio; 
-			imgLine.x = 20 * _ratio;	
-			imgLine.width = 10 * _ratio;
-			imgLine.height = 10 * _ratio;
-			*/
+			
 			//imgDelete 
 			imgDelete.y = -12 * _ratio;
 			imgDelete.x = 20 * _ratio;	

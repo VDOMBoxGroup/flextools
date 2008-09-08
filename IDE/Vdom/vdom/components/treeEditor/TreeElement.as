@@ -2,10 +2,10 @@ package vdom.components.treeEditor
 {
 	import flash.display.Bitmap;
 	import flash.display.Loader;
-	import flash.errors.EOFError;
 	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.system.LoaderContext;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Button;
@@ -281,7 +281,10 @@ package vdom.components.treeEditor
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, loadError);
 			
-            loader.loadBytes(data.data);
+			var loaderContextInfo:LoaderContext = new LoaderContext();
+			loaderContextInfo.allowLoadBytesCodeExecution = true;
+			
+            loader.loadBytes(data.data, loaderContextInfo);
 		}
 		
 		
