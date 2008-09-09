@@ -78,13 +78,13 @@
 	<mx:HBox width="100%" horizontalAlign="center">
 	
 		<mx:Button id="submitButton" 
-			label="{resourceManager.getString('ApplicationManagment','submit_label')}"
+			label="{resourceManager.getString('ApplicationManagment','submit_label').toUpperCase()}"
 			styleName="buttonStyle"
 			cornerRadius="0" 
 			click="processValues();" />
 			
 		<mx:Button 
-			label="{resourceManager.getString('ApplicationManagment','cancel_label')}"
+			label="{resourceManager.getString('ApplicationManagment','cancel_label').toUpperCase()}"
 			styleName="buttonStyle"
 			cornerRadius="0" 
 			click="cancelValues();"/>

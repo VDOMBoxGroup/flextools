@@ -42,7 +42,7 @@
 		}
 	</mx:Style>
 	<mx:Panel 
-		title="{resourceManager.getString('ApplicationManagment','properties_title')}"
+		title="{resourceManager.getString('ApplicationManagment','properties_title').toUpperCase()}"
 		color="#FFFFFF"
 		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
 		borderAlpha="1"
@@ -77,7 +77,7 @@
 			
 			<mx:HBox width="100%" horizontalAlign="center">
 				<mx:Button 
-					label="{resourceManager.getString('ApplicationManagment','properties_edit')}" styleName="buttonStyle"
+					label="{resourceManager.getString('ApplicationManagment','properties_edit').toUpperCase()}" styleName="buttonStyle"
 					cornerRadius="0"
 					click="dispatchEvent(new Event('editCurrentApplication'))"/>
 			</mx:HBox>

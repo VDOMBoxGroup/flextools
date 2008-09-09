@@ -22,7 +22,7 @@
 		}
 	</mx:Style>
 	<mx:Panel 
-		title="{resourceManager.getString('ApplicationManagment','edit_title')}"
+		title="{resourceManager.getString('ApplicationManagment','edit_title').toUpperCase()}"
 		
 		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
 		borderAlpha="1"
