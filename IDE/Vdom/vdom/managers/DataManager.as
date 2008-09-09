@@ -394,7 +394,7 @@ public class DataManager implements IEventDispatcher {
 		
 		var currObj:XML = _currentApplication..Objects.Object.(@ID == objectId)[0];
 		
-		_currentApplication..Objects.Object.(@ID == objectId)[0] = objectData;
+		_currentApplication..Objects.Object.(@ID == objectId)[0] = new XML(objectData);
 		
 		var isPage:Boolean = false;
 		
