@@ -52,10 +52,17 @@
 		<mx:Image id="applicationIcon" source="{_source}"
 			width="50" height="50" horizontalCenter="0" verticalCenter="0"/>
 	</mx:Canvas>
-	<mx:Label width="55" y="12" x="68" 
-		text="{resourceManager.getString('ApplicationManagment','information_pages')}" textAlign="left" color="#FFFFFF"/>
-	<mx:Label width="55" y="29" x="68" 
-		text="{resourceManager.getString('ApplicationManagment','information_objects')}" textAlign="left" color="#FFFFFF"/>
-	<mx:Label width="41" id="applicationPage" y="12" height="15" x="127" color="#FFFFFF"/>
-	<mx:Label width="41" id="applicationObjects" y="29" height="15" x="127" color="#FFFFFF"/>
+	
+	<mx:HBox x="68" y="12">
+		<mx:Label  
+			text="{resourceManager.getString('ApplicationManagment','information_pages')}" textAlign="left" color="#FFFFFF"/>
+		<mx:Label id="applicationObjects" y="29" height="15" x="127" color="#FFFFFF"/>
+	</mx:HBox>
+	
+	<mx:HBox x="68" y="38">
+		<mx:Label 
+			text="{resourceManager.getString('ApplicationManagment','information_objects')}" textAlign="left" color="#FFFFFF"/>
+		<mx:Label id="applicationPage"  height="15"  color="#FFFFFF"/>
+		
+	</mx:HBox>
 </ActionPanel>
