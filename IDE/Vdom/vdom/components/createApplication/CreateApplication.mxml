@@ -6,6 +6,10 @@
 	show="showHandler();"
 	hide="hideHandler();">
 	
+	<mx:Metadata>
+		[ResourceBundle("ApplicationManagment")]
+	</mx:Metadata>
+	
 	<mx:Script source="includes/createApplication.as" />
 	
 	<mx:Style>
@@ -19,7 +23,7 @@
 		}
 	</mx:Style>
 	<mx:Panel 
-		title="CREATE APPLICATION"
+		title="{resourceManager.getString('ApplicationManagment','create_title')}"
 		
 		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
 		borderAlpha="1"

@@ -306,7 +306,7 @@ public class AttributesPanel extends ClosablePanel {
 		
 		if(_objectChanged)
 		{
-			var titleValue:String = "OBJECT PROPERTIES";
+//			var titleValue:String = "OBJECT PROPERTIES";
 			var objectName:String;
 			
 			if (_collection is XMLListCollection)
@@ -327,7 +327,7 @@ public class AttributesPanel extends ClosablePanel {
 				_isValid = false;
 			}
 			
-			title = titleValue;
+//			title = titleValue;
 			status = objectName;
 			help = "";
 //			invalidElementsCount = 0;

@@ -42,7 +42,7 @@
 		}
 	</mx:Style>
 	<mx:Panel 
-		title="APPLICATION PROPERTIES"
+		title="{resourceManager.getString('ApplicationManagment','properties_title')}"
 		color="#FFFFFF"
 		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
 		borderAlpha="1"
