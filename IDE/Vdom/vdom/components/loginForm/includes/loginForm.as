@@ -23,7 +23,7 @@ public var loginTitle:Class;
 [Bindable]
 private var languageList:XMLList;
 
-private var languageManager:LanguageManager;
+private var languageManager:LanguageManager = LanguageManager.getInstance();;
 
 private var dragged:Boolean = false;
 
@@ -36,16 +36,7 @@ private function get window():IWindow {
 
 private function creationCompleteHandler():void {
 	
-	languageManager = LanguageManager.getInstance();
-	
 	languageList = languageManager.languageList;
-	
-	var currentLocale:String = languageManager.currentLocale;
-	
-	var currentItem:XML = languageList.(@code == currentLocale)[0]
-	
-	if(currentItem)
-		selectLang.selectedItem = currentItem;
 	
 	_isListenersEnabled = false;
 	
@@ -83,6 +74,23 @@ private function showHandler():void {
 	_username.text = so.data["username"];
 //	_password.text = so.data["password"];
 	_hostname.text = so.data["hostname"];
+	
+	var currentLocale:String = so.data["locale"];
+	
+	var currentItem:XML = languageList.(@code == currentLocale)[0];
+	
+	if(currentItem)
+	{
+		languageManager.changeLocale(currentLocale);
+	}
+	else
+	{
+		currentLocale = languageManager.currentLocale;
+		currentItem = languageList.(@code == currentLocale)[0]
+	}
+	
+	if(currentItem)
+		selectLang.selectedItem = currentItem;
 }
 
 private function hideHandler():void {
@@ -111,6 +119,11 @@ private function checkData():void {
 	so.data["username"] = _username.text;
 //	so.data["password"] = _password.text;
 	so.data["hostname"] = _hostname.text;
+	
+	if(selectLang.selectedItem)
+	{
+		so.data["locale"] = languageManager.currentLocale;
+	}
 	
 	dispatchEvent(lfe);
 }
