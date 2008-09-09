@@ -4,7 +4,6 @@ package vdom.controls.externalEditorButton
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	
 	import mx.containers.HBox;
@@ -16,12 +15,12 @@ package vdom.controls.externalEditorButton
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
+	import mx.managers.PopUpManagerChildList;
 	
+	import vdom.events.FileManagerEvent;
 	import vdom.managers.DataManager;
 	import vdom.managers.ExternalManager;
 	import vdom.managers.FileManager;
-	import vdom.events.FileManagerEvent;
-	import flash.filesystem.File;
 
 	public class ExternalEditorButton extends HBox
 	{
@@ -134,7 +133,7 @@ package vdom.controls.externalEditorButton
 			applWindow.addChild(applUIComponent);
 	   		applUIComponent.addChild(ldr);
      		
-    		PopUpManager.addPopUp(applWindow, DisplayObject(Application.application), false);
+    		PopUpManager.addPopUp(applWindow, DisplayObject(Application.application), false, PopUpManagerChildList.POPUP);
     		applWindow.addEventListener(CloseEvent.CLOSE, applCloseHandler);
 		}
  

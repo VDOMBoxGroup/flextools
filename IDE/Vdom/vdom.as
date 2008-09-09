@@ -3,7 +3,10 @@ import flash.events.Event;
 import mx.controls.Alert;
 import mx.core.Application;
 import mx.core.Singleton;
+import mx.core.UIComponent;
 import mx.events.FlexEvent;
+import mx.events.IndexChangedEvent;
+import mx.managers.PopUpManager;
 import mx.rpc.events.FaultEvent;
 
 import vdom.connection.SOAP;
@@ -75,6 +78,26 @@ private function preinitalizeHandler():void
 	cacheManager.init();
 	
 	dataManager.addEventListener(DataManagerEvent.CLOSE, dataManager_close);
+}
+
+private function creationCompleteHandler():void
+{
+	moduleTabNavigator.addEventListener(IndexChangedEvent.CHANGE, moduleChangedHandler);
+}
+
+private function moduleChangedHandler(event:IndexChangedEvent):void
+{
+	while(systemManager.popUpChildren.numChildren > 0)
+	{
+		PopUpManager.removePopUp(UIComponent(systemManager.popUpChildren.getChildAt(0)));
+	}
+	
+	/* for (var i:int = systemManager.numChildren-1; i>=0; i–-)
+	{
+		if(getQualifiedClassName(systemManager.getChildAt(i))=="Popup"){
+			systemManager.removeChildAt(i);
+		}
+	} */
 }
 
 private function showLoginFormHandler():void

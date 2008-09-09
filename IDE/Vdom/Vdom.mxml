@@ -12,6 +12,7 @@
 	xmlns:modules="vdom.modules.*"
 		
 	preinitialize="preinitalizeHandler();"
+	creationComplete="creationCompleteHandler()"
 	
 	layout="absolute"
 	verticalScrollPolicy="off"

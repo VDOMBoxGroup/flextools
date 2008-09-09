@@ -39,13 +39,15 @@ private function registerEvent(flag:Boolean):void
 {	
 	if(flag)
 	{	
-		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);	
+		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
+		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED_ERROR, saveXMLScriptErrorHandler);	
 		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
 //		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
 	}
 	else 
 	{	
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
+		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED_ERROR, saveXMLScriptErrorHandler);
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
 //		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
 	}
@@ -80,6 +82,22 @@ private function objectXMLScriptHandler(event:DataManagerEvent):void {
 	saveButton.label = 'Save';
 	scriptEditor.enabled = true;
 	enableElement(true);
+}
+
+private function saveXMLScriptErrorHandler(event:DataManagerEvent):void
+{
+	Alert.show("Wrong data", "Alert");
+	if(_objectId)
+	{
+		saveButton.label = 'Loading...'
+		scriptEditor.enabled = false;
+		loadXMLPresentation();
+	}
+	else
+	{
+		scriptEditor.code = '';
+	}
+	
 }
 
 private function saveXMLScript():void {

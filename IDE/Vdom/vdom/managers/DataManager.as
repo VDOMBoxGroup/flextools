@@ -291,8 +291,7 @@ public class DataManager implements IEventDispatcher {
 	}
 	
 	public function pageStatus(applicationId:String, pageId:String):Boolean
-	{
-		
+	{		
 		var application:XML = _listApplication.(@ID == applicationId)[0];
 		
 		if(!application || !application.@Status == "loaded")
@@ -740,6 +739,11 @@ public class DataManager implements IEventDispatcher {
 			setObjectXMLScriptHandler
 		);
 		
+		soap.submit_object_script_presentation.addEventListener(
+			FaultEvent.FAULT,
+			setObjectXMLScriptErrorHandler
+		);
+		
 		soap.submit_object_script_presentation(currentApplicationId, currentObjectId, objectXMLScript);
 	}
 	
@@ -757,13 +761,21 @@ public class DataManager implements IEventDispatcher {
 		
 		_currentApplication..Objects.Object.(@ID == oldObjectId)[0] = <Object ID={newObjectId} />;
 		
-		soap.get_child_objects_tree(currentApplicationId, newObjectId); //<----
+		soap.get_child_objects_tree(currentApplicationId, newObjectId); //<------
 		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, result));
 		
 //		var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
 //		dmEvent.objectId = newObjectId;
 //		dmEvent.result = event.xml;
 //		dispatchEvent(dmEvent);
+	}
+	
+	private function setObjectXMLScriptErrorHandler(event:FaultEvent):void
+	{
+		var dme:DataManagerEvent = 
+			new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED_ERROR);
+		
+		dispatchEvent(dme);
 	}
 	
 	/**

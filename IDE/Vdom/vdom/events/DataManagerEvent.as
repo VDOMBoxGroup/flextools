@@ -46,6 +46,7 @@ public class DataManagerEvent extends Event
 	
 	public static const OBJECT_XML_SCRIPT_LOADED:String = 'objectXMLScriptLoaded';
 	public static const OBJECT_XML_SCRIPT_SAVED:String = 'objectXMLScriptSaved';
+	public static const OBJECT_XML_SCRIPT_SAVED_ERROR:String = 'objectXMLScriptSavedError';
 	
 	//public static const OBJECTS_LOADED:String = 'objectsLoaded';
 	public static const UPDATE_ATTRIBUTES_BEGIN:String = 'updateAttributesBegin';
