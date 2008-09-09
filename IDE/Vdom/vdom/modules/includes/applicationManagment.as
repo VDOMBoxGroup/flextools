@@ -173,7 +173,10 @@ private function dataManager_applicationDataLoaded(event:DataManagerEvent):void
 	);
 	
 	if(!pageId)
+	{
 		Application.application.switchToModule("editor");
+		return;
+	}
 	
 	dataManager.addEventListener(
 		DataManagerEvent.CURRENT_PAGE_CHANGED,

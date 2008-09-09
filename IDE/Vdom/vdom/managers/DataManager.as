@@ -329,6 +329,9 @@ public class DataManager implements IEventDispatcher {
 		
 		var pages:XMLList = event.result.Objects.Object;
 		
+		if(_currentApplication.Objects.length() > 0)
+			delete _currentApplication.Objects;
+			
 		_currentApplication.appendChild(<Objects />);
 		
 		delete pages.Parent;
@@ -519,7 +522,7 @@ public class DataManager implements IEventDispatcher {
 			oldXMLDescription.@Name = newXMLDescription.@Name;
 			
 			soap.set_name.addEventListener(SOAPEvent.RESULT, setNameCompleteHandler);
-			soap.set_name.addEventListener(FaultEvent.FAULT, setNameCompleteHandler);
+			soap.set_name.addEventListener(FaultEvent.FAULT, setNameFaultHandler);
 			soap.set_name(_currentApplicationId, oldXMLDescription.@ID, oldXMLDescription.@Name);
 		}
 	}
@@ -552,6 +555,35 @@ public class DataManager implements IEventDispatcher {
 		
 		dme = new DataManagerEvent(DataManagerEvent.LIST_PAGES_CHANGED);
 		dme.result = event.result;
+		dispatchEvent(dme);
+	}
+	
+	private function setNameFaultHandler(event:FaultEvent):void
+	{
+		Alert.show(event.fault.faultString, "Alert");
+		
+		var description:XML = XML(event.fault.faultDetail);
+		
+		var objectId:String = description.@ID;
+		
+		var result:XML = getObject(objectId);
+		
+		if(result)
+			result.@Name = description.@Name;
+		
+		if(_currentObject && _currentObject.@ID == objectId)
+			_currentObject.@Name = description.@Name;
+		
+		dispatchEvent(new Event("currentObjectRefreshed"));
+		
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
+		
+		dme.objectId = objectId
+		dme.result = <Result>{description}</Result>;
+		dispatchEvent(dme);
+		
+		dme = new DataManagerEvent(DataManagerEvent.LIST_PAGES_CHANGED);
+		dme.result = <Result>description</Result>;
 		dispatchEvent(dme);
 	}
 	
