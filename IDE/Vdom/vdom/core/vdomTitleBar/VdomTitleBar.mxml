@@ -11,6 +11,16 @@
 		[Event(name="logout", type="flash.events.Event")]
 	</mx:Metadata>
 	
+	<mx:Style>
+		.invBtn {
+			color: #BBBBBB;
+			textRollOverColor: #FFFFFF;
+			fillAlphas: 0.0, 0.0, 0.0, 0.0; 
+			borderStyle: "none";
+			borderAlpha: .0;
+		}
+	</mx:Style>
+	
 	<mx:Script>
 		<![CDATA[
 			import vdom.managers.DataManager;
@@ -143,5 +153,7 @@
 	<mx:Button id="maximizeButton" y="1" width="21" height="16" right="24"/>
 	<mx:Button id="closeButton" y="1" width="24" height="16" right="1"/>
 	<mx:Button visible="false" y="1" width="24" height="16" right="69" cornerRadius="0" fillAlphas="[1.0, 1.0]" fillColors="[#FF0000, #FF0000]"/>
-	<mx:Button label="Logout" right="20" top="22" cornerRadius="0" click="logout();"/>
+	<mx:Button 
+		label="{resourceManager.getString('Application','logout')}" 
+		right="10" top="22" styleName="invBtn" cornerRadius="0" click="logout();" alpha="0.0"/>
 </mx:Canvas>

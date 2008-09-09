@@ -38,7 +38,12 @@
 			<mx:HBox y="21" width="606" horizontalCenter="0" horizontalAlign="center" verticalAlign="bottom">
 			
 				<mx:Label id="userName"
-					text="USER: {authenticationManager.username.toUpperCase()} - VDOM IDE"
+					text=
+						"{
+							resourceManager.getString('Application','user').toUpperCase()
+						}: {
+							authenticationManager.username.toUpperCase()
+						} - VDOM IDE"
 					fontWeight="bold" color="#FFFFFF"/>
 				<mx:Label text="Beta" fontWeight="bold" color="#8C8C8C"/>
 			</mx:HBox>
