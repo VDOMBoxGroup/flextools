@@ -166,6 +166,7 @@ private function dataManager_updateAttributesBeginHandler(event:DataManagerEvent
 private function dataManager_updateAttributesCompleteHandler(event:DataManagerEvent):void
 {	
 	workArea.updateObject(event.result);
+	xmlEditor.dispatchEvent(new FlexEvent(FlexEvent.SHOW)); // <------ Error!
 }
 
 private function dataManager_objectCreatedHandler(event:DataManagerEvent):void

@@ -55,9 +55,11 @@ private function showHandler():void {
 	
 	enableElement(false);
 	registerEvent(true);
+	scriptEditor.enabled = true;
 	if(_objectId)
 	{
 		saveButton.label = 'Loading...'
+		scriptEditor.enabled = false;
 		loadXMLPresentation();
 	}
 }
@@ -76,6 +78,7 @@ private function objectXMLScriptHandler(event:DataManagerEvent):void {
 	var result:String = event.result[0].toXMLString();
 	scriptEditor.code = result;
 	saveButton.label = 'Save';
+	scriptEditor.enabled = true;
 	enableElement(true);
 }
 
