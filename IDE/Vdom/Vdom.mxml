@@ -45,7 +45,6 @@
 							authenticationManager.username.toUpperCase()
 						} - VDOM IDE"
 					fontWeight="bold" color="#FFFFFF"/>
-				<mx:Label text="Beta" fontWeight="bold" color="#8C8C8C"/>
 			</mx:HBox>
 			
 			<mx:Canvas backgroundColor="#FFFFFF" top="50" right="0" bottom="0" left="0" borderStyle="solid" borderColor="#000000">
