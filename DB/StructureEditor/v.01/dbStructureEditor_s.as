@@ -13,15 +13,12 @@ private var externalValue:String;
 [Bindable]
 private var columnsProvider:Array = [];	/* of Object */
 private var thereAreGlobalChanges:Boolean = false;
+private var validName:Boolean = false;
 
 public function set externalManager(ref:*):void {
-	try {
-		manager = ref;
-		manager.addEventListener("callError", remoteMethodCallErrorMsgHandler);	/* add permanent event listener */
-		requestTableStructure();
-		__addRemoveBtns.enabled = true;
-	}
-	catch (err:Error) { return; }
+	manager = ref;
+	requestTableStructure();
+	__addRemoveBtns.enabled = true;
 }
 
 public function set value(value:String):void {
@@ -37,26 +34,16 @@ public function get value():String {
 
 private function requestTableStructure():void {
 	/* Init getting data from External Manager */
-	try {
-		manager.addEventListener("callComplete", getTableStructureHandler);
-		manager.remoteMethodCall("get_structure", "");
-	}
-	catch (err:Error) { return; }
+	manager.addEventListener("callComplete", getTableStructureHandler);
+	manager.remoteMethodCall("get_structure", "");
 }
 
 private function getTableStructureHandler(event:*):void {
 	manager.removeEventListener("callComplete", getTableStructureHandler);
 	
 	/* Applying structure data after 'get_structure' remote method */
-	try {
-		var queryResult:XML = new XML(event.result);
-		tableStructure = new XML(queryResult.Result.tablestructure);		
-	}
-	catch (err:Error) {
-		/* error02 */
-		showMessage("Unexpected External Manager error (02)");
-		return;
-	}
+	var queryResult:XML = new XML(event.result);
+	tableStructure = new XML(queryResult.Result.tablestructure);		
 
 	columnsProvider = []; /* Array of Object */
 	tableID = tableStructure.table.@id;
@@ -158,6 +145,9 @@ private function addRemoveButtonsEnable(value:Boolean):void {
 }
 
 private function applyBtnClickHandler():void {
+	if (!validName)
+		return;
+	
 	/* Lock controls during operation */
 	__propList.enabled = false;
 	addRemoveButtonsEnable(false);
@@ -193,25 +183,15 @@ private function applyBtnClickHandler():void {
 				/>
 			</tableStructure>;
 
-	if (selectedListItem.fnew) {
-			
-		try {
-			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-			remoteMethodCallOkFunction = applyChangesOkHandler;
-			manager.remoteMethodCall("add_column", requestXML.toXMLString());
-		}
-		catch (err:Error) {	return;	trace (err.message); }
+
+	manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+	remoteMethodCallOkFunction = applyChangesOkHandler;
+
+	if (selectedListItem.fnew)
+		manager.remoteMethodCall("add_column", requestXML.toXMLString());
+	else
+		manager.remoteMethodCall("update_column ", requestXML.toXMLString());
 		
-	} else {
-		
-		try {
-			manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-			remoteMethodCallOkFunction = applyChangesOkHandler;
-			manager.remoteMethodCall("update_column ", requestXML.toXMLString());
-		}
-		catch (err:Error) {	return;	trace (err.message); }
-		
-	}
 }
 
 private function applyChangesOkHandler():void {
@@ -238,8 +218,8 @@ private function applyChangesOkHandler():void {
 }
 
 private function addBtnHandler():void {
-	columnsProvider.push({
-		label:'* new',
+	columnsProvider.push( {
+		label:'New Column',
 		data:UIDUtil.createUID().toLowerCase(),
 		type:'text',
 		aincrement:'False',
@@ -248,7 +228,7 @@ private function addBtnHandler():void {
 		primary:'False',
 		unique:'False',
 		fnew:true
-	});
+	} );
 	
 	__propList.dataProvider = columnsProvider;
 	__propList.selectedIndex = columnsProvider.length - 1;
@@ -265,12 +245,9 @@ private function removeBtnHandler():void {
 
 private function removeSelectedColRequest():void {
 	/* Applying changes */
-	try {
-		manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
-		remoteMethodCallOkFunction = removeSelectedColOkHandler;
-		manager.remoteMethodCall("delete_column", "<delete><column id='" + selectedListItem.data + "' /></delete>");
-	}
-	catch (err:Error) { return; }
+	manager.addEventListener("callComplete", remoteMethodCallStandartMsgHandler);
+	remoteMethodCallOkFunction = removeSelectedColOkHandler;
+	manager.remoteMethodCall("delete_column", "<delete><column id='" + selectedListItem.data + "' /></delete>");
 }
 
 private function removeSelectedColOkHandler():void {
@@ -295,54 +272,17 @@ private function removeSelectedColOkHandler():void {
 private var remoteMethodCallOkFunction:Function;
 
 private function remoteMethodCallStandartMsgHandler(event:*):void {
-/*
-	There are may be 2 responses from server in this section: response that
-	everything is OK and standart error message (something wrong with remote
-	method parameters).
-*/
-
+	trace ("Remote Method Call standart msg Handler executed");
+	
 	manager.removeEventListener("callComplete", remoteMethodCallStandartMsgHandler);
 	
 	var xmlResult:XML;
-	try { 
-		xmlResult = new XML(event.result);
-	}
-	catch (err:Error) {	return;	}
-	
-	switch (xmlResult.name().toString()) {
-		case "Result":
-			trace ("Server response:");
-			trace (xmlResult);
-			if (remoteMethodCallOkFunction != null)
-				remoteMethodCallOkFunction();
-			break;
-		case "Error":
-			showMessage("ERROR: " + xmlResult);
-			break;
-	}
-}
+	xmlResult = new XML(event.result);
 
-private function remoteMethodCallErrorMsgHandler(event:*):void {
-/*
-	This function handles responses displaying that method could not be executed
-	for some reason(s) (may be privilegies reason or method is absent?). 
-*/
-	var xmlResult:XML;
-	try { 
-		xmlResult = new XML(event.result);
-	}
-	catch (err:Error) {	return;	}
-	
-	if (xmlResult.name().toString() == "Result") {
-		try {
-			showMessage("SOAP EXCEPTION: " + xmlResult.Error);
-		}
-		catch (err:Error) {
-			showMessage("UNKNOWN SOAP EXCEPTION: " + xmlResult);
-		}
-	} else {
-		showMessage("UNKNOWN ERROR OCCURED: " + xmlResult.toString());
-	}
+	trace ("Server response:");
+	trace (xmlResult);
+	if (remoteMethodCallOkFunction != null)
+		remoteMethodCallOkFunction();
 }
 
 //	----- Alert processing methods -------------------------------------------------------
