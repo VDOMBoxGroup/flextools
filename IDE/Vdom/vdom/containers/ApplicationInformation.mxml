@@ -56,13 +56,13 @@
 	<mx:HBox x="68" y="12">
 		<mx:Label  
 			text="{resourceManager.getString('ApplicationManagment','information_pages')}" textAlign="left" color="#FFFFFF"/>
-		<mx:Label id="applicationObjects" y="29" height="15" x="127" color="#FFFFFF"/>
+		<mx:Label id="applicationPage" y="29" height="15" x="127" color="#FFFFFF"/>
 	</mx:HBox>
 	
 	<mx:HBox x="68" y="38">
 		<mx:Label 
 			text="{resourceManager.getString('ApplicationManagment','information_objects')}" textAlign="left" color="#FFFFFF"/>
-		<mx:Label id="applicationPage"  height="15"  color="#FFFFFF"/>
+		<mx:Label id="applicationObjects"  height="15"  color="#FFFFFF"/>
 		
 	</mx:HBox>
 </ActionPanel>

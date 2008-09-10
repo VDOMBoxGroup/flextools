@@ -340,7 +340,7 @@ public class AttributesPanel extends ClosablePanel {
 		if(_isValid)
 			acceptButton.enabled = true;
 		else
-			acceptButton.enabled = false;
+			acceptButton.enabled = true; //<---- Error!
 		
 		super.commitProperties();
 	}
