@@ -698,7 +698,7 @@ public class RenderManager implements IEventDispatcher {
 	{
 		var itemXMLDescription:XML = event.result.Result.*[0];
 		var itemId:String = itemXMLDescription.@id[0];
-		var parentId:String = event.result.ParentId[0];
+		var parentId:String = event.result.ParentID[0];
 		
 		if(!itemId)
 			return;
