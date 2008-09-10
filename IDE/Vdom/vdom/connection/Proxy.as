@@ -80,7 +80,7 @@ public class Proxy {
 		dataToSend = true;
 		sender();
 		soap.set_attributes.addEventListener(SOAPEvent.RESULT, returnData);
-		soap.set_attributes.addEventListener(FaultEvent.FAULT, returnData);
+//		soap.set_attributes.addEventListener(FaultEvent.FAULT, returnDataError);
 	}
 	
 	private function timeManedger(evt:TimerEvent):void
@@ -122,6 +122,11 @@ public class Proxy {
 	//	trace(evt.result);
 		dispatchEvent(new ProxyEvent(ProxyEvent.PROXY_COMPLETE, evt.result) );
 		
+	}
+	
+	private function returnDataError(event:FaultEvent):void
+	{
+		dispatchEvent(new ProxyEvent(ProxyEvent.PROXY_ERROR) );
 	}
 	
 	// Реализация диспатчера

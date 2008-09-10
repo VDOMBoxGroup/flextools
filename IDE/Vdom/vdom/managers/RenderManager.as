@@ -643,7 +643,7 @@ public class RenderManager implements IEventDispatcher {
 			return;
 		
 		if(_style.hasOwnProperty("backgroundColor") && !_style.hasOwnProperty("backgroundAlpha"))
-			_style["backgroundAlpha"] = 1;
+			_style["backgroundAlpha"] = 100;
 			
 		if(_style.hasOwnProperty("borderColor"))
 			_style["borderStyle"] = "solid";
@@ -657,10 +657,24 @@ public class RenderManager implements IEventDispatcher {
 			)
 			{
 				_style["textDecoration"] = "none";
-			}
+		}
 		
 		for(var atrName:String in _style)
 		{
+//			if(
+//				atrName == "backgroundAlpha"
+//				||
+//				atrName == "backgroundColor"
+//				||
+//				atrName == "fontSize"
+//				||
+//				atrName == "fontStyle"
+//				||
+//				atrName == "fontFamily"
+//				||
+//				atrName == "fontWeight"
+//			)
+//				continue;
 			if(_style[atrName] != "")
 				item.setStyle(atrName, _style[atrName])
 		}
