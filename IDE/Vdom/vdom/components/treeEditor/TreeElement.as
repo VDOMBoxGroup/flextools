@@ -320,7 +320,6 @@ package vdom.components.treeEditor
 			}	
 			min = blHide;
 			isRedraw = true;
-			
 		}
 		
 		private function btLessenOut(muEvt:MouseEvent):void
@@ -570,6 +569,7 @@ package vdom.components.treeEditor
 			imgSelected.source = _selected;
 			
 			
+			
 			//imgheader.maintainAspectRatio = true;
 			//imgheader.scaleContent = true;
 			
@@ -590,18 +590,21 @@ package vdom.components.treeEditor
 			imgLine = new Image();
 			imgLine.source = line;
 			imgLine.buttonMode = true;
+			imgLine.toolTip = resourceManager.getString('Tree','create_line');//----
 			
 			imgLine.addEventListener(MouseEvent.CLICK, lineClickHandler);
 			
 			imgDelete = new Image();
 			imgDelete.source = delet; 
 			imgDelete.buttonMode = true;
+			imgDelete.toolTip = resourceManager.getString('Tree','delete'); //---
 			
 			imgDelete.addEventListener(MouseEvent.CLICK, deleteClickHandler);
 			
 			imgPlus = new Image();
 			imgPlus.source = plus;
 			imgPlus.buttonMode = true;
+			imgPlus.toolTip = resourceManager.getString('Tree','min_max');
 				
 			imgPlus.addEventListener(MouseEvent.CLICK, plusClickHandler);	
 			
@@ -609,6 +612,7 @@ package vdom.components.treeEditor
 			imgStart = new Image();
 			imgStart.source = bt_start_page;
 			imgStart.buttonMode = true;
+			imgStart.toolTip = resourceManager.getString('Tree','set_start_page');
 				
 			imgStart.addEventListener(MouseEvent.CLICK, startPageClickHandler);	
 			

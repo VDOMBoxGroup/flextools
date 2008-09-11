@@ -184,7 +184,7 @@
 	{
 		if(trEvt.currentTarget.ID != null)
 			redrawLines(trEvt.currentTarget.ID); 
-	}
+	} 
 	
 	/** 
 	*
@@ -214,7 +214,7 @@
 			curTree.current = false;	
 		
 		evt.currentTarget.current = true;
-		curTree = evt.currentTarget;
+		curTree = evt.currentTarget;		
 		dataManager.changeCurrentPage(curTree.ID);
 		
 //		evt.currentTarget.availabled = true; 

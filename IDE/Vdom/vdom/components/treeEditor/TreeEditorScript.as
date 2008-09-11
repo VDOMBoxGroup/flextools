@@ -410,13 +410,12 @@ private function get needCreatTree():Boolean
 	{
 		
 		// x,y == 0;
-		var calc:int = 0;
+//		var calc:int = 0;
 		for(var strID:String in massTreeElements)
+		{		
 			if (massTreeElements[strID].x == 0 && massTreeElements[strID].y == 0) 
-			{
-				calc++;
-				if(calc > 2) return true;
-			}
+				return true;
+		}	
 	
 		return false;
 	}
