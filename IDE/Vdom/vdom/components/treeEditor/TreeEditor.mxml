@@ -230,6 +230,8 @@
 //		trace('App');
 		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
+		
+		saveToServer();
 	}
 	
 	//---------------------
@@ -330,6 +332,12 @@
 		drLine(new MouseEvent(MouseEvent.MOUSE_OVER));
 		vctTest.graphics.clear();
 	}
+	
+	private function saveToServerHandler(trEvt:TreeEditorEvent):void
+	{
+		saveToServer();
+	}
+	
 	
 	/**
 	* ресурсы
@@ -544,7 +552,7 @@
 		
 		setStartPage();
 //		drawIndex();
-		saveToServer();
+//		saveToServer();
 		//showHnadler();
 	}
 	

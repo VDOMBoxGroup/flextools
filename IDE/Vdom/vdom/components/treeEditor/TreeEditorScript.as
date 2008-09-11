@@ -428,10 +428,11 @@ private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 			treEl.addEventListener(TreeEditorEvent.START_DRAW_LINE , startDrawLine);
 			treEl.addEventListener(TreeEditorEvent.DELETE , deleteTreeElement);
 			treEl.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
-			// можно его подключать по необходимости
 			treEl.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
-			treEl.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			treEl.addEventListener(TreeEditorEvent.CHANGE_START_PAGE, changeStartPageHandler);
+			treEl.addEventListener(TreeEditorEvent.SAVE_TO_SERVER, saveToServerHandler);
+
+			treEl.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			treEl.addEventListener(MouseEvent.MOUSE_OUT, treeElementMouseOutHandler);
 			treEl.addEventListener(MouseEvent.MOUSE_OVER, treeElementMouseOverHandler);
 			
@@ -579,6 +580,8 @@ private function saveToServer():void
 											
 	 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
 		dataManager.setApplactionStructure(dataToServer);
+		
+	trace('Data saved');
 }
 
 public function dataToXML(massTreeElements:Array, massLines:Array ):XML

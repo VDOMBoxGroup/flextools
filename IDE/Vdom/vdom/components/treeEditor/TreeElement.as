@@ -148,7 +148,9 @@ package vdom.components.treeEditor
 			if(!_availabled)
 				return;
 //			min = !min
-			changeState(!min)
+			changeState(!min);
+			
+//			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SAVE_TO_SERVER));
 		}
 		
 		private function startPageClickHandler(msEvt:MouseEvent):void
@@ -162,6 +164,8 @@ package vdom.components.treeEditor
 		
 		private function txtDoubleClickHandler(msEvt:MouseEvent):void
 		{
+			msEvt.stopImmediatePropagation();
+			
 			txtInp.visible = true;
 			txtInp.text  = txt.text;
 			txtInp.setFocus();
@@ -230,6 +234,7 @@ package vdom.components.treeEditor
 		
 		private function lineClickHandler(msEvt:MouseEvent):void
 		{
+			msEvt.stopPropagation();
 			if(!_availabled)
 				return;
 				
@@ -263,6 +268,8 @@ package vdom.components.treeEditor
 			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
 			rbWnd.selectedItemID = _resourceID;
 			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
+			
+			
 		}
 		
 		private var fileManager:FileManager = FileManager.getInstance();
@@ -271,6 +278,8 @@ package vdom.components.treeEditor
 			
 				_resourceID = rbEvt.resourceID;
 				fileManager.loadResource(dataManager.currentApplicationId,  _resourceID, this);
+				
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SAVE_TO_SERVER));
 		}	
 		
 		private var loader:Loader;

@@ -16,6 +16,7 @@ public class TreeEditorEvent extends Event
 	public static const HIDE_LINES:String = 'hideLine';
 	public static const SELECTED_LEVEL:String = 'selectedLevel';
 	public static const CHANGE_START_PAGE:String = 'changeStratPage';
+	public static const SAVE_TO_SERVER:String = 'saveToServer';
 	
 	
 	
