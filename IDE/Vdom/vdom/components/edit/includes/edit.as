@@ -9,8 +9,11 @@ import vdom.events.DataManagerEvent;
 import vdom.events.WorkAreaEvent;
 import vdom.managers.DataManager;
 
-[Bindable] private var dataManager:DataManager;
-[Bindable] private var help:String;
+[Bindable]
+private var dataManager:DataManager = DataManager.getInstance();
+
+[Bindable]
+private var help:String;
 	
 private var objectsXML:XML;
 private var publicData:Object;
@@ -25,11 +28,6 @@ override protected function updateDisplayList(unscaledWidth:Number,
 	types.height = unscaledHeight;
 	mainArea.height = unscaledHeight;
 	panelContainer.height = unscaledHeight;
-}
-
-private function initializeHandler():void
-{	
-	dataManager = DataManager.getInstance();
 }
 
 private function showHandler():void

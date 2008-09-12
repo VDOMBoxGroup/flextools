@@ -21,6 +21,8 @@ public class TypeAccordion extends Accordion {
 	private var phraseRE:RegExp = /#lang\((\w+)\)/;
 	private var resourceRE:RegExp = /#Res\((.*)\)/;
 	
+	private var currentLocale:String;
+	
 	private var standardCategories:Array = ['standard', 'form', 'table', 'database', 'debug'];
 	
 	public function TypeAccordion()	{
@@ -32,10 +34,19 @@ public class TypeAccordion extends Accordion {
 	
 	public function set dataProvider(value:XMLList):void
 	{	
-		if(!value || _dataProvider == value)
+		if(!value)
 			return;
 		
+		var newLocale:String = resourceManager.localeChain[0];
+		
+		if (currentLocale == newLocale && _dataProvider == value)
+			return;
+		
+		currentLocale = newLocale;
 		_dataProvider = value;
+		
+		categories = {};
+		removeAllChildren();
 		
 		types = new ArrayCollection();
 		types = createTypeDescriptions(value);

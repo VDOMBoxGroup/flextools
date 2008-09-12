@@ -413,7 +413,11 @@ public class AttributesPanel extends ClosablePanel {
 		
 		color = getColorByGroup(1);
 		
-		insertAttribute("Name", valueContainer, color);
+		insertAttribute(
+			resourceManager.getString("Edit","attributes_name"),
+			valueContainer,
+			color
+		);
 		
 		var attributes:XMLList = objectDescription.Type.Attributes.Attribute;
 		

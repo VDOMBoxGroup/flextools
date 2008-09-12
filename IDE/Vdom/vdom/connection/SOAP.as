@@ -9,6 +9,7 @@ import flash.utils.flash_proxy;
 
 import mx.resources.IResourceManager;
 import mx.resources.ResourceManager;
+import mx.rpc.Fault;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 import mx.rpc.soap.LoadEvent;
@@ -134,6 +135,12 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	
 	private function loginErrorHandler(event:FaultEvent):void
 	{
+		if(event.fault is Fault)
+		{
+			ws.dispatchEvent(FaultEvent.createEvent(event.fault, event.token, event.message));
+			return;
+		}
+		
 		var se:SOAPEvent = new SOAPEvent(SOAPEvent.LOGIN_ERROR);
 		se.result = new XML(event.fault.faultDetail)
 		dispatchEvent(se);

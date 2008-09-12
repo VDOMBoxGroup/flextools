@@ -4,8 +4,6 @@
 	xmlns:containers="vdom.containers.*"
 	xmlns:editContainers="vdom.components.edit.containers.*"
 	
-	initialize="initializeHandler();"
-	
 	show="showHandler();"
 	hide="hideHandler();"
 	
