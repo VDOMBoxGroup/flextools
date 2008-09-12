@@ -5,6 +5,7 @@ package vdom.components.treeEditor.colorMenu02
 	import mx.containers.Canvas;
 	import mx.controls.Image;
 	import mx.controls.Label;
+	import mx.events.FlexEvent;
 	
 	import vdom.events.TreeEditorEvent;
 
@@ -27,18 +28,23 @@ package vdom.components.treeEditor.colorMenu02
 		private var slctLevel:Number;
 		private var eye:Image;	
 		private var eyeOpend:Boolean = true;
+		private var  textLabel:Label;
+		
 		public function ColorMenu2()
 		{
+			addEventListener(FlexEvent.SHOW, showHandler);
+			addEventListener(FlexEvent.HIDE, hideHandler);
+			
 			//TODO: implement function
 			super();
 			var imgBackGround:Image = new Image();
 			imgBackGround.source = rMenu;
 			addChild(imgBackGround);
 			slctLevel = 0;
-			creatLevels();
 			
-			var textLabel:Label = new Label();
-				textLabel.text = resourceManager.getString('Tree','levels');
+			
+				textLabel = new Label();
+//				textLabel.text = ;
 				//textLabel.x = ;
 				textLabel.y = 2;
 				textLabel.width = 190;
@@ -56,6 +62,25 @@ package vdom.components.treeEditor.colorMenu02
 			eye.addEventListener(MouseEvent.CLICK, eyeClickHandler);
 			addChild(eye);
 			
+		}
+		
+		private function showHandler(flEvt:FlexEvent):void
+		{
+			
+		}
+		
+		private function hideHandler(flEvt:FlexEvent):void
+		{
+//			removeLevels();
+		}
+		
+		private function removeLevels():void
+		{
+			for (var i:int = 0; i < levels.length; i++)
+			{
+				removeChild(masLevels[i]);
+			}
+			masLevels = [];
 		}
 		
 		private function eyeClickHandler (msEvt:MouseEvent):void
@@ -125,6 +150,12 @@ package vdom.components.treeEditor.colorMenu02
 		{
 		//	trace(treEvt);
 			dispatchEvent(new TreeEditorEvent(treEvt.type, treEvt.ID));
+		}
+		
+		public function set text(str:String):void
+		{
+			textLabel.text = str;
+			creatLevels();
 		}
 	}
 }
