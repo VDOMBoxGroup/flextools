@@ -40,7 +40,7 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	{
 		if (!instance)
 			instance = new SOAP();
-
+		
 		return instance;
 	}
 	

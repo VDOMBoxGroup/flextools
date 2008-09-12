@@ -45,7 +45,8 @@ public class RenderManager implements IEventDispatcher {
 		["fontweight", "fontWeight"],
 		["fontstyle", "fontStyle"],
 		["textdecoration", "textDecoration"],
-		["textalign", "textAlign"]
+		["textalign", "textAlign"],
+		["align", "horizontalAlign"]
 	];
 	
 	public static const propertyList:Array = 
@@ -53,7 +54,9 @@ public class RenderManager implements IEventDispatcher {
 		["left", "x"], 
 		["top", "y"], 
 		["width", "width"], 
-		["height", "height"]
+		["height", "height"],
+		["colspan", "colSpan"],
+		["rowspan", "rowSpan"],
 	];
 	
 	private var soap:SOAP = SOAP.getInstance();
