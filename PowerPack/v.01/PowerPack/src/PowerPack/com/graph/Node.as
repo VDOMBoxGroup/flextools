@@ -425,6 +425,11 @@ public class Node extends Canvas
     {
         super.createChildren();
         
+        if(focusManager)
+        {
+        	focusManager.showFocusIndicator = false;
+        }
+        
         if (!nodeTextArea)
         {
             nodeTextArea = new TextArea();

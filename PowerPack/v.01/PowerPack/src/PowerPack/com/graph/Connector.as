@@ -467,6 +467,11 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     {
         super.createChildren();
 
+        if(focusManager)
+        {
+        	focusManager.showFocusIndicator = false;
+        }
+        
         if (ContextManager.FLASH_CONTEXT_MENU && !contextMenu)
         {
         	contextMenu = new SuperNativeMenu();

@@ -5,7 +5,9 @@ import ExtendedAPI.com.controls.HDivider;
 
 import PowerPack.customize.core.windowClasses.SuperStatusBar;
 
+import flash.desktop.NativeApplication;
 import flash.display.NativeWindowSystemChrome;
+import flash.display.NativeWindowType;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
@@ -27,6 +29,7 @@ import mx.controls.ProgressBarMode;
 import mx.controls.Text;
 import mx.controls.TextArea;
 import mx.core.Application;
+import mx.core.Window;
 import mx.events.MoveEvent;
 import mx.events.ResizeEvent;
 import mx.managers.PopUpManager;
@@ -175,6 +178,8 @@ public class ProgressManager extends EventDispatcher
         			else {
         				instance._bar.setProgress(ProgressEvent(event).bytesLoaded, ProgressEvent(event).bytesTotal);
         			}
+        			
+        			instance._bar.validateNow();
         		}        		
 
         		(value as FileStream).addEventListener(IOErrorEvent.IO_ERROR, onFileStreamClose);
@@ -315,8 +320,8 @@ public class ProgressManager extends EventDispatcher
 				if(showProgress)
 					instance._winBox.addChildAt(instance._bar, 1);
 				
-				instance._dialog = new SuperWindow();
-				//instance._dialog.type = NativeWindowType.LIGHTWEIGHT;
+				instance._dialog = new SuperWindow(NativeApplication.nativeApplication.activeWindow);
+				instance._dialog.type = NativeWindowType.LIGHTWEIGHT;
 				instance._dialog.systemChrome = NativeWindowSystemChrome.NONE;
 				//instance._dialog.transparent = true;
 				instance._dialog.title = LanguageManager.sentences['progress_title'];
@@ -330,30 +335,28 @@ public class ProgressManager extends EventDispatcher
 				instance._dialog.startPosition = SuperWindow.POS_CENTER_SCREEN;
 				instance._dialog.modal = true;				
 				
-				//PopUpManager.addPopUp(instance._window, instance._dialog);	
-
 				instance._dialog.addChild(instance._winBox);
 				instance._dialog.open();
-				instance._dialog.activate();
 
-				instance._dialog.validateNow();
-				//instance._winBox.validateNow();
-    	
-    			//var rect:Rectangle = instance._winBox.getRect(instance._dialog);    	
-				
-				//instance._dialog.width = instance._winBox.width+instance._winBox.maxHorizontalScrollPosition;
-				//instance._dialog.height = instance._winBox.height+instance._winBox.maxVerticalScrollPosition;
-				
-				instance._dialog.width = 300;
-				instance._dialog.height = 150;
-				
-				instance._dialog.validateNow();
-				//instance._winBox.validateNow();
+				//var rect:Rectangle = instance._winBox.getRect(instance._dialog);  
 
+				instance._dialog.width = 250;
+				instance._dialog.height = 110;
+				
+				instance._dialog.validateProperties();
+				
 				instance._dialog.setPosition();
 				
-				instance._dialog.validateNow();				
-    	
+				var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
+				if(parent)
+					parent.validateDisplayList();
+				else
+					Application.application.validateDisplayList();
+				
+				instance._dialog.validateNow();
+
+				instance._dialog.activate();
+
 				viewMode = WINDOW_MODE;
 				break;								
 		}
@@ -372,14 +375,23 @@ public class ProgressManager extends EventDispatcher
 		switch(instance._viewMode)
 		{
 			case WINDOW_MODE:
-					if(instance._winBox.parent)
-						instance._winBox.parent.removeChild(instance._winBox)
 						
 					if(instance._dialog && !instance._dialog.closed)
 					{
 						instance._dialog.visible = false;
-						instance._dialog.validateNow();
+						instance._dialog.validateProperties();
+						
+						if(instance._winBox.parent)
+							instance._winBox.parent.removeChild(instance._winBox);
+							
 						instance._dialog.nativeWindow.close();
+						
+						var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
+						if(parent)
+							parent.validateDisplayList();
+						else
+							Application.application.validateDisplayList();
+
 						instance._dialog = null;
 					}					
 				break;
