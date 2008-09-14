@@ -12,6 +12,7 @@ import mx.core.IWindow;
 import mx.core.Window;
 import mx.core.mx_internal;
 import mx.events.AIREvent;
+import mx.managers.SystemManager;
 import mx.managers.WindowedSystemManager;
 
 use namespace mx_internal;
@@ -170,7 +171,9 @@ public class SuperWindow extends Window implements IWindow
 	{
 		if( value && value.stage.numChildren>0 )
 		{
-			var sm:WindowedSystemManager = (value as NativeWindow).stage.getChildAt(0) as WindowedSystemManager;
+			var obj:Object = (value as NativeWindow).stage.getChildAt(0);
+			var sm:WindowedSystemManager =  obj as WindowedSystemManager;
+			
 			if(!sm)
 				return null;
 				
