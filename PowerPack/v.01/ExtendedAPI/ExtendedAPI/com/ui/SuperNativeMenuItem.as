@@ -548,21 +548,7 @@ public class SuperNativeMenuItem extends NativeMenuItem
     	{
     		_keyEquivalentChanged = false;
     		
-    		/*
-    		var sm:ISystemManager = Application.application.systemManager;
-    		var stg:Stage = Application.application.stage;
-    		sm = sm.topLevelSystemManager;
-    		
-    		
-    		if(stg)
-    		{	
-   				stg.removeEventListener(KeyboardEvent.KEY_DOWN, keyDown, true);
-
-    			if(super.keyEquivalent) {  		
-    				stg.addEventListener(KeyboardEvent.KEY_DOWN, keyDown, true, EventPriority.CURSOR_MANAGEMENT);
-    			}
-    		}
-    		*/
+    		//addKeyDownListener();
     	}
     	
     	if(_dataChanged || _enabledChanged || _labelChanged)
@@ -595,6 +581,11 @@ public class SuperNativeMenuItem extends NativeMenuItem
     //--------------------------------------------------------------------------
     
     private function onAppComplete(event:Event):void
+    {
+    	addKeyDownListener();
+    }
+    
+    private function addKeyDownListener():void
     {
 		var stg:Stage = Application.application.stage;
 		
