@@ -61,8 +61,8 @@ package vdom.components.eventEditor
 		private function treeChangeLister(evt:Event):void
 		{
 			 selectedNode = Tree(evt.target).selectedItem as XML;
-			 trace('------------------')
-			  trace('selectedNode ID: '+selectedNode.@ID)
+//			 trace('------------------')
+//			  trace('selectedNode ID: '+selectedNode.@ID)
 			 containerChange(selectedNode.@ID);
 			
 		}
