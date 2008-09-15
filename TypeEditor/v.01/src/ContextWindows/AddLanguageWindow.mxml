@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	borderAlpha="0.95" cornerRadius="1" width="300" height="180"
+	shadowDirection="right"	borderColor="#636363" titleStyleName="resourceBrowserTitle"
+	title="Add Object Language" verticalGap="15">
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+		]]>
+	</mx:Script>
+	
+	<mx:Style>
+		.resourceBrowserTitle {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+	
+	<mx:VBox verticalGap="0" width="100%">
+		<mx:Label text="Enter language label:" />
+		<mx:TextInput id="__labelStr" width="100%" cornerRadius="1" />
+	</mx:VBox>
+
+	<mx:VBox verticalGap="0" width="100%">
+		<mx:Label text="Enter language ISO 3168-1 string:" />
+		<mx:TextInput id="__isoStr" width="100%" cornerRadius="1" />
+	</mx:VBox>
+
+	<mx:HBox verticalGap="0" width="100%" horizontalAlign="center">
+		<mx:Button label="Apply" icon="@Embed(source='/icons/commit.png')" click="{applyBtnClickHandler();}" />
+		<mx:Button label="Cancel" icon="@Embed(source='/icons/discard.png')" click="{discardBtnClickHandler();}" />
+	</mx:HBox>
+	
+	<mx:Script>
+		<![CDATA[
+			
+			public var lngLabelStr:String = '';
+			public var lngIsoStr:String = '';
+		
+			private function applyBtnClickHandler():void {
+				lngLabelStr = __labelStr.text;
+				lngIsoStr = __isoStr.text;
+				this.dispatchEvent(new Event(Event.COMPLETE));
+			}
+			
+			private function discardBtnClickHandler():void {
+				try {
+					PopUpManager.removePopUp(this);
+				}
+				catch (err:Error) { return; }
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:TitleWindow>

@@ -2,7 +2,8 @@
 <mx:WindowedApplication
 	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
-	width="640" height="480" minHeight="480" minWidth="640">
+	width="720" height="480" minHeight="480" minWidth="720"
+	creationComplete="{creationComplete();}">
 	
 	<mx:Style>
 		.iconBox {
@@ -40,10 +41,12 @@
 	<mx:Script source="componentsHandlers.as" />
 	<mx:Script source="programLogic.as" />
 	
+	<!--
 	<mx:Binding source="menuDataProvider" destination="__mainMenuBar.dataProvider" />
+	-->
 	<mx:XML id="menuDataProvider" xmlns="">
 		<root>
-			<menuItem label="File">
+			<menuItem id="file" label="File">
 				<listItem label="Create new type" icon="openIcon" data="new" />
 				<listItem type="separator" />
 				<listItem label="Open type XML..." icon="openIcon" data="open"/>
@@ -54,12 +57,17 @@
 		</root>
 	</mx:XML>
 	
-	<mx:MenuBar id="__mainMenuBar"
-		width="100%" labelField="@label" iconField="@icon" showRoot="false" 
-		itemClick="{mainMenuHandler(event);}" />
-		
+	
+	<mx:HBox width="100%" horizontalAlign="right" verticalAlign="middle">
+		<mx:MenuBar id="__mainMenuBar"
+			width="100%" labelField="@label" iconField="@icon" showRoot="false" 
+			itemClick="{mainMenuHandler(event);}" />
+
+		<mx:Label text="Choose object language to edit:" fontWeight="bold" />
+		<mx:ComboBox id="__langSelection" width="150" cornerRadius="1" dataProvider="{langsDataProvider}" />	
+	</mx:HBox>
+	
 	<mx:TabNavigator width="100%" height="100%">
-		
 		<!-- Object Properties tab -->
 		<mx:Canvas id="__infoCanvas" label="Object Properties" 
 			width="100%" height="100%" horizontalScrollPolicy="off">
@@ -137,15 +145,15 @@
 				</mx:VBox>
 				
 				<!-- Right Side, where comboBoxes and Icons -->
-				<mx:VBox width="200" height="100%" 
+				<mx:VBox width="200" height="100%" horizontalScrollPolicy="off"
 					paddingLeft="10" paddingRight="25" verticalGap="10">
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Supported languages" />
-						<mx:ComboBox width="100%" cornerRadius="1" />
+						<mx:ComboBox id="__langsComboBox" width="100%" cornerRadius="1" dataProvider="{langsDataProvider}" />
 						<mx:HBox width="100%" paddingTop="2">
-							<mx:Button label="Add" cornerRadius="1" />
-							<mx:Button label="Remove" cornerRadius="1" />
+							<mx:Button label="Add" cornerRadius="1" click="{addObjectLanguageBtnClickHandler();}" />
+							<mx:Button label="Remove" cornerRadius="1" click="{removeObjectLanguageBtnClickHandler();}"/>
 						</mx:HBox>
 					</mx:VBox>
 
@@ -326,7 +334,5 @@
 			width="100%" height="100%" horizontalScrollPolicy="off" />
 
 	</mx:TabNavigator>	
-	<mx:HBox>
-			
-	</mx:HBox>
+
 </mx:WindowedApplication>

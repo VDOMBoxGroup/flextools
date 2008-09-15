@@ -1,7 +1,21 @@
 // ActionScript file
-import mx.events.MenuEvent;
-import mx.core.Application;
+import ContextWindows.AddLanguageWindow;
+
+import flash.events.Event;
 import flash.events.MouseEvent;
+
+import mx.core.Application;
+import mx.events.MenuEvent;
+import mx.managers.PopUpManager;
+
+
+/* Data Providers */
+[Bindable] private var langsDataProvider:Array = [];
+
+
+private function creationComplete():void {
+	__mainMenuBar.dataProvider = menuDataProvider;
+}
 
 
 private function mainMenuHandler(mEvent:MenuEvent):void {
@@ -32,3 +46,39 @@ private function colorSwitcherClickHandler(mEvt:MouseEvent):void {
 	mEvt.currentTarget.setStyle("borderThickness", 2);
 }
 
+
+/* --------- Object Supported languages section --------- */
+
+private var AddLangContextWnd:AddLanguageWindow = new AddLanguageWindow();
+
+private function addObjectLanguageBtnClickHandler():void {
+	PopUpManager.addPopUp(AddLangContextWnd, this, true);
+	PopUpManager.centerPopUp(AddLangContextWnd);
+	AddLangContextWnd.addEventListener(Event.COMPLETE, addObjectLanguage); 
+}
+
+private function addObjectLanguage(event:Event):void {
+	AddLangContextWnd.removeEventListener(Event.COMPLETE, addObjectLanguage);
+	langsDataProvider.push( { label:AddLangContextWnd.lngLabelStr, data:AddLangContextWnd.lngIsoStr } );
+	PopUpManager.removePopUp(AddLangContextWnd);
+	__langsComboBox.invalidateDisplayList();
+	__langSelection.invalidateDisplayList();
+}
+
+private function removeObjectLanguageBtnClickHandler():void {
+	var newLangsProvider:Array = [];
+	
+	for (var i:int = 0; i < langsDataProvider.length; i++) {
+		if (langsDataProvider[i] != __langsComboBox.selectedItem)
+			newLangsProvider.push(langsDataProvider[i]);
+	}
+	
+	
+	langsDataProvider = newLangsProvider;
+	__langsComboBox.invalidateDisplayList();
+	__langSelection.invalidateDisplayList();
+	
+}
+
+
+/* -------------------------------------------------------- */
