@@ -65,6 +65,7 @@
 	
 	private function showHnadler():void
 	{
+		
 		if(!main) 
 			main = new Canvas();
 	/*
@@ -80,10 +81,11 @@
 	
 	private function hideHendler():void
 	{
-		saveToServer();
+//		saveToServer();
 		removeAllLines();
 		removeMassTreeElements();
 		removeTreeEditorListeners();
+		
 		if(curTree)
 			dataManager.changeCurrentPage(curTree.ID);
 	//	btLine.visible = false;
