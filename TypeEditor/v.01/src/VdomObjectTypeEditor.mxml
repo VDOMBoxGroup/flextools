@@ -2,10 +2,15 @@
 <mx:WindowedApplication
 	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
-	width="720" height="480" minHeight="480" minWidth="720"
+	width="700" height="480" minHeight="480" minWidth="700"
 	creationComplete="{creationComplete();}">
 	
 	<mx:Style>
+		TextInput {
+			borderColor:#AAAAAA;
+			borderStyle:"solid";	
+		}
+	
 		.iconBox {
 			paddingRight:5;
 			paddingTop:5;
@@ -15,14 +20,14 @@
 		}
 		
 		.colorField {
-			borderColor:"#000000";
+			borderColor:#000000;
 			borderStyle:"solid";
 			horizontalAlign:"center";
 			verticalAlign:"middle";
 			borderThickness:0;
+			cornerRadius:5;
 		}
-		
-		
+
 	</mx:Style>
 	
 	<mx:Script>
@@ -30,18 +35,23 @@
 			private const VERSION:String = "0.8";
 			
 			[Bindable] [Embed("/icons/save.png")]
-			private var saveIcon:Class; 
+			public var saveIcon:Class; 
 			
 			[Bindable] [Embed("/icons/open.png")]
-			private var openIcon:Class;
+			public var openIcon:Class;
 			 
 			[Bindable] [Embed("/icons/exit.png")]
-			private var exitIcon:Class;
+			public var exitIcon:Class;
+			
+			[Bindable] [Embed("/icons/new.png")]
+			public var newIcon:Class;
 		]]>
 	</mx:Script>
 	
+	<mx:Script source="dataProviders.as" />
 	<mx:Script source="componentsHandlers.as" />
 	<mx:Script source="programLogic.as" />
+	
 	
 	<!--
 	<mx:Binding source="menuDataProvider" destination="__mainMenuBar.dataProvider" />
@@ -49,7 +59,7 @@
 	<mx:XML id="menuDataProvider" xmlns="">
 		<root>
 			<menuItem id="file" label="File">
-				<listItem label="Create new type" icon="openIcon" data="new" />
+				<listItem label="Create new type" icon="newIcon" data="new" />
 				<listItem type="separator" />
 				<listItem label="Open type XML..." icon="openIcon" data="open"/>
 				<listItem label="Save type XML..." icon="saveIcon" data="save"/>
@@ -69,7 +79,7 @@
 		<mx:ComboBox id="__langSelection" width="150" cornerRadius="1" dataProvider="{langsDataProvider}" />	
 	</mx:HBox>
 	
-	<mx:TabNavigator width="100%" height="100%">
+	<mx:TabNavigator width="100%" height="100%" >
 		<!-- Object Properties tab -->
 		<mx:Canvas id="__infoCanvas" label="Object Properties" 
 			width="100%" height="100%" horizontalScrollPolicy="off">
@@ -81,67 +91,72 @@
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Object Name" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__objName" width="100%" />	
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Display Name" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__dispName" width="100%" />	
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Object Name in XML Scripts" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__objNameInXML" width="100%" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Render Type" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__renderType" width="100%" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Description" />
-						<mx:TextArea width="100%" height="80" />	
+						<mx:TextArea id="__descript" width="100%" height="80" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Class Name" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__className" width="100%" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Object ID" />
-						<mx:TextInput width="100%" />	
+						<mx:HBox width="100%">
+							<mx:TextInput id="__objectID" width="100%" editable="false" />
+							<mx:Button id="__refreshIDBtn" icon="@Embed('/icons/refresh.png')" cornerRadius="1"
+								paddingLeft="0" paddingRight="0" width="20" borderColor="#DDDDDD" click="{refreshIDBtnClickHandler();}" />
+									
+						</mx:HBox>
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Container type" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__containerType" width="100%" />	
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Optimization Priority" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__optimPrior" width="100%" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Version" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__version" width="100%" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Containers supported" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__contsSupported" width="100%" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Remote methods" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__remoteMethods" width="100%" />	
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Handlers" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__handlers" width="100%" />	
 					</mx:VBox>
 					
 				</mx:VBox>
@@ -154,14 +169,18 @@
 						<mx:Label text="Supported languages" />
 						<mx:ComboBox id="__langsComboBox" width="100%" cornerRadius="1" dataProvider="{langsDataProvider}" />
 						<mx:HBox width="100%" paddingTop="2">
-							<mx:Button label="Add" cornerRadius="1" click="{addObjectLanguageBtnClickHandler();}" />
-							<mx:Button label="Remove" cornerRadius="1" click="{removeObjectLanguageBtnClickHandler();}"/>
+							<mx:Button label="Add" cornerRadius="1" click="{addObjectLanguageBtnClickHandler();}"
+								icon="@Embed('/icons/list-add.png')" />
+								
+							<mx:Button label="Remove" cornerRadius="1" click="{removeObjectLanguageBtnClickHandler();}"
+								icon="@Embed('/icons/list-remove.png')" />
+								
 						</mx:HBox>
 					</mx:VBox>
 
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Interface Type" />
-						<mx:ComboBox width="100%" cornerRadius="1">
+						<mx:ComboBox id="__objInterfaceType" width="100%" cornerRadius="1">
 							<mx:Array>
 					            <mx:Object data="1" label="Standard" />
 					            <mx:Object data="2" label="RichText Editor" />
@@ -174,38 +193,45 @@
 
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Category" />
-						<mx:ComboBox width="100%" cornerRadius="1" />
+						<mx:ComboBox id="__category" width="100%" cornerRadius="1">
+							<mx:Array>
+					            <mx:Object data="1" label="Standard" />
+					            <mx:Object data="2" label="Advanced" />
+					            <mx:Object data="3" label="Usual" />
+					            <mx:Object data="4" label="Portal" />
+							</mx:Array>
+						</mx:ComboBox>
 					</mx:VBox>
 
-					<mx:VBox verticalGap="0" width="100%" borderStyle="solid" borderColor="#DDDDDD" 
+					<mx:VBox verticalGap="0" width="100%" borderStyle="solid" borderColor="#CCCCCC" 
 						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10">
 						
-						<mx:CheckBox label="Moviable" />
-						<mx:CheckBox label="Resizable" />
-						<mx:CheckBox label="Dynamic" />
+						<mx:CheckBox id="__moviable" label="Moviable" />
+						<mx:CheckBox id="__resizable" label="Resizable" />
+						<mx:CheckBox id="__dynamic" label="Dynamic" />
 					</mx:VBox>
 
-					<mx:VBox width="100%" borderColor="#DDDDDD" borderStyle="solid" horizontalAlign="center"
+					<mx:VBox width="100%" borderColor="#CCCCCC" borderStyle="solid" horizontalAlign="center"
 						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10"
 						verticalGap="20">
 	
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Object Icon" />
-							<mx:Box styleName="iconBox" borderColor="#EEEEEE">
+							<mx:Box styleName="iconBox" borderColor="#DDDDDD">
 								<mx:Image width="64" height="64" />					
 							</mx:Box>
 						</mx:VBox>
 						
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Editor WYSIWYG Icon" />
-							<mx:Box styleName="iconBox" borderColor="#EEEEEE">
+							<mx:Box styleName="iconBox" borderColor="#DDDDDD">
 								<mx:Image width="64" height="64" />					
 							</mx:Box>
 						</mx:VBox>
 	
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Structure Icon" />
-							<mx:Box styleName="iconBox" borderColor="#EEEEEE">
+							<mx:Box styleName="iconBox" borderColor="#DDDDDD">
 								<mx:Image width="64" height="64" />					
 							</mx:Box>
 						</mx:VBox>
@@ -215,7 +241,7 @@
 		</mx:Canvas>
 		
 		<!-- Attributes tab -->
-		<mx:Canvas id="__attrsCanvas" label="Object Attributes" 
+		<mx:Canvas id="__attrsCanvas" label="Object Attributes"
 			width="100%" height="100%" horizontalScrollPolicy="off">
 			
 			<mx:HDividedBox id="__mainContainer" width="100%" height="100%" verticalScrollPolicy="off"
@@ -226,11 +252,15 @@
 					paddingLeft="10" paddingRight="0" verticalGap="5">
 					
 					<mx:Label text="Attributes list" />
-					<mx:List width="100%" height="100%" />
+					<mx:List id="__attrsList" width="100%" height="100%" click="{showAttrProps();}" />
 					<mx:HBox width="100%" horizontalGap="5">
 						<mx:Spacer width="100%" />
-						<mx:Button width="80" label="Add" cornerRadius="1" />
-						<mx:Button width="80" label="Remove" cornerRadius="1" />
+						<mx:Button label="Add" cornerRadius="1" icon="@Embed('/icons/list-add.png')"
+							click="{addAttrBtnClickHandler();}" />
+							
+						<mx:Button label="Remove" cornerRadius="1" icon="@Embed('/icons/list-remove.png')"
+							click="{removeAttrBtnClickHandler();}" />
+							
 						<mx:Spacer width="100%" />
 					</mx:HBox>	
 				</mx:VBox>			
@@ -243,27 +273,27 @@
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Attribute name" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__attrName" width="100%" />	
 					</mx:VBox>
 
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Attribute display name" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__attrDispName" width="100%" />	
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Default value" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__defValue" width="100%" />	
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Regular expression validation string" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__regExValidationStr" width="100%" />	
 					</mx:VBox>
 
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Validation error message" />
-						<mx:TextInput width="100%" />	
+						<mx:TextInput id="__regExValidationErrStr" width="100%" />	
 					</mx:VBox>
 
 					
@@ -271,7 +301,7 @@
 						<mx:VBox width="100%" verticalGap="20" paddingRight="5">
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Interface type" />
-								<mx:ComboBox width="100%" cornerRadius="1">
+								<mx:ComboBox id="__attrInterfaceType" width="100%" cornerRadius="1">
 							        <mx:Array>
 							            <mx:Object data="0" label="Standart" />
 							            <mx:Object data="1" label="Extended" />
@@ -282,7 +312,7 @@
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Panel interface" />
 								<mx:HBox width="100%">
-									<mx:ComboBox width="100%" cornerRadius="1">
+									<mx:ComboBox id="__attrPanelInterface" width="100%" cornerRadius="1">
 								        <mx:Array>
 								            <mx:Object data="0" label="TextField(Length)" />
 								            <mx:Object data="0" label="Number(minValue, maxValue)" />
@@ -307,7 +337,7 @@
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Panel colour group" />
 								<mx:HBox>
-									<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
+									<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" borderThickness="2" click="{colorSwitcherClickHandler(event);}" />
 									<mx:Box id="__redColor" backgroundColor="#B00000" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
 									<mx:Box id="__greenColor" backgroundColor="#00B000" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
 									<mx:Box id="__blueColor" backgroundColor="#0000B0" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
@@ -316,7 +346,7 @@
 
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Visible in Editor" />
-								<mx:ComboBox width="100%" cornerRadius="1">
+								<mx:ComboBox id="__attrVisible" width="100%" cornerRadius="1">
 							        <mx:Array>
 							            <mx:Object data="1" label="Yes (default)" />
 							            <mx:Object data="2" label="No" />
@@ -327,7 +357,6 @@
 					</mx:HBox>
 				</mx:VBox>
 			</mx:HDividedBox>
-			
 			
 		</mx:Canvas>
 		

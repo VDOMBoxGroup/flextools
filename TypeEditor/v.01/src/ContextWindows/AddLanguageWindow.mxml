@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	borderAlpha="0.95" cornerRadius="1" width="300" height="180"
+	borderAlpha="0.95" cornerRadius="1" width="300" height="200"
 	shadowDirection="right"	borderColor="#636363" titleStyleName="resourceBrowserTitle"
-	title="Add Object Language" verticalGap="15">
+	title="Add Object Language" verticalGap="15" creationComplete="{creationCompleteHandler();}">
 	<mx:Script>
 		<![CDATA[
 			import mx.managers.PopUpManager;
@@ -27,7 +27,7 @@
 		<mx:TextInput id="__isoStr" width="100%" cornerRadius="1" />
 	</mx:VBox>
 
-	<mx:HBox verticalGap="0" width="100%" horizontalAlign="center">
+	<mx:HBox verticalGap="0" width="100%" horizontalAlign="center" height="100%" verticalAlign="bottom">
 		<mx:Button label="Apply" icon="@Embed(source='/icons/commit.png')" click="{applyBtnClickHandler();}" />
 		<mx:Button label="Cancel" icon="@Embed(source='/icons/discard.png')" click="{discardBtnClickHandler();}" />
 	</mx:HBox>
@@ -37,6 +37,10 @@
 			
 			public var lngLabelStr:String = '';
 			public var lngIsoStr:String = '';
+			
+			private function creationCompleteHandler():void {
+				__labelStr.setFocus();
+			}
 		
 			private function applyBtnClickHandler():void {
 				lngLabelStr = __labelStr.text;
