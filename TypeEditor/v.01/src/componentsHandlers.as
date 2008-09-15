@@ -7,7 +7,6 @@ import flash.events.MouseEvent;
 import mx.core.Application;
 import mx.events.MenuEvent;
 import mx.managers.PopUpManager;
-import flash.utils.describeType;
 import mx.utils.UIDUtil;
 
 private function creationComplete():void {
@@ -139,7 +138,7 @@ private function addAttrBtnClickHandler():void {
 	attrsListProvider.push(newAttr);
 	__attrsList.dataProvider = attrsListProvider;
 	__attrsList.selectedIndex = attrsListProvider.length;
-	showAttrProps();
+	changeAttrSelection();
 }
 
 private function removeAttrBtnClickHandler():void {
@@ -154,25 +153,38 @@ private function removeAttrBtnClickHandler():void {
 	
 	attrsListProvider = newAttrsListProvider;
 	__attrsList.dataProvider = attrsListProvider;
-	showAttrProps();
+	changeAttrSelection();
 }
 
 private var previousSelectedAttr:int = -1;
+private var previousSelectedLang:String = __langSelection.text;
 
-private function showAttrProps():void {
+private function validSelection():Boolean {
 	if (__attrsList.selectedIndex < 0 || __attrsList.selectedIndex >= attrsListProvider.length) {
-		__attrName.text = '';
-		__attrDispName.text = '';
-		__defValue.text = '';
-		__regExValidationStr.text = '';
-		__regExValidationErrStr.text = '';
-		__attrInterfaceType.selectedIndex = 0;
-		__attrPanelInterface.selectedIndex = 0;
-		__attrVisible.selectedIndex = 0;
-		previousSelectedAttr = -1;
-		return; /* Incorrect index */
+		try {
+			__attrName.text = '';
+			__attrDispName.text = '';
+			__defValue.text = '';
+			__regExValidationStr.text = '';
+			__regExValidationErrStr.text = '';
+			__attrInterfaceType.selectedIndex = 0;
+			__attrPanelInterface.selectedIndex = 0;
+			__attrVisible.selectedIndex = 0;
+			previousSelectedAttr = -1;
+			previousSelectedLang = __langSelection.text;
+		}
+		catch (err:Error) { }
+		
+		return false;
+	} else {
+		return true;
 	}
+}
 
+private function saveAttrProps():void {
+	if (!validSelection())
+		return;
+	
 	var si:int = __attrsList.selectedIndex;
 	var ps:int = previousSelectedAttr;
 	var sl:String = __langSelection.text;
@@ -180,23 +192,48 @@ private function showAttrProps():void {
 	/* write changed properties */
 	if (previousSelectedAttr >= 0 && previousSelectedAttr < attrsListProvider.length) {
 		attrsListProvider[ps]['label'] = __attrName.text;
-		attrsListProvider[ps][sl]['attrDispName'] = __attrDispName.text;
 		attrsListProvider[ps]['defValue'] = __defValue.text;
 		attrsListProvider[ps]['regExValidationStr'] = __regExValidationStr.text;
-		attrsListProvider[ps][sl]['regExValidationErrStr'] = __regExValidationErrStr.text;
+		try {
+			attrsListProvider[ps][sl]['attrDispName'] = __attrDispName.text;
+			attrsListProvider[ps][sl]['regExValidationErrStr'] = __regExValidationErrStr.text;
+		}
+		catch (err:Error) {
+			attrsListProvider[ps][sl] = {};
+			attrsListProvider[ps][sl]['attrDispName'] = __attrDispName.text;
+			attrsListProvider[ps][sl]['regExValidationErrStr'] = __regExValidationErrStr.text;
+		}
 	}
-	
-	/* load selected propertie parameters */
-	__attrName.text = attrsListProvider[si]['label'];
-	__attrDispName.text = attrsListProvider[si][sl]['attrDispName'];
-	__defValue.text = attrsListProvider[si]['defValue'];
-	__regExValidationStr.text = attrsListProvider[si]['regExValidationStr'];
-	__regExValidationErrStr.text = attrsListProvider[si][sl]['regExValidationErrStr'];
-	
-	previousSelectedAttr = si;
+
 	__attrsList.dataProvider = attrsListProvider;
 	__attrsList.selectedIndex = si;
+	previousSelectedAttr = si;
 }
+
+private function loadAttrProps():void {
+	var si:int = __attrsList.selectedIndex;
+	var sl:String = __langSelection.text;
+
+	/* load selected propertie parameters */
+	__attrName.text = attrsListProvider[si]['label'];
+	__defValue.text = attrsListProvider[si]['defValue'];
+	__regExValidationStr.text = attrsListProvider[si]['regExValidationStr'];
 	
+	try {
+		__attrDispName.text = attrsListProvider[si][sl]['attrDispName'];
+		__regExValidationErrStr.text = attrsListProvider[si][sl]['regExValidationErrStr'];
+	}
+	catch (err:Error) {
+		__attrDispName.text = '';
+		__regExValidationErrStr.text = '';
+	}
+}
+
+private function changeAttrSelection():void {
+	if (validSelection()) {
+		saveAttrProps();
+		loadAttrProps();
+	}
+}
 /* -------------------------------------------------------- */
 
