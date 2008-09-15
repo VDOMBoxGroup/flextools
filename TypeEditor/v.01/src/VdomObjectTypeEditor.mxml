@@ -27,14 +27,16 @@
 	
 	<mx:Script>
 		<![CDATA[
+			private const VERSION:String = "0.8";
+			
 			[Bindable] [Embed("/icons/save.png")]
-			public var saveIcon:Class; 
+			private var saveIcon:Class; 
 			
 			[Bindable] [Embed("/icons/open.png")]
-			public var openIcon:Class;
+			private var openIcon:Class;
 			 
 			[Bindable] [Embed("/icons/exit.png")]
-			public var exitIcon:Class;
+			private var exitIcon:Class;
 		]]>
 	</mx:Script>
 	
