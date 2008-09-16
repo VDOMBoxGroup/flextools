@@ -8,6 +8,11 @@ import mx.core.Application;
 import mx.events.MenuEvent;
 import mx.managers.PopUpManager;
 import mx.utils.UIDUtil;
+import mx.controls.Alert;
+import flash.filesystem.File;
+import mx.events.FileEvent;
+import flash.desktop.Icon;
+import mx.controls.Image;
 
 private function creationComplete():void {
 	__mainMenuBar.dataProvider = menuDataProvider;
@@ -52,19 +57,31 @@ private var AddLangContextWnd:AddLanguageWindow = new AddLanguageWindow();
 private function addObjectLanguageBtnClickHandler():void {
 	PopUpManager.addPopUp(AddLangContextWnd, this, true);
 	PopUpManager.centerPopUp(AddLangContextWnd);
-	AddLangContextWnd.addEventListener(Event.COMPLETE, addObjectLanguage); 
+	AddLangContextWnd.addEventListener(Event.COMPLETE, addObjectLanguage);
+	AddLangContextWnd.onShow();
 }
 
 private function addObjectLanguage(event:Event):void {
 	AddLangContextWnd.removeEventListener(Event.COMPLETE, addObjectLanguage);
-	langsDataProvider.push( { label:AddLangContextWnd.lngLabelStr, data:AddLangContextWnd.lngIsoStr } );
 	PopUpManager.removePopUp(AddLangContextWnd);
+	
+	var langStr:String = AddLangContextWnd.langStr; 
+	
+	/* Check for dublicate langs */
+	for each (var language:Object in langsProvider) {
+		if (language['label'] == langStr) {
+			Alert.show('The language with the same parameter(s) is already exist!', 'Name conflict');
+			return;
+		}
+	}
+	
+	langsProvider.push( { label:langStr } );
 
 	__langsComboBox.invalidateDisplayList();
 	__langSelection.invalidateDisplayList();
 	
 	/* Ensure that at least one language selected */
-	if (langsDataProvider.length > 0) {
+	if (langsProvider.length > 0) {
 		formEnabled(true);
 		
 		if (__langSelection.selectedItem == null)
@@ -72,8 +89,8 @@ private function addObjectLanguage(event:Event):void {
 			
 	}
 	
-	if (langsDataProvider.length == 1) {
-		selectedLang = langsDataProvider[0]['label'];
+	if (langsProvider.length == 1) {
+		selectedLang = langsProvider[0]['label'];
 	}
 }
 
@@ -81,17 +98,17 @@ private function removeObjectLanguageBtnClickHandler():void {
 	var needUpdate:Boolean = __langsComboBox.text == __langSelection.text;
 	var newLangsProvider:Array = [];
 	
-	for (var i:int = 0; i < langsDataProvider.length; i++) {
-		if (langsDataProvider[i] != __langsComboBox.selectedItem)
-			newLangsProvider.push(langsDataProvider[i]);
+	for (var i:int = 0; i < langsProvider.length; i++) {
+		if (langsProvider[i] != __langsComboBox.selectedItem)
+			newLangsProvider.push(langsProvider[i]);
 	}
 	
-	langsDataProvider = newLangsProvider;
+	langsProvider = newLangsProvider;
 	
 	__langsComboBox.invalidateDisplayList();
 	__langSelection.invalidateDisplayList();
 	
-	if (langsDataProvider.length == 0)
+	if (langsProvider.length == 0)
 		formEnabled(false);
 	
 	if (needUpdate) {
@@ -124,6 +141,9 @@ private function formEnabled(value:Boolean):void {
 	__attrsCanvas.enabled = value;
 	__resourcesCanvas.enabled = value;
 	__refreshIDBtn.enabled = value;
+	__editorIconBtn.enabled = value;
+	__structIconBtn.enabled = value;
+	__objIconBtn.enabled = value;
 }
 
 private function refreshIDBtnClickHandler():void {
@@ -263,4 +283,54 @@ private function changeLangSelection():void {
 	selectedLang = __langSelection.text;
 	loadAttrProp();
 	loadInformationTabData();
+}
+
+/* --------- Change Icons Procedures ---------------------- */
+/* -------------------------------------------------------- */
+
+private var iconFile:File = new File();
+private var imagesFilter:FileFilter = new FileFilter("Images (*.jpg;*.jpeg;*.gif;*.png)", "*.jpg;*.jpeg;*.gif;*.png");
+private var selectedIcon:Image;
+
+private function changeObjectIconClickHandler(imgRef:Image):void {
+	iconFile = new File();
+	iconFile.addEventListener(Event.SELECT, changeObjectIcon);
+	try {
+		iconFile.browseForOpen("Choose image for Icon", [imagesFilter]);
+	}
+	catch (err:Error) {
+		iconFile.removeEventListener(Event.SELECT, changeObjectIcon);
+		return;
+	}
+	
+	selectedIcon = imgRef;
+}
+
+private function changeObjectIcon(e:Event):void {
+	iconFile.removeEventListener(Event.SELECT, changeObjectIcon);
+	try {
+		if (iconFile && !iconFile.isDirectory) {
+			var srcBytes:ByteArray = new ByteArray();
+			var srcStream:FileStream = new FileStream();
+			
+			try {
+				srcStream.open(iconFile, FileMode.READ);
+				
+				if (srcStream.bytesAvailable == 0) {
+					Alert.show("File is empty", "Could not apply image");
+					return; 
+				}
+				
+				srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
+				srcStream.close();
+				
+				selectedIcon.source = srcBytes;
+			}
+			catch (err:Error) {
+				Alert.show('Could not open file!', 'IO Error');
+				return;
+			}
+		}
+	}
+	catch (err:Error) { }
 }

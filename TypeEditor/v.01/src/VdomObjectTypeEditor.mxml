@@ -16,7 +16,7 @@
 			paddingTop:5;
 			paddingLeft:5;
 			paddingBottom:5;
-			borderStyle:"solid";	
+			borderStyle:"solid";
 		}
 		
 		.colorField {
@@ -76,7 +76,7 @@
 			itemClick="{mainMenuHandler(event);}" />
 
 		<mx:Label text="Choose object language to edit:" fontWeight="bold" />
-		<mx:ComboBox id="__langSelection" width="150" cornerRadius="1" dataProvider="{langsDataProvider}" change="{changeLangSelection();}" />	
+		<mx:ComboBox id="__langSelection" width="150" cornerRadius="1" dataProvider="{langsProvider}" change="{changeLangSelection();}" />	
 	</mx:HBox>
 	
 	<mx:TabNavigator width="100%" height="100%" >
@@ -121,10 +121,11 @@
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Object ID" />
-						<mx:HBox width="100%">
+						<mx:HBox width="100%" verticalAlign="middle">
 							<mx:TextInput id="__objectID" width="100%" editable="false" />
 							<mx:Button id="__refreshIDBtn" icon="@Embed('/icons/refresh.png')" cornerRadius="1"
-								paddingLeft="0" paddingRight="0" width="20" borderColor="#DDDDDD" click="{refreshIDBtnClickHandler();}" />
+								paddingLeft="0" paddingRight="0" width="22" height="22"
+								borderColor="#FFFFFF" click="{refreshIDBtnClickHandler();}" />
 									
 						</mx:HBox>
 					</mx:VBox>
@@ -167,7 +168,7 @@
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Supported languages" />
-						<mx:ComboBox id="__langsComboBox" width="100%" cornerRadius="1" dataProvider="{langsDataProvider}" />
+						<mx:ComboBox id="__langsComboBox" width="100%" cornerRadius="1" dataProvider="{langsProvider}" />
 						<mx:HBox width="100%" paddingTop="2">
 							<mx:Button label="Add" cornerRadius="1" click="{addObjectLanguageBtnClickHandler();}"
 								icon="@Embed('/icons/list-add.png')" />
@@ -217,24 +218,46 @@
 	
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Object Icon" />
-							<mx:Box styleName="iconBox" borderColor="#DDDDDD">
-								<mx:Image width="64" height="64" />					
-							</mx:Box>
+							<mx:HBox horizontalGap="2">
+								<mx:Box styleName="iconBox" borderColor="#DDDDDD">
+									<mx:Image id="__objectIcon" 
+										width="64" height="64" verticalAlign="middle" horizontalAlign="center" />
+															
+								</mx:Box>
+								<mx:Button id="__objIconBtn" click="{changeObjectIconClickHandler(__objectIcon);}"
+									icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+									
+							</mx:HBox>
 						</mx:VBox>
 						
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Editor WYSIWYG Icon" />
-							<mx:Box styleName="iconBox" borderColor="#DDDDDD">
-								<mx:Image width="64" height="64" />					
-							</mx:Box>
+							<mx:HBox horizontalGap="2">
+								<mx:Box styleName="iconBox" borderColor="#DDDDDD">
+									<mx:Image id="__editorIcon"
+										width="64" height="64" verticalAlign="middle" horizontalAlign="center" />
+									
+								</mx:Box>
+								<mx:Button id="__editorIconBtn" click="{changeObjectIconClickHandler(__editorIcon);}"
+									icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+									
+							</mx:HBox>
 						</mx:VBox>
 	
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Structure Icon" />
-							<mx:Box styleName="iconBox" borderColor="#DDDDDD">
-								<mx:Image width="64" height="64" />					
-							</mx:Box>
+							<mx:HBox horizontalGap="2">
+								<mx:Box styleName="iconBox" borderColor="#DDDDDD">
+									<mx:Image id="__structureIcon"
+										width="64" height="64" verticalAlign="middle" horizontalAlign="center" />
+										
+								</mx:Box>
+								<mx:Button id="__structIconBtn" click="{changeObjectIconClickHandler(__structureIcon);}"
+									icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+									
+							</mx:HBox>
 						</mx:VBox>
+
 					</mx:VBox>
 				</mx:VBox>
 			</mx:HBox>

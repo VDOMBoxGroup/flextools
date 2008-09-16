@@ -1,7 +1,7 @@
 // ActionScript file
 /* Data Providers */
 
-[Bindable] private var langsDataProvider:Array = [];
+[Bindable] private var langsProvider:Array = [];
 private var attrsListProvider:Array = [];
 
 private var objDisplayName:Array = [];

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	borderAlpha="0.95" cornerRadius="1" width="300" height="200"
+	borderAlpha="0.95" cornerRadius="1" width="250" height="150"
 	shadowDirection="right"	borderColor="#636363" titleStyleName="resourceBrowserTitle"
-	title="Add Object Language" verticalGap="15" creationComplete="{creationCompleteHandler();}">
-	<mx:Script>
-		<![CDATA[
-			import mx.managers.PopUpManager;
-		]]>
-	</mx:Script>
+	title="Add Object Language" verticalGap="15" creationComplete="{onCreationComplete();}">
+	
+	<mx:RegExpValidator 
+		source="{__langStr}" property="text" expression="^[a-z]\{2,2\}_[A-Z]\{2,2\}$"
+		required="true" valid="{validName = true;}" invalid="{validName = false;}" />
 	
 	<mx:Style>
 		.resourceBrowserTitle {
@@ -16,39 +15,53 @@
 			fontWeight:bold;
 		}
 	</mx:Style>
-	
-	<mx:VBox verticalGap="0" width="100%">
-		<mx:Label text="Enter language label:" />
-		<mx:TextInput id="__labelStr" width="100%" cornerRadius="1" />
-	</mx:VBox>
 
 	<mx:VBox verticalGap="0" width="100%">
 		<mx:Label text="Enter language ISO 3168-1 string:" />
-		<mx:TextInput id="__isoStr" width="100%" cornerRadius="1" />
+		<mx:TextInput id="__langStr" width="100%" cornerRadius="1" text="en_US" />
 	</mx:VBox>
 
 	<mx:HBox verticalGap="0" width="100%" horizontalAlign="center" height="100%" verticalAlign="bottom">
-		<mx:Button label="Apply" icon="@Embed(source='/icons/commit.png')" click="{applyBtnClickHandler();}" />
-		<mx:Button label="Cancel" icon="@Embed(source='/icons/discard.png')" click="{discardBtnClickHandler();}" />
+		<mx:Button id="__applyBtn" label="Apply" icon="@Embed(source='/icons/commit.png')" click="{applyBtnClickHandler();}" />
+		<mx:Button id="__cancelBtn" label="Cancel" icon="@Embed(source='/icons/discard.png')" click="{cancelBtnClickHandler();}" />
 	</mx:HBox>
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
 			
-			public var lngLabelStr:String = '';
-			public var lngIsoStr:String = '';
+			public var langStr:String = '';
+			private var validName:Boolean = true;
 			
-			private function creationCompleteHandler():void {
-				__labelStr.setFocus();
+			private function onCreationComplete():void {
+				this.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler_); 
+			}
+			
+			private function keyDownHandler_(kEvent:KeyboardEvent):void {
+				if (kEvent.keyCode == 13)
+					applyBtnClickHandler()
+				else
+				if (kEvent.keyCode == 27)
+					cancelBtnClickHandler();
+			}
+			
+			public function onShow():void {
+				__langStr.setFocus();
 			}
 		
 			private function applyBtnClickHandler():void {
-				lngLabelStr = __labelStr.text;
-				lngIsoStr = __isoStr.text;
-				this.dispatchEvent(new Event(Event.COMPLETE));
+				__applyBtn.setFocus();
+				if (validName) {
+					langStr = __langStr.text;
+					this.dispatchEvent(new Event(Event.COMPLETE));
+				} else {
+					__langStr.setFocus();
+					Alert.show('Invalid language name!', 'Name error');
+				}
 			}
 			
-			private function discardBtnClickHandler():void {
+			private function cancelBtnClickHandler():void {
 				try {
 					PopUpManager.removePopUp(this);
 				}
