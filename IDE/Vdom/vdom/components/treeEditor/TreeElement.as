@@ -5,7 +5,9 @@ package vdom.components.treeEditor
 	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.system.LoaderContext;
+	import flash.utils.Timer;
 	
 	import mx.containers.Canvas;
 	import mx.controls.Button;
@@ -109,7 +111,10 @@ package vdom.components.treeEditor
 		public function TreeElement(str:String ='')
 		{
 			super();
-			super.cacheAsBitmap = true;
+//			var bt:Button = new Button();
+//			addChild(bt);
+			
+//			super.cacheAsBitmap = true;
 		//	clipContent = false;
 			cnvUpLayer.clipContent = false;
 			
@@ -123,7 +128,6 @@ package vdom.components.treeEditor
 		//	buttonMode = true;
 			
 			addEventListener(MouseEvent.CLICK, endFormatinfHandler);
-			
 		}
 		
 		
@@ -563,6 +567,46 @@ package vdom.components.treeEditor
 		{
 			image.source = obj;
 		}
+		
+		private var _xTo:Number = -1;
+		public function set xTo(num:Number):void
+		{
+			_xTo = num;
+			
+		}
+		
+		private var _yTo:Number = -1;
+		public function set yTo(num:Number):void
+		{
+			_yTo = num;
+			
+		}			
+		
+		private var delayTimer:Timer;
+		public function play():void
+		{
+			var delay:Number = 1000;
+			var repeatCount:int = 10;
+			delayTimer = new Timer(0, repeatCount);
+			delayTimer.addEventListener(TimerEvent.TIMER, timerHandler);
+			
+			dXtoX = (_xTo - this.x) / repeatCount;
+			dYtoY = (_yTo - this.y) / repeatCount;
+			
+			delayTimer.start();
+
+		}		
+		
+		private var dXtoX:Number = 0;
+		private var dYtoY:Number = 0;
+		private function timerHandler(tmEvt:TimerEvent):void
+		{
+			this.x = this.x + dXtoX;
+			this.y = this.y + dYtoY;
+			trace('timerHandler: '+ this.x);
+//			parent).validateDisplayList();
+			
+		}		
 		/*
 		public function set resource(obj:Object):void
 		{
@@ -634,7 +678,6 @@ package vdom.components.treeEditor
 			txtInp.visible = false;
 			
 			cnvUpLayer.addChild(imgheader);
-		//	cnvUpLayer.addChild(imgSelected);
 			cnvUpLayer.addChild(imgMenu);
 			cnvUpLayer.addChild(txt);
 			cnvUpLayer.addChild(imgPlus);

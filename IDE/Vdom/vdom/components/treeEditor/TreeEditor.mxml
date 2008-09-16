@@ -5,16 +5,12 @@
 <mx:Metadata>
 		[ResourceBundle("Tree")]
 </mx:Metadata>	
-<mx:Canvas id="cnForIndex" width="100%" height="100%" >
-<mx:Canvas id="main" width="100%" height="100%" backgroundColor="#ffffff">
 
-
-
-	
-	
+<mx:Canvas id="main" width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1">
 
 <mx:Script>
 	<![CDATA[
+		import mx.effects.easing.Elastic;
 		import vdom.containers.ApplicationPanel;
 		import mx.core.Application;
 		import vdom.events.TreeEditorEvent;
@@ -75,20 +71,17 @@
 		addTreeEditorListeners();
 			
 		dataManager.getApplicationStructure();
-		
-	//	setDisplayNames();
 	}
 	
 	private function hideHendler():void
 	{
-//		saveToServer();
 		removeAllLines();
 		removeMassTreeElements();
 		removeTreeEditorListeners();
 		
 		if(curTree)
 			dataManager.changeCurrentPage(curTree.ID);
-	//	btLine.visible = false;
+
 		if (main.contains(btLine))
 		{
 			main.removeChild(btLine);
@@ -109,7 +102,7 @@
 		xmlApplicationStructure = dtManEvt.result;
 		createTreeArr(xmlApplicationStructure);
 		drawLines(xmlApplicationStructure);
-//			trace("xmlApplicationStructure: \n" + xmlApplicationStructure);
+
 		if (needCreatTree == true)
 			adjustmentTree(xmlApplicationStructure);
 		
@@ -122,10 +115,7 @@
 		
 		if(curTree != null)
 			curTree.current = true;
-			
 	}
-	
-//	var asdp:ApplicationPanel
 	
 	private var dX:Number;
 	private var dY:Number;
@@ -148,8 +138,6 @@
 		
 		var curID:String = curTree.ID;
 		redrawLines(curID);
-		//treeElementMousUpHandler();
-		// saveToServer();
 	}
 	
 	
@@ -176,7 +164,6 @@
 		
 		if (!main.contains(btLine))
 		{
-			//	trace(main.contains(btLine))
 			main.addChild(btLine);
 		}
 		muEvt.stopImmediatePropagation();
@@ -198,18 +185,13 @@
 	
 	private function mouseDownHandler(evt:MouseEvent):void
 	{
-//		trace('object');
-		
 		// проводим линию
 		if(blDrawLine)
 		{
-//			evt.currentTarget.availabled = false;
-			
 			pnFrom.x = evt.currentTarget.x; 
 			pnFrom.y =evt.currentTarget.y;
 			
 			drawLine(evt.currentTarget);
-			
 		}		
 
 		if (curTree != null)
@@ -218,25 +200,18 @@
 		evt.currentTarget.current = true;
 		curTree = evt.currentTarget;		
 		dataManager.changeCurrentPage(curTree.ID);
-		
-//		evt.currentTarget.availabled = true; 
-		//dataManager.changeCurrentPage( curTree.ID);
 	}
 	
 	
 	
 	private function mouseUpHandler(msEvt:MouseEvent):void
 	{	
-	
-		
-//		trace('App');
 		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 		
 		saveToServer();
 	}
 	
-	//---------------------
 	private var treeElemenUnderMouse:Object;
 	private function treeElementMouseOutHandler(msEvt:MouseEvent):void
 	{
@@ -255,17 +230,15 @@
 	}
 	
 	
-	//--------------------------
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
 		var curID:String = curTree.ID;
-//		trace('MOve');
+
 		if (main.mouseX < dX)
 			 	massTreeElements[curID].x = 0;
 			else
 				massTreeElements[curID].x = main.mouseX - dX;
 		
-//		trace('y: '+ massTreeElements[c	urID].y)
 		if ((main.mouseY -dY ) < 10)
 			 	massTreeElements[curID].y = 10;
 			else
@@ -287,10 +260,8 @@
 		Alert.show(resourceManager.getString('Tree','do_you_want_to_delete_element'), resourceManager.getString('Tree','delete_element'), 3, this, alertClickDeleteTreeElement);
 	}
 	 
-            // Event handler function for displaying the selected Alert button.
     private function alertClickDeleteTreeElement(event:CloseEvent):void 
     {
-//    	trace('click delete');
         if (event.detail==Alert.YES)
         {
         	dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
@@ -379,9 +350,6 @@
 		
 			vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
 		}
-//		var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
-//		
-//			vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
 	}
 	
 		
@@ -406,7 +374,6 @@
 	private function showLines(treEvt:TreeEditorEvent):void
 	{
 		var level:String = treEvt.ID;
-//		trace('level: '+ level);
 		for (var frsTrElem:String in massLines[level])
 			for (var sknTrElem:String in massLines[level][frsTrElem])
 			{
@@ -417,8 +384,6 @@
 
 	private function chengeSelectedLevelHandler(trEvt:TreeEditorEvent):void
 	{
-		/// if showing
-	
 		var level:String = trEvt.ID;
 		if(!massLines[level])
 			return;
@@ -433,15 +398,6 @@
 				main.addChild(masIndex[level][fromObj][toObj]);
 			}
 			
-//			
-	/*
-		for(fromObj in massLines[level])
-			for( toObj in massLines[level][fromObj])
-			{
-			} 
-			*/
-//			
-				
 		for (var ID:String in massTreeElements)
 		{
 				main.removeChild(massTreeElements[ID]);
@@ -493,16 +449,12 @@
 	
 	private function addTreeElementLauncher():void 
 	{
-			//	PopUpManager.createPopUp(super, AddTreeElementWindow, true);
-				var rbWnd:AddTreeElementWindow = AddTreeElementWindow(PopUpManager.createPopUp(this, AddTreeElementWindow, true));
-			//rbWnd.treeElement = treeElement;
+			var rbWnd:AddTreeElementWindow = AddTreeElementWindow(PopUpManager.createPopUp(this, AddTreeElementWindow, true));
 			rbWnd.addEventListener(AddTreeElementEvent.TREE_ELEMENT_ADDED, addTreeElementHandler);
 	}
 
 	private function addTreeElementHandler(adTrEvt:AddTreeElementEvent):void 
 	{
-		//rbWnd.removeEventListener(AddTreeElementEvent.TREE_ELEMENT_ADDED, addTreeElementHandler);
-		
 		var ID:String = adTrEvt.treeElementID
 		var trEl:TreeElement = new TreeElement();
 		
@@ -520,7 +472,6 @@
 					maxY = massTreeElements[tID].y;
 					
 		trEl.y = maxY + 100;
-		//trEl.height
 		
 		massTreeElements[ID] = addEventListenerToTreeElement(trEl);
 		main.addChild(massTreeElements[ID]);
@@ -541,22 +492,28 @@
 	
 	private function autoSpacing():void
 	{
+		hideLenes();
 		adjustmentTree(xmlApplicationStructure);
-		removeAllLines();
-		removeMassTreeElements();
 		
-		createTreeArr(xmlApplicationStructure);
-		drawLines(xmlApplicationStructure);
+		var delayTimer:Timer = new Timer(1500, 1);
+		delayTimer.addEventListener(TimerEvent.TIMER, timerHandler);//		removeMassTreeElements();
+		delayTimer.start();
+//		createTreeArr(xmlApplicationStructure);
+		
+	}
+	private function timerHandler(tmEvt:TimerEvent):void
+	{
+		showLenes();
 		
 		curTree = massTreeElements[dataManager.currentPageId];
 		
 		if(curTree != null)	curTree.current = true;
 		
 		setStartPage();
-//		drawIndex();
-//		saveToServer();
-		//showHnadler();
+		
+		saveToServer();
 	}
+	
 	
 	private var expand:Boolean;
 	private function expandAll():void
@@ -599,7 +556,6 @@
 	</mx:ComboBox>
 -->
 </mx:Canvas>
-</mx:Canvas>
 
 <mx:VBox>
 	<colorMenu02:ColorMenu2 id="colmen2" text="{resourceManager.getString('Tree','levels')}" />
@@ -609,6 +565,8 @@
 <mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
 	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
 		  click="addTreeElementLauncher()"/>
+		  <treeEditor:Control id="control"/>
+		  	
 	
 
 </mx:VBox>

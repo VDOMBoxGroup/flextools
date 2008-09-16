@@ -13,8 +13,6 @@ package vdom.components.treeEditor
 		private var trEl1:Object;
 		private var vector:Container = new Container();
 		private var curСolor:String = '';
-		//private var button:Button;
-		
 		
 		public function TreeVector(trEl0:Object, trEl1:Object, level:String = '1'):void
 		{
@@ -35,26 +33,5 @@ package vdom.components.treeEditor
 			graphics.clear();
 			createVector (trEl0,  trEl1);
 		}
-		
-//		private var _visibleIndex:Boolean = true;
-		
-		
-	/*	
-		public  function set mark(bool:Boolean):void
-		{
-			if(bool)
-			{
-				this._mark = true;
-				drawLine();
-			}
-			else
-			{
-				this._mark = false;
-				drawLine();
-		//	trace('mark = fulse')
-			}
-		}
-		*/
-		
 	}
 }
