@@ -54,15 +54,7 @@
 	 		
 	 		[Bindable]
 	 		private var dataManager:DataManager;
-	 		/*
-	 		 [Embed(source='/assets/treeEditor/treeEditor.swf', symbol='plus')]
-			 [Bindable]
-			 public var plus:Class;
-			 
-			 [Embed(source='/assets/treeEditor/treeEditor.swf', symbol='delete')]
-			[Bindable]
-			public var delet:Class;
-			*/
+	 	
 			 [Embed(source='/assets/eventEditor/eventEditor.swf', symbol='copyCursor')]
 			 [Bindable]
 			 public var plus:Class;
@@ -92,7 +84,6 @@
 	 			
 	 			curContainerID = dataManager.currentPageId;
 	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
-//	 			trace('EvenEditor SHOW');
 	 		}
 	 		
 	 		private function hideHandler():void
@@ -100,7 +91,6 @@
 	 			changeWatcher.unwatch();
 	 			trContainer.hideHandler();
 	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
-//	 			trace('EvenEditor HIDE');
 				can.removeAllChildren();
 	 		}
 	 		
@@ -130,7 +120,6 @@
 	 		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
 	 		{
 	 			dataManager.removeEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
-	 			//trace(dmEvt.result.toXMLString());
 	 			cretDat(dmEvt.result);
 	 		}
 	 		
@@ -194,7 +183,6 @@
 	        	el.addEventListener(MouseEvent.MOUSE_OVER, actionMouseOverHandler);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
-//	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
@@ -209,7 +197,6 @@
 	        	el.addEventListener(MouseEvent.MOUSE_OVER, eventMouseOverHandler);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
-//	        	el.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
 	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
@@ -227,22 +214,18 @@
 	        			cursorID = CursorManager.setCursor(plus);
 	        		else
 	        			cursorID = CursorManager.setCursor(delet);
-//	        	trace('-+-')
 	        } 
 	        
 	        private function eventMouseOverHandler(mEvt:MouseEvent):void
 	        {
 	        	if(blDrawLine)
 	        		cursorID = CursorManager.setCursor(delet);
-//	        	trace('+-+')
 	        } 
 	        
 	        private function mouseOutHandler(mEvt:MouseEvent):void
 	        {
-//	        	if(!blDrawLine)
 	        		CursorManager.removeCursor(cursorID);
 	        	cursorID = 0;
-// 	        	trace('++++')
 	        }
  	        
 	        private function objectClickHandler(mEvt:MouseEvent):void
@@ -338,11 +321,11 @@
 				var pnTo:Object = new Object();
 				// чтоб мышка не кликала по своей линии
 				
-				if((tX>0))	pnTo.x = pn.x - 10;
-					else pnTo.x = pn.x + 10;
+				if((tX>0))	pnTo.x = pn.x - 3;
+					else pnTo.x = pn.x + 3;
 				
-				if( (tY>0))	pnTo.y = pn.y - 10;
-					else pnTo.y = pn.y + 10;
+				if( (tY>0))	pnTo.y = pn.y - 3;
+					else pnTo.y = pn.y + 3;
 					
 				return pnTo;
 			}
