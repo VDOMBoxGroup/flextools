@@ -36,7 +36,7 @@
 			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
 				[Embed(source="/assets/resourceBrowserIcons/resourceType/blank.png")]
 				var blank_Icon:Class;
-				
+
 				__image.source = blank_Icon; 
 			}
 			
