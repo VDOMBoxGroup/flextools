@@ -71,9 +71,14 @@ private function addObjectLanguage(event:Event):void {
 			__langSelection.selectedIndex = 1;
 			
 	}
+	
+	if (langsDataProvider.length == 1) {
+		selectedLang = langsDataProvider[0]['label'];
+	}
 }
 
 private function removeObjectLanguageBtnClickHandler():void {
+	var needUpdate:Boolean = __langsComboBox.text == __langSelection.text;
 	var newLangsProvider:Array = [];
 	
 	for (var i:int = 0; i < langsDataProvider.length; i++) {
@@ -88,6 +93,12 @@ private function removeObjectLanguageBtnClickHandler():void {
 	
 	if (langsDataProvider.length == 0)
 		formEnabled(false);
+	
+	if (needUpdate) {
+		selectedLang = __langSelection.text;
+		loadAttrProp();
+		loadInformationTabData();
+	}
 }
 
 /* -------------------------------------------------------- */
@@ -156,12 +167,13 @@ private function removeAttrBtnClickHandler():void {
 	changeAttrSelection();
 }
 
-private var previousSelectedAttr:int = -1;
-private var previousSelectedLang:String = __langSelection.text;
+private var selectedAttrIndex:int = -1;
+private var selectedLang:String = '';
 
-private function validSelection():Boolean {
-	if (__attrsList.selectedIndex < 0 || __attrsList.selectedIndex >= attrsListProvider.length) {
-		try {
+private function validAttrIndex():Boolean {
+	try {
+		if (selectedAttrIndex < 0 || selectedAttrIndex >= attrsListProvider.length) {
+			selectedAttrIndex = -1;
 			__attrName.text = '';
 			__attrDispName.text = '';
 			__defValue.text = '';
@@ -170,58 +182,55 @@ private function validSelection():Boolean {
 			__attrInterfaceType.selectedIndex = 0;
 			__attrPanelInterface.selectedIndex = 0;
 			__attrVisible.selectedIndex = 0;
-			previousSelectedAttr = -1;
-			previousSelectedLang = __langSelection.text;
+			return false;
 		}
-		catch (err:Error) { }
-		
-		return false;
-	} else {
-		return true;
 	}
-}
-
-private function saveAttrProps():void {
-	if (!validSelection())
-		return;
+	catch (err:Error) { return false; }	
 	
-	var si:int = __attrsList.selectedIndex;
-	var ps:int = previousSelectedAttr;
-	var sl:String = __langSelection.text;
-		
-	/* write changed properties */
-	if (previousSelectedAttr >= 0 && previousSelectedAttr < attrsListProvider.length) {
-		attrsListProvider[ps]['label'] = __attrName.text;
-		attrsListProvider[ps]['defValue'] = __defValue.text;
-		attrsListProvider[ps]['regExValidationStr'] = __regExValidationStr.text;
-		try {
-			attrsListProvider[ps][sl]['attrDispName'] = __attrDispName.text;
-			attrsListProvider[ps][sl]['regExValidationErrStr'] = __regExValidationErrStr.text;
-		}
-		catch (err:Error) {
-			attrsListProvider[ps][sl] = {};
-			attrsListProvider[ps][sl]['attrDispName'] = __attrDispName.text;
-			attrsListProvider[ps][sl]['regExValidationErrStr'] = __regExValidationErrStr.text;
-		}
-	}
-
-	__attrsList.dataProvider = attrsListProvider;
-	__attrsList.selectedIndex = si;
-	previousSelectedAttr = si;
+	return true;	
 }
 
-private function loadAttrProps():void {
-	var si:int = __attrsList.selectedIndex;
-	var sl:String = __langSelection.text;
+private function writeAttrPropChanges():void {
+	if (!validAttrIndex())
+		return;
+
+	var sI:int = selectedAttrIndex;
+	var sL:String = selectedLang;
+	
+	/* write changed properties */
+	attrsListProvider[sI]['label'] = __attrName.text;
+	attrsListProvider[sI]['defValue'] = __defValue.text;
+	attrsListProvider[sI]['regExValidationStr'] = __regExValidationStr.text;
+	try {
+		attrsListProvider[sI][sL]['attrDispName'] = __attrDispName.text;
+		attrsListProvider[sI][sL]['regExValidationErrStr'] = __regExValidationErrStr.text;
+	}
+	catch (err:Error) {
+		attrsListProvider[sI][sL] = {};
+		attrsListProvider[sI][sL]['attrDispName'] = __attrDispName.text;
+		attrsListProvider[sI][sL]['regExValidationErrStr'] = __regExValidationErrStr.text;
+	}
+
+	var storedIndex:int = __attrsList.selectedIndex;
+	__attrsList.dataProvider = attrsListProvider;
+	__attrsList.selectedIndex = storedIndex;
+}
+
+private function loadAttrProp():void {
+	if (!validAttrIndex())
+		return;
+
+	var sI:int = selectedAttrIndex;
+	var sL:String = selectedLang;
 
 	/* load selected propertie parameters */
-	__attrName.text = attrsListProvider[si]['label'];
-	__defValue.text = attrsListProvider[si]['defValue'];
-	__regExValidationStr.text = attrsListProvider[si]['regExValidationStr'];
+	__attrName.text = attrsListProvider[sI]['label'];
+	__defValue.text = attrsListProvider[sI]['defValue'];
+	__regExValidationStr.text = attrsListProvider[sI]['regExValidationStr'];
 	
 	try {
-		__attrDispName.text = attrsListProvider[si][sl]['attrDispName'];
-		__regExValidationErrStr.text = attrsListProvider[si][sl]['regExValidationErrStr'];
+		__attrDispName.text = attrsListProvider[sI][sL]['attrDispName'];
+		__regExValidationErrStr.text = attrsListProvider[sI][sL]['regExValidationErrStr'];
 	}
 	catch (err:Error) {
 		__attrDispName.text = '';
@@ -230,10 +239,28 @@ private function loadAttrProps():void {
 }
 
 private function changeAttrSelection():void {
-	if (validSelection()) {
-		saveAttrProps();
-		loadAttrProps();
-	}
+	writeAttrPropChanges();
+	selectedAttrIndex = __attrsList.selectedIndex;
+	loadAttrProp();
 }
+
+/* --------- Information tab procedures ------------------- */
 /* -------------------------------------------------------- */
 
+private function writeInformationTabData():void {	
+	objDisplayName[selectedLang] = __dispName.text;
+	objDescription[selectedLang] = __descript.text;
+}
+
+private function loadInformationTabData():void {
+	__dispName.text = objDisplayName[selectedLang];
+	__descript.text = objDescription[selectedLang]; 
+}
+
+private function changeLangSelection():void {
+	writeAttrPropChanges();
+	writeInformationTabData();
+	selectedLang = __langSelection.text;
+	loadAttrProp();
+	loadInformationTabData();
+}

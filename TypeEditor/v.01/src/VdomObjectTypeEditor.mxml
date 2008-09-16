@@ -76,7 +76,7 @@
 			itemClick="{mainMenuHandler(event);}" />
 
 		<mx:Label text="Choose object language to edit:" fontWeight="bold" />
-		<mx:ComboBox id="__langSelection" width="150" cornerRadius="1" dataProvider="{langsDataProvider}" change="{loadAttrProps();}" />	
+		<mx:ComboBox id="__langSelection" width="150" cornerRadius="1" dataProvider="{langsDataProvider}" change="{changeLangSelection();}" />	
 	</mx:HBox>
 	
 	<mx:TabNavigator width="100%" height="100%" >
