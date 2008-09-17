@@ -56,7 +56,7 @@ public class Template extends EventDispatcher
 	
 	public var isDebug:Boolean;
 	public var isStepDebug:Boolean;			
-	private var forced:int;	
+	private var forced:int;
 	
 	public function Template(_xml:XML)
 	{				
@@ -434,7 +434,7 @@ public class Template extends EventDispatcher
 	
 	public function generate(force:Boolean=false, over:Boolean=false, ret:Boolean=false):String
 	{
-		try{
+		try {
 			
 		//var currentContext:GraphContext = contextStack[contextStack.length-1];
 		
@@ -442,7 +442,7 @@ public class Template extends EventDispatcher
 		{				
 			Application.application.callLater(generate, [force, over]);
 			return null;
-		}				
+		}
 		isRunning = true;
 		
 		if(buffer) {
@@ -455,7 +455,7 @@ public class Template extends EventDispatcher
 			throw new ValidationError(null, 9001);
 		}
 		
-		if(over) 
+		if(over)
 			forced=0;
 			
 		if(ret)
@@ -562,8 +562,7 @@ public class Template extends EventDispatcher
 							}
 							
 							break;
-					}
-					
+					}					
 				
 				case 1: // append data to buffer
 					step = 1;
@@ -700,15 +699,13 @@ public class Template extends EventDispatcher
 			if(transition)
 			{
 				for(var i:int=0; i<arrows.length; i++) {
-					if(ArrowStruct(arrows[i]).label == transition)
+					if(( transition && ArrowStruct(arrows[i]).label == transition 
+						|| !transition ) && 
+						ArrowStruct(arrows[i]).enabled)
 						indexes.push(i);
 				}
 				if(indexes.length>0)
 					index = indexes[ Math.round( Math.random() * (indexes.length-1) ) ];
-			}
-			else
-			{
-				index = Math.round( Math.random() * (arrows.length-1) );
 			}
 		}
 		return index;
