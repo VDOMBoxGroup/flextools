@@ -45,6 +45,10 @@
 			
 			[Bindable] [Embed("/icons/new.png")]
 			public var newIcon:Class;
+			
+			[Bindable] [Embed("/icons/deficon.png")]
+			public var defIcon:Class;
+			
 		]]>
 	</mx:Script>
 	
@@ -96,7 +100,12 @@
 					
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Display Name" />
-						<mx:TextInput id="__dispName" width="100%" />	
+						<mx:HBox width="100%" horizontalGap="2">
+							<mx:TextInput id="__dispName" width="100%" />	
+							<mx:Image height="22" width="22" verticalAlign="middle" horizontalAlign="center" 
+								source="@Embed('/icons/info.png')" scaleContent="false"
+								toolTip="This field is language depended!" />
+						</mx:HBox>	
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
@@ -111,7 +120,12 @@
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Description" />
-						<mx:TextArea id="__descript" width="100%" height="80" />	
+						<mx:HBox width="100%" horizontalGap="2">
+							<mx:TextArea id="__descript" width="100%" height="80" />
+							<mx:Image height="22" width="22" horizontalAlign="center" verticalAlign="middle" 
+								source="@Embed('/icons/info.png')" scaleContent="false"
+								toolTip="This field is language depended!" />	
+						</mx:HBox>
 					</mx:VBox>
 	
 					<mx:VBox verticalGap="0" width="100%">
@@ -121,7 +135,7 @@
 	
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Object ID" />
-						<mx:HBox width="100%" verticalAlign="middle">
+						<mx:HBox width="100%" verticalAlign="middle" horizontalGap="2">
 							<mx:TextInput id="__objectID" width="100%" editable="false" />
 							<mx:Button id="__refreshIDBtn" icon="@Embed('/icons/refresh.png')" cornerRadius="1"
 								paddingLeft="0" paddingRight="0" width="22" height="22"
@@ -212,48 +226,63 @@
 						<mx:CheckBox id="__dynamic" label="Dynamic" />
 					</mx:VBox>
 
+					<!-- Icons Box -->
 					<mx:VBox width="100%" borderColor="#CCCCCC" borderStyle="solid" horizontalAlign="center"
 						paddingLeft="20" paddingRight="20" paddingTop="10" paddingBottom="10"
 						verticalGap="20">
-	
+						
+						<!-- Object Icon Box -->
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Object Icon" />
 							<mx:HBox horizontalGap="2">
 								<mx:Box styleName="iconBox" borderColor="#DDDDDD">
-									<mx:Image id="__objectIcon" 
-										width="64" height="64" verticalAlign="middle" horizontalAlign="center" />
+									<mx:Image id="__objectIcon" source="{defIcon}"
+										width="58" height="58" verticalAlign="middle" horizontalAlign="center" />
 															
 								</mx:Box>
-								<mx:Button id="__objIconBtn" click="{changeObjectIconClickHandler(__objectIcon);}"
-									icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
-									
+								<mx:VBox verticalGap="2">
+									<mx:Button id="__objIconBtn" click="{changeObjectIconClickHandler(__objectIcon);}"
+										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+									<mx:Button click="{__objectIcon.source = defIcon;}" enabled="{__objIconBtn.enabled}"
+										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+								</mx:VBox>
 							</mx:HBox>
 						</mx:VBox>
 						
+						<!-- Editor WYSIWYG Icon Box -->
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Editor WYSIWYG Icon" />
 							<mx:HBox horizontalGap="2">
 								<mx:Box styleName="iconBox" borderColor="#DDDDDD">
-									<mx:Image id="__editorIcon"
-										width="64" height="64" verticalAlign="middle" horizontalAlign="center" />
+									<mx:Image id="__editorIcon" source="{defIcon}"
+										width="58" height="58" verticalAlign="middle" horizontalAlign="center" />
 									
 								</mx:Box>
-								<mx:Button id="__editorIconBtn" click="{changeObjectIconClickHandler(__editorIcon);}"
-									icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+								<mx:VBox verticalGap="2">
+									<mx:Button id="__editorIconBtn" click="{changeObjectIconClickHandler(__editorIcon);}"
+										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+									<mx:Button click="{__editorIcon.source = defIcon;}" enabled="{__editorIconBtn.enabled}"
+										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+								</mx:VBox>
 									
 							</mx:HBox>
 						</mx:VBox>
-	
+						
+						<!-- Structure Icon Box -->
 						<mx:VBox horizontalAlign="center" verticalGap="0">
 							<mx:Label text="Structure Icon" />
 							<mx:HBox horizontalGap="2">
 								<mx:Box styleName="iconBox" borderColor="#DDDDDD">
-									<mx:Image id="__structureIcon"
-										width="64" height="64" verticalAlign="middle" horizontalAlign="center" />
+									<mx:Image id="__structureIcon" source="{defIcon}"
+										width="58" height="58" verticalAlign="middle" horizontalAlign="center" />
 										
 								</mx:Box>
-								<mx:Button id="__structIconBtn" click="{changeObjectIconClickHandler(__structureIcon);}"
-									icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+								<mx:VBox verticalGap="2">
+									<mx:Button id="__structIconBtn" click="{changeObjectIconClickHandler(__structureIcon);}"
+										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+									<mx:Button click="{__structureIcon.source = defIcon}" enabled="{__structIconBtn.enabled}"
+										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+								</mx:VBox>
 									
 							</mx:HBox>
 						</mx:VBox>
@@ -301,7 +330,12 @@
 
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Attribute display name" />
-						<mx:TextInput id="__attrDispName" width="100%" />	
+						<mx:HBox width="100%" horizontalGap="2">
+							<mx:TextInput id="__attrDispName" width="100%" />	
+							<mx:Image height="22" width="22" horizontalAlign="center" verticalAlign="middle" 
+								source="@Embed('/icons/info.png')" scaleContent="false"
+								toolTip="This field is language depended!" />	
+						</mx:HBox>
 					</mx:VBox>
 					
 					<mx:VBox verticalGap="0" width="100%">
@@ -316,7 +350,12 @@
 
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Validation error message" />
-						<mx:TextInput id="__regExValidationErrStr" width="100%" />	
+						<mx:HBox width="100%" horizontalGap="2">
+							<mx:TextInput id="__regExValidationErrStr" width="100%" />	
+							<mx:Image height="22" width="22" horizontalAlign="center" verticalAlign="middle" 
+								source="@Embed('/icons/info.png')" scaleContent="false"
+								toolTip="This field is language depended!" />	
+						</mx:HBox>
 					</mx:VBox>
 
 					
