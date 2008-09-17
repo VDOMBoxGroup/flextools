@@ -113,6 +113,7 @@
 	 			dataChanged = false;
 	 			
 	 			can.removeAllChildren();
+//	 			trace('-----From Server-----\n' +  eeEvt.data);
 	 			trEvents.dataProvider  = eeEvt.data;
 	 			trActions.dataProvider = eeEvt.data;
 	 		}
@@ -579,6 +580,8 @@
 //				trace('curContainerID TO server: '+curContainerID+'\n'+ dataToServer.toXMLString());
 		     	dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_SAVED, applEventSevedHandler)
 				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
+				trace('****************\n '+ curContainerID);
+				trace(dataToServer.toXMLString());
 			}
 			
 			private function applEventSevedHandler(dmEvt:DataManagerEvent):void
@@ -590,7 +593,7 @@
 			{
 				//trace(xmlToTree.toXMLString());
 //				can.removeAllChildren();
-			
+			trace('----From Serve----'+xmlToTree);
 				actionsArray = [];		
 				for each(var actID:XML in xmlToTree.E2vdom.Actions.children())
 				{

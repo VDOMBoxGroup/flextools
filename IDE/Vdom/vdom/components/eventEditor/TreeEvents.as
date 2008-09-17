@@ -56,7 +56,7 @@ package vdom.components.eventEditor
 		 value = value as XML;
 		  for each(child in value.children())
 		  {
-		  	dataXML.appendChild(getChilds(child))
+		  	dataXML.appendChild(getChilds(child));
 		  }
 		  
 		  super.dataProvider = dataXML;
