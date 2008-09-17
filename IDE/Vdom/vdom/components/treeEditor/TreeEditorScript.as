@@ -223,21 +223,25 @@ private function adjustmentTree(xml1:XML):void
 		} 
 	}
 	
-	/**
-	 *  проверить на зацикливание (несколько елементов в одно месте
-	 * начать сортировку с любово из элементов которые в "одном месте"
-	 * 
-	 * 
-	 * */
+	 
 	if(!itIsCorrectTree)
 	{
-
 		for (name in massTreeObj)
 		{
 			if (massTreeObj[name].parent != null && massTreeObj[name].childs != null)
 			setPosition(name);
 		}	
 	}
+	
+	// delete last cycle's
+	for (name in massTreeObj)
+	{
+			if (massTreeObj[name].parent
+				&& massTreeObj[name].mapX == massTreeObj[name].parent.mapX
+				&& massTreeObj[name].mapY == massTreeObj[name].parent.mapY)
+			setPosition(name);
+	}	
+	
 	/*  placement top level conteiner whithout child */ 
 	var lavel:int
 	if(massMap.length == 1)
