@@ -2,7 +2,6 @@
 		
 		import flash.events.MouseEvent;
 		
-		import mx.containers.Canvas;
 		import mx.effects.Move;
 		
 		import vdom.components.treeEditor.Index;
@@ -21,7 +20,7 @@
 
 private function removeAllLines():void
 {
-	trace('removeAllLines');
+//	trace('removeAllLines');
 	for (var level:String in massLines)
 			for (var frsTrElem:String in massLines[level])
 				for (var sknTrElem:String in massLines[level][frsTrElem])
@@ -38,7 +37,7 @@ private function removeAllLines():void
 
 private function hideLenes():void
 {
-	trace('hideLenes');
+//	trace('hideLenes');
 	for (var level:String in massLines)
 			for (var frsTrElem:String in massLines[level])
 				for (var sknTrElem:String in massLines[level][frsTrElem])
@@ -54,7 +53,7 @@ private function hideLenes():void
 
 private function showLenes():void
 {
-	trace('showLenes');
+//	trace('showLenes');
 	for (var level:String in massLines)
 			for (var frsTrElem:String in massLines[level])
 				for (var sknTrElem:String in massLines[level][frsTrElem])
@@ -74,7 +73,7 @@ private function showLenes():void
 
 private function deleteObject(strID:String):void
 {
-	trace('deleteObject');
+//	trace('deleteObject');
 	for (var level:String in massLines)
 		for(var ind1:String in massLines[level])
 			for(var ind2:String in massLines[level][ind1])
@@ -110,7 +109,7 @@ private function deleteObject(strID:String):void
 
 private function drawLine(obj:Object):void
 {
-	trace('drawLine');
+//	trace('drawLine');
 	var fromObj:String = curTree.ID.toString();
 	var toObj:String = obj.ID.toString();
 	var level:String = colmen2.selectedItem.level;
@@ -172,7 +171,7 @@ private function drawLine(obj:Object):void
 
 private function adjustmentTree(xml1:XML):void
 {
-	trace('adjustmentTree');
+//	trace('adjustmentTree');
 	var massMap:Array = new Array();
 	var massTreeObj:Array = new Array();
 
@@ -338,7 +337,7 @@ private function adjustmentTree(xml1:XML):void
 
 private function addTreeEditorListeners():void
 {
-	trace('addTreeEditorListeners');
+//	trace('addTreeEditorListeners');
 	addEventListener(MouseEvent.CLICK, mouseClickHandler);
 	colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 	colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
@@ -351,7 +350,7 @@ private function addTreeEditorListeners():void
 
 private function removeTreeEditorListeners():void
 {
-	trace('removeTreeEditorListeners');
+//	trace('removeTreeEditorListeners');
 	removeEventListener(MouseEvent.CLICK, mouseClickHandler);
 	
 	colmen2.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
@@ -364,7 +363,7 @@ private function removeTreeEditorListeners():void
 
 private  function removeMassTreeElements():void
 {
-	trace('removeMassTreeElements');
+//	trace('removeMassTreeElements');
 		for (var obID:String in massTreeElements)
 		{
 			main.removeChild(massTreeElements[obID]);
@@ -377,7 +376,7 @@ private var topLevelTypes:XMLList;
 
 private function createTreeArr(xml:XML):void
 {
-	trace('createTreeArr');
+//	trace('createTreeArr');
 	topLevelTypes = dataManager.getTopLevelTypes();
 	var xmlTopLevelObjects:XMLList = dataManager.listPages;
 	
@@ -459,13 +458,16 @@ private function getIcon(ID:String):String
 
 private function get needCreatTree():Boolean
 	{
-		
+		var flag:Boolean = false;
 		// x,y == 0;
 //		var calc:int = 0;
 		for(var strID:String in massTreeElements)
 		{		
-			if (massTreeElements[strID].x == 0 && massTreeElements[strID].y == 0) 
-				return true;
+			if ( massTreeElements[strID].y == 0) 
+			{
+				flag = true;
+				massTreeElements[strID].y = 15;
+			}
 		}	
 	
 		return false;
@@ -492,7 +494,7 @@ private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 
 private function drawLines(xml1:XML):void
 {
-	trace('drawLines');
+//	trace('drawLines');
 	for each(var xmlObj:XML in xml1.children())
 	{
 		var obID:String = xmlObj.@ID.toXMLString();
@@ -638,7 +640,7 @@ private function saveToServer():void
 
 public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 {
-	trace('dataToXML');
+//	trace('dataToXML');
 	var outXML:XML = <Structure/> ;
 	
 	for (var levels:String in massTreeElements)
@@ -718,7 +720,7 @@ private function calculatePointTo(mouseX:Number, mouseY:Number, curTree:Object):
 
 private function get randomTreeElement():String
 {
-	trace('randomTreeElement');
+//	trace('randomTreeElement');
 	for (var ID:String in massTreeElements)
 	{
 		return ID;
@@ -729,7 +731,7 @@ private function get randomTreeElement():String
 
 private function setStartPage():void
 {
-	trace('setStartPage');
+//	trace('setStartPage');
 	if(!massTreeElements[startPage])
 	{
 		startPage = randomTreeElement;
@@ -765,7 +767,7 @@ private function drawIndex():void
 */
 private function indexChangeHandler(inEvt:IndexEvent):void
 {
-	trace('indexChangeHandler');
+//	trace('indexChangeHandler');
 //	trace('work');
 	
 		for(var toID:String in masIndex[inEvt.level][inEvt.fromObjectID])

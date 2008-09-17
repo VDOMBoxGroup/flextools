@@ -603,7 +603,7 @@ package vdom.components.treeEditor
 		{
 			this.x = this.x + dXtoX;
 			this.y = this.y + dYtoY;
-			trace('timerHandler: '+ this.x);
+//			trace('timerHandler: '+ this.x);
 //			parent).validateDisplayList();
 			
 		}		

@@ -104,7 +104,17 @@
 		drawLines(xmlApplicationStructure);
 
 		if (needCreatTree == true)
+		{
+			hideLenes();
 			adjustmentTree(xmlApplicationStructure);
+			saveToServer();
+			
+			var delayTimer:Timer = new Timer(1500, 1);
+			delayTimer.addEventListener(TimerEvent.TIMER, timerHandler);//		removeMassTreeElements();
+			delayTimer.start();
+			
+			return;
+		}
 		
 		curTree = massTreeElements[dataManager.currentPageId];
 		startPage = dataManager.currentApplicationInformation.Index;
