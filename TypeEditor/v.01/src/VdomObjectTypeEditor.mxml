@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
 	width="700" height="480" minHeight="480" minWidth="700"
-	creationComplete="{creationComplete();}">
+	creationComplete="{creationComplete();}" xmlns:Components="Components.*">
 	
 	<mx:Style>
 		TextInput {
@@ -17,15 +17,6 @@
 			paddingLeft:5;
 			paddingBottom:5;
 			borderStyle:"solid";
-		}
-		
-		.colorField {
-			borderColor:#000000;
-			borderStyle:"solid";
-			horizontalAlign:"center";
-			verticalAlign:"middle";
-			borderThickness:0;
-			cornerRadius:5;
 		}
 
 	</mx:Style>
@@ -398,12 +389,7 @@
 						<mx:VBox width="100%" verticalGap="20" paddingLeft="5">
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Panel colour group" />
-								<mx:HBox>
-									<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" borderThickness="2" click="{colorSwitcherClickHandler(event);}" />
-									<mx:Box id="__redColor" backgroundColor="#B00000" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
-									<mx:Box id="__greenColor" backgroundColor="#00B000" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
-									<mx:Box id="__blueColor" backgroundColor="#0000B0" width="23" height="23" styleName="colorField" click="{colorSwitcherClickHandler(event);}" />
-								</mx:HBox>
+								<Components:ColorChooser id="__groupColor" />
 							</mx:VBox>
 
 							<mx:VBox verticalGap="0" width="100%">

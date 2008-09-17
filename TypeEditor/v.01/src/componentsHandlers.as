@@ -39,16 +39,6 @@ private function mainMenuHandler(mEvent:MenuEvent):void {
 	}
 }
 
-private function colorSwitcherClickHandler(mEvt:MouseEvent):void {
-	__grayColor.setStyle("borderThickness", 0);
-	__redColor.setStyle("borderThickness", 0);
-	__greenColor.setStyle("borderThickness", 0);
-	__blueColor.setStyle("borderThickness", 0);
-	
-	mEvt.currentTarget.setStyle("borderThickness", 2);
-}
-
-
 /* --------- Object Supported languages section ----------- */
 /* -------------------------------------------------------- */
 

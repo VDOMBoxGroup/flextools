@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+	<mx:Style>
+		.colorField {
+			borderStyle:"solid";
+			horizontalAlign:"center";
+			verticalAlign:"middle";
+			borderThickness:0;
+		}
+	</mx:Style>
+	
+	<mx:Script>
+		<![CDATA[
+			
+			private var selectedColor:int = 1;
+
+			public function set colorNumber(index:int):void {
+				if (index > 0 && index <= 4) {
+					selectedColor = index;
+					switch (index) {
+						case 1:
+							__grayColor.setStyle('borderThickness', 2);
+							break;
+						case 2:
+							__redColor.setStyle('borderThickness', 2);
+							break;
+						case 3:
+							__greenColor.setStyle('borderThickness', 2);
+							break;
+						case 4:
+							__blueColor.setStyle('borderThickness', 2);
+							break;
+					}					
+				}
+			}
+
+			private function get colorNumber():int {
+				return selectedColor;
+			}
+			
+			private function colorSwitcherClickHandler(mEvt:MouseEvent):void {
+				__grayColor.setStyle("borderThickness", 0);
+				__redColor.setStyle("borderThickness", 0);
+				__greenColor.setStyle("borderThickness", 0);
+				__blueColor.setStyle("borderThickness", 0);
+				
+				mEvt.currentTarget.setStyle("borderThickness", 3);
+			}
+
+			
+		]]>
+	</mx:Script>
+
+
+	<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" borderThickness="3"
+		click="{colorSwitcherClickHandler(event); selectedColor = 1;}" borderColor="#AAAAAA" />
+		
+	<mx:Box id="__redColor" backgroundColor="#B00000" width="23" height="23" styleName="colorField"
+		click="{colorSwitcherClickHandler(event); selectedColor = 2;}" borderColor="#E00000" />
+		
+	<mx:Box id="__greenColor" backgroundColor="#00B000" width="23" height="23" styleName="colorField"
+		click="{colorSwitcherClickHandler(event); selectedColor = 3;}" borderColor="#00E000" />
+		
+	<mx:Box id="__blueColor" backgroundColor="#0000B0" width="23" height="23" styleName="colorField"
+		click="{colorSwitcherClickHandler(event); selectedColor = 4;}" borderColor="#9b9bb0"/>
+
+</mx:HBox>
