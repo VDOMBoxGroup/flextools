@@ -988,7 +988,7 @@
            	private function onErrAlertClose(event:Event):void
            	{           		
            		switchDebug(false);
-    			ContextManager.instance.templateStruct = null;        							           		
+    			ContextManager.instance.templateStruct = null;
            	}
            	
             private function openBrowseHandler(event:Event):void
