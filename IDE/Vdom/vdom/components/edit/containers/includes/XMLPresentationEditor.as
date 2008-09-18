@@ -1,5 +1,6 @@
 import mx.controls.Alert;
 
+import vdom.events.DataManagerErrorEvent;
 import vdom.events.DataManagerEvent;
 import vdom.events.SOAPEvent;
 import vdom.managers.DataManager;
@@ -39,17 +40,37 @@ private function registerEvent(flag:Boolean):void
 {	
 	if(flag)
 	{	
-		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
-		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED_ERROR, saveXMLScriptErrorHandler);	
-		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
-//		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
+		dataManager.addEventListener(
+			DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, 
+			saveXMLScriptHandler
+		);
+		
+		dataManager.addEventListener(
+			DataManagerErrorEvent.OBJECT_XML_SCRIPT_SAVE_ERROR, 
+			saveXMLScriptErrorHandler
+		);
+			
+		dataManager.addEventListener(
+			DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, 
+			objectXMLScriptHandler
+		);
 	}
 	else 
 	{	
-		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, saveXMLScriptHandler);
-		dataManager.addEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED_ERROR, saveXMLScriptErrorHandler);
-		dataManager.removeEventListener(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, objectXMLScriptHandler);
-//		soap.addEventListener(SoapEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR, saveXMLScriptHandler);
+		dataManager.removeEventListener(
+			DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, 
+			saveXMLScriptHandler
+		);
+		
+		dataManager.addEventListener(
+			DataManagerErrorEvent.OBJECT_XML_SCRIPT_SAVE_ERROR, 
+			saveXMLScriptErrorHandler
+		);
+		
+		dataManager.removeEventListener(
+			DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, 
+			objectXMLScriptHandler
+		);
 	}
 }
 
@@ -84,7 +105,7 @@ private function objectXMLScriptHandler(event:DataManagerEvent):void {
 	enableElement(true);
 }
 
-private function saveXMLScriptErrorHandler(event:DataManagerEvent):void
+private function saveXMLScriptErrorHandler(event:DataManagerErrorEvent):void
 {
 	Alert.show("Wrong data", "Alert");
 	if(_objectId)
