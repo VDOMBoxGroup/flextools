@@ -19,7 +19,6 @@ private function creationComplete():void {
 	formEnabled(false);
 }
 
-
 private function mainMenuHandler(mEvent:MenuEvent):void {
 	
 	switch (String(mEvent.item.@data)) {
@@ -106,6 +105,18 @@ private function removeObjectLanguageBtnClickHandler():void {
 		loadAttrProp();
 		loadInformationTabData();
 	}
+}
+
+private function selectPreviousObjLanguage():void {
+	if (__langSelection.selectedIndex > 0)
+		__langSelection.selectedIndex = __langSelection.selectedIndex - 1;
+	changeLangSelection(); 
+}
+
+private function selectNextObjLanguage():void {
+	if (__langSelection.selectedIndex < langsProvider.length - 1)
+		__langSelection.selectedIndex = __langSelection.selectedIndex + 1;
+	changeLangSelection();
 }
 
 /* -------------------------------------------------------- */
@@ -323,4 +334,23 @@ private function changeObjectIcon(e:Event):void {
 		}
 	}
 	catch (err:Error) { }
+}
+
+/* --------- Additional attr parameters ------------------- */
+/* -------------------------------------------------------- */
+
+private function changeAttrPanelInterfaceHandler():void {
+	var type:String = __attrPanelInterface.text;
+	var typeReg:RegExp = /^([a-zA-Z]+)\((.*)\)/;
+	
+	var typeName:String = '';
+	var typeParams:String = '';
+	
+	var matchRes:Array = type.match(typeReg);
+	if (matchRes) {
+		typeName = matchRes[1];
+		typeParams = matchRes[2];
+		__params.text = typeName + "()";
+		__attrValuesBtn.enabled = typeParams.length > 0;
+	}
 }

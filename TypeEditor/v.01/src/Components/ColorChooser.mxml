@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
 	<mx:Style>
 		.colorField {
 			borderStyle:"solid";
@@ -16,6 +16,11 @@
 
 			public function set colorNumber(index:int):void {
 				if (index > 0 && index <= 4) {
+					__grayColor.setStyle("borderThickness", 0);
+					__redColor.setStyle("borderThickness", 0);
+					__greenColor.setStyle("borderThickness", 0);
+					__blueColor.setStyle("borderThickness", 0);
+
 					selectedColor = index;
 					switch (index) {
 						case 1:
@@ -44,7 +49,7 @@
 				__greenColor.setStyle("borderThickness", 0);
 				__blueColor.setStyle("borderThickness", 0);
 				
-				mEvt.currentTarget.setStyle("borderThickness", 3);
+				mEvt.currentTarget.setStyle("borderThickness", 2);
 			}
 
 			
@@ -52,7 +57,7 @@
 	</mx:Script>
 
 
-	<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" borderThickness="3"
+	<mx:Box id="__grayColor" backgroundColor="#777777" width="23" height="23" styleName="colorField" borderThickness="2"
 		click="{colorSwitcherClickHandler(event); selectedColor = 1;}" borderColor="#AAAAAA" />
 		
 	<mx:Box id="__redColor" backgroundColor="#B00000" width="23" height="23" styleName="colorField"

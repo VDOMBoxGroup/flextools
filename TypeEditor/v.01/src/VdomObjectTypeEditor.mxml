@@ -2,7 +2,7 @@
 <mx:WindowedApplication
 	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
-	width="700" height="480" minHeight="480" minWidth="700"
+	width="700" minWidth="700"  height="510" minHeight="510"
 	creationComplete="{creationComplete();}" xmlns:Components="Components.*">
 	
 	<mx:Style>
@@ -71,7 +71,13 @@
 			itemClick="{mainMenuHandler(event);}" />
 
 		<mx:Label text="Choose object language to edit:" fontWeight="bold" />
-		<mx:ComboBox id="__langSelection" width="150" cornerRadius="1" dataProvider="{langsProvider}" change="{changeLangSelection();}" />	
+		<mx:HBox horizontalGap="2">
+			<mx:Button width="24" height="100%" cornerRadius="1" icon="@Embed('/icons/back.png')" alpha="0.7"
+				toolTip="Previous" click="{selectPreviousObjLanguage();}" />
+			<mx:ComboBox id="__langSelection" width="100" cornerRadius="1" dataProvider="{langsProvider}" change="{changeLangSelection();}" />
+			<mx:Button width="24" height="100%" cornerRadius="1" icon="@Embed('/icons/forward.png')" alpha="0.7"
+				toolTip="Next" click="{selectNextObjLanguage();}" />	
+		</mx:HBox>
 	</mx:HBox>
 	
 	<mx:TabNavigator width="100%" height="100%" >
@@ -94,7 +100,7 @@
 						<mx:HBox width="100%" horizontalGap="2">
 							<mx:TextInput id="__dispName" width="100%" />	
 							<mx:Image height="22" width="22" verticalAlign="middle" horizontalAlign="center" 
-								source="@Embed('/icons/info.png')" scaleContent="false"
+								source="@Embed('/icons/info.png')" scaleContent="false" alpha="0.7"
 								toolTip="This field is language depended!" />
 						</mx:HBox>	
 					</mx:VBox>
@@ -114,7 +120,7 @@
 						<mx:HBox width="100%" horizontalGap="2">
 							<mx:TextArea id="__descript" width="100%" height="80" />
 							<mx:Image height="22" width="22" horizontalAlign="center" verticalAlign="middle" 
-								source="@Embed('/icons/info.png')" scaleContent="false"
+								source="@Embed('/icons/info.png')" scaleContent="false" alpha="0.7"
 								toolTip="This field is language depended!" />	
 						</mx:HBox>
 					</mx:VBox>
@@ -129,7 +135,7 @@
 						<mx:HBox width="100%" verticalAlign="middle" horizontalGap="2">
 							<mx:TextInput id="__objectID" width="100%" editable="false" />
 							<mx:Button id="__refreshIDBtn" icon="@Embed('/icons/refresh.png')" cornerRadius="1"
-								paddingLeft="0" paddingRight="0" width="22" height="22"
+								paddingLeft="0" paddingRight="0" width="22" height="22" alpha="0.7"
 								borderColor="#FFFFFF" click="{refreshIDBtnClickHandler();}" />
 									
 						</mx:HBox>
@@ -232,9 +238,9 @@
 															
 								</mx:Box>
 								<mx:VBox verticalGap="2">
-									<mx:Button id="__objIconBtn" click="{changeObjectIconClickHandler(__objectIcon);}"
+									<mx:Button id="__objIconBtn" click="{changeObjectIconClickHandler(__objectIcon);}" alpha="0.7"
 										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
-									<mx:Button click="{__objectIcon.source = defIcon;}" enabled="{__objIconBtn.enabled}"
+									<mx:Button click="{__objectIcon.source = defIcon;}" enabled="{__objIconBtn.enabled}" alpha="0.7"
 										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
 								</mx:VBox>
 							</mx:HBox>
@@ -250,9 +256,9 @@
 									
 								</mx:Box>
 								<mx:VBox verticalGap="2">
-									<mx:Button id="__editorIconBtn" click="{changeObjectIconClickHandler(__editorIcon);}"
+									<mx:Button id="__editorIconBtn" click="{changeObjectIconClickHandler(__editorIcon);}" alpha="0.7"
 										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
-									<mx:Button click="{__editorIcon.source = defIcon;}" enabled="{__editorIconBtn.enabled}"
+									<mx:Button click="{__editorIcon.source = defIcon;}" enabled="{__editorIconBtn.enabled}" alpha="0.7"
 										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
 								</mx:VBox>
 									
@@ -269,9 +275,9 @@
 										
 								</mx:Box>
 								<mx:VBox verticalGap="2">
-									<mx:Button id="__structIconBtn" click="{changeObjectIconClickHandler(__structureIcon);}"
+									<mx:Button id="__structIconBtn" click="{changeObjectIconClickHandler(__structureIcon);}" alpha="0.7"
 										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
-									<mx:Button click="{__structureIcon.source = defIcon}" enabled="{__structIconBtn.enabled}"
+									<mx:Button click="{__structureIcon.source = defIcon}" enabled="{__structIconBtn.enabled}" alpha="0.7"
 										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
 								</mx:VBox>
 									
@@ -365,7 +371,8 @@
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Panel interface" />
 								<mx:HBox width="100%">
-									<mx:ComboBox id="__attrPanelInterface" width="100%" cornerRadius="1">
+									<mx:ComboBox id="__attrPanelInterface" width="100%" cornerRadius="1"
+										change="{changeAttrPanelInterfaceHandler();}">
 								        <mx:Array>
 								            <mx:Object data="0" label="TextField(Length)" />
 								            <mx:Object data="0" label="Number(minValue, maxValue)" />
@@ -381,8 +388,11 @@
 								            <mx:Object data="0" label="ExternalEditor(Title, Info)" />
 								        </mx:Array>
 									</mx:ComboBox>	
-									<mx:Button label="Parameters" cornerRadius="1" />
+									<mx:Button id="__attrValuesBtn" label="Value(s)" cornerRadius="1" />
 								</mx:HBox>
+								
+								<mx:Spacer height="2" />
+								<mx:TextInput id="__params" width="100%" borderStyle="solid" borderColor="#DDDDDD" />
 							</mx:VBox>
 						</mx:VBox>
 	
