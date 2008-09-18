@@ -201,7 +201,7 @@ public class GraphCanvas extends Canvas
      		SuperAlert.show(
      			LanguageManager.sentences['graph_alert_clear_text'],
      			LanguageManager.sentences['graph_alert_clear_title'],
-     			Alert.YES|Alert.NO, null, alertRemoveHandler, null, Alert.YES);			     	
+     			Alert.YES|Alert.NO, null, alertRemoveHandler, null, Alert.YES);			  
      	}
 	}	
 		
@@ -498,7 +498,7 @@ public class GraphCanvas extends Canvas
     	if(event.detail==Alert.YES)
     	{        		
    			clear();
-        	}
+        }
 	}	
     
     private function dragEnterHandler(event:DragEvent):void

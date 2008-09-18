@@ -472,6 +472,7 @@ public class Template extends EventDispatcher
 			switch(step)
 			{
 				case 0: // parse current node
+				
 					step = 0;
 					
 					if((forced>0 || over) && !force)
@@ -495,109 +496,119 @@ public class Template extends EventDispatcher
 						
 					force = false;
 					over = false;
+
+					parsedNode = null;				
 					
-					parsedNode = new Object();
-					
-					switch(GraphContext(contextStack[contextStack.length-1]).curNode.category)
+					if(GraphContext(contextStack[contextStack.length-1]).curNode.enabled)
 					{
-						case NodeCategory.NORMAL:
-						
-							parsedNode = CodeParser.ParseText(
-								GraphContext(contextStack[contextStack.length-1]).curNode.text,
-								[context, GraphContext(contextStack[contextStack.length-1]).context] );	
-							break;
+						parsedNode = new Object();
+	
+						switch(GraphContext(contextStack[contextStack.length-1]).curNode.category)
+						{
+							case NodeCategory.NORMAL:
 							
-						case NodeCategory.SUBGRAPH:
-						
-							var subgraph:GraphStruct;
-							parsedNode = CodeParser.ParseSubgraphNode(
-								GraphContext(contextStack[contextStack.length-1]).curNode.text );
+								parsedNode = CodeParser.ParseText(
+									GraphContext(contextStack[contextStack.length-1]).curNode.text,
+									[context, GraphContext(contextStack[contextStack.length-1]).context] );	
+								break;
+								
+							case NodeCategory.SUBGRAPH:
 							
-							if(parsedNode.result)
-							{
-								for each (var graphStruct:GraphStruct in graphs)
+								var subgraph:GraphStruct;
+								parsedNode = CodeParser.ParseSubgraphNode(
+									GraphContext(contextStack[contextStack.length-1]).curNode.text );
+								
+								if(parsedNode.result)
 								{
-									if(graphStruct.name == GraphContext(contextStack[contextStack.length-1]).curNode.text)	
-										subgraph = graphStruct;
+									for each (var graphStruct:GraphStruct in graphs)
+									{
+										if(graphStruct.name == GraphContext(contextStack[contextStack.length-1]).curNode.text)	
+											subgraph = graphStruct;
+									}
+									
+									if(subgraph)
+									{
+										GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
+										nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));	
+										
+										var graphContext:GraphContext = new GraphContext(subgraph);
+										contextStack.push(graphContext);
+										
+										step = 0;
+										if(forced>=0)
+											forced++;
+										continue;
+									}
+									else
+									{
+										isRunning = false;
+										throw new ValidationError(null, 9006, 
+												[GraphContext(contextStack[contextStack.length-1]).curNode.text]);
+									}
+								}
+								break;
+								
+							case NodeCategory.COMMAND:
+													
+								step = 1;
+								
+								parsedNode = CodeParser.ParseCode(
+									GraphContext(contextStack[contextStack.length-1]).curNode.text,
+									GraphContext(contextStack[contextStack.length-1]).varPrefix,
+									[context, GraphContext(contextStack[contextStack.length-1]).context] );
+										
+								if(parsedNode.result)
+								{		
+									if(parsedNode.type==CodeParser.CT_FUNCTION)
+									{							
+										isRunning = false;										
+										return null;
+									}		
 								}
 								
-								if(subgraph)
-								{
-									GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
-									nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));	
+								break;
+						}					
+					}
 									
-									var graphContext:GraphContext = new GraphContext(subgraph);
-									contextStack.push(graphContext);
-									
-									step = 0;
-									if(forced>=0)
-										forced++;
-									continue;
-								}
-								else
-								{
-									isRunning = false;
-									throw new ValidationError(null, 9006, 
-											[GraphContext(contextStack[contextStack.length-1]).curNode.text]);
-								}
-							}
-							break;
-							
-						case NodeCategory.COMMAND:
-												
-							step = 1;
-							
-							parsedNode = CodeParser.ParseCode(
-								GraphContext(contextStack[contextStack.length-1]).curNode.text,
-								GraphContext(contextStack[contextStack.length-1]).varPrefix,
-								[context, GraphContext(contextStack[contextStack.length-1]).context] );
-									
-							if(parsedNode.result)
-							{		
-								if(parsedNode.type==CodeParser.CT_FUNCTION)
-								{							
-									isRunning = false;										
-									return null;
-								}		
-							}
-							
-							break;
-					}					
-				
 				case 1: // append data to buffer
-					step = 1;
 				
-					if(!parsedNode.result)
+					step = 1;
+					
+					if(parsedNode)
 					{
-						isRunning = false;
-						if(parsedNode.error && parsedNode.error.message) {
-							throw parsedNode.error;
+						if(!parsedNode.result)
+						{
+							isRunning = false;
+							if(parsedNode.error && parsedNode.error.message) {
+								throw parsedNode.error;
+							}
+							else {
+								throw new RunTimeError( MSG_PARSE_ERR, -1, 
+									[GraphContext(contextStack[contextStack.length-1]).curNode.graph.name,
+									GraphContext(contextStack[contextStack.length-1]).curNode.text] );
+							}  
+						}			
+						else
+						{
+							if(parsedNode.print && parsedNode.string)
+								GraphContext(contextStack[contextStack.length-1]).buffer += 
+									parsedNode.string + 
+									" ";
+							
+							if(parsedNode.variable!=null)
+								context[parsedNode.variable] = parsedNode.string;
+	
+							if(parsedNode.type==CodeParser.CT_TEST)
+								transition = parsedNode.string;							
+							else if(parsedNode.transition)
+								transition = parsedNode.transition;
 						}
-						else {
-							throw new RunTimeError( MSG_PARSE_ERR, -1, 
-								[GraphContext(contextStack[contextStack.length-1]).curNode.graph.name,
-								GraphContext(contextStack[contextStack.length-1]).curNode.text] );
-						}  
-					}			
-					else
-					{
-						if(parsedNode.print && parsedNode.string)
-							GraphContext(contextStack[contextStack.length-1]).buffer += 
-								parsedNode.string + 
-								" ";
 						
-						if(parsedNode.variable!=null)
-							context[parsedNode.variable] = parsedNode.string;
-
-						if(parsedNode.type==CodeParser.CT_TEST)
-							transition = parsedNode.string;							
-						else if(parsedNode.transition)
-							transition = parsedNode.transition;
+						GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
 					}
 					
-					GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
-
 				case 2: // transition to next node						
+				
 					step = 2;
 					
 					var index:int = -1;
@@ -643,7 +654,7 @@ public class Template extends EventDispatcher
 							nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));
 						}
 						
-						forced--;							
+						forced--;
 
 						if(contextStack.length==0)
 							break;
@@ -696,17 +707,14 @@ public class Template extends EventDispatcher
 		
 		if(arrows && arrows.length>0)
 		{	
-			if(transition)
+			for(var i:int=0; i<arrows.length; i++) 
 			{
-				for(var i:int=0; i<arrows.length; i++) {
-					if(( transition && ArrowStruct(arrows[i]).label == transition 
-						|| !transition ) && 
-						ArrowStruct(arrows[i]).enabled)
-						indexes.push(i);
-				}
-				if(indexes.length>0)
-					index = indexes[ Math.round( Math.random() * (indexes.length-1) ) ];
+				if(( transition && ArrowStruct(arrows[i]).label == transition 
+					|| !transition ) && ArrowStruct(arrows[i]).enabled)
+					indexes.push(i);
 			}
+			if(indexes.length>0)
+				index = indexes[ Math.round( Math.random() * (indexes.length-1) ) ];			
 		}
 		return index;
 	}

@@ -17,7 +17,7 @@ package PowerPack.com.graph
     	public static const DIRECTION_CHANGED:String = "directionChanged";
     		
     	public static const DISPOSED:String = "disposed";
-    	public static const GRAPH_CHANGED:String = "graphChanged";
+    	//public static const GRAPH_CHANGED:String = "graphChanged";
 
 		public function ConnectorEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{

@@ -207,7 +207,6 @@ public class Node extends Canvas
         	invalidateDisplayList();
          
         	dispatchEvent(new NodeEvent(NodeEvent.TEXT_CHANGED));
-        	dispatchEvent(new NodeEvent(NodeEvent.GRAPH_CHANGED));
      	}
     }
     public function get text():String
@@ -241,7 +240,6 @@ public class Node extends Canvas
 	        invalidateDisplayList();
 	        
 	        dispatchEvent(new NodeEvent(NodeEvent.CATEGORY_CHANGED));
-	        dispatchEvent(new NodeEvent(NodeEvent.GRAPH_CHANGED));
 	    }
     }
     public function get category():String
@@ -275,7 +273,6 @@ public class Node extends Canvas
 	        invalidateDisplayList();
 	        
 	        dispatchEvent(new NodeEvent(NodeEvent.TYPE_CHANGED));
-	        dispatchEvent(new NodeEvent(NodeEvent.GRAPH_CHANGED));
 	    }
     }
     public function get type():String
@@ -308,7 +305,6 @@ public class Node extends Canvas
 	        invalidateDisplayList();
 	        
 	        dispatchEvent(new NodeEvent(NodeEvent.BREAKPOINT_CHANGED));
-	        dispatchEvent(new NodeEvent(NodeEvent.GRAPH_CHANGED));
 	    }
     }
     public function get breakpoint():Boolean
@@ -339,7 +335,6 @@ public class Node extends Canvas
         	invalidateDisplayList();
         	
 	        dispatchEvent(new NodeEvent(NodeEvent.ENABLED_CHANGED));
-	        dispatchEvent(new NodeEvent(NodeEvent.GRAPH_CHANGED));
 	   	}	
     }
 
@@ -390,8 +385,8 @@ public class Node extends Canvas
 		removeEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
 		removeEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
-   		removeEventListener("xChanged", positionChangedHandler);
-   		removeEventListener("yChanged", positionChangedHandler);
+   		//removeEventListener("xChanged", positionChangedHandler);
+   		//removeEventListener("yChanged", positionChangedHandler);
        		
 		if(copyNode == this)
 		{
@@ -408,7 +403,6 @@ public class Node extends Canvas
         if(parent)
            	parent.removeChild(this);
            	
-        dispatchEvent(new NodeEvent(NodeEvent.GRAPH_CHANGED));
        	dispatchEvent(new NodeEvent(NodeEvent.DISPOSED));
 	}
 			
@@ -495,8 +489,8 @@ public class Node extends Canvas
 			addEventListener(KeyboardEvent.KEY_DOWN, keyDown); 
 			addEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
        		
-       		addEventListener("xChanged", positionChangedHandler);
-       		addEventListener("yChanged", positionChangedHandler);			
+       		//addEventListener("xChanged", positionChangedHandler);
+       		//addEventListener("yChanged", positionChangedHandler);			
     	} 
     }
 
@@ -866,11 +860,6 @@ public class Node extends Canvas
     		}
     	}
     }
-    
-   	private function positionChangedHandler(event:Event):void
-   	{
-   		dispatchEvent(new NodeEvent(NodeEvent.GRAPH_CHANGED));
-   	}
     
 	private function contextMenuSelectHandler(event:Event):void
 	{

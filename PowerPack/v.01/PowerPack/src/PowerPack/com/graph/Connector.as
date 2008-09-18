@@ -278,7 +278,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			invalidateDisplayList();
 			         
     	    dispatchEvent(new ConnectorEvent(ConnectorEvent.HIGHLIGHTED_CHANGED));
-    	    dispatchEvent(new ConnectorEvent(ConnectorEvent.GRAPH_CHANGED));
   		}
     }
 
@@ -309,7 +308,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			invalidateDisplayList();
 			         
     	    dispatchEvent(new ConnectorEvent(ConnectorEvent.ENABLED_CHANGED));
-    	    dispatchEvent(new ConnectorEvent(ConnectorEvent.GRAPH_CHANGED));
     	}
     }	
 
@@ -337,7 +335,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	        invalidateProperties();
          
     	    dispatchEvent(new ConnectorEvent(ConnectorEvent.LABEL_CHANGED));
-    	    dispatchEvent(new ConnectorEvent(ConnectorEvent.GRAPH_CHANGED));
     	}
     }
 
@@ -365,7 +362,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         	invalidateProperties();
         	      
         	dispatchEvent(new ConnectorEvent(ConnectorEvent.DATA_CHANGED));
-        	dispatchEvent(new ConnectorEvent(ConnectorEvent.GRAPH_CHANGED));
      	}
     }
 
