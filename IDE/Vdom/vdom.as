@@ -11,6 +11,7 @@ import mx.rpc.events.FaultEvent;
 
 import vdom.connection.SOAP;
 import vdom.events.AuthenticationEvent;
+import vdom.events.DataManagerErrorEvent;
 import vdom.events.DataManagerEvent;
 import vdom.events.LoginFormEvent;
 import vdom.managers.AlertManager;
@@ -78,6 +79,9 @@ private function preinitalizeHandler():void
 	cacheManager.init();
 	
 	dataManager.addEventListener(DataManagerEvent.CLOSE, dataManager_close);
+	dataManager.addEventListener(DataManagerErrorEvent.GLOBAL_ERROR, dataManager_globalErrorHandler);
+	
+	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
 }
 
 private function creationCompleteHandler():void
@@ -128,7 +132,6 @@ private function changeLanguageHandler(event:Event):void
 
 private function submitBeginHandler(event:LoginFormEvent):void
 {	
-	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
 	alertManager.showMessage("Authentication process");
 	
 	var hostname:String = event.formData.hostname;
@@ -176,6 +179,8 @@ private function dataManager_typesLoadedHandler(event:DataManagerEvent):void
 	dataManager.removeEventListener(DataManagerEvent.TYPES_LOADED, dataManager_typesLoadedHandler);
 	alertManager.showMessage("");
 	
+	languageManager.parseLanguageData(dataManager.listTypes);
+	
 	viewstack.selectedChild = main;
 	
 	if(moduleTabNavigator)
@@ -222,8 +227,14 @@ private function logoutHandler():void
 
 private function soap_faultHandler(event:FaultEvent):void
 {
-	Alert.show(event.fault.faultString, "Error");
-	soap.removeEventListener(FaultEvent.FAULT, soap_faultHandler);
+	alertManager.showAlert(event.fault.faultString);
+	alertManager.showMessage("");
+	dataManager.close();
+}
+
+private function dataManager_globalErrorHandler(event:*):void
+{
+	alertManager.showAlert(event.fault.faultString);
 	alertManager.showMessage("");
 	dataManager.close();
 }

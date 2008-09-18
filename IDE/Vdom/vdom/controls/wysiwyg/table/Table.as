@@ -10,6 +10,7 @@ import mx.core.IRectangularBorder;
 import mx.core.UIComponent;
 import mx.core.mx_internal;
 import mx.events.ScrollEvent;
+import mx.states.SetStyle;
 
 import vdom.containers.IItem;
 import vdom.managers.wc;	
@@ -32,6 +33,8 @@ public class Table extends Grid implements IItem
 		super();
 		addEventListener(ScrollEvent.SCROLL, scrollHandler);
 		_objectId = objectId;
+		
+		percentWidth = 100;
 	}
 	
 	public function get objectId():String {

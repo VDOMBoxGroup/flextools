@@ -28,7 +28,7 @@ public class DataManagerEvent extends Event
     public static const INIT_COMPLETE:String = 'initComplete';
     
     public static const APPLICATION_CREATED:String = 'applicationCreated';
-    public static const APPLICATION_CHANGED:String = 'applicationChanged';
+//    public static const APPLICATION_CHANGED:String = 'applicationChanged';
     public static const APPLICATION_INFO_CHANGED:String = 'applicationInfoChanged';
     public static const APPLICATION_INFO_SET_COMPLETE:String = 'applicationInfoSetComplete';
     
@@ -39,20 +39,19 @@ public class DataManagerEvent extends Event
     public static const TYPES_LOADED:String = 'typesLoaded';
     public static const PAGE_DATA_LOADED:String = 'pageDataLoaded';
 	
-	public static const LIST_PAGES_CHANGED:String = 'listPagesChanged'
+//	public static const LIST_PAGES_CHANGED:String = 'listPagesChanged'
 	
-	public static const CURRENT_PAGE_CHANGED:String = 'currentPageChanged';
-	public static const CURRENT_OBJECT_CHANGED:String = 'currentObjectChanged';
+	public static const PAGE_CHANGED:String = 'pageChanged';
+	public static const OBJECT_CHANGED:String = 'objectChanged';
 	
 	public static const OBJECT_XML_SCRIPT_LOADED:String = 'objectXMLScriptLoaded';
 	public static const OBJECT_XML_SCRIPT_SAVED:String = 'objectXMLScriptSaved';
-	public static const OBJECT_XML_SCRIPT_SAVED_ERROR:String = 'objectXMLScriptSavedError';
 	
 	//public static const OBJECTS_LOADED:String = 'objectsLoaded';
 	public static const UPDATE_ATTRIBUTES_BEGIN:String = 'updateAttributesBegin';
 	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';
 	
-	public static const OBJECTS_CREATED:String = 'objectCreated';
+	public static const OBJECT_CREATED:String = 'objectCreated';
 	public static const OBJECT_DELETED:String = 'objectDeleted';
 	
 	public static const OBJECT_SCRIPT_LOADED:String = 'objectScriptLoaded';

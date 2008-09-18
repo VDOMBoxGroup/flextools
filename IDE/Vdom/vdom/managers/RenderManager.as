@@ -124,9 +124,10 @@ public class RenderManager implements IEventDispatcher {
 		lastKey = soap.render_wysiwyg(applicationId, itemId, parentId, 0);
 	}
 	
-	public function updateItem(itemId:String, parentId:String):void
+	public function updateItem(itemId:String/* , parentId:String */):void
 	{
-		lastKey = soap.render_wysiwyg(applicationId, itemId, parentId, 0);
+		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
+		lastKey = soap.render_wysiwyg(applicationId, itemId, itemDescription.parentId, 0);
 	}
 	
 	public function deleteItem(itemId:String):void

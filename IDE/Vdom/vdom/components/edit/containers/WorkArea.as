@@ -129,12 +129,12 @@ public class WorkArea extends VBox
 		renderManager.lockItem(objectId);
 	}
 	
-	public function updateObject(result:XML):void
+	public function updateObject(value:String):void
 	{
 		if(!showed)
 			return;
 			
-		var objectId:String = result.Object.@ID;
+		var objectId:String = value;
 		
 		if(_selectedObject && objectId == IItem(_selectedObject).objectId && resizeManager.itemTransform)
 			return;
@@ -160,7 +160,7 @@ public class WorkArea extends VBox
 			}	
 			else
 			{
-				renderManager.updateItem(result.Object.@ID, result.ParentId);
+				renderManager.updateItem(value/* , result.ParentId */);
 			}
 		}
 	}

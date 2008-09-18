@@ -179,7 +179,7 @@ private function dataManager_applicationDataLoaded(event:DataManagerEvent):void
 	}
 	
 	dataManager.addEventListener(
-		DataManagerEvent.CURRENT_PAGE_CHANGED,
+		DataManagerEvent.PAGE_CHANGED,
 		dataManager_pageChanged
 	);
 	
@@ -191,12 +191,12 @@ private function dataManager_applicationDataLoaded(event:DataManagerEvent):void
 private function dataManager_pageChanged(event:DataManagerEvent):void
 {
 	dataManager.removeEventListener(
-		DataManagerEvent.CURRENT_PAGE_CHANGED,
+		DataManagerEvent.PAGE_CHANGED,
 		dataManager_pageChanged
 	);
 	
 	dataManager.addEventListener(
-		DataManagerEvent.CURRENT_OBJECT_CHANGED,
+		DataManagerEvent.OBJECT_CHANGED,
 		dataManager_objectChanged
 	);
 	
@@ -206,7 +206,7 @@ private function dataManager_pageChanged(event:DataManagerEvent):void
 private function dataManager_objectChanged(event:DataManagerEvent):void
 {
 	dataManager.removeEventListener(
-		DataManagerEvent.CURRENT_OBJECT_CHANGED,
+		DataManagerEvent.OBJECT_CHANGED,
 		dataManager_objectChanged
 	);
 	

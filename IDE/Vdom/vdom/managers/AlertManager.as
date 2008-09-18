@@ -5,6 +5,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
+import mx.controls.Alert;
 import mx.core.Application;
 import mx.managers.PopUpManager;
 
@@ -62,6 +63,11 @@ public class AlertManager implements IEventDispatcher {
 		{
 			PopUpManager.removePopUp(alertWindow);
 		}
+	}
+	
+	public function showAlert(value:String):void
+	{
+		Alert.show(value, "Alert");
 	}
 	
 	// Реализация диспатчера

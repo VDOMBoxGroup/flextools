@@ -34,6 +34,8 @@ public class TableCell extends GridItem implements IItem
 		super();
 		mx_internal::layoutObject.direction = BoxDirection.VERTICAL;
 		_objectId = objectId;
+		
+		percentWidth = 100;
 	}
 	
 	public function get objectId():String {

@@ -29,7 +29,7 @@ private function showHandler():void
 	
 	defaultValues = new ApplicationDescription();
 	
-	var applicationInformation:XML = dataManager.applicationInformation();
+	var applicationInformation:XML = dataManager.currentApplicationInformation;
 	
 	defaultValues.id = applicationInformation.Id;
 	defaultValues.name = applicationInformation.Name;

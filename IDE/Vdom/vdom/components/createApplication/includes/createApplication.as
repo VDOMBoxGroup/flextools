@@ -48,7 +48,7 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.OBJECTS_CREATED, 
+			DataManagerEvent.OBJECT_CREATED, 
 			dataManager_objectsCreatedHandler
 		);
 	}
@@ -84,7 +84,7 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.OBJECTS_CREATED, 
+			DataManagerEvent.OBJECT_CREATED, 
 			dataManager_objectsCreatedHandler
 		);
 	}

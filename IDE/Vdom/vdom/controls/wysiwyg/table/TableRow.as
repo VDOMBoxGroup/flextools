@@ -36,6 +36,7 @@ public class TableRow extends GridRow implements IItem {
 		_objectId = objectId;
 		editableAttributes = [];
 		_isStatic = false;
+		percentWidth = 100;
 	}
 	
 	public function get objectId():String

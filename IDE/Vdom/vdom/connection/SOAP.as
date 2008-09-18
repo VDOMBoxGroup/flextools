@@ -73,7 +73,6 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 			return operation;
 		else
 			return null;
-//		 
 	}
 	
 	override flash_proxy function setProperty(name:*, value:*):void

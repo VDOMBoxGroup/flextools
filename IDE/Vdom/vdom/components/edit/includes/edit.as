@@ -5,12 +5,16 @@ import mx.binding.utils.ChangeWatcher;
 import mx.events.FlexEvent;
 
 import vdom.events.AttributesPanelEvent;
+import vdom.events.DataManagerErrorEvent;
 import vdom.events.DataManagerEvent;
 import vdom.events.WorkAreaEvent;
+import vdom.managers.AlertManager;
 import vdom.managers.DataManager;
 
 [Bindable]
 private var dataManager:DataManager = DataManager.getInstance();
+
+private var alertManager:AlertManager = AlertManager.getInstance();
 
 [Bindable]
 private var help:String;
@@ -70,9 +74,10 @@ private function registerEvent(flag:Boolean):void
 		
 //		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		
-		dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, dataManager_objectCreatedHandler);
-		dataManager.addEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
+		dataManager.addEventListener(DataManagerEvent.OBJECT_CREATED, dataManager_objectCreatedHandler);
+		dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler);
 		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
+		dataManager.addEventListener(DataManagerErrorEvent.SET_NAME_ERROR, dataManager_setNameErrorHandler);
 		
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler);
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, dataManager_updateAttributesCompleteHandler);
@@ -89,9 +94,10 @@ private function registerEvent(flag:Boolean):void
 		
 //		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		
-		dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, dataManager_objectCreatedHandler);
-		dataManager.removeEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED, dataManager_objectChangedHandler);
+		dataManager.removeEventListener(DataManagerEvent.OBJECT_CREATED, dataManager_objectCreatedHandler);
+		dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler);
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
+		dataManager.removeEventListener(DataManagerErrorEvent.SET_NAME_ERROR, dataManager_setNameErrorHandler);
 		
 		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler);
 		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, dataManager_updateAttributesCompleteHandler);
@@ -114,8 +120,8 @@ private function attributesChangedHandler(event:Event):void
 
 private function workArea_createObjectHandler(event:Event):void
 {	
-	var evt:WorkAreaEvent = WorkAreaEvent(event);
-	dataManager.createObject(evt.typeId, evt.objectId, '', evt.props);
+	var wae:WorkAreaEvent = WorkAreaEvent(event);
+	dataManager.createObject(wae.typeId, wae.objectId, '', wae.props);
 }
 
 private function workArea_changeObjectHandler(event:WorkAreaEvent):void
@@ -163,8 +169,8 @@ private function dataManager_updateAttributesBeginHandler(event:DataManagerEvent
 
 private function dataManager_updateAttributesCompleteHandler(event:DataManagerEvent):void
 {	
-	workArea.updateObject(event.result);
-	xmlEditor.dispatchEvent(new FlexEvent(FlexEvent.SHOW)); // <------ Error!
+	workArea.updateObject(event.objectId);
+	//xmlEditor.dispatchEvent(new FlexEvent(FlexEvent.SHOW)); // <------ Error!
 }
 
 private function dataManager_objectCreatedHandler(event:DataManagerEvent):void
@@ -184,4 +190,11 @@ private function dataManager_objectChangedHandler(event:DataManagerEvent):void
 private function dataManager_objectDeletedHandler(event:DataManagerEvent):void
 {	
 	workArea.deleteObject(event.objectId);
+}
+
+private function dataManager_setNameErrorHandler(event:DataManagerErrorEvent):void
+{
+	alertManager.showAlert(event.fault.faultString);
+	var objectId:String = XML(event.fault.faultDetail).ObjectID;
+	workArea.updateObject(objectId);
 }

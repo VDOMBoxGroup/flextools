@@ -28,12 +28,12 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.CURRENT_PAGE_CHANGED,
+			DataManagerEvent.PAGE_CHANGED,
 			dataManager_pageChanged
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.CURRENT_OBJECT_CHANGED,
+			DataManagerEvent.OBJECT_CHANGED,
 			dataManager_objectChanged
 		);
 	}
@@ -45,12 +45,12 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.CURRENT_PAGE_CHANGED,
+			DataManagerEvent.PAGE_CHANGED,
 			dataManager_pageChanged
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.CURRENT_OBJECT_CHANGED,
+			DataManagerEvent.OBJECT_CHANGED,
 			dataManager_objectChanged
 		);
 	}
