@@ -148,7 +148,17 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	private function operationResultHandler(event:ResultEvent):void
 	{
 		var resultXML:XML = new XML(<Result />);
-		resultXML.appendChild(XMLList(event.result));
+		
+		try
+		{
+			resultXML.appendChild(XMLList(event.result));
+		}
+		catch(error:Error)
+		{
+			var faultEvent:FaultEvent = FaultEvent.createEvent(new Fault("IDE", "Parse data error"));
+			faultHandler(faultEvent);
+			return;
+		}
 		
 		var se:SOAPEvent = new SOAPEvent(SOAPEvent.RESULT);
 		se.result = resultXML;

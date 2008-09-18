@@ -407,7 +407,7 @@ public class RenderManager implements IEventDispatcher {
 		}
 	}
 	
-	private function newRender(parentId:String, itemXMLDescription:XML):UIComponent
+	private function render(parentId:String, itemXMLDescription:XML):UIComponent
 	{
 		var itemName:String = itemXMLDescription.name().localName;
 		var item:UIComponent;
@@ -536,9 +536,16 @@ public class RenderManager implements IEventDispatcher {
 				
 				case "svg":
 				{
-					item = new SVGViewer();
-					var d:Array = SVGViewer(item).setXML(itemXMLDescription);
-					if(parentItem)
+					try
+					{
+						item = new SVGViewer();
+						var d:Array = SVGViewer(item).setXML(itemXMLDescription);
+					}
+					catch(error:Error){
+						var f:* = "";
+					}
+					
+					if(parentItem && d)
 					{
 						parentItem.editableAttributes = 
 							parentItem.editableAttributes.concat(d);
@@ -577,7 +584,7 @@ public class RenderManager implements IEventDispatcher {
 		{
 			if(child.nodeKind() == "element")
 			{
-				elm = newRender(parId, child);
+				elm = render(parId, child);
 				
 				if(!(elm is IItem) || IItem(elm).isStatic)
 					graphArr.push(elm);
@@ -731,7 +738,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		deleteItemChildren(itemId);
 
-		var item:UIComponent = newRender(parentId, itemXMLDescription);
+		var item:UIComponent = render(parentId, itemXMLDescription);
 		
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		

@@ -78,10 +78,12 @@
 			barColor="#ff0066"  alpha="1.0" borderColor="#0000FF">
 			<mx:Button id="submitButton" styleName="loginButtonOK"
 				label="{resourceManager.getString('LoginForm','ok_button')}"
-				click="checkData();" width="110"/>
+				click="checkData();" width="110"
+				focusEnabled="false"/>
 				<mx:Button id="quitButton" styleName="loginButtonQuit"
 				label="{resourceManager.getString('LoginForm','quit_button')}"
-				width="110" click="Application.application.close()"/>
+				width="110" click="Application.application.close()"
+				focusEnabled="false"/>
 		</mx:ControlBar>
 	</mx:Panel>
 </mx:Canvas>

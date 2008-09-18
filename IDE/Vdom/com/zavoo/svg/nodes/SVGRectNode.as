@@ -18,8 +18,10 @@ package com.zavoo.svg.nodes
 			//x & y loaded in setAttributes()
 			var x:Number = 0; //this.getAttribute('x',0);
 			var y:Number = 0; //this.getAttribute('y',0);
-			var width:Number = this.getAttribute('width',0);
-			var height:Number = this.getAttribute('height',0);
+			
+			var width:Number = this.getAttribute('width', 0);
+			
+			var height:Number = this.getAttribute('height', 0);
 			
 			var rx:String = this.getAttribute('rx');
 			var ry:String = this.getAttribute('ry');			

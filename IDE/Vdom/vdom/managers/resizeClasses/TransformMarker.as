@@ -309,26 +309,29 @@ public class TransformMarker extends UIComponent {
 			cc_box.visible = _moveMode
 		}
 		
+		var realWidth:Number = measuredWidth ? measuredWidth : 0;
+		var realHeight:Number = measuredHeight ? measuredHeight : 0;
+		
 		if(itemChanged) {
 
 			itemChanged = false
 			
 			tl_box.x = 0 + boxSize/2;
 			tl_box.y = 0 + boxSize/2;
-			tc_box.x = measuredWidth/2;
+			tc_box.x = realWidth/2;
 			tc_box.y = 0 + boxSize/2;
-			tr_box.x = measuredWidth - boxSize/2;
+			tr_box.x = realWidth - boxSize/2;
 			tr_box.y = 0 + boxSize/2;
 			cl_box.x = 0 + boxSize/2;
-			cl_box.y = measuredHeight/2;
-			cr_box.x = measuredWidth - boxSize/2;
-			cr_box.y = measuredHeight/2;
+			cl_box.y = realHeight/2;
+			cr_box.x = realWidth - boxSize/2;
+			cr_box.y = realHeight/2;
 			bl_box.x = 0 + boxSize/2;
-			bl_box.y = measuredHeight - boxSize/2;
-			bc_box.x = measuredWidth/2;
-			bc_box.y = measuredHeight - boxSize/2;
-			br_box.x = measuredWidth - boxSize/2;
-			br_box.y = measuredHeight - boxSize/2;
+			bl_box.y = realHeight - boxSize/2;
+			bc_box.x = realWidth/2;
+			bc_box.y = realHeight - boxSize/2;
+			br_box.x = realWidth - boxSize/2;
+			br_box.y = realHeight - boxSize/2;
 //			cc_box.x = 0 + boxSize/2;
 //			cc_box.y = 0 + boxSize/2;
 			
@@ -336,7 +339,7 @@ public class TransformMarker extends UIComponent {
 				var g:Graphics = cc_box.graphics;
 				g.clear();
 				g.lineStyle(6, 0x333333, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-				g.drawRect(0, 0, measuredWidth-6, measuredHeight-6);
+				g.drawRect(0, 0, realWidth-6, realHeight-6);
 //				g.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER);
 //				g.drawRect(0, 0, measuredWidth, measuredHeight);
 				g.endFill(); 
@@ -344,7 +347,7 @@ public class TransformMarker extends UIComponent {
 			
 			graphics.clear();			
 			graphics.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER);
-			graphics.drawRect(0, 0, measuredWidth, measuredHeight);
+			graphics.drawRect(0, 0, realWidth, realHeight);
 			graphics.endFill();
 		
 		}

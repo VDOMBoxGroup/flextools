@@ -383,10 +383,21 @@ package com.zavoo.svg.nodes
 						break;
 					case "RECT":
 						this.nodeBeginFill();
-						if (command.length == 5) {
+						
+//						command[1] = command[1] ? command[1] : 0;
+//						command[2] = command[2] ? command[2] : 0;
+//						command[3] = command[3] ? command[3] : 0;
+//						command[4] = command[4] ? command[4] : 0;
+						
+						if (command.length == 5)
+						{
 							this.graphics.drawRect(command[1], command[2],command[3], command[4]);
 						}
-						else {
+						else
+						{
+//							command[5] = command[5] ? command[5] : 0;
+//							command[6] = command[6] ? command[6] : 0;
+//							
 							this.graphics.drawRoundRect(command[1], command[2],command[3], command[4], command[5], command[6]);
 						}
 						this.nodeEndFill();
