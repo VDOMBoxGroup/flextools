@@ -117,7 +117,7 @@
 			PopUpManager.addPopUp(spinner, DisplayObject(Application.application), true);				 
 
 			OK.enabled = false;
-			dataManager.addEventListener(DataManagerEvent.OBJECTS_CREATED, createObjectHandler);
+			dataManager.addEventListener(DataManagerEvent.OBJECT_CREATED, createObjectHandler);
 			dataManager.createObject(selectedAppl.data);		
 		}	
 		
@@ -125,7 +125,7 @@
 		private var obID:String;
 		private function  createObjectHandler(dmEvt:DataManagerEvent):void
 		{
-			dataManager.removeEventListener(DataManagerEvent.OBJECTS_CREATED, createObjectHandler);
+			dataManager.removeEventListener(DataManagerEvent.OBJECT_CREATED, createObjectHandler);
 			var xmlObj:XML = new XML(dmEvt.result);
 				obID = xmlObj.Object.@ID;
 			var typeID:String = xmlObj.Object.@Type.toXMLString();

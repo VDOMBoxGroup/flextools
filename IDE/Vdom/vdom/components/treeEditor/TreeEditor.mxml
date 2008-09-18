@@ -575,7 +575,7 @@
 <mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
 	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
 		  click="addTreeElementLauncher()"/>
-		  <treeEditor:Control id="control"/>
+
 		  	
 	
 

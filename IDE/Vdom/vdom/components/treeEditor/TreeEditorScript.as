@@ -522,7 +522,7 @@ private function drawLines(xml1:XML):void
 			} 
 			if (!massLines[level][obID])
 			{	 
-				massLines[level][obID] = new Array();
+				massLines[level][obID] = new Array();	
 				masIndex[level][obID] = new Array();
 				
 			}
@@ -636,14 +636,16 @@ private function  removeLine():void
 	saveToServer();
 }
 
+
 private function saveToServer():void
 {
 	var dataToServer:XML =  dataToXML(massTreeElements, massLines);
 	xmlApplicationStructure = dataToServer;
 //	if(dataToServer.*.length() > 0)
+	
 											
 	 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
-		dataManager.setApplactionStructure(dataToServer);
+		dataManager.setApplicationStructure(dataToServer);
 		
 	trace('Data saved');
 }

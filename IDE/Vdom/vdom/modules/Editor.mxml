@@ -50,10 +50,10 @@
 			click="{placeCanvas.selectedChild=treeCanv}"/>
 			
 		
-		<!--<controls:ActionButton styleName="eventsButton"
+		<controls:ActionButton styleName="eventsButton"
 			label="{resourceManager.getString('Application','editor_events')}"
 			labelPlacement="bottom"
-			click="{placeCanvas.selectedChild=eventCanv}"/>-->
+			click="{placeCanvas.selectedChild=eventCanv}"/>
 		
 		<!--<controls:ActionButton styleName="analyseButton"
 			label="Debug"

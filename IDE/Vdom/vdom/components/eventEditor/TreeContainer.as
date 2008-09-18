@@ -40,7 +40,7 @@ package vdom.components.eventEditor
 		{
 			loadedPages = [];
 			selectedNode = null;
-			dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener);
+			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener);
             dataManager.changeCurrentPage(dataManager.currentPageId);
 		}
 		
@@ -53,8 +53,8 @@ package vdom.components.eventEditor
 		
 		private function changeCurrentPageListener(dmEvt:DataManagerEvent):void
 		{
-			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener);
-			dataManager.addEventListener(DataManagerEvent.CURRENT_OBJECT_CHANGED,  changeCurrentObjectListener);
+			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener);
+			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED,  changeCurrentObjectListener);
 			
 		}
 		
@@ -84,7 +84,7 @@ package vdom.components.eventEditor
 			
 			 if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
               {
-          		   		dataManager.addEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener)
+          		   		dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener)
               	   		dataManager.changeCurrentPage(ID);
               } else
               {
@@ -97,7 +97,7 @@ package vdom.components.eventEditor
 		private var curId:String;
 		private function changeCurrentObjectListener(dmEvt:DataManagerEvent):void
 		{
-			dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED,  changeCurrentPageListener);
+			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener);
 			
 			//var ID:String;
 			if(selectedNode)

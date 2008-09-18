@@ -223,6 +223,8 @@ xmlns:containers="vdom.components.edit.containers.*" >
 		}
 	]]>
 </mx:Script>
-	<containers:OTree id="tree"  width="100%"/>
+
+	<containers:OTree id="tree"  width="100%"  openDuration="0"/>
+
 	
 </ClosablePanel>
