@@ -354,7 +354,7 @@ private function addTreeEditorListeners():void
 	colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 	colmen2.addEventListener(TreeEditorEvent.SELECTED_LEVEL, chengeSelectedLevelHandler);
 	
-	dataManager.addEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
+	dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
 	
 	btLine.addEventListener(MouseEvent.CLICK, lineClikHandler );
 }
@@ -367,7 +367,7 @@ private function removeTreeEditorListeners():void
 	colmen2.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 	colmen2.removeEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 	
-	dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
+	dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
 	
 	btLine.removeEventListener(MouseEvent.CLICK, lineClikHandler);
 }
@@ -645,7 +645,7 @@ private function saveToServer():void
 //	if(dataToServer.*.length() > 0)
 	
 											
-	 	dataManager.addEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
+	 	dataManager.addEventListener(DataManagerEvent.SET_APPLICATION_STRUCTURE_COMPLETE, dataManagerListenner)
 		dataManager.setApplicationStructure(dataToServer);
 		
 	trace('Data saved');

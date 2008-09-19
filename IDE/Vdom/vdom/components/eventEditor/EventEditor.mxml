@@ -97,7 +97,7 @@
 	 		private var getApplEventID:String;
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
-	 			dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
+	 			dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
 	 		
 	 			getApplEventID = eeEvt.objID;
 	 			
@@ -120,7 +120,7 @@
 	 		
 	 		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
 	 		{
-	 			dataManager.removeEventListener(DataManagerEvent.APPLICATION_EVENT_LOADED, applicationEvenLoadedHandler);
+	 			dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
 	 			cretDat(dmEvt.result);
 	 		}
 	 		
@@ -578,7 +578,7 @@
 				}
 				
 //				trace('curContainerID TO server: '+curContainerID+'\n'+ dataToServer.toXMLString());
-		     	dataManager.addEventListener(DataManagerEvent.APPLICATION_EVENT_SAVED, applEventSevedHandler)
+		     	dataManager.addEventListener(DataManagerEvent.SET_APPLICATION_EVENTS_COMPLETE, applEventSevedHandler)
 				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
 				trace('****************\n '+ curContainerID);
 				trace(dataToServer.toXMLString());

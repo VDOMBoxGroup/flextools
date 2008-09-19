@@ -1,6 +1,5 @@
 package vdom.connection
 {
-
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
@@ -90,7 +89,6 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 		
 		args.unshift(code.sessionId,key);
 		operation.addEventListener(ResultEvent.RESULT, operationResultHandler)
-//		operation.addEventListener(FaultEvent.FAULT, operationFaultHandler);
 		operation.send.apply(null, args)
 		return key;
 	}
@@ -155,7 +153,7 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 		}
 		catch(error:Error)
 		{
-			var faultEvent:FaultEvent = FaultEvent.createEvent(new Fault("IDE", "Parse data error"));
+			var faultEvent:FaultEvent = FaultEvent.createEvent(new Fault("i101", "Parse data error"));
 			faultHandler(faultEvent);
 			return;
 		}
@@ -165,11 +163,6 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 		 
 		event.target.dispatchEvent(se);
 	}
-	
-	/* private function operationFaultHandler(event:FaultEvent):void
-	{
-		var d:* = "";
-	} */
 	
 	// Реализация диспатчера
 	

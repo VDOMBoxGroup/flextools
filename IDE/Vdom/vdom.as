@@ -7,6 +7,7 @@ import mx.core.UIComponent;
 import mx.events.FlexEvent;
 import mx.events.IndexChangedEvent;
 import mx.managers.PopUpManager;
+import mx.rpc.Fault;
 import mx.rpc.events.FaultEvent;
 
 import vdom.connection.SOAP;
@@ -20,6 +21,7 @@ import vdom.managers.CacheManager;
 import vdom.managers.DataManager;
 import vdom.managers.FileManager;
 import vdom.managers.LanguageManager;
+import vdom.utils.StringUtil;
 
 [Embed(source="/assets/main/vdom_logo.png")]
 [Bindable]
@@ -68,6 +70,33 @@ private function switchToLogin():void
 		
 		viewstack.selectedChild = loginForm;
 	}
+}
+
+private function checkError(fault:Fault):void
+{
+	var errorCode:String = StringUtil.getLocalName(fault.faultCode);
+	
+	switch(errorCode)
+	{
+		case "i101":
+		{
+			
+			break;
+		}
+		case "203":
+		{
+			switchToModule("applicationmanagment");
+			break;
+		}
+		default :
+		{
+			dataManager.close();
+			break;
+		}
+	}
+	
+	alertManager.showAlert(fault.faultString);
+	alertManager.showMessage("");
 }
 
 private function preinitalizeHandler():void
@@ -170,13 +199,13 @@ private function dataManager_initCompleteHandler(event:DataManagerEvent):void
 	
 	alertManager.showMessage("Load Types");
 	
-	dataManager.addEventListener(DataManagerEvent.TYPES_LOADED, dataManager_typesLoadedHandler);
+	dataManager.addEventListener(DataManagerEvent.LOAD_TYPES_COMPLETE, dataManager_typesLoadedHandler);
 	dataManager.loadTypes();	
 }
 
 private function dataManager_typesLoadedHandler(event:DataManagerEvent):void
 {
-	dataManager.removeEventListener(DataManagerEvent.TYPES_LOADED, dataManager_typesLoadedHandler);
+	dataManager.removeEventListener(DataManagerEvent.LOAD_TYPES_COMPLETE, dataManager_typesLoadedHandler);
 	alertManager.showMessage("");
 	
 	languageManager.parseLanguageData(dataManager.listTypes);
@@ -227,14 +256,11 @@ private function logoutHandler():void
 
 private function soap_faultHandler(event:FaultEvent):void
 {
-	alertManager.showAlert(event.fault.faultString);
-	alertManager.showMessage("");
-	dataManager.close();
+	checkError(event.fault);
 }
 
-private function dataManager_globalErrorHandler(event:*):void
+private function dataManager_globalErrorHandler(event:DataManagerErrorEvent):void
 {
-	alertManager.showAlert(event.fault.faultString);
-	alertManager.showMessage("");
-	dataManager.close();
+	checkError(event.fault);
+	
 }

@@ -46,6 +46,11 @@ private function registerEvent(flag:Boolean):void
 			proxy_setAttributesHandler
 		);
 		
+		proxy.addEventListener(
+			FaultEvent.FAULT,
+			faultHandler
+		);
+		
 		for each(method in registeredHandlers)
 		{
 			try

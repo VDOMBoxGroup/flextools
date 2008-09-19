@@ -149,7 +149,7 @@ private function searchResult_searchHandler(event:SearchResultEvent):void
 	objectId = event.objectId;
 	
 	dataManager.addEventListener(
-		DataManagerEvent.APPLICATION_DATA_LOADED,
+		DataManagerEvent.LOAD_APPLICATION_COMPLETE,
 		dataManager_applicationDataLoaded
 	);
 	
@@ -168,7 +168,7 @@ private function dataManager_searchCompleteHandler(event:DataManagerEvent):void
 private function dataManager_applicationDataLoaded(event:DataManagerEvent):void
 {
 	dataManager.removeEventListener(
-		DataManagerEvent.APPLICATION_DATA_LOADED,
+		DataManagerEvent.LOAD_APPLICATION_COMPLETE,
 		dataManager_applicationDataLoaded
 	);
 	

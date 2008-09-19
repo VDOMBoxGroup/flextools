@@ -46,14 +46,14 @@
 			if(dataManager.currentObject) {
 				
 				var objId:String = dataManager.currentObjectId; 
-				dataManager.addEventListener(DataManagerEvent.OBJECT_SCRIPT_LOADED, objectScriptLoaded)
-				dataManager.getObjectScript(objId);
+				dataManager.addEventListener(DataManagerEvent.GET_SCRIPT_COMPLETE, objectScriptLoaded)
+				dataManager.getScript(objId);
 			}
 		}
 		
 		private function objectScriptLoaded(event:DataManagerEvent):void {
 			
-			dataManager.removeEventListener(DataManagerEvent.OBJECT_SCRIPT_LOADED, objectScriptLoaded)
+			dataManager.removeEventListener(DataManagerEvent.GET_SCRIPT_COMPLETE, objectScriptLoaded)
 			txtArea.text = event.result.Script;
 			txtArea.enabled = true;
 			txtArea.editable = true;
@@ -63,13 +63,13 @@
 			
 			txtArea.editable = false;
 			txtArea.enabled = false;
-			dataManager.addEventListener(DataManagerEvent.OBJECT_SCRIPT_SAVED, objectScriptSaved);
-			dataManager.setObjectScript(txtArea.text);  
+			dataManager.addEventListener(DataManagerEvent.SET_SCRIPT_COMPLETE, objectScriptSaved);
+			dataManager.setScript(txtArea.text);  
 		}
 		
 		private function objectScriptSaved(event:DataManagerEvent):void {
 			
-			dataManager.removeEventListener(DataManagerEvent.OBJECT_SCRIPT_SAVED, objectScriptSaved)
+			dataManager.removeEventListener(DataManagerEvent.SET_SCRIPT_COMPLETE, objectScriptSaved)
 			txtArea.text = event.result.Script;
 			txtArea.enabled = true;
 			txtArea.editable = true;

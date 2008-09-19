@@ -12,6 +12,7 @@ import vdom.events.DataManagerErrorEvent;
 import vdom.events.DataManagerEvent;
 import vdom.events.ProxyEvent;
 import vdom.events.SOAPEvent;
+import vdom.utils.StringUtil;
 
 public class DataManager implements IEventDispatcher {
 	
@@ -135,6 +136,15 @@ public class DataManager implements IEventDispatcher {
 	public function init():void
 	{	
 		registerEvent(true);
+		
+		requestQue = {};
+		
+		_currentApplication = null;
+//		_currentApplicationId = null;
+		_currentPageId = null;
+		_currentObject = null;
+//		_typeLoaded = false;
+
 		soap.list_applications();
 	}
 	
@@ -374,7 +384,7 @@ public class DataManager implements IEventDispatcher {
 		soap.submit_object_script_presentation(currentApplicationId, currentObjectId, objectXMLScript);
 	}
 	
-	public function getObjectScript(objectId:String = ""):void
+	public function getScript(objectId:String = ""):void
 	{
 		if(objectId == "")
 			objectId = currentObjectId;
@@ -385,7 +395,7 @@ public class DataManager implements IEventDispatcher {
 		soap.get_script(applicationId, objectId, language);
 	}
 	
-	public function setObjectScript(script:String, objectId:String = ""):void
+	public function setScript(script:String, objectId:String = ""):void
 	{
 		if(objectId == "")
 			objectId = currentObjectId;
@@ -568,25 +578,13 @@ public class DataManager implements IEventDispatcher {
 			return null;
 	}
 	
-	private function getLocalName(name:Object):String
-	{
-		if (name is QName)
-		{
-			return QName(name).localName;
-		}
-		else
-		{
-			return String(name);
-		}
-	}
-	
 	private function soap_createApplicationHandler(event:SOAPEvent):void
 	{
 		_listApplication += event.result.Application[0];
 		
 		dispatchEvent(new DataManagerEvent("listApplicationChanged"));
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_CREATED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.CREATE_APPLICATION_COMPLETE);
 		dme.result = event.result;
 		dispatchEvent(dme);
 	}
@@ -642,7 +640,7 @@ public class DataManager implements IEventDispatcher {
 		if(information.Icon[0] && application.@IconID[0] != information.Icon[0])
 			application.@IconID = information.Icon[0];
 		
-		var dme1:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE);
+		var dme1:DataManagerEvent = new DataManagerEvent(DataManagerEvent.SET_APPLICATION_INFO_COMPLETE);
 		dispatchEvent(dme1);
 		
 		dispatchEvent(new Event("currentApplicationInformationChanged"));
@@ -650,28 +648,28 @@ public class DataManager implements IEventDispatcher {
 	
 	private function soap_getApplicationStructureHandler(event:SOAPEvent):void
 	{
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.STRUCTURE_LOADED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE);
 		dme.result = event.result.Structure[0];
 		dispatchEvent(dme);
 	}
 	
 	private function soap_setApplicationStructureHandler(event:SOAPEvent):void
 	{
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.STRUCTURE_SAVED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.SET_APPLICATION_STRUCTURE_COMPLETE);
 		dme.result = event.result;
 		dispatchEvent(dme);
 	}
 	
 	private function soap_getApplicationEventsHandler(event:SOAPEvent):void
 	{	
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_LOADED)
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE)
 		dme.result = event.result;
 		dispatchEvent(dme);
 	}
 	
 	private function soap_setApplicationEventsHandler(event:SOAPEvent):void
 	{
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.APPLICATION_EVENT_SAVED)
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.SET_APPLICATION_EVENTS_COMPLETE)
 		dme.result = event.result;
 		dispatchEvent(dme);
 	}
@@ -681,7 +679,7 @@ public class DataManager implements IEventDispatcher {
 		_listTypes = event.result.Types.*;
 //		_typeLoaded = true;
 		
-		dispatchEvent(new DataManagerEvent(DataManagerEvent.TYPES_LOADED));
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.LOAD_TYPES_COMPLETE));
 	}
 	
 	private function soap_createObjectHandler(event:SOAPEvent):void
@@ -711,7 +709,7 @@ public class DataManager implements IEventDispatcher {
 		
 		dispatchEvent(new Event("listPagesChanged"));
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_CREATED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.CREATE_OBJECT_COMPLETE);
 		dme.result = event.result;
 		dispatchEvent(dme);
 	}
@@ -730,7 +728,7 @@ public class DataManager implements IEventDispatcher {
 		
 		dispatchEvent(new Event("listPagesChanged"));
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_DELETED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.DELETE_OBJECT_COMPLETE);
 		dme.objectId = objectId;
 		dispatchEvent(dme);
 		
@@ -754,7 +752,7 @@ public class DataManager implements IEventDispatcher {
 		_currentApplication.@Status = "loaded";
 		
 		dispatchEvent(
-			new DataManagerEvent(DataManagerEvent.APPLICATION_DATA_LOADED)
+			new DataManagerEvent(DataManagerEvent.LOAD_APPLICATION_COMPLETE)
 		);
 	}
 	
@@ -780,7 +778,7 @@ public class DataManager implements IEventDispatcher {
 			_currentPageId = objectId;
 			_currentObject = null;
 			dispatchEvent(new Event("currentPageIdChanged"));
-			dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
+//			dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_DATA_LOADED));
 			dispatchEvent(new DataManagerEvent(DataManagerEvent.PAGE_CHANGED));
 		}
 		
@@ -818,7 +816,7 @@ public class DataManager implements IEventDispatcher {
 	private function soap_getObjectScriptPresentationHandler(event:SOAPEvent):void
 	{	
 		var result:XML = event.result.Result.*[0];
-		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, result));
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.GET_OBJECT_XML_SCRIPT_COMPLETE, result));
 	}
 	
 	private function soap_setObjectScriptPresentationHandler(event:SOAPEvent):void
@@ -831,12 +829,12 @@ public class DataManager implements IEventDispatcher {
 		_currentApplication..Objects.Object.(@ID == oldObjectId)[0] = <Object ID={newObjectId} />;
 		
 		soap.get_child_objects_tree(currentApplicationId, newObjectId); //<------
-		dispatchEvent(new DataManagerEvent(DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, result));
+		dispatchEvent(new DataManagerEvent(DataManagerEvent.SET_OBJECT_XML_SCRIPT_COMPLETE, result));
 	}
 	
 	private function soap_getScriptHandler(event:SOAPEvent):void
 	{
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_SCRIPT_LOADED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.GET_SCRIPT_COMPLETE);
 		dme.result = event.result.Result[0];
 		
 		dispatchEvent(dme);
@@ -844,7 +842,7 @@ public class DataManager implements IEventDispatcher {
 	
 	private function soap_setScriptHandler(event:SOAPEvent):void
 	{
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.OBJECT_SCRIPT_SAVED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.SET_SCRIPT_COMPLETE);
 		dme.result = event.result.Result[0];
 		
 		dispatchEvent(dme);
@@ -923,19 +921,19 @@ public class DataManager implements IEventDispatcher {
 	
 	private function faultHandler(event:FaultEvent):void
 	{
-		var errorCode:int = int(getLocalName(event.fault.faultCode));
+		var errorCode:String = StringUtil.getLocalName(event.fault.faultCode);
 		var errorDetails:XML = XML(event.fault.faultDetail);
 		var dme:DataManagerErrorEvent;
 		
 		switch(errorCode)
 		{
-			/* case 305:
+			case "305":
 			{
 				dme = new DataManagerErrorEvent(DataManagerErrorEvent.OBJECT_XML_SCRIPT_SAVE_ERROR);
 				dispatchEvent(dme);
 				break;
-			} */
-			case 306:
+			} 
+			case "306":
 			{
 				var objectId:String = errorDetails.ObjectID[0];
 				_currentObject = createNewCurrentObject(objectId);

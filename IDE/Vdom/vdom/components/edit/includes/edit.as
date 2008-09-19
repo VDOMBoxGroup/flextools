@@ -74,9 +74,9 @@ private function registerEvent(flag:Boolean):void
 		
 //		dataManager.addEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		
-		dataManager.addEventListener(DataManagerEvent.OBJECT_CREATED, dataManager_objectCreatedHandler);
+		dataManager.addEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, dataManager_objectCreatedHandler);
 		dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler);
-		dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
+		dataManager.addEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, dataManager_objectDeletedHandler);
 		dataManager.addEventListener(DataManagerErrorEvent.SET_NAME_ERROR, dataManager_setNameErrorHandler);
 		
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler);
@@ -94,9 +94,9 @@ private function registerEvent(flag:Boolean):void
 		
 //		dataManager.removeEventListener(DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler);
 		
-		dataManager.removeEventListener(DataManagerEvent.OBJECT_CREATED, dataManager_objectCreatedHandler);
+		dataManager.removeEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, dataManager_objectCreatedHandler);
 		dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler);
-		dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, dataManager_objectDeletedHandler);
+		dataManager.removeEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, dataManager_objectDeletedHandler);
 		dataManager.removeEventListener(DataManagerErrorEvent.SET_NAME_ERROR, dataManager_setNameErrorHandler);
 		
 		dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler);

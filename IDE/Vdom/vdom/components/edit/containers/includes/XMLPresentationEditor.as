@@ -41,7 +41,7 @@ private function registerEvent(flag:Boolean):void
 	if(flag)
 	{	
 		dataManager.addEventListener(
-			DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, 
+			DataManagerEvent.SET_OBJECT_XML_SCRIPT_COMPLETE, 
 			saveXMLScriptHandler
 		);
 		
@@ -51,14 +51,14 @@ private function registerEvent(flag:Boolean):void
 		);
 			
 		dataManager.addEventListener(
-			DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, 
+			DataManagerEvent.GET_OBJECT_XML_SCRIPT_COMPLETE, 
 			objectXMLScriptHandler
 		);
 	}
 	else 
 	{	
 		dataManager.removeEventListener(
-			DataManagerEvent.OBJECT_XML_SCRIPT_SAVED, 
+			DataManagerEvent.SET_OBJECT_XML_SCRIPT_COMPLETE, 
 			saveXMLScriptHandler
 		);
 		
@@ -68,7 +68,7 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.OBJECT_XML_SCRIPT_LOADED, 
+			DataManagerEvent.GET_OBJECT_XML_SCRIPT_COMPLETE, 
 			objectXMLScriptHandler
 		);
 	}

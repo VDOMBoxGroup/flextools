@@ -23,7 +23,7 @@ private function registerEvent(flag:Boolean):void
 	if(flag)
 	{
 		dataManager.addEventListener(
-			DataManagerEvent.APPLICATION_DATA_LOADED,
+			DataManagerEvent.LOAD_APPLICATION_COMPLETE,
 			dataManager_applicationDataLoaded
 		);
 		
@@ -40,7 +40,7 @@ private function registerEvent(flag:Boolean):void
 	else
 	{
 		dataManager.removeEventListener(
-			DataManagerEvent.APPLICATION_DATA_LOADED,
+			DataManagerEvent.LOAD_APPLICATION_COMPLETE,
 			dataManager_applicationDataLoaded
 		);
 		

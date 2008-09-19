@@ -97,7 +97,7 @@
 	
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
-		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_LOADED, getApplicationStructure);
+		dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
 		
 		xmlApplicationStructure = dtManEvt.result;
 		createTreeArr(xmlApplicationStructure);
@@ -274,14 +274,14 @@
     {
         if (event.detail==Alert.YES)
         {
-        	dataManager.addEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
+        	dataManager.addEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, deleteObjectHandler)
            	dataManager.deleteObject(curTree.ID)
         }
     }
     
     private function deleteObjectHandler(dmEvt:DataManagerEvent):void
     {
-    	dataManager.removeEventListener(DataManagerEvent.OBJECT_DELETED, deleteObjectHandler)
+    	dataManager.removeEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, deleteObjectHandler)
     	deleteObject(curTree.ID);
            	
 		curTree = massTreeElements[randomTreeElement];
@@ -366,7 +366,7 @@
 		
 	private function dataManagerListenner(dmnEvt:DataManagerEvent):void
 	{
-		dataManager.removeEventListener(DataManagerEvent.STRUCTURE_SAVED, dataManagerListenner)
+		dataManager.removeEventListener(DataManagerEvent.SET_APPLICATION_STRUCTURE_COMPLETE, dataManagerListenner)
 	}
 	
 	
@@ -443,13 +443,13 @@
 			'<Index>' + startPage +	'</Index>' + 
 		'</Information>');
 
-		dataManager.addEventListener(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, applicationInfoChangeHAndler); 
+		dataManager.addEventListener(DataManagerEvent.SET_APPLICATION_INFO_COMPLETE, applicationInfoChangeHAndler); 
 		dataManager.setApplicationInformation( dataManager.currentApplicationId, data);
 	}
 	
 	private function applicationInfoChangeHAndler(dmEvt:DataManagerEvent):void
 	{
-		dataManager.removeEventListener(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, applicationInfoChangeHAndler);
+		dataManager.removeEventListener(DataManagerEvent.SET_APPLICATION_INFO_COMPLETE, applicationInfoChangeHAndler);
 		
 		setStartPage();
 	}

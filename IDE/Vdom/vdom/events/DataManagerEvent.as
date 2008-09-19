@@ -12,7 +12,7 @@ public class DataManagerEvent extends Event
 		result:* = null,
 		isEnabled:Boolean=false,
 		objectId:String=null,
-		key:String=''){
+		key:String=""){
 			
 			// Call the constructor of the superclass.
 			super(type);
@@ -25,46 +25,40 @@ public class DataManagerEvent extends Event
 	}
 
     // Define static constant.
-    public static const INIT_COMPLETE:String = 'initComplete';
+    public static const INIT_COMPLETE:String = "initComplete";
     
-    public static const APPLICATION_CREATED:String = 'applicationCreated';
-//    public static const APPLICATION_CHANGED:String = 'applicationChanged';
-//    public static const APPLICATION_INFO_CHANGED:String = 'applicationInfoChanged';
-    public static const APPLICATION_INFO_SET_COMPLETE:String = 'applicationInfoSetComplete';
+    public static const CREATE_APPLICATION_COMPLETE:String = "createApplicationComplete";
+    public static const LOAD_APPLICATION_COMPLETE:String = "loadApplicationComplete";
+    public static const SET_APPLICATION_INFO_COMPLETE:String = "setApplicationInfoComplete";
     
-    public static const APPLICATION_EVENT_LOADED:String = 'applicationEventLoaded';
-    public static const APPLICATION_EVENT_SAVED:String = 'applicationEventSaved';
+    public static const GET_APPLICATION_EVENTS_COMPLETE:String = "getApplicationEventsComplete";
+    public static const SET_APPLICATION_EVENTS_COMPLETE:String = "setApplicationEventsComplete";
     
-    public static const APPLICATION_DATA_LOADED:String = 'applicationDataLoaded';
-    public static const TYPES_LOADED:String = 'typesLoaded';
-    public static const PAGE_DATA_LOADED:String = 'pageDataLoaded';
+    public static const GET_APPLICATION_STRUCTURE_COMPLETE:String = "getApplicationStructureComplete";
+	public static const SET_APPLICATION_STRUCTURE_COMPLETE:String = "setApplicationStructureComplete";
+    
+    public static const LOAD_TYPES_COMPLETE:String = "loadTypesComplete";
 	
-//	public static const LIST_PAGES_CHANGED:String = 'listPagesChanged'
+	public static const GET_OBJECT_XML_SCRIPT_COMPLETE:String = "getObjectXMLScriptComplete";
+	public static const SET_OBJECT_XML_SCRIPT_COMPLETE:String = "setObjectXMLScriptComplete";
 	
-	public static const PAGE_CHANGED:String = 'pageChanged';
-	public static const OBJECT_CHANGED:String = 'objectChanged';
+	public static const CREATE_OBJECT_COMPLETE:String = "createObjectComplete";
+	public static const DELETE_OBJECT_COMPLETE:String = "deleteObjectComplete";
 	
-	public static const OBJECT_XML_SCRIPT_LOADED:String = 'objectXMLScriptLoaded';
-	public static const OBJECT_XML_SCRIPT_SAVED:String = 'objectXMLScriptSaved';
+	public static const GET_SCRIPT_COMPLETE:String = "getScriptComplete";
+	public static const SET_SCRIPT_COMPLETE:String = "setScriptComplete";
 	
-	//public static const OBJECTS_LOADED:String = 'objectsLoaded';
-	public static const UPDATE_ATTRIBUTES_BEGIN:String = 'updateAttributesBegin';
-	public static const UPDATE_ATTRIBUTES_COMPLETE:String = 'updateAttributesComplete';
+	public static const RESOURCE_MODIFIED:String = "resurceModified";
 	
-	public static const OBJECT_CREATED:String = 'objectCreated';
-	public static const OBJECT_DELETED:String = 'objectDeleted';
+	public static const SEARCH_COMPLETE:String = "searchComplete";
 	
-	public static const OBJECT_SCRIPT_LOADED:String = 'objectScriptLoaded';
-	public static const OBJECT_SCRIPT_SAVED:String = 'objectScriptSaved';
+	public static const UPDATE_ATTRIBUTES_BEGIN:String = "updateAttributesBegin";
+	public static const UPDATE_ATTRIBUTES_COMPLETE:String = "updateAttributesComplete";
 	
-	public static const RESOURCE_MODIFIED:String = 'resurceModified';
+	public static const PAGE_CHANGED:String = "pageChanged";
+	public static const OBJECT_CHANGED:String = "objectChanged";
 	
-	public static const STRUCTURE_LOADED:String = 'structureLoaded';
-	public static const STRUCTURE_SAVED:String = 'structureSaved';
-	
-	public static const SEARCH_COMPLETE:String = 'searchComplete';
-	
-	public static const CLOSE:String = 'close';
+	public static const CLOSE:String = "close";
 
     // Define a public variable to hold the state of the enable property.
 	public var isEnabled:Boolean;

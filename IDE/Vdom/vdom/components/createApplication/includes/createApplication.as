@@ -28,12 +28,12 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.APPLICATION_CREATED, 
+			DataManagerEvent.CREATE_APPLICATION_COMPLETE, 
 			dataManager_applicationCreatedHandler
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.APPLICATION_DATA_LOADED, 
+			DataManagerEvent.LOAD_APPLICATION_COMPLETE, 
 			dataManager_applicationLoadedHandler
 		);
 		
@@ -43,12 +43,12 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, 
+			DataManagerEvent.SET_APPLICATION_INFO_COMPLETE, 
 			dataManager_applicationInfoChangedHandler
 		);
 		
 		dataManager.addEventListener(
-			DataManagerEvent.OBJECT_CREATED, 
+			DataManagerEvent.CREATE_OBJECT_COMPLETE, 
 			dataManager_objectsCreatedHandler
 		);
 	}
@@ -64,12 +64,12 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.APPLICATION_CREATED, 
+			DataManagerEvent.CREATE_APPLICATION_COMPLETE, 
 			dataManager_applicationCreatedHandler
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.APPLICATION_DATA_LOADED, 
+			DataManagerEvent.LOAD_APPLICATION_COMPLETE, 
 			dataManager_applicationLoadedHandler
 		);
 		
@@ -79,12 +79,12 @@ private function registerEvent(flag:Boolean):void
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, 
+			DataManagerEvent.SET_APPLICATION_INFO_COMPLETE, 
 			dataManager_applicationInfoChangedHandler
 		);
 		
 		dataManager.removeEventListener(
-			DataManagerEvent.OBJECT_CREATED, 
+			DataManagerEvent.CREATE_OBJECT_COMPLETE, 
 			dataManager_objectsCreatedHandler
 		);
 	}
