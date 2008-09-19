@@ -243,7 +243,10 @@
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
 		var curID:String = curTree.ID;
-
+		
+		if(!massTreeElements[curID])
+			return;
+			
 		if (main.mouseX < dX)
 			 	massTreeElements[curID].x = 0;
 			else
