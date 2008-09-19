@@ -84,7 +84,7 @@ package vdom.components.eventEditor
 			
 			 if(xmlTreeData.Object.(@ID == ID).toXMLString() != "" )
               {
-          		   		dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener)
+          		   		dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentObjectListener)
               	   		dataManager.changeCurrentPage(ID);
               } else
               {
