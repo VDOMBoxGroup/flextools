@@ -35,9 +35,9 @@ public class RenderManager implements IEventDispatcher {
 	
 	public static const styleList:Array = 
 	[
-		["opacity", "backgroundAlpha"], 
-		["backgroundcolor", "backgroundColor"], 
-		["borderwidth", "borderThickness"], 
+		["opacity", "backgroundAlpha"],
+		["backgroundcolor", "backgroundColor"],
+		["borderwidth", "borderThickness"],
 		["bordercolor", "borderColor"],
 		["color", "color"],
 		["fontfamily", "fontFamily"],
@@ -543,6 +543,7 @@ public class RenderManager implements IEventDispatcher {
 					}
 					catch(error:Error){
 						var f:* = "";
+						item = null;
 					}
 					
 					if(parentItem && d)
