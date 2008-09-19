@@ -22,6 +22,7 @@ package vdom.controls.externalEditorButton
 	import vdom.managers.ExternalManager;
 	import vdom.managers.FileManager;
 	import flash.net.URLRequest;
+	import flash.events.IOErrorEvent;
 
 	public class ExternalEditorButton extends HBox
 	{
@@ -100,13 +101,15 @@ package vdom.controls.externalEditorButton
 
 //		----- Loading and executing external application ------------------------------------- 
 
-		public function set resource(resource:Object):void {			
+		public function set resource(resource:Object):void {
+			fileManager.removeEventListener(FileManagerEvent.RESOURCE_LOADING_ERROR, resourceLoadingErrorHandler);
+						
 			/* Loading nested application */
 			if (!ldr)
         		ldr = new Loader();
         		
 			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, applicationLoaded);
-			
+
 			var loaderContext:LoaderContext = new LoaderContext();
 			loaderContext.allowLoadBytesCodeExecution = true;
 			
