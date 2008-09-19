@@ -343,22 +343,22 @@ package vdom.components.treeEditor
 		
 		private function saveChange():void
 		{
-			dataManager.addEventListener('currentPageChanged', changePagesHandler);
+			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
 			dataManager.changeCurrentPage(_ID);
 		}
 		
 		private function changePagesHandler(dmEvt:DataManagerEvent):void
 		{
-			dataManager.removeEventListener('currentPageChanged', changePagesHandler);
+			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
 			
-			dataManager.addEventListener("currentObjectChanged", changeObjectHandler);
+			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
 			
 			dataManager.changeCurrentObject(_ID);
 		}
 		
 		private function changeObjectHandler(dmEvt:DataManagerEvent):void
 		{
-			dataManager.removeEventListener("currentObjectChanged", changeObjectHandler);
+			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
 			
 			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
 			

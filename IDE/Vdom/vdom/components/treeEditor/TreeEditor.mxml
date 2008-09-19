@@ -443,13 +443,13 @@
 			'<Index>' + startPage +	'</Index>' + 
 		'</Information>');
 
-		dataManager.addEventListener(DataManagerEvent.APPLICATION_INFO_CHANGED, applicationInfoChangeHAndler); 
+		dataManager.addEventListener(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, applicationInfoChangeHAndler); 
 		dataManager.setApplicationInformation( dataManager.currentApplicationId, data);
 	}
 	
 	private function applicationInfoChangeHAndler(dmEvt:DataManagerEvent):void
 	{
-		dataManager.removeEventListener(DataManagerEvent.APPLICATION_INFO_CHANGED, applicationInfoChangeHAndler);
+		dataManager.removeEventListener(DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, applicationInfoChangeHAndler);
 		
 		setStartPage();
 	}

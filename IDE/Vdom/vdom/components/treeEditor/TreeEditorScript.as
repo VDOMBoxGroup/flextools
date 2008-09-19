@@ -3,6 +3,7 @@
 		import flash.events.MouseEvent;
 		
 		import mx.effects.Move;
+		import mx.effects.easing.Exponential;
 		
 		import vdom.components.treeEditor.Index;
 		import vdom.components.treeEditor.TreeElement;
@@ -10,7 +11,6 @@
 		import vdom.events.DataManagerEvent;
 		import vdom.events.IndexEvent;
 		import vdom.events.TreeEditorEvent;
-		
 	 
    
    
@@ -275,6 +275,7 @@ private function adjustmentTree(xml1:XML):void
 				
 				moves.target = massTreeElements[str];	
 				moves.duration = 1500;
+				moves.easingFunction = Exponential.easeInOut; 
 //				moves.startDelay = 1000;
 				moves.xFrom =  massTreeElements[str].x;
 				moves.yFrom = massTreeElements[str].y;
@@ -445,7 +446,7 @@ public function getLanguagePhrase(name:String, phrase:String):String
 	return resourceManager.getString(name, phraseID);
 }
 /***
- * 
+ *  аккорды
  * -------------------------------------------------
  * 
  * ***/
