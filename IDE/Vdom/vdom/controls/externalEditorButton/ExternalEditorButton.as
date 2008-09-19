@@ -197,7 +197,7 @@ package vdom.controls.externalEditorButton
 				value = exEditor['value'];
 			}
 			catch (err:Error) {
-				Alert.show("External Editor doesnt allow to read from 'value' property!", "External Editor Error!");
+				Alert.show("External Editor doesn't allow to read from 'value' property!", "External Editor Error!");
 			}
 		}		
 	}
