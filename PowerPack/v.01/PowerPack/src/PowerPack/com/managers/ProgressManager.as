@@ -6,6 +6,7 @@ import ExtendedAPI.com.controls.HDivider;
 import PowerPack.customize.core.windowClasses.SuperStatusBar;
 
 import flash.desktop.NativeApplication;
+import flash.display.DisplayObject;
 import flash.display.NativeWindowSystemChrome;
 import flash.display.NativeWindowType;
 import flash.events.Event;
@@ -15,7 +16,6 @@ import flash.events.MouseEvent;
 import flash.events.OutputProgressEvent;
 import flash.events.ProgressEvent;
 import flash.filesystem.FileStream;
-import flash.geom.Rectangle;
 
 import mx.containers.Box;
 import mx.containers.ControlBar;
@@ -295,7 +295,7 @@ public class ProgressManager extends EventDispatcher
 				/* TODO: restore position or set default position */
 				instance._panel.validateNow();
 				break;
-				
+			
 			case STATUS_MODE:
 				if(!instance._win.statusBar || !(instance._win.statusBar is SuperStatusBar))
 					break;
@@ -311,6 +311,27 @@ public class ProgressManager extends EventDispatcher
 				SuperStatusBar(instance._win.statusBar).validateNow();
 				break;
 						
+			case WINDOW_MODE:
+				instance._bar.label = LanguageManager.sentences['progress_full_label'];
+				instance._bar.percentWidth = 100;
+				instance._bar.direction = "right";
+				instance._bar.labelPlacement = "top";
+				instance._bar.setStyle("barSkin", ProgressBarSkin);
+				if(showProgress)
+					instance._winBox.addChildAt(instance._bar, 1);
+				
+				instance._window.addChild(instance._winBox);
+				
+				var activeWin:Window = SuperWindow.getWindow(NativeApplication.nativeApplication.activeWindow);
+				if(activeWin)
+					PopUpManager.addPopUp(instance._window, activeWin as DisplayObject, true);
+				else
+					PopUpManager.addPopUp(instance._window, instance._win as DisplayObject, true);				
+				
+				PopUpManager.centerPopUp(instance._window);
+				instance._window.validateNow();
+				break;								
+			
 			default:
 				instance._bar.label = LanguageManager.sentences['progress_full_label'];
 				instance._bar.percentWidth = 100;
@@ -357,7 +378,7 @@ public class ProgressManager extends EventDispatcher
 
 				instance._dialog.activate();
 
-				viewMode = WINDOW_MODE;
+				viewMode = DIALOG_MODE;
 				break;								
 		}
 		
@@ -374,8 +395,13 @@ public class ProgressManager extends EventDispatcher
 			
 		switch(instance._viewMode)
 		{
-			case WINDOW_MODE:
-						
+			case WINDOW_MODE:			
+				if(instance._winBox.parent)
+					instance._winBox.parent.removeChild(instance._winBox);
+				PopUpManager.removePopUp(instance._window);
+				break;
+				
+			case DIALOG_MODE:						
 					if(instance._dialog && !instance._dialog.closed)
 					{
 						instance._dialog.visible = false;
@@ -400,7 +426,7 @@ public class ProgressManager extends EventDispatcher
 				/* TODO: memorize position before close */
 				if(instance._panel.parent)
 				{
-					instance._panel.parent.removeChild(instance._panel)
+					instance._panel.parent.removeChild(instance._panel);
 					instance._panel.validateNow();
 				}
 				break;
@@ -449,7 +475,9 @@ public class ProgressManager extends EventDispatcher
     			if(_dialog==null || _dialog.nativeWindow==null || _dialog.parent==null)
 					PopUpManager.centerPopUp(_window);
 			}	
-						
+		}						
+		if(!_winBox)
+		{
 			var box:VBox = new VBox();	
 			_winBox = box;		
 			//_winBox.addEventListener(ResizeEvent.RESIZE, resizeHandler);
@@ -511,7 +539,6 @@ public class ProgressManager extends EventDispatcher
 			//controlBar.addChild(btnCancel);
 			//controlBar.addChild(btnDetails);
 			
-			//_window.addChild(box);
 			//box.addChild(controlBar);
 		}
 		if(!_panel)

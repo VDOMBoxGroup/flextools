@@ -709,8 +709,8 @@ public class Template extends EventDispatcher
 		{	
 			for(var i:int=0; i<arrows.length; i++) 
 			{
-				if(( transition && ArrowStruct(arrows[i]).label == transition 
-					|| !transition ) && ArrowStruct(arrows[i]).enabled)
+				if( (transition && ArrowStruct(arrows[i]).label == transition 
+					|| !transition) && ArrowStruct(arrows[i]).enabled )
 					indexes.push(i);
 			}
 			if(indexes.length>0)

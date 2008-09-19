@@ -694,6 +694,9 @@
             
             public function showDebugDetails():void
             {
+            	try
+            	{
+            		
 				if(!ContextManager.instance.templateStruct || ContextManager.instance.templateStruct.contextStack.length==0)
 					return;
             	
@@ -813,6 +816,7 @@
 				pnl_node_value.list.selectedIndex = pnl_node_value.array.length-1;
 				pnl_node_value.list.callLater(pnl_node_value.list.scrollToIndex, [pnl_node_value.array.length]);
 				
+            	} catch (e:*) {}
             }
             
             public function switchDebug(enable:Boolean=true):void
