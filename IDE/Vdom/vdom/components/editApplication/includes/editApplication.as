@@ -95,7 +95,7 @@ private function setInformation():void
 		attributes.appendChild(<Icon>{newValues.iconId}</Icon>);
 	
 	dataManager.addEventListener(
-		DataManagerEvent.APPLICATION_INFO_CHANGED, 
+		DataManagerEvent.APPLICATION_INFO_SET_COMPLETE, 
 		dataManager_applicationInfoChangedHandler
 	);
 	
