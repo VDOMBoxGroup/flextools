@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	borderAlpha="0.95" cornerRadius="1" width="400" height="300"
+	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
+	title="DropDown values editor" verticalGap="15" creationComplete="{}">
+	
+	<mx:Style>
+		.title {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+	
+	<mx:HBox width="100%" horizontalGap="4">
+		<mx:VBox width="100%" verticalGap="0">
+			<mx:Label text="Native language" />
+			<mx:ComboBox cornerRadius="1" width="100%" />
+		</mx:VBox>
+		<mx:VBox width="100%" verticalGap="0">
+			<mx:Label text="Native language" />
+			<mx:ComboBox cornerRadius="1" width="100%" />
+		</mx:VBox>
+	</mx:HBox>	
+	
+	
+	<mx:DataGrid width="100%" height="100%">
+		<mx:columns>
+			<mx:DataGridColumn dataField="Text" />
+			<mx:DataGridColumn dataField="Value" width="40" />
+			<mx:DataGridColumn dataField="Text" />
+			<mx:DataGridColumn dataField="Value" width="40" />	
+		</mx:columns>
+	</mx:DataGrid>
+	
+</mx:TitleWindow>

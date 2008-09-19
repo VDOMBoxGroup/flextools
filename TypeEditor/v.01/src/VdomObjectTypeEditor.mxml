@@ -374,25 +374,25 @@
 									<mx:ComboBox id="__attrPanelInterface" width="100%" cornerRadius="1"
 										change="{changeAttrPanelInterfaceHandler();}">
 								        <mx:Array>
-								            <mx:Object data="0" label="TextField(Length)" />
-								            <mx:Object data="0" label="Number(minValue, maxValue)" />
-								            <mx:Object data="0" label="MultiLine(Length)" />
-								            <mx:Object data="0" label="Font()" />
-								            <mx:Object data="0" label="DropDown(Values)" />
-								            <mx:Object data="0" label="File()" />
-								            <mx:Object data="0" label="Color()" />
-								            <mx:Object data="0" label="PageLink()" />
-								            <mx:Object data="0" label="LinkedBase()" />
-								            <mx:Object data="0" label="ObjectList()" />
-								            <mx:Object data="0" label="ObjectList(type_id)" />
-								            <mx:Object data="0" label="ExternalEditor(Title, Info)" />
+								            <mx:Object label="TextField(Length)"			data="textfield" />
+								            <mx:Object label="Number(minValue, maxValue)"	data="number" />
+								            <mx:Object label="MultiLine(Length)"			data="multiline" />
+								            <mx:Object label="Font()"						data="font" />
+								            <mx:Object label="DropDown(Values)"				data="dropdown" />
+								            <mx:Object label="File()"						data="file" />
+								            <mx:Object label="Color()"						data="color" />
+								            <mx:Object label="PageLink()"					data="pagelink" />
+								            <mx:Object label="LinkedBase()"					data="linkedbase" />
+								            <mx:Object label="ObjectList()"					data="objectlist" />
+								            <mx:Object label="ObjectList(type_id)"			data="objectlist2" />
+								            <mx:Object label="ExternalEditor(Title, Info)"	data="externaleditor" />
 								        </mx:Array>
 									</mx:ComboBox>	
-									<mx:Button id="__attrValuesBtn" label="Value(s)" cornerRadius="1" />
+									<mx:Button id="__attrValuesBtn" label="Value(s)" cornerRadius="1" click="{attrInterfaceTypeValuesClickHandler();}" />
 								</mx:HBox>
 								
 								<mx:Spacer height="2" />
-								<mx:TextInput id="__params" width="100%" borderStyle="solid" borderColor="#DDDDDD" />
+								<mx:TextInput id="__params" width="100%" borderStyle="solid" borderColor="#DDDDDD" creationComplete="{changeAttrPanelInterfaceHandler();}" />
 							</mx:VBox>
 						</mx:VBox>
 	

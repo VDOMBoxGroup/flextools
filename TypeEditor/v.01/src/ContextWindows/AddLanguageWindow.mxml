@@ -2,7 +2,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	borderAlpha="0.95" cornerRadius="1" width="250" height="150"
-	shadowDirection="right"	borderColor="#636363" titleStyleName="resourceBrowserTitle"
+	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
 	title="Add Object Language" verticalGap="15" creationComplete="{onCreationComplete();}">
 	
 	<mx:RegExpValidator 
@@ -10,7 +10,7 @@
 		required="true" valid="{validName = true;}" invalid="{validName = false;}" />
 	
 	<mx:Style>
-		.resourceBrowserTitle {
+		.title {
 			color:#FFFFFF;
 			fontWeight:bold;
 		}

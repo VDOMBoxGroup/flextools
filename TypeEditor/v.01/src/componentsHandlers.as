@@ -13,6 +13,7 @@ import flash.filesystem.File;
 import mx.events.FileEvent;
 import flash.desktop.Icon;
 import mx.controls.Image;
+import ContextWindows.DropDownMenuEditor;
 
 private function creationComplete():void {
 	__mainMenuBar.dataProvider = menuDataProvider;
@@ -222,14 +223,17 @@ private function writeAttrPropChanges():void {
 	attrsListProvider[sI]['label'] = __attrName.text;
 	attrsListProvider[sI]['defValue'] = __defValue.text;
 	attrsListProvider[sI]['regExValidationStr'] = __regExValidationStr.text;
+	attrsListProvider[sI]['panelInterface'];
 	try {
 		attrsListProvider[sI][sL]['attrDispName'] = __attrDispName.text;
 		attrsListProvider[sI][sL]['regExValidationErrStr'] = __regExValidationErrStr.text;
+		attrsListProvider[sI][sL]['panelInterfaceParams'] = '';
 	}
 	catch (err:Error) {
 		attrsListProvider[sI][sL] = {};
 		attrsListProvider[sI][sL]['attrDispName'] = __attrDispName.text;
 		attrsListProvider[sI][sL]['regExValidationErrStr'] = __regExValidationErrStr.text;
+		attrsListProvider[sI][sL]['panelInterfaceParams'] = '';
 	}
 
 	var storedIndex:int = __attrsList.selectedIndex;
@@ -352,5 +356,27 @@ private function changeAttrPanelInterfaceHandler():void {
 		typeParams = matchRes[2];
 		__params.text = typeName + "()";
 		__attrValuesBtn.enabled = typeParams.length > 0;
+	}
+}
+
+private function attrInterfaceTypeValuesClickHandler():void {
+	var type:String = __attrPanelInterface.text;
+	var typeReg:RegExp = /^([a-zA-Z]+)\((.*)\)/;
+	
+	var typeName:String = '';
+	var typeParams:String = '';
+
+	var matchRes:Array = type.match(typeReg);
+	if (matchRes) {
+		typeName = matchRes[1];
+		typeParams = matchRes[2];
+		
+		switch (typeName) {
+			case 'DropDown':
+				var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
+				PopUpManager.addPopUp(ddeditor, this);
+				PopUpManager.centerPopUp(ddeditor);
+				break;
+		}
 	}
 }
