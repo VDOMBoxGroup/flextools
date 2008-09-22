@@ -6,6 +6,11 @@ import mx.events.DataGridEvent;
 import mx.controls.LinkButton;
 import mx.utils.StringUtil;
 import mx.controls.Label;
+import resourceBrowser.ResourceBrowser;
+import resourceBrowser.ResourceBrowserEvent;
+import mx.controls.DataGrid;
+import mx.core.UIComponent;
+import mx.managers.PopUpManager;
 
 private var AMOUNT:int = 500;
 
@@ -312,6 +317,8 @@ private function setTableHeaders():void {
 		
 		dataGridColumnsProps.push(columnProps);
 		_header.dataField = xmlHeader.@name;
+		if (String(xmlHeader.@name).toLowerCase() == 'id')
+			_header.editable = false;
 		
 		dataGridColumns.push(_header);
 	}
@@ -335,7 +342,7 @@ private function countResponseHandler(message:String):void {
 private var alertYesFunc:Function;
 private var alertNoFunc:Function;
 [Bindable]
-private var alertMessage:String = "";
+private var alertMessage:String = '';
 
 private function showAlert(message:String, yesHandler:Function, noHandler:Function):void {
 	alertMessage = message;
@@ -602,4 +609,23 @@ private function amountApplyBtnClickHandler():void {
 	pages = [];
 	currentPage = 0;
 	getPageRequest();
+}
+
+private var rBrowserInstance:ResourceBrowser;
+/*
+private function openWindow():void {
+	if (__dg.selectedItem is UIComponent) {
+	
+		rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(DisplayObject(Application.application), ResourceBrowser, true));
+		rBrowserInstance.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
+		PopUpManager.centerPopUp(rBrowserInstance);
+		
+		var matchResult:Array = _value.match(regResource);
+		if (matchResult)
+			rBrowserInstance.selectedItemID = matchResult[1];
+	}
+}
+*/
+private function resourceSelectedHandler(event:ResourceBrowserEvent):void {
+	this.value = "#Res(" + event.resourceID + ")";
 }

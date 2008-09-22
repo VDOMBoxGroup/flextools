@@ -116,49 +116,7 @@ package
 		// ----- Server Messages processing methods ---------------------------------------------
 
 		private function remoteMethodCallStandartMsgHandler(event:*):void {
-			/*
-				There are may be 2 responses from server in this section: response that
-				everything is OK and standart error message (something wrong with remote
-				method parameters).
-			*/
-
-			var xmlResult:XML;
-			try { 
-				xmlResult = new XML(event.result);
-			}
-			catch (err:Error) {	return;	}
 			
-			switch (xmlResult.name().toString()) {
-
-				case "Result":
-					try {
-						if (queue[currentRequestInQueue]['functionOnSuccess'])
-							queue[currentRequestInQueue]['functionOnSuccess'](xmlResult);
-					}
-					catch (err:Error) { }
-					
-					this.dispatchEvent(new QueueEvent(QueueEvent.SUCCESS_RESPONSE, xmlResult));
-					break;
-					
-				case "Error":
-					try {
-						if (queue[currentRequestInQueue]['functionOnFault'])
-							queue[currentRequestInQueue]['functionOnFault'](xmlResult);
-					}
-					catch (err:Error) { }
-					
-					this.dispatchEvent(new QueueEvent(QueueEvent.STANDART_ERROR, xmlResult));
-					truncateAndInterrupt(xmlResult);
-					break;
-			}
-		}
-
-		private function remoteMethodCallErrorMsgHandler(event:*):void {
-			/*
-				This function handles responses displaying that method could not be executed
-				for some reason(s) (may be privilegies reason or method is absent?). 
-			*/
-
 			var xmlResult:XML;
 			try { 
 				xmlResult = new XML(event.result);
@@ -166,19 +124,24 @@ package
 			catch (err:Error) {	return;	}
 			
 			if (xmlResult.name().toString() == "Result") {
-
 				try {
-					this.dispatchEvent(new QueueEvent(QueueEvent.SOAP_EXCEPTION, xmlResult.Error, currentRequestInQueue));
-					truncateAndInterrupt(xmlResult.Error);
-					return;
+					if (queue[currentRequestInQueue]['functionOnSuccess'])
+						queue[currentRequestInQueue]['functionOnSuccess'](xmlResult);
 				}
-				catch (err:Error) {
-					/* Unknown Soap Exception */
-					this.dispatchEvent(new QueueEvent(QueueEvent.SOAP_EXCEPTION, xmlResult));
-				}
-			} else {
+				catch (err:Error) { }
+				
+				this.dispatchEvent(new QueueEvent(QueueEvent.SUCCESS_RESPONSE, xmlResult));
+			}
+		}
 
-				this.dispatchEvent(new QueueEvent(QueueEvent.UNKNOWN_ERROR, xmlResult, currentRequestInQueue));
+		private function remoteMethodCallErrorMsgHandler(event:*):void {
+
+			var xmlResult:XML;
+			try { 
+				xmlResult = new XML(event.result);
+			}
+			catch (err:Error) {	
+				xmlResult = new XML(<error>Unknown Error</error>);
 			}
 			
 			truncateAndInterrupt(xmlResult);

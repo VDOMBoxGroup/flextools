@@ -9,7 +9,7 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	horizontalAlign="center" verticalAlign="middle"
 	paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10"
- 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
+ 	xmlns:resourceBrowser="resourceBrowser.*">
  
 	<resourceBrowser:SmoothImage id="__image" horizontalAlign="center" verticalAlign="middle"
 		maintainAspectRatio="true" scaleContent="true" />

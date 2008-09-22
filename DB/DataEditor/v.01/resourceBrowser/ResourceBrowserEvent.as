@@ -1,4 +1,4 @@
-package vdom.events
+package resourceBrowser
 {
 	import flash.events.Event;
 

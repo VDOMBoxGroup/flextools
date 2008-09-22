@@ -17,13 +17,6 @@ import mx.events.ItemClickEvent;
 import mx.managers.PopUpManager;
 import mx.utils.Base64Encoder;
 
-import vdom.controls.resourceBrowser.ListItem;
-import vdom.controls.resourceBrowser.PreviewContainer;
-import vdom.controls.resourceBrowser.ThumbnailItem;
-import vdom.events.FileManagerEvent;
-import vdom.events.ResourceBrowserEvent;
-import vdom.managers.DataManager;
-import vdom.managers.FileManager;
 import mx.charts.CategoryAxis;
 import flash.utils.ByteArray;
 import flash.events.KeyboardEvent;
@@ -45,7 +38,6 @@ private var selectedThumb:Object;		// Currently selected Thumbnail (visual compo
 private var rTypes:Array;				// Avalible resources types (get during resources scanning)
 private var objects:Array;				// Associative (by id) array of resource objects	
 private var currentView:String;
-private var fileForUpload:File;
 
 private var resourcesListLoadedFlag:Boolean = false;
 
@@ -58,8 +50,8 @@ private var totalResources:int = 0;
 [Bindable]
 private var filteredResources:int = 0;
 
-private var fileManager:FileManager = FileManager.getInstance();	// FileManager global Class instance
-private var dataManager:DataManager = DataManager.getInstance();	// DataManager global Class instance
+
+private var _manager:*;
 
 public function set selectedItemID(itemID:String):void {
 	_selectedItemID = itemID;
@@ -72,7 +64,7 @@ public function get selectedItemID():String {
 	return _selectedItemID;
 }
 
-private function creationComplete():void {
+public function set manager(ref:*):void {
 	this.addEventListener(CloseEvent.CLOSE, closeHandler); 
 	loadTypesIcons();
 	listResourcesQuery();
@@ -81,12 +73,12 @@ private function creationComplete():void {
 }
 
 private function listResourcesQuery():void {
-	fileManager.addEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);
-	fileManager.getListResources();
+	_manager.addEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);
+	_manager.getListResources();
 }
 
-private function getResourcesList(fmEvent:FileManagerEvent):void {
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);	
+private function getResourcesList(fmEvent:*):void {
+	_manager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesList);	
 	resources = new XML(fmEvent.result.Resources);
 	
 	currentView = defaultView;
@@ -178,7 +170,7 @@ private function createResourcesViewObjects(filter:String = "*"):void {
 		viewItem.addEventListener(MouseEvent.CLICK, selectThumbnail);
 		
 		if (isViewable(resource.@type)) {
-			fileManager.loadResource(dataManager.currentApplicationId, resource.@id.toString(), viewItem);			
+			_manager.loadResource(_manager.currentApplicationId, resource.@id.toString(), viewItem);			
 		} else { // if not viewable
 			if (typesIcons[resource.@type] != null) {
 				viewItem.imageSource = typesIcons[resource.@type];	
@@ -233,7 +225,7 @@ private function showResource():void {
 	if (isViewable(selectedThumb.objType)) {
 		preview.imageSource = waiting_Icon;
 		preview.addEventListener(Event.COMPLETE, setImageProperties);
-		fileManager.loadResource(dataManager.currentApplicationId, _selectedItemID, preview);
+		_manager.loadResource(_manager.currentApplicationId, _selectedItemID, preview);
 	} else {
 		preview.imageSource = selectedThumb.imageSource;
 		__iResolution.text = "Can not determine";
@@ -324,87 +316,4 @@ private function closeHandler(cEvent:CloseEvent):void {
 
 private function filterCBxHandler():void {
 	createResourcesViewObjects(__filterCBx.selectedItem.data);	
-}
-
-private function fileUploadHandler():void {
-	if (fileForUpload == null) {
-		fileForUpload = new File();
-	}
-	
-	var allFilesFilter:FileFilter = new FileFilter("All Files (*.*)", "*.*");
-	var imagesFilter:FileFilter = new FileFilter("Images (*.jpg;*.jpeg;*.gif;*.png)", "*.jpg;*.jpeg;*.gif;*.png");
-	var docFilter:FileFilter = new FileFilter("Documents (*.pdf;*.doc;*.txt)", "*.pdf;*.doc;*.txt");
-	
-	fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
-	fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
-}
-
-private function fileSelectHandler(event:Event):void {
-	fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
-
-	if (fileForUpload  && !fileForUpload.isDirectory) {
-		var srcBytes:ByteArray = new ByteArray();
-		var srcStream:FileStream = new FileStream();
-		
-		try {
-
-			srcStream.open(fileForUpload, FileMode.READ);
-			
-			if (srcStream.bytesAvailable == 0) {
-				Alert.show("File is empty", "Could not send file");
-				return; 
-			}
-			
-			srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
-			srcStream.close();
-		}
-		catch (err:Error) {
-			Alert.show('Could not open file!', 'IO Error');
-			return;
-		}
-		
-		var fileType:String = "";
-		try {		
-			fileType = fileForUpload.type.substr(1);
-		}
-		catch (err:Error) {
-			fileType = fileForUpload.extension;
-		}
-		
-		try {
-			var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
-			setResource(fileType, fileName, srcBytes);
-		}
-		catch (err:Error) {
-			Alert.show ('Unexpected error', 'Could not upload selected resource!');
-			return;
-		}
-	}	
-}
-
-private function setResource(resType:String, resName:String, resData:ByteArray):void {
-	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
-	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);
-	fileManager.setResource(resType, resName, resData);	
-}
-
-private function setResourceOkHandler(fmEvent:FileManagerEvent):void {
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);	
-
-	try {
-		var result:XML = XML(fmEvent.result);
-		_selectedItemID = result.Resource.@id.toString();
-		listResourcesQuery();
-	}
-	catch (err:Error) {
-		Alert.show("Unknown response from server", "Resource Id getting error");
-	}
-}
-
-private function setResourceErrorHandler(fmEvent:FileManagerEvent):void {
-	trace('Resource browser: ERROR at sending resource');
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);
-	Alert.show("Could not send resource to server!", "Sending resource error");	
 }

@@ -11,7 +11,7 @@
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	borderAlpha="0.95" cornerRadius="1" 
-	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
+	xmlns:resourceBrowser="resourceBrowser.*"
 	visible="true" shadowDirection="right"
 	borderColor="#636363" titleStyleName="resourceBrowserTitle"
 	titleIcon="@Embed(source='/assets/common/resourcebrowser.png')">
