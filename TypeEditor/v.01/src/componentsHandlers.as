@@ -359,6 +359,8 @@ private function changeAttrPanelInterfaceHandler():void {
 	}
 }
 
+private var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
+
 private function attrInterfaceTypeValuesClickHandler():void {
 	var type:String = __attrPanelInterface.text;
 	var typeReg:RegExp = /^([a-zA-Z]+)\((.*)\)/;
@@ -373,10 +375,16 @@ private function attrInterfaceTypeValuesClickHandler():void {
 		
 		switch (typeName) {
 			case 'DropDown':
-				var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
+				ddeditor.langsProvider = langsProvider;
+				ddeditor.addEventListener(Event.COMPLETE, dropDownEditCompleteHandler); 
 				PopUpManager.addPopUp(ddeditor, this);
 				PopUpManager.centerPopUp(ddeditor);
 				break;
 		}
 	}
+}
+
+private function dropDownEditCompleteHandler(event:Event):void {
+	ddeditor.removeEventListener(Event.COMPLETE, dropDownEditCompleteHandler);
+	PopUpManager.removePopUp(ddeditor);
 }

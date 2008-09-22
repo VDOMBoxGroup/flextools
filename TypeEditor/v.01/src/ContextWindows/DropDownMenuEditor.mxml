@@ -33,8 +33,13 @@
 				_attrsProvider = ap;				
 			}
 			
+			public function get attrsProvider():Array {
+				
+				return [];
+			}
+			
 			private function addNewRowBtnClickHandler():void {
-				var row:Object = { first:EMPTY_STR, second:EMPTY_STR, value:0 };
+				var row:Object = { editable:EMPTY_STR, example:EMPTY_STR, value:0 };
 				rowsProvider.push(row);
 				
 				__dg.dataProvider = rowsProvider;
@@ -74,12 +79,12 @@
 	
 	<mx:HBox width="100%" horizontalGap="4">
 		<mx:VBox width="148" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-			<mx:Label text="First language" />
-			<mx:ComboBox id="__firstLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" />
+			<mx:Label text="Editable language" />
+			<mx:ComboBox id="__editableLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" />
 		</mx:VBox>
 		<mx:VBox width="148" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-			<mx:Label text="Second language" />
-			<mx:ComboBox id="__secondLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" />
+			<mx:Label text="Example language" />
+			<mx:ComboBox id="__exampleLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" />
 		</mx:VBox>
 	</mx:HBox>	
 	
@@ -87,8 +92,8 @@
 		width="100%" height="100%" draggableColumns="false" sortableColumns="false" resizableColumns="false" editable="true">
 		
 		<mx:columns>
-			<mx:DataGridColumn dataField="first" width="150" headerText="Text" />
-			<mx:DataGridColumn dataField="second" width="150" headerText="Text" />
+			<mx:DataGridColumn dataField="editable" width="150" headerText="Text" />
+			<mx:DataGridColumn dataField="example" width="150" headerText="Text" editable="false" />
 			<mx:DataGridColumn dataField="value" headerText="Value" />	
 		</mx:columns>
 	</mx:DataGrid>
