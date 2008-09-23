@@ -195,7 +195,7 @@ public class Node extends Canvas
     {
     	//value = value.replace(/\r/g, "\\r");
     	//value = value.replace(/\n/g, "\\n");
-    	value = value.replace(/\t/g, "\\t");	        
+    	//value = value.replace(/\t/g, "\\t");	        
 
     	if(_text != value)
     	{
@@ -568,8 +568,10 @@ public class Node extends Canvas
             		break;            
             }          
 			
-			styleChanged(null);
 			nodeTextArea.styleChanged(null);
+			nodeTextArea.validateDisplayList();			
+			styleChanged(null);
+			
 			nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	
@@ -796,7 +798,10 @@ public class Node extends Canvas
         	nodeTextArea.setSelection(0, 0);
         }
         
+        nodeTextArea.styleChanged(null);
         styleChanged(null);
+        
+        nodeTextArea.invalidateDisplayList();
         invalidateDisplayList();     		    	
     }
     
@@ -1119,6 +1124,8 @@ public class Node extends Canvas
 	    {
 	    	editMode(false);
 	    	nodeTextArea.text = _text;
+	    	
+	    	invalidateProperties();
 	    	invalidateSize();
 	    	invalidateDisplayList();
 	    }		    
@@ -1195,6 +1202,7 @@ public class Node extends Canvas
 			var node:Node = event.target.parent;
 			
 			node._categoryChanged = true;
+			
 			node.invalidateProperties();
 			node.invalidateSize();
 			node.invalidateDisplayList();		

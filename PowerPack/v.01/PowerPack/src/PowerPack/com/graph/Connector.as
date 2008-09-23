@@ -92,6 +92,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     
     public static const CM_CENTER:String = "toCenter";
     public static const CM_NEAREST:String = "toNearest";
+    public static const CM_MIX:String = "mix";
     
     private static const SELECT_AREA_SIZE:int = 5;
     public static var connectMode:String = CM_CENTER;
@@ -622,7 +623,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		newConnector.enabled = enabled;
 		newConnector.highlighted = highlighted;
 		newConnector.label = label;
-		//newConnector.data = ObjectUtils.baseClone(data);
+		//newConnector.data = data;
 		return newConnector; 
 	}
 	
@@ -702,56 +703,59 @@ public class Connector extends UIComponent implements IFocusManagerComponent
    		var intersect:Rectangle;
    		var union:Rectangle;
 
-   		if(mode == CM_CENTER)
-   		{
-	   		rect.left = Math.min(fromP.x, toP.x);
-	   		rect.top = Math.min(fromP.y, toP.y);
-	   		rect.right = Math.max(fromP.x, toP.x);
-	   		rect.bottom = Math.max(fromP.y, toP.y);
-	   		
-	   		rect.width += rect.width>0?0:1;
-	   		rect.height += rect.height>0?0:1;
-	   		
-	   		var coef:Number = rect.width/rect.height;
-	   		var coef1:Number = fromRect.width/fromRect.height;
-	   		var coef2:Number = toRect.width/toRect.height;
-	   		
-	   		intersect = fromRect.intersection(rect);
-	   		fromP.x += (intersect.left==fromP.x?1:-1)*intersect.width * (coef>coef1?1:coef/coef1);	
-	   		fromP.y += (intersect.top==fromP.y?1:-1)*intersect.height * (coef>coef1?coef1/coef:1);	
-	   		
-	   		intersect = toRect.intersection(rect);
-	   		toP.x += (intersect.left==toP.x?1:-1)*intersect.width * (coef>coef2?1:coef/coef2);	
-	   		toP.y += (intersect.top==toP.y?1:-1)*intersect.height * (coef>coef2?coef2/coef:1);
-	   	}
-	   	else
-	   	{
-	   		var delta:int = 1;
-	   		union = GeomUtils.diffRect(fromRect, toRect);
-	   		
-	   		if(fromRect.right-delta<toRect.left+delta) {
-	   			fromP.x = fromRect.right-delta; 
-	   			toP.x = toRect.left+delta;
-	   		}
-	   		else if(toRect.right-delta<fromRect.left+delta) {
-	   			fromP.x = fromRect.left+delta; 
-	   			toP.x = toRect.right-delta;
-	   		}
-	   		else {
-	   			fromP.x = toP.x = union.x + union.width/2;
-	   		}
-
-	   		if(fromRect.bottom-delta<toRect.top+delta) {
-	   			fromP.y = fromRect.bottom-delta; 
-	   			toP.y = toRect.top+delta;
-	   		}
-	   		else if(toRect.bottom-delta<fromRect.top+delta) {
-	   			fromP.y = fromRect.top+delta; 
-	   			toP.y = toRect.bottom-delta;
-	   		}
-	   		else {
-	   			fromP.y = toP.y = union.y + union.height/2;
-	   		}
+		switch(mode)
+		{
+   			case CM_CENTER:
+		   		rect.left = Math.min(fromP.x, toP.x);
+		   		rect.top = Math.min(fromP.y, toP.y);
+		   		rect.right = Math.max(fromP.x, toP.x);
+		   		rect.bottom = Math.max(fromP.y, toP.y);
+		   		
+		   		rect.width += rect.width>0?0:1;
+		   		rect.height += rect.height>0?0:1;
+		   		
+		   		var coef:Number = rect.width/rect.height;
+		   		var coef1:Number = fromRect.width/fromRect.height;
+		   		var coef2:Number = toRect.width/toRect.height;
+		   		
+		   		intersect = fromRect.intersection(rect);
+		   		fromP.x += (intersect.left==fromP.x?1:-1)*intersect.width * (coef>coef1?1:coef/coef1);	
+		   		fromP.y += (intersect.top==fromP.y?1:-1)*intersect.height * (coef>coef1?coef1/coef:1);	
+		   		
+		   		intersect = toRect.intersection(rect);
+		   		toP.x += (intersect.left==toP.x?1:-1)*intersect.width * (coef>coef2?1:coef/coef2);	
+		   		toP.y += (intersect.top==toP.y?1:-1)*intersect.height * (coef>coef2?coef2/coef:1);
+		   		break;
+	   	
+		   	case CM_NEAREST:
+		   	default:
+		   		var delta:int = 1;
+		   		union = GeomUtils.diffRect(fromRect, toRect);
+		   		
+		   		if(fromRect.right-delta<toRect.left+delta) {
+		   			fromP.x = fromRect.right-delta; 
+		   			toP.x = toRect.left+delta;
+		   		}
+		   		else if(toRect.right-delta<fromRect.left+delta) {
+		   			fromP.x = fromRect.left+delta; 
+		   			toP.x = toRect.right-delta;
+		   		}
+		   		else {
+		   			fromP.x = toP.x = union.x + union.width/2;
+		   		}
+	
+		   		if(fromRect.bottom-delta<toRect.top+delta) {
+		   			fromP.y = fromRect.bottom-delta; 
+		   			toP.y = toRect.top+delta;
+		   		}
+		   		else if(toRect.bottom-delta<fromRect.top+delta) {
+		   			fromP.y = fromRect.top+delta; 
+		   			toP.y = toRect.bottom-delta;
+		   		}
+		   		else {
+		   			fromP.y = toP.y = union.y + union.height/2;
+		   		}
+		   		break;
 	   	}		
    			
 		/**

@@ -120,13 +120,12 @@ public class GraphCanvas extends Canvas
 	{
 		super();
 		
-		name = NameUtil.createUniqueName(this);
+		//name = NameUtil.createUniqueName(this);
 		
 		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
 		addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
 		
-		Application.application.addEventListener("copyNode", copyNodeHandler);
-		
+		Application.application.addEventListener("copyNode", copyNodeHandler);		
 	}
 	
 	//--------------------------------------------------------------------------
@@ -339,21 +338,21 @@ public class GraphCanvas extends Canvas
 	// gen XML that represents graph structure
 	public function toXML():XML
 	{
-		var graphXML:XML = new XML(<graph></graph>);
+		var graphXML:XML = new XML(<graph/>);
 		var children:Array = getChildren();
 		graphXML.@name = name;
 		graphXML.@initial = initial.toString().toLowerCase();
 		graphXML.@category = category;
 		
-		graphXML.appendChild(<states></states>);
-		graphXML.appendChild(<transitions></transitions>);
+		graphXML.appendChild(<states/>);
+		graphXML.appendChild(<transitions/>);
 		
 		for each(var child:DisplayObject in children)
 		{
 			if(child is Connector)
 			{
 				var arrow:Connector = child as Connector;
-				var arrowXML:XML = new XML(<transition></transition>);
+				var arrowXML:XML = new XML(<transition/>);
 				arrowXML.@name = arrow.name;
 				arrowXML.@highlighted = arrow.highlighted;
 				arrowXML.@enabled = arrow.enabled;
@@ -367,7 +366,7 @@ public class GraphCanvas extends Canvas
 			else if(child is Node)
 			{
 				var node:Node = child as Node;
-				var nodeXML:XML = new XML(<state></state>);
+				var nodeXML:XML = new XML(<state/>);
 				nodeXML.@name = node.name;
 				nodeXML.@type = node.type;
 				nodeXML.@category = node.category;
