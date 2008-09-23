@@ -402,24 +402,24 @@ public class ProgressManager extends EventDispatcher
 				break;
 				
 			case DIALOG_MODE:						
-					if(instance._dialog && !instance._dialog.closed)
-					{
-						instance._dialog.visible = false;
-						instance._dialog.validateProperties();
+				if(instance._dialog && !instance._dialog.closed)
+				{
+					instance._dialog.visible = false;
+					instance._dialog.validateProperties();
+					
+					if(instance._winBox.parent)
+						instance._winBox.parent.removeChild(instance._winBox);
 						
-						if(instance._winBox.parent)
-							instance._winBox.parent.removeChild(instance._winBox);
-							
-						instance._dialog.nativeWindow.close();
-						
-						var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
-						if(parent)
-							parent.validateDisplayList();
-						else
-							Application.application.validateDisplayList();
+					instance._dialog.nativeWindow.close();
+					
+					var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
+					if(parent)
+						parent.validateDisplayList();
+					else
+						Application.application.validateDisplayList();
 
-						instance._dialog = null;
-					}					
+					instance._dialog = null;
+				}					
 				break;
 				
 			case PANEL_MODE:
@@ -633,7 +633,7 @@ public class ProgressManager extends EventDispatcher
 		}
 		
 		_dialog.validateNow();
-    }	
+    }
 	
 }
 }

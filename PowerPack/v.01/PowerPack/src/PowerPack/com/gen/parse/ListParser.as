@@ -832,7 +832,7 @@ public class ListParser
 				case 1:
 					break;
 				case 2:
-					str = Utils.doubleQuotes(str);
+					str = Utils.quotes(str);
 					break;
 				case 3:
 					str = StringUtil.trim(str);
@@ -938,7 +938,7 @@ public class ListParser
 		var prog:String = '';
 		
 		for (i=0; i<lexems.length; i++)		
-			prog += ' '+(lexems[i].type=='n' ? Utils.doubleQuotes(lexems[i].value) : lexems[i].value);
+			prog += ' '+(lexems[i].type=='n' ? Utils.quotes(lexems[i].value) : lexems[i].value);
 		
 		var evalRes:*;
 		

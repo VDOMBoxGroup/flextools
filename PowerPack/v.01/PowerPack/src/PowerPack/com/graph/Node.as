@@ -1,6 +1,7 @@
 package PowerPack.com.graph
 {	
 import ExtendedAPI.com.containers.SuperAlert;
+import ExtendedAPI.com.controls.SuperTextArea;
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
 
@@ -21,10 +22,10 @@ import mx.binding.utils.*;
 import mx.collections.ArrayCollection;
 import mx.containers.Canvas;
 import mx.controls.Alert;
-import mx.controls.TextArea;
 import mx.controls.ToolTip;
 import mx.core.Application;
 import mx.core.Container;
+import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
 import mx.events.CloseEvent;
 import mx.managers.IFocusManagerComponent;
@@ -43,8 +44,8 @@ public class Node extends Canvas
     //
     //--------------------------------------------------------------------------
     
-    public static const TEXT_WIDTH_PADDING:int = 5;
-    public static const TEXT_HEIGHT_PADDING:int = 4;
+    public static const TEXT_WIDTH_PADDING:int = 5+1;
+    public static const TEXT_HEIGHT_PADDING:int = 4+1;
     
     /**
     * default minimum node size
@@ -172,7 +173,7 @@ public class Node extends Canvas
     /**
      *  The TextArea sub-control that displays the node text.
      */	    
-    public var nodeTextArea:TextArea;	    
+    public var nodeTextArea:SuperTextArea;	    
     //--------------------------------------------------------------------------
     
     /**
@@ -192,8 +193,8 @@ public class Node extends Canvas
      */
     public function set text(value:String):void
     {
-    	value = value.replace(/\r/g, "\\r");
-    	value = value.replace(/\n/g, "\\n");
+    	//value = value.replace(/\r/g, "\\r");
+    	//value = value.replace(/\n/g, "\\n");
     	value = value.replace(/\t/g, "\\t");	        
 
     	if(_text != value)
@@ -376,13 +377,19 @@ public class Node extends Canvas
 		{	
         	contextMenu.removeEventListener(Event.SELECT, contextMenuSelectHandler);	
         	SuperNativeMenu(contextMenu).dispose();        	 
-  		}	  				
+  		}
+  		
+  		if(nodeTextArea)
+  			nodeTextArea.removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+  			  				
   		stopDragging();   			
 
 		removeEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 		removeEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
 		removeEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
 		removeEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
+		removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+		
 		removeEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
    		//removeEventListener("xChanged", positionChangedHandler);
@@ -426,15 +433,19 @@ public class Node extends Canvas
         
         if (!nodeTextArea)
         {
-            nodeTextArea = new TextArea();
+            nodeTextArea = new SuperTextArea();
             nodeTextArea.editable = false;
             nodeTextArea.selectable = false;	
 
            	nodeTextArea.enabled = enabled;
          	nodeTextArea.text = text;
-         	nodeTextArea.wordWrap = false; 
-
+         	nodeTextArea.wordWrap = false;
+         	nodeTextArea.horizontalScrollPolicy = ScrollPolicy.OFF;
+			nodeTextArea.verticalScrollPolicy = ScrollPolicy.OFF;
+			
             addChild(nodeTextArea);
+            
+            nodeTextArea.addEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
         }
         
         if (ContextManager.FLASH_CONTEXT_MENU && !contextMenu)
@@ -485,7 +496,9 @@ public class Node extends Canvas
 			addEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
 			addEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
-			addEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
+			addEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);			
+			addEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+			
 			addEventListener(KeyboardEvent.KEY_DOWN, keyDown); 
 			addEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
        		
@@ -619,14 +632,20 @@ public class Node extends Canvas
 
 	override protected function measure():void 
 	{
-        var lineMetrics:TextLineMetrics = nodeTextArea.measureText(nodeTextArea.text);
+		var numLines:int = nodeTextArea.field.numLines;
+		nodeTextArea.width = DEFAULT_WIDTH;
 		
-		nodeTextArea.width = Math.max(lineMetrics.width + TEXT_WIDTH_PADDING + (_mode==M_EDITING?PADDING:0), DEFAULT_WIDTH);
-		nodeTextArea.height = lineMetrics.height + TEXT_HEIGHT_PADDING;
+		for (var i:int=0; i<numLines; i++)
+		{
+	        var lineMetrics:TextLineMetrics = nodeTextArea.measureText(nodeTextArea.field.getLineText(i));
+			nodeTextArea.width = Math.max(lineMetrics.width + TEXT_WIDTH_PADDING + (_mode==M_EDITING?PADDING:0), 
+				nodeTextArea.width);
+		}		
+		nodeTextArea.height = lineMetrics.height*numLines + TEXT_HEIGHT_PADDING;
 		
         super.measure();
 		
-        var borderThickness:Number = getStyle("borderThickness");            
+        //var borderThickness:Number = getStyle("borderThickness");            
         var margin:Number = getStyle("margin");       
 
         measuredWidth += margin;        
@@ -762,7 +781,9 @@ public class Node extends Canvas
          	nodeTextArea.setSelection(0, nodeTextArea.text.length);
 			systemManager.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true);
 			nodeTextArea.addEventListener(Event.CHANGE, textAreaChange); 
-			nodeTextArea.addEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);			
+			nodeTextArea.addEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);
+			
+			scrollToNode();			
         }
         else
         {
@@ -1081,7 +1102,7 @@ public class Node extends Canvas
      	{
      		alertDestroy();
 	    }
-	    else if(event.keyCode == Keyboard.ENTER ||
+	    else if(//event.keyCode == Keyboard.ENTER ||
 	    	event.keyCode == Keyboard.F2)
 	    {
 	    	if(_mode==M_NORMAL)
@@ -1122,6 +1143,18 @@ public class Node extends Canvas
 
 		bringToFront();						
 		editMode(true);	  
+    }
+    
+    private function wheelHandler(event:MouseEvent):void
+    {
+    	if(nodeTextArea.maxVerticalScrollPosition==0)
+    	{
+    		event.stopPropagation();
+    		event.stopImmediatePropagation();
+    		event.preventDefault();
+    	
+    		parent.dispatchEvent(event);
+    	}
     }
 	
     override protected function focusOutHandler(event:FocusEvent):void

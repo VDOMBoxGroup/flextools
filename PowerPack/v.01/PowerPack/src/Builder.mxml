@@ -569,6 +569,11 @@
 						ProgressManager.complete();
 						
 						switchDebug(false);
+						
+						ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
+						ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+						ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+													
 						ContextManager.instance.templateStruct = null;
 						Alert.show(e.message, "Warning!");
 					}
@@ -607,12 +612,22 @@
 								break;
 							case 'break':
 								ProgressManager.complete();
+
+								ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
+								ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+								ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+								
 								ContextManager.instance.templateStruct = null;
 								switchDebug(false);
 								break;
 						}							
 					} catch(e:Error) {
 						ProgressManager.complete();
+
+						ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
+						ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+						ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+						
 						ContextManager.instance.templateStruct = null;
 						switchDebug(false);
 						SuperAlert.show(e.message, "Warning!");
@@ -678,6 +693,11 @@
 						ProgressManager.complete();
 						
 						switchDebug(false);
+
+						ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
+						ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+						ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+						
 						ContextManager.instance.templateStruct = null;
 						SuperAlert.show(e.message, "Warning!");
 					}
@@ -976,6 +996,10 @@
            				ContextManager.instance.templateStruct.buffer), "Result");
     			}
     			
+				ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
+				ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+				ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+    			
     			ContextManager.instance.templateStruct = null;        							           		
            	}
 
@@ -992,6 +1016,11 @@
            	private function onErrAlertClose(event:Event):void
            	{           		
            		switchDebug(false);
+
+				ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
+				ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+				ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+           		
     			ContextManager.instance.templateStruct = null;
            	}
            	

@@ -831,7 +831,7 @@ package PowerPack.com.importation
 			
 			var attrLst:String = '[';			
 			for each (var attr:XML in curObj.Attributes.Attribute) {
-				attrLst += ' "'+attr.@Name+'" '+Utils.doubleQuotes(attr);	
+				attrLst += ' "'+attr.@Name+'" '+Utils.quotes(attr);	
 			}			
 			attrLst += ' ]';						
 			
@@ -840,7 +840,7 @@ package PowerPack.com.importation
 			prev = node;
 			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
 				StringUtil.substitute('[sub ParseAttributes {0}]',
-					Utils.doubleQuotes(attrLst)));
+					Utils.quotes(attrLst, true)));
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);			

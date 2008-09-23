@@ -630,7 +630,7 @@ public class Parser
 				var srtVal:String;
 				
 				if(value)
-					srtVal = (value is String) ? Utils.doubleQuotes(value.toString()) : value.toString();
+					srtVal = (value is String) ? Utils.quotes(value.toString()) : value.toString();
 				
 				origBuf += lexems[index].origValue;					 				
 				code += (value!=null ? srtVal : lexems[index].value);
@@ -902,8 +902,8 @@ public class Parser
 											lexems[i-1].type!='[' && 
 											lexems[i].type!=']' && 
 											retVal.string.length ? "," : "") + 
-							(lexems[i].type=='n' ? "{type:'n', value:"+Utils.doubleQuotes(lexems[i].value)+"}" : 
-								lexems[i].type=='A'? Utils.doubleQuotes(lexems[i].value) :
+							(lexems[i].type=='n' ? "{type:'n', value:"+Utils.quotes(lexems[i].value)+"}" : 
+								lexems[i].type=='A'? Utils.quotes(lexems[i].value) :
 								lexems[i].value);
 					
 					retVal.string = Template.CNTXT_INSTANCE + "._" + lexems[sIndex+1].value + "(" +
