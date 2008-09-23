@@ -40,8 +40,9 @@ package vdom.components.eventEditor
 		{
 			loadedPages = [];
 			selectedNode = null;
-			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener);
-            dataManager.changeCurrentPage(dataManager.currentPageId);
+			containerChange(dataManager.currentPageId);
+//			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener);
+//            dataManager.changeCurrentPage(dataManager.currentPageId);
 		}
 		
 		
@@ -245,7 +246,7 @@ package vdom.components.eventEditor
 					
 					xmllReturn.appendChild(xmlTemp)	;
 			}
-			
+			trace(xmllReturn.toXMLString())
 			return xmllReturn;
 		}
 	}

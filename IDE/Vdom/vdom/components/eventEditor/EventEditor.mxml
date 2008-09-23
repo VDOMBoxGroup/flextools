@@ -530,7 +530,7 @@
 			{
 //				trace('SEND curContainerID: '+contrID);
 //				return;
-				dataToServer = <E2vdom>	<Actions/> 	<Events/> </E2vdom>;
+				dataToServer = <E2vdom><Events/><ClientActions/> <ServerActions/></E2vdom>;
 				
 				var temXML:XML;
 				 
@@ -547,7 +547,7 @@
 					
 					temXML.appendChild(actionsArray[actID].parametrs);
 					
-					dataToServer.Actions.appendChild(temXML);
+					dataToServer.ClientActions.appendChild(temXML);
 				}
 				
 				for (var evtID:String in eventsArray)
@@ -559,6 +559,7 @@
 					temXML.@Top 	 = eventsArray[evtID].y;
 					temXML.@Left 	 = eventsArray[evtID].x;
 					temXML.@State	 = eventsArray[evtID].State;
+					temXML.@ContainerID = curContainerID
 					
 					dataToServer.Events.appendChild(temXML);
 				}
@@ -595,13 +596,13 @@
 //				can.removeAllChildren();
 			trace('----From Serve----'+xmlToTree);
 				actionsArray = [];		
-				for each(var actID:XML in xmlToTree.E2vdom.Actions.children())
+				for each(var actID:XML in xmlToTree.E2vdom.ClientActions.children())
 				{
 					///curContainerTypeID 
 					
 					var type:XML = dataManager.getTypeByObjectId(actID.@ObjTgtID)
 					//var tupeID:String = type.Information.ID;
-					var nData:* = type.E2vdom.Actions.Container.(@ID == curContainerTypeID).Action.(@MethodName == actID.@MethodName).Parameters[0];
+					var nData:* = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID).Action.(@MethodName == actID.@MethodName).Parameters[0];
 					if(nData) 
 					{
 						var objAct:EventEditorAction = new EventEditorAction(actID, curContainerTypeID);

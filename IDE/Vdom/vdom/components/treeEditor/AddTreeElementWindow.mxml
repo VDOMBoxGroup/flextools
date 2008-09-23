@@ -132,15 +132,15 @@
 			
 			treeElementID = obID;
 			typeResourse = getIcon(typeID);
-			dataManager.addEventListener('currentPageChanged', changePagesHandler);
+			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
 			dataManager.changeCurrentPage(obID);
 		}
 	
 		private function changePagesHandler(dmEvt:DataManagerEvent):void
 		{
-			dataManager.removeEventListener('currentPageChanged', changePagesHandler);
+			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
 			
-			dataManager.addEventListener("currentObjectChanged", changeObjectHandler);
+			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
 			
 			dataManager.changeCurrentObject(obID);
 		}
@@ -162,7 +162,7 @@
 		
 		private function changeObjectHandler(dmEvt:Event):void
 		{
-			dataManager.removeEventListener("currentObjectChanged", changeObjectHandler)
+			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler)
 			//dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
 			
 			if(!dataManager.currentObject)

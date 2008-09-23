@@ -30,7 +30,7 @@ package vdom.components.eventEditor
 			
 			var type:XML = dataManager.getTypeByTypeId(value.@Type);
 			var curContainerTypeID:String = dataManager.getTypeByObjectId(value.@ID).Information.ID.toString();
-			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
+			var actions:XML = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID)[0];
 			var tempXML:XML;
 			
 			if(actions != null)		
@@ -70,7 +70,7 @@ package vdom.components.eventEditor
 			var outXML:XML = new XML(inXML.toXMLString());
 			var type:XML = dataManager.getTypeByTypeId(inXML.@Type);
 			var curContainerTypeID:String = dataManager.getTypeByObjectId(inXML.@containerID).Information.ID.toString();
-			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0]; 
+			var actions:XML = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID)[0]; 
 			var tempXML:XML;
 			
 			if(actions != null)		
