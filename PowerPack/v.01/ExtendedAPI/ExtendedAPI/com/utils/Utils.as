@@ -127,15 +127,16 @@ package ExtendedAPI.com.utils
 			return buf;
 		}
 		
-		public static function doubleQuotes(_str:String):String
+		public static function quotes(_str:String, isSingle:Boolean=false):String
 		{
 			var str:String;
+			var qoute:String = isSingle ? "'" : '"';
 			
 			str = "";
 			
 			for(var i:int=0; i<_str.length; i++)
 			{
-				if(_str.charAt(i)=='"')
+				if(_str.charAt(i)==qoute)
 				{
 					/*
 					var j:int = i-1;
@@ -158,7 +159,7 @@ package ExtendedAPI.com.utils
 				str += _str.charAt(i);					
 			}
 			
-			str = '"' + str + '"';
+			str = qoute + str + qoute;
 			
 			return str;
 		}
