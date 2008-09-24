@@ -246,7 +246,7 @@ package vdom.components.eventEditor
 					
 					xmllReturn.appendChild(xmlTemp)	;
 			}
-			trace(xmllReturn.toXMLString())
+//			trace(xmllReturn.toXMLString())
 			return xmllReturn;
 		}
 	}

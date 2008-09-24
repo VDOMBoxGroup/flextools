@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" xmlns:containers="vdom.components.scriptEditor.containers.*">
 <mx:Script>
 	<![CDATA[
 		import vdom.events.DataManagerEvent;
@@ -22,17 +22,21 @@
 	 			trContainer.showHandler();
 	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 			
-//	 			btLine.addEventListener(MouseEvent.CLICK, lineClikHandler );
-	 			
-//	 			addEventListener(MouseEvent.CLICK, mouseClickHandler);
-	 			
 	 			curContainerID = dataManager.currentPageId;
 	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
 	 	}
 	 	
+	 	private function hideHandler():void
+	 		{
+	 			changeWatcher.unwatch();
+	 			trContainer.hideHandler();
+	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+	 		}
+	 	
 	 	private var getApplEventID:String;
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
+	 			serverScripts.dataProvider = eeEvt.objID;
 	// 			dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
 	 		
 	 //			getApplEventID = eeEvt.objID;
@@ -52,8 +56,8 @@
 //	 			trace('-----From Server-----\n' +  eeEvt.data);
 	 			trEvents.dataProvider  = eeEvt.data;
 //	 		
-*/		trEvents.dataProvider = eeEvt.data;
-	 		}
+	trEvents.dataProvider = eeEvt.data;
+*/	 		}
 	 	/*	
 			private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
 	 		{
@@ -80,6 +84,18 @@
 			 	
 		 		return IconUtil.getClass(trContainer, data, 16, 16);
 			}
+			
+			private function addNewScript():void
+			{
+				var dataXML:XML  = new XML('<Action/>');
+				dataXML.@label = 'New script';
+				serverScripts.addScript = dataXML;
+			}
+			
+			private function deleteScript():void
+			{
+				serverScripts
+			}
 		
 	]]>
 </mx:Script>
@@ -93,11 +109,15 @@
 			 </mx:VBox>
 			 <mx:Canvas label="canvas1" width="100%" height="100%"  >
 			    <mx:VBox  width="100%" height="100%" >
-				        <mx:Canvas label="{resourceManager.getString('Event','events')}"  width="100%" height="100%" >
-				             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" />
-				        </mx:Canvas>
+				       <containers:ServerScripts id="serverScripts" width="100%" height="100%"/>
+				       <mx:HBox>
+					       <mx:Button label="Add Script" click="addNewScript()" />
+				       	 	<mx:Button label="Delete Script" click="deleteScript()" />
+				       </mx:HBox>
 			      </mx:VBox>
+			      
 	          </mx:Canvas>
+	          
 		</mx:VDividedBox>
 		
         <mx:VBox id="vBox" width="100%" height="100%" >
@@ -105,6 +125,7 @@
             		backgroundColor="#E1E1E1" text="same Text of code">            	 
                 
             </mx:TextArea>
+           
         </mx:VBox>
 	</mx:HDividedBox>
 		
