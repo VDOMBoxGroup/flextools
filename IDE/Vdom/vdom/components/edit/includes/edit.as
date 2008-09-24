@@ -81,7 +81,7 @@ private function registerEvent(flag:Boolean):void
 		
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler);
 		dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, dataManager_updateAttributesCompleteHandler);
-		dataManager.addEventListener(DataManagerEvent.RESOURCE_MODIFIED, dataManager_updateAttributesCompleteHandler);
+		dataManager.addEventListener(DataManagerEvent.MODIFY_RESOURCE_COMPLETE, dataManager_updateAttributesCompleteHandler);
 		
 		attributesPanel.addEventListener('propsChanged', attributesChangedHandler);
 		attributesPanel.addEventListener(AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler);

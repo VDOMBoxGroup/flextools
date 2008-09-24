@@ -878,7 +878,8 @@ public class DataManager implements IEventDispatcher {
 			dispatchEvent(new Event("currentObjectChanged"));
 		}
 		
-		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.RESOURCE_MODIFIED);
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.MODIFY_RESOURCE_COMPLETE);
+		dme.objectId = objectId;
 		dme.result = event.result;
 		dispatchEvent(dme);
 	}

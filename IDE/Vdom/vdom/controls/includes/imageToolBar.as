@@ -89,7 +89,7 @@ private function greyscale():void {
 private function applyChanges(operation:String, attributes:XML):void {
 	
 	item.waitMode = true;
-	dataManager.addEventListener(DataManagerEvent.RESOURCE_MODIFIED, resourceModifedHandler);
+	dataManager.addEventListener(DataManagerEvent.MODIFY_RESOURCE_COMPLETE, resourceModifedHandler);
 	dataManager.modifyResource(resourceId, operation, attributeName, attributes);
 }
 

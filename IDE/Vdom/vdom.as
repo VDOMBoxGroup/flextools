@@ -43,6 +43,15 @@ private var soap:SOAP = SOAP.getInstance();
 
 private var tempStorage:Object = {};
 
+private function initDataManager():void
+{
+	viewstack.selectedChild = main;
+	contentStack.selectedIndex = 0;
+	
+	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManager_initCompleteHandler);
+	dataManager.init();
+}
+
 public function switchToModule(moduleName:String):void
 {
 	switch(moduleName.toLowerCase())
@@ -80,12 +89,11 @@ private function checkError(fault:Fault):void
 	{
 		case "i101":
 		{
-			
 			break;
 		}
 		case "203":
 		{
-			switchToModule("applicationmanagment");
+			initDataManager();
 			break;
 		}
 		default :
@@ -135,13 +143,20 @@ private function moduleChangedHandler(event:IndexChangedEvent):void
 
 private function showLoginFormHandler():void
 {	
-	Application.application.nativeWindow.restore();
+	nativeWindow.restore();
 	Application.application.showStatusBar = false;
 	Application.application.showGripper = false;
 	Application.application.minWidth = 800;
 	Application.application.minHeight = 600;
 	Application.application.width = 800;
 	Application.application.height = 600;
+	nativeWindow.width = 800;
+	nativeWindow.height = 600;
+	var sx:Number = (Capabilities.screenResolutionX - nativeWindow.width) / 2;
+	var sy:Number = (Capabilities.screenResolutionY - nativeWindow.height) / 2;
+	
+	nativeWindow.x = sx;
+	nativeWindow.y = sy;
 }
 
 private function showMainHandler():void
@@ -151,7 +166,21 @@ private function showMainHandler():void
 	Application.application.minWidth = 1000;
 	Application.application.minHeight = 800;
 	
-//	userName.text = "USER: " + authenticationManager.username.toUpperCase()+ " - VDOM IDE";
+	var newWidth:Number = nativeWindow.width;
+	
+	if(newWidth < 1000)
+		newWidth = 1000;
+		
+	var newHeight:Number = nativeWindow.height;
+	
+	if(newHeight < 800)
+		newHeight = 800;
+	
+	var sx:Number = Math.max(nativeWindow.x + 400 - newWidth / 2, 0);
+	var sy:Number = Math.max(nativeWindow.y + 300 - newHeight / 2, 0);
+	
+	nativeWindow.x = sx;
+	nativeWindow.y = sy
 }
 
 private function changeLanguageHandler(event:Event):void
@@ -179,9 +208,9 @@ private function authenticationManager_loginComleteHandler(event:Event):void
 		authenticationManager_loginComleteHandler
 	);
 	
-	dataManager.addEventListener(DataManagerEvent.INIT_COMPLETE, dataManager_initCompleteHandler);
-	dataManager.init();
+	initDataManager();
 }
+
 private function authenticationManager_loginErrorHandler(event:Event):void
 {
 	authenticationManager.addEventListener(
@@ -210,7 +239,7 @@ private function dataManager_typesLoadedHandler(event:DataManagerEvent):void
 	
 	languageManager.parseLanguageData(dataManager.listTypes);
 	
-	viewstack.selectedChild = main;
+	contentStack.selectedIndex = 1;
 	
 	if(moduleTabNavigator)
 	{

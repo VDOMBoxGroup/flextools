@@ -15,16 +15,12 @@ import vdom.managers.DataManager;
 private var dataManager:DataManager = DataManager.getInstance();
 
 private var watchers:Array;
-
-//private var moduleReady:Boolean;
-//
-//private var ppm:MyLoader;
-//
 private var alertManager:AlertManager = AlertManager.getInstance();
 
 private var applicationId:String;
 private var pageId:String;
 private var objectId:String;
+
 
 /* private function creationCompleteHandler():void
 {	

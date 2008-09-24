@@ -48,7 +48,7 @@ public class DataManagerEvent extends Event
 	public static const GET_SCRIPT_COMPLETE:String = "getScriptComplete";
 	public static const SET_SCRIPT_COMPLETE:String = "setScriptComplete";
 	
-	public static const RESOURCE_MODIFIED:String = "resurceModified";
+	public static const MODIFY_RESOURCE_COMPLETE:String = "modifyResourceComplete";
 	
 	public static const SEARCH_COMPLETE:String = "searchComplete";
 	

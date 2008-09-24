@@ -50,8 +50,10 @@
 			if(value != null && _applicationId == value)
 				return;
 			
-			if(value == null && _dataProvider.length > 0)
+			if(value == null && _dataProvider && _dataProvider.length > 0)
 				value = _dataProvider[0].@ID;
+			else
+				return;
 			
 			switchSelection(value);
 		}

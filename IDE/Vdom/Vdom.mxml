@@ -48,7 +48,16 @@
 					fontWeight="bold" color="#FFFFFF"/>
 			</mx:HBox>
 			
-			<mx:Canvas backgroundColor="#FFFFFF" top="50" right="0" bottom="0" left="0" borderStyle="solid" borderColor="#000000">
+			<mx:ViewStack id="contentStack"
+				top="50" right="0" bottom="0" left="0" 
+				paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5"
+				backgroundColor="#FFFFFF" borderStyle="solid" borderColor="#000000"
+			>
+				<mx:Canvas
+					styleName="vdomBackground"
+					borderStyle="solid" borderColor="#000000"
+					dropShadowEnabled="true" />
+				
 				<containers:MainTabNavigator id="moduleTabNavigator"
 					right="5" bottom="5" left="5" top="5"
 					borderStyle="none" 
@@ -58,11 +67,11 @@
 		 				label="{resourceManager.getString('Application','main_title')}"/>
 		 	
 		 			<modules:Editor id="editorModule"
-		 				label="{resourceManager.getString('Application','editor_title')}" 
+		 				label="{resourceManager.getString('Application','editor_title')}"
 		 				width="100%" height="100%"/>
 					
 				</containers:MainTabNavigator>
-			</mx:Canvas>
+			</mx:ViewStack>
 			
 			<mx:Image x="10" y="10" width="62" height="62" source="{vdomLogo}"/>
 		</mx:Canvas>

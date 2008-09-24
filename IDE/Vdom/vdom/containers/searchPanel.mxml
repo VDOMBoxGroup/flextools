@@ -24,6 +24,8 @@
 	
 	public function set applicationId(value:String):void
 	{
+		if(!value)
+			return;
 		applicationList.selectedItem = applicationList.dataProvider.source.(@ID == value)[0];
 	}
 	

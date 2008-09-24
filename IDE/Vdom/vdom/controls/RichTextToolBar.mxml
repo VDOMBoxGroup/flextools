@@ -144,11 +144,11 @@
 			<mx:VRule height="24"/>
 			<controls:DropDownColorPicker width="36" height="24" 
 				viewerRenderer="vdom.controls.richTextToolBarClasses.ColorTextButton" viewerStyleName="" focusEnabled="false"
-				change="colorFillChanged(event)"/>
+				change="colorTextChanged(event)"/>
 			<controls:DropDownColorPicker width="36" height="24"
 				viewerRenderer="vdom.controls.richTextToolBarClasses.ColorFillButton"
 				viewerStyleName="" focusEnabled="false"
-				change="colorTextChanged(event)"/>
+				change="colorFillChanged(event)"/>
 			<mx:VRule height="24"/>
 			<richTextToolBarClasses:MBtn styleName="toolbarButton" label="Source" height="24"
 				click="openCodeEditor();"/>

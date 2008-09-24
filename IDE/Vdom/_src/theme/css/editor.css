@@ -99,4 +99,5 @@ WorkArea {
 	
 	backgroundColor: #FFFFFF;
 	backgroundAlpha: .0;
+	borderSkin: ClassReference("vdom.skins.ItemBorder");
 }

@@ -11,8 +11,6 @@ package com.zavoo.svg.nodes
 	import flash.geom.Matrix;
 	
 	import mx.utils.StringUtil;
-	
-	
 		
 	/** Base node extended by all other SVG Nodes **/
 	public class SVGNode extends Sprite

@@ -28,6 +28,7 @@ import vdom.events.DataManagerEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.events.SOAPEvent;
 import vdom.managers.renderClasses.ItemDescription;
+import vdom.utils.IconUtil;
 
 public class RenderManager implements IEventDispatcher {
 	
@@ -37,6 +38,8 @@ public class RenderManager implements IEventDispatcher {
 	[
 		["opacity", "backgroundAlpha"],
 		["backgroundcolor", "backgroundColor"],
+		["backgroundimage", "backgroundImage"],
+		["backgroundrepeat", "backgroundRepeat"],
 		["borderwidth", "borderThickness"],
 		["bordercolor", "borderColor"],
 		["color", "color"],
@@ -551,7 +554,6 @@ public class RenderManager implements IEventDispatcher {
 						parentItem.editableAttributes = 
 							parentItem.editableAttributes.concat(d);
 					}
-//					SVGViewer(item).xml = itemXMLDescription;
 					
 					break
 				}
@@ -560,8 +562,12 @@ public class RenderManager implements IEventDispatcher {
 		if(!item)
 			return null;
 		
-		applyProperties(item, itemXMLDescription);
-		applyStyles(item, itemXMLDescription);
+// FIXME: Применять ли свойства к SVG или нет?
+		if(!(item is SVGViewer))
+		{
+			applyProperties(item, itemXMLDescription);
+			applyStyles(item, itemXMLDescription);
+		}
 		
 		if(!hasChildren)
 			return item;
@@ -640,6 +646,7 @@ public class RenderManager implements IEventDispatcher {
 		
 		item.styleName = "WYSIWYGItem";
 		
+		
 		var xmlList:XMLList;
 		for each (var attribute:Array in styleList)
 		{
@@ -655,8 +662,9 @@ public class RenderManager implements IEventDispatcher {
 			return;
 		
 		if(_style.hasOwnProperty("backgroundColor") && !_style.hasOwnProperty("backgroundAlpha"))
+// FIXME: Сделать правильное значение -> 1.0 не работает
 			_style["backgroundAlpha"] = 100;
-			
+ 
 		if(_style.hasOwnProperty("borderColor"))
 			_style["borderStyle"] = "solid";
 		
@@ -673,23 +681,13 @@ public class RenderManager implements IEventDispatcher {
 		
 		for(var atrName:String in _style)
 		{
-//			if(
-//				atrName == "backgroundAlpha"
-//				||
-//				atrName == "backgroundColor"
-//				||
-//				atrName == "fontSize"
-//				||
-//				atrName == "fontStyle"
-//				||
-//				atrName == "fontFamily"
-//				||
-//				atrName == "fontWeight"
-//			)
-//				continue;
 			if(_style[atrName] != "")
 				item.setStyle(atrName, _style[atrName])
 		}
+		
+		//repeat, no-repeat, repeat-x, repeat-y
+		//item.setStyle("repeatedBackgroundImage", "beb4fd88-7fc2-4079-8a82-ffe1b9743352")
+		//item.setStyle("backgroundRepeat", "repeat");
 	}
 	
 	private function applyProperties(item:UIComponent, itemXMLDescription:XML):void
