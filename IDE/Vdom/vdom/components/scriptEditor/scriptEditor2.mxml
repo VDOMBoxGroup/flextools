@@ -88,13 +88,22 @@
 			private function addNewScript():void
 			{
 				var dataXML:XML  = new XML('<Action/>');
-				dataXML.@label = 'New script';
+				dataXML.@Name = 'New script';
 				serverScripts.addScript = dataXML;
 			}
 			
 			private function deleteScript():void
 			{
-				serverScripts
+				serverScripts.deleteScript();
+			}
+			
+			private function setScript():void
+			{
+				textArea.text = serverScripts.script;
+			}
+			private function save():void
+			{
+				serverScripts.script = textArea.text;
 			}
 		
 	]]>
@@ -109,10 +118,10 @@
 			 </mx:VBox>
 			 <mx:Canvas label="canvas1" width="100%" height="100%"  >
 			    <mx:VBox  width="100%" height="100%" >
-				       <containers:ServerScripts id="serverScripts" width="100%" height="100%"/>
+				       <containers:ServerScripts id="serverScripts" width="100%" height="100%" dataChanged="{setScript()}" />
 				       <mx:HBox>
-					       <mx:Button label="Add Script" click="addNewScript()" />
-				       	 	<mx:Button label="Delete Script" click="deleteScript()" />
+					       <mx:Button label="Add Script" click="{addNewScript()}"  />
+				       	 	<mx:Button label="Delete Script" click="{deleteScript()}"  />
 				       </mx:HBox>
 			      </mx:VBox>
 			      
@@ -121,11 +130,11 @@
 		</mx:VDividedBox>
 		
         <mx:VBox id="vBox" width="100%" height="100%" >
-            <mx:TextArea id="can" width="100%" height="100%" 
+            <mx:TextArea id="textArea" width="100%" height="100%" 
             		backgroundColor="#E1E1E1" text="same Text of code">            	 
                 
             </mx:TextArea>
-           
+           <mx:Button click="{save()}"/>
         </mx:VBox>
 	</mx:HDividedBox>
 		
