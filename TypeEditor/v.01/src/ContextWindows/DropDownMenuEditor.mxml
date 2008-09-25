@@ -24,6 +24,8 @@
 			private var _langsProvider:Array = [];
 			private var _attrsProvider:Array = [];
 			private var rowsProvider:Array = [];
+			private var editableLang:String = '';
+			private var exampleLang:String = '';
 						
 			public function set langsProvider(lp:Array):void {
 				_langsProvider = lp;	
@@ -71,6 +73,14 @@
 				if (StringUtil.trim(event.currentTarget.itemEditorInstance.text) == '') {
 					event.currentTarget.itemEditorInstance.text = EMPTY_STR;
 				}
+			}
+			
+			private function loadValues():void {
+				
+			}
+			
+			private function langChangeHandler():void {
+				
 			}
 			
 		]]>
