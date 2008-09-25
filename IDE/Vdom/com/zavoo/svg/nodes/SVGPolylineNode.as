@@ -16,7 +16,8 @@ package com.zavoo.svg.nodes
 			this._graphicsCommands = new  Array();
 			
 			var pointsString:String = StringUtil.trim(this.getAttribute('points',''));
-			var points:Array = pointsString.split(' ');
+			var rx:RegExp = /(\b[0-9]*\.?[0-9]+\b)\s*,\s*(\b[0-9]*\.?[0-9]+\b)/g;
+			var points:Array = pointsString.match(rx);
 			
 			for (var i:int = 0; i < points.length; i++) {
 				var point:Array = String(points[i]).split(',');

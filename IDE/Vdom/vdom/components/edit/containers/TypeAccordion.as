@@ -23,7 +23,7 @@ public class TypeAccordion extends Accordion {
 	
 	private var currentLocale:String;
 	
-	private var standardCategories:Array = ['standard', 'form', 'table', 'database', 'debug'];
+	private var standardCategories:Array = ["usual", "standard", "form", "table", "database", "debug"];
 	
 	public function TypeAccordion()	{
 		
@@ -68,7 +68,7 @@ public class TypeAccordion extends Accordion {
 			type = new Type();
 			type.typeDescription = currentDescription;
 			
-			type.setStyle('horizontalAlign', 'center');
+			type.setStyle("horizontalAlign", "center");
 			type.width = 90;
 			type.typeLabel = currentDescription.typeNameLocalized;
 			
@@ -78,7 +78,7 @@ public class TypeAccordion extends Accordion {
 				currentDescription.typeId,
 				currentDescription.resourceId, 
 				type, 
-				'resource', 
+				"resource", 
 				true
 			);
 			cursor.moveNext();
@@ -101,14 +101,14 @@ public class TypeAccordion extends Accordion {
 			categoryNameLocalized = "";
 			
 			if(standardCategories.indexOf(categoryName) != -1)
-				categoryNameLocalized = resourceManager.getString('Edit', categoryName);
+				categoryNameLocalized = resourceManager.getString("Edit", categoryName);
 				
 			else if (categoryName.match(phraseRE)) {
 				
 				categoryPhraseId = categoryName.match(phraseRE)[1];
 				categoryNameLocalized = resourceManager.getString(typeDescription.Information.Name, categoryPhraseId);
 				if(categoryNameLocalized)
-					categoryName = 'lang_' + MD5Util.encrypt(categoryNameLocalized);
+					categoryName = "lang_" + MD5Util.encrypt(categoryNameLocalized);
 			}
 			
 			if(!categoryNameLocalized)
@@ -139,7 +139,7 @@ public class TypeAccordion extends Accordion {
 		}
 		
 		typesArrayCollection.sort = new Sort();
-		typesArrayCollection.sort.fields = [new SortField('typeName')];
+		typesArrayCollection.sort.fields = [new SortField("typeName")];
 		typesArrayCollection.refresh();
 		
 		return typesArrayCollection;
@@ -151,7 +151,7 @@ public class TypeAccordion extends Accordion {
 		
 		for each (var category:String in standardCategories) {
 			
-			labelValue = resourceManager.getString('Edit', category);
+			labelValue = resourceManager.getString("Edit", category);
 			insertCategory(category, labelValue);
 		}
 	}
@@ -167,8 +167,8 @@ public class TypeAccordion extends Accordion {
 			categories[categoryName] = currentCategory;
 	
 			currentCategory.label = label;
-			currentCategory.setStyle('horizontalAlign', 'center');
-			currentCategory.horizontalScrollPolicy = 'off';
+			currentCategory.setStyle("horizontalAlign", "center");
+			currentCategory.horizontalScrollPolicy = "off";
 			currentCategory.percentWidth = 100;
 			
 			addChild(currentCategory);

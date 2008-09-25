@@ -73,7 +73,7 @@ public class WorkArea extends VBox
 		if(!value)
 		{		
 			var warning:Label = new Label();
-			warning.text = 'no page selected';
+			warning.text = "no page selected";
 			_contentHolder.addChild(warning);
 		}
 	}
@@ -393,7 +393,7 @@ public class WorkArea extends VBox
 				attributeValue = attributes[attributeName];
 				
 				if(attributeValue.search(xmlCharRegExp) != -1)
-					newAttribute[attributeName] = XML('<![CDATA['+attributeValue+']'+']>');
+					newAttribute[attributeName] = XML("<![CDATA["+attributeValue+"]"+"]>");
 				else
 					newAttribute[attributeName] = attributeValue;
 				
@@ -465,22 +465,22 @@ public class WorkArea extends VBox
 		}
 		
 		var stack:Array = 
-			DisplayUtil.getObjectsUnderMouse(this, 'vdom.containers::IItem', filterFunction);
+			DisplayUtil.getObjectsUnderMouse(this, "vdom.containers::IItem", filterFunction);
 		
 		if(stack.length == 0)
 			return;
 		
 		var currentItem:Container = stack[0];
 		
-		//trace('WorkArea - dragOverHandler ' + stack.length)
+		//trace("WorkArea - dragOverHandler " + stack.length)
 		
 		if(focusedObject == currentItem || IItem(currentItem).waitMode)
 			return;
 		
 		if(focusedObject)
-			IItem(focusedObject).drawHighlight('none');
+			IItem(focusedObject).drawHighlight("none");
 		
-		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
+		var typeDescription:Object = event.dragSource.dataForFormat("typeDescription");
 		var containersRE:RegExp = /(\w+)/g;
 		var aviableContainers:Array = typeDescription.aviableContainers.match(containersRE);
 		
@@ -492,11 +492,11 @@ public class WorkArea extends VBox
 		
 		if(aviableContainers.indexOf(currentItemName) != -1)
 		{
-			IItem(currentItem).drawHighlight('0x00FF00');
+			IItem(currentItem).drawHighlight("0x00FF00");
 		}
 		else if(currentItemDescription.Information.Container != 1)
 		{
-			IItem(currentItem).drawHighlight('0xFF0000');	
+			IItem(currentItem).drawHighlight("0xFF0000");	
 		}
 		else if(currentItem.parent is IItem)
 		{
@@ -509,9 +509,9 @@ public class WorkArea extends VBox
 				
 			if(aviableContainers.indexOf(currentItemName) != -1)
 				
-				IItem(currentItem).drawHighlight('0x00FF00');
+				IItem(currentItem).drawHighlight("0x00FF00");
 			else	
-				IItem(currentItem).drawHighlight('0xFF0000');
+				IItem(currentItem).drawHighlight("0xFF0000");
 		}
 		
 		focusedObject = currentItem;
@@ -521,12 +521,12 @@ public class WorkArea extends VBox
 		
 		resizeManager.itemDrag = false;
 		
-		var typeDescription:Object = event.dragSource.dataForFormat('typeDescription');
+		var typeDescription:Object = event.dragSource.dataForFormat("typeDescription");
 		
 		var currentContainer:Container = focusedObject;
 		
 		if(focusedObject is IItem)
-			IItem(focusedObject).drawHighlight('none');
+			IItem(focusedObject).drawHighlight("none");
 		
 		if(currentContainer)
 			currentContainer.drawFocus(false);
@@ -538,7 +538,7 @@ public class WorkArea extends VBox
 		
 		var re:RegExp = /\s+/g;
 		
-		var aviableContainers:Array = typeDescription.aviableContainers.replace(re, '').split(',');
+		var aviableContainers:Array = typeDescription.aviableContainers.replace(re, "").split(",");
 		
 		var bool:Number = aviableContainers.indexOf(currentItemName);
 		
@@ -572,7 +572,7 @@ public class WorkArea extends VBox
 		resizeManager.itemDrag = false;
 		
 		if(focusedObject is IItem)
-			IItem(focusedObject).drawHighlight('none');
+			IItem(focusedObject).drawHighlight("none");
 	}
 	
 	private function mouseWheelHandler(event:MouseEvent):void

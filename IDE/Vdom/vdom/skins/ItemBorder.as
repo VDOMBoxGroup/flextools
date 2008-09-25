@@ -59,7 +59,7 @@ public class ItemBorder extends HaloBorder
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
 		
 		// If background image has changed, then load new one.  
-		var newStyle:String = getStyle("repeatedBackgroundImage");
+		var newStyle:String = getStyle("backgroundImage");
 		
 		if(	newStyle && newStyle != backgroundId )
 		{
