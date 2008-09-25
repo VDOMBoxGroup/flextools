@@ -32,6 +32,7 @@ package vdom.components.scriptEditor.containers
 		
 		public function set dataProvider(str:String):void
 		{
+			tree.dataProvider = null;
 			curContainerID = str;
 			dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
 			dataManager.getApplicationEvents(str);
@@ -40,9 +41,12 @@ package vdom.components.scriptEditor.containers
 		
 		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
 		{
+			
 			dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
 	 		creatData(dmEvt.result);
-	 		trace("Data geted")
+	 		trace('-----------from serve-------------');
+	 		trace(curContainerID);
+	 		trace("" + dmEvt.result.toXMLString())
 		}
 		
 		private var dataXML:XML;
@@ -69,11 +73,14 @@ package vdom.components.scriptEditor.containers
 				}
 				
 				tree.dataProvider = dataXML;
+				tree.selectedIndex = 0;
+				tree.validateNow();
 				
 			}else
 			{
 				tree.dataProvider = null;
 			}
+			dispatchEvent(new ServerScriptsEvent(ServerScriptsEvent.DATA_CHANGED));
 		}
 		
 		public function set addScript(xml:XML):void
@@ -119,17 +126,29 @@ package vdom.components.scriptEditor.containers
 		
 		public function set script(str:String):void
 		{
-			if(!tree.selectedItem)
+			if(tree.selectedItem)
 			{
 				var ID:String = tree.selectedItem.@ID;
-				xmlToServer.ServerActions.Action.(@ID == ID).appendChild( XML('<![CDATA[' +str + ']'+']>'));
+				var tempXML:XML = xmlToServer.ServerActions.Action.(@ID == ID)[0]; 
+				var xml:XML = new XML('<Action/>');	
+					xml.@ID = tempXML.@ID;
+					xml.@Name = tempXML.@Name;
+					xml.@Language = tempXML.@Language;
+					xml.appendChild(XML('<![CDATA[' +str + ']'+']>'));
+				
+				xmlToServer.ServerActions.Action.(@ID == ID)[0] = xml;
 				dataManager.setApplicationEvents(curContainerID, xmlToServer.toXMLString());
+				trace('******** To server ********');
+				trace(curContainerID);
 				trace(xmlToServer.toXMLString());
 			}
 		}
 		
 		public function get script():String
 		{
+			if(!tree.selectedItem)
+				return '';
+				
 			var ID:String = tree.selectedItem.@ID;
 			
 			return xmlToServer.ServerActions.Action.(@ID == ID)[0].toString();
@@ -138,6 +157,11 @@ package vdom.components.scriptEditor.containers
 		private function changeHandler(lsEvt:ListEvent):void
 		{
 			dispatchEvent(new ServerScriptsEvent(ServerScriptsEvent.DATA_CHANGED));
+		}
+		
+		public function get dataEnabled():Object
+		{
+			return tree.selectedItem;
 		}
 		
 	}
