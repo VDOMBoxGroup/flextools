@@ -195,7 +195,7 @@ public class Node extends Canvas
     {
     	//value = value.replace(/\r/g, "\\r");
     	//value = value.replace(/\n/g, "\\n");
-    	//value = value.replace(/\t/g, "\\t");	        
+    	//value = value.replace(/\t/g, "\\t");
 
     	if(_text != value)
     	{
@@ -390,7 +390,7 @@ public class Node extends Canvas
 		removeEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
 		removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
 		
-		removeEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
    		//removeEventListener("xChanged", positionChangedHandler);
    		//removeEventListener("yChanged", positionChangedHandler);
@@ -431,7 +431,7 @@ public class Node extends Canvas
         	focusManager.showFocusIndicator = false;
         }
         
-        if (!nodeTextArea)
+        if(!nodeTextArea)
         {
             nodeTextArea = new SuperTextArea();
             nodeTextArea.editable = false;
@@ -499,7 +499,7 @@ public class Node extends Canvas
 			addEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);			
 			addEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
 			
-			addEventListener(KeyboardEvent.KEY_DOWN, keyDown); 
+			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown); 
 			addEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
        		
        		//addEventListener("xChanged", positionChangedHandler);
@@ -568,12 +568,15 @@ public class Node extends Canvas
             		break;            
             }          
 			
-			nodeTextArea.styleChanged(null);
-			nodeTextArea.validateDisplayList();			
-			styleChanged(null);
+			//nodeTextArea.styleChanged(null);
+			//styleChanged(null);
+
+			//nodeTextArea.validateDisplayList();			
 			
-			nodeTextArea.invalidateDisplayList();
+			//nodeTextArea.invalidateDisplayList();
+			//invalidateProperties();
     		invalidateDisplayList();
+    		callLater(invalidateDisplayList);
         }	
 
         if (_typeChanged)
@@ -606,8 +609,9 @@ public class Node extends Canvas
 	            	break;
             }
 			
-			styleChanged(null);
-			nodeTextArea.styleChanged(null);
+			//styleChanged(null);
+			//nodeTextArea.styleChanged(null);
+			invalidateProperties();
     		invalidateDisplayList();
         }	
         
@@ -656,7 +660,7 @@ public class Node extends Canvas
         measuredMinWidth = measuredWidth;
         measuredMinHeight = measuredHeight;    
         
-        setActualSize(measuredWidth, measuredHeight);       
+        setActualSize(measuredWidth, measuredHeight);
     }        
     
     override protected function updateDisplayList(unscaledWidth:Number,
@@ -784,6 +788,7 @@ public class Node extends Canvas
 			systemManager.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true);
 			nodeTextArea.addEventListener(Event.CHANGE, textAreaChange); 
 			nodeTextArea.addEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);
+			nodeTextArea.addEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
 			
 			scrollToNode();			
         }
@@ -793,6 +798,7 @@ public class Node extends Canvas
 			systemManager.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true);
 			nodeTextArea.removeEventListener(Event.CHANGE, textAreaChange); 
             nodeTextArea.removeEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);
+            nodeTextArea.removeEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
             nodeTextArea.selectable = false;
             nodeTextArea.editable = false;
         	nodeTextArea.setSelection(0, 0);
@@ -1081,35 +1087,26 @@ public class Node extends Canvas
 		}
     }
     
-    private function mouseDownOutsideHandler(event:MouseEvent):void
-    {	    	
-    	if (!nodeTextArea.hitTestPoint(event.stageX, event.stageY, true))
-    	{
-	    	if(_mode==M_EDITING)
-	    	{
-			   	text = nodeTextArea.text;
-	    		editMode(false);
-	    	}
-	    }
-    }	    
-    
-	private function keyDown(event:KeyboardEvent):void
+	private function onKeyDown(event:KeyboardEvent):void
     {
     	// don't use event.stopPropagation() here. 
     	// textInput must recieve key events
     	
 		if(canvas && canvas.addingTransition)
 		{
-			return;
+			return;			
 		}
 		
 		if(event.keyCode == Keyboard.DELETE)
      	{
      		alertDestroy();
 	    }
-	    else if(//event.keyCode == Keyboard.ENTER ||
+	    else if(
+	    	(!event.controlKey && !event.commandKey) && event.keyCode == Keyboard.ENTER ||
 	    	event.keyCode == Keyboard.F2)
 	    {
+	    	event.preventDefault();
+	    	
 	    	if(_mode==M_NORMAL)
 	    	{
 		    	editMode(true);
@@ -1128,9 +1125,22 @@ public class Node extends Canvas
 	    	invalidateProperties();
 	    	invalidateSize();
 	    	invalidateDisplayList();
-	    }		    
+	    }	    
+	    else if((event.controlKey || event.commandKey) && event.keyCode == Keyboard.ENTER)
+	    {	    	
+	    	event.preventDefault();
+	    	nodeTextArea.text += '\n';
+	    	nodeTextArea.setSelection(nodeTextArea.text.length, nodeTextArea.text.length);
+	    }
 	}
-     
+	
+	private function textAreaKeyDown(event:KeyboardEvent):void
+    {
+		invalidateProperties();
+		invalidateSize();
+		invalidateDisplayList();		    	
+    }
+    
     private function alertRemoveHandler(event:CloseEvent):void 
     {
     	if(parent && event.detail==Alert.YES)
@@ -1185,13 +1195,28 @@ public class Node extends Canvas
 
         invalidateDisplayList();
     } 
-
+    
+    private function mouseDownOutsideHandler(event:MouseEvent):void
+    {	    	
+    	if (!nodeTextArea.hitTestPoint(event.stageX, event.stageY, true))
+    	{
+	    	if(_mode==M_EDITING)
+	    	{
+			   	text = nodeTextArea.text;
+	    		editMode(false);
+	    	}
+	    }
+    }	
+    
 	private function textAreaFocusOut(Event:FocusEvent):void
 	{
 		if(parent)
 		{
-    		text = nodeTextArea.text;
-    		editMode(false);	
+	    	if(_mode==M_EDITING)
+	    	{
+			   	text = nodeTextArea.text;
+	    		editMode(false);
+	    	}			
   		}	
 	}
 
