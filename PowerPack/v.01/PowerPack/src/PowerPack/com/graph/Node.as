@@ -530,6 +530,7 @@ public class Node extends Canvas
             
             _categoryChanged = true;
 
+			nodeTextArea.invalidateDisplayList();
             invalidateSize();
     		invalidateDisplayList();
         }
@@ -575,8 +576,8 @@ public class Node extends Canvas
 			
 			//nodeTextArea.invalidateDisplayList();
 			//invalidateProperties();
+			nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
-    		callLater(invalidateDisplayList);
         }	
 
         if (_typeChanged)
@@ -611,7 +612,7 @@ public class Node extends Canvas
 			
 			//styleChanged(null);
 			//nodeTextArea.styleChanged(null);
-			invalidateProperties();
+			nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	
         
@@ -619,6 +620,7 @@ public class Node extends Canvas
         {
             _enabledChanged = false;
 			contextMenu.getItemByName("enabled").checked = enabled;
+			nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }
 
@@ -626,6 +628,7 @@ public class Node extends Canvas
         {
         	_breakpointChanged = false;
         	contextMenu.getItemByName("breakpoint").checked = breakpoint;
+        	nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	            
         
@@ -633,6 +636,8 @@ public class Node extends Canvas
         {
         	_needValidate = false;
 			validator.validate();                
+        	nodeTextArea.invalidateDisplayList();
+    		invalidateDisplayList();
         }
     }    
 
