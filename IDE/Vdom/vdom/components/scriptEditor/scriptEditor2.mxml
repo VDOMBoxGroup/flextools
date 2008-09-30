@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" xmlns:containers="vdom.components.scriptEditor.containers.*">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" xmlns:containers="vdom.components.scriptEditor.containers.*"
+		hide="hideHandler()">
 <mx:Script>
 	<![CDATA[
 		import vdom.events.DataManagerEvent;
@@ -31,50 +32,18 @@
 	 			changeWatcher.unwatch();
 	 			trContainer.hideHandler();
 	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+	 			
 	 		}
 	 	
 	 	private var getApplEventID:String;
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
 	 			serverScripts.dataProvider = eeEvt.objID;
-	// 			dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
-	 		
-	 //			getApplEventID = eeEvt.objID;
-	 /*			
-	 			if(dataChanged)
-	 			{
-//	 				creatDataToServer(); //eeEvt.objID
-	 				
-	 			}else
-	 			{
-	 				
-	 				dataManager.getApplicationEvents(getApplEventID);
-	 			}
-	 			dataChanged = false;
-	 			
-//	 			can.removeAllChildren();
-//	 			trace('-----From Server-----\n' +  eeEvt.data);
-	 			trEvents.dataProvider  = eeEvt.data;
-//	 		
-	trEvents.dataProvider = eeEvt.data;
-*/	 		}
-	 	/*	
-			private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
-	 		{
-	 			dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
-	 			cretDat(dmEvt.result);
-	 		}
-	 	*/
-		private function treeContainerChangeHandler(evt:Event):void
+			}
+	 	
+	 		private function treeContainerChangeHandler(evt:Event):void
 			{
 			
-			/*	 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
-				 if (selectedNode)
-				 {
-              	 	curContainerID = selectedNode.@ID;
-              	 	curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
-     			 } 
-		*/
 			}
 			
 			private function getIcon(value:Object):Class 

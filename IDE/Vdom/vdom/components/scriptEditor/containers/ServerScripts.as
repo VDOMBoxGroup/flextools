@@ -53,7 +53,7 @@ package vdom.components.scriptEditor.containers
 		private var xmlToServer:XML;
 		private function creatData(xmlToTree:XML):void
 		{
-			xmlToServer = xmlToTree.E2vdom[0];
+			xmlToServer = new XML(xmlToTree.E2vdom.toXMLString());
 //			delete xmlToServer.Key;
 			var tempXML:XML;
 
@@ -63,7 +63,7 @@ package vdom.components.scriptEditor.containers
 			{
 				for each(var actID:XML in xmlToTree.E2vdom.ServerActions.children())
 				{
-					tempXML = <Event/>;
+					tempXML = <Action/>;
 					tempXML.@label = actID.@Name;
 					tempXML.@Name = actID.@Name;
 					tempXML.@Language = actID.@Language;
@@ -136,7 +136,9 @@ package vdom.components.scriptEditor.containers
 					xml.@Language = tempXML.@Language;
 					xml.appendChild(XML('<![CDATA[' +str + ']'+']>'));
 				
-				xmlToServer.ServerActions.Action.(@ID == ID)[0] = xml;
+				delete xmlToServer.ServerActions.Action.(@ID == ID)[0]
+				xmlToServer.ServerActions.appendChild(xml);
+				
 				dataManager.setApplicationEvents(curContainerID, xmlToServer.toXMLString());
 				trace('******** To server ********');
 				trace(curContainerID);
