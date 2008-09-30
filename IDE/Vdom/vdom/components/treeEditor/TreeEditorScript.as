@@ -648,7 +648,7 @@ private function saveToServer():void
 	 	dataManager.addEventListener(DataManagerEvent.SET_APPLICATION_STRUCTURE_COMPLETE, dataManagerListenner)
 		dataManager.setApplicationStructure(dataToServer);
 		
-	trace('Data saved');
+	trace('********  Data saved  ********\n' + dataToServer.toXMLString());
 }
 
 public function dataToXML(massTreeElements:Array, massLines:Array ):XML
@@ -801,7 +801,9 @@ private function indexChangeHandler(inEvt:IndexEvent):void
 				}
 			}
 		}
-	
+		
+//		trace('indexChangeHandler');
+//		saveToServer();
 	
 }
 //data.@Top[0]
