@@ -595,7 +595,7 @@
 			{
 				//trace(xmlToTree.toXMLString());
 //				can.removeAllChildren();
-			trace('----From Serve----'+xmlToTree);
+				trace('----From Serve----'+xmlToTree);
 				actionsArray = [];		
 				for each(var actID:XML in xmlToTree.E2vdom.ClientActions.children())
 				{
@@ -617,13 +617,16 @@
 				eventsArray = [];		
 				for each(var evt:XML in xmlToTree.E2vdom.Events.children())
 				{
-					var objEv:EventEditorEvents = new EventEditorEvents(evt, curContainerTypeID);
-					
-					eventsArray[objEv.ID] = setListeners4Event(objEv);
-					
-					can.addChild(eventsArray[objEv.ID]);
-					
-					trEvents.disabledItem = objEv;
+					if(dataManager.getObject(evt.@ObjSrcID))
+					{
+						var objEv:EventEditorEvents = new EventEditorEvents(evt, curContainerTypeID);
+						
+						eventsArray[objEv.ID] = setListeners4Event(objEv);
+						
+						can.addChild(eventsArray[objEv.ID]);
+						
+						trEvents.disabledItem = objEv;
+					}
 				}
 				
 				linesArray = [];
