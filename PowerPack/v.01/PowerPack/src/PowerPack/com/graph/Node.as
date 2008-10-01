@@ -17,6 +17,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.text.TextLineMetrics;
 import flash.ui.Keyboard;
+import flash.utils.Dictionary;
 
 import mx.binding.utils.*;
 import mx.collections.ArrayCollection;
@@ -65,6 +66,8 @@ public class Node extends Canvas
     private static const M_EDITING:Number = 1;
     
    	public static var copyNode:Node;
+   	
+   	public static var nodes:Dictionary = new Dictionary(); 
 
     //--------------------------------------------------------------------------
     //
@@ -133,7 +136,8 @@ public class Node extends Canvas
 	
     private var _over:Boolean;
     private var _focused:Boolean; 
-    private var _created:Boolean; 
+    private var _created:Boolean;
+    private var _needRefreshStyles:Boolean; 
 		
     /**
      *  Horizontal location where the user pressed the mouse button
@@ -360,6 +364,8 @@ public class Node extends Canvas
 			this.text = LanguageManager.sentences['node_label'];
 		
 		doubleClickEnabled = true;
+		
+		nodes[this] = this;
 	}		
 	
 	//--------------------------------------------------------------------------
@@ -411,6 +417,8 @@ public class Node extends Canvas
            	parent.removeChild(this);
            	
        	dispatchEvent(new NodeEvent(NodeEvent.DISPOSED));
+       	
+       	delete nodes[this];
 	}
 			
 	//--------------------------------------------------------------------------
@@ -512,7 +520,6 @@ public class Node extends Canvas
         super.commitProperties();
         
         var _needValidate:Boolean = false;
-        
         if (_textChanged)
         {
         	_needValidate = true;
@@ -528,19 +535,21 @@ public class Node extends Canvas
             	nodeTextArea.text = text;
             }
             
-            _categoryChanged = true;
-
 			nodeTextArea.invalidateDisplayList();
             invalidateSize();
     		invalidateDisplayList();
         }
                 
-        if (_categoryChanged)
+        if (_categoryChanged || _needRefreshStyles)
         {
         	_needValidate = true;
             _categoryChanged = false;
             
-            switch(_category)
+            nodeTextArea.clearStyle("borderColor");
+            nodeTextArea.clearStyle("backgroundColor");
+            nodeTextArea.clearStyle("color");
+            
+            switch(category)
             {
             	case NodeCategory.SUBGRAPH:
             		nodeTextArea.setStyle( "borderColor",  0x000000);
@@ -551,7 +560,7 @@ public class Node extends Canvas
             		break;	            	
 
             	case NodeCategory.COMMAND:
-            		nodeTextArea.setStyle( "borderColor",  0xffff00);
+            		nodeTextArea.setStyle( "borderColor",  0x000000);
             		nodeTextArea.setStyle( "backgroundColor",  0x004e98);
             		nodeTextArea.setStyle( "color",  0xffff00);
             		if(contextMenu)
@@ -576,15 +585,18 @@ public class Node extends Canvas
 			
 			//nodeTextArea.invalidateDisplayList();
 			//invalidateProperties();
-			nodeTextArea.invalidateDisplayList();
+			//nodeTextArea.validateNow();
+			//nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	
 
-        if (_typeChanged)
+        if (_typeChanged || _needRefreshStyles)
         {
             _typeChanged = false;
 
-            switch(_type)
+            clearStyle("borderColor");
+            
+            switch(type)
             {
             	case NodeType.INITIAL:
             		setStyle( "borderColor", 0x00ff00);	
@@ -612,7 +624,8 @@ public class Node extends Canvas
 			
 			//styleChanged(null);
 			//nodeTextArea.styleChanged(null);
-			nodeTextArea.invalidateDisplayList();
+			//nodeTextArea.validateNow();
+			//nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	
         
@@ -639,6 +652,8 @@ public class Node extends Canvas
         	nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }
+        
+         _needRefreshStyles = false;
     }    
 
 	override protected function measure():void 
@@ -809,11 +824,14 @@ public class Node extends Canvas
         	nodeTextArea.setSelection(0, 0);
         }
         
-        nodeTextArea.styleChanged(null);
-        styleChanged(null);
+		_needRefreshStyles = true;			
+		invalidateProperties();       
         
-        nodeTextArea.invalidateDisplayList();
-        invalidateDisplayList();     		    	
+        //nodeTextArea.styleChanged(null);
+        //styleChanged(null);
+        
+        //nodeTextArea.invalidateDisplayList();
+        //invalidateDisplayList();     		    	
     }
     
 	public function alertDestroy():void
@@ -1134,8 +1152,11 @@ public class Node extends Canvas
 	    else if((event.controlKey || event.commandKey) && event.keyCode == Keyboard.ENTER)
 	    {	    	
 	    	event.preventDefault();
-	    	nodeTextArea.text += '\n';
-	    	nodeTextArea.setSelection(nodeTextArea.text.length, nodeTextArea.text.length);
+	    	
+	    	var caretPos:int = nodeTextArea.field.caretIndex; 
+	    	nodeTextArea.text = nodeTextArea.text.substr(0, caretPos) +  
+	    		'\n' + nodeTextArea.text.substr(caretPos);	    		
+	    	nodeTextArea.setSelection(caretPos+1, caretPos+1);
 	    }
 	}
 	
@@ -1231,7 +1252,7 @@ public class Node extends Canvas
 		{
 			var node:Node = event.target.parent;
 			
-			node._categoryChanged = true;
+			node._needRefreshStyles = true;
 			
 			node.invalidateProperties();
 			node.invalidateSize();

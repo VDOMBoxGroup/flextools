@@ -146,7 +146,7 @@
 				Node.classConstructed;
 				GraphCanvas.classConstructed;
 				
-				Connector.connectMode = Connector.CM_CENTER;				
+				Connector.connectMode = Connector.CM_NEAREST;				
 				
 				var defaultCaptions:Object = {
 
