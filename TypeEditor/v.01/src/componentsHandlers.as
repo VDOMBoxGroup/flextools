@@ -14,6 +14,7 @@ import mx.events.FileEvent;
 import flash.desktop.Icon;
 import mx.controls.Image;
 import ContextWindows.DropDownMenuEditor;
+import mx.messaging.management.Attribute;
 
 private function creationComplete():void {
 	__mainMenuBar.dataProvider = menuDataProvider;
@@ -376,6 +377,11 @@ private function attrInterfaceTypeValuesClickHandler():void {
 		switch (typeName) {
 			case 'DropDown':
 				ddeditor.langsProvider = langsProvider;
+				ddeditor.exampleLang = langsProvider[0].label;
+				ddeditor.editableLang = selectedLang;
+				ddeditor.selectedAttrIndex = this.selectedAttrIndex;
+				ddeditor.onShow();
+				
 				ddeditor.addEventListener(Event.COMPLETE, dropDownEditCompleteHandler); 
 				PopUpManager.addPopUp(ddeditor, this);
 				PopUpManager.centerPopUp(ddeditor);

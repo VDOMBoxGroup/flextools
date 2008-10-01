@@ -14,30 +14,80 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import mx.utils.StringUtil;
 			import mx.events.DataGridEvent;
 			import mx.managers.PopUpManager;
 			
 			private const EMPTY_STR:String = '[[ empty ]]';
 			
+			public var attrsProvider:Array = [];
+			public var editableLang:String = '';
+			public var exampleLang:String = '';
+			public var selectedAttrIndex:int = 0;
+			
+			private var rowsProvider:Array = [];
 			[Bindable]
 			private var _langsProvider:Array = [];
-			private var _attrsProvider:Array = [];
-			private var rowsProvider:Array = [];
-			private var editableLang:String = '';
-			private var exampleLang:String = '';
+			private var rowsNum:int = 0;
 						
+			/* This function must be executed "by hand" after initialize the object */
+			public function onShow():void {
+				var typeReg:RegExp = /^([a-zA-Z]+)\((.*)\)/;
+				var type:String = attrsProvider[selectedAttrIndex].panelInterface;
+				
+				rowsNum = 0;
+				var matchRes:Array = type.match(typeReg);
+				if (matchRes) {
+					try {
+						rowsNum = matchRes[2];
+					}
+					catch (err:Error) {
+						Alert.show(err.message, "The following error occured:");
+						return;
+					}
+					
+					loadValues();
+				}
+			}
+
+			private function loadValues():void {
+				/* ("text"|value)("text"|value) ... */
+				
+				var editableStrings:Array = [];
+				try {
+					editableStrings = attrsProvider[selectedAttrIndex][editableLang].panelInterfaceParams['Strings'];
+				}
+				catch (err:Error) {
+					try {
+						attrsProvider[selectedAttrIndex][editableLang].panelInterfaceParams = {};
+					}
+					catch (err:Error) {
+						attrsProvider[selectedAttrIndex][editableLang] = {};
+					}
+					editableStrings = attrsProvider[selectedAttrIndex][editableLang].panelInterfaceParams['Strings'] = [];
+				}
+				
+				var exampleValuesStr:String;
+				try {
+					exampleValuesStr = attrsProvider[selectedAttrIndex][exampleLang].panelInterfaceParams;
+				}
+				catch (err:Error) {
+					exampleValuesStr = '';
+				}
+				
+				for (var i:int = 0; i < rowsNum; i++) {
+					
+				}
+				
+			}
+			
+			private function langChangeHandler():void {
+				
+			}
+			
 			public function set langsProvider(lp:Array):void {
 				_langsProvider = lp;	
-			}
-			
-			public function set attrsProvider(ap:Array):void {
-				_attrsProvider = ap;				
-			}
-			
-			public function get attrsProvider():Array {
-				
-				return [];
 			}
 			
 			private function addNewRowBtnClickHandler():void {
@@ -73,14 +123,6 @@
 				if (StringUtil.trim(event.currentTarget.itemEditorInstance.text) == '') {
 					event.currentTarget.itemEditorInstance.text = EMPTY_STR;
 				}
-			}
-			
-			private function loadValues():void {
-				
-			}
-			
-			private function langChangeHandler():void {
-				
 			}
 			
 		]]>
