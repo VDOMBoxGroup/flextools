@@ -397,7 +397,9 @@
 				 {
               	 	curContainerID = selectedNode.@ID;
               	 	curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+              	 	trace('1 - curContainerTypeID: ' + curContainerTypeID);
      			 } 
+     			 trace('2 - curContainerTypeID: '+ curContainerTypeID);
 			}
 			
 			private function getIcon(value:Object):Class 
@@ -601,7 +603,7 @@
 					
 					var type:XML = dataManager.getTypeByObjectId(actID.@ObjTgtID)
 					//var tupeID:String = type.Information.ID;
-					var nData:* = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID).Action.(@MethodName == actID.@MethodName).Parameters[0];
+					var nData:* = type.E2vdom.Actions.Container.(@ID == curContainerTypeID).Action.(@MethodName == actID.@MethodName).Parameters[0];
 					if(nData) 
 					{
 						var objAct:EventEditorAction = new EventEditorAction(actID, curContainerTypeID);

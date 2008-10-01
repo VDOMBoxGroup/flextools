@@ -311,8 +311,8 @@ package vdom.components.eventEditor
 			_objTgtID 	= data.@ObjTgtID;
 	//		_eventType  = data.@label;
 			_methodName = data.@MethodName;
-			
-			var parametrs:* = type.E2vdom.ClientActions.Container.(@ID == containerID)[0];
+			 					
+			var parametrs:* = type.E2vdom.Actions.Container.(@ID == containerID)[0];
 			parametrs = parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
 			///
 			for each(var child:XML in parametrs.children())

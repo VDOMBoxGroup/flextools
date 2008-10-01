@@ -103,6 +103,12 @@ package vdom.components.eventEditor
 		{
 			dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'true';
 			selectedItem = dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
+			
+			if(!selectedItem)
+			{
+				dataXML.Event.(@Name == obj.Name).@enabled = 'true';
+				selectedItem = dataXML.Event.(@Name == obj.Name)[0];
+			}
 		}		
 		
 		public function  set disabledItem(obj:Object):void

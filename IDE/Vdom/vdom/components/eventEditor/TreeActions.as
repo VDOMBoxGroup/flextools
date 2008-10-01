@@ -22,6 +22,7 @@ package vdom.components.eventEditor
 		}
 		
 		private var dataXML:XML ;
+		private var curContainerTypeID:String;
 		override public function set dataProvider(value:Object):void
 		{
 			dataXML  = new XML('<Object/>');
@@ -29,10 +30,10 @@ package vdom.components.eventEditor
 			dataXML.@resourceID = value.@resourceID;
 			
 			var type:XML = dataManager.getTypeByTypeId(value.@Type);
-			var curContainerTypeID:String = dataManager.getTypeByObjectId(value.@ID).Information.ID.toString();
+				curContainerTypeID = dataManager.getTypeByObjectId(value.@ID).Information.ID.toString();
 			var actions:XML = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID)[0];
 			var tempXML:XML;
-			
+			trace('curContainerTypeID: '+ curContainerTypeID);
 			if(actions != null)		
 			{
 				for each(var child:XML in actions.children() )
@@ -69,8 +70,8 @@ package vdom.components.eventEditor
 		{
 			var outXML:XML = new XML(inXML.toXMLString());
 			var type:XML = dataManager.getTypeByTypeId(inXML.@Type);
-			var curContainerTypeID:String = dataManager.getTypeByObjectId(inXML.@containerID).Information.ID.toString();
-			var actions:XML = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID)[0]; 
+//			var curContainerTypeID:String = dataManager.getTypeByObjectId(curContainerTypeID).Information.ID.toString();
+			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0]; 
 			var tempXML:XML;
 			
 			if(actions != null)		
