@@ -349,8 +349,15 @@
 	*/
 	private function drLine (mEvt:MouseEvent):void
 	{
-		if(mouseX > main.width)
-			return;
+//		trace(main.measuredWidth);
+		if(mouseX > main.width - 100 &&  (main.horizontalScrollPosition + main.width - main.measuredWidth) < 9)
+			main.horizontalScrollPosition = main.horizontalScrollPosition + 10;	
+		else if(mouseX < main.x + 100 && main.horizontalScrollPosition > 9)
+			main.horizontalScrollPosition = main.horizontalScrollPosition - 10;	
+		else if(mouseY > main.height - 100 && (main.verticalScrollPosition + main.height - main.measuredHeight) < 9)
+			main.verticalScrollPosition = main.verticalScrollPosition + 10;	
+		else if(mouseY < main.y + 100 &&  main.verticalScrollPosition > 9)
+			main.verticalScrollPosition = main.verticalScrollPosition - 10;	
 			
 		vctTest.graphics.clear();
 		
