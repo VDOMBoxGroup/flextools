@@ -3,6 +3,9 @@
 		hide="hideHandler()">
 <mx:Script>
 	<![CDATA[
+		import mx.events.CloseEvent;
+		import mx.managers.PopUpManager;
+		import vdom.components.treeEditor.AddTreeElementWindow;
 		import vdom.events.DataManagerEvent;
 		import vdom.managers.DataManager;
 		import vdom.events.EventEditorEvent;
@@ -56,6 +59,13 @@
 			
 			private function addNewScript():void
 			{
+				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
+					rbWnd.addEventListener(CloseEvent.CLOSE, creatingNewActionWindowtHandler);
+				
+			}
+			
+			private function creatingNewActionWindowtHandler():void
+			{
 				var dataXML:XML  = new XML('<Action/>');
 				dataXML.@Name = 'New script' + Math.random();
 				serverScripts.addScript = dataXML;
@@ -105,6 +115,8 @@
 				btSave.setStyle("borderColor", "0xEE0000");
 
 			}
+			
+			
 			
 		
 	]]>

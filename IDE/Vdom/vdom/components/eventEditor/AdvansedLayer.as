@@ -105,8 +105,10 @@ package vdom.components.eventEditor
 
 		public function get xmlData():XML
 		{
-			var outXML:XML = new XML("<Parameter>" + _data+ "</Parameter>");
+			var outXML:XML = new XML("<Parameter/>");
 			outXML.@ScriptName = _scriptName;
+			outXML.appendChild(XML('<![CDATA[' +_data + ']'+']>'));
+			
 			return outXML;
 		}
 		

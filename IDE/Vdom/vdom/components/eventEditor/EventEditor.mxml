@@ -88,10 +88,15 @@
 	 		
 	 		private function hideHandler():void
 	 		{
+	 			creatDataToServer();
 	 			changeWatcher.unwatch();
 	 			trContainer.hideHandler();
 	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 				can.removeAllChildren();
+				actionsArray = [];
+				eventsArray = [];
+				linesArray = [];
+				dataChanged = false;
 	 		}
 	 		
 	 		private var getApplEventID:String;
@@ -108,7 +113,7 @@
 	 			}else
 	 			{
 	 				dataManager.getApplicationEvents(getApplEventID);
-	 			}
+	 			}	
 	 			dataChanged = false;
 	 			
 	 			can.removeAllChildren();
