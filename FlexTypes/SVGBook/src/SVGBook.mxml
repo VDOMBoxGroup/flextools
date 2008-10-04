@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="absolute" xmlns:controls="qs.controls.*" xmlns:local="*" xmlns:svg="com.zavoo.svg.*" 
+	creationComplete="{onCreationComplete();}" width="640" height="480">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import mx.core.Container;
+			import mx.binding.utils.BindingUtils;
+			import qs.controls.flexBookClasses.FlexBookEvent;
+			import com.zavoo.svg.SVGViewer;
+			import mx.events.FlexEvent;
+			
+			private var dataSourceUrl:String;
+			private var hostName:String;
+			
+			private function onCreationComplete():void
+			{
+				var flashVars:Object = Application.application.parameters;
+				var pageRange:int = 0;
+				var startPage:int = 0;
+
+//				var pageRange:int = 10;
+//				var startPage:int = 5;
+//				dataSourceUrl = "http://mich/31443708-af07-4980-8ed1-4029b7b4f3f0.vdom";
+				
+				try {
+					pageRange = flashVars.pagerange;
+					startPage = flashVars.startPage;
+					dataSourceUrl = flashVars.datasource;
+					this.width = flashVars.width;
+					this.height = flashVars.height;
+				}
+				catch (err:Error) {
+					Alert.show(err.message, "The following error occurred:");
+					return;
+				}
+				
+				if (this.width == 0 || this.height == 0) {
+					width = 640;
+					height = 480;
+				}
+				
+				var pages:Array = [];
+				var i: int = pageRange;
+				while(i > 0) {
+			    	pages.push(new SVGPage());
+			    	i--;
+			 	}
+				__fb.content = pages;
+			    BindingUtils.bindProperty(this, "pageChange", __fb, "currentPageIndex");
+			    if (startPage != -1 && startPage <= __fb.maximumPageIndex - 1)
+					__fb.turnToPage(startPage - 1, false);
+			}
+			
+			public function set pageChange(index:*):void {
+				if (index == -1 || index > __fb.maximumPageIndex - 1)
+					return;
+				
+				var currentPage:* = __fb.content[index];
+				if (SVGPage(currentPage).numChildren == 0)
+					SVGPage(currentPage).loadURL(dataSourceUrl + '?page=' + String(index + 1));
+				
+				if (index >= 0 && index + 1 <= __fb.maximumPageIndex - 1) {
+					if (SVGPage(__fb.content[index + 1]).numChildren == 0)
+						SVGPage(__fb.content[index + 1]).loadURL(dataSourceUrl + '?page=' + String(index + 2));
+				}
+				
+				if (index - 1 >= 0 && index <= __fb.maximumPageIndex - 1) {
+					if (SVGPage(__fb.content[index - 1]).numChildren == 0)
+						SVGPage(__fb.content[index - 1]).loadURL(dataSourceUrl + '?page=' + String(index));
+				}
+				
+			}
+		]]>
+	</mx:Script>
+	
+	<controls:FlexBook id="__fb" width="100%" height="100%" horizontalCenter="0" verticalCenter="0">
+<!--
+		<controls:cover>
+			<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
+		</controls:cover>
+		<controls:backCover>
+			<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
+		</controls:backCover>
+-->
+	</controls:FlexBook>
+</mx:Application>

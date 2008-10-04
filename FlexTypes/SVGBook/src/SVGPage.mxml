@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#FFFFFF"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"	clipContent="true">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Label;
+			import mx.containers.HBox;
+		
+			import com.zavoo.svg.SVGViewer;
+			
+			public var hostName:String = '';
+			
+			public function loadURL(url:String):void {
+				var request:URLRequest = new URLRequest(url);
+				var loader:URLLoader = new URLLoader();
+				
+				var hostResult:Array = url.match(/(http:\/\/[a-zA-Z0-9-]+)\/.+\.vdom.*/);
+				if (hostResult)
+					hostName = hostResult[1]; 
+				
+				request.method = URLRequestMethod.POST;
+				loader.addEventListener(Event.COMPLETE, loadCompleteHandler);
+				loader.addEventListener(IOErrorEvent.IO_ERROR, loadErrorHandler);
+				loader.load(request);
+			}
+			
+			private function loadCompleteHandler(event:Event):void {
+			    var loader:URLLoader = URLLoader(event.target);
+			    var startIndex:Number = String(loader.data).search("<svg>");
+			    var endIndex:Number = String(loader.data).search("</svg>");
+			    var needle:String = String(loader.data).substring(startIndex, endIndex + 6);
+			    
+			    needle = needle.replace(/href="\//g, 'href="' + hostName + '/');
+			    
+			    var svgInstance:SVGViewer = new SVGViewer();
+			    svgInstance.setXML(XML(needle));
+			    addChild(svgInstance);
+			}
+			
+			private function loadErrorHandler(event:IOErrorEvent):void {
+				var hBox:HBox = new HBox();
+				var label:Label = new Label();
+				
+				hBox.percentWidth = 100;
+				hBox.percentHeight = 100;
+				hBox.setStyle('horizontalAlign', 'center');
+				hBox.setStyle('verticalAlign', 'middle');
+				addChild(hBox);
+				
+				label.text = 'IO Error at loading resource';
+				hBox.addChild(label);
+			}
+			
+		]]>
+	</mx:Script>
+</mx:Canvas>
