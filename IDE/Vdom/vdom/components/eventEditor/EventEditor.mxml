@@ -95,7 +95,7 @@
 	 		
 	 		private function hideHandler():void
 	 		{
-	 			creatDataToServer();
+//	 			creatDataToServer();
 	 			changeWatcher.unwatch();
 	 			trContainer.hideHandler();
 	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
@@ -118,7 +118,7 @@
 	 			
 	 			if(dataChanged)
 	 			{
-	 				creatDataToServer(); //eeEvt.objID
+//	 				creatDataToServer(); //eeEvt.objID
 	 				
 	 			}else
 	 			{

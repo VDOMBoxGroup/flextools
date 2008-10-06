@@ -98,7 +98,7 @@ package vdom.components.eventEditor
 				this.x = data.@Left;
 				_ID  = data.@ID;
 				changeState(data.@State =="true");
-				setValue(data);
+//				setValue(data);
 			}
 		}
 		
