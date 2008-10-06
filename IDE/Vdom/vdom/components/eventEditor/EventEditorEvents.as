@@ -90,7 +90,8 @@ package vdom.components.eventEditor
 			
 			
 			initUpBody();
-			initDownBody(data);
+			if (!initDownBody(data))
+				delete this;
 			
 			updateRatio();
 			
@@ -253,7 +254,7 @@ package vdom.components.eventEditor
 		
 		private var _eventType:String;
 		private var objectName:SimpleLayer;
-		private function initDownBody(data:Object):void
+		private function initDownBody(data:Object):Boolean
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
 			addChild(cnvDownLayer);
@@ -303,6 +304,10 @@ package vdom.components.eventEditor
 			fileManager.loadResource(dataManager.currentApplicationId,  resID, this);
 			
 			var parametrs:XML = type.E2vdom.Events..Event.(@Name == data.@Name).Parameters[0];
+			
+			if(!parametrs)
+				return false;
+			
 			for each(var child:XML in parametrs.children())
 			{
 				if(child.name() == 'Parameter')
@@ -312,6 +317,8 @@ package vdom.components.eventEditor
 					parametr.source = simpleLayer;
 				}
 			}
+			
+			return true;
 		}
 
 
