@@ -8,6 +8,13 @@ package com.zavoo.svg.nodes
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
+	import mx.managers.ToolTipManager;
+	import mx.core.mx_internal;
+	import mx.containers.Canvas;
+	import flash.events.MouseEvent;
+	import mx.controls.ToolTip;
+	
+	use namespace mx_internal;
 	
 	/** SVG Text element node **/
 	public class SVGTextNode extends SVGNode
@@ -33,8 +40,27 @@ package com.zavoo.svg.nodes
 		 **/
 		private var _textBitmap:Bitmap;
 		
+		private var _textWidth:int = 0;
+		
 		public function SVGTextNode(xml:XML):void {			
-			super(xml);			
+			super(xml);
+            this.addEventListener(MouseEvent.MOUSE_OVER,
+                                    toolTipMouseOverHandler);
+            this.addEventListener(MouseEvent.MOUSE_OUT,
+                                    toolTipMouseOutHandler);
+
+		}
+		
+		private var _toolTip:*;
+		
+		private function toolTipMouseOverHandler(event:MouseEvent):void
+		{
+			_toolTip = ToolTipManager.createToolTip(this._text, event.stageX, event.stageY);
+		}
+		
+		private function toolTipMouseOutHandler(event:MouseEvent):void
+		{
+			ToolTipManager.destroyToolTip(_toolTip);	
 		}
 		
 		/**
@@ -79,6 +105,14 @@ package com.zavoo.svg.nodes
 			}
 			super.setAttributes();
 			
+			try {
+				_textWidth = int(_xml.@textWidth);
+			}
+			catch (err:Error) {
+				_textWidth = 0;
+			}
+			
+			
 			if (this._textField != null) {
 				var fontFamily:String = this.getStyle('font-family');				
 				var fontSize:String = this.getStyle('font-size');
@@ -100,7 +134,11 @@ package com.zavoo.svg.nodes
 				this._textField.text = this._text;
 				this._textField.setTextFormat(textFormat);
 				
-				var bitmapData:BitmapData = new BitmapData(this._textField.width, this._textField.height, true, 0x000000);
+				if (_textWidth == 0) {
+					_textWidth = this._textField.width;
+				}
+				
+				var bitmapData:BitmapData = new BitmapData(_textWidth, this._textField.height, true, 0x000000);
 				
 				bitmapData.draw(this._textField);
 				

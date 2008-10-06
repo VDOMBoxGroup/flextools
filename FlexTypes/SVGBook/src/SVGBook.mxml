@@ -2,7 +2,7 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	layout="absolute" xmlns:controls="qs.controls.*" xmlns:local="*" xmlns:svg="com.zavoo.svg.*" 
-	creationComplete="{onCreationComplete();}" width="640" height="480">
+	creationComplete="{onCreationComplete();}" width="800" height="600">
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
@@ -19,24 +19,24 @@
 			private function onCreationComplete():void
 			{
 				var flashVars:Object = Application.application.parameters;
-				var pageRange:int = 0;
-				var startPage:int = 0;
+//				var pageRange:int = 0;
+//				var startPage:int = 0;
 
-//				var pageRange:int = 10;
-//				var startPage:int = 5;
-//				dataSourceUrl = "http://mich/31443708-af07-4980-8ed1-4029b7b4f3f0.vdom";
+				var pageRange:int = 10;
+				var startPage:int = 1;
+				dataSourceUrl = "http://ovsyannikov/b8bf1fd6-ee24-4012-a3f2-0f2b9693a3e0.vdom";
 				
-				try {
-					pageRange = flashVars.pagerange;
-					startPage = flashVars.startPage;
-					dataSourceUrl = flashVars.datasource;
-					this.width = flashVars.width;
-					this.height = flashVars.height;
-				}
-				catch (err:Error) {
-					Alert.show(err.message, "The following error occurred:");
-					return;
-				}
+//				try {
+//					pageRange = flashVars.pagerange;
+//					startPage = flashVars.startPage;
+//					dataSourceUrl = flashVars.datasource;
+//					this.width = flashVars.width;
+//					this.height = flashVars.height;
+//				}
+//				catch (err:Error) {
+//					Alert.show(err.message, "The following error occurred:");
+//					return;
+//				}
 				
 				if (this.width == 0 || this.height == 0) {
 					width = 640;

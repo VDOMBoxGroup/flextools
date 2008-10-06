@@ -22,7 +22,6 @@ package com.zavoo.svg.nodes
 										 'fill', 'fill-opacity', 'opacity', 
 										 'font-family', 'font-size', 'letter-spacing', 'filter'];
 		
-		
 		public namespace xlink = 'http://www.w3.org/1999/xlink';
 		public namespace svg = 'http://www.w3.org/2000/svg';
 		
