@@ -59,9 +59,13 @@
 			
 			private function addNewScript():void
 			{
+				var dataXML:XML  = new XML('<Action/>');
+				dataXML.@Name = 'New script' + Math.random();
+				serverScripts.addScript = dataXML;
+				/*
 				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
 					rbWnd.addEventListener(CloseEvent.CLOSE, creatingNewActionWindowtHandler);
-				
+				*/
 			}
 			
 			private function creatingNewActionWindowtHandler():void
