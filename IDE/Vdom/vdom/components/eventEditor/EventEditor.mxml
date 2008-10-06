@@ -7,6 +7,7 @@
 		
 	 <mx:Script>
 	 	<![CDATA[
+	 		import vdom.components.scriptEditor.containers.ServerScripts;
 	 		import mx.binding.utils.ChangeWatcher;
 	 		import mx.core.Application;
 	 		import mx.managers.CursorManagerPriority;
@@ -74,7 +75,8 @@
 	 		private var changeWatcher:ChangeWatcher ;
 	 		private function showHandler():void
 	 		{
-	 			actionsArray = [];
+	 			clientActionsArray = [];
+	 			serverActionsArray = [];
 				eventsArray = [];
 				linesArray = [];
 				
@@ -98,9 +100,12 @@
 	 			trContainer.hideHandler();
 	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 				can.removeAllChildren();
-				actionsArray = [];
+				
+				clientActionsArray = [];
+				serverActionsArray = [];
 				eventsArray = [];
 				linesArray = [];
+				
 				dataChanged = false;
 	 		}
 	 		
@@ -140,7 +145,8 @@
 	        }
             
             private var eventsArray	:Array = new Array();
-            private var actionsArray:Array = new Array();
+            private var clientActionsArray:Array = new Array();
+            private var serverActionsArray:Array = new Array();
                 
 	        private function dragDropHandler(event:DragEvent):void 
 	        {
@@ -164,9 +170,9 @@
 	        	  {
 	        		 newElement =  new EventEditorAction(item, curContainerTypeID);
 	        		 
-	        		 actionsArray[newElement.ID] = setListeners4Action(newElement);
+	        		 clientActionsArray[newElement.ID] = setListeners4Action(newElement);
 	        		 
-	        		 can.addChild(actionsArray[newElement.ID] ); 
+	        		 can.addChild(clientActionsArray[newElement.ID] ); 
 	        	  } 
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
@@ -187,7 +193,7 @@
 	 			dataChanged = true;		
 	        }   
 	        
-	        private function  setListeners4Action(el:EventEditorAction):EventEditorAction
+	        private function  setListeners4Action(el:Object):Object
 	        {
 	        	el.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
 	        	el.addEventListener(MouseEvent.MOUSE_OVER, actionMouseOverHandler);
@@ -246,11 +252,12 @@
 	        private function deletElementHandler(trEvt:TreeEditorEvent):void
 	        {
 	        	var ID:String = trEvt.ID;
-	        	if(actionsArray[ID])
+	        	
+	        	if(clientActionsArray[ID])
 	        	{
 //	        		deleteLines(ID);
-	        		can.removeChild(actionsArray[ID]);
-	        		delete actionsArray[ID];
+	        		can.removeChild(clientActionsArray[ID]);
+	        		delete clientActionsArray[ID];
 	        		
 	        	}else if(eventsArray[ID])
 	        	{
@@ -259,6 +266,15 @@
 	        		
 	        		if(can.contains(eventsArray[ID]))
 	        			can.removeChild(eventsArray[ID]);
+	        			
+	        		delete eventsArray[ID];
+	        	}else if(serverActionsArray[ID])
+	        	{
+//	        		deleteLines(ID);
+//	        		trEvents.enabledItem = eventsArray[ID];
+	        		
+	        		if(can.contains(serverActionsArray[ID]))
+	        			can.removeChild(serverActionsArray[ID]);
 	        			
 	        		delete eventsArray[ID];
 	        	}
@@ -335,11 +351,11 @@
 				var pnTo:Object = new Object();
 				// чтоб мышка не кликала по своей линии
 				
-				if((tX>0))	pnTo.x = pn.x - 3;
-					else pnTo.x = pn.x + 3;
+				if((tX>0))	pnTo.x = pn.x - 8;
+					else pnTo.x = pn.x + 8;
 				
-				if( (tY>0))	pnTo.y = pn.y - 3;
-					else pnTo.y = pn.y + 3;
+				if( (tY>0))	pnTo.y = pn.y - 8;
+					else pnTo.y = pn.y + 8;
 					
 				return pnTo;
 			}
@@ -362,12 +378,12 @@
 			
 			private function createLine(evtID:String, actID:String):void
 			{
-				if(!actionsArray[actID]) return;
+				if(!clientActionsArray[actID] && !serverActionsArray[actID]) return;
 				
 				if(!linesArray[evtID]) linesArray[evtID] = new Array();
-				
+			
 				linesArray[evtID][actID] = 
-					new TreeVector(eventsArray[evtID], actionsArray[actID], '0');
+					new TreeVector(eventsArray[evtID], clientActionsArray[actID] || serverActionsArray[actID], '0');
 					
 				linesArray[evtID][actID].addEventListener(MouseEvent.CLICK, markLines);	
 				
@@ -442,16 +458,22 @@
 					dY = eventsArray[curID].y;
 				}
 				
-				if(actionsArray[curID])
+				if(clientActionsArray[curID])
 				{ 
-					dX = actionsArray[curID].x;
-					dY = actionsArray[curID].y;
+					dX = clientActionsArray[curID].x;
+					dY = clientActionsArray[curID].y;
+				}
+				
+				if(serverActionsArray[curID])
+				{ 
+					dX = serverActionsArray[curID].x;
+					dY = serverActionsArray[curID].y;
 				}
 				
 				dX = can.mouseX -dX;
 				dY = can.mouseY -dY;
 				
-//				trace('dX: ' + dX);
+				trace('dX: ' + dX+ ' DY: ' + dY);
 				Application.application.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 				Application.application.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			}
@@ -490,24 +512,43 @@
 						eventsArray[curID].y = can.mouseY - dY;	
 					}
 				} 
-				else if(actionsArray[curID]) 
+				else if(clientActionsArray[curID]) 
 				{
 					if (can.mouseX < dX)
 					{
-						 actionsArray[curID].x = 0;
-//						 actionsArray[curID].stopDrag();
+						 clientActionsArray[curID].x = 0;
+//						 clientActionsArray[curID].stopDrag();
 					}else
 					{
-						actionsArray[curID].x = can.mouseX - dX;
+						clientActionsArray[curID].x = can.mouseX - dX;
 					}
 					
 					if ((can.mouseY - dY) < 10)
 					{
-						 actionsArray[curID].y = 10;
-//						 actionsArray[curID].stopDrag();
+						 clientActionsArray[curID].y = 10;
+//						 clientActionsArray[curID].stopDrag();
 					}else
 					{
-						 actionsArray[curID].y = can.mouseY - dY;
+						 clientActionsArray[curID].y = can.mouseY - dY;
+					}
+				}else if(serverActionsArray[curID]) 
+				{
+					if (can.mouseX < dX)
+					{
+						 serverActionsArray[curID].x = 0;
+//						 clientActionsArray[curID].stopDrag();
+					}else
+					{
+						serverActionsArray[curID].x = can.mouseX - dX;
+					}
+					
+					if ((can.mouseY - dY) < 10)
+					{
+						 serverActionsArray[curID].y = 10;
+//						 clientActionsArray[curID].stopDrag();
+					}else
+					{
+						 serverActionsArray[curID].y = can.mouseY - dY;
 					}
 				}
 				
@@ -548,23 +589,43 @@
 				dataToServer = <E2vdom><Events/><ClientActions/> <ServerActions/></E2vdom>;
 				
 				var temXML:XML;
-				 
-				for (var actID:String in actionsArray)
+				
+				 // clientActions
+				for (var actID:String in clientActionsArray)
 				{	
 					temXML = <Action/>;
 					
-					temXML.@ID 		 	= actionsArray[actID].ID;
-					temXML.@ObjTgtID 	= actionsArray[actID].ObjTgtID;
-					temXML.@MethodName 	= actionsArray[actID].MethodName;
-					temXML.@Top 		= actionsArray[actID].y;
-					temXML.@Left 		= actionsArray[actID].x;
-					temXML.@State		= actionsArray[actID].State;
+					temXML.@ID 		 	= clientActionsArray[actID].ID;
+					temXML.@ObjTgtID 	= clientActionsArray[actID].ObjTgtID;
+					temXML.@MethodName 	= clientActionsArray[actID].MethodName;
+					temXML.@Top 		= clientActionsArray[actID].y;
+					temXML.@Left 		= clientActionsArray[actID].x;
+					temXML.@State		= clientActionsArray[actID].State;
 					
-					temXML.appendChild(actionsArray[actID].parametrs);
+					temXML.appendChild(clientActionsArray[actID].parametrs);
 					
 					dataToServer.ClientActions.appendChild(temXML);
 				}
 				
+				
+				for ( actID in serverActionsArray)
+				{	
+					temXML = <Action/>;
+					
+					temXML.@ID 		 	= serverActionsArray[actID].ID;
+					temXML.@Name		= serverActionsArray[actID].Name;
+					temXML.@Top 		= serverActionsArray[actID].y;
+					temXML.@Left 		= serverActionsArray[actID].x;
+					temXML.@State		= serverActionsArray[actID].State;
+					
+					temXML.@Language	= "pyton";
+					
+					temXML.appendChild(serverActionsArray[actID].parametrs);
+					
+					dataToServer.ServerActions.appendChild(temXML);
+				}
+				
+				//  Events
 				for (var evtID:String in eventsArray)
 				{
 					temXML = <Event/>;
@@ -579,6 +640,7 @@
 					dataToServer.Events.appendChild(temXML);
 				}
 				
+				// Lines
 				for(evtID in linesArray)
 				{ 
 					var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
@@ -587,7 +649,10 @@
 					for(actID in linesArray[evtID])
 					{
 						temXML = <Action/>;
-						temXML.@ID = actionsArray[actID].ID;
+						if(clientActionsArray[actID])
+							temXML.@ID = clientActionsArray[actID].ID
+						 else
+							 temXML.@ID =  serverActionsArray[actID].ID; 
 
 						dataToServer.Events.Event.(@ObjSrcID == ObjSrcID && @Name == Name).appendChild(temXML);
 					}
@@ -610,7 +675,9 @@
 				//trace(xmlToTree.toXMLString());
 //				can.removeAllChildren();
 				trace('----From Serve----'+xmlToTree);
-				actionsArray = [];		
+				
+				// Client Action
+				clientActionsArray = [];		
 				for each(var actID:XML in xmlToTree.E2vdom.ClientActions.children())
 				{
 					///curContainerTypeID 
@@ -622,12 +689,32 @@
 					{
 						var objAct:EventEditorAction = new EventEditorAction(actID, curContainerTypeID);
 						
-						 actionsArray[objAct.ID] = setListeners4Action(objAct);
+						 clientActionsArray[objAct.ID] = setListeners4Action(objAct);
 						
-						can.addChild(actionsArray [actID.@ID]);
+						can.addChild(clientActionsArray [actID.@ID]);
 					}
 				}
 				
+				// Server Action 
+				serverActionsArray = [];
+				for each( actID in xmlToTree.E2vdom.ServerActions.children())
+				{
+					var servActin:ServerAction = new ServerAction(actID);
+					serverActionsArray[actID.@ID] = setListeners4Action(servActin);
+					can.addChild(serverActionsArray [actID.@ID]);
+				/*	tempXML = <Action/>;
+					tempXML.@label = actID.@Name;
+					tempXML.@Name = actID.@Name;
+					tempXML.@Language = actID.@Language;
+					tempXML.@ID = actID.@ID;
+					
+					dataXML.appendChild(tempXML);
+					*/
+				}
+				
+				
+				
+				//  Events
 				eventsArray = [];		
 				for each(var evt:XML in xmlToTree.E2vdom.Events.children())
 				{
@@ -646,6 +733,7 @@
 					}
 				}
 				
+				// connection (Lines)
 				linesArray = [];
 				for (var evtID:String in eventsArray )//xmlToTree.E2vdom.Events.children()
 				{
@@ -655,7 +743,9 @@
 					evt = xmlToTree.E2vdom.Events.Event.(@ObjSrcID == ObjSrcID && @Name ==Name)[0];
 					for each(actID in evt.children())
 					{
-						createLine(evtID, actID.@ID);
+						var ID:String = actID.@ID;
+						if(serverActionsArray[ID] || clientActionsArray[ID])
+							createLine(evtID, ID);
 					}
 				}
 				
