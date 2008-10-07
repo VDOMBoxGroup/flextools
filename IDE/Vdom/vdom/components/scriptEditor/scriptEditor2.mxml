@@ -3,6 +3,8 @@
 		hide="hideHandler()">
 <mx:Script>
 	<![CDATA[
+		import vdom.events.ScriptEditorEvent;
+		import vdom.events.ServerScriptsEvent;
 		import mx.events.CloseEvent;
 		import mx.managers.PopUpManager;
 		import vdom.components.treeEditor.AddTreeElementWindow;
@@ -59,23 +61,21 @@
 			
 			private function addNewScript():void
 			{
+				
+				
+				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
+					rbWnd.addEventListener(ScriptEditorEvent.SET_NAME, creatingNewActionWindowtHandler);
+				
+			}
+			
+			private function creatingNewActionWindowtHandler(ssEvt:ScriptEditorEvent):void
+			{
 				var dataXML:XML  = new XML('<Action/>');
-				dataXML.@Name = 'New script' + Math.random();
+				dataXML.@Name = ssEvt.scriptName;
 				dataXML.@Top="5"; 
 				dataXML.@Left="5";
 				dataXML.@State="true";
 				
-				serverScripts.addScript = dataXML;
-				/*
-				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
-					rbWnd.addEventListener(CloseEvent.CLOSE, creatingNewActionWindowtHandler);
-				*/
-			}
-			
-			private function creatingNewActionWindowtHandler():void
-			{
-				var dataXML:XML  = new XML('<Action/>');
-				dataXML.@Name = 'New script' + Math.random();
 				serverScripts.addScript = dataXML;
 			}
 			

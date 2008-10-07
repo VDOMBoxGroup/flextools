@@ -7,13 +7,14 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" width="500" height="350"
 	title="{resourceManager.getString('Tree','new_page')}"
-	creationComplete="creationComplete()"
+	creationComplete="{creationComplete()}"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 >
 	<mx:Script>
 		<![CDATA[
+			import vdom.events.ScriptEditorEvent;
 			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.core.Application;
 			import vdom.controls.externalEditorButton.SpinnerScreen;
@@ -64,21 +65,7 @@
 		 * 
 		 * 
 		 * */
-	/*	private function resourceBrowserLauncher():void 
-		{
-			var rbWnd:ResourceBrowser = ResourceBrowser(PopUpManager.createPopUp(this, ResourceBrowser, true));
-			rbWnd.selectedItemID = resourceID;
-			rbWnd.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, resourseSelectedHandler);
-		}
-		
-		
-		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
-		{
-				resourceID = rbEvt.resourceID;
-				fileManager.loadResource(dataManager.currentApplicationId,  resourceID, this);
-		}	
-		
-		*/
+	
 		
 		
 		/***
@@ -98,8 +85,14 @@
 		{
 			PopUpManager.removePopUp(this);
 		}
-
-
+		
+		private function okPressed():void 
+		{
+			dispatchEvent(new ScriptEditorEvent(ScriptEditorEvent.SET_NAME,  textInput.text));
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+		}
+		
+		
 		
 		
 		]]>
@@ -114,12 +107,12 @@
     	
     		
     	<mx:HBox y="278" horizontalAlign="right" right="20">
-    		
+    		<mx:Button label="Ok" click="okPressed()"/>
     		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
     	</mx:HBox>
-    	<mx:TextInput x="25" y="81" width="233" height="73"/>
+    	<mx:TextInput id="textInput" x="25" y="81" width="233" height="73"/>
     	<mx:Text x="25" y="37" width="296" >
-    		<mx:text>asddddddddddddddddddd as d asd adsafjsdg hgjhlkj lkjsf sdlakjfhsdlfkjsd flksjdfh lsdjkhf lksdj</mx:text>
+    		<mx:text>Write Script name</mx:text>
     	</mx:Text>
 	</mx:Canvas>
 </mx:TitleWindow>
