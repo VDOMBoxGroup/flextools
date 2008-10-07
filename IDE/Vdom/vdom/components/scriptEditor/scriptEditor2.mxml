@@ -61,6 +61,10 @@
 			{
 				var dataXML:XML  = new XML('<Action/>');
 				dataXML.@Name = 'New script' + Math.random();
+				dataXML.@Top="5"; 
+				dataXML.@Left="5";
+				dataXML.@State="true";
+				
 				serverScripts.addScript = dataXML;
 				/*
 				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
@@ -146,7 +150,7 @@
 	          </mx:Canvas>
 	          
 		</mx:VDividedBox>
-		
+			
         <mx:VBox id="vBox" width="100%" height="100%" >
             <mx:TextArea id="textArea" width="100%" height="100%" 
             		 text="same Text of code" 

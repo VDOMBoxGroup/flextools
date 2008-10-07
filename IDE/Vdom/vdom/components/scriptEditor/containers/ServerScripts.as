@@ -134,6 +134,9 @@ package vdom.components.scriptEditor.containers
 					xml.@ID = tempXML.@ID;
 					xml.@Name = tempXML.@Name;
 					xml.@Language = tempXML.@Language;
+					xml.@Top = tempXML.@Top;
+					xml.@Left = tempXML.@Left;
+					xml.@State = tempXML.@State;
 					xml.appendChild(XML('<![CDATA[' +str + ']'+']>'));
 				
 				delete xmlToServer.ServerActions.Action.(@ID == ID)[0]

@@ -276,7 +276,7 @@
 	        		if(can.contains(serverActionsArray[ID]))
 	        			can.removeChild(serverActionsArray[ID]);
 	        			
-	        		delete eventsArray[ID];
+	        		delete serverActionsArray[ID];
 	        	}
 	        	deleteLines(ID);
 	        	
@@ -292,7 +292,7 @@
     					{
     						can.removeChild(linesArray[evtID][actID])
     						delete linesArray[evtID][actID];
-    						delete linesArray[evtID];
+//    						delete linesArray[evtID];
     					}    		
 	        		}
 	        }
@@ -643,18 +643,20 @@
 				// Lines
 				for(evtID in linesArray)
 				{ 
-					var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
-					var Name:String = eventsArray[evtID].Name;
-					y
-					for(actID in linesArray[evtID])
-					{
-						temXML = <Action/>;
-						if(clientActionsArray[actID])
-							temXML.@ID = clientActionsArray[actID].ID
-						 else
-							 temXML.@ID =  serverActionsArray[actID].ID; 
-
-						dataToServer.Events.Event.(@ObjSrcID == ObjSrcID && @Name == Name).appendChild(temXML);
+					if(eventsArray[evtID])
+					{		var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
+						var Name:String = eventsArray[evtID].Name;
+						
+						for(actID in linesArray[evtID])
+						{
+							temXML = <Action/>;
+							if(clientActionsArray[actID])
+								temXML.@ID = clientActionsArray[actID].ID
+							 else
+								 temXML.@ID =  serverActionsArray[actID].ID; 
+	
+							dataToServer.Events.Event.(@ObjSrcID == ObjSrcID && @Name == Name).appendChild(temXML);
+						}
 					}
 				}
 				
