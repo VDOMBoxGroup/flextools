@@ -92,9 +92,6 @@
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 		}
 		
-		
-		
-		
 		]]>
 		
 	
