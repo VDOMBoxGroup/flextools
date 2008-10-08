@@ -551,6 +551,16 @@ public class Node extends Canvas
             
             switch(category)
             {
+            	/*
+            	case NodeCategory.RESOURCE:
+            		nodeTextArea.setStyle( "borderColor",  0x000000);
+            		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
+            		nodeTextArea.setStyle( "color",  0x000000);
+            		if(contextMenu)
+	            		contextMenu.getItemByName("subgraph").checked = true;
+            		break;
+            	*/	            	
+
             	case NodeCategory.SUBGRAPH:
             		nodeTextArea.setStyle( "borderColor",  0x000000);
             		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
@@ -886,7 +896,7 @@ public class Node extends Canvas
        	move(	pPos.x, 
         		pPos.y );
         		
-        invalidateDisplayList();		
+        invalidateDisplayList();
     }
 
     private function systemManager_mouseUpHandler(event:MouseEvent):void
