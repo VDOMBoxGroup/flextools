@@ -5,8 +5,8 @@
 -->
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="500" height="350"
-	title="{resourceManager.getString('Tree','new_page')}"
+	layout="absolute"  
+	title="NeW ScRiPt"
 	creationComplete="{creationComplete()}"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
@@ -28,11 +28,6 @@
 			import mx.events.CloseEvent;
 			import flash.utils.ByteArray;
 			
-			
-			
-	
-   		
-			
 			private function creationComplete():void 
 			{
 				addEventListener(CloseEvent.CLOSE, closeHandler); 
@@ -40,32 +35,7 @@
 			}
 		
 		
-		public function getLanguagePhrase(name:String, phrase:String):String
-		{
-			var phraseRE:RegExp = /#Lang\((\w+)\)/;
-			var phraseID:String = phrase.match(phraseRE)[1]; //001
-			
-			return resourceManager.getString(name, phraseID);
-		}
-		
-	/*			
-				private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
-		{
-			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-			
-			/* Remove spinner in case that all is done 
-			PopUpManager.removePopUp(spinner);
-		}
-		*/
-		
-		
-		/****
-		 * 
-		 * 			resource Browser Launcher
-		 * 
-		 * 
-		 * */
-	
+
 		
 		
 		/***
@@ -99,17 +69,20 @@
 	</mx:Script>
 	
 	
-	<mx:Canvas 	width="100%" height="100%"
+    	<mx:VBox x="8" y="8">
+	<mx:Canvas 	
 		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" fontWeight="bold">
-    	
-    		
-    	<mx:HBox y="278" horizontalAlign="right" right="20">
-    		<mx:Button label="Ok" click="okPressed()"/>
-    		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
-    	</mx:HBox>
-    	<mx:TextInput id="textInput" x="25" y="81" width="233" height="73"/>
-    	<mx:Text x="25" y="37" width="296" >
-    		<mx:text>Write Script name</mx:text>
-    	</mx:Text>
-	</mx:Canvas>
+	    	<mx:Text   width="296" >
+	    		<mx:text>Write Script name</mx:text>
+	    	</mx:Text> 
+	    	<mx:TextInput id="textInput"  width="233" height="23"/>
+	    	
+	    		
+		</mx:Canvas>
+	    	<mx:HBox   horizontalAlign="right" >
+	    		<mx:Button label="Ok" click="okPressed()"/>
+	    		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
+	    	</mx:HBox>
+    	</mx:VBox>
+	    	
 </mx:TitleWindow>
