@@ -19,24 +19,20 @@
 			private function onCreationComplete():void
 			{
 				var flashVars:Object = Application.application.parameters;
-//				var pageRange:int = 0;
-//				var startPage:int = 0;
+				var pageRange:int = 0;
+				var startPage:int = 0;
 
-				var pageRange:int = 10;
-				var startPage:int = 1;
-				dataSourceUrl = "http://ovsyannikov/b8bf1fd6-ee24-4012-a3f2-0f2b9693a3e0.vdom";
-				
-//				try {
-//					pageRange = flashVars.pagerange;
-//					startPage = flashVars.startPage;
-//					dataSourceUrl = flashVars.datasource;
-//					this.width = flashVars.width;
-//					this.height = flashVars.height;
-//				}
-//				catch (err:Error) {
-//					Alert.show(err.message, "The following error occurred:");
-//					return;
-//				}
+				try {
+					pageRange = flashVars.pagerange;
+					startPage = flashVars.startpage;
+					dataSourceUrl = flashVars.datasource;
+					this.width = flashVars.width;
+					this.height = flashVars.height;
+				}
+				catch (err:Error) {
+					Alert.show(err.message, "The following error occurred:");
+					return;
+				}
 				
 				if (this.width == 0 || this.height == 0) {
 					width = 640;
