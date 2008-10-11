@@ -210,7 +210,7 @@
 	        private function setListeners4Event(el:EventEditorEvents):EventEditorEvents
 	        {
 	        	el.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
-	        	el.addEventListener(MouseEvent.MOUSE_OVER, eventMouseOverHandler);
+//	        	el.addEventListener(MouseEvent.MOUSE_OVER, eventMouseOverHandler);
 	        	
 	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
 	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
@@ -221,46 +221,20 @@
 	        	return el;
 	        }
 	        
-//	        private var cursorID:Number = 0;
-//***************
-	private function treeElementMouseOutHandler(msEvt:MouseEvent):void
-	{
-		msEvt.currentTarget.availabled = true;
-		
-	}
-	
-	private function treeElementMouseOverHandler(msEvt:MouseEvent):void
-	{
-		if(blDrawLine)
-		{
-			msEvt.currentTarget.availabled = false;
-		}
-	}
-	
-	//**************
-private var eventUnderMouse:Object;
+			private var eventUnderMouse:Object;
 	       	private function actionMouseOverHandler(mEvt:MouseEvent):void
 	        {
 				eventUnderMouse = mEvt.currentTarget;
-		
-//	        	if( blDrawLine)
-//	        		if(possibleDrawLine(mEvt.currentTarget.ID))
-//	        			line.createVector(curEvent, mEvt.currentTarget);
-//	        			cursorID = CursorManager.setCursor(plus);
-//	        		else
-//	        			cursorID = CursorManager.setCursor(delet);
 	        } 
-	        
+	/*        
 	        private function eventMouseOverHandler(mEvt:MouseEvent):void
 	        {
 //	        	if(blDrawLine)
 //	        		cursorID = CursorManager.setCursor(delet);
 	        } 
-	        
+	  */      
 	        private function mouseOutHandler(mEvt:MouseEvent):void
 	        {
-//	        	CursorManager.removeCursor(cursorID);
-//	        	cursorID = 0;
 				eventUnderMouse = null;
 	        }
  	        
@@ -275,13 +249,11 @@ private var eventUnderMouse:Object;
 	        	
 	        	if(clientActionsArray[ID])
 	        	{
-//	        		deleteLines(ID);
 	        		can.removeChild(clientActionsArray[ID]);
 	        		delete clientActionsArray[ID];
 	        		
 	        	}else if(eventsArray[ID])
 	        	{
-//	        		deleteLines(ID);
 	        		trEvents.enabledItem = eventsArray[ID];
 	        		
 	        		if(can.contains(eventsArray[ID]))
@@ -352,16 +324,28 @@ private var eventUnderMouse:Object;
 			
 			private function drLine (mEvt:MouseEvent):void
 			{
+				// нормализуем mouseX mouseY
+				 var pt:Point = new Point(mEvt.localX, mEvt.localY);
+	            		pt = mEvt.target.localToGlobal(pt);
+	            		pt = can.globalToLocal(pt);
+				//---------------
+				if(pt.x > can.width - 100 &&  (can.horizontalScrollPosition + can.width - can.measuredWidth) < 9)
+			can.horizontalScrollPosition = can.horizontalScrollPosition + 10;	
+		else if(pt.x < can.x + 100 && can.horizontalScrollPosition > 9)
+			can.horizontalScrollPosition = can.horizontalScrollPosition - 10;	
+		else if(pt.y > can.height - 100 && (can.verticalScrollPosition + can.height - can.measuredHeight) < 9)
+			can.verticalScrollPosition = can.verticalScrollPosition + 10;	
+		else if(pt.y < can.y + 100 &&  can.verticalScrollPosition > 9)
+			can.verticalScrollPosition = can.verticalScrollPosition - 10;	
 				
 				if(eventUnderMouse)
 				{
 					line.createVector(curEvent, eventUnderMouse);	
 				}else
 				{
-					// нормализуем mouseX mouseY
-					 var pt:Point = new Point(mEvt.localX, mEvt.localY);
-	            		pt = mEvt.target.localToGlobal(pt);
-	            		pt = can.globalToLocal(pt);
+					
+					pt.x +=  can.horizontalScrollPosition;
+					pt.y +=  can.verticalScrollPosition;
 					
 					var pnTo:Object = calculatePointTo(pt, curEvent);
 					line.graphics.clear();
@@ -377,11 +361,11 @@ private var eventUnderMouse:Object;
 				var pnTo:Object = new Object();
 				// чтоб мышка не кликала по своей линии
 				
-				if((tX>0))	pnTo.x = pn.x - 8;
-					else pnTo.x = pn.x + 8;
+				if((tX>0))	pnTo.x = pn.x - 4;
+					else pnTo.x = pn.x + 4;
 				
-				if( (tY>0))	pnTo.y = pn.y - 8;
-					else pnTo.y = pn.y + 8;
+				if( (tY>0))	pnTo.y = pn.y - 4;
+					else pnTo.y = pn.y + 4;
 					
 				return pnTo;
 			}
