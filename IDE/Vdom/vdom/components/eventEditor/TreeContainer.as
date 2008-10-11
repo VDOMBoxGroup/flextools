@@ -4,6 +4,7 @@ package vdom.components.eventEditor
 	
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
+	import mx.events.TreeEvent;
 	
 	import vdom.events.DataManagerEvent;
 	import vdom.events.EventEditorEvent;
@@ -34,6 +35,8 @@ package vdom.components.eventEditor
 			addEventListener(FlexEvent.HIDE, hideHandler);	
 			addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 			addEventListener(Event.CHANGE, treeChangeLister);
+//			addEventListener(ListEvent.CHANGE, treeCloseHandler);
+			addEventListener(TreeEvent.ITEM_CLOSE, treeCloseHandler);
 		}
 		
 		public function showHandler():void
@@ -46,11 +49,24 @@ package vdom.components.eventEditor
 		}
 		
 		
-		public function hideHandler():void
+		public function hideHandler():void	
 		{
 			if(selectedNode)
 				dataManager.changeCurrentPage(selectedNode.@ID);
 		}
+		
+		private function treeCloseHandler(trEvt:TreeEvent):void
+		{
+//			validateNow();
+			trace("Close");	
+//			trace(selectedItem.toXMLString());
+			selectedIndex = 0;
+			validateNow();
+			selectedNode = selectedItem as XML;  
+//			  trace('selectedNode ID: '+selectedNode.@ID)
+			 containerChange(selectedNode.@ID);
+		}
+		
 		
 		private function changeCurrentPageListener(dmEvt:DataManagerEvent):void
 		{

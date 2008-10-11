@@ -6,14 +6,18 @@
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute"  
-	title="NeW ScRiPt"
+	title="ImpuT NeW ScRiPts nAme"
 	creationComplete="{creationComplete()}"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
+	width="250"
+	
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.events.ValidationResultEvent;
+			import mx.validators.RegExpValidator;
 			import vdom.events.ScriptEditorEvent;
 			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.core.Application;
@@ -32,19 +36,46 @@
 			{
 				addEventListener(CloseEvent.CLOSE, closeHandler); 
 				PopUpManager.centerPopUp(this)
+				
+				var regExpValidator:RegExpValidator = new RegExpValidator();
+				regExpValidator.source = inputText;
+				regExpValidator.property = 'text';
+			//	regExpValidator.flags = "g";
+			//	regExpValidator.
+				regExpValidator.expression =  "^[a-zA-Z_]{1}[_1-9a-zA-Z]*$";
+				regExpValidator.trigger = inputText;
+				regExpValidator.addEventListener(ValidationResultEvent.VALID, validHandler);
+				regExpValidator.addEventListener(ValidationResultEvent.INVALID, validHandler);
+				
+				regExpValidator.noMatchError = "PleAse Input Correct NamE";
+				regExpValidator.triggerEvent = Event.CHANGE;
 			}
 		
-		
-
-		
-		
 		/***
-		 * 
+		 * 	
 		 * 
 		 *    close
 		 * 
 		 * 
 		 * */
+		private var _data:String = '';
+		private var validData:Boolean = false;
+		private function validHandler(vdEvt:ValidationResultEvent):void
+		{
+			if (vdEvt.type == ValidationResultEvent.VALID)
+	        { 
+		        _data = inputText.text;
+		        validData = true;
+		        
+	        } else if  (vdEvt.type == ValidationResultEvent.INVALID)
+	        {
+	        	validData = false;
+	        }
+	          
+		}
+		
+		
+		 
 		private function cancelPressed():void 
 		{
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
@@ -58,31 +89,26 @@
 		
 		private function okPressed():void 
 		{
-			dispatchEvent(new ScriptEditorEvent(ScriptEditorEvent.SET_NAME,  textInput.text));
+			if(inputText.text != '' && validData )
+				dispatchEvent(new ScriptEditorEvent(ScriptEditorEvent.SET_NAME,  _data));
+			
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 		}
 		
 		]]>
-		
-	
-		
 	</mx:Script>
 	
-	
-    	<mx:VBox x="8" y="8">
-	<mx:Canvas 	
-		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" fontWeight="bold">
-	    	<mx:Text   width="296" >
-	    		<mx:text>Write Script name</mx:text>
-	    	</mx:Text> 
-	    	<mx:TextInput id="textInput"  width="233" height="23"/>
+	<mx:ControlBar paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" fontWeight="bold" width="100%">
+    	<mx:VBox x="8" y="8" width="100%" >
+	    	<mx:TextInput id="inputText"  width="100%" />
 	    	
-	    		
-		</mx:Canvas>
-	    	<mx:HBox   horizontalAlign="right" >
+		<mx:Canvas width="100%">
+	    	<mx:HBox right="0"  horizontalAlign="right" >
 	    		<mx:Button label="Ok" click="okPressed()"/>
 	    		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
 	    	</mx:HBox>
+		</mx:Canvas>	    		
     	</mx:VBox>
+	</mx:ControlBar>
 	    	
 </mx:TitleWindow>
