@@ -221,27 +221,47 @@
 	        	return el;
 	        }
 	        
-	        private var cursorID:Number = 0;
-
+//	        private var cursorID:Number = 0;
+//***************
+	private function treeElementMouseOutHandler(msEvt:MouseEvent):void
+	{
+		msEvt.currentTarget.availabled = true;
+		
+	}
+	
+	private function treeElementMouseOverHandler(msEvt:MouseEvent):void
+	{
+		if(blDrawLine)
+		{
+			msEvt.currentTarget.availabled = false;
+		}
+	}
+	
+	//**************
+private var eventUnderMouse:Object;
 	       	private function actionMouseOverHandler(mEvt:MouseEvent):void
 	        {
-	        	if( blDrawLine)
-	        		if(possibleDrawLine(mEvt.currentTarget.ID))
-	        			cursorID = CursorManager.setCursor(plus);
-	        		else
-	        			cursorID = CursorManager.setCursor(delet);
+				eventUnderMouse = mEvt.currentTarget;
+		
+//	        	if( blDrawLine)
+//	        		if(possibleDrawLine(mEvt.currentTarget.ID))
+//	        			line.createVector(curEvent, mEvt.currentTarget);
+//	        			cursorID = CursorManager.setCursor(plus);
+//	        		else
+//	        			cursorID = CursorManager.setCursor(delet);
 	        } 
 	        
 	        private function eventMouseOverHandler(mEvt:MouseEvent):void
 	        {
-	        	if(blDrawLine)
-	        		cursorID = CursorManager.setCursor(delet);
+//	        	if(blDrawLine)
+//	        		cursorID = CursorManager.setCursor(delet);
 	        } 
 	        
 	        private function mouseOutHandler(mEvt:MouseEvent):void
 	        {
-	        		CursorManager.removeCursor(cursorID);
-	        	cursorID = 0;
+//	        	CursorManager.removeCursor(cursorID);
+//	        	cursorID = 0;
+				eventUnderMouse = null;
 	        }
  	        
 	        private function objectClickHandler(mEvt:MouseEvent):void
@@ -332,15 +352,21 @@
 			
 			private function drLine (mEvt:MouseEvent):void
 			{
-			// нормализуем mouseX mouseY
-				 var pt:Point = new Point(mEvt.localX, mEvt.localY);
-            		pt = mEvt.target.localToGlobal(pt);
-            		pt = can.globalToLocal(pt);
 				
-				var pnTo:Object = calculatePointTo(pt, curEvent);
-				
-				line.graphics.clear();
-				line.createVector(curEvent, pnTo);	
+				if(eventUnderMouse)
+				{
+					line.createVector(curEvent, eventUnderMouse);	
+				}else
+				{
+					// нормализуем mouseX mouseY
+					 var pt:Point = new Point(mEvt.localX, mEvt.localY);
+	            		pt = mEvt.target.localToGlobal(pt);
+	            		pt = can.globalToLocal(pt);
+					
+					var pnTo:Object = calculatePointTo(pt, curEvent);
+					line.graphics.clear();
+					line.createVector(curEvent, pnTo);	
+				}
 			}
 			
 			private function calculatePointTo(pn:Point, curTree:Object):Object
