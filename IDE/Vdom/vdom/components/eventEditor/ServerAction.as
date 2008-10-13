@@ -99,6 +99,10 @@ package vdom.components.eventEditor
 				_ID  = data.@ID;
 				changeState(data.@State =="true");
 //				setValue(data);
+			}else
+			{
+				this.y = 10;
+				this.x = 10;
 			}
 		}
 		
