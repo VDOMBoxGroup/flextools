@@ -353,31 +353,70 @@
 	            		pt = mEvt.target.localToGlobal(pt);
 	            		pt = can.globalToLocal(pt);
 				//---------------
-				if(pt.x > can.width - 100 &&  (can.horizontalScrollPosition + can.width - can.measuredWidth) < 9)
-			can.horizontalScrollPosition = can.horizontalScrollPosition + 10;	
-		else if(pt.x < can.x + 100 && can.horizontalScrollPosition > 9)
-			can.horizontalScrollPosition = can.horizontalScrollPosition - 10;	
-		else if(pt.y > can.height - 100 && (can.verticalScrollPosition + can.height - can.measuredHeight) < 9)
-			can.verticalScrollPosition = can.verticalScrollPosition + 10;	
-		else if(pt.y < can.y + 100 &&  can.verticalScrollPosition > 9)
-			can.verticalScrollPosition = can.verticalScrollPosition - 10;	
+				if(pt.x > can.width - 100   )
+				{
+					if((can.horizontalScrollPosition + can.width - can.measuredWidth) < 19)
+					{
+						can.horizontalScrollPosition = can.horizontalScrollPosition + 20;
+					}
+					else
+					{ 
+						can.horizontalScrollPosition = can.measuredWidth;
+					}
+				}
+				else if(pt.x < can.x + 100  )
+				{
+					if(can.horizontalScrollPosition > 19)
+					{
+						can.horizontalScrollPosition = can.horizontalScrollPosition - 20;
+					}
+					else
+					{
+						can.horizontalScrollPosition  = 0;
+					}
+				}
+				else if(pt.y > can.height - 100)
+				{
+					if((can.verticalScrollPosition + can.height - can.measuredHeight) < 19)
+					{
+						can.verticalScrollPosition = can.verticalScrollPosition + 20;
+					}
+					else
+					{
+						can.verticalScrollPosition = can.measuredHeight;
+					}
+				}	
+				else if(pt.y < can.y + 100)
+				{
+					if(can.verticalScrollPosition > 19)
+					{
+						can.verticalScrollPosition = can.verticalScrollPosition - 20;
+					}
+					else
+					{
+						can.verticalScrollPosition = 0;
+					}
+				}	
+				
+				
 				
 				if(eventUnderMouse)
 				{
 					line.createVector(curEvent, eventUnderMouse);	
 				}else
 				{
+					can.validateNow();
 					
 					pt.x +=  can.horizontalScrollPosition;
 					pt.y +=  can.verticalScrollPosition;
 					
 					var pnTo:Object = calculatePointTo(pt, curEvent);
-					line.graphics.clear();
-					line.createVector(curEvent, pnTo);	
+
+						line.createVector(curEvent, pnTo);	
 				}
 			}
 			
-			private function calculatePointTo(pn:Point, curTree:Object):Object
+			private function calculatePointTo(pn:Point, curEvent:Object):Object
 			{
 				var tX:int = pn.x - vBox.x - curEvent.x;
 				var tY:int = pn.y  - curEvent.y;
