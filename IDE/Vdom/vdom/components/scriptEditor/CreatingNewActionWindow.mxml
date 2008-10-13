@@ -12,6 +12,7 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 	width="250"
+	show="showHandler()"
 	
 >
 	<mx:Script>
@@ -40,8 +41,6 @@
 				var regExpValidator:RegExpValidator = new RegExpValidator();
 				regExpValidator.source = inputText;
 				regExpValidator.property = 'text';
-			//	regExpValidator.flags = "g";
-			//	regExpValidator.
 				regExpValidator.expression =  "^[a-zA-Z_]{1}[_1-9a-zA-Z]*$";
 				regExpValidator.trigger = inputText;
 				regExpValidator.addEventListener(ValidationResultEvent.VALID, validHandler);
@@ -49,15 +48,15 @@
 				
 				regExpValidator.noMatchError = "PleAse Input Correct NamE";
 				regExpValidator.triggerEvent = Event.CHANGE;
+				
+				
 			}
 		
-		/***
-		 * 	
-		 * 
-		 *    close
-		 * 
-		 * 
-		 * */
+		private function showHandler():void
+		{
+			inputText.setFocus();
+		}
+		
 		private var _data:String = '';
 		private var validData:Boolean = false;
 		private function validHandler(vdEvt:ValidationResultEvent):void
@@ -73,8 +72,6 @@
 	        }
 	          
 		}
-		
-		
 		 
 		private function cancelPressed():void 
 		{
@@ -95,12 +92,17 @@
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 		}
 		
+		private function myKeyDown(eventObj:KeyboardEvent):void 
+		{   
+            if(eventObj.keyCode == 13)  
+            	 okPressed();
+        }
 		]]>
 	</mx:Script>
 	
 	<mx:ControlBar paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" fontWeight="bold" width="100%">
     	<mx:VBox x="8" y="8" width="100%" >
-	    	<mx:TextInput id="inputText"  width="100%" />
+	    	<mx:TextInput id="inputText"  width="100%" keyDown="{myKeyDown(event)}"/>
 	    	
 		<mx:Canvas width="100%">
 	    	<mx:HBox right="0"  horizontalAlign="right" >

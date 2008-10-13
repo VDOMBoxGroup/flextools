@@ -65,6 +65,7 @@
 				
 				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
 					rbWnd.addEventListener(ScriptEditorEvent.SET_NAME, creatingNewActionWindowtHandler);
+					rbWnd.inputText.setFocus();
 				
 			}
 			
@@ -77,6 +78,8 @@
 				dataXML.@State="true";
 				
 				serverScripts.addScript = dataXML;
+				
+				save();
 			}
 			
 			private function deleteScript():void
@@ -123,10 +126,6 @@
 				btSave.setStyle("borderColor", "0xEE0000");
 
 			}
-			
-			
-			
-		
 	]]>
 </mx:Script>
 	<mx:HDividedBox width="100%" height="100%">
