@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="creationCompleteHandler()" hide="hideHendler()" 
+<mx:Canvas
+ xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="creationCompleteHandler()" hide="hideHendler()" 
 			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*" xmlns:colorMenu02="vdom.components.treeEditor.colorMenu02.*" xmlns:treeEditor="vdom.components.treeEditor.*">
 	
 <mx:Metadata>
 		[ResourceBundle("Tree")]
 </mx:Metadata>	
+<mx:HBox width="100%" height="100%">
+<mx:VBox width="100%" height="100%">
+	
 
-<mx:Canvas id="main" width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1">
+<mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1">
 
 <mx:Script>
 	<![CDATA[
@@ -97,7 +101,9 @@
 	
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
-		dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
+//		dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
+		
+		unMarkButton();
 		
 		xmlApplicationStructure = dtManEvt.result;
 		createTreeArr(xmlApplicationStructure);
@@ -108,6 +114,7 @@
 			hideLenes();
 			adjustmentTree(xmlApplicationStructure);
 			saveToServer();
+			
 			
 			var delayTimer:Timer = new Timer(1500, 1);
 			delayTimer.addEventListener(TimerEvent.TIMER, timerHandler);//		removeMassTreeElements();
@@ -219,7 +226,8 @@
 		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 		
-		saveToServer();
+//		saveToServer();
+		markButton();
 	}
 	
 	private var treeElemenUnderMouse:Object;
@@ -264,6 +272,7 @@
 	*		удаляем обьект и все его связи
 	*
 	*/
+	private var massDeletedElemens:Array = new Array(); // of String
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
 		curTree.current = false;
@@ -278,7 +287,7 @@
         if (event.detail==Alert.YES)
         {
         	dataManager.addEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, deleteObjectHandler)
-           	dataManager.deleteObject(curTree.ID)
+        	dataManager.deleteObject(curTree.ID);
         }
     }
     
@@ -296,6 +305,7 @@
 		}
 		
 		setStartPage();
+		saveToServer();
     }
 	
 	/**
@@ -321,7 +331,8 @@
 	
 	private function saveToServerHandler(trEvt:TreeEditorEvent):void
 	{
-		saveToServer();
+//		saveToServer();
+		markButton();
 	}
 	
 	
@@ -518,6 +529,7 @@
 		var delayTimer:Timer = new Timer(1500, 1);
 		delayTimer.addEventListener(TimerEvent.TIMER, timerHandler);//		removeMassTreeElements();
 		delayTimer.start();
+		markButton();
 //		createTreeArr(xmlApplicationStructure);
 		
 	}
@@ -531,7 +543,7 @@
 		
 		setStartPage();
 		
-		saveToServer();
+//		saveToServer();
 	}
 	
 	
@@ -575,19 +587,36 @@
       </mx:ArrayCollection>
 	</mx:ComboBox>
 -->
-</mx:Canvas>
-
-<mx:VBox>
-	<colorMenu02:ColorMenu2 id="colmen2" text="{resourceManager.getString('Tree','levels')}" />
-	<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>
-	<mx:CheckBox id="chShowSignature" label= "{resourceManager.getString('Tree','show_signature')}"
+	</mx:Canvas>
+	<mx:HBox bottom="0" backgroundColor="0xFFFFFF" width="100%" height="30" 
+			paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5">
+		<mx:VRule height="100%"/>
+		<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
+		 	 click="addTreeElementLauncher()"/>
+	 	<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
+	 	<mx:VRule height="100%" />
+		<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>
+		<mx:CheckBox id="chShowSignature" label= "{resourceManager.getString('Tree','show_signature')}"
 		  click="showSignature()"/>
-<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
-	<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
-		  click="addTreeElementLauncher()"/>
+		 <mx:VRule height="100%" />
+		<mx:Button id="btSave" label="Save" click="{saveToServer()}"/>
+		<mx:Button label="Revert" click="{revert()}"/>
+		<mx:VRule height="100%" />
+		
+	</mx:HBox>
+		
+</mx:VBox>
+
+
+<mx:Canvas right="0">
+	
+	<colorMenu02:ColorMenu2 id="colmen2" text="{resourceManager.getString('Tree','levels')}" />
+</mx:Canvas>
+	
 
 		  	
 	
 
-</mx:VBox>
 </mx:HBox>
+
+</mx:Canvas>

@@ -160,7 +160,8 @@ private function drawLine(obj:Object):void
 				masIndex[level][fromObj][toObj] = index;	
 				main.addChild(masIndex[level][fromObj][toObj]);
 		
-		saveToServer();
+//		saveToServer();
+		markButton();
 	}
 	
 	for(var upDate:String in massLines[level][fromObj])
@@ -195,6 +196,10 @@ private function adjustmentTree(xml1:XML):void
 		 massTreeObj[obID] = new TreeObj(obID);
 	}
 	*/
+	
+	
+	//--------------- begin -----------
+	/*
 	for each( var xmlObj:XML in xml1.children())
 	{
 		var fromObID:String = xmlObj.@ID.toXMLString(); 
@@ -209,7 +214,18 @@ private function adjustmentTree(xml1:XML):void
 			}
 		}
 	}
-	
+	 */
+	//--------------------- end --------------
+	 for (var level:String in massLines)
+			for (var frsTrElem:String in massLines[level])
+				for (var sknTrElem:String in massLines[level][frsTrElem])
+				{
+//					massLines[level][frsTrElem][sknTrElem].updateVector();
+					massTreeObj[frsTrElem].child = massTreeObj[sknTrElem];
+					massTreeObj[sknTrElem].parent = massTreeObj[frsTrElem];
+					
+				}
+	//----------- 
 	var depth:int = 0;
 	massMap[depth] = -1;
 	var itIsCorrectTree:Boolean = false;
@@ -425,6 +441,7 @@ private function createTreeArr(xml:XML):void
 		massTreeElements[ID] =  treeElement;
 //		main.addChild(massTreeElements[ID]);
 	}
+	
 }
 
 private function getType(ID:String):String
@@ -538,8 +555,9 @@ private function drawLines(xml1:XML):void
 			for each(xmlLavelObj in xmlLavel.children())
 			{
 				var toObjID:String = xmlLavelObj.@ID.toXMLString();
-				if (obID != toObjID)// избавляемся от зацикливающихся обьектов
+				if (obID != toObjID && massTreeElements[obID] && massTreeElements[toObjID])// избавляемся от зацикливающихся обьектов
 				{
+					
 					massLines[level][obID][toObjID] = new TreeVector(massTreeElements[obID], massTreeElements[toObjID], level);
 					massLines[level][obID][toObjID].addEventListener(MouseEvent.CLICK, markLines);
 					massLines[level][obID][toObjID].visible = colmen2.showLevel(level);
@@ -633,13 +651,29 @@ private function  removeLine():void
 		main.removeChild(btLine);
 		curLine.mark = false;
 	}
-		
-	saveToServer();
+	
+	markButton();	
+//	saveToServer();
+}
+
+private function markButton():void
+{
+	btSave.setStyle("color", "0xCC0000");
+	btSave.setStyle("borderColor", "0xEE0000");
+}
+
+
+private function unMarkButton():void
+{
+	btSave.setStyle("color", "0x000000");
+	btSave.setStyle("borderColor", "0xAAB3B3");
 }
 
 
 private function saveToServer():void
 {
+	unMarkButton();
+				
 	var dataToServer:XML =  dataToXML(massTreeElements, massLines);
 	xmlApplicationStructure = dataToServer;
 //	if(dataToServer.*.length() > 0)
@@ -648,7 +682,33 @@ private function saveToServer():void
 	 	dataManager.addEventListener(DataManagerEvent.SET_APPLICATION_STRUCTURE_COMPLETE, dataManagerListenner)
 		dataManager.setApplicationStructure(dataToServer);
 		
+	
+        
+//		dataManager.addEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, deleteObjectHandler)
+        
 	trace('********  Data saved  ********\n' + dataToServer.toXMLString());
+}
+
+private function revert():void
+{
+		removeAllLines();
+		removeMassTreeElements();
+//		removeTreeEditorListeners();
+		
+		if(curTree)
+			dataManager.changeCurrentPage(curTree.ID);
+
+		if (main.contains(btLine))
+		{
+			main.removeChild(btLine);
+			curLine.mark = false;
+		}
+			
+		masIndex = [];
+		masMaxOfIndex = [];
+		massLines = [];
+	
+		dataManager.getApplicationStructure();
 }
 
 public function dataToXML(massTreeElements:Array, massLines:Array ):XML
@@ -804,6 +864,7 @@ private function indexChangeHandler(inEvt:IndexEvent):void
 		
 //		trace('indexChangeHandler');
 //		saveToServer();
+		markButton();
 	
 }
 //data.@Top[0]
