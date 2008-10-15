@@ -6,11 +6,6 @@
 <mx:Metadata>
 		[ResourceBundle("Tree")]
 </mx:Metadata>	
-<mx:HBox width="100%" height="100%">
-<mx:VBox width="100%" height="100%">
-	
-
-<mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1">
 
 <mx:Script>
 	<![CDATA[
@@ -578,17 +573,9 @@
 	}
 	]]>
 </mx:Script>
-<!--
-	<mx:ComboBox x="28" y="46" >
-	 <mx:ArrayCollection>
-         <mx:String>1</mx:String>
-         <mx:String>2</mx:String>
-         <mx:String>3</mx:String>
-      </mx:ArrayCollection>
-	</mx:ComboBox>
--->
-	</mx:Canvas>
-	<mx:HBox bottom="0" backgroundColor="0xFFFFFF" width="100%" height="30" 
+<mx:HBox width="100%" height="100%">
+<mx:VBox width="100%" height="100%">
+	<mx:HBox bottom="0" width="100%" height="30" 
 			paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5">
 		<mx:VRule height="100%"/>
 		<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
@@ -604,6 +591,20 @@
 		<mx:VRule height="100%" />
 		
 	</mx:HBox>
+
+<mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1">
+
+<!--
+	<mx:ComboBox x="28" y="46" >
+	 <mx:ArrayCollection>
+         <mx:String>1</mx:String>
+         <mx:String>2</mx:String>
+         <mx:String>3</mx:String>
+      </mx:ArrayCollection>
+	</mx:ComboBox>
+-->
+	</mx:Canvas>
+	
 		
 </mx:VBox>
 

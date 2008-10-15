@@ -93,7 +93,12 @@ package vdom.components.eventEditor
 				
 			 if(loadedPages[ID])
 			 {
-			 	dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID))
+			 	dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[ID], ID));
+			 	
+			 	if(xmlTreeData.Object.(@ID == ID).toXMLString() != ""  
+			 		&& dataManager.currentPageId != ID )
+			 		dataManager.changeCurrentPage(ID);
+			 	
 			 	return;
 			 }
 			 
@@ -103,6 +108,7 @@ package vdom.components.eventEditor
               {
           		   		dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentObjectListener)
               	   		dataManager.changeCurrentPage(ID);
+              	   		trace("--------- Page Chahged: -----");
               } else
               {
               		loadedPages[ID] = craetTreeData(_data..*.Object.(@ID == ID).Objects);
