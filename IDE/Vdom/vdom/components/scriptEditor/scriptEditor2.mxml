@@ -61,8 +61,6 @@
 			
 			private function addNewScript():void
 			{
-				
-				
 				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
 					rbWnd.addEventListener(ScriptEditorEvent.SET_NAME, creatingNewActionWindowtHandler);
 					rbWnd.inputText.setFocus();
@@ -72,7 +70,17 @@
 			private function creatingNewActionWindowtHandler(ssEvt:ScriptEditorEvent):void
 			{
 				var dataXML:XML  = new XML('<Action/>');
-				dataXML.@Name = ssEvt.scriptName;
+				var last7:String = ssEvt.scriptName.slice(-7, ssEvt.scriptName.length);
+				if(last7 == "_python")
+				{
+					dataXML.@Name = ssEvt.scriptName.substr(0,ssEvt.scriptName.length - 7);
+					dataXML.@Language = "python";
+				} else
+				{
+					dataXML.@Name = ssEvt.scriptName;
+					dataXML.@Language = "vscript";
+				}
+				
 				dataXML.@Top="5"; 
 				dataXML.@Left="5";
 				dataXML.@State="true";

@@ -498,7 +498,7 @@ private function get needCreatTree():Boolean
 			}
 		}	
 	
-		return false;
+		return flag;
 	}
 	
 

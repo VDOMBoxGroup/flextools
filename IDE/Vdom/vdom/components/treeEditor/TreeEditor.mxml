@@ -9,6 +9,7 @@
 
 <mx:Script>
 	<![CDATA[
+		import mx.charts.BubbleChart;
 		import mx.effects.easing.Elastic;
 		import vdom.containers.ApplicationPanel;
 		import mx.core.Application;
@@ -114,7 +115,7 @@
 			var delayTimer:Timer = new Timer(1500, 1);
 			delayTimer.addEventListener(TimerEvent.TIMER, timerHandler);//		removeMassTreeElements();
 			delayTimer.start();
-			
+			markButton();
 			return;
 		}
 		
@@ -131,6 +132,7 @@
 	
 	private var dX:Number;
 	private var dY:Number;
+	private var mainWidth:Button= new Button;
 	private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
 	{
 		// object to Top
@@ -139,6 +141,10 @@
 		
 		dX = main.mouseX - massTreeElements[trEvt.ID].x;
 		dY = main.mouseY - massTreeElements[trEvt.ID].y;
+		
+		main.addChild(mainWidth);
+		
+		mainWidth.x = main.width + main.horizontalScrollPosition;
 		
 		Application.application.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
@@ -220,7 +226,7 @@
 	{	
 		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
-		
+		main.removeChild(mainWidth);
 //		saveToServer();
 		markButton();
 	}
@@ -249,11 +255,13 @@
 		
 		if(!massTreeElements[curID])
 			return;
-			
+//		main.width = mainWidth;
+//		main.validateNow();	
+		
 		if (main.mouseX < dX)
 			 	massTreeElements[curID].x = 0;
 			else
-				massTreeElements[curID].x = main.mouseX - dX;
+				massTreeElements[curID].x = main.mouseX   - dX;
 		
 		if ((main.mouseY -dY ) < 10)
 			 	massTreeElements[curID].y = 10;
@@ -579,7 +587,7 @@
 			paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5">
 		<mx:VRule height="100%"/>
 		<mx:Button  label="{resourceManager.getString('Tree','new_page')}"  
-		 	 click="addTreeElementLauncher()"/>
+		 	 	click="addTreeElementLauncher()"/>
 	 	<mx:Button  label="{resourceManager.getString('Tree','auto_Spacing')}"    click="autoSpacing()"/>
 	 	<mx:VRule height="100%" />
 		<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>

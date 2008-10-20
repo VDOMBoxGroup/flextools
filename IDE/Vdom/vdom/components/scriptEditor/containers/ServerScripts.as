@@ -86,7 +86,7 @@ package vdom.components.scriptEditor.containers
 		public function set addScript(xml:XML):void
 		{
 			xml.@ID = UIDUtil.createUID();
-			xml.@Language = 'python';
+			
 			dataXML.appendChild(xml);
 			
 			var temp:XML = new XML(xml.toXMLString());
