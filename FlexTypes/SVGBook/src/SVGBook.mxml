@@ -15,19 +15,21 @@
 			
 			private var dataSourceUrl:String;
 			private var hostName:String;
+			private var hasCover:Boolean = false;
 			
 			private function onCreationComplete():void
 			{
 				var flashVars:Object = Application.application.parameters;
 				var pageRange:int = 0;
 				var startPage:int = 0;
-
+				
 				try {
 					pageRange = flashVars.pagerange;
 					startPage = flashVars.startpage;
 					dataSourceUrl = flashVars.datasource;
 					this.width = flashVars.width;
 					this.height = flashVars.height;
+					this.hasCover = Boolean(flashVars.hascover);
 				}
 				catch (err:Error) {
 					Alert.show(err.message, "The following error occurred:");
@@ -38,6 +40,14 @@
 					width = 640;
 					height = 480;
 				}
+				
+				if (hasCover) {
+					__fb.cover = new SVGPage();
+					__fb.backCover = new SVGPage();
+					SVGPage(__fb.cover).loadURL(dataSourceUrl + '?page=0');
+					SVGPage(__fb.backCover).loadURL(dataSourceUrl + '?page=' + String(pageRange + 1));
+				}
+				
 				
 				var pages:Array = [];
 				var i: int = pageRange;
@@ -78,6 +88,7 @@
 		<controls:cover>
 			<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
 		</controls:cover>
+
 		<controls:backCover>
 			<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
 		</controls:backCover>
