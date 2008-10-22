@@ -212,6 +212,7 @@ public class Node extends Canvas
         	invalidateDisplayList();
          
         	dispatchEvent(new NodeEvent(NodeEvent.TEXT_CHANGED));
+        	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
      	}
     }
     public function get text():String
@@ -245,6 +246,7 @@ public class Node extends Canvas
 	        invalidateDisplayList();
 	        
 	        dispatchEvent(new NodeEvent(NodeEvent.CATEGORY_CHANGED));
+	        dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	    }
     }
     public function get category():String
@@ -278,6 +280,7 @@ public class Node extends Canvas
 	        invalidateDisplayList();
 	        
 	        dispatchEvent(new NodeEvent(NodeEvent.TYPE_CHANGED));
+	        dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	    }
     }
     public function get type():String
@@ -310,6 +313,7 @@ public class Node extends Canvas
 	        invalidateDisplayList();
 	        
 	        dispatchEvent(new NodeEvent(NodeEvent.BREAKPOINT_CHANGED));
+	        dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	    }
     }
     public function get breakpoint():Boolean
@@ -340,6 +344,7 @@ public class Node extends Canvas
         	invalidateDisplayList();
         	
 	        dispatchEvent(new NodeEvent(NodeEvent.ENABLED_CHANGED));
+	        dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	   	}	
     }
 
@@ -398,8 +403,9 @@ public class Node extends Canvas
 		
 		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
-   		//removeEventListener("xChanged", positionChangedHandler);
-   		//removeEventListener("yChanged", positionChangedHandler);
+   		
+   		removeEventListener("xChanged", positionChangedHandler);
+   		removeEventListener("yChanged", positionChangedHandler);
        		
 		if(copyNode == this)
 		{
@@ -417,6 +423,7 @@ public class Node extends Canvas
            	parent.removeChild(this);
            	
        	dispatchEvent(new NodeEvent(NodeEvent.DISPOSED));
+       	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
        	
        	delete nodes[this];
 	}
@@ -510,11 +517,16 @@ public class Node extends Canvas
 			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown); 
 			addEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
        		
-       		//addEventListener("xChanged", positionChangedHandler);
-       		//addEventListener("yChanged", positionChangedHandler);			
+       		addEventListener("xChanged", positionChangedHandler);
+       		addEventListener("yChanged", positionChangedHandler);			
     	} 
     }
 
+	private function positionChangedHandler(event:Event):void
+	{
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+	}
+	
     override protected function commitProperties():void
     {
         super.commitProperties();
@@ -588,15 +600,6 @@ public class Node extends Canvas
             		break;            
             }          
 			
-			//nodeTextArea.styleChanged(null);
-			//styleChanged(null);
-
-			//nodeTextArea.validateDisplayList();			
-			
-			//nodeTextArea.invalidateDisplayList();
-			//invalidateProperties();
-			//nodeTextArea.validateNow();
-			//nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	
 
@@ -632,10 +635,6 @@ public class Node extends Canvas
 	            	break;
             }
 			
-			//styleChanged(null);
-			//nodeTextArea.styleChanged(null);
-			//nodeTextArea.validateNow();
-			//nodeTextArea.invalidateDisplayList();
     		invalidateDisplayList();
         }	
         
@@ -681,7 +680,6 @@ public class Node extends Canvas
 		
         super.measure();
 		
-        //var borderThickness:Number = getStyle("borderThickness");            
         var margin:Number = getStyle("margin");       
 
         measuredWidth += margin;        
@@ -836,12 +834,6 @@ public class Node extends Canvas
         
 		_needRefreshStyles = true;			
 		invalidateProperties();       
-        
-        //nodeTextArea.styleChanged(null);
-        //styleChanged(null);
-        
-        //nodeTextArea.invalidateDisplayList();
-        //invalidateDisplayList();     		    	
     }
     
 	public function alertDestroy():void
@@ -903,7 +895,8 @@ public class Node extends Canvas
     {
         if (!isNaN(regX))
             stopDragging();
-    }	    
+    }
+    	    
     private function stage_mouseLeaveHandler(event:Event):void
     {
         if (!isNaN(regX))

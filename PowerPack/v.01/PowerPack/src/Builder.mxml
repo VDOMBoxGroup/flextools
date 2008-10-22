@@ -337,37 +337,58 @@
 	        private function completeTemplateHandler(event:Event):void
 	        {
         		var fileStream:FileStream = event.target as FileStream;
-        		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
-				fileStream.close();
-				
-				var template:TemplateStruct = new TemplateStruct(xml);
-				
-        		if(ContextManager.instance.templates.length==0)
-	    			ContextManager.instance.templates.addItem(template);
-    			else
-    				ContextManager.instance.templates[0] = template;
-//
-			MenuGeneral.noTemplate(fileMenuData);
-      		ContextManager.instance.lastFile = false;
-            pnl_graphs.clear();
-            workStage.visible = false;
-            workStage.includeInLayout = false;
-//                
-				if(template.isEncoded)
-				{
-					TemplateKey.show(onKeyDialogClose);
-				}
-				else
-				{
-					
-        			var tpl:TemplateStruct = ContextManager.instance.templates[0];        			
-        			tpl.decode();					
+        		var xml:XML;
 
-	                workStage.visible = true;
-    	            workStage.includeInLayout = true;
-    	            ContextManager.instance.lastFile = true;
-    	            MenuGeneral.openedTemplate(fileMenuData);
-				}
+        		try {
+        			xml = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+        			
+        			if( xml.name()!='template' ) 
+        				throw new Error();
+        			
+        			if( !xml.hasOwnProperty('structure') && !xml.hasOwnProperty('encoded') )
+	        			throw new Error();
+	        			        		
+					fileStream.close();
+					
+					var template:TemplateStruct = new TemplateStruct(xml);
+					
+	        		if(ContextManager.instance.templates.length==0)
+		    			ContextManager.instance.templates.addItem(template);
+	    			else
+	    				ContextManager.instance.templates[0] = template;
+					
+					//
+					MenuGeneral.noTemplate(fileMenuData);
+	    	  		ContextManager.instance.lastFile = false;
+	        	    pnl_graphs.clear();
+	            	workStage.visible = false;
+	            	workStage.includeInLayout = false;
+					//                
+					
+					if(template.isEncoded)
+					{
+						TemplateKey.show(onKeyDialogClose);
+					}
+					else
+					{
+						
+	        			var tpl:TemplateStruct = ContextManager.instance.templates[0];        			
+	        			tpl.decode();					
+	
+		                workStage.visible = true;
+	    	            workStage.includeInLayout = true;
+	    	            ContextManager.instance.lastFile = true;
+	    	            MenuGeneral.openedTemplate(fileMenuData);
+					}
+        		} 
+        		catch(e:*)
+        		{
+					fileStream.close();
+
+        			SuperAlert.show( 
+        				LanguageManager.sentences['msg_not_valid_tpl_file'],
+        				LanguageManager.sentences['error']);        				
+        		}
 	        }	        
             
             private function onKeyDialogClose(event:Event):void

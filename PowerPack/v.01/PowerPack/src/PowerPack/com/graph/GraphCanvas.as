@@ -153,6 +153,8 @@ public class GraphCanvas extends Canvas
    		
         if(parent)
            	parent.removeChild(this);
+           	
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	}	
 	
 	//--------------------------------------------------------------------------
@@ -217,6 +219,7 @@ public class GraphCanvas extends Canvas
 				removeChild(child);
 		}
 		removeAllChildren();
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	}
 	
 	public function expandSpace():void
@@ -230,7 +233,8 @@ public class GraphCanvas extends Canvas
 				if(node.y >= contentMouseY)
 					node.y += node.height*2;		
 			}
-		}	
+		}
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));	
 	}
 	
 	public function collapseSpace():void
@@ -245,6 +249,7 @@ public class GraphCanvas extends Canvas
 					node.y -= node.height;		
 			}
 		}	
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	}	
 	
 	public function clone():GraphCanvas
@@ -449,7 +454,9 @@ public class GraphCanvas extends Canvas
 				addChildAt(newArrow, 0);
 			}
 			
-		}				
+		}		
+		
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));		
 		return true;
 	}		
 	
@@ -468,12 +475,14 @@ public class GraphCanvas extends Canvas
 				addChild(newNode);			
 				newNode.move(contentMouseX, contentMouseY);
 				newNode.setFocus();
+				dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 				break;
 				
 			case "paste_state":
 				if(Node.copyNode) {
 					var node:Node = Node.copyNode.duplicate(this);	
 					node.setFocus();
+					dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 				}
 				break;
 			

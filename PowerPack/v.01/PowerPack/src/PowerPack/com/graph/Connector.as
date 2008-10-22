@@ -215,6 +215,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         }
            	
        	dispatchEvent(new ConnectorEvent(ConnectorEvent.DISPOSED));
+       	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
        	
        	delete connectors[this];
 	}	
@@ -279,6 +280,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			invalidateDisplayList();
 			         
     	    dispatchEvent(new ConnectorEvent(ConnectorEvent.HIGHLIGHTED_CHANGED));
+    	    dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
   		}
     }
 
@@ -309,6 +311,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			invalidateDisplayList();
 			         
     	    dispatchEvent(new ConnectorEvent(ConnectorEvent.ENABLED_CHANGED));
+    	    dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
     	}
     }	
 
@@ -336,6 +339,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	        invalidateProperties();
          
     	    dispatchEvent(new ConnectorEvent(ConnectorEvent.LABEL_CHANGED));
+    	    dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
     	}
     }
 
@@ -363,6 +367,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         	invalidateProperties();
         	      
         	dispatchEvent(new ConnectorEvent(ConnectorEvent.DATA_CHANGED));
+        	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
      	}
     }
 
@@ -398,6 +403,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			invalidateDisplayList();
 			         
         	dispatchEvent(new ConnectorEvent(ConnectorEvent.FROM_OBJECT_CHANGED));
+        	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
      	}
     }
 
@@ -433,6 +439,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			invalidateDisplayList();
 			         
         	dispatchEvent(new ConnectorEvent(ConnectorEvent.TO_OBJECT_CHANGED));
+        	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
      	}
     }	
 		
