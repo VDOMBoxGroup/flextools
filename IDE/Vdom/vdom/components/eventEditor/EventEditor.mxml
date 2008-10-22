@@ -692,7 +692,7 @@
 					temXML.@Left 		= serverActionsArray[actID].x;
 					temXML.@State		= serverActionsArray[actID].State;
 					
-					temXML.@Language	= "pyton";
+					temXML.@Language	= serverActionsArray[actID].language;
 					
 					temXML.appendChild(serverActionsArray[actID].parametrs);
 					

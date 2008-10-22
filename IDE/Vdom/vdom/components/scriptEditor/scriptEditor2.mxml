@@ -93,6 +93,7 @@
 			private function deleteScript():void
 			{
 				serverScripts.deleteScript();
+				save();
 			}
 			
 			private function setScript():void

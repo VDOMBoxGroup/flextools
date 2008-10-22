@@ -17,18 +17,31 @@ package vdom.components.treeEditor
         [Embed(source='/assets/treeEditor/selected_back_ground.png')]
 		[Bindable]
         public var selected_back_ground:Class; 
+        
+        [Embed(source='/assets/treeEditor/back_ground.png')]
+		[Bindable]
+        public var back_ground:Class; 
 
 		
 		private var _icon:Image = new Image();
 		private var _backGround:Image = new Image();
 		private var dissolveIn:Fade = new Fade();
 		private var dissolveOut:Fade = new Fade();
+		private var _label:Label = new Label();	
 		
 		public function TreeButton()
 		{
 			super();
 			
 			percentWidth = 100;
+			
+			var spaceImg:Image = new Image();
+			spaceImg.maintainAspectRatio = false;
+			spaceImg.scaleContent = true;
+			spaceImg.percentWidth = 100;
+			spaceImg.source = back_ground;
+//			spaceImg.alpha = 0.1;
+			addChild(spaceImg);
 			
 			dissolveIn.alphaFrom = 0.0;
 			dissolveIn.alphaTo   = 1.0;
@@ -52,60 +65,70 @@ package vdom.components.treeEditor
 
               addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
               addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+              addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+              addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			
 			_icon.source = new_page;
+			_icon.width = 23;
+			_icon.height = 23;
 			addChild(_icon);
 			
 			var vLine:VRule = new VRule();
-			vLine.x = 23;
+			vLine.x = 26;
 			vLine.y = 4;
 			vLine.height = 15;
 			addChild(vLine);
 			
-			var _label:Label = new Label();	
+//			var _label:Label = new Label();	
 			_label.x =  vLine.x + 5;
 			_label.y = 2; 
 			_label.text = "Button";
 			_label.setStyle('fontWeight', "bold");
 			addChild(_label);
-			
-			var spaceImg:Image = new Image();
-			spaceImg.source = selected_back_ground;
-			spaceImg.alpha = 0.1;
-			addChild(spaceImg);
-			
-			
 		}
 		
 		private function mouseOverHandler(msEvt:MouseEvent):void
 		{
 			 _backGround.alpha = 1;
-//			removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-//			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
-//			if(_backGround.alpha == 0)
-//			dissolveIn.play();
 		}
 		
 		private function mouseOutHandler(msEvt:MouseEvent):void
 		{
 			_backGround.alpha = 0;
-			/*
-			trace("Stop: 1.0 - " + _backGround.alpha);
-//			removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
-//			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-			if( _backGround.alpha != 0 && _backGround.alpha != 1)
-				dissolveOut.alphaFrom = _backGround.alpha;
-			else 
-				dissolveOut.alphaFrom = 1;
-				
-			dissolveOut.play();
-			*/
-//			super.icon
+			
+		}
+		
+		private function mouseDownHandler(msEvt:MouseEvent):void
+		{
+			_backGround.alpha = 0.3;
+		}
+		
+		private function mouseUpHandler(msEvt:MouseEvent):void
+		{
+			_backGround.alpha = 1;
 		}
 	
 		public function set iconBt(obj:Object):void
 		{
 			if(obj) _icon.source = obj;
+		}
+		
+		public function set labelBt(value:String):void
+		{
+//			super.label = value;
+			_label.text = value;
+		}
+		
+		public function set mark(bl:Boolean):void
+		{
+			if(bl)
+			{
+				_label.setStyle("color", "0xFF0000");
+//	btSave.setStyle("borderColor", "0xAAB3B3");
+			}else
+			{
+				_label.setStyle("color", "0x000000");
+			}
 		}
 		
 	}

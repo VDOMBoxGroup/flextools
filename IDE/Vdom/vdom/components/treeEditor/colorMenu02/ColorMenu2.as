@@ -61,7 +61,6 @@ package vdom.components.treeEditor.colorMenu02
 			eye.source = openEye;
 			eye.addEventListener(MouseEvent.CLICK, eyeClickHandler);
 			addChild(eye);
-			
 		}
 		
 		private function showHandler(flEvt:FlexEvent):void

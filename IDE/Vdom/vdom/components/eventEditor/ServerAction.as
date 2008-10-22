@@ -86,6 +86,7 @@ package vdom.components.eventEditor
 			
 			initUpBody();
 			initDownBody(data);
+			_language = data.@Language;
 			
 			updateRatio();
 			
@@ -230,7 +231,7 @@ package vdom.components.eventEditor
 			imgLine.addEventListener(MouseEvent.CLICK, lineClickHandler);
 			*/
 			imgDelete = new Image();
-			imgDelete.source = delet; 
+			imgDelete.source = action; 
 			imgDelete.buttonMode = true;
 			
 			imgDelete.addEventListener(MouseEvent.CLICK, deleteClickHandler);
@@ -429,5 +430,16 @@ package vdom.components.eventEditor
    			//image.height = loader.height;
    			objectName.source = loader.content;
    		}
+   		
+   		private var _language:String;
+   		public function set language(str:String):void
+		{
+			 _language = str;
+		}
+   		
+		public function get language():String
+		{
+			return _language;
+		}
 	}
 }

@@ -60,7 +60,7 @@ private function showLenes():void
 				{
 					massLines[level][frsTrElem][sknTrElem].updateVector();
 					massLines[level][frsTrElem][sknTrElem].visible = colmen2.showLevel(level)
-					masIndex[level][frsTrElem][sknTrElem].visible = chShowSignature.selected && colmen2.showLevel(level);
+					masIndex[level][frsTrElem][sknTrElem].visible = shSingnature && colmen2.showLevel(level);
 					
 //					main.addChild(massLines[level][frsTrElem][sknTrElem]);
 					
@@ -155,7 +155,7 @@ private function drawLine(obj:Object):void
 					index.maxIndex = index.index = masMaxOfIndex[level][fromObj] = masMaxOfIndex[level][fromObj]+ 1;
 					
 					index.addEventListener(IndexEvent.CHANGE, indexChangeHandler);
-					index.visible = chShowSignature.selected && colmen2.showLevel(level);
+					index.visible = shSingnature && colmen2.showLevel(level);
 				
 				masIndex[level][fromObj][toObj] = index;	
 				main.addChild(masIndex[level][fromObj][toObj]);
@@ -575,7 +575,7 @@ private function drawLines(xml1:XML):void
 							
 						index.maxIndex = masMaxOfIndex[level][obID];	
 						index.targetLine = massLines[level][obID][toObjID];
-						index.visible = chShowSignature.selected && colmen2.showLevel(level);
+						index.visible = shSingnature && colmen2.showLevel(level);
 //						trace(index.visible);
 						index.addEventListener(IndexEvent.CHANGE, indexChangeHandler);
 						
@@ -658,15 +658,19 @@ private function  removeLine():void
 
 private function markButton():void
 {
-	btSave.setStyle("color", "0xCC0000");
-	btSave.setStyle("borderColor", "0xEE0000");
+	btSave.mark = true;
+//	btSave.setStyle("color", "0xCC0000");
+//	btSave.setStyle("borderColor", "0xEE0000");
 }
 
 
 private function unMarkButton():void
 {
+	btSave.mark = false;
+	/*
 	btSave.setStyle("color", "0x000000");
 	btSave.setStyle("borderColor", "0xAAB3B3");
+	*/
 }
 
 
