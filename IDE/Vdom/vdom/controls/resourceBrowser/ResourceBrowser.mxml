@@ -14,6 +14,7 @@
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 	visible="true" shadowDirection="right"
 	borderColor="#636363" titleStyleName="resourceBrowserTitle"
+	borderThicknessLeft="1" borderThicknessRight="1"
 	titleIcon="@Embed(source='/assets/common/resourcebrowser.png')">
 	
 	<mx:Style>
@@ -42,24 +43,11 @@
 			width="100%" height="30" cornerRadius="0"
 			verticalAlign="middle" paddingLeft="5" paddingRight="5"
 			backgroundColor="#e5e5e5" borderStyle="solid">
-			
-			<mx:ButtonBar height="24" itemClick="{applyView(event);}" iconField="icon" labelField="label">          			
-				<mx:Array>
-					<mx:Object id="tView" label="Thumbnails view" 
-						icon="@Embed(source='/assets/resourceBrowserIcons/interface/thumbsview.png')" />
-					<mx:Object id="lView" label="List view"
-						icon="@Embed(source='/assets/resourceBrowserIcons/interface/listview.png')" />
-				</mx:Array>					
-			</mx:ButtonBar>
-			
-			<mx:Button id="__expandBtn" 
-				height="24" label="Expand" toggle="true" click="{expandHandler();}"
-				icon="@Embed(source='/assets/resourceBrowserIcons/interface/expand.png')" />			
-			
+
 			<mx:VRule height="100%" />
 			
 			<mx:Label text="Filter:" fontWeight="bold"/>
-			<mx:ComboBox id="__filterCBx" width="150" dataProvider="{filterDataProvider}" change="{filterCBxHandler();}" />
+			<mx:ComboBox id="__filterCBx" width="150" dataProvider="{filterDataProvider}" change="{applyFilterHandler();}" />
 			<mx:VRule height="100%" />
 			<mx:Spacer width="100%" />
 			<mx:Button height="24" label="Upload File..." click="{fileUploadHandler();}"
@@ -73,36 +61,46 @@
 		<!-- End of top panel -->
 		
 		<mx:HBox id="__midArea" width="100%" height="100%" horizontalGap="2">
-			<mx:Tile id="thumbsList"
-				height="100%" width="174"
-				direction="horizontal" borderStyle="solid"
+			
+			<mx:List id="__thumbsList"
+				height="100%" width="180"
+				borderStyle="solid" change="{showResource();}"
 				verticalScrollPolicy="on" horizontalScrollPolicy="off"
-				horizontalAlign="center"
-				paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
-				
+				paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+				itemRenderer="vdom.controls.resourceBrowser.ListItem" />
+
 			<mx:VBox width="100%" height="100%" verticalGap="2" horizontalAlign="center">
+			
 				<mx:Box id="__previewArea"
-					width="100%" height="100%"
-					verticalAlign="middle" horizontalAlign="center"/>
+					width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+					
+					<resourceBrowser:PreviewContainer id="__preview"
+						heightLimit="{__previewArea.height - 15}"
+						widthLimit="{__previewArea.width - 15}"
+						width="100" height="100"/>
+						
+				</mx:Box>
 				
 				
 				<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-					<mx:Label id="__rName" text="" height="18" fontWeight="bold" maxWidth="350" textAlign="center"  width="320"/>
+					<mx:Label id="__rName" text="" height="18" fontWeight="bold" maxWidth="350" textAlign="center" width="320"/>
 				</mx:Box>
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center">
 					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-						<mx:Label id="__rType" text="" height="18" fontWeight="bold"  width="150"/>
+						<mx:Label id="__rType" text="" height="18" fontWeight="bold"/>
 					</mx:Box>
+<!--
 					<mx:VRule height="18" />
+-->
 					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-						<mx:Label id="__iResolution" text="" height="18" fontWeight="bold"  width="150"/>
+						<mx:Label id="__iResolution" text="" height="18" fontWeight="bold"/>
 					</mx:Box>					
 				</mx:HBox>
 			</mx:VBox>				
 
 		</mx:HBox>
 	</mx:VBox>
-	<mx:ControlBar height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10">
+	<mx:ControlBar height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF">
 		<mx:Label text="Total Resources:" />
 		<mx:Label text="{totalResources}" fontWeight="bold" />
 		<mx:VRule height="18" />

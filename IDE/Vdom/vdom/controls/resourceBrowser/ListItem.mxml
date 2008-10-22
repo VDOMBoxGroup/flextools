@@ -7,18 +7,23 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	width="174" height="50" 
 	horizontalAlign="left" borderStyle="solid"
-	verticalAlign="middle" 
-	verticalScrollPolicy="off"
+	verticalAlign="middle" verticalScrollPolicy="off"
 	horizontalScrollPolicy="off"
 	paddingTop="3" paddingLeft="3" paddingRight="3" paddingBottom="3"
-	backgroundColor="#FFF6EA" cornerRadius="3"
-	verticalGap="1" horizontalGap="3"
+	cornerRadius="1" verticalGap="1" horizontalGap="3"
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
 	
-	<resourceBrowser:SmoothImage id="__image" height="42" width="42"
-		verticalAlign="middle" horizontalAlign="center" maintainAspectRatio="true"
-		scaleContent="true" 
-		/>
+	
+	<mx:Box
+		width="44" height="44" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0" backgroundColor="#FFFFFF"
+		verticalAlign="middle" horizontalAlign="center">
+		
+		<resourceBrowser:SmoothImage id="__image" height="42" width="42"
+			verticalAlign="middle" horizontalAlign="center" maintainAspectRatio="true"
+			scaleContent="true" />
+			
+	</mx:Box>
+		
 	<mx:VBox width="122" horizontalGap="0" verticalGap="1" horizontalScrollPolicy="off" verticalScrollPolicy="off" verticalAlign="middle">
 		<mx:HBox width="100%" horizontalAlign="left" horizontalGap="3" >
 			<mx:Label id="__type" text="JPG:" textAlign="left" fontWeight="bold" />
@@ -26,81 +31,88 @@
 		</mx:HBox>
 		<mx:Label id="__name" text="img" textAlign="left" width="122" />	
 	</mx:VBox>
+	
 	<mx:Script>
 		<![CDATA[
+			import vdom.managers.DataManager;
+			import vdom.managers.FileManager;
 			import mx.messaging.channels.StreamingAMFChannel;
-			import mx.controls.Text;
-		
 			import mx.controls.Image;
-			import vdom.controls.resourceBrowser.SmoothImage;
 			
-			private var loader:Loader = new Loader();
+			private var typesIcons:TypesIcons = new TypesIcons();
+			private var fileManager:FileManager = FileManager.getInstance();
+			private var dataManager:DataManager = DataManager.getInstance();
 			
-			private var __id:String;
-			private var __selected:Boolean = false;
-			private var __objType:String = "";
-			
-			public var imageWidth:int = 0;
-			public var imageHeight:int = 0;
+			private var _id:String;
+			private var _objType:String = '';
 
-			public function set resource(source:Object):void {
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
-				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-				loader.loadBytes(source.data);
-			}
-			
-			private function imageLoadComplete(event:Event):void {
-				loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoadComplete);
-				__image.source = loader.content				
-				imageWidth = loader.width;
-				imageHeight = loader.height;
-				__res.text = imageWidth.toString() + "x" + imageHeight.toString();				
-			}
-			
-			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
-				[Embed(source="/assets/resourceBrowserIcons/resourceType/blank.png")]
-				var blank_Icon:Class;
+			override public function set data(value:Object):void {
+				__name.text = '';
+				__res.text = '';
 				
-				__image.source = blank_Icon; 
+				
+				super.data = value;
+				
+				try {
+					objName = value.@name;
+					objType = value.@type;
+					objID = value.@id;
+				}
+				catch (err:Error) {
+					trace ("ThumbnailItem: exception at data setter!"); 
+					return;
+				}
+				
+				if (typesIcons.isViewable(objType)) {
+					fileManager.loadResource(dataManager.currentApplicationId, this.objID, this);			
+				} else { // if not viewable
+					if (typesIcons.icon[objType] != null) {
+						__image.source = typesIcons.icon[objType];	
+					} else {
+						__image.source = typesIcons.blank_Icon;
+					}
+				}
+				
 			}
 
+			private var imageSourceLoader:Loader;
+			
+			public function set resource(source:Object):void {
+				imageSourceLoader = new Loader();
+				imageSourceLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				imageSourceLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoaded);
+				imageSourceLoader.loadBytes(ByteArray(source.data));
+			}
+
+			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
+				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
+				__image.source = typesIcons.broken_Icon;
+			}
+			
+			private function imageLoaded(e:Event):void {
+				imageSourceLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
+				__image.source = imageSourceLoader.content;
+				__res.text = imageSourceLoader.width.toString() + "x" + imageSourceLoader.height.toString();			
+
+			}
+			
 			public function set objName(text:String):void { __name.text = text; }
 			
 			public function get objName():String { return __name.text; }
-
-			public function set objID(objID:String):void { __id = objID; }
+			
+			public function set objID(objID:String):void { _id = objID; }
+			
+			public function get objID():String { return _id; }
 			
 			public function set objType(objType:String):void {
 				__type.text = objType.toUpperCase() + ":";
-				__objType = objType;
+				_objType = objType;
 			}
 			
 			public function get objType():String {
-				return __objType;
-			}
-
-			public function get objID():String { return __id; }	
-			
-			public function set selected(value:Boolean):void {
-				if (value == true) {
-					__selected = true;
-					this.setStyle('backgroundColor', "#D8D8D8");
-				} else { 
-					__selected = false;
-					this.setStyle('backgroundColor', "#FFF6EA");
-				}
-			}
-			
-			public function set imageSource(source:Object):void {
-				__image.source = source;
-			}
-
-			public function get imageSource():Object {
-				return __image.source;
-			}
-						
-			public function get selected():Boolean {
-				return __selected;
+				return _objType.toLowerCase();
 			}
 			
 		]]>

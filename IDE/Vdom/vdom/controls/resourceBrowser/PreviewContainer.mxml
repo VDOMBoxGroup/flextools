@@ -12,32 +12,49 @@
  	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
  
 	<resourceBrowser:SmoothImage id="__image" horizontalAlign="center" verticalAlign="middle"
-		maintainAspectRatio="true" scaleContent="true" />
+		maintainAspectRatio="true" scaleContent="true" width="100" height="100" />
 
 	<mx:Script>
 		<![CDATA[
+			import vdom.managers.DataManager;
+			import vdom.managers.FileManager;
+			import mx.controls.Alert;
 			import mx.core.FlexLoader;
 			import mx.rpc.soap.LoadEvent;
 			import mx.events.FlexEvent;
 		
 			private var loader:Loader = new Loader();
+			private var typesIcons:TypesIcons = new TypesIcons();
+			
+			private var fileManager:FileManager = FileManager.getInstance();
+			private var dataManager:DataManager = DataManager.getInstance();
 	
 			public var imageWidth:int = 0;
 			public var imageHeight:int = 0;
 			private var _heightLimit:int = 0;
 			private var _widthLimit:int = 0;
 
+			public function set objID(value:String):void {
+				fileManager.loadResource(
+					dataManager.currentApplicationId,
+					value, this
+				);
+			}
+
 			public function set resource(source:Object):void {
+				loader = new Loader();
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoadComplete);
 				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 				loader.loadBytes(source.data);
 			}
 			
 			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
-				[Embed(source="/assets/resourceBrowserIcons/resourceType/blank.png")]
-				var blank_Icon:Class;
+				__image.width = 64;
+				__image.height = 64;
+				this.height = __image.height + 22;
+				this.width = __image.width + 22;
 
-				__image.source = blank_Icon; 
+				__image.source = typesIcons.broken_Icon;
 			}
 			
 			private function imageLoadComplete(event:Event):void {
@@ -65,12 +82,12 @@
 				this.dispatchEvent(completeEvent);			
 			}
 			
-			public function set imageSource(source:Object):void {
-				__image.source = source;
-			}
-			
-			public function get imageSource():Object {
-				return __image.source;
+			public function set imageSource(value:Object):void {
+				__image.width = 64;
+				__image.height = 64;
+				this.height = __image.height + 22;
+				this.width = __image.width + 22;
+				__image.source = value;
 			}
 			
 			public function set heightLimit(value:int):void {
