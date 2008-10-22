@@ -82,20 +82,21 @@
 				</mx:Box>
 				
 				
-				<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-					<mx:Label id="__rName" text="" height="18" fontWeight="bold" maxWidth="350" textAlign="center" width="320"/>
-				</mx:Box>
 				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center">
+					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
+						<mx:Label id="__rName" text="" height="18" fontWeight="bold" maxWidth="350" textAlign="center" />
+					</mx:Box>
 					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
 						<mx:Label id="__rType" text="" height="18" fontWeight="bold"/>
 					</mx:Box>
-<!--
-					<mx:VRule height="18" />
--->
 					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
 						<mx:Label id="__iResolution" text="" height="18" fontWeight="bold"/>
 					</mx:Box>					
 				</mx:HBox>
+				<mx:Box cornerRadius="3" backgroundColor="#E4E2FD" borderStyle="solid" paddingLeft="5" paddingRight="5">
+					<mx:Label id="__rID" text="" height="18" fontWeight="bold" selectable="true"/>
+				</mx:Box>					
+
 			</mx:VBox>				
 
 		</mx:HBox>

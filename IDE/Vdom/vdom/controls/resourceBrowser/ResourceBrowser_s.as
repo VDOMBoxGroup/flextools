@@ -214,6 +214,7 @@ private function showResource():void {
 	/* Fill in resource information in the info area */
 	__rName.text = __thumbsList.selectedItem.@name;
 	__rType.text = String(__thumbsList.selectedItem.@type).toUpperCase();
+	__rID.text = 'ID: ' + __thumbsList.selectedItem.@id;
 	
 	if (typesIcons.isViewable(__thumbsList.selectedItem.@type)) {
 		
