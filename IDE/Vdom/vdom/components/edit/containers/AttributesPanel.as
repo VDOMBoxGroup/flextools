@@ -674,6 +674,7 @@ public class AttributesPanel extends ClosablePanel {
 		
 		attrItemValue.addChild(element);
 		attrItemValue.setStyle("verticalAlign", "middle");
+		attrItemValue.setStyle("fontFamily", "Tahoma");
 		attrItemValue.setStyle("paddingLeft", 3);
 
 		element.minWidth = 110;

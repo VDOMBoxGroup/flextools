@@ -52,7 +52,7 @@
 			
 			if(value == null && _dataProvider && _dataProvider.length > 0)
 				value = _dataProvider[0].@ID;
-			else
+			else if ( value == null )
 				return;
 			
 			switchSelection(value);

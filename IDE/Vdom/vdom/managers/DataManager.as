@@ -270,7 +270,7 @@ public class DataManager implements IEventDispatcher {
 	public function getTypeByTypeId(typeId:String):XML 
 	{
 		if(typeId)
-			return _listTypes.Information.(ID == typeId)[0].parent();
+			return _listTypes.Information.(ID == typeId)[0].parent(); //TODO !!!!! исправить добавить проверку!!!
 		else
 			return null;
 	}

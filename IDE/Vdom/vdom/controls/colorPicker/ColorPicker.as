@@ -45,7 +45,7 @@ public class ColorPicker extends Canvas {
 	
 	private function mouseClickandler(event:MouseEvent) :void {
 		
-		var colorInt:uint = Number('0x' + _color.substring(1));
+		var colorInt:uint = Number('0x' + _color/* .substring(1) */);
 		ColorPickerWindow.show_window(this, colorInt, true);
 	}
 	

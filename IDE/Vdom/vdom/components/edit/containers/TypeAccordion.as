@@ -11,9 +11,12 @@ import vdom.components.edit.containers.typeAccordionClasses.Types;
 import vdom.managers.FileManager;
 import vdom.utils.MD5Util;
 
-public class TypeAccordion extends Accordion {
+public class TypeAccordion extends Accordion
+{	
+	private const STANDART_CATEGORIES : Array = ["usual", "standard", "form", "table", "database", "debug"];
+	private const USUAL_ELEMENTS:Array = ["button", "copy", "image", "richtext"];
 	
-	private var fileManager:FileManager;
+	private var fileManager:FileManager = FileManager.getInstance();
 	private var _dataProvider:XMLList;
 	private var categories:Object = {};
 	private var types:ArrayCollection;
@@ -23,23 +26,19 @@ public class TypeAccordion extends Accordion {
 	
 	private var currentLocale:String;
 	
-	private var standardCategories:Array = ["usual", "standard", "form", "table", "database", "debug"];
-	
-	public function TypeAccordion()	{
-		
+	public function TypeAccordion()
+	{
 		super();
-		
-		fileManager = FileManager.getInstance();
 	}
 	
-	public function set dataProvider(value:XMLList):void
+	public function set dataProvider( value : XMLList ) : void
 	{	
-		if(!value)
+		if( !value )
 			return;
 		
 		var newLocale:String = resourceManager.localeChain[0];
 		
-		if (currentLocale == newLocale && _dataProvider == value)
+		if ( currentLocale == newLocale && _dataProvider == value )
 			return;
 		
 		currentLocale = newLocale;
@@ -49,14 +48,14 @@ public class TypeAccordion extends Accordion {
 		removeAllChildren();
 		
 		types = new ArrayCollection();
-		types = createTypeDescriptions(value);
+		types = createTypeDescriptions( value );
 		
 		createStandartCategories();
 		
 		var currentDescription:Object, currentCategory:Object, type:Type;
 		var cursor:IViewCursor = types.createCursor();
 		
-		while(!cursor.afterLast) {
+		while( !cursor.afterLast ) {
 			
 			currentDescription = cursor.current;
 			
@@ -72,7 +71,7 @@ public class TypeAccordion extends Accordion {
 			type.width = 90;
 			type.typeLabel = currentDescription.typeNameLocalized;
 			
-			currentCategory.addChild(type);
+			currentCategory.addChild( type );
 			
 			fileManager.loadResource(
 				currentDescription.typeId,
@@ -83,9 +82,41 @@ public class TypeAccordion extends Accordion {
 			);
 			cursor.moveNext();
 		}
+		
+		if( !categories["usual"] )
+			return;
+		
+		currentCategory = categories["usual"];
+		
+		for each( var usualElement : String in USUAL_ELEMENTS )
+		{
+			var result : Boolean = cursor.findFirst( { typeName : usualElement } );
+			
+			if( result )
+			{
+				currentDescription = cursor.current;
+				
+				type = new Type();
+				type.typeDescription = currentDescription;
+			
+				type.setStyle("horizontalAlign", "center");
+				type.width = 90;
+				type.typeLabel = currentDescription.typeNameLocalized;
+			
+				currentCategory.addChild( type );
+			
+				fileManager.loadResource(
+					currentDescription.typeId,
+					currentDescription.resourceId, 
+					type, 
+					"resource", 
+					true
+			);
+			}
+		}
 	}
 	
-	private function createTypeDescriptions(value:XMLList):ArrayCollection
+	private function createTypeDescriptions( value : XMLList ) : ArrayCollection
 	{
 		var typesArrayCollection:ArrayCollection = new ArrayCollection();
 		var categoryName:String, categoryNameLocalized:String, categoryPhraseId:String;
@@ -100,7 +131,7 @@ public class TypeAccordion extends Accordion {
 			categoryName = typeDescription.Information.Category.toLowerCase();
 			categoryNameLocalized = "";
 			
-			if(standardCategories.indexOf(categoryName) != -1)
+			if(STANDART_CATEGORIES.indexOf(categoryName) != -1)
 				categoryNameLocalized = resourceManager.getString("Edit", categoryName);
 				
 			else if (categoryName.match(phraseRE)) {
@@ -149,7 +180,7 @@ public class TypeAccordion extends Accordion {
 	{
 		var labelValue:String;
 		
-		for each (var category:String in standardCategories) {
+		for each (var category:String in STANDART_CATEGORIES) {
 			
 			labelValue = resourceManager.getString("Edit", category);
 			insertCategory(category, labelValue);
