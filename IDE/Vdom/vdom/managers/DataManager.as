@@ -270,7 +270,7 @@ public class DataManager implements IEventDispatcher {
 	public function getTypeByTypeId(typeId:String):XML 
 	{
 		if(typeId)
-			return _listTypes.Information.(ID == typeId)[0].parent(); //TODO !!!!! исправить добавить проверку!!!
+			return _listTypes.Information.(ID == typeId)[0].parent(); //FIXME !!!!! исправить добавить проверку!!!
 		else
 			return null;
 	}
@@ -897,6 +897,9 @@ public class DataManager implements IEventDispatcher {
 	private function proxy_setAttributesHandler(event:ProxyEvent):void
 	{
 		var key:String = event.xml.Key[0];
+		
+		if( !key )
+			return;
 		
 		var objectId:String = event.xml.Object[0].@ID;
 		var attributes:XML = event.xml.Object.Attributes[0];

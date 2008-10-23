@@ -21,7 +21,10 @@
 		private var curContainerID:String;
 		private var curContainerTypeID:String;
 		
-		private var changeWatcher:ChangeWatcher ;
+		private var changeWatcher:ChangeWatcher;
+		
+		private var _changed : Boolean = false;
+		
 		private function showHandler():void
 	 	{
 	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
@@ -118,6 +121,8 @@
 
 				
 				serverScripts.script = textArea.text;
+				
+				_changed = false;
 			}
 			
 			private function revert():void
@@ -125,15 +130,20 @@
 				btSave.setStyle("color", "0x000000");
 				btSave.setStyle("borderColor", "0xAAB3B3");
 
-				
 				textArea.text = serverScripts.script;
+				
+				_changed = false;
 			}
 			
 			private function textAreaDataChangeHandler():void
 			{
+				if( _changed )
+					return;
+				
 				btSave.setStyle("color", "0xCC0000");
 				btSave.setStyle("borderColor", "0xEE0000");
-
+				
+				_changed = true;
 			}
 	]]>
 </mx:Script>
@@ -160,13 +170,13 @@
 		</mx:VDividedBox>
 			
         <mx:VBox id="vBox" width="100%" height="100%" >
-            <mx:TextArea id="textArea" width="100%" height="100%" 
+            <containers:TabbedTextArea id="textArea" width="100%" height="100%" 
             		 text="same Text of code" 
-            		 tabEnabled="true"
-            		  keyDown = "{textAreaDataChangeHandler()}" />            	 
+            		 allowTabKey="true"
+            		 keyDown=" textAreaDataChangeHandler(); "/>            	 
             <mx:HBox>
-	           <mx:Button id="btSave" label="Save" click="{save()}" />
-	           <mx:Button label="Revert" click="{revert()}"/>
+	           <mx:Button id="btSave" label="Save" click=" save(); " />
+	           <mx:Button label="Revert" click=" revert(); "/>
             </mx:HBox>
         </mx:VBox>
 	</mx:HDividedBox>

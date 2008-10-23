@@ -49,11 +49,18 @@ package com.zavoo.svg.nodes
 		
 		public function set resource(value:ByteArray):void
 		{
-			var d:* ="";
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );	
-			loader.loadBytes( value );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+			
+			try
+			{
+				loader.loadBytes( value );
+			}
+			catch ( error : Error )
+			{
+				// FIXME Сделать обработку исключения если не грузится изображение
+			}
 		}
 		
 		/**
@@ -62,8 +69,8 @@ package com.zavoo.svg.nodes
 		private function loadBytes(byteArray:ByteArray):void {
 			
 			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );			
-			loader.loadBytes( byteArray );				
+			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );	
+			loader.loadBytes( byteArray );
 		}
 		
 		/**
