@@ -47,7 +47,7 @@
 			<mx:VRule height="100%" />
 			
 			<mx:Label text="Filter:" fontWeight="bold"/>
-			<mx:ComboBox id="__filterCBx" width="150" dataProvider="{filterDataProvider}" change="{applyFilterHandler();}" />
+			<mx:ComboBox id="__filterCBx" width="150" dataProvider="{filterDataProvider}" change="{applyExtensionFilter();}" />
 			<mx:VRule height="100%" />
 			<mx:Spacer width="100%" />
 			<mx:Button height="24" label="Upload File..." click="{fileUploadHandler();}"
@@ -62,12 +62,26 @@
 		
 		<mx:HBox id="__midArea" width="100%" height="100%" horizontalGap="2">
 			
-			<mx:List id="__thumbsList"
-				height="100%" width="180"
-				borderStyle="solid" change="{showResource();}"
-				verticalScrollPolicy="on" horizontalScrollPolicy="off"
-				paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
-				itemRenderer="vdom.controls.resourceBrowser.ListItem" />
+			<mx:VBox height="100%" width="200" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalGap="2">
+				<mx:HBox 
+					width="100%" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
+					horizontalGap="3" verticalAlign="middle">
+					
+					<mx:TextInput id="__nameFilter" change="{changeNameFilterHandler();}" click="{filterClickHandler();}"
+						borderColor="#999999" borderStyle="solid" width="100%" color="#666666" text="type a filter here"
+						backgroundColor="#EEEEEE" fontFamily="Tahoma" fontWeight="bold" />
+						
+					<mx:Image id="__spinner" width="18" height="18" source="@Embed('/assets/common/spinner.swf')" visible="false" />
+				</mx:HBox>
+				
+				<mx:List id="__thumbsList"
+					height="100%" width="100%"
+					borderStyle="solid" change="{showResource();}"
+					verticalScrollPolicy="on" horizontalScrollPolicy="off"
+					paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+					itemRenderer="vdom.controls.resourceBrowser.ListItem" />
+				
+			</mx:VBox>
 
 			<mx:VBox width="100%" height="100%" verticalGap="2" horizontalAlign="center">
 			

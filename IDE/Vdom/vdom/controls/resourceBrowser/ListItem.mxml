@@ -5,7 +5,7 @@
 -->
 <mx:HBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	width="174" height="50" 
+	height="50" 
 	horizontalAlign="left" borderStyle="solid"
 	verticalAlign="middle" verticalScrollPolicy="off"
 	horizontalScrollPolicy="off"
