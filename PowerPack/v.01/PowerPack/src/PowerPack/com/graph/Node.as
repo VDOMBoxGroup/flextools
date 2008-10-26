@@ -221,7 +221,7 @@ public class Node extends Canvas
     }
     //--------------------------------------------------------------------------
     
-	private var _category:String = NodeCategory.NORMAL;	
+	private var _category:String;	
 	private var _categoryChanged:Boolean = false;
 	    
     [Bindable("categoryChanged")]
@@ -255,7 +255,7 @@ public class Node extends Canvas
     }	
     //--------------------------------------------------------------------------
 
-	private var _type:String = NodeType.NORMAL;	
+	private var _type:String;	
 	private var _typeChanged:Boolean = false;
 
     [Bindable("typeChanged")]

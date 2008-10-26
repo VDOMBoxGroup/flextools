@@ -5,8 +5,13 @@
 	
 	<mx:XML id="templateXML"></mx:XML>
 	
+	<mx:Metadata>
+    	[Event(name="templateChanged", type="flash.events.Event")]
+	</mx:Metadata>
+
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.graph.GraphCanvasEvent;
 			import PowerPack.com.managers.ProgressManager;
 			import PowerPack.com.managers.ContextManager;
 			import mx.events.CollectionEventKind;
@@ -49,6 +54,8 @@
 				LanguageManager.setSentences(defaultCaptions);
 				return true
 			}
+			
+			static public const TPL_CHANGED:String = "templateChanged";
 				    
 		    //--------------------------------------------------------------------------
 		    //
@@ -120,7 +127,9 @@
 				selectGraph(null);
 				
 				vsViewStack.validateNow();
-				validateNow();					
+				validateNow();
+				
+				dispatchEvent(new Event(TPL_CHANGED));			
 			}
 			
 			public function createCategoryTab(label:String):AccordionChild
@@ -135,13 +144,17 @@
 				
 				graphAccordionChild.addEventListener("captionChanged", captionChangedHandler);	
 				
+				dispatchEvent(new Event(TPL_CHANGED));
+				
 				return graphAccordionChild;
 			}
 			
 			public function addGraph(graph:GraphCanvas):void
 			{
 				initGraphs.addItem(graph);				
-				vsViewStack.addChild(graph);	
+				vsViewStack.addChild(graph);
+				
+				graph.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChange);				
 				
 				var graphAccordionChild:AccordionChild = null;
 
@@ -160,7 +173,9 @@
 				graphAccordionChild.graphs.addItem(graph);
 				
 				if(graph.initial)
-					cbInitGraph.selectedItem = graph;			
+					cbInitGraph.selectedItem = graph;	
+					
+				dispatchEvent(new Event(TPL_CHANGED));		
 			}
 			
 			public function findFirstGraph():GraphCanvas
@@ -214,6 +229,8 @@
 
 				initGraphs.addItem(newGraph);
 				vsViewStack.addChild(newGraph);
+				
+				newGraph.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChange);
 
 				newGraph.fromXML(graphXML.toXMLString());
 
@@ -232,6 +249,8 @@
 					graphAccordionChild = createCategoryTab(newGraph.category); 
 
 				graphAccordionChild.graphs.addItem(newGraph);
+				
+				dispatchEvent(new Event(TPL_CHANGED));
 
 			}
 			
@@ -265,6 +284,8 @@
 						break;
 					}
 				}
+				
+				dispatchEvent(new Event(TPL_CHANGED));
 				
 				ProgressManager.complete();
 			}
@@ -375,7 +396,9 @@
 			private function completeEditLstGraphsHandler(event:ListEvent):void
 			{        	
 				vsViewStack.invalidateDisplayList();
-				cbInitGraph.invalidateDisplayList();       						
+				cbInitGraph.invalidateDisplayList();
+				
+				dispatchEvent(new Event(TPL_CHANGED));    						
 			}
 				    			
 	    	// Change initial graph
@@ -389,6 +412,8 @@
 				
 				if(ComboBox(event.target).selectedItem is GraphCanvas)
 					GraphCanvas(ComboBox(event.target).selectedItem).initial = true;
+				
+				dispatchEvent(new Event(TPL_CHANGED));
 			}
 			
 			private function btnNewClickHandler(event:MouseEvent):void
@@ -412,6 +437,8 @@
 				
 				child.lstGraphs.editable = true; 
 				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
+				
+				dispatchEvent(new Event(TPL_CHANGED));
 			}
 				
 			private function btnRenameClickHandler(event:Object):void
@@ -447,6 +474,8 @@
 				
 				child.lstGraphs.editable = true; 
 				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
+				
+				dispatchEvent(new Event(TPL_CHANGED));
 			}
 								
 			private function btnDeleteClickHandler(event:MouseEvent):void
@@ -477,6 +506,8 @@
 				{
 					selectGraph(findFirstGraph());
 				}
+				
+				dispatchEvent(new Event(TPL_CHANGED));
 			}	
 						    		
 			private function btnHelpClickHandler(event:MouseEvent):void
@@ -490,7 +521,16 @@
 				{
 					graph.category = event.target.label;
 				}
-			}								
+				
+				dispatchEvent(new Event(TPL_CHANGED));
+			}	
+			
+			private function onGraphChange(event:GraphCanvasEvent):void
+			{
+				event.stopImmediatePropagation();
+				dispatchEvent(new Event(TPL_CHANGED));			
+			}	
+			
 		]]>
 	</mx:Script>
 	

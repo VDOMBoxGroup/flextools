@@ -48,11 +48,15 @@
             	var list:List = List(event.target);
             	
             	list.createItemEditor(event.columnIndex, event.rowIndex); 
-
+				
             	var editInst:GraphThumb = GraphThumb(list.itemEditorInstance);
             	
 				editInst.labelTextField.visible = false;            	
+				editInst.labelTextField.includeInLayout = false;
+				
 				editInst.txtThumb.visible = true;
+				editInst.txtThumb.includeInLayout = true;
+				
 				editInst.txtThumb.setFocus();
 				editInst.data = list.selectedItem;
 				editInst.txtThumb.setSelection(0, editInst.txtThumb.text.length);

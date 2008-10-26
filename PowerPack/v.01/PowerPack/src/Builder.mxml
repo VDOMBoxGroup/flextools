@@ -146,7 +146,7 @@
 				Node.classConstructed;
 				GraphCanvas.classConstructed;
 				
-				Connector.connectMode = Connector.CM_NEAREST;				
+				Connector.connectMode = Connector.CM_CENTER;				
 				
 				var defaultCaptions:Object = {
 
@@ -373,7 +373,8 @@
 					{
 						
 	        			var tpl:TemplateStruct = ContextManager.instance.templates[0];        			
-	        			tpl.decode();					
+	        			tpl.decode();	
+	        			pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlTemplate;				
 	
 		                workStage.visible = true;
 	    	            workStage.includeInLayout = true;
@@ -403,6 +404,8 @@
             			tpl.decode();
             			if(tpl.xmlTemplate)
             			{
+            				pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlTemplate;
+            				
 			                workStage.visible = true;
 	    		            workStage.includeInLayout = true;
 	    		            ContextManager.instance.lastFile = true;
@@ -415,7 +418,18 @@
             		SuperAlert.show("Invalid secret key.");
             	}         	
             }
-            	    	    	
+            	    	    
+           	public function templateChanged():void
+           	{
+           		if(ContextManager.instance.templates.length>0)
+           		{
+           			var tpl:TemplateStruct = ContextManager.instance.templates[0];
+           			tpl.modified = true;           	
+           		
+           			MenuGeneral.modifiedTemplate(fileMenuData);
+           		}	
+           	}	
+           	
             // Event handler for the MenuBar control's itemClick event.
             private function menuHandler(event:Object):void  
             {
@@ -487,7 +501,9 @@
               			
               			fileStream.open(file, FileMode.WRITE);
         				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
-        				fileStream.close();	        				
+        				fileStream.close();	  
+        				
+        				ContextManager.instance.templates[0].modified = false;      				
         				
         				ProgressManager.complete();
         				
@@ -1084,6 +1100,8 @@
       			fileStream.open(file, FileMode.WRITE);
 				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
 				fileStream.close();	
+				
+				ContextManager.instance.templates[0].modified = false;
         				        		
         		ProgressManager.complete();
         		
@@ -1111,8 +1129,9 @@
 				
 			<panel:Graphs creationIndex="2"
 				id="pnl_graphs"
-				templateXML="{ContextManager.instance.templates.getItemAt(0).xmlTemplate as XML}"
-				vsViewStack="{viewstack}">
+				
+				vsViewStack="{viewstack}"
+				templateChanged="templateChanged();">
 			</panel:Graphs>
 			
 			<mx:Panel creationIndex="1" width="100%" height="100%" layout="absolute" 

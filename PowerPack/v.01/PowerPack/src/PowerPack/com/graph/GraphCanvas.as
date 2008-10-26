@@ -24,7 +24,6 @@ import mx.managers.DragManager;
 import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.ArrayUtil;
-import mx.utils.NameUtil;
 
 public class GraphCanvas extends Canvas
 {
@@ -267,10 +266,12 @@ public class GraphCanvas extends Canvas
 				var newNode:Node = Node(obj).clone();				 
 				dict[obj] = newNode; 
 				newCanvas.addChild(newNode);
-				newNode.validateProperties();
+				newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+				//newNode.validateProperties();
 			}
 		}
 		
+		/*
 		if(newCanvas.parent)
 		{
 			newCanvas.validateNow();
@@ -279,6 +280,7 @@ public class GraphCanvas extends Canvas
 				node.validateNow();
 			}
 		}
+		*/
 		
 		for each (obj in getChildren())
 		{
@@ -303,6 +305,7 @@ public class GraphCanvas extends Canvas
 				
 					newCanvas.addChildAt(newArrow, 0);
 					
+					newArrow.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 				}
 			}	
 		}				
@@ -322,6 +325,8 @@ public class GraphCanvas extends Canvas
 			newArrow.label = label;
 		
 		addArrow(newArrow);
+		
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	}
 	
 	public function addArrow(arrow:Connector):void
@@ -336,7 +341,10 @@ public class GraphCanvas extends Canvas
 			BindingUtils.bindProperty(arrow, 'data',
 				arrow.fromObject, 'arrTrans');
 		
-			addChildAt(arrow, 0);			
+			addChildAt(arrow, 0);
+			arrow.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+			
+			dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));			
 		}		
 	}
 	
@@ -409,9 +417,12 @@ public class GraphCanvas extends Canvas
 			
 			addChild(newNode);
 			
-			newNode.validateProperties();
+			newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+			
+			//newNode.validateProperties();
 		}
 		
+		/*
 		if(parent)
 		{
 			validateNow();
@@ -420,6 +431,7 @@ public class GraphCanvas extends Canvas
 				node.validateNow();
 			}
 		}
+		*/
 		
 		for each (var arrowXML:XML in graphXML.transitions.elements("transition"))
 		{
@@ -452,6 +464,8 @@ public class GraphCanvas extends Canvas
 					newArrow.fromObject, 'arrTrans');
 			
 				addChildAt(newArrow, 0);
+				
+				newArrow.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 			}
 			
 		}		
@@ -475,6 +489,9 @@ public class GraphCanvas extends Canvas
 				addChild(newNode);			
 				newNode.move(contentMouseX, contentMouseY);
 				newNode.setFocus();
+				
+				newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+				
 				dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 				break;
 				
@@ -482,6 +499,9 @@ public class GraphCanvas extends Canvas
 				if(Node.copyNode) {
 					var node:Node = Node.copyNode.duplicate(this);	
 					node.setFocus();
+					
+					node.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+					
 					dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 				}
 				break;
@@ -532,7 +552,17 @@ public class GraphCanvas extends Canvas
 		addChild(newNode);
 		newNode.move(event.localX + horizontalScrollPosition, 
 			event.localY + verticalScrollPosition);
-		newNode.setFocus();	    	
+		newNode.setFocus();
+		
+		newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+		
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));	    	
+    }
+    
+    private function onGraphChanged(event:GraphCanvasEvent):void
+    {
+    	event.stopImmediatePropagation();
+    	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
     }
     
     private function copyNodeHandler(event:Event):void
