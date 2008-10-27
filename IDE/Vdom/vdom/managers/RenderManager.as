@@ -49,7 +49,8 @@ public class RenderManager implements IEventDispatcher {
 		["fontstyle", "fontStyle"],
 		["textdecoration", "textDecoration"],
 		["textalign", "textAlign"],
-		["align", "horizontalAlign"]
+		["align", "horizontalAlign"],
+		["valign", "verticalAlign"]
 	];
 	
 	public static const propertyList:Array = 

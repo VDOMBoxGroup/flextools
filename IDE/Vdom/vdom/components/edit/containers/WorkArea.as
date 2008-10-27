@@ -353,6 +353,8 @@ public class WorkArea extends VBox
 		if(currentToolBar)
 			currentToolBar.close();
 		
+		var newAttribute:Object = {};
+		
 		if(_selectedObject && IItem(_selectedObject).editableAttributes[0] &&
 			currentToolBar && !currentToolBar.selfChanged)
 		{
@@ -360,7 +362,6 @@ public class WorkArea extends VBox
 			var attributes:Object = IItem(_selectedObject).editableAttributes[0].attributes;
 			var attributeValue:String;
 			var xmlCharRegExp:RegExp = /[<>&"]+/;
-			var newAttribute:Object = {};
 			
 			for (var attributeName:String in attributes)
 			{

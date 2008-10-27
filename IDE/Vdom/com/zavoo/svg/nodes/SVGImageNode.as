@@ -83,16 +83,30 @@ package com.zavoo.svg.nodes
 			var content:Bitmap = Bitmap(event.target.content);
 			
 			var m:Matrix = new Matrix();
-			var sx:Number = _xml.@width/content.width;
-			var sy:Number = _xml.@height/content.height;
-
+			
+			var sx : Number, sy : Number;
+			var bitmapWidth : Number, bitmapHeight : Number;
+			
+			if( _xml.@width[0] )
+				bitmapWidth = _xml.@width;
+			else
+				bitmapWidth = content.width;
+			
+			if( _xml.@height[0] )
+				bitmapHeight = _xml.@height;
+			else
+				bitmapHeight = content.height;
+						
+			sx = bitmapWidth/content.width;
+			sy = bitmapHeight/content.height;
+			
 			m.scale(sx, sy);
 			
 			try
 			{
 			var scaledImage:Bitmap = 
 				new Bitmap(
-					new BitmapData(_xml.@width, _xml.@height, true, 0x00000000), 
+					new BitmapData(bitmapWidth, bitmapHeight, true, 0x00000000), 
 					PixelSnapping.AUTO,
 					true
 				);
