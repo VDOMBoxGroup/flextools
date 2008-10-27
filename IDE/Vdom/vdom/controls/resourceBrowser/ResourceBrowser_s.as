@@ -98,15 +98,17 @@ private function keyPressHandler(keybEvent:KeyboardEvent):void
 
 private function doneHandler():void
 {
-	this.dispatchEvent(
-		ResourceBrowserEvent(
-			new ResourceBrowserEvent(
-				ResourceBrowserEvent.RESOURCE_SELECTED,
-				__thumbsList.selectedItem.@id, 
-				__thumbsList.selectedItem.@name
+	if (__thumbsList.selectedItem)
+		this.dispatchEvent(
+			ResourceBrowserEvent(
+				new ResourceBrowserEvent(
+					ResourceBrowserEvent.RESOURCE_SELECTED,
+					__thumbsList.selectedItem.@id, 
+					__thumbsList.selectedItem.@name
+				)
 			)
-		)
-	);
+		);
+
 	var cEvent:CloseEvent = new CloseEvent(CloseEvent.CLOSE);
 	this.dispatchEvent(cEvent); 
 }
@@ -265,6 +267,17 @@ private function closeHandler(cEvent:CloseEvent):void
 }
 
 private function showResource():void {
+	
+	if (!__thumbsList.selectedItem) {
+		__rName.text = 'No item selected';
+		__rType.text = '---';
+		__rID.text = 'Unknown resource ID';
+		__iResolution.text = "Can not determine";
+		__preview.__image.source = typesIcons.spinner;
+		return;
+	}
+	
+	
 	_selectedItemID = __thumbsList.selectedItem.@id;
 	
 	/* Fill in resource information in the info area */
