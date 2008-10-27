@@ -1,5 +1,6 @@
 import flash.display.DisplayObject;
 import flash.events.Event;
+import flash.events.HTMLUncaughtScriptExceptionEvent;
 import flash.events.MouseEvent;
 import flash.html.HTMLLoader;
 
@@ -141,6 +142,7 @@ private function editableHTML_completeHandler(event:Event):void
 	editableHTML.removeEventListener(Event.COMPLETE, editableHTML_completeHandler);
 	
 	HTMLEditorLoader = new HTMLLoader();
+	
 	HTMLEditorLoader.addEventListener(
 		Event.HTML_DOM_INITIALIZE,
 		HTMLEditorLoader_HTMLDomInitalizeHandler
@@ -156,6 +158,9 @@ private function HTMLEditorLoader_HTMLDomInitalizeHandler(event:Event):void
 	)
 	
 	var content:* = editableHTML.domWindow.document.getElementsByTagName('body')[0];
+	
+	oldValue = content.innerHTML; // TODO доделать наконец этот компонет!
+	
 	content.innerHTML = '<span id="xEditingArea">' + content.innerHTML + '</span>';
 	
 	elementForEditing = content.firstChild;
@@ -170,12 +175,18 @@ private function HTMLEditorLoader_completeHandler(event:Event):void
 {	
 	HTMLEditorLoader.removeEventListener(Event.COMPLETE, HTMLEditorLoader_completeHandler);
 //	var d:* = HTMLEditorLoader.window.tinyMCE;
+
+	tinyMCE = HTMLEditorLoader.window.tinyMCE;
+	
 	HTMLEditorLoader.window.tinyMCE.execCommand("mceAddControl", true, "content");
 	
 	elementForEditing = editableHTML.domWindow.document.getElementById('xEditingArea');
+	
+	if( !elementForEditing )
+		return;
+	
 	elementForEditing.focus();
 	
-	tinyMCE = HTMLEditorLoader.window.tinyMCE;
 	editableHTML.addEventListener(KeyboardEvent.KEY_UP, editableElement_KeyUpHandler);
 	
 	var body:* = elementForEditing.contentWindow.document.getElementsByTagName('body')[0];

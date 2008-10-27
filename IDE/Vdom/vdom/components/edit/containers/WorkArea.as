@@ -343,6 +343,40 @@ public class WorkArea extends VBox
 		
 		var objectDescription:XML = dataManager.getObject(IItem(currentObject).objectId);
 		
+		
+		
+		var currentToolBar:IToolBar;
+		
+		if(_contentToolbar && DisplayObject(_contentToolbar).parent)
+			currentToolBar = _contentToolbar;
+		
+		if(currentToolBar)
+			currentToolBar.close();
+		
+		if(_selectedObject && IItem(_selectedObject).editableAttributes[0] &&
+			currentToolBar && !currentToolBar.selfChanged)
+		{
+			
+			var attributes:Object = IItem(_selectedObject).editableAttributes[0].attributes;
+			var attributeValue:String;
+			var xmlCharRegExp:RegExp = /[<>&"]+/;
+			var newAttribute:Object = {};
+			
+			for (var attributeName:String in attributes)
+			{
+				attributeValue = attributes[attributeName];
+				
+				if(attributeValue.search(xmlCharRegExp) != -1)
+					newAttribute[attributeName] = XML("<![CDATA["+attributeValue+"]"+"]>");
+				else
+					newAttribute[attributeName] = attributeValue;				
+			}
+		}
+		
+		_selectedObject = event.item;
+		
+		initToolbar(IItem(_selectedObject));
+		
 		for(var name:String in event.properties)
 		{
 			if(
@@ -361,12 +395,15 @@ public class WorkArea extends VBox
 				if(event.properties["left"])
 					currentObject.x = event.properties["left"];
 			}
+			newAttribute[name] = event.properties[name];
 		}
 		
 		if (changeFlag)
 			lockItem(IItem(currentObject).objectId);
 		
-		applyChanges(IItem(currentObject).objectId, event.properties);
+		applyChanges(IItem(_selectedObject).objectId, newAttribute);
+		
+//		applyChanges(IItem(currentObject).objectId, event.properties);
 	}
 	
 	private function objectSelectHandler(event:ResizeManagerEvent):void {
@@ -395,10 +432,10 @@ public class WorkArea extends VBox
 				if(attributeValue.search(xmlCharRegExp) != -1)
 					newAttribute[attributeName] = XML("<![CDATA["+attributeValue+"]"+"]>");
 				else
-					newAttribute[attributeName] = attributeValue;
-				
-				applyChanges(IItem(_selectedObject).objectId, newAttribute);
+					newAttribute[attributeName] = attributeValue;				
 			}
+			
+			applyChanges(IItem(_selectedObject).objectId, newAttribute);
 		}
 		
 		_selectedObject = event.item;

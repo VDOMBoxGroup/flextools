@@ -257,10 +257,10 @@ private function colorTextChanged(event:ColorPickerEvent):void
 	elementForEditing.setStyle("color", event.color);
 }
 
-private function zzz(event:MouseEvent):void
+/* private function zzz(event:MouseEvent):void
 {
 	event.stopImmediatePropagation();	
-}
+} */
 
 public function close():void
 {	
