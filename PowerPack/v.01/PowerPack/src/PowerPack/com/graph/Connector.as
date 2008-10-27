@@ -280,7 +280,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			invalidateDisplayList();
 			         
     	    dispatchEvent(new ConnectorEvent(ConnectorEvent.HIGHLIGHTED_CHANGED));
-    	    dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+    	    //dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
   		}
     }
 
@@ -484,7 +484,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['connector_delete'], 'delete', false, null, false, false));
         	contextMenu.addItem(new SuperNativeMenuItem('separator'));
         	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['connector_enable'], 'enable', _enabled, null, false, false));
-        	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['connector_highlight'], 'highlight', _highlighted, null, false, false));
+        	//contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['connector_highlight'], 'highlight', _highlighted, null, false, false));
         	
 	       	for each (var item:NativeMenuItem in contextMenu.items) {
 	       		//LanguageManager.bindSentence('connector_'+item.name, item);

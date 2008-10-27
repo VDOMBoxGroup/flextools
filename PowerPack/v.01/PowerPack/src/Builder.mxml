@@ -226,8 +226,7 @@
 		            }
             	}
             	
-            	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
-            	
+            	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));            	
 		    }
 		    		    
 		    private function onProblemsDoubleClick(event:MouseEvent):void
@@ -263,14 +262,22 @@
 	       		exitApplication();	   
 	       	}
 	       	
+	       	public function saveTemplate():void
+	       	{
+   				SuperAlert.show(
+   					"Do you want to save template?", 
+   					LanguageManager.sentences['confirmation'], 
+   					Alert.YES|Alert.NO|Alert.CANCEL, this.nativeWindow, alertSaveHandler, null, Alert.YES);
+	       	}
+	       	
 	       	public function exitApplication(event:Event=null):void
 	       	{
-	       		if(ContextManager.instance.lastFile)
+	       		if(ContextManager.instance.lastFile && ContextManager.instance.templates[0].modified)
 	       		{
        				SuperAlert.show(
        					"Do you want to save file before exit?", 
        					LanguageManager.sentences['confirmation'], 
-       					Alert.YES|Alert.NO|Alert.CANCEL, this.nativeWindow, alertSaveHandler, null, Alert.YES);
+       					Alert.YES|Alert.NO|Alert.CANCEL, this.nativeWindow, alertSaveBeforeExitHandler, null, Alert.YES);
        			}
        			else
        			{
@@ -281,7 +288,7 @@
        			}
 	       	}
 	       	
-		    private function alertSaveHandler(event:CloseEvent):void 
+		    private function alertSaveBeforeExitHandler(event:CloseEvent):void 
 		    {
 	        	if(event.detail==Alert.YES)
 	        	{   
@@ -307,6 +314,26 @@
 	       		}	   	     	
 			}	       	
 
+		    private function alertSaveHandler(event:CloseEvent):void 
+		    {
+	        	if(event.detail==Alert.YES)
+	        	{   
+              		if(ContextManager.instance.lastFile && ContextManager.instance.files[0])
+              		{
+              			var file:File = ContextManager.instance.files[0];
+              			var fileStream:FileStream = new FileStream();
+              			
+              			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+              			ContextManager.instance.templates[0].encode();
+              			ContextManager.instance.templates[0].loadPicture();
+              			
+              			fileStream.open(file, FileMode.WRITE);
+        				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
+        				fileStream.close();					
+              		}
+	        	}	       		
+			}	       	
+
 		    private function alertExitHandler(event:CloseEvent):void 
 		    {
 	        	if(event.detail==Alert.YES)
@@ -314,7 +341,7 @@
 					ContextManager.saveSettings();
 	       			exit();
 	   	     	}
-			}	       	
+			}	      
 	    	    
 			//--------------------------------------------------------------------------
 		    //
@@ -424,9 +451,12 @@
            		if(ContextManager.instance.templates.length>0)
            		{
            			var tpl:TemplateStruct = ContextManager.instance.templates[0];
-           			tpl.modified = true;           	
-           		
-           			MenuGeneral.modifiedTemplate(fileMenuData);
+           			
+           			if(MenuGeneral.state != MenuGeneral.STATE_MOD)
+           			{
+           				tpl.modified = true;
+           				MenuGeneral.modifiedTemplate(fileMenuData);
+           			}
            		}	
            	}	
            	
@@ -549,7 +579,7 @@
 				}     
 				else if(event.item.@id == "properties")
 				{
-					TemplateProperties.show();
+					TemplateProperties.show(onTemplatePropertiesClose);
 				} 				
 				else if(event.item.@id == "validate")
 				{
@@ -678,6 +708,22 @@
 					fileStream.openAsync(file, FileMode.READ);
 				}
 				
+            }
+            
+            private function onTemplatePropertiesClose(event:CloseEvent):void
+            {
+				if(event.detail == ModalDialog.OK)
+            	{
+            		var tpl:TemplateStruct = ContextManager.instance.templates.getItemAt(0) as TemplateStruct; 
+            		var propDlg:TemplateProperties = event.target as TemplateProperties;
+            		
+            		tpl.name = propDlg.txtName.text;
+					tpl.description = propDlg.txtDesc.text;
+					tpl.picturePath = StringUtil.trim(propDlg.picBrowse.text);
+					tpl.key = StringUtil.trim(propDlg.txtKey.text);
+					
+					templateChanged();
+            	}            	
             }
             
             private function onValidate(event:Event):void

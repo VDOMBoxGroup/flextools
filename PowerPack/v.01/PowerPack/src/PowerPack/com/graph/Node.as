@@ -404,8 +404,8 @@ public class Node extends Canvas
 		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
    		
-   		removeEventListener("xChanged", positionChangedHandler);
-   		removeEventListener("yChanged", positionChangedHandler);
+   		removeEventListener("xChanged", graphChangedHandler);
+   		removeEventListener("yChanged", graphChangedHandler);
        		
 		if(copyNode == this)
 		{
@@ -517,12 +517,12 @@ public class Node extends Canvas
 			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown); 
 			addEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
        		
-       		addEventListener("xChanged", positionChangedHandler);
-       		addEventListener("yChanged", positionChangedHandler);			
+       		addEventListener("xChanged", graphChangedHandler);
+       		addEventListener("yChanged", graphChangedHandler);			
     	} 
     }
 
-	private function positionChangedHandler(event:Event):void
+	private function graphChangedHandler(event:Event):void
 	{
 		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	}
@@ -1089,10 +1089,14 @@ public class Node extends Canvas
 				(canvas.currentArrow.fromObject as Node).outArrows.addItem(canvas.currentArrow);
 				(canvas.currentArrow.toObject as Node).inArrows.addItem(canvas.currentArrow);
 				canvas.currentArrow.addEventListener(ConnectorEvent.DISPOSED, destroyArrowHandler);
+				canvas.currentArrow.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, graphChangedHandler);
 				
 				canvas.currentArrow.beginEdit();
-										
+				
 				canvas.currentArrow = null;
+				
+				dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+				
 				return;
 			}
 		}

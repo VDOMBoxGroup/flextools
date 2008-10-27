@@ -37,7 +37,7 @@ package PowerPack.com.gen.structs
 			}
 			else
 			{
-				this.xml = new XML(<template></template>);
+				this.xml = new XML(<template/>);
 				this.xml.@ID = UIDUtil.createUID();
 			}
 		}
@@ -59,7 +59,8 @@ package PowerPack.com.gen.structs
 		}		
 		public function set name(value:String):void
 		{
-			_xml.@name = value;	
+			if(_xml.@name != value)
+				_xml.@name = value;	
 		}		
 
 		[Bindable]
@@ -69,7 +70,8 @@ package PowerPack.com.gen.structs
 		}		
 		public function set description(value:String):void
 		{
-			_xml.description = value;	
+			if(_xml.description != value)
+				_xml.description = value;	
 		}		
 		
 		public function get ID():String
@@ -84,7 +86,8 @@ package PowerPack.com.gen.structs
 		}		
 		public function set picture(value:String):void
 		{
-			_xml.picture = value;	
+			if(_xml.picture != value)
+				_xml.picture = value;	
 		}	
 		
 		public function get isEncoded():Boolean

@@ -164,7 +164,7 @@
 
 			private  function getAllTypesHandler(event:Get_all_typesResultEvent):void
 			{
-				var resultXML:XML = new XML(<Result />);
+				var resultXML:XML = new XML(<Result/>);
 				resultXML.appendChild(XMLList(event.result));	
 				
 				if(resultXML.Error.toString() == 'Error') {

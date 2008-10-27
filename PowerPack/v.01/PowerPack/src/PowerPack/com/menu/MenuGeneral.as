@@ -10,9 +10,17 @@ import flash.filesystem.FileStream;
 public class MenuGeneral extends EventDispatcher
 {	
 	public static const LANG_FOLDER:String = "lang";
+	public static const STATE_NO:String = "noTemplate";
+	public static const STATE_NEW:String = "newTemplate";
+	public static const STATE_MOD:String = "modifiedTemplate";
+	public static const STATE_OPEN:String = "openedTemplate";
+	
+	public static var state:String;	 
 	
 	public static function noTemplate(menu:XML):void
-    {
+    {    	
+    	state = STATE_NO;
+    	 
     	var item:XML;
     	
     	// process file menu
@@ -42,6 +50,8 @@ public class MenuGeneral extends EventDispatcher
 
 	public static function newTemplate(menu:XML):void
 	{
+		state = STATE_NEW;
+		
     	var item:XML;
     	
     	// process file menu
@@ -74,6 +84,8 @@ public class MenuGeneral extends EventDispatcher
 	
 	public static function modifiedTemplate(menu:XML):void
     {
+    	state = STATE_MOD;
+    	
     	var item:XML;
     	
     	// process file menu
@@ -106,6 +118,8 @@ public class MenuGeneral extends EventDispatcher
     
     public static function openedTemplate(menu:XML):void
     {
+    	state = STATE_OPEN;
+    	
     	var item:XML;
     	
     	// process file menu
