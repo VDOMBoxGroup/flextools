@@ -48,6 +48,7 @@ package vdom.components.treeEditor.colorMenu02
 		private var imgEye:Image = new Image();
 		private var imgBackGround:Image;
 		private var desabledEye:Canvas = new Canvas();
+		private var myShape:Canvas = new Canvas();
 		
 		public function Level(obj:Object)
 		{
