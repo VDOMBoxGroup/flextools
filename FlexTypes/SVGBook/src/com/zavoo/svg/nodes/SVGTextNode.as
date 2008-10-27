@@ -13,6 +13,7 @@ package com.zavoo.svg.nodes
 	import mx.containers.Canvas;
 	import flash.events.MouseEvent;
 	import mx.controls.ToolTip;
+	import mx.messaging.channels.StreamingAMFChannel;
 	
 	use namespace mx_internal;
 	
@@ -114,7 +115,7 @@ package com.zavoo.svg.nodes
 			
 			
 			if (this._textField != null) {
-				var fontFamily:String = this.getStyle('font-family');				
+				var fontFamily:String = this.getStyle('font-family');
 				var fontSize:String = this.getStyle('font-size');
 				var fill:String = this.getStyle('fill');
 				

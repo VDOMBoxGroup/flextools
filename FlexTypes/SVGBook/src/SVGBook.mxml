@@ -2,7 +2,15 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	layout="absolute" xmlns:controls="qs.controls.*" xmlns:local="*" xmlns:svg="com.zavoo.svg.*" 
-	creationComplete="{onCreationComplete();}" width="800" height="600">
+	creationComplete="{onCreationComplete();}" width="100%" height="100%" >
+	
+	
+	<mx:Style>
+		ToolTip {
+			fontFamily:"Tahoma";
+		}
+	</mx:Style>
+	
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
@@ -24,21 +32,27 @@
 				var startPage:int = 0;
 				
 				try {
+					this.setStyle('backgroundColor', flashVars.bgcolor);
+				}
+				catch (err:Error) {	}
+				
+				
+				try {
 					pageRange = flashVars.pagerange;
 					startPage = flashVars.startpage;
 					dataSourceUrl = flashVars.datasource;
-					this.width = flashVars.width;
-					this.height = flashVars.height;
-					this.hasCover = Boolean(flashVars.hascover);
+					__fb.width = flashVars.width;
+					__fb.height = flashVars.height;
+					this.hasCover = flashVars.hascover == "1";
 				}
 				catch (err:Error) {
 					Alert.show(err.message, "The following error occurred:");
 					return;
 				}
 				
-				if (this.width == 0 || this.height == 0) {
-					width = 640;
-					height = 480;
+				if (__fb.width == 0 || __fb.height == 0) {
+					__fb.width = 640;
+					__fb.height = 480;
 				}
 				
 				if (hasCover) {
@@ -80,18 +94,40 @@
 				}
 				
 			}
+			
+			private function turnLeft():void {
+				if (__fb.pageCount > 0 && __fb.currentPageIndex > 0)
+					__fb.turnToPage(__fb.currentPageIndex - 1);
+			}
+			
+			private function turnRight():void {
+				if (__fb.pageCount > 0 && __fb.currentPageIndex < __fb.maximumPageIndex)
+					__fb.turnToPage(__fb.currentPageIndex + 1);
+				
+			}
+			
 		]]>
 	</mx:Script>
 	
-	<controls:FlexBook id="__fb" width="100%" height="100%" horizontalCenter="0" verticalCenter="0">
-<!--
-		<controls:cover>
-			<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
-		</controls:cover>
-
-		<controls:backCover>
-			<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
-		</controls:backCover>
--->
-	</controls:FlexBook>
+	<mx:VBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle"
+		paddingBottom="5">
+		
+		<controls:FlexBook id="__fb" width="100%" height="100%" horizontalCenter="0" verticalCenter="0">
+	<!--
+			<controls:cover>
+				<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
+			</controls:cover>
+	
+			<controls:backCover>
+				<mx:Canvas backgroundColor="#000000" color="#FFFFFF" />
+			</controls:backCover>
+	-->
+		</controls:FlexBook>
+		<mx:HBox width="50%" horizontalGap="2" horizontalAlign="center" height="20" verticalAlign="middle" >
+			<mx:LinkButton width="25" click="{turnLeft();}" icon="@Embed('/images/previous.png')" />
+			<mx:HRule width="30" />
+			<mx:LinkButton width="25" click="{turnRight();}" icon="@Embed('/images/next.png')" />
+		</mx:HBox>
+	</mx:VBox>
+		
 </mx:Application>
