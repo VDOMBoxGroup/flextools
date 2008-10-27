@@ -371,6 +371,7 @@ private function addTreeEditorListeners():void
 	colmen2.addEventListener(TreeEditorEvent.SELECTED_LEVEL, chengeSelectedLevelHandler);
 	
 	dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
+	dataManager.addEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, createObjectHandler);
 	
 	btLine.addEventListener(MouseEvent.CLICK, lineClikHandler );
 }
@@ -384,6 +385,7 @@ private function removeTreeEditorListeners():void
 	colmen2.removeEventListener(TreeEditorEvent.SHOW_LINES, showLines);
 	
 	dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
+	dataManager.removeEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, createObjectHandler);
 	
 	btLine.removeEventListener(MouseEvent.CLICK, lineClikHandler);
 }
@@ -875,3 +877,82 @@ private function indexChangeHandler(inEvt:IndexEvent):void
 
 
 
+//private var obID:String;
+private function  createObjectHandler(dmEvt:DataManagerEvent):void
+{
+	trace("Page created");
+	
+	var xmlObj:XML = new XML(dmEvt.result);
+	var	ID:String = xmlObj.Object.@ID;
+	
+	var trEl:TreeElement = new TreeElement();
+		trEl.ID =  ID;
+	
+	var typeID:String = xmlObj.Object.@Type.toXMLString();
+		trEl.typeID = getIcon(typeID);
+		
+	var maxY:Number = 0;
+		for (var tID:String in massTreeElements)
+				if(massTreeElements[tID].y > maxY) 
+					maxY = massTreeElements[tID].y;
+					
+//	trEl.y = maxY + 100;
+	
+	
+					
+	massTreeElements[ID] = addEventListenerToTreeElement(trEl);
+	main.addChild(massTreeElements[ID]);
+	
+	//select new object
+		if(curTree != null)
+			curTree.current = false;
+		curTree = massTreeElements[ID];
+		if(curTree != null)
+		{
+			curTree.current = true;
+			dataManager.changeCurrentPage(curTree.ID);
+		}
+		
+	saveToServer();
+	
+	dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
+	dataManager.changeCurrentPage(ID);
+}
+
+
+private function changePagesHandler(dmEvt:DataManagerEvent):void
+{
+	trace("---Cur page changed---");
+//	dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
+	
+//	dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
+	
+//	dataManager.changeCurrentObject(obID);
+}
+
+/*
+private function changeObjectHandler(dmEvt:Event):void
+{
+	dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler)
+	//dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
+	
+	if(!dataManager.currentObject)
+	{
+		PopUpManager.removePopUp(spinner);
+		return;
+	}
+
+	dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+
+	var str:String = 
+	 	'<Attributes>' + 
+	 		' <Attribute Name="description">' + descript.text+'</Attribute>'+
+	 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
+	 	' </Attributes>';
+	var xml:XML = XML(str)	
+		dataManager.currentObject.Attributes = xml;
+	
+	dataManager.updateAttributes();
+}
+
+*/	

@@ -4,7 +4,7 @@ package vdom.components.treeEditor.colorMenu02
 	{
 		private var dataArr:Array = 
 				[
-				{label:'level 0', data:0xddd000, level:0},
+				{label:'level 0', data:0xfcd700, level:0},
 				{label:'level 1', data:0x7ddd00, level:1},
 				{label:'level 2', data:0xdd00c0, level:2},
 				{label:'level 3', data:0x00ddc6, level:3},

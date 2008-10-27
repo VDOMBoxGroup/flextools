@@ -95,7 +95,7 @@
 	}
 	
 	
-	
+	private var needToSave:Boolean;
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
 //		dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
@@ -108,9 +108,10 @@
 
 		if (needCreatTree == true)
 		{
+			needToSave = true;
 			hideLenes();
 			adjustmentTree(xmlApplicationStructure);
-			saveToServer();
+		
 			
 			
 			var delayTimer:Timer = new Timer(1500, 1);
@@ -214,12 +215,19 @@
 			drawLine(evt.currentTarget);
 		}		
 
+
 		if (curTree != null)
-			curTree.current = false;	
+		{
+			if(curTree.ID != evt.currentTarget.ID)
+			{
+				dataManager.changeCurrentPage(curTree.ID);
+			}
+			curTree.current = false;
+		}	
 		
 		evt.currentTarget.current = true;
 		curTree = evt.currentTarget;		
-		dataManager.changeCurrentPage(curTree.ID);
+		
 	}
 	
 	
@@ -492,38 +500,20 @@
 	private function addTreeElementHandler(adTrEvt:AddTreeElementEvent):void 
 	{
 		var ID:String = adTrEvt.treeElementID
-		var trEl:TreeElement = new TreeElement();
-		
-		trEl.ID =  ID;
+
+		/*
 		trEl.name =  adTrEvt.title;
 		trEl.type =  adTrEvt.trElementType;
 		trEl.resourceID  =  adTrEvt.resourceID;
 		trEl.description =  adTrEvt.description;
-		trEl.typeID = adTrEvt.typeResourse;
 		trEl.state = chExpandAll.selected.toString();
 		
-		var maxY:Number = 0;
-		for (var tID:String in massTreeElements)
-				if(massTreeElements[tID].y > maxY) 
-					maxY = massTreeElements[tID].y;
-					
-		trEl.y = maxY + 100;
 		
-		massTreeElements[ID] = addEventListenerToTreeElement(trEl);
-		main.addChild(massTreeElements[ID]);
 		fileManager.loadResource(dataManager.currentApplicationId,  trEl.resourceID, massTreeElements[ID]);
 		
-		//select new object
-		if(curTree != null)
-			curTree.current = false;
-		curTree = massTreeElements[ID];
-		if(curTree != null)
-		{
-			curTree.current = true;
-			dataManager.changeCurrentPage(curTree.ID);
-		}
 		
-		saveToServer();
+		
+		*/
 	}
 	
 	private function autoSpacing():void
@@ -548,7 +538,10 @@
 		
 		setStartPage();
 		
-//		saveToServer();
+		if(needToSave) 
+			saveToServer();
+		
+		needToSave = false;
 	}
 	
 	
@@ -622,7 +615,7 @@
 
 
 <mx:VBox right="0">
-	<containers:ClosablePanel width="100%" label="">
+	<containers:ClosablePanel width="100%" title="Menu">
 		<mx:VBox width="100%" 	verticalGap="0"  verticalAlign="0" backgroundColor="0x999999">
 			
 			<treeEditor:TreeButton  labelBt="{resourceManager.getString('Tree','new_page')}"  click="addTreeElementLauncher()"
@@ -651,8 +644,8 @@
 			
 		</mx:VBox>		
 	</containers:ClosablePanel>	
-	<containers:ClosablePanel width="100%">
-		<colorMenu02:ColorMenu2 id="colmen2" text="{resourceManager.getString('Tree','levels')}" />
+	<containers:ClosablePanel title="Levels" width="100%">
+		<colorMenu02:ColorMenu2 id="colmen2" text="11111111" />
 	</containers:ClosablePanel>	
 </mx:VBox>
 

@@ -8,8 +8,9 @@ package vdom.components.treeEditor.colorMenu02
 	import mx.events.FlexEvent;
 	
 	import vdom.events.TreeEditorEvent;
+	import mx.containers.VBox;
 
-	public class ColorMenu2 extends Canvas
+	public class ColorMenu2 extends VBox
 	{
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='rMenu')]
 		[Bindable]
@@ -22,6 +23,8 @@ package vdom.components.treeEditor.colorMenu02
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='closeEye')]
 		[Bindable]
 		public var closeEye:Class; 
+		
+		
 		
 		public var masLevels:Array;
 		private var levels:Levels = new Levels();
@@ -37,9 +40,14 @@ package vdom.components.treeEditor.colorMenu02
 			
 			//TODO: implement function
 			super();
+			percentWidth = 100;
+			setStyle("verticalGap", "1");
+			setStyle("backgroundColor","0x999999");
+			
 			var imgBackGround:Image = new Image();
-			imgBackGround.source = rMenu;
-			addChild(imgBackGround);
+				
+				imgBackGround.source = rMenu;
+//			addChild(imgBackGround);
 			slctLevel = 0;
 			
 			
@@ -51,7 +59,7 @@ package vdom.components.treeEditor.colorMenu02
 				textLabel.setStyle("color", "0xFFFFFF");
 				textLabel.setStyle('fontWeight', "bold"); 
 				textLabel.setStyle('textAlign', 'center');
-			addChild(textLabel);
+//			addChild(textLabel);
 			
 			eye = new Image();
 			eye.x = 5;
@@ -60,17 +68,17 @@ package vdom.components.treeEditor.colorMenu02
 			eye.height = 10;
 			eye.source = openEye;
 			eye.addEventListener(MouseEvent.CLICK, eyeClickHandler);
-			addChild(eye);
+//			addChild(eye);
 		}
 		
 		private function showHandler(flEvt:FlexEvent):void
 		{
-			
+			creatLevels();
 		}
 		
 		private function hideHandler(flEvt:FlexEvent):void
 		{
-//			removeLevels();
+			removeLevels();
 		}
 		
 		private function removeLevels():void
@@ -108,8 +116,8 @@ package vdom.components.treeEditor.colorMenu02
 			for (var i:int = 0; i < levels.length; i++)
 			{
 				masLevels[i] = new Level(levels.getLevel(i));
-				masLevels[i].y = i * 25 + 25;
-				masLevels[i].x = 2;
+//				masLevels[i].y = i * 20 + 25;
+//				masLevels[i].x = 2;
 			
 				masLevels[i].addEventListener(TreeEditorEvent.HIDE_LINES, dispasher);
 				masLevels[i].addEventListener(TreeEditorEvent.SHOW_LINES, dispasher);

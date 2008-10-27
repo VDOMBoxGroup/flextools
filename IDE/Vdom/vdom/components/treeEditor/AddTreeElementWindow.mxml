@@ -113,37 +113,18 @@
 		private function okPressed():void 
 		{
 			/* PopUp spinner while something doing... */
-			spinner = new SpinnerScreen();
-			PopUpManager.addPopUp(spinner, DisplayObject(Application.application), true);				 
+//			spinner = new SpinnerScreen();
+//			PopUpManager.addPopUp(spinner, DisplayObject(Application.application), true);				 
 
 			OK.enabled = false;
-			dataManager.addEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, createObjectHandler);
-			dataManager.createObject(selectedAppl.data);		
+		
+			dataManager.createObject(selectedAppl.data);
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+					
 		}	
 		
 		
-		private var obID:String;
-		private function  createObjectHandler(dmEvt:DataManagerEvent):void
-		{
-			dataManager.removeEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, createObjectHandler);
-			var xmlObj:XML = new XML(dmEvt.result);
-				obID = xmlObj.Object.@ID;
-			var typeID:String = xmlObj.Object.@Type.toXMLString();
-			
-			treeElementID = obID;
-			typeResourse = getIcon(typeID);
-			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
-			dataManager.changeCurrentPage(obID);
-		}
-	
-		private function changePagesHandler(dmEvt:DataManagerEvent):void
-		{
-			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
-			
-			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
-			
-			dataManager.changeCurrentObject(obID);
-		}
+		
 		
 	//	resourse brouser
 		private function getIcon(ID:String):String
@@ -160,30 +141,7 @@
 			return  '';
 		}
 		
-		private function changeObjectHandler(dmEvt:Event):void
-		{
-			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler)
-			//dataManager.removeEventListener(DataManagerEvent.CURRENT_PAGE_CHANGED, changeAttributesHandler);
-			
-			if(!dataManager.currentObject)
-			{
-				PopUpManager.removePopUp(spinner);
-				return;
-			}
-
-			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
-		
-			var str:String = 
-			 	'<Attributes>' + 
-			 		' <Attribute Name="description">' + descript.text+'</Attribute>'+
-			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
-			 	' </Attributes>';
-			var xml:XML = XML(str)	
-				dataManager.currentObject.Attributes = xml;
-			
-			dataManager.updateAttributes();
-		}
-		
+				
 		
 		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
 		{
