@@ -595,7 +595,7 @@
 	}
 	]]>
 </mx:Script>
-<mx:HDividedBox width="100%" height="100%">
+<mx:HBox width="100%" height="100%" >
 
 <mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1">
 
@@ -609,12 +609,12 @@
 	</mx:ComboBox>
 -->
 	</mx:Canvas>
-	
-		
+<mx:Canvas right="0"  height="100%" >	
+<mx:VBox  >
+<containers:ClosablePanel width="300" title="Properties">
+<treeEditor:Properties />
+</containers:ClosablePanel>
 
-
-
-<mx:VBox right="0">
 	<containers:ClosablePanel width="100%" title="Menu">
 		<mx:VBox width="100%" 	verticalGap="0"  verticalAlign="0" backgroundColor="0x999999">
 			
@@ -638,17 +638,14 @@
 			<treeEditor:TreeButton id="btSave" labelBt="Save" click="{saveToServer()}" 
 				iconBt="@Embed(source='/assets/treeEditor/save.png')"/>
 				
-		 	
 			<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>
-			
-			
 		</mx:VBox>		
 	</containers:ClosablePanel>	
 	<containers:ClosablePanel title="Levels" width="100%">
 		<colorMenu02:ColorMenu2 id="colmen2" text="11111111" />
 	</containers:ClosablePanel>	
 </mx:VBox>
-
-</mx:HDividedBox>
+</mx:Canvas>
+</mx:HBox>
 
 </mx:Canvas>

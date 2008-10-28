@@ -217,6 +217,9 @@ private function adjustmentTree(xml1:XML):void
 	 */
 	//--------------------- end --------------
 	 for (var level:String in massLines)
+	 {
+	 	if(colmen2.showLevel(level))
+	 	{
 			for (var frsTrElem:String in massLines[level])
 				for (var sknTrElem:String in massLines[level][frsTrElem])
 				{
@@ -225,6 +228,8 @@ private function adjustmentTree(xml1:XML):void
 					massTreeObj[sknTrElem].parent = massTreeObj[frsTrElem];
 					
 				}
+		}
+	}
 	//----------- 
 	var depth:int = 0;
 	massMap[depth] = -1;

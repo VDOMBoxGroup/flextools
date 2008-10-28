@@ -29,7 +29,7 @@ package vdom.components.treeEditor.colorMenu02
 		public var masLevels:Array;
 		private var levels:Levels = new Levels();
 		private var slctLevel:Number;
-		private var eye:Image;	
+//		private var eye:Image;	
 		private var eyeOpend:Boolean = true;
 		private var  textLabel:Label;
 		
@@ -60,7 +60,7 @@ package vdom.components.treeEditor.colorMenu02
 				textLabel.setStyle('fontWeight', "bold"); 
 				textLabel.setStyle('textAlign', 'center');
 //			addChild(textLabel);
-			
+		/*	
 			eye = new Image();
 			eye.x = 5;
 			eye.y = 5;
@@ -69,6 +69,7 @@ package vdom.components.treeEditor.colorMenu02
 			eye.source = openEye;
 			eye.addEventListener(MouseEvent.CLICK, eyeClickHandler);
 //			addChild(eye);
+*/
 		}
 		
 		private function showHandler(flEvt:FlexEvent):void
@@ -92,6 +93,7 @@ package vdom.components.treeEditor.colorMenu02
 		
 		private function eyeClickHandler (msEvt:MouseEvent):void
 		{
+			/*
 			eyeOpend = !eyeOpend;
 			if(eyeOpend)
 			{
@@ -106,7 +108,7 @@ package vdom.components.treeEditor.colorMenu02
 			{
 				masLevels[i].status = eyeOpend;
 			}
-			
+			*/
 			
 		}
 		
