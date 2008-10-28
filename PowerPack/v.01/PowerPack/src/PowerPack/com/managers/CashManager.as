@@ -1,5 +1,7 @@
 package PowerPack.com.managers
 {
+	import flash.filesystem.File;
+	
 
 public class CashManager extends EventDispatcher
 {
@@ -63,6 +65,13 @@ public class CashManager extends EventDispatcher
 	//  Variables
 	//
 	//--------------------------------------------------------------------------			
+	 public var cashDir:File = File.applicationStorageDirectory.resolvePath('cash');
+	 
+	 private var _initialized:Boolean;	 	 
+	 public function get initialized():Boolean
+	 {
+	 	return _initialized;
+	 }
 	
 	//--------------------------------------------------------------------------
 	//
@@ -70,11 +79,22 @@ public class CashManager extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 	
+	private static function initialize():void
+	{
+		instance._initialized = false;
+		
+		if(!instance.cashDir.exists)
+		{
+			instance.cashDir.createDirectory();
+		}	
+	}
+	
 	//--------------------------------------------------------------------------
     //
     //  Event handlers
     //
     //--------------------------------------------------------------------------
+	
 	    
 }
 }
