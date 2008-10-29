@@ -108,7 +108,7 @@ package ExtendedAPI.com.utils
 				buf = _str.concat();
 			}			
 			
-			if(char)
+			if(char)			
 			{
 				buf = "";
 			
@@ -116,7 +116,10 @@ package ExtendedAPI.com.utils
 				{
 					if(str.charAt(i)=='\\')
 					{
-						if(str.charAt(i+1)=='\\' || str.charAt(i+1)==char)
+						if(str.charAt(i+1)=='\\' || 
+							//str.charAt(i+1)==char
+							str.charAt(i+1)=='"' ||
+							str.charAt(i+1)=="'")
 							i++;
 					}
 					
@@ -136,7 +139,8 @@ package ExtendedAPI.com.utils
 			
 			for(var i:int=0; i<_str.length; i++)
 			{
-				if(_str.charAt(i)==qoute)
+				//if(_str.charAt(i)==qoute)
+				if(_str.charAt(i)=='"' || _str.charAt(i)=="'")
 				{
 					/*
 					var j:int = i-1;
