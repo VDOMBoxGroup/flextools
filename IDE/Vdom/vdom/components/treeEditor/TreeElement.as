@@ -511,9 +511,16 @@ package vdom.components.treeEditor
 		
 		/*      type ID resourse     */
 		
-		 public function set typeID(resID:String):void
+		private var _resID:String;
+		public function set typeID(resID:String):void
 		{
-			fileManager.loadResource(dataManager.currentApplicationId,  resID, this, 'typeResourse');
+			_resID = resID;
+			fileManager.loadResource(dataManager.currentApplicationId,  _resID, this, 'typeResourse');
+		}
+		
+		public function get typeID():String
+		{
+			return _resID;
 		}
 		/*
 		public function set state(bl:Boolean):void
@@ -539,11 +546,13 @@ package vdom.components.treeEditor
 		
 		private function loaderTypeResComplete(evt:Event):void 
 		{
-   			loaderTypeRes.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
+   			loaderTypeRes.contentLoaderInfo.removeEventListener(Event.COMPLETE, loaderTypeResComplete);		
    			//image.width = loader.width;
    			//image.height = loader.height;
    			imgType.source = loaderTypeRes.content;
    		}
+		
+		
 		
 		/*      select      */
 		

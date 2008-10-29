@@ -30,7 +30,7 @@
 	private var massLines:Array = new Array();
 	private var masIndex:Array = new Array();
 	private var masMaxOfIndex:Array = new Array();
-	private var _curTree:Properties = new Properties();
+//	private var _curTree:Properties = new Properties();
 	private var canLine:Canvas = new Canvas();
 	private var pnFrom:Point = new Point();
 	private var blDrawLine:Boolean = false;
@@ -614,7 +614,7 @@
 		verticalScrollPolicy="auto"  horizontalScrollPolicy="off">	
 <mx:VBox  >
 <containers:ClosablePanel width="300" title="Properties">
-<treeEditor:Properties />
+<treeEditor:Properties id="_curTree" />
 </containers:ClosablePanel>
 
 	<containers:ClosablePanel width="100%" title="Menu">

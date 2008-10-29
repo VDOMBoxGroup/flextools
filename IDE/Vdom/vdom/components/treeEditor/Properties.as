@@ -1,5 +1,10 @@
 package vdom.components.treeEditor
 {
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
+	import flash.events.IOErrorEvent;
+	import flash.events.KeyboardEvent;
+	
 	import mx.containers.Canvas;
 	import mx.containers.HBox;
 	import mx.containers.VBox;
@@ -9,6 +14,8 @@ package vdom.components.treeEditor
 	import mx.controls.TextInput;
 	
 	import vdom.controls.resourceBrowser.ResourceBrowserButton;
+	import vdom.managers.DataManager;
+	import vdom.managers.FileManager;
 	
 	public class Properties extends VBox
 	{
@@ -21,6 +28,8 @@ package vdom.components.treeEditor
 		private var defaultPicture:Class;
 		
 		private var elasticHeight:int = 21;
+		private var fileManager:FileManager = FileManager.getInstance();
+		private var dataManager:DataManager = DataManager.getInstance();
 			
 		public function Properties()
 		{
@@ -35,11 +44,14 @@ package vdom.components.treeEditor
 			generateTitle();
 			generateImage();
 			generateDisription();
+			__title.text = "Name of Container2";
+			canvas.addChild(__title);
 		}
 		
 		 
 		 
 		private var typeLabel:Label = new Label();
+		private var typePicture:Image = new Image();
 		private function generateType():void
 		{
 			var type:Canvas = new Canvas();
@@ -59,7 +71,7 @@ package vdom.components.treeEditor
 				hBox.setStyle("align", "center");
 			type.addChild(hBox);
 			
-			var typePicture:Image = new Image();
+			
 				typePicture.x = 3;	
 				typePicture.source = defaultPicture; 
 				typePicture.maintainAspectRatio = false;
@@ -77,11 +89,11 @@ package vdom.components.treeEditor
 			hBox.addChild(typeLabel);
 		}
 		
-		private var title:TextInput = new TextInput();
-
+		private var __title:TextInput = new TextInput();
+		private var canvas:Canvas = new Canvas();
 		private function generateTitle():void
 		{
-			var canvas:Canvas = new Canvas();
+			
 			addChild(canvas);
 			
 			var titleElasticGrey:Image = new Image(); 
@@ -98,13 +110,20 @@ package vdom.components.treeEditor
 				titleLabel.text = "Title: ";
 			canvas.addChild(titleLabel);
 			
-				title.text = "Name of Container";
-				title.x = 40;
-				title.percentWidth = 100;
-			canvas.addChild(title);
+				__title.text = "Name of Container";
+				__title.x = 40;
+				__title.percentWidth = 100;
+				__title.addEventListener(KeyboardEvent.KEY_UP, testHandler);
+			
 		}
 		
+		private function testHandler(kEvt:KeyboardEvent):void
+		{
+			
+		}
 		
+		private var disriptionLabel:Label = new Label();
+		private var disriptionTextArea:TextArea = new TextArea();
 		private function generateDisription():void
 		{
 			var disription:Canvas = new Canvas();
@@ -119,11 +138,10 @@ package vdom.components.treeEditor
 				disriptionElasticGrey.height = elasticHeight;
 				disription.addChild(disriptionElasticGrey);
 
-			var disriptionLabel:Label = new Label();
 				disriptionLabel.text = "Disription: ";
 			disription.addChild(disriptionLabel);
 			
-			var disriptionTextArea:TextArea = new TextArea();
+			
 				disriptionTextArea.percentWidth = 100;
 				disriptionTextArea.height = 70;
 				disriptionTextArea.y = 20;
@@ -164,12 +182,46 @@ package vdom.components.treeEditor
 		private var treeElement:TreeElement;
 		public function set target (treObj:TreeElement):void
 		{
-			treeElement = treObj;
-			title.text = treeElement.title
-			title.validateNow();
+			this.treeElement = treObj;
+			__title.text = treeElement.title;
+			disriptionTextArea.text = treeElement.description;
+			 typeLabel.text = treeElement.type;
+			 fileManager.loadResource(dataManager.currentApplicationId,  treeElement.typeID, this, 'typeResourse'); 
 		}
 		
+		private var resourceId:String;
+		private var dictionary:Array = new Array(); // of loader
+		public function set typeResourse(value:Object):void
+		{
+			var loader:Loader = new Loader();
+			
+			resourceId = value.resourceID;
+			
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler, false, 0, true);
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, completeHandler );
+			loader.loadBytes(value.data);
+			
+			
+			if(dictionary[value.resourceID]) {
+				
+				dictionary[value.resourceID].source = loader;
+			}
+		}
 		
+		private function completeHandler(event:Event):void {
+			
+			if(event.type == IOErrorEvent.IO_ERROR)
+				return;
+			if(event && event.target && event.target is LoaderInfo) {
+				displayLoader(event.target.loader as Loader);
+			}
+		}
+		
+		private function displayLoader( loader:Loader ):void
+		 {
+			typePicture.source = loader
+		}
+
 		public function get target ():TreeElement
 		{
 			return treeElement;
