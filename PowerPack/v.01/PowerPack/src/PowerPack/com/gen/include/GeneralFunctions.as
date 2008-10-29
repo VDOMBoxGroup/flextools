@@ -285,6 +285,29 @@ public function _mid(start:int, length:int, string:String):String
 }
 
 /**
+ * replace function section
+ */		 
+public function _replace(string:String, tgt:String, src:String):String
+{
+	var arr:Array = tgt.split('/');
+	var str:String;
+	
+	if(arr.length>1)
+	{
+		var regExp:RegExp = new RegExp(arr[arr.length-2], arr[arr.length-1]);		
+		str = string.replace(regExp, src);
+	}
+	else
+	{
+		str = string.replace(tgt, src);		
+	}		
+	
+	Application.application.callLater(generate);
+	
+	return str;
+}
+
+/**
  * split function section
  */		 
 public function _split(delimiter:String, string:String):String

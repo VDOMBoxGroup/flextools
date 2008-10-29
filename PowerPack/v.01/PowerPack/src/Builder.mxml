@@ -654,7 +654,7 @@
 					if(!ContextManager.instance.templateStruct)
 						return;
 												
-					try {
+					//try {
 						switch(event.item.@id.toString())
 						{
 							case 'resume':
@@ -688,7 +688,7 @@
 								switchDebug(false);
 								break;
 						}							
-					} catch(e:Error) {
+					/*} catch(e:Error) {
 						ProgressManager.complete();
 
 						ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
@@ -698,7 +698,7 @@
 						ContextManager.instance.templateStruct = null;
 						switchDebug(false);
 						SuperAlert.show(e.message, "Warning!");
-					}									
+					}*/									
 				}
 				
 				if(event.item.@tag == "language")

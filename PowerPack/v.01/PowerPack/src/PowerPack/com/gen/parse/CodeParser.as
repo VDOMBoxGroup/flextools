@@ -1,5 +1,7 @@
 package PowerPack.com.gen.parse
 {
+import ExtendedAPI.com.utils.Utils;
+
 import PowerPack.com.gen.*;
 import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.errorClasses.ValidationError;
@@ -77,7 +79,7 @@ public class CodeParser
 	        			}
 	        		}
 	        		
-	        		buffer += (value!=null ? value.toString() : lexems[i].origValue);
+	        		buffer += (value!=null ? Utils.replaceEscapeSequences(value.toString(), "\\n") : lexems[i].origValue);
 		        }
 		        else		        	
 					buffer += lexems[i].value;

@@ -96,7 +96,7 @@ package PowerPack.com.importation
 			yOffset += 40;
 			
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\n<Application>');
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\n<Application>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -143,7 +143,7 @@ package PowerPack.com.importation
 			yOffset += 40;
 			
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Application>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n</Application>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -155,7 +155,7 @@ package PowerPack.com.importation
 				yOffset += 40;
 
 				prev = node;
-				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n<Information>');
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n<Information>');
 				node.x = xOffset; node.y = yOffset;
 				newGraph.addChild(node);
 				newGraph.createArrow(prev, node);
@@ -168,7 +168,8 @@ package PowerPack.com.importation
 
 						prev = node;
 						node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
-							StringUtil.substitute('$ans = [question "Do you want to personalize the Application {0}?" "Yes,No"]', infElm.name()));
+							StringUtil.substitute('$ans = [question "Do you want to personalize the Application {0}?" "Yes,No"]', 
+							infElm.name()));
 						node.x = xOffset; node.y = yOffset;
 						newGraph.addChild(node);
 						newGraph.createArrow(prev, node);
@@ -205,7 +206,7 @@ package PowerPack.com.importation
 
 						prev = node;
 						node = new Node(NodeCategory.NORMAL, NodeType.NORMAL,
-							StringUtil.substitute('\n\t<{0}>${1}</{0}>', infElm.name(), String(infElm.name()).toLowerCase()));
+							StringUtil.substitute('\\n\\t<{0}>${1}</{0}>', infElm.name(), String(infElm.name()).toLowerCase()));
 						node.x = xOffset; node.y = yOffset;
 						newGraph.addChild(node);
 						newGraph.createArrow(memNode, node);												
@@ -217,7 +218,7 @@ package PowerPack.com.importation
 
 						prev = node;
 						node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
-							StringUtil.substitute('\n\t<{0}>{1}</{0}>', infElm.name(), infElm));
+							StringUtil.substitute('\\n\\t<{0}>{1}</{0}>', infElm.name(), String(infElm).replace(/\n/g, "\\n")));
 						node.x = xOffset; node.y = yOffset;
 						newGraph.addChild(node);
 						newGraph.createArrow(prev, node);
@@ -227,7 +228,7 @@ package PowerPack.com.importation
 				yOffset += 40;
 
 				prev = node;
-				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n</Information>');
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n</Information>');
 				node.x = xOffset; node.y = yOffset;
 				newGraph.addChild(node);
 				newGraph.createArrow(prev, node);
@@ -334,7 +335,7 @@ package PowerPack.com.importation
 			xOffset = 10;
 			yOffset = 10;
 			
-			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<Structure>');
+			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\\n<Structure>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			
@@ -417,7 +418,7 @@ package PowerPack.com.importation
 			
 			prev = node;
 			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
-				'\n\t<Object ID="$srcID" Top="$srcTop" Left="$srcLeft" ResourceID="$srcResId">');
+				'\\n\\t<Object ID="$srcID" Top="$srcTop" Left="$srcLeft" ResourceID="$srcResId">');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -469,7 +470,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t\t<Level Index="$lvlIndex">');
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\t\\t<Level Index="$lvlIndex">');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);				
@@ -503,7 +504,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 							
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t\t\t<Object ID="$tgtID" />');
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\t\\t\\t<Object ID="$tgtID" />');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);				
@@ -522,7 +523,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 							
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t\t</Level>');
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\t\\t</Level>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(memNode3, node, 'false');				
@@ -541,7 +542,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t</Object>');
+			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\t</Object>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(memNode2, node, 'false');				
@@ -560,7 +561,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 							
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Structure>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n</Structure>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(memNode1, node, 'false');
@@ -585,7 +586,7 @@ package PowerPack.com.importation
 			
 			var prev:Node;
 			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
-				'\n\t<Object Type="$param1" ID="$param2" Name="$param3">');
+				'\\n\\t<Object Type="$param1" ID="$param2" Name="$param3">');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 			
@@ -600,7 +601,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 			
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n\t</Object>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n\\t</Object>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);			
@@ -618,7 +619,7 @@ package PowerPack.com.importation
 			
 			var memNode1:Node;
 			node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
-				'\n\t<Attributes>');
+				'\\n\\t<Attributes>');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 			
@@ -664,7 +665,7 @@ package PowerPack.com.importation
 
 			prev = node;
 			node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, 
-				'\n\t\t<Attribute Name="$attrName"><![CDATA[$attrValue]]></Attribute>');
+				'\\n\\t\\t<Attribute Name="$attrName"><![CDATA[$attrValue]]></Attribute>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -684,7 +685,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n\t</Attributes>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n\\t</Attributes>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(memNode1, node, 'false');			
@@ -734,7 +735,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 			
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<Objects>');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\\n<Objects>');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 
@@ -746,7 +747,7 @@ package PowerPack.com.importation
 				for each (var obj:XML in objs.Object)
 				{
 					var type:XML = getType(obj.@Type);
-					var objGraphName:String = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
+					var objGraphName:String = type ? (objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name) : obj.@Type;
 					 
 					/*
 					if(type && int(type.Information.Container) == 1)
@@ -780,7 +781,7 @@ package PowerPack.com.importation
 						yOffset +=40;
 						
 						prev = node;
-						node = new Node(NodeCategory.SUBGRAPH, NodeType.NORMAL, contName);
+						node = new Node(NodeCategory.SUBGRAPH, NodeType.NORMAL, String(contName).replace(/\n/g, "\\n"));
 						node.x = xOffset; node.y = yOffset;
 						newGraph.addChild(node);
 						newGraph.createArrow(prev, node);					
@@ -793,7 +794,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 							
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Objects>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n</Objects>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -804,8 +805,8 @@ package PowerPack.com.importation
 		}
 		
 		private function getType(objType:String):XML
-		{
-			return typesXML.Type.(Information.ID == objType)[0];	
+		{				
+			return typesXML.Type.(String(Information.ID).toLowerCase() == objType.toLowerCase())[0];	
 		} 
 		
 		private function parseObjectsRecursive(graphName:String, curObj:XML, graphs:Array, category:String=null):void
@@ -819,7 +820,7 @@ package PowerPack.com.importation
 			
 			var prev:Node;
 			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
-				StringUtil.substitute('\n\t<Object ID="{0}" Name="{1}" Type="{2}">',
+				StringUtil.substitute('\\n\\t<Object ID="{0}" Name="{1}" Type="{2}">',
 					Utils.getStringOrDefault(curObj.@ID, ''),
 					Utils.getStringOrDefault(curObj.@Name, ''), 
 					Utils.getStringOrDefault(curObj.@Type, '')));
@@ -831,7 +832,7 @@ package PowerPack.com.importation
 			
 			var attrLst:String = '[';			
 			for each (var attr:XML in curObj.Attributes.Attribute) {
-				attrLst += ' "'+attr.@Name+'" '+Utils.quotes(attr);	
+				attrLst += ' "'+attr.@Name+'" '+Utils.quotes(attr).replace(/\n/g, "\\n");	
 			}			
 			attrLst += ' ]';						
 			
@@ -840,7 +841,7 @@ package PowerPack.com.importation
 			prev = node;
 			node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
 				StringUtil.substitute('[sub ParseAttributes {0}]',
-					Utils.quotes(attrLst, true)));
+					Utils.quotes(attrLst, true).replace(/\n/g, "\\n")));
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);			
@@ -914,7 +915,7 @@ package PowerPack.com.importation
 				yOffset +=40;
 			
 				prev = node;
-				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t<Objects>');
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\t<Objects>');
 				node.x = xOffset; node.y = yOffset;
 				newGraph.addChild(node);
 				newGraph.createArrow(prev, node);
@@ -955,7 +956,7 @@ package PowerPack.com.importation
 						yOffset +=40;
 						
 						prev = node;
-						node = new Node(NodeCategory.SUBGRAPH, NodeType.NORMAL, contName);
+						node = new Node(NodeCategory.SUBGRAPH, NodeType.NORMAL, contName.replace(/\n/g, "\\n"));
 						node.x = xOffset; node.y = yOffset;
 						newGraph.addChild(node);
 						newGraph.createArrow(prev, node);					
@@ -966,7 +967,7 @@ package PowerPack.com.importation
 				yOffset +=40;
 			
 				prev = node;
-				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t</Objects>');
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\t</Objects>');
 				node.x = xOffset; node.y = yOffset;
 				newGraph.addChild(node);
 				newGraph.createArrow(prev, node);
@@ -1022,7 +1023,7 @@ package PowerPack.com.importation
 				yOffset +=40;
 			
 				prev = node;
-				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\n\t</Scripts>');
+				node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, '\\n\\t</Scripts>');
 				node.x = xOffset; node.y = yOffset;
 				newGraph.addChild(node);
 				newGraph.createArrow(prev, node);
@@ -1031,7 +1032,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 							
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n\t</Object>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n\\t</Object>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -1051,7 +1052,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<Databases>');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\\n<Databases>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			
@@ -1085,14 +1086,14 @@ package PowerPack.com.importation
 				
 					var _prev:Node;
 					var _node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
-						'\n\t<Database Type="$param1" ID="$param2" Name="$param3"><![CDATA[\\-');
+						'\\n\\t<Database Type="$param1" ID="$param2" Name="$param3"><![CDATA[\\-');
 					_node.x = xxOffset; _node.y = yyOffset;
 					dbGraph.addChild(_node);					
 			
 					yyOffset +=40;
 							
 					_prev = _node;
-					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, objDb);
+					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, String(objDb).replace(/\n/g, "\\n"));
 					_node.x = xxOffset; _node.y = yyOffset;
 					dbGraph.addChild(_node);
 					dbGraph.createArrow(_prev, _node);
@@ -1114,7 +1115,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 							
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Databases>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n</Databases>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -1136,7 +1137,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<Resources>');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\\n<Resources>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			
@@ -1170,14 +1171,14 @@ package PowerPack.com.importation
 				
 					var _prev:Node;
 					var _node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, 
-						'\n\t<Resource Type="$param1" ID="$param2" Name="$param3"><![CDATA[\\-');
+						'\\n\\t<Resource Type="$param1" ID="$param2" Name="$param3"><![CDATA[\\-');
 					_node.x = xxOffset; _node.y = yyOffset;
 					resGraph.addChild(_node);					
 			
 					yyOffset +=40;
 							
 					_prev = _node;
-					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, objRes);
+					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, String(objRes).replace(/\n/g, "\\n"));
 					_node.x = xxOffset; _node.y = yyOffset;
 					resGraph.addChild(_node);
 					resGraph.createArrow(_prev, _node);
@@ -1199,7 +1200,7 @@ package PowerPack.com.importation
 			yOffset +=40;
 							
 			prev = node;
-			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\n</Resources>');
+			node = new Node(NodeCategory.NORMAL, NodeType.TERMINAL, '\\n</Resources>');
 			node.x = xOffset; node.y = yOffset;
 			newGraph.addChild(node);
 			newGraph.createArrow(prev, node);
@@ -1221,7 +1222,7 @@ package PowerPack.com.importation
 			var yOffset:Number = 10;
 			
 			var prev:Node;
-			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\n<!-- E2vdom -->');
+			var node:Node = new Node(NodeCategory.NORMAL, NodeType.INITIAL, '\\n<!-- E2vdom -->');
 			node.x = xOffset; node.y = yOffset;			
 			newGraph.addChild(node);
 			

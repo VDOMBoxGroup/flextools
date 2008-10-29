@@ -537,7 +537,7 @@ public class Node extends Canvas
         	_needValidate = true;
             _textChanged = false;
             
-            if(text.length>255)
+            if(text.length>2000)
             {
 	        	_needValidate = false;         
 	        	nodeTextArea.text = text.substr(0, 255) + '...';   	
@@ -804,7 +804,7 @@ public class Node extends Canvas
 		if( _editing && _mode==M_EDITING )
 			return;
 			
-		if(text.length > 500)
+		if(text.length > 2000)
 			return;
 			
         if(_editing)
@@ -818,7 +818,7 @@ public class Node extends Canvas
 			nodeTextArea.addEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);
 			nodeTextArea.addEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
 			
-			scrollToNode();			
+			//scrollToNode();			
         }
         else
         {

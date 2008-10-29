@@ -434,7 +434,7 @@ public class Template extends EventDispatcher
 	
 	public function generate(force:Boolean=false, over:Boolean=false, ret:Boolean=false):String
 	{
-		try {
+		//try {
 			
 		//var currentContext:GraphContext = contextStack[contextStack.length-1];
 		
@@ -683,10 +683,10 @@ public class Template extends EventDispatcher
 		isRunning = false;
 		return buffer;
 
-		} catch (e:Error) {
-			error = e;
-			dispatchEvent(new Event("error"));
-		}
+		//} catch (e:Error) {
+		//	error = e;
+		//	dispatchEvent(new Event("error"));
+		//}
 		
 		return null;		
 	}

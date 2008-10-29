@@ -649,6 +649,9 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	{
 		_connectorPoly = [];
 		
+		if(!parent)
+			return;
+		
 		if(!fromObject && !toObject)
 			return;
 		
