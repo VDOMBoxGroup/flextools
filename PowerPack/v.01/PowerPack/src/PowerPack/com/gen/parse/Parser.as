@@ -32,6 +32,7 @@ public class Parser
 			[/^(v=){0,1}\[n[vscVS][vscVS][vscVS]\]$/, "replace", 3],
 			[/^(v=){0,1}\[n[vscVS][vscVS]\]$/, "split", 2],
 			[/^(v=){0,1}\[n[viVN]\]$/, "random", 1],
+			[/^(v=)?\[n[v][vscVS]\]$/, "imageToBase64", 2],
 			
 			//*********************
 			// List manipulation

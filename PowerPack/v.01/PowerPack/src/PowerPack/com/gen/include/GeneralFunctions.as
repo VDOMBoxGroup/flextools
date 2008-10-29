@@ -14,6 +14,7 @@ import flash.utils.ByteArray;
 
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
+import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
 
 
@@ -164,6 +165,36 @@ public function _writeTo(filename:String):void
 	data = Utils.replaceEscapeSequences(data, "\\-");
 	_writeVarTo(filename, data);
 }			 
+
+public function _imageToBase64(pic:Bitmap, type:String=null):String
+{
+	var data:ByteArray = new ByteArray();
+
+	if( type.toLowerCase()=="jpg" ||
+		type.toLowerCase()=="jpeg" )
+	{
+		var jpgEncoder:JPEGEncoder = new JPEGEncoder(80);
+		data = jpgEncoder.encode(pic.bitmapData);
+	}
+	else if(type.toLowerCase()=="bmp")
+	{
+		data = BMPEncoder.encode(pic.bitmapData);
+	}
+	else
+	{
+		var pngEncoder:PNGEncoder = new PNGEncoder();
+		data = pngEncoder.encode(pic.bitmapData);
+	}
+	
+	var encoder:Base64Encoder = new Base64Encoder();
+	
+	encoder.encodeBytes(data);
+	var strData:String = encoder.flush();
+	
+	Application.application.callLater(generate);
+	
+	return strData;
+} 
  		
 /**
  * writeVarTo function section
