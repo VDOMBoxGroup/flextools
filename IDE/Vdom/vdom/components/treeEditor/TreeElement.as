@@ -401,10 +401,15 @@ package vdom.components.treeEditor
 	  	dispatchEvent(new TreeEditorEvent(TreeEditorEvent.STOP_REDRAW_LINES, _ID));	
 	 }
 
-		override public function set name(names:String):void
+		 public function set title(names:String):void
 		{
 			txt.text = names;
 			txtInp.text = txt.text;
+		}
+		
+		public function get title():String
+		{
+			return  txt.text;
 		}
 		
 		/*     ID         */

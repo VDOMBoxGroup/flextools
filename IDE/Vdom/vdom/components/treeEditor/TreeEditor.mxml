@@ -30,7 +30,7 @@
 	private var massLines:Array = new Array();
 	private var masIndex:Array = new Array();
 	private var masMaxOfIndex:Array = new Array();
-	private var curTree:Object = new Object();
+	private var _curTree:Properties = new Properties();
 	private var canLine:Canvas = new Canvas();
 	private var pnFrom:Point = new Point();
 	private var blDrawLine:Boolean = false;
@@ -80,8 +80,9 @@
 		removeMassTreeElements();
 		removeTreeEditorListeners();
 		
-		if(curTree)
-			dataManager.changeCurrentPage(curTree.ID);
+		
+//		if(curTree)
+//			dataManager.changeCurrentPage(curTree.ID);
 
 		if (main.contains(btLine))
 		{
@@ -121,15 +122,15 @@
 			return;
 		}
 		
-		curTree = massTreeElements[dataManager.currentPageId];
+		_curTree.target = massTreeElements[dataManager.currentPageId];
 		startPage = dataManager.currentApplicationInformation.Index;
 		
 		
 		setStartPage();
 		
 		
-		if(curTree != null)
-			curTree.current = true;
+		if(_curTree.target != null)
+			_curTree.target.current = true;
 	}
 	
 	private var dX:Number;
@@ -157,14 +158,14 @@
 	{
 		main.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 		
-		var curID:String = curTree.ID;
+		var curID:String = _curTree.target.ID;
 		redrawLines(curID);
 	}
 	
 	
 	private function hideTreeElement(trEvt:Object):void
 	{
-		massTreeElements[curTree.ID].resize = true;
+		massTreeElements[_curTree.target.ID].resize = true;
 	}
 	
 
@@ -216,17 +217,17 @@
 		}		
 
 
-		if (curTree != null)
+		if (_curTree.target != null)
 		{
-			if(curTree.ID != evt.currentTarget.ID)
+			if(_curTree.target.ID != evt.currentTarget.ID)
 			{
-				dataManager.changeCurrentPage(curTree.ID);
+				dataManager.changeCurrentPage(_curTree.target.ID);
 			}
-			curTree.current = false;
+			_curTree.target.current = false;
 		}	
 		
 		evt.currentTarget.current = true;
-		curTree = evt.currentTarget;		
+		_curTree.target = TreeElement(evt.currentTarget);		
 		
 	}
 	
@@ -261,7 +262,7 @@
 	
 	private function mouseMoveHandler(msEvt:MouseEvent):void
 	{
-		var curID:String = curTree.ID;
+		var curID:String = _curTree.target.ID;
 		
 		if(!massTreeElements[curID])
 			return;
@@ -288,10 +289,10 @@
 	private var massDeletedElemens:Array = new Array(); // of String
 	private function deleteTreeElement(trEvt:TreeEditorEvent):void
 	{
-		curTree.current = false;
-		curTree = massTreeElements[trEvt.ID];
-		curTree.current = true;
-		dataManager.changeCurrentPage(curTree.ID);
+		_curTree.target.current = false;
+		_curTree.target = massTreeElements[trEvt.ID];
+		_curTree.target.current = true;
+		dataManager.changeCurrentPage(_curTree.target.ID);
 		Alert.show(resourceManager.getString('Tree','do_you_want_to_delete_element'), resourceManager.getString('Tree','delete_element'), 3, this, alertClickDeleteTreeElement);
 	}
 	 
@@ -300,21 +301,21 @@
         if (event.detail==Alert.YES)
         {
         	dataManager.addEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, deleteObjectHandler)
-        	dataManager.deleteObject(curTree.ID);
+        	dataManager.deleteObject(_curTree.target.ID);
         }
     }
     
     private function deleteObjectHandler(dmEvt:DataManagerEvent):void
     {
     	dataManager.removeEventListener(DataManagerEvent.DELETE_OBJECT_COMPLETE, deleteObjectHandler)
-    	deleteObject(curTree.ID);
+    	deleteObject(_curTree.target.ID);
            	
-		curTree = massTreeElements[randomTreeElement];
+		_curTree.target = massTreeElements[randomTreeElement];
 		
-		if(curTree)
+		if(_curTree.target)
 		{
-			curTree.current = true;
-			dataManager.changeCurrentPage(curTree.ID);
+			_curTree.target.current = true;
+			dataManager.changeCurrentPage(_curTree.target.ID);
 		}
 		
 		setStartPage();
@@ -387,12 +388,12 @@
 		
 		if(treeElemenUnderMouse)
 		{
-			vctTest.createVector(curTree, treeElemenUnderMouse, colmen2.selectedItem.data);	
+			vctTest.createVector(_curTree.target, treeElemenUnderMouse, colmen2.selectedItem.data);	
 		}else
 		{
-			var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , curTree);
+			var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , _curTree.target);
 		
-			vctTest.createVector(curTree, pnTo, colmen2.selectedItem.data);	
+			vctTest.createVector(_curTree.target, pnTo, colmen2.selectedItem.data);	
 		}
 	}
 	
@@ -532,9 +533,9 @@
 	{
 		showLenes();
 		
-		curTree = massTreeElements[dataManager.currentPageId];
+		_curTree.target = massTreeElements[dataManager.currentPageId];
 		
-		if(curTree != null)	curTree.current = true;
+		if(_curTree.target != null)	_curTree.target.current = true;
 		
 		setStartPage();
 		
@@ -609,7 +610,8 @@
 	</mx:ComboBox>
 -->
 	</mx:Canvas>
-<mx:Canvas right="0"  height="100%" >	
+<mx:Canvas right="0"  height="100%" 
+		verticalScrollPolicy="auto"  horizontalScrollPolicy="off">	
 <mx:VBox  >
 <containers:ClosablePanel width="300" title="Properties">
 <treeEditor:Properties />

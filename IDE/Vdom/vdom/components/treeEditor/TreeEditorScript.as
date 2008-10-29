@@ -102,7 +102,7 @@ private function deleteObject(strID:String):void
 	main.removeChild(massTreeElements[strID]);
 	delete massTreeElements[strID];
 
-	curTree = null;
+	_curTree.target = null;
 	
 	saveToServer();
 }
@@ -110,7 +110,7 @@ private function deleteObject(strID:String):void
 private function drawLine(obj:Object):void
 {
 //	trace('drawLine');
-	var fromObj:String = curTree.ID.toString();
+	var fromObj:String = _curTree.target.ID.toString();
 	var toObj:String = obj.ID.toString();
 	var level:String = colmen2.selectedItem.level;
 
@@ -121,11 +121,11 @@ private function drawLine(obj:Object):void
 		masMaxOfIndex[level] = new Array();
 	}
 	
-	if(!massLines[level][curTree.ID.toString()]) 
+	if(!massLines[level][_curTree.target.ID.toString()]) 
 	{
-		massLines[level][curTree.ID.toString()] = new Array();
-		masIndex[level][curTree.ID.toString()] = new Array();
-		masMaxOfIndex[level][curTree.ID.toString()] = 0;
+		massLines[level][_curTree.target.ID.toString()] = new Array();
+		masIndex[level][_curTree.target.ID.toString()] = new Array();
+		masMaxOfIndex[level][_curTree.target.ID.toString()] = 0;
 	}
 	
 	// обьект сам на себя
@@ -421,7 +421,7 @@ private function createTreeArr(xml:XML):void
 		var treeElement:TreeElement = new TreeElement();
 		
 		treeElement.ID 	= ID;
-		treeElement.name =  page.Attributes.Attribute.(@Name == 'title' );
+		treeElement.title =  page.Attributes.Attribute.(@Name == 'title' );
 		treeElement.description = page.Attributes.Attribute.(@Name == 'description' );
 		
 		var typeID:String = page.@Type;
@@ -706,8 +706,8 @@ private function revert():void
 		removeMassTreeElements();
 //		removeTreeEditorListeners();
 		
-		if(curTree)
-			dataManager.changeCurrentPage(curTree.ID);
+		if(_curTree.target)
+			dataManager.changeCurrentPage(_curTree.target.ID);
 
 		if (main.contains(btLine))
 		{
@@ -909,13 +909,13 @@ private function  createObjectHandler(dmEvt:DataManagerEvent):void
 	main.addChild(massTreeElements[ID]);
 	
 	//select new object
-		if(curTree != null)
-			curTree.current = false;
-		curTree = massTreeElements[ID];
-		if(curTree != null)
+		if(_curTree.target != null)
+			_curTree.target.current = false;
+		_curTree.target = massTreeElements[ID];
+		if(_curTree.target != null)
 		{
-			curTree.current = true;
-			dataManager.changeCurrentPage(curTree.ID);
+			_curTree.target.current = true;
+			dataManager.changeCurrentPage(_curTree.target.ID);
 		}
 		
 	saveToServer();

@@ -20,17 +20,15 @@ package vdom.components.treeEditor
 		[Bindable]
 		private var defaultPicture:Class;
 		
-		
-		
-		
-		
+		private var elasticHeight:int = 21;
+			
 		public function Properties()
 		{
 			super();
 			
 			percentWidth = 100;
 			
-			setStyle("verticalGap", "1");
+			setStyle("verticalGap", "5");
 			setStyle("backgroundColor","0xAAAAAA");
 			
 			generateType();
@@ -48,25 +46,18 @@ package vdom.components.treeEditor
 				type.percentWidth = 100;
 			addChild(type);
 			
-			var hBox:HBox = new HBox();
-//				hBox.
-			type.addChild(hBox);
-			
 			var typeElasticGrey:Image = new Image();
 				typeElasticGrey.source = elasticGrey; 
 				typeElasticGrey.maintainAspectRatio = false;
 				typeElasticGrey.scaleContent = true;
 				typeElasticGrey.percentWidth = 100;
+				typeElasticGrey.height = elasticHeight;
 			type.addChild(typeElasticGrey);
 			
 			
-			
-				typeLabel.text = "HTML Container";
-				typeLabel.setStyle('fontWeight', "bold"); 
-				typeLabel.setStyle('textAlign', 'center');
-				typeLabel.x = 25;
-				typeLabel.percentWidth = 100;
-			type.addChild(typeLabel);
+			var hBox:HBox = new HBox();
+				hBox.setStyle("align", "center");
+			type.addChild(hBox);
 			
 			var typePicture:Image = new Image();
 				typePicture.x = 3;	
@@ -75,32 +66,42 @@ package vdom.components.treeEditor
 				typePicture.scaleContent = true;
 				typePicture.width = 20;
 				typePicture.height = 20;
-			type.addChild(typePicture);
+			hBox.addChild(typePicture);
+			
+			
+				typeLabel.text = "HTML Container";
+				typeLabel.setStyle('fontWeight', "bold"); 
+//				typeLabel.setStyle('textAlign', 'center');
+				typeLabel.x = 25;
+				typeLabel.percentWidth = 100;
+			hBox.addChild(typeLabel);
 		}
 		
-		private var titleTextIput:TextInput = new TextInput();
+		private var title:TextInput = new TextInput();
 
 		private function generateTitle():void
 		{
-			var title:Canvas = new Canvas();
-			addChild(title);
+			var canvas:Canvas = new Canvas();
+			addChild(canvas);
 			
 			var titleElasticGrey:Image = new Image(); 
 				titleElasticGrey.source = elasticGrey; 
 				titleElasticGrey.maintainAspectRatio = false;
 				titleElasticGrey.scaleContent = true;
+				titleElasticGrey.y = 1;
 				titleElasticGrey.percentWidth = 100;
-				title.addChild(titleElasticGrey);
-				title.percentWidth = 100;
+				titleElasticGrey.height = elasticHeight;
+				canvas.addChild(titleElasticGrey);
+				canvas.percentWidth = 100;
 			
 			var titleLabel:Label = new Label();
 				titleLabel.text = "Title: ";
-			title.addChild(titleLabel);
+			canvas.addChild(titleLabel);
 			
-				titleTextIput.text = "Name of Container";
-				titleTextIput.x = 40;
-				titleTextIput.percentWidth = 100;
-			title.addChild(titleTextIput);
+				title.text = "Name of Container";
+				title.x = 40;
+				title.percentWidth = 100;
+			canvas.addChild(title);
 		}
 		
 		
@@ -115,6 +116,7 @@ package vdom.components.treeEditor
 				disriptionElasticGrey.maintainAspectRatio = false;
 				disriptionElasticGrey.scaleContent = true;
 				disriptionElasticGrey.percentWidth = 100;
+				disriptionElasticGrey.height = elasticHeight;
 				disription.addChild(disriptionElasticGrey);
 
 			var disriptionLabel:Label = new Label();
@@ -139,6 +141,8 @@ package vdom.components.treeEditor
 				imageElasticGrey.maintainAspectRatio = false;
 				imageElasticGrey.scaleContent = true;
 				imageElasticGrey.percentWidth = 100;
+				imageElasticGrey.y = 1;
+				imageElasticGrey.height = elasticHeight;
 			imageCn.addChild(imageElasticGrey);
 			
 			var image:Image = new Image();
@@ -155,6 +159,20 @@ package vdom.components.treeEditor
 				rbr.percentWidth = 100;
 			imageCn.addChild(rbr);
 			
+		}
+		
+		private var treeElement:TreeElement;
+		public function set target (treObj:TreeElement):void
+		{
+			treeElement = treObj;
+			title.text = treeElement.title
+			title.validateNow();
+		}
+		
+		
+		public function get target ():TreeElement
+		{
+			return treeElement;
 		}
 
 	}
