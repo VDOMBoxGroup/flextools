@@ -107,5 +107,8 @@ package vdom.controls.resourceBrowser
 		[Embed(source="/assets/common/spinner.swf")]
 		public var spinner:Class;
 
+		[Embed(source="/assets/common/box.swf")]
+		public var spinnerbox:Class;
+
 	}
 }
