@@ -179,7 +179,7 @@ public class ProgressManager extends EventDispatcher
         				instance._bar.setProgress(ProgressEvent(event).bytesLoaded, ProgressEvent(event).bytesTotal);
         			}
         			
-        			instance._bar.validateNow();
+        			//instance._bar.validateNow();
         		}        		
 
         		(value as FileStream).addEventListener(IOErrorEvent.IO_ERROR, onFileStreamClose);

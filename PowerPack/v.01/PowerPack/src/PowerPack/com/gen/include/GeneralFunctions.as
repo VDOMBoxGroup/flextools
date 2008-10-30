@@ -318,20 +318,10 @@ public function _mid(start:int, length:int, string:String):String
 /**
  * replace function section
  */		 
-public function _replace(string:String, tgt:String, src:String):String
+public function _replace(string:String, tgt:String, flags:String, src:String):String
 {
-	var arr:Array = tgt.split('/');
-	var str:String;
-	
-	if(arr.length>1)
-	{
-		var regExp:RegExp = new RegExp(arr[arr.length-2], arr[arr.length-1]);		
-		str = string.replace(regExp, src);
-	}
-	else
-	{
-		str = string.replace(tgt, src);		
-	}		
+	var regExp:RegExp = new RegExp(tgt, flags);		
+	var str:String = string.replace(regExp, src);
 	
 	Application.application.callLater(generate);
 	
