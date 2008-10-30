@@ -186,8 +186,9 @@ private function applyExtensionFilter():void
 		
 		var newResourcesList:XML = new XML(<Resources />);
 		
-			if (resourceItem.@type == __filterCBx.selectedItem.data) {
+		
 		for each (var resourceItem:XML in allResourcesList.Resource) {
+			if (resourceItem.@type == __filterCBx.selectedItem.data) {
 				filteredResources++;
 				newResourcesList.appendChild(resourceItem);
 			}
