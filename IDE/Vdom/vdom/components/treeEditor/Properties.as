@@ -17,6 +17,7 @@ package vdom.components.treeEditor
 	import mx.controls.TextInput;
 	
 	import vdom.containers.ClosablePanel;
+	import vdom.controls.multiLine.MultiLine;
 	import vdom.controls.resourceBrowser.ResourceBrowserButton;
 	import vdom.events.DataManagerEvent;
 	import vdom.managers.DataManager;
@@ -33,6 +34,8 @@ package vdom.components.treeEditor
 		private var defaultPicture:Class;
 		
 		private var elasticHeight:int = 21;
+		private var elasticWidht:int = 65;
+		
 		private var fileManager:FileManager = FileManager.getInstance();
 		private var dataManager:DataManager = DataManager.getInstance();
 		private var mainVB:VBox;
@@ -43,10 +46,15 @@ package vdom.components.treeEditor
 			
 			title = "Properties";
 			percentWidth = 100;
-			setStyle("backgroundColor","0xAAAAAA");
+			
+			setStyle("backgroundColor","0xFFFFFF");
+			setStyle("borderThicknessLeft", "0");
+  			setStyle("borderThicknessRight", "0");
+
 			
 			mainVB = new VBox();
 				mainVB.setStyle("verticalGap", "2");
+				mainVB.setStyle("borderThickness", "0"); 
 				mainVB.percentWidth = 100;
 			addChild(mainVB);
 			
@@ -112,18 +120,22 @@ package vdom.components.treeEditor
 				titleElasticGrey.maintainAspectRatio = false;
 				titleElasticGrey.scaleContent = true;
 				titleElasticGrey.y = 1;
-				titleElasticGrey.percentWidth = 100;
+				titleElasticGrey.width= elasticWidht;
 				titleElasticGrey.height = elasticHeight;
 				canvas.addChild(titleElasticGrey);
 				
 			
 			var titleLabel:Label = new Label();
-				titleLabel.text = "Title: ";
+				titleLabel.text = "Title:";
+				titleLabel.width = elasticWidht;
+				titleLabel.setStyle("textAlign", "right");
 			canvas.addChild(titleLabel);
 			
 				__title.text = "Name of Container";
-				__title.x = 40;
+				__title.x = elasticWidht;
 				__title.percentWidth = 100;
+//				__title.setStyle("textAlign", "right"); 
+
 				__title.addEventListener(KeyboardEvent.KEY_UP, testHandler);
 			canvas.addChild(__title);
 		}
@@ -145,18 +157,25 @@ package vdom.components.treeEditor
 				disriptionElasticGrey.source = elasticGrey; 
 				disriptionElasticGrey.maintainAspectRatio = false;
 				disriptionElasticGrey.scaleContent = true;
-				disriptionElasticGrey.percentWidth = 100;
+				disriptionElasticGrey.width= elasticWidht;
 				disriptionElasticGrey.height = elasticHeight;
 				disription.addChild(disriptionElasticGrey);
 
-				disriptionLabel.text = "Disription: ";
+				disriptionLabel.text = "Disription:";
+				disriptionLabel.width = elasticWidht;
+				disriptionLabel.setStyle("textAlign", "right");
 			disription.addChild(disriptionLabel);
+
+			var multLine:MultiLine = new MultiLine();
+				multLine.percentWidth = 100;
+				multLine.x = elasticWidht;
+				multLine.value = "Deskri";
+			disription.addChild(multLine);			
 			
-			
-				disriptionTextArea.percentWidth = 100;
-				disriptionTextArea.height = 70;
-				disriptionTextArea.y = 20;
-			disription.addChild(disriptionTextArea);
+//				disriptionTextArea.percentWidth = 100;
+//				disriptionTextArea.height = 70;
+//				disriptionTextArea.y = 20;
+//			disription.addChild(disriptionTextArea);
 		}
 		
 		private function generateImage():void
@@ -169,22 +188,28 @@ package vdom.components.treeEditor
 				imageElasticGrey.source = elasticGrey; 
 				imageElasticGrey.maintainAspectRatio = false;
 				imageElasticGrey.scaleContent = true;
-				imageElasticGrey.percentWidth = 100;
+				imageElasticGrey.width= elasticWidht;
 				imageElasticGrey.y = 1;
 				imageElasticGrey.height = elasticHeight;
 			imageCn.addChild(imageElasticGrey);
 			
-			var image:Image = new Image();
-				image.x = 3;	
-				image.source = defaultPicture; 
-				image.maintainAspectRatio = false;
-				image.scaleContent = true;
-				image.width = 20;
-				image.height = 20;
-			imageCn.addChild(image);
+//			var image:Image = new Image();
+//				image.x = 3;	
+//				image.source = defaultPicture; 
+//				image.maintainAspectRatio = false;
+//				image.scaleContent = true;
+//				image.width = 20;
+//				image.height = 20;
+//			imageCn.addChild(image);
+			
+			var label:Label = new Label();
+				label.text = "Image:";
+				label.width = elasticWidht;
+				label.setStyle("textAlign", "right");
+			imageCn.addChild(label);
 			
 			var rbr:ResourceBrowserButton = new ResourceBrowserButton();
-				rbr.x = 40;
+				rbr.x = elasticWidht;
 				rbr.percentWidth = 100;
 			imageCn.addChild(rbr);
 			
