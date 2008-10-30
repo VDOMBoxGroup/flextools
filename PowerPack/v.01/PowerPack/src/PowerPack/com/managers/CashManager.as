@@ -68,13 +68,13 @@ public class CashManager extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------		
 		
-	 public var cashDir:File = File.applicationStorageDirectory.resolvePath('cash');
-	 
-	 private var _initialized:Boolean;	 	 
-	 public function get initialized():Boolean
-	 {
-	 	return _initialized;
-	 }
+	public var cashDir:File = File.applicationStorageDirectory.resolvePath('cash');
+	
+	private var _initialized:Boolean;	 	 
+	public function get initialized():Boolean
+	{
+		return _initialized;
+	}
 	
 	//--------------------------------------------------------------------------
 	//
@@ -174,11 +174,9 @@ public class CashManager extends EventDispatcher
 	
 	public static function setObj(tplID:String, objID:String, obj:Object):Object
 	{
-		instance.initialized();
-		
+		instance.initialized();		
 	}
 	
-	public static function 
 
 	//--------------------------------------------------------------------------
     //
