@@ -1,9 +1,21 @@
 package PowerPack.com.managers
 {
+	import ExtendedAPI.com.utils.Utils;
+	
+	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.ProgressEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.utils.ByteArray;
 	
+	import mx.graphics.codec.PNGEncoder;
+	import mx.utils.Base64Decoder;	
 
 public class CashManager extends EventDispatcher
 {
@@ -17,6 +29,8 @@ public class CashManager extends EventDispatcher
 	 *  @private
 	 */
 	private static var _instance:CashManager;
+	
+	private static var expirationPeriod:int = 24*7;// hours
 
 	//--------------------------------------------------------------------------
 	//
@@ -92,98 +106,416 @@ public class CashManager extends EventDispatcher
 		}
 	}
 	
-	// index manipulation
+	//
+	// Main index manipulation
+	//
+	
+	/** 
+	 * Main index has following structure:
+	 * 	<Index>
+	 * 		<Template ID='' folder='' creationDate='' lastUpdate='' lastRequest='' saved='' />
+	 * 		...
+	 */
 	
 	private function getMainIndex():XML
 	{
+		var mainIndex:File = instance.cashDir.resolvePath('index.xml');
+		var _xml:XML;
+		var xml:XML = new XML(<Index/>);				
 		
+		if(!mainIndex.exists)
+			return xml;
+		
+		var indexStream:FileStream = new FileStream();
+		indexStream.open(mainIndex, FileMode.READ);		
+		
+		try {
+			_xml = XML(indexStream.readUTFBytes(indexStream.bytesAvailable));
+			xml = _xml;
+		} catch(e:*) {}
+		
+		indexStream.close();
+		
+		return xml;
 	}
 	
 	private function setMainIndex(index:XML):void
-	{
+	{		
+		var mainIndex:File = instance.cashDir.resolvePath('index.xml');
 		
+		var indexStream:FileStream = new FileStream();
+
+  		indexStream.open(mainIndex, FileMode.WRITE);
+		indexStream.writeUTFBytes(index.toXMLString());
+		indexStream.close();
 	}
 
 	private function addMainIndexEntry(index:XML, entryXML:XML):void
 	{
-		
+		removeMainIndexEntry(index, entryXML.@ID);
+		index.appendChild(entryXML)
 	}
 
 	private function removeMainIndexEntry(index:XML, tplID:String):void
 	{
-		
+		delete index.template.(hasOwnProperty('@ID') && @ID == tplID);		
 	}
 	
-	private function updateMainIndexEntry(index:XML, tplID:String, arg:String, value:String):void
+	private function updateMainIndexEntry(index:XML, tplID:String, attr:String, value:String):void
 	{
+		var entry:XML = getMainIndexEntry(index, tplID);
 		
+		if(entry)
+			entry['@'+attr] = value;
 	}
+	
+	private function getMainIndexEntry(index:XML, tplID:String):XML
+	{
+		var entries:XMLList = index.template.(hasOwnProperty('@ID') && @ID == tplID);
+		
+		if(entries.length()>0)
+			return entries[0];
+
+		return null;
+	}
+	
+	//
+	// Template index manipulation
+	//
+	
+	/** 
+	 * Template index has following structure:
+	 * 	<Index folder=''>
+	 * 		<Object category='' ID='' name='' type='' filename='' thumb='' lastUpdate='' lastRequest='' />
+	 * 		...
+	 */
 	
 	private function getIndex(tplID:String):XML
-	{
+	{		
+		var mainIndex:XML = getMainIndex();
+		var entry:XML = getMainIndexEntry(mainIndex, tplID);
 		
+		if(!entry)
+			return null;		
+		
+		var tplDir:File = instance.cashDir.resolvePath(entry.@folder);
+		
+		if(!tplDir.exists)
+		{
+			removeMainIndexEntry(mainIndex, tplID);
+			setMainIndex(mainIndex);
+			return null;
+		}		
+		
+		var index:File = tplDir.resolvePath('index.xml');
+		var _xml:XML;
+		var xml:XML = new XML(<Index/>);
+		xml.@folder = entry.@folder;				
+		
+		if(!index.exists)
+			return xml;
+		
+		var indexStream:FileStream = new FileStream();
+		indexStream.open(index, FileMode.READ);		
+		
+		try {
+			_xml = XML(indexStream.readUTFBytes(indexStream.bytesAvailable));
+			xml = _xml;
+		} catch(e:*) {}
+		
+		indexStream.close();
+		
+		return xml;
 	}
 
 	private function setIndex(index:XML):void
 	{
+		var tplDir:File = cashDir.resolvePath(index.@folder);		
+		var indexFile:File = tplDir.resolvePath('index.xml');
 		
+		var indexStream:FileStream = new FileStream();
+
+  		indexStream.open(indexFile, FileMode.WRITE);
+		indexStream.writeUTFBytes(index.toXMLString());
+		indexStream.close();		
 	}
 	
 	private function addIndexEntry(index:XML, entryXML:XML):void
 	{
-		
+		removeIndexEntry(index, entryXML.@ID);
+		index.appendChild(entryXML)
 	}
 
 	private function removeIndexEntry(index:XML, objID:String):void
 	{
-		
+		delete index.object.(hasOwnProperty('@ID') && @ID == objID);	
 	}
 	
-	private function updateIndexEntry(index:XML, objID:String, arg:String, value:String):void
+	private function updateIndexEntry(index:XML, objID:String, attr:String, value:String):void
 	{
+		var entry:XML = getIndexEntry(index, objID);
 		
+		if(entry)
+			entry['@' + attr] = value;
 	}
-	
+
+	private function getIndexEntry(index:XML, objID:String):XML
+	{
+		var entries:XMLList = index.object.(hasOwnProperty('@ID') && @ID == objID);
+		
+		if(entries.length()>0)
+			return entries[0];
+
+		return null;
+	}
+		
 	//
-
-	public static function getObj(tplID:String, objID:String):Object
-	{		
-		instance.initialized();
-		
-		var tplDir:File = instance.cashDir.resolvePath(tplID);
-		
-		if(!tplDir.exists)
-			return null;
-		
-		// get index
-				
-		var tplIndex:File = tplDir.resolvePath('index.xml');
-		
-		if(!tplIndex.exists)
-			return null;
-		
-		var tplIndexXML:XML;
-		var indexStream:FileStream = new FileStream(); 
-
-		//indexStream.addEventListener(Event.COMPLETE, completeOpenHandler);
-		indexStream.open(tplIndex, FileMode.READ);		
-		
-		tplIndexXML = XML(indexStream.readUTFBytes(indexStream.bytesAvailable));		
-			
-	}
+	// Cash resources manipulation
+	//
 	
-	public static function setObj(tplID:String, objID:String, obj:Object):Object
+	public static function now():Date
 	{
-		instance.initialized();		
+		var localDate:Date = new Date();
+		var offsetMilliseconds:Number = localDate.getTimezoneOffset() * 60 * 1000;
+		localDate.setTime(localDate.getTime() + offsetMilliseconds);
+		
+		return localDate;
 	}
 	
+	public static function clear():void
+	{
+		instance.onProgress(0, 100)
+		
+		var expirationDate:Date = now();
+		var offsetMilliseconds:Number = expirationPeriod * 60 * 60 * 1000;
+		expirationDate.setTime(expirationDate.getTime() - offsetMilliseconds);	
+				
+		instance.initialized;
+
+		var mainIndex:XML = instance.getMainIndex();
+		for each(var indexEntry:XML in mainIndex.template)
+		{
+			if( Number(Utils.getStringOrDefault(indexEntry.@lastRequest,'0')) <= expirationDate.getTime() )
+				instance.removeMainIndexEntry(mainIndex, indexEntry.@ID);
+		}
+		instance.setMainIndex(mainIndex);
+		
+		var fileList:Array = CashManager.instance.cashDir.getDirectoryListing();
+		for each(var file:File in fileList)
+		{
+			var isExpired:Boolean = true;
+			for each(indexEntry in mainIndex.template)
+			{
+				if(file.name == indexEntry.@folder)
+					isExpired = false;
+			}
+			
+			if(isExpired && !file.isHidden)
+			{	
+				if(file.isDirectory)
+					file.deleteDirectory(true);
+				else
+					file.deleteFile();
+			}
+		}
+		
+		instance.onClearComplete();
+	}
+	
+	private function onClearComplete():void
+	{
+		dispatchEvent(new Event(Event.COMPLETE));
+		dispatchEvent(new Event("clearComplete"));
+	}	
+
+	private function onProgress(current:Number, total:Number):void
+	{
+		dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, current, total));
+	}	
+
+	public static function getObject(tplID:String, objID:String):Object
+	{		
+		instance.initialized;
+		
+		var mainIndex:XML = instance.getMainIndex();
+		var tplEntry:XML = instance.getMainIndexEntry(mainIndex, tplID);
+		
+		if(!tplEntry)
+			return null;		
+		
+		var index:XML = instance.getIndex(tplID);
+		
+		if(!index)
+			return null;		
+
+		var entry:XML = instance.getIndexEntry(index, objID);
+		
+		if(!entry)
+			return null;		
+		
+		var tplDir:File = instance.cashDir.resolvePath(tplEntry.@folder);
+		var objFile:File = tplDir.resolvePath(entry.@filename);
+		
+		if(!objFile.exists)
+		{
+			instance.removeIndexEntry(index, objID);
+			instance.setIndex(index);
+			return null;
+		}
+		
+		// get data
+		var dataStream:FileStream = new FileStream(); 
+
+		//dataStream.addEventListener(Event.COMPLETE, onLoadData);
+		dataStream.open(objFile, FileMode.READ);		
+		
+		var data:ByteArray;
+		dataStream.readBytes(data);
+		dataStream.close();
+		
+		instance.updateIndexEntry(index, objID, 'lastRequest', now().getTime().toString());
+		instance.updateMainIndexEntry(mainIndex, tplID, 'lastRequest', now().getTime().toString());
+		
+		instance.setIndex(index);
+		instance.setMainIndex(mainIndex);
+		
+		return { entry: entry, data: data };		
+	}
+	
+	public static function setObject(tplID:String, objEntry:XML, data:ByteArray):XML
+	{
+		instance.initialized;		
+		
+		var mainIndex:XML = instance.getMainIndex();				
+		var tplEntry:XML = instance.getMainIndexEntry(mainIndex, tplID);
+		if(!tplEntry)
+		{
+			tplEntry = new XML(<template/>);
+			tplEntry.@ID = tplID;
+			tplEntry.@folder = tplID.replace('-', '');
+			tplEntry.@creationDate = now().toString();
+			tplEntry.@lastUpdate = now().toString();
+			tplEntry.@lastRequest = now().toString();
+			
+			instance.addMainIndexEntry(mainIndex, tplEntry);
+		}
+		
+		instance.updateMainIndexEntry(mainIndex, tplID, 'lastUpdate', now().toString());
+		instance.updateMainIndexEntry(mainIndex, tplID, 'lastRequest', now().toString());
+				
+		//
+		
+		var tplDir:File = instance.cashDir.resolvePath(tplEntry.@folder);
+		if(!tplDir.exists)
+			tplDir.createDirectory();
+
+		var index:XML = instance.getIndex(tplID);
+		if(!index)
+			return null;					
+		var entry:XML = instance.getIndexEntry(index, objEntry.@ID);
+		if(!entry)
+		{
+			entry = new XML(<Object/>);
+			entry.@category = objEntry.@category; 
+			entry.@ID = objEntry.@ID;
+			entry.@name = objEntry.@name;
+			entry.@type = objEntry.@type;
+			entry.@lastUpdate = now().toString();
+			entry.@lastRequest = now().toString();
+			entry.@filename = String(objEntry.@ID).replace('-', '');
+			
+			instance.addIndexEntry(index, entry);
+		}
+		instance.updateIndexEntry(mainIndex, entry.@ID, 'lastUpdate', now().toString());
+		instance.updateIndexEntry(mainIndex, entry.@ID, 'lastRequest', now().toString());
+		
+		try {
+			var dataFile:File = tplDir.resolvePath(entry.@filename); 
+        	var fileStream:FileStream = new FileStream();
+
+			fileStream.open(dataFile, FileMode.WRITE);
+			fileStream.writeBytes(data);
+			fileStream.close();
+		
+			instance.createThumb(entry, tplDir, data);
+		
+			instance.setIndex(index);
+			instance.setMainIndex(mainIndex);
+		} 
+		catch(e:*) {
+			return null;			
+		}		
+			
+		return entry;
+	}
+	
+	private function createThumb(entry:XML, folder:File, b64Data:ByteArray):void
+	{
+		if(entry.@category != 'image')
+			return;
+		
+		try	{			
+			var decoder:Base64Decoder = new Base64Decoder();
+			decoder.decode( b64Data.readUTFBytes(b64Data.bytesAvailable) );
+			var byteArray:ByteArray = decoder.flush();
+		
+			var loader:Loader = new Loader();
+			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onLoaderBytesLoaded );
+			loader.loadBytes( byteArray );
+
+		}
+		catch (error:Error)	{
+			return;
+		}		
+		
+		function onLoaderBytesLoaded( event:Event ):void {
+			try {
+				var content:DisplayObject = LoaderInfo( event.target ).content;
+				var bitmapData:BitmapData = new BitmapData( content.width, content.height, true, 0x00ffffff );
+				bitmapData.draw( content );	
+					
+				var pngEncoder:PNGEncoder = new PNGEncoder();
+				var data:ByteArray = pngEncoder.encode(bitmapData);	
+	        
+				var thumbFile:String = 'thumb_'+entry.@filename+'.png'; 
+	        
+	        	var file:File = folder.resolvePath(thumbFile); 
+		        var fileStream:FileStream = new FileStream();
+
+				fileStream.open(file, FileMode.WRITE);
+				fileStream.writeBytes(data);
+				fileStream.close();
+			
+				entry.@thumb = thumbFile;
+			} catch(e:*) {}
+		}
+	}
+	
+	public static function updateObject(tplID:String, objID:String, data:ByteArray):XML
+	{
+		instance.initialized;		
+		
+		var mainIndex:XML = instance.getMainIndex();
+		var tplEntry:XML = instance.getMainIndexEntry(mainIndex, tplID);
+		if(!tplEntry)
+			return null;
+
+		var index:XML = instance.getIndex(tplID);
+		if(!index)
+			return null;
+
+		var entry:XML = instance.getIndexEntry(index, objID);
+		if(!entry)
+			return null;
+
+		return setObject(tplID, entry, data);
+	}
 
 	//--------------------------------------------------------------------------
     //
     //  Event handlers
     //
     //--------------------------------------------------------------------------
-	
 	    
 }
 }

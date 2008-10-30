@@ -74,6 +74,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.managers.CashManager;
 			import ExtendedAPI.com.containers.SuperWindow;
 			import mx.core.Window;
 			import ExtendedAPI.com.containers.SuperAlert;
@@ -187,6 +188,8 @@
         	    	if(!file.exists)
         	    		file.createDirectory();
         	    }
+        	    
+        	    CashManager.clear();
         	    
 				// Load application settings
 	            ContextManager.loadSettings();
