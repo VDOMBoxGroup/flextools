@@ -273,7 +273,7 @@ private function showResource():void {
 		__rType.text = '---';
 		__rID.text = 'Unknown resource ID';
 		__iResolution.text = "Can not determine";
-		__preview.__image.source = typesIcons.spinner;
+		__preview.__image.source = typesIcons.spinnerbox;
 		return;
 	}
 	
