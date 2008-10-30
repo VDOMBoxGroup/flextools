@@ -4,20 +4,25 @@ package vdom.components.treeEditor
 	import flash.display.LoaderInfo;
 	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
+	import mx.containers.ControlBar;
 	import mx.containers.HBox;
 	import mx.containers.VBox;
+	import mx.controls.Button;
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	
+	import vdom.containers.ClosablePanel;
 	import vdom.controls.resourceBrowser.ResourceBrowserButton;
+	import vdom.events.DataManagerEvent;
 	import vdom.managers.DataManager;
 	import vdom.managers.FileManager;
 	
-	public class Properties extends VBox
+	public class Properties extends ClosablePanel
 	{
 		[Embed(source='/assets/treeEditor/selected_back_ground.png')]
 		[Bindable]
@@ -30,22 +35,28 @@ package vdom.components.treeEditor
 		private var elasticHeight:int = 21;
 		private var fileManager:FileManager = FileManager.getInstance();
 		private var dataManager:DataManager = DataManager.getInstance();
+		private var mainVB:VBox;
 			
 		public function Properties()
 		{
 			super();
 			
+			title = "Properties";
 			percentWidth = 100;
-			
-			setStyle("verticalGap", "5");
 			setStyle("backgroundColor","0xAAAAAA");
+			
+			mainVB = new VBox();
+				mainVB.setStyle("verticalGap", "2");
+				mainVB.percentWidth = 100;
+			addChild(mainVB);
 			
 			generateType();
 			generateTitle();
 			generateImage();
 			generateDisription();
-			__title.text = "Name of Container2";
-			canvas.addChild(__title);
+			
+			generateControlBar();
+			
 		}
 		
 		 
@@ -56,7 +67,7 @@ package vdom.components.treeEditor
 		{
 			var type:Canvas = new Canvas();
 				type.percentWidth = 100;
-			addChild(type);
+			mainVB.addChild(type);
 			
 			var typeElasticGrey:Image = new Image();
 				typeElasticGrey.source = elasticGrey; 
@@ -90,11 +101,11 @@ package vdom.components.treeEditor
 		}
 		
 		private var __title:TextInput = new TextInput();
-		private var canvas:Canvas = new Canvas();
 		private function generateTitle():void
 		{
-			
-			addChild(canvas);
+			var canvas:Canvas = new Canvas();
+				canvas.percentWidth = 100;
+			mainVB.addChild(canvas);
 			
 			var titleElasticGrey:Image = new Image(); 
 				titleElasticGrey.source = elasticGrey; 
@@ -104,7 +115,7 @@ package vdom.components.treeEditor
 				titleElasticGrey.percentWidth = 100;
 				titleElasticGrey.height = elasticHeight;
 				canvas.addChild(titleElasticGrey);
-				canvas.percentWidth = 100;
+				
 			
 			var titleLabel:Label = new Label();
 				titleLabel.text = "Title: ";
@@ -114,7 +125,7 @@ package vdom.components.treeEditor
 				__title.x = 40;
 				__title.percentWidth = 100;
 				__title.addEventListener(KeyboardEvent.KEY_UP, testHandler);
-			
+			canvas.addChild(__title);
 		}
 		
 		private function testHandler(kEvt:KeyboardEvent):void
@@ -128,7 +139,7 @@ package vdom.components.treeEditor
 		{
 			var disription:Canvas = new Canvas();
 				disription.percentWidth = 100;
-			addChild(disription);
+			mainVB.addChild(disription);
 			
 			var disriptionElasticGrey:Image = new Image();
 				disriptionElasticGrey.source = elasticGrey; 
@@ -152,7 +163,7 @@ package vdom.components.treeEditor
 		{
 			var imageCn:Canvas = new Canvas();
 				imageCn.percentWidth = 100;
-			addChild(imageCn);
+			mainVB.addChild(imageCn);
 			
 			var imageElasticGrey:Image = new Image();
 				imageElasticGrey.source = elasticGrey; 
@@ -178,15 +189,49 @@ package vdom.components.treeEditor
 			imageCn.addChild(rbr);
 			
 		}
+		private function generateControlBar():void
+		{
+			var btHeit:int = 16;
+			
+			var contPan:ControlBar = new ControlBar();
+				addChild(contPan);
+				
+			var btSave:Button = new Button();
+				btSave.height = btHeit;
+				btSave.setStyle("cornerRadius", "0");
+				btSave.label = "Save";
+			btSave.addEventListener(MouseEvent.CLICK, saveProperties); 
+			contPan.addChild(btSave);
+			
+			var btSetStart:Button = new Button();
+				btSetStart.height = btHeit;
+				btSetStart.setStyle("cornerRadius", "0");
+				btSetStart.label = "Start";
+			contPan.addChild(btSetStart);
+			
+			var btDelete:Button = new Button();
+				btDelete.height = btHeit;
+				btDelete.setStyle("cornerRadius", "0");
+				btDelete.label = "Delete";
+			contPan.addChild(btDelete);
+		}
 		
-		private var treeElement:TreeElement;
+		private var treeElement:TreeElement = new TreeElement();
 		public function set target (treObj:TreeElement):void
 		{
-			this.treeElement = treObj;
-			__title.text = treeElement.title;
-			disriptionTextArea.text = treeElement.description;
-			 typeLabel.text = treeElement.type;
-			 fileManager.loadResource(dataManager.currentApplicationId,  treeElement.typeID, this, 'typeResourse'); 
+			if( treeElement != null && treObj != null && treeElement.ID != treObj.ID)
+			{ 
+				treeElement.current = false;
+				treeElement = treObj;
+				treeElement.current = true;
+				
+				dataManager.changeCurrentPage(treObj.ID);
+				
+				__title.text = treeElement.title;
+				disriptionTextArea.text = treeElement.description;
+				 typeLabel.text = treeElement.type;
+				 fileManager.loadResource(dataManager.currentApplicationId,  treeElement.typeID, this, 'typeResourse');
+			} 
 		}
 		
 		private var resourceId:String;
@@ -225,6 +270,50 @@ package vdom.components.treeEditor
 		public function get target ():TreeElement
 		{
 			return treeElement;
+		}
+		
+		private function saveProperties(msEvt:MouseEvent):void
+		{
+						
+		}
+		private function saveChange():void
+		{
+			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
+//			dataManager.changeCurrentPage(_ID);
+		}
+		
+		private function changePagesHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
+			
+			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
+			
+//			dataManager.changeCurrentObject(_ID);
+		}
+		
+		private function changeObjectHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
+			
+			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+			
+			var str:String = 
+			 	'<Attributes>' + 
+//			 		' <Attribute Name="description">' + textArea.text+'</Attribute>'+
+//			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
+			 	' </Attributes>';
+			var xml:XML = XML(str)	
+			dataManager.currentObject.Attributes = xml;
+//			trace('2) '+dataManager.currentObject.Attributes);   
+			
+			dataManager.updateAttributes();
+//			trace('changeAttributes');
+		}
+		
+		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
+//			trace('updateAttributeCompleted')
 		}
 
 	}

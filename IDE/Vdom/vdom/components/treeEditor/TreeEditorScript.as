@@ -706,8 +706,8 @@ private function revert():void
 		removeMassTreeElements();
 //		removeTreeEditorListeners();
 		
-		if(_curTree.target)
-			dataManager.changeCurrentPage(_curTree.target.ID);
+//		if(_curTree.target)
+//			dataManager.changeCurrentPage(_curTree.target.ID);
 
 		if (main.contains(btLine))
 		{
@@ -909,19 +909,19 @@ private function  createObjectHandler(dmEvt:DataManagerEvent):void
 	main.addChild(massTreeElements[ID]);
 	
 	//select new object
-		if(_curTree.target != null)
-			_curTree.target.current = false;
+//		if(_curTree.target != null)
+//			_curTree.target.current = false;
 		_curTree.target = massTreeElements[ID];
-		if(_curTree.target != null)
-		{
-			_curTree.target.current = true;
-			dataManager.changeCurrentPage(_curTree.target.ID);
-		}
+//		if(_curTree.target != null)
+//		{
+//			_curTree.target.current = true;
+//			dataManager.changeCurrentPage(_curTree.target.ID);
+//		}
 		
 	saveToServer();
 	
 	dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
-	dataManager.changeCurrentPage(ID);
+//	dataManager.changeCurrentPage(ID);
 }
 
 
