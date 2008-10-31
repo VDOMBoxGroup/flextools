@@ -327,8 +327,8 @@
 	
 	private function saveToServerHandler(trEvt:TreeEditorEvent):void
 	{
-//		saveToServer();
-		markButton();
+		saveToServer();
+//		markButton();
 	}
 	
 	
@@ -435,9 +435,10 @@
 
 	private function mouseClickHandler(msEvt:MouseEvent):void
 	{
-		for (var ID:String in massTreeElements)
-				if(massTreeElements[ID].select) 
-					massTreeElements[ID].unSelect();
+		
+//		for (var ID:String in massTreeElements)
+//				if(massTreeElements[ID].select) 
+//					massTreeElements[ID].unSelect();
 
 		if (main.contains(btLine))
 		{
@@ -596,8 +597,6 @@
 		verticalScrollPolicy="auto"  horizontalScrollPolicy="off">	
 <mx:VBox  >
 
-<treeEditor:Properties id="_curTree" width="200"/>
-
 
 	<containers:ClosablePanel width="100%" title="Menu">
 		<mx:VBox width="100%" 	verticalGap="0"  verticalAlign="0" backgroundColor="0x999999">
@@ -625,6 +624,7 @@
 			<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>
 		</mx:VBox>		
 	</containers:ClosablePanel>	
+	<treeEditor:Properties id="_curTree" width="200"/>
 	<containers:ClosablePanel title="Levels" width="100%">
 		<colorMenu02:ColorMenu2 id="colmen2" text="11111111" />
 	</containers:ClosablePanel>	

@@ -378,6 +378,10 @@ private function addTreeEditorListeners():void
 	dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
 	dataManager.addEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, createObjectHandler);
 	
+	_curTree.addEventListener(TreeEditorEvent.CHANGE_START_PAGE, changeStartPageHandler);
+	_curTree.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+	_curTree.addEventListener(TreeEditorEvent.SAVE_TO_SERVER, saveToServerHandler);
+	
 	btLine.addEventListener(MouseEvent.CLICK, lineClikHandler );
 }
 
@@ -391,6 +395,10 @@ private function removeTreeEditorListeners():void
 	
 	dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
 	dataManager.removeEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, createObjectHandler);
+	
+	_curTree.removeEventListener(TreeEditorEvent.CHANGE_START_PAGE, changeStartPageHandler);
+	_curTree.removeEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
+	_curTree.removeEventListener(TreeEditorEvent.SAVE_TO_SERVER, saveToServerHandler);	
 	
 	btLine.removeEventListener(MouseEvent.CLICK, lineClikHandler);
 }

@@ -13,13 +13,13 @@ package vdom.components.treeEditor
 	import mx.controls.Button;
 	import mx.controls.Image;
 	import mx.controls.Label;
-	import mx.controls.TextArea;
 	import mx.controls.TextInput;
 	
 	import vdom.containers.ClosablePanel;
 	import vdom.controls.multiLine.MultiLine;
 	import vdom.controls.resourceBrowser.ResourceBrowserButton;
 	import vdom.events.DataManagerEvent;
+	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
 	import vdom.managers.FileManager;
 	
@@ -53,14 +53,26 @@ package vdom.components.treeEditor
 
 			
 			mainVB = new VBox();
-				mainVB.setStyle("verticalGap", "2");
+				mainVB.setStyle("verticalGap", "0");
 				mainVB.setStyle("borderThickness", "0"); 
 				mainVB.percentWidth = 100;
 			addChild(mainVB);
 			
 			generateType();
+			
+//			var glinr:HRule = new HRule();
+//				glinr.percentWidth = 100;
+//			mainVB.addChild(glinr);
 			generateTitle();
+			
+//			var glinr1:HRule = new HRule();
+//			glinr1.percentWidth = 100;
+//			mainVB.addChild(glinr1);
 			generateImage();
+			
+//			var glinr2:HRule = new HRule();
+//			glinr2.percentWidth = 100;
+//			mainVB.addChild(glinr2);
 			generateDisription();
 			
 			generateControlBar();
@@ -146,7 +158,8 @@ package vdom.components.treeEditor
 		}
 		
 		private var disriptionLabel:Label = new Label();
-		private var disriptionTextArea:TextArea = new TextArea();
+//		private var disriptionTextArea:TextArea = new TextArea();
+		private var multLine:MultiLine = new MultiLine();
 		private function generateDisription():void
 		{
 			var disription:Canvas = new Canvas();
@@ -166,7 +179,7 @@ package vdom.components.treeEditor
 				disriptionLabel.setStyle("textAlign", "right");
 			disription.addChild(disriptionLabel);
 
-			var multLine:MultiLine = new MultiLine();
+			
 				multLine.percentWidth = 100;
 				multLine.x = elasticWidht;
 				multLine.value = "Deskri";
@@ -178,6 +191,7 @@ package vdom.components.treeEditor
 //			disription.addChild(disriptionTextArea);
 		}
 		
+		private var resourseBrowser:ResourceBrowserButton = new ResourceBrowserButton();
 		private function generateImage():void
 		{
 			var imageCn:Canvas = new Canvas();
@@ -208,10 +222,9 @@ package vdom.components.treeEditor
 				label.setStyle("textAlign", "right");
 			imageCn.addChild(label);
 			
-			var rbr:ResourceBrowserButton = new ResourceBrowserButton();
-				rbr.x = elasticWidht;
-				rbr.percentWidth = 100;
-			imageCn.addChild(rbr);
+				resourseBrowser.x = elasticWidht;
+				resourseBrowser.percentWidth = 100;
+			imageCn.addChild(resourseBrowser);
 			
 		}
 		private function generateControlBar():void
@@ -232,13 +245,16 @@ package vdom.components.treeEditor
 				btSetStart.height = btHeit;
 				btSetStart.setStyle("cornerRadius", "0");
 				btSetStart.label = "Start";
+				btSetStart.addEventListener(MouseEvent.CLICK, changeStartPage); 
 			contPan.addChild(btSetStart);
 			
 			var btDelete:Button = new Button();
 				btDelete.height = btHeit;
 				btDelete.setStyle("cornerRadius", "0");
 				btDelete.label = "Delete";
+				btDelete.addEventListener(MouseEvent.CLICK, deleteElement); 
 			contPan.addChild(btDelete);
+			
 		}
 		
 		private var treeElement:TreeElement = new TreeElement();
@@ -252,8 +268,9 @@ package vdom.components.treeEditor
 				
 				dataManager.changeCurrentPage(treObj.ID);
 				
+				resourseBrowser.value =  "#Res(" + treeElement.resourceID + ")"; 
 				__title.text = treeElement.title;
-				disriptionTextArea.text = treeElement.description;
+				multLine.value = treeElement.description;
 				 typeLabel.text = treeElement.type;
 				 fileManager.loadResource(dataManager.currentApplicationId,  treeElement.typeID, this, 'typeResourse');
 			} 
@@ -297,35 +314,70 @@ package vdom.components.treeEditor
 			return treeElement;
 		}
 		
+		private const regResource:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
 		private function saveProperties(msEvt:MouseEvent):void
 		{
-						
+			if(dataManager.currentPageId != treeElement.ID )
+			{
+				dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
+				dataManager.changeCurrentPage(treeElement.ID);	
+			}else
+			{
+				if(dataManager.currentObjectId != treeElement.ID)
+				{
+					dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
+					dataManager.changeCurrentObject(treeElement.ID);
+				}else
+				{
+					
+					changeAttributes();
+				}
+			}
+			
+			if(resourseBrowser.value == "")
+			{
+				treeElement.resourceID = "";
+				
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SAVE_TO_SERVER));
+				
+				return;
+			}			
+				
+			var resID:String = resourseBrowser.value.match(regResource)[1];
+			if(treeElement.resourceID != resID)
+			{
+				treeElement.resourceID = resID;
+				
+				fileManager.loadResource(dataManager.currentApplicationId, treeElement.resourceID, treeElement);
+					
+				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SAVE_TO_SERVER));
+			}
 		}
-		private function saveChange():void
-		{
-			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
-//			dataManager.changeCurrentPage(_ID);
-		}
+		
 		
 		private function changePagesHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
 			
 			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
-			
-//			dataManager.changeCurrentObject(_ID);
+			dataManager.changeCurrentObject(treeElement.ID);
 		}
 		
 		private function changeObjectHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
 			
+			changeAttributes();
+		}
+		
+		private function changeAttributes():void
+		{
 			dataManager.addEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
 			
 			var str:String = 
 			 	'<Attributes>' + 
-//			 		' <Attribute Name="description">' + textArea.text+'</Attribute>'+
-//			 		' <Attribute Name="title">' + txt.text + '</Attribute>' + 
+			 		' <Attribute Name="description">' + multLine.value +'</Attribute>'+
+			 		' <Attribute Name="title">' + __title.text + '</Attribute>' + 
 			 	' </Attributes>';
 			var xml:XML = XML(str)	
 			dataManager.currentObject.Attributes = xml;
@@ -338,7 +390,19 @@ package vdom.components.treeEditor
 		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
-//			trace('updateAttributeCompleted')
+			trace('updateAttributeCompleted');
+			treeElement.description = multLine.value;
+			treeElement.title = __title.text;
+		}
+		
+		private function changeStartPage(msEvt:MouseEvent):void
+		{
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.CHANGE_START_PAGE, treeElement.ID));
+		}
+		
+		private function deleteElement(msEvt:MouseEvent):void
+		{
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.DELETE, treeElement.ID));	
 		}
 
 	}

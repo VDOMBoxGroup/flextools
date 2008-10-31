@@ -47,7 +47,7 @@ package vdom.components.treeEditor
 		private var imgStart:Image;
 		private var cnvUpLayer	:Canvas = new Canvas();
 		private var cnvDownLayer:Canvas = new Canvas();		
-		private var txtInp:TextInput;
+//		private var txtInp:TextInput;
 		private var _type:Label;
 //		private var soap:Soap = Soap.getInstance();
 		private var dataManager:DataManager;
@@ -169,46 +169,46 @@ package vdom.components.treeEditor
 		private function txtDoubleClickHandler(msEvt:MouseEvent):void
 		{
 			msEvt.stopImmediatePropagation();
-			
-			txtInp.visible = true;
-			txtInp.text  = txt.text;
-			txtInp.setFocus();
-			txtInp.setSelection(0, 100);
-			txtInp.addEventListener(KeyboardEvent.KEY_UP, txtInpKeyUpHandler);
-			txtInp.addEventListener(MouseEvent.CLICK, txtInpClickHandler);
+			changeState(!min);
+//			txtInp.visible = true;
+//			txtInp.text  = txt.text;
+//			txtInp.setFocus();
+//			txtInp.setSelection(0, 100);
+//			txtInp.addEventListener(KeyboardEvent.KEY_UP, txtInpKeyUpHandler);
+//			txtInp.addEventListener(MouseEvent.CLICK, txtInpClickHandler);
 		}
 		
 		private function txtInpKeyUpHandler(kbEvt:KeyboardEvent):void
 		{
-			if(kbEvt.keyCode == 13)
-			{
-				txtInp.removeEventListener(KeyboardEvent.KEY_UP, txtInpKeyUpHandler);
-				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
-				
-				txt.text = txtInp.text;
-				txtInp.visible = false;
-				saveChange()
-			}
+//			if(kbEvt.keyCode == 13)
+//			{
+//				txtInp.removeEventListener(KeyboardEvent.KEY_UP, txtInpKeyUpHandler);
+//				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
+//				
+//				txt.text = txtInp.text;
+//				txtInp.visible = false;
+//				saveChange()
+//			}
 		}
 		
 		private function txtInpClickHandler(msEvt:MouseEvent):void
 		{
 				msEvt.stopImmediatePropagation();
 		}
-		
+	/*	
 		private function textAreaDoubleClickHandler(msEvt:MouseEvent):void
 		{
 			if(!_availabled)
 				return;
-				
-			textArea.editable = true;
-			textArea.selectable = true;
-			textArea.focusEnabled = true;
-			textArea.setFocus();
-			textArea.setStyle('fontWeight', "normal"); 
+//				
+			textArea.editable = false;
+			textArea.selectable = false;
+//			textArea.focusEnabled = true;
+//			textArea.setFocus();
+//			textArea.setStyle('fontWeight', "normal"); 
 			textArea.addEventListener(MouseEvent.CLICK, textAreaClickHandler);
 		}
-		
+		*/
 		private function textAreaClickHandler(msEvt:MouseEvent):void
 		{
 			msEvt.stopImmediatePropagation();
@@ -216,23 +216,23 @@ package vdom.components.treeEditor
 		
 		private function endFormatinfHandler(msEvt:MouseEvent):void
 		{
-			if(txtInp.visible)
-			{
-				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
-				
-				txt.text = txtInp.text;
-				txtInp.visible = false;
-				saveChange();
-			}
-			
-			if(textArea.editable  )
-			{
-				textArea.removeEventListener(MouseEvent.CLICK, textAreaClickHandler);
-				textArea.editable = false;
-				textArea.selectable = false;
-				textArea.setStyle('fontWeight', "bold");
-				saveChange();
-			}
+//			if(txtInp.visible)
+//			{
+//				txtInp.removeEventListener(MouseEvent.CLICK, txtInpClickHandler);
+//				
+//				txt.text = txtInp.text;
+//				txtInp.visible = false;
+//				saveChange();
+//			}
+//			
+//			if(textArea.editable  )
+//			{
+//				textArea.removeEventListener(MouseEvent.CLICK, textAreaClickHandler);
+//				textArea.editable = false;
+//				textArea.selectable = false;
+//				textArea.setStyle('fontWeight', "bold");
+//				saveChange();
+//			}
 		}
 		
 		
@@ -262,6 +262,7 @@ package vdom.components.treeEditor
 		 * 
 		 * 
 		 * */
+	/*
 		private function imageDoubleClickHandler(msEvt:MouseEvent):void 
 		{
 //			trace('image0');
@@ -275,8 +276,9 @@ package vdom.components.treeEditor
 			
 			
 		}
-		
+		*/
 		private var fileManager:FileManager = FileManager.getInstance();
+		/*
 		private function resourseSelectedHandler(rbEvt:ResourceBrowserEvent):void 
 		{
 			
@@ -285,7 +287,7 @@ package vdom.components.treeEditor
 				
 				dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SAVE_TO_SERVER));
 		}	
-		
+		*/
 		private var loader:Loader;
 		public function set resource(data:Object):void
 		{
@@ -343,10 +345,10 @@ package vdom.components.treeEditor
 		
 		private function saveChange():void
 		{
-			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
-			dataManager.changeCurrentPage(_ID);
+//			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
+//			dataManager.changeCurrentPage(_ID);
 		}
-		
+	/*	
 		private function changePagesHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
@@ -355,7 +357,7 @@ package vdom.components.treeEditor
 			
 			dataManager.changeCurrentObject(_ID);
 		}
-		
+	/*	
 		private function changeObjectHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, changeObjectHandler);
@@ -374,7 +376,7 @@ package vdom.components.treeEditor
 			dataManager.updateAttributes();
 //			trace('changeAttributes');
 		}
-		
+		*/
 		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
@@ -388,11 +390,11 @@ package vdom.components.treeEditor
 	 	if(!_availabled)
 				return;
 				
-	 	if( txtInp.visible == false)
-	 	{
+//	 	if( txtInp.visible == false)
+//	 	{
 	 		dispatchEvent(new TreeEditorEvent(TreeEditorEvent.START_REDRAW_LINES, _ID));
 	 		//startDrag();
-	 	}
+//	 	}
 	 		
 	 }
 	  private function stopDragHandler(msEvt:MouseEvent):void
@@ -404,7 +406,7 @@ package vdom.components.treeEditor
 		 public function set title(names:String):void
 		{
 			txt.text = names;
-			txtInp.text = txt.text;
+//			txtInp.text = txt.text;
 		}
 		
 		public function get title():String
@@ -449,6 +451,8 @@ package vdom.components.treeEditor
 		public function set resourceID(names:String):void
 		{
 			_resourceID = names;
+			if (_resourceID == "")
+				 image.source = defaultPicture;
 		}
 		
 		public function get resourceID():String
@@ -558,7 +562,8 @@ package vdom.components.treeEditor
 		
 		public function get select():Boolean
 		{
-			return txtInp.visible || textArea.editable;
+			return false;
+//			return txtInp.visible || textArea.editable;
 		} 
 		
 		public function unSelect():void
@@ -684,19 +689,19 @@ package vdom.components.treeEditor
 			imgStart.addEventListener(MouseEvent.CLICK, startPageClickHandler);	
 			
 			
-			txtInp = new TextInput();
-			txtInp.setStyle('borderColor', '#000000');
-			txtInp.setStyle('fontWeight', "bold"); 
-			txtInp.setStyle('textAlign', 'center');
-			
-			txtInp.visible = false;
+//			txtInp = new TextInput();
+//			txtInp.setStyle('borderColor', '#000000');
+//			txtInp.setStyle('fontWeight', "bold"); 
+//			txtInp.setStyle('textAlign', 'center');
+//			
+//			txtInp.visible = false;
 			
 			cnvUpLayer.addChild(imgheader);
 			cnvUpLayer.addChild(imgMenu);
 			cnvUpLayer.addChild(txt);
 			cnvUpLayer.addChild(imgPlus);
 			cnvUpLayer.addChild(imgStart);
-			cnvUpLayer.addChild(txtInp);
+//			cnvUpLayer.addChild(txtInp);
 			cnvUpLayer.addChild(imgLine);
 			cnvUpLayer.addChild(imgDelete);
 			
@@ -721,11 +726,12 @@ package vdom.components.treeEditor
 			textArea.setStyle('fontWeight', "bold"); 
 			
 			textArea.editable = false;
-			textArea.focusEnabled = true;
-			textArea.text = 'press double click for edit this text';
+			textArea.focusEnabled = false;
+			textArea.selectable = false;
+//			textArea.text = 'press double click for edit this text';
 			
-			textArea.doubleClickEnabled = true;
-			textArea.addEventListener(MouseEvent.DOUBLE_CLICK, textAreaDoubleClickHandler);
+			textArea.doubleClickEnabled = false;
+//			textArea.addEventListener(MouseEvent.DOUBLE_CLICK, textAreaDoubleClickHandler);
 			cnvDownLayer.addChild(textArea);
 			
 			image = new Image();
@@ -735,7 +741,7 @@ package vdom.components.treeEditor
 			image.scaleContent = true;
 			
 			image.doubleClickEnabled = true;
-			image.addEventListener(MouseEvent.CLICK, imageDoubleClickHandler);
+//			image.addEventListener(MouseEvent.CLICK, imageDoubleClickHandler);
 			cnvDownLayer.addChild(image);
 			
 			imgType = new Image();
@@ -790,8 +796,8 @@ package vdom.components.treeEditor
 			imgStart.height = 10 * _ratio;
 			
 		//	txtInp 
-			txtInp.y = 2 * _ratio;
-			txtInp.width =  240 * _ratio;
+//			txtInp.y = 2 * _ratio;
+//			txtInp.width =  240 * _ratio;
 			
 			
 		//	cnvUpLayer
