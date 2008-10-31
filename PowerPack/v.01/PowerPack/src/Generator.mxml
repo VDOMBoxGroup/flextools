@@ -45,6 +45,8 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Application;
+			import flash.utils.getTimer;
 			import ExtendedAPI.com.containers.SuperAlert;
 			import PowerPack.com.managers.ConnectionManager;
 			import generated.webservices.Install_applicationResultEvent;
@@ -83,6 +85,7 @@
 			private var vsLastChanged:DisplayObject;
 			private var appGenerated:Boolean;
 			private var appInstalled:Boolean;
+			private var timer:Number;
 			
 			private function init():void 
 			{
@@ -189,7 +192,7 @@
 						ContextManager.saveSettings();
 		       			exit();
 		   	     	}
-				}	
+				}
 	       	}
 			
 			private function labelFunction(item:Object):String
@@ -372,7 +375,8 @@
             			
             		case cComplete:
             			txtResultBuf.text = '';
-            			txtResultBuf.text = ContextManager.instance.templateStruct.buffer;
+            			//txtResultBuf.text = ContextManager.instance.templateStruct.buffer;
+            			txtResultBuf.text = (timer/1000).toString();
             			txtResultBuf.verticalScrollPosition = 0;
             			break;
             	}            	            	      	
@@ -534,12 +538,15 @@
 					progressBar.mode = ProgressBarMode.MANUAL;
         			progressBar.maximum = tpl.nodes.length + 1;            
 								
-					tpl.isDebug = true;
-					tpl.isStepDebug = true;
+					//tpl.isDebug = true;
+					//tpl.isStepDebug = true;
 												        			
 					tpl.addEventListener("error", debugErrorHandler);
 					tpl.addEventListener("stepComplete", stepCompleteHandler);
-					tpl.addEventListener("generationComplete", generationComplete);					
+					tpl.addEventListener("generationComplete", generationComplete);
+					
+					timer = getTimer();
+										
 					tpl.generate();
 				}
 				catch(e:Error) 
@@ -561,10 +568,12 @@
             	if(progressBar.value+1<progressBar.maximum/2+1);
             		progressBar.setProgress(progressBar.value+1, progressBar.maximum);
 				
-				ContextManager.instance.templateStruct.generate(true);	            		
+				//ContextManager.instance.templateStruct.generate(true);	            		
             }	           	
            	
            	private function generationComplete(event:Event):void {
+           		timer = getTimer() - timer;
+           		
            		appGenerated = true;
 				ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
 				ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
@@ -684,7 +693,7 @@
 				var appxml:String = ContextManager.instance.templateStruct.buffer;
 				
 				
-				/*appxml =  
+/*appxml =  
 <Application>
     <Information>
       <ID>58963343-afe9-4320-a6d5-fd2880aadf33</ID>      

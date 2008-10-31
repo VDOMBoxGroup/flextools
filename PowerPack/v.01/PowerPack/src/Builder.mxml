@@ -189,6 +189,9 @@
         	    		file.createDirectory();
         	    }
         	    
+        	    Application.application.setStyle("modalTransparencyBlur", 0);
+				Application.application.setStyle("modalTransparency", 0);
+        	    
         	    CashManager.clear();
         	    
 				// Load application settings
@@ -206,7 +209,7 @@
 				file = File.applicationDirectory.resolvePath("lang/"+ContextManager.instance.lang.file);
 	            if(file && file.exists)
 	            {
-					fileStream = new FileStream();	
+					fileStream = new FileStream();
 									
 					fileStream.addEventListener(Event.COMPLETE, completeLangHandler);
 					fileStream.openAsync(file, FileMode.READ);
@@ -229,7 +232,9 @@
 		            }
             	}
             	
-            	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));            	
+            	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
+            	
+            	trace(describeType(Dynamic));            	
 		    }
 		    		    
 		    private function onProblemsDoubleClick(event:MouseEvent):void

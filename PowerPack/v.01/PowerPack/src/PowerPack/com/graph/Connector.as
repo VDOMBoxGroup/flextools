@@ -95,7 +95,9 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     public static const CM_MIX:String = "mix";
     
     private static const SELECT_AREA_SIZE:int = 5;
+    
     public static var connectMode:String = CM_CENTER;
+    public static var deleteConfirmation:Boolean = true;
 
     private static var modalTransparencyBlur:Number;
     private static var modalTransparency:Number;
@@ -202,7 +204,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
   				
   		stopDragging();
    		
-       	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);            
+       	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);            
        	removeEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);           
 
    		removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
@@ -494,11 +496,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         }
         
         if(!_created) {
-        	_created = true;  
-        	
-        	canvas = parent as GraphCanvas;      	
-        	Application.application.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);            
-        	addEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);            
+        	_created = true;	
         }
     }
 
@@ -515,17 +513,16 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         {
             _highlightedChanged = false;
             invalidateDisplayList();
-        }
-        
+        }        
         if (_dataChanged)
         {
             _dataChanged = false;
             
-            if(!data)
+            if(data == null)
             {
             	_label = null;
-            }
-            if(data is Array)
+            }   
+            else if(data is Array)
             {
             	if((data as Array).length==0)
             		_label = null;            	
@@ -539,9 +536,14 @@ public class Connector extends UIComponent implements IFocusManagerComponent
             	if(ListCollectionView(data).getItemIndex(label)==-1)
             		_label = data[0];
             }
-            else
+            else if(data is String)
             {
             	_label = data.toString();
+            }
+            else
+            {
+            	if(!data.hasOwnProperty(_label))
+            		_label = null;
             }
             
           	toolTip = label;
@@ -565,6 +567,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 	    	removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	    	removeEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
+	    	removeEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);
 	    
 	        if(contextMenu)
 	        {
@@ -577,18 +580,21 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	    		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 	            addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	            addEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
-	        
+	    		addEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);
+	    		    
 	            if(contextMenu)
 	            {
 	            	for each (menuItem in contextMenu.items)
 		            	menuItem.enabled = true;
 	            }
 	        }
-        
+        	
+        	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);
 			stopDragging();
 			
 			if((_fromObj || _toObj) && (!_fromObj || !_toObj) && parent)
 			{
+				Application.application.addEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);  
 				startDragging();
 			}
 
@@ -634,14 +640,17 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		return newConnector; 
 	}
 	
-	public function alertDestroy():void
+	public function remove():void
 	{			
  		if(parent)
  		{
-     		SuperAlert.show(
-     			LanguageManager.sentences['connector_alert_delete_text'], 
-     			LanguageManager.sentences['connector_alert_delete_title'], 
-     			Alert.YES|Alert.NO, null, alertRemoveHandler, null, Alert.YES);			     	
+ 			if(deleteConfirmation)
+	     		SuperAlert.show(
+	     			LanguageManager.sentences['connector_alert_delete_text'], 
+	     			LanguageManager.sentences['connector_alert_delete_title'], 
+	     			Alert.YES|Alert.NO, null, alertRemoveHandler, null, Alert.YES);
+	     	else
+	     		dispose();			     	
      	}
 	}	
 			
@@ -649,10 +658,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	{
 		_connectorPoly = [];
 		
-		if(!parent)
-			return;
-		
-		if(!fromObject && !toObject)
+		if(!fromObject && !toObject || !parent)
 			return;
 		
 		var fromP:Point = new Point(
@@ -858,7 +864,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     
     public function beginEdit(atCursorPosition:Boolean = true, position:Point = null):void
     {	
-    	if(!fromObject || !toObject)
+    	if(!fromObject || !toObject || !parent)
     		return;
     	
     	if(	!data ||
@@ -973,7 +979,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 				beginEdit(false);
 				break;
 			case "delete":
-				alertDestroy();
+				remove();
 				break;
 			case "enable":
 				enabled = !enabled;
@@ -999,15 +1005,14 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 
     private function connector_systemManager_mouseDownHandler(event:MouseEvent):void
     {
-    	if(!fromObject || !toObject) {
+    	if(!fromObject || !toObject) 
+    	{
     		fromObject = null;
     		toObject = null;
     	}
-    	
-    	invalidateProperties();
     }	
 
-	private function onKeyDown(event:KeyboardEvent):void
+	private function onGlobalKeyDown(event:KeyboardEvent):void
     {
 	    if(	event.keyCode == Keyboard.ESCAPE && 
 	    	(!toObject || !fromObject))
@@ -1023,7 +1028,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     	
 		if(event.keyCode == Keyboard.DELETE)
      	{
-     		alertDestroy();
+     		remove();
 	    }
 	    else if(event.keyCode == Keyboard.ENTER)
 	    {		    	

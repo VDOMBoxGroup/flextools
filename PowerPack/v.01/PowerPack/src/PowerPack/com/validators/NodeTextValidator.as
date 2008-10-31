@@ -1,5 +1,7 @@
 package PowerPack.com.validators
 {
+	import ExtendedAPI.com.utils.Utils;
+	
 	import PowerPack.com.gen.parse.CodeParser;
 	import PowerPack.com.graph.Node;
 	import PowerPack.com.graph.NodeCategory;
@@ -26,7 +28,7 @@ package PowerPack.com.validators
 		static private function classConstruct():Boolean
 		{
 			LanguageManager.setSentences(defaultCaptions);
-			return true
+			return true;
 		}
 							
         // Define Array for the return value of doValidation().
@@ -50,19 +52,20 @@ package PowerPack.com.validators
             results = [];
 			
             // Call base class doValidation().
-            results = super.doValidation(value);        
+            results = super.doValidation(value);
+                    
             // Return if there are errors.
             if (results.length > 0)
                 return results;
         	
-        	if(!(this.source is Node))
+        	if(!(source is Node))
             {
                 results.push(new ValidationResult(true, null, "invalidSource", 
                     LanguageManager.sentences.msg_not_valid_source));
                 return results;
             }      
             
-            node = Node(this.source);
+            node = Node(source);
             var arrTrans:Array = [];
         	node.toolTip = null;
         	
@@ -78,7 +81,7 @@ package PowerPack.com.validators
 				if(parseResult.result==false)
             	{
                 	results.push(new ValidationResult(true, null, "invalidVarName", 
-                    	(parseResult.error?parseResult.error.message:LanguageManager.sentences.msg_normal_node_syntax_error)));
+                    	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_normal_node_syntax_error)));
             	}       
         	}
         	else if (category == NodeCategory.SUBGRAPH)
@@ -88,7 +91,7 @@ package PowerPack.com.validators
 	        	if(parseResult.result==false)
             	{
                 	results.push(new ValidationResult(true, null, "invalidSubgraph", 
-                    	(parseResult.error?parseResult.error.message:LanguageManager.sentences.msg_graph_node_syntax_error)));
+                    	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_graph_node_syntax_error)));
             	}
          	}
         	else if (category == NodeCategory.COMMAND)
@@ -118,16 +121,18 @@ package PowerPack.com.validators
 	    		if(parseResult.result==false)
 	    		{
 	    			results.push(new ValidationResult(true, null, "invalidCommand", 
-                    	(parseResult.error?parseResult.error.message:LanguageManager.sentences.msg_command_node_syntax_error)));
-       			}	    		
+                    	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_command_node_syntax_error)));
+       			}
         		node.toolTip += node.text;
         	}
         	
-            if(parseResult.lexem)
+            if(parseResult && parseResult.lexem)
             	node.nodeTextArea.setSelection(parseResult.lexem.position, 
             		parseResult.lexem.position + parseResult.lexem.origValue.length);
-                   			
-   			node.arrTrans = arrTrans;
+            
+            if(!Utils.isEqualArrays(node.arrTrans, arrTrans))
+	   			node.arrTrans = arrTrans;
+   			
             return results;
         }
 	}

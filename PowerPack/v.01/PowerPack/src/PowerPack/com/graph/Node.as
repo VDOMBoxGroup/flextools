@@ -79,11 +79,15 @@ public class Node extends Canvas
     	node_add_trans:"Add transition", 
     	node_delete:"Delete state", 
     	node_copy:"Copy state",
+    	
     	node_initial:"Initial",
     	node_terminal:"Terminal",
+    	
     	node_normal:"Normal",
     	node_subgraph:"Subgraph",
     	node_command:"Command", 
+    	node_resource:"Resource", 
+    	
     	node_breakpoint:"Toggle breakpoint",
     	node_enabled:"Enabled",
     	node_label:"State",
@@ -225,7 +229,7 @@ public class Node extends Canvas
 	private var _categoryChanged:Boolean = false;
 	    
     [Bindable("categoryChanged")]
-    [Inspectable(category="General", defaultValue=GraphNodeCategory.NORMAL, enumeration="Normal,Subgraph,Command")]
+    [Inspectable(category="General", defaultValue=GraphNodeCategory.NORMAL, enumeration="Normal,Subgraph,Command,Resource")]
 
     /**
      *  Node category.
@@ -481,6 +485,7 @@ public class Node extends Canvas
         	contextMenu.addItem(new SuperNativeMenuItem('radio', LanguageManager.sentences['node_normal'], 'normal', category==NodeCategory.NORMAL, "category", true));
         	contextMenu.addItem(new SuperNativeMenuItem('radio', LanguageManager.sentences['node_subgraph'], 'subgraph', category==NodeCategory.SUBGRAPH, "category", true));
         	contextMenu.addItem(new SuperNativeMenuItem('radio', LanguageManager.sentences['node_command'], 'command', category==NodeCategory.COMMAND, "category", true));
+        	contextMenu.addItem(new SuperNativeMenuItem('radio', LanguageManager.sentences['node_resource'], 'resource', category==NodeCategory.RESOURCE, "category", true));
 
         	contextMenu.addItem(new SuperNativeMenuItem('separator'));
         	
@@ -563,15 +568,14 @@ public class Node extends Canvas
             
             switch(category)
             {
-            	/*
+            	
             	case NodeCategory.RESOURCE:
-            		nodeTextArea.setStyle( "borderColor",  0x000000);
-            		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
+            		nodeTextArea.setStyle( "borderColor",  0x0000ff);
+            		nodeTextArea.setStyle( "backgroundColor",  0xffffff);
             		nodeTextArea.setStyle( "color",  0x000000);
             		if(contextMenu)
-	            		contextMenu.getItemByName("subgraph").checked = true;
-            		break;
-            	*/	            	
+	            		contextMenu.getItemByName("resource").checked = true;
+            		break;            		            	
 
             	case NodeCategory.SUBGRAPH:
             		nodeTextArea.setStyle( "borderColor",  0x000000);
@@ -975,6 +979,10 @@ public class Node extends Canvas
 		else if(event.target.name == "command")
 		{
 			category = NodeCategory.COMMAND;
+		}
+		else if(event.target.name == "resource")
+		{
+			category = NodeCategory.RESOURCE;
 		}
 		else if(event.target.name == "enabled")
 		{
