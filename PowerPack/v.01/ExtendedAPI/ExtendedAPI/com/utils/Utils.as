@@ -11,6 +11,46 @@ package ExtendedAPI.com.utils
 	
 	public class Utils
 	{
+	 	
+	 	public static function isEqualArrays(arr1:Array, arr2:Array, strict:Boolean = false):Boolean
+	 	{
+	 		if(!arr1 && !arr2)
+	 			return true;  
+	 		
+	 		if(!arr1 || !arr2)
+	 			return false;  
+	 			 		
+	 		if(arr1.length != arr2.length)
+	 			return false;
+	 		
+	 		if(strict)
+	 		{
+	 			for(var i:int=0; i<arr1.length; i++)
+	 			{
+	 				if(arr1[i]!=arr2[i])
+	 					return false;	
+	 			}
+	 		}
+	 		else
+	 		{
+	 			for each(var elm1:Object in arr1)
+	 			{
+	 				var notExist:Boolean = true;
+		 			for each(var elm2:Object in arr2)
+		 			{
+		 				if(elm1==elm2)
+		 				{
+		 					notExist = false;
+		 					break;
+		 				}		
+		 			}
+		 			if(notExist)
+		 				return false; 				
+	 			}
+	 		}
+	 		return true; 
+	 	}
+	 	
 		public static function replaceEscapeSequences(string:String, sequence:String, prefix:String = '\\'):String
 		{
 			var str:String;
