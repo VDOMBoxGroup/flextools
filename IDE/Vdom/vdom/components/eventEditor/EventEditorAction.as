@@ -318,7 +318,7 @@ package vdom.components.eventEditor
 			for each(var child:XML in parametrs.children())
 			{
 				var parametr:AdvansedLayer = new AdvansedLayer(child, type.Information.Name.toString());
-				scriptNamesArray[parametr.scriptName] = parametr;
+				scriptNamesArray[parametr.scriptName + "_"] = parametr;
 				vBox.addChild(parametr);
 			}
 			
@@ -331,7 +331,7 @@ package vdom.components.eventEditor
 			obj = obj as XML;
 			for each(var child:XML in  obj.children())
 			{
-				scriptNamesArray[child.@ScriptName].value = child;
+				scriptNamesArray[child.@ScriptName + "_"].value = child;
 			}
 		}
 
