@@ -17,6 +17,7 @@ public class TreeEditorEvent extends Event
 	public static const SELECTED_LEVEL:String = 'selectedLevel';
 	public static const CHANGE_START_PAGE:String = 'changeStratPage';
 	public static const SAVE_TO_SERVER:String = 'saveToServer';
+	public static const NEED_TO_SAVE:String = 'needToSave';
 	
 	
 	

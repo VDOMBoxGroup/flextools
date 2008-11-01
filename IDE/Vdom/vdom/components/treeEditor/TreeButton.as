@@ -6,7 +6,6 @@ package vdom.components.treeEditor
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.VRule;
-	import mx.effects.Fade;
 
 	public class TreeButton extends Canvas
 	{
@@ -21,13 +20,18 @@ package vdom.components.treeEditor
         [Embed(source='/assets/treeEditor/back_ground.png')]
 		[Bindable]
         public var back_ground:Class; 
+        
+        [Embed(source='/assets/treeEditor/rezinka_red.png')]
+		[Bindable]
+        public var back_ground_rad:Class; 	
 
 		
 		private var _icon:Image = new Image();
 		private var _backGround:Image = new Image();
-		private var dissolveIn:Fade = new Fade();
-		private var dissolveOut:Fade = new Fade();
+//		private var dissolveIn:Fade = new Fade();
+//		private var dissolveOut:Fade = new Fade();
 		private var _label:Label = new Label();	
+		private var spaceImg:Image = new Image();
 		
 		public function TreeButton()
 		{
@@ -35,7 +39,7 @@ package vdom.components.treeEditor
 			
 			percentWidth = 100;
 			
-			var spaceImg:Image = new Image();
+//			var spaceImg:Image = new Image();
 			spaceImg.maintainAspectRatio = false;
 			spaceImg.scaleContent = true;
 			spaceImg.percentWidth = 100;
@@ -43,25 +47,25 @@ package vdom.components.treeEditor
 //			spaceImg.alpha = 0.1;
 			addChild(spaceImg);
 			
-			dissolveIn.alphaFrom = 0.0;
-			dissolveIn.alphaTo   = 1.0;
-			dissolveIn.duration  = 100;
-			dissolveIn.target = _backGround;
+//			dissolveIn.alphaFrom = 0.0;
+//			dissolveIn.alphaTo   = 1.0;
+//			dissolveIn.duration  = 100;
+//			dissolveIn.target = _backGround;
 			
 			
-			dissolveOut.alphaFrom = 1.0;
-			dissolveOut.alphaTo   = 0.0;
-			dissolveOut.duration  = 100;
-			dissolveOut.target = _backGround;
+//			dissolveOut.alphaFrom = 1.0;
+//			dissolveOut.alphaTo   = 0.0;
+//			dissolveOut.duration  = 100;
+//			dissolveOut.target = _backGround;
 			
 			
 			_backGround.maintainAspectRatio = false;
 			_backGround.scaleContent = true;
-			_backGround.source = selected_back_ground;
+			_backGround.source = back_ground_rad;
 			_backGround.percentWidth = 100;
 			_backGround.alpha = 0.0;
 //			_backGround.hideEffect="{dissolveOut}" showEffect="{dissolveIn}"
-			addChild(_backGround);
+//			addChild(_backGround);
 
               addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
               addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
@@ -69,8 +73,9 @@ package vdom.components.treeEditor
               addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			
 			_icon.source = new_page;
-			_icon.width = 23;
-			_icon.height = 23;
+//			_icon.width = 23;
+//			_icon.height = 23;
+			_icon.x = 3;
 			addChild(_icon);
 			
 			var vLine:VRule = new VRule();
@@ -119,16 +124,25 @@ package vdom.components.treeEditor
 			_label.text = value;
 		}
 		
+		private var _selected:Boolean = false;
 		public function set mark(bl:Boolean):void
 		{
-			if(bl)
+			_selected = bl;
+			if(_selected)
 			{
-				_label.setStyle("color", "0xFF0000");
+				_label.setStyle("color", "0xFFFFFF");
+				spaceImg.source = back_ground_rad;
 //	btSave.setStyle("borderColor", "0xAAB3B3");
 			}else
 			{
+				spaceImg.source = back_ground;
 				_label.setStyle("color", "0x000000");
 			}
+		}
+		
+		public function get selected():Boolean
+		{
+			return _selected;
 		}
 		
 	}

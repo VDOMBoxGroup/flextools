@@ -260,11 +260,14 @@ package vdom.components.treeEditor
 		private var treeElement:TreeElement = new TreeElement();
 		public function set target (treObj:TreeElement):void
 		{
+			if (treObj)
+				treObj.current = true;
+				
 			if( treeElement != null && treObj != null && treeElement.ID != treObj.ID)
 			{ 
 				treeElement.current = false;
 				treeElement = treObj;
-				treeElement.current = true;
+//				treeElement.current = true;
 				
 				dataManager.changeCurrentPage(treObj.ID);
 				

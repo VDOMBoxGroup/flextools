@@ -14,12 +14,9 @@ package vdom.components.treeEditor
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.TextArea;
-	import mx.controls.TextInput;
-	import mx.managers.PopUpManager;
 	
-	import vdom.controls.resourceBrowser.ResourceBrowser;
+	import vdom.components.eventEditor.TreeEvents;
 	import vdom.events.DataManagerEvent;
-	import vdom.events.ResourceBrowserEvent;
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
 	import vdom.managers.FileManager;
@@ -831,6 +828,15 @@ package vdom.components.treeEditor
 			_type.setStyle('fontSize', "8");
 		}
 		
+		 override public function set x(value:Number):void
+    {
+        if (super.x == value)
+            return;
+
+        super.x = value;
+        dispatchEvent(new TreeEditorEvent(TreeEditorEvent.NEED_TO_SAVE));
+
+    }
 	 
 	}
 }

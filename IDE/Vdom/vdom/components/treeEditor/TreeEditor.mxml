@@ -96,6 +96,7 @@
 	}
 	
 	
+	
 	private var needToSave:Boolean;
 	private function  getApplicationStructure(dtManEvt:DataManagerEvent):void
 	{
@@ -228,7 +229,7 @@
 		Application.application.removeEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler);
 		main.removeChild(mainWidth);
 //		saveToServer();
-		markButton();
+//		markButton();
 	}
 	
 	private var treeElemenUnderMouse:Object;
@@ -529,11 +530,11 @@
 	}
 	
 	
-	private var expand:Boolean;
+	private var expand:Boolean = false;
 	private function expandAll():void
 	{
-		expand = chExpandAll.selected;
-		
+//		expand = chExpandAll.selected;
+		expand = !expand;
 		for (var tID:String in massTreeElements)
 		{
 			massTreeElements[tID].state = expand.toString();
@@ -599,29 +600,27 @@
 
 
 	<containers:ClosablePanel width="100%" title="Menu">
-		<mx:VBox width="100%" 	verticalGap="0"  verticalAlign="0" backgroundColor="0x999999">
+		<mx:VBox width="100%" 	verticalGap="1"  verticalAlign="0" backgroundColor="0x999999">
 			
 			<treeEditor:TreeButton  labelBt="{resourceManager.getString('Tree','new_page')}"  click="addTreeElementLauncher()"
 				iconBt="@Embed(source='/assets/treeEditor/new_page.png')"/>
 			
 			<treeEditor:TreeButton labelBt="{resourceManager.getString('Tree','auto_Spacing')}"  click="autoSpacing()"
-				iconBt="@Embed(source='/assets/treeEditor/tree.png')" />
+				iconBt="@Embed(source='/assets/treeEditor/auto_spacing.png')" />
 				
+			<treeEditor:TreeButton labelBt="{resourceManager.getString('Tree','expand_all')}" click="expandAll()" 
+				iconBt="@Embed(source='/assets/treeEditor/expand_all.png')"/>
+			
 			<treeEditor:TreeButton labelBt="{resourceManager.getString('Tree','show_signature')}"  click="showSignature()"
-				iconBt="@Embed(source='/assets/treeEditor/show_singnature.png')"/>
+				iconBt="@Embed(source='/assets/treeEditor/show_signature.png')"/>
 			
-			<treeEditor:TreeButton labelBt="Hide signature"  click="hideSignature()"
-				iconBt="@Embed(source='/assets/treeEditor/hide_signature.png')"/>
-			
-			<treeEditor:TreeButton labelBt="{resourceManager.getString('Tree','expand_all')}"/>
-			<treeEditor:TreeButton labelBt="Collapse all" />	
 			<treeEditor:TreeButton labelBt="Revert" click="{revert()}"
 				iconBt="@Embed(source='/assets/treeEditor/revert.png')"/>
 				
 			<treeEditor:TreeButton id="btSave" labelBt="Save" click="{saveToServer()}" 
 				iconBt="@Embed(source='/assets/treeEditor/save.png')"/>
 				
-			<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  click="expandAll()"/>
+		<!--	<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  /> -->
 		</mx:VBox>		
 	</containers:ClosablePanel>	
 	<treeEditor:Properties id="_curTree" width="200"/>

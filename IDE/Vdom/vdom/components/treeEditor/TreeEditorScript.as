@@ -527,6 +527,7 @@ private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 			treEl.addEventListener(TreeEditorEvent.STOP_REDRAW_LINES, stopReDrawLineHandler);
 			treEl.addEventListener(TreeEditorEvent.CHANGE_START_PAGE, changeStartPageHandler);
 			treEl.addEventListener(TreeEditorEvent.SAVE_TO_SERVER, saveToServerHandler);
+			treEl.addEventListener(TreeEditorEvent.NEED_TO_SAVE, needToSaveHandler);
 
 			treEl.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			treEl.addEventListener(MouseEvent.MOUSE_OUT, treeElementMouseOutHandler);
@@ -671,6 +672,10 @@ private function  removeLine():void
 //	saveToServer();
 }
 
+private function needToSaveHandler(trEvt:TreeEditorEvent):void
+{
+	markButton();
+}
 private function markButton():void
 {
 	btSave.mark = true;
