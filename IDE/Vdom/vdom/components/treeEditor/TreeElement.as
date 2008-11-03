@@ -15,7 +15,6 @@ package vdom.components.treeEditor
 	import mx.controls.Label;
 	import mx.controls.TextArea;
 	
-	import vdom.components.eventEditor.TreeEvents;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
@@ -150,7 +149,7 @@ package vdom.components.treeEditor
 				return;
 //			min = !min
 			changeState(!min);
-			
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.NEED_TO_SAVE));
 //			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SAVE_TO_SERVER));
 		}
 		
@@ -167,6 +166,7 @@ package vdom.components.treeEditor
 		{
 			msEvt.stopImmediatePropagation();
 			changeState(!min);
+			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.NEED_TO_SAVE));
 //			txtInp.visible = true;
 //			txtInp.text  = txt.text;
 //			txtInp.setFocus();
@@ -332,6 +332,8 @@ package vdom.components.treeEditor
 			}	
 			min = blHide;
 			isRedraw = true;
+			
+			
 		}
 		
 		private function btLessenOut(muEvt:MouseEvent):void
@@ -828,13 +830,16 @@ package vdom.components.treeEditor
 			_type.setStyle('fontSize', "8");
 		}
 		
-		 override public function set x(value:Number):void
+		 override public function set y(value:Number):void
     {
-        if (super.x == value)
+    	 
+        if (super.y == value)
             return;
 
-        super.x = value;
-        dispatchEvent(new TreeEditorEvent(TreeEditorEvent.NEED_TO_SAVE));
+        super.y = value;
+        
+        if( !isRedraw && value != 0)
+        	dispatchEvent(new TreeEditorEvent(TreeEditorEvent.NEED_TO_SAVE));
 
     }
 	 

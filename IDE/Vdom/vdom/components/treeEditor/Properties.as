@@ -148,13 +148,13 @@ package vdom.components.treeEditor
 				__title.percentWidth = 100;
 //				__title.setStyle("textAlign", "right"); 
 
-				__title.addEventListener(KeyboardEvent.KEY_UP, testHandler);
+				__title.addEventListener(KeyboardEvent.KEY_DOWN, testHandler);
 			canvas.addChild(__title);
 		}
 		
 		private function testHandler(kEvt:KeyboardEvent):void
 		{
-			
+			kEvt.stopImmediatePropagation();
 		}
 		
 		private var disriptionLabel:Label = new Label();

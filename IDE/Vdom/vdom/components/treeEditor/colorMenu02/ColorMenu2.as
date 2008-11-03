@@ -3,12 +3,13 @@ package vdom.components.treeEditor.colorMenu02
 	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
+	import mx.containers.VBox;
 	import mx.controls.Image;
 	import mx.controls.Label;
+	import mx.controls.VRule;
 	import mx.events.FlexEvent;
 	
 	import vdom.events.TreeEditorEvent;
-	import mx.containers.VBox;
 
 	public class ColorMenu2 extends VBox
 	{
@@ -16,7 +17,7 @@ package vdom.components.treeEditor.colorMenu02
 		[Bindable]
 		public var rMenu:Class;
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='openEye')]
+		[Embed(source='/assets/treeEditor/colored_button_all_levels.png')]
 		[Bindable]
 		public var openEye:Class;
 		
@@ -61,14 +62,7 @@ package vdom.components.treeEditor.colorMenu02
 				textLabel.setStyle('textAlign', 'center');
 //			addChild(textLabel);
 		/*	
-			eye = new Image();
-			eye.x = 5;
-			eye.y = 5;
-			eye.width = 20;
-			eye.height = 10;
-			eye.source = openEye;
-			eye.addEventListener(MouseEvent.CLICK, eyeClickHandler);
-//			addChild(eye);
+			
 */
 		}
 		
@@ -93,22 +87,22 @@ package vdom.components.treeEditor.colorMenu02
 		
 		private function eyeClickHandler (msEvt:MouseEvent):void
 		{
-			/*
+			
 			eyeOpend = !eyeOpend;
 			if(eyeOpend)
 			{
-				eye.source = openEye;
+				desabledEye.visible = false;
 				
 			}else
 			{
-				eye.source = closeEye;
+				desabledEye.visible = true;
 			}
 			
 			for(var i:String in masLevels)
 			{
 				masLevels[i].status = eyeOpend;
 			}
-			*/
+			
 			
 		}
 		
@@ -127,6 +121,54 @@ package vdom.components.treeEditor.colorMenu02
 				addChild(masLevels[i]);
 			}
 			masLevels[slctLevel].select(); 
+			
+			creatMainEye();
+		}
+		
+		private var desabledEye:Canvas;
+		private function creatMainEye():void
+		{
+			var canv:Canvas = new Canvas();
+				canv.percentWidth = 100;
+				canv.setStyle("backgroundColor", "#ffffff");
+			addChild(canv);
+			
+			var eye:Image = new Image();
+			eye.x = 3;
+			eye.y = 3;
+//			eye.width = 20;
+//			eye.height = 10;
+			eye.source = openEye;
+			eye.addEventListener(MouseEvent.CLICK, eyeClickHandler);
+			canv.addChild(eye); 
+			
+			desabledEye = new Canvas();
+				desabledEye.graphics.beginFill(0xAAAAAA);
+            	desabledEye.graphics.lineStyle(1);
+            	desabledEye.graphics.drawCircle(0, 0, 6);
+            	desabledEye.graphics.endFill();
+	            	
+	            desabledEye.x = 12;
+	            desabledEye.y = 11;
+	            desabledEye.visible = false;
+	            desabledEye.addEventListener(MouseEvent.CLICK, eyeClickHandler);	
+	        canv.addChild(desabledEye);
+	            
+	        var vLine:VRule = new VRule();
+				vLine.height = 14;
+				vLine.x = 23;
+				vLine.y = 4;
+			canv.addChild(vLine);
+			
+			var label:Label = new Label;
+			label.text =  "Hide/Shaw";
+			label.x = 30;
+			label.y = 3;
+//			label.width = 120;
+			label.setStyle('fontWeight', "bold"); 
+//			label.setStyle('textAlign', 'center');
+			canv.addChild(label);
+			
 		}
 		
 		public function get  selectedItem():Object

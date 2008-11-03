@@ -1,6 +1,8 @@
 // ActionScript file
 		
+		import flash.events.KeyboardEvent;
 		import flash.events.MouseEvent;
+		import flash.geom.Point;
 		
 		import mx.effects.Move;
 		import mx.effects.easing.Exponential;
@@ -274,14 +276,16 @@ private function adjustmentTree(xml1:XML):void
 		
 	}
 	massMap[lavel] = 0;
-		
+	
+	var countOfTreeEl:int = Math.round(main.width / 220);
+//	trace (countOfTreeEl);
 	for (name in massTreeObj)
 		if (massTreeObj[name].parent == null && massTreeObj[name].childs == null)
 		{
 			massTreeObj[name].mapX = massMap[lavel]++;
 			massTreeObj[name].mapY = lavel;
 			
-			if(massMap[lavel] == 5) massMap[++lavel] = 0;
+			if(massMap[lavel] == countOfTreeEl) massMap[++lavel] = 0;
 //			setPosition(name);	
 //			itIsCorrectTree = true;
 		} 
@@ -302,7 +306,7 @@ private function adjustmentTree(xml1:XML):void
 				moves.yFrom = massTreeElements[str].y;
 				
 				moves.xTo = Number(massTreeObj[str].mapX * 220);
-				moves.yTo = Number(massTreeObj[str].mapY * 130 + 20);
+				moves.yTo = Number(massTreeObj[str].mapY * 135 + 20);
 			/*
 				var treeElement:TreeElement = massTreeElements[str];
 				treeElement.xTo  = massTreeObj[str].mapX * 220;
@@ -370,6 +374,10 @@ private function adjustmentTree(xml1:XML):void
 private function addTreeEditorListeners():void
 {
 //	trace('addTreeEditorListeners');
+
+	Application.application.addEventListener(KeyboardEvent.KEY_DOWN, spaceKeyDownHandler);
+	Application.application.addEventListener(KeyboardEvent.KEY_UP, spaceKeyDownHandler);
+	
 	addEventListener(MouseEvent.CLICK, mouseClickHandler);
 	colmen2.addEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
 	colmen2.addEventListener(TreeEditorEvent.SHOW_LINES, showLines);
@@ -388,6 +396,9 @@ private function addTreeEditorListeners():void
 private function removeTreeEditorListeners():void
 {
 //	trace('removeTreeEditorListeners');
+	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, spaceKeyDownHandler);
+	Application.application.removeEventListener(KeyboardEvent.KEY_UP, spaceKeyDownHandler);
+
 	removeEventListener(MouseEvent.CLICK, mouseClickHandler);
 	
 	colmen2.removeEventListener(TreeEditorEvent.HIDE_LINES, hideLines);
@@ -401,6 +412,91 @@ private function removeTreeEditorListeners():void
 	_curTree.removeEventListener(TreeEditorEvent.SAVE_TO_SERVER, saveToServerHandler);	
 	
 	btLine.removeEventListener(MouseEvent.CLICK, lineClikHandler);
+}
+
+
+private function spaceKeyDownHandler(kbEvt:KeyboardEvent):void
+{
+	if( kbEvt.charCode != 32)
+		return;	
+	
+//	trace(kbEvt.charCode);
+	
+	dublMain.width = main.measuredWidth;
+	dublMain.height = main.measuredHeight	
+		
+	if(kbEvt.type == KeyboardEvent.KEY_DOWN )
+	{
+		if(!main.contains(dublMain))
+		{
+			main.addChild(dublMain);
+//			trace("KeysDown");
+			Application.application.addEventListener(MouseEvent.MOUSE_DOWN, spaceMouseHandler);
+			Application.application.addEventListener(MouseEvent.MOUSE_UP, spaceMouseHandler);
+		}
+	} else 
+	{
+		if(main.contains(dublMain))
+		{		
+			main.removeChild(dublMain);
+//			trace("KeysUp");
+			Application.application.removeEventListener(MouseEvent.MOUSE_DOWN, spaceMouseHandler);
+			Application.application.removeEventListener(MouseEvent.MOUSE_UP, spaceMouseHandler);
+			Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, spaceMouseHandler);
+		}
+	}
+}
+
+private var firStateOfScrollX:Number;
+private var firStateOfScrollY:Number;
+private var startX:Number;
+private var startY:Number;
+
+private function spaceMouseHandler(msEvt:MouseEvent):void
+{
+	var pt:Point = new Point(msEvt.localX, msEvt.localY);
+	            		pt = msEvt.target.localToGlobal(pt);
+	            		pt = main.globalToLocal(pt);
+				
+	
+	if(msEvt.type == MouseEvent.MOUSE_DOWN)
+	{
+		firStateOfScrollX = main.horizontalScrollPosition;
+		firStateOfScrollY = main.verticalScrollPosition;
+			
+//		trace("==DOWN==");
+		startX = pt.x;
+		startY = pt.y;
+		
+		Application.application.addEventListener(MouseEvent.MOUSE_MOVE, spaceMouseHandler);
+	} else if(msEvt.type == MouseEvent.MOUSE_UP)
+	{
+//		trace("==UP==");
+		Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, spaceMouseHandler);
+	}else if(msEvt.type == MouseEvent.MOUSE_MOVE)
+	{
+		var dx:Number = startX - pt.x; 
+		var dy:Number = startY - pt.y;
+		
+		main.horizontalScrollPosition 	= firStateOfScrollX + dx;
+		main.verticalScrollPosition 	= firStateOfScrollY + dy;
+//		trace("==MOVE== : " + dx );
+	}
+}
+private function moveSpaceHandler(msEvt:MouseEvent):void
+{
+//	main.scr
+//	trace("moved");
+	if(startX == -1)
+	{
+		startX = msEvt.localX;
+		startY = msEvt.localY;
+	} else
+	{
+		var dx:Number = startX - msEvt.localX;
+//		trace ("dx: "+ dx);
+	}
+	
 }
 
 private  function removeMassTreeElements():void
@@ -914,7 +1010,7 @@ private function  createObjectHandler(dmEvt:DataManagerEvent):void
 				if(massTreeElements[tID].y > maxY) 
 					maxY = massTreeElements[tID].y;
 					
-//	trEl.y = maxY + 100;
+	trEl.y = maxY + 135;
 	
 	
 					

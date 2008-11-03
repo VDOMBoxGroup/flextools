@@ -61,11 +61,11 @@ package vdom.components.treeEditor
 			
 			_backGround.maintainAspectRatio = false;
 			_backGround.scaleContent = true;
-			_backGround.source = back_ground_rad;
+			_backGround.source = selected_back_ground;
 			_backGround.percentWidth = 100;
 			_backGround.alpha = 0.0;
 //			_backGround.hideEffect="{dissolveOut}" showEffect="{dissolveIn}"
-//			addChild(_backGround);
+			addChild(_backGround);
 
               addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
               addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
@@ -95,6 +95,7 @@ package vdom.components.treeEditor
 		private function mouseOverHandler(msEvt:MouseEvent):void
 		{
 			 _backGround.alpha = 1;
+			 
 		}
 		
 		private function mouseOutHandler(msEvt:MouseEvent):void

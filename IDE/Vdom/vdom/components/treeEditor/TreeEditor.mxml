@@ -39,6 +39,7 @@
 	private var dataManager:DataManager  = DataManager.getInstance();
 	private var xmlApplicationStructure:XML;
 	private var btLine:DeleteLineButton = new DeleteLineButton();
+	private var dublMain:Canvas = new Canvas();
 
 /******* 
  * 			to Do
@@ -65,6 +66,18 @@
 		
 		if(!main) 
 			main = new Canvas();
+			
+//		if(!dublMain)
+//			dublMain = new Canvas();
+			
+//		dublMain.percentWidth = 100;
+//		dublMain.percentHeight = 100;
+		dublMain.setStyle(	"backgroundColor", "#ffffff");
+//		dublMain.visible = false;
+		dublMain.alpha = 0.05;
+		dublMain.buttonMode = true;
+		
+		hide();
 	/*
 		if(!btLine)
 			btLine = new DeleteLineButton();
@@ -75,6 +88,28 @@
 	}
 	
 	private function hideHendler():void
+	{
+		if(btSave.selected)
+		{
+			Alert.show("Do You Want to Save changed in Structure?", "Save Change:", 3, this, alertClickSaveStructure);
+		} else
+		{
+			hide();
+		}
+	}
+	
+	private function alertClickSaveStructure(event:CloseEvent):void
+	{
+		if (event.detail==Alert.YES)
+        {
+        	saveToServer();
+        }else
+        {
+        	hide();
+        }
+	}
+	
+	private function hide():void
 	{
 		removeAllLines();
 		removeMassTreeElements();
@@ -94,7 +129,6 @@
 		masMaxOfIndex = [];
 		massLines = [];
 	}
-	
 	
 	
 	private var needToSave:Boolean;
@@ -545,7 +579,7 @@
 	private var shSingnature:Boolean;
 	private function showSignature():void
 	{
-		shSingnature = true;
+		shSingnature = !shSingnature;
 		for(var level:String in massLines)
 		{
 			if(colmen2.showLevel(level) == true)
@@ -560,7 +594,7 @@
 			}
 		}
 	}
-	
+	/*
 	private function hideSignature():void
 	{
 		shSingnature = false;
@@ -578,6 +612,7 @@
 			}
 		}
 	}
+	*/
 	]]>
 </mx:Script>
 <mx:HBox width="100%" height="100%" >
