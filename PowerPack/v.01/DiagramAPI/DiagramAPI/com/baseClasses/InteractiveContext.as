@@ -41,22 +41,34 @@ public class InteractiveContext extends EventDispatcher
         target.removeEventListener(FocusEvent.FOCUS_OUT, focusOutHandler);				
 	}
 
- 	public var snapped:Boolean;
- 	public var snapToObject:Object = {object:null, point:null};
+ 	public var isSnapped:Boolean;
+ 	public var snappedToObject:Object = {object:null, point:null, flags:null};
  	public var isMovable:Boolean;
-    public var _isMoving:Boolean;
-    public var _stopMovingMouseEvent:String = MouseEvent.MOUSE_UP;
-	public var _over:Boolean;
+ 	
+    private var _isMoving:Boolean;
+    private var _stopMovingMouseEvent:String = MouseEvent.MOUSE_UP;
 
     private var _regX:Number;
     private var _regY:Number;
     private var _regStopMovingMouseEvent:String;
+    
+    //----------------------------------
+    //  over
+    //----------------------------------
+    		
+	private var _over:Boolean;
+	
+    public function get over():Boolean
+    {
+        return _over;
+    }
+
     //----------------------------------
     //  focused
     //----------------------------------
     		
-	public var _focused:Boolean;
-
+	private var _focused:Boolean;
+	
     public function get focused():Boolean
     {
     	if(target.getFocus()==target)
@@ -109,14 +121,20 @@ public class InteractiveContext extends EventDispatcher
            	}
         }		 
 	}
+	
+	public static const LEFT:int = 1;
+	public static const TOP:int = 1<<1;
+	public static const RIGHT:int = 1<<2;
+	public static const BOTTOM:int = 1<<3;
 
-	public function snapTo(object:UIComponent, point:Point=null):void
+	public function snapTo(object:UIComponent, point:Point=null, flags:int=0):void
 	{
-		unsnapFrom();
+		unsnap();
 		
-       	snapToObject.object = object;
-       	snapToObject.point = point;
-       	snapped = true;
+       	snappedToObject.object = object;
+       	snappedToObject.point = point;
+       	snappedToObject.flags = flags==0 ? TOP&LEFT : flags;
+       	isSnapped = true;
        	
        	if(object)
        	{
@@ -130,28 +148,29 @@ public class InteractiveContext extends EventDispatcher
        	moveToPoint(object, point);
 	}
 
-	public function unsnapFrom():void
+	public function unsnap():void
 	{
-		if(snapToObject.object)
+		if(snappedToObject.object)
 		{
        		//snapToObject.object.removeEventListener(Event.ENTER_FRAME, snapTargetUpdatedHandler); 
-       		snapToObject.object.removeEventListener(ResizeEvent.RESIZE, snapTargetUpdatedHandler); 
-       		snapToObject.object.removeEventListener("xChanged", snapTargetUpdatedHandler);
-       		snapToObject.object.removeEventListener("yChanged", snapTargetUpdatedHandler);
-       		snapToObject.object.removeEventListener(Event.REMOVED, snapTargetUpdatedHandler);
+       		snappedToObject.object.removeEventListener(ResizeEvent.RESIZE, snapTargetUpdatedHandler); 
+       		snappedToObject.object.removeEventListener("xChanged", snapTargetUpdatedHandler);
+       		snappedToObject.object.removeEventListener("yChanged", snapTargetUpdatedHandler);
+       		snappedToObject.object.removeEventListener(Event.REMOVED, snapTargetUpdatedHandler);
   		}
 
-       	snapToObject.object = null;
-       	snapToObject.point = null;
-       	snapped = false;
+       	snappedToObject.object = null;
+       	snappedToObject.point = null;
+       	snappedToObject.flags = null;
+       	isSnapped = false;
 	}
 	
 	private function snapTargetUpdatedHandler(event:Event):void
 	{
-		if(!snapToObject.object || event.type == Event.REMOVED)
-			unsnapFrom();			
+		if(!snappedToObject.object || event.type == Event.REMOVED)
+			unsnap();			
 		else
-			moveToPoint(snapToObject.object, snapToObject.point);
+			moveToPoint(snappedToObject.object, snappedToObject.point);
 	}	
 	
 	private function getDeltaPoint(object1:DisplayObject, point1:Point,
@@ -211,11 +230,11 @@ public class InteractiveContext extends EventDispatcher
 			_regStopMovingMouseEvent =_stopMovingMouseEvent;
 			         	
 	       	target.systemManager.addEventListener(
-    	       	_regStopMovingMouseEvent, systemManager_mouseEventHandler, true);
+    	       	_regStopMovingMouseEvent, systemManager_stopMovingMouseEventHandler, true);
         }
 	    
 	    target.systemManager.stage.addEventListener(
-	        Event.MOUSE_LEAVE, stage_mouseLeaveHandler, true);            
+	        Event.MOUSE_LEAVE, stage_mouseLeaveHandler, true);
             
         target.dispatchEvent(new MoveEvent(MoveEvent.MOVE_START));
     }
@@ -230,7 +249,7 @@ public class InteractiveContext extends EventDispatcher
 		
 		if(_regStopMovingMouseEvent) 
         	target.systemManager.removeEventListener(
-            	_regStopMovingMouseEvent, systemManager_mouseEventHandler, true);
+            	_regStopMovingMouseEvent, systemManager_stopMovingMouseEventHandler, true);
 	    
 	    target.systemManager.stage.removeEventListener(
 	        Event.MOUSE_LEAVE, stage_mouseLeaveHandler, true);
@@ -287,19 +306,19 @@ public class InteractiveContext extends EventDispatcher
 			pos.y -= parentPos.y;	    	
 	    }
 	    
-	    if(snapped && snapToObject.object)
+	    if(isSnapped && snappedToObject.object)
 	    {
-	    	if(!snapToObject.object.hitTestPoint(target.stage.mouseX, target.stage.mouseY))
-	       		unsnapFrom();	    	
+	    	if(!snappedToObject.object.hitTestPoint(target.stage.mouseX, target.stage.mouseY))
+	       		unsnap();	    	
 	    }
 	    			        	
-	    if(!snapped && pos && isMovable)
+	    if(!isSnapped && pos && isMovable)
 	    	target.move(pos.x, pos.y);
 	        		
 		target.invalidateDisplayList();		    	
     }
         
-    private function systemManager_mouseEventHandler(event:MouseEvent):void
+    private function systemManager_stopMovingMouseEventHandler(event:MouseEvent):void
     {
     	if(_isMoving)
 			stopMove();

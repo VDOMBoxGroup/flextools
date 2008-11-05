@@ -163,7 +163,7 @@ public class NodeContainer extends BaseBoundContainer
     		cP is InteractivePoint && 
     		cP.type==InteractivePoint.CONNECTOR)
         {
-        	if(_context._over && !cP._context.snapped)
+        	if(_context.over && !cP._context.isSnapped)
         	{
     			cP._context.snapTo(this);
         	}
@@ -183,7 +183,7 @@ public class NodeContainer extends BaseBoundContainer
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
 		
 		this.filters = [];
-        if(_context._over)
+        if(_context.over)
         {
 			var filter:GlowFilter = new GlowFilter(0xff0000, 0.7, 6, 6, 5);
     		this.filters = [filter];

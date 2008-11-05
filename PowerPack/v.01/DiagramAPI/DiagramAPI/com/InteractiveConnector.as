@@ -275,17 +275,17 @@ public class InteractiveConnector extends BaseConnector implements IFocusManager
             invalidateDisplayList();
         }
 
-		if(_oldOver != _context._over)
+		if(_oldOver != _context.over)
 		{
-			_oldOver = _context._over;
+			_oldOver = _context.over;
 			
 	       	invalidateSize();
           	invalidateDisplayList();			
 		}
 
-		if(_oldFocused != _context._focused)
+		if(_oldFocused != _context.focused)
 		{
-			_oldFocused = _context._focused;
+			_oldFocused = _context.focused;
 			
 			showControlPoints();
 					
@@ -305,7 +305,7 @@ public class InteractiveConnector extends BaseConnector implements IFocusManager
 
 		var offset:Number = 0;
 		
-   		if(enabled && (_highlighted || _context._over || _context.focused))
+   		if(enabled && (_highlighted || _context.over || _context.focused))
    		{
         	offset = getStyle("outlineThickness");
 	        
@@ -348,7 +348,7 @@ public class InteractiveConnector extends BaseConnector implements IFocusManager
 		
 		if(!_enabled)			{ color=getStyle("disabledColor"); }
 		else if(_highlighted)	{ color=getStyle("highlightColor"); }
-		else if(_context._over)			{ color=getStyle("rollOverColor"); }
+		else if(_context.over)			{ color=getStyle("rollOverColor"); }
 		else if(_context.focused)		{ color=getStyle("selectionColor"); }		
 					
 		super.setStyle("color", color);
@@ -356,7 +356,7 @@ public class InteractiveConnector extends BaseConnector implements IFocusManager
 		var outlineColor:Number = -1;
 							
 		if(_highlighted)		{ outlineColor=getStyle("outlineHighlightColor"); }
-		else if(_context._over)			{ outlineColor=getStyle("outlineRollOverColor"); }
+		else if(_context.over)			{ outlineColor=getStyle("outlineRollOverColor"); }
 		else if(_context.focused)		{ outlineColor=getStyle("outlineSelectionColor"); }
 
 		super.updateDisplayList(unscaledWidth, unscaledHeight);	
@@ -393,7 +393,7 @@ public class InteractiveConnector extends BaseConnector implements IFocusManager
 
 	protected function showControlPoints():void
 	{
-		if(_context._focused && _showControls)
+		if(_context.focused && _showControls)
 			_controlSprite.visible = true;
 		else
 			_controlSprite.visible = false;

@@ -76,7 +76,7 @@ public class BaseBoundContainer extends Box implements IFocusManagerComponent
         	_rotatePoints.addItem(new InteractivePoint());
 			_rotatePoints.addItem(new InteractivePoint());
 
-			InteractivePoint(_rotatePoints[0])._context.snapped = true;
+			InteractivePoint(_rotatePoints[0])._context.isSnapped = true;
 
 			InteractivePoint(_rotatePoints[0]).addEventListener(MoveEvent.MOVED, moveRotateControlHandler);			
 			InteractivePoint(_rotatePoints[1]).addEventListener(MoveEvent.MOVED, moveCenterControlHandler);
