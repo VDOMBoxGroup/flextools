@@ -2287,8 +2287,8 @@ public class SystemManager extends MovieClip
 
 		if (Capabilities.playerType == "Desktop")
 		{
-			//Singleton.registerClass("mx.managers::IDragManager",
-			//	Class(getDefinitionByName("mx.managers::NativeDragManagerImpl")));
+			Singleton.registerClass("mx.managers::IDragManager",
+				Class(getDefinitionByName("mx.managers::NativeDragManagerImpl")));
 				
 			// Make this call to create a new instance of the DragManager singleton. 
 			// This will allow the application to receive NativeDragEvents that originate

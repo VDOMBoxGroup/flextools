@@ -1681,11 +1681,11 @@ public class WindowedSystemManager extends MovieClip implements ISystemManager
 	 */
 	mx_internal function cleanup(e:Event):void
 	{
-		/*
+		/**/
 		if (NativeDragManagerImpl(Singleton.getClass("mx.managers::IDragManager").getInstance())
 					 is NativeDragManagerImpl)
 			NativeDragManagerImpl(Singleton.getClass("mx.managers::IDragManager").getInstance()).unregisterSystemManager(this);
-		*/
+		/**/
 		
 		SystemManagerGlobals.topLevelSystemManagers.splice(SystemManagerGlobals.topLevelSystemManagers.indexOf(this), 1);
 		myWindow.removeEventListener("close", cleanup);

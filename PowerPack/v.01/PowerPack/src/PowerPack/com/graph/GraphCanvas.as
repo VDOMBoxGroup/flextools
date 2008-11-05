@@ -291,15 +291,14 @@ public class GraphCanvas extends Canvas
 				newArrow.fromObject = dict[Connector(obj).fromObject];		
 				newArrow.toObject = dict[Connector(obj).toObject];	
     			
-    			newArrow.data = Node(newArrow.fromObject).arrTrans;
-				newArrow.label = Connector(obj).label;
+    			//newArrow.data = Node(newArrow.fromObject).arrTrans;
+				//newArrow.label = Connector(obj).label;
 										
 				if(newArrow.fromObject && newArrow.toObject)											
 				{
 					(newArrow.fromObject as Node).outArrows.addItem(newArrow);
 					(newArrow.toObject as Node).inArrows.addItem(newArrow);
 				
-					newArrow.addEventListener(ConnectorEvent.DISPOSED, (newArrow.toObject as Node).destroyArrowHandler);
 					BindingUtils.bindProperty(newArrow, 'data',
 						newArrow.fromObject, 'arrTrans');
 				
@@ -336,8 +335,6 @@ public class GraphCanvas extends Canvas
 			(arrow.fromObject as Node).outArrows.addItem(arrow);
 			(arrow.toObject as Node).inArrows.addItem(arrow);
 		
-			arrow.addEventListener(ConnectorEvent.DISPOSED, (arrow.toObject as Node).destroyArrowHandler);
-			
 			BindingUtils.bindProperty(arrow, 'data',
 				arrow.fromObject, 'arrTrans');
 		
@@ -459,7 +456,6 @@ public class GraphCanvas extends Canvas
 				(newArrow.fromObject as Node).outArrows.addItem(newArrow);
 				(newArrow.toObject as Node).inArrows.addItem(newArrow);
 			
-				newArrow.addEventListener(ConnectorEvent.DISPOSED, (newArrow.toObject as Node).destroyArrowHandler);
 				BindingUtils.bindProperty(newArrow, 'data',
 					newArrow.fromObject, 'arrTrans');
 			

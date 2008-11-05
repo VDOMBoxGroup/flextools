@@ -44,6 +44,7 @@ package PowerPack.com.validators
         {
 			var str:String = value.toString();
 			
+			
 			var node:Node;
 			
 			var category:String;

@@ -934,7 +934,7 @@
 		<mx:HBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="left" 
 			paddingTop="10" paddingRight="10" paddingLeft="10" paddingBottom="10">
 			<ExtendedAPI:Base64Image id="tplPic" source="{resources.strLogo}" horizontalAlign="right" width="220"
-				showEffect="{picShow}"/>
+				showEffect="{picShow}" height="100%" verticalAlign="top"/>
 			<mx:VBox height="100%" width="100%" horizontalAlign="right">
 				
 				<mx:ViewStack id="vsProcess" width="100%" height="100%" creationPolicy="all" change="vsChange(event)">

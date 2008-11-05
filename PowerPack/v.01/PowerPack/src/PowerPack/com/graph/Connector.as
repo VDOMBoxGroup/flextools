@@ -3,8 +3,11 @@ package PowerPack.com.graph
 import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
+import ExtendedAPI.com.utils.ObjectUtils;
+import ExtendedAPI.com.utils.Utils;
 
 import GeomLib.GeomUtils;
+import GeomLib._2D.LineSegment;
 
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
@@ -22,6 +25,7 @@ import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 
 import mx.collections.ListCollectionView;
+import mx.containers.Canvas;
 import mx.controls.Alert;
 import mx.controls.ComboBox;
 import mx.core.Application;
@@ -94,15 +98,15 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     public static const CM_NEAREST:String = "toNearest";
     public static const CM_MIX:String = "mix";
     
-    private static const SELECT_AREA_SIZE:int = 5;
-    
     public static var connectMode:String = CM_CENTER;
     public static var deleteConfirmation:Boolean = true;
+    
+    public static var connectors:Dictionary = new Dictionary(); 
+    
+    private static const SELECT_AREA_SIZE:int = 5;
 
     private static var modalTransparencyBlur:Number;
     private static var modalTransparency:Number;
-    
-    public static var connectors:Dictionary = new Dictionary(); 
     
     private static var defaultCaptions:Object = {
     	connector_select_trans: "Edit transition",
@@ -210,7 +214,22 @@ public class Connector extends UIComponent implements IFocusManagerComponent
    		removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
         removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
         removeEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
-
+		
+		var i:int;
+		if(fromObject is Node)
+		{		
+			i = (fromObject as Node).outArrows.getItemIndex(this);
+			if(i>=0)
+				(fromObject as Node).outArrows.removeItemAt(i);
+		}
+    	
+		if(toObject is Node)
+		{		
+			i = (toObject as Node).inArrows.getItemIndex(this);
+			if(i>=0)
+  				(toObject as Node).inArrows.removeItemAt(i);
+		}
+		  			
         if(parent)
     	{
            	parent.removeChild(this);
@@ -230,16 +249,44 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	
     private var _over:Boolean;
     private var _created:Boolean;
-    public var canvas:GraphCanvas;
 
     [ArrayElementType("Point")]
     private var _connectorPoly:Array = []; 
     
+    public var canvas:GraphCanvas;
+
     //--------------------------------------------------------------------------
 	//
 	//  Properties
 	//
 	//--------------------------------------------------------------------------
+
+	
+    //----------------------------------
+    //  fromPoint
+    //----------------------------------
+    		
+    public function get fromPoint():Point
+    {
+    	if(_connectorPoly && _connectorPoly.length>0)
+        	return Point(_connectorPoly[0]).clone();
+        	
+        return null
+        
+    }
+
+    //----------------------------------
+    //  toPoint
+    //----------------------------------
+    		
+    public function get toPoint():Point
+    {
+    	if(_connectorPoly && _connectorPoly.length>1)
+        	return Point(_connectorPoly[1]).clone();
+        	
+        return null
+        
+    }
 
     //----------------------------------
     //  focused
@@ -249,7 +296,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     
     public function get focused():Boolean
     {
-    	if(this.getFocus()==this)
+    	if(focusManager.getFocus()==this)
     		_focused = true;
     	else 
     		_focused = false;
@@ -540,11 +587,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
             {
             	_label = data.toString();
             }
-            else
-            {
-            	if(!data.hasOwnProperty(_label))
-            		_label = null;
-            }
             
           	toolTip = label;
 
@@ -615,7 +657,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
    		invalidateDisplayList();
     }  	    		
    
-	// Override updateDisplayList() to update the component 
 	override protected function updateDisplayList(unscaledWidth:Number,
 											  unscaledHeight:Number):void
 	{
@@ -636,7 +677,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		newConnector.enabled = enabled;
 		newConnector.highlighted = highlighted;
 		newConnector.label = label;
-		//newConnector.data = data;
+		newConnector.data = ObjectUtils.baseClone(data);
 		return newConnector; 
 	}
 	
@@ -653,7 +694,78 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	     		dispose();			     	
      	}
 	}	
+	
+	public function getVisibleRect():Rectangle
+	{
+		if(!parent || !fromPoint || !toPoint)
+			return null; 
 			
+		var visibleRect:Rectangle = Utils.getVisibleRect(this);
+		var lineSeg:LineSegment = new LineSegment(
+			contentToGlobal(fromPoint),
+			contentToGlobal(toPoint));
+
+		var arr:Array = GeomUtils.rectLineIntersection(visibleRect, lineSeg);
+		
+		if(!arr || arr.length==0)
+			return visibleRect;
+		
+		var lineVisibleRect:Rectangle = ExtendedAPI.com.utils.GeomUtils.getObjectsRect(arr);
+		
+		return lineVisibleRect;
+	} 
+    
+    public function beginEdit(atCursorPosition:Boolean = true, position:Point = null):void
+    {	
+    	if(!fromObject || !toObject || !parent)
+    		return;
+    	
+    	if(	!data ||
+    		data is Array && (data as Array).length==0 ||
+    		data is ListCollectionView && (data as ListCollectionView).length==0)    		
+    		return;
+    	
+		var cbChoise:ComboBox = new ComboBox();
+		cbChoise.dataProvider = data;
+		cbChoise.addEventListener(DropdownEvent.CLOSE, dropDownCloseHandler);
+		cbChoise.addEventListener(FlexEvent.CREATION_COMPLETE, comboBoxCreatedHandler);
+		
+		modalTransparencyBlur = Application.application.getStyle("modalTransparencyBlur");
+		modalTransparency = Application.application.getStyle("modalTransparency");
+					
+		Application.application.setStyle("modalTransparencyBlur", 0);
+		Application.application.setStyle("modalTransparency", 0);
+		
+		PopUpManager.addPopUp(cbChoise, parent, true);
+		
+		if(label)
+			cbChoise.selectedItem = label;
+		
+		var visibleRect:Rectangle = getVisibleRect();
+		var point:Point; 
+		
+		if(atCursorPosition)
+		{
+			point = localToGlobal(new Point(mouseX, mouseY));
+		}
+		else if(position)
+		{
+			point = position;
+		}
+		else if(visibleRect && !visibleRect.isEmpty())
+		{
+			point = visibleRect.topLeft.clone();
+			point.offset(	(visibleRect.width-cbChoise.width)/2, 
+							(visibleRect.height-cbChoise.height)/2);
+		}
+		else
+		{
+			point = Container(parent).contentToGlobal(new Point(x+(width-cbChoise.width)/2, y+(height-cbChoise.height)/2));
+		}		
+			
+		cbChoise.move(point.x, point.y);			
+    }
+    
 	private function calcSize(mode:String='toCenter'):void
 	{
 		_connectorPoly = [];
@@ -862,41 +974,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		//graphics.drawRect(0,0,getExplicitOrMeasuredWidth(),getExplicitOrMeasuredHeight());
 	}			
     
-    public function beginEdit(atCursorPosition:Boolean = true, position:Point = null):void
-    {	
-    	if(!fromObject || !toObject || !parent)
-    		return;
-    	
-    	if(	!data ||
-    		data is Array && (data as Array).length==0 ||
-    		data is ListCollectionView && (data as ListCollectionView).length==0)    		
-    		return;
-    	
-		var cbChoise:ComboBox = new ComboBox();
-		cbChoise.dataProvider = data;
-		cbChoise.addEventListener(DropdownEvent.CLOSE, dropDownCloseHandler);
-		cbChoise.addEventListener(FlexEvent.CREATION_COMPLETE, comboBoxCreatedHandler);
-		
-		modalTransparencyBlur = Application.application.getStyle("modalTransparencyBlur");
-		modalTransparency = Application.application.getStyle("modalTransparency");
-					
-		Application.application.setStyle("modalTransparencyBlur", 0);
-		Application.application.setStyle("modalTransparency", 0);
-		
-		PopUpManager.addPopUp(cbChoise, parent, true);
-		
-		if(label)
-			cbChoise.selectedItem = label;
-		
-		var point:Point = atCursorPosition ? localToGlobal(new Point(mouseX, mouseY)) : 
-			Container(parent).contentToGlobal(new Point(x+width/2, y+height/2));
-		
-		if(position)
-			point = position;
-			
-		cbChoise.move(point.x, point.y);			
-    }	    
-    
     /**
      *  Called when the user starts dragging an connector
      */
@@ -992,7 +1069,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 
     private function alertRemoveHandler(event:CloseEvent):void 
     {
-    	if(event.detail==Alert.YES) {        		
+    	if(event.detail==Alert.YES) {
    			dispose();
         }
 	}	
@@ -1011,7 +1088,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     		toObject = null;
     	}
     }	
-
+    
 	private function onGlobalKeyDown(event:KeyboardEvent):void
     {
 	    if(	event.keyCode == Keyboard.ESCAPE && 
@@ -1047,7 +1124,10 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 
         invalidateDisplayList();
     }
-
+    
+    /**
+     *  @private
+     */
     override protected function focusInHandler(event:FocusEvent):void
     {
     	_focused = true;

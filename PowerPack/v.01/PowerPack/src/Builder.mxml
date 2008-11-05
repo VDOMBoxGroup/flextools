@@ -12,11 +12,13 @@
 	xmlns:extended="ExtendedAPI.com.containers.*"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
 	xmlns:ui="ExtendedAPI.com.ui.*" 
-	xmlns:panel="PowerPack.com.panel.*">
+	xmlns:panel="PowerPack.com.panel.*" xmlns:customize="PowerPack.customize.*">
     
     <mx:Style source="style/builder.css"/>
     <mx:Move duration="100" id="DockerMove"/>
 	<mx:Fade duration="100" id="DockerFade"/>
+	
+	<customize:GeneratorResources id="resources"/>
     
     <mx:menu>
     	<ui:SuperFlexNativeMenu id="flexNativeMenu" 
@@ -74,6 +76,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.customize.Resources;
 			import PowerPack.com.managers.CashManager;
 			import ExtendedAPI.com.containers.SuperWindow;
 			import mx.core.Window;
@@ -234,7 +237,9 @@
             	
             	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
             	
-            	trace(describeType(Dynamic));            	
+            	//trace(describeType(Dynamic));
+            	
+            	//trace(pnl_graphs.viewMetrics.top);
 		    }
 		    		    
 		    private function onProblemsDoubleClick(event:MouseEvent):void
@@ -391,6 +396,12 @@
 		    			ContextManager.instance.templates.addItem(template);
 	    			else
 	    				ContextManager.instance.templates[0] = template;
+					
+					var data:ByteArray = new ByteArray();
+					data.writeUTFBytes(resources.strLogo);
+					
+					CashManager.setObject(template.ID, <object category='image' ID='1234567890' name='res.jpg' type='jpg'/>, data);  
+					CashManager.setObject(template.ID, <object category='image' ID='2345678901' name='res.png' type='png'/>, data);  
 					
 					//
 					MenuGeneral.noTemplate(fileMenuData);
