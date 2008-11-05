@@ -28,8 +28,10 @@ package vdom.components.treeEditor
 //			addChild(bt);
 //			setStyle("backgroundColor", "#71FFFF");
 //			super.x = true;
-			height = 70;
 			
+			
+			height = 70;
+			setStyle("paddingLeft", "30");
 			
 //				img.width = 50;
 //				img.height = 50;
@@ -42,7 +44,10 @@ package vdom.components.treeEditor
 			
 			_label.setStyle('fontWeight', "bold");
 			_label.setStyle('fontSize', "14");
+			_label.setStyle("color","#636363");
 			vBox.addChild(_label);
+			
+			_description.setStyle("color","#636363")
 			vBox.addChild(_description);
 						
 //			percentWidth = 100;
@@ -73,6 +78,7 @@ package vdom.components.treeEditor
 		    }
 	    }
 	    
+	    
 	    private var loader:Loader;
 		public function set resource(data:Object):void
 		{
@@ -102,6 +108,11 @@ package vdom.components.treeEditor
 			loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, loadError);
    			
    			img.source = loader.content;
+   		}
+   		
+   		public function set select(bool:Boolean):void
+   		{
+   			trace(bool);
    		}
 		/*
 		override public function get data(value:Object):Object

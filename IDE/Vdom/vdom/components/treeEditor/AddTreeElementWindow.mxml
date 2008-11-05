@@ -5,13 +5,23 @@
 -->
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="600" height="350"
+	layout="absolute" width="600" height="450"
 	title="{resourceManager.getString('Tree','new_page')}"
 	creationComplete="creationComplete()"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
+	borderAlpha="0.98" cornerRadius="1" 
+	visible="true" shadowDirection="right"
+	borderColor="#636363" titleStyleName="resourceBrowserTitle"
+	borderThicknessLeft="1" borderThicknessRight="1"
 >
+	<mx:Style>
+		.resourceBrowserTitle {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
 	<mx:Script>
 		<![CDATA[
 			import mx.events.ListEvent;
@@ -96,7 +106,7 @@
 				}
 				return 0;
 			}
-			titleList.selectedIndex = searchIndex();
+//			titleList.selectedIndex = searchIndex();
 //			titleList.validateDisplayList();
 		//	if(!comBoxAppl.selectedIndex) comBoxAppl.selectedIndex = 0;
 //			selectedAppl = comBoxAppl.selectedItem;
@@ -113,6 +123,8 @@
 		private function comBoxClose(evt:Object):void
 		{
 			selectedAppl = List(evt).selectedItem;
+			OK.enabled = true;
+//			TypeContainerRander(selectedAppl).select = true;
 		}
 		
 		/****
@@ -226,7 +238,8 @@
 		
 		private function chHandl(evt:ListEvent):void
 		{
-			
+//			MouseEvent.
+
 		}
 
 		
@@ -238,17 +251,18 @@
 	</mx:Script>
 	
 	
-	<mx:VBox 	width="100%" height="100%"
-		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" >
-    	<mx:Label text="Please select type of new Container:"/>
-    	<mx:List id="titleList"  width="100%" height="100%"
+	<mx:VBox 	width="100%" height="373" verticalGap="20"
+		paddingBottom="5"  paddingTop="10"  y="5">
+    	<mx:Label text="Please select type of new Container:" fontSize="16" fontWeight="bold" color="#AEAEAE"  width="584" textAlign="center"/>
+    	<mx:List id="titleList"  width="100%" height="100%" borderColor="#FFFFFF"
     		 dataProvider="{arrAppl}" change="{comBoxClose(event.target)}" 
-    		itemRenderer="vdom.components.treeEditor.TypeContainerRander"	/>
+    		itemRenderer="vdom.components.treeEditor.TypeContainerRander"	
+    		selectionColor="#dbdbdb"   rollOverColor="#E5E5E5" />
     	
 	</mx:VBox>
 	<mx:ControlBar horizontalAlign="right"
-			paddingLeft="15" paddingBottom="15" paddingRight="15" paddingTop="15" >
-    		<mx:Button id="OK" label="Ok"    click="okPressed()"/>
+			height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
+    		<mx:Button id="OK" label="Ok" enabled="false"   click="okPressed()"/>
     		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
 	</mx:ControlBar>
 </mx:TitleWindow>

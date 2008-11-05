@@ -1004,6 +1004,7 @@ private function  createObjectHandler(dmEvt:DataManagerEvent):void
 	
 	var typeID:String = xmlObj.Object.@Type.toXMLString();
 		trEl.typeID = getIcon(typeID);
+		trEl.type = getType(typeID)
 		
 	var maxY:Number = 0;
 		for (var tID:String in massTreeElements)

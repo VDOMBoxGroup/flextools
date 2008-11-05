@@ -224,14 +224,17 @@ package vdom.components.treeEditor
 		private function generateControlBar():void
 		{
 			var btHeit:int = 16;
+			var btWidht:int = 58;
 			
 			var contPan:ControlBar = new ControlBar();
+				contPan.setStyle("horizontalAlign", "center");
 				addChild(contPan);
 				
 			var btSave:Button = new Button();
 				btSave.height = btHeit;
 				btSave.setStyle("cornerRadius", "0");
 				btSave.label = "Save";
+				btSave.width = btWidht;
 			btSave.addEventListener(MouseEvent.CLICK, saveProperties); 
 			contPan.addChild(btSave);
 			
@@ -239,6 +242,7 @@ package vdom.components.treeEditor
 				btSetStart.height = btHeit;
 				btSetStart.setStyle("cornerRadius", "0");
 				btSetStart.label = "Start";
+				btSetStart.width = btWidht;
 				btSetStart.addEventListener(MouseEvent.CLICK, changeStartPage); 
 			contPan.addChild(btSetStart);
 			
@@ -247,6 +251,7 @@ package vdom.components.treeEditor
 				btDelete.setStyle("cornerRadius", "0");
 				btDelete.label = "Delete";
 				btDelete.setStyle("Right", "0");
+				btDelete.width = btWidht;
 				btDelete.addEventListener(MouseEvent.CLICK, deleteElement); 
 			contPan.addChild(btDelete);
 			
@@ -255,23 +260,34 @@ package vdom.components.treeEditor
 		private var treeElement:TreeElement = new TreeElement();
 		public function set target (treObj:TreeElement):void
 		{
-			if (treObj)
-				treObj.current = true;
+			if (!treObj)
+				return;
 				
-			if( treeElement != null && treObj != null && treeElement.ID != treObj.ID)
-			{ 
+			treObj.current = true;
+			
+			if (treeElement)
 				treeElement.current = false;
+				
+			if(treeElement.ID != treObj.ID)
+			{ 
 				treeElement = treObj;
-//				treeElement.current = true;
-				
 				dataManager.changeCurrentPage(treObj.ID);
-				
-				resourseBrowser.value =  "#Res(" + treeElement.resourceID + ")"; 
+			}
+
+			resourseBrowser.value =  "#Res(" + treeElement.resourceID + ")"; 
+			multLine.value = treeElement.description;
+			typeLabel.text = treeElement.type;
+			 
+			if(treeElement.title == "")
+			{
+				__title.text = treeElement.type;
+				saveProperties(new MouseEvent(MouseEvent.CLICK));
+			}else
+			{
 				__title.text = treeElement.title;
-				multLine.value = treeElement.description;
-				 typeLabel.text = treeElement.type;
-				 fileManager.loadResource(dataManager.currentApplicationId,  treeElement.typeID, this, 'typeResourse');
-			} 
+			}
+			 fileManager.loadResource(dataManager.currentApplicationId,  treeElement.typeID, this, 'typeResourse');
+			 
 		}
 		
 		private var resourceId:String;
