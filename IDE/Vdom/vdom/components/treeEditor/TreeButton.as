@@ -24,6 +24,10 @@ package vdom.components.treeEditor
         [Embed(source='/assets/treeEditor/rezinka_red.png')]
 		[Bindable]
         public var back_ground_rad:Class; 	
+        
+        [Embed(source='/assets/treeEditor/save_red.png')]
+		[Bindable]
+        public var save_red:Class; 	
 
 		
 		private var _icon:Image = new Image();
@@ -94,13 +98,26 @@ package vdom.components.treeEditor
 		
 		private function mouseOverHandler(msEvt:MouseEvent):void
 		{
-			 _backGround.alpha = 1;
+			if(_selected)
+			{
+				spaceImg.alpha = 0.7;
+				
+			}else
+			{
+				 _backGround.alpha = 1;
+			}
 			 
 		}
 		
 		private function mouseOutHandler(msEvt:MouseEvent):void
 		{
-			_backGround.alpha = 0;
+			if(_selected)
+			{
+				spaceImg.alpha = 1;
+			}else
+			{
+				_backGround.alpha = 0;
+			}
 			
 		}
 		
@@ -114,9 +131,15 @@ package vdom.components.treeEditor
 			_backGround.alpha = 1;
 		}
 	
+		private var imageObj:Object;
 		public function set iconBt(obj:Object):void
 		{
-			if(obj) _icon.source = obj;
+			
+			if(obj)
+			{
+				imageObj = obj;
+				_icon.source = imageObj;
+			} 
 		}
 		
 		public function set labelBt(value:String):void
@@ -133,11 +156,15 @@ package vdom.components.treeEditor
 			{
 				_label.setStyle("color", "0xFFFFFF");
 				spaceImg.source = back_ground_rad;
+				spaceImg.alpha = 0.9;
+				_icon.source = save_red;
 //	btSave.setStyle("borderColor", "0xAAB3B3");
 			}else
 			{
 				spaceImg.source = back_ground;
 				_label.setStyle("color", "0x000000");
+				spaceImg.alpha = 1;
+				_icon.source = imageObj;
 			}
 		}
 		

@@ -44,7 +44,7 @@ package vdom.components.treeEditor
 		{
 			super();
 			
-			title = "Properties";
+			title = "            Properties";
 			percentWidth = 100;
 			
 			setStyle("backgroundColor","0xFFFFFF");
@@ -60,20 +60,11 @@ package vdom.components.treeEditor
 			
 			generateType();
 			
-//			var glinr:HRule = new HRule();
-//				glinr.percentWidth = 100;
-//			mainVB.addChild(glinr);
 			generateTitle();
 			
-//			var glinr1:HRule = new HRule();
-//			glinr1.percentWidth = 100;
-//			mainVB.addChild(glinr1);
-			generateImage();
-			
-//			var glinr2:HRule = new HRule();
-//			glinr2.percentWidth = 100;
-//			mainVB.addChild(glinr2);
 			generateDisription();
+			
+			generateImage();
 			
 			generateControlBar();
 			
@@ -86,21 +77,22 @@ package vdom.components.treeEditor
 		private function generateType():void
 		{
 			var type:Canvas = new Canvas();
+				type.setStyle("backgroundColor","#7c7c7c");
 				type.percentWidth = 100;
 			mainVB.addChild(type);
 			
-			var typeElasticGrey:Image = new Image();
-				typeElasticGrey.source = elasticGrey; 
-				typeElasticGrey.maintainAspectRatio = false;
-				typeElasticGrey.scaleContent = true;
-				typeElasticGrey.percentWidth = 100;
-				typeElasticGrey.height = elasticHeight;
-			type.addChild(typeElasticGrey);
+//			var typeElasticGrey:Image = new Image();
+//				typeElasticGrey.source = elasticGrey; 
+//				typeElasticGrey.maintainAspectRatio = false;
+//				typeElasticGrey.scaleContent = true;
+//				typeElasticGrey.percentWidth = 100;
+//				typeElasticGrey.height = elasticHeight;
+
 			
 			
 			var hBox:HBox = new HBox();
 				hBox.setStyle("align", "center");
-			type.addChild(hBox);
+//			type.addChild(hBox);
 			
 			
 				typePicture.x = 3;	
@@ -109,15 +101,17 @@ package vdom.components.treeEditor
 				typePicture.scaleContent = true;
 				typePicture.width = 20;
 				typePicture.height = 20;
-			hBox.addChild(typePicture);
+//			hBox.addChild(typePicture);
 			
 			
 				typeLabel.text = "HTML Container";
-				typeLabel.setStyle('fontWeight', "bold"); 
-//				typeLabel.setStyle('textAlign', 'center');
-				typeLabel.x = 25;
+//				typeLabel.setStyle('fontWeight', "bold");
+				typeLabel.setStyle("color", "#FFFFFF");
+				typeLabel.setStyle('textAlign', 'center');
+				typeLabel.setStyle('fontSize', "10");
+//				typeLabel.x = 25;
 				typeLabel.percentWidth = 100;
-			hBox.addChild(typeLabel);
+			type.addChild(typeLabel);
 		}
 		
 		private var __title:TextInput = new TextInput();
@@ -252,6 +246,7 @@ package vdom.components.treeEditor
 				btDelete.height = btHeit;
 				btDelete.setStyle("cornerRadius", "0");
 				btDelete.label = "Delete";
+				btDelete.setStyle("Right", "0");
 				btDelete.addEventListener(MouseEvent.CLICK, deleteElement); 
 			contPan.addChild(btDelete);
 			

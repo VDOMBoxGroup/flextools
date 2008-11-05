@@ -523,7 +523,7 @@ private function createTreeArr(xml:XML):void
 		var ID:String = page.@ID.toXMLString();
 		var xmlObj:XML = xml.Object.(@ID == ID)[0];
 		var treeElement:TreeElement = new TreeElement();
-		
+			
 		treeElement.ID 	= ID;
 		treeElement.title =  page.Attributes.Attribute.(@Name == 'title' );
 		treeElement.description = page.Attributes.Attribute.(@Name == 'description' );

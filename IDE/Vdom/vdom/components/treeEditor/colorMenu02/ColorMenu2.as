@@ -108,6 +108,8 @@ package vdom.components.treeEditor.colorMenu02
 		
 		private function creatLevels():void
 		{
+			creatMainEye();
+			
 			masLevels = new Array();
 			for (var i:int = 0; i < levels.length; i++)
 			{
@@ -121,8 +123,6 @@ package vdom.components.treeEditor.colorMenu02
 				addChild(masLevels[i]);
 			}
 			masLevels[slctLevel].select(); 
-			
-			creatMainEye();
 		}
 		
 		private var desabledEye:Canvas;
@@ -130,7 +130,7 @@ package vdom.components.treeEditor.colorMenu02
 		{
 			var canv:Canvas = new Canvas();
 				canv.percentWidth = 100;
-				canv.setStyle("backgroundColor", "#ffffff");
+				canv.setStyle("backgroundColor", "#7c7c7c");
 			addChild(canv);
 			
 			var eye:Image = new Image();
@@ -161,11 +161,12 @@ package vdom.components.treeEditor.colorMenu02
 			canv.addChild(vLine);
 			
 			var label:Label = new Label;
-			label.text =  "Hide/Shaw";
+			label.text =  "Hide/Show";
 			label.x = 30;
 			label.y = 3;
 //			label.width = 120;
-			label.setStyle('fontWeight', "bold"); 
+//			label.setStyle('fontWeight', "bold"); 
+			label.setStyle("color", "#FFFFFF");
 //			label.setStyle('textAlign', 'center');
 			canv.addChild(label);
 			

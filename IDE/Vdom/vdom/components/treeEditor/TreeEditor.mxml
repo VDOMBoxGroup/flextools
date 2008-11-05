@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas
  xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="creationCompleteHandler()" hide="hideHendler()" 
-			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*" xmlns:colorMenu02="vdom.components.treeEditor.colorMenu02.*" xmlns:treeEditor="vdom.components.treeEditor.*" xmlns:containers="vdom.containers.*">
+			show="showHnadler()" label="add Element" xmlns:ns1="vdom.components.treeEditor.colormenu.*" 
+			xmlns:colorMenu02="vdom.components.treeEditor.colorMenu02.*" xmlns:treeEditor="vdom.components.treeEditor.*" xmlns:containers="vdom.containers.*"
+			backgroundColor="#3d3d3d">
 	
 <mx:Metadata>
 		[ResourceBundle("Tree")]
@@ -51,7 +53,17 @@
  * 		* делетеБТ должен исчезать когда нажимается другой елемент
  * 		* при создании нового елемента блокировать кнопку "ок"
  * 		* выделить новосозданный елемент
- * 		
+ * 
+ * 		- бордеры убрать 
+ * 		- 50% всегда, при наведении 100%
+ * 		- Хайд темный фон белые буквы
+ * 		- тайтл всередину
+ * 		- штмл контенер темный фон , белые буквы
+ * 		- кнопку делейт подвинуть
+ * 		- кнопка старт по центру
+ * 		- надписи по центру
+ * 		- нею педж стиль сделать как файлМанаджера
+ * 		- Сглаживание
  * */
 	
 	private var fileManager:FileManager = FileManager.getInstance();
@@ -89,6 +101,8 @@
 	
 	private function hideHendler():void
 	{
+		removeTreeEditorListeners();
+		
 		if(btSave.selected)
 		{
 			Alert.show("Do You Want to Save changed in Structure?", "Save Change:", 3, this, alertClickSaveStructure);
@@ -113,7 +127,6 @@
 	{
 		removeAllLines();
 		removeMassTreeElements();
-		removeTreeEditorListeners();
 		
 		
 //		if(curTree)
@@ -615,9 +628,9 @@
 	*/
 	]]>
 </mx:Script>
-<mx:HBox width="100%" height="100%" >
+<mx:HBox width="100%" height="100%"  right="10">
 
-<mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1">
+<mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1" >
 
 <!--
 	<mx:ComboBox x="28" y="46" >
@@ -630,11 +643,12 @@
 -->
 	</mx:Canvas>
 <mx:Canvas right="0"  height="100%" 
-		verticalScrollPolicy="auto"  horizontalScrollPolicy="off">	
-<mx:VBox  >
+		verticalScrollPolicy="auto"  horizontalScrollPolicy="off"   >	
+<mx:VBox verticalGap="10"  top="10" paddingLeft="3">
 
 
-	<containers:ClosablePanel width="100%" title="Menu">
+	<containers:ClosablePanel width="100%" title="                Menu" paddingLeft="0" paddingRight="0" 
+		paddingTop="0" paddingBottom="0">
 		<mx:VBox width="100%" 	verticalGap="1"  verticalAlign="0" backgroundColor="0x999999">
 			
 			<treeEditor:TreeButton  labelBt="{resourceManager.getString('Tree','new_page')}"  click="addTreeElementLauncher()"
@@ -658,8 +672,8 @@
 		<!--	<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  /> -->
 		</mx:VBox>		
 	</containers:ClosablePanel>	
-	<treeEditor:Properties id="_curTree" width="200"/>
-	<containers:ClosablePanel title="Levels" width="100%">
+	<treeEditor:Properties id="_curTree" width="200" paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0"/>
+	<containers:ClosablePanel title="             Levels" width="100%" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
 		<colorMenu02:ColorMenu2 id="colmen2" text="11111111" />
 	</containers:ClosablePanel>	
 </mx:VBox>

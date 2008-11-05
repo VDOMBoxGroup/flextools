@@ -5,7 +5,7 @@
 -->
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="500" height="350"
+	layout="absolute" width="600" height="350"
 	title="{resourceManager.getString('Tree','new_page')}"
 	creationComplete="creationComplete()"
 	showCloseButton="true"
@@ -14,8 +14,13 @@
 >
 	<mx:Script>
 		<![CDATA[
+			import mx.events.ListEvent;
+			import mx.collections.ArrayCollection;
 			import mx.messaging.channels.StreamingAMFChannel;
 			import mx.core.Application;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			
 			import vdom.controls.externalEditorButton.SpinnerScreen;
 			import vdom.events.AddTreeElementEvent;
 			import vdom.managers.FileManager;
@@ -23,8 +28,7 @@
 			import vdom.controls.resourceBrowser.ResourceBrowser;
 			import vdom.managers.DataManager;
 			import vdom.events.DataManagerEvent;
-			import mx.managers.PopUpManager;
-			import mx.events.CloseEvent;
+
 			import flash.utils.ByteArray;
 			
 			
@@ -37,6 +41,11 @@
    			[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='cube')]
 				[Bindable]
 			private var cube:Class;
+			
+			    [Bindable]
+            private var myDP:ArrayCollection = new ArrayCollection(
+                ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P']);
+    	
 		
 			
 			private var dataManager:DataManager  = DataManager.getInstance();
@@ -53,7 +62,7 @@
 				addEventListener(CloseEvent.CLOSE, closeHandler); 
 				PopUpManager.centerPopUp(this)
 				setDisplayNames();
-				image.source = cube;
+//				image.source = cube;
 			}
 		
 		/****
@@ -70,22 +79,27 @@
 			for each(var lavel:XML in types )
 			{																
 					var strLabel:String = getLanguagePhrase(lavel.Information.Name, lavel.Information.DisplayName);
+					var strDescription:String = getLanguagePhrase(lavel.Information.Name, lavel.Information.Description);
 					var strID:String = lavel.Information.ID;
-					arrAppl.push({label:strLabel, data:strID});
+					var _strLabel:String = lavel.Information.Icon;
+					var	iconResID:String = _strLabel.substr(5, 36);
+					arrAppl.push({label:strLabel, typeID:strID, description:strDescription ,iconResID:iconResID});
 			}
 			
 			function searchIndex():int
 			{
 				for(var i:String in arrAppl)
 				{
-					if (arrAppl[i].data == '2330fe83-8cd6-4ed5-907d-11874e7ebcf4') 
+					trace(arrAppl[i].typeID);
+					if (arrAppl[i].typeID == '2330fe83-8cd6-4ed5-907d-11874e7ebcf4') 
 						return Number(i);	
 				}
 				return 0;
 			}
-			comBoxAppl.selectedIndex = searchIndex();
+			titleList.selectedIndex = searchIndex();
+//			titleList.validateDisplayList();
 		//	if(!comBoxAppl.selectedIndex) comBoxAppl.selectedIndex = 0;
-			selectedAppl = comBoxAppl.selectedItem;
+//			selectedAppl = comBoxAppl.selectedItem;
 		}
 		
 		public function getLanguagePhrase(name:String, phrase:String):String
@@ -98,7 +112,7 @@
 		
 		private function comBoxClose(evt:Object):void
 		{
-			selectedAppl = ComboBox(evt).selectedItem;
+			selectedAppl = List(evt).selectedItem;
 		}
 		
 		/****
@@ -118,7 +132,7 @@
 
 			OK.enabled = false;
 		
-			dataManager.createObject(selectedAppl.data);
+			dataManager.createObject(selectedAppl.typeID);
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 					
 		}	
@@ -142,7 +156,7 @@
 		}
 		
 				
-		
+		/*
 		private function updateAttributeCompleteHandler(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler);
@@ -150,10 +164,10 @@
 																				txt.text, descript.text, selectedAppl.label, typeResourse));
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			
-			/* Remove spinner in case that all is done */
+			/* Remove spinner in case that all is done 
 			PopUpManager.removePopUp(spinner);
 		}
-		
+		*/
 		
 		
 		/****
@@ -189,7 +203,7 @@
 		{
    			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);		
    		
-   			image.source = loader.content;
+//   			image.source = loader.content;
    		}
 		
 		/***
@@ -209,7 +223,11 @@
 		{
 			PopUpManager.removePopUp(this);
 		}
-
+		
+		private function chHandl(evt:ListEvent):void
+		{
+			
+		}
 
 		
 		
@@ -220,23 +238,17 @@
 	</mx:Script>
 	
 	
-	<mx:Canvas 	width="100%" height="100%"
-		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5">
+	<mx:VBox 	width="100%" height="100%"
+		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" >
+    	<mx:Label text="Please select type of new Container:"/>
+    	<mx:List id="titleList"  width="100%" height="100%"
+    		 dataProvider="{arrAppl}" change="{comBoxClose(event.target)}" 
+    		itemRenderer="vdom.components.treeEditor.TypeContainerRander"	/>
     	
-    	<mx:ComboBox id="comBoxAppl"     dataProvider="{arrAppl}" 
-    	  	     close="comBoxClose(event.target)"   x="255" y="204" width="167"/>
-    	<mx:Image id="image" x="20" y="15" width="207" height="246"/>
-    	<mx:Button x="20" y="275" label="{resourceManager.getString('Tree','select_image')}" click="resourceBrowserLauncher()"/>
-    	
-    	<mx:Label x="250" y="15" text="{resourceManager.getString('Tree','title')+':'}"  height="19"/>
-    	<mx:Label x="254" y="67" text="{resourceManager.getString('Tree','description')+':'}"/>
-    	<mx:Label x="254" y="186" text="{resourceManager.getString('Tree','select_type')+':'}" />
-    	
-    	<mx:TextInput id="txt" x="254" y="31" width="201" text="{resourceManager.getString('Tree','title')}"/>
-    	<mx:TextArea id="descript" x="254" y="86" height="88" width="201" text="{resourceManager.getString('Tree','description')}"/>
-    	<mx:HBox y="278" width="100%" horizontalAlign="right" right="20">
+	</mx:VBox>
+	<mx:ControlBar horizontalAlign="right"
+			paddingLeft="15" paddingBottom="15" paddingRight="15" paddingTop="15" >
     		<mx:Button id="OK" label="Ok"    click="okPressed()"/>
     		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
-    	</mx:HBox>
-	</mx:Canvas>
+	</mx:ControlBar>
 </mx:TitleWindow>
