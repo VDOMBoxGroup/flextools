@@ -7,11 +7,44 @@ package ExtendedAPI.com.utils
 	import flash.utils.describeType;
 	
 	import mx.core.Container;
+	import mx.core.EdgeMetrics;
+	import mx.core.UIComponent;
 	import mx.utils.StringUtil;
 	
 	public class Utils
 	{
-	 	
+ 		public static function bringToFront(obj:DisplayObject):void
+		{
+	        // Make sure a parent container exists.
+	        if(obj.parent)
+	        {
+	        	try {
+	        		// if object is child
+	           		if (obj.parent.getChildIndex(obj) < obj.parent.numChildren-1)
+		   		   		obj.parent.setChildIndex(obj, obj.parent.numChildren-1);
+	           	} catch(e:*) {
+	           		// if object is raw child
+		        	Container(obj.parent).rawChildren.setChildIndex(obj,
+		        		Container(obj.parent).rawChildren.numChildren-1) 
+	           	}
+	        }		 
+		}
+		
+		public static function scrollToObject(obj:UIComponent):void
+		{
+			if(!obj.parent)
+				return;
+				
+			if(!(obj.parent is Container))
+				return;
+			
+			var cP:Point = new Point(	obj.x + obj.getExplicitOrMeasuredWidth()/2, 
+										obj.y + obj.getExplicitOrMeasuredHeight()/2);  
+			
+			Container(obj.parent).verticalScrollPosition = cP.y - Container(obj.parent).height/2;
+			Container(obj.parent).horizontalScrollPosition = cP.x - Container(obj.parent).width/2
+		}
+	
 	 	public static function isEqualArrays(arr1:Array, arr2:Array, strict:Boolean = false):Boolean
 	 	{
 	 		if(!arr1 && !arr2)
@@ -238,12 +271,29 @@ package ExtendedAPI.com.utils
 			return rect;			
 		}
 	
+		public static function getContentArea(obj:Container):Rectangle
+		{
+			if(!(obj is Container))
+				return null;
+				
+			var edges:EdgeMetrics = obj.viewMetricsAndPadding;
+			var rect:Rectangle = obj.getBounds(obj.stage);
+			
+			rect.top += edges.top;
+			rect.left += edges.left;
+			rect.bottom -= edges.bottom;
+			rect.right -= edges.right;
+			
+			return  rect;	
+		}
+		
 		public static function getVisibleExactRect(obj:DisplayObject):Rectangle
 		{
 			if(!obj.parent || !(obj.parent is Container))
 				return null;
 			
 			var rect1:Rectangle = getExactRect(obj);
+			
 			rect1.x += (obj.parent as Container).horizontalScrollPosition;
 			rect1.y += (obj.parent as Container).verticalScrollPosition;
 			rect1.width -= (obj.parent as Container).maxHorizontalScrollPosition;		
@@ -259,6 +309,17 @@ package ExtendedAPI.com.utils
 			return rect;			
 		}
 		
+		public static function getVisibleRect(obj:DisplayObject):Rectangle
+		{
+			if(!obj.parent || !(obj.parent is Container))
+				return null;	
+				
+			var contentArea:Rectangle = getContentArea(obj.parent as Container);
+			var bounds:Rectangle = obj.getBounds(obj.stage);
+			
+			return bounds.intersection(contentArea);
+		}	
+			
 		public static function keyCodeFromName(keyname:String):uint
 		{
 			var list:XMLList; 

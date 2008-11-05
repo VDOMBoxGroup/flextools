@@ -19,12 +19,12 @@ public class ObjectUtils
         var packageName:String = typeName.split("::")[1];
         var type:Class = Class(getDefinitionByName(typeName));
 
-        registerClassAlias(packageName, type);
+        registerClassAlias(packageName?packageName:'global', type);
         
         var copier:ByteArray = new ByteArray();
         copier.writeObject(source);
         copier.position = 0;
-        return copier.readObject();
+        return (copier.readObject());
 	}
 
 	public static function baseDispose(obj:*):void
