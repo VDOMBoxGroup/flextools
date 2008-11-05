@@ -110,12 +110,7 @@ public class GeomUtils
     	var len:int = poly.points.length;
     	
     	function pushPt(pt:Point):void {
-    		if(isBelongToSegment) {    		
-    		 	if(ls.containsPoint(pt))
-    				arr.push(pt);
-    		}
-    		else
-    			arr.push(pt);    		
+			arr.push(pt);    		
     	}
     	    	
     	if(len==1)
@@ -127,7 +122,7 @@ public class GeomUtils
     		for(var i:int=0; i<(len==2?len-1:len); i++)
     		{    			
     			var seg:LineSegment = new LineSegment(poly.points[i%len], poly.points[(i+1)%len]);
-    			var p:Point = ls.intersection(seg);
+    			var p:Point = ls.intersection(seg, isBelongToSegment);
     			if(p!=null)
     				pushPt(p);    			
     		}    		

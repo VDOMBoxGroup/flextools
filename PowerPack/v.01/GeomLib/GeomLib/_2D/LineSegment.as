@@ -344,14 +344,14 @@ public class LineSegment extends Object
 		return point;        	
     }        
 
-    public function intersection(toIntersect:LineSegment, precision:Number=0.0000001):Point
+    public function intersection(intersectToSeg:LineSegment, isBelongTo:Boolean=true, precision:Number=0.0000001):Point
     {
-    	var point:Point = lineIntersection(toIntersect, precision);
+    	var point:Point = lineIntersection(intersectToSeg, precision);
     	
     	if(point==null)
     		return null;    
     	
-    	if(containsPoint(point) && toIntersect.containsPoint(point))    	
+    	if((isBelongTo && containsPoint(point) || !isBelongTo) && intersectToSeg.containsPoint(point))    	
 			return point;
 			
 		return null;
