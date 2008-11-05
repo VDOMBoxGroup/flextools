@@ -7,6 +7,6 @@
 		</com:NodeContainer>
 		<com:NodeContainer id="nc0" x="372" y="159" width="89" height="80">
 		</com:NodeContainer>
-		<com:Connector x="229" y="25" fromObject="{nc}" toObject="{nc0}"/>
+		<com:Connector x="229" y="25" fromObject="{nc}" toObject="{nc0}" endPointShape2="arrow" endPointSize="[10, 20]"/>
 	</mx:Canvas>	
 </mx:Application>
