@@ -267,16 +267,19 @@ package vdom.components.treeEditor
 			if (!treObj)
 				return;
 				
-			treObj.current = true;
 			
 			if (treeElement)
 				treeElement.current = false;
-				
+
 			if(treeElement.ID != treObj.ID)
 			{ 
-				treeElement = treObj;
 				dataManager.changeCurrentPage(treObj.ID);
 			}
+			
+			treeElement = treObj;
+
+			treObj.current = true;
+
 
 			resourseBrowser.value =  "#Res(" + treeElement.resourceID + ")"; 
 			multLine.value = treeElement.description;

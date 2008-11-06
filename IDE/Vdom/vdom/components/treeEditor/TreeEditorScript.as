@@ -385,6 +385,7 @@ private function addTreeEditorListeners():void
 	
 	dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_STRUCTURE_COMPLETE, getApplicationStructure);
 	dataManager.addEventListener(DataManagerEvent.CREATE_OBJECT_COMPLETE, createObjectHandler);
+	dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageCangeHandler);
 	
 	_curTree.addEventListener(TreeEditorEvent.CHANGE_START_PAGE, changeStartPageHandler);
 	_curTree.addEventListener(TreeEditorEvent.DELETE, deleteTreeElement);
@@ -445,6 +446,11 @@ private function spaceKeyDownHandler(kbEvt:KeyboardEvent):void
 			Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, spaceMouseHandler);
 		}
 	}
+}
+
+private function pageCangeHandler(dmEvt:DataManagerEvent):void
+{
+	trace("*********  PageChanget  ********");
 }
 
 private var firStateOfScrollX:Number;

@@ -177,8 +177,8 @@
 		setStartPage();
 		
 		
-		if(_curTree.target != null)
-			_curTree.target.current = true;
+//		if(_curTree.target != null)
+//			_curTree.target.current = true;
 	}
 	
 	private var dX:Number;
@@ -566,7 +566,7 @@
 		
 		_curTree.target = massTreeElements[dataManager.currentPageId];
 		
-		if(_curTree.target != null)	_curTree.target.current = true;
+//		if(_curTree.target != null)	_curTree.target.current = true;
 		
 		setStartPage();
 		
