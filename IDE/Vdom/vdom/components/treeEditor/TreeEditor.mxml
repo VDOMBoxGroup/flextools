@@ -628,9 +628,9 @@
 	*/
 	]]>
 </mx:Script>
-<mx:HBox width="100%" height="100%"  right="10">
+<mx:HBox width="100%" height="100%"  >
 
-<mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" moveEffect="itemsChangeEffect1" >
+<mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" >
 
 <!--
 	<mx:ComboBox x="28" y="46" >
@@ -642,9 +642,9 @@
 	</mx:ComboBox>
 -->
 	</mx:Canvas>
-<mx:Canvas right="0"  height="100%" 
+<mx:Canvas  height="100%" 
 		verticalScrollPolicy="auto"  horizontalScrollPolicy="off"   >	
-<mx:VBox verticalGap="10"  top="10" paddingLeft="3">
+<mx:VBox verticalGap="10"  top="10" paddingLeft="3" paddingRight="10">
 
 
 	<containers:ClosablePanel width="100%" title="                Menu" paddingLeft="0" paddingRight="0" 

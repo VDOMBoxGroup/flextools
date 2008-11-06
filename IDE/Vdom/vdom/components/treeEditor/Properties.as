@@ -225,16 +225,20 @@ package vdom.components.treeEditor
 		{
 			var btHeit:int = 16;
 			var btWidht:int = 58;
+			var canv:Canvas = new Canvas();
+				canv.percentWidth = 100;
+			addChild(canv);
 			
 			var contPan:ControlBar = new ControlBar();
-				contPan.setStyle("horizontalAlign", "center");
-				addChild(contPan);
+//				contPan.setStyle("horizontalAlign", "center");
+				canv.addChild(contPan);
+				
 				
 			var btSave:Button = new Button();
 				btSave.height = btHeit;
 				btSave.setStyle("cornerRadius", "0");
 				btSave.label = "Save";
-				btSave.width = btWidht;
+//				btSave.width = btWidht;
 			btSave.addEventListener(MouseEvent.CLICK, saveProperties); 
 			contPan.addChild(btSave);
 			
@@ -242,7 +246,7 @@ package vdom.components.treeEditor
 				btSetStart.height = btHeit;
 				btSetStart.setStyle("cornerRadius", "0");
 				btSetStart.label = "Start";
-				btSetStart.width = btWidht;
+//				btSetStart.x = btSave.getStyle("w;
 				btSetStart.addEventListener(MouseEvent.CLICK, changeStartPage); 
 			contPan.addChild(btSetStart);
 			
@@ -250,10 +254,10 @@ package vdom.components.treeEditor
 				btDelete.height = btHeit;
 				btDelete.setStyle("cornerRadius", "0");
 				btDelete.label = "Delete";
-				btDelete.setStyle("Right", "0");
-				btDelete.width = btWidht;
+				btDelete.setStyle("right", "0");
+//				btDelete.width = btWidht;
 				btDelete.addEventListener(MouseEvent.CLICK, deleteElement); 
-			contPan.addChild(btDelete);
+			canv.addChild(btDelete);
 			
 		}
 		
