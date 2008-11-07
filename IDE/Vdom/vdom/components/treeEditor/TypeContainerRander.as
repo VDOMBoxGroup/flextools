@@ -1,13 +1,14 @@
 package vdom.components.treeEditor
 {
 	import flash.display.Loader;
+	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	
 	import mx.containers.HBox;
 	import mx.containers.VBox;
+	import mx.controls.Image;
 	import mx.controls.Label;
 	
-	import vdom.controls.resourceBrowser.SmoothImage;
 	import vdom.managers.DataManager;
 	import vdom.managers.FileManager;
 	
@@ -18,7 +19,7 @@ package vdom.components.treeEditor
 					[Bindable]
 		private var cube:Class;
 				
-		private var img:SmoothImage = new SmoothImage();
+		private var img:Image = new Image();
 		private var _label:Label = new Label();
 		private var _description:Label = new Label();		
 		public function TypeContainerRander()
@@ -49,9 +50,16 @@ package vdom.components.treeEditor
 			
 			_description.setStyle("color","#636363")
 			vBox.addChild(_description);
+			
+			addEventListener(Event.ACTIVATE, handler);
 						
 //			percentWidth = 100;
 //			height = 50;
+		}
+		
+		private function handler(evt:Event):void
+		{
+			trace("     **Handler**");
 		}
 		
 		private var _typeID:String;

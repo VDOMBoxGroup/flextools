@@ -44,7 +44,7 @@ package vdom.components.treeEditor
 		{
 			super();
 			
-			title = "            Properties";
+			title = resourceManager.getString('Tree','properties');
 			percentWidth = 100;
 			
 			setStyle("backgroundColor","0xFFFFFF");
@@ -132,12 +132,12 @@ package vdom.components.treeEditor
 				
 			
 			var titleLabel:Label = new Label();
-				titleLabel.text = "Title:";
+				titleLabel.text = resourceManager.getString('Tree','title');
 				titleLabel.width = elasticWidht;
 				titleLabel.setStyle("textAlign", "right");
 			canvas.addChild(titleLabel);
 			
-				__title.text = "Name of Container";
+				__title.text = resourceManager.getString('Tree','name');
 				__title.x = elasticWidht;
 				__title.percentWidth = 100;
 //				__title.setStyle("textAlign", "right"); 
@@ -168,7 +168,7 @@ package vdom.components.treeEditor
 				disriptionElasticGrey.height = elasticHeight;
 				disription.addChild(disriptionElasticGrey);
 
-				disriptionLabel.text = "Disription:";
+				disriptionLabel.text = resourceManager.getString('Tree','description');
 				disriptionLabel.width = elasticWidht;
 				disriptionLabel.setStyle("textAlign", "right");
 			disription.addChild(disriptionLabel);
@@ -211,7 +211,7 @@ package vdom.components.treeEditor
 //			imageCn.addChild(image);
 			
 			var label:Label = new Label();
-				label.text = "Image:";
+				label.text = resourceManager.getString('Tree','image')+":";
 				label.width = elasticWidht;
 				label.setStyle("textAlign", "right");
 			imageCn.addChild(label);
@@ -225,13 +225,9 @@ package vdom.components.treeEditor
 		{
 			var btHeit:int = 16;
 			var btWidht:int = 58;
-			var canv:Canvas = new Canvas();
-				canv.percentWidth = 100;
-			addChild(canv);
-			
 			var contPan:ControlBar = new ControlBar();
 //				contPan.setStyle("horizontalAlign", "center");
-				canv.addChild(contPan);
+				addChild(contPan);
 				
 				
 			var btSave:Button = new Button();
@@ -242,22 +238,27 @@ package vdom.components.treeEditor
 			btSave.addEventListener(MouseEvent.CLICK, saveProperties); 
 			contPan.addChild(btSave);
 			
+			var vBox:VBox = new VBox();
+				vBox.percentWidth = 100;
+				vBox.setStyle("horizontalAlign", "center");
+			contPan.addChild(vBox);
+			
 			var btSetStart:Button = new Button();
 				btSetStart.height = btHeit;
 				btSetStart.setStyle("cornerRadius", "0");
-				btSetStart.label = "Start";
+				btSetStart.label = resourceManager.getString('Tree','start');
 //				btSetStart.x = btSave.getStyle("w;
 				btSetStart.addEventListener(MouseEvent.CLICK, changeStartPage); 
-			contPan.addChild(btSetStart);
+			vBox.addChild(btSetStart);
 			
 			var btDelete:Button = new Button();
 				btDelete.height = btHeit;
 				btDelete.setStyle("cornerRadius", "0");
-				btDelete.label = "Delete";
+				btDelete.label = resourceManager.getString('Tree','delete');
 				btDelete.setStyle("right", "0");
 //				btDelete.width = btWidht;
 				btDelete.addEventListener(MouseEvent.CLICK, deleteElement); 
-			canv.addChild(btDelete);
+			contPan.addChild(btDelete);
 			
 		}
 		

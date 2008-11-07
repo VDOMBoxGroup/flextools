@@ -430,6 +430,7 @@ private function spaceKeyDownHandler(kbEvt:KeyboardEvent):void
 	{
 		if(!main.contains(dublMain))
 		{
+			dublMain.alpha = 0.05;
 			main.addChild(dublMain);
 //			trace("KeysDown");
 			Application.application.addEventListener(MouseEvent.MOUSE_DOWN, spaceMouseHandler);
@@ -439,6 +440,7 @@ private function spaceKeyDownHandler(kbEvt:KeyboardEvent):void
 	{
 		if(main.contains(dublMain))
 		{		
+			dublMain.alpha = 1;
 			main.removeChild(dublMain);
 //			trace("KeysUp");
 			Application.application.removeEventListener(MouseEvent.MOUSE_DOWN, spaceMouseHandler);

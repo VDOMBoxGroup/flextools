@@ -86,7 +86,7 @@
 //		dublMain.percentHeight = 100;
 		dublMain.setStyle(	"backgroundColor", "#ffffff");
 //		dublMain.visible = false;
-		dublMain.alpha = 0.05;
+		
 		dublMain.buttonMode = true;
 		
 		hide();
@@ -628,7 +628,7 @@
 	*/
 	]]>
 </mx:Script>
-<mx:HBox width="100%" height="100%"  >
+<mx:HBox width="100%" height="100%" >
 
 <mx:Canvas id="main"   width="100%" height="100%" backgroundColor="#ffffff" >
 
@@ -647,7 +647,7 @@
 <mx:VBox verticalGap="10"  top="10" paddingLeft="3" paddingRight="10">
 
 
-	<containers:ClosablePanel width="100%" title="                Menu" paddingLeft="0" paddingRight="0" 
+	<containers:ClosablePanel width="100%" title="{resourceManager.getString('Tree','menu')}" paddingLeft="0" paddingRight="0" 
 		paddingTop="0" paddingBottom="0">
 		<mx:VBox width="100%" 	verticalGap="1"  verticalAlign="0" backgroundColor="0x999999">
 			
@@ -663,17 +663,17 @@
 			<treeEditor:TreeButton labelBt="{resourceManager.getString('Tree','show_signature')}"  click="showSignature()"
 				iconBt="@Embed(source='/assets/treeEditor/show_signature.png')"/>
 			
-			<treeEditor:TreeButton labelBt="Revert" click="{revert()}"
+			<treeEditor:TreeButton labelBt="{resourceManager.getString('Tree','undo')}" click="{revert()}"
 				iconBt="@Embed(source='/assets/treeEditor/revert.png')"/>
 				
-			<treeEditor:TreeButton id="btSave" labelBt="Save" click="{saveToServer()}" 
+			<treeEditor:TreeButton id="btSave" labelBt="{resourceManager.getString('Tree','save')}" click="{saveToServer()}" 
 				iconBt="@Embed(source='/assets/treeEditor/save.png')"/>
 				
 		<!--	<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  /> -->
 		</mx:VBox>		
 	</containers:ClosablePanel>	
 	<treeEditor:Properties id="_curTree" width="200" paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0"/>
-	<containers:ClosablePanel title="             Levels" width="100%" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+	<containers:ClosablePanel title="{resourceManager.getString('Tree','levels')}" width="100%" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
 		<colorMenu02:ColorMenu2 id="colmen2" text="11111111" />
 	</containers:ClosablePanel>	
 </mx:VBox>

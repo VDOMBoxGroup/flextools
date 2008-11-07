@@ -93,7 +93,7 @@
 					var strID:String = lavel.Information.ID;
 					var _strLabel:String = lavel.Information.Icon;
 					var	iconResID:String = _strLabel.substr(5, 36);
-					arrAppl.push({label:strLabel, typeID:strID, description:strDescription ,iconResID:iconResID});
+					arrAppl.push({label:strLabel, typeID:strID, description:strDescription ,iconResID:iconResID, select:true});
 			}
 			
 			function searchIndex():int
@@ -124,7 +124,8 @@
 		{
 			selectedAppl = List(evt).selectedItem;
 			OK.enabled = true;
-//			TypeContainerRander(selectedAppl).select = true;
+//			OK.
+//			selectedAppl.dispatchEvent(Event.ACTIVATE);
 		}
 		
 		/****
@@ -253,7 +254,7 @@
 	
 	<mx:VBox 	width="100%" height="373" verticalGap="20"
 		paddingBottom="5"  paddingTop="10"  y="5">
-    	<mx:Label text="Please select type of new Container:" fontSize="16" fontWeight="bold" color="#AEAEAE"  width="584" textAlign="center"/>
+    	<mx:Label text="{resourceManager.getString('Tree','palese_select') + ':'}" fontSize="16" fontWeight="bold" color="#AEAEAE"  width="584" textAlign="center"/>
     	<mx:List id="titleList"  width="100%" height="100%" borderColor="#FFFFFF"
     		 dataProvider="{arrAppl}" change="{comBoxClose(event.target)}" 
     		itemRenderer="vdom.components.treeEditor.TypeContainerRander"	
