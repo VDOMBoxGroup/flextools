@@ -644,7 +644,7 @@
 	</mx:Canvas>
 <mx:Canvas  height="100%" 
 		verticalScrollPolicy="auto"  horizontalScrollPolicy="off"   >	
-<mx:VBox verticalGap="10"  top="10" paddingLeft="3" paddingRight="10">
+<mx:VBox verticalGap="10"  top="10" paddingLeft="3" paddingRight="10" width="210">
 
 
 	<containers:ClosablePanel width="100%" title="{resourceManager.getString('Tree','menu')}" paddingLeft="0" paddingRight="0" 
@@ -672,7 +672,7 @@
 		<!--	<mx:CheckBox id="chExpandAll" label= "{resourceManager.getString('Tree','expand_all')}"  /> -->
 		</mx:VBox>		
 	</containers:ClosablePanel>	
-	<treeEditor:Properties id="_curTree" width="200" paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0"/>
+	<treeEditor:Properties id="_curTree" width="100%" paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0"/>
 	<containers:ClosablePanel title="{resourceManager.getString('Tree','levels')}" width="100%" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
 		<colorMenu02:ColorMenu2 id="colmen2" text="11111111" />
 	</containers:ClosablePanel>	

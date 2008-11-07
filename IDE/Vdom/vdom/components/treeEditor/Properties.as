@@ -34,7 +34,7 @@ package vdom.components.treeEditor
 		private var defaultPicture:Class;
 		
 		private var elasticHeight:int = 21;
-		private var elasticWidht:int = 65;
+		private var elasticWidht:int = 75;
 		
 		private var fileManager:FileManager = FileManager.getInstance();
 		private var dataManager:DataManager = DataManager.getInstance();
@@ -132,7 +132,7 @@ package vdom.components.treeEditor
 				
 			
 			var titleLabel:Label = new Label();
-				titleLabel.text = resourceManager.getString('Tree','title');
+				titleLabel.text = resourceManager.getString('Tree','title')+":";
 				titleLabel.width = elasticWidht;
 				titleLabel.setStyle("textAlign", "right");
 			canvas.addChild(titleLabel);
@@ -168,7 +168,7 @@ package vdom.components.treeEditor
 				disriptionElasticGrey.height = elasticHeight;
 				disription.addChild(disriptionElasticGrey);
 
-				disriptionLabel.text = resourceManager.getString('Tree','description');
+				disriptionLabel.text = resourceManager.getString('Tree','description')+":";
 				disriptionLabel.width = elasticWidht;
 				disriptionLabel.setStyle("textAlign", "right");
 			disription.addChild(disriptionLabel);
