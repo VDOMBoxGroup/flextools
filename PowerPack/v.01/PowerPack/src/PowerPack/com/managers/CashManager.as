@@ -427,6 +427,9 @@ public class CashManager extends EventDispatcher
 			entry.@lastRequest = now().getTime().toString();
 			entry.@filename = String(objEntry.@ID).replace(/-/g, '');
 			
+			if(entry.@category == 'image')
+				entry.@thumb = 'thumb_'+entry.@filename+'.png';
+							
 			instance.addIndexEntry(index, entry);
 		}
 		instance.updateIndexEntry(mainIndex, entry.@ID, 'lastUpdate', now().getTime().toString());
@@ -443,7 +446,7 @@ public class CashManager extends EventDispatcher
 			fileStream.close();
 		
 			instance.createThumb(entry, tplDir, data);
-		
+			
 			instance.setIndex(index);
 			instance.setMainIndex(mainIndex);
 		} 
@@ -487,7 +490,6 @@ public class CashManager extends EventDispatcher
 				
 				var bitmapData:BitmapData = new BitmapData( newW, newH, true, 0x00ffffff );
 				bitmapData.draw( content, matrix );
-				
 					
 				var pngEncoder:PNGEncoder = new PNGEncoder();
 				var data:ByteArray = pngEncoder.encode(bitmapData);	
@@ -525,6 +527,42 @@ public class CashManager extends EventDispatcher
 			return null;
 
 		return setObject(tplID, entry, data);
+	}
+
+	public static function isObjectUpdated(tplID:String, objID:String, UTCDate:Number):Boolean
+	{
+		var entry:XML = getObjectEntry(tplID, objID);
+		
+		if(!entry)
+			return false;
+			
+		if( Number(Utils.getStringOrDefault(entry.@lastUpdate,'0')) != UTCDate )
+			return true;
+			
+		return false;		
+	}
+	
+	public static function getObjectEntry(tplID:String, objID:String):XML
+	{
+		initialize();
+		
+		var mainIndex:XML = instance.getMainIndex();
+		var tplEntry:XML = instance.getMainIndexEntry(mainIndex, tplID);
+		
+		if(!tplEntry)
+			return null;		
+		
+		var index:XML = instance.getIndex(tplID);
+		
+		if(!index)
+			return null;		
+
+		var entry:XML = instance.getIndexEntry(index, objID);
+		
+		if(!entry)
+			return null;
+			
+		return entry
 	}
 
 	//--------------------------------------------------------------------------

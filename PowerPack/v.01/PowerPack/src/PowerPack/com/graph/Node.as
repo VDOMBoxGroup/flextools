@@ -13,34 +13,43 @@ import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
 import PowerPack.com.validators.NodeTextValidator;
 
+import flash.display.GradientType;
+import flash.display.Graphics;
 import flash.display.NativeMenuItem;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
-import flash.events.TextEvent;
+import flash.events.TimerEvent;
+import flash.filesystem.File;
+import flash.filters.DropShadowFilter;
 import flash.filters.GlowFilter;
+import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.text.TextLineMetrics;
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
+import flash.utils.Timer;
 
 import mx.binding.utils.*;
 import mx.collections.ArrayCollection;
 import mx.containers.Canvas;
 import mx.controls.Alert;
-import mx.controls.Button;
 import mx.controls.ComboBox;
+import mx.controls.Image;
 import mx.controls.ToolTip;
 import mx.core.Application;
 import mx.core.Container;
+import mx.core.EdgeMetrics;
 import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
 import mx.events.CloseEvent;
 import mx.events.DropdownEvent;
 import mx.events.FlexEvent;
+import mx.events.ValidationResultEvent;
 import mx.managers.IFocusManagerComponent;
+import mx.managers.PopUpManager;
 import mx.managers.ToolTipManager;
 import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
@@ -129,6 +138,7 @@ public class Node extends Canvas
                 newStyleDeclaration.setStyle("themeColor", "haloBlue");
             }     
 		
+			newStyleDeclaration.setStyle( "cornerRadius", 3);
 			newStyleDeclaration.setStyle( "borderStyle", "solid" );
 			newStyleDeclaration.setStyle( "borderThickness", 1);
 			newStyleDeclaration.setStyle( "margin", 2);			
@@ -143,7 +153,113 @@ public class Node extends Canvas
 		    	              
         return true;
     }        
-        
+
+	//--------------------------------------------------------------------------
+	//
+	//  Constructor
+	//
+	//--------------------------------------------------------------------------
+	
+	/**
+	 *	Constructor
+	 */ 
+	public function Node(	category:String = 'Normal',//NodeCategory.NORMAL, 
+							type:String = 'Normal',//NodeType.NORMAL, 
+							text:String = null )
+	{
+		super();
+		
+		this.category = category;
+		this.type = type;
+		
+		if(text)
+			this.text = text;
+		else
+			this.text = LanguageManager.sentences['node_label'];
+
+		doubleClickEnabled = true;
+		//focusEnabled = true;
+		//mouseFocusEnabled = true;
+		tabEnabled = true;	
+		tabChildren = false;
+		styleName = this.className;	
+		cacheAsBitmap = true;		
+		
+		nodes[this] = this;
+	}		
+	
+	//--------------------------------------------------------------------------
+	//
+	//  Destructor
+	//
+	//--------------------------------------------------------------------------
+
+	/**
+	 *	Destructor
+	 */ 
+	public function dispose():void
+	{			
+		destroyTimers();
+		
+		if(contextMenu)
+		{	
+        	contextMenu.removeEventListener(Event.SELECT, contextMenuSelectHandler);	
+        	SuperNativeMenu(contextMenu).dispose();        	 
+  		}
+  		
+  		if(nodeTextArea)
+  		{
+  			nodeTextArea.removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+			nodeTextArea.removeEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
+  		}
+  		
+  		if(nodeCB)
+  		{
+  			nodeCB.removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+          	nodeCB.removeEventListener(KeyboardEvent.KEY_DOWN, comboBoxKeyDown);
+  		}
+
+		if(validator)
+		{
+			validator.removeEventListener(ValidationResultEvent.VALID, validatorHandler);
+			validator.removeEventListener(ValidationResultEvent.INVALID, validatorHandler);
+		}
+  			  				
+  		stopDragging();   			
+
+		removeEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
+		removeEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
+		removeEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
+		removeEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
+		removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+		
+		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
+   		
+   		removeEventListener("xChanged", graphChangedHandler);
+   		removeEventListener("yChanged", graphChangedHandler);
+       		
+		if(copyNode == this)
+		{
+			copyNode = null;
+			Application.application.dispatchEvent(new Event("copyNode"));
+		}
+		
+		while(inArrows.length)
+			inArrows[0].dispose();
+			
+		while(outArrows.length)
+			outArrows[0].dispose();
+
+        if(parent)
+           	parent.removeChild(this);
+           	
+       	dispatchEvent(new NodeEvent(NodeEvent.DISPOSED));
+       	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+       	
+       	delete nodes[this];
+	}
+	        
     //--------------------------------------------------------------------------
     //
     //  Variables
@@ -154,6 +270,7 @@ public class Node extends Canvas
     private var _focused:Boolean; 
     private var _created:Boolean;
     private var _needRefreshStyles:Boolean; 
+    private var _isValidText:Boolean;
 		
 	/**
 	* possible values: M_NORMAL, M_EDITING
@@ -172,7 +289,6 @@ public class Node extends Canvas
      */
     private var regY:Number;  
     
-	private var validator:NodeTextValidator;
 	
     [ArrayElementType("Connector")]
     public var inArrows:ArrayCollection = new ArrayCollection();
@@ -188,7 +304,7 @@ public class Node extends Canvas
    	
    	public var canvas:GraphCanvas;
     
-    //--------------------------------------------------------------------------
+	private var validator:NodeTextValidator;
 
     /**
      *  The TextArea sub-control that displays the node text.
@@ -199,8 +315,49 @@ public class Node extends Canvas
      *  The ComboBox sub-control that displays the resource.
      */	    
     public var nodeCB:ComboBox;    
-    //--------------------------------------------------------------------------
     
+    private var nodePanel:UIComponent;
+    
+    private var tipImage:Image;
+
+    private var showTimer:Timer;
+    private var hideTimer:Timer;
+    
+    //--------------------------------------------------------------------------
+	//
+	//  Properties
+	//
+	//--------------------------------------------------------------------------
+
+    //----------------------------------
+    //  selected
+    //----------------------------------
+    
+    private var _selected:Boolean;
+    private var _selectedChanged:Boolean;
+    
+    public function set selected(value:Boolean):void
+    {
+    	if(_selected != value)
+    	{
+    		_selected = value;
+    		
+        	_selectedChanged = true;
+        
+        	invalidateDisplayList();
+         
+        	dispatchEvent(new NodeEvent(NodeEvent.SELECTED_CHANGED));
+     	}
+    }
+    public function get selected():Boolean
+    {
+        return _selected;
+    }        
+    
+    //----------------------------------
+    //  text
+    //----------------------------------
+        
     /**
      * 	Storage for the text property.
      */ 
@@ -240,7 +397,10 @@ public class Node extends Canvas
     {
         return _text;
     }
-    //--------------------------------------------------------------------------
+
+    //----------------------------------
+    //  category
+    //----------------------------------
     
 	private var _category:String;	
 	private var _categoryChanged:Boolean = false;
@@ -277,7 +437,10 @@ public class Node extends Canvas
     {
         return _category;
     }	
-    //--------------------------------------------------------------------------
+    
+    //----------------------------------
+    //  type
+    //----------------------------------
 
 	private var _type:String;	
 	private var _typeChanged:Boolean = false;
@@ -312,6 +475,10 @@ public class Node extends Canvas
         return _type;
     }	
 	
+    //----------------------------------
+    //  breakpoint
+    //----------------------------------
+    	
 	private var _breakpoint:Boolean = false;	
 	private var _breakpointChanged:Boolean = false;
 
@@ -345,7 +512,9 @@ public class Node extends Canvas
         return _breakpoint;
     }	    
 	
-	//--------------------------------------------------------------------------
+    //----------------------------------
+    //  enabled
+    //----------------------------------
 	
  	private var _enabledChanged:Boolean = false;
 
@@ -371,92 +540,6 @@ public class Node extends Canvas
 	        dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	   	}	
     }
-
-	//--------------------------------------------------------------------------
-	//
-	//  Constructor
-	//
-	//--------------------------------------------------------------------------
-
-	public function Node(	category:String = 'Normal',//NodeCategory.NORMAL, 
-							type:String = 'Normal',//NodeType.NORMAL, 
-							text:String = null )
-	{
-		super();
-		
-		this.category = category;
-		this.type = type;
-		
-		if(text)
-			this.text = text;
-		else
-			this.text = LanguageManager.sentences['node_label'];
-
-		doubleClickEnabled = true;
-		//focusEnabled = true;
-		//mouseFocusEnabled = true;
-		tabEnabled = true;	
-		tabChildren = false;
-		styleName = this.className;	
-		cacheAsBitmap = true;		
-		
-		nodes[this] = this;
-	}		
-	
-	//--------------------------------------------------------------------------
-	//
-	//  Destructor
-	//
-	//--------------------------------------------------------------------------
-
-	/**
-	 *	Destructor
-	 */ 
-	public function dispose():void
-	{			
-		if(contextMenu)
-		{	
-        	contextMenu.removeEventListener(Event.SELECT, contextMenuSelectHandler);	
-        	SuperNativeMenu(contextMenu).dispose();        	 
-  		}
-  		
-  		if(nodeTextArea)
-  			nodeTextArea.removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
-  			  				
-  		stopDragging();   			
-
-		removeEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
-		removeEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
-		removeEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
-		removeEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
-		removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
-		
-		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
-   		
-   		removeEventListener("xChanged", graphChangedHandler);
-   		removeEventListener("yChanged", graphChangedHandler);
-       		
-		if(copyNode == this)
-		{
-			copyNode = null;
-			Application.application.dispatchEvent(new Event("copyNode"));
-		}
-		
-		while(inArrows.length)
-			inArrows[0].dispose();
-			
-		while(outArrows.length)
-			outArrows[0].dispose();
-
-        if(parent)
-           	parent.removeChild(this);
-           	
-       	dispatchEvent(new NodeEvent(NodeEvent.DISPOSED));
-       	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
-       	
-       	delete nodes[this];
-	}
 			
 	//--------------------------------------------------------------------------
 	//
@@ -497,6 +580,7 @@ public class Node extends Canvas
             addChild(nodeTextArea);
             
             nodeTextArea.addEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+			nodeTextArea.addEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
         }
         
         if(!nodeCB)
@@ -513,21 +597,16 @@ public class Node extends Canvas
 			}
 	        addChild(nodeCB);
 	        
-	        var downArrowButton:Button;
-	        for (var i:int=0; i<nodeCB.numChildren; i++)
-	        {
-	        	if(nodeCB.getChildAt(i) is Button)
-	        	{
-	        		downArrowButton = nodeCB.getChildAt(i) as Button;
-	        		break;
-	        	}
-	        }
-                                                 
             nodeCB.addEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
-            
-	        if(downArrowButton)
-	        	downArrowButton.addEventListener(FlexEvent.BUTTON_DOWN,
-                                             downArrowButton_buttonDownHandler, false, 10);
+        	nodeCB.addEventListener(KeyboardEvent.KEY_DOWN, comboBoxKeyDown);
+        }
+        
+        if(!nodePanel)
+        {
+        	nodePanel = new UIComponent();
+        	nodePanel.focusEnabled = false;
+        	
+        	addChild(nodePanel);
         }
         
         if (ContextManager.FLASH_CONTEXT_MENU && !contextMenu)
@@ -567,8 +646,11 @@ public class Node extends Canvas
         	validator = new NodeTextValidator();
 			validator.source = this;
 			validator.property = "text";
-			validator.listener = nodeTextArea;
+			//validator.listener = nodeTextArea;
 			validator.required = true;
+			
+			validator.addEventListener(ValidationResultEvent.VALID, validatorHandler);
+			validator.addEventListener(ValidationResultEvent.INVALID, validatorHandler);
         }    
         
         if(!_created) {
@@ -604,7 +686,6 @@ public class Node extends Canvas
             if(nodeTextArea.text != text)
            		nodeTextArea.text = text;
             
-			//nodeTextArea.invalidateDisplayList();
             invalidateSize();
     		invalidateDisplayList();
         }
@@ -717,6 +798,28 @@ public class Node extends Canvas
     		invalidateDisplayList();
         }	
 
+        if(_enabledChanged)
+        {
+            _enabledChanged = false;
+			contextMenu.getItemByName("enabled").checked = enabled;
+    		invalidateDisplayList();
+        }
+
+        if(_breakpointChanged)
+        {
+        	_breakpointChanged = false;
+        	contextMenu.getItemByName("breakpoint").checked = breakpoint;
+    		invalidateDisplayList();
+        }	            
+        
+        if(validator && _needValidate)
+        {
+        	_needRefreshStyles = true;
+        	_needValidate = false;
+			var validEvent:ValidationResultEvent = validator.validate();                
+    		invalidateDisplayList();
+        }
+
         if (_typeChanged || _needRefreshStyles)
         {
             _typeChanged = false;
@@ -753,37 +856,20 @@ public class Node extends Canvas
             }
 			
     		invalidateDisplayList();
-        }	
-        
-        if(_enabledChanged)
-        {
-            _enabledChanged = false;
-			contextMenu.getItemByName("enabled").checked = enabled;
-			//nodeTextArea.invalidateDisplayList();
-    		invalidateDisplayList();
         }
-
-        if(_breakpointChanged)
-        {
-        	_breakpointChanged = false;
-        	contextMenu.getItemByName("breakpoint").checked = breakpoint;
-        	//nodeTextArea.invalidateDisplayList();
-    		invalidateDisplayList();
-        }	            
-        
-        if(validator && _needValidate)
-        {
-        	_needValidate = false;
-			validator.validate();                
-        	//nodeTextArea.invalidateDisplayList();
-    		invalidateDisplayList();
-        }
-        
+                
          _needRefreshStyles = false;
     }    
 
 	override protected function measure():void 
 	{
+		
+		if(nodePanel)
+		{
+			nodePanel.width = 0;
+			nodePanel.height = 0;	
+		}
+		
 		if(nodeTextArea && nodeTextArea.visible)
 		{
 			var numLines:int = nodeTextArea.field.numLines;
@@ -796,11 +882,20 @@ public class Node extends Canvas
 					nodeTextArea.width);
 			}		
 			nodeTextArea.height = lineMetrics.height*numLines + TEXT_HEIGHT_PADDING;
+			
+			nodeCB.width = 0;
+			nodeCB.height = 0;
 		}
 		else
 		{
 			// set combobox size
-		}
+
+			nodeTextArea.width = 0;
+			nodeTextArea.height = 0;
+
+			nodeCB.width = NaN;
+			nodeCB.height = NaN;
+		}		
 		
         super.measure();
 		
@@ -822,15 +917,48 @@ public class Node extends Canvas
 		
 		var borderThickness:Number = getStyle("borderThickness");
 		var margin:Number = getStyle("margin");
+		
+		if(_focused || selected)
+		{
+			setStyle( "backgroundColor", getStyle("themeColor") );
+		}
+		else
+		{
+			setStyle( "backgroundColor", 0xE2E2E2 );
+		}
 			
-		if(nodeTextArea && nodeTextArea.visible)
+		if(nodeTextArea)
 		{				
 			nodeTextArea.move(margin, margin);
 		}
 		
-		if(nodeCB && nodeCB.visible)
+		if(nodeCB)
 		{
 			nodeCB.move(margin, margin);
+		}
+		
+		if(nodePanel)
+		{
+			var metrics:EdgeMetrics = viewMetrics;			
+			nodePanel.setActualSize(unscaledWidth-metrics.left-metrics.right, unscaledHeight-metrics.top-metrics.bottom);
+			
+			var g:Graphics = nodePanel.graphics;
+			
+			var matrix:Matrix = new Matrix();
+			matrix.createGradientBox(nodePanel.width, nodePanel.height, Math.PI/2);
+			
+			g.clear();
+			
+			g.beginGradientFill(
+				GradientType.LINEAR, 
+				[0xffffff, 0x000000], 
+				[0.3, 0.3], 
+				[60, 255],
+				matrix);
+				
+			g.lineStyle(0.0, 0x000000, 0.0);
+            g.drawRoundRect(0, 0, nodePanel.width, nodePanel.height, 3);
+            g.endFill();	
 		}
 	}
 
@@ -921,6 +1049,8 @@ public class Node extends Canvas
 
         systemManager.stage.addEventListener(
             Event.MOUSE_LEAVE, stage_mouseLeaveHandler);
+            
+        hideImageTip();
     }
 
     /**
@@ -966,6 +1096,8 @@ public class Node extends Canvas
 	            
             if(nodeTextArea && nodeTextArea.visible)
             {
+            	Utils.bringToFront(nodeTextArea);
+            	
             	nodeTextArea.editable = true;
 	            nodeTextArea.selectable = true;
     	     	nodeTextArea.setSelection(0, nodeTextArea.text.length);
@@ -973,14 +1105,13 @@ public class Node extends Canvas
 				systemManager.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true);
 				nodeTextArea.addEventListener(Event.CHANGE, textAreaChange);
 				nodeTextArea.addEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);
-				nodeTextArea.addEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
-				nodeTextArea.addEventListener(TextEvent.TEXT_INPUT, textInputHandler);
             }
             
             if(nodeCB && nodeCB.visible)
             {
-            	nodeCB.open();
+            	Utils.bringToFront(nodeCB);
             	nodeCB.addEventListener(DropdownEvent.CLOSE, dropDownCloseHandler);
+            	callLater(nodeCB.open);
             }
             
 			//scrollToNode();			
@@ -988,6 +1119,8 @@ public class Node extends Canvas
         else
         {
             _mode = M_NORMAL;
+            
+            Utils.bringToFront(nodePanel);
 			
             nodeCB.removeEventListener(DropdownEvent.CLOSE, dropDownCloseHandler);
 			nodeCB.close();
@@ -995,8 +1128,6 @@ public class Node extends Canvas
 			systemManager.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownOutsideHandler, true);
 			nodeTextArea.removeEventListener(Event.CHANGE, textAreaChange); 
             nodeTextArea.removeEventListener(FocusEvent.FOCUS_OUT, textAreaFocusOut);
-            nodeTextArea.removeEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
-            nodeTextArea.removeEventListener(TextEvent.TEXT_INPUT, textInputHandler);
             
             nodeTextArea.selectable = false;
             nodeTextArea.editable = false;
@@ -1006,12 +1137,145 @@ public class Node extends Canvas
 		_needRefreshStyles = true;			
 		invalidateProperties();
     }
+    
+    private function destroyTimers(destroyShowTimer:Boolean=true, destroyHideTimer:Boolean=true):void
+    {
+    	if(showTimer && destroyShowTimer)
+    	{
+    		showTimer.stop();
+    		showTimer.removeEventListener(TimerEvent.TIMER, showTimerHandler);
+    		showTimer = null;
+    	}
+    	if(hideTimer && destroyHideTimer)
+    	{
+    		hideTimer.stop();
+    		hideTimer.removeEventListener(TimerEvent.TIMER, hideTimerHandler);
+    		hideTimer = null;
+    	}
+    }
+    
+    private function showImageTip():void
+    {
+		if(category != NodeCategory.RESOURCE)
+			return;
+		
+		if(!nodeCB.visible || !nodeCB.selectedItem.hasOwnProperty('@thumb'))
+			return;
+		
+    	destroyTimers(false, true);
+    	
+    	if(showTimer)
+    		return;
+    	    	
+    	showTimer = new Timer(1000);
+    	showTimer.addEventListener(TimerEvent.TIMER, showTimerHandler);
+        showTimer.start();
+    }
+    
+    private function hideImageTip():void
+    {
+    	if(hideTimer)
+    		return;
+    		    	
+    	hideTimer = new Timer(100);
+    	hideTimer.addEventListener(TimerEvent.TIMER, hideTimerHandler);
+        hideTimer.start();
+    }
 		    	    
 	//--------------------------------------------------------------------------
     //
     //  Event handlers
     //
     //--------------------------------------------------------------------------
+
+	private function showTimerHandler(event:TimerEvent):void
+	{
+		destroyTimers(true, false);
+		
+		var curTpl:TemplateStruct = ContextManager.instance.templates[0];
+		if(	CashManager.isObjectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) ||
+			tipImage && tipImage.toolTip!=nodeCB.selectedItem.@ID)
+		{
+			tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);
+			tipImage.source = null;
+			tipImage = null;
+		}
+		
+		if(!tipImage)
+		{
+			tipImage = new Image();
+			tipImage.toolTip = nodeCB.selectedItem.@ID;
+			tipImage.visible = false;
+			tipImage.scaleContent = true;
+			
+			var index:XML = CashManager.instance.getIndex(curTpl.ID);
+			var thumbFile:File = CashManager.instance.cashDir.resolvePath(index.@folder).resolvePath(nodeCB.selectedItem.@thumb);
+			
+			tipImage.load( thumbFile.nativePath );	
+			tipImage.addEventListener(Event.COMPLETE, tipImageComplete);
+			return;	
+		}
+		
+		tipImageComplete(null);
+	}
+	
+	private function hideTimerHandler(event:TimerEvent):void
+	{
+		destroyTimers();
+		
+		if(tipImage)
+		{
+			if(tipImage.parent)
+				PopUpManager.removePopUp(tipImage);
+			
+			if(!tipImage.visible)
+			{
+				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+				tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);			
+				tipImage.source = null;
+				tipImage = null;
+			}
+		}		
+	}
+	
+	private function tipImageComplete(event:Event):void
+	{
+		tipImage.addEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);	
+        addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+            
+		tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);			
+		tipImage.visible = true;
+		
+		var point:Point = localToGlobal(new Point(mouseX, mouseY));
+		
+		tipImage.x = point.x+15;
+		tipImage.y = point.y+20;
+
+		if(!tipImage.parent)
+			PopUpManager.addPopUp(tipImage, this);
+	}
+	
+	private function tipImageCreationComplete(event:FlexEvent):void
+	{
+		tipImage.removeEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);
+		
+		tipImage.graphics.clear();
+		tipImage.graphics.beginFill(0xffffff, 1.0);
+		tipImage.graphics.lineStyle(1, 0x000000, 0.8);
+		tipImage.graphics.drawRect(-1, -1, tipImage.width+2, tipImage.height+2);
+		
+		tipImage.filters = [];
+		var filter:DropShadowFilter = new DropShadowFilter(3, 90, 0x000000, 0.6, 7, 7);
+   		tipImage.filters = [filter];
+	}
+	
+	private function mouseMoveHandler(event:MouseEvent):void
+	{
+		var point:Point = localToGlobal(new Point(mouseX, mouseY));
+		
+		tipImage.x = point.x+15;
+		tipImage.y = point.y+20;		
+	}
 
 	private function graphChangedHandler(event:Event):void
 	{
@@ -1164,14 +1428,19 @@ public class Node extends Canvas
 				for each(var arrow:Connector in outArrows)
 				{
 					var visibleRect:Rectangle = arrow.getVisibleRect();
-					var point:Point = new Point(visibleRect.x + visibleRect.width/2, visibleRect.y + visibleRect.height/2);
+					var point:Point;
+
+					if(visibleRect)
+						point = new Point(visibleRect.x + visibleRect.width/2, visibleRect.y + visibleRect.height/2);
 					
-					if(arrow.label)
+					if(arrow.label && point)
 						arrToolTip.push(ToolTipManager.createToolTip(arrow.label, point.x, point.y));
 					arrow.highlighted = true;
 				}			
 			}
 		}
+		
+		showImageTip();
 	}
 	
 	private function mouseOutHandler(event:MouseEvent):void
@@ -1193,6 +1462,8 @@ public class Node extends Canvas
 			ToolTipManager.destroyToolTip(toolTip);
 		
 		arrToolTip = [];
+		
+		hideImageTip();
 	}
 	
     private function mouseDownHandler(event:MouseEvent):void
@@ -1293,12 +1564,6 @@ public class Node extends Canvas
 	    }
 	}
 	
-	private function downArrowButton_buttonDownHandler(event:FlexEvent):void
-	{
-		//if(_mode == M_NORMAL)
-		//	event.stopImmediatePropagation();
-	}
-	
 	private function dropDownCloseHandler(event:DropdownEvent):void
 	{
 		setEditMode(false);
@@ -1307,14 +1572,6 @@ public class Node extends Canvas
 			text = ComboBox(event.target).selectedItem.@ID;
 	}
 	
-	private function textInputHandler(event:TextEvent):void
-	{
-        if (event.text == "\n") {
-        	//var x:* = event.isDefaultPrevented();
-            //event.preventDefault();
-        }
-	}
-		
 	private function textAreaKeyDown(event:KeyboardEvent):void
     {
 		if(canvas && canvas.addingTransition)
@@ -1330,31 +1587,21 @@ public class Node extends Canvas
 	    	if(_mode==M_EDITING)
 	    	{
 		    	event.stopPropagation();		    	
-		    	event.preventDefault();
+	    		event.preventDefault();
 		    	
 		    	if(event.controlKey || event.commandKey)
 		    	{
-		    		event.controlKey = false;
-		    		
-		    		var evnt:TextEvent = new TextEvent(
-		    				TextEvent.TEXT_INPUT,
-		    				false,
-		    				true,
-		    				"\n");
-		    		
-		    		var newEvent:TextEvent =
-            			new TextEvent(TextEvent.TEXT_INPUT, false, true);
-        			newEvent.text = "\n";
-        				
-        			nodeTextArea.field.dispatchEvent(event);
-        						    				    		
-		    		//nodeTextArea.dispatchEvent(evnt);	
+					var caretPos:int = nodeTextArea.field.caretIndex; 
+	    	
+	    			var txt:String = nodeTextArea.text.substr(0, caretPos) +  
+	    				'\n' + nodeTextArea.text.substr(caretPos);	    		
+	    			nodeTextArea.text = txt;
+	    			nodeTextArea.setSelection(caretPos+1, caretPos+1);
 		    	}
 		    	else
 		    	{
-		    		//event.preventDefault();
-			    	//setEditMode(false);
-	    			//text = nodeTextArea.text;
+			    	setEditMode(false);
+	    			text = nodeTextArea.text;
 		    	}
 		    }
 	    }
@@ -1376,17 +1623,57 @@ public class Node extends Canvas
 		}		    	
     }
     
+    private function comboBoxKeyDown(event:KeyboardEvent):void
+    {
+    	hideImageTip();
+    	
+		if(canvas && canvas.addingTransition)
+			return;
+		
+		if(event.keyCode == Keyboard.DELETE)
+     	{
+     		if(_mode == M_EDITING)
+     		{
+     			event.stopPropagation();
+     		}
+     		else
+     		{
+     			event.preventDefault();
+     			event.stopImmediatePropagation();
+				
+				var newEvent:KeyboardEvent = new KeyboardEvent(
+					KeyboardEvent.KEY_DOWN,
+					event.bubbles,
+					event.cancelable,
+					event.charCode,
+					event.keyCode,
+					event.keyLocation,
+					event.ctrlKey,
+					event.altKey,
+					event.shiftKey,
+					event.controlKey,
+					event.commandKey);
+     			
+     			dispatchEvent(newEvent);
+     		}
+	    }		    	
+    }
+    
     private function alertRemoveHandler(event:CloseEvent):void 
     {
     	if(parent && event.detail==Alert.YES)
     	{
 			dispose();
         }
+        
+        setFocus();
 	}
     
     private function doubleClickHandler(event:MouseEvent):void
     {
     	event.stopPropagation();
+    	
+    	hideImageTip();
     	
 		if(canvas && canvas.addingTransition)
 			return;			
@@ -1409,8 +1696,6 @@ public class Node extends Canvas
 	
     override protected function focusOutHandler(event:FocusEvent):void
     {
-		setStyle( "backgroundColor", 0xE2E2E2 );
-    	
     	_focused = false;
 
         super.focusOutHandler(event);
@@ -1420,9 +1705,8 @@ public class Node extends Canvas
 
     override protected function focusInHandler(event:FocusEvent):void
     {
-		setStyle( "backgroundColor", getStyle("themeColor") );
-    	
     	_focused = true;
+    	selected = true;
     	
         super.focusInHandler(event);
 
@@ -1457,13 +1741,24 @@ public class Node extends Canvas
 	{
 		if(initialized)
 		{
-			var node:Node = event.target.parent;
+			_needRefreshStyles = true;
 			
-			node._needRefreshStyles = true;
-			
-			node.invalidateProperties();
-			node.invalidateSize();
-			node.invalidateDisplayList();		
+			invalidateProperties();
+			invalidateSize();
+			invalidateDisplayList();		
+		}
+    }
+    
+    private function validatorHandler(event:ValidationResultEvent):void
+    {
+    	if(event.type==ValidationResultEvent.VALID)
+    	{    
+        	_isValidText = true;
+     	}
+		else
+		{
+        	nodeTextArea.setStyle("borderColor", getStyle("errorColor"));
+			_isValidText = false;
 		}
     }
     

@@ -958,9 +958,19 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			graphics.lineTo( _connectorPoly[3].x, _connectorPoly[3].y );
 			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );									
 		}
+		else
+		{
+			graphics.lineStyle(getStyle("strokeWidth")+2, 0xffffff, 0.8, false, "normal", CapsStyle.NONE, JointStyle.MITER);	
+						
+			graphics.moveTo( _connectorPoly[0].x, _connectorPoly[0].y );
+			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );					
+			graphics.lineTo( _connectorPoly[2].x, _connectorPoly[2].y );
+			graphics.lineTo( _connectorPoly[3].x, _connectorPoly[3].y );
+			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );	
+		}
 		
 		// Draw arrow		
-						
+
 		graphics.lineStyle(getStyle("strokeWidth"), color, getStyle("alpha"), false, "normal", CapsStyle.NONE, JointStyle.MITER);	
 					
 		graphics.moveTo( _connectorPoly[0].x, _connectorPoly[0].y );
@@ -1045,6 +1055,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     	
 		Application.application.setStyle("modalTransparencyBlur", modalTransparencyBlur);
 		Application.application.setStyle("modalTransparency", modalTransparency);	  
+		
 		setFocus();  	
     }	
         

@@ -7,6 +7,7 @@ import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
+import PowerPack.com.managers.SelectionManager;
 
 import flash.display.DisplayObject;
 import flash.display.NativeMenuItem;
@@ -21,11 +22,13 @@ import mx.core.UIComponent;
 import mx.events.CloseEvent;
 import mx.events.DragEvent;
 import mx.managers.DragManager;
+import mx.managers.IFocusManagerComponent;
 import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
 import mx.utils.ArrayUtil;
 
 public class GraphCanvas extends Canvas
+	implements IFocusManagerComponent
 {
 	//--------------------------------------------------------------------------
     //
@@ -99,6 +102,8 @@ public class GraphCanvas extends Canvas
      	}	
     }	    
     
+    public var selectionManager:SelectionManager;
+    
 	public var addingTransition:Boolean;
 	public var currentArrow:Connector;		
 	//public var initialNode:Node;
@@ -168,6 +173,11 @@ public class GraphCanvas extends Canvas
     override protected function createChildren():void
     {
         super.createChildren();
+        
+        if(!selectionManager)
+        {
+        	selectionManager = new SelectionManager(this);
+        }
 
         if (ContextManager.FLASH_CONTEXT_MENU && !contextMenu)
         {
@@ -190,7 +200,7 @@ public class GraphCanvas extends Canvas
 	
 	//--------------------------------------------------------------------------
 	//
-	//  Methods
+	//  Class methods
 	//
 	//--------------------------------------------------------------------------	
 
