@@ -452,11 +452,22 @@ public class DataManager implements IEventDispatcher {
 		if(oldXMLDescription.@Name != newXMLDescription.@Name)
 			nameChanged = true;
 		
+		var dme:DataManagerEvent;
+		
 		if(newOnlyAttributes || nameChanged)
 		{
-			var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN)
+			dme = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN);
 			dme.result = newOnlyAttributes;
 			dispatchEvent(dme);
+		}
+		else
+		{
+			dme = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN);
+			dispatchEvent(dme);
+			
+			var dmEvent:DataManagerEvent = new DataManagerEvent(DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE);
+			dmEvent.objectId = objectId;
+			dispatchEvent( dmEvent );
 		}
 		
 		if(newOnlyAttributes)

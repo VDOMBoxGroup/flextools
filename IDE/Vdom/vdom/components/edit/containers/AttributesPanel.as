@@ -340,7 +340,7 @@ public class AttributesPanel extends ClosablePanel {
 		if(_isValid)
 			acceptButton.enabled = true;
 		else
-			acceptButton.enabled = true; //<---- Error!
+			acceptButton.enabled = true; //FIXME<---- Error!
 		
 		super.commitProperties();
 	}
@@ -443,9 +443,10 @@ public class AttributesPanel extends ClosablePanel {
 			
 			color = getColorByGroup(attributeXMLDescription.Colorgroup);
 			
-			switch(codeInterface["type"]) {
+			switch(codeInterface["type"])
+			{
 				case "number":
-				
+				{
 					valueContainer = new NumberField();
 					valueType = "value";
 					
@@ -461,9 +462,11 @@ public class AttributesPanel extends ClosablePanel {
 					}
 					
 					valueContainer.value = currentAttribute;
-				break;
+					break;
+				}
 					
 				case "textfield":
+				{
 				
 					valueContainer = new TextInput();
 					valueType = "text";
@@ -471,34 +474,39 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.maxChars = codeInterface["value"];
 					
 					valueContainer.text = currentAttribute;
-				break;
+					break;
+				}
 				
 				case "multiline":
-				
+				{
 					valueContainer = new MultiLine();
 					valueType = "value";
 					
 					valueContainer.value = currentAttribute;
-				break;
+					break;
+				}
 				
 				case "file":
-				
+				{
 					valueContainer = new ResourceBrowserButton();
 					valueType = "value";
 					
 					valueContainer.value = currentAttribute;
-				break;
+					break;
+				}
 				
 				case "color":
+				{
 				
 					valueContainer = new ColorPicker();	
 					valueType = "color";
 					
 					valueContainer.color = currentAttribute;
-				break;
+					break;
+				}
 				
 				case "dropdown":
-					
+				{
 					valueContainer = new ComboBox();
 					valueType = "value";
 					
@@ -521,10 +529,11 @@ public class AttributesPanel extends ClosablePanel {
 					
 					valueContainer.dataProvider = comboBoxData;
 					valueContainer.selectedItem = selectedItem;
-				break;
+					break;
+				}
 				
 				case "pagelink":
-					
+				{
 					valueContainer = new ComboBox();
 					valueType = "value";
 					
@@ -546,10 +555,11 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.dataProvider = pagelinkData;
 					valueContainer.selectedItem = selectedItem1;
 					
-				break;
+					break;
+				}
 				
 				case "objectlist":
-					
+				{
 					valueContainer = new ComboBox();
 					valueType = "value";
 					
@@ -571,10 +581,11 @@ public class AttributesPanel extends ClosablePanel {
 					
 					valueContainer.dataProvider = pagelinkData1;
 					valueContainer.selectedItem = selectedItem2;
-				break
+					break;
+				}
 				
 				case "externaleditor":
-					var d:* = "";
+				{
 					var resId:String = String(codeInterface["value"]).split(",")[1];
 					
 					valueContainer = new ExternalEditorButton(
@@ -587,13 +598,16 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.height = 21;
 					
 					valueType = "value";
-				break
+					break
+				}
 				
 				default:
+				{
 					valueContainer = new TextInput();
 					valueType = "text";
 					
 					valueContainer.text = currentAttribute;
+				}
 			}
 			
 			valueContainer.percentWidth = 100;
@@ -623,8 +637,8 @@ public class AttributesPanel extends ClosablePanel {
 		}
 	}
 	
-	private function getColorByGroup(groupNumber:uint):String {
-		
+	private function getColorByGroup(groupNumber:uint):String
+	{
 		var colorGroup:String = "";
 		
 		switch(groupNumber) {
@@ -754,12 +768,13 @@ public class AttributesPanel extends ClosablePanel {
 			invalidateProperties();
 	}
 	
-	private function acceptButton_clickHandler(event:MouseEvent):void {
-		
+	private function acceptButton_clickHandler(event:MouseEvent):void
+	{
 		var objectChanged:Boolean = false;
-		if(objectDescription.@Name != fieldsArray["Name"][0][fieldsArray["Name"][1]])
+		
+		if( objectDescription.@Name != fieldsArray[ "Name" ][ 0 ][ fieldsArray[ "Name" ][ 1 ] ] )
 		{
-			objectDescription.@Name = fieldsArray["Name"][0][fieldsArray["Name"][1]];
+			objectDescription.@Name = fieldsArray[ "Name" ][ 0 ][ fieldsArray["Name" ][ 1 ] ];
 			objectChanged = true;
 		}
 	
@@ -771,12 +786,24 @@ public class AttributesPanel extends ClosablePanel {
 			var value:String = null;
 				
 			if(fieldsArray[attrName][0] is ComboBox)
+			{
 				if(fieldsArray[attrName][0].selectedItem)
 					value = fieldsArray[attrName][0].selectedItem["data"];
 				else
 					value = "";
+			}
+			else if (fieldsArray[attrName][0] is ExternalEditorButton)
+			{
+				if( fieldsArray[ attrName ][ 0 ][ fieldsArray[ attrName ][ 1 ] ] == "modified" )
+				{
+					fieldsArray[ attrName ][ 0 ][ fieldsArray[ attrName ][ 1 ] ] = ""; //FIXME Dirty dirty hack!!!!!!
+					objectChanged = true;
+				}
+			}
 			else
+			{
 				value = fieldsArray[attrName][0][fieldsArray[attrName][1]];
+			}
 				
 			if(value != null && currentElement != value) {
 				

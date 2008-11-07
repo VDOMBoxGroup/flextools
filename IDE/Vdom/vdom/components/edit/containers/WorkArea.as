@@ -582,8 +582,8 @@ public class WorkArea extends VBox
 		
 		if(bool != -1) {
 			
-			var objectLeft:Number = currentContainer.mouseX - 25;
-			var objectTop:Number = currentContainer.mouseY - 25;
+			var objectLeft:Number = currentContainer.mouseX - 25 + currentContainer.horizontalScrollPosition;
+			var objectTop:Number = currentContainer.mouseY - 25 + currentContainer.verticalScrollPosition;
 		
 			objectLeft = (objectLeft < 0) ? 0 : objectLeft;
 			objectTop = (objectTop < 0) ? 0 : objectTop;

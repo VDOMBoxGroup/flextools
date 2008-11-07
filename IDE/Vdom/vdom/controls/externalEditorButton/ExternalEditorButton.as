@@ -78,7 +78,7 @@ package vdom.controls.externalEditorButton
 			
 			if (!__valueLabel) {
 				__valueLabel = new Label();
-				addChild(__valueLabel); 
+				addChild(__valueLabel);
 				__valueLabel.percentWidth = 100;
 				__valueLabel.truncateToFit = true;
 			}
