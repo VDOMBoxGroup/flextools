@@ -130,12 +130,13 @@ package vdom.components.treeEditor.colorMenu02
 		{
 			var canv:Canvas = new Canvas();
 				canv.percentWidth = 100;
+				canv.height = 20;
 				canv.setStyle("backgroundColor", "#7c7c7c");
 			addChild(canv);
 			
 			var eye:Image = new Image();
 			eye.x = 3;
-			eye.y = 3;
+			eye.y = 0;
 //			eye.width = 20;
 //			eye.height = 10;
 			eye.source = openEye;
@@ -149,7 +150,7 @@ package vdom.components.treeEditor.colorMenu02
             	desabledEye.graphics.endFill();
 	            	
 	            desabledEye.x = 12;
-	            desabledEye.y = 11;
+	            desabledEye.y = 8;
 	            desabledEye.visible = false;
 	            desabledEye.addEventListener(MouseEvent.CLICK, eyeClickHandler);	
 	        canv.addChild(desabledEye);
@@ -157,15 +158,15 @@ package vdom.components.treeEditor.colorMenu02
 	        var vLine:VRule = new VRule();
 				vLine.height = 14;
 				vLine.x = 23;
-				vLine.y = 4;
+				vLine.y = 0;
 			canv.addChild(vLine);
 			
 			var label:Label = new Label;
 			label.text =  "Hide/Show";
 			label.x = 30;
-			label.y = 3;
+			label.y = 0;
 //			label.width = 120;
-//			label.setStyle('fontWeight', "bold"); 
+			label.setStyle('fontSize', "9"); 
 			label.setStyle("color", "#FFFFFF");
 //			label.setStyle('textAlign', 'center');
 			canv.addChild(label);
