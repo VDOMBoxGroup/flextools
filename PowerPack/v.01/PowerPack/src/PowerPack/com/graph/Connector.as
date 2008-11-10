@@ -25,7 +25,6 @@ import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 
 import mx.collections.ListCollectionView;
-import mx.containers.Canvas;
 import mx.controls.Alert;
 import mx.controls.ComboBox;
 import mx.core.Application;
@@ -34,6 +33,7 @@ import mx.core.UIComponent;
 import mx.events.CloseEvent;
 import mx.events.DropdownEvent;
 import mx.events.FlexEvent;
+import mx.events.MoveEvent;
 import mx.managers.IFocusManagerComponent;
 import mx.managers.PopUpManager;
 import mx.styles.CSSStyleDeclaration;
@@ -206,7 +206,11 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			SuperNativeMenu(contextMenu).dispose();
   		}	
   				
-  		stopDragging();
+        systemManager.removeEventListener(
+            MouseEvent.MOUSE_MOVE, connector_systemManager_mouseMoveHandler, true);
+
+        systemManager.removeEventListener(
+            MouseEvent.MOUSE_DOWN, connector_systemManager_mouseDownHandler);
    		
        	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);            
        	removeEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);           
@@ -216,18 +220,31 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         removeEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
 		
 		var i:int;
-		if(fromObject is Node)
-		{		
-			i = (fromObject as Node).outArrows.getItemIndex(this);
-			if(i>=0)
-				(fromObject as Node).outArrows.removeItemAt(i);
+
+		if(_fromObj)
+		{
+			_fromObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
+			_fromObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated);    	
+			
+			if(fromObject is Node)
+			{		
+				i = (fromObject as Node).outArrows.getItemIndex(this);
+				if(i>=0)
+					(fromObject as Node).outArrows.removeItemAt(i);
+			}
 		}
+						
+		if(_toObj)
+		{
+			_toObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
+			_toObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated);    	
     	
-		if(toObject is Node)
-		{		
-			i = (toObject as Node).inArrows.getItemIndex(this);
-			if(i>=0)
-  				(toObject as Node).inArrows.removeItemAt(i);
+			if(toObject is Node)
+			{		
+				i = (toObject as Node).inArrows.getItemIndex(this);
+				if(i>=0)
+  					(toObject as Node).inArrows.removeItemAt(i);
+			}
 		}
 		  			
         if(parent)
@@ -438,15 +455,19 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     {
     	if(_fromObj != value)
     	{
-			if(_fromObj)
+			if(_fromObj) {
 				_fromObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
+				_fromObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated);    		
+			}
         	
         	_fromObj = value;
         	_fromObjChanged = true;
         	
-        	if(_fromObj)
+        	if(_fromObj) {
         		_fromObj.addEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);
-        
+        		_fromObj.addEventListener(MoveEvent.MOVE , onObjectUpdated);    	
+        	}
+        	
 	        invalidateProperties();
 			invalidateSize();
 			invalidateDisplayList();
@@ -474,15 +495,19 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     {
     	if(_toObj != value)
     	{
-			if(_toObj)
+			if(_toObj) {
 				_toObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
+				_toObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated); 				
+			}
 
         	_toObj = value;
     	    _toObjChanged = true;
         
-			if(_toObj)
-				_toObj.addEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
-
+			if(_toObj) {
+				_toObj.addEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);
+				_toObj.addEventListener(MoveEvent.MOVE , onObjectUpdated);     		
+			}
+			
 	        invalidateProperties();
 			invalidateSize();
 			invalidateDisplayList();
@@ -671,6 +696,20 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	//
 	//--------------------------------------------------------------------------
 	
+	public function toXML():XML
+	{
+		var arrowXML:XML = new XML(<transition/>);
+		arrowXML.@name = name;
+		arrowXML.@highlighted = highlighted;
+		arrowXML.@enabled = enabled;
+		arrowXML.@source = fromObject.name;
+		arrowXML.@destination = toObject.name;
+		if(label)
+			arrowXML.label = label;
+			
+		return arrowXML;
+	}
+		
 	public function clone():Connector
 	{
 		var newConnector:Connector = new Connector();
@@ -1112,10 +1151,9 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	
 	private function onConnectorKeyDown(event:KeyboardEvent):void
     {
-    	event.stopPropagation();
-    	
 		if(event.keyCode == Keyboard.DELETE)
      	{
+	    	event.stopPropagation();
      		remove();
 	    }
 	    else if(event.keyCode == Keyboard.ENTER)

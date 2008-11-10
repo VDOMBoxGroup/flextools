@@ -1,11 +1,13 @@
 package PowerPack.com.managers
 {
-import flash.display.DisplayObject;
+import PowerPack.com.graph.NodeEvent;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 
@@ -19,10 +21,13 @@ public class SelectionManager extends EventDispatcher
 {
 	//--------------------------------------------------------------------------
 	//
-	//  Class variables
+	//  Class variables and constants
 	//
 	//--------------------------------------------------------------------------
 		
+	public static var isLiveDragging:Boolean = true;
+	public static var drawShadows:Boolean = true;
+	
 	//--------------------------------------------------------------------------
 	//
 	//  Constructor
@@ -81,9 +86,10 @@ public class SelectionManager extends EventDispatcher
     
     private var regDeltaElmPts:Dictionary;
     
-    private var _itemsMoved:Boolean;
+    private var _groupMoved:Boolean;
 
-	private var _elms:Array = [];
+	private var _group:Array = [];
+	private var _preGroup:Array = [];
 	private var _container:Container;
 	
 	private var rectShape:UIComponent;
@@ -93,8 +99,12 @@ public class SelectionManager extends EventDispatcher
 	//  Class methods
 	//
 	//--------------------------------------------------------------------------
-
-
+	
+	public function getSelection():Array
+	{
+		return _group;	
+	}
+	
 	public function addElement(elm:Object):void
 	{
 		if(elm.hasOwnProperty("selected"))
@@ -103,6 +113,7 @@ public class SelectionManager extends EventDispatcher
 			elm.addEventListener(MouseEvent.CLICK, onElmClick);
 			elm.addEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
 			elm.addEventListener(FlexEvent.REMOVE, onElmRemove);
+			elm.addEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected);
 			
 			if(elm.selected)
 				select(elm);
@@ -120,7 +131,8 @@ public class SelectionManager extends EventDispatcher
 			elm.removeEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
 			elm.removeEventListener(MouseEvent.CLICK, onElmClick);
 			elm.removeEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
-			elm.removeEventListener(FlexEvent.REMOVE, onElmRemove); 		
+			elm.removeEventListener(FlexEvent.REMOVE, onElmRemove);
+			elm.removeEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected); 		
 		}		
 	}
 	
@@ -129,62 +141,97 @@ public class SelectionManager extends EventDispatcher
 		for each(var child:Object in _container.getChildren())
 			removeElement(child);
 	}
+	
+	public function select(elm:Object):void
+	{
+		if(elm.hasOwnProperty('selected'))
+		{
+			elm.selected = true;
+			
+			var ac:ArrayCollection = new ArrayCollection(_group);
+			var index:int = ac.getItemIndex(elm);
+		
+			if(index<0)
+				ac.addItem(elm);			 
+		}			 
+	}
+			
+	public function deselect(elm:Object):void
+	{
+		if(elm.hasOwnProperty('selected'))
+		{
+			elm.selected = false;	
 
+			var ac:ArrayCollection = new ArrayCollection(_group);
+			var index:int = ac.getItemIndex(elm);
+		
+			if(index>=0)
+				ac.removeItemAt(index);
+		}
+	}
+	
+	private function preSelect(elm:Object):void
+	{
+		if(elm.hasOwnProperty('selected'))
+		{
+			var ac:ArrayCollection = new ArrayCollection(_preGroup);
+			var index:int = ac.getItemIndex(elm);
+		
+			if(index<0)
+				ac.addItem(elm);			 
+		}
+	}
+
+	private function preDeselect(elm:Object):void
+	{
+		if(elm.hasOwnProperty('selected'))
+		{
+			var ac:ArrayCollection = new ArrayCollection(_preGroup);
+			var index:int = ac.getItemIndex(elm);
+		
+			if(index>=0)
+				ac.removeItemAt(index);
+		}
+	}
+	
+	private function addPreselected():void
+	{
+		for each(var elm:Object in _preGroup)
+		{
+			select(elm);
+		}
+	}
+	
+	private function subtractPreselected():void
+	{
+		for each(var elm:Object in _preGroup)
+		{
+			deselect(elm);
+		}
+	}
+
+	public function selectAll():void
+	{
+		for each(var child:Object in _container.getChildren())
+			select(child);
+	}
+	
 	public function deselectAll():void
 	{
 		for each(var child:Object in _container.getChildren())
 			deselect(child);
 	}
 	
-	public function selectAll():void
-	{
-		for each(var child:Object in _container.getChildren())
-			select(child);
-	}
-		
-	public function deselect(elm:Object):void
-	{
-		var ac:ArrayCollection = new ArrayCollection(_elms);
-		
-		if(elm.hasOwnProperty('selected'))
-		{
-			var index:int = ac.getItemIndex(elm);
-			
-			elm.selected = false;	
-		
-			if(index>=0)
-				ac.removeItemAt(index);			 
-		}
-	}
-	
-	public function select(elm:Object):void
-	{
-		var ac:ArrayCollection = new ArrayCollection(_elms);
-		
-		if(elm.hasOwnProperty('selected'))
-		{
-			var index:int = ac.getItemIndex(elm);
-	
-			elm.selected = true;
-		
-			if(index<0)
-				ac.addItem(elm);
-		}			 
-	}
-	
 	public function isSelected(elm:Object):Boolean
 	{
-		var ac:ArrayCollection = new ArrayCollection(_elms);
-		var index:int = ac.getItemIndex(elm);
+		if(elm.hasOwnProperty('selected') && elm.selected)
+			return true;
 		
-		if(index<0)
-			return false;
-		
-		return true;		
+		return false;		
 	}
 
     /**
-     *  Called when the user starts dragging a node
+     *  Called when the user starts dragging
      */
     protected function startDragging(event:MouseEvent):void
     {
@@ -200,27 +247,35 @@ public class SelectionManager extends EventDispatcher
         _container.systemManager.stage.addEventListener(
             Event.MOUSE_LEAVE, stage_mouseLeaveHandler);
          
-        if(event.currentTarget==_container)
+        if(event.currentTarget==_container) //begin draw selection rect
         {   
         	rectShape = new UIComponent();
         	_container.addChild(rectShape);
         }
-        else
+        else //begin drag group
         {
         	regDeltaElmPts = new Dictionary(true);
 	        for each (var child:Object in _container.getChildren())
 	        {
 	        	if(child.hasOwnProperty('selected') && isSelected(child))
 	        	{
-        			regDeltaElmPts[child] = new Point(child.x-regX, child.y-regY);
-		    		child.setStyle("dropShadowEnabled", true);
+	        		var rect:Rectangle = new Rectangle(child.x, child.y, child.width, child.height);
+        			regDeltaElmPts[child] = {deltaPoint:new Point(child.x-regX, child.y-regY), boundsRect:rect};
+		    		
+		    		if(isLiveDragging && drawShadows)
+		    		{
+		    			if(child.hasOwnProperty('dropShadow'))
+		    				child.dropShadow = true;
+		    			else
+		    				child.setStyle("dropShadowEnabled", true);
+		    		}
 	        	}
 	        }    		
         }
     }
 
     /**
-     *  Called when the user stops dragging a node
+     *  Called when the user stops dragging
      */
     protected function stopDragging():void
     {
@@ -237,7 +292,14 @@ public class SelectionManager extends EventDispatcher
 	        {
 	        	if(child.hasOwnProperty('selected') && isSelected(child))
 	        	{
-		    		child.setStyle("dropShadowEnabled", false);
+		    		if(isLiveDragging && drawShadows)
+		    		{
+		    			if(child.hasOwnProperty('dropShadow'))
+		    				child.dropShadow = false;
+		    			else
+		    				child.setStyle("dropShadowEnabled", false);
+		    		}
+					
 					delete regDeltaElmPts[child];		    		
 	        	}
 	        }    		
@@ -258,23 +320,34 @@ public class SelectionManager extends EventDispatcher
         regDeltaElmPts = null;	
     }
     
+    private function drawSelectionRect(obj:UIComponent, rect:Rectangle):void
+    {
+        obj.graphics.lineStyle(1, 0x000044, 0.8);
+        obj.graphics.beginFill(0xffffff, 0.2);
+        obj.graphics.drawRect(0,0,rect.width,rect.height);
+        obj.graphics.endFill();
+    }
+    
 	//--------------------------------------------------------------------------
     //
     //  Event handlers
     //
     //--------------------------------------------------------------------------
    	
-   	private function onElmAdded(event:ChildExistenceChangedEvent):void
-   	{
-		var elm:Object = event.relatedObject;
-		
-		addElement(elm);
-   	}
-   	
    	private function onContainerRemove(event:Event):void
    	{
    		deselectAll();   		
 		removeAll();
+   	}
+   	
+   	private function onElmAdded(event:ChildExistenceChangedEvent):void
+   	{
+		var elm:Object = event.relatedObject;
+		
+		if(elm.hasOwnProperty('selected'))
+		{
+			addElement(elm);
+		}
    	}
    		
    	private function onElmRemove(event:FlexEvent):void
@@ -284,6 +357,24 @@ public class SelectionManager extends EventDispatcher
    		removeElement(elm);   		
    	}	
    	
+   	private function onElmSelected(event:Event):void
+   	{
+		var elm:Object = event.currentTarget;
+		var ac:ArrayCollection = new ArrayCollection(_group);
+		var index:int = ac.getItemIndex(elm);
+		
+		if(isSelected(elm))
+		{
+			if(index<0)
+				ac.addItem(elm);			 
+		}
+		else
+		{
+			if(index>=0)
+				ac.removeItemAt(index);
+		}
+   	}
+   	   	
     private function systemManager_mouseMoveHandler(event:MouseEvent):void
     {
     	event.stopImmediatePropagation();    	
@@ -303,25 +394,41 @@ public class SelectionManager extends EventDispatcher
 			
 	        rectShape.x = Math.min(p.x, regX);
 	        rectShape.y = Math.min(p.y, regY);
-	        
 	        rectShape.width = Math.max(p.x, regX) - rectShape.x;
 	        rectShape.height = Math.max(p.y, regY) - rectShape.y;        
-	        
-	        rectShape.graphics.lineStyle(1, 0x000044, 0.8);
-	        rectShape.graphics.beginFill(0xffffff, 0.1);
-	        rectShape.graphics.drawRect(0,0,rectShape.width,rectShape.height);
-	        rectShape.graphics.endFill();
+
+			var rect:Rectangle = new Rectangle(0,0,rectShape.width,rectShape.height);
+
+			drawSelectionRect(rectShape, rect);
 	        
 	        for each (var child:Object in _container.getChildren())
 	        {
 	        	if(child.hasOwnProperty('selected'))
 	        	{
-					if(rectShape.hitTestObject(child as DisplayObject))
-						select(child);
-					else
-						deselect(child);
+	        		var rect1:Rectangle = new Rectangle(rectShape.x, rectShape.y, rectShape.width, rectShape.height);
+	        		var rect2:Rectangle = new Rectangle(child.x, child.y, child.width, child.height);
+	        		
+	        		if(!event.shiftKey && !event.commandKey && !event.controlKey)
+	        		{
+						if(rect1.intersects(rect2))
+							select(child);
+						else
+							deselect(child);
+	        		}
+	        		else
+	        		{
+						if(rect1.intersects(rect2))
+							preSelect(child);
+						else
+							preDeselect(child);
+	        		}
 	        	}
 	        }
+	        
+    		if(event.shiftKey && !event.commandKey && !event.controlKey)
+       			addPreselected();
+    		else if(!event.shiftKey && event.commandKey || event.controlKey)
+    			subtractPreselected();
 	    }
 	    else
 	    {
@@ -331,8 +438,8 @@ public class SelectionManager extends EventDispatcher
 	        {
 	        	if(child.hasOwnProperty('selected') && isSelected(child))
 	        	{
-	        		var newX:Number = newP.x+regDeltaElmPts[child].x;
-	        		var newY:Number = newP.y+regDeltaElmPts[child].y;
+	        		var newX:Number = newP.x+regDeltaElmPts[child].deltaPoint.x;
+	        		var newY:Number = newP.y+regDeltaElmPts[child].deltaPoint.y;
 	        		 
 					if(newX<0)
 						newP.x -= newX;
@@ -346,12 +453,12 @@ public class SelectionManager extends EventDispatcher
 	        {
 	        	if(child.hasOwnProperty('selected') && isSelected(child))
 	        	{
-					child.move(	newP.x+regDeltaElmPts[child].x, 
-    							newP.y+regDeltaElmPts[child].y );
-					
+					child.move(	newP.x+regDeltaElmPts[child].deltaPoint.x, 
+    							newP.y+regDeltaElmPts[child].deltaPoint.y );
+    				
     				child.invalidateDisplayList();
     				
-    				_itemsMoved = true;
+    				_groupMoved = true;
 	        	}
 	        }
 	    }
@@ -370,13 +477,17 @@ public class SelectionManager extends EventDispatcher
         if (!isNaN(regX))
             stopDragging();
     } 
-       	
+   	       	
    	private function onContainerMouseDown(event:MouseEvent):void
    	{
+   		if((!event.target.hasOwnProperty('selected') || !event.target.selected) && event.target!=_container)
+			deselectAll();
+   		
    		if(event.target!=_container)
    			return;
-   			
-   		deselectAll();
+   		
+   		if(!event.shiftKey && !event.controlKey && !event.commandKey)	
+   			deselectAll();
    		
    		if(isNaN(regX))
         	startDragging(event);
@@ -386,9 +497,9 @@ public class SelectionManager extends EventDispatcher
    	{
    		event.stopPropagation();
 		
-		if (_itemsMoved)
+		if (_groupMoved)
 		{
-			_itemsMoved = false;
+			_groupMoved = false;
 			return;
 	   	}
 		 
@@ -397,27 +508,28 @@ public class SelectionManager extends EventDispatcher
    		if(event.controlKey || event.commandKey)
    		{
    			if(isSelected(elm))
-   			{
    				deselect(elm);	
-   			}	
    			else
-   			{
    				select(elm);
-   			}
    		}
    		else
    		{
    			deselectAll();
    			
+   			if(_container.focusManager.getFocus()!=elm)
+				elm.setFocus();
+				
    			select(elm);
    		}
    	}
 
    	private function onElmMouseDown(event:MouseEvent):void
    	{
-   		_itemsMoved = false;
+   		_groupMoved = false;
    		
-   		if(_elms.length>1)
+   		if(event.controlKey || event.commandKey)
+   			event.stopImmediatePropagation();
+   		else if(_group.length>1 && event.currentTarget.selected)
    		{
    			event.stopImmediatePropagation();
    			startDragging(event);
@@ -426,19 +538,34 @@ public class SelectionManager extends EventDispatcher
    	
    	private function onContainerKeyDown(event:KeyboardEvent):void
    	{
+   		if(event.target != _container)
+   			return;
+   			
    		if(event.keyCode == Keyboard.A)
    		{
    			if(event.controlKey || event.commandKey)
    			{
    				event.stopImmediatePropagation();
+   				
+   				if(_container.focusManager.getFocus()!=_container)
+   					_container.setFocus();
+   				
    				selectAll();
    			}
+   		}
+   		else if(event.keyCode == Keyboard.TAB)
+   		{
+   			deselectAll();
    		}
    	}
    	
    	private function onElmKeyDown(event:KeyboardEvent):void
    	{
-   		if(_elms.length>1)
+   		if(event.keyCode == Keyboard.TAB)
+   		{
+   			deselectAll();
+   		}
+   		else if(_group.length>1)
    		{
    			event.preventDefault();
 	   		event.stopImmediatePropagation();

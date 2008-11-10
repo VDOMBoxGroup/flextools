@@ -22,7 +22,6 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.events.TimerEvent;
 import flash.filesystem.File;
-import flash.filters.DropShadowFilter;
 import flash.filters.GlowFilter;
 import flash.geom.Matrix;
 import flash.geom.Point;
@@ -39,20 +38,24 @@ import mx.controls.Alert;
 import mx.controls.ComboBox;
 import mx.controls.Image;
 import mx.controls.ToolTip;
-import mx.core.Application;
 import mx.core.Container;
 import mx.core.EdgeMetrics;
 import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
+import mx.effects.Fade;
+import mx.effects.Move;
 import mx.events.CloseEvent;
 import mx.events.DropdownEvent;
 import mx.events.FlexEvent;
+import mx.events.ListEvent;
 import mx.events.ValidationResultEvent;
+import mx.graphics.RectangularDropShadow;
 import mx.managers.IFocusManagerComponent;
 import mx.managers.PopUpManager;
 import mx.managers.ToolTipManager;
 import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
+import mx.utils.NameUtil;
 
 [Event(name="disposed", type="flash.events.Event")]	
 
@@ -79,8 +82,6 @@ public class Node extends Canvas
     */
     public static const PADDING:Number = 0;
     
-   	public static var copyNode:Node;
-   	
    	public static var nodes:Dictionary = new Dictionary(); 
    	public static var deleteConfirmation:Boolean = true;
 
@@ -99,7 +100,9 @@ public class Node extends Canvas
     private static var defaultItemCaptions:Object = {
     	node_add_trans:"Add transition", 
     	node_delete:"Delete state", 
-    	node_copy:"Copy state",
+    	
+    	node_cut:"Cut",
+    	node_copy:"Copy",
     	
     	node_initial:"Initial",
     	node_terminal:"Terminal",
@@ -201,6 +204,8 @@ public class Node extends Canvas
 	{			
 		destroyTimers();
 		
+		destroyImageTip();
+		
 		if(contextMenu)
 		{	
         	contextMenu.removeEventListener(Event.SELECT, contextMenuSelectHandler);	
@@ -217,6 +222,7 @@ public class Node extends Canvas
   		{
   			nodeCB.removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
           	nodeCB.removeEventListener(KeyboardEvent.KEY_DOWN, comboBoxKeyDown);
+          	nodeCB.removeEventListener(ListEvent.CHANGE , comboBoxChange);
   		}
 
 		if(validator)
@@ -225,7 +231,14 @@ public class Node extends Canvas
 			validator.removeEventListener(ValidationResultEvent.INVALID, validatorHandler);
 		}
   			  				
-  		stopDragging();   			
+  		systemManager.removeEventListener(
+            MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler, true);
+
+        systemManager.removeEventListener(
+            MouseEvent.MOUSE_UP, systemManager_mouseUpHandler, true);
+
+        systemManager.stage.removeEventListener(
+            Event.MOUSE_LEAVE, stage_mouseLeaveHandler);  			
 
 		removeEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 		removeEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
@@ -239,12 +252,6 @@ public class Node extends Canvas
    		removeEventListener("xChanged", graphChangedHandler);
    		removeEventListener("yChanged", graphChangedHandler);
        		
-		if(copyNode == this)
-		{
-			copyNode = null;
-			Application.application.dispatchEvent(new Event("copyNode"));
-		}
-		
 		while(inArrows.length)
 			inArrows[0].dispose();
 			
@@ -289,7 +296,6 @@ public class Node extends Canvas
      */
     private var regY:Number;  
     
-	
     [ArrayElementType("Connector")]
     public var inArrows:ArrayCollection = new ArrayCollection();
     
@@ -328,7 +334,27 @@ public class Node extends Canvas
 	//  Properties
 	//
 	//--------------------------------------------------------------------------
-
+    
+    //----------------------------------
+    //  dropShadow
+    //----------------------------------
+    
+    private var _dropShadow:Boolean;
+    
+    public function set dropShadow(value:Boolean):void
+    {
+    	if(_dropShadow != value)
+    	{
+    		_dropShadow = value;
+    		
+        	invalidateDisplayList();
+     	}
+    }
+    public function get dropShadow():Boolean
+    {
+        return _dropShadow;
+    }        
+	
     //----------------------------------
     //  selected
     //----------------------------------
@@ -599,6 +625,7 @@ public class Node extends Canvas
 	        
             nodeCB.addEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
         	nodeCB.addEventListener(KeyboardEvent.KEY_DOWN, comboBoxKeyDown);
+        	nodeCB.addEventListener(ListEvent.CHANGE , comboBoxChange);
         }
         
         if(!nodePanel)
@@ -615,6 +642,10 @@ public class Node extends Canvas
         	
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['node_add_trans'], 'add_trans'));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['node_delete'], 'delete'));
+
+        	contextMenu.addItem(new SuperNativeMenuItem('separator'));
+
+        	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['node_cut'], 'cut'));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['node_copy'], 'copy'));
 
         	contextMenu.addItem(new SuperNativeMenuItem('separator'));
@@ -711,11 +742,11 @@ public class Node extends Canvas
 
         			var curTplIndex:int = 0;
         			var tpl:TemplateStruct = ContextManager.instance.templates[curTplIndex];
-					var objIndex:XML = CashManager.instance.getIndex(tpl.ID);
+					var objIndex:XML = CashManager.getIndex(tpl.ID);
 					var objList:XMLList = new XMLList();
 					
 					if(objIndex) 
-						objList = objIndex.resource;
+						objList = objIndex.resource.(hasOwnProperty('@category') && @category=='image' || @category=='database');
 					
 					nodeCB.dataProvider = objList;
 					
@@ -913,18 +944,30 @@ public class Node extends Canvas
     override protected function updateDisplayList(unscaledWidth:Number,
 											  unscaledHeight:Number):void
 	{
+		graphics.clear();
+		if(dropShadow)
+		{
+			var rectShadow:RectangularDropShadow = new RectangularDropShadow();
+			rectShadow.angle = 90;
+			rectShadow.trRadius = getStyle("cornerRadius");
+			rectShadow.blRadius = getStyle("cornerRadius");
+			rectShadow.drawShadow(graphics, 0, 0, unscaledWidth, unscaledHeight);
+		}	
+
 		super.updateDisplayList(unscaledWidth, unscaledHeight);
 		
 		var borderThickness:Number = getStyle("borderThickness");
 		var margin:Number = getStyle("margin");
-		
+
 		if(_focused || selected)
 		{
 			setStyle( "backgroundColor", getStyle("themeColor") );
+			setStyle( "backgroundAlpha", 0.8 );
 		}
 		else
 		{
 			setStyle( "backgroundColor", 0xE2E2E2 );
+			setStyle( "backgroundAlpha", 0.8 );
 		}
 			
 		if(nodeTextArea)
@@ -978,6 +1021,33 @@ public class Node extends Canvas
 	//
 	//--------------------------------------------------------------------------		
 	
+	public static function fromXML(xml:XML):Node
+	{
+		var newNode:Node = new Node(xml.@category, xml.@type, xml.text);
+		newNode.name = Utils.getStringOrDefault(xml.@name, NameUtil.createUniqueName(newNode));
+		newNode.enabled = Utils.getBooleanOrDefault(xml.@enabled, true);
+		newNode.breakpoint = Utils.getBooleanOrDefault(xml.@breakpoint); 
+		newNode.x = Number(xml.@x);
+		newNode.y = Number(xml.@y);
+		
+		return newNode;		
+	}
+	
+	public function toXML():XML
+	{
+		var nodeXML:XML = new XML(<state/>);
+		nodeXML.@name = name;
+		nodeXML.@type = type;
+		nodeXML.@category = category;
+		nodeXML.@enabled = enabled;	
+		nodeXML.@breakpoint = breakpoint;	
+		nodeXML.@x = x;
+		nodeXML.@y = y;
+		nodeXML.text = text;	
+		
+		return nodeXML;	
+	}
+
 	public function clone():Node
 	{
 		var newNode:Node = new Node(category, type, text);
@@ -1039,7 +1109,7 @@ public class Node extends Canvas
         regX = this.mouseX;
         regY = this.mouseY;
         
-        setStyle("dropShadowEnabled", true);	        
+       dropShadow = true;	        
         
         systemManager.addEventListener(
             MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler, true);
@@ -1050,7 +1120,7 @@ public class Node extends Canvas
         systemManager.stage.addEventListener(
             Event.MOUSE_LEAVE, stage_mouseLeaveHandler);
             
-        hideImageTip();
+        beginHideImageTip();
     }
 
     /**
@@ -1070,7 +1140,9 @@ public class Node extends Canvas
         regX = NaN;
         regY = NaN;
         
-        setStyle("dropShadowEnabled", false);
+        dropShadow = false;
+        
+        beginShowImageTip();
     }	
     
     public function edit():void
@@ -1154,7 +1226,7 @@ public class Node extends Canvas
     	}
     }
     
-    private function showImageTip():void
+    private function beginShowImageTip():void
     {
 		if(category != NodeCategory.RESOURCE)
 			return;
@@ -1162,17 +1234,20 @@ public class Node extends Canvas
 		if(!nodeCB.visible || !nodeCB.selectedItem.hasOwnProperty('@thumb'))
 			return;
 		
+		if(!hideTimer && tipImage && tipImage.parent)
+			return;
+		
     	destroyTimers(false, true);
     	
     	if(showTimer)
     		return;
     	    	
-    	showTimer = new Timer(1000);
+    	showTimer = new Timer(600);
     	showTimer.addEventListener(TimerEvent.TIMER, showTimerHandler);
         showTimer.start();
     }
     
-    private function hideImageTip():void
+    private function beginHideImageTip():void
     {
     	if(hideTimer)
     		return;
@@ -1180,6 +1255,40 @@ public class Node extends Canvas
     	hideTimer = new Timer(100);
     	hideTimer.addEventListener(TimerEvent.TIMER, hideTimerHandler);
         hideTimer.start();
+    }
+
+    private function createImageTip():void
+    {
+    	destroyImageTip();
+    	
+		tipImage = new Image();
+		tipImage.visible = false;
+		tipImage.scaleContent = true;
+		
+		var curTpl:TemplateStruct = ContextManager.instance.templates[0];
+		var index:XML = CashManager.getIndex(curTpl.ID);
+		var thumbFile:File = CashManager.cashFolder.resolvePath(index.@folder).resolvePath(nodeCB.selectedItem.@thumb);
+		
+		tipImage.load( thumbFile.nativePath );	
+		tipImage.addEventListener(Event.COMPLETE, tipImageComplete);    	
+    }
+        
+    private function destroyImageTip():void
+    {
+    	destroyTimers();
+    	
+    	if(!tipImage)
+    		return;
+    		
+		if(tipImage.parent)
+			PopUpManager.removePopUp(tipImage);
+		
+		removeEventListener(MouseEvent.MOUSE_MOVE, tipImageMoveHandler);
+		tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);		
+		tipImage.removeEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);	
+
+		tipImage.source = null;
+		tipImage = null;
     }
 		    	    
 	//--------------------------------------------------------------------------
@@ -1192,58 +1301,32 @@ public class Node extends Canvas
 	{
 		destroyTimers(true, false);
 		
-		var curTpl:TemplateStruct = ContextManager.instance.templates[0];
-		if(	CashManager.isObjectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) ||
-			tipImage && tipImage.toolTip!=nodeCB.selectedItem.@ID)
+		var curTpl:TemplateStruct = ContextManager.instance.templates.length>0 ? ContextManager.instance.templates[0] : null;
+		
+		if(	!curTpl || CashManager.isObjectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
 		{
-			tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);
-			tipImage.source = null;
-			tipImage = null;
+			destroyImageTip();
 		}
+		
+		if(!curTpl)
+			return;
 		
 		if(!tipImage)
 		{
-			tipImage = new Image();
-			tipImage.toolTip = nodeCB.selectedItem.@ID;
-			tipImage.visible = false;
-			tipImage.scaleContent = true;
-			
-			var index:XML = CashManager.instance.getIndex(curTpl.ID);
-			var thumbFile:File = CashManager.instance.cashDir.resolvePath(index.@folder).resolvePath(nodeCB.selectedItem.@thumb);
-			
-			tipImage.load( thumbFile.nativePath );	
-			tipImage.addEventListener(Event.COMPLETE, tipImageComplete);
+			createImageTip();
 			return;	
 		}
 		
 		tipImageComplete(null);
 	}
 	
-	private function hideTimerHandler(event:TimerEvent):void
-	{
-		destroyTimers();
-		
-		if(tipImage)
-		{
-			if(tipImage.parent)
-				PopUpManager.removePopUp(tipImage);
-			
-			if(!tipImage.visible)
-			{
-				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-				tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);			
-				tipImage.source = null;
-				tipImage = null;
-			}
-		}		
-	}
-	
 	private function tipImageComplete(event:Event):void
 	{
-		tipImage.addEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);	
-        addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-            
 		tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);			
+
+		tipImage.addEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);	
+        addEventListener(MouseEvent.MOUSE_MOVE, tipImageMoveHandler);
+            
 		tipImage.visible = true;
 		
 		var point:Point = localToGlobal(new Point(mouseX, mouseY));
@@ -1253,6 +1336,9 @@ public class Node extends Canvas
 
 		if(!tipImage.parent)
 			PopUpManager.addPopUp(tipImage, this);
+			
+		var fade:Fade = new Fade(tipImage);
+		fade.play();
 	}
 	
 	private function tipImageCreationComplete(event:FlexEvent):void
@@ -1260,21 +1346,45 @@ public class Node extends Canvas
 		tipImage.removeEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);
 		
 		tipImage.graphics.clear();
+		
+		var tipImageShadow:RectangularDropShadow = new RectangularDropShadow();
+		tipImageShadow.angle = 90;
+   		tipImageShadow.drawShadow(tipImage.graphics, -1, -1 , tipImage.width+2, tipImage.height+2);
+   		
 		tipImage.graphics.beginFill(0xffffff, 1.0);
 		tipImage.graphics.lineStyle(1, 0x000000, 0.8);
 		tipImage.graphics.drawRect(-1, -1, tipImage.width+2, tipImage.height+2);
-		
-		tipImage.filters = [];
-		var filter:DropShadowFilter = new DropShadowFilter(3, 90, 0x000000, 0.6, 7, 7);
-   		tipImage.filters = [filter];
 	}
 	
-	private function mouseMoveHandler(event:MouseEvent):void
+	private function hideTimerHandler(event:TimerEvent):void
+	{
+		destroyTimers();
+		
+		if(tipImage)
+		{
+			tipImage.endEffectsStarted()
+			
+			if(tipImage.parent)
+				PopUpManager.removePopUp(tipImage);
+			
+			if(!tipImage.visible)
+			{
+				destroyImageTip();
+			}
+		}		
+	}
+		
+	private function tipImageMoveHandler(event:MouseEvent):void
 	{
 		var point:Point = localToGlobal(new Point(mouseX, mouseY));
 		
-		tipImage.x = point.x+15;
-		tipImage.y = point.y+20;		
+		tipImage.endEffectsStarted();
+
+		var move:Move = new Move(tipImage);
+		move.xTo = point.x+15;
+		move.yTo = point.y+15;
+		
+		move.play();
 	}
 
 	private function graphChangedHandler(event:Event):void
@@ -1302,6 +1412,9 @@ public class Node extends Canvas
     	
        	move(	pPos.x, 
         		pPos.y );
+        
+        if(tipImage && tipImage.parent)		
+        	tipImageMoveHandler(event);
         		
         invalidateDisplayList();
     }
@@ -1333,37 +1446,58 @@ public class Node extends Canvas
     		}
     	}
     }
+    private function beginTransition():void
+    {
+		if(canvas)
+		{
+			stopTransition();
+						
+			canvas.addingTransition = true;
+			canvas.currentArrow = new Connector();
+						
+			canvas.addChildAt(canvas.currentArrow, 0);
+			canvas.currentArrow.fromObject = this;
+			canvas.currentArrow.addEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
+	
+			dispatchEvent(new NodeEvent(NodeEvent.ADDING_TRANSITION));    	
+		}
+    }
+    
+    private function stopTransition():void
+    {
+		if(canvas)
+		{
+			canvas.addingTransition = false;
+
+			if(canvas.currentArrow)
+			{
+				canvas.currentArrow.removeEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
+	
+				canvas.currentArrow.dispose();
+				canvas.currentArrow = null;
+			}
+		}
+    }
     
 	private function contextMenuSelectHandler(event:Event):void
 	{
 		if(event.target.name == "add_trans")
 		{
-			if(canvas)
-			{
-				if(canvas.currentArrow)
-				{
-					canvas.currentArrow.dispose();
-					canvas.currentArrow = null;
-				}
-							
-				canvas.addingTransition = true;
-				canvas.currentArrow = new Connector();
-							
-				canvas.addChildAt(canvas.currentArrow, 0);
-				canvas.currentArrow.fromObject = this;
-				canvas.currentArrow.addEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
-			}
-				
-			dispatchEvent(new NodeEvent(NodeEvent.ADDING_TRANSITION));
+			beginTransition();
 		}
 		else if(event.target.name == "delete")
 		{
      		remove();
 		}
+		else if(event.target.name == "cut")
+		{
+			if(parent)
+				parent.dispatchEvent(new Event("cut"));
+		}		
 		else if(event.target.name == "copy")
 		{
-			copyNode = this;
-			Application.application.dispatchEvent(new Event("copyNode"));
+			if(parent)
+				parent.dispatchEvent(new Event("copy"));
 		}
 		else if(event.target.name == "initial")
 		{
@@ -1440,7 +1574,7 @@ public class Node extends Canvas
 			}
 		}
 		
-		showImageTip();
+		beginShowImageTip();
 	}
 	
 	private function mouseOutHandler(event:MouseEvent):void
@@ -1463,7 +1597,7 @@ public class Node extends Canvas
 		
 		arrToolTip = [];
 		
-		hideImageTip();
+		beginHideImageTip();
 	}
 	
     private function mouseDownHandler(event:MouseEvent):void
@@ -1479,8 +1613,7 @@ public class Node extends Canvas
 				
 				if(canvas.currentArrow.fromObject==this)
 				{
-					canvas.currentArrow.dispose();
-					canvas.currentArrow = null;
+					stopTransition();
 					return;
 				}
 				
@@ -1488,8 +1621,7 @@ public class Node extends Canvas
 				{
 					if(arrow.fromObject == canvas.currentArrow.fromObject)
 					{
-						canvas.currentArrow.dispose();
-						canvas.currentArrow = null;
+						stopTransition();
 						return;
 					}
 				}
@@ -1498,8 +1630,7 @@ public class Node extends Canvas
 				{
 					if(arrow.toObject == canvas.currentArrow.fromObject)
 					{
-						canvas.currentArrow.dispose();
-						canvas.currentArrow = null;
+						stopTransition();
 						return;
 					}
 				}
@@ -1512,6 +1643,7 @@ public class Node extends Canvas
 				
 				(canvas.currentArrow.fromObject as Node).outArrows.addItem(canvas.currentArrow);
 				(canvas.currentArrow.toObject as Node).inArrows.addItem(canvas.currentArrow);
+				
 				canvas.currentArrow.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, graphChangedHandler);
 				
 				canvas.currentArrow.beginEdit();
@@ -1526,7 +1658,7 @@ public class Node extends Canvas
 				
 		bringToFront();
 			        
-        if (_mode==M_NORMAL && enabled && isNaN(regX))
+        if (_mode==M_NORMAL && isNaN(regX))
             startDragging(event);
     }
     
@@ -1534,34 +1666,31 @@ public class Node extends Canvas
     {
     	if(!event.target.fromObject)    	
 		{
-			canvas.addingTransition = false;
-			canvas.currentArrow.dispose();
-			canvas.currentArrow = null;
+			stopTransition();
 		}
     }
     
 	private function onKeyDown(event:KeyboardEvent):void
     {
-    	// don't use event.stopPropagation() here. 
-    	// textInput must recieve key events
-    	
-		event.stopPropagation();
-
 		if(canvas && canvas.addingTransition)
 			return;			
-		
+
 		if(event.keyCode == Keyboard.DELETE)
      	{
-     		remove();
+     		if(_mode==M_NORMAL)
+     		{
+				event.stopPropagation();
+     			remove();
+     		}
 	    }
 	    else if(	event.keyCode == Keyboard.ENTER ||
 	    			event.keyCode == Keyboard.F2)
 	    {
-	    	if(_mode==M_NORMAL)
-	    	{
+			event.stopPropagation();
+
+    	    if(_mode==M_NORMAL)
 		    	setEditMode(true);
-		    }
-	    }
+	    }	    
 	}
 	
 	private function dropDownCloseHandler(event:DropdownEvent):void
@@ -1575,20 +1704,15 @@ public class Node extends Canvas
 	private function textAreaKeyDown(event:KeyboardEvent):void
     {
 		if(canvas && canvas.addingTransition)
-			return;			
-		
-		if(event.keyCode == Keyboard.DELETE)
-     	{
-     		if(_mode == M_EDITING)
-     			event.stopPropagation();
-	    }
-	    else if(event.keyCode == Keyboard.ENTER)
+			return;		
+				
+	    if(event.keyCode == Keyboard.ENTER)
 	    {
 	    	if(_mode==M_EDITING)
 	    	{
-		    	event.stopPropagation();		    	
-	    		event.preventDefault();
-		    	
+		    	event.stopPropagation();	    	
+    			event.preventDefault();
+
 		    	if(event.controlKey || event.commandKey)
 		    	{
 					var caretPos:int = nodeTextArea.field.caretIndex; 
@@ -1607,6 +1731,9 @@ public class Node extends Canvas
 	    }
 	    else if(event.keyCode == Keyboard.ESCAPE)
 	    {
+	    	event.stopPropagation();	    	
+	    	event.preventDefault();
+	    	
 	    	setEditMode(false);
 	    	nodeTextArea.text = _text;
 	    	
@@ -1625,38 +1752,25 @@ public class Node extends Canvas
     
     private function comboBoxKeyDown(event:KeyboardEvent):void
     {
-    	hideImageTip();
+    	beginHideImageTip();
     	
 		if(canvas && canvas.addingTransition)
 			return;
 		
-		if(event.keyCode == Keyboard.DELETE)
-     	{
-     		if(_mode == M_EDITING)
-     		{
-     			event.stopPropagation();
-     		}
-     		else
-     		{
-     			event.preventDefault();
-     			event.stopImmediatePropagation();
-				
-				var newEvent:KeyboardEvent = new KeyboardEvent(
-					KeyboardEvent.KEY_DOWN,
-					event.bubbles,
-					event.cancelable,
-					event.charCode,
-					event.keyCode,
-					event.keyLocation,
-					event.ctrlKey,
-					event.altKey,
-					event.shiftKey,
-					event.controlKey,
-					event.commandKey);
-     			
-     			dispatchEvent(newEvent);
-     		}
-	    }		    	
+ 		event.stopPropagation();
+ 		
+ 		if(_mode == M_NORMAL)
+	 		dispatchEvent(event);
+    }
+    
+    private function comboBoxChange(event:ListEvent):void
+    {
+    	var showTipImage:Boolean = tipImage && tipImage.parent;
+    	
+    	destroyImageTip();
+    	
+    	if(showTipImage && !hideTimer)
+    		beginShowImageTip();
     }
     
     private function alertRemoveHandler(event:CloseEvent):void 
@@ -1673,7 +1787,7 @@ public class Node extends Canvas
     {
     	event.stopPropagation();
     	
-    	hideImageTip();
+    	beginHideImageTip();
     	
 		if(canvas && canvas.addingTransition)
 			return;			
@@ -1697,6 +1811,7 @@ public class Node extends Canvas
     override protected function focusOutHandler(event:FocusEvent):void
     {
     	_focused = false;
+    	selected = false;
 
         super.focusOutHandler(event);
 
