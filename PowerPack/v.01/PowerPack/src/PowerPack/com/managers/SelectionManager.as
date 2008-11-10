@@ -2,6 +2,7 @@ package PowerPack.com.managers
 {
 import PowerPack.com.graph.NodeEvent;
 
+import flash.display.DisplayObject;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
@@ -109,11 +110,11 @@ public class SelectionManager extends EventDispatcher
 	{
 		if(elm.hasOwnProperty("selected"))
 		{
-			elm.addEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
-			elm.addEventListener(MouseEvent.CLICK, onElmClick);
-			elm.addEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
-			elm.addEventListener(FlexEvent.REMOVE, onElmRemove);
-			elm.addEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected);
+			DisplayObject(elm).addEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
+			DisplayObject(elm).addEventListener(MouseEvent.CLICK, onElmClick);
+			DisplayObject(elm).addEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
+			DisplayObject(elm).addEventListener(FlexEvent.REMOVE, onElmRemove);
+			DisplayObject(elm).addEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected);
 			
 			if(elm.selected)
 				select(elm);

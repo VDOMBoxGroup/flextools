@@ -213,14 +213,13 @@ public class Connector extends UIComponent implements IFocusManagerComponent
             MouseEvent.MOUSE_DOWN, connector_systemManager_mouseDownHandler);
    		
        	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);            
-       	removeEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);           
 
+       	removeEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);           
+   		removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
    		removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
         removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
         removeEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
 		
-		var i:int;
-
 		if(_fromObj)
 		{
 			_fromObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
@@ -228,7 +227,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			
 			if(fromObject is Node)
 			{		
-				i = (fromObject as Node).outArrows.getItemIndex(this);
+				var i:int = (fromObject as Node).outArrows.getItemIndex(this);
 				if(i>=0)
 					(fromObject as Node).outArrows.removeItemAt(i);
 			}
@@ -247,14 +246,12 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			}
 		}
 		  			
-        if(parent)
-    	{
-           	parent.removeChild(this);
-        }
-           	
-       	dispatchEvent(new ConnectorEvent(ConnectorEvent.DISPOSED));
        	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+       	dispatchEvent(new ConnectorEvent(ConnectorEvent.DISPOSED));
        	
+        if(parent)
+           	parent.removeChild(this);
+           	
        	delete connectors[this];
 	}	
 
@@ -631,6 +628,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			_fromObjChanged = false;
 			_toObjChanged = false;
 
+			removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 	    	removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	    	removeEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
@@ -644,6 +642,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	        
 	        if(_fromObj && _toObj)
 	        {
+	        	addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 	    		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 	            addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	            addEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
@@ -661,6 +660,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			
 			if((_fromObj || _toObj) && (!_fromObj || !_toObj) && parent)
 			{
+				_over = false;
 				Application.application.addEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);  
 				startDragging();
 			}
@@ -1053,6 +1053,17 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     //
     //--------------------------------------------------------------------------
     
+    private function mouseDownHandler(event:MouseEvent):void
+    {
+    	var fromObj:Object = fromObject;
+    	dispose();
+    	
+    	if(fromObj && fromObj is Node)
+    	{
+    		Node(fromObj).beginTransition();
+    	}
+    }
+    
     private function mouseOverHandler(event:MouseEvent):void
     {
     	event.stopPropagation();
@@ -1157,8 +1168,15 @@ public class Connector extends UIComponent implements IFocusManagerComponent
      		remove();
 	    }
 	    else if(event.keyCode == Keyboard.ENTER)
-	    {		    	
+	    {	
+	    	event.stopPropagation();	    	
 	    	beginEdit(false);
+	    }
+	    else if(event.keyCode == Keyboard.A && (event.commandKey || event.controlKey))
+	    {
+	    	event.stopPropagation();
+	    	if(parent)
+	    		parent.dispatchEvent(new Event("selectAll"))
 	    }
 	}
 	

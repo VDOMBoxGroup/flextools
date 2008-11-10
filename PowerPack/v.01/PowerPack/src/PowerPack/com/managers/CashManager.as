@@ -338,7 +338,7 @@ public class CashManager extends EventDispatcher
 				{	
 					if(file.isDirectory)
 						file.deleteDirectory(true);
-					else
+					else if(file.name!='index.xml')
 						file.deleteFile();
 				} 
 				catch(e:*) {}

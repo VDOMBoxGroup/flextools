@@ -29,6 +29,8 @@ import mx.controls.ProgressBarMode;
 import mx.controls.Text;
 import mx.controls.TextArea;
 import mx.core.Application;
+import mx.core.Container;
+import mx.core.EdgeMetrics;
 import mx.core.Window;
 import mx.events.MoveEvent;
 import mx.events.ResizeEvent;
@@ -179,7 +181,8 @@ public class ProgressManager extends EventDispatcher
         				instance._bar.setProgress(ProgressEvent(event).bytesLoaded, ProgressEvent(event).bytesTotal);
         			}
         			
-        			//instance._bar.validateNow();
+        			if(instance._bar.parent)
+        				instance._bar.validateNow();
         		}        		
 
         		(value as FileStream).addEventListener(IOErrorEvent.IO_ERROR, onFileStreamClose);
@@ -280,7 +283,7 @@ public class ProgressManager extends EventDispatcher
 			hide();
 		
 		if(instance._bar.parent)
-			instance._bar.parent.removeChild(instance._bar);
+			Container(instance._bar.parent).removeChild(instance._bar);
 			
 		switch(viewMode)
 		{
@@ -306,7 +309,8 @@ public class ProgressManager extends EventDispatcher
 				instance._bar.width = 50;
 				instance._bar.setStyle("barSkin", ProgressBarSkin);
 				if(showProgress)
-					instance._statusBar.addChild(instance._bar);
+					instance._statusBar.addChild(instance._bar);					
+				
 				SuperStatusBar(instance._win.statusBar).statusHBox.addChildAt(instance._statusBar, 0);
 				SuperStatusBar(instance._win.statusBar).validateNow();
 				break;
@@ -322,13 +326,14 @@ public class ProgressManager extends EventDispatcher
 				
 				instance._window.addChild(instance._winBox);
 				
-				var activeWin:Window = SuperWindow.getWindow(NativeApplication.nativeApplication.activeWindow);
-				if(activeWin)
-					PopUpManager.addPopUp(instance._window, activeWin as DisplayObject, true);
-				else
-					PopUpManager.addPopUp(instance._window, instance._win as DisplayObject, true);				
+				var activeWin:Object = SuperWindow.getWindow(NativeApplication.nativeApplication.activeWindow);
 				
+				if(!activeWin)
+					activeWin = instance._win;
+					
+				PopUpManager.addPopUp(instance._window, activeWin as DisplayObject, true);
 				PopUpManager.centerPopUp(instance._window);
+				
 				instance._window.validateNow();
 				break;								
 			
@@ -350,34 +355,30 @@ public class ProgressManager extends EventDispatcher
 				instance._dialog.showStatusBar = false;
 				instance._dialog.showGripper = false;
 				instance._dialog.resizable = false;
+				instance._dialog.setStyle("borderStyle", "none");
 				instance._dialog.setStyle('cornerRadius', 0);
-				//instance._dialog.setStyle('backgroundAlpha', 0);
+				instance._dialog.setStyle('backgroundAlpha', 0);
+				instance._dialog.minWidth = 0;
+				instance._dialog.minHeight = 0;
 				
 				instance._dialog.startPosition = SuperWindow.POS_CENTER_SCREEN;
-				instance._dialog.modal = true;				
+				instance._dialog.modal = true;
 				
 				instance._dialog.addChild(instance._winBox);
+
 				instance._dialog.open();
 
-				//var rect:Rectangle = instance._winBox.getRect(instance._dialog);  
-
-				instance._dialog.width = 250;
-				instance._dialog.height = 110;
-				
-				instance._dialog.validateProperties();
-				
-				instance._dialog.setPosition();
+				instance.doResizeDialog();
 				
 				var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
+				
 				if(parent)
 					parent.validateDisplayList();
 				else
 					Application.application.validateDisplayList();
 				
-				instance._dialog.validateNow();
-
 				instance._dialog.activate();
-
+				
 				viewMode = DIALOG_MODE;
 				break;								
 		}
@@ -386,6 +387,7 @@ public class ProgressManager extends EventDispatcher
 		instance.dispatchEvent(new Event("modeChange"));
 		instance._isShown = true;
 		instance._showProgress = showProgress;
+		
 	}
 
 	public static function hide():void
@@ -411,13 +413,7 @@ public class ProgressManager extends EventDispatcher
 						instance._winBox.parent.removeChild(instance._winBox);
 						
 					instance._dialog.nativeWindow.close();
-					
 					var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
-					if(parent)
-						parent.validateDisplayList();
-					else
-						Application.application.validateDisplayList();
-
 					instance._dialog = null;
 				}					
 				break;
@@ -439,13 +435,22 @@ public class ProgressManager extends EventDispatcher
 				}
 				break;						
 		}
-		
+
+		if(!parent)
+			parent = SuperWindow.getWindow(NativeApplication.nativeApplication.activeWindow);
+
+		if(parent)
+			parent.validateDisplayList();
+		else
+			Application.application.validateDisplayList();
+								
 		instance._isShown = false;
 	}
 
 	public static function complete():void
 	{
 		hide();
+		source = null;
 	}	
 	
 	protected function createChildren():void
@@ -480,12 +485,14 @@ public class ProgressManager extends EventDispatcher
 		{
 			var box:VBox = new VBox();	
 			_winBox = box;		
-			//_winBox.addEventListener(ResizeEvent.RESIZE, resizeHandler);
-			box.percentHeight = box.percentWidth = 100;			
+			_winBox.addEventListener(ResizeEvent.RESIZE, resizeHandler);
+			//box.percentHeight = box.percentWidth = 100;
+			_winBox.minWidth = 120;			
 			box.setStyle("paddingLeft", 10);
 			box.setStyle("paddingRight", 10);
 			box.setStyle("paddingTop", 10);
 			box.setStyle("paddingBottom", 10);
+			box.setStyle("borderStyle", "1px solid 0x000000");
 			
 			var txt1:Text = new Text();
 			txt1.text = LanguageManager.sentences['progress_full_desc'];
@@ -577,6 +584,29 @@ public class ProgressManager extends EventDispatcher
 		}
 	}			
 	
+	private function doResizeDialog():void
+	{
+		_winBox.validateProperties();
+		_winBox.validateSize();
+		
+		var edges:EdgeMetrics = _dialog.viewMetricsAndPadding;
+		var size:Object = {	w:_winBox.width + _winBox.maxHorizontalScrollPosition + edges.left +edges.right, 
+							h: _winBox.height + _winBox.maxVerticalScrollPosition + edges.top + edges.bottom};
+		
+		_dialog.width = size.w; 
+		_dialog.height = size.h;
+
+		positioned = true;
+
+		_dialog.validateProperties();
+		_dialog.validateSize();
+		_dialog.setPosition();
+		
+		if(_dialog.parent) {
+			_dialog.validateNow();		
+		}
+	}
+	
 	//--------------------------------------------------------------------------
 	//
 	//  Event Handlers
@@ -590,26 +620,11 @@ public class ProgressManager extends EventDispatcher
     {
     	if(_dialog==null || _dialog.nativeWindow==null || _dialog.parent==null)
     		return;
+
+    	if(_winBox==null || _winBox.parent==null)
+    		return;
     		
-    	//event.target.width += event.target.maxHorizontalScrollPosition;
-    	//event.target.height += event.target.maxVerticalScrollPosition;
-    	 
-    	//var rect:Rectangle = _winBox.getRect(_dialog);
-    	
-		//_dialog.width = 300//_winBox.getExplicitOrMeasuredWidth();//width + _winBox.maxHorizontalScrollPosition;
-		//_dialog.height = 100//_winBox.getExplicitOrMeasuredHeight();//height + _winBox.maxVerticalScrollPosition;
-		
-		/*
-		_dialog.width = event.target.width + event.target.maxHorizontalScrollPosition + 
-			_dialog.getStyle('borderThickness')*2 + _dialog.getStyle('paddingLeft') + _dialog.getStyle('paddingRight');
-		_dialog.height = event.target.height + event.target.maxVerticalScrollPosition +
-			_dialog.getStyle('borderThickness')*2 + _dialog.getStyle('paddingTop') + _dialog.getStyle('paddingBottom');
-		*/
-		
-		positioned = true;
-		_dialog.setPosition();
-		
-		_dialog.validateNow();
+    	doResizeDialog();
     }
     
     /**

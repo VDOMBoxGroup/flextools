@@ -397,12 +397,6 @@
 	    			else
 	    				ContextManager.instance.templates[0] = template;
 					
-					var data:ByteArray = new ByteArray();
-					data.writeUTFBytes(resources.strLogo);
-					
-					CashManager.setObject(template.ID, <object category='image' ID='1234567890' name='res.jpg' type='jpg'/>, data);  
-					CashManager.setObject(template.ID, <object category='image' ID='2345678901' name='res.png' type='png'/>, data);  
-					
 					//
 					MenuGeneral.noTemplate(fileMenuData);
 	    	  		ContextManager.instance.lastFile = false;

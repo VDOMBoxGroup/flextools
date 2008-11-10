@@ -48,6 +48,7 @@ import mx.events.CloseEvent;
 import mx.events.DropdownEvent;
 import mx.events.FlexEvent;
 import mx.events.ListEvent;
+import mx.events.MoveEvent;
 import mx.events.ValidationResultEvent;
 import mx.graphics.RectangularDropShadow;
 import mx.managers.IFocusManagerComponent;
@@ -249,8 +250,7 @@ public class Node extends Canvas
 		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
    		
-   		removeEventListener("xChanged", graphChangedHandler);
-   		removeEventListener("yChanged", graphChangedHandler);
+   		removeEventListener(MoveEvent.MOVE, moveHandler);
        		
 		while(inArrows.length)
 			inArrows[0].dispose();
@@ -444,9 +444,6 @@ public class Node extends Canvas
     {
     	if(_category != value)
     	{
-    		//if(_category == NodeCategory.RESOURCE)
-    		//	text = LanguageManager.sentences['node_label'];
-    			
 	    	_category = value;
 	    	
 	        _categoryChanged = true;
@@ -624,7 +621,7 @@ public class Node extends Canvas
 	        addChild(nodeCB);
 	        
             nodeCB.addEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
-        	nodeCB.addEventListener(KeyboardEvent.KEY_DOWN, comboBoxKeyDown);
+        	nodeCB.addEventListener(KeyboardEvent.KEY_DOWN, comboBoxKeyDown, false, 10);
         	nodeCB.addEventListener(ListEvent.CHANGE , comboBoxChange);
         }
         
@@ -698,8 +695,7 @@ public class Node extends Canvas
 			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown); 
 			addEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
        		
-       		addEventListener("xChanged", graphChangedHandler);
-       		addEventListener("yChanged", graphChangedHandler);			
+       		addEventListener(MoveEvent.MOVE, moveHandler);
     	} 
     }
 	
@@ -749,6 +745,7 @@ public class Node extends Canvas
 						objList = objIndex.resource.(hasOwnProperty('@category') && @category=='image' || @category=='database');
 					
 					nodeCB.dataProvider = objList;
+					nodeCB.selectedIndex = 0;
 					
 					if(objList && objList.length()>0)
 					{
@@ -760,10 +757,10 @@ public class Node extends Canvas
 								break;
 							}
 						}
+						
+						if(nodeCB.selectedIndex>=0)
+							text = nodeCB.selectedItem.@ID;
 					}
-								
-					if(nodeCB.selectedIndex>=0)
-						text = nodeCB.selectedItem.@ID;
 					else
 						text = '';
 					
@@ -894,7 +891,6 @@ public class Node extends Canvas
 
 	override protected function measure():void 
 	{
-		
 		if(nodePanel)
 		{
 			nodePanel.width = 0;
@@ -1231,7 +1227,7 @@ public class Node extends Canvas
 		if(category != NodeCategory.RESOURCE)
 			return;
 		
-		if(!nodeCB.visible || !nodeCB.selectedItem.hasOwnProperty('@thumb'))
+		if(!nodeCB.visible || !nodeCB.selectedItem || !nodeCB.selectedItem.hasOwnProperty('@thumb'))
 			return;
 		
 		if(!hideTimer && tipImage && tipImage.parent)
@@ -1374,7 +1370,7 @@ public class Node extends Canvas
 		}		
 	}
 		
-	private function tipImageMoveHandler(event:MouseEvent):void
+	private function tipImageMoveHandler(event:Event):void
 	{
 		var point:Point = localToGlobal(new Point(mouseX, mouseY));
 		
@@ -1387,8 +1383,11 @@ public class Node extends Canvas
 		move.play();
 	}
 
-	private function graphChangedHandler(event:Event):void
+	private function moveHandler(event:MoveEvent):void
 	{
+        if(tipImage && tipImage.parent)		
+        	tipImageMoveHandler(null);
+        			
 		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 	}
 	    
@@ -1412,9 +1411,6 @@ public class Node extends Canvas
     	
        	move(	pPos.x, 
         		pPos.y );
-        
-        if(tipImage && tipImage.parent)		
-        	tipImageMoveHandler(event);
         		
         invalidateDisplayList();
     }
@@ -1446,7 +1442,8 @@ public class Node extends Canvas
     		}
     	}
     }
-    private function beginTransition():void
+    
+    public function beginTransition():void
     {
 		if(canvas)
 		{
@@ -1463,7 +1460,7 @@ public class Node extends Canvas
 		}
     }
     
-    private function stopTransition():void
+    public function stopTransition():void
     {
 		if(canvas)
 		{
@@ -1644,15 +1641,20 @@ public class Node extends Canvas
 				(canvas.currentArrow.fromObject as Node).outArrows.addItem(canvas.currentArrow);
 				(canvas.currentArrow.toObject as Node).inArrows.addItem(canvas.currentArrow);
 				
-				canvas.currentArrow.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, graphChangedHandler);
-				
 				canvas.currentArrow.beginEdit();
 				
 				canvas.currentArrow = null;
 				
-				dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
-				
 				return;
+			}
+			else
+			{
+				if(event.altKey)
+				{	
+					bringToFront();
+					beginTransition();
+					return;				
+				}			
 			}
 		}
 				
@@ -1690,6 +1692,16 @@ public class Node extends Canvas
 
     	    if(_mode==M_NORMAL)
 		    	setEditMode(true);
+	    }
+	    else if(event.keyCode == Keyboard.A && (event.commandKey || event.controlKey))
+	    {
+	    	if(_mode==M_NORMAL)
+	    	{
+	    		event.preventDefault();
+	    		event.stopPropagation();
+	    		if(parent)
+	    			parent.dispatchEvent(new Event("selectAll"))
+	    	}
 	    }	    
 	}
 	
@@ -1697,7 +1709,7 @@ public class Node extends Canvas
 	{
 		setEditMode(false);
 		
-		if(ComboBox(event.target).selectedIndex>=0)
+		if(ComboBox(event.target).selectedItem)
 			text = ComboBox(event.target).selectedItem.@ID;
 	}
 	
@@ -1759,12 +1771,18 @@ public class Node extends Canvas
 		
  		event.stopPropagation();
  		
- 		if(_mode == M_NORMAL)
+ 		if(_mode == M_NORMAL) {
+	 		event.stopImmediatePropagation();
+	 		event.preventDefault();
 	 		dispatchEvent(event);
+ 		}
     }
     
     private function comboBoxChange(event:ListEvent):void
     {
+    	if(ComboBox(event.target).selectedItem)
+			text = ComboBox(event.target).selectedItem.@ID;
+			
     	var showTipImage:Boolean = tipImage && tipImage.parent;
     	
     	destroyImageTip();
@@ -1868,11 +1886,13 @@ public class Node extends Canvas
     {
     	if(event.type==ValidationResultEvent.VALID)
     	{    
+    		nodeCB.clearStyle("borderColor");
         	_isValidText = true;
      	}
 		else
 		{
         	nodeTextArea.setStyle("borderColor", getStyle("errorColor"));
+        	nodeCB.setStyle("borderColor", getStyle("errorColor"));
 			_isValidText = false;
 		}
     }

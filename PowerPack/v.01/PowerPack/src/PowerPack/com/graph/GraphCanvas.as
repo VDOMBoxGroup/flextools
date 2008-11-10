@@ -5,17 +5,23 @@ import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
 import ExtendedAPI.com.utils.Utils;
 
+import PowerPack.com.gen.structs.TemplateStruct;
+import PowerPack.com.managers.CashManager;
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
+import PowerPack.com.managers.ProgressManager;
 import PowerPack.com.managers.SelectionManager;
 
 import flash.desktop.Clipboard;
+import flash.desktop.ClipboardFormats;
+import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.NativeMenuItem;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.ui.Keyboard;
+import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 
 import mx.binding.utils.*;
@@ -23,13 +29,18 @@ import mx.containers.Canvas;
 import mx.controls.Alert;
 import mx.core.UIComponent;
 import mx.effects.Move;
+import mx.events.ChildExistenceChangedEvent;
 import mx.events.CloseEvent;
 import mx.events.DragEvent;
+import mx.graphics.codec.PNGEncoder;
+import mx.managers.CursorManager;
 import mx.managers.DragManager;
 import mx.managers.IFocusManagerComponent;
 import mx.styles.CSSStyleDeclaration;
 import mx.styles.StyleManager;
+import mx.utils.Base64Encoder;
 import mx.utils.NameUtil;
+import mx.utils.UIDUtil;
 
 public class GraphCanvas extends Canvas
 	implements IFocusManagerComponent
@@ -45,9 +56,13 @@ public class GraphCanvas extends Canvas
     //  Variables and properties
     //
     //--------------------------------------------------------------------------
-
+	
+	public static var graphs:Dictionary = new Dictionary(); 
+	
     private static var defaultItemCaptions:Object = {
     	graph_add_state:"Add state", 
+    	graph_add_command:"Add command", 
+    	graph_add_sub:"Add sub", 
     	graph_cut:"Cut", 
     	graph_copy:"Copy", 
     	graph_paste:"Paste", 
@@ -113,7 +128,12 @@ public class GraphCanvas extends Canvas
 		addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		addEventListener("cut", onCut);
 		addEventListener("copy", onCopy);
-		addEventListener(MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler);	 
+		addEventListener("selectAll", onSelectAll);
+		addEventListener(ChildExistenceChangedEvent.CHILD_ADD, childAddHandler);
+		addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, childRemoveHandler);
+		addEventListener(MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler);
+		
+		graphs[this] = this;	 
 	}
 	
 	//--------------------------------------------------------------------------
@@ -144,14 +164,20 @@ public class GraphCanvas extends Canvas
 		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		removeEventListener("cut", onCut);
 		removeEventListener("copy", onCopy);
+		removeEventListener("selectAll", onSelectAll);
+		removeEventListener(ChildExistenceChangedEvent.CHILD_ADD, childAddHandler);
+		removeEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, childRemoveHandler);
 		removeEventListener(MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler);
    		
    		clear();
    		
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.DISPOSED));
+
         if(parent)
            	parent.removeChild(this);
            	
-		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+    	delete graphs[this];
 	}	   
 
     //--------------------------------------------------------------------------
@@ -271,6 +297,8 @@ public class GraphCanvas extends Canvas
         	contextMenu = new SuperNativeMenu();
         	
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_add_state'], 'add_state'));
+        	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_add_command'], 'add_command'));
+        	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_add_sub'], 'add_sub'));
 			contextMenu.addItem(new SuperNativeMenuItem('separator'));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_cut'], 'cut', false, null, false, false));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_copy'], 'copy', false, null, false, false));
@@ -329,11 +357,10 @@ public class GraphCanvas extends Canvas
 		{
 			if(child is Connector)
 			{
-				(child as Connector).removeEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+				continue;
 			}
 			else if(child is Node)
 			{
-				(child as Node).removeEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 				(child as Node).dispose();
 			}
 			else
@@ -408,7 +435,6 @@ public class GraphCanvas extends Canvas
 				var newNode:Node = Node(obj).clone();				 
 				dict[obj] = newNode; 
 				newCanvas.addChild(newNode);
-				newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 			}
 		}
 		
@@ -438,8 +464,6 @@ public class GraphCanvas extends Canvas
 		
 		if(focused)
 			newNode.setFocus();
-		
-		newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 		
 		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 		
@@ -478,8 +502,6 @@ public class GraphCanvas extends Canvas
 				canvas.addChildAt(arrow, 0);
 			else
 				addChildAt(arrow, 0);
-				
-			arrow.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 		}		
 	}
 	
@@ -552,8 +574,6 @@ public class GraphCanvas extends Canvas
 			newNode.y = Number(nodeXML.@y);
 			
 			addChild(newNode);
-			
-			newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 		}
 		
 		for each (var arrowXML:XML in graphXML.transitions.elements("transition"))
@@ -623,7 +643,6 @@ public class GraphCanvas extends Canvas
 				newNode.name = namesMap[newNode.name];
 				newNode.selected = true;
 				addChild(newNode);			
-				newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);				
     		}
     		
     		for each(var xmlArrow:XML in dataXML.transition)
@@ -638,7 +657,52 @@ public class GraphCanvas extends Canvas
     		}
     		    		
     		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
-		}		  	
+		}
+		else if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT))
+		{
+			newNode = createNode();
+			newNode.text = String(Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT));
+			
+			dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+		}
+		else if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.BITMAP_FORMAT))
+		{
+			CursorManager.setBusyCursor();
+			
+			ProgressManager.show(ProgressManager.DIALOG_MODE, false);
+			_doGetBitmapClipBoard();
+			
+			function _doGetBitmapClipBoard():void {
+				var template:TemplateStruct = ContextManager.instance.templates[0];
+				var bitmapData:BitmapData = BitmapData(Clipboard.generalClipboard.getData(ClipboardFormats.BITMAP_FORMAT));
+				
+				var pngEncoder:PNGEncoder = new PNGEncoder();
+				var pngData:ByteArray = pngEncoder.encode(bitmapData);	
+				pngData.position = 0;
+	
+				var encoder:Base64Encoder = new Base64Encoder();
+				encoder.encodeBytes(pngData);
+				var b64Data:String = encoder.flush();
+								
+				var data:ByteArray = new ByteArray();
+				data.writeUTFBytes(b64Data);
+				var ID:String = UIDUtil.createUID();
+				CashManager.setObject(template.ID, XML("<object category='image' ID='"+ID+"' name='"+ID+".png' type='png'/>"), data);  
+	
+				newNode = createNode();
+				newNode.text = ID;
+				newNode.category = NodeCategory.RESOURCE;
+
+				dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+				
+				CursorManager.removeBusyCursor();
+				ProgressManager.complete();
+			}
+		}	  	
+		else if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))
+		{			
+			return;
+		}	  	
     }
     
 	public function doSelectAll():void
@@ -662,11 +726,10 @@ public class GraphCanvas extends Canvas
 		{
 			if(child is Connector)
 			{
-				child.removeEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+				continue;
 			}
 			else if(child.hasOwnProperty('selected') && child.selected)
 			{
-				child.removeEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
 				child.dispose();
 			}
 		}
@@ -723,7 +786,10 @@ public class GraphCanvas extends Canvas
 			contextMenu.getItemByName("copy").enabled = false;			
 		}
 		
-		if(Clipboard.generalClipboard.hasFormat("GRAPH_FORMAT"))
+		if(	Clipboard.generalClipboard.hasFormat("GRAPH_FORMAT") || 
+			Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT) ||
+			Clipboard.generalClipboard.hasFormat(ClipboardFormats.BITMAP_FORMAT) ||
+			Clipboard.generalClipboard.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))
 		{
 			contextMenu.getItemByName("paste").enabled = true;	
 		}
@@ -742,13 +808,28 @@ public class GraphCanvas extends Canvas
     {
     	doCut();	
     }
-
+    
+    private function onSelectAll(event:Event):void
+    {
+    	doSelectAll();	
+    }
+	
 	private function contextMenuSelectHandler(event:Event):void
 	{
 		switch(event.target.name)
 		{
 			case "add_state":
 				createNode();
+				break;
+				
+			case "add_command":
+				var comNode:Node = createNode();
+				comNode.category = NodeCategory.COMMAND;
+				break;
+				
+			case "add_sub":
+				var subNode:Node = createNode();
+				subNode.category = NodeCategory.SUBGRAPH;
 				break;
 				
 			case "cut":
@@ -815,16 +896,26 @@ public class GraphCanvas extends Canvas
     	
 		var newNode:Node = new Node( NodeCategory.SUBGRAPH, NodeType.NORMAL, graph.name );
 		addChild(newNode);
+		
 		newNode.move(	event.localX + horizontalScrollPosition, 
 						event.localY + verticalScrollPosition);
-		newNode.setFocus();
 		
-		newNode.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChanged);
+		newNode.setFocus();
 		
 		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));	    	
     }
     
-    private function onGraphChanged(event:GraphCanvasEvent):void
+    private function childRemoveHandler(event:ChildExistenceChangedEvent):void
+    {
+    	event.relatedObject.removeEventListener(GraphCanvasEvent.GRAPH_CHANGED, graphChangedHadler);
+    }
+    
+    private function childAddHandler(event:ChildExistenceChangedEvent):void
+    {
+    	event.relatedObject.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, graphChangedHadler);
+    }    
+    
+    private function graphChangedHadler(event:GraphCanvasEvent):void
     {
     	event.stopImmediatePropagation();
     	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
