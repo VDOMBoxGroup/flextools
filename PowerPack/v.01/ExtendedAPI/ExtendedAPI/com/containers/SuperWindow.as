@@ -317,7 +317,7 @@ public class SuperWindow extends Window implements IWindow
 
 	private function onDeactivate(event:Event):void {					
 		var active:NativeWindow = NativeApplication.nativeApplication.activeWindow;
-		var inactive:SuperWindow = event.target as SuperWindow;
+		var inactive:SuperWindow = event.currentTarget as SuperWindow;
 		
 		if(	inactive && inactive.nativeWindow && 
 			!inactive.nativeWindow.closed && 
