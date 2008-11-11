@@ -119,11 +119,11 @@
 		]]>
 	</mx:Script>
 			
-	<mx:List width="100%" height="100%" 
+	<mx:List id="lstGraphs"		
+		width="100%" height="100%" 
 		allowMultipleSelection="false" 
 		textAlign="center" 
 		borderStyle="none"
-		id="lstGraphs"		
 		dataProvider="{graphs}"
 		labelField="name"
 		dragEnabled="true"

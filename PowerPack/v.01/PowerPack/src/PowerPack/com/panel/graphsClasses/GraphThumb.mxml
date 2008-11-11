@@ -3,7 +3,7 @@
 	horizontalAlign="center" 
 	verticalAlign="middle" 
 	borderStyle="none" 
-	height="70" 
+	width="40"
 	backgroundAlpha="0.0">
 	
     <mx:Script>
@@ -22,10 +22,12 @@
        			
        			if (!labelTextField)
 			    {
-			    	setStyle("fontWeight", "bold");
+			    	setStyle("fontFamily", "Arial");
+			    	setStyle("fontSize", "11");
+			    	setStyle("fontWeight", "normal");
 			        labelTextField = IUITextField(createInFontContext(UITextField));
 			        labelTextField.text = txtThumb.text;
-			        labelTextField.styleName = getStyle("labelTextStyleName");
+			        //labelTextField.styleName = getStyle("labelTextStyleName");
 			        labelTextField.enabled = true;
 			        
 			        cnvs.addChildAt(DisplayObject(labelTextField), 0);
@@ -53,10 +55,11 @@
         ]]>
     </mx:Script>
     
-	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="@Embed('../../../../../resources/tree.png')" width="32" height="32"/>
+	<mx:Image id="imgThumb" scaleContent="true" autoLoad="true" source="@Embed('../../../../../resources/tree.png')" width="24" height="24"/>
 	
 	<mx:Canvas id="cnvs" width="99%">
-		<mx:TextInput id="txtThumb" text="{data.name}" textAlign="center" width="100%" visible="false" horizontalCenter="0" 
+		<mx:TextInput id="txtThumb" fontFamily="Arial" fontSize="11" fontWeight="normal"
+			text="{data.name}" textAlign="center" width="100%" visible="false" horizontalCenter="0" 
 			change="returnText=txtThumb.text;"
 			updateComplete="returnText=txtThumb.text;" />
 	</mx:Canvas>

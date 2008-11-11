@@ -279,7 +279,12 @@
 
 		<mx:ControlBar id="cbarHeader" horizontalAlign="right" paddingTop="2" paddingBottom="2" paddingRight="2" paddingLeft="2">
 		
-			<flexlib:CanvasButton
+			<flexlib:CanvasButton 
+				paddingTop="0"
+				paddingLeft="0"
+				paddingBottom="0"
+				paddingRight="0"
+				cornerRadius="2"
 				click="closeTabHandler(event);">
 				<mx:Label text="x"/>
 			</flexlib:CanvasButton>
