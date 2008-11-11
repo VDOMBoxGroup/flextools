@@ -85,7 +85,8 @@ package vdom.components.eventEditor
 		}
 		
 		private var selectedNode:XML;
-		private var loadedPages:Array = []; /*of XML*/
+		private var loadedPages:Array = []; /*of XML for EventsTree*/
+		private var loadedPagAction:Array = []; /*of XML for ActionsTree*/
 		private function containerChange(ID:String):void
 		{
 			if(!xmlTreeData)
@@ -118,6 +119,7 @@ package vdom.components.eventEditor
               
 		}
 		private var curId:String;
+		private var curPage:String 
 		private function changeCurrentObjectListener(dmEvt:DataManagerEvent):void
 		{
 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED,  changeCurrentPageListener);
@@ -128,10 +130,12 @@ package vdom.components.eventEditor
 			else
 				curId = dataManager.currentPageId;
 				
+			 curPage= dataManager.currentPageId;
 			
 			loadedPages[curId] = craetTreeData(_data.(@ID == curId).Objects);
+			loadedPagAction[curPage] = branchAction(_data.(@ID == curId).Objects);
 			
-			dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[curId], curId))
+			dispatchEvent(new EventEditorEvent(EventEditorEvent.DATA_CHANGED, loadedPages[curId],loadedPagAction[curId], curId))
 		}
 		
 		private function treeUpdateComletLister(evt:Event):void
@@ -269,6 +273,39 @@ package vdom.components.eventEditor
 					xmllReturn.appendChild(xmlTemp)	;
 			}
 //			trace(xmllReturn.toXMLString())
+			return xmllReturn;
+		}
+		
+		private function branchAction(xmlIn:XMLList):XML
+		{
+//			trace('findOjects');
+			var ID:String;
+			
+//			if(selectedNode)
+//				ID = selectedNode.@ID;
+//			else
+				ID = curPage;
+				
+			var xmllReturn:XML  = new XML('<Object/>');
+				xmllReturn.@label 	= xmlTreeData..Object.(@ID == ID).@label;
+				xmllReturn.@ID 		= ID;
+				xmllReturn.@Type 	= xmlTreeData..Object.(@ID == ID).@Type;
+				xmllReturn.@resourceID = xmlTreeData..Object.(@ID == ID).@resourceID;
+//			var xmllReturn:XMLList  = new XMLList();
+			for each(var xmlLabel:XML in xmlIn.children())
+			{
+				var xmlTemp:XML = new XML('<Object/>');
+					xmlTemp.@label 	= xmlLabel.@Name;
+					xmlTemp.@ID 	= xmlLabel.@ID;
+					xmlTemp.@Type 	= xmlLabel.@Type;
+					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
+					
+				// проверяем есть ли еще обьекты в нутри
+				var numObjects:int = xmlLabel.Objects.*.length(); 
+				if(numObjects > 0)	xmlTemp.appendChild(findOjects(xmlLabel.Objects));
+				
+				xmllReturn.appendChild(xmlTemp);
+			}
 			return xmllReturn;
 		}
 	}

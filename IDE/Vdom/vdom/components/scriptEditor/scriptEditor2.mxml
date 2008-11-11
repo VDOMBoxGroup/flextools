@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" xmlns:containers="vdom.components.scriptEditor.containers.*"
-		hide="hideHandler()">
+		hide="hideHandler()" xmlns:containers1="vdom.containers.*"   backgroundColor="#3d3d3d">
 <mx:Script>
 	<![CDATA[
 		import vdom.events.ScriptEditorEvent;
@@ -18,6 +18,9 @@
 		[Bindable]
 	 	private var dataManager:DataManager = DataManager.getInstance();
 	 	
+	 	[Bindable]
+   			private var arrAppl: Array = new Array();
+	 	
 		private var curContainerID:String;
 		private var curContainerTypeID:String;
 		
@@ -27,20 +30,47 @@
 		
 		private function showHandler():void
 	 	{
-	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
-	 			trContainer.showHandler();
-	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+//	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
+//	 			trContainer.showHandler();
+//	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 			
 	 			curContainerID = dataManager.currentPageId;
 	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+	 			
+	 			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+	 			
+	 			
+	 			arrAppl = [];
+	 			for each(var lavel:XML in dataManager.listPages )
+				{
+		 			var ID:String = lavel.@ID;
+		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
+		 			arrAppl.push({label:strLabel, ID:ID});
+				}
+				
+				function searchIndex():int
+				{
+					var curID:String = dataManager.currentPageId;
+					for(var i:String in arrAppl)
+					{
+//						trace(arrAppl[i].typeID);
+						if (arrAppl[i].ID == curID) 
+							return Number(i);	
+					}
+					return 0;
+				}
+				
+				changeContainer.selectedIndex = searchIndex();
+				serverScripts.dataProvider = dataManager.currentPageId;
 	 	}
 	 	
 	 	private function hideHandler():void
 	 		{
-	 			changeWatcher.unwatch();
-	 			trContainer.hideHandler();
-	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+//	 			changeWatcher.unwatch();
+//	 			trContainer.hideHandler();
+//	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 			
+	 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
 	 		}
 	 	
 	 	private var getApplEventID:String;
@@ -53,7 +83,7 @@
 			{
 			
 			}
-			
+/*			
 			private function getIcon(value:Object):Class 
 			{
 				var xmlData:XML = XML(value);
@@ -61,7 +91,7 @@
 			 	
 		 		return IconUtil.getClass(trContainer, data, 16, 16);
 			}
-			
+	*/		
 			private function addNewScript():void
 			{
 				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
@@ -119,7 +149,6 @@
 				btSave.setStyle("color", "0x000000");
 				btSave.setStyle("borderColor", "0xAAB3B3");
 
-				
 				serverScripts.script = textArea.text;
 				
 				_changed = false;
@@ -137,8 +166,6 @@
 			
 			private function textAreaDataChangeHandler( event : KeyboardEvent ):void
 			{
-				
-				
 //				if( _changed )
 //					return;
 				
@@ -147,30 +174,26 @@
 				
 				_changed = true;
 			}
+			
+			private function pageChangeHandler(dmEvt:DataManagerEvent):void
+			{
+//				changeTree(dataManager.currentPageId);
+				serverScripts.dataProvider = dataManager.currentPageId;
+//				dataManager.getApplicationEvents();
+
+			}
+				[Bindable]
+   			public var selectedAppl:Object; 
+			private function changeContainerHandler(obj:Object):void
+			{
+				selectedAppl = ComboBox(obj).selectedItem;
+//				changeTree(selectedAppl.ID);
+				dataManager.changeCurrentPage(selectedAppl.ID);
+			}
+			
 	]]>
 </mx:Script>
 	<mx:HDividedBox width="100%" height="100%">
-		
-		<mx:VDividedBox width="250" height="100%">
-		 	<mx:VBox  width="100%"  height="40%" >
-				<mx:Label text="Containers:" color="0xFFFFFF" fontWeight="bold"/>
-	        	 <eventEditor:TreeContainer iconFunction="getIcon" id="trContainer" width="100%" height="100%" 
-				 	change="treeContainerChangeHandler(event)"/>
-			 </mx:VBox>
-			 <mx:Canvas label="canvas1" width="100%" height="100%"  >
-			    <mx:VBox  width="100%" height="100%" >
-			    		<mx:Label text="Server Actions:" color="0xFFFFFF" fontWeight="bold"/>
-				       <containers:ServerScripts id="serverScripts" width="100%" height="100%" dataChanged="{setScript()}" />
-				       <mx:HBox>
-					       <mx:Button  label="Add Script" click="{addNewScript()}"  />
-				       	 	<mx:Button label="Delete Script" click="{deleteScript()}"  />
-				       </mx:HBox>
-			      </mx:VBox>
-			      
-	          </mx:Canvas>
-	          
-		</mx:VDividedBox>
-			
         <mx:VBox id="vBox" width="100%" height="100%" >
             <containers:TabbedTextArea id="textArea" width="100%" height="100%" 
             		 text="same Text of code" 
@@ -181,6 +204,21 @@
 	           <mx:Button label="Revert" click=" revert(); "/>
             </mx:HBox>
         </mx:VBox>
+        <mx:VBox width="250" height="100%"
+        	verticalScrollPolicy="auto" horizontalScrollPolicy="off"   verticalGap="10"  top="10" 
+        	paddingLeft="3" paddingRight="10" paddingTop="10">
+        	<mx:Panel title="PAGES" width="100%" color="#FFFFFF">
+			        <mx:ComboBox id="changeContainer" dataProvider="{arrAppl}"  rowCount="20" change="{changeContainerHandler(event.target)}" 
+			        		color="#000000" width="100%"/>
+	        </mx:Panel>
+			
+				       <containers:ServerScripts  id="serverScripts"  title="serverScripts" width="100%" dataChanged="{setScript()}" />
+		       
+		       <mx:HBox >
+			       <mx:Button  label="Add Script" click="{addNewScript()}"  />
+		       	 	<mx:Button label="Delete Script" click="{deleteScript()}"  />
+		       </mx:HBox>
+		</mx:VBox>
 	</mx:HDividedBox>
 		
 

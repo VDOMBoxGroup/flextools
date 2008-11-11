@@ -129,5 +129,62 @@ package vdom.components.eventEditor
 		 	
 	 		return IconUtil.getClass(this, data, 16, 16);
 		}
+		
+		public function set currentObjectId(value:String):void
+		{
+			trace("currentObjectId: "+value);
+			
+			var object:XML = dataManager.getObject(value);
+			dataXML  = new XML('<Object/>');
+			dataXML.@label 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+			dataXML.@resourceID = getSourceID(object.@Type);
+//			dataXML.@resourceID = value.@resourceID;
+		  
+		  	trace("ID: "+dataXML.@ID);
+		  	
+		  	var type:XML = dataManager.getTypeByObjectId(value);
+			var tempXML:XML;
+			
+			for each(var child:XML in type.E2vdom.Events.Userinterfaceevents.children() )
+			{
+			 	tempXML = <Event/>;
+				tempXML.@label = child.@Name;
+				tempXML.@Name = child.@Name;
+				tempXML.@ObjSrcID = dataXML.@ID;
+				
+				dataXML.appendChild(tempXML);
+			} 
+			
+			for each(child in type.E2vdom.Events.Objectevents.children() )
+			{
+				tempXML = <Event/>;
+				tempXML.@label = child.@Name;
+				tempXML.@Name  = child.@Name;
+				tempXML.@ObjSrcID = dataXML.@ID;
+			
+				dataXML.appendChild(tempXML);
+			} 	
+			
+			super.dataProvider = dataXML;
+			
+			validateNow();
+			
+			expandItem(dataProvider.source[0], true, false);
+		}
+		
+		private var masResourceID:Array = new Array();
+		private function getSourceID(ID:String):String
+		{
+			if (masResourceID[ID]) 
+				return masResourceID[ID];
+				
+			var xml:XML = dataManager.getTypeByTypeId(ID);
+			var str:String = xml.Information.StructureIcon;
+			
+			masResourceID[ID] = str.substr(5, 36);
+			
+			return masResourceID[ID];
+		}
+		
 	}
 }

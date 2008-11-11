@@ -1,43 +1,67 @@
 package vdom.components.eventEditor
 {
-	import mx.controls.Tree;
-	import mx.events.FlexEvent;
+	import mx.collections.XMLListCollection;
+	import mx.events.ListEvent;
+	import mx.events.TreeEvent;
 	
+	import vdom.components.edit.containers.OTree;
 	import vdom.containers.ClosablePanel;
-	import vdom.events.DataManagerEvent;
 	import vdom.managers.DataManager;
 	import vdom.utils.IconUtil;
 
 	public class ContainersBranch extends ClosablePanel
 	{
-		private var tree:Tree
+		private var tree:OTree;
 		private var dataManager:DataManager = DataManager.getInstance();
 		
 		public function ContainersBranch()
 		{
 			super();
 			
-			tree = new Tree();
+			tree = new OTree();
 			tree.iconFunction = getIcon;
+			tree.showRoot = true;
+			tree.labelField = "@label";
+			tree.percentWidth = 100;
+			tree.percentHeight = 100;
+			addChild(tree);
 			
-			addEventListener(FlexEvent.SHOW, showHandler);
-			addEventListener(FlexEvent.HIDE, hideHandler);
+			tree.addEventListener(TreeEvent.ITEM_OPEN, itemOpenHandler);
+			tree.addEventListener(TreeEvent.ITEM_CLOSE, itemCloseHandler);
+			tree.addEventListener(ListEvent.CHANGE, itemChangeHandler);
 		}
 		
-		private function showHandler(flEvt:FlexEvent):void
+		public function set currentPageID(value:String):void
 		{
-			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+			var xmlTreeData:XMLListCollection = new XMLListCollection;
+			var xmlLabel:XML = dataManager.listPages.(@ID == dataManager.currentPageId)[0];
+			
+			var xmlList:XML = new XML('<Object/>');
+					xmlList.@label = xmlLabel.Attributes.Attribute.(@Name == "title")+" ("+ xmlLabel.@Name +")";
+					xmlList.@showInList = 'true';
+					xmlList.@ID = xmlLabel.@ID;
+					xmlList.@Type = xmlLabel.@Type;
+					
+					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
+						
+					xmlList.appendChild(findOjects(xmlLabel.Objects));
+					
+			xmlTreeData.addItem(xmlList);
+			
+			tree.dataProvider = xmlTreeData;	
+//			xmlTreeData.addItem(xmlList);
+			tree.validateNow();
+			var item:Object =  XMLListCollection(tree.dataProvider).source[0];
+			
+			tree.expandItem(item, true, false);
+			tree.selectedIndex = 0;
+			
+			var ID:String = XML(tree.selectedItem).@ID;
+			
+			dataManager.changeCurrentObject(value);
 		}
 		
-		private function hideHandler(flEvt:FlexEvent):void
-		{
-			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
-		}
 		
-		private function pageChangeHandler(dmEvt:DataManagerEvent):void
-		{
-			dataManager.listPages.(@ID == dataManager.currentPageId);
-		}
 		
 		private function findOjects(xmlIn:XMLList):XMLList
 		{
@@ -63,7 +87,6 @@ package vdom.components.eventEditor
 		private var masResourceID:Array = new Array();
 		private function getSourceID(ID:String):String
 		{
-//			trace('getSourceID');
 			if (masResourceID[ID]) 
 				return masResourceID[ID];
 				
@@ -75,24 +98,42 @@ package vdom.components.eventEditor
 			return masResourceID[ID];
 		}
 		
-		
-		
-		
-		
-		
-		
 		private function getIcon(value:Object):Class 
 		{
 			var xmlData:XML = XML(value);
-		
-//			if (xmlData.@resourceID.toXMLString() =='')
-//				return action;
-		
 			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 		 	
 	 		return IconUtil.getClass(this, data, 16, 16);
 		}
 		
+		private function itemOpenHandler(trEvt:TreeEvent):void
+		{
+			var ID:String = XML(tree.selectedItem).@ID;
+			
+			dataManager.changeCurrentObject(ID);
+		}
+		
+		private function itemCloseHandler(trEvt:TreeEvent):void
+		{
+			tree.validateNow();
+
+			if(tree.selectedItem)
+			{
+//				trace("Close: "+tree.selectedIndex);
+//				trace(XML(tree.selectedItem).@ID);
+				var ID:String = XML(tree.selectedItem).@ID;
+			
+				dataManager.changeCurrentObject(ID);
+			} 
+//			trace("---"+tree.selectedItem);
+		}
+		
+		private function itemChangeHandler(lsEvt:ListEvent):void
+		{
+			var ID:String = XML(tree.selectedItem).@ID;
+			
+			dataManager.changeCurrentObject(ID);
+		}
 		
 	}
 }

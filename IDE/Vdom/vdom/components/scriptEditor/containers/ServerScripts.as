@@ -1,28 +1,28 @@
 package vdom.components.scriptEditor.containers
 {
-	import mx.containers.Canvas;
-	import mx.controls.Tree;
 	import mx.events.ListEvent;
 	import mx.utils.UIDUtil;
 	
+	import vdom.components.edit.containers.OTree;
+	import vdom.containers.ClosablePanel;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ServerScriptsEvent;
 	import vdom.managers.DataManager;
 	
 	[Event(name="dataChanged", type="vdom.events.ServerScriptsEvent")]
 
-	public class ServerScripts extends Canvas
+	public class ServerScripts extends ClosablePanel
 	{
-		private var tree:Tree;
+		private var tree:OTree;
 		private var dataManager:DataManager = DataManager.getInstance();
 		private var curContainerID:String;
 
 		public function ServerScripts()
 		{
 			super();
-			tree = new Tree();
+			tree = new OTree();
 			tree.showRoot = false;
-			tree.percentHeight = 100;
+//			tree.percentHeight = 100;
 			tree.percentWidth = 100;
 			tree.labelField = '@Name';
 			tree.addEventListener(ListEvent.CHANGE, changeHandler);
@@ -73,8 +73,8 @@ package vdom.components.scriptEditor.containers
 				}
 				
 				tree.dataProvider = dataXML;
-				tree.selectedIndex = 0;
 				tree.validateNow();
+				tree.selectedIndex = 0;
 				
 			}else
 			{

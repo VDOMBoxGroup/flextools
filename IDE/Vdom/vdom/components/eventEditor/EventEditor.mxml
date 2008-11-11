@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" 
+<mx:HDividedBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler()" 
+	  backgroundColor="#3d3d3d"
 	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" hide="hideHandler()" xmlns:containers="vdom.containers.*">
 	<mx:Metadata>
 		[ResourceBundle("Event")]
@@ -77,7 +78,7 @@
 	 			dataManager = DataManager.getInstance();
 	 		}
 	 		
-	 		private var changeWatcher:ChangeWatcher ;
+//	 		private var changeWatcher:ChangeWatcher ;
 	 		private function showHandler():void
 	 		{
 //	 			clientActionsArray = [];
@@ -85,13 +86,14 @@
 //				eventsArray = [];
 //				linesArray = [];
 				
-	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
-	 			trContainer.showHandler();
-	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+//	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
+//	 			trContainer.showHandler();
+//	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 			
 	 			dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
 	 			dataManager.addEventListener(DataManagerEvent.SET_APPLICATION_EVENTS_COMPLETE, applEventSevedHandler)
 	 			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+	 			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
 	 			
 	 			btLine.addEventListener(MouseEvent.CLICK, lineClikHandler );
 	 			
@@ -121,20 +123,36 @@
 				}
 				
 				changeContainer.selectedIndex = searchIndex();
-//				changeTree(dataManager.currentPageId);
+				changeTree(dataManager.currentPageId);
+			
+				dataManager.getApplicationEvents(dataManager.currentPageId);
+				
+				if(dataManager.currentPageId != dataManager.currentObjectId)
+				{
+					dataManager.changeCurrentObject(dataManager.currentPageId)
+				}
+				else
+				{
+					treeActions.currentObjectId = dataManager.currentObjectId;
+					treeEvents.currentObjectId 	= dataManager.currentObjectId;
+				}
+				
+				
 	 		}
 	 		
 	 		private function hideHandler():void
 	 		{
 //	 			creatDataToServer();
-	 			changeWatcher.unwatch();
-	 			trContainer.hideHandler();
-	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+//	 			changeWatcher.unwatch();
+//	 			trContainer.hideHandler();
+//	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 				
 				
 				dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
 				dataManager.removeEventListener(DataManagerEvent.SET_APPLICATION_EVENTS_COMPLETE, applEventSevedHandler)
-				
+	 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+	 			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
+	 			
 				can.removeAllChildren();
 //				nullingData();
 				
@@ -169,8 +187,8 @@
 	 			
 	 			can.removeAllChildren();
 //	 			trace('-----From Server-----\n' +  eeEvt.data);
-	 			trEvents.dataProvider  = eeEvt.data;
-	 			trActions.dataProvider = eeEvt.data;
+//	 			trEvents.dataProvider  = eeEvt.dataEvent;
+//	 			trActions.dataProvider = eeEvt.dataAction;
 	 		}
 	 		
 	 		private function markButton():void
@@ -225,7 +243,7 @@
 	        	  } 
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
-	        	  	newElement = new EventEditorEvents(item, curContainerTypeID);
+	        	  	newElement = new EventEditorEvents(item, dataManager.currentPageId);
 	        	 	
 	        	 	item.@enabled = false;
 	        	  
@@ -305,7 +323,7 @@
 	        		
 	        	}else if(eventsArray[ID])
 	        	{
-	        		trEvents.enabledItem = eventsArray[ID];
+//	        		trEvents.enabledItem = eventsArray[ID];
 	        		
 	        		if(can.contains(eventsArray[ID]))
 	        			can.removeChild(eventsArray[ID]);
@@ -531,7 +549,7 @@
      			 } 
      			 trace('2 - curContainerTypeID: '+ curContainerTypeID);
 			}
-			
+			/*
 			private function getIcon(value:Object):Class 
 			{
 				var xmlData:XML = XML(value);
@@ -539,7 +557,7 @@
 			 	
 		 		return IconUtil.getClass(trContainer, data, 16, 16);
 			}
-			
+			*/
 			/***
 			 * 
 			 *  for ReDraw line when one of objects moved
@@ -837,7 +855,7 @@
 							
 							can.addChild(eventsArray[objEv.ID]);
 							
-							trEvents.disabledItem = objEv;
+//							trEvents.disabledItem = objEv;
 						}
 					}
 				}
@@ -922,18 +940,26 @@
 			private function pageChangeHandler(dmEvt:DataManagerEvent):void
 			{
 				changeTree(dataManager.currentPageId);
+				dataManager.getApplicationEvents(dataManager.currentPageId);
+
+	 			can.removeAllChildren();
 			}
 			
 			private function changeTree(value:String):void
 			{
-				dataManager.currentPageId
-				trace("************************* " + value);
+				containersBranch.currentPageID = dataManager.currentPageId;
 			}
+			
+			private function objectChangeHandler(dmEvt:DataManagerEvent):void
+			{
+				treeEvents.currentObjectId = dataManager.currentObjectId;
+				treeActions.currentObjectId = dataManager.currentObjectId;
+			}
+			
 	 	]]>
 	 </mx:Script>
 	
-	<mx:HDividedBox width="100%" height="100%">
-		
+		<!---
 		<mx:VDividedBox width="250" height="100%">
 		 	<mx:VBox  width="100%"  height="40%" >
 				<mx:Label text="Pages:" color="0xFFFFFF" fontWeight="bold"/>
@@ -953,8 +979,8 @@
 			      </mx:VBox>
 	          </mx:Canvas>
 		</mx:VDividedBox>
-		
-        <mx:VBox id="vBox" width="100%" height="100%" >
+		-->
+        <mx:VBox id="vBox" width="100%" height="100%"  >
             <mx:Canvas id="can" width="100%" height="100%" 
             		backgroundColor="#E1E1E1"
             	 	dragEnter="dragEnterHandler(event);" 
@@ -964,18 +990,25 @@
 	            <mx:Button label="Revert" click="{revert()}"/>
             </mx:HBox>
         </mx:VBox>
-        
-        <mx:VBox width="250">
-	        <mx:ComboBox id="changeContainer" dataProvider="{arrAppl}"  rowCount="20" change="{changeContainerHandler(event.target)}" width="100%"/>
-	        <eventEditor:ContainersBranch width="100%" />
-	        <containers:ClosablePanel width="100%">
-	        	
-	        </containers:ClosablePanel>
-	        
-	        <containers:ClosablePanel width="100%"/>
-        </mx:VBox>
+	        <mx:VBox  width="250"  verticalGap="10"  top="10" paddingLeft="3" paddingRight="10" paddingTop="10"
+	        		 >
+	        	<mx:Panel title="PAGES" width="100%" color="#FFFFFF">
+			        <mx:ComboBox id="changeContainer" dataProvider="{arrAppl}"  rowCount="20" change="{changeContainerHandler(event.target)}" 
+			        		color="#000000" width="100%"/>
+	        	</mx:Panel>
+		        <eventEditor:ContainersBranch id="containersBranch" width="100%"  title="Objects"/>
+		        
+		        <containers:ClosablePanel width="100%"  title="Events" >
+		        	<eventEditor:TreeEvents id="treeEvents" width="100%" />
+		        </containers:ClosablePanel>
+		        
+		        <containers:ClosablePanel width="100%" title="Actions" >
+		        	<eventEditor:TreeActions id="treeActions" width="100%" />
+		        </containers:ClosablePanel>
+		      
+	        </mx:VBox>
         
 	</mx:HDividedBox>
 		
 
-</mx:Canvas>
+

@@ -34,6 +34,7 @@ package vdom.components.eventEditor
 			var actions:XML = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID)[0];
 			var tempXML:XML;
 			trace('curContainerTypeID: '+ curContainerTypeID);
+		
 			if(actions != null)		
 			{
 				for each(var child:XML in actions.children() )
@@ -101,6 +102,58 @@ package vdom.components.eventEditor
 			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 		 	
 	 		return IconUtil.getClass(this, data, 16, 16);
+		}
+		
+//		currentObjectId
+		public function set currentObjectId(value:String):void
+		{
+			trace("currentObjectId: "+value);
+			
+			var object:XML = dataManager.getObject(value);
+			
+			dataXML  = new XML('<Object/>');
+			dataXML.@label 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+			dataXML.@resourceID = getSourceID(object.@Type);
+			
+			var type:XML = dataManager.getTypeByObjectId(dataManager.currentPageId);
+				curContainerTypeID = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();
+			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
+			var tempXML:XML;
+			trace('curContainerTypeID: '+ curContainerTypeID);
+		
+			if(actions != null)		
+			{
+				for each(var child:XML in actions.children() )
+				{
+				 	tempXML = <Event/>;
+					tempXML.@label = child.@MethodName;
+					tempXML.@MethodName  = child.@MethodName;
+					tempXML.@ObjTgtID = object.@ID;
+					tempXML.@containerID = dataManager.currentObject.@ID;
+					
+					dataXML.appendChild(tempXML);
+				}
+			} 
+			
+			super.dataProvider = dataXML;
+			validateNow();
+			var item:Object =  XMLListCollection(dataProvider).source[0];
+			
+			expandItem(item, true, false);
+		}
+		
+		private var masResourceID:Array = new Array();
+		private function getSourceID(ID:String):String
+		{
+			if (masResourceID[ID]) 
+				return masResourceID[ID];
+				
+			var xml:XML = dataManager.getTypeByTypeId(ID);
+			var str:String = xml.Information.StructureIcon;
+			
+			masResourceID[ID] = str.substr(5, 36);
+			
+			return masResourceID[ID];
 		}
 	}
 }

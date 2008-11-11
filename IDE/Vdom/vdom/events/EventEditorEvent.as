@@ -6,13 +6,15 @@ package vdom.events
 	{
 		public static const DATA_CHANGED:String = 'dataChanged';
 		
-		public var data:Object;
+		public var dataEvent:Object;
+		public var dataAction:Object;
 		public var objID:String;
 		
-		public function EventEditorEvent(type:String, data:Object=null, objID:String='', bubbles:Boolean=false, cancelable:Boolean=false)
+		public function EventEditorEvent(type:String, dataEvent:Object=null, dataAction:Object=null, objID:String='', bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
-			this.data = data;
+			this.dataEvent = dataEvent;
+			this.dataAction = dataAction;
 			this.objID = objID;
 		}
 		
