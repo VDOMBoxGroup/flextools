@@ -796,7 +796,7 @@ package ExtendedAPI.com.controls
 				{
 					var parentContainer:Container = dropTarget.parent as Container;
 					var index:int = parentContainer.getChildIndex(dropTarget);
-					var size:Object = {width:dropTarget.width, height:dropTarget.height}; 
+					var size:Object = {width:dropTarget.getExplicitOrMeasuredWidth(), height:dropTarget.getExplicitOrMeasuredHeight()}; 
 					var percentSize:Object = {width:dropTarget.percentWidth, height:dropTarget.percentHeight};
 					
 					parentContainer.removeChild(dropTarget);
@@ -815,9 +815,9 @@ package ExtendedAPI.com.controls
 						case 't':
 						case 'b':
 							box = new VDividedBox(); 
-							newNav.percentWidth = dropTarget.percentWidth = 100;
 							newNav.percentHeight = 100/dropData.divider; 
 							dropTarget.percentHeight = 100-100/dropData.divider;
+							newNav.percentWidth = dropTarget.percentWidth = 100;
 							break;
 					}
 					
