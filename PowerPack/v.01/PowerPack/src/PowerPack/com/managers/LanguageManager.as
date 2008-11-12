@@ -89,6 +89,7 @@ public class LanguageManager extends EventDispatcher
 				login:"Login",
 				password:"Password",
 				
+				// menu items
 				menu_file:"_File",
 				menu_new_template:"_New Template",
 				menu_new_tab:"New _Tab",

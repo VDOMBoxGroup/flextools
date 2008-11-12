@@ -13,6 +13,9 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Window;
+			import mx.core.EdgeMetrics;
+			import mx.core.Container;
 			import mx.core.FlexTextField;
 			import mx.managers.PopUpManager;
 			import mx.events.FlexEvent;
@@ -31,63 +34,150 @@
 			import mx.managers.DragManager;
 			import mx.events.DragEvent;
 			
+		    //--------------------------------------------------------------------------
+		    //
+		    //  Class variables and constants
+		    //
+		    //--------------------------------------------------------------------------
+    			
+			public static const CAPTION_CHANGED:String = "captionChanged";
+			
 			//----------------------------------
-		    //  statusTextField
+		    //  labelTextField
 		    //----------------------------------
 		
 			/**
 		     *  A reference to the UITextField that displays the status bar's text.
 		     */
 		    private var labelTextField:IUITextField;
+		    
 		    public var txtInput:TextInput;	
 		    
-		    private var editing:Boolean;		
-			
+		    private var _isEditing:Boolean;		
+    
+		    //--------------------------------------------------------------------------
+			//
+			//  Properties
+			//
+			//--------------------------------------------------------------------------
+		
+		    //----------------------------------
+		    //  label
+		    //----------------------------------
+    			
 			[Bindable]
 			private var _label:String;
 			
 			override public function set label(value:String):void 
 			{
-				super.label = "";
+				if(_label!=value)
+				{
+					super.label = "";
 				
-				_label = value;
+					_label = value;
+					
+					if(labelTextField)
+						labelTextField.text = _label;
+					
+					if(txtInput)
+						txtInput.text = _label;
+				}
 			}
+	
+			//--------------------------------------------------------------------------
+			//
+			//  Overridden methods
+			//
+			//--------------------------------------------------------------------------	
+			    
+			override protected function createChildren():void
+			{
+       			super.createChildren();
+       			
+       			if (!labelTextField)
+			    {
+			        labelTextField = IUITextField(createInFontContext(UITextField));
+			        labelTextField.text = _label;
+			        labelTextField.styleName = getStyle("labelTextStyleName");
+			        labelTextField.enabled = true;
+			        labelTextField.doubleClickEnabled = true;
+			        labelTextField.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
+			        
+			        boxHeader.addChildAt(DisplayObject(labelTextField), 0);
+		    	}
+		    	if(!txtInput)
+		    	{
+		    		txtInput = new TextInput();
+		    		txtInput.text = _label;
+		    		txtInput.styleName = getStyle("inputTextStyleName");
+		    		txtInput.addEventListener(FocusEvent.FOCUS_OUT, endEdit);
+		    		txtInput.addEventListener(FlexEvent.ENTER, endEdit);
+		    		txtInput.addEventListener(KeyboardEvent.KEY_DOWN, endEdit);
+		    		txtInput.addEventListener(FocusEvent.FOCUS_IN, onFocus);
+		    		
+		    		function onFocus(event:Event):void {
+		    			event.stopPropagation();
+		    		}
+		    	}
+   			}
+   			
+   			override protected function measure():void
+			{
+				super.measure();
+				
+				var parentMetrics:EdgeMetrics = Container(parent).viewMetricsAndPadding;
+				var parentContentArea:Object = {	
+					w: Container(parent).getExplicitOrMeasuredWidth() - parentMetrics.left - parentMetrics.right,
+					h: Container(parent).getExplicitOrMeasuredHeight() - parentMetrics.top - parentMetrics.bottom };
+				
+				measuredWidth = parentContentArea.w;
+   			}
+
+		    /**
+		     *  @private
+		     */
+			override protected function updateDisplayList(unscaledWidth:Number,
+														  unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				boxHeader.setActualSize(unscaledWidth, unscaledHeight);
+				
+				var boxEdges:EdgeMetrics = boxHeader.viewMetricsAndPadding;
+				cbarHeader.move(boxHeader.width - boxEdges.left - boxEdges.right - cbarHeader.getExplicitOrMeasuredWidth(), cbarHeader.y);
+								
+				if(labelTextField.parent) {
+					lblFieldResize();
+				}
+				
+				if(txtInput.parent) {
+					edtFieldResize();				
+				}
+			}
+	
+			//--------------------------------------------------------------------------
+			//
+			//  Class methods
+			//
+			//--------------------------------------------------------------------------
 			
 			private function show():void
 			{
-			}
-			
-			private function doubleClickHandler(event:Event):void
-			{
-				beginEdit();
-			}
-			
-			private function closeTabHandler(event:Event):void
-			{
-				var accordChild:AccordionChild = data as AccordionChild;
-				
-				if(accordChild.graphs && accordChild.graphs.length>0)
-				{	
-					SuperAlert.show(LanguageManager.sentences['msg_cannot_remove_nonempty_cat']);					
-					return;
-				}
-					
-				event.stopPropagation();
-				accordChild.parent.removeChild(accordChild);
+				//
 			}
 			
 			public function beginEdit():void
 			{
-				if(editing)
+				if(_isEditing)
 					return;
 				
-				editing = true;
+				_isEditing = true;
 				
 				if(labelTextField.parent)
 					boxHeader.removeChild(DisplayObject(labelTextField));
-					
+
 				boxHeader.addChildAt(txtInput, 0);
-				txtInput.visible = true;
+				edtFieldResize();
 				txtInput.setFocus();				
 
 				invalidateDisplayList();
@@ -95,7 +185,7 @@
 			
 			public function endEdit(event:Event):void
 			{				
-				if(!editing)
+				if(!_isEditing)
 					return;
 				
 				var bCommit:Boolean = true;
@@ -103,14 +193,12 @@
 				
 				if(event is KeyboardEvent)
 				{
-					// escape
-				    if(KeyboardEvent(event).charCode == 27)
+				    if(KeyboardEvent(event).charCode == 27) // escape
 				    {
 		    			bCommit = false;
 						bEndEdit = true;
 		    		}
-		    		// enter
-				    else if(KeyboardEvent(event).charCode == 13)
+				    else if(KeyboardEvent(event).charCode == 13) // enter
 				    {
 		    			bCommit = true;
 						bEndEdit = true;
@@ -121,29 +209,93 @@
 				
 				if(bEndEdit)
 				{		   
-					editing = false;
+					_isEditing = false;
+					
+					var accordChild:AccordionChild = data as AccordionChild;
 					 	
-					if(bCommit)
-						data.label = txtInput.text;
-					else
+					if(bCommit) {
+						label = txtInput.text;
+						accordChild.label = txtInput.text;
+					}
+					else {
 						txtInput.text = _label;
+					}
 					
-					txtInput.visible = false;
-					
-					txtInput.validateNow();
-
 					if(txtInput.parent)
 						boxHeader.removeChild(txtInput);
 					
 					boxHeader.addChildAt(DisplayObject(labelTextField), 0);
+					lblFieldResize();
 					
 					invalidateDisplayList();
 					
 					if(bCommit)
-						EventDispatcher(data).dispatchEvent(new Event("captionChanged"));
+						accordChild.dispatchEvent(new Event(CAPTION_CHANGED));
 				}
 			}
+							   
+   			private function getTxtFieldWidth():int
+   			{
+   				var boxEdges:EdgeMetrics = boxHeader.viewMetricsAndPadding; 
+   				var width:int = boxHeader.width - cbarHeader.getExplicitOrMeasuredWidth()-
+   					boxEdges.left - boxEdges.right;
+   				
+   				return width;
+   			}
+   			
+   			private function lblFieldResize():void
+   			{
+   				var lblWidth:int = getTxtFieldWidth();
+   				labelTextField.text = _label;
+   				labelTextField.x = 2;
+   				labelTextField.y = (boxHeader.height - labelTextField.textHeight)/2-2;
+   				labelTextField.width = lblWidth-labelTextField.x;
+   				
+   				if(labelTextField.x+labelTextField.textWidth>lblWidth)
+   					labelTextField.truncateToFit("...");
+   			}
+   			
+   			private function edtFieldResize():void
+   			{
+   				var edtWidth:int = getTxtFieldWidth();
+   				
+   				txtInput.width = edtWidth;
+   			}   			
 			
+			//--------------------------------------------------------------------------
+		    //
+		    //  Event handlers
+		    //
+		    //--------------------------------------------------------------------------
+			
+			private function doubleClickHandler(event:Event):void
+			{
+				beginEdit();
+			}
+			
+		    /**
+		     *  @private
+		     */
+		    private function closeTabHandler(event:Event):void
+		    {
+	        	var accordChild:AccordionChild = data as AccordionChild;
+		        	
+		    	event.stopPropagation();
+		    	
+		        var e:Event = new Event("tabClosing", true, true);
+		        accordChild.dispatchEvent(e);
+		        if (e.isDefaultPrevented())
+		        {
+		            event.preventDefault();
+		        }
+		        else 
+		        {
+		            accordChild.parent.removeChild(accordChild);
+		            accordChild.dispatchEvent(new Event("tabClose"));
+		            event.preventDefault();
+		        }
+		    }
+		
 		    private function dragEnterHandler(event:DragEvent):void
 		    {
 	            if (	event.dragSource.hasFormat("items") && 
@@ -177,101 +329,7 @@
 					Graphs(destination.parent.parent.parent.parent).selectGraph(graph);
 		    	}
 		    }
-		    
-			override protected function createChildren():void
-			{
-       			super.createChildren();
-       			
-       			if (!labelTextField)
-			    {
-			        labelTextField = IUITextField(createInFontContext(UITextField));
-			        labelTextField.text = _label;
-			        labelTextField.styleName = getStyle("labelTextStyleName");
-			        labelTextField.enabled = true;
-			        labelTextField.doubleClickEnabled = true;
-			        labelTextField.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
-			        
-			        boxHeader.addChildAt(DisplayObject(labelTextField), 0);
-		    	}
-		    	if(!txtInput)
-		    	{
-		    		txtInput = new TextInput();
-		    		txtInput.text = _label;
-		    		txtInput.addEventListener(FocusEvent.FOCUS_OUT, endEdit);
-		    		txtInput.addEventListener(FlexEvent.ENTER, endEdit);
-		    		txtInput.addEventListener(KeyboardEvent.KEY_DOWN, endEdit);
-		    		txtInput.addEventListener(FocusEvent.FOCUS_IN, onFocus);
-		    		
-		    		function onFocus(event:Event):void {
-		    			event.stopPropagation();
-		    		}
-		    	}
-   			}
-   			
-   			override protected function measure():void
-			{
-				super.measure();
-				
-				measuredWidth = parent.width;
-   			}
-
-		    /**
-		     *  @private
-		     */
-			override protected function updateDisplayList(unscaledWidth:Number,
-														  unscaledHeight:Number):void
-			{
-				unscaledWidth = parent.width;
-
-				super.updateDisplayList(unscaledWidth, unscaledHeight);
-				
-				width = unscaledWidth;	
-				
-				boxHeader.width = width;
-				boxHeader.height = height;
-				
-				cbarHeader.x = boxHeader.width - cbarHeader.width;
-				
-				
-				if(labelTextField.parent)
-					lblFieldResize();
-				
-				if(txtInput.parent)
-					edtFieldResize();				
-
-				boxHeader.validateNow();
-			}
-			   
-   			private function getTxtFieldWidth():int
-   			{
-   				var width:int = boxHeader.getExplicitOrMeasuredWidth() - cbarHeader.getExplicitOrMeasuredWidth()-
-   					boxHeader.getStyle('paddingLeft') - boxHeader.getStyle('paddingRight');
-   				
-   				return width;
-   			}
-   			
-   			private function lblFieldResize():void
-   			{
-   				var lblWidth:int = getTxtFieldWidth();
-   				
-   				labelTextField.text = _label;
-   				labelTextField.x = 2;
-   				labelTextField.y = (boxHeader.getExplicitOrMeasuredHeight() - labelTextField.textHeight) / 2-2;
-   				labelTextField.width = lblWidth-labelTextField.x;
-   				
-   				if(labelTextField.x+labelTextField.textWidth>lblWidth)
-   					labelTextField.truncateToFit("...");
-   					
-   				labelTextField.validateNow();   				  					
-   			}
-   			
-   			private function edtFieldResize():void
-   			{
-   				var edtWidth:int = getTxtFieldWidth();
-   				
-   				txtInput.width = edtWidth;
-   			}   			
-	    			
+		        	    			
 		]]>
 	</mx:Script>
 	

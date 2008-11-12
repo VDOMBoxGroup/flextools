@@ -236,10 +236,8 @@
             	}
             	
             	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
-            	
             	//trace(describeType(Dynamic));
             	
-            	//trace(pnl_graphs.viewMetrics.top);
 		    }
 		    		    
 		    private function onProblemsDoubleClick(event:MouseEvent):void

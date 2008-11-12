@@ -99,7 +99,7 @@ public class GraphCanvas extends Canvas
             }        
             
            	// To get focus during clicking on canvas
-           	newStyleDeclaration.setStyle("backgroundColor", 0xdddddd);
+           	newStyleDeclaration.setStyle("backgroundColor", 0xeeeeee);
 			newStyleDeclaration.setStyle("backgroundAlpha", 1.0);	
 		        
             StyleManager.setStyleDeclaration("GraphCanvas", newStyleDeclaration, true);
@@ -389,7 +389,8 @@ public class GraphCanvas extends Canvas
 		}
 		
 		var move:Move = new Move();
-		move.yBy = node.height*2;
+		move.duration = 300;
+		move.yBy = Node.DEFAULT_HEIGHT*3;
 		move.play(arr);
 		
 		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));	
@@ -414,7 +415,8 @@ public class GraphCanvas extends Canvas
 		}	
 
 		var move:Move = new Move();
-		move.yBy = -node.height;
+		move.duration = 300;
+		move.yBy = -Node.DEFAULT_HEIGHT*2;
 		move.play(arr);
 				
 		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
@@ -819,15 +821,18 @@ public class GraphCanvas extends Canvas
 		switch(event.target.name)
 		{
 			case "add_state":
+				selectionManager.deselectAll();
 				createNode();
 				break;
 				
 			case "add_command":
+				selectionManager.deselectAll();
 				var comNode:Node = createNode();
 				comNode.category = NodeCategory.COMMAND;
 				break;
 				
 			case "add_sub":
+				selectionManager.deselectAll();
 				var subNode:Node = createNode();
 				subNode.category = NodeCategory.SUBGRAPH;
 				break;

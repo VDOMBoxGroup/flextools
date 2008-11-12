@@ -6,9 +6,10 @@
 
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.gen.parse.CodeParser;
+			import mx.core.UIComponent;
 			import PowerPack.com.managers.LanguageManager;
 			import mx.events.ListEventReason;
-			import PowerPack.com.gen.parse.CodeParser;
 			import mx.collections.SortField;
 			import mx.collections.Sort;
 			import mx.collections.ArrayCollection;
@@ -18,27 +19,23 @@
 			
 			[Bindable]
 			public var graphs:ArrayCollection = new ArrayCollection();
-			
+
+			//--------------------------------------------------------------------------
+			//
+			//  Class methods
+			//
+			//--------------------------------------------------------------------------	
+						
 			private function init():void
 			{				
 				graphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onGraphsChange);	
-			}
-			
-			public function onGraphsChange(event:CollectionEvent):void	
-			{
-				if(!event || event.kind!=CollectionEventKind.REFRESH)
-				{
-					var sort:Sort = new Sort();
-     				sort.fields = [new SortField('name', true)];
-     			
-     				graphs.sort = sort;
-       				graphs.refresh();
-    			}
 			}
 
             private function BeginningEdit(event:ListEvent):void 
             {
             	//
+            	
+            	return;
             }
                         
             private function beginEdit(event:ListEvent):void 
@@ -48,17 +45,14 @@
             	var list:List = List(event.target);
             	
             	list.createItemEditor(event.columnIndex, event.rowIndex); 
+            	list.editedItemRenderer.visible = false;
 				
             	var editInst:GraphThumb = GraphThumb(list.itemEditorInstance);
             	
-				editInst.labelTextField.visible = false;            	
-				editInst.labelTextField.includeInLayout = false;
+				editInst.editable = true;
 				
-				editInst.txtThumb.visible = true;
-				editInst.txtThumb.includeInLayout = true;
-				
-				editInst.txtThumb.setFocus();
 				editInst.data = list.selectedItem;
+				editInst.txtThumb.setFocus();
 				editInst.txtThumb.setSelection(0, editInst.txtThumb.text.length);
            	}
             
@@ -68,18 +62,15 @@
                 
             	var list:List = List(event.target);
             	var editInst:GraphThumb = GraphThumb(list.itemEditorInstance);                
-
+				
+				editInst.txtThumb.errorString = null;
                 var newData:String = editInst.txtThumb.text;
-                
-                if(CodeParser.ParseSubgraphNode(newData).result==false)
-                {	                
-                	editInst.errorString = LanguageManager.sentences['msg_enter_valid_graph_name'];
-                }                
                 
                 if (event.reason == ListEventReason.CANCELLED)
                 {
                     // Do not update item.
 	                // Close the cell editor.
+	                list.editedItemRenderer.visible = true;
 	                list.destroyItemEditor();
 	                list.editable = false; 
                 	return;
@@ -88,18 +79,21 @@
             	// Disable copying data back to the control.
                 if(CodeParser.ParseSubgraphNode(newData).result==false)
                 {	      
-                	list.destroyItemEditor();
-	               	//list.editedItemPosition = list.editedItemPosition;
+                	editInst.txtThumb.errorString = LanguageManager.sentences['msg_enter_valid_graph_name'];
+                	editInst.txtThumb.setFocus();
+                	event.stopImmediatePropagation();
             	}            	
             	else
 				{				
 	                // Get new label from editor.
 	                list.editedItemRenderer.data.name =
 						newData;
-	
+
+	            	list.editedItemRenderer.visible = true;
+
 	                // Close the cell editor.
 	                list.destroyItemEditor();
-	                    
+
 	                // Notify the list control to update its display.
 	        		list.dataProvider.notifyItemUpdate(list.editedItemRenderer);
 	        		
@@ -113,9 +107,28 @@
 	        			event.itemRenderer);
 	        		
 	        		list.dispatchEvent(evnt);
+	
+		   			list.editable = false;
 	   			}
-	   			list.editable = false;
             }
+
+			//--------------------------------------------------------------------------
+		    //
+		    //  Event handlers
+		    //
+		    //--------------------------------------------------------------------------
+			
+			public function onGraphsChange(event:CollectionEvent):void	
+			{
+				if(!event || event.kind!=CollectionEventKind.REFRESH)
+				{
+					var sort:Sort = new Sort();
+     				sort.fields = [new SortField('name', true)];
+     			
+     				graphs.sort = sort;
+       				graphs.refresh();
+    			}
+			}            
 		]]>
 	</mx:Script>
 			

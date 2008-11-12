@@ -1055,12 +1055,13 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     
     private function mouseDownHandler(event:MouseEvent):void
     {
-    	var fromObj:Object = fromObject;
-    	dispose();
-    	
-    	if(fromObj && fromObj is Node)
+    	if(event.altKey)
     	{
-    		Node(fromObj).beginTransition();
+	    	var fromObj:Object = fromObject;
+	    	dispose();
+	    	
+    		if(fromObj && fromObj is Node)
+    			Node(fromObj).beginTransition();
     	}
     }
     

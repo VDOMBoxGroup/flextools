@@ -37,6 +37,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.containers.SuperAlert;
 			import mx.utils.NameUtil;
 			import PowerPack.com.graph.GraphCanvasEvent;
 			import PowerPack.com.managers.ProgressManager;
@@ -121,14 +122,6 @@
 					createCategoryTab(label);			
 				}
 				
-				btnNew.addEventListener(MouseEvent.CLICK, btnNewClickHandler);	
-				btnRename.addEventListener(MouseEvent.CLICK, btnRenameClickHandler);	
-				btnCopy.addEventListener(MouseEvent.CLICK, btnCopyClickHandler);	
-				btnDelete.addEventListener(MouseEvent.CLICK, btnDeleteClickHandler);	
-				btnHelp.addEventListener(MouseEvent.CLICK, btnHelpClickHandler);	
-				
-				cbInitGraph.addEventListener(DropdownEvent.CLOSE, cbInitGraphCloseHandler);
-					
 				initGraphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);				
 			}
 			
@@ -167,8 +160,9 @@
 
 				graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, changeLstGraphsHandler);
 				graphAccordionChild.lstGraphs.addEventListener(MouseEvent.DOUBLE_CLICK, btnRenameClickHandler);
-				graphAccordionChild.lstGraphs.addEventListener("editingComplete", completeEditLstGraphsHandler);	
+				graphAccordionChild.lstGraphs.addEventListener("editingComplete", completeEditLstGraphsHandler);
 				
+				graphAccordionChild.addEventListener("tabClosing", closingEditLstGraphsHandler);	
 				graphAccordionChild.addEventListener("captionChanged", captionChangedHandler);	
 				
 				dispatchEvent(new Event(TPL_CHANGED));
@@ -419,6 +413,17 @@
 				//else
 					//callLater(selectGraph, [GraphCanvas(vsViewStack.selectedChild)]);
 			}
+			
+			private function closingEditLstGraphsHandler(event:Event):void
+			{
+				var accordChild:AccordionChild = event.currentTarget as AccordionChild;
+				
+				if(accordChild.graphs && accordChild.graphs.length>0)
+				{	
+					SuperAlert.show(LanguageManager.sentences['msg_cannot_remove_nonempty_cat']);
+					event.preventDefault();					
+				}
+			}
 
 			private function completeEditLstGraphsHandler(event:ListEvent):void
 			{        	
@@ -428,7 +433,20 @@
 				dispatchEvent(new Event(TPL_CHANGED));    						
 			}
 				    			
-	    	// Change initial graph
+			private function cbInitGraphChangeHandler(event:ListEvent):void
+			{
+				for each (var child:DisplayObject in vsViewStack.getChildren())
+				{
+					if(child is GraphCanvas)
+						GraphCanvas(child).initial = false;
+				}
+				
+				if(ComboBox(event.target).selectedItem is GraphCanvas)
+					GraphCanvas(ComboBox(event.target).selectedItem).initial = true;
+				
+				dispatchEvent(new Event(TPL_CHANGED));
+			}
+				    	
 			private function cbInitGraphCloseHandler(event:DropdownEvent):void
 			{
 				for each (var child:DisplayObject in vsViewStack.getChildren())
@@ -504,7 +522,7 @@
 				
 				var newGraph:GraphCanvas = curGraph.clone();
 									
-				newGraph.name = NameUtil.createUniqueName(newGraph);
+				newGraph.name = "Copy_of_"+curGraph.name;//NameUtil.createUniqueName(newGraph);
 				newGraph.label = newGraph.name;
 				newGraph.initial = false;
 
@@ -566,25 +584,30 @@
 		<mx:VBox width="100%" height="100%" verticalGap="0">
 		
 			<mx:ControlBar id="ctrlBar" width="100%" styleName="categoryCtrlBarStyle">
-				<mx:Button id="btnNew" toolTip="{LanguageManager.sentences.lbl_new}" width="100%" icon="{ContextManager.addClass}" styleName="categoryCtrlBtnStyle"/>
-				<mx:Button id="btnRename" toolTip="{LanguageManager.sentences.lbl_rename}" width="100%" icon="{ContextManager.editClass}" styleName="categoryCtrlBtnStyle"/>
-				<mx:Button id="btnCopy" toolTip="{LanguageManager.sentences.lbl_copy}" width="100%" icon="{ContextManager.copyClass}" styleName="categoryCtrlBtnStyle"/>
-				<mx:Button id="btnDelete" toolTip="{LanguageManager.sentences.lbl_delete}" width="100%" icon="{ContextManager.deleteClass}" styleName="categoryCtrlBtnStyle"/>
-				<mx:Button id="btnHelp" toolTip="{LanguageManager.sentences.lbl_help}" width="100%" icon="{ContextManager.helpClass}" styleName="categoryCtrlBtnStyle"
+				<mx:Button id="btnNew" click="btnNewClickHandler(event);"
+					toolTip="{LanguageManager.sentences.lbl_new}" width="100%" icon="{ContextManager.addClass}" styleName="categoryCtrlBtnStyle"/>
+				<mx:Button id="btnRename" click="btnRenameClickHandler(event);"
+					toolTip="{LanguageManager.sentences.lbl_rename}" width="100%" icon="{ContextManager.editClass}" styleName="categoryCtrlBtnStyle"/>
+				<mx:Button id="btnCopy" click="btnCopyClickHandler(event);"
+					toolTip="{LanguageManager.sentences.lbl_copy}" width="100%" icon="{ContextManager.copyClass}" styleName="categoryCtrlBtnStyle"/>
+				<mx:Button id="btnDelete" click="btnDeleteClickHandler(event);"
+					toolTip="{LanguageManager.sentences.lbl_delete}" width="100%" icon="{ContextManager.deleteClass}" styleName="categoryCtrlBtnStyle"/>
+				<mx:Button id="btnHelp" click="btnHelpClickHandler(event);"
+					toolTip="{LanguageManager.sentences.lbl_help}" width="100%" icon="{ContextManager.helpClass}" styleName="categoryCtrlBtnStyle"
 					visible="false" includeInLayout="false"/>
 			</mx:ControlBar>
 			
 			<mx:Accordion 
 				headerRenderer="PowerPack.com.panel.graphsClasses.AccordionHeader" 
-				id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" width="100%" height="100%">		
-			</mx:Accordion>
+				id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" width="100%" height="100%" />		
 			
 		</mx:VBox>
 
 	</mx:Panel>
 	
 	<mx:Panel width="100%" layout="absolute" title="{LanguageManager.sentences.initial_graph}">
-		<mx:ComboBox width="100%" id="cbInitGraph" dataProvider="{initGraphs}" labelField="name"></mx:ComboBox>
+		<mx:ComboBox id="cbInitGraph" close="cbInitGraphCloseHandler(event)" change="cbInitGraphChangeHandler(event)"
+			 dataProvider="{initGraphs}" labelField="name" width="100%"/>
 	</mx:Panel>
 	
 </mx:VBox>
