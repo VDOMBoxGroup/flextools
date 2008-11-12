@@ -131,7 +131,7 @@
 				else
 				{
         			template.decode();		
-          			if(template.xmlTemplate)
+          			if(template.xmlStructure)
         			{
         				populateList();	
 						return;        					
@@ -147,7 +147,7 @@
             		{
             			template.key = event.target.txtKey.text;
             			template.decode();
-            			if(template.xmlTemplate)
+            			if(template.xmlStructure)
             			{
             				populateList();	
 							return;        					
@@ -160,7 +160,7 @@
             
             private function populateList():void
             {            	
-            	var xmlList:XMLList = template.xmlTemplate..graph;
+            	var xmlList:XMLList = template.xmlStructure..graph;
             	var treeXML:XML = <tree/>;
             	
             	for each (var item:XML in xmlList) { 				   

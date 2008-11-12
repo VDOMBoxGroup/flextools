@@ -262,7 +262,7 @@
     				
     			tpl.decode();
     			
-    			if(!tpl.xmlTemplate)
+    			if(!tpl.xmlStructure)
     			{
     				SuperAlert.show(LanguageManager.sentences['msg_cannot_open_tpl']);
 					closeTemplateFile();    				
@@ -491,7 +491,7 @@
     	
     	    		tpl = ContextManager.instance.templates.getItemAt(0) as Template;
 		
-					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlTemplate);
+					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure);
 					
 					var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
 					

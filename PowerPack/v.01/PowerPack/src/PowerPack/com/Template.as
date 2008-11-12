@@ -15,8 +15,35 @@ package PowerPack.com
 	
 	public class Template
 	{
-		[Bindable]
-		public var xmlTemplate:XML;
+		//--------------------------------------------------------------------------
+		//
+		//  Constructor
+		//
+		//--------------------------------------------------------------------------
+		
+		/**
+		 *	Constructor
+		 */ 
+		public function Template(xml:XML=null)
+		{
+			if(xml)
+			{
+				_xml = xml;
+				if(!Utils.getStringOrDefault(_xml.@ID, ''))
+					_xml.@ID = UIDUtil.createUID();	
+			}
+			else
+			{
+				_xml = new XML(<template/>);
+				_xml.@ID = UIDUtil.createUID();
+			}
+		}
+
+	    //--------------------------------------------------------------------------
+	    //
+	    //  Variables
+	    //
+	    //--------------------------------------------------------------------------  
 		
 		[Bindable]
 		public var key:String;
@@ -26,32 +53,49 @@ package PowerPack.com
 		
 		[Bindable]
 		public var picturePath:String;		
-		
-		public function Template(xml:XML=null)
-		{
-			if(xml)
-			{
-				this.xml = xml;
-				if(!Utils.getStringOrDefault(this.xml.@ID, ''))
-					this.xml.@ID = UIDUtil.createUID();	
-			}
-			else
-			{
-				this.xml = new XML(<template/>);
-				this.xml.@ID = UIDUtil.createUID();
-			}
-		}
 
-		private var _xml:XML;		
+	    //--------------------------------------------------------------------------
+		//
+		//  Properties
+		//
+		//--------------------------------------------------------------------------
+	    
+	    //----------------------------------
+	    //  xml
+	    //----------------------------------
+	    
+		private var _xml:XML;
+				
 		public function get xml():XML
 		{
 			return _xml;
 		}
-		public function set xml(value:XML):void
-		{
-			_xml = value;
-		}
+
+	    //----------------------------------
+	    //  xmlStructure
+	    //----------------------------------
+
+		private var _xmlStructure:XML;
 		
+		[Bindable]
+		public function get xmlStructure():XML
+		{
+			if(!_xmlStructure)
+				decode();
+			return _xmlStructure;
+		}		
+		public function set xmlStructure(value:XML):void
+		{
+			if(_xmlStructure!=value)
+			{
+				_xmlStructure=value;		
+			}
+		}
+				
+	    //----------------------------------
+	    //  name
+	    //----------------------------------
+
 		[Bindable]
 		public function get name():String
 		{
@@ -62,6 +106,10 @@ package PowerPack.com
 			if(_xml.@name != value)
 				_xml.@name = value;	
 		}		
+
+	    //----------------------------------
+	    //  description
+	    //----------------------------------
 
 		[Bindable]
 		public function get description():String
@@ -74,27 +122,45 @@ package PowerPack.com
 				_xml.description = value;	
 		}		
 		
+	    //----------------------------------
+	    //  ID
+	    //----------------------------------
+
 		public function get ID():String
 		{
 			return _xml.@ID;	
 		}		
 
+	    //----------------------------------
+	    //  b64picture
+	    //----------------------------------
+
 		[Bindable]
-		public function get picture():String
+		public function get b64picture():String
 		{
 			return Utils.getStringOrDefault(_xml.picture[0], '');	
 		}		
-		public function set picture(value:String):void
+		public function set b64picture(value:String):void
 		{
 			if(_xml.picture != value)
 				_xml.picture = value;	
 		}	
 		
+	    //----------------------------------
+	    //  isEncoded
+	    //----------------------------------
+
 		public function get isEncoded():Boolean
 		{
 			return _xml.hasOwnProperty('encoded');	
 		}		
 
+		//--------------------------------------------------------------------------
+		//
+		//  Class methods
+		//
+		//--------------------------------------------------------------------------
+		
 		public function encode():void
 		{
 			delete _xml.encoded;
@@ -102,19 +168,19 @@ package PowerPack.com
 			
 			if(key)
 			{
-				var bytes:ByteArray = CryptUtils.encrypt(xmlTemplate.toXMLString(), key);
+				var bytes:ByteArray = CryptUtils.encrypt(_xmlStructure.toXMLString(), key);
 				
 				var encoder:Base64Encoder = new Base64Encoder();
 			    encoder.encodeBytes(bytes);
 			    _xml.encoded = encoder.flush();
 			}
 			else
-				_xml.structure = xmlTemplate;
+				_xml.structure = _xmlStructure;
 		}
 		
 		public function decode():void
 		{
-			xmlTemplate = null;
+			_xmlStructure = null;
 			
 			if(isEncoded && key)
 			{			
@@ -129,18 +195,18 @@ package PowerPack.com
 					bytes = CryptUtils.decrypt(bytes, key);	
 					bytes.position = 0;
 					strDecoded = bytes.readUTFBytes(bytes.length);
-				 	xmlTemplate = XML(strDecoded);
+				 	_xmlStructure = XML(strDecoded);
 				 	
-					if(xmlTemplate)
-				 		if(xmlTemplate.name().localName!='structure')
-				 			xmlTemplate = null;				 	
+					if(_xmlStructure)
+				 		if(_xmlStructure.name().localName!='structure')
+				 			_xmlStructure = null;				 	
 				 	
 				} catch(e:*) {
-					xmlTemplate = null;
+					_xmlStructure = null;
 				}				
 			}	
 			else if(_xml.hasOwnProperty('structure'))
-				xmlTemplate = _xml.structure[0];
+				_xmlStructure = _xml.structure[0];
 		}
 		
 		public function loadPicture():void
@@ -162,7 +228,7 @@ package PowerPack.com
 			
 			var fileToBase64:FileToBase64 = new FileToBase64(file.nativePath);
 			fileToBase64.convert();						
-			picture = fileToBase64.data.toString();
+			b64picture = fileToBase64.data.toString();
 		}
 
 	}

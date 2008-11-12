@@ -307,7 +307,7 @@
               			var file:File = ContextManager.instance.files[0];
               			var fileStream:FileStream = new FileStream();
               			
-              			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+              			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
               			ContextManager.instance.templates[0].encode();
               			ContextManager.instance.templates[0].loadPicture();
               			
@@ -333,7 +333,7 @@
               			var file:File = ContextManager.instance.files[0];
               			var fileStream:FileStream = new FileStream();
               			
-              			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+              			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
               			ContextManager.instance.templates[0].encode();
               			ContextManager.instance.templates[0].loadPicture();
               			
@@ -411,7 +411,7 @@
 						
 	        			var tpl:Template = ContextManager.instance.templates[0];        			
 	        			tpl.decode();	
-	        			pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlTemplate;				
+	        			pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlStructure;				
 	
 		                workStage.visible = true;
 	    	            workStage.includeInLayout = true;
@@ -439,9 +439,9 @@
             			
             			tpl.key = event.target.txtKey.text;
             			tpl.decode();
-            			if(tpl.xmlTemplate)
+            			if(tpl.xmlStructure)
             			{
-            				pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlTemplate;
+            				pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlStructure;
             				
 			                workStage.visible = true;
 	    		            workStage.includeInLayout = true;
@@ -535,7 +535,7 @@
 						ProgressManager.source = fileStream;
 						ProgressManager.start();
 					              			
-              			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+              			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
               			ContextManager.instance.templates[0].encode();
               			ContextManager.instance.templates[0].loadPicture();
               			
@@ -754,7 +754,7 @@
 	            		if(dialog.chkNames) 	flags|=TemplateValidateOptions.SET_UNIQ_NAMES;
 	            	}
             		            		
-					ContextManager.instance.templateStruct = new TemplateStruct(ContextManager.instance.templates.getItemAt(0).xmlTemplate as XML);
+					ContextManager.instance.templateStruct = new TemplateStruct(ContextManager.instance.templates.getItemAt(0).xmlStructure as XML);
 					var validateArr:Array = ContextManager.instance.templateStruct.validate(flags).array;
 	
 					pnl_problems.array = validateArr;
@@ -994,13 +994,13 @@
 		                MenuGeneral.newTemplate(fileMenuData);    	        		
             		}
             		
-					if(tpl && tpl.xmlTemplate && tree.selectedItems.length>0)
+					if(tpl && tpl.xmlStructure && tree.selectedItems.length>0)
 					{
 						for each(var node:Object in tree.selectedItems)	
 						{
 							if(node.@isBranch=='true')
 							{
-								var catList:XMLList = tpl.xmlTemplate..graph.(@category==node.@label);
+								var catList:XMLList = tpl.xmlStructure..graph.(@category==node.@label);
 								
 								for each(var xml:XML in catList)
 									if(xmlListCol.source.(@category==xml.@category && @name==xml.@name).length()==0)
@@ -1009,7 +1009,7 @@
 							else
 							{
 								xml = null;
-								var lst:XMLList = tpl.xmlTemplate..graph.(@category==node.@category && @name==node.@label);
+								var lst:XMLList = tpl.xmlStructure..graph.(@category==node.@category && @name==node.@label);
 								if(lst.length()>0)
 									xml = lst[0];
 	
@@ -1149,7 +1149,7 @@
 				ProgressManager.source = fileStream;
 				ProgressManager.start();
 				            		            	
-     			ContextManager.instance.templates[0].xmlTemplate = pnl_graphs.toXML();
+     			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
       			ContextManager.instance.templates[0].encode();
       			ContextManager.instance.templates[0].loadPicture();
       			

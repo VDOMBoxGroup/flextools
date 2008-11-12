@@ -48,7 +48,7 @@
 			{            	
             	var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template; 
 				
-				if(tpl.picture || tpl.picturePath)
+				if(tpl.b64picture || tpl.picturePath)
 				{
 					gridRemovePic.visible = true;
 					gridRemovePic.includeInLayout = true;
@@ -74,9 +74,9 @@
 					tplImg.visible = true; 
 					tplImg.includeInLayout = true; 
 				} 
-				else if(tpl.picture)
+				else if(tpl.b64picture)
 				{
-					b64Img.source = tpl.picture;
+					b64Img.source = tpl.b64picture;
 
 					tplImg.visible = false; 
 					tplImg.includeInLayout = false; 
