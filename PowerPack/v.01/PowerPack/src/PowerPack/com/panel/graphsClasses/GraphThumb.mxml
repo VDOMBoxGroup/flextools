@@ -56,8 +56,6 @@
 				
 						txtThumb.visible = true;
 						txtThumb.includeInLayout = true;
-						
-						setStyle("paddingTop", getStyle("paddingTop")+2);
 		    		}
 		    		else
 		    		{
@@ -66,11 +64,8 @@
 						
 						labelTextField.visible = true;
 						labelTextField.includeInLayout = true;
-
-						setStyle("paddingTop", getStyle("paddingTop")-2);
 		    		}
 		    		
-		    		invalidateProperties();
 		    		invalidateDisplayList();
 
 		    		dispatchEvent(new Event("editableChange"));

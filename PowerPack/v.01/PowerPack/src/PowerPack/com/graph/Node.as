@@ -609,6 +609,7 @@ public class Node extends Canvas
         if(!nodeCB)
         {
         	nodeCB = new ComboBox();
+        	nodeCB.setStyle("cornerRadius", 3);
         	nodeCB.focusEnabled = false;
         	
 			nodeCB.labelField = '@name';
@@ -674,7 +675,6 @@ public class Node extends Canvas
         	validator = new NodeTextValidator();
 			validator.source = this;
 			validator.property = "text";
-			//validator.listener = nodeTextArea;
 			validator.required = true;
 			
 			validator.addEventListener(ValidationResultEvent.VALID, validatorHandler);
@@ -1279,7 +1279,7 @@ public class Node extends Canvas
 		if(tipImage.parent)
 			PopUpManager.removePopUp(tipImage);
 		
-		removeEventListener(MouseEvent.MOUSE_MOVE, tipImageMoveHandler);
+		systemManager.stage.removeEventListener(MouseEvent.MOUSE_MOVE, tipImageMoveHandler);
 		tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);		
 		tipImage.removeEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);	
 
@@ -1321,7 +1321,7 @@ public class Node extends Canvas
 		tipImage.removeEventListener(Event.COMPLETE, tipImageComplete);			
 
 		tipImage.addEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);	
-        addEventListener(MouseEvent.MOUSE_MOVE, tipImageMoveHandler);
+        systemManager.stage.addEventListener(MouseEvent.MOUSE_MOVE, tipImageMoveHandler);
             
 		tipImage.visible = true;
 		
@@ -1348,7 +1348,7 @@ public class Node extends Canvas
    		tipImageShadow.drawShadow(tipImage.graphics, -1, -1 , tipImage.width+2, tipImage.height+2);
    		
 		tipImage.graphics.beginFill(0xffffff, 1.0);
-		tipImage.graphics.lineStyle(1, 0x000000, 0.8);
+		tipImage.graphics.lineStyle(1, 0xffffff, 0.8);
 		tipImage.graphics.drawRect(-1, -1, tipImage.width+2, tipImage.height+2);
 	}
 	
@@ -1374,13 +1374,20 @@ public class Node extends Canvas
 	{
 		var point:Point = localToGlobal(new Point(mouseX, mouseY));
 		
-		tipImage.endEffectsStarted();
+		if(getBounds(systemManager.stage).containsPoint(point))
+		{
+			tipImage.endEffectsStarted();
 
-		var move:Move = new Move(tipImage);
-		move.xTo = point.x+15;
-		move.yTo = point.y+15;
+			var move:Move = new Move(tipImage);
+			move.xTo = point.x+15;
+			move.yTo = point.y+15;
 		
-		move.play();
+			move.play();
+		}
+		else
+		{
+			beginHideImageTip();
+		}
 	}
 
 	private function moveHandler(event:MoveEvent):void

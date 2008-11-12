@@ -117,7 +117,7 @@ public class SelectionManager extends EventDispatcher
 			DisplayObject(elm).addEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected);
 			
 			if(elm.selected)
-				select(elm);
+				select(elm, true);
 		}		
 	}
 	
@@ -125,10 +125,8 @@ public class SelectionManager extends EventDispatcher
 	{
 		if(elm.hasOwnProperty("selected"))
 		{
-			deselect(elm);
+			deselect(elm, true);
 			
-	   		elm.selected = false;
-	   		
 			elm.removeEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
 			elm.removeEventListener(MouseEvent.CLICK, onElmClick);
 			elm.removeEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
@@ -143,31 +141,37 @@ public class SelectionManager extends EventDispatcher
 			removeElement(child);
 	}
 	
-	public function select(elm:Object):void
+	public function select(elm:Object, forced:Boolean=false):void
 	{
 		if(elm.hasOwnProperty('selected'))
 		{
 			elm.selected = true;
 			
-			var ac:ArrayCollection = new ArrayCollection(_group);
-			var index:int = ac.getItemIndex(elm);
+			if(forced)
+			{
+				var ac:ArrayCollection = new ArrayCollection(_group);
+				var index:int = ac.getItemIndex(elm);
 		
-			if(index<0)
-				ac.addItem(elm);			 
+				if(index<0)
+					ac.addItem(elm);
+			}			 
 		}			 
 	}
 			
-	public function deselect(elm:Object):void
+	public function deselect(elm:Object, forced:Boolean=false):void
 	{
 		if(elm.hasOwnProperty('selected'))
 		{
 			elm.selected = false;	
 
-			var ac:ArrayCollection = new ArrayCollection(_group);
-			var index:int = ac.getItemIndex(elm);
+			if(forced)
+			{	
+				var ac:ArrayCollection = new ArrayCollection(_group);
+				var index:int = ac.getItemIndex(elm);
 		
-			if(index>=0)
-				ac.removeItemAt(index);
+				if(index>=0)
+					ac.removeItemAt(index);
+			}
 		}
 	}
 	
@@ -250,6 +254,7 @@ public class SelectionManager extends EventDispatcher
          
         if(event.currentTarget==_container) //begin draw selection rect
         {   
+        	regDeltaElmPts = new Dictionary(true);
         	rectShape = new UIComponent();
         	_container.addChild(rectShape);
         }
@@ -407,7 +412,17 @@ public class SelectionManager extends EventDispatcher
 	        	if(child.hasOwnProperty('selected'))
 	        	{
 	        		var rect1:Rectangle = new Rectangle(rectShape.x, rectShape.y, rectShape.width, rectShape.height);
-	        		var rect2:Rectangle = new Rectangle(child.x, child.y, child.width, child.height);
+	        		var rect2:Rectangle;
+	        		
+	        		if(regDeltaElmPts[child])
+	        		{
+	        			rect2 = regDeltaElmPts[child].boundsRect;
+	        		}
+	        		else
+	        		{
+	        			rect2 = new Rectangle(child.x, child.y, child.width, child.height);
+	        			regDeltaElmPts[child] = {boundsRect: rect2};
+	        		}
 	        		
 	        		if(!event.shiftKey && !event.commandKey && !event.controlKey)
 	        		{
@@ -456,8 +471,6 @@ public class SelectionManager extends EventDispatcher
 	        	{
 					child.move(	newP.x+regDeltaElmPts[child].deltaPoint.x, 
     							newP.y+regDeltaElmPts[child].deltaPoint.y );
-    				
-    				child.invalidateDisplayList();
     				
     				_groupMoved = true;
 	        	}
