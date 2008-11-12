@@ -100,6 +100,7 @@ public class Node extends Canvas
     
     private static var defaultItemCaptions:Object = {
     	node_add_trans:"Add transition", 
+    	node_jump:"Jump to graph", 
     	node_delete:"Delete state", 
     	
     	node_cut:"Cut",
@@ -246,6 +247,7 @@ public class Node extends Canvas
 		removeEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
 		removeEventListener(MouseEvent.DOUBLE_CLICK , doubleClickHandler);
 		removeEventListener(MouseEvent.MOUSE_WHEEL , wheelHandler);
+		removeEventListener(MouseEvent.CONTEXT_MENU , contextHandler);
 		
 		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		removeEventListener(NodeEvent.TYPE_CHANGED , typeChangedHandler);
@@ -639,6 +641,7 @@ public class Node extends Canvas
         	contextMenu = new SuperNativeMenu();
         	
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['node_add_trans'], 'add_trans'));
+	       	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['node_jump'], 'jump', false, null, false, false));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['node_delete'], 'delete'));
 
         	contextMenu.addItem(new SuperNativeMenuItem('separator'));
@@ -662,10 +665,6 @@ public class Node extends Canvas
         	
         	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['node_enabled'], 'enabled', enabled));
         	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['node_breakpoint'], 'breakpoint', breakpoint));
-
-			for each (var item:NativeMenuItem in contextMenu.items) {
-	       		//LanguageManager.bindSentence('node_'+item.name, item);
-	  		}
 			
         	contextMenu.addEventListener(Event.SELECT, contextMenuSelectHandler);        	 
         }	
@@ -686,6 +685,7 @@ public class Node extends Canvas
     		
     		canvas = parent as GraphCanvas;
 			
+			addEventListener(MouseEvent.CONTEXT_MENU , contextHandler);
 			addEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 			addEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
 			addEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
@@ -1286,7 +1286,40 @@ public class Node extends Canvas
 		tipImage.source = null;
 		tipImage = null;
     }
-		    	    
+    
+    public function beginTransition():void
+    {
+		if(canvas)
+		{
+			stopTransition();
+						
+			canvas.addingTransition = true;
+			canvas.currentArrow = new Connector();
+						
+			canvas.addChildAt(canvas.currentArrow, 0);
+			canvas.currentArrow.fromObject = this;
+			canvas.currentArrow.addEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
+	
+			dispatchEvent(new NodeEvent(NodeEvent.ADDING_TRANSITION));    	
+		}
+    }
+    
+    public function stopTransition():void
+    {
+		if(canvas)
+		{
+			canvas.addingTransition = false;
+
+			if(canvas.currentArrow)
+			{
+				canvas.currentArrow.removeEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
+	
+				canvas.currentArrow.dispose();
+				canvas.currentArrow = null;
+			}
+		}
+    }
+    		    	    
 	//--------------------------------------------------------------------------
     //
     //  Event handlers
@@ -1450,96 +1483,69 @@ public class Node extends Canvas
     	}
     }
     
-    public function beginTransition():void
-    {
-		if(canvas)
-		{
-			stopTransition();
-						
-			canvas.addingTransition = true;
-			canvas.currentArrow = new Connector();
-						
-			canvas.addChildAt(canvas.currentArrow, 0);
-			canvas.currentArrow.fromObject = this;
-			canvas.currentArrow.addEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
-	
-			dispatchEvent(new NodeEvent(NodeEvent.ADDING_TRANSITION));    	
-		}
-    }
-    
-    public function stopTransition():void
-    {
-		if(canvas)
-		{
-			canvas.addingTransition = false;
-
-			if(canvas.currentArrow)
-			{
-				canvas.currentArrow.removeEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
-	
-				canvas.currentArrow.dispose();
-				canvas.currentArrow = null;
-			}
-		}
-    }
-    
 	private function contextMenuSelectHandler(event:Event):void
 	{
-		if(event.target.name == "add_trans")
+		switch(event.target.name)
 		{
-			beginTransition();
-		}
-		else if(event.target.name == "delete")
-		{
-     		remove();
-		}
-		else if(event.target.name == "cut")
-		{
-			if(parent)
-				parent.dispatchEvent(new Event("cut"));
-		}		
-		else if(event.target.name == "copy")
-		{
-			if(parent)
-				parent.dispatchEvent(new Event("copy"));
-		}
-		else if(event.target.name == "initial")
-		{
-			if(_type==NodeType.INITIAL)
-				type = NodeType.NORMAL;
-			else
-				type = NodeType.INITIAL;
-		}
-		else if(event.target.name == "terminal")
-		{
-			if(_type==NodeType.TERMINAL)
-				type = NodeType.NORMAL;
-			else
-				type = NodeType.TERMINAL;
-		}
-		else if(event.target.name == "normal")
-		{
-			category = NodeCategory.NORMAL;
-		}
-		else if(event.target.name == "subgraph")
-		{
-			category = NodeCategory.SUBGRAPH;
-		}
-		else if(event.target.name == "command")
-		{
-			category = NodeCategory.COMMAND;
-		}
-		else if(event.target.name == "resource")
-		{
-			category = NodeCategory.RESOURCE;
-		}
-		else if(event.target.name == "enabled")
-		{
-			enabled = !enabled;
-		}
-		else if(event.target.name == "breakpoint")
-		{
-			breakpoint = !breakpoint;
+			case "add_trans":
+				beginTransition();
+				break;
+			
+			case "jump":
+				dispatchEvent(new Event("jumpToGraph"));
+				break;
+
+			case "delete":
+	     		remove();
+	     		break;
+	     		
+	     	case "cut": 
+				if(parent)
+					parent.dispatchEvent(new Event("cut"));
+				break;
+				
+			case "copy": 
+				if(parent)
+					parent.dispatchEvent(new Event("copy"));
+				break;
+		
+			case "initial":
+				if(_type==NodeType.INITIAL)
+					type = NodeType.NORMAL;
+				else
+					type = NodeType.INITIAL;
+				break;
+			
+			case "terminal":
+				if(_type==NodeType.TERMINAL)
+					type = NodeType.NORMAL;
+				else
+					type = NodeType.TERMINAL;
+				break;
+				
+			case "normal":
+				category = NodeCategory.NORMAL;
+				break;
+			
+			case "subgraph":
+				category = NodeCategory.SUBGRAPH;
+				break;
+				
+			case "command":
+				category = NodeCategory.COMMAND;
+				break;
+			
+			case "resource":
+				category = NodeCategory.RESOURCE;
+				break;
+				
+			case "enabled":
+				enabled = !enabled;
+				break;
+	
+			case "breakpoint":
+				breakpoint = !breakpoint;
+				break;
 		}
 	}
 
@@ -1902,6 +1908,18 @@ public class Node extends Canvas
         	nodeCB.setStyle("borderColor", getStyle("errorColor"));
 			_isValidText = false;
 		}
+    }
+    
+    private function contextHandler(event:MouseEvent):void
+    {
+    	if(category == NodeCategory.SUBGRAPH)
+    		contextMenu.getItemByName("jump").enabled = true;
+    	else
+    		contextMenu.getItemByName("jump").enabled = false;
+    	
+		for each (var item:NativeMenuItem in contextMenu.items) {
+			item.label = LanguageManager.sentences['node_'+item.name];
+  		}    	
     }
     
 }
