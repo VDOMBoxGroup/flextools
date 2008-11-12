@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" xmlns:containers="vdom.components.scriptEditor.containers.*"
-		hide="hideHandler()" xmlns:containers1="vdom.containers.*"   backgroundColor="#3d3d3d">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" 
+	xmlns:containers="vdom.components.scriptEditor.containers.*"
+		hide="hideHandler()" xmlns:containers1="vdom.containers.*"  
+		 backgroundColor="#3d3d3d">
 <mx:Script>
 	<![CDATA[
 		import vdom.events.ScriptEditorEvent;
@@ -195,7 +198,7 @@
 </mx:Script>
 	<mx:HDividedBox width="100%" height="100%">
         <mx:VBox id="vBox" width="100%" height="100%" >
-            <containers:TabbedTextArea id="textArea" width="100%" height="100%" 
+            <containers:TabbedTextArea id="textArea" width="100%"  height="100%"
             		 text="same Text of code" 
             		 allowTabKey="true"
             		 keyDown=" textAreaDataChangeHandler( event ); "/>            	 

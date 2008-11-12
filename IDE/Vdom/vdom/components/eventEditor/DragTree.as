@@ -1,11 +1,10 @@
 package vdom.components.eventEditor
 {
-	import mx.controls.Tree;
 	import mx.events.DragEvent;
 	
-	import vdom.utils.IconUtil;
+	import vdom.components.edit.containers.OTree;
 
-	public class DragTree extends Tree
+	public class DragTree extends OTree
 	{
 		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='action')]
 		[Bindable]

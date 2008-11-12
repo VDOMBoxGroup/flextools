@@ -150,7 +150,7 @@ package vdom.components.eventEditor
 			 	tempXML = <Event/>;
 				tempXML.@label = child.@Name;
 				tempXML.@Name = child.@Name;
-				tempXML.@ObjSrcID = dataXML.@ID;
+				tempXML.@ObjSrcID = value;
 				
 				dataXML.appendChild(tempXML);
 			} 
@@ -160,7 +160,7 @@ package vdom.components.eventEditor
 				tempXML = <Event/>;
 				tempXML.@label = child.@Name;
 				tempXML.@Name  = child.@Name;
-				tempXML.@ObjSrcID = dataXML.@ID;
+				tempXML.@ObjSrcID = value;
 			
 				dataXML.appendChild(tempXML);
 			} 	
