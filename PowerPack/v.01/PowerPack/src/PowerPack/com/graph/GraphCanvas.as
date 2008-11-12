@@ -5,7 +5,7 @@ import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
 import ExtendedAPI.com.utils.Utils;
 
-import PowerPack.com.gen.structs.TemplateStruct;
+import PowerPack.com.Template;
 import PowerPack.com.managers.CashManager;
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
@@ -675,7 +675,7 @@ public class GraphCanvas extends Canvas
 			_doGetBitmapClipBoard();
 			
 			function _doGetBitmapClipBoard():void {
-				var template:TemplateStruct = ContextManager.instance.templates[0];
+				var template:Template = ContextManager.instance.templates[0];
 				var bitmapData:BitmapData = BitmapData(Clipboard.generalClipboard.getData(ClipboardFormats.BITMAP_FORMAT));
 				
 				var pngEncoder:PNGEncoder = new PNGEncoder();

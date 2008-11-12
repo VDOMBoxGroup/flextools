@@ -1,4 +1,4 @@
-package PowerPack.com.gen.structs
+package PowerPack.com
 {
 	import ExtendedAPI.com.utils.FileToBase64;
 	import ExtendedAPI.com.utils.FileUtils;
@@ -13,7 +13,7 @@ package PowerPack.com.gen.structs
 	import mx.utils.Base64Encoder;
 	import mx.utils.UIDUtil;
 	
-	public class TemplateStruct
+	public class Template
 	{
 		[Bindable]
 		public var xmlTemplate:XML;
@@ -27,7 +27,7 @@ package PowerPack.com.gen.structs
 		[Bindable]
 		public var picturePath:String;		
 		
-		public function TemplateStruct(xml:XML=null)
+		public function Template(xml:XML=null)
 		{
 			if(xml)
 			{

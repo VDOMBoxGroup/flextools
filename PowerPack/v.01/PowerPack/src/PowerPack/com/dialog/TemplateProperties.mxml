@@ -9,7 +9,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import PowerPack.com.gen.structs.TemplateStruct;
+			import PowerPack.com.Template;
 			import mx.events.CloseEvent;
 			import mx.utils.StringUtil;
 			import PowerPack.com.managers.ContextManager;
@@ -46,7 +46,7 @@
 			
 			private function onShow(event:Event):void
 			{            	
-            	var tpl:TemplateStruct = ContextManager.instance.templates.getItemAt(0) as TemplateStruct; 
+            	var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template; 
 				
 				if(tpl.picture || tpl.picturePath)
 				{
@@ -95,7 +95,7 @@
 			
 			private function removePicture():void
 			{
-				var tpl:TemplateStruct = ContextManager.instance.templates.getItemAt(0) as TemplateStruct;
+				var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template;
 				
 				gridRemovePic.visible = false;
 				gridRemovePic.includeInLayout = false;

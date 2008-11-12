@@ -45,6 +45,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.Template;
 			import mx.core.Application;
 			import flash.utils.getTimer;
 			import ExtendedAPI.com.containers.SuperAlert;
@@ -68,10 +69,9 @@
 			import PowerPack.com.dialog.GenProperties;
 			import mx.events.EffectEvent;
 			import mx.events.IndexChangedEvent;
-			import PowerPack.com.gen.Template;
+			import PowerPack.com.gen.TemplateStruct;
 			import PowerPack.com.dialog.ModalDialog;
 			import PowerPack.com.dialog.TemplateKey;
-			import PowerPack.com.gen.structs.TemplateStruct;
 			import PowerPack.com.managers.ProgressManager;
 			import ExtendedAPI.com.utils.FileUtils;
 			import mx.utils.StringUtil;
@@ -225,7 +225,7 @@
         		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
 				fileStream.close();
 				
-				var template:TemplateStruct = new TemplateStruct(xml);
+				var template:Template = new Template(xml);
 				
         		if(ContextManager.instance.templates.length==0)
 	    			ContextManager.instance.templates.addItem(template);
@@ -255,7 +255,7 @@
             
             private function openTemplate(key:String=null):void
             {
-    			var tpl:TemplateStruct = ContextManager.instance.templates[0];
+    			var tpl:Template = ContextManager.instance.templates[0];
     			
     			if(tpl.isEncoded)
     				tpl.key = key;    			
@@ -469,7 +469,7 @@
             
             private function clearTemplateDebug():void
             {
-            	var tpl:Template = ContextManager.instance.templateStruct;
+            	var tpl:TemplateStruct = ContextManager.instance.templateStruct;
             	
             	if(tpl)
             	{
@@ -487,11 +487,11 @@
 					mnMain.enabled = false;
 					appGenerated = false;
 					
-	        		var tpl:TemplateStruct;
+	        		var tpl:Template;
     	
-    	    		tpl = ContextManager.instance.templates.getItemAt(0) as TemplateStruct;
+    	    		tpl = ContextManager.instance.templates.getItemAt(0) as Template;
 		
-					ContextManager.instance.templateStruct = new Template(tpl.xmlTemplate);
+					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlTemplate);
 					
 					var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
 					
@@ -532,7 +532,7 @@
 			
             private function runTemplate():void
             {
-            	var tpl:Template = ContextManager.instance.templateStruct;
+            	var tpl:TemplateStruct = ContextManager.instance.templateStruct;
         		try
         		{
 					progressBar.mode = ProgressBarMode.MANUAL;

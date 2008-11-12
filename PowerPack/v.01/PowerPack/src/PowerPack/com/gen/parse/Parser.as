@@ -2,7 +2,7 @@ package PowerPack.com.gen.parse
 {
 import ExtendedAPI.com.utils.Utils;
 
-import PowerPack.com.gen.Template;
+import PowerPack.com.gen.TemplateStruct;
 import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.errorClasses.RunTimeError;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
@@ -908,7 +908,7 @@ public class Parser
 								lexems[i].type=='A'? Utils.quotes(lexems[i].value) :
 								lexems[i].value);
 					
-					retVal.string = Template.CNTXT_INSTANCE + "._" + lexems[sIndex+1].value + "(" +
+					retVal.string = TemplateStruct.CNTXT_INSTANCE + "._" + lexems[sIndex+1].value + "(" +
 						String(retVal.string) + ")";
 				}
 

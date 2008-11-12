@@ -16,7 +16,7 @@ import flash.events.EventDispatcher;
 import mx.core.Application;
 import mx.utils.UIDUtil;
 
-public class Template extends EventDispatcher
+public class TemplateStruct extends EventDispatcher
 {
 	include "include/GeneralFunctions.as";
 	include "include/ListManipulationFunctions.as";
@@ -58,7 +58,7 @@ public class Template extends EventDispatcher
 	public var isStepDebug:Boolean;			
 	private var forced:int;
 	
-	public function Template(_xml:XML)
+	public function TemplateStruct(_xml:XML)
 	{				
 		templateXML = _xml;		
 		var _graphs:Array = [];
@@ -302,7 +302,7 @@ public class Template extends EventDispatcher
 									break;
 								}
 							}
-							if(isIdentTrans)
+							if(isIdentTrans && curNode.outArrows.length>1)
 								arr.push( { error:new ValidationWarning("All transitions have same value"),
 									graph:curGraph, node:curNode, arrow:null } );				
 						}						

@@ -3,7 +3,7 @@ package PowerPack.com.managers
 import ExtendedAPI.com.utils.FileUtils;
 import ExtendedAPI.com.utils.Utils;
 
-import PowerPack.com.gen.Template;
+import PowerPack.com.gen.TemplateStruct;
 import PowerPack.com.utils.CryptUtils;
 
 import flash.events.EventDispatcher;
@@ -175,7 +175,7 @@ public class ContextManager extends EventDispatcher
 		generator:{ settingsFolder:"Generator" }
 	};
 	
-	public var templateStruct:Template;
+	public var templateStruct:TemplateStruct;
 
    	[Bindable]
     public var settingsXML:XML;

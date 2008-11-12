@@ -7,7 +7,7 @@ import ExtendedAPI.com.ui.SuperNativeMenuItem;
 import ExtendedAPI.com.utils.ObjectUtils;
 import ExtendedAPI.com.utils.Utils;
 
-import PowerPack.com.gen.structs.TemplateStruct;
+import PowerPack.com.Template;
 import PowerPack.com.managers.CashManager;
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
@@ -1261,7 +1261,7 @@ public class Node extends Canvas
 		tipImage.visible = false;
 		tipImage.scaleContent = true;
 		
-		var curTpl:TemplateStruct = ContextManager.instance.templates[0];
+		var curTpl:Template = ContextManager.instance.templates[0];
 		var index:XML = CashManager.getIndex(curTpl.ID);
 		var thumbFile:File = CashManager.cashFolder.resolvePath(index.@folder).resolvePath(nodeCB.selectedItem.@thumb);
 		
@@ -1297,7 +1297,7 @@ public class Node extends Canvas
 	{
 		destroyTimers(true, false);
 		
-		var curTpl:TemplateStruct = ContextManager.instance.templates.length>0 ? ContextManager.instance.templates[0] : null;
+		var curTpl:Template = ContextManager.instance.templates.length>0 ? ContextManager.instance.templates[0] : null;
 		
 		if(	!curTpl || CashManager.isObjectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
 		{

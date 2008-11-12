@@ -122,7 +122,6 @@
 			import PowerPack.com.dialog.ValidateDialog;
 			import PowerPack.com.gen.*;
 			import PowerPack.com.gen.parse.CodeParser;
-			import PowerPack.com.gen.structs.TemplateStruct;
 			import PowerPack.com.graph.Connector;
 			import PowerPack.com.graph.GraphCanvas;
 			import PowerPack.com.graph.Node;
@@ -388,7 +387,7 @@
 	        			        		
 					fileStream.close();
 					
-					var template:TemplateStruct = new TemplateStruct(xml);
+					var template:Template = new Template(xml);
 					
 	        		if(ContextManager.instance.templates.length==0)
 		    			ContextManager.instance.templates.addItem(template);
@@ -410,7 +409,7 @@
 					else
 					{
 						
-	        			var tpl:TemplateStruct = ContextManager.instance.templates[0];        			
+	        			var tpl:Template = ContextManager.instance.templates[0];        			
 	        			tpl.decode();	
 	        			pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlTemplate;				
 	
@@ -436,7 +435,7 @@
             	{
             		if(event.target.txtKey.text)
             		{
-            			var tpl:TemplateStruct = ContextManager.instance.templates[0];
+            			var tpl:Template = ContextManager.instance.templates[0];
             			
             			tpl.key = event.target.txtKey.text;
             			tpl.decode();
@@ -461,7 +460,7 @@
            	{
            		if(ContextManager.instance.templates.length>0)
            		{
-           			var tpl:TemplateStruct = ContextManager.instance.templates[0];
+           			var tpl:Template = ContextManager.instance.templates[0];
            			
            			if(MenuGeneral.state != MenuGeneral.STATE_MOD)
            			{
@@ -490,7 +489,7 @@
                 	ContextManager.instance.lastFile = false;
 	                pnl_graphs.clear();
 	                
-	                var template:TemplateStruct = new TemplateStruct();
+	                var template:Template = new Template();
 
 	                if(ContextManager.instance.templates.length==0)
 	    				ContextManager.instance.templates.addItem(template);
@@ -601,7 +600,7 @@
 				{
 					try
 					{
-						ContextManager.instance.templateStruct = new Template(pnl_graphs.toXML());
+						ContextManager.instance.templateStruct = new TemplateStruct(pnl_graphs.toXML());
 						switch(event.item.@id.toString())
 						{
 							case 'run':
@@ -725,7 +724,7 @@
             {
 				if(event.detail == ModalDialog.OK)
             	{
-            		var tpl:TemplateStruct = ContextManager.instance.templates.getItemAt(0) as TemplateStruct; 
+            		var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template; 
             		var propDlg:TemplateProperties = event.target as TemplateProperties;
             		
             		tpl.name = propDlg.txtName.text;
@@ -755,7 +754,7 @@
 	            		if(dialog.chkNames) 	flags|=TemplateValidateOptions.SET_UNIQ_NAMES;
 	            	}
             		            		
-					ContextManager.instance.templateStruct = new Template(ContextManager.instance.templates.getItemAt(0).xmlTemplate as XML);
+					ContextManager.instance.templateStruct = new TemplateStruct(ContextManager.instance.templates.getItemAt(0).xmlTemplate as XML);
 					var validateArr:Array = ContextManager.instance.templateStruct.validate(flags).array;
 	
 					pnl_problems.array = validateArr;
@@ -851,7 +850,7 @@
 
 				var arr:Array = [];
 				for (obj in ContextManager.instance.templateStruct.context) {
-					if(!(ContextManager.instance.templateStruct.context[obj] is Template))
+					if(!(ContextManager.instance.templateStruct.context[obj] is TemplateStruct))
 						arr.push( { Name:"$"+obj, Value:ContextManager.instance.templateStruct.context[obj] } );						
 				}			
 				arr.push( { Name:"this", Value: GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).curGraph.name, children:subArr } );
@@ -973,7 +972,7 @@
             	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
             	{
             		var tree:Tree = event.target.tplTree;
-            		var tpl:TemplateStruct = event.target.template;
+            		var tpl:Template = event.target.template;
 					var xmlListCol:XMLListCollection = new XMLListCollection();
             		
 					ProgressManager.start(ProgressManager.WINDOW_MODE, false);
@@ -983,7 +982,7 @@
 	                	ContextManager.instance.lastFile = false;
 		                pnl_graphs.clear();
 		                
-		                var template:TemplateStruct = new TemplateStruct();
+		                var template:Template = new Template();
 	
 		                if(ContextManager.instance.templates.length==0)
 		    				ContextManager.instance.templates.addItem(template);
@@ -1047,7 +1046,7 @@
 	                	ContextManager.instance.lastFile = false;
 		                pnl_graphs.clear();
 		                
-		                var template:TemplateStruct = new TemplateStruct();
+		                var template:Template = new Template();
 	
 		                if(ContextManager.instance.templates.length==0)
 		    				ContextManager.instance.templates.addItem(template);
