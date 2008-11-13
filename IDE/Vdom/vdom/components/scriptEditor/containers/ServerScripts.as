@@ -108,6 +108,7 @@ package vdom.components.scriptEditor.containers
 				var ID:String = tree.selectedItem.@ID;
 				
 				delete dataXML.Action.(@ID == ID)[0];
+				delete xmlToServer.ServerActions.Action.(@ID == ID)[0];
 				
 				if(dataXML.toXMLString() != "<Actions/>")
 				{	
@@ -139,7 +140,7 @@ package vdom.components.scriptEditor.containers
 					xml.@State = tempXML.@State;
 					xml.appendChild(XML('<![CDATA[' +str + ']'+']>'));
 				
-				delete xmlToServer.ServerActions.Action.(@ID == ID)[0]
+				delete xmlToServer.ServerActions.Action.(@ID == ID)[0];
 				xmlToServer.ServerActions.appendChild(xml);
 				
 				dataManager.setApplicationEvents(curContainerID, xmlToServer.toXMLString());
