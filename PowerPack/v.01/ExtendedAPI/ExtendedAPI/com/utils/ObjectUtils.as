@@ -1,9 +1,9 @@
 package ExtendedAPI.com.utils
 {
 import flash.display.DisplayObject;
-import flash.events.EventDispatcher;
 import flash.net.registerClassAlias;
 import flash.utils.ByteArray;
+import flash.utils.Dictionary;
 import flash.utils.describeType;
 import flash.utils.getDefinitionByName;
 import flash.utils.getQualifiedClassName;
@@ -11,6 +11,14 @@ import flash.utils.getQualifiedClassName;
 
 public class ObjectUtils
 {
+	public static function dictLength(dict:Dictionary):int
+	{
+		var count:int = 0;
+		for(var d:* in dict)
+			count ++;
+		return count;	
+	} 
+	
 	/**
 	 * Deep clone object using thiswind@gmail.com 's solution
 	 */
