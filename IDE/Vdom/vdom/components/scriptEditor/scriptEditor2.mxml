@@ -39,18 +39,36 @@
 	 			
 	 			curContainerID = dataManager.currentPageId;
 	 			if(curContainerID)
-	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+	 			{
+	 				curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+	 			}
 	 			
 	 			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
 	 			
 	 			
 	 			arrAppl = [];
 	 			arrAppl.push({label:"Server Actions", ID:"session"});
+	 		/*	for each(var lavel:XML in dataManager.listPages )
+				{
+		 			var ID:String = lavel.@ID;
+		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
+		 			var _strLabel:String = lavel.Information.Icon;
+					var	iconResID:String = _strLabel.substr(5, 36);
+		 			
+		 			arrAppl.push({label:strLabel, ID:ID, iconResID:iconResID});
+				}
+				
+				arrAppl = [];
+	 			*/
 	 			for each(var lavel:XML in dataManager.listPages )
 				{
 		 			var ID:String = lavel.@ID;
 		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
-		 			arrAppl.push({label:strLabel, ID:ID});
+		 			
+		 			var typeID:String = lavel.@Type.toString();
+		 			var iconResID:String = getIcon(typeID);
+		 			
+		 			arrAppl.push({label:strLabel, ID:ID, iconResID:iconResID});
 				}
 				
 				function searchIndex():int
@@ -69,7 +87,7 @@
 				serverScripts.dataProvider = dataManager.currentPageId;
 	 	}
 	 	
-	 	private function hideHandler():void
+	 		private function hideHandler():void
 	 		{
 //	 			changeWatcher.unwatch();
 //	 			trContainer.hideHandler();
@@ -78,6 +96,24 @@
 	 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
 	 		}
 	 	
+	 	
+	 		private var massIconResouceID:Array = new Array(); 
+			private function getIcon(ID:String):String
+			{
+				if (massIconResouceID[ID])
+					return massIconResouceID[ID];
+					
+				for each(var lavel:XML in dataManager.getTopLevelTypes() )
+				{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
+						if( lavel.Information.ID == ID) 
+						{
+							var strLabel:String = lavel.Information.StructureIcon;
+							return  massIconResouceID[ID] = strLabel.substr(5, 36);
+						}
+				}
+				return  '';
+			}
+			
 	 	private var getApplEventID:String;
 	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
@@ -201,24 +237,24 @@
 			
 	]]>
 </mx:Script>
-	<mx:HDividedBox width="100%" height="100%">
-        <mx:VBox id="vBox" width="100%" height="100%" >
+	<mx:HDividedBox width="100%" height="100%" > 
+        <mx:VBox id="vBox" width="100%" height="100%"  paddingTop="10" paddingLeft="10">
             <containers:TabbedTextArea id="textArea" width="100%"  height="100%"
-            		 text="same Text of code"  color="#010F90"
+            		 text="same Text of code"  color="#000000"
             		 allowTabKey="true"
-            		 keyDown=" textAreaDataChangeHandler( event ); " backgroundColor="#FBECFC"/>            	 
-            <mx:HBox>
+            		 keyDown=" textAreaDataChangeHandler( event ); " backgroundColor="#FFFFFF"/>            	 
+            <mx:HBox paddingBottom="5" >
 	           <mx:Button id="btSave" label="Save" click=" save(); " />
 	           <mx:Button label="Revert" click=" revert(); "/>
             </mx:HBox>
         </mx:VBox>
-        <mx:VBox width="250" height="100%" minWidth="250"
+        <mx:VBox width="250"  height="{textArea.height + 25}"  minWidth="250"
         	verticalScrollPolicy="auto" horizontalScrollPolicy="off"   verticalGap="10"  
         	paddingLeft="3" paddingRight="10" paddingTop="10">
         	<mx:Panel title="PAGES" width="100%" color="#FFFFFF" >
 			        <mx:ComboBox id="changeContainer" dataProvider="{arrAppl}"
 			        	 rowCount="20" change="{changeContainerHandler(event.target)}" 
-			        		color="#000000" minWidth="200" width="100%" />
+			        		color="#000000" minWidth="200" width="100%"  itemRenderer="vdom.components.eventEditor.PanelItemRender"/>
 	        </mx:Panel>
 			
 				       <containers:ServerScripts  id="serverScripts"  title="serverScripts" width="100%" dataChanged="{setScript()}" />

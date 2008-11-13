@@ -115,7 +115,7 @@ package vdom.components.eventEditor
 			dataXML.@label 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
 			dataXML.@resourceID = getSourceID(object.@Type);
 			
-			var type:XML = dataManager.getTypeByObjectId(dataManager.currentPageId);
+			var type:XML = dataManager.getTypeByObjectId(value);
 				curContainerTypeID = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();
 			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
 			var tempXML:XML;
@@ -132,7 +132,7 @@ package vdom.components.eventEditor
 					tempXML.@containerID = dataManager.currentObject.@ID;
 					
 					dataXML.appendChild(tempXML);
-				}
+				}	
 			} 
 			
 			super.dataProvider = dataXML;

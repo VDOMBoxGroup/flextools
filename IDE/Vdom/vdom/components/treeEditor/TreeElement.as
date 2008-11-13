@@ -766,9 +766,10 @@ package vdom.components.treeEditor
 			
 			imgMenu.width = 76 * _ratio;
 			imgMenu.height = 14 * _ratio;
-
+			
+			txt.x = 5;
 			txt.y = 2 * _ratio;
-			txt.width =  240 * _ratio;
+			txt.width =  230 * _ratio;
 			
 			 
 			imgLine.y = -12 * _ratio; 
