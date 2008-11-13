@@ -3,7 +3,8 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	borderAlpha="0.95" cornerRadius="1" width="400" height="300"
 	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
-	title="DropDown values editor" verticalGap="15" creationComplete="{}">
+	borderThicknessLeft="1" borderThicknessRight="1"
+	title="DropDown values editor" verticalGap="15">
 	
 	<mx:Style>
 		.title {
@@ -14,90 +15,109 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.messaging.management.Attribute;
 			import mx.controls.Alert;
 			import mx.utils.StringUtil;
 			import mx.events.DataGridEvent;
 			import mx.managers.PopUpManager;
 			
 			private const EMPTY_STR:String = '[[ empty ]]';
+		
+			private var _currentAttrObj:Object;
 			
-			public var attrsProvider:Array = [];
 			public var editableLang:String = '';
 			public var exampleLang:String = '';
-			public var selectedAttrIndex:int = 0;
 			
-			private var rowsProvider:Array = [];
-			[Bindable]
-			private var _langsProvider:Array = [];
+			private var rowsProvider:Array = []; /* of { label:langStr } */
+
+			[Bindable] private var _langsProvider:Array = [];
 			private var rowsNum:int = 0;
-						
-			/* This function must be executed "by hand" after initialize the object */
-			public function onShow():void {
-				var typeReg:RegExp = /^([a-zA-Z]+)\((.*)\)/;
-				var type:String = attrsProvider[selectedAttrIndex].panelInterface;
+			
+			public function set currentAttrObj(value:Object):void {
+				_currentAttrObj = {};
+				_currentAttrObj = value;
+			}
+			
+			public function get currentAttrObj():Object {
+				return _currentAttrObj;
+			}
+			
+			/* This function must be executed "by hand" after object initializitaion  */
+			public function onShow():void
+			{
+				rowsNum = _currentAttrObj.dropDownValues.length;
+				loadValues();
 				
-				rowsNum = 0;
-				var matchRes:Array = type.match(typeReg);
-				if (matchRes) {
-					try {
-						rowsNum = matchRes[2];
-					}
-					catch (err:Error) {
-						Alert.show(err.message, "The following error occured:");
-						return;
-					}
-					
-					loadValues();
+				/* set languageBoxes to actual information */
+				var i:int = 0;
+				for each (var langObj:Object in _langsProvider) {
+					if (langObj.label == editableLang)
+						__editableLang.selectedIndex = i;
+					if (langObj.label == exampleLang)
+						__exampleLang.selectedIndex = i;
+					i++;
 				}
 			}
 
-			private function loadValues():void {
-				/* ("text"|value)("text"|value) ... */
+			private function loadValues():void
+			{
+				/* attach values for editing */
 				
-				var editableStrings:Array = [];
-				try {
-					editableStrings = attrsProvider[selectedAttrIndex][editableLang].panelInterfaceParams['Strings'];
-				}
-				catch (err:Error) {
-					try {
-						attrsProvider[selectedAttrIndex][editableLang].panelInterfaceParams = {};
-					}
-					catch (err:Error) {
-						attrsProvider[selectedAttrIndex][editableLang] = {};
-					}
-					editableStrings = attrsProvider[selectedAttrIndex][editableLang].panelInterfaceParams['Strings'] = [];
-				}
+				if (!_currentAttrObj.dropDownStrings[exampleLang])
+					_currentAttrObj.dropDownStrings[exampleLang] = [];
 				
-				var exampleValuesStr:String;
-				try {
-					exampleValuesStr = attrsProvider[selectedAttrIndex][exampleLang].panelInterfaceParams;
-				}
-				catch (err:Error) {
-					exampleValuesStr = '';
-				}
+				if (!_currentAttrObj.dropDownStrings[editableLang])
+					_currentAttrObj.dropDownStrings[editableLang] = [];
 				
+				rowsProvider = [];
+								
 				for (var i:int = 0; i < rowsNum; i++) {
+					var value:String = _currentAttrObj.dropDownValues[i];
+					var edValue:String;
+					var exValue:String
 					
+					if (!_currentAttrObj.dropDownStrings[editableLang][i])
+						edValue = EMPTY_STR;
+					else
+						edValue = _currentAttrObj.dropDownStrings[editableLang][i];
+					
+					if (!_currentAttrObj.dropDownStrings[exampleLang][i])
+						exValue = EMPTY_STR;
+					else
+						exValue = _currentAttrObj.dropDownStrings[exampleLang][i];
+					
+					rowsProvider.push( {editable:edValue, example:exValue, value:value} );
 				}
-				
-			}
-			
-			private function langChangeHandler():void {
-				
-			}
-			
-			public function set langsProvider(lp:Array):void {
-				_langsProvider = lp;	
-			}
-			
-			private function addNewRowBtnClickHandler():void {
-				var row:Object = { editable:EMPTY_STR, example:EMPTY_STR, value:0 };
-				rowsProvider.push(row);
 				
 				__dg.dataProvider = rowsProvider;
 			}
 			
-			private function removeRowBtnClickHandler():void {
+			
+			private function writeValues():void
+			{
+				for (var i:int = 0; i < rowsNum; i++) {
+					_currentAttrObj.dropDownValues[i] = rowsProvider[i].value;
+					_currentAttrObj.dropDownStrings[editableLang][i] = rowsProvider[i].editable;
+				}
+			}
+
+			
+			public function set langsProvider(lp:Array):void
+			{
+				_langsProvider = lp;
+			}
+			
+			private function addNewRowBtnClickHandler():void
+			{
+				var row:Object = { editable:EMPTY_STR, example:EMPTY_STR, value:0 };
+				rowsProvider.push(row);
+				
+				__dg.dataProvider = rowsProvider;
+				rowsNum++;
+			}
+			
+			private function removeRowBtnClickHandler():void
+			{
 				var newRowsProvider:Array = [];
 				var si:int = __dg.selectedIndex;
 				if (si < 0)
@@ -113,13 +133,29 @@
 				var vsp:int = __dg.verticalScrollPosition;
 				__dg.dataProvider = rowsProvider;
 				__dg.verticalScrollPosition = vsp;
+				if (rowsNum > 0)
+					rowsNum--;
 			}
 			
-			private function okBtnClickHandler():void {
+			private function changeLanguagesHandler():void
+			{
+				writeValues();
+				editableLang = __editableLang.text;
+				exampleLang = __exampleLang.text;
+				loadValues();
+			}
+			
+			
+			private function okBtnClickHandler():void
+			{
+				/* Save unsaved data: Editable Strings, Values */
+				writeValues();
+								
 				this.dispatchEvent(new Event(Event.COMPLETE));
 			}
 			
-			private function itemEditEndHandler(event:DataGridEvent):void {
+			private function itemEditEndHandler(event:DataGridEvent):void
+			{
 				if (StringUtil.trim(event.currentTarget.itemEditorInstance.text) == '') {
 					event.currentTarget.itemEditorInstance.text = EMPTY_STR;
 				}
@@ -132,11 +168,11 @@
 	<mx:HBox width="100%" horizontalGap="4">
 		<mx:VBox width="148" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 			<mx:Label text="Editable language" />
-			<mx:ComboBox id="__editableLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" />
+			<mx:ComboBox id="__editableLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" change="{changeLanguagesHandler();}" />
 		</mx:VBox>
 		<mx:VBox width="148" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
 			<mx:Label text="Example language" />
-			<mx:ComboBox id="__exampleLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" />
+			<mx:ComboBox id="__exampleLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" change="{changeLanguagesHandler();}" />
 		</mx:VBox>
 	</mx:HBox>	
 	

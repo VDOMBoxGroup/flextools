@@ -3,6 +3,7 @@
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
 	borderAlpha="0.95" cornerRadius="1" width="250" height="150"
 	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
+	borderThicknessLeft="1" borderThicknessRight="1"
 	title="Add Object Language" verticalGap="15" creationComplete="{onCreationComplete();}">
 	
 	<mx:RegExpValidator 

@@ -205,12 +205,17 @@
 
 					<mx:VBox verticalGap="0" width="100%">
 						<mx:Label text="Category" />
-						<mx:ComboBox id="__category" width="100%" cornerRadius="1">
+						<mx:ComboBox id="__category" width="100%" cornerRadius="1" editable="true">
 							<mx:Array>
-					            <mx:Object data="1" label="Standard" />
-					            <mx:Object data="2" label="Advanced" />
-					            <mx:Object data="3" label="Usual" />
-					            <mx:Object data="4" label="Portal" />
+					            <mx:Object label="Usual" />
+					            <mx:Object label="Standard" />
+					            <mx:Object label="Form" />
+					            <mx:Object label="Table" />
+					            <mx:Object label="Database" />
+					            <mx:Object label="Debug" />
+					            <mx:Object label="Calendars" />
+					            <mx:Object label="PrintToWeb" />
+					            <mx:Object label="Advanced" />
 							</mx:Array>
 						</mx:ComboBox>
 					</mx:VBox>
@@ -365,14 +370,14 @@
 							            <mx:Object data="0" label="Standart" />
 							            <mx:Object data="1" label="Extended" />
 							        </mx:Array>
-								</mx:ComboBox>	
+								</mx:ComboBox>
 							</mx:VBox>
 		
 							<mx:VBox verticalGap="0" width="100%">
 								<mx:Label text="Panel interface" />
 								<mx:HBox width="100%">
-									<mx:ComboBox id="__attrPanelInterface" width="100%" cornerRadius="1"
-										change="{changeAttrPanelInterfaceHandler();}">
+									<mx:ComboBox id="__attrCodeInterface" width="100%" cornerRadius="1"
+										change="{changeAttrCodeInterfaceHandler();}">
 								        <mx:Array>
 								            <mx:Object label="TextField(Length)"			data="textfield" />
 								            <mx:Object label="Number(minValue, maxValue)"	data="number" />
@@ -392,7 +397,7 @@
 								</mx:HBox>
 								
 								<mx:Spacer height="2" />
-								<mx:TextInput id="__params" width="100%" borderStyle="solid" borderColor="#DDDDDD" creationComplete="{changeAttrPanelInterfaceHandler();}" />
+								<mx:TextInput id="__codeInterfaceParams" width="100%" borderStyle="solid" borderColor="#DDDDDD" creationComplete="{changeAttrCodeInterfaceHandler();}" />
 							</mx:VBox>
 						</mx:VBox>
 	
