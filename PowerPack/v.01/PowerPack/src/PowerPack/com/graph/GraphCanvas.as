@@ -495,11 +495,7 @@ public class GraphCanvas extends Canvas
 	{
 		if(arrow.fromObject && arrow.toObject)											
 		{
-			(arrow.fromObject as Node).outArrows.addItem(arrow);
-			(arrow.toObject as Node).inArrows.addItem(arrow);
-		
-			BindingUtils.bindProperty(arrow, 'data',
-				arrow.fromObject, 'arrTrans');
+			arrow.interactive = true;
 			
 			if(canvas)
 				canvas.addChildAt(arrow, 0);

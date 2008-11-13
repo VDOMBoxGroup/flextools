@@ -24,6 +24,8 @@ import flash.geom.Rectangle;
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 
+import mx.binding.utils.BindingUtils;
+import mx.binding.utils.ChangeWatcher;
 import mx.collections.ListCollectionView;
 import mx.controls.Alert;
 import mx.controls.ComboBox;
@@ -207,23 +209,28 @@ public class Connector extends UIComponent implements IFocusManagerComponent
   		}	
   				
         systemManager.removeEventListener(
-            MouseEvent.MOUSE_MOVE, connector_systemManager_mouseMoveHandler, true);
+            MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler, true);
 
         systemManager.removeEventListener(
-            MouseEvent.MOUSE_DOWN, connector_systemManager_mouseDownHandler);
+            MouseEvent.MOUSE_DOWN, systemManager_mouseDownHandler);
    		
-       	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);            
+       	systemManager.removeEventListener(
+       		KeyboardEvent.KEY_DOWN, systemManager_keyDownHandler);            
 
-       	removeEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);           
+       	removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);           
    		removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
    		removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
         removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
         removeEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
+        removeEventListener(MouseEvent.CONTEXT_MENU, contextHandler);
 		
-		if(_fromObj)
+		if(_dataWatcher)
+			_dataWatcher.unwatch();
+		
+		if(_fromObject)
 		{
-			_fromObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
-			_fromObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated);    	
+			_fromObject.removeEventListener(FlexEvent.UPDATE_COMPLETE, objectUpdateHandler);    		
+			_fromObject.removeEventListener(MoveEvent.MOVE , objectUpdateHandler);    	
 			
 			if(fromObject is Node)
 			{		
@@ -233,10 +240,10 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			}
 		}
 						
-		if(_toObj)
+		if(_toObject)
 		{
-			_toObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
-			_toObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated);    	
+			_toObject.removeEventListener(FlexEvent.UPDATE_COMPLETE, objectUpdateHandler);    		
+			_toObject.removeEventListener(MoveEvent.MOVE , objectUpdateHandler);    	
     	
 			if(toObject is Node)
 			{		
@@ -263,6 +270,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	
     private var _over:Boolean;
     private var _created:Boolean;
+    private var _dataWatcher:ChangeWatcher;
 
     [ArrayElementType("Point")]
     private var _connectorPoly:Array = []; 
@@ -285,7 +293,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     	if(_connectorPoly && _connectorPoly.length>0)
         	return Point(_connectorPoly[0]).clone();
         	
-        return null
+        return null;
         
     }
 
@@ -298,7 +306,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     	if(_connectorPoly && _connectorPoly.length>1)
         	return Point(_connectorPoly[1]).clone();
         	
-        return null
+        return null;
         
     }
 
@@ -306,7 +314,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     //  focused
     //----------------------------------
     		
-    private var _focused:Boolean = false;
+    private var _focused:Boolean;
     
     public function get focused():Boolean
     {
@@ -316,6 +324,29 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     		_focused = false;
     	
         return _focused;
+    }
+
+    //----------------------------------
+    //  interactive
+    //----------------------------------
+    		
+    private var _interactive:Boolean;
+    private var _interactiveChange:Boolean;
+    
+    public function set interactive(value:Boolean):void
+    {
+    	if(_interactive!=value)
+    	{
+    		_interactive = value;    			
+    		_interactiveChange = true;
+    		
+    		invalidateProperties();	
+    		dispatchEvent(new ConnectorEvent(ConnectorEvent.INTERACTIVE_CHANGED));
+    	}
+    }
+    public function get interactive():Boolean
+    {
+        return _interactive;
     }
 
     //----------------------------------
@@ -438,31 +469,31 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     //  fromObject
     //----------------------------------
     
-	private var _fromObj:UIComponent = null;
-    private var _fromObjChanged:Boolean;	    
+	private var _fromObject:UIComponent = null;
+    private var _fromObjectChanged:Boolean;	    
 	
     [Bindable("fromObjectChanged")]
     [Inspectable(category="General")]
 
     public function get fromObject():UIComponent
     {
-        return _fromObj;
+        return _fromObject;
     }
     public function set fromObject(value:UIComponent):void
     {
-    	if(_fromObj != value)
+    	if(_fromObject != value)
     	{
-			if(_fromObj) {
-				_fromObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
-				_fromObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated);    		
+			if(_fromObject) {
+				_fromObject.removeEventListener(FlexEvent.UPDATE_COMPLETE, objectUpdateHandler);    		
+				_fromObject.removeEventListener(MoveEvent.MOVE , objectUpdateHandler);    		
 			}
         	
-        	_fromObj = value;
-        	_fromObjChanged = true;
+        	_fromObject = value;
+        	_fromObjectChanged = true;
         	
-        	if(_fromObj) {
-        		_fromObj.addEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);
-        		_fromObj.addEventListener(MoveEvent.MOVE , onObjectUpdated);    	
+        	if(_fromObject) {
+        		_fromObject.addEventListener(FlexEvent.UPDATE_COMPLETE, objectUpdateHandler);
+        		_fromObject.addEventListener(MoveEvent.MOVE , objectUpdateHandler);    	
         	}
         	
 	        invalidateProperties();
@@ -478,31 +509,31 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     //  toObject
     //----------------------------------
     		
-	private var _toObj:UIComponent = null;	
-    private var _toObjChanged:Boolean = false;	    
+	private var _toObject:UIComponent = null;	
+    private var _toObjectChanged:Boolean = false;	    
 	
     [Bindable("toObjectChanged")]
     [Inspectable(category="General")]
 
     public function get toObject():UIComponent
     {
-        return _toObj;
+        return _toObject;
     }	
     public function set toObject(value:UIComponent):void
     {
-    	if(_toObj != value)
+    	if(_toObject != value)
     	{
-			if(_toObj) {
-				_toObj.removeEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);    		
-				_toObj.removeEventListener(MoveEvent.MOVE , onObjectUpdated); 				
+			if(_toObject) {
+				_toObject.removeEventListener(FlexEvent.UPDATE_COMPLETE, objectUpdateHandler);    		
+				_toObject.removeEventListener(MoveEvent.MOVE , objectUpdateHandler); 				
 			}
 
-        	_toObj = value;
-    	    _toObjChanged = true;
+        	_toObject = value;
+    	    _toObjectChanged = true;
         
-			if(_toObj) {
-				_toObj.addEventListener(FlexEvent.UPDATE_COMPLETE, onObjectUpdated);
-				_toObj.addEventListener(MoveEvent.MOVE , onObjectUpdated);     		
+			if(_toObject) {
+				_toObject.addEventListener(FlexEvent.UPDATE_COMPLETE, objectUpdateHandler);
+				_toObject.addEventListener(MoveEvent.MOVE , objectUpdateHandler);     		
 			}
 			
 	        invalidateProperties();
@@ -556,10 +587,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         	contextMenu.addItem(new SuperNativeMenuItem('separator'));
         	contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['connector_enable'], 'enable', _enabled, null, false, false));
         	//contextMenu.addItem(new SuperNativeMenuItem('check', LanguageManager.sentences['connector_highlight'], 'highlight', _highlighted, null, false, false));
-        	
-	       	for each (var item:NativeMenuItem in contextMenu.items) {
-	       		//LanguageManager.bindSentence('connector_'+item.name, item);
-	       	}
 			        	
         	contextMenu.addEventListener(Event.SELECT, contextMenuSelectHandler);	        	 
         }
@@ -609,6 +636,11 @@ public class Connector extends UIComponent implements IFocusManagerComponent
             {
             	_label = data.toString();
             }
+            else
+            {
+            	if(!data[_label])
+            		_label = null;
+            }
             
           	toolTip = label;
 
@@ -623,50 +655,69 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         	invalidateDisplayList();
         }
 
-        if(_fromObjChanged || _toObjChanged)
+        if(_fromObjectChanged || _toObjectChanged)
         {
-			_fromObjChanged = false;
-			_toObjChanged = false;
+			_fromObjectChanged = false;
+			_toObjectChanged = false;
+	        
+	        if(!_interactiveChange) {
+				_interactiveChange = true;
+				_interactive = false;	        	
+	        }	        
+        	
+        	systemManager.removeEventListener(KeyboardEvent.KEY_DOWN, systemManager_keyDownHandler);
+			stopDragging();
+			
+			if((_fromObject && !_toObject || !_fromObject && _toObject) && parent)
+			{
+				_over = false;
+				systemManager.addEventListener(KeyboardEvent.KEY_DOWN, systemManager_keyDownHandler);  
+				startDragging();
+			}
 
+			invalidateSize();
+			invalidateDisplayList();			
+        }
+        
+        if(_interactiveChange)
+        {
+        	_interactiveChange = false;
+				
 			removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			removeEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 	    	removeEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	    	removeEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
-	    	removeEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);
+	    	removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+	    	removeEventListener(MouseEvent.CONTEXT_MENU, contextHandler);
 	    
 	        if(contextMenu)
 	        {
 	        	for each (var menuItem:NativeMenuItem in contextMenu.items)
 	            	menuItem.enabled = false;
-	        }	
+	        }
 	        
-	        if(_fromObj && _toObj)
-	        {
+	        unbindNodes();	
+		        
+        	if(!_fromObject || !_toObject)
+        		_interactive = false;
+        	
+        	if(_interactive)
+        	{
 	        	addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 	    		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
 	            addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 	            addEventListener(MouseEvent.DOUBLE_CLICK, beginEditHandler);
-	    		addEventListener(KeyboardEvent.KEY_DOWN, onConnectorKeyDown);
+	    		addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+	    		addEventListener(MouseEvent.CONTEXT_MENU, contextHandler);
 	    		    
 	            if(contextMenu)
 	            {
 	            	for each (menuItem in contextMenu.items)
 		            	menuItem.enabled = true;
 	            }
-	        }
-        	
-        	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);
-			stopDragging();
-			
-			if((_fromObj || _toObj) && (!_fromObj || !_toObj) && parent)
-			{
-				_over = false;
-				Application.application.addEventListener(KeyboardEvent.KEY_DOWN, onGlobalKeyDown);  
-				startDragging();
-			}
-
-			invalidateSize();
-			invalidateDisplayList();			
+	            
+	            bindNodes();
+        	}
         }
     }
     
@@ -696,6 +747,39 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	//
 	//--------------------------------------------------------------------------
 	
+	private function bindNodes():void
+	{
+        if(_fromObject is Node)
+        {
+        	_dataWatcher = BindingUtils.bindProperty(this, 'data',
+				_fromObject, 'arrTrans');
+		
+			(_fromObject as Node).outArrows.addItem(this);
+        }
+        if(_toObject is Node)
+			(_toObject as Node).inArrows.addItem(this);		
+	}
+	
+	private function unbindNodes():void
+	{
+		if(_dataWatcher)
+			_dataWatcher.unwatch();
+			
+		if(_fromObject is Node)
+		{		
+			var i:int = (_fromObject as Node).outArrows.getItemIndex(this);
+			if(i>=0)
+				(_fromObject as Node).outArrows.removeItemAt(i);
+		}
+		
+		if(_toObject is Node)
+		{		
+			i = (_toObject as Node).inArrows.getItemIndex(this);
+			if(i>=0)
+				(_toObject as Node).inArrows.removeItemAt(i);
+		}
+	}
+
 	public function toXML():XML
 	{
 		var arrowXML:XML = new XML(<transition/>);
@@ -716,7 +800,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		newConnector.enabled = enabled;
 		newConnector.highlighted = highlighted;
 		newConnector.label = label;
-		newConnector.data = ObjectUtils.baseClone(data);
+		newConnector.data = ObjectUtils.baseClone(data);		
 		return newConnector; 
 	}
 	
@@ -752,7 +836,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		var lineVisibleRect:Rectangle = ExtendedAPI.com.utils.GeomUtils.getObjectsRect(arr);
 		
 		return lineVisibleRect;
-	} 
+	}
     
     public function beginEdit(atCursorPosition:Boolean = true, position:Point = null):void
     {	
@@ -1029,10 +1113,10 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     private function startDragging():void
     {	        
         systemManager.addEventListener(
-            MouseEvent.MOUSE_MOVE, connector_systemManager_mouseMoveHandler, true);
+            MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler, true);
 
         systemManager.addEventListener(
-            MouseEvent.MOUSE_DOWN, connector_systemManager_mouseDownHandler);
+            MouseEvent.MOUSE_DOWN, systemManager_mouseDownHandler);
     }
 
     /**
@@ -1041,10 +1125,10 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     private function stopDragging():void
     {
         systemManager.removeEventListener(
-            MouseEvent.MOUSE_MOVE, connector_systemManager_mouseMoveHandler, true);
+            MouseEvent.MOUSE_MOVE, systemManager_mouseMoveHandler, true);
 
         systemManager.removeEventListener(
-            MouseEvent.MOUSE_DOWN, connector_systemManager_mouseDownHandler);
+            MouseEvent.MOUSE_DOWN, systemManager_mouseDownHandler);
     }
     	    
 	//--------------------------------------------------------------------------
@@ -1068,18 +1152,20 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     private function mouseOverHandler(event:MouseEvent):void
     {
     	event.stopPropagation();
-
-    	_over = true;    	
-		invalidateDisplayList();	
+		
+		if(_interactive) {
+    		_over = true;
+			invalidateDisplayList();
+		}	
     }	
     
     private function mouseOutHandler(event:MouseEvent):void
     {	
     	_over = false;
-		invalidateDisplayList();	
+		invalidateDisplayList();
     }
     
-    private function onObjectUpdated(event:Event):void
+    private function objectUpdateHandler(event:Event):void
     {
     	invalidateSize();    	
     }
@@ -1136,13 +1222,13 @@ public class Connector extends UIComponent implements IFocusManagerComponent
         }
 	}	
 
-    private function connector_systemManager_mouseMoveHandler(event:MouseEvent):void
+    private function systemManager_mouseMoveHandler(event:MouseEvent):void
     {
     	event.stopImmediatePropagation();
     	invalidateSize();
     }		
 
-    private function connector_systemManager_mouseDownHandler(event:MouseEvent):void
+    private function systemManager_mouseDownHandler(event:MouseEvent):void
     {
     	if(!fromObject || !toObject) 
     	{
@@ -1151,7 +1237,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
     	}
     }	
     
-	private function onGlobalKeyDown(event:KeyboardEvent):void
+	private function systemManager_keyDownHandler(event:KeyboardEvent):void
     {
 	    if(	event.keyCode == Keyboard.ESCAPE && 
 	    	(!toObject || !fromObject))
@@ -1161,7 +1247,19 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	    }		 
 	}
 	
-	private function onConnectorKeyDown(event:KeyboardEvent):void
+	private function contextHandler(event:MouseEvent):void
+	{
+       	for each (var item:NativeMenuItem in contextMenu.items) {
+       		item.label = LanguageManager.sentences['connector_'+item.name];
+       	}
+       	
+       	if(_label)
+       		contextMenu.getItemByName('select_trans').enabled = true;
+       	else	
+       		contextMenu.getItemByName('select_trans').enabled = false;
+	}
+	
+	override protected function keyDownHandler(event:KeyboardEvent):void
     {
 		if(event.keyCode == Keyboard.DELETE)
      	{
@@ -1198,11 +1296,17 @@ public class Connector extends UIComponent implements IFocusManagerComponent
      */
     override protected function focusInHandler(event:FocusEvent):void
     {
-    	_focused = true;
+    	if(!_interactive) {
+    		event.preventDefault();
+    	}
+		else
+		{    		
+    		_focused = true;
     	
-        super.focusInHandler(event);
+        	super.focusInHandler(event);
 
-        invalidateDisplayList();
+        	invalidateDisplayList();
+  		}
     }    	
 }
 }

@@ -1647,13 +1647,9 @@ public class Node extends Canvas
 				
 				canvas.currentArrow.removeEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
 				canvas.currentArrow.toObject = this;
+				
+				canvas.currentArrow.interactive = true;
 					
-				BindingUtils.bindProperty(canvas.currentArrow, 'data',
-					canvas.currentArrow.fromObject, 'arrTrans');
-				
-				(canvas.currentArrow.fromObject as Node).outArrows.addItem(canvas.currentArrow);
-				(canvas.currentArrow.toObject as Node).inArrows.addItem(canvas.currentArrow);
-				
 				canvas.currentArrow.beginEdit();
 				
 				canvas.currentArrow = null;
