@@ -2,10 +2,14 @@ package PowerPack.com.menu
 {
 import PowerPack.com.managers.ContextManager;
 
+import flash.display.NativeMenuItem;
 import flash.events.EventDispatcher;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
+import flash.utils.Dictionary;
+
+import mx.controls.FlexNativeMenu;
 
 public class MenuGeneral extends EventDispatcher
 {	
@@ -15,8 +19,32 @@ public class MenuGeneral extends EventDispatcher
 	public static const STATE_MOD:String = "modifiedTemplate";
 	public static const STATE_OPEN:String = "openedTemplate";
 	
-	public static var state:String;	 
+	public static var state:String;
+	public static var menu:FlexNativeMenu;
+	private static var memMenu:Dictionary;
 	
+	public static function enable():void
+	{
+		if(memMenu)
+		{
+			for each(var item:NativeMenuItem in menu.nativeMenu.items)
+				item.enabled = memMenu[item];
+		}
+		else
+		{
+			for each(item in menu.nativeMenu.items)
+				item.enabled = true;
+		}
+	}
+	
+	public static function disable():void
+	{
+		memMenu = new Dictionary(true);
+		
+		for each(var item:NativeMenuItem in menu.nativeMenu.items)
+			memMenu[item] = item.enabled;
+	}
+		
 	public static function noTemplate(menu:XML):void
     {    	
     	state = STATE_NO;
