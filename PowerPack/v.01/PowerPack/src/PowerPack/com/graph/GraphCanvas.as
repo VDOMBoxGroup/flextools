@@ -3,6 +3,7 @@ package PowerPack.com.graph
 import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
+import ExtendedAPI.com.utils.ObjectUtils;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.Template;
@@ -596,13 +597,14 @@ public class GraphCanvas extends Canvas
 	
     public function doCopy():void
     {
-    	if(selectionManager && selectionManager.getSelection().length>0)
+    	var selectionNum:int = ObjectUtils.dictLength(selectionManager.selection);
+    	if(selectionManager && selectionNum>0)
     	{
 			var dataXML:XML = new XML(<copy/>);
 			var outArrows:Dictionary = new Dictionary(true);
 			var inArrows:Dictionary = new Dictionary(true);
 			
-			for each(var obj:Object in selectionManager.getSelection())
+			for (var obj:Object in selectionManager.selection)
 			{
 				if(obj is Node)
 				{
@@ -751,7 +753,7 @@ public class GraphCanvas extends Canvas
      	{
 	    	event.stopPropagation();
 	    	
-	    	if(selectionManager && selectionManager.getSelection().length>0)
+	    	if(selectionManager && ObjectUtils.dictLength(selectionManager.selection)>0)
 	    		alertDelete();
 	    }
 	    else if(event.controlKey || event.commandKey)
@@ -777,7 +779,7 @@ public class GraphCanvas extends Canvas
 	
 	private function contextMenuDisplayingHandler(event:Event):void
 	{
-		if(selectionManager && selectionManager.getSelection().length>0)
+		if(selectionManager && ObjectUtils.dictLength(selectionManager.selection)>0)
 		{
 			contextMenu.getItemByName("cut").enabled = true;	
 			contextMenu.getItemByName("copy").enabled = true;

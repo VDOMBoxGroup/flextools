@@ -1842,7 +1842,6 @@ public class Node extends Canvas
     override protected function focusOutHandler(event:FocusEvent):void
     {
     	_focused = false;
-    	selected = false;
 
         super.focusOutHandler(event);
 
@@ -1852,7 +1851,6 @@ public class Node extends Canvas
     override protected function focusInHandler(event:FocusEvent):void
     {
     	_focused = true;
-    	selected = true;
     	
         super.focusInHandler(event);
 

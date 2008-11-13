@@ -1,10 +1,13 @@
 package PowerPack.com.managers
 {
+import ExtendedAPI.com.utils.ObjectUtils;
+
 import PowerPack.com.graph.NodeEvent;
 
 import flash.display.DisplayObject;
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
@@ -12,7 +15,6 @@ import flash.geom.Rectangle;
 import flash.ui.Keyboard;
 import flash.utils.Dictionary;
 
-import mx.collections.ArrayCollection;
 import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.ChildExistenceChangedEvent;
@@ -44,9 +46,9 @@ public class SelectionManager extends EventDispatcher
 		
 		_container = container;
 		_container.addEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
-		_container.addEventListener(FlexEvent.REMOVE, onContainerRemove);
-		_container.addEventListener(ChildExistenceChangedEvent.CHILD_ADD, onElmAdded);
 		_container.addEventListener(KeyboardEvent.KEY_DOWN, onContainerKeyDown);
+		_container.addEventListener(ChildExistenceChangedEvent.CHILD_ADD, onElmAdded);
+		_container.addEventListener(FlexEvent.REMOVE, onContainerRemove);
 		
 		for each(var child:Object in _container.getChildren())
 		{
@@ -69,9 +71,9 @@ public class SelectionManager extends EventDispatcher
 		removeAll();
 		
 		_container.removeEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
-		_container.removeEventListener(FlexEvent.REMOVE, onContainerRemove);
-		_container.removeEventListener(ChildExistenceChangedEvent.CHILD_ADD, onElmAdded);
 		_container.removeEventListener(KeyboardEvent.KEY_DOWN, onContainerKeyDown);			 	
+		_container.removeEventListener(ChildExistenceChangedEvent.CHILD_ADD, onElmAdded);
+		_container.removeEventListener(FlexEvent.REMOVE, onContainerRemove);
 
 		_container = null;
 	 }
@@ -89,8 +91,8 @@ public class SelectionManager extends EventDispatcher
     
     private var _groupMoved:Boolean;
 
-	private var _group:Array = [];
-	private var _preGroup:Array = [];
+	private var _group:Dictionary = new Dictionary(true);
+	private var _preGroup:Dictionary = new Dictionary(true);
 	private var _container:Container;
 	
 	private var rectShape:UIComponent;
@@ -101,7 +103,7 @@ public class SelectionManager extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 	
-	public function getSelection():Array
+	public function get selection():Dictionary
 	{
 		return _group;	
 	}
@@ -113,8 +115,11 @@ public class SelectionManager extends EventDispatcher
 			DisplayObject(elm).addEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
 			DisplayObject(elm).addEventListener(MouseEvent.CLICK, onElmClick);
 			DisplayObject(elm).addEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
-			DisplayObject(elm).addEventListener(FlexEvent.REMOVE, onElmRemove);
 			DisplayObject(elm).addEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected);
+			DisplayObject(elm).addEventListener(FlexEvent.REMOVE, onElmRemove);
+
+			DisplayObject(elm).addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+			DisplayObject(elm).addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 			
 			if(elm.selected)
 				select(elm, true);
@@ -127,18 +132,21 @@ public class SelectionManager extends EventDispatcher
 		{
 			deselect(elm, true);
 			
-			elm.removeEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
-			elm.removeEventListener(MouseEvent.CLICK, onElmClick);
-			elm.removeEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
-			elm.removeEventListener(FlexEvent.REMOVE, onElmRemove);
-			elm.removeEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected); 		
+			DisplayObject(elm).removeEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
+			DisplayObject(elm).removeEventListener(MouseEvent.CLICK, onElmClick);
+			DisplayObject(elm).removeEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
+			DisplayObject(elm).removeEventListener(NodeEvent.SELECTED_CHANGED, onElmSelected); 		
+			DisplayObject(elm).removeEventListener(FlexEvent.REMOVE, onElmRemove);
+
+			DisplayObject(elm).removeEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+			DisplayObject(elm).removeEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 		}		
 	}
 	
 	public function removeAll():void
 	{
-		for each(var child:Object in _container.getChildren())
-			removeElement(child);
+		for(var elm:Object in _group)
+			removeElement(elm);
 	}
 	
 	public function select(elm:Object, forced:Boolean=false):void
@@ -149,11 +157,10 @@ public class SelectionManager extends EventDispatcher
 			
 			if(forced)
 			{
-				var ac:ArrayCollection = new ArrayCollection(_group);
-				var index:int = ac.getItemIndex(elm);
-		
-				if(index<0)
-					ac.addItem(elm);
+				_group[elm] = elm;
+				   			
+   				if(!_group[_container.focusManager.getFocus()])
+					elm.setFocus();
 			}			 
 		}			 
 	}
@@ -166,11 +173,8 @@ public class SelectionManager extends EventDispatcher
 
 			if(forced)
 			{	
-				var ac:ArrayCollection = new ArrayCollection(_group);
-				var index:int = ac.getItemIndex(elm);
-		
-				if(index>=0)
-					ac.removeItemAt(index);
+				if(_group[elm])
+					delete _group[elm];
 			}
 		}
 	}
@@ -179,11 +183,7 @@ public class SelectionManager extends EventDispatcher
 	{
 		if(elm.hasOwnProperty('selected'))
 		{
-			var ac:ArrayCollection = new ArrayCollection(_preGroup);
-			var index:int = ac.getItemIndex(elm);
-		
-			if(index<0)
-				ac.addItem(elm);			 
+			_preGroup[elm] = elm;		 
 		}
 	}
 
@@ -191,17 +191,14 @@ public class SelectionManager extends EventDispatcher
 	{
 		if(elm.hasOwnProperty('selected'))
 		{
-			var ac:ArrayCollection = new ArrayCollection(_preGroup);
-			var index:int = ac.getItemIndex(elm);
-		
-			if(index>=0)
-				ac.removeItemAt(index);
+			if(_preGroup[elm])
+				delete _preGroup[elm];
 		}
 	}
 	
 	private function addPreselected():void
 	{
-		for each(var elm:Object in _preGroup)
+		for(var elm:Object in _preGroup)
 		{
 			select(elm);
 		}
@@ -209,7 +206,7 @@ public class SelectionManager extends EventDispatcher
 	
 	private function subtractPreselected():void
 	{
-		for each(var elm:Object in _preGroup)
+		for(var elm:Object in _preGroup)
 		{
 			deselect(elm);
 		}
@@ -223,8 +220,8 @@ public class SelectionManager extends EventDispatcher
 	
 	public function deselectAll():void
 	{
-		for each(var child:Object in _container.getChildren())
-			deselect(child);
+		for(var elm:Object in _group)
+			deselect(elm);
 	}
 	
 	public function isSelected(elm:Object):Boolean
@@ -290,7 +287,8 @@ public class SelectionManager extends EventDispatcher
     		_container.removeChild(rectShape);
     		rectShape = null;
     		
-    		_container.setFocus();
+    		if(ObjectUtils.dictLength(_group)==0)
+    			_container.setFocus();
     	}
     	else
     	{
@@ -350,10 +348,7 @@ public class SelectionManager extends EventDispatcher
    	{
 		var elm:Object = event.relatedObject;
 		
-		if(elm.hasOwnProperty('selected'))
-		{
-			addElement(elm);
-		}
+		addElement(elm);
    	}
    		
    	private function onElmRemove(event:FlexEvent):void
@@ -366,18 +361,18 @@ public class SelectionManager extends EventDispatcher
    	private function onElmSelected(event:Event):void
    	{
 		var elm:Object = event.currentTarget;
-		var ac:ArrayCollection = new ArrayCollection(_group);
-		var index:int = ac.getItemIndex(elm);
 		
 		if(isSelected(elm))
 		{
-			if(index<0)
-				ac.addItem(elm);			 
+			_group[elm] = elm;			 
+
+   			if(!_group[_container.focusManager.getFocus()])
+				elm.setFocus();
 		}
-		else
+		else 
 		{
-			if(index>=0)
-				ac.removeItemAt(index);
+			if(_group[elm])
+				delete _group[elm];
 		}
    	}
    	   	
@@ -406,6 +401,8 @@ public class SelectionManager extends EventDispatcher
 			var rect:Rectangle = new Rectangle(0,0,rectShape.width,rectShape.height);
 
 			drawSelectionRect(rectShape, rect);
+			
+			_preGroup = new Dictionary(true);
 	        
 	        for each (var child:Object in _container.getChildren())
 	        {
@@ -424,7 +421,7 @@ public class SelectionManager extends EventDispatcher
 	        			regDeltaElmPts[child] = {boundsRect: rect2};
 	        		}
 	        		
-	        		if(!event.shiftKey && !event.commandKey && !event.controlKey)
+	        		if(!event.shiftKey && !event.commandKey && !event.controlKey && !event.altKey)
 	        		{
 						if(rect1.intersects(rect2))
 							select(child);
@@ -441,39 +438,33 @@ public class SelectionManager extends EventDispatcher
 	        	}
 	        }
 	        
-    		if(event.shiftKey && !event.commandKey && !event.controlKey)
+    		if(event.shiftKey || event.commandKey || event.controlKey && !event.altKey)
        			addPreselected();
-    		else if(!event.shiftKey && event.commandKey || event.controlKey)
+    		else if(!event.shiftKey && !event.commandKey && !event.controlKey && event.altKey)
     			subtractPreselected();
 	    }
 	    else
 	    {
 	    	var newP:Point = new Point(p.x, p.y);
 				    	
-	        for each (child in _container.getChildren())
+	        for (var elm:Object in _group)
 	        {
-	        	if(child.hasOwnProperty('selected') && isSelected(child))
-	        	{
-	        		var newX:Number = newP.x+regDeltaElmPts[child].deltaPoint.x;
-	        		var newY:Number = newP.y+regDeltaElmPts[child].deltaPoint.y;
+        		var newX:Number = newP.x+regDeltaElmPts[elm].deltaPoint.x;
+        		var newY:Number = newP.y+regDeltaElmPts[elm].deltaPoint.y;
 	        		 
-					if(newX<0)
-						newP.x -= newX;
-					
-					if(newY<0)
-						newP.y -= newY;
-	        	}
+				if(newX<0)
+					newP.x -= newX;
+				
+				if(newY<0)
+					newP.y -= newY;
 	        }
 	        
-	        for each (child in _container.getChildren())
+	        for (elm in _group)
 	        {
-	        	if(child.hasOwnProperty('selected') && isSelected(child))
-	        	{
-					child.move(	newP.x+regDeltaElmPts[child].deltaPoint.x, 
-    							newP.y+regDeltaElmPts[child].deltaPoint.y );
+				elm.move(	newP.x+regDeltaElmPts[elm].deltaPoint.x, 
+   							newP.y+regDeltaElmPts[elm].deltaPoint.y );
     				
-    				_groupMoved = true;
-	        	}
+   				_groupMoved = true;
 	        }
 	    }
 	    
@@ -494,13 +485,15 @@ public class SelectionManager extends EventDispatcher
    	       	
    	private function onContainerMouseDown(event:MouseEvent):void
    	{
-   		if((!event.target.hasOwnProperty('selected') || !event.target.selected) && event.target!=_container)
+   		// if you press any non-selectable or not selected object on container 
+   		if(	(!event.target.hasOwnProperty('selected') || !event.target.selected) && 
+   			event.target!=_container)
 			deselectAll();
    		
    		if(event.target!=_container)
    			return;
    		
-   		if(!event.shiftKey && !event.controlKey && !event.commandKey)	
+   		if(!event.shiftKey && !event.controlKey && !event.commandKey && !event.altKey)	
    			deselectAll();
    		
    		if(isNaN(regX))
@@ -526,13 +519,13 @@ public class SelectionManager extends EventDispatcher
    			else
    				select(elm);
    		}
+   		else if(event.shiftKey)
+   		{
+   			select(elm);
+   		}
    		else
    		{
    			deselectAll();
-   			
-   			if(_container.focusManager.getFocus()!=elm)
-				elm.setFocus();
-				
    			select(elm);
    		}
    	}
@@ -541,9 +534,12 @@ public class SelectionManager extends EventDispatcher
    	{
    		_groupMoved = false;
    		
-   		if(event.controlKey || event.commandKey)
-   			event.stopImmediatePropagation();
-   		else if(_group.length>1 && event.currentTarget.selected)
+   		if(event.controlKey || event.commandKey || event.shiftKey)
+   		{
+   			// prevent from change focus
+   			event.stopImmediatePropagation();   			
+   		}
+   		else if(ObjectUtils.dictLength(_group)>1 && event.currentTarget.selected)
    		{
    			event.stopImmediatePropagation();
    			startDragging(event);
@@ -555,17 +551,15 @@ public class SelectionManager extends EventDispatcher
    		if(event.target != _container)
    			return;
    			
-   		if(event.keyCode == Keyboard.A)
+   		if(	event.keyCode == Keyboard.A && 
+   			(event.controlKey || event.commandKey))
    		{
-   			if(event.controlKey || event.commandKey)
-   			{
-   				event.stopImmediatePropagation();
-   				
-   				if(_container.focusManager.getFocus()!=_container)
-   					_container.setFocus();
-   				
-   				selectAll();
-   			}
+   			event.stopImmediatePropagation();
+   			
+   			if(_container.focusManager.getFocus()!=_container)
+   				_container.setFocus();
+   			
+   			selectAll();
    		}
    		else if(event.keyCode == Keyboard.TAB)
    		{
@@ -579,12 +573,28 @@ public class SelectionManager extends EventDispatcher
    		{
    			deselectAll();
    		}
-   		else if(_group.length>1)
+   		else if(ObjectUtils.dictLength(_group)>1)
    		{
    			event.preventDefault();
 	   		event.stopImmediatePropagation();
 	   		
 	   		this.dispatchEvent(event);
+   		}
+   	}
+   	
+   	private function onFocusIn(event:FocusEvent):void
+   	{
+   		var elm:Object = event.currentTarget;
+		select(elm);	
+   	}
+   	
+   	private function onFocusOut(event:FocusEvent):void
+   	{
+   		var elm:Object = event.currentTarget;
+   		
+   		if(ObjectUtils.dictLength(_group)==1)
+   		{
+   			deselect(elm);	
    		}
    	}
    	
