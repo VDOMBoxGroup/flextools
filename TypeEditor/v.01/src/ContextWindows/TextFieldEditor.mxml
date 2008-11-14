@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	borderAlpha="0.95" cornerRadius="1" width="250" height="150"
+	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
+	borderThicknessLeft="1" borderThicknessRight="1"
+	title="TextField Length Editor" verticalGap="15" creationComplete="{onCreationComplete();}">
+	
+	<mx:RegExpValidator 
+		source="{__length}" property="text" expression="^[0-9]\{1,5\}$"
+		required="true" valid="{validNumber = true;}" invalid="{validNumber = false;}" />
+	
+	<mx:Style>
+		.title {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+
+	<mx:VBox verticalGap="0" width="100%">
+		<mx:Label text="Enter TextField Length:" />
+		<mx:TextInput id="__length" width="100%" cornerRadius="1" text="100" />
+	</mx:VBox>
+
+	<mx:HBox verticalGap="0" width="100%" horizontalAlign="center" height="100%" verticalAlign="bottom">
+		<mx:Button id="__applyBtn" label="Apply" icon="@Embed(source='/icons/commit.png')" click="{applyBtnClickHandler();}" />
+		<mx:Button id="__cancelBtn" label="Cancel" icon="@Embed(source='/icons/discard.png')" click="{cancelBtnClickHandler();}" />
+	</mx:HBox>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			
+			public var textFieldLength:int = 0;
+			private var validNumber:Boolean = true;
+			
+			private function onCreationComplete():void {
+				this.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler_); 
+			}
+			
+			private function keyDownHandler_(kEvent:KeyboardEvent):void {
+				if (kEvent.keyCode == 13)
+					applyBtnClickHandler()
+				else
+				if (kEvent.keyCode == 27)
+					cancelBtnClickHandler();
+			}
+			
+			public function onShow():void {
+				__length.text = String(textFieldLength);
+				__length.setFocus();
+			}
+		
+			private function applyBtnClickHandler():void {
+				__applyBtn.setFocus();
+				if (validNumber) {
+					textFieldLength = int(__length.text);
+					this.dispatchEvent(new Event(Event.COMPLETE));
+				} else {
+					__length.setFocus();
+					Alert.show('Invalid number!', 'Error');
+				}
+			}
+			
+			private function cancelBtnClickHandler():void {
+				try {
+					PopUpManager.removePopUp(this);
+				}
+				catch (err:Error) { return; }
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:TitleWindow>

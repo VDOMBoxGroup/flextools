@@ -15,6 +15,7 @@ import flash.desktop.Icon;
 import mx.controls.Image;
 import ContextWindows.DropDownMenuEditor;
 import mx.messaging.management.Attribute;
+import ContextWindows.TextFieldEditor;
 
 private function creationComplete():void
 {
@@ -348,8 +349,11 @@ private function loadCodeInterfaceData():void
 
 	switch (currentAttrObj.codeInterface) {
 		case 'textfield':
+			codeInterfaceString = 'TextField ( ' + currentAttrObj['textFieldLength'] + ' )';
 			__attrCodeInterface.selectedIndex = 0;
+			__attrValuesBtn.enabled = true;	
 			break;
+			
 		case 'number':
 			__attrCodeInterface.selectedIndex = 1;
 			break;
@@ -361,13 +365,13 @@ private function loadCodeInterfaceData():void
 			break;
 			
 		case 'dropdown':
-			codeInterfaceString = 'DropDown(';
+			codeInterfaceString = 'DropDown ( ';
 			
 			if (currentAttrObj && currentAttrObj['dropDownStrings'][selectedLang])
 			{
 				var i:int = 0;
 				for each (var value:String in currentAttrObj['dropDownValues']) {
-					codeInterfaceString += '(' + currentAttrObj['dropDownStrings'][selectedLang][i] + '|' + value + ')';
+					codeInterfaceString += '(' + currentAttrObj['dropDownStrings'][selectedLang][i] + '|' + value + ') ';
 					i++;
 				}
 			}
@@ -500,6 +504,7 @@ private function changeAttrCodeInterfaceHandler():void
 }
 
 private var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
+private var tfeditor:TextFieldEditor = new TextFieldEditor();
 
 private function attrInterfaceTypeValuesClickHandler():void
 {
@@ -509,6 +514,15 @@ private function attrInterfaceTypeValuesClickHandler():void
 	var type:String = __attrCodeInterface.selectedItem.data;
 	
 	switch (type) {
+		case 'textfield':
+			tfeditor.addEventListener(Event.COMPLETE, textFieldEditorCompleteHandler);
+			PopUpManager.addPopUp(tfeditor, this);
+			PopUpManager.centerPopUp(tfeditor); 
+			
+			tfeditor.textFieldLength = currentAttrObj['textFieldLength'];
+			tfeditor.onShow();
+			break;
+			
 		case 'dropdown':
 			ddeditor.addEventListener(Event.COMPLETE, dropDownEditCompleteHandler); 
 			PopUpManager.addPopUp(ddeditor, this);
@@ -519,15 +533,24 @@ private function attrInterfaceTypeValuesClickHandler():void
 			ddeditor.editableLang = selectedLang;
 			ddeditor.currentAttrObj = this.currentAttrObj;
 			ddeditor.onShow();
-			
 			break;
 	}
 }
+
 
 private function dropDownEditCompleteHandler(event:Event):void
 {
 	ddeditor.removeEventListener(Event.COMPLETE, dropDownEditCompleteHandler);
 	currentAttrObj = ddeditor.currentAttrObj;
 	PopUpManager.removePopUp(ddeditor);
+	loadCodeInterfaceData();
+}
+
+
+private function textFieldEditorCompleteHandler(event:Event):void
+{
+	tfeditor.removeEventListener(Event.COMPLETE, textFieldEditorCompleteHandler);
+	currentAttrObj['textFieldLength'] = tfeditor.textFieldLength;
+	PopUpManager.removePopUp(tfeditor);
 	loadCodeInterfaceData();
 }
