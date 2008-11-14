@@ -13,6 +13,8 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.utils.UIDUtil;
+			import mx.containers.Tile;
 			import mx.controls.Alert;
 			import mx.controls.Label;
 			import mx.core.Container;
@@ -58,8 +60,8 @@
 				if (hasCover) {
 					__fb.cover = new SVGPage();
 					__fb.backCover = new SVGPage();
-					SVGPage(__fb.cover).loadURL(dataSourceUrl + '?page=0');
-					SVGPage(__fb.backCover).loadURL(dataSourceUrl + '?page=' + String(pageRange + 1));
+					SVGPage(__fb.cover).loadURL(dataSourceUrl + '?page=0&timestamp=' +  UIDUtil.createUID());
+					SVGPage(__fb.backCover).loadURL(dataSourceUrl + '?page=' + String(pageRange + 1) + '&timestamp=' +  UIDUtil.createUID());
 				}
 				
 				
@@ -71,8 +73,8 @@
 			 	}
 				__fb.content = pages;
 			    BindingUtils.bindProperty(this, "pageChange", __fb, "currentPageIndex");
-			    if (startPage != -1 && startPage <= __fb.maximumPageIndex - 1)
-					__fb.turnToPage(startPage - 1, false);
+			    if (startPage >= 0 && startPage <= __fb.maximumPageIndex - 1)
+					__fb.turnToPage(startPage, false);
 			}
 			
 			public function set pageChange(index:*):void {
@@ -81,29 +83,28 @@
 				
 				var currentPage:* = __fb.content[index];
 				if (SVGPage(currentPage).numChildren == 0)
-					SVGPage(currentPage).loadURL(dataSourceUrl + '?page=' + String(index + 1));
+					SVGPage(currentPage).loadURL(dataSourceUrl + '?page=' + String(index + 1) + '&timestamp=' +  UIDUtil.createUID());
 				
 				if (index >= 0 && index + 1 <= __fb.maximumPageIndex - 1) {
 					if (SVGPage(__fb.content[index + 1]).numChildren == 0)
-						SVGPage(__fb.content[index + 1]).loadURL(dataSourceUrl + '?page=' + String(index + 2));
+						SVGPage(__fb.content[index + 1]).loadURL(dataSourceUrl + '?page=' + String(index + 2) + '&timestamp=' +  UIDUtil.createUID());
 				}
 				
 				if (index - 1 >= 0 && index <= __fb.maximumPageIndex - 1) {
 					if (SVGPage(__fb.content[index - 1]).numChildren == 0)
-						SVGPage(__fb.content[index - 1]).loadURL(dataSourceUrl + '?page=' + String(index));
+						SVGPage(__fb.content[index - 1]).loadURL(dataSourceUrl + '?page=' + String(index) + '&timestamp=' +  UIDUtil.createUID());
 				}
 				
 			}
 			
 			private function turnLeft():void {
-				if (__fb.pageCount > 0 && __fb.currentPageIndex > 0)
+				if (__fb.currentPageIndex > 0)
 					__fb.turnToPage(__fb.currentPageIndex - 1);
 			}
 			
 			private function turnRight():void {
-				if (__fb.pageCount > 0 && __fb.currentPageIndex < __fb.maximumPageIndex)
+				if (__fb.currentPageIndex + 1 < __fb.maximumPageIndex)
 					__fb.turnToPage(__fb.currentPageIndex + 1);
-				
 			}
 			
 		]]>
