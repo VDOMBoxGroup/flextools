@@ -397,7 +397,8 @@
 								</mx:HBox>
 								
 								<mx:Spacer height="2" />
-								<mx:TextInput id="__codeInterfaceParams" width="100%" borderStyle="solid" borderColor="#DDDDDD" creationComplete="{changeAttrCodeInterfaceHandler();}" />
+								<mx:TextInput id="__codeInterfaceParams" width="100%" borderStyle="solid" borderColor="#DDDDDD"
+									creationComplete="{changeAttrCodeInterfaceHandler();}" editable="false" />
 							</mx:VBox>
 						</mx:VBox>
 	

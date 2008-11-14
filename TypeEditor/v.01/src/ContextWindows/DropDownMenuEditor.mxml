@@ -31,7 +31,6 @@
 			private var rowsProvider:Array = []; /* of { label:langStr } */
 
 			[Bindable] private var _langsProvider:Array = [];
-			private var rowsNum:int = 0;
 			
 			public function set currentAttrObj(value:Object):void {
 				_currentAttrObj = {};
@@ -45,7 +44,6 @@
 			/* This function must be executed "by hand" after object initializitaion  */
 			public function onShow():void
 			{
-				rowsNum = _currentAttrObj.dropDownValues.length;
 				loadValues();
 				
 				/* set languageBoxes to actual information */
@@ -71,7 +69,7 @@
 				
 				rowsProvider = [];
 								
-				for (var i:int = 0; i < rowsNum; i++) {
+				for (var i:int = 0; i < _currentAttrObj.dropDownValues.length; i++) {
 					var value:String = _currentAttrObj.dropDownValues[i];
 					var edValue:String;
 					var exValue:String
@@ -95,7 +93,9 @@
 			
 			private function writeValues():void
 			{
-				for (var i:int = 0; i < rowsNum; i++) {
+				_currentAttrObj.dropDownValues = [];
+				_currentAttrObj.dropDownStrings[editableLang] = [];
+				for (var i:int = 0; i < rowsProvider.length; i++) {
 					_currentAttrObj.dropDownValues[i] = rowsProvider[i].value;
 					_currentAttrObj.dropDownStrings[editableLang][i] = rowsProvider[i].editable;
 				}
@@ -113,7 +113,6 @@
 				rowsProvider.push(row);
 				
 				__dg.dataProvider = rowsProvider;
-				rowsNum++;
 			}
 			
 			private function removeRowBtnClickHandler():void
@@ -133,8 +132,7 @@
 				var vsp:int = __dg.verticalScrollPosition;
 				__dg.dataProvider = rowsProvider;
 				__dg.verticalScrollPosition = vsp;
-				if (rowsNum > 0)
-					rowsNum--;
+				
 			}
 			
 			private function changeLanguagesHandler():void

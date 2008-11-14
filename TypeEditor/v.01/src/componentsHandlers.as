@@ -359,12 +359,25 @@ private function loadCodeInterfaceData():void
 		case 'font':
 			__attrCodeInterface.selectedIndex = 3;
 			break;
+			
 		case 'dropdown':
-			codeInterfaceString = '=DropDown()';
+			codeInterfaceString = 'DropDown(';
+			
+			if (currentAttrObj && currentAttrObj['dropDownStrings'][selectedLang])
+			{
+				var i:int = 0;
+				for each (var value:String in currentAttrObj['dropDownValues']) {
+					codeInterfaceString += '(' + currentAttrObj['dropDownStrings'][selectedLang][i] + '|' + value + ')';
+					i++;
+				}
+			}
+			
+			codeInterfaceString += ')';
 			__attrValuesBtn.enabled = true;	
 
 			__attrCodeInterface.selectedIndex = 4;
 			break;
+			
 		case 'file':
 			__attrCodeInterface.selectedIndex = 5;
 			break;
@@ -516,4 +529,5 @@ private function dropDownEditCompleteHandler(event:Event):void
 	ddeditor.removeEventListener(Event.COMPLETE, dropDownEditCompleteHandler);
 	currentAttrObj = ddeditor.currentAttrObj;
 	PopUpManager.removePopUp(ddeditor);
+	loadCodeInterfaceData();
 }
