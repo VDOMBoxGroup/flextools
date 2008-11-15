@@ -8,23 +8,38 @@ package vdom.components.scriptEditor.containers
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ServerScriptsEvent;
 	import vdom.managers.DataManager;
+	import vdom.utils.IconUtil;
 	
 	[Event(name="dataChanged", type="vdom.events.ServerScriptsEvent")]
+
 
 	public class ServerScripts extends ClosablePanel
 	{
 		private var tree:OTree;
 		private var dataManager:DataManager = DataManager.getInstance();
 		private var curContainerID:String;
+			
+		
+		
+		[Embed(source='/assets/scriptEditor/python.png')]
+		[Bindable]
+		public var python:Class;
+		
+		[Embed(source='/assets/scriptEditor/vbscript.png')]
+		[Bindable]
+		public var vscript:Class;
 
+	
+			
 		public function ServerScripts()
 		{
 			super();
 			tree = new OTree();
 			tree.showRoot = false;
-//			tree.percentHeight = 100;
+			tree.iconFunction = getIcon;
 			tree.percentWidth = 100;
 			tree.labelField = '@Name';
+			
 			tree.addEventListener(ListEvent.CHANGE, changeHandler);
 			
 			addChild(tree);
@@ -169,6 +184,23 @@ package vdom.components.scriptEditor.containers
 		{
 			return tree.selectedItem;
 		}
+		
+		private function getIcon(value:Object):Class 
+		{
+			var xmlData:XML = XML(value);
+		
+			if (xmlData.@Language.toXMLString() =='python')
+				return python;
+		
+			if (xmlData.@Language.toXMLString() =='vscript')
+				return vscript;
+			
+			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+		 	
+	 		return IconUtil.getClass(this, data, 16, 16);
+		}
+
+
 		
 	}
 }
