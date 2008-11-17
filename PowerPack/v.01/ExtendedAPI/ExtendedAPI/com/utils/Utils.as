@@ -86,25 +86,22 @@ package ExtendedAPI.com.utils
 	 	
 		public static function replaceEscapeSequences(string:String, sequence:String, prefix:String = '\\'):String
 		{
-			var str:String;
-			var pos:int = 0;
+			var str:String = string.concat();
+			var len:int = str.length;
+			var index:int;
 			
-			str = string.concat();
-			
-			while(pos<str.length-1)
+			while(index<len-1)
 			{
-				pos = str.indexOf(sequence, pos);
+				index = str.indexOf(sequence, index);
 				
-				if(pos<0 || pos>=str.length)
+				if(index<0 || index>=len)
 					break;				
 				
-				var i:int = pos-1;
-				while(i>=0 && str.charAt(i)==prefix)
-				{	    						
-					i--;
-				}
+				var count:int = index-1;
+				while(count>=0 && str.charAt(count)==prefix)
+					count--;
 				
-				if((pos-i)%2==1)
+				if((index-count)%2==1)
 	    		{
 	    			var escapeSym:String;
 					var lOffset:int = 0;
@@ -120,142 +117,106 @@ package ExtendedAPI.com.utils
 		    		{
 		    			escapeSym="";
 		    			
-		    			if( str.charAt(pos-1)==' ' )
+		    			if( str.charAt(index-1)==' ' )
 		    				lOffset=1;
-		    			if( str.charAt(pos+sequence.length)==' ' )
+		    			if( str.charAt(index+sequence.length)==' ' )
 		    				rOffset=1;
 		    		}
 	    			else
 	    				escapeSym=sequence.substring(1);
 	    				
-	    			str = str.substring(0, pos-lOffset) + escapeSym + str.substring(pos+sequence.length+rOffset);
+	    			str = str.substring(0, index-lOffset) + escapeSym + str.substring(index+sequence.length+rOffset);
+	    			len = str.length;
 	    		}	
 	    				
-				pos ++;	
+				index ++;	
 			}			
 			return str;
 		}
 				
-		/*
-		public static function replaceQuotes(_str:String):String
+		public static function replaceQuotes(string:String):String
 		{
 			var str:String;
-
-			if(_str.charAt(0) == '"')
-			{
-				str = _str.replace(/(^"|"$)/g, "");
-				str = replaceEscapeSequences(str, '\\"');
-			}
-			else if(_str.charAt(0) == "'")
-			{
-				str = _str.replace(/(^'|'$)/g, "");
-				str = replaceEscapeSequences(str, "\\'");
-			}
-			else
-			{
-				str = _str.concat();
-			}
-			
-			return str;
-		}
-		*/
-		
-		public static function replaceQuotes(_str:String):String
-		{
-			var str:String;
-			var char:String;
 			var buf:String;
+			var quote:String = string.charAt(0);
 						
-			if(_str.charAt(0) == '"')
-			{
-				str = _str.replace(/(^"|"$)/g, "");
-				char = '"';
+			if(quote == '"')
+				str = string.replace(/(^"|"$)/g, "");
+			else if(quote == "'")
+				str = string.replace(/(^'|'$)/g, "");
+			else {
+				buf = string.concat();
+				quote = null;				
 			}
-			else if(_str.charAt(0) == "'")
-			{
-				str = _str.replace(/(^'|'$)/g, "");
-				char = "'";
-			}
-			else
-			{
-				buf = _str.concat();
-			}			
 			
-			if(char)			
+			if(quote)			
 			{
 				buf = "";
-			
-				for(var i:int=0; i<str.length; i++)
+				var len:int = str.length;
+				var char:String; 
+				
+				for(var i:int=0; i<len; i++)
 				{
-					if(str.charAt(i)=='\\')
+					char = str.charAt(i);
+					if(char=='\\')
 					{
-						if(str.charAt(i+1)=='\\' || 
-							//str.charAt(i+1)==char
-							str.charAt(i+1)=='"' ||
-							str.charAt(i+1)=="'")
+						var nextChar:String = str.charAt(i+1); 
+						if(	nextChar=='\\' || 
+							nextChar=='"' ||
+							nextChar=="'")
 							i++;
 					}
 					
-					buf += str.charAt(i);					
+					buf += char;					
 				}
 			}
 			
 			return buf;
 		}
 		
-		public static function quotes(_str:String, isSingle:Boolean=false):String
+		public static function quotes(string:String, isSingle:Boolean=false):String
 		{
 			var str:String;
-			var qoute:String = isSingle ? "'" : '"';
+			var quote:String = isSingle ? "'" : '"';
+			var len:int = string.length;
+			var char:String;
 			
 			str = "";
 			
-			for(var i:int=0; i<_str.length; i++)
+			for(var i:int=0; i<len; i++)
 			{
-				//if(_str.charAt(i)==qoute)
-				if(_str.charAt(i)=='"' || _str.charAt(i)=="'")
+				char = string.charAt(i);
+				switch (char)
 				{
-					/*
-					var j:int = i-1;
-					while(j>=0 && _str.charAt(j)=="\\") {	    						
-						j--;
-					}
-	
-					if((i-j)%2==1) {
-						str += "\\";
-					}
-					*/
-					
-					str += '\\';					
+					case "'":
+					case '"':
+					case '\\':
+						str += '\\';					
+						break;
 				}
-				else if(_str.charAt(i)=='\\')
-				{
-					str += '\\';
-				}
-				
-				str += _str.charAt(i);					
+				str += char;					
 			}
 			
-			str = qoute + str + qoute;
+			str = quote + str + quote;
 			
 			return str;
 		}
 
-		public static function getNumberOrDefault(object:Object, default_val:Number = 0):Number
+		public static function getNumberOrDefault(object:Object, defaultValue:Number = 0):Number
 		{
-			return (object && StringUtil.trim(object.toString()) && !isNaN(Number(object)) ? Number(object) : default_val);
+			return (object && StringUtil.trim(object.toString()) && !isNaN(Number(object)) ? Number(object) : defaultValue);
 		}
 				
-		public static function getStringOrDefault(object:Object, default_val:String=null):String
+		public static function getStringOrDefault(object:Object, defaultValue:String=null):String
 		{
-			return (object && StringUtil.trim(object.toString()) ? object.toString() : default_val);
+			return (object && StringUtil.trim(object.toString()) ? object.toString() : defaultValue);
 		}
 		
-		public static function getBooleanOrDefault(str_object:Object, default_val:Boolean=false):Boolean
+		public static function getBooleanOrDefault(str_object:Object, defaultValue:Boolean=false):Boolean
 		{			
 			var str:String = str_object ? StringUtil.trim(str_object.toString()).toLowerCase() : null;
 			
-			return (str=='true' ? true : str=='false' ? false : default_val);
+			return (str=='true' ? true : str=='false' ? false : defaultValue);
 		}
 		
 		public static function getExactRect(obj:DisplayObject):Rectangle
