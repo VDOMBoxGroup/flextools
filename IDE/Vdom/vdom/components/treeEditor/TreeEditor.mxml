@@ -218,6 +218,7 @@
 	}
 	
 	
+	
 	private function hideTreeElement(trEvt:Object):void
 	{
 		massTreeElements[_curTree.target.ID].resize = true;

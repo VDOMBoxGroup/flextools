@@ -6,7 +6,7 @@
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute"  
-	title="ImpuT NeW ScRiPts nAme"
+	title="Add Script"
 	creationComplete="{creationComplete()}"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
@@ -14,7 +14,18 @@
 	width="250"
 	show="showHandler()"
 	
+	borderAlpha="0.98" cornerRadius="1" 
+	visible="true" shadowDirection="right"
+	borderColor="#636363" titleStyleName="resourceBrowserTitle"
+	borderThicknessLeft="1" borderThicknessRight="1"
+	
 >
+	<mx:Style>
+		.resourceBrowserTitle {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
 	<mx:Script>
 		<![CDATA[
 			import mx.events.ValidationResultEvent;
@@ -99,18 +110,18 @@
         }
 		]]>
 	</mx:Script>
-	
-	<mx:ControlBar paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" fontWeight="bold" width="100%">
-    	<mx:VBox x="8" y="8" width="100%" >
-	    	<mx:TextInput id="inputText"  width="100%" keyDown="{myKeyDown(event)}"/>
-	    	
-		<mx:Canvas width="100%">
-	    	<mx:HBox right="0"  horizontalAlign="right" >
+	<mx:VBox width="100%" paddingLeft="10" paddingRight="10" paddingTop="4" 
+		paddingBottom="20"  verticalGap="10" horizontalAlign="center">
+		<mx:Label  fontSize="14" color="#AEAEAE" text="Input Script name:"   fontWeight="bold"/>
+		<mx:TextInput id="inputText"  width="100%" keyDown="{myKeyDown(event)}" x="-4"  themeColor="#E1E1E1"/>
+		
+	</mx:VBox>
+	<mx:ControlBar paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" fontWeight="bold" 
+		color="#FFFFFF" width="100%"  horizontalAlign="right" >
+	    	<mx:HBox right="0" >
 	    		<mx:Button label="Ok" click="okPressed()"/>
 	    		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
 	    	</mx:HBox>
-		</mx:Canvas>	    		
-    	</mx:VBox>
 	</mx:ControlBar>
 	    	
 </mx:TitleWindow>
