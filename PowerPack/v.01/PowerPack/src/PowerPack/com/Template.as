@@ -49,10 +49,13 @@ package PowerPack.com
 		public var key:String;
 		
 		[Bindable]
-		public var modified:Boolean = false;
+		public var modified:Boolean;
 		
 		[Bindable]
-		public var picturePath:String;		
+		public var picturePath:String;
+		
+		[Bindable]
+		public var file:File;	
 
 	    //--------------------------------------------------------------------------
 		//
@@ -78,12 +81,6 @@ package PowerPack.com
 		private var _xmlStructure:XML;
 		
 		[Bindable]
-		public function get xmlStructure():XML
-		{
-			if(!_xmlStructure)
-				decode();
-			return _xmlStructure;
-		}		
 		public function set xmlStructure(value:XML):void
 		{
 			if(_xmlStructure!=value)
@@ -91,20 +88,26 @@ package PowerPack.com
 				_xmlStructure=value;		
 			}
 		}
+		public function get xmlStructure():XML
+		{
+			if(!_xmlStructure)
+				decode();
+			return _xmlStructure;
+		}		
 				
 	    //----------------------------------
 	    //  name
 	    //----------------------------------
 
 		[Bindable]
-		public function get name():String
-		{
-			return Utils.getStringOrDefault(_xml.@name, '');	
-		}		
 		public function set name(value:String):void
 		{
-			if(_xml.@name != value)
-				_xml.@name = value;	
+			if(_xml.name != value)
+				_xml.name = value;	
+		}		
+		public function get name():String
+		{
+			return Utils.getStringOrDefault(_xml.name, '');	
 		}		
 
 	    //----------------------------------
@@ -112,14 +115,14 @@ package PowerPack.com
 	    //----------------------------------
 
 		[Bindable]
-		public function get description():String
-		{
-			return Utils.getStringOrDefault(_xml.description, '');	
-		}		
 		public function set description(value:String):void
 		{
 			if(_xml.description != value)
 				_xml.description = value;	
+		}		
+		public function get description():String
+		{
+			return Utils.getStringOrDefault(_xml.description, '');	
 		}		
 		
 	    //----------------------------------
@@ -136,15 +139,15 @@ package PowerPack.com
 	    //----------------------------------
 
 		[Bindable]
-		public function get b64picture():String
-		{
-			return Utils.getStringOrDefault(_xml.picture[0], '');	
-		}		
 		public function set b64picture(value:String):void
 		{
 			if(_xml.picture != value)
 				_xml.picture = value;	
 		}	
+		public function get b64picture():String
+		{
+			return Utils.getStringOrDefault(_xml.picture[0], '');	
+		}		
 		
 	    //----------------------------------
 	    //  isEncoded
@@ -161,6 +164,22 @@ package PowerPack.com
 		//
 		//--------------------------------------------------------------------------
 		
+		public function save():void
+		{
+			
+		}
+		
+		
+		public function saveAs():void
+		{
+			
+		}
+		
+		public function open():void
+		{
+			
+		}
+
 		public function encode():void
 		{
 			delete _xml.encoded;

@@ -105,7 +105,7 @@ public class Parser
 		 * u - undefined
 		 * t - text
 		 * n - name (identifier: function name, graph name, prefix, etc)
-		 * w - word (any ASCII chars sequence)
+		 * w - word (any ASCII chars sequence without spaces)
 		 * o - 'null'
 		 * b - ('true', 'false')
 		 * v - variable

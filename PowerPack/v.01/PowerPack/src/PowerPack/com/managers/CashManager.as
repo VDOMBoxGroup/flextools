@@ -172,7 +172,7 @@ public class CashManager extends EventDispatcher
 	private static function addMainIndexEntry(index:XML, entryXML:XML):void
 	{
 		removeMainIndexEntry(index, entryXML.@ID);
-		index.appendChild(entryXML)
+		index.appendChild(entryXML);
 	}
 
 	private static function removeMainIndexEntry(index:XML, tplID:String):void
