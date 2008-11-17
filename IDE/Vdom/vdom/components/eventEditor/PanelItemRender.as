@@ -16,12 +16,17 @@ package vdom.components.eventEditor
 		private var _icon:Image = new Image();
 		private var _label:Label = new Label();
 		
+		[Embed(source='/assets/scriptEditor/vbscript.png')]
+		[Bindable]
+		public var vscript:Class;
+		
 		public function PanelItemRender()
 		{
 			super();
 //			super.width = 200;	
 //			super.data
 //			setStyle("horizontalScrollPolicy", "off");
+			_icon.source = vscript;
 			addChild(_icon);
 //			_label.setStyle("horizontalScrollPolicy", "off");
 //			_label.width = parent.width;
