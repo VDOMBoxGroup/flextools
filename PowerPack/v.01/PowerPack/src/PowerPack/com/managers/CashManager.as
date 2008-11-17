@@ -13,7 +13,6 @@ package PowerPack.com.managers
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	
 	import mx.graphics.codec.PNGEncoder;
@@ -177,7 +176,7 @@ public class CashManager extends EventDispatcher
 
 	private static function removeMainIndexEntry(index:XML, tplID:String):void
 	{
-		delete getMainIndexEntry(index, tplID);		
+		delete getMainIndexEntry(index, tplID);
 	}
 	
 	private static function updateMainIndexEntry(index:XML, tplID:String, attr:String, value:String):void
@@ -205,7 +204,7 @@ public class CashManager extends EventDispatcher
 	/** 
 	 * Template index has following structure:
 	 * 	<index ID='' folder=''>
-	 * 		<resource category='' ID='' name='' type='' filename='' thumb='' lastUpdate='' lastRequest='' />
+	 * 		<resource category='' ID='' name='' type='' filename='' thumb='' lastUpdate='' lastRequest='' deleted=''/>
 	 * 		...
 	 */
 	
@@ -295,7 +294,7 @@ public class CashManager extends EventDispatcher
 	// Cash resources manipulation
 	//
 	
-	public static function now():Date
+	public static function UTCNow():Date
 	{
 		var localDate:Date = new Date();
 		var offsetMilliseconds:Number = localDate.getTimezoneOffset() * 60 * 1000;
@@ -304,22 +303,33 @@ public class CashManager extends EventDispatcher
 		return localDate;
 	}
 	
-	public static function clear():void
+	public static function clear(...args):void
 	{
 		instance.onProgress(0, 100)
+		initialize();
 		
-		var expirationDate:Date = now();
+		var expirationDate:Date = UTCNow();
 		var offsetMilliseconds:Number = expirationPeriod * 60 * 60 * 1000;
 		expirationDate.setTime(expirationDate.getTime() - offsetMilliseconds);	
-				
-		initialize();
 
 		var mainIndex:XML = getMainIndex();
-		for each(var indexEntry:XML in mainIndex.template)
+		
+		if(!args || args.length==0)
 		{
-			if( Number(Utils.getStringOrDefault(indexEntry.@lastRequest,'0')) <= expirationDate.getTime() )
-				removeMainIndexEntry(mainIndex, indexEntry.@ID);
+			for each(var indexEntry:XML in mainIndex.template)
+			{
+				if( Number(Utils.getStringOrDefault(indexEntry.@lastRequest,'0')) <= expirationDate.getTime() )
+					removeMainIndexEntry(mainIndex, indexEntry.@ID);
+			}
 		}
+		else
+		{
+			for each(var ID:String in args)
+			{
+				removeMainIndexEntry(mainIndex, ID);
+			}
+		}
+		
 		setMainIndex(mainIndex);
 		
 		var fileList:Array = CashManager.cashFolder.getDirectoryListing();
@@ -341,10 +351,11 @@ public class CashManager extends EventDispatcher
 					else if(file.name!='index.xml')
 						file.deleteFile();
 				} 
-				catch(e:*) {}
+				catch(e:*) 
+				{}
 			}
 		}
-		
+
 		instance.onComplete("clearComplete");
 	}
 		
@@ -368,7 +379,7 @@ public class CashManager extends EventDispatcher
 		if(!entry)
 			return null;
 			
-		return entry
+		return entry;
 	}
 
 	public static function isObjectUpdated(tplID:String, objID:String, UTCDate:Number):Boolean
@@ -431,8 +442,8 @@ public class CashManager extends EventDispatcher
 		dataStream.readBytes(data);
 		dataStream.close();
 		
-		updateIndexEntry(index, objID, 'lastRequest', now().getTime().toString());
-		updateMainIndexEntry(mainIndex, tplID, 'lastRequest', now().getTime().toString());
+		updateIndexEntry(index, objID, 'lastRequest', UTCNow().getTime().toString());
+		updateMainIndexEntry(mainIndex, tplID, 'lastRequest', UTCNow().getTime().toString());
 		
 		setIndex(index);
 		setMainIndex(mainIndex);
@@ -459,15 +470,15 @@ public class CashManager extends EventDispatcher
 			tplEntry = new XML(<template/>);
 			tplEntry.@ID = tplID;
 			tplEntry.@folder = getFolderName(tplID);
-			tplEntry.@creationDate = now().getTime().toString();
-			tplEntry.@lastUpdate = now().getTime().toString();
-			tplEntry.@lastRequest = now().getTime().toString();
+			tplEntry.@creationDate = UTCNow().getTime().toString();
+			tplEntry.@lastUpdate = UTCNow().getTime().toString();
+			tplEntry.@lastRequest = UTCNow().getTime().toString();
 			
 			addMainIndexEntry(mainIndex, tplEntry);
 		}
 		
-		updateMainIndexEntry(mainIndex, tplID, 'lastUpdate', now().getTime().toString());
-		updateMainIndexEntry(mainIndex, tplID, 'lastRequest', now().getTime().toString());
+		updateMainIndexEntry(mainIndex, tplID, 'lastUpdate', UTCNow().getTime().toString());
+		updateMainIndexEntry(mainIndex, tplID, 'lastRequest', UTCNow().getTime().toString());
 		
 		//--------------------
 		
@@ -487,18 +498,18 @@ public class CashManager extends EventDispatcher
 			entry.@ID = objEntry.@ID;
 			entry.@name = objEntry.@name;
 			entry.@type = objEntry.@type;
-			entry.@lastUpdate = now().getTime().toString();
-			entry.@lastRequest = now().getTime().toString();
+			entry.@lastUpdate = UTCNow().getTime().toString();
+			entry.@lastRequest = UTCNow().getTime().toString();
 			entry.@filename = String(objEntry.@ID).replace(/\W/g, '_');
 			
-			if(entry.@category == 'image')
+			if(entry.@category == 'image' || entry.@category == 'logo')
 				entry.@thumb = 'thumb_'+entry.@filename+'.png';
 							
 			addIndexEntry(index, entry);
 		}
 		
-		updateIndexEntry(mainIndex, entry.@ID, 'lastUpdate', now().getTime().toString());
-		updateIndexEntry(mainIndex, entry.@ID, 'lastRequest', now().getTime().toString());
+		updateIndexEntry(mainIndex, entry.@ID, 'lastUpdate', UTCNow().getTime().toString());
+		updateIndexEntry(mainIndex, entry.@ID, 'lastRequest', UTCNow().getTime().toString());
 		
 		//---------------------
 		
@@ -526,7 +537,8 @@ public class CashManager extends EventDispatcher
 	
 	private function createThumb(entry:XML, folder:File, b64Data:ByteArray):void
 	{
-		if(entry.@category != 'image')
+		if(	entry.@category != 'image' && 
+			entry.@category != 'logo')
 			return;
 		
 		try	{			
@@ -573,14 +585,38 @@ public class CashManager extends EventDispatcher
 				fileStream.addEventListener(Event.COMPLETE, thumbCompleteHandler)
 				fileStream.writeBytes(data);
 			} 
-			catch(e:*) {}
+			catch(e:*) 
+			{}
 		}
 		
 		function thumbCompleteHandler(event:Event):void {
     		event.target.close();
+    		instance.onComplete("thumbComplete");
 		}		
 	}
-	
+
+	public static function updateID(tplID:String, newID:String):void
+	{
+		initialize();		
+		
+		var mainIndex:XML = getMainIndex();
+		var tplEntry:XML = getMainIndexEntry(mainIndex, tplID);
+		if(!tplEntry)
+			return;
+
+		var index:XML = getIndex(tplID, mainIndex);
+		if(!index)
+			return;
+		
+		index.@folder = getFolderName(newID);
+		
+		updateMainIndexEntry(mainIndex, tplID, 'ID', newID);
+		updateMainIndexEntry(mainIndex, tplID, 'folder', index.@folder);
+
+		setIndex(index);		
+		setMainIndex(mainIndex);		
+	}
+		
 	public static function updateObject(tplID:String, objID:String, data:ByteArray):XML
 	{
 		initialize();		
@@ -607,7 +643,7 @@ public class CashManager extends EventDispatcher
 		dispatchEvent(new Event(Event.COMPLETE));
 		if(eventType)
 			dispatchEvent(new Event(eventType));
-	}	
+	}
 
 	private function onProgress(current:Number, total:Number):void
 	{
