@@ -235,7 +235,6 @@ public class CashManager extends EventDispatcher
 		if(!index.exists)
 			return xml;
 		
-		
 		var indexStream:FileStream = new FileStream();
 		indexStream.open(index, FileMode.READ);		
 		
