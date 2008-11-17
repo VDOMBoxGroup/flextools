@@ -76,6 +76,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import flash.system.fscommand;
 			import PowerPack.customize.Resources;
 			import PowerPack.com.managers.CashManager;
 			import ExtendedAPI.com.containers.SuperWindow;

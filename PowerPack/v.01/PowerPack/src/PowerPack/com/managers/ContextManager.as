@@ -308,8 +308,8 @@ public class ContextManager extends EventDispatcher
 		tmpStr = Utils.getStringOrDefault(instance.settingsXML.appfile, instance.file ? instance.file.nativePath : null);
 		if(FileUtils.isValidPath(tmpStr))
 		{
-			instance.file = new File();
-			instance.file.url = FileUtils.pathToUrl(tmpStr);
+			instance.file = new File(tmpStr);
+			//instance.file.url = FileUtils.pathToUrl(tmpStr);
  		}
  		
  		// get files and last open file
@@ -331,8 +331,8 @@ public class ContextManager extends EventDispatcher
 					
 				if(FileUtils.isValidPath(fileArr[i]))
 				{
-					file = new File();
-					file.url = FileUtils.pathToUrl(fileArr[i]);
+					file = new File(fileArr[i]);
+					//file.url = FileUtils.pathToUrl(fileArr[i]);
 					instance.files.push(file);
 	 			}
  			}
