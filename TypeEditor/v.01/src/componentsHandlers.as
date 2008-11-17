@@ -16,6 +16,8 @@ import mx.controls.Image;
 import ContextWindows.DropDownMenuEditor;
 import mx.messaging.management.Attribute;
 import ContextWindows.TextFieldEditor;
+import ContextWindows.NumberRangeEditor;
+import ContextWindows.MultiLineEditor;
 
 private function creationComplete():void
 {
@@ -172,9 +174,9 @@ private function refreshIDBtnClickHandler():void
  * attrsProvider:
  *  |
  *  |--[0]
- * 	|   |--label = 'New Attribute' (attr Name)
- * 	|   |--defValue = ''
- * 	|   |--regExValidationStr = ''
+ *  |   |--label = 'New Attribute' (attr Name)
+ *  |   |--defValue = ''
+ *  |   |--regExValidationStr = ''
  *  |   |--interfaceType = 0
  *  |   |--colorGroup = 1
  *  |   |--codeInterface = 'textfield' 
@@ -192,7 +194,11 @@ private function refreshIDBtnClickHandler():void
  *  |   |--numberMinValue = 0
  *  |   |--numberMaxValue = 0
  *  |   |--multiLineLength = 0
- *  |   |--externalEditorTitle = ''
+ *  |   |
+ *  |   |--externalEditorTitle
+ *  |   |   |--languageField = str
+ *  |   |   '--languageField = str
+ *  |   |
  *  |   |--externalEditorInfo = ''
  *  |   |
  *  |   |--[dropDownValues]
@@ -224,10 +230,10 @@ private function addAttrBtnClickHandler():void
 		attrDispName			:[],	/* [LanguageField] = str */
 		regExValidationErrStr	:[],	/* [LanguageField] = str */
 		textFieldLength			:0,
-		numberMinValue			:0,
-		numberMaxValue			:0,
+		numberMinValue			:0.0,
+		numberMaxValue			:0.0,
 		multiLineLength			:0,
-		externalEditorTitle		:'',
+		externalEditorTitle		:[],	/* [LanguageField] = str */
 		externalEditorInfo		:'',
 		dropDownValues			:[],	/* Array of values */
 		dropDownStrings			:{}		/* [LanguageFiled] :: Array of Strings */
@@ -349,17 +355,23 @@ private function loadCodeInterfaceData():void
 
 	switch (currentAttrObj.codeInterface) {
 		case 'textfield':
-			codeInterfaceString = 'TextField ( ' + currentAttrObj['textFieldLength'] + ' )';
 			__attrCodeInterface.selectedIndex = 0;
-			__attrValuesBtn.enabled = true;	
+			codeInterfaceString = 'TextField ( ' + currentAttrObj['textFieldLength'] + ' )';
+			__attrValuesBtn.enabled = true;
 			break;
 			
 		case 'number':
 			__attrCodeInterface.selectedIndex = 1;
+			codeInterfaceString = 'Number ( ' + currentAttrObj['numberMinValue'] + ', ' + currentAttrObj['numberMaxValue'] + ' )';
+			__attrValuesBtn.enabled = true;
 			break;
+			
 		case 'multiline':
 			__attrCodeInterface.selectedIndex = 2;
+			codeInterfaceString = 'MultiLine ( ' + currentAttrObj['multiLineLength'] + ' )';
+			__attrValuesBtn.enabled = true;
 			break;
+			
 		case 'font':
 			__attrCodeInterface.selectedIndex = 3;
 			break;
@@ -505,6 +517,8 @@ private function changeAttrCodeInterfaceHandler():void
 
 private var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
 private var tfeditor:TextFieldEditor = new TextFieldEditor();
+private var nreditor:NumberRangeEditor = new NumberRangeEditor();
+private var mleditor:MultiLineEditor = new MultiLineEditor();
 
 private function attrInterfaceTypeValuesClickHandler():void
 {
@@ -522,7 +536,26 @@ private function attrInterfaceTypeValuesClickHandler():void
 			tfeditor.textFieldLength = currentAttrObj['textFieldLength'];
 			tfeditor.onShow();
 			break;
+
+		case 'number':
+			nreditor.addEventListener(Event.COMPLETE, numberRangeEditorCompleteHandler);
+			PopUpManager.addPopUp(nreditor, this);
+			PopUpManager.centerPopUp(nreditor); 
 			
+			nreditor.numberMinValue = currentAttrObj['numberMinValue'];
+			nreditor.numberMaxValue = currentAttrObj['numberMaxValue'];
+			nreditor.onShow();
+			break;
+			
+		case 'multiline':
+			mleditor.addEventListener(Event.COMPLETE, multiLineEditorCompleteHandler);
+			PopUpManager.addPopUp(mleditor, this);
+			PopUpManager.centerPopUp(mleditor); 
+			
+			mleditor.multiLineLength = currentAttrObj['multiLineLength'];
+			mleditor.onShow();
+			break;
+
 		case 'dropdown':
 			ddeditor.addEventListener(Event.COMPLETE, dropDownEditCompleteHandler); 
 			PopUpManager.addPopUp(ddeditor, this);
@@ -552,5 +585,24 @@ private function textFieldEditorCompleteHandler(event:Event):void
 	tfeditor.removeEventListener(Event.COMPLETE, textFieldEditorCompleteHandler);
 	currentAttrObj['textFieldLength'] = tfeditor.textFieldLength;
 	PopUpManager.removePopUp(tfeditor);
+	loadCodeInterfaceData();
+}
+
+
+private function numberRangeEditorCompleteHandler(event:Event):void
+{
+	nreditor.removeEventListener(Event.COMPLETE, numberRangeEditorCompleteHandler);
+	currentAttrObj['numberMinValue'] = nreditor.numberMinValue;
+	currentAttrObj['numberMaxValue'] = nreditor.numberMaxValue;
+	PopUpManager.removePopUp(nreditor);
+	loadCodeInterfaceData();
+}
+
+
+private function multiLineEditorCompleteHandler(event:Event):void
+{
+	mleditor.removeEventListener(Event.COMPLETE, multiLineEditorCompleteHandler);
+	currentAttrObj['multiLineLength'] = mleditor.multiLineLength;
+	PopUpManager.removePopUp(mleditor);
 	loadCodeInterfaceData();
 }
