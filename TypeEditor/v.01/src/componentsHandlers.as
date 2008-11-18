@@ -18,6 +18,7 @@ import mx.messaging.management.Attribute;
 import ContextWindows.TextFieldEditor;
 import ContextWindows.NumberRangeEditor;
 import ContextWindows.MultiLineEditor;
+import ContextWindows.ObjectListEditor;
 
 private function creationComplete():void
 {
@@ -168,54 +169,6 @@ private function refreshIDBtnClickHandler():void
 /* -------- Attributes operations ------------------------- */
 /* -------------------------------------------------------- */
 
-/**
- * Attribute property include following values:
- * 
- * attrsProvider:
- *  |
- *  |--[0]
- *  |   |--label = 'New Attribute' (attr Name)
- *  |   |--defValue = ''
- *  |   |--regExValidationStr = ''
- *  |   |--interfaceType = 0
- *  |   |--colorGroup = 1
- *  |   |--codeInterface = 'textfield' 
- *  |   |--visible = 1 
- *  |   |
- *  |   |--[attrDispName]
- *  |   |   |--languageField = str
- *  |   |   '--languageField = str
- *  |   |
- *  |   |--[regExValidationErrStr]
- *  |   |   |--languageField = str
- *  |   |   '--languageField = str
- *  |   |
- *  |   |--textFieldLength = 0
- *  |   |--numberMinValue = 0
- *  |   |--numberMaxValue = 0
- *  |   |--multiLineLength = 0
- *  |   |
- *  |   |--externalEditorTitle
- *  |   |   |--languageField = str
- *  |   |   '--languageField = str
- *  |   |
- *  |   |--externalEditorInfo = ''
- *  |   |
- *  |   |--[dropDownValues]
- *  |   |   |--0 = value
- *  .   |   |--1 = value
- *  .   |   '--2 = value
- *  .   |   ...
- *      |
- *      '--[dropDownStrings]
- *          '--[languageField]
- *              |--0 = str
- *              |--1 = str
- *              '--2 = str
- *              ...
- **/ 
-
-
 private function addAttrBtnClickHandler():void
 {
 	/* Setup new attr object */
@@ -230,6 +183,7 @@ private function addAttrBtnClickHandler():void
 		attrDispName			:[],	/* [LanguageField] = str */
 		regExValidationErrStr	:[],	/* [LanguageField] = str */
 		textFieldLength			:0,
+		objectListTypeId		:'',
 		numberMinValue			:0.0,
 		numberMaxValue			:0.0,
 		multiLineLength			:0,
@@ -409,9 +363,13 @@ private function loadCodeInterfaceData():void
 		case 'objectlist':
 			__attrCodeInterface.selectedIndex = 9;
 			break;
+			
 		case 'objectlist2':
 			__attrCodeInterface.selectedIndex = 10;
+			codeInterfaceString = 'ObjectList ( ' + currentAttrObj['objectListTypeId'] + ' )';
+			__attrValuesBtn.enabled = true;
 			break;
+			
 		case 'externaleditor':
 			__attrCodeInterface.selectedIndex = 11;
 			break;
@@ -519,6 +477,7 @@ private var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
 private var tfeditor:TextFieldEditor = new TextFieldEditor();
 private var nreditor:NumberRangeEditor = new NumberRangeEditor();
 private var mleditor:MultiLineEditor = new MultiLineEditor();
+private var oleditor:ObjectListEditor = new ObjectListEditor();
 
 private function attrInterfaceTypeValuesClickHandler():void
 {
@@ -567,6 +526,16 @@ private function attrInterfaceTypeValuesClickHandler():void
 			ddeditor.currentAttrObj = this.currentAttrObj;
 			ddeditor.onShow();
 			break;
+
+		case 'objectlist2':
+			oleditor.addEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
+			PopUpManager.addPopUp(oleditor, this);
+			PopUpManager.centerPopUp(oleditor); 
+			
+			oleditor.typeId = currentAttrObj['objectListTypeId'];
+			oleditor.onShow();
+			break;
+
 	}
 }
 
@@ -604,5 +573,14 @@ private function multiLineEditorCompleteHandler(event:Event):void
 	mleditor.removeEventListener(Event.COMPLETE, multiLineEditorCompleteHandler);
 	currentAttrObj['multiLineLength'] = mleditor.multiLineLength;
 	PopUpManager.removePopUp(mleditor);
+	loadCodeInterfaceData();
+}
+
+
+private function objectListEditorCompleteHandler(event:Event):void
+{
+	mleditor.removeEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
+	currentAttrObj['objectListTypeId'] = oleditor.typeId;
+	PopUpManager.removePopUp(oleditor);
 	loadCodeInterfaceData();
 }

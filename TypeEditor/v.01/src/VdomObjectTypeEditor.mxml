@@ -412,8 +412,8 @@
 								<mx:Label text="Visible in Editor" />
 								<mx:ComboBox id="__attrVisible" width="100%" cornerRadius="1">
 							        <mx:Array>
-							            <mx:Object data="1" label="Yes (default)" />
-							            <mx:Object data="2" label="No" />
+							            <mx:Object data="1" label="Visible attribute (default)" />
+							            <mx:Object data="2" label="Invisible attribute" />
 							        </mx:Array>
 								</mx:ComboBox>	
 							</mx:VBox>

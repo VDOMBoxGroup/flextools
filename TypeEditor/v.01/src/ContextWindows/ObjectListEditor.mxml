@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	borderAlpha="0.95" cornerRadius="1" width="300" height="150"
+	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
+	borderThicknessLeft="1" borderThicknessRight="1"
+	title="ObjectList Editor" verticalGap="15" creationComplete="{onCreationComplete();}">
+	
+	<mx:RegExpValidator 
+		source="{__typeId}" property="text" expression="^[A-Fa-f0-9]\{8\}(?:-[A-Fa-f0-9]\{4\})\{3\}-[A-Za-z0-9]\{12\}$"
+		required="true" valid="{validId = true;}" invalid="{validId = false;}" />
+	
+	<mx:Style>
+		.title {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+
+	<mx:VBox verticalGap="0" width="100%">
+		<mx:Label text="Enter or paste type ID:" />
+		<mx:TextInput id="__typeId" width="100%" cornerRadius="1" text="" />
+	</mx:VBox>
+
+	<mx:HBox verticalGap="0" width="100%" horizontalAlign="center" height="100%" verticalAlign="bottom">
+		<mx:Button id="__applyBtn" label="Apply" icon="@Embed(source='/icons/commit.png')" click="{applyBtnClickHandler();}" />
+		<mx:Button id="__cancelBtn" label="Cancel" icon="@Embed(source='/icons/discard.png')" click="{cancelBtnClickHandler();}" />
+	</mx:HBox>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			
+			public var typeId:String = '';
+			private var validId:Boolean = true;
+			
+			private function onCreationComplete():void {
+				this.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler_); 
+			}
+			
+			private function keyDownHandler_(kEvent:KeyboardEvent):void {
+				if (kEvent.keyCode == 13)
+					applyBtnClickHandler()
+				else
+				if (kEvent.keyCode == 27)
+					cancelBtnClickHandler();
+			}
+			
+			public function onShow():void {
+				__typeId.text = typeId;
+				__typeId.setFocus();
+			}
+		
+			private function applyBtnClickHandler():void {
+				__applyBtn.setFocus();
+				if (validId) {
+					typeId = __typeId.text;
+					this.dispatchEvent(new Event(Event.COMPLETE));
+				} else {
+					__typeId.setFocus();
+					Alert.show('Invalid resource ID!', 'Incorrect ID');
+				}
+			}
+			
+			private function cancelBtnClickHandler():void {
+				try {
+					PopUpManager.removePopUp(this);
+				}
+				catch (err:Error) { return; }
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:TitleWindow>
