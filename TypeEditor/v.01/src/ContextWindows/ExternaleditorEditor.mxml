@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	borderAlpha="0.95" cornerRadius="1" width="400" height="300"
+	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
+	borderThicknessLeft="1" borderThicknessRight="1"
+	title="ExternalEditor editor" verticalGap="15">
+	
+	<mx:Style>
+		.title {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.messaging.management.Attribute;
+			import mx.controls.Alert;
+			import mx.utils.StringUtil;
+			import mx.managers.PopUpManager;
+			
+			private const EMPTY_STR:String = '[[ empty ]]';
+			public var selectedLang:String = '';;
+			private var titleProvider:Array = []; /* of Langstr = str */
+			[Bindable] private var _langsProvider:Array = [];
+
+
+			/* This function must be executed "by hand" after object initializitaion  */
+			public function onShow():void
+			{
+				/* set languageBox to actual information */
+				var i:int = 0;
+				for each (var langObj:Object in _langsProvider) {
+					if (langObj.label == selectedLang)
+						__editableLang.selectedIndex = i;
+					i++;
+				}
+			}
+
+			private function loadValues():void
+			{
+				/* attach values for editing */
+				
+				
+			}
+			
+			
+			private function writeValues():void
+			{
+				titleProvider[selectedLang] = __editableLang.text;
+			}
+
+			
+			public function set langsProvider(lp:Array):void
+			{
+				_langsProvider = lp;
+			}
+			
+			
+			
+			private function changeLanguagesHandler():void
+			{
+				writeValues();
+				selectedLang = __editableLang.text;
+				loadValues();
+			}
+			
+			
+			private function okBtnClickHandler():void
+			{
+				/* Save unsaved data: Editable Strings, Values */
+				writeValues();
+								
+				this.dispatchEvent(new Event(Event.COMPLETE));
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+	<mx:HBox width="100%" horizontalGap="4">
+		<mx:Label text="External Editor Title:" />
+		<mx:VBox width="148" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+			<mx:Label text="Editable language" />
+			<mx:ComboBox id="__editableLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" change="{changeLanguagesHandler();}" />
+		</mx:VBox>
+	</mx:HBox>	
+	
+	<mx:HBox width="100%" horizontalGap="4" horizontalAlign="center">
+		<mx:Button label="Ok" click="{okBtnClickHandler();}" />
+		<mx:Button label="Cancel" click="{PopUpManager.removePopUp(this);}" />
+	</mx:HBox>
+	
+	
+</mx:TitleWindow>

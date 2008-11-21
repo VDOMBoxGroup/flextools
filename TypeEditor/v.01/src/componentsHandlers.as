@@ -19,6 +19,7 @@ import ContextWindows.TextFieldEditor;
 import ContextWindows.NumberRangeEditor;
 import ContextWindows.MultiLineEditor;
 import ContextWindows.ObjectListEditor;
+import ContextWindows.ExternaleditorEditor;
 
 private function creationComplete():void
 {
@@ -478,6 +479,7 @@ private var tfeditor:TextFieldEditor = new TextFieldEditor();
 private var nreditor:NumberRangeEditor = new NumberRangeEditor();
 private var mleditor:MultiLineEditor = new MultiLineEditor();
 private var oleditor:ObjectListEditor = new ObjectListEditor();
+private var eeeditor:ExternaleditorEditor = new ExternaleditorEditor();
 
 private function attrInterfaceTypeValuesClickHandler():void
 {
@@ -536,6 +538,18 @@ private function attrInterfaceTypeValuesClickHandler():void
 			oleditor.onShow();
 			break;
 
+		case 'externaleditor':
+			eeeditor.addEventListener(Event.COMPLETE, externalEditorCompleteHandler); 
+			PopUpManager.addPopUp(eeeditor, this);
+			PopUpManager.centerPopUp(eeeditor);
+
+			eeeditor.langsProvider = langsProvider;
+			ddeditor.exampleLang = langsProvider[0].label;
+			ddeditor.editableLang = selectedLang;
+			ddeditor.currentAttrObj = this.currentAttrObj;
+			ddeditor.onShow();
+			break;
+
 	}
 }
 
@@ -578,6 +592,15 @@ private function multiLineEditorCompleteHandler(event:Event):void
 
 
 private function objectListEditorCompleteHandler(event:Event):void
+{
+	mleditor.removeEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
+	currentAttrObj['objectListTypeId'] = oleditor.typeId;
+	PopUpManager.removePopUp(oleditor);
+	loadCodeInterfaceData();
+}
+
+
+private function externalEditorCompleteHandler(event:Event):void
 {
 	mleditor.removeEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
 	currentAttrObj['objectListTypeId'] = oleditor.typeId;
