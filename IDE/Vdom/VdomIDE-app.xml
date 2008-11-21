@@ -15,7 +15,7 @@
 -->
 
 	<!-- The application identifier string, unique to this application. Required. -->
-	<id>Vdom</id>
+	<id>VdomIDE</id>
 
 	<!-- Used as the filename for the application. Required. -->
 	<filename>Vdom IDE</filename>
@@ -35,7 +35,7 @@
 	<initialWindow>
 		<!-- The main SWF or HTML file of the application. Required. -->
 		<!-- Note: In Flex Builder, the SWF reference is set automatically. -->
-		<content>Vdom.swf</content>
+		<content>VdomIDE.swf</content>
 		
 		<!-- The title of the main window. Optional. -->
 		<title>Vdom IDE</title>

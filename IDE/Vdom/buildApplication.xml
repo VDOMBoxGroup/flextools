@@ -14,7 +14,7 @@
 	<property name="release.dir" location="${application.dir}/bin-release" />
 	
 	<!-- Project properties -->
-	<property name="application.name" value="Vdom" />
+	<property name="application.name" value="VdomIDE" />
 	<property name="storetype" value="pkcs12" />
 	<property name="keystore" value="cert.p12" />
 	

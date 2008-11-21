@@ -18,7 +18,7 @@
 	verticalScrollPolicy="off"
 	creationPolicy="all">
 	
-	<mx:Script source="vdom.as"/>
+	<mx:Script source="vdomIDE.as"/>
 	
 	<mx:Metadata>
 		[ResourceBundle("Application")]
