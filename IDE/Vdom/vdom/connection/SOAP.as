@@ -12,6 +12,7 @@ import mx.rpc.Fault;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 import mx.rpc.soap.LoadEvent;
+import mx.rpc.soap.Operation;
 import mx.rpc.soap.WebService;
 
 import vdom.connection.protect.Code;
@@ -84,14 +85,22 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	override flash_proxy function callProperty(name:*, ... args:Array):*
 	{
 		var functionName:String = getLocalName(name);
-		var operation:* = ws[functionName];
+		var operation:Operation = ws[functionName];
 		var key:String = code.skey();
 		
-		args.unshift(code.sessionId,key);
-		operation.addEventListener(ResultEvent.RESULT, operationResultHandler)
-		operation.send.apply(null, args)
+		args.unshift( code.sessionId, key );
+		operation.addEventListener(ResultEvent.RESULT, operationResultHandler);
+		operation.xmlSpecialCharsFilter = escapeXML;
+		operation.send.apply(null, args);
 		return key;
 	}
+	
+	private function escapeXML(value:Object):String
+    {
+        var str:String = value.toString();
+        //str = str.replace(/&/g, "&amp;").replace(/</g, "&lt;"); // TODO very dirty hack. wrong escaping special xml symbols
+        return str;
+    }
 	
 	private function getLocalName(name:Object):String
 	{

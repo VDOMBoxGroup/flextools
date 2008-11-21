@@ -71,7 +71,7 @@ public class RenderManager implements IEventDispatcher {
 	
 	private var applicationId:String;
 	private var rootContainer:Container;
-	private var items:ArrayCollection = new ArrayCollection();;
+	private var items:ArrayCollection = new ArrayCollection();
 	private var cursor:IViewCursor;
 	private var lockedItems:Object = {};
 	private var lastKey:String;

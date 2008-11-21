@@ -399,8 +399,8 @@ public class WorkArea extends VBox
 			newAttribute[name] = event.properties[name];
 		}
 		
-		if (changeFlag)
-			lockItem(IItem(currentObject).objectId);
+//		if (changeFlag)
+//			lockItem(IItem(currentObject).objectId);
 		
 		applyChanges(IItem(_selectedObject).objectId, newAttribute);
 		

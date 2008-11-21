@@ -176,7 +176,7 @@ public class TransformMarker extends UIComponent {
 			height : item.height
 		};
 		
-		resizeManager.itemTransform = true;
+		//resizeManager.itemTransform = true;
 		
 		itemChanged = true;
 		

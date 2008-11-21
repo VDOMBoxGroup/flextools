@@ -40,7 +40,7 @@ public class ResizeManager extends EventDispatcher {
 	private var filterFunction:Function;
 	private var tip:ToolTip;
 	
-	public var itemTransform:Boolean;
+	private var _itemTransform:Boolean;
 //	private var beforeTransform:Object;
 //	private var markerSelected:Boolean;
 	private var itemMoved:Boolean;
@@ -84,6 +84,19 @@ public class ResizeManager extends EventDispatcher {
 			rme.item = Container(_selectedItem);
 			
 			dispatchEvent(rme) 
+		}
+	}
+	
+	public function get itemTransform ():Boolean
+	{
+		return _itemTransform;
+	}
+	
+	public function set itemTransform (value:Boolean):void
+	{
+		if (value != _itemTransform)
+		{
+			_itemTransform = value;
 		}
 	}
 	

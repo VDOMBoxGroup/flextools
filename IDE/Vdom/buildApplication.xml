@@ -4,7 +4,7 @@
 	default="package">
 	
 	<!-- SDK properties -->
-	<property name="SDK_HOME" value="D:/Flex Builder 3 Plug-in/sdks/3.1.0" />
+	<property name="SDK_HOME" value="D:/Flex Builder 3 Plug-in/sdks/3.2.0" />
 	<property name="mxmlc.jar" value="${SDK_HOME}/lib/mxmlc.jar" />
 	<property name="adt.jar" value="${SDK_HOME}/lib/adt.jar" />
 	

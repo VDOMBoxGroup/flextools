@@ -13,6 +13,7 @@
 	<mx:Metadata>
 		[ResourceBundle("Edit")]
 	</mx:Metadata>
+	
 	<mx:Script source="includes/edit.as" />
 	
 	<editContainers:TypeAccordion id="types"
