@@ -543,10 +543,13 @@ private function attrInterfaceTypeValuesClickHandler():void
 			PopUpManager.addPopUp(eeeditor, this);
 			PopUpManager.centerPopUp(eeeditor);
 
+			eeeditor.titleProvider = currentAttrObj['externalEditorTitle'];
+			eeeditor.selectedLang = this.selectedLang;
 			eeeditor.langsProvider = langsProvider;
-			ddeditor.exampleLang = langsProvider[0].label;
-			ddeditor.editableLang = selectedLang;
-			ddeditor.currentAttrObj = this.currentAttrObj;
+			eeeditor.
+			
+			
+
 			ddeditor.onShow();
 			break;
 
