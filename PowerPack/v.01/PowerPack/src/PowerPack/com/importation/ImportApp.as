@@ -74,6 +74,7 @@ package PowerPack.com.importation
 		public function parseIndex():GraphCanvas
 		{
 			var elms:XMLList = appXML.elements("*");
+			
 			var dynElms:Object = {
 				'Name':true,
 				'Description':true

@@ -9,9 +9,11 @@ import PowerPack.com.gen.parse.CodeParser;
 import PowerPack.com.gen.structs.*;
 import PowerPack.com.graph.NodeCategory;
 import PowerPack.com.graph.NodeType;
+import PowerPack.com.managers.CashManager;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.utils.ByteArray;
 
 import mx.core.Application;
 import mx.utils.UIDUtil;
@@ -25,7 +27,8 @@ public class TemplateStruct extends EventDispatcher
 
 	public static const MSG_PARSE_ERR:String = "Runtime error.\nGraph: {0}\nState: {1}";
 	
-	private var templateXML:XML;
+	private var tplStructXML:XML;
+	private var ID:String;
 	public var error:Error;
 	
 	[ArrayElementType("GraphStruct")]
@@ -58,15 +61,16 @@ public class TemplateStruct extends EventDispatcher
 	public var isStepDebug:Boolean;			
 	private var forced:int;
 	
-	public function TemplateStruct(_xml:XML)
+	public function TemplateStruct(tplStruct:XML, ID:String)
 	{				
-		templateXML = _xml;		
+		tplStructXML = tplStruct;		
+		this.ID = ID;
 		var _graphs:Array = [];
 		var _nodes:Array = [];
 		var _arrows:Array = [];
 		var _initGraph:GraphStruct;
 		
-		for each (var graphXML:XML in _xml.elements("graph"))
+		for each (var graphXML:XML in tplStructXML.elements("graph"))
 		{			
 			var graphStruct:GraphStruct = new GraphStruct(
 				Utils.getStringOrDefault(graphXML.@name),
@@ -138,7 +142,7 @@ public class TemplateStruct extends EventDispatcher
 		nodes = _nodes;
 		arrows = _arrows;
 		
-		genInit();
+		init();
 	}
 	
 	public function validate(options:uint=0):Object
@@ -150,7 +154,7 @@ public class TemplateStruct extends EventDispatcher
 		var k:int;
 		var o:int;
 		
-		if(!templateXML)
+		if(!tplStructXML)
 		{
 			return retVal; 
 		}		
@@ -401,9 +405,9 @@ public class TemplateStruct extends EventDispatcher
 		return uid;
 	}	
 	
-	public function genInit():void
+	public function init():void
 	{
-		genClear();
+		clear();
 		
 		var graphContext:GraphContext;
 		
@@ -415,7 +419,7 @@ public class TemplateStruct extends EventDispatcher
 		context[CNTXT_INSTANCE] = this;
 	}
 	
-	public function genClear():void
+	public function clear():void
 	{
 		buffer = "";
 		context = new Dynamic();
@@ -440,7 +444,7 @@ public class TemplateStruct extends EventDispatcher
 		
 		if(isRunning)
 		{				
-			Application.application.callLater(generate, [force, over]);
+			Application.application.callLater(generate, [force, over, ret]);
 			return null;
 		}
 		isRunning = true;
@@ -566,6 +570,13 @@ public class TemplateStruct extends EventDispatcher
 									}		
 								}
 								
+								break;
+
+							case NodeCategory.RESOURCE:
+								var resData:ByteArray = CashManager.getObject(ID, GraphContext(contextStack[contextStack.length-1]).curNode.text).data;
+								parsedNode.result = true;
+								parsedNode.print = true;
+								parsedNode.string = resData.readUTFBytes(resData.length);
 								break;
 						}					
 					}

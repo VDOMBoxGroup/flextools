@@ -437,8 +437,8 @@ public class CashManager extends EventDispatcher
 		//dataStream.addEventListener(Event.COMPLETE, onLoadData);
 		dataStream.open(objFile, FileMode.READ);		
 		
-		var data:ByteArray;
-		dataStream.readBytes(data);
+		var data:ByteArray = new ByteArray();
+		dataStream.readBytes(data, 0, dataStream.bytesAvailable);
 		dataStream.close();
 		
 		updateIndexEntry(index, objID, 'lastRequest', UTCNow().getTime().toString());

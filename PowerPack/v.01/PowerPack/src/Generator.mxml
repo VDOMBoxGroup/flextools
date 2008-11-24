@@ -491,7 +491,7 @@
     	
     	    		tpl = ContextManager.instance.templates.getItemAt(0) as Template;
 		
-					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure);
+					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.ID);
 					
 					var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
 					

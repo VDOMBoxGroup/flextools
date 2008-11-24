@@ -20,11 +20,34 @@ import mx.utils.UIDUtil;
  * 		<picture/>
  * 		<encoded> or <structure>
  * 			<graph name='' initial='' category=''>
- * 			
+ * 				<states>
+ * 					<state name='' type='' category='' enabled='' breakpoint='' x='' y=''>
+ * 						<text/>
+ * 					</state>
+ * 					...
+ * 				</states>
+ * 				
+ * 				<transitions>
+ * 					<transition name='' highlighted='' enabled='' source='' destination=''>
+ * 						<label/>
+ * 					</transition>
+ * 					...
+ * 				</transitions>
+ * 			</graph>
  * 			...
- * 		</>
- * 	</template> 
+ *			<categories>
+ *				<category name=''/>
+ *				...
+ *			</categories>
+ * 				
+ *			<resources>
+ *				<resource category='' ID='' type='' name=''/>
+ *				...
+ *			</resources>
+ * 		</encoded> or </structure>
+ * 	</template>
  */ 
+ 
 public class Template
 {
 	//--------------------------------------------------------------------------
@@ -116,7 +139,7 @@ public class Template
 	}
 	public function get xmlStructure():XML
 	{
-		if(!_xmlStructure)
+		if(_xmlStructure==null)
 			decode();
 		return _xmlStructure;
 	}		
@@ -295,7 +318,7 @@ public class Template
 			_xmlStructure = _xml.structure[0];
 	}
 	
-	private function setPictureFromPath():void
+	public function setPictureFromPath():void
 	{
 		if(!picturePath || !FileUtils.isValidPath(picturePath))
 		{

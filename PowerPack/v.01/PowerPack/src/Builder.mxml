@@ -307,10 +307,11 @@
               		{
               			var file:File = ContextManager.instance.files[0];
               			var fileStream:FileStream = new FileStream();
+              			var tpl:Template = ContextManager.instance.templates[0];
               			
-              			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
-              			ContextManager.instance.templates[0].encode();
-              			ContextManager.instance.templates[0].loadPicture();
+              			tpl.xmlStructure = pnl_graphs.toXML();
+              			tpl.encode();
+              			tpl.setPictureFromPath();
               			
               			fileStream.open(file, FileMode.WRITE);
         				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
@@ -333,10 +334,11 @@
               		{
               			var file:File = ContextManager.instance.files[0];
               			var fileStream:FileStream = new FileStream();
+              			var tpl:Template = ContextManager.instance.templates[0];
               			
-              			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
-              			ContextManager.instance.templates[0].encode();
-              			ContextManager.instance.templates[0].loadPicture();
+              			tpl.xmlStructure = pnl_graphs.toXML();
+              			tpl.encode();
+              			tpl.setPictureFromPath();
               			
               			fileStream.open(file, FileMode.WRITE);
         				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
@@ -535,10 +537,12 @@
 						
 						ProgressManager.source = fileStream;
 						ProgressManager.start();
+						
+						var tpl:Template = ContextManager.instance.templates[0];
 					              			
-              			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
-              			ContextManager.instance.templates[0].encode();
-              			ContextManager.instance.templates[0].loadPicture();
+              			tpl.xmlStructure = pnl_graphs.toXML();
+              			tpl.encode();
+              			tpl.setPictureFromPath();
               			
               			fileStream.open(file, FileMode.WRITE);
         				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
@@ -601,7 +605,10 @@
 				{
 					try
 					{
-						ContextManager.instance.templateStruct = new TemplateStruct(pnl_graphs.toXML());
+						ContextManager.instance.templateStruct = new TemplateStruct(
+							pnl_graphs.toXML(),
+							(ContextManager.instance.templates.getItemAt(0) as Template).ID);
+							
 						switch(event.item.@id.toString())
 						{
 							case 'run':
@@ -755,7 +762,9 @@
 	            		if(dialog.chkNames) 	flags|=TemplateValidateOptions.SET_UNIQ_NAMES;
 	            	}
             		            		
-					ContextManager.instance.templateStruct = new TemplateStruct(ContextManager.instance.templates.getItemAt(0).xmlStructure as XML);
+					ContextManager.instance.templateStruct = new TemplateStruct(
+																ContextManager.instance.templates.getItemAt(0).xmlStructure as XML,
+																(ContextManager.instance.templates.getItemAt(0) as Template).ID);
 					var validateArr:Array = ContextManager.instance.templateStruct.validate(flags).array;
 	
 					pnl_problems.array = validateArr;
@@ -1149,10 +1158,12 @@
             	  	
 				ProgressManager.source = fileStream;
 				ProgressManager.start();
+				
+				var tpl:Template = ContextManager.instance.templates[0];
 				            		            	
-     			ContextManager.instance.templates[0].xmlStructure = pnl_graphs.toXML();
-      			ContextManager.instance.templates[0].encode();
-      			ContextManager.instance.templates[0].loadPicture();
+     			tpl.xmlStructure = pnl_graphs.toXML();
+      			tpl.encode();
+      			tpl.setPictureFromPath();
       			
       			fileStream.open(file, FileMode.WRITE);
 				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
