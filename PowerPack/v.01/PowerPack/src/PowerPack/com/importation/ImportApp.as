@@ -2,14 +2,17 @@ package PowerPack.com.importation
 {
 	import ExtendedAPI.com.utils.Utils;
 	
+	import PowerPack.com.Template;
 	import PowerPack.com.graph.GraphCanvas;
 	import PowerPack.com.graph.Node;
 	import PowerPack.com.graph.NodeCategory;
 	import PowerPack.com.graph.NodeType;
+	import PowerPack.com.managers.CashManager;
 	
 	import flash.events.EventDispatcher;
 	
 	import mx.utils.StringUtil;
+	import mx.utils.UIDUtil;
 
 	public class ImportApp extends EventDispatcher
 	{
@@ -20,6 +23,8 @@ package PowerPack.com.importation
 			this.appXML = app;
 			this.typesXML = types;
 		}
+		
+		public var template:Template = new Template();
 		
 		public var appXML:XML;
 		
@@ -1065,15 +1070,19 @@ package PowerPack.com.importation
 				var i:int = 1;
 				for each(var objDb:XML in dbs.elements('Database'))
 				{
+					var ID:String = Utils.getStringOrDefault(objDb.@ID, UIDUtil.createUID());
+					var name:String = Utils.getStringOrDefault(objDb.@Name, '');
+					var type:String = Utils.getStringOrDefault(objDb.@Type, '');
+					
 					yOffset += 40;
 					
 					prev = node;
 					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
 						StringUtil.substitute('[sub Database_{0} "{1}" "{2}" "{3}"]',
 							i, 
-							Utils.getStringOrDefault(objDb.@Type, ''),
-							Utils.getStringOrDefault(objDb.@ID, ''),
-							Utils.getStringOrDefault(objDb.@Name, '')));
+							type,
+							ID,
+							name));
 					node.x = xOffset; node.y = yOffset;
 					newGraph.addChild(node);
 					newGraph.createArrow(prev, node);
@@ -1094,10 +1103,19 @@ package PowerPack.com.importation
 					yyOffset +=40;
 							
 					_prev = _node;
-					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, String(objDb).replace(/\n/g, "\\n"));
+					_node = new Node(NodeCategory.RESOURCE, NodeType.NORMAL, ID);
 					_node.x = xxOffset; _node.y = yyOffset;
 					dbGraph.addChild(_node);
 					dbGraph.createArrow(_prev, _node);
+					
+					CashManager.setStringObject(
+									template.ID, 
+									XML("<resource " + 
+											"category='database' " + 
+											"ID='"+ID+"' " + 
+											"name='"+name+"' " + 
+											"type='"+type+"' />"),
+									String(objDb));
 									
 					yyOffset +=40;
 									
@@ -1150,15 +1168,20 @@ package PowerPack.com.importation
 				var i:int = 1;
 				for each(var objRes:XML in ress.elements('Resource'))
 				{
+
+					var ID:String = Utils.getStringOrDefault(objRes.@ID, UIDUtil.createUID());
+					var name:String = Utils.getStringOrDefault(objRes.@Name, '');
+					var type:String = Utils.getStringOrDefault(objRes.@Type, '');
+										
 					yOffset += 40;
 					
 					prev = node;
 					node = new Node(NodeCategory.COMMAND, NodeType.NORMAL, 
 						StringUtil.substitute('[sub Resource_{0} "{1}" "{2}" "{3}"]',
 							i, 
-							Utils.getStringOrDefault(objRes.@Type, ''),
-							Utils.getStringOrDefault(objRes.@ID, ''),
-							Utils.getStringOrDefault(objRes.@Name, '')));
+							type,
+							ID,
+							name));
 					node.x = xOffset; node.y = yOffset;
 					newGraph.addChild(node);
 					newGraph.createArrow(prev, node);
@@ -1179,11 +1202,20 @@ package PowerPack.com.importation
 					yyOffset +=40;
 							
 					_prev = _node;
-					_node = new Node(NodeCategory.NORMAL, NodeType.NORMAL, String(objRes).replace(/\n/g, "\\n"));
+					_node = new Node(NodeCategory.RESOURCE, NodeType.NORMAL, ID);
 					_node.x = xxOffset; _node.y = yyOffset;
 					resGraph.addChild(_node);
 					resGraph.createArrow(_prev, _node);
-									
+
+					CashManager.setStringObject(
+									template.ID, 
+									XML("<resource " + 
+											"category='image' " + 
+											"ID='"+ID+"' " + 
+											"name='"+name+"' " + 
+											"type='"+type+"' />"),
+									String(objRes));
+																		
 					yyOffset +=40;
 									
 					_prev = _node;

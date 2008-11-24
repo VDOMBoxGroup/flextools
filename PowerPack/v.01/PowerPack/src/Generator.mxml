@@ -228,7 +228,7 @@
 				var template:Template = new Template(xml);
 				
         		if(ContextManager.instance.templates.length==0)
-	    			ContextManager.instance.templates.addItem(template);
+	    			ContextManager.instance.templates.addItemAt(template, 0);
     			else
     				ContextManager.instance.templates[0] = template;
 

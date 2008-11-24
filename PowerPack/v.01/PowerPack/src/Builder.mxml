@@ -393,7 +393,7 @@
 					var template:Template = new Template(xml);
 					
 	        		if(ContextManager.instance.templates.length==0)
-		    			ContextManager.instance.templates.addItem(template);
+		    			ContextManager.instance.templates.addItemAt(template, 0);
 	    			else
 	    				ContextManager.instance.templates[0] = template;
 					
@@ -495,7 +495,7 @@
 	                var template:Template = new Template();
 
 	                if(ContextManager.instance.templates.length==0)
-	    				ContextManager.instance.templates.addItem(template);
+	    				ContextManager.instance.templates.addItemAt(template, 0);
     				else
     					ContextManager.instance.templates[0] = template;
     					
@@ -995,7 +995,7 @@
 		                var template:Template = new Template();
 	
 		                if(ContextManager.instance.templates.length==0)
-		    				ContextManager.instance.templates.addItem(template);
+		    				ContextManager.instance.templates.addItemAt(template, 0);
 	    				else
 	    					ContextManager.instance.templates[0] = template;
 	    					
@@ -1056,10 +1056,10 @@
 	                	ContextManager.instance.lastFile = false;
 		                pnl_graphs.clear();
 		                
-		                var template:Template = new Template();
+		                var template:Template = Import(event.target).template;
 	
 		                if(ContextManager.instance.templates.length==0)
-		    				ContextManager.instance.templates.addItem(template);
+		    				ContextManager.instance.templates.addItemAt(template, 0);
 	    				else
 	    					ContextManager.instance.templates[0] = template;
 	    					
@@ -1068,15 +1068,24 @@
 		                MenuGeneral.newTemplate(fileMenuData);    	        		
             		}
             		
+            		ProgressManager.start(ProgressManager.DIALOG_MODE, true);
+            		
+            		pnl_graphs.clear();
+            		
+            		var i:int = 0;
+            		
             		if(graphs.length>0)
             		{
+            			ProgressManager.step(i++, graphs.length);
+            			 
 	            		for each (var graph:GraphCanvas in graphs) {
 	            			pnl_graphs.addGraph(graph);
 						}
             		}
+            		
+	            	ProgressManager.complete();
             	}
             	
-            	ProgressManager.complete();
             }  
                         
            	private function generationComplete(event:Event):void

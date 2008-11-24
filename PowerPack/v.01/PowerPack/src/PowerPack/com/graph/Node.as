@@ -1332,7 +1332,7 @@ public class Node extends Canvas
 		
 		var curTpl:Template = ContextManager.instance.templates.length>0 ? ContextManager.instance.templates[0] : null;
 		
-		if(	!curTpl || CashManager.isObjectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
+		if(	!curTpl || CashManager.objectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
 		{
 			destroyImageTip();
 		}

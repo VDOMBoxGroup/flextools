@@ -10,6 +10,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.Template;
 			import ExtendedAPI.com.containers.SuperAlert;
 			import PowerPack.com.importation.ImportApp;
 			import ExtendedAPI.com.utils.FileUtils;
@@ -38,6 +39,7 @@
 			private var appXML:XML;
 			private var typesXML:XML;
 			public var graphs:Array = [];
+			public var template:Template;
 			
 			static public function show(closeHandler:Function = null):Import
 			{
@@ -148,6 +150,8 @@
 
 							ProgressManager.complete();
 							vsStep.selectedIndex++;
+							
+							template = imprt.template;							
 							break;						
 					}				
 				}					
