@@ -272,7 +272,6 @@
 				graphAccordionChild.graphs.addItem(newGraph);
 				
 				dispatchEvent(new Event(TPL_CHANGED));
-
 			}
 			
 			/** 
