@@ -187,6 +187,11 @@
 	</include-file>
 				
 	<include-file>
+		<name>default_type_icon.png</name>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\typeIcons\default_type_icon.png</path>
+	</include-file>
+				
+	<include-file>
 		<name>vdomTheme.swf</name>
 		<path>D:\!Workspace\VdomIDE\_src\theme\swf\vdomTheme.swf</path>
 	</include-file>

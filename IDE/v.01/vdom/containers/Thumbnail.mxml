@@ -7,52 +7,65 @@
 			import mx.controls.TileList;
 			import vdom.managers.FileManager;
 			import mx.core.Application;
-			[Bindable]
-			private var labelValue:String
 			
 			[Bindable]
-			private var _source:Object;
+			private var labelValue : String;
+			
+			private var iconId : String;
+			
+			[Bindable]
+			private var _source : Object;
 			
 			private var _selected:Boolean = false;
 			
-			public function set selected(value:Boolean):void
+			public function set selected( value : Boolean ) : void
 			{
 				if(value)
 				{
-					cnv.setStyle("backgroundImage", getStyle("thumbBackgroundSelected"));
+					cnv.setStyle( "backgroundImage", getStyle( "thumbBackgroundSelected" ) );
 				}
 				else
 				{
-					cnv.setStyle("backgroundImage", getStyle("thumbBackground"));
+					cnv.setStyle( "backgroundImage", getStyle("thumbBackground" ) );
 				}
 			} 
 			
-			override public function set data(value:Object):void {
-				
+			override public function set data( value : Object ) : void
+			{
 				super.data = value;
 				
-				if(!value)
+				if( !value )
 					return;
 				
 				labelValue = value.@Name;
 				
-				if(value.@IconID == '')
-					_source = Application.application.getStyle('appIconPersonalPages');
-				else {
-					
-					var fileManager:FileManager = FileManager.getInstance();
-					fileManager.loadResource(value.Information.Id, value.@IconID, this, 'resource', true);
+				if( _source && iconId ==  value.@IconID )
+					return;
+				
+				iconId = value.@IconID;
+				
+				if( iconId == "" )
+				{
+					_source = Application.application.getStyle( "appIconPersonalPages" );
+				}
+				else
+				{
+					var fileManager : FileManager = FileManager.getInstance();
+					fileManager.loadResource( value.Information.Id, iconId, this, "resource", true );
 				} 
 			}
 			
-			public function set resource(value:Object):void {
-				
-				_source = value;
+			public function set resource( value : Object ) : void
+			{
+				if( value )
+					_source = value;
+				else
+					_source = Application.application.getStyle( "appIconPersonalPages" );
 			}
 			
-			private function initalizeHandler():void
+			private function initalizeHandler() : void
 			{
-				cnv.setStyle("backgroundImage", getStyle("thumbBackground"));
+				cnv.setStyle( "backgroundImage", getStyle( "thumbBackground" ) );
 			}
 		]]>
 	</mx:Script>

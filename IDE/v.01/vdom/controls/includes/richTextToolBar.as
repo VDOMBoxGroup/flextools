@@ -175,8 +175,11 @@ private function HTMLEditorLoader_completeHandler(event:Event):void
 {	
 	HTMLEditorLoader.removeEventListener(Event.COMPLETE, HTMLEditorLoader_completeHandler);
 //	var d:* = HTMLEditorLoader.window.tinyMCE;
-
+	
 	tinyMCE = HTMLEditorLoader.window.tinyMCE;
+	
+	if ( !tinyMCE )
+		return;
 	
 	HTMLEditorLoader.window.tinyMCE.execCommand("mceAddControl", true, "content");
 	

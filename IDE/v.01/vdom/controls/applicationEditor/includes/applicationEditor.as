@@ -32,7 +32,17 @@ private var iconChanged:Boolean;
 
 public function set source(value:ByteArray):void
 {
-	_source = value;
+	if( value )
+	{
+		_source = value;
+	}
+	else
+	{
+		var iconClass:Class = Application.application.getStyle("appIconPersonalPages");
+		var ba:BitmapAsset = new iconClass();
+		var pnge:PNGEncoder = new PNGEncoder();
+		_source = pnge.encode(ba.bitmapData);
+	}
 }
 
 private function changeImage():void 

@@ -27,7 +27,14 @@ public function set dataProvider(value:XML):void
 	applicationDescription.text = value.Description;
 	
 	if(value.Icon.toString())
-		fileManager.loadResource(value.Id, value.Icon, applicationIcon, 'source', true);
+		fileManager.loadResource(value.Id, value.Icon, this, "resource", true);
+	else
+		applicationIcon.source = Application.application.getStyle('appIconPersonalPages');
+}
+public function set resource( value : Object ) : void
+{
+	if( value )
+		applicationIcon.source = value;
 	else
 		applicationIcon.source = Application.application.getStyle('appIconPersonalPages');
 }

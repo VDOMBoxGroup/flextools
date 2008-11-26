@@ -495,7 +495,12 @@ public class WorkArea extends VBox
 		focusedObject = null
 	}
 	
-	private function dragOverHandler(event:DragEvent):void {
+	private function dragOverHandler(event:DragEvent):void
+	{
+		var typeDescription:Object = event.dragSource.dataForFormat("typeDescription");
+		
+		if( !typeDescription )
+			return;
 		
 		var filterFunction:Function = function(item:IItem):Boolean
 		{
@@ -515,10 +520,10 @@ public class WorkArea extends VBox
 		if(focusedObject == currentItem || IItem(currentItem).waitMode)
 			return;
 		
-		if(focusedObject)
+		if( focusedObject )
 			IItem(focusedObject).drawHighlight("none");
 		
-		var typeDescription:Object = event.dragSource.dataForFormat("typeDescription");
+		
 		var containersRE:RegExp = /(\w+)/g;
 		var aviableContainers:Array = typeDescription.aviableContainers.match(containersRE);
 		

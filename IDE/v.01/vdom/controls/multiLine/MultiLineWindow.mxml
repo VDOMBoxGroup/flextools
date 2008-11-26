@@ -88,6 +88,8 @@ private function fileManager_resourceListLoaded(event:FileManagerEvent):void
 private function ok_close_window():void
 {
 	f_apply_flag = true;
+	var tf : TextField = textAreaContainer.mx_internal::getTextField();
+	tf.dispatchEvent( new Event( Event.CHANGE ) );
 	close_window();
 }
 
@@ -133,6 +135,7 @@ private function insertResourceLink():void
 	
 	textFiled.text = textFiled.text.substring(0, index) + "#Res(" + XML(resourceList.selectedItem).@id + ")" + textFiled.text.substring(index);
 	textFiled.setSelection(index, index);
+	textAreaContainer.invalidateProperties();
 }
 
 ]]>

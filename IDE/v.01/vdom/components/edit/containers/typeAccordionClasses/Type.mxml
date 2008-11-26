@@ -7,11 +7,12 @@
 	
 <mx:Script>
 	<![CDATA[
+		import mx.core.Application;
 	import vdom.managers.VdomDragManager;
 	import mx.core.DragSource;
 	
 	[Bindable]
-	private var _source:ByteArray;
+	private var _source:Object;
 	
 	[Bindable]
 	private var _typeLabelText:String
@@ -28,7 +29,14 @@
 	
 	public function set resource(imageResource:ByteArray):void
 	{
-		_source = imageResource;
+		if( !imageResource )
+		{
+			_source = Application.application.getStyle( "defaultTypeIcon" );
+		}
+		else
+		{
+			_source = imageResource;
+		}
 	}
 	
 	public function set typeLabel(value:String):void

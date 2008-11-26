@@ -1,4 +1,5 @@
-package vdom.managers.resizeClasses {
+package vdom.managers.resizeClasses 
+{
 
 import flash.display.CapsStyle;
 import flash.display.DisplayObject;
@@ -22,73 +23,78 @@ import vdom.managers.ResizeManager;
 
 use namespace mx.core.mx_internal;
  
-public class TransformMarker extends UIComponent {
+public class TransformMarker extends UIComponent
+{
 	
-	public static const RESIZE_NONE:uint = 0;
-	public static const RESIZE_WIDTH:uint = 1;
-	public static const RESIZE_HEIGHT:uint = 2;
-	public static const RESIZE_ALL:uint = 3;
+	public static const RESIZE_NONE : uint = 0;
+	public static const RESIZE_WIDTH : uint = 1;
+	public static const RESIZE_HEIGHT : uint = 2;
+	public static const RESIZE_ALL : uint = 3;
 	
-	public static const MOVE_TRUE:Boolean = true;
-	public static const MOVE_FALSE:Boolean = false;
+	public static const MOVE_TRUE : Boolean = true;
+	public static const MOVE_FALSE : Boolean = false;
 	
-	private var tl_box:Sprite;
-	private var tc_box:Sprite;
-	private var tr_box:Sprite;
-	private var cl_box:Sprite;
-	private var cr_box:Sprite;
-	private var bl_box:Sprite;
-	private var bc_box:Sprite;
-	private var br_box:Sprite;
-	private var cc_box:Sprite;
+	private var tl_box : Sprite;
+	private var tc_box : Sprite;
+	private var tr_box : Sprite;
+	private var cl_box : Sprite;
+	private var cr_box : Sprite;
+	private var bl_box : Sprite;
+	private var bc_box : Sprite;
+	private var br_box : Sprite;
+	private var cc_box : Sprite;
 	
-	private var CursorID:uint
+	private var CursorID : uint
 	
-	private var moving:DisplayObject;
+	private var moving : DisplayObject;
 	
-	private var _moveMode:Boolean;
-	private var _resizeMode:uint;
+	private var _moveMode : Boolean;
+	private var _resizeMode : uint;
 	
-	private var _selectedItem:Container;
+	private var _selectedItem : Container;
 	
-	private var _markerSelected:Boolean;
+	private var _markerSelected : Boolean;
 	
-	private var mousePosition:Point;
+	private var mousePosition : Point;
 	
-	private var modeChanged:Boolean;
-	private var boxStyleChanged:Boolean;
-	private var itemChanged:Boolean;
+	private var modeChanged : Boolean;
+	private var boxStyleChanged : Boolean;
+	private var itemChanged : Boolean;
 	
-	private var boxSize:int = 6;
-	private var borderColor:uint;
-	private var borderAlpha:Number;
-	private var backgroundColor:uint
-	private var backgroundAlpha:Number;
+	private var boxSize : int = 6;
+	private var borderColor : uint;
+	private var borderAlpha : Number;
+	private var backgroundColor : uint
+	private var backgroundAlpha : Number;
 	
-	private var transformation:Boolean;
+	private var transformation : Boolean;
 	
-	private var resizeManager:ResizeManager;
+	private var resizeManager : ResizeManager;
 	
-	private var beforeTransform:Object;
+	private var beforeTransform : Object;
 		
-	public function TransformMarker(rm:ResizeManager) {
+	public function TransformMarker( rm : ResizeManager ) 
+	{
 		
 		super();
 		
 		resizeManager = rm;
 		
-		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-		addEventListener(MouseEvent.MOUSE_OUT,  mouseOutHandler);
+		addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
+		addEventListener( MouseEvent.MOUSE_OUT,  mouseOutHandler );
 	}
 	
-	public function get resizeMode():uint {
+	public function get resizeMode() : uint 
+{
 		
 		return _resizeMode;
 	}
 	
-	public function set resizeMode(modeValue:uint):void {
+	public function set resizeMode( modeValue : uint ) : void 
+{
 		
-		if(_resizeMode != modeValue) {
+		if( _resizeMode != modeValue ) 
+{
 			
 			_resizeMode = modeValue;
 			
@@ -98,15 +104,17 @@ public class TransformMarker extends UIComponent {
 		}
 	}
 	
-	public function get moveMode():Boolean {
+	public function get moveMode() : Boolean 
+{
 		
 		return _moveMode;
 	}
 	
-	public function set moveMode(modeValue:Boolean):void {
+	public function set moveMode( modeValue : Boolean ) : void 
+{
 		
 		_moveMode = modeValue;
-		if(!modeValue)
+		if(!modeValue )
 			moving = null;
 		
 		modeChanged = true;
@@ -114,51 +122,56 @@ public class TransformMarker extends UIComponent {
 		invalidateDisplayList();
 	}
 	
-	public function get markerSelected():Boolean {
+	public function get markerSelected() : Boolean 
+{
 		
 		return _markerSelected;
 	}
 	
-	public function get item():Container {
+	public function get item() : Container 
+{
 		
 		return _selectedItem;
 	}
 	
-	public function set item(item:Container):void {
+	public function set item( item : Container ) : void 
+{
 		
-		if(item == null || item.parent == null) {
+		if( item == null || item.parent == null ) 
+{
 			
-			Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
-			Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-			if(_selectedItem)
-				_selectedItem.removeEventListener('refreshComplete', refreshCompleteHandler);
-			removeEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			Application.application.stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+			Application.application.stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+			if( _selectedItem )
+				_selectedItem.removeEventListener('refreshComplete', refreshCompleteHandler );
+			removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			_selectedItem = null;
 			return;
 		}
 		
-		if(_selectedItem == item || (transformation && _selectedItem))
+		if( _selectedItem == item || ( transformation && _selectedItem ))
 			return;
-		if(_selectedItem)
-			_selectedItem.removeEventListener('refreshComplete', refreshCompleteHandler);
+		if( _selectedItem )
+			_selectedItem.removeEventListener('refreshComplete', refreshCompleteHandler );
 		
 		_selectedItem = item;
 		
 		moving = cc_box;
 		
-		mousePosition = new Point(_selectedItem.mouseX, _selectedItem.mouseY);
+		mousePosition = new Point( _selectedItem.mouseX, _selectedItem.mouseY );
 		
-		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-		Application.application.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
-		Application.application.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		_selectedItem.addEventListener('refreshComplete', refreshCompleteHandler);
+		addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
+		Application.application.stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+		Application.application.stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+		_selectedItem.addEventListener('refreshComplete', refreshCompleteHandler );
 		
-		if(parent)
-			parent.addEventListener(FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler);
+		if( parent )
+			parent.addEventListener( FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler );
 		
-		/* var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
+		/* var evt : TransformMarkerEvent = new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_BEGIN );
 		
-		var prop:Object = {
+		var prop : Object = 
+{
 			left : _selectedItem.x,
 			top : _selectedItem.y,
 			width : _selectedItem.width,
@@ -167,9 +180,10 @@ public class TransformMarker extends UIComponent {
 		
 		evt.properties = prop;
 		
-		dispatchEvent(evt); */
+		dispatchEvent( evt ); */
 		
-		beforeTransform = {
+		beforeTransform = 
+{
 			left : item.x,
 			top : item.y,
 			width : item.width,
@@ -180,36 +194,40 @@ public class TransformMarker extends UIComponent {
 		
 		itemChanged = true;
 		
-		/* if(!invalidateSizeFlag) {
+		/* if(!invalidateSizeFlag ) 
+{
 			
 			invalidateDisplayList();
 			invalidateSize();
 		} */
 		
-		//_selectedItem.addEventListener(FlexEvent.UPDATE_COMPLETE, selectedItem_updateCompleteHandler);
+		//_selectedItem.addEventListener( FlexEvent.UPDATE_COMPLETE, selectedItem_updateCompleteHandler );
 		//invalidateProperties();
 		
 		
 	}
 	
-	private function refreshCompleteHandler(event:Event):void {
+	private function refreshCompleteHandler( event : Event ) : void 
+{
 		
-		if(invalidateSizeFlag || transformation)
+		if( invalidateSizeFlag || transformation )
 			return;
 		
 		refresh();
 	}
 	
-	public function refresh():void {
+	public function refresh() : void 
+{
 		
-		if(!visible)
+		if(!visible )
 			return;
 		itemChanged = true;
 		invalidateSize();
 		invalidateDisplayList();
 	}
 	
-	override protected function createChildren():void {
+	override protected function createChildren() : void 
+{
 		
 		super.createChildren();
 		
@@ -227,23 +245,25 @@ public class TransformMarker extends UIComponent {
 		br_box = createBox("br");
 		
 		
-		this.addChild(cc_box);
-		this.addChild(tl_box);
-		this.addChild(tc_box);
-		this.addChild(tr_box);
-		this.addChild(cl_box);
-		this.addChild(cr_box);
-		this.addChild(bl_box);
-		this.addChild(bc_box);
-		this.addChild(br_box);
+		this.addChild( cc_box );
+		this.addChild( tl_box );
+		this.addChild( tc_box );
+		this.addChild( tr_box );
+		this.addChild( cl_box );
+		this.addChild( cr_box );
+		this.addChild( bl_box );
+		this.addChild( bc_box );
+		this.addChild( br_box );
 		
 	}
 	
-	override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
+	override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void 
+{
 		
-		super.updateDisplayList(unscaledWidth, unscaledHeight);
+		super.updateDisplayList( unscaledWidth, unscaledHeight );
 		
-		if(boxStyleChanged) {
+		if( boxStyleChanged ) 
+{
 			
 			boxSize         = this.getStyle("boxSize");
 			borderColor     = this.getStyle("borderColor");
@@ -254,9 +274,11 @@ public class TransformMarker extends UIComponent {
 			boxStyleChanged = false;
 		}
 		
-		if(modeChanged) {
+		if( modeChanged ) 
+{
 			
-			switch(_resizeMode) {
+			switch( _resizeMode ) 
+{
 				
 				case RESIZE_ALL:
 					tl_box.visible = _moveMode;
@@ -309,10 +331,11 @@ public class TransformMarker extends UIComponent {
 			cc_box.visible = _moveMode
 		}
 		
-		var realWidth:Number = measuredWidth ? measuredWidth : 0;
-		var realHeight:Number = measuredHeight ? measuredHeight : 0;
+		var realWidth : Number = measuredWidth ? measuredWidth : 0;
+		var realHeight : Number = measuredHeight ? measuredHeight : 0;
 		
-		if(itemChanged) {
+		if( itemChanged ) 
+{
 
 			itemChanged = false
 			
@@ -335,65 +358,70 @@ public class TransformMarker extends UIComponent {
 //			cc_box.x = 0 + boxSize/2;
 //			cc_box.y = 0 + boxSize/2;
 			
-			if(cc_box.visible) {
-				var g:Graphics = cc_box.graphics;
+			if( cc_box.visible ) 
+{
+				var g : Graphics = cc_box.graphics;
 				g.clear();
-				g.lineStyle(6, 0x333333, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-				g.drawRect(0, 0, realWidth-6, realHeight-6);
-//				g.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER);
-//				g.drawRect(0, 0, measuredWidth, measuredHeight);
+				g.lineStyle( 6, 0x333333, .0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER );
+				g.drawRect( 0, 0, realWidth-6, realHeight-6 );
+//				g.lineStyle( 1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER );
+//				g.drawRect( 0, 0, measuredWidth, measuredHeight );
 				g.endFill(); 
 			}
 			
 			graphics.clear();			
-			graphics.lineStyle(1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER);
-			graphics.drawRect(0, 0, realWidth, realHeight);
+			graphics.lineStyle( 1, 0, 1, false, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.MITER );
+			graphics.drawRect( 0, 0, realWidth, realHeight );
 			graphics.endFill();
 		
 		}
 	}
 	
-	override protected function measure():void {
+	override protected function measure() : void 
+{
 		
 		super.measure();
 		
 		//measuredMinHeight = minHeight;
 		//measuredMinWidth  = minWidth;
 		
-		if(!_selectedItem)
+		if(!_selectedItem )
 			return
 
-		//var rect:Rectangle = _selectedItem.getRect(_selectedItem.parent)
+		//var rect : Rectangle = _selectedItem.getRect( _selectedItem.parent )
 		
-		if(measuredWidth  != _selectedItem.width)
+		if( measuredWidth  != _selectedItem.width )
 			measuredWidth  = _selectedItem.width;
 			
-		if(measuredHeight != _selectedItem.height)
+		if( measuredHeight != _selectedItem.height )
 			measuredHeight = _selectedItem.height;
 		
-		var rectangle:Rectangle = getContentRectangle(_selectedItem, this);
+		var rectangle : Rectangle = getContentRectangle( _selectedItem, this );
 		
-		if(rectangle) {
-			if(x != rectangle.x || y != rectangle.y)
-				move(rectangle.x, rectangle.y);
+		if( rectangle ) 
+{
+			if( x != rectangle.x || y != rectangle.y )
+				move( rectangle.x, rectangle.y );
 		}
 	}
 	
-	protected function updateBoxes():void {
+	protected function updateBoxes() : void 
+{
 		
 		graphics.clear();
-		graphics.beginFill(backgroundColor, backgroundAlpha);
-		graphics.lineStyle(.25, borderColor, 1, true, LineScaleMode.NONE);
-		graphics.drawRect(0,0, measuredWidth, measuredHeight);
+		graphics.beginFill( backgroundColor, backgroundAlpha );
+		graphics.lineStyle(.25, borderColor, 1, true, LineScaleMode.NONE );
+		graphics.drawRect( 0,0, measuredWidth, measuredHeight );
 		graphics.endFill();
 	}
 	
-	protected function createBox(name:String):Sprite {
+	protected function createBox( name : String ) : Sprite 
+{
 		
-		var b:Sprite = new Sprite();
-		b.graphics.beginFill(0xFFFFFF, 1)
-		b.graphics.lineStyle(1, 0x00, 1, true, LineScaleMode.NONE);
-		b.graphics.drawRect(-boxSize/2, -boxSize/2, boxSize, boxSize);
+		var b : Sprite = new Sprite();
+		b.graphics.beginFill( 0xFFFFFF, 1 )
+		b.graphics.lineStyle( 1, 0x00, 1, true, LineScaleMode.NONE );
+		b.graphics.drawRect(-boxSize/2, -boxSize/2, boxSize, boxSize );
 		b.graphics.endFill();
 		b.buttonMode = true
 		b.useHandCursor = false;
@@ -402,24 +430,27 @@ public class TransformMarker extends UIComponent {
 		return b;
 	}
 	
-	private function getContentRectangle(sourceContainer:DisplayObject, destinationContainer:DisplayObject):Rectangle {
+	private function getContentRectangle( sourceContainer : DisplayObject, destinationContainer : DisplayObject ) : Rectangle 
+{
 		
-		if(!sourceContainer)
+		if(!sourceContainer )
 			return null;
-		var pt:Point = new Point(sourceContainer.x, sourceContainer.y);
-		var sc:Container = Container(sourceContainer.parent);
-		var dc:Container = Container(destinationContainer.parent);
-		if(!sc || !dc)
+		var pt : Point = new Point( sourceContainer.x, sourceContainer.y );
+		var sc : Container = Container( sourceContainer.parent );
+		var dc : Container = Container( destinationContainer.parent );
+		if(!sc || !dc )
 			return null;
-		pt = sc.contentToGlobal(pt);
-		pt = dc.globalToContent(pt);
+		pt = sc.contentToGlobal( pt );
+		pt = dc.globalToContent( pt );
 		
-		return new Rectangle(pt.x, pt.y, measuredWidth, measuredHeight);
+		return new Rectangle( pt.x, pt.y, measuredWidth, measuredHeight );
 	}
 	
-	private function mouseDownHandler(event:MouseEvent):void {
+	private function mouseDownHandler( event : MouseEvent ) : void 
+{
 		
-		beforeTransform = {
+		beforeTransform = 
+{
 			left : item.x,
 			top : item.y,
 			width : item.width,
@@ -427,9 +458,10 @@ public class TransformMarker extends UIComponent {
 		};
 		
 		resizeManager.itemTransform = true;
-		/* var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_BEGIN);
+		/* var rmEvent : TransformMarkerEvent = new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_BEGIN );
 		
-		var prop:Object = {
+		var prop : Object = 
+{
 			left : _selectedItem.x,
 			top : _selectedItem.y,
 			width : _selectedItem.width,
@@ -438,139 +470,157 @@ public class TransformMarker extends UIComponent {
 		
 		rmEvent.properties = prop;
 		
-		dispatchEvent(rmEvent); */
+		dispatchEvent( rmEvent ); */
 		
 		moving = null;
-		mousePosition = new Point(mouseX, mouseY);
+		mousePosition = new Point( mouseX, mouseY );
 		
-		if(event.target != this)
-			moving = DisplayObject(event.target);
+		if( event.target != this )
+			moving = DisplayObject( event.target );
 		else
 			moving = this;
 		
 		transformation = true;
 		
-		Application.application.stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
-		Application.application.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		_selectedItem.addEventListener('refreshComplete', refreshCompleteHandler);
+		Application.application.stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+		Application.application.stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+		_selectedItem.addEventListener('refreshComplete', refreshCompleteHandler );
 	}
 	
-	private function mouseOutHandler(event:MouseEvent):void {
+	private function mouseOutHandler( event : MouseEvent ) : void 
+{
 		
-		if(_selectedItem && !moving)			
+		if( _selectedItem && !moving )			
 			CursorManager.removeAllCursors();
 			_markerSelected = false;
-//			dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED));
+//			dispatchEvent( new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_MARKER_UNSELECTED ));
 	}		
 	
-	private function mouseOverHandler(event:MouseEvent):void {
+	private function mouseOverHandler( event : MouseEvent ) : void 
+{
 		
-		if(_selectedItem) {
+		if( _selectedItem ) 
+{
 			
-			var target:Sprite = Sprite(event.target);
+			var target : Sprite = Sprite( event.target );
 			CursorManager.removeAllCursors();
 			_markerSelected = true;
 			
-			switch(target.name) {
+			switch( target.name ) 
+{
 				
 				case "bc":
 				case "tc":
-					CursorID = CursorManager.setCursor(getStyle('topDownCursor'), 2, -6, -8);
+					CursorID = CursorManager.setCursor( getStyle('topDownCursor'), 2, -6, -8 );
 				break;
 				
 				case "cl":
 				case "cr":
-					CursorID = CursorManager.setCursor(getStyle('leftRightCursor'), 2, -8, -4);
+					CursorID = CursorManager.setCursor( getStyle('leftRightCursor'), 2, -8, -4 );
 				break;
 				
 				case "tl":
 				case "br":
-					CursorID = CursorManager.setCursor(getStyle('topLDownRCursor'), 2, -8, -6);
+					CursorID = CursorManager.setCursor( getStyle('topLDownRCursor'), 2, -8, -6 );
 				break;
 				
 				case "tr":
 				case "bl":
-					CursorID = CursorManager.setCursor(getStyle('topRDownLCursor'), 2, -6, -10);
+					CursorID = CursorManager.setCursor( getStyle('topRDownLCursor'), 2, -6, -10 );
 				break;
 				
 				case "cc":
-					CursorID = CursorManager.setCursor(getStyle('moveCursor'), 2, -10, -10);
+					CursorID = CursorManager.setCursor( getStyle('moveCursor'), 2, -10, -10 );
 				break;
 				default:
 					_markerSelected = false;
 				break
 			}
 			
-			if(markerSelected)
-				dispatchEvent(new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_MARKER_SELECTED));
+			if( markerSelected )
+				dispatchEvent( new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_MARKER_SELECTED ));
 		}
 	}		
 	
-	private function mouseUpHandler(event:MouseEvent):void {
+	private function mouseUpHandler( event : MouseEvent ) : void 
+{
 		
-		Application.application.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler, true);
-		Application.application.stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler, true);
+		Application.application.stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+		Application.application.stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 		
-		//var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
-		//dispatchEvent(evt);
+		//var evt : TransformMarkerEvent = new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_CHANGING );
+		//dispatchEvent( evt );
 		
 		moving = null;
 		mousePosition = null;
-		mouseOutHandler(null);
+		mouseOutHandler( null );
 		transformation = false;		
 		
 		resizeManager.itemTransform = false;
 		
-		if(!event)
+		if(!event )
 			return;
 		
-		var rectangle:Rectangle = getContentRectangle(this, _selectedItem);
+		var rectangle : Rectangle = getContentRectangle( this, _selectedItem );
 		
-		var changeFlag:Boolean = false;
-		var prop:Object = {};
+		var rmEvent : TransformMarkerEvent = new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_COMPLETE );
+		rmEvent.item = _selectedItem;
 		
-		for (var name:String in beforeTransform)
+		var changeFlag : Boolean = false;
+		var prop : Object = 
+{};
+		
+		if ( !rectangle )
 		{
-			if(rectangle[name] != beforeTransform[name])
+			rmEvent.properties = prop;
+			dispatchEvent( rmEvent );
+			return;
+		}
+		
+		for ( var name : String in beforeTransform )
+		{
+			if( rectangle[name] != beforeTransform[name])
 			{
 				prop[name] = rectangle[name];
 				changeFlag = true;
 			}
 		}
 		
-		if(!changeFlag)
+		if(!changeFlag )
 			return;
 		
-		var rmEvent:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_COMPLETE);
-		rmEvent.item = _selectedItem;
 		rmEvent.properties = prop;
-		dispatchEvent(rmEvent);
+		dispatchEvent( rmEvent );
 		
 	}
 	
 	
 	
-	private function mouseMoveHandler(event:MouseEvent):void {
+	private function mouseMoveHandler( event : MouseEvent ) : void 
+{
 		
-		if(itemChanged)
+		if( itemChanged )
 			return;
 		
-		if(!_selectedItem || !_selectedItem.parent) {
-			mouseUpHandler(null);
+		if(!_selectedItem || !_selectedItem.parent ) 
+{
+			mouseUpHandler( null );
 			return;
 		}
 		
-		var rect:Rectangle = new Rectangle(x, y, measuredWidth, measuredHeight);
-		var rect1:Rectangle = getContentRectangle(this, _selectedItem);
-		var rect2:Rectangle = getContentRectangle(_selectedItem.parent, this);
-		var allow:Boolean = true;
+		var rect : Rectangle = new Rectangle( x, y, measuredWidth, measuredHeight );
+		var rect1 : Rectangle = getContentRectangle( this, _selectedItem );
+		var rect2 : Rectangle = getContentRectangle( _selectedItem.parent, this );
+		var allow : Boolean = true;
 		
-		if(moving && event.buttonDown) {
+		if( moving && event.buttonDown ) 
+{
 			
-			var mx:Number = mouseX;
-			var my:Number = mouseY;
+			var mx : Number = mouseX;
+			var my : Number = mouseY;
 			
-			switch(moving.name) {
+			switch( moving.name ) 
+{
 				
 				case "br":
 					rect.width = mouseX;
@@ -582,7 +632,7 @@ public class TransformMarker extends UIComponent {
 				break;
 				
 				case "bl":
-					if(rect1.x + mx < 0)
+					if( rect1.x + mx < 0 )
 					{
 						rect.width += rect.x - rect2.x;
 						rect.x = rect2.x;
@@ -600,7 +650,7 @@ public class TransformMarker extends UIComponent {
 				break;
 				
 				case "cl":
-					if(rect1.x + mx < 0)
+					if( rect1.x + mx < 0 )
 					{
 						rect.width += rect.x - rect2.x;
 						rect.x = rect2.x;
@@ -613,7 +663,7 @@ public class TransformMarker extends UIComponent {
 				break;
 				
 				case "tl":
-					if(rect1.x + mx < 0)
+					if( rect1.x + mx < 0 )
 					{
 						rect.width += rect.x - rect2.x;
 						rect.x = rect2.x;
@@ -624,7 +674,7 @@ public class TransformMarker extends UIComponent {
 						rect.width -= mx;
 					}
 					
-					if(rect1.y + my < 0)
+					if( rect1.y + my < 0 )
 					{
 						rect.height += rect.y - rect2.y;
 						rect.y = rect2.y;
@@ -637,7 +687,7 @@ public class TransformMarker extends UIComponent {
 				break;
 					
 				case "tc":
-					if(rect1.y + my < 0)
+					if( rect1.y + my < 0 )
 					{
 						rect.height += rect.y - rect2.y;
 						rect.y = rect2.y;
@@ -650,7 +700,7 @@ public class TransformMarker extends UIComponent {
 				break;
 				
 				case "tr":
-					if(rect1.y + my < 0)
+					if( rect1.y + my < 0 )
 					{
 						rect.height += rect.y - rect2.y;
 						rect.y = rect2.y;
@@ -665,17 +715,21 @@ public class TransformMarker extends UIComponent {
 				break;
 				
 				case "cc":
-					if(rect1.x + mx - mousePosition.x < 0) {
+					if( rect1.x + mx - mousePosition.x < 0 ) 
+{
 						rect.x = rect2.x;
 						rect1.x = 0;
-					} else {
+					} else 
+{
 						rect.x += mx - mousePosition.x;
 						rect1.x += mx - mousePosition.x;
 					}				
-					if(rect1.y + my - mousePosition.y < 0) {
+					if( rect1.y + my - mousePosition.y < 0 ) 
+{
 						rect.y = rect2.y;
 						rect1.y = 0;
-					} else {
+					} else 
+{
 						rect.y += my - mousePosition.y;
 						rect1.y += my - mousePosition.y;
 					}
@@ -683,21 +737,24 @@ public class TransformMarker extends UIComponent {
 				break;
 			}
 			
-			if(rect.width > maxWidth || rect.width < minWidth) allow = false;
-			if(rect.height > maxHeight || rect.height < minHeight) allow = false;
+			if( rect.width > maxWidth || rect.width < minWidth ) allow = false;
+			if( rect.height > maxHeight || rect.height < minHeight ) allow = false;
 			
-			if(rect) {
+			if( rect ) 
+{
 				
-				if(rect.width > maxWidth)   rect.width = maxWidth;
-				if(rect.width < minWidth)   rect.width = minWidth;
-				if(rect.height > maxHeight) rect.height = maxHeight;
-				if(rect.height < minHeight) rect.height = minHeight;
+				if( rect.width > maxWidth )   rect.width = maxWidth;
+				if( rect.width < minWidth )   rect.width = minWidth;
+				if( rect.height > maxHeight ) rect.height = maxHeight;
+				if( rect.height < minHeight ) rect.height = minHeight;
 				
-				if(allow) {
+				if( allow ) 
+{
 					
-					move(rect.x, rect.y);
+					move( rect.x, rect.y );
 					
-					if(_moveMode && (moving.name == 'cc')/*  || moving.name == 'cl' || moving.name == 'tc' || moving.name == 'tl') */) {
+					if( _moveMode && ( moving.name == 'cc')/*  || moving.name == 'cl' || moving.name == 'tc' || moving.name == 'tl') */) 
+{
 						
 						_selectedItem.x = rect1.x;
 						_selectedItem.y = rect1.y;
@@ -708,16 +765,17 @@ public class TransformMarker extends UIComponent {
 					measuredWidth = rect.width;
 					measuredHeight = rect.height;
 					
-					var evt:TransformMarkerEvent = new TransformMarkerEvent(TransformMarkerEvent.TRANSFORM_CHANGING);
-					dispatchEvent(evt);
+					var evt : TransformMarkerEvent = new TransformMarkerEvent( TransformMarkerEvent.TRANSFORM_CHANGING );
+					dispatchEvent( evt );
 				}
 			}
 			
 			invalidateDisplayList();
 			
-		} else {
+		} else 
+{
 			
-			mouseUpHandler(null);
+			mouseUpHandler( null );
 		} 
 	}
 }

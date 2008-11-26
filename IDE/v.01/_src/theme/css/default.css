@@ -7,6 +7,8 @@ global {
 	topLDownRCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopLDownR");
 	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
 	
+	defaultTypeIcon: Embed("default_type_icon.png");
+	
 	appIconPersonalPages: Embed("app-personalpages.png");
 	appIconAssociation: Embed("app-association.png");
 	appIconBuild: Embed("app-build.png");
