@@ -2,6 +2,7 @@
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="frstLoadXML()">
 	<mx:Script>
 	<![CDATA[
+		import mx.utils.StringUtil;
 		import mx.events.TreeEvent;
 		import mx.utils.Base64Decoder;
 		
@@ -109,6 +110,7 @@
 			}
 		}
 		
+		private var arrayOfPages:Array = new Array();
 		
 		private function savePages(product:XML):void
 		{
@@ -121,6 +123,8 @@
 					var fileName:String = page.name.toString() + ".html";
 					
 					cacheFile(fileName , byteArray);
+					
+					arrayOfPages[page.name.toString()] = true;
 			}
 		}
 		
@@ -159,24 +163,59 @@
 			
 		private function treeChangeHandler(object:Object):void
 		{
-			trace("---selected \n" + tree.selectedItem.@name);
+			showSelectedPage(tree.selectedItem.@name);
 			
 		}
 		
 		private function showSelectedPage(pageName:String):void
 		{
 			trace(pageName);
+			var fileName:String = pageName +".html";
+			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
+			var fullPath : String = newFile.nativePath;
+			html.location = fullPath; // = fileStream.readMultiByte(newFile.size, File.systemCharset);
+			fileStream.close();
+//			fullPath = "asjd hajsd aljsd";
+			
 		}
 		
+		private function pageChangedHandler(event:Event):void
+		{
+			var fullPath:String = html.location;
+			var index:Number = Math.max(fullPath.lastIndexOf( "/" ),fullPath.lastIndexOf( "\\") );
+			var fileName : String = fullPath.substr( index + 1 ); 
+			fileName = fileName.substring( 0, fileName.lastIndexOf( "." )  );
+			
+			var selectedItem:String = tree.selectedItem.@name;
+			
+			trace("LOCATION: " + fileName + "   :  " + selectedItem);
+			if(selectedItem == fileName)
+				return;
+			
+			if(arrayOfPages[fileName])
+			{
+				trace("+++ Needed to select")
+			}else
+			{
+				showSelectedPage(selectedItem);
+			}	
+			
+		}
+		
+		private function test(event:Event):void
+		{
+			trace();
+		}
 	]]>
 </mx:Script>
 	<mx:Tree id="tree" x="81" y="70" width="145" height="249"
 		labelField="@title" showRoot="false" change="{treeChangeHandler(event)}" />
-	<mx:HTML x="267" y="72" width="362" height="247"/>
+	<mx:HTML id="html" x="267" y="72" width="362" height="247"
+		locationChange="{pageChangedHandler(event)}"/>
 	<mx:Button x="690" y="71"  label="Load 1-st XML" click="{frstLoadXML()}"/>
 	<mx:Button x="690" y="120" label="Load 2-nd XML"/>
-	<mx:Button x="690" y="171" label="Button"/>
-	<mx:Button x="690" y="230" label="Button"/>
-	<mx:Button x="690" y="281" label="Button"/>
+	<mx:Button x="690" y="171" label="back" click="{html.historyBack()}"/>
+	<mx:Button x="690" y="230" label="forvatd" click="{html.historyForward()}"/>
+	<mx:Button x="690" y="281" label="Test" click="{test(event)}"/>
 	
 </mx:WindowedApplication>

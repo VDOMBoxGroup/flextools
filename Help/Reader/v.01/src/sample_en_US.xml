@@ -16,7 +16,7 @@
       <title>First</title>
       <description>Description of 1-st page</description>
       <content>
-        <![CDATA[<h1> It is 1-st page</h1>  <img src="resources/135aaf50-6055-4db3-8c14-7d9ac93dd30f.png"/>]]>
+        <![CDATA[<h1> It is 1-st page</h1>  <img src="resources/135aaf50-6055-4db3-8c14-7d9ac93dd30f.png"/> <a href ="page2.html">to Page 2</a>]]>
       </content>
       <resources>
         <resource id="135aaf50-6055-4db3-8c14-7d9ac93dd30f" type="png">
@@ -30,7 +30,7 @@
       <title>First</title>
       <description>Description of 2-nd page</description>
       <content>
-        <![CDATA[<h1> It is 2-nd page</h1>  <img src="resources/135aaf50-6055-4db3-8c13-7d9ac93dd312.png"/>]]>
+        <![CDATA[<h1> It is 2-nd page</h1>  <img src="resources/135aaf50-6055-4db3-8c13-7d9ac93dd312.png"/> <a href ="page1.html">to Page 1</a>]]>
       </content>
       <resources>
         <resource id="135aaf50-6055-4db3-8c13-7d9ac93dd312" type="png">
@@ -44,7 +44,7 @@
       <title>Third</title>
       <description>Description of 3-d page</description>
       <content>
-        <![CDATA[<h1> It is 3-d page</h1>  <img src="resources/135fff50-6055-4db3-8c13-7d9ac93dd312.png"/>]]>
+        <![CDATA[<h1> It is 3-d page</h1>  <img src="resources/135fff50-6055-4db3-8c13-7d9ac93dd312.png"/> <a href ="page5.html">to Page 1</a>]]>
       </content>
       <resources>
         <resource id="135fff50-6055-4db3-8c13-7d9ac93dd312" type="png">
