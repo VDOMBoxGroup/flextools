@@ -4,9 +4,11 @@
   <description>It is English Help</description>
   <language>en_US</language>
   <toc>
-    <page name="page1" title="First" />
+    
     <page name="page2" title="Group of Page">
-      <page name="page3" title="Third" />
+		<page name="page3" title="Third" 	>
+			<page name="page1" title="First" />
+		</page>
     </page>
   </toc>
   <pages>

@@ -194,10 +194,34 @@
 			if(arrayOfPages[fileName])
 			{
 				trace("+++ Needed to select")
+				selectNecessaryItem(fileName);
 			}else
 			{
 				showSelectedPage(selectedItem);
 			}	
+		}
+		
+		private function selectNecessaryItem(fileName:String):void
+		{
+			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0];
+			
+			openTree(currentElement);
+			
+			tree.selectedItem = currentElement;
+			
+			var index:int =  tree.getItemIndex(tree.selectedItem);
+			tree.scrollToIndex(index);
+		}
+		
+		private function openTree(item:Object):void
+		{
+			var parentItem:Object = XML(item).parent();
+			if (parentItem)
+			{
+				openTree(parentItem);
+				tree.expandItem(parentItem, true, false);
+				tree.validateNow();
+			}
 		}
 		
 		private function test(event:Event):void
