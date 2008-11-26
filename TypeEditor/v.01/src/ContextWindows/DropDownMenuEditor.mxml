@@ -185,11 +185,11 @@
 	</mx:DataGrid>
 	
 	<mx:HBox width="100%" horizontalGap="4" horizontalAlign="center">
-		<mx:Button label="Add" click="{addNewRowBtnClickHandler();}" />
-		<mx:Button label="Remove" click="{removeRowBtnClickHandler();}" />
+		<mx:Button label="Add" click="{addNewRowBtnClickHandler();}" icon="@Embed('/icons/list-add.png')" />
+		<mx:Button label="Remove" click="{removeRowBtnClickHandler();}" icon="@Embed('/icons/list-remove.png')" />
 		<mx:Spacer width="100%" />
-		<mx:Button label="Ok" click="{okBtnClickHandler();}" />
-		<mx:Button label="Cancel" click="{PopUpManager.removePopUp(this);}" />
+		<mx:Button label="Ok" click="{okBtnClickHandler();}" icon="@Embed('/icons/commit.png')" />
+		<mx:Button label="Cancel" click="{PopUpManager.removePopUp(this);}" icon="@Embed('/icons/discard.png')" />
 	</mx:HBox>
 	
 	

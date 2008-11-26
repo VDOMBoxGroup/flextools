@@ -72,10 +72,10 @@
 
 		<mx:Label text="Choose object language to edit:" fontWeight="bold" />
 		<mx:HBox horizontalGap="2">
-			<mx:Button width="24" height="100%" cornerRadius="1" icon="@Embed('/icons/back.png')" alpha="0.7"
+			<mx:Button width="24" height="100%" icon="@Embed('/icons/back.png')" alpha="0.7"
 				toolTip="Previous" click="{selectPreviousObjLanguage();}" />
 			<mx:ComboBox id="__langSelection" width="100" cornerRadius="1" dataProvider="{langsProvider}" change="{changeLangSelection();}" />
-			<mx:Button width="24" height="100%" cornerRadius="1" icon="@Embed('/icons/forward.png')" alpha="0.7"
+			<mx:Button width="24" height="100%" icon="@Embed('/icons/forward.png')" alpha="0.7"
 				toolTip="Next" click="{selectNextObjLanguage();}" />	
 		</mx:HBox>
 	</mx:HBox>
@@ -134,7 +134,7 @@
 						<mx:Label text="Object ID" />
 						<mx:HBox width="100%" verticalAlign="middle" horizontalGap="2">
 							<mx:TextInput id="__objectID" width="100%" editable="false" />
-							<mx:Button id="__refreshIDBtn" icon="@Embed('/icons/refresh.png')" cornerRadius="1"
+							<mx:Button id="__refreshIDBtn" icon="@Embed('/icons/refresh.png')"
 								paddingLeft="0" paddingRight="0" width="22" height="22" alpha="0.7"
 								borderColor="#FFFFFF" click="{refreshIDBtnClickHandler();}" />
 									
@@ -181,10 +181,10 @@
 						<mx:Label text="Supported languages" />
 						<mx:ComboBox id="__langsComboBox" width="100%" cornerRadius="1" dataProvider="{langsProvider}" />
 						<mx:HBox width="100%" paddingTop="2">
-							<mx:Button label="Add" cornerRadius="1" click="{addObjectLanguageBtnClickHandler();}"
+							<mx:Button label="Add" click="{addObjectLanguageBtnClickHandler();}"
 								icon="@Embed('/icons/list-add.png')" />
 								
-							<mx:Button label="Remove" cornerRadius="1" click="{removeObjectLanguageBtnClickHandler();}"
+							<mx:Button label="Remove" click="{removeObjectLanguageBtnClickHandler();}"
 								icon="@Embed('/icons/list-remove.png')" />
 								
 						</mx:HBox>
@@ -244,9 +244,9 @@
 								</mx:Box>
 								<mx:VBox verticalGap="2">
 									<mx:Button id="__objIconBtn" click="{changeObjectIconClickHandler(__objectIcon);}" alpha="0.7"
-										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+										icon="@Embed('/icons/fileopen.png')" width="22" height="22" borderColor="#FFFFFF" />
 									<mx:Button click="{__objectIcon.source = defIcon;}" enabled="{__objIconBtn.enabled}" alpha="0.7"
-										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+										icon="@Embed('/icons/cancel.png')" width="22" height="22" borderColor="#FFFFFF" />
 								</mx:VBox>
 							</mx:HBox>
 						</mx:VBox>
@@ -262,9 +262,9 @@
 								</mx:Box>
 								<mx:VBox verticalGap="2">
 									<mx:Button id="__editorIconBtn" click="{changeObjectIconClickHandler(__editorIcon);}" alpha="0.7"
-										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+										icon="@Embed('/icons/fileopen.png')" width="22" height="22" borderColor="#FFFFFF" />
 									<mx:Button click="{__editorIcon.source = defIcon;}" enabled="{__editorIconBtn.enabled}" alpha="0.7"
-										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+										icon="@Embed('/icons/cancel.png')" width="22" height="22" borderColor="#FFFFFF" />
 								</mx:VBox>
 									
 							</mx:HBox>
@@ -281,9 +281,9 @@
 								</mx:Box>
 								<mx:VBox verticalGap="2">
 									<mx:Button id="__structIconBtn" click="{changeObjectIconClickHandler(__structureIcon);}" alpha="0.7"
-										icon="@Embed('/icons/fileopen.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+										icon="@Embed('/icons/fileopen.png')" width="22" height="22" borderColor="#FFFFFF" />
 									<mx:Button click="{__structureIcon.source = defIcon}" enabled="{__structIconBtn.enabled}" alpha="0.7"
-										icon="@Embed('/icons/cancel.png')" width="22" height="22" cornerRadius="1" borderColor="#FFFFFF" />
+										icon="@Embed('/icons/cancel.png')" width="22" height="22" borderColor="#FFFFFF" />
 								</mx:VBox>
 									
 							</mx:HBox>
@@ -299,7 +299,7 @@
 			width="100%" height="100%" horizontalScrollPolicy="off">
 			
 			<mx:HDividedBox id="__mainContainer" width="100%" height="100%" verticalScrollPolicy="off"
-				paddingBottom="10" paddingTop="5">
+				paddingBottom="5" paddingTop="5">
 				
 				<!-- Left Side -->
 				<mx:VBox id="__leftSideContainer" width="200" minWidth="200" height="100%" horizontalScrollPolicy="off"
@@ -309,10 +309,10 @@
 					<mx:List id="__attrsList" width="100%" height="100%" click="{changeAttrSelection();}" />
 					<mx:HBox width="100%" horizontalGap="5">
 						<mx:Spacer width="100%" />
-						<mx:Button label="Add" cornerRadius="1" icon="@Embed('/icons/list-add.png')"
+						<mx:Button label="Add" icon="@Embed('/icons/list-add.png')"
 							click="{addAttrBtnClickHandler();}" />
 							
-						<mx:Button label="Remove" cornerRadius="1" icon="@Embed('/icons/list-remove.png')"
+						<mx:Button label="Remove" icon="@Embed('/icons/list-remove.png')"
 							click="{removeAttrBtnClickHandler();}" />
 							
 						<mx:Spacer width="100%" />
@@ -335,7 +335,7 @@
 						<mx:HBox width="100%" horizontalGap="2">
 							<mx:TextInput id="__attrDispName" width="100%" />	
 							<mx:Image height="22" width="22" horizontalAlign="center" verticalAlign="middle" 
-								source="@Embed('/icons/info.png')" scaleContent="false"
+								source="@Embed('/icons/info.png')" scaleContent="false" alpha="0.7"
 								toolTip="This field is language depended!" />	
 						</mx:HBox>
 					</mx:VBox>
@@ -355,7 +355,7 @@
 						<mx:HBox width="100%" horizontalGap="2">
 							<mx:TextInput id="__regExValidationErrStr" width="100%" />	
 							<mx:Image height="22" width="22" horizontalAlign="center" verticalAlign="middle" 
-								source="@Embed('/icons/info.png')" scaleContent="false"
+								source="@Embed('/icons/info.png')" scaleContent="false" alpha="0.7"
 								toolTip="This field is language depended!" />	
 						</mx:HBox>
 					</mx:VBox>
@@ -393,7 +393,7 @@
 								            <mx:Object label="ExternalEditor(Title, Info)"	data="externaleditor" />
 								        </mx:Array>
 									</mx:ComboBox>	
-									<mx:Button id="__attrValuesBtn" label="Value(s)" cornerRadius="1" click="{attrInterfaceTypeValuesClickHandler();}" />
+									<mx:Button id="__attrValuesBtn" label="Value(s)" click="{attrInterfaceTypeValuesClickHandler();}" />
 								</mx:HBox>
 								
 								<mx:Spacer height="2" />
@@ -426,7 +426,28 @@
 		
 		<!-- Resources tab -->
 		<mx:Canvas id="__resourcesCanvas" label="Object Resources" 
-			width="100%" height="100%" horizontalScrollPolicy="off" />
+			width="100%" height="100%" horizontalScrollPolicy="off">
+			
+			<mx:VBox width="100%" height="100%" paddingLeft="5" paddingRight="5" paddingBottom="5">
+				<mx:DataGrid width="100%" height="100%" draggableColumns="false" sortableColumns="false" resizableColumns="false"
+					dataProvider="{resourcesProvider}">
+					<mx:columns>
+						<mx:DataGridColumn dataField="num" width="50" />
+						<mx:DataGridColumn dataField="name" />
+						<mx:DataGridColumn dataField="type" width="100" />
+						<mx:DataGridColumn dataField="size" width="100" />
+						<mx:DataGridColumn dataField="in_use" width="50" />
+					</mx:columns>
+				</mx:DataGrid>
+				
+				<mx:HBox width="100%">
+					<mx:Button label="Add" icon="@Embed('/icons/list-add.png')" />
+					<mx:Button label="Remove" icon="@Embed('/icons/list-remove.png')" />
+					<mx:Button label="Replace" icon="@Embed('/icons/refresh.png')" />
+				</mx:HBox>
+			</mx:VBox>
+		</mx:Canvas>
+			
 
 	</mx:TabNavigator>	
 

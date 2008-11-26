@@ -54,18 +54,20 @@ private var attrsProvider:Array = [];
  * 
  **/ 
 
+[Bindable]
 private var resourcesProvider:Array = [];
 
 /**
  * resourcesPrivoder has structure:
  * 
- * resourcesProvide:
+ * resourcesProvider:
  *  |
  *  |--[resourceID]
+ *  |   |--name = ''
  *  |   |--data = [] (base64 source)
  *  |   |--size = 0
  *  |   |--type = ''
- *  |   '--in_use = false
+ *  |   '--in_use = no
  *  |
  *  ...
  * 

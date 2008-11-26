@@ -1,4 +1,4 @@
-// ActionScript file
+	// ActionScript file
 import ContextWindows.AddLanguageWindow;
 
 import flash.events.Event;
@@ -373,6 +373,10 @@ private function loadCodeInterfaceData():void
 			
 		case 'externaleditor':
 			__attrCodeInterface.selectedIndex = 11;
+			codeInterfaceString = 'ExternalEditor ( ' + currentAttrObj['externalEditorTitle'][selectedLang]
+								+ ', ' + currentAttrObj['externalEditorInfo'] + ' )';
+								
+			__attrValuesBtn.enabled = true;
 			break;
 	}
 
@@ -546,11 +550,9 @@ private function attrInterfaceTypeValuesClickHandler():void
 			eeeditor.titleProvider = currentAttrObj['externalEditorTitle'];
 			eeeditor.selectedLang = this.selectedLang;
 			eeeditor.langsProvider = langsProvider;
-			eeeditor.
-			
-			
-
-			ddeditor.onShow();
+			eeeditor.resourcesProvider = this.resourcesProvider;
+			eeeditor.externalEditorInfo = currentAttrObj['externalEditorInfo'];
+			eeeditor.onShow();
 			break;
 
 	}
@@ -605,8 +607,18 @@ private function objectListEditorCompleteHandler(event:Event):void
 
 private function externalEditorCompleteHandler(event:Event):void
 {
-	mleditor.removeEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
-	currentAttrObj['objectListTypeId'] = oleditor.typeId;
-	PopUpManager.removePopUp(oleditor);
+	eeeditor.removeEventListener(Event.COMPLETE, externalEditorCompleteHandler);
+	currentAttrObj['externalEditorTitle'] = eeeditor.titleProvider;
+	currentAttrObj['externalEditorInfo'] = eeeditor.externalEditorInfo;
+	this.resourcesProvider = eeeditor.resourcesProvider;
+	PopUpManager.removePopUp(eeeditor);
 	loadCodeInterfaceData();
 }
+
+
+/* -------- object resources ------------------------------------------------- */
+private function addResource():void
+{
+		
+	
+} 

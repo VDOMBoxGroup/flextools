@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	borderAlpha="0.95" cornerRadius="1" width="400" height="300"
+	borderAlpha="0.95" cornerRadius="1" width="400" height="220"
 	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
 	borderThicknessLeft="1" borderThicknessRight="1"
 	title="ExternalEditor editor" verticalGap="15">
@@ -22,42 +22,48 @@
 			
 			private const EMPTY_STR:String = '[[ empty ]]';
 			public var selectedLang:String = '';;
-			public var titleProvider:Array = []; /* of Langstr = str */
-			[Bindable] private var _langsProvider:Array = [];
-
+			public var titleProvider:Array = [];		/* of Langstr = str */
+			public var externalEditorInfo:String = '';	/* actually, resource_ID */
+			
+			[Bindable]
+			public var resourcesProvider:Array = [];
+			
+			[Bindable]
+			public var langsProvider:Array = [];
 
 			/* This function must be executed "by hand" after object initializitaion  */
 			public function onShow():void
 			{
 				/* set languageBox to actual information */
 				var i:int = 0;
-				for each (var langObj:Object in _langsProvider) {
+				
+				/* Set current language */
+				for each (var langObj:Object in langsProvider) {
 					if (langObj.label == selectedLang)
 						__editableLang.selectedIndex = i;
+					i++;
+				}
+				
+				/* Set current resource */
+				for each (var resource:Object in resourcesProvider) {
+					if (resource.name == externalEditorInfo)
+						__resource.selectedIndex = i;
 					i++;
 				}
 			}
 
 			private function loadValues():void
 			{
-				/* attach values for editing */
-				
-				
+				/* attach values */
+				__title.text = titleProvider[selectedLang];
 			}
 			
 			
 			private function writeValues():void
 			{
-				titleProvider[selectedLang] = __editableLang.text;
+				titleProvider[selectedLang] = __title.text;
 			}
 
-			
-			public function set langsProvider(lp:Array):void
-			{
-				_langsProvider = lp;
-			}
-			
-			
 			
 			private function changeLanguagesHandler():void
 			{
@@ -75,22 +81,110 @@
 				this.dispatchEvent(new Event(Event.COMPLETE));
 			}
 			
+			private var fileForUpload:File;
+			
+			private function addBtnClickHandler():void
+			{
+				if (!fileForUpload)
+					fileForUpload = new File();
+					
+				var allFilesFilter:FileFilter = new FileFilter("All Files (*.*)", "*.*");
+				var imagesFilter:FileFilter = new FileFilter('Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png');
+				var docFilter:FileFilter = new FileFilter('Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt');
+				
+				fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
+				fileForUpload.addEventListener(Event.CANCEL, fileCancelHandler);
+				fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
+			}
+			
+			private function fileCancelHandler(e:Event):void
+			{
+				fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
+				fileForUpload.removeEventListener(Event.CANCEL, fileCancelHandler);
+			}
+			
+			private function fileSelectHandler(event:Event):void
+			{
+				fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
+				fileForUpload.removeEventListener(Event.CANCEL, fileCancelHandler);
+						
+				if (fileForUpload  && !fileForUpload.isDirectory) {
+					var srcBytes:ByteArray = new ByteArray();
+					var srcStream:FileStream = new FileStream();
+					
+					try {
+			
+						srcStream.open(fileForUpload, FileMode.READ);
+						
+						if (srcStream.bytesAvailable == 0) {
+							Alert.show("File is empty", "File can not be used!");
+							return; 
+						}
+						
+						srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
+						srcStream.close();
+					}
+					catch (err:Error) {
+						Alert.show('Could not open file!', 'IO Error');
+						return;
+					}
+						
+					var fileType:String = "";
+					try {		
+						fileType = fileForUpload.type.substr(1);
+					}
+					catch (err:Error) {
+						fileType = fileForUpload.extension;
+					}
+					
+					try {
+						var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
+						
+						// put code here
+						
+					}
+					catch (err:Error) {
+						Alert.show ('Unexpected error', 'Could not use selected file!');
+						return;
+					}
+				}	
+			}
 		]]>
 	</mx:Script>
 	
 	
-	<mx:HBox width="100%" horizontalGap="4">
-		<mx:Label text="External Editor Title:" />
-		<mx:VBox width="148" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:VBox width="100%" horizontalGap="4">
+		
+		<mx:HBox width="100%" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off"
+			verticalAlign="bottom" horizontalAlign="right">
+			
 			<mx:Label text="Editable language" />
-			<mx:ComboBox id="__editableLang" cornerRadius="1" width="148" dataProvider="{_langsProvider}" change="{changeLanguagesHandler();}" />
+			<mx:ComboBox id="__editableLang" cornerRadius="1" width="100" dataProvider="{langsProvider}" change="{changeLanguagesHandler();}" />	
+		</mx:HBox>
+		
+		<mx:VBox width="100%" verticalGap="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+			<mx:Label text="External Editor Title:" />
+			<mx:HBox width="100%" horizontalGap="2">
+				<mx:TextInput id="__title" width="100%" cornerRadius="1" />
+				<mx:Image height="22" width="22" verticalAlign="middle" horizontalAlign="center" 
+					source="@Embed('/icons/info.png')" scaleContent="false" alpha="0.7"
+					toolTip="This field is language depended!" />
+			</mx:HBox>
+			<mx:Spacer height="2" />
+			<mx:Label text="Choose External Editor Resource:" />
+			<mx:HBox width="100%">
+				<mx:ComboBox id="__resource" width="100%" cornerRadius="1" labelField="name" dataProvider="{resourcesProvider}" />
+				<mx:Button label="Add" />	
+			</mx:HBox>	
 		</mx:VBox>
-	</mx:HBox>	
+		
+	</mx:VBox>	
+	
+	<mx:Spacer height="100%" />
 	
 	<mx:HBox width="100%" horizontalGap="4" horizontalAlign="center">
-		<mx:Button label="Ok" click="{okBtnClickHandler();}" />
-		<mx:Button label="Cancel" click="{PopUpManager.removePopUp(this);}" />
+		<mx:Button label="Ok" click="{okBtnClickHandler();}" icon="@Embed('/icons/commit.png')" />
+		<mx:Button label="Cancel" click="{PopUpManager.removePopUp(this);}" icon="@Embed('/icons/discard.png')" />
 	</mx:HBox>
-	
 	
 </mx:TitleWindow>
