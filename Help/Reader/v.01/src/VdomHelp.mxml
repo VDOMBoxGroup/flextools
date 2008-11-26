@@ -197,6 +197,14 @@
 				selectNecessaryItem(fileName);
 			}else
 			{
+//				var file:File = File.applicationStorageDirectory.resolvePath("");
+//				var localPath : String = file.nativePath;
+				
+//				index = Math.max(localPath.lastIndexOf( "/" ),localPath.lastIndexOf( "\\") );
+				
+//				fileName = localPath.substr( index + 1 ); 
+				
+				navigateToURL(new URLRequest(fullPath));
 				showSelectedPage(selectedItem);
 			}	
 		}
