@@ -1,0 +1,4 @@
+<install>
+  <product name="sampe_ru_RU"  url="http://www.sample.com/help/sampe_ru_RU.xml" />
+  <product name="sample_en_US" url="sample_en_US.xml" />
+</install>

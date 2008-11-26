@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="frstLoadXML()">
+	<mx:Script>
+	<![CDATA[
+		import mx.events.TreeEvent;
+		import mx.utils.Base64Decoder;
+		
+		private var install:XML = new XML();
+		private var XML_URL:String = "StartXML.xml";
+		private var myXMLURL:URLRequest;
+		private var myLoader:URLLoader;
+//		private var cacheFolder:File;
+		private var fileStream:FileStream = new FileStream();
+		
+		
+		// start loading 1-st XML 
+		private function frstLoadXML():void
+		{
+			myXMLURL = new URLRequest(XML_URL)
+			myLoader = new URLLoader(myXMLURL);
+			myLoader.addEventListener(Event.COMPLETE, startXMLLoaded);
+			myLoader.addEventListener(IOErrorEvent.IO_ERROR, startXMLLoaded);
+			
+		}
+		
+		// 
+		private function startXMLLoaded(event:Event):void
+		{
+			myLoader.removeEventListener(Event.COMPLETE, startXMLLoaded);
+			if(event.type == IOErrorEvent.IO_ERROR)
+			{
+				trace("Start XML not Finded")	
+			} 
+			else if(event.type == Event.COMPLETE)
+			{
+			    trace("Start loaded.");
+				 
+				install = XML(myLoader.data);
+				for each(var product:XML in install.children())
+				{
+					trace(product.@url);
+					var xmlURL:URLRequest = new URLRequest(product.@url)
+					var loader:URLLoader = new URLLoader(xmlURL);
+					loader.addEventListener(Event.COMPLETE, xmlLoaded);
+					loader.addEventListener(IOErrorEvent.IO_ERROR, xmlLoaded);
+				} 
+			}
+		}
+		
+		private function xmlLoaded(event:Event):void
+		{
+			if(event.type == IOErrorEvent.IO_ERROR)
+			{
+				trace("!!!! XML not Finded  !!!!")	
+			} 
+			else if(event.type == Event.COMPLETE)
+			{
+			    trace("Data loaded.");
+			    parsingData(XML(event.target.data))
+//			    trace(myLoader.data.toString());
+			}
+		}
+		
+		private function parsingData(product:XML):void
+		{
+			if(product == null || product.name() != "product")
+			{
+				trace("!!!!!!!!!!!! not Correct data from server !!!!!!!!!!!!!");
+				return;
+			}
+			
+			trace(product.name());
+			// save loaded data to local diskDrive 
+			saveLoadedData(product);
+			
+			// выбрать ресурсы и сохранить их на диск
+			saveResources(product);
+			
+			// выбрать странички сохранить их на диск
+			savePages(product);
+			// сгенерить дерево
+			creatTree(product);
+		}
+		
+		private function saveLoadedData(product:XML):void
+		{
+			var byteArray:ByteArray = new ByteArray();
+				byteArray.writeMultiByte(product.toXMLString()+"\n", "UTF-8");
+				
+				var fileName:String =  product.name.toString()+ ".xml";
+			cacheFile( fileName, byteArray);
+		}
+		
+		private function saveResources(product:XML):void
+		{
+//			var folderName:String = product.name.toString();
+			
+			for each(var page:XML in product.pages.children())
+			{
+				for each(var resource:XML in page.resources.children())
+				{
+					var base64:Base64Decoder = new Base64Decoder();
+						base64.decode(resource.toString());
+					var byteArray:ByteArray = base64.toByteArray();
+					var fileName:String = "resources/"+ resource.@id + "." + resource.@type;
+					
+					cacheFile(fileName , byteArray);
+				}
+			}
+		}
+		
+		
+		private function savePages(product:XML):void
+		{
+//			var folderName:String = product.name.toString();
+			
+			for each(var page:XML in product.pages.children())
+			{
+					var byteArray:ByteArray = new ByteArray();
+						byteArray.writeMultiByte(page.content.toString()+"\n", "UTF-8");
+					var fileName:String = page.name.toString() + ".html";
+					
+					cacheFile(fileName , byteArray);
+			}
+		}
+		
+		public function cacheFile(contentName:String, content:ByteArray):void 
+		{
+			var newFileName:String = contentName;
+			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
+			
+			try {
+				
+				fileStream.open(newFile, FileMode.WRITE);
+				fileStream.writeBytes(content);
+				fileStream.close();
+				
+			} catch(error:IOError) {
+//				var er:* =  error;
+				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+newFileName);
+				return;
+			}
+			
+//			cachedFiles.addItem({create:newFile.creationDate.time, name:newFile.name, size:newFile.size})
+		}
+			
+		private function creatTree(product:XML):void
+		{
+			var toc:XML =  new XML();
+				toc = product.toc[0];
+			tree.dataProvider = toc;
+			tree.selectedIndex = 0;
+			tree.validateNow();
+			
+			var pageName:String = tree.selectedItem.@name;
+			showSelectedPage(pageName);
+//			treeChangeHandler();
+		}
+			
+		private function treeChangeHandler(object:Object):void
+		{
+			trace("---selected \n" + tree.selectedItem.@name);
+			
+		}
+		
+		private function showSelectedPage(pageName:String):void
+		{
+			trace(pageName);
+		}
+		
+	]]>
+</mx:Script>
+	<mx:Tree id="tree" x="81" y="70" width="145" height="249"
+		labelField="@title" showRoot="false" change="{treeChangeHandler(event)}" />
+	<mx:HTML x="267" y="72" width="362" height="247"/>
+	<mx:Button x="690" y="71"  label="Load 1-st XML" click="{frstLoadXML()}"/>
+	<mx:Button x="690" y="120" label="Load 2-nd XML"/>
+	<mx:Button x="690" y="171" label="Button"/>
+	<mx:Button x="690" y="230" label="Button"/>
+	<mx:Button x="690" y="281" label="Button"/>
+	
+</mx:WindowedApplication>
