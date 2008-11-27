@@ -18,7 +18,7 @@ package ExtendedAPI.com.utils
         [Bindable("filenameChanged")]
 	    public function set filename(value:String):void
 	    {
-	    	file.url = FileUtils.pathToUrl(value);
+	    	file = new File(value); 
 			loadAndConvert();
 	    }	
 	    public function get filename():String
@@ -34,8 +34,7 @@ package ExtendedAPI.com.utils
 	       	    
        	public function FileToBase64(filename:String):void
        	{
-       		file = new File();
-       		file.url = FileUtils.pathToUrl(filename);
+       		file = new File(filename);
     	    
     	    fileStream = new FileStream();
        	}
