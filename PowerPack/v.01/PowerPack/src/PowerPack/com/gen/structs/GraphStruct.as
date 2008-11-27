@@ -8,6 +8,7 @@ package PowerPack.com.gen.structs
 		public var bGlobal:Boolean;
 		
 		public var initNode:NodeStruct;
+		public var passCount:int = 0;
 		
 		[ArrayElementType("NodeStruct")]
 		public var nodes:Array = [];

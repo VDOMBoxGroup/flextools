@@ -48,7 +48,7 @@
 			{            	
             	var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template; 
 				
-				if(tpl.b64picture || tpl.picturePath)
+				if(tpl.b64picture || tpl.picture)
 				{
 					gridRemovePic.visible = true;
 					gridRemovePic.includeInLayout = true;
@@ -61,12 +61,12 @@
             		
         		txtName.text = tpl.name;
 				txtDesc.text = tpl.description;
-				picBrowse.text = tpl.picturePath;
+				picBrowse.text = tpl.picture.nativePath;
 				txtKey.text = tpl.key;
 				
-				if(tpl.picturePath)
+				if(tpl.picture)
 				{
-					tplImg.source = tpl.picturePath; 
+					tplImg.source = tpl.picture.nativePath; 
 
 					b64Img.visible = false; 
 					b64Img.includeInLayout = false; 
@@ -102,7 +102,7 @@
 					
 				picBrowse.txtInput.text = '';
 				picBrowse.text = '';
-				tpl.picturePath = '';
+				tpl.picture = null;
 				
 				delete tpl.xml.picture;
 			}

@@ -50,27 +50,18 @@
 			}
 			
 			public var template:Template;
-			private var filterArray:Array = 
-				[
-					new FileFilter(
-            			StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
-            			"*.xml"),
-            	
-            		new FileFilter(
-            			StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
-            			"*.*")
-				];
 
 			private function onShow(event:Event):void
 			{
 				tplBrowse.txtInput.setFocus();		
-				tplBrowse.filterArray = filterArray;
+				tplBrowse.filterArray = [Template.tplFilter, Template.allFilter];
 			}
 			
 			///////////////////////////////////////////////////////
 			
 			private function onSelectTemplate():void
 			{
+				/*
 				if(!FileUtils.isValidPath(tplBrowse.text))
 				{
    					SuperAlert.show(
@@ -79,69 +70,31 @@
 						4, this.nativeWindow);
 					return;
 				}
-				
-            	var file:File = new File(tplBrowse.text);
-           		var stream:FileStream = new FileStream();
-				
-           		if(!file.exists)
-   				{
-   					SuperAlert.show(
-						LanguageManager.sentences['msg_file_not_exists'], 
-						LanguageManager.sentences['warning'], 
-						4, this.nativeWindow);
-   					return;
-   				}	
-   					
-				ProgressManager.source = stream;
-				ProgressManager.start(ProgressManager.WINDOW_MODE);
+				*/
 				
 				tplTree.dataProvider = [];
-				
-				stream.addEventListener(Event.COMPLETE, completeTemplateHandler);
-    			stream.openAsync(file, FileMode.READ);				
+
+				template = new Template();
+				template.file = new File(tplBrowse.text);
+				template.addEventListener(Event.COMPLETE, completeTemplateHandler);
+				template.open();
             }
             
 	        private function completeTemplateHandler(event:Event):void
 	        {
-        		var fileStream:FileStream = event.target as FileStream;
-        		
-        		try
-        		{
-        			var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
-        		}
-        		catch(e:*)
-        		{
-   					SuperAlert.show(
-						LanguageManager.sentences['msg_not_valid_tpl_file'], 
-						LanguageManager.sentences['error'], 
-						4, this.nativeWindow);
-					
-					fileStream.close();
-   					return;        				
-        		}
-        		
-				fileStream.close();
-				
-				template = new Template(xml);
-				
 				if(template.isEncoded)
 				{
 					TemplateKey.show(onKeyDialogClose);
 				}
-				else
+				else if(template.xmlStructure)
 				{
-        			template.decode();		
-          			if(template.xmlStructure)
-        			{
-        				populateList();	
-						return;        					
-        			}		
+        			populateList();	
 				}
 	        }    
        
-            private function onKeyDialogClose(event:Event):void
+            private function onKeyDialogClose(event:CloseEvent):void
             {            	
-            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	if(event.detail == ModalDialog.OK)
             	{
             		if(event.target.txtKey.text)
             		{

@@ -20,6 +20,21 @@ import mx.utils.Base64Decoder;
 
 public class CashManager extends EventDispatcher
 {
+	
+	/**
+	 * Resource categories:
+	 * 1. template
+	 * 	a) application
+	 * 	b) module
+	 * 3. image
+	 * 	a) png, bmp, jpg...
+	 * 4. database
+	 * 	a) sqlite
+	 * 	b) xml
+	 * 5. logo  
+	 * 	a) png, bmp, jpg...
+	 */
+	 	
 	//--------------------------------------------------------------------------
 	//
 	//  Class variables
@@ -158,7 +173,7 @@ public class CashManager extends EventDispatcher
 		return xml;
 	}
 	
-	private static function setMainIndex(index:XML):void
+	public static function setMainIndex(index:XML):void
 	{		
 		var mainIndex:File = cashFolder.resolvePath('index.xml');
 		
@@ -169,18 +184,18 @@ public class CashManager extends EventDispatcher
 		indexStream.close();
 	}
 
-	private static function addMainIndexEntry(index:XML, entryXML:XML):void
+	public static function addMainIndexEntry(index:XML, entryXML:XML):void
 	{
 		removeMainIndexEntry(index, entryXML.@ID);
 		index.appendChild(entryXML);
 	}
 
-	private static function removeMainIndexEntry(index:XML, ID:String):void
+	public static function removeMainIndexEntry(index:XML, ID:String):void
 	{
 		delete getMainIndexEntry(index, ID);
 	}
 	
-	private static function updateMainIndexEntry(index:XML, ID:String, attr:String, value:String):void
+	public static function updateMainIndexEntry(index:XML, ID:String, attr:String, value:String):void
 	{
 		var entry:XML = getMainIndexEntry(index, ID);
 		
@@ -188,7 +203,7 @@ public class CashManager extends EventDispatcher
 			entry['@'+attr] = value;
 	}
 	
-	private static function getMainIndexEntry(index:XML, ID:String):XML
+	public static function getMainIndexEntry(index:XML, ID:String):XML
 	{
 		var entries:XMLList = index.instance.(hasOwnProperty('@ID') && @ID == ID);
 		
@@ -249,7 +264,7 @@ public class CashManager extends EventDispatcher
 		return xml;
 	}
 
-	private static function setIndex(index:XML):void
+	public static function setIndex(index:XML):void
 	{
 		var folder:File = cashFolder.resolvePath(index.@folder);		
 		var indexFile:File = folder.resolvePath('index.xml');
@@ -261,18 +276,18 @@ public class CashManager extends EventDispatcher
 		indexStream.close();		
 	}
 	
-	private static function addIndexEntry(index:XML, entryXML:XML):void
+	public static function addIndexEntry(index:XML, entryXML:XML):void
 	{
 		removeIndexEntry(index, entryXML.@ID);
 		index.appendChild(entryXML)
 	}
 
-	private static function removeIndexEntry(index:XML, objID:String):void
+	public static function removeIndexEntry(index:XML, objID:String):void
 	{
 		delete getIndexEntry(index, objID);	
 	}
 	
-	private static function updateIndexEntry(index:XML, objID:String, attr:String, value:String):void
+	public static function updateIndexEntry(index:XML, objID:String, attr:String, value:String):void
 	{
 		var entry:XML = getIndexEntry(index, objID);
 		
@@ -280,7 +295,7 @@ public class CashManager extends EventDispatcher
 			entry['@' + attr] = value;
 	}
 
-	private static function getIndexEntry(index:XML, objID:String):XML
+	public static function getIndexEntry(index:XML, objID:String):XML
 	{
 		var entries:XMLList = index.resource.(hasOwnProperty('@ID') && @ID == objID);
 		
@@ -376,6 +391,18 @@ public class CashManager extends EventDispatcher
 		return (entry!=null?true:false)
 	}
 			
+	public static function getFolder(ID:String):File
+	{
+		var mainIndex:XML = getMainIndex();
+		var entry:XML = getMainIndexEntry(mainIndex, ID);
+
+		if(!entry)
+			return null;
+			
+		var folder:File = cashFolder.resolvePath(entry.@folder);		
+		return folder;
+	}
+	
 	public static function getObjectEntry(ID:String, objID:String):XML
 	{
 		initialize();
@@ -411,7 +438,16 @@ public class CashManager extends EventDispatcher
 			
 		return false;		
 	}
+	
+	public static function getStringObject(ID:String, objID:String):String 
+	{
+		var resObj:Object = CashManager.getObject(ID, objID);
+		var resData:ByteArray = ByteArray(resObj.data);
+		var content:String = resData.readUTFBytes(resData.bytesAvailable);
 		
+		return content; 
+	}	
+	
 	/**
 	 * 
 	 * @param ID
@@ -457,6 +493,7 @@ public class CashManager extends EventDispatcher
 		
 		var data:ByteArray = new ByteArray();
 		dataStream.readBytes(data, 0, dataStream.bytesAvailable);
+		data.position = 0;
 		dataStream.close();
 		
 		updateIndexEntry(index, objID, 'lastRequest', UTCNow().getTime().toString());
@@ -634,11 +671,17 @@ public class CashManager extends EventDispatcher
 		if(!index)
 			return;
 		
+		index.@ID = newID;
 		index.@folder = getFolderName(newID);
+
+		var folder:File = getFolder(ID);
+		var newFolder:File = folder.parent.resolvePath(index.@folder);
 		
 		updateMainIndexEntry(mainIndex, ID, 'folder', index.@folder);
 		updateMainIndexEntry(mainIndex, ID, 'ID', newID);
 
+		folder.moveTo(newFolder, true);
+		
 		setIndex(index);		
 		setMainIndex(mainIndex);		
 	}

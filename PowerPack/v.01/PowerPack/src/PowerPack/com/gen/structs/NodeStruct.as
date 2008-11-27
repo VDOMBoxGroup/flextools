@@ -12,6 +12,7 @@ package PowerPack.com.gen.structs
 		public var enabled:Boolean;
 		public var text:String;
 		
+		public var passCount:int = 0;
 		public var graph:GraphStruct;
 		
 		[ArrayElementType("ArrowStruct")]

@@ -88,8 +88,7 @@ public class ContextManager extends EventDispatcher
 			_context = 'builder';
 		}
 		
-    	dataStorage = new File();
-    	dataStorage.url = FileUtils.pathToUrl(File.applicationStorageDirectory.nativePath);
+    	dataStorage = File.applicationStorageDirectory;
 	    
 	    settingStorage = dataStorage.resolvePath(_appContext[_context]['settingsFolder']);
     
@@ -97,8 +96,7 @@ public class ContextManager extends EventDispatcher
 	    	lastDir = File.documentsDirectory.resolvePath("PowerPack");
 	    }
 	    catch(e:Error) {
-	    	lastDir = new File();
-	    	lastDir.url = FileUtils.pathToUrl(File.applicationDirectory.nativePath);
+	    	lastDir = File.desktopDirectory;
 	    }
 	    
 	    files = [];
@@ -112,7 +110,8 @@ public class ContextManager extends EventDispatcher
 	//
 	//  Variables
 	//
-	//--------------------------------------------------------------------------			
+	//--------------------------------------------------------------------------	
+			
 	[Embed(source="assets/icons/icon_16.png")]
 	[Bindable]
  	public static var iconClass:Class;
@@ -170,6 +169,7 @@ public class ContextManager extends EventDispatcher
  	//
 
 	private var _context:String = 'builder';
+	
 	private var _appContext:Object = {
 		builder:{ settingsFolder:"Builder" },
 		generator:{ settingsFolder:"Generator" }
@@ -187,7 +187,7 @@ public class ContextManager extends EventDispatcher
     public var settingStorage:File;
     public var genSettingStorage:File;
     
-    public var files:Array;	    
+    public var files:Array = [];	    
     public var lastFile:Boolean;
     public var lastDir:File;
     public var lang:Object;
@@ -201,7 +201,7 @@ public class ContextManager extends EventDispatcher
 	public var saveToServer:Boolean;
 	
 	[Bindable]
-	public var host:String = "http://192.168.0.24";
+	public var host:String = "http://localhost";
 	[Bindable]
 	public var default_port:String = "80";
 	[Bindable]
@@ -269,6 +269,7 @@ public class ContextManager extends EventDispatcher
     	}
     	
     	ContextManager.instance.files.unshift(file);
+    	
     	if(ContextManager.instance.files.length>ContextManager.FILE_NUM_STORE)
     		ContextManager.instance.files.pop();
 	}
@@ -300,8 +301,7 @@ public class ContextManager extends EventDispatcher
 		tmpStr = Utils.getStringOrDefault(instance.settingsXML.lastdir, instance.lastDir ? instance.lastDir.nativePath : null);
 		if(FileUtils.isValidPath(tmpStr))
 		{
-			instance.lastDir = new File();
-			instance.lastDir.url = FileUtils.pathToUrl(tmpStr);
+			instance.lastDir = new File(tmpStr);
  		}
  		
 		// get app file 
@@ -309,12 +309,10 @@ public class ContextManager extends EventDispatcher
 		if(FileUtils.isValidPath(tmpStr))
 		{
 			instance.file = new File(tmpStr);
-			//instance.file.url = FileUtils.pathToUrl(tmpStr);
  		}
  		
  		// get files and last open file
- 		tmpStr = (Utils.getStringOrDefault(instance.settingsXML.lastfile, "false")).toString();
- 		instance.lastFile = tmpStr.toLowerCase()=="true"?true:false;
+ 		instance.lastFile = Utils.getBooleanOrDefault(instance.settingsXML.lastfile); 
 		
 		tmpStr = Utils.getStringOrDefault(instance.settingsXML.files, null);
 		if(tmpStr)
@@ -332,28 +330,23 @@ public class ContextManager extends EventDispatcher
 				if(FileUtils.isValidPath(fileArr[i]))
 				{
 					file = new File(fileArr[i]);
-					//file.url = FileUtils.pathToUrl(fileArr[i]);
 					instance.files.push(file);
 	 			}
  			}
  		}
 
  		// save to file option
- 		tmpStr = (Utils.getStringOrDefault(instance.settingsXML.savetofile, "false")).toString();
- 		instance.saveToFile = tmpStr.toLowerCase()=="true"?true:false;
+ 		instance.saveToFile = Utils.getBooleanOrDefault(instance.settingsXML.savetofile);
  		
  		// save to server option
- 		tmpStr = (Utils.getStringOrDefault(instance.settingsXML.savetoserver, "false")).toString();
- 		instance.saveToServer = tmpStr.toLowerCase()=="true"?true:false;
+ 		instance.saveToServer = Utils.getBooleanOrDefault(instance.settingsXML.savetoserver);
  		 		
 		// get connection params 
 		instance.host = Utils.getStringOrDefault(instance.settingsXML.host, instance.host);
 		instance.port = Utils.getStringOrDefault(instance.settingsXML.port, instance.port);
 
 		instance.default_port = Utils.getStringOrDefault(instance.settingsXML.defaulthost, instance.default_port);
-
- 		tmpStr = (Utils.getStringOrDefault(instance.settingsXML.usedefport, "true")).toString();
- 		instance.use_def_port = tmpStr.toLowerCase()=="true"?true:false;
+ 		instance.use_def_port = Utils.getBooleanOrDefault(instance.settingsXML.usedefport);
 
 		// get authentication params 
 		instance.login = Utils.getStringOrDefault(instance.settingsXML.login, instance.login);
@@ -370,8 +363,7 @@ public class ContextManager extends EventDispatcher
 			instance.pass = instance.pass ? instance.pass : tmpStr;
 		} 
 		 
- 		tmpStr = (Utils.getStringOrDefault(instance.settingsXML.savepass, "false")).toString();
- 		instance.save_pass = tmpStr.toLowerCase()=="true"?true:false;
+ 		instance.save_pass = Utils.getBooleanOrDefault(instance.settingsXML.savepass);
 		
  		// get ...        	
     }	

@@ -1,14 +1,14 @@
 package PowerPack.com.gen
 {
-	import PowerPack.com.gen.structs.NodeStruct;
+import PowerPack.com.gen.structs.NodeStruct;
+
+public class NodeContext
+{
+	public var node:NodeStruct;
 	
-	public class NodeContext
+	public function NodeContext(_node:NodeStruct)
 	{
-		public var node:NodeStruct;
-		
-		public function NodeContext(_node:NodeStruct)
-		{
-			node = _node;
-		}
+		node = _node;
 	}
+}
 }

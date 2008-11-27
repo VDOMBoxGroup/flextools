@@ -2,7 +2,6 @@ package PowerPack.com
 {
 import ExtendedAPI.com.containers.SuperAlert;
 import ExtendedAPI.com.utils.FileToBase64;
-import ExtendedAPI.com.utils.FileUtils;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.managers.CashManager;
@@ -15,6 +14,7 @@ import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
+import flash.events.OutputProgressEvent;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
@@ -68,9 +68,17 @@ public class Template extends EventDispatcher
 	public static var defaultCaptions:Object = {
 	};
 	
-	public static const TYPE_APPLICATION:String = "Application";
-	public static const TYPE_MODULE:String = "Module";
+	public static const TYPE_APPLICATION:String = "application";
+	public static const TYPE_MODULE:String = "module";
 			
+	public static var tplFilter:FileFilter = new FileFilter(
+		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
+		"*.xml");
+	
+	public static var allFilter:FileFilter = new FileFilter(
+		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
+		"*.*");	
+
 	//--------------------------------------------------------------------------
 	//
 	//  Constructor
@@ -107,6 +115,7 @@ public class Template extends EventDispatcher
 	 */		 
 	 public function dispose():void
 	 {
+	 	_picture = null;
 	 	file = null;
 	 	_xml = null;
 	 }  
@@ -121,25 +130,42 @@ public class Template extends EventDispatcher
 	public var key:String;
 	
 	[Bindable]
-	public var modified:Boolean;
+	public var file:File;
 	
-	[Bindable]
-	public var file:File;	
-	
-	public var tplFilter:FileFilter = new FileFilter(
-		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
-		"*.xml");
-	
-	public var allFilter:FileFilter = new FileFilter(
-		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
-		"*.*");	
-
     //--------------------------------------------------------------------------
 	//
 	//  Properties
 	//
 	//--------------------------------------------------------------------------
     
+
+    //----------------------------------
+    //  modified
+    //----------------------------------
+
+	private var _modified:Boolean;
+	
+	[Bindable]
+	public function set modified(value:Boolean):void
+	{
+		if(_modified!=value)
+		{
+			_modified = value;
+			
+			if(_modified)
+			{
+				var mainIndex:XML = CashManager.getMainIndex();	
+				CashManager.updateMainIndexEntry(mainIndex, ID, 'saved', 'false');
+				CashManager.setMainIndex(mainIndex);
+			}		
+		}
+	}
+	public function get modified():Boolean
+	{
+		return _modified;
+	}		
+
+
     //----------------------------------
     //  xml
     //----------------------------------
@@ -171,26 +197,6 @@ public class Template extends EventDispatcher
 		return _xmlStructure;
 	}		
 
-    //----------------------------------
-    //  picturePath
-    //----------------------------------
-	
-	private var _picturePath:String;
-			
-	[Bindable]
-	public function set picturePath(value:String):void
-	{
-		if(_picturePath!=value)
-		{
-			modified = true;
-			_picturePath = value;		
-		}
-	}
-	public function get picturePath():String
-	{
-		return _picturePath;
-	}	
-					
     //----------------------------------
     //  name
     //----------------------------------
@@ -242,9 +248,32 @@ public class Template extends EventDispatcher
 	}		
 	public function get ID():String
 	{
+		if(!_xml.hasOwnProperty('@ID'))
+			_xml.@ID = UIDUtil.createUID();
+
 		return _xml.@ID;	
 	}		
 
+    //----------------------------------
+    //  picturePath
+    //----------------------------------
+	
+	private var _picture:File;
+			
+	[Bindable]
+	public function set picture(value:File):void
+	{
+		if(_picture.nativePath!=value.nativePath)
+		{
+			modified = true;
+			_picture = value;		
+		}
+	}
+	public function get picture():File
+	{
+		return _picture;
+	}	
+					
     //----------------------------------
     //  b64picture
     //----------------------------------
@@ -280,27 +309,75 @@ public class Template extends EventDispatcher
 	
 	public function isValidTpl(xmlData:XML):Boolean
 	{
+		if(xmlData.name() != 'template')
+			return false;
+			
+		if(!xmlData.hasOwnProperty('encoded') && !xmlData.hasOwnProperty('structure'))
+			return false;
+			
 		return true;
 	}
 	
 	public function save():void
 	{
+		if(!file)
+		{
+			browseForSave();
+			return;
+		}		
 		
-		modified = false;
-	}
-	
-	
-	public function saveAs():void
-	{
+		ProgressManager.start(null, false);
 		
-		modified = false;
+		// cash template
+		CashManager.setStringObject(ID, 
+			XML(
+				"<resource " + 
+				"category='template' " + 
+				"ID='template' " + 
+				"name='" + name + "' " + 
+				"type='" + TYPE_APPLICATION + "' />"), 
+			_xml);
+			
+		/// get resources from cash 
+   		fromCash();
+   		
+   		// set (+encrypt) structure and resources data
+   		encode();
+      			
+      	// update tpl UID
+   		var oldID:String = ID;
+   		delete _xml.@ID;    		
+   		CashManager.updateID(oldID, ID);
+
+	   	var stream:FileStream = new FileStream();
+		
+		ProgressManager.source = stream;
+		ProgressManager.start();
+		
+		stream.addEventListener(Event.COMPLETE, saveHandler);
+		stream.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
+		stream.addEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
+		stream.openAsync(file, FileMode.WRITE);				
+		
+		stream.writeUTFBytes(_xml.toXMLString());
 	}
 	
 	public function open():void
 	{
+		// check for not saved tpl
+		
 		if(!file)
 		{
 			browseForOpen();
+			return;
+		}
+		
+		if(!file.exists)
+		{
+			SuperAlert.show(
+				LanguageManager.sentences['msg_file_not_exists'],
+				LanguageManager.sentences['error']);
+			
 			return;
 		}
 		
@@ -312,11 +389,31 @@ public class Template extends EventDispatcher
 		stream.addEventListener(Event.COMPLETE, openHandler);
 		stream.addEventListener(IOErrorEvent.IO_ERROR, openErrorHandler);
 		stream.openAsync(file, FileMode.READ);
-		
-		//ContextManager.updateLastFiles(file);            	
-		//MenuGeneral.updateLastFilesMenu(fileMenuData);
 	}
 
+	public function browseForSave():void
+	{
+        var folder:File = ContextManager.instance.lastDir;
+						
+		folder.addEventListener(Event.SELECT, saveBrowseHandler);
+		folder.browseForSave(LanguageManager.sentences['save_file']);
+		
+		function saveBrowseHandler(event:Event):void {
+			var f:File = event.target as File;
+			f.removeEventListener(Event.SELECT, saveBrowseHandler);
+			
+			if(f.isDirectory || f.isPackage || f.isSymbolicLink)
+            	return;
+           	
+           	if(!f.extension || f.extension.toLowerCase() != 'xml')            	
+            	f = f.parent.resolvePath(f.name+'.xml');
+            		            
+            file = f;
+         	
+         	save();   
+		}
+	}
+	
 	public function browseForOpen():void
 	{
         var folder:File = ContextManager.instance.lastDir;
@@ -326,8 +423,9 @@ public class Template extends EventDispatcher
 		
 		function openBrowseHandler(event:Event):void {
 			var f:File = event.target as File;
+			f.removeEventListener(Event.SELECT, openBrowseHandler);
 			
-			if(f.isDirectory)
+			if(f.isDirectory || f.isPackage || f.isSymbolicLink)
             	return;
             
             file = f;
@@ -389,28 +487,22 @@ public class Template extends EventDispatcher
 			_xmlStructure = _xml.structure[0];
 	}
 	
-	public function setPictureFromPath():void
+	public function setPictureFromFile():void
 	{
-		if(!picturePath || !FileUtils.isValidPath(picturePath))
+		if(!picture || !picture.exists)
 		{
 			//throw new BasicError("Not valid filename");
 			return;
 		}
-	
-		var file:File = new File(picturePath);
-		//file.url = FileUtils.pathToUrl(picturePath);
-	
-		if(!file.exists)
-		{
-			//throw new BasicError("File does not exists");
-			return;
-		}
 		
-		picturePath = null;
-		
-		var fileToBase64:FileToBase64 = new FileToBase64(file.nativePath);
+		var fileToBase64:FileToBase64 = new FileToBase64(picture.nativePath);
 		fileToBase64.convert();						
 		b64picture = fileToBase64.data.toString();
+		
+		_xml.picture[0].@type = file.extension;
+		_xml.picture[0].@name = file.name;
+		
+		picture = null;
 	}
 	
 	public function cash():void
@@ -428,15 +520,73 @@ public class Template extends EventDispatcher
 		} 
 		
 		delete _xml.resources;
-		
+
+		if(b64picture)
+		{
+			var picXML:XML = _xml.picture[0];
+			CashManager.setStringObject(ID, 
+				XML(
+					"<resource " + 
+					"category='logo' " + 
+					"ID='logo' " + 
+					"name='" +		Utils.getStringOrDefault(picXML.@name, "") + "' " + 
+					"type='" +		Utils.getStringOrDefault(picXML.@type, "") + "' />"), 
+				b64picture);
+				
+			delete _xml.picture;
+		}
+
 		CashManager.setStringObject(ID, 
 			XML(
 				"<resource " + 
 				"category='template' " + 
-				"ID='" + ID + "' " + 
+				"ID='template' " + 
 				"name='" + name + "' " + 
 				"type='" + TYPE_APPLICATION + "' />"), 
-			res);
+			_xml);
+	}
+
+	public function fromCash():void
+	{
+      	if(picture)
+      		setPictureFromFile();
+      	else
+      	{
+      		delete _xml.picture;
+      		
+      		var picObj:Object = CashManager.getObject(ID, 'logo');
+      		if(picObj)
+      		{
+      			var picData:ByteArray = ByteArray(picObj.data);
+      		
+      			_xml.picture = picData.readUTFBytes(picData.bytesAvailable);
+      			_xml.picture.@name = XML(picObj.entry).@name;       		
+      			_xml.picture.@type = XML(picObj.entry).@type;
+      		}
+      	}
+		
+		var index:XML = CashManager.getIndex(ID);
+		
+		if(index)
+		{
+			var resources:XMLList = index.resource.(hasOwnProperty('category') && (@category=='image' || @category=='database'));
+		
+			for each (var res:XML in resources)
+			{
+				delete _xml.resources;
+				
+				var resObj:Object = CashManager.getObject(ID, res.@ID);
+				var resData:ByteArray = ByteArray(resObj.data);
+				var content:String = resData.readUTFBytes(resData.bytesAvailable);
+				
+				var resXML:XML = <resource><![CDATA[{content}]]></resource>;
+				resXML.@ID = resObj.entry.@ID;
+				resXML.@type = resObj.entry.@type;
+				resXML.@name = resObj.entry.@name;
+				
+				XML(_xml.resources).appendChild(resXML);
+			}
+		}
 	}
 
 	//--------------------------------------------------------------------------
@@ -445,15 +595,70 @@ public class Template extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 	
+	private function outputProgressHandler(event:OutputProgressEvent):void
+	{
+		var stream:FileStream = event.target as FileStream;
+		if(event.bytesPending==0)	
+			stream.dispatchEvent(new Event(Event.COMPLETE)); 
+	}
+	
+	private function saveHandler(event:Event):void 
+	{
+		var stream:FileStream = event.target as FileStream;
+		
+		stream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
+		stream.removeEventListener(Event.COMPLETE, saveHandler);
+		stream.removeEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
+				
+    	try 
+    	{
+    		stream.close();
+    		
+    		ProgressManager.start(ProgressManager.DIALOG_MODE, false);
+			
+			_xml = XML(CashManager.getStringObject(ID, 'template'));
+			
+			var mainIndex:XML = CashManager.getMainIndex();	
+			CashManager.updateMainIndexEntry(mainIndex, ID, 'saved', 'true');
+			CashManager.setMainIndex(mainIndex);
+			
+			modified = false;
+
+			ProgressManager.complete();
+			
+			dispatchEvent( new Event(Event.COMPLETE) );
+    	}
+    	catch(e:Error)
+    	{
+    		ProgressManager.complete();
+	
+			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
+				LanguageManager.sentences['msg_not_valid_tpl_file']);
+			 
+			dispatchEvent(errEvent);
+			
+			if(!errEvent.isDefaultPrevented())
+			{
+				SuperAlert.show( 
+					LanguageManager.sentences['msg_not_valid_tpl_file'],
+					LanguageManager.sentences['error']);    		
+			}
+    	}			
+	}	
+	
 	private function openHandler(event:Event):void 
 	{
 		var stream:FileStream = event.target as FileStream;
-    	
+		stream.removeEventListener(Event.COMPLETE, openHandler);
+		stream.removeEventListener(IOErrorEvent.IO_ERROR, openErrorHandler);
+		    	
     	try 
     	{
     		ProgressManager.start(ProgressManager.DIALOG_MODE, false);
     		 
     		var strData:String = stream.readUTFBytes(stream.bytesAvailable);
+    		stream.close();
+    		
     		var xmlData:XML = XML(strData);
     		
     		if(!isValidTpl(xmlData))
@@ -461,13 +666,10 @@ public class Template extends EventDispatcher
 			
 			_xml = xmlData;
 			
-			if(isEncoded && key)
-			{
-				decode();
+			decode();
 				
-				if(xmlStructure)
-					cash();
-			}
+			if(xmlStructure)
+				cash();
 			
 			ProgressManager.complete();
 
@@ -476,8 +678,9 @@ public class Template extends EventDispatcher
     	}
     	catch(e:Error)
     	{
-    		ProgressManager.complete();
 			stream.close();
+
+    		ProgressManager.complete();
 	
 			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
 				LanguageManager.sentences['msg_not_valid_tpl_file']);
@@ -493,11 +696,14 @@ public class Template extends EventDispatcher
     	}			
 	}
 	
-	private function openErrorHandler(event:IOErrorEvent):void
+	private function saveErrorHandler(event:IOErrorEvent):void
 	{
 		ProgressManager.complete();
 
 		var stream:FileStream = event.target as FileStream;
+		stream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
+		stream.removeEventListener(Event.COMPLETE, saveHandler);
+		stream.removeEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
 		file.cancel();
 		stream.close();
 
@@ -508,7 +714,29 @@ public class Template extends EventDispatcher
 		if(!errEvent.isDefaultPrevented())
 		{
 			SuperAlert.show( 
-				LanguageManager.sentences['msg_ioerror_occurs'],
+				errEvent.text,
+				LanguageManager.sentences['error']);
+		}	
+	}
+		
+	private function openErrorHandler(event:IOErrorEvent):void
+	{
+		ProgressManager.complete();
+
+		var stream:FileStream = event.target as FileStream;
+		stream.removeEventListener(Event.COMPLETE, openHandler);
+		stream.removeEventListener(IOErrorEvent.IO_ERROR, openErrorHandler);		
+		file.cancel();
+		stream.close();
+
+		var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, event.text);
+		 
+		dispatchEvent(errEvent);
+		
+		if(!errEvent.isDefaultPrevented())
+		{
+			SuperAlert.show( 
+				errEvent.text,
 				LanguageManager.sentences['error']);
 		}	
 	}

@@ -221,23 +221,20 @@
 	            // Load template  
 	            if(ContextManager.instance.lastFile && ContextManager.instance.files[0])
     	        {
-					file = ContextManager.instance.files[0];
+    	        	var tpl:Template = new Template();    	        	
+					tpl.file = ContextManager.instance.files[0];
+					tpl.addEventListener(Event.COMPLETE, completeTemplateHandler);
 					
-		            if(file.exists)
-		            {
-						fileStream = new FileStream();
-						
-						ProgressManager.source = fileStream;
-						ProgressManager.start();
-
-						fileStream.addEventListener(Event.COMPLETE, completeTemplateHandler);
-						fileStream.openAsync(file, FileMode.READ);
-		            }
+					tpl.open();
             	}
             	
             	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
             	//trace(describeType(Dynamic));
-            	
+		    	       	
+	       		function closingApplicationHandler(event:Event):void {
+	       			event.preventDefault();
+	       			exitApplication();	   
+	       		}            	
 		    }
 		    		    
 		    private function onProblemsDoubleClick(event:MouseEvent):void
@@ -266,24 +263,10 @@
 		    		pnl_graphs.showGraphByName(grid.selectedItem.data.graph.id);
 		    	}
 		    }
-		    	       	
-	       	private function closingApplicationHandler(event:Event):void
-	       	{
-	       		event.preventDefault();
-	       		exitApplication();	   
-	       	}
-	       	
-	       	public function saveTemplate():void
-	       	{
-   				SuperAlert.show(
-   					"Do you want to save template?", 
-   					LanguageManager.sentences['confirmation'], 
-   					Alert.YES|Alert.NO|Alert.CANCEL, this.nativeWindow, alertSaveHandler, null, Alert.YES);
-	       	}
 	       	
 	       	public function exitApplication(event:Event=null):void
 	       	{
-	       		if(ContextManager.instance.lastFile && ContextManager.instance.templates[0].modified)
+	       		if(ContextManager.instance.templates.length>0 && ContextManager.instance.templates[0].modified)
 	       		{
        				SuperAlert.show(
        					"Do you want to save file before exit?", 
@@ -297,65 +280,142 @@
 	       				LanguageManager.sentences['confirmation'], 
 	       				Alert.YES|Alert.NO, this.nativeWindow, alertExitHandler, null, Alert.NO);
        			}
+       			
+			    function alertExitHandler(event:CloseEvent):void 
+			    {
+		        	if(event.detail==Alert.YES)
+		        	{  		
+						ContextManager.saveSettings();
+		       			exit();
+		   	     	}
+				}	      
+				
+			    function alertSaveBeforeExitHandler(event:CloseEvent):void 
+			    {
+		        	if(event.detail==Alert.YES)
+		        	{   
+              			var tpl:Template = ContextManager.instance.templates[0];
+              			tpl.addEventListener(Event.COMPLETE, templateSaveAndExitHandler);
+              			tpl.xmlStructure = pnl_graphs.toXML();
+              			tpl.save();				
+		        	}
+		        	else if(event.detail==Alert.NO)
+		       		{
+						ContextManager.saveSettings();
+		       			exit();	       		
+		       		}	   	     	
+				}	      
+			    
+			    function templateSaveAndExitHandler(event:Event):void 
+			    {
+			    	var tpl:Template = event.target as Template;
+			    	tpl.removeEventListener(Event.COMPLETE, templateSaveAndExitHandler);
+			    	
+			    	processSavedTpl();
+					ContextManager.saveSettings();
+		       		exit();	 			    	
+			    }       			
 	       	}
 	       	
-		    private function alertSaveBeforeExitHandler(event:CloseEvent):void 
-		    {
-	        	if(event.detail==Alert.YES)
-	        	{   
-              		if(ContextManager.instance.lastFile && ContextManager.instance.files[0])
-              		{
-              			var file:File = ContextManager.instance.files[0];
-              			var fileStream:FileStream = new FileStream();
-              			var tpl:Template = ContextManager.instance.templates[0];
-              			
-              			tpl.xmlStructure = pnl_graphs.toXML();
-              			tpl.encode();
-              			tpl.setPictureFromPath();
-              			
-              			fileStream.open(file, FileMode.WRITE);
-        				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
-        				fileStream.close();					
-              		}
-	        	}
-	       		
-	       		if(event.detail!=Alert.CANCEL)
-	       		{
-					ContextManager.saveSettings();
-	       			exit();	       		
-	       		}	   	     	
-			}	       	
+			public function closeTpl(ask:Boolean = true, action:Function=null, args:Array=null):void
+			{
+				if(ContextManager.instance.templates.length>0)
+				{
+					var tpl:Template = ContextManager.instance.templates[0];
+				
+					if((tpl.modified || !tpl.file) && ask)
+					{
+						alertSaveAndCloseTemplate(action, args);
+						return;
+					}
+				
+					ContextManager.instance.templates.removeItemAt(0);
+				}
+				
+	   	  		ContextManager.instance.lastFile = false;
+	       	    
+	       	    pnl_graphs.clear();
+	           	
+	           	workStage.visible = false;
+	           	workStage.includeInLayout = false;
+	           	
+				MenuGeneral.noTemplate(fileMenuData);
+				
+				if(action!=null)
+					callLater(action, args);
+			}
 
-		    private function alertSaveHandler(event:CloseEvent):void 
-		    {
-	        	if(event.detail==Alert.YES)
-	        	{   
-              		if(ContextManager.instance.lastFile && ContextManager.instance.files[0])
-              		{
-              			var file:File = ContextManager.instance.files[0];
-              			var fileStream:FileStream = new FileStream();
-              			var tpl:Template = ContextManager.instance.templates[0];
-              			
-              			tpl.xmlStructure = pnl_graphs.toXML();
-              			tpl.encode();
-              			tpl.setPictureFromPath();
-              			
-              			fileStream.open(file, FileMode.WRITE);
-        				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
-        				fileStream.close();					
-              		}
-	        	}	       		
-			}	       	
-
-		    private function alertExitHandler(event:CloseEvent):void 
-		    {
-	        	if(event.detail==Alert.YES)
-	        	{   
-					ContextManager.saveSettings();
-	       			exit();
-	   	     	}
-			}	      
+	       	public function alertSaveAndCloseTemplate(action:Function=null, args:Array=null):void
+	       	{
+   				SuperAlert.show(
+   					"Do you want to save template?", 
+   					LanguageManager.sentences['confirmation'], 
+   					Alert.YES|Alert.NO|Alert.CANCEL, this.nativeWindow, alertSaveAndCloseHandler, null, Alert.YES);
+			    
+			    function alertSaveAndCloseHandler(event:CloseEvent):void {
+		        	if(event.detail==Alert.YES)
+		        	{   
+	        			var tpl:Template = ContextManager.instance.templates[0];
+	          			tpl.addEventListener(Event.COMPLETE, templateSaveAndCloseHandler);
+	          			tpl.xmlStructure = pnl_graphs.toXML();
+	          			tpl.save();
+		        	}
+		        	else if(event.detail==Alert.NO)
+		        	{
+						closeTpl(false, action, args);	 			    	
+		        	}	
+				}	       	
+	
+			    function templateSaveAndCloseHandler(event:Event):void {
+					var tpl:Template = event.target as Template;
+	          		tpl.removeEventListener(Event.COMPLETE, templateSaveAndCloseHandler);			    	
+			    	processSavedTpl();
+					closeTpl(false, action, args);	 			    	
+			    }       			
+	       	}
 	    	    
+			public function processOpenedTpl():void
+			{
+				var tpl:Template = Template(ContextManager.instance.templates[0]);
+       			pnl_graphs.templateXML = tpl.xmlStructure;
+
+                workStage.visible = true;
+   	            workStage.includeInLayout = true;
+   	            
+   	            ContextManager.instance.lastFile = true;
+				ContextManager.updateLastFiles(tpl.file);            	
+				
+				MenuGeneral.updateLastFilesMenu(fileMenuData);
+				MenuGeneral.openedTemplate(fileMenuData);    	            
+			}
+			
+			public function processSavedTpl():void
+			{
+				var tpl:Template = Template(ContextManager.instance.templates[0]);
+
+                workStage.visible = true;
+   	            workStage.includeInLayout = true;
+   	            
+   	            ContextManager.instance.lastFile = true;
+				ContextManager.updateLastFiles(tpl.file);            	
+				
+				MenuGeneral.updateLastFilesMenu(fileMenuData);
+				MenuGeneral.openedTemplate(fileMenuData);    	            
+			}
+						
+			public function processNewTpl():void
+			{
+				var tpl:Template = Template(ContextManager.instance.templates[0]);
+       			pnl_graphs.templateXML = tpl.xmlStructure;
+
+                workStage.visible = true;
+   	            workStage.includeInLayout = true;
+   	            
+   	            ContextManager.instance.lastFile = false;
+				
+				MenuGeneral.newTemplate(fileMenuData);    	            
+			}
+							
 			//--------------------------------------------------------------------------
 		    //
 		    //  Event handlers
@@ -364,7 +424,9 @@
 		    
 	        private function completeLangHandler(event:Event):void
 	        {
-        		var fileStream:FileStream = event.target as FileStream;
+        		var fileStream:FileStream = event.target as FileStream;        		
+        		fileStream.removeEventListener(Event.COMPLETE, completeLangHandler);
+        		
         		var xml:XML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
 				fileStream.close();
         		
@@ -376,87 +438,52 @@
 	        
 	        private function completeTemplateHandler(event:Event):void
 	        {
-        		var fileStream:FileStream = event.target as FileStream;
-        		var xml:XML;
+	        	var template:Template = event.target as Template;
 
-        		try {
-        			xml = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
-        			
-        			if( xml.name()!='template' ) 
-        				throw new Error();
-        			
-        			if( !xml.hasOwnProperty('structure') && !xml.hasOwnProperty('encoded') )
-	        			throw new Error();
-	        			        		
-					fileStream.close();
+	        	template.removeEventListener(Event.COMPLETE, completeTemplateHandler);
+	        	
+	        	closeTpl(false);
+	        	
+    			ContextManager.instance.templates.addItemAt(template, 0);
 					
-					var template:Template = new Template(xml);
-					
-	        		if(ContextManager.instance.templates.length==0)
-		    			ContextManager.instance.templates.addItemAt(template, 0);
-	    			else
-	    				ContextManager.instance.templates[0] = template;
-					
-					//
-					MenuGeneral.noTemplate(fileMenuData);
-	    	  		ContextManager.instance.lastFile = false;
-	        	    pnl_graphs.clear();
-	            	workStage.visible = false;
-	            	workStage.includeInLayout = false;
-					//                
-					
-					if(template.isEncoded)
-					{
-						TemplateKey.show(onKeyDialogClose);
-					}
-					else
-					{
-						
-	        			var tpl:Template = ContextManager.instance.templates[0];        			
-	        			tpl.decode();	
-	        			pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlStructure;				
-	
-		                workStage.visible = true;
-	    	            workStage.includeInLayout = true;
-	    	            ContextManager.instance.lastFile = true;
-	    	            MenuGeneral.openedTemplate(fileMenuData);
-					}
-        		} 
-        		catch(e:*)
-        		{
-					fileStream.close();
-
-        			SuperAlert.show( 
-        				LanguageManager.sentences['msg_not_valid_tpl_file'],
-        				LanguageManager.sentences['error']);        				
-        		}
+				if(template.isEncoded)
+				{
+					TemplateKey.show(onKeyDialogClose);
+				}
+				else
+				{
+					processOpenedTpl();
+				}
 	        }	        
-            
-            private function onKeyDialogClose(event:Event):void
+	        
+            private function onKeyDialogClose(event:CloseEvent):void
             {            	
-            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	if(event.detail == ModalDialog.OK)
             	{
             		if(event.target.txtKey.text)
             		{
             			var tpl:Template = ContextManager.instance.templates[0];
             			
             			tpl.key = event.target.txtKey.text;
+            			
+            			ProgressManager.start(ProgressManager.DIALOG_MODE, false);
+            			
             			tpl.decode();
-            			if(tpl.xmlStructure)
-            			{
-            				pnl_graphs.templateXML = ContextManager.instance.templates.getItemAt(0).xmlStructure;
-            				
-			                workStage.visible = true;
-	    		            workStage.includeInLayout = true;
-	    		            ContextManager.instance.lastFile = true;
-							return;        					
-            			}
-            		}
-					
-					ContextManager.instance.lastFile = false;
-            		ContextManager.instance.templates.removeItemAt(0);
-            		SuperAlert.show("Invalid secret key.");
-            	}         	
+            			
+						if(tpl.xmlStructure)
+							tpl.cash();
+							
+						processOpenedTpl();
+						
+						ProgressManager.complete();			
+						
+						return;        					
+					}
+        			
+        			SuperAlert.show("Invalid secret key.");
+            	}
+				
+				closeTpl(false);
             }
             	    	    
            	public function templateChanged():void
@@ -472,93 +499,73 @@
            			}
            		}	
            	}	
+			
+			public function newTpl():void
+			{
+                var template:Template = new Template();
+
+   				ContextManager.instance.templates.addItemAt(template, 0);
+				
+				processNewTpl();									
+			}
+			
+			public function openTpl(file:File=null):void
+			{
+	        	var tpl:Template = new Template();    	        	
+				tpl.addEventListener(Event.COMPLETE, completeTemplateHandler);
+				if(file)
+					tpl.file = file;				
+				tpl.open();		
+			}
+				
            	
             // Event handler for the MenuBar control's itemClick event.
             private function menuHandler(event:Object):void  
             {
             	var file:File = ContextManager.instance.lastDir;
 				var fileStream:FileStream = new FileStream();
-            	
-            	var tmplFilter:FileFilter = new FileFilter(
-            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
-            		"*.xml");
-            	
-            	var filter:FileFilter = new FileFilter(
-            		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
-            		"*.*");
+				var tpl:Template;
 
                 if(event.item.@id == "new")
                 {
-                	ContextManager.instance.lastFile = false;
-	                pnl_graphs.clear();
-	                
-	                var template:Template = new Template();
-
-	                if(ContextManager.instance.templates.length==0)
-	    				ContextManager.instance.templates.addItemAt(template, 0);
-    				else
-    					ContextManager.instance.templates[0] = template;
-    					
-	                workStage.visible = true;
-	                workStage.includeInLayout = true;   
-	                MenuGeneral.newTemplate(fileMenuData); 				
+                	closeTpl(true, newTpl);
                 }
+                else if(event.item.@id == "open_file")
+                {		
+    	        	closeTpl(true, openTpl);
+                }
+				else if(event.item.@tag == "lastfiles")
+				{					
+					closeTpl(true, openTpl, [new File(event.item.@data)]);
+				}     
+    	        else if(event.item.@id == "save")
+    	        {
+    	        	if(ContextManager.instance.templates.length>0)
+    	        	{
+    	        		tpl = ContextManager.instance.templates[0];
+						tpl.addEventListener(Event.COMPLETE, templateSaveHandler);
+						tpl.xmlStructure = pnl_graphs.toXML();    	        		    	        		
+    	        		tpl.save();
+    	        	}
+    	        }
+				else if(event.item.@id == "save_as")
+				{
+    	        	if(ContextManager.instance.templates.length>0)
+    	        	{
+    	        		tpl = ContextManager.instance.templates[0];
+						tpl.addEventListener(Event.COMPLETE, templateSaveHandler);
+						tpl.xmlStructure = pnl_graphs.toXML();    	        		    	        		
+    	        		tpl.browseForSave();
+    	        	}
+				}
+                else if(event.item.@id == "close")
+                {		
+                	closeTpl();
+                }                
                 else if(event.item.@id == "new_category")
                 {
                 	EditCaption.show("New category", onCatDialogClose);
                 }
-                else if(event.item.@id == "open_file")
-                {		
-					file.addEventListener(Event.SELECT, openBrowseHandler);
-					file.browseForOpen("Open file", [tmplFilter, filter])
-                }
-                else if(event.item.@id == "close")
-                {		
-                	MenuGeneral.noTemplate(fileMenuData);
-                	
-              		ContextManager.instance.lastFile = false;
-	                pnl_graphs.clear();
-	                ContextManager.instance.templates.removeItemAt(0);
-	                workStage.visible = false;
-	                workStage.includeInLayout = false;
-                }                
-    	        else if(event.item.@id == "save")
-    	        {
-    	        	if(!ContextManager.instance.lastFile || !ContextManager.instance.files[0])
-    	        	{
-						file.addEventListener(Event.SELECT, saveBrowseHandler);
-						file.browseForSave("Save file");
-              		} 
-              		else
-              		{		    
-        				MenuGeneral.openedTemplate(fileMenuData);
-
-              			file = ContextManager.instance.files[0];
-						
-						ProgressManager.source = fileStream;
-						ProgressManager.start();
-						
-						var tpl:Template = ContextManager.instance.templates[0];
-					              			
-              			tpl.xmlStructure = pnl_graphs.toXML();
-              			tpl.encode();
-              			tpl.setPictureFromPath();
-              			
-              			fileStream.open(file, FileMode.WRITE);
-        				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
-        				fileStream.close();	  
-        				
-        				ContextManager.instance.templates[0].modified = false;      				
-        				
-        				ProgressManager.complete();
-        				
-              		}	        
-    	        }
-				else if(event.item.@id == "save_as")
-				{
-					file.addEventListener(Event.SELECT, saveBrowseHandler);
-					file.browseForSave("Save file");				
-				}
 				else if(event.item.@id == "import_from_app")
 				{
 					Import.show(onImportClose);
@@ -567,27 +574,6 @@
 				{
 					ImportFromTpl.show(onImportFromTplClose);
 				}
-				else if(event.item.@tag == "lastfiles")
-				{
-	            	file.url = FileUtils.pathToUrl(event.item.@data);
-	            	
-	            	if(file.isDirectory)
-	            		return;
-	            	
-	            	if(!file.exists) {
-	            		SuperAlert.show('File doesn`t exist.', 'Error!');
-	            		return; 
-	            	}
-					
-					ProgressManager.source = fileStream;
-					ProgressManager.start();	  
-					
-					fileStream.addEventListener(Event.COMPLETE, completeTemplateHandler);
-	    			fileStream.openAsync(file, FileMode.READ);
-	            	
-	            	ContextManager.updateLastFiles(file);
-	            	MenuGeneral.updateLastFilesMenu(fileMenuData);
-				}     
 				else if(event.item.@id == "exit")
 				{
 					exitApplication();
@@ -721,7 +707,7 @@
 				
 				if(event.item.@tag == "language")
 				{				
-					file = File.applicationDirectory.resolvePath("lang/"+event.item.@data);	
+					file = File.applicationDirectory.resolvePath("lang").resolvePath(event.item.@data);	
 					fileStream.addEventListener(Event.COMPLETE, completeLangHandler);
 					fileStream.openAsync(file, FileMode.READ);
 				}
@@ -732,24 +718,25 @@
             {
 				if(event.detail == ModalDialog.OK)
             	{
-            		var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template; 
+            		var tpl:Template = ContextManager.instance.templates[0]; 
             		var propDlg:TemplateProperties = event.target as TemplateProperties;
             		
             		tpl.name = propDlg.txtName.text;
 					tpl.description = propDlg.txtDesc.text;
-					tpl.picturePath = StringUtil.trim(propDlg.picBrowse.text);
+					tpl.picture = new File(StringUtil.trim(propDlg.picBrowse.text));
 					tpl.key = StringUtil.trim(propDlg.txtKey.text);
 					
 					templateChanged();
             	}            	
             }
             
-            private function onValidate(event:Event):void
+            private function onValidate(event:CloseEvent):void
             {
-            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	if(event.detail == ModalDialog.OK)
             	{
             		var dialog:ValidateDialog = event.target as ValidateDialog;
-            		
+            		var tpl:Template = ContextManager.instance.templates[0];
+            		 
             		var flags:uint = 0;
             		
             		if(dialog)
@@ -762,9 +749,7 @@
 	            		if(dialog.chkNames) 	flags|=TemplateValidateOptions.SET_UNIQ_NAMES;
 	            	}
             		            		
-					ContextManager.instance.templateStruct = new TemplateStruct(
-																ContextManager.instance.templates.getItemAt(0).xmlStructure as XML,
-																(ContextManager.instance.templates.getItemAt(0) as Template).ID);
+					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.ID);
 					var validateArr:Array = ContextManager.instance.templateStruct.validate(flags).array;
 	
 					pnl_problems.array = validateArr;
@@ -967,10 +952,22 @@
             		}					
 				}
             }
-            
-            private function onCatDialogClose(event:Event):void
+	
+			//--------------------------------------------------------------------------
+			//
+			//  Event handlers
+			//
+			//--------------------------------------------------------------------------
+		    private function templateSaveHandler(event:Event):void 
+		    {
+		    	var tpl:Template = event.target as Template;		    	
+		    	tpl.removeEventListener(Event.COMPLETE, templateSaveHandler); 
+		    	processSavedTpl();
+		    } 
+			    	            
+            private function onCatDialogClose(event:CloseEvent):void
             {            	
-            	if(event is CloseEvent && CloseEvent(event).detail == ModalDialog.OK)
+            	if(event.detail == ModalDialog.OK)
             	{
             		if(event.target.txtCaption.text)
             			pnl_graphs.createCategoryTab(event.target.txtCaption.text);
@@ -987,21 +984,9 @@
             		
 					ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 					
-            		if(!ContextManager.instance.lastFile || !ContextManager.instance.files[0])
+            		if(ContextManager.instance.templates.length==0)
     	        	{
-	                	ContextManager.instance.lastFile = false;
-		                pnl_graphs.clear();
-		                
-		                var template:Template = new Template();
-	
-		                if(ContextManager.instance.templates.length==0)
-		    				ContextManager.instance.templates.addItemAt(template, 0);
-	    				else
-	    					ContextManager.instance.templates[0] = template;
-	    					
-		                workStage.visible = true;
-		                workStage.includeInLayout = true;   
-		                MenuGeneral.newTemplate(fileMenuData);    	        		
+	                	newTpl();
             		}
             		
 					if(tpl && tpl.xmlStructure && tree.selectedItems.length>0)
@@ -1045,35 +1030,23 @@
             	ProgressManager.complete();
             }            
 
-            private function onImportClose(event:Event):void
+            private function onImportClose(event:CloseEvent):void
             {            	
-            	if(event is CloseEvent)
+           		if(event.detail == ModalDialog.OK) 
             	{
             		var graphs:Array = event.target.graphs;
             		
-            		if(!ContextManager.instance.lastFile || !ContextManager.instance.files[0])
-    	        	{
-	                	ContextManager.instance.lastFile = false;
-		                pnl_graphs.clear();
-		                
-		                var template:Template = Import(event.target).template;
-	
-		                if(ContextManager.instance.templates.length==0)
-		    				ContextManager.instance.templates.addItemAt(template, 0);
-	    				else
-	    					ContextManager.instance.templates[0] = template;
-	    					
-		                workStage.visible = true;
-		                workStage.includeInLayout = true;   
-		                MenuGeneral.newTemplate(fileMenuData);    	        		
-            		}
-            		
+	        		closeTpl(false);
+	        		
+	                var template:Template = Import(event.target).template;
+
+    				ContextManager.instance.templates.addItemAt(template, 0);
+    					
+					processNewTpl()
+
             		ProgressManager.start(ProgressManager.DIALOG_MODE, true);
             		
-            		pnl_graphs.clear();
-            		
             		var i:int = 0;
-            		
             		if(graphs.length>0)
             		{
             			ProgressManager.step(i++, graphs.length);
@@ -1093,7 +1066,6 @@
            		ProgressManager.complete();
            		
            		switchDebug(false);
-           		
            		
 				if(ContextManager.instance.templateStruct.buffer)
 				{            	
@@ -1135,57 +1107,6 @@
            		
     			ContextManager.instance.templateStruct = null;
            	}
-           	
-            private function openBrowseHandler(event:Event):void
-            {
-            	var file:File = event.target as File;
-           		var stream:FileStream = new FileStream();
-            	
-            	if(file.isDirectory)
-            		return;
-            	
-				ProgressManager.source = stream;
-				ProgressManager.start();
-				
-				stream.addEventListener(Event.COMPLETE, completeTemplateHandler);
-    			stream.openAsync(file, FileMode.READ);
-            	
-            	ContextManager.updateLastFiles(file);            	
-            	MenuGeneral.updateLastFilesMenu(fileMenuData);
-            }
-            
-            private function saveBrowseHandler(event:Event):void
-            {
-            	var file:File = event.target as File;
-           		var fileStream:FileStream = new FileStream();
-            	
-            	if(file.isDirectory)
-            		return;
-            		          
-            	if(!file.extension || file.extension.toLowerCase() != 'xml')            	
-            		file.url = FileUtils.pathToUrl(file.nativePath+'.xml');            		
-            	  	
-				ProgressManager.source = fileStream;
-				ProgressManager.start();
-				
-				var tpl:Template = ContextManager.instance.templates[0];
-				            		            	
-     			tpl.xmlStructure = pnl_graphs.toXML();
-      			tpl.encode();
-      			tpl.setPictureFromPath();
-      			
-      			fileStream.open(file, FileMode.WRITE);
-				fileStream.writeUTFBytes(ContextManager.instance.templates[0].xml.toXMLString());
-				fileStream.close();	
-				
-				ContextManager.instance.templates[0].modified = false;
-        				        		
-        		ProgressManager.complete();
-        		
-  				MenuGeneral.openedTemplate(fileMenuData);      
-            	ContextManager.updateLastFiles(file);            	
-            	MenuGeneral.updateLastFilesMenu(fileMenuData);
-            }
 
 		]]>
 	</mx:Script>
