@@ -93,8 +93,6 @@
 		
 		private function saveResources(product:XML):void
 		{
-//			var folderName:String = product.name.toString();
-			
 			for each(var page:XML in product.pages.children())
 			{
 				for each(var resource:XML in page.resources.children())
@@ -113,8 +111,6 @@
 		
 		private function savePages(product:XML):void
 		{
-//			var folderName:String = product.name.toString();
-			
 			for each(var page:XML in product.pages.children())
 			{
 					var byteArray:ByteArray = new ByteArray();
@@ -131,7 +127,7 @@
 		{
 			var newFileName:String = contentName;
 			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
-			
+//			trace(newFile.toString())
 			try {
 				
 				fileStream.open(newFile, FileMode.WRITE);
@@ -143,8 +139,6 @@
 				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+newFileName);
 				return;
 			}
-			
-//			cachedFiles.addItem({create:newFile.creationDate.time, name:newFile.name, size:newFile.size})
 		}
 			
 		private function creatTree(product:XML):void
@@ -157,7 +151,6 @@
 			
 			var pageName:String = tree.selectedItem.@name;
 			showSelectedPage(pageName);
-//			treeChangeHandler();
 		}
 			
 		private function treeChangeHandler(object:Object):void
@@ -168,13 +161,11 @@
 		
 		private function showSelectedPage(pageName:String):void
 		{
-//			trace(pageName);
 			var fileName:String = pageName +".html";
 			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
 			var fullPath : String = newFile.nativePath;
-			html.location = fullPath; // = fileStream.readMultiByte(newFile.size, File.systemCharset);
+			html.location = fullPath; 
 			fileStream.close();
-//			fullPath = "asjd hajsd aljsd";
 			
 		}
 		
@@ -184,26 +175,17 @@
 			var index:Number = Math.max(fullPath.lastIndexOf( "/" ),fullPath.lastIndexOf( "\\") );
 			var fileName : String = fullPath.substr( index + 1 ); 
 			fileName = fileName.substring( 0, fileName.lastIndexOf( "." )  );
-			
+			trace(fullPath);
 			var selectedItem:String = tree.selectedItem.@name;
 			
-//			trace("LOCATION: " + fileName + "   :  " + selectedItem);
 			if(selectedItem == fileName)
 				return;
 			
 			if(arrayOfPages[fileName])
 			{
-				trace("+++ Needed to select")
 				selectNecessaryItem(fileName);
 			}else
 			{
-//				var file:File = File.applicationStorageDirectory.resolvePath("");
-//				var localPath : String = file.nativePath;
-				
-//				index = Math.max(localPath.lastIndexOf( "/" ),localPath.lastIndexOf( "\\") );
-				
-//				fileName = localPath.substr( index + 1 ); 
-				
 				navigateToURL(new URLRequest(fullPath));
 				showSelectedPage(selectedItem);
 			}	
@@ -234,8 +216,103 @@
 		
 		private function test(event:Event):void
 		{
-			trace();
-		}
+			var  sqlConnection:SQLConnection = new SQLConnection();
+			var newFile:File = File.applicationStorageDirectory.resolvePath("HelpDB.db");
+			
+			// Database has a table "employee" with columns
+			// employeeID, firstName, lastName, birthday
+//			conn.open();
+			
+			try {
+				
+				sqlConnection.open(newFile, SQLMode.CREATE );
+				
+//				fileStream.open(newFile, FileMode.WRITE);
+//				fileStream.writeBytes(content);
+//				fileStream.close();
+				
+			} catch(error:IOError) {
+//				var er:* =  error;
+				trace("!!!!!!!!!!!!!!!! Error Creating 'HelpDB.db'  !!!!!!!!!!!!!!! \n" + error.message );
+				return;
+			}
+			
+			try {
+				var selectStatement:SQLStatement = new SQLStatement();
+				selectStatement.sqlConnection = sqlConnection;
+				selectStatement.text = "CREATE TABLE page (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,  data TEXT, resources TEXT, id_help INTEGER NOT NULL);";
+				selectStatement.execute();
+				
+				selectStatement.text = "CREATE TABLE help (id INTEGER PRIMARY KEY AUTOINCREMENT, toc XML, id_product INTEGER NOT NULL, id_locale INTEGER NOT NULL);";
+				selectStatement.execute();
+				
+				
+				selectStatement.text = "CREATE TABLE product (id INTEGER PRIMARY KEY AUTOINCREMENT, name CHAR NOT NULL, version CHAR NOT NULL);";
+				selectStatement.execute();
+				
+				selectStatement.text = "CREATE TABLE locale (id INTEGER PRIMARY KEY AUTOINCREMENT, name CHAR NOT NULL);";
+				selectStatement.execute();
+				
+				sqlConnection.close();
+				
+			} catch (err:SQLError) {
+				// since there is no column "name", an error will be thrown
+				localizeError(err);
+			}
+			function localizeError(e:SQLError):void 
+			{
+				var argsLength:int = e.detailArguments.length;
+				switch (e.detailID) 
+				{
+					case 2030:
+					// default details string: "trigger '%s' already exists"
+					// do stuff
+						break;
+					// ... other cases ...
+					case 2036:
+					// default details string: "no such column: '%s[.%s[.%s]]'"
+						var colPath:String = "";
+						if (argsLength == 1) 
+						{
+							colPath = e.detailArguments[0];
+						} else if (argsLength == 2) 
+						{
+							colPath = e.detailArguments[0]+"."+e.detailArguments[1];
+						} else if (argsLength == 3) 
+						{
+							colPath = e.detailArguments[0]+"."+e.detailArguments[1]+"."+e.detailArguments[2];
+						}
+			// or use the locale information to generate a localized string
+						displayLocalizedDetail("Column '" + colPath + "' does not exist.");
+						break;
+				default:
+					displayLocalizedDetail(e.details);
+			}
+			}
+			function displayLocalizedDetail(str:String):void 
+			{
+				trace(str)
+			// display error detail
+			}
+//			------------------
+		/*	var newFile:File = File.applicationStorageDirectory.resolvePath("db");
+			var  sqlConnection:SQLConnection = new SQLConnection();
+			
+			try {
+				
+				sqlConnection.open(newFile, SQLMode.CREATE );
+				sqlConnection.close();
+//				fileStream.open(newFile, FileMode.WRITE);
+//				fileStream.writeBytes(content);
+//				fileStream.close();
+				
+			} catch(error:IOError) {
+//				var er:* =  error;
+				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message );
+				return;
+			}
+//				sqlConnection.
+	*/	}
 	]]>
 </mx:Script>
 	<mx:Tree id="tree" x="81" y="70" width="145" height="249"
