@@ -330,6 +330,8 @@
 					}
 				
 					ContextManager.instance.templates.removeItemAt(0);
+					tpl.dispose();
+					tpl = null;
 				}
 				
 	   	  		ContextManager.instance.lastFile = false;
