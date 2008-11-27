@@ -54,7 +54,6 @@ private var attrsProvider:Array = [];
  * 
  **/ 
 
-[Bindable]
 private var resourcesProvider:Array = [];
 
 /**

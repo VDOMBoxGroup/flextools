@@ -2,7 +2,7 @@
 <mx:WindowedApplication
 	xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
-	width="700" minWidth="700"  height="510" minHeight="510"
+	width="750" minWidth="750"  height="510" minHeight="510"
 	creationComplete="{creationComplete();}" xmlns:Components="Components.*">
 	
 	<mx:Style>
@@ -320,7 +320,7 @@
 				</mx:VBox>			
 				
 				<!-- Right Side -->
-				<mx:VBox width="100%" minWidth="430" horizontalScrollPolicy="off" height="{__leftSideContainer.height}"
+				<mx:VBox width="100%" minWidth="520" horizontalScrollPolicy="off" height="{__leftSideContainer.height}"
 					paddingLeft="5" paddingRight="10" verticalGap="10">
 		
 					<mx:Label text="Selected attribute properties" />
@@ -429,19 +429,24 @@
 			width="100%" height="100%" horizontalScrollPolicy="off">
 			
 			<mx:VBox width="100%" height="100%" paddingLeft="5" paddingRight="5" paddingBottom="5">
-				<mx:DataGrid width="100%" height="100%" draggableColumns="false" sortableColumns="false" resizableColumns="false"
-					dataProvider="{resourcesProvider}">
+				<mx:DataGrid id="__resTable" width="100%" height="100%" draggableColumns="false" sortableColumns="false"
+					resizableColumns="false" click="{resourcesTableClickHandler();}">
 					<mx:columns>
-						<mx:DataGridColumn dataField="num" width="50" />
 						<mx:DataGridColumn dataField="name" />
-						<mx:DataGridColumn dataField="type" width="100" />
-						<mx:DataGridColumn dataField="size" width="100" />
+						<mx:DataGridColumn dataField="type" width="70" />
+						<mx:DataGridColumn dataField="size" width="70" />
 						<mx:DataGridColumn dataField="in_use" width="50" />
+						<mx:DataGridColumn dataField="resourceid" width="300" />
 					</mx:columns>
 				</mx:DataGrid>
 				
+				<mx:HBox width="100%" horizontalAlign="right">
+					<mx:Label text="Copy resource ID from here:" color="#999999" />
+					<mx:TextInput id="__tableResourceId" width="300" borderStyle="none" editable="false"  height="17"/>
+				</mx:HBox>
+				
 				<mx:HBox width="100%">
-					<mx:Button label="Add" icon="@Embed('/icons/list-add.png')" />
+					<mx:Button label="Add" icon="@Embed('/icons/list-add.png')" click="{addResource();}" />
 					<mx:Button label="Remove" icon="@Embed('/icons/list-remove.png')" />
 					<mx:Button label="Replace" icon="@Embed('/icons/refresh.png')" />
 				</mx:HBox>

@@ -1,25 +1,21 @@
 	// ActionScript file
 import ContextWindows.AddLanguageWindow;
+import ContextWindows.DropDownMenuEditor;
+import ContextWindows.ExternaleditorEditor;
+import ContextWindows.MultiLineEditor;
+import ContextWindows.NumberRangeEditor;
+import ContextWindows.ObjectListEditor;
+import ContextWindows.TextFieldEditor;
 
 import flash.events.Event;
-import flash.events.MouseEvent;
+import flash.filesystem.File;
 
+import mx.controls.Alert;
+import mx.controls.Image;
 import mx.core.Application;
 import mx.events.MenuEvent;
 import mx.managers.PopUpManager;
 import mx.utils.UIDUtil;
-import mx.controls.Alert;
-import flash.filesystem.File;
-import mx.events.FileEvent;
-import flash.desktop.Icon;
-import mx.controls.Image;
-import ContextWindows.DropDownMenuEditor;
-import mx.messaging.management.Attribute;
-import ContextWindows.TextFieldEditor;
-import ContextWindows.NumberRangeEditor;
-import ContextWindows.MultiLineEditor;
-import ContextWindows.ObjectListEditor;
-import ContextWindows.ExternaleditorEditor;
 
 private function creationComplete():void
 {
@@ -617,8 +613,90 @@ private function externalEditorCompleteHandler(event:Event):void
 
 
 /* -------- object resources ------------------------------------------------- */
+
+private var fileForUpload:File;
+
 private function addResource():void
 {
+	if (!fileForUpload)
+		fileForUpload = new File();
 		
+	var allFilesFilter:FileFilter = new FileFilter("All Files (*.*)", "*.*");
+	var imagesFilter:FileFilter = new FileFilter('Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png');
+	var docFilter:FileFilter = new FileFilter('Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt');
 	
-} 
+	fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
+	fileForUpload.addEventListener(Event.CANCEL, fileCancelHandler);
+	fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
+}
+
+private function fileCancelHandler(e:Event):void
+{
+	fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
+	fileForUpload.removeEventListener(Event.CANCEL, fileCancelHandler);
+}
+
+private function fileSelectHandler(event:Event):void
+{
+	fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
+	fileForUpload.removeEventListener(Event.CANCEL, fileCancelHandler);
+			
+	if (fileForUpload  && !fileForUpload.isDirectory) {
+		var srcBytes:ByteArray = new ByteArray();
+		var srcStream:FileStream = new FileStream();
+		
+		try {
+
+			srcStream.open(fileForUpload, FileMode.READ);
+			
+			if (srcStream.bytesAvailable == 0) {
+				Alert.show("File is empty", "File can not be used!");
+				return; 
+			}
+			
+			srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
+			srcStream.close();
+		}
+		catch (err:Error) {
+			Alert.show('Could not open file!', 'IO Error');
+			return;
+		}
+			
+		var fileType:String = "";
+		try {		
+			fileType = fileForUpload.type.substr(1);
+		}
+		catch (err:Error) {
+			fileType = fileForUpload.extension;
+		}
+		
+		try {
+			var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
+						
+			var resourceObj:Object = {
+				name:	fileName,
+				data:	srcBytes,
+				size:	srcBytes.bytesAvailable,
+				type:	fileType,
+				in_use:	'no',
+				resourceid: UIDUtil.createUID()
+			}
+			
+			resourcesProvider.push(resourceObj);
+			__resTable.dataProvider = resourcesProvider;
+		}
+		catch (err:Error) {
+			Alert.show ('Unexpected error', 'Could not use selected file!');
+			return;
+		}
+	}	
+}
+
+
+private function resourcesTableClickHandler():void {
+	if (__resTable.selectedItem)
+		__tableResourceId.text = __resTable.selectedItem.resourceid;
+	else
+		__tableResourceId.text = '';
+}
+ 

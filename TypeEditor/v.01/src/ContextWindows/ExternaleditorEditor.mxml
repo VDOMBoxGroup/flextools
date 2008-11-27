@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	borderAlpha="0.95" cornerRadius="1" width="400" height="220"
+	borderAlpha="0.95" cornerRadius="1" width="400" height="200"
 	shadowDirection="right"	borderColor="#636363" titleStyleName="title"
 	borderThicknessLeft="1" borderThicknessRight="1"
 	title="ExternalEditor editor" verticalGap="15">
