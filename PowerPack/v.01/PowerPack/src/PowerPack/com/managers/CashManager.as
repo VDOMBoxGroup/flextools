@@ -41,6 +41,15 @@ public class CashManager extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 		
+	public static var typeCategoryMap:Object = {
+		png:'image',
+		gif:'image',
+		jpg:'image',
+		bmp:'image',
+		sqlite:'database',
+		xml:'database'		
+	}
+	
 	/**
 	 *  @private
 	 */
@@ -680,7 +689,9 @@ public class CashManager extends EventDispatcher
 		updateMainIndexEntry(mainIndex, ID, 'folder', index.@folder);
 		updateMainIndexEntry(mainIndex, ID, 'ID', newID);
 
-		folder.moveTo(newFolder, true);
+		try {
+			folder.moveTo(newFolder, true);
+		} catch (e:*) {}
 		
 		setIndex(index);		
 		setMainIndex(mainIndex);		

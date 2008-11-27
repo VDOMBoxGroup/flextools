@@ -328,7 +328,13 @@ public class Template extends EventDispatcher
 		
 		ProgressManager.start(null, false);
 		
+      	// update tpl UID
+   		var oldID:String = ID;
+   		delete _xml.@ID;
+   		CashManager.updateID(oldID, ID);
+
 		// cash template
+		_xml.structure = xmlStructure;
 		CashManager.setStringObject(ID, 
 			XML(
 				"<resource " + 
@@ -343,11 +349,6 @@ public class Template extends EventDispatcher
    		
    		// set (+encrypt) structure and resources data
    		encode();
-      			
-      	// update tpl UID
-   		var oldID:String = ID;
-   		delete _xml.@ID;    		
-   		CashManager.updateID(oldID, ID);
 
 	   	var stream:FileStream = new FileStream();
 		
@@ -507,7 +508,7 @@ public class Template extends EventDispatcher
 	
 	public function cash():void
 	{
-		for each (var res:XML in _xml.resources)
+		for each (var res:XML in xmlStructure.resources.resource)
 		{
 			CashManager.setStringObject(ID, 
 				XML(
@@ -519,7 +520,7 @@ public class Template extends EventDispatcher
 				res);
 		} 
 		
-		delete _xml.resources;
+		delete xmlStructure.resources;
 
 		if(b64picture)
 		{
@@ -569,22 +570,24 @@ public class Template extends EventDispatcher
 		
 		if(index)
 		{
-			var resources:XMLList = index.resource.(hasOwnProperty('category') && (@category=='image' || @category=='database'));
+			var resources:XMLList = index.resource.(hasOwnProperty('@category') && (@category=='image' || @category=='database'));
 		
+			delete xmlStructure.resources;
+			xmlStructure.appendChild(<resources/>);
+
 			for each (var res:XML in resources)
 			{
-				delete _xml.resources;
-				
 				var resObj:Object = CashManager.getObject(ID, res.@ID);
 				var resData:ByteArray = ByteArray(resObj.data);
 				var content:String = resData.readUTFBytes(resData.bytesAvailable);
 				
-				var resXML:XML = <resource><![CDATA[{content}]]></resource>;
+				var resXML:XML = XML('<resource><![CDATA['+content+']]></resource>');
+				resXML.@category = resObj.entry.@category;
 				resXML.@ID = resObj.entry.@ID;
 				resXML.@type = resObj.entry.@type;
 				resXML.@name = resObj.entry.@name;
 				
-				XML(_xml.resources).appendChild(resXML);
+				xmlStructure.resources.appendChild(resXML);
 			}
 		}
 	}
