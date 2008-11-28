@@ -430,12 +430,13 @@
 			
 			<mx:VBox width="100%" height="100%" paddingLeft="5" paddingRight="5" paddingBottom="5">
 				<mx:DataGrid id="__resTable" width="100%" height="100%" draggableColumns="false" sortableColumns="false"
-					resizableColumns="false" click="{resourcesTableClickHandler();}">
+					resizableColumns="false" click="{resourcesTableClickHandler();}"
+					creationComplete="{__resTable.dataProvider = resourcesProvider;}">
+					
 					<mx:columns>
 						<mx:DataGridColumn dataField="name" />
 						<mx:DataGridColumn dataField="type" width="70" />
 						<mx:DataGridColumn dataField="size" width="70" />
-						<mx:DataGridColumn dataField="in_use" width="50" />
 						<mx:DataGridColumn dataField="resourceid" width="300" />
 					</mx:columns>
 				</mx:DataGrid>

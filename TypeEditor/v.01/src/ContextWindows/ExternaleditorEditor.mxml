@@ -85,70 +85,9 @@
 			
 			private function addBtnClickHandler():void
 			{
-				if (!fileForUpload)
-					fileForUpload = new File();
-					
-				var allFilesFilter:FileFilter = new FileFilter("All Files (*.*)", "*.*");
-				var imagesFilter:FileFilter = new FileFilter('Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png');
-				var docFilter:FileFilter = new FileFilter('Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt');
-				
-				fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
-				fileForUpload.addEventListener(Event.CANCEL, fileCancelHandler);
-				fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
+				this.dispatchEvent(new Event(Event.SELECT));
 			}
 			
-			private function fileCancelHandler(e:Event):void
-			{
-				fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
-				fileForUpload.removeEventListener(Event.CANCEL, fileCancelHandler);
-			}
-			
-			private function fileSelectHandler(event:Event):void
-			{
-				fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
-				fileForUpload.removeEventListener(Event.CANCEL, fileCancelHandler);
-						
-				if (fileForUpload  && !fileForUpload.isDirectory) {
-					var srcBytes:ByteArray = new ByteArray();
-					var srcStream:FileStream = new FileStream();
-					
-					try {
-			
-						srcStream.open(fileForUpload, FileMode.READ);
-						
-						if (srcStream.bytesAvailable == 0) {
-							Alert.show("File is empty", "File can not be used!");
-							return; 
-						}
-						
-						srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
-						srcStream.close();
-					}
-					catch (err:Error) {
-						Alert.show('Could not open file!', 'IO Error');
-						return;
-					}
-						
-					var fileType:String = "";
-					try {		
-						fileType = fileForUpload.type.substr(1);
-					}
-					catch (err:Error) {
-						fileType = fileForUpload.extension;
-					}
-					
-					try {
-						var fileName:String = fileForUpload.name.substr(0, fileForUpload.name.length - fileType.length - 1);
-						
-						// put code here
-						
-					}
-					catch (err:Error) {
-						Alert.show ('Unexpected error', 'Could not use selected file!');
-						return;
-					}
-				}	
-			}
 		]]>
 	</mx:Script>
 	
@@ -174,7 +113,7 @@
 			<mx:Label text="Choose External Editor Resource:" />
 			<mx:HBox width="100%">
 				<mx:ComboBox id="__resource" width="100%" cornerRadius="1" labelField="name" dataProvider="{resourcesProvider}" />
-				<mx:Button label="Add" />	
+				<mx:Button label="Add" click="{addBtnClickHandler();}" />	
 			</mx:HBox>	
 		</mx:VBox>
 		

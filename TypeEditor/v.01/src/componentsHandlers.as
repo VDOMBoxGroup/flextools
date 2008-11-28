@@ -17,10 +17,28 @@ import mx.events.MenuEvent;
 import mx.managers.PopUpManager;
 import mx.utils.UIDUtil;
 
+
+
+private var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
+private var tfeditor:TextFieldEditor = new TextFieldEditor();
+private var nreditor:NumberRangeEditor = new NumberRangeEditor();
+private var mleditor:MultiLineEditor = new MultiLineEditor();
+private var oleditor:ObjectListEditor = new ObjectListEditor();
+private var eeeditor:ExternaleditorEditor = new ExternaleditorEditor();
+
+
 private function creationComplete():void
 {
 	__mainMenuBar.dataProvider = menuDataProvider;
 	formEnabled(false);
+	
+	/* Add permanent event listeners */
+	tfeditor.addEventListener(Event.COMPLETE, textFieldEditorCompleteHandler);
+	nreditor.addEventListener(Event.COMPLETE, numberRangeEditorCompleteHandler);
+	mleditor.addEventListener(Event.COMPLETE, multiLineEditorCompleteHandler);
+	ddeditor.addEventListener(Event.COMPLETE, dropDownEditCompleteHandler); 
+	eeeditor.addEventListener(Event.COMPLETE, externalEditorCompleteHandler); 
+	eeeditor.addEventListener(Event.SELECT, addResAtExternalEditorHandler);
 }
 
 private function mainMenuHandler(mEvent:MenuEvent):void
@@ -54,6 +72,8 @@ private function addObjectLanguageBtnClickHandler():void
 	PopUpManager.centerPopUp(AddLangContextWnd);
 	AddLangContextWnd.addEventListener(Event.COMPLETE, addObjectLanguage);
 	AddLangContextWnd.onShow();
+	oleditor.addEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
+
 }
 
 private function addObjectLanguage(event:Event):void
@@ -474,12 +494,6 @@ private function changeAttrCodeInterfaceHandler():void
 	loadCodeInterfaceData();
 }
 
-private var ddeditor:DropDownMenuEditor = new DropDownMenuEditor();
-private var tfeditor:TextFieldEditor = new TextFieldEditor();
-private var nreditor:NumberRangeEditor = new NumberRangeEditor();
-private var mleditor:MultiLineEditor = new MultiLineEditor();
-private var oleditor:ObjectListEditor = new ObjectListEditor();
-private var eeeditor:ExternaleditorEditor = new ExternaleditorEditor();
 
 private function attrInterfaceTypeValuesClickHandler():void
 {
@@ -490,7 +504,6 @@ private function attrInterfaceTypeValuesClickHandler():void
 	
 	switch (type) {
 		case 'textfield':
-			tfeditor.addEventListener(Event.COMPLETE, textFieldEditorCompleteHandler);
 			PopUpManager.addPopUp(tfeditor, this);
 			PopUpManager.centerPopUp(tfeditor); 
 			
@@ -499,7 +512,6 @@ private function attrInterfaceTypeValuesClickHandler():void
 			break;
 
 		case 'number':
-			nreditor.addEventListener(Event.COMPLETE, numberRangeEditorCompleteHandler);
 			PopUpManager.addPopUp(nreditor, this);
 			PopUpManager.centerPopUp(nreditor); 
 			
@@ -509,7 +521,6 @@ private function attrInterfaceTypeValuesClickHandler():void
 			break;
 			
 		case 'multiline':
-			mleditor.addEventListener(Event.COMPLETE, multiLineEditorCompleteHandler);
 			PopUpManager.addPopUp(mleditor, this);
 			PopUpManager.centerPopUp(mleditor); 
 			
@@ -518,7 +529,6 @@ private function attrInterfaceTypeValuesClickHandler():void
 			break;
 
 		case 'dropdown':
-			ddeditor.addEventListener(Event.COMPLETE, dropDownEditCompleteHandler); 
 			PopUpManager.addPopUp(ddeditor, this);
 			PopUpManager.centerPopUp(ddeditor);
 
@@ -530,7 +540,6 @@ private function attrInterfaceTypeValuesClickHandler():void
 			break;
 
 		case 'objectlist2':
-			oleditor.addEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
 			PopUpManager.addPopUp(oleditor, this);
 			PopUpManager.centerPopUp(oleditor); 
 			
@@ -539,7 +548,6 @@ private function attrInterfaceTypeValuesClickHandler():void
 			break;
 
 		case 'externaleditor':
-			eeeditor.addEventListener(Event.COMPLETE, externalEditorCompleteHandler); 
 			PopUpManager.addPopUp(eeeditor, this);
 			PopUpManager.centerPopUp(eeeditor);
 
@@ -557,7 +565,6 @@ private function attrInterfaceTypeValuesClickHandler():void
 
 private function dropDownEditCompleteHandler(event:Event):void
 {
-	ddeditor.removeEventListener(Event.COMPLETE, dropDownEditCompleteHandler);
 	currentAttrObj = ddeditor.currentAttrObj;
 	PopUpManager.removePopUp(ddeditor);
 	loadCodeInterfaceData();
@@ -566,7 +573,6 @@ private function dropDownEditCompleteHandler(event:Event):void
 
 private function textFieldEditorCompleteHandler(event:Event):void
 {
-	tfeditor.removeEventListener(Event.COMPLETE, textFieldEditorCompleteHandler);
 	currentAttrObj['textFieldLength'] = tfeditor.textFieldLength;
 	PopUpManager.removePopUp(tfeditor);
 	loadCodeInterfaceData();
@@ -575,7 +581,6 @@ private function textFieldEditorCompleteHandler(event:Event):void
 
 private function numberRangeEditorCompleteHandler(event:Event):void
 {
-	nreditor.removeEventListener(Event.COMPLETE, numberRangeEditorCompleteHandler);
 	currentAttrObj['numberMinValue'] = nreditor.numberMinValue;
 	currentAttrObj['numberMaxValue'] = nreditor.numberMaxValue;
 	PopUpManager.removePopUp(nreditor);
@@ -585,7 +590,6 @@ private function numberRangeEditorCompleteHandler(event:Event):void
 
 private function multiLineEditorCompleteHandler(event:Event):void
 {
-	mleditor.removeEventListener(Event.COMPLETE, multiLineEditorCompleteHandler);
 	currentAttrObj['multiLineLength'] = mleditor.multiLineLength;
 	PopUpManager.removePopUp(mleditor);
 	loadCodeInterfaceData();
@@ -594,7 +598,6 @@ private function multiLineEditorCompleteHandler(event:Event):void
 
 private function objectListEditorCompleteHandler(event:Event):void
 {
-	mleditor.removeEventListener(Event.COMPLETE, objectListEditorCompleteHandler);
 	currentAttrObj['objectListTypeId'] = oleditor.typeId;
 	PopUpManager.removePopUp(oleditor);
 	loadCodeInterfaceData();
@@ -603,7 +606,6 @@ private function objectListEditorCompleteHandler(event:Event):void
 
 private function externalEditorCompleteHandler(event:Event):void
 {
-	eeeditor.removeEventListener(Event.COMPLETE, externalEditorCompleteHandler);
 	currentAttrObj['externalEditorTitle'] = eeeditor.titleProvider;
 	currentAttrObj['externalEditorInfo'] = eeeditor.externalEditorInfo;
 	this.resourcesProvider = eeeditor.resourcesProvider;
@@ -683,20 +685,44 @@ private function fileSelectHandler(event:Event):void
 			}
 			
 			resourcesProvider.push(resourceObj);
-			__resTable.dataProvider = resourcesProvider;
 		}
 		catch (err:Error) {
 			Alert.show ('Unexpected error', 'Could not use selected file!');
 			return;
 		}
+		
+		if (__resTable)
+			__resTable.dataProvider = resourcesProvider;
 	}	
 }
 
 
-private function resourcesTableClickHandler():void {
+private function removeResource(resourceID:String):void
+{
+	var newResourcesProvider:Array = [];
+	
+	for each (var resourceObj:Object in resourcesProvider) {
+		if (resourceID != resourceObj.resourceid)
+			newResourcesProvider.push(resourceObj);
+	}
+	
+	resourcesProvider = newResourcesProvider;
+	
+	if (__resTable)
+		__resTable.dataProvider = resourcesProvider;
+}
+
+
+private function resourcesTableClickHandler():void
+{
 	if (__resTable.selectedItem)
 		__tableResourceId.text = __resTable.selectedItem.resourceid;
 	else
 		__tableResourceId.text = '';
 }
- 
+
+
+private function addResAtExternalEditorHandler(e:Event):void
+{
+	addResource();
+} 

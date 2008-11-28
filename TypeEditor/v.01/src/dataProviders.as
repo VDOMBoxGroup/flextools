@@ -61,12 +61,12 @@ private var resourcesProvider:Array = [];
  * 
  * resourcesProvider:
  *  |
- *  |--[resourceID]
+ *  |--[0]
+ *  |   |--resourceID = GUID
  *  |   |--name = ''
  *  |   |--data = [] (base64 source)
  *  |   |--size = 0
- *  |   |--type = ''
- *  |   '--in_use = no
+ *  |   '--type = ''
  *  |
  *  ...
  * 
