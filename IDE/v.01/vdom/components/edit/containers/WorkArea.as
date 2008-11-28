@@ -8,6 +8,7 @@ import mx.containers.VBox;
 import mx.controls.Label;
 import mx.core.Container;
 import mx.core.UIComponent;
+import mx.core.mx_internal;
 import mx.events.DragEvent;
 import mx.events.FlexEvent;
 
@@ -26,7 +27,7 @@ import vdom.managers.ResizeManager;
 import vdom.managers.VdomDragManager;
 import vdom.utils.DisplayUtil;
 
-use namespace mx.core.mx_internal;
+use namespace mx_internal;
 
 public class WorkArea extends VBox
 {

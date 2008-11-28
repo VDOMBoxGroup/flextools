@@ -90,7 +90,7 @@ public class AttributesPanel extends ClosablePanel {
 		typeName = null;
 
 		horizontalScrollPolicy = "off";
-		verticalScrollPolicy = "off";
+		//verticalScrollPolicy = "off";
 		ToolTip.maxWidth = 120;
 		
 		_isValid = true;

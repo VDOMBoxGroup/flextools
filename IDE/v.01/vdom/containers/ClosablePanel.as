@@ -14,6 +14,7 @@ public class ClosablePanel extends Panel
 	protected var collapseButton : Button;
 	private var _collapse : Boolean;
 	private var _dataProvider : Object;
+	private var oldHeight : Number;
 	
 	public function ClosablePanel()
 	{
@@ -31,18 +32,22 @@ public class ClosablePanel extends Panel
 	{
 		if( value ) 
 		{
-			collapseButton.setStyle("upSkin", getStyle('CollapseButtonOffButtonUp'));
-			collapseButton.setStyle("downSkin",getStyle('CollapseButtonOffButtonDown'));
-			collapseButton.setStyle("overSkin",getStyle('CollapseButtonOffButtonOver'));
-			collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOffButtonDisabled'));
-			height = getStyle('headerHeight');
+			collapseButton.setStyle( "upSkin", getStyle( "CollapseButtonOffButtonUp" ) );
+			collapseButton.setStyle( "downSkin", getStyle( "CollapseButtonOffButtonDown" ) );
+			collapseButton.setStyle( "overSkin", getStyle( "CollapseButtonOffButtonOver" ) );
+			collapseButton.setStyle( "disabledSkin", getStyle( "CollapseButtonOffButtonDisabled" ) );
+			
+			if( height > titleBar.height )
+				oldHeight = percentHeight;
+			
+			height = getStyle( "headerHeight" );
 		}
 		else 
 		{
-			collapseButton.setStyle("upSkin", getStyle('CollapseButtonOnButtonUp'));
-			collapseButton.setStyle("downSkin",getStyle('CollapseButtonOnButtonDown'));
-			collapseButton.setStyle("overSkin",getStyle('CollapseButtonOnButtonOver'));
-			collapseButton.setStyle("disabledSkin",getStyle('CollapseButtonOnButtonDisabled'));
+			collapseButton.setStyle( "upSkin", getStyle( "CollapseButtonOnButtonUp" ) );
+			collapseButton.setStyle( "downSkin", getStyle( "CollapseButtonOnButtonDown" ) );
+			collapseButton.setStyle( "overSkin", getStyle( "CollapseButtonOnButtonOver" ) );
+			collapseButton.setStyle( "disabledSkin", getStyle( "CollapseButtonOnButtonDisabled" ) );
 			height = NaN;
 		}
 		_collapse = value;
@@ -58,7 +63,7 @@ public class ClosablePanel extends Panel
 	{
 		super.createChildren();
 		
-		if (!collapseButton ) 
+		if ( !collapseButton ) 
 		{
 			collapseButton = new Button();
 			collapseButton.explicitWidth = collapseButton.explicitHeight = 16;
@@ -93,6 +98,11 @@ public class ClosablePanel extends Panel
 			collapseButton.getExplicitOrMeasuredWidth(),
 			( titleBar.height -
 			collapseButton.getExplicitOrMeasuredHeight()) / 2 );
+		
+		if( unscaledHeight <= titleBar.height && !_collapse )
+			collapse = true;
+		else if( unscaledHeight > titleBar.height && _collapse )
+			collapse = false;
 	}
 	
 	private function collapseButton_clickHandler( event : MouseEvent ) : void 
@@ -106,7 +116,16 @@ public class ClosablePanel extends Panel
 	
 	private function panelOpeningHandler( event : ClosablePanelEvent ) : void 
 	{
-		collapse = !collapse;
+		if( !event.collapse )
+		{
+			collapse = false;
+			percentHeight = oldHeight;
+		}
+		else
+		{
+			collapse = true;
+		}
+			
 	}
 }
 }
