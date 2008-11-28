@@ -40,6 +40,7 @@ import mx.controls.Image;
 import mx.controls.ToolTip;
 import mx.core.Container;
 import mx.core.EdgeMetrics;
+import mx.core.EventPriority;
 import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
 import mx.effects.Fade;
@@ -1208,23 +1209,40 @@ public class Node extends Canvas
 		invalidateProperties();
     }
     
-    private function destroyTimers(destroyShowTimer:Boolean=true, destroyHideTimer:Boolean=true):void
+    public function beginTransition():void
     {
-    	if(showTimer && destroyShowTimer)
-    	{
-    		showTimer.stop();
-    		showTimer.removeEventListener(TimerEvent.TIMER, showTimerHandler);
-    		showTimer = null;
-    	}
-    	if(hideTimer && destroyHideTimer)
-    	{
-    		hideTimer.stop();
-    		hideTimer.removeEventListener(TimerEvent.TIMER, hideTimerHandler);
-    		hideTimer = null;
-    	}
+		if(canvas)
+		{
+			stopTransition();
+						
+			canvas.addingTransition = true;
+			canvas.currentArrow = new Connector();
+						
+			canvas.addChildAt(canvas.currentArrow, 0);
+			canvas.currentArrow.fromObject = this;
+			canvas.currentArrow.addEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
+	
+			dispatchEvent(new NodeEvent(NodeEvent.ADDING_TRANSITION));    	
+		}
     }
     
-    private function beginShowImageTip(delay:Number=400):void
+    public function stopTransition():void
+    {
+		if(canvas)
+		{
+			canvas.addingTransition = false;
+
+			if(canvas.currentArrow)
+			{
+				canvas.currentArrow.removeEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
+	
+				canvas.currentArrow.dispose();
+				canvas.currentArrow = null;
+			}
+		}
+    }    
+    
+    private function beginShowImageTip(delay:Number=400, img:Object=null):void
     {
 		if(category != NodeCategory.RESOURCE)
 			return;
@@ -1254,7 +1272,23 @@ public class Node extends Canvas
     	hideTimer.addEventListener(TimerEvent.TIMER, hideTimerHandler);
         hideTimer.start();
     }
-
+    
+    private function destroyTimers(destroyShowTimer:Boolean=true, destroyHideTimer:Boolean=true):void
+    {
+    	if(showTimer && destroyShowTimer)
+    	{
+    		showTimer.stop();
+    		showTimer.removeEventListener(TimerEvent.TIMER, showTimerHandler);
+    		showTimer = null;
+    	}
+    	if(hideTimer && destroyHideTimer)
+    	{
+    		hideTimer.stop();
+    		hideTimer.removeEventListener(TimerEvent.TIMER, hideTimerHandler);
+    		hideTimer = null;
+    	}
+    }
+    
     private function createImageTip():void
     {
     	destroyImageTip();
@@ -1288,39 +1322,6 @@ public class Node extends Canvas
 		tipImage.source = null;
 		tipImage = null;
     }
-    
-    public function beginTransition():void
-    {
-		if(canvas)
-		{
-			stopTransition();
-						
-			canvas.addingTransition = true;
-			canvas.currentArrow = new Connector();
-						
-			canvas.addChildAt(canvas.currentArrow, 0);
-			canvas.currentArrow.fromObject = this;
-			canvas.currentArrow.addEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
-	
-			dispatchEvent(new NodeEvent(NodeEvent.ADDING_TRANSITION));    	
-		}
-    }
-    
-    public function stopTransition():void
-    {
-		if(canvas)
-		{
-			canvas.addingTransition = false;
-
-			if(canvas.currentArrow)
-			{
-				canvas.currentArrow.removeEventListener(ConnectorEvent.FROM_OBJECT_CHANGED, onFromObjectChange);
-	
-				canvas.currentArrow.dispose();
-				canvas.currentArrow = null;
-			}
-		}
-    }
     		    	    
 	//--------------------------------------------------------------------------
     //
@@ -1332,9 +1333,11 @@ public class Node extends Canvas
 	{
 		destroyTimers(true, false);
 		
-		var curTpl:Template = ContextManager.instance.templates.length>0 ? ContextManager.instance.templates[0] : null;
+		var curTpl:Template;		
+		if(ContextManager.instance.templates.length>0)
+			curTpl =  ContextManager.instance.templates[0];
 		
-		if(	!curTpl || CashManager.objectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
+		if(!curTpl || CashManager.objectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
 		{
 			destroyImageTip();
 		}
@@ -1357,13 +1360,13 @@ public class Node extends Canvas
 
 		tipImage.addEventListener(FlexEvent.CREATION_COMPLETE, tipImageCreationComplete);	
         systemManager.stage.addEventListener(MouseEvent.MOUSE_MOVE, tipImageMoveHandler);
-            
-		tipImage.visible = true;
 		
 		var point:Point = localToGlobal(new Point(mouseX, mouseY));
 		
 		tipImage.x = point.x+15;
 		tipImage.y = point.y+20;
+
+		tipImage.visible = true;
 
 		if(!tipImage.parent)
 			PopUpManager.addPopUp(tipImage, this);
@@ -1409,7 +1412,7 @@ public class Node extends Canvas
 	{
 		var point:Point = localToGlobal(new Point(mouseX, mouseY));
 		
-		if(getBounds(systemManager.stage).containsPoint(point)&&1)
+		if(getBounds(systemManager.stage).containsPoint(point))
 		{
 			tipImage.endEffectsStarted();
 
@@ -1739,12 +1742,12 @@ public class Node extends Canvas
 	private function dropDownRollOverHandler(event:ListEvent):void
 	{
 		destroyImageTip();
-		beginShowImageTip(0);
+		beginShowImageTip(100);
 	}
 	
 	private function dropDownRollOutHandler(event:ListEvent):void
 	{
-		beginHideImageTip();
+		//beginHideImageTip();
 	}
 
 	private function textAreaKeyDown(event:KeyboardEvent):void
