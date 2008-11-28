@@ -1060,7 +1060,6 @@
             		
 	            	ProgressManager.complete();
             	}
-            	
             }  
                         
            	private function generationComplete(event:Event):void

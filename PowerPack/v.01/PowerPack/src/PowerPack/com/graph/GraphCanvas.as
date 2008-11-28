@@ -29,6 +29,7 @@ import mx.binding.utils.*;
 import mx.containers.Canvas;
 import mx.controls.Alert;
 import mx.core.UIComponent;
+import mx.core.UIComponentGlobals;
 import mx.effects.Move;
 import mx.events.ChildExistenceChangedEvent;
 import mx.events.CloseEvent;
@@ -670,7 +671,7 @@ public class GraphCanvas extends Canvas
 			CursorManager.setBusyCursor();
 			
 			ProgressManager.show(ProgressManager.DIALOG_MODE, false);
-			_doGetBitmapClipBoard();
+			callLater(_doGetBitmapClipBoard);
 			
 			function _doGetBitmapClipBoard():void {
 				var template:Template = ContextManager.instance.templates[0];

@@ -61,7 +61,8 @@
             		
         		txtName.text = tpl.name;
 				txtDesc.text = tpl.description;
-				picBrowse.text = tpl.picture.nativePath;
+				if(tpl.picture)
+					picBrowse.text = tpl.picture.nativePath;
 				txtKey.text = tpl.key;
 				
 				if(tpl.picture)

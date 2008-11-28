@@ -187,7 +187,7 @@ public class Node extends Canvas
 		//mouseFocusEnabled = true;
 		tabEnabled = true;	
 		tabChildren = false;
-		styleName = this.className;	
+		styleName = this.className;
 		cacheAsBitmap = true;		
 		
 		nodes[this] = this;
@@ -1179,6 +1179,7 @@ public class Node extends Canvas
             {
             	Utils.bringToFront(nodeCB);
             	nodeCB.addEventListener(DropdownEvent.CLOSE, dropDownCloseHandler);
+            	nodeCB.addEventListener(DropdownEvent.OPEN, dropDownOpenHandler);
             	callLater(nodeCB.open);
             }
             
@@ -1190,6 +1191,7 @@ public class Node extends Canvas
             
             Utils.bringToFront(nodePanel);
 			
+			nodeCB.removeEventListener(DropdownEvent.OPEN, dropDownOpenHandler);
             nodeCB.removeEventListener(DropdownEvent.CLOSE, dropDownCloseHandler);
 			nodeCB.close();
             	            
@@ -1222,7 +1224,7 @@ public class Node extends Canvas
     	}
     }
     
-    private function beginShowImageTip():void
+    private function beginShowImageTip(delay:Number=400):void
     {
 		if(category != NodeCategory.RESOURCE)
 			return;
@@ -1238,17 +1240,17 @@ public class Node extends Canvas
     	if(showTimer)
     		return;
     	    	
-    	showTimer = new Timer(600);
+    	showTimer = new Timer(delay);
     	showTimer.addEventListener(TimerEvent.TIMER, showTimerHandler);
         showTimer.start();
     }
     
-    private function beginHideImageTip():void
+    private function beginHideImageTip(delay:Number=100):void
     {
     	if(hideTimer)
     		return;
     		    	
-    	hideTimer = new Timer(100);
+    	hideTimer = new Timer(delay);
     	hideTimer.addEventListener(TimerEvent.TIMER, hideTimerHandler);
         hideTimer.start();
     }
@@ -1407,7 +1409,7 @@ public class Node extends Canvas
 	{
 		var point:Point = localToGlobal(new Point(mouseX, mouseY));
 		
-		if(getBounds(systemManager.stage).containsPoint(point))
+		if(getBounds(systemManager.stage).containsPoint(point)&&1)
 		{
 			tipImage.endEffectsStarted();
 
@@ -1714,14 +1716,37 @@ public class Node extends Canvas
 	    }	    
 	}
 	
+	private function dropDownOpenHandler(event:DropdownEvent):void
+	{
+		var cb:ComboBox = event.target as ComboBox;
+		cb.addEventListener(ListEvent.ITEM_ROLL_OVER, dropDownRollOverHandler); 
+		cb.addEventListener(ListEvent.ITEM_ROLL_OUT, dropDownRollOutHandler);
+	}
+
 	private function dropDownCloseHandler(event:DropdownEvent):void
 	{
+		var cb:ComboBox = event.target as ComboBox;
+
+		cb.removeEventListener(ListEvent.ITEM_ROLL_OVER, dropDownRollOverHandler);
+		cb.removeEventListener(ListEvent.ITEM_ROLL_OUT, dropDownRollOutHandler);
+
 		setEditMode(false);
 		
-		if(ComboBox(event.target).selectedItem)
-			text = ComboBox(event.target).selectedItem.@ID;
+		if(cb.selectedItem)
+			text = cb.selectedItem.@ID;
 	}
 	
+	private function dropDownRollOverHandler(event:ListEvent):void
+	{
+		destroyImageTip();
+		beginShowImageTip(0);
+	}
+	
+	private function dropDownRollOutHandler(event:ListEvent):void
+	{
+		beginHideImageTip();
+	}
+
 	private function textAreaKeyDown(event:KeyboardEvent):void
     {
 		if(canvas && canvas.addingTransition)

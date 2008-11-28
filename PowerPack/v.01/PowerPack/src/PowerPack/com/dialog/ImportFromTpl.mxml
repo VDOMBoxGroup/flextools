@@ -125,7 +125,6 @@
  						treeXML.appendChild(nodeCat);
  					}
  					
- 					
  					var node:XML = <node/>;
  					node.@label = item.@name;
  					node.@category = item.@category;
