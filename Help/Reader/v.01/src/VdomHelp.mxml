@@ -216,15 +216,25 @@
 		
 		private function test(event:Event):void
 		{
-			var sql_1:Sql = new Sql();
-			var sql_2:Sql = new Sql();
+			var sql_1:SQLProxy = new SQLProxy();
 			
 			sql_1.creatDB();
-			sql_1.locale("en_US");
-			sql_1.getLocale();
+			var int_:int = sql_1.setProduct("VdomIDE_en_US", "1", "VdomIDE", "It is help for VdomIDE", "en_US", XML(tree.dataProvider));
+			trace("res: " + int_);
 			
+			int_ = sql_1.setProduct("VdomIDE_en_US", "1", "VdomIDE", "It is help for VdomIDE", "en_US", XML(tree.dataProvider));
+			trace("res: " + int_);
 			
-//			sql_2.creatDB();
+			int_ = sql_1.setProduct("VdomIDE_ru_RU", "1", "VdomIDE", "It is help for VdomIDE", "ru_RU", XML(tree.dataProvider));
+			trace("res: " + int_);
+//			sql_1.locale("ru_RU");
+//			sql_1.locale("en_US");
+//			sql_1.locale("fr_FR");
+//			sql_1.getLocale();
+//			
+//			sql_1.product("VdomIDE");
+//			sql_1.product("VdomPrintToWeb");
+			
 			
 		}
 	]]>

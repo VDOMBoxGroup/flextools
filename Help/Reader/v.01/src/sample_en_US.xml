@@ -7,7 +7,7 @@
 	<page name="page2" title="Group of Page">
 		<page name="page3" title="Third" 	>
 			<page name="page1" title="First" />
-		</page>
+		</page>	
     </page>
     <page name="page2" title="Group of Page">
 		<page name="page3" title="Third" 	>
