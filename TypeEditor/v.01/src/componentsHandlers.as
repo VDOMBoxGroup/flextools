@@ -713,6 +713,18 @@ private function removeResource(resourceID:String):void
 }
 
 
+private function removeResourceBtnClickHandler():void
+{
+	if (!__resTable)
+		return;
+		
+	if (!__resTable.selectedItem)
+		return;
+		
+	removeResource(__resTable.selectedItem.resourceid);
+}
+
+
 private function resourcesTableClickHandler():void
 {
 	if (__resTable.selectedItem)

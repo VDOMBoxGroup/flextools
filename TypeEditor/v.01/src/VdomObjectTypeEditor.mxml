@@ -448,7 +448,7 @@
 				
 				<mx:HBox width="100%">
 					<mx:Button label="Add" icon="@Embed('/icons/list-add.png')" click="{addResource();}" />
-					<mx:Button label="Remove" icon="@Embed('/icons/list-remove.png')" />
+					<mx:Button label="Remove" icon="@Embed('/icons/list-remove.png')" click="{removeResourceBtnClickHandler();}" />
 					<mx:Button label="Replace" icon="@Embed('/icons/refresh.png')" />
 				</mx:HBox>
 			</mx:VBox>
