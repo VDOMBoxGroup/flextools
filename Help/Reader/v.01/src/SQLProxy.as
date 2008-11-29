@@ -29,8 +29,11 @@ package
 		
 		public function  creatDB():Boolean
 		{
+			
 			try {
 				sqlConnection.open(file, SQLMode.CREATE );
+				 
+				 /*****************  !!!   проверить необходимость создания каждой таблички отдельно !!!   *******************/
 				 
 				//       PAGE    (id, name, version, title, description, content ) //
 				text = "CREATE TABLE page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
@@ -126,7 +129,7 @@ package
 	*/	
 	//       PRODUCT  (id, name, version, title, description, language, toc )   //
 	
-		/// ********* curentHelp, curentPage ******************************	
+		/// ********* curentPruduct, curentPage ******************************	
 		public function setProduct(name:String, version:String, title:String, 
 																description:String,
 																language:String,
@@ -173,7 +176,7 @@ package
 			
 			return result.data[0]['id'];
 		}
-		
+		/*
 		public function creatHelp(value:String):Boolean
 		{
 			try {
@@ -200,7 +203,7 @@ package
 			
 			return true;
 		}
-		
+		*/
 			
 		private function displayLocalizedDetail(str:String):void 
 		{

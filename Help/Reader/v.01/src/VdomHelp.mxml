@@ -12,15 +12,18 @@
 		private var myLoader:URLLoader;
 //		private var cacheFolder:File;
 		private var fileStream:FileStream = new FileStream();
+		private var sqlProxy:SQLProxy = new SQLProxy();
 		
 		
 		// start loading 1-st XML 
 		private function frstLoadXML():void
 		{
+			
 			myXMLURL = new URLRequest(XML_URL)
 			myLoader = new URLLoader(myXMLURL);
 			myLoader.addEventListener(Event.COMPLETE, startXMLLoaded);
 			myLoader.addEventListener(IOErrorEvent.IO_ERROR, startXMLLoaded);
+			sqlProxy.creatDB();
 		}
 		
 		// 
@@ -55,9 +58,7 @@
 			} 
 			else if(event.type == Event.COMPLETE)
 			{
-//			    trace("Data loaded.");
 			    parsingData(XML(event.target.data))
-//			    trace(myLoader.data.toString());
 			}
 		}
 		
@@ -68,16 +69,19 @@
 				trace("!!!!!!!!!!!! not Correct data from server !!!!!!!!!!!!!");
 				return;
 			}
+			var name:String = product.name.toString();
 			
-//			trace(product.name());
 			// save loaded data to local diskDrive 
+//			var rsult:int = sqlProxy.setProduct(name,version,title,description, language,toc);
 			saveLoadedData(product);
+			
+			
+			// выбрать странички сохранить их на диск
+			savePages(product);
 			
 			// выбрать ресурсы и сохранить их на диск
 			saveResources(product);
 			
-			// выбрать странички сохранить их на диск
-			savePages(product);
 			// сгенерить дерево
 			creatTree(product);
 		}
@@ -216,9 +220,9 @@
 		
 		private function test(event:Event):void
 		{
-			var sql_1:SQLProxy = new SQLProxy();
 			
-			sql_1.creatDB();
+			
+		/*	
 			var int_:int = sql_1.setProduct("VdomIDE_en_US", "1", "VdomIDE", "It is help for VdomIDE", "en_US", XML(tree.dataProvider));
 			trace("res: " + int_);
 			
@@ -226,7 +230,8 @@
 			trace("res: " + int_);
 			
 			int_ = sql_1.setProduct("VdomIDE_ru_RU", "1", "VdomIDE", "It is help for VdomIDE", "ru_RU", XML(tree.dataProvider));
-			trace("res: " + int_);
+			*/
+//			trace("res: " + int_);
 //			sql_1.locale("ru_RU");
 //			sql_1.locale("en_US");
 //			sql_1.locale("fr_FR");
