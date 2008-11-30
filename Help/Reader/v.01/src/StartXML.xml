@@ -1,4 +1,6 @@
 	<install>
-  <product name="sampe_ru_RU"  url="http://www.sample.com/help/sampe_ru_RU.xml" />
-  <product name="sample_en_US" url="sample_en_US.xml" />
+  <product name="sampe_ru_RU" version="0.1" title="Not Loaded resourse" url="http://www.sample.com/help/sampe_ru_RU.xml" />
+  <product name="sample_en_US" version="0.1" title="Sample"url="sample_en_US.xml" />
+  <product name="VdomHelp_en_US" version="0.1" title="VdomHelp en US" url="VdomHelp_en_US.xml" />
+  
 </install>

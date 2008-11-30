@@ -70,9 +70,14 @@
 				return;
 			}
 			var name:String = product.name.toString();
+			var version:String = product.version.toString();
+			var title:String = product.title.toString();
+			var description:String = product.description.toString();
+			var language:String = product.language.toString();
+			var toc:XML = product.toc[0];
 			
 			// save loaded data to local diskDrive 
-//			var rsult:int = sqlProxy.setProduct(name,version,title,description, language,toc);
+			var rsult:int = sqlProxy.setProduct(name,version,title,description, language,toc);
 			saveLoadedData(product);
 			
 			
@@ -153,8 +158,11 @@
 			tree.selectedIndex = 0;
 			tree.validateNow();
 			
-			var pageName:String = tree.selectedItem.@name;
-			showSelectedPage(pageName);
+			if(tree.selectedItem)
+			{
+				var pageName:String = tree.selectedItem.@name;
+				showSelectedPage(pageName);
+			}
 		}
 			
 		private function treeChangeHandler(object:Object):void
@@ -180,6 +188,9 @@
 			var fileName : String = fullPath.substr( index + 1 ); 
 			fileName = fileName.substring( 0, fileName.lastIndexOf( "." )  );
 			trace(fullPath);
+			
+			if(!tree.selectedItem)
+				return;
 			var selectedItem:String = tree.selectedItem.@name;
 			
 			if(selectedItem == fileName)
