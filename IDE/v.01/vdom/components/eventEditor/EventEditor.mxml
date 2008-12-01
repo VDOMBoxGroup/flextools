@@ -1027,20 +1027,20 @@
 		
         <containers:ClosablePanel title="PAGES"
         	width="100%" maxHeight="55"
-        	color="#FFFFFF">
+        	color="#FFFFFF" height="55">
 	        <mx:ComboBox id="changeContainer" dataProvider="{arrAppl}"
         	 rowCount="20" change="{changeContainerHandler(event.target)}"   
         		color="#000000" minWidth="200" width="100%" itemRenderer="vdom.components.eventEditor.PanelItemRender"/>
    		 </containers:ClosablePanel>
    		 
-        <eventEditor:ContainersBranch id="containersBranch" width="100%"  title="Objects"/>
+        <eventEditor:ContainersBranch id="containersBranch" width="100%"  title="Objects" height="150"/>
         
-        <containers:ClosablePanel width="100%"  title="Events" >
-        	<eventEditor:TreeEvents id="treeEvents" width="100%" />
+        <containers:ClosablePanel width="100%"  title="Events"  height="150">
+        	<eventEditor:TreeEvents id="treeEvents" width="100%"  height="100%"/>
         </containers:ClosablePanel>
         
-        <containers:ClosablePanel width="100%" title="Actions" >
-        	<eventEditor:TreeActions id="treeActions" width="100%" />
+        <containers:ClosablePanel width="100%" title="Actions"  height="150">
+        	<eventEditor:TreeActions id="treeActions" width="100%"  height="100%"/>
         </containers:ClosablePanel>
       
     </mx:VDividedBox>

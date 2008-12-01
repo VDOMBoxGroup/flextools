@@ -6,6 +6,7 @@ import flash.events.MouseEvent;
 import mx.containers.Panel;
 import mx.controls.Button;
 import mx.core.EdgeMetrics;
+import mx.events.FlexEvent;
 
 import vdom.events.ClosablePanelEvent;
 
@@ -21,6 +22,23 @@ public class ClosablePanel extends Panel
 		super();
 		
 		addEventListener( ClosablePanelEvent.PANEL_COLLAPSE, panelOpeningHandler );
+		addEventListener( FlexEvent.CREATION_COMPLETE, _test );
+		minHeight = 20;
+	}
+	
+	private function _test( event : FlexEvent ) : void 
+	{
+		explicitHeight = height;
+	}
+	
+	override public function set height( value : Number ) : void
+	{
+		super.height = value;
+	}
+	
+	override public function set percentHeight( value : Number ) : void
+	{
+		super.percentHeight = value;
 	}
 	
 	public function get collapse() : Boolean
@@ -38,7 +56,12 @@ public class ClosablePanel extends Panel
 			collapseButton.setStyle( "disabledSkin", getStyle( "CollapseButtonOffButtonDisabled" ) );
 			
 			if( height > titleBar.height )
-				oldHeight = percentHeight;
+			{
+				if( percentHeight )
+					oldHeight = percentHeight;
+				else
+					oldHeight = parent.height / height * 100;
+			}
 			
 			height = getStyle( "headerHeight" );
 		}
@@ -48,7 +71,7 @@ public class ClosablePanel extends Panel
 			collapseButton.setStyle( "downSkin", getStyle( "CollapseButtonOnButtonDown" ) );
 			collapseButton.setStyle( "overSkin", getStyle( "CollapseButtonOnButtonOver" ) );
 			collapseButton.setStyle( "disabledSkin", getStyle( "CollapseButtonOnButtonDisabled" ) );
-			height = NaN;
+			//height = NaN;
 		}
 		_collapse = value;
 	}
@@ -119,7 +142,7 @@ public class ClosablePanel extends Panel
 		if( !event.collapse )
 		{
 			collapse = false;
-			percentHeight = oldHeight;
+			percentHeight =  oldHeight;
 		}
 		else
 		{

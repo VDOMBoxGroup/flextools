@@ -47,17 +47,17 @@
 			title="{resourceManager.getString('Edit','attributes_title')}"
 			acceptLabel="{resourceManager.getString('Edit','attributes_save')}" 
 			deleteLabel="{resourceManager.getString('Edit','attributes_delete')}"
-			width="100%" headerHeight="30" height="250" minHeight="30"/>
+			width="100%" headerHeight="30" height="250" minHeight="30" />
 		
 		<containers:ClosablePanel id="helpPanel" 
 			title="{resourceManager.getString('Edit','help_title')}"
 			width="100%" minHeight="20" height="50">
 
-			<mx:Text htmlText="{ attributesPanel.help }" condenseWhite="true" width="100%" minHeight="0"/>
+			<mx:Text htmlText="{ attributesPanel.help }" condenseWhite="true" width="100%"/>
 		</containers:ClosablePanel>
 		
 		<editContainers:ObjectsPanel id="pageList"
 			title="{resourceManager.getString('Edit','pages_title')}"
-			width="100%" minHeight="20" height="100%"/> 							
+			width="100%" height="150"/> 							
 	</mx:VDividedBox>
 </mx:HDividedBox>
