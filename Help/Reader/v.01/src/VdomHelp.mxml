@@ -76,8 +76,9 @@
 			var language:String = product.language.toString();
 			var toc:XML = product.toc[0];
 			
+			// save product to data base
+			sqlProxy.setProduct(name,version,title,description, language,toc);
 			// save loaded data to local diskDrive 
-			var rsult:int = sqlProxy.setProduct(name,version,title,description, language,toc);
 			saveLoadedData(product);
 			
 			
@@ -85,10 +86,10 @@
 			savePages(product);
 			
 			// выбрать ресурсы и сохранить их на диск
-			saveResources(product);
+//			saveResources(product);
 			
 			// сгенерить дерево
-			creatTree(product);
+//			creatTree(product);
 		}
 		
 		private function saveLoadedData(product:XML):void
@@ -100,37 +101,63 @@
 			cacheFile( fileName, byteArray);
 		}
 		
-		private function saveResources(product:XML):void
+	/*	private function saveResources(product:XML):void
 		{
 			for each(var page:XML in product.pages.children())
 			{
-				for each(var resource:XML in page.resources.children())
-				{
-					var base64:Base64Decoder = new Base64Decoder();
-						base64.decode(resource.toString());
-					var byteArray:ByteArray = base64.toByteArray();
-					var fileName:String = "resources/"+ resource.@id + "." + resource.@type;
-					
-					cacheFile(fileName , byteArray);
-				}
+				
 			}
 		}
-		
+		*/
 		private var arrayOfPages:Array = new Array();
 		
 		private function savePages(product:XML):void
 		{
+			var productName:String =  product.name.toString(); 
+			var language:String =  product.language.toString(); 
+			var location:String = language +"/"+productName+"/"; 
+			
+			//********* Creat PAGES ***********//
 			for each(var page:XML in product.pages.children())
 			{
-					var byteArray:ByteArray = new ByteArray();
-						byteArray.writeMultiByte(page.content.toString()+"\n", "UTF-8");
-					var fileName:String = page.name.toString() + ".html";
+				var pageName:String = page.name.toString() + ".html"; 
+				var version:String = page.version.toString(); 
+				var title:String = page.title.toString();
+				var description:String = page.description.toString();
+				var content:String = page.content.toString();
+				var pageLocation:String = location + pageName;
+//				sqlProxy.
+				
+				var byteArray:ByteArray = new ByteArray();
+					byteArray.writeMultiByte(page.content.toString()+"\n", "UTF-8");
+//				var fileName:String = pageName;
+				
+				cacheFile(pageLocation, byteArray);
+				
+				arrayOfPages[pageLocation] = true;
+				
+				sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+				
+				//*************  Creat Resources  ***************//
+				for each(var resource:XML in page.resources.children())
+				{
+					var base64:Base64Decoder = new Base64Decoder();
+						base64.decode(resource.toString());
 					
-					cacheFile(fileName , byteArray);
+					var byteArray0:ByteArray = base64.toByteArray();
 					
-					arrayOfPages[page.name.toString()] = true;
+					var resourceName:String = "resources/"+ resource.@id + "." + resource.@type;
+					
+					cacheFile(location + resourceName , byteArray0);
+					
+					sqlProxy.setResource(pageLocation, location + resourceName);
+//					sqlProxy.
+				}
 			}
-		}
+			
+			sqlProxy.search("conten of page","VdomHelp_en_US");
+			
+		}  
 		
 		public function cacheFile(contentName:String, content:ByteArray):void 
 		{
@@ -152,6 +179,7 @@
 			
 		private function creatTree(product:XML):void
 		{
+			
 			var toc:XML =  new XML();
 				toc = product.toc[0];
 			tree.dataProvider = toc;
@@ -164,6 +192,7 @@
 				showSelectedPage(pageName);
 			}
 		}
+		
 			
 		private function treeChangeHandler(object:Object):void
 		{
@@ -173,7 +202,7 @@
 		
 		private function showSelectedPage(pageName:String):void
 		{
-			var fileName:String = pageName +".html";
+			var fileName:String = pageName	;
 			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
 			var fullPath : String = newFile.nativePath;
 			html.location = fullPath; 

@@ -9,11 +9,11 @@ package
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 	
-	public class SQLProxy extends SQLStatement 
+	public class SQLProxy 
 	{
 		private var  file:File ;
-//		private var connection:SQLConnection = new SQLConnection();
-//		private var selectStatement:SQLStatement;
+		private var connection:SQLConnection = new SQLConnection();
+		private var sqlStatement:SQLStatement = new SQLStatement;
 		
 		public function SQLProxy()
 		{
@@ -21,9 +21,9 @@ package
 			
 			
 			file = File.applicationStorageDirectory.resolvePath("HelpDB.db");
-			sqlConnection = new SQLConnection();
-			addEventListener(SQLEvent.RESULT, resultHandler);
-			addEventListener(SQLErrorEvent.ERROR, errorHandler);
+			sqlStatement.sqlConnection = connection;
+			sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
+			sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
 			
 		}
 		
@@ -31,39 +31,43 @@ package
 		{
 			
 			try {
-				sqlConnection.open(file, SQLMode.CREATE );
+				sqlStatement.sqlConnection.open(file, SQLMode.CREATE );
 				 
 				 /*****************  !!!   проверить необходимость создания каждой таблички отдельно !!!   *******************/
 				 
 				//       PAGE    (id, name, version, title, description, content ) //
-				text = "CREATE TABLE page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+				sqlStatement.text = "CREATE TABLE page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 											"name TEXT NOT NULL,  " + 
 											"version TEXT NOT NULL,  " + 
 											"title TEXT NOT NULL,  " + 
 											"description TEXT , " + 
-											"content TEXT);";
-				execute();
+											"content TEXT, " + 
+											"id_product INTEGER);";
+				sqlStatement.execute();
 				
 				//       PRODUCT  (id, name, version, title, description, language, toc )   //
-				text = "CREATE TABLE product (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+				sqlStatement.text = "CREATE TABLE product (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 												"name CHAR NOT NULL, " + 
 												"version TEXT NOT NULL,  " + 
 												"title TEXT NOT NULL,  " + 
 												"description TEXT , " + 
 												"language TEXT,"+
 												"toc XML);";
-				execute();
+				sqlStatement.execute();
 				
-				text = "CREATE TABLE resource  (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+				sqlStatement.text = "CREATE TABLE resource  (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 											"name TEXT NOT NULL,  " + 
 											"id_page INTEGER);";
-				execute();
+				sqlStatement.execute();
 				
-				sqlConnection.close();
+				sqlStatement.text = "CREATE INDEX index_name ON  page(content)";
+				sqlStatement.execute();
+				
+				sqlStatement.sqlConnection.close();
 				
 			} catch (err:SQLError) {
 				// since there is no column "name", an error will be thrown
-				sqlConnection.close();
+				sqlStatement.sqlConnection.close();
 				
 				localizeError(err);
 				return false;
@@ -136,39 +140,39 @@ package
 																toc:XML):int
 		{
 			try {
-				sqlConnection.open(file, SQLMode.UPDATE );
+				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
 				 
-				text = "SELECT product.id " + 
+				sqlStatement.text = "SELECT product.id " + 
 						"FROM product " + 
 						"WHERE ((name ='"+ name +"') AND (version='"+ version +"') AND (language='"+ language +"'));";
-				execute();
+				sqlStatement.execute();
 //				sqlConnection.close();
-				var result:SQLResult = getResult();
+				var result:SQLResult = sqlStatement.getResult();
 				
 				if( result.data)
 				{
-					sqlConnection.close();
+					sqlStatement.sqlConnection.close();
 					return -1;
 				}
 				
-				text = "INSERT INTO product(name, version, title, description, language, toc) " + 
+				sqlStatement.text = "INSERT INTO product(name, version, title, description, language, toc) " + 
 						"VALUES('"+ name +"','"+ version +"','"+ title +"','"+ 
 																description +"','"+ 
 																language +"','"+ 
 																toc.toString() +"');";
-				execute();
+				sqlStatement.execute();
 				
 				
-				text = "SELECT product.id " + 
+				sqlStatement.text = "SELECT product.id " + 
 						"FROM product " + 
 						"WHERE ((name ='"+ name +"') AND (version='"+ version +"') AND (language='"+ language +"'));";
-				execute();
-				result = getResult();
+				sqlStatement.execute();
+				result = sqlStatement.getResult();
 				
-				sqlConnection.close();
+				sqlStatement.sqlConnection.close();
 			} catch (err:SQLError) 
 			{
-				sqlConnection.close();
+				sqlStatement.sqlConnection.close();
 				
 				localizeError(err);
 				return -1;
@@ -176,34 +180,127 @@ package
 			
 			return result.data[0]['id'];
 		}
-		/*
-		public function creatHelp(value:String):Boolean
+		
+		public function setPage(productName:String, language:String, pageName:String, 
+																		version:String, 
+																		title:String,
+																		description:String,
+																		content:String):int
 		{
 			try {
-				sqlConnection.open(file, SQLMode.UPDATE );
-				 
-				text = "SELECT ALL  name FROM product WHERE name='"+value+"';";
-				execute();
 				
-				var result:SQLResult = getResult();
+				content = cleanContent(content);
+				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
+				 
+				sqlStatement.text = "SELECT product.id " + 
+						"FROM product " + 
+						"WHERE ((name ='"+ productName +"')  AND (language='"+ language +"'));";
+				sqlStatement.execute();
+//				sqlConnection.close();
+				var result:SQLResult = sqlStatement.getResult();
+				
 				if( !result.data)
 				{
-					text = "INSERT INTO product(name) VALUES('"+value+"');";
-					execute();
+					sqlStatement.sqlConnection.close();
+					return -1;
 				}
 				
-				sqlConnection.close();
+				
+				sqlStatement.text = "INSERT INTO page(name, version, title, description, content, id_product) " + 
+						"VALUES('"+ pageName +"','"+ version +"','"+ title +"','"+ 
+																description +"','"+ 
+																content +"','"+ 
+																result.data[0]['id'] +"');";
+				sqlStatement.execute();
+				
+				sqlStatement.sqlConnection.close();
+
 			} catch (err:SQLError) 
 			{
-				sqlConnection.close();
+				sqlStatement.sqlConnection.close();
 				
 				localizeError(err);
-				return false;
+				return -1;
 			}
 			
-			return true;
+			return result.data[0]['id'];
 		}
-		*/
+		
+		public function setResource(pageName:String, resourceName:String	):int
+		{
+			try {
+				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
+				 
+				sqlStatement.text = "SELECT page.id " + 
+						"FROM page " + 
+						"WHERE (name ='"+ pageName +"');";
+				sqlStatement.execute();
+//				sqlConnection.close();
+				var result:SQLResult = sqlStatement.getResult();
+				
+				if( !result.data)
+				{
+					sqlStatement.sqlConnection.close();
+					return -1;
+				}
+				
+				
+				sqlStatement.text = "INSERT INTO resource(name, id_page) " + 
+						"VALUES('"+ resourceName +"','"+ result.data[0]['id'] +"');";
+				sqlStatement.execute();
+				
+				sqlStatement.sqlConnection.close();
+
+			} catch (err:SQLError) 
+			{
+				sqlStatement.sqlConnection.close();
+				
+				localizeError(err);
+				return -1;
+			}
+			
+			return result.data[0]['id'];
+		}
+		
+		public function search(	value:String, productName:String = "",	language:String = "en_US"):Array
+		{
+			try {
+				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
+				 
+				 
+				sqlStatement.text = "SELECT page.name " +
+						"FROM product INNER JOIN page ON product.id = page.id_product "+
+						"WHERE (((product.name)='"+productName+"') AND ((page.content) REGEXP'"+value+"') AND ((product.language)='"+language+"'));"
+//				sqlStatement.text = "SELECT page.id " + 
+//						"FROM page " + 
+//						"WHERE (name ='"+ pageName +"');";
+				sqlStatement.execute();
+//				sqlConnection.close();
+				var result:SQLResult = sqlStatement.getResult();
+				
+				if( !result.data)
+				{
+					sqlStatement.sqlConnection.close();
+					return result.data;
+				}
+				
+				
+//				sqlStatement.text = "INSERT INTO resource(name, id_page) " + 
+//						"VALUES('"+ resourceName +"','"+ result.data[0]['id'] +"');";
+//				sqlStatement.execute();
+				
+				sqlStatement.sqlConnection.close();
+
+			} catch (err:SQLError) 
+			{
+				sqlStatement.sqlConnection.close();
+				
+				localizeError(err);
+//				return result.data;
+			}
+			
+			return result.data;
+		}
 			
 		private function displayLocalizedDetail(str:String):void 
 		{
@@ -220,6 +317,15 @@ package
 		private function errorHandler(event:SQLErrorEvent):void 
 		{
 			trace("!!!!!!!!!!!!!!!!!  SQLErrorEvent !!!!!!!!!!!!!!!");
+		}
+		
+		private function cleanContent(value:String):String
+		{
+//			var phraseRE:RegExp = /<script>.*?<\/script>|<style>.*?<\/style>|<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->|<\!\[CDATA\[.*?\]\]>|&#?[\w\d]+;/;
+			var phraseRE:RegExp = /[^\w]+/;
+//  
+			var phraseID:String = value.match(phraseRE)[1]; 
+			return "Same Text";
 		}
 	}
 }
