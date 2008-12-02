@@ -19,6 +19,7 @@
 		private function frstLoadXML():void
 		{
 			
+			
 			myXMLURL = new URLRequest(XML_URL)
 			myLoader = new URLLoader(myXMLURL);
 			myLoader.addEventListener(Event.COMPLETE, startXMLLoaded);
@@ -155,7 +156,7 @@
 				}
 			}
 			
-			sqlProxy.search("conten of page","VdomHelp_en_US");
+			pageList.dataProvider = sqlProxy.search("conten of page","VdomHelp_en_US");
 			
 		}  
 		
@@ -199,6 +200,13 @@
 			showSelectedPage(tree.selectedItem.@name);
 			
 		}
+		
+		private function listChangeHandler(object:Object):void
+		{
+			showSelectedPage(pageList.selectedItem.name);
+			
+		}
+		
 		
 		private function showSelectedPage(pageName:String):void
 		{
@@ -284,12 +292,14 @@
 		}
 	]]>
 </mx:Script>
-	<mx:Tree id="tree" x="81" y="70" width="145" height="249"
+	<mx:Tree id="tree" x="10" y="72" width="145" height="249"
 		labelField="@title" showRoot="false" change="{treeChangeHandler(event)}" />
 	<mx:HTML id="html" x="267" y="72" width="362" height="247"
 		locationChange="{pageChangedHandler(event)}"/>
 	<mx:Button x="267" y="42" label="back" click="{html.historyBack()}"/>
 	<mx:Button x="328" y="42" label="forvatd" click="{html.historyForward()}"/>
 	<mx:Button x="258" y="327" label="Test" click="{test(event)}"/>
+	<mx:List  id="pageList" x="10" y="329" width="145" height="152" labelField="title"
+		change="{listChangeHandler(event)}"/>
 	
 </mx:WindowedApplication>

@@ -264,13 +264,18 @@ package
 		
 		public function search(	value:String, productName:String = "",	language:String = "en_US"):Array
 		{
+			var phraseRE:RegExp = new RegExp("[^\w]+","gimsx");
+
+			value = " " + value + " ";
+			value = value.replace(phraseRE,"%"); 
+			
 			try {
 				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
 				 
 				 
-				sqlStatement.text = "SELECT page.name " +
+				sqlStatement.text = "SELECT page.name, page.title " +
 						"FROM product INNER JOIN page ON product.id = page.id_product "+
-						"WHERE (((product.name)='"+productName+"') AND ((page.content) REGEXP'"+value+"') AND ((product.language)='"+language+"'));"
+						"WHERE (((product.name)='"+productName+"') AND ((page.content) LIKE'"+value+"') AND ((product.language)='"+language+"'));"
 //				sqlStatement.text = "SELECT page.id " + 
 //						"FROM page " + 
 //						"WHERE (name ='"+ pageName +"');";
@@ -278,7 +283,7 @@ package
 //				sqlConnection.close();
 				var result:SQLResult = sqlStatement.getResult();
 				
-				if( !result.data)
+				if( result.data)
 				{
 					sqlStatement.sqlConnection.close();
 					return result.data;
@@ -321,11 +326,13 @@ package
 		
 		private function cleanContent(value:String):String
 		{
-//			var phraseRE:RegExp = /<script>.*?<\/script>|<style>.*?<\/style>|<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->|<\!\[CDATA\[.*?\]\]>|&#?[\w\d]+;/;
-			var phraseRE:RegExp = /[^\w]+/;
+			var phraseRE1:RegExp = new RegExp("<script.*?>.*?<\/script>|<style.*?>.*?<\/style>|<\/?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->|<\!\[CDATA\[.*?\]\]>|&#?[\w\d]+","gimsx");
+			
+			var phraseRE2:RegExp = new RegExp("[^\w]+","gimsx");
 //  
-			var phraseID:String = value.match(phraseRE)[1]; 
-			return "Same Text";
+			var words:String = value.replace(phraseRE1," "); 
+//				words = words.replace(phraseRE2," ");
+			return words;
 		}
 	}
 }
