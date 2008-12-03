@@ -564,7 +564,14 @@
 				}				
 				else
 				{
-					selectGraph(findFirstGraph());
+					var index:int = graphsAccordion.getChildIndex(curTab);
+					
+					for(var i:int=index-1; i>=0; i--)
+					{
+						var tab:AccordionChild = graphsAccordion.getChildAt(i) as AccordionChild;
+						if(tab.graphs.length>0)
+							selectGraph(tab.graphs.getItemAt(0) as GraphCanvas);
+					}
 				}
 				
 				dispatchEvent(new Event(TPL_CHANGED));

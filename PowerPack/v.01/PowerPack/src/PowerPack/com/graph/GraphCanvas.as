@@ -29,7 +29,6 @@ import mx.binding.utils.*;
 import mx.containers.Canvas;
 import mx.controls.Alert;
 import mx.core.UIComponent;
-import mx.core.UIComponentGlobals;
 import mx.effects.Move;
 import mx.events.ChildExistenceChangedEvent;
 import mx.events.CloseEvent;
@@ -191,7 +190,8 @@ public class GraphCanvas extends Canvas
     public var selectionManager:SelectionManager;
     
 	public var addingTransition:Boolean;
-	public var currentArrow:Connector;		
+	public var currentArrow:Connector;
+	public var xml:XML;		
 	
     //--------------------------------------------------------------------------
 	//
