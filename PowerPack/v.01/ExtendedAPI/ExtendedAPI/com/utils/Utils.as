@@ -44,6 +44,12 @@ package ExtendedAPI.com.utils
 			Container(obj.parent).verticalScrollPosition = cP.y - Container(obj.parent).height/2;
 			Container(obj.parent).horizontalScrollPosition = cP.x - Container(obj.parent).width/2
 		}
+		
+		public static function scrollToContentPoint(content:Container, p:Point):void
+		{
+			content.verticalScrollPosition = p.y - content.height/2;
+			content.horizontalScrollPosition = p.x - content.width/2
+		}		
 	
 	 	public static function isEqualArrays(arr1:Array, arr2:Array, strict:Boolean = false):Boolean
 	 	{

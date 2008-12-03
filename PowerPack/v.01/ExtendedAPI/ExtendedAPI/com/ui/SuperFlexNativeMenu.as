@@ -423,11 +423,14 @@ public class SuperFlexNativeMenu extends FlexNativeMenu
 				SuperNativeMenuItem(nativeMenuItem).type = type;
 				SuperNativeMenuItem(nativeMenuItem).groupName = dataDescriptor.getGroupName(data);
 				
-				if (data is XML)
+				if (data is XML) {
+					SuperNativeMenuItem(nativeMenuItem).name = data.@id.toString();
 					SuperNativeMenuItem(nativeMenuItem).isRequired = data.@isRequired.toString().toLowerCase()=='true'?true:false;
+				}
 	        	else if (data is Object)
 	        	{
 	            	try {
+						SuperNativeMenuItem(nativeMenuItem).name = data.id;
 	                	SuperNativeMenuItem(nativeMenuItem).isRequired = data.isRequired;
 	            	} catch(e:Error) {}
 	         	}
