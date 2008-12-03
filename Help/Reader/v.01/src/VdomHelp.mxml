@@ -129,6 +129,19 @@
 				var pageLocation:String = location + pageName;
 //				sqlProxy.
 				
+				
+				var rez:Object = sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+				
+				if (rez == null)
+					return;
+					
+				if (rez as Array)
+				{
+					trace("delete Old Resources");
+				}
+				
+				
+				
 				var byteArray:ByteArray = new ByteArray();
 					byteArray.writeMultiByte(page.content.toString()+"\n", "UTF-8");
 //				var fileName:String = pageName;
@@ -137,7 +150,6 @@
 				
 				arrayOfPages[pageLocation] = true;
 				
-				sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
 				
 				//*************  Creat Resources  ***************//
 				for each(var resource:XML in page.resources.children())

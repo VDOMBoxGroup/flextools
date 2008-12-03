@@ -185,12 +185,14 @@ package
 																		version:String, 
 																		title:String,
 																		description:String,
-																		content:String):int
+																		content:String):Object
 		{
 			try {
+				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
+				
+				
 				
 				content = cleanContent(content);
-				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
 				 
 				sqlStatement.text = "SELECT product.id " + 
 						"FROM product " + 
@@ -202,16 +204,40 @@ package
 				if( !result.data)
 				{
 					sqlStatement.sqlConnection.close();
-					return -1;
+					return null;
 				}
 				
+				var productID:int  = result.data[0]['id'];
 				
-				sqlStatement.text = "INSERT INTO page(name, version, title, description, content, id_product) " + 
-						"VALUES('"+ pageName +"','"+ version +"','"+ title +"','"+ 
-																description +"','"+ 
-																content +"','"+ 
-																result.data[0]['id'] +"');";
+				sqlStatement.text = "SELECT page.version, page.id  FROM page WHERE (name ='"+ pageName +"');"; 
+				
 				sqlStatement.execute();
+				
+				// страница не найдена - записываем
+				// страница найдена 1) старая - удаляем, записываем 2) такая же - пропускаем
+				
+				result = sqlStatement.getResult();
+				
+				if(!result.data)
+				{
+					askDatabase();
+					return true;
+				} 
+				
+				var verInDB:Number = Number(result.data[0]["version"]);
+				var curVer:Number = Number(version);
+				if(verInDB < curVer)
+				{
+					///  ++++удаляем старое ++++
+					var massOldResources:Array =  deleteOldData(result.data[0]["id"]);
+					askDatabase();
+					return massOldResources;
+						
+				} else
+				{
+					sqlStatement.sqlConnection.close();
+					return null;
+				}
 				
 				sqlStatement.sqlConnection.close();
 
@@ -220,10 +246,38 @@ package
 				sqlStatement.sqlConnection.close();
 				
 				localizeError(err);
-				return -1;
+				return null;
 			}
 			
-			return result.data[0]['id'];
+			return result;
+			
+			function askDatabase():void
+			{
+				sqlStatement.text = "INSERT INTO page(name, version, title, description, content, id_product) " + 
+						"VALUES('"+ pageName +"','"+ version +"','"+ title +"','"+ 
+																description +"','"+ 
+																content +"','"+ 
+																productID +"');";
+				sqlStatement.execute();
+				sqlStatement.sqlConnection.close();
+//				return true;
+			}
+			
+			function deleteOldData(pageID:Number):Array
+			{
+				sqlStatement.text = "DELETE FROM 	page WHERE (id = '"+ pageID +"')";
+				sqlStatement.execute();
+				
+				sqlStatement.text = "SELECT resource.name FROM 	page  WHERE (id_page = '"+ pageID +"')";
+				sqlStatement.execute();
+				
+				var oldResources:SQLResult = sqlStatement.getResult();
+				
+				sqlStatement.text = "DELETE FROM 	resource WHERE (id_page = '"+ pageID +"')";
+				sqlStatement.execute();
+				
+				return oldResources.data;
+			}
 		}
 		
 		public function setResource(pageName:String, resourceName:String	):int
@@ -310,7 +364,6 @@ package
 		private function displayLocalizedDetail(str:String):void 
 		{
 			trace(str)
-		// display error detail
 		}
 
 		private function resultHandler(event:SQLEvent):void 
