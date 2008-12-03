@@ -18,8 +18,6 @@
 		// start loading 1-st XML 
 		private function frstLoadXML():void
 		{
-			
-			
 			myXMLURL = new URLRequest(XML_URL)
 			myLoader = new URLLoader(myXMLURL);
 			myLoader.addEventListener(Event.COMPLETE, startXMLLoaded);
@@ -128,16 +126,26 @@
 				var content:String = page.content.toString();
 				var pageLocation:String = location + pageName;
 //				sqlProxy.
+
+				// проверяем есть ли эта страница уже в базе. берем версию страницы ////getVersionOfPage(): string//////
+				// страница не найдена - записываем
+				// страница найдена 1) старая - удаляем, записываем 2) такая же - пропускаем				
+				// deletePage(namePage); getResourcesOfPage(namePage):Array; deleteResorces(namePage);
 				
+				var curPageVersion:String = sqlProxy.getVersionOfPage(pageLocation);
 				
-				var rez:Object = sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-				
-				if (rez == null)
-					return;
-					
-				if (rez as Array)
+				if(curPageVersion == '')
 				{
-					trace("delete Old Resources");
+					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+				}
+				else if (Number(curPageVersion)< Number(version))
+				{
+					//delete old data
+					deleteOldData(pageLocation);
+					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+				} else
+				{
+					continue;
 				}
 				
 				
@@ -164,13 +172,34 @@
 					cacheFile(location + resourceName , byteArray0);
 					
 					sqlProxy.setResource(pageLocation, location + resourceName);
-//					sqlProxy.
 				}
 			}
 			
-			pageList.dataProvider = sqlProxy.search("conten of page","VdomHelp_en_US");
+			function deleteOldData(namePage:String):void
+			{
+				var resources:Object = sqlProxy.getResourcesOfPage(namePage);
+				
+				for(var index:String in resources)
+				{
+					deleteFile(resources[index]['name']);
+				}
+				
+				sqlProxy.deleteResources(namePage);
+				sqlProxy.deletePage(namePage);
+				
+			}
+//			pageList.dataProvider = sqlProxy.search("conten of page","VdomHelp_en_US");
 			
 		}  
+		
+		private function deleteFile(location:String):void
+		{
+			trace("Delete: " + location);
+			var newFileName:String = location;
+			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
+			newFile.deleteFile();
+//			trace(newFile.toString())
+		}
 		
 		public function cacheFile(contentName:String, content:ByteArray):void 
 		{
@@ -280,26 +309,6 @@
 		
 		private function test(event:Event):void
 		{
-			
-			
-		/*	
-			var int_:int = sql_1.setProduct("VdomIDE_en_US", "1", "VdomIDE", "It is help for VdomIDE", "en_US", XML(tree.dataProvider));
-			trace("res: " + int_);
-			
-			int_ = sql_1.setProduct("VdomIDE_en_US", "1", "VdomIDE", "It is help for VdomIDE", "en_US", XML(tree.dataProvider));
-			trace("res: " + int_);
-			
-			int_ = sql_1.setProduct("VdomIDE_ru_RU", "1", "VdomIDE", "It is help for VdomIDE", "ru_RU", XML(tree.dataProvider));
-			*/
-//			trace("res: " + int_);
-//			sql_1.locale("ru_RU");
-//			sql_1.locale("en_US");
-//			sql_1.locale("fr_FR");
-//			sql_1.getLocale();
-//			
-//			sql_1.product("VdomIDE");
-//			sql_1.product("VdomPrintToWeb");
-			
 			
 		}
 	]]>

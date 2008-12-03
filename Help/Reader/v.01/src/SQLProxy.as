@@ -107,258 +107,156 @@ package
 			}
 		}
 		
-/*		
-		public function getLocale():Array
-		{
-			
-			try {
-				sqlConnection.open(file, SQLMode.UPDATE );
-				 
-				 
-				text = "SELECT ALL  name FROM locale;";
-				execute();
-				sqlConnection.close();
-				var result:SQLResult = getResult();
-				return result.data;
-			
-			} catch (err:SQLError) 
-			{
-				sqlConnection.close();
-				
-				localizeError(err);
-				return new Array();
-			}
-			return new Array();
-		}
-	*/	
 	//       PRODUCT  (id, name, version, title, description, language, toc )   //
 	
 		/// ********* curentPruduct, curentPage ******************************	
 		public function setProduct(name:String, version:String, title:String, 
 																description:String,
 																language:String,
-																toc:XML):int
+																toc:XML):void
 		{
-			try {
-				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
 				 
-				sqlStatement.text = "SELECT product.id " + 
+				var query:String = "SELECT product.id " + 
 						"FROM product " + 
 						"WHERE ((name ='"+ name +"') AND (version='"+ version +"') AND (language='"+ language +"'));";
-				sqlStatement.execute();
-//				sqlConnection.close();
-				var result:SQLResult = sqlStatement.getResult();
+
+				var result:Object = executeQuery(query);
 				
-				if( result.data)
+				if( !result)
 				{
-					sqlStatement.sqlConnection.close();
-					return -1;
+					query = "INSERT INTO product(name, version, title, description, language, toc) " + 
+							"VALUES('"+ name +"','"+ version +"','"+ title +"','"+ 
+																	description +"','"+ 
+																	language +"','"+ 
+																	toc.toString() +"');";
+					executeQuery(query);				
 				}
 				
-				sqlStatement.text = "INSERT INTO product(name, version, title, description, language, toc) " + 
-						"VALUES('"+ name +"','"+ version +"','"+ title +"','"+ 
-																description +"','"+ 
-																language +"','"+ 
-																toc.toString() +"');";
-				sqlStatement.execute();
 				
-				
-				sqlStatement.text = "SELECT product.id " + 
-						"FROM product " + 
-						"WHERE ((name ='"+ name +"') AND (version='"+ version +"') AND (language='"+ language +"'));";
-				sqlStatement.execute();
-				result = sqlStatement.getResult();
-				
-				sqlStatement.sqlConnection.close();
-			} catch (err:SQLError) 
+		}
+		
+		public function getVersionOfPage(pageName:String):String
+		{
+			var query:String = "SELECT page.version, page.id  FROM page WHERE (name ='"+ pageName +"');"; 
+								
+			var result:Object = executeQuery(query);;
+			if(!result)
 			{
-				sqlStatement.sqlConnection.close();
-				
-				localizeError(err);
-				return -1;
+				return "";
 			}
-			
-			return result.data[0]['id'];
+			return result[0]["version"];
 		}
 		
 		public function setPage(productName:String, language:String, pageName:String, 
 																		version:String, 
 																		title:String,
 																		description:String,
-																		content:String):Object
+																		content:String):void
 		{
-			try {
-				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
-				
-				
 				
 				content = cleanContent(content);
 				 
-				sqlStatement.text = "SELECT product.id " + 
+				var query:String = "SELECT product.id " + 
 						"FROM product " + 
 						"WHERE ((name ='"+ productName +"')  AND (language='"+ language +"'));";
-				sqlStatement.execute();
-//				sqlConnection.close();
-				var result:SQLResult = sqlStatement.getResult();
+				var result:Object = executeQuery(query);
 				
-				if( !result.data)
+				if( result)
 				{
-					sqlStatement.sqlConnection.close();
-					return null;
+					var productID:int  = result[0]['id'];
+					query = "INSERT INTO page(name, version, title, description, content, id_product) " + 
+							"VALUES('"+ pageName +"','"+ version +"','"+ title +"','"+ 
+																	description +"','"+ 
+																	content +"','"+ 
+																	productID +"');";
+				
+					executeQuery(query);			
 				}
-				
-				var productID:int  = result.data[0]['id'];
-				
-				sqlStatement.text = "SELECT page.version, page.id  FROM page WHERE (name ='"+ pageName +"');"; 
-				
-				sqlStatement.execute();
-				
-				// страница не найдена - записываем
-				// страница найдена 1) старая - удаляем, записываем 2) такая же - пропускаем
-				
-				result = sqlStatement.getResult();
-				
-				if(!result.data)
-				{
-					askDatabase();
-					return true;
-				} 
-				
-				var verInDB:Number = Number(result.data[0]["version"]);
-				var curVer:Number = Number(version);
-				if(verInDB < curVer)
-				{
-					///  ++++удаляем старое ++++
-					var massOldResources:Array =  deleteOldData(result.data[0]["id"]);
-					askDatabase();
-					return massOldResources;
-						
-				} else
-				{
-					sqlStatement.sqlConnection.close();
-					return null;
-				}
-				
-				sqlStatement.sqlConnection.close();
 
-			} catch (err:SQLError) 
-			{
-				sqlStatement.sqlConnection.close();
-				
-				localizeError(err);
-				return null;
-			}
-			
-			return result;
-			
-			function askDatabase():void
-			{
-				sqlStatement.text = "INSERT INTO page(name, version, title, description, content, id_product) " + 
-						"VALUES('"+ pageName +"','"+ version +"','"+ title +"','"+ 
-																description +"','"+ 
-																content +"','"+ 
-																productID +"');";
-				sqlStatement.execute();
-				sqlStatement.sqlConnection.close();
-//				return true;
-			}
-			
-			function deleteOldData(pageID:Number):Array
-			{
-				sqlStatement.text = "DELETE FROM 	page WHERE (id = '"+ pageID +"')";
-				sqlStatement.execute();
-				
-				sqlStatement.text = "SELECT resource.name FROM 	page  WHERE (id_page = '"+ pageID +"')";
-				sqlStatement.execute();
-				
-				var oldResources:SQLResult = sqlStatement.getResult();
-				
-				sqlStatement.text = "DELETE FROM 	resource WHERE (id_page = '"+ pageID +"')";
-				sqlStatement.execute();
-				
-				return oldResources.data;
-			}
+
+		}
+	
+		public function deletePage(namePage:String):void
+		{
+			var query:String = "DELETE FROM 	page WHERE (name = '"+ namePage +"')";
+			executeQuery(query);
 		}
 		
-		public function setResource(pageName:String, resourceName:String	):int
+		
+		public function deleteResources(namePage:String):void
 		{
-			try {
-				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
-				 
-				sqlStatement.text = "SELECT page.id " + 
+			
+				var query:String = "SELECT page.id FROM 	page  WHERE (name = '"+ namePage +"')";
+				var result:Object = executeQuery(query);
+				var pageID:int = result[0]['id']; 
+				
+				query = "DELETE FROM 	resource WHERE (id_page = '"+ pageID +"')";
+				executeQuery(query);
+		}
+		
+		public function getResourcesOfPage(namePage:String):Object
+		{
+				var query:String  = "SELECT page.id FROM 	page  WHERE (name = '"+ namePage +"')";
+				var result:Object = executeQuery(query);
+				var pageID:int = result[0]['id']; 
+				
+				query = "SELECT resource.name  FROM	resource WHERE (id_page = '"+ pageID +"')";
+				result = executeQuery(query);;
+
+				return result;
+		}
+		
+		
+		public function setResource(pageName:String, resourceName:String	):void
+		{
+				var query:String = "SELECT page.id " + 
 						"FROM page " + 
 						"WHERE (name ='"+ pageName +"');";
-				sqlStatement.execute();
-//				sqlConnection.close();
-				var result:SQLResult = sqlStatement.getResult();
+				var result:Object = executeQuery(query);
 				
-				if( !result.data)
+				if( result)
 				{
-					sqlStatement.sqlConnection.close();
-					return -1;
+					query = "INSERT INTO resource(name, id_page) " + 
+							"VALUES('"+ resourceName +"','"+ result[0]['id'] +"');";
+					executeQuery(query);
 				}
 				
-				
-				sqlStatement.text = "INSERT INTO resource(name, id_page) " + 
-						"VALUES('"+ resourceName +"','"+ result.data[0]['id'] +"');";
-				sqlStatement.execute();
-				
-				sqlStatement.sqlConnection.close();
-
-			} catch (err:SQLError) 
-			{
-				sqlStatement.sqlConnection.close();
-				
-				localizeError(err);
-				return -1;
-			}
-			
-			return result.data[0]['id'];
 		}
 		
-		public function search(	value:String, productName:String = "",	language:String = "en_US"):Array
+		public function search(	value:String, productName:String = "",	language:String = "en_US"):Object
 		{
 			var phraseRE:RegExp = new RegExp("[^\w]+","gimsx");
 
 			value = " " + value + " ";
 			value = value.replace(phraseRE,"%"); 
 			
-			try {
-				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
-				 
-				 
-				sqlStatement.text = "SELECT page.name, page.title " +
+			var query:String = "SELECT page.name, page.title " +
 						"FROM product INNER JOIN page ON product.id = page.id_product "+
 						"WHERE (((product.name)='"+productName+"') AND ((page.content) LIKE'"+value+"') AND ((product.language)='"+language+"'));"
-//				sqlStatement.text = "SELECT page.id " + 
-//						"FROM page " + 
-//						"WHERE (name ='"+ pageName +"');";
-				sqlStatement.execute();
-//				sqlConnection.close();
-				var result:SQLResult = sqlStatement.getResult();
-				
-				if( result.data)
-				{
-					sqlStatement.sqlConnection.close();
-					return result.data;
-				}
-				
-				
-//				sqlStatement.text = "INSERT INTO resource(name, id_page) " + 
-//						"VALUES('"+ resourceName +"','"+ result.data[0]['id'] +"');";
-//				sqlStatement.execute();
-				
-				sqlStatement.sqlConnection.close();
 
-			} catch (err:SQLError) 
+			var result:Object = executeQuery(query);
+			
+			return result;
+		}
+		
+		private function executeQuery(query:String):Object
+		{
+			try {
+				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
+				sqlStatement.text = query;
+				sqlStatement.execute();
+				
+				var result:SQLResult = sqlStatement.getResult();
+				sqlStatement.sqlConnection.close();
+			} 
+			catch (err:SQLError) 
 			{
 				sqlStatement.sqlConnection.close();
 				
 				localizeError(err);
-//				return result.data;
+				return null;
 			}
-			
-			return result.data;
+				return result.data;
 		}
 			
 		private function displayLocalizedDetail(str:String):void 
@@ -387,5 +285,7 @@ package
 //				words = words.replace(phraseRE2," ");
 			return words;
 		}
+		
+		
 	}
 }
