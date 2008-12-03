@@ -150,7 +150,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
             
             newStyleDeclaration.setStyle("alpha", 1);
             newStyleDeclaration.setStyle("strokeWidth", 1);
-            newStyleDeclaration.setStyle("arrowSize", 8);
+            newStyleDeclaration.setStyle("arrowSize", 7);
             newStyleDeclaration.setStyle("arrowAngle", 50);
             
             newStyleDeclaration.setStyle("focusThickness", 2);
@@ -1067,7 +1067,13 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		graphics.lineStyle(SELECT_AREA_SIZE, 0x000000, 0.0);
 		graphics.moveTo( _connectorPoly[0].x, _connectorPoly[0].y );
 		graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );
+		
+		var ls1:LineSegment = new LineSegment(_connectorPoly[0], _connectorPoly[1]);								
+		var ls2:LineSegment = new LineSegment(_connectorPoly[2], _connectorPoly[3]);
 										
+		var crossP:Point = ls1.intersection(ls2, false);
+		var midP:Point = Point.interpolate(crossP, _connectorPoly[1], 0.6);
+		
 		if(focusColor>=0 && _enabled)
 		{
 			// Draw outline
@@ -1078,16 +1084,19 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );			
 								
 			graphics.lineTo( _connectorPoly[2].x, _connectorPoly[2].y );
+			graphics.lineTo( midP.x, midP.y );
 			graphics.lineTo( _connectorPoly[3].x, _connectorPoly[3].y );
 			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );									
 		}
 		else
 		{
-			graphics.lineStyle(getStyle("strokeWidth")+2, 0xffffff, 0.8, false, "normal", CapsStyle.NONE, JointStyle.MITER);	
+			graphics.lineStyle(getStyle("strokeWidth")+2, 0xffffff, 0.6, false, "normal", CapsStyle.NONE, JointStyle.MITER);	
 						
 			graphics.moveTo( _connectorPoly[0].x, _connectorPoly[0].y );
-			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );					
+			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );
+								
 			graphics.lineTo( _connectorPoly[2].x, _connectorPoly[2].y );
+			graphics.lineTo( midP.x, midP.y );
 			graphics.lineTo( _connectorPoly[3].x, _connectorPoly[3].y );
 			graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );	
 		}
@@ -1100,6 +1109,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		graphics.beginFill(color, getStyle("alpha"));
 		graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );					
 		graphics.lineTo( _connectorPoly[2].x, _connectorPoly[2].y );
+		graphics.lineTo( midP.x, midP.y );
 		graphics.lineTo( _connectorPoly[3].x, _connectorPoly[3].y );
 		graphics.lineTo( _connectorPoly[1].x, _connectorPoly[1].y );	
 		graphics.endFill();  

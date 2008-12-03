@@ -21,6 +21,7 @@ import flash.display.NativeMenuItem;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.geom.Point;
 import flash.ui.Keyboard;
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
@@ -124,6 +125,8 @@ public class GraphCanvas extends Canvas
 	{
 		super();
 		
+		addEventListener(MouseEvent.MOUSE_WHEEL, wheelHandler);
+		addEventListener(MouseEvent.MIDDLE_CLICK, middleClickHandler);
 		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
 		addEventListener(DragEvent.DRAG_DROP, dragDropHandler);
 		addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -134,7 +137,7 @@ public class GraphCanvas extends Canvas
 		addEventListener(ChildExistenceChangedEvent.CHILD_REMOVE, childRemoveHandler);
 		addEventListener(MouseEvent.CONTEXT_MENU, contextMenuDisplayingHandler);
 		
-		graphs[this] = this;	 
+		graphs[this] = this;
 	}
 	
 	//--------------------------------------------------------------------------
@@ -160,8 +163,10 @@ public class GraphCanvas extends Canvas
         	selectionManager.dispose();
         }  				
 
-		removeEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
-		removeEventListener(DragEvent.DRAG_DROP, dragDropHandler); 
+		removeEventListener(MouseEvent.MOUSE_WHEEL, wheelHandler);
+		removeEventListener(MouseEvent.MIDDLE_CLICK, middleClickHandler);
+		removeEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
+		removeEventListener(DragEvent.DRAG_DROP, dragDropHandler);
 		removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		removeEventListener("cut", onCut);
 		removeEventListener("copy", onCopy);
@@ -213,6 +218,8 @@ public class GraphCanvas extends Canvas
     	if(_category!=value)
     	{
 	    	_category = value;
+	    	if(xml)
+        		xml.@category = value;
 	    	
 	        _categoryChanged = true;
 	        
@@ -240,6 +247,8 @@ public class GraphCanvas extends Canvas
     	if(_initial!=value)
     	{
 	    	_initial = value;
+	    	if(xml)
+        		xml.@initial = value;	    	
 	    	
 	        _initialChanged = true;
 	        
@@ -265,6 +274,9 @@ public class GraphCanvas extends Canvas
     	{
         	super.name = value;
         	label = value;
+        	
+        	if(xml)
+        		xml.@name = value;
         	
 	        dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.NAME_CHANGED));
 	        dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));        	
@@ -310,12 +322,13 @@ public class GraphCanvas extends Canvas
 			contextMenu.addItem(new SuperNativeMenuItem('separator'));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_expand_space'], 'expand_space'));
         	contextMenu.addItem(new SuperNativeMenuItem('normal', LanguageManager.sentences['graph_collapse_space'], 'collapse_space'));
-			
-			for each (var item:NativeMenuItem in contextMenu.items) {
-	       		//LanguageManager.bindSentence('graph_'+item.name, item);
-			}
 				
         	contextMenu.addEventListener(Event.SELECT, contextMenuSelectHandler);	        	 
+        }
+        
+        if(xml)
+        {
+        	fromXML(xml.toXMLString());
         }	        
     }
 
@@ -508,6 +521,9 @@ public class GraphCanvas extends Canvas
 	// gen XML that represents graph structure
 	public function toXML():XML
 	{
+		if(xml)
+			return xml;
+			
 		var graphXML:XML = new XML(<graph/>);
 		var children:Array = getChildren();
 		
@@ -588,7 +604,8 @@ public class GraphCanvas extends Canvas
 		}		
 		
 		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));	
-			
+       	xml = null;
+
 		return true;
 	}		
 	
@@ -771,11 +788,14 @@ public class GraphCanvas extends Canvas
 	    		doPaste();	
 	    	}
 	    }
-	    
 	}
 	
 	private function contextMenuDisplayingHandler(event:Event):void
 	{
+		for each (var item:NativeMenuItem in contextMenu.items) {
+       		item.label = LanguageManager.sentences['graph_'+item.name];
+		}
+					
 		if(selectionManager && ObjectUtils.dictLength(selectionManager.selection)>0)
 		{
 			contextMenu.getItemByName("cut").enabled = true;	
@@ -878,7 +898,33 @@ public class GraphCanvas extends Canvas
    			doDelete();
         }
 	}
-	    
+	
+	private function wheelHandler(event:MouseEvent):void
+	{
+		if(event.shiftKey)
+		{
+			if(event.delta>0) {
+				scaleX = scaleY += 0.1;
+				verticalScrollPosition += 0.1;
+				horizontalScrollPosition += 0.1;  
+			}
+			else {
+				scaleX = scaleY -= 0.1;
+				verticalScrollPosition -= 0.1;
+				horizontalScrollPosition -= 0.1;  
+			}
+		}	
+	}
+	
+	private function middleClickHandler(event:MouseEvent):void
+	{
+		if(event.shiftKey)
+		{
+			scaleX = scaleY = 1.0;
+			Utils.scrollToContentPoint(this, new Point(contentMouseX, contentMouseY)); 			 	
+		}		
+	}
+	
     private function dragEnterHandler(event:DragEvent):void
     {
         if (	event.dragSource.hasFormat("items") && 

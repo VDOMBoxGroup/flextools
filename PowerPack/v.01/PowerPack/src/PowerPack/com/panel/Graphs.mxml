@@ -37,6 +37,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			import ExtendedAPI.com.containers.SuperAlert;
 			import mx.utils.NameUtil;
 			import PowerPack.com.graph.GraphCanvasEvent;
@@ -109,9 +110,9 @@
 			{
 				initGraphs.addItem(new ObjectProxy({	name: LanguageManager.sentences['none'], 
 														initial: false,
-														className: 'ObjectProxy' }));	
+														className: 'ObjectProxy' }));
 				
-				// Binding to first initial combobox element label				
+				// Binding to first initial combobox element label
 				LanguageManager.bindSentence('none', initGraphs.getItemAt(0), 'name');
 				
 				// We need to repopulate graphs if templateXML has been changed
@@ -119,7 +120,7 @@
 				
 				for each(var label:String in ["application", "objects", "structure", "resources"])
 				{
-					createCategoryTab(label);			
+					createCategoryTab(label);
 				}
 				
 				initGraphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);				
@@ -136,7 +137,7 @@
 					AccordionChild(child).graphs.removeAll();
 				}
 
-				//graphsAccordion.removeAllChildren();
+				graphsAccordion.removeAllChildren();
 				
 				for each (child in vsViewStack.getChildren())
 				{
@@ -146,8 +147,8 @@
 				
 				selectGraph(null);
 
-				vsViewStack.validateNow();
-				validateNow();
+				//vsViewStack.validateNow();
+				//validateNow();
 				
 				dispatchEvent(new Event(TPL_CHANGED));			
 			}
@@ -232,7 +233,18 @@
 								curTab.lstGraphs.selectedIndex = -1;
 							curTab = child;
 							graphsAccordion.selectedChild = curTab;
-							curTab.lstGraphs.selectedIndex = index;
+							curTab.lstGraphs.selectedIndex = index;							
+							if(!vsViewStack.contains(graph))
+							{
+								ProgressManager.start(null, false);
+								vsViewStack.addChild(graph);								
+								graph.addEventListener(FlexEvent.CREATION_COMPLETE, completeHandler);
+								
+								function completeHandler(event:FlexEvent):void {
+									graph.removeEventListener(FlexEvent.CREATION_COMPLETE, completeHandler);
+									ProgressManager.complete();
+								}
+							}
 							vsViewStack.selectedChild = graph;
 							break;
 						}
@@ -247,13 +259,15 @@
 
 				var graphXML:XML = xml;
 				var newGraph:GraphCanvas = new GraphCanvas();				
-
+				newGraph.xml = graphXML;
+				newGraph.name = graphXML.@name;
+				newGraph.category = graphXML.@category; 
+				
 				initGraphs.addItem(newGraph);
-				vsViewStack.addChild(newGraph);
+				//vsViewStack.addChild(newGraph);
 				
 				newGraph.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChange);
-
-				newGraph.fromXML(graphXML.toXMLString());
+				//newGraph.fromXML(graphXML.toXMLString());
 
 				var graphAccordionChild:AccordionChild = null;
 
@@ -281,33 +295,44 @@
 			{	
 				if(!xml)
 					return; 
-
-				clear();
 				
 				ProgressManager.show(null, false);
+				callLater(populateGraphs_01);			
 				
-				for each (var graphXML:XML in templateXML.elements("graph"))
-				{			
-					populateGraph(graphXML);
-				}	
-				
-				selectGraph(findFirstGraph());
-				
-				// set initial graph in combobox
-				
-				cbInitGraph.selectedIndex = 0;
-				for(var i:int=0; i<initGraphs.length; i++)
-				{
-					if(initGraphs.getItemAt(i).initial)
+				function populateGraphs_01():void {
+					clear();				
+
+					for each(var cat:XML in xml.categories.category)
 					{
-						cbInitGraph.selectedIndex = i;
-						break;
+						createCategoryTab(cat.@name);
+					}			
+					
+					for each (var graphXML:XML in templateXML.elements("graph"))
+					{			
+						populateGraph(graphXML);
+					}	
+					
+					selectGraph(findFirstGraph());
+					
+					// set initial graph in combobox
+					
+					cbInitGraph.selectedIndex = 0;
+					for(var i:int=0; i<initGraphs.length; i++)
+					{
+						if(initGraphs.getItemAt(i).initial)
+						{
+							cbInitGraph.selectedIndex = i;
+							break;
+						}
 					}
+					
+					dispatchEvent(new Event(TPL_CHANGED));
+					
+					validateNow();
+					
+					ProgressManager.complete();
 				}
 				
-				dispatchEvent(new Event(TPL_CHANGED));
-				
-				ProgressManager.complete();
 			}
 						
 			/** 

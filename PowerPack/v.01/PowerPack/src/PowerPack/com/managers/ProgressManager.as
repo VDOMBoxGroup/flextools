@@ -3,6 +3,7 @@ package PowerPack.com.managers
 import ExtendedAPI.com.containers.SuperWindow;
 import ExtendedAPI.com.controls.HDivider;
 
+import PowerPack.com.menu.MenuGeneral;
 import PowerPack.customize.core.windowClasses.SuperStatusBar;
 
 import flash.desktop.NativeApplication;
@@ -277,7 +278,7 @@ public class ProgressManager extends EventDispatcher
 			viewMode = instance._viewMode;
 		
 		if(viewMode==instance._viewMode && instance._isShown && instance._showProgress==showProgress)
-			return;					
+			return;
 		
 		if(instance._isShown)
 			hide();
@@ -316,6 +317,8 @@ public class ProgressManager extends EventDispatcher
 				break;
 						
 			case WINDOW_MODE:
+				MenuGeneral.disable();
+				
 				instance._bar.label = LanguageManager.sentences['progress_full_label'];
 				instance._bar.percentWidth = 100;
 				instance._bar.direction = "right";
@@ -337,6 +340,7 @@ public class ProgressManager extends EventDispatcher
 				instance._window.validateNow();
 				break;								
 			
+			case DIALOG_MODE:
 			default:
 				instance._bar.label = LanguageManager.sentences['progress_full_label'];
 				instance._bar.percentWidth = 100;
@@ -373,9 +377,9 @@ public class ProgressManager extends EventDispatcher
 				var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
 				
 				if(parent)
-					parent.validateDisplayList();
+					parent.validateNow();
 				else
-					Application.application.validateDisplayList();
+					Application.application.validateNow();
 				
 				instance._dialog.activate();
 				
@@ -397,7 +401,8 @@ public class ProgressManager extends EventDispatcher
 			
 		switch(instance._viewMode)
 		{
-			case WINDOW_MODE:			
+			case WINDOW_MODE:	
+				MenuGeneral.enable();		
 				if(instance._winBox.parent)
 					instance._winBox.parent.removeChild(instance._winBox);
 				PopUpManager.removePopUp(instance._window);
@@ -406,14 +411,20 @@ public class ProgressManager extends EventDispatcher
 			case DIALOG_MODE:						
 				if(instance._dialog && !instance._dialog.closed)
 				{
-					instance._dialog.visible = false;
-					instance._dialog.validateProperties();
+					instance._dialog.visible = false;					
+					instance._dialog.validateNow();
 					
 					if(instance._winBox.parent)
 						instance._winBox.parent.removeChild(instance._winBox);
-						
-					instance._dialog.nativeWindow.close();
+							
 					var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
+					instance._dialog.nativeWindow.close();
+					
+					if(parent)
+						parent.validateNow();
+					else
+						instance._win.validateNow();
+					
 					instance._dialog = null;
 				}					
 				break;
@@ -436,14 +447,6 @@ public class ProgressManager extends EventDispatcher
 				break;						
 		}
 
-		if(!parent)
-			parent = SuperWindow.getWindow(NativeApplication.nativeApplication.activeWindow);
-
-		if(parent)
-			parent.validateDisplayList();
-		else
-			Application.application.validateDisplayList();
-								
 		instance._isShown = false;
 	}
 
@@ -483,8 +486,8 @@ public class ProgressManager extends EventDispatcher
 		}						
 		if(!_winBox)
 		{
-			var box:VBox = new VBox();	
-			_winBox = box;		
+			var box:VBox = new VBox();
+			_winBox = box;
 			_winBox.addEventListener(ResizeEvent.RESIZE, resizeHandler);
 			//box.percentHeight = box.percentWidth = 100;
 			_winBox.minWidth = 120;			

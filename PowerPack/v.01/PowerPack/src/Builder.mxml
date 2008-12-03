@@ -67,7 +67,9 @@
 	        </menuitem>
 	        
 	        <menuitem label="{LanguageManager.sentences.menu_settings}" id="settings">
-	            <menuitem label="{LanguageManager.sentences.menu_language}" id="language" enabled="false"/>
+	            <menuitem label="{LanguageManager.sentences.menu_language}" id="language">
+		            <menuitem label="{LanguageManager.sentences.menu_language}" id="language_1"/>
+		        </menuitem>
 	        </menuitem>
 
 	        <menuitem label="{LanguageManager.sentences.menu_help}" id="help" enabled="false"/>
@@ -174,7 +176,8 @@
 			}
 			
 			private function init():void 
-			{	            	
+			{	        
+				MenuGeneral.menu = flexNativeMenu;
 		    }
 		    
 		    private function show():void
@@ -200,10 +203,10 @@
 				// Load application settings
 	            ContextManager.loadSettings();
 	            
-	            MenuGeneral.noTemplate(fileMenuData);
+	            MenuGeneral.noTemplate();
 	            
 	            // Fill language menu
-	            MenuGeneral.updateLangMenu(fileMenuData);
+	            MenuGeneral.updateLangMenu();
 	            
 	            // fill last files menu
 	            MenuGeneral.updateLastFilesMenu(fileMenuData);
@@ -341,7 +344,7 @@
 	           	workStage.visible = false;
 	           	workStage.includeInLayout = false;
 	           	
-				MenuGeneral.noTemplate(fileMenuData);
+				MenuGeneral.noTemplate();
 				
 				if(action!=null)
 					callLater(action, args);
@@ -388,7 +391,7 @@
 				ContextManager.updateLastFiles(tpl.file);            	
 				
 				MenuGeneral.updateLastFilesMenu(fileMenuData);
-				MenuGeneral.openedTemplate(fileMenuData);    	            
+				MenuGeneral.openedTemplate();    	            
 			}
 			
 			public function processSavedTpl():void
@@ -402,7 +405,7 @@
 				ContextManager.updateLastFiles(tpl.file);            	
 				
 				MenuGeneral.updateLastFilesMenu(fileMenuData);
-				MenuGeneral.openedTemplate(fileMenuData);    	            
+				MenuGeneral.openedTemplate();    	            
 			}
 						
 			public function processNewTpl():void
@@ -415,7 +418,7 @@
    	            
    	            ContextManager.instance.lastFile = false;
 				
-				MenuGeneral.newTemplate(fileMenuData);    	            
+				MenuGeneral.newTemplate();    	            
 			}
 							
 			//--------------------------------------------------------------------------
@@ -497,7 +500,7 @@
            			if(MenuGeneral.state != MenuGeneral.STATE_MOD)
            			{
            				tpl.modified = true;
-           				MenuGeneral.modifiedTemplate(fileMenuData);
+           				MenuGeneral.modifiedTemplate();
            			}
            		}	
            	}	

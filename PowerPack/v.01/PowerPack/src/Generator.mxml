@@ -150,7 +150,7 @@
 	            ContextManager.loadSettings();
 	            
 	            // Fill language menu
-	            MenuGeneral.updateLangMenu(fileMenuData);
+	            MenuGeneral.updateLangMenu();
 	            
 	            // fill last files menu
 	            MenuGeneral.updateLastFilesMenu(fileMenuData);

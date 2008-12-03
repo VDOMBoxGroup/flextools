@@ -1,7 +1,11 @@
 package PowerPack.com.menu
 {
+import ExtendedAPI.com.ui.SuperNativeMenu;
+import ExtendedAPI.com.ui.SuperNativeMenuItem;
+
 import PowerPack.com.managers.ContextManager;
 
+import flash.display.NativeMenu;
 import flash.display.NativeMenuItem;
 import flash.events.EventDispatcher;
 import flash.filesystem.File;
@@ -45,140 +49,131 @@ public class MenuGeneral extends EventDispatcher
 			memMenu[item] = item.enabled;
 	}
 		
-	public static function noTemplate(menu:XML):void
+	public static function noTemplate():void
     {    	
     	state = STATE_NO;
     	 
-    	var item:XML;
-    	
     	// process file menu
-    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
-    	
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'false';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'false';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'false';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'false';
+		var fileMenu:NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName("file").submenu;
+		fileMenu.getItemByName("new_category").enabled = false;
+		fileMenu.getItemByName("close").enabled = false;
+		fileMenu.getItemByName("save").enabled = false;
+		fileMenu.getItemByName("save_as").enabled = false;
 
     	// process template menu
-    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
-    	templateItem.@enabled = 'false';
-    	for each(item in templateItem.menuitem)
-    	{
-    		item.@enabled = 'false';
-    	}
+		var tplItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("template");
+		tplItem.enabled = false;
+		for each (var item:NativeMenuItem in tplItem.submenu.items)
+		{
+			item.enabled = false;	
+		}
 
     	// process run menu
-    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
-    	runItem.@enabled = 'false';
-    	for each(item in runItem.menuitem)
-    	{
-    		item.@enabled = 'false';
-    	}
+		var runItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("run");
+		runItem.enabled = false;
+		for each (item in runItem.submenu.items)
+		{
+			item.enabled = false;	
+		}
     }
 
-	public static function newTemplate(menu:XML):void
+	public static function newTemplate():void
 	{
 		state = STATE_NEW;
 		
-    	var item:XML;
-    	
     	// process file menu
-    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
-    	
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'true';
+		var fileMenu:NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName("file").submenu;
+		fileMenu.getItemByName("new_category").enabled = true;
+		fileMenu.getItemByName("close").enabled = true;
+		fileMenu.getItemByName("save").enabled = true;
+		fileMenu.getItemByName("save_as").enabled = true;
 
     	// process template menu
-    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
-    	templateItem.@enabled = 'true';
-    	for each(item in templateItem.menuitem)
-    	{
-    		item.@enabled = 'true';
-    	}
+		var tplItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("template");
+		tplItem.enabled = true;
+		for each (var item:NativeMenuItem in tplItem.submenu.items)
+		{
+			item.enabled = true;	
+		}
 
     	// process run menu
-    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
-    	runItem.@enabled = 'true';
-    	for each(item in runItem.menuitem)
-    	{
-    		item.@enabled = 'false';
-    	}
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "run")[0].@enabled = 'true';
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "debug")[0].@enabled = 'true';
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "step_by_step")[0].@enabled = 'true';
+		var runItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("run");
+		runItem.enabled = true;
+		for each (item in runItem.submenu.items)
+		{
+			item.enabled = false;	
+		}
+		
+		runItem.submenu.getItemByName("run").enabled = true;
+		runItem.submenu.getItemByName("debug").enabled = true;
+		runItem.submenu.getItemByName("step_by_step").enabled = true;
     }
 	
-	public static function modifiedTemplate(menu:XML):void
+	public static function modifiedTemplate():void
     {
     	state = STATE_MOD;
     	
-    	var item:XML;
-    	
     	// process file menu
-    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
-    	
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'true';
-
+		var fileMenu:NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName("file").submenu;
+		fileMenu.getItemByName("new_category").enabled = true;
+		fileMenu.getItemByName("close").enabled = true;
+		fileMenu.getItemByName("save").enabled = true;
+		fileMenu.getItemByName("save_as").enabled = true;
+		
     	// process template menu
-    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
-    	templateItem.@enabled = 'true';
-    	for each(item in templateItem.menuitem)
-    	{
-    		item.@enabled = 'true';
-    	}
-
+		var tplItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("template");
+		tplItem.enabled = true;
+		for each (var item:NativeMenuItem in tplItem.submenu.items)
+		{
+			item.enabled = false;	
+		}
+    	
     	// process run menu
-    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
-    	runItem.@enabled = 'true';
-    	for each(item in runItem.menuitem)
-    	{
-    		item.@enabled = 'false';
-    	}
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "run")[0].@enabled = 'true';
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "debug")[0].@enabled = 'true';
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "step_by_step")[0].@enabled = 'true';    	
+		var runItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("run");
+		runItem.enabled = true;
+		for each (item in runItem.submenu.items)
+		{
+			item.enabled = false;	
+		}
+		
+		runItem.submenu.getItemByName("run").enabled = true;
+		runItem.submenu.getItemByName("debug").enabled = true;
+		runItem.submenu.getItemByName("step_by_step").enabled = true;
     }
     
-    public static function openedTemplate(menu:XML):void
+    public static function openedTemplate():void
     {
     	state = STATE_OPEN;
     	
-    	var item:XML;
-    	
     	// process file menu
-    	var fileItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
-    	
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "new_category")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "close")[0].@enabled = 'true';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save")[0].@enabled = 'false';
-    	fileItem.menuitem.(hasOwnProperty('@id') && @id == "save_as")[0].@enabled = 'true';
+		var fileMenu:NativeMenu = MenuGeneral.menu.nativeMenu.getItemByName("file").submenu;
+		fileMenu.getItemByName("new_category").enabled = true;
+		fileMenu.getItemByName("close").enabled = true;
+		fileMenu.getItemByName("save").enabled = false;
+		fileMenu.getItemByName("save_as").enabled = true;
 
     	// process template menu
-    	var templateItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "template")[0];
-    	templateItem.@enabled = 'true';
-    	for each(item in templateItem.menuitem)
-    	{
-    		item.@enabled = 'true';
-    	}
+		var tplItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("template");
+		tplItem.enabled = true;
+		for each (var item:NativeMenuItem in tplItem.submenu.items)
+		{
+			item.enabled = true;	
+		}
 
     	// process run menu
-    	var runItem:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "run")[0];
-    	runItem.@enabled = 'true';
-    	for each(item in runItem.menuitem)
-    	{
-    		item.@enabled = 'false';
-    	}
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "run")[0].@enabled = 'true';
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "debug")[0].@enabled = 'true';
-    	runItem.menuitem.(hasOwnProperty('@id') && @id == "step_by_step")[0].@enabled = 'true';    	
+		var runItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("run");
+		runItem.enabled = true;
+		for each (item in runItem.submenu.items)
+		{
+			item.enabled = false;	
+		}
+		
+		runItem.submenu.getItemByName("run").enabled = true;
+		runItem.submenu.getItemByName("debug").enabled = true;
+		runItem.submenu.getItemByName("step_by_step").enabled = true;	
     }
 
-	public static function updateLangMenu(menu:XML):void
+	public static function updateLangMenu():void
     {
         // get language folder
         var langsDir:File = File.applicationDirectory.resolvePath(LANG_FOLDER);
@@ -186,9 +181,15 @@ public class MenuGeneral extends EventDispatcher
         if(langsDir.exists)
         {
 			var fileList:Array = langsDir.getDirectoryListing();					
-			var langsItemXML:XML = menu..menuitem.(hasOwnProperty('@id') && @id == "language")[0];
-			var langList:XML = new XML(<list/>);
 			
+			var settingsItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("settings");
+			var langItem:NativeMenuItem = settingsItem.submenu.getItemByName("language");
+			
+			if(langItem.submenu)
+				langItem.submenu.removeAllItems();
+			else
+				langItem.submenu = new SuperNativeMenu();
+				
 			// get language files
 			for (var i:int = 0; i < fileList.length; i++) 
 			{	
@@ -200,31 +201,31 @@ public class MenuGeneral extends EventDispatcher
 				
 				if(langXML.name()!="language" || !langXML.@id.toString() || !langXML.@label.toString())
 					continue;
-									
-				var item:XML = new XML(<menuitem/>);
-				item.@label = langXML.@label;
-				item.@id = langXML.@id;
-				item.@data = fileList[i].name;
-				item.@type = "radio";
-				item.@tag = "language";
-				item.@groupName = "language";
-				item.@isRequired = "true";
+				
+				var item:SuperNativeMenuItem = new SuperNativeMenuItem(
+					"radio", 
+					langXML.@label,
+					langXML.@id,
+					false,
+					"language",
+					true,
+					true);
+				
+				item.data = fileList[i].name;
 				
 				if(ContextManager.instance.lang.label.toLowerCase() == langXML.@label.toLowerCase())
 				{
 					ContextManager.instance.lang.file = fileList[i].name
-					item.@toggled = "true";
+					item.checked = true;
 				}
-				langList.appendChild(item);						
+				
+				langItem.submenu.addItem(item);
 			}
 			
-			// fill language submenu
-			langsItemXML.setChildren(langList.menuitem);
-				
-			if(langsItemXML.elements("*").length()==0)
-				langsItemXML.@enabled = "false";	
-			else			
-				langsItemXML.@enabled = "true";	
+			//if(langItem.submenu.numItems==0)
+			//	langItem.enabled = false;	
+			//else			
+				langItem.enabled = true;
         }		    
     }
     
