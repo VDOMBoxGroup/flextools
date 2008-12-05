@@ -31,16 +31,6 @@ public class ClosablePanel extends Panel
 		explicitHeight = height;
 	}
 	
-	override public function set height( value : Number ) : void
-	{
-		super.height = value;
-	}
-	
-	override public function set percentHeight( value : Number ) : void
-	{
-		super.percentHeight = value;
-	}
-	
 	public function get collapse() : Boolean
 	{
 		return _collapse;

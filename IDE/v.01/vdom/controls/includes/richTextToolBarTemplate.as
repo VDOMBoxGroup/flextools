@@ -19,7 +19,7 @@ private var template:String =
 	"</head>" + 
 "<body>" + 
 	"<div>" + 
-		"<textarea id=\"content\" name=\"content\" />" + 
+		"<textarea id=\"content\" name=\"content\"></textarea>" + 
 	"</div>" + 
 "</body>" + 
 "</html>"

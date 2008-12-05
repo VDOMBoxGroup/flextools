@@ -126,6 +126,7 @@ private function insertPageLink():void
 	
 	textFiled.text = textFiled.text.substring(0, index) + "/" + XML(pageList.selectedItem).@ID + ".vdom" + textFiled.text.substring(index);
 	textFiled.setSelection(index, index);
+	textFiled.dispatchEvent( new Event( Event.CHANGE ) );
 }
 
 private function insertResourceLink():void
@@ -135,13 +136,13 @@ private function insertResourceLink():void
 	
 	textFiled.text = textFiled.text.substring(0, index) + "#Res(" + XML(resourceList.selectedItem).@id + ")" + textFiled.text.substring(index);
 	textFiled.setSelection(index, index);
-	textAreaContainer.invalidateProperties();
+	textFiled.dispatchEvent( new Event( Event.CHANGE ) );
 }
 
 ]]>
 </mx:Script>
 
-<mx:TextArea width="100%" height="100%" id="textAreaContainer" creationComplete="init();" text="{attributeValue}" fontFamily="Tahoma"/>
+<mx:TextArea width="100%" height="100%" id="textAreaContainer"  text="{attributeValue}" fontFamily="Tahoma"/>
 
 <mx:ControlBar horizontalAlign="right"
 	paddingLeft="8" paddingRight="8" paddingBottom="5">

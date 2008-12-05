@@ -431,7 +431,7 @@ public class TransformMarker extends UIComponent
 	}
 	
 	private function getContentRectangle( sourceContainer : DisplayObject, destinationContainer : DisplayObject ) : Rectangle 
-{
+	{
 		
 		if(!sourceContainer )
 			return null;
@@ -447,10 +447,10 @@ public class TransformMarker extends UIComponent
 	}
 	
 	private function mouseDownHandler( event : MouseEvent ) : void 
-{
+	{
 		
 		beforeTransform = 
-{
+		{
 			left : item.x,
 			top : item.y,
 			width : item.width,

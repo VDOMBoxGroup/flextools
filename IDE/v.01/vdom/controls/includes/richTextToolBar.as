@@ -1,8 +1,8 @@
 import flash.display.DisplayObject;
 import flash.events.Event;
-import flash.events.HTMLUncaughtScriptExceptionEvent;
 import flash.events.MouseEvent;
 import flash.html.HTMLLoader;
+import flash.net.URLRequest;
 
 import mx.core.Application;
 import mx.core.UIComponent;
@@ -147,7 +147,9 @@ private function editableHTML_completeHandler(event:Event):void
 		Event.HTML_DOM_INITIALIZE,
 		HTMLEditorLoader_HTMLDomInitalizeHandler
 	);
-	HTMLEditorLoader.loadString(template);
+	
+//	HTMLEditorLoader.loadString(template);
+	HTMLEditorLoader.load( new URLRequest( "app:/libs/template.html" ) );
 }
 
 private function HTMLEditorLoader_HTMLDomInitalizeHandler(event:Event):void
