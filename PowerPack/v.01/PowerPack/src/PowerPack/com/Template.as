@@ -65,20 +65,37 @@ import mx.utils.UIDUtil;
  
 public class Template extends EventDispatcher
 {
-	public static var defaultCaptions:Object = {
-	};
-	
 	public static const TYPE_APPLICATION:String = "application";
 	public static const TYPE_MODULE:String = "module";
+	
+	public static const TPL_EXTENSION:String = 'xml';
 			
 	public static var tplFilter:FileFilter = new FileFilter(
-		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*.xml"), 
-		"*.xml");
+		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['template'], "*."+TPL_EXTENSION), 
+		"*."+TPL_EXTENSION);
 	
 	public static var allFilter:FileFilter = new FileFilter(
 		StringUtil.substitute("{0} ({1})", LanguageManager.sentences['all'], "*.*"), 
 		"*.*");	
 
+	public static var defaultCaptions:Object = {
+	};
+	
+    private static var _classConstructed:Boolean = classConstruct();
+    
+    public static function get classConstructed():Boolean
+    {
+    	return _classConstructed;
+    }
+        
+    // Define a static method.
+    private static function classConstruct():Boolean
+    {
+        LanguageManager.setSentences(defaultCaptions);
+        
+        return true;
+    } 
+    
 	//--------------------------------------------------------------------------
 	//
 	//  Constructor
@@ -90,17 +107,22 @@ public class Template extends EventDispatcher
 	 */ 
 	public function Template(xml:XML=null)
 	{
+		_xml = new XML(<template/>);
+		_xml.@ID = UIDUtil.createUID();
+
 		if(xml && isValidTpl(xml))
 		{
 			_xml = xml;
 			if(!Utils.getStringOrDefault(_xml.@ID, ''))
 				_xml.@ID = UIDUtil.createUID();
+			
+			processOpened();
+			return;
 		}
-		else
+		else if(xml)
 		{
-			_xml = new XML(<template/>);
-			_xml.@ID = UIDUtil.createUID();
 			modified = true;
+			_completelyOpened = true;
 		}
 	}
 
@@ -115,6 +137,7 @@ public class Template extends EventDispatcher
 	 */		 
 	 public function dispose():void
 	 {
+	 	_xmlStructure = null;
 	 	_picture = null;
 	 	file = null;
 	 	_xml = null;
@@ -131,6 +154,8 @@ public class Template extends EventDispatcher
 	
 	[Bindable]
 	public var file:File;
+	
+	private var _completelyOpened:Boolean;
 	
     //--------------------------------------------------------------------------
 	//
@@ -152,18 +177,15 @@ public class Template extends EventDispatcher
 		{
 			_modified = value;
 			
-			if(_modified)
-			{
-				var mainIndex:XML = CashManager.getMainIndex();	
-				CashManager.updateMainIndexEntry(mainIndex, ID, 'saved', 'false');
-				CashManager.setMainIndex(mainIndex);
-			}		
+			var mainIndex:XML = CashManager.getMainIndex();	
+			CashManager.updateMainIndexEntry(mainIndex, fullID, 'saved', _modified?'false':'true');
+			CashManager.setMainIndex(mainIndex);
 		}
 	}
 	public function get modified():Boolean
 	{
 		return _modified;
-	}		
+	}
 
 
     //----------------------------------
@@ -189,7 +211,7 @@ public class Template extends EventDispatcher
 		if(_xmlStructure!=value)
 		{
 			modified = true;
-			_xmlStructure=value;		
+			_xmlStructure = value;		
 		}
 	}
 	public function get xmlStructure():XML
@@ -252,6 +274,25 @@ public class Template extends EventDispatcher
 			_xml.@ID = UIDUtil.createUID();
 
 		return _xml.@ID;	
+	}
+	
+    //----------------------------------
+    //  fullID
+    //----------------------------------
+    
+	private var _fullID:String;
+	
+	public function get fullID():String
+	{
+		if(!_fullID)
+		{
+			_fullID = ID;
+			
+			if(file && file.exists)
+				_fullID += '_' + file.creationDate.getTime() + '_' + file.modificationDate.getTime() + '_' + file.size;
+		}
+
+		return _fullID;	
 	}		
 
     //----------------------------------
@@ -307,60 +348,74 @@ public class Template extends EventDispatcher
 	//
 	//--------------------------------------------------------------------------
 	
-	public function isValidTpl(xmlData:XML):Boolean
+	private function isValidTpl(xmlData:XML):Boolean
 	{
 		if(xmlData.name() != 'template')
 			return false;
 			
 		if(!xmlData.hasOwnProperty('encoded') && !xmlData.hasOwnProperty('structure'))
 			return false;
-			
+	
 		return true;
 	}
 	
 	public function save():void
 	{
+		if(!_completelyOpened)
+			return;
+		
 		if(!file)
 		{
 			browseForSave();
 			return;
 		}		
-		
-		ProgressManager.start(null, false);
-		
-      	// update tpl UID
-   		var oldID:String = ID;
-   		delete _xml.@ID;
-   		CashManager.updateID(oldID, ID);
 
-		// cash template
-		_xml.structure = xmlStructure;
-		CashManager.setStringObject(ID, 
-			XML(
-				"<resource " + 
-				"category='template' " + 
-				"ID='template' " + 
-				"name='" + name + "' " + 
-				"type='" + TYPE_APPLICATION + "' />"), 
-			_xml);
+		try
+		{
+			ProgressManager.start(null, false);
 			
-		/// get resources from cash 
-   		fromCash();
-   		
-   		// set (+encrypt) structure and resources data
-   		encode();
+	      	// update tpl UID
+	   		_xml.@ID = UIDUtil.createUID();
 
-	   	var stream:FileStream = new FileStream();
-		
-		ProgressManager.source = stream;
-		ProgressManager.start();
-		
-		stream.addEventListener(Event.COMPLETE, saveHandler);
-		stream.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
-		stream.addEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
-		stream.openAsync(file, FileMode.WRITE);				
-		
-		stream.writeUTFBytes(_xml.toXMLString());
+			// cash template structure
+			cashStructure();
+				
+			/// get resources from cash 
+	   		fillFromCash();
+	   		
+	   		// set (+encrypt) structure and resources data
+	   		encode();
+	   		
+		   	var stream:FileStream = new FileStream();
+			
+			ProgressManager.source = stream;
+			ProgressManager.start();
+			
+			stream.addEventListener(Event.COMPLETE, saveHandler);
+			stream.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
+			stream.addEventListener(IOErrorEvent.IO_ERROR, saveErrorHandler);
+			stream.openAsync(file, FileMode.WRITE);				
+			
+			stream.writeUTFBytes(_xml.toXMLString());
+		}
+		catch(e:Error)
+		{
+			stream.close();
+
+    		ProgressManager.complete();
+	
+			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
+				e.message);
+			 
+			dispatchEvent(errEvent);	
+			
+			if(!errEvent.isDefaultPrevented())
+			{
+				SuperAlert.show( 
+					e.message,
+					LanguageManager.sentences['error']);    		
+			}			
+		}
 	}
 	
 	public function open():void
@@ -375,10 +430,17 @@ public class Template extends EventDispatcher
 		
 		if(!file.exists)
 		{
-			SuperAlert.show(
-				LanguageManager.sentences['msg_file_not_exists'],
-				LanguageManager.sentences['error']);
+			var errEvent:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR, false, true, 
+				LanguageManager.sentences['msg_file_not_exists']);
+			 
+			dispatchEvent(errEvent);
 			
+			if(!errEvent.isDefaultPrevented())
+			{
+				SuperAlert.show( 
+					errEvent.text,
+					LanguageManager.sentences['error']);    		
+			}
 			return;
 		}
 		
@@ -406,12 +468,16 @@ public class Template extends EventDispatcher
 			if(f.isDirectory || f.isPackage || f.isSymbolicLink)
             	return;
            	
-           	if(!f.extension || f.extension.toLowerCase() != 'xml')            	
-            	f = f.parent.resolvePath(f.name+'.xml');
-            		            
+           	if(!f.extension || f.extension.toLowerCase() != TPL_EXTENSION)            	
+            	f = f.parent.resolvePath(f.name+'.'+TPL_EXTENSION);
+ 
             file = f;
+            
+         	var evnt:Event = new Event('saving', false, true);
+         	dispatchEvent(evnt);
          	
-         	save();   
+         	if(!evnt.isDefaultPrevented())         	
+         		save();   
 		}
 	}
 	
@@ -431,36 +497,59 @@ public class Template extends EventDispatcher
             
             file = f;
          	
-         	open();   
+         	var evnt:Event = new Event('opening', false, true);
+         	dispatchEvent(evnt);
+         	
+         	if(!evnt.isDefaultPrevented())
+         		open();   
 		}
 	}	
-
-	public function encode():void
+	
+	public function processOpened():void
+	{
+		if(!_xml.hasOwnProperty('encoded') && !_xml.hasOwnProperty('structure'))
+			return;
+		
+		decode();
+			
+		if(_xmlStructure)
+			cash();
+		
+		if(!isEncoded)
+			_completelyOpened = true;
+	}
+	
+	private function encode():void
 	{
 		delete _xml.encoded;
 		delete _xml.structure;
 		
+		var structData:XML = _xmlStructure ? _xmlStructure : new XML(<structure/>);
+		
 		if(key)
 		{
-			var bytes:ByteArray = CryptUtils.encrypt(_xmlStructure.toXMLString(), key);
+			var bytes:ByteArray = CryptUtils.encrypt(structData.toXMLString(), key);
 			
 			var encoder:Base64Encoder = new Base64Encoder();
 		    encoder.encodeBytes(bytes);
 		    _xml.encoded = encoder.flush();
 		}
 		else
-			_xml.structure = _xmlStructure;
+			_xml.structure = structData;
 	}
 	
-	public function decode():void
+	private function decode():void
 	{
 		_xmlStructure = null;
+		
+		if(isEncoded && _xml.hasOwnProperty('structure'))
+			delete _xml.structure;
 		
 		if(isEncoded && key)
 		{			
 			try 
 			{	
-				var strEncoded:String = _xml.encoded[0]; 
+				var strEncoded:String = XML(_xml.encoded[0]).toXMLString(); 
 		 		var strDecoded:String;
 		 	
 				var decoder:Base64Decoder = new Base64Decoder();
@@ -474,26 +563,29 @@ public class Template extends EventDispatcher
 			 	
 				if(_xmlStructure)
 				{
-			 		if(_xmlStructure.name().localName!='structure')
-			 			_xmlStructure = null;
-			 		else
+			 		if(_xmlStructure.name().localName=='structure')
 			 			delete _xml.encoded;
+			 		else
+			 			_xmlStructure = null;
 			 	}
 			} 
-			catch(e:*) {
+			catch(e:*) 
+			{
 				_xmlStructure = null;
 			}				
 		}	
 		else if(_xml.hasOwnProperty('structure'))
+		{
 			_xmlStructure = _xml.structure[0];
+			delete _xml.structure;
+		}
 	}
 	
-	public function setPictureFromFile():void
+	private function setPictureFromFile():Boolean
 	{
 		if(!picture || !picture.exists)
 		{
-			//throw new BasicError("Not valid filename");
-			return;
+			return false;
 		}
 		
 		var fileToBase64:FileToBase64 = new FileToBase64(picture.nativePath);
@@ -504,13 +596,19 @@ public class Template extends EventDispatcher
 		_xml.picture[0].@name = file.name;
 		
 		picture = null;
+		
+		return true;
 	}
 	
-	public function cash():void
+	private function cash():Boolean
 	{
-		for each (var res:XML in xmlStructure.resources.resource)
+		if(_xmlStructure==null)
+			return false;
+		
+		// cash all resources
+		for each (var res:XML in _xmlStructure.resources.resource)
 		{
-			CashManager.setStringObject(ID, 
+			CashManager.setStringObject(fullID, 
 				XML(
 					"<resource " + 
 					"category='" +	Utils.getStringOrDefault(res.@category, "") + "' " + 
@@ -520,12 +618,13 @@ public class Template extends EventDispatcher
 				res);
 		} 
 		
-		delete xmlStructure.resources;
-
+		delete _xmlStructure.resources;
+		
+		// cash tpl picture
 		if(b64picture)
 		{
 			var picXML:XML = _xml.picture[0];
-			CashManager.setStringObject(ID, 
+			CashManager.setStringObject(fullID, 
 				XML(
 					"<resource " + 
 					"category='logo' " + 
@@ -537,7 +636,14 @@ public class Template extends EventDispatcher
 			delete _xml.picture;
 		}
 
-		CashManager.setStringObject(ID, 
+		cashStructure();
+			
+		return true;
+	}
+	
+	private function cashStructure():void
+	{
+		CashManager.setStringObject(fullID, 
 			XML(
 				"<resource " + 
 				"category='template' " + 
@@ -545,17 +651,28 @@ public class Template extends EventDispatcher
 				"name='" + name + "' " + 
 				"type='" + TYPE_APPLICATION + "' />"), 
 			_xml);
+
+		CashManager.setStringObject(fullID, 
+			XML(
+				"<resource " + 
+				"category='template' " + 
+				"ID='structure' " + 
+				"name='" + name + "' " + 
+				"type='" + TYPE_APPLICATION + "' />"), 
+			_xmlStructure);		
 	}
 
-	public function fromCash():void
+	private function fillFromCash():void
 	{
+		// get tpl picture
+   		delete _xml.picture;
+
       	if(picture)
       		setPictureFromFile();
       	else
       	{
-      		delete _xml.picture;
       		
-      		var picObj:Object = CashManager.getObject(ID, 'logo');
+      		var picObj:Object = CashManager.getObject(fullID, 'logo');
       		if(picObj)
       		{
       			var picData:ByteArray = ByteArray(picObj.data);
@@ -566,18 +683,20 @@ public class Template extends EventDispatcher
       		}
       	}
 		
-		var index:XML = CashManager.getIndex(ID);
-		
+		// get resources		
+		delete _xmlStructure.resources;
+
+		var index:XML = CashManager.getIndex(fullID);
 		if(index)
 		{
-			var resources:XMLList = index.resource.(hasOwnProperty('@category') && (@category=='image' || @category=='database'));
+			var resources:XMLList = index.resource.(hasOwnProperty('@category') && 
+						(@category=='image' || @category=='database'));
 		
-			delete xmlStructure.resources;
-			xmlStructure.appendChild(<resources/>);
+			_xmlStructure.appendChild(<resources/>);
 
 			for each (var res:XML in resources)
 			{
-				var resObj:Object = CashManager.getObject(ID, res.@ID);
+				var resObj:Object = CashManager.getObject(fullID, res.@ID);
 				var resData:ByteArray = ByteArray(resObj.data);
 				var content:String = resData.readUTFBytes(resData.bytesAvailable);
 				
@@ -587,7 +706,7 @@ public class Template extends EventDispatcher
 				resXML.@type = resObj.entry.@type;
 				resXML.@name = resObj.entry.@name;
 				
-				xmlStructure.resources.appendChild(resXML);
+				_xmlStructure.resources.appendChild(resXML);
 			}
 		}
 	}
@@ -619,16 +738,17 @@ public class Template extends EventDispatcher
     		
     		ProgressManager.start(ProgressManager.DIALOG_MODE, false);
 			
-			_xml = XML(CashManager.getStringObject(ID, 'template'));
+			_xml = XML(CashManager.getStringObject(fullID, 'template'));
 			
-			var mainIndex:XML = CashManager.getMainIndex();	
-			CashManager.updateMainIndexEntry(mainIndex, ID, 'saved', 'true');
-			CashManager.setMainIndex(mainIndex);
+	      	// update tpl UID
+	   		var oldID:String = fullID;
+	   		_fullID = null;
+	   		CashManager.updateID(oldID, fullID);			
+			
+			ProgressManager.complete();
 			
 			modified = false;
 
-			ProgressManager.complete();
-			
 			dispatchEvent( new Event(Event.COMPLETE) );
     	}
     	catch(e:Error)
@@ -669,14 +789,16 @@ public class Template extends EventDispatcher
 			
 			_xml = xmlData;
 			
-			decode();
-				
-			if(xmlStructure)
-				cash();
+			_completelyOpened = false;
+			
+			_fullID = null;
+			
+			processOpened();
 			
 			ProgressManager.complete();
 
 			modified = false;
+			
 			dispatchEvent( new Event(Event.COMPLETE) );
     	}
     	catch(e:Error)

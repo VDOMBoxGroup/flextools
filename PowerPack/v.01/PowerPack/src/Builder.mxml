@@ -473,11 +473,6 @@
             			
             			ProgressManager.start(ProgressManager.DIALOG_MODE, false);
             			
-            			tpl.decode();
-            			
-						if(tpl.xmlStructure)
-							tpl.cash();
-							
 						processOpenedTpl();
 						
 						ProgressManager.complete();			
@@ -598,7 +593,7 @@
 					{
 						ContextManager.instance.templateStruct = new TemplateStruct(
 							pnl_graphs.toXML(),
-							(ContextManager.instance.templates.getItemAt(0) as Template).ID);
+							(ContextManager.instance.templates.getItemAt(0) as Template).fullID);
 							
 						switch(event.item.@id.toString())
 						{
@@ -754,7 +749,7 @@
 	            		if(dialog.chkNames) 	flags|=TemplateValidateOptions.SET_UNIQ_NAMES;
 	            	}
             		            		
-					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.ID);
+					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.fullID);
 					var validateArr:Array = ContextManager.instance.templateStruct.validate(flags).array;
 	
 					pnl_problems.array = validateArr;

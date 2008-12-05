@@ -99,7 +99,9 @@
             		if(event.target.txtKey.text)
             		{
             			template.key = event.target.txtKey.text;
-            			template.decode();
+            			
+            			template.processOpened();
+            			
             			if(template.xmlStructure)
             			{
             				populateList();	

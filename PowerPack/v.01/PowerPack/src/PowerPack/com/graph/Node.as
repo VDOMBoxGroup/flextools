@@ -1298,7 +1298,7 @@ public class Node extends Canvas
 		tipImage.scaleContent = true;
 		
 		var curTpl:Template = ContextManager.instance.templates[0];
-		var index:XML = CashManager.getIndex(curTpl.ID);
+		var index:XML = CashManager.getIndex(curTpl.fullID);
 		var thumbFile:File = CashManager.cashFolder.resolvePath(index.@folder).resolvePath(nodeCB.selectedItem.@thumb);
 		
 		tipImage.load( thumbFile.nativePath );	
@@ -1337,7 +1337,7 @@ public class Node extends Canvas
 		if(ContextManager.instance.templates.length>0)
 			curTpl =  ContextManager.instance.templates[0];
 		
-		if(!curTpl || CashManager.objectUpdated(curTpl.ID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
+		if(!curTpl || CashManager.objectUpdated(curTpl.fullID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
 		{
 			destroyImageTip();
 		}

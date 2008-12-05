@@ -24,13 +24,14 @@ package PowerPack.com
 			}
 			
 			super(message, id);	
+			
 			_words.unshift(message);
 			this.message = (StringUtil.substitute as Function).apply(null, _words); 
 			
 			var msg:String = getMessageText(id);
 			
 			if(msg)
-			{	
+			{
 				details = message;		
 				_words2.unshift(msg);
 				this.message = (StringUtil.substitute as Function).apply(null, _words2); 
@@ -42,8 +43,15 @@ package PowerPack.com
         	if(!messages)
         		return null;
         		
-            var message:XMLList = messages.error.(@code == id);
-            return (message.length()>0?message[0].text():null);
+            var messages:XMLList = messages.error.(@code == id);
+            
+            if(messages.length()==0)
+            	return null;
+            	            
+			var xml:XML = messages[0];          
+            var retVal:String = null;//LanguageManager.sentences[xml.@ID];
+            
+            return (retVal ? retVal : xml.text());
         }
         
         public function getTitle():String {

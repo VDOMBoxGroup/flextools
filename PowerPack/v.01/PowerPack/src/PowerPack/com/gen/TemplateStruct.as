@@ -690,8 +690,10 @@ public class TemplateStruct extends EventDispatcher
 		// replace special sequences
 		buffer = Utils.replaceEscapeSequences(buffer, "\\-");
 		
-		dispatchEvent(new Event("generationComplete"));
 		isRunning = false;
+
+		dispatchEvent(new Event("generationComplete"));
+
 		return buffer;
 
 		//} catch (e:Error) {

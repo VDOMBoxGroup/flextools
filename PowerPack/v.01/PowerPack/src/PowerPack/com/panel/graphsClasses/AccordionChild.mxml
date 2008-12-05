@@ -106,9 +106,9 @@
 	        			null,
 	        			event.itemRenderer);
 	        		
-	        		list.dispatchEvent(evnt);
-	
 		   			list.editable = false;
+		   			
+	        		list.dispatchEvent(evnt);
 	   			}
             }
 

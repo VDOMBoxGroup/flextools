@@ -37,6 +37,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.events.IndexChangedEvent;
 			import mx.events.FlexEvent;
 			import ExtendedAPI.com.containers.SuperAlert;
 			import mx.utils.NameUtil;
@@ -94,11 +95,16 @@
 			
 			public var vsViewStack:ViewStack;	
 			
-			public var curTab:AccordionChild;
-			public var curGraph:GraphCanvas;
+			private var curTab:AccordionChild;
+			private var curGraph:GraphCanvas;
+			
+			private var tabMap:Dictionary = new Dictionary();
 			
 			[Bindable]
-			private var initGraphs:ArrayCollection = new ArrayCollection();	
+			private var initGraphs:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var graphs:ArrayCollection = new ArrayCollection();
 			
 			//--------------------------------------------------------------------------
 			//
@@ -123,7 +129,7 @@
 					createCategoryTab(label);
 				}
 				
-				initGraphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);				
+				initGraphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);
 			}
 			
 			public function clear():void
@@ -131,25 +137,28 @@
 				// remove all except first 'none' position
 				while(initGraphs.length>1)
 					initGraphs.removeItemAt(1);				
-
+				
 				for each (var child:DisplayObject in graphsAccordion.getChildren())
 				{
 					AccordionChild(child).graphs.removeAll();
 				}
-
 				graphsAccordion.removeAllChildren();
+				tabMap = new Dictionary();
 				
-				for each (child in vsViewStack.getChildren())
+				for each(var label:String in ["application", "objects", "structure", "resources"])
 				{
-					if(child is GraphCanvas)
-						GraphCanvas(child).dispose();
+					createCategoryTab(label);
 				}
+				
+				for each (var obj:Object in graphs)
+				{
+					if(obj is GraphCanvas)
+						GraphCanvas(obj).dispose();
+				}
+				graphs.removeAll();
 				
 				selectGraph(null);
 
-				//vsViewStack.validateNow();
-				//validateNow();
-				
 				dispatchEvent(new Event(TPL_CHANGED));			
 			}
 			
@@ -158,7 +167,7 @@
 				var graphAccordionChild:AccordionChild = new AccordionChild();
 				graphAccordionChild.label = label;
 				graphsAccordion.addChild(graphAccordionChild);
-
+				
 				graphAccordionChild.lstGraphs.addEventListener(ListEvent.CHANGE, changeLstGraphsHandler);
 				graphAccordionChild.lstGraphs.addEventListener(MouseEvent.DOUBLE_CLICK, btnRenameClickHandler);
 				graphAccordionChild.lstGraphs.addEventListener("editingComplete", completeEditLstGraphsHandler);
@@ -171,10 +180,13 @@
 				return graphAccordionChild;
 			}
 			
-			public function addGraph(graph:GraphCanvas):void
+			public function addGraph(graph:GraphCanvas, processAfterAdding:Boolean=true):void
 			{
+				if(!processAfterAdding)
+					initGraphs.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);
+				
+				graphs.addItem(graph);
 				initGraphs.addItem(graph);				
-				vsViewStack.addChild(graph);
 				
 				graph.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChange);				
 				
@@ -192,19 +204,74 @@
 				if(!graphAccordionChild)
 					graphAccordionChild = createCategoryTab(graph.category); 
 
-				graphAccordionChild.graphs.addItem(graph);
+				if(curTab == graphAccordionChild)
+					graphAccordionChild.graphs.addItem(graph);
+				else
+				{
+					if(!tabMap[graphAccordionChild])
+						tabMap[graphAccordionChild] = new Dictionary();
+						
+					tabMap[graphAccordionChild][graph] = graph;
+				}
 				
-				if(graph.initial)
-					cbInitGraph.selectedItem = graph;	
+				if(graph.initial && processAfterAdding)
+					cbInitGraph.selectedItem = graph;
 					
+				if(!processAfterAdding)
+					initGraphs.addEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);
+
 				dispatchEvent(new Event(TPL_CHANGED));		
+			}
+			
+			public function processAfterGraphAdding():void
+			{
+				for (var i:int=initGraphs.length-1; i>=0; i--) 
+				{
+					var graph:Object = initGraphs[i]; 
+					if(graph is GraphCanvas && GraphCanvas(graph).initial)
+						break;
+				}
+				
+				setInitial(i);
+									
+				onInitGraphsChange(null);
+			}
+			
+			public function setInitial(arg:Object):void
+			{
+				for each (var graph:GraphCanvas in graphs)
+				{
+					graph.initial = false;
+				}
+				
+				if(arg is GraphCanvas)
+				{
+					GraphCanvas(arg).initial = true;
+					cbInitGraph.selectedItem = arg;				
+				}
+				else if(typeof(arg) == "number")
+				{
+					var index:int = int(arg);
+					if(index<0)
+						index = 0;
+					
+					if(initGraphs[index] is GraphCanvas)
+						GraphCanvas(initGraphs[index]).initial = true; 	
+					cbInitGraph.selectedIndex = index;
+				}
 			}
 			
 			public function findFirstGraph():GraphCanvas
 			{
 				for each(var child:AccordionChild in graphsAccordion.getChildren())
 				{
-					if(child.graphs.length>0)
+					if(tabMap[child])
+					{
+						var arr:ArrayCollection = getTabMapGraphs(child, true);
+						if(arr.length>0)
+							return arr[0];
+					}					
+					else if(child.graphs.length>0)
 						return child.graphs.getItemAt(0) as GraphCanvas;
 				}
 				return null;				
@@ -227,27 +294,49 @@
 					{
 						var index:int = child.graphs.getItemIndex(graph);
 						if(index>=0)
-						{
-							curGraph = graph;
-							if(curTab && curTab!=child)
-								curTab.lstGraphs.selectedIndex = -1;
-							curTab = child;
-							graphsAccordion.selectedChild = curTab;
-							curTab.lstGraphs.selectedIndex = index;							
-							if(!vsViewStack.contains(graph))
-							{
-								ProgressManager.start(null, false);
-								vsViewStack.addChild(graph);								
-								graph.addEventListener(FlexEvent.CREATION_COMPLETE, completeHandler);
-								
-								function completeHandler(event:FlexEvent):void {
-									graph.removeEventListener(FlexEvent.CREATION_COMPLETE, completeHandler);
-									ProgressManager.complete();
-								}
-							}
-							vsViewStack.selectedChild = graph;
 							break;
+					}
+					
+					if(index<0)
+					{
+						for(var obj:Object in tabMap)
+						{
+							child = obj as AccordionChild;
+							var arr:ArrayCollection = getTabMapGraphs(child);
+							index = arr.getItemIndex(graph);
+							if(index>=0)
+							{
+								populateTab(child);
+								break;
+							}
 						}
+					}
+						
+					if(index>=0)
+					{
+						curGraph = graph;
+						if(curTab && curTab!=child)
+							curTab.lstGraphs.selectedIndex = -1;
+						curTab = child;
+						
+						graphsAccordion.selectedChild = curTab;
+						curTab.lstGraphs.selectedItem = curGraph;
+						
+						callLater(curTab.lstGraphs.scrollToIndex, [curTab.graphs.getItemIndex(curGraph)]);
+						//curTab.lstGraphs.scrollToIndex(curTab.graphs.getItemIndex(curGraph));							
+
+						if(!vsViewStack.contains(graph))
+						{
+							ProgressManager.start(null, false);
+							vsViewStack.addChild(graph);								
+							graph.addEventListener(FlexEvent.CREATION_COMPLETE, completeHandler);
+							
+							function completeHandler(event:FlexEvent):void {
+								graph.removeEventListener(FlexEvent.CREATION_COMPLETE, completeHandler);
+								ProgressManager.complete();
+							}
+						}
+						vsViewStack.selectedChild = graph;
 					}
 				}					
 			}
@@ -260,32 +349,8 @@
 				var graphXML:XML = xml;
 				var newGraph:GraphCanvas = new GraphCanvas();				
 				newGraph.xml = graphXML;
-				newGraph.name = graphXML.@name;
-				newGraph.category = graphXML.@category; 
 				
-				initGraphs.addItem(newGraph);
-				//vsViewStack.addChild(newGraph);
-				
-				newGraph.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChange);
-				//newGraph.fromXML(graphXML.toXMLString());
-
-				var graphAccordionChild:AccordionChild = null;
-
-				for(var i:int=0; i<graphsAccordion.numChildren; i++)
-				{
-					if(AccordionChild(graphsAccordion.getChildAt(i)).label==newGraph.category)
-					{
-						graphAccordionChild = graphsAccordion.getChildAt(i) as AccordionChild;
-						break;
-					}
-				}
-				
-				if(!graphAccordionChild)
-					graphAccordionChild = createCategoryTab(newGraph.category); 
-
-				graphAccordionChild.graphs.addItem(newGraph);
-				
-				dispatchEvent(new Event(TPL_CHANGED));
+				addGraph(newGraph, false);
 			}
 			
 			/** 
@@ -297,10 +362,9 @@
 					return; 
 				
 				ProgressManager.show(null, false);
-				callLater(populateGraphs_01);			
+				populateGraphs_01();			
 				
 				function populateGraphs_01():void {
-					clear();				
 
 					for each(var cat:XML in xml.categories.category)
 					{
@@ -310,27 +374,15 @@
 					for each (var graphXML:XML in templateXML.elements("graph"))
 					{			
 						populateGraph(graphXML);
-					}	
+					}
+					
+					processAfterGraphAdding();
 					
 					selectGraph(findFirstGraph());
 					
-					// set initial graph in combobox
-					
-					cbInitGraph.selectedIndex = 0;
-					for(var i:int=0; i<initGraphs.length; i++)
-					{
-						if(initGraphs.getItemAt(i).initial)
-						{
-							cbInitGraph.selectedIndex = i;
-							break;
-						}
-					}
+					ProgressManager.complete();
 					
 					dispatchEvent(new Event(TPL_CHANGED));
-					
-					validateNow();
-					
-					ProgressManager.complete();
 				}
 				
 			}
@@ -340,24 +392,21 @@
 			 */	
 			public function toXML():XML
 			{
-				var tmplXML:XML = new XML(<structure></structure>);
+				var structXML:XML = new XML(<structure/>);
 				
-				for each (var child:DisplayObject in vsViewStack.getChildren())
+				for each (var graph:GraphCanvas in graphs)
 				{
-					if(child is GraphCanvas)
-					{
-						var graphXML:XML = GraphCanvas(child).toXML();		
-						tmplXML.appendChild(graphXML);
-					}
+					var graphXML:XML = graph.toXML();		
+					structXML.appendChild(graphXML);
 				} 
 				
-				return tmplXML;
+				return structXML;
 			}
 			
 			public function getNodeByName(name:String):Node
 			{
 				var node:Node;
-				for each(var graph:GraphCanvas in vsViewStack.getChildren())
+				for each(var graph:GraphCanvas in graphs)
 				{
 					var obj:Object = graph.getChildByName(name);
 					if(obj && obj is Node)
@@ -371,27 +420,22 @@
 
 			public function showNodeByName(name:String):Node
 			{
-				var node:Node;
-				for each(var graph:GraphCanvas in vsViewStack.getChildren())
+				var node:Node = getNodeByName(name);
+				if(node)
 				{
-					var obj:Object = graph.getChildByName(name);
-					if(obj && obj is Node)
-					{
-						showGraphByName(graph.name);
-						node = obj as Node;
-						node.scrollToNode();
-						graph.validateNow();
-						break;
-					} 
+					showGraphByName(node.parent.name);
+					node.scrollToNode();
 				}				
 				return node;
 			}
 
 			public function getGraphByName(name:String):GraphCanvas
 			{
-				var object:Object = vsViewStack.getChildByName(name);
-				if(object is GraphCanvas)
-					return object as GraphCanvas;
+				for each(var graph:GraphCanvas in graphs)
+				{
+					if(graph.name == name)
+						return graph;
+				}				
 				return null;
 			}
 
@@ -403,13 +447,30 @@
 				
 				selectGraph(graph);
 				
-				validateNow();
-				vsViewStack.validateNow();
-				
-				curTab.lstGraphs.validateNow();
-				curTab.lstGraphs.scrollToIndex(curTab.graphs.getItemIndex(graph));
-				
 				return graph;
+			}
+			
+			private function getTabMapGraphs(tab:AccordionChild, sorted:Boolean=false):ArrayCollection
+			{
+				var arr:ArrayCollection = new ArrayCollection();
+				
+				if(!tabMap[tab])
+					return arr;
+				
+				for each (var graph:GraphCanvas in tabMap[tab])
+				{
+					arr.addItem(graph);
+				}
+				
+				if(sorted)
+				{	
+					var sort:Sort = new Sort();
+		 			sort.fields = [new SortField('name', true)];
+		   			arr.sort = sort;
+   					arr.refresh();
+   				}
+   				
+   				return arr; 
 			}
 
 			//--------------------------------------------------------------------------
@@ -429,6 +490,30 @@
        				initGraphs.refresh();
        			}
 		    }
+		    
+		    private function tabChangeHandler(event:IndexChangedEvent):void
+		    {
+				var tab:AccordionChild = event.relatedObject as AccordionChild;
+				
+				if(tabMap[tab])
+				{
+					populateTab(tab);
+				}
+		    }
+
+			private function populateTab(tab:AccordionChild):void 
+			{
+				if(tabMap[tab])
+				{				
+					for each (var graph:GraphCanvas in tabMap[tab])
+					{
+						tab.graphs.addItem(graph);
+						delete tabMap[tab]
+					}
+				
+					delete tabMap[tab];
+				}
+			}
 			
 			private function changeLstGraphsHandler(event:Event):void
 			{
@@ -459,28 +544,14 @@
 				    			
 			private function cbInitGraphChangeHandler(event:ListEvent):void
 			{
-				for each (var child:DisplayObject in vsViewStack.getChildren())
-				{
-					if(child is GraphCanvas)
-						GraphCanvas(child).initial = false;
-				}
-				
-				if(ComboBox(event.target).selectedItem is GraphCanvas)
-					GraphCanvas(ComboBox(event.target).selectedItem).initial = true;
+				setInitial(ComboBox(event.target).selectedItem);
 				
 				dispatchEvent(new Event(TPL_CHANGED));
 			}
 				    	
 			private function cbInitGraphCloseHandler(event:DropdownEvent):void
 			{
-				for each (var child:DisplayObject in vsViewStack.getChildren())
-				{
-					if(child is GraphCanvas)
-						GraphCanvas(child).initial = false;
-				}
-				
-				if(ComboBox(event.target).selectedItem is GraphCanvas)
-					GraphCanvas(ComboBox(event.target).selectedItem).initial = true;
+				setInitial(ComboBox(event.target).selectedItem);
 				
 				dispatchEvent(new Event(TPL_CHANGED));
 			}
@@ -518,7 +589,8 @@
 				selectGraph(newGraph);
 				
 				child.lstGraphs.validateNow();
-				child.lstGraphs.scrollToIndex(child.graphs.getItemIndex(newGraph));
+				callLater(child.lstGraphs.scrollToIndex, [child.graphs.getItemIndex(newGraph)]);
+				//child.lstGraphs.scrollToIndex(child.graphs.getItemIndex(newGraph));
 				
 				child.lstGraphs.editable = true; 
 				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
@@ -554,8 +626,9 @@
 				
 				selectGraph(newGraph);
 				
-				child.lstGraphs.validateNow();
-				child.lstGraphs.scrollToIndex(child.graphs.getItemIndex(newGraph));
+				//child.lstGraphs.validateNow();
+				callLater(child.lstGraphs.scrollToIndex, [child.graphs.getItemIndex(newGraph)]);
+				//child.lstGraphs.scrollToIndex(child.graphs.getItemIndex(newGraph));
 				
 				child.lstGraphs.editable = true; 
 				child.lstGraphs.editedItemPosition = {rowIndex: child.lstGraphs.selectedIndex, columnIndex: 0};
@@ -568,7 +641,7 @@
 				if(!curGraph)
 					return;
 				
-				selectGraph(curGraph);
+				//selectGraph(curGraph);
 
 				var newIndex:int = curTab.lstGraphs.selectedIndex-1;
 				newIndex = newIndex<0 ? 0 : newIndex;
@@ -576,12 +649,13 @@
 				if(cbInitGraph.selectedItem == curGraph)
 					cbInitGraph.selectedIndex = 0;
 				
+				graphs.removeItemAt(graphs.getItemIndex(curGraph));
 				initGraphs.removeItemAt(initGraphs.getItemIndex(curGraph));
 				curTab.graphs.removeItemAt(curTab.lstGraphs.selectedIndex);
 				GraphCanvas(curGraph).dispose();
 				
-				curTab.lstGraphs.validateNow();
-				vsViewStack.validateNow();
+				//curTab.lstGraphs.validateNow();
+				//vsViewStack.validateNow();
 				
 				if(curTab.graphs.length>0)
 				{
@@ -590,13 +664,31 @@
 				else
 				{
 					var index:int = graphsAccordion.getChildIndex(curTab);
+					var graphToSelect:GraphCanvas;
 					
 					for(var i:int=index-1; i>=0; i--)
 					{
 						var tab:AccordionChild = graphsAccordion.getChildAt(i) as AccordionChild;
-						if(tab.graphs.length>0)
-							selectGraph(tab.graphs.getItemAt(0) as GraphCanvas);
+						
+						if(tabMap[tab])
+						{
+							var arr:ArrayCollection = getTabMapGraphs(tab, true);
+							if(arr.length>0)
+								graphToSelect = arr[0];
+						}
+						else if(tab.graphs.length>0)
+						{
+							graphToSelect = tab.graphs.getItemAt(0) as GraphCanvas;
+						}
+						
+						if(graphToSelect)
+							break;
 					}
+					
+					if(!graphToSelect)
+						graphToSelect = findFirstGraph();
+
+					selectGraph(graphToSelect);
 				}
 				
 				dispatchEvent(new Event(TPL_CHANGED));
@@ -628,7 +720,7 @@
 					visible="false" includeInLayout="false"/>
 			</mx:ControlBar>
 			
-			<mx:Accordion 
+			<mx:Accordion change="tabChangeHandler(event);" 
 				headerRenderer="PowerPack.com.panel.graphsClasses.AccordionHeader" 
 				id="graphsAccordion" fontFamily="Verdana" borderStyle="solid" width="100%" height="100%" />		
 			

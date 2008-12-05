@@ -260,7 +260,7 @@
     			if(tpl.isEncoded)
     				tpl.key = key;    			
     				
-    			tpl.decode();
+    			//tpl.decode();
     			
     			if(!tpl.xmlStructure)
     			{
@@ -491,7 +491,7 @@
     	
     	    		tpl = ContextManager.instance.templates.getItemAt(0) as Template;
 		
-					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.ID);
+					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.fullID);
 					
 					var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
 					

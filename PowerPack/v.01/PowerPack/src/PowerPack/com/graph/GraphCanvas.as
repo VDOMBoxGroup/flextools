@@ -177,13 +177,13 @@ public class GraphCanvas extends Canvas
    		
    		clear();
    		
-		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
-		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.DISPOSED));
-
         if(parent)
            	parent.removeChild(this);
            	
     	delete graphs[this];
+
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.DISPOSED));
 	}	   
 
     //--------------------------------------------------------------------------
@@ -231,6 +231,9 @@ public class GraphCanvas extends Canvas
     }	 
 	public function get category():String
     {
+    	if(xml)
+    		return Utils.getStringOrDefault(xml.@category, null);
+    		
         return _category;
     }	
     
@@ -260,6 +263,9 @@ public class GraphCanvas extends Canvas
     }	 
 	public function get initial():Boolean
     {
+    	if(xml)
+        	return Utils.getBooleanOrDefault(xml.@initial, false);
+        		
         return _initial;
     }			
         
@@ -284,6 +290,9 @@ public class GraphCanvas extends Canvas
     }	    
 	override public function get name():String
     {
+    	if(xml)
+        	return Utils.getStringOrDefault(xml.@name, null);
+        		
         return super.name;
     }			
 	
@@ -367,6 +376,8 @@ public class GraphCanvas extends Canvas
 		
 	public function clear():void
 	{		
+		xml = null;
+		
 		var children:Array = getChildren();
 		for each(var child:DisplayObject in children)
 		{
@@ -441,6 +452,7 @@ public class GraphCanvas extends Canvas
 	{
 		var newCanvas:GraphCanvas = new GraphCanvas();
 		
+		newCanvas.xml = xml;
 		newCanvas.category = category;
 		newCanvas.initial = initial;
 		
@@ -576,7 +588,7 @@ public class GraphCanvas extends Canvas
 		
 		clear();
 		
-		name = graphXML.@name;
+		name = Utils.getStringOrDefault(graphXML.@name, '');
 		initial = Utils.getBooleanOrDefault(graphXML.@initial); 
 		category = Utils.getStringOrDefault(graphXML.@category, 'other');
 					
@@ -603,9 +615,9 @@ public class GraphCanvas extends Canvas
 			newArrow.highlighted = Utils.getBooleanOrDefault(arrowXML.@highlighted);
 		}		
 		
-		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));	
        	xml = null;
 
+		dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));	
 		return true;
 	}		
 	
@@ -705,16 +717,16 @@ public class GraphCanvas extends Canvas
 				var data:ByteArray = new ByteArray();
 				data.writeUTFBytes(b64Data);
 				var ID:String = UIDUtil.createUID();
-				CashManager.setObject(template.ID, XML("<object category='image' ID='"+ID+"' name='"+ID+".png' type='png'/>"), data);  
+				CashManager.setObject(template.fullID, XML("<object category='image' ID='"+ID+"' name='"+ID+".png' type='png'/>"), data);  
 	
 				newNode = createNode();
 				newNode.text = ID;
 				newNode.category = NodeCategory.RESOURCE;
-
-				dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 				
 				CursorManager.removeBusyCursor();
 				ProgressManager.complete();
+
+				dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
 			}
 		}	  	
 		else if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))

@@ -253,13 +253,13 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 			}
 		}
 		  			
-       	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
-       	dispatchEvent(new ConnectorEvent(ConnectorEvent.DISPOSED));
-       	
         if(parent)
            	parent.removeChild(this);
            	
        	delete connectors[this];
+
+       	dispatchEvent(new GraphCanvasEvent(GraphCanvasEvent.GRAPH_CHANGED));
+       	dispatchEvent(new ConnectorEvent(ConnectorEvent.DISPOSED));
 	}	
 
     //--------------------------------------------------------------------------
@@ -610,42 +610,6 @@ public class Connector extends UIComponent implements IFocusManagerComponent
             _highlightedChanged = false;
             invalidateDisplayList();
         }        
-        if (_dataChanged)
-        {
-            _dataChanged = false;
-            
-            if(data == null)
-            {
-            	_label = null;
-            }   
-            else if(data is Array)
-            {
-            	if((data as Array).length==0)
-            		_label = null;            	
-            	else if(ArrayUtil.getItemIndex(label, data as Array)==-1)
-            		_label = data[0];            	                       
-            }
-            else if(data is ListCollectionView)
-            {
-            	if((data as ListCollectionView).length==0)
-            		_label = null;            	
-            	if(ListCollectionView(data).getItemIndex(label)==-1)
-            		_label = data[0];
-            }
-            else if(data is String)
-            {
-            	_label = data.toString();
-            }
-            else
-            {
-            	if(!data[_label])
-            		_label = null;
-            }
-            
-          	toolTip = label;
-
-			invalidateDisplayList();
-        }
         
         if (_labelChanged)
         {
@@ -719,6 +683,42 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 	            bindNodes();
         	}
         }
+        if (_dataChanged)
+        {
+            _dataChanged = false;
+            
+            if(data == null)
+            {
+            	_label = null;
+            }   
+            else if(data is Array)
+            {
+            	if((data as Array).length==0)
+            		_label = null;            	
+            	else if(ArrayUtil.getItemIndex(label, data as Array)==-1)
+            		_label = data[0];            	                       
+            }
+            else if(data is ListCollectionView)
+            {
+            	if((data as ListCollectionView).length==0)
+            		_label = null;            	
+            	if(ListCollectionView(data).getItemIndex(label)==-1)
+            		_label = data[0];
+            }
+            else if(data is String)
+            {
+            	_label = data.toString();
+            }
+            else
+            {
+            	if(!data[_label])
+            		_label = null;
+            }
+            
+          	toolTip = label;
+
+			invalidateDisplayList();
+        }        
     }
     
 	override protected function measure():void 

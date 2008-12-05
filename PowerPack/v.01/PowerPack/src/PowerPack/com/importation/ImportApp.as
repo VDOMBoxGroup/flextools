@@ -1109,7 +1109,7 @@ package PowerPack.com.importation
 					dbGraph.createArrow(_prev, _node);
 					
 					CashManager.setStringObject(
-									template.ID, 
+									template.fullID, 
 									XML("<resource " + 
 											"category='database' " + 
 											"ID='"+ID+"' " + 
@@ -1208,7 +1208,7 @@ package PowerPack.com.importation
 					resGraph.createArrow(_prev, _node);
 
 					CashManager.setStringObject(
-									template.ID, 
+									template.fullID, 
 									XML("<resource " + 
 											"category='image' " + 
 											"ID='"+ID+"' " + 

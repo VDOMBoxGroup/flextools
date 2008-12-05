@@ -290,9 +290,9 @@
 		        }
 		        else 
 		        {
+		            event.preventDefault();
 		            accordChild.parent.removeChild(accordChild);
 		            accordChild.dispatchEvent(new Event("tabClose"));
-		            event.preventDefault();
 		        }
 		    }
 		

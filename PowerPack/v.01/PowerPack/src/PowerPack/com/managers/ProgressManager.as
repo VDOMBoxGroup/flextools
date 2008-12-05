@@ -388,10 +388,9 @@ public class ProgressManager extends EventDispatcher
 		}
 		
 		instance._viewMode = viewMode;
-		instance.dispatchEvent(new Event("modeChange"));
 		instance._isShown = true;
 		instance._showProgress = showProgress;
-		
+		instance.dispatchEvent(new Event("modeChange"));
 	}
 
 	public static function hide():void
