@@ -73,11 +73,11 @@
             	var file:File = event.target as File;
            			
 				txtInput.text = file.nativePath;
-				txtInput.dispatchEvent(new Event(Event.CHANGE));
 				
 				files = [];
 				files.push(file);
 				
+				txtInput.dispatchEvent(new Event(Event.CHANGE));
 				dispatchEvent(new Event(Event.SELECT));
             }
 
