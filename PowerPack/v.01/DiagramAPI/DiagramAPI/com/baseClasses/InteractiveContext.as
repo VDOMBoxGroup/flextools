@@ -263,7 +263,6 @@ public class InteractiveContext extends EventDispatcher
     private function systemManager_mouseMoveHandler(event:MouseEvent):void
     {
     	//event.stopImmediatePropagation();
-    	
 		target.dispatchEvent(new MoveEvent(MoveEvent.MOVED));
 	    
 	    var pos:Point;
@@ -283,7 +282,8 @@ public class InteractiveContext extends EventDispatcher
 	    		}
 	    	}
 	    	
-	    	parentContainer = parentContainer.parent;	    		    	
+	    	parentContainer = parentContainer.parent;	    	
+	    		    	
 	    }
 	    
 	    if(parentContainer is Container)
