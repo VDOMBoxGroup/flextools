@@ -23,7 +23,7 @@ package vdom.components.eventEditor
 			labelField = "@label";
 			showRoot = true;
 			percentHeight = 100;//width = 200;
-//			percentWidth = 100;
+			percentWidth = 100;
 			
 			//itemRenderer = new ClassFactory(IconTreeItemRenderer);
 			

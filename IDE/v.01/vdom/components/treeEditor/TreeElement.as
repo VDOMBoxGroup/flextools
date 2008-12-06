@@ -61,11 +61,13 @@ package vdom.components.treeEditor
 				[Bindable]
 		private var defaultPicture:Class;
 	
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='backGround')]
+//		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='backGround')]
+		[Embed(source='/assets/treeEditor/test/content.png')]
 		[Bindable]
 		public var backGround:Class;
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='header')]
+//		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='header')]
+		[Embed(source='/assets/treeEditor/test/header.png')]
 		[Bindable]
 		public var header:Class;
 		
@@ -93,9 +95,14 @@ package vdom.components.treeEditor
 		[Bindable]
 		public var start_page:Class; 
 		
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='selected')]
+//		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='selected')]
+		[Embed(source='/assets/treeEditor/test/header_selected.png')]
 		[Bindable]
-		public var _selected:Class; 
+		public var _selected_header:Class; 
+		
+		[Embed(source='/assets/treeEditor/test/content_selected.png')]
+		[Bindable]
+		public var _selected_content:Class; 
 		
 		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='bt_start_page')]
 		[Bindable]
@@ -429,11 +436,13 @@ package vdom.components.treeEditor
 		{
 			if(data)
 			{
-				imgheader.source = _selected;
+				imgheader.source = _selected_header;
+				imgBackGround.source = _selected_content
 			
 			}else
 			{	
 				imgheader.source = header;
+				imgBackGround.source = backGround;	
 			}
 		}
 		
@@ -637,7 +646,7 @@ package vdom.components.treeEditor
 			imgheader.source = header;
 			
 			imgSelected = new Image();
-			imgSelected.source = _selected;
+			imgSelected.source = _selected_header;
 			
 			
 			
@@ -758,40 +767,42 @@ package vdom.components.treeEditor
 
 		private function updateRatio():void
 		{	
-			imgheader.width = 243 * _ratio;
-			imgheader.height = 30 * _ratio;
+//			imgheader.width = 243 * _ratio;
+//			imgheader.height = 30 * _ratio;
 			
 			imgSelected.width = 243 * _ratio;
 			imgSelected.height = 30 * _ratio;
 			
+			imgMenu.x = 4;
+			imgMenu.y = 5 * _ratio;
 			imgMenu.width = 76 * _ratio;
 			imgMenu.height = 14 * _ratio;
 			
 			txt.x = 5;
-			txt.y = 2 * _ratio;
+			txt.y = 7 * _ratio;
 			txt.width =  230 * _ratio;
 			
 			 
-			imgLine.y = -12 * _ratio; 
-			imgLine.x = 20 * _ratio;	
+			imgLine.y = -7 * _ratio; 
+			imgLine.x = 25 * _ratio;	
 			imgLine.width = 10 * _ratio;
 			imgLine.height = 10 * _ratio;
 			
 			//imgDelete 
-			imgDelete.y = -12 * _ratio;
-			imgDelete.x = 40 * _ratio;	
+			imgDelete.y = -7 * _ratio;
+			imgDelete.x = 45 * _ratio;	
 			imgDelete.width = 10 * _ratio;
 			imgDelete.height = 10 * _ratio;
 			
 			 
-			imgPlus.y = -12 * _ratio;
-			imgPlus.x = 4 * _ratio;
+			imgPlus.y = -7 * _ratio;
+			imgPlus.x = 9 * _ratio;
 			imgPlus.width = 10 * _ratio;
 			imgPlus.height = 10 * _ratio;
 			
 			
-			imgStart.y = -12 * _ratio;
-			imgStart.x = 60 * _ratio;
+			imgStart.y = -7 * _ratio;
+			imgStart.x = 65 * _ratio;
 			imgStart.width = 10 * _ratio;
 			imgStart.height = 10 * _ratio;
 			
@@ -804,9 +815,11 @@ package vdom.components.treeEditor
 			//-----------------------------------
 			cnvDownLayer.y = 1 * _ratio;
 			
+			
 			imgBackGround.y = 27 * _ratio;
-			imgBackGround.width = 243 * _ratio;
-			imgBackGround.height = 115 * _ratio;
+			imgBackGround.x = -4;
+//			imgBackGround.width = 243 * _ratio;
+//			imgBackGround.height = 115 * _ratio;
 			
 			textArea.x = 115 * _ratio; // btButton.width;
 			textArea.y = 35 * _ratio;  //txt.height;

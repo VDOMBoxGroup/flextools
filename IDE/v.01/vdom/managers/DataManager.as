@@ -250,7 +250,7 @@ public class DataManager implements IEventDispatcher {
 	{
 		if(!objectId)
 			return;
-		
+		trace("--- Ascet event for: " + objectId);
 		soap.get_application_events(currentApplicationId, objectId); 
 	}
 	
