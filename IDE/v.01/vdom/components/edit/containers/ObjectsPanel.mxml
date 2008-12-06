@@ -204,8 +204,6 @@ xmlns:containers="vdom.components.edit.containers.*" >
 			tree.selectedItem = currentElement;
 			
 			var index:int =  tree.getItemIndex(tree.selectedItem);
-//			tree.selectedIndex = index;
-//			tree.rowCount;
 			tree.scrollToIndex(index);
 			
 		}

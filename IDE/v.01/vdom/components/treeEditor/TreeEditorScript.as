@@ -852,7 +852,7 @@ public function dataToXML(massTreeElements:Array, massLines:Array ):XML
 				xmlList.@top = massTreeElements[levels].y;
 				xmlList.@ResourceID = massTreeElements[levels].resourceID;
 				xmlList.@state = massTreeElements[levels].state;
-				outXML.appendChild(xmlList.toXMLString());
+				outXML.appendChild(xmlList);
 	}
 
 //	trace('1 XML to server: ' + outXML.toString())
@@ -1040,6 +1040,9 @@ private function  createObjectHandler(dmEvt:DataManagerEvent):void
 	
 	dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, changePagesHandler);
 //	dataManager.changeCurrentPage(ID);
+	main.validateNow();
+	main.horizontalScrollPosition = 0;
+	main.verticalScrollPosition = 1000;
 }
 
 

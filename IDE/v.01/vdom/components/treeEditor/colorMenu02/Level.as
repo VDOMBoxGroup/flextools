@@ -39,6 +39,11 @@ package vdom.components.treeEditor.colorMenu02
 		[Bindable]
         public var selectedLevel:Class; 
         
+        [Embed(source='/assets/treeEditor/marked_back_ground.png')]
+		[Bindable]
+        public var markedLevel:Class; 
+//        marked_back_ground
+        
         [Embed(source='/assets/treeEditor/back_ground.png')]
 		[Bindable]
         public var level:Class; 
@@ -119,6 +124,22 @@ package vdom.components.treeEditor.colorMenu02
 			addChild(label);
 			
 			addEventListener(MouseEvent.CLICK, mouseClickHandler)
+			addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+			addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+		}
+		
+		private function mouseOutHandler(msEvt:MouseEvent):void
+		{
+			if(!selected)
+				imgBackGround.source = level;
+			else 
+				imgBackGround.source = selectedLevel;
+		}
+		
+		private function mouseOverHandler(msEvt:MouseEvent):void
+		{
+//			if(!selected)
+				imgBackGround.source = markedLevel;
 		}
 		
 		private function imgEyeClickHandler(msEvt:MouseEvent):void
@@ -155,16 +176,19 @@ package vdom.components.treeEditor.colorMenu02
 			}	
 		}
 		
+		
+		private var selected:Boolean = false;
 		private function mouseClickHandler(msEvt:MouseEvent):void
 		{
 			imgBackGround.source = selectedLevel;
-			
+			selected = true;
 			dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SELECTED_LEVEL, _data.level));
 			//trace('Lavel: ' + _data.level  );
 		}
 		
 		public  function unSelect():void
-		{
+		{ 
+			selected = false;
 			imgBackGround.source = level;
 			//dispatchEvent(new TreeEditorEvent(TreeEditorEvent.SELECTED_LEVEL, _data.level));
 			//trace('Lavel: ' + _data.level  );

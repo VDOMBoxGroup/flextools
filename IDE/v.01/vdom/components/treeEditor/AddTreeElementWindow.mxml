@@ -261,9 +261,9 @@
     		selectionColor="#dbdbdb"   rollOverColor="#E5E5E5" />
     	
 	</mx:VBox>
-	<mx:ControlBar horizontalAlign="right"
+	<mx:ControlBar horizontalAlign="right" 
 			height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
-    		<mx:Button id="OK" label="Ok" enabled="false"  click="okPressed()"/>
+    		<mx:Button id="OK" label="Ok" enabled="false"  click="okPressed()" width="60"/>
     		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
 	</mx:ControlBar>
 </mx:TitleWindow>
