@@ -201,7 +201,7 @@
 	 		}
 	 */		
 	 		private var getApplEventID:String;
-	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
+	 	/*	private function dataChangedListener(eeEvt:EventEditorEvent):void
 	 		{
 	 		
 	 			getApplEventID = eeEvt.objID;
@@ -221,20 +221,25 @@
 //	 			trEvents.dataProvider  = eeEvt.dataEvent;
 //	 			trActions.dataProvider = eeEvt.dataAction;
 	 		}
-	 		
+	 		*/
 	 		private function markButton():void
 	 		{
 	 			btSave.setStyle("color", "0xCC0000");
 				btSave.setStyle("borderColor", "0xEE0000");
 	 		}
-	 		
-	 		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
+	 		private function unMarkButton():void
 	 		{
 	 			btSave.setStyle("color", "0x000000");
 				btSave.setStyle("borderColor", "0xAAB3B3");
+	 		}
+	 		
+	 		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
+	 		{
+	 			unMarkButton();
 				
 	 			cretDat(dmEvt.result);
 	 		}
+	 		
 	 		
 	 		 private function dragEnterHandler(event:DragEvent):void 
 	 		 {
@@ -264,6 +269,7 @@
                 }	  
 	                    
 	        	var newElement:*;
+	        	curContainerTypeID
 	        	  if( event.dragInitiator is TreeActions ) 
 	        	  {
 	        		 newElement =  new EventEditorAction(item, curContainerTypeID);
@@ -568,7 +574,7 @@
 			public var curContainerTypeID:String;
 			private var dataToServer:XML; 
 //			private var dataChanged:Boolean = false;
-
+/*
 			private function treeContainerChangeHandler(evt:Event):void
 			{
 				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
@@ -580,6 +586,7 @@
      			 } 
      			 trace('2 - curContainerTypeID: '+ curContainerTypeID);
 			}
+	*/
 			/*
 			private function getIcon(value:Object):Class 
 			{
@@ -785,7 +792,7 @@
 					temXML.@Top 	 = eventsArray[evtID].y;
 					temXML.@Left 	 = eventsArray[evtID].x;
 					temXML.@State	 = eventsArray[evtID].State;
-					temXML.@ContainerID = curContainerID
+					temXML.@ContainerID = dataManager.currentPageId;
 					
 					dataToServer.Events.appendChild(temXML);
 				}
@@ -812,27 +819,28 @@
 				
 //				trace('curContainerID TO server: '+curContainerID+'\n'+ dataToServer.toXMLString());
 		     	
-				dataManager.setApplicationEvents(curContainerID, dataToServer.toXMLString());
-				trace('****************\n '+ curContainerID);
+				dataManager.setApplicationEvents(dataManager.currentPageId, dataToServer.toXMLString());
+				trace('*********** To Server *****\n '+ dataManager.currentPageId);
 				trace(dataToServer.toXMLString());
 			}
 			
 			private function revert():void
 			{
-							
-				dataManager.getApplicationEvents(getApplEventID);
+				trace('*********** Asced Events for *****\n '+ dataManager.currentPageId);			
+				dataManager.getApplicationEvents(dataManager.currentPageId);
 			}
 			
 			private function applEventSevedHandler(dmEvt:DataManagerEvent):void
 			{
-				dataManager.getApplicationEvents(getApplEventID);
+				unMarkButton();
+//				dataManager.getApplicationEvents(getApplEventID);
 			}
 			
 			private function cretDat(xmlToTree:XML=null):void
 			{
 				//trace(xmlToTree.toXMLString());
 				can.removeAllChildren();
-//				trace('----From Serve----'+xmlToTree);
+				trace('----From Serve----'+xmlToTree);
 				
 				// Client Action
 				clientActionsArray = [];		
@@ -840,8 +848,9 @@
 				{
 					///curContainerTypeID 
 					
-					var type:XML = dataManager.getTypeByObjectId(actID.@ObjTgtID)
+					var type:XML = dataManager.getTypeByObjectId(actID.@ObjTgtID);
 					//var tupeID:String = type.Information.ID;
+					var curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();
 					var nData:* = type.E2vdom.Actions.Container.(@ID == curContainerTypeID).Action.(@MethodName == actID.@MethodName).Parameters[0];
 					if(nData) 
 					{

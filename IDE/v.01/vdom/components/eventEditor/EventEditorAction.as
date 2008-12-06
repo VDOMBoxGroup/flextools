@@ -312,7 +312,8 @@ package vdom.components.eventEditor
 	//		_eventType  = data.@label;
 			_methodName = data.@MethodName;
 			 					
-			var parametrs:* = type.E2vdom.Actions.Container.(@ID == containerID)[0];
+			var curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();			 					
+			var parametrs:* = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
 			parametrs = parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
 			///
 			for each(var child:XML in parametrs.children())
@@ -331,7 +332,8 @@ package vdom.components.eventEditor
 			obj = obj as XML;
 			for each(var child:XML in  obj.children())
 			{
-				scriptNamesArray[child.@ScriptName + "_"].value = child;
+				if(scriptNamesArray[child.@ScriptName + "_"])
+					scriptNamesArray[child.@ScriptName + "_"].value = child;
 			}
 		}
 
