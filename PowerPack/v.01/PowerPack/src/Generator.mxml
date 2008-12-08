@@ -153,7 +153,7 @@
 	            MenuGeneral.updateLangMenu();
 	            
 	            // fill last files menu
-	            MenuGeneral.updateLastFilesMenu(fileMenuData);
+	            MenuGeneral.updateLastFilesMenu();
 	            
 				// Load language file
 				file = File.applicationDirectory.resolvePath("lang/"+ContextManager.instance.lang.file);
@@ -227,14 +227,14 @@
 				
 				var template:Template = new Template(xml);
 				
-        		if(ContextManager.instance.templates.length==0)
-	    			ContextManager.instance.templates.addItemAt(template, 0);
+        		if(ContextManager.templates.length==0)
+	    			ContextManager.templates.addItemAt(template, 0);
     			else
-    				ContextManager.instance.templates[0] = template;
+    				ContextManager.templates[0] = template;
 
-   				if(ContextManager.instance.templates[0].picture) {
+   				if(ContextManager.templates[0].picture) {
 					tplPic.visible = false;
-   					tplPic.source = ContextManager.instance.templates[0].picture;
+   					tplPic.source = ContextManager.templates[0].picture;
 					tplPic.visible = true;
    				}
 
@@ -255,7 +255,7 @@
             
             private function openTemplate(key:String=null):void
             {
-    			var tpl:Template = ContextManager.instance.templates[0];
+    			var tpl:Template = ContextManager.templates[0];
     			
     			if(tpl.isEncoded)
     				tpl.key = key;    			
@@ -375,7 +375,7 @@
             			
             		case cComplete:
             			txtResultBuf.text = '';
-            			//txtResultBuf.text = ContextManager.instance.templateStruct.buffer;
+            			//txtResultBuf.text = ContextManager.templateStruct.buffer;
             			txtResultBuf.text = (timer/1000).toString();
             			txtResultBuf.verticalScrollPosition = 0;
             			break;
@@ -469,14 +469,14 @@
             
             private function clearTemplateDebug():void
             {
-            	var tpl:TemplateStruct = ContextManager.instance.templateStruct;
+            	var tpl:TemplateStruct = ContextManager.templateStruct;
             	
             	if(tpl)
             	{
 					tpl.removeEventListener("stepComplete", stepCompleteHandler);
 					tpl.removeEventListener("generationComplete", generationComplete);					
 					tpl.removeEventListener("error", debugErrorHandler);
-					ContextManager.instance.templateStruct = null;
+					ContextManager.templateStruct = null;
             	}
             }
             
@@ -489,11 +489,11 @@
 					
 	        		var tpl:Template;
     	
-    	    		tpl = ContextManager.instance.templates.getItemAt(0) as Template;
+    	    		tpl = ContextManager.templates.getItemAt(0) as Template;
 		
-					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.fullID);
+					ContextManager.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.fullID);
 					
-					var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
+					var validateArr:Array = ContextManager.templateStruct.validate().array;
 					
 					if(validateArr && validateArr.filter(isError).length>0)
 						alertProceedRun();
@@ -532,7 +532,7 @@
 			
             private function runTemplate():void
             {
-            	var tpl:TemplateStruct = ContextManager.instance.templateStruct;
+            	var tpl:TemplateStruct = ContextManager.templateStruct;
         		try
         		{
 					progressBar.mode = ProgressBarMode.MANUAL;
@@ -568,18 +568,18 @@
             	if(progressBar.value+1<progressBar.maximum/2+1);
             		progressBar.setProgress(progressBar.value+1, progressBar.maximum);
 				
-				//ContextManager.instance.templateStruct.generate(true);	            		
+				//ContextManager.templateStruct.generate(true);	            		
             }	           	
            	
            	private function generationComplete(event:Event):void {
            		timer = getTimer() - timer;
            		
            		appGenerated = true;
-				ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-				ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
-				ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);	           		
+				ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+				ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
+				ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);	           		
 
-				if(ContextManager.instance.templateStruct.buffer) {
+				if(ContextManager.templateStruct.buffer) {
 					infoServerRequest.text = LanguageManager.sentences['msg_save_appxml_to_server'];
 					processStep(cServerRequest);
     			}
@@ -690,7 +690,7 @@
 				var sid:String = code.sessionId; 
 				var skey:String = code.skey(); 
 				
-				var appxml:String = ContextManager.instance.templateStruct.buffer;
+				var appxml:String = ContextManager.templateStruct.buffer;
 				
 				
 /*appxml =  
@@ -785,7 +785,7 @@
     			
     			try {
     				stream.openAsync(file, FileMode.WRITE);
-    				stream.writeUTFBytes(ContextManager.instance.templateStruct.buffer);
+    				stream.writeUTFBytes(ContextManager.templateStruct.buffer);
     				stream.close();
     			} catch (e:Error) {
     				closeStream(stream);
@@ -884,7 +884,7 @@
     				stream.openAsync(_file, FileMode.READ);
 
             		ContextManager.updateLastFiles(_file);            	
-            		MenuGeneral.updateLastFilesMenu(fileMenuData);            		            			
+            		MenuGeneral.updateLastFilesMenu();            		            			
             	}
             	
             	return stream;
@@ -895,8 +895,8 @@
             	clearTemplateDebug();
             	
 				ContextManager.instance.lastFile = false;
-				if(ContextManager.instance.templates.length>0)
-           			ContextManager.instance.templates.removeItemAt(0);
+				if(ContextManager.templates.length>0)
+           			ContextManager.templates.removeItemAt(0);
            		if(fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0])
     				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "run_template")[0].@enabled = 'false';
     			processStep(cWelcome);
@@ -904,8 +904,8 @@
 
 			public function alertInterrupt():void
 			{
-				if(!appGenerated && ContextManager.instance.templateStruct)
-					ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+				if(!appGenerated && ContextManager.templateStruct)
+					ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
 				
 	     		SuperAlert.show(
 	     			LanguageManager.sentences['msg_proceed_interrupt_app_installing'], 
@@ -916,9 +916,9 @@
 		        	if(event.detail==Alert.YES) {    
 		        		processStep(cInterrupt);
 		   	     	}
-		   	     	else if(!appGenerated && ContextManager.instance.templateStruct) {
-						ContextManager.instance.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
-						ContextManager.instance.templateStruct.generate(true);
+		   	     	else if(!appGenerated && ContextManager.templateStruct) {
+						ContextManager.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
+						ContextManager.templateStruct.generate(true);
 			    	}
 				}
 			}
@@ -951,10 +951,10 @@
 						verticalAlign="middle" horizontalAlign="center"
 						showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:TextInput width="90%" editable="false" 
-							text="{ContextManager.instance.templates.getItemAt(0).name}" 
+							text="{ContextManager.templates.getItemAt(0).name}" 
 							styleName="edtTextStyle"/>							
 						<mx:TextArea editable="false" width="90%" height="150" 
-							text="{ContextManager.instance.templates.getItemAt(0).description}"/>
+							text="{ContextManager.templates.getItemAt(0).description}"/>
 						<mx:Label text="{LanguageManager.sentences.msg_input_template_key}:"/>
 						<mx:TextInput width="90%" id="txtKey" styleName="edtTextStyle"/>
 						
@@ -970,10 +970,10 @@
 						verticalAlign="middle" horizontalAlign="center"
 						showEffect="{canvasShow}" hideEffect="{canvasHide}">
 						<mx:TextInput width="90%" editable="false" 
-							text="{ContextManager.instance.templates.getItemAt(0).name}" 
+							text="{ContextManager.templates.getItemAt(0).name}" 
 							styleName="edtTextStyle"/>							
 						<mx:TextArea editable="false" width="90%" height="150" 
-							text="{ContextManager.instance.templates.getItemAt(0).description}"/>
+							text="{ContextManager.templates.getItemAt(0).description}"/>
 						
 						<mx:ControlBar width="90%" horizontalAlign="right">
 							<mx:Button label="{LanguageManager.sentences.cancel}" 
@@ -1089,7 +1089,7 @@
 						verticalAlign="middle" horizontalAlign="center"
 						showEffect="{canvasShow}" hideEffect="{canvasHide}">					
 						<mx:TextInput width="90%" editable="false" 
-							text="{ContextManager.instance.templates.getItemAt(0).name}" 
+							text="{ContextManager.templates.getItemAt(0).name}" 
 							styleName="edtTextStyle"/>						
 						
 						<mx:Spacer width="100%" height="30"/>

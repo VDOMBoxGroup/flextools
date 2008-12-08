@@ -1,6 +1,5 @@
 package PowerPack.com.managers
 {
-import ExtendedAPI.com.utils.FileUtils;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.gen.TemplateStruct;
@@ -88,8 +87,6 @@ public class ContextManager extends EventDispatcher
 			_context = 'builder';
 		}
 		
-    	dataStorage = File.applicationStorageDirectory;
-	    
 	    settingStorage = dataStorage.resolvePath(_appContext[_context]['settingsFolder']);
     
 	    try {
@@ -98,12 +95,6 @@ public class ContextManager extends EventDispatcher
 	    catch(e:Error) {
 	    	lastDir = File.desktopDirectory;
 	    }
-	    
-	    files = [];
-	    
-	    file = File.documentsDirectory.resolvePath("app.xml");
-	    
-	    lang = {label:"english", file:"english.xml"};
 	}
 
 	//--------------------------------------------------------------------------
@@ -174,26 +165,24 @@ public class ContextManager extends EventDispatcher
 		builder:{ settingsFolder:"Builder" },
 		generator:{ settingsFolder:"Generator" }
 	};
-	
-	public var templateStruct:TemplateStruct;
 
    	[Bindable]
     public var settingsXML:XML;
     
-    [Bindable]
-    public var templates:ArrayCollection = new ArrayCollection();
+    private var _templates:ArrayCollection = new ArrayCollection();
+	private var _templateStruct:TemplateStruct;
     
-    public var dataStorage:File;
+    public var dataStorage:File = File.applicationStorageDirectory;
     public var settingStorage:File;
     public var genSettingStorage:File;
     
     public var files:Array = [];	    
     public var lastFile:Boolean;
-    public var lastDir:File;
-    public var lang:Object;
+    public var lastDir:File = File.desktopDirectory;
+    public var lang:Object = {label:"english", file:"english.xml"};
     
     [Bindable]
-	public var file:File;
+	public var file:File = File.documentsDirectory.resolvePath("app.xml");
 	
 	[Bindable]
 	public var saveToFile:Boolean;	
@@ -245,6 +234,29 @@ public class ContextManager extends EventDispatcher
 	{
 		return instance._appContext;
 	}
+	
+    //----------------------------------
+	//  templates
+    //----------------------------------
+
+	public static function get templates():ArrayCollection
+	{
+		return instance._templates;
+	}
+	
+    //----------------------------------
+	//  templateStruct
+    //----------------------------------
+
+	public static function get templateStruct():TemplateStruct
+	{
+		return instance._templateStruct;
+	}	
+	public static function set templateStruct(value:TemplateStruct):void
+	{
+		if(instance._templateStruct != value)
+			instance._templateStruct = value;
+	}	
 
     //--------------------------------------------------------------------------
     //
@@ -282,12 +294,18 @@ public class ContextManager extends EventDispatcher
 		
 		// load settings
 		file = instance.settingStorage.resolvePath("settings.xml");
+		
 		if(!file.exists)
 			return;	
-					
-		fileStream.open(file, FileMode.READ);
-		instance.settingsXML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
-		fileStream.close();					
+		
+		try {
+			fileStream.open(file, FileMode.READ);
+			instance.settingsXML = XML(fileStream.readUTFBytes(fileStream.bytesAvailable));
+			fileStream.close();					
+		} 
+		catch(e:*) {
+			return;
+		};
 	
 		// get language
 		tmpStr = Utils.getStringOrDefault(instance.settingsXML.language, null);
@@ -299,14 +317,14 @@ public class ContextManager extends EventDispatcher
 		
 		// get lastdir 
 		tmpStr = Utils.getStringOrDefault(instance.settingsXML.lastdir, instance.lastDir ? instance.lastDir.nativePath : null);
-		if(FileUtils.isValidPath(tmpStr))
+		if(tmpStr)
 		{
 			instance.lastDir = new File(tmpStr);
  		}
  		
 		// get app file 
 		tmpStr = Utils.getStringOrDefault(instance.settingsXML.appfile, instance.file ? instance.file.nativePath : null);
-		if(FileUtils.isValidPath(tmpStr))
+		if(tmpStr)
 		{
 			instance.file = new File(tmpStr);
  		}
@@ -319,15 +337,14 @@ public class ContextManager extends EventDispatcher
 		{
 			var fileArr:Array = tmpStr.split(",");
 			
-			if(!instance.files || instance.files.length==0) 
-				instance.files = [];
+			instance.files = [];
 				
 			for(var i:int=0; i<fileArr.length; i++)
 			{
 				if(instance.files.length>=FILE_NUM_STORE)
 					break;
 					
-				if(FileUtils.isValidPath(fileArr[i]))
+				if(fileArr[i])
 				{
 					file = new File(fileArr[i]);
 					instance.files.push(file);
@@ -360,7 +377,7 @@ public class ContextManager extends EventDispatcher
 			var bytes:ByteArray = CryptUtils.decrypt(base64Dec.flush());	
 			bytes.position = 0;
 			tmpStr = bytes.readUTFBytes(bytes.length);					
-			instance.pass = instance.pass ? instance.pass : tmpStr;
+			instance.pass = tmpStr ? tmpStr : instance.pass;
 		} 
 		 
  		instance.save_pass = Utils.getBooleanOrDefault(instance.settingsXML.savepass);
@@ -375,30 +392,30 @@ public class ContextManager extends EventDispatcher
 		var tmpStr:String;
 		       		
 		file = instance.settingStorage.resolvePath("settings.xml");
-   		instance.settingsXML = new XML(<settings></settings>);
+   		instance.settingsXML = new XML(<settings/>);
    		
    		// fill XML
-   		instance.settingsXML.language = (instance.lang.label ? instance.lang.label : "");
+   		instance.settingsXML.language = (instance.lang.label ? instance.lang.label : "english");
    		
-   		instance.settingsXML.lastdir = (instance.lastDir && instance.lastDir.nativePath ? instance.lastDir.nativePath : "");
+   		instance.settingsXML.lastdir = (instance.lastDir && instance.lastDir.nativePath ? instance.lastDir.nativePath : File.desktopDirectory.nativePath);
    		
    		instance.settingsXML.lastfile = (instance.lastFile ? "true" : "false");
 
-   		instance.settingsXML.appfile = (instance.file && instance.file.nativePath ? instance.file.nativePath : "");
+   		instance.settingsXML.appfile = (instance.file && instance.file.nativePath ? instance.file.nativePath : File.documentsDirectory);
 
    		instance.settingsXML.savetofile = (instance.saveToFile ? "true" : "false");
 
    		instance.settingsXML.savetoserver = (instance.saveToServer ? "true" : "false");
    		
-   		instance.settingsXML.host = (instance.host ? instance.host : "");
+   		instance.settingsXML.host = (instance.host ? instance.host : "http://localhost");
 
-   		instance.settingsXML.port = (instance.port ? instance.port : "");
+   		instance.settingsXML.port = (instance.port ? instance.port : "80");
 
    		instance.settingsXML.defaultport = (instance.default_port ? instance.default_port : "80");
 
    		instance.settingsXML.usedefport = (instance.use_def_port ? "true" : "false");
 
-   		instance.settingsXML.login = (instance.login ? instance.login : "");
+   		instance.settingsXML.login = (instance.login ? instance.login : "root");
 
 		if(instance.save_pass && instance.pass)
 		{
@@ -420,12 +437,11 @@ public class ContextManager extends EventDispatcher
    		instance.settingsXML.files = tmpStr;
    		
 		// save settings
-   		if(file.parent.exists)
-   		{ 
+		try {
 			fileStream.open(file, FileMode.WRITE);
 			fileStream.writeUTFBytes(instance.settingsXML.toXMLString());
 			fileStream.close();
-   		}
+		} catch (e:*) {};
    	}	
 
 }

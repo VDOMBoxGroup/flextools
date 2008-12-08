@@ -703,7 +703,7 @@ public class GraphCanvas extends Canvas
 			callLater(_doGetBitmapClipBoard);
 			
 			function _doGetBitmapClipBoard():void {
-				var template:Template = ContextManager.instance.templates[0];
+				var template:Template = ContextManager.templates[0];
 				var bitmapData:BitmapData = BitmapData(Clipboard.generalClipboard.getData(ClipboardFormats.BITMAP_FORMAT));
 				
 				var pngEncoder:PNGEncoder = new PNGEncoder();

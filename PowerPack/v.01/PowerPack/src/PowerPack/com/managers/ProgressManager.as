@@ -32,6 +32,7 @@ import mx.controls.TextArea;
 import mx.core.Application;
 import mx.core.Container;
 import mx.core.EdgeMetrics;
+import mx.core.UIComponent;
 import mx.core.Window;
 import mx.events.MoveEvent;
 import mx.events.ResizeEvent;
@@ -397,7 +398,7 @@ public class ProgressManager extends EventDispatcher
 	{
 		if(!instance._isShown)
 			return;
-			
+		
 		switch(instance._viewMode)
 		{
 			case WINDOW_MODE:	

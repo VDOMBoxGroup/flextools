@@ -4,9 +4,11 @@ import ExtendedAPI.com.ui.SuperNativeMenu;
 import ExtendedAPI.com.ui.SuperNativeMenuItem;
 
 import PowerPack.com.managers.ContextManager;
+import PowerPack.com.managers.LanguageManager;
 
 import flash.display.NativeMenu;
 import flash.display.NativeMenuItem;
+import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
@@ -14,6 +16,7 @@ import flash.filesystem.FileStream;
 import flash.utils.Dictionary;
 
 import mx.controls.FlexNativeMenu;
+import mx.events.FlexNativeMenuEvent;
 
 public class MenuGeneral extends EventDispatcher
 {	
@@ -26,6 +29,23 @@ public class MenuGeneral extends EventDispatcher
 	public static var state:String;
 	public static var menu:FlexNativeMenu;
 	private static var memMenu:Dictionary;
+	
+	
+	public static function bindItems():void
+	{
+		bindItemsRecursive(MenuGeneral.menu.nativeMenu);
+	}
+	
+	private static function bindItemsRecursive(menu:NativeMenu):void
+	{
+		for each (var item:NativeMenuItem in menu.items)
+		{
+			LanguageManager.bindSentence('menu_'+item.name, item, 'mnemonicLabel');
+			
+			if(item.submenu)
+				bindItemsRecursive(item.submenu);
+		}
+	}
 	
 	public static function enable():void
 	{
@@ -101,7 +121,7 @@ public class MenuGeneral extends EventDispatcher
 		runItem.enabled = true;
 		for each (item in runItem.submenu.items)
 		{
-			item.enabled = false;	
+			item.enabled = true;	
 		}
 		
 		runItem.submenu.getItemByName("run").enabled = true;
@@ -125,7 +145,7 @@ public class MenuGeneral extends EventDispatcher
 		tplItem.enabled = true;
 		for each (var item:NativeMenuItem in tplItem.submenu.items)
 		{
-			item.enabled = false;	
+			item.enabled = true;	
 		}
     	
     	// process run menu
@@ -188,7 +208,25 @@ public class MenuGeneral extends EventDispatcher
 			if(langItem.submenu)
 				langItem.submenu.removeAllItems();
 			else
+			{
 				langItem.submenu = new SuperNativeMenu();
+				langItem.submenu.addEventListener(Event.SELECT, selectMenu_01);
+				
+				function selectMenu_01(event:Event):void {
+					var item:SuperNativeMenuItem = event.target as SuperNativeMenuItem;
+					var clickEvent:FlexNativeMenuEvent = new FlexNativeMenuEvent(
+						FlexNativeMenuEvent.ITEM_CLICK,
+						false, 
+						false,
+						item.menu,
+						item,
+						item.data,
+						item.label,
+						item.menu.getItemIndex(item));											
+						
+					MenuGeneral.menu.dispatchEvent(clickEvent);
+				}
+			}
 				
 			// get language files
 			for (var i:int = 0; i < fileList.length; i++) 
@@ -222,36 +260,53 @@ public class MenuGeneral extends EventDispatcher
 				langItem.submenu.addItem(item);
 			}
 			
-			//if(langItem.submenu.numItems==0)
-			//	langItem.enabled = false;	
-			//else			
+			if(langItem.submenu.numItems==0)
+				langItem.enabled = false;	
+			else			
 				langItem.enabled = true;
         }		    
     }
     
-    public static function updateLastFilesMenu(menu:XML):void
+    public static function updateLastFilesMenu():void
     {
         if(ContextManager.instance.files && ContextManager.instance.files.length>0)
         {
-			var fileMenuXML:XML = menu.menuitem.(hasOwnProperty('@id') && @id == "file")[0];
-			var exitItemXML:XML = menu..menuitem.(hasOwnProperty('@id') && @id == "exit")[0];
+        	var fileItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("file");
+			var exitItem:NativeMenuItem = fileItem.submenu.getItemByName("exit");
 			
-			while(menu..menuitem.(hasOwnProperty('@tag') && @tag == "lastfiles").length()>0) {
-				delete menu..menuitem.(hasOwnProperty('@tag') && @tag == "lastfiles")[0];
-			}
+			for each(var item:SuperNativeMenuItem in fileItem.submenu.items)
+			{
+				if(item.groupName=='lastfiles')
+					item.menu.removeItem(item);
+			} 
 			
         	for (var i:int = 0; i < ContextManager.instance.files.length; i++) 
 			{
-				var fileItemXML:XML = new XML(<menuitem/>); 
-				fileItemXML.@label = (i+1)+" "+(ContextManager.instance.files[i] as File).name + 
+				var label:String = (i+1)+" "+(ContextManager.instance.files[i] as File).name + 
 									 " ["+(ContextManager.instance.files[i] as File).parent.nativePath+"]";
-				fileItemXML.@id = "lastfile"+i;
-				fileItemXML.@data = (ContextManager.instance.files[i] as File).nativePath;
-				fileItemXML.@tag = "lastfiles";						
-
-        		fileMenuXML.insertChildBefore(exitItemXML, fileItemXML);
+				
+				label.replace('_', '__');
+				
+				item = new SuperNativeMenuItem(
+					"normal",
+					label,
+					"lastfile"+i,
+					false,
+					"lastfiles");
+									
+				item.data = (ContextManager.instance.files[i] as File).nativePath;
+				
+				fileItem.submenu.addItemAt(item, exitItem.menu.getItemIndex(exitItem));
    			}
-			fileMenuXML.insertChildBefore(exitItemXML, <menuitem type="separator" tag="lastfiles"/>);
+			
+			item = new SuperNativeMenuItem(
+				"separator",
+				"",
+				"lastfile",
+				false,
+				"lastfiles");
+								
+			fileItem.submenu.addItemAt(item, exitItem.menu.getItemIndex(exitItem));
         }		    	
     }	
     

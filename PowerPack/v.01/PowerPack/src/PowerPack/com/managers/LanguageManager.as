@@ -101,8 +101,8 @@ public class LanguageManager extends EventDispatcher
 				menu_exit:"E_xit",
 				
 				menu_import:"Import",
-				import_from_app:"From VDOM application...",
-				import_from_tpl:"From template...",
+				menu_import_from_app:"From VDOM application...",
+				menu_import_from_tpl:"From template...",
 				menu_template:"_Template",
 				menu_validate:"_Validate",
 				menu_properties:"_Properties",
@@ -249,10 +249,20 @@ public class LanguageManager extends EventDispatcher
 		
 		if(!site.hasOwnProperty(prop))
 			return;
-			
+		
+		if(instance._bindStack[site])
+		{
+			if(instance._bindStack[site].hasOwnProperty(prop))
+				instance._bindStack[site][prop].unwatch();	
+		}
+		else
+		{
+			instance._bindStack[site] = new Object();
+		}
+		
 		var watcher:ChangeWatcher = BindingUtils.bindProperty(site, prop, instance._sentences, label);
 		
-		instance._bindStack[site] = { 'prop':prop, 'watcher':watcher, 'sentence':label };
+		instance._bindStack[site][prop] = watcher;
 	}
 	
     public static function setSentences(value:Object):void

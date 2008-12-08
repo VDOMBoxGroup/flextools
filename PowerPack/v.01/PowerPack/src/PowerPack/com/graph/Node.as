@@ -13,9 +13,11 @@ import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
 import PowerPack.com.validators.NodeTextValidator;
 
+import flash.display.DisplayObject;
 import flash.display.GradientType;
 import flash.display.Graphics;
 import flash.display.NativeMenuItem;
+import flash.display.Shape;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
@@ -40,7 +42,6 @@ import mx.controls.Image;
 import mx.controls.ToolTip;
 import mx.core.Container;
 import mx.core.EdgeMetrics;
-import mx.core.EventPriority;
 import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
 import mx.effects.Fade;
@@ -70,7 +71,7 @@ public class Node extends Canvas
     //
     //--------------------------------------------------------------------------
     
-    public static const TEXT_WIDTH_PADDING:int = 5+1;
+    public static const TEXT_WIDTH_PADDING:int = 5+2;
     public static const TEXT_HEIGHT_PADDING:int = 4+1;
     
     /**
@@ -281,6 +282,7 @@ public class Node extends Canvas
     private var _created:Boolean;
     private var _needRefreshStyles:Boolean; 
     private var _isValidText:Boolean;
+    private var _rightPadding:int;
 		
 	/**
 	* possible values: M_NORMAL, M_EDITING
@@ -326,6 +328,8 @@ public class Node extends Canvas
     public var nodeCB:ComboBox;    
     
     private var nodePanel:UIComponent;
+    
+    private var flagShape:Shape;
     
     private var tipImage:Image;
 
@@ -609,6 +613,23 @@ public class Node extends Canvas
 			nodeTextArea.addEventListener(KeyboardEvent.KEY_DOWN, textAreaKeyDown);
         }
         
+        if(!flagShape)
+        {
+			flagShape = new Shape();
+			
+			flagShape.graphics.lineStyle(1, 0xff0000, 1.0);
+			flagShape.graphics.beginFill(0xff0000, 1.0);
+			flagShape.graphics.lineTo(5, 2);
+			flagShape.graphics.lineTo(0, 4);
+			flagShape.graphics.lineTo(0, 0);
+			flagShape.graphics.endFill();
+			flagShape.graphics.lineTo(0, 7);
+			
+			var shapeRect:Rectangle = flagShape.getBounds(nodeTextArea);
+			
+			_rightPadding = shapeRect.width + 4;   	
+        }
+        
         if(!nodeCB)
         {
         	nodeCB = new ComboBox();
@@ -738,8 +759,8 @@ public class Node extends Canvas
 					nodeCB.includeInLayout = true;
 
         			var curTplIndex:int = 0;
-        			var tpl:TemplateStruct = ContextManager.instance.templates[curTplIndex];
-					var objIndex:XML = CashManager.getIndex(tpl.ID);
+        			var tpl:Template = ContextManager.templates[curTplIndex];
+					var objIndex:XML = CashManager.getIndex(tpl.fullID);
 					var objList:XMLList = new XMLList();
 					
 					if(objIndex) 
@@ -762,8 +783,6 @@ public class Node extends Canvas
 						if(nodeCB.selectedIndex>=0)
 							text = nodeCB.selectedItem.@ID;
 					}
-					else
-						text = '';
 					
             		if(contextMenu)
 	            		contextMenu.getItemByName("resource").checked = true;
@@ -901,20 +920,21 @@ public class Node extends Canvas
 		if(nodeTextArea && nodeTextArea.visible)
 		{
 			var numLines:int = nodeTextArea.field.numLines;
-			nodeTextArea.width = DEFAULT_WIDTH;
-		
+			var textW:int = DEFAULT_WIDTH;
+			
 			for (var i:int=0; i<numLines; i++)
 			{	
 	       		var lineMetrics:TextLineMetrics = nodeTextArea.measureText(nodeTextArea.field.getLineText(i));
-				nodeTextArea.width = Math.max(lineMetrics.width + TEXT_WIDTH_PADDING + (_mode==M_EDITING?PADDING:0), 
-					nodeTextArea.width);
-			}		
+				textW = Math.max(lineMetrics.width + TEXT_WIDTH_PADDING + (_mode==M_EDITING?PADDING:0) + (breakpoint?_rightPadding:0), textW);
+			}
+			
+			nodeTextArea.width = textW;
 			nodeTextArea.height = lineMetrics.height*numLines + TEXT_HEIGHT_PADDING;
 			
 			nodeCB.width = 0;
 			nodeCB.height = 0;
 		}
-		else
+		else if(nodeCB && nodeCB.visible)
 		{
 			// set combobox size
 
@@ -934,14 +954,13 @@ public class Node extends Canvas
 		
         measuredMinWidth = measuredWidth;
         measuredMinHeight = measuredHeight;    
-        
-        setActualSize(measuredWidth, measuredHeight);
     }        
     
     override protected function updateDisplayList(unscaledWidth:Number,
 											  unscaledHeight:Number):void
 	{
 		graphics.clear();
+		
 		if(dropShadow)
 		{
 			var rectShadow:RectangularDropShadow = new RectangularDropShadow();
@@ -970,6 +989,25 @@ public class Node extends Canvas
 		if(nodeTextArea)
 		{				
 			nodeTextArea.move(margin, margin);
+			
+			if(_breakpoint)
+			{
+				if(!flagShape.parent)
+				{
+					nodeTextArea.addChild(DisplayObject(flagShape));
+				}
+				var offset:int = nodeTextArea.getStyle("borderThickness") + 2;
+				var shapeRect:Rectangle = flagShape.getBounds(nodeTextArea);
+				
+				flagShape.x = nodeTextArea.width - offset - shapeRect.width; 
+				flagShape.y = offset; 
+			}
+			else
+			{
+				if(flagShape.parent)
+					nodeTextArea.removeChild(DisplayObject(flagShape)); 
+			}
+			
 		}
 		
 		if(nodeCB)
@@ -1297,7 +1335,7 @@ public class Node extends Canvas
 		tipImage.visible = false;
 		tipImage.scaleContent = true;
 		
-		var curTpl:Template = ContextManager.instance.templates[0];
+		var curTpl:Template = ContextManager.templates[0];
 		var index:XML = CashManager.getIndex(curTpl.fullID);
 		var thumbFile:File = CashManager.cashFolder.resolvePath(index.@folder).resolvePath(nodeCB.selectedItem.@thumb);
 		
@@ -1334,8 +1372,8 @@ public class Node extends Canvas
 		destroyTimers(true, false);
 		
 		var curTpl:Template;		
-		if(ContextManager.instance.templates.length>0)
-			curTpl =  ContextManager.instance.templates[0];
+		if(ContextManager.templates.length>0)
+			curTpl =  ContextManager.templates[0];
 		
 		if(!curTpl || CashManager.objectUpdated(curTpl.fullID, nodeCB.selectedItem.@ID, Number(nodeCB.selectedItem.@lastUpdate)) )
 		{

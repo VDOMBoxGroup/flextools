@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication 
-	title="{LanguageManager.sentences.app_title} - {ContextManager.instance.templates.length?ContextManager.instance.templates.getItemAt(0).name:'None'}"
+	title="{LanguageManager.sentences.app_title}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).file ? ' - '+ContextManager.templates.getItemAt(0).file.nativePath : ''} - {ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).name ? ContextManager.templates.getItemAt(0).name : LanguageManager.sentences.noname}{ContextManager.templates.length &amp;&amp; ContextManager.templates.getItemAt(0).modified ? '*' : ''}"
 	titleIcon="@Embed(source='assets/icons/icon_16.png')" 
 	layout="absolute" 
 	statusBarFactory="PowerPack.customize.core.windowClasses.SuperStatusBar"
@@ -31,53 +31,54 @@
     
     <mx:XML format="e4x" id="fileMenuData">
         <root> 
-	        <menuitem label="{LanguageManager.sentences.menu_file}" id="file">
-	            <menuitem label="{LanguageManager.sentences.menu_new_template}" id="new" keyEquivalent="n" ctrlKey="true"/>
-	            <menuitem label="{LanguageManager.sentences.menu_new_category}" id="new_category" keyEquivalent="t" ctrlKey="true"/>
-	            <menuitem label="{LanguageManager.sentences.menu_open_file}" id="open_file" keyEquivalent="o" ctrlKey="true"/>
+	        <menuitem label="File" id="file">
+	            <menuitem label="New Template" id="new_template" keyEquivalent="n" ctrlKey="true"/>
+	            <menuitem label="New Category" id="new_category" keyEquivalent="t" ctrlKey="true"/>
+	            <menuitem label="Open File..." id="open_file" keyEquivalent="o" ctrlKey="true"/>
 	            <menuitem type="separator" id="separator"/>
-	            <menuitem label="{LanguageManager.sentences.menu_close}" id="close" keyEquivalent="w" ctrlKey="true"/>
+	            <menuitem label="Close" id="close" keyEquivalent="w" ctrlKey="true"/>
 	            <menuitem type="separator"/>
-	            <menuitem label="{LanguageManager.sentences.menu_save}" id="save" keyEquivalent="s" ctrlKey="true"/>
-	            <menuitem label="{LanguageManager.sentences.menu_save_as}" id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true"/> 
+	            <menuitem label="Save" id="save" keyEquivalent="s" ctrlKey="true"/>
+	            <menuitem label="Save As..." id="save_as" keyEquivalent="s" ctrlKey="true" shiftKey="true"/> 
 	            <menuitem type="separator"/>
-	            <menuitem label="{LanguageManager.sentences.menu_import}" id="import">
-	            	<menuitem label="{LanguageManager.sentences.import_from_app}" id="import_from_app"/>
-	            	<menuitem label="{LanguageManager.sentences.import_from_tpl}" id="import_from_tpl"/> 
+	            <menuitem label="Import" id="import">
+	            	<menuitem label="From VDOM Application..." id="import_from_app"/>
+	            	<menuitem label="From Template..." id="import_from_tpl"/> 
 				</menuitem>
 	            <menuitem type="separator"/>
-	            <menuitem label="{LanguageManager.sentences.menu_exit}" id="exit"/>                                                
+	            <menuitem label="Exit" id="exit"/>                                                
 	        </menuitem>
 
-	        <menuitem label="{LanguageManager.sentences.menu_template}" id="template">
-	        	<!--menuitem label="{LanguageManager.sentences.menu_validate}" id="validate"/-->
-	        	<menuitem label="{LanguageManager.sentences.menu_properties}" id="properties"/>
+	        <menuitem label="Template" id="template">
+	        	<!--menuitem label="Validate" id="validate"/-->
+	        	<menuitem label="Properties" id="properties"/>
 	        </menuitem>
 	        
-	        <menuitem label="{LanguageManager.sentences.menu_run}" id="run">
-	        	<menuitem label="{LanguageManager.sentences.menu_run_template}" id="run" keyEquivalent="r" ctrlKey="true"/>
-	        	<menuitem label="{LanguageManager.sentences.menu_debug}" id="debug" keyEquivalent="d" ctrlKey="true"/>
-	        	<menuitem label="{LanguageManager.sentences.menu_step_by_step}" id="step_by_step" keyEquivalent="d" ctrlKey="true" altKey="true"/>
+	        <menuitem label="Run" id="run">
+	        	<menuitem label="Run" id="run" keyEquivalent="r" ctrlKey="true"/>
+	        	<menuitem label="Debug" id="debug" keyEquivalent="d" ctrlKey="true"/>
+	        	<menuitem label="Step By Step" id="step_by_step" keyEquivalent="d" ctrlKey="true" altKey="true"/>
 	            <menuitem type="separator"/>
-	        	<menuitem label="{LanguageManager.sentences.menu_resume}" id="resume" enabled="false" keyEquivalent="m" ctrlKey="true"/>
-	        	<menuitem label="{LanguageManager.sentences.menu_step_into}" id="step_into" enabled="false" keyEquivalent="i" ctrlKey="true"/>
-	        	<menuitem label="{LanguageManager.sentences.menu_step_over}" id="step_over" enabled="false" keyEquivalent="o" ctrlKey="true"/>
-	        	<menuitem label="{LanguageManager.sentences.menu_step_return}" id="step_return" enabled="false" keyEquivalent="e" ctrlKey="true"/>
-	        	<menuitem label="{LanguageManager.sentences.menu_break}" id="break" enabled="false" keyEquivalent="b" ctrlKey="true"/>
+	        	<menuitem label="Resume" id="resume" enabled="false" keyEquivalent="m" ctrlKey="true"/>
+	        	<menuitem label="Step Into" id="step_into" enabled="false" keyEquivalent="i" ctrlKey="true"/>
+	        	<menuitem label="Step Over" id="step_over" enabled="false" keyEquivalent="o" ctrlKey="true"/>
+	        	<menuitem label="Step Return" id="step_return" enabled="false" keyEquivalent="e" ctrlKey="true"/>
+	        	<menuitem label="Break" id="break" enabled="false" keyEquivalent="b" ctrlKey="true"/>
 	        </menuitem>
 	        
-	        <menuitem label="{LanguageManager.sentences.menu_settings}" id="settings">
-	            <menuitem label="{LanguageManager.sentences.menu_language}" id="language">
-		            <menuitem label="{LanguageManager.sentences.menu_language}" id="language_1"/>
-		        </menuitem>
+	        <menuitem label="Settings" id="settings">
+	            <menuitem label="Language" id="language" enabled="false"/>
 	        </menuitem>
 
-	        <menuitem label="{LanguageManager.sentences.menu_help}" id="help" enabled="false"/>
+	        <menuitem label="Help" id="help" enabled="false"/>
         </root>
     </mx:XML>
     	
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.ui.SuperNativeMenuItem;
+			import mx.managers.LayoutManager;
+			import mx.core.UIComponent;
 			import flash.system.fscommand;
 			import PowerPack.customize.Resources;
 			import PowerPack.com.managers.CashManager;
@@ -183,7 +184,7 @@
 		    private function show():void
 		    {
 				addEventListener(Event.CLOSING, closingApplicationHandler);					
-				pnl_problems.grid.addEventListener(MouseEvent.DOUBLE_CLICK, onProblemsDoubleClick);			
+				pnl_problems.grid.addEventListener(MouseEvent.DOUBLE_CLICK, problemsDoubleClickHandler);			
 				
 				var file:File;
 				var fileStream:FileStream;
@@ -203,16 +204,13 @@
 				// Load application settings
 	            ContextManager.loadSettings();
 	            
+	            MenuGeneral.bindItems();
 	            MenuGeneral.noTemplate();
-	            
-	            // Fill language menu
 	            MenuGeneral.updateLangMenu();
-	            
-	            // fill last files menu
-	            MenuGeneral.updateLastFilesMenu(fileMenuData);
+	            MenuGeneral.updateLastFilesMenu();
 	            
 				// Load language file
-				file = File.applicationDirectory.resolvePath("lang/"+ContextManager.instance.lang.file);
+				file = File.applicationDirectory.resolvePath("lang").resolvePath(ContextManager.instance.lang.file);
 	            if(file && file.exists)
 	            {
 					fileStream = new FileStream();
@@ -231,45 +229,19 @@
 					tpl.open();
             	}
             	
-            	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
-            	//trace(describeType(Dynamic));
-		    	       	
 	       		function closingApplicationHandler(event:Event):void {
 	       			event.preventDefault();
 	       			exitApplication();	   
-	       		}            	
-		    }
-		    		    
-		    private function onProblemsDoubleClick(event:MouseEvent):void
-		    {
-		    	var object:Object = event.target;
-		    	while(object.parent) 
-		    	{
-		    		if(object is SuperDataGrid)
-		    			break;
-		    			
-		    		object = object.parent;
-		    	}
-		    	
-		    	var grid:SuperDataGrid = object as SuperDataGrid;
-		    	
-		    	if(!grid || !grid.selectedItem || !grid.selectedItem.data)
-		    		return;
-		    	
-		    	if(grid.selectedItem.data.node)
-		    	{
-		    		var node:Node = pnl_graphs.showNodeByName(grid.selectedItem.data.node.id);
-		    		node.setFocus();
-		    	}
-		    	else if(grid.selectedItem.data.graph)
-		    	{
-		    		pnl_graphs.showGraphByName(grid.selectedItem.data.graph.id);
-		    	}
+	       		}  
+	       		
+            	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
+            	//trace(describeType(Dynamic));
+		    	       	
 		    }
 	       	
 	       	public function exitApplication(event:Event=null):void
 	       	{
-	       		if(ContextManager.instance.templates.length>0 && ContextManager.instance.templates[0].modified)
+	       		if(ContextManager.templates.length>0 && ContextManager.templates[0].modified)
 	       		{
        				SuperAlert.show(
        					"Do you want to save file before exit?", 
@@ -297,7 +269,7 @@
 			    {
 		        	if(event.detail==Alert.YES)
 		        	{   
-              			var tpl:Template = ContextManager.instance.templates[0];
+              			var tpl:Template = ContextManager.templates[0];
               			tpl.addEventListener(Event.COMPLETE, templateSaveAndExitHandler);
               			tpl.xmlStructure = pnl_graphs.toXML();
               			tpl.save();				
@@ -322,9 +294,9 @@
 	       	
 			public function closeTpl(ask:Boolean = true, action:Function=null, args:Array=null):void
 			{
-				if(ContextManager.instance.templates.length>0)
+				if(ContextManager.templates.length>0)
 				{
-					var tpl:Template = ContextManager.instance.templates[0];
+					var tpl:Template = ContextManager.templates[0];
 				
 					if((tpl.modified || !tpl.file) && ask)
 					{
@@ -332,7 +304,7 @@
 						return;
 					}
 				
-					ContextManager.instance.templates.removeItemAt(0);
+					ContextManager.templates.removeItemAt(0);
 					tpl.dispose();
 					tpl = null;
 				}
@@ -360,7 +332,7 @@
 			    function alertSaveAndCloseHandler(event:CloseEvent):void {
 		        	if(event.detail==Alert.YES)
 		        	{   
-	        			var tpl:Template = ContextManager.instance.templates[0];
+	        			var tpl:Template = ContextManager.templates[0];
 	          			tpl.addEventListener(Event.COMPLETE, templateSaveAndCloseHandler);
 	          			tpl.xmlStructure = pnl_graphs.toXML();
 	          			tpl.save();
@@ -381,7 +353,7 @@
 	    	    
 			public function processOpenedTpl():void
 			{
-				var tpl:Template = Template(ContextManager.instance.templates[0]);
+				var tpl:Template = Template(ContextManager.templates[0]);
        			pnl_graphs.templateXML = tpl.xmlStructure;
 
                 workStage.visible = true;
@@ -390,13 +362,13 @@
    	            ContextManager.instance.lastFile = true;
 				ContextManager.updateLastFiles(tpl.file);            	
 				
-				MenuGeneral.updateLastFilesMenu(fileMenuData);
+				MenuGeneral.updateLastFilesMenu();
 				MenuGeneral.openedTemplate();    	            
 			}
 			
 			public function processSavedTpl():void
 			{
-				var tpl:Template = Template(ContextManager.instance.templates[0]);
+				var tpl:Template = Template(ContextManager.templates[0]);
 
                 workStage.visible = true;
    	            workStage.includeInLayout = true;
@@ -404,13 +376,13 @@
    	            ContextManager.instance.lastFile = true;
 				ContextManager.updateLastFiles(tpl.file);            	
 				
-				MenuGeneral.updateLastFilesMenu(fileMenuData);
+				MenuGeneral.updateLastFilesMenu();
 				MenuGeneral.openedTemplate();    	            
 			}
 						
 			public function processNewTpl():void
 			{
-				var tpl:Template = Template(ContextManager.instance.templates[0]);
+				var tpl:Template = Template(ContextManager.templates[0]);
        			pnl_graphs.templateXML = tpl.xmlStructure;
 
                 workStage.visible = true;
@@ -449,7 +421,7 @@
 	        	
 	        	closeTpl(false);
 	        	
-    			ContextManager.instance.templates.addItemAt(template, 0);
+    			ContextManager.templates.addItemAt(template, 0);
 					
 				if(template.isEncoded)
 				{
@@ -467,7 +439,7 @@
             	{
             		if(event.target.txtKey.text)
             		{
-            			var tpl:Template = ContextManager.instance.templates[0];
+            			var tpl:Template = ContextManager.templates[0];
             			
             			tpl.key = event.target.txtKey.text;
             			
@@ -488,9 +460,9 @@
             	    	    
            	public function templateChanged():void
            	{
-           		if(ContextManager.instance.templates.length>0)
+           		if(ContextManager.templates.length>0)
            		{
-           			var tpl:Template = ContextManager.instance.templates[0];
+           			var tpl:Template = ContextManager.templates[0];
            			
            			if(MenuGeneral.state != MenuGeneral.STATE_MOD)
            			{
@@ -504,7 +476,7 @@
 			{
                 var template:Template = new Template();
 
-   				ContextManager.instance.templates.addItemAt(template, 0);
+   				ContextManager.templates.addItemAt(template, 0);
 				
 				processNewTpl();									
 			}
@@ -520,194 +492,200 @@
 				
            	
             // Event handler for the MenuBar control's itemClick event.
-            private function menuHandler(event:Object):void  
+            private function menuHandler(event:FlexNativeMenuEvent):void  
             {
+            	var menuItem:SuperNativeMenuItem = event.nativeMenuItem as SuperNativeMenuItem;
             	var file:File = ContextManager.instance.lastDir;
 				var fileStream:FileStream = new FileStream();
 				var tpl:Template;
-
-                if(event.item.@id == "new")
-                {
-                	closeTpl(true, newTpl);
-                }
-                else if(event.item.@id == "open_file")
-                {		
-    	        	closeTpl(true, openTpl);
-                }
-				else if(event.item.@tag == "lastfiles")
-				{					
-					closeTpl(true, openTpl, [new File(event.item.@data)]);
-				}     
-    	        else if(event.item.@id == "save")
-    	        {
-    	        	if(ContextManager.instance.templates.length>0)
-    	        	{
-    	        		tpl = ContextManager.instance.templates[0];
-						tpl.addEventListener(Event.COMPLETE, templateSaveHandler);
-						tpl.xmlStructure = pnl_graphs.toXML();    	        		    	        		
-    	        		tpl.save();
-    	        	}
-    	        }
-				else if(event.item.@id == "save_as")
-				{
-    	        	if(ContextManager.instance.templates.length>0)
-    	        	{
-    	        		tpl = ContextManager.instance.templates[0];
-						tpl.addEventListener(Event.COMPLETE, templateSaveHandler);
-						tpl.xmlStructure = pnl_graphs.toXML();    	        		    	        		
-    	        		tpl.browseForSave();
-    	        	}
-				}
-                else if(event.item.@id == "close")
-                {		
-                	closeTpl();
-                }                
-                else if(event.item.@id == "new_category")
-                {
-                	EditCaption.show("New category", onCatDialogClose);
-                }
-				else if(event.item.@id == "import_from_app")
-				{
-					Import.show(onImportClose);
-				}
-				else if(event.item.@id == "import_from_tpl")
-				{
-					ImportFromTpl.show(onImportFromTplClose);
-				}
-				else if(event.item.@id == "exit")
-				{
-					exitApplication();
-				}     
-				else if(event.item.@id == "properties")
-				{
-					TemplateProperties.show(onTemplatePropertiesClose);
-				} 				
-				else if(event.item.@id == "validate")
-				{
-					//ValidateDialog.show(onValidate);
-					onValidate( new CloseEvent(CloseEvent.CLOSE, false, false, ModalDialog.OK));		
-				}  				
-				else if(event.item.@id == "run" || event.item.@id == "debug" || event.item.@id == "step_by_step")
-				{
-					try
-					{
-						ContextManager.instance.templateStruct = new TemplateStruct(
-							pnl_graphs.toXML(),
-							(ContextManager.instance.templates.getItemAt(0) as Template).fullID);
-							
-						switch(event.item.@id.toString())
-						{
-							case 'run':
-								ContextManager.instance.templateStruct.isDebug = false;
-								ContextManager.instance.templateStruct.isStepDebug = false;
-								break;
-							case 'debug':
-								ContextManager.instance.templateStruct.isDebug = true;
-								ContextManager.instance.templateStruct.isStepDebug = false;
-								break;
-							case 'step_by_step':
-								ContextManager.instance.templateStruct.isDebug = true;
-								ContextManager.instance.templateStruct.isStepDebug = true;
-								break;
-						}
-						
-						var validateArr:Array = ContextManager.instance.templateStruct.validate().array;
-						
-						pnl_problems.array = validateArr;
-					
-						function isError(element:*, index:int, arr:Array):Boolean {
-            				return (element.error.severity == BasicError.FATAL);
-	        			}	
-        									
-						if(validateArr && validateArr.filter(isError).length>0)
-						{
-							alertProceedRun();
-						}
-						else
-						{
-							switchDebug(true);
-							
-							ProgressManager.start(ProgressManager.WINDOW_MODE, false);
-							
-							ContextManager.instance.templateStruct.addEventListener("generationComplete", generationComplete);					
-							ContextManager.instance.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
-							ContextManager.instance.templateStruct.addEventListener("error", debugErrorHandler);
-							ContextManager.instance.templateStruct.generate();
-						}
-					}
-					catch(e:Error) 
-					{
-						ProgressManager.complete();
-						
-						switchDebug(false);
-						
-						ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
-						ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-						ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
-													
-						ContextManager.instance.templateStruct = null;
-						Alert.show(e.message, "Warning!");
-					}
-				}
-				else if(event.item.@id == "resume" ||
-					event.item.@id == "step_into" ||
-					event.item.@id == "step_over" ||
-					event.item.@id == "step_return" ||
-					event.item.@id == "break")
-				{
-					if(!ContextManager.instance.templateStruct)
-						return;
-												
-					//try {
-						switch(event.item.@id.toString())
-						{
-							case 'resume':
-								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
-								ContextManager.instance.templateStruct.isStepDebug = false;
-								ContextManager.instance.templateStruct.generate(true);
-								break;
-							case 'step_into':
-								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
-								ContextManager.instance.templateStruct.isStepDebug = true;
-								ContextManager.instance.templateStruct.generate(true);
-								break;
-							case 'step_over':
-								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
-								ContextManager.instance.templateStruct.isStepDebug = true;
-								ContextManager.instance.templateStruct.generate(true, true);
-								break;
-							case 'step_return':
-								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
-								ContextManager.instance.templateStruct.isStepDebug = true;
-								ContextManager.instance.templateStruct.generate(true, true, true);
-								break;
-							case 'break':
-								ProgressManager.complete();
-
-								ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
-								ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-								ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
-								
-								ContextManager.instance.templateStruct = null;
-								switchDebug(false);
-								break;
-						}							
-					/*} catch(e:Error) {
-						ProgressManager.complete();
-
-						ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
-						ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-						ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
-						
-						ContextManager.instance.templateStruct = null;
-						switchDebug(false);
-						SuperAlert.show(e.message, "Warning!");
-					}*/									
-				}
 				
-				if(event.item.@tag == "language")
+				switch(menuItem.name)
+				{
+					case "new":
+	                	closeTpl(true, newTpl);
+	                	break;
+	                	
+					case "open_file":
+	    	        	closeTpl(true, openTpl);
+	    	        	break;
+	    	        
+	    	    	case "save":
+	    	        	if(ContextManager.templates.length>0)
+	    	        	{
+	    	        		tpl = ContextManager.templates[0];
+							tpl.addEventListener(Event.COMPLETE, templateSaveHandler);
+							tpl.xmlStructure = pnl_graphs.toXML();    	        		    	        		
+	    	        		tpl.save();
+	    	        	}
+	    	    		break;    
+
+	    	    	case "save_as":
+	    	        	if(ContextManager.templates.length>0)
+	    	        	{
+	    	        		tpl = ContextManager.templates[0];
+							tpl.addEventListener(Event.COMPLETE, templateSaveHandler);
+							tpl.xmlStructure = pnl_graphs.toXML();    	        		    	        		
+	    	        		tpl.browseForSave();
+	    	        	}
+	    	    		break;
+                
+                	case "close":
+	                	closeTpl();
+	                	break;
+	                	
+                	case "new_category":
+	                	EditCaption.show("New category", onCatDialogClose);
+	                	break;
+	                	
+					case "import_from_app":
+						Import.show(onImportClose);
+						break;
+						
+					case "import_from_tpl":
+						ImportFromTpl.show(onImportFromTplClose);
+						break;
+						
+					case "exit":
+						exitApplication();
+						break;
+						
+					case "properties":
+						TemplateProperties.show(onTemplatePropertiesClose);
+						break;
+				
+					case "validate":
+						//ValidateDialog.show(onValidate);
+						onValidate( new CloseEvent(CloseEvent.CLOSE, false, false, ModalDialog.OK));		
+						break;
+						
+					case "run":
+					case "debug":
+					case "step_by_step":
+						try
+						{
+							ContextManager.templateStruct = new TemplateStruct(
+								pnl_graphs.toXML(),
+								(ContextManager.templates.getItemAt(0) as Template).fullID);
+								
+							switch(menuItem.name)
+							{
+								case 'run':
+									ContextManager.templateStruct.isDebug = false;
+									ContextManager.templateStruct.isStepDebug = false;
+									break;
+								case 'debug':
+									ContextManager.templateStruct.isDebug = true;
+									ContextManager.templateStruct.isStepDebug = false;
+									break;
+								case 'step_by_step':
+									ContextManager.templateStruct.isDebug = true;
+									ContextManager.templateStruct.isStepDebug = true;
+									break;
+							}
+							
+							var validateArr:Array = ContextManager.templateStruct.validate().array;
+							
+							pnl_problems.array = validateArr;
+						
+							function isError(element:*, index:int, arr:Array):Boolean {
+	            				return (element.error.severity == BasicError.FATAL);
+		        			}	
+	        									
+							if(validateArr && validateArr.filter(isError).length>0)
+							{
+								alertProceedRun();
+							}
+							else
+							{
+								switchDebug(true);
+								
+								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+								
+								ContextManager.templateStruct.addEventListener("generationComplete", generationComplete);					
+								ContextManager.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
+								ContextManager.templateStruct.addEventListener("error", debugErrorHandler);
+								ContextManager.templateStruct.generate();
+							}
+						}
+						catch(e:Error) 
+						{
+							ProgressManager.complete();
+							
+							switchDebug(false);
+							
+							ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
+							ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+							ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
+														
+							ContextManager.templateStruct = null;
+							Alert.show(e.message, LanguageManager.sentences['warning']);
+						}
+						break;
+						
+					case "resume":
+					case "step_into":
+					case "step_over":
+					case "step_return":
+					case "break":
+						if(!ContextManager.templateStruct)
+							return;
+													
+						//try {
+							switch(menuItem.name)
+							{
+								case 'resume':
+									ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+									ContextManager.templateStruct.isStepDebug = false;
+									ContextManager.templateStruct.generate(true);
+									break;
+								case 'step_into':
+									ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+									ContextManager.templateStruct.isStepDebug = true;
+									ContextManager.templateStruct.generate(true);
+									break;
+								case 'step_over':
+									ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+									ContextManager.templateStruct.isStepDebug = true;
+									ContextManager.templateStruct.generate(true, true);
+									break;
+								case 'step_return':
+									ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+									ContextManager.templateStruct.isStepDebug = true;
+									ContextManager.templateStruct.generate(true, true, true);
+									break;
+								case 'break':
+									ProgressManager.complete();
+	
+									ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
+									ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+									ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
+									
+									ContextManager.templateStruct = null;
+									switchDebug(false);
+									break;
+							}							
+						/*} catch(e:Error) {
+							ProgressManager.complete();
+	
+							ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
+							ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+							ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
+							
+							ContextManager.templateStruct = null;
+							switchDebug(false);
+							SuperAlert.show(e.message, "Warning!");
+						}*/									
+					
+						break;
+				}
+ 
+				if(menuItem.groupName == "lastfiles")
+				{					
+					closeTpl(true, openTpl, [new File(menuItem.data.toString())]);
+				}				    				
+				else if(menuItem.groupName == "language")
 				{				
-					file = File.applicationDirectory.resolvePath("lang").resolvePath(event.item.@data);	
+					file = File.applicationDirectory.resolvePath("lang").resolvePath(menuItem.data.toString());	
 					fileStream.addEventListener(Event.COMPLETE, completeLangHandler);
 					fileStream.openAsync(file, FileMode.READ);
 				}
@@ -718,12 +696,14 @@
             {
 				if(event.detail == ModalDialog.OK)
             	{
-            		var tpl:Template = ContextManager.instance.templates[0]; 
+            		var tpl:Template = ContextManager.templates[0]; 
             		var propDlg:TemplateProperties = event.target as TemplateProperties;
             		
             		tpl.name = propDlg.txtName.text;
 					tpl.description = propDlg.txtDesc.text;
-					tpl.picture = new File(StringUtil.trim(propDlg.picBrowse.text));
+					try {
+						tpl.picture = new File(StringUtil.trim(propDlg.picBrowse.text));
+					} catch (e:*) {}
 					tpl.key = StringUtil.trim(propDlg.txtKey.text);
 					
 					templateChanged();
@@ -735,7 +715,7 @@
             	if(event.detail == ModalDialog.OK)
             	{
             		var dialog:ValidateDialog = event.target as ValidateDialog;
-            		var tpl:Template = ContextManager.instance.templates[0];
+            		var tpl:Template = ContextManager.templates[0];
             		 
             		var flags:uint = 0;
             		
@@ -749,8 +729,8 @@
 	            		if(dialog.chkNames) 	flags|=TemplateValidateOptions.SET_UNIQ_NAMES;
 	            	}
             		            		
-					ContextManager.instance.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.fullID);
-					var validateArr:Array = ContextManager.instance.templateStruct.validate(flags).array;
+					ContextManager.templateStruct = new TemplateStruct(tpl.xmlStructure, tpl.fullID);
+					var validateArr:Array = ContextManager.templateStruct.validate(flags).array;
 	
 					pnl_problems.array = validateArr;
             	}            
@@ -771,10 +751,10 @@
 		       			
 		       			ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 								
-						ContextManager.instance.templateStruct.addEventListener("generationComplete", generationComplete);					
-						ContextManager.instance.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
-						ContextManager.instance.templateStruct.addEventListener("error", debugErrorHandler);
-						ContextManager.instance.templateStruct.generate();
+						ContextManager.templateStruct.addEventListener("generationComplete", generationComplete);					
+						ContextManager.templateStruct.addEventListener("stepComplete", stepCompleteHandler);
+						ContextManager.templateStruct.addEventListener("error", debugErrorHandler);
+						ContextManager.templateStruct.generate();
 					}
 					catch(e:Error) 
 					{
@@ -782,16 +762,16 @@
 						
 						switchDebug(false);
 
-						ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
-						ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-						ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+						ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
+						ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+						ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
 						
-						ContextManager.instance.templateStruct = null;
+						ContextManager.templateStruct = null;
 						SuperAlert.show(e.message, "Warning!");
 					}
 	   	     	}
 	   	     	else
-	   	     		ContextManager.instance.templateStruct = null;
+	   	     		ContextManager.templateStruct = null;
 			}
 				            
             private function stepCompleteHandler(event:Event):void
@@ -805,10 +785,10 @@
             	try
             	{
             		
-				if(!ContextManager.instance.templateStruct || ContextManager.instance.templateStruct.contextStack.length==0)
+				if(!ContextManager.templateStruct || ContextManager.templateStruct.contextStack.length==0)
 					return;
             	
-            	var curNode:Node = pnl_graphs.showNodeByName(GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).curNode.id);
+            	var curNode:Node = pnl_graphs.showNodeByName(GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).curNode.id);
             	curNode.setFocus();
             	
             	if(curDebugNode)
@@ -822,10 +802,10 @@
 				
             	curDebugNode = curNode;
             	
-            	if(ContextManager.instance.templateStruct.nodeStack.length==0)
+            	if(ContextManager.templateStruct.nodeStack.length==0)
             		return;
             		
-				var nodeContext:NodeContext = ContextManager.instance.templateStruct.nodeStack[ContextManager.instance.templateStruct.nodeStack.length-1];
+				var nodeContext:NodeContext = ContextManager.templateStruct.nodeStack[ContextManager.templateStruct.nodeStack.length-1];
 
             	var prevNode:Node = pnl_graphs.getNodeByName(nodeContext.node.id);
 
@@ -837,18 +817,18 @@
             	// fill variables
             	            	
 				var subArr:Array = [];
-				for (var obj:String in GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).context) {
-					var value:Object = GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).context[obj];
+				for (var obj:String in GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).context) {
+					var value:Object = GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).context[obj];
 					subArr.push( { 	Name: "$"+obj, 
 									Value: value!=null ? value.toString() : 'null' } );						
 				}					
 
 				var arr:Array = [];
-				for (obj in ContextManager.instance.templateStruct.context) {
-					if(!(ContextManager.instance.templateStruct.context[obj] is TemplateStruct))
-						arr.push( { Name:"$"+obj, Value:ContextManager.instance.templateStruct.context[obj] } );						
+				for (obj in ContextManager.templateStruct.context) {
+					if(!(ContextManager.templateStruct.context[obj] is TemplateStruct))
+						arr.push( { Name:"$"+obj, Value:ContextManager.templateStruct.context[obj] } );						
 				}			
-				arr.push( { Name:"this", Value: GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).curGraph.name, children:subArr } );
+				arr.push( { Name:"this", Value: GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).curGraph.name, children:subArr } );
 				
 				pnl_variables.grid.dataProvider = new HierarchicalData(arr);
 				pnl_variables.grid.invalidateList();
@@ -857,7 +837,7 @@
 				
 				var str:String="";
 				
-				str = GraphContext(ContextManager.instance.templateStruct.contextStack[ContextManager.instance.templateStruct.contextStack.length-1]).buffer;
+				str = GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).buffer;
 				pnl_output.text = str;
 				pnl_output.textArea.validateNow();
 				
@@ -929,12 +909,10 @@
             
             public function switchDebug(enable:Boolean=true):void
             {
-            	fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "resume")[0].@enabled = enable?"true":"false";
-				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "step_into")[0].@enabled = enable?"true":"false";
-				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "step_over")[0].@enabled = enable?"true":"false";
-				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "step_return")[0].@enabled = enable?"true":"false";
-				fileMenuData..menuitem.(hasOwnProperty('@id') && @id == "break")[0].@enabled = enable?"true":"false";
-				
+				var runItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("run");
+				for each (var item:NativeMenuItem in runItem.submenu.items)
+					item.enabled = enable;	
+						
 				//if(!enable)
 				{
 					pnl_variables.grid.dataProvider = null;
@@ -958,6 +936,35 @@
 			//  Event handlers
 			//
 			//--------------------------------------------------------------------------
+
+		    		    
+		    private function problemsDoubleClickHandler(event:MouseEvent):void
+		    {
+		    	var object:Object = event.target;
+		    	while(object.parent) 
+		    	{
+		    		if(object is SuperDataGrid)
+		    			break;
+		    			
+		    		object = object.parent;
+		    	}
+		    	
+		    	var grid:SuperDataGrid = object as SuperDataGrid;
+		    	
+		    	if(!grid || !grid.selectedItem || !grid.selectedItem.data)
+		    		return;
+		    	
+		    	if(grid.selectedItem.data.node)
+		    	{
+		    		var node:Node = pnl_graphs.showNodeByName(grid.selectedItem.data.node.id);
+		    		node.setFocus();
+		    	}
+		    	else if(grid.selectedItem.data.graph)
+		    	{
+		    		pnl_graphs.showGraphByName(grid.selectedItem.data.graph.id);
+		    	}
+		    }
+		    			
 		    private function templateSaveHandler(event:Event):void 
 		    {
 		    	var tpl:Template = event.target as Template;		    	
@@ -984,7 +991,7 @@
             		
 					ProgressManager.start(ProgressManager.WINDOW_MODE, false);
 					
-            		if(ContextManager.instance.templates.length==0)
+            		if(ContextManager.templates.length==0)
     	        	{
 	                	newTpl();
             		}
@@ -1040,7 +1047,7 @@
 	        		
 	                var template:Template = Import(event.target).template;
 
-    				ContextManager.instance.templates.addItemAt(template, 0);
+    				ContextManager.templates.addItemAt(template, 0);
     					
 					processNewTpl()
 
@@ -1066,24 +1073,24 @@
            		
            		switchDebug(false);
            		
-				if(ContextManager.instance.templateStruct.buffer)
+				if(ContextManager.templateStruct.buffer)
 				{            	
             		var file:File = ContextManager.instance.file;
            			var stream:FileStream = new FileStream();
             	
         			stream.open(file, FileMode.WRITE);
-        			stream.writeUTFBytes(ContextManager.instance.templateStruct.buffer);
+        			stream.writeUTFBytes(ContextManager.templateStruct.buffer);
         			stream.close();
            			
            			Console.show(StringUtil.substitute("Data saved to {0}.\n{1}", ContextManager.instance.file.nativePath, 
-           				ContextManager.instance.templateStruct.buffer), "Result");
+           				ContextManager.templateStruct.buffer), "Result");
     			}
     			
-				ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
-				ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-				ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+				ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
+				ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+				ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
     			
-    			ContextManager.instance.templateStruct = null;        							           		
+    			ContextManager.templateStruct = null;        							           		
            	}
 
            	private function debugErrorHandler(event:Event):void
@@ -1100,11 +1107,11 @@
            	{           		
            		switchDebug(false);
 
-				ContextManager.instance.templateStruct.removeEventListener("generationComplete", generationComplete);					
-				ContextManager.instance.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
-				ContextManager.instance.templateStruct.removeEventListener("error", debugErrorHandler);
+				ContextManager.templateStruct.removeEventListener("generationComplete", generationComplete);					
+				ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
+				ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
            		
-    			ContextManager.instance.templateStruct = null;
+    			ContextManager.templateStruct = null;
            	}
 
 		]]>

@@ -46,7 +46,7 @@
 			
 			private function onShow(event:Event):void
 			{            	
-            	var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template; 
+            	var tpl:Template = ContextManager.templates.getItemAt(0) as Template; 
 				
 				if(tpl.b64picture || tpl.picture)
 				{
@@ -96,7 +96,7 @@
 			
 			private function removePicture():void
 			{
-				var tpl:Template = ContextManager.instance.templates.getItemAt(0) as Template;
+				var tpl:Template = ContextManager.templates.getItemAt(0) as Template;
 				
 				gridRemovePic.visible = false;
 				gridRemovePic.includeInLayout = false;
