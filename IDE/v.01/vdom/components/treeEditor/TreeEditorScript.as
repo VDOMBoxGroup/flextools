@@ -596,7 +596,7 @@ private function getIcon(ID:String):String
 	{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
 			if( lavel.Information.ID == ID) 
 			{
-				var strLabel:String = lavel.Information.StructureIcon;
+				var strLabel:String = lavel.Information.Icon;
 				return  massIconResouceID[ID] = strLabel.substr(5, 36);
 			}
 	}

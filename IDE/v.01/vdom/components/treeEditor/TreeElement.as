@@ -108,6 +108,14 @@ package vdom.components.treeEditor
 		[Bindable]
 		public var bt_start_page:Class; 
 		
+		[Embed(source='/assets/treeEditor/test/header_home.png')]
+		[Bindable]
+		public var header_home:Class; 
+		
+		[Embed(source='/assets/treeEditor/test/header_home_selected.png')]
+		[Bindable]
+		public var header_home_selected:Class; 
+		
 		
 		
 		
@@ -432,24 +440,49 @@ package vdom.components.treeEditor
 			return _ID;
 		}
 		
+		private var _curPage:Boolean
 		public function set current(data:Boolean):void
 		{
-			if(data)
-			{
-				imgheader.source = _selected_header;
+			_curPage = data;
+			
+			if(_curPage)
+			{	
+				if(_startPager)
+					imgheader.source = header_home_selected;
+				else
+					imgheader.source = _selected_header;
 				imgBackGround.source = _selected_content
 			
 			}else
 			{	
-				imgheader.source = header;
+				if(_startPager)
+					imgheader.source = header_home;
+				else
+					imgheader.source = header;
+				
 				imgBackGround.source = backGround;	
 			}
 		}
 		
+		private var _startPager:Boolean;
 		public function set selected(data:Boolean):void
 		{
-			if(data)imgStart.source = start_page;
-				else imgStart.source = bt_start_page;
+			_startPager = data;
+			
+			
+			if(_curPage)
+			{	
+				if(_startPager)
+					imgheader.source = header_home_selected;
+				else
+					imgheader.source = _selected_header;
+			}else
+			{	
+				if(_startPager)
+					imgheader.source = header_home;
+				else
+					imgheader.source = header;
+			}
 //			trace('prassed');
 		}
 
@@ -656,8 +689,8 @@ package vdom.components.treeEditor
 			txt = new Label();
 			txt.setStyle('color', '#ffffff');
 			txt.setStyle('fontWeight', "bold"); 
-			txt.setStyle('textAlign', 'center');
-			
+//			txt.setStyle('textAlign', 'center');
+//			txt.setStyle('textAlign', 'right');
 			
 			txt.buttonMode = true;
 			txt.doubleClickEnabled = true;
@@ -696,6 +729,11 @@ package vdom.components.treeEditor
 				
 			imgStart.addEventListener(MouseEvent.CLICK, startPageClickHandler);	
 			
+			imgType = new Image();
+			imgType.maintainAspectRatio = true;
+			imgType.scaleContent = true;
+			
+			
 			
 //			txtInp = new TextInput();
 //			txtInp.setStyle('borderColor', '#000000');
@@ -704,14 +742,15 @@ package vdom.components.treeEditor
 //			
 //			txtInp.visible = false;
 			
-			cnvUpLayer.addChild(imgheader);
 			cnvUpLayer.addChild(imgMenu);
-			cnvUpLayer.addChild(txt);
 			cnvUpLayer.addChild(imgPlus);
 			cnvUpLayer.addChild(imgStart);
 //			cnvUpLayer.addChild(txtInp);
 			cnvUpLayer.addChild(imgLine);
 			cnvUpLayer.addChild(imgDelete);
+			cnvUpLayer.addChild(imgheader);
+			cnvUpLayer.addChild(txt);
+			cnvUpLayer.addChild(imgType);
 			
 			cnvUpLayer.addEventListener(MouseEvent.MOUSE_DOWN, startDragHandler);
 			cnvUpLayer.addEventListener(MouseEvent.MOUSE_UP, stopDragHandler)
@@ -752,10 +791,7 @@ package vdom.components.treeEditor
 //			image.addEventListener(MouseEvent.CLICK, imageDoubleClickHandler);
 			cnvDownLayer.addChild(image);
 			
-			imgType = new Image();
-			imgType.maintainAspectRatio = true;
-			imgType.scaleContent = true;
-			cnvDownLayer.addChild(imgType);
+			
 			
 			_type = new Label();
 			_type.text = 'text  ';
@@ -778,9 +814,9 @@ package vdom.components.treeEditor
 			imgMenu.width = 76 * _ratio;
 			imgMenu.height = 14 * _ratio;
 			
-			txt.x = 5;
-			txt.y = 7 * _ratio;
-			txt.width =  230 * _ratio;
+			txt.x = 30;
+			txt.y = 12 * _ratio;
+			txt.width =  210 * _ratio;
 			
 			 
 			imgLine.y = -7 * _ratio; 
@@ -806,6 +842,12 @@ package vdom.components.treeEditor
 			imgStart.width = 10 * _ratio;
 			imgStart.height = 10 * _ratio;
 			
+			
+			imgType.x = _ratio * 5;
+			imgType.y = _ratio * 5;
+			imgType.height = _ratio * 30; 
+			imgType.width = _ratio * 30;
+			
 		//	txtInp 
 //			txtInp.y = 2 * _ratio;
 //			txtInp.width =  240 * _ratio;
@@ -816,30 +858,26 @@ package vdom.components.treeEditor
 			cnvDownLayer.y = 1 * _ratio;
 			
 			
-			imgBackGround.y = 27 * _ratio;
+			imgBackGround.y = 32 * _ratio;
 			imgBackGround.x = -4;
 //			imgBackGround.width = 243 * _ratio;
 //			imgBackGround.height = 115 * _ratio;
 			
-			textArea.x = 115 * _ratio; // btButton.width;
-			textArea.y = 35 * _ratio;  //txt.height;
 			
 			image.x = 10 * _ratio;
-			image.y = 35 * _ratio;
+			image.y = 40 * _ratio;
 			image.height = 100 * _ratio;
 			image.width = 95 * _ratio;
 			
-			imgType.x = _ratio * 217;
-			imgType.y = _ratio * 118;
-			imgType.height = _ratio * 20; 
-			imgType.width = _ratio * 20;
 			
 			
-			textArea.width =  125 * _ratio;
-			textArea.height = 75 * _ratio;
+			textArea.x = 115 * _ratio; // btButton.width;
+			textArea.y = 35 * _ratio;  //txt.height;
+			textArea.width =  135 * _ratio;
+			textArea.height = 80 * _ratio;
 			
 			_type.y = 120 * _ratio;
-			_type.x = 120 * _ratio;
+			_type.x = 140 * _ratio;
 			_type.width =  100 * _ratio;
 			_type.setStyle('fontSize', "8");
 		}
