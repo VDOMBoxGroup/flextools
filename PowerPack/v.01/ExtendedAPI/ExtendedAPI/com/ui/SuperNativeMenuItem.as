@@ -35,7 +35,9 @@ public class SuperNativeMenuItem extends NativeMenuItem
     //  Class variables
     //
     //--------------------------------------------------------------------------		
-
+	
+	private static var MNEMONIC_INDEX_CHARACTER:String = "_";
+	
     //--------------------------------------------------------------------------
     //
     //  Class constructor
@@ -140,6 +142,23 @@ public class SuperNativeMenuItem extends NativeMenuItem
         }
     }
     
+    //----------------------------------
+    //  mnemonicLabel
+    //----------------------------------
+
+    /**
+     *  @private
+     */
+    public function set mnemonicLabel(value:String):void
+    {
+    	if(!value)
+    		return;
+    		
+       	mnemonicIndex = parseLabelToMnemonicIndex(value); 
+
+        label = parseLabelToString(value);
+    }
+
     //----------------------------------
     //  data
     //----------------------------------
@@ -574,6 +593,45 @@ public class SuperNativeMenuItem extends NativeMenuItem
 		return clone;
 	}
 	
+    private function parseLabelToString(data:String):String
+    {
+    	const singleCharacter:RegExp = new RegExp(MNEMONIC_INDEX_CHARACTER, "g");
+    	const doubleCharacter:RegExp = new RegExp(MNEMONIC_INDEX_CHARACTER + MNEMONIC_INDEX_CHARACTER, "g");
+    	var dataWithoutEscapedUnderscores:Array = data.split(doubleCharacter);
+    	
+    	// now need to find lone underscores and remove it
+    	var len:int = dataWithoutEscapedUnderscores.length;
+    	for(var i:int = 0; i < len; i++)
+    	{
+    		var str:String = String(dataWithoutEscapedUnderscores[i]);
+    		dataWithoutEscapedUnderscores[i] = str.replace(singleCharacter, "");
+    	}
+    	
+    	return dataWithoutEscapedUnderscores.join(MNEMONIC_INDEX_CHARACTER);
+    }	
+    
+    private function parseLabelToMnemonicIndex(data:String):int
+    {
+    	const doubleCharacter:RegExp = new RegExp(MNEMONIC_INDEX_CHARACTER + MNEMONIC_INDEX_CHARACTER, "g");
+        var dataWithoutEscapedUnderscores:Array = data.split(doubleCharacter);
+    	
+    	// now need to find first underscore
+    	var len:int = dataWithoutEscapedUnderscores.length;
+    	var strLengthUpTo:int = 0; // length of string accumulator
+    	for(var i:int = 0; i < len; i++)
+    	{
+    		var str:String = String(dataWithoutEscapedUnderscores[i]);
+    		var index:int = str.indexOf(MNEMONIC_INDEX_CHARACTER);
+    		
+    		if (index >= 0)
+    			return index + strLengthUpTo;
+    		
+    		strLengthUpTo += str.length + MNEMONIC_INDEX_CHARACTER.length;
+    	}
+    	
+    	return -1;
+    }
+    	
     //--------------------------------------------------------------------------
     //
     //  Event handlers
