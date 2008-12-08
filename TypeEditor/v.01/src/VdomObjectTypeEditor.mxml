@@ -47,10 +47,6 @@
 	<mx:Script source="componentsHandlers.as" />
 	<mx:Script source="programLogic.as" />
 	
-	
-	<!--
-	<mx:Binding source="menuDataProvider" destination="__mainMenuBar.dataProvider" />
-	-->
 	<mx:XML id="menuDataProvider" xmlns="">
 		<root>
 			<menuItem id="file" label="File">

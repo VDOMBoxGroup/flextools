@@ -389,8 +389,21 @@ private function loadCodeInterfaceData():void
 			
 		case 'externaleditor':
 			__attrCodeInterface.selectedIndex = 11;
+			
+			var resourceName:String = '';
+			var ok:Boolean = false;
+			for each (var resource:Object in resourcesProvider) {
+				if (resource.resourceid == currentAttrObj['externalEditorInfo']) {
+					ok = true;
+					resourceName = resource.name;
+				}
+			}
+			
+			if (!ok && currentAttrObj['externalEditorInfo'] != '')
+				resourceName = 'Resource unavaliable!';
+			
 			codeInterfaceString = 'ExternalEditor ( ' + currentAttrObj['externalEditorTitle'][selectedLang]
-								+ ', ' + currentAttrObj['externalEditorInfo'] + ' )';
+								+ ', ' + resourceName + ' )';
 								
 			__attrValuesBtn.enabled = true;
 			break;
@@ -648,6 +661,7 @@ private function fileSelectHandler(event:Event):void
 	if (fileForUpload  && !fileForUpload.isDirectory) {
 		var srcBytes:ByteArray = new ByteArray();
 		var srcStream:FileStream = new FileStream();
+		var fileSize:int = 0;
 		
 		try {
 
@@ -658,6 +672,7 @@ private function fileSelectHandler(event:Event):void
 				return; 
 			}
 			
+			fileSize = srcStream.bytesAvailable;
 			srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
 			srcStream.close();
 		}
@@ -681,6 +696,7 @@ private function fileSelectHandler(event:Event):void
 				name:	fileName,
 				data:	srcBytes,
 				type:	fileType,
+				size:	fileSize,
 				resourceid: UIDUtil.createUID()
 			}
 			
@@ -715,6 +731,9 @@ private function removeResource(resourceID:String):void
 	
 	if (__resTable)
 		__resTable.dataProvider = resourcesProvider;
+	
+	try { loadCodeInterfaceData(); }
+	catch (err:Error) { }
 }
 
 
@@ -752,6 +771,8 @@ private function replaceResourceBtnClickHandler():void {
 	fileForUpload.addEventListener(Event.CANCEL, replace_fileCancelHandler);
 	fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
 	
+	try { loadCodeInterfaceData(); }
+	catch (err:Error) { }
 }
 
 
@@ -769,16 +790,19 @@ private function replace_fileSelectHandler(event:Event):void
 	if (fileForUpload  && !fileForUpload.isDirectory) {
 		var srcBytes:ByteArray = new ByteArray();
 		var srcStream:FileStream = new FileStream();
+		var fileSize:int = 0;
 		
 		try {
 
 			srcStream.open(fileForUpload, FileMode.READ);
 			
+						
 			if (srcStream.bytesAvailable == 0) {
 				Alert.show("File is empty", "File can not be used!");
 				return; 
 			}
 			
+			fileSize = srcStream.bytesAvailable;
 			srcStream.readBytes(srcBytes, 0, srcStream.bytesAvailable);
 			srcStream.close();
 		}
@@ -801,6 +825,7 @@ private function replace_fileSelectHandler(event:Event):void
 			resourcesProvider[__resTable.selectedIndex].name = fileName;
 			resourcesProvider[__resTable.selectedIndex].data = srcBytes;
 			resourcesProvider[__resTable.selectedIndex].type = fileType;
+			resourcesProvider[__resTable.selectedIndex].size = fileSize;
 			resourcesProvider[__resTable.selectedIndex].resourceid = UIDUtil.createUID(); 
 
 		}

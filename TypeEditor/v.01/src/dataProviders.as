@@ -62,7 +62,7 @@ private var resourcesProvider:Array = [];
  * resourcesProvider:
  *  |
  *  |--[0]
- *  |   |--resourceID = GUID
+ *  |   |--resourceid = GUID
  *  |   |--name = ''
  *  |   |--data = [] (base64 source)
  *  |   |--size = 0

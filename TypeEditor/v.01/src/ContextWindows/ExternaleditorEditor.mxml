@@ -45,10 +45,19 @@
 				}
 				
 				/* Set current resource */
+				var ok:Boolean = false;
+				i = 0;
 				for each (var resource:Object in resourcesProvider) {
-					if (resource.name == externalEditorInfo)
+					if (resource.resourceid == externalEditorInfo) {
+						ok = true;
 						__resource.selectedIndex = i;
+					}
 					i++;
+				}
+				
+				if (!ok) {
+					__resource.selectedItem = null;
+					__resource.text = '';
 				}
 			}
 
@@ -112,7 +121,8 @@
 			<mx:Spacer height="2" />
 			<mx:Label text="Choose External Editor Resource:" />
 			<mx:HBox width="100%">
-				<mx:ComboBox id="__resource" width="100%" cornerRadius="1" labelField="name" dataProvider="{resourcesProvider}" />
+				<mx:ComboBox id="__resource" width="100%" cornerRadius="1" labelField="name" dataProvider="{resourcesProvider}"
+					change="{externalEditorInfo = __resource.selectedItem.resourceid;}"/>
 				<mx:Button label="Add" click="{addBtnClickHandler();}" />	
 			</mx:HBox>	
 		</mx:VBox>
