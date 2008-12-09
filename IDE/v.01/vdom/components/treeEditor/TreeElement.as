@@ -13,7 +13,7 @@ package vdom.components.treeEditor
 	import mx.controls.Button;
 	import mx.controls.Image;
 	import mx.controls.Label;
-	import mx.controls.TextArea;
+	import mx.controls.Text;
 	
 	import vdom.events.DataManagerEvent;
 	import vdom.events.TreeEditorEvent;
@@ -26,7 +26,7 @@ package vdom.components.treeEditor
 		private var btDelete:Button;
 		private var btLessen:Button; 
 		private var txt:Label;
-		private var textArea:TextArea;
+		private var textArea:Text;
 		private var _ID:String;
 //		private var rect:Canvas = new Canvas();
 		private var min:Boolean = false;
@@ -48,6 +48,7 @@ package vdom.components.treeEditor
 //		private var soap:Soap = Soap.getInstance();
 		private var dataManager:DataManager;
 		private var _ratio:Number = 0.8;
+//		private var _description:Label;
 		
 		
 		
@@ -532,7 +533,20 @@ package vdom.components.treeEditor
 		 
 		 public function set description(names:String):void
 		{
-			textArea.text = names;
+			if(names =='')
+				textArea.text = resourceManager.getString('Tree','no_description');
+			else
+				textArea.text = resourceManager.getString('Tree','description')+":\n";
+			
+			if(names.length > 50)
+			{
+				textArea.text += names.slice(0,50) + "...";
+				textArea.toolTip = names;
+			}else
+			{
+				textArea.text += names;
+				textArea.toolTip = '';
+			}
 		}
 		
 		public function get description():String
@@ -769,15 +783,22 @@ package vdom.components.treeEditor
 			
 			cnvDownLayer.addChild(imgBackGround);
 			
-			textArea = new TextArea();
-			textArea.setStyle('fontWeight', "bold"); 
+//			_description = new Label();
+//			cnvDownLayer.addChild(_description);
 			
-			textArea.editable = false;
+			textArea = new Text();
+			textArea.setStyle('fontWeight', "bold");
+//			textArea.
+			
+			
+//			textArea.validateDisplayList();
+			
+//			textArea.editable = false;
 			textArea.focusEnabled = false;
 			textArea.selectable = false;
 //			textArea.text = 'press double click for edit this text';
 			
-			textArea.doubleClickEnabled = false;
+//			textArea.doubleClickEnabled = false;
 //			textArea.addEventListener(MouseEvent.DOUBLE_CLICK, textAreaDoubleClickHandler);
 			cnvDownLayer.addChild(textArea);
 			
@@ -870,13 +891,20 @@ package vdom.components.treeEditor
 			image.width = 95 * _ratio;
 			
 			
-			
+//			_description.x = 115 * _ratio; // btButton.width;
+//			_description.y = 35 * _ratio;
+//			_description.width =  135 * _ratio;
+//			
 			textArea.x = 115 * _ratio; // btButton.width;
-			textArea.y = 35 * _ratio;  //txt.height;
+			textArea.y = 42 * _ratio;  //txt.height;
 			textArea.width =  135 * _ratio;
-			textArea.height = 80 * _ratio;
+			textArea.height = 73 * _ratio;
 			
-			_type.y = 120 * _ratio;
+//			textArea.setStyle('widt', "105"); 
+//			textArea.setStyle('height', "65"); 
+//			textArea.validateDisplayList();
+			
+			_type.y = 115 * _ratio;
 			_type.x = 140 * _ratio;
 			_type.width =  100 * _ratio;
 			_type.setStyle('fontSize', "8");

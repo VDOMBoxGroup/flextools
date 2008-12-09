@@ -105,7 +105,7 @@
 		
 		if(btSave.selected)
 		{
-			Alert.show("Do You Want to Save changed in Structure?", "Save Change:", 3, this, alertClickSaveStructure);
+			Alert.show("Do You Want to save changed structure in tree?", "Tree:", 3, this, alertClickSaveStructure);
 		} else
 		{
 			hide();

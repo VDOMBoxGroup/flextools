@@ -270,11 +270,11 @@ package vdom.components.treeEditor
 					dX = dY*koef;
 				}  
 				
-				if( pFromObj.x < pToObj.x ) 	{ nLeft = pFromObj.x+=dX; }
-   				else 							{ nLeft = pFromObj.x-=dX; }    					
+				if( pFromObj.x < pToObj.x ) 	{ nLeft = pFromObj.x+=dX+5; }
+   				else 							{ nLeft = pFromObj.x-=dX+5; }    					
 					
-   				if( pFromObj.y < pToObj.y ) 	{nTop = pFromObj.y+=dY; }    					
-   				else							{nTop = pFromObj.y-=dY; }
+   				if( pFromObj.y < pToObj.y ) 	{nTop = pFromObj.y+=dY+5; }    					
+   				else							{nTop = pFromObj.y-=dY+5; }
 
     			if(toObj)
    				{	    			
@@ -294,11 +294,11 @@ package vdom.components.treeEditor
 						dX = dY*koef;
 					}  
 					
-					if( pFromObj.x < pToObj.x ) 	{nRight =  pToObj.x-=dX; }
-	   				else 							{nRight =  pToObj.x+=dX; }    					
+					if( pFromObj.x < pToObj.x ) 	{nRight =  pToObj.x-=dX+5; }
+	   				else 							{nRight =  pToObj.x+=dX+5; }    					
 						
-	   				if( pFromObj.y < pToObj.y ) 	{nBottom =  pToObj.y-=dY; }    					
-	   				else							{nBottom =  pToObj.y+=dY; }					    				
+	   				if( pFromObj.y < pToObj.y ) 	{nBottom =  pToObj.y-=dY+5; }    					
+	   				else							{nBottom =  pToObj.y+=dY+5; }					    				
     			}	
 				else
 				{
