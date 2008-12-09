@@ -112,37 +112,55 @@ package vdom.components.treeEditor
 			
 			if (_mark)
 			{
-				
-				this.graphics.lineStyle(5, _numColor, .5, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
-			
-				this.graphics.moveTo(x0, y0);	
+				this.graphics.lineStyle(10, _numColor, .1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				this.graphics.moveTo(x0, y0);
 				this.graphics.lineTo(x1, y1);
 				
 				this.graphics.lineTo(x1 + Math.cos(alf+dA)*dDist, y1 + Math.sin(alf+dA)*dDist );
 				this.graphics.lineTo(x1 + Math.cos(alf-dA)*dDist, y1 + Math.sin(alf-dA)*dDist);
 				this.graphics.lineTo(x1,y1);
 				
-				this.graphics.lineStyle(1, 0x000000, 0.5, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				
+				
+				this.graphics.lineStyle(3, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				this.graphics.moveTo(x0, y0);
+				this.graphics.lineTo(x1, y1);
+				
+				this.graphics.lineStyle(3, 0x000000, .4, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				this.graphics.moveTo(x0, y0);
+				this.graphics.lineTo(x1, y1);
+				
+				this.graphics.lineStyle(1, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 				
 				this.graphics.moveTo(x0, y0);
 				this.graphics.lineTo(x1, y1);
 				
 			//	this.graphics.beginFill(_numColor);
 				
-			
+				this.graphics.lineStyle(3, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 				this.graphics.lineTo(x1 + Math.cos(alf+dA)*dDist, y1 + Math.sin(alf+dA)*dDist );
 				this.graphics.lineTo(x1 + Math.cos(alf-dA)*dDist, y1 + Math.sin(alf-dA)*dDist);
 				this.graphics.lineTo(x1,y1);
+				
 			}else
 			{
-				this.graphics.lineStyle(2, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				
+				this.graphics.lineStyle(3, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				this.graphics.moveTo(x0, y0);
+				this.graphics.lineTo(x1, y1);
+				
+				this.graphics.lineStyle(3, 0x000000, .4, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+				this.graphics.moveTo(x0, y0);
+				this.graphics.lineTo(x1, y1);
+				
+				this.graphics.lineStyle(1, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 				
 				this.graphics.moveTo(x0, y0);
 				this.graphics.lineTo(x1, y1);
 				
 			//	this.graphics.beginFill(_numColor);
 				
-			
+				this.graphics.lineStyle(3, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
 				this.graphics.lineTo(x1 + Math.cos(alf+dA)*dDist, y1 + Math.sin(alf+dA)*dDist );
 				this.graphics.lineTo(x1 + Math.cos(alf-dA)*dDist, y1 + Math.sin(alf-dA)*dDist);
 				this.graphics.lineTo(x1,y1);
