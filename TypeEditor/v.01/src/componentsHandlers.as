@@ -50,6 +50,7 @@ private function mainMenuHandler(mEvent:MenuEvent):void
 			break;
 		
 		case "open":
+			loadXmlDocument();
 			break;
 		
 		case "save":
@@ -461,7 +462,8 @@ private function changeObjectIconClickHandler(imgRef:Image):void
 		iconFile.removeEventListener(Event.SELECT, changeObjectIcon);
 		return;
 	}
-	
+
+	/* We use parameter with current selected image just to short code and not to write several the same functions */ 	
 	selectedIcon = imgRef;
 }
 
