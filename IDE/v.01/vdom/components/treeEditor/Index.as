@@ -17,6 +17,7 @@ package vdom.components.treeEditor
 	{
 		private var cmBox:ComboBox;
 		private var lbIndex:Label;
+		private var lbIndex_w:Label;
 		
 		public function Index()
 		{
@@ -28,11 +29,25 @@ package vdom.components.treeEditor
 			lbIndex.x = -9;
 			lbIndex.y = -8;
 			lbIndex.width = 19;
+			lbIndex.setStyle('fontWeight', "bold");
 			lbIndex.setStyle('textAlign', 'center');
 			lbIndex.buttonMode = true;
-			
-			lbIndex.addEventListener(MouseEvent.CLICK, indexClickHandler);
 			addChild(lbIndex);
+			
+			lbIndex_w = new Label();
+			lbIndex_w.x = -10;
+			lbIndex_w.y = -9;
+			lbIndex_w.width = 19;
+			
+			lbIndex_w.setStyle('fontWeight', "bold");
+			lbIndex_w.setStyle('textAlign', 'center');
+			lbIndex_w.setStyle('color', '0xFFFFFF');
+			lbIndex_w.buttonMode = true;
+			
+			addChild(lbIndex_w);
+
+			buttonMode = true;
+			addEventListener(MouseEvent.CLICK, indexClickHandler);
 		}
 		
 		override public function set visible(value:Boolean):void
@@ -42,7 +57,7 @@ package vdom.components.treeEditor
 		private function creatingComboBox():void
 		{
 			cmBox = new ComboBox();
-			cmBox.width = 50;
+			cmBox.width = 53;
 			cmBox.x = 15;
 			cmBox.visible = false;
 			
@@ -115,11 +130,21 @@ package vdom.components.treeEditor
 			var levels:Levels = new Levels();
 			var color:Number = levels.getColor(_level);
 			
-			graphics.lineStyle(1, color, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			graphics.lineStyle(1, color, .01, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			graphics.drawCircle(0, 0, 15);
 			
-			graphics.beginFill(0xffffff);
-			graphics.drawCircle(0, 0, 10);
+			graphics.lineStyle(12, color, .1, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+			graphics.beginFill(color);
+			graphics.drawCircle(0, 0, 11);
 			graphics.endFill();
+			
+			
+			graphics.lineStyle(1, 0x000000, .4, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER);
+//			
+//			graphics.beginFill(0xffffff);
+			graphics.drawCircle(0, 0, 10);
+//			graphics.endFill();
+			validateDisplayList();
 		}
 		
 		/***
@@ -182,6 +207,8 @@ package vdom.components.treeEditor
 		{
 			_index = num;
 			lbIndex.text = _index.toString(); 
+			lbIndex_w.text = _index.toString(); 
+			
 		}
 		
 		

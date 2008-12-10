@@ -143,14 +143,19 @@
 //			spinner = new SpinnerScreen();
 //			PopUpManager.addPopUp(spinner, DisplayObject(Application.application), true);				 
 
-			OK.enabled = false;
+			OK.enabled = false;	
 		
 			dataManager.createObject(selectedAppl.typeID);
 			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 					
 		}	
 		
-		
+		private function doubleClickHandler(evt:Object):void
+		{
+			OK.enabled = false;
+			dataManager.createObject( List(evt.currentTarget).selectedItem.typeID);
+			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+		}
 		
 		
 	//	resourse brouser
@@ -258,7 +263,7 @@
     	<mx:List id="titleList"  width="100%" height="100%" borderColor="#FFFFFF"
     		 dataProvider="{arrAppl}" change="{comBoxClose(event.target)}" 
     		itemRenderer="vdom.components.treeEditor.TypeContainerRander"	
-    		selectionColor="#dbdbdb"   rollOverColor="#E5E5E5" />
+    		selectionColor="#dbdbdb"   rollOverColor="#E5E5E5"  doubleClickEnabled="true" doubleClick="doubleClickHandler(event)"/>
     	
 	</mx:VBox>
 	<mx:ControlBar horizontalAlign="right" 
