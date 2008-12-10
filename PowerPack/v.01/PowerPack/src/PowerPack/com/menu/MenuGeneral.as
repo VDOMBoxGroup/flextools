@@ -295,6 +295,23 @@ public class MenuGeneral extends EventDispatcher
 				item.data = (ContextManager.instance.files[i] as File).nativePath;
 				
 				fileItem.submenu.addItemAt(item, exitItem.menu.getItemIndex(exitItem));
+				
+				item.addEventListener(Event.SELECT, selectMenuItem_01);
+				
+				function selectMenuItem_01(event:Event):void {
+					var item:SuperNativeMenuItem = event.target as SuperNativeMenuItem;
+					var clickEvent:FlexNativeMenuEvent = new FlexNativeMenuEvent(
+						FlexNativeMenuEvent.ITEM_CLICK,
+						false, 
+						false,
+						item.menu,
+						item,
+						item.data,
+						item.label,
+						item.menu.getItemIndex(item));											
+						
+					MenuGeneral.menu.dispatchEvent(clickEvent);
+				}				
    			}
 			
 			item = new SuperNativeMenuItem(

@@ -32,7 +32,6 @@ import mx.controls.TextArea;
 import mx.core.Application;
 import mx.core.Container;
 import mx.core.EdgeMetrics;
-import mx.core.UIComponent;
 import mx.core.Window;
 import mx.events.MoveEvent;
 import mx.events.ResizeEvent;
@@ -402,22 +401,31 @@ public class ProgressManager extends EventDispatcher
 		switch(instance._viewMode)
 		{
 			case WINDOW_MODE:	
-				MenuGeneral.enable();		
+				MenuGeneral.enable();
+				var parent:Object = instance._window;
+				
 				if(instance._winBox.parent)
 					instance._winBox.parent.removeChild(instance._winBox);
+				
 				PopUpManager.removePopUp(instance._window);
+				
+				if(parent)
+					parent.validateNow();
+				else
+					instance._win.validateNow();
+
 				break;
 				
 			case DIALOG_MODE:						
 				if(instance._dialog && !instance._dialog.closed)
 				{
-					instance._dialog.visible = false;					
-					instance._dialog.validateNow();
+					instance._dialog.visible = false;	
+					instance._dialog.includeInLayout = false;
 					
 					if(instance._winBox.parent)
 						instance._winBox.parent.removeChild(instance._winBox);
 							
-					var parent:Window = SuperWindow.getWindow(instance._dialog.parentWindow);
+					parent = SuperWindow.getWindow(instance._dialog.parentWindow);
 					instance._dialog.nativeWindow.close();
 					
 					if(parent)

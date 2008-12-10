@@ -292,13 +292,13 @@
 			    }       			
 	       	}
 	       	
-			public function closeTpl(ask:Boolean = true, action:Function=null, args:Array=null):void
+			public function closeTpl(askForSave:Boolean = true, action:Function=null, args:Array=null):void
 			{
 				if(ContextManager.templates.length>0)
 				{
 					var tpl:Template = ContextManager.templates[0];
 				
-					if((tpl.modified || !tpl.file) && ask)
+					if((tpl.modified || !tpl.file) && askForSave)
 					{
 						alertSaveAndCloseTemplate(action, args);
 						return;
@@ -313,13 +313,13 @@
 	       	    
 	       	    pnl_graphs.clear();
 	           	
+				MenuGeneral.noTemplate();
+				
 	           	workStage.visible = false;
 	           	workStage.includeInLayout = false;
 	           	
-				MenuGeneral.noTemplate();
-				
 				if(action!=null)
-					callLater(action, args);
+					action.apply(this, args);
 			}
 
 	       	public function alertSaveAndCloseTemplate(action:Function=null, args:Array=null):void
@@ -353,12 +353,14 @@
 	    	    
 			public function processOpenedTpl():void
 			{
-				var tpl:Template = Template(ContextManager.templates[0]);
-       			pnl_graphs.templateXML = tpl.xmlStructure;
-
                 workStage.visible = true;
    	            workStage.includeInLayout = true;
+   	            workStage.validateNow();
    	            
+				var tpl:Template = Template(ContextManager.templates[0]);
+       			pnl_graphs.templateXML = tpl.xmlStructure;
+				tpl.modified = false;
+				
    	            ContextManager.instance.lastFile = true;
 				ContextManager.updateLastFiles(tpl.file);            	
 				
@@ -368,10 +370,11 @@
 			
 			public function processSavedTpl():void
 			{
-				var tpl:Template = Template(ContextManager.templates[0]);
-
                 workStage.visible = true;
    	            workStage.includeInLayout = true;
+
+				var tpl:Template = Template(ContextManager.templates[0]);
+				tpl.modified = false;
    	            
    	            ContextManager.instance.lastFile = true;
 				ContextManager.updateLastFiles(tpl.file);            	
@@ -382,12 +385,13 @@
 						
 			public function processNewTpl():void
 			{
-				var tpl:Template = Template(ContextManager.templates[0]);
-       			pnl_graphs.templateXML = tpl.xmlStructure;
-
                 workStage.visible = true;
    	            workStage.includeInLayout = true;
    	            
+				var tpl:Template = Template(ContextManager.templates[0]);
+       			pnl_graphs.templateXML = tpl.xmlStructure;
+       			tpl.modified = true;
+
    	            ContextManager.instance.lastFile = false;
 				
 				MenuGeneral.newTemplate();    	            
@@ -494,6 +498,8 @@
             // Event handler for the MenuBar control's itemClick event.
             private function menuHandler(event:FlexNativeMenuEvent):void  
             {
+            	event.stopImmediatePropagation();
+            	
             	var menuItem:SuperNativeMenuItem = event.nativeMenuItem as SuperNativeMenuItem;
             	var file:File = ContextManager.instance.lastDir;
 				var fileStream:FileStream = new FileStream();
@@ -501,7 +507,7 @@
 				
 				switch(menuItem.name)
 				{
-					case "new":
+					case "new_template":
 	                	closeTpl(true, newTpl);
 	                	break;
 	                	
@@ -1127,7 +1133,7 @@
 	
 	<extended:Docker>
 
-	<mx:VBox width="100%" height="100%" id="workStage" visible="false" includeInLayout="false">
+	<mx:VBox width="100%" height="100%" id="workStage" visible="true" includeInLayout="true">
     
 		<mx:HDividedBox height="100%" width="100%">
 				

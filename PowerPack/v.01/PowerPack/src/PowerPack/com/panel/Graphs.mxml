@@ -362,7 +362,7 @@
 				if(!xml)
 					return; 
 				
-				ProgressManager.show(null, false);
+				ProgressManager.show(ProgressManager.DIALOG_MODE, false);
 				populateGraphs_01();			
 				
 				function populateGraphs_01():void {
