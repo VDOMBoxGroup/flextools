@@ -109,8 +109,13 @@ private function xmlFileSelected(e:Event):void
 
 private function parseXmlDocument():void {
 	try {
-		__objName.text = xmlDocument.Information.Name;
-	}
-	catch (err:Error) { }
+		__objName.text = xmlDocument.Information.Name;	}
+	catch (err:Error) {
+		__objName.text = '';  }
 	
+	try {
+		__objNameInXML.text = xmlDocument.Information.XMLScriptName;  }
+	catch (err:Error) {
+		__objNameInXML.text = '';  }
+		
 }
