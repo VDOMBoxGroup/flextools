@@ -285,8 +285,6 @@ public class MenuGeneral extends EventDispatcher
 				var label:String = (i+1)+" "+(ContextManager.instance.files[i] as File).name + 
 									 " ["+(ContextManager.instance.files[i] as File).parent.nativePath+"]";
 				
-				label.replace('_', '__');
-				
 				item = new SuperNativeMenuItem(
 					"normal",
 					label,
