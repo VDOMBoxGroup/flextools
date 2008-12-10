@@ -237,7 +237,7 @@
 		curLine = muEvt.currentTarget;
 		curLine.mark = true;
 		btLine.x = main.horizontalScrollPosition + mouseX - btLine.width / 2;
-		btLine.y = main.verticalScrollPosition + mouseY  - btLine.height - 2;
+		btLine.y = main.verticalScrollPosition + mouseY  - btLine.height / 2;
 		btLine.visible = true;
 		
 		if (!main.contains(btLine))

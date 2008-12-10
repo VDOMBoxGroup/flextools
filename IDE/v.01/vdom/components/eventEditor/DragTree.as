@@ -6,11 +6,11 @@ package vdom.components.eventEditor
 
 	public class DragTree extends OTree
 	{
-		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='action')]
+		[Embed(source='/assets/eventEditor/actions.png')]
 		[Bindable]
 		public var action:Class;
 		
-		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='icon_event')]
+		[Embed(source='/assets/eventEditor/events.png')]
 		[Bindable]
 		public var event:Class;
 
