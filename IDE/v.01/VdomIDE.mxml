@@ -16,7 +16,9 @@
 	
 	layout="absolute"
 	verticalScrollPolicy="off"
-	creationPolicy="all">
+	creationPolicy="all"
+	
+	frameRate="30">
 	
 	<mx:Script source="vdomIDE.as"/>
 	

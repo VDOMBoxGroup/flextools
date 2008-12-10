@@ -7,6 +7,7 @@ import mx.core.UIComponent;
 import mx.events.FlexEvent;
 import mx.events.IndexChangedEvent;
 import mx.managers.PopUpManager;
+import mx.managers.ToolTipManager;
 import mx.rpc.Fault;
 import mx.rpc.events.FaultEvent;
 
@@ -109,16 +110,16 @@ private function checkError(fault:Fault):void
 
 private function preinitalizeHandler():void
 {	
+	dataManager.addEventListener(DataManagerEvent.CLOSE, dataManager_close);
+	dataManager.addEventListener(DataManagerErrorEvent.GLOBAL_ERROR, dataManager_globalErrorHandler);
+	
+	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
+	
 	Singleton.registerClass("vdom.managers::IVdomDragManager", 
 		Class(getDefinitionByName("vdom.managers::VdomDragManagerImpl")));
 	
 	languageManager.init(languageList);
 	cacheManager.init();
-	
-	dataManager.addEventListener(DataManagerEvent.CLOSE, dataManager_close);
-	dataManager.addEventListener(DataManagerErrorEvent.GLOBAL_ERROR, dataManager_globalErrorHandler);
-	
-	soap.addEventListener(FaultEvent.FAULT, soap_faultHandler);
 }
 
 private function creationCompleteHandler():void

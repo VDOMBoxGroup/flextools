@@ -98,7 +98,7 @@ public class Proxy {
 	{
 		//
 		if(timeToSend){
-			trace('-Send data-');
+//			trace('-Send data-');
 		//	trace('Data sended');
 			timeToSend = false;
 			for (var appid:String in massObj)

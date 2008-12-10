@@ -11,6 +11,18 @@ private var resourceId:String;
 
 private var _selfChanged:Boolean = true;
 
+private var _selectedItem : IItem;
+
+public function get selectedItem() : IItem 
+{
+	return _selectedItem;
+}
+
+public function set selectedItem( value : IItem ) : void 
+{
+	_selectedItem = value;
+}
+
 public function init(item:IItem):void {
 	
 	this.item = item;

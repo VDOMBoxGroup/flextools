@@ -1,5 +1,3 @@
-import flash.events.MouseEvent;
-
 import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
@@ -54,8 +52,6 @@ private var fontSize:ArrayCollection = new ArrayCollection(
 	]
 );
 
-private var selectedItem:IItem;
-
 private var oldValue:String = '';
 
 private var elementForEditing:EditableText;
@@ -66,14 +62,30 @@ private var _style:Object = {};
 
 private var attributes:Object;
 
+private var _selectedItem : IItem;
+
 public function get selfChanged():Boolean {
 	
 	return _selfChanged;
 }
 
+public function get selectedItem() : IItem 
+{
+	return _selectedItem;
+}
+
+public function set selectedItem( value : IItem ) : void 
+{
+	_selectedItem = value;
+}
+
 public function init(item:IItem):void
 {	
 	var container:EditableText = item.editableAttributes[0].sourceObject;
+	container.setStyle("paddingTop", 5);
+	container.setStyle("paddingBottom", 5);
+	container.setStyle("paddingLeft", 5);
+	container.setStyle("paddingRight", 5);
 	attributes = item.editableAttributes[0].attributes;
 	
 	var attributeValue:String;
@@ -266,6 +278,11 @@ public function close():void
 {	
 	attributes["value"] = elementForEditing.text;
 	
+	if( !elementForEditing.text )
+	{
+		var dummy : * = "";
+	}
+	
 	var attributeValue:String;
 	for each (var attribute:Array in editableStyles)
 	{
@@ -292,6 +309,10 @@ public function close():void
 	}
 	
 //	registerEvent(false);
+	elementForEditing.setStyle("paddingTop", 0);
+	elementForEditing.setStyle("paddingBottom", 0);
+	elementForEditing.setStyle("paddingLeft", 0);
+	elementForEditing.setStyle("paddingRight", 0);
 	elementForEditing.editable = false;
 	elementForEditing.selectable = false;
 }

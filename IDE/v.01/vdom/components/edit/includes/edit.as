@@ -15,10 +15,10 @@ import vdom.managers.DataManager;
 [Bindable]
 private var dataManager : DataManager = DataManager.getInstance();
 
-private var alertManager : AlertManager = AlertManager.getInstance();
-
 [Bindable]
 private var help : String;
+
+private var alertManager : AlertManager = AlertManager.getInstance();
 	
 private var objectsXML : XML;
 private var publicData : Object;
@@ -69,46 +69,105 @@ private function registerEvent( flag : Boolean ) : void
 {	
 	if( flag )
 	{
-		workArea.addEventListener( WorkAreaEvent.CREATE_OBJECT, workArea_createObjectHandler );
-		workArea.addEventListener( WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler );
-		workArea.addEventListener( WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler );
+		workArea.addEventListener(
+			WorkAreaEvent.CREATE_OBJECT, workArea_createObjectHandler );
 		
-		panelContainer.addEventListener( ClosablePanelEvent.PANEL_COLLAPSE, panelContainer_panelOpeningHandler, true );
+		workArea.addEventListener(
+			WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler );
+		
+		workArea.addEventListener(
+			WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler );
+		
+//		panelContainer.addEventListener(
+//			ClosablePanelEvent.PANEL_COLLAPSE,
+//			panelContainer_panelOpeningHandler, true );
 		
 //		dataManager.addEventListener( DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler );
 		
-		dataManager.addEventListener( DataManagerEvent.CREATE_OBJECT_COMPLETE, dataManager_objectCreatedHandler );
-		dataManager.addEventListener( DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler );
-		dataManager.addEventListener( DataManagerEvent.DELETE_OBJECT_COMPLETE, dataManager_objectDeletedHandler );
-		dataManager.addEventListener( DataManagerErrorEvent.SET_NAME_ERROR, dataManager_setNameErrorHandler );
+		dataManager.addEventListener(
+			DataManagerEvent.CREATE_OBJECT_COMPLETE,
+			dataManager_objectCreatedHandler );
+			
+		dataManager.addEventListener(
+			DataManagerEvent.OBJECT_CHANGED,
+			dataManager_objectChangedHandler );
 		
-		dataManager.addEventListener( DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler );
-		dataManager.addEventListener( DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, dataManager_updateAttributesCompleteHandler );
-		dataManager.addEventListener( DataManagerEvent.MODIFY_RESOURCE_COMPLETE, dataManager_updateAttributesCompleteHandler );
+		dataManager.addEventListener(
+			DataManagerEvent.DELETE_OBJECT_COMPLETE,
+			dataManager_objectDeletedHandler );
 		
-		attributesPanel.addEventListener('propsChanged', attributesChangedHandler );
-		attributesPanel.addEventListener( AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler );
+		dataManager.addEventListener(
+			DataManagerErrorEvent.SET_NAME_ERROR,
+			dataManager_setNameErrorHandler );
+		
+		dataManager.addEventListener(
+			DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN,
+			dataManager_updateAttributesBeginHandler );
+		
+		dataManager.addEventListener(
+			DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE,
+			dataManager_updateAttributesCompleteHandler );
+		
+		dataManager.addEventListener(
+			DataManagerEvent.MODIFY_RESOURCE_COMPLETE,
+			dataManager_updateAttributesCompleteHandler );
+		
+		attributesPanel.addEventListener(
+			'propsChanged', attributesChangedHandler );
+		
+		attributesPanel.addEventListener(
+			AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler );
 	}
 	else 
 	{	
-		workArea.removeEventListener( WorkAreaEvent.CREATE_OBJECT, workArea_createObjectHandler );
-		workArea.removeEventListener( WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler );
-		workArea.removeEventListener( WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler );
+		workArea.removeEventListener(
+			WorkAreaEvent.CREATE_OBJECT, workArea_createObjectHandler );
 		
-		panelContainer.removeEventListener( ClosablePanelEvent.PANEL_COLLAPSE, panelContainer_panelOpeningHandler, true );
+		workArea.removeEventListener(
+			WorkAreaEvent.CHANGE_OBJECT, workArea_changeObjectHandler );
+		
+		workArea.removeEventListener(
+			WorkAreaEvent.PROPS_CHANGED, workArea_attributeChangedHandler );
+		
+//		panelContainer.removeEventListener(
+//			ClosablePanelEvent.PANEL_COLLAPSE,
+//			panelContainer_panelOpeningHandler, true );
 		
 //		dataManager.removeEventListener( DataManagerEvent.PAGE_DATA_LOADED, pageDataLoadedHandler );
 		
-		dataManager.removeEventListener( DataManagerEvent.CREATE_OBJECT_COMPLETE, dataManager_objectCreatedHandler );
-		dataManager.removeEventListener( DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler );
-		dataManager.removeEventListener( DataManagerEvent.DELETE_OBJECT_COMPLETE, dataManager_objectDeletedHandler );
-		dataManager.removeEventListener( DataManagerErrorEvent.SET_NAME_ERROR, dataManager_setNameErrorHandler );
+		dataManager.removeEventListener(
+			DataManagerEvent.CREATE_OBJECT_COMPLETE,
+			dataManager_objectCreatedHandler );
+			
+		dataManager.removeEventListener(
+			DataManagerEvent.OBJECT_CHANGED,
+			dataManager_objectChangedHandler );
 		
-		dataManager.removeEventListener( DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN, dataManager_updateAttributesBeginHandler );
-		dataManager.removeEventListener( DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, dataManager_updateAttributesCompleteHandler );
+		dataManager.removeEventListener(
+			DataManagerEvent.DELETE_OBJECT_COMPLETE,
+			dataManager_objectDeletedHandler );
 		
-		attributesPanel.removeEventListener('propsChanged', attributesChangedHandler );
-		attributesPanel.removeEventListener( AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler );
+		dataManager.removeEventListener(
+			DataManagerErrorEvent.SET_NAME_ERROR,
+			dataManager_setNameErrorHandler );
+		
+		dataManager.removeEventListener(
+			DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN,
+			dataManager_updateAttributesBeginHandler );
+		
+		dataManager.removeEventListener(
+			DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE,
+			dataManager_updateAttributesCompleteHandler );
+		
+		dataManager.removeEventListener(
+			DataManagerEvent.MODIFY_RESOURCE_COMPLETE,
+			dataManager_updateAttributesCompleteHandler );
+		
+		attributesPanel.removeEventListener(
+			'propsChanged', attributesChangedHandler );
+		
+		attributesPanel.removeEventListener(
+			AttributesPanelEvent.DELETE_OBJECT, deleteObjectHandler );
 	}
 }
 
@@ -123,11 +182,18 @@ private function attributesChangedHandler( event : Event ) : void
 	//attributesPanel.dataProvider = dataManager.currentObject; //FIXME <-- исправить!!!!!!
 }
 
-private function panelContainer_panelOpeningHandler(event : ClosablePanelEvent) : void 
+
+private function deleteObjectHandler( event : AttributesPanelEvent ) : void
+{	
+	if( event.objectId );
+		dataManager.deleteObject( event.objectId );
+}
+
+/* private function panelContainer_panelOpeningHandler(event : ClosablePanelEvent) : void 
 {
 	var dummy : * = "";
 //	event.stopPropagation();
-}
+} */
 
 private function workArea_createObjectHandler( event : Event ) : void
 {	
@@ -137,24 +203,15 @@ private function workArea_createObjectHandler( event : Event ) : void
 
 private function workArea_changeObjectHandler( event : WorkAreaEvent ) : void
 {	
-	if( event.objectId ) {
-		
+	if( event.objectId )
 		dataManager.changeCurrentObject( event.objectId );
-	} else {
-		
+	else
 		dataManager.changeCurrentObject( null );
-	}
 }
 
 private function workArea_attributeChangedHandler( event : WorkAreaEvent ) : void
 {	
 	dataManager.updateAttributes( event.objectId, event.props );
-}
-
-private function deleteObjectHandler( event : AttributesPanelEvent ) : void
-{	
-	if( event.objectId );
-		dataManager.deleteObject( event.objectId );
 }
 
 private function dataManager_updateAttributesBeginHandler( event : DataManagerEvent ) : void
@@ -170,7 +227,7 @@ private function dataManager_updateAttributesBeginHandler( event : DataManagerEv
 	for each( var attr : XML in event.result.*)
 	{
 		attrName = attr.@Name;
-		if( attrName == "top" || attrName  == "left")
+		if( attrName == "top" || attrName  == "left" )
 			continue;
 		
 		workArea.lockItem( dataManager.currentObjectId );

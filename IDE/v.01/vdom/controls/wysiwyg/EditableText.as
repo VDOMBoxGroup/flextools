@@ -9,7 +9,6 @@ import mx.core.IUITextField;
 
 public class EditableText extends TextArea
 {
-//	private var _alpha:Number = 1;
 	private var flexible:Boolean = true;
 	
 	public function EditableText()
@@ -61,8 +60,8 @@ public class EditableText extends TextArea
 		if(!textField || !flexible)
 			return;
 		
-		explicitHeight = textField.measuredHeight + 10;
-//		trace(textField.measuredHeight);
+		explicitHeight = textField.measuredHeight + 15;
+		
 	}
 }
 }

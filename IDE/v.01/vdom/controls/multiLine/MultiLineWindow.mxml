@@ -59,7 +59,7 @@ public static function show_window(title:String, attrVal:String, parent:DisplayO
 	else {
 		PopUpManager.bringToFront(wnd);
 	}
-
+	wnd.init();
 }
 
 private function init():void

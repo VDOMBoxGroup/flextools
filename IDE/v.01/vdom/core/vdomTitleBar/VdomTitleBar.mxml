@@ -13,11 +13,12 @@
 	
 	<mx:Style>
 		.invBtn {
-			color: #BBBBBB;
+			color: #FF0000;
 			textRollOverColor: #FFFFFF;
 			fillAlphas: 0.0, 0.0, 0.0, 0.0; 
 			borderStyle: "none";
 			borderAlpha: .0;
+			cornerRadius: 0;
 		}
 	</mx:Style>
 	
@@ -153,7 +154,10 @@
 	<mx:Button id="maximizeButton" y="1" width="21" height="16" right="24"/>
 	<mx:Button id="closeButton" y="1" width="24" height="16" right="1"/>
 	<mx:Button visible="false" y="1" width="24" height="16" right="69" cornerRadius="0" fillAlphas="[1.0, 1.0]" fillColors="[#FF0000, #FF0000]"/>
-	<mx:Button 
+	<mx:Label text="{ resourceManager.getString( 'Application','logout' ) }"
+		right="10" top="24" fontWeight="bold" color="#FFFFFF" buttonMode="true" useHandCursor="true" enabled="true"
+		click="logout();" />
+	<!--<mx:Button 
 		label="{resourceManager.getString('Application','logout')}" 
-		right="10" top="22" styleName="invBtn" cornerRadius="0" click="logout();" alpha="0.0"/>
+		right="10" top="22" styleName="invBtn" />-->
 </mx:Canvas>
