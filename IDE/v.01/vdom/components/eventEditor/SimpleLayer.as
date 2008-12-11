@@ -8,18 +8,18 @@ package vdom.components.eventEditor
 
 	public class SimpleLayer extends Canvas
 	{
-		[Embed(source='/assets/treeEditor/treeEditor.swf', symbol='delete')]
+		[Embed(source='/assets/eventEditor/actions.png')]
 		[Bindable]
-		public var delet:Class;
+		public var _action:Class;
 		
 		private var img:Image;
 		
-		public function SimpleLayer(str:String = 'test')
+		public function SimpleLayer	(str:String = 'test')
 		{
 			super();
 			
 			img = new Image();
-			img.source = delet;
+			img.source = _action;
 			img.x = 3;
 			img.y = 2;
 			img.width = 13;

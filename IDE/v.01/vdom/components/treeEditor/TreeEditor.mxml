@@ -426,12 +426,12 @@
 		
 		if(treeElemenUnderMouse)
 		{
-			vctTest.createVector(_curTree.target, treeElemenUnderMouse, colmen2.selectedItem.data);	
+			vctTest.createVector(_curTree.target, treeElemenUnderMouse, colmen2.selectedItem.level, .5);	
 		}else
 		{
 			var pnTo:Object = calculatePointTo(mouseX + main.horizontalScrollPosition, mouseY + main.verticalScrollPosition , _curTree.target);
 		
-			vctTest.createVector(_curTree.target, pnTo, colmen2.selectedItem.data);	
+			vctTest.createVector(_curTree.target, pnTo, colmen2.selectedItem.level, .5);	
 		}
 	}
 	

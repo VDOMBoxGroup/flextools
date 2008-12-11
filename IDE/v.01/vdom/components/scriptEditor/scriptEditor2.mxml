@@ -257,7 +257,8 @@
 			        		color="#000000" minWidth="200" width="100%"  itemRenderer="vdom.components.eventEditor.PanelItemRender"/>
 	        </mx:Panel>
 			
-				       <containers:ServerScripts  id="serverScripts"  title="serverScripts" width="100%" dataChanged="{setScript()}" />
+				       <containers:ServerScripts  id="serverScripts"  title="serverScripts" width="100%" dataChanged="{setScript()}"
+				       	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0" />
 		       
 		       <mx:HBox >
 			       <mx:Button  label="Add Script" click="{addNewScript()}"  />

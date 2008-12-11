@@ -5,7 +5,8 @@
 	
 	creationComplete="creationCompleteHendler();"
 
-xmlns:containers="vdom.components.edit.containers.*" >
+xmlns:containers="vdom.components.edit.containers.*" 
+ paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
 
 <mx:Metadata>
 		[Event(name="change", type="mx.events.ListEvent")]
@@ -59,6 +60,7 @@ xmlns:containers="vdom.components.edit.containers.*" >
 				tree.addEventListener(FlexEvent.UPDATE_COMPLETE, treeUpdateComletLister);
 				tree.addEventListener(Event.CHANGE, treeChangeLister);
 				tree.iconFunction = getIcon;
+				tree.setStyle('borderColor', '0xFFFFFF');
 		}
 		
 		public function set dataProvider(xmlData:XMLList):void {

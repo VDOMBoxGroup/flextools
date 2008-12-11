@@ -24,6 +24,8 @@ package vdom.components.eventEditor
 			tree.labelField = "@label";
 			tree.percentWidth = 100;
 			tree.percentHeight = 100;
+			tree.setStyle('borderColor', '0xFFFFFF');
+			tree.setStyle('openDuration', '0');
 			addChild(tree);
 			
 			tree.addEventListener(TreeEvent.ITEM_OPEN, itemOpenHandler);

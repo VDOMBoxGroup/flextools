@@ -24,6 +24,7 @@ package vdom.components.eventEditor
 			showRoot = true;
 			percentHeight = 100;//width = 200;
 			percentWidth = 100;
+			setStyle('borderColor', '0xFFFFFF');
 			
 			//itemRenderer = new ClassFactory(IconTreeItemRenderer);
 			

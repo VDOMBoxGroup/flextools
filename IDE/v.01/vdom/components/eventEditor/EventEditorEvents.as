@@ -44,7 +44,7 @@ package vdom.components.eventEditor
 		[Bindable]
 		private var menu:Class;
 		
-		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='icon_event')]
+		[Embed(source='/assets/eventEditor/events.png')]
 		[Bindable]
 		private var event:Class;
 		

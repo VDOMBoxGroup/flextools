@@ -39,6 +39,7 @@ package vdom.components.scriptEditor.containers
 			tree.iconFunction = getIcon;
 			tree.percentWidth = 100;
 			tree.labelField = '@Name';
+			tree.setStyle('borderColor', '0xFFFFFF');
 			
 			tree.addEventListener(ListEvent.CHANGE, changeHandler);
 			

@@ -30,11 +30,11 @@ package vdom.components.treeEditor.colorMenu02
 			return dataArr[0];
 		}
 		
-		public function getColor(str:String):Number
+		public function getColor(obg:Object):Number
 		{
-			if(!dataArr[Number(str)])
+			if(!dataArr[Number(obg)])
 				return 0xCC0000;
-			return dataArr[Number(str)].data;
+			return dataArr[Number(obg)].data;
 		}
 		
 		public function getLevel(nLevel:Number):Object

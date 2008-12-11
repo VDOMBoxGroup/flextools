@@ -43,7 +43,7 @@ package vdom.components.eventEditor
 		[Bindable]
 		public var menu:Class;
 		
-		[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='action')]
+		[Embed(source='/assets/eventEditor/actions.png')]
 		[Bindable]
 		public var action:Class;
 		
@@ -231,7 +231,7 @@ package vdom.components.eventEditor
 			imgLine.addEventListener(MouseEvent.CLICK, lineClickHandler);
 			*/
 			imgDelete = new Image();
-			imgDelete.source = action; 
+			imgDelete.source = delet; 
 			imgDelete.buttonMode = true;
 			
 			imgDelete.addEventListener(MouseEvent.CLICK, deleteClickHandler);

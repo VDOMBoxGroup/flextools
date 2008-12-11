@@ -484,7 +484,7 @@
 				
 				if(eventUnderMouse)
 				{
-					line.createVector(curEvent, eventUnderMouse);	
+					line.createVector(curEvent, eventUnderMouse, 1, .5);	
 				}else
 				{
 					can.validateNow();
@@ -494,7 +494,7 @@
 					
 					var pnTo:Object = calculatePointTo(pt, curEvent);
 
-						line.createVector(curEvent, pnTo);	
+						line.createVector(curEvent, pnTo, 1, .5);	
 				}
 			}
 			
@@ -538,7 +538,7 @@
 				if(!linesArray[evtID]) linesArray[evtID] = new Array();
 			
 				linesArray[evtID][actID] = 
-					new TreeVector(eventsArray[evtID], clientActionsArray[actID] || serverActionsArray[actID], '0');
+					new TreeVector(eventsArray[evtID], clientActionsArray[actID] || serverActionsArray[actID], '1');
 					
 				linesArray[evtID][actID].addEventListener(MouseEvent.CLICK, markLines);	
 				
@@ -1042,13 +1042,16 @@
         		color="#000000" minWidth="200" width="100%" itemRenderer="vdom.components.eventEditor.PanelItemRender"/>
    		 </containers:ClosablePanel>
    		 
-        <eventEditor:ContainersBranch id="containersBranch" width="100%"  title="Objects" height="150"/>
+        <eventEditor:ContainersBranch id="containersBranch" width="100%"  title="Objects" height="150"
+        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"/>
         
-        <containers:ClosablePanel width="100%"  title="Events"  height="150">
+        <containers:ClosablePanel width="100%"  title="Events"  height="150" 
+        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
         	<eventEditor:TreeEvents id="treeEvents" width="100%"  height="100%"/>
         </containers:ClosablePanel>
         
-        <containers:ClosablePanel width="100%" title="Actions"  height="150">
+        <containers:ClosablePanel width="100%" title="Actions"  height="150"
+        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
         	<eventEditor:TreeActions id="treeActions" width="100%"  height="100%"/>
         </containers:ClosablePanel>
       
