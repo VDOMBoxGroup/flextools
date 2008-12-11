@@ -201,6 +201,8 @@
         	    
         	    CashManager.clear();
         	    
+        	    TemplateStruct.loadLib();
+        	    
 				// Load application settings
 	            ContextManager.loadSettings();
 	            
@@ -235,8 +237,7 @@
 	       		}  
 	       		
             	//trace(LanguageManager.getSentences("<sentense id='' label='{0}'>{1}</sentense>\n"));
-            	//trace(describeType(Dynamic));
-		    	       	
+            	//trace(describeType(TemplateStruct.lib));
 		    }
 	       	
 	       	public function exitApplication(event:Event=null):void

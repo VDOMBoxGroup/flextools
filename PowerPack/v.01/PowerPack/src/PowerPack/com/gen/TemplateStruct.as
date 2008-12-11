@@ -14,10 +14,13 @@ import PowerPack.com.managers.CashManager;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.filesystem.File;
+import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
 import mx.core.Application;
 import mx.utils.UIDUtil;
+
+import r1.deval.D;
 
 public class TemplateStruct extends EventDispatcher
 {
@@ -149,16 +152,36 @@ public class TemplateStruct extends EventDispatcher
 	
 	public static function loadLib():void
 	{
-		lib = new Dynamic(); 
+		lib = new Dynamic();
+		 
 		var libFolder:File = File.applicationDirectory.resolvePath('libs');
 		
 		if(!libFolder.exists)
-			return;
+			return;		
+		
+		var generalLibs:Array = ['GeneralFunctions.as', 'GraphicFunctions.as', 'ImageProcessingFunctions.as', 'ListManipulationFunctions.as']
+		for each(var libFileName:String in generalLibs)
+		{
+			var libFile:File = libFolder.resolvePath(libFileName);
+			var stream:FileStream = new FileStream();
+			var strData:String;
 			
+			if(libFile.exists)
+			{
+				stream.open(libFile, FileMode.READ);
+				strData = stream.readUTFBytes(stream.bytesAvailable);
+    			stream.close();
+    			D.setOutput(evalHandler);
+    			D.eval(strData, lib);			
+			}
+		}
 		
-		
+		function evalHandler(value:String):void {
+			trace(value);
+		}
 	}
 	
+		
 	public function validate(options:uint=0):Object
 	{
 		var retVal:Object = {result:false, array:[]};
