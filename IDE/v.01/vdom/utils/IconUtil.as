@@ -74,6 +74,9 @@ package vdom.utils
 		
 		public function set resource(value:Object):void {
 			
+			if( !value || !value.data )
+				return;
+			
 			var loader:Loader = new Loader();
 			
 			resourceId = value.resourceID;
