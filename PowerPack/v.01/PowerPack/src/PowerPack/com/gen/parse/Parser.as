@@ -14,87 +14,87 @@ import r1.deval.D;
 
 public class Parser
 {		
-	public static var functionsDefinition:Array =
-		[			
+	public static var funcDefinition:Object =
+		{			
 			/**
 			* [ function_pattern, function_name, args_num ] 
 			*/
 								
-			[/^(v=){0,1}\[nn[nobvscifVNS]*\]$/ , "sub", -1],
-			[/^(v=){0,1}\[nnn[nobvscifVNS]*\]$/, "subPrefix", -2],
-			[/^(v=){0,1}\[n[vscVS][vscVS]\]$/, "question", 2],
-			[/^(v=){0,1}\[n[vscVS][vsciVNS]\]$/, "convert", 2],
-			[/^(v=){0,1}\[n[vscVS]\]$/, "loadDataFrom", 1],
-			[/^(v=){0,1}\[n[vscVS]\]$/, "writeTo", 1],
-			[/^(v=){0,1}\[n[vscVS][vscifVNS]\]$/, "writeVarTo", 2],
-			[/^(v=){0,1}\[n\]$/, "GUID", 0],
-			[/^(v=){0,1}\[n[viVN][viVN][vscVS]\]$/, "mid", 3],
-			[/^(v=){0,1}\[n[vscVS][vscVS][vscVS][vscVS]\]$/, "replace", 4],
-			[/^(v=){0,1}\[n[vscVS][vscVS]\]$/, "split", 2],
-			[/^(v=){0,1}\[n[viVN]\]$/, "random", 1],
-			[/^(v=)?\[n[v][vscVS]\]$/, "imageToBase64", 2],
+			'sub':			{ pattern:/^(v=){0,1}\[nn[nobvscifVNS]*\]$/, argNum:-1 },
+			'subPrefix':	{ pattern:/^(v=){0,1}\[nnn[nobvscifVNS]*\]$/, argNum:-2 },
+			'question':		{ pattern:/^(v=){0,1}\[n[vscVS][vscVS]\]$/, argNum:2 },
+			'convert':		{ pattern:/^(v=){0,1}\[n[vscVS][vsciVNS]\]$/, argNum:2 },
+			'loadDataFrom':	{ pattern:/^(v=){0,1}\[n[vscVS]\]$/, argNum:1 },
+			'writeTo':		{ pattern:/^(v=){0,1}\[n[vscVS]\]$/, argNum:1 },
+			'writeVarTo':	{ pattern:/^(v=){0,1}\[n[vscVS][vscifVNS]\]$/, argNum:2 },
+			'GUID':			{ pattern:/^(v=){0,1}\[n\]$/, argNum:0 },
+			"mid":			{ pattern:/^(v=){0,1}\[n[viVN][viVN][vscVS]\]$/, argNum:3 },
+			"replace":		{ pattern:/^(v=){0,1}\[n[vscVS][vscVS][vscVS][vscVS]\]$/, argNum:4 },
+			"split":		{ pattern:/^(v=){0,1}\[n[vscVS][vscVS]\]$/, argNum:2 },
+			"random":		{ pattern:/^(v=){0,1}\[n[viVN]\]$/, argNum:1 },
+			"imageToBase64":{ pattern:/^(v=)?\[n[v][vscVS]\]$/, argNum:2 },
 			
 			//*********************
 			// List manipulation
 			//*********************
 			
-			[/^(v=){0,1}\[n[vscVSA]\]$/, "length", 1],
-			[/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, "get", 2],
-			[/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, "put", 4],
-			[/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, "update", 4],
-			[/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, "delete", 2],
-			[/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, "getType", 2],
-			[/^(v=){0,1}\[n[nviscVNS][nobvscifVNS][vscVSA]\]$/, "exist", 3],
-			[/^(v=){0,1}\[n[vscVSA]\]$/, "evaluate", 1],
-			[/^(v=){0,1}\[n[vscVSA]\]$/, "execute", 1],
+			"length":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
+			"get":			{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
+			"put":			{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
+			"update":		{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
+			"delete":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
+			"getType":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
+			"exist":		{ pattern:/^(v=){0,1}\[n[nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:3 },
+			"evaluate":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
+			"execute":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
 							
-			[/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, "addStructure", 4],
-			[/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, "updateStructure", 4],
-			[/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, "deleteStructure", 4],
+			"addStructure":		{ pattern:/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
+			"updateStructure":	{ pattern:/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
+			"deleteStructure":	{ pattern:/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
 
 			//*********************
 			// Graphic functions
 			//*********************
 
-			[/^(v=)?\[n[vscVS]\]$/, "loadImage", 1],
-			[/^(v=)?\[n[viVN][viVN][viVN]\]$/, "createImage", 3],
-			[/^(v=)?\[n[v]\]$/, "getWidth", 1],
-			[/^(v=)?\[n[v]\]$/, "getHeight", 1],
-			[/^(v=)?\[n[v][viVN][viVN]\]$/, "getPixel", 3],
-			[/^(v=)?\[n[v][viVN][viVN]\]$/, "getPixel32", 3],
-			[/^(v=)?\[n[v][viVN][viVN][viVN]\]$/, "setPixel", 4],
-			[/^(v=)?\[n[viVN][vscVS]\]$/, "getImage", 2], // ???
+			"loadImage":	{ pattern:/^(v=)?\[n[vscVS]\]$/, argNum:1 },
+			"createImage":	{ pattern:/^(v=)?\[n[viVN][viVN][viVN]\]$/, argNum:3 },
+			"getWidth":		{ pattern:/^(v=)?\[n[v]\]$/, argNum:1 },
+			"getHeight":	{ pattern:/^(v=)?\[n[v]\]$/, argNum:1 },
+			"getPixel":		{ pattern:/^(v=)?\[n[v][viVN][viVN]\]$/, argNum:3 },
+			"getPixel32":	{ pattern:/^(v=)?\[n[v][viVN][viVN]\]$/, argNum:3 },
+			"setPixel":		{ pattern:/^(v=)?\[n[v][viVN][viVN][viVN]\]$/, argNum:4 },
+			"getImage":		{ pattern:/^(v=)?\[n[viVN][vscVS]\]$/, argNum:2 }, // ???
 			
-			[/^(v=)?\[n[v]{1,2}[viVN][viVN][viVN][viVN]\]$/, "addImage", -5],
-			[/^(v=)?\[n[v][v][viVN]\]$/, "mergeImages", 3],
+			"addImage":		{ pattern:/^(v=)?\[n[v]{1,2}[viVN][viVN][viVN][viVN]\]$/, argNum:-5 },
+			"mergeImages":	{ pattern:/^(v=)?\[n[v][v][viVN]\]$/, argNum:3 },
 			
-			[/^(v=)?\[n[v][viVN][viVN][viVN][viVN][vscVSA][viVN]\]$/, "drawLine", 7],
-			[/^(v=)?\[n[v][vscVSA][vscVSA][vscVSA][viVN]\]$/, "drawPolygon", 5],
-			[/^(v=)?\[n[v][viVN][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, "drawAngleArc", 9],
-			[/^(v=)?\[n[v][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, "drawEllipse", 8],
-			[/^(v=)?\[n[v][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, "drawRect", 8],
-			[/^(v=)?\[n[v][viVN][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, "drawRoundRect", 9],
-			[/^(v=)?\[n[v][vscVSA][vscVSA][viVN]\]$/, "drawBezier", 4],
-			[/^(v=)?\[n[v][vscVSA][vscVSA][vscVSA][viVN]\]$/, "fillBezier", 5],
-			[/^(v=)?\[n[v][vscVS][viVN][viVN][viVN][viVN][vscVSA][viVN]\]$/, "writeText", 8],
+			"drawLine":		{ pattern:/^(v=)?\[n[v][viVN][viVN][viVN][viVN][vscVSA][viVN]\]$/, argNum:7 },
+			"drawPolygon":	{ pattern:/^(v=)?\[n[v][vscVSA][vscVSA][vscVSA][viVN]\]$/, argNum:5 },
+			"drawAngleArc":	{ pattern:/^(v=)?\[n[v][viVN][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:9 },
+			"drawEllipse":	{ pattern:/^(v=)?\[n[v][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:8 },
+			"drawRect":		{ pattern:/^(v=)?\[n[v][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:8 },
+			"drawRoundRect":{ pattern:/^(v=)?\[n[v][viVN][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:9 },
+			"drawBezier":	{ pattern:/^(v=)?\[n[v][vscVSA][vscVSA][viVN]\]$/, argNum:4 },
+			"fillBezier":	{ pattern:/^(v=)?\[n[v][vscVSA][vscVSA][vscVSA][viVN]\]$/, argNum:5 },
+			"writeText":	{ pattern:/^(v=)?\[n[v][vscVS][viVN][viVN][viVN][viVN][vscVSA][viVN]\]$/, argNum:8 },
 
-			[/^(v=)?\[n[v][viVN][viVN][viVN][viVN]\]$/, "cropImage", 5],
-			[/^(v=)?\[n[v][viVN]\]$/, "flipImage", 2],
-			[/^(v=)?\[n[v][viVN][viVN]\]$/, "resizeImage", 3],
-			[/^(v=)?\[n[v][viVN][viVN]\]$/, "resizeResampling", 3], // ???
-			[/^(v=)?\[n[v][viVN][viVN]\]$/, "rotateImage", 3],
+			"cropImage":		{ pattern:/^(v=)?\[n[v][viVN][viVN][viVN][viVN]\]$/, argNum:5 },
+			"flipImage":		{ pattern:/^(v=)?\[n[v][viVN]\]$/, argNum:2 },
+			"resizeImage":		{ pattern:/^(v=)?\[n[v][viVN][viVN]\]$/, argNum:3 },
+			"resizeResampling":	{ pattern:/^(v=)?\[n[v][viVN][viVN]\]$/, argNum:3 }, // ???
+			"rotateImage":		{ pattern:/^(v=)?\[n[v][viVN][viVN]\]$/, argNum:3 },
 
-			[/^(v=)?\[n[v][viVN]\]$/, "brightness", 2],
-			[/^(v=)?\[n[v][viVN]\]$/, "contrast", 2],
-			[/^(v=)?\[n[v][viVN]\]$/, "saturation", 2],
-			[/^(v=)?\[n[v]\]$/, "createBlackWhite", 1],
-			[/^(v=)?\[n[v]\]$/, "createGrayScale", 1],
-			[/^(v=)?\[n[v]\]$/, "createNegative", 1],
+			"brightness":		{ pattern:/^(v=)?\[n[v][viVN]\]$/, argNum:2 },
+			"contrast":			{ pattern:/^(v=)?\[n[v][viVN]\]$/, argNum:2 },
+			"saturation":		{ pattern:/^(v=)?\[n[v][viVN]\]$/, argNum:2 },
+			"createBlackWhite":	{ pattern:/^(v=)?\[n[v]\]$/, argNum:1 },
+			"createGrayScale":	{ pattern:/^(v=)?\[n[v]\]$/, argNum:1 },
+			"createNegative":	{ pattern:/^(v=)?\[n[v]\]$/, argNum:1 },
 
-			[/^(v=)?\[n[v][viVN]\]$/, "blur", 2],
-			[/^(v=)?\[n[v][viVN]\]$/, "sharpen", 2],
-			[/^(v=)?\[n[v]\]$/, "emboss", 1]
-		];		
+			"blur":			{ pattern:/^(v=)?\[n[v][viVN]\]$/, argNum:2 },
+			"sharpen":		{ pattern:/^(v=)?\[n[v][viVN]\]$/, argNum:2 },
+			"emboss":		{ pattern:/^(v=)?\[n[v]\]$/, argNum:1 }
+		};		
 	
 	public static function getLexemArray(sourceText:String, isCode:Boolean=true):Array
 	{
@@ -153,13 +153,13 @@ public class Parser
     						break;
     					
     					j = i-1;
-    					while(j>=0 && sourceText.charAt(j)=="\\")	    						
+    					while(j>=0 && sourceText.charAt(j)=="\\")
     						j--;
     					
     					if((i-j-1)%2==1)
     						break;
 
-    					if(sourceText.charAt(i+1).search(/\{/)>=0) //advanced variable
+    					if(sourceText.charAt(i+1)=='{') //advanced variable
     					{	
     						i++;
     						type = '{';
@@ -179,7 +179,7 @@ public class Parser
     							break;
     					} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);							
 						i--;
-   						type = 'v'; // variable
+   						type = 'v'; // variable*/
     					break;
 
     				default:
@@ -189,6 +189,7 @@ public class Parser
     							break;
     					} while(sourceText.charAt(i)!="$");        						
 						i--;
+						break;
 				}
 			}
 			else
@@ -228,7 +229,7 @@ public class Parser
     						break;
     					}
 
-    					if(sourceText.charAt(i+1).search(/\{/)>=0) //advanced variable
+    					if(sourceText.charAt(i+1)=='{') //advanced variable
     					{	
     						i++;
     						type = '{';
@@ -394,7 +395,7 @@ public class Parser
         					bPush=false;        				        					
         					break;        					
         				}	        				
-    			}
+    			}			
 			}
 			
 			if(i>=sourceText.length)
@@ -422,6 +423,29 @@ public class Parser
 		return lexems;  
 	}
 	
+	public static function convertLexemArray(lexems:Array):Array
+	{
+		var converted:Array = lexems.concat();
+		
+		for(var i:int=0; i<converted.length; i++)
+		{
+			switch(converted[i].type)
+			{
+				case "t": // replace special characters from texts						
+					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\r");
+					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\n");
+					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\t");
+					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\$");
+					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\\\");
+					break;
+				case "v": // convert variable names to as3 compatible names
+					converted[i].value = String(converted[i].value).substring(1);
+					break;
+			}
+		}
+		return converted;
+	}
+		
 	public static function sliceLexems(lexems:Array, lexemType:String=';'):Array
 	{
 		var arr:Array = [];
@@ -500,29 +524,6 @@ public class Parser
 			}			
 		}
 	}		
-	
-	public static function convertLexemArray(lexems:Array):Array
-	{
-		var converted:Array = lexems.concat();
-		
-		for(var i:int=0; i<converted.length; i++)
-		{
-			switch(converted[i].type)
-			{
-				case "t": // replace special characters from texts						
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\r");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\n");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\t");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\$");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\\\");
-					break;
-				case "v": // convert variable names to as3 compatible names
-					converted[i].value = String(converted[i].value).substring(1);
-					break;
-			}
-		}
-		return converted;
-	}
 
 	/**
 	 * resolve advanced variable definition technique
@@ -537,7 +538,9 @@ public class Parser
 	public static function processConvertedLexemArray(lexems:Array, contexts:Array):Object
 	{
 		var arr:Array = lexems.concat();
-		var retVal:Object = {result:false, error:null, array:null};
+		var retVal:Object = {	result:false, 
+								error:null, 
+								array:null };
 		
 		var index:int = 0;
 		
@@ -548,12 +551,14 @@ public class Parser
 				var variable:Object = recursiveProcessLexemsArray(arr, contexts, index);
 				
 				if(!variable.result) {
-					return { result:false, error:variable.error, array:null };
+					return {	result:false, 
+								error:variable.error, 
+								array:null };
 				}
 					
 				arr[index].type = "v";
-				arr[index].value = variable.string;
-				arr[index].origValue = variable.origString;
+				arr[index].value = variable.value;
+				arr[index].origValue = variable.origValue;
 			}
 			
 			index++;
@@ -570,13 +575,13 @@ public class Parser
 	 * @param index
 	 * @return 	result: Boolean - valid or not
 	 * 			error: Error - error
-	 * 			string: String - variable name 
+	 * 			value: String - variable name 
 	 * 
 	 */
 	private static function recursiveProcessLexemsArray(lexems:Array, contexts:Array, index:int):Object
 	{
 		var arrColLexems:ArrayCollection = new ArrayCollection(lexems);
-		var retVal:Object = { result:false, error:null, string:null , origString:null };
+		var retVal:Object = { result:false, error:null, value:null, origValue:null };
 
 		var code:String = "";
 		var origBuf:String = "";
@@ -584,7 +589,10 @@ public class Parser
 		var strLexem:String = "";
 		
 		origBuf += lexems[index].origValue;
+		
+		// remove '{'
 		arrColLexems.removeItemAt(index);
+		
 		while(index<arrColLexems.length && lexems[index].type!="}")
 		{
 			result = null;
@@ -593,8 +601,9 @@ public class Parser
 			if(String(lexems[index].type).search(/[scvif90123{]/)<0)
 				return { 	result:false,
 							error:new RunTimeError(null, 9002, [lexems[index].value]), 
-							string:null };
+							value:null };
 			
+			// get variable value
 			if(String(lexems[index].type).search(/v/)>=0 && contexts)
 			{
 				var value:Object = null;
@@ -613,8 +622,8 @@ public class Parser
 				if(value==null)
 					return {	result:false,
 								error:new RunTimeError(null, 9008, [lexems[index].value]), 
-								string:null };
-			}				
+								value:null };
+			}					
 			
 			if(lexems[index].type=="{")
 			{
@@ -623,8 +632,8 @@ public class Parser
 				if(!result.result)
 					return result;
 				
-				origBuf += result.origString;
-				code += result.string;
+				origBuf += result.origValue;
+				code += result.value;
 				strLexem += "v";
 			}
 			else
@@ -645,8 +654,8 @@ public class Parser
 		// '}' not found 
 		if(index>=arrColLexems.length)
 			return {	result:false,
-						error:new RunTimeError(null, 9005, ["(})"]), 
-						string:null };
+						error:new RunTimeError(null, 9005, ["'}'"]), 
+						value:null };
 		
 		if(index<arrColLexems.length)
 			origBuf += lexems[index].origValue;	
@@ -654,13 +663,12 @@ public class Parser
 		if(!isValidOperation(strLexem).result)
 			return {	result:false,
 						error:new RunTimeError(null, 9001), 
-						string:null };
+						value:null };
 		
 		retVal.result = true;
 		retVal.error = null;
-		if(contexts)
-			retVal.string = eval(code, contexts).toString();
-		retVal.origString = origBuf;
+		retVal.value = contexts ? eval(code, contexts).toString() : null;
+		retVal.origValue = origBuf;
 		
 		return retVal;
 	}
@@ -736,66 +744,64 @@ public class Parser
 				
 				[/9(V|N|S|v|i|f|s|c|o)0/g,	"$1"],		// (x) -> x
 				[/\{[VSvsc]\}/g, 			"v"]		// ${x} -> v
-			]
-		;     			
+			];     			
 
 		// parse operations
 		strSentence = rollLexemString(strSentence, patterns);
 		
 		if(/^[VNSvifsco]$/.test(strSentence))
-			return {result: true, string: strSentence};
+			return {result: true, value: strSentence};
 		
-		return {result: false, string: strSentence};
+		return {result: false, value: strSentence};
 	}
 	
 	public static function isValidList(lexemString:String):Object
 	{
-		var strSentence:String = isValidOperation(lexemString).string;  
+		var strSentence:String = isValidOperation(lexemString).value;  
 		var pattern:RegExp;
 
 		var patterns:Array = 
 			[
 				[/\[[nwobvscifVNSA]*\]/g, "A"]
-			]
-		;
+			];
 	
 		strSentence = rollLexemString(strSentence, patterns);
 		
 		if(strSentence=="A")
-			return {result: true, string: strSentence};
+			return {result: true, value: strSentence};
 		
-		return {result: false, string: strSentence};
+		return {result: false, value: strSentence};
 	}	
 	
 	public static function isValidFunction(lexemString:String):Object
 	{
-		var strSentence:String = isValidList(lexemString).string;  
+		var strSentence:String = isValidList(lexemString).value;  
 		var pattern:RegExp;     			
 	
 		pattern = /^(v=)?A$/;
 
 		if(pattern.test(strSentence))
-			return {result: true, string: strSentence};	
+			return {result: true, value: strSentence};	
 		
-		return {result: false, string: strSentence};						
+		return {result: false, value: strSentence};						
 	}			
 	
 	public static function isValidCommand(lexemString:String):Object
 	{
-		var strSentence:String = isValidOperation(lexemString).string;  
+		var strSentence:String = isValidOperation(lexemString).value;  
 		var pattern:RegExp;     			
 	
-		pattern = /^v=[VNSvifscob](;+v=[VNSvifscob])*;*$/;
+		pattern = /^v=[VNSvifscob]$/;
 
 		if(pattern.test(strSentence))
-			return {result: true, string: strSentence};
+			return {result: true, value: strSentence};
 		
-		return {result: false, string: strSentence};
+		return {result: false, value: strSentence};
 	}
 			
 	public static function isValidTest(lexemString:String):Object
 	{
-		var strSentence:String = isValidOperation(lexemString).string;
+		var strSentence:String = isValidOperation(lexemString).value;
 
 		var patterns:Array = 
 			[
@@ -809,9 +815,9 @@ public class Parser
 		strSentence = rollLexemString(strSentence, patterns);
 
 		if(strSentence=="O" || strSentence=="L" || strSentence=="b")
-			return {result: true, string: strSentence};	
+			return {result: true, value: strSentence};	
 		
-		return {result: false, string: strSentence};						
+		return {result: false, value: strSentence};						
 	}
 
 	//--------------------------------------------------------------------------
@@ -823,44 +829,39 @@ public class Parser
 	public static function isFunctionExists(lexems:Array):Object
 	{			
 		var pattern:RegExp;
-		var strSentence:String = "";    
-		var retVal:Object = {result:false, error:null, string:null, variable:null, func:null};
+		var retVal:Object = {result:false, error:null, value:null, variable:null, func:null};
 		
 		if(lexems[0].operationGroup==0)
 			processLexemArray(lexems);   			
 		
+		var strSentence:String = "";    
 		for(var i:int=0; i<lexems.length; i++)
 			strSentence = strSentence + lexems[i].type;
 				
-		strSentence = isValidOperation(strSentence).string;						
+		strSentence = isValidOperation(strSentence).value;						
 		
+		// remove []
 		var strSubSentence:String = strSentence.substring(
 										strSentence.indexOf('[')+1, 
 										strSentence.lastIndexOf(']')); 
 		
-		strSubSentence = isValidList(strSubSentence).string;			
+		// pack all lists in one lexem
+		strSubSentence = isValidList(strSubSentence).value;
 		
+		// add []
 		strSentence = strSentence.substring(0, strSentence.indexOf('[')+1) +
 					  strSubSentence +
 					  strSentence.substring(strSentence.lastIndexOf(']'));
 		
 		// search for '[' index in lexem array
 		for(var sIndex:int=0; sIndex<lexems.length; sIndex++)
-		{
 			if(lexems[sIndex].type=='[')
-			{	
 				break;
-			}
-		}				
 
 		// search for ']' index in lexem array
 		for(var eIndex:int=lexems.length-1; eIndex>sIndex; eIndex--)
-		{
 			if(lexems[eIndex].type==']')
-			{	
 				break;
-			}
-		}				
 				
 		// search for variable index in lexem array
 		for(var vIndex:int=0; vIndex<lexems.length; vIndex++)
@@ -872,47 +873,45 @@ public class Parser
 			}
 		}
 		
-		var patterns:Array = functionsDefinition;
-		
-		for(var j:int=0; j<patterns.length; j++)
+		if(funcDefinition.hasOwnProperty(lexems[sIndex+1].value))
 		{
-			if(lexems[sIndex+1].value==patterns[j][1])
-			{
-				retVal.func = lexems[sIndex+1].value;		
-				
-				// check for correct args number
-				var argNum:int = strSentence.indexOf("]")-strSentence.indexOf("[")-2;
-				if(argNum != patterns[j][2] && patterns[j][2]>=0)
-				{
-					retVal.error = new CompilerError(null, 9007, [patterns[j][2]]);
-					return retVal;
-				}
-				else if(patterns[j][2]<0 && argNum < Math.abs(patterns[j][2]))
-				{
-					retVal.error = new CompilerError(null, 9007, [">"+Math.abs(patterns[j][2])]);
-					return retVal;
-				} 
-			
-				if(	RegExp(patterns[j][0]).test(strSentence) )
-				{
-					retVal.result = true;
-					
-					retVal.string = "";						
-					
-					for(i=sIndex+2; i<lexems.length && i<eIndex; i++)
-						retVal.string += (	lexems[i-1].operationGroup!=lexems[i].operationGroup && 
-											lexems[i-1].type!='[' && 
-											lexems[i].type!=']' && 
-											retVal.string.length ? "," : "") + 
-							(lexems[i].type=='n' ? "{type:'n', value:"+Utils.quotes(lexems[i].value)+"}" : 
-								lexems[i].type=='A'? Utils.quotes(lexems[i].value) :
-								lexems[i].value);
-					
-					retVal.string = TemplateStruct.CNTXT_INSTANCE + "._" + lexems[sIndex+1].value + "(" +
-						String(retVal.string) + ")";
-				}
+			// get function name
+			retVal.func = lexems[sIndex+1].value;					
 
-				break;
+			var def:Object = funcDefinition[retVal.func];
+			
+			// check for correct args number
+			var argNum:int = strSentence.indexOf("]")-strSentence.indexOf("[")-2;
+			if(argNum != def.argNum && def.argNum>=0)
+			{
+				retVal.error = new CompilerError(null, 9007, [def.argNum]);
+				return retVal;
+			}
+			else if(def.argNum<0 && argNum < Math.abs(def.argNum))
+			{
+				retVal.error = new CompilerError(null, 9007, [">"+Math.abs(def.argNum)]);
+				return retVal;
+			} 
+		
+			if(	RegExp(def.pattern).test(strSentence) )
+			{
+				retVal.result = true;
+				
+				retVal.value = "";						
+				
+				for(i=sIndex+2; i<lexems.length && i<eIndex; i++)
+					retVal.value += (lexems[i-1].operationGroup!=lexems[i].operationGroup && 
+										lexems[i-1].type!='[' && 
+										lexems[i].type!=']' && 
+										retVal.value.length ? "," : "") +									
+									(lexems[i].type=='n' ? "{type:'n', value:"+Utils.quotes(lexems[i].value)+"}" : 
+										lexems[i].type=='A'? Utils.quotes(lexems[i].value) :
+										lexems[i].value);
+				
+				retVal.value = retVal.func + "(" + String(retVal.value) + ")";
+				
+				//retVal.value = TemplateStruct.CNTXT_INSTANCE + "._" + lexems[sIndex+1].value + "(" +
+				//	String(retVal.value) + ")";
 			}
 		}
 		
@@ -921,14 +920,14 @@ public class Parser
 			if(/^v=/.test(strSentence))
 			{
 				retVal.variable = lexems[vIndex].value;
-				retVal.string = retVal.variable + "=" + retVal.string;
+				retVal.value = retVal.variable + "=" + retVal.value;
 			}
 		}
-		else if(retVal.func && !retVal.string)
+		else if(retVal.func && !retVal.value)
 		{
 			retVal.error = new CompilerError(null, 9011);
 		}
-		else if(!retVal.string)
+		else if(!retVal.value)
 		{
 			retVal.error = new CompilerError(null, 9009, [lexems[sIndex+1].value]);
 		}
@@ -946,9 +945,11 @@ public class Parser
 	 */
 	public static function packLists(lexems:Array, depth:int=1):Object
 	{
-		var retVal:Object = {result:false, error:null, string:null, array:null};
+		var retVal:Object = { result:false, error:null, array:null };
+		
 		var arr:Array = lexems.concat();
 		var arrColLexems:ArrayCollection = new ArrayCollection(arr);
+		
 		var index:int = 0;
 		var curDepth:int = 0;
 		var fix:int = -1;
@@ -1080,7 +1081,7 @@ public class Parser
 	 */
 	public static function processList(list:String):Object
 	{
-		var retVal:Object = {result:false, error:null, string:null, array:null};
+		var retVal:Object = {result:false, error:null, value:null, array:null};
 					
 		var lexems:Array = getLexemArray(list);
 		lexems = processLexemsLists(lexems);
@@ -1113,10 +1114,10 @@ public class Parser
 			strSentence = strSentence + lexems[i].type;				
     	
     	retVal.result = isValidList(strSentence).result;
-    	retVal.string = strSentence;
+    	retVal.value = strSentence;
    		retVal.array = lexems;
 
-		return retVal;			
+		return retVal;
 	}
 	
 }

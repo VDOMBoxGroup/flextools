@@ -161,7 +161,7 @@ public function _execute(list:String):*
 		throw parsedList.error;
 	}
 	else {
-		return parsedList.string;
+		return parsedList.value;
 	}
 }
 

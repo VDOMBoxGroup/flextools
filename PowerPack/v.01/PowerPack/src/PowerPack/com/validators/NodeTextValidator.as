@@ -2,6 +2,7 @@ package PowerPack.com.validators
 {
 	import ExtendedAPI.com.utils.Utils;
 	
+	import PowerPack.com.gen.ParsedNode;
 	import PowerPack.com.gen.parse.CodeParser;
 	import PowerPack.com.graph.Node;
 	import PowerPack.com.graph.NodeCategory;
@@ -43,7 +44,6 @@ package PowerPack.com.validators
         override protected function doValidation(value:Object):Array 
         {
 			var str:String = value.toString();
-			
 			
 			var node:Node;
 			
@@ -106,25 +106,27 @@ package PowerPack.com.validators
 				if(parseResult.array)
 					arrTrans = parseResult.array;
         		
-        		if(parseResult.type == CodeParser.CT_TEST)
+        		switch(parseResult.type)
         		{
-        			node.toolTip = LanguageManager.sentences.test_command+":\n";
-	    		}
-        		else if(parseResult.type == CodeParser.CT_OPERATION)
-        		{
-        			node.toolTip = LanguageManager.sentences.operation_command+":\n";
-	    		}	    		
-        		else if(parseResult.type == CodeParser.CT_FUNCTION)
-        		{
-        			node.toolTip = LanguageManager.sentences.function_command+":\n";
-	    		}
-	    		
+        			case CodeParser.CT_TEST:
+	        			node.toolTip = LanguageManager.sentences.test_command;
+        				break;
+        				 
+        			case CodeParser.CT_OPERATION:
+	        			node.toolTip = LanguageManager.sentences.operation_command;
+        				break;
+
+        			case CodeParser.CT_FUNCTION:
+	        			node.toolTip = LanguageManager.sentences.function_command;
+        				break;
+        		}
+        			
 	    		if(parseResult.result==false)
 	    		{
 	    			results.push(new ValidationResult(true, null, "invalidCommand", 
                     	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_command_node_syntax_error)));
        			}
-        		node.toolTip += node.text;
+        		//node.toolTip += node.text;
         	}
         	
             if(parseResult && parseResult.lexem)
@@ -133,6 +135,8 @@ package PowerPack.com.validators
             
             if(!Utils.isEqualArrays(node.arrTrans, arrTrans))
 	   			node.arrTrans = arrTrans;
+   			
+   			node.parsedNode = parseResult as ParsedNode;
    			
             return results;
         }

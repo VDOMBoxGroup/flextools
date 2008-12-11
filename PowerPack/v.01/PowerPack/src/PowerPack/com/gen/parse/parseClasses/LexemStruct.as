@@ -21,6 +21,6 @@ public class LexemStruct
 		this.error = error;
 		this.operationGroup = 0;
 		this.listGroup = 0;
-	}		
+	}
 }
 }

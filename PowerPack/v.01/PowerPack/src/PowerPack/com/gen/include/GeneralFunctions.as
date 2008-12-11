@@ -12,6 +12,7 @@ import flash.filesystem.File;
 import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
+import mx.core.Application;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.utils.Base64Encoder;
@@ -55,7 +56,7 @@ private function _enterSubgraph(subgraph:GraphStruct, prefix:String, params:Arra
 		
 	graphContext.varPrefix = prefix;
 	
-	parsedNode.string = subgraph.name;
+	parsedNode.value = subgraph.name;
 	
 	GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
 	nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));
@@ -79,7 +80,7 @@ private function _enterSubgraph(subgraph:GraphStruct, prefix:String, params:Arra
 /**
  * question function section
  */		 
-public function _question(question:String, answers:String):void
+public function _question(question:String, answers:String):Function
 {
 	var array:Array = null;
 	var mode:int;
@@ -103,9 +104,11 @@ public function _question(question:String, answers:String):void
 	}
 							
 	Question.show(question, "", mode, array, filter, null, questionCloseHandler);
-			
+	
+	return questionCloseHandler;
+	
 	function questionCloseHandler(event:Event):void {
-		parsedNode.string = event.target.strAnswer;		
+		parsedNode.value = event.target.strAnswer;		
 		Application.application.callLater(generate);	
 	}	
 }
@@ -150,7 +153,7 @@ public function _convert(type:String, value:Object):void
 	}
 	
 	function convertComplete(value:String):void {
-		parsedNode.string = value;		
+		parsedNode.value = value;		
 		Application.application.callLater(generate);
 	}
 }
@@ -275,7 +278,7 @@ public function _loadDataFrom(filename:String):void
 
 	function onFileStreamError(event:IOErrorEvent):void {
 		//throw new BasicError("IOError exception occurs");
-		parsedNode.string = null;
+		parsedNode.value = null;
 		parsedNode.transition = 'false';
 		
 		Application.application.callLater(generate);	
@@ -284,7 +287,7 @@ public function _loadDataFrom(filename:String):void
 	function onFileLoaded(event:Event):void {
 		var fileStream:FileStream = event.target as FileStream;
 		var bytes:ByteArray = new ByteArray();
-		parsedNode.string = fileStream.readUTFBytes(fileStream.bytesAvailable);
+		parsedNode.value = fileStream.readUTFBytes(fileStream.bytesAvailable);
 		parsedNode.transition = 'true';
 		
 		Application.application.callLater(generate);

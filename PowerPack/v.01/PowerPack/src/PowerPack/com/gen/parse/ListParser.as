@@ -793,7 +793,7 @@ public class ListParser
 			throw listObj.error;
 		}
 	
-		len = listObj.string.length-2;
+		len = listObj.value.length-2;
 		arr = new ArrayCollection(listObj.array);
 	
 		_position = processElmPosition(list, position, operation); 
@@ -865,7 +865,7 @@ public class ListParser
 			ret = StringUtil.trim(ret);
 			
 			/*
-			if(listObj.string.charAt(_position+1)=='A' || Parser.processList( ret ).result)
+			if(listObj.value.charAt(_position+1)=='A' || Parser.processList( ret ).result)
 			{
 				ret = StringUtil.trim(ret);
 			}
@@ -873,7 +873,7 @@ public class ListParser
 		}
 		else if(operation=="getType")
 		{
-			switch((listObj.string as String).charAt(_position+1))
+			switch((listObj.value as String).charAt(_position+1))
 			{
 				case 'n':
 				case 'o':
@@ -909,7 +909,7 @@ public class ListParser
 		var listObj:Object = Parser.processList(list);
 			
 		if(listObj.result)
-			length = listObj.string.length-2;
+			length = listObj.value.length-2;
 		else
 			length = list.length	
 		

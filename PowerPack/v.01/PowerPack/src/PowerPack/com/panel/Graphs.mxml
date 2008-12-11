@@ -383,6 +383,7 @@
 					
 					ProgressManager.complete();
 					
+					dispatchEvent(new Event("populateComplete"));
 					dispatchEvent(new Event(TPL_CHANGED));
 				}
 			}

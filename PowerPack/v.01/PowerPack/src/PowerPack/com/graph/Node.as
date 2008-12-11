@@ -8,6 +8,7 @@ import ExtendedAPI.com.utils.ObjectUtils;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.Template;
+import PowerPack.com.gen.ParsedNode;
 import PowerPack.com.managers.CashManager;
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
@@ -309,6 +310,8 @@ public class Node extends Canvas
     
     [Bindable]
     public var arrTrans:Array = [];
+    
+    public var parsedNode:ParsedNode;
     
 	[ArrayElementType("ToolTip")]
     public var arrToolTip:Array = [];
@@ -727,6 +730,61 @@ public class Node extends Canvas
         
         var _needValidate:Boolean = false;
         
+        if (_typeChanged || _needRefreshStyles)
+        {
+            clearStyle("borderColor");
+            
+            switch(type)
+            {
+            	case NodeType.INITIAL:
+            		setStyle( "borderColor", 0x00ff00);	
+	            	break;
+
+            	case NodeType.TERMINAL:
+            		setStyle( "borderColor", 0x0000ff);	
+	            	break;
+
+            	case NodeType.NORMAL:
+            	default:
+            		setStyle( "borderColor", 0xE2E2E2);	
+	            	break;
+            }
+    		invalidateDisplayList();
+        }
+
+        if (_categoryChanged || _needRefreshStyles)
+        {
+            nodeTextArea.clearStyle("borderColor");
+            nodeTextArea.clearStyle("backgroundColor");
+            nodeTextArea.clearStyle("color");
+            
+            switch(category)
+            {
+            	case NodeCategory.RESOURCE:
+            		break;            		            	
+
+            	case NodeCategory.SUBGRAPH:
+            		nodeTextArea.setStyle( "borderColor",  0x000000);
+            		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
+            		nodeTextArea.setStyle( "color",  0x000000);
+            		break;	            	
+
+            	case NodeCategory.COMMAND:
+            		nodeTextArea.setStyle( "borderColor",  0x000000);
+            		nodeTextArea.setStyle( "backgroundColor",  0x004e98);
+            		nodeTextArea.setStyle( "color",  0xffff00);
+            		break;
+            		        		
+            	case NodeCategory.NORMAL:
+            	default:
+            		nodeTextArea.setStyle( "borderColor",  0x000000);
+            		nodeTextArea.setStyle( "backgroundColor",  0xffffff);
+            		nodeTextArea.setStyle( "color",  0x000000);
+            		break;            
+            }          
+    		invalidateDisplayList();
+        }	
+                
         if (_textChanged)
         {
         	_needValidate = true;
@@ -735,18 +793,18 @@ public class Node extends Canvas
             if(nodeTextArea.text != text)
            		nodeTextArea.text = text;
             
+            parsedNode = null;
+            
             invalidateSize();
     		invalidateDisplayList();
         }
                 
-        if (_categoryChanged || _needRefreshStyles)
+        if (_categoryChanged)
         {
-        	_needValidate = true;
             _categoryChanged = false;
-            
-            nodeTextArea.clearStyle("borderColor");
-            nodeTextArea.clearStyle("backgroundColor");
-            nodeTextArea.clearStyle("color");
+        	_needValidate = true;
+
+            parsedNode = null;
             
             switch(category)
             {
@@ -796,10 +854,6 @@ public class Node extends Canvas
 					nodeTextArea.visible = true;
 					nodeTextArea.includeInLayout = true;
 
-            		nodeTextArea.setStyle( "borderColor",  0x000000);
-            		nodeTextArea.setStyle( "backgroundColor",  0xffff00);
-            		nodeTextArea.setStyle( "color",  0x000000);
-
             		if(contextMenu)
 	            		contextMenu.getItemByName("subgraph").checked = true;
             		break;	            	
@@ -811,10 +865,6 @@ public class Node extends Canvas
 
 					nodeTextArea.visible = true;
 					nodeTextArea.includeInLayout = true;
-
-            		nodeTextArea.setStyle( "borderColor",  0x000000);
-            		nodeTextArea.setStyle( "backgroundColor",  0x004e98);
-            		nodeTextArea.setStyle( "color",  0xffff00);
 
             		if(contextMenu)
 	            		contextMenu.getItemByName("command").checked = true;
@@ -830,9 +880,6 @@ public class Node extends Canvas
 					nodeTextArea.includeInLayout = true;
 
             		_category = NodeCategory.NORMAL;
-            		nodeTextArea.setStyle( "borderColor",  0x000000);
-            		nodeTextArea.setStyle( "backgroundColor",  0xffffff);
-            		nodeTextArea.setStyle( "color",  0x000000);
 
             		if(contextMenu)
 	            		contextMenu.getItemByName("normal").checked = true;
@@ -868,33 +915,25 @@ public class Node extends Canvas
     		invalidateDisplayList();
         }
 
-        if (_typeChanged || _needRefreshStyles)
+        if (_typeChanged)
         {
             _typeChanged = false;
 
-            clearStyle("borderColor");
-            
             switch(type)
             {
             	case NodeType.INITIAL:
-            	
-            		setStyle( "borderColor", 0x00ff00);	
             		if(contextMenu)
 	            		contextMenu.getItemByName("initial").checked = true;
 	            	break;
 
             	case NodeType.TERMINAL:
-            	
-            		setStyle( "borderColor", 0x0000ff);	
             		if(contextMenu)
 	            		contextMenu.getItemByName("terminal").checked = true;
 	            	break;
 
             	case NodeType.NORMAL:
             	default:
-            	
             		_type = NodeType.NORMAL;
-            		setStyle( "borderColor", 0xE2E2E2);	
             		if(contextMenu)
             		{
 	            		contextMenu.getItemByName("initial").checked = false;
@@ -1091,7 +1130,7 @@ public class Node extends Canvas
 		newNode.x = x;
 		newNode.y = y;
 		newNode.arrTrans = ObjectUtils.baseClone(arrTrans);
-		return newNode;		
+		return newNode;
 	}
 	
 	public function duplicate(target:Container):Node		

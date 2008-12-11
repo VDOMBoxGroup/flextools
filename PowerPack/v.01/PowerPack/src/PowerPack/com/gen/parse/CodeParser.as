@@ -23,19 +23,23 @@ public class CodeParser
 	 * @param context - instance of dynamic class
 	 * @return 	result: Boolean - valid or not
 	 * 			error: Error - error
-	 * 			string: String - parsed string 
+	 * 			value: String - parsed string 
 	 * 			print: Boolean - print result to output buffer
 	 * 
 	 */
 	public static function ParseText(	text:String, 
-										contexts:Array=null ):Object
+										contexts:Array=null ):ParsedNode
 	{
 		var pattern:RegExp;
 		var str:String = text.concat();
-		var retVal:Object = {result:false, error:null, string:null, print:true};
-
+		var retVal:ParsedNode = new ParsedNode(); 
+		
+		retVal.result = false;
+		retVal.print = true;
+		
   		var lexems:Array = Parser.getLexemArray(str, false);
   		lexems = Parser.convertLexemArray(lexems);
+		retVal.lexems = lexems; 
 		
     	for(var i:int=0; i<lexems.length; i++)
     	{
@@ -43,6 +47,7 @@ public class CodeParser
     		{
 				retVal.result = false;
 				retVal.error = lexems[i].error;
+				retVal.lexem = lexems[i];
 				return retVal;
     		}
     	}
@@ -54,7 +59,7 @@ public class CodeParser
 			var lexemObj:Object = Parser.processConvertedLexemArray(lexems, contexts);
 			retVal.result = lexemObj.result;
 			retVal.error = lexemObj.error;
-			retVal.string = lexemObj.string;				
+			retVal.value = lexemObj.value;				
 			lexems = lexemObj.array;
 
 			if(!retVal.result)
@@ -86,11 +91,11 @@ public class CodeParser
 			}
         	
         	retVal.result = true;	
-			retVal.string = buffer;
+			retVal.value = buffer;
 			return retVal;
 		}
 		
-		retVal.string = text;
+		retVal.value = text;
 		retVal.result = true;
        	return retVal;
 	}
@@ -100,14 +105,14 @@ public class CodeParser
 	 * @param _nodeText
 	 * @return 	result: Boolean - valid or not
 	 * 			error: Error - error
-	 * 			string: String - parsed string
+	 * 			value: String - parsed string
 	 * 
 	 */
 	public static function ParseSubgraphNode( nodeText:String ):Object
 	{
 		var pattern:RegExp;
 		var str:String = nodeText.concat();
-		var retVal:Object = {result:false, error:null, string:null, print:false};
+		var retVal:Object = {result:false, error:null, value:null, print:false};
 		
     	pattern = /[\W]/gi;
 		
@@ -119,7 +124,7 @@ public class CodeParser
    		}
 		
 		retVal.result = true;
-		retVal.string = str;
+		retVal.value = str;
 		
        	return retVal;
 	}
@@ -131,7 +136,7 @@ public class CodeParser
 	 * @param context - instance of dynamic class
 	 * @return 	result: Boolean - valid or not
 	 * 			error: Error - error
-	 * 			string: String
+	 * 			value: String
 	 * 			type: String - command type (operation, test or function)
 	 * 			program: String - executable as3 script
 	 * 
@@ -150,7 +155,7 @@ public class CodeParser
 		var retVal:Object = new Object();
 		
 		retVal.result = false;
-		retVal.string = null;
+		retVal.value = null;
 		retVal.type = null;
 		retVal.program = null;
 		retVal.error = null;
@@ -204,7 +209,7 @@ public class CodeParser
 
 		// parse operations
 		obj = Parser.isValidCommand(strSentence);
-		strSentence = obj.string;
+		strSentence = obj.value;
 		
 		if(obj.result)
 		{
@@ -217,7 +222,7 @@ public class CodeParser
 		if(!retVal.type)
 		{
 			obj = Parser.isValidTest(strSentence);
-			strSentence = obj.string;			
+			strSentence = obj.value;			
 			
 			if(obj.result)
 			{
@@ -232,7 +237,7 @@ public class CodeParser
 		if(!retVal.type)
 		{
 			obj = Parser.isValidFunction(strSentence);
-			strSentence = obj.string;			
+			strSentence = obj.value;			
 			
 			if(obj.result)
 			{
@@ -315,13 +320,13 @@ public class CodeParser
 				}
 				else if(bFunctionCommand) // function
 				{
-					retVal.program = func.string;
+					retVal.program = func.value;
 				}
 				
 				var evalRes:* = Parser.eval(retVal.program, contexts);
 				
 				if(evalRes!=null)
-					retVal.string = evalRes; 					
+					retVal.value = evalRes; 					
 			}
 		}
 		

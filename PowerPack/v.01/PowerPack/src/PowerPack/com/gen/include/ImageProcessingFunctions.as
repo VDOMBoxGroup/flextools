@@ -92,7 +92,7 @@ public function _loadImage(filename:String):void
 		bitmapData.draw( content );
 		var bitmap:Bitmap = new Bitmap(bitmapData);
 		
-		parsedNode.string = bitmap;
+		parsedNode.value = bitmap;
 		
 		Application.application.callLater(generate);
 	}

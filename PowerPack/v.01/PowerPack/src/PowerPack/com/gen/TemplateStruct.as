@@ -13,6 +13,7 @@ import PowerPack.com.managers.CashManager;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
+import flash.filesystem.File;
 import flash.utils.ByteArray;
 
 import mx.core.Application;
@@ -26,6 +27,7 @@ public class TemplateStruct extends EventDispatcher
 	include "include/ImageProcessingFunctions.as";
 
 	public static const MSG_PARSE_ERR:String = "Runtime error.\nGraph: {0}\nState: {1}";
+	public static var lib:Dynamic;
 	
 	private var tplStructXML:XML;
 	private var ID:String;
@@ -143,6 +145,18 @@ public class TemplateStruct extends EventDispatcher
 		arrows = _arrows;
 		
 		init();
+	}
+	
+	public static function loadLib():void
+	{
+		lib = new Dynamic(); 
+		var libFolder:File = File.applicationDirectory.resolvePath('libs');
+		
+		if(!libFolder.exists)
+			return;
+			
+		
+		
 	}
 	
 	public function validate(options:uint=0):Object
@@ -576,7 +590,7 @@ public class TemplateStruct extends EventDispatcher
 								var resData:ByteArray = CashManager.getObject(ID, GraphContext(contextStack[contextStack.length-1]).curNode.text).data;
 								parsedNode.result = true;
 								parsedNode.print = true;
-								parsedNode.string = resData.readUTFBytes(resData.length);
+								parsedNode.value = resData.readUTFBytes(resData.length);
 								break;
 						}					
 					}
@@ -601,16 +615,16 @@ public class TemplateStruct extends EventDispatcher
 						}			
 						else
 						{
-							if(parsedNode.print && parsedNode.string)
+							if(parsedNode.print && parsedNode.value)
 								GraphContext(contextStack[contextStack.length-1]).buffer += 
-									parsedNode.string + 
+									parsedNode.value + 
 									" ";
 							
 							if(parsedNode.variable!=null)
-								context[parsedNode.variable] = parsedNode.string;
+								context[parsedNode.variable] = parsedNode.value;
 	
 							if(parsedNode.type==CodeParser.CT_TEST)
-								transition = parsedNode.string;							
+								transition = parsedNode.value;							
 							else if(parsedNode.transition)
 								transition = parsedNode.transition;
 						}
@@ -654,7 +668,7 @@ public class TemplateStruct extends EventDispatcher
 						contextStack.pop();
 						
 						if(contextStack.length>0) {
-							GraphContext(contextStack[contextStack.length-1]).curNode.parsedNode.string = 
+							GraphContext(contextStack[contextStack.length-1]).curNode.parsedNode.value = 
 								tmpBuf;
 							
 							GraphContext(contextStack[contextStack.length-1]).curNode.parsedNode.print = tmpPrint;

@@ -30,7 +30,7 @@ package PowerPack.com.importation
 		
 		public var typesXML:XML;
 
-		public var objNames:Object = {
+		public var typeNameMap:Object = {
 			'bar':'Bar',
 			'bgmusic':'BgMusic',
 			'button':'Button',
@@ -711,7 +711,7 @@ package PowerPack.com.importation
 				{
 					var newGraph:GraphCanvas = new GraphCanvas();
 					newGraph.category = 'objects';
-					newGraph.name = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
+					newGraph.name = typeNameMap[type.Information.Name] ? typeNameMap[type.Information.Name] : type.Information.Name;
 		
 					var xOffset:Number = 10;
 					var yOffset:Number = 10;
@@ -753,7 +753,7 @@ package PowerPack.com.importation
 				for each (var obj:XML in objs.Object)
 				{
 					var type:XML = getType(obj.@Type);
-					var objGraphName:String = type ? (objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name) : obj.@Type;
+					var objGraphName:String = type ? (typeNameMap[type.Information.Name] ? typeNameMap[type.Information.Name] : type.Information.Name) : obj.@Type;
 					 
 					/*
 					if(type && int(type.Information.Container) == 1)
@@ -929,7 +929,7 @@ package PowerPack.com.importation
 				for each (var obj:XML in objs.Object)
 				{
 					var type:XML = getType(obj.@Type);
-					var objGraphName:String = objNames[type.Information.Name] ? objNames[type.Information.Name] : type.Information.Name;
+					var objGraphName:String = typeNameMap[type.Information.Name] ? typeNameMap[type.Information.Name] : type.Information.Name;
 					 
 					/*
 					if(int(type.Information.Container) == 1)
