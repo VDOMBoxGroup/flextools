@@ -85,7 +85,6 @@
 			<arg value="${application.descriptor}" />
 			<arg value="icons" />
 			<arg value="libs/tinymce" />
-			<arg value="libs/template.html" />
 			<arg value="-C" />
 			<arg value="${build.dir}" />
 			<arg value="${application.file}" />
