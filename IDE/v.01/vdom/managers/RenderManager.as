@@ -117,6 +117,9 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function createItem(itemId:String, parentId:String = ""):void
 	{
+		if( !applicationId )
+			return;
+		
 		if(!parentId) {
 			
 			rootContainer.removeAllChildren();
@@ -130,16 +133,22 @@ public class RenderManager implements IEventDispatcher {
 	
 	public function updateItem(itemId:String/* , parentId:String */):void
 	{
+		if( !applicationId )
+			return;
+		
 		var itemDescription:ItemDescription = getItemDescriptionById(itemId);
 		lastKey = soap.render_wysiwyg(applicationId, itemId, itemDescription.parentId, 0);
 	}
 	
 	public function deleteItem(itemId:String):void
 	{
+		if( !applicationId )
+			return;
+		
 		items.filterFunction = 
 			function (item:Object):Boolean {
 				return (item.fullPath.indexOf(itemId) != -1);
-		}
+			}
 		
 		items.refresh();
 		

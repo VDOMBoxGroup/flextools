@@ -231,7 +231,7 @@ private function recalculateSize() : void
 	
 	//var newHeight : Number = elementForEditing.contentDocument.documentElement.offsetHeight;
 	
-	if( editableHTML.height != hght && hght > 10 )
+	if( Math.abs( editableHTML.height - hght ) > 16 && hght > 10 )
 	{	
 		editableHTML.height = hght;
 		Container( selectedItem ).invalidateSize();

@@ -52,7 +52,7 @@ public class EditableText extends TextArea
 	
 	private function zzz(event:Event):void
 	{
-		explicitHeight = textField.measuredHeight + 10;
+		explicitHeight = textField.measuredHeight + 15;
 	}
 	
 	private function recalculateSize():void

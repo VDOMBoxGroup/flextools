@@ -1,6 +1,8 @@
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
+import mx.events.FlexEvent;
+
 import vdom.events.DataManagerEvent;
 import vdom.managers.AlertManager;
 import vdom.managers.AuthenticationManager;
