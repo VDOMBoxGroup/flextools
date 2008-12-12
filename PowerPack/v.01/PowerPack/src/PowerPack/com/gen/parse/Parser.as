@@ -908,8 +908,6 @@ public class Parser
 									(lexems[i].type=='n' ? "{type:'n', value:"+Utils.quotes(lexems[i].value)+"}" : 
 										lexems[i].type=='A'? Utils.quotes(lexems[i].value) : lexems[i].value);
 				
-				//retVal.value = retVal.func + "(" + String(retVal.value) + ")";
-				
 				retVal.value = TemplateStruct.CNTXT_INSTANCE + "." + 
 					retVal.func + "(" + String(retVal.value) + ")";
 			}

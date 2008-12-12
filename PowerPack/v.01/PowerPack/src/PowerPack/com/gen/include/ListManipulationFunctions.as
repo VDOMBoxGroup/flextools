@@ -1,4 +1,6 @@
 // ActionScript file
+import PowerPack.com.gen.ParsedNode;
+import PowerPack.com.gen.parse.CodeParser;
 import PowerPack.com.gen.parse.ListParser;
 import PowerPack.com.gen.parse.Parser;
 
@@ -152,11 +154,10 @@ public function _execute(list:String):*
 {
 	var contexts:Array = [context, GraphContext(contextStack[contextStack.length-1]).context];
 	
-	var parsedList:Object = CodeParser.ParseCode(
-		list,
-		GraphContext(contextStack[contextStack.length-1]).varPrefix,
-		contexts);
-							
+	var parsedList:ParsedNode = CodeParser.ParseCode(list);
+	
+	CodeParser.executeCode(parsedList, 0, contexts, GraphContext(contextStack[contextStack.length-1]).varPrefix); 
+	
 	if(!parsedList.result) {								
 		throw parsedList.error;
 	}

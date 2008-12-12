@@ -818,7 +818,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
      	}
 	}	
 	
-	public function getVisibleRect():Rectangle
+	public function _getVisibleRect():Rectangle
 	{
 		if(!parent || !fromPoint || !toPoint)
 			return null; 
@@ -864,7 +864,7 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		if(label)
 			cbChoise.selectedItem = label;
 		
-		var visibleRect:Rectangle = getVisibleRect();
+		var visibleRect:Rectangle = _getVisibleRect();
 		var point:Point; 
 		
 		if(atCursorPosition)
