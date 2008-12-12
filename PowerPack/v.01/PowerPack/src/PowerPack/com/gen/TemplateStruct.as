@@ -482,7 +482,7 @@ public class TemplateStruct extends EventDispatcher
 		
 		if(isRunning)
 		{				
-			Application.application.callLater(generate, [force, over, ret]);
+			//Application.application.callLater(generate, [force, over, ret]);
 			return null;
 		}
 		isRunning = true;
@@ -543,7 +543,7 @@ public class TemplateStruct extends EventDispatcher
 					
 					if(GraphContext(contextStack[contextStack.length-1]).curNode.enabled)
 					{
-						parsedNode = new Object();
+						parsedNode = new ParsedNode();
 	
 						switch(GraphContext(contextStack[contextStack.length-1]).curNode.category)
 						{
@@ -553,7 +553,14 @@ public class TemplateStruct extends EventDispatcher
 									GraphContext(contextStack[contextStack.length-1]).curNode.text,
 									[context, GraphContext(contextStack[contextStack.length-1]).context] );	
 								break;
-								
+
+							case NodeCategory.RESOURCE:
+								var resData:ByteArray = CashManager.getObject(ID, GraphContext(contextStack[contextStack.length-1]).curNode.text).data;
+								parsedNode.result = true;
+								parsedNode.print = true;
+								parsedNode.value = resData.readUTFBytes(resData.length);
+								break;
+																
 							case NodeCategory.SUBGRAPH:
 							
 								var subgraph:GraphStruct;
@@ -610,12 +617,6 @@ public class TemplateStruct extends EventDispatcher
 								
 								break;
 
-							case NodeCategory.RESOURCE:
-								var resData:ByteArray = CashManager.getObject(ID, GraphContext(contextStack[contextStack.length-1]).curNode.text).data;
-								parsedNode.result = true;
-								parsedNode.print = true;
-								parsedNode.value = resData.readUTFBytes(resData.length);
-								break;
 						}					
 					}
 									
