@@ -47,7 +47,7 @@
 			title="{resourceManager.getString('Edit','attributes_title')}"
 			acceptLabel="{resourceManager.getString('Edit','attributes_save')}" 
 			deleteLabel="{resourceManager.getString('Edit','attributes_delete')}"
-			width="100%" headerHeight="30" height="250" minHeight="30" />
+			width="100%" headerHeight="30" height="250" minHeight="38" />
 		
 		<containers:ClosablePanel id="helpPanel" 
 			title="{resourceManager.getString('Edit','help_title')}"

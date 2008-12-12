@@ -565,11 +565,11 @@ public class WorkArea extends VBox
 			newAttributes[name] = event.properties[name];
 		}
 		
-		if( _objectId != currentObjectId )
+		if( _objectId != currentObjectId || !changeFlag )
 		{
 			applyChanges( currentObjectId, newAttributes );
 			return;
-		}
+		} 
 		
 		if( _contentToolbar && DisplayObject( _contentToolbar ).parent )
 			currentToolBar = _contentToolbar;

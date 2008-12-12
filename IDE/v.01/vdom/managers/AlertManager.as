@@ -11,9 +11,8 @@ import mx.managers.PopUpManager;
 
 import vdom.MyLoader;
 	
-	
-public class AlertManager implements IEventDispatcher {
-	
+public class AlertManager implements IEventDispatcher
+{	
 	private static var instance:AlertManager;
 	
 	private var alertWindow:MyLoader = new MyLoader();
