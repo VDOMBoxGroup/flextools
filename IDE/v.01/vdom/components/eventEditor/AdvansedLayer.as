@@ -2,6 +2,7 @@
 package vdom.components.eventEditor
 {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
 	import mx.controls.HRule;
@@ -11,6 +12,9 @@ package vdom.components.eventEditor
 	import mx.controls.VRule;
 	import mx.events.ValidationResultEvent;
 	import mx.validators.RegExpValidator;
+	
+	import vdom.controls.multiLine.MultiLineWindow;
+	import vdom.events.MultiLineWindowEvent;
 
 	public class AdvansedLayer extends Canvas
 	{
@@ -27,6 +31,8 @@ package vdom.components.eventEditor
 			super();
 			
 			this.typeName = typeName;
+			
+			addEventListener('apply', multiLineCompleteHandler);
 		//	this.height = 40;
 			
 			_scriptName = inXML.@ScriptName;
@@ -66,6 +72,7 @@ package vdom.components.eventEditor
 				inputText.setStyle("fontSize", '8');
 				inputText.setStyle("fontWeight", 'bold');
 				inputText.setStyle("textAlign", 'center');
+				inputText.addEventListener(MouseEvent.CLICK, showMultilineWindow);
 
 			addChild(inputText);
 				
@@ -84,7 +91,17 @@ package vdom.components.eventEditor
 				regExpValidator.trigger = inputText;
 				regExpValidator.addEventListener(ValidationResultEvent.VALID, validHandler);
 				regExpValidator.noMatchError =getLanguagePhraseId(inXML.@Help);
-				regExpValidator.triggerEvent = Event.CHANGE;
+				regExpValidator.triggerEvent = 'textChanged';
+		}
+		
+		private function showMultilineWindow(msEvt:MouseEvent):void
+		{
+			MultiLineWindow.show_window('Title', inputText.text , this, true);
+		}
+		
+		private function multiLineCompleteHandler(mlEvt:MultiLineWindowEvent):void
+		{
+			inputText.text = mlEvt.value;
 		}
 		
 		

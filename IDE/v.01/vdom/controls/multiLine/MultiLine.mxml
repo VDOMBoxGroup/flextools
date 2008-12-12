@@ -38,9 +38,10 @@ private function openWindow():void {
 private function completeHandler(event:MultiLineWindowEvent):void {
 	
 	_value = event.value;
-	dispatchEvent( new FlexEvent( FlexEvent.VALUE_COMMIT ) );
+	dispatchEvent( new FlexEvent( FlexEvent.VALUE_COMMIT ));
 	//lbl.text = _value;
 }
+
 override public function validationResultHandler( event : ValidationResultEvent ) : void
 {
 	super.validationResultHandler( event );

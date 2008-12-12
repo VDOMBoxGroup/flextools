@@ -291,8 +291,8 @@
 	        	  	can.addChild(eventsArray[newElement.ID] ); 
 	        	  }
 	        	
-	        	newElement.x = event.localX;
-	        	newElement.y = event.localY;
+	        	newElement.x = can.horizontalScrollPosition + event.localX;
+	        	newElement.y = can.verticalScrollPosition + event.localY;
 	        	
 	        	markButton();
 	        	
