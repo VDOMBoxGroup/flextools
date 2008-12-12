@@ -85,8 +85,9 @@ package vdom.components.eventEditor
 			var regExpValidator:RegExpValidator = new RegExpValidator();
 				regExpValidator.source = inputText;
 				regExpValidator.property = 'text';
-			//	regExpValidator.flags = "g";
-			//	regExpValidator.
+				
+				regExpValidator.flags = "ms";
+//				regExpValidator.flags  RegExp
 				regExpValidator.expression = inXML.@RegularExpressionValidation;// "[0-9]+";
 				regExpValidator.trigger = inputText;
 				regExpValidator.addEventListener(ValidationResultEvent.VALID, validHandler);
