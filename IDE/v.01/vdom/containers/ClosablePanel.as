@@ -3,6 +3,8 @@ package vdom.containers
 
 import flash.events.MouseEvent;
 
+import mx.containers.HDividedBox;
+HDividedBox
 import mx.containers.Panel;
 import mx.controls.Button;
 import mx.core.EdgeMetrics;
@@ -16,6 +18,7 @@ public class ClosablePanel extends Panel
 	private var _collapse : Boolean;
 	private var _dataProvider : Object;
 	private var oldHeight : Number;
+	private var oldPercentHeight : Number;
 	
 	public function ClosablePanel()
 	{
@@ -38,22 +41,15 @@ public class ClosablePanel extends Panel
 	
 	public function set collapse( value : Boolean ) : void
 	{
+//		if( value == _collapse )
+//			return;
+		
 		if( value ) 
 		{
 			collapseButton.setStyle( "upSkin", getStyle( "CollapseButtonOffButtonUp" ) );
 			collapseButton.setStyle( "downSkin", getStyle( "CollapseButtonOffButtonDown" ) );
 			collapseButton.setStyle( "overSkin", getStyle( "CollapseButtonOffButtonOver" ) );
 			collapseButton.setStyle( "disabledSkin", getStyle( "CollapseButtonOffButtonDisabled" ) );
-			
-			if( height > titleBar.height )
-			{
-				if( percentHeight )
-					oldHeight = percentHeight;
-				else
-					oldHeight = parent.height / height * 100;
-			}
-			
-			height = getStyle( "headerHeight" );
 		}
 		else 
 		{
@@ -61,7 +57,6 @@ public class ClosablePanel extends Panel
 			collapseButton.setStyle( "downSkin", getStyle( "CollapseButtonOnButtonDown" ) );
 			collapseButton.setStyle( "overSkin", getStyle( "CollapseButtonOnButtonOver" ) );
 			collapseButton.setStyle( "disabledSkin", getStyle( "CollapseButtonOnButtonDisabled" ) );
-			//height = NaN;
 		}
 		_collapse = value;
 	}
@@ -112,10 +107,21 @@ public class ClosablePanel extends Panel
 			( titleBar.height -
 			collapseButton.getExplicitOrMeasuredHeight()) / 2 );
 		
-		if( unscaledHeight <= titleBar.height && !_collapse )
-			collapse = true;
-		else if( unscaledHeight > titleBar.height && _collapse )
+		if( unscaledHeight > titleBar.height)
+		{			
+			if( isNaN( percentHeight ) )
+				oldHeight = unscaledHeight;
+			else
+				oldPercentHeight = percentHeight;
+			
 			collapse = false;
+		}
+		else
+		{
+			if( height != titleBar.height )
+				height = titleBar.height;
+			collapse = true;
+		}
 	}
 	
 	private function collapseButton_clickHandler( event : MouseEvent ) : void 
@@ -131,12 +137,14 @@ public class ClosablePanel extends Panel
 	{
 		if( !event.collapse )
 		{
-			collapse = false;
-			percentHeight =  oldHeight;
+			if( !oldPercentHeight )
+				height = oldHeight;
+			else
+				percentHeight = oldPercentHeight;
 		}
 		else
 		{
-			collapse = true;
+			height = titleBar.height;
 		}
 			
 	}
