@@ -1,30 +1,30 @@
 package PowerPack.com.gen.parse
 {
-	import ExtendedAPI.com.utils.Utils;
-	
-	import GraphicAPI.drawing.BrushPatternStyle;
-	import GraphicAPI.drawing.PStroke;
-	import GraphicAPI.drawing.StrokePatternStyle;
-	
-	import PowerPack.com.gen.errorClasses.RunTimeError;
-	import PowerPack.com.gen.parse.parseClasses.LexemStruct;
-	
-	import flash.display.GradientType;
-	import flash.display.SpreadMethod;
-	import flash.filters.BevelFilter;
-	import flash.filters.BlurFilter;
-	import flash.filters.ColorMatrixFilter;
-	import flash.filters.ConvolutionFilter;
-	import flash.filters.DisplacementMapFilter;
-	import flash.filters.DropShadowFilter;
-	import flash.filters.GlowFilter;
-	import flash.filters.GradientBevelFilter;
-	import flash.filters.GradientGlowFilter;
-	import flash.geom.Point;
-	import flash.text.TextFormat;
-	
-	import mx.collections.ArrayCollection;
-	import mx.utils.StringUtil;
+import ExtendedAPI.com.utils.Utils;
+
+import GraphicAPI.drawing.BrushPatternStyle;
+import GraphicAPI.drawing.PStroke;
+import GraphicAPI.drawing.StrokePatternStyle;
+
+import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.parse.parseClasses.LexemStruct;
+
+import flash.display.GradientType;
+import flash.display.SpreadMethod;
+import flash.filters.BevelFilter;
+import flash.filters.BlurFilter;
+import flash.filters.ColorMatrixFilter;
+import flash.filters.ConvolutionFilter;
+import flash.filters.DisplacementMapFilter;
+import flash.filters.DropShadowFilter;
+import flash.filters.GlowFilter;
+import flash.filters.GradientBevelFilter;
+import flash.filters.GradientGlowFilter;
+import flash.geom.Point;
+import flash.text.TextFormat;
+
+import mx.collections.ArrayCollection;
+import mx.utils.StringUtil;
 	
 	
 public class ListParser

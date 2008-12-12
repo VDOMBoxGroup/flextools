@@ -30,7 +30,7 @@ public class TemplateStruct extends EventDispatcher
 	include "include/ImageProcessingFunctions.as";
 
 	public static const MSG_PARSE_ERR:String = "Runtime error.\nGraph: {0}\nState: {1}";
-	public static var lib:Dynamic;
+	public static var lib:TemplateLib;
 	
 	private var tplStructXML:XML;
 	private var ID:String;
@@ -54,7 +54,7 @@ public class TemplateStruct extends EventDispatcher
 
 	public var nodeStack:Array = [];
 
-	public static const CNTXT_INSTANCE:String = "_template_" + UIDUtil.createUID().replace(/-/g, "_");
+	public static const CNTXT_INSTANCE:String = "_lib_" + UIDUtil.createUID().replace(/-/g, "_");
 	
 	public var context:Dynamic = new Dynamic();
 
@@ -152,27 +152,28 @@ public class TemplateStruct extends EventDispatcher
 	
 	public static function loadLib():void
 	{
-		lib = new Dynamic();
+		lib = new TemplateLib();
 		 
 		var libFolder:File = File.applicationDirectory.resolvePath('libs');
 		
 		if(!libFolder.exists)
 			return;		
 		
-		var generalLibs:Array = ['GeneralFunctions.as', 'GraphicFunctions.as', 'ImageProcessingFunctions.as', 'ListManipulationFunctions.as']
-		for each(var libFileName:String in generalLibs)
+		var libs:Array = libFolder.getDirectoryListing(); 
+		for each(var libFile:File in libs)
 		{
-			var libFile:File = libFolder.resolvePath(libFileName);
 			var stream:FileStream = new FileStream();
 			var strData:String;
 			
-			if(libFile.exists)
+			if(!libFile.isDirectory && !libFile.isPackage && !libFile.isSymbolicLink && libFile.exists &&
+				(libFile.extension=='as' || libFile.extension=='txt'))
 			{
 				stream.open(libFile, FileMode.READ);
 				strData = stream.readUTFBytes(stream.bytesAvailable);
     			stream.close();
     			D.setOutput(evalHandler);
-    			D.eval(strData, lib);			
+    			strData = strData + ';\n;' 
+    			D.eval(strData, lib);
 			}
 		}
 		
@@ -453,7 +454,7 @@ public class TemplateStruct extends EventDispatcher
 			contextStack.push(graphContext);			
 		}		
 		
-		context[CNTXT_INSTANCE] = this;
+		context[CNTXT_INSTANCE] = lib;
 	}
 	
 	public function clear():void

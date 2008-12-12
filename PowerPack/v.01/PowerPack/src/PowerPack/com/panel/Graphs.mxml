@@ -37,6 +37,8 @@
 
 	<mx:Script>
 		<![CDATA[
+			import ExtendedAPI.com.utils.ObjectUtils;
+			import ExtendedAPI.com.utils.Utils;
 			import mx.events.IndexChangedEvent;
 			import mx.events.FlexEvent;
 			import ExtendedAPI.com.containers.SuperAlert;
@@ -369,7 +371,18 @@
 
 					for each(var cat:XML in xml.categories.category)
 					{
-						createCategoryTab(cat.@name);
+						var exists:Boolean = false;
+						for each (var tab:AccordionChild in graphsAccordion.getChildren())
+						{
+							if(tab.label==cat.@name)
+							{
+								exists = true;						
+								break;
+							}
+						}						
+						
+						if(!exists)
+							createCategoryTab(cat.@name);
 					}			
 					
 					for each (var graphXML:XML in templateXML.elements("graph"))
@@ -399,7 +412,7 @@
 				for each (var tab:AccordionChild in graphsAccordion.getChildren())
 				{
 					var tabXML:XML = XML(<category/>);
-					tabXML.name = tab.label;
+					tabXML.@name = tab.label;
 					structXML.categories.appendChild(tabXML);
 				}
 								
@@ -536,7 +549,8 @@
 			{
 				var accordChild:AccordionChild = event.currentTarget as AccordionChild;
 				
-				if(accordChild.graphs && accordChild.graphs.length>0)
+				if(	accordChild.graphs && accordChild.graphs.length>0 ||
+					tabMap[accordChild] && ObjectUtils.dictLength(tabMap[accordChild])>0)
 				{	
 					SuperAlert.show(LanguageManager.sentences['msg_cannot_remove_nonempty_cat']);
 					event.preventDefault();					

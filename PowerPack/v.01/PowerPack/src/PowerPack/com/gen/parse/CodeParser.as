@@ -13,9 +13,11 @@ public class CodeParser
 	public static const MSG_CN_SYNTAX_ERR:String = "Command state syntax error.";
 	public static const MSG_CN_UNKNOWN_TYPE:String = "Unrecognized command state type.";
 	
-	public static const CT_OPERATION:int = 1;
-	public static const CT_TEST:int = 2;
-	public static const CT_FUNCTION:int = 3;		
+	public static const CT_OPERATION:String = 'operation';
+	public static const CT_TEST:String = 'test';
+	public static const CT_FUNCTION:String = 'function';
+	public static const CT_MULTI:String = 'multi';			
+	public static const CT_NONE:String = 'none';			
 	
 	/**
 	 * 
@@ -39,7 +41,7 @@ public class CodeParser
 		
   		var lexems:Array = Parser.getLexemArray(str, false);
   		lexems = Parser.convertLexemArray(lexems);
-		retVal.lexems = lexems; 
+		retVal.lexemsGroup = [lexems]; 
 		
     	for(var i:int=0; i<lexems.length; i++)
     	{
@@ -95,8 +97,9 @@ public class CodeParser
 			return retVal;
 		}
 		
-		retVal.value = text;
 		retVal.result = true;
+		retVal.value = text;
+
        	return retVal;
 	}
 	
@@ -108,11 +111,11 @@ public class CodeParser
 	 * 			value: String - parsed string
 	 * 
 	 */
-	public static function ParseSubgraphNode( nodeText:String ):Object
+	public static function ParseSubgraphNode( nodeText:String ):ParsedNode
 	{
 		var pattern:RegExp;
 		var str:String = nodeText.concat();
-		var retVal:Object = {result:false, error:null, value:null, print:false};
+		var retVal:ParsedNode = new ParsedNode();
 		
     	pattern = /[\W]/gi;
 		
@@ -146,31 +149,12 @@ public class CodeParser
 	 * 			array: Array - array of transition alternatives
 	 * 
 	 */
-	public static function ParseCode(	code:String, 
-										varPrefix:String = "",
-										contexts:Array = null ):Object
+	public static function ParseCode( code:String ):ParsedNode
 	{
 		var pattern:RegExp;
 		var str:String = code.concat();
-		var retVal:Object = new Object();
+		var retVal:ParsedNode = new ParsedNode();
 		
-		retVal.result = false;
-		retVal.value = null;
-		retVal.type = null;
-		retVal.program = null;
-		retVal.error = null;
-		retVal.lexem = null;
-		retVal.transition = null;
-		
-		retVal.print = false;
-		retVal.func = null;
-		retVal.variable = null;
-		retVal.array = null;
-
-		var bTestCommand:Boolean = false;
-   		var bOperationCommand:Boolean = false;
-   		var bFunctionCommand:Boolean = false;
-   			
    		/**
    		 * lexical analyzer
    		 */
@@ -188,154 +172,175 @@ public class CodeParser
     	}
 		
 		var lexemObj:Object = Parser.packLists(lexems);
-		retVal.result = lexemObj.result;
-		retVal.error = lexemObj.error;
-
-		if(!retVal.result)
+		if(!lexemObj.result)
+		{
+			retVal.result = lexemObj.result;
+			retVal.error = lexemObj.error;
 			return retVal;
+		}
 		
 		lexems = lexemObj.array;
 		Parser.processLexemArray(lexems);
   		lexems = Parser.convertLexemArray(lexems);
   	        		
+    	var lexemsArr:Array = Parser.sliceLexems(lexems);
+		retVal.lexemsGroup = lexemsArr;
+		retVal.vars = [];
+		retVal.funcs = [];
+		
    		/**
    		 * syntax analyzer 
    		 */
    		 
-   		var obj:Object;
-		var strSentence:String = "";       			
-		for(i=0; i<lexems.length; i++)
-			strSentence = strSentence + lexems[i].type;
-
-		// parse operations
-		obj = Parser.isValidCommand(strSentence);
-		strSentence = obj.value;
-		
-		if(obj.result)
-		{
-			bOperationCommand = true;
-			retVal.result = true;
-			retVal.type = CT_OPERATION;
-		}
-		
-		// parse test
-		if(!retVal.type)
-		{
-			obj = Parser.isValidTest(strSentence);
-			strSentence = obj.value;			
-			
-			if(obj.result)
-			{
-				bTestCommand = true;
-				retVal.result = true;
-				retVal.type = CT_TEST;
-				retVal.array = ["true", "false"];
-			}
-		}
-		
-		// parse function
-		if(!retVal.type)
-		{
-			obj = Parser.isValidFunction(strSentence);
-			strSentence = obj.value;			
-			
-			if(obj.result)
-			{
-				bFunctionCommand = true;
-				retVal.type = CT_FUNCTION;
-			}				
-		}  		     
-		
-    	var lexemsArr:Array = Parser.sliceLexems(lexems);
-
-		if(contexts && retVal.result)
-		{
-			for(i=0; i<lexemsArr.length; i++)
-			{    			
-				// add variable prefix for left-part vars
-				for(var j:int=0;j<lexemsArr[i].length;j++)
-				{
-					if(lexemsArr[i][j].type=='=' && lexemsArr[i][j-1].type=='v')
-						lexemsArr[i][j-1].value = varPrefix + lexemsArr[i][j-1].value;							
-				}
-			}
-			
-			for(i=0; i<lexemsArr.length; i++)
-			{    			
-				// resolve advanced techniques
-				lexemObj = Parser.processConvertedLexemArray(lexemsArr[i], contexts);
-				retVal.result = lexemObj.result;
-				retVal.error = lexemObj.error;				
-			
-				if(!retVal.result)
-					return retVal;
-										
-    			lexemsArr[i] = lexemObj.array;							
-			}
+   		if(lexemsArr.length>1)
+   		{
+   			retVal.type = CT_MULTI;
    		}
-
-		if(bFunctionCommand && retVal.result)
-		{			
-			for(i=0; i<lexemsArr.length; i++)
-			{
-				var func:Object = Parser.isFunctionExists(lexemsArr[i]);
-				retVal.result = func.result;
-				retVal.error = func.error;
-				retVal.variable = func.variable;
-				retVal.func = func.func;
-
-				if(!retVal.result)
-					return retVal;
-
-				if(func.variable==null)
-				{					
-					retVal.print = true;
-				}
-				
-				if(retVal.func=='loadDataFrom')
-					retVal.array = ["true", "false"];
-			}	
-		}
-		
-   		// generate programm code
-		if(contexts && retVal.result)
-		{
-			for(i=0; i<lexemsArr.length; i++)
-			{    			
-				var program:String = "";
+   		
+		for(i=0; i<lexemsArr.length; i++)
+		{    			
+	   		retVal.vars.push(null);
+	   		retVal.funcs.push(null);
+	   		
+	   		var obj:Object;
+			var strSentence:String = "";       			
 			
-    			if(bOperationCommand) // operation
-    			{
-					for(j=0;j<lexemsArr[i].length;j++) {
-						program += lexemsArr[i][j].value;
-					}
-					retVal.program = program;
-				}
-				else if(bTestCommand) // test
-				{					
-					for(j=0;j<lexemsArr[i].length;j++) {
-						program += lexemsArr[i][j].value;
-					}
-					retVal.program = program;
-				}
-				else if(bFunctionCommand) // function
-				{
-					retVal.program = func.value;
-				}
+			for(var j:int=0; j<lexemsArr[i].length; j++)
+				strSentence = strSentence + lexemsArr[i][j].type;
 				
-				var evalRes:* = Parser.eval(retVal.program, contexts);
-				
-				if(evalRes!=null)
-					retVal.value = evalRes; 					
+			// parse operations
+			obj = Parser.isValidCommand(strSentence);
+			retVal.result = obj.result;			
+			if(retVal.result && !retVal.type)
+			{
+				retVal.type = CT_OPERATION;
 			}
-		}
+			
+			// parse test
+			if(!retVal.result && !retVal.error)
+			{
+				obj = Parser.isValidTest(strSentence);
+				retVal.result = obj.result;
+				if(retVal.result && !retVal.type)
+				{
+					retVal.type = CT_TEST;
+				}
+				else if(retVal.result && retVal.type==CT_MULTI)
+				{
+					retVal.result = false;
+					retVal.error = new CompilerError(null, 9000);
+				}
+			}
+			
+			// parse function
+			if(!retVal.result && !retVal.error)
+			{
+				obj = Parser.isValidFunction(strSentence);
+				retVal.result = obj.result;				
+				if(retVal.result)
+				{
+					if(!retVal.type)
+						retVal.type = CT_FUNCTION;
+					
+					var func:Object = Parser.isFunctionExists(lexemsArr[i]);
+					retVal.result = func.result;
+					retVal.error = func.error;
+				
+					retVal.vars[i] = func.variable;
+					retVal.funcs[i] = func.func;
+				}				
+			}  		     
+
+			if(!retVal.result  && !retVal.error) 
+			{
+				retVal.error = new CompilerError(null, 9000);
+			}
+			
+			if(retVal.error)
+				return retVal;
+		}  		
 		
-		if(!retVal.type && !retVal.error) {
-			retVal.result = false;
-			retVal.error = new CompilerError(null, 9000);
-		}
-			    		
-		return retVal;
+		return retVal; 
 	}
+
+	public static function executeCode(	node:ParsedNode,
+										index:int,
+										contexts:Array,			 
+										varPrefix:String = "" ):void
+	{
+		node.value = null;
+		node.result = false;
+		node.print = false;
+		
+		node.array = null;
+		node.transition = null;
+		
+		if(node.vars[index] == null)
+			node.print = true;
+		
+		// add variable prefix for left-part vars
+		if(node.vars[index])
+			node.vars[index] = varPrefix + node.vars[index]; 
+		for(var j:int=0; j<node.lexemsGroup[index].length; j++)
+		{
+			if(node.lexemsGroup[index][j].type=='=' && node.lexemsGroup[index][j-1].type=='v')
+				node.lexemsGroup[index][j-1].value = varPrefix + node.lexemsGroup[index][j-1].value;							
+		}		
+			
+		// resolve advanced techniques
+		var lexemObj:Object = Parser.processConvertedLexemArray(node.lexemsGroup[index], contexts);
+		node.result = lexemObj.result;
+		node.error = lexemObj.error;				
+	
+		if(!node.result)
+			return;
+								
+		node.lexemsGroup[index] = lexemObj.array;							
+		
+		/////////////////////////////////
+		
+		if(node.type == CT_TEST)
+		{
+			node.array = ["true", "false"];
+			node.print = false;
+		}
+		else if(node.funcs[index])
+		{
+			if(node.funcs[index]=='loadDataFrom')
+				node.array = ["true", "false"];			
+		}
+
+   		// generate and execute code
+		var code:String = "";
+		if(node.type == CT_TEST)
+		{
+			for(j=0; j<node.lexemsGroup[index].length; j++) 
+			{
+				code += node.lexemsGroup[index][j].value;
+			}			
+		}
+		else if(node.funcs[index])
+		{
+			var func:Object = Parser.isFunctionExists(node.lexemsGroup[index]);
+			node.result = func.result;
+			node.error = func.error;
+		
+			if(!node.result)
+				return;
+			
+			code = func.value;
+		}
+		else
+		{
+			for(j=0; j<node.lexemsGroup[index].length; j++) 
+			{
+				code += node.lexemsGroup[index][j].value;
+			}			
+		}
+			
+		var evalRes:* = Parser.eval(code, contexts);
+		node.value = evalRes;	
+	}
+
 }
 }

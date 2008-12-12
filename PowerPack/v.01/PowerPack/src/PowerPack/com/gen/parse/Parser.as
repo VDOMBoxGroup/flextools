@@ -461,6 +461,7 @@ public class Parser
 			}
 		}
 		
+		// push rest of lexems
 		if(fix<i)
 			arr.push(lexems.slice(fix, i));
 													
@@ -905,13 +906,12 @@ public class Parser
 										lexems[i].type!=']' && 
 										retVal.value.length ? "," : "") +									
 									(lexems[i].type=='n' ? "{type:'n', value:"+Utils.quotes(lexems[i].value)+"}" : 
-										lexems[i].type=='A'? Utils.quotes(lexems[i].value) :
-										lexems[i].value);
+										lexems[i].type=='A'? Utils.quotes(lexems[i].value) : lexems[i].value);
 				
-				retVal.value = retVal.func + "(" + String(retVal.value) + ")";
+				//retVal.value = retVal.func + "(" + String(retVal.value) + ")";
 				
-				//retVal.value = TemplateStruct.CNTXT_INSTANCE + "._" + lexems[sIndex+1].value + "(" +
-				//	String(retVal.value) + ")";
+				retVal.value = TemplateStruct.CNTXT_INSTANCE + "." + 
+					retVal.func + "(" + String(retVal.value) + ")";
 			}
 		}
 		
