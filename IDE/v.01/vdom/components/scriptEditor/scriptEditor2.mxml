@@ -44,6 +44,8 @@
 	 			}
 	 			
 	 			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+	 			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
+	 			
 	 			
 	 			
 	 			arrAppl = [];
@@ -85,6 +87,7 @@
 				
 				changeContainer.selectedIndex = searchIndex();
 				serverScripts.dataProvider = dataManager.currentPageId;
+				containersBranch.currentPageID = dataManager.currentPageId;
 	 	}
 	 	
 	 		private function hideHandler():void
@@ -94,6 +97,7 @@
 //	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 			
 	 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+	 			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
 	 		}
 	 	
 	 	
@@ -219,10 +223,22 @@
 			private function pageChangeHandler(dmEvt:DataManagerEvent):void
 			{
 //				changeTree(dataManager.currentPageId);
-				serverScripts.dataProvider = dataManager.currentPageId;
+				containersBranch.currentPageID = dataManager.currentPageId;
+//				serverScripts.dataProvider = dataManager.currentPageId;
 //				dataManager.getApplicationEvents();
 
 			}
+			
+			private function objectChangeHandler(dmEvt:DataManagerEvent):void
+			{
+//				changeTree(dataManager.currentPageId);
+//				containersBranch.currentPageID = dataManager.currentPageId;
+				serverScripts.dataProvider = dataManager.currentObjectId;
+//				dataManager.getApplicationEvents();
+
+			}
+	
+					
 				[Bindable]
    			public var selectedAppl:Object; 
 			private function changeContainerHandler(obj:Object):void
@@ -256,6 +272,8 @@
 			        	 rowCount="20" change="{changeContainerHandler(event.target)}" 
 			        		color="#000000" minWidth="200" width="100%"  itemRenderer="vdom.components.eventEditor.PanelItemRender"/>
 	        </mx:Panel>
+	        <containers:ContainersBranch id="containersBranch" width="100%"  title="Containers" height="150"
+        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"/>
 			
 				       <containers:ServerScripts  id="serverScripts"  title="serverScripts" width="100%" dataChanged="{setScript()}"
 				       	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0" />
