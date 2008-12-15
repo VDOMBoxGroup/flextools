@@ -179,7 +179,7 @@
 				btSave.setStyle("color", "0x000000");
 				btSave.setStyle("borderColor", "0xAAB3B3");
 				
-				if(serverScripts.dataEnabled)
+				if(serverScripts.dataEnabled && serverScripts.script != 'null')
 				{	
 					textArea.enabled = true;
 					textArea.text = serverScripts.script;
@@ -191,6 +191,9 @@
 			}
 			private function save():void
 			{
+				if(!textArea.enabled)
+					return;
+					
 				btSave.setStyle("color", "0x000000");
 				btSave.setStyle("borderColor", "0xAAB3B3");
 
@@ -260,7 +263,7 @@
             		 allowTabKey="true" fontFamily="coure" fontSize="14" fontGridFitType="pixel" 
             		 keyDown=" textAreaDataChangeHandler( event ); " backgroundColor="#FFFFFF"/>            	 
             <mx:HBox paddingBottom="5" >
-	           <mx:Button id="btSave" label="Save" click=" save(); " />
+	           <mx:Button id="btSave" label="Save" click="{save()}" />
 	           <mx:Button label="Revert" click=" revert(); "/>
             </mx:HBox>
         </mx:VBox>

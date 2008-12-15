@@ -1,5 +1,6 @@
 package vdom.components.scriptEditor.containers
 {
+	import mx.collections.XMLListCollection;
 	import mx.events.ListEvent;
 	import mx.utils.UIDUtil;
 	
@@ -35,7 +36,7 @@ package vdom.components.scriptEditor.containers
 		{
 			super();
 			tree = new OTree();
-			tree.showRoot = false;
+			tree.showRoot = true;
 			tree.iconFunction = getIcon;
 			tree.percentWidth = 100;
 			tree.labelField = '@Name';
@@ -71,9 +72,20 @@ package vdom.components.scriptEditor.containers
 		{
 			xmlToServer = new XML(xmlToTree.E2vdom.toXMLString());
 //			delete xmlToServer.Key;
-			var tempXML:XML;
 
-			dataXML  = new XML('<Actions/>');
+			var object:XML = dataManager.getObject(dataManager.currentObjectId);
+			
+			dataXML  = new XML('<Object/>');
+			dataXML.@Name 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+			dataXML.@resourceID = getSourceID(object.@Type);
+			
+			var type:XML = dataManager.getTypeByObjectId(dataManager.currentObjectId);
+			var	curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentObjectId).Information.ID.toString();
+			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
+			var tempXML:XML;
+//			var tempXML:XML;
+
+//			dataXML  = new XML('<Actions/>');
 			
 			if(xmlToTree.E2vdom.ServerActions.toString() !='' )
 			{
@@ -82,7 +94,7 @@ package vdom.components.scriptEditor.containers
 					tempXML = <Action/>;
 					tempXML.@label = actID.@Name;
 					tempXML.@Name = actID.@Name;
-					tempXML.@Language = actID.@Language;
+					tempXML.@Language =	 actID.@Language;
 					tempXML.@ID = actID.@ID;
 					
 					dataXML.appendChild(tempXML);
@@ -90,13 +102,31 @@ package vdom.components.scriptEditor.containers
 				
 				tree.dataProvider = dataXML;
 				tree.validateNow();
-				tree.selectedIndex = 0;
+				
+				var item:Object =  XMLListCollection(tree.dataProvider).source[0];
+			
+				tree.expandItem(item, true, false);
+				tree.selectedIndex = 1;
 				
 			}else
 			{
 				tree.dataProvider = null;
 			}
 			dispatchEvent(new ServerScriptsEvent(ServerScriptsEvent.DATA_CHANGED));
+		}
+		
+		private var masResourceID:Array = new Array();
+		private function getSourceID(ID:String):String
+		{
+			if (masResourceID[ID]) 
+				return masResourceID[ID];
+				
+			var xml:XML = dataManager.getTypeByTypeId(ID);
+			var str:String = xml.Information.StructureIcon;
+			
+			masResourceID[ID] = str.substr(5, 36);
+			
+			return masResourceID[ID];
 		}
 		
 		public function set addScript(xml:XML):void
@@ -130,7 +160,8 @@ package vdom.components.scriptEditor.containers
 				{	
 					tree.dataProvider = dataXML;
 					tree.validateNow();
-					tree.selectedIndex = 0;
+					tree.selectedIndex = 1;
+					tree.validateNow();
 					
 				//	var script:String = xmlToServer.E2vdom.ServerActions.Action.(@ID == ID)[0];
 					dispatchEvent(new ServerScriptsEvent(ServerScriptsEvent.DATA_CHANGED));
@@ -173,6 +204,9 @@ package vdom.components.scriptEditor.containers
 				
 			var ID:String = tree.selectedItem.@ID;
 			
+			if (ID == '') 
+				return 'null';
+				
 			return xmlToServer.ServerActions.Action.(@ID == ID)[0].toString();
 		}
 		

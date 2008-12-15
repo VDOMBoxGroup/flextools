@@ -107,7 +107,7 @@ package vdom.components.eventEditor
 //		currentObjectId
 		public function set currentObjectId(value:String):void
 		{
-			trace("currentObjectId: "+value);
+//			trace("currentObjectId: "+value);
 			
 			var object:XML = dataManager.getObject(value);
 			
@@ -119,7 +119,7 @@ package vdom.components.eventEditor
 				curContainerTypeID = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();
 			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
 			var tempXML:XML;
-			trace('curContainerTypeID: '+ curContainerTypeID);
+//			trace('curContainerTypeID: '+ curContainerTypeID);
 		
 			if(actions != null)		
 			{
