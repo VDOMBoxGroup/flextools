@@ -307,9 +307,10 @@
 			}
 		}
 		
-		private function test(event:Event):void
+		private function test():void
 		{
-			
+			pageList.dataProvider  = null;
+			pageList.dataProvider = sqlProxy.search(searchWord.text,"VdomHelp_en_US");
 		}
 	]]>
 </mx:Script>
@@ -319,8 +320,11 @@
 		locationChange="{pageChangedHandler(event)}"/>
 	<mx:Button x="267" y="42" label="back" click="{html.historyBack()}"/>
 	<mx:Button x="328" y="42" label="forvatd" click="{html.historyForward()}"/>
-	<mx:Button x="258" y="327" label="Test" click="{test(event)}"/>
-	<mx:List  id="pageList" x="10" y="329" width="145" height="152" labelField="title"
+	<mx:Button x="105" y="327" label="Find" click="{test()}"/>
+	<mx:List  id="pageList" x="7" y="357" width="145" height="152" labelField="title"
 		change="{listChangeHandler(event)}"/>
+	<mx:Label x="273" y="413" text="sfsdfsdfsfsd sdfsdf sdf" width="162" height="84" />
+	<mx:Text x="273" y="536" text="Textdssd&#xa;sdfs" width="202" height="91"/>
+	<mx:TextInput id="searchWord" x="10" y="327" width="87"/>
 	
 </mx:WindowedApplication>

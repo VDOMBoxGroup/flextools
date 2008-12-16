@@ -13,7 +13,7 @@ package
 	{
 		private var  file:File ;
 		private var connection:SQLConnection = new SQLConnection();
-		private var sqlStatement:SQLStatement = new SQLStatement;
+		
 		
 		public function SQLProxy()
 		{
@@ -21,14 +21,16 @@ package
 			
 			
 			file = File.applicationStorageDirectory.resolvePath("HelpDB.db");
-			sqlStatement.sqlConnection = connection;
-			sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
-			sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+			
 			
 		}
 		
 		public function  creatDB():Boolean
 		{
+			var sqlStatement:SQLStatement = new SQLStatement;
+			 		sqlStatement.sqlConnection = connection;
+					sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
+					sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
 			
 			try {
 				sqlStatement.sqlConnection.open(file, SQLMode.CREATE );
@@ -36,7 +38,7 @@ package
 				 /*****************  !!!   проверить необходимость создания каждой таблички отдельно !!!   *******************/
 				 
 				//       PAGE    (id, name, version, title, description, content ) //
-				sqlStatement.text = "CREATE TABLE page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+				sqlStatement.text = "CREATE TABLE IF NOT EXISTS page   (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 											"name TEXT NOT NULL,  " + 
 											"version TEXT NOT NULL,  " + 
 											"title TEXT NOT NULL,  " + 
@@ -46,7 +48,7 @@ package
 				sqlStatement.execute();
 				
 				//       PRODUCT  (id, name, version, title, description, language, toc )   //
-				sqlStatement.text = "CREATE TABLE product (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+				sqlStatement.text = "CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 												"name CHAR NOT NULL, " + 
 												"version TEXT NOT NULL,  " + 
 												"title TEXT NOT NULL,  " + 
@@ -55,12 +57,12 @@ package
 												"toc XML);";
 				sqlStatement.execute();
 				
-				sqlStatement.text = "CREATE TABLE resource  (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+				sqlStatement.text = "CREATE TABLE IF NOT EXISTS resource  (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 											"name TEXT NOT NULL,  " + 
 											"id_page INTEGER);";
 				sqlStatement.execute();
 				
-				sqlStatement.text = "CREATE INDEX index_name ON  page(content)";
+				sqlStatement.text = "CREATE INDEX IF NOT EXISTS index_name ON  page(content)";
 				sqlStatement.execute();
 				
 				sqlStatement.sqlConnection.close();
@@ -118,18 +120,31 @@ package
 				 
 				var query:String = "SELECT product.id " + 
 						"FROM product " + 
-						"WHERE ((name ='"+ name +"') AND (version='"+ version +"') AND (language='"+ language +"'));";
-
-				var result:Object = executeQuery(query);
+						"WHERE name = :name " + 
+							" AND version = :version " + 
+							" AND language = :language ;";
+							
+				var parameters:Object = new Object();
+					parameters[":name"] = name;
+					parameters[":version"] = version;
+					parameters[":language"] = language;
+					
+				var result:Object = executeQuery(query, parameters);
 				
 				if( !result)
 				{
 					query = "INSERT INTO product(name, version, title, description, language, toc) " + 
-							"VALUES('"+ name +"','"+ version +"','"+ title +"','"+ 
-																	description +"','"+ 
-																	language +"','"+ 
-																	toc.toString() +"');";
-					executeQuery(query);				
+								"VALUES(:name, :version, :title, :description, :description, :toc);";
+					
+					parameters = [];
+					parameters[":name"] = name;
+					parameters[":version"] = version;
+					parameters[":title"] = title;
+					parameters[":description"] = description;
+					parameters[":description"] = description;
+					parameters[":toc"] = toc.toXMLString();
+													
+					executeQuery(query, parameters);				
 				}
 				
 				
@@ -137,9 +152,11 @@ package
 		
 		public function getVersionOfPage(pageName:String):String
 		{
-			var query:String = "SELECT page.version, page.id  FROM page WHERE (name ='"+ pageName +"');"; 
+			var query:String = "SELECT page.version, page.id  FROM page WHERE name = :pageName ;"; 
+			var parameters:Object = new Object();
+				parameters[":pageName"] = pageName;
 								
-			var result:Object = executeQuery(query);;
+			var result:Object = executeQuery(query,parameters);
 			if(!result)
 			{
 				return "";
@@ -158,19 +175,29 @@ package
 				 
 				var query:String = "SELECT product.id " + 
 						"FROM product " + 
-						"WHERE ((name ='"+ productName +"')  AND (language='"+ language +"'));";
-				var result:Object = executeQuery(query);
+						"WHERE name = :productName  AND language = :language;";
+						
+				var parameters:Object = new Object();
+					parameters[":productName"] = productName;
+					parameters[":language"] = language;
+						
+				var result:Object = executeQuery(query, parameters);
 				
 				if( result)
 				{
 					var productID:int  = result[0]['id'];
 					query = "INSERT INTO page(name, version, title, description, content, id_product) " + 
-							"VALUES('"+ pageName +"','"+ version +"','"+ title +"','"+ 
-																	description +"','"+ 
-																	content +"','"+ 
-																	productID +"');";
-				
-					executeQuery(query);			
+							"VALUES(:pageName , :version, :title,	:description, :content, :productID);";
+					
+					parameters = [];
+					parameters[":pageName"] 	= pageName;
+					parameters[":version"] 		= version;
+					parameters[":title"] 		= title;
+					parameters[":description"] 	= description;
+					parameters[":content"] 		= content;
+					parameters[":productID"] 	= productID;
+
+					executeQuery(query, parameters);			
 				}
 
 
@@ -178,30 +205,44 @@ package
 	
 		public function deletePage(namePage:String):void
 		{
-			var query:String = "DELETE FROM 	page WHERE (name = '"+ namePage +"')";
-			executeQuery(query);
+			var query:String = "DELETE FROM 	page WHERE name = :namePage";
+			var parameters:Object = new Object();
+				parameters[":namePage"] = namePage;
+			executeQuery(query, parameters);
 		}
 		
 		
 		public function deleteResources(namePage:String):void
 		{
 			
-				var query:String = "SELECT page.id FROM 	page  WHERE (name = '"+ namePage +"')";
-				var result:Object = executeQuery(query);
+				var query:String = "SELECT page.id FROM 	page  WHERE name = :namePage";
+				var parameters:Object = new Object();
+					parameters[":namePage"] = namePage;
+				
+				var result:Object = executeQuery(query, parameters);
 				var pageID:int = result[0]['id']; 
 				
-				query = "DELETE FROM 	resource WHERE (id_page = '"+ pageID +"')";
-				executeQuery(query);
+				query = "DELETE FROM 	resource WHERE id_page = :pageID";
+					parameters = [];
+					parameters[":pageID"] = pageID;
+				executeQuery(query, parameters);
 		}
 		
 		public function getResourcesOfPage(namePage:String):Object
 		{
-				var query:String  = "SELECT page.id FROM 	page  WHERE (name = '"+ namePage +"')";
-				var result:Object = executeQuery(query);
+				var query:String  = "SELECT page.id FROM 	page  WHERE name = :namePage";
+				var parameters:Object = new Object();
+					parameters[":namePage"] = namePage;
+				
+				var result:Object = executeQuery(query, parameters);
 				var pageID:int = result[0]['id']; 
 				
-				query = "SELECT resource.name  FROM	resource WHERE (id_page = '"+ pageID +"')";
-				result = executeQuery(query);;
+				query = "SELECT resource.name  FROM	resource WHERE id_page = :pageID";
+				
+				parameters = [];
+				parameters[":pageID"] = pageID;
+				
+				result = executeQuery(query, parameters);
 
 				return result;
 		}
@@ -211,40 +252,62 @@ package
 		{
 				var query:String = "SELECT page.id " + 
 						"FROM page " + 
-						"WHERE (name ='"+ pageName +"');";
-				var result:Object = executeQuery(query);
+						"WHERE (name = :pageName );";
+				
+				var parameters:Object = new Object();
+					parameters[":pageName"] = pageName;						
+				var result:Object = executeQuery(query, parameters);
 				
 				if( result)
 				{
 					query = "INSERT INTO resource(name, id_page) " + 
-							"VALUES('"+ resourceName +"','"+ result[0]['id'] +"');";
-					executeQuery(query);
+							"VALUES (:resourceName, :result);";
+					parameters = [];
+					parameters[":resourceName"] = resourceName;
+					parameters[":result"] = result[0]['id'];
+					executeQuery(query, parameters);
 				}
 				
 		}
 		
 		public function search(	value:String, productName:String = "",	language:String = "en_US"):Object
 		{
-			var phraseRE:RegExp = new RegExp("[^\w]+","gimsx");
+			var phraseRE:RegExp = /\s+/gim;
 
 			value = " " + value + " ";
 			value = value.replace(phraseRE,"%"); 
 			
 			var query:String = "SELECT page.name, page.title " +
 						"FROM product INNER JOIN page ON product.id = page.id_product "+
-						"WHERE (((product.name)='"+productName+"') AND ((page.content) LIKE'"+value+"') AND ((product.language)='"+language+"'));"
+						"WHERE product.name = :productName " + 
+						"	AND page.content = :value  AND product.language = :language;"
+			
+			var parameters:Object = new Object();
+				parameters[":productName"] = productName;
+				parameters[":value"] = value;
+				parameters[":language"] = language;
 
-			var result:Object = executeQuery(query);
+			var result:Object = executeQuery(query, parameters);
 			
 			return result;
 		}
 		
-		private function executeQuery(query:String):Object
+		private function executeQuery(query:String, parameters:Object):Object
 		{
+			 var sqlStatement:SQLStatement = new SQLStatement;
+			 		sqlStatement.sqlConnection = connection;
+					sqlStatement.addEventListener(SQLEvent.RESULT, resultHandler);
+					sqlStatement.addEventListener(SQLErrorEvent.ERROR, errorHandler);
+					
 			try {
 				sqlStatement.sqlConnection.open(file, SQLMode.UPDATE );
 				sqlStatement.text = query;
+				
+				for(var name:String in parameters )
+					sqlStatement.parameters[name] = parameters[name];
+				
 				sqlStatement.execute();
+				
 				
 				var result:SQLResult = sqlStatement.getResult();
 				sqlStatement.sqlConnection.close();
