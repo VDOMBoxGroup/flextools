@@ -860,7 +860,7 @@ public class DataManager implements IEventDispatcher {
 		var dme : DataManagerEvent = new DataManagerEvent( 
 									DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE );
 		
-		dme.result = event.result.Result[0];
+		dme.result = event.result.ServerActions[0];
 		
 		dispatchEvent( dme );
 	}
@@ -870,7 +870,7 @@ public class DataManager implements IEventDispatcher {
 		var dme : DataManagerEvent = new DataManagerEvent( 
 									DataManagerEvent.SET_SERVER_ACTIONS_COMPLETE );
 		
-		dme.result = event.result.Result[0];
+		dme.result = event.result.ServerActions[0];
 		
 		dispatchEvent( dme );
 	}
