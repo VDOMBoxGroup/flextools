@@ -858,7 +858,7 @@ public class DataManager implements IEventDispatcher {
 	private function soap_getServerActionsHandler( event : SOAPEvent ) : void
 	{
 		var dme : DataManagerEvent = new DataManagerEvent( 
-									DataManagerEvent.GET_SCRIPT_COMPLETE );
+									DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE );
 		
 		dme.result = event.result.Result[0];
 		
@@ -868,7 +868,7 @@ public class DataManager implements IEventDispatcher {
 	private function soap_setServerActionsHandler( event : SOAPEvent ) : void
 	{
 		var dme : DataManagerEvent = new DataManagerEvent( 
-									DataManagerEvent.SET_SCRIPT_COMPLETE );
+									DataManagerEvent.SET_SERVER_ACTIONS_COMPLETE );
 		
 		dme.result = event.result.Result[0];
 		
