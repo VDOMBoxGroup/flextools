@@ -25,6 +25,9 @@ private var registeredHandlers:Array = [
 	{methodName:"get_script", handlerName:"soap_getScriptHandler"},
 	{methodName:"set_script", handlerName:"soap_setScriptHandler"},
 	
+	{methodName:"get_server_actions ", handlerName:"soap_getServerActionsHandler"},
+	{methodName:"set_server_actions ", handlerName:"soap_setServerActionsHandler"},
+	
 	{methodName:"search", handlerName:"soap_searchHandler"},
 	
 	{methodName:"modify_resource", handlerName:"soap_modifyResourceHandler"}

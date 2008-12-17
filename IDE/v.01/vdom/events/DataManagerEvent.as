@@ -1,6 +1,5 @@
 package vdom.events
 {
-
 import flash.events.Event;
 	
 public class DataManagerEvent extends Event
@@ -12,8 +11,8 @@ public class DataManagerEvent extends Event
 		result:* = null,
 		isEnabled:Boolean=false,
 		objectId:String=null,
-		key:String=""){
-			
+		key:String="")
+	{		
 			// Call the constructor of the superclass.
 			super(type);
 			
@@ -47,6 +46,9 @@ public class DataManagerEvent extends Event
 	
 	public static const GET_SCRIPT_COMPLETE:String = "getScriptComplete";
 	public static const SET_SCRIPT_COMPLETE:String = "setScriptComplete";
+	
+	public static const GET_SERVER_ACTIONS_COMPLETE:String = "getServerActionsComplete";
+	public static const SET_SERVER_ACTIONS_COMPLETE:String = "setServerActionsComplete";
 	
 	public static const MODIFY_RESOURCE_COMPLETE:String = "modifyResourceComplete";
 	

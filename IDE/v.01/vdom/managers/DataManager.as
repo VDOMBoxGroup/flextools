@@ -387,6 +387,27 @@ public class DataManager implements IEventDispatcher {
 		soap.set_script(applicationId, objectId, script, language);
 	}
 	
+	public function getServerActions( objectId:String = "" ):void
+	{
+		if(objectId == "")
+			objectId = currentObjectId;
+		
+		var applicationId:String = currentApplicationId;
+		var language:String = "vbscript";
+		
+		soap.get_server_actions( applicationId, objectId );
+	}
+	
+	public function setServerActions(actions:XML, objectId:String = ""):void
+	{
+		if(objectId == "")
+			objectId = currentObjectId;
+		
+		var applicationId:String = currentApplicationId;
+		
+		soap.set_server_actions(applicationId, objectId, actions);
+	}
+	
 	/**
 	 * 
 	 * @param selectedObjects описание типа объекта, которое надо сохранить, для последующей отправки на сервер.
@@ -782,6 +803,22 @@ public class DataManager implements IEventDispatcher {
 	}
 	
 	private function soap_setScriptHandler(event:SOAPEvent):void
+	{
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.SET_SCRIPT_COMPLETE);
+		dme.result = event.result.Result[0];
+		
+		dispatchEvent(dme);
+	}
+	
+	private function soap_getServerActionsHandler(event:SOAPEvent):void
+	{
+		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.GET_SCRIPT_COMPLETE);
+		dme.result = event.result.Result[0];
+		
+		dispatchEvent(dme);
+	}
+	
+	private function soap_setServerActionsHandler(event:SOAPEvent):void
 	{
 		var dme:DataManagerEvent = new DataManagerEvent(DataManagerEvent.SET_SCRIPT_COMPLETE);
 		dme.result = event.result.Result[0];
