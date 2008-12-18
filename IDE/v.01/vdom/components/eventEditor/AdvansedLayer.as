@@ -72,7 +72,8 @@ package vdom.components.eventEditor
 				inputText.setStyle("fontSize", '8');
 				inputText.setStyle("fontWeight", 'bold');
 				inputText.setStyle("textAlign", 'center');
-				inputText.addEventListener(MouseEvent.CLICK, showMultilineWindow);
+				inputText.doubleClickEnabled = true;
+				inputText.addEventListener(MouseEvent.DOUBLE_CLICK, showMultilineWindow);
 
 			addChild(inputText);
 				

@@ -97,7 +97,7 @@
 //	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
 	 			
 	 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
-	 			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
+	 			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
 	 		}
 	 	
 	 	

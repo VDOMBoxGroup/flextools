@@ -45,8 +45,8 @@ package vdom.components.treeEditor
 			var levcColor:Levels = new Levels();
 	//		_strColor = level;
 			_numColor = levcColor.getColor(level);
-			
 		}
+
 		public function set mark(bl:Boolean):void
 		{
 			_mark = bl;	

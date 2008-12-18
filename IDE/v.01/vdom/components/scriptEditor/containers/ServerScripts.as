@@ -51,15 +51,15 @@ package vdom.components.scriptEditor.containers
 		{
 			tree.dataProvider = null;
 			curContainerID = str;
-			dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
-			dataManager.getApplicationEvents(str);
+			dataManager.addEventListener(DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE, getServerActionsHandler);
+			dataManager.getServerActions(str);
 			trace("Data asked")
 		}
 		
-		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
+		private function getServerActionsHandler(dmEvt:DataManagerEvent):void
 		{
 			
-			dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
+			dataManager.removeEventListener(DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE, getServerActionsHandler);
 	 		creatData(dmEvt.result);
 	 		trace('-----------from serve-------------');
 	 		trace(curContainerID);
@@ -70,7 +70,7 @@ package vdom.components.scriptEditor.containers
 		private var xmlToServer:XML;
 		private function creatData(xmlToTree:XML):void
 		{
-			xmlToServer = new XML(xmlToTree.E2vdom.toXMLString());
+			xmlToServer = new XML(xmlToTree.toXMLString());
 //			delete xmlToServer.Key;
 
 			var object:XML = dataManager.getObject(dataManager.currentObjectId);
@@ -87,9 +87,9 @@ package vdom.components.scriptEditor.containers
 
 //			dataXML  = new XML('<Actions/>');
 			
-			if(xmlToTree.E2vdom.ServerActions.toString() !='' )
+			if(xmlToTree.toString() !='' )
 			{
-				for each(var actID:XML in xmlToTree.E2vdom.ServerActions.children())
+				for each(var actID:XML in xmlToTree.children())
 				{
 					tempXML = <Action/>;
 					tempXML.@label = actID.@Name;
@@ -138,12 +138,16 @@ package vdom.components.scriptEditor.containers
 			var temp:XML = new XML(xml.toXMLString());
 //				temp.addName = '123'+ Math.random();
 			
-			xmlToServer.ServerActions.appendChild(temp);	
+			xmlToServer.appendChild(temp);	
 			
 			tree.dataProvider = dataXML;
 			tree.validateNow();
 			
+			var item:Object =  XMLListCollection(tree.dataProvider).source[0];
+			tree.expandItem(item, true, false);
+				
 			tree.selectedItem = xml;
+			tree.validateNow();
 			dispatchEvent(new ServerScriptsEvent(ServerScriptsEvent.DATA_CHANGED));
 		}
 		
@@ -154,7 +158,7 @@ package vdom.components.scriptEditor.containers
 				var ID:String = tree.selectedItem.@ID;
 				
 				delete dataXML.Action.(@ID == ID)[0];
-				delete xmlToServer.ServerActions.Action.(@ID == ID)[0];
+				delete xmlToServer.Action.(@ID == ID)[0];
 				
 				if(dataXML.toXMLString() != "<Actions/>")
 				{	
@@ -177,20 +181,20 @@ package vdom.components.scriptEditor.containers
 			if(tree.selectedItem)
 			{
 				var ID:String = tree.selectedItem.@ID;
-				var tempXML:XML = xmlToServer.ServerActions.Action.(@ID == ID)[0]; 
+				var tempXML:XML = xmlToServer.Action.(@ID == ID)[0]; 
 				var xml:XML = new XML('<Action/>');	
 					xml.@ID = tempXML.@ID;
 					xml.@Name = tempXML.@Name;
 					xml.@Language = tempXML.@Language;
 					xml.@Top = tempXML.@Top;
-					xml.@Left = tempXML.@Left;
+					xml.@Left = tempXML.@Left; 
 					xml.@State = tempXML.@State;
 					xml.appendChild(XML('<![CDATA[' +str + ']'+']>'));
 				
-				delete xmlToServer.ServerActions.Action.(@ID == ID)[0];
-				xmlToServer.ServerActions.appendChild(xml);
+				delete xmlToServer.Action.(@ID == ID)[0];
+				xmlToServer.appendChild(xml);
 				
-				dataManager.setApplicationEvents(curContainerID, xmlToServer.toXMLString());
+				dataManager.setServerActions(xmlToServer,curContainerID);
 				trace('******** To server ********');
 				trace(curContainerID);
 				trace(xmlToServer.toXMLString());
@@ -207,7 +211,7 @@ package vdom.components.scriptEditor.containers
 			if (ID == '') 
 				return 'null';
 				
-			return xmlToServer.ServerActions.Action.(@ID == ID)[0].toString();
+			return xmlToServer.Action.(@ID == ID)[0].toString();
 		}
 		
 		private function changeHandler(lsEvt:ListEvent):void

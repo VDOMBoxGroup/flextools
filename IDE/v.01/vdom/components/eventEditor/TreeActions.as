@@ -23,7 +23,7 @@ package vdom.components.eventEditor
 		
 		private var dataXML:XML ;
 		private var curContainerTypeID:String;
-		override public function set dataProvider(value:Object):void
+	/*	override public function set dataProvider(value:Object):void
 		{
 			dataXML  = new XML('<Object/>');
 			dataXML.@label 	= value.@label;
@@ -66,7 +66,7 @@ package vdom.components.eventEditor
 			
 			
 		}
-		
+		*/
 		private function getChilds(inXML:XML):XML
 		{
 			var outXML:XML = new XML(inXML.toXMLString());
