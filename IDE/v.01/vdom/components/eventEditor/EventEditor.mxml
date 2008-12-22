@@ -269,14 +269,23 @@
                 }	  
 	                    
 	        	var newElement:*;
-	        	curContainerTypeID
+//	        	curContainerTypeID
 	        	  if( event.dragInitiator is TreeActions ) 
 	        	  {
-	        		 newElement =  new EventEditorAction(item, curContainerTypeID);
-	        		 
-	        		 clientActionsArray[newElement.ID] = setListeners4Action(newElement);
-	        		 
-	        		 can.addChild(clientActionsArray[newElement.ID] ); 
+	        	  	if(item.@Language[0])
+	        	  	{
+	        	  		if(!serverActionsArray[item.@ID] || !can.contains(serverActionsArray[item.@ID]) )
+	        	  		{
+							newElement = new ServerAction(item);
+							serverActionsArray[item.@ID] = setListeners4Action(newElement);
+							can.addChild(serverActionsArray [item.@ID]);
+	        	  		}
+	        	  	}else
+	        	  	{
+		        		 newElement =  new EventEditorAction(item, curContainerTypeID);
+		        		 clientActionsArray[newElement.ID] = setListeners4Action(newElement);
+		        		 can.addChild(clientActionsArray[newElement.ID] );
+		        	} 
 	        	  } 
 	        	  else if (event.dragInitiator is TreeEvents ) 
 	        	  {
@@ -291,11 +300,13 @@
 	        	  	can.addChild(eventsArray[newElement.ID] ); 
 	        	  }
 	        	
-	        	newElement.x = can.horizontalScrollPosition + event.localX;
-	        	newElement.y = can.verticalScrollPosition + event.localY;
-	        	
-	        	markButton();
-	        	
+	        	if(newElement)
+	        	{
+		        	newElement.x = can.horizontalScrollPosition + event.localX;
+		        	newElement.y = can.verticalScrollPosition + event.localY;
+		        	
+		        	markButton();
+	        	}
 //	 			dataChanged();		
 	        }   
 	        

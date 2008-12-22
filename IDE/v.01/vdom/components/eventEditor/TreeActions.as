@@ -2,6 +2,7 @@ package vdom.components.eventEditor
 {
 	import mx.collections.XMLListCollection;
 	
+	import vdom.events.DataManagerEvent;
 	import vdom.managers.DataManager;
 	import vdom.utils.IconUtil;
 	
@@ -13,6 +14,14 @@ package vdom.components.eventEditor
 		[Bindable]
 		public var event:Class;
 		*/
+		
+		[Embed(source='/assets/scriptEditor/python.png')]
+		[Bindable]
+		public var python:Class;
+		
+		[Embed(source='/assets/scriptEditor/vbscript.png')]
+		[Bindable]
+		public var vscript:Class;
 		public function TreeActions()
 		{
 			super();
@@ -60,11 +69,7 @@ package vdom.components.eventEditor
 			var item:Object =  XMLListCollection(dataProvider).source[0];
 			
 		//	super.selectedIndex = 0;
-			
-			
 			expandItem(item, true, false);
-			
-			
 		}
 		*/
 		private function getChilds(inXML:XML):XML
@@ -92,9 +97,16 @@ package vdom.components.eventEditor
 			return outXML;
 		}
 		
-		 private function getIcon(value:Object):Class 
+		private function getIcon(value:Object):Class 
 		{
 			var xmlData:XML = XML(value);
+		
+			if (xmlData.@Language.toXMLString() =='python')
+				return python;
+		
+			if (xmlData.@Language.toXMLString() =='vscript')
+				return vscript;
+			
 		
 			if (xmlData.@resourceID.toXMLString() =='')
 				return action;
@@ -116,6 +128,13 @@ package vdom.components.eventEditor
 			dataXML.@resourceID = getSourceID(object.@Type);
 			
 			var type:XML = dataManager.getTypeByObjectId(value);
+			
+			if (type.Information.Container == '2' || type.Information.Container == '3')
+			{
+				dataManager.addEventListener(DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE, getServerActionsHandler);
+				dataManager.getServerActions(value);
+			}
+			
 				curContainerTypeID = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();
 			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
 			var tempXML:XML;
@@ -142,6 +161,37 @@ package vdom.components.eventEditor
 			expandItem(item, true, false);
 		}
 		
+		private function getServerActionsHandler(dmEvt:DataManagerEvent):void
+		{
+			dataManager.removeEventListener(DataManagerEvent.GET_SERVER_ACTIONS_COMPLETE, getServerActionsHandler);
+	 		creatData(dmEvt.result);
+		}
+		
+		private function creatData(xmlToTree:XML):void
+		{
+			var tempXML:XML;
+			if(xmlToTree.toString() !='' )
+			{
+				for each(var actID:XML in xmlToTree.children())
+				{
+					tempXML = <Action/>;
+					tempXML.@label = actID.@Name;
+					tempXML.@Name = actID.@Name;
+					tempXML.@Language =	 actID.@Language;
+					tempXML.@ID = actID.@ID;
+					
+					dataXML.appendChild(tempXML);
+				}
+				
+				super.dataProvider = dataXML;
+				super.validateNow();
+				
+				var item:Object =  XMLListCollection(super.dataProvider).source[0];
+			
+				super.expandItem(item, true, false);
+			}
+		}
+		
 		private var masResourceID:Array = new Array();
 		private function getSourceID(ID:String):String
 		{
@@ -155,5 +205,7 @@ package vdom.components.eventEditor
 			
 			return masResourceID[ID];
 		}
+		
+		
 	}
 }

@@ -79,14 +79,14 @@ package vdom.components.scriptEditor.containers
 			dataXML.@Name 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
 			dataXML.@resourceID = getSourceID(object.@Type);
 			
-			var type:XML = dataManager.getTypeByObjectId(dataManager.currentObjectId);
-			var	curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentObjectId).Information.ID.toString();
-			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
-			var tempXML:XML;
+//			var type:XML = dataManager.getTypeByObjectId(dataManager.currentObjectId);
+//			var	curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentObjectId).Information.ID.toString();
+//			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
 //			var tempXML:XML;
 
 //			dataXML  = new XML('<Actions/>');
 			
+			var tempXML:XML;
 			if(xmlToTree.toString() !='' )
 			{
 				for each(var actID:XML in xmlToTree.children())
