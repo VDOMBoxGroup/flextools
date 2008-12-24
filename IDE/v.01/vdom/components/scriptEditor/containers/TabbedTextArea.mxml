@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- TextAreaTabAllowed -->
-<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" >
+<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" 
+	creationComplete="creationCompleteHandler();">
 <mx:Script>
 	<![CDATA[
+		import mx.core.UITextFormat;
+		import mx.events.FlexEvent;
 	
 	private var _allowTabKey:Boolean = false;
 	
@@ -23,6 +26,13 @@
 	public function get allowTabKey():Boolean {
 		
 		return _allowTabKey;
+	}
+	
+	private function creationCompleteHandler() : void
+	{
+		var tf : TextFormat = new UITextFormat(this.systemManager);
+		tf.tabStops = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300];
+		textField.defaultTextFormat = tf;	
 	}
 	
 	private function catchTabKey(e:FocusEvent = null):void {

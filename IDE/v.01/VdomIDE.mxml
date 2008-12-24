@@ -12,7 +12,8 @@
 	xmlns:modules="vdom.modules.*"
 		
 	preinitialize="preinitalizeHandler();"
-	creationComplete="creationCompleteHandler()"
+	creationComplete="creationCompleteHandler();"
+	invoke="invokeHandler( event );"
 	
 	layout="absolute"
 	verticalScrollPolicy="off"

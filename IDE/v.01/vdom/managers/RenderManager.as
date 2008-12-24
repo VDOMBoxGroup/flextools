@@ -12,6 +12,7 @@ import mx.collections.Sort;
 import mx.collections.SortField;
 import mx.core.Container;
 import mx.core.UIComponent;
+import mx.rpc.events.FaultEvent;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
@@ -28,7 +29,6 @@ import vdom.events.DataManagerEvent;
 import vdom.events.RenderManagerEvent;
 import vdom.events.SOAPEvent;
 import vdom.managers.renderClasses.ItemDescription;
-import vdom.utils.IconUtil;
 
 public class RenderManager implements IEventDispatcher {
 	
@@ -107,6 +107,7 @@ public class RenderManager implements IEventDispatcher {
 	public function init(destContainer:Container, applicationId:String = null):void
 	{
 		soap.render_wysiwyg.addEventListener(SOAPEvent.RESULT, renderWysiwygOkHandler);
+		soap.render_wysiwyg.addEventListener(FaultEvent.FAULT, renderWysiwygFaultHandler);
 		
 		rootContainer = destContainer;
 		
@@ -780,6 +781,11 @@ public class RenderManager implements IEventDispatcher {
 		rme.result = Container(item);
 		
 		dispatchEvent(rme);
+	}
+	
+	private function renderWysiwygFaultHandler( event : FaultEvent ) : void 
+	{
+		var dummy : * = "" // FIXME remove dummy;
 	}
 	
 	/**

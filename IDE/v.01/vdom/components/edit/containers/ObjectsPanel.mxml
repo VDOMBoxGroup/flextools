@@ -14,6 +14,8 @@ xmlns:containers="vdom.components.edit.containers.*"
 
 <mx:Script>
 	<![CDATA[
+		import mx.collections.SortField;
+		import mx.collections.Sort;
 		import mx.collections.XMLListCollection;
 		import mx.validators.ValidationResult;
 		import mx.messaging.AbstractConsumer;
@@ -27,9 +29,6 @@ xmlns:containers="vdom.components.edit.containers.*"
 		import mx.events.FlexEvent;
 		import mx.controls.Tree;
 		import mx.core.Application;
-			
-		    
-  		
 		
 		[Bindable]
 		private var publicData:Object;
@@ -69,7 +68,7 @@ xmlns:containers="vdom.components.edit.containers.*"
 			if(xmlData) 
 			{
 				// создаем обьекты верхнего уровня
-				 xmlTreeData = new XMLListCollection;
+				xmlTreeData = new XMLListCollection;
 				for each(var xmlLabel:XML in xmlData)
 				{
 					if (xmlLabel.name() == 'Parent') continue;
@@ -80,12 +79,17 @@ xmlns:containers="vdom.components.edit.containers.*"
 					xmlList.@ID = xmlLabel.@ID;
 					xmlList.@Type = xmlLabel.@Type;
 					
-					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
+					xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
 					
 					xmlList.appendChild(findOjects(xmlLabel.Objects));
 					
 					xmlTreeData.addItem(xmlList);
 				} 
+				
+				var sort : Sort = new Sort();
+				sort.fields = [new SortField("@Type"), new SortField("@label", true)];
+				xmlTreeData.sort = sort;
+				xmlTreeData.refresh();
 				
 				tree.dataProvider = xmlTreeData;
 				tree.validateNow();

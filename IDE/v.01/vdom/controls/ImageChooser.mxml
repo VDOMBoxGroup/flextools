@@ -35,14 +35,14 @@
 		
 		[Bindable]
 		private var listArray:Array = [
-			{source:'appIconPersonalPages', imageName:'personalpages'}, {source:'appIconAssociation', imageName:'association'},
-			{source:'appIconBuild', imageName:'build'}, {source:'appIconComputer', imageName:'computer'},
-			{source:'appIconCulture', imageName:'culture'}, {source:'appIconEducation', imageName:'education'},
-			{source:'appIconElectronic', imageName:'electronic'}, {source:'appIconFashion', imageName:'fashion'},
-			{source:'appIconHealth', imageName:'health'}, {source:'appIconHotels', imageName:'hotels'},
-			{source:'appIconHousing', imageName:'housing'}, {source:'appIconRestaurant', imageName:'restaurant'},
-			{source:'appIconSport', imageName:'sport'}, {source:'appIconStoreShop', imageName:'storeshop'},
-			{source:'appIconTransportation', imageName:'transportation'}
+			{source:"appIconPersonalPages", imageName:"personalpages"}, {source:"appIconAssociation", imageName:"association"},
+			{source:"appIconBuild", imageName:"build"}, {source:"appIconComputer", imageName:"computer"},
+			{source:"appIconCulture", imageName:"culture"}, {source:"appIconEducation", imageName:"education"},
+			{source:"appIconElectronic", imageName:"electronic"}, {source:"appIconFashion", imageName:"fashion"},
+			{source:"appIconHealth", imageName:"health"}, {source:"appIconHotels", imageName:"hotels"},
+			{source:"appIconHousing", imageName:"housing"}, {source:"appIconRestaurant", imageName:"restaurant"},
+			{source:"appIconSport", imageName:"sport"}, {source:"appIconStoreShop", imageName:"storeshop"},
+			{source:"appIconTransportation", imageName:"transportation"}
 		]
 		
 		private var _selectedImage:ByteArray;
@@ -50,21 +50,35 @@
 		private var loader:Loader;
 		private var tempName:String;
 		
-		[Bindable (event='imageChanged')]
+		[Bindable (event="imageChanged")]
 		private function get selectedImage():Object
 		{	
 			return _selectedImage;
 		}
 		
-		private function changeHandler(event:ListEvent):void
+		private function changeHandler(event:*):void
 		{	
-			_selectedImage = MyImage(event.itemRenderer).source;
-			dispatchEvent(new Event('imageChanged'));
+			try
+			{
+				var imageName : String = MyImage(event.itemRenderer).data.source;
+				var iconClass:Class = Application.application.getStyle( imageName );
+				var ba:BitmapAsset = new iconClass();
+				var pnge:PNGEncoder = new PNGEncoder();
+				_selectedImage = pnge.encode(ba.bitmapData);
+				dispatchEvent(new Event("imageChanged"));
+			}
+			catch( error : Error )
+			{
+				var d : * = "";
+//				Alert.show(error.message);
+			}
+			//_selectedImage = MyImage(event.itemRenderer).source;
+			//dispatchEvent(new Event("imageChanged"));
 		}
 		
 		private function addedHandler():void 
 		{
-			var iconClass:Class = Application.application.getStyle('appIconPersonalPages');
+			var iconClass:Class = Application.application.getStyle("appIconPersonalPages");
 			var ba:BitmapAsset = new iconClass();
 			var pnge:PNGEncoder = new PNGEncoder();
 			_selectedImage = pnge.encode(ba.bitmapData);
@@ -102,9 +116,9 @@
 		private function loadFile():void
 		{
 			var file:File = new File();
-			var fileFilter:FileFilter = new FileFilter('Image', "*.jpg;*.jpeg;*.gif;*.png");
+			var fileFilter:FileFilter = new FileFilter("Image", "*.jpg;*.jpeg;*.gif;*.png");
 			file.addEventListener(Event.SELECT, selectFileHandler);
-			file.browseForOpen('Load image', [fileFilter]);
+			file.browseForOpen("Load image", [fileFilter]);
 		}
 		
 		private function selectFileHandler(event:Event):void
@@ -129,7 +143,7 @@
 				if(byteArray.length > 0) {
 					
 					if(file.name)
-						tempName = file.name.substring(-1, file.name.lastIndexOf('.')); 
+						tempName = file.name.substring(-1, file.name.lastIndexOf(".")); 
 									
 					loader = new Loader();
 				
@@ -163,7 +177,7 @@
 			
 			_selectedImage = iconByteArray;
 			
-			dispatchEvent(new Event('imageChanged'));
+			dispatchEvent(new Event("imageChanged"));
 				
 		}
 			
@@ -174,7 +188,7 @@
 		
 		private function loader_ioErrorHandler(event:IOErrorEvent):void
 		{
-			Alert.show('Wrong format!');
+			Alert.show("Wrong format!");
 			return;
 		}
 	]]>

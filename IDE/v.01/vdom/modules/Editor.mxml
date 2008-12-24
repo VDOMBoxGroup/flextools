@@ -55,10 +55,12 @@
 			labelPlacement="bottom"
 			click="{placeCanvas.selectedChild=eventCanv}"/>
 		
-		<!--<controls:ActionButton styleName="analyseButton"
+		<controls:ActionButton id="debugButton"
+			styleName="analyseButton"
 			label="Debug"
 			labelPlacement="bottom"
-			click="{placeCanvas.selectedChild=analyseCanv}"/>-->
+			visible="false"
+			click="{ placeCanvas.selectedChild = analyseCanv }"/>
 		<!--
 		<controls:ActionButton styleName="statisticsButton" 
 			label="{resourceManager.getString('Application','editor_statistics')}"

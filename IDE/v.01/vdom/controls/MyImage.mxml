@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
 <mx:Script>
 	<![CDATA[
+		import mx.controls.Alert;
 		import mx.graphics.codec.PNGEncoder;
 		import mx.core.BitmapAsset;
 		
@@ -16,8 +17,9 @@
 				_source =  getStyle(value.source);
 		}
 		
-		public function get source():ByteArray {
+		public function get sourcez():* {
 			
+			Alert.show("MyImage -> get source");
 			var result:ByteArray; 
 			if(img.source is Class) {
 				
@@ -35,7 +37,6 @@
 				var bd:BitmapData = BitmapAsset(img.source).bitmapData;
 				result = bd.getPixels(bd.rect);
 			}
-			
 			return result;
 		}
 		

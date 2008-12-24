@@ -1,90 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	show="init();">
 	
-	<mx:Script>
-		<![CDATA[
-			import vdom.managers.FileManager;
-			import mx.core.IUITextField;
-			import vdom.events.FileManagerEvent;
-			import mx.controls.Alert;
-			import mx.core.UIComponent;
-			import vdom.components.analyse.managers.DbgRenderManager;
-			
-			private var renderManager : DbgRenderManager = DbgRenderManager.getInstance();
-			private var fileManager:FileManager = FileManager.getInstance();
-			
-			private function _test() : void
-			{
-				var uicomp : UIComponent;
-				var txt : String = textAreaContainer.text;
-				try
-				{
-					uicomp = renderManager.render( "", XML( txt ) );
-				}
-				catch( error : Error )
-				{
-					Alert.show( "Message: \n" + error.message, "Alert" );
-					return;
-				}
-				
-				if( !uicomp )
-				{
-					Alert.show( "Message: \n" + "Empty result", "Alert" );
-					return;
-				}
-				
-				res.removeAllChildren();
-				res.addChild( uicomp );
-				
-			}
-			private function init():void
-			{
-				var tf:IUITextField = textAreaContainer.mx_internal::getTextField();
-				tf.alwaysShowSelection = true;
-				
-				fileManager.addEventListener(
-					FileManagerEvent.RESOURCE_LIST_LOADED, 
-					fileManager_resourceListLoaded
-				);
-				fileManager.getListResources();
-			}
-			
-			private function fileManager_resourceListLoaded(event:FileManagerEvent):void
-			{
-				fileManager.removeEventListener(
-					FileManagerEvent.RESOURCE_LIST_LOADED, 
-					fileManager_resourceListLoaded
-				);
-				
-				resourceList.dataProvider = event.result.Resources.*
-				resourceList.enabled = true;
-			}
-			
-			private function insertResourceLink():void
-			{
-				var textFiled:TextField = textAreaContainer.mx_internal::getTextField();
-				var index:int = textFiled.selectionBeginIndex;
-				
-				textFiled.text = textFiled.text.substring(0, index) + "#Res(" + XML(resourceList.selectedItem).@id + ")" + textFiled.text.substring(index);
-				textFiled.setSelection(index, index);
-				textFiled.dispatchEvent( new Event( Event.CHANGE ) );
-			}
-		]]>
-	</mx:Script>
+	creationComplete="creationCompleteHandler();"
+	show="init();" >
+	
+	<mx:Script source="includes/analyse.as" />
+
 	<mx:HDividedBox width="100%" height="100%">
-		<mx:Canvas id="res" width="400" height="100%" backgroundColor="#FFFFFF">
+		<mx:Canvas id="res" width="100%" height="100%" backgroundColor="#FFFFFF">
 		</mx:Canvas>
-		<mx:VBox height="100%" horizontalAlign="right">
-			<mx:TextArea id="textAreaContainer" height="100%" width="100%" borderColor="#000000" wordWrap="false"/>
-			<mx:HBox>
+		<mx:VBox width="400" height="100%" horizontalAlign="right" >
+			<mx:TextArea id="textAreaContainer" height="100%" borderColor="#000000" wordWrap="false" width="100%"/>
+			<mx:HBox width="100%">
 				<mx:Label text="Resources:"/>
 				<mx:ComboBox id="resourceList" labelField="@name"
 					width="130" cornerRadius="0" enabled="false"/>
 				<mx:Button label="ok" cornerRadius="0" click="insertResourceLink();"/>
+				<mx:Spacer width="100%"/>
+				<mx:Button label="Apply" click="_test();"/>
 			</mx:HBox>
-			<mx:Button label="Apply" click="_test();"/>
+			
 		</mx:VBox>
 	</mx:HDividedBox>
 			

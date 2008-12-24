@@ -52,7 +52,7 @@
 			target: releasecompile              
 		 ============================== -->
 	
-	<target name="releasecompile">
+	<target name="releasecompile" depends="init" >
 		<java jar="${mxmlc.jar}" fork="true" failonerror="true">
 			<arg value="-debug=false" />
 			<arg value="-source-path+=${basedir}" />

@@ -1,4 +1,5 @@
 import flash.events.Event;
+import flash.events.InvokeEvent;
 
 import mx.controls.Alert;
 import mx.core.Application;
@@ -7,7 +8,6 @@ import mx.core.UIComponent;
 import mx.events.FlexEvent;
 import mx.events.IndexChangedEvent;
 import mx.managers.PopUpManager;
-import mx.managers.ToolTipManager;
 import mx.rpc.Fault;
 import mx.rpc.events.FaultEvent;
 
@@ -84,7 +84,7 @@ private function switchToLogin():void
 
 private function checkError(fault:Fault):void
 {
-	var errorCode:String = StringUtil.getLocalName(fault.faultCode);
+	var errorCode:String = StringUtil.getLocalName( fault.faultCode );
 	
 	switch(errorCode)
 	{
@@ -106,6 +106,30 @@ private function checkError(fault:Fault):void
 	
 	alertManager.showAlert(fault.faultString);
 	alertManager.showMessage("");
+}
+
+private function invokeHandler( event : InvokeEvent ) : void 
+{
+	var argArray : Array = event.arguments;
+	
+	if( argArray.length == 0 )
+		return;
+	
+	for each ( var argValue : String in argArray )
+	{
+		switch ( argValue )
+		{
+			case "debug" :
+			{
+				editorModule.debugButton.visible = true;
+			}
+			case "darkstyle" :
+			{
+				editorModule.scriptCanv.textArea.setStyle( "color", "white" );
+				editorModule.scriptCanv.textArea.setStyle( "backgroundColor", "black" );
+			}
+		}
+	}			
 }
 
 private function preinitalizeHandler():void

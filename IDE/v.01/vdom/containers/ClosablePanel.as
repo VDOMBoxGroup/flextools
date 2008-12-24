@@ -1,10 +1,8 @@
 package vdom.containers 
 {
-
 import flash.events.MouseEvent;
 
 import mx.containers.HDividedBox;
-HDividedBox
 import mx.containers.Panel;
 import mx.controls.Button;
 import mx.core.EdgeMetrics;

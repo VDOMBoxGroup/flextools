@@ -50,7 +50,7 @@ private function changeImage():void
 	imageChooser = new ImageChooser();
 	imageChooser.addEventListener(ImageChooserEvent.APPLY, imageChooser_applyHandler);
 	
-	PopUpManager.addPopUp(imageChooser, DisplayObject(Application.application), true);
+	PopUpManager.addPopUp(imageChooser, DisplayObject( Application.application ), true);
 	PopUpManager.centerPopUp(imageChooser);
 }
 

@@ -12,6 +12,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
+import mx.core.mx_internal;
 import mx.core.Container;
 import mx.core.UIComponent;
 import mx.events.FlexEvent;
@@ -20,7 +21,7 @@ import mx.managers.CursorManager;
 import vdom.events.TransformMarkerEvent;
 import vdom.managers.ResizeManager;
 
-use namespace mx.core.mx_internal;
+use namespace mx_internal;
 
 public class TransformMarker extends UIComponent
 {

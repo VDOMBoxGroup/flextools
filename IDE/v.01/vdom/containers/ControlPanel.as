@@ -1,5 +1,5 @@
-package vdom.containers {
-	
+package vdom.containers
+{
 import flash.display.DisplayObject;
 import flash.events.MouseEvent;
 
