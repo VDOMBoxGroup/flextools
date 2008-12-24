@@ -274,11 +274,12 @@
 	        	  {
 	        	  	if(item.@Language[0])
 	        	  	{
-	        	  		if(!serverActionsArray[item.@ID] || !can.contains(serverActionsArray[item.@ID]) )
+	        	  		if(serverActionsArray[item.@ID] && !can.contains(serverActionsArray[item.@ID]) )
 	        	  		{
-							newElement = new ServerAction(item);
-							serverActionsArray[item.@ID] = setListeners4Action(newElement);
-							can.addChild(serverActionsArray [item.@ID]);
+							newElement = serverActionsArray [item.@ID];
+//							serverActionsArray[item.@ID] = setListeners4Action(newElement);
+							can.addChild(newElement);
+							
 	        	  		}
 	        	  	}else
 	        	  	{
@@ -385,7 +386,7 @@
 	        		if(can.contains(serverActionsArray[ID]))
 	        			can.removeChild(serverActionsArray[ID]);
 	        			
-	        		delete serverActionsArray[ID];
+//	        		delete serverActionsArray[ID];
 	        	}
 	        	deleteLines(ID);
 	        	
@@ -553,7 +554,7 @@
 					
 				linesArray[evtID][actID].addEventListener(MouseEvent.CLICK, markLines);	
 				
-				can.addChild(linesArray[evtID][actID]);
+				can.addChildAt(linesArray[evtID][actID], 0);
 			}
 			
 			private function possibleDrawLine(actID:String):Boolean
@@ -754,45 +755,57 @@
 			{
 //				trace('SEND curContainerID: '+contrID);
 //				return;
-				dataToServer = <E2vdom><Events/><ClientActions/> <ServerActions/></E2vdom>;
+				dataToServer = <E2vdom><Events/><ClientActions/></E2vdom>;
 				
 				var temXML:XML;
 				
 				 // clientActions
 				for (var actID:String in clientActionsArray)
 				{	
-					temXML = <Action/>;
-					
-					temXML.@ID 		 	= clientActionsArray[actID].ID;
-					temXML.@ObjTgtID 	= clientActionsArray[actID].ObjTgtID;
-					temXML.@MethodName 	= clientActionsArray[actID].MethodName;
-					temXML.@Top 		= clientActionsArray[actID].y;
-					temXML.@Left 		= clientActionsArray[actID].x;
-					temXML.@State		= clientActionsArray[actID].State;
-					
-					temXML.appendChild(clientActionsArray[actID].parametrs);
-					
-					dataToServer.ClientActions.appendChild(temXML);
+					if(can.contains(clientActionsArray[actID]))
+					{
+						temXML = <Action/>;
+						
+						temXML.@ID 		 	= clientActionsArray[actID].ID;
+						temXML.@ObjTgtID 	= clientActionsArray[actID].ObjTgtID;
+						temXML.@MethodName 	= clientActionsArray[actID].MethodName;
+						temXML.@Top 		= clientActionsArray[actID].y;
+						temXML.@Left 		= clientActionsArray[actID].x;
+						temXML.@State		= clientActionsArray[actID].State;
+						
+						temXML.appendChild(clientActionsArray[actID].parametrs);
+						
+						dataToServer.ClientActions.appendChild(temXML);
+					}
 				}
 				
-				
+				var containerArray:Array = new Array();// XML
 				for ( actID in serverActionsArray)
 				{	
+					var action:ServerAction = serverActionsArray[actID];
+					if(!containerArray[action.containerID])
+					{
+						containerArray[action.containerID] = new XML('<ServerActions/>')
+					}
+					
 					temXML = <Action/>;
+					temXML.@ID 		 	= action.ID;
+					temXML.@Name		= action.Name;
+					temXML.@Top 		= action.y;
+					temXML.@Left 		= action.x;
+					temXML.@State		= action.State;
+					temXML.@Language	= action.language;
+					temXML.appendChild(action.parametrs);
 					
-					temXML.@ID 		 	= serverActionsArray[actID].ID;
-					temXML.@Name		= serverActionsArray[actID].Name;
-					temXML.@Top 		= serverActionsArray[actID].y;
-					temXML.@Left 		= serverActionsArray[actID].x;
-					temXML.@State		= serverActionsArray[actID].State;
-					
-					temXML.@Language	= serverActionsArray[actID].language;
-					
-					temXML.appendChild(serverActionsArray[actID].parametrs);
-					
-					dataToServer.ServerActions.appendChild(temXML);
+					XML(containerArray[action.containerID]).appendChild(temXML);
+//					dataToServer.ServerActions.appendChild(temXML);
 				}
 				
+				for(var containerID:String in containerArray)
+				{
+					trace('-----------\n'+ containerID +'\n'+ containerArray[containerID])
+					dataManager.setServerActions(containerArray[containerID], containerID);
+				}
 				//  Events
 				for (var evtID:String in eventsArray)
 				{
@@ -869,25 +882,29 @@
 						
 						 clientActionsArray[objAct.ID] = setListeners4Action(objAct);
 						
-						can.addChild(clientActionsArray [actID.@ID]);
+//						can.addChild(clientActionsArray [actID.@ID]);
 					}
 				}
 				
 				// Server Action 
 				serverActionsArray = [];
-				for each( actID in xmlToTree.E2vdom.ServerActions.children())
+				for each( var container:XML in xmlToTree.E2vdom.ServerActions.children())
 				{
-					var servActin:ServerAction = new ServerAction(actID);
-					serverActionsArray[actID.@ID] = setListeners4Action(servActin);
-					can.addChild(serverActionsArray [actID.@ID]);
-				/*	tempXML = <Action/>;
-					tempXML.@label = actID.@Name;
-					tempXML.@Name = actID.@Name;
-					tempXML.@Language = actID.@Language;
-					tempXML.@ID = actID.@ID;
-					
-					dataXML.appendChild(tempXML);
-					*/
+					for each(actID in container.children())
+					{
+						var servActin:ServerAction = new ServerAction(actID, container.@ID);
+							servActin.containerID = container.@ID;
+						serverActionsArray[actID.@ID] = setListeners4Action(servActin);
+//						can.addChild(serverActionsArray [actID.@ID]);
+					/*	tempXML = <Action/>;
+						tempXML.@label = actID.@Name;
+						tempXML.@Name = actID.@Name;
+						tempXML.@Language = actID.@Language;
+						tempXML.@ID = actID.@ID;
+						
+						dataXML.appendChild(tempXML);
+						*/
+					}
 				}
 				
 				
@@ -922,8 +939,22 @@
 					for each(actID in evt.children())
 					{
 						var ID:String = actID.@ID;
-						if(serverActionsArray[ID] || clientActionsArray[ID])
+						if(clientActionsArray[ID])
+						{
 							createLine(evtID, ID);
+							if(!can.contains(clientActionsArray[ID]))
+							{
+								can.addChildAt(clientActionsArray[ID], 0);
+							}
+						}
+						else if(serverActionsArray[ID])
+						{	
+							createLine(evtID, ID);
+							if(!can.contains(serverActionsArray[ID]))
+							{
+								can.addChildAt(serverActionsArray[ID], 0);
+							}
+						}
 					}
 				}
 				

@@ -14,6 +14,7 @@ package vdom.components.eventEditor
 	
 	import vdom.events.TreeEditorEvent;
 	import vdom.managers.DataManager;
+	import vdom.managers.FileManager;
 	
 	
 
@@ -47,6 +48,14 @@ package vdom.components.eventEditor
 		[Bindable]
 		public var action:Class;
 		
+		[Embed(source='/assets/scriptEditor/python.png')]
+		[Bindable]
+		public var python:Class;
+		
+		[Embed(source='/assets/scriptEditor/vbscript.png')]
+		[Bindable]
+		public var vscript:Class;
+		
 	
 		private var btLine:Button;
 		private var btDelete:Button;
@@ -73,7 +82,7 @@ package vdom.components.eventEditor
 		private var _ratio:Number = 0.7;
 	
 		
-		public function ServerAction(data:XML)
+		public function ServerAction(data:XML, objID:String)
 		{
 //			trace('containerID: '+containerID);
 			super();
@@ -85,7 +94,7 @@ package vdom.components.eventEditor
 			//dataManager = DataManager.getInstance();
 			
 			initUpBody();
-			initDownBody(data);
+			initDownBody(data, objID);
 			_language = data.@Language;
 			
 			updateRatio();
@@ -159,7 +168,7 @@ package vdom.components.eventEditor
 					removeChild(cnvDownLayer);
 				
 				imgPlus.source = plus;
-				txt.text = _name  ;
+				txt.text = _name +' : '+_methodName ;
 			}else
 			{
 				if(!contains(cnvDownLayer))	
@@ -264,9 +273,10 @@ package vdom.components.eventEditor
 		}
 		
 		private var _name:String;
+		private var _methodName:String;
 		private var scriptNamesArray:Array = []; /* of advansedLayer*/
 		private var objectName:SimpleLayer;
-		private function initDownBody(data:XML):void
+		private function initDownBody(data:XML, objID:String):void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
 			addChild(cnvDownLayer);
@@ -290,11 +300,34 @@ package vdom.components.eventEditor
 			*/
 			
 			
-			var object:XML = dataManager.getObject(data.@ObjTgtID);
+			var object:XML = dataManager.getObject(objID);
 			
-			_name = data.@Name;
+			_name = object.@Name;
 			objectName = new SimpleLayer(_name);
 			vBox.addChild(objectName);
+			
+			var type:XML = dataManager.getTypeByObjectId(objID);
+			var fileManager:FileManager = FileManager.getInstance();
+			var  regResource:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
+			var _value:String =  type.Information.StructureIcon;
+			var matchResult:Array = _value.match(regResource);
+			var resID:String = matchResult[1];
+			fileManager.loadResource(dataManager.currentApplicationId,  resID, this);
+			
+			
+			_methodName = data.@Name;
+			var objectAction:SimpleLayer = new SimpleLayer(_methodName);
+			
+			
+			if(data.@Language == "vscript")
+			{
+				objectAction.source = vscript;
+			} else if(data.@Language == "python" )
+			{
+				objectAction.source = python;
+			}
+			
+			vBox.addChild(objectAction);
 			
 			_parametrs = data.toString();
 			/*
@@ -440,6 +473,18 @@ package vdom.components.eventEditor
 		public function get language():String
 		{
 			return _language;
+		}
+		
+		private var _containerID:String;
+		public function set containerID(value:String):void
+		{
+			if(value != "")
+			_containerID = value;
+		}
+		
+		public function get containerID():String
+		{
+			return _containerID;
 		}
 	}
 }

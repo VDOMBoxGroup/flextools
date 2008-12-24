@@ -12,6 +12,8 @@ package vdom.components.eventEditor
 		[Bindable]
 		public var _action:Class;
 		
+		
+		
 		private var img:Image;
 		
 		public function SimpleLayer	(str:String = 'test')

@@ -172,15 +172,21 @@ package vdom.components.eventEditor
 			var tempXML:XML;
 			if(xmlToTree.toString() !='' )
 			{
-				for each(var actID:XML in xmlToTree.children())
+				for each(var container:XML in xmlToTree.children())
 				{
-					tempXML = <Action/>;
-					tempXML.@label = actID.@Name;
-					tempXML.@Name = actID.@Name;
-					tempXML.@Language =	 actID.@Language;
-					tempXML.@ID = actID.@ID;
-					
-					dataXML.appendChild(tempXML);
+					if(container.@ID == dataManager.currentObjectId)
+					{
+						for each(var actID:XML in container.children())
+						{
+							tempXML = <Action/>;
+							tempXML.@label = actID.@Name;
+							tempXML.@Name = actID.@Name;
+							tempXML.@Language =	 actID.@Language;
+							tempXML.@ID = actID.@ID;
+							
+							dataXML.appendChild(tempXML);
+						}
+					}
 				}
 				
 				super.dataProvider = dataXML;
@@ -205,6 +211,7 @@ package vdom.components.eventEditor
 			
 			return masResourceID[ID];
 		}
+		
 		
 		
 	}

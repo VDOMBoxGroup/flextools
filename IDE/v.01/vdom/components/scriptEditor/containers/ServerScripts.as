@@ -70,13 +70,16 @@ package vdom.components.scriptEditor.containers
 		private var xmlToServer:XML;
 		private function creatData(xmlToTree:XML):void
 		{
-			xmlToServer = new XML(xmlToTree.toXMLString());
+			xmlToServer = new XML('<ServerActions/>');
+			var continer:XML = new XML(xmlToTree.Container.(@ID == dataManager.currentObjectId)[0].toXMLString());
+			for each(var action:XML in continer.children())
+				xmlToServer.appendChild(action);
 //			delete xmlToServer.Key;
 
 			var object:XML = dataManager.getObject(dataManager.currentObjectId);
 			
 			dataXML  = new XML('<Object/>');
-			dataXML.@Name 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+			dataXML.@Name = object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
 			dataXML.@resourceID = getSourceID(object.@Type);
 			
 //			var type:XML = dataManager.getTypeByObjectId(dataManager.currentObjectId);
@@ -87,9 +90,9 @@ package vdom.components.scriptEditor.containers
 //			dataXML  = new XML('<Actions/>');
 			
 			var tempXML:XML;
-			if(xmlToTree.toString() !='' )
+			if(continer.toString() !='' )
 			{
-				for each(var actID:XML in xmlToTree.children())
+				for each(var actID:XML in continer.children())
 				{
 					tempXML = <Action/>;
 					tempXML.@label = actID.@Name;
