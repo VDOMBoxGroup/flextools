@@ -693,7 +693,7 @@ public class Parser
 		ret = _contexts[0][_res];
 		delete _contexts[0][_res];
 		return ret;
-	} 
+	}
 	
 	//--------------------------------------------------------------------------
     //
