@@ -14,6 +14,7 @@ import PowerPack.com.managers.CashManager;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.filesystem.File;
+import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
@@ -653,8 +654,8 @@ public class TemplateStruct extends EventDispatcher
 									parsedNode.value + 
 									" ";
 							
-							if(parsedNode.variable!=null)
-								context[parsedNode.variable] = parsedNode.value;
+							//if(parsedNode.variable!=null)
+							//	context[parsedNode.variable] = parsedNode.value;
 	
 							if(parsedNode.type==CodeParser.CT_TEST)
 								transition = parsedNode.value;
@@ -668,7 +669,7 @@ public class TemplateStruct extends EventDispatcher
 							continue;
 					}
 					
-				case 2: // transition to next node						
+				case 2: // transition to next node
 				
 					step = 2;
 					
