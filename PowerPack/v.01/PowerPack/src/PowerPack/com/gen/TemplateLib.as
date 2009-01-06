@@ -20,9 +20,20 @@ import mx.utils.StringUtil;
 
 public dynamic class TemplateLib
 {
+	include "include/GeneralFunctions.as";
+	include "include/ListManipulationFunctions.as";
+	include "include/GraphicFunctions.as";
+	include "include/ImageProcessingFunctions.as";
+		
 	public var tplStruct:TemplateStruct;
 	
+	public function TemplateLib()
+	{
+	}
 	
-
+	public function setReturnValue(value:*):void
+	{
+		tplStruct.parsedNode.value = value;
+	}
 }
 }

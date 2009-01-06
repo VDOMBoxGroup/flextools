@@ -17,18 +17,12 @@ import flash.filesystem.File;
 import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
-import mx.core.Application;
 import mx.utils.UIDUtil;
 
 import r1.deval.D;
 
 public class TemplateStruct extends EventDispatcher
 {
-	include "include/GeneralFunctions.as";
-	include "include/ListManipulationFunctions.as";
-	include "include/GraphicFunctions.as";
-	include "include/ImageProcessingFunctions.as";
-
 	public static const MSG_PARSE_ERR:String = "Runtime error.\nGraph: {0}\nState: {1}";
 	public static var lib:TemplateLib;
 	
@@ -58,9 +52,9 @@ public class TemplateStruct extends EventDispatcher
 	
 	public var context:Dynamic = new Dynamic();
 
-	public var parsedNode:Object;
+	public var parsedNode:ParsedNode;
 	private var step:int;
-	public	var transition:String;	
+	public	var transition:String;
 	
 	public var isDebug:Boolean;
 	public var isStepDebug:Boolean;			
@@ -454,6 +448,10 @@ public class TemplateStruct extends EventDispatcher
 			contextStack.push(graphContext);			
 		}		
 		
+		if(!lib)
+			lib = new TemplateLib();
+		
+		lib.tplStruct = this;
 		context[CNTXT_INSTANCE] = lib;
 	}
 	
@@ -493,7 +491,7 @@ public class TemplateStruct extends EventDispatcher
 		}
 		
 		if(!initGraph) {
-			isRunning = false;			
+			isRunning = false;
 			throw new ValidationError(null, 9001);
 		}
 		
@@ -555,6 +553,7 @@ public class TemplateStruct extends EventDispatcher
 								break;
 
 							case NodeCategory.RESOURCE:
+							
 								var resData:ByteArray = CashManager.getObject(ID, GraphContext(contextStack[contextStack.length-1]).curNode.text).data;
 								parsedNode.result = true;
 								parsedNode.print = true;
@@ -599,22 +598,22 @@ public class TemplateStruct extends EventDispatcher
 								
 							case NodeCategory.COMMAND:
 													
-								step = 1;
+								//step = 1;
 								
-								parsedNode = CodeParser.ParseCode(
-									GraphContext(contextStack[contextStack.length-1]).curNode.text,
-									GraphContext(contextStack[contextStack.length-1]).varPrefix,
-									[context, GraphContext(contextStack[contextStack.length-1]).context] );
-										
+								parsedNode = CodeParser.ParseCode(GraphContext(contextStack[contextStack.length-1]).curNode.text);
+								
+								GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
+									
+								/*
 								if(parsedNode.result)
 								{		
 									if(parsedNode.type==CodeParser.CT_FUNCTION)
 									{							
-										isRunning = false;										
+										isRunning = false;
 										return null;
 									}		
 								}
-								
+								*/								
 								break;
 
 						}					
@@ -636,10 +635,19 @@ public class TemplateStruct extends EventDispatcher
 								throw new RunTimeError( MSG_PARSE_ERR, -1, 
 									[GraphContext(contextStack[contextStack.length-1]).curNode.graph.name,
 									GraphContext(contextStack[contextStack.length-1]).curNode.text] );
-							}  
+							}
 						}			
 						else
 						{
+							CodeParser.executeCode(	parsedNode,
+								parsedNode.current,
+								[context, GraphContext(contextStack[contextStack.length-1]).context],			 
+								GraphContext(contextStack[contextStack.length-1]).varPrefix )										
+							
+							// check result
+							
+							parsedNode
+							
 							if(parsedNode.print && parsedNode.value)
 								GraphContext(contextStack[contextStack.length-1]).buffer += 
 									parsedNode.value + 
@@ -649,12 +657,15 @@ public class TemplateStruct extends EventDispatcher
 								context[parsedNode.variable] = parsedNode.value;
 	
 							if(parsedNode.type==CodeParser.CT_TEST)
-								transition = parsedNode.value;							
+								transition = parsedNode.value;
 							else if(parsedNode.transition)
 								transition = parsedNode.transition;
 						}
 						
-						GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
+						parsedNode.current++;
+						
+						if(parsedNode.current < parsedNode.lexemsGroup.length)
+							continue;
 					}
 					
 				case 2: // transition to next node						
@@ -740,7 +751,7 @@ public class TemplateStruct extends EventDispatcher
 		//	dispatchEvent(new Event("error"));
 		//}
 		
-		return null;		
+		return null;
 	}
 	
 	/**
