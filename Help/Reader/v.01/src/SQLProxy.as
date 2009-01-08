@@ -112,6 +112,90 @@ package
 	//       PRODUCT  (id, name, version, title, description, language, toc )   //
 	
 		/// ********* curentPruduct, curentPage ******************************	
+		
+		public function getVersionOfProduct(name:String, language:String):String
+		{
+			 
+			var query:String = "SELECT product.version " + 
+					"FROM product " + 
+					"WHERE name = :name " + 
+						" AND language = :language ;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = name;
+				parameters[":language"] = language;
+				
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return "";
+			}
+			return result[0]["version"];
+		}
+		
+		public function getProductsPages(name:String, language:String):Object
+		{
+			 
+			var query:String = "SELECT product.id " + 
+					"FROM product " + 
+					"WHERE name = :name " + 
+						" AND language = :language ;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = name;
+				parameters[":language"] = language;
+				
+			var result:Object = executeQuery(query, parameters);
+			
+		 	query = "SELECT page.name " + 
+					"FROM page " + 
+					"WHERE id_product = :id_product ";
+			
+			parameters = [];		
+			parameters[":id_product"] = result[0]["id"];
+			
+			result = executeQuery(query, parameters);
+			
+			return result;
+		}
+		
+		public function deleteProduct(name:String, language:String):void
+		{
+			var query:String = "SELECT product.id " + 
+					"FROM product " + 
+					"WHERE name = :name " + 
+						" AND language = :language ;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = name;
+				parameters[":language"] = language;
+				
+			var result:Object = executeQuery(query, parameters);
+			
+		 	query = "DELETE " + 
+					"FROM page " + 
+					"WHERE id_product = :id_product ";
+			
+			parameters = [];		
+			parameters[":id_product"] = result[0]["id"];
+			
+			result = executeQuery(query, parameters);
+			
+			
+			query = "DELETE " + 
+					"FROM product " + 
+					"WHERE name = :name " + 
+						" AND language = :language ;";
+						
+			parameters = [];
+			parameters[":name"] = name;
+			parameters[":language"] = language;
+				
+			result = executeQuery(query, parameters);
+			
+		}
+		
 		public function setProduct(name:String, version:String, title:String, 
 																description:String,
 																language:String,
@@ -134,14 +218,14 @@ package
 				if( !result)
 				{
 					query = "INSERT INTO product(name, version, title, description, language, toc) " + 
-								"VALUES(:name, :version, :title, :description, :description, :toc);";
+								"VALUES(:name, :version, :title, :description, :language, :toc);";
 					
 					parameters = [];
 					parameters[":name"] = name;
 					parameters[":version"] = version;
 					parameters[":title"] = title;
 					parameters[":description"] = description;
-					parameters[":description"] = description;
+					parameters[":language"] = language;
 					parameters[":toc"] = toc.toXMLString();
 													
 					executeQuery(query, parameters);				
@@ -173,12 +257,12 @@ package
 				
 				content = cleanContent(content);
 				 
-				var query:String = "SELECT product.id " + 
+				var query:String = "SELECT id " + 
 						"FROM product " + 
-						"WHERE name = :productName  AND language = :language;";
+						"WHERE name = :name  AND language = :language;";
 						
 				var parameters:Object = new Object();
-					parameters[":productName"] = productName;
+					parameters[":name"] = productName;
 					parameters[":language"] = language;
 						
 				var result:Object = executeQuery(query, parameters);

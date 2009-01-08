@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="frstLoadXML()">
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="frstLoadXML()" viewSourceURL="srcview/index.html">
 	<mx:Script>
 	<![CDATA[
 		import mx.utils.StringUtil;
@@ -76,7 +76,23 @@
 			var toc:XML = product.toc[0];
 			
 			// save product to data base
-			sqlProxy.setProduct(name,version,title,description, language,toc);
+			
+			var curPageVersion:String = sqlProxy.getVersionOfProduct(name, language);
+				
+				if(curPageVersion == '')
+				{
+//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+					sqlProxy.setProduct(name,version,title,description, language,toc);
+				}
+				else if (Number(curPageVersion)< Number(version))
+				{
+					//delete old data Find nessasri page 
+					deleteProduct(name, language);
+//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
+					
+					sqlProxy.setProduct(name, version, title, description, language,toc);
+				}
+			
 			// save loaded data to local diskDrive 
 			saveLoadedData(product);
 			
@@ -141,7 +157,7 @@
 				else if (Number(curPageVersion)< Number(version))
 				{
 					//delete old data
-					deleteOldData(pageLocation);
+					deletePage(pageLocation);
 					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
 				} else
 				{
@@ -175,22 +191,34 @@
 				}
 			}
 			
-			function deleteOldData(namePage:String):void
-			{
-				var resources:Object = sqlProxy.getResourcesOfPage(namePage);
-				
-				for(var index:String in resources)
-				{
-					deleteFile(resources[index]['name']);
-				}
-				
-				sqlProxy.deleteResources(namePage);
-				sqlProxy.deletePage(namePage);
-				
-			}
+			
 //			pageList.dataProvider = sqlProxy.search("conten of page","VdomHelp_en_US");
 			
 		}  
+		
+		private function deleteProduct(name:String, language:String):void
+		{
+//			get All pages of product 
+			var pages:Object = sqlProxy.getProductsPages(name, language);
+			for (var page:String in pages)
+			 deletePage(pages[page].name);
+			 
+			sqlProxy.deleteProduct(name, language);
+		}
+		
+		private function deletePage(namePage:String):void
+		{
+			var resources:Object = sqlProxy.getResourcesOfPage(namePage);
+			
+			for(var index:String in resources)
+			{
+				deleteFile(resources[index]['name']);
+			}
+			
+			sqlProxy.deleteResources(namePage);
+			sqlProxy.deletePage(namePage);
+			
+		}
 		
 		private function deleteFile(location:String):void
 		{
