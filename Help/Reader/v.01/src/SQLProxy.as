@@ -364,7 +364,7 @@ package
 			var query:String = "SELECT page.name, page.title " +
 						"FROM product INNER JOIN page ON product.id = page.id_product "+
 						"WHERE product.name = :productName " + 
-						"	AND page.content = :value  AND product.language = :language;"
+						"	AND ((page.content) LIKE  :value)  AND product.language = :language;"
 			
 			var parameters:Object = new Object();
 				parameters[":productName"] = productName;
