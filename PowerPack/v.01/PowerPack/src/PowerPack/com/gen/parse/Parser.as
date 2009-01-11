@@ -177,7 +177,7 @@ public class Parser
     						i++;
     						if(i>=sourceText.length)
     							break;
-    					} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);							
+    					} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);
 						i--;
    						type = 'v'; // variable*/
     					break;
@@ -292,6 +292,12 @@ public class Parser
     					
     				case ';':
    						type = ';'; // command separator
+   						
+   						do {
+   							i++;
+   						} while(sourceText.charAt(i)==';' || sourceText.charAt(i).search(/\s/)>=0)
+			    		i--;
+			    		
 			    		if(braceStack.length>0)
 			    		{
 			   				brace =	braceStack[braceStack.length-1]=='('?')':
@@ -422,7 +428,29 @@ public class Parser
 			
 		return lexems;  
 	}
-	
+		
+	public static function sliceLexems(lexems:Array, separator:String=';'):Array
+	{
+		var arr:Array = [];
+		var fix:int = 0;
+		
+		for(var i:int=0; i<lexems.length; i++)
+		{
+			if(lexems[i].type==separator)
+			{
+				if(fix<i)					
+					arr.push(lexems.slice(fix, i));
+				fix = i+1;
+			}
+		}
+		
+		// push rest of lexems
+		if(fix<i)
+			arr.push(lexems.slice(fix, i));
+													
+		return arr;
+	}
+		
 	public static function convertLexemArray(lexems:Array):Array
 	{
 		var converted:Array = lexems.concat();
@@ -444,28 +472,6 @@ public class Parser
 			}
 		}
 		return converted;
-	}
-		
-	public static function sliceLexems(lexems:Array, lexemType:String=';'):Array
-	{
-		var arr:Array = [];
-		var fix:int = 0;
-		
-		for(var i:int=0; i<lexems.length; i++)
-		{
-			if(lexems[i].type==lexemType)
-			{
-				if(fix<i)					
-					arr.push(lexems.slice(fix, i));
-				fix = i+1;
-			}
-		}
-		
-		// push rest of lexems
-		if(fix<i)
-			arr.push(lexems.slice(fix, i));
-													
-		return arr;
 	}
 
 	public static function processLexemArray(lexems:Array):void

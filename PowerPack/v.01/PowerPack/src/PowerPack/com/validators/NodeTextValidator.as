@@ -103,8 +103,8 @@ package PowerPack.com.validators
 				
 				node.toolTip = "";
 				
-				if(parseResult.array)
-					arrTrans = parseResult.array;
+				if(parseResult.trans)
+					arrTrans = parseResult.trans;
         		
         		switch(parseResult.type)
         		{
@@ -129,9 +129,9 @@ package PowerPack.com.validators
         		//node.toolTip += node.text;
         	}
         	
-            if(parseResult && parseResult.lexem)
-            	node.nodeTextArea.setSelection(parseResult.lexem.position, 
-            		parseResult.lexem.position + parseResult.lexem.origValue.length);
+            if(parseResult && parseResult.errLexem)
+            	node.nodeTextArea.setSelection(parseResult.errLexem.position, 
+            		parseResult.errLexem.position + parseResult.errLexem.origValue.length);
             
             if(!Utils.isEqualArrays(node.arrTrans, arrTrans))
 	   			node.arrTrans = arrTrans;

@@ -53,12 +53,12 @@ public class TemplateStruct extends EventDispatcher
 	
 	public var context:Dynamic = new Dynamic();
 
-	public var parsedNode:ParsedNode;
-	private var step:int;
+	//public var parsedNode:ParsedNode;
+	private var step:String;
 	public	var transition:String;
 	
 	public var isDebug:Boolean;
-	public var isStepDebug:Boolean;			
+	public var isStepDebug:Boolean;
 	private var forced:int;
 	
 	public function TemplateStruct(tplStruct:XML, ID:String)
@@ -463,9 +463,9 @@ public class TemplateStruct extends EventDispatcher
 					
 		contextStack = [];
 		nodeStack = [];
-		step = 0;
+		step = 'parseNewNode';
 		transition = null;
-		parsedNode = null;
+		//parsedNode = null;
 		isRunning = false;
 		forced = -1;
 		
@@ -477,8 +477,6 @@ public class TemplateStruct extends EventDispatcher
 	{
 		//try {
 			
-		//var currentContext:GraphContext = contextStack[contextStack.length-1];
-		
 		if(isRunning)
 		{				
 			//Application.application.callLater(generate, [force, over, ret]);
@@ -497,28 +495,26 @@ public class TemplateStruct extends EventDispatcher
 		}
 		
 		if(over)
-			forced=0;
+			forced = 0;
 			
 		if(ret)
-			forced=1;
+			forced = 1;
 			
 		do
 		{			
 			// check for current node	
-			if(!GraphContext(contextStack[contextStack.length-1]).curNode) {
+			if(!curGraphContext.curNode) {
 				isRunning = false;
 				throw new ValidationError(null, 9002, 
-					[GraphContext(contextStack[contextStack.length-1]).curGraph.name]);
+					[curGraphContext.curGraph.name]);
 			}
 								
 			switch(step)
 			{
-				case 0: // parse current node
+				case 'parseNewNode': // parse current node
 				
-					step = 0;
-					
 					if((forced>0 || over) && !force)
-						force = true;
+						force = true; 
 					
 					dispatchEvent(new Event("processNode"));
 						
@@ -529,7 +525,7 @@ public class TemplateStruct extends EventDispatcher
 						return null;
 					}
 	
-					if(isDebug && !force && GraphContext(contextStack[contextStack.length-1]).curNode.breakpoint) {
+					if(isDebug && !force && curGraphContext.curNode.breakpoint) {
 						dispatchEvent(new Event("stepComplete"));
 						isRunning = false;
 						forced = -1;
@@ -541,41 +537,39 @@ public class TemplateStruct extends EventDispatcher
 
 					////////////////////////////////////////////////////////////////////
 					
-					parsedNode = null;				
-					
-					if(GraphContext(contextStack[contextStack.length-1]).curNode.enabled)
+					if(curGraphContext.curNode.enabled)
 					{
-						parsedNode = new ParsedNode();
+						curGraphContext.curNode.parsedNode = new ParsedNode();
 	
-						switch(GraphContext(contextStack[contextStack.length-1]).curNode.category)
+						switch(curGraphContext.curNode.category)
 						{
 							case NodeCategory.NORMAL:
-							
-								parsedNode = CodeParser.ParseText(
-									GraphContext(contextStack[contextStack.length-1]).curNode.text,
-									[context, GraphContext(contextStack[contextStack.length-1]).context] );	
+							  
+								curGraphContext.curNode.parsedNode = CodeParser.ParseText(
+									curGraphContext.curNode.text,
+									[context, curGraphContext.context] );	
 								break;
 
 							case NodeCategory.RESOURCE:
 							
-								var resData:ByteArray = CashManager.getObject(ID, GraphContext(contextStack[contextStack.length-1]).curNode.text).data;
-								parsedNode.result = true;
-								parsedNode.print = true;
-								parsedNode.value = resData.readUTFBytes(resData.length);
+								var resData:ByteArray = CashManager.getObject(ID, curGraphContext.curNode.text).data;
+								curGraphContext.curNode.parsedNode.result = true;
+								curGraphContext.curNode.parsedNode.print = true;
+								curGraphContext.curNode.parsedNode.value = resData.readUTFBytes(resData.length);
 								break;
 																
 							case NodeCategory.SUBGRAPH:
 							
-								parsedNode = CodeParser.ParseSubgraphNode(
-									GraphContext(contextStack[contextStack.length-1]).curNode.text );
+								curGraphContext.curNode.parsedNode = CodeParser.ParseSubgraphNode(
+									curGraphContext.curNode.text );
 								
-								if(parsedNode.result)
+								if(curGraphContext.curNode.parsedNode.result)
 								{
 									var subgraph:GraphStruct;
 									
 									for each (var graphStruct:GraphStruct in graphs)
 									{
-										if(graphStruct.name == GraphContext(contextStack[contextStack.length-1]).curNode.text)
+										if(graphStruct.name == curGraphContext.curNode.text)
 										{	
 											subgraph = graphStruct;
 											break;
@@ -584,13 +578,12 @@ public class TemplateStruct extends EventDispatcher
 									
 									if(subgraph)
 									{
-										GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
-										nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));	
+										nodeStack.push(new NodeContext(curGraphContext.curNode));	
 										
 										var graphContext:GraphContext = new GraphContext(subgraph);
 										contextStack.push(graphContext);
 										
-										step = 0;
+										step = 'parseNewNode';
 										if(forced>=0)
 											forced++;
 										continue;
@@ -599,29 +592,14 @@ public class TemplateStruct extends EventDispatcher
 									{
 										isRunning = false;
 										throw new ValidationError(null, 9006, 
-												[GraphContext(contextStack[contextStack.length-1]).curNode.text]);
+												[curGraphContext.curNode.text]);
 									}
 								}
 								break;
 								
 							case NodeCategory.COMMAND:
 													
-								//step = 1;
-								
-								parsedNode = CodeParser.ParseCode(GraphContext(contextStack[contextStack.length-1]).curNode.text);
-								
-								GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
-									
-								/*
-								if(parsedNode.result)
-								{		
-									if(parsedNode.type==CodeParser.CT_FUNCTION)
-									{							
-										isRunning = false;
-										return null;
-									}		
-								}
-								*/								
+								curGraphContext.curNode.parsedNode = CodeParser.ParseCode(curGraphContext.curNode.text);
 								break;
 
 						}					
@@ -640,8 +618,8 @@ public class TemplateStruct extends EventDispatcher
 								{
 									CodeParser.executeCode(	parsedNode,
 										parsedNode.current,
-										[context, GraphContext(contextStack[contextStack.length-1]).context],			 
-										GraphContext(contextStack[contextStack.length-1]).varPrefix );										
+										[context, curGraphContext.context],			 
+										curGraphContext.varPrefix );										
 								
 							
 									if(parsedNode.value is Function)
@@ -656,7 +634,7 @@ public class TemplateStruct extends EventDispatcher
 								step = 1;
 							
 								if(parsedNode.print && parsedNode.value)
-									GraphContext(contextStack[contextStack.length-1]).buffer += 
+									curGraphContext.buffer += 
 										parsedNode.value + 
 										" ";
 							
@@ -665,14 +643,14 @@ public class TemplateStruct extends EventDispatcher
 		
 								if(parsedNode.type==CodeParser.CT_TEST)
 									transition = parsedNode.value;
-								else if(parsedNode.transition)
-									transition = parsedNode.transition;
+								else if(parsedNode.trans.length)
+									transition = parsedNode.value;
 								
 							}
 							else
 							{
 								if(parsedNode.print && parsedNode.value)
-									GraphContext(contextStack[contextStack.length-1]).buffer += 
+									curGraphContext.buffer += 
 										parsedNode.value + 
 										" ";
 							}
@@ -686,8 +664,8 @@ public class TemplateStruct extends EventDispatcher
 							}
 							else {
 								throw new RunTimeError( MSG_PARSE_ERR, -1, 
-									[GraphContext(contextStack[contextStack.length-1]).curNode.graph.name,
-									GraphContext(contextStack[contextStack.length-1]).curNode.text] );
+									[curGraphContext.curNode.graph.name,
+									curGraphContext.curNode.text] );
 							}
 						}			
 						
@@ -697,51 +675,48 @@ public class TemplateStruct extends EventDispatcher
 							continue;
 					}
 					
-				case 2: // transition to next node
+				case 'getNextNode': // transition to next node
 				
-					step = 2;
-					
-					var index:int = -1;
-					index = GetArrowIndex(GraphContext(contextStack[contextStack.length-1]).curNode.outArrows, transition);
+					var index:int = GetArrowIndex(curGraphContext.curNode.outArrows, transition);
 					transition = null;
 					
 					if(	index == -1 ||
-						GraphContext(contextStack[contextStack.length-1]).curNode.type == NodeType.TERMINAL )
+						curGraphContext.curNode.type == NodeType.TERMINAL )
 					{			
 						var tmpPrint:Boolean = false;
 										
-						if(GraphContext(contextStack[contextStack.length-1]).variable!=null)
+						if(curGraphContext.variable!=null)
 						{
-							context[GraphContext(contextStack[contextStack.length-1]).variable] =
+							context[curGraphContext.variable] =
 								Utils.replaceEscapeSequences(
-									GraphContext(contextStack[contextStack.length-1]).buffer, 
+									curGraphContext.buffer, 
 									"\\-");
 						}
 						else if(contextStack.length>1)
 						{
 							tmpPrint = true;
 							GraphContext(contextStack[contextStack.length-2]).buffer +=
-								GraphContext(contextStack[contextStack.length-1]).buffer;
+								curGraphContext.buffer;
 						}
 						else
 						{
 							buffer =
-								GraphContext(contextStack[contextStack.length-1]).buffer;
+								curGraphContext.buffer;
 						}
 						
-						var tmpBuf:String = GraphContext(contextStack[contextStack.length-1]).buffer;
+						var tmpBuf:String = curGraphContext.buffer;
 						contextStack.pop();
 						
 						if(contextStack.length>0) {
-							GraphContext(contextStack[contextStack.length-1]).curNode.parsedNode.value = 
+							curGraphContext.curNode.parsedNode.value = 
 								tmpBuf;
 							
-							GraphContext(contextStack[contextStack.length-1]).curNode.parsedNode.print = tmpPrint;
+							curGraphContext.curNode.parsedNode.print = tmpPrint;
 							
-							if(GraphContext(contextStack[contextStack.length-1]).curNode.category == NodeCategory.SUBGRAPH)
-								GraphContext(contextStack[contextStack.length-1]).curNode.parsedNode.print = true; 	
+							if(curGraphContext.curNode.category == NodeCategory.SUBGRAPH)
+								curGraphContext.curNode.parsedNode.print = true; 	
 								
-							nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));
+							nodeStack.push(new NodeContext(curGraphContext.curNode));
 						}
 						
 						forced--;
@@ -750,19 +725,19 @@ public class TemplateStruct extends EventDispatcher
 							break;
 						
 						// exit subgraph
-						step = 2;							
+						step = 'getNextNode';							
 						continue;
 					}
 					else
 					{
-						nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));
+						nodeStack.push(new NodeContext(curGraphContext.curNode));
 					}
 					
 					// select next node
-					GraphContext(contextStack[contextStack.length-1]).curNode = 
-						ArrowStruct(GraphContext(contextStack[contextStack.length-1]).curNode.outArrows[index]).toObj;						
+					curGraphContext.curNode = 
+						ArrowStruct(curGraphContext.curNode.outArrows[index]).toObj;						
 					
-					step = 0;
+					step = 'parseNewNode';
 			}
 		} while(contextStack.length>0);
 		
@@ -770,7 +745,7 @@ public class TemplateStruct extends EventDispatcher
 		buffer = Utils.replaceEscapeSequences(buffer, "\\-");
 		
 		isRunning = false;
-
+ 
 		dispatchEvent(new Event("generationComplete"));
 
 		return buffer;
@@ -782,8 +757,16 @@ public class TemplateStruct extends EventDispatcher
 		//}
 		
 		return null;
+		
 	}
 	
+	public function get curGraphContext():GraphContext 
+	{
+		if(contextStack.length)
+			return GraphContext(contextStack[contextStack.length-1]);
+		return null;				
+	}
+
 	/**
 	 * This function determine which way to go from current state by
 	 * choosing arrow index in out-arrows array

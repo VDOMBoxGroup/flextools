@@ -853,7 +853,8 @@
 				
 				if(str.length>0)
 					pnl_output.textArea.field.setTextFormat(myformat, 0, str.length) 
-					
+				
+				/*	
 				if(	nodeContext.node.parsedNode && 
 					nodeContext.node.parsedNode.hasOwnProperty('string') && nodeContext.node.parsedNode.string &&
 					nodeContext.node.parsedNode.print)
@@ -900,7 +901,7 @@
 						}
 						break;
 				}
-				
+				*/
 				pnl_node_value.array.push( { label:
 					StringUtil.substitute("State ({0}{1}): {2}", 
 						nodeSubCategory,

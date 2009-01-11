@@ -34,23 +34,23 @@ public class CodeParser
 	{
 		var pattern:RegExp;
 		var str:String = text.concat();
-		var retVal:ParsedNode = new ParsedNode(); 
+		var parsedNode:ParsedNode = new ParsedNode(); 
 		
-		retVal.result = false;
-		retVal.print = true;
+		parsedNode.result = false;
+		parsedNode.print = true;
 		
   		var lexems:Array = Parser.getLexemArray(str, false);
   		lexems = Parser.convertLexemArray(lexems);
-		retVal.lexemsGroup = [lexems]; 
+		parsedNode.lexemsGroup = [lexems];
 		
     	for(var i:int=0; i<lexems.length; i++)
     	{
     		if(lexems[i].error)
     		{
-				retVal.result = false;
-				retVal.error = lexems[i].error;
-				retVal.lexem = lexems[i];
-				return retVal;
+				parsedNode.result = false;
+				parsedNode.error = lexems[i].error;
+				parsedNode.errLexem = lexems[i];
+				return parsedNode;
     		}
     	}
 		
@@ -59,13 +59,13 @@ public class CodeParser
 		{
 			var context:*;
 			var lexemObj:Object = Parser.processConvertedLexemArray(lexems, contexts);
-			retVal.result = lexemObj.result;
-			retVal.error = lexemObj.error;
-			retVal.value = lexemObj.value;				
+			parsedNode.result = lexemObj.result;
+			parsedNode.error = lexemObj.error;
+			parsedNode.value = lexemObj.value;				
 			lexems = lexemObj.array;
 
-			if(!retVal.result)
-				return retVal;
+			if(!parsedNode.result)
+				return parsedNode;
 						
 			var buffer:String = "";
 			
@@ -92,15 +92,15 @@ public class CodeParser
 					buffer += lexems[i].value;
 			}
         	
-        	retVal.result = true;	
-			retVal.value = buffer;
-			return retVal;
+        	parsedNode.result = true;	
+			parsedNode.value = buffer;
+			return parsedNode;
 		}
 		
-		retVal.result = true;
-		retVal.value = text;
+		parsedNode.result = true;
+		parsedNode.value = text;
 
-       	return retVal;
+       	return parsedNode;
 	}
 	
 	/**
@@ -115,21 +115,21 @@ public class CodeParser
 	{
 		var pattern:RegExp;
 		var str:String = nodeText.concat();
-		var retVal:ParsedNode = new ParsedNode();
+		var parsedNode:ParsedNode = new ParsedNode();
 		
     	pattern = /[\W]/gi;
 		
 		if(pattern.test(str))
 		{
-			retVal.result = false;
-			retVal.error = new ValidationError(MSG_SN_SYNTAX_ERR);
-        	return retVal;
+			parsedNode.result = false;
+			parsedNode.error = new ValidationError(MSG_SN_SYNTAX_ERR);
+        	return parsedNode;
    		}
 		
-		retVal.result = true;
-		retVal.value = str;
+		parsedNode.result = true;
+		parsedNode.value = str;
 		
-       	return retVal;
+       	return parsedNode;
 	}
 			
 	/**
@@ -153,7 +153,7 @@ public class CodeParser
 	{
 		var pattern:RegExp;
 		var str:String = code.concat();
-		var retVal:ParsedNode = new ParsedNode();
+		var parsedNode:ParsedNode = new ParsedNode();
 		
    		/**
    		 * lexical analyzer
@@ -164,29 +164,35 @@ public class CodeParser
     	{
     		if(lexems[i].error)
     		{
-				retVal.result = false;
-				retVal.error = lexems[i].error;
-				retVal.lexem = lexems[i];
-				return retVal;
+				parsedNode.result = false;
+				parsedNode.error = lexems[i].error;
+				parsedNode.errLexem = lexems[i];
+				return parsedNode;
     		}
     	}
+		
+		/**
+		 *	pack lists to strings 
+		 */
 		
 		var lexemObj:Object = Parser.packLists(lexems);
 		if(!lexemObj.result)
 		{
-			retVal.result = lexemObj.result;
-			retVal.error = lexemObj.error;
-			return retVal;
+			parsedNode.result = lexemObj.result;
+			parsedNode.error = lexemObj.error;
+			return parsedNode;
 		}
+		
+		///////////////////////////////////////////////
 		
 		lexems = lexemObj.array;
 		Parser.processLexemArray(lexems);
   		lexems = Parser.convertLexemArray(lexems);
   	        		
     	var lexemsArr:Array = Parser.sliceLexems(lexems);
-		retVal.lexemsGroup = lexemsArr;
-		retVal.vars = [];
-		retVal.funcs = [];
+		parsedNode.lexemsGroup = lexemsArr;
+		parsedNode.vars = [];
+		parsedNode.funcs = [];
 		
    		/**
    		 * syntax analyzer 
@@ -194,13 +200,13 @@ public class CodeParser
    		 
    		if(lexemsArr.length>1)
    		{
-   			retVal.type = CT_MULTI;
+   			parsedNode.type = CT_MULTI;
    		}
    		
 		for(i=0; i<lexemsArr.length; i++)
 		{    			
-	   		retVal.vars.push(null);
-	   		retVal.funcs.push(null);
+	   		parsedNode.vars.push(null);
+	   		parsedNode.funcs.push(null);
 	   		
 	   		var obj:Object;
 			var strSentence:String = "";       			
@@ -210,57 +216,57 @@ public class CodeParser
 				
 			// parse operations
 			obj = Parser.isValidCommand(strSentence);
-			retVal.result = obj.result;			
-			if(retVal.result && !retVal.type)
+			parsedNode.result = obj.result;			
+			if(parsedNode.result && !parsedNode.type)
 			{
-				retVal.type = CT_OPERATION;
+				parsedNode.type = CT_OPERATION;
 			}
 			
 			// parse test
-			if(!retVal.result && !retVal.error)
+			if(!parsedNode.result && !parsedNode.error)
 			{
 				obj = Parser.isValidTest(strSentence);
-				retVal.result = obj.result;
-				if(retVal.result && !retVal.type)
+				parsedNode.result = obj.result;
+				if(parsedNode.result && !parsedNode.type)
 				{
-					retVal.type = CT_TEST;
+					parsedNode.type = CT_TEST;
 				}
-				else if(retVal.result && retVal.type==CT_MULTI)
+				else if(parsedNode.result && parsedNode.type==CT_MULTI)
 				{
-					retVal.result = false;
-					retVal.error = new CompilerError(null, 9000);
+					parsedNode.result = false;
+					parsedNode.error = new CompilerError(null, 9000);
 				}
 			}
 			
 			// parse function
-			if(!retVal.result && !retVal.error)
+			if(!parsedNode.result && !parsedNode.error)
 			{
 				obj = Parser.isValidFunction(strSentence);
-				retVal.result = obj.result;				
-				if(retVal.result)
+				parsedNode.result = obj.result;				
+				if(parsedNode.result)
 				{
-					if(!retVal.type)
-						retVal.type = CT_FUNCTION;
+					if(!parsedNode.type)
+						parsedNode.type = CT_FUNCTION;
 					
 					var func:Object = Parser.isFunctionExists(lexemsArr[i]);
-					retVal.result = func.result;
-					retVal.error = func.error;
+					parsedNode.result = func.result;
+					parsedNode.error = func.error;
 				
-					retVal.vars[i] = func.variable;
-					retVal.funcs[i] = func.func;
+					parsedNode.vars[i] = func.variable;
+					parsedNode.funcs[i] = func.func;
 				}				
 			}  		     
 
-			if(!retVal.result  && !retVal.error) 
+			if(!parsedNode.result  && !parsedNode.error) 
 			{
-				retVal.error = new CompilerError(null, 9000);
+				parsedNode.error = new CompilerError(null, 9000);
 			}
 			
-			if(retVal.error)
-				return retVal;
+			if(parsedNode.error)
+				return parsedNode;
 		}  		
 		
-		return retVal; 
+		return parsedNode;
 	}
 
 	public static function executeCode(	node:ParsedNode,
@@ -272,8 +278,8 @@ public class CodeParser
 		node.result = false;
 		node.print = false;
 		
-		node.array = null;
-		node.transition = null;
+		node.trans = [];
+		//node.transition = null;
 		
 		if(node.vars[index] == null)
 			node.print = true;
@@ -301,13 +307,13 @@ public class CodeParser
 		
 		if(node.type == CT_TEST)
 		{
-			node.array = ["true", "false"];
+			node.trans = ["true", "false"];
 			node.print = false;
 		}
 		else if(node.funcs[index])
 		{
 			if(node.funcs[index]=='loadDataFrom')
-				node.array = ["true", "false"];			
+				node.trans = ["true", "false"];			
 		}
 
    		// generate and execute code
