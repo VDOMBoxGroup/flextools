@@ -34,6 +34,7 @@ public dynamic class TemplateLib
 	public function setReturnValue(value:*):void
 	{
 		tplStruct.parsedNode.value = value;
+		tplStruct.generate();
 	}
 }
 }

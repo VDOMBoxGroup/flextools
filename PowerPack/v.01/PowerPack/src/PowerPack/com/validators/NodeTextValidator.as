@@ -73,7 +73,7 @@ package PowerPack.com.validators
         	category = node.category;
        		var pattern:RegExp;
         	
-        	var parseResult:Object;
+        	var parseResult:ParsedNode;
         	
         	if (category == NodeCategory.NORMAL)
         	{

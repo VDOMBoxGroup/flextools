@@ -503,7 +503,8 @@ public class TemplateStruct extends EventDispatcher
 			forced=1;
 			
 		do
-		{				
+		{			
+			// check for current node	
 			if(!GraphContext(contextStack[contextStack.length-1]).curNode) {
 				isRunning = false;
 				throw new ValidationError(null, 9002, 
@@ -538,6 +539,8 @@ public class TemplateStruct extends EventDispatcher
 					force = false;
 					over = false;
 
+					////////////////////////////////////////////////////////////////////
+					
 					parsedNode = null;				
 					
 					if(GraphContext(contextStack[contextStack.length-1]).curNode.enabled)
@@ -563,16 +566,20 @@ public class TemplateStruct extends EventDispatcher
 																
 							case NodeCategory.SUBGRAPH:
 							
-								var subgraph:GraphStruct;
 								parsedNode = CodeParser.ParseSubgraphNode(
 									GraphContext(contextStack[contextStack.length-1]).curNode.text );
 								
 								if(parsedNode.result)
 								{
+									var subgraph:GraphStruct;
+									
 									for each (var graphStruct:GraphStruct in graphs)
 									{
-										if(graphStruct.name == GraphContext(contextStack[contextStack.length-1]).curNode.text)	
+										if(graphStruct.name == GraphContext(contextStack[contextStack.length-1]).curNode.text)
+										{	
 											subgraph = graphStruct;
+											break;
+										}
 									}
 									
 									if(subgraph)
@@ -620,12 +627,57 @@ public class TemplateStruct extends EventDispatcher
 						}					
 					}
 									
-				case 1: // append data to buffer
-				
-					step = 1;
-					
+				case 1: // execute code, append data to buffer
+				case 11: 
+
 					if(parsedNode)
 					{
+						if(parsedNode.result)
+						{
+							if(parsedNode.type)
+							{
+								if(step==1)
+								{
+									CodeParser.executeCode(	parsedNode,
+										parsedNode.current,
+										[context, GraphContext(contextStack[contextStack.length-1]).context],			 
+										GraphContext(contextStack[contextStack.length-1]).varPrefix );										
+								
+							
+									if(parsedNode.value is Function)
+									{
+										isRunning = false;
+										parsedNode.current++;
+										step = 11;
+										return null;
+									}
+								}
+								
+								step = 1;
+							
+								if(parsedNode.print && parsedNode.value)
+									GraphContext(contextStack[contextStack.length-1]).buffer += 
+										parsedNode.value + 
+										" ";
+							
+								//if(parsedNode.variable!=null)
+								//	context[parsedNode.variable] = parsedNode.value;
+		
+								if(parsedNode.type==CodeParser.CT_TEST)
+									transition = parsedNode.value;
+								else if(parsedNode.transition)
+									transition = parsedNode.transition;
+								
+							}
+							else
+							{
+								if(parsedNode.print && parsedNode.value)
+									GraphContext(contextStack[contextStack.length-1]).buffer += 
+										parsedNode.value + 
+										" ";
+							}
+						}
+						
 						if(!parsedNode.result)
 						{
 							isRunning = false;
@@ -638,34 +690,10 @@ public class TemplateStruct extends EventDispatcher
 									GraphContext(contextStack[contextStack.length-1]).curNode.text] );
 							}
 						}			
-						else
-						{
-							CodeParser.executeCode(	parsedNode,
-								parsedNode.current,
-								[context, GraphContext(contextStack[contextStack.length-1]).context],			 
-								GraphContext(contextStack[contextStack.length-1]).varPrefix )										
-							
-							// check result
-							
-							parsedNode
-							
-							if(parsedNode.print && parsedNode.value)
-								GraphContext(contextStack[contextStack.length-1]).buffer += 
-									parsedNode.value + 
-									" ";
-							
-							//if(parsedNode.variable!=null)
-							//	context[parsedNode.variable] = parsedNode.value;
-	
-							if(parsedNode.type==CodeParser.CT_TEST)
-								transition = parsedNode.value;
-							else if(parsedNode.transition)
-								transition = parsedNode.transition;
-						}
 						
 						parsedNode.current++;
 						
-						if(parsedNode.current < parsedNode.lexemsGroup.length)
+						if(parsedNode.lexemsGroup && parsedNode.current < parsedNode.lexemsGroup.length)
 							continue;
 					}
 					
@@ -749,6 +777,7 @@ public class TemplateStruct extends EventDispatcher
 
 		//} catch (e:Error) {
 		//	error = e;
+		//	isRunning = false;
 		//	dispatchEvent(new Event("error"));
 		//}
 		

@@ -3,6 +3,8 @@
 import ExtendedAPI.com.graphics.codec.BMPEncoder;
 import ExtendedAPI.com.utils.FileToBase64;
 
+import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.structs.GraphStruct;
 import PowerPack.com.panel.Question;
 
 import flash.display.Bitmap;
@@ -25,7 +27,7 @@ import mx.utils.StringUtil;
 public function _sub(graph:Object, ...args):void
 {
 	args.unshift(graph, {type:'n', value:''});
-	_subPrefix.apply(this, args)
+	_subPrefix.apply(this, args);
 }
 
 /**
@@ -35,13 +37,13 @@ public function _subPrefix(graph:Object, prefix:Object, ...args):void
 {
 	var subgraph:GraphStruct;
 	
-	for each (var graphStruct:GraphStruct in graphs) {
+	for each (var graphStruct:GraphStruct in tplStruct.graphs) {
 		if(graphStruct.name == graph.value)	
 			subgraph = graphStruct;
 	}
 	
 	if(subgraph) {
-		Application.application.callLater(_enterSubgraph, [subgraph, prefix.value, args]);	
+		_enterSubgraph.apply(this, [subgraph, prefix.value, args]);
 	} else {
 		throw new RunTimeError("Undefined graph name: " + graph.value);
 	}
@@ -51,12 +53,12 @@ private function _enterSubgraph(subgraph:GraphStruct, prefix:String, params:Arra
 {
 	var graphContext:GraphContext = new GraphContext(subgraph);
 	
-	if(parsedNode.variable!=null)
-		graphContext.variable = parsedNode.variable;
+	if(tplStruct.parsedNode.vars!=null && tplStruct.parsedNode.vars.length>0)
+		graphContext.variable = tplStruct.parsedNode.vars[0];
 		
 	graphContext.varPrefix = prefix;
 	
-	parsedNode.value = subgraph.name;
+	tplStruct.parsedNode.value = subgraph.name;
 	
 	GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
 	nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));
