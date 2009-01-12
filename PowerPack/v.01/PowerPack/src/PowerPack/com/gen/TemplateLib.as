@@ -33,7 +33,7 @@ public dynamic class TemplateLib
 	
 	public function setReturnValue(value:*):void
 	{
-		//tplStruct.curGraphContext.curNode.parsedNode.value = value;
+		tplStruct.curGraphContext.curNode.parsedNode.value = value;
 		tplStruct.generate();
 	}
 }

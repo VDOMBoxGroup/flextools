@@ -618,14 +618,13 @@ public class TemplateStruct extends EventDispatcher
 									[context, curGraphContext.context],			 
 									curGraphContext.varPrefix );						
 							
-									if(curGraphContext.curNode.parsedNode.value is Function)
-									{
-										isRunning = false;
-										curGraphContext.curNode.parsedNode.current++;
-										step = 'processExecResult';
-										return null;
-									}
+								if(curGraphContext.curNode.parsedNode.value is Function)
+								{
+									isRunning = false;
+									step = 'processExecResult';
+									return null;
 								}
+							}
 						}
 					}								
 

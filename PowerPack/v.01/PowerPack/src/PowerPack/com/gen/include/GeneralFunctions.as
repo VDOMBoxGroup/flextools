@@ -84,8 +84,8 @@ private function _enterSubgraph(subgraph:GraphStruct, prefix:String, params:Arra
 /**
  * question function section
  */	
- /*	 
-public function _question(question:String, answers:String):Function
+ 	 
+public function question(question:String, answers:String):Function
 {
 	var array:Array = null;
 	var mode:int;
@@ -105,8 +105,7 @@ public function _question(question:String, answers:String):Function
 	else
 	{
 		mode = Question.QM_CHOICE;
-		array = answers.split(/\s*,\s*/
-		/*);
+		array = answers.split(/\s*,\s*/);
 	}
 							
 	Question.show(question, "", mode, array, filter, null, questionCloseHandler);
@@ -114,8 +113,7 @@ public function _question(question:String, answers:String):Function
 	return questionCloseHandler;
 	
 	function questionCloseHandler(event:Event):void {
-		parsedNode.value = event.target.strAnswer;		
-		Application.application.callLater(generate);	
+		setReturnValue(event.target.strAnswer);
 	}	
 }
 
@@ -361,10 +359,10 @@ public function _split(delimiter:String, string:String):String
 /**
  * random function section
  */		 
-public function random(value:int):int 
+public function random(value:int):String 
 {
 	var rnd:int = int(Math.round(Math.random() * value)); 
 	
-	return rnd;
+	return rnd.toString();
 }	
 
