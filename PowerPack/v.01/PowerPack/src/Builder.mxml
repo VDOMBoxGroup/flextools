@@ -568,7 +568,7 @@
 					case "run":
 					case "debug":
 					case "step_by_step":
-						try
+						//try
 						{
 							ContextManager.templateStruct = new TemplateStruct(
 								pnl_graphs.toXML(),
@@ -614,6 +614,7 @@
 								ContextManager.templateStruct.generate();
 							}
 						}
+						/*
 						catch(e:Error) 
 						{
 							ProgressManager.complete();
@@ -627,6 +628,7 @@
 							ContextManager.templateStruct = null;
 							Alert.show(e.message, LanguageManager.sentences['warning']);
 						}
+						*/
 						break;
 						
 					case "resume":
@@ -921,9 +923,13 @@
             public function switchDebug(enable:Boolean=true):void
             {
 				var runItem:NativeMenuItem = MenuGeneral.menu.nativeMenu.getItemByName("run");
-				for each (var item:NativeMenuItem in runItem.submenu.items)
-					item.enabled = enable;	
-						
+
+				runItem.submenu.getItemByName("resume").enabled = enable;
+				runItem.submenu.getItemByName("step_into").enabled = enable;
+				runItem.submenu.getItemByName("step_over").enabled = enable;
+				runItem.submenu.getItemByName("step_return").enabled = enable;
+				runItem.submenu.getItemByName("break").enabled = enable;
+	        							
 				//if(!enable)
 				{
 					pnl_variables.grid.dataProvider = null;

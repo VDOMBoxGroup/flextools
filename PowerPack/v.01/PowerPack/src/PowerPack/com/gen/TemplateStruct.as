@@ -714,16 +714,17 @@ public class TemplateStruct extends EventDispatcher
 						
 						//////////////////////////////////////////////////////
 						
-						curGraphContext.curNode.parsedNode.current++;
-						
-						if(curGraphContext.curNode.parsedNode.lexemsGroup && 
-							curGraphContext.curNode.parsedNode.current < curGraphContext.curNode.parsedNode.lexemsGroup.length)
+						if(contextStack.length>0) 
 						{
-							step = 'executeCode';
-							continue;
-						}							
-						else if(contextStack.length>0) 
-						{
+							curGraphContext.curNode.parsedNode.current++;
+							
+							if(curGraphContext.curNode.parsedNode.lexemsGroup && 
+								curGraphContext.curNode.parsedNode.current < curGraphContext.curNode.parsedNode.lexemsGroup.length)
+							{
+								step = 'executeCode';
+								continue;
+							}	
+							
 							curGraphContext.curNode.parsedNode.value = 
 								tmpBuf;
 							

@@ -24,6 +24,7 @@ import mx.utils.StringUtil;
 /**
  * sub function section
  */	
+ /*
 public function _sub(graph:Object, ...args):void
 {
 	args.unshift(graph, {type:'n', value:''});
@@ -32,7 +33,8 @@ public function _sub(graph:Object, ...args):void
 
 /**
  * subPrefix function section
- */		 
+ */	
+ /*	 
 public function _subPrefix(graph:Object, prefix:Object, ...args):void
 {
 	var subgraph:GraphStruct;
@@ -81,7 +83,8 @@ private function _enterSubgraph(subgraph:GraphStruct, prefix:String, params:Arra
 		 		
 /**
  * question function section
- */		 
+ */	
+ /*	 
 public function _question(question:String, answers:String):Function
 {
 	var array:Array = null;
@@ -102,7 +105,8 @@ public function _question(question:String, answers:String):Function
 	else
 	{
 		mode = Question.QM_CHOICE;
-		array = answers.split(/\s*,\s*/);
+		array = answers.split(/\s*,\s*/
+		/*);
 	}
 							
 	Question.show(question, "", mode, array, filter, null, questionCloseHandler);
@@ -119,6 +123,7 @@ public function _question(question:String, answers:String):Function
 /**
  * convert function section
  */		 
+ /*
 public function _convert(type:String, value:Object):void
 {
 	var result:String;
@@ -163,7 +168,8 @@ public function _convert(type:String, value:Object):void
 
 /**
  * writeTo function section
- */		
+ */	
+ /*	
 public function _writeTo(filename:String):void
 {			
 	var data:String = GraphContext(contextStack[0]).buffer;
@@ -204,6 +210,7 @@ public function _imageToBase64(pic:Bitmap, type:String=null):String
 /**
  * writeVarTo function section
  */		
+ /*
 public function _writeVarTo(filename:String, value:Object):void
 {
 	if(value && filename && FileUtils.isValidPath(filename))
@@ -250,7 +257,8 @@ public function _writeVarTo(filename:String, value:Object):void
 
 /**
  * loadDataFrom function section
- */		
+ */	
+ /*	
 public function _loadDataFrom(filename:String):void
 {	
 	try 
@@ -299,6 +307,7 @@ public function _loadDataFrom(filename:String):void
 /**
  * GUID function section
  */		 
+ /*
 public function _GUID():String
 {
 	var guid:String = UIDUtil.createUID();
@@ -310,7 +319,8 @@ public function _GUID():String
 
 /**
  * mid function section
- */		 
+ */		
+ /* 
 public function _mid(start:int, length:int, string:String):String
 {
 	var substr:String = string.substr(start, length);
@@ -322,7 +332,8 @@ public function _mid(start:int, length:int, string:String):String
 
 /**
  * replace function section
- */		 
+ */		
+ /* 
 public function _replace(string:String, tgt:String, flags:String, src:String):String
 {
 	var regExp:RegExp = new RegExp(tgt, flags);		
@@ -336,6 +347,7 @@ public function _replace(string:String, tgt:String, flags:String, src:String):St
 /**
  * split function section
  */		 
+/*
 public function _split(delimiter:String, string:String):String
 {
 	var arr:Array = string.split(delimiter);
@@ -349,11 +361,9 @@ public function _split(delimiter:String, string:String):String
 /**
  * random function section
  */		 
-public function _random(value:int):String 
+public function random(value:int):int 
 {
-	var rnd:String = int(Math.round(Math.random() * value)).toString(); 
-	
-	Application.application.callLater(generate);
+	var rnd:int = int(Math.round(Math.random() * value)); 
 	
 	return rnd;
 }	
