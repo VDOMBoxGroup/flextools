@@ -901,12 +901,13 @@
 						}
 						break;
 				}
-				*/
+				
 				pnl_node_value.array.push( { label:
 					StringUtil.substitute("State ({0}{1}): {2}", 
 						nodeSubCategory,
 						nodeCategory,
 						str), data: nodeContext.node } );
+				*/
 						
 				pnl_node_value.list.invalidateList();
 				pnl_node_value.list.selectedIndex = pnl_node_value.array.length-1;

@@ -605,62 +605,63 @@ public class TemplateStruct extends EventDispatcher
 						}					
 					}
 									
-				case 1: // execute code, append data to buffer
-				case 11: 
-
-					if(parsedNode)
+				case 'executeCode':
+				
+					if(curGraphContext.curNode.parsedNode)
 					{
-						if(parsedNode.result)
+						if(curGraphContext.curNode.parsedNode.result)
 						{
-							if(parsedNode.type)
+							if(curGraphContext.curNode.parsedNode.type)
 							{
-								if(step==1)
-								{
-									CodeParser.executeCode(	parsedNode,
-										parsedNode.current,
-										[context, curGraphContext.context],			 
-										curGraphContext.varPrefix );										
-								
+								CodeParser.executeCode(	curGraphContext.curNode.parsedNode,
+									curGraphContext.curNode.parsedNode.current,
+									[context, curGraphContext.context],			 
+									curGraphContext.varPrefix );						
 							
-									if(parsedNode.value is Function)
+									if(curGraphContext.curNode.parsedNode.value is Function)
 									{
 										isRunning = false;
-										parsedNode.current++;
-										step = 11;
+										curGraphContext.curNode.parsedNode.current++;
+										step = 'processExecResult';
 										return null;
 									}
 								}
-								
-								step = 1;
-							
-								if(parsedNode.print && parsedNode.value)
+						}
+					}								
+
+				case 'processExecResult': 
+
+					if(curGraphContext.curNode.parsedNode)
+					{
+						if(curGraphContext.curNode.parsedNode.result)
+						{
+							if(curGraphContext.curNode.parsedNode.type)
+							{							
+								if(curGraphContext.curNode.parsedNode.print && curGraphContext.curNode.parsedNode.value)
 									curGraphContext.buffer += 
-										parsedNode.value + 
+										curGraphContext.curNode.parsedNode.value + 
 										" ";
 							
-								//if(parsedNode.variable!=null)
-								//	context[parsedNode.variable] = parsedNode.value;
-		
-								if(parsedNode.type==CodeParser.CT_TEST)
-									transition = parsedNode.value;
-								else if(parsedNode.trans.length)
-									transition = parsedNode.value;
+								if(curGraphContext.curNode.parsedNode.type==CodeParser.CT_TEST)
+									transition = curGraphContext.curNode.parsedNode.value;
+								else if(curGraphContext.curNode.parsedNode.trans.length)
+									transition = curGraphContext.curNode.parsedNode.value;
 								
 							}
 							else
 							{
-								if(parsedNode.print && parsedNode.value)
+								if(curGraphContext.curNode.parsedNode.print && curGraphContext.curNode.parsedNode.value)
 									curGraphContext.buffer += 
-										parsedNode.value + 
+										curGraphContext.curNode.parsedNode.value + 
 										" ";
 							}
 						}
 						
-						if(!parsedNode.result)
+						if(!curGraphContext.curNode.parsedNode.result)
 						{
 							isRunning = false;
-							if(parsedNode.error && parsedNode.error.message) {
-								throw parsedNode.error;
+							if(curGraphContext.curNode.parsedNode.error && curGraphContext.curNode.parsedNode.error.message) {
+								throw curGraphContext.curNode.parsedNode.error;
 							}
 							else {
 								throw new RunTimeError( MSG_PARSE_ERR, -1, 
@@ -669,10 +670,14 @@ public class TemplateStruct extends EventDispatcher
 							}
 						}			
 						
-						parsedNode.current++;
+						curGraphContext.curNode.parsedNode.current++;
 						
-						if(parsedNode.lexemsGroup && parsedNode.current < parsedNode.lexemsGroup.length)
+						if(curGraphContext.curNode.parsedNode.lexemsGroup && 
+							curGraphContext.curNode.parsedNode.current < curGraphContext.curNode.parsedNode.lexemsGroup.length)
+						{
+							step = 'executeCode';
 							continue;
+						}
 					}
 					
 				case 'getNextNode': // transition to next node
@@ -707,7 +712,18 @@ public class TemplateStruct extends EventDispatcher
 						var tmpBuf:String = curGraphContext.buffer;
 						contextStack.pop();
 						
-						if(contextStack.length>0) {
+						//////////////////////////////////////////////////////
+						
+						curGraphContext.curNode.parsedNode.current++;
+						
+						if(curGraphContext.curNode.parsedNode.lexemsGroup && 
+							curGraphContext.curNode.parsedNode.current < curGraphContext.curNode.parsedNode.lexemsGroup.length)
+						{
+							step = 'executeCode';
+							continue;
+						}							
+						else if(contextStack.length>0) 
+						{
 							curGraphContext.curNode.parsedNode.value = 
 								tmpBuf;
 							
