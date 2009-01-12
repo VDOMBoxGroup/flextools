@@ -752,7 +752,7 @@
 		    {
 	        	if(event.detail==Alert.YES)
 	        	{    
-	        		try
+	        		//try
 	        		{
 		       			switchDebug(true);
 		       			
@@ -763,6 +763,7 @@
 						ContextManager.templateStruct.addEventListener("error", debugErrorHandler);
 						ContextManager.templateStruct.generate();
 					}
+					/*
 					catch(e:Error) 
 					{
 						ProgressManager.complete();
@@ -776,6 +777,7 @@
 						ContextManager.templateStruct = null;
 						SuperAlert.show(e.message, "Warning!");
 					}
+					*/
 	   	     	}
 	   	     	else
 	   	     		ContextManager.templateStruct = null;

@@ -8,7 +8,7 @@ package PowerPack.com
 	{
         public static const FATAL:int = 0;
         public static const WARNING:int = 1;
-        protected static var messages:XML;
+        protected var messages:XML;
         public var severity:int;
         public var details:String;
         public var target:Object;
@@ -43,12 +43,12 @@ package PowerPack.com
         	if(!messages)
         		return null;
         		
-            var messages:XMLList = messages.error.(@code == id);
+            var messageLst:XMLList = messages.error.(@code == id);
             
-            if(messages.length()==0)
+            if(messageLst.length()==0)
             	return null;
             	            
-			var xml:XML = messages[0];          
+			var xml:XML = messageLst[0];          
             var retVal:String = null;//LanguageManager.sentences[xml.@ID];
             
             return (retVal ? retVal : xml.text());
