@@ -21,7 +21,7 @@ import mx.utils.StringUtil;
 public dynamic class TemplateLib
 {
 	include "include/GeneralFunctions.as";
-	//include "include/ListManipulationFunctions.as";
+	include "include/ListManipulationFunctions.as";
 	//include "include/GraphicFunctions.as";
 	//include "include/ImageProcessingFunctions.as";
 		
@@ -36,5 +36,11 @@ public dynamic class TemplateLib
 		tplStruct.curGraphContext.curNode.parsedNode.value = value;
 		tplStruct.generate();
 	}
+	
+	public function setTransition(value:String):void
+	{
+		tplStruct.curGraphContext.curNode.parsedNode.transition = value;		
+	}
+		
 }
 }

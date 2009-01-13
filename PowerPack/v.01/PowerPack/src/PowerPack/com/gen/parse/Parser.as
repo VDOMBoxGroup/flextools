@@ -39,7 +39,7 @@ public class Parser
 			//*********************
 			
 			"length":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
-			"get":			{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
+			"getValue":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
 			"put":			{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
 			"update":		{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
 			"delete":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },

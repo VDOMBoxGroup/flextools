@@ -7,6 +7,7 @@ import GraphicAPI.drawing.PStroke;
 import GraphicAPI.drawing.StrokePatternStyle;
 
 import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.parse.listClasses.ElmType;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
 
 import flash.display.GradientType;
@@ -24,23 +25,15 @@ import flash.geom.Point;
 import flash.text.TextFormat;
 
 import mx.collections.ArrayCollection;
-import mx.utils.StringUtil;
-	
+import mx.utils.StringUtil;	
 	
 public class ListParser
 {
 	
 	public static function processElmType(type:*):int
 	{
-		var _type:int = -1;
+		var _type:int = ElmType.UNKNOWN;
 		var strType:String;
-		
-		/**
-		 * 1 - Word
-		 * 2 - String
-		 * 3 - List
-		 * 4 - Variable  
-		 */
 		 
 		switch(typeof type)
 		{
@@ -61,16 +54,16 @@ public class ListParser
 					switch(strType)
 					{
 						case 'word':
-							_type = 1;
+							_type = ElmType.WORD;
 							break;
 						case 'string':
-							_type = 2;
+							_type = ElmType.STRING;
 							break;
 						case 'list':
-							_type = 3;
+							_type = ElmType.LIST;
 							break;
 						case 'variable':
-							_type = 4;
+							_type = ElmType.VARIABLE;
 							break;
 					}
 				}
@@ -96,6 +89,7 @@ public class ListParser
 			
 			case 'string':
 				str = position.toString().toLowerCase();
+			
 			case 'object':
 				if(!str)
 					if(position && position.hasOwnProperty('type') && position.type=='n' && position.hasOwnProperty('value'))

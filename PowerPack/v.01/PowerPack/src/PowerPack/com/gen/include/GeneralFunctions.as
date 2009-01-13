@@ -2,15 +2,15 @@
 // General functions set
 import ExtendedAPI.com.graphics.codec.BMPEncoder;
 import ExtendedAPI.com.utils.FileToBase64;
+import ExtendedAPI.com.utils.Utils;
 
-import PowerPack.com.gen.errorClasses.RunTimeError;
-import PowerPack.com.gen.structs.GraphStruct;
+import PowerPack.com.BasicError;
 import PowerPack.com.panel.Question;
 
 import flash.display.Bitmap;
 import flash.events.Event;
-import flash.events.IOErrorEvent;
 import flash.filesystem.File;
+import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 import flash.utils.ByteArray;
 
@@ -19,6 +19,7 @@ import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
+import mx.utils.UIDUtil;
 
 
 /**
@@ -121,61 +122,44 @@ public function question(question:String, answers:String):Function
 /**
  * convert function section
  */		 
- /*
-public function _convert(type:String, value:Object):void
+
+public function convert(type:String, value:Object):Function
 {
 	var result:String;
 	
 	if(value && type.toLowerCase() == "hexcolor")
 	{
 		result = int("0x" + value.toString().replace(/^#/g, "")).toString();
-		Application.application.callLater(convertComplete, [result]);
 	}
 	else if(value && type.toLowerCase() == "intcolor")
-	{				
+	{
 		result = int(value).toString(16);
-		while(result.length<6)
-		{
+		while(result.length<6) {
 			result = result + "0";
 		}
 		result = "#" + result;
-			
-		Application.application.callLater(convertComplete, [result]);
 	}
 	else if(value && type.toLowerCase() == "base64")
 	{
 		var fileToBase64:FileToBase64 = new FileToBase64(value.toString());
 		fileToBase64.addEventListener("dataConverted", completeConvertHandler);
-		fileToBase64.loadAndConvert();
+		fileToBase64.loadAndConvert();		
+		return completeConvertHandler;
 		
 		function completeConvertHandler(event:Event):void {
-			Application.application.callLater(convertComplete, [event.target.data]);
+			setReturnValue(event.target.data);
 		}
 	}
-	else
-	{			
-		Application.application.callLater(generate);
-	}
+
+	Application.application.callLater(convertComplete, [result]);
+	return convertComplete;
 	
 	function convertComplete(value:String):void {
-		parsedNode.value = value;		
-		Application.application.callLater(generate);
+		setReturnValue(value);
 	}
 }
 
-
-/**
- * writeTo function section
- */	
- /*	
-public function _writeTo(filename:String):void
-{			
-	var data:String = GraphContext(contextStack[0]).buffer;
-	data = Utils.replaceEscapeSequences(data, "\\-");
-	_writeVarTo(filename, data);
-}			 
-
-public function _imageToBase64(pic:Bitmap, type:String=null):String
+public function imageToBase64(pic:Bitmap, type:String=null):String
 {
 	var data:ByteArray = new ByteArray();
 
@@ -200,22 +184,29 @@ public function _imageToBase64(pic:Bitmap, type:String=null):String
 	encoder.encodeBytes(data);
 	var strData:String = encoder.flush();
 	
-	Application.application.callLater(generate);
-	
 	return strData;
 } 
+
+/**
+ * writeTo function section
+ */	
+ 	
+public function writeTo(filePath:String):void
+{			
+	var data:String = GraphContext(tplStruct.contextStack[0]).buffer;
+	data = Utils.replaceEscapeSequences(data, "\\-");
+	writeVarTo(filePath, data);
+}			 
  		
 /**
  * writeVarTo function section
  */		
- /*
-public function _writeVarTo(filename:String, value:Object):void
+ 
+public function writeVarTo(filePath:String, value:Object):void
 {
-	if(value && filename && FileUtils.isValidPath(filename))
+	if(value && filePath)
 	{			
-   		var file:File = new File();
-   		file.url = FileUtils.pathToUrl(filename);       			
-
+   		var file:File = new File(filePath);		      			
 		var data:ByteArray = new ByteArray();
 		
 		if(value is Bitmap)
@@ -240,7 +231,7 @@ public function _writeVarTo(filename:String, value:Object):void
 			data.writeUTFBytes(value.toString());
 		
    		
-   		if(!file.isDirectory)
+   		if(!file.isDirectory && !file.isPackage && !file.isSymbolicLink)
    		{
         	var fileStream:FileStream = new FileStream();
 
@@ -249,29 +240,26 @@ public function _writeVarTo(filename:String, value:Object):void
 			fileStream.close();
    		}
 	}
-	
-	Application.application.callLater(generate);
 }
 
 /**
  * loadDataFrom function section
  */	
- /*	
-public function _loadDataFrom(filename:String):void
+ 
+public function loadDataFrom(filePath:String):Function
 {	
 	try 
 	{		
-		if(!filename || !FileUtils.isValidPath(filename))
+		if(!filePath)
 		{
-			throw new BasicError("Not valid filename");
+			throw new BasicError("Not valid filepath");
 		}
 	
-		var file:File = new File();
-		file.url = FileUtils.pathToUrl(filename);
+		var file:File = new File(filePath);
 	
 		if(!file.exists)
 		{
-			throw new BasicError("File does not exists");
+			throw new BasicError("File does not exist");
 		}
 		
 		var fileStream:FileStream = new FileStream();
@@ -282,87 +270,75 @@ public function _loadDataFrom(filename:String):void
 	catch(e:*)
 	{
 		Application.application.callLater(onFileStreamError, [new IOErrorEvent(IOErrorEvent.IO_ERROR)]);		
+		
+		return onFileStreamError;		
 	}
+		
+	return onFileLoaded;
 
 	function onFileStreamError(event:IOErrorEvent):void {
-		//throw new BasicError("IOError exception occurs");
-		parsedNode.value = null;
-		parsedNode.transition = 'false';
-		
-		Application.application.callLater(generate);	
+		setTransition('false');
+		setReturnValue('false');
 	}
 	
 	function onFileLoaded(event:Event):void {
 		var fileStream:FileStream = event.target as FileStream;
 		var bytes:ByteArray = new ByteArray();
-		parsedNode.value = fileStream.readUTFBytes(fileStream.bytesAvailable);
-		parsedNode.transition = 'true';
 		
-		Application.application.callLater(generate);
+		setTransition('true');
+		setReturnValue(fileStream.readUTFBytes(fileStream.bytesAvailable));
 	}
 }
 
 /**
  * GUID function section
  */		 
- /*
-public function _GUID():String
+ 
+public function GUID():String
 {
 	var guid:String = UIDUtil.createUID();
-	
-	Application.application.callLater(generate);
-	
 	return guid;
 }	
 
 /**
  * mid function section
  */		
- /* 
-public function _mid(start:int, length:int, string:String):String
+  
+public function mid(start:int, length:int, string:String):String
 {
 	var substr:String = string.substr(start, length);
-	
-	Application.application.callLater(generate);
-	
 	return substr;
 }
 
 /**
  * replace function section
  */		
- /* 
-public function _replace(string:String, tgt:String, flags:String, src:String):String
+  
+public function replace(string:String, tgt:String, flags:String, src:String):String
 {
 	var regExp:RegExp = new RegExp(tgt, flags);		
 	var str:String = string.replace(regExp, src);
-	
-	Application.application.callLater(generate);
-	
 	return str;
 }
 
 /**
  * split function section
  */		 
-/*
-public function _split(delimiter:String, string:String):String
+
+public function split(delimiter:String, string:String):String
 {
 	var arr:Array = string.split(delimiter);
 	var str:String = "["+arr.join(" ")+"]";
-	
-	Application.application.callLater(generate);
-	
 	return str;
 }
 
 /**
  * random function section
- */		 
+ */		
+  
 public function random(value:int):String 
 {
-	var rnd:int = int(Math.round(Math.random() * value)); 
-	
+	var rnd:int = int(Math.round(Math.random() * value)); 	
 	return rnd.toString();
 }	
 

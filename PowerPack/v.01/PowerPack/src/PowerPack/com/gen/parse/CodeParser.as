@@ -345,7 +345,7 @@ public class CodeParser
 		}
 			
 		var evalRes:* = Parser.eval(code, contexts);
-		node.value = evalRes;	
+		node.value = evalRes;
 	}
 
 }

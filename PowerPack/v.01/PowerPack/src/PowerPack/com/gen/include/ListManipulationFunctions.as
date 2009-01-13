@@ -7,48 +7,37 @@ import PowerPack.com.gen.parse.Parser;
  /**
  * length function section
  */		 
-public function _length(list:String):int
+public function length(list:String):int
 {
-	Application.application.callLater(generate);
-	
 	return ListParser.length(list);
 }
 
  /**
  * get function section
  */		 
-public function _get(position:Object, list:String):*
+public function getValue(position:Object, list:String):Object
 {
-	var type:int = ListParser.getType(list, position);	
-	var ret:String = ListParser.getElm(list, position);	
-	var contexts:Array = [context, GraphContext(contextStack[contextStack.length-1]).context];
-	
-	if(!ret)
-		ret = '';
+	//var type:int = ListParser.getType(list, position);	
+	//var elm:String = ListParser.getElm(list, position);	
+	var contexts:Array = [tplStruct.context, tplStruct.curGraphContext.context];
 	
 	//else if(type==2)
 		//ret = Utils.replaceQuotes(ret);
 	//else if(type==4 || type==2)
 		//ret = ret.substr(1);
 	
-	ret = ListParser.getElmValue(list, position, contexts);	
+	var elmValue:Object = ListParser.getElmValue(list, position, contexts);	
 		
-	Application.application.callLater(generate);
-	return ret;
+	return elmValue;
 }
 
  /**
  * getType function section
  */		 
-public function _getType(position:Object, list:String):*
+public function getType(position:Object, list:String):int
 {
-	var ret:* = ListParser.getType(list, position);
-
-	if(!ret)
-		ret = '';
-		
-	Application.application.callLater(generate);
-	return ret;
+	var type:int = ListParser.getType(list, position);
+	return type;
 }
 
  /**

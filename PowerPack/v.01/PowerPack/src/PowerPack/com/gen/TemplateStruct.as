@@ -644,7 +644,12 @@ public class TemplateStruct extends EventDispatcher
 								if(curGraphContext.curNode.parsedNode.type==CodeParser.CT_TEST)
 									transition = curGraphContext.curNode.parsedNode.value;
 								else if(curGraphContext.curNode.parsedNode.trans.length)
-									transition = curGraphContext.curNode.parsedNode.value;
+								{
+									transition = curGraphContext.curNode.parsedNode.transition;
+									
+									if(!transition)
+										transition = curGraphContext.curNode.parsedNode.value;
+								}
 								
 							}
 							else

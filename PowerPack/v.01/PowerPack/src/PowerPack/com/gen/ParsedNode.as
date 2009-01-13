@@ -16,7 +16,7 @@ public class ParsedNode
 	public var vars:Array = []; // function variables
 	
 	public var trans:Array = []; // transitions array
-	//public var transition:String; // transition value
+	public var transition:String; // transition value
 	
 	public var error:BasicError; // parse error
 	public var errLexem:LexemStruct; // error lexem

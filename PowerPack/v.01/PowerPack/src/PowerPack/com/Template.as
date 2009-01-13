@@ -119,7 +119,7 @@ public class Template extends EventDispatcher
 			processOpened();
 			return;
 		}
-		else if(xml)
+		else if(!xml)
 		{
 			modified = true;
 			_completelyOpened = true;
@@ -375,7 +375,7 @@ public class Template extends EventDispatcher
 			ProgressManager.start(null, false);
 			
 	      	// update tpl UID
-	   		_xml.@ID = UIDUtil.createUID();
+	   		_xml.@ID = UIDUtil.createUID();	   		
 
 			// cash template structure
 			cashStructure();
@@ -650,7 +650,7 @@ public class Template extends EventDispatcher
 				"ID='template' " + 
 				"name='" + name + "' " + 
 				"type='" + TYPE_APPLICATION + "' />"), 
-			_xml);
+			_xml.toXMLString());
 
 		CashManager.setStringObject(fullID, 
 			XML(
@@ -659,7 +659,7 @@ public class Template extends EventDispatcher
 				"ID='structure' " + 
 				"name='" + name + "' " + 
 				"type='" + TYPE_APPLICATION + "' />"), 
-			_xmlStructure);		
+			_xmlStructure.toXMLString());		
 	}
 
 	private function fillFromCash():void
