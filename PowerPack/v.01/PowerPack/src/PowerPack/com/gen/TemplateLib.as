@@ -22,8 +22,8 @@ public dynamic class TemplateLib
 {
 	include "include/GeneralFunctions.as";
 	include "include/ListManipulationFunctions.as";
-	//include "include/GraphicFunctions.as";
-	//include "include/ImageProcessingFunctions.as";
+	include "include/GraphicFunctions.as";
+	include "include/ImageProcessingFunctions.as";
 		
 	public var tplStruct:TemplateStruct;
 	
@@ -40,6 +40,11 @@ public dynamic class TemplateLib
 	public function setTransition(value:String):void
 	{
 		tplStruct.curGraphContext.curNode.parsedNode.transition = value;		
+	}
+	
+	public function getContexts():Array
+	{
+		return [tplStruct.context, tplStruct.curGraphContext.context];	
 	}
 		
 }

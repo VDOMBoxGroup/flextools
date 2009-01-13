@@ -40,10 +40,10 @@ public class Parser
 			
 			"length":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
 			"getValue":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
-			"put":			{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
-			"update":		{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
-			"delete":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
 			"getType":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
+			"update":		{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
+			"put":			{ pattern:/^(v=){0,1}\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
+			"remove":		{ pattern:/^(v=){0,1}\[n[nviscVNS][vscVSA]\]$/, argNum:2 },
 			"exist":		{ pattern:/^(v=){0,1}\[n[nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:3 },
 			"evaluate":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
 			"execute":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
@@ -880,27 +880,27 @@ public class Parser
 			}
 		}
 		
-		if(funcDefinition.hasOwnProperty(lexems[sIndex+1].value))
+		// get function name
+		retVal.func = lexems[sIndex+1].value;
+		var argNum:int = strSentence.indexOf("]")-strSentence.indexOf("[")-2;
+							
+		//if(funcDefinition.hasOwnProperty(retVal.func))
 		{
-			// get function name
-			retVal.func = lexems[sIndex+1].value;					
-
 			var def:Object = funcDefinition[retVal.func];
 			
 			// check for correct args number
-			var argNum:int = strSentence.indexOf("]")-strSentence.indexOf("[")-2;
-			if(argNum != def.argNum && def.argNum>=0)
+			if(def && argNum != def.argNum && def.argNum>=0)
 			{
 				retVal.error = new CompilerError(null, 9007, [def.argNum]);
 				return retVal;
 			}
-			else if(def.argNum<0 && argNum < Math.abs(def.argNum))
+			else if(def && def.argNum<0 && argNum < Math.abs(def.argNum))
 			{
 				retVal.error = new CompilerError(null, 9007, [">"+Math.abs(def.argNum)]);
 				return retVal;
 			} 
 		
-			if(	RegExp(def.pattern).test(strSentence) )
+			if(	def && RegExp(def.pattern).test(strSentence) || !def)
 			{
 				retVal.result = true;
 				

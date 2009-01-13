@@ -16,15 +16,12 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 
-/**
- * function section
- */
-public function _drawLine( pic:Bitmap, 
+public function drawLine( pic:Bitmap, 
 					x1:int, y1:int, x2:int, y2:int,  
 					pen:String, alpha:int ):Object
 {
-	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
-	var bd2:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
+	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
+	var bd2:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	
 	bd1.draw( pic );
 	
@@ -32,7 +29,7 @@ public function _drawLine( pic:Bitmap,
 	var stroke:PStroke;
 	var _fill:*;	
 	
-	stroke = ListParser.processSubFunc(pen, [context, GraphContext(contextStack[contextStack.length-1]).context]);	
+	stroke = ListParser.processSubFunc(pen, getContexts());	
 	if(!(stroke is PStroke))
 		stroke = new PStroke();
 	
@@ -48,16 +45,11 @@ public function _drawLine( pic:Bitmap,
 	bd2.colorTransform(bd2.rect, ct);
 
 	bd1.copyPixels(	bd2, bd2.rect, new Point(0,0), null, null, true);
-
-	Application.application.callLater(generate);
 	
 	return new Bitmap(bd1);	
 }
 
-/**
- * function section
- */
-private function __drawFigure( pic:Bitmap, method:Function, params:Array,
+private function drawFigure( pic:Bitmap, method:Function, params:Array,
 					pen:String, fill:String, alpha:int ):Object
 {
 	var _params:Array;
@@ -89,7 +81,7 @@ private function __drawFigure( pic:Bitmap, method:Function, params:Array,
 	figureBD.copyPixels(bd1, bd1.rect, new Point(0,0), alphaBD, null, true);	
 	
 	if(fill)
-		_fill = __processFillList(fill, shape.graphics, rect);
+		_fill = processFillList(fill, shape.graphics, rect);
 	
 	if(_fill is BitmapFilter)
 	{
@@ -97,7 +89,7 @@ private function __drawFigure( pic:Bitmap, method:Function, params:Array,
 		bd1.copyPixels(figureBD, figureBD.rect, new Point(0,0), null, null, true);		
 	}
 
-	stroke = ListParser.processSubFunc(pen, [context, GraphContext(contextStack[contextStack.length-1]).context]);	
+	stroke = ListParser.processSubFunc(pen, getContexts());	
 	if(!(stroke is PStroke))
 		stroke = new PStroke();
 	
@@ -122,126 +114,81 @@ private function __drawFigure( pic:Bitmap, method:Function, params:Array,
 	return new Bitmap(bd1);	
 }
 
-/**
- * function section
- */
-public function _drawAngleArc( pic:Bitmap, 
+public function drawAngleArc( pic:Bitmap, 
 					x:int, y:int, radius:uint, 
 					startAngle:Number, endAngle:Number,
 					pen:String, fill:String, alpha:int ):Object
 {
-	var ret:* = __drawFigure( pic, Draw.pie, 
+	var ret:* = drawFigure( pic, Draw.pie, 
 					[x, y, startAngle, endAngle, radius, radius, 0],
 					pen, fill, alpha );
-
-	Application.application.callLater(generate);
-	
 	return ret;	
 }
 
-/**
- * function section
- */
-public function _drawEllipse( pic:Bitmap, 
+public function drawEllipse( pic:Bitmap, 
 					x1:int, y1:int, x2:int, y2:int,  
 					pen:String, fill:String, alpha:int ):Object
 {
-	var ret:* = __drawFigure( pic, Draw.ellipse, 
+	var ret:* = drawFigure( pic, Draw.ellipse, 
 					[x1+(x2-x1)/2, y1+(y2-y1)/2, x2-x1, y2-y1, 0],
 					pen, fill, alpha );
-
-	Application.application.callLater(generate);
-	
 	return ret;	
 }
 
-/**
- * function section
- */
-public function _drawRect( pic:Bitmap, 
+public function drawRect( pic:Bitmap, 
 					x1:int, y1:int, x2:int, y2:int,  
 					pen:String, fill:String, alpha:int ):Object
 {
-	var ret:* = __drawFigure( pic, Draw.rect, 
+	var ret:* = drawFigure( pic, Draw.rect, 
 					[x1, y1, x2-x1, y2-y1],
 					pen, fill, alpha );
-
-	Application.application.callLater(generate);
-	
 	return ret;	
 }
 
-/**
- * function section
- */
-public function _drawRoundRect( pic:Bitmap, 
+public function drawRoundRect( pic:Bitmap, 
 					x1:int, y1:int, x2:int, y2:int, radius:uint,
 					pen:String, fill:String, alpha:int ):Object
 {
-	var ret:* = __drawFigure( pic, Draw.roundRect, 
+	var ret:* = drawFigure( pic, Draw.roundRect, 
 					[x1, y1, x2-x1, y2-y1, radius],
 					pen, fill, alpha );
-
-	Application.application.callLater(generate);
-	
 	return ret;	
 }
 
-/**
- * function section
- */
-public function _drawBezier( pic:Bitmap, 
+public function drawBezier( pic:Bitmap, 
 					points:String,  
 					pen:String, alpha:int ):Object
 {
-	var _points:Array = ListParser.processPoints(points, [context, GraphContext(contextStack[contextStack.length-1]).context]);
-	var ret:* = __drawFigure( pic, Draw.polyBezier, 
+	var _points:Array = ListParser.processPoints(points, getContexts());
+	var ret:* = drawFigure( pic, Draw.polyBezier, 
 					[_points],
 					pen, null, alpha );
-
-	Application.application.callLater(generate);
-	
 	return ret;	
 }
 
-/**
- * function section
- */
-public function _fillBezier( pic:Bitmap, 
+public function fillBezier( pic:Bitmap, 
 					points:String,  
 					pen:String, fill:String, alpha:int ):Object
 {
-	var _points:Array = ListParser.processPoints(points, [context, GraphContext(contextStack[contextStack.length-1]).context]);
-	var ret:* = __drawFigure( pic, Draw.closedBezier, 
+	var _points:Array = ListParser.processPoints(points, getContexts());
+	var ret:* = drawFigure( pic, Draw.closedBezier, 
 					[_points],
 					pen, fill, alpha );
-
-	Application.application.callLater(generate);
-	
 	return ret;	
 }
 
-/**
- * function section
- */
-public function _drawPolygon( pic:Bitmap, 
+public function drawPolygon( pic:Bitmap, 
 					points:String,  
 					pen:String, fill:String, alpha:int ):Object
 {
-	var _points:Array = ListParser.processPoints(points, [context, GraphContext(contextStack[contextStack.length-1]).context]);
-	var ret:* = __drawFigure( pic, Draw.polygon, 
+	var _points:Array = ListParser.processPoints(points, getContexts());
+	var ret:* = drawFigure( pic, Draw.polygon, 
 					[_points],
 					pen, fill, alpha );
-
-	Application.application.callLater(generate);
-	
 	return ret;	
 }
 
-/**
- * function section
- */
-public function _writeText( pic:Bitmap, text:String,
+public function writeText( pic:Bitmap, text:String,
 					x:int, y:int, w:int, h:int,  
 					font:String, alpha:int ):Object
 {
@@ -254,7 +201,7 @@ public function _writeText( pic:Bitmap, text:String,
 	var format:TextFormat;
 	var tf:TextField;
 
-	format = ListParser.processSubFunc(font, [context, GraphContext(contextStack[contextStack.length-1]).context]);
+	format = ListParser.processSubFunc(font, getContexts());
 		
 	if(!(format is TextFormat))
 		format = new TextFormat();
@@ -282,8 +229,6 @@ public function _writeText( pic:Bitmap, text:String,
 	bd2.colorTransform(bd2.rect, ct);
 
 	bd1.copyPixels(	bd2, bd2.rect, new Point(x,y), null, null, true);
-
-	Application.application.callLater(generate);
 	
 	return new Bitmap(bd1);	
 }

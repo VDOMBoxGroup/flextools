@@ -27,9 +27,9 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 
-private function __processFillList(list:String, g:Graphics, rect:Rectangle):*
+private function processFillList(list:String, g:Graphics, rect:Rectangle):*
 {
-	var _fill:* = ListParser.processSubFunc(list, [context, GraphContext(contextStack[contextStack.length-1]).context]);
+	var _fill:* = ListParser.processSubFunc(list, getContexts());
 	var matrix:Matrix = new Matrix();
 	matrix.translate(rect.x, rect.y);
 	
@@ -58,22 +58,18 @@ private function __processFillList(list:String, g:Graphics, rect:Rectangle):*
 	return _fill;	
 }
 
-/**
- * function section
- */		 
-public function _loadImage(filename:String):void
+public function loadImage(filePath:String):Function
 {
-	if(!filename || !FileUtils.isValidPath(filename))
+	if(!filePath)
 	{
-		throw new BasicError("Not valid filename");
+		throw new BasicError("Not valid filepath");
 	}
 
-	var file:File = new File();
-	file.url = FileUtils.pathToUrl(filename);
+	var file:File = new File(filePath);
 
 	if(!file.exists)
 	{
-		throw new BasicError("File does not exists");
+		throw new BasicError("File does not exist");
 	}
 	
 	var fileStream:FileStream = new FileStream();
@@ -86,24 +82,19 @@ public function _loadImage(filename:String):void
 	loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onImageLoaded );
 	loader.loadBytes( bytes );
 	
+	return onImageLoaded;
+	
 	function onImageLoaded(event:Event):void {
 		var content:DisplayObject = LoaderInfo( event.target ).content;
 		var bitmapData:BitmapData = new BitmapData( content.width, content.height, true, 0x00000000 );
 		bitmapData.draw( content );
 		var bitmap:Bitmap = new Bitmap(bitmapData);
 		
-		parsedNode.value = bitmap;
-		
-		Application.application.callLater(generate);
+		setReturnValue(bitmap);
 	}
 }
 
-
-/**
- * createPicture function section
- */		
-
-public function _createImage(width:int, height:int, bgColor:int):Object
+public function createImage(width:int, height:int, bgColor:int):Object
 {
 	if(bgColor<0x01000000)
 		bgColor += 0xff000000;
@@ -113,61 +104,38 @@ public function _createImage(width:int, height:int, bgColor:int):Object
 	var bitmapData:BitmapData = new BitmapData( width, height, true, bgColor );
 	var bitmap:Bitmap = new Bitmap(bitmapData);
 	
-	Application.application.callLater(generate);
-	
 	return bitmap;
 }
 
-/**
- * function section
- */
-public function _getWidth(pic:Bitmap):int
+public function getWidth(pic:Bitmap):int
 {
-	Application.application.callLater(generate);
 	return pic.width;
 }
 
-/**
- * function section
- */		
-public function _getHeight(pic:Bitmap):int
+public function getHeight(pic:Bitmap):int
 {
-	Application.application.callLater(generate);
 	return pic.height;
 }
 
-/**
- * function section
- */
-public function _getPixel( pic:Bitmap, x:int, y:int ):uint 
+public function getPixel( pic:Bitmap, x:int, y:int ):uint 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	
 	bd1.draw( pic );
 
-	Application.application.callLater(generate);
-	
 	return bd1.getPixel(x, y);		
 }
 
-/**
- * function section
- */
-public function _getPixel32( pic:Bitmap, x:int, y:int ):uint 
+public function getPixel32( pic:Bitmap, x:int, y:int ):uint 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	
 	bd1.draw( pic );
 
-	Application.application.callLater(generate);
-	
 	return bd1.getPixel32(x, y);		
 }
 
-/**
- * function section
- */
-public function _setPixel( pic:Bitmap, x:int, y:int, color:uint ):Object 
+public function setPixel( pic:Bitmap, x:int, y:int, color:uint ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	
@@ -178,23 +146,18 @@ public function _setPixel( pic:Bitmap, x:int, y:int, color:uint ):Object
 	else
 		bd1.setPixel(x,y,color);
 	
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _addImage(...args):Object
+public function addImage(...args):Object
 {
 	if(args.length==5)
 		args.unshift(args[0]);
 	
-	return __addImage.apply(this, args);
+	return _addImage.apply(this, args);
 }
 
-private function __addImage(pic1:Bitmap, pic2:Bitmap, x:int, y:int, alpha:int, alphaCol:int):Object
+private function _addImage(pic1:Bitmap, pic2:Bitmap, x:int, y:int, alpha:int, alphaCol:int):Object
 {
 	var bd1:BitmapData = new BitmapData( pic1.width, pic1.height, true, 0x00ffffff );
 	var bd2:BitmapData = new BitmapData( pic2.width, pic2.height, true, 0x00ffffff );
@@ -211,23 +174,15 @@ private function __addImage(pic1:Bitmap, pic2:Bitmap, x:int, y:int, alpha:int, a
 	
 	bd1.copyPixels(	bd2, bd2.rect, new Point(x,y), null, null, true);
 
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);
 }
 
-/**
- * function section
- */
-public function _mergeImages( pic1:Bitmap, pic2:Bitmap, percent:uint ):Object 
+public function mergeImages( pic1:Bitmap, pic2:Bitmap, percent:uint ):Object 
 {
-	return __addImage(pic1, pic2, 0, 0, percent, -1);
+	return _addImage(pic1, pic2, 0, 0, percent, -1);
 }
 
-/**
- * function section
- */
-public function _brightness( pic:Bitmap, value:int ):Object 
+public function brightness( pic:Bitmap, value:int ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
 	
@@ -240,15 +195,10 @@ public function _brightness( pic:Bitmap, value:int ):Object
             
 	bd1.applyFilter(bd1, bd1.rect, new Point(0,0), new ColorMatrixFilter(matrix));
 
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _contrast( pic:Bitmap, value:int ):Object 
+public function contrast( pic:Bitmap, value:int ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	var bd2:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
@@ -293,15 +243,10 @@ public function _contrast( pic:Bitmap, value:int ):Object
 		}
 	}
 	
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd2);			
 }
 
-/**
- * function section
- */
-public function _saturation( pic:Bitmap, value:int ):Object 
+public function saturation( pic:Bitmap, value:int ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	var bd2:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
@@ -329,15 +274,10 @@ public function _saturation( pic:Bitmap, value:int ):Object
 		}
 	}
 		
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd2);		
 }
 
-/**
- * function section
- */
-public function _createBlackWhite( pic:Bitmap ):Object 
+public function createBlackWhite( pic:Bitmap ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
 	var bd2:BitmapData = new BitmapData( pic.width, pic.height, true, 0xffffffff );
@@ -355,15 +295,10 @@ public function _createBlackWhite( pic:Bitmap ):Object
 	bd2.threshold(bd1, bd1.rect, new Point(0,0), '<', 0x7f000000, 0xffffffff, 0xff000000, true);	
 	bd3.threshold(bd2, bd2.rect, new Point(0,0), '<', 0x007f0000, 0xff000000, 0x00ff0000, false);	
 	
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd3);		
 }
 
-/**
- * function section
- */
-public function _createGrayScale( pic:Bitmap ):Object 
+public function createGrayScale( pic:Bitmap ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
 	
@@ -376,15 +311,10 @@ public function _createGrayScale( pic:Bitmap ):Object
             
 	bd1.applyFilter(bd1, bd1.rect, new Point(0,0), new ColorMatrixFilter(matrix));
 		
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _createNegative( pic:Bitmap ):Object 
+public function createNegative( pic:Bitmap ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	
@@ -397,15 +327,10 @@ public function _createNegative( pic:Bitmap ):Object
             
 	bd1.applyFilter(bd1, bd1.rect, new Point(0,0), new ColorMatrixFilter(matrix));
 
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _cropImage( pic:Bitmap, x:int, y:int, w:int, h:int):Object 
+public function cropImage( pic:Bitmap, x:int, y:int, w:int, h:int):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00000000 );
 	var bd2:BitmapData = new BitmapData( w, h, true, 0x00000000 );
@@ -414,15 +339,10 @@ public function _cropImage( pic:Bitmap, x:int, y:int, w:int, h:int):Object
 	
 	bd2.copyPixels(bd1, new Rectangle(x,y,w,h), new Point(0,0)); 
 
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd2);		
 }
 
-/**
- * function section
- */
-public function _flipImage( pic:Bitmap, direction:*):Object
+public function flipImage( pic:Bitmap, direction:*):Object
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
 	var bd2:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
@@ -441,15 +361,10 @@ public function _flipImage( pic:Bitmap, direction:*):Object
 		}
 	}
 	
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd2);	
 }
 
-/**
- * function section
- */
-public function _resizeImage( pic:Bitmap, w:int, h:int ):Object 
+public function resizeImage( pic:Bitmap, w:int, h:int ):Object 
 {
 	var bd1:BitmapData = new BitmapData( w, h, true, 0x00000000 );
 	
@@ -458,15 +373,10 @@ public function _resizeImage( pic:Bitmap, w:int, h:int ):Object
 	
 	bd1.draw( pic.bitmapData, matrix );
 	
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _rotateImage( pic:Bitmap, angle:int, bgColor:int ):Object 
+public function rotateImage( pic:Bitmap, angle:int, bgColor:int ):Object 
 {	
 	var matrix:Matrix = new Matrix();
 	matrix.rotate( angle / 360 * Math.PI * 2 );
@@ -492,15 +402,10 @@ public function _rotateImage( pic:Bitmap, angle:int, bgColor:int ):Object
 
 	bd1.draw( pic.bitmapData, matrix, null, null, null, true );
 	
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _blur( pic:Bitmap, value:int ):Object 
+public function blur( pic:Bitmap, value:int ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
 	
@@ -508,15 +413,10 @@ public function _blur( pic:Bitmap, value:int ):Object
 	
 	bd1.applyFilter(bd1, bd1.rect, new Point(0,0), new BlurFilter(value, value));
 
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _sharpen( pic:Bitmap, value:int ):Object 
+public function sharpen( pic:Bitmap, value:int ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
 	
@@ -534,15 +434,10 @@ public function _sharpen( pic:Bitmap, value:int ):Object
     
 	bd1.applyFilter(bd1, bd1.rect, new Point(0,0), new ConvolutionFilter(matrixX, matrixY, matrix, divisor, bias));
 
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }
 
-/**
- * function section
- */
-public function _emboss( pic:Bitmap ):Object 
+public function emboss( pic:Bitmap ):Object 
 {
 	var bd1:BitmapData = new BitmapData( pic.width, pic.height, true, 0x00ffffff );
 	
@@ -560,7 +455,5 @@ public function _emboss( pic:Bitmap ):Object
             
 	bd1.applyFilter(bd1, bd1.rect, new Point(0,0), new ConvolutionFilter(matrixX, matrixY, matrix, divisor, bias));
 
-	Application.application.callLater(generate);
-	
 	return new Bitmap(bd1);		
 }

@@ -30,7 +30,7 @@ import mx.utils.StringUtil;
 public class ListParser
 {
 	
-	public static function processElmType(type:*):int
+	public static function processElmType(type:Object):int
 	{
 		var _type:int = ElmType.UNKNOWN;
 		var strType:String;
@@ -875,22 +875,22 @@ public class ListParser
 				case 'i':
 				case 'f':
 				case 'w':
-					ret = 1; // word
+					ret = ElmType.WORD; // word
 					break;
 				case 's':
 				case 'c':
-					ret = 2; // string
+					ret = ElmType.STRING; // string
 					if( Parser.processList( arr.getItemAt(_position+1).origValue ).result )
-						ret = 3; // list
+						ret = ElmType.LIST; // list
 					break;
 				case 'A':			
-					ret = 3; // list
+					ret = ElmType.LIST; // list
 					break;
 				case 'v':
-					ret = 4; // variable
+					ret = ElmType.VARIABLE; // variable
 					break;
 				default:
-					ret = 0; // undefined
+					ret = ElmType.UNKNOWN; // undefined
 			}
 		}
 		return ret;
@@ -956,12 +956,12 @@ public class ListParser
 		return evalRes;
 	}
 	
-	public static function getType(list:String, position:*):*
+	public static function getType(list:String, position:*):int
 	{
 		return processList(list, null, position, null, 'getType');
 	}
 
-	public static function exists(list:String, type:*, value:*):*
+	public static function exists(list:String, type:*, value:*):int
 	{
 		var len:int = length(list);
 		var _type:int = processElmType(type);
@@ -981,17 +981,17 @@ public class ListParser
 		return _pos;	
 	}
 
-	public static function remove(list:String, position:*):*
+	public static function remove(list:String, position:*):String
 	{
 		return processList(list, null, position, null, 'delete');
 	}
 	
-	public static function put(list:String, position:*, type:*, value:*):*
+	public static function put(list:String, position:*, type:*, value:*):String
 	{
 		return processList(list, type, position, value, "put");
 	}
 	
-	public static function update(list:String, position:*, type:*, value:*):*
+	public static function update(list:String, position:*, type:*, value:*):String
 	{
 		return processList(list, type, position, value, "update");
 	}

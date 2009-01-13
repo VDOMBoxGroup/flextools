@@ -167,7 +167,7 @@ public class TemplateStruct extends EventDispatcher
 				strData = stream.readUTFBytes(stream.bytesAvailable);
     			stream.close();
     			D.setOutput(evalHandler);
-    			strData = strData + ';\n;' 
+    			strData = strData + ';true;' 
     			D.eval(strData, lib);
 			}
 		}

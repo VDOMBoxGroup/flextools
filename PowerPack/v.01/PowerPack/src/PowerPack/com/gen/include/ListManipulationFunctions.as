@@ -4,104 +4,51 @@ import PowerPack.com.gen.parse.CodeParser;
 import PowerPack.com.gen.parse.ListParser;
 import PowerPack.com.gen.parse.Parser;
 
- /**
- * length function section
- */		 
 public function length(list:String):int
 {
 	return ListParser.length(list);
 }
 
- /**
- * get function section
- */		 
 public function getValue(position:Object, list:String):Object
 {
-	//var type:int = ListParser.getType(list, position);	
-	//var elm:String = ListParser.getElm(list, position);	
-	var contexts:Array = [tplStruct.context, tplStruct.curGraphContext.context];
-	
-	//else if(type==2)
-		//ret = Utils.replaceQuotes(ret);
-	//else if(type==4 || type==2)
-		//ret = ret.substr(1);
-	
+	var contexts:Array = getContexts();
 	var elmValue:Object = ListParser.getElmValue(list, position, contexts);	
-		
 	return elmValue;
 }
 
- /**
- * getType function section
- */		 
 public function getType(position:Object, list:String):int
 {
 	var type:int = ListParser.getType(list, position);
 	return type;
 }
 
- /**
- * exist function section
- */		 
-public function _exist(type:Object, value:Object, list:String):*
+public function exist(type:Object, value:Object, list:String):int
 {
-	var ret:* = ListParser.exists(list, type, value);
-
-	if(!ret)
-		ret = '';
-		
-	Application.application.callLater(generate);
-	return ret;
+	var position:int = ListParser.exists(list, type, value);
+	return position;
 }
 
- /**
- * delete function section
- */		 
-public function _delete(position:Object, list:String):*
+public function remove(position:Object, list:String):String
 {
-	var ret:* = ListParser.remove(list, position);
-
-	if(!ret)
-		ret = '';
-		
-	Application.application.callLater(generate);
-	return ret;
+	var newList:String = ListParser.remove(list, position);
+	return newList;
 }
 
- /**
- * put function section
- */		 
-public function _put(type:Object, position:Object, value:Object, list:String):*
+public function put(type:Object, position:Object, value:Object, list:String):String
 {
-	var ret:* = ListParser.put(list, position, type, value);
-
-	if(!ret)
-		ret = '';
-		
-	Application.application.callLater(generate);
-	return ret;
+	var newList:String = ListParser.put(list, position, type, value);
+	return newList;
 }
 
-/**
- * update function section
- */		 
-public function _update(type:Object, position:Object, value:Object, list:String):*
+public function update(type:Object, position:Object, value:Object, list:String):String
 {
-	var ret:* = ListParser.update(list, position, type, value);
-
-	if(!ret)
-		ret = '';
-		
-	Application.application.callLater(generate);
-	return ret;
+	var newList:String = ListParser.update(list, position, type, value);
+	return newList;
 }
 
- /**
- * evaluate function section
- */		 
-public function _evaluate(list:String):*
+public function evaluate(list:String):String
 {
-	var contexts:Array = [context, GraphContext(contextStack[contextStack.length-1]).context];
+	var contexts:Array = getContexts();
 	
 	var lexems:Array = Parser.getLexemArray(list);
 	Parser.processLexemArray(lexems);
@@ -131,21 +78,16 @@ public function _evaluate(list:String):*
 		buffer += (buffer?" ":"") + (lexems[i].type=="v" ? (value!=null ? value.toString() : 'null') : lexems[i].value);
 	}	
 	
-	Application.application.callLater(generate);
-	
 	return buffer;
 }
 
- /**
- * execute function section
- */		 
-public function _execute(list:String):*
+public function execute(list:String):*
 {
-	var contexts:Array = [context, GraphContext(contextStack[contextStack.length-1]).context];
+	var contexts:Array = getContexts();
 	
 	var parsedList:ParsedNode = CodeParser.ParseCode(list);
 	
-	CodeParser.executeCode(parsedList, 0, contexts, GraphContext(contextStack[contextStack.length-1]).varPrefix); 
+	CodeParser.executeCode(parsedList, 0, contexts, tplStruct.curGraphContext.varPrefix); 
 	
 	if(!parsedList.result) {								
 		throw parsedList.error;
@@ -155,36 +97,27 @@ public function _execute(list:String):*
 	}
 }
 
-public function _addStructure(src:String, tgt:String, level:int, listStruct:String):* 
+public function addStructure(src:String, tgt:String, level:int, listStruct:String):String 
 {
-	var ret:String = _processStructure(src, tgt, level, listStruct, 'add');
-	
-	Application.application.callLater(generate);
-	
-	return ret;
+	var newStruct:String = processStructure(src, tgt, level, listStruct, 'add');
+	return newStruct;
 }
 
-public function _updateStructure(src:String, tgt:String, level:int, listStruct:String):* 
+public function updateStructure(src:String, tgt:String, level:int, listStruct:String):String 
 {
-	var ret:String = _processStructure(src, tgt, level, listStruct, 'update');
-	
-	Application.application.callLater(generate);
-	
-	return ret;
+	var newStruct:String = processStructure(src, tgt, level, listStruct, 'update');
+	return newStruct;
 }
 
-public function _deleteStructure(src:String, tgt:String, level:int, listStruct:String):* 
+public function deleteStructure(src:String, tgt:String, level:int, listStruct:String):String
 {
-	var ret:String = _processStructure(src, tgt, level, listStruct, 'delete');
-	
-	Application.application.callLater(generate);
-	
-	return ret;
+	var newStruct:String = processStructure(src, tgt, level, listStruct, 'delete');
+	return newStruct;
 }
 
-private function _processStructure(src:String, tgt:String, level:int, listStruct:String, action:String='add'):String
+private function processStructure(src:String, tgt:String, level:int, listStruct:String, action:String='add'):String
 {
-	var contexts:Array = [context, GraphContext(contextStack[contextStack.length-1]).context];
+	var contexts:Array = getContexts();
 	var topLevelListLen:int = ListParser.length(listStruct);
 	
 	var listSrcObj:Object = Parser.processList(src);
