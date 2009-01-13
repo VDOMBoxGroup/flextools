@@ -52,7 +52,7 @@
 	 			
 	 			
 	 			arrAppl.removeAll();
-	 			arrAppl.addItem({label:"Server Actions", ID:"session", iconResID:"", typeID:""});
+	 			arrAppl.addItem({label:"Session Actions", ID:"session", iconResID:"", typeID:""});
 	 		/*	for each(var lavel:XML in dataManager.listPages )
 				{
 		 			var ID:String = lavel.@ID;
@@ -258,7 +258,10 @@
 				selectedAppl = ComboBox(obj).selectedItem;
 //				changeTree(selectedAppl.ID);
 				if(selectedAppl.ID == "session")
-					serverScripts.dataProvider = selectedAppl.ID
+				{
+					containersBranch.currentPageID = selectedAppl.ID;
+					serverScripts.dataProvider 		= selectedAppl.ID;
+				}
 				else
 					dataManager.changeCurrentPage(selectedAppl.ID);
 			}

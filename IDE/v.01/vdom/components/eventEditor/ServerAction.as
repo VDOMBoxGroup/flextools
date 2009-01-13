@@ -431,7 +431,7 @@ package vdom.components.eventEditor
 		
 		public function get Name():String
 		{
-			return _name;
+			return _methodName;
 		}
 		
 		public function get State():String

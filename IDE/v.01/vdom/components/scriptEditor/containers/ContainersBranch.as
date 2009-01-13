@@ -35,21 +35,28 @@ package vdom.components.scriptEditor.containers
 		
 		public function set currentPageID(value:String):void
 		{
-			var xmlTreeData:XMLListCollection = new XMLListCollection;
-			var xmlLabel:XML = dataManager.listPages.(@ID == dataManager.currentPageId)[0];
+			if(value == "session")
+			{
+				tree.dataProvider = null;
+				return;
+			}
+				var xmlTreeData:XMLListCollection = new XMLListCollection();
+				var xmlList:XML = new XML('<Object/>');
+				var xmlLabel:XML = dataManager.listPages.(@ID == dataManager.currentPageId)[0];
+				
+				xmlList.@label = xmlLabel.Attributes.Attribute.(@Name == "title")+" ("+ xmlLabel.@Name +")";
+				xmlList.@showInList = 'true';
+				xmlList.@ID = xmlLabel.@ID;
+				xmlList.@Type = xmlLabel.@Type;
+				
+				 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
+					
+				xmlList.appendChild(findOjects(xmlLabel.Objects));
+				
+				dataManager.changeCurrentObject(value);
 			
-			var xmlList:XML = new XML('<Object/>');
-					xmlList.@label = xmlLabel.Attributes.Attribute.(@Name == "title")+" ("+ xmlLabel.@Name +")";
-					xmlList.@showInList = 'true';
-					xmlList.@ID = xmlLabel.@ID;
-					xmlList.@Type = xmlLabel.@Type;
-					
-					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
-						
-					xmlList.appendChild(findOjects(xmlLabel.Objects));
-					
+
 			xmlTreeData.addItem(xmlList);
-			
 			tree.dataProvider = xmlTreeData;	
 //			xmlTreeData.addItem(xmlList);
 			tree.validateNow();
@@ -60,7 +67,7 @@ package vdom.components.scriptEditor.containers
 			
 			var ID:String = XML(tree.selectedItem).@ID;
 			
-			dataManager.changeCurrentObject(value);
+			
 		}
 		
 		

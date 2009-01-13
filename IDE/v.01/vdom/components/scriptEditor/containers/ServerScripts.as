@@ -71,16 +71,28 @@ package vdom.components.scriptEditor.containers
 		private function creatData(xmlToTree:XML):void
 		{
 			xmlToServer = new XML('<ServerActions/>');
-			var continer:XML = new XML(xmlToTree.Container.(@ID == dataManager.currentObjectId)[0].toXMLString());
-			for each(var action:XML in continer.children())
-				xmlToServer.appendChild(action);
+			dataXML  = new XML('<Object/>');
+
+			var continer:XML; 
+
+			if(xmlToTree.Container.(@ID == dataManager.currentObjectId)[0])
+			{	
+				continer = new XML(xmlToTree.Container.(@ID == dataManager.currentObjectId)[0].toXMLString());
+				
+				var object:XML = dataManager.getObject(dataManager.currentObjectId);
+			
+				dataXML.@Name = object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+				dataXML.@resourceID = getSourceID(object.@Type);
+			}else
+			{
+				continer = new XML(xmlToTree.toXMLString());
+				dataXML.@Name = "Session Actions";
+			}
+//			for each(var action:XML in continer.children())
+				
 //			delete xmlToServer.Key;
 
-			var object:XML = dataManager.getObject(dataManager.currentObjectId);
 			
-			dataXML  = new XML('<Object/>');
-			dataXML.@Name = object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
-			dataXML.@resourceID = getSourceID(object.@Type);
 			
 //			var type:XML = dataManager.getTypeByObjectId(dataManager.currentObjectId);
 //			var	curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentObjectId).Information.ID.toString();
@@ -101,6 +113,7 @@ package vdom.components.scriptEditor.containers
 					tempXML.@ID = actID.@ID;
 					
 					dataXML.appendChild(tempXML);
+					xmlToServer.appendChild(actID);
 				}
 				
 				tree.dataProvider = dataXML;
@@ -156,7 +169,7 @@ package vdom.components.scriptEditor.containers
 		
 		public function deleteScript():void
 		{
-			if(tree.selectedItem)
+			if(tree.selectedItem && dataXML.Action.length() > 1)
 			{
 				var ID:String = tree.selectedItem.@ID;
 				
@@ -167,6 +180,10 @@ package vdom.components.scriptEditor.containers
 				{	
 					tree.dataProvider = dataXML;
 					tree.validateNow();
+					
+					var item:Object =  XMLListCollection(tree.dataProvider).source[0];
+					tree.expandItem(item, true, false);
+					
 					tree.selectedIndex = 1;
 					tree.validateNow();
 					
@@ -212,6 +229,9 @@ package vdom.components.scriptEditor.containers
 			var ID:String = tree.selectedItem.@ID;
 			
 			if (ID == '') 
+				return 'null';
+			
+			if(!xmlToServer.Action[0])
 				return 'null';
 				
 			return xmlToServer.Action.(@ID == ID)[0].toString();
