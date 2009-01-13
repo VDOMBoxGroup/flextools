@@ -1832,6 +1832,8 @@ public class Node extends Canvas
 		if(canvas && canvas.addingTransition)
 			return;		
 				
+    	//event.stopPropagation();	    	
+
 	    if(event.keyCode == Keyboard.ENTER)
 	    {
 	    	if(_mode==M_EDITING)

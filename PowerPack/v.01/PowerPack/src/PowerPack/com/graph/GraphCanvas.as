@@ -791,7 +791,7 @@ public class GraphCanvas extends Canvas
 	    	}
 	    	else if(event.keyCode == Keyboard.C)
 	    	{
-	    		event.stopPropagation();
+	    		//event.stopPropagation();
 	    		doCopy();
 	    	}
 	    	else if(event.keyCode == Keyboard.V)
