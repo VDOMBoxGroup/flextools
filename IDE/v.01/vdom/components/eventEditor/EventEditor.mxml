@@ -10,6 +10,8 @@
 		
 	 <mx:Script>
 	 	<![CDATA[
+	 		import mx.collections.SortField;
+	 		import mx.collections.Sort;
 	 		import mx.controls.Label;
 	 		import vdom.components.scriptEditor.containers.ServerScripts;
 	 		import mx.binding.utils.ChangeWatcher;
@@ -70,7 +72,7 @@
 			public var delet:Class;
 			
 	 			[Bindable]
-   			private var arrAppl: Array = new Array();
+   			private var arrAppl: ArrayCollection = new ArrayCollection();
    		
 	 		
 	 		private var linesArray:Array = new Array();
@@ -112,8 +114,8 @@
 	 			curContainerID = dataManager.currentPageId;
 	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
 	 			
-	 			arrAppl = [];
-	 			for each(var lavel:XML in dataManager.listPages )
+	 			arrAppl.removeAll();
+	 			/*for each(var lavel:XML in dataManager.listPages )
 				{
 		 			var ID:String = lavel.@ID;
 		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
@@ -121,8 +123,24 @@
 		 			var typeID:String = lavel.@Type.toString();
 		 			var iconResID:String = getIcon(typeID);
 		 			
-		 			arrAppl.push({label:strLabel, ID:ID, iconResID:iconResID});
+		 			arrAppl.addItem({label:strLabel, ID:ID, iconResID:iconResID});
+				}*/
+				
+				for each(var lavel:XML in dataManager.listPages )
+				{
+		 			var ID:String = lavel.@ID;
+		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
+		 			
+		 			var typeID:String = lavel.@Type.toString();
+		 			var iconResID:String = getIcon(typeID);
+		 			
+		 			arrAppl.addItem({label:strLabel, ID:ID, iconResID:iconResID, typeID:typeID});
 				}
+				
+				var sort : Sort = new Sort();
+				sort.fields = [new SortField("typeID"), new SortField("label", true)];
+				arrAppl.sort = sort;
+				arrAppl.refresh();
 				
 				function searchIndex():int
 				{
@@ -147,9 +165,8 @@
 				}
 				else
 				{
-					treeEvents.currentContainerId = dataManager.currentObjectId;
-					treeEvents.currentObjectId 	= dataManager.currentObjectId;
 					treeActions.currentObjectId = dataManager.currentObjectId;
+					treeEvents.currentObjectId 	= dataManager.currentObjectId;
 				}
 				
 				
@@ -812,14 +829,12 @@
 				{
 					temXML = <Event/>;
 					
-					var event:EventEditorEvents = eventsArray[evtID];
-					
-					temXML.@Name 	 = event.Name;// eventsArray[evtID].Name;
-					temXML.@ObjSrcID = event.ObjSrcID;// eventsArray[evtID].ObjSrcID;
-					temXML.@Top 	 = event.y;// eventsArray[evtID].y;
-					temXML.@Left 	 = event.x;// eventsArray[evtID].x;
-					temXML.@State	 = event.State; // eventsArray[evtID].State;
-					temXML.@ContainerID = event.ContainerID;// eventsArray[evtID].State;
+					temXML.@Name 	 = eventsArray[evtID].Name;
+					temXML.@ObjSrcID = eventsArray[evtID].ObjSrcID;
+					temXML.@Top 	 = eventsArray[evtID].y;
+					temXML.@Left 	 = eventsArray[evtID].x;
+					temXML.@State	 = eventsArray[evtID].State;
+					temXML.@ContainerID = dataManager.currentPageId;
 					
 					dataToServer.Events.appendChild(temXML);
 				}
@@ -1037,7 +1052,6 @@
 			
 			private function objectChangeHandler(dmEvt:DataManagerEvent):void
 			{
-				treeEvents.currentContainerId  = containersBranch.ContainerID;
 				treeEvents.currentObjectId = dataManager.currentObjectId;
 				treeActions.currentObjectId = dataManager.currentObjectId;
 			}
