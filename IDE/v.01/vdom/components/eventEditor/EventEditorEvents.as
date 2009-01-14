@@ -75,14 +75,14 @@ package vdom.components.eventEditor
 		private var txtInp:TextInput;
 		private var _type:Label;
 		private var _ratio:Number = 0.7;
-		private var dataManager:DataManager;
+		private var dataManager:DataManager = DataManager.getInstance();
 		
 		
 		public function EventEditorEvents(data:Object, curContainerID:String)
 		{
 			super();
 			
-			dataManager = DataManager.getInstance();
+ 	
 			
 		//	_ID = UIDUtil.createUID();
 			_ID = data.@ObjSrcID + '_' + data.@Name;
@@ -283,7 +283,7 @@ package vdom.components.eventEditor
 			_name = object.@Name;
 			_eventType = data.@Name;
 			_objSrcID = data.@ObjSrcID;
-			
+			_containerID = data.@ContainerID;
 		//	_ID = _objSrcID +"_"+ _name;
 			
 			
@@ -402,6 +402,15 @@ package vdom.components.eventEditor
 		{
 			return min.toString();
 		}
+		
+		
+		private var _containerID:String;
+		public function get ContainerID():String
+		{
+			return _containerID;
+		}
+		
+		
 	
 	}
 }

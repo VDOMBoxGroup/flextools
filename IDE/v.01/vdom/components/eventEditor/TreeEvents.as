@@ -39,7 +39,7 @@ package vdom.components.eventEditor
 				tempXML.@label = child.@Name;
 				tempXML.@Name = child.@Name;
 				tempXML.@ObjSrcID = value.@ID;
-				
+				tempXML.@ContainerID = 
 				dataXML.appendChild(tempXML);
 			} 
 			
@@ -151,6 +151,7 @@ package vdom.components.eventEditor
 				tempXML.@label = child.@Name;
 				tempXML.@Name = child.@Name;
 				tempXML.@ObjSrcID = value;
+				tempXML.@ContainerID = _currentContainerId;
 				
 				dataXML.appendChild(tempXML);
 			} 
@@ -161,6 +162,7 @@ package vdom.components.eventEditor
 				tempXML.@label = child.@Name;
 				tempXML.@Name  = child.@Name;
 				tempXML.@ObjSrcID = value;
+				tempXML.@ContainerID = _currentContainerId;
 			
 				dataXML.appendChild(tempXML);
 			} 	
@@ -184,6 +186,12 @@ package vdom.components.eventEditor
 			masResourceID[ID] = str.substr(5, 36);
 			
 			return masResourceID[ID];
+		}
+		
+		private var _currentContainerId:String;
+		public function set currentContainerId(value:String):void
+		{
+			_currentContainerId = value;
 		}
 		
 	}

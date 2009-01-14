@@ -147,8 +147,9 @@
 				}
 				else
 				{
-					treeActions.currentObjectId = dataManager.currentObjectId;
+					treeEvents.currentContainerId = dataManager.currentObjectId;
 					treeEvents.currentObjectId 	= dataManager.currentObjectId;
+					treeActions.currentObjectId = dataManager.currentObjectId;
 				}
 				
 				
@@ -811,12 +812,14 @@
 				{
 					temXML = <Event/>;
 					
-					temXML.@Name 	 = eventsArray[evtID].Name;
-					temXML.@ObjSrcID = eventsArray[evtID].ObjSrcID;
-					temXML.@Top 	 = eventsArray[evtID].y;
-					temXML.@Left 	 = eventsArray[evtID].x;
-					temXML.@State	 = eventsArray[evtID].State;
-					temXML.@ContainerID = dataManager.currentPageId;
+					var event:EventEditorEvents = eventsArray[evtID];
+					
+					temXML.@Name 	 = event.Name;// eventsArray[evtID].Name;
+					temXML.@ObjSrcID = event.ObjSrcID;// eventsArray[evtID].ObjSrcID;
+					temXML.@Top 	 = event.y;// eventsArray[evtID].y;
+					temXML.@Left 	 = event.x;// eventsArray[evtID].x;
+					temXML.@State	 = event.State; // eventsArray[evtID].State;
+					temXML.@ContainerID = event.ContainerID;// eventsArray[evtID].State;
 					
 					dataToServer.Events.appendChild(temXML);
 				}
@@ -1034,6 +1037,7 @@
 			
 			private function objectChangeHandler(dmEvt:DataManagerEvent):void
 			{
+				treeEvents.currentContainerId  = containersBranch.ContainerID;
 				treeEvents.currentObjectId = dataManager.currentObjectId;
 				treeActions.currentObjectId = dataManager.currentObjectId;
 			}

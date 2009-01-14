@@ -43,10 +43,10 @@ package vdom.components.eventEditor
 					xmlList.@showInList = 'true';
 					xmlList.@ID = xmlLabel.@ID;
 					xmlList.@Type = xmlLabel.@Type;
-					
+					xmlList.@ContainerID = xmlLabel.@ID
 					 xmlList.@resourceID = getSourceID(xmlLabel.@Type); 
 						
-					xmlList.appendChild(findOjects(xmlLabel.Objects));
+					xmlList.appendChild(findOjects(xmlLabel.Objects, xmlLabel.@ID));
 					
 			xmlTreeData.addItem(xmlList);
 			
@@ -60,12 +60,13 @@ package vdom.components.eventEditor
 			
 			var ID:String = XML(tree.selectedItem).@ID;
 			
+			_containerID = xmlLabel.@ID;
 			dataManager.changeCurrentObject(value);
 		}
 		
 		
 		
-		private function findOjects(xmlIn:XMLList):XMLList
+		private function findOjects(xmlIn:XMLList, ContainerID:String):XMLList
 		{
 //			trace('findOjects');
 			var xmllReturn:XMLList  = new XMLList();
@@ -76,10 +77,11 @@ package vdom.components.eventEditor
 					xmlTemp.@ID 	= xmlLabel.@ID;
 					xmlTemp.@Type 	= xmlLabel.@Type;
 					xmlTemp.@resourceID = getSourceID(xmlLabel.@Type); 
+					xmlTemp.@ContainerID = ContainerID;
 					
 				// проверяем есть ли еще обьекты в нутри
 				var numObjects:int = xmlLabel.Objects.*.length(); 
-				if(numObjects > 0)	xmlTemp.appendChild(findOjects(xmlLabel.Objects));
+				if(numObjects > 0)	xmlTemp.appendChild(findOjects(xmlLabel.Objects, xmlLabel.@ID));
 				
 				xmllReturn += xmlTemp;
 			}
@@ -134,8 +136,17 @@ package vdom.components.eventEditor
 		{
 			var ID:String = XML(tree.selectedItem).@ID;
 			
+			_containerID = XML(tree.selectedItem).@ContainerID;
+		
 			dataManager.changeCurrentObject(ID);
 		}
+		
+		private var  _containerID:String;
+		public function get ContainerID():String
+		{
+			return _containerID;
+		}
+		
 		
 	}
 }
