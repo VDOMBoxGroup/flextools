@@ -1,0 +1,1121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HDividedBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	creationComplete="creationCompleteHandler()" 
+	backgroundColor="#3d3d3d" 
+	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" 
+	hide="hideHandler()" xmlns:containers="vdom.containers.*">
+	<mx:Metadata>
+		[ResourceBundle("Event")]
+	</mx:Metadata>
+		
+	 <mx:Script>
+	 	<![CDATA[
+	 		import mx.collections.SortField;
+	 		import mx.collections.Sort;
+	 		import mx.controls.Label;
+	 		import vdom.components.scriptEditor.containers.ServerScripts;
+	 		import mx.binding.utils.ChangeWatcher;
+	 		import mx.core.Application;
+	 		import mx.managers.CursorManagerPriority;
+	 		import mx.managers.CursorManager;
+	 		import vdom.components.treeEditor.DeleteLineButton;
+	 		import mx.collections.XMLListCollection;
+	 	/***
+	 	 * 
+	 	 * 
+	 	 *  + собрать структуру из дерева 
+	 	 *  + из структуры собрать дерево 
+	 	 *  + удаление линий
+	 	 *  + баг с повторяющимися параметрами
+	 	 *  + перенести вниз дерево евентов/акшинов 
+	 	 *  + удалени елементов
+	 	 *  + чтоб серыми становились вынесенные евенты
+	 	 *  + при удаление евента в дереве востанавливались евенты...
+	 	 *  + запоминание состояния
+	 	 *  + у акшина редактировались параметры
+	 	 *  + посылать на сервер измененные параметры у акшинов
+	 	 *
+	 	 * 
+	 	 *  
+	 	 * */
+	 	 
+	 		import com.yahoo.astra.mx.managers.AutoCompleteManager;
+	 	
+	 		import vdom.events.DataManagerEvent;
+	 		import vdom.events.EventEditorEvent;
+	 		import vdom.events.TreeEditorEvent;
+	 		import vdom.components.treeEditor.TreeElement;
+	 		import vdom.components.treeEditor.TreeVector;
+	 		import vdom.components.treeEditor.Vector2;
+	 		import vdom.managers.DataManager;
+	 		import vdom.utils.IconUtil;
+	 	 
+	 		import mx.binding.utils.BindingUtils;
+	 		import mx.controls.DataGrid;
+	 		import mx.controls.Text;
+	 		import mx.core.DragSource;
+	 		import mx.controls.Tree;
+	 		import mx.collections.ArrayCollection;
+	 		import mx.events.DragEvent;
+	 		import mx.managers.DragManager;
+	 		
+	 		[Bindable]
+	 		private var dataManager:DataManager;
+	 	
+			 [Embed(source='/assets/eventEditor/eventEditor.swf', symbol='copyCursor')]
+			 [Bindable]
+			 public var plus:Class;
+
+			 
+			[Embed(source='/assets/eventEditor/eventEditor.swf', symbol='rejectCursor')]
+			[Bindable]
+			public var delet:Class;
+			
+	 			[Bindable]
+   			private var arrAppl: ArrayCollection = new ArrayCollection();
+   		
+	 		
+	 		private var linesArray:Array = new Array();
+	 		
+	 		private function creationCompleteHandler():void
+	 		{
+	 			dataManager = DataManager.getInstance();
+	 		}
+	 		
+	 		override protected function updateDisplayList( unscaledWidth : Number, 
+													unscaledHeight : Number ) : void
+			{
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
+				vBox.height = unscaledHeight;
+				panelContainer.height = unscaledHeight;
+			}
+	 		
+//	 		private var changeWatcher:ChangeWatcher ;
+	 		private function showHandler():void
+	 		{
+//	 			clientActionsArray = [];
+//	 			serverActionsArray = [];
+//				eventsArray = [];
+//				linesArray = [];
+				
+//	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
+//	 			trContainer.showHandler();
+//	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+	 			
+	 			dataManager.addEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
+	 			dataManager.addEventListener(DataManagerEvent.SET_APPLICATION_EVENTS_COMPLETE, applEventSevedHandler)
+	 			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+	 			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
+	 			
+	 			btLine.addEventListener(MouseEvent.CLICK, lineClikHandler );
+	 			
+	 			addEventListener(MouseEvent.CLICK, mouseClickHandler);
+	 			
+	 			curContainerID = dataManager.currentPageId;
+	 			curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+	 			
+	 			arrAppl.removeAll();
+	 			/*for each(var lavel:XML in dataManager.listPages )
+				{
+		 			var ID:String = lavel.@ID;
+		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
+		 			
+		 			var typeID:String = lavel.@Type.toString();
+		 			var iconResID:String = getIcon(typeID);
+		 			
+		 			arrAppl.addItem({label:strLabel, ID:ID, iconResID:iconResID});
+				}*/
+				
+				for each(var lavel:XML in dataManager.listPages )
+				{
+		 			var ID:String = lavel.@ID;
+		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
+		 			
+		 			var typeID:String = lavel.@Type.toString();
+		 			var iconResID:String = getIcon(typeID);
+		 			
+		 			arrAppl.addItem({label:strLabel, ID:ID, iconResID:iconResID, typeID:typeID});
+				}
+				
+				var sort : Sort = new Sort();
+				sort.fields = [new SortField("typeID"), new SortField("label", true)];
+				arrAppl.sort = sort;
+				arrAppl.refresh();
+				
+				function searchIndex():int
+				{
+					var curID:String = dataManager.currentPageId;
+					for(var i:String in arrAppl)
+					{
+//						trace(arrAppl[i].typeID);
+						if (arrAppl[i].ID == curID) 
+							return Number(i);	
+					}
+					return 0;
+				}
+				
+				changeContainer.selectedIndex = searchIndex();
+				changeTree(dataManager.currentPageId);
+			
+				dataManager.getApplicationEvents(dataManager.currentPageId);
+				
+				if(dataManager.currentPageId != dataManager.currentObjectId)
+				{
+					dataManager.changeCurrentObject(dataManager.currentPageId)
+				}
+				else
+				{
+					treeActions.currentObjectId = dataManager.currentObjectId;
+					treeEvents.currentObjectId 	= dataManager.currentObjectId;
+				}
+				
+				
+	 		}
+	 		
+	 		private var massIconResouceID:Array = new Array(); 
+			private function getIcon(ID:String):String
+			{
+				if (massIconResouceID[ID])
+					return massIconResouceID[ID];
+					
+				for each(var lavel:XML in dataManager.getTopLevelTypes() )
+				{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
+						if( lavel.Information.ID == ID) 
+						{
+							var strLabel:String = lavel.Information.StructureIcon;
+							return  massIconResouceID[ID] = strLabel.substr(5, 36);
+						}
+				}
+				return  '';
+			}
+	 		
+	 		private function hideHandler():void
+	 		{
+//	 			creatDataToServer();
+//	 			changeWatcher.unwatch();
+//	 			trContainer.hideHandler();
+//	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
+				
+				
+				dataManager.removeEventListener(DataManagerEvent.GET_APPLICATION_EVENTS_COMPLETE, applicationEvenLoadedHandler);
+				dataManager.removeEventListener(DataManagerEvent.SET_APPLICATION_EVENTS_COMPLETE, applEventSevedHandler)
+	 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
+	 			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
+	 			
+				can.removeAllChildren();
+//				nullingData();
+				
+//				dataChanged = false;
+	 		}
+	/* 		
+	 		private function nullingData():void
+	 		{
+	 			
+	 			
+	 			clientActionsArray = [];
+				serverActionsArray = [];
+				eventsArray = [];
+				linesArray = [];
+	 		}
+	 */		
+	 		private var getApplEventID:String;
+	 	/*	private function dataChangedListener(eeEvt:EventEditorEvent):void
+	 		{
+	 		
+	 			getApplEventID = eeEvt.objID;
+	 			
+//	 			if(dataChanged)
+//	 			{
+//	 				creatDataToServer(); //eeEvt.objID
+	 				
+//	 			}else
+//	 			{
+	 				dataManager.getApplicationEvents(getApplEventID);
+//	 			}	
+//	 			dataChanged = false;
+	 			
+	 			can.removeAllChildren();
+//	 			trace('-----From Server-----\n' +  eeEvt.data);
+//	 			trEvents.dataProvider  = eeEvt.dataEvent;
+//	 			trActions.dataProvider = eeEvt.dataAction;
+	 		}
+	 		*/
+	 		private function markButton():void
+	 		{
+	 			btSave.setStyle("color", "0xCC0000");
+				btSave.setStyle("borderColor", "0xEE0000");
+	 		}
+	 		private function unMarkButton():void
+	 		{
+	 			btSave.setStyle("color", "0x000000");
+				btSave.setStyle("borderColor", "0xAAB3B3");
+	 		}
+	 		
+	 		private function applicationEvenLoadedHandler(dmEvt:DataManagerEvent):void
+	 		{
+	 			unMarkButton();
+				
+	 			cretDat(dmEvt.result);
+	 		}
+	 		
+	 		
+	 		 private function dragEnterHandler(event:DragEvent):void 
+	 		 {
+	 		        var dropTarget:Canvas=Canvas(event.currentTarget);
+	                DragManager.acceptDragDrop(dropTarget);
+	        }
+            
+            private var eventsArray	:Array = new Array();
+            private var clientActionsArray:Array = new Array();
+            private var serverActionsArray:Array = new Array();
+                
+	        private function dragDropHandler(event:DragEvent):void 
+	        {
+	        	var ds:DragSource = event.dragSource;
+                if( !ds.hasFormat("treeItems") ) return;     // no useful data
+
+                var items:Array = ds.dataForFormat("treeItems") as Array;
+                for(var i:Number=0; i < items.length; i++) 
+                {
+                    var item:XML = XML(items[i]);
+                    
+                    if( item.name().toString() == "Object" )
+                    	 return; // not what we want
+                    
+//                    if ( item.@enabled[0] == "false") 		
+//                    	return;
+                }	  
+	                    
+	        	var newElement:*;
+//	        	curContainerTypeID
+	        	  if( event.dragInitiator is TreeActions ) 
+	        	  {
+	        	  	if(item.@Language[0])
+	        	  	{
+	        	  		if(serverActionsArray[item.@ID] && !can.contains(serverActionsArray[item.@ID]) )
+	        	  		{
+							newElement = serverActionsArray [item.@ID];
+//							serverActionsArray[item.@ID] = setListeners4Action(newElement);
+							can.addChild(newElement);
+							
+	        	  		}
+	        	  	}else
+	        	  	{
+		        		 newElement =  new EventEditorAction(item, curContainerTypeID);
+		        		 clientActionsArray[newElement.ID] = setListeners4Action(newElement);
+		        		 can.addChild(clientActionsArray[newElement.ID] );
+		        	} 
+	        	  } 
+	        	  else if (event.dragInitiator is TreeEvents ) 
+	        	  {
+	        	  	newElement = new EventEditorEvents(item, dataManager.currentPageId);
+	        	 	
+//	        	 	item.@enabled = false;
+	        	  
+	        	  	if (eventsArray[newElement.ID])
+	        	  			return;
+	        	  	
+	        	  	eventsArray[newElement.ID] = setListeners4Event(newElement);
+	        	  	can.addChild(eventsArray[newElement.ID] ); 
+	        	  }
+	        	
+	        	if(newElement)
+	        	{
+		        	newElement.x = can.horizontalScrollPosition + event.localX;
+		        	newElement.y = can.verticalScrollPosition + event.localY;
+		        	
+		        	markButton();
+	        	}
+//	 			dataChanged();		
+	        }   
+	        
+	        private function  setListeners4Action(el:Object):Object
+	        {
+	        	el.addEventListener(MouseEvent.MOUSE_DOWN, creatingAssociationLine);
+	        	el.addEventListener(MouseEvent.MOUSE_OVER, actionMouseOverHandler);
+	        	
+	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
+	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
+	        	el.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+	        	
+	        	return el;
+	        }
+	        
+	        private function setListeners4Event(el:EventEditorEvents):EventEditorEvents
+	        {
+	        	el.addEventListener(TreeEditorEvent.START_DRAW_LINE, startDrawLine);
+//	        	el.addEventListener(MouseEvent.MOUSE_OVER, eventMouseOverHandler);
+	        	
+	        	el.addEventListener(TreeEditorEvent.START_REDRAW_LINES, startReDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.REDRAW_LINES, reDrawLineHandler);
+	        	el.addEventListener(TreeEditorEvent.DELETE, deletElementHandler);
+	        	el.addEventListener(MouseEvent.CLICK, objectClickHandler);
+	        	el.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+	        	
+	        	return el;
+	        }
+	        
+			private var eventUnderMouse:Object;
+	       	private function actionMouseOverHandler(mEvt:MouseEvent):void
+	        {
+				eventUnderMouse = mEvt.currentTarget;
+	        } 
+	/*        
+	        private function eventMouseOverHandler(mEvt:MouseEvent):void
+	        {
+//	        	if(blDrawLine)
+//	        		cursorID = CursorManager.setCursor(delet);
+	        } 
+	  */      
+	        private function mouseOutHandler(mEvt:MouseEvent):void
+	        {
+				eventUnderMouse = null;
+	        }
+ 	        
+	        private function objectClickHandler(mEvt:MouseEvent):void
+	        {
+	        	markButton();
+	        }
+	        
+	        private function deletElementHandler(trEvt:TreeEditorEvent):void
+	        {
+	        	var ID:String = trEvt.ID;
+	        	
+	        	if(clientActionsArray[ID])
+	        	{
+	        		can.removeChild(clientActionsArray[ID]);
+	        		delete clientActionsArray[ID];
+	        		
+	        	}else if(eventsArray[ID])
+	        	{
+//	        		trEvents.enabledItem = eventsArray[ID];
+	        		
+	        		if(can.contains(eventsArray[ID]))
+	        			can.removeChild(eventsArray[ID]);
+	        			
+	        		delete eventsArray[ID];
+	        	}else if(serverActionsArray[ID])
+	        	{
+//	        		deleteLines(ID);
+//	        		trEvents.enabledItem = eventsArray[ID];
+	        		
+	        		if(can.contains(serverActionsArray[ID]))
+	        			can.removeChild(serverActionsArray[ID]);
+	        			
+//	        		delete serverActionsArray[ID];
+	        	}
+	        	deleteLines(ID);
+	        	
+	        	
+	        }
+	        
+	        private function deleteLines(ID:String):void
+	        {
+	        	for(var evtID:String in linesArray)
+	        		for(var actID:String in linesArray[evtID])
+	        		{
+    					if (evtID == ID || actID == ID)
+    					{
+    						can.removeChild(linesArray[evtID][actID])
+    						delete linesArray[evtID][actID];
+//    						delete linesArray[evtID];
+    					}    		
+	        		}
+	        }
+	        
+	        private function onTreeDragComplete(event:DragEvent):void 
+	        {
+                event.preventDefault();
+            }    
+       
+        
+            /******
+            * 
+            *	Рисуем линию... 
+            * 
+            */
+            private var blDrawLine:Boolean = false;
+            private var line:Vector2 = new Vector2();
+        	private var curEvent:Object;
+            private function startDrawLine(trEvt:TreeEditorEvent):void
+			{
+				//чтоб 2жды не запускать
+				if(can.owns(line)) 
+					return;
+					
+				line = new Vector2();	
+								
+				can.addChild(line);//--для рисования связывающей линии
+				can.addEventListener(MouseEvent.MOUSE_MOVE, drLine);
+				
+				blDrawLine = true; //говорим что рисуем линию
+				addEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+				
+				curEvent = eventsArray[trEvt.ID]
+			}
+			// 7-701-249-68-36 cancho 
+			// 7-702-153-44-95 vascho
+			
+			private function drLine (mEvt:MouseEvent):void
+			{
+				// нормализуем mouseX mouseY
+				 var pt:Point = new Point(mEvt.localX, mEvt.localY);
+	            		pt = mEvt.target.localToGlobal(pt);
+	            		pt = can.globalToLocal(pt);
+				//---------------
+				if(pt.x > can.width - 100   )
+				{
+					if((can.horizontalScrollPosition + can.width - can.measuredWidth) < 19)
+					{
+						can.horizontalScrollPosition = can.horizontalScrollPosition + 20;
+					}
+					else
+					{ 
+						can.horizontalScrollPosition = can.measuredWidth;
+					}
+				}
+				else if(pt.x < can.x + 100  )
+				{
+					if(can.horizontalScrollPosition > 19)
+					{
+						can.horizontalScrollPosition = can.horizontalScrollPosition - 20;
+					}
+					else
+					{
+						can.horizontalScrollPosition  = 0;
+					}
+				}
+				else if(pt.y > can.height - 100)
+				{
+					if((can.verticalScrollPosition + can.height - can.measuredHeight) < 19)
+					{
+						can.verticalScrollPosition = can.verticalScrollPosition + 20;
+					}
+					else
+					{
+						can.verticalScrollPosition = can.measuredHeight;
+					}
+				}	
+				else if(pt.y < can.y + 100)
+				{
+					if(can.verticalScrollPosition > 19)
+					{
+						can.verticalScrollPosition = can.verticalScrollPosition - 20;
+					}
+					else
+					{
+						can.verticalScrollPosition = 0;
+					}
+				}	
+				
+				
+				
+				if(eventUnderMouse)
+				{
+					line.createVector(curEvent, eventUnderMouse, 1, .5);	
+				}else
+				{
+					can.validateNow();
+					
+					pt.x +=  can.horizontalScrollPosition;
+					pt.y +=  can.verticalScrollPosition;
+					
+					var pnTo:Object = calculatePointTo(pt, curEvent);
+
+						line.createVector(curEvent, pnTo, 1, .5);	
+				}
+			}
+			
+			private function calculatePointTo(pn:Point, curEvent:Object):Object
+			{
+				var tX:int = pn.x - vBox.x - curEvent.x;
+				var tY:int = pn.y  - curEvent.y;
+				
+				var pnTo:Object = new Object();
+				// чтоб мышка не кликала по своей линии
+				
+				if((tX>0))	pnTo.x = pn.x - 4;
+					else pnTo.x = pn.x + 4;
+				
+				if( (tY>0))	pnTo.y = pn.y - 4;
+					else pnTo.y = pn.y + 4;
+					
+				return pnTo;
+			}
+			
+			private function creatingAssociationLine(msEvt:MouseEvent):void
+			{
+				if (!blDrawLine)
+					return;
+					
+				can.removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
+				removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+				
+				line.clear();
+				can.removeChild(line); ///-------------***********
+				blDrawLine = false;  //говорим что НЕ рисуем линию
+			
+				if(possibleDrawLine(msEvt.currentTarget.ID))
+					createLine(curEvent.ID, msEvt.currentTarget.ID)
+			}
+			
+			private function createLine(evtID:String, actID:String):void
+			{
+				if(!clientActionsArray[actID] && !serverActionsArray[actID]) return;
+				
+				if(!linesArray[evtID]) linesArray[evtID] = new Array();
+			
+				linesArray[evtID][actID] = 
+					new TreeVector(eventsArray[evtID], clientActionsArray[actID] || serverActionsArray[actID], '1');
+					
+				linesArray[evtID][actID].addEventListener(MouseEvent.CLICK, markLines);	
+				
+				can.addChildAt(linesArray[evtID][actID], 0);
+			}
+			
+			private function possibleDrawLine(actID:String):Boolean
+			{
+				var evtID:String = curEvent.ID;
+				
+				if(!linesArray[evtID]) 
+					return true;
+
+				if(linesArray[evtID][actID]) 
+					return false;
+				
+				return true;
+			}
+			
+			private function stopDrawLine(msEvt:MouseEvent):void
+			{
+				if (!blDrawLine)
+					return;
+				can.removeEventListener(MouseEvent.MOUSE_MOVE, drLine);
+					removeEventListener(MouseEvent.MOUSE_DOWN, stopDrawLine);
+				
+				line.clear();
+				can.removeChild(line); ///-------------***********
+				blDrawLine = false;  //говорим что НЕ рисуем линию
+			}
+			
+			private var curContainerID:String;
+			public var curContainerTypeID:String;
+			private var dataToServer:XML; 
+//			private var dataChanged:Boolean = false;
+/*
+			private function treeContainerChangeHandler(evt:Event):void
+			{
+				 var selectedNode:XML = Tree(evt.target).selectedItem as XML;
+				 if (selectedNode)
+				 {
+              	 	curContainerID = selectedNode.@ID;
+              	 	curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
+              	 	trace('1 - curContainerTypeID: ' + curContainerTypeID);
+     			 } 
+     			 trace('2 - curContainerTypeID: '+ curContainerTypeID);
+			}
+	*/
+			/*
+			private function getIcon(value:Object):Class 
+			{
+				var xmlData:XML = XML(value);
+				var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+			 	
+		 		return IconUtil.getClass(trContainer, data, 16, 16);
+			}
+			*/
+			/***
+			 * 
+			 *  for ReDraw line when one of objects moved
+			 *
+			 */
+			private var  curID:String;
+			private var dX:Number;
+			private var dY:Number;
+			private function startReDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				curID = trEvt.ID;
+				
+				if(eventsArray[curID])
+				{ 
+					dX = eventsArray[curID].x;
+					dY = eventsArray[curID].y;
+				}
+				
+				if(clientActionsArray[curID])
+				{ 
+					dX = clientActionsArray[curID].x;
+					dY = clientActionsArray[curID].y;
+				}
+				
+				if(serverActionsArray[curID])
+				{ 
+					dX = serverActionsArray[curID].x;
+					dY = serverActionsArray[curID].y;
+				}
+				
+				dX = can.mouseX -dX;
+				dY = can.mouseY -dY;
+				
+//				dataChanged();
+				
+				Application.application.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+				Application.application.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			}
+			
+			private function mouseUpHandler(msEvt:MouseEvent):void
+			{
+				Application.application.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+				Application.application.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			}
+			
+			private function mouseMoveHandler(msEvt:MouseEvent):void
+			{
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+				
+				if(eventsArray[curID]) 
+				{
+//					eventsArray[curID].x = can.mouseX; //msEvt.localX;
+//					eventsArray[curID].y = can.mouseY;//  msEvt.localY;
+					
+					if (can.mouseX < dX)
+					{
+						 eventsArray[curID].x = 0;
+//						 eventsArray[curID].stopDrag();
+					}else
+					{
+						eventsArray[curID].x = can.mouseX - dX;
+					}
+					
+					if ((can.mouseY - dY) < 10)
+					{
+						 eventsArray[curID].y = 10;
+//						 eventsArray[curID].stopDrag();
+					}else
+					{
+						eventsArray[curID].y = can.mouseY - dY;	
+					}
+				} 
+				else if(clientActionsArray[curID]) 
+				{
+					if (can.mouseX < dX)
+					{
+						 clientActionsArray[curID].x = 0;
+//						 clientActionsArray[curID].stopDrag();
+					}else
+					{
+						clientActionsArray[curID].x = can.mouseX - dX;
+					}
+					
+					if ((can.mouseY - dY) < 10)
+					{
+						 clientActionsArray[curID].y = 10;
+//						 clientActionsArray[curID].stopDrag();
+					}else
+					{
+						 clientActionsArray[curID].y = can.mouseY - dY;
+					}
+				}else if(serverActionsArray[curID]) 
+				{
+					if (can.mouseX < dX)
+					{
+						 serverActionsArray[curID].x = 0;
+//						 clientActionsArray[curID].stopDrag();
+					}else
+					{
+						serverActionsArray[curID].x = can.mouseX - dX;
+					}
+					
+					if ((can.mouseY - dY) < 10)
+					{
+						 serverActionsArray[curID].y = 10;
+//						 clientActionsArray[curID].stopDrag();
+					}else
+					{
+						 serverActionsArray[curID].y = can.mouseY - dY;
+					}
+				}
+				
+				reDrawLines();
+			}
+			
+			private function reDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+			//	trace('reDrawLineHandler: '+ trEvt.ID)	
+			
+				reDrawLines();
+			}
+			
+			private function reDrawLines():void
+			{
+				for(var evID:String in linesArray)
+					for(var acID:String in linesArray[evID])
+					{
+		//				if(evID == curID || acID == curID)
+							linesArray[evID][acID].updateVector();
+					}
+			}
+			
+			private function stopReDrawLineHandler(trEvt:TreeEditorEvent):void
+			{
+				removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+					
+				reDrawLines();
+			//  проверка если перетащили за границы :	treeElementMousUpHandler();
+			}
+			
+			private function creatDataToServer():void
+			{
+//				trace('SEND curContainerID: '+contrID);
+//				return;
+				dataToServer = <E2vdom><Events/><ClientActions/></E2vdom>;
+				
+				var temXML:XML;
+				
+				 // clientActions
+				for (var actID:String in clientActionsArray)
+				{	
+					if(can.contains(clientActionsArray[actID]))
+					{
+						temXML = <Action/>;
+						
+						temXML.@ID 		 	= clientActionsArray[actID].ID;
+						temXML.@ObjTgtID 	= clientActionsArray[actID].ObjTgtID;
+						temXML.@MethodName 	= clientActionsArray[actID].MethodName;
+						temXML.@Top 		= clientActionsArray[actID].y;
+						temXML.@Left 		= clientActionsArray[actID].x;
+						temXML.@State		= clientActionsArray[actID].State;
+						
+						temXML.appendChild(clientActionsArray[actID].parametrs);
+						
+						dataToServer.ClientActions.appendChild(temXML);
+					}
+				}
+				
+				var containerArray:Array = new Array();// XML
+				for ( actID in serverActionsArray)
+				{	
+					var action:ServerAction = serverActionsArray[actID];
+					if(!containerArray[action.containerID])
+					{
+						containerArray[action.containerID] = new XML('<ServerActions/>')
+					}
+					
+					temXML = <Action/>;
+					temXML.@ID 		 	= action.ID;
+					temXML.@Name		= action.Name;
+					temXML.@Top 		= action.y;
+					temXML.@Left 		= action.x;
+					temXML.@State		= action.State;
+					temXML.@Language	= action.language;
+					temXML.appendChild(action.parametrs);
+					
+					XML(containerArray[action.containerID]).appendChild(temXML);
+//					dataToServer.ServerActions.appendChild(temXML);
+				}
+				
+				for(var containerID:String in containerArray)
+				{
+					trace('-----------\n'+ containerID +'\n'+ containerArray[containerID])
+					dataManager.setServerActions(containerArray[containerID], containerID);
+				}
+				//  Events
+				for (var evtID:String in eventsArray)
+				{
+					temXML = <Event/>;
+					
+					temXML.@Name 	 = eventsArray[evtID].Name;
+					temXML.@ObjSrcID = eventsArray[evtID].ObjSrcID;
+					temXML.@Top 	 = eventsArray[evtID].y;
+					temXML.@Left 	 = eventsArray[evtID].x;
+					temXML.@State	 = eventsArray[evtID].State;
+					temXML.@ContainerID = dataManager.currentPageId;
+					
+					dataToServer.Events.appendChild(temXML);
+				}
+				
+				// Lines
+				for(evtID in linesArray)
+				{ 
+					if(eventsArray[evtID])
+					{		var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
+						var Name:String = eventsArray[evtID].Name;
+						
+						for(actID in linesArray[evtID])
+						{
+							temXML = <Action/>;
+							if(clientActionsArray[actID])
+								temXML.@ID = clientActionsArray[actID].ID
+							 else
+								 temXML.@ID =  serverActionsArray[actID].ID; 
+	
+							dataToServer.Events.Event.(@ObjSrcID == ObjSrcID && @Name == Name).appendChild(temXML);
+						}
+					}
+				}
+				
+//				trace('curContainerID TO server: '+curContainerID+'\n'+ dataToServer.toXMLString());
+		     	
+				dataManager.setApplicationEvents(dataManager.currentPageId, dataToServer.toXMLString());
+				trace('*********** To Server *****\n '+ dataManager.currentPageId);
+				trace(dataToServer.toXMLString());
+			}
+			
+			private function revert():void
+			{
+				trace('*********** Asced Events for *****\n '+ dataManager.currentPageId);			
+				dataManager.getApplicationEvents(dataManager.currentPageId);
+			}
+			
+			private function applEventSevedHandler(dmEvt:DataManagerEvent):void
+			{
+				unMarkButton();
+//				dataManager.getApplicationEvents(getApplEventID);
+			}
+			
+			private function cretDat(xmlToTree:XML=null):void
+			{
+				//trace(xmlToTree.toXMLString());
+				can.removeAllChildren();
+				trace('----From Serve----'+xmlToTree);
+				
+				// Client Action
+				clientActionsArray = [];		
+				for each(var actID:XML in xmlToTree.E2vdom.ClientActions.children())
+				{
+					///curContainerTypeID 
+					
+					var type:XML = dataManager.getTypeByObjectId(actID.@ObjTgtID);
+					//var tupeID:String = type.Information.ID;
+					var curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();
+					var nData:* = type.E2vdom.Actions.Container.(@ID == curContainerTypeID).Action.(@MethodName == actID.@MethodName).Parameters[0];
+					if(nData) 
+					{
+						var objAct:EventEditorAction = new EventEditorAction(actID, curContainerTypeID);
+						
+						 clientActionsArray[objAct.ID] = setListeners4Action(objAct);
+						
+//						can.addChild(clientActionsArray [actID.@ID]);
+					}
+				}
+				
+				// Server Action 
+				serverActionsArray = [];
+				for each( var container:XML in xmlToTree.E2vdom.ServerActions.children())
+				{
+					for each(actID in container.children())
+					{
+						var servActin:ServerAction = new ServerAction(actID, container.@ID);
+							servActin.containerID = container.@ID;
+						serverActionsArray[actID.@ID] = setListeners4Action(servActin);
+//						can.addChild(serverActionsArray [actID.@ID]);
+					/*	tempXML = <Action/>;
+						tempXML.@label = actID.@Name;
+						tempXML.@Name = actID.@Name;
+						tempXML.@Language = actID.@Language;
+						tempXML.@ID = actID.@ID;
+						
+						dataXML.appendChild(tempXML);
+						*/
+					}
+				}
+				
+				
+				
+				//  Events
+				eventsArray = [];		
+				for each(var evt:XML in xmlToTree.E2vdom.Events.children())
+				{
+					if(dataManager.getObject(evt.@ObjSrcID))
+					{
+						var objEv:EventEditorEvents = new EventEditorEvents(evt, curContainerTypeID);
+						
+						if(objEv)
+						{
+							eventsArray[objEv.ID] = setListeners4Event(objEv);
+							
+							can.addChild(eventsArray[objEv.ID]);
+							
+//							trEvents.disabledItem = objEv;
+						}
+					}
+				}
+				
+				// connection (Lines)
+				linesArray = [];
+				for (var evtID:String in eventsArray )//xmlToTree.E2vdom.Events.children()
+				{
+					var ObjSrcID:String = eventsArray[evtID].ObjSrcID;
+					var Name: String = eventsArray[evtID].Name;
+					 
+					evt = xmlToTree.E2vdom.Events.Event.(@ObjSrcID == ObjSrcID && @Name ==Name)[0];
+					for each(actID in evt.children())
+					{
+						var ID:String = actID.@ID;
+						if(clientActionsArray[ID])
+						{
+							createLine(evtID, ID);
+							if(!can.contains(clientActionsArray[ID]))
+							{
+								can.addChildAt(clientActionsArray[ID], 0);
+							}
+						}
+						else if(serverActionsArray[ID])
+						{	
+							createLine(evtID, ID);
+							if(!can.contains(serverActionsArray[ID]))
+							{
+								can.addChildAt(serverActionsArray[ID], 0);
+							}
+						}
+					}
+				}
+				
+			//	reDrawLines();
+			}
+			
+			private var curLine:Object = new Object();
+			private var btLine:DeleteLineButton = new DeleteLineButton();
+
+			private function markLines(muEvt:MouseEvent):void
+			{
+				curLine.mark = false;
+				curLine = muEvt.currentTarget;
+				curLine.mark = true;
+				btLine.x =  muEvt.localX - btLine.width / 2;
+				btLine.y =  muEvt.localY - btLine.height - 2;
+				btLine.visible = true;
+				
+				if (!can.contains(btLine))
+				{
+					can.addChild(btLine);
+				}
+				muEvt.stopImmediatePropagation();
+			}
+			
+			private function lineClikHandler(msEvt:MouseEvent):void
+			{
+				removeLine();
+				markButton()
+			}
+			
+			private function  removeLine():void
+			{
+				for (var evID:String in linesArray)
+					for (var actID:String in linesArray[evID])
+						if(curLine  == linesArray[evID][actID] )
+						{
+							can.removeChild(linesArray[evID][actID]);
+							delete linesArray[evID][actID] ;
+						}
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+			}
+			
+			private function mouseClickHandler(msEvt:MouseEvent):void
+			{
+				for (var evID:String in linesArray)
+					for (var actID:String in linesArray[evID])
+						linesArray[evID][actID].mark = false;
+						
+				if (can.contains(btLine))
+					can.removeChild(btLine);
+			
+			}
+			
+			   [Bindable]
+   			public var selectedAppl:Object; 
+			private function changeContainerHandler(obj:Object):void
+			{
+				selectedAppl = ComboBox(obj).selectedItem;
+//				changeTree(selectedAppl.ID);
+				dataManager.changeCurrentPage(selectedAppl.ID);
+			}
+			
+			private function pageChangeHandler(dmEvt:DataManagerEvent):void
+			{
+				changeTree(dataManager.currentPageId);
+				dataManager.getApplicationEvents(dataManager.currentPageId);
+
+	 			can.removeAllChildren();
+			}
+			
+			private function changeTree(value:String):void
+			{
+				containersBranch.currentPageID = dataManager.currentPageId;
+			}
+			
+			private function objectChangeHandler(dmEvt:DataManagerEvent):void
+			{
+				treeEvents.currentObjectId = dataManager.currentObjectId;
+				treeActions.currentObjectId = dataManager.currentObjectId;
+			}
+			
+	 	]]>
+	 </mx:Script>
+	
+		<!---
+		<mx:VDividedBox width="250" height="100%">
+		 	<mx:VBox  width="100%"  height="40%" >
+				<mx:Label text="Pages:" color="0xFFFFFF" fontWeight="bold"/>
+	        	 <eventEditor:TreeContainer iconFunction="getIcon" id="trContainer" width="100%" height="100%" 
+				 	change="treeContainerChangeHandler(event)" />
+			 </mx:VBox>
+			 <mx:Canvas label="canvas1" width="100%" height="100%"  >
+			    <mx:VBox  width="100%" height="100%" >
+	                <mx:TabNavigator id="tn"  width="100%" height="100%">
+				        <mx:Canvas label="{resourceManager.getString('Event','events')}"  width="100%" height="100%" >
+				             <eventEditor:TreeEvents id="trEvents" width="100%" height="100%" />
+				        </mx:Canvas>
+				        <mx:Canvas label="{resourceManager.getString('Event','actions')}"  width="100%" height="100%" >
+				             <eventEditor:TreeActions id="trActions" width="100%" height="100%"	 />
+				        </mx:Canvas>
+			        </mx:TabNavigator>
+			      </mx:VBox>
+	          </mx:Canvas>
+		</mx:VDividedBox>
+		-->
+    <mx:VBox id="vBox" width="100%" height="100%"  paddingLeft="10" paddingTop="10">
+        <mx:Canvas id="can" width="100%" height="100%"
+        		backgroundColor="#7B7B7B"
+        	 	dragEnter="dragEnterHandler(event);" 
+				dragDrop="dragDropHandler(event);" borderColor="#DFDFDF"/>
+     	<mx:HBox paddingBottom="10" >
+    		<mx:Button id="btSave" label="Save" click="{creatDataToServer()}"/>
+        	<mx:Button label="Revert" click="{revert()}"/>
+    	</mx:HBox>
+    </mx:VBox>
+    <mx:VDividedBox id="panelContainer" paddingRight="2" width="220" minWidth="220"
+		verticalGap="5"
+		verticalScrollPolicy="off" height="100%">
+		
+        <containers:ClosablePanel title="PAGES"
+        	width="100%" maxHeight="55"
+        	color="#FFFFFF" height="55">
+	        <mx:ComboBox id="changeContainer" dataProvider="{arrAppl}"
+        	 rowCount="20" change="{changeContainerHandler(event.target)}"   
+        		color="#000000" minWidth="200" width="100%" itemRenderer="vdom.components.eventEditor.PanelItemRender"/>
+   		 </containers:ClosablePanel>
+   		 
+        <eventEditor:ContainersBranch id="containersBranch" width="100%"  title="Objects" height="150"
+        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"/>
+        
+        <containers:ClosablePanel width="100%"  title="Events"  height="150" 
+        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+        	<eventEditor:TreeEvents id="treeEvents" width="100%"  height="100%"/>
+        </containers:ClosablePanel>
+        
+        <containers:ClosablePanel width="100%" title="Actions"  height="150"
+        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+        	<eventEditor:TreeActions id="treeActions" width="100%"  height="100%"/>
+        </containers:ClosablePanel>
+      
+    </mx:VDividedBox>
+        
+</mx:HDividedBox>
+
