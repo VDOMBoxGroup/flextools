@@ -1,5 +1,7 @@
 package vdom.components.eventEditor
 {
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.collections.XMLListCollection;
 	import mx.events.ListEvent;
 	import mx.events.TreeEvent;
@@ -49,7 +51,14 @@ package vdom.components.eventEditor
 					xmlList.appendChild(findOjects(xmlLabel.Objects, xmlLabel.@ID));
 					
 			xmlTreeData.addItem(xmlList);
+			/*
 			
+			var sort : Sort = new Sort();
+			sort.compareFunction = zzz;
+			sort.fields = [ new SortField("@label") ];
+			xmlTreeData.sort = sort;
+			xmlTreeData.refresh();
+			*/
 			tree.dataProvider = xmlTreeData;	
 //			xmlTreeData.addItem(xmlList);
 			tree.validateNow();
@@ -64,7 +73,11 @@ package vdom.components.eventEditor
 			dataManager.changeCurrentObject(value);
 		}
 		
-		
+		private function zzz ( a : * , b : * ) : *
+		{
+			var d : * = "";
+			return -1;
+		}
 		
 		private function findOjects(xmlIn:XMLList, ContainerID:String):XMLList
 		{

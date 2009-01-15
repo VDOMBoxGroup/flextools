@@ -263,6 +263,7 @@ package vdom.components.eventEditor
 		private var _name:String;
 		private var scriptNamesArray:Array = []; /* of advansedLayer*/
 		private var objectName:SimpleLayer;
+		private var _parametrs:*;
 		private function initDownBody(data:Object, containerID:String):void
 		{
 			cnvDownLayer.setStyle('backgroundColor',"0xffffff" );
@@ -313,10 +314,10 @@ package vdom.components.eventEditor
 			_methodName = data.@MethodName;
 			 					
 			var curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentPageId).Information.ID.toString();			 					
-			var parametrs:* = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
-			parametrs = parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
+			_parametrs = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
+			_parametrs = _parametrs.Action.(@MethodName == data.@MethodName).Parameters[0]; 
 			///
-			for each(var child:XML in parametrs.children())
+			for each(var child:XML in _parametrs.children())
 			{
 				var parametr:AdvansedLayer = new AdvansedLayer(child, type.Information.Name.toString());
 				scriptNamesArray[parametr.scriptName + "_"] = parametr;
@@ -405,10 +406,10 @@ package vdom.components.eventEditor
 		{
 			var outXMLList:XMLList = new XMLList();
 			
-			for(var par:String in scriptNamesArray)
+			for each(var child:XML in _parametrs.children())
 			{
-				trace(scriptNamesArray[par].xmlData.toXMLString);
-				outXMLList += scriptNamesArray[par].xmlData;
+//				trace("*"+scriptNamesArray[par].xmlData.toXMLString);
+				outXMLList += scriptNamesArray[child.@ScriptName + "_"].xmlData;
 			}
 			
 			return outXMLList;
