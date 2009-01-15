@@ -18,6 +18,7 @@
 					width="130" cornerRadius="0" enabled="false"/>
 				<mx:Button label="ok" cornerRadius="0" click="insertResourceLink();"/>
 				<mx:Spacer width="100%"/>
+				<mx:Button label="Clear View" click="res.removeAllChildren();"/>
 				<mx:Button label="Apply" click="_test();"/>
 			</mx:HBox>
 			

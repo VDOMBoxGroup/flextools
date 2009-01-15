@@ -365,9 +365,14 @@ public class DataManager implements IEventDispatcher {
 		return object[0];
 	}
 	
-	public function getObjectXMLScript() : void
+	public function getObjectXMLScript( objectId : String = "") : void
 	{	
-		soap.get_object_script_presentation( currentApplicationId, currentObjectId )
+		if( objectId == "" )
+			soap.get_object_script_presentation( currentApplicationId, 
+													currentObjectId );
+		else
+			soap.get_object_script_presentation( currentApplicationId, 
+													objectId );
 	}
 	
 	public function setObjectXMLScript( objectXMLScript : String ) : void

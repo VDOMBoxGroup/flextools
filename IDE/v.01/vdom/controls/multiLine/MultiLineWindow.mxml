@@ -19,9 +19,12 @@
 
 <mx:Script>
 <![CDATA[
-	import vdom.events.FileManagerEvent;
-	import vdom.managers.FileManager;
-	import mx.resources.ResourceManager;
+	import mx.collections.SortField;
+	import mx.collections.Sort;
+	import mx.collections.XMLListCollection;
+import vdom.events.FileManagerEvent;
+import vdom.managers.FileManager;
+import mx.resources.ResourceManager;
 import mx.core.IUITextField;
 import vdom.managers.DataManager;
 
@@ -67,6 +70,13 @@ private function init():void
 	var tf:IUITextField = textAreaContainer.mx_internal::getTextField();
 	tf.alwaysShowSelection = true;
 	
+	var listPagesCollection : XMLListCollection = new XMLListCollection( dataManager.listPages );
+	listPagesCollection.sort = new Sort();
+	listPagesCollection.sort.fields = [ new SortField( "@Name", true ) ];
+	listPagesCollection.refresh();
+	
+	pageList.dataProvider = listPagesCollection;
+	
 	fileManager.addEventListener(
 		FileManagerEvent.RESOURCE_LIST_LOADED, 
 		fileManager_resourceListLoaded
@@ -81,7 +91,12 @@ private function fileManager_resourceListLoaded(event:FileManagerEvent):void
 		fileManager_resourceListLoaded
 	);
 	
-	resourceList.dataProvider = event.result.Resources.*
+	var resourceListCollection : XMLListCollection = new XMLListCollection( event.result.Resources.* )
+	resourceListCollection.sort = new Sort();
+	resourceListCollection.sort.fields = [ new SortField( "@name", true ) ];
+	resourceListCollection.refresh();
+	
+	resourceList.dataProvider = resourceListCollection;
 	resourceList.enabled = true;
 }
 
@@ -150,7 +165,7 @@ private function insertResourceLink():void
 		<mx:HBox>
 			<mx:Label text="Pages:"/>
 			<mx:ComboBox id="pageList"
-				width="130" cornerRadius="0" dataProvider="{dataManager.listPages}" labelField="@Name"/>
+				width="130" cornerRadius="0" labelField="@Name"/>
 			<mx:Button label="ok" cornerRadius="0" click="insertPageLink();"/>
 		</mx:HBox>
 		<mx:HBox>

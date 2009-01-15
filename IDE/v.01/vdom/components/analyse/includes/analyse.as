@@ -18,7 +18,7 @@ private function _test() : void
 	var txt : String = textAreaContainer.text;
 	try
 	{
-		uicomp = dbgRenderManager.render( "", XML( txt ) );
+		uicomp = dbgRenderManager.render( "static", XML( txt ) );
 	}
 	catch( error : Error )
 	{
@@ -34,7 +34,6 @@ private function _test() : void
 	
 	res.removeAllChildren();
 	res.addChild( uicomp );
-	
 }
 
 private function creationCompleteHandler() : void 
@@ -54,7 +53,10 @@ private function renderWysiwygOkHandler( event : SOAPEvent ) : void
 		var itemXMLDescription:XML = event.result.Result.*[0];
 		textAreaContainer.text = itemXMLDescription.toString();
 	}
-	catch( error : Error ) {}
+	catch( error : Error )
+	{
+		var dummy : * = ""; // FIXME remove dummy
+	}
 }
 
 private function init():void

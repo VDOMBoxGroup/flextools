@@ -15,7 +15,7 @@
 -->
 
 	<!-- The application identifier string, unique to this application. Required. -->
-	<id>VdomIDE</id>
+	<id>com.vdom-box-international.vdomide</id>
 
 	<!-- Used as the filename for the application. Required. -->
 	<filename>Vdom IDE</filename>
@@ -78,10 +78,10 @@
 	</initialWindow>
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
-	<!--<installFolder></installFolder>-->
+	<installFolder>VDOM</installFolder>
 
 	<!-- The subpath of the Windows Start/Programs menu to use. Optional. -->
-	<!-- <programMenuFolder></programMenuFolder> -->
+	<programMenuFolder>VDOM</programMenuFolder>
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->

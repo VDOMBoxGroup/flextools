@@ -135,13 +135,15 @@ public class TransformMarker extends UIComponent
 		visible = false;
 		
 		if( item == null || item.parent == null ) 
-		{			
-			stage.removeEventListener(
-				MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
-			
-			stage.removeEventListener(
-				MouseEvent.MOUSE_UP, mouseUpHandler, true );
-			
+		{	
+			if( stage )
+			{	
+				stage.removeEventListener(
+					MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
+				
+				stage.removeEventListener(
+					MouseEvent.MOUSE_UP, mouseUpHandler, true );
+			}
 //			if( _selectedItem )
 //				_selectedItem.removeEventListener(
 //					"refreshComplete", refreshCompleteHandler );

@@ -16,6 +16,7 @@ import vdom.containers.IItem;
 import vdom.controls.IToolBar;
 import vdom.controls.ImageToolBar;
 import vdom.controls.RichTextToolBar;
+import vdom.controls.TableToolBar;
 import vdom.controls.TextToolBar;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
@@ -274,8 +275,18 @@ public class WorkArea extends VBox
 				newContentToolBar = _contentToolbar;
 			
 			flag = true;
-		break;
+			break;
 		}
+		/* case 5:
+		{
+			if( !( _contentToolbar is TableToolBar ) )
+				newContentToolBar = new TableToolBar();
+			else
+				newContentToolBar = _contentToolbar;
+			
+			flag = true;
+			break;
+		} */
 		}
 		
 		if(!flag && _contentToolbar && DisplayObject( _contentToolbar ).parent )
@@ -516,7 +527,7 @@ public class WorkArea extends VBox
 		if( !event.result )
 			return;
 		
-		if( IItem( event.result ).objectId == _pageId )
+		if( event.result is IItem && IItem( event.result ).objectId == _pageId )
 		{
 			resizeManager.init( contentHolder );
 		}

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	implements="vdom.controls.IToolBar"
+	width="100%"
+	paddingBottom="5" paddingTop="5" paddingRight="5" paddingLeft="5" backgroundColor="#F0F0F0">
+	<mx:Style>
+		.toolbarButton {
+			cornerRadius:0;
+			alpha:0;
+			borderColor:#F0F0F0;
+			skin:ClassReference("vdom.skins.ToolbarButtonSkin");
+			fillAlphas: 0,0,0,0;
+		}
+		.toolbarComboBox {
+			cornerRadius:0;
+			borderColor:#CCCCCC;
+			arrowButtonWidth: 15;
+		}
+	</mx:Style>
+	
+	<mx:Script source="includes/tableToolBar.as"/>
+	
+	<mx:HBox left="5" right="5" bottom="5" top="2">	
+		<!--<mx:Button
+			styleName="toolbarButton" 
+			width="20" height="20"
+			icon="@Embed(source='/assets/toolbars/imageToolbar/insert_image.png')"/>-->
+		<mx:Button
+			styleName="toolbarButton"
+			width="20" height="20"
+			icon="@Embed(source='/assets/toolbars/imageToolbar/reset_size.png')"
+			click="test();"/>
+<!--		<mx:Button
+			styleName="toolbarButton"
+			width="20" height="20"
+			icon="@Embed(source='/assets/toolbars/imageToolbar/bring_front.png')"/>
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/send_back.png')"/>-->
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/rotate_left.png')"
+			click="rotate(0);" />
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/rotate_right.png')"
+			click="rotate(1);" />
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/flip_vertical.png')"
+			click="flip(0);" />
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/flip_horizontal.png')"
+			click="flip(1);" />
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/contrast_up.png')"
+			click="contrast(.1);" />
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/contrast_down.png')"
+			click="contrast(-.1);" />
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/brightness_up.png')"
+			click="brightness(.1);" />
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/brightness_down.png')"
+			click="brightness(-.1);" />
+		<!--<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/crop.png')"/>-->
+		<mx:Button 
+			styleName="toolbarButton"
+			width="20" height="20" 
+			icon="@Embed(source='/assets/toolbars/imageToolbar/grayscale.png')"
+			click="greyscale();" />
+	</mx:HBox>
+</mx:Canvas>

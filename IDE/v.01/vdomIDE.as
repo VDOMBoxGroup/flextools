@@ -122,11 +122,13 @@ private function invokeHandler( event : InvokeEvent ) : void
 			case "debug" :
 			{
 				editorModule.debugButton.visible = true;
+				break;
 			}
 			case "darkstyle" :
 			{
 				editorModule.scriptCanv.textArea.setStyle( "color", "white" );
 				editorModule.scriptCanv.textArea.setStyle( "backgroundColor", "black" );
+				break;
 			}
 		}
 	}			

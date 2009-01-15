@@ -23,8 +23,8 @@ public function set selectedItem( value : IItem ) : void
 	_selectedItem = value;
 }
 
-public function init(item:IItem):void {
-	
+public function init( item : IItem ) : void
+{	
 	this.item = item;
 	
 	var container:Object = item.editableAttributes[0].sourceObject;
