@@ -763,26 +763,23 @@ public class RenderManager implements IEventDispatcher
 		}
 		
 		var length : uint = graphArr.length;
+		var i : uint;
 		
-		for ( var i : uint = 0 ; i < length; i++ )
+		for ( i = 0 ; i < length; i++ )
 		{
-			var dummy : * = ""; // FIXME remove dummy
 			if( graphArr[ i ] )
 			{
-				var dummy : * = ""; // FIXME remove dummy
 				item.addChild( graphArr[ i ] );
 			}
 		}
-		
 		
 		var itemArr : Array = sortItems( itemId );
 		length = itemArr.length;
 		i = 0;
 		
-		for ( var i : uint = 0; i < length; i++ )
+		for ( i = 0; i < length; i++ )
 		{
 			item.addChild( itemArr[i] );
-			item.validateNow();
 		}
 		
 		return item;
