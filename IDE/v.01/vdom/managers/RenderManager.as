@@ -281,7 +281,7 @@ public class RenderManager implements IEventDispatcher
 	
 	private function deleteItemChildren( itemId : String ) : void
 	{
-		if( itemId )
+		if( !itemId )
 			return;
 		
 		var itemDescription : ItemDescription = getItemDescriptionById( itemId );
@@ -763,19 +763,27 @@ public class RenderManager implements IEventDispatcher
 		}
 		
 		var length : uint = graphArr.length;
-		var i : uint = 0;
 		
-		for ( i ; i < length; i++ )
-			if( graphArr[i] )
-				item.addChild( graphArr[i] );
+		for ( var i : uint = 0 ; i < length; i++ )
+		{
+			var dummy : * = ""; // FIXME remove dummy
+			if( graphArr[ i ] )
+			{
+				var dummy : * = ""; // FIXME remove dummy
+				item.addChild( graphArr[ i ] );
+			}
+		}
 		
 		
 		var itemArr : Array = sortItems( itemId );
 		length = itemArr.length;
 		i = 0;
 		
-		for ( i; i < length; i++ )
+		for ( var i : uint = 0; i < length; i++ )
+		{
 			item.addChild( itemArr[i] );
+			item.validateNow();
+		}
 		
 		return item;
 	}
