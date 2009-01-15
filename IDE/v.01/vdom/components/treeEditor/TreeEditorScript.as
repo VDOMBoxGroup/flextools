@@ -305,8 +305,8 @@ private function adjustmentTree(xml1:XML):void
 				moves.xFrom =  massTreeElements[str].x;
 				moves.yFrom = massTreeElements[str].y;
 				
-				moves.xTo = Number(massTreeObj[str].mapX * 220);
-				moves.yTo = Number(massTreeObj[str].mapY * 135 + 20);
+				moves.xTo = Number(massTreeObj[str].mapX * 230);
+				moves.yTo = Number(massTreeObj[str].mapY * 145 + 30);
 			/*
 				var treeElement:TreeElement = massTreeElements[str];
 				treeElement.xTo  = massTreeObj[str].mapX * 220;
@@ -1019,7 +1019,7 @@ private function  createObjectHandler(dmEvt:DataManagerEvent):void
 				if(massTreeElements[tID].y > maxY) 
 					maxY = massTreeElements[tID].y;
 					
-	trEl.y = maxY + 135;
+	trEl.y = maxY + 145;
 	
 	
 					
