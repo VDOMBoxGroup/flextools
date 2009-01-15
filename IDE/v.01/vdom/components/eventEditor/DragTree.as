@@ -1,10 +1,9 @@
 package vdom.components.eventEditor
 {
+	import mx.controls.List;
 	import mx.events.DragEvent;
-	
-	import vdom.components.edit.containers.OTree;
 
-	public class DragTree extends OTree
+	public class DragTree extends List
 	{
 		[Embed(source='/assets/eventEditor/actions.png')]
 		[Bindable]
@@ -21,7 +20,7 @@ package vdom.components.eventEditor
 								
 			dragEnabled = true;
 			labelField = "@label";
-			showRoot = true;
+//			showRoot = true;
 			percentHeight = 100;//width = 200;
 			percentWidth = 100;
 			setStyle('borderColor', '0xFFFFFF');

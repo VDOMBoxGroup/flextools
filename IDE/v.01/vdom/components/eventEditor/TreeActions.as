@@ -32,46 +32,7 @@ package vdom.components.eventEditor
 		
 		private var dataXML:XML ;
 		private var curContainerTypeID:String;
-	/*	override public function set dataProvider(value:Object):void
-		{
-			dataXML  = new XML('<Object/>');
-			dataXML.@label 	= value.@label;
-			dataXML.@resourceID = value.@resourceID;
-			
-			var type:XML = dataManager.getTypeByTypeId(value.@Type);
-				curContainerTypeID = dataManager.getTypeByObjectId(value.@ID).Information.ID.toString();
-			var actions:XML = type.E2vdom.ClientActions.Container.(@ID == curContainerTypeID)[0];
-			var tempXML:XML;
-			trace('curContainerTypeID: '+ curContainerTypeID);
-		
-			if(actions != null)		
-			{
-				for each(var child:XML in actions.children() )
-				{
-				 	tempXML = <Event/>;
-					tempXML.@label = child.@MethodName;
-					tempXML.@MethodName  = child.@MethodName;
-					tempXML.@ObjTgtID = value.@ID;
-					tempXML.@containerID = value.@containerID;
-					
-					dataXML.appendChild(tempXML);
-				}
-			} 
-			
-			value = value as XML;
-			for each(child in value.children())
-			{
-				dataXML.appendChild(getChilds(child))
-			}
-			
-			super.dataProvider = dataXML;
-			validateNow();
-			var item:Object =  XMLListCollection(dataProvider).source[0];
-			
-		//	super.selectedIndex = 0;
-			expandItem(item, true, false);
-		}
-		*/
+	
 		private function getChilds(inXML:XML):XML
 		{
 			var outXML:XML = new XML(inXML.toXMLString());
@@ -158,7 +119,7 @@ package vdom.components.eventEditor
 			validateNow();
 			var item:Object =  XMLListCollection(dataProvider).source[0];
 			
-			expandItem(item, true, false);
+//			expandItem(item, true, false);
 		}
 		
 		private function getServerActionsHandler(dmEvt:DataManagerEvent):void
@@ -194,7 +155,7 @@ package vdom.components.eventEditor
 				
 				var item:Object =  XMLListCollection(super.dataProvider).source[0];
 			
-				super.expandItem(item, true, false);
+//				super.expandItem(item, true, false);
 			}
 		}
 		

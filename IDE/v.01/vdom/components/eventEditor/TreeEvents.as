@@ -1,5 +1,6 @@
 package vdom.components.eventEditor
 {
+	import mx.collections.XMLListCollection;
 	import mx.core.ClassFactory;
 	
 	import vdom.managers.DataManager;
@@ -21,55 +22,7 @@ package vdom.components.eventEditor
 			
 		}
 		
-		private var dataXML:XML ;
-		override public function set dataProvider(value:Object):void
-		{
-		/* <Object label="header_image" ID='' Type='' resourceID='' containerID=''/>*/
-		  	dataXML  = new XML('<Object/>');
-			dataXML.@label 	= value.@label;
-			dataXML.@resourceID = value.@resourceID;
-		  
-		  
-		  	var type:XML = dataManager.getTypeByTypeId(value.@Type);
-			var tempXML:XML;
-			
-			for each(var child:XML in type.E2vdom.Events.Userinterfaceevents.children() )
-			{
-			 	tempXML = <Event/>;
-				tempXML.@label = child.@Name;
-				tempXML.@Name = child.@Name;
-				tempXML.@ObjSrcID = value.@ID;
-				
-				dataXML.appendChild(tempXML);
-			} 
-			
-			for each(child in type.E2vdom.Events.Objectevents.children() )
-			{
-				tempXML = <Event/>;
-				tempXML.@label = child.@Name;
-				tempXML.@Name  = child.@Name;
-				tempXML.@ObjSrcID = value.@ID;
-			
-				dataXML.appendChild(tempXML);
-			} 	
-		  
-		 value = value as XML;
-		  for each(child in value.children())
-		  {
-		  	dataXML.appendChild(getChilds(child));
-		  }
-		  
-		  super.dataProvider = dataXML;
-		  
-		  validateNow();
-	//		var item:Object =  XMLListCollection(dataProvider).source[0];
-			
-		//	super.selectedIndex = 0;
-			
-			
-			expandItem(dataProvider.source[0], true, false);
-		}
-		
+		private var dataXML:XMLListCollection ;
 		private function getChilds(inXML:XML):XML
 		{
 			var type:XML = dataManager.getTypeByTypeId(inXML.@Type);
@@ -99,10 +52,11 @@ package vdom.components.eventEditor
 			return outXML;
 		}
 		
+		/*
 		public function  set enabledItem(obj:Object):void
 		{
-			dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'true';
-			selectedItem = dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
+//			dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'true';
+//			selectedItem = dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name)[0];
 			
 			if(!selectedItem)
 			{
@@ -117,7 +71,7 @@ package vdom.components.eventEditor
 			dataXML.Event.(@Name == obj.Name).@enabled = 'false';
 			dataXML.Object.(@ID == obj.ObjSrcID).Event.(@Name == obj.Name).@enabled = 'false';
 		}	
-		
+		*/
 		private function getIcon(value:Object):Class 
 		{
 			var xmlData:XML = XML(value);
@@ -137,12 +91,12 @@ package vdom.components.eventEditor
 			trace("currentObjectId: "+value);
 			
 			var object:XML = dataManager.getObject(value);
-			dataXML  = new XML('<Object/>');
-			dataXML.@label 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
-			dataXML.@resourceID = getSourceID(object.@Type);
+			dataXML  = new XMLListCollection();
+//			dataXML.@label 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+//			dataXML.@resourceID = getSourceID(object.@Type);
 //			dataXML.@resourceID = value.@resourceID;
 		  
-		  	trace("ID: "+dataXML.@ID);
+//		  	trace("ID: "+dataXML.@ID);
 		  	
 		  	var type:XML = dataManager.getTypeByObjectId(value);
 			var tempXML:XML;
@@ -154,7 +108,7 @@ package vdom.components.eventEditor
 				tempXML.@Name = child.@Name;
 				tempXML.@ObjSrcID = value;
 				
-				dataXML.appendChild(tempXML);
+				dataXML.addItem(tempXML);
 			} 
 			
 			for each(child in type.E2vdom.Events.Objectevents.children() )
@@ -164,14 +118,14 @@ package vdom.components.eventEditor
 				tempXML.@Name  = child.@Name;
 				tempXML.@ObjSrcID = value;
 			
-				dataXML.appendChild(tempXML);
+				dataXML.addItem(tempXML);
 			} 	
 			
 			super.dataProvider = dataXML;
 			
-			validateNow();
+//			validateNow();
 			
-			expandItem(dataProvider.source[0], true, false);
+//			expandItem(dataProvider.source[0], true, false);
 		}
 		
 		private var masResourceID:Array = new Array();

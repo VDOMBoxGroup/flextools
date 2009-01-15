@@ -1,8 +1,9 @@
 package vdom.components.eventEditor
 {
+	import mx.controls.listClasses.ListItemRenderer;
 	import mx.controls.treeClasses.TreeItemRenderer;
 
-	public class EventItemRender extends TreeItemRenderer
+	public class EventItemRender extends ListItemRenderer // TreeItemRenderer
 	{
 		public function EventItemRender()
 		{
