@@ -1,3 +1,5 @@
+import mx.core.UIComponent;
+
 import vdom.containers.IItem;
 import vdom.controls.wysiwyg.table.Table;
 import vdom.events.DataManagerEvent;
@@ -39,7 +41,7 @@ public function init( item : IItem ) : void {
 	
 	dataManager.getObjectXMLScript( table.objectId );
 	
-	renderManager.hideItemById( item.objectId );
+//	renderManager.hideItemById( item.objectId );
 	
 //	var container : Object = item.editableAttributes[0].sourceObject;
 //	
@@ -70,14 +72,15 @@ private function test() : void {
 	
 	var objDescr : ItemDescription = renderManager.getItemDescriptionById( item.objectId );
 	
-	var xmlz : XML = 
-		<container visible="1" zindex="10" hierarchy="0" order="0" top="150" left="150" width="200" height="150">
-			<svg>
-				<rect x="0" y="0" width="200" height="150" fill="#0000FF"/>
-			</svg>
-		</container>;
+	var dummy : ItemDescription = renderManager.getItemDescriptionById( table.objectId ); // FIXME remove dummy
 	
-	renderManager.renderItem( objDescr.parentId, xmlz );
+	var dmy : XML = new XML( dummy.XMLPresentation );
+	
+	UIComponent( item ).visible = false;
+	
+	dmy.@contents = "static";
+	
+	renderManager.renderItem( dummy.parentId, dmy )
 }
 
 private function rotate(value : int) : void {

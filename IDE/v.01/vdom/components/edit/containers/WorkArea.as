@@ -286,7 +286,7 @@ public class WorkArea extends VBox
 			
 			flag = true;
 			break;
-		} */
+		}  */
 		}
 		
 		if(!flag && _contentToolbar && DisplayObject( _contentToolbar ).parent )

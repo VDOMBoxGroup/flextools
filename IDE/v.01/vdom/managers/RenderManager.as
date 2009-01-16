@@ -379,7 +379,7 @@ public class RenderManager implements IEventDispatcher
 	{
 		items.filterFunction = 
 			function ( item : Object ) : Boolean {
-				return item.parentId == parentId;
+				return item.parentId == parentId && !ItemDescription( item ).item.isStatic;
 		}
 		
 		items.sort.fields = [new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" )];
@@ -682,7 +682,7 @@ public class RenderManager implements IEventDispatcher
 						
 				item["paintsDefaultBackground"] = false;
 				
-				var HTMLText : String =itemXMLDescription.text().toString();
+				var HTMLText : String = itemXMLDescription.text().toString();
 				
 				item.setStyle( "backgroundAlpha", .0 );
 				
@@ -757,7 +757,7 @@ public class RenderManager implements IEventDispatcher
 			{
 				elm = render( parId, child );
 				
-				if( !( elm is IItem ) /* || IItem( elm ).isStatic */ )
+				if( !( elm is IItem )  || IItem( elm ).isStatic  )
 					graphArr.push( elm );
 			}
 		}
@@ -818,6 +818,7 @@ public class RenderManager implements IEventDispatcher
 			{
 				container = new TableRow( itemId );
 				TableRow( container ).percentWidth = 100;
+				TableRow( container ).percentHeight = 100;
 				TableRow( container ).minHeight = 10;
 				break;
 			}

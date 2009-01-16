@@ -26,7 +26,6 @@ import vdom.controls.wysiwyg.table.Table;
 import vdom.controls.wysiwyg.table.TableCell;
 import vdom.controls.wysiwyg.table.TableRow;
 import vdom.events.DataManagerEvent;
-import vdom.events.RenderManagerEvent;
 import vdom.events.SOAPEvent;
 import vdom.managers.CacheManager;
 import vdom.managers.DataManager;
@@ -103,7 +102,7 @@ public class DbgRenderManager implements IEventDispatcher
 		cursor = items.createCursor();
 		
 		items.sort = new Sort();
-		items.sort.fields = [new SortField( "itemId" )];
+		items.sort.fields = [ new SortField( "itemId" ) ];
 		items.refresh();
 	}
 	
@@ -199,76 +198,70 @@ public class DbgRenderManager implements IEventDispatcher
 		return null;
 	}
 	
-	private function insertItem( itemName : String, itemId : String ) : IItem
-	{	
-		var itemDescription : ItemDescription;
-		var isStatic : Boolean = false;
-		
-		itemDescription = getItemDescriptionById( itemId );
-		
-//		if( !itemDescription )
-//			return null
-		
-		if( itemDescription && itemDescription.item && Container( itemDescription.item ).parent )
-			return itemDescription.item;
-		
-		var container : IItem;
-		
-		switch ( itemName ) {
-			
-		case "container" : 
-		 
-			container = new Item( itemId );
-		break;
-		
-		case "table" : 
-		 
-			container = new Table( itemId );
-			Table( container ).setStyle( "horizontalGap", 0 );
-			Table( container ).setStyle( "verticalGap", 0 );
-		break;
-		
-		case "row" : 
-		 
-			container = new TableRow( itemId );
-			TableRow( container ).percentWidth = 100;
-			TableRow( container ).minHeight = 10;
-		break;
-		
-		case "cell" : 
-		 
-			container = new TableCell( itemId );
-			TableCell( container ).minWidth = 10;
-			TableCell( container ).minHeight = 10;
-		break;
-		}
-		container.editableAttributes = [];
+	public function hideItemById( objectId : String, visible : Boolean = false ) : IItem 
+	{
+		var itemDescription : ItemDescription = getItemDescriptionById( objectId );
+		var item : IItem;
 		
 		if( itemDescription )
-			itemDescription.item = container;
+		{
+			item = itemDescription.item;
+			UIComponent( item ).visible = false;
+		}
 		
-		return container;
+		return item;
+	}
+	
+	public function getItemDescriptionById( itemId : String ) : ItemDescription
+	{
+		if( !itemId )
+			return null;
+		
+		var searchObject : Object = { itemId : itemId };
+		
+		var isResult : Boolean = cursor.findAny( searchObject );
+		var result : ItemDescription;
+		
+		if( isResult )
+			result = ItemDescription( cursor.current );
+		
+		return result;
+	}
+	
+	public function renderItem( parentId : String, itemXMLDescription : XML ) : UIComponent
+	{
+		var itemId : String = itemXMLDescription.@id[ 0 ];
+		
+		deleteItemChildren( itemId );
+		
+		var item : UIComponent = render( parentId, itemXMLDescription );
+				
+		return item;
 	}
 	
 	private function deleteItemChildren( itemId : String ) : void
 	{
+		if( !itemId )
+			return;
+		
 		var itemDescription : ItemDescription = getItemDescriptionById( itemId );
+		var result : Container;
 		
 		if( !itemDescription )
-			return
-		var result : Container = itemDescription.item as Container;
+			return;
 		
-		if( !result )
-			return
+		if( itemDescription.item )
+		{
+			result = itemDescription.item as Container;
+			result.removeAllChildren();
+		}
 		
 		items.filterFunction = 
-			function ( item : Object ) : Boolean {
-				return ( item.fullPath.indexOf( itemId+"." ) != -1 );
+			function ( item : Object ) : Boolean
+			{
+				return ( item.fullPath.indexOf( itemId + "." ) != -1 );
 			}
-	
 		items.refresh();
-	 
-		result.removeAllChildren();
 		items.removeAll();
 		
 		items.filterFunction = null;
@@ -312,60 +305,44 @@ public class DbgRenderManager implements IEventDispatcher
 	
 	private function updateItemDescription( itemId : String, itemXMLDescription : XML ) : ItemDescription
 	{
-		if( !itemId )
-			return null;
-		
 		var itemDescription : ItemDescription = getItemDescriptionById( itemId );
 		var parentDescription : ItemDescription;
-		var newStaticFlag : String = itemDescription.staticFlag;
+		var newStaticFlag : String;
 		
-		if( itemDescription.parentId ) {
-			
-			parentDescription = getItemDescriptionById( itemDescription.parentId );
+		if( !itemDescription )
+			return null;
 		
+		parentDescription = getItemDescriptionById( itemDescription.parentId );
+		newStaticFlag = itemDescription.staticFlag;
 		
+		if( parentDescription )
+		{
 			if( parentDescription.staticFlag == "children" || parentDescription.staticFlag == "all" )
 				newStaticFlag = "all";
 				
 			else if( itemXMLDescription.@contents == "static" )
 				newStaticFlag = "children";
 			
-		} else 
-			if( itemXMLDescription.@contents == "static" )
+		} else if( itemXMLDescription.@contents == "static" )
 				newStaticFlag = "children";
 		
 		itemDescription.zindex = uint( itemXMLDescription.@zindex );
 		itemDescription.hierarchy = uint( itemXMLDescription.@hierarchy );
 		itemDescription.order = uint( itemXMLDescription.@order );
 		itemDescription.staticFlag = newStaticFlag; 
+		itemDescription.XMLPresentation = itemXMLDescription;
 		
 		return itemDescription;
-	}
-	
-	private function getItemDescriptionById( itemId : String ) : ItemDescription
-	{
-		if( !itemId )
-			return null;
-		
-		var searchObject : Object = {itemId : itemId};
-		
-		var isResult : Boolean = cursor.findAny( searchObject );
-		var result : ItemDescription;
-		
-		if( isResult )
-			result = ItemDescription( cursor.current );
-		
-		return result;
 	}
 	
 	private function sortItems( parentId : String ) : Array
 	{
 		items.filterFunction = 
 			function ( item : Object ) : Boolean {
-				return item.parentId == parentId;
+			return item.parentId == parentId && !ItemDescription( item ).item.isStatic;
 		}
 		
-		items.sort.fields = [new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" )];
+		items.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
 		
 		items.refresh();
 		
@@ -425,209 +402,6 @@ public class DbgRenderManager implements IEventDispatcher
 		}
 	}
 	
-	public function render( parentId : String, itemXMLDescription : XML ) : UIComponent
-	{
-		items.removeAll();
-		
-		var itemName : String = itemXMLDescription.name().localName;
-		var item : UIComponent;
-		var itemId : String;
-		
-		var parentItemDescription : ItemDescription;
-		var parentItem : IItem;
-		
-		var isStatic : Boolean = false;
-		
-		if( parentId == "static" )
-		{
-			isStatic = true;
-		}
-		else if( parentId )
-		{
-			parentItemDescription = getItemDescriptionById( parentId );
-			parentItem = parentItemDescription.item;
-		}
-		
-		var hasChildren : Boolean = false;
-		var editableAttributes : *;
-		
-		switch( itemName )
-		{
-			case "container" : 
-			{
-				
-			}
-			
-			case "table" : 
-			{
-				
-			}
-			
-			case "row" : 
-			{
-				
-			}
-			
-			case "cell" : 
-			{
-				itemId = isStatic ? null : itemXMLDescription.@id[ 0 ];
-				
-				var itemDescription : ItemDescription = getItemDescriptionById( itemId );
-				
-				if( itemDescription && itemDescription.item )
-				{
-					item = Container( itemDescription.item );
-					Container( item ).removeAllChildren();
-					item.graphics.clear();
-					itemDescription.item.editableAttributes = [];
-				}
-				else
-				{
-					if( itemId )
-					{
-						itemDescription = createItemDescription( itemId, parentId );
-						itemId = itemDescription.itemId;
-					}
-					
-					item = insertItem( itemName, itemId ) as UIComponent;
-				}
-				
-				itemDescription = updateItemDescription( itemId, itemXMLDescription );
-				
-				if( !itemDescription || itemDescription.staticFlag == "self" || itemDescription.staticFlag == "all" )
-					IItem( item ).isStatic = true;
-				
-				hasChildren = true;
-				break;
-			}
-		
-			case "text" : 
-			{
-				if( itemXMLDescription.@editable[ 0 ] && parentItem && !parentItem.isStatic )
-				{
-					item = new EditableText();
-					item.setStyle( "borderStyle", "none" );
-					insertEditableAttributes( parentItem, item, itemXMLDescription );
-				}
-				else
-				{
-					item = new SimpleText();
-				}
-				
-				var text : String = itemXMLDescription.text().toString();
-				
-				item["text"] = text;
-				item["selectable"] = false;
-				
-				break;
-			}
-		
-			case "htmltext" : 
-			{
-				item = new EditableHTML();
-						
-				item["paintsDefaultBackground"] = false;
-				
-				var HTMLText : String =itemXMLDescription.text().toString();
-				
-				item.setStyle( "backgroundAlpha", .0 );
-				
-				if( HTMLText == "" )
-					HTMLText = "";//"<div>simple text</div>";
-				
-				HTMLText =
-						"<html>" + 
-							"<head>" + 
-								"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-							"</head>" +
-							"<body style=\"margin : 0px;\" >" +
-								HTMLText +
-							"</body>" + 
-						"</html>";
-						
-				item["htmlText"] = HTMLText;
-				
-				break;
-			}
-			
-			case "svg" :
-			{
-				try
-				{
-					item = new SVGViewer();
-					editableAttributes = SVGViewer( item ).setXML( itemXMLDescription );
-				}
-				catch( error : Error )
-				{
-					item = null;
-				}
-				
-				break;
-			}
-		}
-		
-		if( !editableAttributes )
-			editableAttributes = itemXMLDescription;
-			
-		insertEditableAttributes( parentItem, item, editableAttributes );
-		
-		if( !item )
-			return null;
-		
-		// FIXME : Применять ли свойства к SVG или нет?
-		if( !( item is SVGViewer ))
-		{
-			applyProperties( item, itemXMLDescription );
-			applyStyles( item, itemXMLDescription );
-		}
-		
-		if( !hasChildren )
-			return item;
-		
-		var childList : XMLList = itemXMLDescription.*;
-		
-		var graphArr : Array = [];
-		
-		var parId : String = "";
-		
-		if( itemXMLDescription.@contents == "static" )
-			parId = "static";
-		else if( itemId )
-			parId = itemId;
-		else
-			parId = parentId;
-		
-		var elm : UIComponent;
-		
-		for each( var child : XML in childList )
-		{
-			if( child.nodeKind() == "element" )
-			{
-				elm = render( parId, child );
-				
-				if( !( elm is IItem ) || IItem( elm ).isStatic )
-					graphArr.push( elm );
-			}
-		}
-		
-		var length : uint = graphArr.length;
-		var i : uint = 0;
-		
-		for ( i ; i < length; i++ )
-			if( graphArr[i] )
-				item.addChild( graphArr[i] );
-		
-		
-		var itemArr : Array = sortItems( itemId );
-		length = itemArr.length;
-		i = 0;
-		
-		for ( i; i < length; i++ )
-			item.addChild( itemArr[i] );
-		
-		return item;
-	}
-	
 	private function insertEditableAttributes( parentItem : IItem, currentElement : UIComponent, editableAttributes : * ) : void
 	{
 		if(parentItem && parentItem.isStatic )
@@ -647,13 +421,16 @@ public class DbgRenderManager implements IEventDispatcher
 		
 		if( editableAttributes is XML )
 		{
+			if( !editableAttributes.hasOwnProperty( "@editable" ) )
+				return;
+			
 			str = editableAttributes.@editable.toString();
 		}
 		else if( editableAttributes is String )
 		{
 			str = editableAttributes;
 		}
-		else if( editableAttributes is Array && editableAttributes.length > 0 )
+		else if( editableAttributes is Array )
 		{
 			item.editableAttributes = item.editableAttributes.concat( editableAttributes as Array );
 			return;
@@ -664,10 +441,6 @@ public class DbgRenderManager implements IEventDispatcher
 		if( str.length != 0 )
 		{
 			atrArray = str.split( "," );
-		}
-		else
-		{
-			return; //FIXME <- исправить для пустых editable
 		}
 		
 		var attributes : Object = {};
@@ -764,11 +537,273 @@ public class DbgRenderManager implements IEventDispatcher
 			item.explicitHeight = NaN;
 	}
 	
+	private function render( parentId : String, itemXMLDescription : XML ) : UIComponent
+	{
+		var itemName : String = itemXMLDescription.name().localName;
+		var item : UIComponent;
+		var itemId : String = "";
+		var itemDescription : ItemDescription;
+		
+		var parentItemDescription : ItemDescription =  getItemDescriptionById( parentId );
+		var parentItem : IItem;
+		
+		var hasChildren : Boolean = false;
+		var editableAttributes : *;
+		
+		var isStatic : Boolean = false;
+		
+		/* if( parentId == "static" )
+		{
+			isStatic = true;
+		}
+		else */ 
+		if( parentItemDescription && parentItemDescription.item )
+		{
+			parentItem = parentItemDescription.item;
+			isStatic = parentItemDescription.staticFlag != "none" ? true : false;
+		}
+		
+		switch( itemName )
+		{
+			case "container" : 
+			{
+				
+			}
+			
+			case "table" : 
+			{
+				
+			}
+			
+			case "row" : 
+			{
+				
+			}
+			
+			case "cell" : 
+			{
+				if( !isStatic )
+					itemId = itemXMLDescription.@id[ 0 ];
+				
+				itemDescription = getItemDescriptionById( itemId );
+				
+				if( itemDescription && itemDescription.item )
+				{
+					item = itemDescription.item as UIComponent;
+					Container( item ).removeAllChildren();
+					item.graphics.clear();
+					itemDescription.item.editableAttributes = [];
+				}
+				else
+				{
+					itemDescription = createItemDescription( itemId, parentId );
+					itemId = itemDescription.itemId;
+					
+					item = insertItem( itemName, itemId ) as UIComponent;
+				}
+				
+				itemDescription = updateItemDescription( itemId, itemXMLDescription );
+				
+				if( 
+					!itemDescription || 
+					itemDescription.staticFlag == "self" || 
+					itemDescription.staticFlag == "all"
+				)
+					IItem( item ).isStatic = true;
+				
+				hasChildren = true;
+				break;
+			}
+		
+			case "text" : 
+			{
+				if( itemXMLDescription.@editable[ 0 ] && parentItem && !parentItem.isStatic )
+				{
+					item = new EditableText();
+					item.setStyle( "borderStyle", "none" );
+					insertEditableAttributes( parentItem, item, itemXMLDescription );
+				}
+				else
+				{
+					item = new SimpleText();
+				}
+				
+				var text : String = itemXMLDescription.text().toString();
+				
+				item["text"] = text;
+				item["selectable"] = false;
+				
+				break;
+			}
+		
+			case "htmltext" : 
+			{
+				item = new EditableHTML();
+						
+				item["paintsDefaultBackground"] = false;
+				
+				var HTMLText : String = itemXMLDescription.text().toString();
+				
+				item.setStyle( "backgroundAlpha", .0 );
+				
+				if( HTMLText == "" )
+					HTMLText = "";//"<div>simple text</div>";
+				
+				HTMLText =
+						"<html>" + 
+							"<head>" + 
+								"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+							"</head>" +
+							"<body style=\"margin : 0px;\" >" +
+								HTMLText +
+							"</body>" + 
+						"</html>";
+						
+				item["htmlText"] = HTMLText;
+				
+				break;
+			}
+			
+			case "svg" :
+			{
+				try
+				{
+					item = new SVGViewer();
+					editableAttributes = SVGViewer( item ).setXML( itemXMLDescription );
+				}
+				catch( error : Error )
+				{
+					item = null;
+				}
+				
+				break;
+			}
+		}
+		
+		if( !editableAttributes )
+			editableAttributes = itemXMLDescription;
+			
+		insertEditableAttributes( parentItem, item, editableAttributes );
+		
+		if( !item )
+			return null;
+		
+		// FIXME : Применять ли свойства к SVG или нет?
+		if( !( item is SVGViewer ))
+		{
+			applyProperties( item, itemXMLDescription );
+			applyStyles( item, itemXMLDescription );
+		}
+		
+		if( !hasChildren )
+			return item;
+		
+		var childList : XMLList = itemXMLDescription.*;
+		var graphArr : Array = [];
+		var parId : String = itemId;
+		var elm : UIComponent;
+		
+//		if( itemXMLDescription.@contents == "static" )
+//			parId = "static";
+//		else 
+//		if( itemId )
+//		parId = itemId;
+//		else
+//			parId = parentId;
+		
+		for each( var child : XML in childList )
+		{
+			if( child.nodeKind() == "element" )
+			{
+				elm = render( parId, child );
+				
+				if( !( elm is IItem )  || IItem( elm ).isStatic  )
+					graphArr.push( elm );
+			}
+		}
+		
+		var length : uint = graphArr.length;
+		var i : uint;
+		
+		for ( i = 0 ; i < length; i++ )
+		{
+			if( graphArr[ i ] )
+			{
+				item.addChild( graphArr[ i ] );
+			}
+		}
+		
+		var itemArr : Array = sortItems( itemId );
+		length = itemArr.length;
+		i = 0;
+		
+		for ( i = 0; i < length; i++ )
+		{
+			item.addChild( itemArr[i] );
+		}
+		
+		return item;
+	}
+	
+	private function insertItem( itemName : String, itemId : String ) : IItem
+	{	
+		var itemDescription : ItemDescription;
+		var isStatic : Boolean = false;
+		
+		itemDescription = getItemDescriptionById( itemId );
+		
+//		if( !itemDescription )
+//			return null
+		
+		if( itemDescription && itemDescription.item && Container( itemDescription.item ).parent )
+			return itemDescription.item;
+		
+		var container : IItem;
+		
+		switch ( itemName )
+		{	
+			case "container" :
+			{
+				container = new Item( itemId );
+				break;
+			}
+			case "table" :
+			{ 
+				container = new Table( itemId );
+				Table( container ).setStyle( "horizontalGap", 0 );
+				Table( container ).setStyle( "verticalGap", 0 );
+				break;
+			}
+			case "row" : 
+			{
+				container = new TableRow( itemId );
+				TableRow( container ).percentWidth = 100;
+				TableRow( container ).percentHeight = 100;
+				TableRow( container ).minHeight = 10;
+				break;
+			}
+			case "cell" : 
+		 	{
+				container = new TableCell( itemId );
+				TableCell( container ).minWidth = 10;
+				TableCell( container ).minHeight = 10;
+				break;
+			}
+		}
+		
+		container.editableAttributes = [];
+		
+		if( itemDescription )
+			itemDescription.item = container;
+		
+		return container;
+	}
+	
 	private function renderWysiwygOkHandler( event : SOAPEvent ) : void
 	{
-		var itemXMLDescription : XML = event.result.Result.*[0];
-		var itemId : String = itemXMLDescription.@id[0];
-		var parentId : String = event.result.ParentID[0];
+		var itemXMLDescription : XML = event.result.Result.*[ 0 ];
+		var itemId : String = itemXMLDescription.@id[ 0 ];
+		var parentId : String = event.result.ParentID[ 0 ];
 		
 		if( !itemId )
 			return;
@@ -781,41 +816,7 @@ public class DbgRenderManager implements IEventDispatcher
 		if( lockedItems[itemId] && lockedItems[itemId] != key )
 			return;
 		
-		deleteItemChildren( itemId );
-
-		var item : UIComponent = render( parentId, itemXMLDescription );
-		
-		var itemDescription : ItemDescription = getItemDescriptionById( itemId );
-		
-		if( !item )
-			return;
-		
-		if( itemDescription.parentId ) {
-			
-			if( !item.parent ) {
-				var parentDescription : ItemDescription = getItemDescriptionById( itemDescription.parentId );
-				Container( parentDescription.item ).addChild( item );
-			}
-			arrangeItem( parentId );
-		}
-		else
-		{
-			item.percentWidth = 100;
-			item.percentHeight = 100;
-			
-			if( !item.parent )
-				rootContainer.addChild( item );
-		}
-		
-		item.dispatchEvent( new Event( "refreshComplete" ));
-		item.visible = true;
-		
-		IItem( item ).waitMode = false;
-		
-		var rme : RenderManagerEvent = new RenderManagerEvent( RenderManagerEvent.RENDER_COMPLETE );
-		rme.result = Container( item );
-		
-		dispatchEvent( rme );
+		renderItem( parentId, itemXMLDescription );
 	}
 	
 	private function renderWysiwygFaultHandler( event : FaultEvent ) : void 

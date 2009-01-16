@@ -18,7 +18,7 @@ private function _test() : void
 	var txt : String = textAreaContainer.text;
 	try
 	{
-		uicomp = dbgRenderManager.render( "static", XML( txt ) );
+		uicomp = dbgRenderManager.renderItem( "", XML( txt ) );
 	}
 	catch( error : Error )
 	{
