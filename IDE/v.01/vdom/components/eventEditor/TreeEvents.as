@@ -1,5 +1,7 @@
 package vdom.components.eventEditor
 {
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.collections.XMLListCollection;
 	import mx.core.ClassFactory;
 	
@@ -120,6 +122,23 @@ package vdom.components.eventEditor
 			
 				dataXML.addItem(tempXML);
 			} 	
+			/*
+			for each(var lavel:XML in dataManager.listPages )
+				{
+		 			var ID:String = lavel.@ID;
+		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
+		 			
+		 			var typeID:String = lavel.@Type.toString();
+		 			var iconResID:String = getIcon(typeID);
+		 			
+		 			arrAppl.addItem({label:strLabel, ID:ID, iconResID:iconResID, typeID:typeID});
+				}
+				*/
+				var sort : Sort = new Sort();
+				sort.fields = [ new SortField("@Name")];
+				dataXML.sort = sort;
+				dataXML.refresh();
+			
 			
 			super.dataProvider = dataXML;
 			

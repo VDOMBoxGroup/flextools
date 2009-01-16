@@ -272,9 +272,9 @@
 	        private function dragDropHandler(event:DragEvent):void 
 	        {
 	        	var ds:DragSource = event.dragSource;
-                if( !ds.hasFormat("treeItems") ) return;     // no useful data
+                if( !ds.hasFormat("items") ) return;     // no useful data
 
-                var items:Array = ds.dataForFormat("treeItems") as Array;
+                var items:Array = ds.dataForFormat("items") as Array;
                 for(var i:Number=0; i < items.length; i++) 
                 {
                     var item:XML = XML(items[i]);

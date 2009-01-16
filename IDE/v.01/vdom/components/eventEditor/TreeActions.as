@@ -1,5 +1,7 @@
 package vdom.components.eventEditor
 {
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.collections.XMLListCollection;
 	
 	import vdom.events.DataManagerEvent;
@@ -30,7 +32,7 @@ package vdom.components.eventEditor
 			dataManager = DataManager.getInstance();
 		}
 		
-		private var dataXML:XML ;
+		private var dataXML:XMLListCollection ;
 		private var curContainerTypeID:String;
 	
 		private function getChilds(inXML:XML):XML
@@ -84,9 +86,9 @@ package vdom.components.eventEditor
 			
 			var object:XML = dataManager.getObject(value);
 			
-			dataXML  = new XML('<Object/>');
-			dataXML.@label 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
-			dataXML.@resourceID = getSourceID(object.@Type);
+			dataXML  = new XMLListCollection();
+//			dataXML.@label 	= object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+//			dataXML.@resourceID = getSourceID(object.@Type);
 			
 			var type:XML = dataManager.getTypeByObjectId(value);
 			
@@ -111,9 +113,14 @@ package vdom.components.eventEditor
 					tempXML.@ObjTgtID = object.@ID;
 					tempXML.@containerID = dataManager.currentObject.@ID;
 					
-					dataXML.appendChild(tempXML);
+					dataXML.addItem(tempXML);
 				}	
 			} 
+			
+			var sort : Sort = new Sort();
+				sort.fields = [ new SortField("@MethodName")];
+				dataXML.sort = sort;
+				dataXML.refresh();
 			
 			super.dataProvider = dataXML;
 			validateNow();
@@ -145,7 +152,7 @@ package vdom.components.eventEditor
 							tempXML.@Language =	 actID.@Language;
 							tempXML.@ID = actID.@ID;
 							
-							dataXML.appendChild(tempXML);
+							dataXML.addItem(tempXML);
 						}
 					}
 				}
