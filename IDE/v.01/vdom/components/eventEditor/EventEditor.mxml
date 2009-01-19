@@ -1106,12 +1106,12 @@
         	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"/>
         
         <containers:ClosablePanel width="100%"  title="Events"  height="150" 
-        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+        	paddingLeft="5" paddingRight="0" paddingBottom="0" paddingTop="0">
         	<eventEditor:TreeEvents id="treeEvents" width="100%"  height="100%"/>
         </containers:ClosablePanel>
         
         <containers:ClosablePanel width="100%" title="Actions"  height="150"
-        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0">
+        	paddingLeft="5" paddingRight="0" paddingBottom="0" paddingTop="0">
         	<eventEditor:TreeActions id="treeActions" width="100%"  height="100%"/>
         </containers:ClosablePanel>
       

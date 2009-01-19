@@ -1,10 +1,12 @@
 package vdom.components.scriptEditor.containers
 {
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.collections.XMLListCollection;
+	import mx.controls.List;
 	import mx.events.ListEvent;
 	import mx.utils.UIDUtil;
 	
-	import vdom.components.edit.containers.OTree;
 	import vdom.containers.ClosablePanel;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ServerScriptsEvent;
@@ -16,7 +18,7 @@ package vdom.components.scriptEditor.containers
 
 	public class ServerScripts extends ClosablePanel
 	{
-		private var tree:OTree;
+		private var tree:List;
 		private var dataManager:DataManager = DataManager.getInstance();
 		private var curContainerID:String;
 			
@@ -35,10 +37,11 @@ package vdom.components.scriptEditor.containers
 		public function ServerScripts()
 		{
 			super();
-			tree = new OTree();
-			tree.showRoot = true;
+			tree = new List();
+//			tree.showRoot = true;
 			tree.iconFunction = getIcon;
 			tree.percentWidth = 100;
+			tree.percentHeight = 100;
 			tree.labelField = '@Name';
 			tree.setStyle('borderColor', '0xFFFFFF');
 			
@@ -66,12 +69,12 @@ package vdom.components.scriptEditor.containers
 	 		trace("" + dmEvt.result.toXMLString())
 		}
 		
-		private var dataXML:XML;
+		private var dataXML:XMLListCollection;
 		private var xmlToServer:XML;
 		private function creatData(xmlToTree:XML):void
 		{
 			xmlToServer = new XML('<ServerActions/>');
-			dataXML  = new XML('<Object/>');
+			dataXML  = new XMLListCollection();
 
 			var continer:XML; 
 
@@ -81,12 +84,12 @@ package vdom.components.scriptEditor.containers
 				
 				var object:XML = dataManager.getObject(dataManager.currentObjectId);
 			
-				dataXML.@Name = object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
-				dataXML.@resourceID = getSourceID(object.@Type);
+//				dataXML.@Name = object.Attributes.Attribute.(@Name == "title")+" ("+ object.@Name +")";// object.@Name;//value.@label;
+//				dataXML.@resourceID = getSourceID(object.@Type);
 			}else
 			{
 				continer = new XML(xmlToTree.toXMLString());
-				dataXML.@Name = "Session Actions";
+//				dataXML.@Name = "Session Actions";
 			}
 //			for each(var action:XML in continer.children())
 				
@@ -104,7 +107,7 @@ package vdom.components.scriptEditor.containers
 			var tempXML:XML;
 			if(continer.toString() !='' )
 			{
-				for each(var actID:XML in continer.children())
+				for each(	var actID:XML in continer.children())
 				{
 					tempXML = <Action/>;
 					tempXML.@label = actID.@Name;
@@ -112,17 +115,22 @@ package vdom.components.scriptEditor.containers
 					tempXML.@Language =	 actID.@Language;
 					tempXML.@ID = actID.@ID;
 					
-					dataXML.appendChild(tempXML);
+					dataXML.addItem(tempXML);
 					xmlToServer.appendChild(actID);
 				}
+				
+				var sort : Sort = new Sort();
+				sort.fields =  [new SortField("@Language"), new SortField("@label")];
+				dataXML.sort = sort;
+				dataXML.refresh();
 				
 				tree.dataProvider = dataXML;
 				tree.validateNow();
 				
 				var item:Object =  XMLListCollection(tree.dataProvider).source[0];
 			
-				tree.expandItem(item, true, false);
-				tree.selectedIndex = 1;
+//				tree.expandItem(item, true, false);
+				tree.selectedIndex = 0;
 				
 			}else
 			{
@@ -149,7 +157,12 @@ package vdom.components.scriptEditor.containers
 		{
 			xml.@ID = UIDUtil.createUID();
 			
-			dataXML.appendChild(xml);
+			dataXML.addItem(xml);
+			
+			var sort : Sort = new Sort();
+				sort.fields =  [new SortField("@Language"), new SortField("@label")];
+				dataXML.sort = sort;
+				dataXML.refresh();
 			
 			var temp:XML = new XML(xml.toXMLString());
 //				temp.addName = '123'+ Math.random();
@@ -159,8 +172,8 @@ package vdom.components.scriptEditor.containers
 			tree.dataProvider = dataXML;
 			tree.validateNow();
 			
-			var item:Object =  XMLListCollection(tree.dataProvider).source[0];
-			tree.expandItem(item, true, false);
+//			var item:Object =  XMLListCollection(tree.dataProvider).source[0];
+//			tree.expandItem(item, true, false);
 				
 			tree.selectedItem = xml;
 			tree.validateNow();
@@ -169,22 +182,29 @@ package vdom.components.scriptEditor.containers
 		
 		public function deleteScript():void
 		{
-			if(tree.selectedItem && dataXML.Action.length() > 1)
-			{
+//			if(tree.selectedItem && dataXML.Action.length() > 1)
+//			{
 				var ID:String = tree.selectedItem.@ID;
 				
-				delete dataXML.Action.(@ID == ID)[0];
+//				trace(dataXML.length);
+				if(tree.selectedIndex < 0 || dataXML.length < 2)
+				{
+					return;
+				}
+				
+				delete dataXML.removeItemAt(tree.selectedIndex);
 				delete xmlToServer.Action.(@ID == ID)[0];
 				
 				if(dataXML.toXMLString() != "<Actions/>")
 				{	
+					
 					tree.dataProvider = dataXML;
 					tree.validateNow();
 					
-					var item:Object =  XMLListCollection(tree.dataProvider).source[0];
-					tree.expandItem(item, true, false);
+//					var item:Object =  XMLListCollection(tree.dataProvider).source[0];
+//					tree.expandItem(item, true, false);
 					
-					tree.selectedIndex = 1;
+					tree.selectedIndex = 0;
 					tree.validateNow();
 					
 				//	var script:String = xmlToServer.E2vdom.ServerActions.Action.(@ID == ID)[0];
@@ -193,7 +213,7 @@ package vdom.components.scriptEditor.containers
 				{
 					tree.dataProvider = null;
 				}
-			}
+//			}
 		}
 		
 		public function set script(str:String):void

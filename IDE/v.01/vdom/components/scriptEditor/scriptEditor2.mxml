@@ -165,6 +165,7 @@
 				} else
 				{
 					dataXML.@Name = ssEvt.scriptName;
+					dataXML.@label = ssEvt.scriptName;
 					dataXML.@Language = "vscript";
 				}
 				

@@ -69,6 +69,9 @@ package vdom.components.eventEditor
 		
 			if (xmlData.@Language.toXMLString() =='vscript')
 				return vscript;
+				
+			if (xmlData.@Language.toXMLString() =='clien')
+				return vscript;	
 			
 		
 			if (xmlData.@resourceID.toXMLString() =='')
@@ -118,13 +121,13 @@ package vdom.components.eventEditor
 			} 
 			
 			var sort : Sort = new Sort();
-				sort.fields = [ new SortField("@MethodName")];
+				sort.fields = [new SortField("@Language"), new SortField("@label")];
 				dataXML.sort = sort;
 				dataXML.refresh();
 			
 			super.dataProvider = dataXML;
-			validateNow();
-			var item:Object =  XMLListCollection(dataProvider).source[0];
+//			validateNow();
+//			var item:Object =  XMLListCollection(dataProvider).source[0];
 			
 //			expandItem(item, true, false);
 		}
@@ -151,16 +154,22 @@ package vdom.components.eventEditor
 							tempXML.@Name = actID.@Name;
 							tempXML.@Language =	 actID.@Language;
 							tempXML.@ID = actID.@ID;
+							tempXML.@Language = "clien"
 							
 							dataXML.addItem(tempXML);
 						}
 					}
 				}
 				
-				super.dataProvider = dataXML;
-				super.validateNow();
+				var sort : Sort = new Sort();
+				sort.fields = [new SortField("@Language"), new SortField("@label")];
+				dataXML.sort = sort;
+				dataXML.refresh();
 				
-				var item:Object =  XMLListCollection(super.dataProvider).source[0];
+				super.dataProvider = dataXML;
+//				super.validateNow();
+				
+//				var item:Object =  XMLListCollection(super.dataProvider).source[0];
 			
 //				super.expandItem(item, true, false);
 			}
