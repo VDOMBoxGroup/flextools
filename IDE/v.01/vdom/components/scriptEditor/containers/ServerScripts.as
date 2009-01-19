@@ -91,12 +91,6 @@ package vdom.components.scriptEditor.containers
 				continer = new XML(xmlToTree.toXMLString());
 //				dataXML.@Name = "Session Actions";
 			}
-//			for each(var action:XML in continer.children())
-				
-//			delete xmlToServer.Key;
-
-			
-			
 //			var type:XML = dataManager.getTypeByObjectId(dataManager.currentObjectId);
 //			var	curContainerTypeID:String = dataManager.getTypeByObjectId(dataManager.currentObjectId).Information.ID.toString();
 //			var actions:XML = type.E2vdom.Actions.Container.(@ID == curContainerTypeID)[0];
@@ -126,10 +120,7 @@ package vdom.components.scriptEditor.containers
 				
 				tree.dataProvider = dataXML;
 				tree.validateNow();
-				
-				var item:Object =  XMLListCollection(tree.dataProvider).source[0];
 			
-//				tree.expandItem(item, true, false);
 				tree.selectedIndex = 0;
 				
 			}else
@@ -165,16 +156,12 @@ package vdom.components.scriptEditor.containers
 				dataXML.refresh();
 			
 			var temp:XML = new XML(xml.toXMLString());
-//				temp.addName = '123'+ Math.random();
 			
 			xmlToServer.appendChild(temp);	
 			
 			tree.dataProvider = dataXML;
 			tree.validateNow();
 			
-//			var item:Object =  XMLListCollection(tree.dataProvider).source[0];
-//			tree.expandItem(item, true, false);
-				
 			tree.selectedItem = xml;
 			tree.validateNow();
 			dispatchEvent(new ServerScriptsEvent(ServerScriptsEvent.DATA_CHANGED));
@@ -182,11 +169,8 @@ package vdom.components.scriptEditor.containers
 		
 		public function deleteScript():void
 		{
-//			if(tree.selectedItem && dataXML.Action.length() > 1)
-//			{
 				var ID:String = tree.selectedItem.@ID;
 				
-//				trace(dataXML.length);
 				if(tree.selectedIndex < 0 || dataXML.length < 2)
 				{
 					return;
@@ -201,19 +185,14 @@ package vdom.components.scriptEditor.containers
 					tree.dataProvider = dataXML;
 					tree.validateNow();
 					
-//					var item:Object =  XMLListCollection(tree.dataProvider).source[0];
-//					tree.expandItem(item, true, false);
-					
 					tree.selectedIndex = 0;
 					tree.validateNow();
 					
-				//	var script:String = xmlToServer.E2vdom.ServerActions.Action.(@ID == ID)[0];
 					dispatchEvent(new ServerScriptsEvent(ServerScriptsEvent.DATA_CHANGED));
 				}else	
 				{
 					tree.dataProvider = null;
 				}
-//			}
 		}
 		
 		public function set script(str:String):void
