@@ -23,7 +23,19 @@
       <title>First of VdomHelp</title>
       <description>Description of 1-st page</description>
       <content>
-        <![CDATA[<h1> It is 1-st page</h1>  <img src="resources/135aaf50-6055-4db3-8c14-7d9ac93dd30f.png"/> <a href ="page2.html">to Page 2</a>]]>
+        <![CDATA[<h1> It is 1-st page </h1> Starting a print job
+
+To start a print job, you create an instance of the FlexPrintJob class and call its start() method. This method prompts Flash Player or Adobe® AIR™ to spool the print job to the user's operating system, which causes the user's operating system to display a Print dialog box.
+
+If the user selects an option to begin printing from the Print dialog box, the start() method returns a value of true. If the user cancels the print job, the return value is false. After the user exits the operating system Print dialog box, the start() method uses the printer information to set values for the FlexPrintJob object's pageHeight and pageWidth properties, which represent the dimensions of the printed page area.
+
+Note: Depending on the user's operating system, an additional dialog box might appear until spooling is complete and the application calls the send() method.
+
+Only one print job can be active at a time. You cannot start a second print job until one of the following has happened with the previous print job:
+
+    * The start() method returns a value of false (the job failed).
+    * The send() method completes execution following a successful call to the addObject() method. Because the send() method is synchronous, code that follows it can assume that the call completed successfully.
+         <img src="resources/135aaf50-6055-4db3-8c14-7d9ac93dd30f.png"/> <a href ="page2.html">to Page 2</a>]]>
       </content>
       <resources>
         <resource id="135aaf50-6055-4db3-8c14-7d9ac93dd30f" type="png">

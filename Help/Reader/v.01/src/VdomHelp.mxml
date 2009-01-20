@@ -390,7 +390,8 @@
                 if (printJob.start() != true) return;
 
                 // Add the object to print. Do not scale it.
-                printJob.addObject(html, FlexPrintJobScaleType.NONE);
+                printJob.addObject(html, FlexPrintJobScaleType.MATCH_WIDTH);
+                
 
                 // Send the job to the printer.
                 printJob.send();
