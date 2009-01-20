@@ -23,7 +23,7 @@
       <title>First</title>
       <description>Description of 1-st page</description>
       <content>
-        <![CDATA[<h1> It is 1-st page</h1>  <img src="resources/135aaf50-6055-4db3-8c14-7d9ac93dd30f.png"/> <a href ="page2.html">to Page 2</a>]]>
+        <![CDATA[<h1> SAMPLE It is 1-st page</h1>  <img src="resources/135aaf50-6055-4db3-8c14-7d9ac93dd30f.png"/> <a href ="page2.html">to Page 2</a>]]>
       </content>
       <resources>
         <resource id="135aaf50-6055-4db3-8c14-7d9ac93dd30f" type="png">
