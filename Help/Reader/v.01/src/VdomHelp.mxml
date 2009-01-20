@@ -6,10 +6,18 @@
 	
 	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" creationComplete="frstLoadXML()" viewSourceURL="srcview/index.html"
-	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x515151, 0x3d3d3d ]" >
+	layout="absolute" creationComplete="frstLoadXML()" viewSourceURL="srcview/index.html" 
+	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
+	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')">
+	<mx:Style>
+		.tbStyle {
+			color : #FFFFFF;
+		}
+	</mx:Style>
 	<mx:Script>
 	<![CDATA[
+		import mx.printing.FlexPrintJobScaleType;
+		import mx.printing.FlexPrintJob;
 		import mx.utils.StringUtil;
 		import mx.events.TreeEvent;
 		import mx.utils.Base64Decoder;
@@ -372,6 +380,22 @@
 			pageList.dataProvider  = null;
 			pageList.dataProvider = sqlProxy.search(searchWord.text,"VdomHelp_en_US");
 		}
+		
+		private function print():void
+		{
+			 // Create an instance of the FlexPrintJob class.
+                var printJob:FlexPrintJob = new FlexPrintJob();
+
+                // Start the print job.
+                if (printJob.start() != true) return;
+
+                // Add the object to print. Do not scale it.
+                printJob.addObject(html, FlexPrintJobScaleType.NONE);
+
+                // Send the job to the printer.
+                printJob.send();
+
+		}
 	]]>
 </mx:Script>
 	
@@ -381,7 +405,7 @@
 		<mx:Button  label="back" click="{html.historyBack()}"/>
 		<mx:Button  label="forvatd" click="{html.historyForward()}"/>
 		<mx:TextInput id="searchWord" x="185" y="14" width="141"  enter="{search();}" />
-		<mx:Button  label="Find" click="{search();}"/>
+		<mx:Button  label="Search" click="{search();}" icon="@Embed('../assets/search.png')" color="#FFFFFF"/>
 	</mx:HBox>
 	<mx:HRule width="100%" strokeColor="0x000000" shadowColor="0x555555"/>
 	<mx:HDividedBox y="60" width="100%" height="100%" >
@@ -400,7 +424,12 @@
 		</mx:Accordion>
 		<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
 			
-			<mx:Canvas color="#FCFBFB"  width="100%" height="25" backgroundColor="#E4E4E4" />
+			<mx:Canvas color="#FCFBFB"  width="100%" backgroundColor="#E4E4E4" >
+				<mx:HBox right="0" paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5">
+					<mx:Image source="@Embed('../assets/printer.png')" click="{print()}"/>
+					<mx:Image source="@Embed('../assets/bookmark__plus.png')"/>
+				</mx:HBox>
+			</mx:Canvas>
 			<mx:HTML id="html"  width="100%" height="100%"
 				locationChange="{pageChangedHandler(event)}"/>
 		</mx:VBox>
