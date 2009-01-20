@@ -12,6 +12,7 @@ import PowerPack.com.gen.ParsedNode;
 import PowerPack.com.managers.CashManager;
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
+import PowerPack.com.utils.GeneralUtils;
 import PowerPack.com.validators.NodeTextValidator;
 
 import flash.display.DisplayObject;
@@ -41,6 +42,7 @@ import mx.controls.Alert;
 import mx.controls.ComboBox;
 import mx.controls.Image;
 import mx.controls.ToolTip;
+import mx.core.Application;
 import mx.core.Container;
 import mx.core.EdgeMetrics;
 import mx.core.ScrollPolicy;
@@ -1831,9 +1833,30 @@ public class Node extends Canvas
     {
 		if(canvas && canvas.addingTransition)
 			return;		
-				
-    	//event.stopPropagation();	    	
 
+	   	if(_mode == M_EDITING)
+	   	{
+	    	event.stopPropagation();
+			
+			// if you use stopPropagation then CTRL+C/V/A/X wouldnt work
+			if(GeneralUtils.isCopyCombination(event) ||
+				GeneralUtils.isCutCombination(event) ||
+				GeneralUtils.isPasteCombination(event) ||
+				GeneralUtils.isSelectAllCombination(event))
+			{	
+				event.preventDefault();
+				
+				if(GeneralUtils.isCopyCombination(event))
+					Application.application.nativeApplication.copy()
+				else if(GeneralUtils.isCutCombination(event))
+					Application.application.nativeApplication.cut();
+				else if(GeneralUtils.isPasteCombination(event))
+					Application.application.nativeApplication.paste();
+				else if(GeneralUtils.isSelectAllCombination(event))
+					Application.application.nativeApplication.selectAll();				
+			}
+	   	}
+	   	
 	    if(event.keyCode == Keyboard.ENTER)
 	    {
 	    	if(_mode==M_EDITING)
