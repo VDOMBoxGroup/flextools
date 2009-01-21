@@ -8,7 +8,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" creationComplete="frstLoadXML()" viewSourceURL="srcview/index.html" 
 	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
-	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')">
+	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
@@ -30,6 +30,19 @@
 		private var fileStream:FileStream = new FileStream();
 		private var sqlProxy:SQLProxy = new SQLProxy();
 		
+		
+		/***
+		 * 
+		 * 	Иконки для дерева (лист и книжка)
+		 * 	Квадратик на верх
+		 * 	? стрелочки лево право
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * */
 		
 		// start loading 1-st XML 
 		private function frstLoadXML():void
@@ -379,6 +392,7 @@
 				
 			pageList.dataProvider  = null;
 			pageList.dataProvider = sqlProxy.search(searchWord.text,"VdomHelp_en_US");
+			pageList.selectedItem = null;
 		}
 		
 		private function print():void
@@ -403,23 +417,26 @@
 <mx:VBox width="100%" height="100%" paddingLeft="5" paddingRight="5" x="0">
 	
 	<mx:HBox paddingTop="5" paddingLeft="5">
-		<mx:Button  label="back" click="{html.historyBack()}"/>
-		<mx:Button  label="forvatd" click="{html.historyForward()}"/>
+		<local:LeftArrow click="{html.historyBack()}"  htmlPage="{html}"/>
+		<local:RightArrow click="{html.historyForward()}"  htmlPage="{html}"/>
+		<mx:Image source="@Embed('../assets/gear_i.png')" />
+		
 		<mx:TextInput id="searchWord" x="185" y="14" width="141"  enter="{search();}" />
-		<mx:Button  label="Search" click="{search();}" icon="@Embed('../assets/search.png')" color="#FFFFFF"/>
+		<mx:Button  label="Search" click="{search();}" icon="@Embed('../assets/search.png')" color="#FFFFFF" 
+			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 	</mx:HBox>
 	<mx:HRule width="100%" strokeColor="0x000000" shadowColor="0x555555"/>
 	<mx:HDividedBox y="60" width="100%" height="100%" >
-		<mx:Accordion id="accordion" width="155" height="100%" addedEffect="false">
-			<mx:Canvas label="Content" width="100%" height="100%">
-				<mx:Tree id="tree" width="100%" height="100%"
+		<mx:Accordion id="accordion" width="155" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF" >
+			<mx:Canvas label="Content" width="100%" height="100%" icon="@Embed('../assets/contents.png')">
+				<mx:Tree id="tree" width="100%" height="100%" color="#000000"
 				labelField="@title" showRoot="false" change="{treeChangeHandler(event)}" />
 			</mx:Canvas>
-			<mx:Canvas label="Search Result" width="100%" height="100%">
+			<mx:Canvas label="Search Result" width="100%" height="100%" icon="@Embed('../assets/search.png')">
 				<mx:List  id="pageList" width="100%" height="100%" labelField="title"
-					change="{listChangeHandler(event)}"/>
+					change="{listChangeHandler(event)}" color="#000000"/>
 			</mx:Canvas>
-			<mx:Canvas label="Settings" width="100%" height="100%">
+			<mx:Canvas label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')">
 				
 			</mx:Canvas>
 		</mx:Accordion>
@@ -431,7 +448,7 @@
 					<mx:Image source="@Embed('../assets/bookmark__plus.png')"/>
 				</mx:HBox>
 			</mx:Canvas>
-			<mx:HTML id="html"  width="100%" height="100%"
+			<mx:HTML id="html"  width="100%" height="100%" 
 				locationChange="{pageChangedHandler(event)}"/>
 		</mx:VBox>
 	</mx:HDividedBox>
