@@ -54,6 +54,7 @@ package
 												"title TEXT NOT NULL,  " + 
 												"description TEXT , " + 
 												"language TEXT,"+
+												"visible TEXT,"+
 												"toc XML);";
 				sqlStatement.execute();
 				
@@ -76,6 +77,43 @@ package
 			}
 			
 			return true;
+		}
+		
+		public function getToc():Object
+		{
+			 
+			var query:String = "SELECT product.toc " + 
+					"FROM product " + 
+					" WHERE   visible = :visible ;";
+						
+			var parameters:Object = new Object();
+				parameters[":visible"] = "true";
+				
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return null;
+			}
+			return result;
+		}
+		
+		
+		public function getPages():Object
+		{
+			 
+			var query:String = "SELECT name " + 
+					"FROM page;";
+						
+			var parameters:Object = new Object();
+				
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return null;
+			}
+			return result;
 		}
 		
 		private function localizeError(e:SQLError):void 
@@ -217,8 +255,8 @@ package
 				
 				if( !result)
 				{
-					query = "INSERT INTO product(name, version, title, description, language, toc) " + 
-								"VALUES(:name, :version, :title, :description, :language, :toc);";
+					query = "INSERT INTO product(name, version, title, description, language, visible, toc) " + 
+								"VALUES(:name, :version, :title, :description, :language, :visible, :toc);";
 					
 					parameters = [];
 					parameters[":name"] = name;
@@ -227,6 +265,7 @@ package
 					parameters[":description"] = description;
 					parameters[":language"] = language;
 					parameters[":toc"] = toc.toXMLString();
+					parameters[":visible"] = "true";
 													
 					executeQuery(query, parameters);				
 				}
@@ -354,7 +393,7 @@ package
 				
 		}
 		
-		public function search(	value:String, productName:String = "",	language:String = "en_US"):Object
+		public function search(	value:String):Object
 		{
 			var phraseRE:RegExp = /\s+/gim;
 
@@ -363,13 +402,12 @@ package
 			
 			var query:String = "SELECT page.name, page.title " +
 						"FROM product INNER JOIN page ON product.id = page.id_product "+
-						"WHERE product.name = :productName " + 
-						"	AND ((page.content) LIKE  :value)  AND product.language = :language;"
+						"WHERE product.visible = :visible " + 
+						"	AND ((page.content) LIKE  :value) "
 			
 			var parameters:Object = new Object();
-				parameters[":productName"] = productName;
+				parameters[":visible"] = "true";
 				parameters[":value"] = value;
-				parameters[":language"] = language;
 
 			var result:Object = executeQuery(query, parameters);
 			
