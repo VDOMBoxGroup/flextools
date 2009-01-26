@@ -144,6 +144,7 @@
 			//--------------------------------------------------------------------------  	
 			
 			private var curDebugNode:Node = null;
+			private var curDebugBufLen:int = 0;
 						
 			private function preinit():void
 			{
@@ -452,7 +453,7 @@
             			
 						processOpenedTpl();
 						
-						ProgressManager.complete();			
+						ProgressManager.complete();
 						
 						return;        					
 					}
@@ -799,7 +800,8 @@
 				if(!ContextManager.templateStruct || ContextManager.templateStruct.contextStack.length==0)
 					return;
             	
-            	var curNode:Node = pnl_graphs.showNodeByName(GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).curNode.id);
+            	var curGraphContext:GraphContext = ContextManager.templateStruct.curGraphContext;
+            	var curNode:Node = pnl_graphs.showNodeByName(curGraphContext.curNode.id);
             	curNode.setFocus();
             	
             	if(curDebugNode)
@@ -809,9 +811,8 @@
             			Connector(arrow).highlighted = false;            		
             	}
             	
-            	curNode.filters = [new GlowFilter(0xff00ff)];  	
-				
             	curDebugNode = curNode;
+            	curDebugNode.filters = [new GlowFilter(0xff00ff)];      	  	
             	
             	if(ContextManager.templateStruct.nodeStack.length==0)
             		return;
@@ -825,30 +826,36 @@
         	   			if(arrow1==arrow2)
            					Connector(arrow1).highlighted = true;
 
-            	// fill variables
+				// --------------------
+            	// fill variables panel
+				// --------------------
             	            	
+				// get local vars            	   
 				var subArr:Array = [];
-				for (var obj:String in GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).context) {
-					var value:Object = GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).context[obj];
+				for (var obj:String in curGraphContext.context) {
+					var value:Object = curGraphContext.context[obj];
 					subArr.push( { 	Name: "$"+obj, 
 									Value: value!=null ? value.toString() : 'null' } );						
 				}					
 
+				// get global vars
 				var arr:Array = [];
 				for (obj in ContextManager.templateStruct.context) {
-					if(!(ContextManager.templateStruct.context[obj] is TemplateStruct))
+					if(!(ContextManager.templateStruct.context[obj] is TemplateLib))
 						arr.push( { Name:"$"+obj, Value:ContextManager.templateStruct.context[obj] } );						
 				}			
-				arr.push( { Name:"this", Value: GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).curGraph.name, children:subArr } );
+				arr.push( { Name:"this", Value: curGraphContext.curGraph.name, children:subArr } );
 				
 				pnl_variables.grid.dataProvider = new HierarchicalData(arr);
 				pnl_variables.grid.invalidateList();
-
-				// fill output
+				
+				// --------------------------
+				// fill current buffer output
+				// --------------------------
 				
 				var str:String="";
 				
-				str = GraphContext(ContextManager.templateStruct.contextStack[ContextManager.templateStruct.contextStack.length-1]).buffer;
+				str = curGraphContext.buffer;
 				pnl_output.text = str;
 				pnl_output.textArea.validateNow();
 				
@@ -857,20 +864,21 @@
 				
 				if(str.length>0)
 					pnl_output.textArea.field.setTextFormat(myformat, 0, str.length) 
-				
-				/*	
-				if(	nodeContext.node.parsedNode && 
-					nodeContext.node.parsedNode.hasOwnProperty('string') && nodeContext.node.parsedNode.string &&
-					nodeContext.node.parsedNode.print)
+					
+				if(curDebugBufLen < str.length)
 				{
 					myformat.color = 0xFF0000;
 				
 					pnl_output.textArea.field.setTextFormat(myformat,
-						str.length - nodeContext.node.parsedNode.string.toString().length-1,
+						curDebugBufLen,
 						str.length);
 				}
+				
+				curDebugBufLen = str.length;
 					
+				// --------------------
 				// fill node values
+				// --------------------
 				
 				if(!pnl_node_value.array) {
 					pnl_node_value.array = [];
@@ -883,11 +891,16 @@
 				{
 					case NodeCategory.NORMAL:
 					case NodeCategory.SUBGRAPH:
-						str = nodeContext.node.parsedNode.string;
-						break;
+					case NodeCategory.RESOURCE:
+						str = nodeContext.node.parsedNode.value;
+						break;						
 					case NodeCategory.COMMAND:
 						switch(nodeContext.node.parsedNode.type)
 						{
+							case CodeParser.CT_MULTI:
+								nodeSubCategory = "Multi ";
+								str = nodeContext.node.text;
+								break;
 							case CodeParser.CT_OPERATION:
 								nodeSubCategory = "Operation ";
 								str = nodeContext.node.text;
@@ -895,12 +908,13 @@
 							case CodeParser.CT_TEST:
 								nodeSubCategory = "Test ";
 								str = nodeContext.node.text + 
-									" => " + nodeContext.node.parsedNode.string;
+									" => " + nodeContext.node.parsedNode.value;
 								break;
 							case CodeParser.CT_FUNCTION:
 								nodeSubCategory = "Function ";
-								str = nodeContext.node.parsedNode.func +
-									" => " + nodeContext.node.parsedNode.string;
+								str = nodeContext.node.parsedNode.funcs[0] +
+									" => " + 
+									(nodeContext.node.parsedNode.value.toString().length>100 ? String(nodeContext.node.parsedNode.value.toString()).substr(0,100)+'...':nodeContext.node.parsedNode.value);
 								break;
 						}
 						break;
@@ -911,7 +925,7 @@
 						nodeSubCategory,
 						nodeCategory,
 						str), data: nodeContext.node } );
-				*/
+				
 						
 				pnl_node_value.list.invalidateList();
 				pnl_node_value.list.selectedIndex = pnl_node_value.array.length-1;
@@ -936,6 +950,7 @@
 					pnl_node_value.array = [];
 					pnl_output.text = "";
             		
+            		curDebugBufLen = 0;				
             		if(curDebugNode)
             		{
             			curDebugNode.filters = [];
@@ -943,8 +958,8 @@
             			for each(var arrow:Connector in curDebugNode.inArrows)
             				Connector(arrow).highlighted = false;
             				     
-            			curDebugNode = null;       		
-            		}					
+            			curDebugNode = null;
+            		}
 				}
             }
 	
@@ -1066,7 +1081,7 @@
 
     				ContextManager.templates.addItemAt(template, 0);
     					
-					processNewTpl()
+					processNewTpl();
 
             		ProgressManager.start(ProgressManager.DIALOG_MODE, true);
             		
@@ -1079,6 +1094,8 @@
 	            			pnl_graphs.addGraph(graph);
 						}
             		}
+            		
+            		pnl_graphs.selectGraph(pnl_graphs.findFirstGraph());
             		
 	            	ProgressManager.complete();
             	}

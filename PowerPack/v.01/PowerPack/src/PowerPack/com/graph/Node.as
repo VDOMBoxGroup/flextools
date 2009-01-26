@@ -622,17 +622,18 @@ public class Node extends Canvas
         {
 			flagShape = new Shape();
 			
-			flagShape.graphics.lineStyle(1, 0xff0000, 1.0);
+			flagShape.graphics.lineStyle(1, 0xffffff, 0.5);
 			flagShape.graphics.beginFill(0xff0000, 1.0);
-			flagShape.graphics.lineTo(5, 2);
-			flagShape.graphics.lineTo(0, 4);
+			flagShape.graphics.lineTo(7, 3);
+			flagShape.graphics.lineTo(1, 6);
+			flagShape.graphics.lineTo(1, 9);
+			flagShape.graphics.lineTo(0, 9);
 			flagShape.graphics.lineTo(0, 0);
 			flagShape.graphics.endFill();
-			flagShape.graphics.lineTo(0, 7);
 			
 			var shapeRect:Rectangle = flagShape.getBounds(nodeTextArea);
 			
-			_rightPadding = shapeRect.width + 4;   	
+			_rightPadding = shapeRect.width + 3;   	
         }
         
         if(!nodeCB)

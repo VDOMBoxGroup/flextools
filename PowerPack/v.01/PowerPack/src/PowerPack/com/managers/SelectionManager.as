@@ -114,7 +114,7 @@ public class SelectionManager extends EventDispatcher
 		if(!elm.hasOwnProperty("selected"))
 			return;
 		
-		elm.addEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown);
+		elm.addEventListener(MouseEvent.MOUSE_DOWN, onElmMouseDown, true);
 		elm.addEventListener(MouseEvent.CLICK, onElmClick);
 		elm.addEventListener(KeyboardEvent.KEY_DOWN, onElmKeyDown);
 		elm.addEventListener(NodeEvent.SELECTED_CHANGED, onElmSelectedChange);

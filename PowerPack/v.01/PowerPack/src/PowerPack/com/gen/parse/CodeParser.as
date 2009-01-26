@@ -230,6 +230,7 @@ public class CodeParser
 				if(parsedNode.result && !parsedNode.type)
 				{
 					parsedNode.type = CT_TEST;
+					parsedNode.trans = ["true", "false"];
 				}
 				else if(parsedNode.result && parsedNode.type==CT_MULTI)
 				{

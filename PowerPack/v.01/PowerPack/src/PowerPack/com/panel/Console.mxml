@@ -31,7 +31,7 @@
 			
 			static public function show(text:String, desc:String=""):void
 			{
-				if(!_console)
+				if(!_console || _console._window.closed)
 					_console = new Console();				
 
 				if(!_console._window || _console._window.closed) {
@@ -45,8 +45,7 @@
 				}			
 				
 				isShown = true;
-							
-				_console.text = '';	
+				
 				_console.text = text;
 				_console.description = desc;
 			}
@@ -61,6 +60,6 @@
 	
 	<mx:TextArea editable="false" borderStyle="solid" 
 		verticalScrollPolicy="on" horizontalScrollPolicy="on" 
-		id="textArea" width="100%" height="100%" text="{text}" change="event.target.refresh()"/>
+		id="textArea" width="100%" height="100%" text="{text}"/>
 	
 </mx:VBox>

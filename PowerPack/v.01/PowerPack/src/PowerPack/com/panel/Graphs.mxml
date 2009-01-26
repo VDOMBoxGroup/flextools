@@ -190,7 +190,7 @@
 					initGraphs.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onInitGraphsChange);
 				
 				graphs.addItem(graph);
-				initGraphs.addItem(graph);				
+				initGraphs.addItem(graph);
 				
 				graph.addEventListener(GraphCanvasEvent.GRAPH_CHANGED, onGraphChange);				
 				
