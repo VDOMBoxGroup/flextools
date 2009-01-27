@@ -352,8 +352,17 @@
 		
 		private function listChangeHandler(object:ListEvent):void
 		{
-			showSelectedPage(pageList.selectedItem.name);
+//			showSelectedPage(pageList.selectedItem.name);
+			var fileName:String = pageList.selectedItem.name;
+			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
+			var fullPath : String = newFile.url;
 			
+//			var phraseRE1:RegExp = new RegExp(">[^<]*?("+"and" +").*?<","gimsx");
+//			 fullPath.replace(phraseRE1, "<b>and</b>");
+			html.addEventListener(Event.COMPLETE, zzz );
+			html.location = fullPath; 
+//			html.
+			fileStream.close();
 		}
 		
 		
@@ -361,19 +370,35 @@
 		{
 			var fileName:String = pageName	;
 			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
-			var fullPath : String = newFile.nativePath;
+			var fullPath : String = newFile.url;
+			var f : File = File.applicationStorageDirectory; 
 			html.location = fullPath; 
+			
 			fileStream.close();
 			
 		}
 		
+		private function zzz( event : Event ) : void
+		{
+			html.removeEventListener(Event.COMPLETE, zzz );
+			
+			var searhWord : String = searchWord.text;
+			
+			var phraseRE:RegExp = /\s+/gim;
+
+			searhWord = searhWord.replace(phraseRE, "+"); 
+			
+			if(html.htmlLoader.window.localSearchHighlight)
+				html.htmlLoader.window.localSearchHighlight(searhWord);
+		}
+		
 		private function pageChangedHandler(event:Event):void
 		{
-			
+//			return;	
 			var fullPath:String = html.location;
 //			var index:Number = Math.max(fullPath.lastIndexOf( "/" ),fullPath.lastIndexOf( "\\") );
-			var index:Number =  fullPath.lastIndexOf( "Local Store");
-			var fileName : String = fullPath.substr( index + 12 ); 
+//			var index:Number =  fullPath.lastIndexOf( "Local Store");
+			var fileName : String = fullPath.substr( 13 ); 
 //			fileName = fileName.substring( 0, fileName.lastIndexOf( "." )  );
 //			trace(fullPath);
 			var phraseRE:RegExp = /\\/gim;
