@@ -108,7 +108,7 @@ public class Node extends Canvas
     	node_jump:"Jump to graph", 
     	node_delete:"Delete state", 
     	
-    	node_cut:"Cut",
+    	node_cut:"Cut", 
     	node_copy:"Copy",
     	
     	node_initial:"Initial",

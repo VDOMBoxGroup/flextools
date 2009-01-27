@@ -5,6 +5,10 @@ import ExtendedAPI.com.utils.FileToBase64;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.BasicError;
+import PowerPack.com.gen.NodeContext;
+import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.structs.GraphStruct;
+import PowerPack.com.gen.structs.NodeStruct;
 import PowerPack.com.panel.Question;
 
 import flash.display.Bitmap;
@@ -21,22 +25,14 @@ import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-
-/**
- * sub function section
- */	
- /*
-public function _sub(graph:Object, ...args):void
+public function sub(graph:Object, ...args):*
 {
-	args.unshift(graph, {type:'n', value:''});
-	_subPrefix.apply(this, args);
+	var prefix:Object = {type:'n', value:''};
+	args.unshift(graph, prefix);
+	return subPrefix.apply(this, args);
 }
 
-/**
- * subPrefix function section
- */	
- /*	 
-public function _subPrefix(graph:Object, prefix:Object, ...args):void
+public function subPrefix(graph:Object, prefix:Object, ...args):*
 {
 	var subgraph:GraphStruct;
 	
@@ -46,45 +42,47 @@ public function _subPrefix(graph:Object, prefix:Object, ...args):void
 	}
 	
 	if(subgraph) {
-		_enterSubgraph.apply(this, [subgraph, prefix.value, args]);
+		return enterSubgraph.apply(this, [subgraph, prefix.value, args]);
 	} else {
-		throw new RunTimeError("Undefined graph name: " + graph.value);
+		throw new RunTimeError("Undefined graph: " + graph.value + ".");
 	}
 }
 
-private function _enterSubgraph(subgraph:GraphStruct, prefix:String, params:Array=null):void
+
+private function enterSubgraph(subgraph:GraphStruct, prefix:String, params:Array=null):Function
 {
 	var graphContext:GraphContext = new GraphContext(subgraph);
+	var curNode:NodeStruct = tplStruct.curGraphContext.curNode;
 	
-	if(tplStruct.parsedNode.vars!=null && tplStruct.parsedNode.vars.length>0)
-		graphContext.variable = tplStruct.parsedNode.vars[0];
+	// get variable name if defined
+	if(curNode.parsedNode.vars!=null && 
+		curNode.parsedNode.vars.length>curNode.parsedNode.current &&
+		curNode.parsedNode.vars[curNode.parsedNode.current])
+		graphContext.variable = curNode.parsedNode.vars[curNode.parsedNode.current];
 		
 	graphContext.varPrefix = prefix;
 	
-	tplStruct.parsedNode.value = subgraph.name;
+	curNode.parsedNode.value = subgraph.name;
 	
-	GraphContext(contextStack[contextStack.length-1]).curNode['parsedNode'] = parsedNode;
-	nodeStack.push(new NodeContext(GraphContext(contextStack[contextStack.length-1]).curNode));
+	tplStruct.nodeStack.push(new NodeContext(curNode));
 	
-	contextStack.push(graphContext);
-	
-	if(forced>=0)
-		forced++;
-		
-	step = 0;
+	tplStruct.contextStack.push(graphContext);
+
+	tplStruct.step = 'parseNewNode';
+
+	if(tplStruct.forced>=0)
+		tplStruct.forced++;
 	
 	if(params && params.length>0)
 	{
 		for(var i:int=0; i<params.length; i++)
-			contextStack[contextStack.length-1].context['param'+(i+1)] = params[i];
+			tplStruct.curGraphContext.context['param'+(i+1)] = params[i];
 	}
 	
-	Application.application.callLater(generate);
+	Application.application.callLater(tplStruct.generate);
+	
+	return new Function;
 }
-		 		
-/**
- * question function section
- */	
  	 
 public function question(question:String, answers:String):Function
 {
@@ -117,11 +115,6 @@ public function question(question:String, answers:String):Function
 		setReturnValue(event.target.strAnswer);
 	}	
 }
-
-
-/**
- * convert function section
- */		 
 
 public function convert(type:String, value:Object):Function
 {
@@ -187,10 +180,6 @@ public function imageToBase64(pic:Bitmap, type:String=null):String
 	return strData;
 } 
 
-/**
- * writeTo function section
- */	
- 	
 public function writeTo(filePath:String):void
 {			
 	var data:String = GraphContext(tplStruct.contextStack[0]).buffer;
@@ -198,10 +187,6 @@ public function writeTo(filePath:String):void
 	writeVarTo(filePath, data);
 }			 
  		
-/**
- * writeVarTo function section
- */		
- 
 public function writeVarTo(filePath:String, value:Object):void
 {
 	if(value && filePath)
@@ -242,10 +227,6 @@ public function writeVarTo(filePath:String, value:Object):void
 	}
 }
 
-/**
- * loadDataFrom function section
- */	
- 
 public function loadDataFrom(filePath:String):Function
 {	
 	try 
@@ -290,40 +271,24 @@ public function loadDataFrom(filePath:String):Function
 	}
 }
 
-/**
- * GUID function section
- */		 
- 
 public function GUID():String
 {
 	var guid:String = UIDUtil.createUID();
 	return guid;
 }	
 
-/**
- * mid function section
- */		
-  
 public function mid(start:int, length:int, string:String):String
 {
 	var substr:String = string.substr(start, length);
 	return substr;
 }
 
-/**
- * replace function section
- */		
-  
 public function replace(string:String, tgt:String, flags:String, src:String):String
 {
 	var regExp:RegExp = new RegExp(tgt, flags);		
 	var str:String = string.replace(regExp, src);
 	return str;
 }
-
-/**
- * split function section
- */		 
 
 public function split(delimiter:String, string:String):String
 {
@@ -332,10 +297,6 @@ public function split(delimiter:String, string:String):String
 	return str;
 }
 
-/**
- * random function section
- */		
-  
 public function random(value:int):String 
 {
 	var rnd:int = int(Math.round(Math.random() * value)); 	

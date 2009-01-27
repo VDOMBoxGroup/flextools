@@ -27,22 +27,18 @@ public dynamic class TemplateLib
 		
 	public var tplStruct:TemplateStruct;
 	
-	public function TemplateLib()
-	{
-	}
-	
-	public function setReturnValue(value:*):void
+	private function setReturnValue(value:*):void
 	{
 		tplStruct.curGraphContext.curNode.parsedNode.value = value;
 		tplStruct.generate();
 	}
 	
-	public function setTransition(value:String):void
+	private function setTransition(value:String):void
 	{
 		tplStruct.curGraphContext.curNode.parsedNode.transition = value;		
 	}
 	
-	public function getContexts():Array
+	private function getContexts():Array
 	{
 		return [tplStruct.context, tplStruct.curGraphContext.context];	
 	}

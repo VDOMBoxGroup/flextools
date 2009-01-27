@@ -104,10 +104,10 @@ public class Parser
 		 * LEXEM TYPES: utnwobvscif12345=90{}[];VNSALO    		  
 		 * u - undefined
 		 * t - text
+		 * w - word (any ASCII chars sequence without spaces) used in lists
 		 * n - name (identifier: function name, graph name, prefix, etc)
-		 * w - word (any ASCII chars sequence without spaces)
-		 * o - 'null'
-		 * b - ('true', 'false')
+		 * o - keyword 'null'
+		 * b - keyword ('true', 'false')
 		 * v - variable
 		 * i - integer constant
 		 * f - float constant
@@ -491,7 +491,7 @@ public class Parser
 		var checkNext:Boolean = false;
 		
 		lexems[0].operationGroup = 1;
-		lexems[0].listGroup = 1;
+		//lexems[0].listGroup = 1;
 
 		for(var i:int=0; i<lexems.length; i++)
 		{
@@ -738,7 +738,7 @@ public class Parser
 		var strSentence:String = lexemString.concat();  
 		var patterns:Array = 
 			[
-				[/(^|=|4|5|9|n|\[|\])[23](v|i|f)/g, 	"$1$2"],	// remove signs '-1...', '...=-2...', '...(-3...'
+				[/(^|=|4|5|9|n|\[|\])[23](v|i|f)/g, 	"$1$2"],	// remove signs '-1...', '...=+2...', '...(-3...'
 				[/[VNvifo]1[VNvifo]/g, 		"N"],		// (*, /, %)
 				[/[VNvifo]2[VNvifo]/g, 		"N"],		// '-'
 				[/[Nifo]3[Nifo]/g,			"N"],		// '+'					

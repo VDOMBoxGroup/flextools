@@ -54,12 +54,12 @@ public class TemplateStruct extends EventDispatcher
 	public var context:Dynamic = new Dynamic();
 
 	//public var parsedNode:ParsedNode;
-	private var step:String;
+	public var step:String;
 	public	var transition:String;
 	
 	public var isDebug:Boolean;
 	public var isStepDebug:Boolean;
-	private var forced:int;
+	public var forced:int;
 	
 	public function TemplateStruct(tplStruct:XML, ID:String)
 	{				
@@ -618,10 +618,10 @@ public class TemplateStruct extends EventDispatcher
 									[context, curGraphContext.context],			 
 									curGraphContext.varPrefix );						
 							
+								step = 'processExecResult';
 								if(curGraphContext.curNode.parsedNode.value is Function)
 								{
 									isRunning = false;
-									step = 'processExecResult';
 									return null;
 								}
 							}
