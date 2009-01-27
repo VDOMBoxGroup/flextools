@@ -1,6 +1,6 @@
 package PowerPack.com.gen.structs
 {
-	import PowerPack.com.gen.ParsedNode;
+	import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 	import PowerPack.com.graph.NodeCategory;
 	import PowerPack.com.graph.NodeType;
 		
@@ -22,7 +22,7 @@ package PowerPack.com.gen.structs
 		[ArrayElementType("ArrowStruct")]
 		public var inArrows:Array = [];
 		
-		public var parsedNode:ParsedNode;	
+		public var parsedNode:ParsedBlock;	
 		
     	public function NodeStruct(	_id:String = null,
     								_category:String = null,

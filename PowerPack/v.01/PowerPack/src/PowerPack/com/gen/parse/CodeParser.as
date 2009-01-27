@@ -5,6 +5,7 @@ import ExtendedAPI.com.utils.Utils;
 import PowerPack.com.gen.*;
 import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.errorClasses.ValidationError;
+import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 
 public class CodeParser
 {		
@@ -30,7 +31,7 @@ public class CodeParser
 	 * 
 	 */
 	public static function ParseText(	text:String, 
-										contexts:Array=null ):ParsedNode
+										contexts:Array=null ):ParsedBlock
 	{
 		var pattern:RegExp;
 		var str:String = text.concat();

@@ -48,7 +48,6 @@ public function subPrefix(graph:Object, prefix:Object, ...args):*
 	}
 }
 
-
 private function enterSubgraph(subgraph:GraphStruct, prefix:String, params:Array=null):Function
 {
 	var graphContext:GraphContext = new GraphContext(subgraph);

@@ -7,6 +7,7 @@ public class ParsedBlock
 {
 	public var type:String; // node type
 
+	public var origLexems:Array = []; // lexems
 	public var lexems:Array = []; // lexems
 
 	public var value:*; // return value

@@ -5,7 +5,11 @@ import ExtendedAPI.com.utils.Utils;
 import PowerPack.com.gen.TemplateStruct;
 import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.errorClasses.RunTimeError;
+import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
+import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
+
+import generated.webservices.About_request;
 
 import mx.collections.ArrayCollection;
 import mx.utils.UIDUtil;
@@ -47,7 +51,7 @@ public class Parser
 			"exist":		{ pattern:/^(v=){0,1}\[n[nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:3 },
 			"evaluate":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
 			"execute":		{ pattern:/^(v=){0,1}\[n[vscVSA]\]$/, argNum:1 },
-							
+
 			"addStructure":		{ pattern:/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
 			"updateStructure":	{ pattern:/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
 			"deleteStructure":	{ pattern:/^(v=){0,1}\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
@@ -101,7 +105,7 @@ public class Parser
    		var lexems:Array = new Array();
    		    		
 		/**
-		 * LEXEM TYPES: utnwobvscif12345=90{}[];VNSALO    		  
+		 * LEXEM TYPES: utnwobvscif12345=90{}[];VNSALOF    		  
 		 * u - undefined
 		 * t - text
 		 * w - word (any ASCII chars sequence without spaces) used in lists
@@ -143,6 +147,7 @@ public class Parser
 			err=null;
 			bPush=true;
 			
+			// if text block
 			if(braceStack.length==0 && !isCode)
 			{
     			type='t';
@@ -179,7 +184,7 @@ public class Parser
     							break;
     					} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);
 						i--;
-   						type = 'v'; // variable*/
+   						type = 'v'; // variable
     					break;
 
     				default:
@@ -192,12 +197,14 @@ public class Parser
 						break;
 				}
 			}
+			// if code block
 			else
 			{  
 				type='u';
+    			
     			switch(sourceText.charAt(fix))
     			{
-    				case '"':
+    				case '"': // string
     				case "'":
 						do {
     						i++;
@@ -346,7 +353,7 @@ public class Parser
     						}        						
     						break;
     					}
-    					else if(sourceText.charAt(i).search(/[_a-z]/i)>=0) // name or (null, true, false)
+    					else if(sourceText.charAt(i).search(/[_a-z]/i)>=0) // name or keyword (null, true, false)
     					{
     						do {
     							i++;
@@ -459,7 +466,7 @@ public class Parser
 		{
 			switch(converted[i].type)
 			{
-				case "t": // replace special characters from texts						
+				case "t": // replace special characters from texts
 					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\r");
 					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\n");
 					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\t");
@@ -532,6 +539,38 @@ public class Parser
 		}
 	}		
 
+	public static function lexemsFragmentation(lexems:Array):ParsedBlock
+	{
+		var block:ParsedBlock = new ParsedBlock();
+		
+		block.origLexems = lexems.concat();
+		block.lexems = lexems.concat();
+		
+		var index:int = 0;
+		
+		while(index<block.origLexems.length)
+		{
+			if("[{9".search(block.origLexems[index].type)>=0)
+			{
+				block.fragments.push(recursiveLexemsFragmentation());
+			}
+			index++;
+		}
+		
+		return block;
+		
+		function recursiveLexemsFragmentation():CodeFragment {
+			var fragment:CodeFragment = new CodeFragment();
+			var terminal:String = "]}0".charAt("[{9".search(block.origLexems[index].type));
+			
+			while(index<block.origLexems.length && block.origLexems[index].type!=terminal)
+			{
+				
+			}
+			return fragment;
+		}
+	}
+	
 	/**
 	 * resolve advanced variable definition technique
 	 *  
