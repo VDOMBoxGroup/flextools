@@ -44,6 +44,7 @@ package
 											"title TEXT NOT NULL,  " + 
 											"description TEXT , " + 
 											"content TEXT, " + 
+											"mark TEXT, " + 
 											"id_product INTEGER);";
 				sqlStatement.execute();
 				
@@ -101,11 +102,87 @@ package
 		
 		public function getPages():Object
 		{
-			 
+			 // MAST BEE CHANGED !!!!
 			var query:String = "SELECT name " + 
 					"FROM page;";
 						
 			var parameters:Object = new Object();
+				
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return null;
+			}
+			return result;
+		}
+		
+		
+		public function getAllProducts():Object
+		{
+			 
+			var query:String = "SELECT title, visible, description, name " + 
+					"FROM product;";
+						
+			var parameters:Object = new Object();
+				
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return null;
+			}
+			return result;
+		}
+		
+		
+		public function changeStatusForProduct(name:String, value:Boolean):Object
+		{
+			 
+			var query:String = "UPDATE product " + 
+					"SET visible = :value " + 
+					"WHERE name = :name ;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = name;
+				parameters[":value"] = value.toString();
+						
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return null;
+			}
+			return result;
+		}
+		
+		public function mark(name:String, value:Boolean = true):Object
+		{
+			var query:String = "UPDATE page " + 
+					"SET mark = :value " + 
+					"WHERE name = :name ;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = name;
+				parameters[":value"] = value.toString();
+				
+			var result:Object = executeQuery(query, parameters);
+			
+			if(!result)
+			{
+				return null;
+			}
+			return result;
+		}
+		
+		public function getMarkedPage():Object
+		{
+			var query:String = "SELECT name, title " + 
+					"FROM page " + 
+					" WHERE   mark = :mark ;";
+			
+			var parameters:Object = new Object();
+				parameters[":mark"] = "true";
 				
 			var result:Object = executeQuery(query, parameters);
 			
