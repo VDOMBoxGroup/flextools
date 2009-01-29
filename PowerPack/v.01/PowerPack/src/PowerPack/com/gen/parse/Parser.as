@@ -16,6 +16,11 @@ import r1.deval.D;
 
 public class Parser
 {		
+	public static const CT_OPERATION:String = 'operation';
+	public static const CT_TEST:String = 'test';
+	public static const CT_FUNCTION:String = 'function';
+	public static const CT_ASSIGN:String = 'assign';
+	
 	public static var funcDefinition:Object =
 		{			
 			/**
@@ -611,28 +616,92 @@ public class Parser
 	
 	public static function validateFragment(fragment:CodeFragment):void
 	{
+		var lexemObj:Object;
 		var strSentence:String = "";
+		
+		for each(var subfragment:Object in fragment.fragments)
+		{
+			if(subfragment is CodeFragment)
+				validateFragment(subfragment as CodeFragment);
+		}
+		
+		if(fragment.errFragment)
+			return; 
+		
+		fragment.validated = true;
+
+		// start validate current fragment
 		
 		for(var i:int=0; i<fragment.fragments.length; i++)
 			strSentence = strSentence + CodeFragment(fragment.fragments[i]).type;		
 		
+		strSentence = rollUpSeparator(strSentence);
 		
+		// check for operation
+		lexemObj = isValidOperation(strSentence);
+		if(lexemObj.result && lexemObj.strSentence.length==1)
+		{
+			if(fragment.type == 'F')
+				fragment.print = true;
+				
+			fragment.ctype = CT_OPERATION;
+		}
 		
-		fragment.validated = true;
+		// check for test
+		lexemObj = isValidTest(lexemObj.strSentence);
+		if(lexemObj.result && lexemObj.strSentence.length==1)
+		{
+			if(fragment.type == 'F')
+				fragment.trans = ["true", "false"];
+				
+			fragment.ctype = CT_TEST;
+		}
+		
+		// rollup list
+		lexemObj = isValidList(lexemObj.strSentence);
+		if(lexemObj.result && lexemObj.strSentence.length==1)
+		{
+			if(fragment.type == 'F')
+				fragment.print = true;
+			
+			if(CodeFragment(fragment.fragments[0]).type == 'n')
+			{
+				fragment.funcName = fragment.fragments[0];				
+				fragment.ctype = CT_FUNCTION;
+				
+				switch(fragment.funcName)
+				{
+					case 'loadDataFrom':
+						fragment.trans = ["true", "false"];
+						break;					
+				}
+			}
+		}
+				
+		if(!lexemObj.result)
+			lexemObj = isValidAssign(lexemObj.strSentence);		
+					
+		if(lexemObj.result)
+		{
+			fragment.ctype = CT_ASSIGN;
+		}
+		else
+		{
+			fragment.error = new CompilerError(null, 9000);
+			return;
+		}
 	}	
 	
-	public static function validateFragmentedBlock(block:ParsedBlock, mode:String="full"):void
+	public static function validateFragmentedBlock(block:ParsedBlock):void
 	{
-		switch(mode)
+		for each (var fragment:Object in block.fragments)
 		{
-			case 'fast':
-				block.fastValidated = true;
-				break;
-				
-			case 'full':
-				block.fullValidated = true;
-				break;
+			validateFragment(fragment as CodeFragment);
 		}
+		block.validated = true;
+		
+		if(block.errFragment)
+			return;
 	}	
 	
 	/**
@@ -849,35 +918,46 @@ public class Parser
 		return strSentence;
 	}
 	
+	public static function rollUpSeparator(lexemString:String):String
+	{
+		var strSentence:String = lexemString.concat();
+		var patterns:Array = 
+			[
+				[/^(.*)(;)+$/g, "$1"]
+			];     			
+
+		strSentence = rollLexemString(strSentence, patterns);
+		
+		return strSentence;
+	}
+		
 	public static function isValidOperation(lexemString:String):Object
 	{
 		var strSentence:String = rollUpSigns(lexemString);
 		var patterns:Array = 
 			[
-				[/[AWE]/g, 					"V"],
+				[/[AE]/g, 					"V"],
 
 				[/[Nifo]1[Nifo]/g,	 		"N"],		// (*, /, %)
 				[/[Nifo]2[Nifo]/g,	 		"N"],		// '-'
 				[/[Nifo]3[Nifo]/g,			"N"],		// '+'					
 				
-				[/[Ssc]3[VNSvifsco]/g,		"S"],		// '+'
-				[/[VNSvifsco]3[Ssc]/g,		"S"],		// '+'
+				[/[Ssc]3[WVNSvifsco]/g,		"S"],		// '+'
+				[/[WVNSvifsco]3[Ssc]/g,		"S"],		// '+'
 
-				[/[VNvifo]1[VNvifo]/g, 		"V"],		// (*, /, %)				
-				[/[VNvifo]2[VNvifo]/g, 		"V"],		// '-'
+				[/[WVNvifo]1[WVNvifo]/g,	"V"],		// (*, /, %)				
+				[/[WVNvifo]2[WVNvifo]/g,	"V"],		// '-'
 
-				[/[Vv]3[VNvifo]/g,			"V"],		// '+'
-				[/[VNvifo]3[Vv]/g,			"V"],		// '+'
+				[/[WVv]3[WVNvifo]/g,		"V"],		// '+'
+				[/[WVNvifo]3[WVv]/g,		"V"],		// '+'
 
-				[/9(V|N|S|v|i|f|s|c|o)0/g,	"$1"],		// (x) -> x
-				[/\{[VSvsc]\}/g, 			"v"]		// ${x} -> v
-				
-				
+				[/9(W|V|N|S|v|i|f|s|c|o)0/g,	"$1"],		// (x) -> x
+				[/\{[WVSvsc]\}/g, 				"W"]		// ${x} -> W
 			];     			
 
 		strSentence = rollLexemString(strSentence, patterns);
 		
-		if(/^[VNSvifsco]$/.test(strSentence))
+		if(/^[WVNSvifsco]$/.test(strSentence))
 			return {result: true, value: strSentence};
 		
 		return {result: false, value: strSentence};
@@ -889,9 +969,9 @@ public class Parser
 
 		var patterns:Array = 
 			[
-				[/[VNSvifscob]4[VNSvifscob]/g, 	"O"],	// operator
-				[/[OLb]5[OLb]/g, 				"L"],	// logical operator
-				[/9(O|L|b)0/g, 					"$1"]	
+				[/[AEWVNSvifscob]4[AEWVNSvifscob]/g, 	"O"],	// operator
+				[/[OLb]5[OLb]/g, 						"L"],	// logical operator
+				[/9(O|L|b)0/g, 							"$1"]	
 			]
 		;     			
 
@@ -904,25 +984,6 @@ public class Parser
 		return {result: false, value: strSentence};						
 	}
 		
-	public static function isValidAssign(lexemString:String):Object
-	{
-		var strSentence:String = isValidOperation(lexemString).value;
-		
-		var patterns:Array = 
-			[
-				[/^(v=)?[VNSvifscobFAVE]$/g,	"V"],				
-				[/^(W=)?[VNSvifscobFAVE]$/g,	"V"],
-				[/^[VNSvifscobFAVE](;)?$/g,	"V"]
-			];     			
-
-		strSentence = rollLexemString(strSentence, patterns);
-		
-		if(strSentence=="V")
-			return {result: true, value: strSentence};
-		
-		return {result: false, value: strSentence};
-	}
-		
 	public static function isValidList(lexemString:String):Object
 	{
 		var strSentence:String = isValidOperation(lexemString).value;  
@@ -930,7 +991,7 @@ public class Parser
 
 		var patterns:Array = 
 			[
-				[/\[[nwobvscifVNS]*\]/g, "A"]
+				[/\[[OLAEWVNSvifscobnw]*\]/g, "A"]
 			];
 	
 		strSentence = rollLexemString(strSentence, patterns);
@@ -940,6 +1001,24 @@ public class Parser
 		
 		return {result: false, value: strSentence};
 	}	
+			
+	public static function isValidAssign(lexemString:String):Object
+	{
+		var strSentence:String = isValidOperation(lexemString).value;
+		
+		var patterns:Array = 
+			[
+				[/^(v=)+[OLFAEWVNSvifscob]$/g,		"V"],				
+				[/^(W=)+[OLFAEWVNSvifscob]$/g,		"V"]
+			];     			
+
+		strSentence = rollLexemString(strSentence, patterns);
+		
+		if(strSentence=="V")
+			return {result: true, value: strSentence};
+		
+		return {result: false, value: strSentence};
+	}
 	
 	//--------------------------------------------------------------------------
     //

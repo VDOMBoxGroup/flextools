@@ -18,6 +18,7 @@ public class CodeParser
 	public static const CT_OPERATION:String = 'operation';
 	public static const CT_TEST:String = 'test';
 	public static const CT_FUNCTION:String = 'function';
+	
 	public static const CT_MULTI:String = 'multi';			
 	public static const CT_NONE:String = 'none';			
 	
@@ -322,7 +323,7 @@ public class CodeParser
 		else if(node.funcs[index])
 		{
 			if(node.funcs[index]=='loadDataFrom')
-				node.trans = ["true", "false"];			
+				node.trans = ["true", "false"];
 		}
 
    		// generate and execute code
