@@ -6,6 +6,7 @@ import PowerPack.com.gen.*;
 import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.errorClasses.ValidationError;
 import PowerPack.com.gen.parse.parseClasses.CodeFragment;
+import PowerPack.com.gen.parse.parseClasses.LexemStruct;
 import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 
 public class CodeParser
@@ -105,11 +106,49 @@ public class CodeParser
 	{
 		if(!fragment.validated)
 		{
-			Parser.validateFragment(fragment);
+			Parser.validateFragment(fragment);			
 		}
 		
+		if(fragment.errFragment)
+			return;
 		
+		for(var i:int=0; i<fragment.fragments.length; i++)
+		{
+			executeFragment(fragment.fragments[0] as CodeFragment);
+		}
 		
+		// get variables
+		
+		// generate executable code
+		var code:String = "";
+		switch(fragment.ctype)
+		{
+			case Parser.CT_OPERATION:
+			case Parser.CT_TEST:
+				for(i=0; i<fragment.fragments.length; i++) 
+				{
+					var subfragment:Object = fragment.fragments[i];
+					 
+					if(subfragment is CodeFragment)
+					{
+						if((subfragment as CodeFragment).retValue)
+							code += (subfragment as CodeFragment).retValue;
+						else
+							code += 'null';
+					}
+					else if(subfragment is LexemStruct)
+					{
+						var value:Object = LexemStruct(subfragment).value;
+						if(LexemStruct(subfragment).type == 'v')
+							value = String(value).substring(1);
+													
+						code += value;
+					}
+				}	
+				break;
+			case Parser.CT_FUNCTION:
+				break;
+		}
 	}
 	
 	/**

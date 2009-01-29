@@ -673,7 +673,7 @@ public class Parser
 				{
 					case 'loadDataFrom':
 						fragment.trans = ["true", "false"];
-						break;					
+						break;
 				}
 			}
 		}
