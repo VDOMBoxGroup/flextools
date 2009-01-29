@@ -5,6 +5,7 @@ import ExtendedAPI.com.utils.Utils;
 import PowerPack.com.gen.*;
 import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.errorClasses.ValidationError;
+import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 
 public class CodeParser
@@ -35,35 +36,30 @@ public class CodeParser
 	{
 		var pattern:RegExp;
 		var str:String = text.concat();
-		var parsedNode:ParsedNode = new ParsedNode(); 
+		var block:ParsedBlock = Parser.lexemsFragmentation(Parser.getLexemArray(str, false));
+		block.print = true;  		
+  		
+  		//var lexems:Array = Parser.getLexemArray(str, false);
+  		//block.lexems = Parser.convertLexemArray(lexems);  		
+		//parsedNode.lexemsGroup = [lexems];
 		
-		parsedNode.result = false;
-		parsedNode.print = true;
+    	if(block.errFragment)
+    		return block; 
 		
-  		var lexems:Array = Parser.getLexemArray(str, false);
-  		lexems = Parser.convertLexemArray(lexems);
-		parsedNode.lexemsGroup = [lexems];
+		Parser.validateFragmentation(block);
 		
-    	for(var i:int=0; i<lexems.length; i++)
-    	{
-    		if(lexems[i].error)
-    		{
-				parsedNode.result = false;
-				parsedNode.error = lexems[i].error;
-				parsedNode.errLexem = lexems[i];
-				return parsedNode;
-    		}
-    	}
-		
+    	if(block.errFragment)
+    		return block; 
+
 		// contexts - instances of dynamic class that contains global/local variables
 		if(contexts)
 		{
 			var context:*;
-			var lexemObj:Object = Parser.processConvertedLexemArray(lexems, contexts);
-			parsedNode.result = lexemObj.result;
-			parsedNode.error = lexemObj.error;
-			parsedNode.value = lexemObj.value;				
-			lexems = lexemObj.array;
+			//var lexemObj:Object = Parser.processConvertedLexemArray(lexems, contexts);
+			//parsedNode.result = lexemObj.result;
+			//parsedNode.error = lexemObj.error;
+			//parsedNode.value = lexemObj.value;				
+			//lexems = lexemObj.array;
 
 			if(!parsedNode.result)
 				return parsedNode;
@@ -102,6 +98,17 @@ public class CodeParser
 		parsedNode.value = text;
 
        	return parsedNode;
+	}
+	
+	public function executeFragment(fragment:CodeFragment):void
+	{
+		if(!fragment.validated)
+		{
+			Parser.validateFragment(fragment);
+		}
+		
+		
+		
 	}
 	
 	/**

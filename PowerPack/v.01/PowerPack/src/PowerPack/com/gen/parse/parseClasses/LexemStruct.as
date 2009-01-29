@@ -1,27 +1,93 @@
 package PowerPack.com.gen.parse.parseClasses
 {
-import PowerPack.com.gen.errorClasses.CompilerError;
-	
 public class LexemStruct
 {
-	public var origValue:String; // original value (source text segment)
-	public var position:int; // source text segment`s start position
 	public var type:String; // lexem type
-	public var error:Error; // parse error if any
-
-	public var value:String; // modified value
-	public var operationGroup:int; // operation expression group number (0 - not grouped) USED IN LISTS FOR ARGUMENTS SEPARATING
-	public var listGroup:int; // list element number (0 - not grouped) NOT USED!!!
 	
+	public var operationGroup:int = 0; // operation expression group number (0 - not grouped) USED IN LISTS FOR ARGUMENTS SEPARATING
+	public var listGroup:int = 0; // list element number (0 - not grouped) NOT USED!!!
+
+    //--------------------------------------------------------------------------
+	//
+	//  Properties
+	//
+	//--------------------------------------------------------------------------
+    
+    //----------------------------------
+    //  origValue
+    //----------------------------------	
+	private var _origValue:String; // original value (source text segment)
+	public function get origValue():String
+	{
+		return _origValue;
+	} 
+	public function set origValue(value:String):void
+	{
+		_origValue = value;
+	} 
+
+    //----------------------------------
+    //  value
+    //----------------------------------	
+	private var _value:String; // original value (source text segment)
+	public function get value():String
+	{
+		return _value;
+	} 
+	public function set value(val:String):void
+	{
+		_value = val;
+	} 
+
+    //----------------------------------
+    //  error
+    //----------------------------------	
+	private var _error:Error; // parse error if any	
+	public function get error():Error
+	{
+		return _error; 	
+	}
+	public function set error(value:Error):void
+	{
+		_error = value; 	
+	}
+	
+    //----------------------------------
+    //  position
+    //----------------------------------	
+	private var _position:int = -1; // source text segment`s start position
+	public function get position():int
+	{
+		return _position; 	
+	}
+	public function set position(value:int):void
+	{
+		_position = value; 	
+	}
+
+    //----------------------------------
+    //  length
+    //----------------------------------	
+	public function get length():int
+	{
+		return origValue.length; 	
+	}
+	
+	//--------------------------------------------------------------------------
+	//
+	//  Constructor
+	//
+	//--------------------------------------------------------------------------
+	
+	/**
+	 *	Constructor
+	 */ 
 	public function LexemStruct(value:String, type:String, position:int, error:Error)
 	{
 		this.origValue = this.value = value;
 		this.type = type;
 		this.position = position;
 		this.error = error;
-		
-		this.operationGroup = 0;
-		this.listGroup = 0;
 	}
 }
 }

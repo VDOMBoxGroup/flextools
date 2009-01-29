@@ -9,8 +9,6 @@ import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
 import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 
-import generated.webservices.About_request;
-
 import mx.collections.ArrayCollection;
 import mx.utils.UIDUtil;
 
@@ -105,10 +103,12 @@ public class Parser
    		var lexems:Array = new Array();
    		    		
 		/**
-		 * LEXEM TYPES: utnwobvscif12345=90{}[];VNSALOF    		  
-		 * u - undefined
+		 * LEXEM TYPES: utwnobifvsc12345=90{}[];VNSOLFAWE
+		 * 
+		 * -------------Lexems-------------------  		  
+		 * u - undefined symbol
 		 * t - text
-		 * w - word (any ASCII chars sequence without spaces) used in lists
+		 * w - word (any ASCII chars sequence without spaces) USED IN LISTS
 		 * n - name (identifier: function name, graph name, prefix, etc)
 		 * o - keyword 'null'
 		 * b - keyword ('true', 'false')
@@ -130,6 +130,17 @@ public class Parser
 		 * [ - '['
 		 * ] - ']'
 		 * ; - command separator ';'
+		 * 
+		 * -------------Advanced Lexem Structures-------------------
+		 * V - any expression
+		 * N - expression with numbers only
+		 * S - expression that contains string
+		 * O - expression with equality or relation operator
+		 * L - expression with logical operators
+		 * F - complete executable expression
+		 * A - list
+		 * W - advanced variable definition
+		 * E - expression in '()' bracers
 		 */
     		 
 		var i:int=0; 		// iterator
@@ -539,37 +550,90 @@ public class Parser
 		}
 	}		
 
-	public static function lexemsFragmentation(lexems:Array):ParsedBlock
+	public static function fragmentLexems(lexems:Array, codeType:String):ParsedBlock
 	{
 		var block:ParsedBlock = new ParsedBlock();
 		
-		block.origLexems = lexems.concat();
+		block.type = codeType;
 		block.lexems = lexems.concat();
 		
-		var index:int = 0;
-		
-		while(index<block.origLexems.length)
+		var index:int = 0;				
+		while(index<block.lexems.length)
 		{
-			if("[{9".search(block.origLexems[index].type)>=0)
+			switch(codeType)
 			{
-				block.fragments.push(recursiveLexemsFragmentation());
+				case 'text':
+					block.fragments.push(recursiveFragmentLexems(null, "F", block));
+					break;	
+				
+				case 'code':
+					block.fragments.push(recursiveFragmentLexems(";", "F", block));
+					break; 	
 			}
 			index++;
 		}
 		
 		return block;
 		
-		function recursiveLexemsFragmentation():CodeFragment {
-			var fragment:CodeFragment = new CodeFragment();
-			var terminal:String = "]}0".charAt("[{9".search(block.origLexems[index].type));
+		function recursiveFragmentLexems(_terminal:String, _ftype:String, _parent:Object):CodeFragment {
+			var _fragment:CodeFragment = new CodeFragment(_ftype);
+			_fragment.parent = _parent; 
 			
-			while(index<block.origLexems.length && block.origLexems[index].type!=terminal)
+			if(_terminal!=';')
 			{
-				
+				_fragment.fragments.push(block.lexems[index]);
+				index++;
 			}
-			return fragment;
+				
+			while(index<block.lexems.length && block.lexems[index].type!=_terminal)
+			{
+				if(((codeType=='code' || _fragment.parent is CodeFragment) && "[{9".search(block.lexems[index].type)>=0) ||
+					(codeType=='text' && "{".search(block.lexems[index].type)>=0))
+				{
+					var _subfragment:CodeFragment = recursiveFragmentLexems(
+							"]}0".charAt("[{9".search(block.lexems[index].type)), 
+							"AWE".charAt("[{9".search(block.lexems[index].type)),
+							_fragment);
+					_fragment.fragments.push(_subfragment);
+				}
+				else
+					_fragment.fragments.push(block.lexems[index]);
+					
+				index++;
+			}
+			
+			if(_terminal)
+				_fragment.fragments.push(block.lexems[index]);
+
+			return _fragment;
 		}
 	}
+	
+	public static function validateFragment(fragment:CodeFragment):void
+	{
+		var strSentence:String = "";
+		
+		for(var i:int=0; i<fragment.fragments.length; i++)
+			strSentence = strSentence + CodeFragment(fragment.fragments[i]).type;		
+		
+		
+		
+		fragment.validated = true;
+	}	
+	
+	public static function validateFragmentedBlock(block:ParsedBlock, mode:String="full"):void
+	{
+		switch(mode)
+		{
+			case 'fast':
+				block.fastValidated = true;
+				break;
+				
+			case 'full':
+				block.fullValidated = true;
+				break;
+		}
+	}	
 	
 	/**
 	 * resolve advanced variable definition technique
@@ -772,74 +836,48 @@ public class Parser
 		return strSentence;
 	}
 	
-	public static function isValidOperation(lexemString:String):Object
+	public static function rollUpSigns(lexemString:String):String
 	{
-		var strSentence:String = lexemString.concat();  
+		var strSentence:String = lexemString.concat();
 		var patterns:Array = 
 			[
-				[/(^|=|4|5|9|n|\[|\])[23](v|i|f)/g, 	"$1$2"],	// remove signs '-1...', '...=+2...', '...(-3...'
-				[/[VNvifo]1[VNvifo]/g, 		"N"],		// (*, /, %)
-				[/[VNvifo]2[VNvifo]/g, 		"N"],		// '-'
+				[/(^|=|4|5|9|n|\[|\])[23](v|i|f|F|A|W|E)/g, 	"$1$2"],	// remove signs '-1...', '...=+2...', '...(-3...'
+			];     			
+
+		strSentence = rollLexemString(strSentence, patterns);
+		
+		return strSentence;
+	}
+	
+	public static function isValidOperation(lexemString:String):Object
+	{
+		var strSentence:String = rollUpSigns(lexemString);
+		var patterns:Array = 
+			[
+				[/[AWE]/g, 					"V"],
+
+				[/[Nifo]1[Nifo]/g,	 		"N"],		// (*, /, %)
+				[/[Nifo]2[Nifo]/g,	 		"N"],		// '-'
 				[/[Nifo]3[Nifo]/g,			"N"],		// '+'					
-				
-				[/[Vv]3[VNvifo]/g,			"V"],		// '+'
-				[/[VNvifo]3[Vv]/g,			"V"],		// '+'
 				
 				[/[Ssc]3[VNSvifsco]/g,		"S"],		// '+'
 				[/[VNSvifsco]3[Ssc]/g,		"S"],		// '+'
-				
+
+				[/[VNvifo]1[VNvifo]/g, 		"V"],		// (*, /, %)				
+				[/[VNvifo]2[VNvifo]/g, 		"V"],		// '-'
+
+				[/[Vv]3[VNvifo]/g,			"V"],		// '+'
+				[/[VNvifo]3[Vv]/g,			"V"],		// '+'
+
 				[/9(V|N|S|v|i|f|s|c|o)0/g,	"$1"],		// (x) -> x
 				[/\{[VSvsc]\}/g, 			"v"]		// ${x} -> v
+				
+				
 			];     			
 
-		// parse operations
 		strSentence = rollLexemString(strSentence, patterns);
 		
 		if(/^[VNSvifsco]$/.test(strSentence))
-			return {result: true, value: strSentence};
-		
-		return {result: false, value: strSentence};
-	}
-	
-	public static function isValidList(lexemString:String):Object
-	{
-		var strSentence:String = isValidOperation(lexemString).value;  
-		var pattern:RegExp;
-
-		var patterns:Array = 
-			[
-				[/\[[nwobvscifVNSA]*\]/g, "A"]
-			];
-	
-		strSentence = rollLexemString(strSentence, patterns);
-		
-		if(strSentence=="A")
-			return {result: true, value: strSentence};
-		
-		return {result: false, value: strSentence};
-	}	
-	
-	public static function isValidFunction(lexemString:String):Object
-	{
-		var strSentence:String = isValidList(lexemString).value;  
-		var pattern:RegExp;     			
-	
-		pattern = /^(v=)?A$/;
-
-		if(pattern.test(strSentence))
-			return {result: true, value: strSentence};	
-		
-		return {result: false, value: strSentence};						
-	}			
-	
-	public static function isValidCommand(lexemString:String):Object
-	{
-		var strSentence:String = isValidOperation(lexemString).value;  
-		var pattern:RegExp;     			
-	
-		pattern = /^v=[VNSvifscob]$/;
-
-		if(pattern.test(strSentence))
 			return {result: true, value: strSentence};
 		
 		return {result: false, value: strSentence};
@@ -865,7 +903,44 @@ public class Parser
 		
 		return {result: false, value: strSentence};						
 	}
+		
+	public static function isValidAssign(lexemString:String):Object
+	{
+		var strSentence:String = isValidOperation(lexemString).value;
+		
+		var patterns:Array = 
+			[
+				[/^(v=)?[VNSvifscobFAVE]$/g,	"V"],				
+				[/^(W=)?[VNSvifscobFAVE]$/g,	"V"],
+				[/^[VNSvifscobFAVE](;)?$/g,	"V"]
+			];     			
 
+		strSentence = rollLexemString(strSentence, patterns);
+		
+		if(strSentence=="V")
+			return {result: true, value: strSentence};
+		
+		return {result: false, value: strSentence};
+	}
+		
+	public static function isValidList(lexemString:String):Object
+	{
+		var strSentence:String = isValidOperation(lexemString).value;  
+		var pattern:RegExp;
+
+		var patterns:Array = 
+			[
+				[/\[[nwobvscifVNS]*\]/g, "A"]
+			];
+	
+		strSentence = rollLexemString(strSentence, patterns);
+		
+		if(strSentence=="A")
+			return {result: true, value: strSentence};
+		
+		return {result: false, value: strSentence};
+	}	
+	
 	//--------------------------------------------------------------------------
     //
     //  
