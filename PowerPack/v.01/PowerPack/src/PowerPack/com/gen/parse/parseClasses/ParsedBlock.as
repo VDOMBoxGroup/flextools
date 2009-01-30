@@ -4,6 +4,7 @@ import PowerPack.com.BasicError;
 
 public class ParsedBlock
 {
+	public var type:String;
 	public var lexems:Array = []; // lexems
 	public var validated:Boolean;	
 
@@ -75,7 +76,7 @@ public class ParsedBlock
 		{
 			(fragments[fragments.length-1] as CodeFragment).transition;
 		}
-		return [];
+		return null;
 	}	
 
 	

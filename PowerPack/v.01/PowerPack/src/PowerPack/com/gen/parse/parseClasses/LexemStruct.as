@@ -4,9 +4,13 @@ public class LexemStruct
 {
 	public var type:String; // lexem type
 	
-	public var operationGroup:int = 0; // operation expression group number (0 - not grouped) USED IN LISTS FOR ARGUMENTS SEPARATING
-	public var listGroup:int = 0; // list element number (0 - not grouped) NOT USED!!!
+	// USED IN FUNCTIONS FOR ARGUMENTS SEPARATING
+	public var operationGroup:int = 0; // operation expression group number (0 - not grouped) 
+	// USED IN LISTS FOR ARGUMENTS SEPARATING
+	public var listGroup:int = 0; // list element number (0 - not grouped) 
 
+	public var postSpaces:String = ''; 
+	
     //--------------------------------------------------------------------------
 	//
 	//  Properties
@@ -26,10 +30,11 @@ public class LexemStruct
 		_origValue = value;
 	} 
 
+	
     //----------------------------------
     //  value
     //----------------------------------	
-	private var _value:String; // original value (source text segment)
+	private var _value:String; // modified value
 	public function get value():String
 	{
 		return _value;
@@ -37,8 +42,8 @@ public class LexemStruct
 	public function set value(val:String):void
 	{
 		_value = val;
-	} 
-
+	}	
+	
     //----------------------------------
     //  error
     //----------------------------------	
@@ -84,7 +89,8 @@ public class LexemStruct
 	 */ 
 	public function LexemStruct(value:String, type:String, position:int, error:Error)
 	{
-		this.origValue = this.value = value;
+		this.origValue = value 
+		this.value = value;
 		this.type = type;
 		this.position = position;
 		this.error = error;

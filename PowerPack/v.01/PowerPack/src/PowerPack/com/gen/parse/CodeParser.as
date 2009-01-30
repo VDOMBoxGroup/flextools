@@ -102,11 +102,11 @@ public class CodeParser
        	return parsedNode;
 	}
 	
-	public function executeFragment(fragment:CodeFragment):void
+	public function executeCodeFragment(fragment:CodeFragment, contexts:Array):void
 	{
 		if(!fragment.validated)
 		{
-			Parser.validateFragment(fragment);			
+			Parser.validateCodeFragment(fragment);			
 		}
 		
 		if(fragment.errFragment)
@@ -114,10 +114,8 @@ public class CodeParser
 		
 		for(var i:int=0; i<fragment.fragments.length; i++)
 		{
-			executeFragment(fragment.fragments[0] as CodeFragment);
+			executeCodeFragment(fragment.fragments[0] as CodeFragment);
 		}
-		
-		// get variables
 		
 		// generate executable code
 		var code:String = "";
@@ -146,9 +144,180 @@ public class CodeParser
 					}
 				}	
 				break;
+				
 			case Parser.CT_FUNCTION:
+				Parser.processOperationGroups(fragment.fragments);				
+				
+				for(i=2; i<fragment.fragments.length-1; i++)
+				{
+					subfragment = fragment.fragments[i];
+					var tmp:String = 'null';
+					
+					if(subfragment is CodeFragment)
+					{
+						if((subfragment as CodeFragment).retValue)
+							tmp = (subfragment as CodeFragment).retValue;
+						else
+							tmp = 'null';
+					}
+					else if(subfragment is LexemStruct)
+					{
+						value = LexemStruct(subfragment).value;
+						switch(LexemStruct(subfragment).type)
+						{
+							case 'v':
+								value = String(value).substring(1);
+								break;
+							case 'n':
+								value = "{type:'n', value:"+Utils.quotes(String(value))+"}";
+								break;							
+						}
+													
+						tmp = value.toString();
+					}
+										
+					code += (fragment.fragments[i-1].operationGroup!=fragment.fragments[i].operationGroup && 
+								code.length ? "," : "") + tmp;
+				}
+				
+				code = TemplateStruct.CNTXT_INSTANCE + "." + 
+					 fragment.funcName + "(" + code + ")";				
+				
 				break;
+				
+			case Parser.CT_ASSIGN:
+				for(i=0; i<fragment.fragments.length-1; i+=2)
+				{
+					subfragment = fragment.fragments[i];
+					var nextSubfragment:Object = fragment.fragments[i+1];
+					
+					tmp = '';
+					
+					if(nextSubfragment is LexemStruct && LexemStruct(nextSubfragment).type=='=')
+					{
+						if(subfragment is CodeFragment)
+						{
+							if((subfragment as CodeFragment).retValue)
+								tmp = (subfragment as CodeFragment).retValue;
+							else
+								tmp = '';
+						}
+						else if(subfragment is LexemStruct)
+						{
+							value = LexemStruct(subfragment).value;
+							switch(LexemStruct(subfragment).type)
+							{
+								case 'v':
+									value = String(value).substring(1);
+									break;
+							}
+														
+							tmp = value.toString();
+						}
+						
+						// add prefix
+						tmp += fragment.varPrefix + tmp;
+						fragment.varNames.push(tmp);
+						
+						code += tmp + '=';				
+					}
+					else					
+						break;	
+				}
+				
+				// add rest of code
+				for(var j:int=i; j<fragment.fragments.length; j++) 
+				{
+					subfragment = fragment.fragments[j];
+					 
+					if(subfragment is CodeFragment)
+					{
+						if((subfragment as CodeFragment).retValue)
+							code += (subfragment as CodeFragment).retValue;
+						else
+							code += 'null';
+					}
+					else if(subfragment is LexemStruct)
+					{
+						var value:Object = LexemStruct(subfragment).value;
+						if(LexemStruct(subfragment).type == 'v')
+							value = String(value).substring(1);
+													
+						code += value;
+					}
+				}				
+				break;
+				
+			default:			
+				switch(type)
+				{
+					case 'W': // advanced var
+						for(i=1; i<fragment.fragments.length-1; i++) 
+						{
+							subfragment = fragment.fragments[i];
+							 
+							if(subfragment is CodeFragment)
+							{
+								if((subfragment as CodeFragment).retValue)
+									code += (subfragment as CodeFragment).retValue;
+								else
+									code += 'null';
+							}
+							else if(subfragment is LexemStruct)
+							{
+								var value:Object = LexemStruct(subfragment).value;
+								if(LexemStruct(subfragment).type == 'v')
+									value = String(value).substring(1);
+															
+								code += value;
+							}
+						}						
+						break;
+						
+					case 'A': // list
+						Parser.processOperationGroups(fragment.fragments);				
+						
+						for(i=2; i<fragment.fragments.length-1; i++)
+						{
+							subfragment = fragment.fragments[i];
+							var tmp:String = 'null';
+							
+							if(subfragment is CodeFragment)
+							{
+								if((subfragment as CodeFragment).retValue)
+									tmp = (subfragment as CodeFragment).retValue;
+								else
+									tmp = 'null';
+							}
+							else if(subfragment is LexemStruct)
+							{
+								value = LexemStruct(subfragment).value;
+								switch(LexemStruct(subfragment).type)
+								{
+									case 'v':
+										value = String(value).substring(1);
+										break;
+									case 'n':
+										value = "{type:'n', value:"+Utils.quotes(String(value))+"}";
+										break;							
+								}
+															
+								tmp = value.toString();
+							}
+												
+							code += (fragment.fragments[i-1].operationGroup!=fragment.fragments[i].operationGroup && 
+										code.length ? "," : "") + tmp;
+						}
+						
+						code = TemplateStruct.CNTXT_INSTANCE + "." + 
+							 fragment.funcName + "(" + code + ")";				
+						break;
+					
+				}			
 		}
+		
+		// execurte generated code
+		fragment.retValue = Parser.eval(code, contexts);
 	}
 	
 	/**

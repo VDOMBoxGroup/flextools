@@ -29,6 +29,20 @@ public class CodeFragment extends LexemStruct
 	//--------------------------------------------------------------------------
 
     //----------------------------------
+    //  origValue
+    //----------------------------------	
+	override public function get origValue():String
+	{
+		var _origValue:String = '';
+		for(var i:int=0; i<fragments.length; i++)
+		{
+			_origValue += LexemStruct(fragments[i]).origValue + LexemStruct(fragments[i]).postSpaces;
+		}
+		
+		return _origValue;
+	}
+
+    //----------------------------------
     //  varPrefix
     //----------------------------------	
 	private var _varPrefix:String = ''; // variable name prefix
@@ -68,12 +82,22 @@ public class CodeFragment extends LexemStruct
 	override public function get length():int
 	{
 		var sum:int = 0;
+		var offset:int = 0;
 		for(var i:int=0; i<fragments.length; i++)
 		{
-			sum += fragments.length;
+			var curFragment:LexemStruct = fragments[i];
+			var nextFragment:LexemStruct = null;
+			if(i<fragments.length-1)
+				nextFragment = fragments[i+1];
+			
+			sum += offset;
+			sum += curFragment.length;
+			
+			if(i<fragments.length-1)
+				offset = nextFragment.position - (curFragment.position + curFragment.length);
 		}
 		 
-		return sum; 	
+		return sum;
 	}
 	
     //----------------------------------
