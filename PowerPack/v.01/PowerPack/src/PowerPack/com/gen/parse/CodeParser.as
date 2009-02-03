@@ -320,8 +320,6 @@ public class CodeParser
 						break;
 						
 					case 'A': // list
-						//Parser.processListGroups(fragment.fragments);				
-						
 						tmpValue = Utils.quotes(fragment.origValue);
 						code = tmpValue.toString();
 						fragment.code = tmpValue.toString();

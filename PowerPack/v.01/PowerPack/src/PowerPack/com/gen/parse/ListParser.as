@@ -32,19 +32,133 @@ public class ListParser
 {
 	public static function list2Array(list:String):Array
 	{
+		var arr:Array = [];
 		var block:ParsedBlock = Parser.fragmentLexems(Parser.getLexemArray(list.concat(), true), 'code');
   		
     	if(block.errFragment)
-    		return block; 
+    		return null;
 		
 		Parser.validateFragmentedBlock(block);
 		
     	if(block.errFragment)
-    		return block;
+    		return null;
+    	
+    	if(block.type != 'A')
+    		return null;
 
-		Parser.processListGroups(block.fragments);	
+		Parser.processListGroups(block.fragments);
+
+		var curFragment:LexemStruct;
+		var prevFragment:LexemStruct;
+		var wordBuf:String = '';
+		var grp:int = -1;
+		 
+		for (var i:int=0; i<block.fragments.length; i++)
+		{			
+			curFragment = block.fragments[i];
+
+			switch(curFragment.type)
+			{
+				case '[':
+				case ']':
+				case ';':
+					curFragment.listGroup = grp--;
+					pushWord();
+					break;	
+				case 's':
+				case 'c':
+					curFragment.listGroup = grp--;
+					pushWord();
+					arr.push(Utils.replaceQuotes(curFragment.origValue));
+					break;
+				case 'v':
+					curFragment.listGroup = grp--;
+					pushWord();
+					arr.push( {type:'v', value:curFragment.origValue.substring(1)} );
+					break;
+				case 'W':
+					curFragment.listGroup = grp--;
+					pushWord();
+					arr.push( {type:'W', value:curFragment.origValue.substring(1)} );
+					break;
+				case 'A':
+					curFragment.listGroup = grp--;
+					pushWord();
+					arr.push( list2Array(curFragment.origValue) );
+					break;
+				default:
+					if(curFragment.listGroup == prevFragment.listGroup)
+						wordBuf += curFragment.origValue;
+					else if(!wordBuf)
+						wordBuf = curFragment.origValue;
+					else
+						pushWord();
+					break;
+			}
+			prevFragment = curFragment;
+		}
 		
-       	return block;
+       	return arr;
+       	
+       	function pushWord():void {
+			if(wordBuf)
+			{
+				arr.push( {type:'w', value:wordBuf} );
+				wordBuf = '';
+			}
+       	}
+	}
+	
+	public static function array2List(arr:Array):String
+	{
+		var listStr:String = '[ ';
+		for (var i:int=0; i<arr.length; i++)
+		{
+			var curElm:Object = arr[i];
+			
+			if(curElm is String)
+			{
+				listStr += Utils.quotes(String(curElm));
+			}
+			else if(curElm.hasOwnProperty('type') && curElm.hasOwnProperty('value'))
+			{
+				switch(curElm.type)
+				{
+					case 'v':
+					case 'W':
+						listStr += '$'+curElm.value;
+						break;
+					case 'A':
+						listStr += array2List(curElm.value);
+						break;
+					default:
+						listStr += curElm.value;
+						break;					
+				}
+			}
+			else
+				listStr += curElm.toString();
+			
+			listStr += ' ';
+		}	
+		listStr += ']';
+		return listStr;
+	}
+	
+	public static function processElmValue(obj:Object):String
+	{
+		var str:String = "";
+		
+		if(obj!=null && obj.hasOwnProperty('type') && obj.hasOwnProperty('value'))
+		{
+			str = obj.value.toString();
+		}
+		else if(obj!=null)
+		{
+			str = obj.toString();
+		}
+		
+		return str;
 	}
 	
 	public static function processElmType(type:Object):int
@@ -92,7 +206,7 @@ public class ListParser
 		return _type;	
 	}
 	
-	public static function processElmPosition(list:String, position:*, operation:String=null):int
+	public static function processElmPosition(list:String, position:Object, operation:String=null):int
 	{
 		var _position:int = -1;
 		var str:String;
@@ -133,21 +247,13 @@ public class ListParser
 		return _position;	
 	}
 
-	public static function processElmValue(value:Object):String
-	{
-		var str:String = "";
-		
-		if(value!=null && value.hasOwnProperty('type') && value.hasOwnProperty('value'))
-		{
-			str = value.value;
-		}
-		else if(value!=null)
-		{
-			str = value.toString();
-		}
-		
-		return str;
-	}	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static function processPoints(list:String, contexts:Array):Array
 	{

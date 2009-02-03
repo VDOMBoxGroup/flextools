@@ -160,37 +160,6 @@ public class Parser
 		var braceStack:Array=[];
 		var spaceStack:String='';
 		
-		function parseVar():void {
-			i++;
-			// check '$' is not last  symbol
-			if(i>=sourceText.length) 
-			{
-				err = new CompilerError(null, 9001);
-				return;
-			}
-
-			if(sourceText.charAt(i)=='{') //advanced variable begin
-			{	
-				type = '{';
-				braceStack.push('{');
-				return;
-			}
-			
-			// check for not valid symbol in var name
-			if(sourceText.charAt(i).search(/[^_a-z]/i)>=0)
-			{
-				err = new CompilerError(null, 9001);
-				return;
-			}
-			
-			do {
-				i++;
-			} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0 && i<sourceText.length);
-										
-			i--;
-   			type = 'v'; // variable			
-		}
-		
 		while(i<sourceText.length)
 		{
 			fix=i;
@@ -201,49 +170,17 @@ public class Parser
 			// if text block
 			if(braceStack.length==0 && !isCode)
 			{
-    			type='t';
+    			type='t'; // text lexem
     			switch(sourceText.charAt(fix))
 				{
 					case '$': // variable
-    					if(i+1>=sourceText.length)
-    						break;
-    					
-    					j = i-1;
-    					while(j>=0 && sourceText.charAt(j)=="\\")
-    						j--;
-    					
-    					if((i-j-1)%2==1)
-    						break;
-
-    					if(sourceText.charAt(i+1)=='{') //advanced variable
-    					{	
-    						i++;
-    						type = '{';
-    						braceStack.push('{');
-    						break;        					
-    					}
-    					
-    					if(sourceText.charAt(i+1).search(/[^_a-z]/i)>=0)
-    					{
-    						err = new CompilerError(null, 9001);
-    						break;
-    					}
-    					
-    					do {
-    						i++;
-    						if(i>=sourceText.length)
-    							break;
-    					} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);
-						i--;
-   						type = 'v'; // variable
+						parseVar();
     					break;
 
-    				default:
+    				default: // text lexem
 						do {
     						i++;
-    						if(i>=sourceText.length)
-    							break;
-    					} while(sourceText.charAt(i)!="$");        						
+    					} while(i<sourceText.length && sourceText.charAt(i)!="$");        						
 						i--;
 						break;
 				}
@@ -257,57 +194,30 @@ public class Parser
     			{
     				case '"': // string
     				case "'":
-						do {
-    						i++;
-    						if(i>=sourceText.length)
-    							break;
-    						
+						while(i+1<sourceText.length)
+						{
+	   						i++;    						
     						if(sourceText.charAt(i)==sourceText.charAt(fix))
     						{
+    							// check for escape sequence
     							j = i-1;
 								while(j>=0 && sourceText.charAt(j)=="\\")	    						
 									j--;
 				
 								if((i-j)%2==1) 
 	    							break;
-    						}    						
-    					} while( true );        						
+    						}
+    					}        						
 						
     					if(i<sourceText.length)
     						type = (sourceText.charAt(fix)=='"' ? 's' : 'c');
     					else
     						err = new CompilerError(null, 9006);
-    					
+    						    					
     					break;
 
     				case '$': // variable
-    					if(i+1>=sourceText.length) 
-    					{
-    						err = new CompilerError(null, 9001);
-    						break;
-    					}
-
-    					if(sourceText.charAt(i+1)=='{') //advanced variable
-    					{	
-    						i++;
-    						type = '{';
-    						braceStack.push('{');
-    						break;        					
-    					}
-    					
-    					if(sourceText.charAt(i+1).search(/[^_a-z]/i)>=0)
-    					{
-    						err = new CompilerError(null, 9001);
-    						break;
-    					}
-    					
-    					do {
-    						i++;
-    						if(i>=sourceText.length)
-    							break;
-    					} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);							
-						i--;
-   						type = 'v'; // variable
+   						parseVar();
     					break;
 
     				case '(':
@@ -366,12 +276,10 @@ public class Parser
     				default: 
     					if(i+2<sourceText.length && sourceText.substr(i,3).search(/0x[0-9a-f]/i)>=0) // hex
     					{
-    						i=i+2;    						
+    						i=i+2;
     						do {
     							i++;
-	    						if(i>=sourceText.length)
-        							break;       							
-    						} while(sourceText.charAt(i).search(/[0-9a-f]/i)>=0);
+    						} while(i<sourceText.length && sourceText.charAt(i).search(/[0-9a-f]/i)>=0);
     						i--;
     						type = 'i'; // hex integer constant    						
     					}
@@ -379,9 +287,7 @@ public class Parser
     					{
     						do {
     							i++;
-	    						if(i>=sourceText.length)
-        							break;       							
-    						} while(sourceText.charAt(i).search(/\d/)>=0);
+    						} while(i<sourceText.length && sourceText.charAt(i).search(/\d/)>=0);
     						i--;
     						type = 'i'; // integer constant
 
@@ -393,11 +299,9 @@ public class Parser
     							i++;
     							do {
     								i++;	
-		    						if(i>=sourceText.length)
-	        							break;         								
-    							} while(sourceText.charAt(i).search(/\d/)>=0);
+    							} while(i<sourceText.length && sourceText.charAt(i).search(/\d/)>=0);
     							i--;   
-    							type = 'f'; // float constant    						
+    							type = 'f'; // float constant
     						}        						
     						break;
     					}
@@ -405,9 +309,7 @@ public class Parser
     					{
     						do {
     							i++;
-    							if(i>=sourceText.length)
-    								break;
-    						} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);
+    						} while(i<sourceText.length && sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);
 							i--;
        						type = 'n'; // name
        						
@@ -465,10 +367,13 @@ public class Parser
 			
 			if(bPush)
 			{
-				//if(type=='u' && !err)
-				//	err = new CompilerError(null, 9002, ["("+sourceText.substring(fix, i+1)+")"]);
+				if(braceStack[braceStack.length-1]=='[' && type=='u' && !err)
+					type = 'w';
+				
+				if(type=='u' && !err)
+					err = new CompilerError(null, 9002, ["("+sourceText.substring(fix, i+1)+")"]);
  				
- 				lexems.push(new LexemStruct(sourceText.substring(fix, i+1), type, fix, err)); 	
+ 				lexems.push(new LexemStruct(sourceText.substring(fix, i+1), type, fix, err));
  				
  				if(lexems.length>1)
  					LexemStruct(lexems[lexems.length-2]).postSpaces = spaceStack;
@@ -486,6 +391,48 @@ public class Parser
 		}
 			
 		return lexems;
+		
+		function parseVar():void {
+			i++;
+			// check '$' is not last  symbol
+			if(i>=sourceText.length) 
+			{
+				err = new CompilerError(null, 9001);
+				return;
+			}
+			
+			if(!isCode) 
+			{
+				// check for escape sequence
+				j = fix-1;
+	    		while(j>=0 && sourceText.charAt(j)=="\\")
+	    			j--;
+	    					
+				if((fix-j)%2==0)
+					return;
+			}
+
+			if(sourceText.charAt(i)=='{') //advanced variable begin
+			{	
+				type = '{';
+				braceStack.push('{');
+				return;
+			}
+			
+			// check for not valid symbol in var name
+			if(sourceText.charAt(i).search(/[^_a-z]/i)>=0)
+			{
+				err = new CompilerError(null, 9001);
+				return;
+			}
+			
+			do {
+				i++;
+			} while(i<sourceText.length && sourceText.charAt(i).search(/[_a-z0-9]/i)>=0);
+										
+			i--;
+   			type = 'v'; // variable			
+		}		
 	}
 		
 	/*public static function sliceLexems(lexems:Array, separator:String=';'):Array
