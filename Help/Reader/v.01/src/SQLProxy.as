@@ -67,6 +67,11 @@ package
 				sqlStatement.text = "CREATE INDEX IF NOT EXISTS index_name ON  page(content)";
 				sqlStatement.execute();
 				
+				sqlStatement.text = "CREATE TABLE IF NOT EXISTS server  (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
+											"address TEXT NOT NULL,  " + 
+											"data INTEGER);";
+				sqlStatement.execute();
+				
 				sqlStatement.sqlConnection.close();
 				
 			} catch (err:SQLError) {

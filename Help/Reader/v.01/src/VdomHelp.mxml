@@ -28,17 +28,14 @@
 		import mx.events.TreeEvent;
 		import mx.utils.Base64Decoder;
 		
-		private var install:XML = new XML();
-		private var XML_URL:String = "StartXML.xml";
-		private var myXMLURL:URLRequest;
-		private var myLoader:URLLoader;
+		
+		
+		
 //		private var cacheFolder:File;
-		private var fileStream:FileStream = new FileStream();
+		
 		private var sqlProxy:SQLProxy = new SQLProxy();
 		private var pageList : List = new List();
 		private var markList : List = new List();
-		
-		
 		
 		
 		/***
@@ -106,254 +103,9 @@
 			}
 		}
 		
-		
-		
-		// start loading 1-st XML 
-		private function frstLoadXML():void
-		{
-			myXMLURL = new URLRequest(XML_URL)
-			myLoader = new URLLoader(myXMLURL);
-			myLoader.addEventListener(Event.COMPLETE, startXMLLoaded);
-			myLoader.addEventListener(IOErrorEvent.IO_ERROR, startXMLLoaded);
-			sqlProxy.creatDB();
-		}
-		
-		// 
-		private function startXMLLoaded(event:Event):void
-		{
-			myLoader.removeEventListener(Event.COMPLETE, startXMLLoaded);
-			if(event.type == IOErrorEvent.IO_ERROR)
-			{
-				trace("!!!!!!!!!!!!!! Start XML not Finded !!!!!!!!!")	
-			} 
-			else if(event.type == Event.COMPLETE)
-			{
-//			    trace("Start loaded.");
-				 
-				install = XML(myLoader.data);
-				for each(var product:XML in install.children())
-				{
-//					trace(product.@url);
-					var xmlURL:URLRequest = new URLRequest(product.@url)
-					var loader:URLLoader = new URLLoader(xmlURL);
-					loader.addEventListener(Event.COMPLETE, xmlLoaded);
-					loader.addEventListener(IOErrorEvent.IO_ERROR, xmlLoaded);
-				} 
-			}
-		}
-		
-		private function xmlLoaded(event:Event):void
-		{
-			if(event.type == IOErrorEvent.IO_ERROR)
-			{
-				trace("!!!! XML not Finded  !!!!")	
-			} 
-			else if(event.type == Event.COMPLETE)
-			{
-			    parsingData(XML(event.target.data))
-			}
-		}
-		
-		private function parsingData(product:XML):void
-		{
-			if(product == null || product.name() != "product")
-			{
-				trace("!!!!!!!!!!!! not Correct data from server !!!!!!!!!!!!!");
-				return;
-			}
-			var name:String = product.name.toString();
-			var version:String = product.version.toString();
-			var title:String = product.title.toString();
-			var description:String = product.description.toString();
-			var language:String = product.language.toString();
-			var toc:XML = tocToBD(product.toc[0],language, name);
-			
-			
-			// save product to data base
-			
-			var curPageVersion:String = sqlProxy.getVersionOfProduct(name, language);
-				
-				if(curPageVersion == '')
-				{
-//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-					sqlProxy.setProduct(name,version,title,description, language,toc);
-				}
-				else if (Number(curPageVersion)< Number(version))
-				{
-					//delete old data Find nessasri page 
-					deleteProduct(name, language);
-//					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-					
-					sqlProxy.setProduct(name, version, title, description, language,toc);
-				}
-			
-			// save loaded data to local diskDrive 
-			saveLoadedData(product);
-			
-			// выбрать странички сохранить их на диск
-			savePages(product);
-			
-//			creatTree(toc);
-			
-		}
-		
-		private function tocToBD(value:XML, lan:String, product:String):XML
-		{
-			changeStruxcture(value);
-		
-			return value ;
-			
-			function changeStruxcture(xml:XML):void
-			{
-				for each(var page:XML in xml.children())
-				{
-					page.@name = lan + "/" + product + "/"  + page.@name + ".html";
-					changeStruxcture(page);
-				}
-			}
-		}
-		
-		private function saveLoadedData(product:XML):void
-		{
-			var byteArray:ByteArray = new ByteArray();
-				byteArray.writeMultiByte(product.toXMLString()+"\n", "UTF-8");
-				
-				var fileName:String =  product.name.toString()+ ".xml";
-			cacheFile( fileName, byteArray);
-		}
-		
-	/*	private function saveResources(product:XML):void
-		{
-			for each(var page:XML in product.pages.children())
-			{
-				
-			}
-		}
-		*/
 		private var arrayOfPages:Array = new Array();
 		
-		private function savePages(product:XML):void
-		{
-			var productName:String =  product.name.toString(); 
-			var language:String =  product.language.toString(); 
-			var location:String = language +"/"+productName+"/"; 
-			
-			//********* Creat PAGES ***********//
-			for each(var page:XML in product.pages.children())
-			{
-				var pageName:String = page.name.toString() + ".html"; 
-				var version:String = page.version.toString(); 
-				var title:String = page.title.toString();
-				var description:String = page.description.toString();
-				var content:String = page.content.toString();
-				var pageLocation:String = location + pageName;
-				
-				arrayOfPages[pageLocation] = true;
-//				sqlProxy.
 
-				// проверяем есть ли эта страница уже в базе. берем версию страницы ////getVersionOfPage(): string//////
-				// страница не найдена - записываем
-				// страница найдена 1) старая - удаляем, записываем 2) такая же - пропускаем				
-				// deletePage(namePage); getResourcesOfPage(namePage):Array; deleteResorces(namePage);
-				
-				var curPageVersion:String = sqlProxy.getVersionOfPage(pageLocation);
-				
-				if(curPageVersion == '')
-				{
-					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-				}
-				else if (Number(curPageVersion)< Number(version))
-				{
-					//delete old data
-					deletePage(pageLocation);
-					sqlProxy.setPage(productName, language, pageLocation, version, title, description, content);
-				} else
-				{
-					continue;
-				}
-				
-				
-				
-				var byteArray:ByteArray = new ByteArray();
-					byteArray.writeMultiByte(page.content.toString()+"\n", "UTF-8");
-//				var fileName:String = pageName;
-				
-				cacheFile(pageLocation, byteArray);
-				
-				arrayOfPages[pageLocation] = true;
-				
-				
-				//*************  Creat Resources  ***************//
-				for each(var resource:XML in page.resources.children())
-				{
-					var base64:Base64Decoder = new Base64Decoder();
-						base64.decode(resource.toString());
-					
-					var byteArray0:ByteArray = base64.toByteArray();
-					
-					var resourceName:String = "resources/"+ resource.@id + "." + resource.@type;
-					
-					cacheFile(location + resourceName , byteArray0);
-					
-					sqlProxy.setResource(pageLocation, location + resourceName);
-				}
-			}
-			
-			
-//			pageList.dataProvider = sqlProxy.search("conten of page","VdomHelp_en_US");
-			
-		}  
-		
-		private function deleteProduct(name:String, language:String):void
-		{
-//			get All pages of product 
-			var pages:Object = sqlProxy.getProductsPages(name, language);
-			for (var page:String in pages)
-			 deletePage(pages[page].name);
-			 
-			sqlProxy.deleteProduct(name, language);
-		}
-		
-		private function deletePage(namePage:String):void
-		{
-			var resources:Object = sqlProxy.getResourcesOfPage(namePage);
-			
-			for(var index:String in resources)
-			{
-				deleteFile(resources[index]['name']);
-			}
-			
-			sqlProxy.deleteResources(namePage);
-			sqlProxy.deletePage(namePage);
-			
-		}
-		
-		private function deleteFile(location:String):void
-		{
-			trace("Delete: " + location);
-			var newFileName:String = location;
-			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
-			newFile.deleteFile();
-//			trace(newFile.toString())
-		}
-		
-		public function cacheFile(contentName:String, content:ByteArray):void 
-		{
-			var newFileName:String = contentName;
-			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
-//			trace(newFile.toString())
-			try {
-				
-				fileStream.open(newFile, FileMode.WRITE);
-				fileStream.writeBytes(content);
-				fileStream.close();
-				
-			} catch(error:IOError) {
-//				var er:* =  error;
-				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+newFileName);
-				return;
-			}
-		}
 		
 		private function treeChangeHandler(object:Object):void
 		{
@@ -378,7 +130,7 @@
 			html.addEventListener(Event.COMPLETE, zzz );
 			html.location = fullPath; 
 //			html.
-			fileStream.close();
+//			fileStream.close();
 		}
 		
 		
@@ -390,7 +142,7 @@
 			var f : File = File.applicationStorageDirectory; 
 			html.location = fullPath; 
 			
-			fileStream.close();
+//			fileStream.close();
 			
 		}
 		
@@ -512,6 +264,7 @@
 		private function getMarkedPage():void
 		{
 			 markList.dataProvider  = sqlProxy.getMarkedPage();
+			 trace("=========");
 		}
 		
 		private function runSettings():void 
@@ -539,17 +292,16 @@
 		<mx:TextInput id="searchWord" x="185" y="14" width="141"  enter="{search();}" />
 		<mx:Button  label="Search" click="{search();}" icon="@Embed('../assets/search.png')" color="#FFFFFF" 
 			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
-		<mx:Button click="{frstLoadXML()}"	label="Creat DB"/>
 	</mx:HBox>
 	<mx:HRule width="100%" strokeColor="0x000000" shadowColor="0x555555"/>
 	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
 		<mx:Accordion id="accordion" width="155" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF" >
 			<mx:Canvas label="Content" width="100%" height="100%" icon="@Embed('../assets/contents.png')">
-				<mx:Tree id="tree" width="100%" height="100%" color="#000000"  
+				<mx:Tree id="tree" width="100%" height="100%" color="#000000"   itemRenderer="TreeItemRender"
 				labelField="@title" showRoot="true" change="{treeChangeHandler(event)}" />
 			</mx:Canvas>
 			<mx:Canvas id="searchResult" label="Search Result" width="100%" height="100%" icon="@Embed('../assets/search.png')" show="{pageList.selectedIndex = -1}"/>
-			<mx:Canvas  id="bookMarks" label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')" show="{markList.selectedIndex = -1}"/>
+			<mx:Canvas  id="bookMarks" label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')" show="{getMarkedPage()}" creationComplete="{getMarkedPage()}"/>
 		</mx:Accordion>
 		<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
 			<mx:Canvas color="#FCFBFB"  width="100%" backgroundColor="#E4E4E4" >
