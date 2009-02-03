@@ -160,10 +160,41 @@ public class Parser
 		var braceStack:Array=[];
 		var spaceStack:String='';
 		
+		function parseVar():void {
+			i++;
+			// check '$' is not last  symbol
+			if(i>=sourceText.length) 
+			{
+				err = new CompilerError(null, 9001);
+				return;
+			}
+
+			if(sourceText.charAt(i)=='{') //advanced variable begin
+			{	
+				type = '{';
+				braceStack.push('{');
+				return;
+			}
+			
+			// check for not valid symbol in var name
+			if(sourceText.charAt(i).search(/[^_a-z]/i)>=0)
+			{
+				err = new CompilerError(null, 9001);
+				return;
+			}
+			
+			do {
+				i++;
+			} while(sourceText.charAt(i).search(/[_a-z0-9]/i)>=0 && i<sourceText.length);
+										
+			i--;
+   			type = 'v'; // variable			
+		}
+		
 		while(i<sourceText.length)
 		{
 			fix=i;
-			type='u'; // undefined
+			type='u'; // undefined lexem
 			err=null;
 			bPush=true;
 			

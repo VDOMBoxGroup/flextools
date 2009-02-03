@@ -52,7 +52,8 @@ public class CodeParser
 		for(var i:int=fragment.current; i<fragment.fragments.length; i++)
 		{
 			subfragment = fragment.fragments[i];
-			if(subfragment is CodeFragment)
+			if(subfragment is CodeFragment && 
+				(fragment.ctype==Parser.CT_FUNCTION || fragment.type!='A'))
 			{
 				executeCodeFragment(subfragment as CodeFragment, contexts, stepReturn);
 				if(CodeFragment(subfragment).current>=CodeFragment(subfragment).fragments.length)
