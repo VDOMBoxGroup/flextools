@@ -22,8 +22,6 @@ package PowerPack.com.gen.structs
 		[ArrayElementType("ArrowStruct")]
 		public var inArrows:Array = [];
 		
-		public var parsedNode:ParsedBlock;	
-		
     	public function NodeStruct(	_id:String = null,
     								_category:String = null,
     								_type:String = null,

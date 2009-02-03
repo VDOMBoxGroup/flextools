@@ -6,16 +6,31 @@ public class LexemStruct
 	
 	// USED IN FUNCTIONS FOR ARGUMENTS SEPARATING
 	public var operationGroup:int = 0; // operation expression group number (0 - not grouped) 
+	
 	// USED IN LISTS FOR ARGUMENTS SEPARATING
 	public var listGroup:int = 0; // list element number (0 - not grouped) 
 
-	public var postSpaces:String = ''; 
-	
     //--------------------------------------------------------------------------
 	//
 	//  Properties
 	//
 	//--------------------------------------------------------------------------
+
+    //----------------------------------
+    //  postSpaces
+    //----------------------------------	
+	private var _postSpaces:String = '';
+	public function get postSpaces():String
+	{
+		return _postSpaces;
+	} 
+	public function set postSpaces(value:String):void
+	{
+		if(_postSpaces!=value)
+		{
+			_postSpaces = value;
+		}
+	}	
     
     //----------------------------------
     //  origValue
@@ -27,9 +42,11 @@ public class LexemStruct
 	} 
 	public function set origValue(value:String):void
 	{
-		_origValue = value;
+		if(_origValue!=value)
+		{
+			_origValue = value;
+		}
 	} 
-
 	
     //----------------------------------
     //  value
@@ -41,7 +58,10 @@ public class LexemStruct
 	} 
 	public function set value(val:String):void
 	{
-		_value = val;
+		if(_value!=val)
+		{
+			_value = val;
+		}
 	}	
 	
     //----------------------------------
@@ -67,7 +87,10 @@ public class LexemStruct
 	}
 	public function set position(value:int):void
 	{
-		_position = value; 	
+		if(_position != value)
+		{
+			_position = value;
+		} 	
 	}
 
     //----------------------------------

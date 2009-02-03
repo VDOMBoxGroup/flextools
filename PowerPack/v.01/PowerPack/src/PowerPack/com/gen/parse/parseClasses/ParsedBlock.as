@@ -4,12 +4,12 @@ import PowerPack.com.BasicError;
 
 public class ParsedBlock
 {
-	public var type:String;
-	public var lexems:Array = []; // lexems
-	public var validated:Boolean;	
+	public var type:String; // TEXT|CODE
+	public var lexems:Array = []; // lexems array
+	public var validated:Boolean;
 
 	public var retValue:*; // return value
-	public var print:Boolean; // print result value to output buffer
+	//public var print:Boolean; // print result value to output buffer
 	public var error:BasicError; // parse error
 	
 	public var fragments:Array = []; // code fragments to execute
@@ -50,7 +50,7 @@ public class ParsedBlock
 	{
 		if(fragments.length>0)
 		{
-			(fragments[fragments.length-1] as CodeFragment).ctype;
+			return (fragments[fragments.length-1] as CodeFragment).ctype;
 		}
 		return null;
 	}	
@@ -62,9 +62,16 @@ public class ParsedBlock
 	{
 		if(fragments.length>0)
 		{
-			(fragments[fragments.length-1] as CodeFragment).trans;
+			return (fragments[fragments.length-1] as CodeFragment).trans;
 		}
 		return [];
+	}	
+	public function set trans(value:Array):void
+	{
+		if(fragments.length>0)
+		{
+			(fragments[fragments.length-1] as CodeFragment).trans = value;
+		}
 	}	
 	
     //----------------------------------
@@ -74,11 +81,17 @@ public class ParsedBlock
 	{
 		if(fragments.length>0)
 		{
-			(fragments[fragments.length-1] as CodeFragment).transition;
+			return (fragments[fragments.length-1] as CodeFragment).transition;
 		}
 		return null;
-	}	
-
+	}
+	public function set transition(value:String):void
+	{
+		if(fragments.length>0)
+		{
+			(fragments[fragments.length-1] as CodeFragment).transition = value; 
+		}
+	}
 	
     //----------------------------------
     //  errFragment

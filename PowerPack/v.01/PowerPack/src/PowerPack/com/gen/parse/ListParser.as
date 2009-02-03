@@ -9,6 +9,7 @@ import GraphicAPI.drawing.StrokePatternStyle;
 import PowerPack.com.gen.errorClasses.RunTimeError;
 import PowerPack.com.gen.parse.listClasses.ElmType;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
+import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 
 import flash.display.GradientType;
 import flash.display.SpreadMethod;
@@ -29,6 +30,22 @@ import mx.utils.StringUtil;
 	
 public class ListParser
 {
+	public static function list2Array(list:String):Array
+	{
+		var block:ParsedBlock = Parser.fragmentLexems(Parser.getLexemArray(list.concat(), true), 'code');
+  		
+    	if(block.errFragment)
+    		return block; 
+		
+		Parser.validateFragmentedBlock(block);
+		
+    	if(block.errFragment)
+    		return block;
+
+		Parser.processListGroups(block.fragments);	
+		
+       	return block;
+	}
 	
 	public static function processElmType(type:Object):int
 	{
