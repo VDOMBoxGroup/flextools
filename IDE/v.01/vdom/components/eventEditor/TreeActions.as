@@ -152,9 +152,11 @@ package vdom.components.eventEditor
 							tempXML = <Action/>;
 							tempXML.@label = actID.@Name;
 							tempXML.@Name = actID.@Name;
-							tempXML.@Language =	 actID.@Language;
 							tempXML.@ID = actID.@ID;
-							tempXML.@Language = "clien"
+							
+							
+							tempXML.@Language =	 actID.@Language;
+//							tempXML.@Language = "clien"
 							
 							dataXML.addItem(tempXML);
 						}
