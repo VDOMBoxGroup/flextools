@@ -14,9 +14,10 @@ package
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Label;
+	import mx.core.UIComponent;
 	import mx.utils.Base64Decoder;
 	
-	public class Update implements IEventDispatcher
+	public class Update extends UIComponent 
 	{
 		private var sqlProxy:SQLProxy = new SQLProxy();
 		private var XML_URL:String = "StartXML.xml";
@@ -52,14 +53,14 @@ package
 			myLoader.removeEventListener(Event.COMPLETE, startXMLLoaded);
 			if(event.type == IOErrorEvent.IO_ERROR)
 			{
-				dispatcher.dispatchEvent(new HelpEvent(HelpEvent.INSTALL_FILE_LOADED_ERROR, install));
+				dispatchEvent(new HelpEvent(HelpEvent.INSTALL_FILE_LOADED_ERROR, install));
 				trace("!!!!!!!!!!!!!! Start XML not Finded !!!!!!!!!")	
 			} 
 			else if(event.type == Event.COMPLETE)
 			{
 //			    trace("Start loaded.");
 				install = XML(myLoader.data);
-				dispatcher.dispatchEvent(new HelpEvent(HelpEvent.INSTALL_FILE_LOADED, install));
+				dispatchEvent(new HelpEvent(HelpEvent.INSTALL_FILE_LOADED, install));
 				 
 				 /*
 				for each(var product:XML in install.children())
@@ -107,9 +108,9 @@ package
 			{
 				lstLabel.text = "XML Loaded";
 				
-				dispatcher.dispatchEvent(new HelpEvent(HelpEvent.UPDATE_DISPLAY_LIST));
+				dispatchEvent(new HelpEvent(HelpEvent.UPDATE_DISPLAY_LIST));
 				
-			    parsingData(XML(event.target.data), lstLabel);
+			  parsingData(XML(event.target.data), lstLabel);
 			    
 			}
 		}
@@ -153,12 +154,12 @@ package
 			// save loaded data to local diskDrive 
 			lstLabel.text = "Saving data";
 			lstLabel.validateNow();
-			saveLoadedData(product);
+			saveLoadedData( product);
 			
 			// выбрать странички сохранить их на диск
 			lstLabel.text = "Creating DB ";
 			lstLabel.validateNow();
-			savePages(product);
+			savePages( product);
 			
 			lstLabel.text = "Fineshed ";
 			
@@ -314,6 +315,7 @@ package
 			}
 		}
 		
+		/*
 		public function addEventListener(type:String, listener:Function, 
 						useCapture:Boolean = false, priority:int = 0, 
 						useWeakReference:Boolean = false):void 
@@ -342,7 +344,7 @@ package
 		{
 			return dispatcher.willTrigger(type);
 		}
-
+*/
 
 
 	}

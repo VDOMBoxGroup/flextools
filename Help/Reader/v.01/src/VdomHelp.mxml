@@ -162,16 +162,11 @@
 		
 		private function pageChangedHandler(event:Event):void
 		{
-//			return;	
 			var fullPath:String = html.location;
-//			var index:Number = Math.max(fullPath.lastIndexOf( "/" ),fullPath.lastIndexOf( "\\") );
-//			var index:Number =  fullPath.lastIndexOf( "Local Store");
 			var fileName : String = fullPath.substr( 13 ); 
-//			fileName = fileName.substring( 0, fileName.lastIndexOf( "." )  );
-//			trace(fullPath);
 			var phraseRE:RegExp = /\\/gim;
-
 			fileName = fileName.replace(phraseRE,"/"); 
+
 			
 			
 			if(!tree.selectedItem)
@@ -247,7 +242,13 @@
 		
 		private function markPage():void
 		{
-			if(accordion.selectedIndex == 0 && tree.selectedItem)
+			var fullPath:String = html.location;
+			var fileName : String = fullPath.substr( 13 ); 
+			var phraseRE:RegExp = /\\/gim;
+			fileName = fileName.replace(phraseRE,"/"); 
+			sqlProxy.mark(fileName);
+		
+		/*	if(accordion.selectedIndex == 0 && tree.selectedItem)
 			{
 				trace("Tree: " + tree.selectedItem.@name);
 				sqlProxy.mark(tree.selectedItem.@name);
@@ -257,7 +258,7 @@
 				trace("PageList: " + pageList.selectedItem.name);
 				sqlProxy.mark(pageList.selectedItem.name);
 			}
-			
+		*/	
 			getMarkedPage();
 		}
 		
