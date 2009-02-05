@@ -3,6 +3,7 @@
 	
 	showStatusBar="false"
 	showGripper="false"
+	showTitleBar="false"
 	
 	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
@@ -38,6 +39,9 @@
 		private var markList : List = new List();
 		
 		
+		[Embed(source='../assets/bookmarks.png')]
+		[Bindable]
+		public var python:Class;
 		/***
 		 * 
 		 * 	Иконки для дерева (лист и книжка)
@@ -280,12 +284,46 @@
 //			var ID:String = adTrEvt.treeElementID
 	
 		}
+		
+	
+		private function minMaximize():void
+		{
+			if (stage.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED)
+				restore();
+			else
+				maximize();
+		
+		}
+		
+		private function getIcon(value:Object):Class 
+		{
+//			var xmlData:XML = XML(value);
+		
+//			if (xmlData.@Language.toXMLString() =='python')
+				return python;
+		}
+	
 	]]>
 </mx:Script>
 	
 <mx:VBox width="100%" height="100%"   x="0">
+	<mx:Canvas width="100%" >
+		<mx:Image source="@Embed('../assets/header.png')" width="100%" maintainAspectRatio="false" scaleContent="true" 
+			mouseDown="{nativeWindow.startMove();}" doubleClick="{minMaximize()}" doubleClickEnabled="true"/>
+		<mx:HBox paddingLeft="5" paddingTop="5" paddingRight="5" 
+				color="#FFFFFF" width="100%">
+			<mx:Image source="@Embed('../assets/bookmarks.png')" />
+			<mx:Label text="VDOM Help Aplication" />
+			<mx:HBox width="100%"  horizontalAlign="right" paddingTop="2">
+				<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}"/>
+				<mx:Image source="@Embed('../assets/restore.png')" right="0" click="{minMaximize()}"/>
+				<mx:Image source="@Embed('../assets/close.png')" right="0" click="{close()}"/>
+			</mx:HBox>
+		</mx:HBox>
+	</mx:Canvas>
 	
-	<mx:HBox paddingTop="5" paddingLeft="5">
+	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373"/>
+	<mx:HBox paddingTop="5" paddingLeft="5" width="100%">
 		<local:LeftArrow click="{html.historyBack()}"  htmlPage="{html}"/>
 		<local:RightArrow click="{html.historyForward()}"  htmlPage="{html}"/>
 		<mx:Image source="@Embed('../assets/gear_i.png')" click="{runSettings();}" />
@@ -294,12 +332,14 @@
 		<mx:Button  label="Search" click="{search();}" icon="@Embed('../assets/search.png')" color="#FFFFFF" 
 			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 	</mx:HBox>
-	<mx:HRule width="100%" strokeColor="0x000000" shadowColor="0x555555"/>
+	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c"/>
 	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
 		<mx:Accordion id="accordion" width="155" height="100%" addedEffect="false" backgroundColor="#000000" color="#FFFFFF" >
 			<mx:Canvas label="Content" width="100%" height="100%" icon="@Embed('../assets/contents.png')">
 				<mx:Tree id="tree" width="100%" height="100%" color="#000000"   itemRenderer="TreeItemRender"
-				labelField="@title" showRoot="true" change="{treeChangeHandler(event)}" />
+					labelField="@title" showRoot="true" change="{treeChangeHandler(event)}"  
+					folderOpenIcon="@Embed('../assets/open_folder.png')" folderClosedIcon="@Embed('../assets/close_folder.png')" 
+					defaultLeafIcon="@Embed('../assets/page.png')" /> 
 			</mx:Canvas>
 			<mx:Canvas id="searchResult" label="Search Result" width="100%" height="100%" icon="@Embed('../assets/search.png')" show="{pageList.selectedIndex = -1}"/>
 			<mx:Canvas  id="bookMarks" label="Bookmarks" width="100%" height="100%" icon="@Embed('../assets/bookmarks.png')" show="{getMarkedPage()}" creationComplete="{getMarkedPage()}"/>

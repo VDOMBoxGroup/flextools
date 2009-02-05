@@ -164,7 +164,9 @@
 	</mx:TabNavigator>
 	<mx:ControlBar horizontalAlign="right" 
 			height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
-    		<mx:Button id="OK" label="Ok"   width="60" click="okHandler()"/>
-    		<mx:Button label="Cancel"  click=" {cancelPressed()}"/>
+    		<mx:Button  label="OK" click="{okHandler()}"  color="#FFFFFF" 
+			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+			<mx:Button  label="Cancel" click="{cancelPressed()}" color="#FFFFFF" 
+			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 	</mx:ControlBar>
 </mx:TitleWindow>
