@@ -154,7 +154,7 @@
 		xmlApplicationStructure = dtManEvt.result;
 		createTreeArr(xmlApplicationStructure);
 		drawLines(xmlApplicationStructure);
-
+/*
 		if (needCreatTree == true)
 		{
 			needToSave = true;
@@ -169,7 +169,7 @@
 			markButton();
 			return;
 		}
-		
+	*/	
 		_curTree.target = massTreeElements[dataManager.currentPageId];
 		startPage = dataManager.currentApplicationInformation.Index;
 		
