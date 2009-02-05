@@ -1056,6 +1056,14 @@
 				treeActions.currentObjectId = dataManager.currentObjectId;
 			}
 			
+			private function getIcon(value:Object):Class 
+			{
+				var xmlData:XML = XML(value);
+			
+				if (xmlData.@Language.toXMLString() =='python')
+					return python;
+			}
+			
 	 	]]>
 	 </mx:Script>
 	
