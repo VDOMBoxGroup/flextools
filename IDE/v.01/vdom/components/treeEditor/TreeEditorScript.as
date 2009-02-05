@@ -602,7 +602,7 @@ private function getIcon(ID:String):String
 	}
 	return  '';
 }
-
+/*
 private function get needCreatTree():Boolean
 	{
 		var flag:Boolean = false;
@@ -621,7 +621,7 @@ private function get needCreatTree():Boolean
 	}
 	
 
-
+*/
 private function addEventListenerToTreeElement(treEl:TreeElement):TreeElement
 {
 			treEl.addEventListener(TreeEditorEvent.REDRAW_LINES , treeElementLinesReDrawHandler);
