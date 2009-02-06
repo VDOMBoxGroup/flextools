@@ -7,6 +7,7 @@
 	
 	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	minWidth="650" minHeight="300"
 	layout="absolute" creationComplete="{creatComleatHandler()}" viewSourceURL="srcview/index.html" 
 	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
 	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
@@ -17,6 +18,7 @@
 	</mx:Style>
 	<mx:Script>
 	<![CDATA[
+		import mx.controls.Label;
 		import mx.messaging.AbstractConsumer;
 		import mx.events.CloseEvent;
 		import mx.managers.PopUpManager;
@@ -140,6 +142,8 @@
 		
 		private function showSelectedPage(pageName:String):void
 		{
+			findDistanition(pageName);
+			
 			var fileName:String = pageName	;
 			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
 			var fullPath : String = newFile.url;
@@ -200,6 +204,8 @@
 			
 			var index:int =  tree.getItemIndex(tree.selectedItem);
 			tree.scrollToIndex(index);
+			
+			findDistanition(fileName);
 		}
 		
 		private function openTree(item:Object):void
@@ -207,10 +213,58 @@
 			var parentItem:Object = XML(item).parent();
 			if (parentItem)
 			{
+//				distan.text = item.@title +' \\ '+  distan.text;
 				openTree(parentItem);
 				tree.expandItem(parentItem, true, false);
 				tree.validateNow();
 			}
+		}
+		
+		private function findDistanition(fileName:String):void
+		{
+			location.removeAllChildren();
+//			distan.text = "";
+			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0];
+			
+			find(currentElement);
+
+//			distan.text = "\\" + distan.text;
+			
+			function find(item:XML):void
+			{
+				var parentItem:Object = XML(item).parent();
+				if (parentItem)
+				{
+					var loc : Location = new Location(item);
+					loc.addEventListener(MouseEvent.CLICK, locationClickHandler);
+
+					find(parentItem);
+					
+					if(location.numChildren  == 0)
+//						distan.text = item.@title;
+						location.addChild(loc);
+					else	
+					{
+						var lb : Label = new Label();
+							lb.text = "->";
+							lb.setStyle("color", "#333333");
+							location.addChild(lb);
+							
+						location.addChild(loc);	
+					}
+//						distan.text = item.@title +' -> '+  distan.text;
+					
+				}
+			}
+		}
+		
+		
+		private function locationClickHandler(msEvt:MouseEvent):void
+		{
+			var addreess : String = Location(msEvt.currentTarget).addreess;
+			
+			selectNecessaryItem(addreess);
+			
 		}
 		
 		private function search():void
@@ -346,6 +400,9 @@
 		</mx:Accordion>
 		<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
 			<mx:Canvas color="#FCFBFB"  width="100%" backgroundColor="#E4E4E4" >
+				<mx:HBox id="location" paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5" width="100%">
+					
+				</mx:HBox>
 				<mx:HBox right="0" paddingRight="10" paddingTop="5" paddingLeft="5" paddingBottom="5">
 					<mx:Image source="@Embed('../assets/printer.png')" click="{print()}"/>
 					<mx:Image source="@Embed('../assets/bookmark__plus.png')" click="{markPage()}"/>
