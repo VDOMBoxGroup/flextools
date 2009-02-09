@@ -148,12 +148,38 @@ public class CacheManager {
 		cachedFiles.addItem({create:newFile.creationDate.time, name:newFile.name, size:newFile.size})
 	}
 	
+	public function deleteFile( fileName : String ) : Boolean
+	{
+		var isDone : Boolean = false;
+		
+		fileName = applicationPrefix + fileName;
+		
+		var isFind : Boolean = cursor.findAny(
+			{ name :  fileName }
+		)
+		
+		if( isFind ) {
+			
+			cacheSize -= cursor.current.size;
+			cursor.remove();
+			
+			try {
+				
+				cacheFolder.resolvePath( fileName ).deleteFile();
+				isDone = true
+			}
+			catch ( error : Error ) {}
+		}
+		
+		return isDone;
+	}
+	
 	private function get applicationPrefix():String {
 		
-		if(applicationId)
-			return applicationId.substr(0, 8);
+		if( applicationId )
+			return applicationId.substr( 0, 8 );
 		else
-			return null;
+			return "";
 	}
 	
 	private function cleanupCache(size:uint):void {

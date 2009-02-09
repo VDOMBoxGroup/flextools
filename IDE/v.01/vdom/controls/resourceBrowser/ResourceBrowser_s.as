@@ -1,20 +1,18 @@
 // ActionScript file
-import vdom.managers.FileManager;
+import flash.events.Event;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
+
+import mx.controls.Alert;
+import mx.core.Application;
+import mx.managers.PopUpManager;
+
+import vdom.controls.resourceBrowser.ListItemEvent;
+import vdom.controls.resourceBrowser.TypesIcons;
 import vdom.events.FileManagerEvent;
 import vdom.events.ResourceBrowserEvent;
-import mx.managers.PopUpManager;
-import mx.core.Application;
-import vdom.controls.resourceBrowser.TypesIcons;
-import vdom.components.edit.containers.typeAccordionClasses.Type;
-import mx.core.IFactory;
-import mx.core.ClassFactory;
-import vdom.containers.Thumbnail;
 import vdom.managers.DataManager;
-import mx.controls.List;
-import mx.controls.Alert;
-import flash.utils.Timer;
-import flash.events.TimerEvent;
-import flash.events.Event;
+import vdom.managers.FileManager;
 
 /**
  * Resource Browser component action script file.
@@ -53,6 +51,12 @@ private var totalResources:int = 0;
 [Bindable]
 private var filteredResources:int = 0;
 
+private var resourcesListDataProvider:XML = new XML(<Resources/>)
+
+private var firstFilterClickFlag:Boolean = true;
+private var timer:Timer = new Timer(1200, 1);
+
+private var resourceIDForDelete : String = "";
 
 public function set selectedItemID(itemID:String):void
 {
@@ -64,37 +68,45 @@ public function set selectedItemID(itemID:String):void
 	}
 }
 
-
 public function get selectedItemID():String
 {
 	return _selectedItemID;
 }
 
-
-private function creationComplete():void
+private function registerEvent( flag : Boolean ) : void 
 {
-	addEventListener(CloseEvent.CLOSE, closeHandler);
-	listResourcesQuery();
-	this.visible = true;
-	Application.application.addEventListener(KeyboardEvent.KEY_DOWN, keyPressHandler);
-}
-
-
-private function keyPressHandler(keybEvent:KeyboardEvent):void
-{
-	Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, keyPressHandler);
-	
-	switch (keybEvent.keyCode)
+	if( flag )
 	{
-		case 27: /* Escape Press */
-			closeHandler(new CloseEvent(CloseEvent.CLOSE));
-			break;
-		case 13: /* Enter Press */
-			doneHandler();
-			break;
+		addEventListener(CloseEvent.CLOSE, closeHandler);
+		
+		Application.application.addEventListener(KeyboardEvent.KEY_DOWN, keyPressHandler);
+		
+		__thumbsList.addEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler );
+		
+		fileManager.addEventListener( FileManagerEvent.RESOURCE_DELETED, fileManager_resourceDeletedHandler );
+		fileManager.addEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, fileManager_resourceListLoadedHandler);
+		fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED, fileManager_resourceSavedHandler);
+		fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, fileManager_resourceSavedErrorHandler);
+	}
+	else
+	{
+		removeEventListener(CloseEvent.CLOSE, closeHandler);
+		
+		Application.application.removeEventListener(KeyboardEvent.KEY_DOWN, keyPressHandler);
+		
+		__thumbsList.removeEventListener( ListItemEvent.DELETE_RESOURCE, deleteResourceHandler );
+		
+		fileManager.removeEventListener( FileManagerEvent.RESOURCE_DELETED, fileManager_resourceDeletedHandler );
+		fileManager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, fileManager_resourceListLoadedHandler);
+		fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, fileManager_resourceSavedHandler);
+		fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, fileManager_resourceSavedErrorHandler);
 	}
 }
 
+private function listResourcesQuery():void
+{
+	fileManager.getListResources();
+}
 
 private function doneHandler():void
 {
@@ -113,41 +125,21 @@ private function doneHandler():void
 	this.dispatchEvent(cEvent); 
 }
 
-
-private function listResourcesQuery():void
-{
-	fileManager.addEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesListHandler);
-	fileManager.getListResources();
-}
-
-
-private function getResourcesListHandler(fmEvent:FileManagerEvent):void
-{
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_LIST_LOADED, getResourcesListHandler);	
-	allResourcesList = new XML(fmEvent.result.Resources);
-	
-	try {
-		totalResources = allResourcesList.Resource.length();
-	}
-	catch (err:Error) {
-		trace("Resource browser exception occured! :: " + err.message);
-	}
-	
-	resourcesListLoadedFlag = true;
-	determineResourcesTypes();
-	showResource();
-}
-
 private function determineResourcesTypes():void
 {
 	rTypes = [];
 	
-	try {
-		for each (var resource:XML in allResourcesList.Resource) {
+	try
+	{
+		for each (var resource:XML in allResourcesList.Resource)
+		{
 			rTypes[resource.@type] = resource.@type;
 		}
 	}
-	catch (err:Error) { return; }
+	catch (err:Error)
+	{ 
+		return;
+	}
 	
 	createFilters();
 }
@@ -168,9 +160,6 @@ private function createFilters():void
 	
 	applyExtensionFilter(); 		//  !!!  Create actual thumbs (at start and later)  !!!
 }
-
-
-private var resourcesListDataProvider:XML = new XML(<Resources/>)
 
 private function applyExtensionFilter():void
 {
@@ -199,18 +188,13 @@ private function applyExtensionFilter():void
 	}
 	
 	__thumbsList.dataProvider = resourcesListDataProvider.Resource;
-	
 	for (i = 0; i < resourcesListDataProvider.Resource.length(); i++) {
 		if (resourcesListDataProvider.Resource[i].@id == _selectedItemID) {
 			__thumbsList.selectedIndex = i;
 			break;
 		}
 	}
-
 }
-
-private var firstFilterClickFlag:Boolean = true;
-private var timer:Timer = new Timer(1200, 1);
 
 private function nameFilterOnTheFly(e:Event):void
 {
@@ -245,28 +229,6 @@ private function nameFilterOnTheFly(e:Event):void
 	__spinner.visible = false;		
 }
 
-private function changeNameFilterHandler():void
-{
-	timer.addEventListener(TimerEvent.TIMER_COMPLETE, nameFilterOnTheFly);
-	timer.reset();
-	timer.start();
-	__spinner.visible = true;
-}
-
-
-private function filterClickHandler():void
-{
-	if (firstFilterClickFlag) {
-		__nameFilter.text = '';
-		firstFilterClickFlag = false;
-	}
-}
-
-private function closeHandler(cEvent:CloseEvent):void
-{
-	PopUpManager.removePopUp(this);
-}
-
 private function showResource():void {
 	
 	if (!__thumbsList.selectedItem) {
@@ -274,10 +236,9 @@ private function showResource():void {
 		__rType.text = '---';
 		__rID.text = 'Unknown resource ID';
 		__iResolution.text = "Can not determine";
-		__preview.__image.source = typesIcons.spinnerbox;
+		__preview.__image.source = null;//typesIcons.spinnerbox;
 		return;
 	}
-	
 	
 	_selectedItemID = __thumbsList.selectedItem.@id;
 	
@@ -309,8 +270,64 @@ private function setImageProperties(event:Event):void
 	__iResolution.text = event.currentTarget.imageWidth.toString() + " x " + event.currentTarget.imageHeight.toString();
 }
 
+private function creationCompleteHandler():void
+{
+	registerEvent( true );
+	listResourcesQuery();
+	this.visible = true;
+}
 
-private function fileUploadHandler():void
+private function keyPressHandler(keybEvent:KeyboardEvent):void
+{	
+	switch (keybEvent.keyCode)
+	{
+		case 27: /* Escape Press */
+			closeHandler(new CloseEvent(CloseEvent.CLOSE));
+			break;
+		case 13: /* Enter Press */
+			doneHandler();
+			break;
+	}
+}
+
+private function closeHandler(cEvent:CloseEvent):void
+{
+	PopUpManager.removePopUp(this);
+}
+
+private function nameFilter_clickHandler():void
+{
+	if (firstFilterClickFlag) {
+		__nameFilter.text = '';
+		firstFilterClickFlag = false;
+	}
+}
+
+private function nameFilter_changeHandler():void
+{
+	timer.addEventListener(TimerEvent.TIMER_COMPLETE, nameFilterOnTheFly);
+	timer.reset();
+	timer.start();
+	__spinner.visible = true;
+}
+
+private function deleteResourceHandler( event : ListItemEvent ) : void 
+{
+	resourceIDForDelete = event.resourceID;
+	Alert.show( "Delete resource: " + event.resourceName + "?", "Alert!", Alert.YES | Alert.NO, this, acceptDeleteHandler )
+}
+
+private function acceptDeleteHandler( event : CloseEvent ) : void 
+{
+	if( event.detail == Alert.YES)
+	{
+		fileManager.deleteResource( resourceIDForDelete );
+	}
+	
+	resourceIDForDelete = "";
+}
+
+private function uploadButton_clickHandler() : void
 {
 	if (fileForUpload == null) {
 		fileForUpload = new File();
@@ -320,14 +337,13 @@ private function fileUploadHandler():void
 	var imagesFilter:FileFilter = new FileFilter('Images (*.jpg;*.jpeg;*.gif;*.png)', '*.jpg;*.jpeg;*.gif;*.png');
 	var docFilter:FileFilter = new FileFilter('Documents (*.pdf;*.doc;*.txt)', '*.pdf;*.doc;*.txt');
 	
-	fileForUpload.addEventListener(Event.SELECT, fileSelectHandler);
+	fileForUpload.addEventListener(Event.SELECT, fileForUpload_selectHandler);
 	fileForUpload.browseForOpen("Choose file to upload", [imagesFilter, docFilter, allFilesFilter]);
 }
 
-
-private function fileSelectHandler(event:Event):void
+private function fileForUpload_selectHandler(event:Event):void
 {
-	fileForUpload.removeEventListener(Event.SELECT, fileSelectHandler);
+	fileForUpload.removeEventListener(Event.SELECT, fileForUpload_selectHandler);
 
 	if (fileForUpload  && !fileForUpload.isDirectory) {
 		var srcBytes:ByteArray = new ByteArray();
@@ -372,17 +388,12 @@ private function fileSelectHandler(event:Event):void
 
 private function setResource(resType:String, resName:String, resData:ByteArray):void
 {
-	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
-	fileManager.addEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);
 	fileManager.setResource(resType, resName, resData);	
 }
 
 
-private function setResourceOkHandler(fmEvent:FileManagerEvent):void
+private function fileManager_resourceSavedHandler(fmEvent:FileManagerEvent):void
 {
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);	
-
 	try {
 		var result:XML = XML(fmEvent.result);
 		_selectedItemID = result.Resource.@id.toString();
@@ -394,10 +405,29 @@ private function setResourceOkHandler(fmEvent:FileManagerEvent):void
 }
 
 
-private function setResourceErrorHandler(fmEvent:FileManagerEvent):void
+private function fileManager_resourceSavedErrorHandler(fmEvent:FileManagerEvent):void
 {
 	trace('Resource browser: ERROR at sending resource');
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED, setResourceOkHandler);
-	fileManager.removeEventListener(FileManagerEvent.RESOURCE_SAVED_ERROR, setResourceErrorHandler);
 	Alert.show("Could not send resource to server!", "Sending resource error");
+}
+
+private function fileManager_resourceListLoadedHandler(event:FileManagerEvent):void
+{
+	allResourcesList = new XML( event.result.Resources );
+	
+	try {
+		totalResources = allResourcesList.Resource.length();
+	}
+	catch (err:Error) {
+		trace("Resource browser exception occured! :: " + err.message);
+	}
+	
+	resourcesListLoadedFlag = true;
+	determineResourcesTypes();
+	showResource();
+}
+
+private function fileManager_resourceDeletedHandler( event : FileManagerEvent ) : void 
+{
+	listResourcesQuery();
 }

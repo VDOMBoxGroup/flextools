@@ -93,7 +93,7 @@ public class AuthenticationManager implements IEventDispatcher
 		
 		soap.removeEventListener(SOAPEvent.LOGIN_OK, soap_loginOKHandler);
 		
-		dispatchEvent(new Event(AuthenticationEvent.LOGIN_COMPLETE));
+		dispatchEvent(new AuthenticationEvent(AuthenticationEvent.LOGIN_COMPLETE));
 	}
 	
 	private function soap_loginErrorHandler(event:SOAPEvent):void

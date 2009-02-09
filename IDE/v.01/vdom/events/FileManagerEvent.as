@@ -24,6 +24,9 @@ public class FileManagerEvent extends Event {
 	
 	public static const RESOURCE_SAVED:String = 'resourceSaved';
 	public static const RESOURCE_SAVED_ERROR:String = 'resourceSavedError';
+	
+	public static const RESOURCE_DELETED:String = 'resourceDeleted';
+	public static const RESOURCE_DELETED_ERROR:String = 'resourceDeletedError';
 
     // Define a public variable to hold the state of the enable property.
 	public var result:Object;

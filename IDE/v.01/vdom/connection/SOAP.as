@@ -26,7 +26,7 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	private var ws:WebService;
 	private var dispatcher:EventDispatcher = new EventDispatcher();
 	
-	private var code:Code =  Code.getInstance();
+	private var code:Code = Code.getInstance();
 	
 	private var resourceManager:IResourceManager = 
 	 									ResourceManager.getInstance();

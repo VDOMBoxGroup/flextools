@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication 
 	
-	showTitleBar="false"
-	showStatusBar="false"
-	showGripper="false"
-	
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 	xmlns:loginForm="vdom.components.loginForm.*"
 	xmlns:containers="vdom.containers.*" 
 	xmlns:modules="vdom.modules.*"
-		
+	
 	preinitialize="preinitalizeHandler();"
 	creationComplete="creationCompleteHandler();"
 	invoke="invokeHandler( event );"
+	
+	showTitleBar="false"
+	showStatusBar="false"
+	showGripper="false"
 	
 	layout="absolute"
 	verticalScrollPolicy="off"
@@ -33,7 +33,7 @@
 	
 		<loginForm:LoginForm id="loginForm" 
 			show="showLoginFormHandler();" 
-			submitBegin="submitBeginHandler(event)"/>
+			submitBegin="submitBeginHandler( event )"/>
 	
 		<mx:Canvas id="main"  width="100%" height="100%" show="showMainHandler();">
 			

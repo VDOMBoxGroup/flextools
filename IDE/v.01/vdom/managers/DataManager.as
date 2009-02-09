@@ -12,7 +12,7 @@ import vdom.events.DataManagerErrorEvent;
 import vdom.events.DataManagerEvent;
 import vdom.events.ProxyEvent;
 import vdom.events.SOAPEvent;
-import vdom.utils.StringUtil;
+import vdom.utils.StringUtils;
 
 public class DataManager implements IEventDispatcher {
 	
@@ -963,7 +963,7 @@ public class DataManager implements IEventDispatcher {
 	
 	private function faultHandler( event : FaultEvent ) : void
 	{
-		var errorCode : String = StringUtil.getLocalName( event.fault.faultCode );
+		var errorCode : String = StringUtils.getLocalName( event.fault.faultCode );
 		var errorDetails : XML = XML( event.fault.faultDetail );
 		var dme : DataManagerErrorEvent;
 		

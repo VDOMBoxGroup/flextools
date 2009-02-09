@@ -68,6 +68,11 @@ public class FileManager implements IEventDispatcher
 		soap.list_resources(ownerId);
 	}
 	
+	public function deleteResource( resourceID : String ) : void
+	{
+		soap.delete_resource( dataManager.currentApplicationId, resourceID );
+	}
+	
 	private function registerEvent(flag:Boolean):void
 	{
 		if(flag)
@@ -79,6 +84,8 @@ public class FileManager implements IEventDispatcher
 			
 			soap.set_resource.addEventListener(SOAPEvent.RESULT, setResourceOkHandler);
 			soap.set_resource.addEventListener(FaultEvent.FAULT, setResourceErrorHandler);
+			
+			soap.delete_resource.addEventListener(SOAPEvent.RESULT, soap_deleteResourceHandler);
 		}
 		else
 		{
@@ -221,6 +228,27 @@ public class FileManager implements IEventDispatcher
 		var fme:FileManagerEvent = new FileManagerEvent(FileManagerEvent.RESOURCE_SAVED_ERROR)
 //		fme.result = event.result;
 		dispatchEvent(fme);
+	}
+	
+	private function soap_deleteResourceHandler( event : SOAPEvent ) : void 
+	{
+		var resourceID : String;
+		
+		try
+		{
+			resourceID = event.result.Resource[0].toString();
+		}
+		catch( error : Error ) {}
+		
+		if( resourceID == null )
+			return;
+		
+		cacheManager.deleteFile( resourceID );
+		
+		
+		var fme : FileManagerEvent = new FileManagerEvent( FileManagerEvent.RESOURCE_DELETED );
+		fme.result = event.result;
+		dispatchEvent( fme );
 	}
 	
 	// Реализация диспатчера

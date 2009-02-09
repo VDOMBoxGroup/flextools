@@ -13,25 +13,6 @@
 	cornerRadius="1" verticalGap="1" horizontalGap="3"
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*">
 	
-	
-	<mx:Box
-		width="44" height="44" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0" backgroundColor="#FFFFFF"
-		verticalAlign="middle" horizontalAlign="center">
-		
-		<resourceBrowser:SmoothImage id="__image" height="42" width="42"
-			verticalAlign="middle" horizontalAlign="center" maintainAspectRatio="true"
-			scaleContent="true" />
-			
-	</mx:Box>
-		
-	<mx:VBox width="122" horizontalGap="0" verticalGap="1" horizontalScrollPolicy="off" verticalScrollPolicy="off" verticalAlign="middle">
-		<mx:HBox width="100%" horizontalAlign="left" horizontalGap="3" >
-			<mx:Label id="__type" text="JPG:" textAlign="left" fontWeight="bold" />
-			<mx:Label id="__res" text="" textAlign="left" />	
-		</mx:HBox>
-		<mx:Label id="__name" text="img" textAlign="left" width="122" />	
-	</mx:VBox>
-	
 	<mx:Script>
 		<![CDATA[
 			import vdom.managers.DataManager;
@@ -95,7 +76,7 @@
 				imageSourceLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaded);
 				__image.source = imageSourceLoader.content;
 				__res.text = imageSourceLoader.width.toString() + "x" + imageSourceLoader.height.toString();			
-
+				deleteButton.enabled = true;
 			}
 			
 			public function set objName(text:String):void { __name.text = text; }
@@ -115,6 +96,45 @@
 				return _objType.toLowerCase();
 			}
 			
+			private function deleteButton_clickHandler( event : MouseEvent ) : void
+			{
+				var lie : ListItemEvent = new ListItemEvent( ListItemEvent.DELETE_RESOURCE );
+				lie.resourceID = objID;
+				lie.resourceName = objName;
+				lie.resourceType = objType;
+				owner.dispatchEvent( lie );
+			}
+			
 		]]>
 	</mx:Script>
+	
+	<mx:Box
+		width="44" height="44" paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0" backgroundColor="#FFFFFF"
+		verticalAlign="middle" horizontalAlign="center">
+		
+		<resourceBrowser:SmoothImage id="__image" height="42" width="42"
+			verticalAlign="middle" horizontalAlign="center" maintainAspectRatio="true"
+			scaleContent="true" />
+			
+	</mx:Box>
+		
+	<mx:VBox width="122" horizontalGap="0" verticalGap="1" horizontalScrollPolicy="off" verticalScrollPolicy="off" verticalAlign="middle">
+		<mx:HBox width="100%" horizontalAlign="left" horizontalGap="3" paddingRight="5" verticalAlign="middle">
+			<mx:Label id="__type" text="JPG:" textAlign="left" fontWeight="bold" />
+			<mx:Label id="__res" text="" textAlign="left" />
+			<mx:Spacer width="100%"/>
+			<mx:Button id="deleteButton"
+				enabled="false"
+				cornerRadius="0" label="x" width="18" height="18" fontWeight="bold" fontSize="10"
+				toolTip="Delete"
+				paddingLeft="0" paddingRight="0"
+				paddingTop="0" paddingBottom="0"
+				color="#FF0000"
+				
+				click="deleteButton_clickHandler( event );"/>	
+		</mx:HBox>
+		<mx:Label id="__name" text="img" textAlign="left" width="122" />	
+	</mx:VBox>
+	
+	
 </mx:HBox>
