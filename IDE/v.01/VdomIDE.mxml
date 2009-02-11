@@ -9,6 +9,7 @@
 	
 	preinitialize="preinitalizeHandler();"
 	creationComplete="creationCompleteHandler();"
+	windowComplete="windowCompleteHandler();"
 	invoke="invokeHandler( event );"
 	
 	showTitleBar="false"

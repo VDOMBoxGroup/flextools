@@ -187,11 +187,14 @@ private function preinitalizeHandler() : void
 private function creationCompleteHandler() : void
 {
 	moduleTabNavigator.addEventListener( IndexChangedEvent.CHANGE, moduleChangedHandler );
-	
+}
+
+private function windowCompleteHandler() : void 
+{
 	try
 	{
 		if( configMain.updater.enabled == "1" )
-			updateManager.init();
+			callLater( updateManager.init );
 	}
 	catch( error : Error ) {}
 }

@@ -9,7 +9,8 @@ import vdom.events.ColorPickerEvent;
 
 public class ColorPicker extends Canvas {
 	
-	private var _color:String;
+	private var _color : String = "0";
+	private var _colorInNumber : uint = 0;
 	
 	public function ColorPicker() {
 		
@@ -32,28 +33,32 @@ public class ColorPicker extends Canvas {
 		return _color;
 	}
 	
-	public function set color(colorValue:String):void {
+	public function set color( colorValue:String ):void {
+		
+		var newColor : uint = uint( ( colorValue == "" ) ? "0" : "0x" + colorValue )
 		
 		setStyle(
 			'backgroundColor',
-			Number('0x' + colorValue.toString())
+			newColor
 		);
 		_color = colorValue;
+		_colorInNumber = newColor;
 		
-		dispatchEvent(new Event("valueCommit"));
+		dispatchEvent( new Event("valueCommit") );
 	}
 	
 	private function mouseClickandler(event:MouseEvent) :void {
 		
-		var colorInt:uint = Number('0x' + _color/* .substring(1) */);
-		ColorPickerWindow.show_window(this, colorInt, true);
+//		var colorInt:uint = Number('0x' + _color/* .substring(1) */);
+		ColorPickerWindow.show_window( this, _colorInNumber, true );
 	}
 	
 	private function colorCompleteHandler(event:ColorPickerEvent):void {
 		
 		if(event.type == 'apply') {
 			
-			color =/*  '#' +  */event.hexcolor;
+			_color = event.hexcolor;
+			_colorInNumber = event.color;
 		}
 		
 	}

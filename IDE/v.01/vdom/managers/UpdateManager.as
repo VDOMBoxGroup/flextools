@@ -20,7 +20,7 @@ public class UpdateManager
 	
 	private var applicationUpdater : ApplicationUpdaterUI = new ApplicationUpdaterUI();
 	private var configManager : ConfigManager = ConfigManager.getInstance();
-	private var updaterConfig : Config = configManager.getConfig( "updater.config" );
+	private var updaterConfig : Config;
 	private var urlList : Array;
 	private var currentServerNumber : uint;
 	private var isInitalized : Boolean = false;
@@ -41,9 +41,13 @@ public class UpdateManager
 	
 	public function init() : void
 	{
-		if( !updaterConfig )
+		if( applicationUpdater.isFirstRun ||!updaterConfig )
 		{
 			createConfigFile();
+		}
+		else
+		{
+			updaterConfig = configManager.getConfig( "updater.config" );
 		}
 		
 		urlList = updaterConfig.urllist.url as Array;
@@ -94,8 +98,8 @@ public class UpdateManager
 			updaterConfig.urllist = {
 				url : 
 					[
-						"file:////Segroup/exchange/vdomide/update/update.xml",
-//						"http://update.vdombox.net/update/update.xml"
+						"file:////Segroup/exchange/vdomide/update/update_dev.xml",
+//						"http://update.vdombox.net/update.xml"
 					]
 			};
 			updaterConfig.delay = "0";
