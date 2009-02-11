@@ -317,6 +317,8 @@ private function dataManager_typesLoadedHandler( event : DataManagerEvent ) : vo
 		else
 			moduleTabNavigator.selectedChild.dispatchEvent( new FlexEvent( FlexEvent.SHOW ));
 	}
+	
+	applicationVersion.text = "(" + VersionUtils.getApplicationVersion() + ")";
 }
 
 private function dataManager_close( event : DataManagerEvent ) : void

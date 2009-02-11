@@ -21,6 +21,12 @@
 	creationPolicy="all"
 	
 	frameRate="30">
+	<mx:Script>
+		<![CDATA[
+			import vdom.utils.VersionUtils;
+			import mx.core.Application;
+		]]>
+	</mx:Script>
 	
 	<mx:Script source="vdomIDE.as"/>
 	
@@ -50,6 +56,9 @@
 							authenticationManager.username.toUpperCase()
 						} - VDOM IDE"
 					fontWeight="bold" color="#FFFFFF"/>
+				
+				<mx:Label id="applicationVersion"
+					fontWeight="bold" color="#B4B4B4"/>
 			</mx:HBox>
 			
 			<mx:ViewStack id="contentStack"
