@@ -19,6 +19,7 @@ public class Parser
 	public static const CT_FUNCTION:String = 'function';
 	public static const CT_ASSIGN:String = 'assign';
 	public static const CT_TEXT:String = 'text';
+	public static const CT_LIST:String = 'list';
 	
 	public static var funcDefinition:Object =
 		{			
@@ -34,7 +35,7 @@ public class Parser
 			'subPrefix':		{ pattern:/^\[nnn[nobvscifVNS]*\]$/, 			argNum:-2 },
 			'question':			{ pattern:/^\[n[vscVS][vscVS]\]$/, 				argNum:2 },
 			'convert':			{ pattern:/^\[n[vscVS][vsciVNS]\]$/, 			argNum:2 },
-			'loadDataFrom':		{ pattern:/^\[n[vscVS]\]$/, 					argNum:1 },
+			'loadDataFrom':		{ pattern:/^\[n[vscVS]\]$/, 					argNum:1,	trans:['true', 'false'] },
 			'writeTo':			{ pattern:/^\[n[vscVS]\]$/, 					argNum:1 },
 			'writeVarTo':		{ pattern:/^\[n[vscVS][vscifVNS]\]$/, 			argNum:2 },
 			'GUID':				{ pattern:/^\[n\]$/, 							argNum:0 },
@@ -666,7 +667,15 @@ public class Parser
 		fragment.ctype = CT_TEXT;		
 		fragment.print = true;
 	}
+	
+	public static function isFunctionExist(funcName:String):Boolean
+	{
+		var typeDescr:XML = describeType(TemplateStruct.lib);
+		var funcDescr:XMLList = typeDescr..method.(@name == funcName);
 		
+		return (funcDescr.length()>0);
+	}	
+	
 	public static function validateCodeFragment(fragment:CodeFragment):void
 	{
 		var lexemObj:Object;
@@ -699,6 +708,7 @@ public class Parser
 
 			fragment.type = lexemObj.strSentence;
 			fragment.ctype = CT_OPERATION;
+			return;
 		}
 		
 		lexemObj = isValidAdvVar(lexemObj.strSentence);
@@ -712,12 +722,13 @@ public class Parser
 				
 			fragment.type = lexemObj.strSentence;
 			fragment.ctype = CT_TEST;
+			return;
 		}
 		
 		// rollup function
 		var argNum:int = lexemObj.strSentence.indexOf("]")-strSentence.indexOf("[")-2;
 		lexemObj = isValidFunction(lexemObj.strSentence);
-		if(lexemObj.result && lexemObj.strSentence.length==1)
+		if(lexemObj.result && lexemObj.strSentence.length==1 && isFunctionExist(fragment.fragments[0]))
 		{
 			if(fragment.isTopLevel)
 				fragment.print = true;
@@ -728,15 +739,6 @@ public class Parser
 			fragment.ctype = CT_FUNCTION;
 			
 			var funcDef:Object = funcDefinition[fragment.funcName];
-			var typeDescr:XML = describeType(TemplateStruct.lib);
-			
-			// TODO: check for function exists
-			var funcDescr:XMLList = typeDescr..method.(@name == fragment.funcName);
-			if(funcDescr.length()==0)
-			{
-				fragment.error = new CompilerError(null, 9009, [fragment.funcName]);
-				return;
-			}
 
 			// check for correct args number
 			if(funcDef)
@@ -757,13 +759,9 @@ public class Parser
 					return;
 				}
 				
-				switch(fragment.funcName)
-				{
-					case 'loadDataFrom':
-						fragment.trans = ["true", "false"];
-						break;
-				}
+				fragment.trans = funcDef.trans;
 			}
+			return;
 		}
 		
 		// rollup list
@@ -772,22 +770,20 @@ public class Parser
 		{
 			if(fragment.isTopLevel)
 				fragment.print = true;
-							
+				
+			fragment.ctype = CT_LIST;							
 			fragment.type = lexemObj.strSentence;
+			return;			
 		}
 				
-		if(!lexemObj.result)
-			lexemObj = isValidAssign(lexemObj.strSentence);		
-					
+		lexemObj = isValidAssign(lexemObj.strSentence);
 		if(lexemObj.result)
 		{
 			fragment.ctype = CT_ASSIGN;
-		}
-		else
-		{
-			fragment.error = new CompilerError(null, 9000);
 			return;
 		}
+		
+		fragment.error = new CompilerError(null, 9000);
 	}
 	
 	public static function validateFragmentedBlock(block:ParsedBlock):void
@@ -961,7 +957,7 @@ public class Parser
 	}
 	*/
 
-	public static function eval(prog:String, contexts:Array):*
+	public static function eval(prog:String, contexts:Array=null):*
 	{
 		var _res:String = "_result_" + UIDUtil.createUID().replace(/-/g, "_"); 
 		var _contexts:Array = [null, null];
@@ -975,7 +971,7 @@ public class Parser
 				_contexts[1] = contexts[1];		
 		}
 		
-		D.eval(_prog, _contexts[0], _contexts[contexts.length-1]);
+		D.eval(_prog, _contexts[0], _contexts[_contexts.length-1]);
 		
 		ret = _contexts[0][_res];
 		delete _contexts[0][_res];
@@ -1059,8 +1055,8 @@ public class Parser
 				[/[WVAv]3[WVANvifo]/g,		"V"],		// '+'
 				[/[WVANvifo]3[WVAv]/g,		"V"],		// '+'
 				
-				[/[WVAv]2[WVANvifo]/g,		"V"],		// -				
-				[/[WVANvifo]2[WVAv]/g,		"V"],		// -				
+				[/[WVAv]2[WVANvifo]/g,		"V"],		// '-'				
+				[/[WVANvifo]2[WVAv]/g,		"V"],		// '-'				
 
 				[/9(W|V|A|N|S|v|i|f|s|c|o)0/g,	"$1"]		// (x) -> x				
 			];     			

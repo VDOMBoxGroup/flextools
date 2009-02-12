@@ -18,6 +18,7 @@ public class CodeParser
 	
 	public static function resetCodeFragmentCurrent(fragment:CodeFragment):void
 	{
+		fragment.executed = false;
 		fragment.current = 0;
 
 		for(var i:int=0; i<fragment.fragments.length; i++)
@@ -29,6 +30,7 @@ public class CodeParser
 
 	public static function resetBlockCurrent(block:ParsedBlock):void
 	{
+		block.executed = false;
 		block.current = 0;		
 
 		for(var i:int=0; i<block.fragments.length; i++)
@@ -52,12 +54,11 @@ public class CodeParser
 		for(var i:int=fragment.current; i<fragment.fragments.length; i++)
 		{
 			subfragment = fragment.fragments[i];
-			if(subfragment is CodeFragment && 
-				(fragment.ctype==Parser.CT_FUNCTION || fragment.type!='A'))
+			if(subfragment is CodeFragment && fragment.ctype!=Parser.CT_LIST)
 			{
 				executeCodeFragment(subfragment as CodeFragment, contexts, stepReturn);
-				if(CodeFragment(subfragment).current>=CodeFragment(subfragment).fragments.length)
-					fragment.current = i+1;				
+				if(CodeFragment(subfragment).executed)
+					fragment.current = i+1;	
 				
 				if(CodeFragment.lastExecutedFragment.ctype == Parser.CT_FUNCTION && 
 					(stepReturn || CodeFragment.lastExecutedFragment.retValue is Function))
@@ -280,6 +281,12 @@ public class CodeParser
 				}				
 				break;
 				
+			case Parser.CT_LIST:
+				tmpValue = Utils.quotes(fragment.origValue);
+				code = tmpValue.toString();
+				fragment.code = tmpValue.toString();
+				break;
+								
 			default:			
 				switch(fragment.type)
 				{
@@ -318,17 +325,12 @@ public class CodeParser
 						fragment.code = fragment.retValue.toString();
 						code = fragment.code; 
 						break;
-						
-					case 'A': // list
-						tmpValue = Utils.quotes(fragment.origValue);
-						code = tmpValue.toString();
-						fragment.code = tmpValue.toString();
-						break;
 				}
 		}
 		
 		// execute generated code
 		fragment.retValue = Parser.eval(code, contexts);
+		fragment.executed = true;
 		CodeFragment.lastExecutedFragment = fragment;
 	}
 
@@ -342,7 +344,7 @@ public class CodeParser
 		if(block.errFragment)
 			return;
 		
-		if(block.current>=block.fragments.length)
+		if(block.executed)
 			return;
 		
 		while(block.current<block.fragments.length)
@@ -351,12 +353,14 @@ public class CodeParser
 
 			executeCodeFragment(curFragment, contexts, stepReturn);
 		
-			if(curFragment.current>=curFragment.fragments.length)
+			if(curFragment.executed)
 				block.current++;
 				
 			if(stepReturn)
 				return;
 		}
+		
+		block.executed = true;
 	}
 
 	/**

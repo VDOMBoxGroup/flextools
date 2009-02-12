@@ -14,6 +14,7 @@ public class ParsedBlock
 	
 	public var fragments:Array = []; // code fragments to execute
 	public var current:int = 0; // current fragment
+	public var executed:Boolean = false;
 
     //--------------------------------------------------------------------------
 	//

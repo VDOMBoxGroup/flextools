@@ -52,6 +52,7 @@ public class ListParser
 		var prevFragment:LexemStruct;
 		var wordBuf:String = '';
 		var grp:int = -1;
+		var str:String;
 		 
 		for (var i:int=0; i<block.fragments.length; i++)
 		{			
@@ -64,28 +65,37 @@ public class ListParser
 				case ';':
 					curFragment.listGroup = grp--;
 					pushWord();
-					break;	
+					break;
+						
 				case 's':
 				case 'c':
 					curFragment.listGroup = grp--;
 					pushWord();
-					arr.push(Utils.replaceQuotes(curFragment.origValue));
+					str = replaceAllBracers(curFragment.origValue);
+					arr.push(Utils.replaceQuotes(str));
 					break;
+					
 				case 'v':
 					curFragment.listGroup = grp--;
 					pushWord();
-					arr.push( {type:'v', value:curFragment.origValue.substring(1)} );
+					str = replaceAllBracers(curFragment.origValue);
+					arr.push( {type:'v', value:str.substring(1)} );
 					break;
+					
 				case 'W':
 					curFragment.listGroup = grp--;
 					pushWord();
-					arr.push( {type:'W', value:curFragment.origValue.substring(1)} );
+					str = replaceAllBracers(curFragment.origValue);
+					arr.push( {type:'W', value:str.substr(1,str)} );
 					break;
+					
 				case 'A':
 					curFragment.listGroup = grp--;
 					pushWord();
+					str = replaceAllBracers(curFragment.origValue);
 					arr.push( list2Array(curFragment.origValue) );
 					break;
+					
 				default:
 					if(curFragment.listGroup == prevFragment.listGroup)
 						wordBuf += curFragment.origValue;
@@ -107,6 +117,19 @@ public class ListParser
 				wordBuf = '';
 			}
        	}
+       	
+       	function replaceAllBracers(_str:String):String {
+       		var _buf:String = _str.concat();
+			var _len:int = _buf.length;
+			
+			do {
+				_len = _buf.length;
+				_buf = StringUtil.trim(_buf);
+				_buf = Utils.replaceBracers(_buf, '(');       		
+			} while(_len!=_buf.length);
+			
+			return _buf;
+       	}
 	}
 	
 	public static function array2List(arr:Array):String
@@ -120,6 +143,10 @@ public class ListParser
 			{
 				listStr += Utils.quotes(String(curElm));
 			}
+			else if(curElm is Array)
+			{
+				listStr += array2List(curElm);
+			}
 			else if(curElm.hasOwnProperty('type') && curElm.hasOwnProperty('value'))
 			{
 				switch(curElm.type)
@@ -128,9 +155,7 @@ public class ListParser
 					case 'W':
 						listStr += '$'+curElm.value;
 						break;
-					case 'A':
-						listStr += array2List(curElm.value);
-						break;
+					case 'w':
 					default:
 						listStr += curElm.value;
 						break;					
@@ -143,6 +168,39 @@ public class ListParser
 		}	
 		listStr += ']';
 		return listStr;
+	}
+	
+	public static function elm2Value(elm:Object):Object
+	{
+		var code:String = '';
+		var retVal:Object;
+		if(elm is String)
+		{
+			retVal = elm;
+		}
+		else if(elm is Array)
+		{
+			retVal = array2List(elm);
+		}
+		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
+		{
+			switch(elm.type)
+			{
+				case 'v':
+				case 'W':
+					code = '$'+elm.value;
+					break;
+					
+				case 'w':
+					code = elm.value;
+					break;
+			}
+			
+			var block:ParsedBlock = Parser.fragmentLexems(Parser.getLexemArray(elm.value.concat(), false), 'text');
+			executeCodeFragment(curFragment, contexts, stepReturn);
+		}
+		
+		return retVal;
 	}
 	
 	public static function processElmValue(obj:Object):String
@@ -246,75 +304,50 @@ public class ListParser
 		
 		return _position;	
 	}
-
 	
-	
-	
-	
-	
-	
-	
-	
-	public static function processPoints(list:String, contexts:Array):Array
+	public static function processFlipDirection(drct:Object):int
 	{
-		var len:int = length(list);
-		var arr:Array = [];
-		
-		for(var i:int=0; i<len; i++)
-		{
-			var strList:String = getElm(list,i+1);
-			
-			if(length(strList)!=2)
-				throw new RunTimeError(null, 9007, [2]);
-				
-			arr.push(new Point(	int(getElmValue(strList,1,contexts)),
-								int(getElmValue(strList,2,contexts))	));
-		}
-			
-		return arr;
-	}
-	
-	public static function processFlipDirection(type:*):int
-	{
-		var _type:int = 0;
+		var _drct:int = 0;
 		var _str:String = null;
 		
-		switch(typeof type)
+		switch(typeof drct)
 		{
 			case 'number':
-				_type = int(type);
+				_drct = int(drct);
 				break;
 			
 			case 'string':
-				if(!_str && type) 
-					_str = type.toString().toLowerCase();
+				if(!_str && drct) 
+					_str = drct.toString().toLowerCase();
 			case 'object':
-				if(!_str && type && type.hasOwnProperty('type') && type.type=='n' && type.hasOwnProperty('value'))
-					_str = type.value.toLowerCase();
+				if(!_str && drct && 
+					drct.hasOwnProperty('type') && drct.hasOwnProperty('value') && 
+					drct.type=='n')
+					_str = drct.value.toLowerCase();
 		
 				switch(_str)
 				{
 					case 'horizontal':
-						_type = 0;
+						_drct = 0;
 						break;
 	
 					case 'vertical':
-						_type = 1;
+						_drct = 1;
 						break;
 	
 					default:
-						_type = int(type)
+						_drct = int(drct)
 						break;
 				}
 				break;
 		}
 		
-		return _type;	
+		return _drct;	
 	}
 	
-	public static function processStrokeType(type:*):*
+	public static function processStrokeType(type:Object):Object
 	{
-		var ret:* = StrokePatternStyle.SOLID;
+		var ret:Object = StrokePatternStyle.SOLID;
 		var _type:int = 0;
 		var _str:String = null;
 		
@@ -328,7 +361,9 @@ public class ListParser
 				if(!_str && type) 
 					_str = type.toString().toLowerCase();
 			case 'object':
-				if(!_str && type && type.hasOwnProperty('type') && type.type=='n' && type.hasOwnProperty('value'))
+				if(!_str && type && 
+					type.hasOwnProperty('type') && type.hasOwnProperty('value') &&
+					type.type=='n' )
 					_str = type.value.toLowerCase();
 		
 				switch(_str)
@@ -399,9 +434,9 @@ public class ListParser
 		return ret;	
 	}
 	
-	public static function processBrushType(type:*, color:uint):*
+	public static function processBrushType(type:Object, color:uint):Object
 	{
-		var ret:* = null
+		var ret:Object;
 		var _type:int = 0;
 		var _str:String = null;
 		
@@ -415,7 +450,9 @@ public class ListParser
 				if(!_str && type) 
 					_str = type.toString().toLowerCase();
 			case 'object':
-				if(!_str && type && type.hasOwnProperty('type') && type.type=='n' && type.hasOwnProperty('value'))
+				if(!_str && type && 
+					type.hasOwnProperty('type') && type.hasOwnProperty('value') && 
+					type.type=='n')
 					_str = type.value.toLowerCase();
 		
 				switch(_str)
@@ -492,7 +529,34 @@ public class ListParser
 		
 		return ret;	
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	public static function processPoints(list:String, contexts:Array):Array
+	{
+		var len:int = length(list);
+		var arr:Array = [];
 		
+		for(var i:int=0; i<len; i++)
+		{
+			var strList:String = getElm(list,i+1);
+			
+			if(length(strList)!=2)
+				throw new RunTimeError(null, 9007, [2]);
+				
+			arr.push(new Point(	int(getElmValue(strList,1,contexts)),
+								int(getElmValue(strList,2,contexts))	));
+		}
+			
+		return arr;
+	}
+			
 	public static function processSubFunc(sublist:String, contexts:Array):*
 	{
 		var len:int = length(sublist);

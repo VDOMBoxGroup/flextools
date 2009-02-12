@@ -24,6 +24,7 @@ public class CodeFragment extends LexemStruct
 	
 	public var parent:Object; // parent fragment|block
 	public var current:int = 0; // current subfragment
+	public var executed:Boolean = false;
 
     //--------------------------------------------------------------------------
 	//
