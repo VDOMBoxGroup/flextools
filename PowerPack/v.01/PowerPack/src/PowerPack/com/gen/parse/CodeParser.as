@@ -3,7 +3,6 @@ package PowerPack.com.gen.parse
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.gen.*;
-import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.errorClasses.ValidationError;
 import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
@@ -39,8 +38,42 @@ public class CodeParser
 				resetCodeFragmentCurrent(block.fragments[i]);
 		}
 	}
-		
-	public static function executeCodeFragment(fragment:CodeFragment, contexts:Array, stepReturn:Boolean=false):void
+	
+	public static function evaluateLexem(lexem:LexemStruct, contexts:Array):void
+	{
+		switch(LexemStruct(lexem).type)
+		{
+			case 'v':
+				lexem.code = String(lexem.origValue).substring(1);
+				lexem.value = Parser.eval(lexem.code, contexts);
+				break;
+				
+			case 't':
+				lexem.value = Utils.replaceEscapeSequences(lexem.origValue.toString(), "\\r");
+				lexem.value = Utils.replaceEscapeSequences(lexem.value.toString(), "\\n");
+				lexem.value = Utils.replaceEscapeSequences(lexem.value.toString(), "\\t");
+				lexem.value = Utils.replaceEscapeSequences(lexem.value.toString(), "\\$");
+				lexem.value = Utils.replaceEscapeSequences(lexem.value.toString(), "\\\\");
+				lexem.code = lexem.value;
+				break;
+			
+			case 'n':
+				lexem.value = Utils.quotes(String(lexem.origValue));
+				lexem.code = lexem.value;
+				break;
+				
+			case '[':
+			case ']':
+			case '{':
+			case '}':
+			case ';':
+				lexem.value = '';
+				lexem.code = lexem.value;
+				break;
+		}		
+	}
+	
+	public static function executeCodeFragment(fragment:CodeFragment, contexts:Array, stepReturn:Boolean=false, evaluate:Boolean=false):void
 	{
 		if(!fragment.validated)
 		{
@@ -54,9 +87,9 @@ public class CodeParser
 		for(var i:int=fragment.current; i<fragment.fragments.length; i++)
 		{
 			subfragment = fragment.fragments[i];
-			if(subfragment is CodeFragment && fragment.ctype!=Parser.CT_LIST)
+			if(subfragment is CodeFragment && (fragment.ctype!=Parser.CT_LIST || evaluate))
 			{
-				executeCodeFragment(subfragment as CodeFragment, contexts, stepReturn);
+				executeCodeFragment(subfragment as CodeFragment, contexts, stepReturn, evaluate);
 				if(CodeFragment(subfragment).executed)
 					fragment.current = i+1;	
 				
@@ -64,8 +97,11 @@ public class CodeParser
 					(stepReturn || CodeFragment.lastExecutedFragment.retValue is Function))
 					return;
 			}
-			else
+			else if(subfragment is LexemStruct)
+			{
+				evaluateLexem(subfragment as LexemStruct, contexts);
 				fragment.current = i+1;
+			}
 		}
 
 		// generate executable code
@@ -81,33 +117,17 @@ public class CodeParser
 					 
 					if(subfragment is CodeFragment)
 					{
+						tmpValue = 'null';
 						if((subfragment as CodeFragment).retValue)
 							tmpValue = (subfragment as CodeFragment).retValue;
-						else
-							tmpValue = 'null';
-							
-						code += tmpValue;
 					}
 					else if(subfragment is LexemStruct)
 					{
-						tmpValue = LexemStruct(subfragment).origValue;
-						switch(LexemStruct(subfragment).type)
-						{
-							case 'v':
-								tmpValue = Parser.eval(String(tmpValue).substring(1), contexts);
-								break;
-								
-							default:
-								tmpValue = Utils.replaceEscapeSequences(tmpValue.toString(), "\\r");
-								tmpValue = Utils.replaceEscapeSequences(tmpValue.toString(), "\\n");
-								tmpValue = Utils.replaceEscapeSequences(tmpValue.toString(), "\\t");
-								tmpValue = Utils.replaceEscapeSequences(tmpValue.toString(), "\\$");
-								tmpValue = Utils.replaceEscapeSequences(tmpValue.toString(), "\\\\");					
-								break;
-						}
-													
-						code += tmpValue.toString();
+						tmpValue = LexemStruct(subfragment).value;
 					}
+
+					code += tmpValue;
+					fragment.code += LexemStruct(subfragment).code;
 				}
 				
 				fragment.retValue = code;
@@ -124,31 +144,17 @@ public class CodeParser
 					 
 					if(subfragment is CodeFragment)
 					{
+						tmpValue = 'null';
 						if((subfragment as CodeFragment).retValue)
 							tmpValue = (subfragment as CodeFragment).retValue;
-						else
-							tmpValue = 'null';
-							
-						code += tmpValue;
-						fragment.code += (subfragment as CodeFragment).code;
 					}
 					else if(subfragment is LexemStruct)
 					{
-						tmpValue = LexemStruct(subfragment).origValue;
-						switch(LexemStruct(subfragment).type)
-						{
-							case 'v':
-								tmpValue = String(tmpValue).substring(1);
-								break;
-								
-							case ';':
-								tmpValue = '';
-								break;
-						}
-													
-						code += tmpValue;
-						fragment.code += tmpValue;
+						tmpValue = LexemStruct(subfragment).value;							
 					}
+
+					code += tmpValue;
+					fragment.code += LexemStruct(subfragment).code;
 				}	
 				break;
 				
@@ -164,35 +170,18 @@ public class CodeParser
 					{
 						if((subfragment as CodeFragment).retValue)
 							tmpValue = (subfragment as CodeFragment).retValue;
-						else
-							tmpValue = 'null';
 					}
 					else if(subfragment is LexemStruct)
 					{
-						tmpValue = LexemStruct(subfragment).origValue;
-						switch(LexemStruct(subfragment).type)
-						{
-							case 'v':
-								tmpValue = String(tmpValue).substring(1);
-								break;
-							case 'n':
-								tmpValue = "{type:'n', value:"+Utils.quotes(String(tmpValue))+"}";
-								break;							
-							case ']':
-							case ';':
-								tmpValue = "";
-								break;						
-						}
-						
-						fragment.code += tmpValue;
+						tmpValue = LexemStruct(subfragment).value;					
 					}
-					
+
 					var sep:String = (fragment.fragments[i-1].operationGroup!=fragment.fragments[i].operationGroup && 
 								code.length && tmpValue.toString().length ? "," : "");
 								 										
 					code += sep + tmpValue.toString();
-						
-					fragment.code += sep + (subfragment is CodeFragment ? (subfragment as CodeFragment).code : tmpValue.toString());
+					
+					fragment.code += sep + LexemStruct(subfragment).code;
 				}
 				
 				code = TemplateStruct.CNTXT_INSTANCE + "." + 
@@ -222,17 +211,7 @@ public class CodeParser
 						}
 						else if(subfragment is LexemStruct)
 						{
-							tmpValue = LexemStruct(subfragment).origValue;
-							switch(LexemStruct(subfragment).type)
-							{
-								case 'v':
-									tmpValue = String(tmpValue).substring(1);
-									break;
-									
-								case ';':
-									tmpValue = '';
-									break;									
-							}
+							tmpValue = LexemStruct(subfragment).code;
 						}
 						
 						// add prefix
@@ -253,36 +232,30 @@ public class CodeParser
 					 
 					if(subfragment is CodeFragment)
 					{
+						tmpValue = 'null';
 						if((subfragment as CodeFragment).retValue)
 							tmpValue = (subfragment as CodeFragment).retValue;
-						else
-							tmpValue = 'null';
-							
-						code += tmpValue;
-						fragment.code += (subfragment as CodeFragment).code;
 					}
 					else if(subfragment is LexemStruct)
 					{
-						tmpValue = LexemStruct(subfragment).origValue;
-						switch(LexemStruct(subfragment).type)
-						{
-							case 'v':
-								tmpValue = String(tmpValue).substring(1);
-								break;
-								
-							case ';':
-								tmpValue = '';
-								break;
-						}
-						
-						code += tmpValue;
-						fragment.code += tmpValue;
+						tmpValue = LexemStruct(subfragment).value;
 					}
-				}				
+						
+					code += tmpValue;
+					fragment.code += LexemStruct(subfragment).code;
+				}
 				break;
 				
 			case Parser.CT_LIST:
-				tmpValue = Utils.quotes(fragment.origValue);
+				if(!evaluate)
+				{
+					tmpValue = Utils.quotes(fragment.origValue);
+				}
+				else
+				{
+					tmpValue = Utils.quotes(fragment.evalValue);
+				}
+				
 				code = tmpValue.toString();
 				fragment.code = tmpValue.toString();
 				break;
@@ -297,29 +270,16 @@ public class CodeParser
 							 
 							if(subfragment is CodeFragment)
 							{
+								tmpValue = 'null';
 								if((subfragment as CodeFragment).retValue)
 									tmpValue = (subfragment as CodeFragment).retValue;
-								else
-									tmpValue = 'null';
-									
-								code += tmpValue;
 							}
 							else if(subfragment is LexemStruct)
 							{
-								tmpValue = LexemStruct(subfragment).origValue;
-								switch(LexemStruct(subfragment).type)
-								{
-									case 'v':
-										tmpValue = String(tmpValue).substring(1);
-										break;
-										
-									case '}':
-									case ';':
-										tmpValue = '';
-										break;
-								}
-								code += tmpValue;
+								tmpValue = LexemStruct(subfragment).value;
 							}
+
+							code += tmpValue;
 						}
 						fragment.retValue = Parser.eval(code, contexts);
 						fragment.code = fragment.retValue.toString();

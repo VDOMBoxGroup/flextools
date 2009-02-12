@@ -1,5 +1,7 @@
 package PowerPack.com.gen.parse.parseClasses
 {
+	import PowerPack.com.gen.parse.Parser;
+	
 public class CodeFragment extends LexemStruct
 {
 	public static var lastExecutedFragment:CodeFragment;
@@ -8,7 +10,6 @@ public class CodeFragment extends LexemStruct
 	//public var codeFragments:Array = []; // fragments without nonusable characters
 	
 	public var retValue:*; // return value
-	public var code:String; // generated code
 	public var print:Boolean; // print result value to output buffer
 
 	// for commands
@@ -53,6 +54,37 @@ public class CodeFragment extends LexemStruct
 		}
 		
 		return '';
+	}
+
+    //----------------------------------
+    //  evalValue
+    //----------------------------------	
+	public function get evalValue():String
+	{		
+		var _value:String = '';
+		for(var i:int=0; i<fragments.length; i++)
+		{
+			var curFragment:LexemStruct = fragments[i];
+			
+			if(curFragment is CodeFragment)
+			{
+				if(CodeFragment(curFragment).ctype == Parser.CT_FUNCTION)
+					_value += CodeFragment(curFragment).retValue + curFragment.postSpaces;
+				else if(CodeFragment(curFragment).type == 'W')
+					_value += CodeFragment(curFragment).retValue + curFragment.postSpaces;
+				else
+					_value += CodeFragment(curFragment).evalValue;
+			}			
+			else if(curFragment is LexemStruct)
+			{
+				if(curFragment.type == 'v')			
+					_value += curFragment.value + curFragment.postSpaces;
+				else
+					_value += curFragment.origValue + curFragment.postSpaces;
+			}
+		}
+		
+		return _value.substr(0, _value.length-postSpaces.length);
 	}
 
     //----------------------------------

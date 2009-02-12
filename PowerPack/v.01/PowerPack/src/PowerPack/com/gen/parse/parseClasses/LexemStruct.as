@@ -3,6 +3,7 @@ package PowerPack.com.gen.parse.parseClasses
 public class LexemStruct
 {
 	public var type:String; // lexem type
+	public var code:String; // generated code
 	
 	// USED IN FUNCTIONS FOR ARGUMENTS SEPARATING
 	public var operationGroup:int = 0; // operation expression group number (0 - not grouped) 
@@ -114,6 +115,8 @@ public class LexemStruct
 	{
 		this.origValue = value 
 		this.value = value;
+		this.code = value;
+		
 		this.type = type;
 		this.position = position;
 		this.error = error;

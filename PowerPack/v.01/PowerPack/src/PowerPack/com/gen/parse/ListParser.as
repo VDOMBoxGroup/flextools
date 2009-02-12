@@ -8,6 +8,7 @@ import GraphicAPI.drawing.StrokePatternStyle;
 
 import PowerPack.com.gen.errorClasses.RunTimeError;
 import PowerPack.com.gen.parse.listClasses.ElmType;
+import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
 import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 
@@ -71,29 +72,31 @@ public class ListParser
 				case 'c':
 					curFragment.listGroup = grp--;
 					pushWord();
-					str = replaceAllBracers(curFragment.origValue);
-					arr.push(Utils.replaceQuotes(str));
+					//str = replaceAllBracers(curFragment.origValue);
+					//arr.push(Utils.replaceQuotes(str));
+					arr.push( curFragment );
 					break;
 					
 				case 'v':
 					curFragment.listGroup = grp--;
 					pushWord();
-					str = replaceAllBracers(curFragment.origValue);
-					arr.push( {type:'v', value:str.substring(1)} );
+					//str = replaceAllBracers(curFragment.origValue);
+					arr.push( curFragment );
 					break;
 					
 				case 'W':
 					curFragment.listGroup = grp--;
 					pushWord();
-					str = replaceAllBracers(curFragment.origValue);
-					arr.push( {type:'W', value:str.substr(1,str)} );
+					//str = replaceAllBracers(curFragment.origValue);
+					arr.push( curFragment );
 					break;
 					
 				case 'A':
 					curFragment.listGroup = grp--;
 					pushWord();
-					str = replaceAllBracers(curFragment.origValue);
-					arr.push( list2Array(curFragment.origValue) );
+					//str = replaceAllBracers(curFragment.origValue);
+					//arr.push( list2Array(str) );
+					arr.push( curFragment );
 					break;
 					
 				default:
@@ -145,7 +148,11 @@ public class ListParser
 			}
 			else if(curElm is Array)
 			{
-				listStr += array2List(curElm);
+				listStr += array2List(Array(curElm));
+			}
+			else if(curElm is CodeFragment)
+			{
+				listStr += CodeFragment(curElm).value;
 			}
 			else if(curElm.hasOwnProperty('type') && curElm.hasOwnProperty('value'))
 			{
@@ -153,8 +160,6 @@ public class ListParser
 				{
 					case 'v':
 					case 'W':
-						listStr += '$'+curElm.value;
-						break;
 					case 'w':
 					default:
 						listStr += curElm.value;
