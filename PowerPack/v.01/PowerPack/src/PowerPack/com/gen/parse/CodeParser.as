@@ -44,7 +44,7 @@ public class CodeParser
 	{
 		if(!fragment.validated)
 		{
-			Parser.validateCodeFragment(fragment);			
+			Parser.validateCodeFragment(fragment);
 		}
 		
 		if(fragment.errFragment)
