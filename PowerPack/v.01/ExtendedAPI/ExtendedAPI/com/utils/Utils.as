@@ -139,7 +139,24 @@ package ExtendedAPI.com.utils
 			}			
 			return str;
 		}
-				
+
+		public static function replaceBracers(string:String, bracers:String='({['):String
+		{
+			var str:String = string.concat();
+			var bracer:String = str.charAt(0);
+			var closeBracer:String;
+			
+			if("({[".search(bracer)>=0 && bracers.search(bracer)>=0)
+				closeBracer = ")}]".charAt("({[".search(bracer));
+			
+			if(closeBracer && str.charAt(str.length-1)==closeBracer)
+			{
+				str = str.substr(1, str.length-2);
+			}
+			
+			return str;
+		}
+					
 		public static function replaceQuotes(string:String):String
 		{
 			var str:String;
