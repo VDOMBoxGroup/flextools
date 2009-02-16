@@ -281,9 +281,8 @@ public class CodeParser
 
 							code += tmpValue;
 						}
-						fragment.retValue = Parser.eval(code, contexts);
-						fragment.code = fragment.retValue.toString();
-						code = fragment.code; 
+						code = Parser.eval(code, contexts);
+						fragment.code = code;
 						break;
 				}
 		}

@@ -142,17 +142,13 @@ public class ListParser
 		{
 			var curElm:Object = arr[i];
 			
-			if(curElm is String)
+			if(curElm is Array)
 			{
-				listStr += Utils.quotes(String(curElm));
-			}
-			else if(curElm is Array)
-			{
-				listStr += array2List(Array(curElm));
+				listStr += array2List(curElm as Array);
 			}
 			else if(curElm is CodeFragment)
 			{
-				listStr += CodeFragment(curElm).value;
+				listStr += CodeFragment(curElm).origValue;
 			}
 			else if(curElm.hasOwnProperty('type') && curElm.hasOwnProperty('value'))
 			{
@@ -160,10 +156,10 @@ public class ListParser
 				{
 					case 'v':
 					case 'W':
-					case 'w':
+					case 'w':					
 					default:
 						listStr += curElm.value;
-						break;					
+						break;
 				}
 			}
 			else
@@ -175,6 +171,7 @@ public class ListParser
 		return listStr;
 	}
 	
+	/*
 	public static function elm2Value(elm:Object):Object
 	{
 		var code:String = '';
@@ -207,7 +204,9 @@ public class ListParser
 		
 		return retVal;
 	}
+	*/
 	
+	/*
 	public static function processElmValue(obj:Object):String
 	{
 		var str:String = "";
@@ -223,6 +222,7 @@ public class ListParser
 		
 		return str;
 	}
+	*/
 	
 	public static function processElmType(type:Object):int
 	{
@@ -269,11 +269,11 @@ public class ListParser
 		return _type;	
 	}
 	
-	public static function processElmPosition(list:String, position:Object, operation:String=null):int
+	public static function processElmPosition(listLen:int, position:Object, operation:String=null):int
 	{
 		var _position:int = -1;
 		var str:String;
-		var len:int = length(list);
+		var len:int = listLen;
 		
 		switch(typeof position)
 		{
@@ -535,41 +535,35 @@ public class ListParser
 		return ret;	
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
 	public static function processPoints(list:String, contexts:Array):Array
 	{
-		var len:int = length(list);
-		var arr:Array = [];
+		var arr:Array = list2Array(String(list)); 
+		var ret:Array = []; 
 		
-		for(var i:int=0; i<len; i++)
+		for(var i:int=0; i<arr.length; i++)
 		{
-			var strList:String = getElm(list,i+1);
+			var strSublist:String = getElm(arr,i+1);
+			var arrSublist:Array = list2Array(String(strSublist));
 			
-			if(length(strList)!=2)
+			if(arrSublist.length!=2)
 				throw new RunTimeError(null, 9007, [2]);
 				
-			arr.push(new Point(	int(getElmValue(strList,1,contexts)),
-								int(getElmValue(strList,2,contexts))	));
+			ret.push(new Point(	int(getElmValue(arrSublist,1,contexts)),
+								int(getElmValue(arrSublist,2,contexts))	));
 		}
 			
-		return arr;
+		return ret;
 	}
 			
 	public static function processSubFunc(sublist:String, contexts:Array):*
 	{
-		var len:int = length(sublist);
+		var arr:Array = list2Array(String(sublist)); 
+		var len:int = arr.length;
 		
 		if(len==0)
 			return null;
 		
-		var strVal:String = getElm(sublist, 1);
+		var strVal:String = getElm(arr, 1);
 		var ret:*;
 		
 		switch(strVal.toLowerCase())
@@ -579,17 +573,17 @@ public class ListParser
 					throw new RunTimeError(null, 9007, [4]);
 					
 				ret = new PStroke(
-								uint(getElmValue(sublist, 2, contexts)),
-								uint(getElmValue(sublist, 4, contexts)),
-								processStrokeType(getElmValue(sublist, 3, contexts)));													
+								uint(getElmValue(arr, 2, contexts)),
+								uint(getElmValue(arr, 4, contexts)),
+								processStrokeType(getElmValue(arr, 3, contexts)));													
 				break;
 				
 			case 'brush':
 				if(len!=3)
 					throw new RunTimeError(null, 9007, [3]);
 					
-				var bColor:uint = uint(getElmValue(sublist, 3, contexts));
-				ret = processBrushType(getElmValue(sublist, 2, contexts), bColor);				
+				var bColor:uint = uint(getElmValue(arr, 3, contexts));
+				ret = processBrushType(getElmValue(arr, 2, contexts), bColor);				
 				break;
 				
 			case 'gradientoneway':
@@ -597,9 +591,9 @@ public class ListParser
 				if(len!=4)
 					throw new RunTimeError(null, 9007, [4]);		
 	
-				var gCol1:uint = uint(getElmValue(sublist, 2, contexts));
-				var gCol2:uint = uint(getElmValue(sublist, 3, contexts));
-				var gAngle:int = int(getElmValue(sublist, 4, contexts));
+				var gCol1:uint = uint(getElmValue(arr, 2, contexts));
+				var gCol2:uint = uint(getElmValue(arr, 3, contexts));
+				var gAngle:int = int(getElmValue(arr, 4, contexts));
 				
 				var alpha1:Number = 1.0; 
 				var alpha2:Number = 1.0;
@@ -621,14 +615,14 @@ public class ListParser
 				if(len!=2)
 					throw new RunTimeError(null, 9007, [2]);
 					
-				ret = getElmValue(sublist, 2, contexts);		
+				ret = getElmValue(arr, 2, contexts);		
 				break;
 				
 			case 'filter':
 				if(len<2)
 					throw new RunTimeError(null, 9007, ['>1']);
 
-				var fName:String = getElmValue(sublist, 2, contexts).toString().toLowerCase();
+				var fName:String = getElmValue(arr, 2, contexts).toString().toLowerCase();
 				var filter:*;
 				var params:Object = {};				
 				var index:int = 2;
@@ -637,27 +631,27 @@ public class ListParser
 				{
 					case 'bevelfilter':
 						if(len>index++)
-							params.distance = Number(getElmValue(sublist, index, contexts));
+							params.distance = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.angle = Number(getElmValue(sublist, index, contexts));
+							params.angle = Number(getElmValue(arr, index, contexts));
 							
 						if(len>index++)
-							params.hColor = uint(getElmValue(sublist, index, contexts));
+							params.hColor = uint(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.hAlpha = Number(getElmValue(sublist, index, contexts))/100;
+							params.hAlpha = Number(getElmValue(arr, index, contexts))/100;
 						if(len>index++)
-							params.sColor = uint(getElmValue(sublist, index, contexts));
+							params.sColor = uint(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.sAlpha = Number(getElmValue(sublist, index, contexts))/100;
+							params.sAlpha = Number(getElmValue(arr, index, contexts))/100;
 							
 						if(len>index++)
-							params.blurX = Number(getElmValue(sublist, index, contexts));
+							params.blurX = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.blurY = Number(getElmValue(sublist, index, contexts));
+							params.blurY = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.strength = Number(getElmValue(sublist, index, contexts));
+							params.strength = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.type = getElmValue(sublist, index, contexts).toString();
+							params.type = getElmValue(arr, index, contexts).toString();
 
 						filter = new BevelFilter(
 							params.hasOwnProperty('distance') ? params.distance : 4,
@@ -676,9 +670,9 @@ public class ListParser
 						
 					case 'blurfilter':
 						if(len>index++)
-							params.blurX = Number(getElmValue(sublist, index, contexts));
+							params.blurX = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.blurY = Number(getElmValue(sublist, index, contexts));
+							params.blurY = Number(getElmValue(arr, index, contexts));
 
 						filter = new BlurFilter(
 							params.hasOwnProperty('blurX') ? params.blurX : 4,
@@ -688,8 +682,8 @@ public class ListParser
 
 					case 'colormatrixfilter':
 						if(len>index++) {
-							params.matrixList = getElm(sublist, index).toString();
-							params.matrixListLen = length(params.matrixList);
+							params.matrixList = list2Array(getElm(arr, index).toString());
+							params.matrixListLen = params.matrixList.length;
 							
 							if(params.matrixListLen!=20)
 								throw new RunTimeError(null, 9007, ['20']);		
@@ -704,13 +698,13 @@ public class ListParser
 						
 					case 'convolutionfilter':
 						if(len>index++)
-							params.matrixX = Number(getElmValue(sublist, index, contexts));
+							params.matrixX = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.matrixY = Number(getElmValue(sublist, index, contexts));
+							params.matrixY = Number(getElmValue(arr, index, contexts));
 						
 						if(len>index++) {
-							params.matrixList = getElm(sublist, index).toString();
-							params.matrixListLen = length(params.matrixList);
+							params.matrixList = list2Array(getElm(arr, index).toString());
+							params.matrixListLen = params.matrixList.length;
 							
 							if(params.matrixListLen != params.matrixX*params.matrixY)
 								throw new RunTimeError(null, 9007, [params.matrixX*params.matrixY]);		
@@ -721,19 +715,19 @@ public class ListParser
 						}
 													
 						if(len>index++)
-							params.divisor = Number(getElmValue(sublist, index, contexts));
+							params.divisor = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.bias = Number(getElmValue(sublist, index, contexts));
+							params.bias = Number(getElmValue(arr, index, contexts));
 							
 						if(len>index++)
-							params.preserveAlpha = getElmValue(sublist, index, contexts);							
+							params.preserveAlpha = getElmValue(arr, index, contexts);							
 						if(len>index++)
-							params.clamp = getElmValue(sublist, index, contexts);
+							params.clamp = getElmValue(arr, index, contexts);
 							
 						if(len>index++)
-							params.color = uint(getElmValue(sublist, index, contexts));
+							params.color = uint(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.alpha = Number(getElmValue(sublist, index, contexts))/100;
+							params.alpha = Number(getElmValue(arr, index, contexts))/100;
 												
 						filter = new ConvolutionFilter(
 							params.hasOwnProperty('matrixX') ? params.matrixX : 0,
@@ -749,12 +743,12 @@ public class ListParser
 						
 					case 'displacementmapfilter':						
 						if(len>index++)
-							params.mapBitmap = getElmValue(sublist, index, contexts);
+							params.mapBitmap = getElmValue(arr, index, contexts);
 							
 						if(len>index++)
 						{
-							params.mapPointList = getElm(sublist, index).toString();
-							params.mapPointListLen = length(params.mapPointList);
+							params.mapPointList = list2Array(getElm(arr, index).toString());
+							params.mapPointListLen = params.mapPointList.length;
 							
 							if(params.mapPointListLen != 2)
 								throw new RunTimeError(null, 9007, ['2']);		
@@ -764,20 +758,20 @@ public class ListParser
 						}
 						
 						if(len>index++)
-							params.componentX = uint(getElmValue(sublist, index, contexts));
+							params.componentX = uint(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.componentY = uint(getElmValue(sublist, index, contexts));
+							params.componentY = uint(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.scaleX = Number(getElmValue(sublist, index, contexts));
+							params.scaleX = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.scaleY = Number(getElmValue(sublist, index, contexts));
+							params.scaleY = Number(getElmValue(arr, index, contexts));
 
 						if(len>index++)
-							params.mode = getElmValue(sublist, index, contexts).toString();
+							params.mode = getElmValue(arr, index, contexts).toString();
 						if(len>index++)
-							params.color = Number(getElmValue(sublist, index, contexts));
+							params.color = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.alpha = Number(getElmValue(sublist, index, contexts))/100;
+							params.alpha = Number(getElmValue(arr, index, contexts))/100;
 
 						filter = new DisplacementMapFilter(
 							params.hasOwnProperty('mapBitmap') ? params.mapBitmap : null,
@@ -793,25 +787,25 @@ public class ListParser
 						
 					case 'dropshadowfilter':
 						if(len>index++)
-							params.distance = Number(getElmValue(sublist, index, contexts));
+							params.distance = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.angle = Number(getElmValue(sublist, index, contexts));
+							params.angle = Number(getElmValue(arr, index, contexts));
 							
 						if(len>index++)
-							params.color = uint(getElmValue(sublist, index, contexts));
+							params.color = uint(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.alpha = Number(getElmValue(sublist, index, contexts))/100;
+							params.alpha = Number(getElmValue(arr, index, contexts))/100;
 							
 						if(len>index++)
-							params.blurX = Number(getElmValue(sublist, index, contexts));
+							params.blurX = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.blurY = Number(getElmValue(sublist, index, contexts));
+							params.blurY = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.strength = Number(getElmValue(sublist, index, contexts));
+							params.strength = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.inner = getElmValue(sublist, index, contexts);
+							params.inner = getElmValue(arr, index, contexts);
 						if(len>index++)
-							params.hideObject = getElmValue(sublist, index, contexts);
+							params.hideObject = getElmValue(arr, index, contexts);
 											
 						filter = new DropShadowFilter(
 							params.hasOwnProperty('distance') ? params.distance : 4,
@@ -829,18 +823,18 @@ public class ListParser
 						
 					case 'glowfilter':
 						if(len>index++)
-							params.color = uint(getElmValue(sublist, index, contexts));
+							params.color = uint(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.alpha = Number(getElmValue(sublist, index, contexts))/100;
+							params.alpha = Number(getElmValue(arr, index, contexts))/100;
 							
 						if(len>index++)
-							params.blurX = Number(getElmValue(sublist, index, contexts));
+							params.blurX = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.blurY = Number(getElmValue(sublist, index, contexts));
+							params.blurY = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.strength = Number(getElmValue(sublist, index, contexts));
+							params.strength = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.inner = getElmValue(sublist, index, contexts);
+							params.inner = getElmValue(arr, index, contexts);
 											
 						filter = new GlowFilter(
 							params.hasOwnProperty('color') ? params.color : 0xFF0000,
@@ -860,13 +854,13 @@ public class ListParser
 							filter = new GradientGlowFilter();
 
 						if(len>index++)
-							params.distance = Number(getElmValue(sublist, index, contexts));
+							params.distance = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.angle = Number(getElmValue(sublist, index, contexts));
+							params.angle = Number(getElmValue(arr, index, contexts));
 
 						if(len>index++) {
-							params.colorList = getElm(sublist, index).toString();
-							params.colorListLen = length(params.colorList);
+							params.colorList = list2Array(getElm(arr, index).toString());
+							params.colorListLen = params.colorList.length;
 							
 							params.colors = [];
 							for (i=0; i<params.colorListLen; i++)
@@ -874,8 +868,8 @@ public class ListParser
 						}
 
 						if(len>index++) {
-							params.alphaList = getElm(sublist, index).toString();
-							params.alphaListLen = length(params.alphaList);
+							params.alphaList = list2Array(getElm(arr, index).toString());
+							params.alphaListLen = params.alphaList.length;
 							
 							params.alphas = [];
 							for (i=0; i<params.alphaListLen; i++)
@@ -883,8 +877,8 @@ public class ListParser
 						}
 
 						if(len>index++) {
-							params.ratioList = getElm(sublist, index).toString();
-							params.ratioListLen = length(params.ratioList);
+							params.ratioList = list2Array(getElm(arr, index).toString());
+							params.ratioListLen = params.ratioList.length;
 							
 							params.ratios = [];
 							for (i=0; i<params.ratioListLen; i++)
@@ -892,13 +886,13 @@ public class ListParser
 						}
 													
 						if(len>index++)
-							params.blurX = Number(getElmValue(sublist, index, contexts));
+							params.blurX = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.blurY = Number(getElmValue(sublist, index, contexts));
+							params.blurY = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.strength = Number(getElmValue(sublist, index, contexts));
+							params.strength = Number(getElmValue(arr, index, contexts));
 						if(len>index++)
-							params.type = getElmValue(sublist, index, contexts);
+							params.type = getElmValue(arr, index, contexts);
 							
 						filter.distance = params.hasOwnProperty('distance') ? params.distance : 4;
 						filter.angle = params.hasOwnProperty('angle') ? params.angle : 45;
@@ -924,13 +918,13 @@ public class ListParser
 				var format:TextFormat = new TextFormat();
 				var fArg:String;
 	
-	            format.font = getElmValue(sublist, 2, contexts);
-	            format.size = int(getElmValue(sublist, 3, contexts));
-	            format.color = uint(getElmValue(sublist, 4, contexts));
+	            format.font = String(getElmValue(arr, 2, contexts));
+	            format.size = int(getElmValue(arr, 3, contexts));
+	            format.color = uint(getElmValue(arr, 4, contexts));
 				
 				for (i=4; i<len; i++)
 				{
-					fArg = getElmValue(sublist, i+1, contexts).toString().toLowerCase();
+					fArg = getElmValue(arr, i+1, contexts).toString().toLowerCase();
 					switch( fArg )
 					{
 						case 'bold':
@@ -959,7 +953,8 @@ public class ListParser
 					
 		return ret;	
 	}
-
+	
+	/*
 	private static function processList(
 		list:String, 
 		type:Object=null, 
@@ -987,12 +982,12 @@ public class ListParser
 		if(_position<0)
 			throw new RunTimeError(null, 9011);
 		
-		/**
-		 * 1 - Word
-		 * 2 - String
-		 * 3 - List
-		 * 4 - Variable  
-		 */		 
+		
+		 // 1 - Word
+		 // 2 - String
+		 // 3 - List
+		 // 4 - Variable  
+		 		 
 		_type = processElmType(type);
 		
 		if(_type<=0 && (operation=='exist' || operation=='update' || operation=='put'))
@@ -1050,12 +1045,12 @@ public class ListParser
 			ret = arr.getItemAt(_position+1).origValue;
 			ret = StringUtil.trim(ret);
 			
-			/*
-			if(listObj.value.charAt(_position+1)=='A' || Parser.processList( ret ).result)
-			{
-				ret = StringUtil.trim(ret);
-			}
-			*/
+			
+			//if(listObj.value.charAt(_position+1)=='A' || Parser.processList( ret ).result)
+			//{
+			//	ret = StringUtil.trim(ret);
+			//}
+			
 		}
 		else if(operation=="getType")
 		{
@@ -1087,106 +1082,281 @@ public class ListParser
 		}
 		return ret;
 	}
+	*/
 	
-	public static function length(list:String):int
-	{
-		var length:int = 0;
+	public static function length(list:Object):int
+	{		
+		var arr:Array = [];
 		
-		var listObj:Object = Parser.processList(list);
-			
-		if(listObj.result)
-			length = listObj.value.length-2;
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;
+		
+		return arr.length;	
+	}
+
+	public static function getElm(list:Object, position:Object):String
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:String;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);			
+		
+		var elm:Object = arr[pos];
+		
+		if(elm is CodeFragment)
+			ret = CodeFragment(elm).origValue;
+		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
+			ret = elm.value;
 		else
-			length = list.length	
+			ret = elm.toString();
 		
-		return length;	
+		return ret;
 	}
 
-	public static function getElm(list:String, position:*):*
+	public static function getElmValue(list:Object, position:Object, contexts:Array):Object
 	{
-		return processList(list, null, position);
-	}
+		var arr:Array = [];
+		var pos:int;
+		var ret:Object;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
 
-	public static function getElmValue(list:String, position:*, contexts:Array):*
-	{
-		var strElm:String = getElm(list, position).toString();
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);			
 		
-		var lexems:Array = Parser.getLexemArray(strElm);
-		Parser.processLexemArray(lexems);
-		lexems = Parser.convertLexemArray(lexems);
-		var lexemObj:Object = Parser.processConvertedLexemArray(lexems, contexts);
-		lexems = lexemObj.array;
+		var elm:Object = arr[pos];
 		
-    	var strSentence:String = "";
-		for(var i:int=0; i<lexems.length; i++)
-			strSentence = strSentence + lexems[i].type;	
-		
-		var prog:String = '';
-		
-		for (i=0; i<lexems.length; i++)		
-			prog += ' '+(lexems[i].type=='n' ? Utils.quotes(lexems[i].value) : lexems[i].value);
-		
-		var evalRes:*;
-		
-		if(lexems.length==1 && (lexems[0].type=='c' || lexems[0].type=='s'))
+		if(elm is CodeFragment)
 		{
-			evalRes = Utils.replaceQuotes(lexems[0].value);
+			CodeParser.executeCodeFragment(CodeFragment(elm), contexts);			
+			ret = CodeFragment(elm).retValue;
 		}
-		else if(Parser.isValidOperation(strSentence).result)
+		else if(elm is LexemStruct)
 		{
-			try {
-				evalRes = Parser.eval(prog, contexts);
-			} catch(e:*) {
-				evalRes = strElm;
+			CodeParser.evaluateLexem(LexemStruct(elm), contexts);
+			ret = Parser.eval(LexemStruct(elm).code, contexts);
+		}
+		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
+			ret = elm.value;
+		else
+			ret = elm.toString();
+		
+		return ret;
+	}
+	
+	public static function getType(list:Object, position:Object):int
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);			
+		
+		var elm:Object = arr[pos];		
+		
+		if(elm is LexemStruct)
+		{
+			switch(LexemStruct(elm).type)
+			{
+				case 'n':
+				case 'o':
+				case 'b':
+				case 'i':
+				case 'f':
+				case 'w':
+					ret = ElmType.WORD;
+					break;
+				case 's':
+				case 'c':
+					ret = ElmType.STRING; 
+					break;
+				case 'A':			
+					ret = ElmType.LIST;
+					break;
+				case 'v':
+				case 'W':
+					ret = ElmType.VARIABLE;
+					break;
+				default:
+					ret = ElmType.UNKNOWN;
 			}
 		}
+		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
+			ret = ElmType.WORD;			
 		else
-		{
-			evalRes = strElm;
-		}
+			ret = ElmType.WORD;					
 		
-		return evalRes;
-	}
-	
-	public static function getType(list:String, position:*):int
-	{
-		return processList(list, null, position, null, 'getType');
+		return ret;
 	}
 
-	public static function exists(list:String, type:*, value:*):int
+	public static function exists(list:Object, type:Object, value:String):int
 	{
-		var len:int = length(list);
+		var arr:Array = [];
+		var pos:int;
+		var ret:int = 0;
 		var _type:int = processElmType(type);
-		var _strVal:String = processElmValue(value);
-		var _pos:int = -1;
 		
-		for(var i:int=1; i<=len; i++)
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+					
+		for(var i:int=1; i<=arr.length; i++)
 		{
-			if(	_type==processList(list, null, i, null, 'getType') &&
-				_strVal==processList(list, null, i, null, "get") )
+			if(	_type==getType(arr, i) &&
+				value==getElm(arr, i) )
 			{
-				_pos = i;
+				ret = i;
 				break;
 			}
-		} 
-
-		return _pos;	
+		}
+		
+		return ret;
 	}
 
-	public static function remove(list:String, position:*):String
+	public static function remove(list:Object, position:Object):String
 	{
-		return processList(list, null, position, null, 'delete');
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		var arrCol:ArrayCollection = new ArrayCollection(arr);
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);
+		
+		arrCol.removeItemAt(pos);			
+		
+		return array2List(arr);
+	}
+		
+	public static function put(list:Object, position:Object, type:Object, value:String):String
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		var _type:int = processElmType(type);
+		var _value:String;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		var arrCol:ArrayCollection = new ArrayCollection(arr);
+		
+		pos = processElmPosition(arr.length, position, 'put');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>arr.length)
+			throw new RunTimeError(null, 9013);
+
+		switch(_type)
+		{
+			case ElmType.WORD:
+				_value = value;
+				break;
+			case ElmType.STRING:
+				_value = Utils.quotes(value);
+				break;
+			case ElmType.LIST:
+				_value = StringUtil.trim(value);
+				break;
+			case ElmType.VARIABLE:
+				_value = "$"+StringUtil.trim(_value);
+				break;
+		}
+		
+		arrCol.addItemAt(_value, pos);
+					
+		return array2List(arr);
 	}
 	
-	public static function put(list:String, position:*, type:*, value:*):String
+	public static function update(list:Object, position:Object, type:Object, value:String):String
 	{
-		return processList(list, type, position, value, "put");
-	}
-	
-	public static function update(list:String, position:*, type:*, value:*):String
-	{
-		return processList(list, type, position, value, "update");
-	}
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		var _type:int = processElmType(type);
+		var _value:String;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'put');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
 
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);
+			
+		switch(_type)
+		{
+			case ElmType.WORD:
+				_value = value;
+				break;
+			case ElmType.STRING:
+				_value = Utils.quotes(value);
+				break;
+			case ElmType.LIST:
+				_value = StringUtil.trim(value);
+				break;
+			case ElmType.VARIABLE:
+				_value = "$"+StringUtil.trim(_value);
+				break;
+		}
+		
+		arr[pos] = _value;
+					
+		return array2List(arr);
+	}
 }
 }
