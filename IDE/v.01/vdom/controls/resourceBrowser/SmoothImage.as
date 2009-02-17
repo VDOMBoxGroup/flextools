@@ -18,7 +18,7 @@ package vdom.controls.resourceBrowser
 
 	public class SmoothImage extends Image
 	{
-		private static var classConstructed:Boolean = classConstruct();
+		/* private static var classConstructed:Boolean = classConstruct();
 		
 		private static function classConstruct():Boolean {
 			// If there is no CSS definition for our style,
@@ -34,7 +34,7 @@ package vdom.controls.resourceBrowser
 			}
 			
 			return true;
-		}
+		} */
 
 		private var bSmoothingChanged:Boolean;
 		

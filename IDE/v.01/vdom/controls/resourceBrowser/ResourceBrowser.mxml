@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	Resource Browser component for VDOM Box IDE
-	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+	 Resource Browser component for VDOM Box IDE
+	 Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
 -->
-<mx:TitleWindow 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="800" height="600"
-	title="Resource Browser"
-	creationComplete="creationCompleteHandler();"
-	showCloseButton="true"
-	verticalScrollPolicy="off" horizontalScrollPolicy="off"
-	borderAlpha="0.95" cornerRadius="1" 
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
-	visible="true" shadowDirection="right"
-	borderColor="#636363" titleStyleName="resourceBrowserTitle"
-	borderThicknessLeft="1" borderThicknessRight="1"
-	titleIcon="@Embed(source='/assets/common/resourcebrowser.png')">
 	
+	title="Resource Browser"
+	titleStyleName="resourceBrowserTitle"
+	titleIcon="@Embed(source='/assets/common/resourcebrowser.png')"
+	
+	height="600" width="800"
+	
+	borderAlpha="0.95" borderColor="#636363" 
+	borderThicknessLeft="1"	borderThicknessRight="1"
+	cornerRadius="1" shadowDirection="right"
+	
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	layout="absolute"  showCloseButton="true" 
+	
+	creationComplete="creationCompleteHandler();" 
+	>
 	<mx:Style>
 		.resourceBrowserTitle {
 			color:#FFFFFF;
@@ -24,109 +29,108 @@
 		}
 	</mx:Style>
 	
-	<mx:Script>
-		<![CDATA[
-			import mx.events.CloseEvent;
-		]]>
-	</mx:Script>
-	
-	<!-- Main Class Scripting File -->			
-	<mx:Script source="ResourceBrowser_s.as" />
+	<!-- Main Class Scripting File -->
+	<mx:Script source="ResourceBrowser_s.as"/>
 	
 	<mx:VBox 
-		width="100%" height="100%"
-		paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5"
-		horizontalGap="3" verticalGap="3">
-		
+		height="100%" horizontalGap="3" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+		verticalGap="3" width="100%">
 		<!-- Top Panel -->
-		<mx:HBox
-			width="100%" height="30" cornerRadius="0"
-			verticalAlign="middle" paddingLeft="5" paddingRight="5"
-			backgroundColor="#e5e5e5" borderStyle="solid">
-
-			<mx:VRule height="100%" />
-			
-			<mx:Label text="Filter:" fontWeight="bold"/>
-			<mx:ComboBox id="__filterCBx" width="150" dataProvider="{filterDataProvider}" change="{applyExtensionFilter();}" />
-			<mx:VRule height="100%" />
-			<mx:Spacer width="100%" />
-			<mx:Button height="24" label="Upload File..." click="uploadButton_clickHandler();"
-				icon="@Embed(source='/assets/resourceBrowserIcons/interface/upload.png')"  width="120"/>
-			
-			<!--
-			<mx:VRule height="100%" />
-			<mx:Button height="24" label="Delete File..." enabled="false" />
-			-->
+		<mx:HBox 
+			backgroundColor="#e5e5e5" borderStyle="solid" cornerRadius="0" height="30" paddingLeft="5"
+			paddingRight="5" verticalAlign="middle" width="100%">
+			<mx:VRule 
+				height="100%"/>
+			<mx:Label 
+				fontWeight="bold" text="Filter:"/>
+			<mx:ComboBox id="__filterCBx"
+				change="{applyExtensionFilter();}" dataProvider="{filterDataProvider}" width="150"/>
+			<mx:VRule 
+				height="100%"/>
+			<mx:Spacer 
+				width="100%"/>
+			<mx:Button 
+				click="uploadButton_clickHandler();" height="24" icon="@Embed(source='/assets/resourceBrowserIcons/interface/upload.png')"
+				label="Upload File..." width="120"/>
+				
 		</mx:HBox>
 		<!-- End of top panel -->
 		
-		<mx:HBox id="__midArea" width="100%" height="100%" horizontalGap="2">
-			
-			<mx:VBox height="100%" width="200" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalGap="2">
+		<mx:HBox id="__midArea"
+			height="100%" horizontalGap="2" width="100%">
+			<mx:VBox 
+				height="100%" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalGap="2"
+				width="200">
 				<mx:HBox 
-					width="100%" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
-					horizontalGap="3" verticalAlign="middle">
-					
+					horizontalGap="3" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
+					verticalAlign="middle" width="100%">
 					<mx:TextInput id="__nameFilter"
-						
-						borderColor="#999999" borderStyle="solid" width="100%" color="#666666" text="type a filter here"
-						backgroundColor="#EEEEEE" fontFamily="Tahoma" fontWeight="bold" 
-						
-						change="nameFilter_changeHandler();"
-						click="nameFilter_clickHandler();"
-						/>
-						
-					<mx:Image id="__spinner" width="18" height="18" source="@Embed('/assets/common/spinner.swf')" visible="false" />
+						backgroundColor="#EEEEEE" borderColor="#999999" borderStyle="solid" change="nameFilter_changeHandler();"
+						click="nameFilter_clickHandler();" color="#666666" fontFamily="Tahoma" fontWeight="bold"
+						text="type a filter here" width="100%"/>
+					<mx:Image id="__spinner"
+						height="18" source="@Embed('/assets/common/spinner.swf')" visible="false" width="18"/>
 				</mx:HBox>
-				
 				<mx:List id="__thumbsList"
-					height="100%" width="100%"
-					borderStyle="solid" change="showResource();"
-					verticalScrollPolicy="on" horizontalScrollPolicy="off"
-					paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
-					itemRenderer="vdom.controls.resourceBrowser.ListItem" />
-				
+					borderStyle="solid" change="showResource();" height="100%" horizontalScrollPolicy="off"
+					itemRenderer="vdom.controls.resourceBrowser.ListItem" paddingBottom="5" paddingLeft="5"
+					paddingRight="5" paddingTop="5" verticalScrollPolicy="on" width="100%"/>
 			</mx:VBox>
-
-			<mx:VBox width="100%" height="100%" verticalGap="2" horizontalAlign="center">
-			
+			<mx:VBox 
+				height="100%" horizontalAlign="center" verticalGap="2" width="100%">
 				<mx:Box id="__previewArea"
-					width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
-					
+					height="100%" horizontalAlign="center" verticalAlign="middle" width="100%">
 					<resourceBrowser:PreviewContainer id="__preview"
+						height="100" width="100"
 						heightLimit="{__previewArea.height - 15}"
-						widthLimit="{__previewArea.width - 15}"
-						width="100" height="100"/>
-						
+						widthLimit="{__previewArea.width - 15}"/>
 				</mx:Box>
-				
-				
-				<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center">
-					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-						<mx:Label id="__rName" text="" height="18" fontWeight="bold" maxWidth="350" textAlign="center" />
+				<mx:HBox 
+					horizontalAlign="center" verticalAlign="middle" width="100%">
+					<mx:Box 
+						backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5"
+						paddingRight="5">
+						<mx:Label id="__rName"
+							fontWeight="bold" height="18" maxWidth="350" text="" textAlign="center"/>
 					</mx:Box>
-					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-						<mx:Label id="__rType" text="" height="18" fontWeight="bold"/>
+					<mx:Box 
+						backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5"
+						paddingRight="5">
+						<mx:Label id="__rType"
+							fontWeight="bold" height="18" text=""/>
 					</mx:Box>
-					<mx:Box cornerRadius="3" backgroundColor="#FFF6EA" borderStyle="solid" paddingLeft="5" paddingRight="5">
-						<mx:Label id="__iResolution" text="" height="18" fontWeight="bold"/>
-					</mx:Box>					
+					<mx:Box 
+						backgroundColor="#FFF6EA" borderStyle="solid" cornerRadius="3" paddingLeft="5"
+						paddingRight="5">
+						<mx:Label id="__iResolution"
+							fontWeight="bold" height="18" text=""/>
+					</mx:Box>
 				</mx:HBox>
-				<mx:Box cornerRadius="3" backgroundColor="#E4E2FD" borderStyle="solid" paddingLeft="5" paddingRight="5">
-					<mx:Label id="__rID" text="" height="18" fontWeight="bold" selectable="true"/>
-				</mx:Box>					
-
-			</mx:VBox>				
-
+				<mx:Box 
+					backgroundColor="#E4E2FD" borderStyle="solid" cornerRadius="3" paddingLeft="5" paddingRight="5">
+					<mx:Label id="__rID"
+						fontWeight="bold" height="18" selectable="true" text=""/>
+				</mx:Box>
+			</mx:VBox>
 		</mx:HBox>
 	</mx:VBox>
-	<mx:ControlBar height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF">
-		<mx:Label text="Total Resources:" />
-		<mx:Label text="{totalResources}" fontWeight="bold" />
-		<mx:VRule height="18" />
-		<mx:Label text="Filtered:" />
-		<mx:Label text="{filteredResources}" fontWeight="bold" />
-		<mx:Spacer width="100%" />
-		<mx:Button label="Done" click="{doneHandler();}" icon="@Embed(source='/assets/resourceBrowserIcons/interface/done.png')" />
+	
+	<mx:ControlBar 
+		color="#FFFFFF" height="35" paddingBottom="2" paddingLeft="10" paddingRight="10" paddingTop="2">
+		<mx:Label 
+			text="Total Resources:"/>
+		<mx:Label 
+			fontWeight="bold" text="{totalResources}"/>
+		<mx:VRule 
+			height="18"/>
+		<mx:Label 
+			text="Filtered:"/>
+		<mx:Label 
+			fontWeight="bold" text="{filteredResources}"/>
+		<mx:Spacer 
+			width="100%"/>
+		<mx:Button 
+			click="doneHandler();" icon="@Embed(source='/assets/resourceBrowserIcons/interface/done.png')"
+			label="Done"/>
 	</mx:ControlBar>
 </mx:TitleWindow>

@@ -12,7 +12,7 @@
 			private const regResource:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
 			private var _value:String = "";
 			private var _title:String = "";
-			private var rBrowserInstance:ResourceBrowser;
+			
 			[Bindable]
 			private var _labelText:String = "";
 			[Bindable]
@@ -42,13 +42,16 @@
 			}
 	
 			private function openWindow():void {
-				rBrowserInstance = ResourceBrowser(PopUpManager.createPopUp(DisplayObject(Application.application), ResourceBrowser, true));
-				rBrowserInstance.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
-				PopUpManager.centerPopUp(rBrowserInstance);
+				
+				var rBrowser : ResourceBrowser = ResourceBrowser( PopUpManager.createPopUp( DisplayObject(Application.application), ResourceBrowser, true ) );
+				
+			
+				rBrowser.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
+				PopUpManager.centerPopUp(rBrowser);
 				
 				var matchResult:Array = _value.match(regResource);
 				if (matchResult)
-					rBrowserInstance.selectedItemID = matchResult[1];
+					rBrowser.selectedItemID = matchResult[1]; 
 			}
 	
 			private function completeHandler(event:ResourceBrowserEvent):void {
@@ -64,6 +67,6 @@
 		enabled="{clearBtnEnabled}" label="X" height="20" cornerRadius="5" click="{this.value = '';}" width="20" paddingLeft="1" paddingRight="1"
 		toolTip="Clear field" />
 	<mx:Button
-		label="..." height="19" cornerRadius="0" click="{openWindow();}" width="22" paddingLeft="2" paddingRight="2"
+		label="..." height="19" cornerRadius="0" click="openWindow();" width="22" paddingLeft="2" paddingRight="2"
 		toolTip="Browse for resource" />
 </mx:HBox>
