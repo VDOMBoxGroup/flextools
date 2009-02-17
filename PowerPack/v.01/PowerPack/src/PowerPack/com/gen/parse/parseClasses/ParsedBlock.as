@@ -4,12 +4,14 @@ import PowerPack.com.BasicError;
 
 public class ParsedBlock
 {
+	public var lastExecutedFragment:CodeFragment;
+	
 	public var type:String; // TEXT|CODE
 	public var lexems:Array = []; // lexems array
 	public var validated:Boolean;
 
 	public var retValue:*; // return value
-	//public var print:Boolean; // print result value to output buffer
+	public var print:Boolean; // print result value to output buffer
 	public var error:BasicError; // parse error
 	
 	public var fragments:Array = []; // code fragments to execute

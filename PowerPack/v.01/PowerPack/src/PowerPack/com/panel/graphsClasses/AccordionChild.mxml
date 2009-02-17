@@ -77,7 +77,7 @@
                 }
             	
             	// Disable copying data back to the control.
-                if(CodeParser.ParseSubgraphNode(newData).result==false)
+                if(CodeParser.ParseSubgraphNode(newData).error)
                 {	      
                 	editInst.txtThumb.errorString = LanguageManager.sentences['msg_enter_valid_graph_name'];
                 	editInst.txtThumb.setFocus();

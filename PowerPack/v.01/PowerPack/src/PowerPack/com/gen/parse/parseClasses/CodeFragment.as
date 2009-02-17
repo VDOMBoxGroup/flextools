@@ -1,19 +1,27 @@
 package PowerPack.com.gen.parse.parseClasses
 {
-	import PowerPack.com.gen.parse.Parser;
+import PowerPack.com.gen.parse.Parser;
+
+import mx.utils.UIDUtil;
 	
 public class CodeFragment extends LexemStruct
 {
-	public static var lastExecutedFragment:CodeFragment;
-	
+	public static const CT_OPERATION:String = 'operation';
+	public static const CT_TEST:String = 'test';
+	public static const CT_FUNCTION:String = 'function';
+	public static const CT_ASSIGN:String = 'assign';
+	public static const CT_TEXT:String = 'text';
+	public static const CT_LIST:String = 'list';
+
 	public var fragments:Array = []; // lexems of fragment
 	//public var codeFragments:Array = []; // fragments without nonusable characters
 	
+	public var retVarName:String = "tmp_" + UIDUtil.createUID().replace(/-/g, "_"); 
 	public var retValue:*; // return value
 	public var print:Boolean; // print result value to output buffer
 
 	// for commands
-	public var ctype:String; // command type (FUNCTION|TEST|OPERATION|ASSIGN)
+	public var ctype:String; // command type (FUNCTION|TEST|OPERATION|ASSIGN|LIST|TEXT)
 	public var funcName:String; // function
 	
 	public var varNames:Array = []; // variable names for assign result
@@ -34,6 +42,21 @@ public class CodeFragment extends LexemStruct
 	//--------------------------------------------------------------------------
 
     //----------------------------------
+    //  lastExecutedFragment
+    //----------------------------------	
+	public function get lastExecutedFragment():CodeFragment
+	{
+		var topLevel:Object = getTopLevel();		
+		return topLevel.hasOwnProperty('lastExecutedFragment') ? topLevel.lastExecutedFragment : null;
+	}
+	public function set lastExecutedFragment(value:CodeFragment):void
+	{
+		var topLevel:Object = getTopLevel();		
+		if(topLevel.hasOwnProperty('lastExecutedFragment'))
+			topLevel.lastExecutedFragment = value;
+	}
+
+    //----------------------------------
     //  isTopLevel
     //----------------------------------	
 	public function get isTopLevel():Boolean
@@ -41,7 +64,7 @@ public class CodeFragment extends LexemStruct
 		if(!parent && !(parent is CodeFragment))
 			return true;
 		return false; 	
-	}	
+	}		
 
     //----------------------------------
     //  postSpaces
@@ -68,7 +91,7 @@ public class CodeFragment extends LexemStruct
 			
 			if(curFragment is CodeFragment)
 			{
-				if(CodeFragment(curFragment).ctype == Parser.CT_FUNCTION)
+				if(CodeFragment(curFragment).ctype == CT_FUNCTION)
 					_value += CodeFragment(curFragment).retValue + curFragment.postSpaces;
 				else if(CodeFragment(curFragment).type == 'W')
 					_value += CodeFragment(curFragment).retValue + curFragment.postSpaces;
@@ -208,6 +231,24 @@ public class CodeFragment extends LexemStruct
 	public function CodeFragment(type:String)
 	{
 		super(null, type, -1, null);
+	}
+	
+	//--------------------------------------------------------------------------
+	//
+	//  Class methods
+	//
+	//--------------------------------------------------------------------------
+		
+	public function getTopLevel():Object
+	{
+		var target:Object = parent;	
+		
+		while(target.parent)
+		{
+			target = target.parent;
+		}
+		
+		return target;
 	}
 }
 }

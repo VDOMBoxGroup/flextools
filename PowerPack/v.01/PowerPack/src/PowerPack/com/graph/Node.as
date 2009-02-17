@@ -8,7 +8,6 @@ import ExtendedAPI.com.utils.ObjectUtils;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.Template;
-import PowerPack.com.gen.ParsedNode;
 import PowerPack.com.managers.CashManager;
 import PowerPack.com.managers.ContextManager;
 import PowerPack.com.managers.LanguageManager;
@@ -312,8 +311,6 @@ public class Node extends Canvas
     
     [Bindable]
     public var arrTrans:Array = [];
-    
-    public var parsedNode:ParsedNode;
     
 	[ArrayElementType("ToolTip")]
     public var arrToolTip:Array = [];
@@ -796,8 +793,6 @@ public class Node extends Canvas
             if(nodeTextArea.text != text)
            		nodeTextArea.text = text;
             
-            parsedNode = null;
-            
             invalidateSize();
     		invalidateDisplayList();
         }
@@ -807,8 +802,6 @@ public class Node extends Canvas
             _categoryChanged = false;
         	_needValidate = true;
 
-            parsedNode = null;
-            
             switch(category)
             {
             	case NodeCategory.RESOURCE:

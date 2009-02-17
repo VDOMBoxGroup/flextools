@@ -14,13 +14,6 @@ import r1.deval.D;
 
 public class Parser
 {		
-	public static const CT_OPERATION:String = 'operation';
-	public static const CT_TEST:String = 'test';
-	public static const CT_FUNCTION:String = 'function';
-	public static const CT_ASSIGN:String = 'assign';
-	public static const CT_TEXT:String = 'text';
-	public static const CT_LIST:String = 'list';
-	
 	public static var funcDefinition:Object =
 		{			
 			/**
@@ -629,7 +622,7 @@ public class Parser
 				index++;
 			}
 			
-			if(_terminal && block.lexems[index].type==_terminal)
+			if(index<block.lexems.length && _terminal && block.lexems[index].type==_terminal)
 				_fragment.fragments.push(block.lexems[index]);
 
 			return _fragment;
@@ -664,7 +657,7 @@ public class Parser
 			return;
 		}
 		
-		fragment.ctype = CT_TEXT;		
+		fragment.ctype = CodeFragment.CT_TEXT;		
 		fragment.print = true;
 	}
 	
@@ -701,42 +694,42 @@ public class Parser
 		
 		// check for operation
 		lexemObj = isValidOperation(strSentence);
-		if(lexemObj.result && lexemObj.strSentence.length==1)
+		if(lexemObj.result && lexemObj.value.length==1)
 		{
 			if(fragment.isTopLevel)
 				fragment.print = true;
 
-			fragment.type = lexemObj.strSentence;
-			fragment.ctype = CT_OPERATION;
+			fragment.type = lexemObj.value;
+			fragment.ctype = CodeFragment.CT_OPERATION;
 			return;
 		}
 		
-		lexemObj = isValidAdvVar(lexemObj.strSentence);
+		lexemObj = isValidAdvVar(lexemObj.value);
 		
 		// check for test
-		lexemObj = isValidTest(lexemObj.strSentence);
-		if(lexemObj.result && lexemObj.strSentence.length==1)
+		lexemObj = isValidTest(lexemObj.value);
+		if(lexemObj.result && lexemObj.value.length==1)
 		{
 			if(fragment.isTopLevel)
 				fragment.trans = ["true", "false"];
 				
-			fragment.type = lexemObj.strSentence;
-			fragment.ctype = CT_TEST;
+			fragment.type = lexemObj.value;
+			fragment.ctype = CodeFragment.CT_TEST;
 			return;
 		}
 		
 		// rollup function
-		var argNum:int = lexemObj.strSentence.indexOf("]")-strSentence.indexOf("[")-2;
-		lexemObj = isValidFunction(lexemObj.strSentence);
-		if(lexemObj.result && lexemObj.strSentence.length==1 && isFunctionExist(fragment.fragments[0]))
+		var argNum:int = lexemObj.value.indexOf("]")-strSentence.indexOf("[")-2;
+		lexemObj = isValidFunction(lexemObj.value);
+		if(lexemObj.result && lexemObj.value.length==1 && isFunctionExist(fragment.fragments[0]))
 		{
 			if(fragment.isTopLevel)
 				fragment.print = true;
 			
-			fragment.type = lexemObj.strSentence;
+			fragment.type = lexemObj.value;
 			
 			fragment.funcName = fragment.fragments[0];				
-			fragment.ctype = CT_FUNCTION;
+			fragment.ctype = CodeFragment.CT_FUNCTION;
 			
 			var funcDef:Object = funcDefinition[fragment.funcName];
 
@@ -753,7 +746,7 @@ public class Parser
 					fragment.error = new CompilerError(null, 9007, [">"+Math.abs(funcDef.argNum)]);
 					return;
 				}
-				if(!RegExp(funcDef.pattern).test(lexemObj.strSentence))
+				if(!RegExp(funcDef.pattern).test(lexemObj.value))
 				{
 					fragment.error = new CompilerError(null, 9011);
 					return;
@@ -765,21 +758,21 @@ public class Parser
 		}
 		
 		// rollup list
-		lexemObj = isValidList(lexemObj.strSentence);
-		if(lexemObj.result && lexemObj.strSentence.length==1)
+		lexemObj = isValidList(lexemObj.value);
+		if(lexemObj.result && lexemObj.value.length==1)
 		{
 			if(fragment.isTopLevel)
 				fragment.print = true;
 				
-			fragment.ctype = CT_LIST;							
-			fragment.type = lexemObj.strSentence;
+			fragment.ctype = CodeFragment.CT_LIST;							
+			fragment.type = lexemObj.value;
 			return;			
 		}
 				
-		lexemObj = isValidAssign(lexemObj.strSentence);
+		lexemObj = isValidAssign(lexemObj.value);
 		if(lexemObj.result)
 		{
-			fragment.ctype = CT_ASSIGN;
+			fragment.ctype = CodeFragment.CT_ASSIGN;
 			return;
 		}
 		

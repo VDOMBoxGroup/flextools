@@ -2,8 +2,9 @@ package PowerPack.com.validators
 {
 	import ExtendedAPI.com.utils.Utils;
 	
-	import PowerPack.com.gen.ParsedNode;
 	import PowerPack.com.gen.parse.CodeParser;
+	import PowerPack.com.gen.parse.parseClasses.CodeFragment;
+	import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
 	import PowerPack.com.graph.Node;
 	import PowerPack.com.graph.NodeCategory;
 	import PowerPack.com.managers.LanguageManager;
@@ -73,13 +74,13 @@ package PowerPack.com.validators
         	category = node.category;
        		var pattern:RegExp;
         	
-        	var parseResult:ParsedNode;
+        	var parseResult:ParsedBlock;
         	
         	if (category == NodeCategory.NORMAL)
         	{
         		parseResult = CodeParser.ParseText(str);
         		
-				if(parseResult.result==false)
+				if(parseResult.error)
             	{
                 	results.push(new ValidationResult(true, null, "invalidVarName", 
                     	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_normal_node_syntax_error)));
@@ -89,7 +90,7 @@ package PowerPack.com.validators
         	{
         		parseResult = CodeParser.ParseSubgraphNode(str);
 
-	        	if(parseResult.result==false)
+	        	if(parseResult.error)
             	{
                 	results.push(new ValidationResult(true, null, "invalidSubgraph", 
                     	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_graph_node_syntax_error)));
@@ -108,20 +109,20 @@ package PowerPack.com.validators
         		
         		switch(parseResult.type)
         		{
-        			case CodeParser.CT_TEST:
+        			case CodeFragment.CT_TEST:
 	        			node.toolTip = LanguageManager.sentences.test_command;
         				break;
         				 
-        			case CodeParser.CT_OPERATION:
+        			case CodeFragment.CT_OPERATION:
 	        			node.toolTip = LanguageManager.sentences.operation_command;
         				break;
 
-        			case CodeParser.CT_FUNCTION:
+        			case CodeFragment.CT_FUNCTION:
 	        			node.toolTip = LanguageManager.sentences.function_command;
         				break;
         		}
         			
-	    		if(parseResult.result==false)
+	    		if(parseResult.error)
 	    		{
 	    			results.push(new ValidationResult(true, null, "invalidCommand", 
                     	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_command_node_syntax_error)));
@@ -129,14 +130,12 @@ package PowerPack.com.validators
         		//node.toolTip += node.text;
         	}
         	
-            if(parseResult && parseResult.errLexem)
-            	node.nodeTextArea.setSelection(parseResult.errLexem.position, 
-            		parseResult.errLexem.position + parseResult.errLexem.origValue.length);
+            if(parseResult.errFragment)
+            	node.nodeTextArea.setSelection(parseResult.errFragment.position, 
+            		parseResult.errFragment.position + parseResult.errFragment.origValue.length);
             
             if(!Utils.isEqualArrays(node.arrTrans, arrTrans))
 	   			node.arrTrans = arrTrans;
-   			
-   			node.parsedNode = parseResult as ParsedNode;
    			
             return results;
         }

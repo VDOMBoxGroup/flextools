@@ -16,12 +16,13 @@ import mx.core.Application;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.utils.Base64Encoder;
-import mx.utils.StringUtil;	
+import mx.utils.StringUtil;
+import PowerPack.com.gen.parse.parseClasses.CodeFragment;	
 
 public dynamic class TemplateLib
 {
 	include "include/GeneralFunctions.as";
-	include "include/ListManipulationFunctions.as";
+	//include "include/ListManipulationFunctions.as";
 	include "include/GraphicFunctions.as";
 	include "include/ImageProcessingFunctions.as";
 		
@@ -29,13 +30,18 @@ public dynamic class TemplateLib
 	
 	private function setReturnValue(value:*):void
 	{
-		tplStruct.curGraphContext.curNode.parsedNode.value = value;
+		var lastFrag:CodeFragment = tplStruct.curNodeContext.block.lastExecutedFragment;
+		
+		lastFrag.retValue = value;
+		tplStruct.context[lastFrag.retVarName] = value; 
+		
 		tplStruct.generate();
 	}
 	
 	private function setTransition(value:String):void
 	{
-		tplStruct.curGraphContext.curNode.parsedNode.transition = value;		
+		var lastFrag:CodeFragment = tplStruct.curNodeContext.block.lastExecutedFragment;
+		lastFrag.transition = value;		
 	}
 	
 	private function getContexts():Array

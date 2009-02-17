@@ -76,6 +76,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 			import ExtendedAPI.com.ui.SuperNativeMenuItem;
 			import mx.managers.LayoutManager;
 			import mx.core.UIComponent;
@@ -891,30 +892,28 @@
 				{
 					case NodeCategory.NORMAL:
 					case NodeCategory.SUBGRAPH:
+						str = nodeContext.block.lastExecutedFragment.retValue;
+						break;
 					case NodeCategory.RESOURCE:
-						str = nodeContext.node.parsedNode.value;
+						str = nodeContext.block.retValue;
 						break;						
 					case NodeCategory.COMMAND:
-						switch(nodeContext.node.parsedNode.type)
+						switch(nodeContext.block.ctype)
 						{
-							case CodeParser.CT_MULTI:
-								nodeSubCategory = "Multi ";
-								str = nodeContext.node.text;
-								break;
-							case CodeParser.CT_OPERATION:
+							case CodeFragment.CT_OPERATION:
 								nodeSubCategory = "Operation ";
 								str = nodeContext.node.text;
 								break;
-							case CodeParser.CT_TEST:
+							case CodeFragment.CT_TEST:
 								nodeSubCategory = "Test ";
 								str = nodeContext.node.text + 
-									" => " + nodeContext.node.parsedNode.value;
+									" => " + nodeContext.block.lastExecutedFragment.retValue;
 								break;
-							case CodeParser.CT_FUNCTION:
+							case CodeFragment.CT_FUNCTION:
 								nodeSubCategory = "Function ";
-								str = nodeContext.node.parsedNode.funcs[0] +
+								str = nodeContext.block.lastExecutedFragment.funcName +
 									" => " + 
-									(nodeContext.node.parsedNode.value.toString().length>100 ? String(nodeContext.node.parsedNode.value.toString()).substr(0,100)+'...':nodeContext.node.parsedNode.value);
+									nodeContext.block.lastExecutedFragment.retValue;
 								break;
 						}
 						break;
