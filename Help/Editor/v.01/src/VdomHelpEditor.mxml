@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication
+	
+	showStatusBar="false"
+	showGripper="false"
+	showTitleBar="false"
+	
+	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	minWidth="650" minHeight="300"
+	layout="absolute" 
+	 viewSourceURL="srcview/index.html"  creationComplete="{creationCompleteHandler()}"
+	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
+	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
+	<mx:Style>
+		.tbStyle {
+			color : #FFFFFF;
+		}
+	</mx:Style>
+	<mx:Script>
+	<![CDATA[
+		import mx.collections.XMLListCollection;
+	
+	
+		private function creationCompleteHandler():void
+		{
+			tree.dataProvider = XML("<page title = 'page 0' name = 'page_0' isBranch='true' />");
+		}
+		
+		private function treeChangeHandler(object:Object):void
+		{
+//			showSelectedPage(tree.selectedItem.@name);
+			
+		}
+		
+		private function showSelectedPage(pageName:String):void
+		{
+			
+			var fileName:String = pageName	;
+			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
+			var fullPath : String = newFile.url;
+			var f : File = File.applicationStorageDirectory; 
+			html.location = fullPath; 
+		}
+		
+		
+		private var arrayOfPages:Array = new Array();
+		private function pageChangedHandler(event:Event):void
+		{
+			var fullPath:String = html.location;
+			var fileName : String = fullPath.substr( 13 ); 
+			var phraseRE:RegExp = /\\/gim;
+			fileName = fileName.replace(phraseRE,"/"); 
+
+			
+			
+			if(!tree.selectedItem)
+				return;
+			var selectedItem:String = tree.selectedItem.@name;
+			
+			if(selectedItem == fileName)
+				return;
+			
+			if(arrayOfPages[fileName])
+			{
+				selectNecessaryItem(fileName);
+			}else
+			{
+				navigateToURL(new URLRequest(fullPath));
+				showSelectedPage(selectedItem);
+			}
+		}
+		
+		private function selectNecessaryItem(fileName:String):void
+		{
+			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0];
+			
+			openTree(currentElement);
+			
+			tree.selectedItem = currentElement;
+			
+			var index:int =  tree.getItemIndex(tree.selectedItem);
+			tree.scrollToIndex(index);
+			
+//			findDistanition(fileName);
+		}
+		
+		private function openTree(item:Object):void
+		{
+			var parentItem:Object = XML(item).parent();
+			if (parentItem)
+			{
+//				distan.text = item.@title +' \\ '+  distan.text;
+				openTree(parentItem);
+				tree.expandItem(parentItem, true, false);
+				tree.validateNow();
+			}
+		}
+		
+		private function minMaximize():void
+		{
+			if (stage.nativeWindow.displayState == NativeWindowDisplayState.MAXIMIZED)
+				restore();
+			else
+				maximize();
+		}
+		
+		
+		private var toc : XMLListCollection = new XMLListCollection();
+		private var count : int = 0; 
+		private function addItem():void
+		{
+			++count;
+			toc = null;
+//			toc = XMLListCollection(tree.dataProvider);
+			
+//			toc.addItem(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
+//			tree.dataProvider = toc;
+	
+			var parentItem : Object = tree.indexToItemRenderer(1).data;
+			
+			var obj : Object = new Object()
+				obj.label = "123";
+					
+			tree.dataDescriptor.addChildAt(parentItem ,obj,0);
+		}
+		
+	
+	]]>
+</mx:Script>
+	
+<mx:VBox width="100%" height="100%"   x="0">
+	<mx:Canvas width="100%" >
+		<mx:Image source="@Embed('../assets/header.png')" width="100%" maintainAspectRatio="false" scaleContent="true" 
+			mouseDown="{nativeWindow.startMove();}" doubleClick="{minMaximize()}" doubleClickEnabled="true"/>
+		<mx:HBox paddingLeft="5" paddingTop="5" paddingRight="5" 
+				color="#FFFFFF" width="100%">
+			<mx:Image source="@Embed('../assets/bookmarks.png')" />
+			<mx:Label text="VDOM Help Aplication" />
+			<mx:HBox width="100%"  horizontalAlign="right" paddingTop="2">
+				<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}"/>
+				<mx:Image source="@Embed('../assets/restore.png')" right="0" click="{minMaximize()}"/>
+				<mx:Image source="@Embed('../assets/close.png')" right="0" click="{close()}"/>
+			</mx:HBox>
+		</mx:HBox>
+	</mx:Canvas>
+	
+	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373"/>
+	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c"/>
+	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
+		<mx:VBox height="100%">
+			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="false"
+				labelField="@title"  dragEnabled="true" dropEnabled="true" 
+				change="{treeChangeHandler(event)}"  dragMoveEnabled="true" 	
+				folderOpenIcon="@Embed('../assets/open_folder.png')" folderClosedIcon="@Embed('../assets/close_folder.png')" 
+				defaultLeafIcon="@Embed('../assets/page.png')" /> 
+			<mx:Button  label="Add Item" click="{addItem()}"/>
+		</mx:VBox>
+		<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0">
+			<mx:Canvas color="#FCFBFB"  width="100%" backgroundColor="#E4E4E4" >
+				
+			</mx:Canvas>
+			<mx:HTML id="html"  width="100%" height="100%" 
+				locationChange="{pageChangedHandler(event)}"/>
+		</mx:VBox>
+	</mx:HDividedBox>
+	<mx:HBox horizontalAlign="right" width="100%">
+		<mx:VBox verticalGap="1" verticalAlign="0">
+			<mx:Label text="VDOM Help Application" color="0xFFFFFF" textAlign="right" width="100%"/>
+			<mx:Label text="Copyright© 2009 - V.D.O.M. Box Internationl - All rights reserved "  color="0xFFFFFF"/>
+		</mx:VBox>
+		<mx:Image source="@Embed('../assets/label.png')"/>
+	</mx:HBox>
+</mx:VBox>		
+</mx:WindowedApplication>
