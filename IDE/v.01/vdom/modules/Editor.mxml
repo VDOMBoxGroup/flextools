@@ -55,6 +55,12 @@
 			labelPlacement="bottom"
 			click="{placeCanvas.selectedChild=eventCanv}"/>
 		
+		<controls:ActionButton id="resourceButton"
+			styleName="resourceButton"
+			label="Resources"
+			labelPlacement="bottom"
+			visible="false"/>
+		
 		<controls:ActionButton id="debugButton"
 			styleName="analyseButton"
 			label="Debug"

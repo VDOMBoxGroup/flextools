@@ -157,6 +157,16 @@
 	</include-file>
 				
 	<include-file>
+		<name>resource.png</name>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\resource.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>resource_s.png</name>
+		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\resource_s.png</path>
+	</include-file>
+				
+	<include-file>
 		<name>script.png</name>
 		<path>D:\!Workspace\VdomIDE\_src\theme\png\editorButtons\script.png</path>
 	</include-file>

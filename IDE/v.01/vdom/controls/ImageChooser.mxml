@@ -160,13 +160,13 @@
 		{
 			var image:Bitmap = Bitmap(loader.content);
 			var m:Matrix = new Matrix();
-			var sx:Number = 50/image.width;
-			var sy:Number = 50/image.height;
+			var sx:Number = 55/image.width;
+			var sy:Number = 55/image.height;
 
 			m.scale(sx, sy);
 			var scaledImage:Bitmap = 
 				new Bitmap(
-					new BitmapData(50, 50, true, 0x00ffffff), 
+					new BitmapData(55, 55, true, 0x00ffffff), 
 					PixelSnapping.AUTO,
 					true
 				); 
@@ -195,7 +195,7 @@
 </mx:Script>
 
 <mx:VBox width="100%" horizontalAlign="center" borderStyle="solid" paddingTop="5" paddingBottom="5">
-	<controls:BorderImage width="50" height="50" source="{selectedImage}" borderThickness="1"/>
+	<controls:BorderImage width="55" height="55" source="{selectedImage}" borderThickness="1"/>
 </mx:VBox>
 
 <mx:HBox width="100%" verticalAlign="middle" horizontalAlign="left" paddingLeft="5" paddingRight="5">

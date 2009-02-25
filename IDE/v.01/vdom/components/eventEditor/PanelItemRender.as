@@ -56,6 +56,9 @@ package vdom.components.eventEditor
 	    private var loader:Loader;
 		public function set resourceImg(data:Object):void
 		{
+			if( data.data == null )
+				return;
+			
 			loader = new Loader();
 			
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);

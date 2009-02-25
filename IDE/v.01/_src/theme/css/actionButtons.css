@@ -127,3 +127,15 @@ ActionButton {
 	selectedDownIcon: Embed("tree_s.png");
 	selectedDisabledIcon: Embed("tree_s.png");
 }
+
+.resourceButton {
+	upIcon: Embed("resource.png");
+	overIcon: Embed("resource_s.png");
+	downIcon: Embed("resource_s.png");
+	disabledIcon: Embed("resource_s.png");
+
+	selectedUpIcon: Embed("resource_s.png");
+	selectedOverIcon: Embed("resource_s.png");
+	selectedDownIcon: Embed("resource_s.png");
+	selectedDisabledIcon: Embed("resource_s.png");
+}

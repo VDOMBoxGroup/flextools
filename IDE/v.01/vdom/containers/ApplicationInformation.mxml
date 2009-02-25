@@ -58,7 +58,7 @@
 	</mx:Script>
 	<mx:Canvas width="60" height="60" styleName="thumb" top="3">
 		<mx:Image id="applicationIcon" source="{ _source }"
-			width="50" height="50" horizontalCenter="0" verticalCenter="0"/>
+			width="55" height="55" horizontalCenter="0" verticalCenter="0"/>
 	</mx:Canvas>
 	
 	<mx:HBox x="68" y="12">
