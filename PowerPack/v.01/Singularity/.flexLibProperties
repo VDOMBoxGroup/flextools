@@ -29,7 +29,6 @@
 <classEntry path="Singularity.Geom.P3D.FastCubicSpline"/>
 <classEntry path="Singularity.Geom.P3D.IPoly"/>
 <classEntry path="Singularity.Geom.P3D.Knot"/>
-<classEntry path="Singularity.Geom.P3D.PV3DSpline"/>
 <classEntry path="Singularity.Geom.PSpline3"/>
 <classEntry path="Singularity.Geom.Parametric"/>
 <classEntry path="Singularity.Geom.Quad"/>
@@ -57,36 +56,6 @@
 <classEntry path="Singularity.Rigs.Pelvis"/>
 <classEntry path="Singularity.Rigs.SimpleSpine"/>
 <classEntry path="Singularity.Rigs.Template"/>
-<classEntry path="Singularity.demos.BezierClosedSpline"/>
-<classEntry path="Singularity.demos.BezierNumeric"/>
-<classEntry path="Singularity.demos.BezierParameterization"/>
-<classEntry path="Singularity.demos.BezierSplineTest"/>
-<classEntry path="Singularity.demos.BezierTest"/>
-<classEntry path="Singularity.demos.CRAnimation"/>
-<classEntry path="Singularity.demos.CRClosed2"/>
-<classEntry path="Singularity.demos.CRClosedSpline"/>
-<classEntry path="Singularity.demos.CatmullRomTest"/>
-<classEntry path="Singularity.demos.EllipseTest"/>
-<classEntry path="Singularity.demos.PSplineTest"/>
-<classEntry path="Singularity.demos.PV3D.Canvas3D"/>
-<classEntry path="Singularity.demos.PV3D.Figure8"/>
-<classEntry path="Singularity.demos.PV3D.P3DTutorial"/>
-<classEntry path="Singularity.demos.PV3D.PV3DFigure8"/>
-<classEntry path="Singularity.demos.PV3D.RenderableSpline"/>
-<classEntry path="Singularity.demos.PV3D.SimpleSphere"/>
-<classEntry path="Singularity.demos.PV3D.Spline3dTest"/>
-<classEntry path="Singularity.demos.PathTween"/>
-<classEntry path="Singularity.demos.PathTween2"/>
-<classEntry path="Singularity.demos.QuadBezierParam"/>
-<classEntry path="Singularity.demos.QuadInterpolation"/>
-<classEntry path="Singularity.demos.Rigging.BipedTest"/>
-<classEntry path="Singularity.demos.Rigging.CCDSteps1"/>
-<classEntry path="Singularity.demos.Rigging.ChainTest"/>
-<classEntry path="Singularity.demos.Rigging.IKJointLimit2Link"/>
-<classEntry path="Singularity.demos.Rigging.JointLimitTest"/>
-<classEntry path="Singularity.demos.Rigging.SimpleSkinTest"/>
-<classEntry path="Singularity.demos.SplineTest"/>
-<classEntry path="Singularity.demos.WedgeTest"/>
 </includeClasses>
 <includeResources/>
 <namespaceManifests/>
