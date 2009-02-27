@@ -7,7 +7,7 @@ package vdom.components.scriptEditor.containers
 	import vdom.components.edit.containers.OTree;
 	import vdom.containers.ClosablePanel;
 	import vdom.managers.DataManager;
-	import vdom.utils.IconUtil;
+	import vdom.utils.IconUtils;
 
 	public class ContainersBranch extends ClosablePanel
 	{
@@ -124,7 +124,7 @@ package vdom.components.scriptEditor.containers
 			var xmlData:XML = XML(value);
 			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 		 	
-	 		return IconUtil.getClass(this, data, 16, 16);
+	 		return IconUtils.getClass(this, data, 16, 16);
 		}
 		
 		private function itemOpenHandler(trEvt:TreeEvent):void

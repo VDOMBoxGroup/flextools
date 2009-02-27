@@ -11,7 +11,7 @@ package vdom.components.scriptEditor.containers
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ServerScriptsEvent;
 	import vdom.managers.DataManager;
-	import vdom.utils.IconUtil;
+	import vdom.utils.IconUtils;
 	
 	[Event(name="dataChanged", type="vdom.events.ServerScriptsEvent")]
 
@@ -258,7 +258,7 @@ package vdom.components.scriptEditor.containers
 			
 			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 		 	
-	 		return IconUtil.getClass(this, data, 16, 16);
+	 		return IconUtils.getClass(this, data, 16, 16);
 		}
 
 

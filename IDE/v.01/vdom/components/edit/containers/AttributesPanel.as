@@ -33,7 +33,7 @@ import vdom.containers.ClosablePanel;
 import vdom.controls.NumberField;
 import vdom.controls.colorPicker.ColorPicker;
 import vdom.controls.externalEditorButton.ExternalEditorButton;
-import vdom.controls.multiLine.MultiLine;
+import vdom.controls.multiLine.Multiline;
 import vdom.controls.resourceBrowser.ResourceBrowserButton;
 import vdom.events.AttributesPanelEvent;
 import vdom.managers.DataManager;
@@ -480,10 +480,11 @@ public class AttributesPanel extends ClosablePanel {
 				
 				case "multiline" : 
 				{
-					valueContainer = new MultiLine();
+					valueContainer = new Multiline();
 					valueType = "value";
 					
 					valueContainer.value = currentAttribute;
+					valueContainer.title = label;
 					break;
 				}
 				

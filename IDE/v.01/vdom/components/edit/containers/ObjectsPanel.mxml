@@ -14,12 +14,12 @@ xmlns:containers="vdom.components.edit.containers.*"
 
 <mx:Script>
 	<![CDATA[
+		import vdom.utils.IconUtils;
 		import mx.collections.SortField;
 		import mx.collections.Sort;
 		import mx.collections.XMLListCollection;
 		import mx.validators.ValidationResult;
 		import mx.messaging.AbstractConsumer;
-		import vdom.utils.IconUtil;
 		import vdom.managers.DataManager;
 		import mx.events.ListEvent;
 		import mx.controls.listClasses.ListBase;
@@ -46,7 +46,7 @@ xmlns:containers="vdom.components.edit.containers.*"
 			var xmlData:XML = XML(value);
 			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 		 	
-	 		return IconUtil.getClass(tree, data, 16, 16);
+	 		return IconUtils.getClass(tree, data, 16, 16);
 		}
 		
 		private function creationCompleteHendler():void

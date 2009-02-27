@@ -1,72 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	horizontalAlign="right" verticalAlign="middle" horizontalGap="1" borderStyle="solid">
-
+	borderStyle="solid" horizontalAlign="right" horizontalGap="1" verticalAlign="middle">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.UIComponent;
+			import vdom.managers.PopUpWindowManager;
 			import mx.core.Application;
 			import mx.managers.PopUpManager;
 			import vdom.events.ResourceBrowserEvent;
-			
-			private const regResource:RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
-			private var _value:String = "";
-			private var _title:String = "";
-			
-			[Bindable]
-			private var _labelText:String = "";
-			[Bindable]
-			private var clearBtnEnabled:Boolean = false;
-	
-			public function set title(attrValue:String):void {
+
+			private const regResource : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
+			private var _value : String = "";
+			private var _title : String = "";
+
+			[ Bindable ]
+			private var _labelText : String = "";
+			[ Bindable ]
+			private var clearBtnEnabled : Boolean = false;
+
+			public function set title( attrValue : String ) : void
+			{
 				_title = attrValue;
-			} 
-			
-			[Bindable (event="valueCommit")]
-			public function get value():String {
+			}
+
+			[ Bindable( event="valueCommit" ) ]
+			public function get value() : String
+			{
 				return _value;
 			}
-	
-			public function set value(attrValue:String):void {
+
+			public function set value( attrValue : String ) : void
+			{
 				_value = attrValue;
-				var matchResult:Array = _value.match(regResource);
-				if (matchResult) {
-					_labelText = "Resource ID: " + matchResult[1];
+				var matchResult : Array = _value.match( regResource );
+				if ( matchResult )
+				{
+					_labelText = "Resource ID: " + matchResult[ 1 ];
 					clearBtnEnabled = true;
-				} else {
+				}
+				else
+				{
 					_labelText = "";
 					_value = "";
 					clearBtnEnabled = false;
 				}
-				dispatchEvent(new Event("valueCommit"));
+				dispatchEvent( new Event( "valueCommit" ) );
 			}
-	
-			private function openWindow():void {
-				
-				var rBrowser : ResourceBrowser = ResourceBrowser( PopUpManager.createPopUp( DisplayObject(Application.application), ResourceBrowser, true ) );
-				
-			
-				rBrowser.addEventListener(ResourceBrowserEvent.RESOURCE_SELECTED, completeHandler);
-				PopUpManager.centerPopUp(rBrowser);
-				
-				var matchResult:Array = _value.match(regResource);
-				if (matchResult)
-					rBrowser.selectedItemID = matchResult[1]; 
+
+			private function openWindow() : void
+			{
+
+				var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
+				var rb : ResourceBrowser = new ResourceBrowser();
+				rb.minWidth = 800;
+				rb.minHeight = 600;
+				rb.percentWidth = 100;
+				rb.percentHeight = 100;
+
+				rb.addEventListener( ResourceBrowserEvent.RESOURCE_SELECTED, resourceBrowser_selectedHandler,
+									 false, 0, true );
+				rb.addEventListener( ResourceBrowserEvent.RESOURCE_CANCELED, resourceBrowser_canceledHandler,
+									 false, 0, true );
+
+				var matchResult : Array = _value.match( regResource );
+				if ( matchResult )
+					rb.selectedItemID = matchResult[ 1 ];
+
+				popUpWindowManager.addPopUp( rb, "Resource Browser", this, true );
 			}
-	
-			private function completeHandler(event:ResourceBrowserEvent):void {
+
+			private function resourceBrowser_selectedHandler( event : ResourceBrowserEvent ) : void
+			{
 				this.value = "#Res(" + event.resourceID + ")";
 				_labelText = event.resourceName;
+
+				var currentTarget : Object = event.currentTarget;
+				if ( currentTarget is ResourceBrowser )
+				{
+					UIComponent( currentTarget ).removeEventListener( ResourceBrowserEvent.RESOURCE_SELECTED,
+																	  resourceBrowser_selectedHandler,
+																	  false );
+				}
+
+				var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
+				popUpWindowManager.removePopUp( event.currentTarget );
 			}
-	
+
+			private function resourceBrowser_canceledHandler( event : ResourceBrowserEvent ) : void
+			{
+				var currentTarget : Object = event.currentTarget;
+				if ( currentTarget is ResourceBrowser )
+				{
+					UIComponent( currentTarget ).removeEventListener( ResourceBrowserEvent.RESOURCE_CANCELED,
+																	  resourceBrowser_selectedHandler,
+																	  false );
+				}
+
+				var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
+				popUpWindowManager.removePopUp( event.currentTarget );
+			}
 		]]>
 	</mx:Script>
-
-	<mx:TextInput text="{_labelText}" id="__label" width="100%" borderStyle="none" editable="false" height="20"/>
-	<mx:LinkButton id="__clearBtn"
-		enabled="{clearBtnEnabled}" label="X" height="20" cornerRadius="5" click="{this.value = '';}" width="20" paddingLeft="1" paddingRight="1"
-		toolTip="Clear field" />
-	<mx:Button
-		label="..." height="19" cornerRadius="0" click="openWindow();" width="22" paddingLeft="2" paddingRight="2"
-		toolTip="Browse for resource" />
+	<mx:TextInput 
+		id="__label"
+		height="20" text="{_labelText}" width="100%"
+		borderStyle="none" editable="false"/>
+	<mx:LinkButton 
+		id="__clearBtn"
+		enabled="{clearBtnEnabled}" height="20" label="X" toolTip="Clear field" width="20"
+		cornerRadius="5" paddingLeft="1" paddingRight="1" click="{this.value = '';}"/>
+	<mx:Button 
+		height="19" label="..." toolTip="Browse for resource" width="22"
+		cornerRadius="0" paddingLeft="2" paddingRight="2" click="openWindow();"/>
 </mx:HBox>

@@ -16,7 +16,7 @@ package vdom.components.treeEditor
 	import mx.controls.TextInput;
 	
 	import vdom.containers.ClosablePanel;
-	import vdom.controls.multiLine.MultiLine;
+	import vdom.controls.multiLine.Multiline;
 	import vdom.controls.resourceBrowser.ResourceBrowserButton;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.TreeEditorEvent;
@@ -153,7 +153,7 @@ package vdom.components.treeEditor
 		
 		private var disriptionLabel:Label = new Label();
 //		private var disriptionTextArea:TextArea = new TextArea();
-		private var multLine:MultiLine = new MultiLine();
+		private var multLine:Multiline = new Multiline();
 		private function generateDisription():void
 		{
 			var disription:Canvas = new Canvas();

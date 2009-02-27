@@ -19,7 +19,6 @@
 		import vdom.events.EventEditorEvent;
 		import mx.binding.utils.BindingUtils;
 		import mx.binding.utils.ChangeWatcher;
-		import vdom.utils.IconUtil;
 		
 		[Bindable]
 	 	private var dataManager:DataManager = DataManager.getInstance();

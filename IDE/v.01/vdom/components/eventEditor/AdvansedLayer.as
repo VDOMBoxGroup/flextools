@@ -1,7 +1,6 @@
 
 package vdom.components.eventEditor
 {
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import mx.containers.Canvas;
@@ -10,11 +9,13 @@ package vdom.components.eventEditor
 	import mx.controls.Label;
 	import mx.controls.TextInput;
 	import mx.controls.VRule;
+	import mx.core.UIComponent;
 	import mx.events.ValidationResultEvent;
 	import mx.validators.RegExpValidator;
 	
-	import vdom.controls.multiLine.MultiLineWindow;
-	import vdom.events.MultiLineWindowEvent;
+	import vdom.controls.multiLine.MultilineWindow;
+	import vdom.events.MultilineWindowEvent;
+	import vdom.managers.PopUpWindowManager;
 
 	public class AdvansedLayer extends Canvas
 	{
@@ -32,7 +33,6 @@ package vdom.components.eventEditor
 			
 			this.typeName = typeName;
 			
-			addEventListener('apply', multiLineCompleteHandler);
 		//	this.height = 40;
 			
 			_scriptName = inXML.@ScriptName;
@@ -98,12 +98,34 @@ package vdom.components.eventEditor
 		
 		private function showMultilineWindow(msEvt:MouseEvent):void
 		{
-			MultiLineWindow.show_window('Title', inputText.text , this, true);
+			var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
+			var multilineWindow : MultilineWindow = new MultilineWindow();
+			multilineWindow.minWidth = 800;
+			multilineWindow.minHeight = 600;
+			multilineWindow.percentWidth = 100;
+			multilineWindow.percentHeight = 100;
+			
+			multilineWindow.attributeValue = inputText.text;
+			
+			multilineWindow.addEventListener( "apply", multilineWindow_applyHandler,
+								 false, 0, true );
+			
+			popUpWindowManager.addPopUp( multilineWindow, "Title", this, true );
 		}
 		
-		private function multiLineCompleteHandler(mlEvt:MultiLineWindowEvent):void
+		private function multilineWindow_applyHandler( event:MultilineWindowEvent ):void
 		{
-			inputText.text = mlEvt.value;
+			inputText.text = event.value;
+			var currentTarget : Object = event.currentTarget;
+			if ( currentTarget is MultilineWindow )
+			{
+				UIComponent( currentTarget ).removeEventListener( "apply",
+																  multilineWindow_applyHandler,
+																  false );
+			}
+
+			var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
+			popUpWindowManager.removePopUp( event.currentTarget );
 		}
 		
 		

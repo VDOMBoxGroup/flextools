@@ -17,7 +17,7 @@ import mx.rpc.soap.WebService;
 
 import vdom.connection.protect.Code;
 import vdom.events.SOAPEvent;
-import vdom.utils.MD5Util;
+import vdom.utils.MD5Utils;
 
 public dynamic class SOAP extends Proxy implements IEventDispatcher
 {
@@ -56,7 +56,7 @@ public dynamic class SOAP extends Proxy implements IEventDispatcher
 	
 	public function login(login:String, password:String):*
 	{
-		var password:String = MD5Util.encrypt(password);
+		var password:String = MD5Utils.encrypt(password);
 		
 		ws.open_session.addEventListener(ResultEvent.RESULT, loginCompleteHandler);
 		ws.open_session.addEventListener(FaultEvent.FAULT, loginErrorHandler);

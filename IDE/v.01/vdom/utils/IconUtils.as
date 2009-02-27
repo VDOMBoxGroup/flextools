@@ -29,7 +29,7 @@ package vdom.utils
 	/**
 	 * Provides a workaround for using run-time loaded graphics in styles and properties which require a Class reference
 	 */
-	public class IconUtil extends BitmapAsset
+	public class IconUtils extends BitmapAsset
 	{
 		
 		private static var dictionary:Object;
@@ -62,7 +62,7 @@ package vdom.utils
 				height:height 
 			};
 			
-			return IconUtil;
+			return IconUtils;
 		}
 		
 		/**

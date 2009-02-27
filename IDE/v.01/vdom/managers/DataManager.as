@@ -3,6 +3,7 @@ package vdom.managers {
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
+import flash.system.System;
 
 import mx.rpc.events.FaultEvent;
 
@@ -169,6 +170,8 @@ public class DataManager implements IEventDispatcher {
 	{
 		if( !applicationId )
 			return;
+		
+		cleanUp();
 		
 		soap.get_top_objects( applicationId );
 	} 
@@ -517,6 +520,28 @@ public class DataManager implements IEventDispatcher {
 		soap.modify_resource( currentApplicationId, currentObjectId, 
 										resourceId, attributeName, 
 										operation, attributes );
+	}
+	
+	private function cleanUp() : void 
+	{
+		var dummy : * = ""; // FIXME remove dummy
+		
+		var loadedApplications : XMLList = _listApplication.( @Status == "loaded" );
+		
+		if( !loadedApplications || loadedApplications.length() == 0 )
+			return;
+		
+		try
+		{
+			for each( var application : XML in loadedApplications )
+			{
+				application.@Status = "";
+				delete application.Objects;
+			}
+		}
+		catch( error : Error ) {}
+		
+		System.gc();
 	}
 	
 	private function createNewCurrentObject( objectId : String ) : XML

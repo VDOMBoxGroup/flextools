@@ -5,6 +5,7 @@ package vdom.events
 	public class ResourceBrowserEvent extends Event
 	{
 		public static const RESOURCE_SELECTED:String = 'resource_selected';
+		public static const RESOURCE_CANCELED:String = 'resource_canceled';
 		
 		public var resourceID:String;
 		public var resourceName:String;

@@ -6,11 +6,12 @@
 	xmlns:scriptEditor="vdom.components.scriptEditor.*"
 	xmlns:treeEditor="vdom.components.treeEditor.*"
 	xmlns:analyse="vdom.components.analyse.*"
+	xmlns:eventEditor="vdom.components.eventEditor.*"
 	
 	show="showHandler();"
 	hide="hideHandler();"
 	
-	creationPolicy="all" xmlns:eventEditor="vdom.components.eventEditor.*">
+	creationPolicy="all" >
 	
 <mx:Script source="includes/editor.as" />
 
@@ -59,7 +60,7 @@
 			styleName="resourceButton"
 			label="Resources"
 			labelPlacement="bottom"
-			visible="false"/>
+			click="resourceButton_clickHandler();"/>
 		
 		<controls:ActionButton id="debugButton"
 			styleName="analyseButton"
@@ -71,8 +72,6 @@
 		<controls:ActionButton styleName="statisticsButton" 
 			label="{resourceManager.getString('Application','editor_statistics')}"
 			labelPlacement="bottom"/>-->
-		
-			
 	</controls:ControlPanel>
 	
 	<mx:ViewStack id="placeCanvas" 

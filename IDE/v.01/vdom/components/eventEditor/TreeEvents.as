@@ -6,7 +6,7 @@ package vdom.components.eventEditor
 	import mx.core.ClassFactory;
 	
 	import vdom.managers.DataManager;
-	import vdom.utils.IconUtil;
+	import vdom.utils.IconUtils;
 
 	public class TreeEvents extends DragTree
 	{
@@ -83,7 +83,7 @@ package vdom.components.eventEditor
 		
 			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 		 	
-	 		return IconUtil.getClass(this, data, 16, 16);
+	 		return IconUtils.getClass(this, data, 16, 16);
 	 		
 	 		
 		}

@@ -48,7 +48,6 @@
 	 		import vdom.components.treeEditor.TreeVector;
 	 		import vdom.components.treeEditor.Vector2;
 	 		import vdom.managers.DataManager;
-	 		import vdom.utils.IconUtil;
 	 	 
 	 		import mx.binding.utils.BindingUtils;
 	 		import mx.controls.DataGrid;

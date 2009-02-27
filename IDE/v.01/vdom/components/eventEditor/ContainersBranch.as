@@ -1,7 +1,5 @@
 package vdom.components.eventEditor
 {
-	import mx.collections.Sort;
-	import mx.collections.SortField;
 	import mx.collections.XMLListCollection;
 	import mx.events.ListEvent;
 	import mx.events.TreeEvent;
@@ -9,7 +7,7 @@ package vdom.components.eventEditor
 	import vdom.components.edit.containers.OTree;
 	import vdom.containers.ClosablePanel;
 	import vdom.managers.DataManager;
-	import vdom.utils.IconUtil;
+	import vdom.utils.IconUtils;
 
 	public class ContainersBranch extends ClosablePanel
 	{
@@ -120,7 +118,7 @@ package vdom.components.eventEditor
 			var xmlData:XML = XML(value);
 			var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
 		 	
-	 		return IconUtil.getClass(this, data, 16, 16);
+	 		return IconUtils.getClass(this, data, 16, 16);
 		}
 		
 		private function itemOpenHandler(trEvt:TreeEvent):void

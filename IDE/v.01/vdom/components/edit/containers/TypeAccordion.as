@@ -9,7 +9,7 @@ import mx.containers.Accordion;
 import vdom.components.edit.containers.typeAccordionClasses.Type;
 import vdom.components.edit.containers.typeAccordionClasses.Types;
 import vdom.managers.FileManager;
-import vdom.utils.MD5Util;
+import vdom.utils.MD5Utils;
 
 public class TypeAccordion extends Accordion
 {	
@@ -139,7 +139,7 @@ public class TypeAccordion extends Accordion
 				categoryPhraseId = categoryName.match(phraseRE)[1];
 				categoryNameLocalized = resourceManager.getString(typeDescription.Information.Name, categoryPhraseId);
 				if(categoryNameLocalized)
-					categoryName = "lang_" + MD5Util.encrypt(categoryNameLocalized);
+					categoryName = "lang_" + MD5Utils.encrypt(categoryNameLocalized);
 			}
 			
 			if(!categoryNameLocalized)

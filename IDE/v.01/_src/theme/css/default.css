@@ -237,3 +237,26 @@ ControlBar {
 ComboBox {
 	cornerRadius: 0;
 }
+
+.popUpWindow
+{
+	headerHeight : 16;
+	borderColor : #000000;
+	
+	titleBarColors : #000000, #000000;
+	titleTextStyleName : popUpWindowText;
+	titleBarButtonPadding : -4;
+	titleAlignment : center;
+	
+	buttonPadding : 0;
+	buttonAlignment : right;
+	minimizeButtonSkin: ClassReference("vdom.skins.TitleBarMinimizeButtonSkin");
+	maximizeButtonSkin: ClassReference("vdom.skins.TitleBarMaximizeButtonSkin");
+	restoreButtonSkin: ClassReference("vdom.skins.TitleBarRestoreButtonSkin");
+	closeButtonSkin: ClassReference("vdom.skins.TitleBarCloseButtonSkin");
+}
+
+.popUpWindowText
+{
+	color : #FFFFFF;
+}
