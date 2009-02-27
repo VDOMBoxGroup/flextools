@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" width="600" height="450"
+	title="Settings"
+	creationComplete="creationComplete()"
+	showCloseButton="true"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	borderAlpha="0.98" cornerRadius="1" 
+	visible="true" shadowDirection="right"
+	borderColor="#373739" titleStyleName="resourceBrowserTitle"
+	borderThicknessLeft="1" borderThicknessRight="1"
+>
+	<mx:Style>
+		.resourceBrowserTitle {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.CheckBox;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			
+			
+			private function creationComplete():void 
+			{
+				addEventListener(CloseEvent.CLOSE, closeHandler); 
+				PopUpManager.centerPopUp(this);
+			}
+			
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function cancelPressed():void 
+			{
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function okHandler():void 
+			{
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			
+			
+		]]>
+		
+	
+		
+	</mx:Script>
+		<mx:VBox label="Products" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10">
+			<mx:Label text="Select Necessary Products: " textAlign="center" fontSize="20"/>
+			<mx:ComboBox></mx:ComboBox>
+			<mx:VBox id="applications" paddingLeft="5"   borderStyle="solid" width="100%" height="100%" >
+			<mx:Label text="Titel:" />
+			<mx:Label text="Name:" />
+			<mx:Label text="Version:" />
+			<mx:Label text="Language:" />
+			
+			</mx:VBox>
+		</mx:VBox>
+	<mx:ControlBar horizontalAlign="right" 
+			height="35" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
+    		<mx:Button  label="OK" click="{okHandler()}" 
+    		color="#FFFFFF" 	fillColors="#333333" 
+    		 textSelectedColor="#FFFFFF" cornerRadius="1"
+    		  borderColor="#262626" themeColor="#656565" 
+    		  textRollOverColor="#FFFFFF"/>
+    		  <mx:Button  label="Undo"  color="#FFFFFF" 
+			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+			<mx:Button  label="Cancel" click="{cancelPressed()}" color="#FFFFFF" 
+			fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" borderColor="#262626" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+			
+	</mx:ControlBar>
+</mx:TitleWindow>
