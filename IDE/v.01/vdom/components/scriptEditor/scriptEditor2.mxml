@@ -1,238 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:eventEditor="vdom.components.eventEditor.*" show="showHandler()" 
-	xmlns:containers="vdom.components.scriptEditor.containers.*"
-		hide="hideHandler()" xmlns:containers1="vdom.containers.*"  
-		 backgroundColor="#3d3d3d">
-<mx:Script>
-	<![CDATA[
-		import mx.collections.SortField;
-		import mx.collections.Sort;
-		import mx.collections.ArrayCollection;
-		import vdom.events.ScriptEditorEvent;
-		import vdom.events.ServerScriptsEvent;
-		import mx.events.CloseEvent;
-		import mx.managers.PopUpManager;
-		import vdom.components.treeEditor.AddTreeElementWindow;
-		import vdom.events.DataManagerEvent;
-		import vdom.managers.DataManager;
-		import vdom.events.EventEditorEvent;
-		import mx.binding.utils.BindingUtils;
-		import mx.binding.utils.ChangeWatcher;
-		
-		[Bindable]
-	 	private var dataManager:DataManager = DataManager.getInstance();
-	 	
-	 	[Bindable]
-   			private var arrAppl: ArrayCollection = new ArrayCollection();
-	 	
-		private var curContainerID:String;
-		private var curContainerTypeID:String;
-		
-		private var changeWatcher:ChangeWatcher;
-		
-		private var _changed : Boolean = false;
-		
-		private function showHandler():void
-	 	{
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	backgroundColor="#3d3d3d"
+	hide="hideHandler()" show="showHandler()"
+	xmlns:containers="vdom.components.scriptEditor.containers.*" xmlns:containers1="vdom.containers.*"
+	xmlns:controls="vdom.controls.*" xmlns:eventEditor="vdom.components.eventEditor.*"
+	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.SortField;
+			import mx.collections.Sort;
+			import mx.collections.ArrayCollection;
+			import vdom.events.ScriptEditorEvent;
+			import vdom.events.ServerScriptsEvent;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import vdom.components.treeEditor.AddTreeElementWindow;
+			import vdom.events.DataManagerEvent;
+			import vdom.managers.DataManager;
+			import vdom.events.EventEditorEvent;
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+
+			[ Bindable ]
+			private var dataManager : DataManager = DataManager.getInstance();
+
+			[ Bindable ]
+			private var arrAppl : ArrayCollection = new ArrayCollection();
+
+			private var curContainerID : String;
+			private var curContainerTypeID : String;
+
+			private var changeWatcher : ChangeWatcher;
+
+			private var _changed : Boolean = false;
+
+			private function showHandler() : void
+			{
 //	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
 //	 			trContainer.showHandler();
 //	 			trContainer.addEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
-	 			
-	 			curContainerID = dataManager.currentPageId;
-	 			if(curContainerID)
-	 			{
-	 				curContainerTypeID = dataManager.getTypeByObjectId(curContainerID).Information.ID.toString();
-	 			}
-	 			
-	 			dataManager.addEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
-	 			dataManager.addEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
-	 			
-	 			
-	 			
-	 			arrAppl.removeAll();
-	 			arrAppl.addItem({label:"Session Actions", ID:"session", iconResID:"", typeID:""});
-	 		/*	for each(var lavel:XML in dataManager.listPages )
+
+				curContainerID = dataManager.currentPageId;
+				if ( curContainerID )
 				{
-		 			var ID:String = lavel.@ID;
-		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
-		 			var _strLabel:String = lavel.Information.Icon;
-					var	iconResID:String = _strLabel.substr(5, 36);
-		 			
-		 			arrAppl.push({label:strLabel, ID:ID, iconResID:iconResID});
+					curContainerTypeID = dataManager.getTypeByObjectId( curContainerID ).Information.ID.toString();
 				}
-				
-				arrAppl = [];
-	 			*/
-	 			for each(var lavel:XML in dataManager.listPages )
+
+				dataManager.addEventListener( DataManagerEvent.PAGE_CHANGED, pageChangeHandler );
+				dataManager.addEventListener( DataManagerEvent.OBJECT_CHANGED, objectChangeHandler );
+
+
+
+				arrAppl.removeAll();
+				arrAppl.addItem( { label : "Session Actions", ID : "session", iconResID : "", typeID : "" } );
+				/*	for each(var lavel:XML in dataManager.listPages )
+				   {
+				   var ID:String = lavel.@ID;
+				   var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
+				   var _strLabel:String = lavel.Information.Icon;
+				   var	iconResID:String = _strLabel.substr(5, 36);
+
+				   arrAppl.push({label:strLabel, ID:ID, iconResID:iconResID});
+				   }
+
+				   arrAppl = [];
+				 */
+				for each ( var lavel : XML in dataManager.listPages )
 				{
-		 			var ID:String = lavel.@ID;
-		 			var strLabel:String =  lavel.Attributes.Attribute.(@Name == "title");
-		 			
-		 			var typeID:String = lavel.@Type.toString();
-		 			var iconResID:String = getIcon(typeID);
-		 			
-		 			arrAppl.addItem({label:strLabel, ID:ID, iconResID:iconResID, typeID:typeID});
+					var ID : String = lavel.@ID;
+					var strLabel : String = lavel.Attributes.Attribute.( @Name == "title" );
+
+					var typeID : String = lavel.@Type.toString();
+					var iconResID : String = getIcon( typeID );
+
+					arrAppl.addItem( { label : strLabel, ID : ID, iconResID : iconResID, typeID : typeID } );
 				}
-				
-				
+
+
 				var sort : Sort = new Sort();
-				sort.fields = [new SortField("typeID"), new SortField("label", true)];
+				sort.fields = [ new SortField( "typeID" ), new SortField( "label",
+																		  true ) ];
 				arrAppl.sort = sort;
 				arrAppl.refresh();
-				
-				function searchIndex():int
+
+				function searchIndex() : int
 				{
-					var curID:String = dataManager.currentPageId;
-					for(var i:String in arrAppl)
+					var curID : String = dataManager.currentPageId;
+					for ( var i : String in arrAppl )
 					{
 //						trace(arrAppl[i].typeID);
-						if (arrAppl[i].ID == curID) 
-							return Number(i);	
+						if ( arrAppl[ i ].ID == curID )
+							return Number( i );
 					}
 					return 0;
 				}
-				
+
 				changeContainer.selectedIndex = searchIndex();
 				serverScripts.dataProvider = dataManager.currentPageId;
 				containersBranch.currentPageID = dataManager.currentPageId;
-	 	}
-	 	
-	 		private function hideHandler():void
-	 		{
+			}
+
+			private function hideHandler() : void
+			{
 //	 			changeWatcher.unwatch();
 //	 			trContainer.hideHandler();
 //	 			trContainer.removeEventListener(EventEditorEvent.DATA_CHANGED, dataChangedListener);
-	 			
-	 			dataManager.removeEventListener(DataManagerEvent.PAGE_CHANGED, pageChangeHandler);
-	 			dataManager.removeEventListener(DataManagerEvent.OBJECT_CHANGED, objectChangeHandler);
-	 		}
-	 	
-	 	
-	 		private var massIconResouceID:Array = new Array(); 
-			private function getIcon(ID:String):String
+
+				dataManager.removeEventListener( DataManagerEvent.PAGE_CHANGED, pageChangeHandler );
+				dataManager.removeEventListener( DataManagerEvent.OBJECT_CHANGED,
+												 objectChangeHandler );
+			}
+
+
+			private var massIconResouceID : Array = new Array();
+
+			private function getIcon( ID : String ) : String
 			{
-				if (massIconResouceID[ID])
-					return massIconResouceID[ID];
-					
-				for each(var lavel:XML in dataManager.getTopLevelTypes() )
-				{																//2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
-						if( lavel.Information.ID == ID) 
-						{
-							var strLabel:String = lavel.Information.StructureIcon;
-							return  massIconResouceID[ID] = strLabel.substr(5, 36);
-						}
+				if ( massIconResouceID[ ID ] )
+					return massIconResouceID[ ID ];
+
+				for each ( var lavel : XML in dataManager.getTopLevelTypes() )
+				{ //2330fe83-8cd6-4ed5-907d-11874e7ebcf4 /#Lang(001)
+					if ( lavel.Information.ID == ID )
+					{
+						var strLabel : String = lavel.Information.StructureIcon;
+						return massIconResouceID[ ID ] = strLabel.substr( 5, 36 );
+					}
 				}
-				return  '';
+				return '';
 			}
-			
-	 		private var getApplEventID:String;
-	 		private function dataChangedListener(eeEvt:EventEditorEvent):void
-	 		{
-	 			serverScripts.dataProvider = eeEvt.objID;
-			}
-	 	
-	 		private function treeContainerChangeHandler(evt:Event):void
+
+			private var getApplEventID : String;
+
+			private function dataChangedListener( eeEvt : EventEditorEvent ) : void
 			{
-			
+				serverScripts.dataProvider = eeEvt.objID;
 			}
-/*			
-			private function getIcon(value:Object):Class 
+
+			private function treeContainerChangeHandler( evt : Event ) : void
 			{
-				var xmlData:XML = XML(value);
-				var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
-			 	
-		 		return IconUtil.getClass(trContainer, data, 16, 16);
+
 			}
-	*/		
-			private function addNewScript():void
+
+			/*
+			   private function getIcon(value:Object):Class
+			   {
+			   var xmlData:XML = XML(value);
+			   var data:Object = {typeId:xmlData.@Type, resourceId:xmlData.@resourceID}
+
+			   return IconUtil.getClass(trContainer, data, 16, 16);
+			   }
+			 */
+			private function addNewScript() : void
 			{
-				var rbWnd:CreatingNewActionWindow = CreatingNewActionWindow(PopUpManager.createPopUp(this, CreatingNewActionWindow, true));
-					rbWnd.addEventListener(ScriptEditorEvent.SET_NAME, creatingNewActionWindowtHandler);
-					rbWnd.inputText.setFocus();
-				
+				var rbWnd : CreatingNewActionWindow = CreatingNewActionWindow( PopUpManager.createPopUp( this,
+																										 CreatingNewActionWindow,
+																										 true ) );
+				rbWnd.addEventListener( ScriptEditorEvent.SET_NAME, creatingNewActionWindowtHandler );
+				rbWnd.inputText.setFocus();
+
 			}
-			
-			private function creatingNewActionWindowtHandler(ssEvt:ScriptEditorEvent):void
+
+			private function creatingNewActionWindowtHandler( ssEvt : ScriptEditorEvent ) : void
 			{
-				var dataXML:XML  = new XML('<Action/>');
-				var last7:String = ssEvt.scriptName.slice(-7, ssEvt.scriptName.length);
-				if(last7 == "_python")
+				var dataXML : XML = new XML( '<Action/>' );
+				var last7 : String = ssEvt.scriptName.slice( -7, ssEvt.scriptName.length );
+				if ( last7 == "_python" )
 				{
-					dataXML.@Name = ssEvt.scriptName.substr(0,ssEvt.scriptName.length - 7);
+					dataXML.@Name = ssEvt.scriptName.substr( 0, ssEvt.scriptName.length - 7 );
 					dataXML.@Language = "python";
-				} else
+				}
+				else
 				{
 					dataXML.@Name = ssEvt.scriptName;
 					dataXML.@label = ssEvt.scriptName;
 					dataXML.@Language = "vscript";
 				}
-				
-				dataXML.@Top="5"; 
-				dataXML.@Left="5";
-				dataXML.@State="true";
-				
+
+				dataXML.@Top = "5";
+				dataXML.@Left = "5";
+				dataXML.@State = "true";
+
 				serverScripts.addScript = dataXML;
-				
+
 				save();
 			}
-			
-			private function deleteScript():void
+
+			private function deleteScript() : void
 			{
 				serverScripts.deleteScript();
 				save();
 			}
-			
-			private function setScript():void
+
+			private function setScript() : void
 			{
-				btSave.setStyle("color", "0x000000");
-				btSave.setStyle("borderColor", "0xAAB3B3");
-				
-				if(serverScripts.dataEnabled && serverScripts.script != 'null')
-				{	
+				btSave.setStyle( "color", "0x000000" );
+				btSave.setStyle( "borderColor", "0xAAB3B3" );
+
+				if ( serverScripts.dataEnabled && serverScripts.script != 'null' )
+				{
 					textArea.enabled = true;
 					textArea.text = serverScripts.script;
-				}else
+				}
+				else
 				{
 					textArea.enabled = false;
 				}
-				
+
 			}
-			private function save():void
+
+			private function save() : void
 			{
-				if(!textArea.enabled)
-					return;
-					
-				btSave.setStyle("color", "0x000000");
-				btSave.setStyle("borderColor", "0xAAB3B3");
+				if ( !textArea.enabled )
+					return ;
+
+				btSave.setStyle( "color", "0x000000" );
+				btSave.setStyle( "borderColor", "0xAAB3B3" );
 
 				serverScripts.script = textArea.text;
-				
+
 				_changed = false;
 			}
-			
-			private function revert():void
+
+			private function revert() : void
 			{
-				btSave.setStyle("color", "0x000000");
-				btSave.setStyle("borderColor", "0xAAB3B3");
+				btSave.setStyle( "color", "0x000000" );
+				btSave.setStyle( "borderColor", "0xAAB3B3" );
 
 				textArea.text = serverScripts.script;
-				
+
 				_changed = false;
 			}
-			
-			private function textAreaDataChangeHandler( event : KeyboardEvent ):void
+
+			private function textAreaDataChangeHandler( event : KeyboardEvent ) : void
 			{
 //				if( _changed )
 //					return;
-				
-				btSave.setStyle("color", "0xCC0000");
-				btSave.setStyle("borderColor", "0xEE0000");
-				
+
+				btSave.setStyle( "color", "0xCC0000" );
+				btSave.setStyle( "borderColor", "0xEE0000" );
+
 				_changed = true;
 			}
-			
-			private function pageChangeHandler(dmEvt:DataManagerEvent):void
+
+			private function pageChangeHandler( dmEvt : DataManagerEvent ) : void
 			{
 //				changeTree(dataManager.currentPageId);
 				containersBranch.currentPageID = dataManager.currentPageId;
@@ -240,8 +252,8 @@
 //				dataManager.getApplicationEvents();
 
 			}
-			
-			private function objectChangeHandler(dmEvt:DataManagerEvent):void
+
+			private function objectChangeHandler( dmEvt : DataManagerEvent ) : void
 			{
 //				changeTree(dataManager.currentPageId);
 //				containersBranch.currentPageID = dataManager.currentPageId;
@@ -249,58 +261,72 @@
 //				dataManager.getApplicationEvents();
 
 			}
-	
-					
-				[Bindable]
-   			public var selectedAppl:Object; 
-			private function changeContainerHandler(obj:Object):void
+
+
+			[ Bindable ]
+			public var selectedAppl : Object;
+
+			private function changeContainerHandler( obj : Object ) : void
 			{
-				selectedAppl = ComboBox(obj).selectedItem;
+				selectedAppl = ComboBox( obj ).selectedItem;
 //				changeTree(selectedAppl.ID);
-				if(selectedAppl.ID == "session")
+				if ( selectedAppl.ID == "session" )
 				{
 					containersBranch.currentPageID = selectedAppl.ID;
-					serverScripts.dataProvider 		= selectedAppl.ID;
+					serverScripts.dataProvider = selectedAppl.ID;
 				}
 				else
-					dataManager.changeCurrentPage(selectedAppl.ID);
+					dataManager.changeCurrentPage( selectedAppl.ID );
 			}
-			
-	]]>
-</mx:Script>
-	<mx:HDividedBox width="100%" height="100%" > 
-        <mx:VBox id="vBox" width="100%" height="100%"  paddingTop="10" paddingLeft="10">
-            <containers:TabbedTextArea id="textArea" width="100%"  height="100%"
-            		 text="same Text of code" 
-            		 
-            		 allowTabKey="true" fontFamily="Courier New" fontSize="12" fontGridFitType="pixel" 
-            		 keyDown=" textAreaDataChangeHandler( event ); " backgroundColor="#FFFFFF" wordWrap="false"/>            	 
-            <mx:HBox paddingBottom="5" >
-	           <mx:Button id="btSave" label="Save" click="{save()}" />
-	           <mx:Button label="Revert" click=" revert(); "/>
-            </mx:HBox>
-        </mx:VBox>
-        <mx:VBox width="250"  height="{textArea.height + 25}"  minWidth="250"
-        	verticalScrollPolicy="auto" horizontalScrollPolicy="off"   verticalGap="10"  
-        	paddingLeft="3" paddingRight="10" paddingTop="10">
-        	<mx:Panel title="PAGES" width="100%" color="#FFFFFF" >
-			        <mx:ComboBox id="changeContainer" dataProvider="{arrAppl}"
-			        	 rowCount="20" change="{changeContainerHandler(event.target)}" 
-			        		color="#000000" minWidth="200" width="100%"  itemRenderer="vdom.components.eventEditor.PanelItemRender"/>
-	        </mx:Panel>
-	        <containers:ContainersBranch id="containersBranch" width="100%"  title="Containers" height="150"
-        	paddingLeft="0" paddingRight="0" paddingBottom="0" paddingTop="0"/>
-			
-				       <containers:ServerScripts  id="serverScripts"  title="serverScripts" width="100%" dataChanged="{setScript()}"
-				       	paddingLeft="5" paddingRight="0" paddingBottom="0" paddingTop="0" />
-		       
-		       <mx:HBox >
-			       <mx:Button  label="Add Script" click="{addNewScript()}"  />
-		       	 	<mx:Button label="Delete Script" click="{deleteScript()}"  />
-		       </mx:HBox>
+		]]>
+	</mx:Script>
+	<mx:HDividedBox height="100%" width="100%">
+		<mx:VBox 
+			id="vBox"
+			height="100%" width="100%"
+			paddingLeft="10" paddingTop="10">
+			<controls:TextEditor 
+				id="textArea"
+				height="100%" text="same Text of code" width="100%"
+				keyDown="textAreaDataChangeHandler( event )"/>
+			<mx:HBox paddingBottom="5">
+				<mx:Button 
+					id="btSave"
+					label="Save"
+					click="{save()}"/>
+				<mx:Button label="Revert"
+					click=" revert(); "/>
+			</mx:HBox>
+		</mx:VBox>
+		<mx:VBox height="{textArea.height + 25}" horizontalScrollPolicy="off" minWidth="250"
+			verticalScrollPolicy="auto" width="250"
+			paddingLeft="3" paddingRight="10" paddingTop="10" verticalGap="10">
+			<mx:Panel width="100%"
+				color="#FFFFFF"
+				title="PAGES">
+				<mx:ComboBox 
+					id="changeContainer"
+					dataProvider="{arrAppl}" minWidth="200" width="100%"
+					color="#000000"
+					change="{changeContainerHandler(event.target)}"
+					itemRenderer="vdom.components.eventEditor.PanelItemRender" rowCount="20"/>
+			</mx:Panel>
+			<containers:ContainersBranch 
+				id="containersBranch"
+				height="150" width="100%"
+				paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
+				title="Containers"/>
+			<containers:ServerScripts 
+				id="serverScripts"
+				width="100%"
+				paddingBottom="0" paddingLeft="5" paddingRight="0" paddingTop="0"
+				dataChanged="{setScript()}" title="serverScripts"/>
+			<mx:HBox>
+				<mx:Button label="Add Script"
+					click="{addNewScript()}"/>
+				<mx:Button label="Delete Script"
+					click="{deleteScript()}"/>
+			</mx:HBox>
 		</mx:VBox>
 	</mx:HDividedBox>
-		
-
-
 </mx:Canvas>

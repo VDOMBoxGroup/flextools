@@ -80,11 +80,13 @@
 			<mx:Button id="submitButton" styleName="loginButtonOK"
 				label="{resourceManager.getString('LoginForm','ok_button')}"
 				click="checkData();" width="110"
+				buttonMode="true"
 				focusEnabled="false"/>
 				
 			<mx:Button id="quitButton" styleName="loginButtonQuit"
 				label="{resourceManager.getString('LoginForm','quit_button')}"
 				width="110" click="Application.application.close()"
+				buttonMode="true"
 				focusEnabled="false"/>
 			
 		</mx:ControlBar>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns="vdom.containers.*">
+	xmlns="vdom.containers.*"
+	
+	creationComplete="creationCompleteHandler()">
 	<mx:Script>
 		<![CDATA[
 			import vdom.events.MultilineWindowEvent;
@@ -28,7 +30,7 @@
 			[ Bindable ]
 			public var attributeValue : String;
 
-			private function init() : void
+			private function creationCompleteHandler() : void
 			{
 				var tf : IUITextField = textAreaContainer.mx_internal::getTextField();
 				tf.alwaysShowSelection = true;

@@ -26,6 +26,10 @@ global {
 	appIconTransportation: Embed("app-transportation.png");
 }
 
+Container {
+	disabledOverlayAlpha : 0;
+}
+
 WindowedApplication {
 	
 	statusBarBackgroundColor: #000000;
@@ -72,6 +76,12 @@ TabNavigator {
 TextInput {
 	fontFamily: "Tahoma";
 	color: "red"
+}
+
+Tree
+{
+	disclosureClosedIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureClosedIcon");
+	disclosureOpenIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureOpenIcon");
 }
 
 .tabStyle {

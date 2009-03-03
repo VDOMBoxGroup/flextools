@@ -1,54 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- TextAreaTabAllowed -->
-<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:TextArea 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
 	creationComplete="creationCompleteHandler();">
-<mx:Script>
-	<![CDATA[
-		import mx.core.UITextFormat;
-		import mx.events.FlexEvent;
-	
-	private var _allowTabKey:Boolean = false;
-	
-	[Bindable]
-	public function set allowTabKey ( value:Boolean ) : void {
-		
-		if( value ) {
-			
-			addEventListener( FocusEvent.KEY_FOCUS_CHANGE, catchTabKey);
-		} else {
-			
-			removeEventListener( FocusEvent.KEY_FOCUS_CHANGE, catchTabKey);
-		}
-			
-		_allowTabKey = value;
-	}
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UITextFormat;
+			import mx.events.FlexEvent;
 
-	public function get allowTabKey():Boolean {
-		
-		return _allowTabKey;
-	}
-	
-	private function creationCompleteHandler() : void
-	{
-		var tf : TextFormat = new UITextFormat(this.systemManager);
-		tf.tabStops = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300];
-		textField.defaultTextFormat = tf;	
-	}
-	
-	private function catchTabKey(e:FocusEvent = null):void {
-	
-		if(e) {
-			
-			var before:String = this.text.substring (0, this.selectionBeginIndex);
-			var after:String = this.text.substring(this.selectionEndIndex, this.text.length);
-			var newCaretPos:int = this.selectionBeginIndex + 1;
-			this.text = before + "\t" + after;
-			this.setSelection( newCaretPos, newCaretPos );
-			e.preventDefault();
-			this.setFocus();
-		}
-	}
+			private var _allowTabKey : Boolean = false;
 
-	]]>
-</mx:Script>
+			[ Bindable ]
+			public function set allowTabKey( value : Boolean ) : void
+			{
+
+				if ( value )
+				{
+
+					addEventListener( FocusEvent.KEY_FOCUS_CHANGE, catchTabKey );
+				}
+				else
+				{
+
+					removeEventListener( FocusEvent.KEY_FOCUS_CHANGE, catchTabKey );
+				}
+
+				_allowTabKey = value;
+			}
+
+			public function get allowTabKey() : Boolean
+			{
+
+				return _allowTabKey;
+			}
+
+			private function creationCompleteHandler() : void
+			{
+				var tf : TextFormat = new UITextFormat( this.systemManager );
+				tf.tabStops = createTabs( 40, 30 );
+				textField.defaultTextFormat = tf;
+			}
+			
+			private function createTabs( count : uint, step : uint ) : Array
+			{
+				var tabsArray : Array = [];
+			
+				for ( var i : uint = 1; i <= count; i++ )
+				{
+					tabsArray.push( i * step );
+				}
+			
+				return tabsArray;
+			}
+			
+			private function catchTabKey( e : FocusEvent = null ) : void
+			{
+				if ( e )
+				{
+					var before : String = this.text.substring( 0, this.selectionBeginIndex );
+					var after : String = this.text.substring( this.selectionEndIndex,
+															  this.text.length );
+					var newCaretPos : int = this.selectionBeginIndex + 1;
+					this.text = before + "\t" + after;
+					this.setSelection( newCaretPos, newCaretPos );
+					e.preventDefault();
+					this.setFocus();
+				}
+			}
+		]]>
+	</mx:Script>
 </mx:TextArea>

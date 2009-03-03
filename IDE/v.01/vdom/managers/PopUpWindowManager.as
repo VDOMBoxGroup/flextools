@@ -423,7 +423,7 @@ public class PopUpWindowManager
 		if( handlerDictionary[ parentNativeWindow ] === undefined )
 		{
 			parentNativeWindow.addEventListener( Event.ACTIVATE, nativeWindow_activateHandler );
-			handlerDictionary[ parentNativeWindow ] = [ { type : Event.ACTIVATE, handler : nativeWindow_activateHandler } ];;
+			handlerDictionary[ parentNativeWindow ] = [ { type : Event.ACTIVATE, handler : nativeWindow_activateHandler } ];
 		}
 		
 		window.visible = true;

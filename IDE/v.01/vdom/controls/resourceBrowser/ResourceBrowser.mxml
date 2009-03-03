@@ -26,7 +26,7 @@
 		<mx:Spacer 
 			width="100%"/>
 		<mx:Button 
-			label="Refresh" click="refreshButton_clickHandler();"/>
+			label="Refresh" height="24" click="refreshButton_clickHandler();"/>
 		<mx:Button 
 			height="24" icon="@Embed(source='/assets/resourceBrowserIcons/interface/upload.png')" label="Upload File..."
 			width="120" click="uploadButton_clickHandler();"/>
@@ -119,6 +119,8 @@
 		<mx:Label 
 			text="{filteredResources}"
 			fontWeight="bold"/>
+		<mx:VRule 
+			height="18"/>
 		<mx:Spacer 
 			width="100%"/>
 		<mx:Button 

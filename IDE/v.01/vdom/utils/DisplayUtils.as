@@ -10,7 +10,7 @@ import flash.utils.getDefinitionByName;
 import mx.controls.scrollClasses.ScrollBar;
 import mx.core.Application;
 
-public class DisplayUtil
+public class DisplayUtils
 {
 	
 	public static function getObjectsUnderMouse(

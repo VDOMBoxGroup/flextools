@@ -25,7 +25,7 @@ import vdom.managers.DataManager;
 import vdom.managers.RenderManager;
 import vdom.managers.ResizeManager;
 import vdom.managers.VdomDragManager;
-import vdom.utils.DisplayUtil;
+import vdom.utils.DisplayUtils;
 
 use namespace mx_internal;
 
@@ -402,7 +402,7 @@ public class WorkArea extends VBox
 		}
 		
 		var stack : Array = 
-			DisplayUtil.getObjectsUnderMouse( this, "vdom.containers::IItem", filterFunction );
+			DisplayUtils.getObjectsUnderMouse( this, "vdom.containers::IItem", filterFunction );
 		
 		if( stack.length == 0 )
 			return;

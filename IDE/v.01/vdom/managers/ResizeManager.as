@@ -17,7 +17,7 @@ package vdom.managers
 	import vdom.events.ResizeManagerEvent;
 	import vdom.events.TransformMarkerEvent;
 	import vdom.managers.resizeClasses.TransformMarker;
-	import vdom.utils.DisplayUtil;
+	import vdom.utils.DisplayUtils;
 	
 			
 [Event( name="RESIZE_COMPLETE", type="vdom.events.ResizeManagerEvent")]
@@ -335,7 +335,7 @@ public class ResizeManager extends EventDispatcher
 		var itemUnderMouse : IItem;
 		
 		var targetList : Array =
-			DisplayUtil.getObjectsUnderMouse( topLevelItem.parent, "vdom.containers::IItem", filterFunction );
+			DisplayUtils.getObjectsUnderMouse( topLevelItem.parent, "vdom.containers::IItem", filterFunction );
 		
 		if( targetList.length == 0 )
 			return itemUnderMouse;
