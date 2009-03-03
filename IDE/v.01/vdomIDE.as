@@ -141,8 +141,8 @@ private function invokeHandler( event : InvokeEvent ) : void
 			}
 			case "darkstyle" :
 			{
-				editorModule.scriptCanv.textArea.setStyle( "color", "white" );
-				editorModule.scriptCanv.textArea.setStyle( "backgroundColor", "black" );
+				editorModule.scriptCanv.textArea.codeEditor.setStyle( "color", "white" );
+				editorModule.scriptCanv.textArea.codeEditor.setStyle( "backgroundColor", "black" );
 				break;
 			}
 		}

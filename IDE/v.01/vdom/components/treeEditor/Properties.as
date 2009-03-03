@@ -16,7 +16,7 @@ package vdom.components.treeEditor
 	import mx.controls.TextInput;
 	
 	import vdom.containers.ClosablePanel;
-	import vdom.controls.multiLine.Multiline;
+	import vdom.controls.multiline.Multiline;
 	import vdom.controls.resourceBrowser.ResourceBrowserButton;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.TreeEditorEvent;

@@ -33,7 +33,7 @@ import vdom.containers.ClosablePanel;
 import vdom.controls.NumberField;
 import vdom.controls.colorPicker.ColorPicker;
 import vdom.controls.externalEditorButton.ExternalEditorButton;
-import vdom.controls.multiLine.Multiline;
+import vdom.controls.multiline.Multiline;
 import vdom.controls.resourceBrowser.ResourceBrowserButton;
 import vdom.events.AttributesPanelEvent;
 import vdom.managers.DataManager;
