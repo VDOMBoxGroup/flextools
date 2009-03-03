@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#EBEBEB" horizontalGap="3"
+	creationComplete="initializeHandler()"
+	xmlns:containers="vdom.components.scriptEditor.containers.*">
+	<mx:Script source="textEditor.as"/>
+	<mx:TextArea 
+		id="lineNumbers"
+		height="{ codeEditor.height - 16 }" horizontalScrollPolicy="off" selectable="false"
+		text="1" verticalScrollPolicy="off" width="30"
+		borderStyle="none" focusAlpha="0" textAlign="right"
+		wordWrap="false"/>
+	<containers:TabbedTextArea 
+		id="codeEditor"
+		height="100%" horizontalScrollPolicy="on" verticalScrollPolicy="on" width="100%"
+		text="{ _text }"
+		borderStyle="none" focusAlpha="0"
+		allowTabKey="true" wordWrap="false"/>
+</mx:HBox>
