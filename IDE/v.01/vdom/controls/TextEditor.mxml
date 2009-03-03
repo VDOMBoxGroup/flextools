@@ -2,7 +2,7 @@
 <mx:HBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#EBEBEB" horizontalGap="3"
 	creationComplete="initializeHandler()"
-	xmlns:containers="vdom.components.scriptEditor.containers.*">
+	xmlns:text="gearsandcogs.text.*" xmlns:controls="vdom.controls.*">
 	<mx:Script source="textEditor.as"/>
 	<mx:TextArea 
 		id="lineNumbers"
@@ -10,10 +10,11 @@
 		text="1" verticalScrollPolicy="off" width="30"
 		borderStyle="none" focusAlpha="0" textAlign="right"
 		wordWrap="false"/>
-	<containers:TabbedTextArea 
+	<controls:TabbedTextArea
 		id="codeEditor"
 		height="100%" horizontalScrollPolicy="on" verticalScrollPolicy="on" width="100%"
 		text="{ _text }"
 		borderStyle="none" focusAlpha="0"
 		allowTabKey="true" wordWrap="false"/>
+	<text:UndoTextFields id="undoTextFields" target="{ codeEditor }" />
 </mx:HBox>

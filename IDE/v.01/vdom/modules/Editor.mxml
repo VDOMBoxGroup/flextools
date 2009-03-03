@@ -22,7 +22,8 @@
 <mx:VBox id="components"
 	width="100%" height="100%" verticalGap="7">
 	
-	<controls:ControlPanel 
+	<controls:ControlPanel
+		id="controlPanel" 
 		width="100%" height="104"
 		paddingTop="7" paddingBottom="7" paddingLeft="7" paddingRight="7"
 		dropShadowEnabled="true"
@@ -60,6 +61,7 @@
 			styleName="resourceButton"
 			label="Resources"
 			labelPlacement="bottom"
+			switched="false"
 			click="resourceButton_clickHandler();"/>
 		
 		<controls:ActionButton id="debugButton"
@@ -85,7 +87,7 @@
 		
 		<edit:Edit id="editorCanv" width="100%" height="100%"/>
 		
-		<scriptEditor:scriptEditor2 id="scriptCanv" width="100%" height="100%" />
+		<scriptEditor:scriptEditor id="scriptCanv" width="100%" height="100%" />
 			
 		<treeEditor:TreeEditor id="treeCanv" width="100%" height="100%" />
 		

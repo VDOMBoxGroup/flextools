@@ -1,7 +1,7 @@
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-import mx.core.Window;
+import mx.events.FlexEvent;
 
 import vdom.controls.resourceBrowser.ResourceBrowser;
 import vdom.events.DataManagerEvent;
@@ -51,7 +51,8 @@ private function switchToEdit() : void
 private function showHandler() : void
 {
 	registerEvent( true );
-
+	controlPanel.dispatchEvent( new FlexEvent( FlexEvent.SHOW ) );
+	
 	var applicationId : String = dataManager.currentApplicationId;
 
 	if ( !applicationId )

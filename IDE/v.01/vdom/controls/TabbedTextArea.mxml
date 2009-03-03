@@ -5,9 +5,13 @@
 	creationComplete="creationCompleteHandler();">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.UITextField;
 			import mx.core.UITextFormat;
 			import mx.events.FlexEvent;
-
+			
+			import mx.core.mx_internal;
+			use namespace mx_internal;
+			
 			private var _allowTabKey : Boolean = false;
 
 			[ Bindable ]
@@ -53,18 +57,19 @@
 				return tabsArray;
 			}
 			
-			private function catchTabKey( e : FocusEvent = null ) : void
+			private function catchTabKey( event : FocusEvent = null ) : void
 			{
-				if ( e )
+				if ( event )
 				{
-					var before : String = this.text.substring( 0, this.selectionBeginIndex );
-					var after : String = this.text.substring( this.selectionEndIndex,
+					var before : String = text.substring( 0, this.selectionBeginIndex );
+					var after : String = text.substring( this.selectionEndIndex,
 															  this.text.length );
-					var newCaretPos : int = this.selectionBeginIndex + 1;
-					this.text = before + "\t" + after;
-					this.setSelection( newCaretPos, newCaretPos );
-					e.preventDefault();
-					this.setFocus();
+					var newCaretPos : int = selectionBeginIndex + 1;
+					textField.text = before + "\t" + after;
+					textField.setSelection( newCaretPos, newCaretPos );
+					textField.dispatchEvent( new Event( Event.CHANGE ) )
+					event.preventDefault();
+					setFocus();
 				}
 			}
 		]]>

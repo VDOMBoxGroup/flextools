@@ -21,6 +21,7 @@ public function get text() : String
 public function set text( value : String ) : void
 {
 	_text = value;
+	undoTextFields.clearHistory();
 }
 
 private function registerEvent( flag : Boolean ) : void 
@@ -82,7 +83,7 @@ private function codeEditor_changeHandler( event : Event ) : void
 
 private function codeEditor_valueCommitHandler( event : FlexEvent ) : void 
 {
-	calculateNumbers();
+	callLater( calculateNumbers );
 }
 
 private function codeEditor_scrollHandler( event : ScrollEvent ) : void 
