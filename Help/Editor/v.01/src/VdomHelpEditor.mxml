@@ -144,7 +144,7 @@
 		
 		private function productEdit():void
 			{
-				var rbWnd:EditProduct = EditProduct(PopUpManager.createPopUp(this, EditProduct, true));
+				var rbWnd:Products = Products(PopUpManager.createPopUp(this, Products, true));
 //				rbWnd.addEventListener(CloseEvent.CLOSE, closeSettingsHandler);
 			}
 	
@@ -188,6 +188,7 @@
 				change="{treeChangeHandler(event)}"  dragMoveEnabled="true" 	
 				folderOpenIcon="@Embed('../assets/open_folder.png')" folderClosedIcon="@Embed('../assets/close_folder.png')" 
 				defaultLeafIcon="@Embed('../assets/page.png')" /> 
+
 			<mx:HBox paddingLeft="3">
 				<mx:Button  label="Add Item" click="{addItem()}"
 				color="#FFFFFF" 	fillColors="#333333" 

@@ -2,8 +2,8 @@
 
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="400" height="270"
-	title="Add"
+	layout="absolute" width="400" height="450"
+	title="Products"
 	creationComplete="creationComplete()"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
@@ -20,6 +20,7 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import mx.collections.ArrayCollection;
 			import mx.controls.CheckBox;
 			import mx.managers.PopUpManager;
@@ -30,18 +31,6 @@
 			{
 				addEventListener(CloseEvent.CLOSE, closeHandler); 
 				PopUpManager.centerPopUp(this);
-				
-				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler); 
-				
-				productLabel.setFocus() 	;
-			}
-			
-			private function keyboardHandler(msEvt:KeyboardEvent):void
-			{
-				if(msEvt.charCode == 27)
-				{
-					dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-				}
 			}
 			
 			private function closeHandler(cEvent:CloseEvent):void 
@@ -61,34 +50,51 @@
 			
 			private function editClickHandler():void
 			{
-				
+				var rbWnd:EditProduct = EditProduct(PopUpManager.createPopUp(this, EditProduct, true));
 			}
 						
+			private function addClickHandler():void
+			{
+				var rbWnd:AddProduct = AddProduct(PopUpManager.createPopUp(this, AddProduct, true));
+			}
 			
+			private function deleteClickHandler():void
+			{
+				Alert.show("Delete this Product?", "Dalete", 3, this, alertClickHandler);
+			}
+			
+			private function alertClickHandler(event:CloseEvent):void
+			{
+				if (event.detail==Alert.YES)
+		        {
+//		        	saveToServer();
+		        }else
+		        {
+//		        	hide();
+		        }
+			}
 		]]>
 		
 	</mx:Script>
 	<mx:HBox width="100%" height="100%">
-		<mx:VBox label="Add Product" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10">
-			<mx:Label text="Product:"  fontSize="20"/>
-			<mx:Canvas width="100%" height="100%" >
-				
-				<mx:Label  x="17" y="13" text="Label:" />
-				<mx:TextInput id="productLabel" x="65" y="11" text="Label of product" width="211"/>
-				
-				<mx:Label x="18" y="42" text="Name:"/>
-				<mx:TextInput x="65" y="40" text="Like 'VDOM_IDE'" width="211"/>
-				
-				<mx:Label x="10" y="74" text="Description:"/>
-				<mx:TextArea x="18" y="100" width="258" height="87"/>
-			</mx:Canvas>
+		<mx:VBox label="Products" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10">
+			<mx:Label text="List of Products:"  fontSize="20"/>
+			<mx:List width="100%" height="100%" dataProvider="[label:'Alabama']"/>
 		</mx:VBox>
 	<mx:VBox horizontalAlign="center"   backgroundColor="#373739"
 			height="100%" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
     		 
-    		  <mx:Button  label="Ok"  click="{cancelPressed()}"
+    		 <mx:Button  label="Add"  click="{addClickHandler()}"
     		  	color="#FFFFFF"  width="100%"  borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+			
+			<mx:Button  label="Edit"  click="{editClickHandler()}"
+				color="#FFFFFF"  width="100%" borderColor="#999999"
+				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1"  themeColor="#656565" textRollOverColor="#FFFFFF"/>
+			
+			<mx:Button  label="Delete"  click="{deleteClickHandler()}"
+				color="#FFFFFF"  width="100%" borderColor="#999999"
+				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1"  themeColor="#656565" textRollOverColor="#FFFFFF"/>
 			
 			<mx:Button  label="Cancel" 
 				click="{cancelPressed()}" color="#FFFFFF" width="100%" borderColor="#999999"
