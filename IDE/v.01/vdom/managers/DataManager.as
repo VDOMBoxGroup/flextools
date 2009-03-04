@@ -596,7 +596,12 @@ public class DataManager implements IEventDispatcher {
 	
 	private function soap_createApplicationHandler( event : SOAPEvent ) : void
 	{
-		_listApplication += event.result.Application[0];
+		var applicationNode : XML = event.result.Application[0];
+		applicationNode.@Name = applicationNode.Information.Name[0];
+		applicationNode.@IconID = applicationNode.Information.Icon[0];
+		applicationNode.@Status = "";
+		
+		_listApplication += applicationNode;
 		
 		dispatchEvent( new DataManagerEvent( "listApplicationChanged" ));
 		

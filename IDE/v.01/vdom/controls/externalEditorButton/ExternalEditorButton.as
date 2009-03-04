@@ -1,6 +1,5 @@
 package vdom.controls.externalEditorButton
 {
-	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -10,195 +9,121 @@ package vdom.controls.externalEditorButton
 	import mx.controls.Alert;
 	import mx.controls.Button;
 	import mx.controls.Label;
-	import mx.core.Application;
 	import mx.core.UIComponent;
+	import mx.core.Window;
 	import mx.events.CloseEvent;
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-	import mx.managers.PopUpManagerChildList;
 	
-	import vdom.events.FileManagerEvent;
 	import vdom.managers.DataManager;
 	import vdom.managers.ExternalManager;
 	import vdom.managers.FileManager;
-	import flash.net.URLRequest;
-	import flash.events.IOErrorEvent;
+	import vdom.managers.PopUpWindowManager;
 
 	public class ExternalEditorButton extends HBox
 	{
-		private var fileManager:FileManager = FileManager.getInstance();
-		private var dataManager:DataManager = DataManager.getInstance();
-		private var applicationID:String = '';
-		private var objectID:String = '';
-		private var resourceID:String = '';
-		
-		private var __valueLabel:Label;
-		private var __openBtn:Button;
-		
-		private var ldr:Loader;
-		private var exEditor:*;
-		private var applWindow:ApplicationWindow;
-		private var applUIComponent:UIComponent;
-		private var spinner:SpinnerScreen;
-		private var externalManager:ExternalManager;
-		
-		private var _value:String; 
+		private var externalEditor : ExternalEditor;
+		private var applicationID : String = "";
+		private var objectID : String = "";
+		private var resourceID : String = "";
 
-		public function ExternalEditorButton(applicationID:String, objectID:String, resourceID:String) {
-			
+		private var __valueLabel : Label;
+		private var openButton : Button;
+
+		private var _value : String;
+		private var _title : String;
+		
+		private var window : Window;
+		
+		public function ExternalEditorButton( applicationID : String, objectID : String,
+											  resourceID : String )
+		{
+
 			super();
 
-			this.horizontalScrollPolicy = "off";
-			this.verticalScrollPolicy = "off";
-			this.setStyle("horizontalGap", 1);
-			this.setStyle("paddingLeft", 0);
-			this.setStyle("paddingRight", 0);
-			this.setStyle("verticalAlign", "middle");
+			horizontalScrollPolicy = "off";
+			verticalScrollPolicy = "off";
+			setStyle( "horizontalGap", 1 );
+			setStyle( "paddingLeft", 0 );
+			setStyle( "paddingRight", 0 );
+			setStyle( "verticalAlign", "middle" );
 
 			this.applicationID = applicationID;
 			this.objectID = objectID;
 			this.resourceID = resourceID;
 		}
 		
-		public function set value(value:String):void {
-			
-			_value = value;
-			if (__valueLabel)
-				__valueLabel.text = _value;
+		public function set title( value : String ) : void
+		{
+			_title = value;
 		}
 		
-		public function get value():String {
-			
+		public function set value( value : String ) : void
+		{
+
+			_value = value;
+			if ( __valueLabel )
+				__valueLabel.text = _value;
+		}
+
+		public function get value() : String
+		{
+
 			return _value;
 		}
 		
-		override protected function createChildren():void {
-						
+		override protected function createChildren() : void
+		{
+
 			super.createChildren();
-			
-			if (!__valueLabel) {
+
+			if ( !__valueLabel )
 				__valueLabel = new Label();
-				addChild(__valueLabel);
-				__valueLabel.percentWidth = 100;
-				__valueLabel.truncateToFit = true;
-			}
 			
-			if (!__openBtn) {
-				__openBtn = new Button();
-				addChild(__openBtn);
-				__openBtn.width = 22;
-				__openBtn.height = 20;
-				__openBtn.setStyle("cornerRadius", 0);
-				__openBtn.setStyle("paddingLeft", 1);
-				__openBtn.setStyle("paddingRight", 1);
-				__openBtn.label = "...";
-				__openBtn.addEventListener(MouseEvent.CLICK, openWindow);
-			}
-			
+			__valueLabel.percentWidth = 100;
+			__valueLabel.truncateToFit = true;
+			addChild( __valueLabel );
+
+
+			if ( !openButton )
+				openButton = new Button();
+
+			openButton.width = 22;
+			openButton.height = 20;
+			openButton.setStyle( "cornerRadius", 0 );
+			openButton.setStyle( "paddingLeft", 1 );
+			openButton.setStyle( "paddingRight", 1 );
+			openButton.label = "...";
+			openButton.addEventListener( MouseEvent.CLICK, openButton_clickHandler );
+			addChild( openButton );
+
 			invalidateDisplayList();
 			invalidateSize();
 		}
 
-//		----- Loading and executing external application ------------------------------------- 
-
-		public function set resource(resource:Object):void {
-			fileManager.removeEventListener(FileManagerEvent.RESOURCE_LOADING_ERROR, resourceLoadingErrorHandler);
-						
-			/* Loading nested application */
-			if (!ldr)
-        		ldr = new Loader();
-        		
-			ldr.contentLoaderInfo.addEventListener(Event.COMPLETE, applicationLoaded);
-
-			var loaderContext:LoaderContext = new LoaderContext();
-			loaderContext.allowLoadBytesCodeExecution = true;
-			
-			/* Temporary procedures for testing local external components */ 
-//			var dbExtEditor:URLRequest = new URLRequest("/home/CSD/koldoon/workspace/dbStructureEditor/bin-debug/dbStructureEditor.swf");
-//			var dbExtEditor:URLRequest = new URLRequest("/home/CSD/koldoon/workspace/dbDataEditor/bin-debug/dbDataEditor.swf");
-//			ldr.load(dbExtEditor, loaderContext);
-			/* end of -- Temporary procedures for testing local external components */
-			
-			ldr.loadBytes(resource.data, loaderContext);
-		}
-        
-		private function applicationLoaded(event:Event):void {
-			ldr.removeEventListener(Event.COMPLETE, applicationLoaded);
-			
-			/* Remove spinner in case that application is already loaded */
-			PopUpManager.removePopUp(spinner);
-			
-			/* create popup window and set its visual properties */
-			applWindow = new ApplicationWindow();
-			applWindow.visible = false;
-			
-	   		event.currentTarget.content.addEventListener(FlexEvent.APPLICATION_COMPLETE, applicationComplete);
-	   		
- 	   		applUIComponent = new UIComponent();
- 	   		applUIComponent.width = ldr.content.width;
- 	   		applUIComponent.height = ldr.content.height;
-			
-			applWindow.addChild(applUIComponent);
-	   		applUIComponent.addChild(ldr);
-     		
-    		PopUpManager.addPopUp(applWindow, DisplayObject(Application.application), false, PopUpManagerChildList.POPUP);
-    		applWindow.addEventListener(CloseEvent.CLOSE, applCloseHandler);
-		}
- 
-		private function applicationComplete(event:Event):void {
-			exEditor = event.target.application;
-			
-			PopUpManager.centerPopUp(applWindow);
-			applWindow.visible = true;
-			
-			exEditor.addEventListener(CloseEvent.CLOSE, applCloseHandler);
-			
-			/* Create external manager for this component */
-			if (!externalManager)
-				externalManager = new ExternalManager(applicationID, objectID);
-			
-			/* Applying properties to external components */
-			try {
-    			exEditor['externalManager'] = externalManager;
-				exEditor['value'] = _value;
-			}
-			catch (err:Error) {
-				/* error002 */
-				Alert.show("External editor returned an error. Could not execute a command.", "External Editor Error! (002)");
-			}
-		}
-
-		private function openWindow(event:Event):void {
+		private function openButton_clickHandler( event : Event ) : void
+		{
 			/* Pop up spinner while external application is loading... */
-			if (!spinner)
-				spinner = new SpinnerScreen();
-				
-			PopUpManager.addPopUp(spinner, DisplayObject(Application.application), true);
-			PopUpManager.centerPopUp(spinner);
-			spinner.visible = true;
 			
-			/* Init loading application */
-			fileManager.addEventListener(FileManagerEvent.RESOURCE_LOADING_ERROR, resourceLoadingErrorHandler); 
-			fileManager.loadResource(dataManager.currentApplicationId, resourceID, this)
+			var puwm : PopUpWindowManager = PopUpWindowManager.getInstance();
+			
+			externalEditor = new ExternalEditor();
+			
+			externalEditor.applicationID = applicationID;
+			externalEditor.objectID = objectID;
+			externalEditor.resourceID = resourceID;
+			
+			externalEditor.value = _value;
+			
+			externalEditor.minWidth = 400;
+			externalEditor.minHeight = 300;
+			
+			externalEditor.percentWidth = 100;
+			externalEditor.percentHeight = 100;
+			
+			window = puwm.addPopUp( externalEditor, _title, this );
 		}
-		
-		private function resourceLoadingErrorHandler(event:FileManagerEvent):void {
-			fileManager.removeEventListener(FileManagerEvent.RESOURCE_LOADING_ERROR, resourceLoadingErrorHandler);
 
-			PopUpManager.removePopUp(spinner);
-			Alert.show("External editor not found for this type!", "Resource loading error!");
-		}
 		
-		
-		private function applCloseHandler(event:Event):void {
-			applWindow.visible = false;
-			PopUpManager.removePopUp(applWindow);
-			try {
-				value = exEditor['value'];
-			}
-			catch (err:Error) {
-				Alert.show("External Editor doesn't allow to read from 'value' property!", "External Editor Error!");
-			}
-		}		
 	}
 }

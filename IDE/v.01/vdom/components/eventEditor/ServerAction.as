@@ -449,6 +449,9 @@ package vdom.components.eventEditor
 		private var loader:Loader = new Loader();
 		public function set resource(data:Object):void
 		{
+			if( data == null || data.data == null ) //FIXME Исправить более правильно;
+				return;
+			
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
 			
 			loader.loadBytes(data.data);

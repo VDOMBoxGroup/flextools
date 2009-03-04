@@ -13,7 +13,7 @@ package vdom.components.eventEditor
 	import mx.events.ValidationResultEvent;
 	import mx.validators.RegExpValidator;
 	
-	import vdom.controls.multiLine.MultilineWindow;
+	import vdom.controls.multiline.MultilineWindow;
 	import vdom.events.MultilineWindowEvent;
 	import vdom.managers.PopUpWindowManager;
 

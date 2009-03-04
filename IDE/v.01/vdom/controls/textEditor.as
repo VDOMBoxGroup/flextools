@@ -15,6 +15,7 @@ private var _text : String;
 
 public function get text() : String
 {
+	codeTextField.dispatchEvent( new Event( Event.CHANGE ) );
 	return codeEditor.text;
 }
 

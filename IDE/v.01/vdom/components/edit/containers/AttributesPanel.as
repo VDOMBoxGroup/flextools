@@ -610,6 +610,7 @@ public class AttributesPanel extends ClosablePanel {
 					valueContainer.minWidth = 110;
 					valueContainer.percentWidth = 100;
 					valueContainer.height = 21;
+					valueContainer.title = label;
 					
 					valueType = "value";
 					break

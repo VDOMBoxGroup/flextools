@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns="vdom.containers.*"
 	
-	creationComplete="creationCompleteHandler()">
+	creationComplete="creationCompleteHandler()" xmlns:controls="vdom.controls.*">
 	<mx:Script>
 		<![CDATA[
 			import vdom.events.MultilineWindowEvent;
@@ -81,7 +81,7 @@
 				var textFiled : TextField = textAreaContainer.mx_internal::getTextField();
 				var index : int = textFiled.selectionBeginIndex;
 
-				textFiled.text = textFiled.text.substring( 0, index ) + "/" + XML( pageList.selectedItem ).@ID + ".vdom" + textFiled.text.substring( index );
+				textFiled.text = textFiled.text.substring( 0, index ) + "/" + XML( pageList.selectedItem ).@Name + ".vdom" + textFiled.text.substring( index );
 				textFiled.setSelection( index, index );
 				textFiled.dispatchEvent( new Event( Event.CHANGE ) );
 			}
@@ -97,11 +97,12 @@
 			}
 		]]>
 	</mx:Script>
-	<mx:TextArea 
+	<controls:TabbedTextArea
 		id="textAreaContainer"
+		allowTabKey="true"
 		text="{attributeValue}"
-		borderColor="#000000" fontFamily="Tahoma" bottom="65" top="5" left="5" right="5"
-		focusAlpha=".0"/>
+		borderColor="#000000" fontFamily="Courier New" bottom="65" top="5" left="5" right="5"
+		focusAlpha=".0" fontSize="12"/>
 	<mx:HBox 
 		height="60" width="100%"
 		horizontalGap="0" verticalAlign="middle" backgroundColor="#C2C2C2" borderColor="#000000" bottom="0"

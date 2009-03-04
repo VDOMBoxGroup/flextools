@@ -314,7 +314,7 @@ package gearsandcogs.text
 			if (keyCode == Keyboard.DELETE || keyCode == Keyboard.BACKSPACE) {
 				return ACTION_DELETE;
 			}
-			else if( keyCode == Keyboard.SPACE || keyCode == Keyboard.ENTER || keyCode == Keyboard.TAB )
+			else if( keyCode == Keyboard.SPACE || keyCode == Keyboard.TAB )
 			{
 				return null;
 			} else if (event.charCode) {

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Box
-	xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
 	backgroundColor="#FFFFFF" backgroundAlpha="0.0"
-	horizontalAlign="center" verticalAlign="middle"
-	visible="false">
+	horizontalAlign="center" verticalAlign="middle">
 	
 	<mx:Image source="@Embed(source='/assets/common/spinner.swf')" />
 	<mx:Spacer height="20" />

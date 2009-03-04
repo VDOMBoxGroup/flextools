@@ -53,6 +53,8 @@ package gearsandcogs.text.commands
 		
 		public function execute():void
 		{
+			if( text == "\r" )
+				text = "\n";
 		}
 
 		public function undo():void
