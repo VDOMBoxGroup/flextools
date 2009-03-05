@@ -25,26 +25,26 @@ import mx.utils.Base64Encoder;
 import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
-public function sub(graph:Object, ...args):*
+public function sub(graph:String, ...args):*
 {
-	var prefix:Object = {type:'n', value:''};
+	var prefix:String = '';
 	args.unshift(graph, prefix);
 	return subPrefix.apply(this, args);
 }
 
-public function subPrefix(graph:Object, prefix:Object, ...args):*
+public function subPrefix(graph:String, prefix:String, ...args):*
 {
 	var subgraph:GraphStruct;
 	
 	for each (var graphStruct:GraphStruct in tplStruct.graphs) {
-		if(graphStruct.name == graph.value)	
+		if(graphStruct.name == graph)	
 			subgraph = graphStruct;
 	}
 	
 	if(subgraph) {
-		return enterSubgraph.apply(this, [subgraph, prefix.value, args]);
+		return enterSubgraph.apply(this, [subgraph, prefix, args]);
 	} else {
-		throw new RunTimeError("Undefined graph: " + graph.value + ".");
+		throw new RunTimeError("Undefined graph: " + graph + ".");
 	}
 }
 

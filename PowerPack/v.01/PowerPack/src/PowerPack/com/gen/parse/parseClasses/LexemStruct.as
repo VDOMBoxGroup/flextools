@@ -3,7 +3,7 @@ package PowerPack.com.gen.parse.parseClasses
 public class LexemStruct
 {
 	public var type:String; // lexem type
-	public var code:String; // generated code
+	public var code:String; // as3 execution code
 	
 	// USED IN FUNCTIONS FOR ARGUMENTS SEPARATING
 	public var operationGroup:int = 0; // operation expression group number (0 - not grouped) 
@@ -24,14 +24,14 @@ public class LexemStruct
 	public function get postSpaces():String
 	{
 		return _postSpaces;
-	} 
+	}
 	public function set postSpaces(value:String):void
 	{
 		if(_postSpaces!=value)
 		{
 			_postSpaces = value;
 		}
-	}	
+	}
     
     //----------------------------------
     //  origValue
@@ -40,14 +40,14 @@ public class LexemStruct
 	public function get origValue():String
 	{
 		return _origValue;
-	} 
+	}
 	public function set origValue(value:String):void
 	{
 		if(_origValue!=value)
 		{
 			_origValue = value;
 		}
-	} 
+	}
 	
     //----------------------------------
     //  value
@@ -91,7 +91,7 @@ public class LexemStruct
 		if(_position != value)
 		{
 			_position = value;
-		} 	
+		}
 	}
 
     //----------------------------------

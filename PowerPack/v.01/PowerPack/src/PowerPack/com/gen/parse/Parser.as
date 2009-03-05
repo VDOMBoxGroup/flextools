@@ -11,6 +11,7 @@ import flash.utils.describeType;
 import mx.utils.UIDUtil;
 
 import r1.deval.D;
+import r1.deval.rt.FunctionDef;
 
 public class Parser
 {		
@@ -665,8 +666,7 @@ public class Parser
 	{
 		var typeDescr:XML = describeType(TemplateStruct.lib);
 		var funcDescr:XMLList = typeDescr..method.(@name == funcName);
-		
-		return (funcDescr.length()>0);
+		return (funcDescr.length()>0 || TemplateStruct.lib[funcName] is FunctionDef);		
 	}	
 	
 	public static function validateCodeFragment(fragment:CodeFragment):void
@@ -721,14 +721,15 @@ public class Parser
 		// rollup function
 		var argNum:int = lexemObj.value.indexOf("]")-strSentence.indexOf("[")-2;
 		lexemObj = isValidFunction(lexemObj.value);
-		if(lexemObj.result && lexemObj.value.length==1 && isFunctionExist(fragment.fragments[0]))
+		if(lexemObj.result && lexemObj.value.length==1 && 
+			isFunctionExist(LexemStruct(fragment.fragments[1]).value))
 		{
 			if(fragment.isTopLevel)
 				fragment.print = true;
 			
 			fragment.type = lexemObj.value;
 			
-			fragment.funcName = fragment.fragments[0];				
+			fragment.funcName = LexemStruct(fragment.fragments[1]).value;				
 			fragment.ctype = CodeFragment.CT_FUNCTION;
 			
 			var funcDef:Object = funcDefinition[fragment.funcName];

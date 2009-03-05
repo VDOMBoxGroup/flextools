@@ -243,7 +243,7 @@ public class CodeFragment extends LexemStruct
 	{
 		var target:Object = parent;	
 		
-		while(target.parent)
+		while(target.hasOwnProperty('parent') && target.parent)
 		{
 			target = target.parent;
 		}
