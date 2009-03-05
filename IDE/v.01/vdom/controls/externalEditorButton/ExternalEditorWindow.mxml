@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:ViewStack 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:externalEditorButton="vdom.controls.externalEditorButton.*"
 	creationPolicy="all"
-	creationComplete="creationCompleteHandler()">
-	<mx:Script source="externalEditor.as" />
-	<externalEditorButton:SpinnerScreen
-		width="100%" height="100%"/>
-	<mx:VBox id="mainScreen">
+	height="100%" width="100%"
+	minWidth="200" minHeight="200"
+	creationComplete="creationCompleteHandler()"
+	xmlns:externalEditorButton="vdom.controls.externalEditorButton.*">
+	<mx:Script source="externalEditorWindow.as"/>
+	<externalEditorButton:SpinnerScreen height="100%" width="100%"/>
+	<mx:VBox 
+		id="mainScreen">
 		<mx:Canvas 
 			id="placement"
 			height="100%" width="100%"

@@ -1,28 +1,21 @@
 package vdom.controls.externalEditorButton
 {
-	import flash.display.Loader;
+	import flash.display.NativeWindowInitOptions;
+	import flash.display.NativeWindowSystemChrome;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.system.LoaderContext;
 	
 	import mx.containers.HBox;
-	import mx.controls.Alert;
 	import mx.controls.Button;
 	import mx.controls.Label;
-	import mx.core.UIComponent;
 	import mx.core.Window;
 	import mx.events.CloseEvent;
-	import mx.events.FlexEvent;
-	import mx.managers.PopUpManager;
 	
-	import vdom.managers.DataManager;
-	import vdom.managers.ExternalManager;
-	import vdom.managers.FileManager;
 	import vdom.managers.PopUpWindowManager;
 
 	public class ExternalEditorButton extends HBox
 	{
-		private var externalEditor : ExternalEditor;
+		private var externalEditorWindow : ExternalEditorWindow;
 		private var applicationID : String = "";
 		private var objectID : String = "";
 		private var resourceID : String = "";
@@ -100,30 +93,37 @@ package vdom.controls.externalEditorButton
 			invalidateDisplayList();
 			invalidateSize();
 		}
-
+		
 		private function openButton_clickHandler( event : Event ) : void
 		{
 			/* Pop up spinner while external application is loading... */
 			
 			var puwm : PopUpWindowManager = PopUpWindowManager.getInstance();
 			
-			externalEditor = new ExternalEditor();
+			externalEditorWindow = new ExternalEditorWindow();
 			
-			externalEditor.applicationID = applicationID;
-			externalEditor.objectID = objectID;
-			externalEditor.resourceID = resourceID;
+			externalEditorWindow.applicationID = applicationID;
+			externalEditorWindow.objectID = objectID;
+			externalEditorWindow.resourceID = resourceID;
 			
-			externalEditor.value = _value;
+			externalEditorWindow.value = _value;
+			externalEditorWindow.addEventListener( CloseEvent.CLOSE, externalEditorWindow_closeHandler );
 			
-			externalEditor.minWidth = 400;
-			externalEditor.minHeight = 300;
+			var nwio : NativeWindowInitOptions = new NativeWindowInitOptions();
+			nwio.resizable = false;
+			nwio.systemChrome = NativeWindowSystemChrome.NONE;
+			nwio.transparent = true;
+			nwio.maximizable = false;
+			nwio.minimizable = false;
 			
-			externalEditor.percentWidth = 100;
-			externalEditor.percentHeight = 100;
-			
-			window = puwm.addPopUp( externalEditor, _title, this );
+			window = puwm.addPopUp( externalEditorWindow, _title, this, true, null, nwio);
+			window.showStatusBar = false;
+			window.showGripper = false;
 		}
-
 		
+		private function externalEditorWindow_closeHandler( event : Event ) : void 
+		{
+			value = event.currentTarget.value;
+		}
 	}
 }
