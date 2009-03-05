@@ -18,11 +18,7 @@ package
 		public function SQLProxy()
 		{
 			super();
-			
-			
 			file = File.applicationStorageDirectory.resolvePath("HelpDB.db");
-			
-			
 		}
 		
 		public function  creatDB():Boolean
@@ -85,6 +81,7 @@ package
 			return true;
 		}
 		
+		/*
 		public function getToc():Object
 		{
 			 
@@ -97,11 +94,7 @@ package
 				
 			var result:Object = executeQuery(query, parameters);
 			
-			if(!result)
-			{
-				return null;
-			}
-			return result;
+			if(!result) 	
 		}
 		
 		
@@ -196,37 +189,6 @@ package
 				return null;
 			}
 			return result;
-		}
-		
-		private function localizeError(e:SQLError):void 
-		{
-				var argsLength:int = e.detailArguments.length;
-				switch (e.detailID) 
-				{
-					case 2030:
-					// default details string: "trigger '%s' already exists"
-					// do stuff
-						break;
-					// ... other cases ...
-					case 2036:
-					// default details string: "no such column: '%s[.%s[.%s]]'"
-						var colPath:String = "";
-						if (argsLength == 1) 
-						{
-							colPath = e.detailArguments[0];
-						} else if (argsLength == 2) 
-						{
-							colPath = e.detailArguments[0]+"."+e.detailArguments[1];
-						} else if (argsLength == 3) 
-						{
-							colPath = e.detailArguments[0]+"."+e.detailArguments[1]+"."+e.detailArguments[2];
-						}
-			// or use the locale information to generate a localized string
-						displayLocalizedDetail("Column '" + colPath + "' does not exist.");
-						break;
-				default:
-					displayLocalizedDetail(e.details);
-			}
 		}
 		
 	//       PRODUCT  (id, name, version, title, description, language, toc )   //
@@ -526,21 +488,6 @@ package
 				return result.data;
 		}
 			
-		private function displayLocalizedDetail(str:String):void 
-		{
-			trace(str)
-		}
-
-		private function resultHandler(event:SQLEvent):void 
-		{
-			trace("  SQLEvent Ok! ");	
-		}
-		
-		
-		private function errorHandler(event:SQLErrorEvent):void 
-		{
-			trace("!!!!!!!!!!!!!!!!!  SQLErrorEvent !!!!!!!!!!!!!!!");
-		}
 		
 		private function cleanContent(value:String):String
 		{
@@ -553,6 +500,53 @@ package
 			return words;
 		}
 		
+		*/
+		private function resultHandler(event:SQLEvent):void 
+		{
+			trace("  SQLEvent Ok! ");	
+		}
+		
+		private function displayLocalizedDetail(str:String):void 
+		{
+			trace(str)
+		}
+
+		
+		private function errorHandler(event:SQLErrorEvent):void 
+		{
+			trace("!!!!!!!!!!!!!!!!!  SQLErrorEvent !!!!!!!!!!!!!!!");
+		}
+		
+		private function localizeError(e:SQLError):void 
+		{
+				var argsLength:int = e.detailArguments.length;
+				switch (e.detailID) 
+				{
+					case 2030:
+					// default details string: "trigger '%s' already exists"
+					// do stuff
+						break;
+					// ... other cases ...
+					case 2036:
+					// default details string: "no such column: '%s[.%s[.%s]]'"
+						var colPath:String = "";
+						if (argsLength == 1) 
+						{
+							colPath = e.detailArguments[0];
+						} else if (argsLength == 2) 
+						{
+							colPath = e.detailArguments[0]+"."+e.detailArguments[1];
+						} else if (argsLength == 3) 
+						{
+							colPath = e.detailArguments[0]+"."+e.detailArguments[1]+"."+e.detailArguments[2];
+						}
+			// or use the locale information to generate a localized string
+						displayLocalizedDetail("Column '" + colPath + "' does not exist.");
+						break;
+				default:
+					displayLocalizedDetail(e.details);
+			}
+		}
 		
 	}
 }
