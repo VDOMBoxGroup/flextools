@@ -105,7 +105,24 @@ override protected function updateDisplayList(unscaledWidth:Number, unscaledHeig
 	super.updateDisplayList( unscaledWidth, unscaledHeight );
 	if( window )
 	{
+		var oldWidth : Number = window.width;
+		var oldHeight : Number = window.height;
+		
 		var vm : EdgeMetrics = window.viewMetricsAndPadding;
+		
+		var newWidth : Number = mainScreen.measuredWidth + vm.left + vm.right;
+		var newHeight : Number = mainScreen.measuredHeight + vm.top + vm.bottom;
+		
+		var offsetX : Number = ( newWidth - oldWidth ) / 2;
+		var offsetY : Number = ( newHeight - oldHeight ) / 2;
+		
+		offsetX = offsetX < 0 ? 0 : offsetX;
+		offsetY = offsetY < 0 ? 0 : offsetY;
+		
+		window.nativeWindow.x = ( window.nativeWindow.x - offsetX ) < 0 ? 0 : window.nativeWindow.x - offsetX; 
+		window.nativeWindow.y = ( window.nativeWindow.y - offsetY ) < 0 ? 0 : window.nativeWindow.y - offsetY;
+		
+		
 		window.width = mainScreen.measuredWidth + vm.left + vm.right;
 		window.height = mainScreen.measuredHeight + vm.top + vm.bottom;
 	}
