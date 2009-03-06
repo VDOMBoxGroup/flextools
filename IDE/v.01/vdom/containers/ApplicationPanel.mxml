@@ -12,6 +12,8 @@
 	
 	<mx:Script>
 	<![CDATA[
+		import mx.collections.SortField;
+		import mx.collections.Sort;
 		import mx.collections.XMLListCollection;
 		import mx.collections.IViewCursor;
 		import mx.events.ListEvent;
@@ -23,13 +25,27 @@
 		
 		private var _applicationId:String;
 		
+		private var sort : Sort;
+		
 		public function set dataProvider(value:XMLList):void
 		{	
 			if(value == oldXMLList)
 				return;
 			
+			if( sort == null )
+			{
+				sort = new Sort();
+				sort.fields = [ new SortField( "@Name" ) ];
+			}
+			
 			oldXMLList = value;
-			_applicationTitleList.dataProvider = _dataProvider = new XMLListCollection(value);
+			
+			_dataProvider = new XMLListCollection(value);
+			
+			_dataProvider.sort = sort;
+			_dataProvider.refresh();
+			
+			_applicationTitleList.dataProvider = _dataProvider; 
 			_applicationTitleList.validateNow();
 			
 			if(value == null)

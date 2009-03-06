@@ -58,7 +58,7 @@ private function showHandler() : void
 	if ( !applicationId )
 		return ;
 
-	if ( !dataManager.applicationStatus( applicationId ) || true ) // FIXME сделать проверку загруженности апликухи.
+	if ( !dataManager.applicationStatus( applicationId )/*  || true */ ) // FIXME сделать проверку загруженности апликухи.
 	{
 		loadApplicationData();
 		return ;

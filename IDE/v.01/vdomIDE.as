@@ -336,6 +336,7 @@ private function logoutHandler() : void
 {
 	if( moduleTabNavigator && moduleTabNavigator.selectedChild )
 		moduleTabNavigator.selectedChild.dispatchEvent( new FlexEvent( FlexEvent.HIDE ) );
+	
 	dataManager.close();
 } 
 

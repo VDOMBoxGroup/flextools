@@ -100,9 +100,8 @@ private function closeEditor() : void
 		window.close();
 }
 
-override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+override protected function measure():void
 {
-	super.updateDisplayList( unscaledWidth, unscaledHeight );
 	if( window )
 	{
 		var oldWidth : Number = window.width;
@@ -119,12 +118,11 @@ override protected function updateDisplayList(unscaledWidth:Number, unscaledHeig
 		offsetX = offsetX < 0 ? 0 : offsetX;
 		offsetY = offsetY < 0 ? 0 : offsetY;
 		
+		window.width = newWidth;
+		window.height = newHeight;
+		
 		window.nativeWindow.x = ( window.nativeWindow.x - offsetX ) < 0 ? 0 : window.nativeWindow.x - offsetX; 
 		window.nativeWindow.y = ( window.nativeWindow.y - offsetY ) < 0 ? 0 : window.nativeWindow.y - offsetY;
-		
-		
-		window.width = mainScreen.measuredWidth + vm.left + vm.right;
-		window.height = mainScreen.measuredHeight + vm.top + vm.bottom;
 	}
 }
 
@@ -144,9 +142,7 @@ private function loader_completeHandler( event : Event ) : void
 
 	event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE,
 												  applicationComplete );
-	
 	addExternalEditor( loader );
-
 //	window.width = loader.content.width;
 //	window.height = loader.content.height;
 //	window.addChild( externalEditor );

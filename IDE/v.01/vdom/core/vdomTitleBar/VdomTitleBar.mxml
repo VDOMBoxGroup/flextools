@@ -5,16 +5,6 @@
 	<mx:Metadata>
 		[Event(name="logout", type="flash.events.Event")]
 	</mx:Metadata>
-	<mx:Style>
-		.invBtn {
-			color: #FF0000;
-			textRollOverColor: #FFFFFF;
-			fillAlphas: 0.0, 0.0, 0.0, 0.0; 
-			borderStyle: "none";
-			borderAlpha: .0;
-			cornerRadius: 0;
-		}
-	</mx:Style>
 	<mx:Script>
 		<![CDATA[
 			import vdom.managers.DataManager;
@@ -163,7 +153,4 @@
 		color="#FFFFFF" fontWeight="bold" right="10" rollOverColor="#333333" selectionColor="#333333"
 		textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF" top="24"
 		click="logout();"/>
-	<!--<mx:Button
-		 label="{resourceManager.getString('Application','logout')}"
-		 right="10" top="22" styleName="invBtn" />-->
 </mx:Canvas>

@@ -27,31 +27,7 @@ private var objectId:String;
 	dispatchEvent( new FlexEvent( FlexEvent.SHOW ));
 } */
 
-private function showHandler():void
-{	
-	registerEvent( true );
-	registerWatchers( true );
-	
-	listApplicationContainer.enabled = true;
-	searchPanel.enabled = true;
-	
-	selectedChild = components;
-	
-	if( listApplicationContainer.applicationId )
-		mainViewStack.selectedChild = applicationProperties;
-	else
-		mainViewStack.selectedIndex = 0;
-}
 
-private function hideHandler():void
-{
-	registerEvent( false );
-	registerWatchers( false );
-	
-	listApplicationContainer.dataProvider = null;
-	mainViewStack.selectedIndex = 0;
-	selectedChild = initModule;
-}
 
 private function registerEvent( flag : Boolean ) : void
 {	
@@ -102,6 +78,13 @@ private function registerWatchers( flag:Boolean ) : void
 	}
 }
 
+private function cleanUp() : void
+{
+	listApplicationContainer.dataProvider = null;
+	searchPanel.listApplication = null;
+	applicationInformation.dataProvider = null;
+}
+
 private function switchToCreate():void
 {
 	listApplicationContainer.enabled = false;
@@ -130,6 +113,33 @@ private function switchToSearch( event:Event ):void
 	mainViewStack.selectedChild = searchResult;
 }
 
+private function showHandler():void
+{	
+	registerEvent( true );
+	registerWatchers( true );
+	
+	listApplicationContainer.enabled = true;
+	searchPanel.enabled = true;
+	
+	selectedChild = components;
+	
+	if( listApplicationContainer.applicationId )
+		mainViewStack.selectedChild = applicationProperties;
+	else
+		mainViewStack.selectedIndex = 0;
+}
+
+private function hideHandler():void
+{
+	registerEvent( false );
+	registerWatchers( false );
+	
+	cleanUp();
+	
+	mainViewStack.selectedIndex = 0;
+	selectedChild = initModule;
+}
+
 private function createApplicationHandler( event:Event ):void
 {	
 	mainViewStack.selectedChild = mainCanvas;
@@ -151,6 +161,10 @@ private function searchResult_searchHandler( event:SearchResultEvent ):void
 	mainViewStack.selectedIndex = 0;
 	
 	applicationId = event.applicationId;
+	
+	if( applicationId == "" || applicationId == null )
+		return;
+	
 	pageId = event.pageId;
 	objectId = event.objectId;
 	

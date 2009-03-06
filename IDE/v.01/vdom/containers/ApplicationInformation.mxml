@@ -30,14 +30,19 @@
 			public function set dataProvider(value:XML):void
 			{
 				if(!value)
+				{
+					applicationPage.text = "";
+					applicationObjects.text = "";
+					_source = null;
 					return;
+				}
 			
 				applicationPage.text = value.Numberofpages.toString();
 				applicationObjects.text = value.Numberofobjects.toString();
 				
 				if(value.Icon == '')
 				{
-					_source = null; //<---- Error
+					_source = null; //FIXME<---- Error
 					_source = defaultImage;
 				}
 				else

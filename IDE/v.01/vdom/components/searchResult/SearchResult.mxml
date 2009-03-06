@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas
+<mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	show="showHandler();" xmlns:controls="vdom.controls.*" xmlns:containers="vdom.containers.*">
-	
-	<mx:Script source="includes/searchResult.as" />
-	
+	xmlns:containers="vdom.containers.*" xmlns:controls="vdom.controls.*">
+	<mx:Script source="includes/searchResult.as"/>
 	<mx:Style>
 		.zzz {
 			titleBackgroundSkin: Embed(source="vdomTheme.swf",symbol="PanelTitleBackground");
@@ -41,45 +39,52 @@
 			selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="ButtonBackgroundImage");
 		}
 		.invBtn {
-			color: #BBBBBB;
+			color: #FFFFFF;
 			textRollOverColor: #FFFFFF;
-			fillAlphas: 0.0, 0.0, 0.0, 0.0; 
-			borderStyle: "none";
-			borderAlpha: .0;
+			rollOverColor: #666666;
+			textSelectedColor: #FFFFFF;
 		}
 	</mx:Style>
-	<mx:Panel 
-		title="SEARCH RESULT"
-		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
-		borderAlpha="1" color="#FFFFFF"
-		left="15" top="15" width="500" height="400" shadowDirection="right" layout="absolute">
-		<mx:VBox 
-			backgroundColor="#C2C2C2" color="#000000"
-			left="20" top="20" height="320" borderStyle="solid" borderColor="#C2C2C2">
-			<mx:HBox width="100%" styleName="bg">
-				<mx:Button id="expandButton" styleName="invBtn" 
-					label="{resourceManager.getString('ApplicationManagment','expand_label')}" cornerRadius="0" click="expandAll();"   alpha="0.0"/>
-				<mx:Button id="collapseButton" styleName="invBtn" 
-					label="{resourceManager.getString('ApplicationManagment','collapse_label')}" cornerRadius="0" click="collapseAll();" alpha="0.0"/>
-				<mx:Button id="goToEditorButton" styleName="invBtn" 
-					label="{resourceManager.getString('ApplicationManagment','goto_label')}" cornerRadius="0" click="goToEdit();" alpha="0.0"/>
-				<mx:Button styleName="invBtn" label="Close" cornerRadius="0" click="clear();" alpha="0.0"/>
+	<mx:Panel height="400" layout="absolute" styleName="zzz" width="500"
+		color="#FFFFFF" cornerRadius="0" left="15" shadowDirection="right" top="15"
+		borderAlpha="1" title="SEARCH RESULT" titleStyleName="titleNamez">
+		<mx:VBox height="320"
+			backgroundColor="#C2C2C2" borderColor="#C2C2C2" borderStyle="solid" color="#000000"
+			left="20" top="20">
+			<mx:HBox styleName="bg" width="100%">
+				<mx:LinkButton 
+					id="expandButton"
+					label="{resourceManager.getString('ApplicationManagment','expand_label')}"
+					styleName="invBtn"
+					cornerRadius="0"
+					click="expandAll()"/>
+				<mx:LinkButton 
+					id="collapseButton"
+					label="{resourceManager.getString('ApplicationManagment','collapse_label')}"
+					styleName="invBtn"
+					cornerRadius="0"
+					click="collapseAll()"/>
+				<mx:LinkButton 
+					id="goToEditorButton"
+					label="{resourceManager.getString('ApplicationManagment','goto_label')}"
+					styleName="invBtn"
+					cornerRadius="0"
+					click="goToEdit()"/>
+				<mx:LinkButton label="Close" styleName="invBtn"
+					cornerRadius="0"
+					click="clear()"/>
 			</mx:HBox>
-			<mx:HBox>
-				<mx:Label fontSize="14" fontWeight="bold" 
-					text="{resourceManager.getString('ApplicationManagment','name_label')}"/>
-				<mx:Label fontSize="14" fontWeight="bold" id="applicationName" text="{_applicationName}"/>
-			</mx:HBox>
-			<containers:SearchDataGrid id="searchDataGrid" selectedIndex="0"
-				showHeaders="false" sortableColumns="false" width="100%" height="100%" borderStyle="none" backgroundAlpha="0.0"
-				folderClosedIcon="{null}"
-				folderOpenIcon="{null}"
-				defaultLeafIcon="{null}"
-				verticalSeparatorSkin="{null}"
-				selectionMode="singleRow">
+			<containers:SearchDataGrid 
+				id="searchDataGrid"
+				height="100%" selectedIndex="0" width="100%"
+				backgroundAlpha="0.0" borderStyle="none"
+				defaultLeafIcon="{null}" folderClosedIcon="{null}" folderOpenIcon="{null}"
+				selectionMode="singleRow" showHeaders="false" sortableColumns="false"
+				verticalSeparatorSkin="{null}">
 				<containers:columns>
-					<mx:AdvancedDataGridColumn dataField="" width="30"/>
-					<mx:AdvancedDataGridColumn dataField="@Name"/>
+					<mx:AdvancedDataGridColumn width="50"
+						dataField=""/>
+					<mx:AdvancedDataGridColumn styleFunction="{ styleFunction }" labelFunction="{ labelFunction }"/>
 				</containers:columns>
 			</containers:SearchDataGrid>
 		</mx:VBox>
