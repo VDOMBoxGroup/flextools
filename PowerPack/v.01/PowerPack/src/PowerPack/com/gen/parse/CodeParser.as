@@ -284,7 +284,7 @@ public class CodeParser
 
 			executeCodeFragment(curFragment, contexts, stepReturn);
 		
-			if(curFragment.executed)
+			if(curFragment.executed)			
 				block.current++;
 				
 			if(stepReturn)

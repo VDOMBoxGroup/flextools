@@ -153,11 +153,20 @@ public class TemplateStruct extends EventDispatcher
 			return GraphContext(contextStack[contextStack.length-1]);
 		return null;				
 	}
+	
+	public function get prevGraphContext():GraphContext 
+	{
+		if(contextStack.length>1)
+			return GraphContext(contextStack[contextStack.length-2]);
+		return null;				
+	}	
 
 	public function get curNodeContext():NodeContext 
-	{
+	{		
 		if(curGraphContext.contextStack.length)
-			return NodeContext(curGraphContext.contextStack[contextStack.length-1]);
+			return NodeContext(curGraphContext.contextStack[curGraphContext.contextStack.length-1]);
+		else if(contextStack.length>1)
+			return NodeContext(prevGraphContext.contextStack[prevGraphContext.contextStack.length-1]);
 		return null;
 	}
 		
@@ -665,7 +674,7 @@ public class TemplateStruct extends EventDispatcher
 								true);
 						
 							step = 'processExecResult';
-							if(curNodeContext.block.retValue is Function)
+							if(curNodeContext.block.lastExecutedFragment.retValue is Function)
 							{
 								isRunning = false;
 								return null;
