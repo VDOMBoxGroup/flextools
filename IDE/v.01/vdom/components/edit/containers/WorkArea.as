@@ -2,6 +2,7 @@ package vdom.components.edit.containers {
 	
 import flash.display.DisplayObject;
 import flash.events.MouseEvent;
+import flash.geom.Point;
 
 import mx.containers.Canvas;
 import mx.containers.VBox;
@@ -16,7 +17,6 @@ import vdom.containers.IItem;
 import vdom.controls.IToolBar;
 import vdom.controls.ImageToolBar;
 import vdom.controls.RichTextToolBar;
-import vdom.controls.TableToolBar;
 import vdom.controls.TextToolBar;
 import vdom.events.RenderManagerEvent;
 import vdom.events.ResizeManagerEvent;
@@ -362,6 +362,26 @@ public class WorkArea extends VBox
 		}
 	}
 	
+	private function scrollToObject( objectID : String ) : void
+	{
+		var pageContainer : Container = contentHolder.getChildAt( 0 ) as Container;
+		
+		if( pageContainer == null || pageContainer.horizontalScrollBar == null && pageContainer.verticalScrollBar == null )
+			return;
+		
+		var item : IItem = renderManager.getItemById( objectID );
+		
+		if( item == null || UIComponent( item ).parent )
+			return;
+		
+		var currentHScrollPosition : Number = contentHolder.horizontalScrollPosition;
+		var currentVScrollPosition : Number = contentHolder.horizontalScrollPosition;
+		
+		var pt : Point = DisplayUtils.getConvertedPoint( DisplayObject( item ), contentHolder );
+		
+		var dummy : * = ""; // FIXME remove dummy
+	}
+	
 	private function showHandler( event : FlexEvent ) : void
 	{
 		registerEvent( true );
@@ -377,6 +397,8 @@ public class WorkArea extends VBox
 	private function hideHandler( event : FlexEvent ) : void
 	{
 		registerEvent( false );
+		_objectId = null;
+		_pageId = null;
 		showed = false;
 	}
 	
@@ -530,7 +552,16 @@ public class WorkArea extends VBox
 		if( event.result is IItem && IItem( event.result ).objectId == _pageId )
 		{
 			resizeManager.init( contentHolder );
+			
+			if( _objectId )
+			{
+				var item : IItem = renderManager.getItemById( _objectId );
+		
+				if( item )
+					resizeManager.selectItem( item );
+			}
 		}
+		
 		
 		initToolbar( IItem( selectedObject ) );
 	}
@@ -614,6 +645,8 @@ public class WorkArea extends VBox
 	private function resizeManager_objectSelectHandler( event : ResizeManagerEvent ) : void {
 		
 		var currentToolBar : IToolBar;
+		
+//		callLater( scrollToObject, [ _objectId ] );
 		
 		if( _contentToolbar && DisplayObject( _contentToolbar ).parent )
 			currentToolBar = _contentToolbar;

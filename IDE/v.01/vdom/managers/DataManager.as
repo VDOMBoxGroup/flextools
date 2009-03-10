@@ -799,12 +799,15 @@ package vdom.managers
 			{
 				_currentPageId = objectId;
 				_currentObject = null;
+			}
+			
+			_currentObject = createNewCurrentObject( objectId );
+			
+			if ( isPage )
+			{
 				dispatchEvent( new Event( "currentPageIdChanged" ) );
 				dispatchEvent( new DataManagerEvent( DataManagerEvent.PAGE_CHANGED ) );
 			}
-
-			_currentObject = createNewCurrentObject( objectId );
-
 			dispatchEvent( new Event( "listPagesChanged" ) );
 			dispatchEvent( new Event( "currentObjectIdChanged" ) );
 			dispatchEvent( new Event( "currentObjectChanged" ) );
