@@ -1,6 +1,5 @@
 package vdom.components.edit.containers
 {
-
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -386,12 +385,21 @@ package vdom.components.edit.containers
 		{
 			registerEvent( true );
 			showed = true;
-
-			if ( _pageId )
+			
+			if ( _pageId == null || _pageId != dataManager.currentPageId )
 			{
+				_pageId = dataManager.currentPageId;
 				bPageIdChanged = true;
-				invalidateProperties();
 			}
+			
+			if( _objectId == null || _objectId != dataManager.currentObjectId )
+			{
+				_objectId = dataManager.currentObjectId
+				bObjectIdChanged = true;
+			}
+			
+			if( bPageIdChanged || bObjectIdChanged )
+				invalidateProperties();
 		}
 
 		private function hideHandler( event : FlexEvent ) : void
