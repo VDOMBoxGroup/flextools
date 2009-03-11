@@ -12,10 +12,10 @@ import vdom.events.WorkAreaEvent;
 import vdom.managers.AlertManager;
 import vdom.managers.DataManager;
 
-[ Bindable ]
+[Bindable]
 private var dataManager : DataManager = DataManager.getInstance();
 
-[ Bindable ]
+[Bindable]
 private var help : String;
 
 private var alertManager : AlertManager = AlertManager.getInstance();
@@ -39,9 +39,9 @@ private function showHandler() : void
 	watchers = [];
 
 	registerEvent( true );
-	
+
 	mainArea.selectedChild.dispatchEvent( new FlexEvent( FlexEvent.SHOW ) );
-	
+
 	watchers.push( BindingUtils.bindProperty( types, "dataProvider", dataManager,
 											  "listTypes" ), BindingUtils.bindProperty( pageList,
 																						"dataProvider",
@@ -156,7 +156,7 @@ private function registerEvent( flag : Boolean ) : void
 private function attributesChangedHandler( event : Event ) : void
 {
 	dataManager.updateAttributes();
-//attributesPanel.dataProvider = dataManager.currentObject; //FIXME <-- исправить!!!!!!
+//	attributesPanel.dataProvider = dataManager.currentObject; //FIXME <-- исправить!!!!!!
 }
 
 
@@ -198,8 +198,8 @@ private function dataManager_updateAttributesBeginHandler( event : DataManagerEv
 
 	if ( !event.result )
 	{
-		workArea.lockItem( dataManager.currentObjectId );
-		return ;
+		workArea.lockItem( event.objectId );
+		return;
 	}
 
 	for each ( var attr : XML in event.result.* )
@@ -227,7 +227,7 @@ private function dataManager_objectCreatedHandler( event : DataManagerEvent ) : 
 private function dataManager_objectChangedHandler( event : DataManagerEvent ) : void
 {
 	if ( !dataManager.currentPageId )
-		return ;
+		return;
 
 	if ( !dataManager.currentObjectId )
 		dataManager.changeCurrentObject( dataManager.currentPageId );

@@ -63,13 +63,13 @@ package vdom.managers
 			return instance;
 		}
 
-		[ Bindable( event="listApplicationChanged" ) ]
+		[Bindable( event="listApplicationChanged" )]
 		public function get listApplication() : XMLList
 		{
 			return _listApplication;
 		}
 
-		[ Bindable( event="listPagesChanged" ) ]
+		[Bindable( event="listPagesChanged" )]
 		public function get listPages() : XMLList
 		{
 			if ( !_currentApplication )
@@ -86,7 +86,7 @@ package vdom.managers
 			return _listTypes;
 		}
 
-		[ Bindable( event="currentApplicationIdChanged" ) ]
+		[Bindable( event="currentApplicationIdChanged" )]
 		public function get currentApplicationId() : String
 		{
 			if ( _currentApplication )
@@ -95,7 +95,7 @@ package vdom.managers
 				return null;
 		}
 
-		[ Bindable( event="currentApplicationInformationChanged" ) ]
+		[Bindable( event="currentApplicationInformationChanged" )]
 		public function get currentApplicationInformation() : XML
 		{
 			if ( currentApplicationId )
@@ -104,13 +104,13 @@ package vdom.managers
 				return null;
 		}
 
-		[ Bindable( event="currentPageIdChanged" ) ]
+		[Bindable( event="currentPageIdChanged" )]
 		public function get currentPageId() : String
 		{
 			return _currentPageId;
 		}
 
-		[ Bindable( event="currentObjectIdChanged" ) ]
+		[Bindable( event="currentObjectIdChanged" )]
 		public function get currentObjectId() : String
 		{
 			if ( _currentObject )
@@ -119,7 +119,7 @@ package vdom.managers
 				return null;
 		}
 
-		[ Bindable( event="currentObjectChanged" ) ]
+		[Bindable( event="currentObjectChanged" )]
 		public function get currentObject() : XML
 		{
 			return _currentObject;
@@ -179,7 +179,7 @@ package vdom.managers
 		public function loadApplication( applicationId : String ) : void
 		{
 			if ( !applicationId )
-				return ;
+				return;
 
 			cleanUp();
 
@@ -189,15 +189,15 @@ package vdom.managers
 		public function changeCurrentApplication( applicationId : String ) : void
 		{
 			if ( currentApplicationId == applicationId )
-				return ;
+				return;
 
 			_currentApplication = null;
 			_currentPageId = null;
 			_currentObject = null;
-			
+
 			//FIXME Диспатчить событие о фэйле!!!
 			if ( !applicationId || _listApplication == null || _listApplication.length() == 0 )
-				return ;
+				return;
 
 			_currentApplication = _listApplication.( @ID == applicationId )[ 0 ]
 
@@ -213,7 +213,7 @@ package vdom.managers
 
 			var application : XML = _listApplication.( @ID == applicationId )[ 0 ];
 
-			if ( application ) //FIXME Разобраться наконец со Status;
+			if ( application != null && application.Objects != null && application.Objects.length() > 0 ) //FIXME Разобраться наконец со Status;
 				return true;
 			else
 				return false;
@@ -248,14 +248,14 @@ package vdom.managers
 		public function getApplicationEvents( objectId : String ) : void
 		{
 			if ( !objectId )
-				return ;
+				return;
 			soap.get_application_events( currentApplicationId, objectId );
 		}
 
 		public function setApplicationEvents( objectId : String, eventsValue : String ) : void
 		{
 			if ( !objectId )
-				return ;
+				return;
 
 			soap.set_application_events( currentApplicationId, objectId, eventsValue );
 		}
@@ -450,7 +450,7 @@ package vdom.managers
 				newXMLDescription = getObject( newObjectId );
 
 				if ( !newXMLDescription )
-					return ;
+					return;
 
 				newListAttributes = attributes.Attribute;
 
@@ -460,14 +460,14 @@ package vdom.managers
 
 				objectId = _currentObject.@ID;
 				if ( !_currentObject )
-					return ;
+					return;
 				newXMLDescription = _currentObject;
 				newListAttributes = newXMLDescription.Attributes.Attribute;
 			}
 
 			var oldXMLDescription : XML = getObject( objectId );
 			if ( !oldXMLDescription )
-				return ;
+				return;
 			var oldListAttributes : XMLList = oldXMLDescription.Attributes.Attribute
 
 			var newOnlyAttributes : XML = extractNewValues( oldListAttributes, newListAttributes );
@@ -490,13 +490,13 @@ package vdom.managers
 			else
 			{
 				dme = new DataManagerEvent( DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN );
-
+				dme.objectId = objectId;
 				dispatchEvent( dme );
 
-				var dmEvent : DataManagerEvent = new DataManagerEvent( DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE );
+				dme = new DataManagerEvent( DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE );
 
-				dmEvent.objectId = objectId;
-				dispatchEvent( dmEvent );
+				dme.objectId = objectId;
+				dispatchEvent( dme );
 			}
 
 			if ( newOnlyAttributes )
@@ -527,7 +527,7 @@ package vdom.managers
 			var loadedApplications : XMLList = _listApplication.( @Status == "loaded" );
 
 			if ( !loadedApplications || loadedApplications.length() == 0 )
-				return ;
+				return;
 
 			try
 			{
@@ -560,7 +560,7 @@ package vdom.managers
 		private function deleteXMLNodes( objectId : String ) : void
 		{
 			if ( !objectId )
-				return ;
+				return;
 
 			var deleteNodes : XMLList = _currentApplication..Objects.Object.( @ID == objectId );
 
@@ -631,7 +631,7 @@ package vdom.managers
 			var result : XML = event.result.Information[ 0 ];
 
 			if ( !result )
-				return ;
+				return;
 
 			var applicationId : String = result.Id;
 
@@ -786,7 +786,7 @@ package vdom.managers
 			var currObj : XMLList = _currentApplication..Objects.Object.( @ID == objectId );
 
 			if ( currObj.length() == 0 )
-				return ;
+				return;
 
 			currObj[ 0 ] = new XML( objectData );
 
@@ -800,9 +800,9 @@ package vdom.managers
 				_currentPageId = objectId;
 				_currentObject = null;
 			}
-			
+
 			_currentObject = createNewCurrentObject( objectId );
-			
+
 			if ( isPage )
 			{
 				dispatchEvent( new Event( "currentPageIdChanged" ) );
@@ -834,7 +834,7 @@ package vdom.managers
 			dme.result = 
 				<Result>
 					{result}</Result>
-				;
+			;
 			dispatchEvent( dme );
 
 			dispatchEvent( new Event( "listPagesChanged" ) );
@@ -856,7 +856,7 @@ package vdom.managers
 
 			_currentApplication..Objects.Object.( @ID == oldObjectId )[ 0 ] = 
 				<Object ID={newObjectId}/>
-				;
+			;
 
 			soap.get_child_objects_tree( currentApplicationId, newObjectId ); //<------
 			dispatchEvent( new DataManagerEvent( DataManagerEvent.SET_OBJECT_XML_SCRIPT_COMPLETE,
@@ -953,7 +953,7 @@ package vdom.managers
 			var key : String = event.xml.Key[ 0 ];
 
 			if ( !key )
-				return ;
+				return;
 
 			var objectId : String = event.xml.Object[ 0 ].@ID;
 			var attributes : XML = event.xml.Object.Attributes[ 0 ];

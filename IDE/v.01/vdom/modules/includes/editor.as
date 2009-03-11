@@ -56,12 +56,12 @@ private function showHandler() : void
 	var applicationId : String = dataManager.currentApplicationId;
 
 	if ( !applicationId )
-		return ;
+		return;
 
 	if ( !dataManager.applicationStatus( applicationId )/*  || true */ ) // FIXME сделать проверку загруженности апликухи.
 	{
 		loadApplicationData();
-		return ;
+		return;
 	}
 
 	var pageId : String = dataManager.currentPageId;
@@ -77,7 +77,7 @@ private function showHandler() : void
 	if ( !objectId )
 	{
 		selectObject();
-		return ;
+		return;
 	}
 
 	switchToEdit();
@@ -121,8 +121,7 @@ private function selectPage() : void
 
 private function selectObject() : void
 {
-	if ( dataManager.currentPageId )
-		dataManager.changeCurrentObject( dataManager.currentPageId );
+	dataManager.changeCurrentObject( dataManager.currentPageId );
 }
 
 private function resourceButton_clickHandler() : void
@@ -160,7 +159,7 @@ private function dataManager_applicationDataLoaded( event : DataManagerEvent ) :
 
 private function dataManager_pageChanged( event : DataManagerEvent ) : void
 {
-	selectObject();
+	switchToEdit();
 }
 
 private function dataManager_objectChanged( event : DataManagerEvent ) : void
