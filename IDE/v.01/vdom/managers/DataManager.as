@@ -483,7 +483,8 @@ package vdom.managers
 			if ( newOnlyAttributes || nameChanged )
 			{
 				dme = new DataManagerEvent( DataManagerEvent.UPDATE_ATTRIBUTES_BEGIN );
-
+				
+				dme.objectId = objectId;
 				dme.result = newOnlyAttributes;
 				dispatchEvent( dme );
 			}

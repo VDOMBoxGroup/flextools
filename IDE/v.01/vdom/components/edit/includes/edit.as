@@ -208,7 +208,7 @@ private function dataManager_updateAttributesBeginHandler( event : DataManagerEv
 		if ( attrName == "top" || attrName == "left" )
 			continue;
 
-		workArea.lockItem( dataManager.currentObjectId );
+		workArea.lockItem( event.objectId );
 		break;
 	}
 }

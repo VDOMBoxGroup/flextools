@@ -81,7 +81,7 @@ private function showHandler():void {
 	scriptEditor.enabled = true;
 	if(_objectId)
 	{
-		saveButton.label = 'Loading...'
+		saveButton.label = "Loading..."
 		scriptEditor.enabled = false;
 		loadXMLPresentation();
 	}
@@ -91,7 +91,7 @@ private function hideHandler():void {
 	
 	registerEvent(false);
 	enableElement(false);
-	scriptEditor.code = '';
+	scriptEditor.code = "";
 }
 
 private function objectXMLScriptHandler(event:DataManagerEvent):void {
@@ -100,7 +100,7 @@ private function objectXMLScriptHandler(event:DataManagerEvent):void {
 	XML.prettyIndent = 4;
 	var result:String = event.result[0].toXMLString();
 	scriptEditor.code = result;
-	saveButton.label = 'Save';
+	saveButton.label = "Save";
 	scriptEditor.enabled = true;
 	enableElement(true);
 }
@@ -110,13 +110,13 @@ private function saveXMLScriptErrorHandler(event:DataManagerErrorEvent):void
 	Alert.show("Wrong data", "Alert");
 	if(_objectId)
 	{
-		saveButton.label = 'Loading...'
+		saveButton.label = "Loading..."
 		scriptEditor.enabled = false;
 		loadXMLPresentation();
 	}
 	else
 	{
-		scriptEditor.code = '';
+		scriptEditor.code = "";
 	}
 	
 }
@@ -129,7 +129,7 @@ private function saveXMLScript():void {
 		return;
 	}
 	enableElement(false);
-	saveButton.label = 'Saving...';
+	saveButton.label = "Saving...";
 	var code:String = scriptEditor.code;
 	dataManager.setObjectXMLScript(code);
 }
@@ -140,7 +140,7 @@ private function saveXMLScriptHandler(event:Event):void {
 		Alert.show("Data not saved.", "Description Error");
 	
 	enableElement(true);
-	saveButton.label = 'Save';
+	saveButton.label = "Save";
 }
 
 private function enableElement(flag:Boolean):void {
