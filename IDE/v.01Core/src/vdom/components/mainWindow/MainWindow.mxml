@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Window 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	id="main"
+	
+	height="100%" layout="absolute" width="100%"
+	
+	show="showMainHandler()">
+	<vdomTitleBar:VdomTitleBar 
+		left="0" right="0"
+		logout="logoutHandler()"/>
+	<mx:HBox 
+		width="606" y="21"
+		
+		horizontalAlign="center" horizontalCenter="0" verticalAlign="bottom">
+		<mx:Label 
+			id="userName"
+			
+			text="{
+				resourceManager.getString('Application','user').toUpperCase()
+				}: { 
+				authenticationManager.username.toUpperCase()
+				} - VDOM IDE"
+			
+			color="#FFFFFF" fontWeight="bold"/>
+		<mx:Label 
+			id="applicationVersion"
+			
+			color="#B4B4B4" fontWeight="bold"/>
+	</mx:HBox>
+	<mx:ViewStack 
+		id="contentStack"
+		
+		backgroundColor="#FFFFFF" borderColor="#000000" borderStyle="solid" bottom="0"
+		left="0" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+		right="0" top="50">
+		<mx:Canvas 
+			styleName="vdomBackground"
+			
+			borderColor="#000000" borderStyle="solid" dropShadowEnabled="true"/>
+		<containers:MainTabNavigator 
+			id="moduleTabNavigator"
+			
+			borderStyle="none" bottom="5" left="5" right="5" top="5"
+			tabHeight="25" tabPaddingLeft="80">
+			<!--<modules:ApplicationManagment id="applicationManagmentModule"
+				 label="{resourceManager.getString('Application','main_title')}"/>
+
+				 <modules:Editor id="editorModule"
+				 label="{resourceManager.getString('Application','editor_title')}"
+				 width="100%" height="100%"/>-->
+		</containers:MainTabNavigator>
+	</mx:ViewStack>
+	<mx:Image 
+		height="62" source="{vdomLogo}" width="62" x="10" y="10"/>
+</mx:Window>

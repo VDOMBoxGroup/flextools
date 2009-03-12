@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<Language code="en_US" label="English"/>
+	<Language code="ru_RU" label="Russian"/>
+	<Language code="fr_FR" label="French"/>
+</root>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:containers="vdom.containers.*"
+	xmlns:loginForm="vdom.components.loginForm.*" xmlns:modules="vdom.modules.*"
+	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
+	
+	creationPolicy="all" frameRate="30" layout="absolute" showGripper="false" showStatusBar="false"
+	showTitleBar="false" verticalScrollPolicy="off"
+	
+	creationComplete="creationCompleteHandler()" invoke="invokeHandler( event )"
+	preinitialize="preinitalizeHandler()" windowComplete="windowCompleteHandler()">
+	<mx:Script 
+		source="vdomIDE.as"/>
+	<mx:Metadata>
+		[ResourceBundle("Application")]
+	</mx:Metadata>
+	<mx:XML 
+		id="languageList"
+		
+		source="locale/locales.xml"/>
+</mx:WindowedApplication>
