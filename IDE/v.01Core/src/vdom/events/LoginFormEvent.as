@@ -4,7 +4,8 @@ import flash.events.Event;
 
 public class LoginFormEvent extends Event {
 	
-	public static const SUBMIT_BEGIN:String = 'submitBegin';
+	public static const SUBMIT_BEGIN:String = "submitBegin";
+	public static const QUIT:String = "quit";
 	
 	public var formData:Object;
 	

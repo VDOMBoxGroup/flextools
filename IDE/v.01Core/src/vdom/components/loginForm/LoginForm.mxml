@@ -4,7 +4,8 @@
 	
 	height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="100%"
 	
-	creationComplete="creationCompleteHandler()" hide="hideHandler()" show="showHandler()">
+	creationComplete="creationCompleteHandler()" hide="hideHandler()" show="showHandler()"
+	mouseDown="mouseDownHandler(event)" mouseUp="mouseUpHandler(event)">
 	<mx:Metadata>
 		[ResourceBundle("LoginForm")]
 		[Exclude(name="alignButtons", kind="property")]
@@ -45,7 +46,7 @@
 		backgroundAlpha=".20" backgroundColor="#FFFFFF" borderColor="#808080" borderStyle="solid"
 		borderThickness="1" cornerRadius="12" dropShadowEnabled="true" horizontalAlign="center"
 		horizontalCenter="0" shadowDirection="right" shadowDistance="5" verticalCenter="0"
-		mouseDown="mouseDownHandler(event)" mouseUp="mouseUpHandler(event)" title="{resourceManager.getString('LoginForm','title')}">
+		title="{resourceManager.getString('LoginForm','title')}">
 		<mx:Form 
 			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
 			<mx:FormItem 
@@ -79,22 +80,21 @@
 					
 					fillAlphas="[1.0, 0.59]" fillColors="[#FFFFFF, #FFFFFF]"
 					
-					change="languageChangeHandler(event)"/>
+					change="selectLang_changeHandler( event )"/>
 			</mx:FormItem>
 		</mx:Form>
 		<mx:ControlBar 
 			width="100%"
 			
 			barColor="#ff0066" borderColor="#0000FF" horizontalAlign="center" horizontalGap="0"
-			paddingBottom="-1"
-			alpha="1.0">
+			paddingBottom="-1">
 			<mx:Button 
 				id="submitButton"
 				
 				focusEnabled="false" label="{resourceManager.getString('LoginForm','ok_button')}"
 				styleName="loginButtonOK" width="110"
 				
-				click="checkData()"
+				click="submitButton_clickHandler()"
 				buttonMode="true"/>
 			<mx:Button 
 				id="quitButton"
@@ -102,7 +102,7 @@
 				focusEnabled="false" label="{resourceManager.getString('LoginForm','quit_button')}"
 				styleName="loginButtonQuit" width="110"
 				
-				click="Application.application.close()"
+				click="quitButton_clickHandler()"
 				buttonMode="true"/>
 		</mx:ControlBar>
 	</mx:Panel>

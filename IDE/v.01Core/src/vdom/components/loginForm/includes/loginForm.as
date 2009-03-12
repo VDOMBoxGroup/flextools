@@ -5,8 +5,6 @@ import flash.net.SharedObject;
 
 import mx.controls.Button;
 import mx.controls.TextInput;
-import mx.core.Application;
-import mx.core.IWindow;
 import mx.events.FlexEvent;
 
 import vdom.events.LoginFormEvent;
@@ -14,11 +12,11 @@ import vdom.managers.LanguageManager;
 
 [Embed( source="/assets/login/vectorGraphic.swf", symbol = "LoginCube" )]
 [Bindable]
-public var loginCube : Class;
+private var loginCube : Class;
 
 [Embed( source="/assets/login/vectorGraphic.swf", symbol = "LoginTitle" )]
 [Bindable]
-public var loginTitle : Class;
+private var loginTitle : Class;
 
 [Bindable]
 private var languageList : XMLList;
@@ -29,16 +27,7 @@ private var dragged : Boolean = false;
 
 private var _isListenersEnabled : Boolean;
 
-private function creationCompleteHandler() : void
-{
-	languageList = languageManager.languageList;
-
-	_isListenersEnabled = false;
-
-	dispatchEvent( new FlexEvent( FlexEvent.SHOW ) );
-}
-
-private function setListeners( flag : Boolean ) : void
+private function registerEvents( flag : Boolean ) : void
 {
 	if ( flag == _isListenersEnabled )
 		return;
@@ -62,9 +51,35 @@ private function setListeners( flag : Boolean ) : void
 	}
 }
 
+private function checkData() : void
+{
+	var lfe : LoginFormEvent = new LoginFormEvent( LoginFormEvent.SUBMIT_BEGIN );
+	lfe.formData = { username : _username.text, password : _password.text, hostname : _hostname.text };
+	var so : SharedObject = SharedObject.getLocal( "userData" );
+	so.data[ "username" ] = _username.text;
+//	so.data["password"] = _password.text;
+	so.data[ "hostname" ] = _hostname.text;
+
+	if ( selectLang.selectedItem )
+	{
+		so.data[ "locale" ] = languageManager.currentLocale;
+	}
+
+	dispatchEvent( lfe );
+}
+
+private function creationCompleteHandler() : void
+{
+	languageList = languageManager.languageList;
+
+	_isListenersEnabled = false;
+
+	dispatchEvent( new FlexEvent( FlexEvent.SHOW ) );
+}
+
 private function showHandler() : void
 {
-	setListeners( true );
+	registerEvents( true );
 	_username.setFocus();
 
 	var so : SharedObject = SharedObject.getLocal( "userData" );
@@ -93,34 +108,16 @@ private function showHandler() : void
 
 private function hideHandler() : void
 {
-	setListeners( false );
+	registerEvents( false );
 
 	_username.text = "";
 	_password.text = "";
 	_hostname.text = "";
 }
 
-private function languageChangeHandler( event : Event ) : void
+private function selectLang_changeHandler( event : Event ) : void
 {
-
 	languageManager.changeLocale( event.currentTarget.selectedItem.@code );
-}
-
-private function checkData() : void
-{
-	var lfe : LoginFormEvent = new LoginFormEvent( LoginFormEvent.SUBMIT_BEGIN );
-	lfe.formData = { username : _username.text, password : _password.text, hostname : _hostname.text };
-	var so : SharedObject = SharedObject.getLocal( "userData" );
-	so.data[ "username" ] = _username.text;
-//	so.data["password"] = _password.text;
-	so.data[ "hostname" ] = _hostname.text;
-
-	if ( selectLang.selectedItem )
-	{
-		so.data[ "locale" ] = languageManager.currentLocale;
-	}
-
-	dispatchEvent( lfe );
 }
 
 private function loginForm_keyDownHandler( event : KeyboardEvent ) : void
@@ -129,7 +126,18 @@ private function loginForm_keyDownHandler( event : KeyboardEvent ) : void
 		checkData();
 }
 
-protected function mouseDownHandler( event : MouseEvent ) : void
+private function submitButton_clickHandler() : void
+{
+	checkData();
+}
+
+private function quitButton_clickHandler() : void
+{
+	var lfe : LoginFormEvent = new LoginFormEvent( LoginFormEvent.QUIT );
+	dispatchEvent( lfe );
+}
+
+private function mouseDownHandler( event : MouseEvent ) : void
 {
 
 	if ( event.target is Button || event.target.parent is TextInput )

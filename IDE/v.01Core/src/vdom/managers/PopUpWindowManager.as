@@ -237,7 +237,7 @@ package vdom.managers
 			for ( var i : int = 0; i < n; i++ )
 			{
 				var o : PopUpWindowData = popUpInfo[ i ];
-				if( o.parent == null )
+				if ( o.parent == null )
 					continue;
 				var pnw : NativeWindow = o.parent.stage.nativeWindow;
 				if ( o.isModal && pnw == parentNativeWindow )
@@ -271,10 +271,10 @@ package vdom.managers
 
 			if ( !nativeWindow.closed )
 				nativeWindow.close();
-			
-			if( o.parent == null )
+
+			if ( o.parent == null )
 				return;
-			
+
 			var parentNativeWindow : NativeWindow = o.parent.stage.nativeWindow;
 			var isLockedWindow : Boolean = windowIsLocked( parentNativeWindow );
 
@@ -398,14 +398,14 @@ package vdom.managers
 									 { type : Event.ACTIVATE, handler : nativeWindow_activateHandler } ];
 
 			addHandlers( nativeWindow, handlers );
-			
-			if( puwd.parent == null )
+
+			if ( puwd.parent == null )
 			{
 				window.visible = true;
 				nativeWindow.activate();
 				return;
 			}
-			
+
 			var parentNativeWindow : NativeWindow = puwd.parent.stage.nativeWindow;
 			var isLockedWindow : Boolean = windowIsLocked( puwd.parent.stage.nativeWindow );
 			var parentHandlers : Array;
