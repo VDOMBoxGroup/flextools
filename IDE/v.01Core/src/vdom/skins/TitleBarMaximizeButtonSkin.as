@@ -51,10 +51,10 @@ public class TitleBarMaximizeButtonSkin extends UIComponent
     [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinDown")]
     private static var winMaxDownSkin:Class;
     
-    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinDisabled")]
     private static var macMaxDisabledSkin:Class;
 
-    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="maximizeButtonSkinDisabled")]
     private static var winMaxDisabledSkin:Class;
     
     [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinUp")]

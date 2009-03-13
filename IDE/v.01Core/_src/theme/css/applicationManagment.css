@@ -1,0 +1,44 @@
+ActionPanel {
+	
+	borderAlpha: 1;	
+	headerColors: #4e84df, #0f6cc3;
+	footerColors: #d91107, #d91107;
+	headerHeight: 0;
+	fontWeight: bold;
+	roundedBottomCorners: true;
+	cornerRadius: 0;
+	paddingTop: 5;
+	paddingBottom: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	highlightAlphas: 0, 0.12;
+	backgroundColor: #484848;
+	layout: absolute;
+	borderStyle: solid;
+	borderThickness: 1;
+	controlBarStyleName: actionPanelBar;
+	dropShadowEnabled: false; 
+}
+
+.actionPanelBar {
+	color: #ffffff;
+	paddingTop: 0;
+	paddingBottom: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	backgroundImage: Embed(source="vdomTheme.swf", symbol="ActionPanelBar");
+	backgroundSize: "100%";
+	borderColor: #ffffff;
+}
+
+.actionPanlelLabel {
+	
+	fontFamily: Verdana;
+	textAlign: center;
+}
+Thumbnail {
+	
+	thumbBackground: Embed(source="vdomTheme.swf", symbol="ThumbBackground");
+	thumbBackgroundSelected: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
+	backgroundSize: "100%";
+}

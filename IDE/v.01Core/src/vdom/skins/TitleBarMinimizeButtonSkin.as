@@ -51,10 +51,10 @@ public class TitleBarMinimizeButtonSkin extends UIComponent
     [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinDown")]
     private static var winMinDownSkin:Class;
     
-    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinDisabled")]
     private static var macMinDisabledSkin:Class;
 
-    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinUp")]
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="minimizeButtonSkinDisabled")]
     private static var winMinDisabledSkin:Class;
 	
 	//--------------------------------------------------------------------------

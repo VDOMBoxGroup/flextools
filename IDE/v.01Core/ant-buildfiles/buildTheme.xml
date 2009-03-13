@@ -7,10 +7,10 @@
 	<taskdef resource="flexTasks.tasks" classpath="jars/flexTasks.jar" />
 	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 
-	<property file="config/local.properties"/>
+	<property file="_cfg/local.properties"/>
 	
 	<!-- dirs -->
-	<property name="source.dir" location="ext_src/theme"/>
+	<property name="source.dir" location="_src/theme"/>
 	<property name="build.dir" location="src/assets/theme"/>
 
 	<!-- files -->

@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<flex-config>
+		
+	<include-file>
+		<name>applicationManagment.css</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\css\applicationManagment.css</path>
+	</include-file>
+				
+	<include-file>
+		<name>default.css</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\css\default.css</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-association.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-association.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-build.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-build.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-computer.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-computer.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-culture.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-culture.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-education.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-education.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-electronic.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-electronic.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-fashion.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-fashion.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-health.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-health.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-hotels.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-hotels.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-housing.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-housing.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-personalpages.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-personalpages.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-restaurant.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-restaurant.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-sport.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-sport.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-storeshop.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-storeshop.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>app-transportation.png</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-transportation.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>vdomTheme.swf</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\swf\vdomTheme.swf</path>
+	</include-file>
+				
+</flex-config>
+		

@@ -63,10 +63,10 @@ package vdom.managers
 			if ( instance )
 				throw new Error( "Instance already exists." );
 
-			var nativeWindow : NativeWindow = Application.application.nativeWindow;
-			if ( nativeWindow )
-				nativeWindow.addEventListener( NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING,
-											   nativeWindow_displayStateChangingHandler );
+//			var nativeWindow : NativeWindow = Application.application.nativeWindow;
+//			if ( nativeWindow )
+//				nativeWindow.addEventListener( NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING,
+//											   nativeWindow_displayStateChangingHandler );
 		}
 
 		public function addPopUp( content : UIComponent, title : String, parent : UIComponent = null,
@@ -88,7 +88,7 @@ package vdom.managers
 
 			window.systemChrome = NativeWindowSystemChrome.NONE;
 			window.transparent = true;
-//			window.styleName = "popUpWindow";
+			window.styleName = "popUpWindow";
 
 			if ( windowOptions != null )
 			{

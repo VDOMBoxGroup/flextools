@@ -33,14 +33,29 @@ public class TitleBarRestoreButtonSkin extends UIComponent
 	//
 	//--------------------------------------------------------------------------
 
+   [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinUp")]
+    private static var macRestoreUpSkin:Class;
+
     [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinUp")]
     private static var winRestoreUpSkin:Class;
-    
-   	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDown")]
+	   
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinOver")]
+	private static var macRestoreOverSkin:Class;
+	
+	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinOver")]
+	private static var winRestoreOverSkin:Class;
+
+  	[Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDown")]
+    private static var macRestoreDownSkin:Class;
+
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDown")]
     private static var winRestoreDownSkin:Class;
     
-    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinOver")]
-    private static var winRestoreOverSkin:Class;
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDisabled")]
+    private static var macRestoreDisabledSkin:Class;
+
+    [Embed(source="/assets/titleBarButtons/titleBarButtons.swf", symbol="restoreButtonSkinDisabled")]
+    private static var winRestoreDisabledSkin:Class;
 	
 	//--------------------------------------------------------------------------
 	//
@@ -54,6 +69,8 @@ public class TitleBarRestoreButtonSkin extends UIComponent
 	public function TitleBarRestoreButtonSkin()
 	{
 		super();
+		
+		isMac = Capabilities.os.substring(0,3) == "Mac";
 	}
 	
 	//--------------------------------------------------------------------------
@@ -61,7 +78,9 @@ public class TitleBarRestoreButtonSkin extends UIComponent
 	//  Variables
 	//
 	//--------------------------------------------------------------------------
-
+	
+	private var isMac:Boolean;
+	
 	/**
 	 *  @private
 	 */
@@ -160,6 +179,15 @@ public class TitleBarRestoreButtonSkin extends UIComponent
 		overProp.value = winRestoreOverSkin;
 		overState.overrides.push(overProp);
 		states.push(overState);
+		
+		var disabledState:State = new State();
+		disabledState.name = "disabled";
+		var disabledProp:SetProperty = new SetProperty();
+		disabledProp.name = "source";
+		disabledProp.target = skinImage;
+		disabledProp.value = isMac ? macRestoreDisabledSkin : winRestoreDisabledSkin;
+		disabledState.overrides.push(disabledProp);
+		states.push(disabledState);
 	}
 }
 

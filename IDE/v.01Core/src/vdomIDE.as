@@ -3,23 +3,22 @@ import flash.display.NativeWindowSystemChrome;
 import flash.events.Event;
 import flash.events.InvokeEvent;
 
-import mx.controls.Alert;
 import mx.core.Application;
-import mx.core.UIComponent;
 import mx.core.Window;
-import mx.events.IndexChangedEvent;
-import mx.managers.PopUpManager;
+import mx.core.windowClasses.TitleBar;
 import mx.rpc.Fault;
 import mx.rpc.events.FaultEvent;
 
 import vdom.components.loginForm.LoginForm;
+import vdom.components.main.Main;
 import vdom.connection.SOAP;
+import vdom.controls.AlertWindow;
+import vdom.controls.alertWindowClasses.AlertWindowForm;
 import vdom.events.AuthenticationEvent;
 import vdom.events.DataManagerErrorEvent;
 import vdom.events.DataManagerEvent;
 import vdom.events.LoginFormEvent;
 import vdom.events.SOAPEvent;
-import vdom.managers.AlertManager;
 import vdom.managers.AuthenticationManager;
 import vdom.managers.CacheManager;
 import vdom.managers.ConfigManager;
@@ -33,65 +32,36 @@ import vdom.utils.StringUtils;
 import vdom.utils.VersionUtils;
 
 include "SERVER_VERSION.as";
-
+TitleBar
+Window
 public var arguments : Array = [];
 
-[Embed( source="/assets/main/vdom_logo.png" )]
-[Bindable]
-private var vdomLogo : Class;
+private var soap : SOAP = SOAP.getInstance();
 
-[Bindable]
 private var dataManager : DataManager = DataManager.getInstance();
-
-[Bindable]
 private var authenticationManager : AuthenticationManager = AuthenticationManager.getInstance();
-
 private var languageManager : LanguageManager = LanguageManager.getInstance();
-
 private var fileManager : FileManager = FileManager.getInstance();
 private var cacheManager : CacheManager = CacheManager.getInstance();
-private var alertManager : AlertManager = AlertManager.getInstance();
-
 private var updateManager : UpdateManager = UpdateManager.getInstance();
-
 private var configManager : ConfigManager = ConfigManager.getInstance();
-
 private var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
 
-private var configMain : Config;
+private var loginWindow : Window;
+private var mainWindow : Window;
 
-private var soap : SOAP = SOAP.getInstance();
+private var currentWindow : Window;
+
+private var configMain : Config;
 
 private var tempStorage : Object = {};
 
 private var isServerVersionOld : Boolean = false;
 
-private var loginWindow : Window;
-private var mainWindow : Window;
-
-public function switchToModule( moduleName : String ) : void
-{
-/* switch( moduleName.toLowerCase() )
-   {
-   case "applicationmanagment":
-   {
-   moduleTabNavigator.selectedChild = applicationManagmentModule;
-   break;
-   }
-
-   case "editor":
-   {
-   moduleTabNavigator.selectedChild = editorModule;
-   break;
-   }
- } */
-}
-
 private function registerEvent( flag : Boolean ) : void
 {
 	if ( flag )
 	{
-		dataManager.addEventListener( DataManagerEvent.INIT_COMPLETE, dataManager_initCompleteHandler );
 		dataManager.addEventListener( DataManagerEvent.CLOSE, dataManager_close );
 		dataManager.addEventListener( DataManagerErrorEvent.GLOBAL_ERROR, dataManager_globalErrorHandler );
 
@@ -99,7 +69,6 @@ private function registerEvent( flag : Boolean ) : void
 	}
 	else
 	{
-		dataManager.removeEventListener( DataManagerEvent.INIT_COMPLETE, dataManager_initCompleteHandler );
 		dataManager.removeEventListener( DataManagerEvent.CLOSE, dataManager_close );
 		dataManager.removeEventListener( DataManagerErrorEvent.GLOBAL_ERROR, dataManager_globalErrorHandler );
 
@@ -111,7 +80,6 @@ private function initManagers() : void
 {
 	languageManager.init( languageList );
 	cacheManager.init();
-
 	configManager.init();
 }
 
@@ -119,7 +87,7 @@ private function initConfig() : void
 {
 	configMain = configManager.getConfig( "main" );
 
-	if ( configMain == null )
+	if ( !configMain )
 	{
 		configMain = configManager.createConfig( "main" );
 		configMain.updater = { enabled : "1" };
@@ -137,13 +105,13 @@ private function initConfig() : void
 	}
 }
 
-private function initDataManager() : void
+/* private function initDataManager() : void
 {
 //	viewstack.selectedChild = main;
 //	contentStack.selectedIndex = 0;
 
 	dataManager.init();
-}
+} */
 
 /* private function switchToLogin() : void
    {
@@ -158,34 +126,77 @@ private function initDataManager() : void
 
 private function openLoginWindow() : Window
 {
-	if( loginWindow == null )
+	if ( mainWindow && mainWindow.visible )
+		mainWindow.visible = false;
+
+	if ( !loginWindow )
 	{
 		var loginForm : LoginForm = new LoginForm();
-	
+
 		loginForm.addEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
 		loginForm.addEventListener( LoginFormEvent.QUIT, loginForm_quitHandler );
-	
+
 		var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
 		windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
 		windowOptions.resizable = false;
 		windowOptions.maximizable = false;
 		windowOptions.minimizable = false;
 		windowOptions.transparent = true;
-		
-		loginWindow = popUpWindowManager.addPopUp( loginForm, "VDOM IDE - Login", null,
-												  false, null, windowOptions );
-	
+
+		loginWindow = popUpWindowManager.addPopUp( loginForm, "VDOM IDE - Login",
+												   null, false, null, windowOptions );
+
 		loginWindow.showTitleBar = false;
 		loginWindow.showGripper = false;
 		loginWindow.showStatusBar = false;
+
+		loginWindow.setStyle( "borderStyle", "none" );
+		loginWindow.setStyle( "backgroundAlpha", .0 );
 	}
 	else
 	{
-		if( !loginWindow.visible )
+		if ( !loginWindow.visible )
 			loginWindow.visible = true;
-			
 	}
+	
+	currentWindow = loginWindow;
+	
 	return loginWindow;
+}
+
+private function openMainWindow() : Window
+{
+	if ( loginWindow.visible )
+		loginWindow.visible = false;
+
+	if ( !mainWindow )
+	{
+		var main : Main = new Main();
+
+		var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
+		windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
+		windowOptions.resizable = true;
+		windowOptions.maximizable = true;
+		windowOptions.minimizable = true;
+		windowOptions.transparent = true;
+
+		mainWindow = popUpWindowManager.addPopUp( main, "VDOM IDE", null, false,
+												  null, windowOptions );
+
+		mainWindow.showTitleBar = false;
+		mainWindow.showGripper = true;
+		mainWindow.showStatusBar = true;
+	}
+	else
+	{
+		if ( !mainWindow.visible )
+			mainWindow.visible = true;
+
+	}
+	
+	currentWindow = mainWindow;
+	
+	return mainWindow;
 }
 
 private function checkError( fault : Fault ) : void
@@ -200,7 +211,7 @@ private function checkError( fault : Fault ) : void
 		}
 		case "203" : 
 		{
-			initDataManager();
+//			initDataManager();
 			break;
 		}
 		default : 
@@ -209,9 +220,6 @@ private function checkError( fault : Fault ) : void
 			break;
 		}
 	}
-
-	alertManager.showAlert( fault.faultString );
-	alertManager.showMessage( "" );
 }
 
 private function invokeHandler( event : InvokeEvent ) : void
@@ -242,8 +250,6 @@ private function invokeHandler( event : InvokeEvent ) : void
 
 private function preinitalizeHandler() : void
 {
-//	Singleton.registerClass( "vdom.managers::IVdomDragManager", 
-//		Class( getDefinitionByName( "vdom.managers::VdomDragManagerImpl" )) );
 	nativeWindow.close();
 	NativeApplication.nativeApplication.autoExit = false;
 //	NativeApplication.nativeApplication.idleThreshold = IDLE_TIME;
@@ -255,7 +261,6 @@ private function preinitalizeHandler() : void
 
 private function creationCompleteHandler() : void
 {
-//	moduleTabNavigator.addEventListener( IndexChangedEvent.CHANGE, moduleChangedHandler );
 	openLoginWindow();
 }
 
@@ -271,13 +276,13 @@ private function windowCompleteHandler() : void
 	}
 }
 
-private function moduleChangedHandler( event : IndexChangedEvent ) : void
-{
-	while ( systemManager.popUpChildren.numChildren > 0 )
-	{
-		PopUpManager.removePopUp( UIComponent( systemManager.popUpChildren.getChildAt( 0 ) ) );
-	}
-}
+/* private function moduleChangedHandler( event : IndexChangedEvent ) : void
+   {
+   while ( systemManager.popUpChildren.numChildren > 0 )
+   {
+   PopUpManager.removePopUp( UIComponent( systemManager.popUpChildren.getChildAt( 0 ) ) );
+   }
+ } */
 
 /* private function showLoginFormHandler() : void
    {
@@ -324,66 +329,61 @@ private function moduleChangedHandler( event : IndexChangedEvent ) : void
 private function loginForm_submitBeginHandler( event : LoginFormEvent ) : void
 {
 	var loginForm : LoginForm = event.currentTarget as LoginForm;
-	
-	loginForm.removeEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
-	loginForm.removeEventListener( LoginFormEvent.QUIT, loginForm_quitHandler );
-	
-	loginWindow.visible = false;
-	
-	alertManager.showMessage( "Authentication process" );
+
+	if ( !loginForm || !loginWindow || !loginWindow.visible )
+		return;
+
+//	alertManager.showMessage( "Authentication process" );
 
 	var hostname : String = event.formData.hostname;
 
 	tempStorage = event.formData;
 
 	var wsdl : String = "http://" + hostname + "/vdom.wsdl";
-	soap.addEventListener( "loadWsdlComplete", soap_initCompleteHandler );
+	soap.addEventListener( SOAPEvent.INIT_COMPLETE, soap_initCompleteHandler );
 	soap.init( wsdl );
 }
 
 private function loginForm_quitHandler( event : LoginFormEvent ) : void
 {
 	var loginForm : LoginForm = event.currentTarget as LoginForm;
-	
+
 	loginWindow.removeEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
 	loginWindow.removeEventListener( LoginFormEvent.QUIT, loginForm_quitHandler );
-	
-	popUpWindowManager.removePopUp( loginWindow );
-	
-	Application.application.exit();
-}
 
-private function changeLanguageHandler( event : Event ) : void
-{
-	languageManager.changeLocale( event.currentTarget.selectedItem.@code );
+	popUpWindowManager.removePopUp( loginWindow );
+
+	Application.application.exit();
 }
 
 private function authenticationManager_loginComleteHandler( event : AuthenticationEvent ) : void
 {
 	authenticationManager.removeEventListener( AuthenticationEvent.LOGIN_COMPLETE,
 											   authenticationManager_loginComleteHandler );
-
-	initDataManager();
+	authenticationManager.addEventListener( AuthenticationEvent.LOGIN_ERROR, authenticationManager_loginErrorHandler );
 }
 
 private function authenticationManager_loginErrorHandler( event : Event ) : void
 {
-	authenticationManager.addEventListener( AuthenticationEvent.LOGIN_ERROR, authenticationManager_loginErrorHandler );
+	authenticationManager.removeEventListener( AuthenticationEvent.LOGIN_COMPLETE,
+											   authenticationManager_loginComleteHandler );
+	authenticationManager.removeEventListener( AuthenticationEvent.LOGIN_ERROR, authenticationManager_loginErrorHandler );
 
-	Alert.show( "Login Error", "Login Error" );
-	alertManager.showMessage( "" );
-	dataManager.close();
+	
+	var awm : AlertWindowForm = new AlertWindowForm();
+	AlertWindow.show( "Login Error", "Alert", 0x4, loginWindow );
+//	dataManager.close();
 }
 
-private function dataManager_initCompleteHandler( event : DataManagerEvent ) : void
+/* private function dataManager_initCompleteHandler( event : DataManagerEvent ) : void
 {
 	alertManager.showMessage( "Load Types" );
 
 	dataManager.addEventListener( DataManagerEvent.LOAD_TYPES_COMPLETE, dataManager_typesLoadedHandler );
 	dataManager.loadTypes();
-}
+} */
 
-private function dataManager_typesLoadedHandler( event : DataManagerEvent ) : void
+/* private function dataManager_typesLoadedHandler( event : DataManagerEvent ) : void
 {
 	dataManager.removeEventListener( DataManagerEvent.LOAD_TYPES_COMPLETE, dataManager_typesLoadedHandler );
 	alertManager.showMessage( "" );
@@ -393,7 +393,8 @@ private function dataManager_typesLoadedHandler( event : DataManagerEvent ) : vo
 
 	languageManager.parseLanguageData( dataManager.listTypes );
 
-/* contentStack.selectedIndex = 1;
+	openMainWindow();
+ contentStack.selectedIndex = 1;
 
    if( moduleTabNavigator )
    {
@@ -403,8 +404,8 @@ private function dataManager_typesLoadedHandler( event : DataManagerEvent ) : vo
    moduleTabNavigator.selectedChild.dispatchEvent( new FlexEvent( FlexEvent.SHOW ));
    }
 
- applicationVersion.text = "(" + VersionUtils.getApplicationVersion() + ")"; */
-}
+ applicationVersion.text = "(" + VersionUtils.getApplicationVersion() + ")"; 
+} */
 
 private function dataManager_close( event : DataManagerEvent ) : void
 {
@@ -414,15 +415,6 @@ private function dataManager_close( event : DataManagerEvent ) : void
 private function dataManager_globalErrorHandler( event : DataManagerErrorEvent ) : void
 {
 	checkError( event.fault );
-
-}
-
-private function logoutHandler() : void
-{
-//	if( moduleTabNavigator && moduleTabNavigator.selectedChild )
-//		moduleTabNavigator.selectedChild.dispatchEvent( new FlexEvent( FlexEvent.HIDE ) );
-
-	dataManager.close();
 }
 
 private function soap_initCompleteHandler( event : Event ) : void
@@ -436,7 +428,6 @@ private function soap_initCompleteHandler( event : Event ) : void
 	soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler )
 
 	authenticationManager.addEventListener( AuthenticationEvent.LOGIN_COMPLETE, authenticationManager_loginComleteHandler );
-
 	authenticationManager.addEventListener( AuthenticationEvent.LOGIN_ERROR, authenticationManager_loginErrorHandler );
 
 	authenticationManager.login( hostname, username, password );

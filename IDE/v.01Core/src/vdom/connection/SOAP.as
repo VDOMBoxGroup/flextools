@@ -13,9 +13,11 @@ package vdom.connection
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.soap.LoadEvent;
 	import mx.rpc.soap.Operation;
+	import mx.rpc.soap.SOAPFault;
 	import mx.rpc.soap.WebService;
 
 	import vdom.connection.protect.Code;
+	import vdom.events.SOAPErrorEvent;
 	import vdom.events.SOAPEvent;
 	import vdom.utils.MD5Utils;
 
@@ -116,7 +118,7 @@ package vdom.connection
 
 		private function loadHandler( event : LoadEvent ) : void
 		{
-			dispatchEvent( new Event( 'loadWsdlComplete' ) );
+			dispatchEvent( new SOAPEvent( SOAPEvent.INIT_COMPLETE ) );
 		}
 
 		private function faultHandler( event : FaultEvent ) : void
@@ -143,16 +145,21 @@ package vdom.connection
 
 		private function loginErrorHandler( event : FaultEvent ) : void
 		{
-			if ( event.fault is Fault )
+			if ( event.fault is SOAPFault )
+			{
+				var se : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.LOGIN_ERROR );
+				se.faultCode = event.fault.faultCode;
+				se.faultString = event.fault.faultString;
+				se.faultDetail = event.fault.faultDetail;
+				dispatchEvent( se );
+			}
+			else if ( event.fault is Fault )
 			{
 				ws.dispatchEvent( FaultEvent.createEvent( event.fault, event.token,
 														  event.message ) );
-				return ;
 			}
 
-			var se : SOAPEvent = new SOAPEvent( SOAPEvent.LOGIN_ERROR );
-			se.result = new XML( event.fault.faultDetail )
-			dispatchEvent( se );
+
 		}
 
 		private function operationResultHandler( event : ResultEvent ) : void
@@ -168,9 +175,9 @@ package vdom.connection
 			catch ( error : Error )
 			{
 				var faultEvent : FaultEvent = FaultEvent.createEvent( new Fault( "i101",
-																				 "Parse data error" ) );
+																				 "Parse XML data error" ) );
 				faultHandler( faultEvent );
-				return ;
+				return;
 			}
 
 			var se : SOAPEvent = new SOAPEvent( SOAPEvent.RESULT );

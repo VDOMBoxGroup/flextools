@@ -7,6 +7,7 @@
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Window;
 			import vdom.managers.DataManager;
 			import mx.core.windowClasses.TitleBar;
 			import mx.core.WindowedApplication;
@@ -42,7 +43,7 @@
 
 			private function get window() : IWindow
 			{
-				return IWindow( Application.application );
+				return IWindow( Window.getWindow( this ) );
 			}
 
 			private static function isMac() : Boolean
