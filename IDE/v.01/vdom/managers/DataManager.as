@@ -812,6 +812,7 @@ package vdom.managers
 			dispatchEvent( new Event( "listPagesChanged" ) );
 			dispatchEvent( new Event( "currentObjectIdChanged" ) );
 			dispatchEvent( new Event( "currentObjectChanged" ) );
+			dispatchEvent( new DataManagerEvent( DataManagerEvent.OBJECT_CHANGED ) );
 
 		}
 

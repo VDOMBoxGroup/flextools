@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:containers="vdom.components.scriptEditor.containers.*"
+	
 	backgroundColor="#3d3d3d"
+	
 	hide="hideHandler()" show="showHandler()"
-	xmlns:containers="vdom.components.scriptEditor.containers.*" xmlns:containers1="vdom.containers.*"
-	xmlns:controls="vdom.controls.*" xmlns:eventEditor="vdom.components.eventEditor.*"
+	xmlns:containers1="vdom.containers.*" xmlns:controls="vdom.controls.*" xmlns:eventEditor="vdom.components.eventEditor.*"
 	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*">
 	<mx:Script>
 		<![CDATA[
@@ -22,10 +23,10 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 
-			[ Bindable ]
+			[Bindable]
 			private var dataManager : DataManager = DataManager.getInstance();
 
-			[ Bindable ]
+			[Bindable]
 			private var arrAppl : ArrayCollection = new ArrayCollection();
 
 			private var curContainerID : String;
@@ -213,7 +214,7 @@
 			private function save() : void
 			{
 				if ( !textArea.enabled )
-					return ;
+					return;
 
 				btSave.setStyle( "color", "0x000000" );
 				btSave.setStyle( "borderColor", "0xAAB3B3" );
@@ -263,7 +264,7 @@
 			}
 
 
-			[ Bindable ]
+			[Bindable]
 			public var selectedAppl : Object;
 
 			private function changeContainerHandler( obj : Object ) : void
@@ -280,52 +281,76 @@
 			}
 		]]>
 	</mx:Script>
-	<mx:HDividedBox height="100%" width="100%">
+	<mx:HDividedBox 
+		height="100%" width="100%">
 		<mx:VBox 
 			id="vBox"
+			
 			height="100%" width="100%"
+			
 			paddingLeft="10" paddingTop="10">
 			<controls:TextEditor 
 				id="textArea"
+				
 				height="100%" text="same Text of code" width="100%"
 				keyDown="textAreaDataChangeHandler( event )"/>
-			<mx:HBox paddingBottom="5">
+			<mx:HBox 
+				paddingBottom="5">
 				<mx:Button 
 					id="btSave"
+					
 					label="Save"
+					
 					click="{save()}"/>
-				<mx:Button label="Revert"
+				<mx:Button 
+					label="Revert"
+					
 					click=" revert(); "/>
 			</mx:HBox>
 		</mx:VBox>
-		<mx:VBox height="{textArea.height + 25}" horizontalScrollPolicy="off" minWidth="250"
+		<mx:VBox 
+			height="{textArea.height + 25}" horizontalScrollPolicy="off" minWidth="250"
 			verticalScrollPolicy="auto" width="250"
+			
 			paddingLeft="3" paddingRight="10" paddingTop="10" verticalGap="10">
-			<mx:Panel width="100%"
+			<mx:Panel 
+				width="100%"
+				
 				color="#FFFFFF"
 				title="PAGES">
 				<mx:ComboBox 
 					id="changeContainer"
+					
 					dataProvider="{arrAppl}" minWidth="200" width="100%"
+					
 					color="#000000"
+					
 					change="{changeContainerHandler(event.target)}"
 					itemRenderer="vdom.components.eventEditor.PanelItemRender" rowCount="20"/>
 			</mx:Panel>
 			<containers:ContainersBranch 
 				id="containersBranch"
+				
 				height="150" width="100%"
+				
 				paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
 				title="Containers"/>
 			<containers:ServerScripts 
 				id="serverScripts"
+				
 				width="100%"
+				
 				paddingBottom="0" paddingLeft="5" paddingRight="0" paddingTop="0"
-				dataChanged="{setScript()}" title="serverScripts"/>
+				dataChanged="setScript()" title="serverScripts"/>
 			<mx:HBox>
-				<mx:Button label="Add Script"
-					click="{addNewScript()}"/>
-				<mx:Button label="Delete Script"
-					click="{deleteScript()}"/>
+				<mx:Button 
+					label="Add Script"
+					
+					click="addNewScript()"/>
+				<mx:Button 
+					label="Delete Script"
+					
+					click="deleteScript()"/>
 			</mx:HBox>
 		</mx:VBox>
 	</mx:HDividedBox>
