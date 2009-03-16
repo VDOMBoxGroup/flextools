@@ -5,9 +5,9 @@ package vdom.managers
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.system.System;
-
+	
 	import mx.rpc.events.FaultEvent;
-
+	
 	import vdom.connection.Proxy;
 	import vdom.connection.SOAP;
 	import vdom.events.DataManagerErrorEvent;
@@ -514,7 +514,25 @@ package vdom.managers
 		{
 			soap.search( applicationId, searchString );
 		}
-
+		
+		public function getLibraries( applicationId : String = "") : void 
+		{
+			if( applicationId == null || applicationId == "" )
+				applicationId = currentApplicationId;
+			
+			if( applicationId )
+				soap.get_libraries( applicationId );
+		}
+		
+		public function setLibrary( name : String, data : *, applicationId : String = "" ) : void 
+		{
+			if( applicationId == null || applicationId == "" )
+				applicationId = currentApplicationId;
+			
+			if( applicationId )
+				soap.set_library( applicationId, name, data );
+		}
+		
 		public function modifyResource( resourceId : String, operation : String,
 										attributeName : String, attributes : XML ) : void
 		{
@@ -938,7 +956,21 @@ package vdom.managers
 			dme.result = event.result;
 			dispatchEvent( dme );
 		}
-
+		
+		private function soap_getLibrariesHandler( event : SOAPEvent ) : void 
+		{
+			var dme : DataManagerEvent = new DataManagerEvent( DataManagerEvent.GET_LIBRARIES_COMPLETE );
+			dme.result = event.result.Libraries[0];
+			dispatchEvent( dme );
+		}
+		
+		private function soap_setLibraryHandler( event : SOAPEvent ) : void 
+		{
+			var dme : DataManagerEvent = new DataManagerEvent( DataManagerEvent.SET_LIBRARY_COMPLETE );
+//			dme.result = event.result.Libraries[0];
+			dispatchEvent( dme );
+		}
+		
 		private function proxy_sendHandler( event : ProxyEvent ) : void
 		{
 			var objectId : String = event.objectId;

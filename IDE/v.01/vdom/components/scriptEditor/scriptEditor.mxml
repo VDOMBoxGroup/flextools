@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:containers="vdom.components.scriptEditor.containers.*"
+	xmlns:containers1="vdom.containers.*" xmlns:controls="vdom.controls.*" xmlns:eventEditor="vdom.components.eventEditor.*"
+	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*"
 	
 	backgroundColor="#3d3d3d"
 	
-	hide="hideHandler()" show="showHandler()"
-	xmlns:containers1="vdom.containers.*" xmlns:controls="vdom.controls.*" xmlns:eventEditor="vdom.components.eventEditor.*"
-	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*">
+	hide="hideHandler()" show="showHandler()">
 	<mx:Script>
 		<![CDATA[
+			import mx.events.ListEvent;
 			import mx.collections.SortField;
 			import mx.collections.Sort;
 			import mx.collections.ArrayCollection;
@@ -34,8 +35,22 @@
 
 			private var changeWatcher : ChangeWatcher;
 
+			private var libraries : XMLList;
+
 			private var _changed : Boolean = false;
 
+			private var currentEditing : String;
+			
+			private function addNewLibrary() : void
+			{
+				
+			}
+			
+			private function deleteLibrary() : void
+			{
+				
+			}
+			
 			private function showHandler() : void
 			{
 //	 			changeWatcher = BindingUtils.bindProperty(trContainer, 'dataProvider', dataManager, 'listPages')
@@ -50,8 +65,10 @@
 
 				dataManager.addEventListener( DataManagerEvent.PAGE_CHANGED, pageChangeHandler );
 				dataManager.addEventListener( DataManagerEvent.OBJECT_CHANGED, objectChangeHandler );
+				dataManager.addEventListener( DataManagerEvent.GET_LIBRARIES_COMPLETE,
+											  glch );
 
-
+				dataManager.getLibraries();
 
 				arrAppl.removeAll();
 				arrAppl.addItem( { label : "Session Actions", ID : "session", iconResID : "", typeID : "" } );
@@ -100,6 +117,12 @@
 				changeContainer.selectedIndex = searchIndex();
 				serverScripts.dataProvider = dataManager.currentPageId;
 				containersBranch.currentPageID = dataManager.currentPageId;
+			}
+
+			private function glch( event : DataManagerEvent ) : void
+			{
+				libraries = event.result.*;
+				librariesList.dataProvider = libraries;
 			}
 
 			private function hideHandler() : void
@@ -199,16 +222,38 @@
 				btSave.setStyle( "color", "0x000000" );
 				btSave.setStyle( "borderColor", "0xAAB3B3" );
 
+				librariesList.selectedIndex = -1;
+
 				if ( serverScripts.dataEnabled && serverScripts.script != 'null' )
 				{
 					textArea.enabled = true;
 					textArea.text = serverScripts.script;
+					currentEditing = "script";
 				}
 				else
 				{
 					textArea.enabled = false;
+					currentEditing = "none";
 				}
+			}
 
+			private function setLibrary( event : ListEvent ) : void
+			{
+				btSave.setStyle( "color", "0x000000" );
+				btSave.setStyle( "borderColor", "0xAAB3B3" );
+
+				if ( event.itemRenderer && event.itemRenderer.data )
+				{
+					var data : XML = event.itemRenderer.data as XML;
+					textArea.enabled = true;
+					textArea.text = data.toString();
+					currentEditing = "library";
+				}
+				else
+				{
+					textArea.enabled = false;
+					currentEditing = "none";
+				}
 			}
 
 			private function save() : void
@@ -216,10 +261,17 @@
 				if ( !textArea.enabled )
 					return;
 
+				if ( currentEditing == "script" )
+					serverScripts.script = textArea.text;
+				else if ( currentEditing == "library" )
+				{
+					var data : XML = librariesList.selectedItem as XML;
+					var name : String = data.@Name;
+					dataManager.setLibrary( name, textArea.text );
+				}
+
 				btSave.setStyle( "color", "0x000000" );
 				btSave.setStyle( "borderColor", "0xAAB3B3" );
-
-				serverScripts.script = textArea.text;
 
 				_changed = false;
 			}
@@ -342,7 +394,7 @@
 				
 				paddingBottom="0" paddingLeft="5" paddingRight="0" paddingTop="0"
 				dataChanged="setScript()" title="serverScripts"/>
-			<mx:HBox>
+			<mx:HBox width="100%">
 				<mx:Button 
 					label="Add Script"
 					
@@ -351,6 +403,25 @@
 					label="Delete Script"
 					
 					click="deleteScript()"/>
+			</mx:HBox>
+			<containers1:ClosablePanel 
+				width="100%" title="Libraries">
+				<mx:List 
+					id="librariesList"
+					
+					labelField="@Name" width="100%"
+					
+					change="setLibrary( event )"/>
+			</containers1:ClosablePanel>
+			<mx:HBox width="100%">
+				<mx:Button 
+					label="Add Library"
+					
+					click="addNewLibrary()"/>
+				<mx:Button 
+					label="Delete Library"
+					
+					click="deleteLibrary()"/>
 			</mx:HBox>
 		</mx:VBox>
 	</mx:HDividedBox>

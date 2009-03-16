@@ -30,7 +30,10 @@ private var registeredHandlers:Array = [
 	
 	{methodName:"search", handlerName:"soap_searchHandler"},
 	
-	{methodName:"modify_resource", handlerName:"soap_modifyResourceHandler"}
+	{methodName:"modify_resource", handlerName:"soap_modifyResourceHandler"},
+	
+	{methodName:"get_libraries", handlerName:"soap_getLibrariesHandler"},
+	{methodName:"set_library ", handlerName:"soap_setLibraryHandler"}
 ]
 
 private function registerEvent(flag:Boolean):void
