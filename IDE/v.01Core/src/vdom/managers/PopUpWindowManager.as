@@ -108,7 +108,7 @@ package vdom.managers
 
 			window.visible = false;
 			window.title = title;
-
+			
 			window.addChild( puwd.content );
 
 			window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
@@ -163,9 +163,13 @@ package vdom.managers
 			var containerHeight : Number = Math.max( content.height, content.getExplicitOrMeasuredHeight() );
 
 			var vm : EdgeMetrics = window.viewMetricsAndPadding;
-
+			
+			window.minWidth = content.minWidth + vm.left + vm.right;
+			window.minHeight = content.minHeight + vm.top + vm.bottom;
+			
 			window.width = containerWidth + vm.left + vm.right;
 			window.height = containerHeight + vm.top + vm.bottom;
+			
 		}
 
 		private function windowIsLocked( nativeWindow : NativeWindow ) : Boolean

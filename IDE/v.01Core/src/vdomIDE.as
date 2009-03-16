@@ -361,6 +361,8 @@ private function authenticationManager_loginComleteHandler( event : Authenticati
 	authenticationManager.removeEventListener( AuthenticationEvent.LOGIN_COMPLETE,
 											   authenticationManager_loginComleteHandler );
 	authenticationManager.addEventListener( AuthenticationEvent.LOGIN_ERROR, authenticationManager_loginErrorHandler );
+	
+	openMainWindow();
 }
 
 private function authenticationManager_loginErrorHandler( event : Event ) : void
