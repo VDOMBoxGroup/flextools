@@ -126,6 +126,9 @@ public class CodeParser
 				
 				fragment.retValue = code;
 				fragment.lastExecutedFragment = fragment;
+				
+				contexts[0][fragment.retVarName] = fragment.retValue;
+				fragment.executed = true;
 				return;
 				
 				break;
@@ -269,7 +272,7 @@ public class CodeParser
 	{
 		if(!block.validated)
 		{
-			Parser.validateFragmentedBlock(block);			
+			Parser.validateFragmentedBlock(block);
 		}
 
 		if(block.errFragment)
@@ -287,7 +290,7 @@ public class CodeParser
 			if(curFragment.executed)			
 				block.current++;
 				
-			if(stepReturn)
+			if(stepReturn && block.current<block.fragments.length)
 				return;
 		}
 		

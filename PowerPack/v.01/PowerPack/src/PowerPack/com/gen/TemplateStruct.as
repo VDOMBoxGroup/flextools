@@ -245,7 +245,7 @@ public class TemplateStruct extends EventDispatcher
 				arr.push( { error:new ValidationError(null, 9006), 
 					graph:curGraph, node:null, arrow:null } );
 			
-			if(!CodeParser.ParseSubgraphNode(curGraph.name).error)
+			if(CodeParser.ParseSubgraphNode(curGraph.name).error)
 				arr.push( { error:new ValidationError(null, 9100), 
 					graph:curGraph, node:null, arrow:null } );
 			
