@@ -18,6 +18,7 @@ import mx.containers.GridRow;
 import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.ComboBox;
+import mx.controls.Label;
 import mx.controls.Spacer;
 import mx.controls.Text;
 import mx.controls.TextInput;
@@ -68,7 +69,8 @@ public class AttributesPanel extends ClosablePanel {
 	
 	private var _isValid : Boolean;
 	private var _objectChanged : Boolean;
-	private var _objectName : String;
+	private var objectID : String;
+	private var objectName : String;
 	private var attributesVisible : Boolean;
 	
 	private var _acceptLabel : String;
@@ -129,8 +131,8 @@ public class AttributesPanel extends ClosablePanel {
 			invalidElements = {};
 			invalidElements["_currentCount"] = 0;
 			
-			
-			_objectName = objectDescription.@Name;
+			objectID = objectDescription.@ID;
+			objectName = objectDescription.@Name;
 			
 			if( objectDescription.Objectlist )
 				_objectList = objectDescription.Objectlist.*;
@@ -407,12 +409,24 @@ public class AttributesPanel extends ClosablePanel {
 		var valueType : String;
 		var color : String = "";
 		
+		valueContainer = new Label();
+		valueContainer.text = objectID;
+		valueType = "text";
+		fieldsArray["ID"] = [ valueContainer, valueType ];
+		color = getColorByGroup( 1 );
+		
+		insertAttribute(
+			"ID",
+			valueContainer,
+			color
+		);
+		
 		valueContainer = new TextInput();
-		valueContainer.text = _objectName;
+		valueContainer.text = objectName;
 		valueType = "text";
 		fieldsArray["Name"] = [ valueContainer, valueType ];
 		
-		color = getColorByGroup( 1 );
+		color = getColorByGroup( 1 );			
 		
 		insertAttribute(
 			resourceManager.getString( "Edit","attributes_name" ),
