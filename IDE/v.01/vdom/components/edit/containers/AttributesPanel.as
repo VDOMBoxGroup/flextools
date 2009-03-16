@@ -409,7 +409,10 @@ public class AttributesPanel extends ClosablePanel {
 		var valueType : String;
 		var color : String = "";
 		
-		valueContainer = new Label();
+		valueContainer = new TextInput();
+		TextInput( valueContainer ).editable = false;
+		valueContainer.setStyle( "borderStyle", "none" );
+		valueContainer.setStyle( "backgroundAlpha", .0 );
 		valueContainer.text = objectID;
 		valueType = "text";
 		fieldsArray["ID"] = [ valueContainer, valueType ];
