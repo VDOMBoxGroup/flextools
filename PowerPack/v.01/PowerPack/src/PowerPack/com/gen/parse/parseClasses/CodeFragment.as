@@ -61,9 +61,9 @@ public class CodeFragment extends LexemStruct
     //----------------------------------	
 	public function get isTopLevel():Boolean
 	{
-		if(!parent && !(parent is CodeFragment))
+		if(!parent || !(parent is CodeFragment))
 			return true;
-		return false; 	
+		return false;
 	}		
 
     //----------------------------------
