@@ -230,7 +230,7 @@ public class Parser
     				case ']':
    						type = sourceText.charAt(fix)==')'?'0':sourceText.charAt(fix);   						   						
    						
-   						var brace:String = "({[".charAt(")}]".search(sourceText.charAt(fix)));
+   						var brace:String = "({[".charAt(")}]".indexOf(sourceText.charAt(fix)));
    						
    						if(braceStack.length>0 && braceStack[braceStack.length-1]==brace)
    							braceStack.pop(); 
@@ -262,7 +262,7 @@ public class Parser
 			    		
 			    		if(braceStack.length>0)
 			    		{
-			    			brace = ")}]".charAt("({[".search(braceStack[braceStack.length-1]));
+			    			brace = ")}]".charAt("({[".indexOf(braceStack[braceStack.length-1]));
 			   											    			
 			    			err = new CompilerError(null, 9005, ["'"+brace+"'"]);
 			    		}	   						
@@ -380,7 +380,7 @@ public class Parser
 		
 		if(braceStack.length>0 && lexems.length>0 && !lexems[lexems.length-1].error)
 		{
-			brace = ")}]".charAt("({[".search(braceStack[braceStack.length-1]));
+			brace = ")}]".charAt("({[".indexOf(braceStack[braceStack.length-1]));
 			
    			lexems.push(new LexemStruct('', 'u', sourceText.length, new CompilerError(null, 9005, ["'"+brace+"'"])));				    			
 		}
@@ -608,12 +608,12 @@ public class Parser
 				
 			while(index<block.lexems.length && block.lexems[index].type!=_terminal)
 			{
-				if(((codeType=='code' || _fragment.parent is CodeFragment) && "[{9".search(block.lexems[index].type)>=0) ||
-					(codeType=='text' && "{".search(block.lexems[index].type)>=0))
+				if(((codeType=='code' || _fragment.parent is CodeFragment) && "[{9".indexOf(block.lexems[index].type)>=0) ||
+					(codeType=='text' && "{".indexOf(block.lexems[index].type)>=0))
 				{
 					var _subfragment:CodeFragment = recursiveFragmentLexems(
-							"]}0".charAt("[{9".search(block.lexems[index].type)), 
-							"AWE".charAt("[{9".search(block.lexems[index].type)),
+							"]}0".charAt("[{9".indexOf(block.lexems[index].type)), 
+							"AWE".charAt("[{9".indexOf(block.lexems[index].type)),
 							_fragment);
 					_fragment.fragments.push(_subfragment);
 				}
