@@ -533,6 +533,15 @@ package vdom.managers
 				soap.set_library( applicationId, name, data );
 		}
 		
+		public function removeLibrary( name : String, applicationId : String = "" ) : void 
+		{
+			if( applicationId == null || applicationId == "" )
+				applicationId = currentApplicationId;
+			
+			if( applicationId )
+				soap.remove_library( applicationId, name );
+		}
+		
 		public function modifyResource( resourceId : String, operation : String,
 										attributeName : String, attributes : XML ) : void
 		{
@@ -967,7 +976,14 @@ package vdom.managers
 		private function soap_setLibraryHandler( event : SOAPEvent ) : void 
 		{
 			var dme : DataManagerEvent = new DataManagerEvent( DataManagerEvent.SET_LIBRARY_COMPLETE );
-//			dme.result = event.result.Libraries[0];
+			dme.result = event.result.Library[0];
+			dispatchEvent( dme );
+		}
+		
+		private function soap_removeLibraryHandler( event : SOAPEvent ) : void 
+		{
+			var dme : DataManagerEvent = new DataManagerEvent( DataManagerEvent.REMOVE_LIBRARY_COMPLETE );
+			dme.result = event.result.Library[0];
 			dispatchEvent( dme );
 		}
 		

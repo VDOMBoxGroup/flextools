@@ -30,12 +30,6 @@ package gearsandcogs.text.commands
 	 */
 	public class CommandAlterText implements IUndoableCommand
 	{
-		public var textField:TextField;
-		public var replacedText:String = "";
-		public var text:String = "";
-		public var selection:Array;
-		public var index:uint;
-		
 		public function CommandAlterText(textField:TextField, oldText:String, oldSelection:Array)
 		{
 			this.textField = textField;
@@ -52,6 +46,12 @@ package gearsandcogs.text.commands
 				text = textField.text.substring(selection[0], index);
 			}
 		}
+		
+		public var textField:TextField;
+		public var replacedText:String = "";
+		public var text:String = "";
+		public var selection:Array;
+		public var index:uint;
 		
 		public function execute():void
 		{

@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	Resource Browser component for VDOM Box IDE
-	Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
+	 Resource Browser component for VDOM Box IDE
+	 Developed by Vadim A. Usoltsev, Tomsk, Russia, 2008
 -->
 <mx:TitleWindow 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute"  
-	title="Add Script"
-	creationComplete="{creationComplete()}"
-	showCloseButton="true"
-	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
-	xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
-	width="250"
-	show="showHandler()"
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:resourceBrowser="vdom.controls.resourceBrowser.*"
 	
-	borderAlpha="0.98" cornerRadius="1" 
-	visible="true" shadowDirection="right"
-	borderColor="#636363" titleStyleName="resourceBrowserTitle"
-	borderThicknessLeft="1" borderThicknessRight="1"
+	horizontalScrollPolicy="off" layout="absolute" title="Add Script" verticalScrollPolicy="off"
+	visible="true" width="250"
 	
->
+	borderColor="#636363" cornerRadius="1" shadowDirection="right"
+	
+	creationComplete="creationComplete()" show="showHandler()"
+	borderAlpha="1" borderThicknessLeft="1" borderThicknessRight="1" showCloseButton="true"
+	titleStyleName="resourceBrowserTitle">
 	<mx:Style>
 		.resourceBrowserTitle {
 			color:#FFFFFF;
@@ -43,85 +37,111 @@
 			import mx.managers.PopUpManager;
 			import mx.events.CloseEvent;
 			import flash.utils.ByteArray;
-			
-			private function creationComplete():void 
+
+			private function creationComplete() : void
 			{
-				addEventListener(CloseEvent.CLOSE, closeHandler); 
-				PopUpManager.centerPopUp(this)
-				
-				var regExpValidator:RegExpValidator = new RegExpValidator();
+				addEventListener( CloseEvent.CLOSE, closeHandler );
+				PopUpManager.centerPopUp( this )
+
+				var regExpValidator : RegExpValidator = new RegExpValidator();
 				regExpValidator.source = inputText;
 				regExpValidator.property = 'text';
-				regExpValidator.expression =  "^[a-zA-Z_]{1}[_1-9a-zA-Z]*$";
+				regExpValidator.expression = "^[a-zA-Z_]{1}[_1-9a-zA-Z]*$";
 				regExpValidator.trigger = inputText;
-				regExpValidator.addEventListener(ValidationResultEvent.VALID, validHandler);
-				regExpValidator.addEventListener(ValidationResultEvent.INVALID, validHandler);
-				
+				regExpValidator.addEventListener( ValidationResultEvent.VALID, validHandler );
+				regExpValidator.addEventListener( ValidationResultEvent.INVALID,
+												  validHandler );
+
 				regExpValidator.noMatchError = "PleAse Input Correct NamE";
 				regExpValidator.triggerEvent = Event.CHANGE;
-				
-				
+
+
 			}
-		
-		private function showHandler():void
-		{
-			inputText.setFocus();
-		}
-		
-		private var _data:String = '';
-		private var validData:Boolean = false;
-		private function validHandler(vdEvt:ValidationResultEvent):void
-		{
-			if (vdEvt.type == ValidationResultEvent.VALID)
-	        { 
-		        _data = inputText.text;
-		        validData = true;
-		        
-	        } else if  (vdEvt.type == ValidationResultEvent.INVALID)
-	        {
-	        	validData = false;
-	        }
-	          
-		}
-		 
-		private function cancelPressed():void 
-		{
-			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-		}
-			
-		
-		private function closeHandler(cEvent:CloseEvent):void 
-		{
-			PopUpManager.removePopUp(this);
-		}
-		
-		private function okPressed():void 
-		{
-			if(inputText.text != '' && validData )
-				dispatchEvent(new ScriptEditorEvent(ScriptEditorEvent.SET_NAME,  _data));
-			
-			dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-		}
-		
-		private function myKeyDown(eventObj:KeyboardEvent):void 
-		{   
-            if(eventObj.keyCode == 13)  
-            	 okPressed();
-        }
+
+			private function showHandler() : void
+			{
+				inputText.setFocus();
+			}
+
+			private var _data : String = '';
+			private var validData : Boolean = false;
+
+			private function validHandler( vdEvt : ValidationResultEvent ) : void
+			{
+				if ( vdEvt.type == ValidationResultEvent.VALID )
+				{
+					_data = inputText.text;
+					validData = true;
+
+				}
+				else if ( vdEvt.type == ValidationResultEvent.INVALID )
+				{
+					validData = false;
+				}
+
+			}
+
+			private function cancelPressed() : void
+			{
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+
+
+			private function closeHandler( cEvent : CloseEvent ) : void
+			{
+				PopUpManager.removePopUp( this );
+			}
+
+			private function okPressed() : void
+			{
+				if ( inputText.text != '' && validData )
+					dispatchEvent( new ScriptEditorEvent( ScriptEditorEvent.SET_NAME,
+														  _data ) );
+
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+
+			private function myKeyDown( eventObj : KeyboardEvent ) : void
+			{
+				if ( eventObj.keyCode == 13 )
+					okPressed();
+			}
 		]]>
 	</mx:Script>
-	<mx:VBox width="100%" paddingLeft="10" paddingRight="10" paddingTop="4" 
-		paddingBottom="20"  verticalGap="10" horizontalAlign="center">
-		<mx:Label  fontSize="14" color="#AEAEAE" text="Input Script name:"   fontWeight="bold"/>
-		<mx:TextInput id="inputText"  width="100%" keyDown="{myKeyDown(event)}" x="-4"  themeColor="#E1E1E1"/>
+	<mx:VBox 
+		width="100%"
 		
+		horizontalAlign="center" paddingBottom="20" paddingLeft="10" paddingRight="10"
+		paddingTop="4" verticalGap="10">
+		<mx:Label 
+			id="insertLabel"
+			
+			text="Input Script name:"
+			
+			color="#AEAEAE" fontSize="14" fontWeight="bold"/>
+		<mx:TextInput 
+			id="inputText"
+			
+			width="100%" x="-4"
+			
+			themeColor="#E1E1E1"
+			keyDown="{myKeyDown(event)}"/>
 	</mx:VBox>
-	<mx:ControlBar paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" fontWeight="bold" 
-		color="#FFFFFF" width="100%"  horizontalAlign="right" >
-	    	<mx:HBox right="0" >
-	    		<mx:Button label="Ok" click="okPressed()"/>
-	    		<mx:Button label="{resourceManager.getString('Tree','cancel')}" click="cancelPressed()"/>
-	    	</mx:HBox>
+	<mx:ControlBar 
+		width="100%"
+		
+		color="#FFFFFF" fontWeight="bold" horizontalAlign="right" paddingBottom="5"
+		paddingLeft="5" paddingRight="5" paddingTop="5">
+		<mx:HBox 
+			right="0">
+			<mx:Button 
+				label="Ok"
+				
+				click="okPressed()"/>
+			<mx:Button 
+				label="{resourceManager.getString('Tree','cancel')}"
+				
+				click="cancelPressed()"/>
+		</mx:HBox>
 	</mx:ControlBar>
-	    	
 </mx:TitleWindow>

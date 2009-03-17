@@ -58,6 +58,7 @@ package vdom.events
 
 		public static const GET_LIBRARIES_COMPLETE : String = "getLibrariesComplete";
 		public static const SET_LIBRARY_COMPLETE : String = "setLibraryComplete";
+		public static const REMOVE_LIBRARY_COMPLETE : String = "removeLibraryComplete";
 
 		public static const CLOSE : String = "close";
 
