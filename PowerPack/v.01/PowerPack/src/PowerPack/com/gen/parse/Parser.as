@@ -371,7 +371,7 @@ public class Parser
  				lexems.push(new LexemStruct(sourceText.substring(fix, i+1), type, fix, err));
  				
  				if(lexems.length>1)
- 					LexemStruct(lexems[lexems.length-2]).postSpaces = spaceStack;
+ 					LexemStruct(lexems[lexems.length-2]).tailSpaces = spaceStack;
  				
  				spaceStack = ''; 			
  			} 					
@@ -556,7 +556,7 @@ public class Parser
 			
 			increaseNext = false;
 			
-			if(curFragment.postSpaces)
+			if(curFragment.tailSpaces)
 			{
 				increaseNext = true;
 			}

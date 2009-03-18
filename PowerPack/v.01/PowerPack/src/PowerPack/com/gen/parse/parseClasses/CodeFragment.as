@@ -67,13 +67,13 @@ public class CodeFragment extends LexemStruct
 	}		
 
     //----------------------------------
-    //  postSpaces
+    //  tailSpaces
     //----------------------------------	
-	override public function get postSpaces():String
+	override public function get tailSpaces():String
 	{
 		if(fragments.length>0)
 		{
-			return fragments[fragments.length-1].postSpaces;
+			return fragments[fragments.length-1].tailSpaces;
 		}
 		
 		return '';
@@ -92,22 +92,22 @@ public class CodeFragment extends LexemStruct
 			if(curFragment is CodeFragment)
 			{
 				if(CodeFragment(curFragment).ctype == CT_FUNCTION)
-					_value += CodeFragment(curFragment).retValue + curFragment.postSpaces;
+					_value += CodeFragment(curFragment).retValue + curFragment.tailSpaces;
 				else if(CodeFragment(curFragment).type == 'W')
-					_value += CodeFragment(curFragment).retValue + curFragment.postSpaces;
+					_value += CodeFragment(curFragment).retValue + curFragment.tailSpaces;
 				else
 					_value += CodeFragment(curFragment).evalValue;
 			}			
 			else if(curFragment is LexemStruct)
 			{
 				if(curFragment.type == 'v')			
-					_value += curFragment.value + curFragment.postSpaces;
+					_value += curFragment.value + curFragment.tailSpaces;
 				else
-					_value += curFragment.origValue + curFragment.postSpaces;
+					_value += curFragment.origValue + curFragment.tailSpaces;
 			}
 		}
 		
-		return _value.substr(0, _value.length-postSpaces.length);
+		return _value.substr(0, _value.length-tailSpaces.length);
 	}
 
     //----------------------------------
@@ -120,10 +120,10 @@ public class CodeFragment extends LexemStruct
 		{
 			var curFragment:LexemStruct = fragments[i];
 			_origValue += curFragment.origValue + 
-				(curFragment is CodeFragment ? '' : curFragment.postSpaces);
+				(curFragment is CodeFragment ? '' : curFragment.tailSpaces);
 		}
 		
-		return _origValue.substr(0, _origValue.length-postSpaces.length);
+		return _origValue.substr(0, _origValue.length-tailSpaces.length);
 	}
 
     //----------------------------------
@@ -186,7 +186,7 @@ public class CodeFragment extends LexemStruct
 		{
 			curFragment = fragments[i];
 
-			sum += curFragment.length + (curFragment is CodeFragment ? 0 : curFragment.postSpaces.length);
+			sum += curFragment.length + (curFragment is CodeFragment ? 0 : curFragment.tailSpaces.length);
 		}
 		 
 		return sum;

@@ -20,16 +20,16 @@ public class LexemStruct
     //----------------------------------
     //  postSpaces
     //----------------------------------	
-	private var _postSpaces:String = '';
-	public function get postSpaces():String
+	private var _tailSpaces:String = '';
+	public function get tailSpaces():String
 	{
-		return _postSpaces;
+		return _tailSpaces;
 	}
-	public function set postSpaces(value:String):void
+	public function set tailSpaces(value:String):void
 	{
-		if(_postSpaces!=value)
+		if(_tailSpaces!=value)
 		{
-			_postSpaces = value;
+			_tailSpaces = value;
 		}
 	}
     
