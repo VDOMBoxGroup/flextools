@@ -68,7 +68,7 @@ public class CodeFragment extends LexemStruct
 
     //----------------------------------
     //  tailSpaces
-    //----------------------------------	
+    //----------------------------------
 	override public function get tailSpaces():String
 	{
 		if(fragments.length>0)
@@ -81,7 +81,7 @@ public class CodeFragment extends LexemStruct
 
     //----------------------------------
     //  evalValue
-    //----------------------------------	
+    //----------------------------------
 	public function get evalValue():String
 	{		
 		var _value:String = '';
