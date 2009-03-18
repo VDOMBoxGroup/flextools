@@ -1,104 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas 
+<mx:HDividedBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:containers="vdom.components.scriptEditor.containers.*"
 	xmlns:containers1="vdom.containers.*" xmlns:controls="vdom.controls.*" xmlns:eventEditor="vdom.components.eventEditor.*"
 	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*"
 	
-	backgroundColor="#3d3d3d"
+	height="100%" width="100%"
 	
 	hide="hideHandler()" show="showHandler()">
 	<mx:Script 
 		source="includes/scriptEditor.as"/>
-	<mx:HDividedBox 
+	<mx:VBox 
 		height="100%" width="100%">
-		<mx:VBox 
-			height="100%" width="100%"
+		<mx:Label 
+			id="nameLabel"
 			
-			paddingLeft="10" paddingTop="10">
-			<mx:Label id="nameLabel" width="100%" color="#FFFFFF" />
-			<controls:TextEditor 
-				id="textEditor"
-				
-				height="100%" text="same Text of code" width="100%"
-				keyDown="textEditor_keyDownHandler( event )"/>
-			<mx:HBox 
-				paddingBottom="5">
-				<mx:Button 
-					id="saveButton"
-					
-					label="Save"
-					
-					click="save()"/>
-				<mx:Button 
-					label="Revert"
-					
-					click="revert()"/>
-			</mx:HBox>
-		</mx:VBox>
-		<mx:VBox 
-			height="{textEditor.height + 25}" horizontalScrollPolicy="off" minWidth="250"
-			verticalScrollPolicy="auto" width="250"
+			width="100%"
 			
-			paddingLeft="3" paddingRight="10" paddingTop="10" verticalGap="10">
-			<mx:Panel 
-				title="PAGES" width="100%"
+			color="#FFFFFF"/>
+		<controls:TextEditor 
+			id="textEditor"
+			
+			height="100%" text="same Text of code" width="100%"
+			keyDown="textEditor_keyDownHandler( event )"/>
+		<mx:HBox 
+			paddingBottom="5">
+			<mx:Button 
+				id="saveButton"
 				
-				color="#FFFFFF">
-				<mx:ComboBox 
-					id="pages"
-					
-					dataProvider="{arrAppl}" itemRenderer="vdom.components.eventEditor.PanelItemRender"
-					minWidth="200" rowCount="20" width="100%"
-					
-					color="#000000"
-					
-					change="pages_changeHandler(event.target)"/>
-			</mx:Panel>
-			<containers:ContainersBranch 
-				id="containersBranch"
+				label="Save"
 				
-				height="150" title="Containers" width="100%"
+				cornerRadius="0"
 				
-				paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"/>
-			<containers:ServerScripts 
-				id="serverScripts"
+				click="save()"/>
+			<mx:Button 
+				label="Revert"
 				
-				title="serverScripts" width="100%"
+				cornerRadius="0"
 				
-				paddingBottom="0" paddingLeft="5" paddingRight="0" paddingTop="0"
-				scriptChanged="serverScripts_scriptChangedHandler()"/>
-			<mx:HBox 
-				width="100%">
+				click="revert()"/>
+		</mx:HBox>
+	</mx:VBox>
+	<mx:VDividedBox 
+		id="panels"
+		
+		horizontalScrollPolicy="off" minWidth="250" verticalScrollPolicy="off" width="250"
+		
+		verticalGap="10">
+		<mx:Panel 
+			maxHeight="54" minHeight="54" title="PAGES" width="100%"
+			headerHeight="20"
+			
+			color="#FFFFFF" cornerRadius="0">
+			<mx:ComboBox 
+				id="pages"
+				
+				dataProvider="{arrAppl}" itemRenderer="vdom.components.eventEditor.PanelItemRender"
+				minWidth="200" rowCount="20" width="100%"
+				
+				color="#000000" cornerRadius="0"
+				
+				change="pages_changeHandler(event.target)"/>
+		</mx:Panel>
+		<containers:ContainersBranch 
+			id="containersBranch"
+			
+			height="150" title="Containers" width="100%"
+			
+			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"/>
+		<containers:ServerScripts 
+			id="serverScripts"
+			
+			height="150" title="serverScripts" width="100%"
+			
+			paddingBottom="0" paddingLeft="5" paddingRight="0" paddingTop="0"
+			scriptChanged="serverScripts_scriptChangedHandler()">
+			<mx:ControlBar 
+				horizontalAlign="right">
 				<mx:Button 
 					label="Add Script"
+					
+					cornerRadius="0"
 					
 					click="addScript_clickHandler()"/>
 				<mx:Button 
 					label="Delete Script"
 					
+					cornerRadius="0"
+					
 					click="deleteScript_clickHandler()"/>
-			</mx:HBox>
-			<containers1:ClosablePanel 
-				title="Libraries" width="100%">
-				<mx:List 
-					id="librariesList"
-					
-					labelField="@Name" width="100%"
-					
-					change="librariesList_changeHandler( event )"
-					valueCommit="librariesList_valueCommitHandler( event )"/>
-			</containers1:ClosablePanel>
-			<mx:HBox 
-				width="100%">
+			</mx:ControlBar>
+		</containers:ServerScripts>
+		<containers1:ClosablePanel 
+			height="150" title="Libraries" width="100%">
+			<mx:List 
+				id="librariesList"
+				
+				labelField="@Name" width="100%"
+				
+				borderStyle="none"
+				
+				change="librariesList_changeHandler( event )" valueCommit="librariesList_valueCommitHandler( event )"/>
+			<mx:ControlBar 
+				horizontalAlign="right">
 				<mx:Button 
 					label="Add Library"
+					
+					cornerRadius="0"
 					
 					click="addLibrary_clickHandler()"/>
 				<mx:Button 
 					label="Delete Library"
 					
+					cornerRadius="0"
+					
 					click="deleteLibrary_clickHandler()"/>
-			</mx:HBox>
-		</mx:VBox>
-	</mx:HDividedBox>
-</mx:Canvas>
+			</mx:ControlBar>
+		</containers1:ClosablePanel>
+	</mx:VDividedBox>
+</mx:HDividedBox>

@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox 
-	xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#EBEBEB" horizontalGap="3"
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="vdom.controls.*"
+	
+	backgroundColor="#EBEBEB" horizontalGap="3"
+	
 	creationComplete="initializeHandler()"
-	xmlns:text="gearsandcogs.text.*" xmlns:controls="vdom.controls.*">
-	<mx:Script source="includes/textEditor.as"/>
+	xmlns:text="gearsandcogs.text.*">
+	<mx:Script 
+		source="includes/textEditor.as"/>
 	<mx:TextArea 
 		id="lineNumbers"
+		
 		height="{ codeEditor.height - 16 }" horizontalScrollPolicy="off" selectable="false"
 		text="1" verticalScrollPolicy="off" width="30"
+		
 		borderStyle="none" focusAlpha="0" textAlign="right"
 		wordWrap="false"/>
-	<controls:TabbedTextArea
+	<controls:TabbedTextArea 
 		id="codeEditor"
+		
 		height="100%" horizontalScrollPolicy="on" verticalScrollPolicy="on" width="100%"
-		text="{ _text }"
+		
 		borderStyle="none" focusAlpha="0"
 		allowTabKey="true" wordWrap="false"/>
-	<text:UndoTextFields id="undoTextFields" target="{ codeEditor }" />
+	<text:UndoTextFields 
+		id="undoTextFields"
+		target="{ codeEditor }"/>
 </mx:HBox>

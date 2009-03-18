@@ -1,10 +1,12 @@
 import flash.events.Event;
 import flash.events.InvokeEvent;
+import flash.geom.Rectangle;
 
 import mx.controls.Alert;
 import mx.core.Application;
 import mx.core.Singleton;
 import mx.core.UIComponent;
+import mx.core.Window;
 import mx.events.FlexEvent;
 import mx.events.IndexChangedEvent;
 import mx.managers.PopUpManager;
@@ -94,6 +96,7 @@ private function switchToLogin() : void
 			moduleTabNavigator.selectedChild.dispatchEvent( new FlexEvent( FlexEvent.HIDE ));
 		
 		viewstack.selectedChild = loginForm;
+		callLater( showLoginFormHandler );
 	}
 }
 
@@ -210,27 +213,26 @@ private function moduleChangedHandler( event : IndexChangedEvent ) : void
 private function showLoginFormHandler() : void
 {	
 	nativeWindow.restore();
-	Application.application.showStatusBar = false;
-	Application.application.showGripper = false;
-	Application.application.minWidth = 800;
-	Application.application.minHeight = 600;
-	Application.application.width = 800;
-	Application.application.height = 600;
-	nativeWindow.width = 800;
-	nativeWindow.height = 600;
+	showStatusBar = false;
+	showGripper = false;
+	
+	minWidth = 800;
+	minHeight = 600;
+	
+	validateNow();
+
 	var sx : Number = ( Capabilities.screenResolutionX - nativeWindow.width ) / 2;
 	var sy : Number = ( Capabilities.screenResolutionY - nativeWindow.height ) / 2;
 	
-	nativeWindow.x = sx;
-	nativeWindow.y = sy;
+	bounds = new Rectangle( sx, sy, 800, 600 );
 }
 
 private function showMainHandler() : void
 {	
-	Application.application.showStatusBar = true;
-	Application.application.showGripper = true;
-	Application.application.minWidth = 1000;
-	Application.application.minHeight = 800;
+	showStatusBar = true;
+	showGripper = true;
+	minWidth = 1000;
+	minHeight = 800;
 	
 	var newWidth : Number = nativeWindow.width;
 	

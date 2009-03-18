@@ -1,6 +1,9 @@
 import mx.collections.ArrayCollection;
+import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
+import mx.collections.XMLListCollection;
+import mx.core.EdgeMetrics;
 import mx.events.FlexEvent;
 import mx.events.ListEvent;
 import mx.managers.PopUpManager;
@@ -22,7 +25,7 @@ private var selectedApplication : Object;
 private var curContainerID : String;
 private var curContainerTypeID : String;
 
-private var libraries : XMLList;
+private var libraries : XMLListCollection;
 
 private var scriptChanged : Boolean = false;
 private var librariesChanged : Boolean = false;
@@ -38,7 +41,15 @@ override protected function commitProperties() : void
 	{
 		librariesChanged = false;
 		librariesList.dataProvider = libraries;
+		librariesList.validateNow();
 	}
+}
+
+override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+{
+	super.updateDisplayList( unscaledWidth, unscaledHeight );
+	var vm : EdgeMetrics = viewMetricsAndPadding;
+	panels.height = unscaledHeight - vm.top - vm.bottom - 5; //FIXME убрать числовое значениеж.
 }
 
 private function createScript( name : String ) : void
@@ -69,7 +80,6 @@ private function createScript( name : String ) : void
 
 	serverScripts.addScript = dataXML;
 	currentEditing = "script";
-	textEditor.setFocus();
 	save();
 }
 
@@ -84,7 +94,7 @@ private function editLibrary() : void
 	saveButton.setStyle( "borderColor", "0xAAB3B3" );
 
 	var item : XML = librariesList.selectedItem as XML;
-	
+
 	if ( item && currentEditing == "library" && currentLibraryName == item.@Name )
 		return;
 
@@ -131,6 +141,23 @@ private function save() : void
 	{
 		var data : XML = librariesList.selectedItem as XML;
 		var name : String = data.@Name;
+		var text : String = textEditor.text;
+
+		var cursor : IViewCursor = libraries.createCursor();
+
+		var isFind : Boolean = cursor.findFirst( { "@Name" : name } );
+
+		if ( isFind )
+		{
+			try
+			{
+				XML( cursor.current ).*[ 0 ] = text;
+			}
+			catch ( error : Error )
+			{
+			}
+		}
+
 		dataManager.setLibrary( name, textEditor.text );
 	}
 
@@ -327,28 +354,46 @@ private function dataManager_objectChangedHandler( dmEvt : DataManagerEvent ) : 
 
 private function dataManager_getLibrariesCompleteHandler( event : DataManagerEvent ) : void
 {
-	libraries = event.result.*;
+	libraries = new XMLListCollection( event.result.* );
+
+	var sort : Sort = new Sort();
+	sort.fields = [ new SortField( "@Name" ) ];
+
+	libraries.sort = sort;
+	libraries.refresh();
+
 	librariesChanged = true;
 	invalidateProperties();
 }
 
 private function dataManager_setLibraryCompleteHandler( event : DataManagerEvent ) : void
 {
-	libraries += event.result as XML;
-	librariesChanged = true;
-	invalidateProperties();
+	var library : XML = event.result as XML;
+
+	var cursor : IViewCursor = libraries.createCursor();
+
+	var isFind : Boolean = cursor.findFirst( { "@Name" : library.@Name } );
+
+	if ( !isFind )
+		libraries.addItem( library );
 }
 
 private function dataManager_removeLibraryCompleteHandler( event : DataManagerEvent ) : void
 {
 	var name : String = event.result.@Name;
 
-	for ( var i : int = 0; i < libraries.length(); i++ )
-	{
-		if ( libraries[ i ].@Name == name )
-			delete libraries[ i ];
-	}
+	var cursor : IViewCursor = libraries.createCursor();
 
-	librariesChanged = true;
-	invalidateProperties();
+	var isFind : Boolean = cursor.findFirst( { "@Name" : name } );
+
+	if ( isFind )
+	{
+		try
+		{
+			libraries.removeItemAt( libraries.getItemIndex( cursor.current ) );
+		}
+		catch ( error : Error )
+		{
+		}
+	}
 }

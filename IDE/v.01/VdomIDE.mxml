@@ -39,7 +39,6 @@
 	<mx:ViewStack id="viewstack" width="100%" height="100%">
 	
 		<loginForm:LoginForm id="loginForm" 
-			show="showLoginFormHandler();" 
 			submitBegin="submitBeginHandler( event )"/>
 	
 		<mx:Canvas id="main"  width="100%" height="100%" show="showMainHandler();">

@@ -10,19 +10,30 @@ use namespace mx_internal;
 private var codeTextField : UITextField;
 private var numbersTextField : UITextField;
 
-[Bindable]
+private var textChanged : Boolean = false;
+
 private var _text : String;
 
 public function get text() : String
 {
-	codeTextField.dispatchEvent( new Event( Event.CHANGE ) );
 	return codeEditor.text;
 }
 
 public function set text( value : String ) : void
 {
 	_text = value;
+	textChanged = true;
 	undoTextFields.clearHistory();
+	validateNow();
+}
+
+override protected function commitProperties() : void
+{
+	if( textChanged )
+	{
+		textChanged = false;
+		codeEditor.text = _text;
+	}
 }
 
 private function registerEvent( flag : Boolean ) : void 

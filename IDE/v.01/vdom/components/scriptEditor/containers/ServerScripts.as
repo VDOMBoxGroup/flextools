@@ -43,7 +43,7 @@ package vdom.components.scriptEditor.containers
 
 		private var masResourceID : Array = new Array();
 
-		private var tree : List;
+		public var tree : List;
 		private var curContainerID : String;
 
 		private var dataXML : XMLListCollection;
