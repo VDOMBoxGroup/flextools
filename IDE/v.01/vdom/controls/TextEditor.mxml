@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#EBEBEB" horizontalGap="3"
 	creationComplete="initializeHandler()"
 	xmlns:text="gearsandcogs.text.*" xmlns:controls="vdom.controls.*">
-	<mx:Script source="textEditor.as"/>
+	<mx:Script source="includes/textEditor.as"/>
 	<mx:TextArea 
 		id="lineNumbers"
 		height="{ codeEditor.height - 16 }" horizontalScrollPolicy="off" selectable="false"

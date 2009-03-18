@@ -68,6 +68,9 @@ private function createScript( name : String ) : void
 	dataXML.@State = "true";
 
 	serverScripts.addScript = dataXML;
+	currentEditing = "script";
+	textEditor.setFocus();
+	save();
 }
 
 private function createLibrary( name : String ) : void

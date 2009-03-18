@@ -94,10 +94,10 @@ package vdom.components.scriptEditor.containers
 			var ID : String = tree.selectedItem.@ID;
 
 			if ( ID == "" )
-				return "null";
+				return null;
 
 			if ( !xmlToServer.Action[ 0 ] )
-				return "null";
+				return null;
 
 			return xmlToServer.Action.( @ID == ID )[ 0 ].toString();
 		}
