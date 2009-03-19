@@ -152,7 +152,15 @@ package vdom.managers
 			if ( nativeWindow != null )
 				closeWindow( nativeWindow );
 		}
-
+		
+		public function removeAllPopUp() : void
+		{
+			while ( popUpInfo.length > 0 )
+			{
+				closeWindow( PopUpWindowData( popUpInfo[ 0 ] ).nativeWindow );
+			}
+		}
+		
 		private function fitToContent( window : Window, content : UIComponent ) : void
 		{
 			var oldWidth : Number = window.width;

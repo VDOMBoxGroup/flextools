@@ -18,7 +18,17 @@ private function logoutHandler() : void
 {
 
 }
-private function aaa( event : Event ) : void
+private function addHandler( event : Event ) : void
 {
-	contentStack.selectedIndex = 1;
+//	contentStack.selectedIndex = 1;
+}
+
+private function creationCompleteHandler() : void 
+{
+	var dummy : * = ""; // FIXME remove dummy
+	testID.dataProvider = [
+		{label : "one"},
+		{label : "two"},
+		{label : "tree"}
+	]
 }

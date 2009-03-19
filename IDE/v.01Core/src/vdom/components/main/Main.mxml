@@ -2,12 +2,10 @@
 <mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:containers="vdom.containers.*"
 	
-	creationPolicy="all"
+	creationPolicy="all" height="100%" minHeight="800" minWidth="1000" width="100%"
 	
-	height="100%" minHeight="800" minWidth="1000" width="100%"
-	
-	show="showMainHandler()"
-	add="aaa( event )"
+	add="addHandler( event )" show="showMainHandler()"
+	creationComplete="creationCompleteHandler()"
 	xmlns:mainClasses="vdom.components.main.mainClasses.*" xmlns:ns1="vdom.*">
 	<mx:Script 
 		source="includes/main.as"/>
@@ -33,12 +31,17 @@
 			
 			color="#B4B4B4" fontWeight="bold"/>
 	</mx:HBox>
+	<mx:TabBar 
+		id="testID"
+		
+		width="100%"
+		top="50"/>
 	<mx:ViewStack 
 		id="contentStack"
 		
 		backgroundColor="#FFFFFF" borderColor="#000000" borderStyle="none" bottom="0"
 		left="0" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
-		right="0" top="50">
+		right="0" top="80">
 		<mx:Canvas 
 			styleName="vdomBackground"
 			
@@ -46,20 +49,19 @@
 			<ns1:MyLoader 
 				horizontalCenter="0" verticalCenter="0"/>
 		</mx:Canvas>
-		<mx:Canvas>
-			<mx:TabBar id="testID" width="100%"/>
-			<containers:MainTabNavigator 
-				id="moduleTabNavigator"
+		<mx:Canvas 
+			backgroundColor="#949494">
+			<mx:Label 
+				text="Application Managment"
 				
-				borderStyle="none" bottom="5" left="5" right="5" top="5"
-				tabHeight="25" tabPaddingLeft="80">
-				<!--<modules:ApplicationManagment id="applicationManagmentModule"
-					 label="{resourceManager.getString('Application','main_title')}"/>
-
-					 <modules:Editor id="editorModule"
-					 label="{resourceManager.getString('Application','editor_title')}"
-					 width="100%" height="100%"/>-->
-			</containers:MainTabNavigator>
+				color="#FFFFFF" horizontalCenter="0" verticalCenter="0"/>
+		</mx:Canvas>
+		<mx:Canvas 
+			backgroundColor="#949494">
+			<mx:Label 
+				text="Module Managment"
+				
+				color="#FFFFFF" horizontalCenter="0" verticalCenter="0"/>
 		</mx:Canvas>
 	</mx:ViewStack>
 	<mx:Image 
