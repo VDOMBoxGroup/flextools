@@ -23,7 +23,10 @@ public function set text( value : String ) : void
 {
 	_text = value;
 	textChanged = true;
+	if( codeEditor )
+		codeEditor.text = _text; //FIXME сделать наконец нормально присваивание
 	undoTextFields.clearHistory();
+	
 	validateNow();
 }
 

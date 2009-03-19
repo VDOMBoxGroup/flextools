@@ -92,7 +92,7 @@ private function editLibrary() : void
 {
 	saveButton.setStyle( "color", "0x000000" );
 	saveButton.setStyle( "borderColor", "0xAAB3B3" );
-
+	
 	var item : XML = librariesList.selectedItem as XML;
 
 	if ( item && currentEditing == "library" && currentLibraryName == item.@Name )
@@ -100,6 +100,8 @@ private function editLibrary() : void
 
 	if ( item )
 	{
+		serverScripts.tree.selectedIndex = -1;
+		
 		textEditor.enabled = true;
 		textEditor.text = item.toString();
 		currentEditing = "library";
@@ -108,9 +110,12 @@ private function editLibrary() : void
 	}
 	else
 	{
-		textEditor.enabled = false;
-		currentEditing = "none";
-		nameLabel.text = currentLibraryName = "";
+		if( currentEditing == "library" )
+		{
+			textEditor.enabled = false;
+			currentEditing = "none";
+			nameLabel.text = currentLibraryName = "";
+		}
 	}
 }
 
@@ -171,9 +176,12 @@ private function revert() : void
 {
 	saveButton.setStyle( "color", "0x000000" );
 	saveButton.setStyle( "borderColor", "0xAAB3B3" );
-
-	textEditor.text = serverScripts.script;
-
+	
+	if( currentEditing == "script" )
+		textEditor.text = serverScripts.script;
+	else if( currentEditing == "library" )
+		textEditor.text = librariesList.selectedItem.toString();
+		
 	scriptChanged = false;
 }
 
@@ -266,10 +274,10 @@ private function serverScripts_scriptChangedHandler() : void
 	saveButton.setStyle( "color", "0x000000" );
 	saveButton.setStyle( "borderColor", "0xAAB3B3" );
 
-	librariesList.selectedIndex = -1;
-
-	if ( serverScripts.dataEnabled && serverScripts.script != "null" )
+	if ( serverScripts.dataEnabled && serverScripts.script != null )
 	{
+		librariesList.selectedIndex = -1;
+		
 		textEditor.enabled = true;
 		textEditor.text = serverScripts.script;
 		currentEditing = "script";
@@ -277,9 +285,12 @@ private function serverScripts_scriptChangedHandler() : void
 	}
 	else
 	{
-		textEditor.enabled = false;
-		currentEditing = "none";
-		nameLabel.text = "";
+		if( currentEditing == "script" )
+		{
+			textEditor.enabled = false;
+			currentEditing = "none";
+			nameLabel.text = "";
+		}
 	}
 }
 
@@ -321,6 +332,7 @@ private function addLibrary_clickHandler() : void
 private function deleteScript_clickHandler() : void
 {
 	serverScripts.deleteScript();
+	save();
 }
 
 private function deleteLibrary_clickHandler() : void
@@ -391,6 +403,11 @@ private function dataManager_removeLibraryCompleteHandler( event : DataManagerEv
 		try
 		{
 			libraries.removeItemAt( libraries.getItemIndex( cursor.current ) );
+			
+			textEditor.enabled = false;
+			textEditor.text = "";
+			currentEditing = "none";
+			nameLabel.text = "";
 		}
 		catch ( error : Error )
 		{
