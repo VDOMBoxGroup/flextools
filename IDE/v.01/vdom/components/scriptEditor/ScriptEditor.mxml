@@ -11,7 +11,7 @@
 		source="includes/scriptEditor.as"/>
 	<mx:VBox 
 		height="100%" width="100%">
-		<mx:Label 
+		<mx:Label
 			id="nameLabel"
 			
 			width="100%"
