@@ -85,7 +85,7 @@
 				
 			<mx:Button id="quitButton" styleName="loginButtonQuit"
 				label="{resourceManager.getString('LoginForm','quit_button')}"
-				width="110" click="Application.application.close()"
+				width="110" click="quitButton_clickHandler()"
 				buttonMode="true"
 				focusEnabled="false"/>
 			

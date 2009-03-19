@@ -14,6 +14,7 @@ import vdom.managers.PopUpWindowManager;
 private var dataManager : DataManager = DataManager.getInstance();
 private var authenticationManager : AuthenticationManager = AuthenticationManager.getInstance();
 private var alertManager : AlertManager = AlertManager.getInstance();
+private var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
 
 private function showPreview() : void
 {
@@ -89,6 +90,7 @@ private function hideHandler() : void
 	placeCanvas.selectedIndex = 0;
 	selectedChild = initModule;
 	registerEvent( false );
+	popUpWindowManager.removeAllPopUp();
 }
 
 private function loadApplicationData() : void
