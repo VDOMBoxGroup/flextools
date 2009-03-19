@@ -155,6 +155,9 @@ package vdom.managers
 		
 		public function removeAllPopUp() : void
 		{
+			if( !popUpInfo )
+				return;
+			
 			while ( popUpInfo.length > 0 )
 			{
 				closeWindow( PopUpWindowData( popUpInfo[ 0 ] ).nativeWindow );
