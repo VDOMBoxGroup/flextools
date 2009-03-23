@@ -5,9 +5,10 @@ import flash.events.InvokeEvent;
 
 import mx.core.Application;
 import mx.core.Window;
-import mx.core.windowClasses.TitleBar;
 import mx.rpc.Fault;
 import mx.rpc.events.FaultEvent;
+
+import net.vdombox.ide.ApplicationFacade;
 
 import vdom.components.loginForm.LoginForm;
 import vdom.components.main.Main;
@@ -32,8 +33,9 @@ import vdom.utils.StringUtils;
 import vdom.utils.VersionUtils;
 
 include "SERVER_VERSION.as";
-TitleBar
-Window
+
+public static const NAME:String = "vdomIDE"; 
+
 public var arguments : Array = [];
 
 private var soap : SOAP = SOAP.getInstance();
@@ -57,6 +59,8 @@ private var configMain : Config;
 private var tempStorage : Object = {};
 
 private var isServerVersionOld : Boolean = false;
+
+private var facade : ApplicationFacade = ApplicationFacade.getInstance( stage );	
 
 private function registerEvent( flag : Boolean ) : void
 {
@@ -224,39 +228,18 @@ private function checkError( fault : Fault ) : void
 
 private function invokeHandler( event : InvokeEvent ) : void
 {
-	arguments = event.arguments;
-
-	if ( arguments.length == 0 )
-		return;
-
-	for each ( var argValue : String in arguments )
-	{
-		/* switch ( argValue )
-		   {
-		   case "debug" :
-		   {
-		   editorModule.debugButton.visible = true;
-		   break;
-		   }
-		   case "darkstyle" :
-		   {
-		   editorModule.scriptCanv.textArea.codeEditor.setStyle( "color", "white" );
-		   editorModule.scriptCanv.textArea.codeEditor.setStyle( "backgroundColor", "black" );
-		   break;
-		   }
-		 } */
-	}
+	facade.invoke( event.arguments );
 }
 
 private function preinitalizeHandler() : void
 {
-	nativeWindow.close();
-	NativeApplication.nativeApplication.autoExit = false;
+	facade.preinitalize( this );
+	
 //	NativeApplication.nativeApplication.idleThreshold = IDLE_TIME;
 
-	registerEvent( true );
-	initManagers();
-	initConfig();
+//	registerEvent( true );
+//	initManagers();
+//	initConfig();
 }
 
 private function creationCompleteHandler() : void
@@ -264,16 +247,9 @@ private function creationCompleteHandler() : void
 	openLoginWindow();
 }
 
-private function windowCompleteHandler() : void
+private function applicationCompleteHandler() : void 
 {
-	try
-	{
-		if ( configMain.updater.enabled == "1" )
-			callLater( updateManager.init );
-	}
-	catch ( error : Error )
-	{
-	}
+	facade.startup( this );
 }
 
 /* private function moduleChangedHandler( event : IndexChangedEvent ) : void

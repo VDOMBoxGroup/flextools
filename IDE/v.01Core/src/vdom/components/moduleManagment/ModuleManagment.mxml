@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script source="includes/moduleManagment.as" />
+	<mx:ButtonBar width="100%" height="30" />
+</mx:VBox>

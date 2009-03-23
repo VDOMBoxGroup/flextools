@@ -7,8 +7,8 @@
 	creationPolicy="all" frameRate="30" layout="absolute" showGripper="false" showStatusBar="false"
 	showTitleBar="false" verticalScrollPolicy="off"
 	
-	creationComplete="creationCompleteHandler()" invoke="invokeHandler( event )"
-	preinitialize="preinitalizeHandler()" windowComplete="windowCompleteHandler()">
+	applicationComplete="applicationCompleteHandler()" creationComplete="creationCompleteHandler()"
+	invoke="invokeHandler( event )" preinitialize="preinitalizeHandler()">
 	<mx:Script 
 		source="vdomIDE.as"/>
 	<mx:Metadata>
