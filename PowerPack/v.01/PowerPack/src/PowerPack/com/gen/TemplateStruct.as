@@ -543,7 +543,7 @@ public class TemplateStruct extends EventDispatcher
 				case 'parseNewNode': // parse current node
 				
 					if((forced>0 || over) && !force)
-						force = true; 
+						force = true;
 					
 					dispatchEvent(new Event("processNode"));
 						
@@ -600,37 +600,6 @@ public class TemplateStruct extends EventDispatcher
 								}									
 								else
 								{
-									/*
-									var subgraph:GraphStruct;
-									
-									for each (var graphStruct:GraphStruct in graphs)
-									{
-										if(graphStruct.name == curGraphContext.curNode.text)
-										{	
-											subgraph = graphStruct;
-											break;
-										}
-									}
-									
-									if(subgraph)
-									{
-										nodeStack.push(curNodeContext);	
-										
-										var graphContext:GraphContext = new GraphContext(subgraph);
-										contextStack.push(graphContext);
-										
-										step = 'parseNewNode';
-										if(forced>=0)
-											forced++;
-										continue;
-									}
-									else
-									{
-										isRunning = false;
-										throw new ValidationError(null, 9006, 
-												[curGraphContext.curNode.text]);
-									}
-									*/
 									curNodeContext.block = CodeParser.ParseCode(
 										'[sub '+curGraphContext.curNode.text+']' );
 								}								
@@ -668,12 +637,13 @@ public class TemplateStruct extends EventDispatcher
 					{
 						if(!curNodeContext.block.executed)
 						{
+							step = 'processExecResult';
+
 							CodeParser.executeBlock(
 								curNodeContext.block,
 								[context, curGraphContext.context], 
 								true);
 						
-							step = 'processExecResult';
 							if(curNodeContext.block.lastExecutedFragment.retValue is Function)
 							{
 								isRunning = false;
@@ -722,7 +692,12 @@ public class TemplateStruct extends EventDispatcher
 					if(	index == -1 ||
 						curGraphContext.curNode.type == NodeType.TERMINAL )
 					{			
+						
+						var tmpBuf:String = curGraphContext.buffer;
+
+						/*
 						var tmpPrint:Boolean = false;
+						var tmpBuf:String = '';
 							
 						/*			
 						if(curGraphContext.variable!=null)
@@ -733,35 +708,36 @@ public class TemplateStruct extends EventDispatcher
 									"\\-");
 						}
 						else 
-						*/
+						
+						
 						if(contextStack.length>1)
 						{
 							tmpPrint = true;
-							GraphContext(contextStack[contextStack.length-2]).buffer +=
-								curGraphContext.buffer;
+							GraphContext(contextStack[contextStack.length-2]).buffer += tmpBuf;
 						}
-						else
+						*/
+						
+						if(contextStack.length==0)
 						{
-							buffer =
-								curGraphContext.buffer;
+							buffer = tmpBuf;
 						}
 						
-						var tmpBuf:String = curGraphContext.buffer;
 						contextStack.pop();
 						
 						//////////////////////////////////////////////////////
 						
 						if(contextStack.length>0) 
 						{
-							if(!curNodeContext.block.executed)
+							//if(!curNodeContext.block.executed)
 							{
 								curNodeContext.block.lastExecutedFragment.retValue =
-									Utils.replaceEscapeSequences(tmpBuf, "\\-");
+									tmpBuf;
+									//Utils.replaceEscapeSequences(tmpBuf, "\\-");
 								
 								context[curNodeContext.block.lastExecutedFragment.retVarName] =
 									curNodeContext.block.lastExecutedFragment.retValue; 
 								
-								step = 'executeCode';
+								step = 'processExecResult';
 								continue;
 							}	
 							
@@ -813,8 +789,7 @@ public class TemplateStruct extends EventDispatcher
 		//	dispatchEvent(new Event("error"));
 		//}
 		
-		return null;
-		
+		return null;		
 	}
 
 	/**

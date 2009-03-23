@@ -53,17 +53,6 @@ private function enterSubgraph(subgraph:GraphStruct, prefix:String, params:Array
 	var graphContext:GraphContext = new GraphContext(subgraph);
 	var curNode:NodeStruct = tplStruct.curGraphContext.curNode;
 	
-	// get variable name if defined
-	
-	/*
-	if(tplStruct.curNodeContext.block.
-	curNode.parsedNode.vars!=null && 
-		curNode.parsedNode.vars.length>curNode.parsedNode.current &&
-		curNode.parsedNode.vars[curNode.parsedNode.current])
-		
-		graphContext.variable = curNode.parsedNode.vars[curNode.parsedNode.current];
-	*/
-		
 	graphContext.varPrefix = prefix;
 	
 	tplStruct.curNodeContext.block.retValue = subgraph.name;
