@@ -146,8 +146,8 @@ package ExtendedAPI.com.utils
 			var bracer:String = str.charAt(0);
 			var closeBracer:String;
 			
-			if("({[".search(bracer)>=0 && bracers.search(bracer)>=0)
-				closeBracer = ")}]".charAt("({[".search(bracer));
+			if("({[".indexOf(bracer)>=0 && bracers.indexOf(bracer)>=0)
+				closeBracer = ")}]".charAt("({[".indexOf(bracer));
 			
 			if(closeBracer && str.charAt(str.length-1)==closeBracer)
 			{
