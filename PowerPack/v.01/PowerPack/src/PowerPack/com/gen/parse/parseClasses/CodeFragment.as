@@ -14,7 +14,6 @@ public class CodeFragment extends LexemStruct
 	public static const CT_LIST:String = 'list';
 
 	public var fragments:Array = []; // lexems of fragment
-	//public var codeFragments:Array = []; // fragments without nonusable characters
 	
 	public var retVarName:String = "tmp_" + UIDUtil.createUID().replace(/-/g, "_"); 
 	public var retValue:*; // return value
@@ -61,9 +60,7 @@ public class CodeFragment extends LexemStruct
     //----------------------------------	
 	public function get isTopLevel():Boolean
 	{
-		if(!parent || !(parent is CodeFragment))
-			return true;
-		return false;
+		return !parent || !(parent is CodeFragment);
 	}		
 
     //----------------------------------
@@ -72,9 +69,7 @@ public class CodeFragment extends LexemStruct
 	override public function get tailSpaces():String
 	{
 		if(fragments.length>0)
-		{
 			return fragments[fragments.length-1].tailSpaces;
-		}
 		
 		return '';
 	}
@@ -82,6 +77,7 @@ public class CodeFragment extends LexemStruct
     //----------------------------------
     //  evalValue
     //----------------------------------
+	
 	public function get evalValue():String
 	{		
 		var _value:String = '';
@@ -96,7 +92,7 @@ public class CodeFragment extends LexemStruct
 				else if(CodeFragment(curFragment).type == 'W')
 					_value += CodeFragment(curFragment).retValue + curFragment.tailSpaces;
 				else
-					_value += CodeFragment(curFragment).evalValue;
+					_value += CodeFragment(curFragment).evalValue + curFragment.tailSpaces;
 			}			
 			else if(curFragment is LexemStruct)
 			{
@@ -107,9 +103,10 @@ public class CodeFragment extends LexemStruct
 			}
 		}
 		
-		return _value.substr(0, _value.length-tailSpaces.length);
+		return _value.substr(0, _value.length - tailSpaces.length);
 	}
-
+	
+	
     //----------------------------------
     //  origValue
     //----------------------------------	
@@ -119,11 +116,10 @@ public class CodeFragment extends LexemStruct
 		for(var i:int=0; i<fragments.length; i++)
 		{
 			var curFragment:LexemStruct = fragments[i];
-			_origValue += curFragment.origValue + 
-				(curFragment is CodeFragment ? '' : curFragment.tailSpaces);
+			_origValue += curFragment.origValue + curFragment.tailSpaces;
 		}
 		
-		return _origValue.substr(0, _origValue.length-tailSpaces.length);
+		return _origValue.substr(0, _origValue.length - tailSpaces.length);
 	}
 
     //----------------------------------
@@ -179,17 +175,15 @@ public class CodeFragment extends LexemStruct
 	override public function get length():int
 	{
 		var sum:int = 0;
-		var offset:int = 0;
-		var curFragment:LexemStruct;
 		
 		for(var i:int=0; i<fragments.length; i++)
 		{
-			curFragment = fragments[i];
+			var curFragment:LexemStruct = fragments[i];
 
-			sum += curFragment.length + (curFragment is CodeFragment ? 0 : curFragment.tailSpaces.length);
+			sum += curFragment.length + curFragment.tailSpaces.length;
 		}
 		 
-		return sum;
+		return sum - tailSpaces.length;
 	}
 	
     //----------------------------------
@@ -199,8 +193,8 @@ public class CodeFragment extends LexemStruct
 	{
 		for(var i:int=0; i<fragments.length; i++)
 		{
-			var fragment:Object = fragments[i];
 			var errFrag:LexemStruct;
+			var fragment:Object = fragments[i];
 			
 			if(fragment is CodeFragment)
 			{

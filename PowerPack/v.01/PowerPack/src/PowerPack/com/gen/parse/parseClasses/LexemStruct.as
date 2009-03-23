@@ -18,7 +18,7 @@ public class LexemStruct
 	//--------------------------------------------------------------------------
 
     //----------------------------------
-    //  postSpaces
+    //  tailSpaces
     //----------------------------------	
 	private var _tailSpaces:String = '';
 	public function get tailSpaces():String
@@ -96,10 +96,10 @@ public class LexemStruct
 
     //----------------------------------
     //  length
-    //----------------------------------	
+    //----------------------------------
 	public function get length():int
 	{
-		return origValue.length; 	
+		return origValue.length;
 	}
 	
 	//--------------------------------------------------------------------------
