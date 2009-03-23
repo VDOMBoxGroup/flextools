@@ -65,7 +65,7 @@ public class TemplateStruct extends EventDispatcher
 	
 	public function TemplateStruct(tplStruct:XML, ID:String)
 	{				
-		tplStructXML = tplStruct;		
+		tplStructXML = tplStruct;
 		this.ID = ID;
 		var _graphs:Array = [];
 		var _nodes:Array = [];
@@ -76,9 +76,9 @@ public class TemplateStruct extends EventDispatcher
 		{			
 			var graphStruct:GraphStruct = new GraphStruct(
 				Utils.getStringOrDefault(graphXML.@name),
-				Utils.getStringOrDefault(graphXML.@name),					
+				Utils.getStringOrDefault(graphXML.@name),
 				Utils.getBooleanOrDefault(graphXML.@initial),
-				Utils.getBooleanOrDefault(graphXML.@global));	
+				Utils.getBooleanOrDefault(graphXML.@global));
 				
 			if(graphStruct.bInitial)
 			{
@@ -89,8 +89,8 @@ public class TemplateStruct extends EventDispatcher
 			{
 				var nodeStruct:NodeStruct = new NodeStruct(
 					Utils.getStringOrDefault(nodeXML.@name),
-					Utils.getStringOrDefault(nodeXML.@category), 
-					Utils.getStringOrDefault(nodeXML.@type), 
+					Utils.getStringOrDefault(nodeXML.@category),
+					Utils.getStringOrDefault(nodeXML.@type),
 					Utils.getStringOrDefault(nodeXML.text),
 					Utils.getBooleanOrDefault(nodeXML.@enabled, true),
 					Utils.getBooleanOrDefault(nodeXML.@breakpoint),
