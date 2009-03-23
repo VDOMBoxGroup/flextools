@@ -162,7 +162,7 @@ public class TemplateStruct extends EventDispatcher
 	}	
 
 	public function get curNodeContext():NodeContext 
-	{		
+	{
 		if(curGraphContext.contextStack.length)
 			return NodeContext(curGraphContext.contextStack[curGraphContext.contextStack.length-1]);
 		else if(contextStack.length>1)
@@ -824,7 +824,6 @@ public class TemplateStruct extends EventDispatcher
 	 * @param arrows - out arrows array
 	 * @param transition - transition string
 	 * @return - out arrows array index for transition
-	 * 
 	 */
 	private static function GetArrowIndex(arrows:Array, transition:String):int
 	{
