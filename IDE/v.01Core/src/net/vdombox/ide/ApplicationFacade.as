@@ -1,8 +1,9 @@
 package net.vdombox.ide
 {
 	import net.vdombox.ide.controller.InvokeCommand;
+	import net.vdombox.ide.controller.LoginCommand;
 	import net.vdombox.ide.controller.PreinitalizeCommand;
-	import net.vdombox.ide.controller.StartupCommand;
+	import net.vdombox.ide.controller.QuitCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -16,6 +17,7 @@ package net.vdombox.ide
 		public static const LOGIN : String = "login";
 		
 		public static const SUBMIT_BEGIN : String = "submitBegin";
+		public static const QUIT : String = "quit";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -32,11 +34,12 @@ package net.vdombox.ide
 		override protected function initializeController() : void
 		{
 			super.initializeController();
-
-			registerCommand( INVOKE, InvokeCommand );
+			
 			registerCommand( PREINITALIZE, PreinitalizeCommand );
-			registerCommand( STARTUP, StartupCommand );
-			registerCommand( 
+			
+			registerCommand( INVOKE, InvokeCommand );
+			registerCommand( SUBMIT_BEGIN, LoginCommand );
+			registerCommand( QUIT, QuitCommand );
 		}
 
 		public function invoke( arguments : Array ) : void

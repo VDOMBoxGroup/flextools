@@ -244,7 +244,7 @@ private function preinitalizeHandler() : void
 
 private function creationCompleteHandler() : void
 {
-	openLoginWindow();
+	//openLoginWindow();
 }
 
 private function applicationCompleteHandler() : void 

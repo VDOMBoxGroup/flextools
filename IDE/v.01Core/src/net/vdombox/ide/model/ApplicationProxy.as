@@ -3,18 +3,25 @@ package net.vdombox.ide.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	public class ApplicationAttributesProxy extends Proxy implements IProxy
+	public class ApplicationProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ApplicationAttributesProxy";
 
-		public function ApplicationAttributesProxy( data : Array = null )
+		public function ApplicationProxy( data : Object = null )
 		{
 			super( NAME, data );
 		}
 		
+		private var _attributes : Array;		
+		
 		public function get attributes() : Array
 		{
-			return data as Array;
+			return _attributes;
+		}
+		
+		public function set attributes( value : Array ) : void
+		{
+			_attributes = value;
 		}
 	}
 }

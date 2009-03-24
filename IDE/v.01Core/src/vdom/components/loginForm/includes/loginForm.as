@@ -54,11 +54,11 @@ private function registerEvents( flag : Boolean ) : void
 private function checkData() : void
 {
 	var lfe : LoginFormEvent = new LoginFormEvent( LoginFormEvent.SUBMIT_BEGIN );
-	lfe.formData = { username : _username.text, password : _password.text, hostname : _hostname.text };
+	lfe.formData = { username : username.text, password : password.text, hostname : hostname.text };
 	var so : SharedObject = SharedObject.getLocal( "userData" );
-	so.data[ "username" ] = _username.text;
-//	so.data["password"] = _password.text;
-	so.data[ "hostname" ] = _hostname.text;
+	so.data[ "username" ] = username.text;
+//	so.data["password"] = password.text;
+	so.data[ "hostname" ] = hostname.text;
 
 	if ( selectLang.selectedItem )
 	{
@@ -79,14 +79,14 @@ private function creationCompleteHandler() : void
 
 private function showHandler() : void
 {
-	registerEvents( true );
-	_username.setFocus();
+	/* registerEvents( true );
+	username.setFocus();
 
 	var so : SharedObject = SharedObject.getLocal( "userData" );
 
-	_username.text = so.data[ "username" ];
-//	_password.text = so.data["password"];
-	_hostname.text = so.data[ "hostname" ];
+	username.text = so.data[ "username" ];
+//	password.text = so.data["password"];
+	hostname.text = so.data[ "hostname" ];
 
 	var currentLocale : String = so.data[ "locale" ];
 
@@ -103,21 +103,21 @@ private function showHandler() : void
 	}
 
 	if ( currentItem )
-		selectLang.selectedItem = currentItem;
+		selectLang.selectedItem = currentItem; */
 }
 
 private function hideHandler() : void
 {
 	registerEvents( false );
 
-	_username.text = "";
-	_password.text = "";
-	_hostname.text = "";
+	username.text = "";
+	password.text = "";
+	hostname.text = "";
 }
 
 private function selectLang_changeHandler( event : Event ) : void
 {
-	languageManager.changeLocale( event.currentTarget.selectedItem.@code );
+	//languageManager.changeLocale( event.currentTarget.selectedItem.@code );
 }
 
 private function loginForm_keyDownHandler( event : KeyboardEvent ) : void
