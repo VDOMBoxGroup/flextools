@@ -9,6 +9,7 @@ package net.vdombox.ide.view
 	import net.vdombox.ide.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	import vdom.components.loginForm.LoginForm;

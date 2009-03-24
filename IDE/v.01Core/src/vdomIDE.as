@@ -60,7 +60,7 @@ private var tempStorage : Object = {};
 
 private var isServerVersionOld : Boolean = false;
 
-private var facade : ApplicationFacade = ApplicationFacade.getInstance( stage );	
+private var facade : ApplicationFacade = ApplicationFacade.getInstance( NAME );	
 
 private function registerEvent( flag : Boolean ) : void
 {

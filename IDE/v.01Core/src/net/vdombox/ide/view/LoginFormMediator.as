@@ -3,6 +3,7 @@ package net.vdombox.ide.view
 	import net.vdombox.ide.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	import vdom.components.loginForm.LoginForm;
@@ -24,18 +25,6 @@ package net.vdombox.ide.view
 			return [ ApplicationFacade.STARTUP ];
 		}
 
-		override public function handleNotification( note : INotification ) : void
-		{
-			switch ( note.getName() )
-			{
-				case ApplicationFacade.SUBMIT_BEGIN : 
-				{
-					openLoginWindow();
-					break;
-				}
-			}
-		}
-
 		private function get loginForm() : LoginForm
 		{
 			return viewComponent as LoginForm;
@@ -48,8 +37,12 @@ package net.vdombox.ide.view
 
 		private function addEventListeners() : void
 		{
-			loginForm.addEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
+			loginForm.addEventListener( LoginFormEvent.SUBMIT_BEGIN, submitBeginHandler );
 		}
-
+		
+		private function submitBeginHandler( event : LoginFormEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SUBMIT_BEGIN );
+		}
 	}
 }
