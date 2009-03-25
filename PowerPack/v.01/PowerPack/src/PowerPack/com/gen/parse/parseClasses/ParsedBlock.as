@@ -8,7 +8,6 @@ public class ParsedBlock
 	
 	public var type:String; // TEXT|CODE
 	public var lexems:Array = []; // lexems array
-	public var validated:Boolean;
 
 	public var retValue:*; // return value
 	public var print:Boolean; // print result value to output buffer
@@ -16,7 +15,8 @@ public class ParsedBlock
 	
 	public var fragments:Array = []; // code fragments to execute
 	public var current:int = 0; // current fragment
-	public var executed:Boolean = false;
+	public var validated:Boolean;
+	public var executed:Boolean;
 
     //--------------------------------------------------------------------------
 	//
@@ -104,9 +104,29 @@ public class ParsedBlock
 		for(var i:int=0; i<fragments.length; i++)
 		{
 			if((fragments[i] as CodeFragment).error)
+				return fragments[i];
+			else if ((fragments[i] as CodeFragment).errFragment)
 				return (fragments[i] as CodeFragment).errFragment;
 		}	
 		return null; 	
+	}
+
+	//--------------------------------------------------------------------------
+	//
+	//  Class methods
+	//
+	//--------------------------------------------------------------------------
+		
+	public function resetCurrent():void
+	{
+		executed = false;
+		current = 0;		
+
+		for(var i:int=0; i<fragments.length; i++)
+		{
+			if(fragments[i] is CodeFragment)
+				CodeFragment(fragments[i]).resetCurrent();
+		}
 	}
 }
 }

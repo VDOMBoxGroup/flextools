@@ -285,6 +285,7 @@ public class Node extends Canvas
     private var _needRefreshStyles:Boolean; 
     private var _isValidText:Boolean;
     private var _rightPadding:int;
+    private var _needValidate:Boolean;
 		
 	/**
 	* possible values: M_NORMAL, M_EDITING
@@ -728,8 +729,6 @@ public class Node extends Canvas
     {
         super.commitProperties();
         
-        var _needValidate:Boolean = false;
-        
         if (_typeChanged || _needRefreshStyles)
         {
             clearStyle("borderColor");
@@ -907,7 +906,7 @@ public class Node extends Canvas
         {
         	_needRefreshStyles = true;
         	_needValidate = false;
-			var validEvent:ValidationResultEvent = validator.validate();                
+			validator.validate();                
     		invalidateDisplayList();
         }
 
@@ -1638,7 +1637,7 @@ public class Node extends Canvas
 			if(canvas.addingTransition)
 			{
 				filters = [];
-				var filter:GlowFilter = new GlowFilter(0xff0000, 0.5, 4, 4, 3);
+				var filter:GlowFilter = new GlowFilter(0x0000ff, 0.5, 4, 4, 3);
    				filters = [filter];
         				
 				if(canvas.currentArrow.fromObject!=this)
@@ -1985,6 +1984,7 @@ public class Node extends Canvas
 	    	{
 			   	text = nodeTextArea.text;
 	    		setEditMode(false);
+	    		_needValidate = true;
 	    	}
 	    }
     }	
@@ -1997,6 +1997,7 @@ public class Node extends Canvas
 	    	{
 			   	text = nodeTextArea.text;
 	    		setEditMode(false);
+	    		_needValidate = true;
 	    	}			
   		}	
 	}

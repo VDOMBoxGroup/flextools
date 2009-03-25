@@ -1,6 +1,4 @@
 // ActionScript file
-import PowerPack.com.gen.ParsedNode;
-import PowerPack.com.gen.parse.CodeParser;
 import PowerPack.com.gen.parse.ListParser;
 import PowerPack.com.gen.parse.Parser;
 
@@ -24,7 +22,7 @@ public function getType(position:Object, list:String):int
 
 public function exist(type:Object, value:Object, list:String):int
 {
-	var position:int = ListParser.exists(list, type, value);
+	var position:int = ListParser.exists(list, type, value.toString());
 	return position;
 }
 
@@ -36,65 +34,24 @@ public function remove(position:Object, list:String):String
 
 public function put(type:Object, position:Object, value:Object, list:String):String
 {
-	var newList:String = ListParser.put(list, position, type, value);
+	var newList:String = ListParser.put(list, position, type, value.toString());
 	return newList;
 }
 
 public function update(type:Object, position:Object, value:Object, list:String):String
 {
-	var newList:String = ListParser.update(list, position, type, value);
+	var newList:String = ListParser.update(list, position, type, value.toString());
 	return newList;
 }
 
 public function evaluate(list:String):String
 {
-	var contexts:Array = getContexts();
-	
-	var lexems:Array = Parser.getLexemArray(list);
-	Parser.processLexemArray(lexems);
-    lexems = Parser.convertLexemArray(lexems);
-    var lexemObj:Object = Parser.processConvertedLexemArray(lexems, contexts);
-    lexems = lexemObj.array;
-    
-	var buffer:String = "";
-	
-	for(var i:int=0; i<lexems.length; i++)
-	{
-		var value:Object = null;
-		 
-    	if( lexems[i].type=="v" )
-    	{
-			for(var j:int=contexts.length-1; j>=0; j--)
-			{
-				var context:* = contexts[j];
-			
-    			if( context.hasOwnProperty(lexems[i].value) )
-    			{
-					value = context[lexems[i].value];
-    				break;
-    			}
-    		}
-        }	
-		buffer += (buffer?" ":"") + (lexems[i].type=="v" ? (value!=null ? value.toString() : 'null') : lexems[i].value);
-	}	
-	
-	return buffer;
+	return ListParser.evaluate(list, getContexts());
 }
 
 public function execute(list:String):*
 {
-	var contexts:Array = getContexts();
-	
-	var parsedList:ParsedNode = CodeParser.ParseCode(list);
-	
-	CodeParser.executeCode(parsedList, 0, contexts, tplStruct.curGraphContext.varPrefix); 
-	
-	if(!parsedList.result) {								
-		throw parsedList.error;
-	}
-	else {
-		return parsedList.value;
-	}
+	return ListParser.execute(list, getContexts());
 }
 
 public function addStructure(src:String, tgt:String, level:int, listStruct:String):String 
@@ -118,28 +75,26 @@ public function deleteStructure(src:String, tgt:String, level:int, listStruct:St
 private function processStructure(src:String, tgt:String, level:int, listStruct:String, action:String='add'):String
 {
 	var contexts:Array = getContexts();
-	var topLevelListLen:int = ListParser.length(listStruct);
 	
-	var listSrcObj:Object = Parser.processList(src);
-	var listTgtObj:Object = Parser.processList(tgt);
-	var listStructObj:Object = Parser.processList(listStruct);
+	var listSrcObj:Array = ListParser.list2Array(src);
+	var listTgtObj:Array = ListParser.list2Array(tgt);
+	var listStructObj:Array = ListParser.list2Array(listStruct);
 	
-	if(!listStructObj.result)
-		throw new Error('Not valid struct list.');	
+	var topLevelListLen:int = ListParser.length(listStructObj);
 	
 	var idSrc:String = src;
-	if(listSrcObj.result) 
-		idSrc = ListParser.getElmValue(src, 1, contexts);
+	if(listSrcObj) 
+		idSrc = ListParser.getElmValue(listSrcObj, 1, contexts).toString();
 	
 	var idTgt:String = tgt;
-	if(listTgtObj.result) 
-		idTgt = ListParser.getElmValue(tgt, 1, contexts);
+	if(listTgtObj) 
+		idTgt = ListParser.getElmValue(listTgtObj, 1, contexts).toString();
 	
 	for(var i:int=1; i<=topLevelListLen; i++)
 	{
 		var topLevelList:String = ListParser.getElm(listStruct, i);
 		var objSrcList:String = ListParser.getElm(topLevelList, 1);		
-		var idObjSrc:String = ListParser.getElmValue(objSrcList, 1, contexts);
+		var idObjSrc:String = ListParser.getElmValue(objSrcList, 1, contexts).toString();
 	
 		if(idObjSrc == idSrc)
 			break;		
@@ -166,7 +121,7 @@ private function processStructure(src:String, tgt:String, level:int, listStruct:
 			
 			for(var k:int=1; k<=objTgtListLen; k++)
 			{
-				var idObjTgt:String = ListParser.getElmValue(objTgtList, k, contexts);
+				var idObjTgt:String = ListParser.getElmValue(objTgtList, k, contexts).toString();
 				
 				if(idObjTgt == idTgt)
 					break;
@@ -211,7 +166,7 @@ private function processStructure(src:String, tgt:String, level:int, listStruct:
 			{
 				case 'add':
 					objTgtList = ListParser.put('[]', 'tail', 'string', idTgt);
-					lvlObjTgtList = ListParser.put('[]', 'head', 'word', level);				
+					lvlObjTgtList = ListParser.put('[]', 'head', 'word', level.toString());				
 					lvlObjTgtList = ListParser.put(lvlObjTgtList, 'tail', 'list', objTgtList);				
 					lvlLinkList = ListParser.put(lvlLinkList, 'tail', 'list', lvlObjTgtList);
 					topLevelList = ListParser.update(topLevelList, 2, 'list', lvlLinkList);
@@ -228,9 +183,9 @@ private function processStructure(src:String, tgt:String, level:int, listStruct:
 			case 'update':
 				if(listSrcObj.result)
 				{
-					objSrcList = ListParser.update(objSrcList, 2, 'word', ListParser.getElmValue(src, 2, contexts));
-					objSrcList = ListParser.update(objSrcList, 3, 'word', ListParser.getElmValue(src, 3, contexts));
-					objSrcList = ListParser.update(objSrcList, 4, 'string', ListParser.getElmValue(src, 4, contexts));
+					objSrcList = ListParser.update(objSrcList, 2, 'word', ListParser.getElmValue(src, 2, contexts).toString());
+					objSrcList = ListParser.update(objSrcList, 3, 'word', ListParser.getElmValue(src, 3, contexts).toString());
+					objSrcList = ListParser.update(objSrcList, 4, 'string', ListParser.getElmValue(src, 4, contexts).toString());
 					
 					topLevelList = ListParser.update(topLevelList, 1, 'list', objSrcList);
 					listStruct = ListParser.update(listStruct, i, 'list', topLevelList);
@@ -247,16 +202,16 @@ private function processStructure(src:String, tgt:String, level:int, listStruct:
 		{
 			case 'add':
 				objTgtList = ListParser.put('[]', 'tail', 'string', idTgt);
-				lvlObjTgtList = ListParser.put('[]', 'head', 'word', level);				
+				lvlObjTgtList = ListParser.put('[]', 'head', 'word', level.toString());				
 				lvlObjTgtList = ListParser.put(lvlObjTgtList, 'tail', 'list', objTgtList);								
 				lvlLinkList = ListParser.put('[]', 'tail', 'list', lvlObjTgtList);				
 				
 				objSrcList = ListParser.put('[]', 'head', 'string', idSrc);
 				if(listSrcObj.result)
 				{
-					objSrcList = ListParser.put(objSrcList, 'tail', 'word', ListParser.getElmValue(src, 2, contexts));
-					objSrcList = ListParser.put(objSrcList, 'tail', 'word', ListParser.getElmValue(src, 3, contexts));
-					objSrcList = ListParser.put(objSrcList, 'tail', 'string', ListParser.getElmValue(src, 4, contexts));
+					objSrcList = ListParser.put(objSrcList, 'tail', 'word', ListParser.getElmValue(src, 2, contexts).toString());
+					objSrcList = ListParser.put(objSrcList, 'tail', 'word', ListParser.getElmValue(src, 3, contexts).toString());
+					objSrcList = ListParser.put(objSrcList, 'tail', 'string', ListParser.getElmValue(src, 4, contexts).toString());
 				}
 								
 				topLevelList = ListParser.put('[]', 'head', 'list', objSrcList);

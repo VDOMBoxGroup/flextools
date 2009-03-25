@@ -15,7 +15,7 @@ public class CodeParser
 	public static const MSG_CN_SYNTAX_ERR:String = "Command state syntax error.";
 	public static const MSG_CN_UNKNOWN_TYPE:String = "Unrecognized command state type.";
 	
-	public static function resetCodeFragmentCurrent(fragment:CodeFragment):void
+	/*public static function resetCodeFragmentCurrent(fragment:CodeFragment):void
 	{
 		fragment.executed = false;
 		fragment.current = 0;
@@ -25,9 +25,9 @@ public class CodeParser
 			if(fragment.fragments[i] is CodeFragment)
 				resetCodeFragmentCurrent(fragment.fragments[i]);
 		}
-	}
+	}*/
 
-	public static function resetBlockCurrent(block:ParsedBlock):void
+	/*public static function resetBlockCurrent(block:ParsedBlock):void
 	{
 		block.executed = false;
 		block.current = 0;		
@@ -37,7 +37,7 @@ public class CodeParser
 			if(block.fragments[i] is CodeFragment)
 				resetCodeFragmentCurrent(block.fragments[i]);
 		}
-	}
+	}*/
 	
 	public static function evaluateLexem(lexem:LexemStruct, contexts:Array):void
 	{
@@ -73,15 +73,26 @@ public class CodeParser
 		}		
 	}
 	
-	public static function executeCodeFragment(fragment:CodeFragment, contexts:Array, stepReturn:Boolean=false, evaluate:Boolean=false):void
+	public static function executeCodeFragment(	fragment:CodeFragment, 
+												contexts:Array, 			// execution contexts
+												stepReturn:Boolean=false,	// stops after every fragment execution
+												evaluate:Boolean=false		// evaluate lists value 
+												):void	
 	{
+		// validate
+		
 		if(!fragment.validated)
 		{
 			Parser.validateCodeFragment(fragment);
 		}
 		
-		if(fragment.errFragment)
+		if(fragment.errFragment || !fragment.validated)
 			return;
+		
+		if(fragment.executed)
+			return;
+			
+		// execute subfragments
 		
 		var subfragment:Object;
 		for(var i:int=fragment.current; i<fragment.fragments.length; i++)
@@ -90,8 +101,9 @@ public class CodeParser
 			if(subfragment is CodeFragment && (fragment.ctype!=CodeFragment.CT_LIST || evaluate))
 			{
 				executeCodeFragment(subfragment as CodeFragment, contexts, stepReturn, evaluate);
+				
 				if(CodeFragment(subfragment).executed)
-					fragment.current = i+1;	
+					fragment.current = i+1;
 				
 				if(fragment.lastExecutedFragment.ctype == CodeFragment.CT_FUNCTION && 
 					(stepReturn || fragment.lastExecutedFragment.retValue is Function))
@@ -105,9 +117,10 @@ public class CodeParser
 		}
 
 		// generate executable code
+		
 		var code:String = '';
-		var tmpValue:Object
-		fragment.code = '';
+		var tmpValue:Object;
+		
 		switch(fragment.ctype)
 		{
 			case CodeFragment.CT_TEXT:
@@ -116,18 +129,15 @@ public class CodeParser
 					subfragment = fragment.fragments[i];
 					 
 					if(subfragment is CodeFragment)
-						tmpValue = (subfragment as CodeFragment).retVarName;
+						tmpValue = (subfragment as CodeFragment).retValue;
 					else if(subfragment is LexemStruct)
-						tmpValue = LexemStruct(subfragment).code;
+						tmpValue = LexemStruct(subfragment).value;
 
-					code += tmpValue;
-					fragment.code += LexemStruct(subfragment).code;
+					code += tmpValue.toString();
 				}
 				
 				fragment.retValue = code;
 				fragment.lastExecutedFragment = fragment;
-				
-				contexts[0][fragment.retVarName] = fragment.retValue;
 				fragment.executed = true;
 				return;
 				
@@ -144,38 +154,47 @@ public class CodeParser
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).code;							
 
-					code += tmpValue;
-					fragment.code += LexemStruct(subfragment).code;
+					code += tmpValue.toString();
 				}	
 				break;
-				
+								
+			case CodeFragment.CT_ADV_VAR:
+				for(i=1; i<fragment.fragments.length-1; i++) 
+				{
+					subfragment = fragment.fragments[i];
+					 
+					if(subfragment is CodeFragment)
+						tmpValue = (subfragment as CodeFragment).retVarName;
+					else if(subfragment is LexemStruct)
+						tmpValue = LexemStruct(subfragment).code;
+
+					code += tmpValue.toString();
+				}
+				fragment.varNames.push(code);
+				code = Parser.eval(code, contexts);
+				break;
+								
 			case CodeFragment.CT_FUNCTION:
 				Parser.processOperationGroups(fragment.fragments);				
 				
 				for(i=2; i<fragment.fragments.length-1; i++)
 				{
 					subfragment = fragment.fragments[i];
-					tmpValue = 'null';
 					
 					if(subfragment is CodeFragment)
 						tmpValue = (subfragment as CodeFragment).retVarName;
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).code;					
 
-					var sep:String = (fragment.fragments[i-1].operationGroup!=fragment.fragments[i].operationGroup && 
-								code.length && tmpValue.toString().length ? "," : "");
+					var sep:String = 
+						(fragment.fragments[i-1].operationGroup!=fragment.fragments[i].operationGroup && 
+						code.length && tmpValue.toString().length ? "," : "");
 								 										
 					code += sep + tmpValue.toString();
-					
-					fragment.code += sep + LexemStruct(subfragment).code;
 				}
 				
 				code = TemplateStruct.CNTXT_INSTANCE + "." + 
 					 fragment.funcName + "(" + code + ")";				
-				
-				fragment.code = TemplateStruct.CNTXT_INSTANCE + "." + 
-					 fragment.funcName + "(" + fragment.code + ")";	
-					 			
 				break;
 				
 			case CodeFragment.CT_ASSIGN:
@@ -184,16 +203,11 @@ public class CodeParser
 					subfragment = fragment.fragments[i];
 					var nextSubfragment:Object = fragment.fragments[i+1];
 					
-					tmpValue = '';
-					
 					if(nextSubfragment is LexemStruct && LexemStruct(nextSubfragment).type=='=')
 					{
 						if(subfragment is CodeFragment)
 						{
-							if((subfragment as CodeFragment).retValue)
-								tmpValue = (subfragment as CodeFragment).code;
-							else
-								tmpValue = '';
+							tmpValue = (subfragment as CodeFragment).varNames[0];
 						}
 						else if(subfragment is LexemStruct)
 						{
@@ -205,7 +219,6 @@ public class CodeParser
 						fragment.varNames.push(tmpValue);
 						
 						code += tmpValue + '=';
-						fragment.code += tmpValue + '=';
 					}
 					else					
 						break;	
@@ -222,7 +235,6 @@ public class CodeParser
 						tmpValue = LexemStruct(subfragment).code;
 						
 					code += tmpValue;
-					fragment.code += LexemStruct(subfragment).code;
 				}
 				break;
 				
@@ -237,28 +249,7 @@ public class CodeParser
 				}
 				
 				code = tmpValue.toString();
-				fragment.code = tmpValue.toString();
 				break;
-								
-			default:			
-				switch(fragment.type)
-				{
-					case 'W': // advanced var
-						for(i=1; i<fragment.fragments.length-1; i++) 
-						{
-							subfragment = fragment.fragments[i];
-							 
-							if(subfragment is CodeFragment)
-								tmpValue = (subfragment as CodeFragment).retVarName;
-							else if(subfragment is LexemStruct)
-								tmpValue = LexemStruct(subfragment).code;
-
-							code += tmpValue;
-						}
-						code = Parser.eval(code, contexts);
-						fragment.code = code;
-						break;
-				}
 		}
 		
 		// execute generated code
@@ -270,12 +261,14 @@ public class CodeParser
 
 	public static function executeBlock(block:ParsedBlock, contexts:Array, stepReturn:Boolean=false):void
 	{
+		// validate 
+		
 		if(!block.validated)
 		{
 			Parser.validateFragmentedBlock(block);
 		}
 
-		if(block.errFragment)
+		if(block.errFragment || !block.validated)
 			return;
 		
 		if(block.executed)
@@ -299,12 +292,9 @@ public class CodeParser
 
 	/**
 	 * 
-	 * @param nodeText - input string
-	 * @param context - instance of dynamic class
-	 * @return 	result: Boolean - valid or not
-	 * 			error: Error - error
-	 * 			value: String - parsed string 
-	 * 			print: Boolean - print result to output buffer
+	 * @param text
+	 * @param contexts
+	 * @return 
 	 * 
 	 */
 	public static function ParseText(	text:String, 
@@ -328,12 +318,11 @@ public class CodeParser
        	return block;
 	}
 		
+	
 	/**
 	 * 
-	 * @param _nodeText
-	 * @return 	result: Boolean - valid or not
-	 * 			error: Error - error
-	 * 			value: String - parsed string
+	 * @param nodeText
+	 * @return 
 	 * 
 	 */
 	public static function ParseSubgraphNode( nodeText:String ):ParsedBlock
@@ -356,19 +345,8 @@ public class CodeParser
 			
 	/**
 	 * 
-	 * @param nodeText - input text
-	 * @param varPrefix - variable prefix for left-part variables
-	 * @param context - instance of dynamic class
-	 * @return 	result: Boolean - valid or not
-	 * 			error: Error - error
-	 * 			value: String
-	 * 			type: String - command type (operation, test or function)
-	 * 			program: String - executable as3 script
-	 * 
-	 * 			print: Boolean - if true then print function result to template buffer
-	 * 			func: String - function name
-	 * 			variable: String - variable name for storing result
-	 * 			array: Array - array of transition alternatives
+	 * @param code
+	 * @return 
 	 * 
 	 */
 	public static function ParseCode( code:String ):ParsedBlock
@@ -386,85 +364,5 @@ public class CodeParser
        	return block;
 	}
 
-	/*
-	public static function executeCode(	node:ParsedNode,
-										index:int,
-										contexts:Array,
-										varPrefix:String = "" ):void
-	{
-		node.value = null;
-		node.result = false;
-		node.print = false;
-		
-		node.trans = [];
-		//node.transition = null;
-		
-		if(node.vars[index] == null)
-			node.print = true;
-		
-		// add variable prefix for left-part vars
-		if(node.vars[index])
-			node.vars[index] = varPrefix + node.vars[index]; 
-		for(var j:int=0; j<node.lexemsGroup[index].length; j++)
-		{
-			if(node.lexemsGroup[index][j].type=='=' && node.lexemsGroup[index][j-1].type=='v')
-				node.lexemsGroup[index][j-1].value = varPrefix + node.lexemsGroup[index][j-1].value;							
-		}		
-			
-		// resolve advanced techniques
-		var lexemObj:Object = Parser.processConvertedLexemArray(node.lexemsGroup[index], contexts);
-		node.result = lexemObj.result;
-		node.error = lexemObj.error;				
-	
-		if(!node.result)
-			return;
-								
-		node.lexemsGroup[index] = lexemObj.array;							
-		
-		/////////////////////////////////
-		
-		if(node.type == CT_TEST)
-		{
-			node.trans = ["true", "false"];
-			node.print = false;
-		}
-		else if(node.funcs[index])
-		{
-			if(node.funcs[index]=='loadDataFrom')
-				node.trans = ["true", "false"];
-		}
-
-   		// generate and execute code
-		var code:String = "";
-		if(node.type == CT_TEST)
-		{
-			for(j=0; j<node.lexemsGroup[index].length; j++) 
-			{
-				code += node.lexemsGroup[index][j].value;
-			}			
-		}
-		else if(node.funcs[index])
-		{
-			var func:Object = Parser.isFunctionExists(node.lexemsGroup[index]);
-			node.result = func.result;
-			node.error = func.error;
-		
-			if(!node.result)
-				return;
-			
-			code = func.value;
-		}
-		else
-		{
-			for(j=0; j<node.lexemsGroup[index].length; j++) 
-			{
-				code += node.lexemsGroup[index][j].value;
-			}			
-		}
-			
-		var evalRes:* = Parser.eval(code, contexts);
-		node.value = evalRes;
-	}
-	*/
 }
 }

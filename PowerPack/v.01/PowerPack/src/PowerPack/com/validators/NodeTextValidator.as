@@ -2,6 +2,7 @@ package PowerPack.com.validators
 {
 	import ExtendedAPI.com.utils.Utils;
 	
+	import PowerPack.com.BasicError;
 	import PowerPack.com.gen.parse.CodeParser;
 	import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 	import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
@@ -20,9 +21,7 @@ package PowerPack.com.validators
 			function_command: "function command",
 			
 			msg_not_valid_source: "Not valid source object.",
-			msg_normal_node_syntax_error: "State syntax error.",
-			msg_graph_node_syntax_error: "Subgraph state syntax error.",
-			msg_command_node_syntax_error: "Command state syntax error."
+			msg_normal_node_syntax_error: "State syntax error."
 		}
 		
 		static private var _classConstructed:Boolean = classConstruct(); 
@@ -75,31 +74,18 @@ package PowerPack.com.validators
        		var pattern:RegExp;
         	
         	var parseResult:ParsedBlock;
-        	
+
         	if (category == NodeCategory.NORMAL)
         	{
         		parseResult = CodeParser.ParseText(str);
-        		
-				if(parseResult.error)
-            	{
-                	results.push(new ValidationResult(true, null, "invalidVarName", 
-                    	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_normal_node_syntax_error)));
-            	}       
+      
         	}
         	else if (category == NodeCategory.SUBGRAPH)
         	{
         		parseResult = CodeParser.ParseSubgraphNode(str);
-
-	        	if(parseResult.error)
-            	{
-                	results.push(new ValidationResult(true, null, "invalidSubgraph", 
-                    	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_graph_node_syntax_error)));
-            	}
          	}
         	else if (category == NodeCategory.COMMAND)
         	{        		
-       			// check for command
-       			       			
        			parseResult = CodeParser.ParseCode(str);
 				
 				node.toolTip = "";
@@ -121,19 +107,22 @@ package PowerPack.com.validators
 	        			node.toolTip = LanguageManager.sentences.function_command;
         				break;
         		}
-        			
-	    		if(parseResult.error)
-	    		{
-	    			results.push(new ValidationResult(true, null, "invalidCommand", 
-                    	(parseResult.error ? parseResult.error.message : LanguageManager.sentences.msg_command_node_syntax_error)));
-       			}
         		//node.toolTip += node.text;
         	}
+        		
+            if(parseResult && (parseResult.errFragment || parseResult.error))
+			{
+	        	var error:Error = parseResult.errFragment ? parseResult.errFragment.error : parseResult.error;
         	
-            if(parseResult.errFragment)
-            	node.nodeTextArea.setSelection(parseResult.errFragment.position, 
-            		parseResult.errFragment.position + parseResult.errFragment.origValue.length);
+                results.push(new ValidationResult(true, null, error.errorID.toString(), error.message));
+            	
+            	if(parseResult.errFragment)        	
+            		node.nodeTextArea.setSelection(
+            			parseResult.errFragment.position, 
+            			parseResult.errFragment.position + parseResult.errFragment.origValue.length);
             
+   			}
+   
             if(!Utils.isEqualArrays(node.arrTrans, arrTrans))
 	   			node.arrTrans = arrTrans;
    			

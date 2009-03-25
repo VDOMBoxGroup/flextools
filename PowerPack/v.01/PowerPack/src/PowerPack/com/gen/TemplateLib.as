@@ -22,7 +22,7 @@ import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 public dynamic class TemplateLib
 {
 	include "include/GeneralFunctions.as";
-	//include "include/ListManipulationFunctions.as";
+	include "include/ListManipulationFunctions.as";
 	include "include/GraphicFunctions.as";
 	include "include/ImageProcessingFunctions.as";
 		

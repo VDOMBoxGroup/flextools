@@ -717,10 +717,6 @@ public class TemplateStruct extends EventDispatcher
 						}
 						*/
 						
-						if(contextStack.length==0)
-						{
-							buffer = tmpBuf;
-						}
 						
 						contextStack.pop();
 						
@@ -735,7 +731,7 @@ public class TemplateStruct extends EventDispatcher
 									//Utils.replaceEscapeSequences(tmpBuf, "\\-");
 								
 								context[curNodeContext.block.lastExecutedFragment.retVarName] =
-									curNodeContext.block.lastExecutedFragment.retValue; 
+									curNodeContext.block.lastExecutedFragment.retValue;
 								
 								step = 'processExecResult';
 								continue;
@@ -775,7 +771,7 @@ public class TemplateStruct extends EventDispatcher
 		} while(contextStack.length>0);
 		
 		// replace special sequences
-		buffer = Utils.replaceEscapeSequences(buffer, "\\-");
+		buffer = Utils.replaceEscapeSequences(tmpBuf, "\\-");
 		
 		isRunning = false;
  

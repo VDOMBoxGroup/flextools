@@ -571,6 +571,14 @@ public class Parser
 		}	
 	}
 	
+	/**
+	 * All non top level subfragments starts with ( or [ or {
+	 *  
+	 * @param lexems
+	 * @param codeType
+	 * @return 
+	 * 
+	 */
 	public static function fragmentLexems(lexems:Array, codeType:String):ParsedBlock
 	{
 		var block:ParsedBlock = new ParsedBlock();
@@ -596,11 +604,13 @@ public class Parser
 		
 		return block;
 		
+		//-------------------------------------------------------------------------------------------------
+		
 		function recursiveFragmentLexems(_terminal:String, _ftype:String, _parent:Object):CodeFragment {
 			var _fragment:CodeFragment = new CodeFragment(_ftype);
 			_fragment.parent = _parent; 
 			
-			if(_terminal!=';')
+			//if(_terminal!=';')
 			{
 				_fragment.fragments.push(block.lexems[index]);
 				index++;
@@ -629,38 +639,6 @@ public class Parser
 			return _fragment;
 		}
 	}
-
-	public static function validateTextFragment(fragment:CodeFragment):void
-	{
-		var lexemObj:Object;
-		var strSentence:String = "";
-		
-		for each(var subfragment:Object in fragment.fragments)
-		{
-			if(subfragment is CodeFragment)
-				validateCodeFragment(subfragment as CodeFragment);
-		}
-		
-		if(fragment.errFragment)
-			return; 
-		
-		fragment.validated = true;
-
-		// start validate current fragment
-		
-		for(var i:int=0; i<fragment.fragments.length; i++)
-			strSentence = strSentence + LexemStruct(fragment.fragments[i]).type;		
-		
-		lexemObj = isValidText(strSentence);
-		if(!lexemObj.result)
-		{
-			fragment.error = new CompilerError(null, 9000);
-			return;
-		}
-		
-		fragment.ctype = CodeFragment.CT_TEXT;		
-		fragment.print = true;
-	}
 	
 	public static function isFunctionExist(funcName:String):Boolean
 	{
@@ -674,18 +652,18 @@ public class Parser
 		var lexemObj:Object;
 		var strSentence:String = "";
 		
+		// validate current subfragments
+		
 		for each(var subfragment:Object in fragment.fragments)
 		{
 			if(subfragment is CodeFragment)
 				validateCodeFragment(subfragment as CodeFragment);
-		}
 		
-		if(fragment.errFragment)
-			return; 
-		
-		fragment.validated = true;
+			if(fragment.errFragment)
+				return; 
+		}		
 
-		// start validate current fragment
+		// validate current fragment
 		
 		for(var i:int=0; i<fragment.fragments.length; i++)
 			strSentence = strSentence + LexemStruct(fragment.fragments[i]).type;		
@@ -701,10 +679,9 @@ public class Parser
 
 			fragment.type = lexemObj.value;
 			fragment.ctype = CodeFragment.CT_OPERATION;
+			fragment.validated = true;
 			return;
 		}
-		
-		lexemObj = isValidAdvVar(lexemObj.value);
 		
 		// check for test
 		lexemObj = isValidTest(lexemObj.value);
@@ -715,22 +692,36 @@ public class Parser
 				
 			fragment.type = lexemObj.value;
 			fragment.ctype = CodeFragment.CT_TEST;
+			fragment.validated = true;
 			return;
 		}
 		
-		// rollup function
-		var argNum:int = lexemObj.value.indexOf("]")-strSentence.indexOf("[")-2;
-		lexemObj = isValidFunction(lexemObj.value);
-		if(lexemObj.result && lexemObj.value.length==1 && 
+		// check for advanced variable
+		lexemObj = isValidAdvVar(lexemObj.value);
+		if(lexemObj.result && lexemObj.value.length==1)
+		{
+			if(fragment.isTopLevel)
+				fragment.print = true;
+				
+			fragment.type = lexemObj.value;
+			fragment.ctype = CodeFragment.CT_ADV_VAR;
+			fragment.validated = true;
+			return;
+		}
+
+		// check for function
+		var funcObj:Object = isValidFunction(lexemObj.value);
+		var argNum:int = lexemObj.value.indexOf("]") - lexemObj.value.indexOf("[")-2;
+		if(funcObj.result && funcObj.value.length==1 && 
 			isFunctionExist(LexemStruct(fragment.fragments[1]).value))
 		{
 			if(fragment.isTopLevel)
 				fragment.print = true;
 			
 			fragment.type = lexemObj.value;
+			fragment.ctype = CodeFragment.CT_FUNCTION;
 			
 			fragment.funcName = LexemStruct(fragment.fragments[1]).value;				
-			fragment.ctype = CodeFragment.CT_FUNCTION;
 			
 			var funcDef:Object = funcDefinition[fragment.funcName];
 
@@ -753,12 +744,14 @@ public class Parser
 					return;
 				}
 				
-				fragment.trans = funcDef.trans;
+				if(funcDef.trans)
+					fragment.trans = funcDef.trans;
 			}
+			fragment.validated = true;
 			return;
 		}
 		
-		// rollup list
+		// check for list
 		lexemObj = isValidList(lexemObj.value);
 		if(lexemObj.result && lexemObj.value.length==1)
 		{
@@ -767,19 +760,55 @@ public class Parser
 				
 			fragment.ctype = CodeFragment.CT_LIST;							
 			fragment.type = lexemObj.value;
+			fragment.validated = true;
 			return;			
 		}
-				
+		
+		// check for assign
 		lexemObj = isValidAssign(lexemObj.value);
 		if(lexemObj.result)
 		{
 			fragment.ctype = CodeFragment.CT_ASSIGN;
+			fragment.validated = true;
 			return;
 		}
 		
 		fragment.error = new CompilerError(null, 9000);
 	}
-	
+
+	public static function validateTextFragment(fragment:CodeFragment):void
+	{
+		var lexemObj:Object;
+		var strSentence:String = "";
+		
+		// validate current subfragments
+				
+		for each(var subfragment:Object in fragment.fragments)
+		{
+			if(subfragment is CodeFragment)
+				validateCodeFragment(subfragment as CodeFragment);
+		
+			if(fragment.errFragment)
+				return; 
+		}		
+
+		// validate current fragment
+		
+		for(var i:int=0; i<fragment.fragments.length; i++)
+			strSentence = strSentence + LexemStruct(fragment.fragments[i]).type;		
+		
+		lexemObj = isValidText(strSentence);
+		if(!lexemObj.result)
+		{
+			fragment.error = new CompilerError(null, 9000);
+			return;
+		}
+		
+		fragment.ctype = CodeFragment.CT_TEXT;		
+		fragment.print = true;
+		fragment.validated = true;
+	}
+		
 	public static function validateFragmentedBlock(block:ParsedBlock):void
 	{
 		for each (var fragment:Object in block.fragments)
@@ -795,10 +824,11 @@ public class Parser
 					break;
 			}
 		}
-		block.validated = true;
 		
 		if(block.errFragment)
 			return;
+		
+		block.validated = true;
 	}	
 	
 	/**
@@ -980,15 +1010,15 @@ public class Parser
     	
 	public static function rollLexemString(lexemString:String, patterns:Array):String
 	{
-		var len:int;
+		//var len:int;
 		var prevLen:int;
 		var index:int = 0;
 		var strSentence:String = lexemString.concat();
 		
 		// parse operations
-		do {
-			len = strSentence.length;
-			index = 0;
+		//do {
+		//	len = strSentence.length;
+		//	index = 0;
 			
 			do {
 				prevLen = strSentence.length;
@@ -996,10 +1026,12 @@ public class Parser
 				strSentence = strSentence.replace(patterns[index][0], patterns[index][1]);
 				
 				if(prevLen == strSentence.length)
-					index++;				
+					index++;
+				else
+					index=0;
 			} while (index<patterns.length && strSentence.length);
 			
-		} while	(len!=strSentence.length && strSentence.length)
+		//} while	(len!=strSentence.length && strSentence.length)
 		
 		return strSentence;
 	}
@@ -1009,7 +1041,7 @@ public class Parser
 		var strSentence:String = lexemString.concat();
 		var patterns:Array = 
 			[
-				[/(^|=|4|5|9|n|\[|\])[23](v|i|f|F|A|W|E)/g, 	"$1$2"],	// remove signs '-1...', '...=+2...', '...(-3...'
+				[/(^|=|4|5|9|n|\[|\])[23](v|i|f|F|A|W|E)/g, 	"$1$2"]	// remove signs '-1...', '...=+2...', '...(-3...'
 			];     			
 
 		strSentence = rollLexemString(strSentence, patterns);
@@ -1022,7 +1054,7 @@ public class Parser
 		var strSentence:String = lexemString.concat();
 		var patterns:Array = 
 			[
-				[/^(.*)(;)+$/g, "$1"]
+				[/^(.*)(;)+$/g, "$1"]	// remove ';' from tail
 			];     			
 
 		strSentence = rollLexemString(strSentence, patterns);
@@ -1071,7 +1103,7 @@ public class Parser
 			[
 				[/[AWVNSvifscob]4[AWVNSvifscob]/g, 		"O"],	// operator
 				[/[OLb]5[OLb]/g, 						"L"],	// logical operator
-				[/9(O|L|b)0/g, 							"$1"]	
+				[/9(O|L|b)0/g, 							"$1"]	// (x) -> x			
 			]
 		;     			
 
@@ -1161,7 +1193,7 @@ public class Parser
 
 		var patterns:Array = 
 			[
-				[/[Wv]+/g, 				""],	// roll up vars
+				[/[Wv]+/g, 				"t"],	// roll up vars
 				[/t+/g, 				"t"]	// roll up text
 			]
 		;     			
@@ -1175,8 +1207,6 @@ public class Parser
 	}	
 	
 	//--------------------------------------------------------------------------
-    //
-    //  
     //
     //--------------------------------------------------------------------------
     

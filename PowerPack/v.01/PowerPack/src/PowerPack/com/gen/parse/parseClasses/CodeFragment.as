@@ -1,18 +1,17 @@
 package PowerPack.com.gen.parse.parseClasses
 {
-import PowerPack.com.gen.parse.Parser;
-
 import mx.utils.UIDUtil;
 	
 public class CodeFragment extends LexemStruct
 {
+	public static const CT_TEXT:String = 'text';
+	public static const CT_ADV_VAR:String = 'advancedVariable';
 	public static const CT_OPERATION:String = 'operation';
 	public static const CT_TEST:String = 'test';
 	public static const CT_FUNCTION:String = 'function';
-	public static const CT_ASSIGN:String = 'assign';
-	public static const CT_TEXT:String = 'text';
 	public static const CT_LIST:String = 'list';
-
+	public static const CT_ASSIGN:String = 'assign';
+	
 	public var fragments:Array = []; // lexems of fragment
 	
 	public var retVarName:String = "tmp_" + UIDUtil.createUID().replace(/-/g, "_"); 
@@ -21,10 +20,10 @@ public class CodeFragment extends LexemStruct
 
 	// for commands
 	public var ctype:String; // command type (FUNCTION|TEST|OPERATION|ASSIGN|LIST|TEXT)
+	
 	public var funcName:String; // function
 	
 	public var varNames:Array = []; // variable names for assign result
-	public var validated:Boolean;
 
 	// for variation create. ONLY FOR TOP LEVEL FRAGMENTS
 	public var trans:Array = []; // transitions array
@@ -32,7 +31,8 @@ public class CodeFragment extends LexemStruct
 	
 	public var parent:Object; // parent fragment|block
 	public var current:int = 0; // current subfragment
-	public var executed:Boolean = false;
+	public var validated:Boolean;
+	public var executed:Boolean;
 
     //--------------------------------------------------------------------------
 	//
@@ -60,7 +60,7 @@ public class CodeFragment extends LexemStruct
     //----------------------------------	
 	public function get isTopLevel():Boolean
 	{
-		return !parent || !(parent is CodeFragment);
+		return (!parent || !(parent is CodeFragment));
 	}		
 
     //----------------------------------
@@ -89,7 +89,7 @@ public class CodeFragment extends LexemStruct
 			{
 				if(CodeFragment(curFragment).ctype == CT_FUNCTION)
 					_value += CodeFragment(curFragment).retValue + curFragment.tailSpaces;
-				else if(CodeFragment(curFragment).type == 'W')
+				else if(CodeFragment(curFragment).ctype == CT_ADV_VAR)
 					_value += CodeFragment(curFragment).retValue + curFragment.tailSpaces;
 				else
 					_value += CodeFragment(curFragment).evalValue + curFragment.tailSpaces;
@@ -209,7 +209,11 @@ public class CodeFragment extends LexemStruct
 			
 			if(errFrag)
 				return errFrag;			
-		}	
+		}
+		
+		if(this.error)
+			return this;
+			
 		return null; 	
 	}
 	
@@ -232,7 +236,19 @@ public class CodeFragment extends LexemStruct
 	//  Class methods
 	//
 	//--------------------------------------------------------------------------
-		
+
+	public function resetCurrent():void
+	{
+		executed = false;
+		current = 0;
+
+		for(var i:int=0; i<fragments.length; i++)
+		{
+			if(fragments[i] is CodeFragment)
+				CodeFragment(fragments[i]).resetCurrent();
+		}
+	}
+			
 	public function getTopLevel():Object
 	{
 		var target:Object = parent;	

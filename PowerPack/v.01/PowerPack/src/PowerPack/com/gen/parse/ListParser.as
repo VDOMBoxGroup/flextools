@@ -41,13 +41,18 @@ public class ListParser
 		
 		Parser.validateFragmentedBlock(block);
 		
-    	if(block.errFragment)
+    	if(block.errFragment || !block.validated)
     		return null;
     	
-    	if(block.type != 'A')
+    	if(block.fragments.length!=1)
+    		return null;
+    	
+    	var fragment:CodeFragment = block.fragments[0];
+    	
+    	if(fragment.type != 'A')
     		return null;
 
-		Parser.processListGroups(block.fragments);
+		Parser.processListGroups(fragment.fragments);
 
 		var curFragment:LexemStruct;
 		var prevFragment:LexemStruct;
@@ -55,9 +60,9 @@ public class ListParser
 		var grp:int = -1;
 		var str:String;
 		 
-		for (var i:int=0; i<block.fragments.length; i++)
+		for (var i:int=0; i<fragment.fragments.length; i++)
 		{			
-			curFragment = block.fragments[i];
+			curFragment = fragment.fragments[i];
 
 			switch(curFragment.type)
 			{
@@ -70,32 +75,11 @@ public class ListParser
 						
 				case 's':
 				case 'c':
-					curFragment.listGroup = grp--;
-					pushWord();
-					//str = replaceAllBracers(curFragment.origValue);
-					//arr.push(Utils.replaceQuotes(str));
-					arr.push( curFragment );
-					break;
-					
 				case 'v':
-					curFragment.listGroup = grp--;
-					pushWord();
-					//str = replaceAllBracers(curFragment.origValue);
-					arr.push( curFragment );
-					break;
-					
 				case 'W':
-					curFragment.listGroup = grp--;
-					pushWord();
-					//str = replaceAllBracers(curFragment.origValue);
-					arr.push( curFragment );
-					break;
-					
 				case 'A':
 					curFragment.listGroup = grp--;
 					pushWord();
-					//str = replaceAllBracers(curFragment.origValue);
-					//arr.push( list2Array(str) );
 					arr.push( curFragment );
 					break;
 					
@@ -113,6 +97,8 @@ public class ListParser
 		
        	return arr;
        	
+       	//-----------------------------------------------------------------
+       	
        	function pushWord():void {
 			if(wordBuf)
 			{
@@ -121,6 +107,7 @@ public class ListParser
 			}
        	}
        	
+       	/*
        	function replaceAllBracers(_str:String):String {
        		var _buf:String = _str.concat();
 			var _len:int = _buf.length;
@@ -133,6 +120,7 @@ public class ListParser
 			
 			return _buf;
        	}
+       	*/
 	}
 	
 	public static function array2List(arr:Array):String
@@ -152,15 +140,7 @@ public class ListParser
 			}
 			else if(curElm.hasOwnProperty('type') && curElm.hasOwnProperty('value'))
 			{
-				switch(curElm.type)
-				{
-					case 'v':
-					case 'W':
-					case 'w':					
-					default:
-						listStr += curElm.value;
-						break;
-				}
+				listStr += curElm.value;
 			}
 			else
 				listStr += curElm.toString();
@@ -171,58 +151,61 @@ public class ListParser
 		return listStr;
 	}
 	
-	/*
-	public static function elm2Value(elm:Object):Object
+	public static function evaluate(list:String, contexts:Array):String
 	{
-		var code:String = '';
-		var retVal:Object;
-		if(elm is String)
-		{
-			retVal = elm;
-		}
-		else if(elm is Array)
-		{
-			retVal = array2List(elm);
-		}
-		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
-		{
-			switch(elm.type)
-			{
-				case 'v':
-				case 'W':
-					code = '$'+elm.value;
-					break;
-					
-				case 'w':
-					code = elm.value;
-					break;
-			}
-			
-			var block:ParsedBlock = Parser.fragmentLexems(Parser.getLexemArray(elm.value.concat(), false), 'text');
-			executeCodeFragment(curFragment, contexts, stepReturn);
-		}
+		var block:ParsedBlock = Parser.fragmentLexems(Parser.getLexemArray(list.concat(), true), 'code');
+  		
+    	if(block.errFragment)
+    		return null;
 		
-		return retVal;
+		Parser.validateFragmentedBlock(block);
+		
+    	if(block.errFragment || !block.validated)
+    		return null;
+    	
+    	if(block.fragments.length!=1)
+    		return null;
+    	
+    	var fragment:CodeFragment = block.fragments[0];
+    	
+    	if(fragment.type != 'A')
+    		return null;
+    		
+    	CodeParser.executeCodeFragment(fragment, contexts, false, true);
+    	
+    	if(fragment.executed)
+    		return fragment.retValue;
+    	
+    	return null;	
 	}
-	*/
 	
-	/*
-	public static function processElmValue(obj:Object):String
+	public static function execute(list:String, contexts:Array):String
 	{
-		var str:String = "";
+		var block:ParsedBlock = Parser.fragmentLexems(Parser.getLexemArray(list.concat(), true), 'code');
+  		
+    	if(block.errFragment)
+    		return null;
 		
-		if(obj!=null && obj.hasOwnProperty('type') && obj.hasOwnProperty('value'))
-		{
-			str = obj.value.toString();
-		}
-		else if(obj!=null)
-		{
-			str = obj.toString();
-		}
+		Parser.validateFragmentedBlock(block);
 		
-		return str;
+    	if(block.errFragment || !block.validated)
+    		return null;
+    	
+    	if(block.fragments.length!=1)
+    		return null;
+    	
+    	var fragment:CodeFragment = block.fragments[0];
+    	
+    	if(fragment.type != 'A')
+    		return null;
+    		
+    	CodeParser.executeCodeFragment(fragment, contexts, false, false);
+    	
+    	if(fragment.executed)
+    		return fragment.retValue;
+    	
+    	return null;    	
 	}
-	*/
 	
 	public static function processElmType(type:Object):int
 	{
@@ -236,12 +219,8 @@ public class ListParser
 				break;
 			
 			case 'string':
-				strType = type.toString().toLowerCase();
-				
 			case 'object':			
-				if(!strType)
-					if(type && type.hasOwnProperty('type') && type.type=='n' && type.hasOwnProperty('value'))
-						strType = type.value.toLowerCase()
+				strType = type.toString().toLowerCase();
 				
 				if(int(strType)==0)
 				{
@@ -282,13 +261,9 @@ public class ListParser
 				break;
 			
 			case 'string':
+			case 'object':
 				str = position.toString().toLowerCase();
 			
-			case 'object':
-				if(!str)
-					if(position && position.hasOwnProperty('type') && position.type=='n' && position.hasOwnProperty('value'))
-						str = position.value.toLowerCase();
-				
 				if(isNaN(Number(str)))
 				{
 					switch(str)
@@ -322,14 +297,10 @@ public class ListParser
 				break;
 			
 			case 'string':
+			case 'object':
 				if(!_str && drct) 
 					_str = drct.toString().toLowerCase();
-			case 'object':
-				if(!_str && drct && 
-					drct.hasOwnProperty('type') && drct.hasOwnProperty('value') && 
-					drct.type=='n')
-					_str = drct.value.toLowerCase();
-		
+
 				switch(_str)
 				{
 					case 'horizontal':
@@ -363,14 +334,10 @@ public class ListParser
 				break;
 			
 			case 'string':
+			case 'object':
 				if(!_str && type) 
 					_str = type.toString().toLowerCase();
-			case 'object':
-				if(!_str && type && 
-					type.hasOwnProperty('type') && type.hasOwnProperty('value') &&
-					type.type=='n' )
-					_str = type.value.toLowerCase();
-		
+
 				switch(_str)
 				{
 					case null:
@@ -452,13 +419,9 @@ public class ListParser
 				break;
 			
 			case 'string':
+			case 'object':
 				if(!_str && type) 
 					_str = type.toString().toLowerCase();
-			case 'object':
-				if(!_str && type && 
-					type.hasOwnProperty('type') && type.hasOwnProperty('value') && 
-					type.type=='n')
-					_str = type.value.toLowerCase();
 		
 				switch(_str)
 				{
@@ -535,6 +498,281 @@ public class ListParser
 		return ret;	
 	}
 
+	public static function length(list:Object):int
+	{		
+		var arr:Array = [];
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;
+		
+		return arr.length;	
+	}
+
+	public static function getElm(list:Object, position:Object):String
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:String;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);			
+		
+		var elm:Object = arr[pos];
+		
+		if(elm is CodeFragment)
+			ret = CodeFragment(elm).origValue;
+		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
+			ret = elm.value;
+		else
+			ret = elm.toString();
+		
+		return ret;
+	}
+
+	public static function getElmValue(list:Object, position:Object, contexts:Array):Object
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:Object;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);			
+		
+		var elm:Object = arr[pos];
+		
+		if(elm is CodeFragment)
+		{
+			CodeParser.executeCodeFragment(CodeFragment(elm), contexts);			
+			ret = CodeFragment(elm).retValue;
+		}
+		else if(elm is LexemStruct)
+		{
+			CodeParser.evaluateLexem(LexemStruct(elm), contexts);
+			ret = Parser.eval(LexemStruct(elm).code, contexts);
+		}
+		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
+			ret = elm.value;
+		else
+			ret = elm.toString();
+		
+		return ret;
+	}
+	
+	public static function getType(list:Object, position:Object):int
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);			
+		
+		var elm:Object = arr[pos];		
+		
+		if(elm is LexemStruct)
+		{
+			switch(LexemStruct(elm).type)
+			{
+				case 'n':
+				case 'o':
+				case 'b':
+				case 'i':
+				case 'f':
+				case 'w':
+					ret = ElmType.WORD;
+					break;
+				case 's':
+				case 'c':
+					ret = ElmType.STRING; 
+					break;
+				case 'A':			
+					ret = ElmType.LIST;
+					break;
+				case 'v':
+				case 'W':
+					ret = ElmType.VARIABLE;
+					break;
+				default:
+					ret = ElmType.UNKNOWN;
+			}
+		}
+		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
+			ret = ElmType.WORD;			
+		else
+			ret = ElmType.WORD;					
+		
+		return ret;
+	}
+
+	public static function exists(list:Object, type:Object, value:String):int
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:int = 0;
+		var _type:int = processElmType(type);
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+					
+		for(var i:int=1; i<=arr.length; i++)
+		{
+			if(	_type==getType(arr, i) &&
+				value==getElm(arr, i) )
+			{
+				ret = i;
+				break;
+			}
+		}
+		
+		return ret;
+	}
+
+	public static function remove(list:Object, position:Object):String
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		var arrCol:ArrayCollection = new ArrayCollection(arr);
+		
+		pos = processElmPosition(arr.length, position, 'get');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);
+		
+		arrCol.removeItemAt(pos);			
+		
+		return array2List(arr);
+	}
+		
+	public static function put(list:Object, position:Object, type:Object, value:String):String
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		var _type:int = processElmType(type);
+		var _value:String;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		var arrCol:ArrayCollection = new ArrayCollection(arr);
+		
+		pos = processElmPosition(arr.length, position, 'put');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>arr.length)
+			throw new RunTimeError(null, 9013);
+
+		switch(_type)
+		{
+			case ElmType.WORD:
+				_value = value;
+				break;
+			case ElmType.STRING:
+				_value = Utils.quotes(value);
+				break;
+			case ElmType.LIST:
+				_value = StringUtil.trim(value);
+				break;
+			case ElmType.VARIABLE:
+				_value = "$"+StringUtil.trim(_value);
+				break;
+		}
+		
+		arrCol.addItemAt(_value, pos);
+					
+		return array2List(arr);
+	}
+	
+	public static function update(list:Object, position:Object, type:Object, value:String):String
+	{
+		var arr:Array = [];
+		var pos:int;
+		var ret:int;
+		var _type:int = processElmType(type);
+		var _value:String;
+		
+		if(list is String)
+			arr = list2Array(String(list)); 
+		else if(list is Array)
+			arr = list as Array;	
+		
+		pos = processElmPosition(arr.length, position, 'put');
+		
+		if(pos<0)
+			throw new RunTimeError(null, 9011);
+
+		if(pos>=arr.length)
+			throw new RunTimeError(null, 9013);
+			
+		switch(_type)
+		{
+			case ElmType.WORD:
+				_value = value;
+				break;
+			case ElmType.STRING:
+				_value = Utils.quotes(value);
+				break;
+			case ElmType.LIST:
+				_value = StringUtil.trim(value);
+				break;
+			case ElmType.VARIABLE:
+				_value = "$"+StringUtil.trim(_value);
+				break;
+		}
+		
+		arr[pos] = _value;
+					
+		return array2List(arr);
+	}
+	
 	public static function processPoints(list:String, contexts:Array):Array
 	{
 		var arr:Array = list2Array(String(list)); 
@@ -954,409 +1192,5 @@ public class ListParser
 		return ret;	
 	}
 	
-	/*
-	private static function processList(
-		list:String, 
-		type:Object=null, 
-		position:Object=null, 
-		value:Object=null, 
-		operation:String="get"):*
-	{
-		var _position:int = -1;
-		var _type:int = -1;
-		var len:int;
-		var ret:*;
-		var i:int;
-		var arr:ArrayCollection;
-		var listObj:Object = Parser.processList(list);
-		
-		if(!listObj.result) {
-			throw listObj.error;
-		}
-	
-		len = listObj.value.length-2;
-		arr = new ArrayCollection(listObj.array);
-	
-		_position = processElmPosition(list, position, operation); 
-		
-		if(_position<0)
-			throw new RunTimeError(null, 9011);
-		
-		
-		 // 1 - Word
-		 // 2 - String
-		 // 3 - List
-		 // 4 - Variable  
-		 		 
-		_type = processElmType(type);
-		
-		if(_type<=0 && (operation=='exist' || operation=='update' || operation=='put'))
-			throw new RunTimeError(null, 9011);
-	
-		if(operation=="put")
-		{		
-			if(_position<0 || _position>len)
-				throw new RunTimeError(null, 9013);
-		}
-		else
-		{
-			if(_position<0 || _position>=len)
-				throw new RunTimeError(null, 9013);
-		}
-		
-		var str:String = processElmValue(value);
-				
-		if(operation=="update" || operation=="put")
-		{
-			switch(_type)
-			{
-				case 1:
-					break;
-				case 2:
-					str = Utils.quotes(str);
-					break;
-				case 3:
-					str = StringUtil.trim(str);
-					break;
-				case 4:
-					str = "$"+StringUtil.trim(str);
-					break;
-			}
-			
-			if(operation=='put')
-				arr.addItemAt(new LexemStruct(str, 'w', -1, null), _position+1);
-			else
-				arr.getItemAt(_position+1).origValue = str;
-				
-			ret = "";
-			for(i=0; i<arr.length; i++)
-				ret += (i>0?" ":"") + arr.getItemAt(i).origValue; 
-		}
-		else if(operation=="delete")
-		{
-			arr.removeItemAt(_position+1); 
-	
-			ret = "";
-			for(i=0; i<arr.length; i++)
-				ret += (i>0?" ":"") + arr.getItemAt(i).origValue; 
-		}
-		else if(operation=="get")
-		{ 
-			ret = arr.getItemAt(_position+1).origValue;
-			ret = StringUtil.trim(ret);
-			
-			
-			//if(listObj.value.charAt(_position+1)=='A' || Parser.processList( ret ).result)
-			//{
-			//	ret = StringUtil.trim(ret);
-			//}
-			
-		}
-		else if(operation=="getType")
-		{
-			switch((listObj.value as String).charAt(_position+1))
-			{
-				case 'n':
-				case 'o':
-				case 'b':
-				case 'i':
-				case 'f':
-				case 'w':
-					ret = ElmType.WORD; // word
-					break;
-				case 's':
-				case 'c':
-					ret = ElmType.STRING; // string
-					if( Parser.processList( arr.getItemAt(_position+1).origValue ).result )
-						ret = ElmType.LIST; // list
-					break;
-				case 'A':			
-					ret = ElmType.LIST; // list
-					break;
-				case 'v':
-					ret = ElmType.VARIABLE; // variable
-					break;
-				default:
-					ret = ElmType.UNKNOWN; // undefined
-			}
-		}
-		return ret;
-	}
-	*/
-	
-	public static function length(list:Object):int
-	{		
-		var arr:Array = [];
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;
-		
-		return arr.length;	
-	}
-
-	public static function getElm(list:Object, position:Object):String
-	{
-		var arr:Array = [];
-		var pos:int;
-		var ret:String;
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;	
-		
-		pos = processElmPosition(arr.length, position, 'get');
-		
-		if(pos<0)
-			throw new RunTimeError(null, 9011);
-
-		if(pos>=arr.length)
-			throw new RunTimeError(null, 9013);			
-		
-		var elm:Object = arr[pos];
-		
-		if(elm is CodeFragment)
-			ret = CodeFragment(elm).origValue;
-		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
-			ret = elm.value;
-		else
-			ret = elm.toString();
-		
-		return ret;
-	}
-
-	public static function getElmValue(list:Object, position:Object, contexts:Array):Object
-	{
-		var arr:Array = [];
-		var pos:int;
-		var ret:Object;
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;	
-		
-		pos = processElmPosition(arr.length, position, 'get');
-		
-		if(pos<0)
-			throw new RunTimeError(null, 9011);
-
-		if(pos>=arr.length)
-			throw new RunTimeError(null, 9013);			
-		
-		var elm:Object = arr[pos];
-		
-		if(elm is CodeFragment)
-		{
-			CodeParser.executeCodeFragment(CodeFragment(elm), contexts);			
-			ret = CodeFragment(elm).retValue;
-		}
-		else if(elm is LexemStruct)
-		{
-			CodeParser.evaluateLexem(LexemStruct(elm), contexts);
-			ret = Parser.eval(LexemStruct(elm).code, contexts);
-		}
-		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
-			ret = elm.value;
-		else
-			ret = elm.toString();
-		
-		return ret;
-	}
-	
-	public static function getType(list:Object, position:Object):int
-	{
-		var arr:Array = [];
-		var pos:int;
-		var ret:int;
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;	
-		
-		pos = processElmPosition(arr.length, position, 'get');
-		
-		if(pos<0)
-			throw new RunTimeError(null, 9011);
-
-		if(pos>=arr.length)
-			throw new RunTimeError(null, 9013);			
-		
-		var elm:Object = arr[pos];		
-		
-		if(elm is LexemStruct)
-		{
-			switch(LexemStruct(elm).type)
-			{
-				case 'n':
-				case 'o':
-				case 'b':
-				case 'i':
-				case 'f':
-				case 'w':
-					ret = ElmType.WORD;
-					break;
-				case 's':
-				case 'c':
-					ret = ElmType.STRING; 
-					break;
-				case 'A':			
-					ret = ElmType.LIST;
-					break;
-				case 'v':
-				case 'W':
-					ret = ElmType.VARIABLE;
-					break;
-				default:
-					ret = ElmType.UNKNOWN;
-			}
-		}
-		else if(elm.hasOwnProperty('type') && elm.hasOwnProperty('value'))
-			ret = ElmType.WORD;			
-		else
-			ret = ElmType.WORD;					
-		
-		return ret;
-	}
-
-	public static function exists(list:Object, type:Object, value:String):int
-	{
-		var arr:Array = [];
-		var pos:int;
-		var ret:int = 0;
-		var _type:int = processElmType(type);
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;	
-					
-		for(var i:int=1; i<=arr.length; i++)
-		{
-			if(	_type==getType(arr, i) &&
-				value==getElm(arr, i) )
-			{
-				ret = i;
-				break;
-			}
-		}
-		
-		return ret;
-	}
-
-	public static function remove(list:Object, position:Object):String
-	{
-		var arr:Array = [];
-		var pos:int;
-		var ret:int;
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;	
-		
-		var arrCol:ArrayCollection = new ArrayCollection(arr);
-		
-		pos = processElmPosition(arr.length, position, 'get');
-		
-		if(pos<0)
-			throw new RunTimeError(null, 9011);
-
-		if(pos>=arr.length)
-			throw new RunTimeError(null, 9013);
-		
-		arrCol.removeItemAt(pos);			
-		
-		return array2List(arr);
-	}
-		
-	public static function put(list:Object, position:Object, type:Object, value:String):String
-	{
-		var arr:Array = [];
-		var pos:int;
-		var ret:int;
-		var _type:int = processElmType(type);
-		var _value:String;
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;	
-		
-		var arrCol:ArrayCollection = new ArrayCollection(arr);
-		
-		pos = processElmPosition(arr.length, position, 'put');
-		
-		if(pos<0)
-			throw new RunTimeError(null, 9011);
-
-		if(pos>arr.length)
-			throw new RunTimeError(null, 9013);
-
-		switch(_type)
-		{
-			case ElmType.WORD:
-				_value = value;
-				break;
-			case ElmType.STRING:
-				_value = Utils.quotes(value);
-				break;
-			case ElmType.LIST:
-				_value = StringUtil.trim(value);
-				break;
-			case ElmType.VARIABLE:
-				_value = "$"+StringUtil.trim(_value);
-				break;
-		}
-		
-		arrCol.addItemAt(_value, pos);
-					
-		return array2List(arr);
-	}
-	
-	public static function update(list:Object, position:Object, type:Object, value:String):String
-	{
-		var arr:Array = [];
-		var pos:int;
-		var ret:int;
-		var _type:int = processElmType(type);
-		var _value:String;
-		
-		if(list is String)
-			arr = list2Array(String(list)); 
-		else if(list is Array)
-			arr = list as Array;	
-		
-		pos = processElmPosition(arr.length, position, 'put');
-		
-		if(pos<0)
-			throw new RunTimeError(null, 9011);
-
-		if(pos>=arr.length)
-			throw new RunTimeError(null, 9013);
-			
-		switch(_type)
-		{
-			case ElmType.WORD:
-				_value = value;
-				break;
-			case ElmType.STRING:
-				_value = Utils.quotes(value);
-				break;
-			case ElmType.LIST:
-				_value = StringUtil.trim(value);
-				break;
-			case ElmType.VARIABLE:
-				_value = "$"+StringUtil.trim(_value);
-				break;
-		}
-		
-		arr[pos] = _value;
-					
-		return array2List(arr);
-	}
 }
 }

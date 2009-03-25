@@ -1,5 +1,6 @@
 package PowerPack.com.gen.parse.parseClasses
 {
+	
 public class LexemStruct
 {
 	public var type:String; // lexem type
@@ -52,7 +53,7 @@ public class LexemStruct
     //----------------------------------
     //  value
     //----------------------------------	
-	private var _value:String; // modified value
+	private var _value:String; // evaluate value
 	public function get value():String
 	{
 		return _value;
@@ -113,7 +114,7 @@ public class LexemStruct
 	 */ 
 	public function LexemStruct(value:String, type:String, position:int, error:Error)
 	{
-		this.origValue = value 
+		this.origValue = value; 
 		this.value = value;
 		this.code = value;
 		

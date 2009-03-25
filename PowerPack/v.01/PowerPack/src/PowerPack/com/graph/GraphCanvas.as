@@ -125,6 +125,9 @@ public class GraphCanvas extends Canvas
 	{
 		super();
 		
+		doubleClickEnabled = true;
+		
+		addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 		addEventListener(MouseEvent.MOUSE_WHEEL, wheelHandler);
 		addEventListener(MouseEvent.MIDDLE_CLICK, middleClickHandler);
 		addEventListener(DragEvent.DRAG_ENTER, dragEnterHandler); 
@@ -162,7 +165,8 @@ public class GraphCanvas extends Canvas
         	selectionManager.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
         	selectionManager.dispose();
         }  				
-
+		
+		removeEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 		removeEventListener(MouseEvent.MOUSE_WHEEL, wheelHandler);
 		removeEventListener(MouseEvent.MIDDLE_CLICK, middleClickHandler);
 		removeEventListener(DragEvent.DRAG_ENTER, dragEnterHandler);
@@ -920,13 +924,18 @@ public class GraphCanvas extends Canvas
 				verticalScrollPosition += 0.1;
 				horizontalScrollPosition += 0.1;  
 			}
-			else {
+			else if(scaleX>0.2){
 				scaleX = scaleY -= 0.1;
 				verticalScrollPosition -= 0.1;
 				horizontalScrollPosition -= 0.1;  
 			}
 		}	
 	}
+	private function doubleClickHandler(event:MouseEvent):void
+	{
+		selectionManager.deselectAll();
+		createNode();
+	}	
 	
 	private function middleClickHandler(event:MouseEvent):void
 	{
