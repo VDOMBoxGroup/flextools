@@ -718,7 +718,7 @@ public class Parser
 			if(fragment.isTopLevel)
 				fragment.print = true;
 			
-			fragment.type = lexemObj.value;
+			fragment.type = funcObj.value;
 			fragment.ctype = CodeFragment.CT_FUNCTION;
 			
 			fragment.funcName = LexemStruct(fragment.fragments[1]).value;				

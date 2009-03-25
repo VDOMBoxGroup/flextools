@@ -194,6 +194,8 @@ public class Node extends Canvas
 		styleName = this.className;
 		cacheAsBitmap = true;		
 		
+		addEventListener(FlexEvent.ADD, addHandler);
+		
 		nodes[this] = this;
 	}		
 	
@@ -245,7 +247,8 @@ public class Node extends Canvas
 
         systemManager.stage.removeEventListener(
             Event.MOUSE_LEAVE, stage_mouseLeaveHandler);  			
-
+		
+		removeEventListener(FlexEvent.ADD, addHandler);
 		removeEventListener(MouseEvent.MOUSE_OVER , mouseOverHandler);
 		removeEventListener(MouseEvent.MOUSE_OUT , mouseOutHandler);
 		removeEventListener(MouseEvent.MOUSE_DOWN , mouseDownHandler);
@@ -1544,14 +1547,34 @@ public class Node extends Canvas
             stopDragging();
     } 
         	    
-    private function typeChangedHandler(event:Event):void
-    {	    	
-    	if(event.target.type==NodeType.INITIAL && event.target.parent)
+    private function addHandler(event:FlexEvent):void
+    {
+    	var node:Node = event.target as Node;
+    	 
+    	if(node.type==NodeType.INITIAL && node.parent)
     	{
-    		for each (var child:UIComponent in Container(event.target.parent).getChildren())
+    		for each (var child:UIComponent in Container(node.parent).getChildren())
     		{
     			if(	child is Node && 
-    				child!=event.target && 
+    				child!=node && 
+    				Node(child).type==NodeType.INITIAL)
+    			{
+    				Node(child).type = NodeType.NORMAL;
+    			}
+    		}
+    	}
+    }
+    
+    private function typeChangedHandler(event:Event):void
+    {	    	
+    	var node:Node = event.target as Node;
+    	 
+    	if(node.type==NodeType.INITIAL && node.parent)
+    	{
+    		for each (var child:UIComponent in Container(node.parent).getChildren())
+    		{
+    			if(	child is Node && 
+    				child!=node && 
     				Node(child).type==NodeType.INITIAL)
     			{
     				Node(child).type = NodeType.NORMAL;
@@ -1726,10 +1749,20 @@ public class Node extends Canvas
 				canvas.currentArrow.toObject = this;
 				
 				canvas.currentArrow.interactive = true;
-					
-				canvas.currentArrow.beginEdit();
+				
+				if(!event.altKey)
+				{
+					callLater(canvas.currentArrow.beginEdit);
+				}
 				
 				canvas.currentArrow = null;
+				
+				if(event.altKey)
+				{	
+					bringToFront();
+					beginTransition();
+					return;
+				}
 				
 				return;
 			}
