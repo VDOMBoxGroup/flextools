@@ -715,8 +715,7 @@ public class TemplateStruct extends EventDispatcher
 							tmpPrint = true;
 							GraphContext(contextStack[contextStack.length-2]).buffer += tmpBuf;
 						}
-						*/
-						
+						*/						
 						
 						contextStack.pop();
 						

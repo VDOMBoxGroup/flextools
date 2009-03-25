@@ -215,7 +215,7 @@ public class CodeParser
 						}
 						
 						// add prefix
-						tmpValue += fragment.varPrefix + tmpValue.toString();
+						tmpValue = fragment.varPrefix + tmpValue.toString();
 						fragment.varNames.push(tmpValue);
 						
 						code += tmpValue + '=';
