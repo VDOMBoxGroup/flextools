@@ -153,6 +153,7 @@ public class Parser
 		var err:Error;		// error
 		var bPush:Boolean;	// add or not sequence to lexems array
 		var braceStack:Array=[];
+		var braceLexemStack:Array=[];
 		var spaceStack:String='';
 		
 		while(i<sourceText.length)
@@ -373,7 +374,16 @@ public class Parser
  				if(lexems.length>1)
  					LexemStruct(lexems[lexems.length-2]).tailSpaces = spaceStack;
  				
- 				spaceStack = ''; 			
+ 				if("9{[".indexOf(LexemStruct(lexems[lexems.length-1]).type)>=0)
+ 					braceLexemStack.push(lexems[lexems.length-1]);
+ 				else if("0}]".indexOf(LexemStruct(lexems[lexems.length-1]).type)>=0 && braceLexemStack.length)
+ 				{
+ 					LexemStruct(lexems[lexems.length-1]).relative = LexemStruct(braceLexemStack[braceLexemStack.length-1]); 
+ 					LexemStruct(braceLexemStack[braceLexemStack.length-1]).relative = LexemStruct(lexems[lexems.length-1]);
+ 					braceLexemStack.pop();
+ 				}
+ 				
+ 				spaceStack = '';		
  			} 					
 			i++;        			        				
 		} 
@@ -386,6 +396,8 @@ public class Parser
 		}
 			
 		return lexems;
+		
+		// ------------------------------------------------------------------------
 		
 		function parseVar():void {
 			i++;

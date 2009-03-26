@@ -89,7 +89,10 @@ public class ListParser
 					else if(!wordBuf)
 						wordBuf = curFragment.origValue;
 					else
+					{
 						pushWord();
+						wordBuf = curFragment.origValue;
+					}
 					break;
 			}
 			prevFragment = curFragment;

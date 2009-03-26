@@ -5,6 +5,7 @@ public class LexemStruct
 {
 	public var type:String; // lexem type
 	public var code:String; // as3 execution code
+	public var relative:LexemStruct; // for brakes pairs
 	
 	// USED IN FUNCTIONS FOR ARGUMENTS SEPARATING
 	public var operationGroup:int = 0; // operation expression group number (0 - not grouped) 
