@@ -278,7 +278,7 @@
 					else if(child.graphs.length>0)
 						return child.graphs.getItemAt(0) as GraphCanvas;
 				}
-				return null;				
+				return null;
 			}
 			
 			public function selectGraph(graph:GraphCanvas):void

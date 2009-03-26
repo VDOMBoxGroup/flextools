@@ -34,7 +34,7 @@ package PowerPack.com.importation
 			'bar':'Bar',
 			'bgmusic':'BgMusic',
 			'button':'Button',
-			'calendar':'Calendar',
+			'calendar':'Calendar', 
 			'contact':'Contact',
 			'container':'Container',
 			'copy':'Copy',
