@@ -198,8 +198,7 @@ public class CodeFragment extends LexemStruct
 			
 			if(fragment is CodeFragment)
 			{
-				if((fragment as CodeFragment).error)
-					errFrag = (fragment as CodeFragment).errFragment;
+				errFrag = (fragment as CodeFragment).errFragment;
 			}
 			else if(fragment is LexemStruct)
 			{
@@ -211,7 +210,7 @@ public class CodeFragment extends LexemStruct
 				return errFrag;			
 		}
 		
-		if(this.error)
+		if(error)
 			return this;
 			
 		return null; 	

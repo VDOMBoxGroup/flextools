@@ -103,10 +103,10 @@ public class ParsedBlock
 	{
 		for(var i:int=0; i<fragments.length; i++)
 		{
-			if((fragments[i] as CodeFragment).error)
-				return fragments[i];
-			else if ((fragments[i] as CodeFragment).errFragment)
-				return (fragments[i] as CodeFragment).errFragment;
+			var curFragm:LexemStruct = (fragments[i] as CodeFragment).errFragment
+
+			if(curFragm)
+				return curFragm;
 		}	
 		return null; 	
 	}

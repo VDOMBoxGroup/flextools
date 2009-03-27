@@ -264,8 +264,7 @@ public class Parser
 			    		if(braceStack.length>0)
 			    		{
 			    			brace = ")}]".charAt("({[".indexOf(braceStack[braceStack.length-1]));
-			   											    			
-			    			err = new CompilerError(null, 9005, ["'"+brace+"'"]);
+			   				LexemStruct(braceLexemStack[braceLexemStack.length-1]).error = new CompilerError(null, 9005, ["'"+brace+"'"]);							    			
 			    		}	   						
     					break;	
     					
@@ -369,7 +368,17 @@ public class Parser
 				if(type=='u' && !err)
 					err = new CompilerError(null, 9002, ["("+sourceText.substring(fix, i+1)+")"]);
  				
- 				lexems.push(new LexemStruct(sourceText.substring(fix, i+1), type, fix, err));
+ 				if(lexems.length && LexemStruct(lexems[lexems.length-1]).type=='t' && type=='t')
+ 				{
+ 					var substr:String = sourceText.substring(fix, i+1);
+ 					var lastLexem:LexemStruct = LexemStruct(lexems[lexems.length-1]); 
+ 					
+ 					lastLexem.origValue += substr;  
+ 					lastLexem.value = lastLexem.origValue; 
+ 					lastLexem.code = lastLexem.origValue;  
+ 				}
+ 				else
+ 					lexems.push(new LexemStruct(sourceText.substring(fix, i+1), type, fix, err));
  				
  				if(lexems.length>1)
  					LexemStruct(lexems[lexems.length-2]).tailSpaces = spaceStack;
@@ -391,8 +400,7 @@ public class Parser
 		if(braceStack.length>0 && lexems.length>0 && !lexems[lexems.length-1].error)
 		{
 			brace = ")}]".charAt("({[".indexOf(braceStack[braceStack.length-1]));
-			
-   			lexems.push(new LexemStruct('', 'u', sourceText.length, new CompilerError(null, 9005, ["'"+brace+"'"])));				    			
+			LexemStruct(braceLexemStack[braceLexemStack.length-1]).error = new CompilerError(null, 9005, ["'"+brace+"'"]);
 		}
 			
 		return lexems;
@@ -441,56 +449,6 @@ public class Parser
    			type = 'v'; // variable			
 		}		
 	}
-		
-	/*public static function sliceLexems(lexems:Array, separator:String=';'):Array
-	{
-		var arr:Array = [];
-		var fix:int = 0;
-		
-		for(var i:int=0; i<lexems.length; i++)
-		{
-			if(lexems[i].type==separator)
-			{
-				if(fix<i)					
-					arr.push(lexems.slice(fix, i));
-				fix = i+1;
-			}
-		}
-		
-		// push rest of lexems
-		if(fix<i)
-			arr.push(lexems.slice(fix, i));
-													
-		return arr;
-	}*/
-		
-	/*public static function convertLexemArray(lexems:Array):Array
-	{
-		var converted:Array = lexems.concat();
-		
-		for(var i:int=0; i<converted.length; i++)
-		{
-			switch(converted[i].type)
-			{
-				case "t": // replace special characters from texts
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\r");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\n");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\t");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\$");
-					converted[i].value = Utils.replaceEscapeSequences(converted[i].value, "\\\\");
-					break;
-				case "v": // convert variable names to as3 compatible names
-					converted[i].value = String(converted[i].value).substring(1);
-					break;
-			}
-		}
-		return converted;
-	}*/
-	
-	/*public static function processLexemArray(lexems:Array):void
-	{			
-		processOperationGroups(lexems);
-	}*/
 	
 	/**
 	 * Divide lexem array into operation groups
@@ -604,13 +562,22 @@ public class Parser
 			switch(codeType)
 			{
 				case 'text':
-					block.fragments.push(recursiveFragmentLexems(null, "F", block));
 					break;	
 				
 				case 'code':
-					block.fragments.push(recursiveFragmentLexems(";", "F", block));
 					break;
 			}
+			
+			block.fragments.push(recursiveFragmentLexems(";", "F", block));
+			
+			var lastFragm:CodeFragment = block.fragments[block.fragments.length-1] as CodeFragment;
+			if(	lastFragm.fragments.length==1 && lastFragm.fragments[0] is CodeFragment ||
+				lastFragm.fragments.length==2 && lastFragm.fragments[0] is CodeFragment && LexemStruct(lastFragm.fragments[1]).type==';')
+			{
+				block.fragments[block.fragments.length-1] = lastFragm.fragments[0];
+				CodeFragment(lastFragm.fragments[0]).parent = block;
+			}
+			
 			index++;
 		}
 		
@@ -622,7 +589,7 @@ public class Parser
 			var _fragment:CodeFragment = new CodeFragment(_ftype);
 			_fragment.parent = _parent; 
 			
-			//if(_terminal!=';')
+			if(_parent is CodeFragment)
 			{
 				_fragment.fragments.push(block.lexems[index]);
 				index++;
@@ -630,8 +597,7 @@ public class Parser
 				
 			while(index<block.lexems.length && block.lexems[index].type!=_terminal)
 			{
-				if(((codeType=='code' || _fragment.parent is CodeFragment) && "[{9".indexOf(block.lexems[index].type)>=0) ||
-					(codeType=='text' && "{".indexOf(block.lexems[index].type)>=0))
+				if("[{9".indexOf(block.lexems[index].type)>=0)
 				{
 					var _subfragment:CodeFragment = recursiveFragmentLexems(
 							"]}0".charAt("[{9".indexOf(block.lexems[index].type)), 
@@ -645,7 +611,7 @@ public class Parser
 				index++;
 			}
 			
-			if(index<block.lexems.length && _terminal && block.lexems[index].type==_terminal)
+			if(index<block.lexems.length && block.lexems[index].type==_terminal)
 				_fragment.fragments.push(block.lexems[index]);
 
 			return _fragment;

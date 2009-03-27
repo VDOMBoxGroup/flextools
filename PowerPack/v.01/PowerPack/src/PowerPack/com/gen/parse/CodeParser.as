@@ -15,30 +15,6 @@ public class CodeParser
 	public static const MSG_CN_SYNTAX_ERR:String = "Command state syntax error.";
 	public static const MSG_CN_UNKNOWN_TYPE:String = "Unrecognized command state type.";
 	
-	/*public static function resetCodeFragmentCurrent(fragment:CodeFragment):void
-	{
-		fragment.executed = false;
-		fragment.current = 0;
-
-		for(var i:int=0; i<fragment.fragments.length; i++)
-		{
-			if(fragment.fragments[i] is CodeFragment)
-				resetCodeFragmentCurrent(fragment.fragments[i]);
-		}
-	}*/
-
-	/*public static function resetBlockCurrent(block:ParsedBlock):void
-	{
-		block.executed = false;
-		block.current = 0;		
-
-		for(var i:int=0; i<block.fragments.length; i++)
-		{
-			if(block.fragments[i] is CodeFragment)
-				resetCodeFragmentCurrent(block.fragments[i]);
-		}
-	}*/
-	
 	public static function evaluateLexem(lexem:LexemStruct, contexts:Array):void
 	{
 		switch(LexemStruct(lexem).type)
@@ -132,7 +108,10 @@ public class CodeParser
 						tmpValue = (subfragment as CodeFragment).retValue;
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).value;
-
+					
+					if(tmpValue == null)
+						tmpValue = 'undefined';
+						
 					code += tmpValue.toString();
 				}
 				
@@ -154,6 +133,9 @@ public class CodeParser
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).code;							
 
+					if(tmpValue == null)
+						tmpValue = 'null';
+
 					code += tmpValue.toString();
 				}	
 				break;
@@ -168,10 +150,13 @@ public class CodeParser
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).code;
 
+					if(tmpValue == null)
+						tmpValue = 'null';
+
 					code += tmpValue.toString();
 				}
-				fragment.varNames.push(code);
 				code = Parser.eval(code, contexts);
+				fragment.varNames.push(code);
 				break;
 								
 			case CodeFragment.CT_FUNCTION:
@@ -185,6 +170,9 @@ public class CodeParser
 						tmpValue = (subfragment as CodeFragment).retVarName;
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).code;					
+					
+					if(tmpValue == null)
+						tmpValue = 'null';
 
 					var sep:String = 
 						(fragment.fragments[i-1].operationGroup!=fragment.fragments[i].operationGroup && 
@@ -206,13 +194,12 @@ public class CodeParser
 					if(nextSubfragment is LexemStruct && LexemStruct(nextSubfragment).type=='=')
 					{
 						if(subfragment is CodeFragment)
-						{
 							tmpValue = (subfragment as CodeFragment).varNames[0];
-						}
 						else if(subfragment is LexemStruct)
-						{
 							tmpValue = LexemStruct(subfragment).code;
-						}
+		
+						if(tmpValue == null)
+							tmpValue = 'null';
 						
 						// add prefix
 						tmpValue = fragment.varPrefix + tmpValue.toString();
@@ -233,7 +220,10 @@ public class CodeParser
 						tmpValue = (subfragment as CodeFragment).retVarName;
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).code;
-						
+		
+					if(tmpValue == null)
+						tmpValue = 'null';
+				
 					code += tmpValue;
 				}
 				break;
