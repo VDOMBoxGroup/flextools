@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	
+	layout="absolute" width="1000" height="600"
+	
+	creationComplete="creationCompleteHandler()" xmlns:ns1="*">
+<mx:Script>
+	<![CDATA[
+		private function creationCompleteHandler() : void
+		{
+			var d : * = "";
+		}
+	]]>
+</mx:Script>
+	<ns1:XMLScriptEditor id="eee" left="10" right="10" top="10" bottom="10"/>
+	
+</mx:WindowedApplication>

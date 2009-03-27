@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml"
+	location="exemple_full.html" initialize="initalize()">
+	<mx:Script>
+		<![CDATA[
+			private function initalize() : void
+			{
+				addEventListener( "windowLoaded", zzz );
+			}
+			private function zzz( event : Event ) : void
+			{
+				var d : * = "";	
+			}
+		]]>
+	</mx:Script>
+</mx:HTML>
