@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml"
-	location="exemple_full.html" initialize="initalize()">
+	location="exemple_full.html" initialize="initalize()" >
 	<mx:Script>
 		<![CDATA[
 			private function initalize() : void
 			{
 				addEventListener( "windowLoaded", zzz );
+				this.domWindow.test = test;
 			}
 			private function zzz( event : Event ) : void
 			{
 				var d : * = "";	
+			}
+			
+			private function test( ... arg ) : void
+			{
+				var d : * = ""
 			}
 		]]>
 	</mx:Script>

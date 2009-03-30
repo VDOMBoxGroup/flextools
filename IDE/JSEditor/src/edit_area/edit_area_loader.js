@@ -220,13 +220,11 @@ EditAreaLoader.prototype ={
 			if(typeof(settings[i])=="undefined")
 				settings[i]=this.default_settings[i];
 		}
-//		alert("init begin 1") //<---
 		this.nav['isValidBrowser']=true //<---
 		
 		if(settings["browsers"]=="known" && this.nav['isValidBrowser']==false){
 			return;
 		}
-//		alert("init begin 2") //<---
 		if(settings["begin_toolbar"].length>0)
 			settings["toolbar"]= settings["begin_toolbar"] +","+ settings["toolbar"];
 		if(settings["end_toolbar"].length>0)
@@ -238,7 +236,6 @@ EditAreaLoader.prototype ={
 			if(settings["plugins"][i].length==0)
 				settings["plugins"].splice(i,1);
 		}
-	//	alert(settings["plugins"].length+": "+ settings["plugins"].join(","));
 	/*	var tmp="";
 		for(var i in settings){
 			tmp+=i+" : "+settings[i]+";\n";
@@ -252,7 +249,6 @@ EditAreaLoader.prototype ={
 			this.load_script(this.baseURL + "reg_syntax/"+ settings["syntax"] + ".js");
 		}
 		//alert(this.template);
-//		alert("init begin 3") //<---
 		editAreas[settings["id"]]= {"settings": settings};
 		editAreas[settings["id"]]["displayed"]=false;
 		editAreas[settings["id"]]["hidden"]=false;
@@ -418,6 +414,7 @@ EditAreaLoader.prototype ={
 		container.id= "EditArea_frame_container_"+area["settings"]["id"];
 	*/	
 		var content= document.createElement("iframe");
+		content.sandboxRoot="http://www.example.com/air/"
 		content.name= "frame_"+area["settings"]["id"];
 		content.id= "frame_"+area["settings"]["id"];
 		content.style.borderWidth= "0px";
@@ -431,7 +428,6 @@ EditAreaLoader.prototype ={
 			father.appendChild(container);
 		else
 			father.insertBefore(container, next) ;*/
-		alert(content)
 		var next= area.textarea.nextSibling;
 		if(next==null)
 			father.appendChild(content);
@@ -439,15 +435,13 @@ EditAreaLoader.prototype ={
 			father.insertBefore(content, next) ;		
 		var frame=window.frames["frame_"+area["settings"]["id"]];		
 		
-		frame.document.open();
+		//frame.document.open();
 		frame.editAreas=editAreas;
-		frame.area_id= area["settings"]["id"];	
-		frame.document.area_id= area["settings"]["id"];	
-		frame.document.write(template);
-		frame.document.close();
-	//	frame.editAreaLoader=this;
-		//editAreas[area["settings"]["id"]]["displayed"]=true;
-		
+		frame.area_id= area["settings"]["id"];
+		frame.document.area_id= area["settings"]["id"];
+		frame.location.href = "edit_area/ntemplate.html";
+		//frame.document.write(template);
+		//frame.document.close();
 	},
 	
 	toggle : function(id, toggle_to){
@@ -697,7 +691,7 @@ EditAreaLoader.prototype ={
 				alert("XMLHTTPRequest not supported. EditArea not loaded"); 
 				return; 
 			} 
-			var file = new air.File("app:/edit_area/template.html");
+			var file = new air.File("app:/edit_area/ntemplate.html");
 			
 //			file = file.resolvePath("template.html");
 			var fs = new air.FileStream();
