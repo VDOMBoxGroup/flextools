@@ -65,7 +65,7 @@ public class LexemStruct
 		{
 			_value = val;
 		}
-	}	
+	}
 	
     //----------------------------------
     //  error
