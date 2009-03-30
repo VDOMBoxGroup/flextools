@@ -7,7 +7,7 @@
 	EditArea.prototype.check_line_selection= function(timer_checkup){
 		//if(do_highlight==false){
 
-		if(!editAreas[this.id])
+		if(!parent.editAreas[this.id]) //<--
 			return false;
 		
 		//time=new Date;
@@ -15,7 +15,7 @@
 		
 		if(!this.smooth_selection && !this.do_highlight){
 			//formatArea();
-		}else if(this.textareaFocused && editAreas[this.id]["displayed"]==true && this.isResizing==false){
+		}else if(this.textareaFocused && parent.editAreas[this.id]["displayed"]==true && this.isResizing==false){ //<--
 			infos= this.get_selection_infos();
 		//	time=new Date;
 		//	t2= time.getTime();
@@ -96,7 +96,7 @@
 		
 		if(timer_checkup){
 			//if(this.do_highlight==true)	//can slow down check speed when highlight mode is on
-			setTimeout("editArea.check_line_selection(true)", this.check_line_selection_timer);
+			setTimeout(function(){editArea.check_line_selection(true)}, this.check_line_selection_timer);
 		}
 	};
 

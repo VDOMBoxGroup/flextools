@@ -98,7 +98,7 @@ function keyDown(e){
 		setTimeout("editArea.check_redo();", 10);
 	}
 	
-	setTimeout("editArea.check_file_changes();", 10);
+	setTimeout(function(){editArea.check_file_changes();}, 10);
 	
 	
 	if(use){

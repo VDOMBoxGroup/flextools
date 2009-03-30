@@ -304,7 +304,7 @@
 	};
 	
 	EditArea.prototype.check_undo= function(only_once){
-		if(!editAreas[this.id])
+		if(!parent.editAreas[this.id])//<--
 			return false;
 		if(this.textareaFocused && editAreas[this.id]["displayed"]==true){
 			var text=this.textarea.value;
@@ -322,7 +322,7 @@
 		}
 
 		if(!only_once)
-			setTimeout("editArea.check_undo()", 3000);
+			setTimeout(function(){editArea.check_undo()}, 3000);
 	};
 	
 	EditArea.prototype.undo= function(){
