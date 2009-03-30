@@ -120,7 +120,7 @@ pre{
 }
 
 .hidden{
-	opacity: 0.2; 
+	opacity: 0.0; 
 	filter:alpha(opacity=20);
 }
 

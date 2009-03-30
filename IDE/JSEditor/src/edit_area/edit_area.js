@@ -66,8 +66,10 @@
 //		this.id= area_id; <--
 		this.id= "example_1";		
 		this.settings= parent.editAreas[this.id]["settings"];
-		this.editAreas = parent.editAreas;
+		
 		editAreas = parent.editAreas;
+		test = parent.test;
+		
 		if((""+this.settings['replace_tab_by_spaces']).match(/^[0-9]+$/))
 		{
 			this.tab_nb_char= this.settings['replace_tab_by_spaces'];
@@ -437,12 +439,12 @@
 				break;
 			
 			default:
-				if(typeof(this["editArea."+cmd])=="function")
+				if(typeof(editArea[cmd])=="function")
 				{
 					if(this.settings["debug"])
 						eval("editArea."+ cmd +"(param);");
 					else
-						try{eval("editArea."+ cmd +"(param);");}catch(e){};
+						try{editArea[cmd](param)}catch(e){};
 				}
 		}
 	};

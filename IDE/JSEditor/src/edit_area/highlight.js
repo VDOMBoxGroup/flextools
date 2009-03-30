@@ -9,7 +9,6 @@
 		if(this.do_highlight==change_to)
 			return false;
 	
-			
 		if(this.nav['isIE'])
 			this.getIESelection();
 		var pos_start= this.textarea.selectionStart;
