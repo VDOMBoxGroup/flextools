@@ -60,7 +60,7 @@ editAreaLoader.load_syntax["php"] = {
 	}
 	,'STYLES' : {
 		'COMMENTS': 'color: #AAAAAA;'
-		,'QUOTESMARKS': 'color: #879EFA;'
+		,'QUOTESMARKS': 'color: #00FF00;'
 		,'KEYWORDS' : {
 			'reserved' : 'color: #48BDDF;'
 			,'functions' : 'color: #0040FD;'

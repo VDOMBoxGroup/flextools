@@ -130,15 +130,15 @@ editAreaLoader.load_syntax["python"] = {
 	]
 	,'STYLES' : {
 		'COMMENTS': 'color: #AAAAAA;'
-		,'QUOTESMARKS': 'color: #660066;'
+		,'QUOTESMARKS': 'color: #00CC00;'
 		,'KEYWORDS' : {
 			'reserved' : 'color: #0000FF;'
-			,'builtins' : 'color: #009900;'
-			,'stdlib' : 'color: #009900;'
-			,'special': 'color: #006666;'
+			,'builtins' : 'color: #ff0066;'
+			,'stdlib' : 'color: #ff66ff;'
+			,'special': 'color: #ff66ff;'
 			}
-		,'OPERATORS' : 'color: #993300;'
-		,'DELIMITERS' : 'color: #993300;'
+		,'OPERATORS' : 'color: #FF3300;'
+		,'DELIMITERS' : 'color: #6666FF;'
 				
 	}
 };
