@@ -384,8 +384,8 @@ EditAreaLoader.prototype ={
 		
 		// create template
 		var template= this.template.replace(/\[__BASEURL__\]/g, this.baseURL);
+		
 		template= template.replace("[__TOOLBAR__]",html_toolbar_content);
-			
 		
 		// fill template with good language sentences
 		template= this.translate(template, area["settings"]["language"], "template");
@@ -398,9 +398,20 @@ EditAreaLoader.prototype ={
 		// add version_code
 		template= template.replace("[__EA_VERSION__]", this.version);
 		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traduc_template);
-		
 		//editAreas[area["settings"]["id"]]["template"]= template;
-		
+		try
+		{
+			var file = new air.File("app-storage:/codeEditor/template.html");
+			if(file.exists)
+			{
+				file.deleteFile();
+			}
+			var fs = new air.FileStream();
+			fs.open(file, "write");
+			fs.writeUTFBytes(template);
+			fs.close();
+		}
+		catch( error ){}
 		area.textarea=document.getElementById(area["settings"]["id"]);
 		editAreas[area["settings"]["id"]]["textarea"]=area.textarea;
 	
@@ -414,7 +425,7 @@ EditAreaLoader.prototype ={
 		container.id= "EditArea_frame_container_"+area["settings"]["id"];
 	*/	
 		var content= document.createElement("iframe");
-		content.sandboxRoot="http://www.example.com/air/"
+//		content.sandboxRoot="http://www.example.com/air/"
 		content.name= "frame_"+area["settings"]["id"];
 		content.id= "frame_"+area["settings"]["id"];
 		content.style.borderWidth= "0px";
@@ -435,13 +446,15 @@ EditAreaLoader.prototype ={
 			father.insertBefore(content, next) ;		
 		var frame=window.frames["frame_"+area["settings"]["id"]];		
 		
-		//frame.document.open();
+//		frame.document.open();
 		frame.editAreas=editAreas;
 		frame.area_id= area["settings"]["id"];
 		frame.document.area_id= area["settings"]["id"];
-		frame.location.href = "edit_area/ntemplate.html";
-		//frame.document.write(template);
-		//frame.document.close();
+
+		frame.location.href="edit_area/ntemplate.html"
+		
+//		frame.document.write(template);
+//		frame.document.close();
 	},
 	
 	toggle : function(id, toggle_to){
@@ -690,16 +703,18 @@ EditAreaLoader.prototype ={
 			else { // XMLHttpRequest not supported
 				alert("XMLHTTPRequest not supported. EditArea not loaded"); 
 				return; 
-			} 
-			var file = new air.File("app:/edit_area/ntemplate.html");
+			}
+			try
+			{
+				var file = new air.File("app:/edit_area/template.html");
+				var fs = new air.FileStream();
+				fs.open( file, "read" );
 			
-//			file = file.resolvePath("template.html");
-			var fs = new air.FileStream();
-			fs.open( file, "read" );
-			
-//			xhr_object.open("GET", this.baseURL+"template.html", false); 
-//			xhr_object.send(null);
-			this.template = fs.readUTFBytes( fs.bytesAvailable ); 
+//				xhr_object.open("GET", this.baseURL+"template.html", false); 
+//				xhr_object.send(null);
+				this.template = fs.readUTFBytes( fs.bytesAvailable );
+			}
+			catch(error){} 
 //			if(xhr_object.readyState == 4) 
 //				this.template=xhr_object.responseText;
 //			else

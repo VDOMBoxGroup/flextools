@@ -5,7 +5,6 @@
  *	Released under LGPL, Apache and BSD licenses (use the one you want)
  *
 ******/
-
 	function EditArea(){
 		this.error= false;	// to know if load is interrrupt
 		
@@ -62,13 +61,15 @@
 		
 		this.isResizing=false;	// resize var
 		
-		// init with settings and ID
-//		this.id= area_id; <--
-		this.id= "example_1";		
-		this.settings= parent.editAreas[this.id]["settings"];
-		
 		editAreas = parent.editAreas;
 		test = parent.test;
+		
+		// init with settings and ID
+//		this.id= area_id; <--
+		this.id= "code_editor";		
+		this.settings= editAreas[this.id]["settings"];
+		
+		
 		
 		if((""+this.settings['replace_tab_by_spaces']).match(/^[0-9]+$/))
 		{
@@ -180,7 +181,7 @@
 		
 		
 		// init datas
-		this.textarea.value=parent.editAreas[this.id]["textarea"].value; // <--
+		this.textarea.value= editAreas[this.id]["textarea"].value; // <--
 		if(this.settings["debug"])
 			this.debug=parent.document.getElementById("edit_area_debug_"+this.id);
 		
@@ -396,46 +397,46 @@
 		switch(cmd){
 			case "save":
 				if(this.settings["save_callback"].length>0)
-					eval("parent."+this.settings["save_callback"]+"('"+ this.id +"', editArea.textarea.value);");
+					parent[this.settings["save_callback"]](this.id, editArea.textarea.value);
 				break;
 			case "load":
 				if(this.settings["load_callback"].length>0)
-					eval("parent."+this.settings["load_callback"]+"('"+ this.id +"');");
+					parent[this.settings["load_callback"]](this.id);
 				break;
 			case "onchange":
 				if(this.settings["change_callback"].length>0)
-					eval("parent."+this.settings["change_callback"]+"('"+ this.id +"');");
+					parent[this.settings["change_callback"]](this.id);
 				break;		
 			case "EA_load":
 				if(this.settings["EA_load_callback"].length>0)
-					eval("parent."+this.settings["EA_load_callback"]+"('"+ this.id +"');");
+					parent[this.settings["EA_load_callback"]](this.id);
 				break;
 			case "EA_unload":
 				if(this.settings["EA_unload_callback"].length>0)
-					eval("parent."+this.settings["EA_unload_callback"]+"('"+ this.id +"');");
+					parent[this.settings["EA_unload_callback"]](this.id);
 				break;
 			case "toggle_on":
 				if(this.settings["EA_toggle_on_callback"].length>0)
-					eval("parent."+this.settings["EA_toggle_on_callback"]+"('"+ this.id +"');");
+					parent[this.settings["EA_toggle_on_callback"]](this.id);
 				break;
 			case "toggle_off":
 				if(this.settings["EA_toggle_off_callback"].length>0)
-					eval("parent."+this.settings["EA_toggle_off_callback"]+"('"+ this.id +"');");
+					parent[this.settings["EA_toggle_off_callback"]](this.id);
 				break;
 			case "re_sync":
 				if(!this.do_highlight)
 					break;
 			case "file_switch_on":
 				if(this.settings["EA_file_switch_on_callback"].length>0)
-					eval("parent."+this.settings["EA_file_switch_on_callback"]+"(param);");
+					parent[this.settings["EA_file_switch_on_callback"]](param);
 				break;
 			case "file_switch_off":
 				if(this.settings["EA_file_switch_off_callback"].length>0)
-					eval("parent."+this.settings["EA_file_switch_off_callback"]+"(param);");
+					parent[this.settings["EA_file_switch_off_callback"]](param);
 				break;
 			case "file_close":
 				if(this.settings["EA_file_close_callback"].length>0)
-					return eval("parent."+this.settings["EA_file_close_callback"]+"(param);");
+					return parent[this.settings["EA_file_close_callback"]](param);
 				break;
 			
 			default:

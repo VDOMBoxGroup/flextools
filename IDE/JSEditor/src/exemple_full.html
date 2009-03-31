@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>EditArea - the code editor in a textarea</title>
@@ -9,17 +9,20 @@
 		// initialisation
 
 		editAreaLoader.init({
-			id: "example_1"	// id of the textarea to transform		
+			id: "code_editor"	// id of the textarea to transform		
 			,start_highlight: true	// if start with highlight
-			,allow_resize: "both"
+			,font_family: "verdana, monospace"
+			,toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, change_smooth_selection, highlight, |, help"
+			,allow_resize: "none"
 			,allow_toggle: false
 			,language: "ru"
+			,save_callback: "save_code"
 			,syntax: "python"
 		});
 		
 		
 		// callback functions
-		function my_save(id, content){
+		function save_code(id, content){
 			alert("Here is the content of the EditArea '"+ id +"' as received by the save callback function:\n"+content);
 		}
 		
@@ -79,7 +82,7 @@
 </head>
 <body>
 <form action='' method='post'>
-		<textarea id="example_1" style="height: 350px; width: 100%;" name="test_1">
+		<textarea id="code_editor" style="height: 99%; width: 100%;" >
 <?php	
 	$authors= array();
 	$news= array();
