@@ -397,7 +397,8 @@
 		switch(cmd){
 			case "save":
 				if(this.settings["save_callback"].length>0)
-					parent[this.settings["save_callback"]](this.id, editArea.textarea.value);
+//					parent[this.settings["save_callback"]](this.id, editArea.textarea.value);
+					this.settings["save_callback"](this.id, editArea.textarea.value);
 				break;
 			case "load":
 				if(this.settings["load_callback"].length>0)

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HTML 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	
+	initialize="initalize()"
+	
+	htmlDOMInitialize="complete()" uncaughtScriptException="ddd(event)" >
+	<mx:Script source="includes/scriptEditor.as" />
+	<mx:Script>
+		<![CDATA[
+		private function ddd(event : Event) : void
+		{
+			var d : * = "";
+		}
+			private const ID : String = "code_editor";
+			
+			private var editAreaLoader : *;
+			
+			public function get script() : String
+			{
+				if(editAreaLoader)
+					return editAreaLoader.getValue( ID );
+				else
+					return null;
+			}
+			
+			private function initalize() : void
+			{
+				this.htmlText = initHTML;
+			}
+			
+			private function complete() : void
+			{
+				domWindow.test = test;
+				domWindow.window.onload = load;				
+			}
+			private function load( ...arg ) : void
+			{
+				editAreaLoader = domWindow.editAreaLoader;
+				
+				if( !editAreaLoader )
+					return;
+				
+				editAreaLoader.init( {
+					id: ID, 
+					start_highlight: true, 
+					font_family: "verdana, monospace", 
+					toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, change_smooth_selection, highlight, |, help", 
+					allow_resize: "none", 
+					allow_toggle: false, 
+					language: "ru", 
+					save_callback: save_code, 
+					syntax: "python" 
+				} );
+				
+			}
+			
+			private function save_code( id : String, content : String ) : void
+			{
+				var d : * = "";
+			}
+			
+			private function test( ... arg ) : void
+			{
+				var d : * = ""
+			}
+
+//			editAreaLoader.init({
+//			id: "code_editor"	// id of the textarea to transform		
+//			,start_highlight: true	// if start with highlight
+//			,font_family: "verdana, monospace"
+//			,toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, change_smooth_selection, highlight, |, help"
+//			,allow_resize: "none"
+//			,allow_toggle: false
+//			,language: "ru"
+//			,save_callback: "save_code"
+//			,syntax: "python"
+//		});
+//		
+//		function save_code(id, content){
+//			alert("Here is the content of the EditArea '"+ id +"' as received by the save callback function:\n"+content);
+//		}
+		]]>
+	</mx:Script>
+</mx:HTML>

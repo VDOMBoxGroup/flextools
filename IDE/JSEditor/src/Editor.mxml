@@ -11,8 +11,14 @@
 		{
 			var d : * = "";
 		}
+		
+		private function zzz() : void
+		{
+			var d : String = eee.script;
+		}
 	]]>
 </mx:Script>
-	<ns1:XMLScriptEditor id="eee" left="10" right="10" top="10" bottom="10"/>
+	<ns1:ScriptEditor id="eee" left="10" right="10" top="10" bottom="10"/>
+	<mx:Button x="264" y="0" label="Button" click="zzz()"/>
 	
 </mx:WindowedApplication>

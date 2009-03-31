@@ -5,7 +5,7 @@
  *	Released under LGPL, Apache and BSD licenses (use the one you want)
  *
 ******/
-
+alert("zzzz");
 function EditAreaLoader(){
 	this.version= "0.7.2.3";
 	date= new Date();
@@ -399,19 +399,6 @@ EditAreaLoader.prototype ={
 		template= template.replace("[__EA_VERSION__]", this.version);
 		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traduc_template);
 		//editAreas[area["settings"]["id"]]["template"]= template;
-		try
-		{
-			var file = new air.File("app-storage:/codeEditor/template.html");
-			if(file.exists)
-			{
-				file.deleteFile();
-			}
-			var fs = new air.FileStream();
-			fs.open(file, "write");
-			fs.writeUTFBytes(template);
-			fs.close();
-		}
-		catch( error ){}
 		area.textarea=document.getElementById(area["settings"]["id"]);
 		editAreas[area["settings"]["id"]]["textarea"]=area.textarea;
 	
@@ -447,11 +434,11 @@ EditAreaLoader.prototype ={
 		var frame=window.frames["frame_"+area["settings"]["id"]];		
 		
 //		frame.document.open();
-		frame.editAreas=editAreas;
-		frame.area_id= area["settings"]["id"];
-		frame.document.area_id= area["settings"]["id"];
-
-		frame.location.href="edit_area/ntemplate.html"
+		//frame.editAreas=editAreas;
+	//	frame.area_id= area["settings"]["id"];
+		//frame.document.area_id= area["settings"]["id"];
+		
+		frame.location.href="app:/edit_area/compiled_template.html"
 		
 //		frame.document.write(template);
 //		frame.document.close();
