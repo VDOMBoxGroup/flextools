@@ -13,7 +13,7 @@
 	<controls:EditArea
 		id="editArea"
 		
-		height="100%" text="same Text of code" width="100%"
+		height="100%" content="same Text of code" width="100%"
 		keyDown="textEditor_keyDownHandler( event )"/>
 	<mx:VDividedBox 
 		id="panels"

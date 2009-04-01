@@ -62,7 +62,6 @@
 		this.isResizing=false;	// resize var
 		
 		editAreas = parent.editAreas;
-		test = parent.test;
 		
 		// init with settings and ID
 //		this.id= area_id; <--

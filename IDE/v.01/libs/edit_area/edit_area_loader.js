@@ -177,8 +177,8 @@ EditAreaLoader.prototype ={
 				editAreaLoader.add_event(form, "reset", EditAreaLoader.prototype.reset);
 			}
 		}
-		var ed = new air.EventDispatcher();
-		ed.dispatchEvent(new air.Event("windowLoaded") );
+//		var ed = new air.EventDispatcher();
+//		ed.dispatchEvent(new air.Event("windowLoaded") );
 		editAreaLoader.add_event(window, "unload", function(){for(var i in editAreas){editAreaLoader.delete_instance(i);}});	// ini callback
 	},
 	
@@ -200,6 +200,7 @@ EditAreaLoader.prototype ={
 		
 	init : function(settings){
 //		alert("init begin") //<---
+//		air.trace("init begin")
 		for(var i=0; i<this.scripts_to_load.length; i++){
 			var path = this.baseURL + this.scripts_to_load[i]+ ".js"
 			this.waiting_loading[this.scripts_to_load[i]+ ".js"]= false;
@@ -381,6 +382,7 @@ EditAreaLoader.prototype ={
 			this.iframe_css="<link href='"+ this.baseURL +"edit_area.css' rel='stylesheet' type='text/css' />";
 		}
 		
+		var templateFilename = "compiled_template.html";
 		// create template
 		var template= this.template.replace(/\[__BASEURL__\]/g, this.baseURL);
 		
@@ -396,11 +398,14 @@ EditAreaLoader.prototype ={
 		
 		// add version_code
 		template= template.replace("[__EA_VERSION__]", this.version);
-		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traduc_template);
+		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traduc_template);		
 		//editAreas[area["settings"]["id"]]["template"]= template;
+		
+		saveCompiledTemplate( this.baseURL + templateFilename, template );
+		
 		area.textarea=document.getElementById(area["settings"]["id"]);
 		editAreas[area["settings"]["id"]]["textarea"]=area.textarea;
-	
+		
 		// if removing previous instances from DOM before (fix from Marcin)
 		if(typeof(window.frames["frame_"+area["settings"]["id"]])!='undefined') 
 			delete window.frames["frame_"+area["settings"]["id"]];
@@ -436,8 +441,7 @@ EditAreaLoader.prototype ={
 		//frame.editAreas=editAreas;
 	//	frame.area_id= area["settings"]["id"];
 		//frame.document.area_id= area["settings"]["id"];
-		
-		frame.location.href="app:/edit_area/compiled_template.html"
+		frame.location.href= this.baseURL + templateFilename;
 		
 //		frame.document.write(template);
 //		frame.document.close();
@@ -692,13 +696,11 @@ EditAreaLoader.prototype ={
 			}
 			try
 			{
-				var file = new air.File("app:/edit_area/template.html");
-				var fs = new air.FileStream();
-				fs.open( file, "read" );
+				this.template = getTemplateString(); //<--
+
 			
 //				xhr_object.open("GET", this.baseURL+"template.html", false); 
 //				xhr_object.send(null);
-				this.template = fs.readUTFBytes( fs.bytesAvailable );
 			}
 			catch(error){} 
 //			if(xhr_object.readyState == 4) 

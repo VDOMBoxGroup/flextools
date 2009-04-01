@@ -90,8 +90,8 @@ private function createLibrary( name : String ) : void
 
 private function editLibrary() : void
 {
-	saveButton.setStyle( "color", "0x000000" );
-	saveButton.setStyle( "borderColor", "0xAAB3B3" );
+//	saveButton.setStyle( "color", "0x000000" );
+//	saveButton.setStyle( "borderColor", "0xAAB3B3" );
 	
 	var item : XML = librariesList.selectedItem as XML;
 
@@ -102,19 +102,19 @@ private function editLibrary() : void
 	{
 		serverScripts.tree.selectedIndex = -1;
 		
-		textEditor.enabled = true;
-		textEditor.text = item.toString();
+		editArea.enabled = true;
+		editArea.content = item.toString();
 		currentEditing = "library";
 		currentLibraryName = item.@Name
-		nameLabel.text = "Library Name: " + currentLibraryName;
+//		nameLabel.text = "Library Name: " + currentLibraryName;
 	}
 	else
 	{
 		if( currentEditing == "library" )
 		{
-			textEditor.enabled = false;
+			editArea.enabled = false;
 			currentEditing = "none";
-			nameLabel.text = currentLibraryName = "";
+//			nameLabel.text = currentLibraryName = "";
 		}
 	}
 }
@@ -137,16 +137,16 @@ private function getIcon( ID : String ) : String
 
 private function save() : void
 {
-	if ( !textEditor.enabled )
+	if ( !editArea.enabled )
 		return;
 
 	if ( currentEditing == "script" )
-		serverScripts.script = textEditor.text;
+		serverScripts.script = editArea.content;
 	else if ( currentEditing == "library" )
 	{
 		var data : XML = librariesList.selectedItem as XML;
 		var name : String = data.@Name;
-		var text : String = textEditor.text;
+		var text : String = editArea.content;
 
 		var cursor : IViewCursor = libraries.createCursor();
 
@@ -163,24 +163,24 @@ private function save() : void
 			}
 		}
 
-		dataManager.setLibrary( name, textEditor.text );
+		dataManager.setLibrary( name, editArea.content );
 	}
 
-	saveButton.setStyle( "color", "0x000000" );
-	saveButton.setStyle( "borderColor", "0xAAB3B3" );
+//	saveButton.setStyle( "color", "0x000000" );
+//	saveButton.setStyle( "borderColor", "0xAAB3B3" );
 
 	scriptChanged = false;
 }
 
 private function revert() : void
 {
-	saveButton.setStyle( "color", "0x000000" );
-	saveButton.setStyle( "borderColor", "0xAAB3B3" );
+//	saveButton.setStyle( "color", "0x000000" );
+//	saveButton.setStyle( "borderColor", "0xAAB3B3" );
 	
 	if( currentEditing == "script" )
-		textEditor.text = serverScripts.script;
+		editArea.content = serverScripts.script;
 	else if( currentEditing == "library" )
-		textEditor.text = librariesList.selectedItem.toString();
+		editArea.content = librariesList.selectedItem.toString();
 		
 	scriptChanged = false;
 }
@@ -251,8 +251,8 @@ private function textEditor_keyDownHandler( event : KeyboardEvent ) : void
 	if ( scriptChanged )
 		return;
 
-	saveButton.setStyle( "color", "0xCC0000" );
-	saveButton.setStyle( "borderColor", "0xEE0000" );
+//	saveButton.setStyle( "color", "0xCC0000" );
+//	saveButton.setStyle( "borderColor", "0xEE0000" );
 
 	scriptChanged = true;
 }
@@ -271,25 +271,25 @@ private function pages_changeHandler( obj : Object ) : void
 
 private function serverScripts_scriptChangedHandler() : void
 {
-	saveButton.setStyle( "color", "0x000000" );
-	saveButton.setStyle( "borderColor", "0xAAB3B3" );
+//	saveButton.setStyle( "color", "0x000000" );
+//	saveButton.setStyle( "borderColor", "0xAAB3B3" );
 
 	if ( serverScripts.dataEnabled && serverScripts.script != null )
 	{
 		librariesList.selectedIndex = -1;
 		
-		textEditor.enabled = true;
-		textEditor.text = serverScripts.script;
+		editArea.enabled = true;
+		editArea.content = serverScripts.script;
 		currentEditing = "script";
-		nameLabel.text = "Script Name: " + serverScripts.dataEnabled.@Name;
+//		nameLabel.text = "Script Name: " + serverScripts.dataEnabled.@Name;
 	}
 	else
 	{
 		if( currentEditing == "script" )
 		{
-			textEditor.enabled = false;
+			editArea.enabled = false;
 			currentEditing = "none";
-			nameLabel.text = "";
+//			nameLabel.text = "";
 		}
 	}
 }
@@ -404,10 +404,10 @@ private function dataManager_removeLibraryCompleteHandler( event : DataManagerEv
 		{
 			libraries.removeItemAt( libraries.getItemIndex( cursor.current ) );
 			
-			textEditor.enabled = false;
-			textEditor.text = "";
+			editArea.enabled = false;
+			editArea.content = "";
 			currentEditing = "none";
-			nameLabel.text = "";
+//			nameLabel.text = "";
 		}
 		catch ( error : Error )
 		{
