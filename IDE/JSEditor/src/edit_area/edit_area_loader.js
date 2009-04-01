@@ -5,7 +5,6 @@
  *	Released under LGPL, Apache and BSD licenses (use the one you want)
  *
 ******/
-alert("zzzzz");
 function EditAreaLoader(){
 	this.version= "0.7.2.3";
 	date= new Date();
@@ -200,7 +199,8 @@ EditAreaLoader.prototype ={
 	},
 		
 	init : function(settings){
-//		alert("init begin") //<---
+		alert("init begin") //<---
+		air.trace("init begin")
 		for(var i=0; i<this.scripts_to_load.length; i++){
 			var path = this.baseURL + this.scripts_to_load[i]+ ".js"
 			this.waiting_loading[this.scripts_to_load[i]+ ".js"]= false;
@@ -437,7 +437,7 @@ EditAreaLoader.prototype ={
 		//frame.editAreas=editAreas;
 	//	frame.area_id= area["settings"]["id"];
 		//frame.document.area_id= area["settings"]["id"];
-		alert(baseURL)
+		alert(this.baseURL)
 		frame.location.href= baseURL + "compiled_template.html";
 		
 //		frame.document.write(template);

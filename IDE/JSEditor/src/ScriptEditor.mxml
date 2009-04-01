@@ -5,7 +5,7 @@
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	
 	initialize="initalizeHandler()"
-	htmlDOMInitialize="completeHandler()" location="app-storage:/libs/edit_area/init.html">
+	htmlDOMInitialize="completeHandler()">
 	<mx:Script>
 		<![CDATA[
 			private const ID : String = "code_editor";
@@ -53,10 +53,22 @@
 			private function initalizeHandler() : void
 			{
 				htmlLoader.placeLoadStringContentInApplicationSandbox = true;
+				
+				var file : File  = new File( "app-storage:/edit_area" );
+				
+				var fileApp : File = new File("app:/edit_area");
+				if( fileApp.exists )
+				{
+					fileApp.copyTo( file, true );
+				}
+				
+				location="app-storage:/edit_area/init.html"
 			}
 			
 			private function completeHandler() : void
 			{
+				var file : File = new File("app-storage:/edit_area/init.html");
+				
 				domWindow.test = test;
 				domWindow.window.onload = load;
 			}
