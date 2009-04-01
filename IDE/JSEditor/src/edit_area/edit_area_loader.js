@@ -5,6 +5,7 @@
  *	Released under LGPL, Apache and BSD licenses (use the one you want)
  *
 ******/
+alert("zzzzz");
 function EditAreaLoader(){
 	this.version= "0.7.2.3";
 	date= new Date();
@@ -396,11 +397,11 @@ EditAreaLoader.prototype ={
 		
 		// add version_code
 		template= template.replace("[__EA_VERSION__]", this.version);
-		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traduc_template);
+		//template=template.replace(/\{\$([^\}]+)\}/gm, this.traduc_template);		
 		//editAreas[area["settings"]["id"]]["template"]= template;
 		area.textarea=document.getElementById(area["settings"]["id"]);
 		editAreas[area["settings"]["id"]]["textarea"]=area.textarea;
-	
+		
 		// if removing previous instances from DOM before (fix from Marcin)
 		if(typeof(window.frames["frame_"+area["settings"]["id"]])!='undefined') 
 			delete window.frames["frame_"+area["settings"]["id"]];
@@ -436,8 +437,8 @@ EditAreaLoader.prototype ={
 		//frame.editAreas=editAreas;
 	//	frame.area_id= area["settings"]["id"];
 		//frame.document.area_id= area["settings"]["id"];
-		
-		frame.location.href="app:/edit_area/compiled_template.html"
+		alert(baseURL)
+		frame.location.href= baseURL + "compiled_template.html";
 		
 //		frame.document.write(template);
 //		frame.document.close();
@@ -692,7 +693,7 @@ EditAreaLoader.prototype ={
 			}
 			try
 			{
-				var file = new air.File("app:/edit_area/template.html");
+				var file = new air.File( baseURL + "template.html");
 				var fs = new air.FileStream();
 				fs.open( file, "read" );
 			
