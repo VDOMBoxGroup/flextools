@@ -6,6 +6,9 @@
 	
 	preinitialize="initalizeHandler()"
 	htmlDOMInitialize="completeHandler()">
+	<mx:Metadata> 
+        [Event(name="save", type="vdom.events.EditAreaEvent")] 
+    </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
 			private const ID : String = "code_editor";
