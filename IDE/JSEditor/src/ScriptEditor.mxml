@@ -14,7 +14,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>EditArea - the code editor in a textarea</title>
 	<script language="Javascript" type="text/javascript" src="app:/edit_area/edit_area_loader.js"></script>
-	<script language="Javascript" type="text/javascript" src="app:/AIRAliases.js"></script>
+	<script language="Javascript" type="text/javascript" src="app:/edit_area/AIRAliases.js"></script>
 </head>
 <body>
 <form action="" method="post">
