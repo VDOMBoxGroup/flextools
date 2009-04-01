@@ -5,7 +5,6 @@
  *	Released under LGPL, Apache and BSD licenses (use the one you want)
  *
 ******/
-alert("zzzz");
 function EditAreaLoader(){
 	this.version= "0.7.2.3";
 	date= new Date();
