@@ -9,37 +9,12 @@
 	hide="hideHandler()" show="showHandler()">
 	<mx:Script 
 		source="includes/scriptEditor.as"/>
-	<mx:VBox 
-		height="100%" width="100%">
-		<mx:Label
-			id="nameLabel"
-			
-			width="100%"
-			
-			color="#FFFFFF"/>
-		<controls:TextEditor 
-			id="textEditor"
-			
-			height="100%" text="same Text of code" width="100%"
-			keyDown="textEditor_keyDownHandler( event )"/>
-		<mx:HBox 
-			paddingBottom="5">
-			<mx:Button 
-				id="saveButton"
-				
-				label="Save"
-				
-				cornerRadius="0"
-				
-				click="save()"/>
-			<mx:Button 
-				label="Revert"
-				
-				cornerRadius="0"
-				
-				click="revert()"/>
-		</mx:HBox>
-	</mx:VBox>
+
+	<controls:EditArea
+		id="editArea"
+		
+		height="100%" text="same Text of code" width="100%"
+		keyDown="textEditor_keyDownHandler( event )"/>
 	<mx:VDividedBox 
 		id="panels"
 		

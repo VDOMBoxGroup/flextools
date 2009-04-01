@@ -154,10 +154,10 @@ private function invokeHandler( event : InvokeEvent ) : void
 			}
 			case "darkstyle" : 
 			{
-				editorModule.scriptCanv.textEditor.codeEditor.setStyle( "color",
-																		"white" );
-				editorModule.scriptCanv.textEditor.codeEditor.setStyle( "backgroundColor",
-																		"black" );
+//				editorModule.scriptCanv.textEditor.codeEditor.setStyle( "color",
+//																		"white" );
+//				editorModule.scriptCanv.textEditor.codeEditor.setStyle( "backgroundColor",
+//																		"black" );
 				break;
 			}
 		}
