@@ -4,12 +4,12 @@
 	
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	
-	initialize="initalizeHandler()"
+	preinitialize="initalizeHandler()"
 	htmlDOMInitialize="completeHandler()">
 	<mx:Script>
 		<![CDATA[
 			private const ID : String = "code_editor";
-
+			private const BASE_URL : String = "app-storage:/edit_area/";
 			private var editAreaLoader : *;
 
 			public function get script() : String
@@ -23,7 +23,6 @@
 			private function load( ... arg ) : void
 			{
 				editAreaLoader = domWindow.editAreaLoader;
-
 				if ( !editAreaLoader )
 					return;
 				
@@ -34,7 +33,7 @@
 					toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, change_smooth_selection, highlight, |, help", 
 					allow_resize: "none", 
 					allow_toggle: false, 
-					language: "ru", 
+					language: "en", 
 					save_callback: save_code, 
 					syntax: "python" 
 				} );
@@ -44,32 +43,56 @@
 			{
 				var d : * = "";
 			}
-
-			private function test( ... arg ) : void
+			
+			private function getTemplateString() : String
 			{
-				var d : * = ""
+				var template : String = "";
+				
+				try
+				{
+					var file : File = new File( BASE_URL + "template.html");
+					var fs : FileStream = new FileStream();
+					fs.open( file, FileMode.READ );
+					template = fs.readUTFBytes( fs.bytesAvailable );
+				}
+				catch( error : Error ){}
+				
+				return template;
+			}
+			
+			private function saveCompiledTemplate( path : String, content : String ) : Boolean
+			{
+				try
+				{
+					var file : File = new File( path );
+					var fs : FileStream = new FileStream();
+					fs.open( file, FileMode.WRITE);
+					fs.writeUTFBytes( content );
+				}
+				catch( error : Error )
+				{
+					return false;
+				}
+				return true;
 			}
 			
 			private function initalizeHandler() : void
 			{
-				htmlLoader.placeLoadStringContentInApplicationSandbox = true;
-				
-				var file : File  = new File( "app-storage:/edit_area" );
-				
+				var file : File  = new File( BASE_URL );
+				 
 				var fileApp : File = new File("app:/edit_area");
 				if( fileApp.exists )
 				{
 					fileApp.copyTo( file, true );
 				}
 				
-				location="app-storage:/edit_area/init.html"
+				location= BASE_URL + "init.html"
 			}
 			
 			private function completeHandler() : void
-			{
-				var file : File = new File("app-storage:/edit_area/init.html");
-				
-				domWindow.test = test;
+			{	
+				domWindow.getTemplateString = getTemplateString;
+				domWindow.saveCompiledTemplate = saveCompiledTemplate;
 				domWindow.window.onload = load;
 			}
 		]]>
