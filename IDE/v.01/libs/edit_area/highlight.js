@@ -100,8 +100,11 @@
 	
 	EditArea.prototype.maj_highlight= function(infos){
 		if(this.last_highlight_base_text==infos["full_text"] && this.resync_highlight!==true)
+		{
+//			if(this.reload_highlight===true)
+//				this.reload_highlight=false;
 			return;
-					
+		}
 		//var infos= this.getSelectionInfos();
 		if(infos["full_text"].indexOf("\r")!=-1)
 			text_to_highlight= infos["full_text"].replace(/\r/g, "");

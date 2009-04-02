@@ -198,17 +198,6 @@ private function preinitalizeHandler() : void
 		configMain.server = { version : SERVER_VERSION };
 		configManager.saveConfig( configMain );
 	}
-	
-	var file : File  = new File( "app-storage:/libs/edit_area" );
-			
-	if( !file.exists )
-	{
-		var fileApp : File = new File("app:/libs/edit_area");
-		if( fileApp.exists )
-		{
-			fileApp.copyTo( file, true );
-		}
-	}
 }
 
 private function creationCompleteHandler() : void

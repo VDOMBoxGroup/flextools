@@ -20,7 +20,7 @@
 		this.last_hightlighted_text= "";
 		this.syntax_list= new Array();
 		this.allready_used_syntax= new Object();
-		this.check_line_selection_timer= 50;	// the timer delay for modification and/or selection change detection
+		this.check_line_selection_timer= 100;	// the timer delay for modification and/or selection change detection
 		
 		this.textareaFocused= false;
 		this.highlight_selection_line= null;
@@ -405,7 +405,7 @@
 				break;
 			case "onchange":
 				if(this.settings["change_callback"].length>0)
-					parent[this.settings["change_callback"]](this.id);
+					this.settings["change_callback"](this.id);
 				break;		
 			case "EA_load":
 				if(this.settings["EA_load_callback"].length>0)

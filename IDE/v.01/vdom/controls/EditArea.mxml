@@ -4,17 +4,23 @@
 	
 	horizontalScrollPolicy="off" verticalScrollPolicy="off"
 	
-	preinitialize="initalizeHandler()"
+	hide="hideHandler()" preinitialize="initalizeHandler()" show="showHandler()"
 	htmlDOMInitialize="completeHandler()">
 	<mx:Metadata> 
-        [Event(name="save", type="vdom.events.EditAreaEvent")] 
+        [Event(name="save", type="vdom.events.EditAreaEvent")]  
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import vdom.events.EditAreaEvent;
 			private const ID : String = "code_editor";
 			private const BASE_URL : String = "app-storage:/libs/edit_area/";
+			
 			private var editAreaLoader : *;
-
+			private var editAreas : *;
+			
+			private var _content : String;
+			private var isEditorLoaded : Boolean = false;
+			
 			public function get content() : String
 			{
 				if ( editAreaLoader )
@@ -25,13 +31,39 @@
 			
 			public function set content( value : String ) : void
 			{
+				_content = content
+				if( !isEditorLoaded )
+					return;
+				
 				if ( editAreaLoader )
-					editAreaLoader.setValue( ID, value );
+				{
+					try
+					{
+						editAreaLoader.setValue( ID, value );
+//						var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
+//						var saveImg : * =domWindow.window.frames[ "frame_" + ID ].document.getElementById("save");
+//						editArea.switchClassSticky(saveImg, 'editAreaButtonDisabled', true);
+//						
+//						editArea.previous = [];
+//						editArea.check_redo();
+//						editArea.next = [];
+//						editArea.check_undo( true );
+					}
+					catch( error : Error )
+					{
+						var d : * = "";
+					}
+				}
 			}
 			
 			private function load( ... arg ) : void
 			{
+				isEditorLoaded = true;
+				
 				editAreaLoader = domWindow.editAreaLoader;
+				
+				content = _content; // FIXME fix!
+				
 				if ( !editAreaLoader )
 					return;
 				
@@ -43,14 +75,30 @@
 					allow_resize: "none", 
 					allow_toggle: false, 
 					language: "en", 
-					save_callback: save_code, 
-					syntax: "python" 
+					save_callback: save_code,
+					change_callback: change_code,
+					syntax: "python"
 				} );
 			}
 			
 			private function save_code( id : String, content : String ) : void
 			{
-				var d : * = "";
+				var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
+				var saveImg : * =domWindow.window.frames[ "frame_" + ID ].document.getElementById("save");
+				editArea.switchClassSticky(saveImg, 'editAreaButtonDisabled', true);
+				var eae : EditAreaEvent = new EditAreaEvent( EditAreaEvent.SAVE );
+				eae.content = content;
+				dispatchEvent( eae );
+			}
+			
+			private function change_code( id : String ) : void
+			{
+				if( id == ID )
+				{
+					var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
+					var saveImg : * =domWindow.window.frames[ "frame_" + ID ].document.getElementById("save");
+					editArea.switchClassSticky(saveImg, 'editAreaButtonNormal', true);
+				}
 			}
 			
 			private function getTemplateString() : String
@@ -97,7 +145,6 @@
 						fileApp.copyTo( file, true );
 					}
 				}
-				location= BASE_URL + "init.html"
 			}
 			
 			private function completeHandler() : void
@@ -106,6 +153,17 @@
 				domWindow.saveCompiledTemplate = saveCompiledTemplate;
 				domWindow.window.onload = load;
 			}
+			
+		private function showHandler() : void
+		{
+			location= BASE_URL + "init.html";
+		}
+		
+		private function hideHandler() : void
+		{
+			location= null;
+			isEditorLoaded = false;
+		}
 		]]>
 	</mx:Script>
 </mx:HTML>

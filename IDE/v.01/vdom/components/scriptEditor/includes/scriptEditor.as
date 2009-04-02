@@ -10,6 +10,7 @@ import mx.managers.PopUpManager;
 
 import vdom.components.scriptEditor.CreatingNewActionWindow;
 import vdom.events.DataManagerEvent;
+import vdom.events.EditAreaEvent;
 import vdom.events.ScriptEditorEvent;
 import vdom.managers.DataManager;
 
@@ -187,12 +188,14 @@ private function revert() : void
 
 private function showHandler() : void
 {
+	editArea.dispatchEvent( new FlexEvent( FlexEvent.SHOW ) );
 	curContainerID = dataManager.currentPageId;
 	if ( curContainerID )
 	{
 		curContainerTypeID = dataManager.getTypeByObjectId( curContainerID ).Information.ID.toString();
 	}
-
+	
+	editArea.addEventListener( EditAreaEvent.SAVE, editArea_saveHandler );
 	dataManager.addEventListener( DataManagerEvent.PAGE_CHANGED, dataManager_pageChangedHandler );
 	dataManager.addEventListener( DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler );
 	dataManager.addEventListener( DataManagerEvent.GET_LIBRARIES_COMPLETE, dataManager_getLibrariesCompleteHandler );
@@ -239,6 +242,8 @@ private function showHandler() : void
 
 private function hideHandler() : void
 {
+	editArea.dispatchEvent( new FlexEvent(FlexEvent.HIDE ) );
+	
 	dataManager.removeEventListener( DataManagerEvent.PAGE_CHANGED, dataManager_pageChangedHandler );
 	dataManager.removeEventListener( DataManagerEvent.OBJECT_CHANGED, dataManager_objectChangedHandler );
 	dataManager.removeEventListener( DataManagerEvent.GET_LIBRARIES_COMPLETE, dataManager_getLibrariesCompleteHandler );
@@ -302,6 +307,11 @@ private function librariesList_changeHandler( event : ListEvent ) : void
 private function librariesList_valueCommitHandler( event : FlexEvent ) : void
 {
 	editLibrary();
+}
+
+private function editArea_saveHandler( event : EditAreaEvent ) : void 
+{
+	save();
 }
 
 private function addScript_clickHandler() : void
