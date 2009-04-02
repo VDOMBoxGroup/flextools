@@ -37,7 +37,7 @@ public function subPrefix(graph:String, prefix:String, ...args):*
 	var subgraph:GraphStruct;
 	
 	for each (var graphStruct:GraphStruct in tplStruct.graphs) {
-		if(graphStruct.name == graph)	
+		if(graphStruct.name == graph)
 			subgraph = graphStruct;
 	}
 	

@@ -689,44 +689,51 @@ public class Parser
 
 		// check for function
 		var funcObj:Object = isValidFunction(lexemObj.value);
-		var argNum:int = lexemObj.value.indexOf("]") - lexemObj.value.indexOf("[")-2;
-		if(funcObj.result && funcObj.value.length==1 && 
-			isFunctionExist(LexemStruct(fragment.fragments[1]).value))
-		{
-			if(fragment.isTopLevel)
-				fragment.print = true;
-			
-			fragment.type = funcObj.value;
-			fragment.ctype = CodeFragment.CT_FUNCTION;
-			
-			fragment.funcName = LexemStruct(fragment.fragments[1]).value;				
-			
-			var funcDef:Object = funcDefinition[fragment.funcName];
-
-			// check for correct args number
-			if(funcDef)
-			{
-				if(argNum!=funcDef.argNum && funcDef.argNum>=0)
-				{
-					fragment.error = new CompilerError(null, 9007, [funcDef.argNum]);
-					return;
-				}
-				else if(funcDef.argNum<0 && argNum<Math.abs(funcDef.argNum))
-				{
-					fragment.error = new CompilerError(null, 9007, [">"+Math.abs(funcDef.argNum)]);
-					return;
-				}
-				if(!RegExp(funcDef.pattern).test(lexemObj.value))
-				{
-					fragment.error = new CompilerError(null, 9011);
-					return;
-				}
+		var funcName:String;
+		if(funcObj.result && funcObj.value.length==1)
+		{ 
+			var argNum:int = lexemObj.value.indexOf("]") - lexemObj.value.indexOf("[")-2;
+			funcName = LexemStruct(fragment.fragments[1]).value;
+		
+			if(funcName=='get')
+				funcName = 'getValue';
 				
-				if(funcDef.trans)
-					fragment.trans = funcDef.trans;
+			if(isFunctionExist(funcName))
+			{
+				if(fragment.isTopLevel)
+					fragment.print = true;
+				
+				fragment.type = funcObj.value;
+				fragment.ctype = CodeFragment.CT_FUNCTION;			
+				fragment.funcName = funcName;				
+				
+				var funcDef:Object = funcDefinition[fragment.funcName];
+	
+				// check for correct args number
+				if(funcDef)
+				{
+					if(argNum!=funcDef.argNum && funcDef.argNum>=0)
+					{
+						fragment.error = new CompilerError(null, 9007, [funcDef.argNum]);
+						return;
+					}
+					else if(funcDef.argNum<0 && argNum<Math.abs(funcDef.argNum))
+					{
+						fragment.error = new CompilerError(null, 9007, [">"+Math.abs(funcDef.argNum)]);
+						return;
+					}
+					if(!RegExp(funcDef.pattern).test(lexemObj.value))
+					{
+						fragment.error = new CompilerError(null, 9011);
+						return;
+					}
+					
+					if(funcDef.trans)
+						fragment.trans = funcDef.trans;
+				}
+				fragment.validated = true;
+				return;
 			}
-			fragment.validated = true;
-			return;
 		}
 		
 		// check for list
