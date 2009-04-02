@@ -31,7 +31,6 @@
 			
 			public function set content( value : String ) : void
 			{
-				_content = content
 				if( !isEditorLoaded )
 					return;
 				
@@ -145,6 +144,7 @@
 						fileApp.copyTo( file, true );
 					}
 				}
+				location= BASE_URL + "init.html";
 			}
 			
 			private function completeHandler() : void
@@ -156,13 +156,12 @@
 			
 		private function showHandler() : void
 		{
-			location= BASE_URL + "init.html";
+			
 		}
 		
 		private function hideHandler() : void
 		{
-			location= null;
-			isEditorLoaded = false;
+			
 		}
 		]]>
 	</mx:Script>
