@@ -74,9 +74,9 @@ private function showHandler() : void
 
 	applicationName.text = defaultValues.name;
 	applicationDescription.text = defaultValues.description;
-	if( defaultValues.scriptlanguage == "python" )
+	if ( defaultValues.scriptlanguage == "python" )
 		languageGroup.selectedValue = "python";
-	
+
 	iconChanged = false;
 
 
@@ -104,10 +104,8 @@ private function hideHandler() : void
 
 private function processValues() : void
 {
-	if ( 
-		applicationName.text == defaultValues.name && 
-		applicationDescription.text == defaultValues.description &&
-		languageGroup.selectedValue ==  defaultValues.scriptlanguage &&
+	if ( applicationName.text == defaultValues.name && applicationDescription.text ==
+		defaultValues.description && languageGroup.selectedValue == defaultValues.scriptlanguage &&
 		!iconChanged )
 	{
 
@@ -123,7 +121,7 @@ private function processValues() : void
 	ad.name = applicationName.text;
 	ad.description = applicationDescription.text;
 	ad.scriptlanguage = languageGroup.selectedValue as String;
-	
+
 	if ( iconChanged )
 		ad.icon = _source;
 

@@ -76,6 +76,7 @@
 	</mx:HBox>
 	
 	<mx:VBox width="100%">
+		<mx:Label text="Language"  fontWeight="bold"/>
 		<mx:RadioButtonGroup id="languageGroup"/>
 		<mx:RadioButton label="vscript" value="vscript" groupName="languageGroup" selected="true"/>
 		<mx:RadioButton label="python" value="python" groupName="languageGroup"/>

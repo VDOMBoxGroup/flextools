@@ -27,7 +27,7 @@
 		
 		cornerRadius="0" styleName="zzz" titleStyleName="titleNamez"
 		borderAlpha="1"
-		color="#FFFFFF" left="15" top="15" width="500" height="450" shadowDirection="right" layout="absolute">
+		color="#FFFFFF" left="15" top="15" width="500" height="470" shadowDirection="right" layout="absolute">
 		
 		<applicationEditor:ApplicationEditor id="applicationEditor" left="20" top="20"/>
 	</mx:Panel>

@@ -442,7 +442,6 @@ EditAreaLoader.prototype ={
 	//	frame.area_id= area["settings"]["id"];
 		//frame.document.area_id= area["settings"]["id"];
 		frame.location.href= this.baseURL + templateFilename;
-		
 //		frame.document.write(template);
 //		frame.document.close();
 	},
@@ -837,6 +836,7 @@ EditAreaLoader.prototype ={
     
     // allow to set the value of the editarea
     setValue : function(id, new_val){
+    	window.test("setValue begin");
         if(window.frames["frame_"+id] && editAreas[id]["displayed"]==true){
             window.frames["frame_"+ id].editArea.textarea.value= new_val;     
 			window.frames["frame_"+ id].editArea.execCommand("focus"); 
