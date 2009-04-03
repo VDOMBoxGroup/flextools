@@ -1,4 +1,4 @@
-editAreaLoader.lang["en"]={
+editAreaLoader.lang["en_US"]={
 new_document: "new empty document",
 search_button: "search and replace",
 search_command: "search next / open search area",

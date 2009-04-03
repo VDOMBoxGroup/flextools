@@ -11,6 +11,7 @@
     </mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import vdom.managers.LanguageManager;
 			import vdom.events.EditAreaEvent;
 			private const ID : String = "code_editor";
 			private const BASE_URL : String = "app-storage:/libs/edit_area/";
@@ -18,8 +19,22 @@
 //			private var editAreaLoader : *;
 //			private var editAreas : *;
 			
+			private var languageManager : LanguageManager = LanguageManager.getInstance();
+			
+			private var _syntax : String = "vscript";
+			
 			private var _content : String;
 			private var isEditorLoaded : Boolean = false;
+			
+			public function get syntax() : String
+			{
+				return _syntax;
+			}
+			
+			public function set syntax( value : String ) : void
+			{
+				_syntax = value;
+			}
 			
 			public function get content() : String
 			{
@@ -42,8 +57,8 @@
 					{
 						editAreaLoader.setValue( ID, value );
 						var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
-//						var saveImg : * =domWindow.window.frames[ "frame_" + ID ].document.getElementById("save");
-//						editArea.switchClassSticky(saveImg, 'editAreaButtonDisabled', true);
+						var saveImg : * = domWindow.window.frames[ "frame_" + ID ].document.getElementById( "save" );
+						editArea.switchClassSticky( saveImg, 'editAreaButtonDisabled', true );
 //						
 						editArea.previous = [];
 						editArea.check_redo();
@@ -88,23 +103,12 @@
 			} */
 			private function save_code( id : String, content : String ) : void
 			{
-//				var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
-//				var saveImg : * = domWindow.window.frames[ "frame_" + ID ].document.getElementById( "save" );
-//				editArea.switchClassSticky( saveImg, 'editAreaButtonDisabled', true );
+				var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
+				var saveImg : * = domWindow.window.frames[ "frame_" + ID ].document.getElementById( "save" );
+				editArea.switchClassSticky( saveImg, 'editAreaButtonDisabled', true );
 				var eae : EditAreaEvent = new EditAreaEvent( EditAreaEvent.SAVE );
 				eae.content = content;
 				dispatchEvent( eae );
-			}
-
-			private function change_code( id : String ) : void
-			{
-				if ( id == ID )
-				{
-//					var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
-//					var saveImg : * = domWindow.window.frames[ "frame_" + ID ].document.getElementById( "save" );
-//					editArea.switchClassSticky( saveImg, 'editAreaButtonNormal',
-//												true );
-				}
 			}
 			
 			private function test( ...arg ) : void
@@ -159,10 +163,12 @@
 					}
 				//}
 			}
-
 			
 			private function completeHandler() : void
 			{	
+				if( location == "about:blank")
+					return;
+				
 				domWindow.getTemplateString = getTemplateString;
 				domWindow.saveCompiledTemplate = saveCompiledTemplate;
 				domWindow.test = test;
@@ -178,12 +184,11 @@
 					start_highlight: true, 
 					font_family: "verdana, monospace", 
 					toolbar: "save, |, search, go_to_line, |, undo, redo, |, select_font, |, change_smooth_selection, highlight, |, help", 
-					allow_resize: "none", 
+					allow_resize: "none",
 					allow_toggle: false, 
-					language: "en", 
+					language: languageManager.currentLocale,
 					save_callback: save_code,
-					change_callback: change_code,
-					syntax: "python"
+					syntax: _syntax
 				} );
 				
 				if( _content )
@@ -199,6 +204,17 @@
 		{
 			location= "about:blank";
 			isEditorLoaded = false;
+		}
+		
+		override protected function keyDownHandler( event : KeyboardEvent ) :void
+		{
+			super.keyDownHandler( event );
+			if( isEditorLoaded && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.commandKey && !event.controlKey )
+			{
+				var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
+				var saveImg : * = domWindow.window.frames[ "frame_" + ID ].document.getElementById( "save" );
+				editArea.switchClassSticky( saveImg, 'editAreaButtonNormal', true );
+			}
 		}
 		]]>
 	</mx:Script>

@@ -52,10 +52,8 @@
 				regExpValidator.addEventListener( ValidationResultEvent.INVALID,
 												  validHandler );
 
-				regExpValidator.noMatchError = "PleAse Input Correct NamE";
+				regExpValidator.noMatchError = "Please Input Correct Name";
 				regExpValidator.triggerEvent = Event.CHANGE;
-
-
 			}
 
 			private function showHandler() : void
@@ -85,7 +83,6 @@
 			{
 				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
 			}
-
 
 			private function closeHandler( cEvent : CloseEvent ) : void
 			{

@@ -1,4 +1,4 @@
-editAreaLoader.lang["ru"]={
+editAreaLoader.lang["ru_RU"]={
 new_document: "новый пустой документ",
 search_button: "поиск и замена",
 search_command: "искать следующий / открыть панель поиска",

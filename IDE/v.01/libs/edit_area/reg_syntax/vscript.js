@@ -1,4 +1,4 @@
-editAreaLoader.load_syntax["vb"] = {
+editAreaLoader.load_syntax["vscript"] = {
 	'COMMENT_SINGLE' : {1 : "'"}
 	,'COMMENT_MULTI' : { }
 	,'QUOTEMARKS' : {1: '"'}

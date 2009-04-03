@@ -34,6 +34,8 @@ private var librariesChanged : Boolean = false;
 private var currentEditing : String;
 private var currentLibraryName : String;
 
+private var scriptLanguage : String = "";
+
 override protected function commitProperties() : void
 {
 	super.commitProperties();
@@ -55,26 +57,28 @@ override protected function updateDisplayList( unscaledWidth : Number, unscaledH
 
 private function createScript( name : String ) : void
 {
-	var extension : String = "";
-	var extStartPosition : int = name.lastIndexOf( "_" );
-
-	if ( extStartPosition != -1 )
-		extension = name.substr( extStartPosition );
-
+//	var extension : String = "";
+//	var extStartPosition : int = name.lastIndexOf( "_" );
+//
+//	if ( extStartPosition != -1 )
+//		extension = name.substr( extStartPosition );
+//
+//
+//	if ( extension == "_python" )
+//	{
+//		dataXML.@Name = name.substr( 0, extStartPosition );
+//		dataXML.@Language = "python";
+//	}
+//	else
+//	{
+//		dataXML.@Name = name;
+//		dataXML.@label = name;
+//		dataXML.@Language = "vscript";
+//	}
 	var dataXML : XML = new XML( "<Action/>" );
-
-	if ( extension == "_python" )
-	{
-		dataXML.@Name = name.substr( 0, extStartPosition );
-		dataXML.@Language = "python";
-	}
-	else
-	{
-		dataXML.@Name = name;
-		dataXML.@label = name;
-		dataXML.@Language = "vscript";
-	}
-
+	dataXML.@Name = name;
+	dataXML.@label = name;
+	
 	dataXML.@Top = "5";
 	dataXML.@Left = "5";
 	dataXML.@State = "true";
@@ -194,6 +198,11 @@ private function showHandler() : void
 	{
 		curContainerTypeID = dataManager.getTypeByObjectId( curContainerID ).Information.ID.toString();
 	}
+	
+	scriptLanguage = dataManager.currentApplicationInformation.ScriptingLanguage;
+	
+	serverScripts.scriptLanguage = scriptLanguage;
+	editArea.syntax = scriptLanguage;
 	
 	editArea.addEventListener( EditAreaEvent.SAVE, editArea_saveHandler );
 	dataManager.addEventListener( DataManagerEvent.PAGE_CHANGED, dataManager_pageChangedHandler );

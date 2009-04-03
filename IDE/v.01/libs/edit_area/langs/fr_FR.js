@@ -1,4 +1,4 @@
-editAreaLoader.lang["fr"]={
+editAreaLoader.lang["fr_FR"]={
 new_document: "nouveau document (efface le contenu)",
 search_button: "rechercher / remplacer",
 search_command: "rechercher suivant / ouvrir la fen&ecirc;tre de recherche",

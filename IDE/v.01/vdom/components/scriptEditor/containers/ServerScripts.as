@@ -6,7 +6,7 @@ package vdom.components.scriptEditor.containers
 	import mx.controls.List;
 	import mx.events.ListEvent;
 	import mx.utils.UIDUtil;
-
+	
 	import vdom.containers.ClosablePanel;
 	import vdom.events.DataManagerEvent;
 	import vdom.events.ServerScriptsEvent;
@@ -48,7 +48,19 @@ package vdom.components.scriptEditor.containers
 
 		private var dataXML : XMLListCollection;
 		private var xmlToServer : XML;
-
+		
+		private var _scriptLanguage : String
+		
+		public function get scriptLanguage() : String
+		{
+			return _scriptLanguage;
+		}  
+		
+		public function set scriptLanguage( value : String ) :void
+		{
+			_scriptLanguage = value;
+		}
+		
 		public function set dataProvider( str : String ) : void
 		{
 			tree.dataProvider = null;
@@ -65,7 +77,7 @@ package vdom.components.scriptEditor.containers
 			dataXML.addItem( xml );
 
 			var sort : Sort = new Sort();
-			sort.fields = [ new SortField( "@Language" ), new SortField( "@label" ) ];
+			sort.fields = [ new SortField( "@label" ) ];
 			dataXML.sort = sort;
 			dataXML.refresh();
 
@@ -111,7 +123,6 @@ package vdom.components.scriptEditor.containers
 				var xml : XML = new XML( "<Action/>" );
 				xml.@ID = tempXML.@ID;
 				xml.@Name = tempXML.@Name;
-				xml.@Language = tempXML.@Language;
 				xml.@Top = tempXML.@Top;
 				xml.@Left = tempXML.@Left;
 				xml.@State = tempXML.@State;
@@ -181,7 +192,6 @@ package vdom.components.scriptEditor.containers
 						;
 					tempXML.@label = actID.@Name;
 					tempXML.@Name = actID.@Name;
-					tempXML.@Language = actID.@Language;
 					tempXML.@ID = actID.@ID;
 
 					dataXML.addItem( tempXML );
@@ -189,7 +199,7 @@ package vdom.components.scriptEditor.containers
 				}
 
 				var sort : Sort = new Sort();
-				sort.fields = [ new SortField( "@Language" ), new SortField( "@label" ) ];
+				sort.fields = [ new SortField( "@label" ) ];
 				dataXML.sort = sort;
 				dataXML.refresh();
 
@@ -207,17 +217,22 @@ package vdom.components.scriptEditor.containers
 
 		private function getIcon( value : Object ) : Class
 		{
-			var xmlData : XML = XML( value );
-
-			if ( xmlData.@Language.toXMLString() == "python" )
+//			var xmlData : XML = XML( value );
+//
+//			if ( xmlData.@Language.toXMLString() == "python" )
+//				return python;
+//
+//			if ( xmlData.@Language.toXMLString() == "vscript" )
+//				return vscript;
+//
+//			var data : Object = { typeId : xmlData.@Type, resourceId : xmlData.@resourceID }
+//
+//			return IconUtils.getClass( this, data, 16, 16 );
+			
+			if( _scriptLanguage == "python" )
 				return python;
-
-			if ( xmlData.@Language.toXMLString() == "vscript" )
+			else
 				return vscript;
-
-			var data : Object = { typeId : xmlData.@Type, resourceId : xmlData.@resourceID }
-
-			return IconUtils.getClass( this, data, 16, 16 );
 		}
 
 		private function getSourceID( ID : String ) : String
