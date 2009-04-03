@@ -1,14 +1,14 @@
 package vdom.controls
 {
+	import flash.utils.ByteArray;
 
-import flash.utils.ByteArray;
-	
-public class ApplicationDescription
-{	
-	public var id:String = '';
-	public var name:String = '';
-	public var description:String = '';
-	public var icon:ByteArray;
-	public var iconId:String;
-}
+	public class ApplicationDescription
+	{
+		public var id : String = "";
+		public var name : String = "";
+		public var description : String = "";
+		public var icon : ByteArray;
+		public var iconId : String;
+		public var scriptlanguage : String;
+	}
 }

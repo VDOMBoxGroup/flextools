@@ -12,148 +12,142 @@ import vdom.events.ApplicationEditorEvent;
 import vdom.events.ImageChooserEvent;
 import vdom.managers.FileManager;
 
-private var fileManager:FileManager = FileManager.getInstance();
+private var fileManager : FileManager = FileManager.getInstance();
 
 [Bindable]
-public var formName:String = "";
+public var formName : String = "";
 
-public var defaultValues:ApplicationDescription;
+public var defaultValues : ApplicationDescription;
 
 [Bindable]
-private var _source:ByteArray;
+private var _source : ByteArray;
 
-private var _name:String = "Application Icon";
-private var _applicationId:String;
+private var _name : String = "Application Icon";
+private var _applicationId : String;
 
-private var imageChooser:ImageChooser;
+private var imageChooser : ImageChooser;
 //private var ppm:MyLoader;
 
-private var iconChanged:Boolean;
+private var iconChanged : Boolean;
 
-public function set source(value:ByteArray):void
+public function set source( value : ByteArray ) : void
 {
-	if( value )
+	if ( value )
 	{
 		_source = value;
 	}
 	else
 	{
-		var iconClass:Class = Application.application.getStyle("appIconPersonalPages");
-		var ba:BitmapAsset = new iconClass();
-		var pnge:PNGEncoder = new PNGEncoder();
-		_source = pnge.encode(ba.bitmapData);
+		var iconClass : Class = Application.application.getStyle( "appIconPersonalPages" );
+		var ba : BitmapAsset = new iconClass();
+		var pnge : PNGEncoder = new PNGEncoder();
+		_source = pnge.encode( ba.bitmapData );
 	}
 }
 
-private function changeImage():void 
-{	
+private function changeImage() : void
+{
 	imageChooser = new ImageChooser();
-	imageChooser.addEventListener(ImageChooserEvent.APPLY, imageChooser_applyHandler);
-	
-	PopUpManager.addPopUp(imageChooser, DisplayObject( Application.application ), true);
-	PopUpManager.centerPopUp(imageChooser);
+	imageChooser.addEventListener( ImageChooserEvent.APPLY, imageChooser_applyHandler );
+
+	PopUpManager.addPopUp( imageChooser, DisplayObject( Application.application ),
+						   true );
+	PopUpManager.centerPopUp( imageChooser );
 }
 
-private function resetImage():void
+private function resetImage() : void
 {
-	var iconClass:Class = Application.application.getStyle("appIconPersonalPages");
-	var ba:BitmapAsset = new iconClass();
-	var pnge:PNGEncoder = new PNGEncoder();
-	_source = pnge.encode(ba.bitmapData);
-	if(defaultValues.iconId && !iconChanged)
+	var iconClass : Class = Application.application.getStyle( "appIconPersonalPages" );
+	var ba : BitmapAsset = new iconClass();
+	var pnge : PNGEncoder = new PNGEncoder();
+	_source = pnge.encode( ba.bitmapData );
+	if ( defaultValues.iconId && !iconChanged )
 		iconChanged = true;
 }
 
-private function showHandler():void 
-{	
-	if(!defaultValues)
+private function showHandler() : void
+{
+	if ( !defaultValues )
 	{
-//		submitButton.label = "CREATE";
 		defaultValues = new ApplicationDescription();
 	}
-	else
-	{	
-//		submitButton.label = "OK";
-	}
-		
+
 	applicationName.text = defaultValues.name;
 	applicationDescription.text = defaultValues.description;
+	if( defaultValues.scriptlanguage == "python" )
+		languageGroup.selectedValue = "python";
+	
 	iconChanged = false;
-	
-	
-	if(defaultValues.id && defaultValues.iconId)
+
+
+	if ( defaultValues.id && defaultValues.iconId )
 	{
-		fileManager.loadResource(defaultValues.id, defaultValues.iconId, this, "source", true);
+		fileManager.loadResource( defaultValues.id, defaultValues.iconId, this, "source",
+								  true );
 	}
 	else
 	{
-		var iconClass:Class = Application.application.getStyle("appIconPersonalPages"); 
-		var ba:BitmapAsset = new iconClass();
-		var pnge:PNGEncoder = new PNGEncoder();
-		var byteArray:ByteArray = pnge.encode(ba.bitmapData);
+		var iconClass : Class = Application.application.getStyle( "appIconPersonalPages" );
+		var ba : BitmapAsset = new iconClass();
+		var pnge : PNGEncoder = new PNGEncoder();
+		var byteArray : ByteArray = pnge.encode( ba.bitmapData );
 		_source = byteArray;
 		iconChanged = true;
 	}
 }
 
-private function hideHandler():void
+private function hideHandler() : void
 {
 	defaultValues = null;
 	iconChanged = false;
 }
 
-private function processValues():void
-{	
-	if(
-		applicationName.text == defaultValues.name &&
+private function processValues() : void
+{
+	if ( 
+		applicationName.text == defaultValues.name && 
 		applicationDescription.text == defaultValues.description &&
-		!iconChanged
-	) {
-		
-		dispatchEvent(
-			new ApplicationEditorEvent(
-				ApplicationEditorEvent.APPLICATION_PROPERTIES_CANCELED
-			)
-		);
+		languageGroup.selectedValue ==  defaultValues.scriptlanguage &&
+		!iconChanged )
+	{
+
+		dispatchEvent( new ApplicationEditorEvent( ApplicationEditorEvent.APPLICATION_PROPERTIES_CANCELED ) );
 		return;
 	}
-	
-	var aee:ApplicationEditorEvent = new ApplicationEditorEvent(
-		ApplicationEditorEvent.APPLICATION_PROPERTIES_CHANGED);
-	
-	var ad:ApplicationDescription = new ApplicationDescription();
-	
+
+	var aee : ApplicationEditorEvent = new ApplicationEditorEvent( ApplicationEditorEvent.APPLICATION_PROPERTIES_CHANGED );
+
+	var ad : ApplicationDescription = new ApplicationDescription();
+
 	ad.id = defaultValues.id;
 	ad.name = applicationName.text;
 	ad.description = applicationDescription.text;
-	if(iconChanged)
+	ad.scriptlanguage = languageGroup.selectedValue as String;
+	
+	if ( iconChanged )
 		ad.icon = _source;
-	
+
 	aee.applicationDescription = ad;
-	
-	dispatchEvent(aee);
+
+	dispatchEvent( aee );
 }
 
-private function cancelValues():void
+private function cancelValues() : void
 {
-	dispatchEvent(
-		new ApplicationEditorEvent(
-			ApplicationEditorEvent.APPLICATION_PROPERTIES_CANCELED
-		)
-	);
+	dispatchEvent( new ApplicationEditorEvent( ApplicationEditorEvent.APPLICATION_PROPERTIES_CANCELED ) );
 }
 
-private function handleValid(event:ValidationResultEvent):void
+private function handleValid( event : ValidationResultEvent ) : void
 {
-	if(event.type==ValidationResultEvent.VALID)
+	if ( event.type == ValidationResultEvent.VALID )
 		submitButton.enabled = true;
 	else
 		submitButton.enabled = false;
 }
 
-private function imageChooser_applyHandler(event:ImageChooserEvent):void
-{	
-	imageChooser.removeEventListener(ImageChooserEvent.APPLY, imageChooser_applyHandler);
+private function imageChooser_applyHandler( event : ImageChooserEvent ) : void
+{
+	imageChooser.removeEventListener( ImageChooserEvent.APPLY, imageChooser_applyHandler );
 	_source = event.resource;
 	iconChanged = true;
 }

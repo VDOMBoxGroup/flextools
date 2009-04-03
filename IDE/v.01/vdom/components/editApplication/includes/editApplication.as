@@ -35,6 +35,7 @@ private function showHandler():void
 	defaultValues.name = applicationInformation.Name;
 	defaultValues.description = applicationInformation.Description;
 	defaultValues.iconId = applicationInformation.Icon;
+	defaultValues.scriptlanguage = applicationInformation.Scriptinglanguage;
 	
 	applicationEditor.defaultValues = defaultValues;
 	applicationEditor.dispatchEvent(new FlexEvent(FlexEvent.SHOW));
@@ -91,6 +92,9 @@ private function setInformation():void
 	if(newValues.description != defaultValues.description)
 		attributes.appendChild(<Description>{newValues.description}</Description>);
 	
+	if(newValues.scriptlanguage != defaultValues.scriptlanguage)
+		attributes.appendChild(<Scriptinglanguage>{newValues.scriptlanguage}</Scriptinglanguage>);
+	
 	if(newValues.iconId && newValues.iconId != defaultValues.iconId)
 		attributes.appendChild(<Icon>{newValues.iconId}</Icon>);
 	
@@ -111,7 +115,8 @@ private function applicationEditorChangedHandler(event:ApplicationEditorEvent):v
 	
 	if(
 		newValues.name != defaultValues.name ||
-		newValues.description != defaultValues.description
+		newValues.description != defaultValues.description ||
+		newValues.scriptlanguage != defaultValues.scriptlanguage
 	)
 		changeInformation = true;
 	

@@ -142,6 +142,7 @@ private function fileManager_resourceSavedHandler(event:FileManagerEvent):void
     		<Name>{applicationDescription.name}</Name>
     		<Description>{applicationDescription.description}</Description>
     		<Icon>{applicationDescription.iconId}</Icon>
+    		<Scriptinglanguage>{applicationDescription.scriptlanguage}</Scriptinglanguage>
 		</Attributes>
 	
 	dataManager.setApplicationInformation(applicationDescription.id, attributes);

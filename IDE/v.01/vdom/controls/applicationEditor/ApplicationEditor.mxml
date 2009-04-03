@@ -3,8 +3,8 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="vdom.controls.*"
 	
-	show="showHandler();"
-	hide="hideHandler();"
+	show="showHandler()"
+	hide="hideHandler()"
 	
 	backgroundColor="#C2C2C2" width="230" color="#000000"
 	paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10"
@@ -55,10 +55,10 @@
 		
 		<mx:HBox>
 			<mx:Button label="X"
-				cornerRadius="0" width="35" click="resetImage();"/>
+				cornerRadius="0" width="35" click="resetImage()"/>
 			<mx:Button label="..."
 				cornerRadius="0" width="35"
-				click="changeImage();"/>
+				click="changeImage()"/>
 		</mx:HBox>
 	</mx:VBox>
 	
@@ -75,18 +75,23 @@
 			prompt="{resourceManager.getString('ApplicationManagment','description_prompt')}" height="125" width="100%" textAlign="left"/>
 	</mx:HBox>
 	
+	<mx:VBox width="100%">
+		<mx:RadioButtonGroup id="languageGroup"/>
+		<mx:RadioButton label="vscript" value="vscript" groupName="languageGroup" selected="true"/>
+		<mx:RadioButton label="python" value="python" groupName="languageGroup"/>
+	</mx:VBox>
 	<mx:HBox width="100%" horizontalAlign="center">
 	
 		<mx:Button id="submitButton" 
 			label="{resourceManager.getString('ApplicationManagment','submit_label').toUpperCase()}"
 			styleName="buttonStyle"
 			cornerRadius="0" 
-			click="processValues();" />
+			click="processValues()" />
 			
 		<mx:Button 
 			label="{resourceManager.getString('ApplicationManagment','cancel_label').toUpperCase()}"
 			styleName="buttonStyle"
 			cornerRadius="0" 
-			click="cancelValues();"/>
+			click="cancelValues()"/>
 	</mx:HBox>
 </mx:VBox>
