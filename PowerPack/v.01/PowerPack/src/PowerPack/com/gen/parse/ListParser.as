@@ -506,7 +506,12 @@ public class ListParser
 		var arr:Array = [];
 		
 		if(list is String)
-			arr = list2Array(String(list)); 
+		{
+			arr = list2Array(String(list));
+			
+			if(!arr)
+				return String(list).length;
+		} 
 		else if(list is Array)
 			arr = list as Array;
 		
