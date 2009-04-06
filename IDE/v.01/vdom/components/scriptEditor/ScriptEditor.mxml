@@ -9,8 +9,7 @@
 	hide="hideHandler()" show="showHandler()">
 	<mx:Script 
 		source="includes/scriptEditor.as"/>
-
-	<controls:EditArea
+	<controls:EditArea 
 		id="editArea"
 		
 		height="100%" width="100%"
@@ -23,9 +22,9 @@
 		verticalGap="10">
 		<mx:Panel 
 			maxHeight="54" minHeight="54" title="PAGES" width="100%"
-			headerHeight="20"
 			
-			color="#FFFFFF" cornerRadius="0">
+			color="#FFFFFF" cornerRadius="0"
+			headerHeight="20">
 			<mx:ComboBox 
 				id="pages"
 				
@@ -70,7 +69,7 @@
 			<mx:List 
 				id="librariesList"
 				
-				labelField="@Name" width="100%"
+				height="100%" labelField="@Name" width="100%"
 				
 				borderStyle="none"
 				

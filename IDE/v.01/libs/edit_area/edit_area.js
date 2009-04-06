@@ -344,6 +344,7 @@
 			if(this.textarea.previous_scrollHeight!=area_height)	
 			{	
 				this.container.style.height= (area_height+2)+"px";
+				$("line_number").style.height = (area_height+2)+"px"; //<--
 				this.textarea.style.height= area_height+"px";
 				this.content_highlight.style.height= area_height+"px";	
 				this.textarea.previous_scrollHeight= area_height;
@@ -354,7 +355,7 @@
 			if(this.last_selection["nb_line"] >= this.line_number)
 			{
 				var div_line_number="";
-				for(i=this.line_number+1; i<this.last_selection["nb_line"]+100; i++)
+				for(i=this.line_number+1; i<this.last_selection["nb_line"]+1; i++)
 				{
 					div_line_number+=i+"<br />";
 					this.line_number++;

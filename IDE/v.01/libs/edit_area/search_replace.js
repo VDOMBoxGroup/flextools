@@ -167,7 +167,7 @@
 			$("area_search_msg").innerHTML="<strong>"+nb_change+"</strong> "+this.get_translation("occurrence_replaced");
 			// firefox and opera doesn't manage with the focus if it's done directly
 			//editArea.textarea.focus();editArea.textarea.textareaFocused=true;
-			setTimeout("editArea.textarea.focus();editArea.textarea.textareaFocused=true;", 100);
+			setTimeout(function (){editArea.textarea.focus(); editArea.textarea.textareaFocused=true;}, 100);
 		}
 		
 		

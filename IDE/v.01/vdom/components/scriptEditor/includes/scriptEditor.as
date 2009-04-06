@@ -44,6 +44,7 @@ override protected function commitProperties() : void
 	{
 		librariesChanged = false;
 		librariesList.dataProvider = libraries;
+		librariesList.scrollToIndex( 0 );
 		librariesList.validateNow();
 	}
 }
