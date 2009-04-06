@@ -509,7 +509,7 @@ public class ListParser
 		{
 			arr = list2Array(String(list));
 			
-			if(!arr)
+			if(!arr) 
 				return String(list).length;
 		} 
 		else if(list is Array)

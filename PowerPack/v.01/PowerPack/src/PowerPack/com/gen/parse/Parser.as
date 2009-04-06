@@ -652,8 +652,8 @@ public class Parser
 		lexemObj = isValidOperation(strSentence);
 		if(lexemObj.result && lexemObj.value.length==1)
 		{
-			if(fragment.isTopLevel)
-				fragment.print = true;
+			//if(fragment.isTopLevel)
+			//	fragment.print = true;
 
 			fragment.type = lexemObj.value;
 			fragment.ctype = CodeFragment.CT_OPERATION;
@@ -678,8 +678,8 @@ public class Parser
 		lexemObj = isValidAdvVar(lexemObj.value);
 		if(lexemObj.result && lexemObj.value.length==1)
 		{
-			if(fragment.isTopLevel)
-				fragment.print = true;
+			//if(fragment.isTopLevel)
+			//	fragment.print = true;
 				
 			fragment.type = lexemObj.value;
 			fragment.ctype = CodeFragment.CT_ADV_VAR;
@@ -700,8 +700,8 @@ public class Parser
 				
 			if(isFunctionExist(funcName))
 			{
-				if(fragment.isTopLevel)
-					fragment.print = true;
+				//if(fragment.isTopLevel)
+				//	fragment.print = true;
 				
 				fragment.type = funcObj.value;
 				fragment.ctype = CodeFragment.CT_FUNCTION;			
@@ -740,8 +740,8 @@ public class Parser
 		lexemObj = isValidList(lexemObj.value);
 		if(lexemObj.result && lexemObj.value.length==1)
 		{
-			if(fragment.isTopLevel)
-				fragment.print = true;
+			//if(fragment.isTopLevel)
+			//	fragment.print = true;
 				
 			fragment.ctype = CodeFragment.CT_LIST;							
 			fragment.type = lexemObj.value;
