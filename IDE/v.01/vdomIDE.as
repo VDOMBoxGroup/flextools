@@ -1,6 +1,7 @@
 import flash.desktop.NativeApplication;
 import flash.events.Event;
 import flash.events.InvokeEvent;
+import flash.filesystem.File;
 import flash.geom.Rectangle;
 
 import mx.controls.Alert;
@@ -197,6 +198,24 @@ private function preinitalizeHandler() : void
 	{
 		configMain.server = { version : SERVER_VERSION };
 		configManager.saveConfig( configMain );
+	}
+	
+	try
+	{
+		var file : File = new File( "app-storage:/libs/edit_area" );
+		var fileApp : File = new File( "app:/libs/edit_area" );
+		
+		if ( fileApp.exists )
+		{
+			if( file.exists &&  file.isDirectory )
+				file.deleteDirectory( true );
+			
+			fileApp.copyTo( file, true );
+		}
+	}
+	catch( error : Error )
+	{
+		
 	}
 }
 
