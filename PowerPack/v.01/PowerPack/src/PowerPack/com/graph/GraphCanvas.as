@@ -18,6 +18,7 @@ import flash.desktop.ClipboardFormats;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.NativeMenuItem;
+import flash.display.StageQuality;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
@@ -123,7 +124,7 @@ public class GraphCanvas extends Canvas
 	 */		
 	public function GraphCanvas()
 	{
-		super();
+		super();		
 		
 		doubleClickEnabled = true;
 		
@@ -342,7 +343,7 @@ public class GraphCanvas extends Canvas
         if(xml)
         {
         	fromXML(xml.toXMLString());
-        }	        
+        }	  
     }
 
     override protected function commitProperties():void

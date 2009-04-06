@@ -1671,7 +1671,7 @@ public class Node extends Canvas
 				arrToolTip = [];
 				for each(var arrow:Connector in outArrows)
 				{
-					var visibleRect:Rectangle = arrow.getVisibleRect();
+					var visibleRect:Rectangle = arrow._getVisibleRect();
 					var point:Point;
 
 					if(visibleRect)

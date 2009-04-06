@@ -823,7 +823,8 @@ public class Connector extends UIComponent implements IFocusManagerComponent
 		if(!parent || !fromPoint || !toPoint)
 			return null; 
 			
-		var visibleRect:Rectangle = Utils.getVisibleRect(this);
+		var visibleRect:Rectangle = getVisibleRect();//Utils.getVisibleRect(this);
+		
 		var lineSeg:LineSegment = new LineSegment(
 			contentToGlobal(fromPoint),
 			contentToGlobal(toPoint));

@@ -26,7 +26,7 @@
         	labelField="@label" 
         	keyEquivalentField="@keyEquivalent"
         	showRoot="false"
-        	itemClick="menuHandler(event);" />        
+        	itemClick="menuHandler(event);" />
     </mx:menu>
     
     <mx:XML format="e4x" id="fileMenuData">
@@ -148,7 +148,7 @@
 			private var curDebugBufLen:int = 0;
 						
 			private function preinit():void
-			{
+			{				
 				maximize();	
 				
             	Connector.classConstructed;
