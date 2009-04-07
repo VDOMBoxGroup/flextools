@@ -34,8 +34,8 @@ package vdom.events
 
 		public static const LOAD_TYPES_COMPLETE : String = "loadTypesComplete";
 
-		public static const GET_OBJECT_XML_SCRIPT_COMPLETE : String = "getObjectXMLScriptComplete";
-		public static const SET_OBJECT_XML_SCRIPT_COMPLETE : String = "setObjectXMLScriptComplete";
+		public static const GET_OBJECT_SCRIPT_PRESENTATION_COMPLETE : String = "getObjectScriptPresentationComplete";
+		public static const SUBMIT_OBJECT_SCRIPT_PRESENTATION_COMPLETE : String = "submitObjectScriptPresentationComplete";
 
 		public static const CREATE_OBJECT_COMPLETE : String = "createObjectComplete";
 		public static const DELETE_OBJECT_COMPLETE : String = "deleteObjectComplete";

@@ -5,6 +5,7 @@
  *	Released under LGPL, Apache and BSD licenses (use the one you want)
  *
 ******/
+parent.test("TestArea end");
 	function EditArea(){
 		this.error= false;	// to know if load is interrrupt
 		
@@ -86,8 +87,6 @@
 		
 		if(this.settings['syntax'])
 			this.allready_used_syntax[this.settings['syntax']]=true;
-		
-		
 	};
 	
 	

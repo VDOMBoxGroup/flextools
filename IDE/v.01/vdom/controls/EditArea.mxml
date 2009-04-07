@@ -113,7 +113,7 @@
 			
 			private function test( ...arg ) : void
 			{
-				var d : * = "";
+				trace( arg );
 			}
 			
 			private function getTemplateString() : String
@@ -129,6 +129,7 @@
 				}
 				catch ( error : Error )
 				{
+					trace(" get tmpl error ");
 				}
 
 				return template;
@@ -187,19 +188,20 @@
 			
 		private function showHandler() : void
 		{
+			addEventListener( KeyboardEvent.KEY_DOWN, keyboard_keyDownHandler, true );
 			location= BASE_URL + "init.html";
 		}
 		
 		private function hideHandler() : void
 		{
+			removeEventListener( KeyboardEvent.KEY_DOWN, keyboard_keyDownHandler, true );
 			location= "about:blank";
 			isEditorLoaded = false;
 		}
 		
-		override protected function keyDownHandler( event : KeyboardEvent ) :void
+		private function keyboard_keyDownHandler( event : KeyboardEvent ) : void
 		{
-			super.keyDownHandler( event );
-			if( isEditorLoaded && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.commandKey && !event.controlKey )
+			if( isEditorLoaded && event.charCode != 0 )
 			{
 				var editArea : * = domWindow.window.frames[ "frame_" + ID ].editArea;
 				var saveImg : * = domWindow.window.frames[ "frame_" + ID ].document.getElementById( "save" );

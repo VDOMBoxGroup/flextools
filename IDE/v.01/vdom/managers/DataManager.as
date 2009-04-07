@@ -376,7 +376,7 @@ package vdom.managers
 			return object[ 0 ];
 		}
 
-		public function getObjectXMLScript( objectId : String = "" ) : void
+		public function getObjectScriptPresentation( objectId : String = "" ) : void
 		{
 			if ( objectId == "" )
 				soap.get_object_script_presentation( currentApplicationId, currentObjectId );
@@ -384,7 +384,7 @@ package vdom.managers
 				soap.get_object_script_presentation( currentApplicationId, objectId );
 		}
 
-		public function setObjectXMLScript( objectXMLScript : String ) : void
+		public function submitObjectScriptPresentation( objectXMLScript : String ) : void
 		{
 			soap.submit_object_script_presentation( currentApplicationId, currentObjectId,
 													objectXMLScript );
@@ -872,7 +872,7 @@ package vdom.managers
 		private function soap_getObjectScriptPresentationHandler( event : SOAPEvent ) : void
 		{
 			var result : XML = event.result.Result.*[ 0 ];
-			dispatchEvent( new DataManagerEvent( DataManagerEvent.GET_OBJECT_XML_SCRIPT_COMPLETE,
+			dispatchEvent( new DataManagerEvent( DataManagerEvent.GET_OBJECT_SCRIPT_PRESENTATION_COMPLETE,
 												 result ) );
 		}
 
@@ -888,7 +888,7 @@ package vdom.managers
 			;
 
 			soap.get_child_objects_tree( currentApplicationId, newObjectId ); //<------
-			dispatchEvent( new DataManagerEvent( DataManagerEvent.SET_OBJECT_XML_SCRIPT_COMPLETE,
+			dispatchEvent( new DataManagerEvent( DataManagerEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_COMPLETE,
 												 result ) );
 		}
 
@@ -1039,7 +1039,7 @@ package vdom.managers
 			{
 				case "305" : 
 				{
-					dme = new DataManagerErrorEvent( DataManagerErrorEvent.OBJECT_XML_SCRIPT_SAVE_ERROR );
+					dme = new DataManagerErrorEvent( DataManagerErrorEvent.SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR );
 
 					dispatchEvent( dme );
 					break;

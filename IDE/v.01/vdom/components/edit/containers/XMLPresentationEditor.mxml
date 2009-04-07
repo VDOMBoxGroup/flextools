@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	xmlns:XMLPresentationClasses="vdom.components.edit.containers.XMLPresentationClasses.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="vdom.controls.*"
 	
-	initialize="initalizeHandler();"
-	
-	show="showHandler();"
-	hide="hideHandler();"
->
-	<mx:Script source="includes/XMLPresentationEditor.as" />
-	
-	<mx:Button id="saveButton"
-		label="Save"
-		x="10" y="5" height="20"
-		cornerRadius="0"
+	hide="hideHandler();" initialize="initalizeHandler();" show="showHandler();"
+	xmlns:XMLPresentationClasses="vdom.components.edit.containers.XMLPresentationClasses.*">
+	<mx:Script 
+		source="includes/XMLPresentationEditor.as"/>
+	<controls:EditArea 
+		id="editArea"
 		
-		click="saveXMLScript()"
-	/>
-	<XMLPresentationClasses:XMLScriptEditor id="scriptEditor"
-		bottom="10" right="10" left="10" top="30"
-		borderStyle="solid" borderColor="#000000"
-	/>
+		height="100%" width="100%"
+		syntax="xml"/>
+	<!--	<mx:Button id="saveButton"
+		 label="Save"
+		 x="10" y="5" height="20"
+		 cornerRadius="0"
+
+		 click="saveXMLScript()"
+		 />-->
+	<!--<XMLPresentationClasses:XMLScriptEditor id="scriptEditor"
+		 bottom="10" right="10" left="10" top="30"
+		 borderStyle="solid" borderColor="#000000"
+		 />-->
 </mx:Canvas>

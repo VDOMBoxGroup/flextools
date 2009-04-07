@@ -255,6 +255,7 @@ EditAreaLoader.prototype ={
 		
 		//if(settings["display"]=="onload")
 		editAreaLoader.start(settings["id"]);
+		test("init end");
 	},
 	
 	// delete an instance of an EditArea
@@ -444,6 +445,7 @@ EditAreaLoader.prototype ={
 		frame.location.href= this.baseURL + templateFilename;
 //		frame.document.write(template);
 //		frame.document.close();
+		test("start end");
 	},
 	
 	toggle : function(id, toggle_to){
@@ -701,7 +703,10 @@ EditAreaLoader.prototype ={
 //				xhr_object.open("GET", this.baseURL+"template.html", false); 
 //				xhr_object.send(null);
 			}
-			catch(error){} 
+			catch(error)
+			{
+				test("load template error");
+			} 
 //			if(xhr_object.readyState == 4) 
 //				this.template=xhr_object.responseText;
 //			else
@@ -836,7 +841,6 @@ EditAreaLoader.prototype ={
     
     // allow to set the value of the editarea
     setValue : function(id, new_val){
-    	window.test("setValue begin");
         if(window.frames["frame_"+id] && editAreas[id]["displayed"]==true){
             window.frames["frame_"+ id].editArea.textarea.value= new_val;     
 			window.frames["frame_"+ id].editArea.execCommand("focus"); 

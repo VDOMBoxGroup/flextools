@@ -7,9 +7,9 @@ import mx.rpc.Fault;
 public class DataManagerErrorEvent extends Event
 {
 	// Define static constant.
-	public static const GLOBAL_ERROR:String = 'globalError';
-	public static const OBJECT_XML_SCRIPT_SAVE_ERROR:String = 'objectXMLScriptSaveError';
-	public static const SET_NAME_ERROR:String = 'setNameError';
+	public static const GLOBAL_ERROR:String = "globalError";
+	public static const SUBMIT_OBJECT_SCRIPT_PRESENTATION_ERROR:String = "submitObjectScriptPresentationError";
+	public static const SET_NAME_ERROR:String = "setNameError";
 	
 	// Define a public variable to hold the state of the enable property.
 	public var isEnabled:Boolean;
@@ -20,7 +20,7 @@ public class DataManagerErrorEvent extends Event
 	// Public constructor.
 	public function DataManagerErrorEvent(type:String, fault:Fault = null,
 								isEnabled:Boolean = false, objectId:String = null,
-								key:String = '')
+								key:String = "")
 	{		
 		// Call the constructor of the superclass.
 		super(type);
