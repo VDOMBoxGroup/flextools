@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	layout="absolute"
+	
+	invoke="invokeHandler( event )" preinitialize="preinitalizeHandler( event )"
+	applicationComplete="applicationCompleteHandler( event )">
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.ide.ApplicationFacade;
+			import mx.events.FlexEvent;
+
+			public static const NAME : String = "vdomIDE";
+
+			private var facade : ApplicationFacade = ApplicationFacade.getInstance( NAME );
+
+			private function invokeHandler( event : InvokeEvent ) : void
+			{
+				facade.invoke( event.arguments );
+			}
+
+			private function preinitalizeHandler( event : FlexEvent ) : void
+			{
+				facade.preinitalize( this );
+			}
+
+			private function applicationCompleteHandler( event : FlexEvent ) : void
+			{
+				facade.startup( this );
+			}
+		]]>
+	</mx:Script>
+</mx:WindowedApplication>
