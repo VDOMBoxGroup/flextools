@@ -7,13 +7,12 @@ package net.vdombox.ide.view
 	import mx.core.Window;
 	
 	import net.vdombox.ide.ApplicationFacade;
+	import net.vdombox.ide.view.components.LoginForm;
+	import net.vdombox.ide.view.managers.PopUpWindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import vdom.components.loginForm.LoginForm;
-	import vdom.managers.PopUpWindowManager;
 
 	public class ApplicationMediator extends Mediator implements IMediator
 	{

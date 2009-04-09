@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	height="600" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="800">
+	<mx:Metadata>
+		[ResourceBundle("LoginForm")]
+	</mx:Metadata>
+	<mx:Script 
+		source="includes/loginForm.as"/>
+	<mx:Style>
+		
+		.loginPanel{
+			headerHeight: 50;
+			titleStyleName: "loginPanelTitle";	
+		}
+		.loginPanelTitle {
+			color: #000000;
+			textAlign: "center";
+			fontWeight: "bold";
+		}
+	</mx:Style>
+	<mx:Image 
+		source="{loginTitle}" x="0" y="0"
+		
+		right="20" top="20"
+		autoLoad="true"/>
+	<mx:Image 
+		source="{loginCube}" x="0" y="22"
+		
+		verticalCenter="-4.5"/>
+	<mx:Panel 
+		id="loginFormPanel"
+		
+		height="200" styleName="loginPanel" title="{resourceManager.getString('LoginForm','title')}"
+		width="370" x="0" y="44"
+		
+		backgroundAlpha=".20" backgroundColor="#FFFFFF" borderColor="#808080" borderStyle="solid"
+		borderThickness="1" cornerRadius="12" dropShadowEnabled="true" horizontalAlign="center"
+		horizontalCenter="0" shadowDirection="right" shadowDistance="5" verticalCenter="0">
+		<mx:Form 
+			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+			<mx:FormItem 
+				label="{resourceManager.getString('LoginForm','username')}">
+				<mx:TextInput 
+					id="username"
+					
+					width="140"/>
+			</mx:FormItem>
+			<mx:FormItem 
+				label="{resourceManager.getString('LoginForm','password')}">
+				<mx:TextInput 
+					id="password"
+					
+					width="140"
+					displayAsPassword="true"/>
+			</mx:FormItem>
+			<mx:FormItem 
+				label="{resourceManager.getString('LoginForm','hostname')}">
+				<mx:TextInput 
+					id="hostname"
+					
+					width="140"/>
+			</mx:FormItem>
+			<mx:FormItem 
+				label="{resourceManager.getString('LoginForm','language')}">
+				<mx:ComboBox 
+					id="selectLang"
+					
+					labelField="@label" width="140"
+					
+					fillAlphas="[1.0, 0.59]" fillColors="[#FFFFFF, #FFFFFF]"/>
+			</mx:FormItem>
+		</mx:Form>
+		<mx:ControlBar 
+			width="100%"
+			
+			barColor="#ff0066" borderColor="#0000FF" horizontalAlign="center" horizontalGap="0"
+			paddingBottom="-1">
+			<mx:Button 
+				id="submitButton"
+				
+				focusEnabled="false" label="{resourceManager.getString('LoginForm','ok_button')}"
+				styleName="loginButtonOK" width="110"
+				buttonMode="true"/>
+			<mx:Button 
+				id="quitButton"
+				
+				focusEnabled="false" label="{resourceManager.getString('LoginForm','quit_button')}"
+				styleName="loginButtonQuit" width="110"
+				buttonMode="true"/>
+		</mx:ControlBar>
+	</mx:Panel>
+</mx:Canvas>

@@ -258,10 +258,10 @@ ComboBox {
 	
 	buttonPadding : 0;
 	buttonAlignment : right;
-	minimizeButtonSkin: ClassReference("vdom.skins.TitleBarMinimizeButtonSkin");
-	maximizeButtonSkin: ClassReference("vdom.skins.TitleBarMaximizeButtonSkin");
-	restoreButtonSkin: ClassReference("vdom.skins.TitleBarRestoreButtonSkin");
-	closeButtonSkin: ClassReference("vdom.skins.TitleBarCloseButtonSkin");
+	minimizeButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarMinimizeButtonSkin");
+	maximizeButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarMaximizeButtonSkin");
+	restoreButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarRestoreButtonSkin");
+	closeButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarCloseButtonSkin");
 }
 
 .popUpWindowText

@@ -1,19 +1,20 @@
 package net.vdombox.ide.view
 {
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-
+	
+	import mx.controls.Button;
+	import mx.controls.TextInput;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-
+	
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.model.LocaleProxy;
 	import net.vdombox.ide.model.LoginProxy;
-
+	import net.vdombox.ide.view.components.LoginForm;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
-	import vdom.components.loginForm.LoginForm;
-	import vdom.events.LoginFormEvent;
 
 	public class LoginFormMediator extends Mediator implements IMediator
 	{
@@ -27,19 +28,19 @@ package net.vdombox.ide.view
 		private var loginProxy : LoginProxy;
 		private var localeProxy : LocaleProxy;
 
-		override public function listNotificationInterests() : Array
-		{
-			return [ ApplicationFacade.STARTUP ];
-		}
-		
-		override public function onRegister():void
+//		override public function listNotificationInterests() : Array
+//		{
+//			return [ ApplicationFacade.STARTUP ];
+//		}
+
+		override public function onRegister() : void
 		{
 			loginProxy = facade.retrieveProxy( LoginProxy.NAME ) as LoginProxy;
 			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
-			
+
 			addEventListeners();
 		}
-		
+
 		private function get loginForm() : LoginForm
 		{
 			return viewComponent as LoginForm;
@@ -51,13 +52,24 @@ package net.vdombox.ide.view
 			loginForm.addEventListener( FlexEvent.SHOW, showHandler );
 		}
 
+		private function submit() : void
+		{
+			var loginFormData : Object = {};
+			loginFormData.username = loginForm.username.text;
+			loginFormData.password = loginForm.password.text;
+			loginFormData.hostname = loginForm.hostname.text;
+			
+			sendNotification( ApplicationFacade.SUBMIT_BEGIN, loginFormData );
+		}
+
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			loginForm.selectLang.addEventListener( ListEvent.CHANGE, changeLanguageHandler );
-			loginForm.submitButton.addEventListener( MouseEvent.CLICK, submitHandler );
-			loginForm.quitButton.addEventListener( MouseEvent.CLICK, quitHandler );
+			loginForm.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
+			loginForm.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
 
-			
+			loginForm.selectLang.addEventListener( ListEvent.CHANGE, selectLang_changeHandler );
+			loginForm.submitButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
+			loginForm.quitButton.addEventListener( MouseEvent.CLICK, quitButton_clickHandler );
 
 			loginForm.username.text = loginProxy.username;
 			loginForm.hostname.text = loginProxy.hostname;
@@ -69,18 +81,34 @@ package net.vdombox.ide.view
 //			loginForm.
 		}
 
-		private function changeLanguageHandler( event : ListEvent ) : void
+		private function mouseDownHandler( event : MouseEvent ) : void
+		{
+			if ( event.target is Button || event.target.parent is TextInput )
+				return;
+
+			loginForm.stage.nativeWindow.startMove();
+
+			event.stopImmediatePropagation();
+		}
+
+		private function keyDownHandler( event : KeyboardEvent ) : void
+		{
+			if ( event.keyCode == 13 )
+				submit();
+		}
+
+		private function selectLang_changeHandler( event : ListEvent ) : void
 		{
 			var selectedItem : XML = event.currentTarget.selectedItem as XML;
 			localeProxy.changeLocale( selectedItem.@code );
 		}
 
-		private function submitHandler( event : MouseEvent ) : void
+		private function submitButton_clickHandler( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.SUBMIT_BEGIN );
+			submit();
 		}
 
-		private function quitHandler( event : MouseEvent ) : void
+		private function quitButton_clickHandler( event : MouseEvent ) : void
 		{
 			sendNotification( ApplicationFacade.QUIT );
 		}
