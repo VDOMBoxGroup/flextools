@@ -182,7 +182,7 @@ public class ListParser
     	return null;	
 	}
 	
-	public static function execute(list:String, contexts:Array):String
+	public static function execute(list:String, contexts:Array):Object
 	{
 		var block:ParsedBlock = Parser.fragmentLexems(Parser.getLexemArray(list.concat(), true), 'code');
   		

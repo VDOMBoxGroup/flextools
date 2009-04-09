@@ -542,7 +542,7 @@ public class TemplateStruct extends EventDispatcher
 			{
 				case 'parseNewNode': // parse current node
 				
-					if((forced>0 || over) && !force)
+					if(forced>0 || over)
 						force = true;
 					
 					dispatchEvent(new Event("processNode"));
@@ -694,67 +694,25 @@ public class TemplateStruct extends EventDispatcher
 					{			
 						
 						var tmpBuf:String = curGraphContext.buffer;
-
-						/*
-						var tmpPrint:Boolean = false;
-						var tmpBuf:String = '';
-							
-						/*			
-						if(curGraphContext.variable!=null)
-						{
-							context[curGraphContext.variable] =
-								Utils.replaceEscapeSequences(
-									curGraphContext.buffer, 
-									"\\-");
-						}
-						else 
 						
-						
-						if(contextStack.length>1)
-						{
-							tmpPrint = true;
-							GraphContext(contextStack[contextStack.length-2]).buffer += tmpBuf;
-						}
-						*/						
-						
+						forced--;
 						contextStack.pop();
-						
-						//////////////////////////////////////////////////////
 						
 						if(contextStack.length>0) 
 						{
-							//if(!curNodeContext.block.executed)
-							{
-								curNodeContext.block.lastExecutedFragment.retValue =
-									tmpBuf;
-									//Utils.replaceEscapeSequences(tmpBuf, "\\-");
-								
-								context[curNodeContext.block.lastExecutedFragment.retVarName] =
-									curNodeContext.block.lastExecutedFragment.retValue;
-								
-								step = 'processExecResult';
-								continue;
-							}	
+							curNodeContext.block.lastExecutedFragment.retValue =
+								tmpBuf;
 							
-							//curGraphContext.curNode.parsedNode.value = 
-							//	tmpBuf;
+							context[curNodeContext.block.lastExecutedFragment.retVarName] =
+								curNodeContext.block.lastExecutedFragment.retValue;
 							
-							//curGraphContext.curNode.parsedNode.print = tmpPrint;
-							
-							//if(curGraphContext.curNode.category == NodeCategory.SUBGRAPH)
-							//	curGraphContext.curNode.parsedNode.print = true; 	
-								
-							nodeStack.push(curNodeContext);
+							step = 'processExecResult';
+	
+							continue;
 						}
 						
-						forced--;
-
 						if(contextStack.length==0)
 							break;
-						
-						// exit subgraph
-						step = 'getNextNode';							
-						continue;
 					}
 					else
 					{

@@ -14,7 +14,7 @@ public class CodeFragment extends LexemStruct
 	
 	public var fragments:Array = []; // lexems of fragment
 	
-	public var retVarName:String = "tmp_" + UIDUtil.createUID().replace(/-/g, "_"); 
+	public var retVarName:String = "__tmp_" + UIDUtil.createUID().replace(/-/g, "_"); 
 	public var retValue:*; // return value
 	public var print:Boolean; // print result value to output buffer
 

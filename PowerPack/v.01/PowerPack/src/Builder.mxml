@@ -34,7 +34,7 @@
 	        <menuitem label="File" id="file">
 	            <menuitem label="New Template" id="new_template" keyEquivalent="n" ctrlKey="true"/>
 	            <menuitem label="New Category" id="new_category" keyEquivalent="t" ctrlKey="true"/>
-	            <menuitem label="Open File..." id="open_file" keyEquivalent="o" ctrlKey="true"/>
+	            <menuitem label="Open File..." id="open_file"/>
 	            <menuitem type="separator" id="separator"/>
 	            <menuitem label="Close" id="close" keyEquivalent="w" ctrlKey="true"/>
 	            <menuitem type="separator"/>
@@ -76,6 +76,7 @@
     	
 	<mx:Script>
 		<![CDATA[
+			import PowerPack.com.gen.structs.NodeStruct;
 			import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 			import ExtendedAPI.com.ui.SuperNativeMenuItem;
 			import mx.managers.LayoutManager;
@@ -802,7 +803,11 @@
 					return;
             	
             	var curGraphContext:GraphContext = ContextManager.templateStruct.curGraphContext;
-            	var curNode:Node = pnl_graphs.showNodeByName(curGraphContext.curNode.id);
+            	var curNodeStruct:NodeStruct = curGraphContext.curNode;
+            	
+            	pnl_graphs.showGraphByName(curGraphContext.curGraph.id);
+            	var curNode:Node = pnl_graphs.showNodeByName(curNodeStruct.id);
+            	
             	curNode.setFocus();
             	
             	if(curDebugNode)

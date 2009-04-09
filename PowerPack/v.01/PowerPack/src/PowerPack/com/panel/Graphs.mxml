@@ -430,7 +430,8 @@
 				var node:Node;
 				for each(var graph:GraphCanvas in graphs)
 				{
-					var obj:Object = graph.getChildByName(name);
+					var obj:Object = graph.getChildByName(name);					
+					
 					if(obj && obj is Node)
 					{
 						node = obj as Node;

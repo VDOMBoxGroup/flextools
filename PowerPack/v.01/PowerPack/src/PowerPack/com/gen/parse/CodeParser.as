@@ -245,13 +245,23 @@ public class CodeParser
 		// execute generated code
 		fragment.retValue = Parser.eval(code, contexts);
 		contexts[0][fragment.retVarName] = fragment.retValue;
+		
+		for(i=fragment.current; i<fragment.fragments.length; i++)
+		{
+			subfragment = fragment.fragments[i];
+			if(subfragment is CodeFragment)
+			{
+				delete contexts[0][subfragment.retVarName];
+			}
+		}
+		
 		fragment.executed = true;
 		fragment.lastExecutedFragment = fragment;
 	}
 
 	public static function executeBlock(block:ParsedBlock, contexts:Array, stepReturn:Boolean=false):void
 	{
-		// validate 
+		// validate
 		
 		if(!block.validated)
 		{
