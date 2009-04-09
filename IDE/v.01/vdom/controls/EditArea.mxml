@@ -113,7 +113,7 @@
 			
 			private function test( ...arg ) : void
 			{
-				trace( arg );
+//				trace( arg );
 			}
 			
 			private function getTemplateString() : String
@@ -126,6 +126,7 @@
 					var fs : FileStream = new FileStream();
 					fs.open( file, FileMode.READ );
 					template = fs.readUTFBytes( fs.bytesAvailable );
+					fs.close();
 				}
 				catch ( error : Error )
 				{
@@ -143,6 +144,7 @@
 					var fs : FileStream = new FileStream();
 					fs.open( file, FileMode.WRITE );
 					fs.writeUTFBytes( content );
+					fs.close();
 				}
 				catch ( error : Error )
 				{
@@ -185,19 +187,22 @@
 				if( _content )
 					content = _content; // FIXME fix!
 			}
-			
-		private function showHandler() : void
-		{
-			addEventListener( KeyboardEvent.KEY_DOWN, keyboard_keyDownHandler, true );
-			location= BASE_URL + "init.html";
-		}
-		
-		private function hideHandler() : void
-		{
-			removeEventListener( KeyboardEvent.KEY_DOWN, keyboard_keyDownHandler, true );
-			location= "about:blank";
-			isEditorLoaded = false;
-		}
+
+			private function showHandler() : void
+			{
+				addEventListener( KeyboardEvent.KEY_DOWN, keyboard_keyDownHandler,
+								  true );
+				location = BASE_URL + "init.html";
+			}
+
+			private function hideHandler() : void
+			{
+				removeEventListener( KeyboardEvent.KEY_DOWN, keyboard_keyDownHandler,
+									 true );
+				location = "about:blank";
+				isEditorLoaded = false;
+			}
+
 		
 		private function keyboard_keyDownHandler( event : KeyboardEvent ) : void
 		{

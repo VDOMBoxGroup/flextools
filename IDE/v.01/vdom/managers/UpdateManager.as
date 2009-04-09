@@ -98,7 +98,7 @@ public class UpdateManager
 			updaterConfig.urllist = {
 				url : 
 					[
-//						"file:////Segroup/exchange/vdomide/update/update_dev.xml",
+//						"file:////Segroup/exchange/vdomide/update/update_dev.xml"
 						"http://update.vdombox.net/update.xml"
 					]
 			};
