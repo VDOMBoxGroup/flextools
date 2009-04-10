@@ -7,7 +7,6 @@ package net.vdombox.ide
 	import net.vdombox.ide.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.controller.QuitCommand;
 	import net.vdombox.ide.controller.SubmitCommand;
-	import net.vdombox.ide.model.LoginProxy;
 	import net.vdombox.ide.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
@@ -49,7 +48,6 @@ package net.vdombox.ide
 
 			registerCommand( INVOKE, InvokeCommand );
 			registerCommand( SUBMIT_BEGIN, SubmitCommand );
-			registerCommand( LoginProxy.LOGIN_OK, LoginCommand );
 			registerCommand( QUIT, QuitCommand );
 		}
 

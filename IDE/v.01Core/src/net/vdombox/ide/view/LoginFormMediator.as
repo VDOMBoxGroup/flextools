@@ -10,7 +10,7 @@ package net.vdombox.ide.view
 	
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.model.LocaleProxy;
-	import net.vdombox.ide.model.LoginProxy;
+	import net.vdombox.ide.model.SharedObjectProxy;
 	import net.vdombox.ide.view.components.LoginForm;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -25,7 +25,7 @@ package net.vdombox.ide.view
 			super( NAME, viewComponent );
 		}
 
-		private var loginProxy : LoginProxy;
+		private var sharedObjectProxy : SharedObjectProxy;
 		private var localeProxy : LocaleProxy;
 
 //		override public function listNotificationInterests() : Array
@@ -35,7 +35,7 @@ package net.vdombox.ide.view
 
 		override public function onRegister() : void
 		{
-			loginProxy = facade.retrieveProxy( LoginProxy.NAME ) as LoginProxy;
+			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
 
 			addEventListeners();
@@ -71,8 +71,8 @@ package net.vdombox.ide.view
 			loginForm.submitButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
 			loginForm.quitButton.addEventListener( MouseEvent.CLICK, quitButton_clickHandler );
 
-			loginForm.username.text = loginProxy.username;
-			loginForm.hostname.text = loginProxy.hostname;
+			loginForm.username.text = sharedObjectProxy.username;
+			loginForm.hostname.text = sharedObjectProxy.hostname;
 			loginForm.selectLang.dataProvider = localeProxy.languageList;
 		}
 
