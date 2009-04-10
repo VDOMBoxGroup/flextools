@@ -6,8 +6,6 @@
 	<mx:Metadata>
 		[ResourceBundle("LoginForm")]
 	</mx:Metadata>
-	<mx:Script 
-		source="includes/loginForm.as"/>
 	<mx:Style>
 		
 		.loginPanel{
@@ -21,12 +19,14 @@
 		}
 	</mx:Style>
 	<mx:Image 
-		source="{loginTitle}" x="0" y="0"
+		source="@Embed( source='/assets/login/vectorGraphic.swf', symbol = 'LoginTitle' )"
+		x="0" y="0"
 		
 		right="20" top="20"
-		autoLoad="true"/>
+		/>
 	<mx:Image 
-		source="{loginCube}" x="0" y="22"
+		source="@Embed( source='/assets/login/vectorGraphic.swf', symbol = 'LoginCube' )"
+		x="0" y="22"
 		
 		verticalCenter="-4.5"/>
 	<mx:Panel 

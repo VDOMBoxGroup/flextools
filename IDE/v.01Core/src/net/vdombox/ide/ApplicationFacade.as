@@ -1,13 +1,15 @@
 package net.vdombox.ide
 {
 	import mx.rpc.events.FaultEvent;
-
+	
 	import net.vdombox.ide.controller.InvokeCommand;
 	import net.vdombox.ide.controller.LoginCommand;
 	import net.vdombox.ide.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.controller.QuitCommand;
+	import net.vdombox.ide.controller.SubmitCommand;
+	import net.vdombox.ide.model.LoginProxy;
 	import net.vdombox.ide.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -46,7 +48,8 @@ package net.vdombox.ide
 			registerCommand( PREINITALIZE, PreinitalizeMacroCommand );
 
 			registerCommand( INVOKE, InvokeCommand );
-			registerCommand( SUBMIT_BEGIN, LoginCommand );
+			registerCommand( SUBMIT_BEGIN, SubmitCommand );
+			registerCommand( LoginProxy.LOGIN_OK, LoginCommand );
 			registerCommand( QUIT, QuitCommand );
 		}
 
