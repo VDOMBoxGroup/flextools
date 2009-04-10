@@ -11,5 +11,10 @@ package net.vdombox.ide.model
 		{
 			super( NAME, data );
 		}
+		
+		public function login() : void
+		{
+			
+		}
 	}
 }
