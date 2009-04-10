@@ -296,7 +296,7 @@ public class Template extends EventDispatcher
 	}		
 
     //----------------------------------
-    //  picturePath
+    //  picture
     //----------------------------------
 	
 	private var _picture:File;
@@ -304,7 +304,7 @@ public class Template extends EventDispatcher
 	[Bindable]
 	public function set picture(value:File):void
 	{
-		if(_picture.nativePath!=value.nativePath)
+		if(!value || !_picture || _picture.nativePath!=value.nativePath)
 		{
 			modified = true;
 			_picture = value;		
@@ -549,7 +549,7 @@ public class Template extends EventDispatcher
 		{			
 			try 
 			{	
-				var strEncoded:String = XML(_xml.encoded[0]).toXMLString(); 
+				var strEncoded:String = XML(_xml.encoded[0]).toString(); 
 		 		var strDecoded:String;
 		 	
 				var decoder:Base64Decoder = new Base64Decoder();

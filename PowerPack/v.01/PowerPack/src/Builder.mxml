@@ -453,11 +453,15 @@
             			
             			ProgressManager.start(ProgressManager.DIALOG_MODE, false);
             			
-						processOpenedTpl();
+            			tpl.processOpened();						
 						
 						ProgressManager.complete();
-						
-						return;        					
+
+						if(!tpl.isEncoded)
+						{
+							processOpenedTpl();
+							return;
+						}
 					}
         			
         			SuperAlert.show("Invalid secret key.");
@@ -713,9 +717,14 @@
             		
             		tpl.name = propDlg.txtName.text;
 					tpl.description = propDlg.txtDesc.text;
-					try {
+					try 
+					{
 						tpl.picture = new File(StringUtil.trim(propDlg.picBrowse.text));
-					} catch (e:*) {}
+					} 
+					catch (e:*) 
+					{
+						trace('Wrong pic path');
+					}
 					tpl.key = StringUtil.trim(propDlg.txtKey.text);
 					
 					templateChanged();
