@@ -1,5 +1,7 @@
 package PowerPack.com.gen.parse
 {
+import ExtendedAPI.com.utils.Utils;
+
 import PowerPack.com.gen.TemplateStruct;
 import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.parse.parseClasses.CodeFragment;
@@ -38,6 +40,7 @@ public class Parser
 			"split":			{ pattern:/^\[n[vscVS][vscVS]\]$/, 				argNum:2 },
 			"random":			{ pattern:/^\[n[viVN]\]$/, 						argNum:1 },
 			"imageToBase64":	{ pattern:/^\[n[v][vscVS]\]$/, 					argNum:2 },
+			"_switch":			{ pattern:/^\[n[nvscVS][nsc]*\]$/, 				argNum:-2, trans:[] },
 			
 			//*********************
 			// List manipulation
@@ -378,7 +381,16 @@ public class Parser
  					lastLexem.code = lastLexem.origValue;  
  				}
  				else
+ 				{
  					lexems.push(new LexemStruct(sourceText.substring(fix, i+1), type, fix, err));
+ 					
+ 					if(type=='n')
+ 					{
+	 					lastLexem = LexemStruct(lexems[lexems.length-1]); 
+ 						lastLexem.value = Utils.quotes(String(lastLexem.origValue));
+ 						lastLexem.code = lastLexem.value; 						
+ 					}
+ 				}
  				
  				if(lexems.length>1)
  					LexemStruct(lexems[lexems.length-2]).tailSpaces = spaceStack;
@@ -625,6 +637,57 @@ public class Parser
 		return (funcDescr.length()>0 || TemplateStruct.lib[funcName] is FunctionDef);		
 	}	
 	
+	public static function getFunctionTrans(fragment:CodeFragment):Array
+	{
+		var arr:Array = [];
+		var tmpValue:String = '';
+		var concat:String = '';
+		var prevGrp:int = -1;
+		
+		if(fragment.ctype != CodeFragment.CT_FUNCTION)
+			return null;
+		
+		Parser.processOperationGroups(fragment.fragments);				
+		
+		for(var i:int=3; i<fragment.fragments.length-1; i++)
+		{
+			var subfragment:LexemStruct = fragment.fragments[i];
+			
+			if(subfragment is CodeFragment)
+			{
+				switch(subfragment.type)
+				{
+					case 'c':
+					case 's':
+					case 'n':
+						tmpValue = Utils.replaceAllBracers((subfragment as CodeFragment).origValue);
+						break;
+					default:
+						tmpValue = (subfragment as CodeFragment).origValue;
+				}
+				
+			}
+			else if(subfragment is LexemStruct)
+			{
+				tmpValue = Utils.replaceQuotes(LexemStruct(subfragment).value);
+			}
+			
+			if(prevGrp!=-1 && prevGrp!=subfragment.operationGroup)
+			{
+				arr.push(concat);
+				concat = '';
+			}
+			
+			concat += tmpValue;
+			prevGrp = subfragment.operationGroup;
+		}
+		
+		if(concat)
+			arr.push(concat);
+			
+		return arr; 		
+	}
+	
 	public static function validateCodeFragment(fragment:CodeFragment):void
 	{
 		var lexemObj:Object;
@@ -693,10 +756,12 @@ public class Parser
 		if(funcObj.result && funcObj.value.length==1)
 		{ 
 			var argNum:int = lexemObj.value.indexOf("]") - lexemObj.value.indexOf("[")-2;
-			funcName = LexemStruct(fragment.fragments[1]).value;
+			funcName = LexemStruct(fragment.fragments[1]).origValue;
 		
 			if(funcName=='get')
 				funcName = 'getValue';
+			else if(funcName=='switch')
+				funcName = '_switch';
 				
 			if(isFunctionExist(funcName))
 			{
@@ -729,7 +794,16 @@ public class Parser
 					}
 					
 					if(funcDef.trans)
-						fragment.trans = funcDef.trans;
+					{ 
+						if(funcDef.trans.length)
+							fragment.trans = funcDef.trans;
+						else
+						{
+							fragment.trans = getFunctionTrans(fragment);
+							fragment.trans.push('other...');
+						}
+					}
+					
 				}
 				fragment.validated = true;
 				return;
@@ -816,7 +890,7 @@ public class Parser
 		block.validated = true;
 	}	
 
-	public static function eval(prog:String, contexts:Array=null):*
+	public static function eval(prog:String, contexts:Array):*
 	{
 		var _res:String = "_result_" + UIDUtil.createUID().replace(/-/g, "_"); 
 		var _contexts:Array = [null, null];

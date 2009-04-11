@@ -41,7 +41,7 @@ public dynamic class TemplateLib
 	private function setTransition(value:String):void
 	{
 		var lastFrag:CodeFragment = tplStruct.curNodeContext.block.lastExecutedFragment;
-		lastFrag.transition = value;		
+		lastFrag.transition = value;
 	}
 	
 	private function getContexts():Array

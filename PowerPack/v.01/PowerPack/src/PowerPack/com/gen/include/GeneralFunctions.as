@@ -5,7 +5,6 @@ import ExtendedAPI.com.utils.FileToBase64;
 import ExtendedAPI.com.utils.Utils;
 
 import PowerPack.com.BasicError;
-import PowerPack.com.gen.NodeContext;
 import PowerPack.com.gen.errorClasses.RunTimeError;
 import PowerPack.com.gen.structs.GraphStruct;
 import PowerPack.com.gen.structs.NodeStruct;
@@ -107,6 +106,17 @@ public function question(question:String, answers:String):Function
 	function questionCloseHandler(event:Event):void {
 		setReturnValue(event.target.strAnswer);
 	}	
+}
+
+public function _switch(value:String, ...args):String
+{
+	for each (var arg:String in args)
+	{
+		if(value==arg)
+			return value;
+	}
+	
+	return 'other...';
 }
 
 public function convert(type:String, value:Object):Function

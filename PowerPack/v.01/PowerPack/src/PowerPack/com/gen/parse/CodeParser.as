@@ -33,11 +33,6 @@ public class CodeParser
 				lexem.code = lexem.value;
 				break;
 			
-			case 'n':
-				lexem.value = Utils.quotes(String(lexem.origValue));
-				lexem.code = lexem.value;
-				break;
-				
 			case '[':
 			case ']':
 			case '{':
