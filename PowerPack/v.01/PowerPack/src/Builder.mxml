@@ -849,7 +849,8 @@
 				var subArr:Array = [];
 				for (var obj:String in curGraphContext.context) {
 					var value:Object = curGraphContext.context[obj];
-					subArr.push( { 	Name: "$"+obj, 
+					if(obj.search(/^__tmp_.*$/)<0)
+						subArr.push( { 	Name: "$"+obj, 
 									Value: value!=null ? value.toString() : 'null' } );						
 				}					
 
@@ -857,7 +858,10 @@
 				var arr:Array = [];
 				for (obj in ContextManager.templateStruct.context) {
 					if(!(ContextManager.templateStruct.context[obj] is TemplateLib))
-						arr.push( { Name:"$"+obj, Value:ContextManager.templateStruct.context[obj] } );						
+					{
+						if(obj.search(/^__tmp_.*$/)<0)
+							arr.push( { Name:"$"+obj, Value:ContextManager.templateStruct.context[obj] } );
+					}						
 				}			
 				arr.push( { Name:"this", Value: curGraphContext.curGraph.name, children:subArr } );
 				
