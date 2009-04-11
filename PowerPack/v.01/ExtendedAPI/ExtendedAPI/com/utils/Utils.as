@@ -156,6 +156,20 @@ package ExtendedAPI.com.utils
 			
 			return str;
 		}
+		
+		public static function replaceAllBracers(string:String, bracers:String='({['):String
+		{
+			var str:String = string.concat();
+			var len:int;
+			
+			do
+			{
+				len = str.length;
+				str = replaceBracers(str, bracers);				
+			} while(len!=str.length)
+			
+			return str;
+		}		
 					
 		public static function replaceQuotes(string:String):String
 		{
