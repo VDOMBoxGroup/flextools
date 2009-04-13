@@ -19,18 +19,47 @@
 	</mx:Style>
 	<mx:Script>
 	<![CDATA[
+		import mx.events.ListEvent;
+		import mx.events.CloseEvent;
 		import mx.managers.PopUpManager;
 		import mx.collections.XMLListCollection;
 	
-	
+		private var sqlProxy : SQLProxy = new SQLProxy(); 
 		private function creationCompleteHandler():void
 		{
-			tree.dataProvider = XML("<page title = 'page 0' name = 'page_0' isBranch='true' />");
+			sqlProxy.creatDB();
+			
+			showAllProducts();
+//			tree.dataProvider = XML("<page title = 'page 0' name = 'page_0' isBranch='true' />");
 		}
 		
-		private function treeChangeHandler(object:Object):void
+		private function treeChangeHandler(lstEvt:ListEvent):void
 		{
 //			showSelectedPage(tree.selectedItem.@name);
+//			trace("Tree Change");
+			sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
+			
+			
+			if(!tree.selectedItem)
+			{
+				tree.selectedItem = XML(lstEvt.itemRenderer.data.toXMLString());
+				tree.validateNow();
+			}
+//			tree.selectedItem = XML(lstEvt.itemRenderer.data);
+			trace(": "+lstEvt.itemRenderer.data.@name +" : "+ tree.selectedItem.@name);
+				
+			var resoult : Object = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name);
+			if(resoult)
+			{
+				htmlSource.text = resoult[0]["content"];
+			}
+		}
+		
+		private function showAllProducts():void
+		{
+			cmboxProduct.dataProvider =  sqlProxy.getAllProducts();
+//			listOfProducts.selectedIndex = 0;
+			changeProduct();
 			
 		}
 		
@@ -74,14 +103,16 @@
 		
 		private function selectNecessaryItem(fileName:String):void
 		{
-			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0];
+			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0]; // tree.dataProvider.source..page.(@name == fileName)[0];
 			
 			openTree(currentElement);
-			
 			tree.selectedItem = currentElement;
+			tree.validateNow();
 			
-			var index:int =  tree.getItemIndex(tree.selectedItem);
-			tree.scrollToIndex(index);
+//			tree.selectedItem = currentElement;
+			
+//			var index:int =  tree.getItemIndex(tree.selectedItem);
+//			tree.scrollToIndex(index);
 			
 //			findDistanition(fileName);
 		}
@@ -107,29 +138,71 @@
 		}
 		
 		
-		private var toc : XMLListCollection = new XMLListCollection();
+		private var toc : XML = new XML();
 		private var count : int = 0; 
 		private function addItem():void
 		{
-			++count;
-			toc = XMLListCollection(tree.dataProvider);
+			if(tree.selectedItem)
+				var name : String = tree.selectedItem.@name;
+			else trace("NO SELECTED PAGE");
+				
+			toc = tree.dataProvider[0];
 			
-			toc.addItem(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
+			var pageName : String = "page_" + count++;
+			
+			while(sqlProxy.checkPageName(pageName))
+			{
+				pageName = "page_" + count++;
+				trace("Page in data base: " + pageName);
+			}
+			
+			sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
+								"Write Title", "write Description", "it is  "+ pageName);
+			
+			toc.appendChild(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
 			tree.dataProvider = null;
 			
 			tree.validateNow();
 			tree.dataProvider = toc;
-	
+
+			tree.validateNow();
+			if(tree.selectedItem)
+				selectNecessaryItem(name);
+			
+			sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
+			
+//			tree.expandItem(toc, true);
+//			tree.selectedIndex = selectedIndex;
+			
 		}
 		
 		private function removeItem():void
 		{
+			var selectedIndex : Number = tree.selectedIndex; 
+			if( selectedIndex > 0)
+			{
+				delete toc..page.(@name == tree.selectedItem.@name)[0];
+//				toc = XML(tree.dataProvider);
+				
+					tree.dataProvider = null;
+					tree.validateNow();
+					tree.dataProvider = toc;
+					
+					tree.validateNow();
+					tree.expandItem(toc, true);
+					
+					tree.selectedIndex = selectedIndex;
+					if (!tree.selectedIndex)
+						tree.selectedIndex = selectedIndex - 1;
+
+			}
+			/*
 			if(tree.selectedItem)
 			{
 				if( toc.getItemIndex(tree.selectedItem) == -1)
 				{
 					delete tree.dataProvider.source..page.(@name == tree.selectedItem.@name)[0];
-					toc = XMLListCollection(tree.dataProvider);
+					toc = XML(tree.dataProvider);
 				}
 				else
 				{
@@ -139,14 +212,35 @@
 					tree.validateNow();
 					tree.dataProvider = toc;
 				}
-			}	
+			}
+			*/	
 		}
 		
 		private function productEdit():void
 			{
 				var rbWnd:Products = Products(PopUpManager.createPopUp(this, Products, true));
-//				rbWnd.addEventListener(CloseEvent.CLOSE, closeSettingsHandler);
+				rbWnd.addEventListener(CloseEvent.CLOSE, closeProductsHandler);
 			}
+		private function closeProductsHandler(evt:CloseEvent):void
+		{
+			showAllProducts();
+		}
+		
+		private function changeProduct():void
+		{
+			if(!cmboxProduct.selectedItem)
+				return;
+				
+			var resoult : Object = sqlProxy.getToc(cmboxProduct.selectedItem.name)  ;
+			tree.dataProvider =  resoult as XML;
+			
+			toc = tree.dataProvider[0];
+			
+			tree.validateNow();
+			tree.expandItem(toc, true);
+			tree.selectedIndex = 0;
+		}
+		
 	
 	]]>
 </mx:Script>
@@ -156,7 +250,7 @@
 		<mx:Image source="@Embed('../assets/header.png')" width="100%" maintainAspectRatio="false" scaleContent="true" 
 			mouseDown="{nativeWindow.startMove();}" doubleClick="{minMaximize()}" doubleClickEnabled="true"/>
 		<mx:HBox paddingLeft="5" paddingTop="5" paddingRight="5" 
-				color="#FFFFFF" width="100%">
+				color="#FFFFFF" width="100%"  >
 			<mx:Image source="@Embed('../assets/bookmarks.png')" />
 			<mx:Label text="VDOM Help Aplication" />
 			<mx:HBox width="100%"  horizontalAlign="right" paddingTop="2">
@@ -171,22 +265,24 @@
 	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c"/>
 	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
 		<mx:VBox height="100%" minWidth="220" horizontalScrollPolicy="off">
-			<mx:HBox paddingLeft="3" paddingRight="3">
-				<mx:ComboBox  width="100%" dataProvider="{{label:'VDOM Editor'}}"
-					color="#FFFFFF" 	fillColors="#333333" iconColor="0xCCCCCC"
-		    		 textSelectedColor="#FFFFFF" cornerRadius="1" 
+			<mx:HBox paddingLeft="3" paddingRight="3" color="#FFFFFF">
+				<mx:ComboBox  id="cmboxProduct" width="100%" labelField="title" dataProvider="{{label:'VDOM Editor'}}"
+					 	fillColors="#333333" iconColor="0xCCCCCC" change="{changeProduct()}"
+		    		 textSelectedColor="#FFFFFF"  cornerRadius="1" 
 		    		  borderColor="#999999" themeColor="#656565" 
-		    		  textRollOverColor="#FFFFFF" />
+		    		  textRollOverColor="#000000" selectionColor="#0000FF" />
 				<mx:Button label="Edit" click="{productEdit()}"
 					color="#FFFFFF" 	fillColors="#333333" 
 		    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 		    		  borderColor="#999999" themeColor="#656565" 
 		    		  textRollOverColor="#FFFFFF"/>
 			</mx:HBox>
-			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="false"
-				labelField="@title"  dragEnabled="true" dropEnabled="true" 
+			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="true"
+				labelField="@title"  dragEnabled="true" dropEnabled="true"  
 				change="{treeChangeHandler(event)}"  dragMoveEnabled="true" 	
-				folderOpenIcon="@Embed('../assets/open_folder.png')" folderClosedIcon="@Embed('../assets/close_folder.png')" 
+				folderOpenIcon="@Embed('../assets/open_folder.png')" 
+				folderClosedIcon="@Embed('../assets/close_folder.png')"
+				openDuration="0" 
 				defaultLeafIcon="@Embed('../assets/page.png')" /> 
 
 			<mx:HBox paddingLeft="3">
@@ -219,12 +315,12 @@
 						</mx:VBox>	
 						<mx:Button label="..."  bottom="0" />
 				</mx:HBox>
-					<mx:TextArea width="100%" height="100%" /> 
+					<mx:TextArea id="htmlSource" width="100%" height="100%" /> 
 				</mx:VBox>
 			</mx:Canvas >
 			<mx:Canvas width="100%" height="100%" label="Preview">
 				
-			<mx:HTML id="html"  width="100%" height="100%" 
+			<mx:HTML id="html"  width="100%" height="100%" htmlText="{htmlSource.text}"
 				locationChange="{pageChangedHandler(event)}"/>
 			</mx:Canvas>
 		</mx:TabNavigator>
