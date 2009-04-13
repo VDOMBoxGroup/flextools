@@ -4,14 +4,16 @@ package net.vdombox.ide.model
 	import net.vdombox.ide.events.SOAPEvent;
 	import net.vdombox.ide.model.business.SOAP;
 	import net.vdombox.ide.model.vo.AuthInfo;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ServerProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ServerProxy";
-		public static const LOGIN_OK : String = "Login OK";
+		
+		public static const LOGIN_COMPLETE : String = "Login Complete";
+		public static const CONNECT_COMPLETE : String = "Connect Complete";
 
 		public function ServerProxy( data : Object = null )
 		{
@@ -23,8 +25,24 @@ package net.vdombox.ide.model
 		public var connected : Boolean = false;
 
 		private var soap : SOAP = SOAP.getInstance();
-		private var tempAuthInfo : AuthInfo;
 
+		private var registeredHandlers : Array = [ { methodName: "list_applications", handlerName: "soap_listApplicationsHandler" },
+												   { methodName: "get_all_types", handlerName: "soap_getAllTypesHandler" } ]
+
+		private var tempAuthInfo : AuthInfo;
+		private var _authInfo : AuthInfo;
+		private var _applicationList : XML;
+
+		public function get authInfo() : AuthInfo
+		{
+			return _authInfo;
+		}
+		
+		public function get applicationList() : XML
+		{
+			return _applicationList;
+		}
+		
 		public function connect( authInfo : AuthInfo ) : void
 		{
 			connected = false;
@@ -48,10 +66,20 @@ package net.vdombox.ide.model
 		{
 			connected = true;
 			var result : XML = event.result;
+			_authInfo = new AuthInfo( result.Username[ 0 ], tempAuthInfo.password,
+									  result.Hostname[ 0 ] );
 			tempAuthInfo = null;
-			var authInfo : AuthInfo = new AuthInfo( result.Username[ 0 ], result.Hostname[ 0 ] );
 
-			sendNotification( LOGIN_OK, authInfo );
+			sendNotification( LOGIN_COMPLETE, _authInfo );
+
+			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_listApplicationsHandler )
+			soap.list_applications();
+		}
+
+		private function soap_listApplicationsHandler( event : SOAPEvent ) : void
+		{
+			_applicationList = event.result.Applications[0];
+			sendNotification( CONNECT_COMPLETE );
 		}
 
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void

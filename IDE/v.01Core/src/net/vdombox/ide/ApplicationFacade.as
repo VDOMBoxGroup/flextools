@@ -2,11 +2,14 @@ package net.vdombox.ide
 {
 	import mx.rpc.events.FaultEvent;
 	
+	import net.vdombox.ide.controller.ConnectCompleteCommand;
 	import net.vdombox.ide.controller.InvokeCommand;
-	import net.vdombox.ide.controller.LoginCommand;
 	import net.vdombox.ide.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.controller.QuitCommand;
 	import net.vdombox.ide.controller.SubmitCommand;
+	import net.vdombox.ide.controller.TypesLoadedCommand;
+	import net.vdombox.ide.model.ServerProxy;
+	import net.vdombox.ide.model.TypesProxy;
 	import net.vdombox.ide.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
@@ -25,8 +28,6 @@ package net.vdombox.ide
 		public static const INVOKE : String = "invoke";
 		public static const PREINITALIZE : String = "preinitalize";
 		public static const STARTUP : String = "startup";
-
-		public static const LOGIN : String = "login";
 
 		public static const SUBMIT_BEGIN : String = "submitBegin";
 		public static const QUIT : String = "quit";
@@ -48,6 +49,8 @@ package net.vdombox.ide
 
 			registerCommand( INVOKE, InvokeCommand );
 			registerCommand( SUBMIT_BEGIN, SubmitCommand );
+			registerCommand( ServerProxy.CONNECT_COMPLETE, ConnectCompleteCommand );
+			registerCommand( TypesProxy.TYPES_LOADED, TypesLoadedCommand );
 			registerCommand( QUIT, QuitCommand );
 		}
 
