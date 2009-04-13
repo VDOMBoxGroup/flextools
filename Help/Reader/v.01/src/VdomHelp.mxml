@@ -8,7 +8,7 @@
 	xmlns:vdomTitleBar="vdom.core.vdomTitleBar.*"
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	minWidth="650" minHeight="300"
-	layout="absolute" creationComplete="{creatComleatHandler()}" viewSourceURL="srcview/index.html" 
+	layout="absolute" creationComplete="{creatComleatHandler()}" 
 	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
 	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
 	<mx:Style>
@@ -32,7 +32,14 @@
 		import mx.utils.Base64Decoder;
 		
 		
-		
+		/**
+		 * сделать хелпы 2шт.
+		 * поиск подсвечивался
+		 * кнопки при наведении выделялись
+		 * 
+		 * 
+		 * 
+		 */
 		
 //		private var cacheFolder:File;
 		
@@ -69,6 +76,8 @@
 			bookMarks.addChild(markList);
 			
 			updateToc();
+			
+			
 			
 		}
 		

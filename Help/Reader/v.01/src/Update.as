@@ -3,7 +3,6 @@ package
 	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
@@ -45,8 +44,70 @@ package
 			myLoader.addEventListener(Event.COMPLETE, startXMLLoaded);
 			myLoader.addEventListener(IOErrorEvent.IO_ERROR, startXMLLoaded);
 			
+			checJSFile();
 		}
 		
+		private var JSFileName : String = "searchhi_slim.js";
+		private var cssFileName : String = "main.css";
+		private function checJSFile():void
+		{
+			
+//			var loadJSFile : File = new File(urlJSFile);
+//			loadJSFile.load();
+			
+			
+			var newFile:File = File.applicationStorageDirectory.resolvePath(JSFileName);
+			try {
+				fileStream.open(newFile, FileMode.READ);
+				fileStream.close();
+				
+			} catch(error:IOError) {
+//				var er:* =  error;
+				trace("'''''Will Copy JS File  \n" + JSFileName);
+				var JSURL  : URLRequest = new URLRequest(JSFileName)
+				var JSLoader : URLLoader  = new URLLoader(JSURL);
+				
+				JSLoader.addEventListener(Event.COMPLETE, startCopyJSFile);
+				
+				var cssData : String = ".searchword { background-color : #ffff00;}"
+			
+				var byteArray:ByteArray = new ByteArray();
+				byteArray.writeMultiByte(cssData + "\n", "UTF-8");
+				
+				newFile = File.applicationStorageDirectory.resolvePath(cssFileName);
+				try {
+					fileStream.open(newFile, FileMode.WRITE);
+					fileStream.writeBytes(byteArray);
+					fileStream.close();
+					
+				}catch(error:IOError) {
+	//				var er:* =  error;
+					trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+ cssFileName);
+					return;
+				}
+			
+			}
+			
+		}
+		
+		
+		private function startCopyJSFile(evt:Event):void
+		{
+			var byteArray:ByteArray = new ByteArray();
+				byteArray.writeMultiByte(evt.target.data + "\n", "UTF-8");
+			
+			var newFile:File = File.applicationStorageDirectory.resolvePath(JSFileName);
+			try {
+				fileStream.open(newFile, FileMode.WRITE);
+				fileStream.writeBytes(byteArray);
+				fileStream.close();
+				
+			}catch(error:IOError) {
+//				var er:* =  error;
+				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+ JSFileName);
+				return;
+			}
+		}
 		
 		private function startXMLLoaded(event:Event):void
 		{
@@ -192,7 +253,8 @@ package
 			cacheFile( fileName, byteArray);
 		}
 		
-				private function savePages(product:XML):void
+		
+		private function savePages(product:XML):void
 		{
 			var productName:String =  product.name.toString(); 
 			var language:String =  product.language.toString(); 
