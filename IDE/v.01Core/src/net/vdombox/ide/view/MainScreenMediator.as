@@ -2,6 +2,7 @@ package net.vdombox.ide.view
 {
 	import mx.collections.XMLListCollection;
 	import mx.events.FlexEvent;
+	import mx.events.ItemClickEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
@@ -29,6 +30,9 @@ package net.vdombox.ide.view
 		private var modulesProxy : ModulesProxy;
 		private var localeProxy : LocaleProxy;
 
+		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
+		private var modulesManagmentMediator : ModulesManagmentMediator;
+
 		override public function onRegister() : void
 		{
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
@@ -49,9 +53,14 @@ package net.vdombox.ide.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			facade.registerMediator( new ApplicationManagmentMediator(  ) );
+			applicationsManagmentMediator = new ApplicationsManagmentMediator( mainScreen.applicationsManagment );
+			facade.registerMediator( applicationsManagmentMediator );
 			
-			
+			modulesManagmentMediator = new ModulesManagmentMediator( mainScreen.modulesManagment )
+			facade.registerMediator( modulesManagmentMediator );
+
+			mainScreen.mainTabBar.addEventListener( ItemClickEvent.ITEM_CLICK, mainTabBar_itemClickHandler )
+
 			var tabs : XMLListCollection = new XMLListCollection();
 			tabs.addItem(
 				<category name="applicationManagment" label={resourceManager.getString( "ApplicationManagment",
@@ -66,16 +75,31 @@ package net.vdombox.ide.view
 																					  category.@name )}/>
 					);
 			}
-			
-			
+
+
 			mainScreen.mainTabBar.iconField = null;
-			
+
 			mainScreen.mainTabBar.labelFunction = function( data : XML ) : String
 			{
 				return data.@label[ 0 ];
 			};
-			
+
 			mainScreen.mainTabBar.dataProvider = tabs;
+		}
+
+		private function mainTabBar_itemClickHandler( event : ItemClickEvent ) : void
+		{
+			var categoryName : String = event.item.@name;
+			
+			if ( categoryName == "applicationManagment" )
+			{
+				mainScreen.componentsStack.selectedChild = mainScreen.applicationsManagment;
+			}
+			else
+			{
+				mainScreen.componentsStack.selectedChild = mainScreen.modulesManagment;
+				modulesManagmentMediator.showModulesByCategory( categoryName );
+			}
 		}
 	}
 }

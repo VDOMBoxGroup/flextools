@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox 
+<mx:Canvas 
 	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="net.vdombox.ide.view.components.*"
 	
-	creationPolicy="all" height="600" width="800"
+	creationPolicy="all" height="100%" width="100%" minWidth="800" minHeight="600"
 	
-	backgroundAlpha="1" backgroundColor="#FFFFFF">
+	borderColor="#000000" borderStyle="solid" backgroundAlpha="1.0" backgroundColor="#FFFFFF">
 	<mx:TabBar 
 		id="mainTabBar"
 		
-		width="100%"/>
-	<mx:ViewStack width="100%" height="100%" creationPolicy="all">
-		<components:ApplicationManagment/>
-		<components:ModulesManagment/>
+		height="30" width="100%"/>
+	<mx:ViewStack 
+		id="componentsStack"
+		
+		creationPolicy="all" height="100%" width="100%"
+		
+		top="30">
+		<components:ApplicationsManagment 
+			id="applicationsManagment"/>
+		<components:ModulesManagment 
+			id="modulesManagment"/>
 	</mx:ViewStack>
-</mx:VBox>
+</mx:Canvas>

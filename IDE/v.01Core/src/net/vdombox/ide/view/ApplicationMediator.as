@@ -109,17 +109,17 @@ package net.vdombox.ide.view
 
 				var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
 				windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
-				windowOptions.resizable = false;
-				windowOptions.maximizable = false;
-				windowOptions.minimizable = false;
+				windowOptions.resizable = true;
+				windowOptions.maximizable = true;
+				windowOptions.minimizable = true;
 				windowOptions.transparent = true;
 
 				mainWindow = popUpWindowManager.addPopUp( mainScreen, "VDOM IDE - Login",
 														  null, false, null, windowOptions );
 
-				mainWindow.showTitleBar = false;
-				mainWindow.showGripper = false;
-				mainWindow.showStatusBar = false;
+				mainWindow.showTitleBar = true;
+				mainWindow.showGripper = true;
+				mainWindow.showStatusBar = true;
 
 				mainWindow.setStyle( "borderStyle", "none" );
 				mainWindow.setStyle( "backgroundAlpha", .0 );

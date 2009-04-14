@@ -36,6 +36,11 @@ package net.vdombox.ide.model
 			return _categories;
 		}
 		
+		public function getModulesList( categoryName : String ) : XMLList
+		{
+			return new XMLList( MODULES_XML.category.(@name == categoryName).module );
+		}
+		
 		private function init() : void
 		{	
 			_categories = new XMLList();
