@@ -15,7 +15,7 @@ package net.vdombox.ide.view
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+		
 	public class LoginFormMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "LoginFormMediator";

@@ -3,13 +3,14 @@ package net.vdombox.ide.view
 	import flash.desktop.NativeApplication;
 	import flash.display.NativeWindowInitOptions;
 	import flash.display.NativeWindowSystemChrome;
-	
+
 	import mx.core.Window;
-	
+
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.view.components.LoginForm;
+	import net.vdombox.ide.view.components.MainScreen;
 	import net.vdombox.ide.view.managers.PopUpWindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -29,24 +30,24 @@ package net.vdombox.ide.view
 		{
 			return viewComponent as VdomIDE
 		}
-		
+
 		private var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
-		
+
 		private var currentWindow : Window;
-		
+
 		private var loginWindow : Window;
 		private var mainWindow : Window;
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			return [ ApplicationFacade.STARTUP ];
 		}
-		
+
 		override public function handleNotification( note : INotification ) : void
 		{
 			switch ( note.getName() )
 			{
-				case ApplicationFacade.STARTUP : 
+				case ApplicationFacade.STARTUP:
 				{
 					openLoginWindow();
 					break;
@@ -54,7 +55,7 @@ package net.vdombox.ide.view
 			}
 		}
 
-		private function openLoginWindow() : void
+		public function openLoginWindow() : void
 		{
 			if ( mainWindow && mainWindow.visible )
 				mainWindow.visible = false;
@@ -63,7 +64,7 @@ package net.vdombox.ide.view
 			{
 				var loginForm : LoginForm = new LoginForm();
 				facade.registerMediator( new LoginFormMediator( loginForm ) );
-				
+
 //				loginForm.addEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
 //				loginForm.addEventListener( LoginFormEvent.QUIT, loginForm_quitHandler );
 
@@ -91,6 +92,45 @@ package net.vdombox.ide.view
 			}
 
 			currentWindow = loginWindow;
+		}
+
+		public function openMainWindow() : void
+		{
+			if ( loginWindow && loginWindow.visible )
+				loginWindow.visible = false;
+
+			if ( !mainWindow )
+			{
+				var mainScreen : MainScreen = new MainScreen();
+				facade.registerMediator( new MainScreenMediator( mainScreen ) );
+
+//				loginForm.addEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
+//				loginForm.addEventListener( LoginFormEvent.QUIT, loginForm_quitHandler );
+
+				var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
+				windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
+				windowOptions.resizable = false;
+				windowOptions.maximizable = false;
+				windowOptions.minimizable = false;
+				windowOptions.transparent = true;
+
+				mainWindow = popUpWindowManager.addPopUp( mainScreen, "VDOM IDE - Login",
+														  null, false, null, windowOptions );
+
+				mainWindow.showTitleBar = false;
+				mainWindow.showGripper = false;
+				mainWindow.showStatusBar = false;
+
+				mainWindow.setStyle( "borderStyle", "none" );
+				mainWindow.setStyle( "backgroundAlpha", .0 );
+			}
+			else
+			{
+				if ( !mainWindow.visible )
+					mainWindow.visible = true;
+			}
+
+			currentWindow = mainWindow;
 		}
 
 	}

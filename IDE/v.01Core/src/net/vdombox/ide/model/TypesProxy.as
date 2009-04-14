@@ -40,6 +40,8 @@ package net.vdombox.ide.model
 		private function soap_getAllTypesHandler( event : SOAPEvent ) : void
 		{
 			_types = event.result.Types[ 0 ];
+			
+			sendNotification( TYPES_LOADED, _types );
 		}
 	}
 }

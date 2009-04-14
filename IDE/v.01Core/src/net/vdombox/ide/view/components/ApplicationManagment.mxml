@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ViewStack 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	creationPolicy="all"
+	hide="hideHandler();" show="showHandler();"
+	xmlns:applicationProperties="vdom.components.applicationProperties.*" xmlns:controls="vdom.containers.*"
+	xmlns:createApplication="vdom.components.createApplication.*" xmlns:editApplication="vdom.components.editApplication.*"
+	xmlns:main="vdom.components.main.*" xmlns:searchResult="vdom.components.searchResult.*">
+	<mx:Script source="includes/applicationManagment.as"/>
+	<mx:Canvas 
+		id="initModule"
+		height="100%" width="100%">
+		<mx:Label text="Loading..."
+			horizontalCenter="0" verticalCenter="0"/>
+	</mx:Canvas>
+	<mx:VBox 
+		id="components"
+		height="100%" width="100%"
+		verticalGap="7">
+		<controls:ControlPanel height="104" verticalScrollPolicy="off" width="100%"
+			borderColor="#000000" borderStyle="solid" dropShadowEnabled="true" horizontalAlign="left"
+			horizontalGap="5" paddingBottom="7" paddingLeft="7" paddingRight="7"
+			paddingTop="7" verticalAlign="middle">
+			<controls:ActionButton label="{resourceManager.getString('Application','main_new')}"
+				styleName="newButton"
+				click="switchToCreate()"/>
+			<controls:searchPanel 
+				id="searchPanel"
+				height="86" width="250"
+				panelName="{resourceManager.getString('Application','main_search')}"/>
+			<controls:ApplicationPanel 
+				id="listApplicationContainer"
+				focusEnabled="false" height="86" width="280"
+				panelName="{resourceManager.getString('Application','main_applist')}"/>
+			<controls:ApplicationInformation 
+				id="applicationInformation"
+				height="86"
+				panelName="{resourceManager.getString('Application','main_appinfo')}"/>
+		</controls:ControlPanel>
+		<mx:ViewStack 
+			id="mainViewStack"
+			height="100%" styleName="vdomBackground" width="100%"
+			borderColor="#000000" borderStyle="solid" dropShadowEnabled="true">
+			<main:Main 
+				id="mainCanvas"
+				height="100%" styleName="mainCanvas" width="100%"
+				borderStyle="none"/>
+			<createApplication:CreateApplication 
+				id="createApplication"
+				height="100%" width="100%"/>
+			<applicationProperties:ApplicationProperties 
+				id="applicationProperties"
+				height="100%" width="100%"/>
+			<editApplication:EditApplication 
+				id="editApplication"
+				height="100%" width="100%"/>
+			<searchResult:SearchResult 
+				id="searchResult"
+				height="100%" width="100%"/>
+		</mx:ViewStack>
+	</mx:VBox>
+</mx:ViewStack>
