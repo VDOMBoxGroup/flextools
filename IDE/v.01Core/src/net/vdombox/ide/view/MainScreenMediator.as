@@ -49,6 +49,9 @@ package net.vdombox.ide.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
+			facade.registerMediator( new ApplicationManagmentMediator(  ) );
+			
+			
 			var tabs : XMLListCollection = new XMLListCollection();
 			tabs.addItem(
 				<category name="applicationManagment" label={resourceManager.getString( "ApplicationManagment",
