@@ -18,7 +18,6 @@ import mx.containers.GridRow;
 import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.ComboBox;
-import mx.controls.Label;
 import mx.controls.Spacer;
 import mx.controls.Text;
 import mx.controls.TextInput;
@@ -844,9 +843,19 @@ public class AttributesPanel extends ClosablePanel {
 				var xmlCharRegExp : RegExp = /[<>&"]+/;
 			
 				if( value.search( xmlCharRegExp ) != -1 )
-					currentElement.*[0] = XML( "<![CDATA["+value+"]"+"]>" );
-				else 
+				{	
+					var name : String = currentElement.@Name;
+					var parent : XML = currentElement.parent();
+					value = value.replace(/\]\]>/g, "]]]]"+"><![CDATA[>" );
+					value = "<Attribute Name=\""+ name +"\"><![CDATA[" + value + "]" + "]></Attribute>"
+					delete parent.Attribute.(@Name == name)[0];
+					parent.appendChild( new XML( value ) );
 					currentElement.*[0] = value;
+				}
+				else
+				{
+					currentElement.*[0] = value;
+				}
 			}
 		}
 		if( objectChanged )

@@ -413,13 +413,12 @@ private function soap_loginOKHandler( event : SOAPEvent ) : void
 	catch ( eror : Error )
 	{
 	}
-	;
 
 	if ( serverVersion == "old" || configServerVersion != "none" && VersionUtils.isUpdateNeeded( configServerVersion,
 																								 serverVersion ) )
 	{
 		//alertManager.showMessage("");
-		isServerVersionOld = true;
+//		isServerVersionOld = true;
 		//dataManager.close();
 		//event.stopImmediatePropagation();
 	}

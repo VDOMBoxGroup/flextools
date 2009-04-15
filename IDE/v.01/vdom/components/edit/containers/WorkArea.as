@@ -221,9 +221,8 @@ package vdom.components.edit.containers
 			for ( var attributeName : String in attributes )
 			{
 				newAttributes.appendChild( 
-					<Attribute Name={attributeName}>
-						{attributes[ attributeName ]}</Attribute>
-					);
+					new XML( "<Attribute Name=\"" + attributeName + "\">" + attributes[ attributeName ] + "</Attribute>")
+				);
 			}
 
 			var wae : WorkAreaEvent = new WorkAreaEvent( WorkAreaEvent.PROPS_CHANGED );
@@ -636,9 +635,15 @@ package vdom.components.edit.containers
 					attributeValue = attributes[ attributeName ];
 
 					if ( attributeValue.search( xmlCharRegExp ) != -1 )
-						newAttributes[ attributeName ] = XML( "<![CDATA[" + attributeValue + "]" + "]>" );
-					else
+					{
+						attributeValue = attributeValue.replace(/\]\]>/g, "]]]]"+"><![CDATA[>" );
+						attributeValue = "<![CDATA[" + attributeValue + "]" + "]>"
 						newAttributes[ attributeName ] = attributeValue;
+					}
+					else
+					{
+						newAttributes[ attributeName ] = attributeValue;
+					}
 				}
 			}
 
@@ -671,9 +676,15 @@ package vdom.components.edit.containers
 					attributeValue = attributes[ attributeName ] ? attributes[ attributeName ] : "";
 
 					if ( attributeValue.search( xmlCharRegExp ) != -1 )
-						newAttribute[ attributeName ] = XML( "<![CDATA[" + attributeValue + "]" + "]>" );
-					else
+					{
+						attributeValue = attributeValue.replace(/\]\]>/g, "]]]]"+"><![CDATA[>" );
+						attributeValue = "<![CDATA[" + attributeValue + "]" + "]>"
 						newAttribute[ attributeName ] = attributeValue;
+					}
+					else
+					{
+						newAttribute[ attributeName ] = attributeValue;
+					}
 				}
 
 				applyChanges( IItem( selectedObject ).objectId, newAttribute );
