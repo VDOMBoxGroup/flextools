@@ -1,6 +1,5 @@
 package modules
 {
-	import mx.controls.Alert;
 	import mx.modules.Module;
 	
 	import net.vdombox.ide.interfaces.IVDOMIDEModule;

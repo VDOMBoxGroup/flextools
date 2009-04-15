@@ -2,11 +2,11 @@
 <VDOMIDEModule 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	
-	height="100%" icon="@Embed(source='assets/main/vdom_logo.png')" layout="absolute"
+	height="100%"  layout="absolute"
 	width="100%"
 	
 	borderColor="#000000" borderStyle="solid"
-	implements="net.vdombox.ide.interfaces.IVDOMIDEModule" xmlns="modules.*">
+	implements="net.vdombox.ide.interfaces.IVDOMIDEModule" xmlns="modules.*" icon="modules.ZzzzButtonSkin">
 	<mx:Script>
 		<![CDATA[
 			override public function get title() : String
