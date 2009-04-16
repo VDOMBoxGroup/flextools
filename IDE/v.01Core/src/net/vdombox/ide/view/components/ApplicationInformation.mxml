@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionPanel 
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="net.vdombox.ide.view.containers.*"
+	
+	layout="absolute">
+	<mx:Metadata>
+		[ResourceBundle("ApplicationManagment")]
+	</mx:Metadata>
+	<mx:Style>
+		.thumb {
+			backgroundImage: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+
+			[Bindable]
+			private var _source : Object;
+
+			private var defaultImage : Class = Application.application.getStyle( "appIconPersonalPages" );
+
+			public function set dataProvider( value : XML ) : void
+			{
+				if ( !value )
+				{
+					applicationPage.text = "";
+					applicationObjects.text = "";
+					_source = null;
+					return;
+				}
+
+				applicationPage.text = value.Numberofpages.toString();
+				applicationObjects.text = value.Numberofobjects.toString();
+
+				if ( value.Icon == '' )
+				{
+					_source = null; //FIXME<---- Error
+					_source = defaultImage;
+				}
+				else
+				{
+//					var fileManager : FileManager = FileManager.getInstance();
+//					fileManager.loadResource( value.Id, value.Icon, this, "resource",
+//											  true );
+				}
+			}
+
+			public function set resource( value : Object ) : void
+			{
+				if ( value )
+					_source = value;
+				else
+					_source = defaultImage;
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas 
+		height="60" styleName="thumb" width="60"
+		
+		top="3">
+		<mx:Image 
+			id="applicationIcon"
+			
+			height="55" source="{ _source }" width="55"
+			
+			horizontalCenter="0" verticalCenter="0"/>
+	</mx:Canvas>
+	<mx:HBox 
+		x="68" y="12">
+		<mx:Label 
+			text="{resourceManager.getString('ApplicationManagment','information_pages')}"
+			
+			color="#FFFFFF" textAlign="left"/>
+		<mx:Label 
+			id="applicationPage"
+			
+			height="15" x="127" y="29"
+			
+			color="#FFFFFF"/>
+	</mx:HBox>
+	<mx:HBox 
+		x="68" y="38">
+		<mx:Label 
+			text="{resourceManager.getString('ApplicationManagment','information_objects')}"
+			
+			color="#FFFFFF" textAlign="left"/>
+		<mx:Label 
+			id="applicationObjects"
+			
+			height="15"
+			
+			color="#FFFFFF"/>
+	</mx:HBox>
+</ActionPanel>

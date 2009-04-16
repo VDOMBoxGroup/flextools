@@ -12,6 +12,11 @@
 	</include-file>
 				
 	<include-file>
+		<name>loginForm.css</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\css\loginForm.css</path>
+	</include-file>
+				
+	<include-file>
 		<name>app-association.png</name>
 		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-association.png</path>
 	</include-file>
@@ -84,6 +89,11 @@
 	<include-file>
 		<name>app-transportation.png</name>
 		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-transportation.png</path>
+	</include-file>
+				
+	<include-file>
+		<name>theme.swf</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\swf\theme.swf</path>
 	</include-file>
 				
 	<include-file>

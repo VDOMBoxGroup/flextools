@@ -1,0 +1,29 @@
+.loginButtonOK {
+	
+	color: #FFFFFF;
+	
+	upSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	overSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	downSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	disabledSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+
+	selectedUpSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	selectedOverSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	selectedDownSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	selectedDisabledSkin: Embed(source="theme.swf", symbol="LoginLeftButton");	
+}
+
+.loginButtonQuit {
+	
+	color: #FFFFFF;
+	
+	upSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	overSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	downSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	disabledSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	
+	selectedUpSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	selectedOverSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	selectedDownSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	selectedDisabledSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+}

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	
+	initialize="initalizeHandler();">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.TileList;
+			import mx.core.Application;
+
+			[Bindable]
+			private var labelValue : String;
+
+			private var iconId : String;
+
+			[Bindable]
+			private var _source : Object;
+
+			private var _selected : Boolean = false;
+
+			public function set selected( value : Boolean ) : void
+			{
+				if ( value )
+				{
+					cnv.setStyle( "backgroundImage", getStyle( "thumbBackgroundSelected" ) );
+				}
+				else
+				{
+					cnv.setStyle( "backgroundImage", getStyle( "thumbBackground" ) );
+				}
+			}
+
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+
+				if ( !value )
+					return;
+
+				labelValue = value.@Name;
+
+				if ( _source && iconId == value.@IconID )
+					return;
+
+				iconId = value.@IconID;
+
+				if ( iconId == "" )
+				{
+					_source = Application.application.getStyle( "appIconPersonalPages" );
+				}
+				else
+				{
+//					var fileManager : FileManager = FileManager.getInstance();
+//					fileManager.loadResource( value.Information.Id, iconId, this,
+//											  "resource", true );
+				}
+			}
+
+			public function set resource( value : Object ) : void
+			{
+				if ( value )
+					_source = value;
+				else
+					_source = Application.application.getStyle( "appIconPersonalPages" );
+			}
+
+			private function initalizeHandler() : void
+			{
+				cnv.setStyle( "backgroundImage", getStyle( "thumbBackground" ) );
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas 
+		id="cnv"
+		
+		height="60" width="60"
+		
+		horizontalCenter="0" verticalCenter="0">
+		<mx:Image 
+			height="55" source="{_source}" toolTip="{labelValue}" width="55"
+			
+			horizontalCenter="0" verticalCenter="0"
+			scaleContent="true"/>
+	</mx:Canvas>
+</mx:Canvas>

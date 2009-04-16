@@ -16,7 +16,7 @@
 	<!-- files -->
 	<property name="config.xml" location="${source.dir}/config.xml"/>
 	<property name="compc.exe" location="${FLEX_HOME}/bin/compc.exe"/>
-	<property name="build.file" location="${build.dir}/vdomTheme.swc"/>
+	<property name="build.file" location="${build.dir}/theme.swc"/>
 
 	<description>
     	A vdom theme builder

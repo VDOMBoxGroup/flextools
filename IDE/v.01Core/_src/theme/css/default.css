@@ -1,33 +1,3 @@
-global {
-	
-	moveCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorMove");
-	
-	topDownCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopDown");
-	leftRightCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorLeftRight");
-	topLDownRCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopLDownR");
-	topRDownLCursor: Embed(source="vdomTheme.swf", symbol="ResizeCursorTopRDownL");
-	
-	appIconPersonalPages: Embed("app-personalpages.png");
-	appIconAssociation: Embed("app-association.png");
-	appIconBuild: Embed("app-build.png");
-	appIconComputer: Embed("app-computer.png");
-	appIconCulture: Embed("app-culture.png");
-	appIconEducation: Embed("app-education.png");
-	appIconElectronic: Embed("app-electronic.png");
-	appIconFashion: Embed("app-fashion.png");
-	appIconHealth: Embed("app-health.png");
-	appIconHotels: Embed("app-hotels.png");
-	appIconHousing: Embed("app-housing.png");
-	appIconRestaurant: Embed("app-restaurant.png");
-	appIconSport: Embed("app-sport.png");
-	appIconStoreShop: Embed("app-storeshop.png");
-	appIconTransportation: Embed("app-transportation.png");
-}
-
-Container {
-	disabledOverlayAlpha : 0;
-}
-
 WindowedApplication {
 	
 	statusBarBackgroundColor: #000000;
@@ -35,98 +5,11 @@ WindowedApplication {
 	borderStyle: none;
 }
 
-AdvancedDataGrid {
-	
-	disclosureClosedIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureClosedIcon");
-	disclosureOpenIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureOpenIcon");
-}
-
-Alert {
-	
-	modalTransparencyDuration:0;
-	modalTransparencyBlur:0;
-	modalTransparency:0;
-}
-
 TitleWindow {
 	
 	modalTransparencyDuration:0;
 	modalTransparencyBlur:0;
 	modalTransparency:0;
-}
-
-VdomTitleBar {
-	
-	backgroundSize: "100%";
-	backgroundImage: Embed(source="vdomTheme.swf", symbol="TitleBarBackground");
-	
-	minimizeButtonSkin: ClassReference("vdom.skins.TitleBarMinimizeButtonSkin");
-	maximizeButtonSkin: ClassReference("vdom.skins.TitleBarMaximizeButtonSkin");
-	restoreButtonSkin: ClassReference("vdom.skins.TitleBarRestoreButtonSkin");
-	closeButtonSkin: ClassReference("vdom.skins.TitleBarCloseButtonSkin");
-}
-
-TabNavigator {
-		
-	tabStyleName: "tabStyle";
-}
-
-TextInput {
-	fontFamily: "Tahoma";
-	color: "red"
-}
-
-Tree
-{
-	disclosureClosedIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureClosedIcon");
-	disclosureOpenIcon: Embed(source="vdomTheme.swf",symbol="Tree_disclosureOpenIcon");
-}
-
-.tabStyle {
-	
-	color: #444444;
-	textRollOverColor: #444444;
-	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkinTop");
-	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinTop");
-	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinTop");
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkinTop");
-	
-	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkinTop");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinTop");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinTop");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinTop");
-}
-
-MainTabNavigator {
-	
-	color: #444444;
-	textSelectedColor: #444444;
-	textRollOverColor: #444444;
-	
-		
-	tabStyleName: "mainTabStyle";
-	selectedTabTextStyleName: "selectedTab";	
-}
-
-.mainTabStyle {
-	
-	upSkin: Embed(source="vdomTheme.swf", symbol="EditorTabUp");
-	overSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
-	downSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
-
-	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="EditorTabSelect");
-	
-}
-
-.selectedTab {
-	
-	color: #000000;
-	textSelectedColor: #000000;
-	textRollOverColor: #000000;
 }
 
 LoginForm {
@@ -137,12 +20,12 @@ LoginForm {
 
 FormItemLabel {
 			
-	color: #ffffff;
+	color: #FFFFFF;
 }
 
 .loginButtonOK {
 	
-	color: #ffffff;
+	color: #FFFFFF;
 	
 	upSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
 	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonLeft");
@@ -157,7 +40,7 @@ FormItemLabel {
 
 .loginButtonQuit {
 	
-	color: #ffffff;
+	color: #FFFFFF;
 	
 	upSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
 	overSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
@@ -168,103 +51,4 @@ FormItemLabel {
 	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
 	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
 	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="LoginButtonRight");
-}
-
-ControlPanel, .vdomBackground {
-	
-	backgroundAlpha: 1.0;
-    backgroundSize: "100%";
-	backgroundGradientAlphas: 1, 1;
-	
-	backgroundImage: Embed(source="vdomTheme.swf", symbol="ApplicationBackground");
-}
-
-MainTabNavigator {
-	
-	paddingTop: 0;
-	paddingBottom: 0;
-	paddingRight: 0;
-	paddingLeft: 0;
-}
-
-AdvancedTabNavigator {
-
-	paddingTop: 0;
-	tabBarPosition: "bottom";
-	tabHeight: 20;
-	selectedTabTextStyleName: "selectedAdvancedTab";
-}
-
-.selectedAdvancedTab {
-	color: #000000;
-	textRollOverColor: #000000;
-}
-
-.advancedTabBottom {
-	color: #444444;
-	textRollOverColor: #444444;
-	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkinBottom");
-	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinBottom");
-	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinBottom");
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkinBottom");
-	
-	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkinBottom");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinBottom");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinBottom");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinBottom");
-}
-
-.advancedTabUp {
-	color: #444444;
-	textRollOverColor: #444444;
-	upSkin: Embed(source="vdomTheme.swf", symbol="TabUpSkinTop");
-	overSkin: Embed(source="vdomTheme.swf", symbol="TabOverSkinTop");
-	downSkin: Embed(source="vdomTheme.swf", symbol="TabDownSkinTop");
-	disabledSkin: Embed(source="vdomTheme.swf", symbol="TabDisabledSkinTop");
-	
-	selectedUpSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedUpSkinTop");
-	selectedOverSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedOverSkinTop");
-	selectedDownSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDownSkinTop");
-	selectedDisabledSkin: Embed(source="vdomTheme.swf", symbol="TabSelectedDisabledSkinTop");
-}
-
-.mainCanvas {
-	
-	borderStyle: none;
-}
-
-ControlBar {
-	
-	backgroundAlpha: 1;
-	paddingTop: 0;
-	paddingBottom: 0;
-	paddingLeft: 0;
-	paddingRight: 0;
-}
-
-ComboBox {
-	cornerRadius: 0;
-}
-
-.popUpWindow
-{
-	headerHeight : 16;
-	borderColor : #000000;
-	
-	titleBarColors : #000000, #000000;
-	titleTextStyleName : popUpWindowText;
-	titleBarButtonPadding : -4;
-	titleAlignment : center;
-	
-	buttonPadding : 0;
-	buttonAlignment : right;
-	minimizeButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarMinimizeButtonSkin");
-	maximizeButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarMaximizeButtonSkin");
-	restoreButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarRestoreButtonSkin");
-	closeButtonSkin: ClassReference("net.vdombox.ide.view.skins.TitleBarCloseButtonSkin");
-}
-
-.popUpWindowText
-{
-	color : #FFFFFF;
 }

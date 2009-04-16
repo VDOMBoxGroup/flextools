@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionPanel 
+	xmlns="net.vdombox.ide.view.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	layout="absolute"
+	borderThicknessBottom="0" borderThicknessLeft="0" borderThicknessRight="0" borderThicknessTop="0">
+	<mx:Metadata>
+		[Event(name="applicationChanged", type="mx.events.ListEvent")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.ide.view.containers.Thumbnail;
+			import mx.collections.SortField;
+			import mx.collections.Sort;
+			import mx.collections.XMLListCollection;
+			import mx.collections.IViewCursor;
+			import mx.events.ListEvent;
+			import mx.controls.TileList;
+
+			private var oldXMLList : XMLList;
+			private var _dataProvider : XMLListCollection;
+			private var selectedRenderer : Thumbnail;
+
+			private var _applicationId : String;
+
+			private var sort : Sort;
+
+			public function set dataProvider( value : XMLList ) : void
+			{
+				if ( value == oldXMLList )
+					return;
+
+				if ( sort == null )
+				{
+					sort = new Sort();
+					sort.fields = [ new SortField( "@Name" ) ];
+				}
+
+				oldXMLList = value;
+
+				_dataProvider = new XMLListCollection( value );
+
+				_dataProvider.sort = sort;
+				_dataProvider.refresh();
+
+				_applicationTitleList.dataProvider = _dataProvider;
+				_applicationTitleList.validateNow();
+
+				if ( value == null )
+					_applicationId = null;
+			}
+
+			public function get applicationId() : String
+			{
+				if ( _applicationTitleList.selectedItem )
+				{
+					return _applicationTitleList.selectedItem.@ID;
+				}
+				else
+				{
+					return null;
+				}
+			}
+
+			public function set applicationId( value : String ) : void
+			{
+				if ( value != null && _applicationId == value )
+					return;
+
+				if ( value == null && _dataProvider && _dataProvider.length > 0 )
+					value = _dataProvider[ 0 ].@ID;
+				else if ( value == null )
+					return;
+
+				switchSelection( value );
+			}
+
+			private function switchSelection( value : String ) : void
+			{
+				if ( selectedRenderer )
+					selectedRenderer.selected = false;
+
+				if ( !oldXMLList )
+					return;
+
+				var currentElement : XML = oldXMLList.( @ID == value )[ 0 ];
+				var index : int = _dataProvider.getItemIndex( currentElement );
+
+				_applicationTitleList.selectedIndex = index;
+				_applicationTitleList.scrollToIndex( index );
+
+				_applicationId = value;
+
+				selectedRenderer = Thumbnail( _applicationTitleList.indexToItemRenderer( _applicationTitleList.selectedIndex ) );
+
+				if ( selectedRenderer && XML( selectedRenderer.data ).@ID == value )
+					selectedRenderer.selected = true;
+
+				if ( _applicationId )
+					dispatchEvent( new ListEvent( "applicationChanged" ) );
+			}
+
+			private function changeListEvent( event : ListEvent ) : void
+			{
+
+				var evt : ListEvent = new ListEvent( 'applicationChanged' );
+				dispatchEvent( evt );
+			}
+
+			private function sss() : void
+			{
+
+				if ( selectedRenderer )
+					selectedRenderer.selected = false;
+
+				callLater( ddd );
+			}
+
+			private function ddd() : void
+			{
+				selectedRenderer = Thumbnail( _applicationTitleList.indexToItemRenderer( _applicationTitleList.selectedIndex ) );
+
+				if ( selectedRenderer && XML( selectedRenderer.data ).@ID == applicationId )
+					selectedRenderer.selected = true;
+			}
+		]]>
+	</mx:Script>
+	<mx:TileList 
+		id="_applicationTitleList"
+		
+		allowMultipleSelection="false" direction="horizontal" focusEnabled="false"
+		height="70" itemRenderer="net.vdombox.ide.view.containers.Thumbnail" rowCount="1" verticalScrollPolicy="auto"
+		width="100%"
+		
+		backgroundAlpha="0" backgroundColor="#808080" borderThickness="0" selectionColor="#777777"
+		textAlign="right"
+		
+		change="changeListEvent(event)" scroll="{sss()}"
+		columnCount="4"/>
+</ActionPanel>
