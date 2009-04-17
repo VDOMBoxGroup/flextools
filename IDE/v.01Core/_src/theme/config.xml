@@ -2,16 +2,6 @@
 <flex-config>
 		
 	<include-file>
-		<name>applicationManagment.css</name>
-		<path>D:\!Workspace\VdomIDECore\_src\theme\css\applicationManagment.css</path>
-	</include-file>
-				
-	<include-file>
-		<name>default.css</name>
-		<path>D:\!Workspace\VdomIDECore\_src\theme\css\default.css</path>
-	</include-file>
-				
-	<include-file>
 		<name>loginForm.css</name>
 		<path>D:\!Workspace\VdomIDECore\_src\theme\css\loginForm.css</path>
 	</include-file>
@@ -94,11 +84,6 @@
 	<include-file>
 		<name>theme.swf</name>
 		<path>D:\!Workspace\VdomIDECore\_src\theme\swf\theme.swf</path>
-	</include-file>
-				
-	<include-file>
-		<name>vdomTheme.swf</name>
-		<path>D:\!Workspace\VdomIDECore\_src\theme\swf\vdomTheme.swf</path>
 	</include-file>
 				
 </flex-config>

@@ -6,11 +6,11 @@
 	<mx:Metadata>
 		[ResourceBundle("ApplicationManagment")]
 	</mx:Metadata>
-	<mx:Style>
+<!--	<mx:Style>
 		.thumb {
 			backgroundImage: Embed(source="vdomTheme.swf", symbol="ThumbBackgroundSelected");
 		}
-	</mx:Style>
+	</mx:Style>-->
 	<mx:Script>
 		<![CDATA[
 			import mx.core.Application;

@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	
 	height="300" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="540"
-	
+	color="#FFFFFF"
 	backgroundAlpha="0.0">
 	<mx:Metadata>
 		[ResourceBundle("LoginForm")]
@@ -12,7 +12,10 @@
 		
 		.loginPanel{
 			headerHeight: 50;
-			titleStyleName: "loginPanelTitle";	
+			titleStyleName: "loginPanelTitle";
+			controlBarStyleName: "loginControlBar";
+			backgroundImage: Embed(source="theme.swf", symbol="LoginBackground");
+			backgroundSize: "100%";
 		}
 		.loginPanelTitle {
 			color: #000000;
@@ -24,29 +27,30 @@
 			fillAlphas: 0.5, 0.5;
 		}
 	</mx:Style>
-	<mx:Panel 
+	<mx:Canvas 
 		id="loginFormPanel"
 		
-		height="280" styleName="loginPanel" title="{resourceManager.getString('LoginForm','title')}"
+		height="280" styleName="loginPanel" 
 		width="540" x="0"
-		
+		horizontalScrollPolicy="off" verticalScrollPolicy="off"
 		backgroundColor="#3F3F3F" borderColor="#454545" borderStyle="solid" bottom="0"
-		cornerRadius="8" dropShadowEnabled="false">
+		cornerRadius="8" 	>
+		<mx:Label text="{resourceManager.getString('LoginForm','title')}" fontSize="14" fontWeight="bold" x="87" y="10" width="441"/>
 		<mx:Form 
-			paddingBottom="0" paddingRight="0" paddingTop="0">
+			paddingBottom="0" paddingRight="0" paddingTop="0" x="70." y="70">
 			<mx:FormItem 
 				label="{resourceManager.getString('LoginForm','username')}">
 				<mx:TextInput 
 					id="username"
 					
-					width="140"/>
+					width="200"/>
 			</mx:FormItem>
 			<mx:FormItem 
 				label="{resourceManager.getString('LoginForm','password')}">
 				<mx:TextInput 
 					id="password"
 					
-					width="140"
+					width="200"
 					displayAsPassword="true"/>
 			</mx:FormItem>
 			<mx:FormItem 
@@ -54,22 +58,20 @@
 				<mx:TextInput 
 					id="hostname"
 					
-					width="140"/>
+					width="200"/>
 			</mx:FormItem>
 			<mx:FormItem 
 				label="{resourceManager.getString('LoginForm','language')}">
 				<mx:ComboBox 
 					id="selectLang"
 					
-					labelField="@label" width="140"
+					labelField="@label" width="200"
 					
 					fillAlphas="[1.0, 0.59]" fillColors="[#FFFFFF, #FFFFFF]"/>
 			</mx:FormItem>
 		</mx:Form>
-		<mx:ControlBar 
-			width="100%"
-			
-			paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+		<mx:HBox styleName="loginControlBar"
+			width="100%" bottom="0">
 			<mx:Button 
 				id="submitButton"
 				
@@ -88,8 +90,8 @@
 				
 				cornerRadius="0"
 				buttonMode="true"/>
-		</mx:ControlBar>
-	</mx:Panel>
+		</mx:HBox>
+	</mx:Canvas>
 	<mx:Image 
 		height="70" source="@Embed(source='assets/login/logo.png')" width="70" x="10"/>
 </mx:Canvas>

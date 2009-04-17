@@ -1,6 +1,6 @@
 .loginButtonOK {
 	
-	color: #FFFFFF;
+	color: #444444;
 	
 	upSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
 	overSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
@@ -15,7 +15,7 @@
 
 .loginButtonQuit {
 	
-	color: #FFFFFF;
+	color: #444444;
 	
 	upSkin: Embed(source="theme.swf", symbol="LoginRightButton");
 	overSkin: Embed(source="theme.swf", symbol="LoginRightButton");
@@ -26,4 +26,14 @@
 	selectedOverSkin: Embed(source="theme.swf", symbol="LoginRightButton");
 	selectedDownSkin: Embed(source="theme.swf", symbol="LoginRightButton");
 	selectedDisabledSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+}
+.loginControlBar
+{
+	paddingBottom: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingTop: 0;
+	
+	backgroundImage: Embed(source="theme.swf", symbol="LoginControlBarBackground");
+	backgroundSize: "100%";
 }
