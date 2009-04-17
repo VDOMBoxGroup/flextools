@@ -35,39 +35,39 @@
 		horizontalScrollPolicy="off" verticalScrollPolicy="off"
 		backgroundColor="#3F3F3F" borderColor="#454545" borderStyle="solid" bottom="0"
 		cornerRadius="8" 	>
-		<mx:Label text="{resourceManager.getString('LoginForm','title')}" fontSize="14" fontWeight="bold" x="87" y="10" width="441"/>
+		<mx:Label text="{resourceManager.getString('LoginForm','title')}" fontSize="15" fontWeight="bold" x="87" y="10" width="441"/>
 		<mx:Form 
-			paddingBottom="0" paddingRight="0" paddingTop="0" x="70." y="70">
+			paddingBottom="0" paddingRight="0" paddingTop="0" x="70" y="60" verticalGap="15">
 			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','username')}">
+				label="{resourceManager.getString('LoginForm','username')}" fontSize="12" fontWeight="bold">
 				<mx:TextInput 
 					id="username"
 					
-					width="200"/>
+					width="240"/>
 			</mx:FormItem>
 			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','password')}">
+				label="{resourceManager.getString('LoginForm','password')}" fontSize="12" fontWeight="bold">
 				<mx:TextInput 
 					id="password"
 					
-					width="200"
+					width="240"
 					displayAsPassword="true"/>
 			</mx:FormItem>
 			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','hostname')}">
+				label="{resourceManager.getString('LoginForm','hostname')}" fontSize="12" fontWeight="bold">
 				<mx:TextInput 
 					id="hostname"
 					
-					width="200"/>
+					width="240"/>
 			</mx:FormItem>
 			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','language')}">
+				label="{resourceManager.getString('LoginForm','language')}" fontSize="12" fontWeight="bold">
 				<mx:ComboBox 
 					id="selectLang"
 					
-					labelField="@label" width="200"
+					labelField="@label" width="240"
 					
-					fillAlphas="[1.0, 0.59]" fillColors="[#FFFFFF, #FFFFFF]"/>
+					fillAlphas="[1.0, 0.59]" fillColors="[#FFFFFF, #FFFFFF]" cornerRadius="0" color="#444444"/>
 			</mx:FormItem>
 		</mx:Form>
 		<mx:HBox styleName="loginControlBar"
@@ -79,7 +79,7 @@
 				styleName="loginButtonOK" width="110"
 				
 				cornerRadius="0"
-				buttonMode="true"/>
+				buttonMode="true" fontSize="14."/>
 			<mx:Spacer 
 				width="100%"/>
 			<mx:Button 
@@ -89,7 +89,7 @@
 				styleName="loginButtonQuit" width="110"
 				
 				cornerRadius="0"
-				buttonMode="true"/>
+				buttonMode="true" fontSize="14"/>
 		</mx:HBox>
 	</mx:Canvas>
 	<mx:Image 
