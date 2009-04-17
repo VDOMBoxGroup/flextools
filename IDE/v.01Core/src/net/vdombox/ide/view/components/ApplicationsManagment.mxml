@@ -32,7 +32,7 @@
 		
 		height="100%" styleName="vdomBackground" width="100%"
 		
-		borderColor="#000000" borderStyle="solid" dropShadowEnabled="true">
+		borderColor="#000000" dropShadowEnabled="true">
 		<!--<main:Main
 			 id="mainCanvas"
 			 height="100%" styleName="mainCanvas" width="100%"

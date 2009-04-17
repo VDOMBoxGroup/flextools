@@ -7,6 +7,11 @@
 	</include-file>
 				
 	<include-file>
+		<name>mainWindow.css</name>
+		<path>D:\!Workspace\VdomIDECore\_src\theme\css\mainWindow.css</path>
+	</include-file>
+				
+	<include-file>
 		<name>app-association.png</name>
 		<path>D:\!Workspace\VdomIDECore\_src\theme\png\applicationIcons\app-association.png</path>
 	</include-file>

@@ -117,9 +117,9 @@ package net.vdombox.ide.view
 				mainWindow = popUpWindowManager.addPopUp( mainScreen, "VDOM IDE - Login",
 														  null, false, null, windowOptions );
 
-				mainWindow.showTitleBar = true;
-				mainWindow.showGripper = true;
-				mainWindow.showStatusBar = true;
+				mainWindow.showTitleBar = false;
+				mainWindow.showGripper = false;
+				mainWindow.showStatusBar = false;
 
 				mainWindow.setStyle( "borderStyle", "none" );
 				mainWindow.setStyle( "backgroundAlpha", .0 );
