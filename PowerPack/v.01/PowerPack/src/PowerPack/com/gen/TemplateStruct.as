@@ -663,10 +663,10 @@ public class TemplateStruct extends EventDispatcher
 							if(lastExecFrag.print)
 								curGraphContext.buffer += lastExecFrag.retValue + " ";
 						
+							transition = lastExecFrag.transition;
+								
 							if(lastExecFrag.trans.length)
 							{
-								transition = lastExecFrag.transition;
-								
 								if(!transition)
 									transition = lastExecFrag.retValue;
 							}

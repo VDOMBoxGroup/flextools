@@ -272,8 +272,8 @@ public function loadDataFrom(filePath:String):Function
 		}
 		
 		var fileStream:FileStream = new FileStream();
-		fileStream.addEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
 		fileStream.addEventListener( Event.COMPLETE, onFileLoaded );
+		fileStream.addEventListener( IOErrorEvent.IO_ERROR, onFileStreamError );
 		fileStream.openAsync(file, FileMode.READ);
 	}
 	catch(e:*)
@@ -291,11 +291,12 @@ public function loadDataFrom(filePath:String):Function
 	}
 	
 	function onFileLoaded(event:Event):void {
-		var fileStream:FileStream = event.target as FileStream;
-		var bytes:ByteArray = new ByteArray();
+		var _stream:FileStream = event.target as FileStream;
+		var _strData:String = _stream.readUTFBytes(_stream.bytesAvailable);
+		_stream.close();
 		
 		setTransition('true');
-		setReturnValue(fileStream.readUTFBytes(fileStream.bytesAvailable));
+		setReturnValue(_strData);
 	}
 }
 
