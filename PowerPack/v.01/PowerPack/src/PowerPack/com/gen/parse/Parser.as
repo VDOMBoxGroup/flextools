@@ -7,6 +7,7 @@ import PowerPack.com.gen.errorClasses.CompilerError;
 import PowerPack.com.gen.parse.parseClasses.CodeFragment;
 import PowerPack.com.gen.parse.parseClasses.LexemStruct;
 import PowerPack.com.gen.parse.parseClasses.ParsedBlock;
+import PowerPack.com.managers.LanguageManager;
 
 import flash.utils.describeType;
 
@@ -27,81 +28,82 @@ public class Parser
 			// General functions
 			//*********************
 								
-			'sub':				{ pattern:/^\[nn[nobvscifVNS]*\]$/, 			argNum:-1 },
-			'subPrefix':		{ pattern:/^\[nnn[nobvscifVNS]*\]$/, 			argNum:-2 },
-			'question':			{ pattern:/^\[n[vscVS][vscVS]\]$/, 				argNum:2 },
-			'convert':			{ pattern:/^\[n[vscVS][vsciVNS]\]$/, 			argNum:2 },
-			'loadDataFrom':		{ pattern:/^\[n[vscVS]\]$/, 					argNum:1,	trans:['true', 'false'] },
-			'writeTo':			{ pattern:/^\[n[vscVS]\]$/, 					argNum:1 },
-			'writeVarTo':		{ pattern:/^\[n[vscVS][vscifVNS]\]$/, 			argNum:2 },
-			'GUID':				{ pattern:/^\[n\]$/, 							argNum:0 },
-			"mid":				{ pattern:/^\[n[viVN][viVN][vscVS]\]$/, 		argNum:3 },
-			"replace":			{ pattern:/^\[n[vscVS][vscVS][vscVS][vscVS]\]$/, argNum:4 },
-			"split":			{ pattern:/^\[n[vscVS][vscVS]\]$/, 				argNum:2 },
-			"random":			{ pattern:/^\[n[viVN]\]$/, 						argNum:1 },
-			"imageToBase64":	{ pattern:/^\[n[v][vscVS]\]$/, 					argNum:2 },
-			"_switch":			{ pattern:/^\[n[nvscVS][nsc]*\]$/, 				argNum:-2, trans:[] },
+			'sub':				{ pattern:/^\[nn[nobvscifVNSA]*\]$/, 				argNum:-1 },
+			'subPrefix':		{ pattern:/^\[nnn[nobvscifVNSA]*\]$/, 				argNum:-2 },
+			'question':			{ pattern:/^\[n[vscVSA][nvscVSA]*\]$/, 				argNum:-1 },
+			'qSwitch':			{ pattern:/^\[n[vscVSA][nsc]*\]$/,					argNum:-2,	trans:[] },
+			"_switch":			{ pattern:/^\[n[nvscVSA][nsc]*\]$/, 				argNum:-2,	trans:[] },
+			'convert':			{ pattern:/^\[n[vscVSA][vsciVNSA]\]$/, 				argNum:2 },
+			'loadDataFrom':		{ pattern:/^\[n[vscVSA]\]$/, 						argNum:1,	trans:['true', 'false'] },
+			'writeTo':			{ pattern:/^\[n[vscVSA]\]$/, 						argNum:1 },
+			'writeVarTo':		{ pattern:/^\[n[vscVSA][vscifVNSA]\]$/, 			argNum:2 },
+			'GUID':				{ pattern:/^\[n\]$/, 								argNum:0 },
+			"mid":				{ pattern:/^\[n[viVNA][viVNA][vscVSA]\]$/, 			argNum:3 },
+			"replace":			{ pattern:/^\[n[vscVSA][vscVSA][vscVSA][vscVSA]\]$/, argNum:4 },
+			"split":			{ pattern:/^\[n[vscVSA][vscVSA]\]$/, 				argNum:2 },
+			"random":			{ pattern:/^\[n[viVNA]\]$/, 						argNum:1 },
+			"imageToBase64":	{ pattern:/^\[n[v][vscVSA]\]$/, 					argNum:2 },
 			
 			//*********************
 			// List manipulation
 			//*********************
 			
-			"length":			{ pattern:/^\[n[vscVSA]\]$/, 					argNum:1 },
-			"getValue":			{ pattern:/^\[n[nviscVNS][vscVSA]\]$/, 			argNum:2 },
-			"getType":			{ pattern:/^\[n[nviscVNS][vscVSA]\]$/, 			argNum:2 },
-			"update":			{ pattern:/^\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
-			"put":				{ pattern:/^\[n[nviscVNS][nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:4 },
-			"remove":			{ pattern:/^\[n[nviscVNS][vscVSA]\]$/, 			argNum:2 },
-			"exist":			{ pattern:/^\[n[nviscVNS][nobvscifVNS][vscVSA]\]$/, argNum:3 },
-			"evaluate":			{ pattern:/^\[n[vscVSA]\]$/, 					argNum:1 },
-			"execute":			{ pattern:/^\[n[vscVSA]\]$/, 					argNum:1 },
+			"length":			{ pattern:/^\[n[vscVSA]\]$/, 						argNum:1 },
+			"getValue":			{ pattern:/^\[n[nviscVNSA][vscVSA]\]$/, 			argNum:2 },
+			"getType":			{ pattern:/^\[n[nviscVNSA][vscVSA]\]$/, 			argNum:2 },
+			"update":			{ pattern:/^\[n[nviscVNSA][nviscVNSA][nobvscifVNSA][vscVSA]\]$/, argNum:4 },
+			"put":				{ pattern:/^\[n[nviscVNSA][nviscVNSA][nobvscifVNSA][vscVSA]\]$/, argNum:4 },
+			"remove":			{ pattern:/^\[n[nviscVNSA][vscVSA]\]$/, 				argNum:2 },
+			"exist":			{ pattern:/^\[n[nviscVNSA][nobvscifVNSA][vscVSA]\]$/, 	argNum:3 },
+			"evaluate":			{ pattern:/^\[n[vscVSA]\]$/, 							argNum:1 },
+			"execute":			{ pattern:/^\[n[vscVSA]\]$/, 							argNum:1 },
 
-			"addStructure":		{ pattern:/^\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
-			"updateStructure":	{ pattern:/^\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
-			"deleteStructure":	{ pattern:/^\[n[nvscVSA][nvscVSA][viVN][vscVSA]\]$/, argNum:4 },
+			"addStructure":		{ pattern:/^\[n[nvscVSA][nvscVSA][viVNA][vscVSA]\]$/, argNum:4 },
+			"updateStructure":	{ pattern:/^\[n[nvscVSA][nvscVSA][viVNA][vscVSA]\]$/, argNum:4 },
+			"deleteStructure":	{ pattern:/^\[n[nvscVSA][nvscVSA][viVNA][vscVSA]\]$/, argNum:4 },
 
 			//*********************
 			// Graphic functions
 			//*********************
 
-			"loadImage":		{ pattern:/^\[n[vscVS]\]$/, 					argNum:1 },
-			"createImage":		{ pattern:/^\[n[viVN][viVN][viVN]\]$/, 			argNum:3 },
-			"getWidth":			{ pattern:/^\[n[v]\]$/, 						argNum:1 },
-			"getHeight":		{ pattern:/^\[n[v]\]$/, 						argNum:1 },
-			"getPixel":			{ pattern:/^\[n[v][viVN][viVN]\]$/, 			argNum:3 },
-			"getPixel32":		{ pattern:/^\[n[v][viVN][viVN]\]$/, 			argNum:3 },
-			"setPixel":			{ pattern:/^\[n[v][viVN][viVN][viVN]\]$/, 		argNum:4 },
-			"getImage":			{ pattern:/^\[n[viVN][vscVS]\]$/, 				argNum:2 }, // ???
+			"loadImage":		{ pattern:/^\[n[vscVSA]\]$/, 						argNum:1 },
+			"createImage":		{ pattern:/^\[n[viVNA][viVNA][viVNA]\]$/, 			argNum:3 },
+			"getWidth":			{ pattern:/^\[n[vA]\]$/, 							argNum:1 },
+			"getHeight":		{ pattern:/^\[n[vA]\]$/, 							argNum:1 },
+			"getPixel":			{ pattern:/^\[n[vA][viVNA][viVNA]\]$/, 				argNum:3 },
+			"getPixel32":		{ pattern:/^\[n[vA][viVNA][viVNA]\]$/, 				argNum:3 },
+			"setPixel":			{ pattern:/^\[n[vA][viVNA][viVNA][viVNA]\]$/, 		argNum:4 },
+			"getImage":			{ pattern:/^\[n[viVNA][vscVSA]\]$/, 				argNum:2 }, // ???
 			
-			"addImage":			{ pattern:/^\[n[v]{1,2}[viVN][viVN][viVN][viVN]\]$/, argNum:-5 },
-			"mergeImages":		{ pattern:/^\[n[v][v][viVN]\]$/, 				argNum:3 },
+			"addImage":			{ pattern:/^\[n[vA]{1,2}[viVNA][viVNA][viVNA][viVNA]\]$/, 	argNum:-5 },
+			"mergeImages":		{ pattern:/^\[n[vA][vA][viVNA]\]$/, 						argNum:3 },
 			
-			"drawLine":			{ pattern:/^\[n[v][viVN][viVN][viVN][viVN][vscVSA][viVN]\]$/, argNum:7 },
-			"drawPolygon":		{ pattern:/^\[n[v][vscVSA][vscVSA][vscVSA][viVN]\]$/, argNum:5 },
-			"drawAngleArc":		{ pattern:/^\[n[v][viVN][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:9 },
-			"drawEllipse":		{ pattern:/^\[n[v][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:8 },
-			"drawRect":			{ pattern:/^\[n[v][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:8 },
-			"drawRoundRect":	{ pattern:/^\[n[v][viVN][viVN][viVN][viVN][viVN][vscVSA][vscVSA][viVN]\]$/, argNum:9 },
-			"drawBezier":		{ pattern:/^\[n[v][vscVSA][vscVSA][viVN]\]$/, argNum:4 },
-			"fillBezier":		{ pattern:/^\[n[v][vscVSA][vscVSA][vscVSA][viVN]\]$/, argNum:5 },
-			"writeText":		{ pattern:/^\[n[v][vscVS][viVN][viVN][viVN][viVN][vscVSA][viVN]\]$/, argNum:8 },
+			"drawLine":			{ pattern:/^\[n[vA][viVNA][viVNA][viVNA][viVNA][vscVSA][viVNA]\]$/, 				argNum:7 },
+			"drawPolygon":		{ pattern:/^\[n[vA][vscVSA][vscVSA][vscVSA][viVNA]\]$/, 							argNum:5 },
+			"drawAngleArc":		{ pattern:/^\[n[vA][viVNA][viVNA][viVNA][viVNA][viVNA][vscVSA][vscVSA][viVNA]\]$/, 	argNum:9 },
+			"drawEllipse":		{ pattern:/^\[n[vA][viVNA][viVNA][viVNA][viVNA][vscVSA][vscVSA][viVNA]\]$/, 		argNum:8 },
+			"drawRect":			{ pattern:/^\[n[vA][viVNA][viVNA][viVNA][viVNA][vscVSA][vscVSA][viVNA]\]$/, 		argNum:8 },
+			"drawRoundRect":	{ pattern:/^\[n[vA][viVNA][viVNA][viVNA][viVNA][viVNA][vscVSA][vscVSA][viVNA]\]$/, 	argNum:9 },
+			"drawBezier":		{ pattern:/^\[n[vA][vscVSA][vscVSA][viVNA]\]$/, 									argNum:4 },
+			"fillBezier":		{ pattern:/^\[n[vA][vscVSA][vscVSA][vscVSA][viVNA]\]$/, 							argNum:5 },
+			"writeText":		{ pattern:/^\[n[vA][vscVSA][viVNA][viVNA][viVNA][viVNA][vscVSA][viVNA]\]$/, 		argNum:8 },
 
-			"cropImage":		{ pattern:/^\[n[v][viVN][viVN][viVN][viVN]\]$/, argNum:5 },
-			"flipImage":		{ pattern:/^\[n[v][viVN]\]$/, 				argNum:2 },
-			"resizeImage":		{ pattern:/^\[n[v][viVN][viVN]\]$/, 		argNum:3 },
-			"resizeResampling":	{ pattern:/^\[n[v][viVN][viVN]\]$/, 		argNum:3 }, // ???
-			"rotateImage":		{ pattern:/^\[n[v][viVN][viVN]\]$/, 		argNum:3 },
+			"cropImage":		{ pattern:/^\[n[vA][viVNA][viVNA][viVNA][viVNA]\]$/, 	argNum:5 },
+			"flipImage":		{ pattern:/^\[n[vA][viVNA]\]$/, 						argNum:2 },
+			"resizeImage":		{ pattern:/^\[n[vA][viVNA][viVNA]\]$/, 					argNum:3 },
+			"resizeResampling":	{ pattern:/^\[n[vA][viVNA][viVNA]\]$/, 					argNum:3 }, // ???
+			"rotateImage":		{ pattern:/^\[n[vA][viVNA][viVNA]\]$/, 					argNum:3 },
 
-			"brightness":		{ pattern:/^\[n[v][viVN]\]$/, 				argNum:2 },
-			"contrast":			{ pattern:/^\[n[v][viVN]\]$/, 				argNum:2 },
-			"saturation":		{ pattern:/^\[n[v][viVN]\]$/, 				argNum:2 },
-			"createBlackWhite":	{ pattern:/^\[n[v]\]$/, 					argNum:1 },
-			"createGrayScale":	{ pattern:/^\[n[v]\]$/, 					argNum:1 },
-			"createNegative":	{ pattern:/^\[n[v]\]$/, 					argNum:1 },
+			"brightness":		{ pattern:/^\[n[vA][viVNA]\]$/, 				argNum:2 },
+			"contrast":			{ pattern:/^\[n[vA][viVNA]\]$/, 				argNum:2 },
+			"saturation":		{ pattern:/^\[n[vA][viVNA]\]$/, 				argNum:2 },
+			"createBlackWhite":	{ pattern:/^\[n[vA]\]$/, 					argNum:1 },
+			"createGrayScale":	{ pattern:/^\[n[vA]\]$/, 					argNum:1 },
+			"createNegative":	{ pattern:/^\[n[vA]\]$/, 					argNum:1 },
 
-			"blur":				{ pattern:/^\[n[v][viVN]\]$/, 					argNum:2 },
-			"sharpen":			{ pattern:/^\[n[v][viVN]\]$/, 					argNum:2 },
-			"emboss":			{ pattern:/^\[n[v]\]$/, 						argNum:1 }
+			"blur":				{ pattern:/^\[n[vA][viVNA]\]$/, 					argNum:2 },
+			"sharpen":			{ pattern:/^\[n[vA][viVNA]\]$/, 					argNum:2 },
+			"emboss":			{ pattern:/^\[n[vA]\]$/, 							argNum:1 }
 		};		
 	
 	public static function getLexemArray(sourceText:String, isCode:Boolean=true):Array
@@ -637,7 +639,7 @@ public class Parser
 		return (funcDescr.length()>0 || TemplateStruct.lib[funcName] is FunctionDef);		
 	}	
 	
-	public static function getFunctionTrans(fragment:CodeFragment):Array
+	public static function getFunctionTrans(fragment:CodeFragment, paramOffset:int=3):Array
 	{
 		var arr:Array = [];
 		var tmpValue:String = '';
@@ -649,7 +651,7 @@ public class Parser
 		
 		Parser.processOperationGroups(fragment.fragments);				
 		
-		for(var i:int=3; i<fragment.fragments.length-1; i++)
+		for(var i:int=paramOffset; i<fragment.fragments.length-1; i++)
 		{
 			var subfragment:LexemStruct = fragment.fragments[i];
 			
@@ -758,10 +760,16 @@ public class Parser
 			var argNum:int = lexemObj.value.indexOf("]") - lexemObj.value.indexOf("[")-2;
 			funcName = LexemStruct(fragment.fragments[1]).origValue;
 		
-			if(funcName=='get')
-				funcName = 'getValue';
-			else if(funcName=='switch')
-				funcName = '_switch';
+			switch(funcName)
+			{
+				case 'get':
+					funcName = 'getValue';
+					break;
+					
+				case 'switch':
+					funcName = '_switch';
+					break;
+			}
 				
 			if(isFunctionExist(funcName))
 			{
@@ -800,7 +808,9 @@ public class Parser
 						else
 						{
 							fragment.trans = getFunctionTrans(fragment);
-							fragment.trans.push('other...');
+							
+							if(funcName=='_switch')
+								fragment.trans.push(LanguageManager.sentences['other']+'...');
 						}
 					}
 					

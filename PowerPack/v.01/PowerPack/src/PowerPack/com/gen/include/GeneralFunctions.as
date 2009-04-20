@@ -8,6 +8,7 @@ import PowerPack.com.BasicError;
 import PowerPack.com.gen.errorClasses.RunTimeError;
 import PowerPack.com.gen.structs.GraphStruct;
 import PowerPack.com.gen.structs.NodeStruct;
+import PowerPack.com.managers.LanguageManager;
 import PowerPack.com.panel.Question;
 
 import flash.display.Bitmap;
@@ -21,7 +22,6 @@ import mx.core.Application;
 import mx.graphics.codec.JPEGEncoder;
 import mx.graphics.codec.PNGEncoder;
 import mx.utils.Base64Encoder;
-import mx.utils.StringUtil;
 import mx.utils.UIDUtil;
 
 public function sub(graph:String, ...args):*
@@ -75,36 +75,61 @@ private function enterSubgraph(subgraph:GraphStruct, prefix:String, params:Array
 	
 	return new Function;
 }
- 	 
-public function question(question:String, answers:String):Function
+
+private function __question(handler:Function, question:String, params:Array=null):Function
 {
-	var array:Array = null;
+	var array:Array = [];
 	var mode:int;
-	var filter:String = "*.*";
-
-	answers = StringUtil.trim(answers);
-
-	if(answers == "*")
+	var filter:String;
+	
+	if(!params) params = [];
+	
+	if(params.length == 0)
 	{
 		mode = Question.QM_QUESTION
 	}
-	else if(answers.charAt(0) == "#")
+	else if(params[0].toString() == "#")
 	{
-		mode = Question.QM_BROWSE
-		filter = answers.substring(1);
+		mode = Question.QM_BROWSE;		
+		
+		if(params.length>1)
+			filter = params[1].toString();
 	}
 	else
 	{
 		mode = Question.QM_CHOICE;
-		array = answers.split(/\s*,\s*/);
+		
+		for(var i:int=0; i<params.length; i++)
+			array.push(params[i].toString());
 	}
 							
-	Question.show(question, "", mode, array, filter, null, questionCloseHandler);
-	
-	return questionCloseHandler;
+	Question.show(question, "", mode, array, filter, null, handler);
+	return handler;
+}
+ 	 
+public function question(question:String, ...args):Function
+{
+	return __question(questionCloseHandler, question, args);
 	
 	function questionCloseHandler(event:Event):void {
 		setReturnValue(event.target.strAnswer);
+	}	
+}
+
+public function qSwitch(question:String, ...args):Function
+{
+	return __question(questionCloseHandler, question, args);
+	
+	function questionCloseHandler(event:Event):void {
+		var retVal:String = LanguageManager.sentences['other']+'...';
+		
+		for each (var arg:String in args)
+		{
+			if(event.target.strAnswer==arg)
+				retVal = event.target.strAnswer;
+		}
+		
+		setReturnValue(retVal);
 	}	
 }
 
@@ -116,7 +141,7 @@ public function _switch(value:String, ...args):String
 			return value;
 	}
 	
-	return 'other...';
+	return LanguageManager.sentences['other']+'...';
 }
 
 public function convert(type:String, value:Object):Function

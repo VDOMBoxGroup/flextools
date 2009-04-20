@@ -88,7 +88,7 @@
 		        dialog.strQuestion = question;
 		        dialog.strTitle = title;
 		        dialog.fCloseHandler = closeHandler;
-		        dialog.arrAnswers = answers;
+		        dialog.arrAnswers = answers?answers:[];
 		        
 		        dialog.mode = mode;
 		        dialog.strFilter = filter?StringUtil.trim(filter):null;

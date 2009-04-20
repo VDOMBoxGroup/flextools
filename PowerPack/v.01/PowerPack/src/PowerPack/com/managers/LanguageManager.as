@@ -73,6 +73,7 @@ public class LanguageManager extends EventDispatcher
 				all:"All",
 				none:"none",
 				noname:"noname",
+				other:"other",
 				
 				language:"Language",
 				connection:"Connection",
