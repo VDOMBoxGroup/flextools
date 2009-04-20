@@ -5,18 +5,18 @@
 	creationPolicy="all" height="100%" minHeight="600" minWidth="800" width="100%">
 	<components:MainTitleBar 
 		width="100%"/>
-	<mx:TabBar 
+	<mx:TabBar
 		id="mainTabBar"
+		styleName="mainTabBar"
+		height="18" horizontalAlign="left"
 		
-		height="30" width="100%"
-		
-		top="50"/>
+		top="32" left="150"/>
 	<mx:ViewStack 
 		id="componentsStack"
 		
 		creationPolicy="all" height="100%" width="100%"
 		
-		top="80">
+		top="70">
 		<components:ApplicationsManagment 
 			id="applicationsManagment"/>
 		<components:ModulesManagment 

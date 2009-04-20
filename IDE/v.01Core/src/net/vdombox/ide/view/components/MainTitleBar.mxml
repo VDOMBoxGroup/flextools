@@ -7,6 +7,8 @@
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Window;
+			import mx.managers.SystemManager;
 			import mx.core.windowClasses.TitleBar;
 			import mx.core.WindowedApplication;
 			import mx.core.Application;
@@ -39,7 +41,7 @@
 
 			private function get window() : IWindow
 			{
-				return IWindow( Application.application );
+				return IWindow( Window.getWindow( this ) );
 			}
 
 			private static function isMac() : Boolean
