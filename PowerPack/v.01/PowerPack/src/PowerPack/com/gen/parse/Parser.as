@@ -839,6 +839,32 @@ public class Parser
 		{
 			fragment.ctype = CodeFragment.CT_ASSIGN;
 			fragment.validated = true;
+
+			// get transitions from subfragment
+			var fragmCount:int = 0;
+			var memSubfragm:CodeFragment;
+			for(i=fragment.fragments.length-1; i>=0; i--) 
+			{
+				subfragment = fragment.fragments[i];
+				 
+				if(subfragment is CodeFragment)
+				{
+					memSubfragm = (subfragment as CodeFragment); 
+					fragmCount++;
+				}
+				else if(subfragment is LexemStruct)
+				{
+					if(subfragment.type=='=')
+						break;
+					else if(subfragment.type!=';')
+						fragmCount++;
+				}
+			}
+			if(memSubfragm && fragmCount==1)
+			{
+				fragment.trans = memSubfragm.trans;
+			}	
+					
 			return;
 		}
 		

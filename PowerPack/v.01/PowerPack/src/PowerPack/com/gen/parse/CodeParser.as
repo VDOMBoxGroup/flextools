@@ -207,20 +207,35 @@ public class CodeParser
 				}
 				
 				// add rest of code
+				
+				var fragmCount:int = 0;
+				var memSubfragm:CodeFragment;
 				for(var j:int=i; j<fragment.fragments.length; j++) 
 				{
 					subfragment = fragment.fragments[j];
 					 
 					if(subfragment is CodeFragment)
+					{
 						tmpValue = (subfragment as CodeFragment).retVarName;
+						memSubfragm = (subfragment as CodeFragment); 
+					}
 					else if(subfragment is LexemStruct)
 						tmpValue = LexemStruct(subfragment).code;
 		
 					if(tmpValue == null)
 						tmpValue = 'null';
-				
+					
+					if(tmpValue)
+						fragmCount++;
+					
 					code += tmpValue;
 				}
+				// get transition from subfragment
+				if(memSubfragm && fragmCount==1)
+				{
+					fragment.transition = memSubfragm.transition;
+				}
+				
 				break;
 				
 			case CodeFragment.CT_LIST:
