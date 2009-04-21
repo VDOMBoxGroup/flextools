@@ -5,18 +5,18 @@
 	creationPolicy="all" height="100%" minHeight="600" minWidth="800" width="100%">
 	<components:MainTitleBar 
 		width="100%"/>
-	<mx:TabBar
+	<mx:TabBar 
 		id="mainTabBar"
-		styleName="mainTabBar"
-		height="18" horizontalAlign="left"
 		
-		top="32" left="150"/>
+		height="18" styleName="mainTabBar"
+		
+		horizontalAlign="left" left="130" top="32"/>
 	<mx:ViewStack 
 		id="componentsStack"
 		
-		creationPolicy="all" height="100%" width="100%"
+		height="100%" width="100%"
 		
-		top="70">
+		top="50">
 		<components:ApplicationsManagment 
 			id="applicationsManagment"/>
 		<components:ModulesManagment 
@@ -24,5 +24,5 @@
 	</mx:ViewStack>
 	<mx:Image 
 		height="70" source="@Embed(source='assets/login/logo.png')" width="70" x="20"
-		y="10"/>
+		y="5"/>
 </mx:Canvas>

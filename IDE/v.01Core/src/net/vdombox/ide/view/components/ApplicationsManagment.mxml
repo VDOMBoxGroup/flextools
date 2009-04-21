@@ -1,53 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
 	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:containers="net.vdombox.ide.view.containers.*"
-	xmlns:controls="net.vdombox.ide.view.controls.*" xmlns:components="net.vdombox.ide.view.components.*">
-	<containers:ControlPanel 
-		height="104" verticalScrollPolicy="off" width="100%"
+	xmlns:controls="net.vdombox.ide.view.controls.*" xmlns:components="net.vdombox.ide.view.components.*"
+	
+	verticalGap="0">
+	<mx:Style>
+		.actionButton
+		{
+			cornerRadius: 0;
+		}
+	</mx:Style>
+	<mx:HBox 
+		id="buttonBar"
 		
-		borderColor="#000000" borderStyle="solid" dropShadowEnabled="true" horizontalAlign="left"
-		horizontalGap="5" paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7"
-		verticalAlign="middle">
-		<controls:ActionButton 
-			label="{resourceManager.getString('Application','main_new')}" styleName="newButton"/>
-		 
-		<components:SearchPanel 
-			id="searchPanel"
-			
-			height="86" width="250"
-			panelName="{resourceManager.getString('Application','main_search')}"/>
-		<components:ApplicationPanel
-			id="listApplicationContainer"
-			
-			focusEnabled="false" height="86" width="280"
-			panelName="{resourceManager.getString('Application','main_applist')}"/>
-		<components:ApplicationInformation 
-			id="applicationInformation"
-			
-			height="86"
-			panelName="{resourceManager.getString('Application','main_appinfo')}"/>
-	</containers:ControlPanel>
-	<mx:ViewStack 
-		id="mainViewStack"
+		height="35" styleName="buttonBar" width="100%"
 		
-		height="100%" styleName="vdomBackground" width="100%"
-		
-		borderColor="#000000" dropShadowEnabled="true">
-		<!--<main:Main
-			 id="mainCanvas"
-			 height="100%" styleName="mainCanvas" width="100%"
-			 borderStyle="none"/>
-			 <createApplication:CreateApplication
-			 id="createApplication"
-			 height="100%" width="100%"/>
-			 <applicationProperties:ApplicationProperties
-			 id="applicationProperties"
-			 height="100%" width="100%"/>
-			 <editApplication:EditApplication
-			 id="editApplication"
-			 height="100%" width="100%"/>
-			 <searchResult:SearchResult
-			 id="searchResult"
-			 height="100%" width="100%"/>-->
-	</mx:ViewStack>
+		horizontalGap="-1">
+		<mx:Spacer 
+			width="110"/>
+		<mx:Button 
+			id="createButton"
+			
+			height="35" label="Create Application" styleName="actionButton"/>
+		<mx:Button 
+			id="deleteButton"
+			
+			height="35" label="Delete Application" styleName="actionButton"/>
+		<mx:Button 
+			id="exportButton"
+			
+			height="35" label="Export Application" styleName="actionButton"/>
+	</mx:HBox>
+	<mx:HBox 
+		height="100%" width="100%" horizontalGap="0">
+		<mx:ViewStack 
+			id="mainViewStack"
+			height="100%" styleName="vdomLogo" width="100%"/>
+		<mx:List 
+			id="applicationsList"
+			
+			height="100%" width="250"
+			
+			backgroundAlpha=".1" borderStyle="none"/>
+	</mx:HBox>
 </mx:VBox>

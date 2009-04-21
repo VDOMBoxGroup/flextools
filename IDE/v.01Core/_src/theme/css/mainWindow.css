@@ -40,3 +40,16 @@ MainTitleBar
 	selectedDownSkin: Embed(source="theme.swf", symbol="TabSelectedDownSkin");
 	selectedDisabledSkin: Embed(source="theme.swf", symbol="TabSelectedDisabledSkin");
 }
+
+.buttonBar
+{
+	backgroundImage: Embed(source="theme.swf", symbol="ButtonBarBackground");
+	backgroundSize: "100%";
+}
+
+.vdomLogo
+{
+	borderSkin: ClassReference("net.vdombox.ide.view.skins.HalloBorderWithImagePositioning");
+	backgroundImage: Embed(source="theme.swf", symbol="VDOMLogo");
+	backgroundPosition: right,bottom;
+}

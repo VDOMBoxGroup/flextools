@@ -32,18 +32,18 @@ package net.vdombox.ide.view
 
 		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
 		private var modulesManagmentMediator : ModulesManagmentMediator;
-
+		
+		private function get mainScreen() : MainScreen
+		{
+			return viewComponent as MainScreen;
+		}
+		
 		override public function onRegister() : void
 		{
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
 			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
 
 			addEventListeners();
-		}
-
-		private function get mainScreen() : MainScreen
-		{
-			return viewComponent as MainScreen;
 		}
 
 		private function addEventListeners() : void
