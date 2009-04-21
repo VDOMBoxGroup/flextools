@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalGap="4" horizontalAlign="right" xmlns:events="flash.events.*">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" horizontalGap="4" horizontalAlign="right" xmlns:events="flash.events.*"
+	initialize="text=memPath;">
 	
 	<mx:String id="browseTitle">Select file...</mx:String>
 	<mx:String id="browseLabel">Browse...</mx:String>
@@ -23,24 +24,28 @@
 			public static const MODE_SAVE:String = "save";
 			public static const MODE_DIR:String = "dir";
 			public static const MODE_MULTI:String = "multi";
-
+			public static var memPath:String = File.documentsDirectory.nativePath;
+			
 			private var _enabled:Boolean;		
 			
-			[Bindable("enabled")]
-    		[Inspectable(category="General")]	
+			[Inspectable(category="General", enumeration="true,false", defaultValue="true")]
+    		[Bindable("enabledChanged")] 
 			
 			override public function get enabled():Boolean
 			{
 				return _enabled;
 			}
 			override public function set enabled(value:Boolean):void
-			{				
-				_enabled = value;
-				for each (var child:UIComponent in getChildren())
-					child.enabled = value;				
+			{
+				if(_enabled != value)
+				{				
+					_enabled = value;
+					for each (var child:UIComponent in getChildren())
+						child.enabled = value;
+				}
 			}	
 						
-			public var files:Array = [];			
+			public var files:Array = [];
 			public var filterArray:Array = [];
 		
 			private function onBrowseClick(event:MouseEvent):void
@@ -49,10 +54,14 @@
             	
             	if(text)
             	{
-            		if(FileUtils.isValidPath(text))            		
-            		file.url = FileUtils.pathToUrl(text);
-            		if(!file.exists)
+            		try {
+            			file = new File(text);
+	    
+	            		if(!file.exists)
+    	        			file = new File(File.documentsDirectory.nativePath);
+            		} catch(e:*) {
             			file = new File(File.documentsDirectory.nativePath);
+            		}
             	}
             	
             	var filter:FileFilter = new FileFilter(
@@ -88,7 +97,8 @@
 		    private function onSelect(event:Event):void
             {
             	var file:File = event.target as File;
-           			
+           		
+           		memPath = file.nativePath;
 				txtInput.text = file.nativePath;
 				
 				files = [];
@@ -101,6 +111,7 @@
 		    private function onMultiSelect(event:FileListEvent):void
             {
             	files = event.files;
+            	memPath = File(files[0]).nativePath;
             	dispatchEvent(new FileListEvent(FileListEvent.SELECT_MULTIPLE));
             }					
             

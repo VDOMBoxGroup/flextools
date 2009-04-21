@@ -6,8 +6,8 @@
 			
 			private var _enabled:Boolean;
 			
-			[Bindable("enabled")]
-    		[Inspectable(category="General")]	
+			[Inspectable(category="General", enumeration="true,false", defaultValue="true")]
+    		[Bindable("enabledChanged")] 
 			
 			override public function get enabled():Boolean
 			{
