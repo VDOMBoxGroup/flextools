@@ -112,6 +112,9 @@
 						txtAnswer.percentHeight = 100;					
 						cnvsAnswer.addChild(txtAnswer);
 						txtAnswer.addEventListener(KeyboardEvent.KEY_DOWN, onTxtAreaKeyDown);
+						txtAnswer.addEventListener(TextEvent.TEXT_INPUT, onTextInput);
+						
+						btnOk.enabled = false;
 					}
 					else if(mode == QM_CHOICE)
 					{
@@ -233,6 +236,11 @@
 				//	event.stopPropagation();
 				}
 			} 
+			
+			private function onTextInput(event:TextEvent):void
+			{
+				btnOk.enabled = event.target.text || event.text ? true : false; 
+			}		
 			
 			override protected function keyDownHandler(event:KeyboardEvent):void
 			{

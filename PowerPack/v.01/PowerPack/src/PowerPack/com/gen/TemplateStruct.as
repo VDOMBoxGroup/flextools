@@ -62,6 +62,7 @@ public class TemplateStruct extends EventDispatcher
 	public var isDebug:Boolean;
 	public var isStepDebug:Boolean;
 	public var forced:int;
+	public var terminated:Boolean;
 	
 	public function TemplateStruct(tplStruct:XML, ID:String)
 	{				
@@ -506,6 +507,12 @@ public class TemplateStruct extends EventDispatcher
 	{
 		//try {
 			
+		if(terminated)
+		{
+			return null;
+			terminated = false;
+		}
+		
 		if(isRunning)
 		{				
 			//Application.application.callLater(generate, [force, over, ret]);

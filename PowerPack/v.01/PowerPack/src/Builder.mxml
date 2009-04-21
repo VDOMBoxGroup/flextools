@@ -577,6 +577,9 @@
 					case "step_by_step":
 						//try
 						{
+							if(ContextManager.templateStruct)
+								ContextManager.templateStruct.terminated = true;
+							
 							ContextManager.templateStruct = new TemplateStruct(
 								pnl_graphs.toXML(),
 								(ContextManager.templates.getItemAt(0) as Template).fullID);
@@ -676,6 +679,7 @@
 									ContextManager.templateStruct.removeEventListener("stepComplete", stepCompleteHandler);
 									ContextManager.templateStruct.removeEventListener("error", debugErrorHandler);
 									
+									ContextManager.templateStruct.terminated = true;
 									ContextManager.templateStruct = null;
 									switchDebug(false);
 									break;
