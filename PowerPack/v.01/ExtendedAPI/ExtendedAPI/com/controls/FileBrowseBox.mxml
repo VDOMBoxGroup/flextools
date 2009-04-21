@@ -7,14 +7,15 @@
 	<mx:String id="mode">open</mx:String>
 	<mx:String id="filterAll">All</mx:String>
  	
- 	<mx:Metadata> 
+ 	<mx:Metadata>
         [Event(name="change", type="flash.events.Event")] 
         [Event(name="select", type="flash.events.Event")] 
         [Event(name="selectMultiple", type="flash.events.FileListEvent")] 
-    </mx:Metadata> 
+    </mx:Metadata>
 
 	<mx:Script>
 		<![CDATA[
+			import mx.core.UIComponent;
 			import ExtendedAPI.com.utils.FileUtils;
 			import mx.utils.StringUtil;
 			
@@ -22,7 +23,23 @@
 			public static const MODE_SAVE:String = "save";
 			public static const MODE_DIR:String = "dir";
 			public static const MODE_MULTI:String = "multi";
+
+			private var _enabled:Boolean;		
 			
+			[Bindable("enabled")]
+    		[Inspectable(category="General")]	
+			
+			override public function get enabled():Boolean
+			{
+				return _enabled;
+			}
+			override public function set enabled(value:Boolean):void
+			{				
+				_enabled = value;
+				for each (var child:UIComponent in getChildren())
+					child.enabled = value;				
+			}	
+						
 			public var files:Array = [];			
 			public var filterArray:Array = [];
 		

@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalAlign="middle" width="100%"  disabledOverlayAlpha="0.0">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalAlign="middle" width="100%">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;		
+			
+			private var _enabled:Boolean;
+			
+			[Bindable("enabled")]
+    		[Inspectable(category="General")]	
+			
+			override public function get enabled():Boolean
+			{
+				return _enabled;
+			}
+			override public function set enabled(value:Boolean):void
+			{				
+				_enabled = value;
+				for each (var child:UIComponent in getChildren())
+					child.enabled = value;				
+			}			
+		]]>
+	</mx:Script>
+
 	<mx:HRule width="50%"/>
 	<mx:Label text="{label}"/>
 	<mx:HRule width="50%"/>
 </mx:HBox>
+
