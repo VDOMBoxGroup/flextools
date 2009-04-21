@@ -6,7 +6,7 @@
 	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*"
 	width="450" height="460"
 	title="{LanguageManager.sentences.lbl_import}" 
-	close="ConnectionManager.instance.window = null">
+	close="ConnectionManager.instance.window = null" xmlns:importClasses="PowerPack.com.dialog.importClasses.*">
 	
 	<mx:Script>
 		<![CDATA[
@@ -288,13 +288,13 @@
 	
 	<mx:ViewStack width="100%" height="100%" selectedIndex="0" id="vsStep" change="onVSChange()">
 
-		<dialogClasses:ImportStep1 styleName="dlgContent" width="100%" height="100%" id="step1"/>
+		<importClasses:ImportStep1 styleName="dlgContent" width="100%" height="100%" id="step1"/>
 		
-		<dialogClasses:ImportStep2 styleName="dlgContent" width="100%" height="100%" id="step2" show="onStep2Show()"/>
+		<importClasses:ImportStep2 styleName="dlgContent" width="100%" height="100%" id="step2" show="onStep2Show()"/>
 		
-		<dialogClasses:ImportStep3 styleName="dlgContent" width="100%" height="100%" id="step3" show="onStep3Show()"/>
+		<importClasses:ImportStep3 styleName="dlgContent" width="100%" height="100%" id="step3" show="onStep3Show()"/>
 		
-		<dialogClasses:ImportStep4 styleName="dlgContent" width="100%" height="100%" id="step4" show="onStep4Show()"/>
+		<importClasses:ImportStep4 styleName="dlgContent" width="100%" height="100%" id="step4" show="onStep4Show()"/>
 		
 	</mx:ViewStack>
 
