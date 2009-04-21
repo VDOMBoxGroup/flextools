@@ -53,7 +53,7 @@
 			</mx:GridItem>
 		</mx:GridRow>
 				
-		<mx:GridRow visible="false" includeInLayout="false">
+		<mx:GridRow visible="true" includeInLayout="true">
 			<mx:GridItem>
 				<mx:RadioButton groupName="importType" id="radFile" selected="false" value="File"
 			        label="{LanguageManager.sentences.import_from_file}:"/>    			        

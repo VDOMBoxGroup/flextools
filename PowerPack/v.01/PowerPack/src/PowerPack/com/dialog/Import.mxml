@@ -3,10 +3,10 @@
 	xmlns="PowerPack.com.dialog.*" 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:controls="ExtendedAPI.com.controls.*" 
-	xmlns:dialogClasses="PowerPack.com.dialog.dialogClasses.*"
+	xmlns:importClasses="PowerPack.com.dialog.importClasses.*"
 	width="450" height="460"
 	title="{LanguageManager.sentences.lbl_import}" 
-	close="ConnectionManager.instance.window = null" xmlns:importClasses="PowerPack.com.dialog.importClasses.*">
+	close="ConnectionManager.instance.window = null">
 	
 	<mx:Script>
 		<![CDATA[
@@ -83,6 +83,10 @@
 							if(step1.radServer.selected)
 							{
 								ProgressManager.start(ProgressManager.WINDOW_MODE, false);
+								
+								if(step1.txtHost.text.indexOf('http://')==-1)
+									step1.txtHost.text = 'http://' + step1.txtHost.text;
+								
 								ContextManager.instance.host = step1.txtHost.text;
 								ContextManager.instance.port = step1.txtPort.text;
 								ContextManager.instance.login = step1.txtLogin.text;
