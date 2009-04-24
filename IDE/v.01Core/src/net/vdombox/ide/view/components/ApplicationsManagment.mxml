@@ -32,15 +32,19 @@
 			height="35" label="Export Application" styleName="actionButton"/>
 	</mx:HBox>
 	<mx:HBox 
-		height="100%" width="100%" horizontalGap="0">
+		height="100%" width="100%"
+		
+		horizontalGap="0">
 		<mx:ViewStack 
 			id="mainViewStack"
+			
 			height="100%" styleName="vdomLogo" width="100%"/>
 		<mx:List 
 			id="applicationsList"
 			
-			height="100%" width="250"
+			itemRenderer="net.vdombox.ide.view.controls.ApplicationItemRenderer"
+			width="300"
 			
-			backgroundAlpha=".1" borderStyle="none"/>
+			backgroundAlpha=".1" borderStyle="none" height="100%"/>
 	</mx:HBox>
 </mx:VBox>

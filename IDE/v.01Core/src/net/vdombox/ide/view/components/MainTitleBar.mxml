@@ -92,7 +92,7 @@
 
 			private function closeButton_clickHandler( event : Event ) : void
 			{
-				window.close();
+				Application.application.exit();
 			}
 
 			private function mouseDownHandler( event : MouseEvent ) : void

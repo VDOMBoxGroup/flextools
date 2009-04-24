@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	height="130" minWidth="250" width="300" color="#FFFFFF" addedToStage="addedToStageHandler( event )">
+	<mx:Script>
+		<![CDATA[
+			public static const RENDERER_CREATED:String = "rendererCreated";
+			
+			public function addedToStageHandler( event : Event ) : void
+			{
+				var evnt : Event = new Event( RENDERER_CREATED );
+				dispatchEvent( evnt ); 
+			}
+		]]>
+	</mx:Script>
+	<mx:Image 
+		height="100" width="100" x="10" y="10"/>
+	<mx:VBox left="120" right="10" top="10" bottom="10">
+		<mx:Label 
+			text="Sample application #1" y="10"
+			
+			fontFamily="Tahoma" fontSize="12" fontWeight="bold" left="120" right="10" width="100%" truncateToFit="true"/>
+		<mx:Text
+			text="This application is only example and does not work at all. Please do not delete or change this application!"
+			truncateToFit="true"
+			left="120" width="100%" height="50"/>
+		<mx:Text 
+			text="Pages: 20&#xa;Objects: 40"
+			
+			bottom="10" right="10" textAlign="right" width="100%"/>
+	</mx:VBox>
+</mx:Canvas>
