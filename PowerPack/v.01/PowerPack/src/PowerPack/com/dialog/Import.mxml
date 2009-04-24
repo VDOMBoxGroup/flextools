@@ -6,7 +6,9 @@
 	xmlns:importClasses="PowerPack.com.dialog.importClasses.*"
 	width="450" height="460"
 	title="{LanguageManager.sentences.lbl_import}" 
-	close="ConnectionManager.instance.window = null">
+	close="ConnectionManager.instance.window = null"
+	>
+
 	
 	<mx:Script>
 		<![CDATA[
@@ -95,7 +97,7 @@
 							
 								ConnectionManager.endpointURI = step1.txtHost.text + ":" + 
 									(step1.radDefPort.selected ? ContextManager.instance.default_port : step1.txtPort.text) + 
-									"/SOAP"
+									"/SOAP";
 											
 								ConnectionManager.exec('list_applications', getAppListHandler); 								
 							}
