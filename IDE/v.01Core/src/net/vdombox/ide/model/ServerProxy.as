@@ -26,8 +26,8 @@ package net.vdombox.ide.model
 
 		private var soap : SOAP = SOAP.getInstance();
 
-		private var registeredHandlers : Array = [ { methodName: "list_applications", handlerName: "soap_listApplicationsHandler" },
-												   { methodName: "get_all_types", handlerName: "soap_getAllTypesHandler" } ]
+//		private var registeredHandlers : Array = [ { methodName: "list_applications", handlerName: "soap_listApplicationsHandler" },
+//												   { methodName: "get_all_types", handlerName: "soap_getAllTypesHandler" } ]
 
 		private var tempAuthInfo : AuthInfo;
 		private var _authInfo : AuthInfo;

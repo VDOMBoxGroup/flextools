@@ -6,12 +6,12 @@ package net.vdombox.ide.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	public class TypesProxy extends Proxy implements IProxy
+	public class TypeProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "TypesProxy";
 		public static const TYPES_LOADED : String = "Types Loaded";
 
-		public function TypesProxy( data : Object = null )
+		public function TypeProxy( data : Object = null )
 		{
 			super( NAME, data );
 
