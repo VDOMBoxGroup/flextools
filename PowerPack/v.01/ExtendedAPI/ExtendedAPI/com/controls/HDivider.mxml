@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalAlign="middle" width="100%">
+<mx:HBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	verticalAlign="middle" 
+	width="100%"
+	disabledOverlayAlpha="0.0"
+	childAdd="onChildAdd(event)">
+	
 	<mx:Script>
 		<![CDATA[
+			import mx.events.ChildExistenceChangedEvent;
 			import mx.core.UIComponent;		
 			
-			private var _enabled:Boolean;
-			
-			[Inspectable(category="General", enumeration="true,false", defaultValue="true")]
-    		[Bindable("enabledChanged")] 
-			
+		    //----------------------------------
+		    //  enabled
+		    //----------------------------------
+		
+		    /**
+		     *  @private
+		     */			
 			override public function get enabled():Boolean
 			{
-				return _enabled;
+				return super.enabled;
 			}
 			override public function set enabled(value:Boolean):void
-			{				
-				_enabled = value;
+			{
+				super.enabled = value;
+				
 				for each (var child:UIComponent in getChildren())
-					child.enabled = value;				
+					child.enabled = value;
+			}
+		    
+		    //--------------------------------------------------------------------------
+		    //
+		    //  Event handlers
+		    //
+		    //--------------------------------------------------------------------------
+		    			
+			private function onChildAdd(event:ChildExistenceChangedEvent):void
+			{
+				UIComponent(event.relatedObject).enabled = enabled;
 			}			
+					
 		]]>
 	</mx:Script>
 
