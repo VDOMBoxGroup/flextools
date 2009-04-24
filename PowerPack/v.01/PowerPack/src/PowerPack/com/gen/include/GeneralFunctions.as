@@ -326,9 +326,9 @@ public function split(delimiter:String, string:String):String
 	return str;
 }
 
-public function random(value:int):String 
+public function random(value:int):String
 {
-	var rnd:int = int(Math.round(Math.random() * value)); 	
+	var rnd:int = int(Math.round(Math.random() * value));
 	return rnd.toString();
-}	
+}
 
