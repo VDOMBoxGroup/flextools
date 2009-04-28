@@ -651,7 +651,7 @@ public class Parser
 		
 		Parser.processOperationGroups(fragment.fragments);				
 		
-		for(var i:int=paramOffset; i<fragment.fragments.length-1; i++)
+		for(var i:int=0; i<fragment.fragments.length-1; i++)
 		{
 			var subfragment:LexemStruct = fragment.fragments[i];
 			
@@ -676,7 +676,10 @@ public class Parser
 			
 			if(prevGrp!=-1 && prevGrp!=subfragment.operationGroup)
 			{
-				arr.push(concat);
+				paramOffset--;
+				if(paramOffset<=0)
+					arr.push(concat);
+				
 				concat = '';
 			}
 			

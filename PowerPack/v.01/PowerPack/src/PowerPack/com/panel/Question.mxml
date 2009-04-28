@@ -52,6 +52,8 @@
 			
 			private var fCloseHandler:Function;			
 			
+			private var dSize:Boolean = false;
+			
 			private function show():void
 			{
 				btnOk.addEventListener(MouseEvent.CLICK, clickHandler);
@@ -92,7 +94,7 @@
 		        
 		        dialog.mode = mode;
 		        dialog.strFilter = filter?StringUtil.trim(filter):null;
-		
+				
 		        PopUpManager.addPopUp(dialog, parent, true);
 		        PopUpManager.centerPopUp(dialog);
 				
@@ -127,6 +129,7 @@
 						{
 							var radBtn:RadioButton = new RadioButton();							
 							radBtn.groupName = "radioGroup";
+							
 							radBtn.value = radBtn.label = arrAnswers[i];
 							vBox.addChild(radBtn);
 
@@ -158,26 +161,34 @@
 				}
 			}
 			
+			
 			override protected function updateDisplayList(unscaledWidth:Number,
 														  unscaledHeight:Number):void
 			{
 				super.updateDisplayList(unscaledWidth, unscaledHeight);	
 				
 				var dHeight:int = cnvsAnswer.maxVerticalScrollPosition;
-				
-				if(dHeight)
+				var dWidth:int = cnvsAnswer.maxHorizontalScrollPosition;
+
+				if(!dSize && (dWidth || dHeight))
 				{
+					dSize = true;
+				
 					var container:DisplayObjectContainer = cnvsAnswer.parent;
 
 					while(container!=this)
 					{
 						container = container.parent;
-						container.height += dHeight;
+						if(dWidth)
+							container.width += dWidth;
+						if(dHeight)
+							container.height += dHeight;
 					}
 					
-					callLater(PopUpManager.centerPopUp,[this]);				
+					if(dWidth || dHeight)
+						callLater(PopUpManager.centerPopUp,[this]);				
 				}				
-			}		    
+			}
 			
 			
 			private function closeDialog():void
