@@ -4,17 +4,12 @@ package vdom.managers
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.utils.ByteArray;
-
+	
 	import mx.rpc.events.FaultEvent;
 	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
 
-	import vdom.connection.SOAP;
-	import vdom.events.DataManagerEvent;
-	import vdom.events.FileManagerEvent;
-	import vdom.events.SOAPEvent;
-
-	public class FileManager implements IEventDispatcher
+	public class FileManager implements IEventDispatcher, IEventDispatcher
 	{
 		private static var instance : FileManager;
 

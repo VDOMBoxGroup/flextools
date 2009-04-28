@@ -1,11 +1,13 @@
 package net.vdombox.ide.model
 {
+	import flash.events.Event;
 	import flash.utils.ByteArray;
 	
 	import mx.rpc.events.FaultEvent;
 	import mx.utils.Base64Encoder;
 	
 	import net.vdombox.ide.events.SOAPEvent;
+	import net.vdombox.ide.interfaces.IResource;
 	import net.vdombox.ide.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
@@ -23,35 +25,21 @@ package net.vdombox.ide.model
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
-		private var cacheManager : CacheManager = CacheManager.getInstance();
-		
-		private var requestQue : Object = {};
+
 
 		public function getListResources( applicatioID : String ) : void
 		{
 			soap.list_resources( applicatioID );
 		}
 
-		public function getResource( ownerID : String, resourceID : String ) : void
+		public function getResource( ownerID : String, resourceID : String ) : IResource
 		{
 			if ( !resourceID )
-				return;
+				return null;
 
-			var result : ByteArray = cacheManager.getCachedFileById( resourceID );
+			var resource : Resource = new Resource( ownerID, resourceID );
 
-			if ( result )
-			{
-				var dummy : * = ""; // FIXME remove dummy
-				return;
-			}
-
-			if ( !requestQue[ resourceID ] )
-			{
-				requestQue[ resourceID ] = new Array();
-				soap.get_resource( ownerID, resourceID );
-			}
-
-			requestQue[ resourceID ].push( {} );
+			return resource;
 		}
 
 		public function setResource( name : String, data : ByteArray, type : String,
@@ -74,9 +62,6 @@ package net.vdombox.ide.model
 		private function addEventListeners() : void
 		{
 			soap.list_resources.addEventListener( SOAPEvent.RESULT, listResourcesHandler );
-
-			soap.get_resource.addEventListener( SOAPEvent.RESULT, resourceLoadedOKHandler );
-			soap.get_resource.addEventListener( FaultEvent.FAULT, resourceLoadedFaultHandler );
 
 			soap.set_resource.addEventListener( SOAPEvent.RESULT, setResourceOKHandler );
 			soap.set_resource.addEventListener( FaultEvent.FAULT, setResourceFaultHandler );
@@ -120,9 +105,8 @@ package net.vdombox.ide.model
 
 		}
 	}
-
-
 }
+
 import flash.utils.ByteArray;
 import mx.collections.ArrayCollection;
 import flash.filesystem.File;
@@ -132,13 +116,126 @@ import mx.collections.Sort;
 import mx.collections.SortField;
 import flash.filesystem.FileMode;
 import flash.errors.IOError;
+import flash.events.Event;
+import flash.events.IEventDispatcher;
+import flash.events.EventDispatcher;
+import net.vdombox.ide.interfaces.IResource;
+import net.vdombox.ide.model.business.SOAP;
+import mx.rpc.events.FaultEvent;
+import net.vdombox.ide.events.SOAPEvent;
+import mx.utils.Base64Decoder;
 
+class Resource implements IResource, IEventDispatcher
+{
+	public function Resource( ownerID : String, resourceID : String )
+	{
+		_ownerID = ownerID;
+		_resourceID = resourceID;
+	}
+
+	private var cacheManager : CacheManager = CacheManager.getInstance();
+	private var soap : SOAP = SOAP.getInstance();
+
+	private var _resourceID : String;
+	private var _ownerID : String;
+
+	private var dispatcher : EventDispatcher = new EventDispatcher( IEventDispatcher( this ) );
+	private var _data : ByteArray;
+	private var _loaded : Boolean;
+	
+	public function get resourceID() : String
+	{
+		return _resourceID;
+	}
+
+	public function get data() : ByteArray
+	{
+		return _data;
+	}
+
+	public function load() : void
+	{
+		var resource : ByteArray = cacheManager.getCachedFileById( _resourceID );
+		if ( resource )
+		{
+			_data = resource;
+			dispatchEvent( new Event( "resource loaded" ) );
+			return;
+		}
+
+		soap.get_resource.addEventListener( SOAPEvent.RESULT, resourceLoadedOKHandler );
+		soap.get_resource.addEventListener( FaultEvent.FAULT, resourceLoadedFaultHandler );
+
+		soap.get_resource( _ownerID, _resourceID );
+	}
+
+	/**
+	 *  @private
+	 */
+	public function addEventListener( type : String, listener : Function, useCapture : Boolean = false,
+									  priority : int = 0, useWeakReference : Boolean = false ) : void
+	{
+		dispatcher.addEventListener( type, listener, useCapture, priority );
+	}
+
+	/**
+	 *  @private
+	 */
+	public function dispatchEvent( evt : Event ) : Boolean
+	{
+		return dispatcher.dispatchEvent( evt );
+	}
+
+	/**
+	 *  @private
+	 */
+	public function hasEventListener( type : String ) : Boolean
+	{
+		return dispatcher.hasEventListener( type );
+	}
+
+	/**
+	 *  @private
+	 */
+	public function removeEventListener( type : String, listener : Function, useCapture : Boolean = false ) : void
+	{
+		dispatcher.removeEventListener( type, listener, useCapture );
+	}
+
+	/**
+	 *  @private
+	 */
+	public function willTrigger( type : String ) : Boolean
+	{
+		return dispatcher.willTrigger( type );
+	}
+
+	private function resourceLoadedOKHandler( event : SOAPEvent ) : void
+	{
+		var resourceID : String = event.result.ResourceID;
+		var resource : String = event.result.Resource;
+
+		var decoder : Base64Decoder = new Base64Decoder();
+		decoder.decode( resource );
+
+		var imageSource : ByteArray = decoder.toByteArray();
+
+		imageSource.uncompress();
+
+		cacheManager.cacheFile( resourceID, imageSource );
+	}
+
+	private function resourceLoadedFaultHandler( event : FaultEvent ) : void
+	{
+		var dummy : * = ""; // FIXME remove dummy
+	}
+}
 
 class CacheManager
 {
 
 	private static var instance : CacheManager;
-	
+
 	public static function getInstance() : CacheManager
 	{
 		if ( !instance )
@@ -154,8 +251,10 @@ class CacheManager
 	{
 		if ( instance )
 			throw new Error( "Instance already exists." );
+
+		init();
 	}
-	
+
 	private const CACHE_SIZE : uint = 100000000;
 
 	private var cacheFolder : File;
@@ -166,7 +265,7 @@ class CacheManager
 	private var cacheSize : int;
 	private var cachedFiles : ArrayCollection = new ArrayCollection();
 	private var cursor : IViewCursor;
-	
+
 	public function init() : void
 	{
 		cursor = cachedFiles.createCursor();
@@ -242,12 +341,10 @@ class CacheManager
 
 			try
 			{
-
 				cacheFolder.resolvePath( newFileName ).deleteFile();
 			}
 			catch ( error : IOError )
 			{
-
 				return;
 			}
 		}
@@ -300,6 +397,7 @@ class CacheManager
 
 		return isDone;
 	}
+
 
 	private function get applicationPrefix() : String
 	{

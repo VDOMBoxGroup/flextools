@@ -3,9 +3,11 @@ package net.vdombox.ide.view
 	import flash.events.Event;
 
 	import mx.controls.List;
-	import mx.events.FlexEvent;
 
+	import net.vdombox.ide.events.ApplicationItemRendererEvent;
+	import net.vdombox.ide.interfaces.IResource;
 	import net.vdombox.ide.model.LocaleProxy;
+	import net.vdombox.ide.model.ResourceProxy;
 	import net.vdombox.ide.model.ServerProxy;
 	import net.vdombox.ide.view.components.ApplicationsManagment;
 	import net.vdombox.ide.view.controls.ApplicationItemRenderer;
@@ -24,6 +26,10 @@ package net.vdombox.ide.view
 
 		private var localeProxy : LocaleProxy;
 		private var serverProxy : ServerProxy;
+		private var resourceProxy : ResourceProxy;
+
+
+		private var applicationItemRenderers : Object = {};
 
 		private function get applicationsManagment() : ApplicationsManagment
 		{
@@ -34,24 +40,39 @@ package net.vdombox.ide.view
 		{
 			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
 			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			resourceProxy = facade.retrieveProxy( ResourceProxy.NAME ) as ResourceProxy;
 
 			var applicationsList : List = applicationsManagment.applicationsList;
-			applicationsList.addEventListener( ApplicationItemRenderer.RENDERER_CREATED,
-											   applicationItemRenderer_rendererCreated,
+			applicationsList.addEventListener( ApplicationItemRenderer.ICON_CHANGED,
+											   applicationItemRenderer_iconChanged,
 											   true );
-			applicationsList.dataProvider = serverProxy.applicationList.*
+			applicationsList.dataProvider = serverProxy.applicationList.* + serverProxy.applicationList.*
 		}
 
-		private function applicationItemRenderer_rendererCreated( event : Event ) : void
+		private function applicationItemRenderer_iconChanged( event : ApplicationItemRendererEvent ) : void
 		{
-			var renderer : ApplicationItemRenderer = event.target as ApplicationItemRenderer;
-			var mediator : ApplicationItemRendererMediator = new ApplicationItemRendererMediator( renderer );
-			facade.registerMediator( mediator );
+			if ( !applicationItemRenderers.hasOwnProperty( [ event.iconID ] ) )
+				applicationItemRenderers[ event.iconID ] = [];
+
+			applicationItemRenderers[ event.iconID ].push( event.target );
+
+			var resource : IResource = resourceProxy.getResource( "", event.iconID );
+			resource.addEventListener( "resource loaded", resourceLoadedHander );
+
+			resource.load();
 		}
 
-		private function zzz( event : FlexEvent ) : void
+		private function resourceLoadedHander( event : Event ) : void
 		{
-			var dummy : * = ""; // FIXME remove dummy
+			event.target.removeEventListener( "resource loaded", resourceLoadedHander );
+			if ( applicationItemRenderers[ event.target.resourceID ] )
+			{
+				for each ( var item : ApplicationItemRenderer in applicationItemRenderers[ event.target.resourceID ] )
+				{
+					item.applicationIcon.source = event.target.data;
+				}
+				delete applicationItemRenderers[ event.target.resourceID ];
+			}
 		}
 	}
 }
