@@ -276,7 +276,69 @@ package
 				return result;
 			
 		}
-
+			
+		public function setPageContent(productName:String, language:String, pageName:String, content:String, version:Number ):Object
+		{
+				var query:String = "SELECT id " + 
+						"FROM product " + 
+						"WHERE name = :name  AND language = :language;";
+						
+				var parameters:Object = new Object();
+					parameters[":name"] = productName;
+					parameters[":language"] = language;
+						
+				var result:Object = executeQuery(query, parameters);
+				
+				if( result)
+				{
+					var productID:int  = result[0]['id'];
+					
+					query = "UPDATE page " + 
+					"SET content = :content , version = :version " +
+					"WHERE name = :name  AND id_product = :id_product ;";
+					
+						parameters = {};
+						parameters[":name"] = pageName;
+						parameters[":id_product"] = productID;
+						parameters[":content"] = content;
+						parameters[":version"] = version + 1;
+						
+							
+					 result = executeQuery(query, parameters);
+				}
+				
+				return result;
+		}
+		
+		public function getLastPage(productName:String, language:String):Object
+		{
+			var query:String = "SELECT id " + 
+						"FROM product " + 
+						"WHERE name = :name  AND language = :language;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = productName;
+				parameters[":language"] = language;
+					
+			var result:Object = executeQuery(query, parameters);
+			
+			if( result)
+			{
+				var productID:int  = result[0]['id'];
+				
+				query = "SELECT * " + 
+					"FROM page " + 
+					"WHERE  id_product = :id_product ;";
+				
+				parameters = [];
+				parameters[":id_product"] = productID;
+				
+				result = executeQuery(query, parameters);
+					
+			}
+				
+			return result;
+		}
 		
 		/*
 		public function getPages():Object

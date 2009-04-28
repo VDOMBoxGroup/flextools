@@ -19,12 +19,33 @@
 	</mx:Style>
 	<mx:Script>
 	<![CDATA[
+		import mx.controls.Alert;
 		import mx.events.ListEvent;
 		import mx.events.CloseEvent;
 		import mx.managers.PopUpManager;
 		import mx.collections.XMLListCollection;
 	
 		private var sqlProxy : SQLProxy = new SQLProxy(); 
+		private var pageVersion: Number;
+		
+		/***
+		 * 
+		 * + сохранить экспортируемую хмл
+		 * - прогресс бар
+		 * + вывести на экран сообщение о том куда и покаким именем сохранен файл
+		 * 
+		 * - выбрать картинку
+		 * - скопировать ее в кэшь
+		 * - добавить в базу данных
+		 * - вставить в текст кода странички
+		 * 
+		 * - экспортировать картинки в хмл 
+		 * 
+		 * 
+		 */
+		 
+		 
+		
 		private function creationCompleteHandler():void
 		{
 			sqlProxy.creatDB();
@@ -38,20 +59,26 @@
 //			showSelectedPage(tree.selectedItem.@name);
 //			trace("Tree Change");
 			sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
-			
-			
 			if(!tree.selectedItem)
 			{
 				tree.selectedItem = XML(lstEvt.itemRenderer.data.toXMLString());
 				tree.validateNow();
 			}
+			
+			getCurrentPage();
+		}
+		private function getCurrentPage():void
+		{	
 //			tree.selectedItem = XML(lstEvt.itemRenderer.data);
-			trace(": "+lstEvt.itemRenderer.data.@name +" : "+ tree.selectedItem.@name);
+//			trace(": "+lstEvt.itemRenderer.data.@name +" : "+ tree.selectedItem.@name);
 				
 			var resoult : Object = sqlProxy.getPage(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name);
 			if(resoult)
 			{
+				pageVersion = resoult[0]["version"];
 				htmlSource.text = resoult[0]["content"];
+				pageInformation.text = resoult[0]["title"] +" (v." + pageVersion +")  " + resoult[0]["name"];
+				pageInformation.toolTip =  resoult[0]["description"];
 			}
 		}
 		
@@ -105,9 +132,12 @@
 		{
 			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0]; // tree.dataProvider.source..page.(@name == fileName)[0];
 			
-			openTree(currentElement);
-			tree.selectedItem = currentElement;
-			tree.validateNow();
+			if(currentElement)
+			{
+				openTree(currentElement);
+				tree.selectedItem = currentElement;
+				tree.validateNow();
+			}
 			
 //			tree.selectedItem = currentElement;
 			
@@ -142,22 +172,26 @@
 		private var count : int = 0; 
 		private function addItem():void
 		{
+			var selectedPage : String = "";
 			if(tree.selectedItem)
-				var name : String = tree.selectedItem.@name;
+				selectedPage = tree.selectedItem.@name;
 			else trace("NO SELECTED PAGE");
 				
 			toc = tree.dataProvider[0];
 			
-			var pageName : String = "page_" + count++;
+			var pageName : String = "page_" + ++count;
 			
+//			search vacant name in dataBase
 			while(sqlProxy.checkPageName(pageName))
 			{
-				pageName = "page_" + count++;
-				trace("Page in data base: " + pageName);
+				pageName = "page_" + ++count;
+//				trace("Page in data base: " + pageName);
 			}
 			
+			var pageTitle : String = "Page " + count;
+			 
 			sqlProxy.addPage(cmboxProduct.selectedItem.name, "en_US", pageName, 0, 
-								"Write Title", "write Description", "it is  "+ pageName);
+								pageTitle, "write Description", "it is  "+ pageName);
 			
 			toc.appendChild(XML("<page title = 'page " + count+ "' name = 'page_" + count+ "' isBranch='true' />"));
 			tree.dataProvider = null;
@@ -166,13 +200,17 @@
 			tree.dataProvider = toc;
 
 			tree.validateNow();
-			if(tree.selectedItem)
-				selectNecessaryItem(name);
+//			if(selectedPage != "")
+			selectNecessaryItem(selectedPage);
+			
 			
 			sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
-			
-//			tree.expandItem(toc, true);
-//			tree.selectedIndex = selectedIndex;
+			// if not selected index select top item
+			if(tree.selectedIndex == -1)
+			{
+				tree.expandItem(toc, true);
+				tree.selectedIndex = 0;
+			}
 			
 		}
 		
@@ -239,8 +277,139 @@
 			tree.validateNow();
 			tree.expandItem(toc, true);
 			tree.selectedIndex = 0;
+			tree.validateNow();
+			
+			tree.dispatchEvent(new ListEvent(ListEvent.CHANGE));
+			
 		}
 		
+		private function addTag( tag:String, finishTag:Boolean = true):void
+		{
+			var resoultText : String;
+			var bgTag :String;
+			var endTag : String = "";
+			var selectionBegin : Number;
+			var selectionEnd : Number;
+			
+			if(finishTag)
+			{
+				bgTag = "<" + tag + ">";
+				endTag = "</" + tag + ">";
+			} else
+			{
+				bgTag = "<" + tag + "/>";
+			}
+			
+			
+			
+			resoultText = htmlSource.text.substring( 0, htmlSource.selectionBeginIndex) 
+					+ bgTag + htmlSource.text.substring(htmlSource.selectionBeginIndex, htmlSource.selectionEndIndex )
+					+ endTag + htmlSource.text.substring(htmlSource.selectionEndIndex);
+			
+			selectionBegin = htmlSource.selectionBeginIndex;
+			selectionEnd = htmlSource.selectionEndIndex + bgTag.length + endTag.length;
+			
+			htmlSource.text = resoultText;		
+			htmlSource.setFocus();
+			htmlSource.setSelection(selectionBegin, selectionEnd);
+		}
+		
+		private function savePage():void
+		{
+			sqlProxy.setPageContent(cmboxProduct.selectedItem.name, "en_US", tree.selectedItem.@name, htmlSource.text, pageVersion);
+			getCurrentPage();
+		}
+		
+		private function creatProductXML():void
+		{
+			var result :Object = sqlProxy.getLastPage(cmboxProduct.selectedItem.name, "en_US");
+//			пробегаемся по дереву строим новую хмл
+//			по ходу делаем хмл для каждой странички
+			var product:XML = new XML("<product/>");
+				product.name = cmboxProduct.selectedItem.name;
+				product.version = "777";
+				product.title = cmboxProduct.selectedItem.title;
+				product.description = "";
+				product.language = "en_US";
+			
+			var	pages : XML = new XML("<pages/>");
+			var length : Number = Number(result.length);
+//			progressBar.setProgress(0,100);
+			
+			
+			for (var i:String in result)
+			{
+				var tempXML : XML = new XML("<page/>");
+					tempXML.name = result[i]["name"];
+					tempXML.version = result[i]["version"];
+					tempXML.title = result[i]["title"];
+					tempXML.description = result[i]["description"];
+					tempXML.content = XML("<![CDATA[" + 
+											"<html>" + 
+												"<head>" + 
+													"<script src='app-storage:/searchhi_slim.js'/>" +
+													"<link rel='stylesheet' href='app-storage:/main.css' type='text/css' />"+
+												"</head>" +
+												"<body>"+
+													result[i]["content"] +
+												"</body>" +
+											"<html>" +		
+						"]"+ "]>");
+				
+				pages.appendChild(tempXML);
+				
+				trace(i);
+				var progress : Number = Number(i)* 100/length;
+//				progressBar.setProgress(progress , 100);
+//				progressBar.label = progress.toString();
+			}
+			
+			product.appendChild(pages);
+		
+			var fileStream:FileStream = new FileStream();
+			var fileName:String = cmboxProduct.selectedItem.name;
+			var docsDir:File = File.documentsDirectory;
+			var location : File = new File(docsDir.url +"/"+ fileName + ".xml");
+			try
+			{
+	//				fileStream.addEventListener(Event., savedData);
+			  		fileStream.open( location, FileMode.WRITE);
+					fileStream.writeUTFBytes(product.toXMLString());
+					fileStream.close(); 
+					
+					Alert.show( location.nativePath, "Saved to:");
+			}
+			catch (error:Error)
+			{
+				Alert.show( error.message, "Failed:");
+			}
+		}
+		
+		private function insertImage():void
+		{
+//			var docsDir:File = File.documentsDirectory;
+			var fileToOpen:File = File.documentsDirectory;;
+			var txtFilter:FileFilter = new FileFilter("Image (*.jpg; *.png; *,bmp) ", "*.img;*.jpg;*.bmp;*.png");
+			
+			try 
+			{
+			    fileToOpen.browseForOpen("Open", [txtFilter]);
+			    fileToOpen.addEventListener(Event.SELECT, fileSelected);
+			}
+			catch (error:Error)
+			{
+			    trace("Failed:", error.message);
+			}
+			
+			function fileSelected(event:Event):void 
+			{
+			    var stream:FileStream = new FileStream();
+			    stream.open(event.target as File, FileMode.READ);
+			    var fileData:String = stream.readUTFBytes(stream.bytesAvailable);
+			    trace(fileData);
+			}
+		}
+
 	
 	]]>
 </mx:Script>
@@ -262,6 +431,18 @@
 	</mx:Canvas>
 	
 	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373"/>
+		 <mx:HBox >
+			<mx:Button label="Creat product XML" click="{creatProductXML()}"
+						color="#FFFFFF" 	fillColors="#333333" 
+			    		 textSelectedColor="#FFFFFF" cornerRadius="1"
+			    		  borderColor="#999999" themeColor="#656565" 
+			    		  textRollOverColor="#FFFFFF"/>
+			 <!--    		  
+			<mx:ProgressBar id="progressBar" labelPlacement="top" themeColor="#F20D7A"
+	            minimum="0" visible="true" maximum="100" label="CurrentProgress 0%" 
+	            direction="right" mode="manual" width="100%"/>
+	          -->
+		 </mx:HBox>
 	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c"/>
 	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
 		<mx:VBox height="100%" minWidth="220" horizontalScrollPolicy="off">
@@ -279,6 +460,7 @@
 			</mx:HBox>
 			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="true"
 				labelField="@title"  dragEnabled="true" dropEnabled="true"  
+				
 				change="{treeChangeHandler(event)}"  dragMoveEnabled="true" 	
 				folderOpenIcon="@Embed('../assets/open_folder.png')" 
 				folderClosedIcon="@Embed('../assets/close_folder.png')"
@@ -305,15 +487,16 @@
 						<mx:VBox width="100%"  
 							paddingTop="3" paddingLeft="3" paddingBottom="3">
 							<mx:HBox  >
-								<mx:Label text="Title: title"/>
-								<mx:Label text=" v.5"  />
-								<mx:Label text="(name)"/>
+								<mx:Label id="pageInformation" text="Title: title"/>
 							</mx:HBox>
-							<mx:HBox>
-								<mx:Label text="Description: descrioption"/>
+							<mx:HBox  >
+								<mx:Button label="H1" click="{addTag('h1' )}" />
+								<mx:Button label="BR" click="{addTag('br',false)}" />
+								<mx:Button label="img" click="{insertImage()}"/>
 							</mx:HBox>
 						</mx:VBox>	
 						<mx:Button label="..."  bottom="0" />
+						<mx:Button label="Save" toolTip="Save page"  bottom="0" click="{savePage()}"/>
 				</mx:HBox>
 					<mx:TextArea id="htmlSource" width="100%" height="100%" /> 
 				</mx:VBox>
