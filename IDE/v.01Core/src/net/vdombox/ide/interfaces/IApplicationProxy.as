@@ -1,8 +1,10 @@
 package net.vdombox.ide.interfaces
 {
+	import net.vdombox.ide.model.vo.PageVO;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 
-	public interface IApplicationProxie extends IProxy
+	public interface IApplicationProxy extends IProxy
 	{
 		function get id() : String;
 		function get information() : XML;
@@ -14,7 +16,7 @@ package net.vdombox.ide.interfaces
 		function deletePage( pageVO : PageVO ) : void;
 		function deletePageAt( pageID : String ) : void;
 		function getPageAt( pageID : String ) : PageVO;
-		function getPageProxie( pageVO : PageVO );
-		function getPageProxieAt( pageID : String );
+		function getPageProxie( pageVO : PageVO ) : IPageProxy;
+		function getPageProxieAt( pageID : String ) : IPageProxy;
 	}
 }
