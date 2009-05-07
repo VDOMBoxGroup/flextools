@@ -11,8 +11,8 @@ package net.vdombox.ide.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var attributes : Array = notification.getBody() as Array;
-			var applicationProxy : ApplicationProxy = facade.retrieveProxy( "ApplicationProxy" ) as ApplicationProxy;
-			applicationProxy.attributes = attributes;
+//			var applicationProxy : ApplicationProxy = facade.retrieveProxy( "ApplicationProxy" ) as ApplicationProxy;
+//			applicationProxy.attributes = attributes;
 		}
 	}
 }

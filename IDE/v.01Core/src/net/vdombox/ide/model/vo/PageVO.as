@@ -7,5 +7,7 @@ package net.vdombox.ide.model.vo
 		{
 
 		}
+		
+		public var id : String;
 	}
 }
