@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox 
-	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:containers="net.vdombox.ide.view.containers.*"
-	xmlns:controls="net.vdombox.ide.view.controls.*" xmlns:components="net.vdombox.ide.view.components.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:containers="net.vdombox.ide.view.containers.*"
+	xmlns:controls="net.vdombox.ide.view.controls.*"
+	xmlns:components="net.vdombox.ide.view.components.*"
 	
 	verticalGap="0">
 	<mx:Style>
@@ -39,12 +41,16 @@
 			id="mainViewStack"
 			
 			height="100%" styleName="vdomLogo" width="100%"/>
-		<mx:List 
-			id="applicationsList"
-			
-			itemRenderer="net.vdombox.ide.view.controls.ApplicationItemRenderer"
-			width="300"
-			
-			backgroundAlpha=".1" borderStyle="none" height="100%"/>
+		<mx:Canvas 
+			height="100%">
+			<controls:SmoothScrollingList 
+				id="applicationsList"
+				
+				itemRenderer="net.vdombox.ide.view.controls.ApplicationItemRenderer"
+				width="300"
+				
+				backgroundAlpha=".1" borderStyle="none"
+				variableRowHeight="true" height="100%"/>
+		</mx:Canvas>
 	</mx:HBox>
 </mx:VBox>
