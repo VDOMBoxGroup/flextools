@@ -8,6 +8,7 @@ package net.vdombox.ide.model.business
 	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+	import mx.rpc.AsyncToken;
 	import mx.rpc.Fault;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
@@ -56,14 +57,14 @@ package net.vdombox.ide.model.business
 			ws.loadWSDL();
 		}
 
-		public function login( login : String, password : String ) : *
+		public function login( login : String, password : String ) : AsyncToken
 		{
 			var password : String = MD5Utils.encrypt( password );
 
 			ws.open_session.addEventListener( ResultEvent.RESULT, loginCompleteHandler );
 			ws.open_session.addEventListener( FaultEvent.FAULT, loginErrorHandler );
 
-			ws.open_session( login, password );
+			return ws.open_session( login, password );
 		}
 
 		override flash_proxy function getProperty( name : * ) : *
@@ -89,12 +90,15 @@ package net.vdombox.ide.model.business
 			var functionName : String = getLocalName( name );
 			var operation : Operation = ws[ functionName ];
 			var key : String = code.skey();
-
+			var token : AsyncToken;
+			
 			args.unshift( code.sessionId, key );
 			operation.addEventListener( ResultEvent.RESULT, operationResultHandler );
 			operation.xmlSpecialCharsFilter = escapeXML;
-			operation.send.apply( null, args );
-			return key;
+			
+			token = operation.send.apply( null, args );
+			token.key = key;
+			return token;
 		}
 
 		private function escapeXML( value : Object ) : String

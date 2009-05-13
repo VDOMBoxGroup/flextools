@@ -1,5 +1,7 @@
 package net.vdombox.ide.model
 {
+	import mx.rpc.AsyncToken;
+	
 	import net.vdombox.ide.events.SOAPErrorEvent;
 	import net.vdombox.ide.events.SOAPEvent;
 	import net.vdombox.ide.model.business.SOAP;
@@ -7,7 +9,6 @@ package net.vdombox.ide.model
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-
 	public class ServerProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ServerProxy";
