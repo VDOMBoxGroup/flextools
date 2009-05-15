@@ -1,5 +1,6 @@
 package net.vdombox.ide.controller
 {
+	import net.vdombox.ide.model.ApplicationProxy;
 	import net.vdombox.ide.model.ResourceProxy;
 	import net.vdombox.ide.model.TypeProxy;
 	
@@ -10,10 +11,11 @@ package net.vdombox.ide.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
+			facade.registerProxy( new ResourceProxy() );
+			facade.registerProxy( new ApplicationProxy() );
+			
 			var typeProxy : TypeProxy = new TypeProxy();
 			facade.registerProxy( typeProxy );
-			facade.registerProxy( new ResourceProxy() );
-			
 			typeProxy.load();
 		}
 	}

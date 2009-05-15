@@ -4,7 +4,7 @@ package net.vdombox.ide.model
 	import net.vdombox.ide.interfaces.IPageProxy;
 	import net.vdombox.ide.model.business.SOAP;
 	import net.vdombox.ide.model.vo.PageVO;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy implements IApplicationProxy
@@ -20,8 +20,10 @@ package net.vdombox.ide.model
 		private var _inormation : XML;
 
 		private var _selectedPage : PageVO;
-		
+
 		private var soap : SOAP = SOAP.getInstance();
+
+		private var serverProxy : ServerProxy;
 
 		public function get id() : String
 		{
@@ -46,9 +48,14 @@ package net.vdombox.ide.model
 				return null;
 		}
 
+		override public function onRegister() : void
+		{
+			init();
+		}
+
 		public function load( applicationID : String ) : void
 		{
-			
+			var dummy : * = ""; // FIXME remove dummy
 		}
 
 		public function createPage( pageID : String ) : PageVO
@@ -77,6 +84,11 @@ package net.vdombox.ide.model
 		public function getPageProxieAt( pageID : String ) : IPageProxy
 		{
 			return null;
+		}
+
+		private function init() : void
+		{
+			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 		}
 	}
 }

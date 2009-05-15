@@ -1,18 +1,18 @@
 package net.vdombox.ide.model
 {
-	import mx.rpc.AsyncToken;
-	
 	import net.vdombox.ide.events.SOAPErrorEvent;
 	import net.vdombox.ide.events.SOAPEvent;
 	import net.vdombox.ide.model.business.SOAP;
+	import net.vdombox.ide.model.vo.ApplicationVO;
 	import net.vdombox.ide.model.vo.AuthInfo;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
+
 	public class ServerProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ServerProxy";
-		
+
 		public static const LOGIN_COMPLETE : String = "Login Complete";
 		public static const CONNECT_COMPLETE : String = "Connect Complete";
 
@@ -32,18 +32,18 @@ package net.vdombox.ide.model
 
 		private var tempAuthInfo : AuthInfo;
 		private var _authInfo : AuthInfo;
-		private var _applicationList : XML;
+		private var _applications : Array;
 
 		public function get authInfo() : AuthInfo
 		{
 			return _authInfo;
 		}
-		
-		public function get applicationList() : XML
+
+		public function get applications() : Array
 		{
-			return _applicationList;
+			return _applications;
 		}
-		
+
 		public function connect( authInfo : AuthInfo ) : void
 		{
 			connected = false;
@@ -51,11 +51,26 @@ package net.vdombox.ide.model
 			soap.init( authInfo.WSDLFilePath );
 		}
 
+		public function getApplicationProxy( applicationID : String ) : void
+		{
+
+		}
+
 		private function addEventListeners() : void
 		{
 			soap.addEventListener( SOAPEvent.INIT_COMPLETE, soap_initCompleteHandler );
 			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
 			soap.addEventListener( SOAPErrorEvent.LOGIN_ERROR, soap_loginErrorHandler );
+		}
+
+		private function createApplicationList( applications : XML ) : void
+		{
+			_applications = [];
+			
+			for each( var application : XML in applications.* )
+			{
+				_applications.push( new ApplicationVO( application ) );
+			}
 		}
 
 		private function soap_initCompleteHandler( event : SOAPEvent ) : void
@@ -79,7 +94,7 @@ package net.vdombox.ide.model
 
 		private function soap_listApplicationsHandler( event : SOAPEvent ) : void
 		{
-			_applicationList = event.result.Applications[0];
+			createApplicationList( event.result.Applications[ 0 ] );
 			sendNotification( CONNECT_COMPLETE );
 		}
 
