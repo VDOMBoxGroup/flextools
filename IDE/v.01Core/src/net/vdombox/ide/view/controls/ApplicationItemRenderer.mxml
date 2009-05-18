@@ -7,41 +7,33 @@
 	color="#FFFFFF">
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.ide.interfaces.IApplicationVO;
 			import net.vdombox.ide.events.ApplicationItemRendererEvent;
 			public static const ICON_CHANGED : String = "icon changed";
 
 			override public function set data( value : Object ) : void
 			{
+				var applicationVO : IApplicationVO = value as IApplicationVO;
+
+				if ( !applicationVO )
+					return;
+
 				var currentIconID : String;
 				var newIconID : String;
 
-				try
-				{
-					appName.text = value.Information.Name[ 0 ];
-					appDesc.text = value.Information.Description[ 0 ];
-				}
-				catch ( error : Error )
-				{
 
-				}
+				appName.text = applicationVO.name;
+				appDesc.text = applicationVO.description;
 
 				try
 				{
-					if ( data )
-						currentIconID = data.Information.Icon[ 0 ];
+					currentIconID = data.iconID;
 				}
 				catch ( error : Error )
 				{
 				}
 
-				try
-				{
-					if ( value )
-						newIconID = value.Information.Icon[ 0 ];
-				}
-				catch ( error : Error )
-				{
-				}
+				newIconID = applicationVO.iconID;
 
 				super.data = value;
 
@@ -52,6 +44,20 @@
 					aire.iconID = newIconID;
 					dispatchEvent( aire );
 				}
+			}
+
+			public function get applicationID() : String
+			{
+				var applicatioID : String;
+
+				try
+				{
+					applicatioID = data.id;
+				}
+				catch ( error : Error )
+				{
+				}
+				return applicatioID;
 			}
 		]]>
 	</mx:Script>
@@ -65,13 +71,16 @@
 		<mx:Label 
 			id="appName"
 			
-			text="Sample application #1" truncateToFit="true" width="100%" y="10"
+			text="Sample application #1" truncateToFit="true" width="100%"
+			y="10"
 			
-			fontFamily="Tahoma" fontSize="12" fontWeight="bold" left="120" right="10"/>
+			fontFamily="Tahoma" fontSize="12" fontWeight="bold" left="120"
+			right="10"/>
 		<mx:Text 
 			id="appDesc"
 			
-			height="50" text="This application is only example and does not work at all. Please do not delete or change this application!"
+			height="50"
+			text="This application is only example and does not work at all. Please do not delete or change this application!"
 			truncateToFit="true" width="100%"
 			
 			left="120"/>

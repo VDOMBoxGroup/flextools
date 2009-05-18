@@ -2,6 +2,7 @@ package net.vdombox.ide.model
 {
 	import net.vdombox.ide.events.SOAPErrorEvent;
 	import net.vdombox.ide.events.SOAPEvent;
+	import net.vdombox.ide.interfaces.IApplicationVO;
 	import net.vdombox.ide.model.business.SOAP;
 	import net.vdombox.ide.model.vo.ApplicationVO;
 	import net.vdombox.ide.model.vo.AuthInfo;
@@ -27,12 +28,9 @@ package net.vdombox.ide.model
 
 		private var soap : SOAP = SOAP.getInstance();
 
-//		private var registeredHandlers : Array = [ { methodName: "list_applications", handlerName: "soap_listApplicationsHandler" },
-//												   { methodName: "get_all_types", handlerName: "soap_getAllTypesHandler" } ]
-
 		private var tempAuthInfo : AuthInfo;
 		private var _authInfo : AuthInfo;
-		private var _applications : Array;
+		private var listOfApplications : Object;
 
 		public function get authInfo() : AuthInfo
 		{
@@ -41,6 +39,12 @@ package net.vdombox.ide.model
 
 		public function get applications() : Array
 		{
+			var _applications : Array = [];
+			
+			for each( var applicationVO : IApplicationVO in listOfApplications )
+			{
+				_applications.push( applicationVO );
+			}
 			return _applications;
 		}
 
@@ -51,9 +55,17 @@ package net.vdombox.ide.model
 			soap.init( authInfo.WSDLFilePath );
 		}
 
-		public function getApplicationProxy( applicationID : String ) : void
+		public function getApplicationProxy( applicationID : String ) : ApplicationProxy
 		{
-
+			if( listOfApplications[ applicationID ] )
+			{
+			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME ) as
+				ApplicationProxy;
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		private function addEventListeners() : void
@@ -65,11 +77,16 @@ package net.vdombox.ide.model
 
 		private function createApplicationList( applications : XML ) : void
 		{
-			_applications = [];
-			
-			for each( var application : XML in applications.* )
+			listOfApplications = {};
+
+			for each ( var application : XML in applications.* )
 			{
-				_applications.push( new ApplicationVO( application ) );
+				var applicationVO : IApplicationVO = new ApplicationVO( application );
+				
+				if ( !applicationVO.id )
+					continue;
+					
+				listOfApplications[ applicationVO.id ] = applicationVO;
 			}
 		}
 

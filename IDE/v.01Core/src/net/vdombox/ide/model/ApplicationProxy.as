@@ -4,7 +4,7 @@ package net.vdombox.ide.model
 	import net.vdombox.ide.interfaces.IPageProxy;
 	import net.vdombox.ide.model.business.SOAP;
 	import net.vdombox.ide.model.vo.PageVO;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy implements IApplicationProxy

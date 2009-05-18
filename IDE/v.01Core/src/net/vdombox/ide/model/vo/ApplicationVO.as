@@ -1,11 +1,29 @@
 package net.vdombox.ide.model.vo
 {
+	import net.vdombox.ide.interfaces.IApplicationVO;
+	
 
-	public class ApplicationVO
+	public class ApplicationVO implements IApplicationVO
 	{
 		public function ApplicationVO( application : XML )
-		{
-			var dummy : * = ""; // FIXME remove dummy
+		{	
+			if( !application )
+				return;
+			
+			var information : XML = application.Information[ 0 ];
+			
+			if( !information )
+				return;
+			
+			_id = information.Id[ 0 ];
+			_name = information.Name[ 0 ];
+			_description = information.Description[ 0 ];
+			_serverVersion = information.ServerVersion[ 0 ];
+			_iconID = information.Icon[ 0 ];
+			_indexPageID = information.Index[ 0 ];
+			_numberOfPages = information.Numberofpages[ 0 ];
+			_numberOfObjects = information.Numberofobjects[ 0 ];
+			_scriptingLanguage = information.ScriptingLanguage[ 0 ];
 		}
 
 		private var _id : String
@@ -14,7 +32,7 @@ package net.vdombox.ide.model.vo
 		private var _serverVersion : String
 		private var _iconID : String
 		private var _indexPageID : String
-		private var _numberOfPage : int
+		private var _numberOfPages : int
 		private var _numberOfObjects : int
 		private var _scriptingLanguage : String
 
@@ -48,9 +66,9 @@ package net.vdombox.ide.model.vo
 			return _indexPageID;
 		}
 
-		public function get numberOfPage() : int
+		public function get numberOfPages() : int
 		{
-			return _numberOfPage;
+			return _numberOfPages;
 		}
 
 		public function get numberOfObjects() : int

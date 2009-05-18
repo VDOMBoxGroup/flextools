@@ -1,10 +1,13 @@
 package net.vdombox.ide.view
 {
 	import flash.events.Event;
-	
+
+	import mx.collections.ArrayCollection;
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.controls.List;
 	import mx.events.ListEvent;
-	
+
 	import net.vdombox.ide.events.ApplicationItemRendererEvent;
 	import net.vdombox.ide.interfaces.IResource;
 	import net.vdombox.ide.model.ApplicationProxy;
@@ -13,7 +16,7 @@ package net.vdombox.ide.view
 	import net.vdombox.ide.model.ServerProxy;
 	import net.vdombox.ide.view.components.ApplicationsManagment;
 	import net.vdombox.ide.view.controls.ApplicationItemRenderer;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
@@ -44,7 +47,6 @@ package net.vdombox.ide.view
 			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
 			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			resourceProxy = facade.retrieveProxy( ResourceProxy.NAME ) as ResourceProxy;
-			applicationProxy = facade.retrieveProxy( ApplicationProxy.NAME ) as ApplicationProxy;
 
 			var applicationsList : List = applicationsManagment.applicationsList;
 			applicationsList.addEventListener( ApplicationItemRenderer.ICON_CHANGED,
@@ -53,7 +55,12 @@ package net.vdombox.ide.view
 
 			applicationsList.addEventListener( ListEvent.CHANGE, applicationList_changeHandler );
 
-			applicationsList.dataProvider = serverProxy.applications.* + serverProxy.applications.*
+			var applications : ArrayCollection = new ArrayCollection( serverProxy.applications );
+			var sort : Sort = new Sort();
+			sort.fields = [ new SortField( "name" ) ];
+			applications.sort = sort;
+			applications.refresh();
+			applicationsList.dataProvider = applications;
 		}
 
 		private function applicationItemRenderer_iconChanged( event : ApplicationItemRendererEvent ) : void
@@ -85,9 +92,9 @@ package net.vdombox.ide.view
 		private function applicationList_changeHandler( event : ListEvent ) : void
 		{
 			var itemRenderer : ApplicationItemRenderer = event.itemRenderer as ApplicationItemRenderer;
-			var applicationID : String = itemRenderer.data.@ID[0];
-			
-			applicationProxy.load( applicationID );
+			var applicationID : String = itemRenderer.applicationID;
+
+			var applicationProxy : ApplicationProxy = serverProxy.getApplicationProxy( applicationID );
 		}
 	}
 }
