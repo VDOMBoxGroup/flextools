@@ -1,22 +1,23 @@
 package net.vdombox.ide.view
 {
 	import flash.events.Event;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
 	import mx.controls.List;
 	import mx.events.ListEvent;
-
+	
 	import net.vdombox.ide.events.ApplicationItemRendererEvent;
 	import net.vdombox.ide.interfaces.IResource;
 	import net.vdombox.ide.model.ApplicationProxy;
 	import net.vdombox.ide.model.LocaleProxy;
 	import net.vdombox.ide.model.ResourceProxy;
 	import net.vdombox.ide.model.ServerProxy;
+	import net.vdombox.ide.model.vo.ApplicationVO;
 	import net.vdombox.ide.view.components.ApplicationsManagment;
 	import net.vdombox.ide.view.controls.ApplicationItemRenderer;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
@@ -92,9 +93,9 @@ package net.vdombox.ide.view
 		private function applicationList_changeHandler( event : ListEvent ) : void
 		{
 			var itemRenderer : ApplicationItemRenderer = event.itemRenderer as ApplicationItemRenderer;
-			var applicationID : String = itemRenderer.applicationID;
+			var applicationVO : ApplicationVO = itemRenderer.data as ApplicationVO;
 
-			var applicationProxy : ApplicationProxy = serverProxy.getApplicationProxy( applicationID );
+			serverProxy.selectedApplication = applicationVO;
 		}
 	}
 }

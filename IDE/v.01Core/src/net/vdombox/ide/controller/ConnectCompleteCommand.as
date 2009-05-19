@@ -12,7 +12,6 @@ package net.vdombox.ide.controller
 		override public function execute( notification : INotification ) : void
 		{
 			facade.registerProxy( new ResourceProxy() );
-			facade.registerProxy( new ApplicationProxy() );
 			
 			var typeProxy : TypeProxy = new TypeProxy();
 			facade.registerProxy( typeProxy );

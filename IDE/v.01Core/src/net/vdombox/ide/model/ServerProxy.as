@@ -30,6 +30,7 @@ package net.vdombox.ide.model
 
 		private var tempAuthInfo : AuthInfo;
 		private var _authInfo : AuthInfo;
+		private var _selectedApplication : ApplicationVO;
 		private var listOfApplications : Object;
 
 		public function get authInfo() : AuthInfo
@@ -40,14 +41,27 @@ package net.vdombox.ide.model
 		public function get applications() : Array
 		{
 			var _applications : Array = [];
-			
-			for each( var applicationVO : IApplicationVO in listOfApplications )
+
+			for each ( var applicationVO : IApplicationVO in listOfApplications )
 			{
 				_applications.push( applicationVO );
 			}
 			return _applications;
 		}
-
+		
+		public function get selectedApplication() : ApplicationVO
+		{
+			return _selectedApplication;
+		}
+		
+		public function set selectedApplication( value : ApplicationVO ) : void
+		{
+			if( listOfApplications[ value.id ] )
+			{
+				_selectedApplication = value;
+			}
+		}
+		
 		public function connect( authInfo : AuthInfo ) : void
 		{
 			connected = false;
@@ -57,17 +71,28 @@ package net.vdombox.ide.model
 
 		public function getApplicationProxy( applicationID : String ) : ApplicationProxy
 		{
-			if( listOfApplications[ applicationID ] )
-			{
-			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME ) as
+			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME +
+																			"." +
+																			applicationID ) as
 				ApplicationProxy;
-			}
-			else
-			{
-				return null;
-			}
-		}
 
+			if ( !applicationProxy )
+			{
+				var applicationVO : ApplicationVO = listOfApplications[ applicationID ];
+
+				if ( applicationVO )
+				{
+					applicationProxy = new ApplicationProxy( ApplicationProxy.NAME +
+															 "." + applicationID,
+															 applicationVO );
+					facade.registerProxy( applicationProxy );
+				}
+			}
+
+			return applicationProxy;
+
+		}
+		
 		private function addEventListeners() : void
 		{
 			soap.addEventListener( SOAPEvent.INIT_COMPLETE, soap_initCompleteHandler );
@@ -82,10 +107,10 @@ package net.vdombox.ide.model
 			for each ( var application : XML in applications.* )
 			{
 				var applicationVO : IApplicationVO = new ApplicationVO( application );
-				
+
 				if ( !applicationVO.id )
 					continue;
-					
+
 				listOfApplications[ applicationVO.id ] = applicationVO;
 			}
 		}

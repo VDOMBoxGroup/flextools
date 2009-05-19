@@ -3,6 +3,7 @@ package net.vdombox.ide.model
 	import net.vdombox.ide.interfaces.IApplicationProxy;
 	import net.vdombox.ide.interfaces.IPageProxy;
 	import net.vdombox.ide.model.business.SOAP;
+	import net.vdombox.ide.model.vo.ApplicationVO;
 	import net.vdombox.ide.model.vo.PageVO;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -11,13 +12,10 @@ package net.vdombox.ide.model
 	{
 		public static const NAME : String = "ApplicationProxy";
 
-		public function ApplicationProxy( data : Object = null )
+		public function ApplicationProxy( proxyName : String, data : Object = null )
 		{
-			super( NAME, data );
+			super( proxyName, data );
 		}
-
-		private var _id : String;
-		private var _inormation : XML;
 
 		private var _selectedPage : PageVO;
 
@@ -27,12 +25,12 @@ package net.vdombox.ide.model
 
 		public function get id() : String
 		{
-			return _id;
+			return applicationVO.id;
 		}
 
-		public function get information() : XML
+		public function get information() : ApplicationVO
 		{
-			return _inormation;
+			return applicationVO;
 		}
 
 		public function get selectedPage() : PageVO
@@ -47,12 +45,7 @@ package net.vdombox.ide.model
 			else
 				return null;
 		}
-
-		override public function onRegister() : void
-		{
-			init();
-		}
-
+		
 		public function load( applicationID : String ) : void
 		{
 			var dummy : * = ""; // FIXME remove dummy
@@ -85,10 +78,10 @@ package net.vdombox.ide.model
 		{
 			return null;
 		}
-
-		private function init() : void
+		
+		private function get applicationVO() : ApplicationVO
 		{
-			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			return data as ApplicationVO;
 		}
 	}
 }
