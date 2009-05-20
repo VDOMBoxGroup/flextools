@@ -19,6 +19,9 @@
 	</mx:Style>
 	<mx:Script>
 	<![CDATA[
+		import mx.utils.Base64Encoder;
+		import mx.utils.Base64Decoder;
+		import mx.utils.UIDUtil;
 		import mx.controls.Alert;
 		import mx.events.ListEvent;
 		import mx.events.CloseEvent;
@@ -34,12 +37,13 @@
 		 * - прогресс бар
 		 * + вывести на экран сообщение о том куда и покаким именем сохранен файл
 		 * 
-		 * - выбрать картинку
-		 * - скопировать ее в кэшь
-		 * - добавить в базу данных
-		 * - вставить в текст кода странички
+		 * + выбрать картинку
+		 * + скопировать ее в кэшь
+		 * + вставить в текст кода странички
 		 * 
-		 * - экспортировать картинки в хмл 
+		 * = экспортировать картинки в хмл
+		 * 	+ по странично выбрать  список ресурсов странички
+		 *  + вставить ресурс в хмл
 		 * 
 		 * 
 		 */
@@ -66,6 +70,7 @@
 			}
 			
 			getCurrentPage();
+			htmlShowHandler();
 		}
 		private function getCurrentPage():void
 		{	
@@ -96,38 +101,13 @@
 			var fileName:String = pageName	;
 			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
 			var fullPath : String = newFile.url;
-			var f : File = File.applicationStorageDirectory; 
+//			var f : File = File.applicationStorageDirectory; 
 			html.location = fullPath; 
 		}
 		
 		
-		private var arrayOfPages:Array = new Array();
-		private function pageChangedHandler(event:Event):void
-		{
-			var fullPath:String = html.location;
-			var fileName : String = fullPath.substr( 13 ); 
-			var phraseRE:RegExp = /\\/gim;
-			fileName = fileName.replace(phraseRE,"/"); 
+//		private var arrayOfPages:Array = new Array();
 
-			
-			
-			if(!tree.selectedItem)
-				return;
-			var selectedItem:String = tree.selectedItem.@name;
-			
-			if(selectedItem == fileName)
-				return;
-			
-			if(arrayOfPages[fileName])
-			{
-				selectNecessaryItem(fileName);
-			}else
-			{
-				navigateToURL(new URLRequest(fullPath));
-				showSelectedPage(selectedItem);
-			}
-		}
-		
 		private function selectNecessaryItem(fileName:String):void
 		{
 			var currentElement:XML = tree.dataProvider.source..page.(@name == fileName)[0]; // tree.dataProvider.source..page.(@name == fileName)[0];
@@ -139,12 +119,6 @@
 				tree.validateNow();
 			}
 			
-//			tree.selectedItem = currentElement;
-			
-//			var index:int =  tree.getItemIndex(tree.selectedItem);
-//			tree.scrollToIndex(index);
-			
-//			findDistanition(fileName);
 		}
 		
 		private function openTree(item:Object):void
@@ -152,7 +126,6 @@
 			var parentItem:Object = XML(item).parent();
 			if (parentItem)
 			{
-//				distan.text = item.@title +' \\ '+  distan.text;
 				openTree(parentItem);
 				tree.expandItem(parentItem, true, false);
 				tree.validateNow();
@@ -234,24 +207,6 @@
 						tree.selectedIndex = selectedIndex - 1;
 
 			}
-			/*
-			if(tree.selectedItem)
-			{
-				if( toc.getItemIndex(tree.selectedItem) == -1)
-				{
-					delete tree.dataProvider.source..page.(@name == tree.selectedItem.@name)[0];
-					toc = XML(tree.dataProvider);
-				}
-				else
-				{
-					toc.removeItemAt(toc.getItemIndex(tree.selectedItem));
-
-					tree.dataProvider = null;
-					tree.validateNow();
-					tree.dataProvider = toc;
-				}
-			}
-			*/	
 		}
 		
 		private function productEdit():void
@@ -323,45 +278,106 @@
 		private function creatProductXML():void
 		{
 			var result :Object = sqlProxy.getLastPage(cmboxProduct.selectedItem.name, "en_US");
-//			пробегаемся по дереву строим новую хмл
-//			по ходу делаем хмл для каждой странички
+			
 			var product:XML = new XML("<product/>");
 				product.name = cmboxProduct.selectedItem.name;
 				product.version = "777";
 				product.title = cmboxProduct.selectedItem.title;
 				product.description = "";
 				product.language = "en_US";
+				
+//			пробегаемся по дереву строим новую хмл
+			var tocXML : XML = new XML("<toc/>");
+			var tocString : String = tree.dataProvider.toString();
+			var regExp : RegExp	= /isBranch="true"/gim ;
+			
+			tocXML.appendChild(XML(tocString.replace(regExp,' ')));
+			
+			product.appendChild(tocXML);
+			
+//			trace()
+//			по ходу делаем хмл для каждой странички
 			
 			var	pages : XML = new XML("<pages/>");
 			var length : Number = Number(result.length);
 //			progressBar.setProgress(0,100);
-			
+			var guidRegExp : RegExp  = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-Z0-9]{12}\.[A-Z]{3}\b/gim;
 			
 			for (var i:String in result)
 			{
+				var pageContent : String = result[i]["content"]
+				
 				var tempXML : XML = new XML("<page/>");
 					tempXML.name = result[i]["name"];
 					tempXML.version = result[i]["version"];
 					tempXML.title = result[i]["title"];
 					tempXML.description = result[i]["description"];
-					tempXML.content = XML("<![CDATA[" + 
+
+					var content : XML = XML("<content/>"); 
+					content.appendChild( XML("<![CDATA[" + 
 											"<html>" + 
 												"<head>" + 
 													"<script src='app-storage:/searchhi_slim.js'/>" +
 													"<link rel='stylesheet' href='app-storage:/main.css' type='text/css' />"+
 												"</head>" +
 												"<body>"+
-													result[i]["content"] +
+													pageContent +
 												"</body>" +
 											"<html>" +		
-						"]"+ "]>");
+						"]"+ "]>"));
+					
+					tempXML.appendChild(content);
+				
+//				****  get resources ****		
+				var pagesResources : Array = pageContent.match(guidRegExp);
+				var resources : XML = new XML("<resources/>");
+				for (var j:String in pagesResources)
+				{
+					var resource : XML = new XML("<resource/>");
+					var resourceName : String = pagesResources[j];
+					
+					resource.@id = resourceName.substr(0,36);
+					resource.@type = resourceName.substr(37,3);
+					resource.appendChild(getResoucesCDATA(resourceName));
+					resources.appendChild(resource);
+				} 
+				
+				tempXML.appendChild(resources);
 				
 				pages.appendChild(tempXML);
 				
-				trace(i);
-				var progress : Number = Number(i)* 100/length;
+//				trace("--------");
+				
+//				var progress : Number = Number(i)* 100/length;
 //				progressBar.setProgress(progress , 100);
 //				progressBar.label = progress.toString();
+
+				function getResoucesCDATA(fileName:String):XML
+				{
+					var location:File = File.applicationStorageDirectory.resolvePath("resources/"+fileName);
+					var fileStream:FileStream = new FileStream();
+//					var location : File = new File(docsDir.url +"/"+ fileName + ".xml");
+					
+					try
+					{
+						var byteArr : ByteArray = new ByteArray();
+						var base64:Base64Encoder = new Base64Encoder(); 
+				  		
+				  		fileStream.open( location, FileMode.READ);
+				  		fileStream.readBytes(byteArr);
+						fileStream.close(); 
+						
+						base64.encodeBytes(byteArr);
+						trace("------------------");
+						var sourse : String =  base64.toString();
+					}
+					catch (error:Error)
+					{
+						Alert.show( error.message, "Failed:");
+					}
+					
+					return XML("<![CDATA[" + sourse +"]"+ "]>");
+				}
 			}
 			
 			product.appendChild(pages);
@@ -385,10 +401,10 @@
 			}
 		}
 		
+		private var fileToOpen:File = File.documentsDirectory;
 		private function insertImage():void
 		{
 //			var docsDir:File = File.documentsDirectory;
-			var fileToOpen:File = File.documentsDirectory;;
 			var txtFilter:FileFilter = new FileFilter("Image (*.jpg; *.png; *,bmp) ", "*.img;*.jpg;*.bmp;*.png");
 			
 			try 
@@ -403,10 +419,77 @@
 			
 			function fileSelected(event:Event):void 
 			{
+				var srcBytes : ByteArray = new ByteArray();
 			    var stream:FileStream = new FileStream();
 			    stream.open(event.target as File, FileMode.READ);
-			    var fileData:String = stream.readUTFBytes(stream.bytesAvailable);
-			    trace(fileData);
+//			    var fileData:String = stream.readUTFBytes(stream.bytesAvailable);
+			    
+			    stream.readBytes( srcBytes, 0, stream.bytesAvailable );
+				stream.close();
+				
+				dataManipulation(event.target.type, srcBytes);
+			}
+		}
+		
+		private function dataManipulation(type:String, srcBytes:ByteArray):void
+		{
+			// generate new file name
+			var newName : String = "resources/" + UIDUtil.createUID() + type;
+			
+			insertImageCode(newName);
+			saveFile(newName, srcBytes);
+			
+		}
+		
+		private function insertImageCode(newName:String):void
+		{
+			var resoultText : String = htmlSource.text.substring( 0, htmlSource.selectionBeginIndex) 
+					+ " <img src='"+newName+"'/> "
+					+ htmlSource.text.substring(htmlSource.selectionBeginIndex);
+			
+			
+			htmlSource.text = resoultText;		
+			htmlSource.setFocus();
+		}
+		
+		// save file to folder
+		public function saveFile(contentName:String, content:ByteArray):void 
+		{
+			var newFileName:String = contentName;
+			var newFile:File = File.applicationStorageDirectory.resolvePath(newFileName);
+			var fileStream:FileStream = new FileStream();
+
+			try {
+				fileStream.open(newFile, FileMode.WRITE);
+				fileStream.writeBytes(content);
+				fileStream.close();
+				
+			} catch(error:IOError) {
+//				var er:* =  error;
+				trace("!!!!!!!!!!!!!!!! Error Write !!!!!!!!!!!!!!! \n" + error.message +"\n"+newFileName);
+				return;
+			}
+		}
+		
+		private function htmlShowHandler():void
+		{
+//			trace("::htmlShowHandler::");
+			var fileName:String = "temp.html"	;
+			var content : ByteArray = new ByteArray();
+				
+			content.writeUTF(htmlSource.text);
+			
+			saveFile(fileName, content );
+			
+			
+			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
+			
+			var fullPath : String = newFile.url;
+//			var f : File = File.applicationStorageDirectory; 
+			if(html)
+			{
+				html.location = fullPath; 
+				html.validateDisplayList();
 			}
 		}
 
@@ -501,10 +584,8 @@
 					<mx:TextArea id="htmlSource" width="100%" height="100%" /> 
 				</mx:VBox>
 			</mx:Canvas >
-			<mx:Canvas width="100%" height="100%" label="Preview">
-				
-			<mx:HTML id="html"  width="100%" height="100%" htmlText="{htmlSource.text}"
-				locationChange="{pageChangedHandler(event)}"/>
+			<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
+				<mx:HTML id="html"  width="100%" height="100%"  />
 			</mx:Canvas>
 		</mx:TabNavigator>
 	</mx:HDividedBox>
