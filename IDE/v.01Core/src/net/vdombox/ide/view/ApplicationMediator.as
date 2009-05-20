@@ -3,20 +3,25 @@ package net.vdombox.ide.view
 	import flash.desktop.NativeApplication;
 	import flash.display.NativeWindowInitOptions;
 	import flash.display.NativeWindowSystemChrome;
-
+	
+	import mx.core.ClassFactory;
 	import mx.core.Window;
-
+	
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.view.components.LoginForm;
 	import net.vdombox.ide.view.components.MainScreen;
+	import net.vdombox.ide.view.components.MainTitleBar;
 	import net.vdombox.ide.view.managers.PopUpWindowManager;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class ApplicationMediator extends Mediator implements IMediator
 	{
+		[Embed(source="/assets/login/logo.png")]
+		private var zzz:Class;
+		
 		public static const NAME : String = "ApplicationMediator";
 
 		public function ApplicationMediator( viewComponent : Object = null )
@@ -113,13 +118,22 @@ package net.vdombox.ide.view
 				windowOptions.maximizable = true;
 				windowOptions.minimizable = true;
 				windowOptions.transparent = true;
-
+				
+				
 				mainWindow = popUpWindowManager.addPopUp( mainScreen, "VDOM IDE - Login",
 														  null, false, null, windowOptions );
-
+				
 				mainWindow.showTitleBar = false;
+				
+				//mainWindow.rawChildren.removeChild( mainWindow.titleBar );
+				mainWindow.titleBarFactory = new ClassFactory( MainTitleBar );
+				
+				mainWindow.titleIcon  = zzz;
+				mainWindow.titleBar.height = 20;
+				
+				mainWindow.showTitleBar = true;
 				mainWindow.showGripper = false;
-				mainWindow.showStatusBar = false;
+				mainWindow.showStatusBar = true;
 
 				mainWindow.setStyle( "borderStyle", "none" );
 				mainWindow.setStyle( "backgroundAlpha", .0 );

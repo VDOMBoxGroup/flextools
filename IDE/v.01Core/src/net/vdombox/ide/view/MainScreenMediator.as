@@ -1,6 +1,7 @@
 package net.vdombox.ide.view
 {
 	import mx.collections.XMLListCollection;
+	import mx.core.Window;
 	import mx.events.FlexEvent;
 	import mx.events.ItemClickEvent;
 	import mx.resources.IResourceManager;
@@ -32,12 +33,12 @@ package net.vdombox.ide.view
 
 		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
 		private var modulesManagmentMediator : ModulesManagmentMediator;
-		
+
 		private function get mainScreen() : MainScreen
 		{
 			return viewComponent as MainScreen;
 		}
-		
+
 		override public function onRegister() : void
 		{
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
@@ -55,7 +56,7 @@ package net.vdombox.ide.view
 		{
 			applicationsManagmentMediator = new ApplicationsManagmentMediator( mainScreen.applicationsManagment );
 			facade.registerMediator( applicationsManagmentMediator );
-			
+
 			modulesManagmentMediator = new ModulesManagmentMediator( mainScreen.modulesManagment )
 			facade.registerMediator( modulesManagmentMediator );
 
@@ -85,12 +86,13 @@ package net.vdombox.ide.view
 			};
 
 			mainScreen.mainTabBar.dataProvider = tabs;
+			mainScreen.mainTabBar.selectedIndex = 0;
 		}
 
 		private function mainTabBar_itemClickHandler( event : ItemClickEvent ) : void
 		{
 			var categoryName : String = event.item.@name;
-			
+
 			if ( categoryName == "applicationManagment" )
 			{
 				mainScreen.componentsStack.selectedChild = mainScreen.applicationsManagment;

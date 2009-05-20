@@ -10,11 +10,13 @@ package net.vdombox.ide.view.managers
 	import flash.utils.Dictionary;
 	
 	import mx.core.Application;
+	import mx.core.ClassFactory;
 	import mx.core.EdgeMetrics;
 	import mx.core.UIComponent;
 	import mx.core.Window;
 	import mx.events.AIREvent;
 	
+	import net.vdombox.ide.view.components.MainTitleBar;
 	import net.vdombox.utils.ArrayUtils;
 	
 	public class PopUpWindowManager
@@ -97,7 +99,7 @@ package net.vdombox.ide.view.managers
 
 			window.visible = false;
 			window.title = title;
-			
+
 			window.addChild( puwd.content );
 
 			window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );

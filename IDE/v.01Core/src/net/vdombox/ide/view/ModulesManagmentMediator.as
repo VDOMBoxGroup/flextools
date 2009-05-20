@@ -71,7 +71,7 @@ package net.vdombox.ide.view
 		private function getModule() : void
 		{
 			if ( moduleList.length == 0 )
-			{
+			{	
 				var test : Array = [];
 				for each ( var item : * in loadedModules )
 				{
@@ -80,7 +80,10 @@ package net.vdombox.ide.view
 				modulesManagment.modulesButtonBar.dataProvider = test;
 				
 				modulesManagment.modulePlacement.removeAllChildren();
-				modulesManagment.modulePlacement.addChild( loadedModules[ 0 ] );
+				
+				if( loadedModules.length > 0 )
+					modulesManagment.modulePlacement.addChild( loadedModules[ 0 ] );
+				
 				return;
 			}
 
