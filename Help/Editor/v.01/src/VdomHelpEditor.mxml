@@ -474,21 +474,29 @@
 		private function htmlShowHandler():void
 		{
 //			trace("::htmlShowHandler::");
-			var fileName:String = "temp.html"	;
-			var content : ByteArray = new ByteArray();
-				
-			content.writeUTF(htmlSource.text);
-			
-			saveFile(fileName, content );
-			
-			
-			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
-			
-			var fullPath : String = newFile.url;
+//			var fileName:String = "temp.html"	;
+//			var content : ByteArray = new ByteArray();
+//			var sourse : String = 
+//				"<html>" + 
+//					"<head>" + 
+//					"</head>" + 
+//					"<body>" +
+//					  htmlSource.text + 
+//					"</body>"	;
+//				
+//			content.writeUTFBytes(sourse);
+//			
+//			saveFile(fileName, content);
+//			
+//			
+//			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
+//			
+//			var fullPath : String = newFile.url;
 //			var f : File = File.applicationStorageDirectory; 
 			if(html)
 			{
-				html.location = fullPath; 
+				html.htmlText = htmlSource.text ;
+//				html.location = fullPath; 
 				html.validateDisplayList();
 			}
 		}
@@ -585,7 +593,7 @@
 				</mx:VBox>
 			</mx:Canvas >
 			<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
-				<mx:HTML id="html"  width="100%" height="100%"  />
+				<mx:HTML id="html"   width="100%" height="100%"  />
 			</mx:Canvas>
 		</mx:TabNavigator>
 	</mx:HDividedBox>
