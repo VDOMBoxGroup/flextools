@@ -45,7 +45,11 @@
 		 * 	+ по странично выбрать  список ресурсов странички
 		 *  + вставить ресурс в хмл
 		 * 
-		 * 
+		 * -------------------
+		 * -создать загрузочную хмл
+		 * - изменение свойств страницы 
+		 * - дисаблить кнопку создания продукта
+		 * - 
 		 */
 		 
 		 
@@ -222,7 +226,13 @@
 		private function changeProduct():void
 		{
 			if(!cmboxProduct.selectedItem)
+			{
+				editProduct.label = "Add Product";
+				tree.dataProvider = null;
 				return;
+			}
+			
+			editProduct.label = "Edit";
 				
 			var resoult : Object = sqlProxy.getToc(cmboxProduct.selectedItem.name)  ;
 			tree.dataProvider =  resoult as XML;
@@ -527,7 +537,7 @@
 						color="#FFFFFF" 	fillColors="#333333" 
 			    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 			    		  borderColor="#999999" themeColor="#656565" 
-			    		  textRollOverColor="#FFFFFF"/>
+			    		  textRollOverColor="#FFFFFF" enabled="{Boolean(cmboxProduct.selectedItem)}"/>
 			 <!--    		  
 			<mx:ProgressBar id="progressBar" labelPlacement="top" themeColor="#F20D7A"
 	            minimum="0" visible="true" maximum="100" label="CurrentProgress 0%" 
@@ -543,7 +553,7 @@
 		    		 textSelectedColor="#FFFFFF"  cornerRadius="1" 
 		    		  borderColor="#999999" themeColor="#656565" 
 		    		  textRollOverColor="#000000" selectionColor="#0000FF" />
-				<mx:Button label="Edit" click="{productEdit()}"
+				<mx:Button  id="editProduct" label="Edit" click="{productEdit()}"
 					color="#FFFFFF" 	fillColors="#333333" 
 		    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 		    		  borderColor="#999999" themeColor="#656565" 
@@ -559,16 +569,16 @@
 				defaultLeafIcon="@Embed('../assets/page.png')" /> 
 
 			<mx:HBox paddingLeft="3">
-				<mx:Button  label="Add Item" click="{addItem()}"
+				<mx:Button  label="Add Page" click="{addItem()}"
 				color="#FFFFFF" 	fillColors="#333333" 
 	    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 	    		  borderColor="#999999" themeColor="#656565" 
-	    		  textRollOverColor="#FFFFFF"/>
-				<mx:Button label="Remove Item" click="{removeItem()}" 
+	    		  textRollOverColor="#FFFFFF" enabled="{Boolean(cmboxProduct.selectedItem)}"/>
+				<mx:Button label="Remove Page" click="{removeItem()}" 
 				color="#FFFFFF" 	fillColors="#333333" 
 	    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 	    		  borderColor="#999999" themeColor="#656565" 
-	    		  textRollOverColor="#FFFFFF"/>				
+	    		  textRollOverColor="#FFFFFF" />				
 			</mx:HBox>
 		</mx:VBox>
 		<mx:TabNavigator width="100%" height="100%">
