@@ -65,8 +65,22 @@
 		private function treeChangeHandler(lstEvt:ListEvent):void
 		{
 //			showSelectedPage(tree.selectedItem.@name);
-//			trace("Tree Change");
-			sqlProxy.setToc(tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
+			trace("Tree Change");
+			var tocString : String = tree.dataProvider.toXMLString();
+
+			try{
+			 // some code that could throw an error
+			 	XML(tocString);
+			}
+			catch (err:Error)
+			{
+			 // code to react to the error
+				 getTocFromDataBase();
+				 Alert.show("Impossible operation", "Error:");
+			 	return;
+			}
+
+			sqlProxy.setToc(tocString, cmboxProduct.selectedItem.name);
 			if(!tree.selectedItem)
 			{
 				tree.selectedItem = XML(lstEvt.itemRenderer.data.toXMLString());
@@ -234,7 +248,11 @@
 			}
 			
 			editProduct.label = "Edit";
-				
+			getTocFromDataBase();
+		}
+		
+		private function getTocFromDataBase():void
+		{	
 			var resoult : Object = sqlProxy.getToc(cmboxProduct.selectedItem.name)  ;
 			tree.dataProvider =  resoult as XML;
 			
@@ -511,6 +529,11 @@
 				html.validateDisplayList();
 			}
 		}
+		
+		private function dragDropHandler(event:Event):void
+		{
+			trace('dragDropHandler');
+		}
 
 	
 	]]>
@@ -562,7 +585,7 @@
 			</mx:HBox>
 			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="true"
 				labelField="@title"  dragEnabled="true" dropEnabled="true"  
-				
+				 dragDrop="dragDropHandler(event);"
 				change="{treeChangeHandler(event)}"  dragMoveEnabled="true" 	
 				folderOpenIcon="@Embed('../assets/open_folder.png')" 
 				folderClosedIcon="@Embed('../assets/close_folder.png')"
