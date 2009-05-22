@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="net.vdombox.ide.view.components.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:components="net.vdombox.ide.view.components.*"
 	
-	creationPolicy="all" height="100%" minHeight="600" minWidth="800" width="100%">
-	<components:MainTitleBar 
-		width="100%"/>
+	creationPolicy="all" height="100%" minHeight="600" minWidth="800"
+	width="100%">
 	<mx:TabBar 
 		id="mainTabBar"
 		
 		height="18" styleName="mainTabBar"
 		
-		horizontalAlign="left" left="130" top="32"/>
+		horizontalAlign="left" left="130"/>
 	<mx:ViewStack 
 		id="componentsStack"
 		
-		height="100%" width="100%"
-		
-		top="50">
+		height="100%" width="100%" top="18">
 		<components:ApplicationsManagment 
 			id="applicationsManagment"/>
 		<components:ModulesManagment 
 			id="modulesManagment"/>
 	</mx:ViewStack>
-	<mx:Image 
-		height="70" source="@Embed(source='assets/login/logo.png')" width="70" x="20"
-		y="5"/>
 </mx:Canvas>

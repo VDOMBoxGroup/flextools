@@ -119,17 +119,25 @@ package net.vdombox.ide.view
 				windowOptions.minimizable = true;
 				windowOptions.transparent = true;
 				
+				var mainWindow : Window = new Window();
 				
-				mainWindow = popUpWindowManager.addPopUp( mainScreen, "VDOM IDE - Login",
-														  null, false, null, windowOptions );
+				mainWindow.systemChrome = NativeWindowSystemChrome.NONE;
+				mainWindow.resizable = true;
+				mainWindow.maximizable = true;
+				mainWindow.minimizable = true;
+				mainWindow.transparent = true;
 				
-				mainWindow.showTitleBar = false;
+//				mainWindow = popUpWindowManager.addPopUp( mainScreen, "VDOM IDE - Login",
+//														  null, false, null, windowOptions );
+				
+//				mainWindow.showTitleBar = false;
 				
 				//mainWindow.rawChildren.removeChild( mainWindow.titleBar );
 				mainWindow.titleBarFactory = new ClassFactory( MainTitleBar );
-				
 				mainWindow.titleIcon  = zzz;
-				mainWindow.titleBar.height = 20;
+				
+				mainWindow.addChild( mainScreen );
+				
 				
 				mainWindow.showTitleBar = true;
 				mainWindow.showGripper = false;
@@ -137,6 +145,8 @@ package net.vdombox.ide.view
 
 				mainWindow.setStyle( "borderStyle", "none" );
 				mainWindow.setStyle( "backgroundAlpha", .0 );
+				
+				mainWindow.open();
 			}
 			else
 			{

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml" doubleClickEnabled="true" height="50"
-	creationComplete="creationCompleteHandler();">
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	
+	doubleClickEnabled="true" height="30" minWidth="300"
+	
+	creationComplete="creationCompleteHandler()">
 	<mx:Metadata>
 		[Event(name="logout", type="flash.events.Event")]
 	</mx:Metadata>
@@ -53,10 +56,10 @@
 														   unscaledHeight : Number ) : void
 			{
 				super.updateDisplayList( unscaledWidth, unscaledHeight );
-				
-				if( window.nativeWindow.closed )
+
+				if ( window.nativeWindow.closed )
 					return;
-				
+
 				if ( !isMac() )
 				{
 
@@ -98,7 +101,7 @@
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
 				/* if( event.target == logoffButton )
-					return; */
+				 return; */
 				window.nativeWindow.startMove();
 
 				event.stopPropagation();
@@ -137,23 +140,33 @@
 	</mx:Script>
 	<mx:Button 
 		id="minimizeButton"
+		
 		height="13" width="13"
+		
 		right="41" top="5"/>
 	<mx:Button 
 		id="maximizeButton"
+		
 		height="13" width="13"
+		
 		right="23" top="5"/>
 	<mx:Button 
 		id="closeButton"
+		
 		height="13" width="13"
+		
 		right="5" top="5"/>
-	<mx:Button height="16" width="24" y="1"
+	<mx:Button 
+		height="16" visible="false" width="24" y="1"
+		
 		cornerRadius="0" fillAlphas="[1.0, 1.0]" fillColors="[#FF0000, #FF0000]"
-		right="69"
-		visible="false"/>
-	<mx:Label y="5" text="Vdom IDE User: " horizontalCenter="0" color="#969696" fontWeight="bold" fontSize="14"/>
+		right="69"/>
+	<mx:Label 
+		text="Vdom IDE User: " y="5"
+		
+		color="#969696" fontSize="14" fontWeight="bold" horizontalCenter="0"/>
 	<!--<mx:LinkButton id="logoffButton" label="{ resourceManager.getString( 'Application','logout' ) }"
-		color="#FFFFFF" fontWeight="bold" right="10" rollOverColor="#333333" selectionColor="#333333"
-		textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF" top="24"
-		click="logout();"/>-->
+		 color="#FFFFFF" fontWeight="bold" right="10" rollOverColor="#333333" selectionColor="#333333"
+		 textRollOverColor="#FFFFFF" textSelectedColor="#FFFFFF" top="24"
+		 click="logout();"/>-->
 </mx:Canvas>
