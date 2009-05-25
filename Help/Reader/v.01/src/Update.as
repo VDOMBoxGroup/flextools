@@ -46,7 +46,7 @@ package
 			
 			checJSFile();
 		}
-		
+		 	
 		private var JSFileName : String = "searchhi_slim.js";
 		private var cssFileName : String = "main.css";
 		private function checJSFile():void
@@ -181,6 +181,7 @@ package
 		{ 
 			if(product == null || product.name() != "product")
 			{
+//				if(product.produc[])
 				trace("!!!!!!!!!!!! not Correct data from server !!!!!!!!!!!!!");
 				lstLabel.text = "not Correct data from server";
 				lstLabel.validateNow();

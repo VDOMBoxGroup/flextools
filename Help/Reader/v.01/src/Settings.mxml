@@ -23,6 +23,7 @@
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import mx.collections.ArrayCollection;
 			import mx.controls.CheckBox;
 			import mx.managers.PopUpManager;
@@ -76,7 +77,7 @@
 			}
 			
 			private var update:Update = new Update();
-			private function checkApdate():void
+			private function checkUpdate():void
 			{
 				newProducts.removeAllChildren();
 				newProductArray.removeAll();
@@ -84,6 +85,29 @@
 				update.addEventListener(HelpEvent.INSTALL_FILE_LOADED, installFileLoadedHandler); 
 				update.addEventListener(HelpEvent.INSTALL_FILE_LOADED_ERROR, installFileLoadedHandler); 
 				update.frstLoadXML();
+				
+				loadLocalHelp();
+			}
+			
+			private function loadLocalHelp():void
+			{
+				var fileStream:FileStream = new FileStream();
+				var docsDir:File = File.documentsDirectory;
+				var location : File =new File(docsDir.url +"/VDOMHelp/StartXML.xml");	
+				
+				try
+				{
+			  		fileStream.open( location, FileMode.READ);
+			  		var str:String = fileStream.readMultiByte(location.size, File.systemCharset);
+			  		fileStream.close();
+			 	}
+			 	catch (error:Error)
+				{
+					Alert.show( error.message, "Error:");
+				}
+				
+				if(str != "")
+				showNewProducts(str);
 			}
 			
 			private function installFileLoadedHandler(hlEvt:HelpEvent):void
@@ -94,7 +118,7 @@
 				if(hlEvt.type == HelpEvent.INSTALL_FILE_LOADED)
 				{
 					showNewProducts(hlEvt.dataEvent);
-				} else if(hlEvt.type == HelpEvent.INSTALL_FILE_LOADED)
+				} else if(hlEvt.type == HelpEvent.INSTALL_FILE_LOADED_ERROR)
 				{
 					statu.text = "Check Error";
 					
@@ -158,7 +182,7 @@
 			<mx:Label text="Select Necessary Products: " width="100%" textAlign="center" fontSize="20"/>
 			<mx:VBox id="applications" paddingLeft="5"   borderStyle="solid" width="100%" height="100%" />
 		</mx:VBox>
-		<mx:VBox   label="Update" width="100%" height="100%" creationComplete="checkApdate()" >
+		<mx:VBox   label="Update" width="100%" height="100%" creationComplete="checkUpdate()" >
 			<mx:Label id="statu" />
 			<mx:VBox id="newProducts" />
 			<mx:Button label="Load" click="{load()}"/>
