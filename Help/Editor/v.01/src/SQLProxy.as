@@ -47,7 +47,7 @@ package
 				//       PRODUCT  (id, name, version, title, description, language, toc )   //
 				sqlStatement.text = "CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, " + 
 												"name CHAR NOT NULL, " + 
-												"version TEXT NOT NULL,  " + 
+												"version INTEGER NOT NULL,  " + 
 												"title TEXT NOT NULL,  " + 
 												"description TEXT , " + 
 												"language TEXT,"+
@@ -310,7 +310,7 @@ package
 				return result;
 		}
 		
-		public function getLastPage(productName:String, language:String):Object
+		public function getProductsPages(productName:String, language:String):Object
 		{
 			var query:String = "SELECT id " + 
 						"FROM product " + 
@@ -338,6 +338,44 @@ package
 			}
 				
 			return result;
+		}
+		
+		public function upVersion(productName:String, language:String):String
+		{
+			var query:String = "SELECT id, version " + 
+						"FROM product " + 
+						"WHERE name = :name  AND language = :language;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = productName;
+				parameters[":language"] = language;
+			
+			var result:Object = executeQuery(query, parameters);
+			
+			if( result)
+			{
+				var productVersion : int  	= result[0]['version'] + 1;
+				var productID : int  		= result[0]['id'];
+				
+				
+				query = "UPDATE product " + 
+					"SET  version = :version " +
+					"WHERE id = :id;";
+				/*
+				query = "SELECT * " + 
+					"FROM page " + 
+					"WHERE  id_product = :id_product ;";
+				*/
+				parameters = [];
+				parameters[":id"] = productID;
+				parameters[":version"] = productVersion;
+				
+				result = executeQuery(query, parameters);
+					
+			}
+				
+				
+			return productVersion.toString();
 		}
 		
 		/*

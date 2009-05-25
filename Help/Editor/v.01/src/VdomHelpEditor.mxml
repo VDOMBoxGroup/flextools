@@ -306,11 +306,11 @@
 		
 		private function creatProductXML():void
 		{
-			var result :Object = sqlProxy.getLastPage(cmboxProduct.selectedItem.name, "en_US");
+			var result :Object = sqlProxy.getProductsPages(cmboxProduct.selectedItem.name, "en_US");
 			
 			var product:XML = new XML("<product/>");
 				product.name = cmboxProduct.selectedItem.name;
-				product.version = "777";
+				product.version = sqlProxy.upVersion(cmboxProduct.selectedItem.name, "en_US"); // get Version
 				product.title = cmboxProduct.selectedItem.title;
 				product.description = "";
 				product.language = "en_US";
@@ -414,20 +414,83 @@
 			var fileStream:FileStream = new FileStream();
 			var fileName:String = cmboxProduct.selectedItem.name;
 			var docsDir:File = File.documentsDirectory;
-			var location : File = new File(docsDir.url +"/"+ fileName + ".xml");
+			var productLocation : File = new File(docsDir.url +"/VDOMHelp/"+ fileName+"/" + fileName + ".xml");
 			try
 			{
 	//				fileStream.addEventListener(Event., savedData);
-			  		fileStream.open( location, FileMode.WRITE);
+			  		fileStream.open( productLocation, FileMode.WRITE);
 					fileStream.writeUTFBytes(product.toXMLString());
 					fileStream.close(); 
 					
-					Alert.show( location.nativePath, "Saved to:");
+					Alert.show( productLocation.nativePath, "Saved to:");
 			}
 			catch (error:Error)
 			{
-				Alert.show( error.message, "Failed:");
+				Alert.show( error.message, "Error:");
 			}
+
+			var fileSize : Number = productLocation.size;
+			var fileSizeStr : String;
+			var gig : Number = 1024 * 1024 * 1024;
+			var meg : Number = 1024 * 1024;
+			var kil : Number = 1024; 
+			
+			if(fileSize > gig)
+			
+				fileSizeStr = String((fileSize / gig) - (fileSize / gig) % 0.1) + " Gb";
+				
+			else if (fileSize > meg)
+			
+				fileSizeStr = String((fileSize / meg) - (fileSize / meg) % 0.1) + " Mg";
+			
+			else if (fileSize > kil)
+			
+				fileSizeStr = String((fileSize / kil) - (fileSize / kil) % 0.1) + " Kb";
+			
+			
+			var location : File  = new File(docsDir.url +"/VDOMHelp/StartXML.xml");	
+			
+			try
+			{
+			  		fileStream.open( location, FileMode.UPDATE);
+			  		var str:String = fileStream.readMultiByte(location.size, File.systemCharset);
+			  		var installXML : XML = new XML();
+
+			  		if (str == "")
+			  			installXML =  XML("<install/>");
+			  		else
+			  			installXML = XML(str);
+					
+					var productItem :XML 	= new XML("<product/>");
+						productItem.@name 	= product.name ;
+						productItem.@version = product.version ;
+						productItem.@title 	= product.title;
+						productItem.@description = product.description;
+						productItem.@language  	= product.language;
+						productItem.@size  	= fileSizeStr;
+						productItem.@url	= productLocation.url;
+					
+					delete installXML.product.(@name == product.name)[0];
+					
+					installXML.appendChild(productItem);
+					fileStream.close(); 
+					
+					fileStream.open( location, FileMode.WRITE);
+					fileStream.writeUTFBytes(installXML.toXMLString());
+					fileStream.close(); 
+					
+			}
+			catch (error:Error)
+			{
+				Alert.show( error.message, "Error:");
+			}
+			
+			
+//			<install>
+//			  <product name="" language="" version="0.1" title="" url="http://www.sample.com/help/sampe_ru_RU.xml" size="" />
+//			  <product name="" language="" version="0.2" title="" url="help/sample_en_US.xml" size="" />
+//			</install>
+
 		}
 		
 		private var fileToOpen:File = File.documentsDirectory;
