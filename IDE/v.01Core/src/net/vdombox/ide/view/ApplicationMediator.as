@@ -5,6 +5,7 @@ package net.vdombox.ide.view
 	import flash.display.NativeWindowSystemChrome;
 	
 	import mx.core.ClassFactory;
+	import mx.core.ScrollPolicy;
 	import mx.core.Window;
 	
 	import net.vdombox.ide.ApplicationFacade;
@@ -19,9 +20,9 @@ package net.vdombox.ide.view
 
 	public class ApplicationMediator extends Mediator implements IMediator
 	{
-		[Embed(source="/assets/login/logo.png")]
-		private var zzz:Class;
-		
+		[Embed( source="/assets/login/logo.png" )]
+		private var zzz : Class;
+
 		public static const NAME : String = "ApplicationMediator";
 
 		public function ApplicationMediator( viewComponent : Object = null )
@@ -70,9 +71,6 @@ package net.vdombox.ide.view
 				var loginForm : LoginForm = new LoginForm();
 				facade.registerMediator( new LoginFormMediator( loginForm ) );
 
-//				loginForm.addEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
-//				loginForm.addEventListener( LoginFormEvent.QUIT, loginForm_quitHandler );
-
 				var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
 				windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
 				windowOptions.resizable = false;
@@ -80,8 +78,15 @@ package net.vdombox.ide.view
 				windowOptions.minimizable = false;
 				windowOptions.transparent = true;
 
-				loginWindow = popUpWindowManager.addPopUp( loginForm, "VDOM IDE - Login",
-														   null, false, null, windowOptions );
+				loginWindow = new Window();
+
+				loginWindow.systemChrome = NativeWindowSystemChrome.NONE;
+				loginWindow.resizable = false;
+				loginWindow.maximizable = false;
+				loginWindow.minimizable = false;
+				loginWindow.transparent = true;
+
+				loginWindow.title = "VDOM IDE - Login";
 
 				loginWindow.showTitleBar = false;
 				loginWindow.showGripper = false;
@@ -89,6 +94,13 @@ package net.vdombox.ide.view
 
 				loginWindow.setStyle( "borderStyle", "none" );
 				loginWindow.setStyle( "backgroundAlpha", .0 );
+
+				loginWindow.addChild( loginForm );
+
+				loginWindow.width = loginForm.width;
+				loginWindow.height = loginForm.height;
+				
+				loginWindow.open();
 			}
 			else
 			{
@@ -109,43 +121,37 @@ package net.vdombox.ide.view
 				var mainScreen : MainScreen = new MainScreen();
 				facade.registerMediator( new MainScreenMediator( mainScreen ) );
 
-//				loginForm.addEventListener( LoginFormEvent.SUBMIT_BEGIN, loginForm_submitBeginHandler );
-//				loginForm.addEventListener( LoginFormEvent.QUIT, loginForm_quitHandler );
-
 				var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
 				windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
 				windowOptions.resizable = true;
 				windowOptions.maximizable = true;
 				windowOptions.minimizable = true;
 				windowOptions.transparent = true;
-				
+
 				var mainWindow : Window = new Window();
-				
+
 				mainWindow.systemChrome = NativeWindowSystemChrome.NONE;
 				mainWindow.resizable = true;
 				mainWindow.maximizable = true;
 				mainWindow.minimizable = true;
 				mainWindow.transparent = true;
-				
-//				mainWindow = popUpWindowManager.addPopUp( mainScreen, "VDOM IDE - Login",
-//														  null, false, null, windowOptions );
-				
-//				mainWindow.showTitleBar = false;
-				
-				//mainWindow.rawChildren.removeChild( mainWindow.titleBar );
+
 				mainWindow.titleBarFactory = new ClassFactory( MainTitleBar );
-				mainWindow.titleIcon  = zzz;
+				mainWindow.titleIcon = zzz;
+				
+				mainWindow.horizontalScrollPolicy = ScrollPolicy.OFF;
+				mainWindow.verticalScrollPolicy = ScrollPolicy.OFF;
 				
 				mainWindow.addChild( mainScreen );
-				
-				
+
+
 				mainWindow.showTitleBar = true;
 				mainWindow.showGripper = false;
 				mainWindow.showStatusBar = true;
 
 				mainWindow.setStyle( "borderStyle", "none" );
 				mainWindow.setStyle( "backgroundAlpha", .0 );
-				
+
 				mainWindow.open();
 			}
 			else

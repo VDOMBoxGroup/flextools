@@ -3,18 +3,26 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:components="net.vdombox.ide.view.components.*"
 	
-	creationPolicy="all" height="100%" minHeight="600" minWidth="800"
-	width="100%">
-	<mx:TabBar 
-		id="mainTabBar"
+	creationPolicy="all" height="100%" horizontalScrollPolicy="off"
+	minHeight="600" minWidth="800" verticalScrollPolicy="off" width="100%">
+	<mx:Canvas 
+		width="100%"
 		
-		height="18" styleName="mainTabBar"
-		
-		horizontalAlign="left" left="130"/>
+		backgroundImage="@Embed(source='theme.swf', symbol='MainTabBarBackground')"
+		backgroundSize="100%">
+		<mx:TabBar 
+			id="mainTabBar"
+			
+			height="18" styleName="mainTabBar"
+			
+			horizontalAlign="left" left="130"/>
+	</mx:Canvas>
 	<mx:ViewStack 
 		id="componentsStack"
 		
-		height="100%" width="100%" top="18">
+		height="100%" width="100%"
+		
+		top="18">
 		<components:ApplicationsManagment 
 			id="applicationsManagment"/>
 		<components:ModulesManagment 

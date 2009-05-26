@@ -5,7 +5,6 @@ package net.vdombox.ide.view
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
-	import mx.controls.List;
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.events.ApplicationItemRendererEvent;
@@ -15,6 +14,7 @@ package net.vdombox.ide.view
 	import net.vdombox.ide.model.ResourceProxy;
 	import net.vdombox.ide.model.ServerProxy;
 	import net.vdombox.ide.model.vo.ApplicationVO;
+	import net.vdombox.ide.view.components.ApplicationsList;
 	import net.vdombox.ide.view.components.ApplicationsManagment;
 	import net.vdombox.ide.view.controls.ApplicationItemRenderer;
 	
@@ -49,19 +49,17 @@ package net.vdombox.ide.view
 			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			resourceProxy = facade.retrieveProxy( ResourceProxy.NAME ) as ResourceProxy;
 
-			var applicationsList : List = applicationsManagment.applicationsList;
-			applicationsList.addEventListener( ApplicationItemRenderer.ICON_CHANGED,
-											   applicationItemRenderer_iconChanged,
-											   true );
-
-			applicationsList.addEventListener( ListEvent.CHANGE, applicationList_changeHandler );
+			var applicationsList : ApplicationsList = applicationsManagment.applicationsList;
 
 			var applications : ArrayCollection = new ArrayCollection( serverProxy.applications );
 			var sort : Sort = new Sort();
 			sort.fields = [ new SortField( "name" ) ];
 			applications.sort = sort;
 			applications.refresh();
+			
 			applicationsList.dataProvider = applications;
+			
+			applications.addItem( new ApplicationVO( <xml /> ) );
 		}
 
 		private function applicationItemRenderer_iconChanged( event : ApplicationItemRendererEvent ) : void

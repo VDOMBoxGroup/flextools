@@ -41,16 +41,7 @@
 			id="mainViewStack"
 			
 			height="100%" styleName="vdomLogo" width="100%"/>
-		<mx:Canvas 
-			height="100%">
-			<controls:SmoothScrollingList 
-				id="applicationsList"
-				
-				itemRenderer="net.vdombox.ide.view.controls.ApplicationItemRenderer"
-				width="300"
-				
-				backgroundAlpha=".1" borderStyle="none"
-				variableRowHeight="true" height="100%"/>
-		</mx:Canvas>
+		<components:ApplicationsList id="applicationsList"
+			width="300"/>
 	</mx:HBox>
 </mx:VBox>
