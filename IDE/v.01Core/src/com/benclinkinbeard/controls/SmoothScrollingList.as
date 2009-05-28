@@ -1,66 +1,122 @@
 package com.benclinkinbeard.controls
 {
-	import mx.controls.List;
-	import mx.core.Container;
-	import mx.core.ScrollPolicy;
-	import mx.core.mx_internal;
-	import mx.events.FlexEvent;
+	import flash.display.DisplayObject;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 
+	import mx.controls.List;
+	import mx.events.ScrollEvent;
+	import mx.events.ScrollEventDetail;
+	import mx.events.ScrollEventDirection;
+
+	/**
+	 *  List that uses smooth scrolling
+	 */
 	public class SmoothScrollingList extends List
 	{
+
 		public function SmoothScrollingList()
 		{
 			super();
-			
-			// required to ensure all renderers get created
-			setStyle( "paddingBottom", -1 );
-			// parent container will handle scrolling
-			verticalScrollPolicy = ScrollPolicy.OFF;
-			
-			addEventListener( FlexEvent.UPDATE_COMPLETE, handleUpdateComplete );
+			offscreenExtraRowsOrColumns = 2;
 		}
-		
-		private function handleUpdateComplete( event:FlexEvent ):void
+
+		override protected function configureScrollBars() : void
 		{
-			var combinedRendererHeight:Number = 0;
-			
-			// iterate over list of renderers provided by our List subclass
-			for each( var renderer:Object in renderers )
+			super.configureScrollBars();
+			if ( verticalScrollBar )
+				verticalScrollBar.lineScrollSize = .125; // should be inverse power of 2
+		}
+
+		private var fudge : Number;
+
+		override public function get verticalScrollPosition() : Number
+		{
+			if ( !isNaN( fudge ) )
 			{
-				combinedRendererHeight += renderer.height;
+				var vsp : Number = super.verticalScrollPosition + fudge;
+				fudge = NaN;
+				return vsp;
 			}
-			
-			// list needs to be at least 10 pixels tall
-			// and always needs to be 10 pixels taller than the combined height of the renderers
-			height = combinedRendererHeight + 10;
-			
-			// need to shrink list width when canvas has a scrollbar so the scrollbar doesn't overlap the list
-			width = ( Container( parent ).maxVerticalScrollPosition > 0 ) ? parent.width - 16 : parent.width;
+			return Math.floor( super.verticalScrollPosition );
 		}
-		
-		// array of renderers being used in this list
-		public function get renderers():Array
+
+		override protected function scrollHandler( event : Event ) : void
 		{
-			// prefix the internal property name with its namespace
-			var rawArray:Array = mx_internal::rendererArray;
-			var arr:Array = new Array();
-			
-			// the rendererArray is a bit messy
-			// its an Array of Arrays, except sometimes the sub arrays are empty
-			// and sometimes it contains entries that aren't Arrays at all
-			for each( var obj:Object in rawArray )
+			// going backward is trickier.  When you cross from, for instance 2.1 to 1.9, you need to convince
+			// the superclass that it is going from 2 to 1 so the delta is -1 and not -.2.
+			// we do this by adding a fudge factor to the first return from verticalScrollPosition
+			// which is used by the superclass logic.
+			var last : Number = super.verticalScrollPosition;
+			var vsp : Number = verticalScrollBar.scrollPosition;
+			if ( vsp < last )
 			{
-				var rendererArray:Array = obj as Array;
-				
-				// make sure we have an Array and there is something in it
-				if( rendererArray && rendererArray.length > 0 )
+				if ( last != Math.floor( last ) || vsp != Math.floor( vsp ) )
 				{
-					// if there is something in it, the first item is our renderer
-					arr.push( obj[ 0 ] );
+					if ( Math.floor( vsp ) < Math.floor( last ) )
+					{
+						fudge = Math.floor( last ) - Math.floor( verticalScrollBar.scrollPosition );
+//						trace( last.toFixed( 2 ), vsp.toFixed( 2 ), fudge );
+					}
 				}
 			}
-			
-			return arr;
+
+			super.scrollHandler( event );
+			var pos : Number = super.verticalScrollPosition;
+			// if we get a THUMB_TRACK, then we need to calculate the position
+			// because it gets rounded to an int by the ScrollThumb code, and 
+			// we want fractional values.
+			if ( event is ScrollEvent )
+			{
+				var se : ScrollEvent = ScrollEvent( event );
+				if ( se.detail == ScrollEventDetail.THUMB_TRACK )
+				{
+					if ( verticalScrollBar.numChildren == 4 )
+					{
+						var downArrow : DisplayObject = verticalScrollBar.getChildAt( 3 );
+						var thumb : DisplayObject = verticalScrollBar.getChildAt( 2 );
+						pos = ( thumb.y - downArrow.height ) / ( downArrow.y - thumb.height -
+							downArrow.height ) * maxVerticalScrollPosition;
+						// round to nearest lineScrollSize;
+						pos /= verticalScrollBar.lineScrollSize;
+						pos = Math.round( pos );
+						pos *= verticalScrollBar.lineScrollSize;
+							//trace("faked", pos);
+					}
+				}
+			}
+			var fraction : Number = pos - verticalScrollPosition;
+			fraction *= rowHeight;
+			//trace("was", listContent.y.toFixed(2));
+			listContent.move( listContent.x, viewMetrics.top + listContent.topOffset -
+							  fraction );
+			//trace("now", listContent.y.toFixed(2), fraction.toFixed(2), listItems[0][0].data.lastName);
 		}
+
+		override protected function mouseWheelHandler( event : MouseEvent ) : void
+		{
+			if ( verticalScrollBar && verticalScrollBar.visible )
+			{
+				event.stopPropagation();
+				var oldPosition : Number = super.verticalScrollPosition;
+				var newPos : Number = super.verticalScrollPosition;
+				newPos -= event.delta * verticalScrollBar.lineScrollSize;
+				newPos = Math.max( 0, Math.min( newPos, verticalScrollBar.maxScrollPosition ) );
+				//verticalScrollPosition = newPos;
+				if ( oldPosition != newPos )
+				{
+					verticalScrollBar.scrollPosition = newPos;
+					var scrollEvent : ScrollEvent = new ScrollEvent( ScrollEvent.SCROLL );
+					scrollEvent.direction = ScrollEventDirection.VERTICAL;
+					scrollEvent.position = super.verticalScrollPosition;
+					scrollEvent.delta = super.verticalScrollPosition - oldPosition;
+					scrollEvent.detail = ScrollEventDetail.THUMB_TRACK;
+
+					verticalScrollBar.dispatchEvent( scrollEvent );
+				}
+			}
+		}
+
 	}
+
 }

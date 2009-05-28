@@ -151,7 +151,10 @@ package net.vdombox.ide.view
 
 				mainWindow.setStyle( "borderStyle", "none" );
 				mainWindow.setStyle( "backgroundAlpha", .0 );
-
+				
+				mainWindow.width = 800;
+				mainWindow.height = 600;
+				
 				mainWindow.open();
 			}
 			else

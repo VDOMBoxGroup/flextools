@@ -5,7 +5,8 @@
 	xmlns:controls="net.vdombox.ide.view.controls.*"
 	xmlns:components="net.vdombox.ide.view.components.*"
 	
-	verticalGap="0">
+	verticalGap="0"
+	xmlns:controls1="com.benclinkinbeard.controls.*">
 	<mx:Style>
 		.actionButton
 		{
@@ -41,7 +42,9 @@
 			id="mainViewStack"
 			
 			height="100%" styleName="vdomLogo" width="100%"/>
-		<components:ApplicationsList id="applicationsList"
-			width="300"/>
+		<controls1:SmoothScrollingList itemRenderer="net.vdombox.ide.view.controls.ApplicationItemRenderer"
+			id="applicationsList" variableRowHeight="true"
+			
+			height="100%" width="300" backgroundAlpha=".0"/>
 	</mx:HBox>
 </mx:VBox>

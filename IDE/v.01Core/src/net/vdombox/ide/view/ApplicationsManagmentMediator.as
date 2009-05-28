@@ -1,5 +1,7 @@
 package net.vdombox.ide.view
 {
+	import com.benclinkinbeard.controls.SmoothScrollingList;
+	
 	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
@@ -14,7 +16,6 @@ package net.vdombox.ide.view
 	import net.vdombox.ide.model.ResourceProxy;
 	import net.vdombox.ide.model.ServerProxy;
 	import net.vdombox.ide.model.vo.ApplicationVO;
-	import net.vdombox.ide.view.components.ApplicationsList;
 	import net.vdombox.ide.view.components.ApplicationsManagment;
 	import net.vdombox.ide.view.controls.ApplicationItemRenderer;
 	
@@ -49,8 +50,10 @@ package net.vdombox.ide.view
 			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			resourceProxy = facade.retrieveProxy( ResourceProxy.NAME ) as ResourceProxy;
 
-			var applicationsList : ApplicationsList = applicationsManagment.applicationsList;
-
+			var applicationsList : SmoothScrollingList = applicationsManagment.applicationsList;
+			
+			applicationsList.addEventListener( ListEvent.CHANGE, applicationList_changeHandler, false, 0, true );
+			
 			var applications : ArrayCollection = new ArrayCollection( serverProxy.applications );
 			var sort : Sort = new Sort();
 			sort.fields = [ new SortField( "name" ) ];
