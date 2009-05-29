@@ -73,6 +73,7 @@
 			</sequential>
 		</for>
 		<echo file="${config.xml}" append="true">
+
 <![CDATA[</flex-config>]]>
 		</echo>
 	</target>
@@ -84,6 +85,7 @@
 	<target name="compile">
 		<compc output="${build.file}">
 			<load-config filename="${config.xml}" />
+			<include-classes> ActionButtonSkin </include-classes>
 		</compc>
 	</target>
 	

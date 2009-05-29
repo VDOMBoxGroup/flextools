@@ -47,6 +47,12 @@ MainTitleBar
 	backgroundSize: "100%";
 }
 
+.actionButton
+{
+	cornerRadius: 0;
+	skin: Embed(skinClass="ActionButtonSkin");
+}
+
 .vdomLogo
 {
 	borderSkin: ClassReference("net.vdombox.ide.view.skins.HalloBorderWithImagePositioning");
