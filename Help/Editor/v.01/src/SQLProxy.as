@@ -9,6 +9,8 @@ package
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 	
+	import mx.controls.Alert;
+	
 	public class SQLProxy 
 	{
 		private var  file:File ;
@@ -120,28 +122,33 @@ package
 		public function deleteProduct(productsName:String, language:String):Object
 		{
 			var query:String = "SELECT id " + 
-					"FROM product " + 
-					"WHERE name = :name ;"  
-						" AND language = :language ;";
-			var parameters:Object = new Object();
-				parameters[":name"] = productsName;
-				parameters[":language"] = language;
-		
+						"FROM product " + 
+						"WHERE name = :name  AND language = :language;";
+						
+				var parameters:Object = new Object();
+					parameters[":name"] = productsName;
+					parameters[":language"] = language;
+						
+				var result:Object = executeQuery(query, parameters);
 				
-			var result:Object = executeQuery(query, parameters);
+			
 			if(result)
 			{
 				var id_product : Number = result[0]["id"];
 				query = "DELETE " + 
 						"FROM page " + 
-						"WHRER id_product = :id_product ; ";
+						"WHERE id_product = :id_product ; ";
 					
 					parameters = [];	
 					parameters[":id_product"] = id_product;
 					
+				executeQuery(query, parameters);
+					
 				query = "DELETE " + 
-						"FROM  product" + 
-						"WHRER id = :id_product ; ";	
+						"FROM  product " + 
+						"WHERE id = :id_product ; ";	
+						
+				executeQuery(query, parameters);
 			}
 			
 			
@@ -429,8 +436,8 @@ package
 				 	parameters = {};
 					parameters[":id_product"] = id_product;
 					parameters[":title"] = title;
-					parameters[":new_name"] = oldPageName;
-					parameters[":old_name"] = newPageName;
+					parameters[":new_name"] = newPageName;
+					parameters[":old_name"] =  oldPageName;
 					parameters[":description"] = description;
 						
 				result = executeQuery(query, parameters);
@@ -441,7 +448,7 @@ package
 				
 				parameters = {};
 					parameters[":id_product"] = id_product;
-					parameters[":new_name"] = oldPageName;
+					parameters[":new_name"] = newPageName;
 						
 						
 				result = executeQuery(query, parameters);
@@ -848,7 +855,8 @@ package
 		
 		private function displayLocalizedDetail(str:String):void 
 		{
-			trace(str)
+			trace(str);
+			Alert.show(str, "SQL error:");
 		}
 
 		
