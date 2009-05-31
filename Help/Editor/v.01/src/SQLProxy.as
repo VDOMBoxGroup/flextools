@@ -117,25 +117,41 @@ package
 				}
 		}
 		
-		public function deleteProduct(productsName:String):Object
+		public function deleteProduct(productsName:String, language:String):Object
 		{
-			var query:String = "DELETE " + 
+			var query:String = "SELECT id " + 
 					"FROM product " + 
 					"WHERE name = :name ;"  
-//						" AND language = :language ;";
+						" AND language = :language ;";
 			var parameters:Object = new Object();
 				parameters[":name"] = productsName;
+				parameters[":language"] = language;
 		
 				
 			var result:Object = executeQuery(query, parameters);
+			if(result)
+			{
+				var id_product : Number = result[0]["id"];
+				query = "DELETE " + 
+						"FROM page " + 
+						"WHRER id_product = :id_product ; ";
+					
+					parameters = [];	
+					parameters[":id_product"] = id_product;
+					
+				query = "DELETE " + 
+						"FROM  product" + 
+						"WHRER id = :id_product ; ";	
+			}
+			
+			
 			
 			return result;
 		}
 		
 		public function getAllProducts():Object
 		{
-			 
-			var query:String = "SELECT title, description, name " + 
+			var query:String = "SELECT * " + 
 					"FROM product;";
 						
 			var parameters:Object = new Object();
@@ -361,11 +377,7 @@ package
 				query = "UPDATE product " + 
 					"SET  version = :version " +
 					"WHERE id = :id;";
-				/*
-				query = "SELECT * " + 
-					"FROM page " + 
-					"WHERE  id_product = :id_product ;";
-				*/
+
 				parameters = [];
 				parameters[":id"] = productID;
 				parameters[":version"] = productVersion;
@@ -373,10 +385,70 @@ package
 				result = executeQuery(query, parameters);
 					
 			}
-				
-				
 			return productVersion.toString();
 		}
+		
+		public function changeProductProperties( id:Number, title:String, name:String, description:String):Object
+		{
+				var	query : String = "UPDATE product " + 
+					"SET name = :name , title = :title ,  description = :description " +
+					"WHERE id = :id ;";
+						
+				var parameters:Object = new Object();
+					parameters[":id"] = id;
+					parameters[":title"] = title;
+					parameters[":name"] = name;
+					parameters[":description"] = description;
+						
+				var result:Object = executeQuery(query, parameters);
+				
+				return result;
+		}
+		
+		public function changePageProperties( productName:String, ln:String, oldPageName:String, newPageName:String, title:String, 
+																	description:String ):Object
+		{
+				var query:String = "SELECT id " + 
+						"FROM product " + 
+						"WHERE name = :name  AND language = :language;";
+						
+			var parameters:Object = new Object();
+				parameters[":name"] = productName;
+				parameters[":language"] = ln;
+			
+			var result:Object = executeQuery(query, parameters);
+			
+			if(result)
+			{		
+				query   = "UPDATE page " + 
+					"SET name = :new_name , title = :title ,  description = :description " +
+					"WHERE id_product = :id_product AND name = :old_name ;";
+					
+				var id_product :Number = result[0]['id'];	
+						
+				 	parameters = {};
+					parameters[":id_product"] = id_product;
+					parameters[":title"] = title;
+					parameters[":new_name"] = oldPageName;
+					parameters[":old_name"] = newPageName;
+					parameters[":description"] = description;
+						
+				result = executeQuery(query, parameters);
+				
+				 query = "SELECT * " + 
+						"FROM page " + 
+						"WHERE name = :new_name  AND id_product = :id_product;";
+				
+				parameters = {};
+					parameters[":id_product"] = id_product;
+					parameters[":new_name"] = oldPageName;
+						
+						
+				result = executeQuery(query, parameters);
+			}	
+				return result;
+		}
+		
 		
 		/*
 		public function getPages():Object

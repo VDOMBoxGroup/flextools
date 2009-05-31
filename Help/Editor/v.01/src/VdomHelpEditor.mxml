@@ -9,7 +9,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	minWidth="650" minHeight="300"
 	layout="absolute" 
-	 viewSourceURL="srcview/index.html"  creationComplete="{creationCompleteHandler()}"
+	 creationComplete="{creationCompleteHandler()}"
 	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
 	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
 	<mx:Style>
@@ -46,9 +46,10 @@
 		 *  + вставить ресурс в хмл
 		 * 
 		 * -------------------
-		 * - создать загрузочную хмл
+		 * + создать загрузочную хмл
 		 * - изменение свойств страницы 
 		 * + дисаблить кнопку создания продукта
+		 * - удалять все страницы, когда удаляем продукт
 		 * 
 		 */
 		 
@@ -102,6 +103,8 @@
 				htmlSource.text = resoult[0]["content"];
 				pageInformation.text = resoult[0]["title"] +" (v." + pageVersion +")  " + resoult[0]["name"];
 				pageInformation.toolTip =  resoult[0]["description"];
+				
+				topTitle.htmlText= "VDOM Help Aplication - <b>" +  resoult[0]["title"] +"</b>";
 			}
 		}
 		
@@ -241,13 +244,13 @@
 		{
 			if(!cmboxProduct.selectedItem)
 			{
-				editProduct.label = "Add Product";
+//				editProduct.label = "Add Product";
 				tree.dataProvider = null;
 				htmlSource.text = "";
 				return;
 			}
 			
-			editProduct.label = "Edit";
+//			editProduct.label = "Edit Products List";
 			getTocFromDataBase();
 		}
 		
@@ -511,6 +514,8 @@
 			
 			function fileSelected(event:Event):void 
 			{
+				fileToOpen.removeEventListener(Event.SELECT, fileSelected);
+				
 				var srcBytes : ByteArray = new ByteArray();
 			    var stream:FileStream = new FileStream();
 			    stream.open(event.target as File, FileMode.READ);
@@ -565,30 +570,30 @@
 		
 		private function htmlShowHandler():void
 		{
-//			trace("::htmlShowHandler::");
-//			var fileName:String = "temp.html"	;
-//			var content : ByteArray = new ByteArray();
-//			var sourse : String = 
-//				"<html>" + 
-//					"<head>" + 
-//					"</head>" + 
-//					"<body>" +
-//					  htmlSource.text + 
-//					"</body>"	;
-//				
-//			content.writeUTFBytes(sourse);
-//			
-//			saveFile(fileName, content);
-//			
-//			
-//			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
-//			
-//			var fullPath : String = newFile.url;
-//			var f : File = File.applicationStorageDirectory; 
+			trace("::htmlShowHandler::");
+			var fileName:String = "temp.html"	;
+			var content : ByteArray = new ByteArray();
+			var sourse : String = 
+				"<html>" + 
+					"<head>" + 
+					"</head>" + 
+					"<body>" +
+					  htmlSource.text + 
+					"</body>"	;
+				
+			content.writeUTFBytes(sourse);
+			
+			saveFile(fileName, content);
+			
+			
+			var newFile:File = File.applicationStorageDirectory.resolvePath(fileName);
+			
+			var fullPath : String = newFile.url;
+			var f : File = File.applicationStorageDirectory; 
 			if(html)
 			{
-				html.htmlText = htmlSource.text ;
-//				html.location = fullPath; 
+//				html.htmlText = htmlSource.text ;
+				html.location = fullPath; 
 				html.validateDisplayList();
 			}
 		}
@@ -597,6 +602,25 @@
 		{
 			trace('dragDropHandler');
 		}
+		
+		private function editPage():void
+		{
+			var editPage : EditPage = EditPage(PopUpManager.createPopUp(this, EditPage, true));
+				editPage.addEventListener(CloseEvent.CLOSE, editPageHandler);
+				editPage.pageLn = "en_US"
+				editPage.curPage = tree.selectedItem;
+				editPage.productName = cmboxProduct.selectedItem.name;
+			
+			function editPageHandler(evt:CloseEvent):void
+			{
+				// сохранить дерево
+				// обновить данные вверху и внизу
+				trace("::editPageHandler::");
+			}	
+		}
+		
+		
+	
 
 	
 	]]>
@@ -609,7 +633,7 @@
 		<mx:HBox paddingLeft="5" paddingTop="5" paddingRight="5" 
 				color="#FFFFFF" width="100%"  >
 			<mx:Image source="@Embed('../assets/bookmarks.png')" />
-			<mx:Label text="VDOM Help Aplication" />
+			<mx:Label  id="topTitle" text="VDOM Help Aplication" />
 			<mx:HBox width="100%"  horizontalAlign="right" paddingTop="2">
 				<mx:Image source="@Embed('../assets/minimize.png')" right="0" click="{minimize()}"/>
 				<mx:Image source="@Embed('../assets/restore.png')" right="0" click="{minMaximize()}"/>
@@ -618,13 +642,20 @@
 		</mx:HBox>
 	</mx:Canvas>
 	
-	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373"/>
-		 <mx:HBox >
-			<mx:Button label="Creat product XML" click="{creatProductXML()}"
+	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x737373" />
+		 <mx:HBox  paddingLeft="4">
+			 <mx:Button  id="editProduct" label="Edit Products List" click="{productEdit()}"
+					color="#FFFFFF" 	fillColors="#333333" 
+		    		 textSelectedColor="#FFFFFF" cornerRadius="1"
+		    		  borderColor="#999999" themeColor="#656565" 
+		    		  textRollOverColor="#FFFFFF"/>
+			
+			<mx:Button label="Creat products XML" click="{creatProductXML()}"
 						color="#FFFFFF" 	fillColors="#333333" 
 			    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 			    		  borderColor="#999999" themeColor="#656565" 
 			    		  textRollOverColor="#FFFFFF" enabled="{Boolean(cmboxProduct.selectedItem)}"/>
+			 
 			 <!--    		  
 			<mx:ProgressBar id="progressBar" labelPlacement="top" themeColor="#F20D7A"
 	            minimum="0" visible="true" maximum="100" label="CurrentProgress 0%" 
@@ -634,17 +665,13 @@
 	<mx:HRule width="100%" strokeColor="0x1a1a1a" shadowColor="0x4b4c4c"/>
 	<mx:HDividedBox y="60" width="100%" height="100%" horizontalGap="1">
 		<mx:VBox height="100%" minWidth="220" horizontalScrollPolicy="off">
-			<mx:HBox paddingLeft="3" paddingRight="3" color="#FFFFFF">
+			<mx:HBox paddingLeft="3" paddingRight="3" color="#FFFFFF" width="100%">
 				<mx:ComboBox  id="cmboxProduct" width="100%" labelField="title" dataProvider="{{label:'VDOM Editor'}}"
 					 	fillColors="#333333" iconColor="0xCCCCCC" change="{changeProduct()}"
 		    		 textSelectedColor="#FFFFFF"  cornerRadius="1" 
 		    		  borderColor="#999999" themeColor="#656565" 
 		    		  textRollOverColor="#000000" selectionColor="#0000FF" />
-				<mx:Button  id="editProduct" label="Edit" click="{productEdit()}"
-					color="#FFFFFF" 	fillColors="#333333" 
-		    		 textSelectedColor="#FFFFFF" cornerRadius="1"
-		    		  borderColor="#999999" themeColor="#656565" 
-		    		  textRollOverColor="#FFFFFF"/>
+				
 			</mx:HBox>
 			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="true"
 				labelField="@title"  dragEnabled="true" dropEnabled="true"  
@@ -668,25 +695,41 @@
 	    		  textRollOverColor="#FFFFFF" />				
 			</mx:HBox>
 		</mx:VBox>
-		<mx:TabNavigator width="100%" height="100%">
+		<mx:TabNavigator width="100%" height="100%" backgroundColor="#E4E4E4"  	
+			paddingTop="0">
 			<mx:Canvas width="100%" height="100%"  label="Edit">
 				<mx:VBox width="100%" height="100%" verticalGap="0" verticalAlign="0"  >
 					<mx:HBox width="100%" color="#000000" backgroundColor="#E4E4E4"  >
 						<mx:VBox width="100%"  
 							paddingTop="3" paddingLeft="3" paddingBottom="3">
 							<mx:HBox  >
-								<mx:Label id="pageInformation" text="Title: title"/>
-							</mx:HBox>
-							<mx:HBox  >
-								<mx:Button label="H1" click="{addTag('h1' )}" />
-								<mx:Button label="BR" click="{addTag('br',false)}" />
-								<mx:Button label="img" click="{insertImage()}"/>
+								<mx:Button label="H1" click="{addTag('h1' )}" height="15" />
+								<mx:Button label="BR" click="{addTag('br',false)}" height="15" />
+								<mx:Button label="img" click="{insertImage()}" height="15"/>
 							</mx:HBox>
 						</mx:VBox>	
-						<mx:Button label="..."  bottom="0" />
-						<mx:Button label="Save" toolTip="Save page"  bottom="0" click="{savePage()}"/>
 				</mx:HBox>
-					<mx:TextArea id="htmlSource" width="100%" height="100%" /> 
+					<mx:TextArea id="htmlSource" width="100%" height="100%"  focusAlpha="0" /> 
+					<mx:HBox width="100%" backgroundColor="0x373739" paddingBottom="3">
+						<mx:Canvas height="100%">
+							<mx:Label id="pageInformation" text="Title: title" color="#FFFFFF" 
+								fontSize="12"  top="5" left="5"/>
+						</mx:Canvas>
+						<mx:HBox width="100%"  horizontalAlign="right" paddingTop="3"  paddingRight="3">
+						
+							<mx:Button label="Page Settings" click="{editPage()}" 
+								color="#FFFFFF" 	fillColors="#333333" 
+					    		 textSelectedColor="#FFFFFF" cornerRadius="1"
+					    		  borderColor="#999999" themeColor="#656565" 
+					    		  textRollOverColor="#FFFFFF" />	
+							
+							<mx:Button label="Save" click="{savePage()}"  toolTip="Save page"
+								color="#FFFFFF" 	fillColors="#333333" 
+					    		 textSelectedColor="#FFFFFF" cornerRadius="1"
+					    		  borderColor="#999999" themeColor="#656565" 
+					    		  textRollOverColor="#FFFFFF" />	
+						</mx:HBox>
+					</mx:HBox>
 				</mx:VBox>
 			</mx:Canvas >
 			<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">

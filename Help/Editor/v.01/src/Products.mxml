@@ -68,6 +68,9 @@
 			{
 				var rbWnd:EditProduct = EditProduct(PopUpManager.createPopUp(this, EditProduct, true));
 				rbWnd.addEventListener(CloseEvent.CLOSE, validateListOfProducts);
+				
+				rbWnd.curentProduct =  listOfProducts.selectedItem;
+				
 			}
 						
 			private function addClickHandler():void
@@ -86,7 +89,7 @@
 			{
 				if (event.detail==Alert.YES)
 		        {
-		        	sqlProxy.deleteProduct(listOfProducts.selectedItem.name);
+		        	sqlProxy.deleteProduct(listOfProducts.selectedItem.name, "en_US");
 		        	showAllProducts();
 		        }else
 		        {
@@ -103,6 +106,11 @@
 		</mx:VBox>
 	<mx:VBox horizontalAlign="center"   backgroundColor="#373739"
 			height="100%" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
+			
+			<mx:Button  label="OK" 
+				click="{cancelPressed()}" color="#FFFFFF" width="100%" borderColor="#999999"
+				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+				
     		 <mx:Button  label="Add"  click="{addClickHandler()}"
     		  	color="#FFFFFF"  width="100%"  borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
@@ -117,9 +125,6 @@
 				color="#FFFFFF"  width="100%" borderColor="#999999"
 				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1"  themeColor="#656565" textRollOverColor="#FFFFFF"/>
 			
-			<mx:Button  label="Cancel" 
-				click="{cancelPressed()}" color="#FFFFFF" width="100%" borderColor="#999999"
-				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
 	</mx:VBox>
 	</mx:HBox>
 </mx:TitleWindow>

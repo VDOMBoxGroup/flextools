@@ -3,7 +3,7 @@
 <mx:TitleWindow 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" width="400" height="300"
-	title="Edit"
+	title="Pages Settings"
 	creationComplete="creationComplete()"
 	showCloseButton="true"
 	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
@@ -25,7 +25,9 @@
 			import mx.managers.PopUpManager;
 			import mx.events.CloseEvent;
 			
-			public var curentProduct : Object; 
+			public var curPage : Object;
+			public var pageLn	: String; 
+			public var productName	: String; 
 			
 			private var sqlProxy : SQLProxy = new SQLProxy();
 			
@@ -36,19 +38,23 @@
 				
 				addEventListener(KeyboardEvent.KEY_UP,keyboardHandler); 
 				
-				productLabel.setFocus() ;
+				pageLabel.setFocus() ;
 				
 				vilidate();
 			}
 			
 			private function vilidate():void
 			{
-				productLabel.text		= curentProduct.title;
-				productName.text		= curentProduct.name;
-				productDescription.text	= curentProduct.description;
-				productVersion.text		= curentProduct.version;
-				productLanguage.text 	= curentProduct.language;
+				if(productName != "" && curPage.@name != "" && pageLn != "")
+					var resoult : Object = sqlProxy.getPage(productName, pageLn, curPage.@name );
 				
+				if(resoult)
+				{	
+					pageVersion.text = resoult[0]["version"];
+					pageDescription.text = resoult[0]["description"];
+					pageLabel.text = resoult[0]["title"];
+					pageName.text = resoult[0]["name"];
+				}
 			}
 			
 			private function keyboardHandler(msEvt:KeyboardEvent):void
@@ -71,8 +77,15 @@
 			
 			private function okHandler():void 
 			{
-				sqlProxy.changeProductProperties(curentProduct.id, productLabel.text, 
-													productName.text, productDescription.text);
+				var result :Object = sqlProxy.changePageProperties(productName, pageLn, curPage.@name,
+																	pageName.text, pageLabel.text, 
+																	pageDescription.text );
+			
+				if(result)
+				{
+					curPage.@name = pageName.text;
+					curPage.@title = pageLabel.text;
+				}
 													 
 				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			}
@@ -92,19 +105,16 @@
 			<mx:Canvas width="100%" height="100%" >
 				
 				<mx:Label  x="17" y="13" text="Label:" />
-				<mx:TextInput id="productLabel" x="65" y="11" text="Label of product" width="211"/>
+				<mx:TextInput id="pageLabel" x="65" y="11" text="Label of product" width="211"/>
 				
 				<mx:Label x="18" y="42" text="Name:"/>
-				<mx:TextInput id="productName" x="65" y="40" text="Like 'VDOM_IDE'" width="211"/>
+				<mx:TextInput id="pageName" x="65" y="40" text="Like 'VDOM_IDE'" width="211"/>
 				
-				<mx:Label x="14" y="194" text="Language:"/>
-				<mx:Label id="productLanguage" x="87" y="194" text="EN" width="55"/>
-				
-				<mx:Label x="167" y="194" text="Version:"/>
-				<mx:Label id="productVersion" x="226" y="194" text="12"  width="41"/>
+				<mx:Label x="18" y="194" text="Version:"/>
+				<mx:Label id="pageVersion" x="77" y="194" text="12"  width="41"/>
 				
 				<mx:Label x="16" y="67" text="Description:"/>
-				<mx:TextArea id="productDescription" x="18" y="93" width="258" height="87"/>
+				<mx:TextArea id="pageDescription" x="18" y="93" width="258" height="87"/>
 			</mx:Canvas>
 		</mx:VBox>
 		
