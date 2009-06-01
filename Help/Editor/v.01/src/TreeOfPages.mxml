@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" width="300"  height="400"
+	title="Pages"
+	creationComplete="creationComplete()"
+	showCloseButton="true"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off" 
+	borderAlpha="0.98" cornerRadius="1" 
+	visible="true" shadowDirection="right"
+	borderColor="#373739" titleStyleName="resourceBrowserTitle"
+	borderThicknessLeft="1" borderThicknessRight="1"
+ 	>
+	<mx:Style>
+		.resourceBrowserTitle {
+			color:#FFFFFF;
+			fontWeight:bold;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
+			import mx.controls.CheckBox;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			
+			private var sqlProxy:SQLProxy = new SQLProxy();
+			
+			public var  product 	: String = '';
+			public var  pageName 	: String = '';
+			public var  pageTitle 	: String = '';
+			
+			private function creationComplete():void 
+			{
+				addEventListener(CloseEvent.CLOSE, closeHandler); 
+				PopUpManager.centerPopUp(this);
+				
+				getTocFromDataBase();
+			}
+			
+			
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function cancelPressed():void 
+			{
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function okPressed():void 
+			{
+				pageName = tree.selectedItem.@name;
+				pageTitle = tree.selectedItem.@title;
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function getTocFromDataBase():void
+			{	
+				var resoult : Object = sqlProxy.getToc(product)  ;
+				var tocString : String = resoult.toString();
+				var regExp : RegExp	= /isBranch="true"/gim ;
+				
+				tree.dataProvider =  XML(tocString.replace(regExp,' '));
+				tree.validateNow();
+				
+				tree.expandItem(tree.dataProvider[0], true);
+				tree.selectedIndex = 0;
+				tree.validateNow();
+			}
+			
+		]]>
+		
+	</mx:Script>
+	<mx:HBox width="100%" height="100%">
+		<mx:VBox label="Products" width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10">
+			<mx:Label text="Select page:"  fontSize="20"/>
+			<mx:Tree id="tree" width="100%" height="100%" color="#000000"  showRoot="true"
+				labelField="@title"  dragEnabled="true" dropEnabled="true"  
+				dragMoveEnabled="true" 	
+				folderOpenIcon="@Embed('../assets/open_folder.png')" 
+				folderClosedIcon="@Embed('../assets/close_folder.png')"
+				openDuration="0" 
+				defaultLeafIcon="@Embed('../assets/page.png')" /> 
+		</mx:VBox>
+	<mx:VBox horizontalAlign="center"   backgroundColor="#373739"
+			height="100%" paddingTop="2" paddingBottom="2" paddingLeft="10" paddingRight="10" color="#FFFFFF" >
+			
+			<mx:Button  label="OK" 
+				click="{okPressed()}" color="#FFFFFF" width="100%" borderColor="#999999"
+				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+				
+			<mx:Button  label="Cancel" 
+				click="{cancelPressed()}" color="#FFFFFF" width="100%" borderColor="#999999"
+				fillColors="#333333"  textSelectedColor="#FFFFFF" cornerRadius="1" themeColor="#656565" textRollOverColor="#FFFFFF"/>
+    		 
+	</mx:VBox>
+	</mx:HBox>
+</mx:TitleWindow>

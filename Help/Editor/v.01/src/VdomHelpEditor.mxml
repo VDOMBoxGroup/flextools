@@ -47,9 +47,11 @@
 		 * 
 		 * -------------------
 		 * + создать загрузочную хмл
-		 * - изменение свойств страницы 
+		 * + изменение свойств страницы 
 		 * + дисаблить кнопку создания продукта
-		 * - удалять все страницы, когда удаляем продукт
+		 * + удалять все страницы, когда удаляем продукт
+		 * + сделать ссылку на страницу
+		 * - автоматически поправлять ссылки  при изменении имени и названия страницы
 		 * 
 		 */
 		 
@@ -66,7 +68,7 @@
 		private function treeChangeHandler(lstEvt:ListEvent):void
 		{
 //			showSelectedPage(tree.selectedItem.@name);
-			trace("Tree Change");
+//			trace("Tree Change");
 			var tocString : String = tree.dataProvider.toXMLString();
 
 			try{
@@ -541,7 +543,7 @@
 		private function insertImageCode(newName:String):void
 		{
 			var resoultText : String = htmlSource.text.substring( 0, htmlSource.selectionBeginIndex) 
-					+ " <img src='"+newName+"'/> "
+					+ " <IMG src='"+newName+"'/> "
 					+ htmlSource.text.substring(htmlSource.selectionBeginIndex);
 			
 			
@@ -600,13 +602,14 @@
 		
 		private function dragDropHandler(event:Event):void
 		{
-			trace('dragDropHandler');
+//			trace('dragDropHandler');
 		}
 		
 		private function editPage():void
 		{
 			var editPage : EditPage = EditPage(PopUpManager.createPopUp(this, EditPage, true));
 				editPage.addEventListener(CloseEvent.CLOSE, editPageHandler);
+				
 				editPage.pageLn = "en_US"
 				editPage.curPage = tree.selectedItem;
 				editPage.productName = cmboxProduct.selectedItem.name;
@@ -614,11 +617,32 @@
 			function editPageHandler(evt:CloseEvent):void
 			{
 				// сохранить дерево
+				sqlProxy.setToc( tree.dataProvider.toXMLString(), cmboxProduct.selectedItem.name);
 				// обновить данные вверху и внизу
-				trace("::editPageHandler::");
+				getCurrentPage();
 			}	
 		}
 		
+		private function pageURL():void
+		{
+			var treeOfPages : TreeOfPages = TreeOfPages(PopUpManager.createPopUp(this, TreeOfPages, true));
+			treeOfPages.addEventListener(CloseEvent.CLOSE, selectPageHandler);
+			
+			treeOfPages.product = cmboxProduct.selectedItem.name;
+			
+			function selectPageHandler():void
+			{
+				 if(treeOfPages.pageName != '' && treeOfPages.pageTitle != '')
+				 {
+				 	var resoultText : String = htmlSource.text.substring( 0, htmlSource.selectionBeginIndex) 
+					+ " <a href='"+treeOfPages.pageName+".html'> "+treeOfPages.pageTitle+"</a> "
+					+ htmlSource.text.substring(htmlSource.selectionBeginIndex);
+			
+					htmlSource.text = resoultText;		
+					htmlSource.setFocus();
+				 }
+			}
+		}
 		
 	
 
@@ -703,9 +727,10 @@
 						<mx:VBox width="100%"  
 							paddingTop="3" paddingLeft="3" paddingBottom="3">
 							<mx:HBox  >
-								<mx:Button label="H1" click="{addTag('h1' )}" height="15" />
-								<mx:Button label="BR" click="{addTag('br',false)}" height="15" />
-								<mx:Button label="img" click="{insertImage()}" height="15"/>
+								<mx:Button label="H1" click="{addTag('H1' )}" height="15" />
+								<mx:Button label="BR" click="{addTag('BR',false)}" height="15" />
+								<mx:Button label="IMG" click="{insertImage()}" height="15"/>
+								<mx:Button label="PAGE" click="{pageURL()}" height="15"/>
 							</mx:HBox>
 						</mx:VBox>	
 				</mx:HBox>
@@ -716,14 +741,14 @@
 								fontSize="12"  top="5" left="5"/>
 						</mx:Canvas>
 						<mx:HBox width="100%"  horizontalAlign="right" paddingTop="3"  paddingRight="3">
-						
-							<mx:Button label="Page Settings" click="{editPage()}" 
+							
+							<mx:Button label="Save" click="{savePage()}"  toolTip="Save page"
 								color="#FFFFFF" 	fillColors="#333333" 
 					    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 					    		  borderColor="#999999" themeColor="#656565" 
 					    		  textRollOverColor="#FFFFFF" />	
-							
-							<mx:Button label="Save" click="{savePage()}"  toolTip="Save page"
+						
+							<mx:Button label="Page Settings" click="{editPage()}" 
 								color="#FFFFFF" 	fillColors="#333333" 
 					    		 textSelectedColor="#FFFFFF" cornerRadius="1"
 					    		  borderColor="#999999" themeColor="#656565" 
