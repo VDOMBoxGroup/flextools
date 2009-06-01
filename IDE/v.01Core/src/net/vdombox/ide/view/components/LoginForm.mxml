@@ -1,119 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
-	
-	height="300" horizontalScrollPolicy="off" verticalScrollPolicy="off" width="540"
-	
-	backgroundAlpha="0.0" color="#FFFFFF">
-	<mx:Metadata>
-		[ResourceBundle("LoginForm")]
-	</mx:Metadata>
-	<mx:Style>
-		
-		.loginPanel{
-			headerHeight: 50;
-			titleStyleName: "loginPanelTitle";
-			controlBarStyleName: "loginControlBar";
-			backgroundImage: Embed(source="theme.swf", symbol="LoginBackground");
-			backgroundSize: "100%";
-		}
-		.loginPanelTitle {
-			color: #000000;
-			textAlign: "center";
-			fontWeight: "bold";
-		}
-		.gradientBackground1 {
-			fillColors: #EEEEEE, #999999;
-			fillAlphas: 0.5, 0.5;
-		}
-	</mx:Style>
-	<mx:Canvas 
-		id="loginFormPanel"
-		
-		height="280" horizontalScrollPolicy="off" styleName="loginPanel" verticalScrollPolicy="off"
-		width="540" x="0"
-		
-		backgroundColor="#3F3F3F" borderColor="#454545" borderStyle="solid" bottom="0"
-		cornerRadius="8">
-		<mx:Label 
-			text="{resourceManager.getString('LoginForm','title')}" width="441" x="87"
-			y="10"
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/halo" width="540" height="300">
+	<s:layout>
+		<fx:DesignLayer>
+			<s:Rect y="25" height="285" width="460" radiusX="15" radiusY="15">
+				<s:fill>
+					<s:SolidColor color="#454545"/>
+				</s:fill>
+			</s:Rect>
+		</fx:DesignLayer>
+	</s:layout>
+	<mx:Label
+		text="{resourceManager.getString('LoginForm','title')}"
+		width="440" x="90" y="10"/>
+	<mx:Form x="70" y="60">
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','username')}">
+			<s:TextInput
+				id="username"
+					
+				width="240"/>
+		</mx:FormItem>
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','password')}">
+			<s:TextInput
+				id="password"
+					
+				width="240"/>
+		</mx:FormItem>
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','hostname')}">
+			<s:TextInput
+				id="hostname"
+					
+				width="240"/>
+		</mx:FormItem>
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','language')}">
+			<mx:ComboBox
+				id="selectLang"
+				labelField="@label" width="240"/>
+		</mx:FormItem>
+	</mx:Form>
+	<s:HGroup bottom="0" width="100%">
+		<s:Button
+			id="exitButton"
+			height="35"
+			/>
+		<mx:Spacer width="100%"/>
+		<s:Button
+			id="submitButton"
 			
-			fontSize="15" fontWeight="bold"/>
-		<mx:Form 
-			x="70" y="60"
-			
-			paddingBottom="0" paddingRight="0" paddingTop="0" verticalGap="15">
-			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','username')}"
-				
-				fontSize="12" fontWeight="bold">
-				<mx:TextInput 
-					id="username"
-					
-					width="240"
-					
-					color="#444444"/>
-			</mx:FormItem>
-			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','password')}"
-				
-				fontSize="12" fontWeight="bold">
-				<mx:TextInput 
-					id="password"
-					
-					width="240"
-					
-					color="#444444"
-					displayAsPassword="true"/>
-			</mx:FormItem>
-			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','hostname')}"
-				
-				fontSize="12" fontWeight="bold">
-				<mx:TextInput 
-					id="hostname"
-					
-					width="240"
-					
-					color="#444444"/>
-			</mx:FormItem>
-			<mx:FormItem 
-				label="{resourceManager.getString('LoginForm','language')}"
-				
-				fontSize="12" fontWeight="bold">
-				<mx:ComboBox 
-					id="selectLang"
-					
-					labelField="@label" width="240"
-					
-					color="#444444" cornerRadius="0" fillAlphas="[1.0, 0.59]" fillColors="[#FFFFFF, #FFFFFF]"/>
-			</mx:FormItem>
-		</mx:Form>
-		<mx:HBox 
-			styleName="loginControlBar" width="100%"
-			
-			bottom="0">
-			<mx:Button 
-				id="submitButton"
-				
-				focusEnabled="false" height="35" label="{resourceManager.getString('LoginForm','ok_button')}"
-				styleName="loginButtonOK" width="110"
-				
-				cornerRadius="0" fontSize="14."
-				buttonMode="true"/>
-			<mx:Spacer 
-				width="100%"/>
-			<mx:Button 
-				id="quitButton"
-				
-				focusEnabled="false" height="35" label="{resourceManager.getString('LoginForm','quit_button')}"
-				styleName="loginButtonQuit" width="110"
-				
-				cornerRadius="0" fontSize="14"
-				buttonMode="true"/>
-		</mx:HBox>
-	</mx:Canvas>
-	<mx:Image 
-		height="70" source="@Embed(source='assets/login/logo.png')" width="70" x="10"/>
-</mx:Canvas>
+			height="35"/>
+	</s:HGroup>
+	<mx:Image x="10" width="70" height="70" source="@Embed(source='assets/login/logo.png')" y="0"/>
+</s:SkinnableContainer>

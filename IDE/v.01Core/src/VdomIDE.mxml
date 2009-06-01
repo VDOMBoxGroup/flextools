@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+<s:WindowedApplication
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/halo"
 	
-	layout="absolute"
-	
-	invoke="invokeHandler( event )" preinitialize="preinitalizeHandler( event )"
-	applicationComplete="applicationCompleteHandler( event )">
-	<mx:Script>
+	invoke="application_invokeHandler(event)"
+	preinitialize="application_preinitializeHandler(event)"
+	applicationComplete="application_applicationCompleteHandler(event)">
+
+	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.ApplicationFacade;
 			import mx.events.FlexEvent;
-
-			public static const NAME : String = "vdomIDE";
-
+			
+			public static const NAME : String = "VDOM IDE";
+			
 			private var facade : ApplicationFacade = ApplicationFacade.getInstance( NAME );
-
-			private function invokeHandler( event : InvokeEvent ) : void
+			
+			protected function application_invokeHandler(event:InvokeEvent):void
 			{
 				facade.invoke( event.arguments );
 			}
 
-			private function preinitalizeHandler( event : FlexEvent ) : void
+			protected function application_preinitializeHandler(event:FlexEvent):void
 			{
 				facade.preinitalize( this );
 			}
 
-			private function applicationCompleteHandler( event : FlexEvent ) : void
+
+			protected function application_applicationCompleteHandler(event:FlexEvent):void
 			{
 				facade.startup( this );
 			}
+
 		]]>
-	</mx:Script>
-</mx:WindowedApplication>
+	</fx:Script>
+</s:WindowedApplication>

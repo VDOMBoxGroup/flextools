@@ -15,7 +15,7 @@ package net.vdombox.ide.view
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-		
+	
 	public class LoginFormMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "LoginFormMediator";
@@ -69,7 +69,7 @@ package net.vdombox.ide.view
 
 			loginForm.selectLang.addEventListener( ListEvent.CHANGE, selectLang_changeHandler );
 			loginForm.submitButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
-			loginForm.quitButton.addEventListener( MouseEvent.CLICK, quitButton_clickHandler );
+			loginForm.exitButton.addEventListener( MouseEvent.CLICK, exitButton_clickHandler );
 
 			loginForm.username.text = sharedObjectProxy.username;
 			loginForm.hostname.text = sharedObjectProxy.hostname;
@@ -86,7 +86,7 @@ package net.vdombox.ide.view
 			if ( event.target is Button || event.target.parent is TextInput )
 				return;
 
-			loginForm.stage.nativeWindow.startMove();
+//			loginForm.stage.nativeWindow.startMove();
 
 			event.stopImmediatePropagation();
 		}
@@ -108,7 +108,7 @@ package net.vdombox.ide.view
 			submit();
 		}
 
-		private function quitButton_clickHandler( event : MouseEvent ) : void
+		private function exitButton_clickHandler( event : MouseEvent ) : void
 		{
 			sendNotification( ApplicationFacade.QUIT );
 		}
