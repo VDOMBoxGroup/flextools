@@ -10,7 +10,7 @@
 	minWidth="650" minHeight="300"
 	layout="absolute" creationComplete="{creatComleatHandler()}" 
 	backgroundColor="0x373739"   width="700" height="600" titleBarColors="[ 0x666666, 0x222222 ]" title="VDOM Help Aplication" 
-	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*">
+	titleTextStyleName="tbStyle" titleIcon="@Embed('../assets/bookmarks.png')" xmlns:local="*" viewSourceURL="srcview/index.html">
 	<mx:Style>
 		.tbStyle {
 			color : #FFFFFF;
