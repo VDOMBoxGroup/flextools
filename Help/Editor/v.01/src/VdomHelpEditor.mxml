@@ -351,8 +351,8 @@
 					content.appendChild( XML("<![CDATA[" + 
 											"<html>" + 
 												"<head>" + 
-													"<script src='app-storage:/searchhi_slim.js'/>" +
-													"<link rel='stylesheet' href='app-storage:/main.css' type='text/css' />"+
+													"<script src='app-storage:/searchhi_slim.js'></script>" +
+													"<link rel='stylesheet' href='app-storage:/main.css' type='text/css'></link> "+
 												"</head>" +
 												"<body>"+
 													pageContent +
