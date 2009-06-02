@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas 
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/halo" 
 	
 	height="130" minWidth="250" width="300"
 	
 	color="#FFFFFF">
-	<mx:Script>
+	
+	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.interfaces.IApplicationVO;
 			import net.vdombox.ide.events.ApplicationItemRendererEvent;
 			public static const ICON_CHANGED : String = "icon changed";
-
-			override public function set data( value : Object ) : void
+			
+			public function set dataz( value : Object ) : void
 			{
+				data
 				var applicationVO : IApplicationVO = value as IApplicationVO;
 
 				if ( !applicationVO )
@@ -60,7 +64,7 @@
 				return applicatioID;
 			}
 		]]>
-	</mx:Script>
+	</fx:Script>
 	<mx:Image 
 		id="applicationIcon"
 		
@@ -89,4 +93,4 @@
 			
 			bottom="10" right="10" textAlign="right"/>
 	</mx:VBox>
-</mx:Canvas>
+</s:ItemRenderer>

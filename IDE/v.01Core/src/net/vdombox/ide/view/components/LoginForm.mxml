@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/halo" width="540" height="300">
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/halo" 
+	
+	width="540" height="300" xmlns:ns1="*">
+	<fx:Script>
+		<![CDATA[
+			import mx.graphics.SolidColor;
+		]]>
+	</fx:Script>
 	<s:layout>
-		<fx:DesignLayer>
-			<s:Rect y="25" height="285" width="460" radiusX="15" radiusY="15">
-				<s:fill>
-					<s:SolidColor color="#454545"/>
-				</s:fill>
-			</s:Rect>
-		</fx:DesignLayer>
+		<s:BasicLayout />
 	</s:layout>
+	<s:Rect y="25" height="275" width="100%" radiusX="15" radiusY="15" fill="{new SolidColor(0x454545)}"/>
 	<mx:Label
 		text="{resourceManager.getString('LoginForm','title')}"
-		width="440" x="90" y="10"/>
-	<mx:Form x="70" y="60">
+		width="440" x="90" y="40"/>
+	<mx:Form x="70" y="80">
 		<mx:FormItem
 			label="{resourceManager.getString('LoginForm','username')}">
 			<s:TextInput
@@ -41,7 +46,7 @@
 				labelField="@label" width="240"/>
 		</mx:FormItem>
 	</mx:Form>
-	<s:HGroup bottom="0" width="100%">
+	<s:HGroup bottom="0" width="540">
 		<s:Button
 			id="exitButton"
 			height="35"
@@ -52,5 +57,5 @@
 			
 			height="35"/>
 	</s:HGroup>
-	<mx:Image x="10" width="70" height="70" source="@Embed(source='assets/login/logo.png')" y="0"/>
-</s:SkinnableContainer>
+	<mx:Image x="10" width="70" height="70" source="@Embed(source='../assets/login/logo.png')" y="0"/>
+</s:Group>

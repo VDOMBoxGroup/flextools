@@ -1,7 +1,5 @@
 package net.vdombox.ide.view
 {
-	import com.benclinkinbeard.controls.SmoothScrollingList;
-	
 	import flash.events.Event;
 	
 	import mx.collections.ArrayCollection;
@@ -21,6 +19,8 @@ package net.vdombox.ide.view
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.List;
 
 	public class ApplicationsManagmentMediator extends Mediator implements IMediator
 	{
@@ -50,7 +50,7 @@ package net.vdombox.ide.view
 			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			resourceProxy = facade.retrieveProxy( ResourceProxy.NAME ) as ResourceProxy;
 
-			var applicationsList : SmoothScrollingList = applicationsManagment.applicationsList;
+			var applicationsList : List = applicationsManagment.applicationsList;
 			
 			applicationsList.addEventListener( ListEvent.CHANGE, applicationList_changeHandler, false, 0, true );
 			
@@ -94,9 +94,9 @@ package net.vdombox.ide.view
 		private function applicationList_changeHandler( event : ListEvent ) : void
 		{
 			var itemRenderer : ApplicationItemRenderer = event.itemRenderer as ApplicationItemRenderer;
-			var applicationVO : ApplicationVO = itemRenderer.data as ApplicationVO;
+//			var applicationVO : ApplicationVO = itemRenderer.data as ApplicationVO;
 
-			serverProxy.selectedApplication = applicationVO;
+//			serverProxy.selectedApplication = applicationVO;
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package net.vdombox.ide.view
 {
 	import mx.collections.XMLListCollection;
-	import mx.core.Window;
+	import mx.core.Container;
 	import mx.events.FlexEvent;
 	import mx.events.ItemClickEvent;
 	import mx.resources.IResourceManager;

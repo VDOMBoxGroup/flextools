@@ -20,7 +20,7 @@ package net.vdombox.ide.view
 
 	public class ApplicationMediator extends Mediator implements IMediator
 	{
-		[Embed( source="/assets/login/logo.png" )]
+		[Embed( source="../assets/login/logo.png" )]
 		private var zzz : Class;
 
 		public static const NAME : String = "ApplicationMediator";

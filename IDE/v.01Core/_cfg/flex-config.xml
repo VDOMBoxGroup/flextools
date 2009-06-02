@@ -15,7 +15,7 @@
 		</locale>
 		
 		<theme>
-			<filename>assets/theme/theme.swc</filename> 
+			<filename>../assets/theme/theme.swc</filename> 
 		</theme>
 		<!-- List of path elements that form the roots of ActionScript class hierarchies. -->
 		

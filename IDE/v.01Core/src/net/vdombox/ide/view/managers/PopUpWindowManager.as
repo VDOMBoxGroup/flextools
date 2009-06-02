@@ -9,8 +9,8 @@ package net.vdombox.ide.view.managers
 	import flash.events.NativeWindowDisplayStateEvent;
 	import flash.utils.Dictionary;
 	
-	import mx.core.Application;
 	import mx.core.EdgeMetrics;
+	import mx.core.FlexGlobals;
 	import mx.core.UIComponent;
 	import mx.core.Window;
 	import mx.events.AIREvent;
@@ -365,7 +365,7 @@ package net.vdombox.ide.view.managers
 				return;
 			}
 
-			var nativeWindow : NativeWindow = Application.application.nativeWindow;
+			var nativeWindow : NativeWindow = FlexGlobals.topLevelApplication.nativeWindow;
 
 			if ( currentNativeWindow == nativeWindow )
 			{
