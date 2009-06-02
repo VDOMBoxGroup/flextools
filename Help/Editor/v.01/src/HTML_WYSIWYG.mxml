@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml" location="tinymce/examples/full.html" htmlDOMInitialize="rrr()">
+	<mx:Script>
+		<![CDATA[
+			
+			public function setHTML( value : String ) : void
+			{
+				htmlLoader.window.tinyMCE.get("elm1").setContent(value);
+			}
+			
+			private function rrr() : void
+			{
+				htmlLoader.window.zzzzzz = zzzzzz;
+			}
+			
+			public function getHTML(  ) : String
+			{
+				return htmlLoader.window.tinyMCE.get("elm1").getContent();
+			}
+			
+			private function zzzzzz( ddd : *, aaa : *, sss : *  ) : void
+			{
+				dispatchEvent( new Event("onSave") );
+			}
+		]]>
+	</mx:Script>
+</mx:HTML>
