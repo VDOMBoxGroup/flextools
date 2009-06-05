@@ -4,14 +4,12 @@ package net.vdombox.ide.view
 	import flash.display.NativeWindowInitOptions;
 	import flash.display.NativeWindowSystemChrome;
 	
-	import mx.core.ClassFactory;
-	import mx.core.ScrollPolicy;
-	
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.view.components.LoginForm;
+	import net.vdombox.ide.view.components.LoginFormWindow;
 	import net.vdombox.ide.view.components.MainScreen;
-	import net.vdombox.ide.view.components.MainTitleBar;
 	import net.vdombox.ide.view.managers.PopUpWindowManager;
+	import net.vdombox.ide.view.skins.WindowSkin;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -69,37 +67,30 @@ package net.vdombox.ide.view
 				var loginForm : LoginForm = new LoginForm();
 				facade.registerMediator( new LoginFormMediator( loginForm ) );
 
-				var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
-				windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
-				windowOptions.resizable = false;
-				windowOptions.maximizable = false;
-				windowOptions.minimizable = false;
-				windowOptions.transparent = true;
-
-				loginWindow = new Window();
+				loginWindow = new LoginFormWindow();
 
 				loginWindow.systemChrome = NativeWindowSystemChrome.NONE;
 				loginWindow.resizable = false;
 				loginWindow.maximizable = false;
 				loginWindow.minimizable = false;
 				loginWindow.transparent = true;
-
+//				loginWindow.setStyle( "skinClass", WindowSkin );
 				loginWindow.title = "VDOM IDE - Login";
 
 				loginWindow.showTitleBar = false;
 				loginWindow.showGripper = false;
 				loginWindow.showStatusBar = false;
 
-				loginWindow.setStyle( "borderStyle", "none" );
-				loginWindow.setStyle( "backgroundAlpha", .0 );
+//				loginWindow.setStyle( "borderStyle", "none" );
+//				loginWindow.setStyle( "backgroundAlpha", .0 );
 
 				
-				loginWindow.width = loginForm.width;
-				loginWindow.height = loginForm.height;
+//				loginWindow.width = loginForm.width;
+//				loginWindow.height = loginForm.height;
 				
 				loginWindow.open();
 				
-				loginWindow.addElement( loginForm );
+//				loginWindow.addElement( loginForm );
 			}
 			else
 			{
@@ -126,7 +117,7 @@ package net.vdombox.ide.view
 				windowOptions.maximizable = true;
 				windowOptions.minimizable = true;
 				windowOptions.transparent = true;
-
+				
 				var mainWindow : Window = new Window();
 
 				mainWindow.systemChrome = NativeWindowSystemChrome.NONE;
@@ -144,7 +135,7 @@ package net.vdombox.ide.view
 				mainWindow.showTitleBar = true;
 				mainWindow.showGripper = false;
 				mainWindow.showStatusBar = true;
-
+	
 				mainWindow.setStyle( "borderStyle", "none" );
 				mainWindow.setStyle( "backgroundAlpha", .0 );
 				

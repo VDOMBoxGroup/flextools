@@ -1,12 +1,12 @@
-@namespace "library://ns.adobe.com/flex/spark";
+@namespace s "library://ns.adobe.com/flex/spark";
 @namespace mx "library://ns.adobe.com/flex/halo";
 
-MainScreen
+s | MainScreen
 {
 	backgroundImage: Embed(source="theme.swf", symbol="MainBackground");
 	backgroundSize: "100%";	
 }
-MainTitleBar
+s | MainTitleBar
 {
 	backgroundImage: Embed(source="theme.swf", symbol="MainTitleBarBackground");
 	backgroundSize: "100%";
@@ -16,14 +16,14 @@ MainTitleBar
 	restoreButton: Embed(source="theme.swf", symbol="RestoreButton");
 }
 
-.mainTabBar
+s | .mainTabBar
 {	
 	horizontalGap: 1;
 	selectedTabTextStyleName : "selectedTabStyle";
 	tabStyleName: "tabStyle";
 }
 
-.selectedTabStyle
+s | .selectedTabStyle
 {
 	color: #FFFFFF;
 }
