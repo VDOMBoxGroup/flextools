@@ -13,7 +13,6 @@
 	<mx:Canvas 
 		width="100%"
 		
-		backgroundImage="@Embed(source='theme.swf', symbol='MainTabBarBackground')"
 		backgroundSize="100%">
 		<mx:TabBar 
 			id="mainTabBar"

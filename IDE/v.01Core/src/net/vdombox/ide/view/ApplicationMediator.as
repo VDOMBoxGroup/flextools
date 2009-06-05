@@ -6,7 +6,6 @@ package net.vdombox.ide.view
 	
 	import mx.core.ClassFactory;
 	import mx.core.ScrollPolicy;
-	import mx.core.Window;
 	
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.view.components.LoginForm;
@@ -17,12 +16,11 @@ package net.vdombox.ide.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.Window;
 
 	public class ApplicationMediator extends Mediator implements IMediator
 	{
-		[Embed( source="../assets/login/logo.png" )]
-		private var zzz : Class;
-
 		public static const NAME : String = "ApplicationMediator";
 
 		public function ApplicationMediator( viewComponent : Object = null )
@@ -95,12 +93,13 @@ package net.vdombox.ide.view
 				loginWindow.setStyle( "borderStyle", "none" );
 				loginWindow.setStyle( "backgroundAlpha", .0 );
 
-				loginWindow.addChild( loginForm );
-
+				
 				loginWindow.width = loginForm.width;
 				loginWindow.height = loginForm.height;
 				
 				loginWindow.open();
+				
+				loginWindow.addElement( loginForm );
 			}
 			else
 			{
@@ -136,11 +135,8 @@ package net.vdombox.ide.view
 				mainWindow.minimizable = true;
 				mainWindow.transparent = true;
 
-				mainWindow.titleBarFactory = new ClassFactory( MainTitleBar );
-				mainWindow.titleIcon = zzz;
+//				mainWindow.titleBarFactory = new ClassFactory( MainTitleBar );
 				
-				mainWindow.horizontalScrollPolicy = ScrollPolicy.OFF;
-				mainWindow.verticalScrollPolicy = ScrollPolicy.OFF;
 				
 				mainWindow.addChild( mainScreen );
 

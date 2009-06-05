@@ -1,3 +1,6 @@
+@namespace "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/halo";
+
 .loginButtonOK {
 	
 	color: #444444;
