@@ -5,11 +5,9 @@ package net.vdombox.ide.view
 	import flash.display.NativeWindowSystemChrome;
 	
 	import net.vdombox.ide.ApplicationFacade;
-	import net.vdombox.ide.view.components.LoginForm;
-	import net.vdombox.ide.view.components.LoginFormWindow;
+	import net.vdombox.ide.view.components.LoginWindow;
 	import net.vdombox.ide.view.components.MainScreen;
 	import net.vdombox.ide.view.managers.PopUpWindowManager;
-	import net.vdombox.ide.view.skins.WindowSkin;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -37,7 +35,7 @@ package net.vdombox.ide.view
 
 		private var currentWindow : Window;
 
-		private var loginWindow : Window;
+		private var loginWindow : LoginWindow;
 		private var mainWindow : Window;
 
 		override public function listNotificationInterests() : Array
@@ -64,10 +62,9 @@ package net.vdombox.ide.view
 
 			if ( !loginWindow )
 			{
-				var loginForm : LoginForm = new LoginForm();
-				facade.registerMediator( new LoginFormMediator( loginForm ) );
-
-				loginWindow = new LoginFormWindow();
+//				var loginForm : LoginForm = new LoginForm();
+				loginWindow = new LoginWindow();
+				facade.registerMediator( new LoginWindowMediator( loginWindow ) );
 
 				loginWindow.systemChrome = NativeWindowSystemChrome.NONE;
 				loginWindow.resizable = false;
@@ -81,12 +78,6 @@ package net.vdombox.ide.view
 				loginWindow.showGripper = false;
 				loginWindow.showStatusBar = false;
 
-//				loginWindow.setStyle( "borderStyle", "none" );
-//				loginWindow.setStyle( "backgroundAlpha", .0 );
-
-				
-//				loginWindow.width = loginForm.width;
-//				loginWindow.height = loginForm.height;
 				
 				loginWindow.open();
 				

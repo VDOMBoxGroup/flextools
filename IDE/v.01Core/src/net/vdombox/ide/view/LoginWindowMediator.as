@@ -3,24 +3,26 @@ package net.vdombox.ide.view
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
-	import mx.controls.Button;
-	import mx.controls.TextInput;
+	import mx.controls.ComboBox;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.model.LocaleProxy;
 	import net.vdombox.ide.model.SharedObjectProxy;
-	import net.vdombox.ide.view.components.LoginForm;
+	import net.vdombox.ide.view.components.LoginWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
-	public class LoginFormMediator extends Mediator implements IMediator
+	import spark.components.Button;
+	import spark.primitives.RichEditableText;
+	
+	public class LoginWindowMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "LoginFormMediator";
 
-		public function LoginFormMediator( viewComponent : Object = null )
+		public function LoginWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
@@ -41,39 +43,39 @@ package net.vdombox.ide.view
 			addEventListeners();
 		}
 
-		private function get loginForm() : LoginForm
+		private function get loginWindow() : LoginWindow
 		{
-			return viewComponent as LoginForm;
+			return viewComponent as LoginWindow;
 		}
 
 		private function addEventListeners() : void
 		{
-			loginForm.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			loginForm.addEventListener( FlexEvent.SHOW, showHandler );
+			loginWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			loginWindow.addEventListener( FlexEvent.SHOW, showHandler );
 		}
 
 		private function submit() : void
 		{
 			var loginFormData : Object = {};
-			loginFormData.username = loginForm.username.text;
-			loginFormData.password = loginForm.password.text;
-			loginFormData.hostname = loginForm.hostname.text;
+			loginFormData.username = loginWindow.username.text;
+			loginFormData.password = loginWindow.password.text;
+			loginFormData.hostname = loginWindow.hostname.text;
 			
 			sendNotification( ApplicationFacade.SUBMIT_BEGIN, loginFormData );
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			loginForm.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-			loginForm.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
+			loginWindow.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
+			loginWindow.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
 
-			loginForm.selectLang.addEventListener( ListEvent.CHANGE, selectLang_changeHandler );
-			loginForm.submitButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
-			loginForm.exitButton.addEventListener( MouseEvent.CLICK, exitButton_clickHandler );
+			loginWindow.selectLang.addEventListener( ListEvent.CHANGE, selectLang_changeHandler );
+			loginWindow.submitButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
+			loginWindow.exitButton.addEventListener( MouseEvent.CLICK, exitButton_clickHandler );
 
-			loginForm.username.text = sharedObjectProxy.username;
-			loginForm.hostname.text = sharedObjectProxy.hostname;
-			loginForm.selectLang.dataProvider = localeProxy.languageList;
+			loginWindow.username.text = sharedObjectProxy.username;
+			loginWindow.hostname.text = sharedObjectProxy.hostname;
+			loginWindow.selectLang.dataProvider = localeProxy.languageList;
 		}
 
 		private function showHandler( event : FlexEvent ) : void
@@ -83,10 +85,10 @@ package net.vdombox.ide.view
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
-			if ( event.target is Button || event.target.parent is TextInput )
+			if ( event.target is Button || event.target is RichEditableText || event.target.parent is ComboBox )
 				return;
 
-//			loginForm.stage.nativeWindow.startMove();
+			loginWindow.nativeWindow.startMove();
 
 			event.stopImmediatePropagation();
 		}

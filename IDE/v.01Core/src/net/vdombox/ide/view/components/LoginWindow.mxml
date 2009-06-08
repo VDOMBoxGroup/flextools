@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Window
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/halo"
+	xmlns:components="net.vdombox.ide.view.components.*"
+	
+	showGripper="false" showStatusBar="false" showTitleBar="false"
+	
+	width="550" height="300" preinitialize="preinitializeHandler(event)">
+	
+	<fx:Metadata>
+		[ResourceBundle("LoginForm") ]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import net.vdombox.ide.view.skins.WindowSkin;
+
+			protected function preinitializeHandler(event:FlexEvent):void
+			{
+				setStyle( "skinClass", WindowSkin );
+			}
+
+		]]>
+	</fx:Script>
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<s:Rect width="100%" height="275" y="25" radiusX="10" radiusY="10">
+		<s:fill>
+			<s:SolidColor color="#454545" />
+		</s:fill>
+	</s:Rect>
+	
+	<mx:Label
+		text="{resourceManager.getString('LoginForm','title')}"
+		width="440" x="90" y="40"/>
+	<mx:Form x="70" y="90" >
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','username')}">
+			<s:TextInput
+				id="username"
+					
+				width="240"/>
+		</mx:FormItem>
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','password')}">
+			<s:TextInput
+				id="password"
+					
+				width="240"/>
+		</mx:FormItem>
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','hostname')}">
+			<s:TextInput
+				id="hostname"
+					
+				width="240"/>
+		</mx:FormItem>
+		<mx:FormItem
+			label="{resourceManager.getString('LoginForm','language')}">
+			<mx:ComboBox
+				id="selectLang"
+				labelField="@label" width="240"/>
+		</mx:FormItem>
+	</mx:Form>
+	<s:HGroup width="100%" bottom="-25">
+		<s:Button
+			id="exitButton"
+			label="{resourceManager.getString('LoginForm','quit_button')}"
+			height="35"
+			/>
+		<mx:Spacer width="100%"/>
+		<s:Button
+			id="submitButton"
+			label="{resourceManager.getString('LoginForm','ok_button')}"
+			height="35"/>
+	</s:HGroup>
+	
+	<s:BitmapImage source="@Embed(source='../assets/login/logo.png')" x="10" width="70" height="70"/>
+</s:Window>
