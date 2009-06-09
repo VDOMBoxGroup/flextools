@@ -1,12 +1,11 @@
 package net.vdombox.ide.view
 {
 	import flash.desktop.NativeApplication;
-	import flash.display.NativeWindowInitOptions;
 	import flash.display.NativeWindowSystemChrome;
 	
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.view.components.LoginWindow;
-	import net.vdombox.ide.view.components.MainScreen;
+	import net.vdombox.ide.view.components.MainWindow;
 	import net.vdombox.ide.view.managers.PopUpWindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -36,7 +35,7 @@ package net.vdombox.ide.view
 		private var currentWindow : Window;
 
 		private var loginWindow : LoginWindow;
-		private var mainWindow : Window;
+		private var mainWindow : MainWindow;
 
 		override public function listNotificationInterests() : Array
 		{
@@ -99,39 +98,8 @@ package net.vdombox.ide.view
 
 			if ( !mainWindow )
 			{
-				var mainScreen : MainScreen = new MainScreen();
-				facade.registerMediator( new MainScreenMediator( mainScreen ) );
-
-				var windowOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
-				windowOptions.systemChrome = NativeWindowSystemChrome.NONE;
-				windowOptions.resizable = true;
-				windowOptions.maximizable = true;
-				windowOptions.minimizable = true;
-				windowOptions.transparent = true;
-				
-				var mainWindow : Window = new Window();
-
-				mainWindow.systemChrome = NativeWindowSystemChrome.NONE;
-				mainWindow.resizable = true;
-				mainWindow.maximizable = true;
-				mainWindow.minimizable = true;
-				mainWindow.transparent = true;
-
-//				mainWindow.titleBarFactory = new ClassFactory( MainTitleBar );
-				
-				
-				mainWindow.addChild( mainScreen );
-
-
-				mainWindow.showTitleBar = true;
-				mainWindow.showGripper = false;
-				mainWindow.showStatusBar = true;
-	
-				mainWindow.setStyle( "borderStyle", "none" );
-				mainWindow.setStyle( "backgroundAlpha", .0 );
-				
-				mainWindow.width = 800;
-				mainWindow.height = 600;
+				mainWindow = new MainWindow();
+				facade.registerMediator( new MainWindowMediator( mainWindow ) );
 				
 				mainWindow.open();
 			}

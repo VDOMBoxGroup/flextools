@@ -36,7 +36,7 @@
 		height="100%" width="100%"
 		
 		horizontalGap="0">
-		<mx:ViewStack 
+		<mx:ViewStack
 			id="mainViewStack"
 			
 			height="100%" styleName="vdomLogo" width="100%"/>

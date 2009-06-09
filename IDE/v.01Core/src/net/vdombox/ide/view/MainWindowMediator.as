@@ -1,7 +1,6 @@
 package net.vdombox.ide.view
 {
 	import mx.collections.XMLListCollection;
-	import mx.core.Container;
 	import mx.events.FlexEvent;
 	import mx.events.ItemClickEvent;
 	import mx.resources.IResourceManager;
@@ -9,7 +8,7 @@ package net.vdombox.ide.view
 	
 	import net.vdombox.ide.model.LocaleProxy;
 	import net.vdombox.ide.model.ModulesProxy;
-	import net.vdombox.ide.view.components.MainScreen;
+	import net.vdombox.ide.view.components.MainWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -17,11 +16,11 @@ package net.vdombox.ide.view
 	[ResourceBundle( "ApplicationManagment" )]
 	[ResourceBundle( "Modules" )]
 
-	public class MainScreenMediator extends Mediator implements IMediator
+	public class MainWindowMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "MainScreenMediator";
 
-		public function MainScreenMediator( viewComponent : Object = null )
+		public function MainWindowMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
@@ -34,9 +33,9 @@ package net.vdombox.ide.view
 		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
 		private var modulesManagmentMediator : ModulesManagmentMediator;
 
-		private function get mainScreen() : MainScreen
+		private function get mainWindow() : MainWindow
 		{
-			return viewComponent as MainScreen;
+			return viewComponent as MainWindow;
 		}
 
 		override public function onRegister() : void
@@ -49,18 +48,18 @@ package net.vdombox.ide.view
 
 		private function addEventListeners() : void
 		{
-			mainScreen.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			applicationsManagmentMediator = new ApplicationsManagmentMediator( mainScreen.applicationsManagment );
+			applicationsManagmentMediator = new ApplicationsManagmentMediator( mainWindow.applicationsManagment );
 			facade.registerMediator( applicationsManagmentMediator );
 
-			modulesManagmentMediator = new ModulesManagmentMediator( mainScreen.modulesManagment )
+			modulesManagmentMediator = new ModulesManagmentMediator( mainWindow.modulesManagment )
 			facade.registerMediator( modulesManagmentMediator );
 
-			mainScreen.mainTabBar.addEventListener( ItemClickEvent.ITEM_CLICK, mainTabBar_itemClickHandler )
+			mainWindow.mainTabBar.addEventListener( ItemClickEvent.ITEM_CLICK, mainTabBar_itemClickHandler )
 
 			var tabs : XMLListCollection = new XMLListCollection();
 			tabs.addItem(
@@ -78,15 +77,15 @@ package net.vdombox.ide.view
 			}
 
 
-			mainScreen.mainTabBar.iconField = null;
+			mainWindow.mainTabBar.iconField = null;
 
-			mainScreen.mainTabBar.labelFunction = function( data : XML ) : String
+			mainWindow.mainTabBar.labelFunction = function( data : XML ) : String
 			{
 				return data.@label[ 0 ];
 			};
 
-			mainScreen.mainTabBar.dataProvider = tabs;
-			mainScreen.mainTabBar.selectedIndex = 0;
+			mainWindow.mainTabBar.dataProvider = tabs;
+			mainWindow.mainTabBar.selectedIndex = 0;
 		}
 
 		private function mainTabBar_itemClickHandler( event : ItemClickEvent ) : void
@@ -95,11 +94,11 @@ package net.vdombox.ide.view
 
 			if ( categoryName == "applicationManagment" )
 			{
-				mainScreen.componentsStack.selectedChild = mainScreen.applicationsManagment;
+				mainWindow.componentsStack.selectedChild = mainWindow.applicationsManagment;
 			}
 			else
 			{
-				mainScreen.componentsStack.selectedChild = mainScreen.modulesManagment;
+				mainWindow.componentsStack.selectedChild = mainWindow.modulesManagment;
 				modulesManagmentMediator.showModulesByCategory( categoryName );
 			}
 		}
