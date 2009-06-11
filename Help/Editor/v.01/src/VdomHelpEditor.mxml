@@ -126,6 +126,7 @@
 			var fullPath : String = newFile.url;
 //			var f : File = File.applicationStorageDirectory; 
 			html.location = fullPath; 
+//			html_wysiwyg.setHTML( "fullPath");
 		}
 		
 		
@@ -760,7 +761,7 @@
 			<mx:Canvas width="100%" height="100%" label="Preview" show="{htmlShowHandler()}">
 				<mx:HTML id="html"   width="100%" height="100%"  />
 			</mx:Canvas>
-			<mx:Canvas width="100%" height="100%" label="WYSIWYG" >
+			<mx:Canvas width="100%" height="100%" label="WYSIWYG" color="#00FF00" >
 				<local:HTML_WYSIWYG id="html_wysiwyg"   width="100%" height="100%"  />
 			</mx:Canvas>
 		</mx:TabNavigator>

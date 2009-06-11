@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml" location="tinymce/examples/black.html" htmlDOMInitialize="rrr()" creationComplete="init()">
+<mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml" location="tinymce/examples/full.html" htmlDOMInitialize="rrr()" creationComplete="init()">
 	<mx:Script>
 		<![CDATA[
 			private function init():void
 			{
-				
+			
 			}
 			
 			public function setHTML( value : String ) : void
@@ -14,12 +14,14 @@
 			
 			private function rrr() : void
 			{
+				var d : * = htmlLoader.window.tinyMCE;	
 				htmlLoader.window.zzzzzz = zzzzzz;
 			}
 			
 			public function getHTML(  ) : String
 			{
 				return htmlLoader.window.tinyMCE.get("elm1").getContent();
+				
 			}
 			
 			private function zzzzzz( ddd : *, aaa : *, sss : *  ) : void
