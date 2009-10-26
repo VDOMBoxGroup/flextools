@@ -50,9 +50,9 @@ package net.vdombox.ide.view
 			serverProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			resourceProxy = facade.retrieveProxy( ResourceProxy.NAME ) as ResourceProxy;
 
-			var applicationsList : List = applicationsManagment.applicationsList;
-			
-			applicationsList.addEventListener( ListEvent.CHANGE, applicationList_changeHandler, false, 0, true );
+//			var applicationsList : List = applicationsManagment.applicationsList;
+//			
+//			applicationsList.addEventListener( ListEvent.CHANGE, applicationList_changeHandler, false, 0, true );
 			
 			var applications : ArrayCollection = new ArrayCollection( serverProxy.applications );
 			var sort : Sort = new Sort();
@@ -60,7 +60,7 @@ package net.vdombox.ide.view
 			applications.sort = sort;
 			applications.refresh();
 			
-			applicationsList.dataProvider = applications;
+//			applicationsList.dataProvider = applications;
 			
 			applications.addItem( new ApplicationVO( <xml /> ) );
 		}

@@ -6,7 +6,7 @@ package net.vdombox.ide.model
 	import net.vdombox.ide.model.business.SOAP;
 	import net.vdombox.ide.model.vo.ApplicationVO;
 	import net.vdombox.ide.model.vo.AuthInfo;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -15,6 +15,7 @@ package net.vdombox.ide.model
 		public static const NAME : String = "ServerProxy";
 
 		public static const LOGIN_COMPLETE : String = "Login Complete";
+
 		public static const CONNECT_COMPLETE : String = "Connect Complete";
 
 		public function ServerProxy( data : Object = null )
@@ -29,8 +30,11 @@ package net.vdombox.ide.model
 		private var soap : SOAP = SOAP.getInstance();
 
 		private var tempAuthInfo : AuthInfo;
+
 		private var _authInfo : AuthInfo;
+
 		private var _selectedApplication : ApplicationVO;
+
 		private var listOfApplications : Object;
 
 		public function get authInfo() : AuthInfo
@@ -48,20 +52,20 @@ package net.vdombox.ide.model
 			}
 			return _applications;
 		}
-		
+
 		public function get selectedApplication() : ApplicationVO
 		{
 			return _selectedApplication;
 		}
-		
+
 		public function set selectedApplication( value : ApplicationVO ) : void
 		{
-			if( listOfApplications[ value.id ] )
+			if ( listOfApplications[ value.id ])
 			{
 				_selectedApplication = value;
 			}
 		}
-		
+
 		public function connect( authInfo : AuthInfo ) : void
 		{
 			connected = false;
@@ -71,10 +75,7 @@ package net.vdombox.ide.model
 
 		public function getApplicationProxy( applicationID : String ) : ApplicationProxy
 		{
-			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME +
-																			"." +
-																			applicationID ) as
-				ApplicationProxy;
+			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "." + applicationID ) as ApplicationProxy;
 
 			if ( !applicationProxy )
 			{
@@ -82,9 +83,7 @@ package net.vdombox.ide.model
 
 				if ( applicationVO )
 				{
-					applicationProxy = new ApplicationProxy( ApplicationProxy.NAME +
-															 "." + applicationID,
-															 applicationVO );
+					applicationProxy = new ApplicationProxy( ApplicationProxy.NAME + "." + applicationID, applicationVO );
 					facade.registerProxy( applicationProxy );
 				}
 			}
@@ -92,7 +91,7 @@ package net.vdombox.ide.model
 			return applicationProxy;
 
 		}
-		
+
 		private function addEventListeners() : void
 		{
 			soap.addEventListener( SOAPEvent.INIT_COMPLETE, soap_initCompleteHandler );
@@ -124,13 +123,12 @@ package net.vdombox.ide.model
 		{
 			connected = true;
 			var result : XML = event.result;
-			_authInfo = new AuthInfo( result.Username[ 0 ], tempAuthInfo.password,
-									  result.Hostname[ 0 ] );
+			_authInfo = new AuthInfo( result.Username[ 0 ], tempAuthInfo.password, result.Hostname[ 0 ] );
 			tempAuthInfo = null;
 
 			sendNotification( LOGIN_COMPLETE, _authInfo );
 
-			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_listApplicationsHandler )
+			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_listApplicationsHandler );
 			soap.list_applications();
 		}
 

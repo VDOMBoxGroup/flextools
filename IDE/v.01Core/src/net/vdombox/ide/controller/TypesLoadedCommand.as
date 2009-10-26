@@ -9,9 +9,8 @@ package net.vdombox.ide.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var applicationMediator : ApplicationMediator = facade.retrieveMediator( ApplicationMediator.NAME ) as
-				ApplicationMediator;
-			
+			var applicationMediator : ApplicationMediator = facade.retrieveMediator( ApplicationMediator.NAME ) as ApplicationMediator;
+
 			applicationMediator.openMainWindow();
 		}
 	}

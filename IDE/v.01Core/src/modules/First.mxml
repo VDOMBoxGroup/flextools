@@ -9,9 +9,10 @@
 	implements="net.vdombox.ide.interfaces.IVDOMIDEModule" xmlns="modules.*" icon="modules.ZzzzButtonSkin">
 	<mx:Script>
 		<![CDATA[
+			[ResourceBundle("First")]
 			override public function get title() : String
 			{
-				return "zzzzzz";
+				return resourceManager.getString( "First", "test" );;
 			}
 		]]>
 	</mx:Script>

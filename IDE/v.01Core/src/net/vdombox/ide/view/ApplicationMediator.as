@@ -63,21 +63,23 @@ package net.vdombox.ide.view
 			{
 //				var loginForm : LoginForm = new LoginForm();
 				loginWindow = new LoginWindow();
+//				var rwindow : Window = new Window();
+//				rwindow.systemChrome = NativeWindowSystemChrome.NONE;
 				facade.registerMediator( new LoginWindowMediator( loginWindow ) );
 
-				loginWindow.systemChrome = NativeWindowSystemChrome.NONE;
-				loginWindow.resizable = false;
-				loginWindow.maximizable = false;
-				loginWindow.minimizable = false;
-				loginWindow.transparent = true;
+//				loginWindow.systemChrome = NativeWindowSystemChrome.ALTERNATE;
+//				loginWindow.showStatusBar = false;
+//				loginWindow.resizable = false;
+//				loginWindow.maximizable = false;
+//				loginWindow.minimizable = false;
+//				loginWindow.transparent = true;
 //				loginWindow.setStyle( "skinClass", WindowSkin );
-				loginWindow.title = "VDOM IDE - Login";
+//				loginWindow.title = "VDOM IDE - Login";
 
-				loginWindow.showTitleBar = false;
-				loginWindow.showGripper = false;
-				loginWindow.showStatusBar = false;
+//				loginWindow.showTitleBar = false;
+//				loginWindow.showGripper = false;
+//				loginWindow.showStatusBar = false;
 
-				
 				loginWindow.open();
 				
 //				loginWindow.addElement( loginForm );

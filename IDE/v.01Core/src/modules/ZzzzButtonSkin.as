@@ -33,13 +33,13 @@ public class ZzzzButtonSkin extends UIComponent
 	//
 	//--------------------------------------------------------------------------
 
-    [Embed(source="/assets/test/one.png")]
+    [Embed(source="assets/test/one.png")]
     private static var winRestoreUpSkin:Class;
     
-	[Embed(source="/assets/test/two.png")]
+	[Embed(source="assets/test/two.png")]
     private static var winRestoreDownSkin:Class;
     
-    [Embed(source="/assets/test/two.png")]
+    [Embed(source="assets/test/two.png")]
     private static var winRestoreOverSkin:Class;
 	
 	//--------------------------------------------------------------------------

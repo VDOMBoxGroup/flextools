@@ -27,7 +27,6 @@
 				facade.preinitalize( this );
 			}
 
-
 			protected function application_applicationCompleteHandler(event:FlexEvent):void
 			{
 				facade.startup( this );

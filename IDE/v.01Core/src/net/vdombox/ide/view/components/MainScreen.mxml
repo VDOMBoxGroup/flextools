@@ -7,25 +7,21 @@
 	
 	height="100%"
 	minHeight="600" minWidth="800" width="100%">
+	
 	<s:layout>
 		<s:BasicLayout />
 	</s:layout>
+	
 	<mx:Canvas 
-		width="100%"
+		width="100%" backgroundSize="100%">
 		
-		backgroundSize="100%">
-		<mx:TabBar 
-			id="mainTabBar"
-			
+		<mx:TabBar id="mainTabBar"
 			height="18" styleName="mainTabBar"
-			
 			horizontalAlign="left" left="130"/>
 	</mx:Canvas>
-	<mx:ViewStack
-		id="componentsStack"
-		
+	
+	<mx:ViewStack id="componentsStack"
 		height="100%" width="100%"
-		
 		top="18">
 		
 		<mx:Box id="applicationsManagment" >

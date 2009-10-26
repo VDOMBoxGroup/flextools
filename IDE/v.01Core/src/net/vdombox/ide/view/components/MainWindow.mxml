@@ -10,31 +10,4 @@
 		<s:BasicLayout/>
 	</s:layout>
 	
-	<mx:Canvas 
-		width="100%"
-		
-		backgroundSize="100%">
-		<mx:TabBar 
-			id="mainTabBar"
-			
-			height="18" styleName="mainTabBar"
-			
-			horizontalAlign="left" left="130"/>
-	</mx:Canvas>
-	<mx:ViewStack
-		id="componentsStack"
-		
-		height="100%" width="100%"
-		
-		top="18">
-		
-		<mx:Box id="applicationsManagment" >
-		<components:ApplicationsManagment 
-			width="100%" height="100%"/>
-		</mx:Box>
-		<mx:Box id="modulesManagment">
-		<components:ModulesManagment
-			 width="100%" height="100%"/>
-		</mx:Box>
-	</mx:ViewStack>
 </s:Window>

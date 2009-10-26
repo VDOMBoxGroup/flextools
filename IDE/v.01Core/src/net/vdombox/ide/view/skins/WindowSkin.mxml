@@ -63,8 +63,8 @@
             </s:Rect>
         
             <!-- status text -->
-            <s:SimpleText id="statusText" top="2" bottom="2" left="10" right="10" verticalAlign="middle" 
-                fontSize="10" color="0x585858" width="100%" truncation="1" />
+            <s:Label id="statusText" top="2" bottom="2" left="10" right="10" verticalAlign="middle" 
+                fontSize="10" color="0x585858" width="100%" />
 
         </s:Group> 
     </s:Group>

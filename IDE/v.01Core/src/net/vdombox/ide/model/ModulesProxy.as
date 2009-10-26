@@ -1,23 +1,23 @@
 package net.vdombox.ide.model
 {
 	import flash.display.DisplayObject;
-	
+
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ModulesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ModulesProxy";
+
 		public static const MODULE_LOADED : String = "Module Loaded";
 
 		private static const MODULES_DIR : String = "app:/modules/";
 
-		private static const MODULES_XML : XML =
-			<modules>
+		private static const MODULES_XML : XML = <modules>
 				<category name="editing">
 					<module name="FirstModule" path="app:/modules/First.swf"/>
 					<module name="SecondModule" path="app:/modules/Second.swf"/>
@@ -37,8 +37,9 @@ package net.vdombox.ide.model
 		}
 
 		private var _categories : XMLList;
+
 		private var moduleInfo : IModuleInfo;
-		
+
 		public function get categories() : XMLList
 		{
 			return _categories;
@@ -51,8 +52,7 @@ package net.vdombox.ide.model
 
 		public function loadModule( categoryName : String, moduleName : String ) : void
 		{
-			var module : XML = MODULES_XML.category.( @name == categoryName ).module.( @name ==
-				moduleName )[ 0 ];
+			var module : XML = MODULES_XML.category.( @name == categoryName ).module.( @name == moduleName )[ 0 ];
 			moduleInfo = ModuleManager.getModule( module.@path );
 			moduleInfo.addEventListener( ModuleEvent.READY, moduleReadyHandler );
 			moduleInfo.load();
@@ -64,8 +64,7 @@ package net.vdombox.ide.model
 
 			for each ( var category : XML in MODULES_XML.* )
 			{
-				_categories +=
-					<category name={category.@name}/>
+				_categories += <category name={category.@name}/>
 			}
 		}
 

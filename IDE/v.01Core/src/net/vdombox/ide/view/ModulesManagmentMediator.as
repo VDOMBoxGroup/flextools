@@ -2,7 +2,7 @@ package net.vdombox.ide.view
 {
 	import flash.display.DisplayObject;
 	
-	import mx.controls.Button;
+	import mx.containers.Box;
 	
 	import net.vdombox.ide.model.ModulesProxy;
 	import net.vdombox.ide.view.components.ModulesManagment;
@@ -32,7 +32,7 @@ package net.vdombox.ide.view
 
 		private function get modulesManagment() : ModulesManagment
 		{
-			return viewComponent as ModulesManagment;
+			return Box( viewComponent ).getChildAt( 0 ) as ModulesManagment;
 		}
 
 		override public function listNotificationInterests() : Array
