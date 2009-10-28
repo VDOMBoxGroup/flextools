@@ -5,9 +5,8 @@
 	xmlns:mx="library://ns.adobe.com/flex/halo"
 	xmlns:components="net.vdombox.ide.view.components.*"
 	
-	width="800" height="600" >
-	<s:layout>
-		<s:BasicLayout/>
-	</s:layout>
+	width="800" height="600"
 	
+	skinClass="net.vdombox.ide.view.skins.WindowSkin"
+	systemChrome="{ flash.display.NativeWindowSystemChrome.NONE }">
 </s:Window>
