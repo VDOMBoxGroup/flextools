@@ -2,16 +2,16 @@ package net.vdombox.ide.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.display.NativeWindowSystemChrome;
-	
+
 	import net.vdombox.ide.ApplicationFacade;
 	import net.vdombox.ide.view.components.LoginWindow;
 	import net.vdombox.ide.view.components.MainWindow;
 	import net.vdombox.ide.view.managers.PopUpWindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.Window;
 
 	public class ApplicationMediator extends Mediator implements IMediator
@@ -35,6 +35,7 @@ package net.vdombox.ide.view
 		private var currentWindow : Window;
 
 		private var loginWindow : LoginWindow;
+
 		private var mainWindow : MainWindow;
 
 		override public function listNotificationInterests() : Array
@@ -44,7 +45,7 @@ package net.vdombox.ide.view
 
 		override public function handleNotification( note : INotification ) : void
 		{
-			switch ( note.getName() )
+			switch ( note.getName())
 			{
 				case ApplicationFacade.STARTUP:
 				{
@@ -61,28 +62,10 @@ package net.vdombox.ide.view
 
 			if ( !loginWindow )
 			{
-//				var loginForm : LoginForm = new LoginForm();
 				loginWindow = new LoginWindow();
-//				var rwindow : Window = new Window();
-//				rwindow.systemChrome = NativeWindowSystemChrome.NONE;
-				facade.registerMediator( new LoginWindowMediator( loginWindow ) );
-
-//				loginWindow.systemChrome = NativeWindowSystemChrome.ALTERNATE;
-//				loginWindow.showStatusBar = false;
-//				loginWindow.resizable = false;
-//				loginWindow.maximizable = false;
-//				loginWindow.minimizable = false;
-//				loginWindow.transparent = true;
-//				loginWindow.setStyle( "skinClass", WindowSkin );
-//				loginWindow.title = "VDOM IDE - Login";
-
-//				loginWindow.showTitleBar = false;
-//				loginWindow.showGripper = false;
-//				loginWindow.showStatusBar = false;
+				facade.registerMediator( new LoginWindowMediator( loginWindow ));
 
 				loginWindow.open();
-				
-//				loginWindow.addElement( loginForm );
 			}
 			else
 			{
@@ -101,8 +84,8 @@ package net.vdombox.ide.view
 			if ( !mainWindow )
 			{
 				mainWindow = new MainWindow();
-				facade.registerMediator( new MainWindowMediator( mainWindow ) );
-				
+				facade.registerMediator( new MainWindowMediator( mainWindow ));
+
 				mainWindow.open();
 			}
 			else

@@ -8,9 +8,17 @@
 	implements="net.vdombox.ide.interfaces.IVDOMIDEModule" xmlns="modules.*">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.UIComponent;
 			override public function get title() : String
 			{
 				return "22222222";
+			}
+			
+			public function get toolset() : UIComponent
+			{
+				var toolsetButton : Button = new Button();
+				toolsetButton.label = title;
+				return toolsetButton;
 			}
 		]]>
 	</mx:Script>

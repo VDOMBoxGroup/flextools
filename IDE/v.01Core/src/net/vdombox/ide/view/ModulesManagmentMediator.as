@@ -2,6 +2,7 @@ package net.vdombox.ide.view
 {
 	import flash.display.DisplayObject;
 	
+	import mx.collections.ArrayCollection;
 	import mx.containers.Box;
 	
 	import net.vdombox.ide.model.ModulesProxy;
@@ -56,7 +57,7 @@ package net.vdombox.ide.view
 
 		public function showModulesByCategory( categoryName : String ) : void
 		{
-			var moduleXMLList : XMLList = modulesProxy.getModulesList( categoryName );
+			var moduleXMLList : Array = modulesProxy.getModulesList( categoryName );
 			currentModuleCategory = categoryName;
 			moduleList = [];
 			loadedModules = [];

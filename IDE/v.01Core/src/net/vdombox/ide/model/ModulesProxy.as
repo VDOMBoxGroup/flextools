@@ -1,14 +1,19 @@
 package net.vdombox.ide.model
 {
 	import flash.display.DisplayObject;
-
+	
+	import mx.collections.ArrayCollection;
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
-
+	import mx.resources.IResourceManager;
+	import mx.resources.ResourceManager;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-
+	
+	[ResourceBundle( "Modules" )]
+	
 	public class ModulesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ModulesProxy";
@@ -18,6 +23,10 @@ package net.vdombox.ide.model
 		private static const MODULES_DIR : String = "app:/modules/";
 
 		private static const MODULES_XML : XML = <modules>
+				<category name="applicationManagment">
+					<module name="FirstModule" path="app:/modules/First.swf"/>
+					<module name="SecondModule" path="app:/modules/Second.swf"/>
+				</category>
 				<category name="editing">
 					<module name="FirstModule" path="app:/modules/First.swf"/>
 					<module name="SecondModule" path="app:/modules/Second.swf"/>
@@ -36,18 +45,24 @@ package net.vdombox.ide.model
 			init();
 		}
 
-		private var _categories : XMLList;
+		private var _categories : ArrayCollection;
+		private var _modulesListByCategory : Object;
 
 		private var moduleInfo : IModuleInfo;
 
-		public function get categories() : XMLList
+		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+
+		public function get categories() : ArrayCollection
 		{
 			return _categories;
 		}
 
-		public function getModulesList( categoryName : String ) : XMLList
+		public function getModulesList( categoryName : String ) : Array
 		{
-			return new XMLList( MODULES_XML.category.( @name == categoryName ).module );
+			if( _modulesListByCategory.hasOwnProperty( categoryName ) )
+				return _modulesListByCategory[ categoryName ];
+			else
+				return null;
 		}
 
 		public function loadModule( categoryName : String, moduleName : String ) : void
@@ -60,11 +75,33 @@ package net.vdombox.ide.model
 
 		private function init() : void
 		{
-			_categories = new XMLList();
-
-			for each ( var category : XML in MODULES_XML.* )
+			_categories = new ArrayCollection();
+			_modulesListByCategory = {};
+			
+			var categoryName : String;
+			var categoryLocalizedName : String;
+			
+			var moduleName : String;
+			var moduleLocalizedName : String;
+			
+			var moduleList : Array;
+			
+			for each ( var category : XML in MODULES_XML.* ) //TODO Добавить проверку наличия локализованного имени и т.д.
 			{
-				_categories += <category name={category.@name}/>
+				categoryName = category.@name;
+				categoryLocalizedName = resourceManager.getString( "Modules", categoryName );
+				
+				_categories.addItem({ name: categoryName, localizedName : categoryLocalizedName });
+				
+				moduleList = [];
+				
+				for each ( var module : XML in category.* )
+				{
+					moduleName = module.@name;
+					moduleList.push({ name : moduleName, localizedName : "two" }); 
+				}
+				
+				_modulesListByCategory[ categoryName ] = moduleList;
 			}
 		}
 

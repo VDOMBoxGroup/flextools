@@ -1,20 +1,24 @@
 package net.vdombox.ide.view
 {
-	import mx.collections.XMLListCollection;
+	import flash.display.DisplayObject;
+	
+	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
-	import mx.events.ItemClickEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.model.LocaleProxy;
 	import net.vdombox.ide.model.ModulesProxy;
 	import net.vdombox.ide.view.components.MainWindow;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.ButtonBar;
+	import spark.events.IndexChangeEvent;
 
 	[ResourceBundle( "ApplicationManagment" )]
-	[ResourceBundle( "Modules" )]
 
 	public class MainWindowMediator extends Mediator implements IMediator
 	{
@@ -25,20 +29,24 @@ package net.vdombox.ide.view
 			super( NAME, viewComponent );
 		}
 
-		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+		private var localeProxy : LocaleProxy;
 
 		private var modulesProxy : ModulesProxy;
 
-		private var localeProxy : LocaleProxy;
 
 		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
 
 		private var modulesManagmentMediator : ModulesManagmentMediator;
 
-		private function get mainWindow() : MainWindow
-		{
-			return viewComponent as MainWindow;
-		}
+		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+
+
+		private var currentModuleCategory : String;
+
+		private var moduleList : Array;
+
+		private var loadedModules : Array;
+
 
 		override public function onRegister() : void
 		{
@@ -48,25 +56,73 @@ package net.vdombox.ide.view
 			addEventListeners();
 		}
 
+		override public function listNotificationInterests() : Array
+		{
+			return [ ModulesProxy.MODULE_LOADED ];
+		}
+
+		override public function handleNotification( note : INotification ) : void
+		{
+			switch ( note.getName())
+			{
+				case ModulesProxy.MODULE_LOADED:
+				{
+					var module : DisplayObject = note.getBody() as DisplayObject;
+					loadedModules.push( module );
+					getModule();
+					break;
+				}
+			}
+		}
+
+		public function showModulesByCategory( categoryName : String ) : void
+		{
+			moduleList = modulesProxy.getModulesList( categoryName );
+
+			currentModuleCategory = categoryName;
+
+			loadedModules = [];
+
+			getModule();
+		}
+
+		private function get mainWindow() : MainWindow
+		{
+			return viewComponent as MainWindow;
+		}
+
 		private function addEventListeners() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
 
+		private function getModule() : void
+		{
+			if ( moduleList.length == 0 )
+			{
+				var test : Array = [];
+				for each ( var item : Object in loadedModules )
+				{
+					test.push( item.toolset );
+				}
+
+				if ( loadedModules.length > 0 )
+					mainWindow.toolsetBar.mxmlContent = test;
+
+				return;
+			}
+
+			var module : Object = moduleList.shift();
+			modulesProxy.loadModule( currentModuleCategory, module.name );
+		}
+
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
-//			applicationsManagmentMediator = new ApplicationsManagmentMediator( mainWindow.applicationsManagment );
-//			facade.registerMediator( applicationsManagmentMediator );
-
-//			modulesManagmentMediator = new ModulesManagmentMediator( mainWindow.modulesManagment )
-//			facade.registerMediator( modulesManagmentMediator );
-
-//			mainWindow.mainTabBar.addEventListener( ItemClickEvent.ITEM_CLICK, mainTabBar_itemClickHandler )
-
 //			var tabs : XMLListCollection = new XMLListCollection();
 //			tabs.addItem( <category name="applicationManagment" label={resourceManager.getString( "ApplicationManagment", "title" )} /> );
 //
-//			var modulesCategories : XMLList = modulesProxy.categories;
+			var modulesCategories : ArrayCollection = modulesProxy.categories;
+			var tabBar : ButtonBar = mainWindow.tabBar;
 //			for each ( var category : XML in modulesCategories )
 //			{
 //				tabs.addItem( <category name={category.@name} label={resourceManager.getString( "Modules", category.@name )} /> );
@@ -79,15 +135,19 @@ package net.vdombox.ide.view
 //			{
 //				return data.@label[ 0 ];
 //			};
-//
-//			mainWindow.mainTabBar.dataProvider = tabs;
-//			mainWindow.mainTabBar.selectedIndex = 0;
+			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
+
+			tabBar.labelField = "localizedName";
+			tabBar.dataProvider = modulesCategories;
+			tabBar.selectedIndex = 0;
 		}
 
-		private function mainTabBar_itemClickHandler( event : ItemClickEvent ) : void
+		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
-//			var categoryName : String = event.item.@name;
-//
+			var categoryName : String = event.target.selectedItem.name as String;
+
+			showModulesByCategory( categoryName );
+
 //			if ( categoryName == "applicationManagment" )
 //			{
 //				mainWindow.componentsStack.selectedChild = mainWindow.applicationsManagment;
