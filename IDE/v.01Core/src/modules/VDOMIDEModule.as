@@ -4,7 +4,7 @@ package modules
 	
 	import net.vdombox.ide.interfaces.IVDOMIDEModule;
 
-	public class VDOMIDEModule extends Module implements IVDOMIDEModule
+	public class VDOMIDEModule extends Module 
 	{
 		public function VDOMIDEModule()
 		{

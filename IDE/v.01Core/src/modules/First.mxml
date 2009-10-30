@@ -3,7 +3,7 @@
 			   height="100%" icon="modules.ZzzzButtonSkin" layout="absolute" width="100%"
 			   borderColor="#000000" borderStyle="solid"
 			   
-			   implements="net.vdombox.ide.interfaces.IVDOMIDEModule" xmlns="modules.*">
+			  xmlns="modules.*">
 	<mx:Script>
 		<![CDATA[
 			import flash.events.MouseEvent;
