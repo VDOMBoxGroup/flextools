@@ -15,7 +15,7 @@
 			override public function get title() : String
 			{
 				return resourceManager.getString( "First", "test" );
-				;
+				
 			}
 
 			public function get toolset() : UIComponent
