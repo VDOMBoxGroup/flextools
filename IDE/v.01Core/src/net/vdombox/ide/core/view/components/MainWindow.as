@@ -1,11 +1,11 @@
-package net.vdombox.ide.view.components
+package net.vdombox.ide.core.view.components
 {
 	import flash.display.NativeWindowSystemChrome;
-
+	
 	import mx.events.FlexEvent;
-
-	import net.vdombox.ide.view.skins.MainWindowSkin;
-
+	
+	import net.vdombox.ide.core.view.skins.MainWindowSkin;
+	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.components.Window;

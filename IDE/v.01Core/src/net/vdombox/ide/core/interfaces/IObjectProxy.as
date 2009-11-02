@@ -1,7 +1,5 @@
-package net.vdombox.ide.interfaces
-{
-	import net.vdombox.ide.model.vo.PageVO;
-	
+package net.vdombox.ide.core.interfaces
+{	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 
 	public interface IObjectProxy extends IProxy

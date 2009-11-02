@@ -1,4 +1,4 @@
-package net.vdombox.ide.interfaces
+package net.vdombox.ide.core.interfaces
 {
 	import flash.events.IEventDispatcher;
 	import flash.utils.ByteArray;

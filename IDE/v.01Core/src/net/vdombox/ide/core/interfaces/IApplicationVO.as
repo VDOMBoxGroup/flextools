@@ -1,4 +1,4 @@
-package net.vdombox.ide.interfaces
+package net.vdombox.ide.core.interfaces
 {
 
 	public interface IApplicationVO

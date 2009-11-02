@@ -1,4 +1,4 @@
-package net.vdombox.ide.model.business
+package net.vdombox.ide.core.model.business
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -17,9 +17,9 @@ package net.vdombox.ide.model.business
 	import mx.rpc.soap.SOAPFault;
 	import mx.rpc.soap.WebService;
 	
-	import net.vdombox.ide.events.SOAPErrorEvent;
-	import net.vdombox.ide.events.SOAPEvent;
-	import net.vdombox.ide.model.business.protect.Code;
+	import net.vdombox.ide.core.events.SOAPErrorEvent;
+	import net.vdombox.ide.core.events.SOAPEvent;
+	import net.vdombox.ide.core.model.business.protect.Code;
 	import net.vdombox.utils.MD5Utils;
 
 	public dynamic class SOAP extends Proxy implements IEventDispatcher

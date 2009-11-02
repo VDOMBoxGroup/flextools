@@ -1,12 +1,12 @@
-package net.vdombox.ide.model
+package net.vdombox.ide.core.model
 {
-	import net.vdombox.ide.events.SOAPErrorEvent;
-	import net.vdombox.ide.events.SOAPEvent;
-	import net.vdombox.ide.interfaces.IApplicationVO;
-	import net.vdombox.ide.model.business.SOAP;
-	import net.vdombox.ide.model.vo.ApplicationVO;
-	import net.vdombox.ide.model.vo.AuthInfo;
-
+	import net.vdombox.ide.core.events.SOAPErrorEvent;
+	import net.vdombox.ide.core.events.SOAPEvent;
+	import net.vdombox.ide.core.interfaces.IApplicationVO;
+	import net.vdombox.ide.core.model.business.SOAP;
+	import net.vdombox.ide.core.model.vo.ApplicationVO;
+	import net.vdombox.ide.core.model.vo.AuthInfo;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -123,7 +123,7 @@ package net.vdombox.ide.model
 		{
 			connected = true;
 			var result : XML = event.result;
-			_authInfo = new AuthInfo( result.Username[ 0 ], tempAuthInfo.password, result.Hostname[ 0 ] );
+			_authInfo = new AuthInfo( result.Username[ 0 ], tempAuthInfo.password, result.Hostname[ 0 ]);
 			tempAuthInfo = null;
 
 			sendNotification( LOGIN_COMPLETE, _authInfo );
@@ -134,7 +134,7 @@ package net.vdombox.ide.model
 
 		private function soap_listApplicationsHandler( event : SOAPEvent ) : void
 		{
-			createApplicationList( event.result.Applications[ 0 ] );
+			createApplicationList( event.result.Applications[ 0 ]);
 			sendNotification( CONNECT_COMPLETE );
 		}
 

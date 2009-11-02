@@ -1,7 +1,7 @@
 /* 
 * Provide protect when connetion to server 
 */
-package net.vdombox.ide.model.business.protect
+package net.vdombox.ide.core.model.business.protect
 {
 	public class Code 
 	{

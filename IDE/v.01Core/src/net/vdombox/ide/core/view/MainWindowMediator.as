@@ -1,4 +1,4 @@
-package net.vdombox.ide.view
+package net.vdombox.ide.core.view
 {
 	import flash.display.DisplayObject;
 	
@@ -7,9 +7,9 @@ package net.vdombox.ide.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.model.LocaleProxy;
-	import net.vdombox.ide.model.ModulesProxy;
-	import net.vdombox.ide.view.components.MainWindow;
+	import net.vdombox.ide.core.model.LocaleProxy;
+	import net.vdombox.ide.core.model.ModulesProxy;
+	import net.vdombox.ide.core.view.components.MainWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -35,16 +35,16 @@ package net.vdombox.ide.view
 		private var modulesProxy : ModulesProxy;
 
 
-		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
+//		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
 
-		private var modulesManagmentMediator : ModulesManagmentMediator;
+//		private var modulesManagmentMediator : ModulesManagmentMediator;
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
 
-		private var currentModuleCategory : String;
-
 		private var moduleList : Array;
+		
+		private var currentModuleCategory : String;
 
 		private var loadedModules : Array;
 
@@ -76,19 +76,6 @@ package net.vdombox.ide.view
 			}
 		}
 
-		public function showModulesByCategory( categoryName : String ) : void
-		{	
-			toolsetBar.removeAllElements();
-			
-			moduleList = modulesProxy.getModulesList( categoryName );
-
-			currentModuleCategory = categoryName;
-
-			loadedModules = [];
-
-			getModule();
-		}
-
 		private function get mainWindow() : MainWindow
 		{
 			return viewComponent as MainWindow;
@@ -103,7 +90,20 @@ package net.vdombox.ide.view
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
-
+		
+		private function showModulesByCategory( categoryName : String ) : void
+		{	
+			toolsetBar.removeAllElements();
+			
+			moduleList = modulesProxy.getModulesList( categoryName );
+			
+			currentModuleCategory = categoryName;
+			
+			loadedModules = [];
+			
+			getModule();
+		}
+		
 		private function getModule() : void
 		{
 			if ( moduleList.length == 0 )

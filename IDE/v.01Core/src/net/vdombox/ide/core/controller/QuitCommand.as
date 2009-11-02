@@ -1,4 +1,4 @@
-package net.vdombox.ide.controller
+package net.vdombox.ide.core.controller
 {
 	import mx.core.FlexGlobals;
 	

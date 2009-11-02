@@ -1,4 +1,4 @@
-package net.vdombox.ide.model.vo
+package net.vdombox.ide.core.model.vo
 {
 
 	public class PageVO

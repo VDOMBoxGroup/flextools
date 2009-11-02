@@ -1,7 +1,6 @@
-package net.vdombox.ide.model.vo
-{
-	import net.vdombox.ide.interfaces.IApplicationVO;
-	
+package net.vdombox.ide.core.model.vo
+{	
+	import net.vdombox.ide.core.interfaces.IApplicationVO;
 
 	public class ApplicationVO implements IApplicationVO
 	{

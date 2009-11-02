@@ -1,4 +1,4 @@
-package net.vdombox.ide.view
+package net.vdombox.ide.core.view
 {
 	import flash.events.Event;
 	

@@ -1,15 +1,17 @@
-package net.vdombox.ide
+package net.vdombox.ide.core
 {
 	import mx.rpc.events.FaultEvent;
-	import net.vdombox.ide.controller.ConnectCompleteCommand;
-	import net.vdombox.ide.controller.InvokeCommand;
-	import net.vdombox.ide.controller.PreinitalizeMacroCommand;
-	import net.vdombox.ide.controller.QuitCommand;
-	import net.vdombox.ide.controller.SubmitCommand;
-	import net.vdombox.ide.controller.TypesLoadedCommand;
-	import net.vdombox.ide.model.ServerProxy;
-	import net.vdombox.ide.model.TypeProxy;
-	import net.vdombox.ide.model.business.SOAP;
+	
+	import net.vdombox.ide.core.controller.ConnectCompleteCommand;
+	import net.vdombox.ide.core.controller.InvokeCommand;
+	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
+	import net.vdombox.ide.core.controller.QuitCommand;
+	import net.vdombox.ide.core.controller.SubmitCommand;
+	import net.vdombox.ide.core.controller.TypesLoadedCommand;
+	import net.vdombox.ide.core.model.ServerProxy;
+	import net.vdombox.ide.core.model.TypeProxy;
+	import net.vdombox.ide.core.model.business.SOAP;
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 

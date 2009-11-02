@@ -1,4 +1,4 @@
-package net.vdombox.ide.model.business.protect
+package net.vdombox.ide.core.model.business.protect
 {
 /*
 1. Вызвав веб-сервис login, ты получаешь две строки: hash string и session key

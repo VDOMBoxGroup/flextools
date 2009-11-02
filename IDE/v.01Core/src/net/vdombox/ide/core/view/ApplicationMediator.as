@@ -1,17 +1,16 @@
-package net.vdombox.ide.view
+package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
-	import flash.display.NativeWindowSystemChrome;
-
-	import net.vdombox.ide.ApplicationFacade;
-	import net.vdombox.ide.view.components.LoginWindow;
-	import net.vdombox.ide.view.components.MainWindow;
-	import net.vdombox.ide.view.managers.PopUpWindowManager;
-
+	
+	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.view.components.LoginWindow;
+	import net.vdombox.ide.core.view.components.MainWindow;
+	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.Window;
 
 	public class ApplicationMediator extends Mediator implements IMediator

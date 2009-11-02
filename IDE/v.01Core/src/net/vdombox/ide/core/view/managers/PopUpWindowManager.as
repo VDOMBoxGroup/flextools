@@ -1,4 +1,4 @@
-package net.vdombox.ide.view.managers
+package net.vdombox.ide.core.view.managers
 {
 	import flash.display.NativeWindow;
 	import flash.display.NativeWindowDisplayState;

@@ -1,8 +1,8 @@
-package net.vdombox.ide.model
+package net.vdombox.ide.core.model
 {
-	import net.vdombox.ide.events.SOAPEvent;
-	import net.vdombox.ide.model.business.SOAP;
-
+	import net.vdombox.ide.core.events.SOAPEvent;
+	import net.vdombox.ide.core.model.business.SOAP;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -37,7 +37,7 @@ package net.vdombox.ide.model
 			soap.get_all_types.addEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 		}
 
-		private function soap_getAllTypesHandler( event : SOAPEvent ) : void
+		private function soap_getAllTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
 		{
 			_types = event.result.Types[ 0 ];
 			

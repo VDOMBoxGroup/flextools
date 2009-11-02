@@ -1,6 +1,5 @@
-package net.vdombox.ide.model.vo
+package net.vdombox.ide.core.model.vo
 {
-
 	public class AuthInfo
 	{
 
@@ -13,8 +12,11 @@ package net.vdombox.ide.model.vo
 		}
 
 		public var username : String;
+
 		public var password : String;
+
 		public var hostname : String;
+
 		public var serverVersion : String;
 
 		public function get WSDLFilePath() : String

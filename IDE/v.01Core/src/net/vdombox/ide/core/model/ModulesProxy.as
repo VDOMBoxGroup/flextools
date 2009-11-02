@@ -1,4 +1,4 @@
-package net.vdombox.ide.model
+package net.vdombox.ide.core.model
 {
 	import flash.display.DisplayObject;
 	

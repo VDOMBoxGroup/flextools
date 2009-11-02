@@ -1,4 +1,4 @@
-package net.vdombox.ide.model
+package net.vdombox.ide.core.model
 {
 	import flash.events.Event;
 	import flash.utils.ByteArray;
@@ -6,9 +6,9 @@ package net.vdombox.ide.model
 	import mx.rpc.events.FaultEvent;
 	import mx.utils.Base64Encoder;
 	
-	import net.vdombox.ide.events.SOAPEvent;
-	import net.vdombox.ide.interfaces.IResource;
-	import net.vdombox.ide.model.business.SOAP;
+	import net.vdombox.ide.core.events.SOAPEvent;
+	import net.vdombox.ide.core.interfaces.IResource;
+	import net.vdombox.ide.core.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -107,23 +107,25 @@ package net.vdombox.ide.model
 	}
 }
 
-import flash.utils.ByteArray;
-import mx.collections.ArrayCollection;
+import flash.errors.IOError;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
 import flash.filesystem.File;
+import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
+import flash.utils.ByteArray;
+
+import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
-import flash.filesystem.FileMode;
-import flash.errors.IOError;
-import flash.events.Event;
-import flash.events.IEventDispatcher;
-import flash.events.EventDispatcher;
-import net.vdombox.ide.interfaces.IResource;
-import net.vdombox.ide.model.business.SOAP;
 import mx.rpc.events.FaultEvent;
-import net.vdombox.ide.events.SOAPEvent;
 import mx.utils.Base64Decoder;
+
+import net.vdombox.ide.core.events.SOAPEvent;
+import net.vdombox.ide.core.interfaces.IResource;
+import net.vdombox.ide.core.model.business.SOAP;
 
 class Resource implements IResource, IEventDispatcher
 {

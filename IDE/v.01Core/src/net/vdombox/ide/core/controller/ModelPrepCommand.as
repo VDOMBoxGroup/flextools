@@ -1,10 +1,9 @@
-package net.vdombox.ide.controller
-{
-	import net.vdombox.ide.model.ApplicationProxy;
-	import net.vdombox.ide.model.LocaleProxy;
-	import net.vdombox.ide.model.ModulesProxy;
-	import net.vdombox.ide.model.ServerProxy;
-	import net.vdombox.ide.model.SharedObjectProxy;
+package net.vdombox.ide.core.controller
+{	
+	import net.vdombox.ide.core.model.LocaleProxy;
+	import net.vdombox.ide.core.model.ModulesProxy;
+	import net.vdombox.ide.core.model.ServerProxy;
+	import net.vdombox.ide.core.model.SharedObjectProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

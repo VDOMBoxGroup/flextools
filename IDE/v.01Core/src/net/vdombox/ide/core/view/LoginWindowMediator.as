@@ -1,23 +1,23 @@
-package net.vdombox.ide.view
+package net.vdombox.ide.core.view
 {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-
+	
 	import mx.controls.ComboBox;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-
-	import net.vdombox.ide.ApplicationFacade;
-	import net.vdombox.ide.model.LocaleProxy;
-	import net.vdombox.ide.model.SharedObjectProxy;
-	import net.vdombox.ide.view.components.LoginWindow;
-
+	
+	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.LocaleProxy;
+	import net.vdombox.ide.core.model.SharedObjectProxy;
+	import net.vdombox.ide.core.view.components.LoginWindow;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.Button;
 	import spark.components.RichEditableText;
-
+	
 	public class LoginWindowMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "LoginFormMediator";
@@ -26,9 +26,9 @@ package net.vdombox.ide.view
 		{
 			super( NAME, viewComponent );
 		}
+		private var localeProxy : LocaleProxy;
 
 		private var sharedObjectProxy : SharedObjectProxy;
-		private var localeProxy : LocaleProxy;
 
 		override public function listNotificationInterests() : Array
 		{
@@ -43,25 +43,10 @@ package net.vdombox.ide.view
 			addEventListeners();
 		}
 
-		private function get loginWindow() : LoginWindow
-		{
-			return viewComponent as LoginWindow;
-		}
-
 		private function addEventListeners() : void
 		{
 			loginWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			loginWindow.addEventListener( FlexEvent.SHOW, showHandler );
-		}
-
-		private function submit() : void
-		{
-			var loginFormData : Object = {};
-			loginFormData.username = loginWindow.username.text;
-			loginFormData.password = loginWindow.password.text;
-			loginFormData.hostname = loginWindow.hostname.text;
-
-			sendNotification( ApplicationFacade.SUBMIT, loginFormData );
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
@@ -78,9 +63,15 @@ package net.vdombox.ide.view
 			loginWindow.selectLang.dataProvider = localeProxy.languageList;
 		}
 
-		private function showHandler( event : FlexEvent ) : void
+		private function keyDownHandler( event : KeyboardEvent ) : void
 		{
-//			loginForm.
+			if ( event.keyCode == 13 )
+				submit();
+		}
+
+		private function get loginWindow() : LoginWindow
+		{
+			return viewComponent as LoginWindow;
 		}
 
 		private function mouseDownHandler( event : MouseEvent ) : void
@@ -93,10 +84,9 @@ package net.vdombox.ide.view
 			event.stopImmediatePropagation();
 		}
 
-		private function keyDownHandler( event : KeyboardEvent ) : void
+		private function quitButton_clickHandler( event : MouseEvent ) : void
 		{
-			if ( event.keyCode == 13 )
-				submit();
+			sendNotification( ApplicationFacade.QUIT );
 		}
 
 		private function selectLang_changeHandler( event : ListEvent ) : void
@@ -105,14 +95,24 @@ package net.vdombox.ide.view
 			localeProxy.changeLocale( selectedItem.@code );
 		}
 
+		private function showHandler( event : FlexEvent ) : void
+		{
+//			loginForm.
+		}
+
+		private function submit() : void
+		{
+			var loginFormData : Object = {};
+			loginFormData.username = loginWindow.username.text;
+			loginFormData.password = loginWindow.password.text;
+			loginFormData.hostname = loginWindow.hostname.text;
+
+			sendNotification( ApplicationFacade.SUBMIT, loginFormData );
+		}
+
 		private function submitButton_clickHandler( event : MouseEvent ) : void
 		{
 			submit();
-		}
-
-		private function quitButton_clickHandler( event : MouseEvent ) : void
-		{
-			sendNotification( ApplicationFacade.QUIT );
 		}
 	}
 }
