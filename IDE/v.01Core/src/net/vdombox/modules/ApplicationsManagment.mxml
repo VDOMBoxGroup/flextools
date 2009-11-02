@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modules:VDOMIDEModule xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/halo" 
+					   xmlns:modules="modules.*"
+					   
+					   implements="net.vdombox.ide.interfaces.IVDOMIDEModule"
+					   
+					   width="100%" height="100%"
+					   
+					   invoke="application_invokeHandler(event)"
+					   preinitialize="application_preinitializeHandler(event)"
+					   applicationComplete="application_applicationCompleteHandler(event)">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.interfaces.IVDOMIDEModule;
+			
+			public static const NAME : String = "VDOM IDE";
+			
+			private var facade : ApplicationFacade = ApplicationFacade.getInstance( NAME );
+		]]>
+	</fx:Script>
+	
+	<s:Group width="100%" height="100%">
+		<s:Label text="Application managment" horizontalCenter="0" verticalCenter="0" fontSize="14" fontWeight="bold" color="#FF0000"/>
+	</s:Group>
+	
+</modules:VDOMIDEModule>
