@@ -4,28 +4,17 @@
 	xmlns:s="library://ns.adobe.com/flex/spark" 
 	xmlns:mx="library://ns.adobe.com/flex/halo"
 	
-	invoke="application_invokeHandler(event)"
-	preinitialize="application_preinitializeHandler(event)"
 	applicationComplete="application_applicationCompleteHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.ApplicationFacade;
 			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 			
 			public static const NAME : String = "VDOM IDE";
 			
 			private var facade : ApplicationFacade = ApplicationFacade.getInstance( NAME );
-			
-			protected function application_invokeHandler(event:InvokeEvent):void
-			{
-				facade.invoke( event.arguments );
-			}
-
-			protected function application_preinitializeHandler(event:FlexEvent):void
-			{
-				facade.preinitalize( this );
-			}
 
 			protected function application_applicationCompleteHandler(event:FlexEvent):void
 			{

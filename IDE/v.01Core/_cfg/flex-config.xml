@@ -7,9 +7,9 @@
 			<locale-element>ru_RU</locale-element>
 		</locale>
 		
-		<theme>
+		<!--<theme>
 			<filename>../assets/theme/theme.swc</filename> 
-		</theme>
+		</theme>-->
 		
 		<source-path>
 	   		<path-element>../locale/{locale}</path-element>
