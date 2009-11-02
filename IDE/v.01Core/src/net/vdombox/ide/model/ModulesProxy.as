@@ -2,12 +2,12 @@ package net.vdombox.ide.model
 {
 	import flash.display.DisplayObject;
 	
-	import mx.collections.ArrayCollection;
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+	import mx.utils.ObjectUtil;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -22,18 +22,19 @@ package net.vdombox.ide.model
 
 		private static const MODULES_DIR : String = "app:/modules/";
 
-		private static const MODULES_XML : XML = <modules>
+		private static const MODULES_XML : XML = 
+			<modules>
 				<category name="applicationManagment">
 					<module name="FirstModule" path="app:/modules/First.swf"/>
 					<module name="SecondModule" path="app:/modules/Second.swf"/>
 				</category>
 				<category name="editing">
-					<module name="FirstModule" path="app:/modules/First.swf"/>
-					<module name="SecondModule" path="app:/modules/Second.swf"/>
+					<module name="22222" path="app:/modules/Second.swf"/>
+					<module name="11111" path="app:/modules/First.swf"/>
 				</category>
 				<category name="language">
-					<module name="FirstModule" path="app:/modules/First.swf"/>
-					<module name="SecondModule" path="app:/modules/Second.swf"/>
+					<module name="Aaaaaa" path="app:/modules/First.swf"/>
+					<module name="Zzzzzz" path="app:/modules/Second.swf"/>
 				</category>
 				<category name="some">
 				</category>
@@ -45,14 +46,14 @@ package net.vdombox.ide.model
 			init();
 		}
 
-		private var _categories : ArrayCollection;
+		private var _categories : Array;
 		private var _modulesListByCategory : Object;
 
 		private var moduleInfo : IModuleInfo;
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
-		public function get categories() : ArrayCollection
+		public function get categories() : Array
 		{
 			return _categories;
 		}
@@ -60,7 +61,7 @@ package net.vdombox.ide.model
 		public function getModulesList( categoryName : String ) : Array
 		{
 			if( _modulesListByCategory.hasOwnProperty( categoryName ) )
-				return _modulesListByCategory[ categoryName ];
+				return ObjectUtil.copy( _modulesListByCategory[ categoryName ] ) as Array;
 			else
 				return null;
 		}
@@ -75,7 +76,7 @@ package net.vdombox.ide.model
 
 		private function init() : void
 		{
-			_categories = new ArrayCollection();
+			_categories = [];
 			_modulesListByCategory = {};
 			
 			var categoryName : String;
@@ -91,7 +92,7 @@ package net.vdombox.ide.model
 				categoryName = category.@name;
 				categoryLocalizedName = resourceManager.getString( "Modules", categoryName );
 				
-				_categories.addItem({ name: categoryName, localizedName : categoryLocalizedName });
+				_categories.push({ name: categoryName, localizedName : categoryLocalizedName });
 				
 				moduleList = [];
 				

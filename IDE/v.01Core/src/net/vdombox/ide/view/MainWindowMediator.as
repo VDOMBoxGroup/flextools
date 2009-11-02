@@ -2,7 +2,7 @@ package net.vdombox.ide.view
 {
 	import flash.display.DisplayObject;
 	
-	import mx.collections.ArrayCollection;
+	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
@@ -16,6 +16,7 @@ package net.vdombox.ide.view
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	import spark.components.ButtonBar;
+	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
 
 	[ResourceBundle( "ApplicationManagment" )]
@@ -76,7 +77,9 @@ package net.vdombox.ide.view
 		}
 
 		public function showModulesByCategory( categoryName : String ) : void
-		{
+		{	
+			toolsetBar.removeAllElements();
+			
 			moduleList = modulesProxy.getModulesList( categoryName );
 
 			currentModuleCategory = categoryName;
@@ -90,7 +93,12 @@ package net.vdombox.ide.view
 		{
 			return viewComponent as MainWindow;
 		}
-
+		
+		private function get toolsetBar() : Group
+		{
+			return mainWindow.toolsetBar;
+		}
+		
 		private function addEventListeners() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
@@ -107,7 +115,7 @@ package net.vdombox.ide.view
 				}
 
 				if ( loadedModules.length > 0 )
-					mainWindow.toolsetBar.mxmlContent = test;
+					toolsetBar.mxmlContent = test;
 
 				return;
 			}
@@ -121,7 +129,7 @@ package net.vdombox.ide.view
 //			var tabs : XMLListCollection = new XMLListCollection();
 //			tabs.addItem( <category name="applicationManagment" label={resourceManager.getString( "ApplicationManagment", "title" )} /> );
 //
-			var modulesCategories : ArrayCollection = modulesProxy.categories;
+			var modulesCategories : Array = modulesProxy.categories;
 			var tabBar : ButtonBar = mainWindow.tabBar;
 //			for each ( var category : XML in modulesCategories )
 //			{
@@ -137,15 +145,17 @@ package net.vdombox.ide.view
 //			};
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
 
-			tabBar.labelField = "localizedName";
-			tabBar.dataProvider = modulesCategories;
+			tabBar.labelField = "name";
+			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
+			
+			showModulesByCategory( modulesCategories[ 0 ].name );
 		}
 
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
 			var categoryName : String = event.target.selectedItem.name as String;
-
+			
 			showModulesByCategory( categoryName );
 
 //			if ( categoryName == "applicationManagment" )
