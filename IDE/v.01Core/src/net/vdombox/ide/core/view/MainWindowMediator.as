@@ -7,6 +7,7 @@ package net.vdombox.ide.core.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.common.IVDOMIDEModule;
 	import net.vdombox.ide.core.model.LocaleProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.view.components.MainWindow;
@@ -109,7 +110,7 @@ package net.vdombox.ide.core.view
 			if ( moduleList.length == 0 )
 			{
 				var test : Array = [];
-				for each ( var item : Object in loadedModules )
+				for each ( var item : IVDOMIDEModule in loadedModules )
 				{
 					test.push( item.toolset );
 				}

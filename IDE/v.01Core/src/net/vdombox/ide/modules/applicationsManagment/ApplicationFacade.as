@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment
 {
+	import net.vdombox.ide.modules.ApplicationsManagment;
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -19,7 +21,7 @@ package net.vdombox.ide.modules.applicationsManagment
 			super( key );
 		}
 		
-		public function startup( application : VdomIDE ) : void
+		public function startup( application : ApplicationsManagment ) : void
 		{
 			sendNotification( STARTUP, application );
 		}

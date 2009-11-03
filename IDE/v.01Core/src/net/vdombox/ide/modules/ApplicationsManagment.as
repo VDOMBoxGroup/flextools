@@ -10,7 +10,7 @@ package net.vdombox.ide.modules
 		public function ApplicationsManagment()
 		{
 			super( ApplicationFacade.getInstance( NAME ));
-//			ApplicationFacade( facade ).startup( this );
+			ApplicationFacade( facade ).startup( this );
 		}
 	}
 }
