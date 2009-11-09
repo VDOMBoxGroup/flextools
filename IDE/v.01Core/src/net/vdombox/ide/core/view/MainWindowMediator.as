@@ -130,8 +130,8 @@ package net.vdombox.ide.core.view
 				test.push( item.toolset );
 			}
 			
-			if ( loadedModules.length > 0 )
-				toolsetBar.mxmlContent = test;
+//			if ( loadedModules.length > 0 )
+//				toolsetBar.mxmlContent = test;
 			
 			return;
 		}

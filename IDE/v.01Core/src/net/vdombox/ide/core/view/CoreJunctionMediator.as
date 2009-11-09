@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.view
 {
 	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -36,14 +37,14 @@ package net.vdombox.ide.core.view
 		override public function onRegister() : void
 		{
 			// The STDOUT pipe from the shell to all modules 
-			junction.registerPipe( VIModule.STDOUT, Junction.OUTPUT, new TeeSplit());
+			junction.registerPipe( PipeNames.STDOUT, Junction.OUTPUT, new TeeSplit());
 
 			// The STDIN pipe to the shell from all modules 
-			junction.registerPipe( VIModule.STDIN, Junction.INPUT, new TeeMerge());
-			junction.addPipeListener( VIModule.STDIN, this, handlePipeMessage );
+			junction.registerPipe( PipeNames.STDIN, Junction.INPUT, new TeeMerge());
+			junction.addPipeListener( PipeNames.STDIN, this, handlePipeMessage );
 
 			// The STDLOG pipe from the shell to the logger
-			junction.registerPipe( VIModule.STDLOG, Junction.OUTPUT, new Pipe());
+			junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, new Pipe());
 			sendNotification( ApplicationFacade.CONNECT_CORE_TO_LOGGER, junction );
 
 		}
@@ -74,14 +75,14 @@ package net.vdombox.ide.core.view
 					// Connect a module's STDSHELL to the shell's STDIN
 					var module : IPipeAware = note.getBody() as IPipeAware;
 					var moduleToShell : Pipe = new Pipe();
-					module.acceptOutputPipe( VIModule.STDSHELL, moduleToShell );
-					var shellIn : TeeMerge = junction.retrievePipe( VIModule.STDIN ) as TeeMerge;
+					module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
+					var shellIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
 					shellIn.connectInput( moduleToShell );
 
 					// Connect the shell's STDOUT to the module's STDIN
 					var shellToModule : Pipe = new Pipe();
-					module.acceptInputPipe( VIModule.STDIN, shellToModule );
-					var shellOut : IPipeFitting = junction.retrievePipe( VIModule.STDOUT ) as IPipeFitting;
+					module.acceptInputPipe( PipeNames.STDIN, shellToModule );
+					var shellOut : IPipeFitting = junction.retrievePipe( PipeNames.STDOUT ) as IPipeFitting;
 					shellOut.connect( shellToModule );
 					
 					sendNotification( ApplicationFacade.MODULE_READY, module );

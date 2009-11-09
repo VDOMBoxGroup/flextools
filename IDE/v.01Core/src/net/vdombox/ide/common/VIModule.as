@@ -8,8 +8,9 @@ package net.vdombox.ide.common
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	
-	public class VIModule extends ModuleBase implements IPipe, IVIModule
+	public class VIModule extends ModuleBase implements IPipeAware, IVIModule
 	{
 		public function VIModule( facade : IFacade )
 		{
@@ -44,10 +45,9 @@ package net.vdombox.ide.common
 		 * <P>
 		 * Registers an input pipe with this module's Junction.
 		 */
-		public function acceptInputPipe( name : String, pipe : IPipeFitting ) : Boolean
+		public function acceptInputPipe( name : String, pipe : IPipeFitting ) : void
 		{
 			facade.sendNotification( JunctionMediator.ACCEPT_INPUT_PIPE, pipe, name );
-			return true;
 		}
 
 		/**
@@ -55,10 +55,9 @@ package net.vdombox.ide.common
 		 * <P>
 		 * Registers an input pipe with this module's Junction.
 		 */
-		public function acceptOutputPipe( name : String, pipe : IPipeFitting ) : Boolean
+		public function acceptOutputPipe( name : String, pipe : IPipeFitting ) : void
 		{
 			facade.sendNotification( JunctionMediator.ACCEPT_OUTPUT_PIPE, pipe, name );
-			return true;
 		}
 	}
 }
