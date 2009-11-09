@@ -6,39 +6,11 @@ package net.vdombox.ide.common
 	import net.vdombox.ide.core.interfaces.IToolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	
-	public class VIModule extends ModuleBase implements IPipeAware, IVIModule
+	public class VIModule extends ModuleBase implements IPipe, IVIModule
 	{
-
-		/**
-		 * Standard input pipe name constant.
-		 */
-		public static const STDIN : String = 'standardInput';
-
-		/**
-		 * Standard log pipe name constant.
-		 */
-		public static const STDLOG : String = 'standardLog';
-
-		/**
-		 * Standard output pipe name constant.
-		 */
-		public static const STDOUT : String = 'standardOutput';
-
-		/**
-		 * Standard shell pipe name constant.
-		 */
-		public static const STDSHELL : String = 'standardShell';
-
-		/**
-		 * Constructor.
-		 * <P>
-		 * In subclass, create appropriate facade and pass
-		 * to super.</P>
-		 */
 		public function VIModule( facade : IFacade )
 		{
 			super();
@@ -72,9 +44,10 @@ package net.vdombox.ide.common
 		 * <P>
 		 * Registers an input pipe with this module's Junction.
 		 */
-		public function acceptInputPipe( name : String, pipe : IPipeFitting ) : void
+		public function acceptInputPipe( name : String, pipe : IPipeFitting ) : Boolean
 		{
 			facade.sendNotification( JunctionMediator.ACCEPT_INPUT_PIPE, pipe, name );
+			return true;
 		}
 
 		/**
@@ -82,9 +55,10 @@ package net.vdombox.ide.common
 		 * <P>
 		 * Registers an input pipe with this module's Junction.
 		 */
-		public function acceptOutputPipe( name : String, pipe : IPipeFitting ) : void
+		public function acceptOutputPipe( name : String, pipe : IPipeFitting ) : Boolean
 		{
 			facade.sendNotification( JunctionMediator.ACCEPT_OUTPUT_PIPE, pipe, name );
+			return true;
 		}
 	}
 }
