@@ -84,16 +84,16 @@ package net.vdombox.ide.common
                         
                     }
                     var logMessage:LogMessage = new LogMessage( level, this.multitonKey, note.getBody() as String);
-                    junction.sendMessage( VIModule.STDLOG, logMessage );
+                    junction.sendMessage( PipeNames.STDLOG, logMessage );
                     break;
 
                 // Modify the Log Level filter 
                 case LogFilterMessage.SET_LOG_LEVEL:
                     var logLevel:number = note.getBody() as Number;
                     var setLogLevelMessage:LogFilterMessage = new LogFilterMessage(FilterControlMessage.SET_PARAMS, logLevel);
-                    var changedLevel:Boolean = junction.sendMessage( VIModule.STDLOG, setLogLevelMessage );
+                    var changedLevel:Boolean = junction.sendMessage( PipeNames.STDLOG, setLogLevelMessage );
                     var changedLevelMessage:LogMessage = new LogMessage( LogMessage.CHANGE, this.multitonKey, "Changed Log Level to: "+LogMessage.LEVELS[logLevel])
-                    var logChanged:Boolean = junction.sendMessage( VIModule.STDLOG, changedLevelMessage );
+                    var logChanged:Boolean = junction.sendMessage( PipeNames.STDLOG, changedLevelMessage );
                     break;
 
 				
