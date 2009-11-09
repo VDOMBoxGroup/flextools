@@ -1,10 +1,11 @@
 package net.vdombox.ide.modules.applicationsManagment
 {
 	import net.vdombox.ide.modules.ApplicationsManagment;
+	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
-
+	
 	public class ApplicationFacade extends Facade implements IFacade
 	{
 		public static const STARTUP : String = "startup";
@@ -24,6 +25,12 @@ package net.vdombox.ide.modules.applicationsManagment
 		public function startup( application : ApplicationsManagment ) : void
 		{
 			sendNotification( STARTUP, application );
+		}
+		
+		override protected function initializeController( ) : void 
+		{
+			super.initializeController();            
+			registerCommand( STARTUP, StartupCommand );
 		}
 	}
 }

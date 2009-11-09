@@ -10,7 +10,7 @@ package net.vdombox.ide.common
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	
-	public class VDOMIDEModule extends ModuleBase implements IPipeAware, IVDOMIDEModule
+	public class VIModule extends ModuleBase implements IPipeAware, IVIModule
 	{
 
 		/**
@@ -39,7 +39,7 @@ package net.vdombox.ide.common
 		 * In subclass, create appropriate facade and pass
 		 * to super.</P>
 		 */
-		public function VDOMIDEModule( facade : IFacade )
+		public function VIModule( facade : IFacade )
 		{
 			super();
 			this.facade = facade;

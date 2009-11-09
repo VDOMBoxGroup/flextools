@@ -1,13 +1,14 @@
 package net.vdombox.ide.core.model
 {
-	import flash.display.DisplayObject;
-	
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	import mx.utils.ObjectUtil;
+	
+	import net.vdombox.ide.common.VIModule;
+	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -25,7 +26,7 @@ package net.vdombox.ide.core.model
 		private static const MODULES_XML : XML = 
 			<modules>
 				<category name="applicationManagment">
-					<module name="FirstModule" path="app:/modules/ApplicationsManagment.swf"/>
+					<module name="FirstModule" path="app:/net/vdombox/ide/modules/ApplicationsManagment.swf"/>
 				</category>
 			</modules>
 
@@ -81,8 +82,6 @@ package net.vdombox.ide.core.model
 				categoryName = category.@name;
 				categoryLocalizedName = resourceManager.getString( "Modules", categoryName );
 				
-				_categories.push({ name: categoryName, localizedName : categoryLocalizedName });
-				
 				moduleList = [];
 				
 				for each ( var module : XML in category.* )
@@ -91,13 +90,14 @@ package net.vdombox.ide.core.model
 					moduleList.push({ name : moduleName, localizedName : "two" }); 
 				}
 				
+				_categories.push( new ModulesCategoryVO( categoryName, categoryLocalizedName, moduleList ) );
 				_modulesListByCategory[ categoryName ] = moduleList;
 			}
 		}
 
 		private function moduleReadyHandler( event : ModuleEvent ) : void
 		{
-			var module : DisplayObject = event.module.factory.create() as DisplayObject;
+			var module : VIModule = event.module.factory.create() as VIModule;
 			sendNotification( MODULE_LOADED, module );
 		}
 	}

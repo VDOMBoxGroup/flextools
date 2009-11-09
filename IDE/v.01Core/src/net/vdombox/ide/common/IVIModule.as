@@ -4,7 +4,7 @@ package net.vdombox.ide.common
 	
 	import net.vdombox.ide.core.interfaces.IToolset;
 
-	public interface IVDOMIDEModule
+	public interface IVIModule
 	{
 		function get moduleID() : String;
 //		function get name() : String;

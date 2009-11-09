@@ -1,13 +1,13 @@
 package net.vdombox.ide.core.view
 {
-	import flash.display.DisplayObject;
-	
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.IVDOMIDEModule;
+	import net.vdombox.ide.common.IVIModule;
+	import net.vdombox.ide.common.VIModule;
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.LocaleProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.view.components.MainWindow;
@@ -60,16 +60,16 @@ package net.vdombox.ide.core.view
 
 		override public function listNotificationInterests() : Array
 		{
-			return [ ModulesProxy.MODULE_LOADED ];
+			return [ ApplicationFacade.MODULE_READY ];
 		}
 
 		override public function handleNotification( note : INotification ) : void
 		{
 			switch ( note.getName())
 			{
-				case ModulesProxy.MODULE_LOADED:
+				case ApplicationFacade.MODULE_READY:
 				{
-					var module : DisplayObject = note.getBody() as DisplayObject;
+					var module : VIModule = note.getBody() as VIModule;
 					loadedModules.push( module );
 					getModule();
 					break;
@@ -107,24 +107,35 @@ package net.vdombox.ide.core.view
 		
 		private function getModule() : void
 		{
-			if ( moduleList.length == 0 )
+			if ( moduleList.length > 0 )
 			{
-				var test : Array = [];
-				for each ( var item : IVDOMIDEModule in loadedModules )
-				{
-					test.push( item.toolset );
-				}
-
-				if ( loadedModules.length > 0 )
-					toolsetBar.mxmlContent = test;
-
+				var module : Object = moduleList.shift();
+				modulesProxy.loadModule( currentModuleCategory, module.name );
 				return;
 			}
-
-			var module : Object = moduleList.shift();
-			modulesProxy.loadModule( currentModuleCategory, module.name );
+			
+			placeToolsets();
 		}
-
+		
+		private function placeToolsets() : void
+		{
+			toolsetBar.removeAllElements();
+			
+			if( loadedModules.length == 0 )
+				return;
+				
+			var test : Array = [];
+			for each ( var item : IVIModule in loadedModules )
+			{
+				test.push( item.toolset );
+			}
+			
+			if ( loadedModules.length > 0 )
+				toolsetBar.mxmlContent = test;
+			
+			return;
+		}
+		
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
 //			var tabs : XMLListCollection = new XMLListCollection();

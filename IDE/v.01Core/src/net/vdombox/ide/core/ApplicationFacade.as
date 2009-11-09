@@ -4,10 +4,12 @@ package net.vdombox.ide.core
 	
 	import net.vdombox.ide.core.controller.ConnectCompleteCommand;
 	import net.vdombox.ide.core.controller.InvokeCommand;
+	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.QuitCommand;
 	import net.vdombox.ide.core.controller.SubmitCommand;
 	import net.vdombox.ide.core.controller.TypesLoadedCommand;
+	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.TypeProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -21,11 +23,18 @@ package net.vdombox.ide.core
 
 		public static const PREINITALIZE : String = "preinitalize";
 
-		public static const QUIT : String = "quit";
-
 		public static const STARTUP : String = "startup";
 
 		public static const SUBMIT : String = "submit";
+
+		public static const QUIT : String = "quit";
+
+		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
+
+		public static const CONNECT_CORE_TO_LOGGER : String = "connectCoreToLogger";
+		
+		public static const MODULE_READY : String = "moduleReady";
+
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -67,6 +76,7 @@ package net.vdombox.ide.core
 			registerCommand( INVOKE, InvokeCommand );
 			registerCommand( SUBMIT, SubmitCommand );
 			registerCommand( ServerProxy.CONNECT_COMPLETE, ConnectCompleteCommand );
+			registerCommand( ModulesProxy.MODULE_LOADED, ModuleLoadedCommand );
 			registerCommand( TypeProxy.TYPES_LOADED, TypesLoadedCommand );
 			registerCommand( QUIT, QuitCommand );
 		}
