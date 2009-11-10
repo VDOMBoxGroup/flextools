@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.edition
 {
 	import net.vdombox.ide.modules.Edition;
 	import net.vdombox.ide.modules.edition.controller.StartupCommand;
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 

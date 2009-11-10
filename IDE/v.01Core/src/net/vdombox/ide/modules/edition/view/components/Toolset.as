@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.applicationsSearch.view.components
+package net.vdombox.ide.modules.edition.view.components
 {
 	import net.vdombox.ide.core.interfaces.IToolset;
 	
