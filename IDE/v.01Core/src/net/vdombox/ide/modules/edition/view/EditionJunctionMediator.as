@@ -7,11 +7,11 @@ package net.vdombox.ide.modules.edition.view
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 
-	public class ApplicationsManagmentJunctionMediator extends LoggingJunctionMediator
+	public class EditionJunctionMediator extends LoggingJunctionMediator
 	{
 		public static const NAME : String = "ApplicationsManagmentJunctionMediator";
 
-		public function ApplicationsManagmentJunctionMediator()
+		public function EditionJunctionMediator()
 		{
 			super( NAME, new Junction() );
 		}

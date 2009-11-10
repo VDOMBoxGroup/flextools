@@ -1,10 +1,11 @@
-package net.vdombox.ide.modules.edition
+package net.vdombox.ide.modules.applicationsSearch
 {
-	import net.vdombox.ide.modules.Edition;
-	import net.vdombox.ide.modules.edition.controller.StartupCommand;
+	import net.vdombox.ide.modules.ApplicationsSearch;
+	import net.vdombox.ide.modules.applicationsSearch.controller.StartupCommand;
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
-
+	
 	public class ApplicationFacade extends Facade implements IFacade
 	{
 		public static const STARTUP : String = "startup";
@@ -22,15 +23,15 @@ package net.vdombox.ide.modules.edition
 		{
 			super( key );
 		}
-
-		public function startup( application : Edition ) : void
+		
+		public function startup( application : ApplicationsSearch ) : void
 		{
 			sendNotification( STARTUP, application );
 		}
-
-		override protected function initializeController() : void
+		
+		override protected function initializeController( ) : void 
 		{
-			super.initializeController();
+			super.initializeController();            
 			registerCommand( STARTUP, StartupCommand );
 		}
 	}

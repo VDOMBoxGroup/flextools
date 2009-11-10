@@ -1,6 +1,6 @@
-package net.vdombox.ide.modules.edition.controller
+package net.vdombox.ide.modules.applicationsSearch.controller
 {
-	import net.vdombox.ide.modules.edition.view.EditionJunctionMediator;
+	import net.vdombox.ide.modules.applicationsSearch.view.ApplicatiosSearchJunctionMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.edition.controller
 	{
 		override public function execute( note : INotification ) : void
 		{
-			facade.registerMediator( new EditionJunctionMediator() );
+			facade.registerMediator( new ApplicatiosSearchJunctionMediator() );
 		}
 	}
 }
