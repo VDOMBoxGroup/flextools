@@ -1,11 +1,11 @@
 package net.vdombox.ide.core.view
 {
 	import mx.collections.ArrayList;
+	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.IVIModule;
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.LocaleProxy;
@@ -55,7 +55,10 @@ package net.vdombox.ide.core.view
 
 		override public function listNotificationInterests() : Array
 		{
-			return [ ApplicationFacade.MODULE_READY ];
+			return [
+				ApplicationFacade.MODULE_READY,
+				ApplicationFacade.SHOW_TOOLSET
+			];
 		}
 
 		override public function handleNotification( note : INotification ) : void
@@ -68,6 +71,11 @@ package net.vdombox.ide.core.view
 					loadedModules.push( module );
 					getModule();
 					break;
+				}
+				
+				case ApplicationFacade.SHOW_TOOLSET:
+				{
+					toolsetBar.addElement( note.getBody() as IVisualElement );
 				}
 			}
 		}
@@ -118,11 +126,10 @@ package net.vdombox.ide.core.view
 			
 			if( loadedModules.length == 0 )
 				return;
-				
+			
 			for each ( var item : VIModule in loadedModules )
 			{
-				sendNotification( 
-//				toolsetBar.addElement( item.toolset );
+				item.getToolset();
 			}
 			
 			return;
@@ -148,16 +155,6 @@ package net.vdombox.ide.core.view
 			var categoryName : String = event.target.selectedItem.name as String;
 			
 			showModulesByCategory( categoryName );
-
-//			if ( categoryName == "applicationManagment" )
-//			{
-//				mainWindow.componentsStack.selectedChild = mainWindow.applicationsManagment;
-//			}
-//			else
-//			{
-//				mainWindow.componentsStack.selectedChild = mainWindow.modulesManagment;
-//				modulesManagmentMediator.showModulesByCategory( categoryName );
-//			}
 		}
 	}
 }

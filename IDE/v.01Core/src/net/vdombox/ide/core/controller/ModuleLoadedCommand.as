@@ -13,7 +13,7 @@ package net.vdombox.ide.core.controller
 		{
 			var module : VIModule= notification.getBody() as VIModule;
 			facade.registerMediator( new VIModuleMediator( module ) );
-			sendNotification( ApplicationFacade.MODULE_READY, module );
+			sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, module );
 		}
 	}
 }

@@ -30,17 +30,19 @@ package net.vdombox.ide.core
 
 		public static const QUIT : String = "quit";
 
-//		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
+		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
 //
 //		public static const CONNECT_CORE_TO_LOGGER : String = "connectCoreToLogger";
 		
-		//ModulesProxy
+//		ModulesProxy
 		public static const LOAD_MODULE : String = "loadModule";
 		
 		public static const MODULE_LOADED : String = "moduleLoaded";
 		
 		public static const MODULE_READY : String = "moduleReady";
-		
+
+//		pipes messages
+		public static const SHOW_TOOLSET : String = "showToolset";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

@@ -10,6 +10,8 @@ package net.vdombox.ide.modules.applicationsManagment
 	{
 		public static const STARTUP : String = "startup";
 		
+		public static const EXPORT_TOOLSET : String = "exportToolset";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

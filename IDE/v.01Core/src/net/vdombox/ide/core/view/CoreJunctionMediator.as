@@ -3,9 +3,8 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.UIQueryMessage;
-	import net.vdombox.ide.common.VIModule;
+	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.model.ModulesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
@@ -57,7 +56,7 @@ package net.vdombox.ide.core.view
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			interests.push( ApplicationFacade.MODULE_LOADED );
+			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
 			return interests;
 		}
 
@@ -69,7 +68,7 @@ package net.vdombox.ide.core.view
 
 			switch ( note.getName())
 			{
-				case ApplicationFacade.MODULE_LOADED:
+				case ApplicationFacade.CONNECT_MODULE_TO_CORE:
 //					sendNotification( LogMessage.SEND_TO_LOG, "Connecting new module instance to Shell.", LogMessage.LEVELS[ LogMessage.DEBUG ]);
 
 					// Connect a module's STDSHELL to the shell's STDIN
@@ -120,7 +119,11 @@ package net.vdombox.ide.core.view
 			{
 				switch ( UIQueryMessage( message ).name )
 				{
-					
+					case UIQueryMessageNames.TOOLSET_UI:
+					{
+						sendNotification( ApplicationFacade.SHOW_TOOLSET, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+						break;
+					}
 				}
 			}
 		}

@@ -25,9 +25,8 @@ package net.vdombox.ide.common
 			return null;
 		}
 		
-		public function get toolset() : IToolset
+		public function getToolset() : void
 		{
-			return null;
 		}
 		
 		public function get mainContent() : UIComponent
