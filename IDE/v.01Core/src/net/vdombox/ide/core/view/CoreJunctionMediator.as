@@ -45,7 +45,7 @@ package net.vdombox.ide.core.view
 
 			// The STDLOG pipe from the shell to the logger
 			junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, new Pipe());
-			sendNotification( ApplicationFacade.CONNECT_CORE_TO_LOGGER, junction );
+//			sendNotification( ApplicationFacade.CONNECT_CORE_TO_LOGGER, junction );
 
 		}
 
@@ -57,7 +57,7 @@ package net.vdombox.ide.core.view
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			interests.push( ModulesProxy.MODULE_LOADED );
+			interests.push( ApplicationFacade.MODULE_LOADED );
 			return interests;
 		}
 
@@ -69,21 +69,21 @@ package net.vdombox.ide.core.view
 
 			switch ( note.getName())
 			{
-				case ApplicationFacade.CONNECT_MODULE_TO_CORE:
+				case ApplicationFacade.MODULE_LOADED:
 //					sendNotification( LogMessage.SEND_TO_LOG, "Connecting new module instance to Shell.", LogMessage.LEVELS[ LogMessage.DEBUG ]);
 
 					// Connect a module's STDSHELL to the shell's STDIN
 					var module : IPipeAware = note.getBody() as IPipeAware;
 					var moduleToShell : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
-					var shellIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
-					shellIn.connectInput( moduleToShell );
+					var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
+					coreIn.connectInput( moduleToShell );
 
 					// Connect the shell's STDOUT to the module's STDIN
-					var shellToModule : Pipe = new Pipe();
-					module.acceptInputPipe( PipeNames.STDIN, shellToModule );
-					var shellOut : IPipeFitting = junction.retrievePipe( PipeNames.STDOUT ) as IPipeFitting;
-					shellOut.connect( shellToModule );
+					var coreToModule : Pipe = new Pipe();
+					module.acceptInputPipe( PipeNames.STDIN, coreToModule );
+					var coreOut : IPipeFitting = junction.retrievePipe( PipeNames.STDOUT ) as IPipeFitting;
+					coreOut.connect( coreToModule );
 					
 					sendNotification( ApplicationFacade.MODULE_READY, module );
 					break;

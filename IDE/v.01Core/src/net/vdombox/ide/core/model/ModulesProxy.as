@@ -8,6 +8,8 @@ package net.vdombox.ide.core.model
 	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.VIModule;
+	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
@@ -18,8 +20,6 @@ package net.vdombox.ide.core.model
 	public class ModulesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ModulesProxy";
-
-		public static const MODULE_LOADED : String = "Module Loaded";
 
 		private static const MODULES_DIR : String = "app:/modules/";
 
@@ -59,9 +59,9 @@ package net.vdombox.ide.core.model
 				return null;
 		}
 
-		public function loadModule( categoryName : String, moduleName : String ) : void
+		public function loadModule( moduleVO : ModuleVO ) : void
 		{
-			var module : XML = MODULES_XML.category.( @name == categoryName ).module.( @name == moduleName )[ 0 ];
+			var module : XML = MODULES_XML.category.( @name == moduleVO.category ).module.( @name == moduleVO.name )[ 0 ];
 			moduleInfo = ModuleManager.getModule( module.@path );
 			moduleInfo.addEventListener( ModuleEvent.READY, moduleReadyHandler );
 			moduleInfo.load();
@@ -101,7 +101,7 @@ package net.vdombox.ide.core.model
 		private function moduleReadyHandler( event : ModuleEvent ) : void
 		{
 			var module : VIModule = event.module.factory.create() as VIModule;
-			sendNotification( MODULE_LOADED, module );
+			sendNotification( ApplicationFacade.MODULE_LOADED, module );
 		}
 	}
 }

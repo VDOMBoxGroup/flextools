@@ -10,6 +10,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.LocaleProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
+	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -35,13 +36,7 @@ package net.vdombox.ide.core.view
 
 		private var modulesProxy : ModulesProxy;
 
-
-//		private var applicationsManagmentMediator : ApplicationsManagmentMediator;
-
-//		private var modulesManagmentMediator : ModulesManagmentMediator;
-
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
-
 
 		private var moduleList : Array;
 		
@@ -110,7 +105,7 @@ package net.vdombox.ide.core.view
 			if ( moduleList.length > 0 )
 			{
 				var module : Object = moduleList.shift();
-				modulesProxy.loadModule( currentModuleCategory, module.name );
+				sendNotification( ApplicationFacade.LOAD_MODULE, new ModuleVO( module.name, currentModuleCategory ) );
 				return;
 			}
 			
@@ -124,37 +119,21 @@ package net.vdombox.ide.core.view
 			if( loadedModules.length == 0 )
 				return;
 				
-			var test : Array = [];
-			for each ( var item : IVIModule in loadedModules )
+			for each ( var item : VIModule in loadedModules )
 			{
-				test.push( item.toolset );
+				sendNotification( 
+//				toolsetBar.addElement( item.toolset );
 			}
-			
-//			if ( loadedModules.length > 0 )
-//				toolsetBar.mxmlContent = test;
 			
 			return;
 		}
 		
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
-//			var tabs : XMLListCollection = new XMLListCollection();
-//			tabs.addItem( <category name="applicationManagment" label={resourceManager.getString( "ApplicationManagment", "title" )} /> );
-//
 			var modulesCategories : Array = modulesProxy.categories;
+			
 			var tabBar : ButtonBar = mainWindow.tabBar;
-//			for each ( var category : XML in modulesCategories )
-//			{
-//				tabs.addItem( <category name={category.@name} label={resourceManager.getString( "Modules", category.@name )} /> );
-//			}
-//
-//
-//			mainWindow.mainTabBar.iconField = null;
-//
-//			mainWindow.mainTabBar.labelFunction = function( data : XML ) : String
-//			{
-//				return data.@label[ 0 ];
-//			};
+
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
 
 			tabBar.labelField = "name";

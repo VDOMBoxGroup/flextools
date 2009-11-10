@@ -12,7 +12,6 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var module : VIModule= notification.getBody() as VIModule;
-			sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, module );
 			facade.registerMediator( new VIModuleMediator( module ) );
 			sendNotification( ApplicationFacade.MODULE_READY, module );
 		}
