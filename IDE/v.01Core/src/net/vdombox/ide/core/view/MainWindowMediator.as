@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.view
 {
+	import flash.display.DisplayObject;
+	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
@@ -43,7 +45,8 @@ package net.vdombox.ide.core.view
 		private var currentModuleCategory : String;
 
 		private var loadedModules : Array;
-
+		
+		private var selectedModuleID : String = "";
 
 		override public function onRegister() : void
 		{
@@ -57,7 +60,9 @@ package net.vdombox.ide.core.view
 		{
 			return [
 				ApplicationFacade.MODULE_READY,
-				ApplicationFacade.SHOW_TOOLSET
+				ApplicationFacade.SHOW_TOOLSET,
+				ApplicationFacade.SHOW_MAIN_CONTENT,
+				ApplicationFacade.CHANGE_SELECTED_MODULE
 			];
 		}
 
@@ -76,6 +81,20 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SHOW_TOOLSET:
 				{
 					toolsetBar.addElement( note.getBody() as IVisualElement );
+				}
+				
+				case ApplicationFacade.SHOW_MAIN_CONTENT:
+				{
+					mainWindow.addChild( note.getBody() as DisplayObject );
+				}
+					
+				case ApplicationFacade.CHANGE_SELECTED_MODULE:
+				{
+//					var newSelectedModuleID : String = note.getBody() as String;
+//					var oldSelectedModuleID : String = selectedModuleID;
+					
+					selectedModuleID = note.getBody() as String;
+					sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, selectedModuleID );
 				}
 			}
 		}

@@ -29,9 +29,8 @@ package net.vdombox.ide.common
 		{
 		}
 		
-		public function get mainContent() : UIComponent
+		public function getMainContent() : void
 		{
-			return null;
 		}
 		
 		public function get settings() : UIComponent

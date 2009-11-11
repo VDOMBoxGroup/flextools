@@ -40,9 +40,14 @@ package net.vdombox.ide.core
 		public static const MODULE_LOADED : String = "moduleLoaded";
 		
 		public static const MODULE_READY : String = "moduleReady";
+		
+		public static const CHANGE_SELECTED_MODULE : String = "changeSelectedModule";
+		
+		public static const SELECTED_MODULE_CHANGED : String = "selectedModuleChanged";
 
 //		pipes messages
 		public static const SHOW_TOOLSET : String = "showToolset";
+		public static const SHOW_MAIN_CONTENT : String = "showMainContent";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

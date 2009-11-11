@@ -2,6 +2,7 @@ package net.vdombox.ide.modules
 {
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
+	import net.vdombox.ide.modules.applicationsManagment.view.components.MainContent;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.Toolset;
 
 	public class ApplicationsManagment extends VIModule
@@ -20,6 +21,11 @@ package net.vdombox.ide.modules
 			button.label = NAME;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_TOOLSET, button );
+		}
+		
+		override public function getMainContent() : void
+		{
+			facade.sendNotification( ApplicationFacade.EXPORT_MAIN_CONTENT, new MainContent() );
 		}
 	}
 }

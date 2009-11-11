@@ -6,6 +6,6 @@ package net.vdombox.ide.common
 		
 //		modules to core
 		public static const TOOLSET_UI : String = "toolsetUI";
-		public static const MODULE_WINDOW_UI : String = "moduleWindowUI";
+		public static const MAIN_CONTENT_UI : String = "mainContentUI";
 	}
 }

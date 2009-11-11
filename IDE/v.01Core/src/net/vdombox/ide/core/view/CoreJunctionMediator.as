@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.view
 {
 	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.MessageHeaders;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
@@ -10,6 +11,7 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
+	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
@@ -21,7 +23,7 @@ package net.vdombox.ide.core.view
 
 		public function CoreJunctionMediator()
 		{
-			super( NAME, new Junction() );
+			super( NAME, new Junction());
 		}
 
 		/**
@@ -57,6 +59,7 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
+			interests.push( ApplicationFacade.SELECTED_MODULE_CHANGED );
 			return interests;
 		}
 
@@ -69,6 +72,7 @@ package net.vdombox.ide.core.view
 			switch ( note.getName())
 			{
 				case ApplicationFacade.CONNECT_MODULE_TO_CORE:
+				{
 //					sendNotification( LogMessage.SEND_TO_LOG, "Connecting new module instance to Shell.", LogMessage.LEVELS[ LogMessage.DEBUG ]);
 
 					// Connect a module's STDSHELL to the shell's STDIN
@@ -83,10 +87,15 @@ package net.vdombox.ide.core.view
 					module.acceptInputPipe( PipeNames.STDIN, coreToModule );
 					var coreOut : IPipeFitting = junction.retrievePipe( PipeNames.STDOUT ) as IPipeFitting;
 					coreOut.connect( coreToModule );
-					
+
 					sendNotification( ApplicationFacade.MODULE_READY, module );
 					break;
-
+				}
+					
+				case ApplicationFacade.SELECTED_MODULE_CHANGED:
+				{
+					junction.sendMessage( PipeNames.STDOUT, new Message( Message.NORMAL, MessageHeaders.MODULE_SELECTED, note.getBody() )); 
+				}
 				// Let super handle the rest (ACCEPT_OUTPUT_PIPE, ACCEPT_INPUT_PIPE, SEND_TO_LOG)								
 				default:
 					super.handleNotification( note );
@@ -122,6 +131,23 @@ package net.vdombox.ide.core.view
 					case UIQueryMessageNames.TOOLSET_UI:
 					{
 						sendNotification( ApplicationFacade.SHOW_TOOLSET, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+						break;
+					}
+					
+					case UIQueryMessageNames.MAIN_CONTENT_UI:
+					{
+						sendNotification( ApplicationFacade.SHOW_MAIN_CONTENT, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+						break;
+					}
+				}
+			}
+			else if ( message is Message )
+			{
+				switch ( message.getHeader() )
+				{
+					case MessageHeaders.SELECT_MODULE:
+					{
+						sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getBody() );
 						break;
 					}
 				}
