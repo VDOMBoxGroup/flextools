@@ -613,7 +613,6 @@ public class TemplateStruct extends EventDispatcher
 								break;
 								
 							case NodeCategory.COMMAND:
-													
 								curNodeContext.block = CodeParser.ParseCode(curGraphContext.curNode.text);
 								break;
 

@@ -16,7 +16,18 @@ public class CodeFragment extends LexemStruct
 	
 	public var retVarName:String = "__tmp_" + UIDUtil.createUID().replace(/-/g, "_"); 
 	public var retValue:*; // return value
-	public var print:Boolean; // print result value to output buffer
+	
+	public var _print:Boolean; // print result value to output buffer
+	public function set print(value:Boolean):void
+	{
+		_print = value;
+	}
+	
+	public function get print():Boolean
+	{
+		return _print;
+	}
+	
 
 	// for commands
 	public var ctype:String; // command type (FUNCTION|TEST|OPERATION|ASSIGN|LIST|TEXT)

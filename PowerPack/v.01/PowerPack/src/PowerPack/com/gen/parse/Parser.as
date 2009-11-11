@@ -776,8 +776,8 @@ public class Parser
 				
 			if(isFunctionExist(funcName))
 			{
-				//if(fragment.isTopLevel)
-				//	fragment.print = true;
+				if(fragment.isTopLevel)
+					fragment.print = true;
 				
 				fragment.type = funcObj.value;
 				fragment.ctype = CodeFragment.CT_FUNCTION;			

@@ -303,7 +303,7 @@ public function loadDataFrom(filePath:String):Function
 public function GUID():String
 {
 	var guid:String = UIDUtil.createUID();
-	return guid;
+	return guid.toLowerCase();
 }	
 
 public function mid(start:int, length:int, string:String):String
