@@ -38,12 +38,13 @@ package net.vdombox.ide.core.view
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
 		private var modulesList : Array;
-		
+
 		private var currentModuleCategory : String;
 
 		private var loadedModules : Object;
+
 		private var modulesOrder : Array;
-		
+
 		private var selectedModuleID : String = "";
 
 		override public function onRegister() : void
@@ -56,12 +57,7 @@ package net.vdombox.ide.core.view
 
 		override public function listNotificationInterests() : Array
 		{
-			return [
-				ApplicationFacade.MODULE_READY,
-				ApplicationFacade.SHOW_TOOLSET,
-				ApplicationFacade.SHOW_MAIN_CONTENT,
-				ApplicationFacade.CHANGE_SELECTED_MODULE
-			];
+			return [ ApplicationFacade.MODULE_READY, ApplicationFacade.SHOW_TOOLSET, ApplicationFacade.SHOW_MAIN_CONTENT, ApplicationFacade.CHANGE_SELECTED_MODULE ];
 		}
 
 		override public function handleNotification( note : INotification ) : void
@@ -76,23 +72,23 @@ package net.vdombox.ide.core.view
 					getModule();
 					break;
 				}
-				
+
 				case ApplicationFacade.SHOW_TOOLSET:
 				{
 					toolsetBar.addElement( note.getBody() as IVisualElement );
 					break;
 				}
-				
+
 				case ApplicationFacade.SHOW_MAIN_CONTENT:
 				{
 					mainWindow.addElement( note.getBody() as IVisualElement );
 					break;
 				}
-					
+
 				case ApplicationFacade.CHANGE_SELECTED_MODULE:
 				{
-					selectedModuleID = note.getBody() as String;
-					sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, selectedModuleID );
+					var newSelectedModuleID : String = note.getBody() as String;
+					selectModule( newSelectedModuleID );
 					break;
 				}
 			}
@@ -102,31 +98,31 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as MainWindow;
 		}
-		
+
 		private function get toolsetBar() : Group
 		{
 			return mainWindow.toolsetBar;
 		}
-		
+
 		private function addEventListeners() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
-		
+
 		private function showModulesByCategory( categoryName : String ) : void
-		{	
+		{
 			toolsetBar.removeAllElements();
-			
+
 			modulesList = modulesProxy.getModulesList( categoryName );
-			
+
 			currentModuleCategory = categoryName;
-			
+
 			loadedModules = {};
 			modulesOrder = [];
-			
+
 			getModule();
 		}
-		
+
 		private function getModule() : void
 		{
 			if ( modulesList.length > 0 )
@@ -135,39 +131,47 @@ package net.vdombox.ide.core.view
 				sendNotification( ApplicationFacade.LOAD_MODULE, module );
 				return;
 			}
-			
+
 			placeToolsets();
 			selectModule();
-			
+
 		}
-		
+
 		private function placeToolsets() : void
 		{
 			toolsetBar.removeAllElements();
-			
-			if( loadedModules.length == 0 )
+
+			if ( loadedModules.length == 0 )
 				return;
-			
+
 			for each ( var item : ModuleVO in modulesOrder )
 			{
 				item.body.getToolset();
 			}
-			
+
 			return;
 		}
-		
+
 		private function selectModule( moduleID : String = "" ) : void
 		{
 			var moduleVO : ModuleVO;
-			if( moduleID == "" )
+			if ( moduleID == "" )
 			{
 				moduleVO = modulesOrder[ 0 ] as ModuleVO;
-				
-				selectedModuleID = ModuleVO( modulesOrder[ 0 ] ).moduleID;
+
+				moduleID = ModuleVO( modulesOrder[ 0 ]).moduleID;
 				moduleVO.body.getMainContent();
 			}
+			else
+			{
+				moduleVO = loadedModules[ moduleID ] as ModuleVO;
+				moduleVO.body.getMainContent();
+			}
+
+			selectedModuleID = moduleID;
+			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, selectedModuleID );
 		}
-		
+
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
 			var modulesCategories : Array = modulesProxy.categories;
@@ -178,14 +182,14 @@ package net.vdombox.ide.core.view
 			tabBar.labelField = "name";
 			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
-			
+
 			showModulesByCategory( modulesCategories[ 0 ].name );
 		}
 
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
 			var categoryName : String = event.target.selectedItem.name as String;
-			
+
 			showModulesByCategory( categoryName );
 		}
 	}

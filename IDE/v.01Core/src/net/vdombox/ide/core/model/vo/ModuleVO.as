@@ -4,9 +4,8 @@ package net.vdombox.ide.core.model.vo
 
 	public class ModuleVO
 	{
-		public function ModuleVO( name : String, category : String, path : String )
+		public function ModuleVO( category : String, path : String )
 		{
-			_name = name;
 			_category = category;
 			_path = path;
 		}
@@ -15,23 +14,8 @@ package net.vdombox.ide.core.model.vo
 
 		private var _category : String;
 
-		private var _name : String;
-		
 		private var _path : String;
-		
-		public function get moduleID() : String
-		{
-			if( _body )
-				return _body.moduleID;
-			else
-				return "";
-		}
-		
-		public function get path() : String
-		{
-			return _path;
-		}
-		
+
 		public function get body() : VIModule
 		{
 			return _body;
@@ -42,9 +26,17 @@ package net.vdombox.ide.core.model.vo
 			return _category;
 		}
 
-		public function get name() : String
+		public function get moduleID() : String
 		{
-			return _name;
+			if ( _body )
+				return _body.moduleID;
+			else
+				return "";
+		}
+
+		public function get path() : String
+		{
+			return _path;
 		}
 
 		public function setBody( value : VIModule ) : void

@@ -1,6 +1,8 @@
 package net.vdombox.ide.modules.applicationsManagment.controller
 {
-	import net.vdombox.ide.modules.ApplicationsManagment;
+	import mx.resources.IResourceManager;
+	import mx.resources.ResourceManager;
+	
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.ToolsetMediator;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.Toolset;
@@ -13,7 +15,6 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var toolset : Toolset = new Toolset();
-			toolset.label = ApplicationsManagment.NAME;
 			
 			facade.registerMediator( new ToolsetMediator( toolset ) )
 			

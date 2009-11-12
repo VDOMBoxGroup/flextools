@@ -2,9 +2,9 @@ package net.vdombox.ide.modules.applicationsManagment.view.components
 {
 	import net.vdombox.ide.core.interfaces.IToolset;
 	
-	import spark.components.Button;
+	import spark.components.ToggleButton;
 	
-	public class Toolset extends Button implements IToolset
+	public class Toolset extends ToggleButton implements IToolset
 	{
 	}
 }

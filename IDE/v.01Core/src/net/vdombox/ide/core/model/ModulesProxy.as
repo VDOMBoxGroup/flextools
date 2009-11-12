@@ -76,7 +76,6 @@ package net.vdombox.ide.core.model
 			var categoryName : String;
 			var categoryLocalizedName : String;
 			
-			var moduleName : String;
 			var modulePath : String;
 			
 			var moduleList : Array;
@@ -90,9 +89,8 @@ package net.vdombox.ide.core.model
 				
 				for each ( var module : XML in category.* )
 				{
-					moduleName = module.@name;
 					modulePath = module.@path;
-					moduleList.push( new ModuleVO( moduleName, categoryName, modulePath ) ); 
+					moduleList.push( new ModuleVO( categoryName, modulePath ) ); 
 				}
 				
 				_categories.push( new ModulesCategoryVO( categoryName, categoryLocalizedName ) );

@@ -7,7 +7,7 @@ package net.vdombox.ide.common
 	public interface IVIModule
 	{
 		function get moduleID() : String;
-
+		
 		function get settings() : UIComponent;
 
 		function getToolset() : void;
