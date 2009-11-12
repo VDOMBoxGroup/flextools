@@ -20,6 +20,7 @@ package net.vdombox.ide.core.view
 		public function ApplicationMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
+			
 			application.nativeWindow.close();
 			NativeApplication.nativeApplication.autoExit = false;
 		}

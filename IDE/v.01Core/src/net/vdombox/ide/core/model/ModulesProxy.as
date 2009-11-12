@@ -5,7 +5,6 @@ package net.vdombox.ide.core.model
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	import mx.utils.ObjectUtil;
 	
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -48,22 +47,23 @@ package net.vdombox.ide.core.model
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
 		public function get categories() : Array
-		{
-			return _categories;
+		{		
+			return _categories.slice();
 		}
 
 		public function getModulesList( categoryName : String ) : Array
 		{
 			if( _modulesListByCategory.hasOwnProperty( categoryName ) )
-				return ObjectUtil.copy( _modulesListByCategory[ categoryName ] ) as Array;
+				return _modulesListByCategory[ categoryName ].slice() as Array ;
 			else
 				return null;
 		}
 
 		public function loadModule( moduleVO : ModuleVO ) : void
 		{
-			var module : XML = MODULES_XML.category.( @name == moduleVO.category ).module.( @name == moduleVO.name )[ 0 ];
-			moduleInfo = ModuleManager.getModule( module.@path );
+			moduleInfo = ModuleManager.getModule( moduleVO.path );
+			moduleInfo.data = moduleVO;
+			
 			moduleInfo.addEventListener( ModuleEvent.READY, moduleReadyHandler );
 			moduleInfo.load();
 		}
@@ -77,7 +77,7 @@ package net.vdombox.ide.core.model
 			var categoryLocalizedName : String;
 			
 			var moduleName : String;
-			var moduleLocalizedName : String;
+			var modulePath : String;
 			
 			var moduleList : Array;
 			
@@ -91,18 +91,21 @@ package net.vdombox.ide.core.model
 				for each ( var module : XML in category.* )
 				{
 					moduleName = module.@name;
-					moduleList.push({ name : moduleName, localizedName : "two" }); 
+					modulePath = module.@path;
+					moduleList.push( new ModuleVO( moduleName, categoryName, modulePath ) ); 
 				}
 				
-				_categories.push( new ModulesCategoryVO( categoryName, categoryLocalizedName, moduleList ) );
+				_categories.push( new ModulesCategoryVO( categoryName, categoryLocalizedName ) );
 				_modulesListByCategory[ categoryName ] = moduleList;
 			}
 		}
 
 		private function moduleReadyHandler( event : ModuleEvent ) : void
 		{
+			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			var module : VIModule = event.module.factory.create() as VIModule;
-			sendNotification( ApplicationFacade.MODULE_LOADED, module );
+			moduleVO.setBody( module );
+			sendNotification( ApplicationFacade.MODULE_LOADED, moduleVO );
 		}
 	}
 }

@@ -6,6 +6,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.vo.ModuleVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
@@ -76,7 +77,8 @@ package net.vdombox.ide.core.view
 //					sendNotification( LogMessage.SEND_TO_LOG, "Connecting new module instance to Shell.", LogMessage.LEVELS[ LogMessage.DEBUG ]);
 
 					// Connect a module's STDSHELL to the shell's STDIN
-					var module : IPipeAware = note.getBody() as IPipeAware;
+					var moduleVO : ModuleVO = note.getBody() as ModuleVO;
+					var module : IPipeAware = moduleVO.body as IPipeAware;
 					var moduleToShell : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
 					var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
@@ -88,7 +90,7 @@ package net.vdombox.ide.core.view
 					var coreOut : IPipeFitting = junction.retrievePipe( PipeNames.STDOUT ) as IPipeFitting;
 					coreOut.connect( coreToModule );
 
-					sendNotification( ApplicationFacade.MODULE_READY, module );
+					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
 					break;
 				}
 					

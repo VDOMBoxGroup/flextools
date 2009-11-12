@@ -1,14 +1,11 @@
 package net.vdombox.ide.core.view
 {
-	import flash.display.DisplayObject;
-	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
-	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.LocaleProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
@@ -40,11 +37,12 @@ package net.vdombox.ide.core.view
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
-		private var moduleList : Array;
+		private var modulesList : Array;
 		
 		private var currentModuleCategory : String;
 
-		private var loadedModules : Array;
+		private var loadedModules : Object;
+		private var modulesOrder : Array;
 		
 		private var selectedModuleID : String = "";
 
@@ -72,8 +70,9 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.MODULE_READY:
 				{
-					var module : VIModule = note.getBody() as VIModule;
-					loadedModules.push( module );
+					var moduleVO : ModuleVO = note.getBody() as ModuleVO;
+					loadedModules[ moduleVO.moduleID ] = moduleVO;
+					modulesOrder.push( moduleVO );
 					getModule();
 					break;
 				}
@@ -81,20 +80,20 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.SHOW_TOOLSET:
 				{
 					toolsetBar.addElement( note.getBody() as IVisualElement );
+					break;
 				}
 				
 				case ApplicationFacade.SHOW_MAIN_CONTENT:
 				{
-					mainWindow.addChild( note.getBody() as DisplayObject );
+					mainWindow.addElement( note.getBody() as IVisualElement );
+					break;
 				}
 					
 				case ApplicationFacade.CHANGE_SELECTED_MODULE:
 				{
-//					var newSelectedModuleID : String = note.getBody() as String;
-//					var oldSelectedModuleID : String = selectedModuleID;
-					
 					selectedModuleID = note.getBody() as String;
 					sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, selectedModuleID );
+					break;
 				}
 			}
 		}
@@ -118,25 +117,28 @@ package net.vdombox.ide.core.view
 		{	
 			toolsetBar.removeAllElements();
 			
-			moduleList = modulesProxy.getModulesList( categoryName );
+			modulesList = modulesProxy.getModulesList( categoryName );
 			
 			currentModuleCategory = categoryName;
 			
-			loadedModules = [];
+			loadedModules = {};
+			modulesOrder = [];
 			
 			getModule();
 		}
 		
 		private function getModule() : void
 		{
-			if ( moduleList.length > 0 )
+			if ( modulesList.length > 0 )
 			{
-				var module : Object = moduleList.shift();
-				sendNotification( ApplicationFacade.LOAD_MODULE, new ModuleVO( module.name, currentModuleCategory ) );
+				var module : ModuleVO = modulesList.shift();
+				sendNotification( ApplicationFacade.LOAD_MODULE, module );
 				return;
 			}
 			
 			placeToolsets();
+			selectModule();
+			
 		}
 		
 		private function placeToolsets() : void
@@ -146,18 +148,29 @@ package net.vdombox.ide.core.view
 			if( loadedModules.length == 0 )
 				return;
 			
-			for each ( var item : VIModule in loadedModules )
+			for each ( var item : ModuleVO in modulesOrder )
 			{
-				item.getToolset();
+				item.body.getToolset();
 			}
 			
 			return;
 		}
 		
+		private function selectModule( moduleID : String = "" ) : void
+		{
+			var moduleVO : ModuleVO;
+			if( moduleID == "" )
+			{
+				moduleVO = modulesOrder[ 0 ] as ModuleVO;
+				
+				selectedModuleID = ModuleVO( modulesOrder[ 0 ] ).moduleID;
+				moduleVO.body.getMainContent();
+			}
+		}
+		
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
 			var modulesCategories : Array = modulesProxy.categories;
-			
 			var tabBar : ButtonBar = mainWindow.tabBar;
 
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );

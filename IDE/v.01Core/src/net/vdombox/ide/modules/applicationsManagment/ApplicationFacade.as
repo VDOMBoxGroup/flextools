@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment
 {
 	import net.vdombox.ide.modules.ApplicationsManagment;
+	import net.vdombox.ide.modules.applicationsManagment.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
@@ -9,6 +10,9 @@ package net.vdombox.ide.modules.applicationsManagment
 	public class ApplicationFacade extends Facade implements IFacade
 	{
 		public static const STARTUP : String = "startup";
+		
+		public static const CREATE_TOOLSET : String = "createToolset";
+		public static const CREATE_MAIN_CONTENT : String = "createMainContent";
 		
 		public static const EXPORT_TOOLSET : String = "exportToolset";
 		public static const EXPORT_MAIN_CONTENT : String = "exportMainContent"; 
@@ -32,8 +36,9 @@ package net.vdombox.ide.modules.applicationsManagment
 		
 		override protected function initializeController( ) : void 
 		{
-			super.initializeController();            
+			super.initializeController();
 			registerCommand( STARTUP, StartupCommand );
+			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
 		}
 	}
 }
