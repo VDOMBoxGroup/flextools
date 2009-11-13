@@ -10,7 +10,6 @@ package net.vdombox.ide.core.view
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
@@ -26,6 +25,8 @@ package net.vdombox.ide.core.view
 		{
 			super( NAME, new Junction());
 		}
+
+		private var outMap : Object = {};
 
 		/**
 		 * Called when the Mediator is registered.
@@ -69,6 +70,9 @@ package net.vdombox.ide.core.view
 		 */
 		override public function handleNotification( note : INotification ) : void
 		{
+			var moduleVO : ModuleVO;
+			var module : IPipeAware;
+			var coreOut : TeeSplit;
 
 			switch ( note.getName())
 			{
@@ -77,31 +81,47 @@ package net.vdombox.ide.core.view
 //					sendNotification( LogMessage.SEND_TO_LOG, "Connecting new module instance to Shell.", LogMessage.LEVELS[ LogMessage.DEBUG ]);
 
 					// Connect a module's STDSHELL to the shell's STDIN
-					var moduleVO : ModuleVO = note.getBody() as ModuleVO;
-					var module : IPipeAware = moduleVO.body as IPipeAware;
+					moduleVO = note.getBody() as ModuleVO;
+					module = moduleVO.body as IPipeAware;
+					
 					var moduleToShell : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
+					
 					var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
 					coreIn.connectInput( moduleToShell );
 
 					// Connect the shell's STDOUT to the module's STDIN
 					var coreToModule : Pipe = new Pipe();
 					module.acceptInputPipe( PipeNames.STDIN, coreToModule );
-					var coreOut : IPipeFitting = junction.retrievePipe( PipeNames.STDOUT ) as IPipeFitting;
+					
+					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
 					coreOut.connect( coreToModule );
+
+					outMap[ moduleVO.moduleID ] = coreToModule;
 
 					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
 					break;
 				}
+
+				case ApplicationFacade.DISCONNECT_MODULE_TO_CORE:
+				{
+					moduleVO = note.getBody() as ModuleVO;
+
+					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
+					coreOut.disconnectFitting( outMap[ moduleVO.moduleID ]);
 					
+					delete outMap[ moduleVO.moduleID ];
+				}
+
 				case ApplicationFacade.SELECTED_MODULE_CHANGED:
 				{
-					junction.sendMessage( PipeNames.STDOUT, new Message( Message.NORMAL, MessageHeaders.MODULE_SELECTED, note.getBody() )); 
+					junction.sendMessage( PipeNames.STDOUT, new Message( Message.NORMAL, MessageHeaders.MODULE_SELECTED, note.getBody()));
 				}
-				// Let super handle the rest (ACCEPT_OUTPUT_PIPE, ACCEPT_INPUT_PIPE, SEND_TO_LOG)								
+												
 				default:
+				{
 					super.handleNotification( note );
-
+				}
 			}
 		}
 
@@ -135,7 +155,7 @@ package net.vdombox.ide.core.view
 						sendNotification( ApplicationFacade.SHOW_TOOLSET, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
 						break;
 					}
-					
+
 					case UIQueryMessageNames.MAIN_CONTENT_UI:
 					{
 						sendNotification( ApplicationFacade.SHOW_MAIN_CONTENT, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
@@ -145,11 +165,11 @@ package net.vdombox.ide.core.view
 			}
 			else if ( message is Message )
 			{
-				switch ( message.getHeader() )
+				switch ( message.getHeader())
 				{
 					case MessageHeaders.SELECT_MODULE:
 					{
-						sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getBody() );
+						sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getBody());
 						break;
 					}
 				}

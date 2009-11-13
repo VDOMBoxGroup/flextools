@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.view
 {
+	import net.vdombox.ide.common.IVIModule;
 	import net.vdombox.ide.common.VIModule;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -7,11 +8,19 @@ package net.vdombox.ide.core.view
 
 	public class VIModuleMediator extends Mediator implements IMediator
 	{
-		public static const NAME : String = 'VIModuleMediator';
-
 		public function VIModuleMediator( viewComponent : VIModule )
 		{
-			super( NAME + "/" + viewComponent.moduleID, viewComponent );
+			super( viewComponent.moduleID, viewComponent );
+		}
+
+		public function tearDown() : void
+		{
+			module.tearDown();
+		}
+
+		private function get module() : IVIModule
+		{
+			return viewComponent as IVIModule;
 		}
 	}
 }

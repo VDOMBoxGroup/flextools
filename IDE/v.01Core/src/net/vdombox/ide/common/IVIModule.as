@@ -13,5 +13,7 @@ package net.vdombox.ide.common
 		function getToolset() : void;
 		
 		function getMainContent() : void;
+		
+		function tearDown() : void;
 	}
 }

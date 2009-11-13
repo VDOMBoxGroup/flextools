@@ -104,5 +104,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.EXPORT_MAIN_CONTENT );
 			return interests;
 		}
+
+		public function tearDown() : void
+		{
+			junction.removePipe( PipeNames.STDIN );
+			junction.removePipe( PipeNames.STDCORE );
+		}
 	}
 }

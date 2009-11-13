@@ -111,8 +111,8 @@ package net.vdombox.ide.core.view
 
 		private function showModulesByCategory( categoryName : String ) : void
 		{
-			toolsetBar.removeAllElements();
-
+			cleanup();
+			
 			modulesList = modulesProxy.getModulesList( categoryName );
 
 			currentModuleCategory = categoryName;
@@ -122,7 +122,23 @@ package net.vdombox.ide.core.view
 
 			getModule();
 		}
-
+		
+		private function cleanup() : void
+		{
+			var moduleForUnload : ModuleVO;
+			
+			var i : int = 0;
+			for( i; i < modulesOrder.length; i++ )
+			{
+				moduleForUnload = modulesOrder[ i ];
+				
+				sendNotification( ApplicationFacade.REMOVE_MODULE, moduleForUnload );
+			}
+			
+			toolsetBar.removeAllElements();
+			mainWindow.removeAllElements();
+		}
+		
 		private function getModule() : void
 		{
 			if ( modulesList.length > 0 )

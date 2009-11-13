@@ -33,6 +33,10 @@ package net.vdombox.ide.common
 		{
 		}
 		
+		public function tearDown() : void
+		{
+		}
+		
 		public function get settings() : UIComponent
 		{
 			return null;

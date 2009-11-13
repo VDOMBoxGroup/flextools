@@ -8,9 +8,9 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.QuitCommand;
+	import net.vdombox.ide.core.controller.RemoveModuleCommand;
 	import net.vdombox.ide.core.controller.SubmitCommand;
 	import net.vdombox.ide.core.controller.TypesLoadedCommand;
-	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.TypeProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -29,12 +29,15 @@ package net.vdombox.ide.core
 		public static const SUBMIT : String = "submit";
 
 		public static const QUIT : String = "quit";
-
+		
 		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
+		public static const DISCONNECT_MODULE_TO_CORE : String = "disconnectModuleToCore";
 //
 //		public static const CONNECT_CORE_TO_LOGGER : String = "connectCoreToLogger";
 		
 //		ModulesProxy
+		public static const REMOVE_MODULE : String = "removeModule";
+		
 		public static const LOAD_MODULE : String = "loadModule";
 		
 		public static const MODULE_LOADED : String = "moduleLoaded";
@@ -91,6 +94,7 @@ package net.vdombox.ide.core
 			registerCommand( ServerProxy.CONNECT_COMPLETE, ConnectCompleteCommand );
 			registerCommand( ApplicationFacade.LOAD_MODULE, LoadModuleCommand );
 			registerCommand( ApplicationFacade.MODULE_LOADED, ModuleLoadedCommand );
+			registerCommand( ApplicationFacade.REMOVE_MODULE, RemoveModuleCommand );
 			registerCommand( TypeProxy.TYPES_LOADED, TypesLoadedCommand );
 			registerCommand( QUIT, QuitCommand );
 		}
