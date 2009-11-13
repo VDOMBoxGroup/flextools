@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.applicationsManagment
 	import net.vdombox.ide.modules.ApplicationsManagment;
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.TearDownCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -15,7 +16,9 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const CREATE_MAIN_CONTENT : String = "createMainContent";
 		
 		public static const EXPORT_TOOLSET : String = "exportToolset";
-		public static const EXPORT_MAIN_CONTENT : String = "exportMainContent"; 
+		public static const EXPORT_MAIN_CONTENT : String = "exportMainContent";
+		
+		public static const TEAR_DOWN : String = "tearDown";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -39,6 +42,7 @@ package net.vdombox.ide.modules.applicationsManagment
 			super.initializeController();
 			registerCommand( STARTUP, StartupCommand );
 			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
+			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
 	}
 }

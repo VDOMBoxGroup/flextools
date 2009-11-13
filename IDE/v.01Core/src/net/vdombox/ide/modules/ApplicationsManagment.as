@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules
 {
+	import flash.events.Event;
+	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
@@ -11,6 +13,8 @@ package net.vdombox.ide.modules
 	{
 		public static const MODULE_ID : String = "04D1487D-F14E-0FE5-82F9-E6E8FEFCD2CD";
 		
+		public static const TEAR_DOWN:String = "tearDown";
+		
 		public function ApplicationsManagment()
 		{
 			super( ApplicationFacade.getInstance( MODULE_ID ));
@@ -18,6 +22,11 @@ package net.vdombox.ide.modules
 		}
 		
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+		
+		override public function tearDown():void
+		{
+			dispatchEvent( new Event( TEAR_DOWN ) );
+		}
 		
 		override public function get moduleID() : String
 		{

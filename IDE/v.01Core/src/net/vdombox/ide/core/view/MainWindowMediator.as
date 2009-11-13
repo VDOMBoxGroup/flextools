@@ -21,7 +21,6 @@ package net.vdombox.ide.core.view
 	import spark.events.IndexChangeEvent;
 
 	[ResourceBundle( "ApplicationManagment" )]
-
 	public class MainWindowMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "MainScreenMediator";
@@ -31,34 +30,21 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 
+		private var currentModuleCategory : String;
+
+		private var loadedModules : Object;
+
 		private var localeProxy : LocaleProxy;
+
+		private var modulesList : Array;
+
+		private var modulesOrder : Array;
 
 		private var modulesProxy : ModulesProxy;
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
-		private var modulesList : Array;
-
-		private var currentModuleCategory : String;
-
-		private var loadedModules : Object;
-
-		private var modulesOrder : Array;
-
 		private var selectedModuleID : String = "";
-
-		override public function onRegister() : void
-		{
-			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
-
-			addEventListeners();
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			return [ ApplicationFacade.MODULE_READY, ApplicationFacade.SHOW_TOOLSET, ApplicationFacade.SHOW_MAIN_CONTENT, ApplicationFacade.CHANGE_SELECTED_MODULE ];
-		}
 
 		override public function handleNotification( note : INotification ) : void
 		{
@@ -94,14 +80,20 @@ package net.vdombox.ide.core.view
 			}
 		}
 
-		private function get mainWindow() : MainWindow
+		override public function listNotificationInterests() : Array
 		{
-			return viewComponent as MainWindow;
+			return [ ApplicationFacade.MODULE_READY, ApplicationFacade.SHOW_TOOLSET, ApplicationFacade.SHOW_MAIN_CONTENT, ApplicationFacade.CHANGE_SELECTED_MODULE ];
 		}
 
-		private function get toolsetBar() : Group
+		override public function onRegister() : void
 		{
-			return mainWindow.toolsetBar;
+			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
+			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
+
+			loadedModules = {};
+			modulesOrder = [];
+
+			addEventListeners();
 		}
 
 		private function addEventListeners() : void
@@ -109,36 +101,21 @@ package net.vdombox.ide.core.view
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
 
-		private function showModulesByCategory( categoryName : String ) : void
-		{
-			cleanup();
-			
-			modulesList = modulesProxy.getModulesList( categoryName );
-
-			currentModuleCategory = categoryName;
-
-			loadedModules = {};
-			modulesOrder = [];
-
-			getModule();
-		}
-		
 		private function cleanup() : void
 		{
 			var moduleForUnload : ModuleVO;
-			
-			var i : int = 0;
-			for( i; i < modulesOrder.length; i++ )
+
+			for ( var i : int = 0; i < modulesOrder.length; i++ )
 			{
 				moduleForUnload = modulesOrder[ i ];
-				
+
 				sendNotification( ApplicationFacade.REMOVE_MODULE, moduleForUnload );
 			}
-			
+
 			toolsetBar.removeAllElements();
 			mainWindow.removeAllElements();
 		}
-		
+
 		private function getModule() : void
 		{
 			if ( modulesList.length > 0 )
@@ -151,6 +128,25 @@ package net.vdombox.ide.core.view
 			placeToolsets();
 			selectModule();
 
+		}
+
+		private function get mainWindow() : MainWindow
+		{
+			return viewComponent as MainWindow;
+		}
+
+		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
+		{
+			var modulesCategories : Array = modulesProxy.categories;
+			var tabBar : ButtonBar = mainWindow.tabBar;
+
+			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
+
+			tabBar.labelField = "name";
+			tabBar.dataProvider = new ArrayList( modulesCategories );
+			tabBar.selectedIndex = 0;
+
+			showModulesByCategory( modulesCategories[ 0 ].name );
 		}
 
 		private function placeToolsets() : void
@@ -188,18 +184,18 @@ package net.vdombox.ide.core.view
 			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, selectedModuleID );
 		}
 
-		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
+		private function showModulesByCategory( categoryName : String ) : void
 		{
-			var modulesCategories : Array = modulesProxy.categories;
-			var tabBar : ButtonBar = mainWindow.tabBar;
+			cleanup();
 
-			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
+			modulesList = modulesProxy.getModulesList( categoryName );
 
-			tabBar.labelField = "name";
-			tabBar.dataProvider = new ArrayList( modulesCategories );
-			tabBar.selectedIndex = 0;
+			currentModuleCategory = categoryName;
 
-			showModulesByCategory( modulesCategories[ 0 ].name );
+			loadedModules = {};
+			modulesOrder = [];
+
+			getModule();
 		}
 
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
@@ -207,6 +203,11 @@ package net.vdombox.ide.core.view
 			var categoryName : String = event.target.selectedItem.name as String;
 
 			showModulesByCategory( categoryName );
+		}
+
+		private function get toolsetBar() : Group
+		{
+			return mainWindow.toolsetBar;
 		}
 	}
 }
