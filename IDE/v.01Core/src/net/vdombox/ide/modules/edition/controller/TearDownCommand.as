@@ -1,6 +1,6 @@
-package net.vdombox.ide.modules.applicationsSearch.controller
-{	
-	import net.vdombox.ide.modules.applicationsSearch.view.ApplicationsSearchJunctionMediator;
+package net.vdombox.ide.modules.edition.controller
+{
+	import net.vdombox.ide.modules.edition.view.EditionJunctionMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -10,9 +10,11 @@ package net.vdombox.ide.modules.applicationsSearch.controller
 	{
 		override public function execute(notification:INotification) : void
 		{
-			var applicationsSearchJunctionMediator:ApplicationsSearchJunctionMediator =
-				facade.retrieveMediator( ApplicationsSearchJunctionMediator.NAME ) as ApplicationsSearchJunctionMediator;			
-			applicationsSearchJunctionMediator.tearDown();
+			var editionJunctionMediator:EditionJunctionMediator =
+				facade.retrieveMediator( EditionJunctionMediator.NAME ) as EditionJunctionMediator;
+			
+			editionJunctionMediator.tearDown();
+			
 			//Definitively removes the PureMVC core used to manage this module.
 			Facade.removeCore( multitonKey );
 		}

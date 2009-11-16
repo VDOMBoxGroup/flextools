@@ -2,6 +2,13 @@ package net.vdombox.ide.modules.applicationsSearch.view
 {
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.MessageHeaders;
+	import net.vdombox.ide.common.PipeNames;
+	import net.vdombox.ide.common.UIQueryMessage;
+	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.modules.applicationsSearch.ApplicationFacade;
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;

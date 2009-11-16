@@ -2,7 +2,6 @@ package net.vdombox.ide.modules.applicationsSearch.view
 {
 	import flash.events.Event;
 	
-	import net.vdombox.ide.modules.ApplicationsManagment;
 	import net.vdombox.ide.modules.ApplicationsSearch;
 	import net.vdombox.ide.modules.applicationsSearch.ApplicationFacade;
 	
@@ -20,12 +19,12 @@ package net.vdombox.ide.modules.applicationsSearch.view
 
 		override public function onRegister() : void
 		{
-			applicationsSearch.addEventListener( ApplicationsManagment.TEAR_DOWN, tearDownHandler )
+			applicationsSearch.addEventListener( ApplicationsSearch.TEAR_DOWN, tearDownHandler )
 		}
 
-		private function get applicationsSearch() : ApplicationsManagment
+		private function get applicationsSearch() : ApplicationsSearch
 		{
-			return viewComponent as ApplicationsManagment;
+			return viewComponent as ApplicationsSearch;
 		}
 
 		private function tearDownHandler( event : Event ) : void
