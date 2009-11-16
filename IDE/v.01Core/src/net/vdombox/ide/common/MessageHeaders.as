@@ -7,5 +7,8 @@ package net.vdombox.ide.common
 		public static const MODULE_UNSELECTED : String = "moduleUnselected";
 		//		modules to core
 		public static const SELECT_MODULE : String = "selectModule";
+		
+		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
+		public static const DISCONNECT_PROXIES_PIPE : String = "disconnectProxiesPipe";
 	}
 }

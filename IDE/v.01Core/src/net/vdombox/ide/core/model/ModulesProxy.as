@@ -41,6 +41,7 @@ package net.vdombox.ide.core.model
 
 		private var _categories : Array;
 		private var _modulesListByCategory : Object;
+		private var _loadedModules : Object;
 
 		private var moduleInfo : IModuleInfo;
 
@@ -58,7 +59,12 @@ package net.vdombox.ide.core.model
 			else
 				return null;
 		}
-
+		
+		public function getModuleByID( moduleID : String ) : ModuleVO
+		{
+			return _loadedModules[ moduleID ] as ModuleVO;
+		}
+		
 		public function loadModule( moduleVO : ModuleVO ) : void
 		{
 			moduleInfo = ModuleManager.getModule( moduleVO.path );
@@ -103,6 +109,7 @@ package net.vdombox.ide.core.model
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			var module : VIModule = event.module.factory.create() as VIModule;
 			moduleVO.setBody( module );
+			_loadedModules[ moduleVO.moduleID ] = moduleVO;
 			sendNotification( ApplicationFacade.MODULE_LOADED, moduleVO );
 		}
 	}

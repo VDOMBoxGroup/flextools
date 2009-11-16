@@ -6,6 +6,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -26,6 +27,8 @@ package net.vdombox.ide.core.view
 			super( NAME, new Junction());
 		}
 
+		private var moduleProxy : ModulesProxy;
+		
 		private var outMap : Object = {};
 
 		/**
@@ -39,6 +42,7 @@ package net.vdombox.ide.core.view
 		 */
 		override public function onRegister() : void
 		{
+			moduleProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy ;
 			// The STDOUT pipe from the shell to all modules 
 			junction.registerPipe( PipeNames.STDOUT, Junction.OUTPUT, new TeeSplit());
 
@@ -51,7 +55,7 @@ package net.vdombox.ide.core.view
 //			sendNotification( ApplicationFacade.CONNECT_CORE_TO_LOGGER, junction );
 
 		}
-
+		
 		/**
 		 * ShellJunction related Notification list.
 		 * <P>
@@ -172,8 +176,36 @@ package net.vdombox.ide.core.view
 						sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getBody());
 						break;
 					}
+					
+					case MessageHeaders.CONNECT_PROXIES_PIPE:
+					{
+						var moduleID : String = message.getBody().toString();
+						
+						var moduleVO : ModuleVO = moduleProxy.getModuleByID( moduleID ) as ModuleVO;
+						var module : IPipeAware = moduleVO.module as IPipeAware;
+						
+						var moduleToShell : Pipe = new Pipe();
+						module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
+						
+						var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
+						coreIn.connectInput( moduleToShell );
+						
+						// Connect the shell's STDOUT to the module's STDIN
+						var coreToModule : Pipe = new Pipe();
+						module.acceptInputPipe( PipeNames.STDIN, coreToModule );
+						
+						coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
+						coreOut.connect( coreToModule );
+						
+						outMap[ moduleVO.moduleID ] = coreToModule;
+					}
 				}
 			}
+		}
+		
+		private function connectProxiesPipe( moduleID : String ) : void
+		{
+			
 		}
 	}
 }

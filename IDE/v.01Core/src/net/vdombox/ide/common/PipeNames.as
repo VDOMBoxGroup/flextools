@@ -10,6 +10,7 @@ package net.vdombox.ide.common
 
 		public static const STDOUT : String = "standardOut";
 		
-		public static const PROXIES : String = "proxies";
+		public static const PROXIESIN : String = "proxiesIn";
+		public static const PROXIESOUT : String = "proxiesOut";
 	}
 }
