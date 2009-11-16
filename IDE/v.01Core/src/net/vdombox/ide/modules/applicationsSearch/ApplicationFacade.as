@@ -18,6 +18,8 @@ package net.vdombox.ide.modules.applicationsSearch
 		public static const EXPORT_TOOLSET : String = "exportToolset";
 		public static const EXPORT_MAIN_CONTENT : String = "exportMainContent";
 		
+		public static const SELECT_MODULE : String = "selectModule";
+		
 		public static const TEAR_DOWN : String = "tearDown";
 		
 		public static function getInstance( key : String ) : ApplicationFacade

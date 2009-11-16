@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.applicationsSearch.view
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
+	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
@@ -73,6 +74,12 @@ package net.vdombox.ide.modules.applicationsSearch.view
 					junction.sendMessage( PipeNames.STDCORE, mainContentMessage );
 					break;
 				}
+				
+				case ApplicationFacade.SELECT_MODULE:
+				{
+					var message : Message = new Message( Message.NORMAL, MessageHeaders.SELECT_MODULE, note.getBody() );
+					junction.sendMessage( PipeNames.STDCORE, message );
+				}
 			}
 			
 			/*
@@ -102,6 +109,7 @@ package net.vdombox.ide.modules.applicationsSearch.view
 			var interests : Array = super.listNotificationInterests();
 			interests.push( ApplicationFacade.EXPORT_TOOLSET );
 			interests.push( ApplicationFacade.EXPORT_MAIN_CONTENT );
+			interests.push( ApplicationFacade.SELECT_MODULE );
 			return interests;
 		}
 		

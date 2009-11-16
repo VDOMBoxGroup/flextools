@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.applicationsSearch.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.modules.applicationsSearch.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsSearch.view.components.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -39,7 +40,7 @@ package net.vdombox.ide.modules.applicationsSearch.view
 		
 		private function toolset_clickHandler( event : MouseEvent ) : void
 		{
-			
+			sendNotification( ApplicationFacade.SELECT_MODULE, multitonKey );
 		}
 	}
 }

@@ -100,7 +100,17 @@ package net.vdombox.ide.core.view
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
-
+		
+		private function get mainWindow() : MainWindow
+		{
+			return viewComponent as MainWindow;
+		}
+		
+		private function get toolsetBar() : Group
+		{
+			return mainWindow.toolsetBar;
+		}
+		
 		private function cleanup() : void
 		{
 			var moduleForUnload : ModuleVO;
@@ -129,12 +139,7 @@ package net.vdombox.ide.core.view
 			selectModule();
 
 		}
-
-		private function get mainWindow() : MainWindow
-		{
-			return viewComponent as MainWindow;
-		}
-
+		
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
 			var modulesCategories : Array = modulesProxy.categories;
@@ -166,6 +171,7 @@ package net.vdombox.ide.core.view
 
 		private function selectModule( moduleID : String = "" ) : void
 		{
+			mainWindow.removeAllElements();
 			var moduleVO : ModuleVO;
 			if ( moduleID == "" )
 			{
@@ -203,11 +209,6 @@ package net.vdombox.ide.core.view
 			var categoryName : String = event.target.selectedItem.name as String;
 
 			showModulesByCategory( categoryName );
-		}
-
-		private function get toolsetBar() : Group
-		{
-			return mainWindow.toolsetBar;
 		}
 	}
 }

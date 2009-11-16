@@ -84,15 +84,18 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
-			if ( message.getBody() != multitonKey )
-				return;
-
+			var recepientKey : String = message.getBody().toString();
+			
 			switch ( message.getHeader())
 			{
 				case MessageHeaders.MODULE_SELECTED:
 				{
 					var toolsetMediator : ToolsetMediator = facade.retrieveMediator( ToolsetMediator.NAME ) as ToolsetMediator;
-					toolsetMediator.selected = true;
+					
+					if( recepientKey == multitonKey )
+						toolsetMediator.selected = true;
+					else
+						toolsetMediator.selected = false;
 				}
 			}
 		}
