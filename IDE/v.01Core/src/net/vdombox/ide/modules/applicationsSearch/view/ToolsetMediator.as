@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.applicationsSearch.view
 
 		override public function onRegister() : void
 		{
-			toolset.label = resourceManager.getString( "Modules", "applicationManagment" );
+			toolset.label = resourceManager.getString( "Modules", "some" );
 			toolset.addEventListener( MouseEvent.CLICK, toolset_clickHandler );
 		}
 		

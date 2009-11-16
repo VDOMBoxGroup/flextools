@@ -10,15 +10,15 @@ package net.vdombox.ide.core.model.vo
 			_path = path;
 		}
 
-		private var _body : VIModule;
+		private var _module : VIModule;
 
 		private var _category : String;
 
 		private var _path : String;
 
-		public function get body() : VIModule
+		public function get module() : VIModule
 		{
-			return _body;
+			return _module;
 		}
 
 		public function get category() : String
@@ -28,8 +28,8 @@ package net.vdombox.ide.core.model.vo
 
 		public function get moduleID() : String
 		{
-			if ( _body )
-				return _body.moduleID;
+			if ( _module )
+				return _module.moduleID;
 			else
 				return "";
 		}
@@ -41,7 +41,7 @@ package net.vdombox.ide.core.model.vo
 
 		public function setBody( value : VIModule ) : void
 		{
-			_body = value;
+			_module = value;
 		}
 	}
 }

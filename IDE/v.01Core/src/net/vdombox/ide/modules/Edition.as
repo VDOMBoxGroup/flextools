@@ -1,19 +1,26 @@
 package net.vdombox.ide.modules
 {
+	import flash.events.Event;
+	
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.modules.edition.ApplicationFacade;
-	import net.vdombox.ide.modules.edition.view.components.Toolset;
-
+	import net.vdombox.ide.modules.edition.view.components.MainContent;
+	
 	public class Edition extends VIModule
 	{
-		public static const NAME : String = "Edition";
+		public static const MODULE_ID : String = "433B3EB7-E872-9A2C-39AB-FB919E5148F5";
 		
-		private static const MODULE_ID : String = "C594A2ED-B7C2-B577-D643-E6EB3FA4B90E";
-
+		public static const TEAR_DOWN:String = "tearDown";
+		
 		public function Edition()
 		{
-			super( ApplicationFacade.getInstance( NAME ));
+			super( ApplicationFacade.getInstance( MODULE_ID ));
 			ApplicationFacade( facade ).startup( this );
+		}
+		
+		override public function tearDown():void
+		{
+			dispatchEvent( new Event( TEAR_DOWN ) );
 		}
 		
 		override public function get moduleID() : String
@@ -23,10 +30,12 @@ package net.vdombox.ide.modules
 		
 		override public function getToolset() : void
 		{
-			var button : Toolset = new Toolset();
-			button.label = NAME;
-			
-			facade.sendNotification( ApplicationFacade.EXPORT_TOOLSET, button );
+			facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
+		}
+		
+		override public function getBody() : void
+		{
+			facade.sendNotification( ApplicationFacade.EXPORT_MAIN_CONTENT, new MainContent() );
 		}
 	}
 }

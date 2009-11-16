@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.edition.view
 
 		override public function onRegister() : void
 		{
-			toolset.label = resourceManager.getString( "Modules", "applicationManagment" );
+			toolset.label = resourceManager.getString( "Modules", "language" );
 			toolset.addEventListener( MouseEvent.CLICK, toolset_clickHandler );
 		}
 		

@@ -38,7 +38,7 @@ package net.vdombox.ide.modules
 			facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
 		}
 		
-		override public function getMainContent() : void
+		override public function getBody() : void
 		{
 			facade.sendNotification( ApplicationFacade.EXPORT_MAIN_CONTENT, new MainContent() );
 		}

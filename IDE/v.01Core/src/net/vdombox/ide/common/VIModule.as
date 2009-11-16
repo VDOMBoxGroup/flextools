@@ -29,17 +29,12 @@ package net.vdombox.ide.common
 		{
 		}
 		
-		public function getMainContent() : void
+		public function getBody() : void
 		{
 		}
 		
 		public function tearDown() : void
 		{
-		}
-		
-		public function get settings() : UIComponent
-		{
-			return null;
 		}
 		
 		/**

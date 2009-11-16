@@ -1,8 +1,5 @@
 package net.vdombox.ide.modules.applicationsSearch.controller
 {
-	import mx.resources.IResourceManager;
-	import mx.resources.ResourceManager;
-	
 	import net.vdombox.ide.modules.applicationsSearch.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsSearch.view.ToolsetMediator;
 	import net.vdombox.ide.modules.applicationsSearch.view.components.Toolset;

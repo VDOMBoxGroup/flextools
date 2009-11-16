@@ -158,7 +158,7 @@ package net.vdombox.ide.core.view
 
 			for each ( var item : ModuleVO in modulesOrder )
 			{
-				item.body.getToolset();
+				item.module.getToolset();
 			}
 
 			return;
@@ -172,12 +172,12 @@ package net.vdombox.ide.core.view
 				moduleVO = modulesOrder[ 0 ] as ModuleVO;
 
 				moduleID = ModuleVO( modulesOrder[ 0 ]).moduleID;
-				moduleVO.body.getMainContent();
+				moduleVO.module.getBody();
 			}
 			else
 			{
 				moduleVO = loadedModules[ moduleID ] as ModuleVO;
-				moduleVO.body.getMainContent();
+				moduleVO.module.getBody();
 			}
 
 			selectedModuleID = moduleID;

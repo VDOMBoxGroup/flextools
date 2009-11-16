@@ -82,7 +82,7 @@ package net.vdombox.ide.core.view
 
 					// Connect a module's STDSHELL to the shell's STDIN
 					moduleVO = note.getBody() as ModuleVO;
-					module = moduleVO.body as IPipeAware;
+					module = moduleVO.module as IPipeAware;
 					
 					var moduleToShell : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
