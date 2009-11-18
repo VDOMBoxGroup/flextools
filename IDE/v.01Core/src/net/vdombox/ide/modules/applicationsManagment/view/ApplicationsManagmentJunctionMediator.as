@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
+	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
@@ -42,6 +43,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 						return;
 					}
+					else if ( type == PipeNames.PROXIESIN )
+					{
+						pipe = note.getBody() as IPipeFitting;
+						pipe.connect( new PipeListener( this, handlePipeMessage ));
+						junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
+					}
 
 					break;
 				}
@@ -56,7 +63,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 						//It does not need to be handled by super.
 						return;
 					}
-
+					else if ( type == PipeNames.PROXIESOUT )
+					{
+						pipe = note.getBody() as IPipeFitting;
+						junction.registerPipe( PipeNames.PROXIESOUT, Junction.OUTPUT, pipe );
+					}
 					break;
 				}
 
@@ -96,6 +107,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 						toolsetMediator.selected = true;
 					else
 						toolsetMediator.selected = false;
+					
+					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.CONNECT_PROXIES_PIPE, multitonKey)); 
 				}
 			}
 		}

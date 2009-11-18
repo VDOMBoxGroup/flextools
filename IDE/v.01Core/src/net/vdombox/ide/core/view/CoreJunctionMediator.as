@@ -29,7 +29,9 @@ package net.vdombox.ide.core.view
 
 		private var moduleProxy : ModulesProxy;
 		
-		private var outMap : Object = {};
+//		private var stdOutMap : Object = {};
+//		private var proxiesOutMap : Object = {};
+		private var pipeStorage : PipeStorage = new PipeStorage();
 
 		/**
 		 * Called when the Mediator is registered.
@@ -43,16 +45,18 @@ package net.vdombox.ide.core.view
 		override public function onRegister() : void
 		{
 			moduleProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy ;
-			// The STDOUT pipe from the shell to all modules 
+			 
 			junction.registerPipe( PipeNames.STDOUT, Junction.OUTPUT, new TeeSplit());
-
-			// The STDIN pipe to the shell from all modules 
+ 
 			junction.registerPipe( PipeNames.STDIN, Junction.INPUT, new TeeMerge());
 			junction.addPipeListener( PipeNames.STDIN, this, handlePipeMessage );
 
-			// The STDLOG pipe from the shell to the logger
 			junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, new Pipe());
-//			sendNotification( ApplicationFacade.CONNECT_CORE_TO_LOGGER, junction );
+			
+			junction.registerPipe( PipeNames.PROXIESOUT, Junction.OUTPUT, new TeeSplit());
+			
+			junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, new TeeMerge());
+			junction.addPipeListener( PipeNames.PROXIESIN, this, handlePipeMessage );
 
 		}
 		
@@ -88,11 +92,11 @@ package net.vdombox.ide.core.view
 					moduleVO = note.getBody() as ModuleVO;
 					module = moduleVO.module as IPipeAware;
 					
-					var moduleToShell : Pipe = new Pipe();
-					module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
+					var moduleToCore : Pipe = new Pipe();
+					module.acceptOutputPipe( PipeNames.STDCORE, moduleToCore );
 					
 					var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
-					coreIn.connectInput( moduleToShell );
+					coreIn.connectInput( moduleToCore );
 
 					// Connect the shell's STDOUT to the module's STDIN
 					var coreToModule : Pipe = new Pipe();
@@ -101,7 +105,7 @@ package net.vdombox.ide.core.view
 					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
 					coreOut.connect( coreToModule );
 
-					outMap[ moduleVO.moduleID ] = coreToModule;
+					stdOutMap[ moduleVO.moduleID ] = coreToModule;
 
 					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
 					break;
@@ -112,16 +116,15 @@ package net.vdombox.ide.core.view
 					moduleVO = note.getBody() as ModuleVO;
 
 					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
-					coreOut.disconnectFitting( outMap[ moduleVO.moduleID ]);
+					coreOut.disconnectFitting( stdOutMap[ moduleVO.moduleID ]);
 					
-					delete outMap[ moduleVO.moduleID ];
+					delete stdOutMap[ moduleVO.moduleID ];
 				}
 
 				case ApplicationFacade.SELECTED_MODULE_CHANGED:
 				{
 					junction.sendMessage( PipeNames.STDOUT, new Message( Message.NORMAL, MessageHeaders.MODULE_SELECTED, note.getBody()));
 				}
-												
 				default:
 				{
 					super.handleNotification( note );
@@ -184,20 +187,20 @@ package net.vdombox.ide.core.view
 						var moduleVO : ModuleVO = moduleProxy.getModuleByID( moduleID ) as ModuleVO;
 						var module : IPipeAware = moduleVO.module as IPipeAware;
 						
-						var moduleToShell : Pipe = new Pipe();
-						module.acceptOutputPipe( PipeNames.STDCORE, moduleToShell );
+						var moduleToCoreProxies : Pipe = new Pipe();
+						module.acceptOutputPipe( PipeNames.PROXIESOUT, moduleToCoreProxies );
 						
-						var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
-						coreIn.connectInput( moduleToShell );
+						var proxiesIn : TeeMerge = junction.retrievePipe( PipeNames.PROXIESIN ) as TeeMerge;
+						proxiesIn.connectInput( moduleToCoreProxies );
 						
 						// Connect the shell's STDOUT to the module's STDIN
-						var coreToModule : Pipe = new Pipe();
-						module.acceptInputPipe( PipeNames.STDIN, coreToModule );
+						var coreToModuleProxies : Pipe = new Pipe();
+						module.acceptInputPipe( PipeNames.PROXIESIN, coreToModuleProxies );
 						
-						coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
-						coreOut.connect( coreToModule );
+						var proxiesOut : TeeSplit = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
+						proxiesOut.connect( coreToModuleProxies );
 						
-						outMap[ moduleVO.moduleID ] = coreToModule;
+						proxiesOutMap[ moduleVO.moduleID ] = coreToModuleProxies;
 					}
 				}
 			}
@@ -205,7 +208,40 @@ package net.vdombox.ide.core.view
 		
 		private function connectProxiesPipe( moduleID : String ) : void
 		{
-			
+			var d : * = "";
 		}
+	}
+}
+
+class PipeStorage
+{
+	public function PipeStorage()
+	{
+		_storage = {};
+	}
+	
+	private var _storage : Object;
+	
+	public function savePipe( moduleID : String, pipeName : String ) : void
+	{
+		if ( !_storage.hasOwnProperty( moduleID ) )
+		{
+			_storage[ moduleID ] = new Vector.<String>();
+		}
+		
+		if ( _storage[ moduleID ].lastIndexOf( pipeName ) === -1 )
+		{
+			_storage[ moduleID ].push( pipeName );
+		}
+	}
+	
+	public function getPipes( moduleID : String ) : Vector.<String>
+	{
+		var result : Vector.<String>;
+		
+		if( _storage.hasOwnProperty( moduleID ) )
+			result = _storage[ moduleID ];
+		
+		return result;
 	}
 }

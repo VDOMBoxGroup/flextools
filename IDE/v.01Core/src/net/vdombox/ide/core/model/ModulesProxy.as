@@ -78,6 +78,7 @@ package net.vdombox.ide.core.model
 		{
 			_categories = [];
 			_modulesListByCategory = {};
+			_loadedModules = {};
 			
 			var categoryName : String;
 			var categoryLocalizedName : String;

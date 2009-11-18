@@ -1,5 +1,7 @@
 package net.vdombox.ide.core
 {
+	import flash.events.UncaughtErrorEvent;
+	
 	import mx.rpc.events.FaultEvent;
 	
 	import net.vdombox.ide.core.controller.ConnectCompleteCommand;
