@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import mx.core.UIComponent;
 	
+	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.MessageHeaders;
 	import net.vdombox.ide.common.PipeNames;
@@ -26,71 +27,45 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			super( NAME, new Junction());
 		}
 
-		override public function handleNotification( note : INotification ) : void
+		override public function handleNotification( notification : INotification ) : void
 		{
 			var pipe : IPipeFitting;
-			var type : String = type = note.getType();
+			var type : String = notification.getType();
 
-			switch ( note.getName())
+			switch ( notification.getName())
 			{
 				case JunctionMediator.ACCEPT_INPUT_PIPE:
 				{
-					if ( type == PipeNames.STDIN )
-					{
-						pipe = note.getBody() as IPipeFitting;
-						pipe.connect( new PipeListener( this, handlePipeMessage ));
-						junction.registerPipe( PipeNames.STDIN, Junction.INPUT, pipe );
-
-						return;
-					}
-					else if ( type == PipeNames.PROXIESIN )
-					{
-						pipe = note.getBody() as IPipeFitting;
-						pipe.connect( new PipeListener( this, handlePipeMessage ));
-						junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
-					}
-
+					processInputPipe( notification );
 					break;
 				}
 
 				case JunctionMediator.ACCEPT_OUTPUT_PIPE:
 				{
-					if ( type == PipeNames.STDCORE )
-					{
-						pipe = note.getBody() as IPipeFitting;
-						junction.registerPipe( PipeNames.STDCORE, Junction.OUTPUT, pipe );
-
-						//It does not need to be handled by super.
-						return;
-					}
-					else if ( type == PipeNames.PROXIESOUT )
-					{
-						pipe = note.getBody() as IPipeFitting;
-						junction.registerPipe( PipeNames.PROXIESOUT, Junction.OUTPUT, pipe );
-					}
+					processOutputPipe( notification );
 					break;
 				}
 
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
-					var toolsetMessage : UIQueryMessage = new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.TOOLSET_UI, UIComponent( note.getBody()));
+					var toolsetMessage : UIQueryMessage = 
+						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.TOOLSET_UI, UIComponent( notification.getBody()));
+					
 					junction.sendMessage( PipeNames.STDCORE, toolsetMessage );
 					break;
 				}
 
 				case ApplicationFacade.EXPORT_MAIN_CONTENT:
 				{
-					var mainContentMessage : UIQueryMessage = new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.MAIN_CONTENT_UI, UIComponent( note.getBody()));
+					var mainContentMessage : UIQueryMessage = 
+						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.MAIN_CONTENT_UI, UIComponent( notification.getBody()));
+					
 					junction.sendMessage( PipeNames.STDCORE, mainContentMessage );
 					break;
 				}
 			}
 
-			/*
-			 * Use super for any notifications that do not need special
-			 * consideration.
-			 */
-			super.handleNotification( note );
+			super.handleNotification( notification );
 		}
 
 		override public function handlePipeMessage( message : IPipeMessage ) : void
@@ -108,7 +83,13 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					else
 						toolsetMediator.selected = false;
 					
-					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.CONNECT_PROXIES_PIPE, multitonKey)); 
+					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.CONNECT_PROXIES_PIPE, multitonKey));
+					break;
+				}
+				case MessageHeaders.PROXIES_PIPE_CONNECTED:
+				{
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					break;
 				}
 			}
 		}
@@ -125,6 +106,66 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			junction.removePipe( PipeNames.STDIN );
 			junction.removePipe( PipeNames.STDCORE );
+		}
+		
+		private function processInputPipe( notification : INotification ) : void
+		{
+			var pipe : IPipeFitting;
+			var type : String = notification.getType() as String;
+			
+			switch ( type )
+			{
+				case PipeNames.STDIN:
+				{
+					pipe = notification.getBody() as IPipeFitting;
+					pipe.connect( new PipeListener( this, handlePipeMessage ));
+					junction.registerPipe( PipeNames.STDIN, Junction.INPUT, pipe );
+					
+					break;
+				}
+				
+				case  PipeNames.PROXIESIN:
+				{
+					pipe = notification.getBody() as IPipeFitting;
+					pipe.connect( new PipeListener( this, handlePipeMessage ));
+					junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
+					
+					break;
+				}
+			}	
+		}
+		
+		private function processOutputPipe( notification : INotification ) : void
+		{
+			var pipe : IPipeFitting;
+			var type : String = notification.getType() as String;
+			
+			switch ( type )
+			{
+				case PipeNames.STDCORE:
+				{
+					pipe = notification.getBody() as IPipeFitting;
+					junction.registerPipe( PipeNames.STDCORE, Junction.OUTPUT, pipe );
+					
+					break;
+				}
+					
+				case PipeNames.PROXIESOUT:
+				{
+					pipe = notification.getBody() as IPipeFitting;
+					junction.registerPipe( PipeNames.PROXIESOUT, Junction.OUTPUT, pipe );
+					
+					break;
+				}
+				
+				case PipeNames.STDLOG:
+				{
+					pipe = notification.getBody() as IPipeFitting;
+					junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, pipe );
+					
+					break;
+				}
+			}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.view
 {
+	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.MessageHeaders;
 	import net.vdombox.ide.common.PipeNames;
@@ -27,21 +28,10 @@ package net.vdombox.ide.core.view
 			super( NAME, new Junction());
 		}
 
-		private var moduleProxy : ModulesProxy;
+		private var moduleProxy : ModulesProxy;		
 		
-//		private var stdOutMap : Object = {};
-//		private var proxiesOutMap : Object = {};
 		private var pipeStorage : PipeStorage = new PipeStorage();
 
-		/**
-		 * Called when the Mediator is registered.
-		 * <P>
-		 * Registers a Merging Tee for STDIN,
-		 * and sets this as the Pipe Listener.</P>
-		 * <P>
-		 * Registers a Pipe for STDLOG and
-		 * connects it to LoggerModule.</P>
-		 */
 		override public function onRegister() : void
 		{
 			moduleProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy ;
@@ -52,19 +42,14 @@ package net.vdombox.ide.core.view
 			junction.addPipeListener( PipeNames.STDIN, this, handlePipeMessage );
 
 			junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, new Pipe());
+			junction.addPipeListener( PipeNames.STDLOG, this, handlePipeMessage );
 			
 			junction.registerPipe( PipeNames.PROXIESOUT, Junction.OUTPUT, new TeeSplit());
 			
 			junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, new TeeMerge());
 			junction.addPipeListener( PipeNames.PROXIESIN, this, handlePipeMessage );
-
 		}
 		
-		/**
-		 * ShellJunction related Notification list.
-		 * <P>
-		 * Adds subclass interests to JunctionMediator interests.</P>
-		 */
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -73,9 +58,6 @@ package net.vdombox.ide.core.view
 			return interests;
 		}
 
-		/**
-		 * Handle ShellJunction related Notifications.
-		 */
 		override public function handleNotification( note : INotification ) : void
 		{
 			var moduleVO : ModuleVO;
@@ -95,8 +77,12 @@ package net.vdombox.ide.core.view
 					var moduleToCore : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.STDCORE, moduleToCore );
 					
+					var moduleToLog : Pipe = new Pipe();
+					module.acceptOutputPipe( PipeNames.STDLOG, moduleToLog );
+					
 					var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
 					coreIn.connectInput( moduleToCore );
+					coreIn.connectInput( moduleToLog );
 
 					// Connect the shell's STDOUT to the module's STDIN
 					var coreToModule : Pipe = new Pipe();
@@ -105,7 +91,8 @@ package net.vdombox.ide.core.view
 					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
 					coreOut.connect( coreToModule );
 
-					stdOutMap[ moduleVO.moduleID ] = coreToModule;
+					pipeStorage.savePipe( moduleVO.moduleID, PipeNames.STDIN, coreToModule );
+//					stdOutMap[ moduleVO.moduleID ] = coreToModule;
 
 					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
 					break;
@@ -116,9 +103,15 @@ package net.vdombox.ide.core.view
 					moduleVO = note.getBody() as ModuleVO;
 
 					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
-					coreOut.disconnectFitting( stdOutMap[ moduleVO.moduleID ]);
 					
-					delete stdOutMap[ moduleVO.moduleID ];
+					var pipes : Object = pipeStorage.getPipes( moduleVO.moduleID );
+					
+					for each ( var pipe : Pipe in pipes )
+					{
+						coreOut.disconnectFitting( pipe );
+					}
+					
+					pipeStorage.removePipes( moduleVO.moduleID );
 				}
 
 				case ApplicationFacade.SELECTED_MODULE_CHANGED:
@@ -132,25 +125,6 @@ package net.vdombox.ide.core.view
 			}
 		}
 
-		/**
-		 * Handle incoming pipe messages for the ShellJunction.
-		 * <P>
-		 * The LoggerModule sends its LogButton and LogWindow instances
-		 * to the Shell for display management via an output Pipe it
-		 * knows as STDSHELL. The PrattlerModule instances also send
-		 * their manufactured FeedWindow instances to the shell via
-		 * their STDSHELL pipe. Those messages all show up and are
-		 * handled here.</P>
-		 * <P>
-		 * Note that we are handling PipeMessages with the same idiom
-		 * as Notifications. Conceptually they are the same, and the
-		 * Mediator role doesn't change much. It takes these messages
-		 * and turns them into notifications to be handled by other
-		 * actors in the main app / shell.</P>
-		 * <P>
-		 * Also, it is logging its actions by sending INFO messages
-		 * to the STDLOG output pipe.</P>
-		 */
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
 			if ( message is UIQueryMessage )
@@ -169,6 +143,10 @@ package net.vdombox.ide.core.view
 						break;
 					}
 				}
+			}
+			else if ( message is LogMessage )
+			{
+				trace( message.getBody() );
 			}
 			else if ( message is Message )
 			{
@@ -200,7 +178,14 @@ package net.vdombox.ide.core.view
 						var proxiesOut : TeeSplit = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
 						proxiesOut.connect( coreToModuleProxies );
 						
-						proxiesOutMap[ moduleVO.moduleID ] = coreToModuleProxies;
+						pipeStorage.savePipe( moduleVO.moduleID, PipeNames.PROXIESIN, coreToModuleProxies );
+						
+						junction.sendMessage( PipeNames.STDOUT, new Message( Message.NORMAL, MessageHeaders.PROXIES_PIPE_CONNECTED, moduleID ))
+					}
+						
+					case MessageHeaders.DISCONNECT_PROXIES_PIPE:
+					{
+						// TODO сделать disconnect.
 					}
 				}
 			}
@@ -213,6 +198,8 @@ package net.vdombox.ide.core.view
 	}
 }
 
+import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
+
 class PipeStorage
 {
 	public function PipeStorage()
@@ -222,26 +209,41 @@ class PipeStorage
 	
 	private var _storage : Object;
 	
-	public function savePipe( moduleID : String, pipeName : String ) : void
+	public function savePipe( moduleID : String, pipeName : String, pipe : Pipe ) : void
 	{
 		if ( !_storage.hasOwnProperty( moduleID ) )
 		{
-			_storage[ moduleID ] = new Vector.<String>();
+			_storage[ moduleID ] = {};
 		}
 		
-		if ( _storage[ moduleID ].lastIndexOf( pipeName ) === -1 )
+		if ( _storage[ moduleID ].hasOwnProperty( pipeName ) )
 		{
-			_storage[ moduleID ].push( pipeName );
+			_storage[ moduleID ][ pipeName ] = pipe;
 		}
 	}
 	
-	public function getPipes( moduleID : String ) : Vector.<String>
+	public function getPipes( moduleID : String ) : Object
 	{
-		var result : Vector.<String>;
+		var result : Object;
 		
-		if( _storage.hasOwnProperty( moduleID ) )
+		if ( _storage.hasOwnProperty( moduleID ) )
 			result = _storage[ moduleID ];
 		
 		return result;
+	}
+	
+	public function removePipe( moduleID : String, pipeName : String ) : void
+	{
+		if ( !_storage.hasOwnProperty( moduleID ) && !_storage[ moduleID ].hasOwnProperty( pipeName ) )
+			return;
+		
+		delete _storage[ moduleID ][ pipeName ];
+		
+	}
+	
+	public function removePipes( moduleID : String ) : void
+	{
+		if( _storage.hasOwnProperty( moduleID ) )
+			delete _storage[ moduleID ];
 	}
 }

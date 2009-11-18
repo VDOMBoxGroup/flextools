@@ -9,6 +9,8 @@ package net.vdombox.ide.common
 		public static const SELECT_MODULE : String = "selectModule";
 		
 		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
+		public static const PROXIES_PIPE_CONNECTED : String = "proxiesPipeConnected";
+		
 		public static const DISCONNECT_PROXIES_PIPE : String = "disconnectProxiesPipe";
 	}
 }
