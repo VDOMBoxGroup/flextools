@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<flex-config>
+   <compiler>
+      <locale>
+			<locale-element>en_US</locale-element>
+			<locale-element>fr_FR</locale-element>
+			<locale-element>ru_RU</locale-element>
+		</locale>
+		
+		<!--<theme>
+			<filename>../assets/theme/theme.swc</filename> 
+		</theme>-->
+		
+		<source-path>
+	   		<path-element>../locale/{locale}</path-element>
+		</source-path>
+   </compiler>
+</flex-config>
