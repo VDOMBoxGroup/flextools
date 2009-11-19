@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.model
 {
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
 
 	public class PipesProxy extends Proxy
@@ -27,6 +28,16 @@ package net.vdombox.ide.core.model
 			{
 				_storage[ moduleID ][ pipeName ] = pipe;
 			}
+		}
+		
+		public function getPipe( moduleID : String, pipeName : String ) : IPipeFitting
+		{
+			var result : IPipeFitting;
+			
+			if ( _storage.hasOwnProperty( moduleID ) && _storage[ moduleID ].hasOwnProperty( pipeName ) )
+				result = _storage[ moduleID ][ pipeName ];
+			
+			return result;
 		}
 		
 		public function getPipes( moduleID : String ) : Object

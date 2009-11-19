@@ -5,9 +5,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
+	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class ToolsetMediator extends Mediator implements IMediator
@@ -21,11 +23,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 		
-		public function set selected ( value : Boolean ) : void
-		{
-			toolset.selected = value;
-		}
-		
 		private function get toolset() : Toolset
 		{
 			return viewComponent as Toolset;
@@ -37,9 +34,37 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			toolset.addEventListener( MouseEvent.CLICK, toolset_clickHandler );
 		}
 		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.MODULE_SELECTED );
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			
+			return interests;
+		}
+		
+		override public function handleNotification( notification : INotification ) : void
+		{
+			switch ( notification.getName())
+			{
+				case ApplicationFacade.MODULE_SELECTED:
+				{
+					toolset.selected = true;
+					break;
+				}
+					
+				case ApplicationFacade.MODULE_DESELECTED:
+				{
+					toolset.selected = false;
+					break;
+				}
+			}
+		}
+		
 		private function toolset_clickHandler( event : MouseEvent ) : void
 		{
-			
+//			TODO toolset_clickHandler
 		}
 	}
 }

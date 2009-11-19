@@ -10,7 +10,7 @@ package net.vdombox.ide.common
 			headers.place = place;
 			headers.target = target;
 			
-			super( operation, headers, body, priority );
+			super( operation, headers, parameters, priority );
 		}
 		
 		public function get operation() : String
@@ -28,7 +28,7 @@ package net.vdombox.ide.common
 			return header.target;			
 		}
 		
-		public function get parameters() : String
+		public function get parameters() : Object
 		{
 			return body;			
 		}

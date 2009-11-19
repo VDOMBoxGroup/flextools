@@ -106,7 +106,7 @@ package net.vdombox.ide.core
 
 		private function soap_faultEvent( event : FaultEvent ) : void
 		{
-			var dummy : * = ""; // FIXME remove dummy
+			var dummy : * = ""; // TODO soap_faultEvent
 		}
 	}
 }

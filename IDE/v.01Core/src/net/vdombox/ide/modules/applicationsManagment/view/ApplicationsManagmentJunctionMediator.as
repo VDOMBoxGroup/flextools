@@ -5,9 +5,14 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.MessageHeaders;
+	import net.vdombox.ide.common.PPMOperationNames;
+	import net.vdombox.ide.common.PPMPlaceNames;
+	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.PipeNames;
+	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -26,7 +31,15 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			super( NAME, new Junction());
 		}
-
+		
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			interests.push( ApplicationFacade.EXPORT_TOOLSET );
+			interests.push( ApplicationFacade.EXPORT_MAIN_CONTENT );
+			return interests;
+		}
+		
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var pipe : IPipeFitting;
@@ -79,9 +92,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					var toolsetMediator : ToolsetMediator = facade.retrieveMediator( ToolsetMediator.NAME ) as ToolsetMediator;
 					
 					if( recepientKey == multitonKey )
-						toolsetMediator.selected = true;
+						sendNotification( ApplicationFacade.MODULE_SELECTED );
 					else
-						toolsetMediator.selected = false;
+						sendNotification( ApplicationFacade.MODULE_DESELECTED );
 					
 					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.CONNECT_PROXIES_PIPE, multitonKey));
 					break;
@@ -91,19 +104,17 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					if( recepientKey == multitonKey )
 					{
 						junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
-						junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.DISCONNECT_PROXIES_PIPE, multitonKey ) );
+						
+						junction.sendMessage( 
+							PipeNames.PROXIESOUT, 
+							new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.APPLICATION, PPMServerTargetNames.APPLICATION, { test : "test" } )
+							);
+						
+//						junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.DISCONNECT_PROXIES_PIPE, multitonKey ) );
 					}
 					break;
 				}
 			}
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-			interests.push( ApplicationFacade.EXPORT_TOOLSET );
-			interests.push( ApplicationFacade.EXPORT_MAIN_CONTENT );
-			return interests;
 		}
 
 		public function tearDown() : void

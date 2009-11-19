@@ -8,6 +8,8 @@ package net.vdombox.ide.core.view
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
@@ -51,6 +53,7 @@ package net.vdombox.ide.core.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var moduleID : String
+			var proxiesOut : TeeSplit;
 			
 			switch ( notification.getName() )
 			{
@@ -59,19 +62,21 @@ package net.vdombox.ide.core.view
 					moduleID  = notification.getBody().toString();
 					
 					var moduleVO : ModuleVO = moduleProxy.getModuleByID( moduleID ) as ModuleVO;
+					
 					var module : IPipeAware = moduleVO.module as IPipeAware;
 					
+					// Connect the core's PROXYIN to the module's PROXYOUT
 					var moduleToCoreProxies : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.PROXIESOUT, moduleToCoreProxies );
 					
 					var proxiesIn : TeeMerge = junction.retrievePipe( PipeNames.PROXIESIN ) as TeeMerge;
 					proxiesIn.connectInput( moduleToCoreProxies );
 					
-					// Connect the shell's STDOUT to the module's STDIN
+					// Connect the core's PROXYOUT to the module's PROXYIN
 					var coreToModuleProxies : Pipe = new Pipe();
 					module.acceptInputPipe( PipeNames.PROXIESIN, coreToModuleProxies );
 					
-					var proxiesOut : TeeSplit = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
+					proxiesOut = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
 					proxiesOut.connect( coreToModuleProxies );
 					
 					pipesProxy.savePipe( moduleVO.moduleID, PipeNames.PROXIESIN, coreToModuleProxies );
@@ -85,10 +90,21 @@ package net.vdombox.ide.core.view
 				{
 					moduleID = notification.getBody().toString();
 					
+					var pipe : IPipeFitting = pipesProxy.getPipe( moduleID, PipeNames.PROXIESIN );
+					
+					proxiesOut = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
+					
+					proxiesOut.disconnectFitting( pipe );
+					
 					pipesProxy.removePipe( moduleID, PipeNames.PROXIESIN );
 					break;
 				}
 			}
+		}
+		
+		override public function handlePipeMessage( message :IPipeMessage ) : void
+		{
+			var d : * = "";
 		}
 	}
 }

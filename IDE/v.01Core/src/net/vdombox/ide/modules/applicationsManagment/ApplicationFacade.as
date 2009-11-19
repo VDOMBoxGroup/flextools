@@ -18,6 +18,9 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const EXPORT_TOOLSET : String = "exportToolset";
 		public static const EXPORT_MAIN_CONTENT : String = "exportMainContent";
 		
+		public static const MODULE_SELECTED : String = "moduleSelected";
+		public static const MODULE_DESELECTED : String = "moduleDeselected";
+		
 		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
 		
 		public static const TEAR_DOWN : String = "tearDown";

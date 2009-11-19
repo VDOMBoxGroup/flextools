@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class ApplicationsManagmentMediator extends Mediator implements IMediator
