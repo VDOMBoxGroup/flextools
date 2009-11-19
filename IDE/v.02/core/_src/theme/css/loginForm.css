@@ -1,0 +1,42 @@
+@namespace "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/halo";
+
+.loginButtonOK {
+	
+	color: #444444;
+	
+	upSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	overSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	downSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	disabledSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+
+	selectedUpSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	selectedOverSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	selectedDownSkin: Embed(source="theme.swf", symbol="LoginLeftButton");
+	selectedDisabledSkin: Embed(source="theme.swf", symbol="LoginLeftButton");	
+}
+
+.loginButtonQuit {
+	
+	color: #444444;
+	
+	upSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	overSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	downSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	disabledSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	
+	selectedUpSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	selectedOverSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	selectedDownSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+	selectedDisabledSkin: Embed(source="theme.swf", symbol="LoginRightButton");
+}
+.loginControlBar
+{
+	paddingBottom: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingTop: 0;
+	
+	backgroundImage: Embed(source="theme.swf", symbol="LoginControlBarBackground");
+	backgroundSize: "100%";
+}
