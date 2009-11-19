@@ -28,7 +28,7 @@ package net.vdombox.ide.core.view
 			super( NAME, new Junction());
 		}
 
-		private var moduleProxy : ModulesProxy;		
+		private var moduleProxy : ModulesProxy;
 		
 		private var pipeStorage : PipeStorage = new PipeStorage();
 

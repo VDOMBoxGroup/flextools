@@ -5,7 +5,6 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.view.components.LoginWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
-	import net.vdombox.ide.core.view.managers.PopUpWindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -29,8 +28,6 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as VdomIDE
 		}
-
-		private var popUpWindowManager : PopUpWindowManager = PopUpWindowManager.getInstance();
 
 		private var currentWindow : Window;
 
