@@ -88,7 +88,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				}
 				case MessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
-					junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					if( recepientKey == multitonKey )
+					{
+						junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
+						junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.DISCONNECT_PROXIES_PIPE, multitonKey ) );
+					}
 					break;
 				}
 			}

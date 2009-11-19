@@ -29,6 +29,10 @@ package net.vdombox.ide.common
 		{
 		}
 		
+		public function getPropertyScreen() : void
+		{
+		}
+		
 		public function getBody() : void
 		{
 		}

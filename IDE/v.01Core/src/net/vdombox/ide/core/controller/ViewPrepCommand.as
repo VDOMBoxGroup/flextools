@@ -2,6 +2,7 @@ package net.vdombox.ide.core.controller
 {	
 	import net.vdombox.ide.core.view.ApplicationMediator;
 	import net.vdombox.ide.core.view.CoreJunctionMediator;
+	import net.vdombox.ide.core.view.ProxiesJunctionMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -12,6 +13,7 @@ package net.vdombox.ide.core.controller
 		{
 			var application : VdomIDE = notification.getBody() as VdomIDE;
 			facade.registerMediator( new CoreJunctionMediator() );
+			facade.registerMediator( new ProxiesJunctionMediator() );
 			facade.registerMediator( new ApplicationMediator( application ) );
 		}
 	}

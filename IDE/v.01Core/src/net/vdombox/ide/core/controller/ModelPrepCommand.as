@@ -2,6 +2,7 @@ package net.vdombox.ide.core.controller
 {	
 	import net.vdombox.ide.core.model.LocaleProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
+	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	
@@ -16,6 +17,7 @@ package net.vdombox.ide.core.controller
 			facade.registerProxy( new SharedObjectProxy() );
 			facade.registerProxy( new LocaleProxy() );
 			facade.registerProxy( new ModulesProxy() );
+			facade.registerProxy( new PipesProxy() );
 		}
 	}
 }

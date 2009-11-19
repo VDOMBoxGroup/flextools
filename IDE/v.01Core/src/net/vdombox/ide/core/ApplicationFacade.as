@@ -34,8 +34,11 @@ package net.vdombox.ide.core
 		
 		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
 		public static const DISCONNECT_MODULE_TO_CORE : String = "disconnectModuleToCore";
-//
-//		public static const CONNECT_CORE_TO_LOGGER : String = "connectCoreToLogger";
+		
+		public static const CONNECT_MODULE_TO_PROXIES : String = "connectModuleToProxies";
+		public static const MODULE_TO_PROXIES_CONNECTED : String = "moduleToProxiesСonnected";
+		public static const DISCONNECT_MODULE_TO_PROXIES : String = "disconnectModuleToProxies";
+		public static const MODULE_TO_PROXIES_DISCONNECTED : String = "moduleToProxiesDisconnected";
 		
 //		ModulesProxy
 		public static const REMOVE_MODULE : String = "removeModule";

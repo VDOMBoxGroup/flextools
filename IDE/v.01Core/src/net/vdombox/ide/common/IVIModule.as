@@ -10,6 +10,8 @@ package net.vdombox.ide.common
 
 		function getToolset() : void;
 		
+		function getPropertyScreen() : void;
+		
 		function getBody() : void;
 		
 		function tearDown() : void;

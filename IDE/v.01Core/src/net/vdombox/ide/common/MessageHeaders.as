@@ -12,5 +12,6 @@ package net.vdombox.ide.common
 		public static const PROXIES_PIPE_CONNECTED : String = "proxiesPipeConnected";
 		
 		public static const DISCONNECT_PROXIES_PIPE : String = "disconnectProxiesPipe";
+		public static const PROXIES_PIPE_DISCONNECTED : String = "proxiesPipeDisconnected";
 	}
 }
