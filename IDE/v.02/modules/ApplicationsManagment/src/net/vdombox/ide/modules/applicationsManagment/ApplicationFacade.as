@@ -25,6 +25,7 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
 		
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationsList";
+		public static const APPLICATIONS_LIST_GETTED : String = "applicationsListGetted";
 		
 		public static const TEAR_DOWN : String = "tearDown";
 		

@@ -111,6 +111,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.CONNECT_PROXIES_PIPE, multitonKey));
 					break;
 				}
+				
 				case MessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
 					if( recepientKey == multitonKey )
@@ -126,9 +127,15 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					}
 					break;
 				}
+					
+				case MessageHeaders.PROXIES_PIPE_CONNECTED:
+				{
+					
+					break;
+				}
 			}
 		}
-
+		
 		public function tearDown() : void
 		{
 			junction.removePipe( PipeNames.STDIN );
@@ -154,7 +161,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case  PipeNames.PROXIESIN:
 				{
 					pipe = notification.getBody() as IPipeFitting;
-					pipe.connect( new PipeListener( this, handlePipeMessage ));
+					pipe.connect( new PipeListener( this, handleProxiesPipeMessage ));
 					junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
 					
 					break;
@@ -190,6 +197,31 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					pipe = notification.getBody() as IPipeFitting;
 					junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, pipe );
 					
+					break;
+				}
+			}
+		}
+		
+		private function handleProxiesPipeMessage( message : ProxiesPipeMessage ) : void
+		{
+			var place : String = message.place;
+			
+			switch ( place ) 
+			{
+				case PPMPlaceNames.SERVER:
+				{
+					processServerProxyMessage( message );
+				}
+			}
+		}
+		
+		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch( message.target )
+			{
+				case PPMServerTargetNames.APPLICATIONS:
+				{
+					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.parameters );
 					break;
 				}
 			}
