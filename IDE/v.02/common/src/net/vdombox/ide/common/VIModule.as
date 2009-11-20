@@ -1,16 +1,15 @@
 package net.vdombox.ide.common
 {
-	import mx.core.UIComponent;
 	import mx.modules.ModuleBase;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	
 	public class VIModule extends ModuleBase implements IPipeAware, IVIModule
 	{
-		public function VIModule( facade : IFacade )
+		public function VIModule( facade : IFacade = null )
 		{
 			super();
 			this.facade = facade;
@@ -19,6 +18,11 @@ package net.vdombox.ide.common
 		protected var facade : IFacade;
 		
 		public function get moduleID() : String
+		{
+			return null;
+		}
+		
+		public function get moduleName() : String
 		{
 			return null;
 		}

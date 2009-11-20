@@ -5,6 +5,7 @@ package net.vdombox.ide.common
 	public interface IVIModule
 	{
 		function get moduleID() : String;
+		function get moduleName() : String;
 
 		function getToolset() : void;
 		

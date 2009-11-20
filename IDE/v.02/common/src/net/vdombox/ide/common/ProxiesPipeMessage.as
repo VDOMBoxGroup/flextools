@@ -1,10 +1,11 @@
 package net.vdombox.ide.common
 {
 	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 
 	public class ProxiesPipeMessage extends Message
 	{
-		public function ProxiesPipeMessage( operation : String, place : String, target : String, parameters : Object )
+		public function ProxiesPipeMessage( operation : String, place : String, target : String, parameters : Object = null )
 		{
 			var headers : Object = {};
 			headers.place = place;
