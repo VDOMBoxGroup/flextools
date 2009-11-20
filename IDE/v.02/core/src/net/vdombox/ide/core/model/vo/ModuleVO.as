@@ -33,7 +33,15 @@ package net.vdombox.ide.core.model.vo
 			else
 				return "";
 		}
-
+		
+		public function get moduleName() : String
+		{
+			if ( _module )
+				return _module.moduleName;
+			else
+				return "";
+		}
+		
 		public function get path() : String
 		{
 			return _path;

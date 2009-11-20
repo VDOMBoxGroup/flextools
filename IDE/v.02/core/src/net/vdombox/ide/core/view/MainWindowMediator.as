@@ -65,7 +65,7 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.SHOW_MAIN_CONTENT:
+				case ApplicationFacade.SHOW_BODY:
 				{
 					mainWindow.addElement( note.getBody() as IVisualElement );
 					break;
@@ -82,7 +82,7 @@ package net.vdombox.ide.core.view
 
 		override public function listNotificationInterests() : Array
 		{
-			return [ ApplicationFacade.MODULE_READY, ApplicationFacade.SHOW_TOOLSET, ApplicationFacade.SHOW_MAIN_CONTENT, ApplicationFacade.CHANGE_SELECTED_MODULE ];
+			return [ ApplicationFacade.MODULE_READY, ApplicationFacade.SHOW_TOOLSET, ApplicationFacade.SHOW_BODY, ApplicationFacade.CHANGE_SELECTED_MODULE ];
 		}
 
 		override public function onRegister() : void

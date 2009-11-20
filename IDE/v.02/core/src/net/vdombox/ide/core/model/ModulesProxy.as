@@ -26,7 +26,6 @@ package net.vdombox.ide.core.model
 			<modules>
 				<category name="applicationManagment">
 					<module name="ApplicationsManagment" path="app:/modules/ApplicationsManagment.swf"/>
-					<module name="ApplicationsSearch" path="app:/modules/ApplicationsSearch.swf"/>
 				</category>
 				<category name="Editor">
 					<module name="Edition" path="app:/modules/Edition.swf"/>

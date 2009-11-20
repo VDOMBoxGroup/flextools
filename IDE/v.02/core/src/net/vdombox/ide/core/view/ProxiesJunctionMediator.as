@@ -1,6 +1,8 @@
 package net.vdombox.ide.core.view
 {
+	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PipeNames;
+	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
@@ -102,9 +104,21 @@ package net.vdombox.ide.core.view
 			}
 		}
 		
-		override public function handlePipeMessage( message :IPipeMessage ) : void
+		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
-			var d : * = "";
+			var ppMessage : ProxiesPipeMessage = message as ProxiesPipeMessage;
+			
+			switch ( ppMessage.place )
+			{
+				case PPMPlaceNames.SERVER:
+				{
+					sendNotification( ApplicationFacade.SERVER_PROXY_REQUEST, 
+									  { operation : ppMessage.operation, target : ppMessage.target, parameters : ppMessage.parameters } 
+					);
+					
+					break;
+				}
+			}
 		}
 	}
 }

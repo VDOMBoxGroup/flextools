@@ -1,7 +1,5 @@
 package net.vdombox.ide.core
 {
-	import flash.events.UncaughtErrorEvent;
-	
 	import mx.rpc.events.FaultEvent;
 	
 	import net.vdombox.ide.core.controller.ConnectCompleteCommand;
@@ -11,6 +9,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.QuitCommand;
 	import net.vdombox.ide.core.controller.RemoveModuleCommand;
+	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
 	import net.vdombox.ide.core.controller.SubmitCommand;
 	import net.vdombox.ide.core.controller.TypesLoadedCommand;
 	import net.vdombox.ide.core.model.ServerProxy;
@@ -40,6 +39,10 @@ package net.vdombox.ide.core
 		public static const DISCONNECT_MODULE_TO_PROXIES : String = "disconnectModuleToProxies";
 		public static const MODULE_TO_PROXIES_DISCONNECTED : String = "moduleToProxiesDisconnected";
 		
+//		Proxies
+		public static const SERVER_PROXY_REQUEST : String = "serverProxieRequest";
+		public static const SERVER_PROXY_RESPONSE : String = "serverProxieResponse";
+		
 //		ModulesProxy
 		public static const REMOVE_MODULE : String = "removeModule";
 		
@@ -55,7 +58,7 @@ package net.vdombox.ide.core
 
 //		pipes messages
 		public static const SHOW_TOOLSET : String = "showToolset";
-		public static const SHOW_MAIN_CONTENT : String = "showMainContent";
+		public static const SHOW_BODY : String = "showBody";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -100,6 +103,7 @@ package net.vdombox.ide.core
 			registerCommand( ApplicationFacade.LOAD_MODULE, LoadModuleCommand );
 			registerCommand( ApplicationFacade.MODULE_LOADED, ModuleLoadedCommand );
 			registerCommand( ApplicationFacade.REMOVE_MODULE, RemoveModuleCommand );
+			registerCommand( ApplicationFacade.SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
 			registerCommand( TypeProxy.TYPES_LOADED, TypesLoadedCommand );
 			registerCommand( QUIT, QuitCommand );
 		}

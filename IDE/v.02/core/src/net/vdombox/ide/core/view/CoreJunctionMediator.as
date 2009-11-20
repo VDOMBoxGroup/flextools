@@ -145,9 +145,9 @@ package net.vdombox.ide.core.view
 						break;
 					}
 
-					case UIQueryMessageNames.MAIN_CONTENT_UI:
+					case UIQueryMessageNames.BODY_UI:
 					{
-						sendNotification( ApplicationFacade.SHOW_MAIN_CONTENT, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+						sendNotification( ApplicationFacade.SHOW_BODY, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
 						break;
 					}
 				}
