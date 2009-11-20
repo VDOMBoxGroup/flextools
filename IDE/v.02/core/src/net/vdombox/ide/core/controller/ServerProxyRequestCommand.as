@@ -1,6 +1,5 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
 	
@@ -12,8 +11,12 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-			
 			var applications : Array = serverProxy.applications;
+			var body : Object = notification.getBody();
+			
+			sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, 
+							  { operation : body.operation, target : body.target, parameters : applications }
+			);
 		}
 	}
 }
