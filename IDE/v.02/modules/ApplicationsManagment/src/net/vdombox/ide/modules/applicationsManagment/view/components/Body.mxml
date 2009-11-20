@@ -4,8 +4,16 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 
 		 width="100%" height="100%">
+	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Label text="ApplicationsManagmentModule" horizontalCenter="0" verticalCenter="0" fontWeight="bold"/>
+	
+	<s:layout>
+		<s:HorizontalLayout />
+	</s:layout>
+	
+	<s:Group width="100%" height="100%" />
+	<s:List id="applicationsList"
+		width="200" height="100%"></s:List>
 </s:Group>

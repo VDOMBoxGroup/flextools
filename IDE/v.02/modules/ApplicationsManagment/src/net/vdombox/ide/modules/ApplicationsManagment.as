@@ -7,11 +7,13 @@ package net.vdombox.ide.modules
 	
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
-	import net.vdombox.ide.modules.applicationsManagment.view.components.MainContent;
+	import net.vdombox.ide.modules.applicationsManagment.view.components.Body;
 
 	public class ApplicationsManagment extends VIModule
 	{
 		public static const MODULE_ID : String = "04D1487D-F14E-0FE5-82F9-E6E8FEFCD2CD";
+		
+		public static const MODULE_NAME : String = "ApplicationsManagment";
 		
 		public static const TEAR_DOWN:String = "tearDown";
 		
@@ -33,6 +35,11 @@ package net.vdombox.ide.modules
 			return MODULE_ID;
 		}
 		
+		override public function get moduleName() : String
+		{
+			return MODULE_NAME;
+		}
+		
 		override public function getToolset() : void
 		{
 			facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
@@ -40,7 +47,7 @@ package net.vdombox.ide.modules
 		
 		override public function getBody() : void
 		{
-			facade.sendNotification( ApplicationFacade.EXPORT_MAIN_CONTENT, new MainContent() );
+			facade.sendNotification( ApplicationFacade.CREATE_BODY );
 		}
 	}
 }

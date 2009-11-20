@@ -34,8 +34,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
+			
 			interests.push( ApplicationFacade.EXPORT_TOOLSET );
-			interests.push( ApplicationFacade.EXPORT_MAIN_CONTENT );
+			interests.push( ApplicationFacade.EXPORT_BODY );
+			
+			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
+			
 			return interests;
 		}
 		
@@ -67,12 +71,21 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 
-				case ApplicationFacade.EXPORT_MAIN_CONTENT:
+				case ApplicationFacade.EXPORT_BODY:
 				{
-					var mainContentMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.MAIN_CONTENT_UI, UIComponent( notification.getBody()));
+					var bodyMessage : UIQueryMessage = 
+						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.BODY_UI, UIComponent( notification.getBody()));
 					
-					junction.sendMessage( PipeNames.STDCORE, mainContentMessage );
+					junction.sendMessage( PipeNames.STDCORE, bodyMessage );
+					break;
+				}
+				
+				case ApplicationFacade.GET_APPLICATIONS_LIST:
+				{
+					var proxiesPipeMessage : ProxiesPipeMessage = 
+						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.APPLICATIONS );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
 					break;
 				}
 			}
