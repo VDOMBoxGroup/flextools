@@ -21,7 +21,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		override public function onRegister() : void
 		{
-			applicationsList.labelField = "id";
+			applicationsList.itemRendererFunction = itemRendererFunction;
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 		}
 
@@ -48,6 +48,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		private function get applicationsList() : List
 		{
 			return viewComponent as List;
+		}
+		
+		private function itemRendererFunction( item : Object ) : void
+		{
+			
 		}
 	}
 }
