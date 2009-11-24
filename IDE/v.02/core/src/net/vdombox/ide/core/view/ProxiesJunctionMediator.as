@@ -124,17 +124,13 @@ package net.vdombox.ide.core.view
 			{
 				case PPMPlaceNames.SERVER:
 				{
-					sendNotification( ApplicationFacade.SERVER_PROXY_REQUEST, 
-									  { operation : ppMessage.operation, target : ppMessage.target, parameters : ppMessage.parameters }
-					);
+					sendNotification( ApplicationFacade.SERVER_PROXY_REQUEST, ppMessage );
 					
 					break;
 				}
 				case PPMPlaceNames.RESOURCES:
 				{
-					sendNotification( ApplicationFacade.SERVER_PROXY_REQUEST, 
-						{ operation : ppMessage.operation, target : ppMessage.target, parameters : ppMessage.parameters }
-					);
+					sendNotification( ApplicationFacade.SERVER_PROXY_REQUEST, ppMessage );
 					
 					break;
 				}	

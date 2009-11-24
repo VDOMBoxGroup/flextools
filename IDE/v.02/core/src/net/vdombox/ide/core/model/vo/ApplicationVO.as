@@ -37,7 +37,7 @@ package net.vdombox.ide.core.model.vo
 		{
 			return _id;
 		}
-
+		
 		public function get name() : String
 		{
 			return _name;
