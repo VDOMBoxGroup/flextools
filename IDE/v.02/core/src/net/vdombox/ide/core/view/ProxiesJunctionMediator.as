@@ -130,6 +130,14 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
+				case PPMPlaceNames.RESOURCES:
+				{
+					sendNotification( ApplicationFacade.SERVER_PROXY_REQUEST, 
+						{ operation : ppMessage.operation, target : ppMessage.target, parameters : ppMessage.parameters }
+					);
+					
+					break;
+				}	
 			}
 		}
 	}

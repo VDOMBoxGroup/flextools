@@ -1,6 +1,6 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.core.model.ResourceProxy;
+	import net.vdombox.ide.core.model.ResourcesProxy;
 	import net.vdombox.ide.core.model.TypeProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -10,7 +10,7 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			facade.registerProxy( new ResourceProxy() );
+			facade.registerProxy( new ResourcesProxy() );
 			
 			var typeProxy : TypeProxy = new TypeProxy();
 			facade.registerProxy( typeProxy );

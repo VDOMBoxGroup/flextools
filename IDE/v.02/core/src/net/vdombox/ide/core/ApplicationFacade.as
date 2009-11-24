@@ -43,6 +43,9 @@ package net.vdombox.ide.core
 		public static const SERVER_PROXY_REQUEST : String = "serverProxieRequest";
 		public static const SERVER_PROXY_RESPONSE : String = "serverProxieResponse";
 		
+		public static const RESOURCES_PROXY_REQUEST : String = "resourcesProxieRequest";
+		public static const RESOURCES_PROXY_RESPONSE : String = "resourcesProxieResponse";
+		
 //		ModulesProxy
 		public static const REMOVE_MODULE : String = "removeModule";
 		

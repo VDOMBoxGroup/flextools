@@ -1,23 +1,24 @@
 package net.vdombox.ide.core.model
 {
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.utils.ByteArray;
 	
 	import mx.rpc.events.FaultEvent;
 	import mx.utils.Base64Encoder;
 	
 	import net.vdombox.ide.core.events.SOAPEvent;
-	import net.vdombox.ide.core.interfaces.IResource;
 	import net.vdombox.ide.core.model.business.SOAP;
+	import net.vdombox.ide.core.model.vo.ResourceVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	public class ResourceProxy extends Proxy implements IProxy
+	public class ResourcesProxy extends Proxy implements IProxy
 	{
-		public static const NAME : String = "ResourceProxy";
+		public static const NAME : String = "ResourcesProxy";
 
-		public function ResourceProxy( data : Object = null )
+		public function ResourcesProxy( data : Object = null )
 		{
 			super( NAME, data );
 
@@ -26,24 +27,31 @@ package net.vdombox.ide.core.model
 
 		private var soap : SOAP = SOAP.getInstance();
 
+		public function deleteResource( resourceID : String ) : void
+		{
+			soap.delete_resource( resourceID );
+		}
+
 
 		public function getListResources( applicatioID : String ) : void
 		{
 			soap.list_resources( applicatioID );
 		}
 
-		public function getResource( ownerID : String, resourceID : String ) : IResource
+		public function getResource( ownerID : String, resourceID : String ) : ResourceVO
 		{
 			if ( !resourceID )
 				return null;
 
-			var resource : Resource = new Resource( ownerID, resourceID );
-
-			return resource;
+			var resourceVO : ResourceVO = new ResourceVO( ownerID, resourceID );
+			
+			var resource : Resource = new Resource( resourceVO );
+			resource.load();
+			
+			return resourceVO;
 		}
 
-		public function setResource( name : String, data : ByteArray, type : String,
-									 applicationID : String ) : void
+		public function setResource( name : String, data : ByteArray, type : String, applicationID : String ) : void
 		{
 			data.compress();
 
@@ -51,12 +59,7 @@ package net.vdombox.ide.core.model
 			base64Data.insertNewLines = false;
 			base64Data.encodeBytes( data );
 
-			soap.set_resource( applicationID, type, name, base64Data.toString() );
-		}
-
-		public function deleteResource( resourceID : String ) : void
-		{
-			soap.delete_resource( resourceID );
+			soap.set_resource( applicationID, type, name, base64Data.toString());
 		}
 
 		private function addEventListeners() : void
@@ -70,27 +73,7 @@ package net.vdombox.ide.core.model
 			soap.set_resource.addEventListener( FaultEvent.FAULT, deleteResourceFaultHandler );
 		}
 
-		private function listResourcesHandler( event : SOAPEvent ) : void
-		{
-
-		}
-
-		private function resourceLoadedOKHandler( event : SOAPEvent ) : void
-		{
-
-		}
-
-		private function resourceLoadedFaultHandler( event : FaultEvent ) : void
-		{
-
-		}
-
-		private function setResourceOKHandler( event : SOAPEvent ) : void
-		{
-
-		}
-
-		private function setResourceFaultHandler( event : FaultEvent ) : void
+		private function deleteResourceFaultHandler( event : FaultEvent ) : void
 		{
 
 		}
@@ -100,9 +83,39 @@ package net.vdombox.ide.core.model
 
 		}
 
-		private function deleteResourceFaultHandler( event : FaultEvent ) : void
+		private function listResourcesHandler( event : SOAPEvent ) : void
 		{
 
+		}
+
+		private function resourceLoadedFaultHandler( event : FaultEvent ) : void
+		{
+
+		}
+
+		private function resourceLoadedOKHandler( event : SOAPEvent ) : void
+		{
+
+		}
+
+		private function setResourceFaultHandler( event : FaultEvent ) : void
+		{
+
+		}
+
+		private function setResourceOKHandler( event : SOAPEvent ) : void
+		{
+
+		}
+		
+		private function resource_loadCompleteHandler( event : Event ) : void
+		{
+			var d : * = "";
+		}
+		
+		private function resource_loadErrorHandler( event : Event ) : void
+		{
+			var d : * = "";
 		}
 	}
 }
@@ -124,109 +137,64 @@ import mx.rpc.events.FaultEvent;
 import mx.utils.Base64Decoder;
 
 import net.vdombox.ide.core.events.SOAPEvent;
-import net.vdombox.ide.core.interfaces.IResource;
 import net.vdombox.ide.core.model.business.SOAP;
+import net.vdombox.ide.core.model.vo.ResourceVO;
 
-class Resource implements IResource, IEventDispatcher
+class Resource
 {
-	public function Resource( ownerID : String, resourceID : String )
+	public function Resource( resourceVO : ResourceVO )
 	{
-		_ownerID = ownerID;
-		_resourceID = resourceID;
+		_resourceVO = resourceVO;
 	}
+
+	private var _resourceVO : ResourceVO;
 
 	private var cacheManager : CacheManager = CacheManager.getInstance();
+
+	private var dispatcher : EventDispatcher = new EventDispatcher( IEventDispatcher( this ));
+
 	private var soap : SOAP = SOAP.getInstance();
 
-	private var _resourceID : String;
-	private var _ownerID : String;
-
-	private var dispatcher : EventDispatcher = new EventDispatcher( IEventDispatcher( this ) );
-	private var _data : ByteArray;
-	private var _loaded : Boolean;
+	public function get resourceVO() : ResourceVO
+	{
+		return _resourceVO;
+	}
 	
-	public function get resourceID() : String
-	{
-		return _resourceID;
-	}
-
-	public function get data() : ByteArray
-	{
-		return _data;
-	}
-
 	public function load() : void
 	{
-		var resource : ByteArray = cacheManager.getCachedFileById( _resourceID );
+		var resource : ByteArray = cacheManager.getCachedFileById( _resourceVO.resourceID );
 		if ( resource )
 		{
-			_data = resource;
-			dispatchEvent( new Event( "resource loaded" ) );
+			_resourceVO.setData( resource );
+			_resourceVO.setStatus( "loaded" );
+			
 			return;
 		}
-
+		
 		soap.get_resource.addEventListener( SOAPEvent.RESULT, resourceLoadedOKHandler );
 		soap.get_resource.addEventListener( FaultEvent.FAULT, resourceLoadedFaultHandler );
-
-		soap.get_resource( _ownerID, _resourceID );
+		
+		soap.get_resource( _resourceVO.ownerID, _resourceVO.resourceID );
 	}
-
-	/**
-	 *  @private
-	 */
-	public function addEventListener( type : String, listener : Function, useCapture : Boolean = false,
-									  priority : int = 0, useWeakReference : Boolean = false ) : void
-	{
-		dispatcher.addEventListener( type, listener, useCapture, priority );
-	}
-
-	/**
-	 *  @private
-	 */
-	public function dispatchEvent( evt : Event ) : Boolean
-	{
-		return dispatcher.dispatchEvent( evt );
-	}
-
-	/**
-	 *  @private
-	 */
-	public function hasEventListener( type : String ) : Boolean
-	{
-		return dispatcher.hasEventListener( type );
-	}
-
-	/**
-	 *  @private
-	 */
-	public function removeEventListener( type : String, listener : Function, useCapture : Boolean = false ) : void
-	{
-		dispatcher.removeEventListener( type, listener, useCapture );
-	}
-
-	/**
-	 *  @private
-	 */
-	public function willTrigger( type : String ) : Boolean
-	{
-		return dispatcher.willTrigger( type );
-	}
-
+	
 	private function resourceLoadedOKHandler( event : SOAPEvent ) : void
 	{
 		var resourceID : String = event.result.ResourceID;
-		var resource : String = event.result.Resource;
+		var data : String = event.result.Resource;
 
 		var decoder : Base64Decoder = new Base64Decoder();
-		decoder.decode( resource );
+		decoder.decode( data );
 
 		var imageSource : ByteArray = decoder.toByteArray();
 
 		imageSource.uncompress();
 
 		cacheManager.cacheFile( resourceID, imageSource );
+		
+		_resourceVO.setData( imageSource );
+		_resourceVO.setStatus( "loaded" );
 	}
-
+	
 	private function resourceLoadedFaultHandler( event : FaultEvent ) : void
 	{
 		var dummy : * = ""; // FIXME remove dummy
@@ -241,10 +209,7 @@ class CacheManager
 	public static function getInstance() : CacheManager
 	{
 		if ( !instance )
-		{
-
 			instance = new CacheManager();
-		}
 
 		return instance;
 	}
@@ -259,71 +224,17 @@ class CacheManager
 
 	private const CACHE_SIZE : uint = 100000000;
 
-	private var cacheFolder : File;
-	private var fileStream : FileStream = new FileStream();
-
 	private var applicationId : String;
 
+	private var cacheFolder : File;
+
 	private var cacheSize : int;
+
 	private var cachedFiles : ArrayCollection = new ArrayCollection();
+
 	private var cursor : IViewCursor;
 
-	public function init() : void
-	{
-		cursor = cachedFiles.createCursor();
-
-		cachedFiles.sort = new Sort();
-		cachedFiles.sort.fields = [ new SortField( "name" ) ];
-		cachedFiles.refresh();
-
-		cacheFolder = File.applicationStorageDirectory.resolvePath( "cache" );
-
-		if ( !cacheFolder.exists )
-		{
-			cacheFolder.createDirectory();
-			return;
-		}
-
-		var currentDate : Number = new Date().getTime();
-		var fileList : Array = cacheFolder.getDirectoryListing();
-
-		for each ( var file : File in fileList )
-		{
-
-			var days : Number = ( currentDate - file.creationDate.time ) / 1000 /
-				60 / 60 / 24;
-			if ( days > 4 )
-			{
-				file.deleteFile();
-				continue;
-			}
-
-			cacheSize += file.size;
-			cachedFiles.addItem( { create: file.creationDate.time, name: file.name, size: file.size } );
-		}
-	}
-
-	public function getCachedFileById( resourceId : String ) : ByteArray
-	{
-
-		var fileName : String = resourceId;
-
-		var result : Boolean = cursor.findFirst( { name: fileName } );
-		if ( result )
-		{
-
-			var file : File = cacheFolder.resolvePath( fileName );
-			var fileBytes : ByteArray = new ByteArray();
-
-			fileStream.open( file, FileMode.READ );
-			fileStream.readBytes( fileBytes );
-			fileStream.close();
-
-			return fileBytes;
-		}
-		else
-			return null;
-	}
+	private var fileStream : FileStream = new FileStream();
 
 	public function cacheFile( contentName : String, content : ByteArray ) : void
 	{
@@ -335,7 +246,7 @@ class CacheManager
 
 		var newFileName : String = contentName;
 
-		if ( cursor.findAny( { name: applicationPrefix + "" + contentName } ) )
+		if ( cursor.findAny({ name: applicationPrefix + "" + contentName }))
 		{
 
 			cacheSize -= cursor.current.size;
@@ -369,7 +280,7 @@ class CacheManager
 			return;
 		}
 
-		cachedFiles.addItem( { create: newFile.creationDate.time, name: newFile.name, size: newFile.size } )
+		cachedFiles.addItem({ create: newFile.creationDate.time, name: newFile.name, size: newFile.size })
 	}
 
 	public function deleteFile( fileName : String ) : Boolean
@@ -378,7 +289,7 @@ class CacheManager
 
 		fileName = applicationPrefix + fileName;
 
-		var isFind : Boolean = cursor.findAny( { name: fileName } )
+		var isFind : Boolean = cursor.findAny({ name: fileName })
 
 		if ( isFind )
 		{
@@ -400,6 +311,62 @@ class CacheManager
 		return isDone;
 	}
 
+	public function getCachedFileById( resourceId : String ) : ByteArray
+	{
+
+		var fileName : String = resourceId;
+
+		var result : Boolean = cursor.findFirst({ name: fileName });
+		if ( result )
+		{
+
+			var file : File = cacheFolder.resolvePath( fileName );
+			var fileBytes : ByteArray = new ByteArray();
+
+			fileStream.open( file, FileMode.READ );
+			fileStream.readBytes( fileBytes );
+			fileStream.close();
+
+			return fileBytes;
+		}
+		else
+			return null;
+	}
+
+	public function init() : void
+	{
+		cursor = cachedFiles.createCursor();
+
+		cachedFiles.sort = new Sort();
+		cachedFiles.sort.fields = [ new SortField( "name" )];
+		cachedFiles.refresh();
+
+		cacheFolder = File.applicationStorageDirectory.resolvePath( "cache" );
+
+		if ( !cacheFolder.exists )
+		{
+			cacheFolder.createDirectory();
+			return;
+		}
+
+		var currentDate : Number = new Date().getTime();
+		var fileList : Array = cacheFolder.getDirectoryListing();
+
+		for each ( var file : File in fileList )
+		{
+
+			var days : Number = ( currentDate - file.creationDate.time ) / 1000 / 60 / 60 / 24;
+			if ( days > 4 )
+			{
+				file.deleteFile();
+				continue;
+			}
+
+			cacheSize += file.size;
+			cachedFiles.addItem({ create: file.creationDate.time, name: file.name, size: file.size });
+		}
+	}
+
 
 	private function get applicationPrefix() : String
 	{
@@ -419,7 +386,7 @@ class CacheManager
 		{
 
 			cachedFiles.sort = new Sort();
-			cachedFiles.sort.fields = [ new SortField( "create" ) ];
+			cachedFiles.sort.fields = [ new SortField( "create" )];
 			cachedFiles.refresh();
 
 			var item : Object = {}
@@ -444,7 +411,7 @@ class CacheManager
 			}
 
 			cachedFiles.sort = new Sort();
-			cachedFiles.sort.fields = [ new SortField( "name" ) ];
+			cachedFiles.sort.fields = [ new SortField( "name" )];
 			cachedFiles.refresh();
 		}
 	}

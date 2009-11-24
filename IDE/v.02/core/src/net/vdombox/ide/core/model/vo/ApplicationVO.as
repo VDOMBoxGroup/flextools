@@ -1,8 +1,6 @@
 package net.vdombox.ide.core.model.vo
 {	
-	import net.vdombox.ide.core.interfaces.IApplicationVO;
-
-	public class ApplicationVO implements IApplicationVO
+	public class ApplicationVO
 	{
 		public function ApplicationVO( application : XML )
 		{	

@@ -2,7 +2,6 @@ package net.vdombox.ide.core.model
 {
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
-	import net.vdombox.ide.core.interfaces.IApplicationVO;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.ApplicationVO;
 	import net.vdombox.ide.core.model.vo.AuthInfo;
@@ -46,7 +45,7 @@ package net.vdombox.ide.core.model
 		{
 			var _applications : Array = [];
 
-			for each ( var applicationVO : IApplicationVO in listOfApplications )
+			for each ( var applicationVO : ApplicationVO in listOfApplications )
 			{
 				_applications.push( applicationVO );
 			}
@@ -55,6 +54,15 @@ package net.vdombox.ide.core.model
 
 		public function get selectedApplication() : ApplicationVO
 		{
+			if( !_selectedApplication )
+			{
+				for each ( var applicationVO : ApplicationVO in listOfApplications )
+				{
+					_selectedApplication = applicationVO;
+					break;
+				}
+			}
+				 
 			return _selectedApplication;
 		}
 
@@ -105,7 +113,7 @@ package net.vdombox.ide.core.model
 
 			for each ( var application : XML in applications.* )
 			{
-				var applicationVO : IApplicationVO = new ApplicationVO( application );
+				var applicationVO : ApplicationVO = new ApplicationVO( application );
 
 				if ( !applicationVO.id )
 					continue;
