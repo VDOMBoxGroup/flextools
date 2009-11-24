@@ -41,6 +41,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
+			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.GET_RESOURCE );
 			
 			return interests;
@@ -98,6 +99,16 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				{
 					proxiesPipeMessage = 
 						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.SELECTED_APPLICATION );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					break;
+				}
+				
+				case ApplicationFacade.SET_SELECTED_APPLICATION:
+				{
+					proxiesPipeMessage = 
+						new ProxiesPipeMessage( PPMOperationNames.UPDATE, PPMPlaceNames.SERVER, 
+												PPMServerTargetNames.SELECTED_APPLICATION, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
 					break;

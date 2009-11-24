@@ -61,15 +61,18 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
 				{
-					var selectedApplication : Object = notification.getBody();
+					var newSelectedApplication : Object = notification.getBody();
 
-					if ( !applications || applications.length == 0 || selectedApplication == null )
+					if ( !applications || applications.length == 0 || newSelectedApplication == null )
 						return;
 
-					var index : int = applications.lastIndexOf( selectedApplication );
+					var index : int = applications.lastIndexOf( newSelectedApplication );
 
 					if ( index != -1 )
+					{
 						applicationsList.selectedIndex = index;
+						selectedApplication = newSelectedApplication;
+					}
 
 					break;
 				}
@@ -97,7 +100,15 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		private function changeHandler( event : IndexChangeEvent ) : void
 		{
-			var d : * = "";
+			if( event.newIndex == -1 )
+				return;
+			
+			var newSelectedApplication : Object = applications[ event.newIndex ];
+			
+			if( selectedApplication == newSelectedApplication )
+				return;
+			
+			sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, newSelectedApplication );
 		}
 	}
 }
