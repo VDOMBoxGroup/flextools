@@ -9,6 +9,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.QuitCommand;
 	import net.vdombox.ide.core.controller.RemoveModuleCommand;
+	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
 	import net.vdombox.ide.core.controller.SubmitCommand;
 	import net.vdombox.ide.core.controller.TypesLoadedCommand;
@@ -107,6 +108,7 @@ package net.vdombox.ide.core
 			registerCommand( ApplicationFacade.MODULE_LOADED, ModuleLoadedCommand );
 			registerCommand( ApplicationFacade.REMOVE_MODULE, RemoveModuleCommand );
 			registerCommand( ApplicationFacade.SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
+			registerCommand( ApplicationFacade.RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
 			registerCommand( TypeProxy.TYPES_LOADED, TypesLoadedCommand );
 			registerCommand( QUIT, QuitCommand );
 		}

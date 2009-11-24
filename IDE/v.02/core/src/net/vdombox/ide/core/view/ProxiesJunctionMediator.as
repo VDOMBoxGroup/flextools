@@ -50,6 +50,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES );
 			
 			interests.push( ApplicationFacade.SERVER_PROXY_RESPONSE );
+			interests.push( ApplicationFacade.RESOURCES_PROXY_RESPONSE );
 			
 			return interests;
 		}
@@ -113,6 +114,16 @@ package net.vdombox.ide.core.view
 					);
 					break;
 				}
+					
+				case ApplicationFacade.RESOURCES_PROXY_RESPONSE:
+				{
+					var body : Object = notification.getBody();
+					
+					junction.sendMessage( PipeNames.PROXIESOUT,
+						new ProxiesPipeMessage( body.operation, PPMPlaceNames.SERVER, body.target, body.parameters )
+					);
+					break;
+				}
 			}
 		}
 		
@@ -130,7 +141,7 @@ package net.vdombox.ide.core.view
 				}
 				case PPMPlaceNames.RESOURCES:
 				{
-					sendNotification( ApplicationFacade.SERVER_PROXY_REQUEST, ppMessage );
+					sendNotification( ApplicationFacade.RESOURCES_PROXY_REQUEST, ppMessage );
 					
 					break;
 				}	

@@ -151,8 +151,6 @@ class Resource
 
 	private var cacheManager : CacheManager = CacheManager.getInstance();
 
-	private var dispatcher : EventDispatcher = new EventDispatcher( IEventDispatcher( this ));
-
 	private var soap : SOAP = SOAP.getInstance();
 
 	public function get resourceVO() : ResourceVO
