@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.MessageHeaders;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
+	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
@@ -39,6 +40,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.EXPORT_BODY );
 			
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
+			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
+			interests.push( ApplicationFacade.GET_RESOURCE );
 			
 			return interests;
 		}
@@ -47,6 +50,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			var pipe : IPipeFitting;
 			var type : String = notification.getType();
+			var body : Object = notification.getBody();
+			var proxiesPipeMessage : ProxiesPipeMessage;
 
 			switch ( notification.getName())
 			{
@@ -82,8 +87,27 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				
 				case ApplicationFacade.GET_APPLICATIONS_LIST:
 				{
-					var proxiesPipeMessage : ProxiesPipeMessage = 
+					proxiesPipeMessage = 
 						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.APPLICATIONS );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					break;
+				}
+					
+				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				{
+					proxiesPipeMessage = 
+						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.SELECTED_APPLICATION );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					break;
+				}
+				
+				case ApplicationFacade.GET_RESOURCE:
+				{
+					proxiesPipeMessage = 
+						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.RESOURCES, 
+												PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
 					break;
@@ -222,6 +246,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case PPMServerTargetNames.APPLICATIONS:
 				{
 					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.parameters );
+					break;
+				}
+				
+				case PPMServerTargetNames.SELECTED_APPLICATION:
+				{
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.parameters );
 					break;
 				}
 			}

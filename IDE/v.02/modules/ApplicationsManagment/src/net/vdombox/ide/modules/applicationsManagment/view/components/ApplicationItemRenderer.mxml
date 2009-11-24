@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
-				xmlns:mx="library://ns.adobe.com/flex/halo">
+				xmlns:mx="library://ns.adobe.com/flex/halo"
+				
+				creationComplete="creationCompleteHandler( event )">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			public static const RENDERER_CREATED:String = "rendererCreated";
+			
+			protected function creationCompleteHandler( event : FlexEvent ) : void
+			{
+				dispatchEvent( new Event( RENDERER_CREATED ) );
+			}
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->

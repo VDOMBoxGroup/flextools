@@ -24,8 +24,17 @@ package net.vdombox.ide.modules.applicationsManagment
 		
 		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
 		
+		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
+//		public static const GET_SELECTED_GETTED : String = "selectedApplicationGetted";
+		public static const SET_SELECTED_APPLICATION : String = "setSelectedApplication";
+		
+		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
+		
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationsList";
 		public static const APPLICATIONS_LIST_GETTED : String = "applicationsListGetted";
+		
+		public static const GET_RESOURCE : String = "getResource";
+		public static const RESOURCE_GETTED : String = "resourceGetted";
 		
 		public static const TEAR_DOWN : String = "tearDown";
 		

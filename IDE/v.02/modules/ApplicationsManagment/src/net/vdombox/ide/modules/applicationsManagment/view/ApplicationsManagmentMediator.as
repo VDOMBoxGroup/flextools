@@ -21,6 +21,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function onRegister() : void
 		{
 			applicationsManagment.addEventListener( ApplicationsManagment.TEAR_DOWN, tearDownHandler )
+			
 		}
 
 		private function get applicationsManagment() : ApplicationsManagment
