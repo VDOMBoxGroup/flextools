@@ -11,5 +11,7 @@ package net.vdombox.ide.common
 		public static const PAGE : String = "page";
 		
 		public static const OBJECT : String = "object";
+		
+		public static const RESOURCES : String = "resources";
 	}
 }
