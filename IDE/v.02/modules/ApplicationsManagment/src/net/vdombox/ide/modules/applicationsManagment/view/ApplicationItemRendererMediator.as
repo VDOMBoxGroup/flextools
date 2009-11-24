@@ -35,7 +35,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function onRegister() : void
 		{
 			var iconID : String = applicationItemRenderer.data.iconID;
-			sendNotification( ApplicationFacade.GET_RESOURCE, { resourceID : iconID, recepientName : mediatorName } );
+			
+			if( iconID != "" )
+				sendNotification( ApplicationFacade.GET_RESOURCE, { resourceID : iconID, recepientName : mediatorName } );
 		}
 		
 		override public function handleNotification(notification:INotification) : void
