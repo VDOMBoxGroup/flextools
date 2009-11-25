@@ -60,11 +60,13 @@ package net.vdombox.ide.core.view
 			var moduleID : String
 			var proxiesOut : TeeSplit;
 			
+			var body : Object = notification.getBody();
+			
 			switch ( notification.getName() )
 			{
 				case ApplicationFacade.CONNECT_MODULE_TO_PROXIES:
 				{
-					moduleID  = notification.getBody().toString();
+					moduleID  = body.toString();
 					
 					var moduleVO : ModuleVO = moduleProxy.getModuleByID( moduleID ) as ModuleVO;
 					
@@ -93,7 +95,7 @@ package net.vdombox.ide.core.view
 				
 				case ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES:
 				{
-					moduleID = notification.getBody().toString();
+					moduleID = body.toString();
 					
 					var pipe : IPipeFitting = pipesProxy.getPipe( moduleID, PipeNames.PROXIESIN );
 					
@@ -107,8 +109,6 @@ package net.vdombox.ide.core.view
 				
 				case ApplicationFacade.SERVER_PROXY_RESPONSE:
 				{
-					var body : Object = notification.getBody();
-					
 					junction.sendMessage( PipeNames.PROXIESOUT,
 										  new ProxiesPipeMessage( body.operation, PPMPlaceNames.SERVER, body.target, body.parameters )
 					);
@@ -117,10 +117,8 @@ package net.vdombox.ide.core.view
 					
 				case ApplicationFacade.RESOURCES_PROXY_RESPONSE:
 				{
-					var body : Object = notification.getBody();
-					
 					junction.sendMessage( PipeNames.PROXIESOUT,
-						new ProxiesPipeMessage( body.operation, PPMPlaceNames.SERVER, body.target, body.parameters )
+						new ProxiesPipeMessage( body.operation, PPMPlaceNames.RESOURCES, body.target, body.parameters )
 					);
 					break;
 				}

@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ResourcesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.vo.ResourceVO;
@@ -18,19 +19,20 @@ package net.vdombox.ide.core.controller
 			
 			var ppMessage : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 			
-			var resourceID : String = ppMessage.parameters.resourceID;
+			var parameters : Object = ppMessage.parameters;
 			var applicationID : String;
 			
-			if( !hasOwnProperty( ppMessage.parameters.applicationID ) )
+			if( !hasOwnProperty( parameters.applicationID ) )
 			{
 				applicationID = serverProxy.selectedApplication.id;
 			}
 			
-			var resourceVO : ResourceVO = resourcesProxy.getResource( applicationID, resourceID );
+			var resourceVO : ResourceVO = resourcesProxy.getResource( applicationID, parameters.resourceID );
+			parameters.resourceVO = resourceVO;
 			
-//			sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, 
-//				{ operation : body.operation, target : body.target, parameters : resourceVO }
-//			);
+			sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, 
+				{ operation : ppMessage.operation, target : ppMessage.target, parameters : parameters }
+			);
 		}
 	}
 }

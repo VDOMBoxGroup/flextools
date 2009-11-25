@@ -163,8 +163,8 @@ class Resource
 		var resource : ByteArray = cacheManager.getCachedFileById( _resourceVO.resourceID );
 		if ( resource )
 		{
-			_resourceVO.setData( resource );
-			_resourceVO.setStatus( "loaded" );
+			_resourceVO.data = resource;
+			_resourceVO.status = "loaded";
 			
 			return;
 		}
@@ -189,8 +189,8 @@ class Resource
 
 		cacheManager.cacheFile( resourceID, imageSource );
 		
-		_resourceVO.setData( imageSource );
-		_resourceVO.setStatus( "loaded" );
+		_resourceVO.data = imageSource;
+		_resourceVO.status = "loaded";
 	}
 	
 	private function resourceLoadedFaultHandler( event : FaultEvent ) : void
