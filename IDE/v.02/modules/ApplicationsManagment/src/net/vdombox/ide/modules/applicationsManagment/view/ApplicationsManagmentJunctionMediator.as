@@ -246,6 +246,13 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case PPMPlaceNames.SERVER:
 				{
 					processServerProxyMessage( message );
+					break;
+				}
+				
+				case PPMPlaceNames.RESOURCES:
+				{
+					processResourcesProxyMessage( message );
+					break;
 				}
 			}
 		}
@@ -263,6 +270,19 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case PPMServerTargetNames.SELECTED_APPLICATION:
 				{
 					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.parameters );
+					break;
+				}
+			}
+		}
+		
+		private function processResourcesProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch( message.target )
+			{
+				case PPMResourcesTargetNames.RESOURCE:
+				{
+					sendNotification( message.parameters.recepientName + "/" +
+									  ApplicationFacade.RESOURCE_GETTED, message.parameters );
 					break;
 				}
 			}
