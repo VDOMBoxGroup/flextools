@@ -1,17 +1,18 @@
 package net.vdombox.ide.core.model
 {
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
+	import net.vdombox.ide.core.model.vo.TypeVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	public class TypeProxy extends Proxy implements IProxy
+	public class TypesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "TypesProxy";
-		public static const TYPES_LOADED : String = "Types Loaded";
 
-		public function TypeProxy( data : Object = null )
+		public function TypesProxy( data : Object = null )
 		{
 			super( NAME, data );
 
@@ -20,9 +21,9 @@ package net.vdombox.ide.core.model
 
 		private var soap : SOAP = SOAP.getInstance();
 
-		private var _types : XML;
+		private var _types : Array = [];
 
-		public function get types() : XML
+		public function get types() : Array
 		{
 			return _types;
 		}
@@ -39,9 +40,17 @@ package net.vdombox.ide.core.model
 
 		private function soap_getAllTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
 		{
-			_types = event.result.Types[ 0 ];
+			var typesXML : XML = event.result.Types[ 0 ];
 			
-			sendNotification( TYPES_LOADED, _types );
+			for each( var type : XML in typesXML.* )
+			{
+				var typeVO : TypeVO = new TypeVO( type );
+				_types.push( typeVO );
+				
+				sendNotification( ApplicationFacade.TYPE_LOADED, typeVO );
+			}
+			
+			sendNotification( ApplicationFacade.TYPES_LOADED );
 		}
 	}
 }

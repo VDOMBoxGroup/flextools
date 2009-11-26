@@ -12,9 +12,10 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
 	import net.vdombox.ide.core.controller.SubmitCommand;
+	import net.vdombox.ide.core.controller.TypeLoadedCommand;
 	import net.vdombox.ide.core.controller.TypesLoadedCommand;
+	import net.vdombox.ide.core.controller.TypesProxyRequestCommand;
 	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.TypeProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
@@ -32,6 +33,12 @@ package net.vdombox.ide.core
 
 		public static const QUIT : String = "quit";
 		
+		public static const LOGIN_COMPLETE : String = "Login Complete";
+		public static const CONNECT_COMPLETE : String = "Connect Complete";
+		
+		public static const TYPES_LOADED : String = "typesLoaded";
+		public static const TYPE_LOADED : String = "typeLoaded";
+		
 		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
 		public static const DISCONNECT_MODULE_TO_CORE : String = "disconnectModuleToCore";
 		
@@ -40,12 +47,15 @@ package net.vdombox.ide.core
 		public static const DISCONNECT_MODULE_TO_PROXIES : String = "disconnectModuleToProxies";
 		public static const MODULE_TO_PROXIES_DISCONNECTED : String = "moduleToProxiesDisconnected";
 		
-//		Proxies
-		public static const SERVER_PROXY_REQUEST : String = "serverProxieRequest";
-		public static const SERVER_PROXY_RESPONSE : String = "serverProxieResponse";
+//		Proxies		
+		public static const RESOURCES_PROXY_REQUEST : String = "resourcesProxyRequest";
+		public static const RESOURCES_PROXY_RESPONSE : String = "resourcesProxyResponse";
 		
-		public static const RESOURCES_PROXY_REQUEST : String = "resourcesProxieRequest";
-		public static const RESOURCES_PROXY_RESPONSE : String = "resourcesProxieResponse";
+		public static const SERVER_PROXY_REQUEST : String = "serverProxyRequest";
+		public static const SERVER_PROXY_RESPONSE : String = "serverProxyResponse";
+		
+		public static const TYPES_PROXY_REQUEST : String = "typesProxyRequest";
+		public static const TYPES_PROXY_RESPONSE : String = "typesProxyResponse";
 		
 //		ModulesProxy
 		public static const REMOVE_MODULE : String = "removeModule";
@@ -103,13 +113,18 @@ package net.vdombox.ide.core
 
 			registerCommand( INVOKE, InvokeCommand );
 			registerCommand( SUBMIT, SubmitCommand );
-			registerCommand( ServerProxy.CONNECT_COMPLETE, ConnectCompleteCommand );
-			registerCommand( ApplicationFacade.LOAD_MODULE, LoadModuleCommand );
-			registerCommand( ApplicationFacade.MODULE_LOADED, ModuleLoadedCommand );
-			registerCommand( ApplicationFacade.REMOVE_MODULE, RemoveModuleCommand );
-			registerCommand( ApplicationFacade.SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
-			registerCommand( ApplicationFacade.RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
-			registerCommand( TypeProxy.TYPES_LOADED, TypesLoadedCommand );
+			registerCommand( CONNECT_COMPLETE, ConnectCompleteCommand );
+			registerCommand( LOAD_MODULE, LoadModuleCommand );
+			registerCommand( MODULE_LOADED, ModuleLoadedCommand );
+			registerCommand( REMOVE_MODULE, RemoveModuleCommand );
+			
+			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
+			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
+			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
+			
+			registerCommand( TYPE_LOADED, TypeLoadedCommand );
+			registerCommand( TYPES_LOADED, TypesLoadedCommand );
+			
 			registerCommand( QUIT, QuitCommand );
 		}
 

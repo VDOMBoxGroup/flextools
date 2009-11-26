@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.model
 {
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -12,10 +13,6 @@ package net.vdombox.ide.core.model
 	public class ServerProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ServerProxy";
-
-		public static const LOGIN_COMPLETE : String = "Login Complete";
-
-		public static const CONNECT_COMPLETE : String = "Connect Complete";
 
 		public function ServerProxy( data : Object = null )
 		{
@@ -134,7 +131,7 @@ package net.vdombox.ide.core.model
 			_authInfo = new AuthInfo( result.Username[ 0 ], tempAuthInfo.password, result.Hostname[ 0 ]);
 			tempAuthInfo = null;
 
-			sendNotification( LOGIN_COMPLETE, _authInfo );
+			sendNotification( ApplicationFacade.LOGIN_COMPLETE, _authInfo );
 
 			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_listApplicationsHandler );
 			soap.list_applications();
@@ -143,7 +140,7 @@ package net.vdombox.ide.core.model
 		private function soap_listApplicationsHandler( event : SOAPEvent ) : void
 		{
 			createApplicationList( event.result.Applications[ 0 ]);
-			sendNotification( CONNECT_COMPLETE );
+			sendNotification( ApplicationFacade.CONNECT_COMPLETE );
 		}
 
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
