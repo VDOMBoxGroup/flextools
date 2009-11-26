@@ -27,7 +27,7 @@ package net.vdombox.ide.core.controller
 			{
 				case PPMTypesTargetNames.TYPES:
 				{
-					var types : Array //= typesProxy.types;
+					var types : Array = typesProxy.types;
 					
 					sendNotification( ApplicationFacade.TYPES_PROXY_RESPONSE, 
 						{ operation : body.operation, target : body.target, parameters : types }

@@ -15,7 +15,12 @@ package net.vdombox.ide.core.model.vo
 			
 			for each ( var property : XML in typeAttribute.* )
 			{
-				propertyName = property.localName().toString().toLowerCase();
+				propertyName = property.localName();
+				
+				if( propertyName === null )
+					continue;
+				
+				propertyName = propertyName.toLowerCase();
 				propertyValue = property[ 0 ];
 				
 				propertyObject[ propertyName ] = propertyValue;
@@ -61,8 +66,6 @@ package net.vdombox.ide.core.model.vo
 				value = propertyObject[ valueName ];
 			
 			return value;
-				
-			
 		}
 	}
 }
