@@ -1,6 +1,6 @@
-package net.vdombox.ide.modules.edit.controller
+package net.vdombox.ide.modules.edition.controller
 {
-	import net.vdombox.ide.modules.edit.view.EditJunctionMediator;
+	import net.vdombox.ide.modules.edition.view.EditionJunctionMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -10,10 +10,10 @@ package net.vdombox.ide.modules.edit.controller
 	{
 		override public function execute(notification:INotification) : void
 		{
-			var editJunctionMediator:EditJunctionMediator =
-				facade.retrieveMediator( EditJunctionMediator.NAME ) as EditJunctionMediator;
+			var editionJunctionMediator:EditionJunctionMediator =
+				facade.retrieveMediator( EditionJunctionMediator.NAME ) as EditionJunctionMediator;
 			
-			editJunctionMediator.tearDown();
+			editionJunctionMediator.tearDown();
 			
 			//Definitively removes the PureMVC core used to manage this module.
 			Facade.removeCore( multitonKey );

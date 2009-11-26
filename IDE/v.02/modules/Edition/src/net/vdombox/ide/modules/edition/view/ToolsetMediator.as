@@ -1,12 +1,12 @@
-package net.vdombox.ide.modules.edit.view
+package net.vdombox.ide.modules.edition.view
 {
 	import flash.events.MouseEvent;
 
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 
-	import net.vdombox.ide.modules.edit.ApplicationFacade;
-	import net.vdombox.ide.modules.edit.view.components.Toolset;
+	import net.vdombox.ide.modules.edition.ApplicationFacade;
+	import net.vdombox.ide.modules.edition.view.components.Toolset;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

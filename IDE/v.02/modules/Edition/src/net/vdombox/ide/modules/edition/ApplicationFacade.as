@@ -1,10 +1,10 @@
-package net.vdombox.ide.modules.edit
+package net.vdombox.ide.modules.edition
 {
-	import net.vdombox.ide.modules.Edit;
-	import net.vdombox.ide.modules.edit.controller.CreateBodyCommand;
-	import net.vdombox.ide.modules.edit.controller.CreateToolsetCommand;
-	import net.vdombox.ide.modules.edit.controller.StartupCommand;
-	import net.vdombox.ide.modules.edit.controller.TearDownCommand;
+	import net.vdombox.ide.modules.Edition;
+	import net.vdombox.ide.modules.edition.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.edition.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.edition.controller.StartupCommand;
+	import net.vdombox.ide.modules.edition.controller.TearDownCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -50,7 +50,7 @@ package net.vdombox.ide.modules.edit
 			super( key );
 		}
 		
-		public function startup( application : Edit ) : void
+		public function startup( application : Edition ) : void
 		{
 			sendNotification( STARTUP, application );
 		}

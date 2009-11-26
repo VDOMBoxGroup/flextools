@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.edit.view
+package net.vdombox.ide.modules.edition.view
 {
 	import mx.core.UIComponent;
 	
@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.edit.view
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.modules.edit.ApplicationFacade;
+	import net.vdombox.ide.modules.edition.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -23,11 +23,11 @@ package net.vdombox.ide.modules.edit.view
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
 
-	public class EditJunctionMediator extends LoggingJunctionMediator
+	public class EditionJunctionMediator extends LoggingJunctionMediator
 	{
-		public static const NAME : String = "EditJunctionMediator";
+		public static const NAME : String = "EditionJunctionMediator";
 
-		public function EditJunctionMediator()
+		public function EditionJunctionMediator()
 		{
 			super( NAME, new Junction());
 		}

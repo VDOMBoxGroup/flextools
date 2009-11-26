@@ -1,9 +1,9 @@
-package net.vdombox.ide.modules.edit.view
+package net.vdombox.ide.modules.edition.view
 {
 	import mx.events.FlexEvent;
 
-	import net.vdombox.ide.modules.edit.ApplicationFacade;
-	import net.vdombox.ide.modules.edit.view.components.Body;
+	import net.vdombox.ide.modules.edition.ApplicationFacade;
+	import net.vdombox.ide.modules.edition.view.components.Body;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

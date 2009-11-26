@@ -6,18 +6,18 @@ package net.vdombox.ide.modules
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.VIModule;
-	import net.vdombox.ide.modules.edit.ApplicationFacade;
-	import net.vdombox.ide.modules.edit.view.components.Body;
+	import net.vdombox.ide.modules.edition.ApplicationFacade;
+	import net.vdombox.ide.modules.edition.view.components.Body;
 
-	public class Edit extends VIModule
+	public class Edition extends VIModule
 	{
 		public static const MODULE_ID : String = "04D1487D-F14E-0FE5-82F9-E6E8FEFCD2CD";
 		
-		public static const MODULE_NAME : String = "Edit";
+		public static const MODULE_NAME : String = "Edition";
 		
 		public static const TEAR_DOWN:String = "tearDown";
 		
-		public function Edit()
+		public function Edition()
 		{
 			super( ApplicationFacade.getInstance( MODULE_ID ));
 			ApplicationFacade( facade ).startup( this );

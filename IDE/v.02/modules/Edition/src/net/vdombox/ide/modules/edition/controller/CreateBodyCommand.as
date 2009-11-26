@@ -1,8 +1,8 @@
-package net.vdombox.ide.modules.edit.controller
+package net.vdombox.ide.modules.edition.controller
 {
-	import net.vdombox.ide.modules.edit.ApplicationFacade;
-	import net.vdombox.ide.modules.edit.view.BodyMediator;
-	import net.vdombox.ide.modules.edit.view.components.Body;
+	import net.vdombox.ide.modules.edition.ApplicationFacade;
+	import net.vdombox.ide.modules.edition.view.BodyMediator;
+	import net.vdombox.ide.modules.edition.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
