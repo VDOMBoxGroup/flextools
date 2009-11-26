@@ -27,6 +27,21 @@ package net.vdombox.ide.common
 			return null;
 		}
 		
+		public function get hasToolset() : Boolean
+		{
+			return false;
+		}
+		
+		public function get hasPropertyScreen() : Boolean
+		{
+			return false;
+		}
+		
+		public function get hasBody() : Boolean
+		{
+			return false;
+		}
+		
 		public function getToolset() : void
 		{
 		}
