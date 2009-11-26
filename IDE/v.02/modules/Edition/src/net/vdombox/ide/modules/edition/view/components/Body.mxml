@@ -12,5 +12,5 @@
 		<s:HorizontalLayout />
 	</s:layout>
 	
-	<components:TypeAccordion />
+	<components:TypeAccordion id="typeAccordion"/>
 </s:Group>

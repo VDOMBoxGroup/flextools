@@ -33,6 +33,9 @@ package net.vdombox.ide.modules.edition
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationsList";
 		public static const APPLICATIONS_LIST_GETTED : String = "applicationsListGetted";
 		
+		public static const GET_TYPES : String = "getTypes";
+		public static const TYPES_GETTED : String = "typesGetted";
+		
 		public static const GET_RESOURCE : String = "getResource";
 		public static const RESOURCE_GETTED : String = "resourceGetted";
 		

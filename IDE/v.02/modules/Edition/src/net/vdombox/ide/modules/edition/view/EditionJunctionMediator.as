@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.edition.view
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
+	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
@@ -42,6 +43,7 @@ package net.vdombox.ide.modules.edition.view
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
+			interests.push( ApplicationFacade.GET_TYPES );
 			interests.push( ApplicationFacade.GET_RESOURCE );
 			
 			return interests;
@@ -114,6 +116,16 @@ package net.vdombox.ide.modules.edition.view
 					break;
 				}
 				
+				case ApplicationFacade.GET_TYPES:
+				{
+					proxiesPipeMessage = 
+						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.TYPES, 
+							PPMTypesTargetNames.TYPES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					break;
+				}
+					
 				case ApplicationFacade.GET_RESOURCE:
 				{
 					proxiesPipeMessage = 
@@ -249,6 +261,12 @@ package net.vdombox.ide.modules.edition.view
 					break;
 				}
 				
+				case PPMPlaceNames.TYPES:
+				{
+					processTypesProxyMessage( message );
+					break;
+				}
+				
 				case PPMPlaceNames.RESOURCES:
 				{
 					processResourcesProxyMessage( message );
@@ -270,6 +288,18 @@ package net.vdombox.ide.modules.edition.view
 				case PPMServerTargetNames.SELECTED_APPLICATION:
 				{
 					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.parameters );
+					break;
+				}
+			}
+		}
+		
+		private function processTypesProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch( message.target )
+			{
+				case PPMTypesTargetNames.TYPES:
+				{
+					sendNotification( ApplicationFacade.TYPES_GETTED, message.parameters );
 					break;
 				}
 			}

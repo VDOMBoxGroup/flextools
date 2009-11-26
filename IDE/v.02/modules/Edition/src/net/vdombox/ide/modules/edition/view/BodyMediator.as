@@ -1,12 +1,10 @@
 package net.vdombox.ide.modules.edition.view
 {
 	import mx.events.FlexEvent;
-
-	import net.vdombox.ide.modules.edition.ApplicationFacade;
+	
 	import net.vdombox.ide.modules.edition.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
-	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
 	public class BodyMediator extends Mediator implements IMediator
@@ -35,7 +33,7 @@ package net.vdombox.ide.modules.edition.view
 
 		private function body_creationCompleteHandler( event : FlexEvent ) : void
 		{
-
+			facade.registerMediator( new TypeAccordionMediator( body.typeAccordion ) );
 		}
 	}
 }
