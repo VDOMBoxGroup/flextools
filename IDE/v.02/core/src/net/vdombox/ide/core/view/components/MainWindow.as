@@ -2,6 +2,7 @@ package net.vdombox.ide.core.view.components
 {
 	import flash.display.NativeWindowSystemChrome;
 	
+	import mx.controls.Image;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
@@ -18,8 +19,6 @@ package net.vdombox.ide.core.view.components
 			systemChrome = NativeWindowSystemChrome.NONE;
 			width = 800;
 			height = 600;
-
-			addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
 
 		[SkinPart( required="true" )]
@@ -27,10 +26,8 @@ package net.vdombox.ide.core.view.components
 
 		[SkinPart( required="true" )]
 		public var toolsetBar : Group;
-
-		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
-		{
-
-		}
+		
+		[SkinPart( required="true" )]
+		public var settingsButton : Image;
 	}
 }

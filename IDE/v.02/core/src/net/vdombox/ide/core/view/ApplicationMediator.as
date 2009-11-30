@@ -5,6 +5,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.view.components.LoginWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -34,6 +35,8 @@ package net.vdombox.ide.core.view
 		private var loginWindow : LoginWindow;
 
 		private var mainWindow : MainWindow;
+		
+		private var windowManager : WindowManager = net.vdombox.utils.WindowManager.getInstance();
 
 		override public function listNotificationInterests() : Array
 		{
@@ -61,8 +64,9 @@ package net.vdombox.ide.core.view
 			{
 				loginWindow = new LoginWindow();
 				facade.registerMediator( new LoginWindowMediator( loginWindow ));
+				windowManager.addWindow( loginWindow );
 
-				loginWindow.open();
+//				loginWindow.open();
 			}
 			else
 			{

@@ -4,8 +4,7 @@
 	xmlns:mx="library://ns.adobe.com/flex/halo"
 	
 	alpha.disabledGroup="0.5" width="500" height="400"
-	
-	creationComplete="creationCompleteHandler(event)">
+	>
 	
 	<fx:Metadata>
 		[HostComponent("Object")]
@@ -41,12 +40,6 @@
 		 * @productversion Flex 4
 		 */
 		override public function get colorizeExclusions():Array {return exclusions;}
-		
-		protected function creationCompleteHandler(event:FlexEvent):void
-		{
-			var log : ILogger = Log.getLogger("CusLog");
-			log.debug("test message");
-		}
 	]]>
 	</fx:Script>
 	
@@ -163,7 +156,17 @@
 		</s:Group> 
 		
 	</s:Group>
-	<s:BitmapImage smooth="false" source="@Embed('assets/main/vdom_logo.png')" x.normal="20" y.normal="20"/>
+	<mx:Image id="settingsButton"
+		source="@Embed('assets/main/vdom_logo.png')"
+		buttonMode="true"
+		x="20" y="20"
+		/>
+	<!--<s:BitmapImage 
+				   source="@Embed('assets/main/vdom_logo.png')" 
+				   x="20" y="20"
+				   smooth="false"
+				   
+				   />-->
 	<!-- layer 3: gripper -->
 	<!--- 
 	Defines the Button control for the gripper button. 
