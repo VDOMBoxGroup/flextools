@@ -96,7 +96,7 @@ package net.vdombox.utils
 			window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
 			window.open( false );
 
-			windowData.nativeWindow = window.nativeWindow;
+			windowData.window = window;
 
 			windowsInfo.push( windowData );
 			return window;
@@ -121,7 +121,7 @@ package net.vdombox.utils
 			window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
 			window.open( false );
 			
-			windowData.nativeWindow = window.nativeWindow;
+			windowData.window = window;
 			
 			windowsInfo.push( windowData );
 		}
@@ -174,6 +174,9 @@ package net.vdombox.utils
 
 		private function fitToContent( window : Window, content : UIComponent ) : void
 		{
+			if( !window || !content )
+				return;
+			
 			var oldWidth : Number = window.width;
 			var oldHeight : Number = window.height;
 
@@ -232,7 +235,7 @@ package net.vdombox.utils
 			}
 		}
 
-		private function centerPopUp( window : Window ) : void
+		private function moveToCenter( window : Window ) : void
 		{
 			var screen : Screen = Screen.getScreensForRectangle( window.nativeWindow.bounds )[ 0 ];
 
@@ -244,14 +247,14 @@ package net.vdombox.utils
 			const n : int = windowsInfo.length;
 			for ( var i : int = 0; i < n; i++ )
 			{
-				var o : WindowData = windowsInfo[ i ];
-				if ( o.nativeWindow == nativeWindow )
-					return o;
+				var windowData : WindowData = windowsInfo[ i ];
+				if ( windowData.nativeWindow == nativeWindow )
+					return windowData;
 			}
 			return null;
 		}
 
-		private function findFirstModalWindowInfoByParentWindow( parentNativeWindow : NativeWindow ) : WindowData
+		private function findFirstModalWindowInfoByParentWindow( nativeWindow : NativeWindow ) : WindowData
 		{
 			const n : int = windowsInfo.length;
 			
@@ -264,7 +267,7 @@ package net.vdombox.utils
 				
 				var parentNativeWindow : NativeWindow = NativeWindow( windowData.parent.stage.nativeWindow );
 				
-				if ( windowData.isModal && parentNativeWindow == parentNativeWindow )
+				if ( windowData.isModal && nativeWindow == parentNativeWindow )
 					return windowData;
 			}
 			return null;
@@ -288,7 +291,7 @@ package net.vdombox.utils
 
 			nativeWindow.removeEventListener( Event.CLOSE, nativeWindow_closeHandler );
 
-			windowData.content.dispatchEvent( new Event( Event.CLOSE ));
+			windowData.window.dispatchEvent( new Event( Event.CLOSE ));
 			ArrayUtils.removeValueFromArray( windowsInfo, windowData );
 			removeHandlers( nativeWindow );
 
@@ -413,8 +416,8 @@ package net.vdombox.utils
 			if ( !windowData )
 				return;
 
-//			fitToContent( window, puwd.content );
-			centerPopUp( window );
+			fitToContent( window, windowData.content );
+			moveToCenter( window );
 
 			var handlers : Array = 
 				[
@@ -483,43 +486,33 @@ package net.vdombox.utils
 		}
 	}
 }
-
-
 import flash.display.NativeWindow;
-import flash.events.Event;
 
-import mx.core.IVisualElement;
 import mx.core.UIComponent;
+
+import spark.components.Window;
 
 
 class WindowData
 {
-
-	//--------------------------------------------------------------------------
-	//
-	//  Constructor
-	//
-	//--------------------------------------------------------------------------
-
-	/**
-	 *  Constructor.
-	 */
 	public function WindowData()
 	{
 		super();
 	}
 
-	//--------------------------------------------------------------------------
-	//
-	//  Variables
-	//
-	//--------------------------------------------------------------------------
-
-	public var nativeWindow : NativeWindow;
-
 	public var content : UIComponent;
-
+	
 	public var parent : UIComponent;
-
+	
 	public var isModal : Boolean;
+	
+	public var window : Window;
+	
+	public function get nativeWindow() : NativeWindow
+	{
+		if ( window )
+			return window.nativeWindow;
+		else
+			return null;
+	}
 }
