@@ -3,10 +3,8 @@ package net.vdombox.ide.core.view
 	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayList;
-	import mx.containers.TitleWindow;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
-	import mx.managers.PopUpManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
@@ -15,6 +13,8 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
+	import net.vdombox.ide.core.view.components.SettingsWindow;
+	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -47,6 +47,7 @@ package net.vdombox.ide.core.view
 		private var modulesProxy : ModulesProxy;
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+		private var windowManager : WindowManager = WindowManager.getInstance();
 
 		private var selectedModuleID : String = "";
 
@@ -219,7 +220,10 @@ package net.vdombox.ide.core.view
 		
 		private function settingsButton_clickHandler( event : MouseEvent ) : void
 		{
-			PopUpManager.createPopUp( mainWindow, TitleWindow );
+			var settingsWindow : SettingsWindow = new SettingsWindow();
+			facade.registerMediator( new SettingsWindowMediator( settingsWindow ) );
+			
+			windowManager.addWindow( settingsWindow, mainWindow, true );
 		}
 	}
 }

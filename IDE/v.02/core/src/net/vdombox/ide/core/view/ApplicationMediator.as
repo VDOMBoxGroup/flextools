@@ -64,14 +64,15 @@ package net.vdombox.ide.core.view
 			{
 				loginWindow = new LoginWindow();
 				facade.registerMediator( new LoginWindowMediator( loginWindow ));
+				
 				windowManager.addWindow( loginWindow );
-
-//				loginWindow.open();
 			}
 			else
 			{
 				if ( !loginWindow.visible )
 					loginWindow.visible = true;
+				
+				loginWindow.activate();
 			}
 
 			currentWindow = loginWindow;
@@ -87,12 +88,14 @@ package net.vdombox.ide.core.view
 				mainWindow = new MainWindow();
 				facade.registerMediator( new MainWindowMediator( mainWindow ));
 
-				mainWindow.open();
+				windowManager.addWindow( mainWindow );
 			}
 			else
 			{
 				if ( !mainWindow.visible )
 					mainWindow.visible = true;
+				
+				mainWindow.activate();
 			}
 
 			currentWindow = mainWindow;
