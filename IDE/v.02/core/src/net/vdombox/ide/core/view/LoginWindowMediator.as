@@ -106,7 +106,10 @@ package net.vdombox.ide.core.view
 			loginFormData.username = loginWindow.username.text;
 			loginFormData.password = loginWindow.password.text;
 			loginFormData.hostname = loginWindow.hostname.text;
-
+			
+			sharedObjectProxy.username = loginWindow.username.text;
+			sharedObjectProxy.hostname = loginWindow.hostname.text;
+			
 			sendNotification( ApplicationFacade.SUBMIT, loginFormData );
 		}
 
