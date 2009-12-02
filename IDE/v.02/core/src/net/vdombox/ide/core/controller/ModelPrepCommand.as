@@ -15,10 +15,9 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			facade.registerProxy( new SettingsProxy() );
-			facade.registerProxy( new ServerProxy() );
 			facade.registerProxy( new SharedObjectProxy() );
 			facade.registerProxy( new LocaleProxy() );
-			facade.registerProxy( new ModulesProxy() );
+			facade.registerProxy( new ModulesProxy() );			
 			facade.registerProxy( new PipesProxy() );
 		}
 	}

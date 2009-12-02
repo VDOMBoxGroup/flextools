@@ -4,7 +4,7 @@ package net.vdombox.ide.core.model.vo
 
 	public class ModuleVO
 	{
-		public function ModuleVO( category : String, path : String )
+		public function ModuleVO( category : ModulesCategoryVO, path : String )
 		{
 			_category = category;
 			_path = path;
@@ -12,7 +12,7 @@ package net.vdombox.ide.core.model.vo
 
 		private var _module : VIModule;
 
-		private var _category : String;
+		private var _category : ModulesCategoryVO;
 
 		private var _path : String;
 
@@ -21,7 +21,7 @@ package net.vdombox.ide.core.model.vo
 			return _module;
 		}
 
-		public function get category() : String
+		public function get category() : ModulesCategoryVO
 		{
 			return _category;
 		}
@@ -47,7 +47,7 @@ package net.vdombox.ide.core.model.vo
 			return _path;
 		}
 
-		public function setBody( value : VIModule ) : void
+		public function setModule( value : VIModule ) : void
 		{
 			_module = value;
 		}

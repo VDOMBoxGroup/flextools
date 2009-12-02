@@ -35,7 +35,7 @@ package net.vdombox.ide.core.controller
 				
 				case PPMServerTargetNames.SELECTED_APPLICATION:
 				{
-					var selectedApplication : ApplicationVO; 
+					var selectedApplication : ApplicationVO;
 					
 					if( operation == PPMOperationNames.READ )
 					{

@@ -80,7 +80,7 @@ package net.vdombox.ide.core.model
 
 		public function getApplicationProxy( applicationID : String ) : ApplicationProxy
 		{
-			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "." + applicationID ) as ApplicationProxy;
+			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + applicationID ) as ApplicationProxy;
 
 			if ( !applicationProxy )
 			{
@@ -88,7 +88,7 @@ package net.vdombox.ide.core.model
 
 				if ( applicationVO )
 				{
-					applicationProxy = new ApplicationProxy( ApplicationProxy.NAME + "." + applicationID, applicationVO );
+					applicationProxy = new ApplicationProxy( ApplicationProxy.NAME + "/" + applicationID, applicationVO );
 					facade.registerProxy( applicationProxy );
 				}
 			}

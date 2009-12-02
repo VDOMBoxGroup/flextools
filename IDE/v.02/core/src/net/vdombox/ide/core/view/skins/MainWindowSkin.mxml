@@ -104,7 +104,6 @@
 		</s:Rect>
 		
 		<s:ButtonBar id="tabBar"
-			dataProvider="{new ArrayList([1,2,3,4,5,6])}"
 			
 			requireSelection="true"
 			height="25" top="25" left="100"/>

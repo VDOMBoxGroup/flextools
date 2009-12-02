@@ -4,7 +4,7 @@ package net.vdombox.ide.core
 	
 	import net.vdombox.ide.core.controller.ConnectCompleteCommand;
 	import net.vdombox.ide.core.controller.InvokeCommand;
-	import net.vdombox.ide.core.controller.LoadModuleCommand;
+	import net.vdombox.ide.core.controller.LoadModulesCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.QuitCommand;
@@ -13,9 +13,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
 	import net.vdombox.ide.core.controller.SubmitCommand;
 	import net.vdombox.ide.core.controller.TypeLoadedCommand;
-	import net.vdombox.ide.core.controller.TypesLoadedCommand;
 	import net.vdombox.ide.core.controller.TypesProxyRequestCommand;
-	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
@@ -26,9 +24,17 @@ package net.vdombox.ide.core
 		public static const INVOKE : String = "invoke";
 
 		public static const PREINITALIZE : String = "preinitalize";
+		
+		public static const LOGOFF : String = "logoff";
 
 		public static const STARTUP : String = "startup";
-
+		
+		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
+		
+		public static const LOAD_MODULES : String = "loadModules";
+		public static const MODULES_LOADED : String = "modulesLoaded";
+		
+		
 		public static const SUBMIT : String = "submit";
 
 		public static const QUIT : String = "quit";
@@ -60,8 +66,9 @@ package net.vdombox.ide.core
 //		ModulesProxy
 		public static const REMOVE_MODULE : String = "removeModule";
 		
-		public static const LOAD_MODULE : String = "loadModule";
+//		public static const LOAD_MODULE : String = "loadModule";
 		
+		public static const MODULE_LOAD : String = "moduleLoad";
 		public static const MODULE_LOADED : String = "moduleLoaded";
 		
 		public static const MODULE_READY : String = "moduleReady";
@@ -112,9 +119,12 @@ package net.vdombox.ide.core
 			registerCommand( PREINITALIZE, PreinitalizeMacroCommand );
 
 			registerCommand( INVOKE, InvokeCommand );
+			
+			registerCommand( LOAD_MODULES, LoadModulesCommand );
+			
 			registerCommand( SUBMIT, SubmitCommand );
 			registerCommand( CONNECT_COMPLETE, ConnectCompleteCommand );
-			registerCommand( LOAD_MODULE, LoadModuleCommand );
+			
 			registerCommand( MODULE_LOADED, ModuleLoadedCommand );
 			registerCommand( REMOVE_MODULE, RemoveModuleCommand );
 			
@@ -123,7 +133,7 @@ package net.vdombox.ide.core
 			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
 			
 			registerCommand( TYPE_LOADED, TypeLoadedCommand );
-			registerCommand( TYPES_LOADED, TypesLoadedCommand );
+//			registerCommand( TYPES_LOADED, TypesLoadedCommand );
 			
 			registerCommand( QUIT, QuitCommand );
 		}

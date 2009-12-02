@@ -12,6 +12,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.LocaleProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
+	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.utils.WindowManager;
@@ -34,7 +35,7 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 
-		private var currentModuleCategory : String;
+		private var currentModuleCategory : ModulesCategoryVO;
 
 		private var loadedModules : Object;
 
@@ -100,7 +101,27 @@ package net.vdombox.ide.core.view
 
 			addEventListeners();
 		}
-
+		
+		override public function onRemove() : void
+		{
+			removeEventListeners();
+		}
+		
+		public function openWindow() : void
+		{
+			windowManager.addWindow( mainWindow );
+		}
+		
+		public function closeWindow() : void
+		{
+			windowManager.removeWindow( mainWindow );
+		}
+		
+		private function removeEventListeners() : void
+		{
+			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
+		}
+		
 		private function addEventListeners() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
@@ -136,7 +157,7 @@ package net.vdombox.ide.core.view
 			if ( modulesList.length > 0 )
 			{
 				var module : ModuleVO = modulesList.shift();
-				sendNotification( ApplicationFacade.LOAD_MODULE, module );
+//				sendNotification( ApplicationFacade.LOAD_MODULE, module );
 				return;
 			}
 
@@ -158,7 +179,7 @@ package net.vdombox.ide.core.view
 			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
 
-			showModulesByCategory( modulesCategories[ 0 ].name );
+			showModulesByCategory( modulesCategories[ 0 ] as ModulesCategoryVO );
 		}
 
 		private function placeToolsets() : void
@@ -197,13 +218,13 @@ package net.vdombox.ide.core.view
 			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, selectedModuleID );
 		}
 
-		private function showModulesByCategory( categoryName : String ) : void
+		private function showModulesByCategory( categoryVO : ModulesCategoryVO ) : void
 		{
 			cleanup();
 
-			modulesList = modulesProxy.getModulesList( categoryName );
+			modulesList = modulesProxy.getModulesListByCategory( categoryVO );
 
-			currentModuleCategory = categoryName;
+			currentModuleCategory = categoryVO;
 
 			loadedModules = {};
 			modulesOrder = [];
@@ -213,9 +234,9 @@ package net.vdombox.ide.core.view
 
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
-			var categoryName : String = event.target.selectedItem.name as String;
+			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
 
-			showModulesByCategory( categoryName );
+			showModulesByCategory( categoryVO );
 		}
 		
 		private function settingsButton_clickHandler( event : MouseEvent ) : void

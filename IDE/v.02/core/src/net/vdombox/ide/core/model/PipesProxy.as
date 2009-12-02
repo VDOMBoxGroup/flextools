@@ -11,11 +11,19 @@ package net.vdombox.ide.core.model
 		public function PipesProxy( data : Object = null )
 		{
 			super( NAME, data );
-			
-			_storage = {};
 		}
 		
 		private var _storage : Object;
+		
+		override public function onRegister() : void
+		{
+			_storage = {};
+		}
+		
+		override public function onRemove() : void
+		{
+			
+		}
 		
 		public function savePipe( moduleID : String, pipeName : String, pipe : Pipe ) : void
 		{

@@ -3,9 +3,8 @@ package net.vdombox.ide.core.view
 	import flash.desktop.NativeApplication;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.view.components.LoginWindow;
+	import net.vdombox.ide.core.view.components.InitialWindow;
 	import net.vdombox.ide.core.view.components.MainWindow;
-	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -20,7 +19,7 @@ package net.vdombox.ide.core.view
 		public function ApplicationMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
-			
+
 			application.nativeWindow.close();
 			NativeApplication.nativeApplication.autoExit = false;
 		}
@@ -32,15 +31,21 @@ package net.vdombox.ide.core.view
 
 		private var currentWindow : Window;
 
-		private var loginWindow : LoginWindow;
+		private var initialWindowMediator : InitialWindowMediator;
 
-		private var mainWindow : MainWindow;
-		
-		private var windowManager : WindowManager = net.vdombox.utils.WindowManager.getInstance();
+		private var mainWindowMediator : MainWindowMediator;
+
+//		private var windowManager : WindowManager = net.vdombox.utils.WindowManager.getInstance();
 
 		override public function listNotificationInterests() : Array
 		{
-			return [ ApplicationFacade.STARTUP ];
+			var interests : Array = super.listNotificationInterests();
+
+			interests.push( ApplicationFacade.STARTUP );
+			interests.push( ApplicationFacade.LOGOFF );
+			interests.push( ApplicationFacade.INITIAL_WINDOW_OPENED );
+
+			return interests;
 		}
 
 		override public function handleNotification( note : INotification ) : void
@@ -49,57 +54,32 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.STARTUP:
 				{
-					openLoginWindow();
+					initialWindowMediator.openWindow();
+					break;
+				}
+				
+				case ApplicationFacade.INITIAL_WINDOW_OPENED:
+				{
+					sendNotification( ApplicationFacade.LOAD_MODULES );
+					break;
+				}
+					
+				case ApplicationFacade.LOGOFF:
+				{
+					if ( mainWindowMediator )
+						mainWindowMediator.closeWindow();
 					break;
 				}
 			}
 		}
 
-		public function openLoginWindow() : void
+		override public function onRegister() : void
 		{
-			if ( mainWindow && mainWindow.visible )
-				mainWindow.visible = false;
+			initialWindowMediator = new InitialWindowMediator( new InitialWindow());
+			facade.registerMediator( initialWindowMediator );
 
-			if ( !loginWindow )
-			{
-				loginWindow = new LoginWindow();
-				facade.registerMediator( new LoginWindowMediator( loginWindow ));
-				
-				windowManager.addWindow( loginWindow );
-			}
-			else
-			{
-				if ( !loginWindow.visible )
-					loginWindow.visible = true;
-				
-				loginWindow.activate();
-			}
-
-			currentWindow = loginWindow;
+			mainWindowMediator = new MainWindowMediator( new MainWindow());
+			facade.registerMediator( mainWindowMediator );
 		}
-
-		public function openMainWindow() : void
-		{
-			if ( loginWindow && loginWindow.visible )
-				loginWindow.visible = false;
-
-			if ( !mainWindow )
-			{
-				mainWindow = new MainWindow();
-				facade.registerMediator( new MainWindowMediator( mainWindow ));
-
-				windowManager.addWindow( mainWindow );
-			}
-			else
-			{
-				if ( !mainWindow.visible )
-					mainWindow.visible = true;
-				
-				mainWindow.activate();
-			}
-
-			currentWindow = mainWindow;
-		}
-
 	}
 }

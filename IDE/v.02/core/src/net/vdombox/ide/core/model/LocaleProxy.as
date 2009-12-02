@@ -24,7 +24,6 @@ package net.vdombox.ide.core.model
 		public function LocaleProxy( data : Object = null )
 		{
 			super( NAME, data );
-			init();
 		}
 
 		private var sharedObject : SharedObject = SharedObject.getLocal( "userData" );
@@ -35,7 +34,7 @@ package net.vdombox.ide.core.model
 		private var allLocales : Array;
 		private var defaultLocale : String;
 		private var _currentLocale : String;
-
+		
 		public function get languageList() : XMLList
 		{
 			return _languageList;
@@ -45,7 +44,33 @@ package net.vdombox.ide.core.model
 		{
 			return _currentLocale;
 		}
-
+		
+		override public function onRegister() : void
+		{
+			_languageList = LOCALES.*;
+			
+			allLocales = [];
+			
+			var lastLocale : String = sharedObject.data.locale as String;
+			var code : String;
+			
+			for each ( var node : XML in _languageList )
+			{
+				code = node.@code.toString();
+				allLocales.push( code );
+				
+				if ( code && code == lastLocale )
+					_currentLocale = code;
+			}
+			
+			defaultLocale = allLocales[ 0 ];
+			
+			if ( _currentLocale && defaultLocale != _currentLocale )
+				resourceManager.localeChain = [ _currentLocale, defaultLocale ];
+			else
+				resourceManager.localeChain = [ defaultLocale ];
+		}
+		
 		public function changeLocale( locale : String ) : void
 		{
 			if ( _currentLocale != locale && allLocales.indexOf( locale ) != -1 )
@@ -60,7 +85,7 @@ package net.vdombox.ide.core.model
 
 		}
 
-		public function parseLanguageData( languageData : XMLList ) : void
+		/*public function parseLanguageData( languageData : XMLList ) : void
 		{
 			var resourceBundles : Object = {};
 
@@ -100,32 +125,6 @@ package net.vdombox.ide.core.model
 			}
 
 			resourceManager.update();
-		}
-
-		private function init() : void
-		{
-			_languageList = LOCALES.*;
-
-			allLocales = [];
-
-			var lastLocale : String = sharedObject.data.locale as String;
-			var code : String;
-
-			for each ( var node : XML in _languageList )
-			{
-				code = node.@code.toString();
-				allLocales.push( code );
-
-				if ( code && code == lastLocale )
-					_currentLocale = code;
-			}
-
-			defaultLocale = allLocales[ 0 ];
-
-			if ( _currentLocale && defaultLocale != _currentLocale )
-				resourceManager.localeChain = [ _currentLocale, defaultLocale ];
-			else
-				resourceManager.localeChain = [ defaultLocale ];
-		}
+		}*/
 	}
 }

@@ -15,14 +15,22 @@ package net.vdombox.ide.core.model
 		public function TypesProxy( data : Object = null )
 		{
 			super( NAME, data );
-
-			addEventListeners();
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
 
 		private var _types : Array = [];
 
+		override public function onRegister() : void
+		{
+			addEventListeners();
+		}
+		
+		override public function onRemove() : void
+		{
+			removeEventListeners();
+		}
+		
 		public function get types() : Array
 		{
 			return _types;
@@ -37,7 +45,12 @@ package net.vdombox.ide.core.model
 		{
 			soap.get_all_types.addEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 		}
-
+		
+		private function removeEventListeners() : void
+		{
+			soap.get_all_types.removeEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
+		}
+		
 		private function soap_getAllTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
 		{
 			var typesXML : XML = event.result.Types[ 0 ];
