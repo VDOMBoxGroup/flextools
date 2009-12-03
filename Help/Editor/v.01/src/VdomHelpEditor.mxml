@@ -126,7 +126,7 @@
 			var fullPath : String = newFile.url;
 //			var f : File = File.applicationStorageDirectory; 
 			html.location = fullPath; 
-//			html_wysiwyg.setHTML( "fullPath");
+			html_wysiwyg.setHTML( "fullPath");
 		}
 		
 		
