@@ -1,6 +1,6 @@
 package net.vdombox.ide.core.controller
 {	
-	import net.vdombox.ide.core.model.LocaleProxy;
+	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
@@ -14,9 +14,9 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new SharedObjectProxy() );
-			facade.registerProxy( new LocaleProxy() );
+			facade.registerProxy( new SettingsProxy() );			
+			facade.registerProxy( new LocalesProxy() );
 			facade.registerProxy( new ModulesProxy() );			
 			facade.registerProxy( new PipesProxy() );
 		}

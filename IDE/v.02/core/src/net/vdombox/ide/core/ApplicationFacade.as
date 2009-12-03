@@ -31,6 +31,9 @@ package net.vdombox.ide.core
 		
 		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
 		
+		public static const CHANGE_LOCALE : String = "changeLocale";
+		
+		
 		public static const LOAD_MODULES : String = "loadModules";
 		public static const MODULES_LOADED : String = "modulesLoaded";
 		

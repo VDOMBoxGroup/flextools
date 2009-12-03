@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.model
 {
+	import flash.utils.Dictionary;
+	
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
@@ -39,7 +41,7 @@ package net.vdombox.ide.core.model
 		private var _categories : Array;
 
 //		private var modulesListByCategory : Object;
-//		private var _loadedModules : Object;
+		private var loadedModules : Dictionary;
 		private var modulesList : Array;
 
 		private var modulesForLoadQue : Array;
@@ -58,6 +60,7 @@ package net.vdombox.ide.core.model
 			modulesList = [];
 			_categories = [];
 			modulesForLoadQue = [];
+			loadedModules = new Dictionary();
 			
 			var category : ModulesCategoryVO;
 			var categoryName : String;
@@ -146,15 +149,21 @@ package net.vdombox.ide.core.model
 
 			moduleInfo.addEventListener( ModuleEvent.READY, moduleReadyHandler );
 			moduleInfo.addEventListener( ModuleEvent.ERROR, moduleErrorHandler );
+			
+			loadedModules[ moduleInfo ] = "";
 			moduleInfo.load();
 
 		}
 
 		private function moduleReadyHandler( event : ModuleEvent ) : void
 		{
+			
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			var module : VIModule = event.module.factory.create() as VIModule;
 			moduleVO.setModule( module );
+			
+			delete loadedModules[ event.module ]
+			
 			sendNotification( ApplicationFacade.MODULE_LOADED, moduleVO );
 			loadModuleFromQue();
 		}

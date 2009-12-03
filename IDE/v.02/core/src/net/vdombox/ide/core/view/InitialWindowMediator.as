@@ -9,14 +9,14 @@ package net.vdombox.ide.core.view
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.model.LocaleProxy;
+	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
+	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.InitialWindow;
-	import net.vdombox.ide.core.view.components.initialWindowClasses.ErrorView;
-	import net.vdombox.ide.core.view.components.initialWindowClasses.LoginView;
 	import net.vdombox.utils.WindowManager;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	import spark.components.Button;
@@ -39,7 +39,7 @@ package net.vdombox.ide.core.view
 
 		private var windowManager : WindowManager = WindowManager.getInstance();
 
-		private var localeProxy : LocaleProxy;
+		private var localeProxy : LocalesProxy;
 
 		private var sharedObjectProxy : SharedObjectProxy;
 
@@ -65,13 +65,43 @@ package net.vdombox.ide.core.view
 		override public function onRegister() : void
 		{
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
-			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
+			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
 
 			selectedViewName = PROGRESS_VIEW_NAME;
 
 			addEventListeners();
 		}
 
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.CHANGE_LOCALE );
+			interests.push( ApplicationFacade.MODULES_LOADED );
+			
+			return interests;
+		}
+		
+		override public function handleNotification( notification : INotification ) : void
+		{
+			switch ( notification.getName() )
+			{
+				case ApplicationFacade.MODULES_LOADED:
+				{
+					selectedViewName = LOGIN_VIEW_NAME;
+					
+					break;
+				}
+					
+				case ApplicationFacade.CHANGE_LOCALE:
+				{
+					localeProxy.changeLocale( notification.getBody() as LocaleVO );
+					
+					break;
+				}
+			}
+		}
+		
 		public function openWindow() : void
 		{
 			windowManager.addWindow( initialWindow );
@@ -114,12 +144,12 @@ package net.vdombox.ide.core.view
 					return;
 				}
 				
-				var view : INavigatorContent = initialWindow.getChildByName( newValue ) as INavigatorContent;
+				var view : INavigatorContent = initialWindow.viewStack.getChildByName( newValue ) as INavigatorContent;
 				
 				if ( view )
 				{
 					initialWindow.viewStack.selectedChild = view;
-					selectedViewName = newValue;
+					_selectedViewName = newValue;
 				}
 			}
 		}

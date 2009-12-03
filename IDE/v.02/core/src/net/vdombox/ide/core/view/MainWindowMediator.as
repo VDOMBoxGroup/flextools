@@ -1,26 +1,26 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.MouseEvent;
-	
+
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.model.LocaleProxy;
+	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -39,7 +39,7 @@ package net.vdombox.ide.core.view
 
 		private var loadedModules : Object;
 
-		private var localeProxy : LocaleProxy;
+//		private var localeProxy : LocaleProxy;
 
 		private var modulesList : Array;
 
@@ -48,6 +48,7 @@ package net.vdombox.ide.core.view
 		private var modulesProxy : ModulesProxy;
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+
 		private var windowManager : WindowManager = WindowManager.getInstance();
 
 		private var selectedModuleID : String = "";
@@ -56,15 +57,6 @@ package net.vdombox.ide.core.view
 		{
 			switch ( note.getName())
 			{
-				case ApplicationFacade.MODULE_READY:
-				{
-					var moduleVO : ModuleVO = note.getBody() as ModuleVO;
-					loadedModules[ moduleVO.moduleID ] = moduleVO;
-					modulesOrder.push( moduleVO );
-					getModule();
-					break;
-				}
-
 				case ApplicationFacade.SHOW_TOOLSET:
 				{
 					toolsetBar.addElement( note.getBody() as IVisualElement );
@@ -88,55 +80,61 @@ package net.vdombox.ide.core.view
 
 		override public function listNotificationInterests() : Array
 		{
-			return [ ApplicationFacade.MODULE_READY, ApplicationFacade.SHOW_TOOLSET, ApplicationFacade.SHOW_BODY, ApplicationFacade.CHANGE_SELECTED_MODULE ];
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.SHOW_TOOLSET );
+			interests.push( ApplicationFacade.SHOW_BODY );
+			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
+
+			return interests;
 		}
 
 		override public function onRegister() : void
 		{
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
+//			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
 
-			loadedModules = {};
-			modulesOrder = [];
+//			loadedModules = {};
+//			modulesOrder = [];
 
 			addEventListeners();
 		}
-		
+
 		override public function onRemove() : void
 		{
 			removeEventListeners();
 		}
-		
+
 		public function openWindow() : void
 		{
 			windowManager.addWindow( mainWindow );
 		}
-		
+
 		public function closeWindow() : void
 		{
 			windowManager.removeWindow( mainWindow );
 		}
-		
+
 		private function removeEventListeners() : void
 		{
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
-		
+
 		private function addEventListeners() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
-		
+
 		private function get mainWindow() : MainWindow
 		{
 			return viewComponent as MainWindow;
 		}
-		
+
 		private function get toolsetBar() : Group
 		{
 			return mainWindow.toolsetBar;
 		}
-		
+
 		private function cleanup() : void
 		{
 			var moduleForUnload : ModuleVO;
@@ -165,7 +163,7 @@ package net.vdombox.ide.core.view
 			selectModule();
 
 		}
-		
+
 		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
 		{
 			var modulesCategories : Array = modulesProxy.categories;
@@ -173,8 +171,8 @@ package net.vdombox.ide.core.view
 
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
 			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
-			
-			
+
+
 			tabBar.labelField = "name";
 			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
@@ -238,12 +236,12 @@ package net.vdombox.ide.core.view
 
 			showModulesByCategory( categoryVO );
 		}
-		
+
 		private function settingsButton_clickHandler( event : MouseEvent ) : void
 		{
 			var settingsWindow : SettingsWindow = new SettingsWindow();
-			facade.registerMediator( new SettingsWindowMediator( settingsWindow ) );
-			
+			facade.registerMediator( new SettingsWindowMediator( settingsWindow ));
+
 			windowManager.addWindow( settingsWindow, mainWindow, true );
 		}
 	}

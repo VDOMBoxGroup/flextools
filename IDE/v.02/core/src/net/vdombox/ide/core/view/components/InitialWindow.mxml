@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Window xmlns:components="net.vdombox.ide.view.components.*"
-		  xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/halo"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  xmlns:initialWindowClasses="net.vdombox.ide.core.view.components.initialWindowClasses.*"
+		  
+		  xmlns:components="net.vdombox.ide.core.view.components.*"
 		  
 		  height="300" width="550"
 		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }"
@@ -40,9 +40,9 @@
 	</fx:Script>
 	
 	<mx:ViewStack id="viewStack"
-				  width="100%" height="100%">
-		<initialWindowClasses:ProgressView id="progressView"/>
-		<initialWindowClasses:LoginView id="loginView"/>
-		<initialWindowClasses:ErrorView id="errorView"/>
+				  width="100%" height="100%" creationPolicy="all">
+		<components:ProgressView id="progressView"/>
+		<components:LoginView id="loginView"/>
+		<components:ErrorView id="errorView"/>
 	</mx:ViewStack>
 </s:Window>

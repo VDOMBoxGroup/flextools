@@ -1,7 +1,8 @@
 package net.vdombox.ide.core.view
 {
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.view.components.initialWindowClasses.ProgressView;
+	import net.vdombox.ide.core.view.components.ProgressView;
+	import net.vdombox.ide.core.view.components.Task;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -18,6 +19,13 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 
+		private var tasks : Object;
+		
+		override public function onRegister() : void
+		{
+			tasks = {};
+		}
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -33,22 +41,35 @@ package net.vdombox.ide.core.view
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
+			var task : Task;
 			switch ( notification.getName() )
 			{
 				case ApplicationFacade.LOAD_MODULES:
 				{
-					var label : Label = new Label();
-					label.text = notification.getName();
-					label.setStyle( "color", "white" );
-					progressView.place.addElement( label );
+					task= new Task();
+					task.taskName = notification.getName();
+					task.status = "begin";
+					
+					tasks[ "types" ] = task;
+					
+					progressView.place.addElement( task );
+					
 					break;
 				}
+					
 				case ApplicationFacade.MODULE_LOADED:
 				{
-					var label : Label = new Label();
-					label.text = notification.getName();
-					label.setStyle( "color", "white" );
-					progressView.place.addElement( label );
+					task = tasks[ "types" ];
+					task.status = "loading";
+					
+					break;
+				}
+					
+				case ApplicationFacade.MODULES_LOADED:
+				{
+					task = tasks[ "types" ];
+					task.status = "OK";
+					
 					break;
 				}
 			}

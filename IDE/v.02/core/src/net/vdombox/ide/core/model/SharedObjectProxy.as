@@ -45,5 +45,15 @@ package net.vdombox.ide.core.model
 		{
 			sharedObject.data.hostname = value;
 		}
+		
+		public function get localeCode() : String
+		{
+			return sharedObject.data.localeCode ? sharedObject.data.localeCode : "";
+		}
+		
+		public function set localeCode( value : String ) : void
+		{
+			sharedObject.data.localeCode = value;
+		}
 	}
 }
