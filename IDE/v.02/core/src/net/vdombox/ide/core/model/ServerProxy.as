@@ -5,7 +5,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.ApplicationVO;
-	import net.vdombox.ide.core.model.vo.AuthInfo;
+	import net.vdombox.ide.core.model.vo.AuthInfoVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -13,84 +13,96 @@ package net.vdombox.ide.core.model
 	public class ServerProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "ServerProxy";
+		
+		public static const NOT_CONNECTED : String = "notConnected";
+		
+		public static const CONNECTION_PROCESS : String = "connectionProcess";
+		
+		public static const CONNECTION_ERROR : String = "connectionError";
+		
+		public static const CONNECTED : String = "connected";
 
-		public function ServerProxy( data : Object = null )
+		public function ServerProxy()
 		{
 			super( NAME, data );
-
-			addEventListeners();
 		}
 
-		public var connected : Boolean = false;
+		private var soap : SOAP;
 
-		private var soap : SOAP = SOAP.getInstance();
+		private var _status : String;
+		
+		private var tempAuthInfo : AuthInfoVO;
 
-		private var tempAuthInfo : AuthInfo;
-
-		private var _authInfo : AuthInfo;
+		private var _authInfo : AuthInfoVO;
 
 		private var _selectedApplication : ApplicationVO;
 
-		private var listOfApplications : Object;
-
-		public function get authInfo() : AuthInfo
+		private var _applications : Array;
+		
+		public function get status() : String
+		{
+			return _status;
+		}
+		
+		public function get authInfo() : AuthInfoVO
 		{
 			return _authInfo;
 		}
 
 		public function get applications() : Array
 		{
-			var _applications : Array = [];
-
-			for each ( var applicationVO : ApplicationVO in listOfApplications )
-			{
-				_applications.push( applicationVO );
-			}
-			return _applications;
+			return _applications.slice();
 		}
 
 		public function get selectedApplication() : ApplicationVO
 		{
-			if( !_selectedApplication )
-			{
-				for each ( var applicationVO : ApplicationVO in listOfApplications )
-				{
-					_selectedApplication = applicationVO;
-					break;
-				}
-			}
-				 
 			return _selectedApplication;
 		}
 
 		public function set selectedApplication( value : ApplicationVO ) : void
 		{
-			if ( listOfApplications[ value.id ])
-			{
+			if ( _applications.indexOf( value ) != -1)
 				_selectedApplication = value;
-			}
 		}
 
-		public function connect( authInfo : AuthInfo ) : void
+		override public function onRegister() : void
 		{
-			connected = false;
-			tempAuthInfo = authInfo;
+			_status = NOT_CONNECTED;
+			soap = SOAP.getInstance();
+			
+			addEventListeners();
+		}
+
+		public function connect( username : String, password : String, hostname : String ) : void
+		{
+			_status = CONNECTION_PROCESS;
+			
+			tempAuthInfo = new AuthInfoVO( username, password, hostname );
 			soap.init( authInfo.WSDLFilePath );
 		}
 
-		public function getApplicationProxy( applicationID : String ) : ApplicationProxy
+		public function disconnect() : void
 		{
-			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + applicationID ) as ApplicationProxy;
+			_status = NOT_CONNECTED;
+		}
+		
+		public function loadApplications() : void
+		{
+			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_loadApplicationsHandler );
+			soap.list_applications();
+		}
+		
+		public function getApplicationProxy( applicationVO : ApplicationVO ) : ApplicationProxy
+		{
+			if( applications.indexOf( applicationVO ) == -1 )
+				return null;
+			
+			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + applicationVO.id ) as ApplicationProxy;
 
 			if ( !applicationProxy )
 			{
-				var applicationVO : ApplicationVO = listOfApplications[ applicationID ];
-
-				if ( applicationVO )
-				{
-					applicationProxy = new ApplicationProxy( ApplicationProxy.NAME + "/" + applicationID, applicationVO );
-					facade.registerProxy( applicationProxy );
-				}
+				applicationProxy = new ApplicationProxy( applicationVO );
+				facade.registerProxy( applicationProxy );
 			}
 
 			return applicationProxy;
@@ -106,7 +118,7 @@ package net.vdombox.ide.core.model
 
 		private function createApplicationList( applications : XML ) : void
 		{
-			listOfApplications = {};
+			_applications = [];
 
 			for each ( var application : XML in applications.* )
 			{
@@ -115,7 +127,7 @@ package net.vdombox.ide.core.model
 				if ( !applicationVO.id )
 					continue;
 
-				listOfApplications[ applicationVO.id ] = applicationVO;
+				_applications.push( applicationVO );
 			}
 		}
 
@@ -126,21 +138,20 @@ package net.vdombox.ide.core.model
 
 		private function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
-			connected = true;
+			_status = CONNECTED;
+			
 			var result : XML = event.result;
-			_authInfo = new AuthInfo( result.Username[ 0 ], tempAuthInfo.password, result.Hostname[ 0 ]);
+			_authInfo = new AuthInfoVO( result.Username[ 0 ], tempAuthInfo.password, result.Hostname[ 0 ] );
+			
 			tempAuthInfo = null;
 
-			sendNotification( ApplicationFacade.LOGIN_COMPLETE, _authInfo );
-
-			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_listApplicationsHandler );
-			soap.list_applications();
+			sendNotification( ApplicationFacade.LOGON_SUCCESS, _authInfo );
 		}
 
-		private function soap_listApplicationsHandler( event : SOAPEvent ) : void
+		private function soap_loadApplicationsHandler( event : SOAPEvent ) : void
 		{
 			createApplicationList( event.result.Applications[ 0 ]);
-			sendNotification( ApplicationFacade.CONNECT_COMPLETE );
+			sendNotification( ApplicationFacade.APPLICATIONS_LOADED, applications );
 		}
 
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void

@@ -12,9 +12,9 @@ package net.vdombox.ide.core.model
 	{
 		public static const NAME : String = "ApplicationProxy";
 
-		public function ApplicationProxy( proxyName : String, data : Object = null )
+		public function ApplicationProxy( applicationVO : ApplicationVO )
 		{
-			super( proxyName, data );
+			super( NAME + "/" + applicationVO.id, data );
 		}
 
 		private var _selectedPage : PageVO;

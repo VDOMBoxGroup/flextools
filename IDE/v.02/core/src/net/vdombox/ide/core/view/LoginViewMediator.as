@@ -61,7 +61,6 @@ package net.vdombox.ide.core.view
 		
 		private function addEventListeners() : void
 		{
-			loginView.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			loginView.addEventListener( FlexEvent.SHOW, showHandler );
 			
 			loginView.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
@@ -77,13 +76,6 @@ package net.vdombox.ide.core.view
 			loginView.selectLang.selectedItem = localeProxy.currentLocale;
 		}
 		
-		private function creationCompleteHandler( event : FlexEvent ) : void
-		{
-//			loginView.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-			
-			
-		}
-		
 		private function keyDownHandler( event : KeyboardEvent ) : void
 		{
 			if ( event.keyCode == 13 )
@@ -93,7 +85,9 @@ package net.vdombox.ide.core.view
 		private function showHandler( event : FlexEvent ) : void
 		{
 			loginView.username.text = sharedObjectProxy.username;
+			loginView.username.appendText( "" ); //FIXME убрать эту конструкцию непонятную, иначе не рефрешит поле.
 			loginView.hostname.text = sharedObjectProxy.hostname;
+			loginView.hostname.appendText( "" );
 			
 			setupLanguageList();
 		}
@@ -126,7 +120,7 @@ package net.vdombox.ide.core.view
 			sharedObjectProxy.username = loginView.username.text;
 			sharedObjectProxy.hostname = loginView.hostname.text;
 			
-			sendNotification( ApplicationFacade.SUBMIT, loginFormData );
+			sendNotification( ApplicationFacade.LOGGED_ON, loginFormData );
 		}
 		
 		private function submitButton_clickHandler( event : MouseEvent ) : void

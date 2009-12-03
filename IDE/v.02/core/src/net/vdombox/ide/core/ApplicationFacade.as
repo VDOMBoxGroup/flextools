@@ -2,16 +2,15 @@ package net.vdombox.ide.core
 {
 	import mx.rpc.events.FaultEvent;
 	
-	import net.vdombox.ide.core.controller.ConnectCompleteCommand;
 	import net.vdombox.ide.core.controller.InvokeCommand;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
+	import net.vdombox.ide.core.controller.LoggedOnCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.QuitCommand;
 	import net.vdombox.ide.core.controller.RemoveModuleCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
-	import net.vdombox.ide.core.controller.SubmitCommand;
 	import net.vdombox.ide.core.controller.TypeLoadedCommand;
 	import net.vdombox.ide.core.controller.TypesProxyRequestCommand;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -24,8 +23,6 @@ package net.vdombox.ide.core
 		public static const INVOKE : String = "invoke";
 
 		public static const PREINITALIZE : String = "preinitalize";
-		
-		public static const LOGOFF : String = "logoff";
 
 		public static const STARTUP : String = "startup";
 		
@@ -38,12 +35,21 @@ package net.vdombox.ide.core
 		public static const MODULES_LOADED : String = "modulesLoaded";
 		
 		
-		public static const SUBMIT : String = "submit";
+//		public static const SUBMIT : String = "submit";
 
 		public static const QUIT : String = "quit";
 		
-		public static const LOGIN_COMPLETE : String = "Login Complete";
-		public static const CONNECT_COMPLETE : String = "Connect Complete";
+		public static const LOGGED_ON: String = "loggedOn";
+		public static const LOGON_SUCCESS : String = "logonSuccess";
+		public static const LOGON_ERROR : String = "logonError";
+		
+		public static const LOGOFF : String = "logoff";
+		public static const LOGOFF_SUCCESS : String = "logoffSuccess";
+		public static const LOGOFF_ERROR : String = "logoffError";
+		
+		public static const APPLICATIONS_LOADING : String = "applicationsLoading";
+		public static const APPLICATIONS_LOADED : String = "applicationsLoaded";
+//		public static const CONNECT_COMPLETE : String = "Connect Complete";
 		
 		public static const TYPES_LOADED : String = "typesLoaded";
 		public static const TYPE_LOADED : String = "typeLoaded";
@@ -125,8 +131,10 @@ package net.vdombox.ide.core
 			
 			registerCommand( LOAD_MODULES, LoadModulesCommand );
 			
-			registerCommand( SUBMIT, SubmitCommand );
-			registerCommand( CONNECT_COMPLETE, ConnectCompleteCommand );
+			registerCommand( LOGGED_ON, LoggedOnCommand );
+			registerCommand( LOGGED_ON, LoggedOnCommand );
+			
+//			registerCommand( CONNECT_COMPLETE, ConnectCompleteCommand );
 			
 			registerCommand( MODULE_LOADED, ModuleLoadedCommand );
 			registerCommand( REMOVE_MODULE, RemoveModuleCommand );

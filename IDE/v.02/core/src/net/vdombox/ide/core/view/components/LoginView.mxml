@@ -26,7 +26,7 @@
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }"
 					 width="100%" textAlign="right"/>
 			<mx:ComboBox id="selectLang"
-						 labelField="@label" width="240" />
+						 width="240" />
 		</s:HGroup>
 	</s:VGroup>
 	<s:Button id="submitButton"

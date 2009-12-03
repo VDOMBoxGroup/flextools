@@ -121,10 +121,8 @@ package net.vdombox.ide.core.view
 		private function addEventListeners() : void
 		{
 			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			initialWindow.addEventListener( FlexEvent.SHOW, showHandler );
 
 			initialWindow.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-			initialWindow.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
 		}
 		
 		private function commitProperties() : void
@@ -164,12 +162,6 @@ package net.vdombox.ide.core.view
 			sendNotification( ApplicationFacade.INITIAL_WINDOW_OPENED );
 		}
 
-		private function keyDownHandler( event : KeyboardEvent ) : void
-		{
-			if ( event.keyCode == 13 )
-				submit();
-		}
-
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
 			if ( event.target is Button || event.target is RichEditableText || event.target.parent is ComboBox )
@@ -178,40 +170,6 @@ package net.vdombox.ide.core.view
 			initialWindow.nativeWindow.startMove();
 
 			event.stopImmediatePropagation();
-		}
-
-		private function quitButton_clickHandler( event : MouseEvent ) : void
-		{
-			sendNotification( ApplicationFacade.QUIT );
-		}
-
-		private function selectLang_changeHandler( event : ListEvent ) : void
-		{
-			var selectedItem : XML = event.currentTarget.selectedItem as XML;
-			localeProxy.changeLocale( selectedItem.@code );
-		}
-
-		private function showHandler( event : FlexEvent ) : void
-		{
-//			loginForm.
-		}
-
-		private function submit() : void
-		{
-			var loginFormData : Object = {};
-			loginFormData.username //= initialWindow.username.text;
-			loginFormData.password //= initialWindow.password.text;
-			loginFormData.hostname //= initialWindow.hostname.text;
-
-			sharedObjectProxy.username //= initialWindow.username.text;
-			sharedObjectProxy.hostname //= initialWindow.hostname.text;
-
-			sendNotification( ApplicationFacade.SUBMIT, loginFormData );
-		}
-
-		private function submitButton_clickHandler( event : MouseEvent ) : void
-		{
-			submit();
 		}
 	}
 }
