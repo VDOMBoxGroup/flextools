@@ -11,7 +11,7 @@ package net.vdombox.ide.modules
 
 	public class Edition extends VIModule
 	{
-		public static const MODULE_ID : String = "04D1487D-F14E-0FE5-82F9-E6E8FEFCD2CD";
+		public static const MODULE_ID : String = "net.vdombox.ide.modules.Edition";
 		
 		public static const MODULE_NAME : String = "Edition";
 		
