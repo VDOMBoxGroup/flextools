@@ -2,17 +2,9 @@ package net.vdombox.ide.core.model.vo
 {
 	public class AuthInfoVO
 	{
-
-		public function AuthInfoVO( username : String, password : String, hostname : String )
-		{
-			_username = username;
-			_password = password;
-			_hostname = hostname;
-		}
-
 		private var _username : String;
 
-		private var _password : String;
+//		private var _password : String;
 
 		private var _hostname : String;
 
@@ -21,10 +13,10 @@ package net.vdombox.ide.core.model.vo
 			return _username;
 		}
 
-		public function get password() : String
-		{
-			return _password;
-		}
+//		public function get password() : String
+//		{
+//			return _password;
+//		}
 		
 		public function get hostname() : String
 		{
@@ -33,7 +25,22 @@ package net.vdombox.ide.core.model.vo
 		
 		public function get WSDLFilePath() : String
 		{
-			return "http://" + _hostname + "/vdom.wsdl";
+			var wsdlPath : String;
+			
+			if( _hostname )
+				wsdlPath = "http://" + _hostname + "/vdom.wsdl";
+			
+			return wsdlPath;
+		}
+		
+		public function setHostname( value : String ) : void
+		{
+			_hostname = value;
+		}
+		
+		public function setUsername( value : String ) : void
+		{
+			_username = value;
 		}
 	}
 }

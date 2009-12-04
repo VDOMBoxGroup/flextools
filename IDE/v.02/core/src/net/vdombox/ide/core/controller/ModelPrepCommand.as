@@ -19,6 +19,7 @@ package net.vdombox.ide.core.controller
 			facade.registerProxy( new LocalesProxy() );
 			facade.registerProxy( new ModulesProxy() );			
 			facade.registerProxy( new PipesProxy() );
+			facade.registerProxy( new ServerProxy() );
 		}
 	}
 }

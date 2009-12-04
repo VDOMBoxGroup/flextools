@@ -1,12 +1,10 @@
 package net.vdombox.ide.core.view
 {
-	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
 	import mx.controls.ComboBox;
 	import mx.core.INavigatorContent;
 	import mx.events.FlexEvent;
-	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.LocalesProxy;
@@ -46,7 +44,9 @@ package net.vdombox.ide.core.view
 		private var proposedViewName : String;
 		
 		private var _selectedViewName : String = "";
-
+		
+		private var userData : Object;
+		
 		public function get selectedViewName() : String
 		{
 			return proposedViewName != "" ? proposedViewName : _selectedViewName;
@@ -61,12 +61,28 @@ package net.vdombox.ide.core.view
 
 			commitProperties();
 		}
-
+		
+		public function get username() : String
+		{
+			return userData.username;
+		}
+		
+		public function get password() : String
+		{
+			return userData.password;
+		}
+		
+		public function get hostname() : String
+		{
+			return userData.hostname;
+		}
+		
 		override public function onRegister() : void
 		{
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
 
+			userData = {};
 			selectedViewName = PROGRESS_VIEW_NAME;
 
 			addEventListeners();
@@ -78,6 +94,11 @@ package net.vdombox.ide.core.view
 			
 			interests.push( ApplicationFacade.CHANGE_LOCALE );
 			interests.push( ApplicationFacade.MODULES_LOADED );
+			interests.push( ApplicationFacade.LOGGED_ON );
+			interests.push( ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL );
+			interests.push( ApplicationFacade.LOGON_SUCCESS );
+			interests.push( ApplicationFacade.APPLICATIONS_LOADED );
+			
 			
 			return interests;
 		}
@@ -96,6 +117,20 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.CHANGE_LOCALE:
 				{
 					localeProxy.changeLocale( notification.getBody() as LocaleVO );
+					
+					break;
+				}
+					
+				case ApplicationFacade.PROCESS_USER_INPUT:
+				{
+					userData = notification.getBody();
+					
+					var progressViewMediator : ProgressViewMediator = facade.retrieveMediator( ProgressViewMediator.NAME ) as ProgressViewMediator;
+					
+					progressViewMediator.cleanup();
+					selectedViewName = PROGRESS_VIEW_NAME;
+					
+					sendNotification( ApplicationFacade.CONNECT_SERVER );
 					
 					break;
 				}

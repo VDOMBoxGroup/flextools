@@ -1,79 +1,44 @@
-/* 
-* Provide protect when connetion to server 
-*/
+/*
+ * Provide protect when connetion to server
+ */
 package net.vdombox.ide.core.model.business.protect
 {
-	public class Code 
+	public class Code
 	{
-		
-//		import com.gsolo.encryption.protector;
+		public function Code()
+		{
+			if ( instance )
+				throw new Error( "Singleton and can only be accessed through Code.getInstance(hstr:String)" );
+		}
 
-		public var sessionId: String;
+		private static var instance : Code;
 		
-		private var protector:VDOMSessionProtector;
-		private var key:String;
-		private var counter:int = -1;
+		public static function getInstance() : Code
+		{
+			return instance || ( instance = new Code());
+		}
 		
+		public var sessionId : String;
 		
-		private static var instance:Code;
+		private var counter : int = -1;
 		
+		private var protector : VDOMSessionProtector;
 		
-		/**
-		 * this is impossible, because it is singleton
-		 * 
-		 * @return 
-		 * 
-		 */
-		public function Code() {
-            if( instance ) throw new Error( "Singleton and can only be accessed through Code.getInstance(hstr:String)" );
-         } 		
-		 
-		  		
-		 
-		 /**
-		  *  class initialization.
-		  * 
-		  * @return instanse of this class
-		  * 
-		  */
-		 public static function getInstance():Code {
-             
-             return instance || (instance = new Code()); ;
-        }
-
-		/**
-		 * protect initialization
-		 *  
-		 * @param hstr - hesh
-		 * 
-		 */
-		public function init(hstr:String):void{
-		//	trace('hesh:' + hstr)
+		private var key : String;
+		
+		public function initialize( hashString : String, sessionKey : String ) : void
+		{
 			counter = -1;
-			protector = new VDOMSessionProtector(hstr);
+			protector = new VDOMSessionProtector( hashString );
+			key = sessionKey;
 		}
-		
-		
-		/**
-		 * input First key
-		 * 
-		 * @param str
-		 * 
-		 */
-		public function inputSKey(str:String):void{
-			key = str;
-		}
-		
-		/**
-		 * generation next key
-		 * 
-		 * @return necessary key 
-		 * 
-		 */
-		public function skey():String{
-			key = protector.nextSessionKey(key);
+
+		public function get nextSessionKey() : String
+		{
+			key = protector.nextSessionKey( key );
 			counter++;
-			return key+'_'+counter.toString();
+			
+			return key + "_" + counter.toString();
 		}
 	}
 }

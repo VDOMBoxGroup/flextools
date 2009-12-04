@@ -31,10 +31,21 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.STARTUP );
-			interests.push( ApplicationFacade.LOGOFF );
 			interests.push( ApplicationFacade.LOAD_MODULES );
 			interests.push( ApplicationFacade.MODULES_LOADED );
 			interests.push( ApplicationFacade.MODULE_LOADED );
+			
+			interests.push( ApplicationFacade.CONNECTION_SERVER_STARTS);
+			interests.push( ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL);
+			
+			interests.push( ApplicationFacade.LOGON_STARTS );
+			interests.push( ApplicationFacade.LOGON_SUCCESS );
+			
+			interests.push( ApplicationFacade.APPLICATIONS_LOADING );
+			interests.push( ApplicationFacade.APPLICATIONS_LOADED );
+			
+			interests.push( ApplicationFacade.TYPES_LOADING );
+			interests.push( ApplicationFacade.TYPES_LOADED );
 
 			return interests;
 		}
@@ -72,7 +83,101 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.CONNECTION_SERVER_STARTS:
+				{
+					task= new Task();
+					task.taskName = "Connect to server...";
+					task.status = "process";
+					
+					tasks[ "connect" ] = task;
+					
+					progressView.place.addElement( task );
+					
+					break;
+				}
+					
+				case ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL:
+				{
+					task = tasks[ "connect" ];
+					task.taskName = "Connect to server";
+					task.status = "OK";
+					
+					break;
+				}
+					
+				case ApplicationFacade.LOGON_STARTS:
+				{
+					task= new Task();
+					task.taskName = "Log on to server...";
+					task.status = "process";
+					
+					tasks[ "logon" ] = task;
+					
+					progressView.place.addElement( task );
+					
+					break;
+				}
+					
+				case ApplicationFacade.LOGON_SUCCESS:
+				{
+					task = tasks[ "logon" ];
+					task.taskName = "Log on to server";
+					task.status = "OK";
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATIONS_LOADING:
+				{
+					task= new Task();
+					task.taskName = "Applications loading...";
+					task.status = "process";
+					
+					tasks[ "applications" ] = task;
+					
+					progressView.place.addElement( task );
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATIONS_LOADED:
+				{
+					task = tasks[ "applications" ];
+					task.taskName = "Applications loading";
+					task.status = "OK";
+					
+					break;
+				}
+					
+				case ApplicationFacade.TYPES_LOADING:
+				{
+					task= new Task();
+					task.taskName = "Types loading...";
+					task.status = "process";
+					
+					tasks[ "types" ] = task;
+					
+					progressView.place.addElement( task );
+					
+					break;
+				}
+					
+				case ApplicationFacade.TYPES_LOADED:
+				{
+					task = tasks[ "types" ];
+					task.taskName = "Types loading";
+					task.status = "OK";
+					
+					break;
+				}
 			}
+		}
+		
+		public function cleanup() : void
+		{
+			progressView.place.removeAllElements();
+			tasks = {};
 		}
 		
 		private function get progressView() : ProgressView

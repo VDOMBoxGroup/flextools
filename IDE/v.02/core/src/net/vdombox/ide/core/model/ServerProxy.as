@@ -20,6 +20,10 @@ package net.vdombox.ide.core.model
 		
 		public static const CONNECTION_ERROR : String = "connectionError";
 		
+		public static const LOGGED : String = "logonProcess";
+//		
+//		public static const LOGON_ERROR : String = "logonError";
+		
 		public static const CONNECTED : String = "connected";
 
 		public function ServerProxy()
@@ -30,8 +34,6 @@ package net.vdombox.ide.core.model
 		private var soap : SOAP;
 
 		private var _status : String;
-		
-		private var tempAuthInfo : AuthInfoVO;
 
 		private var _authInfo : AuthInfoVO;
 
@@ -72,15 +74,28 @@ package net.vdombox.ide.core.model
 			
 			addEventListeners();
 		}
-
-		public function connect( username : String, password : String, hostname : String ) : void
+		
+		public function connect( hostname : String ) : void
 		{
 			_status = CONNECTION_PROCESS;
 			
-			tempAuthInfo = new AuthInfoVO( username, password, hostname );
-			soap.init( authInfo.WSDLFilePath );
+			_authInfo = new AuthInfoVO();
+			_authInfo.setHostname( hostname );
+			
+			sendNotification( ApplicationFacade.CONNECTION_SERVER_STARTS );
+			
+			soap.init( _authInfo.WSDLFilePath );
 		}
 
+		public function logon( username : String, password : String ) : void
+		{
+			if( _status == CONNECTED || _status == LOGGED )
+			{
+				sendNotification( ApplicationFacade.LOGON_STARTS );
+				soap.logon( username, password );
+			}
+		}
+		
 		public function disconnect() : void
 		{
 			_status = NOT_CONNECTED;
@@ -89,7 +104,11 @@ package net.vdombox.ide.core.model
 		public function loadApplications() : void
 		{
 			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_loadApplicationsHandler );
+			
+			sendNotification( ApplicationFacade.APPLICATIONS_LOADING );
+			
 			soap.list_applications();
+			
 		}
 		
 		public function getApplicationProxy( applicationVO : ApplicationVO ) : ApplicationProxy
@@ -133,17 +152,17 @@ package net.vdombox.ide.core.model
 
 		private function soap_initCompleteHandler( event : SOAPEvent ) : void
 		{
-			soap.login( tempAuthInfo.username, tempAuthInfo.password );
+			_status = CONNECTED;
+			sendNotification( ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL );
 		}
 
 		private function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
-			_status = CONNECTED;
+			_status = LOGGED;
 			
 			var result : XML = event.result;
-			_authInfo = new AuthInfoVO( result.Username[ 0 ], tempAuthInfo.password, result.Hostname[ 0 ] );
-			
-			tempAuthInfo = null;
+			_authInfo.setUsername( result.Username[ 0 ] );
+			_authInfo.setHostname( result.Hostname[ 0 ] );
 
 			sendNotification( ApplicationFacade.LOGON_SUCCESS, _authInfo );
 		}
@@ -156,7 +175,6 @@ package net.vdombox.ide.core.model
 
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
 		{
-			tempAuthInfo = null;
 		}
 	}
 }

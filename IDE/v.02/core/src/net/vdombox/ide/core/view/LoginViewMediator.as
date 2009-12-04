@@ -120,7 +120,7 @@ package net.vdombox.ide.core.view
 			sharedObjectProxy.username = loginView.username.text;
 			sharedObjectProxy.hostname = loginView.hostname.text;
 			
-			sendNotification( ApplicationFacade.LOGGED_ON, loginFormData );
+			sendNotification( ApplicationFacade.PROCESS_USER_INPUT, loginFormData );
 		}
 		
 		private function submitButton_clickHandler( event : MouseEvent ) : void

@@ -12,8 +12,10 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var application : VdomIDE = notification.getBody() as VdomIDE;
+			
 			facade.registerMediator( new CoreJunctionMediator() );
 			facade.registerMediator( new ProxiesJunctionMediator() );
+			
 			facade.registerMediator( new ApplicationMediator( application ) );
 		}
 	}

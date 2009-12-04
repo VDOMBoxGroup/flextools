@@ -36,8 +36,9 @@ package net.vdombox.ide.core.model
 			return _types;
 		}
 
-		public function load() : void
+		public function loadTypes() : void
 		{
+			sendNotification( ApplicationFacade.TYPES_LOADING );
 			soap.get_all_types();
 		}
 

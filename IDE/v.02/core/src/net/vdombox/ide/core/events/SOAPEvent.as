@@ -6,6 +6,7 @@ package net.vdombox.ide.core.events
 	{
 		public static var INIT_COMPLETE : String = "Init Complete";
 		public static var LOGIN_OK : String = "Login OK";
+		public static var LOGOFF_OK : String = "Logoff OK";
 		public static var RESULT : String = "Result";
 
 		public var result : XML = new XML();

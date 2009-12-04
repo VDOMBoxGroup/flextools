@@ -57,13 +57,13 @@ package net.vdombox.ide.core.view
 		{
 			switch ( note.getName())
 			{
-				case ApplicationFacade.SHOW_TOOLSET:
+				case ApplicationFacade.SHOW_MODULE_TOOLSET:
 				{
 					toolsetBar.addElement( note.getBody() as IVisualElement );
 					break;
 				}
 
-				case ApplicationFacade.SHOW_BODY:
+				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
 					mainWindow.addElement( note.getBody() as IVisualElement );
 					break;
@@ -82,8 +82,8 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.SHOW_TOOLSET );
-			interests.push( ApplicationFacade.SHOW_BODY );
+			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
+			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 
 			return interests;
@@ -143,7 +143,7 @@ package net.vdombox.ide.core.view
 			{
 				moduleForUnload = modulesOrder[ i ];
 
-				sendNotification( ApplicationFacade.REMOVE_MODULE, moduleForUnload );
+//				sendNotification( ApplicationFacade.REMOVE_MODULE, moduleForUnload );
 			}
 
 			toolsetBar.removeAllElements();
