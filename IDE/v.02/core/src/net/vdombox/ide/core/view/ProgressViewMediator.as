@@ -7,8 +7,6 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Label;
 
 	public class ProgressViewMediator extends Mediator implements IMediator
 	{
@@ -58,7 +56,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.LOAD_MODULES:
 				{
 					task= new Task();
-					task.taskName = notification.getName();
+					task.description = notification.getName();
 					task.status = "begin";
 					
 					tasks[ "types" ] = task;
@@ -87,7 +85,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.CONNECTION_SERVER_STARTS:
 				{
 					task= new Task();
-					task.taskName = "Connect to server...";
+					task.description = "Connect to server...";
 					task.status = "process";
 					
 					tasks[ "connect" ] = task;
@@ -100,7 +98,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL:
 				{
 					task = tasks[ "connect" ];
-					task.taskName = "Connect to server";
+					task.description = "Connect to server";
 					task.status = "OK";
 					
 					break;
@@ -109,7 +107,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.LOGON_STARTS:
 				{
 					task= new Task();
-					task.taskName = "Log on to server...";
+					task.description = "Log on to server...";
 					task.status = "process";
 					
 					tasks[ "logon" ] = task;
@@ -122,7 +120,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.LOGON_SUCCESS:
 				{
 					task = tasks[ "logon" ];
-					task.taskName = "Log on to server";
+					task.description = "Log on to server";
 					task.status = "OK";
 					
 					break;
@@ -131,7 +129,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.APPLICATIONS_LOADING:
 				{
 					task= new Task();
-					task.taskName = "Applications loading...";
+					task.description = "Applications loading...";
 					task.status = "process";
 					
 					tasks[ "applications" ] = task;
@@ -144,7 +142,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.APPLICATIONS_LOADED:
 				{
 					task = tasks[ "applications" ];
-					task.taskName = "Applications loading";
+					task.description = "Applications loading";
 					task.status = "OK";
 					
 					break;
@@ -153,7 +151,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.TYPES_LOADING:
 				{
 					task= new Task();
-					task.taskName = "Types loading...";
+					task.description = "Types loading(0)...";
 					task.status = "process";
 					
 					tasks[ "types" ] = task;
@@ -166,7 +164,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.TYPES_LOADED:
 				{
 					task = tasks[ "types" ];
-					task.taskName = "Types loading";
+					task.description = "Types loading(" + notification.getBody().length + ")...";
 					task.status = "OK";
 					
 					break;

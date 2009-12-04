@@ -2,8 +2,11 @@ package net.vdombox.ide.core
 {
 	import mx.rpc.events.FaultEvent;
 	
+	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
 	import net.vdombox.ide.core.controller.ConnectServerCommand;
+	import net.vdombox.ide.core.controller.ConnectionServerSuccessfulCommand;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
+	import net.vdombox.ide.core.controller.LogonSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
@@ -33,7 +36,7 @@ package net.vdombox.ide.core
 		public static const CONNECTION_SERVER_SUCCESSFUL : String = "connectionServerSuccessful";
 		public static const CONNECTION_SERVER_ERROR : String = "connectionServerError";
 		
-		public static const LOGGED_ON: String = "loggedOn";
+//		public static const LOGGED_ON: String = "loggedOn";
 		public static const LOGON_STARTS : String = "logonStarts";
 		public static const LOGON_SUCCESS : String = "logonSuccess";
 		public static const LOGON_ERROR : String = "logonError";
@@ -48,8 +51,6 @@ package net.vdombox.ide.core
 		
 		public static const TYPES_LOADING : String = "typesLoading";
 		public static const TYPES_LOADED : String = "typesLoaded";
-		
-		public static const TYPE_LOADED : String = "typeLoaded";
 		
 		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
 		public static const DISCONNECT_MODULE_TO_CORE : String = "disconnectModuleToCore";
@@ -118,6 +119,9 @@ package net.vdombox.ide.core
 			registerCommand( PREINITALIZE, PreinitalizeMacroCommand );
 			
 			registerCommand( CONNECT_SERVER, ConnectServerCommand );
+			registerCommand( CONNECTION_SERVER_SUCCESSFUL, ConnectionServerSuccessfulCommand );
+			registerCommand( LOGON_SUCCESS, LogonSuccessfulCommand );
+			registerCommand( APPLICATIONS_LOADED, ApplicationLoadedCommand );
 			
 			registerCommand( LOAD_MODULES, LoadModulesCommand );
 			registerCommand( MODULE_LOADED, ModuleLoadedCommand );

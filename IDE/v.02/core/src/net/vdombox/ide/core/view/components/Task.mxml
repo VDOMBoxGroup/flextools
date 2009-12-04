@@ -11,14 +11,14 @@
 		<![CDATA[
 			
 			[Bindable]
-			private var _taskName : String;
+			private var _description : String;
 			
 			[Bindable]
 			private var _status : String;
 			
-			public function set taskName( value : String ) : void
+			public function set description( value : String ) : void
 			{
-				_taskName = value;
+				_description = value;
 			}
 			
 			public function set status( value : String ) : void
@@ -33,7 +33,7 @@
 		<s:HorizontalLayout />
 	</s:layout>
 	
-	<s:Label text="{ _taskName }" width="100%" />
+	<s:Label text="{ _description }" width="100%" />
 	
 	<s:Label text="{ _status }" width="50" />
 </s:ItemRenderer>

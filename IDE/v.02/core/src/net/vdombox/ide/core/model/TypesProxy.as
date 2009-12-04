@@ -33,9 +33,14 @@ package net.vdombox.ide.core.model
 		
 		public function get types() : Array
 		{
-			return _types;
+			return _types.slice();
 		}
-
+		
+		public function get numTypes() : uint
+		{
+			return _types.length;
+		}
+		
 		public function loadTypes() : void
 		{
 			sendNotification( ApplicationFacade.TYPES_LOADING );
@@ -60,11 +65,9 @@ package net.vdombox.ide.core.model
 			{
 				var typeVO : TypeVO = new TypeVO( type );
 				_types.push( typeVO );
-				
-				sendNotification( ApplicationFacade.TYPE_LOADED, typeVO );
 			}
 			
-			sendNotification( ApplicationFacade.TYPES_LOADED );
+			sendNotification( ApplicationFacade.TYPES_LOADED, types );
 		}
 	}
 }
