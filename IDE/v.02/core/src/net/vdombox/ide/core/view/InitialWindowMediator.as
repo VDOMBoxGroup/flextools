@@ -95,10 +95,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.CHANGE_LOCALE );
 			interests.push( ApplicationFacade.MODULES_LOADED );
 			interests.push( ApplicationFacade.PROCESS_USER_INPUT );
-			interests.push( ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL );
-			interests.push( ApplicationFacade.LOGON_SUCCESS );
-			interests.push( ApplicationFacade.APPLICATIONS_LOADED );
-			
+			interests.push( ApplicationFacade.TYPES_LOADED );
 			
 			return interests;
 		}

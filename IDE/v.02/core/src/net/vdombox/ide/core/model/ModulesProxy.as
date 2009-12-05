@@ -28,8 +28,8 @@ package net.vdombox.ide.core.model
 				<category name="applicationManagment">
 					<module name="ApplicationsManagment" path="app:/modules/ApplicationsManagment.swf"/>
 				</category>
-				<category name="Editor">
-					<module name="Edition" path="app:/modules/Edition.swf"/>
+				<category name="Edition">
+					<module name="Wysiwyg" path="app:/modules/Wysiwyg.swf"/>
 				</category>
 			</modules>
 
@@ -53,6 +53,11 @@ package net.vdombox.ide.core.model
 		public function get categories() : Array
 		{
 			return _categories.slice();
+		}
+		
+		public function get modules() : Array
+		{
+			return modulesList.slice();
 		}
 		
 		override public function onRegister() : void
@@ -104,28 +109,28 @@ package net.vdombox.ide.core.model
 			return null;
 		}
 
-		public function getModuleByID( moduleID : String ) : ModuleVO
-		{
-			var modulesListLength : int = modulesList.length;
-			var moduleVO : ModuleVO;
+//		public function getModuleByID( moduleID : String ) : ModuleVO
+//		{
+//			var modulesListLength : int = modulesList.length;
+//			var moduleVO : ModuleVO;
+//
+//			for ( var i : int = 0; i < modulesListLength; i++ )
+//			{
+//				moduleVO = modulesList[ i ] as ModuleVO;
+//
+//				if ( moduleVO.moduleID == moduleID )
+//					break;
+//			}
+//
+//			return moduleVO;
+//		}
 
-			for ( var i : int = 0; i < modulesListLength; i++ )
-			{
-				moduleVO = modulesList[ i ] as ModuleVO;
-
-				if ( moduleVO.moduleID == moduleID )
-					break;
-			}
-
-			return moduleVO;
-		}
-
-		public function loadModule( moduleVO : ModuleVO ) : void
-		{
-			modulesForLoadQue.push( moduleVO );
-			
-			loadModuleFromQue();
-		}
+//		public function loadModule( moduleVO : ModuleVO ) : void
+//		{
+//			modulesForLoadQue.push( moduleVO );
+//			
+//			loadModuleFromQue();
+//		}
 
 		public function loadModules() : void
 		{

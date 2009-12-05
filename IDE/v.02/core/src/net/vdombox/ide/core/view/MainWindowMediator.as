@@ -91,13 +91,9 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
-			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-//			localeProxy = facade.retrieveProxy( LocaleProxy.NAME ) as LocaleProxy;
-
-//			loadedModules = {};
-//			modulesOrder = [];
-
 			addEventListeners();
+			
+			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;			
 		}
 
 		override public function onRemove() : void
@@ -114,25 +110,25 @@ package net.vdombox.ide.core.view
 		{
 			windowManager.removeWindow( mainWindow );
 		}
-
-		private function removeEventListeners() : void
-		{
-			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
-		}
-
-		private function addEventListeners() : void
-		{
-			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
-		}
-
+	
 		private function get mainWindow() : MainWindow
 		{
 			return viewComponent as MainWindow;
 		}
-
+		
 		private function get toolsetBar() : Group
 		{
 			return mainWindow.toolsetBar;
+		}
+		
+		private function addEventListeners() : void
+		{
+			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
+		}
+		
+		private function removeEventListeners() : void
+		{
+			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
 
 		private function cleanup() : void
@@ -140,11 +136,7 @@ package net.vdombox.ide.core.view
 			var moduleForUnload : ModuleVO;
 
 			for ( var i : int = 0; i < modulesOrder.length; i++ )
-			{
 				moduleForUnload = modulesOrder[ i ];
-
-//				sendNotification( ApplicationFacade.REMOVE_MODULE, moduleForUnload );
-			}
 
 			toolsetBar.removeAllElements();
 			mainWindow.removeAllElements();
@@ -155,7 +147,6 @@ package net.vdombox.ide.core.view
 			if ( modulesList.length > 0 )
 			{
 				var module : ModuleVO = modulesList.shift();
-//				sendNotification( ApplicationFacade.LOAD_MODULE, module );
 				return;
 			}
 
@@ -177,7 +168,7 @@ package net.vdombox.ide.core.view
 			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
 
-			showModulesByCategory( modulesCategories[ 0 ] as ModulesCategoryVO );
+//			showModulesByCategory( modulesCategories[ 0 ] as ModulesCategoryVO );
 		}
 
 		private function placeToolsets() : void
@@ -232,9 +223,9 @@ package net.vdombox.ide.core.view
 
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
-			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
-
-			showModulesByCategory( categoryVO );
+//			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
+//
+//			showModulesByCategory( categoryVO );
 		}
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void

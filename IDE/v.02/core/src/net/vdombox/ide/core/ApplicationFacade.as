@@ -26,6 +26,7 @@ package net.vdombox.ide.core
 		public static const STARTUP : String = "startup";
 		
 		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
+		public static const MAIN_WINDOW_OPENED : String = "mainWindowOpened";
 		
 		public static const CHANGE_LOCALE : String = "changeLocale";
 
@@ -41,7 +42,7 @@ package net.vdombox.ide.core
 		public static const LOGON_SUCCESS : String = "logonSuccess";
 		public static const LOGON_ERROR : String = "logonError";
 		
-		public static const LOGOFF : String = "logoff";
+//		public static const LOGOFF : String = "logoff";
 		public static const LOGOFF_STARTS : String = "logoffStarts";
 		public static const LOGOFF_SUCCESS : String = "logoffSuccess";
 		public static const LOGOFF_ERROR : String = "logoffError";

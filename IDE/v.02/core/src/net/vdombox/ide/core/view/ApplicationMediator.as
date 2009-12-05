@@ -42,8 +42,9 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.STARTUP );
-			interests.push( ApplicationFacade.LOGOFF );
 			interests.push( ApplicationFacade.INITIAL_WINDOW_OPENED );
+			interests.push( ApplicationFacade.MAIN_WINDOW_OPENED );
+			interests.push( ApplicationFacade.TYPES_LOADED );
 
 			return interests;
 		}
@@ -55,19 +56,28 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.STARTUP:
 				{
 					initialWindowMediator.openWindow();
+					
 					break;
 				}
 				
-				case ApplicationFacade.INITIAL_WINDOW_OPENED:
+				case ApplicationFacade.TYPES_LOADED:
 				{
-					sendNotification( ApplicationFacade.LOAD_MODULES );
+					mainWindowMediator.openWindow();
+					
 					break;
 				}
 					
-				case ApplicationFacade.LOGOFF:
+				case ApplicationFacade.INITIAL_WINDOW_OPENED:
 				{
-					if ( mainWindowMediator )
-						mainWindowMediator.closeWindow();
+					sendNotification( ApplicationFacade.LOAD_MODULES );
+					
+					break;
+				}
+				
+				case ApplicationFacade.MAIN_WINDOW_OPENED:
+				{
+					sendNotification( ApplicationFacade.LOAD_MODULES );
+					
 					break;
 				}
 			}
