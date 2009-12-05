@@ -39,6 +39,21 @@ package net.vdombox.ide.modules
 			return MODULE_NAME;
 		}
 		
+		override public function get hasToolset() : Boolean
+		{
+			return true;
+		}
+		
+		override public function get hasSettings() : Boolean
+		{
+			return true;
+		}
+		
+		override public function get hasBody() : Boolean
+		{
+			return true;
+		}
+		
 		override public function getToolset() : void
 		{
 			facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
