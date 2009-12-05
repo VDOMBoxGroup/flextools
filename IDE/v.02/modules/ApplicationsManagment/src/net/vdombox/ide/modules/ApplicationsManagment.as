@@ -11,7 +11,7 @@ package net.vdombox.ide.modules
 
 	public class ApplicationsManagment extends VIModule
 	{
-		public static const MODULE_ID : String = "04D1487D-F14E-0FE5-82F9-E6E8FEFCD2CD";
+		public static const MODULE_ID : String = "net.vdombox.ide.modules.ApplicationsManagment";
 		
 		public static const MODULE_NAME : String = "ApplicationsManagment";
 		
@@ -40,9 +40,29 @@ package net.vdombox.ide.modules
 			return MODULE_NAME;
 		}
 		
+		override public function get hasToolset() : Boolean
+		{
+			return true;
+		}
+		
+		override public function get hasSettings() : Boolean
+		{
+			return true;
+		}
+		
+		override public function get hasBody() : Boolean
+		{
+			return true;
+		}
+		
 		override public function getToolset() : void
 		{
 			facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
+		}
+		
+		override public function getSettingsScreen() : void
+		{
+			facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
 		}
 		
 		override public function getBody() : void

@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.applicationsManagment
 {
 	import net.vdombox.ide.modules.ApplicationsManagment;
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.TearDownCommand;
@@ -14,9 +15,11 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const STARTUP : String = "startup";
 		
 		public static const CREATE_TOOLSET : String = "createToolset";
+		public static const CREATE_SETTINGS_SCREEN : String = "createToolset";
 		public static const CREATE_BODY : String = "createBody";
 		
 		public static const EXPORT_TOOLSET : String = "exportToolset";
+		public static const EXPORT_SETTINGS_SCREEN : String = "exportSettingsScreen";
 		public static const EXPORT_BODY : String = "exportBody";
 		
 		public static const MODULE_SELECTED : String = "moduleSelected";
@@ -60,6 +63,7 @@ package net.vdombox.ide.modules.applicationsManagment
 			super.initializeController();
 			registerCommand( STARTUP, StartupCommand );
 			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
+			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
 			registerCommand( CREATE_BODY, CreateBodyCommand );
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
