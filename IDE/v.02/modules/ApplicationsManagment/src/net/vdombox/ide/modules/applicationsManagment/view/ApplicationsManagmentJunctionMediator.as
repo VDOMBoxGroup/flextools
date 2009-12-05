@@ -37,6 +37,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.EXPORT_TOOLSET );
+			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
 			interests.push( ApplicationFacade.EXPORT_BODY );
 			
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
@@ -76,7 +77,16 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					junction.sendMessage( PipeNames.STDCORE, toolsetMessage );
 					break;
 				}
-
+				
+				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
+				{
+					var settingsScreenMessage : UIQueryMessage = 
+						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( notification.getBody()));
+					
+					junction.sendMessage( PipeNames.STDCORE, settingsScreenMessage );
+					break;
+				}
+					
 				case ApplicationFacade.EXPORT_BODY:
 				{
 					var bodyMessage : UIQueryMessage = 
