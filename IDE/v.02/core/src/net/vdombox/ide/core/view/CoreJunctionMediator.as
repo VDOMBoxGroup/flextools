@@ -144,7 +144,13 @@ package net.vdombox.ide.core.view
 						sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
 						break;
 					}
-
+					
+					case UIQueryMessageNames.SETTINGS_SCREEN_UI:
+					{
+						sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+						break;
+					}
+						
 					case UIQueryMessageNames.BODY_UI:
 					{
 						sendNotification( ApplicationFacade.SHOW_MODULE_BODY, UIQueryMessage( message ).component, UIQueryMessage( message ).name );

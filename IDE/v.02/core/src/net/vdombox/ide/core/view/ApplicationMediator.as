@@ -63,6 +63,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.TYPES_LOADED:
 				{
 					mainWindowMediator.openWindow();
+					initialWindowMediator.closeWindow();
 					
 					break;
 				}

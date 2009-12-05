@@ -14,8 +14,8 @@
 		<s:layout>
 			<s:HorizontalLayout/>
 		</s:layout>
-		<s:List x="42" y="82" height="100%"></s:List>
-		<s:Group width="100%" height="100%">
+		<s:List x="42" y="82" height="100%" id="settingsCategory"></s:List>
+		<s:Group width="100%" height="100%" id="settingsScreenHolder">
 		</s:Group>
 	</s:Group>
 	<s:HGroup width="100%" >

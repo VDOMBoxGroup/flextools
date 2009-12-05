@@ -85,6 +85,7 @@ package net.vdombox.ide.core
 
 //		pipes messages
 		public static const SHOW_MODULE_TOOLSET : String = "showModuleToolset";
+		public static const SHOW_MODULE_SETTINGS_SCREEN : String = "showModuleSettingsScreen";
 		public static const SHOW_MODULE_BODY : String = "showModuleBody";
 
 		public static function getInstance( key : String ) : ApplicationFacade

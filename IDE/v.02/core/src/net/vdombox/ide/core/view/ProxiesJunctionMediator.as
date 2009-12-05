@@ -67,9 +67,7 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.CONNECT_MODULE_TO_PROXIES:
 				{
-					moduleID  = body.toString();
-					
-					var moduleVO : ModuleVO = moduleProxy.getModuleByID( moduleID ) as ModuleVO;
+					var moduleVO : ModuleVO = body as ModuleVO;
 					
 					var module : IPipeAware = moduleVO.module as IPipeAware;
 					

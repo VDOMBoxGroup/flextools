@@ -53,6 +53,17 @@ package net.vdombox.ide.core.view
 
 		private var selectedModuleID : String = "";
 
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
+			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
+			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
+			
+			return interests;
+		}
+		
 		override public function handleNotification( note : INotification ) : void
 		{
 			switch ( note.getName())
@@ -76,17 +87,6 @@ package net.vdombox.ide.core.view
 					break;
 				}
 			}
-		}
-
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-			
-			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
-			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
-			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
-
-			return interests;
 		}
 
 		override public function onRegister() : void
