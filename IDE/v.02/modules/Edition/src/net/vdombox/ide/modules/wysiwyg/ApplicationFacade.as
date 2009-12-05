@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.edition
 {
-	import net.vdombox.ide.modules.Edition;
+	import net.vdombox.ide.modules.Wysiwyg;
 	import net.vdombox.ide.modules.edition.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.edition.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.edition.controller.StartupCommand;
@@ -53,7 +53,7 @@ package net.vdombox.ide.modules.edition
 			super( key );
 		}
 		
-		public function startup( application : Edition ) : void
+		public function startup( application : Wysiwyg ) : void
 		{
 			sendNotification( STARTUP, application );
 		}

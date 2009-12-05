@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.edition.controller
 {
-	import net.vdombox.ide.modules.Edition;
+	import net.vdombox.ide.modules.Wysiwyg;
 	import net.vdombox.ide.modules.edition.view.EditionJunctionMediator;
 	import net.vdombox.ide.modules.edition.view.EditionMediator;
 	
@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.edition.controller
 	{
 		override public function execute( note : INotification ) : void
 		{
-			var application : Edition = note.getBody() as Edition;
+			var application : Wysiwyg = note.getBody() as Wysiwyg;
 			
 			facade.registerMediator( new EditionJunctionMediator() );
 			facade.registerMediator( new EditionMediator( application ) )

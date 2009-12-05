@@ -9,7 +9,7 @@ package net.vdombox.ide.modules
 	import net.vdombox.ide.modules.edition.ApplicationFacade;
 	import net.vdombox.ide.modules.edition.view.components.Body;
 
-	public class Edition extends VIModule
+	public class Wysiwyg extends VIModule
 	{
 		public static const MODULE_ID : String = "net.vdombox.ide.modules.Edition";
 		
@@ -17,7 +17,7 @@ package net.vdombox.ide.modules
 		
 		public static const TEAR_DOWN:String = "tearDown";
 		
-		public function Edition()
+		public function Wysiwyg()
 		{
 			super( ApplicationFacade.getInstance( MODULE_ID ));
 			ApplicationFacade( facade ).startup( this );
