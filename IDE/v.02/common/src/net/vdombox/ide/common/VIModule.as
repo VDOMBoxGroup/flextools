@@ -32,7 +32,7 @@ package net.vdombox.ide.common
 			return false;
 		}
 		
-		public function get hasPropertyScreen() : Boolean
+		public function get hasSettings() : Boolean
 		{
 			return false;
 		}
@@ -46,7 +46,7 @@ package net.vdombox.ide.common
 		{
 		}
 		
-		public function getPropertyScreen() : void
+		public function getSettingsScreen() : void
 		{
 		}
 		

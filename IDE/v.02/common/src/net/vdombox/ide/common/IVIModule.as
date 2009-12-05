@@ -8,13 +8,13 @@ package net.vdombox.ide.common
 
 		function get hasToolset() : Boolean;
 
-		function get hasPropertyScreen() : Boolean;
+		function get hasSettings() : Boolean;
 
 		function get hasBody() : Boolean;
 
 		function getToolset() : void;
 
-		function getPropertyScreen() : void;
+		function getSettingsScreen() : void;
 
 		function getBody() : void;
 
