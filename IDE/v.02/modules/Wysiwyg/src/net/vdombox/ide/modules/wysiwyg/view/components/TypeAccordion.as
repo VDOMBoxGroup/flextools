@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.edition.view.components
+package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import mx.collections.ArrayCollection;
 	import mx.collections.IViewCursor;
@@ -119,7 +119,7 @@ package net.vdombox.ide.modules.edition.view.components
 				categoryNameLocalized = "";
 
 				if ( STANDART_CATEGORIES.indexOf( categoryName ) != -1 )
-					categoryNameLocalized = resourceManager.getString( "Edition", categoryName );
+					categoryNameLocalized = resourceManager.getString( "wysiwyg", categoryName );
 
 				else if ( categoryName.match( phraseRE ))
 				{
@@ -161,7 +161,7 @@ package net.vdombox.ide.modules.edition.view.components
 			for each ( var category : String in STANDART_CATEGORIES )
 			{
 
-				labelValue = resourceManager.getString( "Edition", category );
+				labelValue = resourceManager.getString( "wysiwyg", category );
 				insertCategory( category, labelValue );
 			}
 		}

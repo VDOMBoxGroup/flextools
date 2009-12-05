@@ -6,14 +6,13 @@ package net.vdombox.ide.modules
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.common.VIModule;
-	import net.vdombox.ide.modules.edition.ApplicationFacade;
-	import net.vdombox.ide.modules.edition.view.components.Body;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 
 	public class Wysiwyg extends VIModule
 	{
-		public static const MODULE_ID : String = "net.vdombox.ide.modules.Edition";
+		public static const MODULE_ID : String = "net.vdombox.ide.modules.Wysiwyg";
 		
-		public static const MODULE_NAME : String = "Edition";
+		public static const MODULE_NAME : String = "Wysiwyg";
 		
 		public static const TEAR_DOWN:String = "tearDown";
 		

@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.edition.view.components
+package net.vdombox.ide.modules.wysiwyg.view.components
 {
 
 	import flash.geom.Rectangle;

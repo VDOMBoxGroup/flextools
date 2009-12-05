@@ -1,4 +1,4 @@
-package vdom.components.edition.containers
+package vdom.components.wysiwyg.containers
 {
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
@@ -235,7 +235,7 @@ package vdom.components.edition.containers
 		{
 			var interfaceType : uint;
 
-			if ( item && item.editionableAttributes.length && item.objectId )
+			if ( item && item.wysiwygableAttributes.length && item.objectId )
 			{
 				var type : XML = dataManager.getTypeByObjectId( IItem( selectedObject ).objectId );
 				interfaceType = type.Information.InterfaceType;
@@ -624,9 +624,9 @@ package vdom.components.edition.containers
 			if ( currentToolBar )
 				currentToolBar.close();
 
-			if ( changeFlag && IItem( currentObject ).editionableAttributes[ 0 ] && currentToolBar && !currentToolBar.selfChanged )
+			if ( changeFlag && IItem( currentObject ).wysiwygableAttributes[ 0 ] && currentToolBar && !currentToolBar.selfChanged )
 			{
-				var attributes : Object = IItem( currentObject ).editionableAttributes[ 0 ].attributes;
+				var attributes : Object = IItem( currentObject ).wysiwygableAttributes[ 0 ].attributes;
 				var attributeValue : String;
 				var xmlCharRegExp : RegExp = /[<>&"]+/;
 
@@ -663,10 +663,10 @@ package vdom.components.edition.containers
 			if ( currentToolBar )
 				currentToolBar.close();
 
-			if ( selectedObject && IItem( selectedObject ).editionableAttributes[ 0 ] && currentToolBar && !currentToolBar.selfChanged )
+			if ( selectedObject && IItem( selectedObject ).wysiwygableAttributes[ 0 ] && currentToolBar && !currentToolBar.selfChanged )
 			{
 
-				var attributes : Object = IItem( selectedObject ).editionableAttributes[ 0 ].attributes;
+				var attributes : Object = IItem( selectedObject ).wysiwygableAttributes[ 0 ].attributes;
 				var attributeValue : String;
 				var xmlCharRegExp : RegExp = /[<>&"]+/;
 				var newAttribute : Object = {};

@@ -1,8 +1,8 @@
-package net.vdombox.ide.modules.edition.view
+package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.modules.edition.view.components.Body;
+	import net.vdombox.ide.modules.wysiwyg.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;

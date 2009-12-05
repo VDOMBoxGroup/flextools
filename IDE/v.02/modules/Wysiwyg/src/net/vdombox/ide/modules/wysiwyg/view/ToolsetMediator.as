@@ -1,12 +1,12 @@
-package net.vdombox.ide.modules.edition.view
+package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.MouseEvent;
 
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 
-	import net.vdombox.ide.modules.edition.ApplicationFacade;
-	import net.vdombox.ide.modules.edition.view.components.Toolset;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.view.components.Toolset;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

@@ -20,5 +20,5 @@
 		<s:HorizontalLayout />
 	</s:layout>
 	
-	<s:Button label="Edition"/>
+	<s:Button label="wysiwyg"/>
 </s:Group>

@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.edition.view
+package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.core.UIComponent;
 	
@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.edition.view
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.modules.edition.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -24,11 +24,11 @@ package net.vdombox.ide.modules.edition.view
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
 
-	public class EditionJunctionMediator extends LoggingJunctionMediator
+	public class WysiwygJunctionMediator extends LoggingJunctionMediator
 	{
-		public static const NAME : String = "EditionJunctionMediator";
+		public static const NAME : String = "WysiwygJunctionMediator";
 
-		public function EditionJunctionMediator()
+		public function WysiwygJunctionMediator()
 		{
 			super( NAME, new Junction());
 		}

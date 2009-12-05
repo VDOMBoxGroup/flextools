@@ -1,4 +1,4 @@
-package vdom.components.edition.containers {
+package vdom.components.wysiwyg.containers {
 
 import flash.display.DisplayObject;
 import flash.events.Event;
@@ -32,7 +32,7 @@ import mx.utils.StringUtil;
 import vdom.containers.ClosablePanel;
 import vdom.controls.NumberField;
 import vdom.controls.colorPicker.ColorPicker;
-import vdom.controls.externalEditionorButton.ExternalEditionorButton;
+import vdom.controls.externalwysiwygorButton.ExternalwysiwygorButton;
 import vdom.controls.multiline.Multiline;
 import vdom.controls.resourceBrowser.ResourceBrowserButton;
 import vdom.events.AttributesPanelEvent;
@@ -409,7 +409,7 @@ public class AttributesPanel extends ClosablePanel {
 		var color : String = "";
 		
 		valueContainer = new TextInput();
-		TextInput( valueContainer ).editionable = false;
+		TextInput( valueContainer ).wysiwygable = false;
 		valueContainer.setStyle( "borderStyle", "none" );
 		valueContainer.setStyle( "backgroundAlpha", .0 );
 		valueContainer.text = objectID;
@@ -431,7 +431,7 @@ public class AttributesPanel extends ClosablePanel {
 		color = getColorByGroup( 1 );			
 		
 		insertAttribute(
-			resourceManager.getString( "Edition","attributes_name" ),
+			resourceManager.getString( "wysiwyg","attributes_name" ),
 			valueContainer,
 			color
 		);
@@ -614,11 +614,11 @@ public class AttributesPanel extends ClosablePanel {
 					break;
 				}
 				
-				case "externaleditionor" : 
+				case "externalwysiwygor" : 
 				{
 					var resId : String = String( codeInterface["value"] ).split( "," )[1];
 					
-					valueContainer = new ExternalEditionorButton(
+					valueContainer = new ExternalwysiwygorButton(
 						dataManager.currentApplicationId, 
 						objectDescription.@ID,
 						resId );  
@@ -823,7 +823,7 @@ public class AttributesPanel extends ClosablePanel {
 				else
 					value = "";
 			}
-			else if ( fieldsArray[attrName][0] is ExternalEditionorButton )
+			else if ( fieldsArray[attrName][0] is ExternalwysiwygorButton )
 			{
 				if( fieldsArray[ attrName ][ 0 ][ fieldsArray[ attrName ][ 1 ] ] == "modified" )
 				{

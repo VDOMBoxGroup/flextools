@@ -1,10 +1,10 @@
-package net.vdombox.ide.modules.edition
+package net.vdombox.ide.modules.wysiwyg
 {
 	import net.vdombox.ide.modules.Wysiwyg;
-	import net.vdombox.ide.modules.edition.controller.CreateBodyCommand;
-	import net.vdombox.ide.modules.edition.controller.CreateToolsetCommand;
-	import net.vdombox.ide.modules.edition.controller.StartupCommand;
-	import net.vdombox.ide.modules.edition.controller.TearDownCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.TearDownCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
