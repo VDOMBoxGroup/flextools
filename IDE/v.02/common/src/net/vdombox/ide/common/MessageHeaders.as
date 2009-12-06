@@ -8,6 +8,9 @@ package net.vdombox.ide.common
 		//		modules to core
 		public static const SELECT_MODULE : String = "selectModule";
 		
+		public static const RETRIEVE_SETTINGS : String = "retrieveSettings";
+		public static const SAVE_SETTINGS : String = "saveSettings";
+		
 		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
 		public static const PROXIES_PIPE_CONNECTED : String = "proxiesPipeConnected";
 		

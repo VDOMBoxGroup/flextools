@@ -54,6 +54,10 @@ package net.vdombox.ide.common
 		{
 		}
 		
+		public function initializeSettings() : void
+		{
+		}
+		
 		public function tearDown() : void
 		{
 		}

@@ -17,7 +17,9 @@ package net.vdombox.ide.common
 		function getSettingsScreen() : void;
 
 		function getBody() : void;
-
+		
+		function initializeSettings() : void;
+		
 		function tearDown() : void;
 	}
 }
