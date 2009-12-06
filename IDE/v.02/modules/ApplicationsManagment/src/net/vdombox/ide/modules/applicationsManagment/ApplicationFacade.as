@@ -4,6 +4,9 @@ package net.vdombox.ide.modules.applicationsManagment
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.GetSettingsCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.TearDownCommand;
 	
@@ -22,15 +25,26 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const EXPORT_SETTINGS_SCREEN : String = "exportSettingsScreen";
 		public static const EXPORT_BODY : String = "exportBody";
 		
+//		settings
+		public static const INITIALIZE_SETTINGS : String = "initializeSettings";
+		
+		public static const GET_SETTINGS : String = "getSettings";
+		public static const SETTINGS_GETTED : String = "settingsGetted";
+		public static const GET_SAVED_SETTINGS : String = "getSavedSettings";
+		public static const SAVED_SETTINGS_GETTED : String = "savedSettingsGetted";
+		
+		public static const SET_SETTINGS : String = "setSettings";
+		public static const SETTINGS_SETTED : String = "settingsSetted";
+		public static const SAVE_SETTINGS : String = "saveSettings";
+		
+//		selection
 		public static const MODULE_SELECTED : String = "moduleSelected";
 		public static const MODULE_DESELECTED : String = "moduleDeselected";
 		
 		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
 		
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
-//		public static const GET_SELECTED_GETTED : String = "selectedApplicationGetted";
 		public static const SET_SELECTED_APPLICATION : String = "setSelectedApplication";
-		
 		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
 		
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationsList";
@@ -65,6 +79,9 @@ package net.vdombox.ide.modules.applicationsManagment
 			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
 			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
 			registerCommand( CREATE_BODY, CreateBodyCommand );
+			registerCommand( GET_SETTINGS, GetSettingsCommand );
+			registerCommand( SET_SETTINGS, SetSettingsCommand );
+			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
 	}

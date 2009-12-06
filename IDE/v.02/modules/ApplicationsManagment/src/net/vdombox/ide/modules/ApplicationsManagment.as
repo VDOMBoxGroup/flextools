@@ -7,7 +7,6 @@ package net.vdombox.ide.modules
 	
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
-	import net.vdombox.ide.modules.applicationsManagment.view.components.Body;
 
 	public class ApplicationsManagment extends VIModule
 	{
@@ -68,6 +67,11 @@ package net.vdombox.ide.modules
 		override public function getBody() : void
 		{
 			facade.sendNotification( ApplicationFacade.CREATE_BODY );
+		}
+		
+		override public function initializeSettings() : void
+		{
+			facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
 		}
 	}
 }

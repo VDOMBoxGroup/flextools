@@ -40,6 +40,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
 			interests.push( ApplicationFacade.EXPORT_BODY );
 			
+			interests.push( ApplicationFacade.GET_SAVED_SETTINGS );
+			interests.push( ApplicationFacade.SAVE_SETTINGS );
+			
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
@@ -60,12 +63,14 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case JunctionMediator.ACCEPT_INPUT_PIPE:
 				{
 					processInputPipe( notification );
+					
 					break;
 				}
 
 				case JunctionMediator.ACCEPT_OUTPUT_PIPE:
 				{
 					processOutputPipe( notification );
+					
 					break;
 				}
 
@@ -75,6 +80,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.TOOLSET_UI, UIComponent( notification.getBody()));
 					
 					junction.sendMessage( PipeNames.STDCORE, toolsetMessage );
+					
 					break;
 				}
 				
@@ -84,6 +90,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( notification.getBody()));
 					
 					junction.sendMessage( PipeNames.STDCORE, settingsScreenMessage );
+					
 					break;
 				}
 					
@@ -93,15 +100,36 @@ package net.vdombox.ide.modules.applicationsManagment.view
 						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.BODY_UI, UIComponent( notification.getBody()));
 					
 					junction.sendMessage( PipeNames.STDCORE, bodyMessage );
+					
 					break;
 				}
 				
+				case ApplicationFacade.GET_SAVED_SETTINGS:
+				{
+					var message : IPipeMessage = new Message( Message.NORMAL, MessageHeaders.RETRIEVE_SETTINGS, multitonKey );
+					
+					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					break;
+				}
+				
+				case ApplicationFacade.SAVE_SETTINGS:
+				{
+					var message : IPipeMessage = new Message( Message.NORMAL, MessageHeaders.SAVE_SETTINGS, 
+															  { moduleID : multitonKey, settings : notification.getBody() } );
+					
+					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.GET_APPLICATIONS_LIST:
 				{
 					proxiesPipeMessage = 
 						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.APPLICATIONS );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					
 					break;
 				}
 					
@@ -111,6 +139,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.SELECTED_APPLICATION );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					
 					break;
 				}
 				
@@ -121,6 +150,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 												PPMServerTargetNames.SELECTED_APPLICATION, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					
 					break;
 				}
 				
@@ -131,6 +161,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 												PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					
 					break;
 				}
 			}

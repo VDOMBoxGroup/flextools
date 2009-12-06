@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.controller
 {
 	import net.vdombox.ide.modules.ApplicationsManagment;
+	import net.vdombox.ide.modules.applicationsManagment.model.SettingsProxy;
 	import net.vdombox.ide.modules.applicationsManagment.view.ApplicationsManagmentJunctionMediator;
 	import net.vdombox.ide.modules.applicationsManagment.view.ApplicationsManagmentMediator;
 	
@@ -15,6 +16,8 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 			
 			facade.registerMediator( new ApplicationsManagmentJunctionMediator() );
 			facade.registerMediator( new ApplicationsManagmentMediator( application ) )
+				
+			facade.registerProxy( new SettingsProxy() );
 		}
 	}
 }
