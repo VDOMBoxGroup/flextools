@@ -7,7 +7,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.IVIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
-	import net.vdombox.ide.core.model.SettingsProxy;
+	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	
@@ -73,7 +73,7 @@ package net.vdombox.ide.core.view
 			settingsWindow.settingsCategory.addEventListener( IndexChangeEvent.CHANGE, settingsCategory_changeHandler );
 			
 			var modulesProxy : ModulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
+			var settingsProxy : SettingsStorageProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
 
 			var modules : Array = modulesProxy.modules;
 			

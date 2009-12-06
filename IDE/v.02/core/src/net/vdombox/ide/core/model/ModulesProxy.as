@@ -109,28 +109,28 @@ package net.vdombox.ide.core.model
 			return null;
 		}
 
-//		public function getModuleByID( moduleID : String ) : ModuleVO
-//		{
-//			var modulesListLength : int = modulesList.length;
-//			var moduleVO : ModuleVO;
-//
-//			for ( var i : int = 0; i < modulesListLength; i++ )
-//			{
-//				moduleVO = modulesList[ i ] as ModuleVO;
-//
-//				if ( moduleVO.moduleID == moduleID )
-//					break;
-//			}
-//
-//			return moduleVO;
-//		}
+		public function getModuleByID( moduleID : String ) : ModuleVO
+		{
+			var modulesListLength : int = modulesList.length;
+			var moduleVO : ModuleVO;
 
-//		public function loadModule( moduleVO : ModuleVO ) : void
-//		{
-//			modulesForLoadQue.push( moduleVO );
-//			
-//			loadModuleFromQue();
-//		}
+			for ( var i : int = 0; i < modulesListLength; i++ )
+			{
+				moduleVO = modulesList[ i ] as ModuleVO;
+
+				if ( moduleVO.moduleID == moduleID )
+					break;
+			}
+
+			return moduleVO;
+		}
+
+		public function loadModule( moduleVO : ModuleVO ) : void
+		{
+			modulesForLoadQue.push( moduleVO );
+			
+			loadModuleFromQue();
+		}
 
 		public function loadModules() : void
 		{

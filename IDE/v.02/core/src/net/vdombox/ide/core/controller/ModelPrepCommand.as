@@ -4,7 +4,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.SettingsProxy;
+	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -15,7 +15,7 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			facade.registerProxy( new SharedObjectProxy() );
-			facade.registerProxy( new SettingsProxy() );			
+			facade.registerProxy( new SettingsStorageProxy() );			
 			facade.registerProxy( new LocalesProxy() );
 			facade.registerProxy( new ModulesProxy() );			
 			facade.registerProxy( new PipesProxy() );

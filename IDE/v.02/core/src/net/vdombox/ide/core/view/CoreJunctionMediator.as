@@ -181,6 +181,18 @@ package net.vdombox.ide.core.view
 						sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message.getBody());
 						break;
 					}
+						
+					case MessageHeaders.RETRIEVE_SETTINGS:
+					{
+						sendNotification( ApplicationFacade.GET_MODULE_SETTINGS, message.getBody());
+						break;
+					}
+						
+					case MessageHeaders.SAVE_SETTINGS:
+					{
+						sendNotification( ApplicationFacade.SET_MODULE_SETTINGS, message.getBody());
+						break;
+					}
 				}
 			}
 		}

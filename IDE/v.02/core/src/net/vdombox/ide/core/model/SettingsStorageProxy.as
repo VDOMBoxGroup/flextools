@@ -5,18 +5,18 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 	
-	public class SettingsProxy extends Proxy implements IProxy
+	public class SettingsStorageProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "SettingsProxy";
 		
 		private const SETTINGS_PATH : String = "app-storage";
 		
-		public function SettingsProxy( data : Object = null )
+		public function SettingsStorageProxy( data : Object = null )
 		{
 			super( NAME, data );
 		}
 		
-		public function getSettings( settingsName : String ) : String
+		public function loadSettings( settingsName : String ) : String
 		{
 			return "";
 		}
