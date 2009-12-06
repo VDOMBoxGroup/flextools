@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
@@ -56,8 +57,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var pipe : IPipeFitting;
 			var type : String = notification.getType();
 			var body : Object = notification.getBody();
-			var proxiesPipeMessage : ProxiesPipeMessage;
-
+//			var proxiesPipeMessage : ProxiesPipeMessage;
+			
+			var message : IPipeMessage;
+			
 			switch ( notification.getName())
 			{
 				case JunctionMediator.ACCEPT_INPUT_PIPE:
@@ -76,37 +79,37 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
-					var toolsetMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.TOOLSET_UI, UIComponent( notification.getBody()));
+					message = 
+						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.TOOLSET_UI, UIComponent( body ));
 					
-					junction.sendMessage( PipeNames.STDCORE, toolsetMessage );
+					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
 				}
 				
 				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
 				{
-					var settingsScreenMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( notification.getBody()));
+					message = 
+						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ));
 					
-					junction.sendMessage( PipeNames.STDCORE, settingsScreenMessage );
+					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
 				}
 					
 				case ApplicationFacade.EXPORT_BODY:
 				{
-					var bodyMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.BODY_UI, UIComponent( notification.getBody()));
+					message = 
+						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.BODY_UI, UIComponent( body ));
 					
-					junction.sendMessage( PipeNames.STDCORE, bodyMessage );
+					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
 				}
 				
 				case ApplicationFacade.GET_SAVED_SETTINGS:
 				{
-					var message : IPipeMessage = new Message( Message.NORMAL, MessageHeaders.RETRIEVE_SETTINGS, multitonKey );
+					message = new SimpleMessage( MessageHeaders.RETRIEVE_MODULE_SETTINGS, null, multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
@@ -115,8 +118,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				
 				case ApplicationFacade.SAVE_SETTINGS:
 				{
-					var message : IPipeMessage = new Message( Message.NORMAL, MessageHeaders.SAVE_SETTINGS, 
-															  { moduleID : multitonKey, settings : notification.getBody() } );
+					message = new SimpleMessage( MessageHeaders.SAVE_MODULE_SETTINGS, body, multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
@@ -125,42 +127,42 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					
 				case ApplicationFacade.GET_APPLICATIONS_LIST:
 				{
-					proxiesPipeMessage = 
+					message = 
 						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.APPLICATIONS );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}
 					
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					proxiesPipeMessage = 
+					message = 
 						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.SELECTED_APPLICATION );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}
 				
 				case ApplicationFacade.SET_SELECTED_APPLICATION:
 				{
-					proxiesPipeMessage = 
+					message = 
 						new ProxiesPipeMessage( PPMOperationNames.UPDATE, PPMPlaceNames.SERVER, 
 												PPMServerTargetNames.SELECTED_APPLICATION, body );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}
 				
 				case ApplicationFacade.GET_RESOURCE:
 				{
-					proxiesPipeMessage = 
+					message = 
 						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.RESOURCES, 
 												PPMResourcesTargetNames.RESOURCE, body );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
 				}
@@ -204,10 +206,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 					
-				case MessageHeaders.PROXIES_PIPE_CONNECTED:
+				case MessageHeaders.RETRIEVE_MODULE_SETTINGS:
 				{
-					
-					break;
+//					if( recepientKey == multitonKey )
+//					break;
 				}
 			}
 		}

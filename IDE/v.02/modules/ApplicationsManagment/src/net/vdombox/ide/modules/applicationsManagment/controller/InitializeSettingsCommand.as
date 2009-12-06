@@ -12,8 +12,8 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 		override public function execute(notification:INotification) : void
 		{
 			var settingeProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
-			var settingsVO : SettingsVO = settingeProxy.defaultSettings;
-			settingeProxy.setSettings( settingsVO );
+			var settingsVO : Object = settingeProxy.defaultSettings;
+//			settingeProxy.setSettings( settingsVO );
 			sendNotification( ApplicationFacade.SAVE_SETTINGS, settingsVO );
 		}
 	}

@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.model
 {
+	import mx.collections.ArrayList;
+	
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	
@@ -16,9 +18,14 @@ package net.vdombox.ide.modules.applicationsManagment.model
 		}
 		
 		private var _settings : SettingsVO;
-		private var _defaultSettings : SettingsVO;
+		private var _defaultSettings : Object;
 		
-		public function get defaultSettings() : SettingsVO
+		override public function onRegister() : void
+		{
+			_defaultSettings = { one : "test", two : [ "test1", [ 1, 2, 3 ], new ArrayList() ] };
+		}
+		
+		public function get defaultSettings() : Object
 		{
 			return _defaultSettings;
 		}
