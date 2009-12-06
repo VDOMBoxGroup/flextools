@@ -1,34 +1,63 @@
 package net.vdombox.ide.core.model
 {
 	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
+	import flash.utils.ByteArray;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	
+
 	public class SettingsStorageProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "SettingsProxy";
-		
+
 		private const SETTINGS_PATH : String = "app-storage";
-		
+
 		public function SettingsStorageProxy( data : Object = null )
 		{
 			super( NAME, data );
 		}
-		
-		public function loadSettings( settingsName : String ) : String
+
+		public function loadSettings( settingsName : String ) : Object
 		{
-			return "";
+			return readObjectFromFile( "settings/" + settingsName );
 		}
-		
-		public function saveSettings( settingsName : String, settingsValue : String ) : Boolean
+
+		public function saveSettings( settingsID : String, settingsValue : Object ) : void
 		{
-			return true;
+			writeObjectToFile( settingsValue, "settings/" + settingsID );
 		}
-		
+
 		override public function onRegister() : void
 		{
-			var path : String = File.applicationStorageDirectory.nativePath;	
+			var path : String = File.applicationStorageDirectory.nativePath;
+		}
+
+		private function writeObjectToFile( object : Object, fname : String ) : void
+		{
+			var file : File = File.applicationStorageDirectory.resolvePath( fname );
+
+			var fileStream : FileStream = new FileStream();
+			fileStream.open( file, FileMode.WRITE );
+			fileStream.writeObject( object );
+			fileStream.close();
+		}
+
+		private function readObjectFromFile( fname : String ) : Object
+		{
+			var file : File = File.applicationStorageDirectory.resolvePath( fname );
+
+			if ( file.exists )
+			{
+				var obj : Object;
+				var fileStream : FileStream = new FileStream();
+				fileStream.open( file, FileMode.READ );
+				obj = fileStream.readObject();
+				fileStream.close();
+				return obj;
+			}
+			return null;
 		}
 	}
 }

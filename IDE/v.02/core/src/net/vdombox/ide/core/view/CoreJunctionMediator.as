@@ -4,6 +4,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.MessageHeaders;
 	import net.vdombox.ide.common.PipeNames;
+	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -54,6 +55,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
 			interests.push( ApplicationFacade.SELECTED_MODULE_CHANGED );
 			interests.push( ApplicationFacade.MODULE_TO_PROXIES_CONNECTED );
+			interests.push( ApplicationFacade.MODULE_SETTINGS_GETTED );
 			
 			return interests;
 		}
@@ -126,6 +128,18 @@ package net.vdombox.ide.core.view
 					break;
 				}
 				
+				case ApplicationFacade.MODULE_SETTINGS_GETTED:
+				{
+					junction.sendMessage( PipeNames.STDOUT, notification.getBody() as IPipeMessage );
+					break;
+				}
+					
+				case ApplicationFacade.MODULE_SETTINGS_SETTED:
+				{
+					junction.sendMessage( PipeNames.STDOUT, notification.getBody() as IPipeMessage );
+					break;
+				}
+					
 				default:
 				{
 					super.handleNotification( notification );
@@ -136,70 +150,69 @@ package net.vdombox.ide.core.view
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
 			if ( message is UIQueryMessage )
-			{
-				switch ( UIQueryMessage( message ).name )
-				{
-					case UIQueryMessageNames.TOOLSET_UI:
-					{
-						sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
-						break;
-					}
-					
-					case UIQueryMessageNames.SETTINGS_SCREEN_UI:
-					{
-						sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
-						break;
-					}
-						
-					case UIQueryMessageNames.BODY_UI:
-					{
-						sendNotification( ApplicationFacade.SHOW_MODULE_BODY, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
-						break;
-					}
-				}
-			}
+				processUIQuieryMessage( message as UIQueryMessage );
+			else if ( message is SimpleMessage )
+				processSimpleMessage( message as SimpleMessage );
 			else if ( message is LogMessage )
-			{
 				trace( message.getBody() );
-			}
-			else if ( message is Message )
+		}
+		
+		private function processUIQuieryMessage( message : UIQueryMessage ) : void
+		{
+			switch ( UIQueryMessage( message ).name )
 			{
-				switch ( message.getHeader())
+				case UIQueryMessageNames.TOOLSET_UI:
 				{
-					case MessageHeaders.SELECT_MODULE:
-					{
-						sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getBody());
-						break;
-					}
-					case MessageHeaders.CONNECT_PROXIES_PIPE:
-					{
-						sendNotification( ApplicationFacade.CONNECT_MODULE_TO_PROXIES, message.getBody());
-						break;
-					}
-					case MessageHeaders.DISCONNECT_PROXIES_PIPE:
-					{
-						sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message.getBody());
-						break;
-					}
-						
-					case MessageHeaders.RETRIEVE_SETTINGS:
-					{
-						sendNotification( ApplicationFacade.GET_MODULE_SETTINGS, message.getBody());
-						break;
-					}
-						
-					case MessageHeaders.SAVE_SETTINGS:
-					{
-						sendNotification( ApplicationFacade.SET_MODULE_SETTINGS, message.getBody());
-						break;
-					}
+					sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+					break;
+				}
+					
+				case UIQueryMessageNames.SETTINGS_SCREEN_UI:
+				{
+					sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+					break;
+				}
+					
+				case UIQueryMessageNames.BODY_UI:
+				{
+					sendNotification( ApplicationFacade.SHOW_MODULE_BODY, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+					break;
 				}
 			}
 		}
 		
-		private function connectProxiesPipe( moduleID : String ) : void
+		private function processSimpleMessage( message : SimpleMessage ) : void
 		{
-			var d : * = "";
+			switch ( message.getHeader())
+			{
+				case MessageHeaders.SELECT_MODULE:
+				{
+					sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message );
+					break;
+				}
+				case MessageHeaders.CONNECT_PROXIES_PIPE:
+				{
+					sendNotification( ApplicationFacade.CONNECT_MODULE_TO_PROXIES, message );
+					break;
+				}
+				case MessageHeaders.DISCONNECT_PROXIES_PIPE:
+				{
+					sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message );
+					break;
+				}
+					
+				case MessageHeaders.RETRIEVE_MODULE_SETTINGS:
+				{
+					sendNotification( ApplicationFacade.RETRIEVE_MODULE_SETTINGS, message );
+					break;
+				}
+					
+				case MessageHeaders.SAVE_MODULE_SETTINGS:
+				{
+					sendNotification( ApplicationFacade.SAVE_MODULE_SETTINGS, message );
+					break;
+				}
+			}
 		}
 	}
 }

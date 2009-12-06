@@ -5,14 +5,14 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
 	import net.vdombox.ide.core.controller.ConnectServerCommand;
 	import net.vdombox.ide.core.controller.ConnectionServerSuccessfulCommand;
-	import net.vdombox.ide.core.controller.GetModuleSettings;
+	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
 	import net.vdombox.ide.core.controller.LogonSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
-	import net.vdombox.ide.core.controller.SetModuleSettings;
+	import net.vdombox.ide.core.controller.SaveModuleSettings;
 	import net.vdombox.ide.core.controller.TypesProxyRequestCommand;
 	import net.vdombox.ide.core.model.business.SOAP;
 	
@@ -64,8 +64,10 @@ package net.vdombox.ide.core
 		public static const MODULE_TO_PROXIES_DISCONNECTED : String = "moduleToProxiesDisconnected";
 		
 //		Settings
-		public static const GET_MODULE_SETTINGS : String = "getModuleSettings";
-		public static const SET_MODULE_SETTINGS : String = "setModuleSettings";
+		public static const RETRIEVE_MODULE_SETTINGS : String = "getModuleSettings";
+		public static const MODULE_SETTINGS_GETTED : String = "moduleSettingsGetted";
+		public static const SAVE_MODULE_SETTINGS : String = "setModuleSettings";
+		public static const MODULE_SETTINGS_SETTED : String = "moduleSettingsSetted";
 		
 //		Proxies		
 		public static const RESOURCES_PROXY_REQUEST : String = "resourcesProxyRequest";
@@ -134,8 +136,8 @@ package net.vdombox.ide.core
 			registerCommand( LOAD_MODULES, LoadModulesCommand );
 			registerCommand( MODULE_LOADED, ModuleLoadedCommand );
 			
-			registerCommand( GET_MODULE_SETTINGS, GetModuleSettings );
-			registerCommand( SET_MODULE_SETTINGS, SetModuleSettings );
+			registerCommand( RETRIEVE_MODULE_SETTINGS, RetrieveModuleSettings );
+			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
 			
 			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
 			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
