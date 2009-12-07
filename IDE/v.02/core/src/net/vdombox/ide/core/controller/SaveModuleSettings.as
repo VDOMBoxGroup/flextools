@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.controller
 {
+	import net.vdombox.ide.common.SimpleMessage;
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.SettingsStorageProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -10,9 +12,13 @@ package net.vdombox.ide.core.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var settingsStorageProxy : SettingsStorageProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
-			var settings : Object = notification.getBody();
-			settingsStorageProxy.saveSettings( settings.moduleID, settings.settings );
-			var d : * = settingsStorageProxy.loadSettings( settings.moduleID );
+
+			var simpleMessage : SimpleMessage = notification.getBody() as SimpleMessage;
+
+			settingsStorageProxy.saveSettings( simpleMessage.getRecepientKey(), simpleMessage.getBody());
+			
+			simpleMessage.setAnswerFlag( true )
+			sendNotification( ApplicationFacade.MODULE_SETTINGS_SETTED, simpleMessage );
 		}
 	}
 }
