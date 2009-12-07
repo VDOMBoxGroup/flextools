@@ -41,7 +41,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
 			interests.push( ApplicationFacade.EXPORT_BODY );
 			
-			interests.push( ApplicationFacade.GET_SAVED_SETTINGS );
+			interests.push( ApplicationFacade.RETRIEVE_SETTINGS );
 			interests.push( ApplicationFacade.SAVE_SETTINGS );
 			
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
@@ -107,7 +107,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 				
-				case ApplicationFacade.GET_SAVED_SETTINGS:
+				case ApplicationFacade.RETRIEVE_SETTINGS:
 				{
 					message = new SimpleMessage( MessageHeaders.RETRIEVE_MODULE_SETTINGS, null, multitonKey );
 					
@@ -173,43 +173,47 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
-			var recepientKey : String = message.getBody().toString();
+			var simpleMessage : SimpleMessage = message as SimpleMessage;
 			
-			switch ( message.getHeader())
+			var recepientKey : String = simpleMessage.getRecepientKey();
+			
+			switch ( simpleMessage.getHeader())
 			{
 				case MessageHeaders.MODULE_SELECTED:
 				{
-					var toolsetMediator : ToolsetMediator = facade.retrieveMediator( ToolsetMediator.NAME ) as ToolsetMediator;
-					
 					if( recepientKey == multitonKey )
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
 					else
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
 					
 					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.CONNECT_PROXIES_PIPE, multitonKey));
+					
 					break;
 				}
 				
 				case MessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
-					if( recepientKey == multitonKey )
-					{
-						junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
-						
-						junction.sendMessage( 
-							PipeNames.PROXIESOUT, 
-							new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.APPLICATION, PPMServerTargetNames.APPLICATION, { test : "test" } )
-							);
-						
-//						junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.DISCONNECT_PROXIES_PIPE, multitonKey ) );
-					}
+					if( recepientKey != multitonKey )
+						return;
+					
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					
+					junction.sendMessage( 
+						PipeNames.PROXIESOUT, 
+						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.APPLICATION, PPMServerTargetNames.APPLICATION, { test : "test" } )
+						);
+					
 					break;
 				}
 					
 				case MessageHeaders.RETRIEVE_MODULE_SETTINGS:
 				{
-//					if( recepientKey == multitonKey )
-//					break;
+					if( recepientKey != multitonKey )
+						return;
+					
+					sendNotification( ApplicationFacade.SET_SETTINGS, message.getBody() );
+					
+					break;
 				}
 			}
 		}

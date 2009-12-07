@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 			}
 			else
 			{
-				sendNotification( ApplicationFacade.GET_SAVED_SETTINGS );
+				sendNotification( ApplicationFacade.RETRIEVE_SETTINGS );
 			}
 		}
 	}

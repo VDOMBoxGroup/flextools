@@ -29,12 +29,12 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const INITIALIZE_SETTINGS : String = "initializeSettings";
 		
 		public static const GET_SETTINGS : String = "getSettings";
-		public static const SETTINGS_GETTED : String = "settingsGetted";
-		public static const GET_SAVED_SETTINGS : String = "getSavedSettings";
-		public static const SAVED_SETTINGS_GETTED : String = "savedSettingsGetted";
-		
 		public static const SET_SETTINGS : String = "setSettings";
+		
+		public static const SETTINGS_GETTED : String = "settingsGetted";
 		public static const SETTINGS_SETTED : String = "settingsSetted";
+		
+		public static const RETRIEVE_SETTINGS : String = "retrieveSettings";
 		public static const SAVE_SETTINGS : String = "saveSettings";
 		
 //		selection

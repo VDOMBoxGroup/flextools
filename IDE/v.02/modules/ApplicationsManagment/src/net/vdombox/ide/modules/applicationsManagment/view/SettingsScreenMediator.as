@@ -27,7 +27,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.SETTINGS_GETTED );
 			interests.push( ApplicationFacade.SETTINGS_SETTED );
 			
 			return interests;
@@ -37,16 +36,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.SETTINGS_GETTED:
-				{
-					var d : * = "";
-					
-					break;
-				}
-					
 				case ApplicationFacade.SETTINGS_SETTED:
 				{
-					var s : * = "";
+					settingsScreen.labelID.text = "settings setted";
 					
 					break;
 				}
