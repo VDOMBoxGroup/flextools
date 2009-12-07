@@ -18,7 +18,7 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const STARTUP : String = "startup";
 		
 		public static const CREATE_TOOLSET : String = "createToolset";
-		public static const CREATE_SETTINGS_SCREEN : String = "createToolset";
+		public static const CREATE_SETTINGS_SCREEN : String = "createSettingsScreen";
 		public static const CREATE_BODY : String = "createBody";
 		
 		public static const EXPORT_TOOLSET : String = "exportToolset";

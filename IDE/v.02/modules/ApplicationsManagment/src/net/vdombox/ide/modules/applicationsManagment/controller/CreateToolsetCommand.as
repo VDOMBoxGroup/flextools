@@ -1,8 +1,5 @@
 package net.vdombox.ide.modules.applicationsManagment.controller
 {
-	import mx.resources.IResourceManager;
-	import mx.resources.ResourceManager;
-	
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.ToolsetMediator;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.Toolset;
@@ -14,9 +11,19 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var toolset : Toolset = new Toolset();
+			var toolset : Toolset;
+			var toolsetMediator : ToolsetMediator;
 			
-			facade.registerMediator( new ToolsetMediator( toolset ) )
+			if( facade.hasMediator( ToolsetMediator.NAME ) )
+			{
+				toolsetMediator = facade.retrieveMediator( ToolsetMediator.NAME ) as ToolsetMediator;
+				toolset = toolsetMediator.toolset;
+			}
+			else
+			{
+				toolset = new Toolset();
+				facade.registerMediator( new ToolsetMediator( toolset ) )
+			}
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_TOOLSET, toolset );
 		}

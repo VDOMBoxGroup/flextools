@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			addHandlers();
 		}
 
-		private function get body() : Body
+		public function get body() : Body
 		{
 			return viewComponent as Body;
 		}

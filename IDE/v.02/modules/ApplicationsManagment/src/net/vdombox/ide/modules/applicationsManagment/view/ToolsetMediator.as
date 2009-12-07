@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
-		private function get toolset() : Toolset
+		public function get toolset() : Toolset
 		{
 			return viewComponent as Toolset;
 		}
