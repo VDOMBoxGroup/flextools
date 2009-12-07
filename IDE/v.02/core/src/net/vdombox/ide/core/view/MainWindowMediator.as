@@ -1,26 +1,25 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.utils.WindowManager;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -37,13 +36,7 @@ package net.vdombox.ide.core.view
 
 		private var currentModuleCategory : ModulesCategoryVO;
 
-		private var loadedModules : Object;
-
-//		private var localeProxy : LocaleProxy;
-
 		private var modulesList : Array;
-
-		private var modulesOrder : Array;
 
 		private var modulesProxy : ModulesProxy;
 
@@ -133,73 +126,42 @@ package net.vdombox.ide.core.view
 
 		private function cleanup() : void
 		{
-			var moduleForUnload : ModuleVO;
-
-			for ( var i : int = 0; i < modulesOrder.length; i++ )
-				moduleForUnload = modulesOrder[ i ];
-
 			toolsetBar.removeAllElements();
 			mainWindow.removeAllElements();
-		}
-
-		private function getModule() : void
-		{
-			if ( modulesList.length > 0 )
-			{
-				var module : ModuleVO = modulesList.shift();
-				return;
-			}
-
-			placeToolsets();
-			selectModule();
-
-		}
-
-		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
-		{
-			var modulesCategories : Array = modulesProxy.categories;
-			var tabBar : ButtonBar = mainWindow.tabBar;
-
-			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
-			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
-
-
-			tabBar.labelField = "name";
-			tabBar.dataProvider = new ArrayList( modulesCategories );
-			tabBar.selectedIndex = 0;
-
-//			showModulesByCategory( modulesCategories[ 0 ] as ModulesCategoryVO );
 		}
 
 		private function placeToolsets() : void
 		{
 			toolsetBar.removeAllElements();
 
-			if ( loadedModules.length == 0 )
+			if ( modulesList.length == 0 )
 				return;
 
-			for each ( var item : ModuleVO in modulesOrder )
+			for ( var i : int = 0; i < modulesList.length; i++ )
 			{
-				item.module.getToolset();
+				var moduleVO : ModuleVO = modulesList[ i ];
+				
+				if( moduleVO.module.hasToolset )
+					moduleVO.module.getToolset();
 			}
-
-			return;
 		}
 
 		private function selectModule( moduleID : String = "" ) : void
 		{
-			mainWindow.removeAllElements();
 			var moduleVO : ModuleVO;
+			
+			mainWindow.removeAllElements();
+			
 			if ( moduleID == "" )
 			{
-				moduleVO = modulesOrder[ 0 ] as ModuleVO;
+				moduleVO = modulesList[ 0 ] as ModuleVO;
 
-				moduleID = ModuleVO( modulesOrder[ 0 ]).moduleID;
+				moduleID = ModuleVO( modulesList[ 0 ] ).moduleID;
 				moduleVO.module.getBody();
 			}
 			else
 			{
-				moduleVO = loadedModules[ moduleID ] as ModuleVO;
+				moduleVO = modulesProxy.getModuleByID( moduleID );
 				moduleVO.module.getBody();
 			}
 
@@ -214,18 +176,29 @@ package net.vdombox.ide.core.view
 			modulesList = modulesProxy.getModulesListByCategory( categoryVO );
 
 			currentModuleCategory = categoryVO;
-
-			loadedModules = {};
-			modulesOrder = [];
-
-			getModule();
+			
+			placeToolsets();
 		}
 
+		private function mainWindow_creationCompleteHandler( event : FlexEvent ) : void
+		{
+			var modulesCategories : Array = modulesProxy.categories;
+			var tabBar : ButtonBar = mainWindow.tabBar;
+			
+			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
+			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
+			
+			
+			tabBar.labelField = "name";
+			tabBar.dataProvider = new ArrayList( modulesCategories );
+			tabBar.selectedIndex = 0;
+		}
+		
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
-//			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
-//
-//			showModulesByCategory( categoryVO );
+			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
+
+			showModulesByCategory( categoryVO );
 		}
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void

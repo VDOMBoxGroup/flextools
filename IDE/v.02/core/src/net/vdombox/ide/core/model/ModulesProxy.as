@@ -91,7 +91,7 @@ package net.vdombox.ide.core.model
 					modulesList.push( new ModuleVO( category, modulePath ));
 				}
 				
-				_categories.push( new ModulesCategoryVO( categoryName, categoryLocalizedName ));
+				_categories.push( category );
 			}
 		}
 		
@@ -106,7 +106,7 @@ package net.vdombox.ide.core.model
 						return false;
 				});
 
-			return null;
+			return result;
 		}
 
 		public function getModuleByID( moduleID : String ) : ModuleVO
