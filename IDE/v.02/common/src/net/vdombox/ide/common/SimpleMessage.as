@@ -6,9 +6,7 @@ package net.vdombox.ide.common
 	{
 		public function SimpleMessage( header : String, body : Object = null, recepientKey : String = null, answerFlag : Boolean = false )
 		{
-			var messageBody : Object = { body : body, recepientKey : recepientKey, answerFlag : answerFlag };
-			
-			super( type = Message.NORMAL, header, messageBody );
+			super( type = Message.NORMAL, header, body );
 			
 			setRecepientKey( recepientKey );
 			
