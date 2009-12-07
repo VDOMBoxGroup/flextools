@@ -13,6 +13,9 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 		{
 			var settings : SettingsScreen = new SettingsScreen();
 			
+			if( facade.hasMediator( SettingsScreenMediator.NAME ) )
+				facade.removeMediator( SettingsScreenMediator.NAME );
+			
 			facade.registerMediator( new SettingsScreenMediator( settings ) )
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_SETTINGS_SCREEN, settings );

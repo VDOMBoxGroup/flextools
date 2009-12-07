@@ -27,6 +27,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
+			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
 			interests.push( ApplicationFacade.SETTINGS_SETTED );
 			
 			return interests;
@@ -39,6 +40,13 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.SETTINGS_SETTED:
 				{
 					settingsScreen.labelID.text = "settings setted";
+					
+					break;
+				}
+					
+				case NAME + "/" + ApplicationFacade.SETTINGS_GETTED:
+				{
+					settingsScreen.labelID.text = "settings getted";
 					
 					break;
 				}
@@ -57,7 +65,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		private function showHandler( event : FlexEvent ) : void
 		{
-			sendNotification( ApplicationFacade.GET_SETTINGS );
+			sendNotification( ApplicationFacade.GET_SETTINGS, NAME );
 		}
 	}
 }

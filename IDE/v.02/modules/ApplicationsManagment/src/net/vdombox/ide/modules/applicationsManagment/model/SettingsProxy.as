@@ -37,10 +37,28 @@ package net.vdombox.ide.modules.applicationsManagment.model
 		
 		public function setSettings( value : SettingsVO ) : void
 		{
-			if(  )
-			_settings.stringSetting = value.stringSetting;
-			_settings.arraySetting = value.arraySetting;
-			sendNotification( ApplicationFacade.SETTINGS_SETTED, _settings );
+			var settingsChanged : Boolean = false
+				
+			if( !_settings )
+			{
+				_settings = value;
+				settingsChanged = true;
+			}
+			
+			if( _settings.stringSetting != value.stringSetting )
+			{
+				_settings.stringSetting = value.stringSetting;
+				settingsChanged = true;
+			}
+			
+			if( _settings.arraySetting != value.arraySetting )
+			{
+				_settings.arraySetting = value.arraySetting;
+				settingsChanged = true;
+			}
+			
+			if( settingsChanged )
+				sendNotification( ApplicationFacade.SETTINGS_SETTED, _settings );
 		}
 	}
 }

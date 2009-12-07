@@ -12,11 +12,17 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var settingsProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
+			
+			var mediatorName : String = notification.getBody().toString();
 			var settingsVO : SettingsVO = settingsProxy.getSettings();
+			var notificationName : String = ApplicationFacade.SETTINGS_GETTED;
 			
 			if ( settingsVO )
 			{
-				sendNotification( ApplicationFacade.SETTINGS_GETTED, settingsVO );
+				if( mediatorName )
+					notificationName = mediatorName + "/" + notificationName;
+					
+				sendNotification( notificationName, settingsVO );
 			}
 			else
 			{
