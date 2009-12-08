@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -35,9 +35,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function onRegister() : void
 		{
 			var iconID : String = applicationItemRenderer.data.iconID;
-
+			var ownerID : String = applicationItemRenderer.data.id;
+			
 			if ( iconID != "" )
-				sendNotification( ApplicationFacade.GET_RESOURCE, { resourceID: iconID, recepientName: mediatorName });
+				sendNotification( ApplicationFacade.GET_RESOURCE, { resourceID: iconID, ownerID : ownerID, recepientName: mediatorName });
 		}
 
 		override public function handleNotification( notification : INotification ) : void

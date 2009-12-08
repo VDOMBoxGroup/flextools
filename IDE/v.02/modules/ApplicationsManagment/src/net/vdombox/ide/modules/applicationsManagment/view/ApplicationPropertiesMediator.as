@@ -38,8 +38,14 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
 				{
+					var newSelectedApplicationID : String;
 					var applicationVO : Object = notification.getBody();
-					var newSelectedApplicationID : String = applicationVO.id;
+					
+					if( applicationVO )
+						newSelectedApplicationID = applicationVO.id;
+					else
+						newSelectedApplicationID = "";
+					
 					
 					if ( newSelectedApplicationID == selectedApplicationID )
 					{
@@ -53,6 +59,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					{
 						applicationProperties.applicationName.text = applicationVO.name;
 						applicationProperties.applicationDescription.text = applicationVO.description;
+						applicationProperties.visible = true;
 						
 					}
 					break;
