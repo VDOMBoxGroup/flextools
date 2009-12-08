@@ -15,8 +15,6 @@ package net.vdombox.ide.core.controller
 			var moduleVO : ModuleVO = notification.getBody() as ModuleVO;
 			
 			facade.registerMediator( new VIModuleMediator( moduleVO.module ) );
-			
-			sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, moduleVO );
 		}
 	}
 }

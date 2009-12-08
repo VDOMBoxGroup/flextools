@@ -67,7 +67,9 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.CONNECT_MODULE_TO_PROXIES:
 				{
-					var moduleVO : ModuleVO = body as ModuleVO;
+					moduleID = body.toString();
+					
+					var moduleVO : ModuleVO = moduleProxy.getModuleByID( moduleID );
 					
 					var module : IPipeAware = moduleVO.module as IPipeAware;
 					
@@ -109,27 +111,21 @@ package net.vdombox.ide.core.view
 				
 				case ApplicationFacade.SERVER_PROXY_RESPONSE:
 				{
-					junction.sendMessage( PipeNames.PROXIESOUT,
-										  new ProxiesPipeMessage( body.operation, PPMPlaceNames.SERVER, body.target, body.parameters )
-					);
+					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxiesPipeMessage );
 					
 					break;
 				}
 				
 				case ApplicationFacade.TYPES_PROXY_RESPONSE:
 				{
-					junction.sendMessage( PipeNames.PROXIESOUT,
-										  new ProxiesPipeMessage( body.operation, PPMPlaceNames.TYPES, body.target, body.parameters )
-					);
+					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxiesPipeMessage );
 					
 					break;
 				}
 				
 				case ApplicationFacade.RESOURCES_PROXY_RESPONSE:
 				{
-					junction.sendMessage( PipeNames.PROXIESOUT,
-										  new ProxiesPipeMessage( body.operation, PPMPlaceNames.RESOURCES, body.target, body.parameters )
-					);
+					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxiesPipeMessage );
 					
 					break;
 				}
@@ -140,7 +136,7 @@ package net.vdombox.ide.core.view
 		{
 			var ppMessage : ProxiesPipeMessage = message as ProxiesPipeMessage;
 			
-			switch ( ppMessage.place )
+			switch ( ppMessage.getPlace() )
 			{
 				case PPMPlaceNames.SERVER:
 				{

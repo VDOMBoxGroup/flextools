@@ -1,10 +1,10 @@
 package net.vdombox.ide.core.model
 {
+	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.core.interfaces.IApplicationProxy;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-	import net.vdombox.ide.core.model.vo.ApplicationVO;
-	import net.vdombox.ide.core.model.vo.PageVO;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 

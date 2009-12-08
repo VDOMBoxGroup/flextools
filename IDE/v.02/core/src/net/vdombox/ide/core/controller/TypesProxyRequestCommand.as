@@ -15,10 +15,10 @@ package net.vdombox.ide.core.controller
 		{
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			
-			var body : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 			
-			var target : String = body.target;
-			var operation : String = body.operation;
+			var target : String = message.getTarget();
+			var operation : String = message.getOperation();
 			
 			if( operation != PPMOperationNames.READ )
 				return;
@@ -27,11 +27,9 @@ package net.vdombox.ide.core.controller
 			{
 				case PPMTypesTargetNames.TYPES:
 				{
-					var types : Array = typesProxy.types;
+					message.setParameters( typesProxy.types );
 					
-					sendNotification( ApplicationFacade.TYPES_PROXY_RESPONSE, 
-						{ operation : body.operation, target : body.target, parameters : types }
-					);
+					sendNotification( ApplicationFacade.TYPES_PROXY_RESPONSE, message );
 					break;
 				}
 					

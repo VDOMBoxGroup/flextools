@@ -1,10 +1,10 @@
 package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ResourcesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.vo.ResourceVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -19,20 +19,20 @@ package net.vdombox.ide.core.controller
 			
 			var ppMessage : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 			
-			var parameters : Object = ppMessage.parameters;
-			var applicationID : String;
+			var parameters : Object = ppMessage.getParameters();
+			var ownerID : String;
 			
-			if( !hasOwnProperty( parameters.applicationID ) )
+			if( !parameters.hasOwnProperty( "ownerID" ) )
 			{
-				applicationID = serverProxy.selectedApplication.id;
+				ownerID = serverProxy.selectedApplication.id;
 			}
 			
-			var resourceVO : ResourceVO = resourcesProxy.getResource( applicationID, parameters.resourceID );
-			parameters.resourceVO = resourceVO;
+			var resourceVO : ResourceVO = resourcesProxy.getResource( ownerID, parameters.resourceID );
+			parameters["resourceVO"] = resourceVO;
 			
-			sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, 
-				{ operation : ppMessage.operation, target : ppMessage.target, parameters : parameters }
-			);
+			ppMessage.setParameters( parameters );
+			
+			sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, ppMessage );
 		}
 	}
 }

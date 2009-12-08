@@ -1,15 +1,14 @@
 package net.vdombox.ide.core.model
 {
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.utils.ByteArray;
 	
 	import mx.rpc.events.FaultEvent;
 	import mx.utils.Base64Encoder;
 	
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
-	import net.vdombox.ide.core.model.vo.ResourceVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -122,8 +121,6 @@ package net.vdombox.ide.core.model
 
 import flash.errors.IOError;
 import flash.events.Event;
-import flash.events.EventDispatcher;
-import flash.events.IEventDispatcher;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
@@ -136,9 +133,9 @@ import mx.collections.SortField;
 import mx.rpc.events.FaultEvent;
 import mx.utils.Base64Decoder;
 
+import net.vdombox.ide.common.vo.ResourceVO;
 import net.vdombox.ide.core.events.SOAPEvent;
 import net.vdombox.ide.core.model.business.SOAP;
-import net.vdombox.ide.core.model.vo.ResourceVO;
 
 class Resource
 {

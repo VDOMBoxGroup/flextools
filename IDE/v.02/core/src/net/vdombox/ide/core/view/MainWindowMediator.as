@@ -57,26 +57,28 @@ package net.vdombox.ide.core.view
 			return interests;
 		}
 		
-		override public function handleNotification( note : INotification ) : void
+		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( note.getName())
+			switch ( notification.getName())
 			{
 				case ApplicationFacade.SHOW_MODULE_TOOLSET:
 				{
-					toolsetBar.addElement( note.getBody() as IVisualElement );
+					toolsetBar.addElement( notification.getBody() as IVisualElement );
 					break;
 				}
 
 				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
-					mainWindow.addElement( note.getBody() as IVisualElement );
+					mainWindow.addElement( notification.getBody() as IVisualElement );
 					break;
 				}
 
 				case ApplicationFacade.CHANGE_SELECTED_MODULE:
 				{
-					var newSelectedModuleID : String = note.getBody() as String;
-					selectModule( newSelectedModuleID );
+					var newSelectedModuleID : String = notification.getBody() as String;
+					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
+					
+					selectModule( moduleVO );
 					break;
 				}
 			}
@@ -146,27 +148,23 @@ package net.vdombox.ide.core.view
 			}
 		}
 
-		private function selectModule( moduleID : String = "" ) : void
+		private function selectModule( moduleVO : ModuleVO = null ) : void
 		{
-			var moduleVO : ModuleVO;
-			
 			mainWindow.removeAllElements();
 			
-			if ( moduleID == "" )
+			if ( !moduleVO )
 			{
 				moduleVO = modulesList[ 0 ] as ModuleVO;
-
-				moduleID = ModuleVO( modulesList[ 0 ] ).moduleID;
 				moduleVO.module.getBody();
 			}
 			else
 			{
-				moduleVO = modulesProxy.getModuleByID( moduleID );
 				moduleVO.module.getBody();
 			}
 
-			selectedModuleID = moduleID;
-			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, selectedModuleID );
+			selectedModuleID = moduleVO.moduleID;
+			
+			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, moduleVO );
 		}
 
 		private function showModulesByCategory( categoryVO : ModulesCategoryVO ) : void
@@ -176,6 +174,14 @@ package net.vdombox.ide.core.view
 			modulesList = modulesProxy.getModulesListByCategory( categoryVO );
 
 			currentModuleCategory = categoryVO;
+			
+			if(  modulesList.length == 0 )
+				return;
+			
+			for ( var i : int = 0; i < modulesList.length; i++ )
+			{
+				sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, modulesList[ i ] );
+			}
 			
 			placeToolsets();
 		}
@@ -199,6 +205,7 @@ package net.vdombox.ide.core.view
 			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
 
 			showModulesByCategory( categoryVO );
+			selectModule();
 		}
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void

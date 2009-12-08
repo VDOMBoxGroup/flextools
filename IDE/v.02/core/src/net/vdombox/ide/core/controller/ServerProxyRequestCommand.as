@@ -5,7 +5,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.core.model.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -16,10 +16,10 @@ package net.vdombox.ide.core.controller
 		{
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			
-			var body : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 			
-			var target : String = body.target;
-			var operation : String = body.operation;
+			var target : String = message.getTarget();
+			var operation : String = message.getOperation();
 			
 			switch ( target )
 			{
@@ -27,9 +27,9 @@ package net.vdombox.ide.core.controller
 				{
 					var applications : Array = serverProxy.applications;
 					
-					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, 
-						{ operation : body.operation, target : body.target, parameters : applications }
-					);
+					message.setParameters( applications );
+					
+					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
 					break;
 				}
 				
@@ -40,20 +40,16 @@ package net.vdombox.ide.core.controller
 					if( operation == PPMOperationNames.READ )
 					{
 						selectedApplication = serverProxy.selectedApplication;
-						
-						sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, 
-							{ operation : body.operation, target : target, parameters : selectedApplication }
-						);
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
-						selectedApplication = body.parameters as ApplicationVO;
+						selectedApplication = message.getParameters() as ApplicationVO;
 						serverProxy.selectedApplication = selectedApplication;
-						
-						sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, 
-							{ operation : operation, target : target, parameters : selectedApplication }
-						);
 					}
+					
+					message.setParameters( selectedApplication );
+					
+					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
 					
 					break;
 				}

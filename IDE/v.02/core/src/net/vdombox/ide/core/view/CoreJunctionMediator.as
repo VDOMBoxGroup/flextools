@@ -118,13 +118,15 @@ package net.vdombox.ide.core.view
 				{
 					moduleVO = notification.getBody() as ModuleVO;
 					
-					junction.sendMessage( PipeNames.STDOUT, new Message( Message.NORMAL, MessageHeaders.PROXIES_PIPE_CONNECTED, moduleVO.moduleID ));
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( MessageHeaders.PROXIES_PIPE_CONNECTED, null, moduleVO.moduleID ));
 					break;
 				}
 
 				case ApplicationFacade.SELECTED_MODULE_CHANGED:
 				{
-					junction.sendMessage( PipeNames.STDOUT, new Message( Message.NORMAL, MessageHeaders.MODULE_SELECTED, notification.getBody()));
+					moduleVO = notification.getBody() as ModuleVO;
+					
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( MessageHeaders.MODULE_SELECTED, null, moduleVO.moduleID ));
 					break;
 				}
 				
@@ -187,17 +189,17 @@ package net.vdombox.ide.core.view
 			{
 				case MessageHeaders.SELECT_MODULE:
 				{
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message );
+					sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getRecepientKey() );
 					break;
 				}
 				case MessageHeaders.CONNECT_PROXIES_PIPE:
 				{
-					sendNotification( ApplicationFacade.CONNECT_MODULE_TO_PROXIES, message );
+					sendNotification( ApplicationFacade.CONNECT_MODULE_TO_PROXIES, message.getRecepientKey() );
 					break;
 				}
 				case MessageHeaders.DISCONNECT_PROXIES_PIPE:
 				{
-					sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message );
+					sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message.getRecepientKey() );
 					break;
 				}
 					
