@@ -31,7 +31,6 @@ package net.vdombox.ide.core.model
 			soap.delete_resource( resourceID );
 		}
 
-
 		public function getListResources( applicatioID : String ) : void
 		{
 			soap.list_resources( applicatioID );

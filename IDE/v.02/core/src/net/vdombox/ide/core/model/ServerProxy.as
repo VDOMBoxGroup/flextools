@@ -21,8 +21,6 @@ package net.vdombox.ide.core.model
 		public static const CONNECTION_ERROR : String = "connectionError";
 		
 		public static const LOGGED : String = "logonProcess";
-//		
-//		public static const LOGON_ERROR : String = "logonError";
 		
 		public static const CONNECTED : String = "connected";
 
