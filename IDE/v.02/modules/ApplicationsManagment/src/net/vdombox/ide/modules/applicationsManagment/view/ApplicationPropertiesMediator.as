@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationProperties;
 	
@@ -39,7 +40,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
 				{
 					var newSelectedApplicationID : String;
-					var applicationVO : Object = notification.getBody();
+					var applicationVO : ApplicationVO = notification.getBody() as ApplicationVO;
 					
 					if( applicationVO )
 						newSelectedApplicationID = applicationVO.id;
@@ -58,6 +59,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					else
 					{
 						applicationProperties.applicationName.text = applicationVO.name;
+						applicationProperties.actionsForLabel.text += applicationVO.name;
+						applicationProperties.pagesCount.text = "PAGES: " + applicationVO.numberOfPages.toString();
+						applicationProperties.objectsCount.text = "OBJECTS: " + applicationVO.numberOfObjects.toString();
 						applicationProperties.applicationDescription.text = applicationVO.description;
 						applicationProperties.visible = true;
 						

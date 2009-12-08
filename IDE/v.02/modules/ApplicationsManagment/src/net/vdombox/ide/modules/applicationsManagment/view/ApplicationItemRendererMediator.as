@@ -1,5 +1,8 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
+	import mx.binding.utils.BindingUtils;
+	
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
 	
@@ -20,7 +23,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private static function getNextID() : String
 		{
-			return NAME + '/' + serial++;
+			var id : String = NAME + "/" + serial;
+			serial++;
+			return id;
+			
 		}
 
 		override public function listNotificationInterests() : Array
@@ -43,12 +49,19 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			applicationItemRenderer.imageHolder.source = notification.getBody().resourceVO.data;
+			var resourceVO :ResourceVO = notification.getBody() as ResourceVO;
+				
+			BindingUtils.bindSetter( setIcon, resourceVO, "data" );
 		}
-
+		
 		private function get applicationItemRenderer() : ApplicationItemRenderer
 		{
 			return viewComponent as ApplicationItemRenderer;
+		}
+		
+		private function setIcon( value : * ) : void
+		{
+			applicationItemRenderer.imageHolder.source = value;
 		}
 	}
 }

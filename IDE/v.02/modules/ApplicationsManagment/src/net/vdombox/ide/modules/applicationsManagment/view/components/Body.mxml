@@ -17,5 +17,5 @@
 	<components:ApplicationProperties id="applicationProperties"
 		width="100%" height="100%"/>
 	<s:List id="applicationsList"
-		width="200" height="100%"/>
+		width="270" height="100%" useVirtualLayout="false" />
 </s:Group>

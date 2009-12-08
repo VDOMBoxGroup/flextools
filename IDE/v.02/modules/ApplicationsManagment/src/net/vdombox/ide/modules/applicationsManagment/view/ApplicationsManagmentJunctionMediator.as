@@ -14,12 +14,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
-	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
@@ -328,8 +328,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				case PPMResourcesTargetNames.RESOURCE:
 				{
+					var resourceVO : ResourceVO = message.getParameters().resourceVO as ResourceVO;
+					
 					sendNotification( message.getParameters().recepientName + "/" +
-									  ApplicationFacade.RESOURCE_GETTED, message.getParameters() );
+									  ApplicationFacade.RESOURCE_GETTED, resourceVO );
 					break;
 				}
 			}
