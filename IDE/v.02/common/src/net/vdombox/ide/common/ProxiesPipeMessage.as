@@ -1,37 +1,46 @@
 package net.vdombox.ide.common
 {
 	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 
 	public class ProxiesPipeMessage extends Message
 	{
-		public function ProxiesPipeMessage( operation : String, place : String, target : String, parameters : Object = null )
+		public function ProxiesPipeMessage( place : String, operation : String, target : String, parameters : Object = null )
 		{
-			var headers : Object = {};
-			headers.place = place;
-			headers.target = target;
 			
-			super( operation, headers, parameters, priority );
+			_operation = operation;
+			
+			_target = target;
+			
+			super( Message.NORMAL, place, parameters );
 		}
 		
-		public function get operation() : String
+		protected var _operation : String;
+		
+		protected var _target : String;
+		
+		public function getPlace() : String
 		{
-			return type;
+			return header.toString();
 		}
 		
-		public function get place() : String
+		public function getOperation() : String
 		{
-			return header.place;
+			return _operation;
 		}
 		
-		public function get target() : String
+		public function getTarget() : String
 		{
-			return header.target;			
+			return _target;			
 		}
 		
-		public function get parameters() : Object
+		public function getParameters() : Object
 		{
 			return body;			
+		}
+		
+		public function setParameters( value : Object ) : void
+		{
+			body = value;			
 		}
 	}
 }
