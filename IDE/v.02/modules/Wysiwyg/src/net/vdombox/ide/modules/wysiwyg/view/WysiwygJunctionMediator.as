@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -142,7 +143,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
-			var recepientKey : String = message.getBody().toString();
+			var simpleMessage : SimpleMessage = message as SimpleMessage;
+			
+			var recepientKey : String = simpleMessage.getRecepientKey();
 			
 			switch ( message.getHeader())
 			{
@@ -251,7 +254,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function handleProxiesPipeMessage( message : ProxiesPipeMessage ) : void
 		{
-			var place : String = message.place;
+			var place : String = message.getPlace();
 			
 			switch ( place ) 
 			{
@@ -277,17 +280,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
 		{
-			switch( message.target )
+			switch( message.getTarget() )
 			{
 				case PPMServerTargetNames.APPLICATIONS:
 				{
-					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.parameters );
+					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.getParameters() );
 					break;
 				}
 				
 				case PPMServerTargetNames.SELECTED_APPLICATION:
 				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.parameters );
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getParameters() );
 					break;
 				}
 			}
@@ -295,11 +298,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function processTypesProxyMessage( message : ProxiesPipeMessage ) : void
 		{
-			switch( message.target )
+			switch( message.getTarget() )
 			{
 				case PPMTypesTargetNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.TYPES_GETTED, message.parameters );
+					sendNotification( ApplicationFacade.TYPES_GETTED, message.getParameters() );
 					break;
 				}
 			}
@@ -307,12 +310,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function processResourcesProxyMessage( message : ProxiesPipeMessage ) : void
 		{
-			switch( message.target )
+			switch( message.getTarget() )
 			{
 				case PPMResourcesTargetNames.RESOURCE:
 				{
-					sendNotification( message.parameters.recepientName + "/" +
-									  ApplicationFacade.RESOURCE_GETTED, message.parameters );
+					sendNotification( message.getParameters().recepientName + "/" +
+									  ApplicationFacade.RESOURCE_GETTED, message.getParameters() );
 					break;
 				}
 			}
