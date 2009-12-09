@@ -53,6 +53,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
+			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 			
 			return interests;
 		}
@@ -80,6 +81,23 @@ package net.vdombox.ide.core.view
 					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
 					
 					selectModule( moduleVO );
+					break;
+				}
+					
+				case ApplicationFacade.CLOSE_SETTINGS_WINDOW:
+				{
+					var settingsWindowMediator : SettingsWindowMediator = 
+						facade.retrieveMediator( SettingsWindowMediator.NAME ) as SettingsWindowMediator;
+					
+					if( !settingsWindowMediator )
+						return;
+					
+					var settingsWindow : SettingsWindow = settingsWindowMediator.settingsWindow;
+					
+					windowManager.removeWindow( settingsWindow );
+					
+					facade.removeMediator( SettingsWindowMediator.NAME );
+					
 					break;
 				}
 			}

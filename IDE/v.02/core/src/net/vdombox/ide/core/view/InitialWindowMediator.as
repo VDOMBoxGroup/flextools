@@ -47,6 +47,10 @@ package net.vdombox.ide.core.view
 		
 		private var userData : Object;
 		
+		private var progressViewMediator : ProgressViewMediator;
+		private var loginViewMediator : LoginViewMediator;
+		private var errorViewMediator : ErrorViewMediator;
+		
 		public function get selectedViewName() : String
 		{
 			return proposedViewName != "" ? proposedViewName : _selectedViewName;
@@ -83,7 +87,6 @@ package net.vdombox.ide.core.view
 			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
 
 			userData = {};
-			selectedViewName = PROGRESS_VIEW_NAME;
 
 			addEventListeners();
 		}
@@ -96,6 +99,9 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.MODULES_LOADED );
 			interests.push( ApplicationFacade.PROCESS_USER_INPUT );
 			interests.push( ApplicationFacade.TYPES_LOADED );
+			interests.push( ApplicationFacade.LOGON_ERROR );
+			interests.push( ApplicationFacade.SHOW_LOGON_VIEW );
+			interests.push( ApplicationFacade.SHOW_ERROR_VIEW );
 			
 			return interests;
 		}
@@ -131,6 +137,29 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.LOGON_ERROR:
+				{
+					selectedViewName = ERROR_VIEW_NAME;
+					
+					break;
+				}
+					
+				case ApplicationFacade.SHOW_LOGON_VIEW:
+				{
+					selectedViewName = LOGIN_VIEW_NAME;
+					
+					break;
+				}
+					
+				case ApplicationFacade.SHOW_ERROR_VIEW:
+				{
+					selectedViewName = ERROR_VIEW_NAME;
+					
+					errorViewMediator.errorText = notification.getBody().toString();
+					
+					break;
+				}
 			}
 		}
 		
@@ -149,7 +178,7 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as InitialWindow;
 		}
-
+		
 		private function addEventListeners() : void
 		{
 			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
@@ -186,9 +215,16 @@ package net.vdombox.ide.core.view
 		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			facade.registerMediator( new ProgressViewMediator( initialWindow.progressView ) );
-			facade.registerMediator( new LoginViewMediator( initialWindow.loginView ) );
-			facade.registerMediator( new ErrorViewMediator( initialWindow.errorView ) );
+			progressViewMediator = new ProgressViewMediator( initialWindow.progressView )
+			facade.registerMediator( progressViewMediator );
+			
+			loginViewMediator = new LoginViewMediator( initialWindow.loginView );
+			facade.registerMediator( loginViewMediator );
+			
+			errorViewMediator = new ErrorViewMediator( initialWindow.errorView );
+			facade.registerMediator( errorViewMediator );
+
+			selectedViewName = PROGRESS_VIEW_NAME;
 			
 			commitProperties();
 			sendNotification( ApplicationFacade.INITIAL_WINDOW_OPENED );

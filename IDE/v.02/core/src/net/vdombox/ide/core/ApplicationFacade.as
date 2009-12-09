@@ -30,6 +30,11 @@ package net.vdombox.ide.core
 		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
 		public static const MAIN_WINDOW_OPENED : String = "mainWindowOpened";
 		
+		public static const SHOW_LOGON_VIEW : String = "showLoginView";
+		public static const SHOW_ERROR_VIEW : String = "showErrorView";
+		
+		public static const CLOSE_SETTINGS_WINDOW : String = "closeSettingsWindow";
+		
 		public static const CHANGE_LOCALE : String = "changeLocale";
 
 		public static const PROCESS_USER_INPUT: String = "processUserInput";
@@ -138,6 +143,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( RETRIEVE_MODULE_SETTINGS, RetrieveModuleSettings );
 			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
+			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
 			
 			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
 			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
@@ -146,7 +152,7 @@ package net.vdombox.ide.core
 
 		private function soap_faultEvent( event : FaultEvent ) : void
 		{
-			var dummy : * = ""; // TODO soap_faultEvent
+			sendNotification( SHOW_ERROR_VIEW, event.fault.faultDetail );
 		}
 	}
 }

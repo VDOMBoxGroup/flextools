@@ -6,6 +6,7 @@ package net.vdombox.ide.core.view
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.interfaces.ISettingsScreen;
 	import net.vdombox.ide.common.interfaces.IVIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
@@ -38,6 +39,11 @@ package net.vdombox.ide.core.view
 		
 		
 		private var selectedSettingsID : String
+		
+		public function get settingsWindow() : SettingsWindow
+		{
+			return viewComponent as SettingsWindow;
+		}
 		
 		override public function onRegister() : void
 		{
@@ -73,11 +79,6 @@ package net.vdombox.ide.core.view
 					break;
 				}
 			}
-		}
-		
-		private function get settingsWindow() : SettingsWindow
-		{
-			return viewComponent as SettingsWindow;
 		}
 
 		private function addEventListeners() : void
@@ -149,17 +150,20 @@ package net.vdombox.ide.core.view
 		{
 			if( selectedSettingsID == "VdomIDE" )
 			{
-				
+				var d : * = "";
 			}
 			else
 			{
-//				IVIModule( moduleWithSettings[ selectedItem.id ] )
+				if ( settingsScreensList.hasOwnProperty( selectedSettingsID ) )
+					ISettingsScreen( settingsScreensList[ selectedSettingsID ] ).performOK();
 			}
+			
+			sendNotification( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 		}
 		
 		private function performCancel_clickHandler( event : MouseEvent ) : void
 		{
-			var d : * = "";
+			sendNotification( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 		}
 	}
 }

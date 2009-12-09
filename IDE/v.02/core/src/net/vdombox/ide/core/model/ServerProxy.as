@@ -1,10 +1,10 @@
 package net.vdombox.ide.core.model
 {
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
-	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.model.vo.AuthInfoVO;
 	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
@@ -173,6 +173,7 @@ package net.vdombox.ide.core.model
 
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
 		{
+			sendNotification( ApplicationFacade.LOGON_ERROR );
 		}
 	}
 }

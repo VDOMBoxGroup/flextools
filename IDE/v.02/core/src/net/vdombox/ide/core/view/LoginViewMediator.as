@@ -86,8 +86,12 @@ package net.vdombox.ide.core.view
 		{
 			loginView.username.text = sharedObjectProxy.username;
 			loginView.username.appendText( "" ); //FIXME убрать эту конструкцию непонятную, иначе не рефрешит поле.
+			
 			loginView.hostname.text = sharedObjectProxy.hostname;
 			loginView.hostname.appendText( "" );
+			
+			loginView.password.text = "";
+			loginView.password.appendText( "" );
 			
 			setupLanguageList();
 		}
