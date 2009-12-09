@@ -59,23 +59,24 @@ package net.vdombox.ide.core.view
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
+			var body : Object = notification.getBody();
 			switch ( notification.getName())
 			{
 				case ApplicationFacade.SHOW_MODULE_TOOLSET:
 				{
-					toolsetBar.addElement( notification.getBody() as IVisualElement );
+					toolsetBar.addElement( body.component as IVisualElement );
 					break;
 				}
 
 				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
-					mainWindow.addElement( notification.getBody() as IVisualElement );
+					mainWindow.addElement( body.component  as IVisualElement );
 					break;
 				}
 
 				case ApplicationFacade.CHANGE_SELECTED_MODULE:
 				{
-					var newSelectedModuleID : String = notification.getBody() as String;
+					var newSelectedModuleID : String = body as String;
 					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
 					
 					selectModule( moduleVO );

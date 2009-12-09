@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.model
 {
+	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
 	
 	import mx.events.ModuleEvent;

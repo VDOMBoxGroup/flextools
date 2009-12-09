@@ -1,10 +1,12 @@
 package net.vdombox.ide.core.view
 {
+	import flash.events.MouseEvent;
+	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.IVIModule;
+	import net.vdombox.ide.common.interfaces.IVIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.SettingsStorageProxy;
@@ -28,11 +30,23 @@ package net.vdombox.ide.core.view
 			super( NAME, viewComponent );
 		}
 		
+		private var modulesProxy : ModulesProxy;
+		private var settingsProxy : SettingsStorageProxy;
+		
 		private var moduleWithSettings : Object;
+		private var settingsScreensList : Object;
+		
+		
+		private var selectedSettingsID : String
 		
 		override public function onRegister() : void
 		{
 			addEventListeners();
+			
+			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
+			settingsProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
+			
+			settingsScreensList = {};
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -46,12 +60,15 @@ package net.vdombox.ide.core.view
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
+			var body : Object = notification.getBody();
+			
 			switch ( notification.getName() )
 			{
 				case ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN:
 				{
-					settingsWindow.settingsScreenHolder.removeAllElements();
-					settingsWindow.settingsScreenHolder.addElement( notification.getBody() as IVisualElement );
+					settingsScreensList[ body.recepientKey ] = body.component;
+					
+					settingsWindow.settingsScreenHolder.addElement( body.component as IVisualElement );
 					
 					break;
 				}
@@ -71,9 +88,8 @@ package net.vdombox.ide.core.view
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			settingsWindow.settingsCategory.addEventListener( IndexChangeEvent.CHANGE, settingsCategory_changeHandler );
-			
-			var modulesProxy : ModulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
-			var settingsProxy : SettingsStorageProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
+			settingsWindow.performOK.addEventListener( MouseEvent.CLICK, performOK_clickHandler );
+			settingsWindow.performCancel.addEventListener( MouseEvent.CLICK, performCancel_clickHandler );
 
 			var modules : Array = modulesProxy.modules;
 			
@@ -101,11 +117,19 @@ package net.vdombox.ide.core.view
 			
 		}
 		
-		public function settingsCategory_changeHandler( event : IndexChangeEvent ) : void
+		private function settingsCategory_changeHandler( event : IndexChangeEvent ) : void
 		{
 			var selectedItem : Object = List( event.currentTarget ).selectedItem;
 			
+			selectedSettingsID = selectedItem.id;
+			
 			settingsWindow.settingsScreenHolder.removeAllElements();
+			
+			if( settingsScreensList.hasOwnProperty( selectedSettingsID ) )
+			{
+				settingsWindow.settingsScreenHolder.addElement( settingsScreensList[ selectedSettingsID ] );
+				return;
+			}
 			
 			if( selectedItem.id == "VdomIDE" )
 			{
@@ -119,6 +143,23 @@ package net.vdombox.ide.core.view
 			{
 				IVIModule( moduleWithSettings[ selectedItem.id ] ).getSettingsScreen();
 			}
+		}
+		
+		private function performOK_clickHandler( event : MouseEvent ) : void
+		{
+			if( selectedSettingsID == "VdomIDE" )
+			{
+				
+			}
+			else
+			{
+//				IVIModule( moduleWithSettings[ selectedItem.id ] )
+			}
+		}
+		
+		private function performCancel_clickHandler( event : MouseEvent ) : void
+		{
+			var d : * = "";
 		}
 	}
 }

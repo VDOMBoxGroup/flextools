@@ -2,7 +2,7 @@ package net.vdombox.ide.core.view
 {
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.MessageHeaders;
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.UIQueryMessage;
@@ -118,7 +118,7 @@ package net.vdombox.ide.core.view
 				{
 					moduleVO = notification.getBody() as ModuleVO;
 					
-					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( MessageHeaders.PROXIES_PIPE_CONNECTED, null, moduleVO.moduleID ));
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.PROXIES_PIPE_CONNECTED, null, moduleVO.moduleID ));
 					break;
 				}
 
@@ -126,7 +126,7 @@ package net.vdombox.ide.core.view
 				{
 					moduleVO = notification.getBody() as ModuleVO;
 					
-					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( MessageHeaders.MODULE_SELECTED, null, moduleVO.moduleID ));
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.MODULE_SELECTED, null, moduleVO.moduleID ));
 					break;
 				}
 				
@@ -161,23 +161,29 @@ package net.vdombox.ide.core.view
 		
 		private function processUIQuieryMessage( message : UIQueryMessage ) : void
 		{
-			switch ( UIQueryMessage( message ).name )
+			switch ( message.name )
 			{
 				case UIQueryMessageNames.TOOLSET_UI:
 				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+					sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, 
+									  { component : message.component, recepientKey : message.recepientKey });
+										  
 					break;
 				}
 					
 				case UIQueryMessageNames.SETTINGS_SCREEN_UI:
 				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+					sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN,
+									  { component : message.component, recepientKey : message.recepientKey });
+					
 					break;
 				}
 					
 				case UIQueryMessageNames.BODY_UI:
 				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_BODY, UIQueryMessage( message ).component, UIQueryMessage( message ).name );
+					sendNotification( ApplicationFacade.SHOW_MODULE_BODY, 
+									  { component : message.component, recepientKey : message.recepientKey });
+					
 					break;
 				}
 			}
@@ -187,29 +193,29 @@ package net.vdombox.ide.core.view
 		{
 			switch ( message.getHeader())
 			{
-				case MessageHeaders.SELECT_MODULE:
+				case SimpleMessageHeaders.SELECT_MODULE:
 				{
 					sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getRecepientKey() );
 					break;
 				}
-				case MessageHeaders.CONNECT_PROXIES_PIPE:
+				case SimpleMessageHeaders.CONNECT_PROXIES_PIPE:
 				{
 					sendNotification( ApplicationFacade.CONNECT_MODULE_TO_PROXIES, message.getRecepientKey() );
 					break;
 				}
-				case MessageHeaders.DISCONNECT_PROXIES_PIPE:
+				case SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE:
 				{
 					sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message.getRecepientKey() );
 					break;
 				}
 					
-				case MessageHeaders.RETRIEVE_MODULE_SETTINGS:
+				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
 					sendNotification( ApplicationFacade.RETRIEVE_MODULE_SETTINGS, message );
 					break;
 				}
 					
-				case MessageHeaders.SAVE_MODULE_SETTINGS:
+				case SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE:
 				{
 					sendNotification( ApplicationFacade.SAVE_MODULE_SETTINGS, message );
 					break;
