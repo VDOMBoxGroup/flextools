@@ -12,9 +12,15 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 		override public function execute(notification:INotification) : void
 		{
 			var settingeProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
-			var settingsVO : Object = settingeProxy.defaultSettings;
-//			settingeProxy.setSettings( settingsVO );
-			sendNotification( ApplicationFacade.SAVE_SETTINGS, settingsVO );
+			var settings : Object = settingeProxy.defaultSettings;
+			
+			var settingsVO : SettingsVO = new SettingsVO();
+			
+			settingsVO.saveLastApplication = settings.saveLastApplication;
+			settingsVO.lastApplicatonID = settings.lastApplicatonID;
+			
+			settingeProxy.setSettings( settingsVO );
+			sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE, settings );
 		}
 	}
 }

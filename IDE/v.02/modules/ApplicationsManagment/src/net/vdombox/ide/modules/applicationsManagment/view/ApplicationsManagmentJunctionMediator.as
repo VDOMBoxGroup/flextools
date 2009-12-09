@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.MessageHeaders;
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
@@ -41,8 +41,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
 			interests.push( ApplicationFacade.EXPORT_BODY );
 			
-			interests.push( ApplicationFacade.RETRIEVE_SETTINGS );
-			interests.push( ApplicationFacade.SAVE_SETTINGS );
+			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
+			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
 			
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
@@ -80,7 +80,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
 					message = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.TOOLSET_UI, UIComponent( body ));
+						new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ), multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
@@ -90,7 +90,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
 				{
 					message = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ));
+						new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ), multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
@@ -100,25 +100,25 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.EXPORT_BODY:
 				{
 					message = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.BODY_UI, UIComponent( body ));
+						new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
 				}
 				
-				case ApplicationFacade.RETRIEVE_SETTINGS:
+				case ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					message = new SimpleMessage( MessageHeaders.RETRIEVE_MODULE_SETTINGS, null, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE, null, multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
 					break;
 				}
 				
-				case ApplicationFacade.SAVE_SETTINGS:
+				case ApplicationFacade.SAVE_SETTINGS_TO_STORAGE:
 				{
-					message = new SimpleMessage( MessageHeaders.SAVE_MODULE_SETTINGS, body, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body, multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
@@ -179,24 +179,24 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			
 			switch ( simpleMessage.getHeader())
 			{
-				case MessageHeaders.MODULE_SELECTED:
+				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
 					if( recepientKey == multitonKey )
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
 					else
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
 					
-					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( MessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey));
+					junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey));
 					
 					break;
 				}
 				
-				case MessageHeaders.PROXIES_PIPE_CONNECTED:
+				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
 					if( recepientKey != multitonKey )
 						return;
 					
-					junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 					
 					junction.sendMessage( 
 						PipeNames.PROXIESOUT, 
@@ -206,12 +206,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 					
-				case MessageHeaders.RETRIEVE_MODULE_SETTINGS:
+				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
 					if( recepientKey != multitonKey )
 						return;
 					
-					sendNotification( ApplicationFacade.SET_SETTINGS, message.getBody() );
+					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, message.getBody() );
 					
 					break;
 				}

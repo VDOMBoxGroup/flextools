@@ -20,8 +20,8 @@
 	<s:VGroup left="30" top="30" right="30" bottom="30" >
 		
 		<s:Label id="applicationName" fontFamily="Verdana" fontSize="24" fontWeight="bold"/>
-		<s:Label id="pagesCount" fontFamily="Verdana" fontSize="12" fontWeight="bold"/>
-		<s:Label id="objectsCount" fontFamily="Verdana" fontSize="12" fontWeight="bold"/>
+		<s:RichText id="counts" fontFamily="Verdana" fontSize="12" fontWeight="bold"/>
+		<s:Label id="objectsCount" fontFamily="Verdana" fontSize="12" fontWeight="bold" includeIn="changeDescription,changeIcon,changeName,deleteApplication"/>
 		
 		<s:Scroller width="100%" minHeight="50" maxHeight="200">
 			<s:Group>	
@@ -30,7 +30,7 @@
 		</s:Scroller>
 		
 		<s:Label id="actionsForLabel"
-			text="Actions for {0}" fontFamily="Verdana" fontSize="18" />
+			fontFamily="Verdana" fontSize="18" />
 		
 		<s:Label text="Change icon:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
 				 click="currentState='changeIcon'"/>

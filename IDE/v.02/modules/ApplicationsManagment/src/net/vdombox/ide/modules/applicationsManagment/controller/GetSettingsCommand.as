@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 			}
 			else
 			{
-				sendNotification( ApplicationFacade.RETRIEVE_SETTINGS );
+				sendNotification( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
 			}
 		}
 	}

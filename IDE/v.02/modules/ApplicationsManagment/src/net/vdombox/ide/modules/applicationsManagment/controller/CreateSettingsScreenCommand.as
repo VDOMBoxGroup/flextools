@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.controller
 {
+	import mx.controls.CheckBox;
+	
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.SettingsScreenMediator;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.SettingsScreen;

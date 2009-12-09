@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.applicationsManagment.model
 		
 		override public function onRegister() : void
 		{
-			_defaultSettings = { one : "test", two : [ "test1", [ 1, 2, 3 ], new ArrayList() ] };
+			_defaultSettings = { saveLAstApplication : true, lastApplication : "" };
 		}
 		
 		public function get defaultSettings() : Object
@@ -45,15 +45,15 @@ package net.vdombox.ide.modules.applicationsManagment.model
 				settingsChanged = true;
 			}
 			
-			if( _settings.stringSetting != value.stringSetting )
+			if( _settings.saveLastApplication != value.saveLastApplication )
 			{
-				_settings.stringSetting = value.stringSetting;
+				_settings.saveLastApplication = value.saveLastApplication;
 				settingsChanged = true;
 			}
 			
-			if( _settings.arraySetting != value.arraySetting )
+			if( _settings.lastApplicatonID != value.lastApplicatonID )
 			{
-				_settings.arraySetting = value.arraySetting;
+				_settings.lastApplicatonID = value.lastApplicatonID;
 				settingsChanged = true;
 			}
 			

@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
+	import mx.utils.StringUtil;
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationProperties;
@@ -17,6 +19,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		public const NAME : String = "ApplicationPropertiesMediator";
 
+		private const ACTIONS_TEMPLATE : String = "Actions for {0}";
+		private const PO_TEMPLATE : String = "PAGES: {0}\nOBJECTS: {1}";
+		
 		private var selectedApplicationID : String;
 
 		override public function onRegister() : void
@@ -59,12 +64,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					else
 					{
 						applicationProperties.applicationName.text = applicationVO.name;
-						applicationProperties.actionsForLabel.text += applicationVO.name;
-						applicationProperties.pagesCount.text = "PAGES: " + applicationVO.numberOfPages.toString();
-						applicationProperties.objectsCount.text = "OBJECTS: " + applicationVO.numberOfObjects.toString();
+						applicationProperties.actionsForLabel.text = StringUtil.substitute( ACTIONS_TEMPLATE, applicationVO.name );
+						applicationProperties.counts.text = StringUtil.substitute( PO_TEMPLATE, applicationVO.numberOfPages, applicationVO.numberOfObjects )
 						applicationProperties.applicationDescription.text = applicationVO.description;
 						applicationProperties.visible = true;
-						
 					}
 					break;
 				}
