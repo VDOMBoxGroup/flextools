@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 
-		 implements="net.vdombox.ide.common.IToolset">
+		 implements="net.vdombox.ide.common.interfaces.IToolset">
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
@@ -11,7 +11,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.common.IToolset;
+			import net.vdombox.ide.common.interfaces.IToolset;
 			
 		]]>
 	</fx:Script>

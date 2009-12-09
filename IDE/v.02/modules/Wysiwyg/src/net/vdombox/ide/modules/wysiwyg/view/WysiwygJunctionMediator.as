@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.MessageHeaders;
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
@@ -74,7 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
 					var toolsetMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.TOOLSET_UI, UIComponent( notification.getBody()));
+						new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( notification.getBody()), multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, toolsetMessage );
 					break;
@@ -83,7 +83,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.EXPORT_BODY:
 				{
 					var bodyMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessage.SET, UIQueryMessageNames.BODY_UI, UIComponent( notification.getBody()));
+						new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( notification.getBody()), multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, bodyMessage );
 					break;
@@ -149,7 +149,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			switch ( message.getHeader())
 			{
-				case MessageHeaders.MODULE_SELECTED:
+				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
 					var toolsetMediator : ToolsetMediator = facade.retrieveMediator( ToolsetMediator.NAME ) as ToolsetMediator;
 					
@@ -158,15 +158,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					else
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
 					
-					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.CONNECT_PROXIES_PIPE, multitonKey));
+					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, SimpleMessageHeaders.CONNECT_PROXIES_PIPE, multitonKey));
 					break;
 				}
 				
-				case MessageHeaders.PROXIES_PIPE_CONNECTED:
+				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
 					if( recepientKey == multitonKey )
 					{
-						junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", MessageHeaders.PROXIES_PIPE_CONNECTED ) );
+						junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 						
 						junction.sendMessage( 
 							PipeNames.PROXIESOUT, 
@@ -178,7 +178,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case MessageHeaders.PROXIES_PIPE_CONNECTED:
+				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
 					
 					break;
