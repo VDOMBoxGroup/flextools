@@ -4,8 +4,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	
 	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
+	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
+	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -25,7 +28,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		public const NAME : String = "ApplicationsListMediator";
 
 		private var applications : Array;
-		private var selectedApplication : Object;
+		private var selectedApplication : ApplicationVO;
+		
+		private var saveLastApplication : Boolean;
+		
+		private var lastApplicationID : String;
 
 		override public function listNotificationInterests() : Array
 		{
@@ -33,6 +40,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			interests.push( ApplicationFacade.APPLICATIONS_LIST_GETTED );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
+			
+			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
+			interests.push( ApplicationFacade.SETTINGS_SETTED );
 
 			return interests;
 		}
@@ -41,8 +51,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			addHandlers();
 			
+			saveLastApplication = false;
+			
 			applicationsList.itemRenderer = new ClassFactory( ApplicationItemRenderer );
 
+			sendNotification( ApplicationFacade.GET_SETTINGS, NAME );
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 		}
 
@@ -61,19 +74,66 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.SELECTED_APPLICATION_CHANGED:
 				{
-					var newSelectedApplication : Object = notification.getBody();
-
-					if ( !applications || applications.length == 0 || newSelectedApplication == null )
+					var newSelectedApplication : ApplicationVO = notification.getBody() as ApplicationVO;
+					
+					if ( !applications || applications.length == 0 )
 						return;
-
+					
+					if( newSelectedApplication == null )
+					{
+						for ( var i : int = 0; i < applications.length; i++ )
+						{
+							if ( applications[ i ].id == lastApplicationID )
+							{
+								newSelectedApplication = applications[ i ];
+								var index : int = applications.lastIndexOf( newSelectedApplication );
+								
+								if ( index == -1 )
+									return;
+								
+								applicationsList.selectedIndex = index;
+								return;
+							}
+						}
+					}
+					
 					var index : int = applications.lastIndexOf( newSelectedApplication );
 
-					if ( index != -1 )
-					{
-						applicationsList.selectedIndex = index;
-						selectedApplication = newSelectedApplication;
-					}
+					if ( index == -1 )
+						return;
+					
+					applicationsList.selectedIndex = index;
+					selectedApplication = newSelectedApplication;
 
+					if( saveLastApplication )
+					{
+						var settingsVO : SettingsVO = 
+							new SettingsVO( { lastApplicationID : selectedApplication.id, saveLastApplication : saveLastApplication } )
+						
+						lastApplicationID = settingsVO.lastApplicationID;
+							
+						sendNotification( ApplicationFacade.SET_SETTINGS, settingsVO );
+					}
+					
+					break;
+				}
+					
+				case NAME + "/" + ApplicationFacade.SETTINGS_GETTED:
+				{
+					
+				}
+					
+				case ApplicationFacade.SETTINGS_SETTED:
+				{
+					var settingsVO : SettingsVO = notification.getBody() as SettingsVO;
+					
+					saveLastApplication = settingsVO.saveLastApplication;
+					
+					if( saveLastApplication && !lastApplicationID )
+					{
+						lastApplicationID = settingsVO.lastApplicationID;
+					}
+					
 					break;
 				}
 			}
@@ -103,7 +163,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			if( event.newIndex == -1 )
 				return;
 			
-			var newSelectedApplication : Object = applications[ event.newIndex ];
+			var newSelectedApplication : ApplicationVO = applications[ event.newIndex ] as ApplicationVO;
 			
 			if( selectedApplication == newSelectedApplication )
 				return;

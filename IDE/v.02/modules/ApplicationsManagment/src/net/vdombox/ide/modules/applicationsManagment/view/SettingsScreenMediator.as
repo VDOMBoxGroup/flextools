@@ -21,6 +21,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			super( NAME, viewComponent );
 		}
 		
+		private var settingsVO : SettingsVO;
+		
 		override public function onRegister() : void
 		{
 			addEventListeners();
@@ -38,7 +40,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var settingsVO : SettingsVO = notification.getBody() as SettingsVO;
+			settingsVO = notification.getBody() as SettingsVO;
 			settingsScreen.saveLastApplication.selected = settingsVO.saveLastApplication;
 		}
 		
@@ -60,7 +62,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		private function performOKHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.SET_SETTINGS, NAME );
+			settingsVO.saveLastApplication = settingsScreen.saveLastApplication.selected;
+			
+			sendNotification( ApplicationFacade.SET_SETTINGS, settingsVO );
 		}
 	}
 }

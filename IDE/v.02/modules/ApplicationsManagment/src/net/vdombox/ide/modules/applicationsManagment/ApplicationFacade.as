@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.applicationsManagment
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.applicationsManagment.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.TearDownCommand;
@@ -77,12 +78,16 @@ package net.vdombox.ide.modules.applicationsManagment
 		{
 			super.initializeController();
 			registerCommand( STARTUP, StartupCommand );
+			
 			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
 			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
 			registerCommand( CREATE_BODY, CreateBodyCommand );
+			
+			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
 			registerCommand( GET_SETTINGS, GetSettingsCommand );
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
-			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
+			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
+			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
 	}

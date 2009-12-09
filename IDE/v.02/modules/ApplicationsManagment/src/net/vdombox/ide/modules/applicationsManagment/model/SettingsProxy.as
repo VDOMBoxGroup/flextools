@@ -51,9 +51,9 @@ package net.vdombox.ide.modules.applicationsManagment.model
 				settingsChanged = true;
 			}
 			
-			if( _settings.lastApplicatonID != value.lastApplicatonID )
+			if( _settings.lastApplicationID != value.lastApplicationID )
 			{
-				_settings.lastApplicatonID = value.lastApplicatonID;
+				_settings.lastApplicationID = value.lastApplicationID;
 				settingsChanged = true;
 			}
 			

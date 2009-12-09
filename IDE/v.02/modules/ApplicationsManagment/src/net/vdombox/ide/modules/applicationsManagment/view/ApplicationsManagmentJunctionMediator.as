@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
@@ -12,10 +11,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.SimpleMessage;
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
+	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -211,7 +212,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					if( recepientKey != multitonKey )
 						return;
 					
-					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, message.getBody() );
+					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
+					
+					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );
 					
 					break;
 				}

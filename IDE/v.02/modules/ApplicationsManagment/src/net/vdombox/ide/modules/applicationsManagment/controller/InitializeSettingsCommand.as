@@ -14,10 +14,7 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 			var settingeProxy : SettingsProxy = facade.retrieveProxy( SettingsProxy.NAME ) as SettingsProxy;
 			var settings : Object = settingeProxy.defaultSettings;
 			
-			var settingsVO : SettingsVO = new SettingsVO();
-			
-			settingsVO.saveLastApplication = settings.saveLastApplication;
-			settingsVO.lastApplicatonID = settings.lastApplicatonID;
+			var settingsVO : SettingsVO = new SettingsVO( settings );
 			
 			settingeProxy.setSettings( settingsVO );
 			sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE, settings );
