@@ -1,4 +1,4 @@
-package net.vdombox.ide.common
+package net.vdombox.ide.common.interfaces
 {
 	public interface IVIModule
 	{

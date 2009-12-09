@@ -1,6 +1,6 @@
 package net.vdombox.ide.common
 {
-	public class MessageHeaders
+	public class SimpleMessageHeaders
 	{
 		//		core to modules
 		public static const MODULE_SELECTED : String = "moduleSelected";
@@ -8,8 +8,8 @@ package net.vdombox.ide.common
 		//		modules to core
 		public static const SELECT_MODULE : String = "selectModule";
 		
-		public static const RETRIEVE_MODULE_SETTINGS : String = "retrieveModuleSettings";
-		public static const SAVE_MODULE_SETTINGS : String = "saveModuleSettings";
+		public static const RETRIEVE_SETTINGS_FROM_STORAGE : String = "retrieveSettingsFromStorage";
+		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
 		
 		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
 		public static const PROXIES_PIPE_CONNECTED : String = "proxiesPipeConnected";

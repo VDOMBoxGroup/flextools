@@ -6,6 +6,7 @@ package net.vdombox.ide.common
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
+	import net.vdombox.ide.common.interfaces.IVIModule;
 	
 	public class VIModule extends ModuleBase implements IPipeAware, IVIModule
 	{
