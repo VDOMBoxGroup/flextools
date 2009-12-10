@@ -62,7 +62,14 @@
 				imageSourceLoader = new Loader();
 				imageSourceLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 				imageSourceLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoaded);
-				imageSourceLoader.loadBytes(ByteArray(source.data));
+				if( ByteArray(source.data).length )
+				{
+					imageSourceLoader.loadBytes(ByteArray(source.data));
+				}
+				else
+				{
+					var d : * = "";
+				}
 			}
 
 			private function ioErrorHandler(ioEvent:IOErrorEvent):void {
