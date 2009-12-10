@@ -1,10 +1,12 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
+	import flash.events.Event;
+	
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -18,25 +20,54 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			super( NAME, viewComponent );
 		}
 
-		override public function onRegister() : void
-		{
-			addHandlers();
-		}
-
 		public function get body() : Body
 		{
 			return viewComponent as Body;
 		}
-
-		private function addHandlers() : void
+		
+		override public function onRegister() : void
 		{
-			body.addEventListener( FlexEvent.CREATION_COMPLETE, body_creationCompleteHandler );
+			addEventListeners();
 		}
 
-		private function body_creationCompleteHandler( event : FlexEvent ) : void
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+			
+			interests.push( ApplicationFacade.CREATE_NEW_APPLICATION );
+			
+			return interests;
+		}
+		
+		override public function handleNotification( notification : INotification ) : void
+		{
+			switch ( notification.getName() )
+			{
+				case ApplicationFacade.CREATE_NEW_APPLICATION:
+				{
+					body.viewStack.selectedIndex = 1;
+					
+					break;
+				}
+			}
+		}
+
+		private function addEventListeners() : void
+		{
+			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			body.addEventListener( "cancelCreateApplication", cancelCreateApplicationHandler )
+		}
+
+		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			facade.registerMediator( new ApplicationPropertiesMediator( body.applicationProperties ));
 			facade.registerMediator( new ApplicationsListMediator( body.applicationsList ));
+			facade.registerMediator( new CreateApplicationMediator( body.createApplicationView ));
+		}
+		
+		private function cancelCreateApplicationHandler( event : Event ) : void
+		{
+			body.viewStack.selectedIndex = 0;
 		}
 	}
 }

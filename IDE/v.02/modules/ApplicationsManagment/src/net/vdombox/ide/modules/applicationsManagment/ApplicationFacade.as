@@ -39,6 +39,8 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
 		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
+		public static const CREATE_NEW_APPLICATION : String = "createNewApplication";
+		
 //		selection
 		public static const MODULE_SELECTED : String = "moduleSelected";
 		public static const MODULE_DESELECTED : String = "moduleDeselected";

@@ -4,18 +4,22 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 
 		 implements="net.vdombox.ide.common.interfaces.IToolset">
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
+	
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.interfaces.IToolset;
 			
 		]]>
 	</fx:Script>
+	
 	<s:layout>
 		<s:HorizontalLayout />
 	</s:layout>
-	<s:ToggleButton label="New Application"/>
+	
+	<s:ToggleButton id="createNewApplicatoin"
+					label="New Application"
+					click="dispatchEvent( new Event( 'createNewApplication' ) )"/>
+	
 	<s:Button  label="Export"/>
+	
 </s:Group>
