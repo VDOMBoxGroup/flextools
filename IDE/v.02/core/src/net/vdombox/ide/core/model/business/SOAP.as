@@ -26,7 +26,7 @@ package net.vdombox.ide.core.model.business
 	{
 		private static var instance : SOAP;
 
-		private var ws : WebService;
+		private var webService : WebService;
 
 		private var dispatcher : EventDispatcher = new EventDispatcher();
 
@@ -50,36 +50,36 @@ package net.vdombox.ide.core.model.business
 
 		public function init( wsdl : String ) : void
 		{
-			ws = new WebService();
-			ws.wsdl = wsdl;
-			ws.useProxy = false;
-			ws.addEventListener( LoadEvent.LOAD, loadHandler );
-			ws.addEventListener( FaultEvent.FAULT, faultHandler );
-			ws.loadWSDL();
+			webService = new WebService();
+			webService.wsdl = wsdl;
+			webService.useProxy = false;
+			webService.addEventListener( LoadEvent.LOAD, loadHandler );
+			webService.addEventListener( FaultEvent.FAULT, faultHandler );
+			webService.loadWSDL();
 		}
 
 		public function logon( username : String, password : String ) : AsyncToken
 		{
 			var password : String = MD5Utils.encrypt( password );
 
-			ws.open_session.addEventListener( ResultEvent.RESULT, logonCompleteHandler );
-			ws.open_session.addEventListener( FaultEvent.FAULT, logonErrorHandler );
+			webService.open_session.addEventListener( ResultEvent.RESULT, logonCompleteHandler );
+			webService.open_session.addEventListener( FaultEvent.FAULT, logonErrorHandler );
 
-			return ws.open_session( username, password );
+			return webService.open_session( username, password );
 		}
 
 		public function logout() : AsyncToken
 		{
-			ws.open_session.addEventListener( ResultEvent.RESULT, logoffCompleteHandler );
-			ws.open_session.addEventListener( FaultEvent.FAULT, logoffErrorHandler );
+			webService.open_session.addEventListener( ResultEvent.RESULT, logoffCompleteHandler );
+			webService.open_session.addEventListener( FaultEvent.FAULT, logoffErrorHandler );
 			
-			return ws.close_session( code.sessionId );
+			return webService.close_session( code.sessionId );
 		}
 
 		override flash_proxy function getProperty( name : * ) : *
 		{
 			var functionName : String = getLocalName( name );
-			var operation : * = ws[ functionName ];
+			var operation : * = webService[ functionName ];
 
 			if ( functionName && operation )
 				return operation;
@@ -96,7 +96,7 @@ package net.vdombox.ide.core.model.business
 		override flash_proxy function callProperty( name : *, ... args : Array ) : *
 		{
 			var functionName : String = getLocalName( name );
-			var operation : Operation = ws[ functionName ];
+			var operation : Operation = webService[ functionName ];
 			var key : String = code.nextSessionKey;
 			var token : AsyncToken;
 
@@ -135,8 +135,8 @@ package net.vdombox.ide.core.model.business
 
 		private function faultHandler( event : FaultEvent ) : void
 		{
-			var fe : FaultEvent = FaultEvent.createEvent( event.fault, null, event.message );
-			dispatchEvent( fe );
+			var faultEvent : FaultEvent = FaultEvent.createEvent( event.fault, null, event.message );
+			dispatchEvent( faultEvent );
 		}
 
 		private function logonCompleteHandler( event : ResultEvent ) : void
@@ -147,24 +147,24 @@ package net.vdombox.ide.core.model.business
 			code.initialize( resultXML.Session.HashString, resultXML.Session.SessionKey );
 			code.sessionId = resultXML.Session.SessionId;
 
-			var se : SOAPEvent = new SOAPEvent( SOAPEvent.LOGIN_OK );
-			se.result = resultXML;
-			dispatchEvent( se );
+			var see : SOAPEvent = new SOAPEvent( SOAPEvent.LOGIN_OK );
+			see.result = resultXML;
+			dispatchEvent( see );
 		}
 
 		private function logonErrorHandler( event : FaultEvent ) : void
 		{
 			if ( event.fault is SOAPFault )
 			{
-				var se : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.LOGIN_ERROR );
-				se.faultCode = event.fault.faultCode;
-				se.faultString = event.fault.faultString;
-				se.faultDetail = event.fault.faultDetail;
-				dispatchEvent( se );
+				var see : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.LOGIN_ERROR );
+				see.faultCode = event.fault.faultCode;
+				see.faultString = event.fault.faultString;
+				see.faultDetail = event.fault.faultDetail;
+				dispatchEvent( see );
 			}
 			else if ( event.fault is Fault )
 			{
-				ws.dispatchEvent( FaultEvent.createEvent( event.fault, event.token, event.message ));
+				webService.dispatchEvent( FaultEvent.createEvent( event.fault, event.token, event.message ));
 			}
 
 
@@ -172,23 +172,23 @@ package net.vdombox.ide.core.model.business
 		
 		private function logoffCompleteHandler( event : ResultEvent ) : void
 		{	
-			var se : SOAPEvent = new SOAPEvent( SOAPEvent.LOGOFF_OK );
-			dispatchEvent( se );
+			var see : SOAPEvent = new SOAPEvent( SOAPEvent.LOGOFF_OK );
+			dispatchEvent( see );
 		}
 		
 		private function logoffErrorHandler( event : FaultEvent ) : void
 		{
 			if ( event.fault is SOAPFault )
 			{
-				var se : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.LOGIN_ERROR );
-				se.faultCode = event.fault.faultCode;
-				se.faultString = event.fault.faultString;
-				se.faultDetail = event.fault.faultDetail;
-				dispatchEvent( se );
+				var see : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.LOGIN_ERROR );
+				see.faultCode = event.fault.faultCode;
+				see.faultString = event.fault.faultString;
+				see.faultDetail = event.fault.faultDetail;
+				dispatchEvent( see );
 			}
 			else if ( event.fault is Fault )
 			{
-				ws.dispatchEvent( FaultEvent.createEvent( event.fault, event.token, event.message ));
+				webService.dispatchEvent( FaultEvent.createEvent( event.fault, event.token, event.message ));
 			}
 		}
 
@@ -207,10 +207,10 @@ package net.vdombox.ide.core.model.business
 				return;
 			}
 
-			var se : SOAPEvent = new SOAPEvent( SOAPEvent.RESULT );
-			se.result = resultXML;
+			var see : SOAPEvent = new SOAPEvent( SOAPEvent.RESULT );
+			see.result = resultXML;
 
-			event.target.dispatchEvent( se );
+			event.target.dispatchEvent( see );
 		}
 
 		// Реализация диспатчера
