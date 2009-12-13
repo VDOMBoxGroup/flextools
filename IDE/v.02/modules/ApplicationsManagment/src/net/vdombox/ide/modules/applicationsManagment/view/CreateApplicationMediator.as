@@ -1,7 +1,9 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
+	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.CreateApplication;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -18,7 +20,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		override public function onRegister() : void
 		{
-			createApplication.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			createApplication.addEventListener( FlexEvent.SHOW, creationCompleteHandler );
 		}
 		
 		private function get createApplication() : CreateApplication
@@ -28,7 +30,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			var d : * = "";
+			var gp : GalleryProxy = facade.retrieveProxy( GalleryProxy.NAME ) as GalleryProxy;
+			createApplication.itemList.dataProvider = new ArrayList( gp.items );
 		}
 	}
 }
