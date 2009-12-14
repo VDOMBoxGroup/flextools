@@ -4,17 +4,29 @@
 					xmlns:mx="library://ns.adobe.com/flex/halo"
 					
 					width="100%" height="100%">
+	<s:states>
+		<s:State name="default"/>
+		<s:State name="gallery"/>
+	</s:states>
 	
-	<s:VGroup left="30" top="30" right="30" bottom="30" >
+	<s:VGroup left="30" top="30" right="30" bottom="30">
 		
-		<s:Rect width="60" height="80">
-			<s:stroke>
-				<s:SolidColorStroke color="white" />
-			</s:stroke>
-		</s:Rect>
+		<mx:Image id="selectedIcon"
+				  width="64" height="64"/>
 		
-		<s:Label text="Select from gallery" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true" />
-		<s:Label text="Load from computer" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true" />
+		<s:Label text="Select from gallery" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
+				 click="dispatchEvent( new Event('selectGalleryLabelClicked'))"/>
+		
+		<s:List id="itemList"
+				width="100%" height="100" includeIn="gallery" itemCreationPolicy="immediate"
+				itemRenderer="net.vdombox.ide.modules.applicationsManagment.view.components.GalleryItemRenderer">
+			<s:layout>
+				<s:TileLayout/>
+			</s:layout>
+		</s:List>
+		
+		<s:Label text="Load from computer" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
+				 click="dispatchEvent( new Event('LoadFromComputerLabelClicked'))" />
 		
 		<s:HGroup width="100%">
 			<s:Label text="Name:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true" />
@@ -37,33 +49,6 @@
 				<s:RichEditableText width="100%" height="100%"/>
 			</s:Group>
 		</s:VGroup>
-			
-		<s:List id="itemList" width="100%">
-			<s:layout>
-				<s:TileLayout/>
-			</s:layout>
-			<s:itemRenderer>
-				<fx:Component>
-					<s:ItemRenderer>
-						<s:states>
-							<s:State name="normal" />
-							<s:State name="hovered" />
-							<s:State name="selected" />
-						</s:states>
-						<s:Rect left="0" right="0" top="0" bottom="0">
-							<s:fill>
-								<s:SolidColor color="0x999999" alpha="0" alpha.hovered="0.2"
-											  alpha.selected="0.6" />
-							</s:fill>
-						</s:Rect>
-						<s:VGroup>
-							<mx:Image source="{data.content}" />
-							<s:Label text="{data.name}" /> 
-						</s:VGroup>
-					</s:ItemRenderer>
-				</fx:Component>
-			</s:itemRenderer>
-		</s:List>
 		
 		<s:HGroup>
 			<s:Button label="Save" />
