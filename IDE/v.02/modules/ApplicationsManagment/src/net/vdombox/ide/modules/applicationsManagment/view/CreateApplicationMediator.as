@@ -24,7 +24,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
+	import spark.components.TextInput;
 	import spark.events.IndexChangeEvent;
+	import spark.events.TextOperationEvent;
 
 	public class CreateApplicationMediator extends Mediator implements IMediator
 	{
@@ -41,17 +43,19 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			createApplication.addEventListener( FlexEvent.SHOW, creationCompleteHandler );
 			createApplication.addEventListener( "selectGalleryLabelClicked", selectGalleryLabelClickedHandler );
-			createApplication.addEventListener( "LoadFromComputerLabelClicked", loadFromComputerLabelClickedHandler );
+			createApplication.addEventListener( "loadFromComputerLabelClicked", loadFromComputerLabelClickedHandler );
+			createApplication.addEventListener( "saveCreateApplication", saveCreateApplicationHandler );
 		}
 
 		private function get createApplication() : CreateApplication
 		{
 			return viewComponent as CreateApplication
 		}
-
+		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			createApplication.itemList.addEventListener( IndexChangeEvent.CHANGE, itemList_changeHandler );
+			createApplication.nameField.addEventListener( TextOperationEvent.CHANGE, nameField_changeHandler )
 		}
 
 		private function selectGalleryLabelClickedHandler( event : Event ) : void
@@ -69,19 +73,27 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			}
 		}
 		
-		private function itemList_changeHandler( event : IndexChangeEvent ) : void
+		private function saveCreateApplicationHandler( event : Event ) : void
 		{
-			var d : GalleryItemVO = event.currentTarget.selectedItem as GalleryItemVO;
-			createApplication.selectedIcon.source = d.content;
+			var name : String = createApplication.nameField.text;
+			var description : String = createApplication.descriptionField.text;
 		}
-
+		
 		private function loadFromComputerLabelClickedHandler( event : Event ) : void
 		{
+			createApplication.currentState = "default";
+			
 			var file : File = new File();
 			var fileFilter : FileFilter = new FileFilter( "Image", "*.jpg;*.jpeg;*.gif;*.png" );
 			
 			file.addEventListener( Event.SELECT, file_selectHandler );
 			file.browseForOpen( "Load image", [ fileFilter ]);
+		}
+		
+		private function itemList_changeHandler( event : IndexChangeEvent ) : void
+		{
+			var d : GalleryItemVO = event.currentTarget.selectedItem as GalleryItemVO;
+			createApplication.selectedIcon.source = d.content;
 		}
 
 		private function file_selectHandler( event : Event ) : void
@@ -132,16 +144,23 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var pnge : PNGEncoder = new PNGEncoder();
 			var iconByteArray : ByteArray = pnge.encode( scaledImage.bitmapData );
 
-			_selectedImage = iconByteArray;
-
-			dispatchEvent( new Event( "imageChanged" ));
-
+			createApplication.selectedIcon.source = iconByteArray;
 		}
 
 		private function loader_ioErrorHandler( event : IOErrorEvent ) : void
 		{
-			Alert.show( "Wrong format!" );
 			return;
+		}
+		
+		private function nameField_changeHandler( event : TextOperationEvent ) : void
+		{
+			var nameField : TextInput = event.currentTarget as TextInput;
+			
+			if ( nameField.text == "" && createApplication.saveButton.enabled )
+				createApplication.saveButton.enabled = false;
+			else if ( nameField.text != "" && !createApplication.saveButton.enabled )
+				createApplication.saveButton.enabled = true;
+				
 		}
 	}
 }

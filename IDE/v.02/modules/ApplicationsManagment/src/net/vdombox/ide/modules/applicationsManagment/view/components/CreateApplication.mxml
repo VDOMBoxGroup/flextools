@@ -4,6 +4,14 @@
 					xmlns:mx="library://ns.adobe.com/flex/halo"
 					
 					width="100%" height="100%">
+	
+	<fx:Declarations>
+		<mx:StringValidator id="reqV" 
+							source="{nameField}" 
+							property="text" 
+							required="true"/>
+	</fx:Declarations>
+	
 	<s:states>
 		<s:State name="default"/>
 		<s:State name="gallery"/>
@@ -26,11 +34,12 @@
 		</s:List>
 		
 		<s:Label text="Load from computer" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-				 click="dispatchEvent( new Event('LoadFromComputerLabelClicked'))" />
+				 click="dispatchEvent( new Event('loadFromComputerLabelClicked'))" />
 		
 		<s:HGroup width="100%">
 			<s:Label text="Name:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true" />
-			<s:TextInput width="100%"/>	
+			<s:TextInput id="nameField"
+						 width="100%" change="reqV.validate()"/>	
 		</s:HGroup>
 		
 		<s:Label text="Description:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
@@ -46,12 +55,16 @@
 						<s:SolidColor color="white" />
 					</s:fill>
 				</s:Rect>
-				<s:RichEditableText width="100%" height="100%"/>
+				<s:RichEditableText id="descriptionField"
+									width="100%" height="100%"/>
 			</s:Group>
 		</s:VGroup>
 		
 		<s:HGroup>
-			<s:Button label="Save" />
+			<s:Button id="saveButton"
+					  label="Save" enabled="false"
+					  click="dispatchEvent( new Event( 'saveCreateApplication' ) )" />
+			
 			<s:Button label="Cancel" click="dispatchEvent( new Event( 'cancelCreateApplication' ) )" />
 		</s:HGroup>
 		
