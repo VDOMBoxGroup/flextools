@@ -5,7 +5,7 @@
 	xmlns:mx="library://ns.adobe.com/flex/halo"
 	
 	preinitialize="application_preinitializeHandler(event)"
-	applicationComplete="application_applicationCompleteHandler()">
+	applicationComplete="application_applicationCompleteHandler() ">
 
 	<fx:Script>
 		<![CDATA[
