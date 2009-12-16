@@ -14,6 +14,8 @@ package net.vdombox.ide.modules
 		
 		public static const MODULE_NAME : String = "ApplicationsManagment";
 		
+		public static const VERSION : String = "0.0.1";
+		
 		public static const TEAR_DOWN:String = "tearDown";
 		
 		public function ApplicationsManagment()
@@ -35,6 +37,11 @@ package net.vdombox.ide.modules
 		}
 		
 		override public function get moduleName() : String
+		{
+			return MODULE_NAME;
+		}
+		
+		override public function get version() : String
 		{
 			return MODULE_NAME;
 		}

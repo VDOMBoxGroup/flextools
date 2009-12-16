@@ -17,6 +17,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import mx.events.FlexEvent;
 	import mx.graphics.codec.PNGEncoder;
 	
+	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
+	import net.vdombox.ide.modules.applicationsManagment.events.CreateApplicationEvent;
 	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.GalleryItemVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.CreateApplication;
@@ -42,9 +44,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function onRegister() : void
 		{
 			createApplication.addEventListener( FlexEvent.SHOW, creationCompleteHandler );
-			createApplication.addEventListener( "selectGalleryLabelClicked", selectGalleryLabelClickedHandler );
-			createApplication.addEventListener( "loadFromComputerLabelClicked", loadFromComputerLabelClickedHandler );
-			createApplication.addEventListener( "saveCreateApplication", saveCreateApplicationHandler );
+			
+			createApplication.addEventListener( CreateApplicationEvent.SHOW_ICONS_GALLERY, showIconsGalleryHandler );
+			createApplication.addEventListener( CreateApplicationEvent.LOAD_ICON,loadIconHandler );
+			createApplication.addEventListener( CreateApplicationEvent.SAVE, saveHandler );
+			createApplication.addEventListener( CreateApplicationEvent.CANCEL, cancelHandler );
 		}
 
 		private function get createApplication() : CreateApplication
@@ -55,10 +59,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			createApplication.itemList.addEventListener( IndexChangeEvent.CHANGE, itemList_changeHandler );
-			createApplication.nameField.addEventListener( TextOperationEvent.CHANGE, nameField_changeHandler )
+			createApplication.nameField.addEventListener( TextOperationEvent.CHANGE, nameField_changeHandler );
 		}
 
-		private function selectGalleryLabelClickedHandler( event : Event ) : void
+		private function showIconsGalleryHandler( event : CreateApplicationEvent ) : void
 		{
 			if ( createApplication.currentState == "default" )
 			{
@@ -73,13 +77,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			}
 		}
 		
-		private function saveCreateApplicationHandler( event : Event ) : void
-		{
-			var name : String = createApplication.nameField.text;
-			var description : String = createApplication.descriptionField.text;
-		}
-		
-		private function loadFromComputerLabelClickedHandler( event : Event ) : void
+		private function loadIconHandler( CreateApplicationEvent : Event ) : void
 		{
 			createApplication.currentState = "default";
 			
@@ -88,6 +86,21 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			
 			file.addEventListener( Event.SELECT, file_selectHandler );
 			file.browseForOpen( "Load image", [ fileFilter ]);
+		}
+		
+		private function saveHandler( event : CreateApplicationEvent ) : void
+		{
+			var name : String = createApplication.nameField.text;
+			var description : String = createApplication.descriptionField.text;
+			var icon : ByteArray = createApplication.selectedIcon.source as ByteArray;
+			
+			sendNotification( ApplicationFacade.NEW_APP_PROPS_SUBMITTED, { name : name, description : description, icon : icon } );
+		}
+		
+		private function cancelHandler( event : CreateApplicationEvent ) : void
+		{
+			var name : String = createApplication.nameField.text;
+			var description : String = createApplication.descriptionField.text;
 		}
 		
 		private function itemList_changeHandler( event : IndexChangeEvent ) : void

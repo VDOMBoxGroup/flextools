@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.interfaces.IToolset;
+			import net.vdombox.ide.modules.applicationsManagment.events.ToolsetEvent;
 			
 		]]>
 	</fx:Script>
@@ -18,7 +19,7 @@
 	
 	<s:ToggleButton id="createNewApplicatoin"
 					label="New Application"
-					click="dispatchEvent( new Event( 'createNewApplication' ) )"/>
+					click="dispatchEvent( new ToolsetEvent( ToolsetEvent.OPEN_CREATE_APPLICATION ) )"/>
 	
 	<s:Button  label="Export"/>
 	

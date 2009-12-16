@@ -48,7 +48,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
+			
 			interests.push( ApplicationFacade.GET_RESOURCE );
+			interests.push( ApplicationFacade.SET_RESOURCE );
+			
+			interests.push( ApplicationFacade.CREATE_APPLICATION );
 			
 			return interests;
 		}
@@ -157,11 +161,33 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 				
+				case ApplicationFacade.CREATE_APPLICATION:
+				{
+					message = 
+						new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE,
+							PPMServerTargetNames.APPLICATION );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.GET_RESOURCE:
 				{
 					message = 
 						new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
 												PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_RESOURCE:
+				{
+					message = 
+						new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
+							PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -311,15 +337,23 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			switch( message.getTarget() )
 			{
+				case PPMServerTargetNames.APPLICATION:
+				{
+					sendNotification( ApplicationFacade.APPLICATION_CREATED, message.getBody() );
+					
+					break;
+				}
 				case PPMServerTargetNames.APPLICATIONS:
 				{
-					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.getParameters() );
+					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.getBody() );
+					
 					break;
 				}
 				
 				case PPMServerTargetNames.SELECTED_APPLICATION:
 				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getParameters() );
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getBody() );
+					
 					break;
 				}
 			}
@@ -331,9 +365,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				case PPMResourcesTargetNames.RESOURCE:
 				{
-					var resourceVO : ResourceVO = message.getParameters().resourceVO as ResourceVO;
+					var resourceVO : ResourceVO = message.getBody().resourceVO as ResourceVO;
 					
-					sendNotification( message.getParameters().recepientName + "/" +
+					sendNotification( message.getBody().recepientName + "/" +
 									  ApplicationFacade.RESOURCE_GETTED, resourceVO );
 					break;
 				}

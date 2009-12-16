@@ -20,6 +20,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			super( NAME, viewComponent );
 		}
 
+		private var newApplicationsParameters : Object;
+		
 		public function get body() : Body
 		{
 			return viewComponent as Body;
@@ -34,7 +36,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.CREATE_NEW_APPLICATION );
+			interests.push( ApplicationFacade.OPEN_CREATE_APPLICATION_VIEW );
+			interests.push( ApplicationFacade.NEW_APP_PROPS_SUBMITTED );
+			interests.push( ApplicationFacade.APPLICATION_CREATED );
 			
 			return interests;
 		}
@@ -43,9 +47,28 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.CREATE_NEW_APPLICATION:
+				case ApplicationFacade.OPEN_CREATE_APPLICATION_VIEW:
 				{
 					body.viewStack.selectedIndex = 1;
+					
+					break;
+				}
+					
+				case ApplicationFacade.NEW_APP_PROPS_SUBMITTED:
+				{
+					newApplicationsParameters = notification.getBody();
+					
+					if( newApplicationsParameters.hasOwnProperty( "name" ) )
+					{
+						sendNotification( ApplicationFacade.CREATE_APPLICATION );
+					}
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_CREATED:
+				{
+					var d : * = "";
 					
 					break;
 				}

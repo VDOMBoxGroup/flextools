@@ -39,7 +39,10 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
 		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
-		public static const CREATE_NEW_APPLICATION : String = "createNewApplication";
+		
+		public static const CREATE_APPLICATION : String = "createApplication";
+		public static const OPEN_CREATE_APPLICATION_VIEW : String = "openCreateApplicationView";
+		public static const NEW_APP_PROPS_SUBMITTED : String = "newAppPropsSubmitted";
 		
 //		selection
 		public static const MODULE_SELECTED : String = "moduleSelected";
@@ -54,8 +57,13 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationsList";
 		public static const APPLICATIONS_LIST_GETTED : String = "applicationsListGetted";
 		
+		public static const APPLICATION_CREATED : String = "applicationCreated";
+		
 		public static const GET_RESOURCE : String = "getResource";
 		public static const RESOURCE_GETTED : String = "resourceGetted";
+
+		public static const SET_RESOURCE : String = "setResource";
+		public static const RESOURCE_SETTED : String = "resourceSetted";
 		
 		public static const TEAR_DOWN : String = "tearDown";
 		

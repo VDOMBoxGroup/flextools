@@ -4,6 +4,11 @@
 					xmlns:mx="library://ns.adobe.com/flex/halo"
 					
 					width="100%" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.applicationsManagment.events.CreateApplicationEvent;
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
 		<mx:StringValidator id="reqV" 
@@ -23,7 +28,7 @@
 				  width="64" height="64"/>
 		
 		<s:Label text="Select from gallery" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-				 click="dispatchEvent( new Event('selectGalleryLabelClicked'))"/>
+				 click="dispatchEvent( new CreateApplicationEvent( CreateApplicationEvent.SHOW_ICONS_GALLERY ))"/>
 		
 		<s:List id="itemList"
 				width="100%" height="100" includeIn="gallery" itemCreationPolicy="immediate"
@@ -34,19 +39,22 @@
 		</s:List>
 		
 		<s:Label text="Load from computer" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-				 click="dispatchEvent( new Event('loadFromComputerLabelClicked'))" />
+				 click="dispatchEvent( new CreateApplicationEvent( CreateApplicationEvent.LOAD_ICON ))" />
 		
 		<s:HGroup width="100%">
+			
 			<s:Label text="Name:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true" />
 			<s:TextInput id="nameField"
-						 width="100%" change="reqV.validate()"/>	
+						 width="100%" change="reqV.validate()"/>
+			
 		</s:HGroup>
 		
-		<s:Label text="Description:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-				 click="currentState='changeDescription'"/>
+		<s:Label text="Description:" textDecoration="underline" 
+				 fontFamily="Verdana" fontSize="14" buttonMode="true"/>
 		
 		<s:VGroup width="100%">
 			<s:Group width="100%" height="50">
+				
 				<s:Rect width="100%" height="100%">
 					<s:stroke>
 						<s:SolidColorStroke color="black" />
@@ -55,6 +63,7 @@
 						<s:SolidColor color="white" />
 					</s:fill>
 				</s:Rect>
+				
 				<s:RichEditableText id="descriptionField"
 									width="100%" height="100%"/>
 			</s:Group>
@@ -63,9 +72,10 @@
 		<s:HGroup>
 			<s:Button id="saveButton"
 					  label="Save" enabled="false"
-					  click="dispatchEvent( new Event( 'saveCreateApplication' ) )" />
+					  click="dispatchEvent( new CreateApplicationEvent( CreateApplicationEvent.SAVE ) )" />
 			
-			<s:Button label="Cancel" click="dispatchEvent( new Event( 'cancelCreateApplication' ) )" />
+			<s:Button label="Cancel" 
+					  click="dispatchEvent( new CreateApplicationEvent( CreateApplicationEvent.CANCEL ) )" />
 		</s:HGroup>
 		
 	</s:VGroup>
