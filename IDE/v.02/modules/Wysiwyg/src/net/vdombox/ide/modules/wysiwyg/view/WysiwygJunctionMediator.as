@@ -284,13 +284,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case PPMServerTargetNames.APPLICATIONS:
 				{
-					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.getParameters() );
+					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.getBody() );
 					break;
 				}
 				
 				case PPMServerTargetNames.SELECTED_APPLICATION:
 				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getParameters() );
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getBody() );
 					break;
 				}
 			}
@@ -302,7 +302,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case PPMTypesTargetNames.TYPES:
 				{
-					sendNotification( ApplicationFacade.TYPES_GETTED, message.getParameters() );
+					sendNotification( ApplicationFacade.TYPES_GETTED, message.getBody() );
 					break;
 				}
 			}
@@ -314,8 +314,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case PPMResourcesTargetNames.RESOURCE:
 				{
-					sendNotification( message.getParameters().recepientName + "/" +
-									  ApplicationFacade.RESOURCE_GETTED, message.getParameters() );
+					sendNotification( message.getBody().recepientName + "/" +
+									  ApplicationFacade.RESOURCE_GETTED, message.getBody() );
 					break;
 				}
 			}
