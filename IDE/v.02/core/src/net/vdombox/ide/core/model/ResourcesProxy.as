@@ -49,15 +49,16 @@ package net.vdombox.ide.core.model
 			return resourceVO;
 		}
 
-		public function setResource( name : String, data : ByteArray, type : String, applicationID : String ) : void
+		public function setResource( resourceVO : ResourceVO ) : void
 		{
+			var data : ByteArray = resourceVO.data;
 			data.compress();
 
 			var base64Data : Base64Encoder = new Base64Encoder();
 			base64Data.insertNewLines = false;
 			base64Data.encodeBytes( data );
 
-			soap.set_resource( applicationID, type, name, base64Data.toString());
+			soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
 		}
 
 		private function addEventListeners() : void
@@ -114,6 +115,38 @@ package net.vdombox.ide.core.model
 		private function resource_loadErrorHandler( event : Event ) : void
 		{
 			var d : * = "";
+		}
+		
+		private function soap_resultHandler( event : SOAPEvent ) : void
+		{
+			var operation : Operation = event.currentTarget as Operation;
+			var result : XML = event.result[ 0 ] as XML;
+			
+			if( !operation || !result )
+				return;
+			
+			var operationName : String = operation.name;
+			
+			switch ( operationName )
+			{
+				case "list_applications" :
+				{
+					createApplicationList( result.Applications[ 0 ]);
+					sendNotification( ApplicationFacade.APPLICATIONS_LOADED, applications );
+					
+					break;
+				}
+					
+				case "create_application" :
+				{
+					var applicationVO : ApplicationVO = new ApplicationVO( result.Application[ 0 ] );
+					_applications.push( applicationVO );
+					
+					sendNotification( ApplicationFacade.APPLICATION_CREATED, applicationVO );
+					
+					break;
+				}
+			}
 		}
 	}
 }

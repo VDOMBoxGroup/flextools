@@ -10,6 +10,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
+	import net.vdombox.ide.core.controller.ResourcesProxyResponseCommand;
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
 	import net.vdombox.ide.core.controller.SendToLogCommand;
@@ -80,6 +81,8 @@ package net.vdombox.ide.core
 //		Proxies		
 		public static const RESOURCES_PROXY_REQUEST : String = "resourcesProxyRequest";
 		public static const RESOURCES_PROXY_RESPONSE : String = "resourcesProxyResponse";
+		
+		public static const RESOURCE_SETTED : String = "resourceSetted";
 		
 		public static const SERVER_PROXY_REQUEST : String = "serverProxyRequest";
 		public static const SERVER_PROXY_RESPONSE : String = "serverProxyResponse";
@@ -155,6 +158,8 @@ package net.vdombox.ide.core
 			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
 			
 			registerCommand( APPLICATION_CREATED, ServerProxyResponseCommand );
+			
+			registerCommand( RESOURCE_SETTED, ResourcesProxyResponseCommand );
 			
 			registerCommand( SEND_TO_LOG, SendToLogCommand );
 		}
