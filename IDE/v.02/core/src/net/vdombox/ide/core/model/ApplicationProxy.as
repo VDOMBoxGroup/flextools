@@ -1,7 +1,9 @@
 package net.vdombox.ide.core.model
 {
+	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IApplicationProxy;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -14,7 +16,7 @@ package net.vdombox.ide.core.model
 
 		public function ApplicationProxy( applicationVO : ApplicationVO )
 		{
-			super( NAME + "/" + applicationVO.id, data );
+			super( NAME + "/" + applicationVO.id, applicationVO );
 		}
 
 		private var _selectedPage : PageVO;
@@ -22,13 +24,13 @@ package net.vdombox.ide.core.model
 		private var soap : SOAP = SOAP.getInstance();
 
 		private var serverProxy : ServerProxy;
-
+		
 		public function get id() : String
 		{
 			return applicationVO.id;
 		}
 
-		public function get information() : ApplicationVO
+		public function get application() : ApplicationVO
 		{
 			return applicationVO;
 		}
@@ -46,11 +48,24 @@ package net.vdombox.ide.core.model
 				return null;
 		}
 		
+		override public function onRegister() : void
+		{
+			addEventListeners();
+		}
+		
 		public function load( applicationID : String ) : void
 		{
 			var dummy : * = ""; // FIXME remove dummy
 		}
-
+		
+		public function changeApplicationProperties( applicationPropertiesVO : ApplicationPropertiesVO ) : void
+		{
+			var d : * = applicationPropertiesVO.toXML();
+			
+			soap.set_application_info( applicationVO.id, d );
+			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+		}
+		
 		public function createPage( pageID : String ) : PageVO
 		{
 			return null;
@@ -82,6 +97,16 @@ package net.vdombox.ide.core.model
 		private function get applicationVO() : ApplicationVO
 		{
 			return data as ApplicationVO;
+		}
+		
+		private function addEventListeners() : void
+		{
+
+		}
+		
+		private function soap_resultHandler( event : SOAPEvent ) : void
+		{
+			var d : * = "";
 		}
 	}
 }

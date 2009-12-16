@@ -144,7 +144,7 @@ package net.vdombox.ide.core.view
 					
 					break;
 				}
-				
+
 				case PPMPlaceNames.TYPES:
 				{
 					sendNotification( ApplicationFacade.TYPES_PROXY_REQUEST, ppMessage );
@@ -157,7 +157,14 @@ package net.vdombox.ide.core.view
 					sendNotification( ApplicationFacade.RESOURCES_PROXY_REQUEST, ppMessage );
 					
 					break;
-				}	
+				}
+					
+				case PPMPlaceNames.APPLICATION:
+				{
+					sendNotification( ApplicationFacade.APPLICATION_PROXY_REQUEST, ppMessage );
+					
+					break;
+				}
 			}
 		}
 	}

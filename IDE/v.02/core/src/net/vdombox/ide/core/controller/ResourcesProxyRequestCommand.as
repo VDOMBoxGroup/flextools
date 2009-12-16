@@ -59,8 +59,6 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 			}
-
-
 		}
 	}
 }

@@ -207,10 +207,11 @@ package net.vdombox.ide.core.model.business
 				return;
 			}
 
-			var see : SOAPEvent = new SOAPEvent( SOAPEvent.RESULT );
-			see.result = resultXML;
+			var soapEvent : SOAPEvent = new SOAPEvent( SOAPEvent.RESULT );
+			soapEvent.result = resultXML;
+			soapEvent.token = event.token;
 
-			event.target.dispatchEvent( see );
+			event.target.dispatchEvent( soapEvent );
 		}
 
 		// Реализация диспатчера

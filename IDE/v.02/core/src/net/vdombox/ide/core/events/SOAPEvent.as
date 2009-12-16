@@ -1,6 +1,8 @@
 package net.vdombox.ide.core.events
 {
 	import flash.events.Event;
+	
+	import mx.rpc.AsyncToken;
 
 	public class SOAPEvent extends Event
 	{
@@ -10,13 +12,15 @@ package net.vdombox.ide.core.events
 		public static var RESULT : String = "Result";
 
 		public var result : XML = new XML();
+		public var token : AsyncToken;
 
 		public function SOAPEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true,
-								   result : XML = null )
+								   result : XML = null, token : AsyncToken = null )
 		{
 			super( type, bubbles, cancelable );
 
 			this.result = result;
+			this.token = token;
 		}
 
 		override public function clone() : Event

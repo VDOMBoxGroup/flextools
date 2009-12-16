@@ -3,6 +3,7 @@ package net.vdombox.ide.core
 	import mx.rpc.events.FaultEvent;
 	
 	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
+	import net.vdombox.ide.core.controller.ApplicationProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ConnectServerCommand;
 	import net.vdombox.ide.core.controller.ConnectionServerSuccessfulCommand;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
@@ -90,6 +91,9 @@ package net.vdombox.ide.core
 		public static const TYPES_PROXY_REQUEST : String = "typesProxyRequest";
 		public static const TYPES_PROXY_RESPONSE : String = "typesProxyResponse";
 		
+		public static const APPLICATION_PROXY_REQUEST : String = "applicationProxyRequest";
+		public static const APPLICATION_PROXY_RESPONSE : String = "applicationProxyResponse";
+		
 //		************
 		
 		public static const LOAD_MODULES : String = "loadModules";
@@ -154,12 +158,15 @@ package net.vdombox.ide.core
 			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
 			
 			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
-			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
+			
 			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
 			
 			registerCommand( APPLICATION_CREATED, ServerProxyResponseCommand );
 			
+			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
 			registerCommand( RESOURCE_SETTED, ResourcesProxyResponseCommand );
+			
+			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand )
 			
 			registerCommand( SEND_TO_LOG, SendToLogCommand );
 		}

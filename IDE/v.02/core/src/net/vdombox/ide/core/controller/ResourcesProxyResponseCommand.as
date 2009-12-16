@@ -2,7 +2,7 @@ package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.PPMServerTargetNames;
+	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -31,7 +31,7 @@ package net.vdombox.ide.core.controller
 					}
 					
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, 
-						PPMServerTargetNames.APPLICATION, resourceVO );
+						PPMResourcesTargetNames.RESOURCE, resourceVO );
 					
 					sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, message );
 					

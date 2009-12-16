@@ -1,12 +1,15 @@
 package net.vdombox.ide.core.model
 {
-	import flash.events.Event;
 	import flash.utils.ByteArray;
 	
+	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
+	import mx.rpc.soap.Operation;
+	import mx.rpc.soap.SOAPFault;
 	import mx.utils.Base64Encoder;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	
@@ -41,7 +44,9 @@ package net.vdombox.ide.core.model
 			if ( !resourceID )
 				return null;
 
-			var resourceVO : ResourceVO = new ResourceVO( ownerID, resourceID );
+			var resourceVO : ResourceVO = new ResourceVO();
+			resourceVO.ownerID = ownerID;
+			resourceVO.resourceID = resourceID;
 			
 			var resource : Resource = new Resource( resourceVO );
 			resource.load();
@@ -58,63 +63,20 @@ package net.vdombox.ide.core.model
 			base64Data.insertNewLines = false;
 			base64Data.encodeBytes( data );
 
-			soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
+			var asyncToken : AsyncToken =
+				soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
+			
+			asyncToken.resourceVO = resourceVO;
 		}
 
 		private function addEventListeners() : void
 		{
-			soap.list_resources.addEventListener( SOAPEvent.RESULT, listResourcesHandler );
+			soap.list_resources.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 
-			soap.set_resource.addEventListener( SOAPEvent.RESULT, setResourceOKHandler );
-			soap.set_resource.addEventListener( FaultEvent.FAULT, setResourceFaultHandler );
+			soap.set_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 
-			soap.delete_resource.addEventListener( SOAPEvent.RESULT, deleteResourceOKHandler );
-			soap.set_resource.addEventListener( FaultEvent.FAULT, deleteResourceFaultHandler );
-		}
-
-		private function deleteResourceFaultHandler( event : FaultEvent ) : void
-		{
-
-		}
-
-		private function deleteResourceOKHandler( event : SOAPEvent ) : void
-		{
-
-		}
-
-		private function listResourcesHandler( event : SOAPEvent ) : void
-		{
-
-		}
-
-		private function resourceLoadedFaultHandler( event : FaultEvent ) : void
-		{
-
-		}
-
-		private function resourceLoadedOKHandler( event : SOAPEvent ) : void
-		{
-
-		}
-
-		private function setResourceFaultHandler( event : FaultEvent ) : void
-		{
-
-		}
-
-		private function setResourceOKHandler( event : SOAPEvent ) : void
-		{
-
-		}
-		
-		private function resource_loadCompleteHandler( event : Event ) : void
-		{
-			var d : * = "";
-		}
-		
-		private function resource_loadErrorHandler( event : Event ) : void
-		{
-			var d : * = "";
+			soap.delete_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 		
 		private function soap_resultHandler( event : SOAPEvent ) : void
@@ -129,24 +91,39 @@ package net.vdombox.ide.core.model
 			
 			switch ( operationName )
 			{
-				case "list_applications" :
+				case "set_resource" :
 				{
-					createApplicationList( result.Applications[ 0 ]);
-					sendNotification( ApplicationFacade.APPLICATIONS_LOADED, applications );
+					var resourceVO : ResourceVO;
+					
+					if ( event.token && event.token.resourceVO)
+						resourceVO = event.token.resourceVO as ResourceVO;
+					else
+						resourceVO = new ResourceVO;
+					
+					var id : String = result.Resource.@id.toString();
+					
+					if( id == "" )
+						return;
+					
+					resourceVO.resourceID = id;
+					
+					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
 					
 					break;
 				}
 					
-				case "create_application" :
+				case "list_resources" :
 				{
-					var applicationVO : ApplicationVO = new ApplicationVO( result.Application[ 0 ] );
-					_applications.push( applicationVO );
-					
-					sendNotification( ApplicationFacade.APPLICATION_CREATED, applicationVO );
+				
 					
 					break;
 				}
 			}
+		}
+		
+		private function soap_faultHandler( event : SOAPFault ) : void
+		{
+			var d : * = "";
 		}
 	}
 }

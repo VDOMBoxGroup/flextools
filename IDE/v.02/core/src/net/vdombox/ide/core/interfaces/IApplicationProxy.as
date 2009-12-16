@@ -8,7 +8,7 @@ package net.vdombox.ide.core.interfaces
 	public interface IApplicationProxy extends IProxy
 	{
 		function get id() : String;
-		function get information() : ApplicationVO;
+		function get application() : ApplicationVO;
 		function get selectedPage() : PageVO;
 		function get selectedPageID() : String;
 //		function get pagesList() : IPageVO; ???
