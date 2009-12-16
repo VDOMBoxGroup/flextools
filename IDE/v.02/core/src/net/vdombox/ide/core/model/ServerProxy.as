@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.model
 {
+	import mx.rpc.soap.Operation;
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
@@ -101,12 +103,18 @@ package net.vdombox.ide.core.model
 		
 		public function loadApplications() : void
 		{
-			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_loadApplicationsHandler );
+			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			
 			sendNotification( ApplicationFacade.APPLICATIONS_LOADING );
 			
 			soap.list_applications();
+		}
+		
+		public function createApplication() : void
+		{
+			soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			
+			soap.create_application("");
 		}
 		
 		public function getApplicationProxy( applicationVO : ApplicationVO ) : ApplicationProxy
@@ -164,13 +172,39 @@ package net.vdombox.ide.core.model
 
 			sendNotification( ApplicationFacade.LOGON_SUCCESS, _authInfo );
 		}
-
-		private function soap_loadApplicationsHandler( event : SOAPEvent ) : void
+		
+		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
-			createApplicationList( event.result.Applications[ 0 ]);
-			sendNotification( ApplicationFacade.APPLICATIONS_LOADED, applications );
+			var operation : Operation = event.currentTarget as Operation;
+			var result : XML = event.result[ 0 ] as XML;
+			
+			if( !operation || !result )
+				return;
+			
+			var operationName : String = operation.name;
+			
+			switch ( operationName )
+			{
+				case "list_applications" :
+				{
+					createApplicationList( result.Applications[ 0 ]);
+					sendNotification( ApplicationFacade.APPLICATIONS_LOADED, applications );
+					
+					break;
+				}
+				
+				case "create_application" :
+				{
+					var applicationVO : ApplicationVO = new ApplicationVO( result.Application[ 0 ] );
+					_applications.push( applicationVO );
+					
+					sendNotification( ApplicationFacade.APPLICATION_CREATED, applicationVO );
+					
+					break;
+				}
+			}
 		}
-
+		
 		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
 		{
 			sendNotification( ApplicationFacade.LOGON_ERROR );

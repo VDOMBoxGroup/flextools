@@ -3,9 +3,9 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
-	import net.vdombox.ide.common.vo.ApplicationVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -23,11 +23,19 @@ package net.vdombox.ide.core.controller
 			
 			switch ( target )
 			{
+				case PPMServerTargetNames.APPLICATION:
+				{
+					if( operation == PPMOperationNames.CREATE )
+						serverProxy.createApplication();
+					
+					break;
+				}
+					
 				case PPMServerTargetNames.APPLICATIONS:
 				{
 					var applications : Array = serverProxy.applications;
 					
-					message.setParameters( applications );
+					message.setBody( applications );
 					
 					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
 					break;
@@ -43,11 +51,11 @@ package net.vdombox.ide.core.controller
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
-						selectedApplication = message.getParameters() as ApplicationVO;
+						selectedApplication = message.getBody() as ApplicationVO;
 						serverProxy.selectedApplication = selectedApplication;
 					}
 					
-					message.setParameters( selectedApplication );
+					message.setBody( selectedApplication );
 					
 					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
 					

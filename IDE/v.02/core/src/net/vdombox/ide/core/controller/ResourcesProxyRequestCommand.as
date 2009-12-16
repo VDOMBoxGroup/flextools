@@ -19,7 +19,7 @@ package net.vdombox.ide.core.controller
 			
 			var ppMessage : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 			
-			var parameters : Object = ppMessage.getParameters();
+			var parameters : Object = ppMessage.getBody();
 			var ownerID : String;
 			
 			if( !parameters.hasOwnProperty( "ownerID" ) )
@@ -30,7 +30,7 @@ package net.vdombox.ide.core.controller
 			var resourceVO : ResourceVO = resourcesProxy.getResource( ownerID, parameters.resourceID );
 			parameters["resourceVO"] = resourceVO;
 			
-			ppMessage.setParameters( parameters );
+			ppMessage.setBody( parameters );
 			
 			sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, ppMessage );
 		}

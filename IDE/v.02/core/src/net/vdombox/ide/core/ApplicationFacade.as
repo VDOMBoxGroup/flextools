@@ -5,14 +5,16 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
 	import net.vdombox.ide.core.controller.ConnectServerCommand;
 	import net.vdombox.ide.core.controller.ConnectionServerSuccessfulCommand;
-	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
 	import net.vdombox.ide.core.controller.LogonSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
-	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
+	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
+	import net.vdombox.ide.core.controller.SendToLogCommand;
+	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
+	import net.vdombox.ide.core.controller.ServerProxyResponseCommand;
 	import net.vdombox.ide.core.controller.TypesProxyRequestCommand;
 	import net.vdombox.ide.core.model.business.SOAP;
 	
@@ -44,18 +46,19 @@ package net.vdombox.ide.core
 		public static const CONNECTION_SERVER_SUCCESSFUL : String = "connectionServerSuccessful";
 		public static const CONNECTION_SERVER_ERROR : String = "connectionServerError";
 		
-//		public static const LOGGED_ON: String = "loggedOn";
 		public static const LOGON_STARTS : String = "logonStarts";
 		public static const LOGON_SUCCESS : String = "logonSuccess";
 		public static const LOGON_ERROR : String = "logonError";
+	
 		
-//		public static const LOGOFF : String = "logoff";
 		public static const LOGOFF_STARTS : String = "logoffStarts";
 		public static const LOGOFF_SUCCESS : String = "logoffSuccess";
 		public static const LOGOFF_ERROR : String = "logoffError";
 		
 		public static const APPLICATIONS_LOADING : String = "applicationsLoading";
 		public static const APPLICATIONS_LOADED : String = "applicationsLoaded";
+		
+		public static const APPLICATION_CREATED : String = "applicationCreated";
 		
 		public static const TYPES_LOADING : String = "typesLoading";
 		public static const TYPES_LOADED : String = "typesLoaded";
@@ -100,6 +103,9 @@ package net.vdombox.ide.core
 		public static const SHOW_MODULE_TOOLSET : String = "showModuleToolset";
 		public static const SHOW_MODULE_SETTINGS_SCREEN : String = "showModuleSettingsScreen";
 		public static const SHOW_MODULE_BODY : String = "showModuleBody";
+		
+//		log
+		public static const SEND_TO_LOG : String = "sendToLog";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -143,11 +149,14 @@ package net.vdombox.ide.core
 			
 			registerCommand( RETRIEVE_MODULE_SETTINGS, RetrieveModuleSettings );
 			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
-			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
 			
 			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
 			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
 			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
+			
+			registerCommand( APPLICATION_CREATED, ServerProxyResponseCommand );
+			
+			registerCommand( SEND_TO_LOG, SendToLogCommand );
 		}
 
 		private function soap_faultEvent( event : FaultEvent ) : void

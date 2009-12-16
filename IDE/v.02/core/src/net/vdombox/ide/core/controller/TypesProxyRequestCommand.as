@@ -27,7 +27,7 @@ package net.vdombox.ide.core.controller
 			{
 				case PPMTypesTargetNames.TYPES:
 				{
-					message.setParameters( typesProxy.types );
+					message.setBody( typesProxy.types );
 					
 					sendNotification( ApplicationFacade.TYPES_PROXY_RESPONSE, message );
 					break;
