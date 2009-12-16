@@ -59,6 +59,9 @@ package net.vdombox.ide.modules.applicationsManagment
 		
 		public static const APPLICATION_CREATED : String = "applicationCreated";
 		
+		public static const EDIT_APPLICATION : String = "editApplication";
+		public static const APPLICATION_EDITED : String = "ApplicationEdited";
+		
 		public static const GET_RESOURCE : String = "getResource";
 		public static const RESOURCE_GETTED : String = "resourceGetted";
 

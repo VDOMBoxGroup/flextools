@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.model.vo
 {
 	import flash.utils.ByteArray;
-
+	
 	public class GalleryItemVO
 	{
 		public function GalleryItemVO( name : String, content : ByteArray )

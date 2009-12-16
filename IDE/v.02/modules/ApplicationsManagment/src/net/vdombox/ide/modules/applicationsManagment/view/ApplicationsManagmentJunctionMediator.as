@@ -53,6 +53,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.SET_RESOURCE );
 			
 			interests.push( ApplicationFacade.CREATE_APPLICATION );
+			interests.push( ApplicationFacade.EDIT_APPLICATION );
 			
 			return interests;
 		}
@@ -171,6 +172,17 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					
 					break;
 				}
+				
+				case ApplicationFacade.EDIT_APPLICATION:
+				{
+					message = 
+						new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE,
+							PPMServerTargetNames.APPLICATION, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}	
 					
 				case ApplicationFacade.GET_RESOURCE:
 				{

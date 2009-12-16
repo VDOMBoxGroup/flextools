@@ -17,6 +17,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import mx.events.FlexEvent;
 	import mx.graphics.codec.PNGEncoder;
 	
+	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.events.CreateApplicationEvent;
 	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
