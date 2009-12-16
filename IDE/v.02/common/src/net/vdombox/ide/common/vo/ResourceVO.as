@@ -5,12 +5,12 @@ package net.vdombox.ide.common.vo
 	[Bindable]
 	public class ResourceVO
 	{
-		public function ResourceVO( ownerID : String, resourceID : String )
+		public function ResourceVO()
 		{
-			_ownerID = ownerID;
-			_resourceID = resourceID;
+			_name = "";
+			_type = "";
 		}
-
+		
 		private var _ownerID : String;
 
 		private var _resourceID : String;
@@ -28,9 +28,19 @@ package net.vdombox.ide.common.vo
 			return _ownerID;
 		}
 
+		public function set ownerID( value : String ) : void
+		{
+			_ownerID = value;
+		}
+		
 		public function get resourceID() : String
 		{
 			return _resourceID;
+		}
+		
+		public function set resourceID( value : String ) : void
+		{
+			_resourceID = value;
 		}
 		
 		public function get name() : String
