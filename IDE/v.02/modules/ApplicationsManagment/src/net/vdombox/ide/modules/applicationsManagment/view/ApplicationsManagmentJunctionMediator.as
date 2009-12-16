@@ -361,14 +361,29 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		private function processResourcesProxyMessage( message : ProxiesPipeMessage ) : void
 		{
+			var operation : String = message.getOperation();
+			
+			var resourceVO : ResourceVO;
+			
 			switch( message.getTarget() )
 			{
 				case PPMResourcesTargetNames.RESOURCE:
 				{
-					var resourceVO : ResourceVO = message.getBody().resourceVO as ResourceVO;
 					
-					sendNotification( message.getBody().recepientName + "/" +
-									  ApplicationFacade.RESOURCE_GETTED, resourceVO );
+					if( operation == PPMOperationNames.READ )
+					{
+						resourceVO = message.getBody().resourceVO as ResourceVO;
+						
+						sendNotification( message.getBody().recepientName + "/" +
+										  ApplicationFacade.RESOURCE_GETTED, resourceVO );
+					}
+					else if ( operation == PPMOperationNames.CREATE )
+					{
+						resourceVO = message.getBody() as ResourceVO;
+						
+						sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
+					}
+					
 					break;
 				}
 			}

@@ -68,7 +68,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					
 				case ApplicationFacade.APPLICATION_CREATED:
 				{
-					var d : * = "";
+					sendNotification( 
+						ApplicationFacade.SET_RESOURCE, { application : notification.getBody(), icon : newApplicationsParameters.icon }
+					);
 					
 					break;
 				}
