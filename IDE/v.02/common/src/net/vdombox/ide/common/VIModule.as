@@ -28,6 +28,11 @@ package net.vdombox.ide.common
 			return null;
 		}
 		
+		public function get version() : String
+		{
+			return null;
+		}
+		
 		public function get hasToolset() : Boolean
 		{
 			return false;

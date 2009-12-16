@@ -4,14 +4,14 @@ package net.vdombox.ide.common
 
 	public class ProxiesPipeMessage extends Message
 	{
-		public function ProxiesPipeMessage( place : String, operation : String, target : String, parameters : Object = null )
+		public function ProxiesPipeMessage( place : String, operation : String, target : String, body : Object = null )
 		{
 			
 			_operation = operation;
 			
 			_target = target;
 			
-			super( Message.NORMAL, place, parameters );
+			super( Message.NORMAL, place, body );
 		}
 		
 		protected var _operation : String;
@@ -31,16 +31,6 @@ package net.vdombox.ide.common
 		public function getTarget() : String
 		{
 			return _target;			
-		}
-		
-		public function getParameters() : Object
-		{
-			return body;			
-		}
-		
-		public function setParameters( value : Object ) : void
-		{
-			body = value;			
 		}
 	}
 }

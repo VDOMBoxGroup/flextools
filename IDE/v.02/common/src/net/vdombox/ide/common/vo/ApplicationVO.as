@@ -6,7 +6,7 @@ package net.vdombox.ide.common.vo
 		{	
 			if( !application )
 				return;
-			
+
 			var information : XML = application.Information[ 0 ];
 			
 			if( !information )

@@ -14,9 +14,13 @@ package net.vdombox.ide.common.vo
 		private var _ownerID : String;
 
 		private var _resourceID : String;
-
+		
+		private var _type : String;
+		
+		private var _name : String;
+		
 		private var _data : ByteArray;
-
+		
 		private var _status : String;
 
 		public function get ownerID() : String
@@ -28,7 +32,27 @@ package net.vdombox.ide.common.vo
 		{
 			return _resourceID;
 		}
-
+		
+		public function get name() : String
+		{
+			return _type;
+		}
+		
+		public function set name( value : String ) : void
+		{
+			_type = value;
+		}
+		
+		public function get type() : String
+		{
+			return _type;
+		}
+		
+		public function set type( value : String ) : void
+		{
+			_type = value;
+		}
+		
 		public function get status() : String
 		{
 			return _status;

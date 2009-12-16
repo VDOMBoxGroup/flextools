@@ -5,6 +5,8 @@ package net.vdombox.ide.common.interfaces
 		function get moduleID() : String;
 
 		function get moduleName() : String;
+		
+		function get version() : String;
 
 		function get hasToolset() : Boolean;
 
