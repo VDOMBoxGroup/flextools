@@ -102,19 +102,18 @@ package net.vdombox.ide.core.model.business
 
 			args.unshift( code.sessionId, key );
 			operation.addEventListener( ResultEvent.RESULT, operationResultHandler );
-//			operation.xmlSpecialCharsFilter = escapeXML;
+			operation.xmlSpecialCharsFilter = escapeXML;
 
 			token = operation.send.apply( null, args );
 			token.key = key;
 			return token;
 		}
 
-//		private function escapeXML( value : Object ) : String
-//		{
-//			var str : String = value.toString();
-//			//str = str.replace(/&/g, "&amp;").replace(/</g, "&lt;"); // TODO very dirty hack. wrong escaping special xml symbols
-//			return str;
-//		}
+		private function escapeXML( value : Object ) : String
+		{
+			var str : String = 	value.toString();
+			return str;
+		}
 
 		private function getLocalName( name : Object ) : String
 		{

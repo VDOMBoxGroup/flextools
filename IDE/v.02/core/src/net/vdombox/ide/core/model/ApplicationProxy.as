@@ -60,9 +60,9 @@ package net.vdombox.ide.core.model
 		
 		public function changeApplicationProperties( applicationPropertiesVO : ApplicationPropertiesVO ) : void
 		{
-			var d : * = applicationPropertiesVO.toXML();
+			var applicationProperties : XML = applicationPropertiesVO.toXML();
 			
-			soap.set_application_info( applicationVO.id, d );
+			soap.set_application_info( applicationVO.id, applicationProperties );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 		
