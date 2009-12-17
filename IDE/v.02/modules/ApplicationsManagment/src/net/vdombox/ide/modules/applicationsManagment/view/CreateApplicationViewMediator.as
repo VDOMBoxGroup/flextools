@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.modules.applicationsManagment.events.CreateApplicationEvent;
 	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.GalleryItemVO;
-	import net.vdombox.ide.modules.applicationsManagment.view.components.CreateApplication;
+	import net.vdombox.ide.modules.applicationsManagment.view.components.CreateApplicationView;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -31,11 +31,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import spark.events.IndexChangeEvent;
 	import spark.events.TextOperationEvent;
 
-	public class CreateApplicationMediator extends Mediator implements IMediator
+	public class CreateApplicationViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "CreateApplicationMediator";
 
-		public function CreateApplicationMediator( viewComponent : Object = null )
+		public function CreateApplicationViewMediator( viewComponent : Object = null )
 		{
 			super( NAME, viewComponent );
 		}
@@ -52,9 +52,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			createApplication.addEventListener( CreateApplicationEvent.CANCEL, cancelHandler );
 		}
 
-		private function get createApplication() : CreateApplication
+		private function get createApplication() : CreateApplicationView
 		{
-			return viewComponent as CreateApplication
+			return viewComponent as CreateApplicationView
 		}
 		
 		private function creationCompleteHandler( event : FlexEvent ) : void

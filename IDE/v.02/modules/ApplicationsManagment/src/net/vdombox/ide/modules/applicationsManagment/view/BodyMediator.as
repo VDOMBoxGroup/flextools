@@ -107,14 +107,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		private function addEventListeners() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			body.addEventListener( "cancelCreateApplication", cancelCreateApplicationHandler )
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			facade.registerMediator( new ApplicationPropertiesMediator( body.applicationProperties ));
-			facade.registerMediator( new ApplicationsListMediator( body.applicationsList ));
-			facade.registerMediator( new CreateApplicationMediator( body.createApplicationView ));
+			facade.registerMediator( new EditApplicationViewMediator( body.editApplicationView ));
+			facade.registerMediator( new CreateApplicationViewMediator( body.createApplicationView ));
 		}
 		
 		private function cancelCreateApplicationHandler( event : Event ) : void

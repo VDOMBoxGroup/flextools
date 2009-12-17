@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const SET_SETTINGS : String = "setSettings";
 		
 		public static const SETTINGS_GETTED : String = "settingsGetted";
-		public static const SETTINGS_SETTED : String = "settingsSetted";
+		public static const SETTINGS_CHANGED : String = "settingsChanged";
 		
 		public static const RETRIEVE_SETTINGS_FROM_STORAGE : String = "retrieveSettingsFromStorage";
 		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";

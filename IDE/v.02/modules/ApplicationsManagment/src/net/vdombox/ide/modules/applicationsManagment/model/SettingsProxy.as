@@ -32,7 +32,10 @@ package net.vdombox.ide.modules.applicationsManagment.model
 		
 		public function getSettings() : SettingsVO
 		{
-			return _settings;
+			if( _settings )
+				return _settings.copy();
+			else
+				return null;
 		}
 		
 		public function setSettings( value : SettingsVO ) : void
@@ -58,7 +61,7 @@ package net.vdombox.ide.modules.applicationsManagment.model
 			}
 			
 			if( settingsChanged )
-				sendNotification( ApplicationFacade.SETTINGS_SETTED, _settings );
+				sendNotification( ApplicationFacade.SETTINGS_CHANGED, _settings );
 		}
 	}
 }

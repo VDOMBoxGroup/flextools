@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
-			interests.push( ApplicationFacade.SETTINGS_SETTED );
+			interests.push( ApplicationFacade.SETTINGS_CHANGED );
 			
 			return interests;
 		}
