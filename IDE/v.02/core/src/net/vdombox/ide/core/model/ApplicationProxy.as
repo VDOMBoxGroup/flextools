@@ -1,5 +1,7 @@
 package net.vdombox.ide.core.model
 {
+	import mx.rpc.http.Operation;
+	
 	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -106,7 +108,24 @@ package net.vdombox.ide.core.model
 		
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
-			var d : * = "";
+			var operation : Operation = event.currentTarget as Operation;
+			var result : XML = event.result[ 0 ] as XML;
+			
+			if( !operation || !result )
+				return;
+			
+			var operationName : String = operation.name;
+			
+			switch ( operationName )
+			{
+				case "set_application_info" :
+				{
+					createApplicationList( result.Applications[ 0 ]);
+					sendNotification( ApplicationFacade.A, applications );
+					
+					break;
+				}
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@ package net.vdombox.ide.core
 	
 	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
 	import net.vdombox.ide.core.controller.ApplicationProxyRequestCommand;
+	import net.vdombox.ide.core.controller.ApplicationProxyResponseCommand;
 	import net.vdombox.ide.core.controller.ConnectServerCommand;
 	import net.vdombox.ide.core.controller.ConnectionServerSuccessfulCommand;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
@@ -61,6 +62,7 @@ package net.vdombox.ide.core
 		public static const APPLICATIONS_LOADED : String = "applicationsLoaded";
 		
 		public static const APPLICATION_CREATED : String = "applicationCreated";
+		public static const APPLICATION_CHANGED : String = "applicationChanged";
 		
 		public static const TYPES_LOADING : String = "typesLoading";
 		public static const TYPES_LOADED : String = "typesLoaded";
@@ -167,6 +169,7 @@ package net.vdombox.ide.core
 			registerCommand( RESOURCE_SETTED, ResourcesProxyResponseCommand );
 			
 			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand )
+			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand )
 			
 			registerCommand( SEND_TO_LOG, SendToLogCommand );
 		}
