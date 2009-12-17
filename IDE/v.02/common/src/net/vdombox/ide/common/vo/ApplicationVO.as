@@ -12,15 +12,7 @@ package net.vdombox.ide.common.vo
 			if( !information )
 				return;
 			
-			_id = information.Id[ 0 ];
-			_name = information.Name[ 0 ];
-			_description = information.Description[ 0 ];
-			_serverVersion = information.ServerVersion[ 0 ];
-			_iconID = information.Icon[ 0 ];
-			_indexPageID = information.Index[ 0 ];
-			_numberOfPages = information.Numberofpages[ 0 ];
-			_numberOfObjects = information.Numberofobjects[ 0 ];
-			_scriptingLanguage = information.ScriptingLanguage[ 0 ];
+			setInformation( information );
 		}
 
 		private var _id : String
@@ -47,7 +39,7 @@ package net.vdombox.ide.common.vo
 		{
 			return _description;
 		}
-
+		
 		public function get serverVersion() : String
 		{
 			return _serverVersion;
@@ -76,6 +68,19 @@ package net.vdombox.ide.common.vo
 		public function get scriptingLanguage() : String
 		{
 			return _scriptingLanguage;
+		}
+		
+		public function setInformation( information : XML ) : void
+		{
+			_id = information.Id[ 0 ];
+			_name = information.Name[ 0 ];
+			_description = information.Description[ 0 ];
+			_serverVersion = information.ServerVersion[ 0 ];
+			_iconID = information.Icon[ 0 ];
+			_indexPageID = information.Index[ 0 ];
+			_numberOfPages = information.Numberofpages[ 0 ];
+			_numberOfObjects = information.Numberofobjects[ 0 ];
+			_scriptingLanguage = information.ScriptingLanguage[ 0 ];
 		}
 	}
 }
