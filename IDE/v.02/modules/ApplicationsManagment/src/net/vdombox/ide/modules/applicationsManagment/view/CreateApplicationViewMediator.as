@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	
 	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
-	import net.vdombox.ide.modules.applicationsManagment.events.CreateApplicationEvent;
+	import net.vdombox.ide.modules.applicationsManagment.events.CreateApplicationViewEvent;
 	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.GalleryItemVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.CreateApplicationView;
@@ -46,10 +46,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			createApplication.addEventListener( FlexEvent.SHOW, creationCompleteHandler );
 			
-			createApplication.addEventListener( CreateApplicationEvent.SHOW_ICONS_GALLERY, showIconsGalleryHandler );
-			createApplication.addEventListener( CreateApplicationEvent.LOAD_ICON,loadIconHandler );
-			createApplication.addEventListener( CreateApplicationEvent.SAVE, saveHandler );
-			createApplication.addEventListener( CreateApplicationEvent.CANCEL, cancelHandler );
+			createApplication.addEventListener( CreateApplicationViewEvent.SHOW_ICONS_GALLERY, showIconsGalleryHandler );
+			createApplication.addEventListener( CreateApplicationViewEvent.LOAD_ICON,loadIconHandler );
+			createApplication.addEventListener( CreateApplicationViewEvent.SAVE, saveHandler );
+			createApplication.addEventListener( CreateApplicationViewEvent.CANCEL, cancelHandler );
 		}
 
 		private function get createApplication() : CreateApplicationView
@@ -63,7 +63,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			createApplication.nameField.addEventListener( TextOperationEvent.CHANGE, nameField_changeHandler );
 		}
 
-		private function showIconsGalleryHandler( event : CreateApplicationEvent ) : void
+		private function showIconsGalleryHandler( event : CreateApplicationViewEvent ) : void
 		{
 			if ( createApplication.currentState == "default" )
 			{
@@ -89,7 +89,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			file.browseForOpen( "Load image", [ fileFilter ]);
 		}
 		
-		private function saveHandler( event : CreateApplicationEvent ) : void
+		private function saveHandler( event : CreateApplicationViewEvent ) : void
 		{
 			var name : String = createApplication.nameField.text;
 			var description : String = createApplication.descriptionField.text;
@@ -98,7 +98,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			sendNotification( ApplicationFacade.NEW_APP_PROPS_SUBMITTED, { name : name, description : description, icon : icon } );
 		}
 		
-		private function cancelHandler( event : CreateApplicationEvent ) : void
+		private function cancelHandler( event : CreateApplicationViewEvent ) : void
 		{
 			var name : String = createApplication.nameField.text;
 			var description : String = createApplication.descriptionField.text;

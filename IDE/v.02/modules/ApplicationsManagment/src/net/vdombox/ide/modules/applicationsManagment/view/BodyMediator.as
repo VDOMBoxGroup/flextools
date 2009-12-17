@@ -96,7 +96,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					appPropertiesVO.description = newApplicationsParameters.description;
 					appPropertiesVO.iconID = resourceVO.resourceID;
 					
-					sendNotification( ApplicationFacade.EDIT_APPLICATION,
+					sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION,
 									  { applicationVO : createdApplicationVO, applicationPropertiesVO : appPropertiesVO } );
 					
 					break;

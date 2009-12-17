@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
@@ -53,7 +54,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.SET_RESOURCE );
 			
 			interests.push( ApplicationFacade.CREATE_APPLICATION );
-			interests.push( ApplicationFacade.EDIT_APPLICATION );
+			interests.push( ApplicationFacade.EDIT_APPLICATION_INFORMATION );
 			
 			return interests;
 		}
@@ -173,16 +174,16 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 				
-				case ApplicationFacade.EDIT_APPLICATION:
+				case ApplicationFacade.EDIT_APPLICATION_INFORMATION:
 				{
 					message = 
 						new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE,
-							PPMServerTargetNames.APPLICATION, body );
+							PPMApplicationTargetNames.INFORMATION, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
-				}	
+				}
 					
 				case ApplicationFacade.GET_RESOURCE:
 				{

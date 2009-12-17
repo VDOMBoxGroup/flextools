@@ -5,13 +5,17 @@
 					xmlns:components="net.vdombox.ide.modules.applicationsManagment.view.components.*"
 					
 					width="100%" height="100%" >
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.applicationsManagment.events.EditApplicationViewEvent;
+		]]>
+	</fx:Script>
 	
 	<s:states>
 		<s:State name="default"/>
 		<s:State name="changeIcon"/>
 		<s:State name="changeName"/>
 		<s:State name="changeDescription"/>
-		<s:State name="deleteApplication"/>
 	</s:states>
 	
 	<s:layout>
@@ -22,13 +26,13 @@
 		
 		<s:VGroup left="30" top="30" right="30" bottom="30" >
 			
-			<s:Label id="applicationName" fontFamily="Verdana" fontSize="24" fontWeight="bold"/>
-			<s:RichText id="counts" fontFamily="Verdana" fontSize="12" fontWeight="bold"/>
-			<s:Label id="objectsCount" fontFamily="Verdana" fontSize="12" fontWeight="bold" includeIn="changeDescription,changeIcon,changeName,deleteApplication"/>
+			<s:Label id="applicationName" fontFamily="Verdana" fontSize="24" fontWeight="bold" />
+			<s:RichText id="counts" fontFamily="Verdana" fontSize="12" fontWeight="bold" />
+			<s:Label id="objectsCount" fontFamily="Verdana" fontSize="12" fontWeight="bold" />
 			
 			<s:Scroller width="100%" minHeight="50" maxHeight="200">
 				<s:Group>	
-					<s:RichText id="applicationDescription"	width="100%"/>
+					<s:RichText id="applicationDescription"	width="100%" />
 				</s:Group>
 			</s:Scroller>
 			
@@ -36,21 +40,21 @@
 					 fontFamily="Verdana" fontSize="18" />
 			
 			<s:Label text="Change icon:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-					 click="currentState='changeIcon'"/>
+					 click="currentState='changeIcon'" />
 			<s:VGroup includeIn="changeIcon" width="100%">
 				<s:TextInput />
-				<s:Button label="Save" click="currentState='default'"/>
+				<s:Button label="Save" click="currentState='default'" />
 			</s:VGroup>
 			
 			<s:Label text="Change name:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-					 click="currentState='changeName'"/>
+					 click="currentState='changeName'" />
 			<s:VGroup includeIn="changeName" width="100%">
 				<s:TextInput />
-				<s:Button label="Save" click="currentState='default'"/>
+				<s:Button label="Save" click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_NAME_CHANGED ) )" />
 			</s:VGroup>
 			
 			<s:Label text="Edit Description:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-					 click="currentState='changeDescription'"/>
+					 click="currentState='changeDescription'" />
 			<s:VGroup includeIn="changeDescription" width="100%">
 				<s:Group width="100%" height="50">
 					<s:Rect width="100%" height="100%">
@@ -61,18 +65,10 @@
 							<s:SolidColor color="white" />
 						</s:fill>
 					</s:Rect>
-					<s:RichEditableText width="100%" height="100%"/>
+					<s:RichEditableText width="100%" height="100%" />
 				</s:Group>
-				<s:Button label="Save" click="currentState='default'"/>
+				<s:Button label="Save" click="currentState='default'" />
 			</s:VGroup>
-			
-			<s:Label text="Delete Application:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
-					 click="currentState='deleteApplication'"/>
-			<s:HGroup includeIn="deleteApplication" width="100%">
-				<s:Button label="Cancel" click="currentState='default'"/>
-				<s:Button label="Apply"
-						  click="currentState='default';dispatchEvent( new Event( 'deleteApplication' ) );"/>
-			</s:HGroup>
 		</s:VGroup>
 		
 	</s:Group>
