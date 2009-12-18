@@ -50,6 +50,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES );
 			
 			interests.push( ApplicationFacade.SERVER_PROXY_RESPONSE );
+			interests.push( ApplicationFacade.APPLICATION_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.TYPES_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.RESOURCES_PROXY_RESPONSE );
 			
@@ -110,6 +111,13 @@ package net.vdombox.ide.core.view
 				}
 				
 				case ApplicationFacade.SERVER_PROXY_RESPONSE:
+				{
+					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxiesPipeMessage );
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_PROXY_RESPONSE:
 				{
 					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxiesPipeMessage );
 					

@@ -1,10 +1,12 @@
 package net.vdombox.ide.core.model
 {
-	import mx.rpc.http.Operation;
+	
+	import mx.rpc.soap.Operation;
 	
 	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IApplicationProxy;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
@@ -120,8 +122,9 @@ package net.vdombox.ide.core.model
 			{
 				case "set_application_info" :
 				{
-					createApplicationList( result.Applications[ 0 ]);
-					sendNotification( ApplicationFacade.A, applications );
+					var information : XML = result.Information[ 0 ];
+					applicationVO.setInformation( information )
+					sendNotification( ApplicationFacade.APPLICATION_CHANGED, applicationVO );
 					
 					break;
 				}
