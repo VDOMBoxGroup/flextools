@@ -43,6 +43,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			
 			interests.push( ApplicationFacade.OPEN_CREATE_APPLICATION_VIEW );
 			interests.push( ApplicationFacade.NEW_APP_PROPS_SUBMITTED );
+			interests.push( ApplicationFacade.NEW_APP_PROPS_CANCELED );
 			interests.push( ApplicationFacade.APPLICATION_CREATED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
 			
@@ -56,7 +57,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				case ApplicationFacade.OPEN_CREATE_APPLICATION_VIEW:
 				{
-					body.viewStack.selectedIndex = 1;
+					body.currentState = "CreateApplicationView";
 					
 					break;
 				}
@@ -69,6 +70,13 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					{
 						sendNotification( ApplicationFacade.CREATE_APPLICATION );
 					}
+					
+					break;
+				}
+					
+				case ApplicationFacade.NEW_APP_PROPS_CANCELED:
+				{
+					body.currentState = "default";
 					
 					break;
 				}
@@ -113,11 +121,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			facade.registerMediator( new EditApplicationViewMediator( body.editApplicationView ));
 			facade.registerMediator( new CreateApplicationViewMediator( body.createApplicationView ));
-		}
-		
-		private function cancelCreateApplicationHandler( event : Event ) : void
-		{
-			body.viewStack.selectedIndex = 0;
 		}
 	}
 }

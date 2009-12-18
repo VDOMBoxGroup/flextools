@@ -100,8 +100,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		
 		private function cancelHandler( event : CreateApplicationViewEvent ) : void
 		{
-			var name : String = createApplication.nameField.text;
-			var description : String = createApplication.descriptionField.text;
+			sendNotification( ApplicationFacade.NEW_APP_PROPS_CANCELED );
 		}
 		
 		private function itemList_changeHandler( event : IndexChangeEvent ) : void
