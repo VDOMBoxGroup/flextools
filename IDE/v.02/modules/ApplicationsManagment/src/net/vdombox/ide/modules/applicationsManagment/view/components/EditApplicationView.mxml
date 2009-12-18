@@ -49,7 +49,7 @@
 			<s:Label text="Change name:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true"
 					 click="currentState='changeName'" />
 			<s:VGroup includeIn="changeName" width="100%">
-				<s:TextInput />
+				<s:TextInput id="newApplicationName"/>
 				<s:Button label="Save" click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_NAME_CHANGED ) )" />
 			</s:VGroup>
 			

@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import flash.events.Event;
-
+	
 	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
 	import mx.utils.StringUtil;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
@@ -13,11 +13,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.EditApplicationView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
 
@@ -64,6 +64,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
+			interests.push( ApplicationFacade.APPLICATION_EDITED );
 
 			return interests;
 		}
@@ -72,7 +73,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			var body : Object = notification.getBody();
 
-			switch ( notification.getName() )
+			switch ( notification.getName())
 			{
 				case ApplicationFacade.APPLICATIONS_LIST_GETTED:
 				{
@@ -105,6 +106,16 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 					break;
 				}
+				
+				case ApplicationFacade.APPLICATION_EDITED:
+				{
+					var applicationVO : ApplicationVO = body as ApplicationVO;
+					
+					if ( applicationVO === selectedApplication )
+						refreshApplicationProperties();
+					
+					break;
+				}
 			}
 
 			commitProperties();
@@ -122,11 +133,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private function addEventListeners() : void
 		{
-			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_NAME_CHANGED,
-												  applicationNameChangedHandler )
+			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_NAME_CHANGED, applicationNameChangedHandler )
 
-			applicationsList.addEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler,
-											   true );
+			applicationsList.addEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler, true );
 
 			applicationsList.addEventListener( IndexChangeEvent.CHANGE, applicationsList_changeHandler );
 		}
@@ -147,13 +156,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				if ( selectedApplication )
 				{
 					applicationsList.selectedItem = selectedApplication;
-
-					editApplicationView.applicationName.text = selectedApplication.name;
-					editApplicationView.actionsForLabel.text = StringUtil.substitute( ACTIONS_TEMPLATE,
-																					  selectedApplication.name );
-					editApplicationView.counts.text = StringUtil.substitute( PO_TEMPLATE, selectedApplication.numberOfPages,
-																			 selectedApplication.numberOfObjects )
-					editApplicationView.applicationDescription.text = selectedApplication.description;
+					
+					refreshApplicationProperties();
 
 					if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplication.id )
 					{
@@ -171,25 +175,33 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					{
 						if ( applications[ i ].id == settings.lastApplicationID )
 						{
-							sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applications[ i ] );
+							sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applications[ i ]);
 							return;
 						}
 					}
 				}
 			}
 		}
-
+		
+		private function refreshApplicationProperties() : void
+		{
+			editApplicationView.applicationName.text = selectedApplication.name;
+			editApplicationView.actionsForLabel.text = StringUtil.substitute( ACTIONS_TEMPLATE, selectedApplication.name );
+			editApplicationView.counts.text = StringUtil.substitute( PO_TEMPLATE, selectedApplication.numberOfPages, selectedApplication.numberOfObjects )
+			editApplicationView.applicationDescription.text = selectedApplication.description;
+		}
+		
 		private function applicationNameChangedHandler( event : EditApplicationViewEvent ) : void
 		{
-			var newApplicationName : String = editApplicationView.applicationName.text;
+			var newApplicationName : String = editApplicationView.newApplicationName.text;
 
-			if ( !newApplicationName || newApplicationName == selectedApplication.name )
+			if ( newApplicationName && newApplicationName == selectedApplication.name )
 				return;
 
 			var applicationProperties : ApplicationPropertiesVO = new ApplicationPropertiesVO;
 			applicationProperties.name = newApplicationName;
 
-			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, applicationProperties );
+			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplication, applicationPropertiesVO: applicationProperties });
 		}
 
 		private function applicationItemRenderer_rendererCreatedHandler( event : Event ) : void

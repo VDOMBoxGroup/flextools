@@ -1,7 +1,9 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import mx.binding.utils.BindingUtils;
+	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
@@ -26,7 +28,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var id : String = NAME + "/" + serial;
 			serial++;
 			return id;
-			
+
 		}
 
 		override public function listNotificationInterests() : Array
@@ -34,6 +36,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( mediatorName + "/" + ApplicationFacade.RESOURCE_GETTED );
+			interests.push( ApplicationFacade.APPLICATION_EDITED );
 
 			return interests;
 		}
@@ -42,18 +45,38 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			var iconID : String = applicationItemRenderer.data.iconID;
 			var ownerID : String = applicationItemRenderer.data.id;
-			
+
+			refreshProperties();
+			applicationItemRenderer.addEventListener( FlexEvent.DATA_CHANGE, dataChangeHandler );
+
 			if ( iconID != "" )
-				sendNotification( ApplicationFacade.GET_RESOURCE, { resourceID: iconID, ownerID : ownerID, recepientName: mediatorName });
+				sendNotification( ApplicationFacade.GET_RESOURCE, { resourceID: iconID, ownerID: ownerID, recepientName: mediatorName });
 		}
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var resourceVO :ResourceVO = notification.getBody() as ResourceVO;
-				
-			BindingUtils.bindSetter( setIcon, resourceVO, "data" );
+			switch ( notification.getName())
+			{
+				case mediatorName + "/" + ApplicationFacade.RESOURCE_GETTED:
+				{
+					var resourceVO : ResourceVO = notification.getBody() as ResourceVO;
+
+					BindingUtils.bindSetter( setIcon, resourceVO, "data" );
+
+					break;
+				}
+
+				case ApplicationFacade.APPLICATION_EDITED:
+				{
+					if ( notification.getBody() === applicationItemRenderer.data )
+						refreshProperties();
+
+					break;
+				}
+			}
+
 		}
-		
+
 		private function get applicationItemRenderer() : ApplicationItemRenderer
 		{
 			return viewComponent as ApplicationItemRenderer;
@@ -62,6 +85,33 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		private function setIcon( value : * ) : void
 		{
 			applicationItemRenderer.imageHolder.source = value;
+		}
+		
+		private function dataChangeHandler( event : FlexEvent) : void
+		{
+			refreshProperties();
+		}
+		
+		private function refreshProperties() : void
+		{
+			var applicationVO : ApplicationVO = applicationItemRenderer.data as ApplicationVO;
+			
+			if( applicationVO )
+			{
+				applicationItemRenderer.nameLabel.text = applicationVO.name;
+				applicationItemRenderer.description.text = applicationVO.description;
+				
+				applicationItemRenderer.pagesCount.text = "Pages: " + applicationVO.numberOfPages.toString();
+				applicationItemRenderer.objectsCount.text = "Objects: " + applicationVO.numberOfObjects.toString();
+			}
+			else
+			{
+				applicationItemRenderer.nameLabel.text = "";
+				applicationItemRenderer.description.text = "";
+				
+				applicationItemRenderer.pagesCount.text = "Pages: ";
+				applicationItemRenderer.objectsCount.text = "Objects: ";
+			}
 		}
 	}
 }

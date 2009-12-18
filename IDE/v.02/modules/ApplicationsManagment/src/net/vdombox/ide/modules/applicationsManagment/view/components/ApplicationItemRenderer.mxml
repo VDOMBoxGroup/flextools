@@ -15,19 +15,6 @@
 
 			public static const RENDERER_CREATED : String = "rendererCreated";
 
-			override public function set data( value : Object ) : void
-			{
-				var applicationVO : ApplicationVO = value as ApplicationVO;
-				
-				nameLabel.text = applicationVO.name;
-				description.text = applicationVO.description;
-				
-				pagesCount.text = "Pages: " + applicationVO.numberOfPages.toString();
-				objectsCount.text = "Objects: " + applicationVO.numberOfObjects.toString();
-				
-				super.data = value;
-			}
-
 			protected function creationCompleteHandler( event : FlexEvent ) : void
 			{
 				dispatchEvent( new Event( RENDERER_CREATED ));

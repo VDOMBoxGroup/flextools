@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
@@ -338,6 +339,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 				
+				case PPMPlaceNames.APPLICATION:
+				{
+					processApplicationProxyMessage( message );
+					break;
+				}
+					
 				case PPMPlaceNames.RESOURCES:
 				{
 					processResourcesProxyMessage( message );
@@ -368,6 +375,22 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getBody() );
 					
 					break;
+				}
+			}
+		}
+		
+		private function processApplicationProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			var operation : String = message.getOperation();
+			
+			var body : Object = message.getBody();
+			
+			switch( message.getTarget() )
+			{
+				case PPMApplicationTargetNames.INFORMATION:
+				{
+					if( operation == PPMOperationNames.UPDATE )
+						sendNotification( ApplicationFacade.APPLICATION_EDITED, body as ApplicationVO );
 				}
 			}
 		}
