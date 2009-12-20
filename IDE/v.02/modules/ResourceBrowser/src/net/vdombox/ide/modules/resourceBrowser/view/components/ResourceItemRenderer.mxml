@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer 
+	xmlns:mx="library://ns.adobe.com/flex/halo"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	
+	width="100%">
+	
+	<s:layout>
+		<s:HorizontalLayout />
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.resourceBrowser.model.vo.NewResourceVO;
+
+			[Bindable]
+			private var newResourceVO : NewResourceVO;
+
+			override public function set data( value : Object ) : void
+			{
+				newResourceVO = value as NewResourceVO;
+
+				super.data = value;
+			}
+
+			private function formatFileSize( numSize : Number ) : String
+			{
+				var strReturn : String;
+				
+				if( isNaN( numSize ) )
+					return "-";	
+				
+				numSize = Number( numSize / 1000 );
+				strReturn = String( numSize.toFixed( 1 ) + " KB" );
+				if ( numSize > 1000 )
+				{
+					numSize = numSize / 1000;
+					strReturn = String( numSize.toFixed( 1 ) + " MB" );
+					if ( numSize > 1000 )
+					{
+						numSize = numSize / 1000;
+						strReturn = String( numSize.toFixed( 1 ) + " GB" );
+					}
+				}
+				return strReturn;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:TextInput id="resourceName"
+		text="@{ newResourceVO.name }" width="200" />
+	
+	<s:Label
+		maxWidth="200" text="{ newResourceVO.path }"
+		lineBreak="toFit" maxDisplayedLines="1" />
+	
+	<s:Label 
+		text="{ formatFileSize( newResourceVO.size ) }" />
+	
+	<mx:Spacer
+		width="100%" />
+	
+	<s:Label 
+		text="Remove"
+		textDecoration="underline"
+		buttonMode="true"
+		
+		click="dispatchEvent( new Event( 'removeResource' ) )" />
+
+</s:ItemRenderer>

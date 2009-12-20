@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*"
+		 
+		 width="100%" height="100%">
+	<s:List id="resourceList"
+			height="100%" width="200" />
+	
+	<s:VGroup width="100%" height="100%">
+		<components:LoadResourcesView id="loadResourcesView"
+									  width="100%"/>
+		<s:Rect width="100%" height="100%">
+			<s:stroke>
+				<s:SolidColorStroke color="black" />
+			</s:stroke>
+			<s:fill>
+				<s:SolidColor color="white" />
+			</s:fill>
+		</s:Rect>
+	</s:VGroup>
+	
+</s:HGroup>

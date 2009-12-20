@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/halo">
+	
+	<s:List id="reslourceList"
+		itemRenderer="net.vdombox.ide.modules.resourceBrowser.view.components.ResourceItemRenderer"
+		width="100%" maxHeight="200"/>
+	<s:HGroup>
+		<s:Label text="Add Resource"
+				 textDecoration="underline" buttonMode="true"
+				 click="dispatchEvent( new Event( 'addResource' ) )"/>
+		<s:Label id="loadResourceLabel"
+				 text="Load Resources"
+				 textDecoration="underline" buttonMode="true" visible="false"
+				 click="dispatchEvent( new Event( 'loadResources' ) )"/>
+	</s:HGroup>
+	
+	
+</s:VGroup>
