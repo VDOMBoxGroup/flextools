@@ -16,6 +16,7 @@ package net.vdombox.ide.modules.applicationsManagment
 	
 	public class ApplicationFacade extends Facade implements IFacade
 	{
+//		main
 		public static const STARTUP : String = "startup";
 		
 		public static const CREATE_TOOLSET : String = "createToolset";
@@ -25,6 +26,15 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const EXPORT_TOOLSET : String = "exportToolset";
 		public static const EXPORT_SETTINGS_SCREEN : String = "exportSettingsScreen";
 		public static const EXPORT_BODY : String = "exportBody";
+		
+//		selection
+		public static const MODULE_SELECTED : String = "moduleSelected";
+		public static const MODULE_DESELECTED : String = "moduleDeselected";
+		
+		public static const PIPES_READY : String = "pipesReady";
+
+//		tear down
+		public static const TEAR_DOWN : String = "tearDown";		
 		
 //		settings
 		public static const INITIALIZE_SETTINGS : String = "initializeSettings";
@@ -49,12 +59,7 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const EDIT_APPLICATION_INFORMATION : String = "editApplicationInformation";
 		public static const APPLICATION_EDITED : String = "ApplicationEdited";
 		
-//		selection
-		public static const MODULE_SELECTED : String = "moduleSelected";
-		public static const MODULE_DESELECTED : String = "moduleDeselected";
-		
-		public static const CONNECT_PROXIES_PIPE : String = "connectProxiesPipe";
-		
+//		application	
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SET_SELECTED_APPLICATION : String = "setSelectedApplication";
 		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
@@ -62,13 +67,13 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const GET_APPLICATIONS_LIST : String = "getApplicationsList";
 		public static const APPLICATIONS_LIST_GETTED : String = "applicationsListGetted";
 		
+//		resources
 		public static const GET_RESOURCE : String = "getResource";
 		public static const RESOURCE_GETTED : String = "resourceGetted";
 
 		public static const SET_RESOURCE : String = "setResource";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
 		
-		public static const TEAR_DOWN : String = "tearDown";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
