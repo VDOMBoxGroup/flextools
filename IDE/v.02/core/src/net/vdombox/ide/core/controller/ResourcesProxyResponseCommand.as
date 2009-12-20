@@ -20,6 +20,11 @@ package net.vdombox.ide.core.controller
 			
 			switch ( notification.getName() )
 			{
+				case ApplicationFacade.RESOURCES_GETTED:
+				{
+					var d : * = "";
+					break;
+				}
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
 					var resourceVO : ResourceVO = body as ResourceVO;

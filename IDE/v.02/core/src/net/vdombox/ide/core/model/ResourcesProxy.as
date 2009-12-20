@@ -8,6 +8,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.soap.SOAPFault;
 	import mx.utils.Base64Encoder;
 	
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
@@ -34,9 +35,9 @@ package net.vdombox.ide.core.model
 			soap.delete_resource( resourceID );
 		}
 
-		public function getListResources( applicatioID : String ) : void
+		public function getListResources( applicationVO : ApplicationVO ) : void
 		{
-			soap.list_resources( applicatioID );
+			soap.list_resources( applicationVO.id );
 		}
 
 		public function getResource( ownerID : String, resourceID : String ) : ResourceVO
@@ -72,11 +73,18 @@ package net.vdombox.ide.core.model
 		private function addEventListeners() : void
 		{
 			soap.list_resources.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.list_resources.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 
 			soap.set_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 
 			soap.delete_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+		}
+		
+		private function createResourcesList( resources : XML ) : void
+		{
+			
 		}
 		
 		private function soap_resultHandler( event : SOAPEvent ) : void
@@ -114,8 +122,7 @@ package net.vdombox.ide.core.model
 					
 				case "list_resources" :
 				{
-				
-					
+					sendNotification( ApplicationFacade.RESOURCES_GETTED );
 					break;
 				}
 			}

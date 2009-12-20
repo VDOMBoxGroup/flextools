@@ -11,7 +11,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -27,36 +27,36 @@ package net.vdombox.ide.core.view
 
 		public function CoreJunctionMediator()
 		{
-			super( NAME, new Junction());
+			super( NAME, new Junction() );
 		}
 
 		private var moduleProxy : ModulesProxy;
-		
+
 		private var pipesProxy : PipesProxy;
 
 		override public function onRegister() : void
 		{
 			moduleProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
 			pipesProxy = facade.retrieveProxy( PipesProxy.NAME ) as PipesProxy;
-			 
-			junction.registerPipe( PipeNames.STDOUT, Junction.OUTPUT, new TeeSplit());
- 
-			junction.registerPipe( PipeNames.STDIN, Junction.INPUT, new TeeMerge());
+
+			junction.registerPipe( PipeNames.STDOUT, Junction.OUTPUT, new TeeSplit() );
+
+			junction.registerPipe( PipeNames.STDIN, Junction.INPUT, new TeeMerge() );
 			junction.addPipeListener( PipeNames.STDIN, this, handlePipeMessage );
 
-			junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, new Pipe());
+			junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, new Pipe() );
 			junction.addPipeListener( PipeNames.STDLOG, this, handlePipeMessage );
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			
+
 			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
 			interests.push( ApplicationFacade.SELECTED_MODULE_CHANGED );
 			interests.push( ApplicationFacade.MODULE_TO_PROXIES_CONNECTED );
 			interests.push( ApplicationFacade.MODULE_SETTINGS_GETTED );
-			
+
 			return interests;
 		}
 
@@ -66,20 +66,20 @@ package net.vdombox.ide.core.view
 			var module : IPipeAware;
 			var coreOut : TeeSplit;
 
-			switch ( notification.getName())
+			switch ( notification.getName() )
 			{
 				case ApplicationFacade.CONNECT_MODULE_TO_CORE:
 				{
 					// Connect a module's STDSHELL to the shell's STDIN
 					moduleVO = notification.getBody() as ModuleVO;
 					module = moduleVO.module as IPipeAware;
-					
+
 					var moduleToCore : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.STDCORE, moduleToCore );
-					
+
 					var moduleToLog : Pipe = new Pipe();
 					module.acceptOutputPipe( PipeNames.STDLOG, moduleToLog );
-					
+
 					var coreIn : TeeMerge = junction.retrievePipe( PipeNames.STDIN ) as TeeMerge;
 					coreIn.connectInput( moduleToCore );
 					coreIn.connectInput( moduleToLog );
@@ -87,7 +87,7 @@ package net.vdombox.ide.core.view
 					// Connect the shell's STDOUT to the module's STDIN
 					var coreToModule : Pipe = new Pipe();
 					module.acceptInputPipe( PipeNames.STDIN, coreToModule );
-					
+
 					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
 					coreOut.connect( coreToModule );
 
@@ -102,46 +102,48 @@ package net.vdombox.ide.core.view
 					moduleVO = notification.getBody() as ModuleVO;
 
 					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
-					
+
 					var pipes : Object = pipesProxy.getPipes( moduleVO.moduleID );
-					
+
 					for each ( var pipe : Pipe in pipes )
 					{
 						coreOut.disconnectFitting( pipe );
 					}
-					
+
 					pipesProxy.removePipes( moduleVO.moduleID );
 					break;
 				}
-				
+
 				case ApplicationFacade.MODULE_TO_PROXIES_CONNECTED:
 				{
 					moduleVO = notification.getBody() as ModuleVO;
-					
-					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.PROXIES_PIPE_CONNECTED, null, moduleVO.moduleID ));
+
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.PROXIES_PIPE_CONNECTED,
+																			   null, moduleVO.moduleID ) );
 					break;
 				}
 
 				case ApplicationFacade.SELECTED_MODULE_CHANGED:
 				{
 					moduleVO = notification.getBody() as ModuleVO;
-					
-					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.MODULE_SELECTED, null, moduleVO.moduleID ));
+
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.MODULE_SELECTED,
+																			   null, moduleVO.moduleID ) );
 					break;
 				}
-				
+
 				case ApplicationFacade.MODULE_SETTINGS_GETTED:
 				{
 					junction.sendMessage( PipeNames.STDOUT, notification.getBody() as IPipeMessage );
 					break;
 				}
-					
+
 				case ApplicationFacade.MODULE_SETTINGS_SETTED:
 				{
 					junction.sendMessage( PipeNames.STDOUT, notification.getBody() as IPipeMessage );
 					break;
 				}
-					
+
 				default:
 				{
 					super.handleNotification( notification );
@@ -158,40 +160,40 @@ package net.vdombox.ide.core.view
 			else if ( message is LogMessage )
 				trace( message.getBody() );
 		}
-		
+
 		private function processUIQuieryMessage( message : UIQueryMessage ) : void
 		{
 			switch ( message.name )
 			{
 				case UIQueryMessageNames.TOOLSET_UI:
 				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, 
-									  { component : message.component, recepientKey : message.recepientKey });
-										  
+					sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, { component: message.component,
+										  recepientKey: message.recepientKey } );
+
 					break;
 				}
-					
+
 				case UIQueryMessageNames.SETTINGS_SCREEN_UI:
 				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN,
-									  { component : message.component, recepientKey : message.recepientKey });
-					
+					sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN, { component: message.component,
+										  recepientKey: message.recepientKey } );
+
 					break;
 				}
-					
+
 				case UIQueryMessageNames.BODY_UI:
 				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_BODY, 
-									  { component : message.component, recepientKey : message.recepientKey });
-					
+					sendNotification( ApplicationFacade.SHOW_MODULE_BODY, { component: message.component,
+										  recepientKey: message.recepientKey } );
+
 					break;
 				}
 			}
 		}
-		
+
 		private function processSimpleMessage( message : SimpleMessage ) : void
 		{
-			switch ( message.getHeader())
+			switch ( message.getHeader() )
 			{
 				case SimpleMessageHeaders.SELECT_MODULE:
 				{
@@ -208,13 +210,13 @@ package net.vdombox.ide.core.view
 					sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message.getRecepientKey() );
 					break;
 				}
-					
+
 				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
 					sendNotification( ApplicationFacade.RETRIEVE_MODULE_SETTINGS, message );
 					break;
 				}
-					
+
 				case SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE:
 				{
 					sendNotification( ApplicationFacade.SAVE_MODULE_SETTINGS, message );

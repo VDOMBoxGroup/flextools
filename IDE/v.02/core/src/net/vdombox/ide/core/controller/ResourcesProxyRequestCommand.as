@@ -1,7 +1,9 @@
 package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.common.PPMOperationNames;
+	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ResourcesProxy;
@@ -14,22 +16,48 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
+			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+
+			if ( message.getTarget() == PPMResourcesTargetNames.RESOURCES )
+				processResourcesTarget( message );
+			else
+				processResourceTarget( message );
+		}
+
+		private function processResourcesTarget( message : ProxiesPipeMessage ) : void
+		{
 			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
-			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			var applicationVO : ApplicationVO = message.getBody() as ApplicationVO;
 
-
-			var ppMessage : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
-
-			var body : Object = ppMessage.getBody();
-			var ownerID : String;
-
-			var resourceVO : ResourceVO;
-			
-			switch ( ppMessage.getOperation())
+			switch ( message.getOperation() )
 			{
 				case PPMOperationNames.READ:
 				{
-					if ( !body.hasOwnProperty( "ownerID" ))
+					resourcesProxy.getListResources( applicationVO );
+
+					break;
+				}
+			}
+		}
+
+		private function processResourceTarget( message : ProxiesPipeMessage ) : void
+		{
+			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+
+			var target : String = message.getTarget();
+			var operation : String = message.getOperation();
+			var body : Object = message.getBody();
+
+			var resourceVO : ResourceVO;
+
+			switch ( message.getOperation() )
+			{
+				case PPMOperationNames.READ:
+				{
+					var ownerID : String;
+
+					if ( !body.hasOwnProperty( "ownerID" ) )
 					{
 						ownerID = serverProxy.selectedApplication.id;
 					}
@@ -37,9 +65,9 @@ package net.vdombox.ide.core.controller
 					resourceVO = resourcesProxy.getResource( ownerID, body.resourceID );
 					body[ "resourceVO" ] = resourceVO;
 
-					ppMessage.setBody( body );
+					message.setBody( body );
 
-					sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, ppMessage );
+					sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, message );
 
 					break;
 				}
