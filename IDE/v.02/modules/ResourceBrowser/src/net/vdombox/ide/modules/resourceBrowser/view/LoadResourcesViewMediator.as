@@ -9,8 +9,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import mx.collections.ArrayList;
 	import mx.events.CollectionEvent;
 	
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
-	import net.vdombox.ide.modules.resourceBrowser.model.vo.NewResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.LoadResourcesView;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -69,6 +69,14 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			newResources.addEventListener( CollectionEvent.COLLECTION_CHANGE, newResources_collectionChange )
 		}
 		
+		private function loadResource() : void
+		{
+			if( newResources.length == 0 )
+				return;
+			
+			var resourceVO : ResourceVO = newResources.removeItemAt( 0 ) as ResourceVO;
+		}
+		
 		private function addResourceHandler( event : Event ) : void
 		{
 			var file : File = new File();
@@ -79,12 +87,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		
 		private function loadResourcesHandler( event : Event ) : void
 		{
-			var d : * = "";
+			sendNotification( ApplicationFacade.SET_RESOURCES, newResources.source );
+			loadResource();
 		}
 		
 		private function removeResourceHandler( event : Event ) : void
 		{
-			var newResourceVO : NewResourceVO = event.target.data as NewResourceVO;
+			var newResourceVO : ResourceVO = event.target.data as ResourceVO;
 			
 			if ( newResourceVO )
 				newResources.removeItem( newResourceVO );
@@ -112,7 +121,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				return;
 			}
 			
-			newResources.addItem( new NewResourceVO( file.name, file.nativePath, file.size ) );
+			var resourceVO : ResourceVO = new ResourceVO();
+			
+			resourceVO.name = file.name;
+			resourceVO.path = file.nativePath;
+			resourceVO.size = file.size;
+			
+			newResources.addItem( resourceVO );
 		}
 		
 		private function newResources_collectionChange( event : CollectionEvent ) : void

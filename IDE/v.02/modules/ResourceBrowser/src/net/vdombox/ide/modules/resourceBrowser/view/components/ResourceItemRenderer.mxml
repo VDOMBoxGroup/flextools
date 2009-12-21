@@ -12,14 +12,14 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.modules.resourceBrowser.model.vo.NewResourceVO;
+			import net.vdombox.ide.common.vo.ResourceVO;
 
 			[Bindable]
-			private var newResourceVO : NewResourceVO;
+			private var resourceVO : ResourceVO;
 
 			override public function set data( value : Object ) : void
 			{
-				newResourceVO = value as NewResourceVO;
+				resourceVO = value as ResourceVO;
 
 				super.data = value;
 			}
@@ -49,14 +49,14 @@
 	</fx:Script>
 	
 	<s:TextInput id="resourceName"
-		text="@{ newResourceVO.name }" width="200" />
+		text="@{ resourceVO.name }" width="200" />
 	
 	<s:Label
-		maxWidth="200" text="{ newResourceVO.path }"
+		maxWidth="200" text="{ resourceVO.path }"
 		lineBreak="toFit" maxDisplayedLines="1" />
 	
 	<s:Label 
-		text="{ formatFileSize( newResourceVO.size ) }" />
+		text="{ formatFileSize( resourceVO.size ) }" />
 	
 	<mx:Spacer
 		width="100%" />

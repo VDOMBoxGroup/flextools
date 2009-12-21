@@ -57,7 +57,7 @@ package net.vdombox.ide.modules.resourceBrowser
 		public static const GET_RESOURCES : String = "getResources";
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 
-		public static const SET_RESOURCE : String = "setResource";
+		public static const SET_RESOURCES : String = "setResources";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
 
 		

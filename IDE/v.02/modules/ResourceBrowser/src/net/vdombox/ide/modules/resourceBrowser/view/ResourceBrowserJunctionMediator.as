@@ -49,7 +49,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			
 			interests.push( ApplicationFacade.GET_RESOURCES );
-			interests.push( ApplicationFacade.SET_RESOURCE );
+			interests.push( ApplicationFacade.SET_RESOURCES );
 
 			return interests;
 		}
@@ -147,10 +147,10 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.SET_RESOURCE:
+				case ApplicationFacade.SET_RESOURCES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
-													  PPMResourcesTargetNames.RESOURCE, body );
+													  PPMResourcesTargetNames.RESOURCES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
