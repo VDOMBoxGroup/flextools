@@ -37,6 +37,13 @@ package net.vdombox.ide.core.controller
 
 					break;
 				}
+				
+				case PPMOperationNames.READ:
+				{
+					resourcesProxy.setResource(( applicationVO );
+					
+					break;
+				}
 			}
 		}
 

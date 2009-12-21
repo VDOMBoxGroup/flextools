@@ -29,7 +29,9 @@ package net.vdombox.ide.core.model
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
-
+		
+		private var loadQue : Array;
+		
 		public function deleteResource( resourceID : String ) : void
 		{
 			soap.delete_resource( resourceID );
@@ -69,7 +71,23 @@ package net.vdombox.ide.core.model
 			
 			asyncToken.resourceVO = resourceVO;
 		}
-
+		
+		public function setResources( resources : Array ) : void
+		{
+			if( !resources || resources.length == 0 )
+				return;
+				
+			if ( !loadQue )
+				loadQue = [];
+			
+			if( loadQue.length == 0 )
+			{
+				loadQue = loadQue.concat( resources ); 
+			}
+			
+			setResource()
+		}
+		
 		private function addEventListeners() : void
 		{
 			soap.list_resources.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
