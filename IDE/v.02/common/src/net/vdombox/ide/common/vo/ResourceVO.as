@@ -19,9 +19,13 @@ package net.vdombox.ide.common.vo
 		
 		private var _name : String;
 		
+		private var _size : Number;
+		
 		private var _data : ByteArray;
 		
 		private var _status : String;
+		
+		private var _path : String;
 
 		public function get ownerID() : String
 		{
@@ -81,6 +85,26 @@ package net.vdombox.ide.common.vo
 		public function set data( value : ByteArray ) : void
 		{
 			_data = value;
+		}
+		
+		public function get size() : Number
+		{
+			return _size;
+		}
+		
+		public function set size( value : Number ) : void
+		{
+			_size = value;
+		}
+		
+		public function get path() : String
+		{
+			return _path;
+		}
+		
+		public function set path( value : String ) : void
+		{
+			_path = value;
 		}
 	}
 }
