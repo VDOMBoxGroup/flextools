@@ -53,7 +53,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
-					sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+//					sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 					break;
 				}
 
@@ -69,7 +69,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-
+					var d : * = "";
+					
 					break;
 				}
 			}
@@ -83,6 +84,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			facade.registerMediator( new LoadResourcesViewMediator( body.loadResourcesView ) );
+			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}
 	}
 }

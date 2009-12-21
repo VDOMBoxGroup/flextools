@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import mx.collections.ArrayList;
 	import mx.events.CollectionEvent;
 	
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.LoadResourcesView;
@@ -31,6 +32,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			return viewComponent as LoadResourcesView;
 		}
 		
+		private var selectedApplicationVO : ApplicationVO;
 		private var newResources : ArrayList;
 		
 		override public function onRegister() : void
@@ -45,15 +47,24 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.GET_RESOURCES );
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
+			interests.push( ApplicationFacade.RESOURCES_GETTED );
 			
 			return interests;
 		}
 		
 		override public function handleNotification( notification : INotification ) : void
 		{
+			var body : Object = notification.getBody();
+			
 			switch ( notification.getName() )
 			{
+				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+				{
+					selectedApplicationVO = body as ApplicationVO;
+					
+					break;
+				}
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
 					break;
@@ -103,7 +114,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var file : File = event.currentTarget as File;
 			
-			if ( !file || !file.exists )
+			if ( !file || !file.exists ) //FIXME отписывать после file, но до exists.
 				return;
 			
 			file.removeEventListener( Event.SELECT, file_selectHandler );
@@ -123,9 +134,20 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			
 			var resourceVO : ResourceVO = new ResourceVO();
 			
+			if( selectedApplicationVO )
+				resourceVO.ownerID = selectedApplicationVO.id;
+			else
+				var d : * = "";
+			
 			resourceVO.name = file.name;
 			resourceVO.path = file.nativePath;
 			resourceVO.size = file.size;
+			
+			var index : int = file.name.lastIndexOf( "." );
+			
+			if( index != -1 )
+				resourceVO.type = file.name.substring( index + 1 );
+				
 			
 			newResources.addItem( resourceVO );
 		}
