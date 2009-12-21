@@ -1,19 +1,21 @@
 package net.vdombox.ide.core.model
 {
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-	
+
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
-	import mx.rpc.soap.SOAPFault;
 	import mx.utils.Base64Encoder;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -29,9 +31,9 @@ package net.vdombox.ide.core.model
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
-		
+
 		private var loadQue : Array;
-		
+
 		public function deleteResource( resourceID : String ) : void
 		{
 			soap.delete_resource( resourceID );
@@ -50,44 +52,50 @@ package net.vdombox.ide.core.model
 			var resourceVO : ResourceVO = new ResourceVO();
 			resourceVO.ownerID = ownerID;
 			resourceVO.resourceID = resourceID;
-			
+
 			var resource : Resource = new Resource( resourceVO );
 			resource.load();
-			
+
 			return resourceVO;
 		}
 
 		public function setResource( resourceVO : ResourceVO ) : void
 		{
-			var data : ByteArray = resourceVO.data;
-			data.compress();
-
-			var base64Data : Base64Encoder = new Base64Encoder();
-			base64Data.insertNewLines = false;
-			base64Data.encodeBytes( data );
-
-			var asyncToken : AsyncToken =
-				soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
-			
-			asyncToken.resourceVO = resourceVO;
-		}
-		
-		public function setResources( resources : Array ) : void
-		{
-			if( !resources || resources.length == 0 )
-				return;
-				
 			if ( !loadQue )
 				loadQue = [];
 			
-			if( loadQue.length == 0 )
-			{
-				loadQue = loadQue.concat( resources ); 
-			}
-			
-			setResource()
+			if ( loadQue.indexOf( resourceVO ) != -1 )
+				loadQue.push( resourceVO );
+
+			soap_setResource();
 		}
-		
+
+		public function setResources( resources : Array ) : void
+		{
+			if ( !resources || resources.length == 0 )
+				return;
+
+			if ( !loadQue )
+				loadQue = [];
+
+			if ( loadQue.length == 0 )
+			{
+				loadQue = loadQue.concat( resources );
+			}
+			else
+			{
+				for ( var i : int = 0; i < resources.length; i++ )
+				{
+					var resourceVO : ResourceVO = resources[ i ];
+
+					if ( loadQue.indexOf( resourceVO ) != -1 )
+						loadQue.push( resourceVO );
+				}
+			}
+
+			soap_setResource();
+		}
+
 		private function addEventListeners() : void
 		{
 			soap.list_resources.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -99,56 +107,111 @@ package net.vdombox.ide.core.model
 			soap.delete_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
-		
-		private function createResourcesList( resources : XML ) : void
+
+		private function createResourcesList( resources : XML ) : Array
 		{
-			
+			var d : * = "";
+
+			return [];
 		}
-		
+
+		private function soap_setResource() : void
+		{
+			if ( loadQue.length == 0 )
+				return;
+
+			var resourceVO : ResourceVO = loadQue.shift() as ResourceVO;
+			var data : ByteArray;
+
+			if ( resourceVO.data )
+			{
+				data = resourceVO.data;
+			}
+			else if ( resourceVO.path )
+			{
+				var file : File = File.applicationDirectory;
+				file = file.resolvePath( resourceVO.path );
+
+				if ( !file || !file.exists )
+					return;
+
+				var fileStream : FileStream = new FileStream();
+				data = new ByteArray();
+
+				try
+				{
+					fileStream.open( file, FileMode.READ );
+					fileStream.readBytes( data );
+				}
+				catch ( error : Error )
+				{
+					return;
+				}
+			}
+
+			if ( !data || data.bytesAvailable == 0 )
+				return;
+
+			data.compress();
+
+			data.position = 0;
+			
+			var base64Data : Base64Encoder = new Base64Encoder();
+			base64Data.insertNewLines = false;
+			base64Data.encodeBytes( data );
+
+			var asyncToken : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
+
+			asyncToken.resourceVO = resourceVO;
+		}
+
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
 			var operation : Operation = event.currentTarget as Operation;
 			var result : XML = event.result[ 0 ] as XML;
-			
-			if( !operation || !result )
+
+			if ( !operation || !result )
 				return;
-			
+
 			var operationName : String = operation.name;
-			
+
 			switch ( operationName )
 			{
-				case "set_resource" :
+				case "set_resource":
 				{
 					var resourceVO : ResourceVO;
-					
-					if ( event.token && event.token.resourceVO)
+
+					if ( event.token && event.token.resourceVO )
 						resourceVO = event.token.resourceVO as ResourceVO;
 					else
 						resourceVO = new ResourceVO;
-					
+
 					var id : String = result.Resource.@id.toString();
-					
-					if( id == "" )
+
+					if ( id == "" )
 						return;
-					
+
 					resourceVO.resourceID = id;
-					
+
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
-					
+					soap_setResource();
+
 					break;
 				}
-					
-				case "list_resources" :
+
+				case "list_resources":
 				{
+
+					createResourcesList( <a/> );
 					sendNotification( ApplicationFacade.RESOURCES_GETTED );
 					break;
 				}
 			}
 		}
-		
-		private function soap_faultHandler( event : SOAPFault ) : void
+
+		private function soap_faultHandler( event : FaultEvent ) : void
 		{
-			var d : * = "";
+			sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxy | soap_faultHandler | " + event.currentTarget.name );
 		}
 	}
 }
@@ -188,7 +251,7 @@ class Resource
 	{
 		return _resourceVO;
 	}
-	
+
 	public function load() : void
 	{
 		var resource : ByteArray = cacheManager.getCachedFileById( _resourceVO.resourceID );
@@ -196,16 +259,16 @@ class Resource
 		{
 			_resourceVO.data = resource;
 			_resourceVO.status = "loaded";
-			
+
 			return;
 		}
-		
+
 		soap.get_resource.addEventListener( SOAPEvent.RESULT, resourceLoadedOKHandler );
 		soap.get_resource.addEventListener( FaultEvent.FAULT, resourceLoadedFaultHandler );
-		
+
 		soap.get_resource( _resourceVO.ownerID, _resourceVO.resourceID );
 	}
-	
+
 	private function resourceLoadedOKHandler( event : SOAPEvent ) : void
 	{
 		var resourceID : String = event.result.ResourceID;
@@ -219,11 +282,11 @@ class Resource
 		imageSource.uncompress();
 
 		cacheManager.cacheFile( resourceID, imageSource );
-		
+
 		_resourceVO.data = imageSource;
 		_resourceVO.status = "loaded";
 	}
-	
+
 	private function resourceLoadedFaultHandler( event : FaultEvent ) : void
 	{
 		var dummy : * = ""; // FIXME remove dummy

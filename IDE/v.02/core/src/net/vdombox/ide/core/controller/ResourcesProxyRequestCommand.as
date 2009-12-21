@@ -8,7 +8,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ResourcesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -27,20 +27,24 @@ package net.vdombox.ide.core.controller
 		private function processResourcesTarget( message : ProxiesPipeMessage ) : void
 		{
 			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
-			var applicationVO : ApplicationVO = message.getBody() as ApplicationVO;
-
+			var body : Object = message.getBody();
+			var applicationVO : ApplicationVO;
+			
 			switch ( message.getOperation() )
 			{
 				case PPMOperationNames.READ:
 				{
+					applicationVO = body as ApplicationVO;
 					resourcesProxy.getListResources( applicationVO );
 
 					break;
 				}
 				
-				case PPMOperationNames.READ:
+				case PPMOperationNames.CREATE:
 				{
-					resourcesProxy.setResource(( applicationVO );
+					var resources : Array = body as Array;
+					
+					resourcesProxy.setResources( resources );
 					
 					break;
 				}
