@@ -49,12 +49,12 @@ package net.vdombox.ide.common.vo
 		
 		public function get name() : String
 		{
-			return _type;
+			return _name;
 		}
 		
 		public function set name( value : String ) : void
 		{
-			_type = value;
+			_name = value;
 		}
 		
 		public function get type() : String
@@ -64,7 +64,7 @@ package net.vdombox.ide.common.vo
 		
 		public function set type( value : String ) : void
 		{
-			_type = value;
+			_type = value.toLowerCase();
 		}
 		
 		public function get status() : String
