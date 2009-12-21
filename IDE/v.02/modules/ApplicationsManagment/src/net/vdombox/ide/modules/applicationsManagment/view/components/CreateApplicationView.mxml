@@ -10,13 +10,6 @@
 		]]>
 	</fx:Script>
 	
-	<fx:Declarations>
-		<mx:StringValidator id="reqV" 
-							source="{nameField}" 
-							property="text" 
-							required="true"/>
-	</fx:Declarations>
-	
 	<s:states>
 		<s:State name="default"/>
 		<s:State name="gallery"/>
@@ -45,7 +38,7 @@
 			
 			<s:Label text="Name:" textDecoration="underline" fontFamily="Verdana" fontSize="14" buttonMode="true" />
 			<s:TextInput id="nameField"
-						 width="100%" change="reqV.validate()"/>
+						 width="100%"/>
 			
 		</s:HGroup>
 		

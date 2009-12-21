@@ -45,6 +45,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function onRegister() : void
 		{
 			createApplication.addEventListener( FlexEvent.SHOW, creationCompleteHandler );
+			createApplication.addEventListener( FlexEvent.ADD, creationCompleteHandler );
 			
 			createApplication.addEventListener( CreateApplicationViewEvent.SHOW_ICONS_GALLERY, showIconsGalleryHandler );
 			createApplication.addEventListener( CreateApplicationViewEvent.LOAD_ICON,loadIconHandler );
@@ -57,7 +58,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			return viewComponent as CreateApplicationView
 		}
 		
-		private function creationCompleteHandler( event : FlexEvent ) : void
+		private function creationCompleteHandler( event : Event ) : void
 		{
 			createApplication.itemList.addEventListener( IndexChangeEvent.CHANGE, itemList_changeHandler );
 			createApplication.nameField.addEventListener( TextOperationEvent.CHANGE, nameField_changeHandler );

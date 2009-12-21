@@ -88,6 +88,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					resourceVO = new ResourceVO();
 					resourceVO.ownerID = createdApplicationVO.id;
 					resourceVO.data = newApplicationsParameters.icon;
+					resourceVO.type = "png";
+					resourceVO.name = "applicationIcon"
 						
 					sendNotification( ApplicationFacade.SET_RESOURCE, resourceVO );
 					

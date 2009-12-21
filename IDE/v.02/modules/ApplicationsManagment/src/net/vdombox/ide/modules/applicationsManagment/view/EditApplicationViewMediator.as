@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import flash.events.Event;
-	
+
 	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
 	import mx.utils.StringUtil;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
@@ -13,11 +13,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.EditApplicationView;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
 
@@ -106,14 +106,14 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 					break;
 				}
-				
+
 				case ApplicationFacade.APPLICATION_EDITED:
 				{
 					var applicationVO : ApplicationVO = body as ApplicationVO;
-					
+
 					if ( applicationVO === selectedApplication )
 						refreshApplicationProperties();
-					
+
 					break;
 				}
 			}
@@ -156,7 +156,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				if ( selectedApplication )
 				{
 					applicationsList.selectedItem = selectedApplication;
-					
+
 					refreshApplicationProperties();
 
 					if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplication.id )
@@ -165,6 +165,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 						sendNotification( ApplicationFacade.SET_SETTINGS, settings );
 					}
+
+					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplication );
 				}
 				else
 				{
@@ -182,7 +184,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				}
 			}
 		}
-		
+
 		private function refreshApplicationProperties() : void
 		{
 			editApplicationView.applicationName.text = selectedApplication.name;
@@ -190,7 +192,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			editApplicationView.counts.text = StringUtil.substitute( PO_TEMPLATE, selectedApplication.numberOfPages, selectedApplication.numberOfObjects )
 			editApplicationView.applicationDescription.text = selectedApplication.description;
 		}
-		
+
 		private function applicationNameChangedHandler( event : EditApplicationViewEvent ) : void
 		{
 			var newApplicationName : String = editApplicationView.newApplicationName.text;
