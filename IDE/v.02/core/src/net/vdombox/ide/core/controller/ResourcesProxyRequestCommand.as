@@ -66,14 +66,8 @@ package net.vdombox.ide.core.controller
 			{
 				case PPMOperationNames.READ:
 				{
-					var ownerID : String;
-
-					if ( !body.hasOwnProperty( "ownerID" ) )
-					{
-						ownerID = serverProxy.selectedApplication.id;
-					}
-
-					resourceVO = resourcesProxy.getResource( ownerID, body.resourceID );
+					resourcesProxy.loadResource( resourceVO );
+					
 					body[ "resourceVO" ] = resourceVO;
 
 					message.setBody( body );

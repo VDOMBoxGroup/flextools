@@ -4,18 +4,18 @@ package net.vdombox.ide.core.model
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.ByteArray;
-
+	
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	import mx.utils.Base64Encoder;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -41,18 +41,12 @@ package net.vdombox.ide.core.model
 
 		public function getListResources( applicationVO : ApplicationVO ) : void
 		{
-			soap.list_resources( applicationVO.id );
+			var asyncToken : AsyncToken = soap.list_resources( applicationVO.id );
+			asyncToken.applicationVO = applicationVO;
 		}
 
-		public function getResource( ownerID : String, resourceID : String ) : ResourceVO
-		{
-			if ( !resourceID )
-				return null;
-
-			var resourceVO : ResourceVO = new ResourceVO();
-			resourceVO.ownerID = ownerID;
-			resourceVO.resourceID = resourceID;
-
+		public function loadResource( resourceVO : ResourceVO ) : ResourceVO
+		{			
 			var resource : Resource = new Resource( resourceVO );
 			resource.load();
 
@@ -108,11 +102,20 @@ package net.vdombox.ide.core.model
 			soap.delete_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
-		private function createResourcesList( resources : XML ) : Array
+		private function createResourcesList( applicationVO : ApplicationVO, resourcesXML : XML ) : Array
 		{
-			var d : * = "";
-
-			return [];
+			var resources : Array = [];
+			var resource : ResourceVO;
+			
+			for each ( var resourceDescription : XML in resourcesXML.* )
+			{
+				resource = new ResourceVO( applicationVO.id );
+				resource.setXMLDescription( resourceDescription );
+				
+				resources.push( resource );
+			}
+			
+			return resources;
 		}
 
 		private function soap_setResource() : void
@@ -181,18 +184,10 @@ package net.vdombox.ide.core.model
 				{
 					var resourceVO : ResourceVO;
 
-					if ( event.token && event.token.resourceVO )
-						resourceVO = event.token.resourceVO as ResourceVO;
-					else
-						resourceVO = new ResourceVO;
+					resourceVO = event.token.resourceVO as ResourceVO;
 
-					var id : String = result.Resource.@id.toString();
-
-					if ( id == "" )
-						return;
-
-					resourceVO.resourceID = id;
-
+					resourceVO.setXMLDescription( result.Resource[ 0 ] );
+					
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
 					soap_setResource();
 
@@ -201,9 +196,10 @@ package net.vdombox.ide.core.model
 
 				case "list_resources":
 				{
-
-					createResourcesList( <a/> );
-					sendNotification( ApplicationFacade.RESOURCES_GETTED );
+					var applicationVO : ApplicationVO = event.token.applicationVO;
+					var resources : Array = createResourcesList( applicationVO, result.Resources[ 0 ] );
+					
+					sendNotification( ApplicationFacade.RESOURCES_GETTED, resources );
 					break;
 				}
 			}
@@ -254,11 +250,12 @@ class Resource
 
 	public function load() : void
 	{
-		var resource : ByteArray = cacheManager.getCachedFileById( _resourceVO.resourceID );
+		var resource : ByteArray = cacheManager.getCachedFileById( _resourceVO.id );
+		
 		if ( resource )
 		{
-			_resourceVO.data = resource;
-			_resourceVO.status = "loaded";
+			_resourceVO.setData( resource );
+			_resourceVO.setStatus( "loaded" );
 
 			return;
 		}
@@ -266,7 +263,7 @@ class Resource
 		soap.get_resource.addEventListener( SOAPEvent.RESULT, resourceLoadedOKHandler );
 		soap.get_resource.addEventListener( FaultEvent.FAULT, resourceLoadedFaultHandler );
 
-		soap.get_resource( _resourceVO.ownerID, _resourceVO.resourceID );
+		soap.get_resource( _resourceVO.ownerID, _resourceVO.id );
 	}
 
 	private function resourceLoadedOKHandler( event : SOAPEvent ) : void
@@ -283,8 +280,8 @@ class Resource
 
 		cacheManager.cacheFile( resourceID, imageSource );
 
-		_resourceVO.data = imageSource;
-		_resourceVO.status = "loaded";
+		_resourceVO.setData( imageSource );
+		_resourceVO.setStatus( "loaded" );
 	}
 
 	private function resourceLoadedFaultHandler( event : FaultEvent ) : void

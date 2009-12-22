@@ -26,8 +26,6 @@ package net.vdombox.ide.core
 
 	public class ApplicationFacade extends Facade implements IFacade
 	{
-//		public static const INVOKE : String = "invoke";
-
 		public static const PREINITALIZE : String = "preinitalize";
 
 		public static const STARTUP : String = "startup";
@@ -75,13 +73,13 @@ package net.vdombox.ide.core
 		public static const DISCONNECT_MODULE_TO_PROXIES : String = "disconnectModuleToProxies";
 		public static const MODULE_TO_PROXIES_DISCONNECTED : String = "moduleToProxiesDisconnected";
 		
-//		Settings
+//		settings
 		public static const RETRIEVE_MODULE_SETTINGS : String = "getModuleSettings";
 		public static const MODULE_SETTINGS_GETTED : String = "moduleSettingsGetted";
 		public static const SAVE_MODULE_SETTINGS : String = "setModuleSettings";
 		public static const MODULE_SETTINGS_SETTED : String = "moduleSettingsSetted";
 		
-//		Proxies		
+//		proxies		
 		public static const RESOURCES_PROXY_REQUEST : String = "resourcesProxyRequest";
 		public static const RESOURCES_PROXY_RESPONSE : String = "resourcesProxyResponse";
 		
@@ -97,8 +95,7 @@ package net.vdombox.ide.core
 		public static const APPLICATION_PROXY_REQUEST : String = "applicationProxyRequest";
 		public static const APPLICATION_PROXY_RESPONSE : String = "applicationProxyResponse";
 		
-//		************
-		
+//		modules
 		public static const LOAD_MODULES : String = "loadModules";
 		public static const MODULES_LOADED : String = "modulesLoaded";
 		
