@@ -193,7 +193,7 @@ package net.vdombox.ide.core.model
 				case "list_applications":
 				{
 					createApplicationList( result.Applications[ 0 ] );
-					sendNotification( ApplicationFacade.APPLICATIONS_LOADED, applications );
+					sendNotification( ApplicationFacade.APPLICATIONS_LOADED, _applications );
 
 					break;
 				}
