@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
@@ -319,10 +318,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case PPMResourcesTargetNames.RESOURCES:
 				{
-
 					if ( operation == PPMOperationNames.READ )
 					{
-						var d : * = "";
+						sendNotification( ApplicationFacade.RESOURCES_GETTED, message.getBody() );
 					}
 
 					break;

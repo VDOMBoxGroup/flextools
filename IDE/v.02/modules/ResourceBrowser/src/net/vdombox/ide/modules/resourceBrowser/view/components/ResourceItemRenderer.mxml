@@ -12,6 +12,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import flash.filesystem.File;
+
 			import net.vdombox.ide.common.vo.ResourceVO;
 
 			[Bindable]
@@ -19,7 +21,21 @@
 
 			override public function set data( value : Object ) : void
 			{
+				if ( !value || value == resourceVO )
+					return;
+
 				resourceVO = value as ResourceVO;
+
+				pathLabel.text = resourceVO.path;
+
+				try
+				{
+					var file : File = File.applicationDirectory.resolvePath( resourceVO.path );
+					sizeLabel.text = formatFileSize( file.size );
+				}
+				catch ( error : Error )
+				{
+				}
 
 				super.data = value;
 			}
@@ -27,10 +43,10 @@
 			private function formatFileSize( numSize : Number ) : String
 			{
 				var strReturn : String;
-				
-				if( isNaN( numSize ) )
-					return "-";	
-				
+
+				if ( isNaN( numSize ) )
+					return "-";
+
 				numSize = Number( numSize / 1000 );
 				strReturn = String( numSize.toFixed( 1 ) + " KB" );
 				if ( numSize > 1000 )
@@ -43,29 +59,29 @@
 						strReturn = String( numSize.toFixed( 1 ) + " GB" );
 					}
 				}
+				
 				return strReturn;
 			}
 		]]>
 	</fx:Script>
-	
 	<s:TextInput id="resourceName"
 		text="@{ resourceVO.name }" width="200" />
 	
-	<s:Label
-		maxWidth="200" text="{ resourceVO.path }"
+	<s:Label id="pathLabel"
+		maxWidth="200"
 		lineBreak="toFit" maxDisplayedLines="1" />
 	
-	<s:Label 
-		text="{ formatFileSize( resourceVO.size ) }" />
+	<s:Label id="sizeLabel" />
 	
-	<mx:Spacer
+	<mx:Spacer 
 		width="100%" />
 	
 	<s:Label 
 		text="Remove"
-		textDecoration="underline"
-		buttonMode="true"
 		
-		click="dispatchEvent( new Event( 'removeResource' ) )" />
-
+		textDecoration="underline"
+		
+		click="dispatchEvent( new Event( 'removeResource' ) )"
+		buttonMode="true" />
+	
 </s:ItemRenderer>

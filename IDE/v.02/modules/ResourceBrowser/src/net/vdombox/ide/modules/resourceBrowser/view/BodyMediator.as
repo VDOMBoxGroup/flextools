@@ -1,17 +1,13 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
-	import flash.events.Event;
-	import flash.filesystem.File;
-	import flash.filesystem.FileMode;
-	import flash.filesystem.FileStream;
-	import flash.utils.ByteArray;
-
+	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -42,7 +38,11 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			interests.push( ApplicationFacade.PIPES_READY );
 
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
+			
+			interests.push( ApplicationFacade.RESOURCE_SETTED );
+			
 			interests.push( ApplicationFacade.GET_RESOURCES );
+			interests.push( ApplicationFacade.RESOURCES_GETTED );
 
 			return interests;
 		}
@@ -67,9 +67,19 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
+				case ApplicationFacade.RESOURCE_SETTED:
+				{
+					var resourceVO : ResourceVO = notification.getBody() as ResourceVO;
+					
+					if( body.resourceList.dataProvider.getItemIndex( resourceVO ) == -1 )
+						body.resourceList.dataProvider.addItem( resourceVO );
+					
+					break;
+				}
+					
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-					var d : * = "";
+					body.resourceList.dataProvider = new ArrayList( notification.getBody() as Array );
 					
 					break;
 				}
