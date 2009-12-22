@@ -67,12 +67,6 @@ package net.vdombox.ide.core.controller
 				case PPMOperationNames.READ:
 				{
 					resourcesProxy.loadResource( resourceVO );
-					
-					body[ "resourceVO" ] = resourceVO;
-
-					message.setBody( body );
-
-					sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, message );
 
 					break;
 				}

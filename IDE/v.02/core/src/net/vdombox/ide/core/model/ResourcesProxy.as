@@ -8,6 +8,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
+	import mx.utils.Base64Decoder;
 	import mx.utils.Base64Encoder;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
@@ -31,7 +32,9 @@ package net.vdombox.ide.core.model
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
-
+		
+		private var cacheManager : CacheManager = CacheManager.getInstance();
+		
 		private var loadQue : Array;
 
 		public function deleteResource( resourceID : String ) : void
@@ -45,12 +48,25 @@ package net.vdombox.ide.core.model
 			asyncToken.applicationVO = applicationVO;
 		}
 
-		public function loadResource( resourceVO : ResourceVO ) : ResourceVO
+		public function loadResource( resourceVO : ResourceVO ) : void
 		{			
-			var resource : Resource = new Resource( resourceVO );
-			resource.load();
-
-			return resourceVO;
+			var resource : ByteArray = cacheManager.getCachedFileById( resourceVO.id );
+			
+			if ( resource )
+			{
+				resourceVO.setData( resource );
+				resourceVO.setStatus( "loaded" );
+				
+				sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
+			}
+			else
+			{
+				soap.get_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+				soap.get_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+				var asyncToken : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
+				asyncToken.resourceVO = resourceVO;
+			}
 		}
 
 		public function setResource( resourceVO : ResourceVO ) : void
@@ -170,6 +186,8 @@ package net.vdombox.ide.core.model
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
+			var resourceVO : ResourceVO;
+			
 			var operation : Operation = event.currentTarget as Operation;
 			var result : XML = event.result[ 0 ] as XML;
 
@@ -180,10 +198,31 @@ package net.vdombox.ide.core.model
 
 			switch ( operationName )
 			{
+				case "get_resource":
+				{
+					resourceVO = event.token.resourceVO as ResourceVO;
+					
+					var data : String = event.result.Resource;
+					
+					var decoder : Base64Decoder = new Base64Decoder();
+					decoder.decode( data );
+					
+					var imageSource : ByteArray = decoder.toByteArray();
+					
+					imageSource.uncompress();
+					
+					cacheManager.cacheFile( resourceVO.id, imageSource );
+					
+					resourceVO.setData( imageSource );
+					resourceVO.setStatus( "loaded" );
+					
+					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
+					
+					break;
+				}
+				
 				case "set_resource":
 				{
-					var resourceVO : ResourceVO;
-
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					resourceVO.setXMLDescription( result.Resource[ 0 ] );
@@ -200,6 +239,7 @@ package net.vdombox.ide.core.model
 					var resources : Array = createResourcesList( applicationVO, result.Resources[ 0 ] );
 					
 					sendNotification( ApplicationFacade.RESOURCES_GETTED, resources );
+					
 					break;
 				}
 			}
@@ -213,7 +253,6 @@ package net.vdombox.ide.core.model
 }
 
 import flash.errors.IOError;
-import flash.events.Event;
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
@@ -223,72 +262,6 @@ import mx.collections.ArrayCollection;
 import mx.collections.IViewCursor;
 import mx.collections.Sort;
 import mx.collections.SortField;
-import mx.rpc.events.FaultEvent;
-import mx.utils.Base64Decoder;
-
-import net.vdombox.ide.common.vo.ResourceVO;
-import net.vdombox.ide.core.events.SOAPEvent;
-import net.vdombox.ide.core.model.business.SOAP;
-
-class Resource
-{
-	public function Resource( resourceVO : ResourceVO )
-	{
-		_resourceVO = resourceVO;
-	}
-
-	private var _resourceVO : ResourceVO;
-
-	private var cacheManager : CacheManager = CacheManager.getInstance();
-
-	private var soap : SOAP = SOAP.getInstance();
-
-	public function get resourceVO() : ResourceVO
-	{
-		return _resourceVO;
-	}
-
-	public function load() : void
-	{
-		var resource : ByteArray = cacheManager.getCachedFileById( _resourceVO.id );
-		
-		if ( resource )
-		{
-			_resourceVO.setData( resource );
-			_resourceVO.setStatus( "loaded" );
-
-			return;
-		}
-
-		soap.get_resource.addEventListener( SOAPEvent.RESULT, resourceLoadedOKHandler );
-		soap.get_resource.addEventListener( FaultEvent.FAULT, resourceLoadedFaultHandler );
-
-		soap.get_resource( _resourceVO.ownerID, _resourceVO.id );
-	}
-
-	private function resourceLoadedOKHandler( event : SOAPEvent ) : void
-	{
-		var resourceID : String = event.result.ResourceID;
-		var data : String = event.result.Resource;
-
-		var decoder : Base64Decoder = new Base64Decoder();
-		decoder.decode( data );
-
-		var imageSource : ByteArray = decoder.toByteArray();
-
-		imageSource.uncompress();
-
-		cacheManager.cacheFile( resourceID, imageSource );
-
-		_resourceVO.setData( imageSource );
-		_resourceVO.setStatus( "loaded" );
-	}
-
-	private function resourceLoadedFaultHandler( event : FaultEvent ) : void
-	{
-		var dummy : * = ""; // FIXME remove dummy
-	}
-}
 
 class CacheManager
 {

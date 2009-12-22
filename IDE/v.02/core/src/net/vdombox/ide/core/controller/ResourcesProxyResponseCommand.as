@@ -18,16 +18,33 @@ package net.vdombox.ide.core.controller
 			
 			var message : ProxiesPipeMessage;
 			
+			var resourceVO : ResourceVO;
+			
 			switch ( notification.getName() )
 			{
 				case ApplicationFacade.RESOURCES_GETTED:
 				{
-					var d : * = "";
+					var resources : Array = body as Array;
+					
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
+						PPMResourcesTargetNames.RESOURCES, resources );
+					
 					break;
 				}
+					
+				case ApplicationFacade.RESOURCE_LOADED:
+				{
+					resourceVO = body as ResourceVO;
+					
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
+						PPMResourcesTargetNames.RESOURCE, resourceVO );
+					
+					break;
+				}
+					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
-					var resourceVO : ResourceVO = body as ResourceVO;
+					resourceVO = body as ResourceVO;
 					
 					if( !resourceVO )
 					{
@@ -38,11 +55,11 @@ package net.vdombox.ide.core.controller
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, 
 						PPMResourcesTargetNames.RESOURCE, resourceVO );
 					
-					sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, message );
-					
 					break;
 				}
 			}
+			
+			sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, message );
 		}
 	}
 }
