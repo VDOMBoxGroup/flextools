@@ -12,14 +12,14 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.common.vo.ApplicationVO;
 
 			public static const RENDERER_CREATED : String = "rendererCreated";
 
 			protected function creationCompleteHandler( event : FlexEvent ) : void
 			{
-				dispatchEvent( new Event( RENDERER_CREATED ));
+				dispatchEvent( new Event( RENDERER_CREATED ) );
 			}
 		]]>
 	</fx:Script>
