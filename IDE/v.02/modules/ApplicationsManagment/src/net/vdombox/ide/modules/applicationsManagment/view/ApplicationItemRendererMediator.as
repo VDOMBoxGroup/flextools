@@ -2,12 +2,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import mx.binding.utils.BindingUtils;
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -43,19 +43,14 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		override public function onRegister() : void
 		{
-			var iconID : String = applicationItemRenderer.data.iconID;
-			var ownerID : String = applicationItemRenderer.data.id;
-
-			refreshProperties();
 			applicationItemRenderer.addEventListener( FlexEvent.DATA_CHANGE, dataChangeHandler );
 
-			if ( iconID != "" )
-				sendNotification( ApplicationFacade.GET_RESOURCE, { resourceID: iconID, ownerID: ownerID, recepientName: mediatorName });
+			refreshProperties();
 		}
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( notification.getName())
+			switch ( notification.getName() )
 			{
 				case mediatorName + "/" + ApplicationFacade.RESOURCE_GETTED:
 				{
@@ -81,26 +76,26 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			return viewComponent as ApplicationItemRenderer;
 		}
-		
+
 		private function setIcon( value : * ) : void
 		{
 			applicationItemRenderer.imageHolder.source = value;
 		}
-		
-		private function dataChangeHandler( event : FlexEvent) : void
+
+		private function dataChangeHandler( event : FlexEvent ) : void
 		{
 			refreshProperties();
 		}
-		
+
 		private function refreshProperties() : void
 		{
 			var applicationVO : ApplicationVO = applicationItemRenderer.data as ApplicationVO;
-			
-			if( applicationVO )
+
+			if ( applicationVO )
 			{
 				applicationItemRenderer.nameLabel.text = applicationVO.name;
 				applicationItemRenderer.description.text = applicationVO.description;
-				
+
 				applicationItemRenderer.pagesCount.text = "Pages: " + applicationVO.numberOfPages.toString();
 				applicationItemRenderer.objectsCount.text = "Objects: " + applicationVO.numberOfObjects.toString();
 			}
@@ -108,7 +103,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				applicationItemRenderer.nameLabel.text = "";
 				applicationItemRenderer.description.text = "";
-				
+
 				applicationItemRenderer.pagesCount.text = "Pages: ";
 				applicationItemRenderer.objectsCount.text = "Objects: ";
 			}
