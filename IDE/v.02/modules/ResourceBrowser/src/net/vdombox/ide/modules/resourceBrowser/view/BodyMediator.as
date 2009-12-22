@@ -11,6 +11,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.events.IndexChangeEvent;
 
 	public class BodyMediator extends Mediator implements IMediator
 	{
@@ -21,6 +23,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			super( NAME, viewComponent );
 		}
 
+		public var selectedResource :ResourceVO;
+		
 		public function get body() : Body
 		{
 			return viewComponent as Body;
@@ -86,15 +90,36 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			}
 		}
 
+		private var _selectedResourceChanged : Boolean;
+		
 		private function addEventListeners() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
-
+		
+		private function commitProperties() : void
+		{
+			if( _selectedResourceChanged )
+			{
+				_selectedResourceChanged = false;
+				
+				
+			}
+		}
+		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			facade.registerMediator( new LoadResourcesViewMediator( body.loadResourcesView ) );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+			body.resourceList.addEventListener( IndexChangeEvent.CHANGE, resourceList_changeHandler );
+		}
+		
+		private function resourceList_changeHandler( event : IndexChangeEvent ) : void
+		{
+			selectedResource = event.currentTarget.selectedItem;
+			_selectedResourceChanged = true;
+			
+			commitProperties();
 		}
 	}
 }
