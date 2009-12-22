@@ -85,11 +85,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				{
 					createdApplicationVO = notification.getBody() as ApplicationVO;
 					
-					resourceVO = new ResourceVO();
-					resourceVO.ownerID = createdApplicationVO.id;
-					resourceVO.data = newApplicationsParameters.icon;
-					resourceVO.type = "png";
-					resourceVO.name = "applicationIcon"
+					resourceVO = new ResourceVO( createdApplicationVO.id );
+					
+					resourceVO.setData( newApplicationsParameters.icon );
+					resourceVO.setType( "png" );
+					resourceVO.name = "applicationIcon";
 						
 					sendNotification( ApplicationFacade.SET_RESOURCE, resourceVO );
 					
@@ -104,7 +104,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					
 					appPropertiesVO.name = newApplicationsParameters.name;
 					appPropertiesVO.description = newApplicationsParameters.description;
-					appPropertiesVO.iconID = resourceVO.resourceID;
+					appPropertiesVO.iconID = resourceVO.id;
 					
 					sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION,
 									  { applicationVO : createdApplicationVO, applicationPropertiesVO : appPropertiesVO } );
