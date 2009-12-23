@@ -57,8 +57,14 @@ package net.vdombox.ide.modules.resourceBrowser
 		public static const GET_RESOURCES : String = "getResources";
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 
+		public static const LOAD_RESOURCE : String = "loadResource";
+		public static const RESOURCE_LOADED : String = "resourceLoadded";
+		
 		public static const SET_RESOURCES : String = "setResources";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
+		
+		public static const DELETE_RESOURCE : String = "deleteResource";
+		public static const RESOURCE_DELETED : String = "resourceDeleted";
 
 		
 		public static function getInstance( key : String ) : ApplicationFacade
