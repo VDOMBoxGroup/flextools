@@ -37,9 +37,11 @@ package net.vdombox.ide.core.model
 		
 		private var loadQue : Array;
 
-		public function deleteResource( resourceID : String ) : void
+		public function deleteResource( applicationVO : ApplicationVO, resourceVO : ResourceVO ) : void
 		{
-			soap.delete_resource( resourceID );
+			
+			var asyncToken : AsyncToken = soap.delete_resource( applicationVO.id, resourceVO.id );
+			asyncToken.resourceVO = resourceVO;
 		}
 
 		public function getListResources( applicationVO : ApplicationVO ) : void
@@ -57,7 +59,7 @@ package net.vdombox.ide.core.model
 				resourceVO.setData( resource );
 				resourceVO.setStatus( "loaded" );
 				
-				sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
+				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 			}
 			else
 			{
@@ -216,7 +218,7 @@ package net.vdombox.ide.core.model
 					resourceVO.setData( imageSource );
 					resourceVO.setStatus( "loaded" );
 					
-					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
+					sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 					
 					break;
 				}
@@ -241,6 +243,18 @@ package net.vdombox.ide.core.model
 					sendNotification( ApplicationFacade.RESOURCES_GETTED, resources );
 					
 					break;
+				}
+					
+				case "delete_resource":
+				{
+					resourceVO = event.token.resourceVO as ResourceVO;
+					
+					cacheManager.deleteFile( resourceVO.id );
+					
+					resourceVO.setData( null );
+					resourceVO.setPath( null );
+					
+					sendNotification( ApplicationFacade.RESOURCE_DELETED, resourceVO );
 				}
 			}
 		}

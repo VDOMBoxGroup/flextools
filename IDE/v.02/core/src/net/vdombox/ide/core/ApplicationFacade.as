@@ -86,6 +86,7 @@ package net.vdombox.ide.core
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 		public static const RESOURCE_LOADED : String = "resourceLoaded";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
+		public static const RESOURCE_DELETED : String = "resourceDeleted";
 		
 		public static const SERVER_PROXY_REQUEST : String = "serverProxyRequest";
 		public static const SERVER_PROXY_RESPONSE : String = "serverProxyResponse";
@@ -168,6 +169,7 @@ package net.vdombox.ide.core
 			registerCommand( RESOURCES_GETTED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_LOADED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_SETTED, ResourcesProxyResponseCommand );
+			registerCommand( RESOURCE_DELETED, ResourcesProxyResponseCommand );
 			
 			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand )
 			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand )

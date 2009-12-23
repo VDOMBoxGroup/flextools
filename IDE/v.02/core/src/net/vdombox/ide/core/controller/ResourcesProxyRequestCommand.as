@@ -65,7 +65,9 @@ package net.vdombox.ide.core.controller
 			switch ( message.getOperation() )
 			{
 				case PPMOperationNames.READ:
-				{
+				{	
+					resourceVO = body as ResourceVO;
+					
 					resourcesProxy.loadResource( resourceVO );
 
 					break;
@@ -74,7 +76,7 @@ package net.vdombox.ide.core.controller
 				case PPMOperationNames.CREATE:
 				{
 					resourceVO = body as ResourceVO;
-
+					
 					if ( !resourceVO || !resourceVO.data )
 					{
 						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Set resource error." );
@@ -83,6 +85,22 @@ package net.vdombox.ide.core.controller
 
 					resourcesProxy.setResource( resourceVO );
 
+					break;
+				}
+					
+				case PPMOperationNames.DELETE:
+				{
+					resourceVO = body.resourceVO as ResourceVO;
+					var applicationVO : ApplicationVO = body.applicationVO;
+					
+					if ( !applicationVO && !resourceVO )
+					{
+						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Delete resource error." );
+						return;
+					}
+					
+					resourcesProxy.deleteResource( applicationVO, resourceVO );
+					
 					break;
 				}
 			}

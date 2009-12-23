@@ -57,6 +57,22 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+					
+				case ApplicationFacade.RESOURCE_DELETED:
+				{
+					resourceVO = body as ResourceVO;
+					
+					if( !resourceVO )
+					{
+						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyResponseCommand: RESOURCE_DELETED resourceVO is null." );
+						return;
+					}
+					
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE, 
+						PPMResourcesTargetNames.RESOURCE, resourceVO );
+					
+					break;
+				}
 			}
 			
 			sendNotification( ApplicationFacade.RESOURCES_PROXY_RESPONSE, message );
