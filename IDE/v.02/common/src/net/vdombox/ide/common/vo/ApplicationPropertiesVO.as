@@ -18,7 +18,7 @@ package net.vdombox.ide.common.vo
 				info.appendChild( <Description>{description}</Description> );
 			
 			if ( iconID !== null )
-				info.appendChild( <Icon>{name}</Icon> );
+				info.appendChild( <Icon>{iconID}</Icon> );
 			
 			if ( indexPageID !== null )
 				info.appendChild( <Index>{indexPageID}</Index> );

@@ -83,6 +83,11 @@ package net.vdombox.ide.common.vo
 			return _status;
 		}
 
+		public function setID( value : String ) : void
+		{
+			_id = value;
+		}
+		
 		public function setType( value : String ) : void
 		{
 			_type = value.toLowerCase();
