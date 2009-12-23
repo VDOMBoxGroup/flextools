@@ -1,7 +1,5 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
-	import flash.events.Event;
-	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
@@ -45,6 +43,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.NEW_APP_PROPS_SUBMITTED );
 			interests.push( ApplicationFacade.NEW_APP_PROPS_CANCELED );
 			interests.push( ApplicationFacade.APPLICATION_CREATED );
+			interests.push( ApplicationFacade.APPLICATION_EDITED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
 			
 			return interests;
@@ -66,9 +65,14 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				{
 					newApplicationsParameters = notification.getBody();
 					
+					var applicationPropertiesVO : ApplicationPropertiesVO = new ApplicationPropertiesVO();
+					
+					applicationPropertiesVO.name = newApplicationsParameters.name;
+					applicationPropertiesVO.description = newApplicationsParameters.description;
+					
 					if( newApplicationsParameters.hasOwnProperty( "name" ) )
 					{
-						sendNotification( ApplicationFacade.CREATE_APPLICATION );
+						sendNotification( ApplicationFacade.CREATE_APPLICATION, applicationPropertiesVO );
 					}
 					
 					break;
@@ -96,14 +100,19 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 					
+				case ApplicationFacade.APPLICATION_EDITED:
+				{
+					body.currentState = "default";
+					
+					break;
+				}
+					
 				case ApplicationFacade.RESOURCE_SETTED:
 				{
 					resourceVO = notification.getBody() as ResourceVO;
 					
 					var appPropertiesVO : ApplicationPropertiesVO = new ApplicationPropertiesVO();
 					
-					appPropertiesVO.name = newApplicationsParameters.name;
-					appPropertiesVO.description = newApplicationsParameters.description;
 					appPropertiesVO.iconID = resourceVO.id;
 					
 					sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION,

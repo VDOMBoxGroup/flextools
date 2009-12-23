@@ -1,7 +1,9 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
+	import flash.utils.Dictionary;
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -19,7 +21,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -34,6 +36,13 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		public function ApplicationsManagmentJunctionMediator()
 		{
 			super( NAME, new Junction() );
+		}
+
+		private var recepients : Dictionary;
+
+		override public function onRegister() : void
+		{
+			recepients = new Dictionary( true );
 		}
 
 		override public function listNotificationInterests() : Array
@@ -51,7 +60,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
 
-			interests.push( ApplicationFacade.GET_RESOURCE );
+			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( ApplicationFacade.SET_RESOURCE );
 
 			interests.push( ApplicationFacade.CREATE_APPLICATION );
@@ -164,7 +173,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.CREATE_APPLICATION:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE,
-													  PPMServerTargetNames.APPLICATION );
+													  PPMServerTargetNames.APPLICATION, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -181,10 +190,28 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 
-				case ApplicationFacade.GET_RESOURCE:
+				case ApplicationFacade.LOAD_RESOURCE:
 				{
+					var recepientKey : String;
+					var resourceVO : ResourceVO;
+
+					if ( body is ResourceVO )
+					{
+						resourceVO = body as ResourceVO;
+					}
+					else
+					{
+						recepientKey = body.recepientKey;
+						resourceVO = body.resourceVO as ResourceVO;
+						
+						if ( !recepients[ resourceVO ] )
+							recepients[ resourceVO ] = [];
+							
+						recepients[ resourceVO ].push( recepientKey );
+					}
+
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
-													  PPMResourcesTargetNames.RESOURCE, body );
+													  PPMResourcesTargetNames.RESOURCE, resourceVO );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -238,7 +265,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
 																			SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
-					
+
 					sendNotification( ApplicationFacade.PIPES_READY );
 
 					break;
@@ -405,10 +432,24 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 					if ( operation == PPMOperationNames.READ )
 					{
-						resourceVO = message.getBody().resourceVO as ResourceVO;
+						var recepientsArray : Array;
 
-						sendNotification( message.getBody().recepientName + "/" + ApplicationFacade.RESOURCE_GETTED,
-										  resourceVO );
+						resourceVO = message.getBody() as ResourceVO;
+
+						if ( recepients[ resourceVO ] )
+						{
+							recepientsArray = recepients[ resourceVO ];
+
+							for ( var i : int = 0; i < recepientsArray.length; i++ )
+							{
+								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recepientsArray[ i ],
+												  resourceVO );
+							}
+						}
+						else
+						{
+							sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
+						}
 					}
 					else if ( operation == PPMOperationNames.CREATE )
 					{

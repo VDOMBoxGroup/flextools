@@ -31,15 +31,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		}
 
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( mediatorName + "/" + ApplicationFacade.RESOURCE_GETTED );
-			interests.push( ApplicationFacade.APPLICATION_EDITED );
-
-			return interests;
-		}
+		private var resourceVO : ResourceVO;
 
 		override public function onRegister() : void
 		{
@@ -48,11 +40,21 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			refreshProperties();
 		}
 
+		override public function listNotificationInterests() : Array
+		{
+			var interests : Array = super.listNotificationInterests();
+
+			interests.push( ApplicationFacade.RESOURCE_LOADED + "/" + mediatorName );
+			interests.push( ApplicationFacade.APPLICATION_EDITED );
+
+			return interests;
+		}
+
 		override public function handleNotification( notification : INotification ) : void
 		{
 			switch ( notification.getName() )
 			{
-				case mediatorName + "/" + ApplicationFacade.RESOURCE_GETTED:
+				case ApplicationFacade.RESOURCE_LOADED + "/" + mediatorName:
 				{
 					var resourceVO : ResourceVO = notification.getBody() as ResourceVO;
 
@@ -98,6 +100,14 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				applicationItemRenderer.pagesCount.text = "Pages: " + applicationVO.numberOfPages.toString();
 				applicationItemRenderer.objectsCount.text = "Objects: " + applicationVO.numberOfObjects.toString();
+
+				if ( applicationVO.iconID && ( !resourceVO || resourceVO.id != applicationVO.iconID ) )
+				{
+					resourceVO = new ResourceVO( applicationVO.id );
+					resourceVO.setID( applicationVO.iconID );
+
+					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recepientKey: mediatorName } );
+				}
 			}
 			else
 			{

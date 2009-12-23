@@ -1,11 +1,11 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import flash.events.Event;
-
+	
 	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
 	import mx.utils.StringUtil;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
@@ -13,11 +13,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.EditApplicationView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
 
@@ -65,6 +65,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
 			interests.push( ApplicationFacade.APPLICATION_EDITED );
+			interests.push( ApplicationFacade.APPLICATION_CREATED );
 
 			return interests;
 		}
@@ -72,7 +73,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
-
+			
+			var applicationVO : ApplicationVO;
+			
 			switch ( notification.getName())
 			{
 				case ApplicationFacade.APPLICATIONS_LIST_GETTED:
@@ -109,11 +112,21 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.APPLICATION_EDITED:
 				{
-					var applicationVO : ApplicationVO = body as ApplicationVO;
+					applicationVO = body as ApplicationVO;
 
 					if ( applicationVO === selectedApplication )
 						refreshApplicationProperties();
 
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_CREATED:
+				{
+					applicationVO = body as ApplicationVO;
+					
+					if ( applicationVO )
+						editApplicationView.applicationsList.dataProvider.addItem( applicationVO );
+					
 					break;
 				}
 			}
@@ -133,7 +146,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private function addEventListeners() : void
 		{
-			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_NAME_CHANGED, applicationNameChangedHandler )
+			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_NAME_CHANGED, applicationNameChangedHandler );
+			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_DESCRIPTION_CHANGED, applicationDescriptionChangedHandler )
 
 			applicationsList.addEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler, true );
 
@@ -205,7 +219,20 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplication, applicationPropertiesVO: applicationProperties });
 		}
-
+		
+		private function applicationDescriptionChangedHandler( event : EditApplicationViewEvent ) : void
+		{
+			var newApplicationDescription : String = editApplicationView.newApplicationDescription.text;
+			
+			if ( newApplicationDescription && newApplicationDescription == selectedApplication.description )
+				return;
+			
+			var applicationProperties : ApplicationPropertiesVO = new ApplicationPropertiesVO;
+			applicationProperties.description = newApplicationDescription;
+			
+			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplication, applicationPropertiesVO: applicationProperties });
+		}
+		
 		private function applicationItemRenderer_rendererCreatedHandler( event : Event ) : void
 		{
 			var renderer : ApplicationItemRenderer = event.target as ApplicationItemRenderer;

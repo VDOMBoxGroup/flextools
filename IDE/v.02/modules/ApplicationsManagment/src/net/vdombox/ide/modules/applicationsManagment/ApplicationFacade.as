@@ -68,8 +68,8 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const APPLICATIONS_LIST_GETTED : String = "applicationsListGetted";
 		
 //		resources
-		public static const GET_RESOURCE : String = "getResource";
-		public static const RESOURCE_GETTED : String = "resourceGetted";
+		public static const LOAD_RESOURCE : String = "loadResource";
+		public static const RESOURCE_LOADED : String = "resourceLoaded";
 
 		public static const SET_RESOURCE : String = "setResource";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
