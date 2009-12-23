@@ -171,7 +171,10 @@ package net.vdombox.ide.modules.resourceBrowser.view
 						recepientKey = body.recepientKey;
 						resourceVO = body.resourceVO as ResourceVO;
 						
-						recepients[ resourceVO ].push( recepientKey )
+						if ( !recepients[ resourceVO ] )
+							recepients[ resourceVO ] = [];
+						
+						recepients[ resourceVO ].push( recepientKey );
 					}
 					
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
