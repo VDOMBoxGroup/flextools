@@ -2,6 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.soap.Operation;
 	
+	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPErrorEvent;
@@ -110,11 +111,11 @@ package net.vdombox.ide.core.model
 			soap.list_applications();
 		}
 
-		public function createApplication() : void
+		public function createApplication( applicationPropertiesVO : ApplicationPropertiesVO ) : void
 		{
 			soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			soap.create_application( "" );
+			
+			soap.create_application( applicationPropertiesVO.toXML() );
 		}
 
 		public function getApplicationProxy( applicationVO : ApplicationVO ) : ApplicationProxy
@@ -200,7 +201,8 @@ package net.vdombox.ide.core.model
 
 				case "create_application":
 				{
-					var applicationVO : ApplicationVO = new ApplicationVO( result.Application[ 0 ] );
+					var applicationVO : ApplicationVO = new ApplicationVO( result.Application[ 0 ].@ID );
+					applicationVO.setInformation( result.Application[ 0 ].Information[ 0 ] );
 					_applications.push( applicationVO );
 
 					sendNotification( ApplicationFacade.APPLICATION_CREATED, applicationVO );

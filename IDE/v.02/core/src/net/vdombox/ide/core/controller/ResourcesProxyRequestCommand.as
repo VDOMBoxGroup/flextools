@@ -24,6 +24,61 @@ package net.vdombox.ide.core.controller
 				processResourceTarget( message );
 		}
 
+		private function processResourceTarget( message : ProxiesPipeMessage ) : void
+		{
+			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			
+			var target : String = message.getTarget();
+			var operation : String = message.getOperation();
+			var body : Object = message.getBody();
+			
+			var resourceVO : ResourceVO;
+			
+			switch ( message.getOperation() )
+			{
+				case PPMOperationNames.READ:
+				{	
+					resourceVO = body as ResourceVO;
+					
+					resourcesProxy.loadResource( resourceVO );
+					
+					break;
+				}
+					
+				case PPMOperationNames.CREATE:
+				{
+					resourceVO = body as ResourceVO;
+					
+					if ( !resourceVO || !resourceVO.data )
+					{
+						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Set resource error." );
+						return;
+					}
+					
+					resourcesProxy.setResource( resourceVO );
+					
+					break;
+				}
+					
+				case PPMOperationNames.DELETE:
+				{
+					resourceVO = body.resourceVO as ResourceVO;
+					var applicationVO : ApplicationVO = body.applicationVO;
+					
+					if ( !applicationVO && !resourceVO )
+					{
+						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Delete resource error." );
+						return;
+					}
+					
+					resourcesProxy.deleteResource( applicationVO, resourceVO );
+					
+					break;
+				}
+			}
+		}
+		
 		private function processResourcesTarget( message : ProxiesPipeMessage ) : void
 		{
 			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
@@ -45,61 +100,6 @@ package net.vdombox.ide.core.controller
 					var resources : Array = body as Array;
 					
 					resourcesProxy.setResources( resources );
-					
-					break;
-				}
-			}
-		}
-
-		private function processResourceTarget( message : ProxiesPipeMessage ) : void
-		{
-			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
-			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
-
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
-			var body : Object = message.getBody();
-
-			var resourceVO : ResourceVO;
-
-			switch ( message.getOperation() )
-			{
-				case PPMOperationNames.READ:
-				{	
-					resourceVO = body as ResourceVO;
-					
-					resourcesProxy.loadResource( resourceVO );
-
-					break;
-				}
-
-				case PPMOperationNames.CREATE:
-				{
-					resourceVO = body as ResourceVO;
-					
-					if ( !resourceVO || !resourceVO.data )
-					{
-						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Set resource error." );
-						return;
-					}
-
-					resourcesProxy.setResource( resourceVO );
-
-					break;
-				}
-					
-				case PPMOperationNames.DELETE:
-				{
-					resourceVO = body.resourceVO as ResourceVO;
-					var applicationVO : ApplicationVO = body.applicationVO;
-					
-					if ( !applicationVO && !resourceVO )
-					{
-						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Delete resource error." );
-						return;
-					}
-					
-					resourcesProxy.deleteResource( applicationVO, resourceVO );
 					
 					break;
 				}

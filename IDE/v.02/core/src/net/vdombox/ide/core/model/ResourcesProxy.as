@@ -63,9 +63,6 @@ package net.vdombox.ide.core.model
 			}
 			else
 			{
-				soap.get_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-				soap.get_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
-			
 				var asyncToken : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
 				asyncToken.resourceVO = resourceVO;
 			}
@@ -76,7 +73,7 @@ package net.vdombox.ide.core.model
 			if ( !loadQue )
 				loadQue = [];
 			
-			if ( loadQue.indexOf( resourceVO ) != -1 )
+			if ( loadQue.indexOf( resourceVO ) == -1 )
 				loadQue.push( resourceVO );
 
 			soap_setResource();
@@ -110,6 +107,9 @@ package net.vdombox.ide.core.model
 
 		private function addEventListeners() : void
 		{
+			soap.get_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
 			soap.list_resources.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.list_resources.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 
