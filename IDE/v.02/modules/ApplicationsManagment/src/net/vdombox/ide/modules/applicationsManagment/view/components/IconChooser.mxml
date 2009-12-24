@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup 
+	xmlns:mx="library://ns.adobe.com/flex/halo"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.applicationsManagment.events.IconChooserEvent;
+		]]>
+	</fx:Script>
+
+	<mx:Image id="selectedIcon"
+		height="64" width="64" />
+
+	<s:List id="iconsList"
+		height="100" width="100%"
+		itemRenderer="net.vdombox.ide.modules.applicationsManagment.view.components.GalleryItemRenderer">
+
+		<s:layout>
+
+			<s:TileLayout />
+		</s:layout>
+	</s:List>
+
+	<s:Label 
+		buttonMode="true" text="Load from computer"
+		
+		fontFamily="Verdana" fontSize="14" textDecoration="underline"
+		
+		click="dispatchEvent( new IconChooserEvent( IconChooserEvent.LOAD_ICON ))" />
+</s:VGroup>

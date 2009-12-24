@@ -40,8 +40,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var interests : Array = super.listNotificationInterests();
 			
 			interests.push( ApplicationFacade.OPEN_CREATE_APPLICATION_VIEW );
-			interests.push( ApplicationFacade.NEW_APP_PROPS_SUBMITTED );
-			interests.push( ApplicationFacade.NEW_APP_PROPS_CANCELED );
+			interests.push( ApplicationFacade.CREATE_NEW_APP_SUBMITTED );
+			interests.push( ApplicationFacade.CREATE_NEW_APP_CANCELED );
 			interests.push( ApplicationFacade.APPLICATION_CREATED );
 			interests.push( ApplicationFacade.APPLICATION_EDITED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
@@ -61,7 +61,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 					
-				case ApplicationFacade.NEW_APP_PROPS_SUBMITTED:
+				case ApplicationFacade.CREATE_NEW_APP_SUBMITTED:
 				{
 					newApplicationsParameters = notification.getBody();
 					
@@ -78,7 +78,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 					
-				case ApplicationFacade.NEW_APP_PROPS_CANCELED:
+				case ApplicationFacade.CREATE_NEW_APP_CANCELED:
 				{
 					body.currentState = "default";
 					
