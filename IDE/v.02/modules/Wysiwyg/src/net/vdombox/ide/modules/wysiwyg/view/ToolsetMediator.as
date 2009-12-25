@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
@@ -62,7 +62,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function addEventListeners() : void
 		{
-			
+			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, toolsetButton_click )
+		}
+		
+		private function toolsetButton_click( event : MouseEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}
 }

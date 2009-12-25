@@ -52,6 +52,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
+			
+			interests.push( ApplicationFacade.SELECT_MODULE );
 
 			interests.push( ApplicationFacade.GET_TYPES );
 
@@ -131,6 +133,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
+				case ApplicationFacade.SELECT_MODULE:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.SELECT_MODULE, null, multitonKey );
+					
+					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.GET_TYPES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
