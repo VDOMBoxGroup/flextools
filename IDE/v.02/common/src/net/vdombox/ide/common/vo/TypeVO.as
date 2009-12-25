@@ -14,19 +14,21 @@ package net.vdombox.ide.common.vo
 			var informationXML : XML = typeXML.Information[ 0 ];
 			var attributesXML : XML = typeXML.Attributes[ 0 ];
 
-			_typeName = informationXML.Name[ 0 ].toString();
-
-
-			var propertyName : String;
-			var propertyValue : String;
-			var propertyObject : String;
+			_typeName = "type_" + informationXML.Name[ 0 ].toString();
 
 			extractResources( informationXML.*, languages );
 			extractResources( attributesXML.Attribute.*, languages );
 
-			_information = new TypeInformationVO( _typeName, informationXML );
+			var propertyName : String;
+			var propertyValue : String;
 
-			_attributes = [];
+			for each ( var property : XML in informationXML.* )
+			{
+				propertyName = property.localName().toString().toLowerCase();
+				propertyValue = property[ 0 ];
+
+				informationPropertyObject[ propertyName ] = propertyValue;
+			}
 
 			for each ( var attribute : XML in attributesXML.* )
 			{
@@ -36,15 +38,22 @@ package net.vdombox.ide.common.vo
 			resourceManager.update();
 		}
 
+		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database",
+													  "debug" ];
+
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+
+		private var propertyRE : RegExp = /#Lang\((\w+)\)/;
 
 		private var _typeName : String;
 
 		private var _information : TypeInformationVO;
 
-		private var _attributes : Array;
+		private var _attributes : Array = [];
 
-		public function get information() : Object
+		private var informationPropertyObject : Object = {};
+
+		public function get information() : TypeInformationVO
 		{
 			return _information;
 		}
@@ -52,6 +61,115 @@ package net.vdombox.ide.common.vo
 		public function get attributes() : Array
 		{
 			return _attributes.slice();
+		}
+
+		public function get id() : String
+		{
+			return getInformationProperty( "id" );
+		}
+
+		public function get name() : String
+		{
+			return getInformationProperty( "name" );
+		}
+
+		public function get displayName() : String
+		{
+			return getInformationProperty( "displayname" );
+		}
+
+		public function get description() : String
+		{
+			return getInformationProperty( "description" );
+		}
+
+		public function get className() : String
+		{
+			return getInformationProperty( "classname" );
+		}
+
+		public function get icon() : String
+		{
+			return getInformationProperty( "icon" );
+		}
+
+		public function get editorIcon() : String
+		{
+			return getInformationProperty( "editoricon" );
+		}
+
+		public function get structureIcon() : String
+		{
+			return getInformationProperty( "structureicon" );
+		}
+
+		public function get moveable() : String
+		{
+			return getInformationProperty( "moveable" );
+		}
+
+		public function get resizable() : String
+		{
+			return getInformationProperty( "resizable" );
+		}
+
+		public function get category() : String
+		{
+			var categoryName : String = getInformationProperty( "category" );
+
+			var generalCategory : String = resourceManager.getString( "Types", categoryName.toLowerCase() );
+			
+			if ( generalCategory )
+				categoryName = generalCategory;
+			
+			return categoryName;
+		}
+
+		public function get dynamic() : String
+		{
+			return getInformationProperty( "dynamic" );
+		}
+
+		public function get version() : String
+		{
+			return getInformationProperty( "version" );
+		}
+
+		public function get interfaceType() : String
+		{
+			return getInformationProperty( "interfacetype" );
+		}
+
+		public function get optimizationPriority() : String
+		{
+			return getInformationProperty( "optimizationpriority" );
+		}
+
+		public function get containers() : String
+		{
+			return getInformationProperty( "containers" );
+		}
+
+		public function get container() : String
+		{
+			return getInformationProperty( "container" );
+		}
+
+		private function getInformationProperty( valueName : String ) : String
+		{
+			var value : String = "";
+
+			if ( !informationPropertyObject.hasOwnProperty( valueName ) )
+				return value;
+
+			var matchResult : Array = informationPropertyObject[ valueName ].match( propertyRE );
+
+			if ( matchResult )
+				value = resourceManager.getString( _typeName, matchResult[ 1 ] );
+			else
+				value = informationPropertyObject[ valueName ];
+
+			return value;
 		}
 
 		private function extractResources( properties : XMLList, languages : XMLList ) : void
@@ -75,16 +193,16 @@ package net.vdombox.ide.common.vo
 					continue;
 
 				var localeName : String;
-				var sents : XMLList = languages.Sentence.( @ID == matchResult[ 1 ])
+				var sents : XMLList = languages.Sentence.( @ID == matchResult[ 1 ] )
 
 				for each ( var sent : XML in sents )
 				{
 					localeName = sent.parent().@Code;
 
-					if ( !prepareForResourceBundles.hasOwnProperty( localeName ))
+					if ( !prepareForResourceBundles.hasOwnProperty( localeName ) )
 						prepareForResourceBundles[ localeName ] = {};
 
-					prepareForResourceBundles[ localeName ][ sent.@ID.toString()] = sent[ 0 ].toString();
+					prepareForResourceBundles[ localeName ][ sent.@ID.toString() ] = sent[ 0 ].toString();
 				}
 			}
 
@@ -96,7 +214,7 @@ package net.vdombox.ide.common.vo
 				if ( !resourceBundle )
 					resourceBundle = new ResourceBundle( locale, _typeName );
 
-				for ( resourceName in prepareForResourceBundles[ locale ])
+				for ( resourceName in prepareForResourceBundles[ locale ] )
 				{
 					resourceBundle.content[ resourceName ] = prepareForResourceBundles[ locale ][ resourceName ];
 				}
