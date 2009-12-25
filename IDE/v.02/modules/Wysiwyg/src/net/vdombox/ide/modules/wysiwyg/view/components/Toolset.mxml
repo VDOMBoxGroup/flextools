@@ -5,10 +5,6 @@
 		 
 		 implements="net.vdombox.ide.common.interfaces.IToolset">
 	
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
-	
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.interfaces.IToolset;
@@ -20,5 +16,5 @@
 		<s:HorizontalLayout />
 	</s:layout>
 	
-	<s:Button label="wysiwyg"/>
+	<s:ToggleButton label="Wysiwyg" />
 </s:Group>

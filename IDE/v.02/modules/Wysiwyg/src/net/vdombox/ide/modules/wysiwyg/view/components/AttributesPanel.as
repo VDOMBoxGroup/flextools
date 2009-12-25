@@ -34,7 +34,7 @@ import vdom.controls.NumberField;
 import vdom.controls.colorPicker.ColorPicker;
 import vdom.controls.externalwysiwygorButton.ExternalwysiwygorButton;
 import vdom.controls.multiline.Multiline;
-import vdom.controls.resourceBrowser.ResourceBrowserButton;
+import vdom.controls.wysiwyg.WysiwygButton;
 import vdom.events.AttributesPanelEvent;
 import vdom.managers.DataManager;
 import vdom.managers.LanguageManager;
@@ -506,7 +506,7 @@ public class AttributesPanel extends ClosablePanel {
 				
 				case "file" : 
 				{
-					valueContainer = new ResourceBrowserButton();
+					valueContainer = new WysiwygButton();
 					valueType = "value";
 					
 					valueContainer.value = currentAttribute;

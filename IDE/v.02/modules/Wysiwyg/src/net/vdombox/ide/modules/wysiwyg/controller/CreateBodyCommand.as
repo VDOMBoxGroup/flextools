@@ -11,9 +11,19 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var body : Body = new Body();
+			var body : Body;
+			var bodyMediator : BodyMediator;
 			
-			facade.registerMediator( new BodyMediator( body ) )
+			if( facade.hasMediator( BodyMediator.NAME ) )
+			{
+				bodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;
+				body = bodyMediator.body;
+			}
+			else
+			{
+				body = new Body();
+				facade.registerMediator( new BodyMediator( body ) )
+			}
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 		}

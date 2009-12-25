@@ -1,13 +1,13 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import flash.events.MouseEvent;
-
+	import flash.events.Event;
+	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Toolset;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -23,15 +23,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
-		private function get toolset() : Toolset
+		public function get toolset() : Toolset
 		{
 			return viewComponent as Toolset;
 		}
 
 		override public function onRegister() : void
 		{
-//			toolset.label = resourceManager.getString( "Main", "applicationManagment" );
-//			toolset.addEventListener( MouseEvent.CLICK, toolset_clickHandler );
+
+			addEventListeners()
 		}
 
 		override public function listNotificationInterests() : Array
@@ -59,10 +59,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 			}
 		}
-
-		private function toolset_clickHandler( event : MouseEvent ) : void
+		
+		private function addEventListeners() : void
 		{
-//			TODO toolset_clickHandler
+			
 		}
 	}
 }

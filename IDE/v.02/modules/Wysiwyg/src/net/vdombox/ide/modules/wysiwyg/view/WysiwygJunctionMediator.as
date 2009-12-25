@@ -1,26 +1,28 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.utils.Dictionary;
+	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
-	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.SimpleMessage;
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
-	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
@@ -31,109 +33,175 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		public function WysiwygJunctionMediator()
 		{
-			super( NAME, new Junction());
+			super( NAME, new Junction() );
+		}
+
+		private var recepients : Dictionary;
+		
+		override public function onRegister() : void
+		{
+			recepients = new Dictionary( true );
 		}
 		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			
+
 			interests.push( ApplicationFacade.EXPORT_TOOLSET );
+			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
 			interests.push( ApplicationFacade.EXPORT_BODY );
+
+			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
+			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
 			
-			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
-			interests.push( ApplicationFacade.SET_SELECTED_APPLICATION );
-			interests.push( ApplicationFacade.GET_TYPES );
-			interests.push( ApplicationFacade.GET_RESOURCE );
 			
+			interests.push( ApplicationFacade.GET_RESOURCES );
+			interests.push( ApplicationFacade.LOAD_RESOURCE );
+			interests.push( ApplicationFacade.SET_RESOURCES );
+			interests.push( ApplicationFacade.DELETE_RESOURCE );
+
 			return interests;
 		}
-		
+
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var pipe : IPipeFitting;
 			var type : String = notification.getType();
 			var body : Object = notification.getBody();
-			var proxiesPipeMessage : ProxiesPipeMessage;
 
-			switch ( notification.getName())
+			var message : IPipeMessage;
+
+			switch ( notification.getName() )
 			{
 				case JunctionMediator.ACCEPT_INPUT_PIPE:
 				{
 					processInputPipe( notification );
+
 					break;
 				}
 
 				case JunctionMediator.ACCEPT_OUTPUT_PIPE:
 				{
 					processOutputPipe( notification );
+
 					break;
 				}
 
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
-					var toolsetMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( notification.getBody()), multitonKey );
-					
-					junction.sendMessage( PipeNames.STDCORE, toolsetMessage );
+					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ),
+												  multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
+					break;
+				}
+
+				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
+				{
+					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ),
+												  multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
 					break;
 				}
 
 				case ApplicationFacade.EXPORT_BODY:
 				{
-					var bodyMessage : UIQueryMessage = 
-						new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( notification.getBody()), multitonKey );
-					
-					junction.sendMessage( PipeNames.STDCORE, bodyMessage );
+					message = new UIQueryMessage( UIQueryMessageNames.BODY_UI, UIComponent( body ), multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
 					break;
 				}
-				
-				case ApplicationFacade.GET_APPLICATIONS_LIST:
+
+				case ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					proxiesPipeMessage = 
-						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.APPLICATIONS );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE,
+												 null, multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
 					break;
 				}
-					
+
+				case ApplicationFacade.SAVE_SETTINGS_TO_STORAGE:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body,
+												 multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
+					break;
+				}
+
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					proxiesPipeMessage = 
-						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.SERVER, PPMServerTargetNames.SELECTED_APPLICATION );
+					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ,
+						PPMServerTargetNames.SELECTED_APPLICATION, body );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
-					break;
-				}
-				
-				case ApplicationFacade.SET_SELECTED_APPLICATION:
-				{
-					proxiesPipeMessage = 
-						new ProxiesPipeMessage( PPMOperationNames.UPDATE, PPMPlaceNames.SERVER, 
-												PPMServerTargetNames.SELECTED_APPLICATION, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
-					break;
-				}
-				
-				case ApplicationFacade.GET_TYPES:
-				{
-					proxiesPipeMessage = 
-						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.TYPES, 
-							PPMTypesTargetNames.TYPES, body );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
 					break;
 				}
 					
-				case ApplicationFacade.GET_RESOURCE:
+				case ApplicationFacade.GET_RESOURCES:
 				{
-					proxiesPipeMessage = 
-						new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.RESOURCES, 
-												PPMResourcesTargetNames.RESOURCE, body );
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
+													  PPMResourcesTargetNames.RESOURCES, body );
+
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break;
+				}
 					
-					junction.sendMessage( PipeNames.PROXIESOUT, proxiesPipeMessage );
+				case ApplicationFacade.LOAD_RESOURCE:
+				{
+					var recepientKey : String;
+					var resourceVO : ResourceVO;
+					
+					if( body is ResourceVO )
+					{
+						resourceVO = body as ResourceVO;
+					}
+					else
+					{
+						recepientKey = body.recepientKey;
+						resourceVO = body.resourceVO as ResourceVO;
+						
+						if ( !recepients[ resourceVO ] )
+							recepients[ resourceVO ] = [];
+						
+						recepients[ resourceVO ].push( recepientKey );
+					}
+					
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
+						PPMResourcesTargetNames.RESOURCE, resourceVO );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+
+				case ApplicationFacade.SET_RESOURCES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
+													  PPMResourcesTargetNames.RESOURCES, body );
+
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break;
+				}
+					
+				case ApplicationFacade.DELETE_RESOURCE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE,
+						PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 			}
@@ -144,132 +212,131 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
 			var simpleMessage : SimpleMessage = message as SimpleMessage;
-			
+
 			var recepientKey : String = simpleMessage.getRecepientKey();
-			
-			switch ( message.getHeader())
+
+			switch ( simpleMessage.getHeader() )
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					var toolsetMediator : ToolsetMediator = facade.retrieveMediator( ToolsetMediator.NAME ) as ToolsetMediator;
-					
-					if( recepientKey == multitonKey )
-						sendNotification( ApplicationFacade.MODULE_SELECTED );
-					else
-						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-					
-					junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, SimpleMessageHeaders.CONNECT_PROXIES_PIPE, multitonKey));
-					break;
-				}
-				
-				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
-				{
 					if( recepientKey == multitonKey )
 					{
-						junction.sendMessage( PipeNames.STDLOG, new LogMessage(	LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
-						
-						junction.sendMessage( 
-							PipeNames.PROXIESOUT, 
-							new ProxiesPipeMessage( PPMOperationNames.READ, PPMPlaceNames.APPLICATION, PPMServerTargetNames.APPLICATION, { test : "test" } )
-							);
-						
-//						junction.sendMessage( PipeNames.STDCORE, new Message( Message.NORMAL, MessageHeaders.DISCONNECT_PROXIES_PIPE, multitonKey ) );
+						sendNotification( ApplicationFacade.MODULE_SELECTED );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey));
 					}
+					else
+					{
+						sendNotification( ApplicationFacade.MODULE_DESELECTED );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey));
+					}
+					
 					break;
 				}
-					
+
 				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
+					if ( recepientKey != multitonKey )
+						return;
+
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
+																			SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 					
+					sendNotification( ApplicationFacade.PIPES_READY );
+					break;
+				}
+
+				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
+				{
+					if ( recepientKey != multitonKey )
+						return;
+
+					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
+
+					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );
+
 					break;
 				}
 			}
 		}
-		
+
 		public function tearDown() : void
 		{
 			junction.removePipe( PipeNames.STDIN );
 			junction.removePipe( PipeNames.STDCORE );
 		}
-		
+
 		private function processInputPipe( notification : INotification ) : void
 		{
 			var pipe : IPipeFitting;
 			var type : String = notification.getType() as String;
-			
+
 			switch ( type )
 			{
 				case PipeNames.STDIN:
 				{
 					pipe = notification.getBody() as IPipeFitting;
-					pipe.connect( new PipeListener( this, handlePipeMessage ));
+					pipe.connect( new PipeListener( this, handlePipeMessage ) );
 					junction.registerPipe( PipeNames.STDIN, Junction.INPUT, pipe );
-					
+
 					break;
 				}
-				
-				case  PipeNames.PROXIESIN:
+
+				case PipeNames.PROXIESIN:
 				{
 					pipe = notification.getBody() as IPipeFitting;
-					pipe.connect( new PipeListener( this, handleProxiesPipeMessage ));
+					pipe.connect( new PipeListener( this, handleProxiesPipeMessage ) );
 					junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
-					
+
 					break;
 				}
-			}	
+			}
 		}
-		
+
 		private function processOutputPipe( notification : INotification ) : void
 		{
 			var pipe : IPipeFitting;
 			var type : String = notification.getType() as String;
-			
+
 			switch ( type )
 			{
 				case PipeNames.STDCORE:
 				{
 					pipe = notification.getBody() as IPipeFitting;
 					junction.registerPipe( PipeNames.STDCORE, Junction.OUTPUT, pipe );
-					
+
 					break;
 				}
-					
+
 				case PipeNames.PROXIESOUT:
 				{
 					pipe = notification.getBody() as IPipeFitting;
 					junction.registerPipe( PipeNames.PROXIESOUT, Junction.OUTPUT, pipe );
-					
+
 					break;
 				}
-				
+
 				case PipeNames.STDLOG:
 				{
 					pipe = notification.getBody() as IPipeFitting;
 					junction.registerPipe( PipeNames.STDLOG, Junction.OUTPUT, pipe );
-					
+
 					break;
 				}
 			}
 		}
-		
+
 		private function handleProxiesPipeMessage( message : ProxiesPipeMessage ) : void
 		{
 			var place : String = message.getPlace();
-			
-			switch ( place ) 
+
+			switch ( place )
 			{
 				case PPMPlaceNames.SERVER:
 				{
 					processServerProxyMessage( message );
 					break;
 				}
-				
-				case PPMPlaceNames.TYPES:
-				{
-					processTypesProxyMessage( message );
-					break;
-				}
-				
+
 				case PPMPlaceNames.RESOURCES:
 				{
 					processResourcesProxyMessage( message );
@@ -277,45 +344,72 @@ package net.vdombox.ide.modules.wysiwyg.view
 				}
 			}
 		}
-		
+
 		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
 		{
-			switch( message.getTarget() )
+			switch ( message.getTarget() )
 			{
-				case PPMServerTargetNames.APPLICATIONS:
-				{
-					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.getBody() );
-					break;
-				}
-				
 				case PPMServerTargetNames.SELECTED_APPLICATION:
 				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getBody() );
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
 					break;
 				}
 			}
 		}
-		
-		private function processTypesProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch( message.getTarget() )
-			{
-				case PPMTypesTargetNames.TYPES:
-				{
-					sendNotification( ApplicationFacade.TYPES_GETTED, message.getBody() );
-					break;
-				}
-			}
-		}
-		
+
 		private function processResourcesProxyMessage( message : ProxiesPipeMessage ) : void
 		{
-			switch( message.getTarget() )
+			var operation : String = message.getOperation();
+
+			var resourceVO : ResourceVO;
+
+			switch ( message.getTarget() )
 			{
+				case PPMResourcesTargetNames.RESOURCES:
+				{
+					if ( operation == PPMOperationNames.READ )
+					{
+						sendNotification( ApplicationFacade.RESOURCES_GETTED, message.getBody() );
+					}
+
+					break;
+				}
+
 				case PPMResourcesTargetNames.RESOURCE:
 				{
-					sendNotification( message.getBody().recepientName + "/" +
-									  ApplicationFacade.RESOURCE_GETTED, message.getBody() );
+					if ( operation == PPMOperationNames.CREATE )
+					{
+						resourceVO = message.getBody() as ResourceVO;
+
+						sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
+					}
+					else if ( operation == PPMOperationNames.READ )
+					{
+						var recepientsArray : Array;
+						
+						resourceVO = message.getBody() as ResourceVO;
+
+						if( recepients[ resourceVO ] )
+						{
+							recepientsArray = recepients[ resourceVO ];
+							
+							for( var i : int = 0; i < recepientsArray.length; i++ )
+							{
+								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recepientsArray[ i ], resourceVO );
+							}
+						}
+						else
+						{
+							sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
+						}
+					}
+					else if ( operation == PPMOperationNames.DELETE )
+					{
+						resourceVO = message.getBody() as ResourceVO;
+						
+						sendNotification( ApplicationFacade.RESOURCE_DELETED, resourceVO );
+					}
+					
 					break;
 				}
 			}

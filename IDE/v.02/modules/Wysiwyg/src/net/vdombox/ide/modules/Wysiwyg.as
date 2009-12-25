@@ -14,6 +14,8 @@ package net.vdombox.ide.modules
 		
 		public static const MODULE_NAME : String = "Wysiwyg";
 		
+		public static const VERSION : String = "0.0.1";
+		
 		public static const TEAR_DOWN:String = "tearDown";
 		
 		public function Wysiwyg()
@@ -39,6 +41,11 @@ package net.vdombox.ide.modules
 			return MODULE_NAME;
 		}
 		
+		override public function get version() : String
+		{
+			return MODULE_NAME;
+		}
+		
 		override public function get hasToolset() : Boolean
 		{
 			return true;
@@ -59,9 +66,19 @@ package net.vdombox.ide.modules
 			facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
 		}
 		
+		override public function getSettingsScreen() : void
+		{
+			facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
+		}
+		
 		override public function getBody() : void
 		{
 			facade.sendNotification( ApplicationFacade.CREATE_BODY );
+		}
+		
+		override public function initializeSettings() : void
+		{
+			facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
 		}
 	}
 }
