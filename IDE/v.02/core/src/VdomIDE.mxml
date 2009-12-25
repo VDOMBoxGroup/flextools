@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication
-	xmlns:fx="http://ns.adobe.com/mxml/2009" 
-	xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:WindowedApplication 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:mx="library://ns.adobe.com/flex/halo"
 	
 	preinitialize="application_preinitializeHandler(event)"
@@ -9,12 +9,11 @@
 
 	<fx:Script>
 		<![CDATA[
-			import flash.display.LoaderInfo;
-			
+			import mx.containers.Accordion;
 			import mx.events.FlexEvent;
 			
 			import net.vdombox.ide.core.ApplicationFacade;
-			
+
 			public static const NAME : String = "VdomIDE";
 
 			private var facade : ApplicationFacade = ApplicationFacade.getInstance( NAME );
@@ -27,8 +26,8 @@
 			protected function application_applicationCompleteHandler() : void
 			{
 				facade.startup( this );
+				var zzz : Accordion = new Accordion();
 			}
-			
 		]]>
 	</fx:Script>
 </s:WindowedApplication>

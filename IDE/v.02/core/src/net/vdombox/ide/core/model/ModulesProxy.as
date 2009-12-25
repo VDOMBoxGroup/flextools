@@ -30,6 +30,7 @@ package net.vdombox.ide.core.model
 					<module name="ApplicationsManagment" path="app:/modules/applicationsManagment/ApplicationsManagment.swf"/>
 				</category>
 				<category name="Edition">
+					<module name="Wysiwyg" path="app:/modules/Wysiwyg.swf"/>
 					<module name="ResourceBrowser" path="app:/modules/ResourceBrowser.swf"/>
 				</category>
 			</modules>

@@ -24,7 +24,6 @@ package net.vdombox.ide.core.view
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
 
-	[ResourceBundle( "ApplicationManagment" )]
 	public class MainWindowMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "MainScreenMediator";

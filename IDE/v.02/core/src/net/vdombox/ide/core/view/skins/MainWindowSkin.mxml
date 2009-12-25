@@ -126,7 +126,7 @@
 		<!-- content -->
 		<!--- Defines the Group container where the content children get pushed into and laid out. -->
 		<s:Group id="contentGroup"
-				 top="75" width="100%" height="100%" minHeight="0" minWidth="0"/>
+				 top="75" bottom="15" width="100%" height="100%" minHeight="0" minWidth="0"/>
 		
 		<!-- status bar -->
 		<!--- Defines the Group container for the status bar. -->
