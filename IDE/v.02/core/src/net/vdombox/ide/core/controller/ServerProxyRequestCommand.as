@@ -3,7 +3,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
-	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
+	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ServerProxy;
@@ -27,7 +27,7 @@ package net.vdombox.ide.core.controller
 				case PPMServerTargetNames.APPLICATION:
 				{
 					if ( operation == PPMOperationNames.CREATE )
-						serverProxy.createApplication( message.getBody() as ApplicationPropertiesVO );
+						serverProxy.createApplication( message.getBody() as ApplicationInformationVO );
 					
 					break;
 				}

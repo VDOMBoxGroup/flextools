@@ -3,7 +3,7 @@ package net.vdombox.ide.core.model
 	
 	import mx.rpc.soap.Operation;
 	
-	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
+	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -62,11 +62,11 @@ package net.vdombox.ide.core.model
 			var dummy : * = ""; // FIXME remove dummy
 		}
 		
-		public function changeApplicationProperties( applicationPropertiesVO : ApplicationPropertiesVO ) : void
+		public function changeApplicationInformation( applicationInformationVO : ApplicationInformationVO ) : void
 		{
-			var applicationProperties : XML = applicationPropertiesVO.toXML();
+			var applicationInformationXML : XML = applicationInformationVO.toXML();
 			
-			soap.set_application_info( applicationVO.id, applicationProperties );
+			soap.set_application_info( applicationVO.id, applicationInformationXML );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 		
