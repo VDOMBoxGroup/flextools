@@ -16,6 +16,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import mx.collections.ArrayList;
 	import mx.graphics.codec.PNGEncoder;
 	
+	import net.vdombox.ide.modules.applicationsManagment.events.IconChooserEvent;
 	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.GalleryItemVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.IconChooser;
@@ -48,7 +49,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		public function get selectedIcon() : ByteArray
 		{
-			return null;
+			return iconChooser.selectedIcon.source as ByteArray;
 		}
 
 		override public function onRegister() : void
@@ -56,6 +57,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var gp : GalleryProxy = facade.retrieveProxy( GalleryProxy.NAME ) as GalleryProxy;
 			
 			iconChooser.iconsList.addEventListener( IndexChangeEvent.CHANGE, iconList_changeHandler )
+			iconChooser.addEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler )
 			iconChooser.iconsList.dataProvider = new ArrayList( gp.items );
 		}
 
@@ -70,8 +72,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private function iconList_changeHandler( event : IndexChangeEvent ) : void
 		{
-			var galleryItemVO : GalleryItemVO = event.currentTarget.selectedItem as GalleryItemVO;
-			iconChooser.selectedIcon.source = galleryItemVO.content;
+			if( event.newIndex != -1 )
+			{
+				var galleryItemVO : GalleryItemVO = event.currentTarget.selectedItem as GalleryItemVO;
+				iconChooser.selectedIcon.source = galleryItemVO.content;
+			}
 		}
 
 		private function file_selectHandler( event : Event ) : void
@@ -133,6 +138,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var iconByteArray : ByteArray = pnge.encode( scaledImage.bitmapData );
 
 			iconChooser.selectedIcon.source = iconByteArray;
+			iconChooser.iconsList.selectedIndex = -1;
 		}
 
 		private function loader_ioErrorHandler( event : IOErrorEvent ) : void

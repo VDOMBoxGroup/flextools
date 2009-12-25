@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.applicationsManagment.events
 	{
 		public static var APPLICATION_NAME_CHANGED : String = "applicationNameChanged";
 		public static var APPLICATION_DESCRIPTION_CHANGED : String = "applicationDescriptionChanged";
+		public static var APPLICATION_ICON_CHANGED : String = "applicationIconChanged";
 		
 		public function EditApplicationViewEvent( type : String, bubbles : Boolean = false, 
 													cancelable : Boolean = false )

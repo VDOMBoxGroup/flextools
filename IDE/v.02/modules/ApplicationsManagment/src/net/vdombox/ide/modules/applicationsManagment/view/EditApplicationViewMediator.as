@@ -1,23 +1,25 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import flash.events.Event;
-	
+	import flash.utils.ByteArray;
+
 	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
 	import mx.utils.StringUtil;
-	
-	import net.vdombox.ide.common.vo.ApplicationPropertiesVO;
+
+	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.events.EditApplicationViewEvent;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.ApplicationItemRenderer;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.EditApplicationView;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.List;
 	import spark.events.IndexChangeEvent;
 
@@ -40,19 +42,31 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private var applicationsChanged : Boolean;
 
-		private var selectedApplication : ApplicationVO;
+		private var selectedApplicationVO : ApplicationVO;
 
 		private var selectedApplicationChanged : Boolean;
+
+		private var newIconResourceVO : ResourceVO;
 
 		override public function onRegister() : void
 		{
 			addEventListeners();
+
+			if ( facade.hasMediator( IconChooserMediator.NAME ) )
+				facade.removeMediator( IconChooserMediator.NAME );
+
+			facade.registerMediator( new IconChooserMediator( editApplicationView.iconChooser ) );
 
 			applicationsList.itemRenderer = new ClassFactory( ApplicationItemRenderer );
 
 			sendNotification( ApplicationFacade.GET_SETTINGS, NAME );
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+		}
+
+		override public function onRemove() : void
+		{
+			removeEventListeners();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -66,6 +80,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
 			interests.push( ApplicationFacade.APPLICATION_EDITED );
 			interests.push( ApplicationFacade.APPLICATION_CREATED );
+			interests.push( ApplicationFacade.RESOURCE_SETTED );
 
 			return interests;
 		}
@@ -73,10 +88,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
-			
+
 			var applicationVO : ApplicationVO;
-			
-			switch ( notification.getName())
+
+			switch ( notification.getName() )
 			{
 				case ApplicationFacade.APPLICATIONS_LIST_GETTED:
 				{
@@ -90,10 +105,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				{
 					var newSelectedApplication : ApplicationVO = notification.getBody() as ApplicationVO;
 
-					if ( newSelectedApplication && newSelectedApplication == selectedApplication )
+					if ( newSelectedApplication && newSelectedApplication == selectedApplicationVO )
 						return;
 
-					selectedApplication = newSelectedApplication;
+					selectedApplicationVO = newSelectedApplication;
 					selectedApplicationChanged = true;
 
 					break;
@@ -114,19 +129,39 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				{
 					applicationVO = body as ApplicationVO;
 
-					if ( applicationVO === selectedApplication )
+					if ( applicationVO === selectedApplicationVO )
 						refreshApplicationProperties();
 
 					break;
 				}
-					
+
 				case ApplicationFacade.APPLICATION_CREATED:
 				{
 					applicationVO = body as ApplicationVO;
-					
+
 					if ( applicationVO )
 						editApplicationView.applicationsList.dataProvider.addItem( applicationVO );
-					
+
+					break;
+				}
+
+				case ApplicationFacade.RESOURCE_SETTED:
+				{
+					var resourceVO : ResourceVO = body as ResourceVO;
+
+					if ( resourceVO == newIconResourceVO )
+					{
+						newIconResourceVO = null;
+						
+						var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO();
+						applicationInformationVO.iconID = resourceVO.id;
+
+						sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplicationVO,
+											  applicationInformationVO: applicationInformationVO } );
+					}
+					if ( applicationVO )
+						editApplicationView.applicationsList.dataProvider.addItem( applicationVO );
+
 					break;
 				}
 			}
@@ -146,12 +181,34 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private function addEventListeners() : void
 		{
-			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_NAME_CHANGED, applicationNameChangedHandler );
-			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_DESCRIPTION_CHANGED, applicationDescriptionChangedHandler )
+			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_NAME_CHANGED,
+												  applicationNameChangedHandler );
+			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_DESCRIPTION_CHANGED,
+												  applicationDescriptionChangedHandler );
 
-			applicationsList.addEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler, true );
+			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_ICON_CHANGED,
+												  applicationIconChangedHandler )
+
+			applicationsList.addEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler,
+											   true );
 
 			applicationsList.addEventListener( IndexChangeEvent.CHANGE, applicationsList_changeHandler );
+		}
+
+		private function removeEventListeners() : void
+		{
+			editApplicationView.removeEventListener( EditApplicationViewEvent.APPLICATION_NAME_CHANGED,
+													 applicationNameChangedHandler );
+			editApplicationView.removeEventListener( EditApplicationViewEvent.APPLICATION_DESCRIPTION_CHANGED,
+													 applicationDescriptionChangedHandler );
+
+			editApplicationView.removeEventListener( EditApplicationViewEvent.APPLICATION_ICON_CHANGED,
+													 applicationDescriptionChangedHandler )
+
+			applicationsList.removeEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler,
+												  true );
+
+			applicationsList.removeEventListener( IndexChangeEvent.CHANGE, applicationsList_changeHandler );
 		}
 
 		private function commitProperties() : void
@@ -167,20 +224,20 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				selectedApplicationChanged = false;
 
-				if ( selectedApplication )
+				if ( selectedApplicationVO )
 				{
-					applicationsList.selectedItem = selectedApplication;
+					applicationsList.selectedItem = selectedApplicationVO;
 
 					refreshApplicationProperties();
 
-					if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplication.id )
+					if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
 					{
-						settings.lastApplicationID = selectedApplication.id
+						settings.lastApplicationID = selectedApplicationVO.id
 
 						sendNotification( ApplicationFacade.SET_SETTINGS, settings );
 					}
 
-					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplication );
+					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
 				}
 				else
 				{
@@ -191,7 +248,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					{
 						if ( applications[ i ].id == settings.lastApplicationID )
 						{
-							sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applications[ i ]);
+							sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applications[ i ] );
 							return;
 						}
 					}
@@ -201,38 +258,59 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private function refreshApplicationProperties() : void
 		{
-			editApplicationView.applicationName.text = selectedApplication.name;
-			editApplicationView.actionsForLabel.text = StringUtil.substitute( ACTIONS_TEMPLATE, selectedApplication.name );
-			editApplicationView.counts.text = StringUtil.substitute( PO_TEMPLATE, selectedApplication.numberOfPages, selectedApplication.numberOfObjects )
-			editApplicationView.applicationDescription.text = selectedApplication.description;
+			editApplicationView.applicationName.text = selectedApplicationVO.name;
+			editApplicationView.actionsForLabel.text = StringUtil.substitute( ACTIONS_TEMPLATE, selectedApplicationVO.name );
+			editApplicationView.counts.text = StringUtil.substitute( PO_TEMPLATE, selectedApplicationVO.numberOfPages,
+																	 selectedApplicationVO.numberOfObjects )
+			editApplicationView.applicationDescription.text = selectedApplicationVO.description;
 		}
 
 		private function applicationNameChangedHandler( event : EditApplicationViewEvent ) : void
 		{
 			var newApplicationName : String = editApplicationView.newApplicationName.text;
 
-			if ( newApplicationName && newApplicationName == selectedApplication.name )
+			if ( newApplicationName && newApplicationName == selectedApplicationVO.name )
 				return;
 
-			var applicationProperties : ApplicationPropertiesVO = new ApplicationPropertiesVO;
-			applicationProperties.name = newApplicationName;
+			var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO;
+			applicationInformationVO.name = newApplicationName;
 
-			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplication, applicationPropertiesVO: applicationProperties });
+			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplicationVO,
+								  applicationInformationVO: applicationInformationVO } );
 		}
-		
+
 		private function applicationDescriptionChangedHandler( event : EditApplicationViewEvent ) : void
 		{
 			var newApplicationDescription : String = editApplicationView.newApplicationDescription.text;
-			
-			if ( newApplicationDescription && newApplicationDescription == selectedApplication.description )
+
+			if ( newApplicationDescription && newApplicationDescription == selectedApplicationVO.description )
 				return;
-			
-			var applicationProperties : ApplicationPropertiesVO = new ApplicationPropertiesVO;
-			applicationProperties.description = newApplicationDescription;
-			
-			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplication, applicationPropertiesVO: applicationProperties });
+
+			var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO;
+			applicationInformationVO.description = newApplicationDescription;
+
+			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplicationVO,
+								  applicationInformationVO: applicationInformationVO } );
 		}
-		
+
+		private function applicationIconChangedHandler( event : EditApplicationViewEvent ) : void
+		{
+			var iconChooserMediator : IconChooserMediator = facade.retrieveMediator( IconChooserMediator.NAME ) as IconChooserMediator;
+
+			var newApplicationIcon : ByteArray = iconChooserMediator.selectedIcon;
+
+			if ( !newApplicationIcon )
+				return;
+
+			newIconResourceVO = new ResourceVO( selectedApplicationVO.id );
+
+			newIconResourceVO.name = "Application Icon";
+			newIconResourceVO.setData( newApplicationIcon );
+			newIconResourceVO.setType( "png" );
+
+			sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
+		}
+
 		private function applicationItemRenderer_rendererCreatedHandler( event : Event ) : void
 		{
 			var renderer : ApplicationItemRenderer = event.target as ApplicationItemRenderer;
@@ -248,9 +326,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			if ( event.newIndex != -1 )
 				newSelectedApplication = applications[ event.newIndex ] as ApplicationVO;
 
-			if ( selectedApplication != newSelectedApplication )
+			if ( selectedApplicationVO != newSelectedApplication )
 			{
-				selectedApplication = newSelectedApplication;
+				selectedApplicationVO = newSelectedApplication;
 				selectedApplicationChanged = true;
 				commitProperties();
 			}

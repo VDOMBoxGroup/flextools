@@ -50,8 +50,9 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
 		public static const OPEN_CREATE_APPLICATION_VIEW : String = "openCreateApplicationView";
-		public static const CREATE_NEW_APP_SUBMITTED : String = "createNewAppSubmitted";
-		public static const CREATE_NEW_APP_CANCELED : String = "createNewAppCanceled";
+		
+		public static const CREATE_NEW_APP_COMPLETE: String = "createNewAppComplete";
+		public static const CREATE_NEW_APP_CANCELED: String = "createNewAppCanceled";
 		
 		public static const CREATE_APPLICATION : String = "createApplication";
 		public static const APPLICATION_CREATED : String = "applicationCreated";
