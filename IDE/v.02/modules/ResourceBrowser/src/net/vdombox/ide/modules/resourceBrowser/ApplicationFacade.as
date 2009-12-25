@@ -28,6 +28,7 @@ package net.vdombox.ide.modules.resourceBrowser
 		public static const EXPORT_BODY : String = "exportBody";
 		
 //		selection
+		public static const SELECT_MODULE : String = "selectModule";
 		public static const MODULE_SELECTED : String = "moduleSelected";
 		public static const MODULE_DESELECTED : String = "moduleDeselected";
 		

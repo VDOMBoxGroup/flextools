@@ -1,12 +1,11 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
-	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
-	import net.vdombox.ide.modules.resourceBrowser.events.ToolsetEvent;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -31,7 +30,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		override public function onRegister() : void
 		{
-
 			addEventListeners()
 		}
 
@@ -47,7 +45,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( notification.getName())
+			switch ( notification.getName() )
 			{
 				case ApplicationFacade.MODULE_SELECTED:
 				{
@@ -60,10 +58,15 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				}
 			}
 		}
-		
+
 		private function addEventListeners() : void
 		{
-			
+			toolset.resourceButton.addEventListener( MouseEvent.CLICK, resourceButton_click )
+		}
+		
+		private function resourceButton_click( event : MouseEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}
 }

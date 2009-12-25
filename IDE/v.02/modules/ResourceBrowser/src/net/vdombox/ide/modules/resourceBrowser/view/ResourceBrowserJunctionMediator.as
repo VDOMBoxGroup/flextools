@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMOperationNames;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.vo.SettingsVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -37,12 +37,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		}
 
 		private var recepients : Dictionary;
-		
+
 		override public function onRegister() : void
 		{
 			recepients = new Dictionary( true );
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -53,9 +53,11 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
-			
+
+			interests.push( ApplicationFacade.SELECT_MODULE );
+
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
-			
+
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( ApplicationFacade.SET_RESOURCES );
@@ -137,16 +139,25 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				case ApplicationFacade.SELECT_MODULE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ,
-						PPMServerTargetNames.SELECTED_APPLICATION, body );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+					message = new SimpleMessage( SimpleMessageHeaders.SELECT_MODULE, null, multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
 					break;
 				}
-					
+
+				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION,
+													  body );
+
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break;
+				}
+
 				case ApplicationFacade.GET_RESOURCES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
@@ -156,13 +167,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
 					var recepientKey : String;
 					var resourceVO : ResourceVO;
-					
-					if( body is ResourceVO )
+
+					if ( body is ResourceVO )
 					{
 						resourceVO = body as ResourceVO;
 					}
@@ -170,18 +181,18 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					{
 						recepientKey = body.recepientKey;
 						resourceVO = body.resourceVO as ResourceVO;
-						
+
 						if ( !recepients[ resourceVO ] )
 							recepients[ resourceVO ] = [];
-						
+
 						recepients[ resourceVO ].push( recepientKey );
 					}
-					
+
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
-						PPMResourcesTargetNames.RESOURCE, resourceVO );
-					
+													  PPMResourcesTargetNames.RESOURCE, resourceVO );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
@@ -194,14 +205,14 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.DELETE_RESOURCE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE,
-						PPMResourcesTargetNames.RESOURCE, body );
-					
+													  PPMResourcesTargetNames.RESOURCE, body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 			}
@@ -219,17 +230,19 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if( recepientKey == multitonKey )
+					if ( recepientKey == multitonKey )
 					{
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey));
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
+																					null, multitonKey ) );
 					}
 					else
 					{
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey));
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
+																					null, multitonKey ) );
 					}
-					
+
 					break;
 				}
 
@@ -240,7 +253,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
 																			SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
-					
+
 					sendNotification( ApplicationFacade.PIPES_READY );
 					break;
 				}
@@ -386,16 +399,17 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					else if ( operation == PPMOperationNames.READ )
 					{
 						var recepientsArray : Array;
-						
+
 						resourceVO = message.getBody() as ResourceVO;
 
-						if( recepients[ resourceVO ] )
+						if ( recepients[ resourceVO ] )
 						{
 							recepientsArray = recepients[ resourceVO ];
-							
-							for( var i : int = 0; i < recepientsArray.length; i++ )
+
+							for ( var i : int = 0; i < recepientsArray.length; i++ )
 							{
-								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recepientsArray[ i ], resourceVO );
+								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recepientsArray[ i ],
+												  resourceVO );
 							}
 						}
 						else
@@ -406,10 +420,10 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					else if ( operation == PPMOperationNames.DELETE )
 					{
 						resourceVO = message.getBody() as ResourceVO;
-						
+
 						sendNotification( ApplicationFacade.RESOURCE_DELETED, resourceVO );
 					}
-					
+
 					break;
 				}
 			}
