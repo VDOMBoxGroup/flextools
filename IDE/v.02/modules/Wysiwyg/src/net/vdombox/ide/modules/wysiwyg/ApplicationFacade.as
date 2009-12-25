@@ -49,23 +49,9 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
 		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
-//		application
-		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
-		public static const SELECTED_APPLICATION_GETTED: String = "selectedApplicationGetted";
-		
-//		resources
-		public static const GET_RESOURCES : String = "getResources";
-		public static const RESOURCES_GETTED : String = "resourcesGetted";
-
-		public static const LOAD_RESOURCE : String = "loadResource";
-		public static const RESOURCE_LOADED : String = "resourceLoadded";
-		
-		public static const SET_RESOURCES : String = "setResources";
-		public static const RESOURCE_SETTED : String = "resourceSetted";
-		
-		public static const DELETE_RESOURCE : String = "deleteResource";
-		public static const RESOURCE_DELETED : String = "resourceDeleted";
-
+//		types
+		public static const GET_TYPES : String = "getTypes";
+		public static const TYPES_GETTED : String = "typesGetted";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

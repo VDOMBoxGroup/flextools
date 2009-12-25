@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/halo">
+
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			private var typeName : String
+
+			override public function set data( value : Object ) : void
+			{
+				if ( value )
+					typeName = value.displayName;
+				else
+					typeName = "";
+
+				super.data = value;
+			}
+		]]>
+	</fx:Script>
+
+	<s:Rect 
+		height="50" width="50"
+		
+		horizontalCenter="0">
+
+		<s:stroke>
+
+			<s:SolidColorStroke color="black" />
+		</s:stroke>
+	</s:Rect>
+
+	<s:RichText 
+		text="{ typeName }" width="100%"
+		
+		horizontalCenter="0" top="55" />
+</s:ItemRenderer>
