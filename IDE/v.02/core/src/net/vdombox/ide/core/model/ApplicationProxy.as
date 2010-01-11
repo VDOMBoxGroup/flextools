@@ -25,20 +25,24 @@ package net.vdombox.ide.core.model
 
 		private var _selectedPage : PageVO;
 
+		private var _pages : Array;
+		
 		private var soap : SOAP = SOAP.getInstance();
 
 		private var serverProxy : ServerProxy;
+		
+		private var isLoaded : Boolean = false;
 		
 		public function get id() : String
 		{
 			return applicationVO.id;
 		}
-
-		public function get application() : ApplicationVO
+		
+		public function get applicationVO() : ApplicationVO
 		{
-			return applicationVO;
+			return data as ApplicationVO;
 		}
-
+		
 		public function get selectedPage() : PageVO
 		{
 			return _selectedPage;
@@ -57,17 +61,21 @@ package net.vdombox.ide.core.model
 			addEventListeners();
 		}
 		
-		public function load( applicationID : String ) : void
-		{
-			var dummy : * = ""; // FIXME remove dummy
-		}
-		
 		public function changeApplicationInformation( applicationInformationVO : ApplicationInformationVO ) : void
 		{
 			var applicationInformationXML : XML = applicationInformationVO.toXML();
 			
 			soap.set_application_info( applicationVO.id, applicationInformationXML );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+		}
+		
+		public function getPages() : void
+		{
+			if( !isLoaded )
+			{
+				soap.get_top_objects( applicationVO.id );
+				soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			}
 		}
 		
 		public function createPage( pageID : String ) : PageVO
@@ -98,14 +106,33 @@ package net.vdombox.ide.core.model
 			return null;
 		}
 		
-		private function get applicationVO() : ApplicationVO
-		{
-			return data as ApplicationVO;
-		}
-		
 		private function addEventListeners() : void
 		{
 
+		}
+		
+		private function createPageList( pages : XML ) : void
+		{
+			_pages = [];
+			
+			var pageID : String;
+			var typeID : String;
+			
+			for each ( var page : XML in pages.* )
+			{
+				pageID = page.@ID[ 0 ];
+				
+				typeID = page.@Type[ 0 ];
+				
+				if( !pageID || !typeID )
+					continue;
+				
+				var pageVO : PageVO = new PageVO( pageID, typeID );
+				
+				pageVO.setXMLDescription( page );
+				
+				_pages.push( applicationVO );
+			}
 		}
 		
 		private function soap_resultHandler( event : SOAPEvent ) : void
@@ -127,6 +154,10 @@ package net.vdombox.ide.core.model
 					sendNotification( ApplicationFacade.APPLICATION_CHANGED, applicationVO );
 					
 					break;
+				}
+				case "get_top_objects" :
+				{
+					createPageList( result.Objects[ 0 ] );
 				}
 			}
 		}
