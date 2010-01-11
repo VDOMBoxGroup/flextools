@@ -8,7 +8,6 @@ package net.vdombox.ide.common.vo
 		public function ResourceVO( ownerID : String )
 		{
 			_ownerID = ownerID;
-			;
 		}
 
 		private var _ownerID : String;
