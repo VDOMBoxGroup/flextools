@@ -6,9 +6,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
+	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
@@ -56,6 +58,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
 			interests.push( ApplicationFacade.GET_TYPES );
+			
+			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
+			
+			interests.push( ApplicationFacade.GET_PAGES );
 
 			return interests;
 		}
@@ -148,6 +154,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_PAGES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 			}
@@ -285,6 +309,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
+				case PPMPlaceNames.APPLICATION:
+				{
+					processApplicationProxyMessage( message );
+					break;
+				}
+					
 				case PPMPlaceNames.RESOURCES:
 				{
 					processResourcesProxyMessage( message );
@@ -303,10 +333,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			switch ( message.getTarget() )
 			{
-
+				case PPMServerTargetNames.SELECTED_APPLICATION:
+				{
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
+				}
 			}
 		}
-
+		
+		private function processApplicationProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch ( message.getTarget() )
+			{
+				case PPMApplicationTargetNames.PAGES:
+				{
+					sendNotification( ApplicationFacade.PAGES_GETTED, message.getBody() );
+				}
+			}
+		}
+		
 		private function processTypesProxyMessage( message : ProxiesPipeMessage ) : void
 		{
 			switch ( message.getTarget() )

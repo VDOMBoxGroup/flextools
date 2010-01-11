@@ -39,6 +39,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.PIPES_READY );
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
+			interests.push( ApplicationFacade.PAGES_GETTED );
 			
 			return interests;
 		}
@@ -51,6 +53,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
+					break;
+				}
+					
+				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+				{
+					sendNotification( ApplicationFacade.GET_PAGES, notification.getBody() );
+					break;
+				}
+					
+				case ApplicationFacade.PAGES_GETTED:
+				{
+					var d : * = "";
 					break;
 				}
 			}
@@ -71,6 +85,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			addEventListeners();
 			
 			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
+			
+			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}
 	}
 }

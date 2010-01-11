@@ -54,6 +54,14 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_TYPES : String = "getTypes";
 		public static const TYPES_GETTED : String = "typesGetted";
 		
+//		application	
+		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
+		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
+		
+//		pages
+		public static const GET_PAGES : String = "getPages";
+		public static const PAGES_GETTED: String = "pagesGetted";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
