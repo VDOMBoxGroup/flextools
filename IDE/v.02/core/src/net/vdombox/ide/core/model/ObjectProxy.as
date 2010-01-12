@@ -1,13 +1,18 @@
-package net.vdombox.ide.model
+package net.vdombox.ide.core.model
 {
+	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	import net.vdombox.ide.interfaces.IObjectProxy;
 
 	public class ObjectProxy extends Proxy implements IObjectProxy
 	{
-		public function ObjectProxy( proxyName : String = null, data : Object = null )
+		public static const NAME : String = "ObjectProxy";
+
+		public function ObjectProxy( applicationVO : ApplicationVO, pageVO : PageVO, objectVO : ObjectVO )
 		{
-			super( proxyName, data );
+			super( NAME + "/" + applicationVO.id + "/" + pageVO.id + "/" + objectVO.id, objectVO );
 		}
 
 		public function get id() : String

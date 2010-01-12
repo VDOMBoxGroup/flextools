@@ -17,7 +17,7 @@ package net.vdombox.ide.core.interfaces
 		function deletePage( pageVO : PageVO ) : void;
 		function deletePageAt( pageID : String ) : void;
 		function getPageAt( pageID : String ) : PageVO;
-		function getPageProxie( pageVO : PageVO ) : IPageProxy;
-		function getPageProxieAt( pageID : String ) : IPageProxy;
+		function getPageProxy( pageVO : PageVO ) : IPageProxy;
+		function getPageProxyAt( pageID : String ) : IPageProxy;
 	}
 }

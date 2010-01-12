@@ -10,6 +10,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
 	import net.vdombox.ide.core.controller.LogonSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
+	import net.vdombox.ide.core.controller.PageProxyRequestCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyResponseCommand;
@@ -97,6 +98,9 @@ package net.vdombox.ide.core
 		public static const APPLICATION_PROXY_REQUEST : String = "applicationProxyRequest";
 		public static const APPLICATION_PROXY_RESPONSE : String = "applicationProxyResponse";
 		
+		public static const PAGE_PROXY_REQUEST : String = "pageProxyRequest";
+		public static const PAGE_PROXY_RESPONSE : String = "pageProxyResponse";
+		
 //		modules
 		public static const LOAD_MODULES : String = "loadModules";
 		public static const MODULES_LOADED : String = "modulesLoaded";
@@ -112,6 +116,9 @@ package net.vdombox.ide.core
 		public static const SHOW_MODULE_TOOLSET : String = "showModuleToolset";
 		public static const SHOW_MODULE_SETTINGS_SCREEN : String = "showModuleSettingsScreen";
 		public static const SHOW_MODULE_BODY : String = "showModuleBody";
+		
+//		pages
+		public static const PAGES_GETTED : String = "pagesGetted";
 		
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
@@ -165,14 +172,17 @@ package net.vdombox.ide.core
 			
 			registerCommand( APPLICATION_CREATED, ServerProxyResponseCommand );
 			
+			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
+			
 			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
 			registerCommand( RESOURCES_GETTED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_LOADED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_SETTED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_DELETED, ResourcesProxyResponseCommand );
 			
-			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand )
-			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand )
+			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand );
+			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand );
+			registerCommand( PAGES_GETTED, ApplicationProxyResponseCommand );
 			
 			registerCommand( SEND_TO_LOG, SendToLogCommand );
 		}

@@ -15,6 +15,7 @@ package net.vdombox.ide.core.interfaces
 		function createObject( objectID : String ) : ObjectVO;
 		function deleteObject( objectVO : ObjectVO ) : void;
 		function deleteObjectAt( objectID : String ) : void;
+		function getObjects() : void;
 		function getObjectAt( objectID : String ) : ObjectVO;
 		function getObjectProxie( objectVO : ObjectVO ) : IObjectProxy;
 		function getObjectProxieAt( objectID : String ) : IObjectProxy;
