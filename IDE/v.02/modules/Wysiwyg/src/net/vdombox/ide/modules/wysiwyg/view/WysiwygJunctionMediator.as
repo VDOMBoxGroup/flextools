@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
+	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
@@ -62,6 +63,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			
 			interests.push( ApplicationFacade.GET_PAGES );
+			interests.push( ApplicationFacade.GET_OBJECTS );
 
 			return interests;
 		}
@@ -169,6 +171,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.GET_PAGES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_OBJECTS:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

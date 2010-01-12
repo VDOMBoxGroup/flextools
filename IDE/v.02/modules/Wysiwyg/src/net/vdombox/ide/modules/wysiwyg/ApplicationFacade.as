@@ -62,6 +62,12 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED: String = "pagesGetted";
 		
+//		objects
+		public static const GET_OBJECTS : String = "getObjects";
+		public static const OBJECTS_GETTED: String = "objectsGetted";
+		
+		
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

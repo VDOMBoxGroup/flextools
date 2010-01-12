@@ -1,12 +1,12 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Body;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -40,8 +40,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
-			interests.push( ApplicationFacade.PAGES_GETTED );
-			
+
 			return interests;
 		}
 
@@ -49,22 +48,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var resourceVO : ResourceVO;
 
-			switch ( notification.getName() )
+			switch ( notification.getName())
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
 					break;
 				}
-					
+
 				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
 				{
-					sendNotification( ApplicationFacade.GET_PAGES, notification.getBody() );
-					break;
-				}
+					selectedApplication = notification.getBody() as ApplicationVO;
+					sendNotification( ApplicationFacade.GET_PAGES, notification.getBody());
 					
-				case ApplicationFacade.PAGES_GETTED:
-				{
-					var d : * = "";
 					break;
 				}
 			}
@@ -77,15 +72,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function commitProperties() : void
 		{
-			
+
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			addEventListeners();
-			
-			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
-			
+
+			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ));
+
+			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ));
+
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}
 	}
