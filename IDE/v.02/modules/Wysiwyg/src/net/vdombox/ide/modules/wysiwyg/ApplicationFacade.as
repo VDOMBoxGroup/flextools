@@ -61,6 +61,8 @@ package net.vdombox.ide.modules.wysiwyg
 //		pages
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED: String = "pagesGetted";
+		public static const GET_PAGE_SRUCTURE : String = "getPageStructure";
+		public static const PAGE_SRUCTURE_GETTED : String = "pageStructureGetted";
 		
 //		objects
 		public static const GET_OBJECTS : String = "getObjects";

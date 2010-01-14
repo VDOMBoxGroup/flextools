@@ -45,14 +45,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.PAGES_GETTED );
-			interests.push( ApplicationFacade.OBJECTS_GETTED );
+			interests.push( ApplicationFacade.PAGE_SRUCTURE_GETTED );
 
 			return interests;
 		}
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( notification.getName())
+			var name : String = notification.getName();
+			var body : Object = notification.getBody();
+			
+			switch ( name )
 			{
 				case ApplicationFacade.PAGES_GETTED:
 				{	
@@ -61,9 +64,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.OBJECTS_GETTED:
+				case ApplicationFacade.PAGE_SRUCTURE_GETTED:
 				{	
-					
+					objectsTree.dataProvider = body
 					
 					break;
 				}
@@ -106,7 +109,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var item : XML = event.itemRenderer.data as XML;
 			var id : String = item.@id;
 			
-			sendNotification( ApplicationFacade.GET_OBJECTS, _pages[ id ] );
+			sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
 		}
 	}
 }

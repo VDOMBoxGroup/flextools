@@ -63,6 +63,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			
 			interests.push( ApplicationFacade.GET_PAGES );
+			interests.push( ApplicationFacade.GET_PAGE_SRUCTURE );
 			interests.push( ApplicationFacade.GET_OBJECTS );
 
 			return interests;
@@ -171,6 +172,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.GET_PAGES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_PAGE_SRUCTURE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -325,6 +335,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 					processApplicationProxyMessage( message );
 					break;
 				}
+				
+				case PPMPlaceNames.PAGE:
+				{
+					processPageProxyMessage( message );
+					break;
+				}
 					
 				case PPMPlaceNames.RESOURCES:
 				{
@@ -358,6 +374,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case PPMApplicationTargetNames.PAGES:
 				{
 					sendNotification( ApplicationFacade.PAGES_GETTED, message.getBody() );
+				}
+			}
+		}
+		
+		private function processPageProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch ( message.getTarget() )
+			{
+				case PPMPageTargetNames.STRUCTURE:
+				{
+					sendNotification( ApplicationFacade.PAGE_SRUCTURE_GETTED, message.getBody() );
 				}
 			}
 		}
