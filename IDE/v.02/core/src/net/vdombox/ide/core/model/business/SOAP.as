@@ -79,10 +79,9 @@ package net.vdombox.ide.core.model.business
 		override flash_proxy function getProperty( name : * ) : *
 		{
 			var functionName : String = getLocalName( name );
-			var operation : * = webService[ functionName ];
-
-			if ( functionName && operation )
-				return operation;
+			
+			if ( functionName )
+				return webService.getOperation( functionName );
 			else
 				return null;
 		}
@@ -96,7 +95,7 @@ package net.vdombox.ide.core.model.business
 		override flash_proxy function callProperty( name : *, ... args : Array ) : *
 		{
 			var functionName : String = getLocalName( name );
-			var operation : Operation = webService[ functionName ];
+			var operation : Operation = webService.getOperation( functionName ) as Operation;
 			var key : String = code.nextSessionKey;
 			var token : AsyncToken;
 
@@ -107,6 +106,7 @@ package net.vdombox.ide.core.model.business
 
 			token = operation.send.apply( null, args );
 			token.key = key;
+			
 			return token;
 		}
 

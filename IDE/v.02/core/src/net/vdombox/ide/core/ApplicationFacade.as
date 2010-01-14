@@ -11,6 +11,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.LogonSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
 	import net.vdombox.ide.core.controller.PageProxyRequestCommand;
+	import net.vdombox.ide.core.controller.PageProxyResponseCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyResponseCommand;
@@ -116,9 +117,16 @@ package net.vdombox.ide.core
 		public static const SHOW_MODULE_TOOLSET : String = "showModuleToolset";
 		public static const SHOW_MODULE_SETTINGS_SCREEN : String = "showModuleSettingsScreen";
 		public static const SHOW_MODULE_BODY : String = "showModuleBody";
-		
-//		pages
+
+//		application
 		public static const PAGES_GETTED : String = "pagesGetted";
+		
+//		page		
+		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
+		public static const OBJECTS_GETTED : String = "objectssGetted";
+		
+//		object
+		
 		
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
@@ -183,6 +191,9 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand );
 			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand );
 			registerCommand( PAGES_GETTED, ApplicationProxyResponseCommand );
+			
+			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
+			registerCommand( OBJECTS_GETTED, PageProxyResponseCommand );
 			
 			registerCommand( SEND_TO_LOG, SendToLogCommand );
 		}

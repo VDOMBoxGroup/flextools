@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.model
 {
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -10,10 +10,10 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.interfaces.IApplicationProxy;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	public class ApplicationProxy extends Proxy implements IApplicationProxy
+	public class ApplicationProxy extends Proxy
 	{
 		public static const NAME : String = "ApplicationProxy";
 
@@ -95,13 +95,16 @@ package net.vdombox.ide.core.model
 			return null;
 		}
 
-		public function getPageProxy( pageVO : PageVO ) : IPageProxy
+		public function getPageProxy( pageVO : PageVO ) : PageProxy
 		{
 			var pageProxy : PageProxy = facade.retrieveProxy( PageProxy.NAME + "/" + pageVO.applicationID + "/" + pageVO.id ) as PageProxy;
-			
-			if( !pageProxy )
-				pageProxy = facade.registerProxy( new PageProxy( pageVO ) ) as PageProxy;
-			
+
+			if ( !pageProxy )
+			{
+				pageProxy = new PageProxy( pageVO ) as PageProxy;
+				facade.registerProxy( pageProxy );
+			}
+
 			return pageProxy;
 		}
 
@@ -115,7 +118,7 @@ package net.vdombox.ide.core.model
 
 		}
 
-		private function createPageList( pages : XML ) : void
+		private function createPagesList( pages : XML ) : void
 		{
 			_pages = [];
 
@@ -161,9 +164,10 @@ package net.vdombox.ide.core.model
 				}
 				case "get_top_objects":
 				{
-					createPageList( result.Objects[ 0 ]);
+					createPagesList( result.Objects[ 0 ] );
 
-					sendNotification( ApplicationFacade.PAGES_GETTED, { applicationVO: applicationVO, pages: _pages });
+					sendNotification( ApplicationFacade.PAGES_GETTED, { applicationVO: applicationVO,
+										  pages: _pages } );
 				}
 			}
 		}
