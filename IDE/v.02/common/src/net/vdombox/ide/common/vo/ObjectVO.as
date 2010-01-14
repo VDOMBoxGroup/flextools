@@ -2,7 +2,7 @@ package net.vdombox.ide.common.vo
 {
 	public class ObjectVO
 	{
-		public function ObjectVO( id : String, typeID : String )
+		public function ObjectVO( id : String, applicationID : String, pageID : String, typeID : String )
 		{
 			_id = id;
 			_typeID = typeID;
