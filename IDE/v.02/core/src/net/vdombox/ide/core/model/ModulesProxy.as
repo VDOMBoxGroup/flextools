@@ -167,6 +167,7 @@ package net.vdombox.ide.core.model
 			
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			var module : VIModule = event.module.factory.create() as VIModule;
+			module.startup();
 			moduleVO.setModule( module );
 			
 			delete loadedModules[ event.module ]
