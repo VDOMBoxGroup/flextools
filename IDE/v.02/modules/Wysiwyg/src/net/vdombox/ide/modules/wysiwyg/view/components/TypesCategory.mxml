@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:NavigatorContent 
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:mx="library://ns.adobe.com/flex/halo"
-	
-	height="100%" width="100%">
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:mx="library://ns.adobe.com/flex/halo"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					
+					height="100%" width="100%">
 
 	<fx:Script>
 		<![CDATA[
@@ -26,11 +25,10 @@
 	</fx:Script>
 
 	<s:layout>
-		<s:VerticalLayout variableRowHeight="true" /> 
+		<s:VerticalLayout variableRowHeight="true" />
 	</s:layout>
-	
-	<s:List 
-		dataProvider="{ typeData }" height="100%" labelField="displayName"
-		width="100%"
-		itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer"  textAlign="center"/>
+
+	<s:List dataProvider="{ typeData }" height="100%" labelField="displayName" width="100%"
+			textAlign="center"
+			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer" />
 </s:NavigatorContent>

@@ -24,7 +24,7 @@ package net.vdombox.ide.modules
 			ApplicationFacade( facade ).startup( this );
 		}
 		
-		private var resourceManager : IResourceManager = ResourceManager.getInstance();
+//		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 		
 		override public function tearDown():void
 		{

@@ -22,6 +22,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var _pages : Object;
 
+		[Bindable]
+		private var pagesXMLList : XMLList;
+		
 		public function get objectsTreePanel() : ObjectsTreePanel
 		{
 			return viewComponent as ObjectsTreePanel;
@@ -66,7 +69,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.PAGE_SRUCTURE_GETTED:
 				{	
-					objectsTree.dataProvider = body
+					var pageXMLTree : XML = notification.getBody() as XML;
+					var pageXML : XML;
+					
+					pageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
+					pageXML.appendChild( pageXMLTree.* );
 					
 					break;
 				}
@@ -78,6 +85,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			addEventListeners();
 
 			objectsTree.labelField = "@name";
+			objectsTree.showRoot = true;
 		}
 
 		private function addEventListeners() : void
@@ -87,16 +95,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function showPages( pages : Array ) : void
 		{
-			var pageXMLList : XMLList = new XMLList();
+			pagesXMLList  = new XMLList();
 			_pages = {};
 			
 			for ( var i : int = 0; i < pages.length; i++ )
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
-				pageXMLList += <page id={ pages[ i ].id } typeID={ pages[ i ].typeID } name={ pages[ i ].name } />
+				pagesXMLList += <page id={ pages[ i ].id } name={ pages[ i ].name } typeID={ pages[ i ].typeID }/>
 			}
 
-			objectsTree.dataProvider = pageXMLList;
+			objectsTree.dataProvider = pagesXMLList;
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
