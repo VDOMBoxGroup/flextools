@@ -1,14 +1,15 @@
 package net.vdombox.ide.common
 {
-	import mx.modules.ModuleBase;
+	import mx.modules.Module;
+	
+	import net.vdombox.ide.common.interfaces.IVIModule;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
-	import net.vdombox.ide.common.interfaces.IVIModule;
 	
-	public class VIModule extends ModuleBase implements IPipeAware, IVIModule
+	public class VIModule extends Module implements IPipeAware, IVIModule
 	{
 		public function VIModule( facade : IFacade = null )
 		{
@@ -46,6 +47,10 @@ package net.vdombox.ide.common
 		public function get hasBody() : Boolean
 		{
 			return false;
+		}
+		
+		public function startup() : void
+		{
 		}
 		
 		public function getToolset() : void
