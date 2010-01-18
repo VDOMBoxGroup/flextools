@@ -29,6 +29,16 @@ package net.vdombox.ide.common
 			return null;
 		}
 		
+		public function get categoryID() : String
+		{
+			return null;
+		}
+		
+		public function get categoryName() : String
+		{
+			return null;
+		}
+		
 		public function get version() : String
 		{
 			return null;
