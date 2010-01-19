@@ -8,7 +8,7 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	[ResourceBundle("Types")]
+	[ResourceBundle( "Types" )]
 	public class TypesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "TypesProxy";
@@ -26,48 +26,63 @@ package net.vdombox.ide.core.model
 		{
 			addEventListeners();
 		}
-		
+
 		override public function onRemove() : void
 		{
 			removeEventListeners();
 		}
-		
+
 		public function get types() : Array
 		{
 			return _types.slice();
 		}
-		
+
 		public function get numTypes() : uint
 		{
 			return _types.length;
 		}
-		
+
 		public function loadTypes() : void
 		{
 			sendNotification( ApplicationFacade.TYPES_LOADING );
 			soap.get_all_types();
 		}
 
+		public function getType( typeID : String ) : TypeVO
+		{
+			var typeVO : TypeVO;
+			
+			for( var i : int = 0; i < _types.length; i++ )
+			{
+				if( _types[ i ].id != typeID )
+					continue;
+				
+				typeVO = _types[ i ];
+			}
+			
+			return typeVO;
+		}
+
 		private function addEventListeners() : void
 		{
 			soap.get_all_types.addEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 		}
-		
+
 		private function removeEventListeners() : void
 		{
 			soap.get_all_types.removeEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 		}
-		
+
 		private function soap_getAllTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
 		{
 			var typesXML : XML = event.result.Types[ 0 ];
-			
-			for each( var type : XML in typesXML.* )
+
+			for each ( var type : XML in typesXML.* )
 			{
 				var typeVO : TypeVO = new TypeVO( type );
 				_types.push( typeVO );
 			}
-			
+
 			sendNotification( ApplicationFacade.TYPES_LOADED, types );
 		}
 	}

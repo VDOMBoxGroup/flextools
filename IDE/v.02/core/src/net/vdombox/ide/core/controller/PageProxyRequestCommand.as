@@ -5,7 +5,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.PageProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -22,26 +22,40 @@ package net.vdombox.ide.core.controller
 			var target : String = message.getTarget();
 			var operation : String = message.getOperation();
 
-			var pageVO : PageVO = body as PageVO;
-			
+			var pageVO : PageVO;
+
+			if ( body is PageVO )
+				pageVO = body as PageVO;
+			else if ( body.hasOwnProperty( "pageVO" ) )
+				pageVO = body.pageVO as PageVO;
+			else
+				throw new Error( "no page VO" );
+
 			applicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + pageVO.applicationID ) as ApplicationProxy;
 			pageProxy = applicationProxy.getPageProxy( pageVO ) as PageProxy;
-			
+
 			switch ( target )
 			{
 				case PPMPageTargetNames.OBJECTS:
 				{
 					pageProxy.getObjects();
-					
+
 					break;
 				}
-					
+
 				case PPMPageTargetNames.STRUCTURE:
-				{	
+				{
 					pageProxy.getStructure();
-					
+
 					break;
-				}	
+				}
+
+				case PPMPageTargetNames.OBJECT:
+				{
+					pageProxy.getObjectAt( body.objectID );
+
+					break;
+				}
 			}
 		}
 	}

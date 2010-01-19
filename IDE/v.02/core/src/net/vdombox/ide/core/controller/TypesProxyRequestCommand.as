@@ -3,6 +3,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.TypesProxy;
 	
@@ -17,6 +18,7 @@ package net.vdombox.ide.core.controller
 			
 			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 			
+			var body : Object = message.getBody();
 			var target : String = message.getTarget();
 			var operation : String = message.getOperation();
 			
@@ -35,6 +37,11 @@ package net.vdombox.ide.core.controller
 					
 				case PPMTypesTargetNames.TYPE:
 				{
+					var type : TypeVO = typesProxy.getType( body.toString() );
+					
+					message.setBody( type );
+					
+					sendNotification( ApplicationFacade.TYPES_PROXY_RESPONSE, message );
 					
 					break;
 				}

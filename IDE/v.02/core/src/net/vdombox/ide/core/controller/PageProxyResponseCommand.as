@@ -20,6 +20,13 @@ package net.vdombox.ide.core.controller
 			
 			switch ( name )
 			{
+				case ApplicationFacade.OBJECT_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
+					
+					break;
+				}
+				
 				case ApplicationFacade.OBJECTS_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
