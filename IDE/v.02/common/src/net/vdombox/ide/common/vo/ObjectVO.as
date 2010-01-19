@@ -5,10 +5,14 @@ package net.vdombox.ide.common.vo
 		public function ObjectVO( id : String, applicationID : String, pageID : String, typeID : String )
 		{
 			_id = id;
+			_applicationID = applicationID;
+			_pageID = pageID;
 			_typeID = typeID;
 		}
 
 		private var _id : String;
+		private var _applicationID : String;
+		private var _pageID : String;
 
 		private var _typeID : String;
 
@@ -19,6 +23,16 @@ package net.vdombox.ide.common.vo
 			return _id;
 		}
 
+		public function get applicationID() : String
+		{
+			return _applicationID;
+		}
+		
+		public function get pageID() : String
+		{
+			return _pageID;
+		}
+		
 		public function get typeID() : String
 		{
 			return _typeID;
