@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
@@ -59,12 +60,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
 			interests.push( ApplicationFacade.GET_TYPES );
+			interests.push( ApplicationFacade.GET_TYPE );
 			
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			
 			interests.push( ApplicationFacade.GET_PAGES );
 			interests.push( ApplicationFacade.GET_PAGE_SRUCTURE );
 			interests.push( ApplicationFacade.GET_OBJECTS );
+			interests.push( ApplicationFacade.GET_OBJECT );
+			
+			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
+			interests.push( ApplicationFacade.GET_OBJECT_ATTRIBUTES );
 
 			return interests;
 		}
@@ -160,6 +166,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
+				case ApplicationFacade.GET_TYPE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION );
@@ -190,6 +205,33 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.GET_OBJECTS:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_OBJECT:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+				
+				case ApplicationFacade.GET_PAGE_ATTRIBUTES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_OBJECT_ATTRIBUTES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.ATTRIBUTES, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -342,6 +384,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
+				case PPMPlaceNames.OBJECT:
+				{
+					processObjectProxyMessage( message );
+					break;
+				}
+					
 				case PPMPlaceNames.RESOURCES:
 				{
 					processResourcesProxyMessage( message );
@@ -374,6 +422,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case PPMApplicationTargetNames.PAGES:
 				{
 					sendNotification( ApplicationFacade.PAGES_GETTED, message.getBody() );
+					
+					break;
 				}
 			}
 		}
@@ -385,6 +435,28 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case PPMPageTargetNames.STRUCTURE:
 				{
 					sendNotification( ApplicationFacade.PAGE_SRUCTURE_GETTED, message.getBody() );
+					
+					break;
+				}
+					
+				case PPMPageTargetNames.OBJECT:
+				{
+					sendNotification( ApplicationFacade.OBJECT_GETTED, message.getBody() );
+					
+					break;
+				}
+			}
+		}
+		
+		private function processObjectProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch ( message.getTarget() )
+			{
+				case PPMObjectTargetNames.ATTRIBUTES:
+				{
+					sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, message.getBody() );
+					
+					break;
 				}
 			}
 		}
@@ -396,6 +468,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case PPMTypesTargetNames.TYPES:
 				{
 					sendNotification( ApplicationFacade.TYPES_GETTED, message.getBody() );
+					
+					break;
+				}
+					
+				case PPMTypesTargetNames.TYPE:
+				{
+					sendNotification( ApplicationFacade.TYPE_GETTED, message.getBody() );
+					
+					break;
 				}
 			}
 		}

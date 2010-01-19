@@ -1,12 +1,12 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -79,9 +79,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			addEventListeners();
 
-			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ));
+			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
 
-			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ));
+			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
+			
+			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );
 
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}

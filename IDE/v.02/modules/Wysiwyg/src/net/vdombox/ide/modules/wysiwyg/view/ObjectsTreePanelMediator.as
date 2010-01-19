@@ -50,6 +50,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.PAGE_SRUCTURE_GETTED );
 
+			interests.push( ApplicationFacade.OBJECT_GETTED );
+			
 			return interests;
 		}
 
@@ -74,6 +76,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					pageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
 					pageXML.appendChild( pageXMLTree.* );
+					
+					break;
+				}
+					
+				case ApplicationFacade.OBJECT_GETTED:
+				{	
+					sendNotification( ApplicationFacade.OBJECT_SELECTED, body );
 					
 					break;
 				}
@@ -117,7 +126,32 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var item : XML = event.itemRenderer.data as XML;
 			var id : String = item.@id;
 			
-			sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
+			if( item.name() == "page" )
+			{
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
+				sendNotification( ApplicationFacade.PAGE_SELECTED, _pages[ id ] );
+			}
+			else if ( item.name() == "object" )
+			{
+				var pageID : String
+				var parent : XML = item.parent();
+				
+				while( parent )
+				{
+					if( parent.name() != "page" )
+					{
+						parent = parent.parent();
+						continue;
+					}
+					
+					pageID = parent.@id;
+					parent = null;
+				}
+					
+				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO : _pages[ pageID ], objectID : id } );
+			}
 		}
+		
+		
 	}
 }

@@ -54,6 +54,9 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_TYPES : String = "getTypes";
 		public static const TYPES_GETTED : String = "typesGetted";
 		
+		public static const GET_TYPE : String = "getType";
+		public static const TYPE_GETTED : String = "typeGetted";
+		
 //		application	
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
@@ -63,11 +66,22 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const PAGES_GETTED: String = "pagesGetted";
 		public static const GET_PAGE_SRUCTURE : String = "getPageStructure";
 		public static const PAGE_SRUCTURE_GETTED : String = "pageStructureGetted";
+		public static const SELECT_PAGE : String = "selectPage";
+		public static const PAGE_SELECTED : String = "pageSelected";
 		
 //		objects
+		public static const GET_OBJECT : String = "getObject";
+		public static const OBJECT_GETTED: String = "objectGetted";
+		public static const SELECT_OBJECT : String = "selectObject";
+		public static const OBJECT_SELECTED : String = "objectSelected";
 		public static const GET_OBJECTS : String = "getObjects";
 		public static const OBJECTS_GETTED: String = "objectsGetted";
 		
+//		attributes
+		public static const GET_PAGE_ATTRIBUTES : String = "getPageAttributes";
+		public static const PAGE_ATTRIBUTES_GETTED : String = "pageAttributesGetted";
+		public static const GET_OBJECT_ATTRIBUTES : String = "getObjectAttributes";
+		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
 		
 		
 		public static function getInstance( key : String ) : ApplicationFacade
