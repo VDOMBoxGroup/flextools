@@ -19,9 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			super( NAME, viewComponent );
 		}
-
-		public var selectedResource : ResourceVO;
-
+		
 		public var selectedApplication : ApplicationVO;
 
 		public function get body() : Body
@@ -38,7 +36,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.PIPES_READY );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
 
 			return interests;
@@ -46,15 +43,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var resourceVO : ResourceVO;
-
 			switch ( notification.getName())
 			{
-				case ApplicationFacade.PIPES_READY:
-				{
-					break;
-				}
-
 				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
 				{
 					selectedApplication = notification.getBody() as ApplicationVO;
