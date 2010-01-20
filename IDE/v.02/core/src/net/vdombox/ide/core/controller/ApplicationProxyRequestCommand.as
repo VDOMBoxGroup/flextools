@@ -36,6 +36,13 @@ package net.vdombox.ide.core.controller
 			
 			switch ( target )
 			{
+				case PPMApplicationTargetNames.STRUCTURE:
+				{
+					applicationProxy.getStructure();
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.PAGES:
 				{
 					applicationProxy.getPages();

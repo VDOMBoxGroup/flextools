@@ -2,20 +2,19 @@ package net.vdombox.ide.core.view
 {
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
-	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.SimpleMessage;
+	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
-	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
@@ -29,14 +28,11 @@ package net.vdombox.ide.core.view
 		{
 			super( NAME, new Junction() );
 		}
-
-		private var moduleProxy : ModulesProxy;
-
+		
 		private var pipesProxy : PipesProxy;
 
 		override public function onRegister() : void
 		{
-			moduleProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
 			pipesProxy = facade.retrieveProxy( PipesProxy.NAME ) as PipesProxy;
 
 			junction.registerPipe( PipeNames.STDOUT, Junction.OUTPUT, new TeeSplit() );
@@ -54,6 +50,7 @@ package net.vdombox.ide.core.view
 
 			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
 			interests.push( ApplicationFacade.SELECTED_MODULE_CHANGED );
+			
 			interests.push( ApplicationFacade.MODULE_TO_PROXIES_CONNECTED );
 			interests.push( ApplicationFacade.MODULE_SETTINGS_GETTED );
 

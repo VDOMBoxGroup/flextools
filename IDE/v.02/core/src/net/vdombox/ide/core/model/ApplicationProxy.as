@@ -65,7 +65,6 @@ package net.vdombox.ide.core.model
 			var applicationInformationXML : XML = applicationInformationVO.toXML();
 
 			soap.set_application_info( applicationVO.id, applicationInformationXML );
-			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		public function getPages() : void
@@ -73,7 +72,15 @@ package net.vdombox.ide.core.model
 			if ( !isLoaded )
 			{
 				soap.get_top_objects( applicationVO.id );
-				soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+				
+			}
+		}
+		
+		public function getStructure() : void
+		{
+			if ( !isLoaded )
+			{
+				soap.get_application_structure( applicationVO.id );
 			}
 		}
 
@@ -115,7 +122,9 @@ package net.vdombox.ide.core.model
 
 		private function addEventListeners() : void
 		{
-
+			soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createPagesList( pages : XML ) : void
@@ -168,6 +177,13 @@ package net.vdombox.ide.core.model
 
 					sendNotification( ApplicationFacade.PAGES_GETTED, { applicationVO: applicationVO,
 										  pages: _pages } );
+
+					break;
+				}
+
+				case "get_application_structure":
+				{
+					break;
 				}
 			}
 		}
