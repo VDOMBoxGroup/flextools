@@ -6,6 +6,8 @@ package net.vdombox.ide.modules.tree.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.PipeNames;
@@ -52,6 +54,9 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
+			
+			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
+			interests.push( ApplicationFacade.GET_APPLICATION_STRUCTURE );
 
 			return interests;
 		}
@@ -135,6 +140,24 @@ package net.vdombox.ide.modules.tree.view
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_APPLICATION_STRUCTURE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.STRUCTURE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 			}
@@ -268,19 +291,14 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case PPMPlaceNames.SERVER:
 				{
-					processServerProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
 					break;
 				}
-			}
-		}
-
-		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMServerTargetNames.SELECTED_APPLICATION:
+					
+				case PPMPlaceNames.APPLICATION:
 				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
+					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					break;
 				}
 			}
 		}

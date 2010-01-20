@@ -6,6 +6,8 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.tree.controller.ProcessApplicationProxyMessageCommand;
+	import net.vdombox.ide.modules.tree.controller.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.tree.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
@@ -50,25 +52,16 @@ package net.vdombox.ide.modules.tree
 		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
 		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
-//		types
-		public static const GET_TYPES : String = "getTypes";
-		public static const TYPES_GETTED : String = "typesGetted";
+//		pipe messages
+		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
+		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		
-//		application	
+//		application
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
 		
-//		pages
-		public static const GET_PAGES : String = "getPages";
-		public static const PAGES_GETTED: String = "pagesGetted";
-		public static const GET_PAGE_SRUCTURE : String = "getPageStructure";
-		public static const PAGE_SRUCTURE_GETTED : String = "pageStructureGetted";
-		
-//		objects
-		public static const GET_OBJECTS : String = "getObjects";
-		public static const OBJECTS_GETTED: String = "objectsGetted";
-		
-		
+		public static const GET_APPLICATION_STRUCTURE : String = "getApplicationStructure";
+		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -100,6 +93,9 @@ package net.vdombox.ide.modules.tree
 			registerCommand( GET_SETTINGS, GetSettingsCommand );
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
+			
+			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
+			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

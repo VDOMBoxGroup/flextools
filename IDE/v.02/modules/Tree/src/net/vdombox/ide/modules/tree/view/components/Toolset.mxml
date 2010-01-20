@@ -4,7 +4,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark">
 
 	<fx:Metadata> 
-		[ResourceBundle("General")] 
+		[ResourceBundle("Tree_General")] 
 	</fx:Metadata>
 
 	<s:layout>
@@ -12,5 +12,5 @@
 	</s:layout>
 
 	<s:ToggleButton id="toolsetButton"
-					label="{ resourceManager.getString( 'General', 'toolset_button_label' ) }" />
+					label="{ resourceManager.getString( 'Tree_General', 'toolset_button_label' ) }" />
 </s:Group>
