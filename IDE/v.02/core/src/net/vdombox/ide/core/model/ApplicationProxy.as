@@ -1,16 +1,16 @@
 package net.vdombox.ide.core.model
 {
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
-	import net.vdombox.ide.core.interfaces.IApplicationProxy;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy
@@ -72,10 +72,10 @@ package net.vdombox.ide.core.model
 			if ( !isLoaded )
 			{
 				soap.get_top_objects( applicationVO.id );
-				
+
 			}
 		}
-		
+
 		public function getStructure() : void
 		{
 			if ( !isLoaded )
@@ -125,6 +125,25 @@ package net.vdombox.ide.core.model
 			soap.get_top_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+		}
+
+		private function createStructure( sourceStructure : XMLList ) : Array
+		{
+			if( sourceStructure.length() == 0 )
+				return null;
+				
+			var resultStructure : Array = [];
+			var structureObjectVO : StructureObjectVO;
+			
+			for each ( var structureObjectXML : XML in sourceStructure )
+			{
+				structureObjectVO = new StructureObjectVO( structureObjectXML.@ID )
+				structureObjectVO.setDescription( structureObjectXML );
+				
+				resultStructure.push( structureObjectVO );
+			}
+
+			return resultStructure;
 		}
 
 		private function createPagesList( pages : XML ) : void
@@ -183,6 +202,10 @@ package net.vdombox.ide.core.model
 
 				case "get_application_structure":
 				{
+					var structure : Array = createStructure( result.Structure[ 0 ].* );
+
+					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, { applicationVO: applicationVO,
+										  structure: structure } );
 					break;
 				}
 			}

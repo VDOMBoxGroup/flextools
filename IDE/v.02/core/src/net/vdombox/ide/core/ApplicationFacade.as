@@ -124,6 +124,7 @@ package net.vdombox.ide.core
 		public static const SHOW_MODULE_BODY : String = "showModuleBody";
 
 //		application
+		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
 		public static const PAGES_GETTED : String = "pagesGetted";
 		
 //		page		
@@ -188,6 +189,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand );
 			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( PAGES_GETTED, ApplicationProxyResponseCommand );
 			
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
