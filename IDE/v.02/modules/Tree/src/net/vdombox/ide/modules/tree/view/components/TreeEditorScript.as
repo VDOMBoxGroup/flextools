@@ -1,15 +1,13 @@
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+
 import mx.controls.Alert;
 import mx.core.Application;
 import mx.effects.Move;
 import mx.effects.easing.Exponential;
 import mx.events.CloseEvent;
 import mx.managers.PopUpManager;
-import net.vdombox.ide.modules.tree.events.AddTreeElementEvent;
-import net.vdombox.ide.modules.tree.events.IndexEvent;
-import net.vdombox.ide.modules.tree.events.TreeEditorEvent;
 
 [Embed( source="assets/treeEditor/treeEditor.swf", symbol="rMenu" )]
 [Bindable]
