@@ -8,24 +8,20 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.events.TimerEvent;
 	import flash.system.LoaderContext;
 	import flash.utils.Timer;
+
 	import mx.containers.Canvas;
 	import mx.controls.Button;
 	import mx.controls.Image;
 	import mx.controls.Label;
 	import mx.controls.Text;
-	import vdom.events.DataManagerEvent;
-	import vdom.events.TreeEditorEvent;
-	import vdom.managers.DataManager;
-	import vdom.managers.FileManager;
+
 	public class TreeElement extends Canvas
 	{
-		public function TreeElement( str : String = "" )
+		public function TreeElement()
 		{
 			super();
 
 			cnvUpLayer.clipContent = false;
-
-			dataManager = DataManager.getInstance();
 
 			initUpBody();
 			initDownBody();
@@ -33,7 +29,7 @@ package net.vdombox.ide.modules.tree.view.components
 
 			isRedraw = true;
 
-			addEventListener( MouseEvent.CLICK, endFormatinfHandler );
+//			addEventListener( MouseEvent.CLICK, endFormatinfHandler );
 		}
 
 		[Embed( source="assets/treeEditor/test/content_selected.png" )]
@@ -119,6 +115,7 @@ package net.vdombox.ide.modules.tree.view.components
 		private var btDelete : Button;
 
 		private var btLessen : Button;
+
 		private var btLine : Button;
 
 		private var cnvDownLayer : Canvas = new Canvas();
@@ -129,15 +126,11 @@ package net.vdombox.ide.modules.tree.view.components
 
 		private var dYtoY : Number = 0;
 
-		private var dataManager : DataManager;
-
 		[Embed( source="assets/treeEditor/treeEditor.swf", symbol="cube" )]
 		[Bindable]
 		private var defaultPicture : Class;
 
 		private var delayTimer : Timer;
-
-		private var fileManager : FileManager = FileManager.getInstance();
 
 		private var image : Image;
 
@@ -353,7 +346,6 @@ package net.vdombox.ide.modules.tree.view.components
 		public function set typeID( resID : String ) : void
 		{
 			_resID = resID;
-			fileManager.loadResource( dataManager.currentApplicationId, _resID, this, "typeResourse" );
 		}
 
 		public function set typeResourse( data : Object ) : void
@@ -363,10 +355,10 @@ package net.vdombox.ide.modules.tree.view.components
 			loaderTypeRes.loadBytes( data.data );
 		}
 
-		public function unSelect() : void
-		{
-			endFormatinfHandler( new MouseEvent( MouseEvent.CLICK ) );
-		}
+		/*		public function unSelect() : void
+		   {
+		   endFormatinfHandler( new MouseEvent( MouseEvent.CLICK ) );
+		 }*/
 
 		public function set xTo( num : Number ) : void
 		{
@@ -381,8 +373,8 @@ package net.vdombox.ide.modules.tree.view.components
 
 			super.y = value;
 
-			if ( !isRedraw && value != 0 )
-				dispatchEvent( new TreeEditorEvent( TreeEditorEvent.NEED_TO_SAVE ) );
+//			if ( !isRedraw && value != 0 )
+//				dispatchEvent( new TreeEditorEvent( TreeEditorEvent.NEED_TO_SAVE ) );
 		}
 
 		public function set yTo( num : Number ) : void
@@ -398,7 +390,7 @@ package net.vdombox.ide.modules.tree.view.components
 			if ( isRedraw )
 			{
 
-				dispatchEvent( new TreeEditorEvent( TreeEditorEvent.REDRAW_LINES, _ID ) );
+//				dispatchEvent( new TreeEditorEvent( TreeEditorEvent.REDRAW_LINES, _ID ) );
 				isRedraw = false;
 			}
 		}
@@ -436,7 +428,7 @@ package net.vdombox.ide.modules.tree.view.components
 			if ( !_availabled )
 				return;
 
-			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.DELETE, _ID ) );
+//			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.DELETE, _ID ) );
 		}
 
 		private function initDownBody() : void
@@ -475,7 +467,7 @@ package net.vdombox.ide.modules.tree.view.components
 			cnvDownLayer.addChild( _type );
 		}
 
-	
+
 		private function initUpBody() : void
 		{
 			imgheader = new Image();
@@ -549,7 +541,7 @@ package net.vdombox.ide.modules.tree.view.components
 			if ( !_availabled )
 				return;
 
-			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.START_DRAW_LINE, _ID ) );
+//			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.START_DRAW_LINE, _ID ) );
 		}
 
 		private function loadComplete( evt : Event ) : void
@@ -583,7 +575,7 @@ package net.vdombox.ide.modules.tree.view.components
 				return;
 
 			changeState( !min );
-			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.NEED_TO_SAVE ) );
+//			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.NEED_TO_SAVE ) );
 		}
 
 
@@ -593,7 +585,7 @@ package net.vdombox.ide.modules.tree.view.components
 			if ( !_availabled )
 				return;
 
-			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.START_REDRAW_LINES, _ID ) );
+//			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.START_REDRAW_LINES, _ID ) );
 		}
 
 		private function startPageClickHandler( msEvt : MouseEvent ) : void
@@ -601,13 +593,13 @@ package net.vdombox.ide.modules.tree.view.components
 			if ( !_availabled )
 				return;
 
-			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.CHANGE_START_PAGE, _ID ) );
+//			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.CHANGE_START_PAGE, _ID ) );
 		}
 
 		private function stopDragHandler( msEvt : MouseEvent ) : void
 		{
 			stopDrag();
-			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.STOP_REDRAW_LINES, _ID ) );
+//			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.STOP_REDRAW_LINES, _ID ) );
 		}
 
 		private function textAreaClickHandler( msEvt : MouseEvent ) : void
@@ -627,7 +619,7 @@ package net.vdombox.ide.modules.tree.view.components
 		{
 			msEvt.stopImmediatePropagation();
 			changeState( !min );
-			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.NEED_TO_SAVE ) );
+//			dispatchEvent( new TreeEditorEvent( TreeEditorEvent.NEED_TO_SAVE ) );
 		}
 
 		private function txtInpClickHandler( msEvt : MouseEvent ) : void
@@ -637,11 +629,6 @@ package net.vdombox.ide.modules.tree.view.components
 
 		private function txtInpKeyUpHandler( kbEvt : KeyboardEvent ) : void
 		{
-		}
-
-		private function updateAttributeCompleteHandler( dmEvt : DataManagerEvent ) : void
-		{
-			dataManager.removeEventListener( DataManagerEvent.UPDATE_ATTRIBUTES_COMPLETE, updateAttributeCompleteHandler );
 		}
 
 

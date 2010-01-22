@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
 	import net.vdombox.ide.modules.tree.controller.TearDownCommand;
+	import net.vdombox.ide.modules.tree.controller.TreeElementCreatedCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -62,6 +63,14 @@ package net.vdombox.ide.modules.tree
 		
 		public static const GET_APPLICATION_STRUCTURE : String = "getApplicationStructure";
 		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
+
+		public static const GET_TYPE : String = "getType";
+		public static const TYPE_GETTED : String = "typeGetted";
+		
+		public static const GET_PAGE : String = "getPage";
+		public static const PAGE_GETTED : String = "pageGetted";
+		
+		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -96,6 +105,8 @@ package net.vdombox.ide.modules.tree
 			
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
+			
+			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

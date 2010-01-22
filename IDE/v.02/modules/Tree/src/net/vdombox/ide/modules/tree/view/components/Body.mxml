@@ -8,6 +8,6 @@
 
 	<!--<components:TreeEditor height="5" width="5" />-->
 
-	<mx:Canvas id="main"
+	<s:Group id="main"
 			   height="100%" width="100%" />
 </s:Group>

@@ -3,9 +3,9 @@ package net.vdombox.ide.modules.tree.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.view.components.Body;
+	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -15,14 +15,16 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "BodyMediator";
 
-		public function BodyMediator( viewComponent : Object = null )
+		public function BodyMediator( viewComponent :Object )
 		{
 			super( NAME, viewComponent );
 		}
 
-		public var selectedResource : ResourceVO;
-
 		public var selectedApplication : ApplicationVO;
+
+		public var pages : Array;
+
+		public var structure : Array;
 
 		public function get body() : Body
 		{
@@ -46,14 +48,33 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			var name : String = notification.getName();
-			var body : Object = notification.getBody();
-			
-			switch ( name )
+			var messageName : String = notification.getName();
+			var messageBody : Object = notification.getBody();
+
+			switch ( messageName )
 			{
 				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
 				{
-					sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, body );
+					selectedApplication = body as ApplicationVO;
+
+					sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, messageBody );
+					break;
+				}
+
+				case ApplicationFacade.APPLICATION_STRUCTURE_GETTED:
+				{
+					structure = messageBody as Array;
+
+					var treeElement : TreeElement;
+
+					for ( var i : int = 0; i < structure.length; i++ )
+					{
+						treeElement = new TreeElement();
+						body.main.addElement( treeElement );
+						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
+											  structureObjectVO: structure[ i ] } );
+					}
+
 					break;
 				}
 			}
