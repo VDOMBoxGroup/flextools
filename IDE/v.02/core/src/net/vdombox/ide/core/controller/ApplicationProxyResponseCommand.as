@@ -34,6 +34,13 @@ package net.vdombox.ide.core.controller
 
 					break;
 				}
+					
+				case ApplicationFacade.APPLICATION_STRUCTURE_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.STRUCTURE, body );
+					
+					break;
+				}
 			}
 
 			if ( message )
