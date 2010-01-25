@@ -2,6 +2,8 @@ package net.vdombox.ide.common
 {
 	public class PPMPlaceNames
 	{
+		public static const STATES : String = "placeStates";
+		
 		public static const SERVER : String = "placeServer";
 		
 		public static const APPLICATION : String = "placeApplication";
