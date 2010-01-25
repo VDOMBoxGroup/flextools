@@ -1,9 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
-	import flash.utils.Dictionary;
-
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -11,17 +9,18 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
+	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
-	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
+	import net.vdombox.ide.modules.applicationsManagment.model.SessionProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -36,13 +35,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		public function ApplicationsManagmentJunctionMediator()
 		{
 			super( NAME, new Junction() );
-		}
-
-		private var recepients : Dictionary;
-
-		override public function onRegister() : void
-		{
-			recepients = new Dictionary( true );
 		}
 
 		override public function listNotificationInterests() : Array
@@ -153,7 +145,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION );
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -162,8 +154,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.SET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.UPDATE,
-													  PPMServerTargetNames.SELECTED_APPLICATION, body );
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE,
+													  PPMStatesTargetNames.SELECTED_APPLICATION, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -192,22 +184,25 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
-					var recepientKey : String;
+					var recipientKey : String;
 					var resourceVO : ResourceVO;
-
+					
+					var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+					var recipients : Object = sessionProxy.getObject( PPMPlaceNames.RESOURCES );
+					
 					if ( body is ResourceVO )
 					{
 						resourceVO = body as ResourceVO;
 					}
 					else
 					{
-						recepientKey = body.recepientKey;
+						recipientKey = body.recipientKey;
 						resourceVO = body.resourceVO as ResourceVO;
-						
-						if ( !recepients[ resourceVO ] )
-							recepients[ resourceVO ] = [];
-							
-						recepients[ resourceVO ].push( recepientKey );
+
+						if ( !recipients.hasOwnProperty( resourceVO.id ) )
+							recipients[ resourceVO.id ] = [];
+
+						recipients[ resourceVO.id ].push( recipientKey );
 					}
 
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
@@ -359,105 +354,29 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				case PPMPlaceNames.SERVER:
 				{
-					processServerProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
+					
 					break;
 				}
 
+				case PPMPlaceNames.STATES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
 				case PPMPlaceNames.APPLICATION:
 				{
-					processApplicationProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					
 					break;
 				}
 
 				case PPMPlaceNames.RESOURCES:
 				{
-					processResourcesProxyMessage( message );
-					break;
-				}
-			}
-		}
-
-		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMServerTargetNames.APPLICATION:
-				{
-					sendNotification( ApplicationFacade.APPLICATION_CREATED, message.getBody() );
-
-					break;
-				}
-				case PPMServerTargetNames.APPLICATIONS:
-				{
-					sendNotification( ApplicationFacade.APPLICATIONS_LIST_GETTED, message.getBody() );
-
-					break;
-				}
-
-				case PPMServerTargetNames.SELECTED_APPLICATION:
-				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_CHANGED, message.getBody() );
-
-					break;
-				}
-			}
-		}
-
-		private function processApplicationProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			var operation : String = message.getOperation();
-
-			var body : Object = message.getBody();
-
-			switch ( message.getTarget() )
-			{
-				case PPMApplicationTargetNames.INFORMATION:
-				{
-					if ( operation == PPMOperationNames.UPDATE )
-						sendNotification( ApplicationFacade.APPLICATION_EDITED, body as ApplicationVO );
-				}
-			}
-		}
-
-		private function processResourcesProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			var operation : String = message.getOperation();
-
-			var resourceVO : ResourceVO;
-
-			switch ( message.getTarget() )
-			{
-				case PPMResourcesTargetNames.RESOURCE:
-				{
-
-					if ( operation == PPMOperationNames.READ )
-					{
-						var recepientsArray : Array;
-
-						resourceVO = message.getBody() as ResourceVO;
-
-						if ( recepients[ resourceVO ] )
-						{
-							recepientsArray = recepients[ resourceVO ];
-
-							for ( var i : int = 0; i < recepientsArray.length; i++ )
-							{
-								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recepientsArray[ i ],
-												  resourceVO );
-							}
-						}
-						else
-						{
-							sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
-						}
-					}
-					else if ( operation == PPMOperationNames.CREATE )
-					{
-						resourceVO = message.getBody() as ResourceVO;
-
-						sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
-					}
-
+					sendNotification( ApplicationFacade.PROCESS_RESOURCE_PROXY_MESSAGE, message );
+					
 					break;
 				}
 			}

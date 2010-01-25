@@ -6,6 +6,10 @@ package net.vdombox.ide.modules.applicationsManagment
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessApplicationProxyMessageCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessResourceProxyMessageCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessServerProxyMessageCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.applicationsManagment.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
@@ -60,6 +64,12 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const EDIT_APPLICATION_INFORMATION : String = "editApplicationInformation";
 		public static const APPLICATION_EDITED : String = "ApplicationEdited";
 		
+//		pipe messages
+		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
+		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
+		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
+		public static const PROCESS_RESOURCE_PROXY_MESSAGE : String = "processResourceProxyMessage";
+		
 //		application	
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SET_SELECTED_APPLICATION : String = "setSelectedApplication";
@@ -106,6 +116,11 @@ package net.vdombox.ide.modules.applicationsManagment
 			registerCommand( GET_SETTINGS, GetSettingsCommand );
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
+			
+			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
+			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
+			registerCommand( PROCESS_RESOURCE_PROXY_MESSAGE, ProcessResourceProxyMessageCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

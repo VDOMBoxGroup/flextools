@@ -28,7 +28,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var id : String = NAME + "/" + serial;
 			serial++;
 			return id;
-
 		}
 
 		private var resourceVO : ResourceVO;
@@ -106,7 +105,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					resourceVO = new ResourceVO( applicationVO.id );
 					resourceVO.setID( applicationVO.iconID );
 
-					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recepientKey: mediatorName } );
+					sendNotification( ApplicationFacade.LOAD_RESOURCE, { resourceVO: resourceVO, recipientKey: mediatorName } );
 				}
 			}
 			else
