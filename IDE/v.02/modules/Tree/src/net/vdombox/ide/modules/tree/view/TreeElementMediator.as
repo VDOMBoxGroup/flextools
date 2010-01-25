@@ -40,7 +40,7 @@ package net.vdombox.ide.modules.tree.view
 			treeElement.x = structureObjectVO.left;
 			treeElement.y = structureObjectVO.top;
 			
-			sendNotification( ApplicationFacade.get
+			sendNotification( ApplicationFacade.GET_PAGE );
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -59,7 +59,7 @@ package net.vdombox.ide.modules.tree.view
 			
 			switch ( messageName )
 			{
-				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+				case ApplicationFacade.PAGE_GETTED:
 				{
 					
 					sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, messageBody );

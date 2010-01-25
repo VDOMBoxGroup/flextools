@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.PPMServerTargetNames;
+	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.SimpleMessage;
@@ -56,6 +56,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.SELECT_MODULE );
 			
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
+			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
 			interests.push( ApplicationFacade.GET_APPLICATION_STRUCTURE );
 
 			return interests;
@@ -145,7 +146,16 @@ package net.vdombox.ide.modules.tree.view
 					
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION );
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_SELECTED_PAGE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -292,6 +302,12 @@ package net.vdombox.ide.modules.tree.view
 				case PPMPlaceNames.SERVER:
 				{
 					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
+					break;
+				}
+				
+				case PPMPlaceNames.STATES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
 					break;
 				}
 					

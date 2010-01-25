@@ -1,6 +1,6 @@
 package net.vdombox.ide.modules.tree.controller
 {
-	import net.vdombox.ide.common.PPMServerTargetNames;
+	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	
@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.tree.controller
 			
 			switch ( message.getTarget() )
 			{
-				case PPMServerTargetNames.SELECTED_APPLICATION:
+				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
 					break;

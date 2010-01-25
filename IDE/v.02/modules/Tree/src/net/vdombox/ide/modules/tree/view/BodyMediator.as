@@ -42,6 +42,7 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
+			interests.push( ApplicationFacade.SELECTED_PAGE_GETTED );
 
 			return interests;
 		}
@@ -74,7 +75,9 @@ package net.vdombox.ide.modules.tree.view
 						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
 											  structureObjectVO: structure[ i ] } );
 					}
-
+					
+					sendNotification( ApplicationFacade.GET_SELECTED_PAGE, selectedApplication );
+					
 					break;
 				}
 			}

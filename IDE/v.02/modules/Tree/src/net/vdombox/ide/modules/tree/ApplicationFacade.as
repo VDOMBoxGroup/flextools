@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessServerProxyMessageCommand;
+	import net.vdombox.ide.modules.tree.controller.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.tree.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
@@ -56,6 +57,7 @@ package net.vdombox.ide.modules.tree
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
+		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		
 //		application
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
@@ -66,6 +68,9 @@ package net.vdombox.ide.modules.tree
 
 		public static const GET_TYPE : String = "getType";
 		public static const TYPE_GETTED : String = "typeGetted";
+		
+		public static const GET_SELECTED_PAGE : String = "getSelectedPage";
+		public static const SELECTED_PAGE_GETTED : String = "selectedPageGetted";
 		
 		public static const GET_PAGE : String = "getPage";
 		public static const PAGE_GETTED : String = "pageGetted";
@@ -105,6 +110,7 @@ package net.vdombox.ide.modules.tree
 			
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
+			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
 			
