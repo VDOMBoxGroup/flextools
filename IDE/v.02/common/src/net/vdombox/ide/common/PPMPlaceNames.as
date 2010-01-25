@@ -2,18 +2,18 @@ package net.vdombox.ide.common
 {
 	public class PPMPlaceNames
 	{
-		public static const STATES : String = "placeStates";
+		public static const STATES : String = "states";
 		
-		public static const SERVER : String = "placeServer";
+		public static const SERVER : String = "server";
 		
-		public static const APPLICATION : String = "placeApplication";
+		public static const APPLICATION : String = "application";
 		
-		public static const TYPES : String = "placeTypes";
+		public static const TYPES : String = "types";
 		
-		public static const PAGE : String = "placePage";
+		public static const PAGE : String = "page";
 		
-		public static const OBJECT : String = "placeObject";
+		public static const OBJECT : String = "object";
 		
-		public static const RESOURCES : String = "placeResources";
+		public static const RESOURCES : String = "resources";
 	}
 }
