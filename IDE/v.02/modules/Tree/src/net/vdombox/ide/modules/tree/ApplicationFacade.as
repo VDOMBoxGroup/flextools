@@ -59,22 +59,25 @@ package net.vdombox.ide.modules.tree
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		
-//		application
-		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
-		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
-		
-		public static const GET_APPLICATION_STRUCTURE : String = "getApplicationStructure";
-		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
-
+//		types
 		public static const GET_TYPE : String = "getType";
 		public static const TYPE_GETTED : String = "typeGetted";
+		
+//		states
+		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
+		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
 		
 		public static const GET_SELECTED_PAGE : String = "getSelectedPage";
 		public static const SELECTED_PAGE_GETTED : String = "selectedPageGetted";
 		
-		public static const GET_PAGE : String = "getPage";
-		public static const PAGE_GETTED : String = "pageGetted";
+//		application
+		public static const GET_APPLICATION_STRUCTURE : String = "getApplicationStructure";
+		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
 		
+		public static const GET_PAGES : String = "getPages";
+		public static const PAGES_GETTED : String = "pagesGetted";
+
+//		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
 		
 		public static function getInstance( key : String ) : ApplicationFacade

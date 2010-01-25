@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
@@ -14,7 +15,7 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "TreeElementMediator";
 		
-		public function TreeElementMediator( viewComponent : Object, structureObjectVO : StructureObjectVO )
+		public function TreeElementMediator( viewComponent : Object, pageVO : PageVO, structureObjectVO : StructureObjectVO )
 		{
 			super( NAME + "/" + structureObjectVO.id, viewComponent );
 			
@@ -39,15 +40,13 @@ package net.vdombox.ide.modules.tree.view
 			
 			treeElement.x = structureObjectVO.left;
 			treeElement.y = structureObjectVO.top;
-			
-			sendNotification( ApplicationFacade.GET_PAGE );
 		}
 		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
+//			interests.push( ApplicationFacade.PAGE_GETTED + "/" + mediatorName );
 			
 			return interests;
 		}
@@ -59,10 +58,10 @@ package net.vdombox.ide.modules.tree.view
 			
 			switch ( messageName )
 			{
-				case ApplicationFacade.PAGE_GETTED:
+				case ApplicationFacade.TYPE_GETTED:
 				{
 					
-					sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, messageBody );
+					
 					break;
 				}
 			}

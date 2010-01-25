@@ -1,12 +1,14 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -15,7 +17,7 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "BodyMediator";
 
-		public function BodyMediator( viewComponent :Object )
+		public function BodyMediator( viewComponent : Object )
 		{
 			super( NAME, viewComponent );
 		}
@@ -42,6 +44,7 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
+			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_GETTED );
 
 			return interests;
@@ -56,9 +59,19 @@ package net.vdombox.ide.modules.tree.view
 			{
 				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
 				{
-					selectedApplication = body as ApplicationVO;
+					selectedApplication = messageBody as ApplicationVO;
 
-					sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, messageBody );
+					sendNotification( ApplicationFacade.GET_PAGES, selectedApplication );
+
+					break;
+				}
+
+				case ApplicationFacade.PAGES_GETTED:
+				{
+					pages = messageBody as Array;
+
+					sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, selectedApplication );
+
 					break;
 				}
 
@@ -67,17 +80,19 @@ package net.vdombox.ide.modules.tree.view
 					structure = messageBody as Array;
 
 					var treeElement : TreeElement;
+					var pageVO : PageVO;
 
-					for ( var i : int = 0; i < structure.length; i++ )
+					for each ( pageVO in pages )
 					{
 						treeElement = new TreeElement();
 						body.main.addElement( treeElement );
+						
 						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
-											  structureObjectVO: structure[ i ] } );
+											  pageVO: pageVO, structureObjectVO: getStructureObject( pageVO ) } );
 					}
-					
+
 					sendNotification( ApplicationFacade.GET_SELECTED_PAGE, selectedApplication );
-					
+
 					break;
 				}
 			}
@@ -86,6 +101,22 @@ package net.vdombox.ide.modules.tree.view
 		private function addEventListeners() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+		}
+
+		private function getStructureObject( pageVO : PageVO ) : StructureObjectVO
+		{
+			var result : StructureObjectVO;
+
+			for each ( var structureObjectVO : StructureObjectVO in structure )
+			{
+				if ( structureObjectVO.id == pageVO.id )
+				{
+					result = structureObjectVO;
+					break;
+				}
+			}
+
+			return result;
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void

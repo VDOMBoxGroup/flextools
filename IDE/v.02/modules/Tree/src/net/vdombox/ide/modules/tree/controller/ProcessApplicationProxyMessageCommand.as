@@ -32,10 +32,13 @@ package net.vdombox.ide.modules.tree.controller
 				case PPMApplicationTargetNames.STRUCTURE:
 				{
 					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, body.structure );
+					
 					break;
 				}
-				case PPMApplicationTargetNames.PAGE:
+				case PPMApplicationTargetNames.PAGES:
 				{
+					sendNotification( ApplicationFacade.PAGES_GETTED, body.pages );
+					
 					break;
 				}
 			}

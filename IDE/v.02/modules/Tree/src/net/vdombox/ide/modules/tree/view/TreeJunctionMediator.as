@@ -17,6 +17,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -57,7 +58,9 @@ package net.vdombox.ide.modules.tree.view
 			
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
+			
 			interests.push( ApplicationFacade.GET_APPLICATION_STRUCTURE );
+			interests.push( ApplicationFacade.GET_PAGES );
 
 			return interests;
 		}
@@ -165,6 +168,15 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.GET_APPLICATION_STRUCTURE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.STRUCTURE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_PAGES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
