@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.PPMServerTargetNames;
+	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
@@ -177,7 +177,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION );
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -408,7 +408,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			switch ( message.getTarget() )
 			{
-				case PPMServerTargetNames.SELECTED_APPLICATION:
+				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
 				}
