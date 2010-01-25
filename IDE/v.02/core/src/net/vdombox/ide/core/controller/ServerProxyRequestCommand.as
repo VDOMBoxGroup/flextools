@@ -41,27 +41,6 @@ package net.vdombox.ide.core.controller
 					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
 					break;
 				}
-
-				case PPMServerTargetNames.SELECTED_APPLICATION:
-				{
-					var selectedApplication : ApplicationVO;
-
-					if ( operation == PPMOperationNames.READ )
-					{
-						selectedApplication = serverProxy.selectedApplication;
-					}
-					else if ( operation == PPMOperationNames.UPDATE )
-					{
-						selectedApplication = message.getBody() as ApplicationVO;
-						serverProxy.selectedApplication = selectedApplication;
-					}
-
-					message.setBody( selectedApplication );
-
-					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
-
-					break;
-				}
 			}
 		}
 	}

@@ -50,6 +50,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES );
 
 			interests.push( ApplicationFacade.SERVER_PROXY_RESPONSE );
+			interests.push( ApplicationFacade.STATES_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.APPLICATION_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.PAGE_PROXY_RESPONSE );
 			interests.push( ApplicationFacade.OBJECT_PROXY_RESPONSE );
@@ -116,6 +117,10 @@ package net.vdombox.ide.core.view
 				{
 				}
 
+				case ApplicationFacade.STATES_PROXY_RESPONSE:
+				{
+				}
+					
 				case ApplicationFacade.APPLICATION_PROXY_RESPONSE:
 				{
 				}
@@ -154,6 +159,13 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
+				case PPMPlaceNames.STATES:
+				{
+					sendNotification( ApplicationFacade.STATES_PROXY_REQUEST, ppMessage );
+					
+					break;
+				}
+					
 				case PPMPlaceNames.TYPES:
 				{
 					sendNotification( ApplicationFacade.TYPES_PROXY_REQUEST, ppMessage );

@@ -29,7 +29,7 @@ package net.vdombox.ide.core.model
 
 		public function ServerProxy()
 		{
-			super( NAME, data );
+			super( NAME );
 		}
 
 		private var soap : SOAP;
@@ -55,17 +55,6 @@ package net.vdombox.ide.core.model
 		public function get applications() : Array
 		{
 			return _applications.slice();
-		}
-
-		public function get selectedApplication() : ApplicationVO
-		{
-			return _selectedApplication;
-		}
-
-		public function set selectedApplication( value : ApplicationVO ) : void
-		{
-			if ( _applications.indexOf( value ) != -1 )
-				_selectedApplication = value;
 		}
 
 		override public function onRegister() : void

@@ -22,6 +22,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.SendToLogCommand;
 	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ServerProxyResponseCommand;
+	import net.vdombox.ide.core.controller.StatesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.TypesProxyRequestCommand;
 	import net.vdombox.ide.core.model.business.SOAP;
 	
@@ -94,6 +95,9 @@ package net.vdombox.ide.core
 		
 		public static const SERVER_PROXY_REQUEST : String = "serverProxyRequest";
 		public static const SERVER_PROXY_RESPONSE : String = "serverProxyResponse";
+		
+		public static const STATES_PROXY_REQUEST : String = "statesProxyRequest";
+		public static const STATES_PROXY_RESPONSE : String = "statesProxyResponse";
 		
 		public static const TYPES_PROXY_REQUEST : String = "typesProxyRequest";
 		public static const TYPES_PROXY_RESPONSE : String = "typesProxyResponse";
@@ -186,6 +190,8 @@ package net.vdombox.ide.core
 			
 			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
 			registerCommand( APPLICATION_CREATED, ServerProxyResponseCommand );
+			
+			registerCommand( STATES_PROXY_REQUEST, StatesProxyRequestCommand );
 			
 			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand );
 			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand );

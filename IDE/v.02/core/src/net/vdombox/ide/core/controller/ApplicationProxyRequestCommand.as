@@ -26,7 +26,7 @@ package net.vdombox.ide.core.controller
 
 			if ( body is ApplicationVO )
 				applicationVO = body as ApplicationVO;
-			else if ( body.hasOwnProperty( "applicationVO" ))
+			else if ( body && body.hasOwnProperty( "applicationVO" ))
 				applicationVO = body.applicationVO as ApplicationVO;
 			else
 				throw new Error( "no application VO" );
