@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
+			interests.push( NAME + ApplicationFacade.DELIMITER + ApplicationFacade.SETTINGS_GETTED );
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
 			
 			return interests;

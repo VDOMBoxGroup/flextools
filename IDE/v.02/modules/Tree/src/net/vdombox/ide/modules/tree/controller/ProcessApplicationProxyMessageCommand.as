@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.tree.controller
 			else
 				throw new Error( "no application VO" );
 
-			switch ( message.getTarget() )
+			switch ( target )
 			{
 				case PPMApplicationTargetNames.STRUCTURE:
 				{

@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.tree.controller
 			if ( settingsVO )
 			{
 				if ( mediatorName )
-					notificationName = mediatorName + "/" + notificationName;
+					notificationName = mediatorName + ApplicationFacade.DELIMITER + notificationName;
 
 				sendNotification( notificationName, settingsVO );
 			}

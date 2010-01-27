@@ -7,8 +7,10 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessApplicationProxyMessageCommand;
+	import net.vdombox.ide.modules.tree.controller.ProcessResourcesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessStatesProxyMessageCommand;
+	import net.vdombox.ide.modules.tree.controller.ProcessTypesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.tree.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
@@ -56,7 +58,9 @@ package net.vdombox.ide.modules.tree
 		
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
+		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
+		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
 		
 //		types
@@ -77,7 +81,13 @@ package net.vdombox.ide.modules.tree
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED : String = "pagesGetted";
 
-//		
+//		resources
+		public static const GET_RESOURCE : String = "getResource";
+		public static const RESOURCE_GETTED : String = "resourceGetted";
+		
+//		other
+		public static const DELIMITER : String = "/";
+		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
@@ -112,8 +122,10 @@ package net.vdombox.ide.modules.tree
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 			
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
+			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 			
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
 			

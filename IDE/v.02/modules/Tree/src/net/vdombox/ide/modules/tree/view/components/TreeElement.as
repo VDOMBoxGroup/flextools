@@ -252,7 +252,7 @@ package net.vdombox.ide.modules.tree.view.components
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, loadError );
 
 			var loaderContextInfo : LoaderContext = new LoaderContext();
-			loaderContextInfo.allowLoadBytesCodeExecution = true;
+//			loaderContextInfo.allowLoadBytesCodeExecution = true;
 
 			loader.loadBytes( data.data, loaderContextInfo );
 		}
