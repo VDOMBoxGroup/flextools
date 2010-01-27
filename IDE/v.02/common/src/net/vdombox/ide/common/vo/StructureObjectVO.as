@@ -7,13 +7,13 @@ package net.vdombox.ide.common.vo
 			_id = id;
 		}
 		
-		public var top : int;
+		public var top : int = 0;
 		
-		public var left : int;
+		public var left : int = 0;
 		
-		public var state : Boolean;
+		public var state : Boolean = false;
 		
-		public var levels : Array;
+		public var levels : Array = [];
 		
 		private var _id : String;
 		
@@ -39,7 +39,6 @@ package net.vdombox.ide.common.vo
 			if( sourceLevels.length() == 0 )
 				return;
 			
-			levels = [];
 			var levelVO : LevelVO;
 			
 			for each( var levelXML : XML in sourceLevels )

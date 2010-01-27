@@ -88,21 +88,75 @@ package net.vdombox.ide.common.vo
 			return getInformationProperty( "classname" );
 		}
 
+		/* this three properties are implementation of "iconID state" values.
+		MD5 values return empty string*/
+		
+		public function get iconID() : String
+		{
+			var value : String = getInformationProperty( "icon" );
+
+			if ( value.substr( 0, 4 ) == "#Res" )
+				value = value.substring( 5, 36 );
+			else
+				value = "";
+
+			return value;
+		}
+
+		public function get editorIconID() : String
+		{
+			var value : String = getInformationProperty( "editoricon" );
+			
+			if ( value.substr( 0, 4 ) == "#Res" )
+				value = value.substring( 5, 36 );
+			else
+				value = "";
+			
+			return value;
+		}
+		
+		public function get structureIconID() : String
+		{
+			var value : String = getInformationProperty( "structureicon" );
+			
+			if ( value.substr( 0, 4 ) == "#Res" )
+				value = value.substring( 5, 36 );
+			else
+				value = "";
+			
+			return value;
+		}
+
 		public function get icon() : String
 		{
-			return getInformationProperty( "icon" );
+			var value : String = getInformationProperty( "icon" );
+			
+			if ( value.substr( 0, 4 ) == "#Res" )
+				value = "";
+			
+			return value;
 		}
-
+		
 		public function get editorIcon() : String
 		{
-			return getInformationProperty( "editoricon" );
+			var value : String = getInformationProperty( "editoricon" );
+			
+			if ( value.substr( 0, 4 ) == "#Res" )
+				value = "";
+			
+			return value;
 		}
-
+		
 		public function get structureIcon() : String
 		{
-			return getInformationProperty( "structureicon" );
+			var value : String = getInformationProperty( "structureicon" );
+			
+			if ( value.substr( 0, 4 ) == "#Res" )
+				value = "";
+			
+			return value;
 		}
-
+		
 		public function get moveable() : String
 		{
 			return getInformationProperty( "moveable" );
@@ -118,10 +172,10 @@ package net.vdombox.ide.common.vo
 			var categoryName : String = getInformationProperty( "category" );
 
 			var generalCategory : String = resourceManager.getString( "Types", categoryName.toLowerCase() );
-			
+
 			if ( generalCategory )
 				categoryName = generalCategory;
-			
+
 			return categoryName;
 		}
 
