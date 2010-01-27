@@ -35,6 +35,13 @@ package net.vdombox.ide.core.controller
 			
 			var resourceVO : ResourceVO;
 			
+			if ( body is ResourceVO )
+				resourceVO = body as ResourceVO;
+			else if ( body.hasOwnProperty( "pageVO" ) )
+				resourceVO = body.resourceVO as ResourceVO;
+			else
+				throw new Error( "no page VO" );
+			
 			switch ( message.getOperation() )
 			{
 				case PPMOperationNames.READ:
