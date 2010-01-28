@@ -24,7 +24,7 @@ package net.vdombox.ide.common.vo
 		
 		public function setDescription( description : XML ) : void
 		{
-			levels = null;
+			levels = [];
 			
 			left = description.@left;
 			top = description.@top;

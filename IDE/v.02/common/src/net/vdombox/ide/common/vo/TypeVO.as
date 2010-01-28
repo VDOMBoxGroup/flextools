@@ -96,7 +96,7 @@ package net.vdombox.ide.common.vo
 			var value : String = getInformationProperty( "icon" );
 
 			if ( value.substr( 0, 4 ) == "#Res" )
-				value = value.substring( 5, 36 );
+				value = value.substring( 5, 41 );
 			else
 				value = "";
 
@@ -108,7 +108,7 @@ package net.vdombox.ide.common.vo
 			var value : String = getInformationProperty( "editoricon" );
 			
 			if ( value.substr( 0, 4 ) == "#Res" )
-				value = value.substring( 5, 36 );
+				value = value.substring( 5, 41 );
 			else
 				value = "";
 			
@@ -120,7 +120,7 @@ package net.vdombox.ide.common.vo
 			var value : String = getInformationProperty( "structureicon" );
 			
 			if ( value.substr( 0, 4 ) == "#Res" )
-				value = value.substring( 5, 36 );
+				value = value.substring( 5, 41 );
 			else
 				value = "";
 			

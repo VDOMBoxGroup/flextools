@@ -2,7 +2,6 @@ package net.vdombox.ide.common.vo
 {
 	import flash.utils.ByteArray;
 
-	[Bindable]
 	public class ResourceVO
 	{
 		public function ResourceVO( ownerID : String )
@@ -11,7 +10,6 @@ package net.vdombox.ide.common.vo
 		}
 
 		private var _ownerID : String;
-
 
 		private var _id : String;
 
@@ -41,7 +39,8 @@ package net.vdombox.ide.common.vo
 		{
 			return _useCount;
 		}
-
+		
+		[Bindable]
 		public function get name() : String
 		{
 			return _name;
@@ -57,11 +56,19 @@ package net.vdombox.ide.common.vo
 			return _type;
 		}
 
+		[Bindable]
 		public function get data() : ByteArray
 		{
 			return _data;
 		}
 
+		public function set data( value : ByteArray ) : void
+		{
+			var d : * = value;
+			
+			var tyoe : String = "asdasdasd";
+		}
+		
 		public function get size() : int
 		{
 			if ( !_data )
@@ -95,6 +102,7 @@ package net.vdombox.ide.common.vo
 		public function setData( value : ByteArray ) : void
 		{
 			_data = value;
+			data = value;
 		}
 
 		public function setPath( value : String ) : void
