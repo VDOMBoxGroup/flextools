@@ -1,7 +1,10 @@
 package net.vdombox.ide.common.vo
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.utils.ByteArray;
-
+	
+	[Bindable]
 	public class ResourceVO
 	{
 		public function ResourceVO( ownerID : String )
@@ -25,6 +28,8 @@ package net.vdombox.ide.common.vo
 
 		private var _status : String;
 
+		private var dispatcher : EventDispatcher = new EventDispatcher();
+		
 		public function get ownerID() : String
 		{
 			return _ownerID;
@@ -40,7 +45,6 @@ package net.vdombox.ide.common.vo
 			return _useCount;
 		}
 		
-		[Bindable]
 		public function get name() : String
 		{
 			return _name;
@@ -56,17 +60,15 @@ package net.vdombox.ide.common.vo
 			return _type;
 		}
 
-		[Bindable]
+		[Bindable(event="propertyDataChange")]
 		public function get data() : ByteArray
 		{
 			return _data;
 		}
-
+		
 		public function set data( value : ByteArray ) : void
 		{
-			var d : * = value;
-			
-			var tyoe : String = "asdasdasd";
+			trace( "zzzzzz" );
 		}
 		
 		public function get size() : int
@@ -102,7 +104,7 @@ package net.vdombox.ide.common.vo
 		public function setData( value : ByteArray ) : void
 		{
 			_data = value;
-			data = value;
+			dispatcher.dispatchEvent( new Event( "propertyDataChange" ) );
 		}
 
 		public function setPath( value : String ) : void
