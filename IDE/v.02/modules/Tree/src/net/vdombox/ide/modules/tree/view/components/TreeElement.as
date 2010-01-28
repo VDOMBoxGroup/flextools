@@ -148,7 +148,7 @@ package net.vdombox.ide.modules.tree.view.components
 
 		private var imgStart : Image;
 
-		private var imgType : Image;
+		public var imgType : Image;
 
 		private var imgheader : Image;
 

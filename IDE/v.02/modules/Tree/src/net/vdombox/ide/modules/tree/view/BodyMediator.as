@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.view.components.Body;
-	import net.vdombox.ide.modules.tree.view.components.TreeElement;
+	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -79,12 +79,12 @@ package net.vdombox.ide.modules.tree.view
 				{
 					structure = messageBody as Array;
 
-					var treeElement : TreeElement;
+					var treeElement : TreeElementz;
 					var pageVO : PageVO;
 
 					for each ( pageVO in pages )
 					{
-						treeElement = new TreeElement();
+						treeElement = new TreeElementz();
 						body.main.addElement( treeElement );
 						
 						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,

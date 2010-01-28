@@ -1,11 +1,14 @@
 package net.vdombox.ide.modules.tree.view
 {
+	import mx.binding.utils.BindingUtils;
+	import mx.binding.utils.ChangeWatcher;
+	
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.view.components.TreeElement;
+	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -40,9 +43,9 @@ package net.vdombox.ide.modules.tree.view
 			return _structureObjectVO;
 		}
 
-		public function get treeElement() : TreeElement
+		public function get treeElement() : TreeElementz
 		{
-			return viewComponent as TreeElement;
+			return viewComponent as TreeElementz;
 		}
 
 		override public function onRegister() : void
@@ -60,7 +63,6 @@ package net.vdombox.ide.modules.tree.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
-			interests.push( ApplicationFacade.RESOURCE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 
 			return interests;
 		}
@@ -78,20 +80,16 @@ package net.vdombox.ide.modules.tree.view
 					
 					var resourceVO : ResourceVO = new ResourceVO( _typeVO.id );
 					resourceVO.setID( _typeVO.iconID );
-						
+					
+					treeElement.typeIcon.source = resourceVO.data;
+					
 					sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
 
 					break;
 				}
-					
-				case ApplicationFacade.RESOURCE_GETTED + ApplicationFacade.DELIMITER + mediatorName:
-				{
-					
-					break;
-				}
 			}
 		}
-
+		
 		private function addEventListeners() : void
 		{
 		}

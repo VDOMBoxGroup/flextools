@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 
+		 height="125" width="200">
+
+	<fx:Script>
+		<![CDATA[
+			
+		]]>
+	</fx:Script>
+
+	<s:Rect height="100%" width="100%">
+
+		<s:fill>
+
+			<s:SolidColor color="gray" />
+		</s:fill>
+	</s:Rect>
+
+	<s:Group height="15" x="0">
+
+		<mx:Image source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='menu')" />
+
+		<s:Group x="5" y="1">
+
+			<s:layout>
+
+				<s:HorizontalLayout />
+			</s:layout>
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='plus')"
+					  width="10" />
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='line')"
+					  width="10" />
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='delete')"
+					  width="10" />
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='start_page')"
+					  width="10" />
+		</s:Group>
+	</s:Group>
+
+	<s:Group width="100%"
+			 top="15">
+
+		<mx:Image id="typeIcon"
+				  height="25" width="25" />
+
+		<s:Label id="pageTitle" />
+	</s:Group>
+
+	<s:Group width="100%"
+			 bottom="0">
+
+		<s:layout>
+
+			<s:HorizontalLayout />
+		</s:layout>
+
+		<mx:Image id="pageIcon"
+				  height="80" width="80" />
+
+		<s:Group height="100%" width="100%">
+
+			<s:layout>
+
+				<s:VerticalLayout />
+			</s:layout>
+
+			<s:TextArea id="descriptionTextArea"
+						height="47" width="100%" />
+
+			<s:Label id="typeNameLabel"
+					 width="100%" />
+		</s:Group>
+	</s:Group>
+</s:Group>
