@@ -7,6 +7,9 @@ package net.vdombox.ide.common.vo
 
 	public class TypeVO
 	{
+		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database",
+													  "debug" ];
+
 		public function TypeVO( typeXML : XML )
 		{
 			var languages : XMLList = typeXML.Languages.*;
@@ -14,7 +17,7 @@ package net.vdombox.ide.common.vo
 			var informationXML : XML = typeXML.Information[ 0 ];
 			var attributesXML : XML = typeXML.Attributes[ 0 ];
 
-			_typeName = "type_" + informationXML.Name[ 0 ].toString();
+			_typeID = informationXML.ID[ 0 ].toString();
 
 			extractResources( informationXML.*, languages );
 			extractResources( attributesXML.Attribute.*, languages );
@@ -32,24 +35,21 @@ package net.vdombox.ide.common.vo
 
 			for each ( var attribute : XML in attributesXML.* )
 			{
-				_attributes.push( new TypeAttributeVO( _typeName, attribute ) );
+				_attributeDescriptions.push( new AttributeDescriptionVO( _typeID, attribute ) );
 			}
 
 			resourceManager.update();
 		}
 
-		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database",
-													  "debug" ];
-
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
 		private var propertyRE : RegExp = /#Lang\((\w+)\)/;
 
-		private var _typeName : String;
+		private var _typeID : String;
 
 		private var _information : TypeInformationVO;
 
-		private var _attributes : Array = [];
+		private var _attributeDescriptions : Array = [];
 
 		private var informationPropertyObject : Object = {};
 
@@ -58,9 +58,9 @@ package net.vdombox.ide.common.vo
 			return _information;
 		}
 
-		public function get attributes() : Array
+		public function get attributeDescriptions() : Array
 		{
-			return _attributes.slice();
+			return _attributeDescriptions.slice();
 		}
 
 		public function get id() : String
@@ -89,8 +89,8 @@ package net.vdombox.ide.common.vo
 		}
 
 		/* this three properties are implementation of "iconID state" values.
-		MD5 values return empty string*/
-		
+		 MD5 values return empty string*/
+
 		public function get iconID() : String
 		{
 			var value : String = getInformationProperty( "icon" );
@@ -106,57 +106,57 @@ package net.vdombox.ide.common.vo
 		public function get editorIconID() : String
 		{
 			var value : String = getInformationProperty( "editoricon" );
-			
+
 			if ( value.substr( 0, 4 ) == "#Res" )
 				value = value.substring( 5, 41 );
 			else
 				value = "";
-			
+
 			return value;
 		}
-		
+
 		public function get structureIconID() : String
 		{
 			var value : String = getInformationProperty( "structureicon" );
-			
+
 			if ( value.substr( 0, 4 ) == "#Res" )
 				value = value.substring( 5, 41 );
 			else
 				value = "";
-			
+
 			return value;
 		}
 
 		public function get icon() : String
 		{
 			var value : String = getInformationProperty( "icon" );
-			
+
 			if ( value.substr( 0, 4 ) == "#Res" )
 				value = "";
-			
+
 			return value;
 		}
-		
+
 		public function get editorIcon() : String
 		{
 			var value : String = getInformationProperty( "editoricon" );
-			
+
 			if ( value.substr( 0, 4 ) == "#Res" )
 				value = "";
-			
+
 			return value;
 		}
-		
+
 		public function get structureIcon() : String
 		{
 			var value : String = getInformationProperty( "structureicon" );
-			
+
 			if ( value.substr( 0, 4 ) == "#Res" )
 				value = "";
-			
+
 			return value;
 		}
-		
+
 		public function get moveable() : String
 		{
 			return getInformationProperty( "moveable" );
@@ -219,7 +219,7 @@ package net.vdombox.ide.common.vo
 			var matchResult : Array = informationPropertyObject[ valueName ].match( propertyRE );
 
 			if ( matchResult )
-				value = resourceManager.getString( _typeName, matchResult[ 1 ] );
+				value = resourceManager.getString( _typeID, matchResult[ 1 ] );
 			else
 				value = informationPropertyObject[ valueName ];
 
@@ -263,10 +263,10 @@ package net.vdombox.ide.common.vo
 			for ( var locale : String in prepareForResourceBundles )
 			{
 				var resourceName : String;
-				var resourceBundle : IResourceBundle = resourceManager.getResourceBundle( locale, _typeName );
+				var resourceBundle : IResourceBundle = resourceManager.getResourceBundle( locale, _typeID );
 
 				if ( !resourceBundle )
-					resourceBundle = new ResourceBundle( locale, _typeName );
+					resourceBundle = new ResourceBundle( locale, _typeID );
 
 				for ( resourceName in prepareForResourceBundles[ locale ] )
 				{
