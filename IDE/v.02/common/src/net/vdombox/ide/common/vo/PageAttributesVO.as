@@ -16,6 +16,11 @@ package net.vdombox.ide.common.vo
 
 		private var _objectsList : Array;
 
+		public function get pageID() : String
+		{
+			return _pageID;
+		}
+		
 		public function get attributes() : Array
 		{
 			return _attributes;
