@@ -20,15 +20,22 @@ package net.vdombox.ide.core.model
 
 		private var soap : SOAP = SOAP.getInstance();
 
-		private var _types : Array = [];
+		private var _types : Array;
+		private var _topLevelTypes : Array;
 
 		override public function onRegister() : void
 		{
+			_types = [];
+			_topLevelTypes = [];
+			
 			addEventListeners();
 		}
 
 		override public function onRemove() : void
 		{
+			_types = null;
+			_topLevelTypes = null;
+			
 			removeEventListeners();
 		}
 
@@ -37,6 +44,11 @@ package net.vdombox.ide.core.model
 			return _types.slice();
 		}
 
+		public function get topLevelTypes() : Array
+		{
+			return _topLevelTypes.slice();
+		}
+		
 		public function get numTypes() : uint
 		{
 			return _types.length;
@@ -76,11 +88,14 @@ package net.vdombox.ide.core.model
 		private function soap_getAllTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
 		{
 			var typesXML : XML = event.result.Types[ 0 ];
-
+			
 			for each ( var type : XML in typesXML.* )
 			{
 				var typeVO : TypeVO = new TypeVO( type );
 				_types.push( typeVO );
+				
+				if( typeVO.container == 3 )
+					_topLevelTypes.push( typeVO );
 			}
 
 			sendNotification( ApplicationFacade.TYPES_LOADED, types );

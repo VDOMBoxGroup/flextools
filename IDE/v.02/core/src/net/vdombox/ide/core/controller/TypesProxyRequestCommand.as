@@ -35,6 +35,17 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 					
+				case PPMTypesTargetNames.TOP_LEVEL_TYPES:
+				{
+					var types : Array = typesProxy.topLevelTypes;
+					
+					message.setBody( types );
+					
+					sendNotification( ApplicationFacade.TYPES_PROXY_RESPONSE, message );
+					
+					break;
+				}
+					
 				case PPMTypesTargetNames.TYPE:
 				{
 					var type : TypeVO = typesProxy.getType( body.toString() );
