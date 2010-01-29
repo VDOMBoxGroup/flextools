@@ -5,9 +5,53 @@
 		 xmlns:components="net.vdombox.ide.modules.tree.view.components.*"
 		 
 		 height="100%" width="100%">
-
 	<!--<components:TreeEditor height="5" width="5" />-->
 
-	<s:Group id="main"
-			   height="100%" width="100%" />
+	<s:layout>
+
+		<s:HorizontalLayout />
+	</s:layout>
+
+	<s:Scroller height="100%" width="100%">
+
+		<s:Group id="main" />
+	</s:Scroller>
+
+	<s:Group height="100%">
+
+		<s:layout>
+
+			<s:VerticalLayout />
+		</s:layout>
+
+		<s:Panel id="menuPanel"
+				 width="100%">
+
+			<s:layout>
+
+				<s:VerticalLayout />
+			</s:layout>
+
+			<s:Button label="Button" width="100%" />
+
+			<s:Button label="Button" width="100%" />
+
+			<s:Button label="Button" width="100%" />
+
+			<s:Button label="Button" width="100%" />
+
+			<s:Button label="Button" width="100%" />
+
+			<s:Button label="Button" width="100%" />
+		</s:Panel>
+
+		<components:Properties id="propertiesPanel"
+								width="100%" />
+
+		<s:Panel id="levelsPanel"
+				 width="100%">
+
+			<components:ColorMenu height="100%" width="100%" />
+		</s:Panel>
+	</s:Group>
 </s:Group>

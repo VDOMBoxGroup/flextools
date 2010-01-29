@@ -28,6 +28,8 @@ package net.vdombox.ide.modules.tree.view
 
 		public var structure : Array;
 
+		public var selectedPage : PageVO;
+
 		public function get body() : Body
 		{
 			return viewComponent as Body;
@@ -38,6 +40,11 @@ package net.vdombox.ide.modules.tree.view
 			addEventListeners();
 		}
 
+		override public function onRemove() : void
+		{
+			removeEventListeners();
+		}
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -46,6 +53,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_GETTED );
+			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 
 			return interests;
 		}
@@ -86,12 +94,37 @@ package net.vdombox.ide.modules.tree.view
 					{
 						treeElement = new TreeElementz();
 						body.main.addElement( treeElement );
-						
+
 						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
 											  pageVO: pageVO, structureObjectVO: getStructureObject( pageVO ) } );
 					}
 
 					sendNotification( ApplicationFacade.GET_SELECTED_PAGE, selectedApplication );
+
+					break;
+				}
+
+				case ApplicationFacade.SELECTED_PAGE_GETTED:
+				{
+					var newSelectedPage : PageVO = messageBody as PageVO;
+
+					if ( !newSelectedPage )
+						newSelectedPage = getPageVOByID( selectedApplication.indexPageID );
+
+					if ( newSelectedPage != selectedPage )
+					{
+						selectedPage = newSelectedPage;
+
+						sendNotification( ApplicationFacade.GET_TYPE, { typeID: selectedPage.typeID,
+											  recipientID: mediatorName } );
+					}
+
+					break;
+				}
+
+				case ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName:
+				{
+					sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, { pageVO : selectedPage, typeVO : messageBody } );
 
 					break;
 				}
@@ -101,6 +134,11 @@ package net.vdombox.ide.modules.tree.view
 		private function addEventListeners() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+		}
+
+		private function removeEventListeners() : void
+		{
+			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
 		private function getStructureObject( pageVO : PageVO ) : StructureObjectVO
@@ -119,8 +157,25 @@ package net.vdombox.ide.modules.tree.view
 			return result;
 		}
 
+		private function getPageVOByID( pageID : String ) : PageVO
+		{
+			var result : PageVO;
+
+			for each ( var pageVO : PageVO in pages )
+			{
+				if ( pageVO.id == pageID )
+				{
+					result = pageVO;
+					break;
+				}
+			}
+
+			return result;
+		}
+
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
+			sendNotification( ApplicationFacade.BODY_CREATED, body );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}
 	}

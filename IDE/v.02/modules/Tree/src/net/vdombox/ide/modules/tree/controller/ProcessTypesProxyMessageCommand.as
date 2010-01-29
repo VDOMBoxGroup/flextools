@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.tree.controller
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -30,18 +30,22 @@ package net.vdombox.ide.modules.tree.controller
 				{
 					var typeVO : TypeVO = body as TypeVO;
 
-					var recipients : Array = sessionProxy.getObject( place +
+					var allTypeRecipients : Object = sessionProxy.getObject( place +
 						ApplicationFacade.DELIMITER + operation + ApplicationFacade.DELIMITER +
-						target )[ typeVO.id ];
+						target );
+					
+					var typeRecipient : Array = allTypeRecipients[ typeVO.id ];
 
 					var recipientID : String;
 
-					for each ( recipientID in recipients )
+					for each ( recipientID in typeRecipient )
 					{
 						sendNotification( ApplicationFacade.TYPE_GETTED +
 							ApplicationFacade.DELIMITER + recipientID, typeVO );
 					}
 
+					delete allTypeRecipients[ typeVO.id ];
+					
 					break;
 				}
 			}

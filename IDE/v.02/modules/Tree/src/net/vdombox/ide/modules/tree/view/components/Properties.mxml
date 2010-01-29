@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 
+		 title="{ resourceManager.getString( 'Tree_General', 'properties_panel_title' ) }">
+
+	<fx:Script>
+		<![CDATA[
+			public function set pageTitle( value : String ) : void
+			{
+				pageTitleInput.text = value;
+			}
+
+			public function set pageDescription( value : String ) : void
+			{
+				pageDescriptionInput.text = value;
+			}
+
+			public function set pageImage( value : String ) : void
+			{
+				pageImageInput.text = value;
+			}
+		]]>
+	</fx:Script>
+
+	<s:layout>
+
+		<s:VerticalLayout />
+	</s:layout>
+
+	<s:Label id="typeName"
+			 height="15" text="TypeName" width="100%"
+			 backgroundColor="#8D8D8D" color="#FFFFFF" horizontalCenter="0"
+			 textAlign="center" verticalAlign="middle" />
+
+	<mx:Grid width="100%"
+			 horizontalGap="0" verticalGap="0">
+
+		<mx:GridRow width="100%">
+
+			<mx:GridItem backgroundColor="gray" verticalAlign="middle">
+
+				<s:Label 
+						 text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_title' ) }"
+						 verticalAlign="middle" />
+			</mx:GridItem>
+
+			<mx:GridItem width="100%">
+
+				<s:TextInput id="pageTitleInput"
+							 width="100%" />
+			</mx:GridItem>
+		</mx:GridRow>
+
+		<mx:GridRow width="100%">
+
+			<mx:GridItem backgroundColor="gray" verticalAlign="middle">
+
+				<s:Label 
+						 text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_description' ) }"
+						 verticalAlign="middle" />
+			</mx:GridItem>
+
+			<mx:GridItem width="100%">
+
+				<s:TextInput id="pageDescriptionInput"
+							 width="100%" />
+			</mx:GridItem>
+		</mx:GridRow>
+
+		<mx:GridRow width="100%">
+
+			<mx:GridItem backgroundColor="gray" verticalAlign="middle">
+
+				<s:Label 
+						 text="{ resourceManager.getString( 'Tree_General', 'properties_panel_page_image' ) }"
+						 verticalAlign="middle" />
+			</mx:GridItem>
+
+			<mx:GridItem width="100%">
+
+				<s:TextInput id="pageImageInput"
+							 width="100%" />
+			</mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+
+	<s:controlBarContent>
+
+		<s:Button />
+
+		<s:Button />
+
+		<s:Button />
+	</s:controlBarContent>
+</s:Panel>

@@ -44,7 +44,7 @@ package net.vdombox.ide.modules.tree.view.components
 		[Bindable]
 		public var backGround : Class;
 
-		[Embed( source="assets/treeEditor/treeEditor.swf", symbol="bt_start_page" )]
+		[Embed( source="assets/treeEditor/treeEditor.swf", symbol="start_page" )]
 		[Bindable]
 		public var bt_start_page : Class;
 

@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
+	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
@@ -70,6 +71,8 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.GET_TYPE );
 
 			interests.push( ApplicationFacade.GET_RESOURCE );
+			
+			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
 
 			return interests;
 		}
@@ -216,6 +219,15 @@ package net.vdombox.ide.modules.tree.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.GET_PAGE_ATTRIBUTES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 			}
@@ -373,6 +385,12 @@ package net.vdombox.ide.modules.tree.view
 				case PPMPlaceNames.APPLICATION:
 				{
 					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					break;
+				}
+					
+				case PPMPlaceNames.PAGE:
+				{
+					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
 					break;
 				}
 			}

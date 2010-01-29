@@ -1,12 +1,14 @@
 package net.vdombox.ide.modules.tree
 {
 	import net.vdombox.ide.modules.Tree;
+	import net.vdombox.ide.modules.tree.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessApplicationProxyMessageCommand;
+	import net.vdombox.ide.modules.tree.controller.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessResourcesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessStatesProxyMessageCommand;
@@ -58,10 +60,12 @@ package net.vdombox.ide.modules.tree
 		
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
-		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
-		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
+		public static const PROCESS_RESOURCES_PROXY_MESSAGE : String = "processResourcesProxyMessage";
+		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
+		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
+		
 		
 //		types
 		public static const GET_TYPE : String = "getType";
@@ -74,6 +78,8 @@ package net.vdombox.ide.modules.tree
 		public static const GET_SELECTED_PAGE : String = "getSelectedPage";
 		public static const SELECTED_PAGE_GETTED : String = "selectedPageGetted";
 		
+		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
+		
 //		application
 		public static const GET_APPLICATION_STRUCTURE : String = "getApplicationStructure";
 		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
@@ -81,6 +87,10 @@ package net.vdombox.ide.modules.tree
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED : String = "pagesGetted";
 
+//		pages
+		public static const GET_PAGE_ATTRIBUTES : String = "getPageAttributes";
+		public static const PAGE_ATTRIBUTES_GETTED : String = "pageAttributesGetted";
+		
 //		resources
 		public static const GET_RESOURCE : String = "getResource";
 		public static const RESOURCE_GETTED : String = "resourceGetted";
@@ -89,6 +99,7 @@ package net.vdombox.ide.modules.tree
 		public static const DELIMITER : String = "/";
 		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
+		public static const BODY_CREATED : String = "bodyCreated";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -124,10 +135,12 @@ package net.vdombox.ide.modules.tree
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
+			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
 			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 			
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
+			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
