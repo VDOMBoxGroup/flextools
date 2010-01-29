@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo">
+
+	<s:layout>
+
+		<s:VerticalLayout />
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.tree.events.MenuPanelEvent;
+		]]>
+	</fx:Script>
+
+	<s:Button label="New Page" width="100%"
+			  click="dispatchEvent( new MenuPanelEvent( MenuPanelEvent.CREATE_PAGE ) )" />
+
+	<s:Button label="Auto Spacing" width="100%"
+			  click="dispatchEvent( new MenuPanelEvent( MenuPanelEvent.AUTO_SPACING ) )" />
+
+	<s:Button label="Expand All" width="100%"
+			  click="dispatchEvent( new MenuPanelEvent( MenuPanelEvent.EXPAND_ALL ) )" />
+
+	<s:Button label="Show Signature" width="100%"
+			  click="dispatchEvent( new MenuPanelEvent( MenuPanelEvent.SHOW_SIGNATURE ) )" />
+
+	<s:Button label="Undo" width="100%"
+			  click="dispatchEvent( new MenuPanelEvent( MenuPanelEvent.UNDO ) )" />
+
+	<s:Button label="Save" width="100%"
+			  click="dispatchEvent( new MenuPanelEvent( MenuPanelEvent.SAVE ) )" />
+</s:Panel>

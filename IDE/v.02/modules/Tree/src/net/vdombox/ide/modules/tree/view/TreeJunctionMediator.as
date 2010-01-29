@@ -69,6 +69,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.GET_PAGES );
 
 			interests.push( ApplicationFacade.GET_TYPE );
+			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
 
 			interests.push( ApplicationFacade.GET_RESOURCE );
 			
@@ -210,6 +211,15 @@ package net.vdombox.ide.modules.tree.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.GET_TOP_LEVEL_TYPES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 

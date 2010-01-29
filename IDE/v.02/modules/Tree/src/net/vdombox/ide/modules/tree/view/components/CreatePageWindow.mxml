@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/halo"
+				
+				horizontalAlign="center"
+				showCloseButton="true" title="Create Page">
+
+	<s:Label text="Select page type" />
+
+	<s:List height="100%" width="100%" />
+
+	<mx:ControlBar horizontalAlign="right">
+
+		<s:Button label="Create" />
+
+		<s:Button label="Cancel" />
+	</mx:ControlBar>
+</mx:TitleWindow>

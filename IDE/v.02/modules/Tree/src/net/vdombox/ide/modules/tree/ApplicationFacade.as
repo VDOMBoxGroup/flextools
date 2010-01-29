@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.Tree;
 	import net.vdombox.ide.modules.tree.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.tree.controller.CreatePageWindowCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
@@ -66,10 +67,12 @@ package net.vdombox.ide.modules.tree
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		
-		
 //		types
 		public static const GET_TYPE : String = "getType";
 		public static const TYPE_GETTED : String = "typeGetted";
+		
+		public static const GET_TOP_LEVEL_TYPES : String = "getTopLevelTypes";
+		public static const TOP_LEVEL_TYPES_GETTED : String = "topLevelTypesGetted";
 		
 //		states
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
@@ -86,6 +89,9 @@ package net.vdombox.ide.modules.tree
 		
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED : String = "pagesGetted";
+		
+		public static const CREATE_PAGE : String = "createPags";
+		public static const PAGE_CREATED : String = "pageCreated";
 
 //		pages
 		public static const GET_PAGE_ATTRIBUTES : String = "getPageAttributes";
@@ -96,15 +102,19 @@ package net.vdombox.ide.modules.tree
 		public static const RESOURCE_GETTED : String = "resourceGetted";
 		
 //		other
+		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
+		
 		public static const DELIMITER : String = "/";
 		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
 		public static const BODY_CREATED : String = "bodyCreated";
+		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )
 				instanceMap[ key ] = new ApplicationFacade( key );
+			
 			return instanceMap[ key ] as ApplicationFacade;
 		}
 
@@ -141,6 +151,7 @@ package net.vdombox.ide.modules.tree
 			
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
+			registerCommand( CREATE_PAGE_WINDOW_CREATED, CreatePageWindowCreatedCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

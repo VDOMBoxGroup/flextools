@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.tree.controller
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -13,8 +13,7 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as
-				SessionProxy;
+			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 
@@ -30,22 +29,27 @@ package net.vdombox.ide.modules.tree.controller
 				{
 					var typeVO : TypeVO = body as TypeVO;
 
-					var allTypeRecipients : Object = sessionProxy.getObject( place +
-						ApplicationFacade.DELIMITER + operation + ApplicationFacade.DELIMITER +
-						target );
-					
+					var allTypeRecipients : Object = sessionProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
+						ApplicationFacade.DELIMITER + target );
+
 					var typeRecipient : Array = allTypeRecipients[ typeVO.id ];
 
 					var recipientID : String;
 
 					for each ( recipientID in typeRecipient )
 					{
-						sendNotification( ApplicationFacade.TYPE_GETTED +
-							ApplicationFacade.DELIMITER + recipientID, typeVO );
+						sendNotification( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + recipientID, typeVO );
 					}
 
 					delete allTypeRecipients[ typeVO.id ];
-					
+
+					break;
+				}
+
+				case PPMTypesTargetNames.TOP_LEVEL_TYPES:
+				{
+					sendNotification( ApplicationFacade.TOP_LEVEL_TYPES_GETTED, body );
+
 					break;
 				}
 			}

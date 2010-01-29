@@ -1,14 +1,16 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-
+	import mx.managers.PopUpManager;
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.view.components.Body;
+	import net.vdombox.ide.modules.tree.view.components.CreatePageWindow;
 	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -54,6 +56,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_GETTED );
 			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
+			interests.push( ApplicationFacade.CREATE_PAGE_REQUEST );
 
 			return interests;
 		}
@@ -126,6 +129,17 @@ package net.vdombox.ide.modules.tree.view
 				{
 					sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, { pageVO : selectedPage, typeVO : messageBody } );
 
+					break;
+				}
+					
+				case ApplicationFacade.CREATE_PAGE_REQUEST:
+				{
+					var createPageWindow : CreatePageWindow = new CreatePageWindow();
+					
+					sendNotification( ApplicationFacade.CREATE_PAGE_WINDOW_CREATED, createPageWindow );
+					
+					PopUpManager.addPopUp( createPageWindow, body );
+					
 					break;
 				}
 			}

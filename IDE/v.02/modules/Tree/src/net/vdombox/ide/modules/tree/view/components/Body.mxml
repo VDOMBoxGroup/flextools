@@ -24,29 +24,11 @@
 			<s:VerticalLayout />
 		</s:layout>
 
-		<s:Panel id="menuPanel"
-				 width="100%">
-
-			<s:layout>
-
-				<s:VerticalLayout />
-			</s:layout>
-
-			<s:Button label="Button" width="100%" />
-
-			<s:Button label="Button" width="100%" />
-
-			<s:Button label="Button" width="100%" />
-
-			<s:Button label="Button" width="100%" />
-
-			<s:Button label="Button" width="100%" />
-
-			<s:Button label="Button" width="100%" />
-		</s:Panel>
+		<components:MenuPanel id="menuPanel"
+							  width="100%" />
 
 		<components:Properties id="propertiesPanel"
-								width="100%" />
+							   width="100%" />
 
 		<s:Panel id="levelsPanel"
 				 width="100%">
