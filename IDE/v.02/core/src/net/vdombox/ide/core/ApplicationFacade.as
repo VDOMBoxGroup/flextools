@@ -200,6 +200,7 @@ package net.vdombox.ide.core
 			
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_ATTRIBUTES_GETTED, PageProxyResponseCommand );
 			registerCommand( OBJECTS_GETTED, PageProxyResponseCommand );
 			registerCommand( OBJECT_GETTED, PageProxyResponseCommand );
 			
