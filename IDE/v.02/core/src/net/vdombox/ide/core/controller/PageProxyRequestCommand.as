@@ -56,6 +56,13 @@ package net.vdombox.ide.core.controller
 
 					break;
 				}
+					
+				case PPMPageTargetNames.ATTRIBUTES:
+				{
+					pageProxy.getAttributes();
+					
+					break;
+				}
 			}
 		}
 	}

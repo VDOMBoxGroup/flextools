@@ -2,21 +2,29 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
-	import net.vdombox.ide.core.interfaces.IObjectProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
 	public class PageProxy extends Proxy
 	{
 		public static const NAME : String = "PageProxy";
+
+		private static const GET_ATTRIBUTES : String = "getAttributes";
+
+		private static const GET_OBJECT : String = "getObject";
+
+		private static const GET_OBJECTS : String = "getObjects";
+
+		private static const GET_STRUCTURE : String = "getStructure";
 
 		public function PageProxy( pageVO : PageVO )
 		{
@@ -37,20 +45,20 @@ package net.vdombox.ide.core.model
 			return null;
 		}
 
-		public function get structure() : XML
-		{
-			return null;
-		}
+//		public function get structure() : XML
+//		{
+//			return null;
+//		}
 
-		public function get selectedObject() : ObjectVO
-		{
-			return null;
-		}
+//		public function get selectedObject() : ObjectVO
+//		{
+//			return null;
+//		}
 
-		public function get selectedObjectID() : String
-		{
-			return null;
-		}
+//		public function get selectedObjectID() : String
+//		{
+//			return null;
+//		}
 
 		override public function onRegister() : void
 		{
@@ -61,9 +69,22 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
+//			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			token = soap.get_child_objects_tree( pageVO.applicationID, pageVO.id );
-			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			token.recepientName = proxyName;
+			token.requestFunctionName = GET_STRUCTURE;
+
+			return token;
+		}
+
+		public function getAttributes() : AsyncToken
+		{
+			var token : AsyncToken;
+
+//			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			token = soap.get_one_object( pageVO.applicationID, pageVO.id );
+			token.recepientName = proxyName;
+			token.requestFunctionName = GET_ATTRIBUTES;
 
 			return token;
 		}
@@ -74,6 +95,7 @@ package net.vdombox.ide.core.model
 			token = soap.get_child_objects( pageVO.applicationID, pageVO.id );
 
 			token.recepientName = proxyName;
+			token.requestFunctionName = GET_OBJECTS;
 
 			return token;
 		}
@@ -97,6 +119,7 @@ package net.vdombox.ide.core.model
 			token = soap.get_one_object( pageVO.applicationID, objectID );
 
 			token.recepientName = proxyName;
+			token.requestFunctionName = GET_OBJECT;
 
 			return token;
 		}
@@ -255,14 +278,25 @@ package net.vdombox.ide.core.model
 
 				case "get_one_object":
 				{
-//					createObjectesList( result.Objects[ 0 ] );
-					var objectXML : XML = result.Objects.Object[ 0 ];
-					var objectVO : ObjectVO = new ObjectVO( objectXML.@ID, pageVO.applicationID, pageVO.id,
-															objectXML.@Type );
-					objectVO.setXMLDescription( objectXML );
+					if ( token.requestFunctionName == GET_OBJECT )
+					{
+						var objectXML : XML = result.Objects.Object[ 0 ];
+						var objectVO : ObjectVO = new ObjectVO( objectXML.@ID, pageVO.applicationID,
+																pageVO.id, objectXML.@Type );
+						
+						objectVO.setXMLDescription( objectXML );
 
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_GETTED, objectVO );
-					notification.token = token;
+						notification = new ProxyNotification( ApplicationFacade.OBJECT_GETTED, objectVO );
+						notification.token = token;
+					}
+					else if ( token.requestFunctionName == GET_ATTRIBUTES )
+					{
+						var pageAttributesVO : PageAttributesVO = new PageAttributesVO( pageVO.id );
+						pageAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
+						
+						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
+						notification.token = token;
+					}
 
 					break;
 				}
