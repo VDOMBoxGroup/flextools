@@ -204,9 +204,9 @@ package net.vdombox.ide.common.vo
 			return getInformationProperty( "containers" );
 		}
 
-		public function get container() : String
+		public function get container() : int
 		{
-			return getInformationProperty( "container" );
+			return int( getInformationProperty( "container" ) );
 		}
 
 		private function getInformationProperty( valueName : String ) : String
