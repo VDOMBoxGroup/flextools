@@ -2,7 +2,8 @@ package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.PageAttributesVO;
+	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -17,19 +18,17 @@ package net.vdombox.ide.modules.tree.controller
 			var target : String = message.getTarget();
 			var operation : String = message.getOperation();
 			
-			var pageVO : PageVO;
-			
-			if ( body is PageVO )
-				pageVO = body as PageVO;
-			else if ( body.hasOwnProperty( "pageVO" ))
-				pageVO = body.pageVO as PageVO;
-			else
-				throw new Error( "no pageVO" );
-			
 			switch ( target )
 			{
 				case PPMPageTargetNames.ATTRIBUTES :
 				{
+
+					var pageAttributesVO : PageAttributesVO = body as PageAttributesVO;
+					
+					if( pageAttributesVO )
+					{
+						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO.attributes );
+					}
 					
 					break;
 				}

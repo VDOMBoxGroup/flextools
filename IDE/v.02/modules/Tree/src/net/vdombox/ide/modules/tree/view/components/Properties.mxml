@@ -7,6 +7,11 @@
 
 	<fx:Script>
 		<![CDATA[
+			public function set typeName( value : String ) : void
+			{
+				typeNameLabel.text = value;
+			}
+
 			public function set pageTitle( value : String ) : void
 			{
 				pageTitleInput.text = value;
@@ -29,7 +34,7 @@
 		<s:VerticalLayout />
 	</s:layout>
 
-	<s:Label id="typeName"
+	<s:Label id="typeNameLabel"
 			 height="15" text="TypeName" width="100%"
 			 backgroundColor="#8D8D8D" color="#FFFFFF" horizontalCenter="0"
 			 textAlign="center" verticalAlign="middle" />
@@ -88,10 +93,10 @@
 
 	<s:controlBarContent>
 
-		<s:Button />
+		<s:Button label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }" />
 
-		<s:Button />
+		<s:Button label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }" />
 
-		<s:Button />
+		<s:Button label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_delete' ) }" />
 	</s:controlBarContent>
 </s:Panel>
