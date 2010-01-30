@@ -38,18 +38,18 @@ package net.vdombox.ide.modules.applicationsManagment.controller
 				{
 					if ( operation == PPMOperationNames.READ )
 					{
-						var recepientsArray : Array;
-						var recepients : Object = sessionProxy.getObject( PPMPlaceNames.RESOURCES );
+						var recipientsArray : Array;
+						var recipients : Object = sessionProxy.getObject( PPMPlaceNames.RESOURCES );
 
 						resourceVO = message.getBody() as ResourceVO;
 
-						if ( recepients.hasOwnProperty( resourceVO.id ) )
+						if ( recipients.hasOwnProperty( resourceVO.id ) )
 						{
-							recepientsArray = recepients[ resourceVO.id ];
+							recipientsArray = recipients[ resourceVO.id ];
 
-							for ( var i : int = 0; i < recepientsArray.length; i++ )
+							for ( var i : int = 0; i < recipientsArray.length; i++ )
 							{
-								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recepientsArray[ i ],
+								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recipientsArray[ i ],
 												  resourceVO );
 							}
 						}
