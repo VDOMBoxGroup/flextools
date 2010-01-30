@@ -41,11 +41,11 @@ package net.vdombox.ide.modules.tree.view
 
 		private var sessionProxy : SessionProxy;
 
-		private var recepients : Dictionary;
+		private var recipients : Dictionary;
 
 		override public function onRegister() : void
 		{
-			recepients = new Dictionary( true );
+			recipients = new Dictionary( true );
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 		}
 
@@ -74,6 +74,8 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.GET_RESOURCE );
 			
 			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
+			
+			interests.push( ApplicationFacade.OPEN_WINDOW );
 
 			return interests;
 		}
@@ -153,6 +155,15 @@ package net.vdombox.ide.modules.tree.view
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.OPEN_WINDOW:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
+					
+					junction.sendMessage( PipeNames.STDCORE, message );
+					
 					break;
 				}
 
@@ -249,13 +260,13 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var simpleMessage : SimpleMessage = message as SimpleMessage;
 
-			var recepientKey : String = simpleMessage.getRecepientKey();
+			var recipientKey : String = simpleMessage.getRecipientKey();
 
 			switch ( simpleMessage.getHeader() )
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if ( recepientKey == multitonKey )
+					if ( recipientKey == multitonKey )
 					{
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
@@ -272,7 +283,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
-					if ( recepientKey != multitonKey )
+					if ( recipientKey != multitonKey )
 						return;
 
 					junction.sendMessage( PipeNames.STDLOG,
@@ -284,7 +295,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					if ( recepientKey != multitonKey )
+					if ( recipientKey != multitonKey )
 						return;
 
 					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );

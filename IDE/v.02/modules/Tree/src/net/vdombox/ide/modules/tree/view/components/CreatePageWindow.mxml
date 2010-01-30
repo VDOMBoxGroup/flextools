@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
-				xmlns:s="library://ns.adobe.com/flex/spark"
-				xmlns:mx="library://ns.adobe.com/flex/halo"
-				
-				horizontalAlign="center"
-				showCloseButton="true" title="Create Page">
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:mx="library://ns.adobe.com/flex/halo"
+		  
+		  height="100%" width="100%"
+		  horizontalAlign="center">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.tree.events.CreatePageWindowEvent;
+		]]>
+	</fx:Script>
 
 	<s:Label text="Select page type" />
 
 	<s:List height="100%" width="100%" />
 
-	<mx:ControlBar horizontalAlign="right">
+	<s:HGroup width="100%">
 
-		<s:Button label="Create" />
+		<mx:Spacer width="100%" />
 
-		<s:Button label="Cancel" />
-	</mx:ControlBar>
-</mx:TitleWindow>
+		<s:Button label="Create"
+				  click="dispatchEvent( new CreatePageWindowEvent( CreatePageWindowEvent.PERFORM_CREATE ) )" />
+
+		<s:Button label="Cancel"
+				  click="dispatchEvent( new CreatePageWindowEvent( CreatePageWindowEvent.PERFORM_CANCEL ) )" />
+	</s:HGroup>
+</s:VGroup>

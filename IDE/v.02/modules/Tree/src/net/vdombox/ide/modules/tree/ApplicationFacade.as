@@ -110,6 +110,8 @@ package net.vdombox.ide.modules.tree
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 		
+		public static const OPEN_WINDOW : String = "openWidow";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

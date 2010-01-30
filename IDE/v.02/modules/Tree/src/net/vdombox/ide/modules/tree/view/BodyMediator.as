@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
 	import mx.managers.PopUpManager;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.CreatePageWindow;
 	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -98,8 +98,8 @@ package net.vdombox.ide.modules.tree.view
 						treeElement = new TreeElementz();
 						body.main.addElement( treeElement );
 
-						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
-											  pageVO: pageVO, structureObjectVO: getStructureObject( pageVO ) } );
+						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED,
+										  { viewComponent: treeElement, pageVO: pageVO, structureObjectVO: getStructureObject( pageVO ) } );
 					}
 
 					sendNotification( ApplicationFacade.GET_SELECTED_PAGE, selectedApplication );
@@ -118,8 +118,7 @@ package net.vdombox.ide.modules.tree.view
 					{
 						selectedPage = newSelectedPage;
 
-						sendNotification( ApplicationFacade.GET_TYPE, { typeID: selectedPage.typeID,
-											  recipientID: mediatorName } );
+						sendNotification( ApplicationFacade.GET_TYPE, { typeID: selectedPage.typeID, recipientID: mediatorName } );
 					}
 
 					break;
@@ -127,19 +126,18 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
-					sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, { pageVO : selectedPage, typeVO : messageBody } );
+					sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, { pageVO: selectedPage, typeVO: messageBody } );
 
 					break;
 				}
-					
+
 				case ApplicationFacade.CREATE_PAGE_REQUEST:
 				{
 					var createPageWindow : CreatePageWindow = new CreatePageWindow();
-					
+
+					sendNotification( ApplicationFacade.OPEN_WINDOW, { content: createPageWindow, title: "Create Page", isModal: true } );
 					sendNotification( ApplicationFacade.CREATE_PAGE_WINDOW_CREATED, createPageWindow );
-					
-					PopUpManager.addPopUp( createPageWindow, body );
-					
+
 					break;
 				}
 			}
