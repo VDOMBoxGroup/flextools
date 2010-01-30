@@ -1,15 +1,15 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.utils.Dictionary;
-
+	
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.PPMServerTargetNames;
+	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.SimpleMessage;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -36,11 +36,11 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			super( NAME, new Junction() );
 		}
 
-		private var recepients : Dictionary;
+		private var recipients : Dictionary;
 
 		override public function onRegister() : void
 		{
-			recepients = new Dictionary( true );
+			recipients = new Dictionary( true );
 		}
 
 		override public function listNotificationInterests() : Array
@@ -150,7 +150,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.SELECTED_APPLICATION,
+					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION,
 													  body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -170,7 +170,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
-					var recepientKey : String;
+					var recipientKey : String;
 					var resourceVO : ResourceVO;
 
 					if ( body is ResourceVO )
@@ -179,13 +179,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 					else
 					{
-						recepientKey = body.recepientKey;
+						recipientKey = body.recipientKey;
 						resourceVO = body.resourceVO as ResourceVO;
 
-						if ( !recepients[ resourceVO ] )
-							recepients[ resourceVO ] = [];
+						if ( !recipients[ resourceVO ] )
+							recipients[ resourceVO ] = [];
 
-						recepients[ resourceVO ].push( recepientKey );
+						recipients[ resourceVO ].push( recipientKey );
 					}
 
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
@@ -224,13 +224,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			var simpleMessage : SimpleMessage = message as SimpleMessage;
 
-			var recepientKey : String = simpleMessage.getRecepientKey();
+			var recipientKey : String = simpleMessage.getRecipientKey();
 
 			switch ( simpleMessage.getHeader() )
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if ( recepientKey == multitonKey )
+					if ( recipientKey == multitonKey )
 					{
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
@@ -248,7 +248,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
-					if ( recepientKey != multitonKey )
+					if ( recipientKey != multitonKey )
 						return;
 
 					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
@@ -260,7 +260,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					if ( recepientKey != multitonKey )
+					if ( recipientKey != multitonKey )
 						return;
 
 					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
@@ -362,7 +362,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		{
 			switch ( message.getTarget() )
 			{
-				case PPMServerTargetNames.SELECTED_APPLICATION:
+				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
 					break;
@@ -398,17 +398,17 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 					else if ( operation == PPMOperationNames.READ )
 					{
-						var recepientsArray : Array;
+						var recipientsArray : Array;
 
 						resourceVO = message.getBody() as ResourceVO;
 
-						if ( recepients[ resourceVO ] )
+						if ( recipients[ resourceVO ] )
 						{
-							recepientsArray = recepients[ resourceVO ];
+							recipientsArray = recipients[ resourceVO ];
 
-							for ( var i : int = 0; i < recepientsArray.length; i++ )
+							for ( var i : int = 0; i < recipientsArray.length; i++ )
 							{
-								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recepientsArray[ i ],
+								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recipientsArray[ i ],
 												  resourceVO );
 							}
 						}
