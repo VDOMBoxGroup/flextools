@@ -15,7 +15,7 @@ package net.vdombox.ide.core.controller
 		{
 			var settingsStorageProxy : SettingsStorageProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
 			var message : SimpleMessage = notification.getBody() as SimpleMessage;
-			var moduleID : String = message.getRecepientKey();
+			var moduleID : String = message.getRecipientKey();
 			
 			
 			var settings : Object = settingsStorageProxy.loadSettings( moduleID );

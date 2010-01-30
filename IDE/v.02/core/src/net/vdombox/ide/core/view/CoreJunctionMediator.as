@@ -8,10 +8,9 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.core.ApplicationFacade;
-	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -28,7 +27,7 @@ package net.vdombox.ide.core.view
 		{
 			super( NAME, new Junction() );
 		}
-		
+
 		private var pipesProxy : PipesProxy;
 
 		override public function onRegister() : void
@@ -50,7 +49,7 @@ package net.vdombox.ide.core.view
 
 			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
 			interests.push( ApplicationFacade.SELECTED_MODULE_CHANGED );
-			
+
 			interests.push( ApplicationFacade.MODULE_TO_PROXIES_CONNECTED );
 			interests.push( ApplicationFacade.MODULE_SETTINGS_GETTED );
 
@@ -115,8 +114,8 @@ package net.vdombox.ide.core.view
 				{
 					moduleVO = notification.getBody() as ModuleVO;
 
-					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.PROXIES_PIPE_CONNECTED,
-																			   null, moduleVO.moduleID ) );
+					junction.sendMessage( PipeNames.STDOUT,
+										  new SimpleMessage( SimpleMessageHeaders.PROXIES_PIPE_CONNECTED, null, moduleVO.moduleID ) );
 					break;
 				}
 
@@ -124,8 +123,7 @@ package net.vdombox.ide.core.view
 				{
 					moduleVO = notification.getBody() as ModuleVO;
 
-					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.MODULE_SELECTED,
-																			   null, moduleVO.moduleID ) );
+					junction.sendMessage( PipeNames.STDOUT, new SimpleMessage( SimpleMessageHeaders.MODULE_SELECTED, null, moduleVO.moduleID ) );
 					break;
 				}
 
@@ -151,75 +149,11 @@ package net.vdombox.ide.core.view
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
 			if ( message is UIQueryMessage )
-				processUIQuieryMessage( message as UIQueryMessage );
+				sendNotification( ApplicationFacade.PROCESS_UIQUERY_MESSAGE, message );
 			else if ( message is SimpleMessage )
-				processSimpleMessage( message as SimpleMessage );
+				sendNotification( ApplicationFacade.PROCESS_SIMPLE_MESSAGE, message );
 			else if ( message is LogMessage )
 				trace( message.getBody() );
-		}
-
-		private function processUIQuieryMessage( message : UIQueryMessage ) : void
-		{
-			switch ( message.name )
-			{
-				case UIQueryMessageNames.TOOLSET_UI:
-				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_TOOLSET, { component: message.component,
-										  recepientKey: message.recepientKey } );
-
-					break;
-				}
-
-				case UIQueryMessageNames.SETTINGS_SCREEN_UI:
-				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN, { component: message.component,
-										  recepientKey: message.recepientKey } );
-
-					break;
-				}
-
-				case UIQueryMessageNames.BODY_UI:
-				{
-					sendNotification( ApplicationFacade.SHOW_MODULE_BODY, { component: message.component,
-										  recepientKey: message.recepientKey } );
-
-					break;
-				}
-			}
-		}
-
-		private function processSimpleMessage( message : SimpleMessage ) : void
-		{
-			switch ( message.getHeader() )
-			{
-				case SimpleMessageHeaders.SELECT_MODULE:
-				{
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_MODULE, message.getRecepientKey() );
-					break;
-				}
-				case SimpleMessageHeaders.CONNECT_PROXIES_PIPE:
-				{
-					sendNotification( ApplicationFacade.CONNECT_MODULE_TO_PROXIES, message.getRecepientKey() );
-					break;
-				}
-				case SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE:
-				{
-					sendNotification( ApplicationFacade.DISCONNECT_MODULE_TO_PROXIES, message.getRecepientKey() );
-					break;
-				}
-
-				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
-				{
-					sendNotification( ApplicationFacade.RETRIEVE_MODULE_SETTINGS, message );
-					break;
-				}
-
-				case SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE:
-				{
-					sendNotification( ApplicationFacade.SAVE_MODULE_SETTINGS, message );
-					break;
-				}
-			}
 		}
 	}
 }

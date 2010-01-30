@@ -45,6 +45,11 @@ package net.vdombox.ide.core.view
 
 		private var selectedModuleID : String = "";
 
+		public function get mainWindow() : MainWindow
+		{
+			return viewComponent as MainWindow;
+		}
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -124,11 +129,6 @@ package net.vdombox.ide.core.view
 			windowManager.removeWindow( mainWindow );
 		}
 	
-		private function get mainWindow() : MainWindow
-		{
-			return viewComponent as MainWindow;
-		}
-		
 		private function get toolsetBar() : Group
 		{
 			return mainWindow.toolsetBar;

@@ -15,7 +15,7 @@ package net.vdombox.ide.core.controller
 
 			var simpleMessage : SimpleMessage = notification.getBody() as SimpleMessage;
 
-			settingsStorageProxy.saveSettings( simpleMessage.getRecepientKey(), simpleMessage.getBody());
+			settingsStorageProxy.saveSettings( simpleMessage.getRecipientKey(), simpleMessage.getBody());
 			
 			simpleMessage.setAnswerFlag( true )
 			sendNotification( ApplicationFacade.MODULE_SETTINGS_SETTED, simpleMessage );

@@ -72,7 +72,7 @@ package net.vdombox.ide.core.view
 			{
 				case ApplicationFacade.SHOW_MODULE_SETTINGS_SCREEN:
 				{
-					settingsScreensList[ body.recepientKey ] = body.component;
+					settingsScreensList[ body.recipientKey ] = body.component;
 					
 					settingsWindow.settingsScreenHolder.addElement( body.component as IVisualElement );
 					

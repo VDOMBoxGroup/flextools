@@ -71,7 +71,7 @@ package net.vdombox.ide.core.model
 
 //			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			token = soap.get_child_objects_tree( pageVO.applicationID, pageVO.id );
-			token.recepientName = proxyName;
+			token.recipientName = proxyName;
 			token.requestFunctionName = GET_STRUCTURE;
 
 			return token;
@@ -83,7 +83,7 @@ package net.vdombox.ide.core.model
 
 //			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			token = soap.get_one_object( pageVO.applicationID, pageVO.id );
-			token.recepientName = proxyName;
+			token.recipientName = proxyName;
 			token.requestFunctionName = GET_ATTRIBUTES;
 
 			return token;
@@ -94,7 +94,7 @@ package net.vdombox.ide.core.model
 			var token : AsyncToken;
 			token = soap.get_child_objects( pageVO.applicationID, pageVO.id );
 
-			token.recepientName = proxyName;
+			token.recipientName = proxyName;
 			token.requestFunctionName = GET_OBJECTS;
 
 			return token;
@@ -118,7 +118,7 @@ package net.vdombox.ide.core.model
 			var token : AsyncToken;
 			token = soap.get_one_object( pageVO.applicationID, objectID );
 
-			token.recepientName = proxyName;
+			token.recipientName = proxyName;
 			token.requestFunctionName = GET_OBJECT;
 
 			return token;
@@ -244,7 +244,7 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken = event.token;
 
-			if ( !token.hasOwnProperty( "recepientName" ) || token.recepientName != proxyName )
+			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
 				return;
 
 			var operation : Operation = event.currentTarget as Operation;

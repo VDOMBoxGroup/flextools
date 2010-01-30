@@ -38,7 +38,7 @@ package net.vdombox.ide.core.model
 			var token : AsyncToken;
 
 			token = soap.get_one_object( objectVO.applicationID, objectVO.id );
-			token.recepientName = proxyName;
+			token.recipientName = proxyName;
 
 			return token;
 		}
@@ -73,7 +73,7 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken = event.token;
 
-			if ( !token.hasOwnProperty( "recepientName" ) || token.recepientName != proxyName )
+			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
 				return;
 
 			var operation : Operation = event.currentTarget as Operation;
