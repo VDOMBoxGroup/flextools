@@ -136,13 +136,13 @@ package net.vdombox.ide.modules.events.view
 		{
 			var simpleMessage : SimpleMessage = message as SimpleMessage;
 			
-			var recepientKey : String = simpleMessage.getRecepientKey();
+			var recipientKey : String = simpleMessage.getRecipientKey();
 			
 			switch ( simpleMessage.getHeader() )
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
 				{
-					if ( recepientKey == multitonKey )
+					if ( recipientKey == multitonKey )
 					{
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
@@ -160,7 +160,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case SimpleMessageHeaders.PROXIES_PIPE_CONNECTED:
 				{
-					if ( recepientKey != multitonKey )
+					if ( recipientKey != multitonKey )
 						return;
 					
 					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
@@ -172,7 +172,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					if ( recepientKey != multitonKey )
+					if ( recipientKey != multitonKey )
 						return;
 					
 					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
