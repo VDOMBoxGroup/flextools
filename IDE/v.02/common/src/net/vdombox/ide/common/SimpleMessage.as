@@ -8,7 +8,7 @@ package net.vdombox.ide.common
 		{
 			super( type = Message.NORMAL, header, body );
 			
-			setRecepientKey( recepientKey );
+			setRecipientKey( recepientKey );
 			
 			setAnswerFlag( answerFlag );
 		}
@@ -17,12 +17,12 @@ package net.vdombox.ide.common
 		
 		protected var answerFlag : Boolean;
 		
-		public function getRecepientKey() : String
+		public function getRecipientKey() : String
 		{
 			return recepientKey;
 		}
 		
-		public function setRecepientKey( value : String ) : void
+		public function setRecipientKey( value : String ) : void
 		{
 			recepientKey = value;
 		}

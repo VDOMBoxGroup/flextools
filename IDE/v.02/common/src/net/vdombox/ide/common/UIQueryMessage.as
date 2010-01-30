@@ -18,14 +18,14 @@ package net.vdombox.ide.common
 	 */
 	public class UIQueryMessage extends Message
 	{
-		public function UIQueryMessage( name : String, component : UIComponent = null, recepientKey : String = null )
+		public function UIQueryMessage( name : String, component : UIComponent = null, ricepientKey : String = null )
 		{
-			_recepientKey = recepientKey;
+			_recipientKey = recipientKey;
 				
 			super( Message.NORMAL, name, component );
 		}
 
-		protected var _recepientKey : String;
+		protected var _recipientKey : String;
 		
 		public function get name() : String
 		{
@@ -37,9 +37,9 @@ package net.vdombox.ide.common
 			return body as UIComponent;
 		}
 		
-		public function get recepientKey() : String
+		public function get recipientKey() : String
 		{
-			return _recepientKey;
+			return _recipientKey;
 		}
 
 	}
