@@ -27,7 +27,7 @@
 		<components:MenuPanel id="menuPanel"
 							  width="100%" />
 
-		<components:Properties id="propertiesPanel"
+		<components:PropertiesPanel id="propertiesPanel"
 							   width="100%" />
 
 		<components:LevelsFilterPanel id="levelsPanel"

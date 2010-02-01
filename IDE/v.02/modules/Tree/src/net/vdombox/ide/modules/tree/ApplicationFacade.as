@@ -117,6 +117,10 @@ package net.vdombox.ide.modules.tree
 		public static const GET_STRUCTURE_LEVELS: String = "getStructureLevels";
 		public static const STRUCTURE_LEVELS_GETTED: String = "structureLevelsGetted";
 		
+//		public static const GET_SELECTED_STRUCTURE_LEVEL: String = "getSelectedStructureLevel";
+//		public static const SELECTED_STRUCTURE_LEVEL_GETTED: String = "selectedStructureLevelGetted";
+		public static const SELECTED_STRUCTURE_LEVEL_CHANGED: String = "selectedStructureLevelChanged";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

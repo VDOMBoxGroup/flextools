@@ -1,27 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:mx="library://ns.adobe.com/flex/halo">
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 
+		 title="{ resourceManager.getString( 'Tree_General', 'levels_panel_title' ) }"
+		 creationComplete="showHandler()">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
+			
+			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
+			import net.vdombox.ide.modules.tree.model.vo.StructureLevelVO;
+			
+			import spark.events.IndexChangeEvent;
 
 			[Bindable]
 			private var levels : ArrayList;
 
+			[Bindable]
+			private var selectAll : Boolean;
+			
+			[Bindable]
+			private var _currentStructuretLevel : StructureLevelVO;
+			
 			public function set dataProvider( value : Array ) : void
 			{
 				levels = new ArrayList( value );
 			}
+
+			public function get currentStructureLevel() : StructureLevelVO
+			{
+				return _currentStructuretLevel;
+			}
+			
+			public function set currentStructureLevel( value : StructureLevelVO ) : void
+			{
+				_currentStructuretLevel = value;
+			}
+			
+			private function switchAll() : void
+			{
+				for each ( var structureLevelVO : StructureLevelVO in levels.source )
+				{
+					structureLevelVO.visible = selectAll;
+				}
+
+				selectAll = !selectAll;
+			}
+
+			private function changeHandler( event : Event ) : void
+			{
+				if ( event is IndexChangeEvent )
+				{
+					dispatchEvent( new LevelsFilterPanelEvent( LevelsFilterPanelEvent.CURRENT_LEVEL_CHANGED ) );
+					return;
+				}
+
+				var hasVisible : Boolean = false;
+
+				for each ( var structureLevelVO : StructureLevelVO in levels.source )
+				{
+					if ( structureLevelVO.visible )
+					{
+						hasVisible = true;
+						break;
+					}
+				}
+
+				if ( !hasVisible && !selectAll )
+					selectAll = true;
+				else if ( hasVisible && selectAll )
+					selectAll = false;
+			}
+
+			protected function showHandler() : void
+			{
+				structureLevelsList.addEventListener( Event.CHANGE, changeHandler, true );
+			}
 		]]>
 	</fx:Script>
 
-	<s:layout>
+	<s:Rect width="100%" height="25">
+		<s:fill>
+			<s:SolidColor color="0x999999" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:HGroup height="25" width="100%"
+			  paddingLeft="3" paddingRight="3" verticalAlign="middle"
+			  click="switchAll()">
 
-		<s:VerticalLayout />
-	</s:layout>
+		<mx:Image source="@Embed(source='assets/treeEditor/colored_button_all_levels.png')" />
 
-	<s:List dataProvider="{ levels }" height="100%" width="100%"
-			itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }" />
+		<s:Rect width="1"
+				bottom="3" top="3">
+
+			<s:fill>
+
+				<s:SolidColor color="gray" />
+			</s:fill>
+		</s:Rect>
+
+		<s:Label 
+				 text="{ selectAll ? resourceManager.getString( 'Tree_General', 'level_show_all' ) : resourceManager.getString( 'Tree_General', 'level_hide_all' ) }"
+				 width="100%" />
+	</s:HGroup>
+
+	<s:Line width="100%">
+
+		<s:stroke>
+
+			<s:SolidColorStroke color="gray" />
+		</s:stroke>
+	</s:Line>
+
+	<s:List id="structureLevelsList" selectedItem="@{_currentStructuretLevel}"
+			dataProvider="{ levels }" height="100%" width="100%"
+			change="changeHandler( event )"
+			borderVisible="false"
+			itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }" y="25"/>
 </s:Panel>

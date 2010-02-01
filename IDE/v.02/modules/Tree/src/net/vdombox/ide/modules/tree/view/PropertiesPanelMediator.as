@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.view.components.Properties;
+	import net.vdombox.ide.modules.tree.view.components.PropertiesPanel;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -25,9 +25,9 @@ package net.vdombox.ide.modules.tree.view
 
 		private var pageAttributes : Array;
 
-		public function get propertiesPanel() : Properties
+		public function get propertiesPanel() : PropertiesPanel
 		{
-			return viewComponent as Properties;
+			return viewComponent as PropertiesPanel;
 		}
 
 		override public function onRegister() : void
