@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
+	import net.vdombox.ide.modules.tree.controller.GetStructureLevelsCommand;
 	import net.vdombox.ide.modules.tree.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessPageProxyMessageCommand;
@@ -111,6 +112,10 @@ package net.vdombox.ide.modules.tree
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 		
 		public static const OPEN_WINDOW : String = "openWidow";
+		public static const CLOSE_WINDOW : String = "closeWidow";
+		
+		public static const GET_STRUCTURE_LEVELS: String = "getStructureLevels";
+		public static const STRUCTURE_LEVELS_GETTED: String = "structureLevelsGetted";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -154,6 +159,8 @@ package net.vdombox.ide.modules.tree
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			registerCommand( CREATE_PAGE_WINDOW_CREATED, CreatePageWindowCreatedCommand );
+			
+			registerCommand( GET_STRUCTURE_LEVELS, GetStructureLevelsCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

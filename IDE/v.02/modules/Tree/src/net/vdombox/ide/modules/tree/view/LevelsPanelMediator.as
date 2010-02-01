@@ -1,12 +1,13 @@
 package net.vdombox.ide.modules.tree.view
 {
+	import flash.events.Event;
+	
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.view.components.LevelsFilterPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Panel;
 	
 	public class LevelsPanelMediator extends Mediator implements IMediator
 	{
@@ -17,14 +18,16 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 		
-		public function get levelsPanel() : Panel
+		public function get levelsPanel() : LevelsFilterPanel
 		{
-			return viewComponent as Panel;
+			return viewComponent as LevelsFilterPanel;
 		}
 		
 		override public function onRegister() : void
 		{
 			addEventListeners();
+			
+			sendNotification( ApplicationFacade.GET_STRUCTURE_LEVELS );
 		}
 		
 		override public function onRemove() : void
@@ -36,7 +39,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-//			interests.push( ApplicationFacade. );
+			interests.push( ApplicationFacade.STRUCTURE_LEVELS_GETTED );
 			
 			return interests;
 		}
@@ -48,8 +51,9 @@ package net.vdombox.ide.modules.tree.view
 			
 			switch ( name )
 			{
-				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+				case ApplicationFacade.STRUCTURE_LEVELS_GETTED:
 				{
+					levelsPanel.dataProvider = body as Array;
 					
 					break;
 				}
@@ -58,10 +62,15 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function addEventListeners() : void
 		{
-			
+			levelsPanel.addEventListener( Event.CHANGE, changeHandler, true );
 		}
 		
 		private function removeEventListeners() : void
+		{
+			
+		}
+		
+		private function changeHandler( event : Event ) : void
 		{
 			
 		}

@@ -30,10 +30,7 @@
 		<components:Properties id="propertiesPanel"
 							   width="100%" />
 
-		<s:Panel id="levelsPanel"
-				 width="100%">
-
-			<components:ColorMenu height="100%" width="100%" />
-		</s:Panel>
+		<components:LevelsFilterPanel id="levelsPanel"
+									  width="100%" />
 	</s:Group>
 </s:Group>

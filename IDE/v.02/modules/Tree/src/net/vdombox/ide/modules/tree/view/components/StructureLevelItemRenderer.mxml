@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/halo"
+				
+				height="25">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.tree.view.skins.NewCheckBoxSkin;
+		]]>
+	</fx:Script>
+
+	<s:HGroup width="100%" height="100%" verticalAlign="middle">
+
+		<s:CheckBox id="cbx"
+					height="100%" selected="@{ data.visible }"
+					skinClass="net.vdombox.ide.modules.tree.view.skins.NewCheckBoxSkin"
+					symbolColor="{data.color}" />
+
+		<s:Rect width="1"
+				bottom="3" top="3">
+
+			<s:fill>
+
+				<s:SolidColor color="gray" />
+			</s:fill>
+		</s:Rect>
+
+		<s:Label text="{ data.label }" width="100%" />
+	</s:HGroup>
+
+	<s:Line width="100%"
+			bottom="0">
+
+		<s:stroke>
+
+			<s:SolidColorStroke color="gray" />
+		</s:stroke>
+	</s:Line>
+</s:ItemRenderer>

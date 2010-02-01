@@ -76,6 +76,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
 			
 			interests.push( ApplicationFacade.OPEN_WINDOW );
+			interests.push( ApplicationFacade.CLOSE_WINDOW );
 
 			return interests;
 		}
@@ -161,6 +162,15 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.OPEN_WINDOW:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
+					
+					junction.sendMessage( PipeNames.STDCORE, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.CLOSE_WINDOW:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
 					
 					junction.sendMessage( PipeNames.STDCORE, message );
 					
