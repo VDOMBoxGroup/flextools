@@ -11,6 +11,11 @@ package net.vdombox.ide.common.vo
 		
 		private var _id : String;
 		
+		public function get id() : String
+		{
+			return _id;
+		}
+		
 		public function setDescription( description : XML ) : void
 		{
 			index = description.@Index;
