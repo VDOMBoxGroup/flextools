@@ -39,14 +39,22 @@ package net.vdombox.ide.common.vo
 			if( sourceLevels.length() == 0 )
 				return;
 			
-			var levelVO : LevelVO;
+			var levelObjects : XMLList = sourceLevels.Object;
 			
-			for each( var levelXML : XML in sourceLevels )
+			var levelObjectVO : LevelObjectVO;
+			var level : int;
+			
+			for each( var levelObjectXML : XML in levelObjects )
 			{
-				levelVO = new LevelVO( levelXML.@Index );
-				levelVO.setDescription( levelXML );
+				level = levelObjectXML.parent().@Index;
 				
-				levels.push( levelVO );
+				levelObjectVO = new LevelObjectVO( levelObjectXML.@ID );
+				
+				levelObjectVO.level = level;
+				levelObjectVO.index = levelObjectXML.@Index;
+				
+				
+				levels.push( levelObjectVO );
 			}
 		}
 	}

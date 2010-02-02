@@ -7,6 +7,7 @@ package net.vdombox.ide.common.vo
 			_id = id;
 		}
 		
+		public var level : uint;
 		public var index : uint;
 		
 		private var _id : String;
@@ -14,11 +15,6 @@ package net.vdombox.ide.common.vo
 		public function get id() : String
 		{
 			return _id;
-		}
-		
-		public function setDescription( description : XML ) : void
-		{
-			index = description.@Index;
 		}
 	}
 }
