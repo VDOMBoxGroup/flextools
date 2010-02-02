@@ -1,9 +1,10 @@
 package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.view.BodyMediator;
 	import net.vdombox.ide.modules.tree.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -11,6 +12,7 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
+			
 			var body : Body;
 			var bodyMediator : BodyMediator;
 
@@ -25,6 +27,13 @@ package net.vdombox.ide.modules.tree.controller
 				facade.registerMediator( new BodyMediator( body ) )
 			}
 
+			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var bodySessionObject : Object = sessionProxy.getObject( ApplicationFacade.BODY_SESSION_OBJECT );
+			
+			bodySessionObject[ "inititializeProcess" ] = 0;
+			bodySessionObject[ "pages" ] = [];
+			bodySessionObject[ "selectedPage" ] = null;
+			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 		}
 	}

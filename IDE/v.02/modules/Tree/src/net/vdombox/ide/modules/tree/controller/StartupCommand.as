@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.controller
 	import net.vdombox.ide.modules.Tree;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.SettingsProxy;
-	import net.vdombox.ide.modules.tree.model.StructureLevelsProxy;
+	import net.vdombox.ide.modules.tree.model.StructureProxy;
 	import net.vdombox.ide.modules.tree.view.TreeJunctionMediator;
 	import net.vdombox.ide.modules.tree.view.TreeMediator;
 	
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.tree.controller
 //			model prepare
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new SettingsProxy() );
-			facade.registerProxy( new StructureLevelsProxy() );
+			facade.registerProxy( new StructureProxy() );
 			
 //			view prepare			
 			facade.registerMediator( new TreeJunctionMediator() );

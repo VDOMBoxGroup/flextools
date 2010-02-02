@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.tree
 {
 	import net.vdombox.ide.modules.Tree;
+	import net.vdombox.ide.modules.tree.controller.ArrowCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.tree.controller.CreatePageWindowCreatedCommand;
@@ -8,6 +9,8 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.GetStructureLevelsCommand;
+	import net.vdombox.ide.modules.tree.controller.InitializeCommand;
+	import net.vdombox.ide.modules.tree.controller.InitializeCompleteCommand;
 	import net.vdombox.ide.modules.tree.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessPageProxyMessageCommand;
@@ -16,6 +19,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessTypesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.SaveSettingsToProxy;
+	import net.vdombox.ide.modules.tree.controller.SelectedApplicationGettedCommand;
 	import net.vdombox.ide.modules.tree.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
 	import net.vdombox.ide.modules.tree.controller.TearDownCommand;
@@ -103,11 +107,15 @@ package net.vdombox.ide.modules.tree
 		public static const RESOURCE_GETTED : String = "resourceGetted";
 		
 //		other
+		public static const BODY_SESSION_OBJECT : String = "bodySessionObject";
+		
 		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
 		
 		public static const DELIMITER : String = "/";
 		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
+		public static const ARROW_CREATED : String = "arrowCreated";
+		
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 		
@@ -120,6 +128,8 @@ package net.vdombox.ide.modules.tree
 //		public static const GET_SELECTED_STRUCTURE_LEVEL: String = "getSelectedStructureLevel";
 //		public static const SELECTED_STRUCTURE_LEVEL_GETTED: String = "selectedStructureLevelGetted";
 		public static const SELECTED_STRUCTURE_LEVEL_CHANGED: String = "selectedStructureLevelChanged";
+		
+		public static const INITIALIZE_COMPLETE: String = "initializeComplete";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -161,8 +171,17 @@ package net.vdombox.ide.modules.tree
 			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 			
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
+			registerCommand( ARROW_CREATED, ArrowCreatedCommand );
+			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			registerCommand( CREATE_PAGE_WINDOW_CREATED, CreatePageWindowCreatedCommand );
+			
+			registerCommand( SELECTED_APPLICATION_GETTED, SelectedApplicationGettedCommand );
+			
+			registerCommand( PAGES_GETTED, InitializeCommand );
+			
+			registerCommand( APPLICATION_STRUCTURE_GETTED, InitializeCommand );
+			registerCommand( INITIALIZE_COMPLETE, InitializeCompleteCommand );
 			
 			registerCommand( GET_STRUCTURE_LEVELS, GetStructureLevelsCommand );
 			

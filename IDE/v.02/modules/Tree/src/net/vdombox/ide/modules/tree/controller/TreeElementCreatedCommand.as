@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.StructureObjectVO;
+	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
 	import net.vdombox.ide.modules.tree.view.TreeElementMediator;
 	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
 	
@@ -15,10 +15,10 @@ package net.vdombox.ide.modules.tree.controller
 			var body : Object = notification.getBody();
 			
 			var viewComponent : TreeElementz = body.viewComponent as TreeElementz;
-			var structureObjectVO : StructureObjectVO = body.structureObjectVO as StructureObjectVO;
+			var structureElementVO : StructureElementVO= body.structureElementVO as StructureElementVO;
 			var pageVO : PageVO = body.pageVO as PageVO;
 			
-			facade.registerMediator( new TreeElementMediator( viewComponent, pageVO, structureObjectVO ) );
+			facade.registerMediator( new TreeElementMediator( viewComponent, pageVO, structureElementVO ) );
 		}
 	}
 }

@@ -1,0 +1,24 @@
+package net.vdombox.ide.modules.tree.controller
+{
+	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.model.SessionProxy;
+	
+	import org.puremvc.as3.multicore.interfaces.INotification;
+	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
+
+	public class SelectedApplicationGettedCommand extends SimpleCommand
+	{
+		override public function execute( notification : INotification ) : void
+		{
+			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			var bodySessionObject : Object = sessionProxy.getObject( ApplicationFacade.BODY_SESSION_OBJECT );
+			
+			var selectedApplication : ApplicationVO = notification.getBody() as ApplicationVO;
+			
+			sendNotification( ApplicationFacade.GET_PAGES, selectedApplication );
+			sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, selectedApplication );
+		}
+	}
+}

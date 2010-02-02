@@ -1,13 +1,10 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import mx.binding.utils.BindingUtils;
-	import mx.binding.utils.ChangeWatcher;
-	
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
-	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
 	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -18,18 +15,18 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "TreeElementMediator";
 
-		public function TreeElementMediator( viewComponent : Object, pageVO : PageVO, structureObjectVO : StructureObjectVO )
+		public function TreeElementMediator( viewComponent : Object, pageVO : PageVO, structureElementVO : StructureElementVO )
 		{
 			super( NAME + ApplicationFacade.DELIMITER + pageVO.id, viewComponent );
 
 			_pageVO = pageVO;
 
-			_structureObjectVO = structureObjectVO ? structureObjectVO : new StructureObjectVO( pageVO.id );
+			_structureElementVO = structureElementVO ? structureElementVO : new StructureElementVO( pageVO.id );
 		}
 
 		private var _pageVO : PageVO;
 
-		private var _structureObjectVO : StructureObjectVO;
+		private var _structureElementVO : StructureElementVO;
 		
 		private var _typeVO : TypeVO;
 
@@ -38,9 +35,9 @@ package net.vdombox.ide.modules.tree.view
 			return _pageVO;
 		}
 
-		public function get structureObjectVO() : StructureObjectVO
+		public function get structureElementVO() : StructureElementVO
 		{
-			return _structureObjectVO;
+			return _structureElementVO;
 		}
 
 		public function get treeElement() : TreeElementz
@@ -52,9 +49,12 @@ package net.vdombox.ide.modules.tree.view
 		{
 			addEventListeners();
 
-			treeElement.x = structureObjectVO.left;
-			treeElement.y = structureObjectVO.top;
+			treeElement.x = structureElementVO.left;
+			treeElement.y = structureElementVO.top;
 
+			structureElementVO.width = treeElement.width;
+			structureElementVO.height = treeElement.height;
+			
 			sendNotification( ApplicationFacade.GET_TYPE, { typeID: pageVO.typeID, recipientID: mediatorName } );
 		}
 
