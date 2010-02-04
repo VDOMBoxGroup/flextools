@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
 	import net.vdombox.ide.modules.tree.view.components.Arrow;
 	import net.vdombox.ide.modules.tree.view.components.Body;
-	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
+	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -46,11 +46,11 @@ package net.vdombox.ide.modules.tree.view
 			structure = structureElements;
 
 			var pageVO : PageVO;
-			var treeElement : TreeElementz;
+			var treeElement : TreeElement;
 
 			for each ( pageVO in pages )
 			{
-				treeElement = new TreeElementz();
+				treeElement = new TreeElement();
 
 				treeElements[ pageVO.id ] = treeElement;
 

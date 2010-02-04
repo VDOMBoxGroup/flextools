@@ -28,7 +28,7 @@
 							  width="100%" />
 
 		<components:PropertiesPanel id="propertiesPanel"
-							   width="100%" />
+									width="100%" />
 
 		<components:LevelsFilterPanel id="levelsPanel"
 									  width="100%" />

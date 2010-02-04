@@ -1,9 +1,12 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import flash.display.CapsStyle;
+	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
 	import flash.geom.Point;
+
+	import mx.binding.utils.BindingUtils;
 
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
@@ -28,7 +31,24 @@ package net.vdombox.ide.modules.tree.view
 			count++;
 		}
 
+		private const RTL : Number = 0;
+
+		private const LTR : Number = 1;
+
+		private const UTD : Number = 0;
+
+		private const DTU : Number = 1;
+
+
 		private var _linkageVO : LinkageVO;
+
+		private var directionalX : uint;
+
+		private var directionalY : uint;
+
+		private var isActive : Boolean;
+
+		private var activeChanged : Boolean;
 
 		public function get arrow() : Arrow
 		{
@@ -42,21 +62,13 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			var sourceBX : int = linkageVO.source.left + linkageVO.source.width / 2;
-			var sourceBY : int = linkageVO.source.top + linkageVO.source.height / 2;
+			BindingUtils.bindSetter( sourceTargetChange, _linkageVO, "source" );
+			BindingUtils.bindSetter( sourceTargetChange, _linkageVO, "target" );
 
-			var sourceEX : int = linkageVO.target.left + linkageVO.target.width / 2;
-			var sourceEY : int = linkageVO.target.top + linkageVO.target.height / 2;
+			BindingUtils.bindSetter( visibleChange, _linkageVO.level, "visible" );
 
-			calculatePoints();
-
-			zzz( sourceBX, sourceBY, sourceEX, sourceEY );
-
-//			arrow.x = linkageVO.source.left;
-//			arrow.y = linkageVO.source.top;
-
-//			arrow.width = Math.abs( linkageVO.source.left - linkageVO.target.left );
-//			arrow.height = Math.abs( linkageVO.source.top - linkageVO.target.top );
+			calculatePositionAndSize();
+			drawArrow();
 		}
 
 		override public function onRemove() : void
@@ -64,274 +76,247 @@ package net.vdombox.ide.modules.tree.view
 
 		}
 
-		private function zzz( sourceBX : Number, sourceBY : Number, sourceEX : Number, sourceEY : Number ) : void
+		private function commitProperties() : void
 		{
-			var x0 : Number = 0;
-			var y0 : Number = 0;
-			var x1 : Number = arrow.width;
-			var y1 : Number = arrow.height;
-
-			var dX : Number;
-			var dY : Number;
-
-			var middleX : Number;
-			var middleY : Number;
-
-			var alf : Number;
-			var dA : Number = 0.2;
-			var dDist : Number = 10;
-
-			var _numColor : Number = 0xFFF000;
-
-			dX = x0 - x1;
-			dY = y0 - y1;
-
-
-			var dist : Number = dX * dX + dY * dY;
-			//			trace(dist);
-			middleX = x0 - dX / 2;
-			middleY = y0 - dY / 2;
-
-			alf = Math.atan( dY / dX );
-			if ( dX < 0 )
-				alf += Math.PI;
-
-
-			var btX : Number = x0 - dX / 2;
-			var btY : Number = y0 - dY / 2;
-
-			arrow.graphics.clear();
-
-			arrow.graphics.lineStyle( 8, _numColor, 0, false, LineScaleMode.NONE, CapsStyle.SQUARE, JointStyle.MITER );
-
-			arrow.graphics.moveTo( x0, y0 );
-			arrow.graphics.lineTo( x1, y1 );
-
-			if ( true )
+			if ( activeChanged )
 			{
-				arrow.graphics.lineStyle( 10, _numColor, .1, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-				arrow.graphics.moveTo( x0, y0 );
-				arrow.graphics.lineTo( x1, y1 );
+				activeChanged = false;
 
-				arrow.graphics.lineTo( x1 + Math.cos( alf + dA ) * dDist, y1 + Math.sin( alf + dA ) * dDist );
-				arrow.graphics.lineTo( x1 + Math.cos( alf - dA ) * dDist, y1 + Math.sin( alf - dA ) * dDist );
-				arrow.graphics.lineTo( x1, y1 );
+				if ( isActive )
+				{
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "left" );
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "top" );
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "width" );
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "height" );
 
-
-
-				arrow.graphics.lineStyle( 3, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-				arrow.graphics.moveTo( x0, y0 );
-				arrow.graphics.lineTo( x1, y1 );
-
-				arrow.graphics.lineStyle( 3, 0x000000, .4, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-				arrow.graphics.moveTo( x0, y0 );
-				arrow.graphics.lineTo( x1, y1 );
-
-				arrow.graphics.lineStyle( 1, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-
-				arrow.graphics.moveTo( x0, y0 );
-				arrow.graphics.lineTo( x1, y1 );
-
-				//	this.graphics.beginFill(_numColor);
-
-				arrow.graphics.lineStyle( 3, _numColor, 1, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-				arrow.graphics.lineTo( x1 + Math.cos( alf + dA ) * dDist, y1 + Math.sin( alf + dA ) * dDist );
-				arrow.graphics.lineTo( x1 + Math.cos( alf - dA ) * dDist, y1 + Math.sin( alf - dA ) * dDist );
-				arrow.graphics.lineTo( x1, y1 );
-
-			}
-			else
-			{
-
-				arrow.graphics.lineStyle( 3, _numColor, 1 * _alpha, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-				arrow.graphics.moveTo( x0, y0 );
-				arrow.graphics.lineTo( x1, y1 );
-
-				arrow.graphics.lineStyle( 3, 0x000000, .4 * _alpha, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-				arrow.graphics.moveTo( x0, y0 );
-				arrow.graphics.lineTo( x1, y1 );
-
-				arrow.graphics.lineStyle( 1, _numColor, 1 * _alpha, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-
-				arrow.graphics.moveTo( x0, y0 );
-				arrow.graphics.lineTo( x1, y1 );
-
-				//	this.graphics.beginFill(_numColor);
-
-				arrow.graphics.lineStyle( 3, _numColor, _alpha, false, LineScaleMode.NONE, CapsStyle.SQUARE,
-										  JointStyle.MITER );
-				arrow.graphics.lineTo( x1 + Math.cos( alf + dA ) * dDist, y1 + Math.sin( alf + dA ) * dDist );
-				arrow.graphics.lineTo( x1 + Math.cos( alf - dA ) * dDist, y1 + Math.sin( alf - dA ) * dDist );
-				arrow.graphics.lineTo( x1, y1 );
-					//this.graphics.endFill();
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "left" );
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "top" );
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "width" );
+					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "height" );
+				}
 			}
 		}
 
-		private function calculatePoints() : void
+		private function calculatePositionAndSize() : void
 		{
-			var nLeft : Number = 0;
-			var nRight : Number = 0;
-			var nTop : Number = 0;
-			var nBottom : Number = 0;
+			var sourceObject : StructureElementVO = linkageVO.source;
+			var targetObject : StructureElementVO = linkageVO.target;
 
-			var _pFromObj : Point;
-			var _pToObj : Point;
 			var pFromObj : Point;
 			var pToObj : Point;
-			var pArrow1 : Point;
-			var pArrow2 : Point;
 
-			var fromObjWidth : Number = 0;
-			var fromObjHeight : Number = 0;
 			var fromObjHalfWidth : Number = 0;
 			var fromObjHalfHeight : Number = 0;
 
-			var toObjWidth : Number = 0;
-			var toObjHeight : Number = 0;
 			var toObjHalfWidth : Number = 0;
 			var toObjHalfHeight : Number = 0;
 
 			var fromObjVertCross : Boolean = false;
 			var toObjVertCross : Boolean = false;
 
-			var sourceObject : StructureElementVO = linkageVO.source;
-			var targetObject : StructureElementVO = linkageVO.target;
+			fromObjHalfWidth = sourceObject.width / 2;
+			fromObjHalfHeight = sourceObject.height / 2;
 
-			if ( sourceObject )
-			{
-				/**
-				 * Calculates fromObject center coordinates
-				 */
-				fromObjWidth = sourceObject.width;
-				fromObjHeight = sourceObject.height;
-
-				fromObjHalfWidth = fromObjWidth / 2;
-				fromObjHalfHeight = fromObjHeight / 2;
-			}
-
-			if ( targetObject )
-			{
-				/**
-				 * Calculates toObject center coordinates
-				 */
-				toObjWidth = targetObject.width;
-				toObjHeight = targetObject.height;
-
-				toObjHalfWidth = toObjWidth / 2;
-				toObjHalfHeight = toObjHeight / 2;
-			}
+			toObjHalfWidth = targetObject.width / 2;
+			toObjHalfHeight = targetObject.height / 2;
 
 			pFromObj = new Point( sourceObject.left + fromObjHalfWidth, sourceObject.top + fromObjHalfHeight );
 			pToObj = new Point( targetObject.left + toObjHalfWidth, targetObject.top + toObjHalfHeight );
 
-			if ( sourceObject )
+			var arrowWidth : Number = Math.abs( pToObj.x - pFromObj.x );
+			var arrowHeight : Number = Math.abs( pToObj.y - pFromObj.y );
+
+			var arrowRatio : Number = arrowWidth / arrowHeight;
+			var sourceObjectRatio : Number = fromObjHalfWidth / fromObjHalfHeight;
+			var targetObjectRatio : Number = toObjHalfWidth / toObjHalfHeight;
+
+			/**
+			 * If objects overlay each other then return from function
+			 */
+			if ( arrowWidth <= fromObjHalfWidth + toObjHalfWidth && arrowHeight <= fromObjHalfHeight + toObjHalfHeight )
 			{
-				var arrowWidth : Number = Math.abs( pToObj.x - pFromObj.x );
-				var arrowHeight : Number = Math.abs( pToObj.y - pFromObj.y );
-
-				var arrowRatio : Number = arrowWidth / arrowHeight;
-				var sourceObjectRatio : Number = fromObjWidth / fromObjHeight;
-				var targetObjectRatio : Number = toObjWidth / toObjHeight;
-
-				/**
-				 * If objects overlay each other then return from function
-				 */
-				if ( arrowWidth <= fromObjHalfWidth + toObjHalfWidth && arrowHeight <= fromObjHalfHeight + toObjHalfHeight )
-					return;
-
-				var dX : Number = 0;
-				var dY : Number = 0;
-
-				/**
-				 * If arrowRatio > sourceObjectRatio then arrow crosses vertical border of fromObject else - horisontal
-				 */
-				if ( arrowRatio > sourceObjectRatio )
-					fromObjVertCross = true;
-
-				/**
-				 * Calculates delta X and delta Y for arrow start point
-				 */
-				if ( fromObjVertCross )
-				{
-					dX = fromObjHalfWidth;
-					dY = dX / arrowRatio;
-				}
-				else
-				{
-					dY = fromObjHalfHeight;
-					dX = dY * arrowRatio;
-				}
-
-				if ( pFromObj.x < pToObj.x )
-				{
-					nLeft = pFromObj.x += dX;
-				}
-				else
-				{
-					nLeft = pFromObj.x -= dX;
-				}
-
-				if ( pFromObj.y < pToObj.y )
-				{
-					nTop = pFromObj.y += dY;
-				}
-				else
-				{
-					nTop = pFromObj.y -= dY;
-				}
-
-				if ( targetObject )
-				{
-					if ( arrowRatio > targetObjectRatio )
-						toObjVertCross = true;
-					/**
-					 * Calculates delta X and delta Y for arrow end point
-					 */
-					if ( toObjVertCross )
-					{
-						dX = toObjHalfWidth;
-						dY = dX / arrowRatio;
-					}
-					else
-					{
-						dY = toObjHalfHeight;
-						dX = dY * arrowRatio;
-					}
-
-					if ( pFromObj.x < pToObj.x )
-					{
-						nRight = pToObj.x -= dX;
-					}
-					else
-					{
-						nRight = pToObj.x += dX;
-					}
-
-					if ( pFromObj.y < pToObj.y )
-					{
-						nBottom = pToObj.y -= dY;
-					}
-					else
-					{
-						nBottom = pToObj.y += dY;
-					}
-				}
-
+				arrow.width = 0;
+				arrow.height = 0;
+				return;
 			}
 
-			arrow.x = pFromObj.x;
-			arrow.y = pFromObj.y;
+			var dX : Number = 0;
+			var dY : Number = 0;
 
-			arrow.width = pToObj.x - pFromObj.x;
-			arrow.height = pToObj.y - pFromObj.y;
+			/**
+			 * If arrowRatio > sourceObjectRatio then arrow crosses vertical border of fromObject else - horisontal
+			 */
+			if ( arrowRatio > sourceObjectRatio )
+				fromObjVertCross = true;
+
+			/**
+			 * Calculates delta X and delta Y for arrow start point
+			 */
+			if ( fromObjVertCross )
+			{
+				dX = fromObjHalfWidth;
+				dY = dX / arrowRatio;
+			}
+			else
+			{
+				dY = fromObjHalfHeight;
+				dX = dY * arrowRatio;
+			}
+
+			if ( pFromObj.x < pToObj.x )
+				pFromObj.x += dX;
+			else
+				pFromObj.x -= dX;
+
+
+			if ( pFromObj.y < pToObj.y )
+				pFromObj.y += dY;
+			else
+				pFromObj.y -= dY;
+
+
+			if ( arrowRatio > targetObjectRatio )
+				toObjVertCross = true;
+			/**
+			 * Calculates delta X and delta Y for arrow end point
+			 */
+			if ( toObjVertCross )
+			{
+				dX = toObjHalfWidth;
+				dY = dX / arrowRatio;
+			}
+			else
+			{
+				dY = toObjHalfHeight;
+				dX = dY * arrowRatio;
+			}
+
+			if ( pFromObj.x < pToObj.x )
+				pToObj.x -= dX;
+			else
+				pToObj.x += dX;
+
+
+			if ( pFromObj.y < pToObj.y )
+				pToObj.y -= dY;
+			else
+				pToObj.y += dY;
+
+			if ( pFromObj.x <= pToObj.x )
+			{
+				arrow.x = pFromObj.x;
+				arrow.width = pToObj.x - pFromObj.x;
+				directionalX = LTR;
+			}
+			else
+			{
+				arrow.x = pToObj.x;
+				arrow.width = pFromObj.x - pToObj.x;
+				directionalX = RTL;
+			}
+
+			if ( pFromObj.y <= pToObj.y )
+			{
+				arrow.y = pFromObj.y;
+				arrow.height = pToObj.y - pFromObj.y;
+				directionalY = UTD;
+			}
+			else
+			{
+				arrow.y = pToObj.y;
+				arrow.height = pFromObj.y - pToObj.y;
+				directionalY = DTU;
+			}
+		}
+
+		private function drawArrow() : void
+		{
+			var alphaAngle : Number;
+			var arrowHeadAngle : Number = 0.2;
+			var arrowHeadLength : Number = 10;
+
+			var startPoint : Point = new Point();
+			var endPoint : Point = new Point();
+
+			var graphics : Graphics = arrow.graphics;
+
+			if ( directionalX == LTR )
+				endPoint.x = arrow.width;
+			else
+				startPoint.x = arrow.width;
+
+			if ( directionalY == UTD )
+				endPoint.y = arrow.height;
+			else
+				startPoint.y = arrow.height;
+
+			if ( Math.abs( Point.distance( startPoint, endPoint ) ) <= arrowHeadLength )
+				return;
+
+			var dX : Number;
+			var dY : Number;
+
+			var _numColor : Number = linkageVO.level.color;
+
+			dX = startPoint.x - endPoint.x;
+			dY = startPoint.y - endPoint.y;
+
+			alphaAngle = Math.atan( dY / dX );
+
+			if ( dX < 0 )
+				alphaAngle += Math.PI;
+
+			graphics.lineStyle( 3, _numColor, 1, true, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.BEVEL );
+
+			graphics.moveTo( startPoint.x, startPoint.y );
+			graphics.lineTo( endPoint.x, endPoint.y );
+
+			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength,
+													endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
+
+			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength,
+													endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
+
+			graphics.lineTo( endPoint.x, endPoint.y );
+		}
+
+		private function sourceTargetChange( source : Object ) : void
+		{
+			if ( _linkageVO.source && _linkageVO.target && !isActive )
+				isActive = true;
+			else if ( ( !_linkageVO.source || !_linkageVO.target ) && !isActive )
+				isActive = false;
+			else
+				return;
+
+			activeChanged = true;
+			commitProperties();
+		}
+
+		private function objectsChanged( source : Object ) : void
+		{
+			if ( arrow.visible )
+			{
+				arrow.graphics.clear();
+				calculatePositionAndSize();
+				drawArrow();
+			}
+		}
+
+		private function visibleChange( source : Object ) : void
+		{	
+			if( _linkageVO.level.visible )
+			{
+				arrow.graphics.clear();
+				calculatePositionAndSize();
+				drawArrow();
+			}
+			else
+			{
+				arrow.graphics.clear();
+			}
+			
+			arrow.visible = _linkageVO.level.visible;
 		}
 	}
 }

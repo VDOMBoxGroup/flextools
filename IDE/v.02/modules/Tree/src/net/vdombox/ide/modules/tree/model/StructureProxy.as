@@ -91,6 +91,7 @@ package net.vdombox.ide.modules.tree.model
 				structureElementVO.left = rawStructureObject.left;
 				structureElementVO.top = rawStructureObject.top;
 				structureElementVO.state = rawStructureObject.state;
+				structureElementVO.resourceID = rawStructureObject.resourceID;
 
 				_structureElements.push( structureElementVO );
 			}

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 
+		 height="125" width="200" x="@{ _structureElementVO.left }"
+		 y="@{ _structureElementVO.top }"
+		 mouseDown="mouseDownHanlder()">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
+
+			[Bindable]
+			private var _typeResource : ResourceVO;
+
+			[Bindable]
+			private var _pageResource : ResourceVO
+
+			[Bindable]
+			private var _structureElementVO : StructureElementVO;
+
+			private var mouseOffcetX : int;
+
+			private var mouseOffcetY : int;
+
+			public function set typeResource( value : ResourceVO ) : void
+			{
+				_typeResource = value;
+			}
+
+			public function set pageResource( value : ResourceVO ) : void
+			{
+				_pageResource = value;
+			}
+
+			public function set structureElementVO( value : StructureElementVO ) : void
+			{
+				_structureElementVO = value;
+				_structureElementVO.width = width;
+				_structureElementVO.height = height;
+
+			}
+
+			private function mouseDownHanlder() : void
+			{
+				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
+				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
+
+				mouseOffcetX = mouseX;
+				mouseOffcetY = mouseY;
+			}
+
+			private function stage_mouseMoveHandler( event : MouseEvent ) : void
+			{
+				var newX : int = parent.mouseX - mouseOffcetX;
+				var newY : int = parent.mouseY - mouseOffcetY;
+
+				if ( newX < 0 )
+					x = 0;
+				else
+					x = newX;
+
+				if ( newY < 10 )
+					y = 10;
+				else
+					y = newY;
+			}
+
+			private function stage_mouseUpHandler( event : MouseEvent ) : void
+			{
+				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
+				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
+			}
+		]]>
+	</fx:Script>
+
+	<s:Rect height="100%" width="100%">
+
+		<s:fill>
+
+			<s:SolidColor color="gray" />
+		</s:fill>
+	</s:Rect>
+
+	<s:Group height="15" x="0">
+
+		<mx:Image 
+				  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='menu')"
+				  y="-10" />
+
+		<s:Group x="5" y="-10">
+
+			<s:layout>
+
+				<s:HorizontalLayout />
+			</s:layout>
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='plus')"
+					  width="10" />
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='line')"
+					  width="10" />
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='delete')"
+					  width="10" />
+
+			<mx:Image height="10"
+					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='start_page')"
+					  width="10" />
+		</s:Group>
+	</s:Group>
+
+	<s:HGroup width="100%"
+			  top="15">
+
+		<mx:Image height="25" source="{ _typeResource.data }" width="25" />
+
+		<s:Label id="pageTitle" />
+	</s:HGroup>
+
+	<s:Group width="100%"
+			 bottom="0">
+
+		<s:layout>
+
+			<s:HorizontalLayout />
+		</s:layout>
+
+		<mx:Image height="80" source="{ _pageResource.data }" width="80" />
+
+		<s:Group height="100%" width="100%">
+
+			<s:layout>
+
+				<s:VerticalLayout />
+			</s:layout>
+
+			<s:RichText id="descriptionTextArea"
+						height="47" width="100%" />
+
+			<s:Label id="typeNameLabel"
+					 width="100%" />
+		</s:Group>
+	</s:Group>
+</s:Group>

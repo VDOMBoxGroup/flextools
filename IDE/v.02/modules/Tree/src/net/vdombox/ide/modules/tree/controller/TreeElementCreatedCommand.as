@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.tree.controller
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
 	import net.vdombox.ide.modules.tree.view.TreeElementMediator;
-	import net.vdombox.ide.modules.tree.view.components.TreeElementz;
+	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.tree.controller
 		{
 			var body : Object = notification.getBody();
 			
-			var viewComponent : TreeElementz = body.viewComponent as TreeElementz;
+			var viewComponent : TreeElement = body.viewComponent as TreeElement;
 			var structureElementVO : StructureElementVO= body.structureElementVO as StructureElementVO;
 			var pageVO : PageVO = body.pageVO as PageVO;
 			

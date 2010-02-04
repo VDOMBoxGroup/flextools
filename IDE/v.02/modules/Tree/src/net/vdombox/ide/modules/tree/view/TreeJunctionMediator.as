@@ -19,6 +19,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;
@@ -255,7 +256,20 @@ package net.vdombox.ide.modules.tree.view
 					
 				case ApplicationFacade.GET_PAGE_ATTRIBUTES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, body );
+					var pageAttributesRecipientID : String = body.recipientID;
+					var pageVO : PageVO = body.pageVO;
+					
+					var pageAttributesSessionName : String = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.READ +
+						ApplicationFacade.DELIMITER + PPMPageTargetNames.ATTRIBUTES;
+					
+					var pageAttributesRecipients : Object = sessionProxy.getObject( pageAttributesSessionName );
+					
+					if ( !pageAttributesRecipients.hasOwnProperty( pageVO.id ) )
+						pageAttributesRecipients[ pageVO.id ] = [];
+					
+					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );
+					
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, pageVO );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
