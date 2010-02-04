@@ -13,6 +13,8 @@ package net.vdombox.ide.common.vo
 		
 		public var state : Boolean = false;
 		
+		public var resourceID : String;
+		
 		public var levels : Array = [];
 		
 		private var _id : String;
@@ -33,6 +35,8 @@ package net.vdombox.ide.common.vo
 				state = true;
 			else
 				state = false;
+			
+			resourceID = description.@ResourceID;
 			
 			var sourceLevels : XMLList = description.Level;
 			

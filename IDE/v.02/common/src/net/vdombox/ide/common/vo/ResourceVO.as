@@ -59,17 +59,19 @@ package net.vdombox.ide.common.vo
 		{
 			return _type;
 		}
-
-		[Bindable(event="propertyDataChange")]
-		public function get data() : ByteArray
-		{
-			return _data;
-		}
+//
+//		[Bindable(event="propertyDataChange")]
+//		public function get data() : ByteArray
+//		{
+//			return _data;
+//		}
+//		
+//		public function set data( value : ByteArray ) : void
+//		{
+//			trace( "zzzzzz" );
+//		}
 		
-		public function set data( value : ByteArray ) : void
-		{
-			trace( "zzzzzz" );
-		}
+		public var data : ByteArray;		
 		
 		public function get size() : int
 		{
@@ -103,7 +105,7 @@ package net.vdombox.ide.common.vo
 
 		public function setData( value : ByteArray ) : void
 		{
-			_data = value;
+			data = value;
 			dispatcher.dispatchEvent( new Event( "propertyDataChange" ) );
 		}
 
