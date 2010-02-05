@@ -92,7 +92,7 @@ package net.vdombox.ide.modules.tree.view
 					var resourceVO : ResourceVO = new ResourceVO( _typeVO.id );
 					resourceVO.setID( _typeVO.iconID );
 					treeElement.typeResource = resourceVO;
-					treeElement.typeNameLabel.text = _typeVO.displayName;
+					treeElement.typeName = _typeVO.displayName;
 
 					sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
 
@@ -103,8 +103,8 @@ package net.vdombox.ide.modules.tree.view
 				{
 					_pageAttributesVO = body as PageAttributesVO;
 					
-					treeElement.descriptionTextArea.text = getAttributeValue( "description" );
-					treeElement.pageTitle.text = getAttributeValue( "title" );
+					treeElement.description = getAttributeValue( "description" );
+					treeElement.title = getAttributeValue( "title" );
 					break;
 				}
 			}

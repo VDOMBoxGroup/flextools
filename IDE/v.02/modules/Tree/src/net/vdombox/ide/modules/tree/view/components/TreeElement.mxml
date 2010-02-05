@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 
-		 height="125" width="200" x="@{ _structureElementVO.left }"
-		 y="@{ _structureElementVO.top }"
-		 mouseDown="mouseDownHanlder()">
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:mx="library://ns.adobe.com/flex/halo"
+					  
+					  height="125" width="200" x="@{ _structureElementVO.left }"
+					  y="@{ _structureElementVO.top }"
+					  creationComplete="creationCompleteHandler()"
+					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin">
 
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.controls.Image;
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
+			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
+			
+			import spark.components.Group;
+
+			[SkinPart( required="true" )]
+			public var minimizeButton : Image;
+
+			[SkinPart( required="true" )]
+			public var createLineButton : Image;
+
+			[SkinPart( required="true" )]
+			public var deleteButton : Image;
+
+			[SkinPart( required="true" )]
+			public var setStartPageButton : Image;
+
+			[SkinPart( required="true" )]
+			public var header : Group;
 
 			[Bindable]
 			private var _typeResource : ResourceVO;
@@ -20,6 +42,10 @@
 
 			[Bindable]
 			private var _structureElementVO : StructureElementVO;
+
+			private var _selected : Boolean;
+
+			private var _minimized : Boolean;
 
 			private var mouseOffcetX : int;
 
@@ -38,12 +64,102 @@
 			public function set structureElementVO( value : StructureElementVO ) : void
 			{
 				_structureElementVO = value;
-				_structureElementVO.width = width;
-				_structureElementVO.height = height;
+				BindingUtils.bindProperty( _structureElementVO, "width", this, "width" );
+				BindingUtils.bindProperty( _structureElementVO, "height", this, "height" );
+//				_structureElementVO.width = width;
+//				_structureElementVO.height = height;
+			}
+
+			public function set description( value : String ) : void
+			{
 
 			}
 
-			private function mouseDownHanlder() : void
+			public function set title( value : String ) : void
+			{
+
+			}
+
+			public function set typeName( value : String ) : void
+			{
+
+			}
+
+			override protected function getCurrentSkinState() : String
+			{
+				var skinStateName : String;
+				
+				if ( _minimized )
+				{
+					if ( _selected )
+						skinStateName = "normalSelected";
+					else
+						skinStateName = "normal";
+					
+					height = 125;
+				}
+				else
+				{
+					if ( _selected )
+						skinStateName = "minimizedSelected";
+					else
+						skinStateName = "minimized";
+					
+					height = 30;
+				}
+				
+				return skinStateName;
+			}
+
+			override protected function partAdded( partName : String, instance : Object ) : void
+			{
+				switch ( partName )
+				{
+					case "header":
+					{
+						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler );
+						break;
+					}
+
+					case "minimizeButton":
+					{
+						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler, true );
+						break;
+					}
+
+					case "createLineButton":
+					{
+						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler );
+						break;
+					}
+
+					case "deleteButton":
+					{
+						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler );
+						break;
+					}
+
+					case "setStartPageButton":
+					{
+						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler );
+						break;
+					}
+				}
+			}
+
+			private function creationCompleteHandler() : void
+			{
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, true, 0 );
+			}
+			
+			private function mouseDownHandler( event : MouseEvent ) : void
+			{
+				_selected = !_selected;
+
+				invalidateSkinState();
+			}
+
+			private function header_mouseDownHandler( event : MouseEvent ) : void
 			{
 				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
@@ -73,78 +189,28 @@
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
+
+			private function minimizeButton_clickHandler( event : MouseEvent ) : void
+			{
+				_minimized = !_minimized;
+
+				invalidateSkinState();
+			}
+
+			private function createLineButton_clickHandler( event : MouseEvent ) : void
+			{
+
+			}
+
+			private function deleteButton_clickHandler( event : MouseEvent ) : void
+			{
+
+			}
+
+			private function setStartPageButton_clickHandler( event : MouseEvent ) : void
+			{
+
+			}
 		]]>
 	</fx:Script>
-
-	<s:Rect height="100%" width="100%">
-
-		<s:fill>
-
-			<s:SolidColor color="gray" />
-		</s:fill>
-	</s:Rect>
-
-	<s:Group height="15" x="0">
-
-		<mx:Image 
-				  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='menu')"
-				  y="-10" />
-
-		<s:Group x="5" y="-10">
-
-			<s:layout>
-
-				<s:HorizontalLayout />
-			</s:layout>
-
-			<mx:Image height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='plus')"
-					  width="10" />
-
-			<mx:Image height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='line')"
-					  width="10" />
-
-			<mx:Image height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='delete')"
-					  width="10" />
-
-			<mx:Image height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='start_page')"
-					  width="10" />
-		</s:Group>
-	</s:Group>
-
-	<s:HGroup width="100%"
-			  top="15">
-
-		<mx:Image height="25" source="{ _typeResource.data }" width="25" />
-
-		<s:Label id="pageTitle" />
-	</s:HGroup>
-
-	<s:Group width="100%"
-			 bottom="0">
-
-		<s:layout>
-
-			<s:HorizontalLayout />
-		</s:layout>
-
-		<mx:Image height="80" source="{ _pageResource.data }" width="80" />
-
-		<s:Group height="100%" width="100%">
-
-			<s:layout>
-
-				<s:VerticalLayout />
-			</s:layout>
-
-			<s:RichText id="descriptionTextArea"
-						height="47" width="100%" />
-
-			<s:Label id="typeNameLabel"
-					 width="100%" />
-		</s:Group>
-	</s:Group>
-</s:Group>
+</s:SkinnableContainer>
