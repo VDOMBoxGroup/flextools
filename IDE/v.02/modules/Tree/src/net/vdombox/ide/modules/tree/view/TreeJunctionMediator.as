@@ -78,6 +78,8 @@ package net.vdombox.ide.modules.tree.view
 			
 			interests.push( ApplicationFacade.OPEN_WINDOW );
 			interests.push( ApplicationFacade.CLOSE_WINDOW );
+			
+			interests.push( ApplicationFacade.TREE_ELEMENT_SELECTION );
 
 			return interests;
 		}
@@ -270,6 +272,15 @@ package net.vdombox.ide.modules.tree.view
 					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );
 					
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, pageVO );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.TREE_ELEMENT_SELECTION:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

@@ -6,9 +6,10 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -29,7 +30,7 @@ package net.vdombox.ide.modules.tree.view
 		private var _pageVO : PageVO;
 
 		private var _structureElementVO : StructureElementVO;
-		
+
 		private var _pageAttributesVO : PageAttributesVO;
 
 		private var _typeVO : TypeVO;
@@ -72,6 +73,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
+			interests.push( ApplicationFacade.SELECTED_PAGE_GETTED );
 			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 
@@ -102,32 +104,46 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
 					_pageAttributesVO = body as PageAttributesVO;
-					
+
 					treeElement.description = getAttributeValue( "description" );
 					treeElement.title = getAttributeValue( "title" );
 					break;
+				}
+
+				case ApplicationFacade.SELECTED_PAGE_GETTED:
+				{
+					if( body == pageVO )
+						treeElement.selected = true;
+					else
+						treeElement.selected = false;
 				}
 			}
 		}
 
 		private function addEventListeners() : void
 		{
+			treeElement.addEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler );
 		}
-		
+
 		private function getAttributeValue( attributeName : String ) : String
 		{
 			var result : String;
-			
+
 			for each ( var attributeVO : AttributeVO in _pageAttributesVO.attributes )
 			{
-				if( attributeVO.name == attributeName )
+				if ( attributeVO.name == attributeName )
 				{
 					result = attributeVO.value;
 					break;
 				}
 			}
-			
+
 			return result;
+		}
+
+		private function elementSelectionHandler( event : TreeElementEvent ) : void
+		{
+			sendNotification( ApplicationFacade.TREE_ELEMENT_SELECTION, pageVO );
 		}
 	}
 }

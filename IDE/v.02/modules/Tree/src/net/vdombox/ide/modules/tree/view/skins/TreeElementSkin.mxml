@@ -7,69 +7,6 @@
 		[HostComponent("net.vdombox.ide.modules.tree.view.components.TreeElement")]
 	</fx:Metadata>
 
-	<fx:Script>
-		<![CDATA[
-			private var _selected : Boolean;
-
-			private var _minimized : Boolean;
-
-			public function get selected() : Boolean
-			{
-				return _selected;
-			}
-
-			public function set selected( value : Boolean ) : void
-			{
-				if ( _selected == value )
-					return;
-
-				_selected = value;
-
-				if ( _selected )
-				{
-					if ( _minimized )
-						currentState = "minimizedSelected";
-					else
-						currentState = "normalSelected";
-				}
-				else
-				{
-					if ( _minimized )
-						currentState = "minimized";
-					else
-						currentState = "normal";
-				}
-			}
-
-			private function switchState() : void
-			{
-				if ( _minimized )
-				{
-					if ( _selected )
-						currentState = "normalSelected";
-					else
-						currentState = "normal";
-
-					hostComponent.height = 125;
-				}
-				else
-				{
-					if ( _selected )
-						currentState = "minimizedSelected";
-					else
-						currentState = "minimized";
-
-					hostComponent.height = 30;
-				}
-			}
-
-			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
-			{
-				super.updateDisplayList( unscaledWidth, unscaledHeight );
-			}
-		]]>
-	</fx:Script>
-
 	<s:states>
 
 		<s:State name="normal" stateGroups="normalGroup, unselectedGroup" />
@@ -79,6 +16,8 @@
 		<s:State name="minimized" stateGroups="minimizedGroup, unselectedGroup" />
 
 		<s:State name="minimizedSelected" stateGroups="minimizedGroup, selectedGroup" />
+		
+		<s:State name="disabled" stateGroups="normalGroup, unselectedGroup" />
 	</s:states>
 
 	<s:Group id="topMask"
@@ -167,23 +106,23 @@
 			</s:Rect>
 
 			<s:HGroup width="100%" top="4">
-				<!--<mx:Image height="25" source="{ _typeResource.data }" width="25" />-->
+				<mx:Image height="25" source="{ hostComponent.typeResource.data }" width="25" />
 
-				<s:Label id="pageTitle" />
+				<s:Label text="{ hostComponent.title }"  color.normal="#FFFFFF"/>
 			</s:HGroup>
 		</s:Group>
 
 		<s:HGroup height="100%" width="100%"
 				  top="30"
 				  visible.minimized="false">
-			<!--<mx:Image height="80" source="{ _pageResource.data }" width="80" />-->
+			<mx:Image height="80" source="{ hostComponent.pageResource.data }" width="80" />
 
 			<s:VGroup height="100%" width="100%">
 
-				<s:RichText id="descriptionTextArea"
+				<s:RichText text="{ hostComponent.description }"
 							height="47" width="100%" />
 
-				<s:Label id="typeNameLabel" width="100%" />
+				<s:Label width="100%" text="{ hostComponent.typeName }" />
 			</s:VGroup>
 		</s:HGroup>
 	</s:Group>

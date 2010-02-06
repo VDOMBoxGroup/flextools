@@ -7,7 +7,7 @@
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.modules.tree.view.skins.NewCheckBoxSkin;
+			import net.vdombox.ide.modules.tree.view.skins.LevelCheckBoxSkin;
 		]]>
 	</fx:Script>
 
@@ -31,7 +31,7 @@
 
 		<s:CheckBox id="cbx"
 					height="100%" selected="@{ data.visible }"
-					skinClass="net.vdombox.ide.modules.tree.view.skins.NewCheckBoxSkin"
+					skinClass="net.vdombox.ide.modules.tree.view.skins.LevelCheckBoxSkin"
 					symbolColor="{data.color}" />
 
 		<s:Rect width="1"

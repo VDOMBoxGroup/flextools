@@ -10,5 +10,10 @@ package net.vdombox.ide.modules.tree.events
 		{
 			super( type, bubbles, cancelable );
 		}
+		
+		override public function clone() : Event
+		{
+			return new LevelsFilterPanelEvent( type, bubbles, cancelable );
+		}
 	}
 }

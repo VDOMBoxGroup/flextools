@@ -114,6 +114,7 @@ package net.vdombox.ide.modules.tree
 		public static const DELIMITER : String = "/";
 		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
+		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";
 		public static const ARROW_CREATED : String = "arrowCreated";
 		
 		public static const BODY_CREATED : String = "bodyCreated";

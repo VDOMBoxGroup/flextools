@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:SkinnableComponent xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  
 					  height="125" width="200" x="@{ _structureElementVO.left }"
 					  y="@{ _structureElementVO.top }"
-					  creationComplete="creationCompleteHandler()"
 					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.controls.Image;
-			
+
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-			
+
 			import spark.components.Group;
+			import spark.components.supportClasses.TextBase;
 
 			[SkinPart( required="true" )]
 			public var minimizeButton : Image;
@@ -34,6 +35,15 @@
 			[SkinPart( required="true" )]
 			public var header : Group;
 
+//			[SkinPart( required="true" )]
+//			public var titleDisplay : TextBase;
+//
+//			[SkinPart( required="true" )]
+//			public var descriptionDisplay : TextBase;
+//
+//			[SkinPart( required="true" )]
+//			public var typeNameDisplay : TextBase;
+
 			[Bindable]
 			private var _typeResource : ResourceVO;
 
@@ -43,6 +53,12 @@
 			[Bindable]
 			private var _structureElementVO : StructureElementVO;
 
+			private var _title : String;
+
+			private var _description : String;
+
+			private var _typeName : String;
+
 			private var _selected : Boolean;
 
 			private var _minimized : Boolean;
@@ -51,11 +67,24 @@
 
 			private var mouseOffcetY : int;
 
+			
+			[Bindable]
+			public function get typeResource(  ) : ResourceVO
+			{
+				return _typeResource;
+			}
+			
 			public function set typeResource( value : ResourceVO ) : void
 			{
 				_typeResource = value;
 			}
-
+			
+			[Bindable]
+			public function get pageResource(  ) : ResourceVO
+			{
+				return _pageResource;
+			}
+			
 			public function set pageResource( value : ResourceVO ) : void
 			{
 				_pageResource = value;
@@ -66,36 +95,61 @@
 				_structureElementVO = value;
 				BindingUtils.bindProperty( _structureElementVO, "width", this, "width" );
 				BindingUtils.bindProperty( _structureElementVO, "height", this, "height" );
-//				_structureElementVO.width = width;
-//				_structureElementVO.height = height;
+			}
+
+			[Bindable]
+			public function get description() : String
+			{
+				return _description;
 			}
 
 			public function set description( value : String ) : void
 			{
+				_description = value;
+			}
 
+			[Bindable]
+			public function get title() : String
+			{
+				return _title;
 			}
 
 			public function set title( value : String ) : void
 			{
+				_title = value;
+			}
 
+			[Bindable]
+			public function get typeName() : String
+			{
+				return _typeName;
 			}
 
 			public function set typeName( value : String ) : void
 			{
+				_typeName = value;
+			}
 
+			public function set selected( value : Boolean ) : void
+			{
+				if ( _selected != value )
+				{
+					_selected = value;
+					callLater( invalidateSkinState );
+				}
 			}
 
 			override protected function getCurrentSkinState() : String
 			{
 				var skinStateName : String;
-				
+
 				if ( _minimized )
 				{
 					if ( _selected )
 						skinStateName = "normalSelected";
 					else
 						skinStateName = "normal";
-					
+
 					height = 125;
 				}
 				else
@@ -104,11 +158,18 @@
 						skinStateName = "minimizedSelected";
 					else
 						skinStateName = "minimized";
-					
+
 					height = 30;
 				}
-				
+
 				return skinStateName;
+			}
+
+			override protected function attachSkin() : void
+			{
+				super.attachSkin();
+
+				skin.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
 			}
 
 			override protected function partAdded( partName : String, instance : Object ) : void
@@ -147,16 +208,9 @@
 				}
 			}
 
-			private function creationCompleteHandler() : void
-			{
-				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, true, 0 );
-			}
-			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
-				_selected = !_selected;
-
-				invalidateSkinState();
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.ELEMENT_SELECTION ) );
 			}
 
 			private function header_mouseDownHandler( event : MouseEvent ) : void
@@ -194,7 +248,7 @@
 			{
 				_minimized = !_minimized;
 
-				invalidateSkinState();
+				callLater( invalidateSkinState );
 			}
 
 			private function createLineButton_clickHandler( event : MouseEvent ) : void
@@ -213,4 +267,4 @@
 			}
 		]]>
 	</fx:Script>
-</s:SkinnableContainer>
+</s:SkinnableComponent>
