@@ -47,7 +47,7 @@ package net.vdombox.ide.core.view
 		
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 			
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
 			settingsProxy = facade.retrieveProxy( SettingsStorageProxy.NAME ) as SettingsStorageProxy;
@@ -81,7 +81,7 @@ package net.vdombox.ide.core.view
 			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			settingsWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}

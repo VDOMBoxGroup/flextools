@@ -30,7 +30,7 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 		}
 
 		public function getAttributes() : AsyncToken
@@ -43,12 +43,12 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}

@@ -62,7 +62,12 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
+		}
+		
+		override public function onRemove() : void
+		{
+			removeHandlers();
 		}
 
 		public function getStructure() : AsyncToken
@@ -150,14 +155,14 @@ package net.vdombox.ide.core.model
 //			return objectProxy;
 //		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );

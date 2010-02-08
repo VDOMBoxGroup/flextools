@@ -1,9 +1,11 @@
 package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	
@@ -55,6 +57,18 @@ package net.vdombox.ide.core.controller
 					var applicationInformationVO : ApplicationInformationVO = body.applicationInformationVO;
 					applicationProxy.changeApplicationInformation( applicationInformationVO );
 
+					break;
+				}
+					
+				case PPMApplicationTargetNames.PAGE:
+				{
+					if( operation == PPMOperationNames.CREATE )
+					{
+						var typeVO : TypeVO = body.typeVO;
+						
+						applicationProxy.createPage( typeVO );
+					}
+					
 					break;
 				}
 			}

@@ -175,6 +175,9 @@ package net.vdombox.ide.core
 		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
 
 		public static const PAGES_GETTED : String = "pagesGetted";
+		
+		public static const PAGE_CREATED : String = "pageCreated";
+		public static const PAGE_DELETED : String = "pageDeleted";
 
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
@@ -253,6 +256,8 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( PAGES_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( PAGE_CREATED, ApplicationProxyResponseCommand );
+			registerCommand( PAGE_DELETED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );

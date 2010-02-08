@@ -88,7 +88,7 @@ package net.vdombox.ide.core.view
 
 			userData = {};
 
-			addEventListeners();
+			addHandlers();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -179,7 +179,7 @@ package net.vdombox.ide.core.view
 			return viewComponent as InitialWindow;
 		}
 		
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 

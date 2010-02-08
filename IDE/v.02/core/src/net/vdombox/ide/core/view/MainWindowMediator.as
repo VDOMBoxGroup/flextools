@@ -109,14 +109,14 @@ package net.vdombox.ide.core.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 			
 			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;			
 		}
 
 		override public function onRemove() : void
 		{
-			removeEventListeners();
+			removeHandlers();
 		}
 
 		public function openWindow() : void
@@ -134,12 +134,12 @@ package net.vdombox.ide.core.view
 			return mainWindow.toolsetBar;
 		}
 		
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
 		
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}

@@ -62,7 +62,7 @@ package net.vdombox.ide.core.model
 			_status = NOT_CONNECTED;
 			soap = SOAP.getInstance();
 
-			addEventListeners();
+			addHandlers();
 		}
 
 		public function connect( hostname : String ) : void
@@ -124,7 +124,7 @@ package net.vdombox.ide.core.model
 
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			soap.addEventListener( SOAPEvent.INIT_COMPLETE, soap_initCompleteHandler );
 			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );

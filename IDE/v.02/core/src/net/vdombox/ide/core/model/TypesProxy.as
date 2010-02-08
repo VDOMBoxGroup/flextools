@@ -28,7 +28,7 @@ package net.vdombox.ide.core.model
 			_types = [];
 			_topLevelTypes = [];
 			
-			addEventListeners();
+			addHandlers();
 		}
 
 		override public function onRemove() : void
@@ -36,7 +36,7 @@ package net.vdombox.ide.core.model
 			_types = null;
 			_topLevelTypes = null;
 			
-			removeEventListeners();
+			removeHandlers();
 		}
 
 		public function get types() : Array
@@ -75,12 +75,12 @@ package net.vdombox.ide.core.model
 			return typeVO;
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			soap.get_all_types.addEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 		}
 
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 			soap.get_all_types.removeEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 		}

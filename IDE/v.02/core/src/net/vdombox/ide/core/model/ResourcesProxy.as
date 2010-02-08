@@ -28,7 +28,7 @@ package net.vdombox.ide.core.model
 		{
 			super( NAME, data );
 
-			addEventListeners();
+			addHandlers();
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
@@ -105,7 +105,7 @@ package net.vdombox.ide.core.model
 			soap_setResource();
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			soap.get_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );

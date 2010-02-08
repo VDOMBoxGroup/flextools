@@ -34,7 +34,7 @@ package net.vdombox.ide.core.view
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
 			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
 
-			addEventListeners();
+			addHandlers();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -59,7 +59,7 @@ package net.vdombox.ide.core.view
 			return viewComponent as LoginView;
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			loginView.addEventListener( FlexEvent.SHOW, showHandler );
 
