@@ -25,7 +25,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.tree.view
 			return viewComponent as SettingsScreen;
 		}
 		
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			settingsScreen.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			settingsScreen.addEventListener( "performOK", performOKHandler );

@@ -41,6 +41,13 @@ package net.vdombox.ide.modules.tree.controller
 					
 					break;
 				}
+					
+				case PPMApplicationTargetNames.PAGE:
+				{
+					sendNotification( ApplicationFacade.PAGE_CREATED, body.pages );
+					
+					break;
+				}
 			}
 		}
 	}

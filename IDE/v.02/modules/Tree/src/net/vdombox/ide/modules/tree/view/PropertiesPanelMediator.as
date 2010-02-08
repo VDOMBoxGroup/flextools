@@ -32,12 +32,12 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
-			removeEventListeners();
+			removeHandlers();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -96,12 +96,12 @@ package net.vdombox.ide.modules.tree.view
 			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 
 		}
 
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 
 		}

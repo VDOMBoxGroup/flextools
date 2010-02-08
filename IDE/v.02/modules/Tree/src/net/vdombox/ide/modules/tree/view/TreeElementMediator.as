@@ -52,7 +52,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 
 			treeElement.structureElementVO = structureElementVO;
 
@@ -120,7 +120,7 @@ package net.vdombox.ide.modules.tree.view
 			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			treeElement.addEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler );
 		}

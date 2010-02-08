@@ -1,29 +1,13 @@
 package net.vdombox.ide.modules.tree.controller
 {
-	import net.vdombox.ide.modules.Tree;
-	import net.vdombox.ide.modules.tree.model.SessionProxy;
-	import net.vdombox.ide.modules.tree.model.SettingsProxy;
-	import net.vdombox.ide.modules.tree.model.StructureProxy;
-	import net.vdombox.ide.modules.tree.view.TreeJunctionMediator;
-	import net.vdombox.ide.modules.tree.view.TreeMediator;
-	
-	import org.puremvc.as3.multicore.interfaces.INotification;
-	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
+	import org.puremvc.as3.multicore.patterns.command.MacroCommand;
 
-	public class StartupCommand extends SimpleCommand
+	public class StartupCommand extends MacroCommand
 	{
-		override public function execute( note : INotification ) : void
+		override protected function initializeMacroCommand() : void
 		{
-			var application : Tree = note.getBody() as Tree;
-
-//			model prepare
-			facade.registerProxy( new SessionProxy() );
-			facade.registerProxy( new SettingsProxy() );
-			facade.registerProxy( new StructureProxy() );
-			
-//			view prepare			
-			facade.registerMediator( new TreeJunctionMediator() );
-			facade.registerMediator( new TreeMediator( application ) )
+			addSubCommand( StartupModelCommand );
+			addSubCommand( StartupViewCommand );
 		}
 	}
 }

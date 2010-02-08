@@ -30,7 +30,7 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners()
+			addHandlers()
 		}
 
 		override public function listNotificationInterests() : Array
@@ -59,7 +59,7 @@ package net.vdombox.ide.modules.tree.view
 			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, toolsetButton_clickHandler )
 		}

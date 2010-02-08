@@ -27,14 +27,14 @@ package net.vdombox.ide.modules.tree.view
 		
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 			
 			sendNotification( ApplicationFacade.GET_STRUCTURE_LEVELS );
 		}
 		
 		override public function onRemove() : void
 		{
-			removeEventListeners();
+			removeHandlers();
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -63,12 +63,12 @@ package net.vdombox.ide.modules.tree.view
 			}
 		}
 		
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			levelsPanel.addEventListener( LevelsFilterPanelEvent.CURRENT_LEVEL_CHANGED, changeHandler );
 		}
 		
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 			
 		}

@@ -28,11 +28,13 @@ package net.vdombox.ide.modules.tree.controller
 			}
 
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
 			var bodySessionObject : Object = sessionProxy.getObject( ApplicationFacade.BODY_SESSION_OBJECT );
+			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 			
 			bodySessionObject[ "inititializeProcess" ] = 0;
 			bodySessionObject[ "pages" ] = [];
-			bodySessionObject[ "selectedPage" ] = null;
+			statesObject[ ApplicationFacade.SELECTED_PAGE ] = null;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 		}

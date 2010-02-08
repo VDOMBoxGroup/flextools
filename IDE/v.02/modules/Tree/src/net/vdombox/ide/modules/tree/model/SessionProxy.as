@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.tree.model
 		override public function onRemove() : void
 		{
 			data = null;
-		}
+		} 
 		
 		public function getObject( objectID : String ) : Object
 		{	

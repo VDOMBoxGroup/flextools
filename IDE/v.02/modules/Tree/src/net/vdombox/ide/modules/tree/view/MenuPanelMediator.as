@@ -25,12 +25,12 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
-			removeEventListeners();
+			removeHandlers();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -57,7 +57,7 @@ package net.vdombox.ide.modules.tree.view
 //			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			menuPanel.addEventListener( MenuPanelEvent.CREATE_PAGE, menuPanel_createPageHandler );
 			menuPanel.addEventListener( MenuPanelEvent.AUTO_SPACING, menuPanel_autoSpacingHandler );
@@ -67,7 +67,7 @@ package net.vdombox.ide.modules.tree.view
 			menuPanel.addEventListener( MenuPanelEvent.SAVE, menuPanel_saveHandler );
 		}
 
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 			menuPanel.removeEventListener( MenuPanelEvent.CREATE_PAGE, menuPanel_createPageHandler );
 			menuPanel.removeEventListener( MenuPanelEvent.AUTO_SPACING, menuPanel_autoSpacingHandler );
@@ -79,22 +79,22 @@ package net.vdombox.ide.modules.tree.view
 
 		private function menuPanel_createPageHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CREATE_PAGE_REQUEST );
+			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST );
 		}
 
 		private function menuPanel_autoSpacingHandler( event : MenuPanelEvent ) : void
 		{
-
+			sendNotification( ApplicationFacade.AUTO_SPACING_REQUEST );
 		}
 
 		private function menuPanel_expandAllHandler( event : MenuPanelEvent ) : void
 		{
-
+			sendNotification( ApplicationFacade.EXPAND_ALL_REQUEST );
 		}
 
 		private function menuPanel_showSignatureHandler( event : MenuPanelEvent ) : void
 		{
-
+			sendNotification( ApplicationFacade.SHOW_SIGNATURE_REQUEST );
 		}
 
 		private function menuPanel_undoHandler( event : MenuPanelEvent ) : void
@@ -104,7 +104,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private function menuPanel_saveHandler( event : MenuPanelEvent ) : void
 		{
-
+			sendNotification( ApplicationFacade.SAVE_REQUEST );
 		}
 	}
 }

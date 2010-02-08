@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.ArrowCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateBodyCommand;
-	import net.vdombox.ide.modules.tree.controller.CreatePageWindowCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.CreatePageRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
@@ -12,10 +12,11 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.InitializeCommand;
 	import net.vdombox.ide.modules.tree.controller.InitializeCompleteCommand;
 	import net.vdombox.ide.modules.tree.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.tree.controller.OpenCreatePageWindowRequestCommand;
+	import net.vdombox.ide.modules.tree.controller.PageTypeItemRendererCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessResourcesProxyMessageCommand;
-	import net.vdombox.ide.modules.tree.controller.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.ProcessTypesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.SaveSettingsToProxy;
@@ -95,7 +96,7 @@ package net.vdombox.ide.modules.tree
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED : String = "pagesGetted";
 		
-		public static const CREATE_PAGE : String = "createPags";
+		public static const CREATE_PAGE : String = "createPage";
 		public static const PAGE_CREATED : String = "pageCreated";
 
 //		pages
@@ -111,7 +112,18 @@ package net.vdombox.ide.modules.tree
 		
 		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
 		
+		public static const OPEN_CREATE_PAGE_WINDOW_REQUEST : String = "openCreatePageWindowRequest";
+		public static const AUTO_SPACING_REQUEST : String = "autoSpacingRequest";
+		public static const EXPAND_ALL_REQUEST : String = "expandAllRequest";
+		public static const SHOW_SIGNATURE_REQUEST : String = "showSignatureRequest";
+		public static const SAVE_REQUEST : String = "saveRequest";
+		
 		public static const DELIMITER : String = "/";
+		
+		public static const STATES : String = "states";
+		
+		public static const SELECTED_APPLICATION : String = "selectedApplication";
+		public static const SELECTED_PAGE : String = "selectedPage";
 		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
 		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";
@@ -129,6 +141,8 @@ package net.vdombox.ide.modules.tree
 //		public static const GET_SELECTED_STRUCTURE_LEVEL: String = "getSelectedStructureLevel";
 //		public static const SELECTED_STRUCTURE_LEVEL_GETTED: String = "selectedStructureLevelGetted";
 		public static const SELECTED_STRUCTURE_LEVEL_CHANGED: String = "selectedStructureLevelChanged";
+		
+		public static const PAGE_TYPE_ITEM_RENDERER_CREATED : String = "pageTypeItemRendererCreated";
 		
 		public static const INITIALIZE_COMPLETE: String = "initializeComplete";
 		
@@ -164,7 +178,6 @@ package net.vdombox.ide.modules.tree
 			registerCommand( SET_SETTINGS, SetSettingsCommand );
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 			
-			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
@@ -175,7 +188,7 @@ package net.vdombox.ide.modules.tree
 			registerCommand( ARROW_CREATED, ArrowCreatedCommand );
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
-			registerCommand( CREATE_PAGE_WINDOW_CREATED, CreatePageWindowCreatedCommand );
+			registerCommand( OPEN_CREATE_PAGE_WINDOW_REQUEST, OpenCreatePageWindowRequestCommand );
 			
 			registerCommand( SELECTED_APPLICATION_GETTED, SelectedApplicationGettedCommand );
 			
@@ -185,6 +198,10 @@ package net.vdombox.ide.modules.tree
 			registerCommand( INITIALIZE_COMPLETE, InitializeCompleteCommand );
 			
 			registerCommand( GET_STRUCTURE_LEVELS, GetStructureLevelsCommand );
+			
+			registerCommand( PAGE_TYPE_ITEM_RENDERER_CREATED, PageTypeItemRendererCreatedCommand );
+			
+			registerCommand( CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

@@ -79,14 +79,14 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 
 			treeElements = {};
 		}
 
 		override public function onRemove() : void
 		{
-			removeEventListeners();
+			removeHandlers();
 
 			treeElements = null;
 		}
@@ -95,13 +95,6 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-//			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
-//			interests.push( ApplicationFacade.APPLICATION_STRUCTURE_GETTED );
-//			interests.push( ApplicationFacade.PAGES_GETTED );
-//			interests.push( ApplicationFacade.SELECTED_PAGE_GETTED );
-//			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
-//			interests.push( ApplicationFacade.CREATE_PAGE_REQUEST );
-
 			return interests;
 		}
 
@@ -109,98 +102,14 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var messageName : String = notification.getName();
 			var messageBody : Object = notification.getBody();
-
-//			switch ( messageName )
-//			{
-//				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
-//				{
-//					selectedApplication = messageBody as ApplicationVO;
-//
-//					sendNotification( ApplicationFacade.GET_PAGES, selectedApplication );
-//
-//					break;
-//				}
-//
-//				case ApplicationFacade.PAGES_GETTED:
-//				{
-//					pages = messageBody as Array;
-//
-//					sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, selectedApplication );
-//
-//					break;
-//				}
-//
-//				case ApplicationFacade.APPLICATION_STRUCTURE_GETTED:
-//				{
-//					structure = messageBody as Array;
-//
-//					var treeElement : TreeElementz;
-//					var pageVO : PageVO;
-//
-//					for each ( pageVO in pages )
-//					{
-//						treeElement = new TreeElementz();
-//						
-//						treeElements[ pageVO.id ] = treeElement;
-//						
-//						body.main.addElement( treeElement );
-//
-//						sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED,
-//										  { viewComponent: treeElement, pageVO: pageVO, structureObjectVO: getStructureObject( pageVO ) } );
-//					}
-//
-//					for each ( var structureLevelVO : StructureLevelVO in structure )
-//					{
-//						
-//					}
-//					
-//					sendNotification( ApplicationFacade.GET_SELECTED_PAGE, selectedApplication );
-//
-//					break;
-//				}
-//
-//				case ApplicationFacade.SELECTED_PAGE_GETTED:
-//				{
-//					var newSelectedPage : PageVO = messageBody as PageVO;
-//
-//					if ( !newSelectedPage )
-//						newSelectedPage = getPageVOByID( selectedApplication.indexPageID );
-//
-//					if ( newSelectedPage != selectedPage )
-//					{
-//						selectedPage = newSelectedPage;
-//
-//						sendNotification( ApplicationFacade.GET_TYPE, { typeID: selectedPage.typeID, recipientID: mediatorName } );
-//					}
-//
-//					break;
-//				}
-//
-//				case ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName:
-//				{
-//					sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, { pageVO: selectedPage, typeVO: messageBody } );
-//
-//					break;
-//				}
-//
-//				case ApplicationFacade.CREATE_PAGE_REQUEST:
-//				{
-//					var createPageWindow : CreatePageWindow = new CreatePageWindow();
-//
-//					sendNotification( ApplicationFacade.OPEN_WINDOW, { content: createPageWindow, title: "Create Page", isModal: true } );
-//					sendNotification( ApplicationFacade.CREATE_PAGE_WINDOW_CREATED, createPageWindow );
-//
-//					break;
-//				}
-//			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
-		private function removeEventListeners() : void
+		private function removeHandlers() : void
 		{
 			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
