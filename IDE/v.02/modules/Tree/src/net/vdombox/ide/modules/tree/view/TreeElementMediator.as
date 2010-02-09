@@ -69,6 +69,11 @@ package net.vdombox.ide.modules.tree.view
 			sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: pageVO, recipientID: mediatorName } );
 		}
 
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		}
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -112,7 +117,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SELECTED_PAGE_GETTED:
 				{
-					if( body == pageVO )
+					if ( body == pageVO )
 						treeElement.selected = true;
 					else
 						treeElement.selected = false;
@@ -122,7 +127,14 @@ package net.vdombox.ide.modules.tree.view
 
 		private function addHandlers() : void
 		{
-			treeElement.addEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler );
+			treeElement.addEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler, false, 0, true );
+			treeElement.addEventListener( TreeElementEvent.DELETE_REQUEST, deleteRequestHandler, false, 0, true );
+		}
+
+		private function removeHandlers() : void
+		{
+			treeElement.removeEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler );
+			treeElement.removeEventListener( TreeElementEvent.DELETE_REQUEST, deleteRequestHandler );
 		}
 
 		private function getAttributeValue( attributeName : String ) : String
@@ -144,6 +156,11 @@ package net.vdombox.ide.modules.tree.view
 		private function elementSelectionHandler( event : TreeElementEvent ) : void
 		{
 			sendNotification( ApplicationFacade.TREE_ELEMENT_SELECTION, pageVO );
+		}
+		
+		private function deleteRequestHandler( event : TreeElementEvent ) : void
+		{
+			sendNotification( ApplicationFacade.DELETE_PAGE_REQUEST, pageVO );
 		}
 	}
 }

@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.tree.events
 	public class TreeElementEvent extends Event
 	{
 		public static var ELEMENT_SELECTION : String = "elementSelection";
+		public static var DELETE_REQUEST : String = "deleteRequest";
 		
 		public function TreeElementEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

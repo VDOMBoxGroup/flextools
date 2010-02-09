@@ -82,6 +82,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.TREE_ELEMENT_SELECTION );
 			
 			interests.push( ApplicationFacade.CREATE_PAGE );
+			interests.push( ApplicationFacade.DELETE_PAGE );
 
 			return interests;
 		}
@@ -292,6 +293,15 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.CREATE_PAGE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.DELETE_PAGE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

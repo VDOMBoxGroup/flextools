@@ -1,10 +1,11 @@
 package net.vdombox.ide.modules.tree.controller
 {
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -44,7 +45,10 @@ package net.vdombox.ide.modules.tree.controller
 					
 				case PPMApplicationTargetNames.PAGE:
 				{
-					sendNotification( ApplicationFacade.PAGE_CREATED, body.pages );
+					if ( operation == PPMOperationNames.CREATE )
+						sendNotification( ApplicationFacade.PAGE_CREATED, body );
+					else if ( operation == PPMOperationNames.DELETE )
+						sendNotification( ApplicationFacade.PAGE_DELETED, body );
 					
 					break;
 				}

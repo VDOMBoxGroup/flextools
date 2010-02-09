@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Arrow;
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -27,6 +27,7 @@ package net.vdombox.ide.modules.tree.view
 		public var selectedApplication : ApplicationVO;
 
 		public var pages : Array;
+		public var arrows : Array;
 
 		public var structure : Array;
 
@@ -71,6 +72,7 @@ package net.vdombox.ide.modules.tree.view
 			{
 				arrow = new Arrow();
 
+				arrows.push( arrow );
 				body.main.addElement( arrow );
 
 				sendNotification( ApplicationFacade.ARROW_CREATED, { viewComponent: arrow, linkageVO: linkageVO } );
@@ -82,6 +84,7 @@ package net.vdombox.ide.modules.tree.view
 			addHandlers();
 
 			treeElements = {};
+			arrows = [];
 		}
 
 		override public function onRemove() : void
@@ -89,12 +92,15 @@ package net.vdombox.ide.modules.tree.view
 			removeHandlers();
 
 			treeElements = null;
+			arrows = null;
 		}
 
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
+			interests.push( ApplicationFacade.PAGE_DELETED );
+			
 			return interests;
 		}
 
@@ -102,6 +108,15 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var messageName : String = notification.getName();
 			var messageBody : Object = notification.getBody();
+			
+			switch ( messageName )
+			{
+				case ApplicationFacade.PAGE_DELETED:
+				{
+					var pageVO : PageVO = messageBody.pageVO;
+					break;
+				}
+			}
 		}
 
 		private function addHandlers() : void

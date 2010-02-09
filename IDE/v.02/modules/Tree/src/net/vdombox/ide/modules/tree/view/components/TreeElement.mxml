@@ -18,7 +18,6 @@
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
 
 			import spark.components.Group;
-			import spark.components.supportClasses.TextBase;
 
 			[SkinPart( required="true" )]
 			public var minimizeButton : Image;
@@ -34,15 +33,6 @@
 
 			[SkinPart( required="true" )]
 			public var header : Group;
-
-//			[SkinPart( required="true" )]
-//			public var titleDisplay : TextBase;
-//
-//			[SkinPart( required="true" )]
-//			public var descriptionDisplay : TextBase;
-//
-//			[SkinPart( required="true" )]
-//			public var typeNameDisplay : TextBase;
 
 			[Bindable]
 			private var _typeResource : ResourceVO;
@@ -67,24 +57,24 @@
 
 			private var mouseOffcetY : int;
 
-			
+
 			[Bindable]
-			public function get typeResource(  ) : ResourceVO
+			public function get typeResource() : ResourceVO
 			{
 				return _typeResource;
 			}
-			
+
 			public function set typeResource( value : ResourceVO ) : void
 			{
 				_typeResource = value;
 			}
-			
+
 			[Bindable]
-			public function get pageResource(  ) : ResourceVO
+			public function get pageResource() : ResourceVO
 			{
 				return _pageResource;
 			}
-			
+
 			public function set pageResource( value : ResourceVO ) : void
 			{
 				_pageResource = value;
@@ -178,31 +168,31 @@
 				{
 					case "header":
 					{
-						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler );
+						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
 						break;
 					}
 
 					case "minimizeButton":
 					{
-						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler, true );
+						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler, true, 0, true );
 						break;
 					}
 
 					case "createLineButton":
 					{
-						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler );
+						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler, false, 0, true );
 						break;
 					}
 
 					case "deleteButton":
 					{
-						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler );
+						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
 						break;
 					}
 
 					case "setStartPageButton":
 					{
-						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler );
+						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler, false, 0, true );
 						break;
 					}
 				}
@@ -258,7 +248,7 @@
 
 			private function deleteButton_clickHandler( event : MouseEvent ) : void
 			{
-
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE_REQUEST ) );
 			}
 
 			private function setStartPageButton_clickHandler( event : MouseEvent ) : void

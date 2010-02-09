@@ -16,7 +16,7 @@
 		<s:State name="minimized" stateGroups="minimizedGroup, unselectedGroup" />
 
 		<s:State name="minimizedSelected" stateGroups="minimizedGroup, selectedGroup" />
-		
+
 		<s:State name="disabled" stateGroups="normalGroup, unselectedGroup" />
 	</s:states>
 
@@ -57,17 +57,17 @@
 					  width="10" />
 
 			<mx:Image id="createLineButton"
-					  height="10"
+					  buttonMode="true" height="10"
 					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='line')"
 					  width="10" />
 
 			<mx:Image id="deleteButton"
-					  height="10"
+					  buttonMode="true" height="10"
 					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='delete')"
 					  width="10" />
 
 			<mx:Image id="setStartPageButton"
-					  height="10"
+					  buttonMode="true" height="10"
 					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='start_page')"
 					  width="10" />
 		</s:Group>
@@ -106,23 +106,24 @@
 			</s:Rect>
 
 			<s:HGroup width="100%" top="4">
+
 				<mx:Image height="25" source="{ hostComponent.typeResource.data }" width="25" />
 
-				<s:Label text="{ hostComponent.title }"  color.normal="#FFFFFF"/>
+				<s:Label text="{ hostComponent.title }" color.normal="#FFFFFF" />
 			</s:HGroup>
 		</s:Group>
 
 		<s:HGroup height="100%" width="100%"
 				  top="30"
 				  visible.minimized="false">
+
 			<mx:Image height="80" source="{ hostComponent.pageResource.data }" width="80" />
 
 			<s:VGroup height="100%" width="100%">
 
-				<s:RichText text="{ hostComponent.description }"
-							height="47" width="100%" />
+				<s:RichText height="47" text="{ hostComponent.description }" width="100%" />
 
-				<s:Label width="100%" text="{ hostComponent.typeName }" />
+				<s:Label text="{ hostComponent.typeName }" width="100%" />
 			</s:VGroup>
 		</s:HGroup>
 	</s:Group>
