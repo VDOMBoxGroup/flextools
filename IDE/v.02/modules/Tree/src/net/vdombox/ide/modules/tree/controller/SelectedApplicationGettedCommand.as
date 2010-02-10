@@ -18,8 +18,8 @@ package net.vdombox.ide.modules.tree.controller
 			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = selectedApplication;
 			
-			sendNotification( ApplicationFacade.GET_PAGES, selectedApplication );
 			sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, selectedApplication );
+			sendNotification( ApplicationFacade.GET_PAGES, selectedApplication );
 		}
 	}
 }

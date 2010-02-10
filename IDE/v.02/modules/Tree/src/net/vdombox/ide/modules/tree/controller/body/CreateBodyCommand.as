@@ -28,11 +28,8 @@ package net.vdombox.ide.modules.tree.controller.body
 				facade.registerMediator( new BodyMediator( body ) )
 			}
 			
-			var bodySessionObject : Object = sessionProxy.getObject( ApplicationFacade.BODY_SESSION_OBJECT );
 			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
-			
-			bodySessionObject[ "inititializeProcess" ] = 0;
-			
+						
 			statesObject[ ApplicationFacade.SELECTED_PAGE ] = null;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );

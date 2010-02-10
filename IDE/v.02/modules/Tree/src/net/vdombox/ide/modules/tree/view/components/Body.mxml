@@ -13,7 +13,12 @@
 
 	<s:Scroller height="100%" width="100%">
 
-		<s:Group id="main" />
+		<s:Group>
+
+			<s:Group id="linkagesContainer" />
+
+			<s:Group id="treeElementsContainer" />
+		</s:Group>
 	</s:Scroller>
 
 	<s:Group height="100%">

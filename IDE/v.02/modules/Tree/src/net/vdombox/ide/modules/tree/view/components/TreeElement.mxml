@@ -11,12 +11,12 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.controls.Image;
-
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-
+			
 			import spark.components.Group;
 
 			[SkinPart( required="true" )]
@@ -51,7 +51,7 @@
 
 			private var _selected : Boolean;
 
-			private var _minimized : Boolean;
+//			private var _minimized : Boolean;
 
 			private var mouseOffcetX : int;
 
@@ -118,6 +118,7 @@
 				_treeElementVO = value;
 				BindingUtils.bindProperty( _treeElementVO, "width", this, "width", false, true );
 				BindingUtils.bindProperty( _treeElementVO, "height", this, "height", false, true );
+				BindingUtils.bindSetter( statePropertyChanged, _treeElementVO, "state", false, true );
 			}
 
 			public function set selected( value : Boolean ) : void
@@ -133,7 +134,7 @@
 			{
 				var skinStateName : String;
 
-				if ( _minimized )
+				if ( _treeElementVO.state )
 				{
 					if ( _selected )
 						skinStateName = "normalSelected";
@@ -198,6 +199,11 @@
 				}
 			}
 
+			private function statePropertyChanged( object : Object ) : void
+			{
+				callLater( invalidateSkinState );
+			}
+			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.ELEMENT_SELECTION ) );
@@ -236,7 +242,7 @@
 
 			private function minimizeButton_clickHandler( event : MouseEvent ) : void
 			{
-				_minimized = !_minimized;
+				_treeElementVO.state = _treeElementVO.state;
 
 				callLater( invalidateSkinState );
 			}

@@ -40,6 +40,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 //			this.treeElements = treeElements;
 
+			body.treeElementsContainer.removeAllElements();
+			
 			var treeElement : TreeElement;
 			var treeElementVO : TreeElementVO;
 
@@ -49,7 +51,7 @@ package net.vdombox.ide.modules.tree.view
 
 //				treeElements[ treeElementVO.id ] = treeElement;
 
-				body.main.addElement( treeElement );
+				body.treeElementsContainer.addElement( treeElement );
 
 				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
 			}
@@ -57,6 +59,8 @@ package net.vdombox.ide.modules.tree.view
 
 		public function createLinkages( linkages : Array ) : void
 		{
+			body.linkagesContainer.removeAllElements();
+			
 			var linkageVO : LinkageVO;
 
 			var linkage : Linkage;
@@ -66,7 +70,7 @@ package net.vdombox.ide.modules.tree.view
 				linkage = new Linkage();
 
 //				arrows.push( arrow );
-				body.main.addElement( linkage );
+				body.linkagesContainer.addElement( linkage );
 
 				sendNotification( ApplicationFacade.LINKAGE_CREATED, { viewComponent: linkage, linkageVO: linkageVO } );
 			}

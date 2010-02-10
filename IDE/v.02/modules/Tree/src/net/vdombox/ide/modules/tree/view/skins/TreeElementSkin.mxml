@@ -109,7 +109,7 @@
 
 				<mx:Image height="25" source="{ hostComponent.typeResource.data }" width="25" />
 
-				<s:Label text="{ hostComponent.title }" color.normal="#FFFFFF" />
+				<s:Label text="{ hostComponent.title }" color="#FFFFFF" />
 			</s:HGroup>
 		</s:Group>
 

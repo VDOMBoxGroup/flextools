@@ -18,6 +18,8 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
+		private var isExpand : Boolean;
+		
 		public function get menuPanel() : Panel
 		{
 			return viewComponent as Panel;
@@ -26,11 +28,15 @@ package net.vdombox.ide.modules.tree.view
 		override public function onRegister() : void
 		{
 			addHandlers();
+			
+			isExpand = true;
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
+			
+			isExpand = true;
 		}
 
 		override public function listNotificationInterests() : Array
@@ -89,7 +95,8 @@ package net.vdombox.ide.modules.tree.view
 
 		private function menuPanel_expandAllHandler( event : MenuPanelEvent ) : void
 		{
-			sendNotification( ApplicationFacade.EXPAND_ALL_REQUEST );
+			sendNotification( ApplicationFacade.EXPAND_ALL_REQUEST, isExpand );
+			isExpand = !isExpand;
 		}
 
 		private function menuPanel_showSignatureHandler( event : MenuPanelEvent ) : void

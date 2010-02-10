@@ -1,31 +1,34 @@
 package net.vdombox.ide.modules.tree
 {
 	import net.vdombox.ide.modules.Tree;
-	import net.vdombox.ide.modules.tree.controller.body.LinkageCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
+	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
+	import net.vdombox.ide.modules.tree.controller.GetStructureLevelsCommand;
+	import net.vdombox.ide.modules.tree.controller.SelectedApplicationGettedCommand;
+	import net.vdombox.ide.modules.tree.controller.StartupCommand;
+	import net.vdombox.ide.modules.tree.controller.TearDownCommand;
+	import net.vdombox.ide.modules.tree.controller.body.ApplicationStructureGettedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.BodyCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.CreateBodyCommand;
 	import net.vdombox.ide.modules.tree.controller.body.CreatePageRequestCommand;
-	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
-	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.body.DeletePageRequestCommand;
-	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
-	import net.vdombox.ide.modules.tree.controller.GetStructureLevelsCommand;
-	import net.vdombox.ide.modules.tree.controller.body.InitializeCommand;
-	import net.vdombox.ide.modules.tree.controller.body.InitializeCompleteCommand;
-	import net.vdombox.ide.modules.tree.controller.settings.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.tree.controller.body.ExpandAllRequestCommand;
+	import net.vdombox.ide.modules.tree.controller.body.LinkageCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.LinkagesChangedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.OpenCreatePageWindowRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.PageTypeItemRendererCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.PagesGettedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.TreeElementCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.TreeElementsChangedCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessResourcesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessTypesProxyMessageCommand;
+	import net.vdombox.ide.modules.tree.controller.settings.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.settings.SaveSettingsToProxy;
-	import net.vdombox.ide.modules.tree.controller.SelectedApplicationGettedCommand;
 	import net.vdombox.ide.modules.tree.controller.settings.SetSettingsCommand;
-	import net.vdombox.ide.modules.tree.controller.StartupCommand;
-	import net.vdombox.ide.modules.tree.controller.TearDownCommand;
-	import net.vdombox.ide.modules.tree.controller.body.TreeElementCreatedCommand;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -112,7 +115,7 @@ package net.vdombox.ide.modules.tree
 		public static const RESOURCE_GETTED : String = "resourceGetted";
 
 //		other
-		public static const BODY_SESSION_OBJECT : String = "bodySessionObject";
+//		public static const BODY_SESSION_OBJECT : String = "bodySessionObject";
 
 		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
 		public static const DELETE_PAGE_REQUEST : String = "deletePageRequest";
@@ -134,6 +137,9 @@ package net.vdombox.ide.modules.tree
 		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";
 		public static const LINKAGE_CREATED : String = "linkageCreated";
 
+		public static const TREE_ELEMENTS_CHANGED : String = "treeElementsChanged";
+		public static const LINKAGES_CHANGED : String = "linkagesChanged";
+		
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 
@@ -199,18 +205,21 @@ package net.vdombox.ide.modules.tree
 
 			registerCommand( SELECTED_APPLICATION_GETTED, SelectedApplicationGettedCommand );
 
-			registerCommand( PAGES_GETTED, InitializeCommand );
-
-			registerCommand( APPLICATION_STRUCTURE_GETTED, InitializeCommand );
-			registerCommand( INITIALIZE_COMPLETE, InitializeCompleteCommand );
-
+			registerCommand( PAGES_GETTED, PagesGettedCommand );
+			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationStructureGettedCommand );
+			
 			registerCommand( GET_STRUCTURE_LEVELS, GetStructureLevelsCommand );
 
 			registerCommand( PAGE_TYPE_ITEM_RENDERER_CREATED, PageTypeItemRendererCreatedCommand );
 
 			registerCommand( CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			registerCommand( DELETE_PAGE_REQUEST, DeletePageRequestCommand );
+			
+			registerCommand( EXPAND_ALL_REQUEST, ExpandAllRequestCommand );
 
+			registerCommand( TREE_ELEMENTS_CHANGED, TreeElementsChangedCommand );			
+			registerCommand( LINKAGES_CHANGED, LinkagesChangedCommand );
+			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
 	}

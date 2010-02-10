@@ -2,14 +2,15 @@ package net.vdombox.ide.modules.tree.model
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.vo.LevelObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
+	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -70,20 +71,23 @@ package net.vdombox.ide.modules.tree.model
 
 				treeElementsObject[ treeElementVO.id ] = treeElementVO;
 				_treeElements.push( treeElementVO );
-				
+
 				treeElementsChanged = true;
 			}
 
-			if( treeElementsChanged )
+			if ( treeElementsChanged )
+			{
 				commitProperties();
+				sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
+			}
 		}
 
 		public function setRawSructure( rawStructure : Array ) : void
 		{
 			this.rawStructure = rawStructure;
-			
+
 			rawStructureChanged = true;
-			
+
 			commitProperties();
 		}
 
@@ -110,7 +114,7 @@ package net.vdombox.ide.modules.tree.model
 		override public function onRemove() : void
 		{
 			treeElementsObject = null;
-			
+
 			_treeElements = null;
 			_treeLevels = null;
 			_linkages = null;
@@ -118,11 +122,11 @@ package net.vdombox.ide.modules.tree.model
 
 		private function commitProperties() : void
 		{
-			if( rawStructureChanged || treeElementsChanged )
+			if ( rawStructureChanged || treeElementsChanged )
 			{
 				rawStructureChanged = false;
 				treeElementsChanged = false;
-				
+
 				updateTreeElementsPreoperties();
 				updateLinkages();
 			}
@@ -162,6 +166,8 @@ package net.vdombox.ide.modules.tree.model
 
 			var levelObjectVO : LevelObjectVO;
 
+			var isLinkagesChanged : Boolean = false;
+
 			for each ( treeElementVO in treeElements )
 			{
 				rawStructureObject = getStructureObjectByID( treeElementVO.id );
@@ -172,13 +178,13 @@ package net.vdombox.ide.modules.tree.model
 				for each ( levelObjectVO in rawStructureObject.levels )
 				{
 					target = treeElementsObject[ levelObjectVO.id ];
-					
-					if( hasLinkage( source, target, levelObjectVO.level ) )
+
+					if ( hasLinkage( source, target, levelObjectVO.level ) )
 						continue;
-					
+
 					level = getTreeLevelByNumber( levelObjectVO.level );
 					index = levelObjectVO.index;
-					
+
 					if ( !target || !level )
 						continue;
 
@@ -190,27 +196,32 @@ package net.vdombox.ide.modules.tree.model
 					linkageVO.index = index;
 
 					_linkages.push( linkageVO );
+
+					isLinkagesChanged = true;
 				}
 			}
+
+			if ( isLinkagesChanged )
+				sendNotification( ApplicationFacade.LINKAGES_CHANGED, linkages );
 		}
 
 		private function getStructureObjectByID( id : String ) : StructureObjectVO
 		{
 			var result : StructureObjectVO;
 			var structureObjectVO : StructureObjectVO;
-			
-			for each( structureObjectVO in rawStructure )
+
+			for each ( structureObjectVO in rawStructure )
 			{
-				if( structureObjectVO.id == id )
+				if ( structureObjectVO.id == id )
 				{
 					result = structureObjectVO;
 					break;
 				}
 			}
-			
+
 			return result;
 		}
-		
+
 		private function getTreeLevelByNumber( number : uint ) : TreeLevelVO
 		{
 			var result : TreeLevelVO;
@@ -226,21 +237,21 @@ package net.vdombox.ide.modules.tree.model
 
 			return result;
 		}
-		
+
 		private function hasLinkage( source : TreeElementVO, target : TreeElementVO, levelNumber : uint ) : Boolean
 		{
 			var result : Boolean = false;
-			var linkageVO : LinkageVO; 
-			
+			var linkageVO : LinkageVO;
+
 			for each ( linkageVO in _linkages )
 			{
-				if( linkageVO.source == source && linkageVO.target == target && linkageVO.level.level == levelNumber )
+				if ( linkageVO.source == source && linkageVO.target == target && linkageVO.level.level == levelNumber )
 				{
 					result = true;
 					break;
 				}
 			}
-			
+
 			return result;
 		}
 	}
