@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.tree.controller
+package net.vdombox.ide.modules.tree.controller.messages
 {
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;

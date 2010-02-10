@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.tree.controller
+package net.vdombox.ide.modules.tree.controller.settings
 {
 	import net.vdombox.ide.modules.tree.model.SettingsProxy;
 	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;

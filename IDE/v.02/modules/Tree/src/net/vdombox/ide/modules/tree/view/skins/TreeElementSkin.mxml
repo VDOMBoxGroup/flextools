@@ -115,7 +115,7 @@
 
 		<s:HGroup height="100%" width="100%"
 				  top="30"
-				  visible.minimized="false">
+				  excludeFrom="minimizedGroup">
 
 			<mx:Image height="80" source="{ hostComponent.pageResource.data }" width="80" />
 

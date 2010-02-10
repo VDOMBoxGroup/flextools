@@ -5,24 +5,24 @@ package net.vdombox.ide.modules.tree.view
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
 	import flash.geom.Point;
-
+	
 	import mx.binding.utils.BindingUtils;
-
+	
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
-	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
-	import net.vdombox.ide.modules.tree.view.components.Arrow;
-
+	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
+	import net.vdombox.ide.modules.tree.view.components.Linkage;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
-	public class ArrowMediator extends Mediator implements IMediator
+	public class LinkageMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "ArrowMediator";
 
 		private static var count : uint = 0;
 
-		public function ArrowMediator( viewComponent : Object, linkageVO : LinkageVO )
+		public function LinkageMediator( viewComponent : Object, linkageVO : LinkageVO )
 		{
 			super( NAME + ApplicationFacade.DELIMITER + count, viewComponent );
 
@@ -50,9 +50,9 @@ package net.vdombox.ide.modules.tree.view
 
 		private var activeChanged : Boolean;
 
-		public function get arrow() : Arrow
+		public function get arrow() : Linkage
 		{
-			return viewComponent as Arrow;
+			return viewComponent as Linkage;
 		}
 
 		public function get linkageVO() : LinkageVO
@@ -99,8 +99,8 @@ package net.vdombox.ide.modules.tree.view
 
 		private function calculatePositionAndSize() : void
 		{
-			var sourceObject : StructureElementVO = linkageVO.source;
-			var targetObject : StructureElementVO = linkageVO.target;
+			var sourceObject : TreeElementVO = linkageVO.source;
+			var targetObject : TreeElementVO = linkageVO.target;
 
 			var pFromObj : Point;
 			var pToObj : Point;

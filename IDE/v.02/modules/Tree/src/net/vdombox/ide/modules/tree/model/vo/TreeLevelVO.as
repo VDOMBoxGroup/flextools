@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.model.vo
 {
 	[Bindable]
-	public class StructureLevelVO
+	public class TreeLevelVO
 	{
 		public var color : int;
 

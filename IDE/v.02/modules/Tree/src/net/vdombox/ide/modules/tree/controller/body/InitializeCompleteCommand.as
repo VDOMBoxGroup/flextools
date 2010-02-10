@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.tree.controller
+package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
@@ -12,15 +12,11 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var structureProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
 			var bodyMediator : BodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;
 			
-			var bodySessionObject : Object = sessionProxy.getObject( ApplicationFacade.BODY_SESSION_OBJECT );
-			
-			bodyMediator.createTreeElements( bodySessionObject[ "pages" ], structureProxy.structureElements );
-			
-			bodyMediator.createArrows( structureProxy.linkages );
+			bodyMediator.createTreeElements( structureProxy.treeElements );
+			bodyMediator.createLinkages( structureProxy.linkages );
 		}
 	}
 }

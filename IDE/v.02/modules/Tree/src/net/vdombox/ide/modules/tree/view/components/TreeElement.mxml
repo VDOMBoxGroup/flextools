@@ -3,8 +3,8 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  
-					  height="125" width="200" x="@{ _structureElementVO.left }"
-					  y="@{ _structureElementVO.top }"
+					  height="125" width="200" x="@{ _treeElementVO.left }"
+					  y="@{ _treeElementVO.top }"
 					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin">
 
 	<fx:Script>
@@ -14,7 +14,7 @@
 
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
-			import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
+			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
 
 			import spark.components.Group;
@@ -41,7 +41,7 @@
 			private var _pageResource : ResourceVO
 
 			[Bindable]
-			private var _structureElementVO : StructureElementVO;
+			private var _treeElementVO : TreeElementVO;
 
 			private var _title : String;
 
@@ -80,13 +80,6 @@
 				_pageResource = value;
 			}
 
-			public function set structureElementVO( value : StructureElementVO ) : void
-			{
-				_structureElementVO = value;
-				BindingUtils.bindProperty( _structureElementVO, "width", this, "width" );
-				BindingUtils.bindProperty( _structureElementVO, "height", this, "height" );
-			}
-
 			[Bindable]
 			public function get description() : String
 			{
@@ -118,6 +111,13 @@
 			public function set typeName( value : String ) : void
 			{
 				_typeName = value;
+			}
+
+			public function set treeElementVO( value : TreeElementVO ) : void
+			{
+				_treeElementVO = value;
+				BindingUtils.bindProperty( _treeElementVO, "width", this, "width", false, true );
+				BindingUtils.bindProperty( _treeElementVO, "height", this, "height", false, true );
 			}
 
 			public function set selected( value : Boolean ) : void

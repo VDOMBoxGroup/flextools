@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.tree.controller
+package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;

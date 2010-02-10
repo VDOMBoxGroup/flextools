@@ -1,16 +1,16 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
-	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
-	import net.vdombox.ide.modules.tree.view.components.Arrow;
+	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
+	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -26,56 +26,49 @@ package net.vdombox.ide.modules.tree.view
 
 		public var selectedApplication : ApplicationVO;
 
-		public var pages : Array;
-		public var arrows : Array;
+//		public var treeElements : Array;
+//		public var arrows : Array;
 
-		public var structure : Array;
-
-		public var selectedPage : PageVO;
-
-		public var treeElements : Object;
+		public var selectedTreeElement : TreeElementVO;
 
 		public function get body() : Body
 		{
 			return viewComponent as Body;
 		}
 
-		public function createTreeElements( pages : Array, structureElements : Array ) : void
+		public function createTreeElements( treeElements : Array ) : void
 		{
-			this.pages = pages;
+//			this.treeElements = treeElements;
 
-			structure = structureElements;
-
-			var pageVO : PageVO;
 			var treeElement : TreeElement;
+			var treeElementVO : TreeElementVO;
 
-			for each ( pageVO in pages )
+			for each ( treeElementVO in treeElements )
 			{
 				treeElement = new TreeElement();
 
-				treeElements[ pageVO.id ] = treeElement;
+//				treeElements[ treeElementVO.id ] = treeElement;
 
 				body.main.addElement( treeElement );
 
-				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
-									  pageVO: pageVO, structureElementVO: getStructureElement( pageVO ) } );
+				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
 			}
 		}
 
-		public function createArrows( linkages : Array ) : void
+		public function createLinkages( linkages : Array ) : void
 		{
 			var linkageVO : LinkageVO;
 
-			var arrow : Arrow;
+			var linkage : Linkage;
 
 			for each ( linkageVO in linkages )
 			{
-				arrow = new Arrow();
+				linkage = new Linkage();
 
-				arrows.push( arrow );
-				body.main.addElement( arrow );
+//				arrows.push( arrow );
+				body.main.addElement( linkage );
 
-				sendNotification( ApplicationFacade.ARROW_CREATED, { viewComponent: arrow, linkageVO: linkageVO } );
+				sendNotification( ApplicationFacade.LINKAGE_CREATED, { viewComponent: linkage, linkageVO: linkageVO } );
 			}
 		}
 
@@ -83,16 +76,16 @@ package net.vdombox.ide.modules.tree.view
 		{
 			addHandlers();
 
-			treeElements = {};
-			arrows = [];
+//			treeElements = {};
+//			arrows = [];
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
 
-			treeElements = null;
-			arrows = null;
+//			treeElements = null;
+//			arrows = null;
 		}
 
 		override public function listNotificationInterests() : Array
@@ -100,7 +93,7 @@ package net.vdombox.ide.modules.tree.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.PAGE_DELETED );
-			
+
 			return interests;
 		}
 
@@ -108,7 +101,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var messageName : String = notification.getName();
 			var messageBody : Object = notification.getBody();
-			
+
 			switch ( messageName )
 			{
 				case ApplicationFacade.PAGE_DELETED:
@@ -129,37 +122,38 @@ package net.vdombox.ide.modules.tree.view
 			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
-		private function getStructureElement( pageVO : PageVO ) : StructureElementVO
-		{
-			var result : StructureElementVO;
+//		private function getStructureElement( pageVO : PageVO ) : TreeElementVO
+//		{
+//			var result : TreeElementVO;
+//			var treeElementVO : TreeElementVO
+//
+//			for each ( treeElementVO in structure )
+//			{
+//				if ( treeElementVO.id == pageVO.id )
+//				{
+//					result = treeElementVO;
+//					break;
+//				}
+//			}
+//
+//			return result;
+//		}
 
-			for each ( var structureElementVO : StructureElementVO in structure )
-			{
-				if ( structureElementVO.id == pageVO.id )
-				{
-					result = structureElementVO;
-					break;
-				}
-			}
-
-			return result;
-		}
-
-		private function getPageVOByID( pageID : String ) : PageVO
-		{
-			var result : PageVO;
-
-			for each ( var pageVO : PageVO in pages )
-			{
-				if ( pageVO.id == pageID )
-				{
-					result = pageVO;
-					break;
-				}
-			}
-
-			return result;
-		}
+//		private function getPageVOByID( pageID : String ) : PageVO
+//		{
+//			var result : PageVO;
+//
+//			for each ( var pageVO : PageVO in pages )
+//			{
+//				if ( pageVO.id == pageID )
+//				{
+//					result = pageVO;
+//					break;
+//				}
+//			}
+//
+//			return result;
+//		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{

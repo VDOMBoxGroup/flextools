@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.tree.controller
+package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.modules.tree.view.PageTypeItemRendererMediator;
 	import net.vdombox.ide.modules.tree.view.components.PageTypeItemRenderer;

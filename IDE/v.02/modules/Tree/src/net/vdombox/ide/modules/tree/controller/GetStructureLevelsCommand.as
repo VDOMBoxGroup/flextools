@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.tree.controller
 		{
 			var structureLevelsProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
 			
-			sendNotification( ApplicationFacade.STRUCTURE_LEVELS_GETTED, structureLevelsProxy.structureLevels );
+			sendNotification( ApplicationFacade.TREE_LEVELS_GETTED, structureLevelsProxy.treeLevels );
 		}
 	}
 }

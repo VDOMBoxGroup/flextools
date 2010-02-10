@@ -11,12 +11,11 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
-			
 			var selectedApplication : ApplicationVO = notification.getBody() as ApplicationVO;
 			
+			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+						
+			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = selectedApplication;
 			
 			sendNotification( ApplicationFacade.GET_PAGES, selectedApplication );

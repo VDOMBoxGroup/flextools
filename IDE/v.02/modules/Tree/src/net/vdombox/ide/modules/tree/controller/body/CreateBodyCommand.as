@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.tree.controller
+package net.vdombox.ide.modules.tree.controller.body
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
+			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			var body : Body;
 			var bodyMediator : BodyMediator;
@@ -26,14 +27,12 @@ package net.vdombox.ide.modules.tree.controller
 				body = new Body();
 				facade.registerMediator( new BodyMediator( body ) )
 			}
-
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			var bodySessionObject : Object = sessionProxy.getObject( ApplicationFacade.BODY_SESSION_OBJECT );
 			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 			
 			bodySessionObject[ "inititializeProcess" ] = 0;
-			bodySessionObject[ "pages" ] = [];
+			
 			statesObject[ ApplicationFacade.SELECTED_PAGE ] = null;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );

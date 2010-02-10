@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.tree.view
 	
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
-	import net.vdombox.ide.modules.tree.model.vo.StructureLevelVO;
+	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 	import net.vdombox.ide.modules.tree.view.components.LevelsFilterPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -41,7 +41,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( ApplicationFacade.STRUCTURE_LEVELS_GETTED );
+			interests.push( ApplicationFacade.TREE_LEVELS_GETTED );
 			
 			return interests;
 		}
@@ -53,10 +53,10 @@ package net.vdombox.ide.modules.tree.view
 			
 			switch ( name )
 			{
-				case ApplicationFacade.STRUCTURE_LEVELS_GETTED:
+				case ApplicationFacade.TREE_LEVELS_GETTED:
 				{
 					levelsPanel.dataProvider = body as Array;
-					levelsPanel.currentStructureLevel = body[ 0 ] as StructureLevelVO;
+					levelsPanel.currentStructureLevel = body[ 0 ] as TreeLevelVO;
 					
 					break;
 				}

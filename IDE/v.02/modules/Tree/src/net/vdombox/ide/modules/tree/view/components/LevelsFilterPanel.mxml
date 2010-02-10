@@ -11,7 +11,7 @@
 			import mx.collections.ArrayList;
 			
 			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
-			import net.vdombox.ide.modules.tree.model.vo.StructureLevelVO;
+			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 			
 			import spark.events.IndexChangeEvent;
 
@@ -22,26 +22,26 @@
 			private var selectAll : Boolean;
 			
 			[Bindable]
-			private var _currentStructuretLevel : StructureLevelVO;
+			private var _currentStructuretLevel : TreeLevelVO;
 			
 			public function set dataProvider( value : Array ) : void
 			{
 				levels = new ArrayList( value );
 			}
 
-			public function get currentStructureLevel() : StructureLevelVO
+			public function get currentStructureLevel() : TreeLevelVO
 			{
 				return _currentStructuretLevel;
 			}
 			
-			public function set currentStructureLevel( value : StructureLevelVO ) : void
+			public function set currentStructureLevel( value : TreeLevelVO ) : void
 			{
 				_currentStructuretLevel = value;
 			}
 			
 			private function switchAll() : void
 			{
-				for each ( var structureLevelVO : StructureLevelVO in levels.source )
+				for each ( var structureLevelVO : TreeLevelVO in levels.source )
 				{
 					structureLevelVO.visible = selectAll;
 				}
@@ -59,7 +59,7 @@
 
 				var hasVisible : Boolean = false;
 
-				for each ( var structureLevelVO : StructureLevelVO in levels.source )
+				for each ( var structureLevelVO : TreeLevelVO in levels.source )
 				{
 					if ( structureLevelVO.visible )
 					{

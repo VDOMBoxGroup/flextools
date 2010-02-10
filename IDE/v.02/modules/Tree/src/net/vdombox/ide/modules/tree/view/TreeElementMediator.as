@@ -7,9 +7,9 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
-	import net.vdombox.ide.modules.tree.model.vo.StructureElementVO;
+	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -18,31 +18,24 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "TreeElementMediator";
 
-		public function TreeElementMediator( viewComponent : Object, pageVO : PageVO, structureElementVO : StructureElementVO )
+		public function TreeElementMediator( viewComponent : Object, treeElementVO : TreeElementVO )
 		{
-			super( NAME + ApplicationFacade.DELIMITER + pageVO.id, viewComponent );
+			super( NAME + ApplicationFacade.DELIMITER + treeElementVO.id, viewComponent );
 
-			_pageVO = pageVO;
-
-			_structureElementVO = structureElementVO ? structureElementVO : new StructureElementVO( pageVO.id );
+			_treeElementVO = treeElementVO;
 		}
 
 		private var _pageVO : PageVO;
 
-		private var _structureElementVO : StructureElementVO;
+		private var _treeElementVO : TreeElementVO;
 
 		private var _pageAttributesVO : PageAttributesVO;
 
 		private var _typeVO : TypeVO;
 
-		public function get pageVO() : PageVO
+		public function get treeElementVO() : TreeElementVO
 		{
-			return _pageVO;
-		}
-
-		public function get structureElementVO() : StructureElementVO
-		{
-			return _structureElementVO;
+			return _treeElementVO;
 		}
 
 		public function get treeElement() : TreeElement
@@ -54,19 +47,19 @@ package net.vdombox.ide.modules.tree.view
 		{
 			addHandlers();
 
-			treeElement.structureElementVO = structureElementVO;
+			treeElement.treeElementVO = _treeElementVO;
 
-			if ( structureElementVO.resourceID )
+			if ( treeElementVO.resourceID )
 			{
-				var resourceVO : ResourceVO = new ResourceVO( pageVO.applicationID );
-				resourceVO.setID( structureElementVO.resourceID );
+				var resourceVO : ResourceVO = new ResourceVO( treeElementVO.pageVO.applicationID );
+				resourceVO.setID( treeElementVO.resourceID );
 				treeElement.pageResource = resourceVO;
 
 				sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
 			}
 
-			sendNotification( ApplicationFacade.GET_TYPE, { typeID: pageVO.typeID, recipientID: mediatorName } );
-			sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: pageVO, recipientID: mediatorName } );
+			sendNotification( ApplicationFacade.GET_TYPE, { typeID: treeElementVO.pageVO.typeID, recipientID: mediatorName } );
+			sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: treeElementVO.pageVO, recipientID: mediatorName } );
 		}
 
 		override public function onRemove() : void
@@ -117,7 +110,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SELECTED_PAGE_GETTED:
 				{
-					if ( body == pageVO )
+					if ( body == treeElementVO.pageVO )
 						treeElement.selected = true;
 					else
 						treeElement.selected = false;
@@ -155,12 +148,12 @@ package net.vdombox.ide.modules.tree.view
 
 		private function elementSelectionHandler( event : TreeElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.TREE_ELEMENT_SELECTION, pageVO );
+			sendNotification( ApplicationFacade.TREE_ELEMENT_SELECTION, treeElementVO.pageVO );
 		}
 		
 		private function deleteRequestHandler( event : TreeElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.DELETE_PAGE_REQUEST, pageVO );
+			sendNotification( ApplicationFacade.DELETE_PAGE_REQUEST, treeElementVO.pageVO );
 		}
 	}
 }

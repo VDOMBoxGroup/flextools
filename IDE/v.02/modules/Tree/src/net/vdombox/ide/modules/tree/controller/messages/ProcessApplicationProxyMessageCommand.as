@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.tree.controller
+package net.vdombox.ide.modules.tree.controller.messages
 {
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
@@ -36,6 +36,7 @@ package net.vdombox.ide.modules.tree.controller
 					
 					break;
 				}
+					
 				case PPMApplicationTargetNames.PAGES:
 				{
 					sendNotification( ApplicationFacade.PAGES_GETTED, body.pages );
