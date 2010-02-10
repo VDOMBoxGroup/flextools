@@ -153,7 +153,7 @@ package net.vdombox.ide.core.view
 			else if ( message is SimpleMessage )
 				sendNotification( ApplicationFacade.PROCESS_SIMPLE_MESSAGE, message );
 			else if ( message is LogMessage )
-				trace( message.getBody() );
+				sendNotification( ApplicationFacade.PROCESS_LOG_MESSAGE, message );
 		}
 	}
 }

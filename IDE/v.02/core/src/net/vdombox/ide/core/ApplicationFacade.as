@@ -17,6 +17,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.PageProxyRequestCommand;
 	import net.vdombox.ide.core.controller.PageProxyResponseCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
+	import net.vdombox.ide.core.controller.ProcessLogMessage;
 	import net.vdombox.ide.core.controller.ProcessSimpleMessageCommand;
 	import net.vdombox.ide.core.controller.ProcessUIQueryMessageCommand;
 	import net.vdombox.ide.core.controller.ResourcesProxyRequestCommand;
@@ -163,6 +164,8 @@ package net.vdombox.ide.core
 		public static const PROCESS_SIMPLE_MESSAGE : String = "processSimpleMessage";
 
 		public static const PROCESS_UIQUERY_MESSAGE : String = "processUIQueryMessage";
+		
+		public static const PROCESS_LOG_MESSAGE : String = "processLogMessage";
 
 //		pipes messages
 		public static const SHOW_MODULE_TOOLSET : String = "showModuleToolset";
@@ -244,6 +247,7 @@ package net.vdombox.ide.core
 
 			registerCommand( PROCESS_SIMPLE_MESSAGE, ProcessSimpleMessageCommand );
 			registerCommand( PROCESS_UIQUERY_MESSAGE, ProcessUIQueryMessageCommand );
+			registerCommand( PROCESS_LOG_MESSAGE, ProcessLogMessage );
 
 			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
 
