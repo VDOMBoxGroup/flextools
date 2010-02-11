@@ -30,7 +30,9 @@ package net.vdombox.ide.modules.tree.controller.body
 			
 			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 						
-			statesObject[ ApplicationFacade.SELECTED_PAGE ] = null;
+			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = null;
+			statesObject[ ApplicationFacade.SELECTED_TREE_ELEMENT ] = null;
+			statesObject[ ApplicationFacade.SELECTED_TREE_LEVEL ] = null;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 		}

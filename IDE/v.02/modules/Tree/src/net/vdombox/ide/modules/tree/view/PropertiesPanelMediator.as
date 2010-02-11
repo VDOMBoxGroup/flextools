@@ -1,11 +1,13 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.PropertiesPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -23,7 +25,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private var typeVO : TypeVO;
 
-		private var pageAttributes : Array;
+		private var pageAttributes : PageAttributesVO;
 
 		public function get propertiesPanel() : PropertiesPanel
 		{
@@ -44,8 +46,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED );
+			interests.push( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED );
+			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 
 			return interests;
 		}
@@ -57,22 +59,21 @@ package net.vdombox.ide.modules.tree.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED:
 				{
-					selectedPageVO = notification.getBody().pageVO as PageVO;
-					typeVO = notification.getBody().typeVO as TypeVO;
-
-					propertiesPanel.typeName = typeVO.displayName;
+					var treeElementVO : TreeElementVO = notification.getBody() as TreeElementVO;
+					
+					selectedPageVO = treeElementVO.pageVO;
 
 					if ( selectedPageVO )
-						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, selectedPageVO );
+						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: treeElementVO.pageVO, recipientID: mediatorName } );
 
 					break;
 				}
 
-				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED:
+				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
-					pageAttributes = body as Array;
+					pageAttributes = body as PageAttributesVO;
 
 					var attributeVO : AttributeVO;
 
@@ -110,7 +111,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var result : AttributeVO;
 
-			for each ( var attributeVO : AttributeVO in pageAttributes )
+			for each ( var attributeVO : AttributeVO in pageAttributes.attributes )
 			{
 				if ( attributeVO.name == name )
 				{

@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.model
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.vo.LevelObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.tree.model
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -23,9 +23,11 @@ package net.vdombox.ide.modules.tree.model
 			super( NAME );
 		}
 
-		private const LEVELS_PROERTIES : Array = [ { color: 0xfcd700, level: 0 }, { color: 0x7ddd00, level: 1 }, { color: 0xdd00c0, level: 2 },
-												   { color: 0x00ddc6, level: 3 }, { color: 0xdd0044, level: 4 }, { color: 0xb100dd, level: 5 },
-												   { color: 0x81C9FF, level: 6 }, { color: 0x082478, level: 7 } ];
+		private const LEVELS_PROERTIES : Array = [ { color: 0xfcd700, level: 0 }, { color: 0x7ddd00,
+													   level: 1 }, { color: 0xdd00c0, level: 2 }, { color: 0x00ddc6,
+													   level: 3 }, { color: 0xdd0044, level: 4 }, { color: 0xb100dd,
+													   level: 5 }, { color: 0x81C9FF, level: 6 }, { color: 0x082478,
+													   level: 7 } ];
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
@@ -35,11 +37,13 @@ package net.vdombox.ide.modules.tree.model
 		private var _treeLevels : Array;
 
 		private var _treeElements : Array;
+
 		private var treeElementsObject : Object;
 
 		private var _linkages : Array;
 
 		private var treeElementsChanged : Boolean;
+
 		private var rawStructureChanged : Boolean;
 
 		public function get treeLevels() : Array
@@ -55,40 +59,6 @@ package net.vdombox.ide.modules.tree.model
 		public function get linkages() : Array
 		{
 			return _linkages;
-		}
-
-		public function setPages( pages : Array ) : void
-		{
-			var treeElementVO : TreeElementVO;
-			var pageVO : PageVO;
-
-			for each ( pageVO in pages )
-			{
-				if ( treeElementsObject.hasOwnProperty( pageVO.id ) )
-					continue;
-
-				treeElementVO = new TreeElementVO( pageVO );
-
-				treeElementsObject[ treeElementVO.id ] = treeElementVO;
-				_treeElements.push( treeElementVO );
-
-				treeElementsChanged = true;
-			}
-
-			if ( treeElementsChanged )
-			{
-				commitProperties();
-				sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
-			}
-		}
-
-		public function setRawSructure( rawStructure : Array ) : void
-		{
-			this.rawStructure = rawStructure;
-
-			rawStructureChanged = true;
-
-			commitProperties();
 		}
 
 		override public function onRegister() : void
@@ -120,19 +90,91 @@ package net.vdombox.ide.modules.tree.model
 			_linkages = null;
 		}
 
-		private function commitProperties() : void
+		public function setPages( pages : Array ) : void
 		{
-			if ( rawStructureChanged || treeElementsChanged )
-			{
-				rawStructureChanged = false;
-				treeElementsChanged = false;
+			var treeElementVO : TreeElementVO;
+			var pageVO : PageVO;
 
-				updateTreeElementsPreoperties();
-				updateLinkages();
+			for each ( pageVO in pages )
+			{
+				if ( treeElementsObject.hasOwnProperty( pageVO.id ) )
+					continue;
+
+				treeElementVO = new TreeElementVO( pageVO );
+
+				treeElementsObject[ treeElementVO.id ] = treeElementVO;
+				_treeElements.push( treeElementVO );
+
+				treeElementsChanged = true;
+				rawStructureChanged = true;
+				
+			}
+
+			if ( treeElementsChanged )
+			{
+				commitProperties();
+				sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
 			}
 		}
 
-		private function updateTreeElementsPreoperties() : void
+		public function setRawSructure( rawStructure : Array ) : void
+		{
+			this.rawStructure = rawStructure;
+
+			rawStructureChanged = true;
+
+			commitProperties();
+		}
+
+		public function getTreeElementByVO( pageVO : PageVO ) : TreeElementVO
+		{
+			return treeElementsObject[ pageVO.id ];
+		}
+		
+		public function deleteTreeElementByVO( pageVO : PageVO ) : void
+		{
+			var treeElementVO : TreeElementVO = treeElementsObject[ pageVO.id ];
+
+			if ( !treeElementVO )
+				return;
+
+			var i : uint;
+
+			for ( i = 0; i < treeElements.length; i++ )
+			{
+				if ( treeElements[ i ] != treeElementVO )
+					continue;
+
+				deleteTreeElementLinkages( treeElementVO );
+
+				treeElements.splice( i, 1 );
+
+				sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
+
+				break;
+			}
+		}
+
+
+
+		private function commitProperties() : void
+		{
+			if ( treeElementsChanged )
+			{
+				treeElementsChanged = false;
+
+				updateTreeElementsProperties();
+			}
+
+			if ( rawStructureChanged )
+			{
+				rawStructureChanged = false;
+
+				createLinkages();
+			}
+		}
+
+		private function updateTreeElementsProperties() : void
 		{
 			var treeElementVO : TreeElementVO;
 			var rawStructureObject : StructureObjectVO;
@@ -151,7 +193,7 @@ package net.vdombox.ide.modules.tree.model
 			}
 		}
 
-		private function updateLinkages() : void
+		private function createLinkages() : void
 		{
 			var linkageVO : LinkageVO;
 
@@ -168,6 +210,8 @@ package net.vdombox.ide.modules.tree.model
 
 			var isLinkagesChanged : Boolean = false;
 
+			_linkages = [];
+
 			for each ( treeElementVO in treeElements )
 			{
 				rawStructureObject = getStructureObjectByID( treeElementVO.id );
@@ -178,9 +222,6 @@ package net.vdombox.ide.modules.tree.model
 				for each ( levelObjectVO in rawStructureObject.levels )
 				{
 					target = treeElementsObject[ levelObjectVO.id ];
-
-					if ( hasLinkage( source, target, levelObjectVO.level ) )
-						continue;
 
 					level = getTreeLevelByNumber( levelObjectVO.level );
 					index = levelObjectVO.index;
@@ -199,6 +240,30 @@ package net.vdombox.ide.modules.tree.model
 
 					isLinkagesChanged = true;
 				}
+			}
+
+			if ( isLinkagesChanged )
+				sendNotification( ApplicationFacade.LINKAGES_CHANGED, linkages );
+		}
+
+		private function deleteTreeElementLinkages( treeElementVO : TreeElementVO ) : void
+		{
+			var linkageVO : LinkageVO;
+
+			var isLinkagesChanged : Boolean;
+
+			var i : uint;
+			
+			for ( i = 0; i < _linkages.length; i++ )
+			{
+				linkageVO = _linkages[ i ];
+				
+				if ( linkageVO.source != treeElementVO && linkageVO.target != treeElementVO )
+					continue;
+
+				_linkages.splice( i, 1 );
+				i--;
+				isLinkagesChanged = true;
 			}
 
 			if ( isLinkagesChanged )

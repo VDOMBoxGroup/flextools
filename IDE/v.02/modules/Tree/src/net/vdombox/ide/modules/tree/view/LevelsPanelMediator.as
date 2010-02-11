@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			addHandlers();
 			
-			sendNotification( ApplicationFacade.GET_STRUCTURE_LEVELS );
+			sendNotification( ApplicationFacade.GET_TREE_LEVELS );
 		}
 		
 		override public function onRemove() : void
@@ -75,7 +75,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function changeHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.SELECTED_STRUCTURE_LEVEL_CHANGED, levelsPanel.currentStructureLevel );
+			sendNotification( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
 		}
 	}
 }

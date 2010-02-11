@@ -4,8 +4,9 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
-	import net.vdombox.ide.modules.tree.controller.GetStructureLevelsCommand;
+	import net.vdombox.ide.modules.tree.controller.GetTreeLevelsCommand;
 	import net.vdombox.ide.modules.tree.controller.SelectedApplicationGettedCommand;
+	import net.vdombox.ide.modules.tree.controller.SelectedPageGettedCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
 	import net.vdombox.ide.modules.tree.controller.TearDownCommand;
 	import net.vdombox.ide.modules.tree.controller.body.ApplicationStructureGettedCommand;
@@ -17,9 +18,12 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.body.LinkageCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.LinkagesChangedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.OpenCreatePageWindowRequestCommand;
+	import net.vdombox.ide.modules.tree.controller.body.PageDeletedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.PageTypeItemRendererCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.PagesGettedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.SelectedTreeLevelChangeRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.TreeElementCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.TreeElementSelectionCommand;
 	import net.vdombox.ide.modules.tree.controller.body.TreeElementsChangedCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessPageProxyMessageCommand;
@@ -40,7 +44,9 @@ package net.vdombox.ide.modules.tree
 
 		public static const CREATE_TOOLSET : String = "createToolset";
 		public static const CREATE_SETTINGS_SCREEN : String = "createSettingsScreen";
+		
 		public static const CREATE_BODY : String = "createBody";
+		public static const BODY_CREATED : String = "bodyCreated";
 
 		public static const EXPORT_TOOLSET : String = "exportToolset";
 		public static const EXPORT_SETTINGS_SCREEN : String = "exportSettingsScreen";
@@ -89,9 +95,11 @@ package net.vdombox.ide.modules.tree
 		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
 
 		public static const GET_SELECTED_PAGE : String = "getSelectedPage";
+		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
 		public static const SELECTED_PAGE_GETTED : String = "selectedPageGetted";
+		public static const SELECTED_PAGE_SETTED : String = "selectedPageSetted";
 
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
+//		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
 
 //		application
 		public static const GET_APPLICATION_STRUCTURE : String = "getApplicationStructure";
@@ -112,11 +120,15 @@ package net.vdombox.ide.modules.tree
 
 //		resources
 		public static const GET_RESOURCE : String = "getResource";
-		public static const RESOURCE_GETTED : String = "resourceGetted";
 
 //		other
-//		public static const BODY_SESSION_OBJECT : String = "bodySessionObject";
-
+		public static const DELIMITER : String = "/";
+		public static const STATES : String = "states";
+		
+		public static const SELECTED_APPLICATION : String = "selectedApplication";
+		public static const SELECTED_TREE_ELEMENT : String = "selectedTreeElement";
+		public static const SELECTED_TREE_LEVEL : String = "selectedTreeLevel";
+		
 		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
 		public static const DELETE_PAGE_REQUEST : String = "deletePageRequest";
 
@@ -125,37 +137,29 @@ package net.vdombox.ide.modules.tree
 		public static const EXPAND_ALL_REQUEST : String = "expandAllRequest";
 		public static const SHOW_SIGNATURE_REQUEST : String = "showSignatureRequest";
 		public static const SAVE_REQUEST : String = "saveRequest";
-
-		public static const DELIMITER : String = "/";
-
-		public static const STATES : String = "states";
-
-		public static const SELECTED_APPLICATION : String = "selectedApplication";
-		public static const SELECTED_PAGE : String = "selectedPage";
-
+		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
-		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";
 		public static const LINKAGE_CREATED : String = "linkageCreated";
+		
+		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";
+		
+		public static const SELECTED_TREE_ELEMENT_CHANGED : String = "selectedTreeElementChanged";
 
 		public static const TREE_ELEMENTS_CHANGED : String = "treeElementsChanged";
-		public static const LINKAGES_CHANGED : String = "linkagesChanged";
+		public static const LINKAGES_CHANGED : String = "linkagesChanged";		
 		
-		public static const BODY_CREATED : String = "bodyCreated";
 		public static const CREATE_PAGE_WINDOW_CREATED : String = "createPageWindowCreated";
 
 		public static const OPEN_WINDOW : String = "openWidow";
 		public static const CLOSE_WINDOW : String = "closeWidow";
 
-		public static const GET_STRUCTURE_LEVELS : String = "getStructureLevels";
+		public static const GET_TREE_LEVELS : String = "getTreeLevels";
 		public static const TREE_LEVELS_GETTED : String = "treeLevelsGetted";
 
-//		public static const GET_SELECTED_STRUCTURE_LEVEL: String = "getSelectedStructureLevel";
-//		public static const SELECTED_STRUCTURE_LEVEL_GETTED: String = "selectedStructureLevelGetted";
-		public static const SELECTED_STRUCTURE_LEVEL_CHANGED : String = "selectedStructureLevelChanged";
+		public static const SELECTED_TREE_LEVEL_CHANGE_REQUEST : String = "selectedTreeLevelChangeRequest";
+		public static const SELECTED_TREE_LEVEL_CHANGED : String = "selectedTreeLevelChanged";
 
 		public static const PAGE_TYPE_ITEM_RENDERER_CREATED : String = "pageTypeItemRendererCreated";
-
-		public static const INITIALIZE_COMPLETE : String = "initializeComplete";
 		
 		public static const SEND_TO_LOG : String = "sendToLog";
 
@@ -204,21 +208,28 @@ package net.vdombox.ide.modules.tree
 			registerCommand( OPEN_CREATE_PAGE_WINDOW_REQUEST, OpenCreatePageWindowRequestCommand );
 
 			registerCommand( SELECTED_APPLICATION_GETTED, SelectedApplicationGettedCommand );
+			registerCommand( SELECTED_PAGE_GETTED, SelectedPageGettedCommand );
 
 			registerCommand( PAGES_GETTED, PagesGettedCommand );
 			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationStructureGettedCommand );
 			
-			registerCommand( GET_STRUCTURE_LEVELS, GetStructureLevelsCommand );
+			registerCommand( GET_TREE_LEVELS, GetTreeLevelsCommand );
 
 			registerCommand( PAGE_TYPE_ITEM_RENDERER_CREATED, PageTypeItemRendererCreatedCommand );
 
 			registerCommand( CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			registerCommand( DELETE_PAGE_REQUEST, DeletePageRequestCommand );
 			
+			registerCommand( PAGE_DELETED, PageDeletedCommand );
+			
 			registerCommand( EXPAND_ALL_REQUEST, ExpandAllRequestCommand );
 
 			registerCommand( TREE_ELEMENTS_CHANGED, TreeElementsChangedCommand );			
 			registerCommand( LINKAGES_CHANGED, LinkagesChangedCommand );
+			
+			registerCommand( SELECTED_TREE_LEVEL_CHANGE_REQUEST, SelectedTreeLevelChangeRequestCommand );
+			
+			registerCommand( TREE_ELEMENT_SELECTION, TreeElementSelectionCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

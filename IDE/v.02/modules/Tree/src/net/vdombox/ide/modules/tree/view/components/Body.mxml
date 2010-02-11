@@ -15,9 +15,11 @@
 
 		<s:Group>
 
-			<s:Group id="linkagesContainer" />
+			<s:Group id="linkagesContainer"
+					 x="10" y="20" />
 
-			<s:Group id="treeElementsContainer" />
+			<s:Group id="treeElementsContainer"
+					 x="10" y="20" />
 		</s:Group>
 	</s:Scroller>
 
@@ -28,10 +30,13 @@
 			<s:VerticalLayout />
 		</s:layout>
 
-		<components:MenuPanel id="menuPanel" width="100%" />
+		<components:MenuPanel id="menuPanel"
+							  width="100%" />
 
-		<components:PropertiesPanel id="propertiesPanel" width="100%" />
+		<components:PropertiesPanel id="propertiesPanel"
+									width="100%" />
 
-		<components:LevelsFilterPanel id="levelsPanel" width="100%" />
+		<components:LevelsFilterPanel id="levelsPanel"
+									  width="100%" />
 	</s:Group>
 </s:Group>

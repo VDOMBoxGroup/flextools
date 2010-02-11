@@ -17,11 +17,6 @@ package net.vdombox.ide.modules.tree.controller
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new StructureProxy() );
-			
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
-			
-			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = null;
-			statesObject[ ApplicationFacade.SELECTED_PAGE ] = null;
 		}
 	}
 }

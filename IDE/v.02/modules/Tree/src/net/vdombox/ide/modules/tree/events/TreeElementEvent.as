@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.tree.events
 	{
 		public static var ELEMENT_SELECTION : String = "elementSelection";
 		public static var DELETE_REQUEST : String = "deleteRequest";
+		public static var CREATE_LINKAGE_REQUEST : String = "createLinkageRequest";
 		
 		public function TreeElementEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

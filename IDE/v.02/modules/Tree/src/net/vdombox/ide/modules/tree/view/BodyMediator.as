@@ -7,8 +7,8 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
-	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.Body;
+	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -26,8 +26,9 @@ package net.vdombox.ide.modules.tree.view
 
 		public var selectedApplication : ApplicationVO;
 
-//		public var treeElements : Array;
-//		public var arrows : Array;
+		public var treeElementsObject : Object;
+
+		public var linkagesObject : Object;
 
 		public var selectedTreeElement : TreeElementVO;
 
@@ -38,58 +39,95 @@ package net.vdombox.ide.modules.tree.view
 
 		public function createTreeElements( treeElements : Array ) : void
 		{
-//			this.treeElements = treeElements;
-
-			body.treeElementsContainer.removeAllElements();
-			
 			var treeElement : TreeElement;
 			var treeElementVO : TreeElementVO;
 
+			var oldElements : Object = treeElementsObject;
+			var newElements : Object = {};
+
 			for each ( treeElementVO in treeElements )
 			{
+				if ( oldElements.hasOwnProperty( treeElementVO.id ) )
+				{
+					newElements[ treeElementVO.id ] = oldElements[ treeElementVO.id ];
+
+					delete oldElements[ treeElementVO.id ];
+
+					continue;
+				}
+
 				treeElement = new TreeElement();
 
-//				treeElements[ treeElementVO.id ] = treeElement;
+				newElements[ treeElementVO.id ] = treeElement;
 
 				body.treeElementsContainer.addElement( treeElement );
 
-				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
+				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
+									  treeElementVO: treeElementVO } );
 			}
+
+			for each ( treeElement in oldElements )
+			{
+				body.treeElementsContainer.removeElement( treeElement );
+			}
+
+			treeElementsObject = newElements;
 		}
 
 		public function createLinkages( linkages : Array ) : void
 		{
-			body.linkagesContainer.removeAllElements();
-			
+			var linkage : Linkage;
 			var linkageVO : LinkageVO;
 
-			var linkage : Linkage;
+			var oldLinkages : Object = linkagesObject;
+			var newLinkages : Object = {};
+
+			var linkageID : String;
 
 			for each ( linkageVO in linkages )
 			{
+				linkageID = linkageVO.source.id + "/" + linkageVO.target.id + "/" + linkageVO.level.level;
+				
+				if ( oldLinkages.hasOwnProperty( linkageID ) )
+				{
+					newLinkages[ linkageID ] = oldLinkages[ linkageID ];
+
+					delete oldLinkages[ linkageID ];
+
+					continue;
+				}
+
 				linkage = new Linkage();
 
-//				arrows.push( arrow );
+				newLinkages[ linkageID ] = linkage;
+				
 				body.linkagesContainer.addElement( linkage );
 
 				sendNotification( ApplicationFacade.LINKAGE_CREATED, { viewComponent: linkage, linkageVO: linkageVO } );
 			}
+			
+			for each ( linkage in oldLinkages )
+			{
+				body.linkagesContainer.removeElement( linkage );
+			}
+			
+			linkagesObject = newLinkages;
 		}
 
 		override public function onRegister() : void
 		{
 			addHandlers();
 
-//			treeElements = {};
-//			arrows = [];
+			treeElementsObject = {};
+			linkagesObject = {};
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
 
-//			treeElements = null;
-//			arrows = null;
+			treeElementsObject = null;
+			linkagesObject = null;
 		}
 
 		override public function listNotificationInterests() : Array

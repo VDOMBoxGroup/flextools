@@ -16,6 +16,7 @@ package net.vdombox.ide.modules.tree.controller
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 						
 			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
+			
 			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = selectedApplication;
 			
 			sendNotification( ApplicationFacade.GET_APPLICATION_STRUCTURE, selectedApplication );

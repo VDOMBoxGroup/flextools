@@ -10,13 +10,14 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
-			
+
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-			
+
 			import spark.components.Group;
 
 			[SkinPart( required="true" )]
@@ -56,6 +57,12 @@
 			private var mouseOffcetX : int;
 
 			private var mouseOffcetY : int;
+
+			private var widthWatcher : ChangeWatcher;
+
+			private var heightWatcher : ChangeWatcher;
+
+			private var stateWatcher : ChangeWatcher;
 
 
 			[Bindable]
@@ -116,9 +123,15 @@
 			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;
-				BindingUtils.bindProperty( _treeElementVO, "width", this, "width", false, true );
-				BindingUtils.bindProperty( _treeElementVO, "height", this, "height", false, true );
-				BindingUtils.bindSetter( statePropertyChanged, _treeElementVO, "state", false, true );
+
+				widthWatcher = BindingUtils.bindProperty( _treeElementVO, "width", this, "width", false,
+														  true );
+				
+				heightWatcher = BindingUtils.bindProperty( _treeElementVO, "height", this, "height",
+														   false, true );
+				
+				stateWatcher = BindingUtils.bindSetter( statePropertyChanged, _treeElementVO, "state",
+														false, true );
 			}
 
 			public function set selected( value : Boolean ) : void
@@ -133,6 +146,9 @@
 			override protected function getCurrentSkinState() : String
 			{
 				var skinStateName : String;
+
+				if ( !_treeElementVO )
+					return skin.currentState;
 
 				if ( _treeElementVO.state )
 				{
@@ -169,31 +185,36 @@
 				{
 					case "header":
 					{
-						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
+						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false,
+												 0, true );
 						break;
 					}
 
 					case "minimizeButton":
 					{
-						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler, true, 0, true );
+						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler,
+														 true, 0, true );
 						break;
 					}
 
 					case "createLineButton":
 					{
-						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler, false, 0, true );
+						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler,
+														   false, 0, true );
 						break;
 					}
 
 					case "deleteButton":
 					{
-						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
+						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false,
+													   0, true );
 						break;
 					}
 
 					case "setStartPageButton":
 					{
-						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler, false, 0, true );
+						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler,
+															 false, 0, true );
 						break;
 					}
 				}
@@ -203,7 +224,7 @@
 			{
 				callLater( invalidateSkinState );
 			}
-			
+
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
 				dispatchEvent( new TreeElementEvent( TreeElementEvent.ELEMENT_SELECTION ) );
@@ -228,8 +249,8 @@
 				else
 					x = newX;
 
-				if ( newY < 10 )
-					y = 10;
+				if ( newY < 0 )
+					y = 0;
 				else
 					y = newY;
 			}
@@ -242,7 +263,7 @@
 
 			private function minimizeButton_clickHandler( event : MouseEvent ) : void
 			{
-				_treeElementVO.state = _treeElementVO.state;
+				_treeElementVO.state = !_treeElementVO.state;
 
 				callLater( invalidateSkinState );
 			}
@@ -259,7 +280,7 @@
 
 			private function setStartPageButton_clickHandler( event : MouseEvent ) : void
 			{
-
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
 			}
 		]]>
 	</fx:Script>

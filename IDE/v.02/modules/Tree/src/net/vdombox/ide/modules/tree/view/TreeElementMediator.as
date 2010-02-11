@@ -71,7 +71,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.SELECTED_PAGE_GETTED );
+			interests.push( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED );
 			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 
@@ -108,9 +108,9 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.SELECTED_PAGE_GETTED:
+				case ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED:
 				{
-					if ( body == treeElementVO.pageVO )
+					if ( body == treeElementVO )
 						treeElement.selected = true;
 					else
 						treeElement.selected = false;
@@ -122,6 +122,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			treeElement.addEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler, false, 0, true );
 			treeElement.addEventListener( TreeElementEvent.DELETE_REQUEST, deleteRequestHandler, false, 0, true );
+			treeElement.addEventListener( TreeElementEvent.CREATE_LINKAGE_REQUEST, createLinkageRequestHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -148,12 +149,17 @@ package net.vdombox.ide.modules.tree.view
 
 		private function elementSelectionHandler( event : TreeElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.TREE_ELEMENT_SELECTION, treeElementVO.pageVO );
+			sendNotification( ApplicationFacade.TREE_ELEMENT_SELECTION, treeElementVO );
 		}
 		
 		private function deleteRequestHandler( event : TreeElementEvent ) : void
 		{
 			sendNotification( ApplicationFacade.DELETE_PAGE_REQUEST, treeElementVO.pageVO );
+		}
+		
+		private function createLinkageRequestHandler( event : TreeElementEvent ) : void
+		{
+			
 		}
 	}
 }
