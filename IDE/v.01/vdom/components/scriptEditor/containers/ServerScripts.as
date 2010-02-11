@@ -104,14 +104,19 @@ package vdom.components.scriptEditor.containers
 				return "";
 
 			var ID : String = tree.selectedItem.@ID;
+			var name : String = tree.selectedItem.@Name;
 
 			if ( ID == "" )
 				return null;
 
 			if ( !xmlToServer.Action[ 0 ] )
 				return null;
-
-			return xmlToServer.Action.( @ID == ID )[ 0 ].toString();
+			
+			if( ID == "session" )
+				return xmlToServer.Action.( @ID == ID && @Name == name)[ 0 ].toString();
+			else
+				return xmlToServer.Action.( @ID == ID )[ 0 ].toString();
+			
 		}
 
 		public function set script( str : String ) : void
@@ -119,7 +124,15 @@ package vdom.components.scriptEditor.containers
 			if ( tree.selectedItem )
 			{
 				var ID : String = tree.selectedItem.@ID;
-				var tempXML : XML = xmlToServer.Action.( @ID == ID )[ 0 ];
+				var name : String = tree.selectedItem.@Name;
+				
+				var tempXML : XML;
+				
+				if( ID == "session" )
+					tempXML = xmlToServer.Action.( @ID == ID && @Name == name )[ 0 ];
+				else
+					tempXML = xmlToServer.Action.( @ID == ID )[ 0 ];			
+				
 				var xml : XML = new XML( "<Action/>" );
 				xml.@ID = tempXML.@ID;
 				xml.@Name = tempXML.@Name;
@@ -128,7 +141,11 @@ package vdom.components.scriptEditor.containers
 				xml.@State = tempXML.@State;
 				xml.appendChild( XML( "<![CDATA[" + str + "]" + "]>" ) );
 
-				delete xmlToServer.Action.( @ID == ID )[ 0 ];
+				if( ID == "session" )
+					delete xmlToServer.Action.( @ID == ID && @Name == name )[ 0 ];
+				else
+					delete xmlToServer.Action.( @ID == ID )[ 0 ];
+					
 				xmlToServer.appendChild( xml );
 
 				dataManager.setServerActions( xmlToServer, curContainerID );
@@ -167,6 +184,16 @@ package vdom.components.scriptEditor.containers
 		private function createData( xmlToTree : XML ) : void
 		{
 			xmlToServer = new XML( "<ServerActions/>" );
+			
+//			if( xmlToTree.Action.(@ID == "session")[ 0 ] )
+//			{
+//				xmlToTree = 
+//				<ServerActions>
+//					<Action ID="session" Name="SessionOnStart" Top="" Left="" State="" />
+//					<Action ID="session" Name="SessionOnEnd" Top="" Left="" State="" />
+//				</ServerActions>;
+//			}
+			
 			dataXML = new XMLListCollection();
 
 			var continer : XML;
@@ -187,9 +214,8 @@ package vdom.components.scriptEditor.containers
 			{
 				for each ( var actID : XML in continer.children() )
 				{
-					tempXML = 
-						<Action/>
-						;
+					tempXML = <Action/>;
+					
 					tempXML.@label = actID.@Name;
 					tempXML.@Name = actID.@Name;
 					tempXML.@ID = actID.@ID;
