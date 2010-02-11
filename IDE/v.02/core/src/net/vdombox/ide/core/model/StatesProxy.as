@@ -27,7 +27,14 @@ package net.vdombox.ide.core.model
 		
 		public function set selectedApplication( value : ApplicationVO ) : void
 		{
+			if( _selectedApplication == value )
+				return;
+			
+			_selectedObject = null;
+			_selectedPage = null;
 			_selectedApplication = value;
+			
+			
 		}
 		
 		public function get selectedPage() : PageVO
@@ -37,6 +44,10 @@ package net.vdombox.ide.core.model
 		
 		public function set selectedPage( value : PageVO ) : void
 		{
+			if( _selectedPage == value )
+				return;
+			
+			_selectedObject = null;
 			_selectedPage = value;
 		}
 		
