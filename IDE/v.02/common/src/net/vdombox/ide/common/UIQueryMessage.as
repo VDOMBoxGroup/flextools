@@ -18,7 +18,7 @@ package net.vdombox.ide.common
 	 */
 	public class UIQueryMessage extends Message
 	{
-		public function UIQueryMessage( name : String, component : UIComponent = null, ricepientKey : String = null )
+		public function UIQueryMessage( name : String, component : UIComponent = null, recipientKey : String = null )
 		{
 			_recipientKey = recipientKey;
 				
