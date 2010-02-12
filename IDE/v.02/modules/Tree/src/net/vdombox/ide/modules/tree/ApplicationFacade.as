@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.body.LinkageCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.LinkagesChangedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.OpenCreatePageWindowRequestCommand;
+	import net.vdombox.ide.modules.tree.controller.body.PageCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.PageDeletedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.PageTypeItemRendererCreatedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.PagesGettedCommand;
@@ -220,6 +221,7 @@ package net.vdombox.ide.modules.tree
 			registerCommand( CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			registerCommand( DELETE_PAGE_REQUEST, DeletePageRequestCommand );
 			
+			registerCommand( PAGE_CREATED, PageCreatedCommand );
 			registerCommand( PAGE_DELETED, PageDeletedCommand );
 			
 			registerCommand( EXPAND_ALL_REQUEST, ExpandAllRequestCommand );

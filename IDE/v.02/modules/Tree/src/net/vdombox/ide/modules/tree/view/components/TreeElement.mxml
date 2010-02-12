@@ -52,8 +52,6 @@
 
 			private var _selected : Boolean;
 
-//			private var _minimized : Boolean;
-
 			private var mouseOffcetX : int;
 
 			private var mouseOffcetY : int;

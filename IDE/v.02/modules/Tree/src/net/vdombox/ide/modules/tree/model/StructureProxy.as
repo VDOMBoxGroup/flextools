@@ -131,6 +131,25 @@ package net.vdombox.ide.modules.tree.model
 			return treeElementsObject[ pageVO.id ];
 		}
 		
+		public function cretaeTreeElementByVO( pageVO : PageVO ) : void
+		{
+			var treeElementVO : TreeElementVO = treeElementsObject[ pageVO.id ];
+			
+			if( treeElementVO )
+				return;
+			
+			treeElementVO = new TreeElementVO( pageVO );
+			
+			treeElementsObject[ treeElementVO.id ] = treeElementVO;
+			treeElements.push( treeElementVO );
+			
+			treeElementsChanged = true;
+			
+			commitProperties();
+			
+			sendNotification( ApplicationFacade.TREE_ELEMENTS_CHANGED, treeElements );
+		}
+		
 		public function deleteTreeElementByVO( pageVO : PageVO ) : void
 		{
 			var treeElementVO : TreeElementVO = treeElementsObject[ pageVO.id ];
