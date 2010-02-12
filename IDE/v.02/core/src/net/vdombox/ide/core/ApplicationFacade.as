@@ -24,7 +24,6 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ResourcesProxyResponseCommand;
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
-	import net.vdombox.ide.core.controller.SendToLogCommand;
 	import net.vdombox.ide.core.controller.ServerProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ServerProxyResponseCommand;
 	import net.vdombox.ide.core.controller.StatesProxyRequestCommand;
@@ -280,9 +279,6 @@ package net.vdombox.ide.core
 
 			registerCommand( OPEN_WINDOW, OpenWindowCommand );
 			registerCommand( CLOSE_WINDOW, CloseWindowCommand );
-
-
-			registerCommand( SEND_TO_LOG, SendToLogCommand );
 		}
 
 		private function soap_faultEvent( event : FaultEvent ) : void
