@@ -59,7 +59,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			applicationsList.itemRenderer = new ClassFactory( ApplicationItemRenderer );
 
-			sendNotification( ApplicationFacade.GET_SETTINGS, NAME );
+			sendNotification( ApplicationFacade.GET_SETTINGS, mediatorName );
 			sendNotification( ApplicationFacade.GET_APPLICATIONS_LIST );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}
@@ -76,8 +76,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.APPLICATIONS_LIST_GETTED );
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_CHANGED );
 
-			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
+			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName );
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
+			
 			interests.push( ApplicationFacade.APPLICATION_EDITED );
 			interests.push( ApplicationFacade.APPLICATION_CREATED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
@@ -114,13 +115,18 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					break;
 				}
 
-				case NAME + "/" + ApplicationFacade.SETTINGS_GETTED:
-				{
-				}
-
-				case ApplicationFacade.SETTINGS_CHANGED:
+				case ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName:
 				{
 					settings = body as SettingsVO;
+					
+					selectedApplicationChanged = true;
+					
+					break;
+				}	
+					
+				case ApplicationFacade.SETTINGS_CHANGED:
+				{
+					selectedApplicationChanged = true;
 
 					break;
 				}
@@ -233,15 +239,13 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					if ( settings && settings.saveLastApplication && settings.lastApplicationID != selectedApplicationVO.id )
 					{
 						settings.lastApplicationID = selectedApplicationVO.id
-
-						sendNotification( ApplicationFacade.SET_SETTINGS, settings );
 					}
 
 					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, selectedApplicationVO );
 				}
 				else
 				{
-					if ( !settings || !settings.saveLastApplication || !settings.lastApplicationID || !applications )
+					if ( !settings || !applications )
 						return;
 
 					for ( var i : int = 0; i < applications.length; i++ )

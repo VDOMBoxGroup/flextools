@@ -45,8 +45,8 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			interests.push( ApplicationFacade.EXPORT_SETTINGS_SCREEN );
 			interests.push( ApplicationFacade.EXPORT_BODY );
 
-			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
+			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
 
 			interests.push( ApplicationFacade.GET_APPLICATIONS_LIST );
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
@@ -232,7 +232,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			var simpleMessage : SimpleMessage = message as SimpleMessage;
 
 			var recipientKey : String = simpleMessage.getRecipientKey();
-
+			
 			switch ( simpleMessage.getHeader() )
 			{
 				case SimpleMessageHeaders.MODULE_SELECTED:
@@ -271,9 +271,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					var settingsVO : SettingsVO = new SettingsVO( simpleMessage.getBody() );
-
-					sendNotification( ApplicationFacade.SAVE_SETTINGS_TO_PROXY, settingsVO );
+					sendNotification( ApplicationFacade.SETTINGS_FROM_STORAGE_RETRIEVED, simpleMessage.getBody() );
 
 					break;
 				}

@@ -6,12 +6,12 @@ package net.vdombox.ide.modules.applicationsManagment
 	import net.vdombox.ide.modules.applicationsManagment.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.PipesReadyCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessResourceProxyMessageCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessStatesProxyMessageCommand;
-	import net.vdombox.ide.modules.applicationsManagment.controller.SaveSettingsToProxy;
-	import net.vdombox.ide.modules.applicationsManagment.controller.SetSettingsCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.SettingsFromStorageRetrievedCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.TearDownCommand;
 	
@@ -44,15 +44,15 @@ package net.vdombox.ide.modules.applicationsManagment
 		public static const INITIALIZE_SETTINGS : String = "initializeSettings";
 		
 		public static const GET_SETTINGS : String = "getSettings";
-		public static const SET_SETTINGS : String = "setSettings";
-		
 		public static const SETTINGS_GETTED : String = "settingsGetted";
+		
 		public static const SETTINGS_CHANGED : String = "settingsChanged";
-		
+
 		public static const RETRIEVE_SETTINGS_FROM_STORAGE : String = "retrieveSettingsFromStorage";
+		public static const SETTINGS_FROM_STORAGE_RETRIEVED : String = "settingsFromStorageRetrieved";
 		public static const SAVE_SETTINGS_TO_STORAGE : String = "saveSettingsToStorage";
-		public static const SAVE_SETTINGS_TO_PROXY : String = "saveSettingsToProxy";
 		
+//		application
 		public static const OPEN_CREATE_APPLICATION_VIEW : String = "openCreateApplicationView";
 		
 		public static const CREATE_NEW_APP_COMPLETE: String = "createNewAppComplete";
@@ -106,16 +106,19 @@ package net.vdombox.ide.modules.applicationsManagment
 		override protected function initializeController( ) : void 
 		{
 			super.initializeController();
+			
 			registerCommand( STARTUP, StartupCommand );
+			
+			registerCommand( PIPES_READY, PipesReadyCommand );
 			
 			registerCommand( CREATE_TOOLSET, CreateToolsetCommand );
 			registerCommand( CREATE_SETTINGS_SCREEN, CreateSettingsScreenCommand );
 			registerCommand( CREATE_BODY, CreateBodyCommand );
 			
+			registerCommand( SETTINGS_FROM_STORAGE_RETRIEVED, SettingsFromStorageRetrievedCommand );
+			
 			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
 			registerCommand( GET_SETTINGS, GetSettingsCommand );
-			registerCommand( SET_SETTINGS, SetSettingsCommand );
-			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 			
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );

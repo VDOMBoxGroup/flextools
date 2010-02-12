@@ -20,8 +20,8 @@ package net.vdombox.ide.modules
 		
 		public function ApplicationsManagment()
 		{
-			super( ApplicationFacade.getInstance( MODULE_ID ));
-			ApplicationFacade( facade ).startup( this );
+//			super( ApplicationFacade.getInstance( MODULE_ID ));
+//			ApplicationFacade( facade ).startup( this );
 		}
 		
 		override public function tearDown():void
@@ -57,6 +57,12 @@ package net.vdombox.ide.modules
 		override public function get hasBody() : Boolean
 		{
 			return true;
+		}
+		
+		override public function startup() : void
+		{
+			facade = ApplicationFacade.getInstance( MODULE_ID );
+			ApplicationFacade( facade ).startup( this );
 		}
 		
 		override public function getToolset() : void

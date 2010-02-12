@@ -51,11 +51,15 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			{
 				case ApplicationFacade.MODULE_SELECTED:
 				{
+					toolset.createNewApplicatoin.selected = true;
+					
 					break;
 				}
 
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
+					toolset.createNewApplicatoin.selected = false;
+					
 					break;
 				}
 			}

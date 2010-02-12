@@ -19,7 +19,7 @@
 	
 	<s:ToggleButton id="createNewApplicatoin"
 					label="New Application"
-					click="dispatchEvent( new ToolsetEvent( ToolsetEvent.OPEN_CREATE_APPLICATION ) )"/>
+					click="dispatchEvent( new ToolsetEvent( ToolsetEvent.OPEN_CREATE_APPLICATION ) ); createNewApplicatoin.selected = false;"/>
 	
 	<s:Button  label="Export"/>
 	

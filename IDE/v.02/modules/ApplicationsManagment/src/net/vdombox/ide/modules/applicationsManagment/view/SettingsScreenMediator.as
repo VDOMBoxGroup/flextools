@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-			interests.push( NAME + "/" + ApplicationFacade.SETTINGS_GETTED );
+			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + NAME );
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
 			
 			return interests;
@@ -63,8 +63,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		private function performOKHandler( event : Event ) : void
 		{
 			settingsVO.saveLastApplication = settingsScreen.saveLastApplication.selected;
-			
-			sendNotification( ApplicationFacade.SET_SETTINGS, settingsVO );
 		}
 	}
 }

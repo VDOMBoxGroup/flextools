@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.controller
 {
 	import net.vdombox.ide.modules.ApplicationsManagment;
+	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.model.GalleryProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.SessionProxy;
 	import net.vdombox.ide.modules.applicationsManagment.model.SettingsProxy;
