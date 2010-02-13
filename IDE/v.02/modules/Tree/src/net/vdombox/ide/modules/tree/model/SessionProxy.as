@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.tree.model
 	
 	public class SessionProxy extends Proxy implements IProxy
 	{
-		public static const NAME : String = "RecipientsProxy";
+		public static const NAME : String = "SessionProxy";
 		
 		public function SessionProxy( )
 		{

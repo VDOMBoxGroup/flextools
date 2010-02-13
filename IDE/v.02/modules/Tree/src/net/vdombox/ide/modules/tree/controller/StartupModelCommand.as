@@ -12,8 +12,6 @@ package net.vdombox.ide.modules.tree.controller
 	{
 		override public function execute( note : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = new SessionProxy();
-			
 			facade.registerProxy( new SessionProxy() );
 			facade.registerProxy( new SettingsProxy() );
 			facade.registerProxy( new StructureProxy() );

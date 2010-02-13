@@ -9,10 +9,10 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-			
+
 			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-			
+
 			import spark.events.IndexChangeEvent;
 
 			[Bindable]
@@ -20,10 +20,10 @@
 
 			[Bindable]
 			private var selectAll : Boolean;
-			
+
 			[Bindable]
 			private var _currentStructuretLevel : TreeLevelVO;
-			
+
 			public function set dataProvider( value : Array ) : void
 			{
 				levels = new ArrayList( value );
@@ -33,12 +33,12 @@
 			{
 				return _currentStructuretLevel;
 			}
-			
+
 			public function set currentStructureLevel( value : TreeLevelVO ) : void
 			{
 				_currentStructuretLevel = value;
 			}
-			
+
 			private function switchAll() : void
 			{
 				for each ( var structureLevelVO : TreeLevelVO in levels.source )
@@ -81,12 +81,14 @@
 		]]>
 	</fx:Script>
 
-	<s:Rect width="100%" height="25">
+	<s:Rect height="25" width="100%">
+
 		<s:fill>
+
 			<s:SolidColor color="0x999999" />
 		</s:fill>
 	</s:Rect>
-	
+
 	<s:HGroup height="25" width="100%"
 			  paddingLeft="3" paddingRight="3" verticalAlign="middle"
 			  click="switchAll()">
@@ -102,9 +104,7 @@
 			</s:fill>
 		</s:Rect>
 
-		<s:Label 
-				 text="{ selectAll ? resourceManager.getString( 'Tree_General', 'level_show_all' ) : resourceManager.getString( 'Tree_General', 'level_hide_all' ) }"
-				 width="100%" />
+		<s:Label text="{ selectAll ? resourceManager.getString( 'Tree_General', 'level_show_all' ) : resourceManager.getString( 'Tree_General', 'level_hide_all' ) }" width="100%" />
 	</s:HGroup>
 
 	<s:Line width="100%">
@@ -115,9 +115,9 @@
 		</s:stroke>
 	</s:Line>
 
-	<s:List id="structureLevelsList" selectedItem="@{_currentStructuretLevel}"
-			dataProvider="{ levels }" height="100%" width="100%"
+	<s:List id="structureLevelsList"
+			dataProvider="{ levels }" height="100%" width="100%" y="25"
 			change="changeHandler( event )"
-			borderVisible="false"
-			itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }" y="25"/>
+			borderVisible="false" itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }"
+			selectedItem="@{ _currentStructuretLevel }" />
 </s:Panel>

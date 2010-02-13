@@ -354,7 +354,7 @@ package net.vdombox.ide.modules.tree.view
 						return;
 
 					junction.sendMessage( PipeNames.STDLOG,
-										  new LogMessage( LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( ApplicationFacade.PIPES_READY );
 					break;
