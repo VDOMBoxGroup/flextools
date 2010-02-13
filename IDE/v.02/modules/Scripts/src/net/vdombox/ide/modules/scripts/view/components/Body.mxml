@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 
-		 height="100%" width="100%"
-		 xmlns:components="net.vdombox.ide.modules.scripts.view.components.*">
-</s:Group>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:mx="library://ns.adobe.com/flex/halo"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:components="net.vdombox.ide.modules.scripts.view.components.*"
+		  
+		  height="100%" width="100%">
+
+	<s:Group height="100%" width="100%" />
+
+	<s:VGroup width="250" height="100%">
+
+		<components:PagesPanel id="pagesPanel" width="100%" />
+
+		<components:ContainersPanel id="containersPanel" width="100%"/>
+
+		<components:ServerScriptsPanel id="serverScriptsPanel" width="100%"/>
+
+		<components:LibrariesPanel id="librariesPanel" width="100%"/>
+	</s:VGroup>
+</s:HGroup>

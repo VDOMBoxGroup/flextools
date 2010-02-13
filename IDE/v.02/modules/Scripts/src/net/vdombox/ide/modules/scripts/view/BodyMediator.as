@@ -55,7 +55,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-
+			sendNotification( ApplicationFacade.BODY_CREATED, body );
 		}
 	}
 }

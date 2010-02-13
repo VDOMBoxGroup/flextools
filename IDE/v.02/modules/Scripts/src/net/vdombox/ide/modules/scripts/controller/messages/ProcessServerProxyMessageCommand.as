@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.scripts.controller
+package net.vdombox.ide.modules.scripts.controller.messages
 {
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;

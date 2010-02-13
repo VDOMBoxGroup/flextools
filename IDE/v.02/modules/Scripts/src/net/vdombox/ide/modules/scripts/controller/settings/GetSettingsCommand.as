@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.scripts.controller
+package net.vdombox.ide.modules.scripts.controller.settings
 {
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.SettingsProxy;

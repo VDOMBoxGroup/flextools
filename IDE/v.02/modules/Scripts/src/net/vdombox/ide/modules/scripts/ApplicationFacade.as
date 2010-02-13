@@ -1,16 +1,20 @@
 package net.vdombox.ide.modules.scripts
 {
 	import net.vdombox.ide.modules.Scripts;
+	import net.vdombox.ide.modules.scripts.controller.BodyCreatedCommand;
+	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
-	import net.vdombox.ide.modules.scripts.controller.GetSettingsCommand;
-	import net.vdombox.ide.modules.scripts.controller.InitializeSettingsCommand;
-	import net.vdombox.ide.modules.scripts.controller.ProcessServerProxyMessageCommand;
-	import net.vdombox.ide.modules.scripts.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
 	import net.vdombox.ide.modules.scripts.controller.TearDownCommand;
+	import net.vdombox.ide.modules.scripts.controller.messages.ProcessApplicationProxyMessageCommand;
+	import net.vdombox.ide.modules.scripts.controller.messages.ProcessServerProxyMessageCommand;
+	import net.vdombox.ide.modules.scripts.controller.messages.ProcessStatesProxyMessageCommand;
+	import net.vdombox.ide.modules.scripts.controller.settings.GetSettingsCommand;
+	import net.vdombox.ide.modules.scripts.controller.settings.InitializeSettingsCommand;
+	import net.vdombox.ide.modules.scripts.controller.settings.SaveSettingsToProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -53,6 +57,34 @@ package net.vdombox.ide.modules.scripts
 		
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
+		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
+		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
+		
+//		server messages
+		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
+		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
+		
+//		other
+		public static const DELIMITER : String = "/";
+		public static const STATES : String = "states";
+		
+		public static const SELECTED_APPLICATION : String = "selectedApplication";
+		public static const SELECTED_PAGE : String = "selectedPage";
+		
+		public static const BODY_CREATED : String = "bodyCreated";
+		
+		public static const GET_PAGES : String = "getPages";
+		public static const PAGES_GETTED : String = "pagesGetted";
+		
+		public static const PAGES_CHANGED : String = "pagesChanged";
+		
+		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
+		
+		public static const GET_SELECTED_PAGE : String = "getSelectedPages";
+		public static const SET_SELECTED_PAGE : String = "setSelectedPages";
+		public static const SELECTED_PAGE_CHANGED : String = "selectedPagesChanged";
+		
+		
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -86,6 +118,12 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( SAVE_SETTINGS_TO_PROXY, SaveSettingsToProxy );
 			
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
+			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
+			
+			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			
+			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
