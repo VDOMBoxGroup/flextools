@@ -74,7 +74,6 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
-//			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			token = soap.get_child_objects_tree( pageVO.applicationID, pageVO.id );
 			token.recipientName = proxyName;
 			token.requestFunctionName = GET_STRUCTURE;
@@ -86,7 +85,6 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
-//			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			token = soap.get_one_object( pageVO.applicationID, pageVO.id );
 			token.recipientName = proxyName;
 			token.requestFunctionName = GET_ATTRIBUTES;

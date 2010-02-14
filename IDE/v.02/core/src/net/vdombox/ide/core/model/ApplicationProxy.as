@@ -30,6 +30,8 @@ package net.vdombox.ide.core.model
 
 		private var soap : SOAP = SOAP.getInstance();
 
+		private var typesProxy : TypesProxy;
+		
 		private var serverProxy : ServerProxy;
 
 		public function get id() : String
@@ -57,11 +59,15 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
+			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+			
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
+			typesProxy = null;
+			
 			removeHandlers();
 		}
 
@@ -200,7 +206,7 @@ package net.vdombox.ide.core.model
 				if ( !pageID || !typeID )
 					continue;
 
-				var pageVO : PageVO = new PageVO( pageID, applicationVO.id, typeID );
+				var pageVO : PageVO = new PageVO( applicationVO, pageID, typeID );
 
 				pageVO.setXMLDescription( page );
 
@@ -263,7 +269,7 @@ package net.vdombox.ide.core.model
 					if ( !pageID || !typeID )
 						return;
 
-					var pageVO : PageVO = new PageVO( pageID, applicationVO.id, typeID );
+					var pageVO : PageVO = new PageVO( applicationVO, pageID, typeID );
 
 					pageVO.setXMLDescription( pageXML );
 
