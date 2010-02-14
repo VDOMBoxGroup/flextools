@@ -6,8 +6,10 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
+	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
+	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.SimpleMessage;
@@ -45,9 +47,15 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
-
+			
+			interests.push( ApplicationFacade.GET_TYPES );
+			
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.GET_PAGES );
+			
+			interests.push( ApplicationFacade.GET_OBJECTS );
+			
+			interests.push( ApplicationFacade.GET_STRUCTURE );
 			
 			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
@@ -168,6 +176,33 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.GET_OBJECTS:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_STRUCTURE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_TYPES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
 			}
 
 			super.handleNotification( notification );
@@ -243,10 +278,24 @@ package net.vdombox.ide.modules.scripts.view
 					
 					break;
 				}
+				
+				case PPMPlaceNames.TYPES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					
+					break;
+				}
 					
 				case PPMPlaceNames.APPLICATION:
 				{
 					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.PAGE:
+				{
+					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
 					
 					break;
 				}

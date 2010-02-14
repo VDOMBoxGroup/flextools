@@ -5,9 +5,22 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
+			[Bindable]
+			private var _structure : XML;
+
+			public function get selectionObjectID () : String
+			{
+				return conteinersTree.selectedItem ? conteinersTree.selectedItem.@id : null;
+			}
 			
+			public function set structure( value : XML ) : void
+			{
+				_structure = value;
+			}
 		]]>
 	</fx:Script>
 
-	<mx:Tree height="100%" width="100%" />
+	<mx:Tree id="conteinersTree" dataProvider="{ _structure }" height="100%" labelField="@name" showRoot="true"
+			 width="100%" change="dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) )" />
 </s:Panel>

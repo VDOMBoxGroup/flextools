@@ -10,8 +10,10 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
 	import net.vdombox.ide.modules.scripts.controller.TearDownCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessApplicationProxyMessageCommand;
+	import net.vdombox.ide.modules.scripts.controller.messages.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessStatesProxyMessageCommand;
+	import net.vdombox.ide.modules.scripts.controller.messages.ProcessTypesProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.settings.GetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.settings.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.settings.SaveSettingsToProxy;
@@ -58,11 +60,17 @@ package net.vdombox.ide.modules.scripts
 //		pipe messages
 		public static const PROCESS_SERVER_PROXY_MESSAGE : String = "processServerProxyMessage";
 		public static const PROCESS_STATES_PROXY_MESSAGE : String = "processStatesProxyMessage";
+		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
+		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		
 //		server messages
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
+		
+//		types
+		public static const GET_TYPES : String = "getTypes";
+		public static const TYPES_GETTED : String = "typesGetted";
 		
 //		other
 		public static const DELIMITER : String = "/";
@@ -76,13 +84,18 @@ package net.vdombox.ide.modules.scripts
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED : String = "pagesGetted";
 		
-		public static const PAGES_CHANGED : String = "pagesChanged";
-		
 		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
+		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
 		
 		public static const GET_SELECTED_PAGE : String = "getSelectedPages";
 		public static const SET_SELECTED_PAGE : String = "setSelectedPages";
 		public static const SELECTED_PAGE_CHANGED : String = "selectedPagesChanged";
+		
+		public static const GET_OBJECTS : String = "getObjects";
+		public static const OBJECTS_GETTED : String = "objectsGetted";
+		
+		public static const GET_STRUCTURE : String = "getStructure";
+		public static const STRUCTURE_GETTED : String = "structureGetted";
 		
 		
 		
@@ -119,7 +132,9 @@ package net.vdombox.ide.modules.scripts
 			
 			registerCommand( PROCESS_SERVER_PROXY_MESSAGE, ProcessServerProxyMessageCommand );
 			registerCommand( PROCESS_STATES_PROXY_MESSAGE, ProcessStatesProxyMessageCommand );
+			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
+			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			
