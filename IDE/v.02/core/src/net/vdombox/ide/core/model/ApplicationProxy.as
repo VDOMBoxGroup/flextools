@@ -206,7 +206,9 @@ package net.vdombox.ide.core.model
 				if ( !pageID || !typeID )
 					continue;
 
-				var pageVO : PageVO = new PageVO( applicationVO, pageID, typeID );
+				var typeVO : TypeVO = typesProxy.getType( typeID );
+				
+				var pageVO : PageVO = new PageVO( pageID, applicationVO, typeVO );
 
 				pageVO.setXMLDescription( page );
 
@@ -269,7 +271,9 @@ package net.vdombox.ide.core.model
 					if ( !pageID || !typeID )
 						return;
 
-					var pageVO : PageVO = new PageVO( applicationVO, pageID, typeID );
+					var typeVO : TypeVO = typesProxy.getType( typeID );
+					
+					var pageVO : PageVO = new PageVO( pageID, applicationVO, typeVO );
 
 					pageVO.setXMLDescription( pageXML );
 

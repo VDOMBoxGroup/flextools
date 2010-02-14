@@ -2,15 +2,16 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -32,6 +33,8 @@ package net.vdombox.ide.core.model
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
+
+		private var typesProxy : TypesProxy;
 
 		private var _objects : Array;
 
@@ -62,11 +65,15 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
+			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
+
 			addHandlers();
 		}
-		
+
 		override public function onRemove() : void
 		{
+			typesProxy = null;
+
 			removeHandlers();
 		}
 
@@ -129,7 +136,8 @@ package net.vdombox.ide.core.model
 
 		public function getObjectProxy( objectVO : ObjectVO ) : ObjectProxy
 		{
-			var objectProxy : ObjectProxy = facade.retrieveProxy( ObjectProxy.NAME + "/" + objectVO.applicationID + "/" + objectVO.pageID + "/" + objectVO.id ) as ObjectProxy;
+			var objectProxy : ObjectProxy = facade.retrieveProxy( ObjectProxy.NAME + "/" + objectVO.applicationID + "/" + objectVO.pageID + "/" +
+				objectVO.id ) as ObjectProxy;
 
 			if ( !objectProxy )
 			{
@@ -183,7 +191,9 @@ package net.vdombox.ide.core.model
 				if ( !objectID || !typeID )
 					continue;
 
-				var objectVO : ObjectVO = new ObjectVO( objectID, pageVO.applicationID, pageVO.id, typeID );
+				var typeVO : TypeVO = typesProxy.getType( typeID );
+
+				var objectVO : ObjectVO = new ObjectVO( objectID, pageVO, typeVO );
 
 				objectVO.setXMLDescription( object );
 
@@ -284,9 +294,11 @@ package net.vdombox.ide.core.model
 					if ( token.requestFunctionName == GET_OBJECT )
 					{
 						var objectXML : XML = result.Objects.Object[ 0 ];
-						var objectVO : ObjectVO = new ObjectVO( objectXML.@ID, pageVO.applicationID,
-																pageVO.id, objectXML.@Type );
-						
+
+						var typeVO : TypeVO = typesProxy.getType( objectXML.@Type );
+
+						var objectVO : ObjectVO = new ObjectVO( objectXML.@ID, pageVO, typeVO );
+
 						objectVO.setXMLDescription( objectXML );
 
 						notification = new ProxyNotification( ApplicationFacade.OBJECT_GETTED, objectVO );
@@ -296,7 +308,7 @@ package net.vdombox.ide.core.model
 					{
 						var pageAttributesVO : PageAttributesVO = new PageAttributesVO( pageVO.id );
 						pageAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
-						
+
 						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
 						notification.token = token;
 					}
