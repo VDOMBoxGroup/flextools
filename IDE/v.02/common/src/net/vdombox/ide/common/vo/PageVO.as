@@ -3,15 +3,15 @@ package net.vdombox.ide.common.vo
 	[Bindable]
 	public class PageVO
 	{
-		public function PageVO( id : String, applicationID : String, typeID : String )
+		public function PageVO( applicationVO : ApplicationVO, id : String, typeID : String )
 		{
 			_id = id;
-			_applicationID = applicationID;
+			_applicationVO = applicationVO;
 			_typeID = typeID;
 		}
 		
 		private var _id : String;
-		private var _applicationID : String;
+		private var _applicationVO : ApplicationVO;
 		private var _typeID : String;
 		private var _name : String;
 		
@@ -22,7 +22,7 @@ package net.vdombox.ide.common.vo
 		
 		public function get applicationID() : String
 		{
-			return _applicationID;
+			return _applicationVO.id;
 		}
 		
 		public function get typeID() : String
