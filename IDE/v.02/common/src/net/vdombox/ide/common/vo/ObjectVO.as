@@ -2,19 +2,17 @@ package net.vdombox.ide.common.vo
 {
 	public class ObjectVO
 	{
-		public function ObjectVO( id : String, applicationID : String, pageID : String, typeID : String )
+		public function ObjectVO( id : String, pageVO : PageVO, typeVO : TypeVO )
 		{
 			_id = id;
-			_applicationID = applicationID;
-			_pageID = pageID;
-			_typeID = typeID;
+			_pageVO = pageVO;
+			_typeVO = typeVO;
 		}
 
 		private var _id : String;
-		private var _applicationID : String;
-		private var _pageID : String;
-
-		private var _typeID : String;
+		
+		private var _pageVO : PageVO;
+		private var _typeVO : TypeVO;
 
 		private var _name : String;
 
@@ -25,17 +23,17 @@ package net.vdombox.ide.common.vo
 
 		public function get applicationID() : String
 		{
-			return _applicationID;
+			return _pageVO.applicationID;
 		}
 		
 		public function get pageID() : String
 		{
-			return _pageID;
+			return _pageVO.id;
 		}
 		
 		public function get typeID() : String
 		{
-			return _typeID;
+			return _typeVO.id;
 		}
 
 		public function get name() : String
