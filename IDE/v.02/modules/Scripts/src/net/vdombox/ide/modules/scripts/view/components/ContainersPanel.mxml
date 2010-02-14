@@ -9,9 +9,14 @@
 			[Bindable]
 			private var _structure : XML;
 
-			public function get selectionObjectID () : String
+			public function get selectedObjectID () : String
 			{
 				return conteinersTree.selectedItem ? conteinersTree.selectedItem.@id : null;
+			}
+			
+			public function get selectedItem () : XML
+			{
+				return conteinersTree.selectedItem as XML;
 			}
 			
 			public function set structure( value : XML ) : void
