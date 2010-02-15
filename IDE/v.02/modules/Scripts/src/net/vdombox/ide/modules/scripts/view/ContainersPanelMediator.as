@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.ContainersPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -47,6 +47,7 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.TYPES_GETTED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			interests.push( ApplicationFacade.STRUCTURE_GETTED );
 
 			return interests;
@@ -75,6 +76,20 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
+				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				{
+					var objectVO : ObjectVO = body as ObjectVO;
+					var objectID : String;
+
+					if( objectVO )
+						objectID = objectVO.id;
+					
+					if( containersPanel.selectedObjectID != objectID )
+						containersPanel.selectedObjectID = objectID;
+						
+					break;
+				}
+					
 				case ApplicationFacade.STRUCTURE_GETTED:
 				{
 					var structure : XML = body as XML;
@@ -137,7 +152,8 @@ package net.vdombox.ide.modules.scripts.view
 
 			if ( selectedItem.name() == "object" )
 				selectedObject = new ObjectVO( selectedItem.@id, selectedPageVO, typeVO );
-
+			
+			sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 		}
 	}
 }

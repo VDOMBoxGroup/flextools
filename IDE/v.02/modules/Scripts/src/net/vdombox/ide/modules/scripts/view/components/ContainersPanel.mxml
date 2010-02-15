@@ -11,12 +11,20 @@
 
 			public function get selectedObjectID () : String
 			{
-				return conteinersTree.selectedItem ? conteinersTree.selectedItem.@id : null;
+				return containersTree.selectedItem ? containersTree.selectedItem.@id : null;
+			}
+			
+			public function set selectedObjectID ( value : String ) : void
+			{
+				if( value )
+					containersTree.selectedItem = _structure..object.( @id == value )[ 0 ];
+				else
+					containersTree.selectedIndex = 0;
 			}
 			
 			public function get selectedItem () : XML
 			{
-				return conteinersTree.selectedItem as XML;
+				return containersTree.selectedItem as XML;
 			}
 			
 			public function set structure( value : XML ) : void
@@ -26,6 +34,6 @@
 		]]>
 	</fx:Script>
 
-	<mx:Tree id="conteinersTree" dataProvider="{ _structure }" height="100%" labelField="@name" showRoot="true"
+	<mx:Tree id="containersTree" dataProvider="{ _structure }" height="100%" labelField="@name" showRoot="true"
 			 width="100%" change="dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) )" />
 </s:Panel>

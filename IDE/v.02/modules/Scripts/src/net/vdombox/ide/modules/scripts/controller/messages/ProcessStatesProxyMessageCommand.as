@@ -3,10 +3,11 @@ package net.vdombox.ide.modules.scripts.controller.messages
 	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -44,6 +45,20 @@ package net.vdombox.ide.modules.scripts.controller.messages
 						statesObject[ ApplicationFacade.SELECTED_PAGE ] = selectedPageVO;
 
 						sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, body );
+					}
+
+					break;
+				}
+					
+				case PPMStatesTargetNames.SELECTED_OBJECT:
+				{
+					var selectedObjectVO : ObjectVO = body as ObjectVO;
+
+					if ( statesObject[ ApplicationFacade.SELECTED_OBJECT ] != selectedObjectVO )
+					{
+						statesObject[ ApplicationFacade.SELECTED_OBJECT ] = selectedObjectVO;
+
+						sendNotification( ApplicationFacade.SELECTED_OBJECT_CHANGED, body );
 					}
 
 					break;

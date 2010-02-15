@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.scripts
 {
 	import net.vdombox.ide.modules.Scripts;
 	import net.vdombox.ide.modules.scripts.controller.BodyCreatedCommand;
+	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedObjectRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateSettingsScreenCommand;
@@ -78,6 +79,7 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const SELECTED_APPLICATION : String = "selectedApplication";
 		public static const SELECTED_PAGE : String = "selectedPage";
+		public static const SELECTED_OBJECT : String = "selectedObject";
 		
 		public static const BODY_CREATED : String = "bodyCreated";
 		
@@ -90,6 +92,10 @@ package net.vdombox.ide.modules.scripts
 		public static const GET_SELECTED_PAGE : String = "getSelectedPages";
 		public static const SET_SELECTED_PAGE : String = "setSelectedPages";
 		public static const SELECTED_PAGE_CHANGED : String = "selectedPagesChanged";
+		
+		public static const GET_SELECTED_OBJECT : String = "getSelectedObject";
+		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
+		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
 		
 		public static const GET_OBJECTS : String = "getObjects";
 		public static const OBJECTS_GETTED : String = "objectsGetted";
@@ -137,6 +143,7 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
 			
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			

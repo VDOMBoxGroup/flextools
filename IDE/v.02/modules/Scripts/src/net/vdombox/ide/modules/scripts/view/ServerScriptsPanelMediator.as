@@ -1,5 +1,9 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -14,6 +18,9 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			super( NAME, viewComponent );
 		}
+		
+		private var selectedPageVO : PageVO;
+		private var selectedObjectVO : ObjectVO;
 		
 		public function get serverScriptsPanel() : Panel
 		{
@@ -34,7 +41,8 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
-//			interests.push( ApplicationFacade. );
+			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			
 			return interests;
 		}
@@ -44,14 +52,22 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
-//			switch ( name )
-//			{
-//				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
-//				{
-//					
-//					break;
-//				}
-//			}
+			switch ( name )
+			{
+				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				{
+					selectedPageVO = body as PageVO;
+					
+					break;
+				}
+					
+				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				{
+					selectedObjectVO = body as ObjectVO;
+					
+					break;
+				}
+			}
 		}
 		
 		private function addHandlers() : void

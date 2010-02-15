@@ -59,6 +59,9 @@ package net.vdombox.ide.modules.scripts.view
 			
 			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
+			
+			interests.push( ApplicationFacade.GET_SELECTED_OBJECT );
+			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 
 			return interests;
 		}
@@ -162,6 +165,24 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SET_SELECTED_PAGE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_SELECTED_OBJECT:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_SELECTED_OBJECT:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
