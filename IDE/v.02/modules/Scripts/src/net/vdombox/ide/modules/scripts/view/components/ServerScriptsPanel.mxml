@@ -6,18 +6,31 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
+
+			import net.vdombox.ide.common.vo.ServerActionVO;
+			import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
+
 			[Bindable]
 			private var _scripts : ArrayList;
+
+			public function get selectedScript() : ServerActionVO
+			{
+				return actionList.selectedItem as ServerActionVO;
+			}
 
 			public function set scripts( value : Array ) : void
 			{
 				_scripts = new ArrayList( value );
+				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) );
 			}
 		]]>
 	</fx:Script>
 
-	<s:List dataProvider="{ _scripts }" height="100%" labelField="name"
-			width="100%" />
+	<s:List id="actionList"
+			dataProvider="{ _scripts }" height="100%" labelField="name"
+			width="100%"
+			change="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) )"
+			requireSelection="true" />
 
 	<s:controlBarContent>
 

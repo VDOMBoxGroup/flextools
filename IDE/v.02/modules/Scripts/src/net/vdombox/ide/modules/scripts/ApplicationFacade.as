@@ -110,6 +110,8 @@ package net.vdombox.ide.modules.scripts
 		public static const GET_SERVER_ACTIONS : String = "getServerActions";
 		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
 		
+		public static const SELECTED_SERVER_ACTION_CHANGED : String = "selectedServerActionChanged";
+		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
 			if ( instanceMap[ key ] == null )

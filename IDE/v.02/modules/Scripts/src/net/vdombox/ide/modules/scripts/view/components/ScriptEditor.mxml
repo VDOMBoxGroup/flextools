@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/halo">
+
+	<fx:Script>
+		<![CDATA[
+			
+			[Bindable]
+			private var _script : String;
+			
+			public function get script () : String
+			{
+				return null;
+			}
+			
+			public function set script ( value : String ) : void
+			{
+				_script = value;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:TextArea text="{ _script }" height="100%" width="100%" />
+</s:Group>
