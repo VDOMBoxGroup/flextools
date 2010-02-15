@@ -37,7 +37,7 @@ package net.vdombox.ide.common.vo
 		
 		public function set name( value : String ) : void
 		{
-			_name = name;
+			_name = value;
 		}
 		
 		public function setXMLDescription( description : XML ) : void
