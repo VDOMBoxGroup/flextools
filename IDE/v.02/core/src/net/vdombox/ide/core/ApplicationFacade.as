@@ -1,7 +1,7 @@
 package net.vdombox.ide.core
 {
 	import mx.rpc.events.FaultEvent;
-
+	
 	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
 	import net.vdombox.ide.core.controller.ApplicationProxyRequestCommand;
 	import net.vdombox.ide.core.controller.ApplicationProxyResponseCommand;
@@ -29,7 +29,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.StatesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.TypesProxyRequestCommand;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -116,19 +116,22 @@ package net.vdombox.ide.core
 
 //		application
 		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
-		public static const PAGES_GETTED : String = "pagesGetted";
+		public static const APPLICATION_PAGES_GETTED : String = "applicationPagesGetted";
+		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
 
-		public static const PAGE_CREATED : String = "pageCreated";
-		public static const PAGE_DELETED : String = "pageDeleted";
+		public static const APPLICATION_PAGE_CREATED : String = "applicationPageCreated";
+		public static const APPLICATION_PAGE_DELETED : String = "applicationPageDeleted";
 
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
 		public static const PAGE_ATTRIBUTES_GETTED : String = "pageAttributesGetted";
-		public static const OBJECTS_GETTED : String = "objectsGetted";
-		public static const OBJECT_GETTED : String = "objectGetted";
+		public static const PAGE_OBJECTS_GETTED : String = "pageObjectsGetted";
+		public static const PAGE_OBJECT_GETTED : String = "pageObjectGetted";
+		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
 
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
+		public static const OBJECT_SERVER_ACTIONS_GETTED : String = "objectServerActionsGetted";
 
 //		window
 		public static const OPEN_WINDOW : String = "openWindow";
@@ -195,18 +198,21 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand );
 			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationProxyResponseCommand );
-			registerCommand( PAGES_GETTED, ApplicationProxyResponseCommand );
-			registerCommand( PAGE_CREATED, ApplicationProxyResponseCommand );
-			registerCommand( PAGE_DELETED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_PAGES_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_PAGE_CREATED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_PAGE_DELETED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_SERVER_ACTIONS_GETTED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_ATTRIBUTES_GETTED, PageProxyResponseCommand );
-			registerCommand( OBJECTS_GETTED, PageProxyResponseCommand );
-			registerCommand( OBJECT_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_OBJECTS_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_OBJECT_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
 
 			registerCommand( OBJECT_PROXY_REQUEST, ObjectProxyRequestCommand );
 			registerCommand( OBJECT_ATTRIBUTES_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_SERVER_ACTIONS_GETTED, ObjectProxyResponseCommand );
 
 			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
 			registerCommand( RESOURCES_GETTED, ResourcesProxyResponseCommand );

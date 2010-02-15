@@ -6,6 +6,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -105,6 +106,16 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function getServerActions() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_actions( applicationVO.id, applicationVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function createPage( typeVO : TypeVO ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -161,6 +172,7 @@ package net.vdombox.ide.core.model
 			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -169,6 +181,7 @@ package net.vdombox.ide.core.model
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createStructure( sourceStructure : XMLList ) : Array
@@ -247,7 +260,7 @@ package net.vdombox.ide.core.model
 				{
 					createPagesList( result.Objects[ 0 ] );
 
-					sendNotification( ApplicationFacade.PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
+					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
 
 					break;
 				}
@@ -260,6 +273,29 @@ package net.vdombox.ide.core.model
 					break;
 				}
 
+				case "get_server_actions":
+				{
+					var serverActions : Array = [];
+					
+					var serverActionsXML : XMLList = result.ServerActions.Container.( @ID == applicationVO.id ).Action;
+					
+					var serverActionVO : ServerActionVO;
+					var serverActionXML : XML;
+					
+					for each( serverActionXML in serverActionsXML )
+					{
+						serverActionVO = new ServerActionVO( serverActionXML.@ID, applicationVO );
+						serverActionVO.name = serverActionXML.@Name;
+						serverActionVO.script = serverActionXML[ 0 ];
+						
+						serverActions.push( serverActionVO );
+					}
+					
+					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED, serverActions )
+					
+					break;
+				}
+					
 				case "create_object":
 				{
 					var pageXML : XML = result.Object[ 0 ];
@@ -279,7 +315,7 @@ package net.vdombox.ide.core.model
 
 					_pages.push( pageVO );
 
-					sendNotification( ApplicationFacade.PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
+					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
 					break;
 				}
 
@@ -302,7 +338,7 @@ package net.vdombox.ide.core.model
 					
 					if( deletedPageVO )
 					{
-						sendNotification( ApplicationFacade.PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
+						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
 					}
 				}
 			}

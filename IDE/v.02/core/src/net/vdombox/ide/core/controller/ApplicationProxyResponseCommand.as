@@ -28,7 +28,7 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 
-				case ApplicationFacade.PAGES_GETTED:
+				case ApplicationFacade.APPLICATION_PAGES_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
@@ -42,16 +42,23 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_CREATED:
+				case ApplicationFacade.APPLICATION_PAGE_CREATED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
 					
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_DELETED:
+				case ApplicationFacade.APPLICATION_PAGE_DELETED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.SERVER_ACTIONS, body );
 					
 					break;
 				}

@@ -2,16 +2,17 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -295,7 +296,7 @@ package net.vdombox.ide.core.model
 				case "get_child_objects":
 				{
 					createObjectsList( result.Objects[ 0 ] );
-					notification = new ProxyNotification( ApplicationFacade.OBJECTS_GETTED, _objects );
+					notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECTS_GETTED, _objects );
 					notification.token = token;
 
 					break;
@@ -303,7 +304,24 @@ package net.vdombox.ide.core.model
 
 				case "get_server_actions":
 				{
-				
+					var serverActions : Array = [];
+					
+					var serverActionsXML : XMLList = result.ServerActions.Container.( @ID == pageVO.id ).Action;
+					
+					var serverActionVO : ServerActionVO;
+					var serverActionXML : XML;
+					
+					for each( serverActionXML in serverActionsXML )
+					{
+						serverActionVO = new ServerActionVO( serverActionXML.@ID, pageVO );
+						serverActionVO.name = serverActionXML.@Name;
+						serverActionVO.script = serverActionXML[ 0 ];
+						
+						serverActions.push( serverActionVO );
+					}
+					
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, serverActions )
+					
 					break;
 				}
 				
@@ -319,7 +337,7 @@ package net.vdombox.ide.core.model
 
 						objectVO.setXMLDescription( objectXML );
 
-						notification = new ProxyNotification( ApplicationFacade.OBJECT_GETTED, objectVO );
+						notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECT_GETTED, objectVO );
 						notification.token = token;
 					}
 					else if ( token.requestFunctionName == GET_ATTRIBUTES )

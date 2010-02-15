@@ -42,6 +42,13 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+					
+				case PPMObjectTargetNames.SERVER_ACTIONS:
+				{
+					objectProxy.getServerActions();
+					
+					break;
+				}
 			}
 		}
 	}

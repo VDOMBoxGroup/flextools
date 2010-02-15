@@ -5,6 +5,7 @@ package net.vdombox.ide.core.model
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -42,15 +43,27 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
+		
+		public function getServerActions() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_actions( objectVO.applicationID, objectVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
 
 		private function addHandlers() : void
 		{
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function removeHandlers() : void
 		{
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function generateObjectAttributes( attributesXML : XML ) : Array
@@ -94,6 +107,29 @@ package net.vdombox.ide.core.model
 					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, attributes );
 					notification.token = token;
 
+					break;
+				}
+					
+				case "get_server_actions":
+				{
+					var serverActions : Array = [];
+					
+					var serverActionsXML : XMLList = result.ServerActions.Container.( @ID == objectVO.id ).Action;
+					
+					var serverActionVO : ServerActionVO;
+					var serverActionXML : XML;
+					
+					for each( serverActionXML in serverActionsXML )
+					{
+						serverActionVO = new ServerActionVO( serverActionXML.@ID, objectVO );
+						serverActionVO.name = serverActionXML.@Name;
+						serverActionVO.script = serverActionXML[ 0 ];
+						
+						serverActions.push( serverActionVO );
+					}
+					
+					sendNotification( ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED, serverActions );
+					
 					break;
 				}
 			}
