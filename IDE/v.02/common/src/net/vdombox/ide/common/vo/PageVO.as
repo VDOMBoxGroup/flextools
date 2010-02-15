@@ -37,13 +37,12 @@ package net.vdombox.ide.common.vo
 		
 		public function set name( value : String ) : void
 		{
-			
+			_name = name;
 		}
 		
 		public function setXMLDescription( description : XML ) : void
 		{
-			_name = description.@Name[ 0 ];
-			name = _name;
+			name = description.@Name[ 0 ];
 		}
 	}
 }
