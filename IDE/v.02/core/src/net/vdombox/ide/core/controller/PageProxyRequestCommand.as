@@ -63,6 +63,13 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+					
+				case PPMPageTargetNames.SERVER_ACTIONS:
+				{
+					pageProxy.getServerActions();
+					
+					break;
+				}
 			}
 		}
 	}

@@ -110,6 +110,16 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function getServerActions() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_server_actions( pageVO.applicationID, pageVO.id );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function createObject( objectID : String ) : ObjectVO
 		{
 			return null;
@@ -166,6 +176,7 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -173,6 +184,7 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -289,6 +301,12 @@ package net.vdombox.ide.core.model
 					break;
 				}
 
+				case "get_server_actions":
+				{
+				
+					break;
+				}
+				
 				case "get_one_object":
 				{
 					if ( token.requestFunctionName == GET_OBJECT )
