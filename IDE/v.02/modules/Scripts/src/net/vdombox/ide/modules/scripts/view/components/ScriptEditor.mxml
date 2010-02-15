@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:mx="library://ns.adobe.com/flex/halo">
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 xmlns:components="net.vdombox.ide.modules.scripts.view.components.*" width="100%" height="100%">
 
 	<fx:Script>
 		<![CDATA[
-			
 			[Bindable]
 			private var _script : String;
-			
-			public function get script () : String
+
+			public function get script() : String
 			{
 				return null;
 			}
-			
-			public function set script ( value : String ) : void
+
+			public function set script( value : String ) : void
 			{
 				_script = value;
 			}
-			
 		]]>
 	</fx:Script>
-	
-	<s:TextArea text="{ _script }" height="100%" width="100%" />
+	<components:EditArea height="100%" width="100%" />
 </s:Group>
