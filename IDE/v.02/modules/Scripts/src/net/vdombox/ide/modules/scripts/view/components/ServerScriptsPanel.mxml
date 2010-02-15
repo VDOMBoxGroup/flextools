@@ -3,7 +3,21 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo">
 
-	<s:List height="100%" width="100%" />
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			[Bindable]
+			private var _scripts : ArrayList;
+
+			public function set scripts( value : Array ) : void
+			{
+				_scripts = new ArrayList( value );
+			}
+		]]>
+	</fx:Script>
+
+	<s:List dataProvider="{ _scripts }" height="100%" labelField="name"
+			width="100%" />
 
 	<s:controlBarContent>
 

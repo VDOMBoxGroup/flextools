@@ -7,10 +7,12 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
 	import net.vdombox.ide.modules.scripts.controller.TearDownCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessApplicationProxyMessageCommand;
+	import net.vdombox.ide.modules.scripts.controller.messages.ProcessObjectProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessPageProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.scripts.controller.messages.ProcessStatesProxyMessageCommand;
@@ -64,6 +66,7 @@ package net.vdombox.ide.modules.scripts
 		public static const PROCESS_TYPES_PROXY_MESSAGE : String = "processTypesProxyMessage";
 		public static const PROCESS_APPLICATION_PROXY_MESSAGE : String = "processApplicationProxyMessage";
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
+		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
 		
 //		server messages
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
@@ -103,7 +106,9 @@ package net.vdombox.ide.modules.scripts
 		public static const GET_STRUCTURE : String = "getStructure";
 		public static const STRUCTURE_GETTED : String = "structureGetted";
 		
-		
+		public static const GET_SERVER_ACTIONS_REQUEST : String = "getServerActionsRequest";
+		public static const GET_SERVER_ACTIONS : String = "getServerActions";
+		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -141,9 +146,11 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( PROCESS_TYPES_PROXY_MESSAGE, ProcessTypesProxyMessageCommand );
 			registerCommand( PROCESS_APPLICATION_PROXY_MESSAGE, ProcessApplicationProxyMessageCommand );
 			registerCommand( PROCESS_PAGE_PROXY_MESSAGE, ProcessPageProxyMessageCommand );
+			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 			
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
+			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			

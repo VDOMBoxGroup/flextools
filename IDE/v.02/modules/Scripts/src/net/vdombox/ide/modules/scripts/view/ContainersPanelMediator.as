@@ -110,6 +110,9 @@ package net.vdombox.ide.modules.scripts.view
 					}
 
 					containersPanel.structure = structure;
+					containersPanel.validateNow();
+					containersPanel.selectedObjectID = selectedPageVO.id;
+					
 					break;
 				}
 			}

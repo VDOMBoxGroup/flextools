@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
@@ -16,6 +17,9 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.vo.SettingsVO;
 	
@@ -47,21 +51,23 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
-			
+
 			interests.push( ApplicationFacade.GET_TYPES );
-			
+
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.GET_PAGES );
-			
+
 			interests.push( ApplicationFacade.GET_OBJECTS );
-			
+
 			interests.push( ApplicationFacade.GET_STRUCTURE );
-			
+
 			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
-			
+
 			interests.push( ApplicationFacade.GET_SELECTED_OBJECT );
 			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
+
+			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
 
 			return interests;
 		}
@@ -92,7 +98,8 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ), multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ),
+												  multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -101,7 +108,8 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ), multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ),
+												  multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -119,7 +127,8 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE, null, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE,
+												 null, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -128,7 +137,8 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.SAVE_SETTINGS_TO_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body,
+												 multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -146,82 +156,121 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION, body );
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION,
+													  body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
 					break;
 				}
-				
+
 				case ApplicationFacade.GET_SELECTED_PAGE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE,
+													  body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-				
+
 				case ApplicationFacade.SET_SELECTED_PAGE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE,
+													  PPMStatesTargetNames.SELECTED_PAGE, body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_SELECTED_OBJECT:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_OBJECT, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_OBJECT,
+													  body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.SET_SELECTED_OBJECT:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE,
+													  PPMStatesTargetNames.SELECTED_OBJECT, body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_PAGES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ,
+													  PPMApplicationTargetNames.PAGES, body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_OBJECTS:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS,
+													  body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_STRUCTURE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE,
+													  body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_TYPES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES, body );
-					
+					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES,
+													  body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
+					break;
+				}
+
+				case ApplicationFacade.GET_SERVER_ACTIONS:
+				{
+					var placeName : String;
+					var targetName : String;
+
+					if ( body is ObjectVO )
+					{
+						placeName = PPMPlaceNames.OBJECT;
+						targetName = PPMObjectTargetNames.SERVER_ACTIONS;
+					}
+					else if ( body is PageVO )
+					{
+						placeName = PPMPlaceNames.PAGE;
+						targetName = PPMPageTargetNames.SERVER_ACTIONS
+					}
+					else if ( body is ApplicationVO )
+					{
+						placeName = PPMPlaceNames.APPLICATION;
+						targetName = PPMApplicationTargetNames.SERVER_ACTIONS
+					}
+
+					if ( placeName && targetName )
+					{
+						message = new ProxiesPipeMessage( placeName, PPMOperationNames.READ, targetName, body );
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+					}
+
 					break;
 				}
 			}
@@ -242,13 +291,14 @@ package net.vdombox.ide.modules.scripts.view
 					if ( recipientKey == multitonKey )
 					{
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
+																					null, multitonKey ) );
 					}
 					else
 					{
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE,
-											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
+																					null, multitonKey ) );
 					}
 
 					break;
@@ -259,8 +309,8 @@ package net.vdombox.ide.modules.scripts.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG,
-										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, multitonKey,
+																			SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( ApplicationFacade.PIPES_READY );
 					break;
@@ -289,34 +339,41 @@ package net.vdombox.ide.modules.scripts.view
 				case PPMPlaceNames.SERVER:
 				{
 					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.STATES:
 				{
 					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-				
+
 				case PPMPlaceNames.TYPES:
 				{
 					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.APPLICATION:
 				{
 					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.PAGE:
 				{
 					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
+
+					break;
+				}
+					
+				case PPMPlaceNames.OBJECT:
+				{
+					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
 					
 					break;
 				}

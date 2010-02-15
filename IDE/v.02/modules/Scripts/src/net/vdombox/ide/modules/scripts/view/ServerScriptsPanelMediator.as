@@ -3,12 +3,11 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Panel;
 	
 	public class ServerScriptsPanelMediator extends Mediator implements IMediator
 	{
@@ -22,9 +21,9 @@ package net.vdombox.ide.modules.scripts.view
 		private var selectedPageVO : PageVO;
 		private var selectedObjectVO : ObjectVO;
 		
-		public function get serverScriptsPanel() : Panel
+		public function get serverScriptsPanel() : ServerScriptsPanel
 		{
-			return viewComponent as Panel;
+			return viewComponent as ServerScriptsPanel;
 		}
 		
 		override public function onRegister() : void
@@ -44,6 +43,8 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			
+			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
+			
 			return interests;
 		}
 		
@@ -58,12 +59,23 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					selectedPageVO = body as PageVO;
 					
+					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					
 					break;
 				}
 					
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
 					selectedObjectVO = body as ObjectVO;
+					
+					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SERVER_ACTIONS_GETTED:
+				{
+					serverScriptsPanel.scripts = body as Array;
 					
 					break;
 				}

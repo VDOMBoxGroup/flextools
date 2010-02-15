@@ -35,6 +35,13 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					sendNotification( ApplicationFacade.STRUCTURE_GETTED, body );
 					break;
 				}
+					
+				case PPMPageTargetNames.SERVER_ACTIONS:
+				{
+					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					
+					break;
+				}
 			}
 		}
 	}
