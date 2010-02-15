@@ -28,7 +28,7 @@ package net.vdombox.ide.core.model
 		private static const MODULES_XML : XML = <modules>
 				<category name="applicationManagment">
 					<module name="ApplicationsManagment" path="app:/modules/applicationsManagment/ApplicationsManagment.swf"/>
-					<module name="Scripts" path="app:/modules/Scripts.swf"/>
+					<module name="Scripts" path="app:/modules/scripts/Scripts.swf"/>
 					<module name="Tree" path="app:/modules/Tree.swf"/>
 				</category>
 				<category name="Edition">
@@ -44,7 +44,6 @@ package net.vdombox.ide.core.model
 
 		private var _categories : Array;
 
-//		private var modulesListByCategory : Object;
 		private var loadedModules : Dictionary;
 		private var modulesList : Array;
 
