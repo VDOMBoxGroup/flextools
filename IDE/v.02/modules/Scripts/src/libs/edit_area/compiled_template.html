@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+<head>
+	<title>EditArea</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href='app:/modules/scripts/libs/edit_area/edit_area.css' rel='stylesheet' type='text/css' />
+	<script language="javascript" type="text/javascript" src="app:/modules/scripts/libs/edit_area/edit_area.js"></script><script language="javascript" type="text/javascript" src="app:/modules/scripts/libs/edit_area/manage_area.js"></script><script language="javascript" type="text/javascript" src="app:/modules/scripts/libs/edit_area/edit_area_functions.js"></script><script language="javascript" type="text/javascript" src="app:/modules/scripts/libs/edit_area/keyboard.js"></script><script language="javascript" type="text/javascript" src="app:/modules/scripts/libs/edit_area/search_replace.js"></script><script language="javascript" type="text/javascript" src="app:/modules/scripts/libs/edit_area/highlight.js"></script><script language="javascript" type="text/javascript" src="app:/modules/scripts/libs/edit_area/regexp.js"></script>
+</head>
+<body>
+	<div id='editor'>
+		<div class='area_toolbar' id='toolbar_1'><a id="a_save" href="javascript:editArea.execCommand('save')" onclick="editArea.execCommand('save');return false;" onmousedown="return false;" target="_self" fileSpecific="no"><img id="save" src="app:/modules/scripts/libs/edit_area/images/save.gif" title="сохранить" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a><img src="app:/modules/scripts/libs/edit_area/images/spacer.gif" width="1" height="15" class="editAreaSeparatorLine"><a id="a_search" href="javascript:editArea.execCommand('show_search')" onclick="editArea.execCommand('show_search');return false;" onmousedown="return false;" target="_self" fileSpecific="no"><img id="search" src="app:/modules/scripts/libs/edit_area/images/search.gif" title="поиск" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a><a id="a_go_to_line" href="javascript:editArea.execCommand('go_to_line')" onclick="editArea.execCommand('go_to_line');return false;" onmousedown="return false;" target="_self" fileSpecific="no"><img id="go_to_line" src="app:/modules/scripts/libs/edit_area/images/go_to_line.gif" title="перейти к строке" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a><img src="app:/modules/scripts/libs/edit_area/images/spacer.gif" width="1" height="15" class="editAreaSeparatorLine"><a id="a_undo" href="javascript:editArea.execCommand('undo')" onclick="editArea.execCommand('undo');return false;" onmousedown="return false;" target="_self" fileSpecific="yes"><img id="undo" src="app:/modules/scripts/libs/edit_area/images/undo.gif" title="отменить" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a><a id="a_redo" href="javascript:editArea.execCommand('redo')" onclick="editArea.execCommand('redo');return false;" onmousedown="return false;" target="_self" fileSpecific="yes"><img id="redo" src="app:/modules/scripts/libs/edit_area/images/redo.gif" title="вернуть" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a><img src="app:/modules/scripts/libs/edit_area/images/spacer.gif" width="1" height="15" class="editAreaSeparatorLine"><select id='area_font_size' onchange='javascript:editArea.execCommand("change_font_size")' fileSpecific='yes'><option value='-1'>--Размер шрифта--</option><option value='8'>8 pt</option><option value='9'>9 pt</option><option value='10'>10 pt</option><option value='11'>11 pt</option><option value='12'>12 pt</option><option value='14'>14 pt</option></select><img src="app:/modules/scripts/libs/edit_area/images/spacer.gif" width="1" height="15" class="editAreaSeparatorLine"><a id="a_change_smooth_selection" href="javascript:editArea.execCommand('change_smooth_selection_mode')" onclick="editArea.execCommand('change_smooth_selection_mode');return false;" onmousedown="return false;" target="_self" fileSpecific="yes"><img id="change_smooth_selection" src="app:/modules/scripts/libs/edit_area/images/smooth_selection.gif" title="включить/отключить некоторые функции просмотра (более красиво, но больше использует процессор)" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a><a id="a_highlight" href="javascript:editArea.execCommand('change_highlight')" onclick="editArea.execCommand('change_highlight');return false;" onmousedown="return false;" target="_self" fileSpecific="yes"><img id="highlight" src="app:/modules/scripts/libs/edit_area/images/highlight.gif" title="переключить подсветку синтаксиса включена/выключена" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a><img src="app:/modules/scripts/libs/edit_area/images/spacer.gif" width="1" height="15" class="editAreaSeparatorLine"><a id="a_help" href="javascript:editArea.execCommand('show_help')" onclick="editArea.execCommand('show_help');return false;" onmousedown="return false;" target="_self" fileSpecific="no"><img id="help" src="app:/modules/scripts/libs/edit_area/images/help.gif" title="о программе" width="20" height="20" class="editAreaButtonNormal" onmouseover="editArea.switchClass(this,'editAreaButtonOver');" onmouseout="editArea.restoreClass(this);" onmousedown="editArea.restoreAndSwitchClass(this,'editAreaButtonDown');" /></a></div>
+		<div class='area_toolbar' id='tab_browsing_area'><ul id='tab_browsing_list' class='menu'> <li> </li> </ul></div>
+		<div id='result'>
+			<div id='no_file_selected'></div>
+			<div id='container'>
+				<div id='cursor_pos' class='edit_area_cursor'>&nbsp;</div>
+				<div id='end_bracket' class='edit_area_cursor'>&nbsp;</div>
+				<div id='selection_field'></div>
+				<div id='line_number' selec='none'></div>
+				<div id='content_highlight'></div>
+				<div id='test_font_size'></div>
+				<textarea id='textarea' wrap='off' onchange='editArea.execCommand("onchange");' onfocus='javascript:editArea.textareaFocused=true;' onblur='javascript:editArea.textareaFocused=false;'>
+				</textarea>
+				
+			</div>
+		</div>
+		<div class='area_toolbar' id='toolbar_2'>
+			<table class='statusbar' cellspacing='0' cellpadding='0'>
+				<tr>
+					<td class='total' selec='none'>Позиция:</td>
+					<td class='infos' selec='none'>
+						Стр <span  id='linePos'>0</span>, Стлб <span id='currPos'>0</span>
+					</td>
+					<td class='total' selec='none'>Всего:</td>
+					<td class='infos' selec='none'>
+						Стр <span id='nbLine'>0</span>, Стлб <span id='nbChar'>0</span>
+					</td>
+					<td class='resize'>
+						<span id='resize_area'><img src='app:/modules/scripts/libs/edit_area/images/statusbar_resize.gif' alt='resize' selec='none'></span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div id='processing'>
+		<div id='processing_text'>
+			Обработка...
+		</div>
+	</div>
+
+	<div id='area_search_replace' class='editarea_popup'>
+		<table cellspacing='2' cellpadding='0' style='width: 100%'>
+			<tr>
+				<td selec='none'>поиск</td>
+				<td><input type='text' id='area_search' /></td>
+				<td id='close_area_search_replace'>
+					<a onclick='Javascript:editArea.execCommand("hidden_search")'><img selec='none' src='app:/modules/scripts/libs/edit_area/images/close.gif' alt='закрыть всплывающее окно' title='закрыть всплывающее окно' /></a><br />
+			</tr><tr>
+				<td selec='none'>замена</td>
+				<td><input type='text' id='area_replace' /></td>
+				<td><img id='move_area_search_replace' onmousedown='return parent.start_move_element(event,"area_search_replace", parent.frames["frame_"+editArea.id]);'  src='app:/modules/scripts/libs/edit_area/images/move.gif' alt='переместить окно поиска' title='переместить окно поиска' /></td>
+			</tr>
+		</table>
+		<div class='button'>
+			<input type='checkbox' id='area_search_match_case' /><label for='area_search_match_case' selec='none'>учитывать регистр</label>
+			<input type='checkbox' id='area_search_reg_exp' /><label for='area_search_reg_exp' selec='none'>регулярное выражение</label>
+			<br />
+			<a onclick='Javascript:editArea.execCommand("area_search")' selec='none'>найти следующее</a>
+			<a onclick='Javascript:editArea.execCommand("area_replace")' selec='none'>замена</a>
+			<a onclick='Javascript:editArea.execCommand("area_replace_all")' selec='none'>заменить все</a><br />
+		</div>
+		<div id='area_search_msg' selec='none'></div>
+	</div>
+	<div id='edit_area_help' class='editarea_popup'>
+		<div class='close_popup'>
+			<a onclick='Javascript:editArea.execCommand("close_all_inline_popup")'><img src='app:/modules/scripts/libs/edit_area/images/close.gif' alt='закрыть всплывающее окно' title='закрыть всплывающее окно' /></a>
+		</div>
+		<div><h2>Editarea 0.7.2.3</h2><br />
+			<h3>Горячие клавиши:</h3>
+				Tab: добавить табуляцию в текст<br />
+				Shift+Tab: убрать табуляцию из текста<br />
+				Ctrl+f: искать следующий / открыть панель поиска<br />
+				Ctrl+r: заменить / открыть панель поиска<br />
+				Ctrl+h: переключить подсветку синтаксиса включена/выключена<br />
+				Ctrl+g: перейти к строке<br />
+				Ctrl+z: отменить<br />
+				Ctrl+y: вернуть<br />
+				Ctrl+e: о программе<br />
+				Ctrl+q, Esc: закрыть всплывающее окно<br />
+				Горячая клавиша E: Переключить редактор<br />
+			<br />
+			<em>Внимание: функция подсветки синтаксиса только для небольших текстов</em>
+			<br /><div class='copyright'>&copy; Christophe Dolivet 2007-2008</div>
+		</div>
+	</div>
+</body>
+</html>
