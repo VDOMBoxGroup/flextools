@@ -124,6 +124,7 @@ package net.vdombox.ide.core
 		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
 		public static const APPLICATION_LIBRARY_CREATED : String = "applicationLibraryCreated";
+		public static const APPLICATION_LIBRARY_DELETED : String = "applicationLibraryDeleted";
 		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
@@ -131,6 +132,7 @@ package net.vdombox.ide.core
 		public static const PAGE_OBJECTS_GETTED : String = "pageObjectsGetted";
 		public static const PAGE_OBJECT_GETTED : String = "pageObjectGetted";
 		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
+		public static const PAGE_SERVER_ACTIONS_SETTED : String = "pageServerActionsGetted";
 
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
@@ -207,6 +209,7 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_SERVER_ACTIONS_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARIES_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_CREATED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_LIBRARY_DELETED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
@@ -214,6 +217,7 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_OBJECTS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECT_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_SERVER_ACTIONS_SETTED, PageProxyResponseCommand );
 
 			registerCommand( OBJECT_PROXY_REQUEST, ObjectProxyRequestCommand );
 			registerCommand( OBJECT_ATTRIBUTES_GETTED, ObjectProxyResponseCommand );

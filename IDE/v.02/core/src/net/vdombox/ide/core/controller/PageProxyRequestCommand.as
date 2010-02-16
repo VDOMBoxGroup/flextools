@@ -1,11 +1,12 @@
 package net.vdombox.ide.core.controller
 {
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.PageProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -63,11 +64,14 @@ package net.vdombox.ide.core.controller
 
 					break;
 				}
-
+					
 				case PPMPageTargetNames.SERVER_ACTIONS:
 				{
-					pageProxy.getServerActions();
-
+					if( operation == PPMOperationNames.READ )
+						pageProxy.getServerActions();
+					else if( operation == PPMOperationNames.UPDATE )
+						pageProxy.setServerActions( body.serverActions );
+					
 					break;
 				}
 			}

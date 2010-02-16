@@ -70,6 +70,13 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 					
+				case ApplicationFacade.APPLICATION_LIBRARY_DELETED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.LIBRARY, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.APPLICATION_LIBRARIES_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );

@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -12,7 +12,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -106,6 +106,31 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function setServerActions( serverActions : Array ) : AsyncToken
+		{
+			var token : AsyncToken;
+			
+			var language : String = "vscript";
+			
+			if( pageVO.applicationVO.scriptingLanguage )
+				language = pageVO.applicationVO.scriptingLanguage;
+			
+			var serverActionsXML : XML = <ServerActions />;
+			var serverActionVO : ServerActionVO;
+			
+			for each ( serverActionVO in serverActions )
+			{
+				serverActionsXML.appendChild( serverActionVO.toXML() );
+			}
+			
+			token = soap.set_server_actions( pageVO.applicationVO.id, serverActions );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+
+		
 		public function createObject( objectID : String ) : ObjectVO
 		{
 			return null;
@@ -298,8 +323,9 @@ package net.vdombox.ide.core.model
 
 					for each ( serverActionXML in serverActionsXML )
 					{
-						serverActionVO = new ServerActionVO( serverActionXML.@ID, pageVO );
-						serverActionVO.name = serverActionXML.@Name;
+						serverActionVO = new ServerActionVO( serverActionXML.@Name, pageVO );
+						serverActionVO.setID( serverActionXML.@ID );
+						
 						serverActionVO.script = serverActionXML[ 0 ];
 
 						serverActions.push( serverActionVO );
@@ -307,6 +333,14 @@ package net.vdombox.ide.core.model
 
 					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, serverActions )
 
+					break;
+				}
+					
+				case "set_server_actions":
+				{
+					
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, { pageVO : pageVO } )
+					
 					break;
 				}
 

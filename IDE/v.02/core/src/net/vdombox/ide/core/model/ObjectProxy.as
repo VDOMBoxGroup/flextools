@@ -121,8 +121,9 @@ package net.vdombox.ide.core.model
 					
 					for each( serverActionXML in serverActionsXML )
 					{
-						serverActionVO = new ServerActionVO( serverActionXML.@ID, objectVO );
-						serverActionVO.name = serverActionXML.@Name;
+						serverActionVO = new ServerActionVO( serverActionXML.@Name, objectVO );
+						serverActionVO.setID( serverActionXML.@ID );
+						
 						serverActionVO.script = serverActionXML[ 0 ];
 						
 						serverActions.push( serverActionVO );

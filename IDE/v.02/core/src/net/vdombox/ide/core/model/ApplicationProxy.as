@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
@@ -14,7 +14,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy
@@ -126,6 +126,16 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
+		
+		public function removeLibrary( libraryVO : LibraryVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.remove_library( applicationVO.id, libraryVO.name );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
 
 		public function getLibraries() : AsyncToken
 		{
@@ -195,6 +205,7 @@ package net.vdombox.ide.core.model
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remove_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_libraries.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 		}
 
@@ -206,6 +217,7 @@ package net.vdombox.ide.core.model
 			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remove_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
@@ -313,8 +325,9 @@ package net.vdombox.ide.core.model
 
 					for each ( serverActionXML in serverActionsXML )
 					{
-						serverActionVO = new ServerActionVO( serverActionXML.@ID, applicationVO );
-						serverActionVO.name = serverActionXML.@Name;
+						serverActionVO = new ServerActionVO( serverActionXML.@Name, applicationVO );
+						serverActionVO.setID( serverActionXML.@ID );
+						
 						serverActionVO.script = serverActionXML[ 0 ];
 
 						serverActions.push( serverActionVO );
@@ -338,6 +351,18 @@ package net.vdombox.ide.core.model
 					break;
 				}
 
+				case "remove_library":
+				{
+					libraryXML = result.Library[ 0 ];
+					
+					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+					libraryVO.script = libraryXML[ 0 ];
+					
+					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_DELETED, { applicationVO: applicationVO, libraryVO: libraryVO } );
+					
+					break;
+				}
+					
 				case "get_libraries":
 				{
 					var libraries : Array = [];
