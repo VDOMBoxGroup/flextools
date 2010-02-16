@@ -71,7 +71,10 @@ package net.vdombox.ide.modules.scripts.view
 				{
 					selectedPageVO = body as PageVO;
 
-					sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: selectedPageVO } );
+					if( selectedPageVO )
+						sendNotification( ApplicationFacade.GET_STRUCTURE, { pageVO: selectedPageVO } );
+					else
+						containersPanel.structure = null;
 
 					break;
 				}

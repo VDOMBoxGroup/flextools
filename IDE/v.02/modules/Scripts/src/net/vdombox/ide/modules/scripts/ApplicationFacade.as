@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.CreateScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.scripts.controller.DeleteLibraryRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.OpenCreateActionWindowCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
@@ -112,6 +113,9 @@ package net.vdombox.ide.modules.scripts
 		public static const GET_SERVER_ACTIONS : String = "getServerActions";
 		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
 		
+		public static const SET_SERVER_ACTIONS : String = "setServerActions";
+		public static const SERVER_ACTIONS_SETTED : String = "serverActionsSetted";
+		
 		public static const GET_LIBRARIES : String = "getLibraries";
 		public static const LIBRARIES_GETTED : String = "librariesGetted";
 		
@@ -128,11 +132,16 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const CREATE_SCRIPT_REQUEST : String = "createScriptRequest";
 		
-		public static const CREATE_SEVER_ACTION : String = "createAction";
-		public static const SERVER_ACTION_CREATED : String = "actionCreated";
+//		public static const CREATE_SEVER_ACTION : String = "createAction";
+//		public static const SERVER_ACTION_CREATED : String = "actionCreated";
 		
 		public static const CREATE_LIBRARY : String = "createLibrary";
 		public static const LIBRARY_CREATED : String = "libraryCreated";
+		
+		public static const DELETE_LIBRARY_REQUEST : String = "deleteLibraryRequest";
+		
+		public static const DELETE_LIBRARY : String = "deleteLibrary";
+		public static const LIBRARY_DELETED : String = "libraryDeleted";
 		
 		public static const OPEN_WINDOW : String = "openWidow";
 		public static const CLOSE_WINDOW : String = "closeWidow";
@@ -184,6 +193,8 @@ package net.vdombox.ide.modules.scripts
 			
 			registerCommand( OPEN_CREATE_ACTION_WINDOW, OpenCreateActionWindowCommand );
 			registerCommand( CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
+			
+			registerCommand( DELETE_LIBRARY_REQUEST, DeleteLibraryRequestCommand );
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			

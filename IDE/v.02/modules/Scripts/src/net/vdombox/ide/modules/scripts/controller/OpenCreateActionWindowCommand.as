@@ -23,9 +23,9 @@ package net.vdombox.ide.modules.scripts.controller
 				facade.retrieveMediator( CreateActionWindowMediator.NAME );
 
 			if ( target == ApplicationFacade.ACTION )
-				title = resourceManager.getString( "Scripts_General", "create_action_window_library_title" );
-			else if ( target == ApplicationFacade.LIBRARY )
 				title = resourceManager.getString( "Scripts_General", "create_action_window_action_title" );
+			else if ( target == ApplicationFacade.LIBRARY )
+				title = resourceManager.getString( "Scripts_General", "create_action_window_library_title" );
 			else
 				return;
 

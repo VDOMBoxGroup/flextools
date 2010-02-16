@@ -71,10 +71,13 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
+			interests.push( ApplicationFacade.SET_SERVER_ACTIONS );
+			
 			interests.push( ApplicationFacade.GET_LIBRARIES );
 
-			interests.push( ApplicationFacade.CREATE_SEVER_ACTION );
 			interests.push( ApplicationFacade.CREATE_LIBRARY );
+			
+			interests.push( ApplicationFacade.DELETE_LIBRARY );
 
 			return interests;
 		}
@@ -294,12 +297,12 @@ package net.vdombox.ide.modules.scripts.view
 					break
 				}
 
-				case ApplicationFacade.CREATE_SEVER_ACTION:
+				case ApplicationFacade.SET_SERVER_ACTIONS:
 				{
 					if ( body.hasOwnProperty( "objectVO" ) )
-						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.SERVER_ACTION, body );
+						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS, body );
 					else if ( body.hasOwnProperty( "pageVO" ) )
-						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.SERVER_ACTION, body );
+						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.SERVER_ACTIONS, body );
 
 					if( message )
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -312,6 +315,14 @@ package net.vdombox.ide.modules.scripts.view
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.LIBRARY, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break
+				}
+					
+				case ApplicationFacade.DELETE_LIBRARY:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.LIBRARY, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break
 				}
 			}

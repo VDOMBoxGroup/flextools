@@ -1,8 +1,10 @@
 package net.vdombox.ide.modules.scripts.controller
 {
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
+	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
 
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -30,17 +32,34 @@ package net.vdombox.ide.modules.scripts.controller
 				case ApplicationFacade.ACTION:
 				{
 
-					if ( statesObject[ ApplicationFacade.SELECTED_OBJECT ] )
+					var serverScriptsPanelMediator : ServerScriptsPanelMediator = facade.retrieveMediator( ServerScriptsPanelMediator.NAME ) as
+						ServerScriptsPanelMediator;
+
+					var serverActions : Array = serverScriptsPanelMediator.serverActions;
+					var serverActionVO : ServerActionVO;
+
+					if ( serverScriptsPanelMediator.selectedObjectVO )
 					{
-						sendNotification( ApplicationFacade.CREATE_SEVER_ACTION,
-										  { objectVO: statesObject[ ApplicationFacade.SELECTED_OBJECT ], name: scriptName, script: "" } );
+						serverActionVO = new ServerActionVO( scriptName, serverScriptsPanelMediator.selectedObjectVO );
+						serverActionVO.script = "";
+						
+						serverActions.push( serverActionVO );
+
+						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
+										  { objectVO: statesObject[ ApplicationFacade.SELECTED_OBJECT ], serverActions: serverActions } );
 					}
 
 					else if ( statesObject[ ApplicationFacade.SELECTED_PAGE ] )
 					{
-						sendNotification( ApplicationFacade.CREATE_SEVER_ACTION,
-										  { pageVO: statesObject[ ApplicationFacade.SELECTED_PAGE ], name: scriptName, script: "" } );
+						serverActionVO = new ServerActionVO( scriptName, serverScriptsPanelMediator.selectedPageVO );
+						serverActionVO.script = "";
+						
+						serverActions.push( serverActionVO );
+
+						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
+										  { pageVO: statesObject[ ApplicationFacade.SELECTED_PAGE ], serverActions: serverActions } );
 					}
+
 					break;
 				}
 

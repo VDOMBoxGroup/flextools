@@ -48,6 +48,8 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				{
 					if( operation == PPMOperationNames.CREATE )
 						sendNotification( ApplicationFacade.LIBRARY_CREATED, body.libraryVO );
+					else if( operation == PPMOperationNames.DELETE )
+						sendNotification( ApplicationFacade.LIBRARY_DELETED, body.libraryVO );
 					
 					break;
 				}

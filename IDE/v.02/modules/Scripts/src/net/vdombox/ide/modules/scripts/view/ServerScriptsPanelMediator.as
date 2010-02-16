@@ -19,10 +19,12 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 
-		private var selectedPageVO : PageVO;
+		public var selectedPageVO : PageVO;
 
-		private var selectedObjectVO : ObjectVO;
+		public var selectedObjectVO : ObjectVO;
 
+		public var serverActions : Array;
+		
 		public function get serverScriptsPanel() : ServerScriptsPanel
 		{
 			return viewComponent as ServerScriptsPanel;
@@ -44,6 +46,7 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
 
@@ -77,7 +80,17 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.SERVER_ACTIONS_GETTED:
 				{
-					serverScriptsPanel.scripts = body as Array;
+					serverActions = body as Array;
+					
+					serverScriptsPanel.scripts = serverActions;
+
+					break;
+				}
+
+				case ApplicationFacade.SELECTED_LIBRARY_CHANGED:
+				{
+					if ( body )
+						serverScriptsPanel.selectedScript = null;
 
 					break;
 				}
@@ -86,16 +99,28 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function addHandlers() : void
 		{
-			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED,
-												 selectedServerActionChangedHandler, false, 0, true );
+			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.CREATE_ACTION, createActionHandler, false, 0, true );
+			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.DELETE_ACTION, deleteActionHandler, false, 0, true );
+			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED, selectedServerActionChangedHandler, false, 0,
+												 true );
 		}
 
 		private function removeHandlers() : void
 		{
-			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED,
-													selectedServerActionChangedHandler );
+			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.CREATE_ACTION, createActionHandler );
+			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.DELETE_ACTION, deleteActionHandler );
+			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED, selectedServerActionChangedHandler );
 		}
 
+		private function createActionHandler( event : ServerScriptsPanelEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_CREATE_ACTION_WINDOW, ApplicationFacade.ACTION );
+		}
+		
+		private function deleteActionHandler( event : ServerScriptsPanelEvent ) : void
+		{
+		}
+		
 		private function selectedServerActionChangedHandler( event : ServerScriptsPanelEvent ) : void
 		{
 			sendNotification( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED, serverScriptsPanel.selectedScript );

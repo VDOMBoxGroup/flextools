@@ -5,6 +5,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import spark.events.IndexChangeEvent;
 			import mx.collections.ArrayList;
 
 			import net.vdombox.ide.common.vo.ServerActionVO;
@@ -15,21 +16,53 @@
 
 			public function get selectedScript() : ServerActionVO
 			{
-				return actionList.selectedItem as ServerActionVO;
+				return actionList.selectedItem;
+			}
+
+			public function set selectedScript( value : ServerActionVO ) : void
+			{
+				actionList.selectedItem = value;
+				actionList.validateNow();
+
+				if ( actionList.selectedIndex == -1 )
+					deleteButton.enabled = false;
+				else
+					deleteButton.enabled = true;
 			}
 
 			public function set scripts( value : Array ) : void
 			{
-				_scripts = new ArrayList( value );
+				if ( value.length > 0 )
+				{
+					_scripts = new ArrayList( value );
+					deleteButton.enabled = false;
+					actionList.selectedIndex = -1;
+				}
+				else
+				{
+					_scripts = null;
+					deleteButton.enabled = false;
+					actionList.selectedIndex = -1;
+				}
+
 				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) );
+			}
+
+			protected function actionList_changeHandler() : void
+			{
+				if ( actionList.selectedItem )
+					deleteButton.enabled = true;
+				else
+					deleteButton.enabled = false;
+
+				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) )
 			}
 		]]>
 	</fx:Script>
 
 	<s:List id="actionList"
 			dataProvider="{ _scripts }" height="100%" labelField="name" width="100%"
-			change="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) )"
-			requireSelection="true" />
+			change="actionList_changeHandler()" />
 
 	<s:controlBarContent>
 
@@ -38,7 +71,9 @@
 		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_add' ) }"
 				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )" />
 
-		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_delete' ) }"
+		<s:Button id="deleteButton"
+				  enabled="false"
+				  label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_delete' ) }"
 				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) )" />
 	</s:controlBarContent>
 </s:Panel>

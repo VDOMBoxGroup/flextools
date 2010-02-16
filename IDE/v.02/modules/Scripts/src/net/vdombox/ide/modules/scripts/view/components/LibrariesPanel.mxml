@@ -5,21 +5,62 @@
 
 	<fx:Script>
 		<![CDATA[
+			import spark.events.IndexChangeEvent;
 			import mx.collections.ArrayList;
 
+			import net.vdombox.ide.common.vo.LibraryVO;
 			import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
 
 			[Bindable]
 			private var _libraries : ArrayList;
 
+			public function get selectedLibrary() : LibraryVO
+			{
+				return librariesList.selectedItem as LibraryVO;
+			}
+
+			public function set selectedLibrary( value : LibraryVO ) : void
+			{
+				librariesList.selectedItem = value;
+				librariesList.validateNow();
+				
+				if( librariesList.selectedIndex == -1 )
+					deleteButton.enabled = false;
+				else
+					deleteButton.enabled = true;
+			}
+
 			public function set libraries( value : Array ) : void
 			{
-				_libraries = new ArrayList( value );
+				if ( value.length > 0 )
+				{
+					_libraries = new ArrayList( value );
+					librariesList.selectedIndex = -1;
+					deleteButton.enabled = false;
+				}
+				else
+				{
+					_libraries = null;
+					librariesList.selectedIndex = -1;
+					deleteButton.enabled = false;
+				}
+			}
+
+			protected function librariesList_changeHandler() : void
+			{
+				if( librariesList.selectedItem )
+					deleteButton.enabled = true;
+				else
+					deleteButton.enabled = false;
+				
+				dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) )
 			}
 		]]>
 	</fx:Script>
 
-	<s:List dataProvider="{ _libraries }" height="100%" labelField="name" width="100%" />
+	<s:List id="librariesList"
+			dataProvider="{ _libraries }" height="100%" labelField="name" width="100%"
+			change="librariesList_changeHandler()" />
 
 	<s:controlBarContent>
 
@@ -28,7 +69,7 @@
 		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_add' ) }"
 				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.CREATE_LIBRARY ) )" />
 
-		<s:Button 
+		<s:Button id="deleteButton" enabled="false"
 				  label="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_delete' ) }"
 				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY ) )" />
 	</s:controlBarContent>
