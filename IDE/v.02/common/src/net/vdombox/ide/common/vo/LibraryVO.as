@@ -5,6 +5,7 @@ package net.vdombox.ide.common.vo
 		public function LibraryVO( name : String, applicationVO : ApplicationVO )
 		{
 			_name = name;
+			_applicationVO = applicationVO;
 		}
 		
 		public var script : String;
