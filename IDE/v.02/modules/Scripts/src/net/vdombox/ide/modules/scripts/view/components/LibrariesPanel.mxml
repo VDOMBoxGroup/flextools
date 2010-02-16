@@ -3,14 +3,33 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo">
 
-	<s:List height="100%" width="100%" />
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+
+			import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
+
+			[Bindable]
+			private var _libraries : ArrayList;
+
+			public function set libraries( value : Array ) : void
+			{
+				_libraries = new ArrayList( value );
+			}
+		]]>
+	</fx:Script>
+
+	<s:List dataProvider="{ _libraries }" height="100%" labelField="name" width="100%" />
 
 	<s:controlBarContent>
 
 		<mx:Spacer width="100%" />
 
-		<s:Button />
+		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_add' ) }"
+				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.CREATE_LIBRARY ) )" />
 
-		<s:Button />
+		<s:Button 
+				  label="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_delete' ) }"
+				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY ) )" />
 	</s:controlBarContent>
 </s:Panel>

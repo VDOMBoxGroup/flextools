@@ -12,15 +12,19 @@
 	<s:VGroup height="100%" width="250">
 
 		<components:PagesPanel id="pagesPanel"
+							   title="{ resourceManager.getString( 'Scripts_General', 'pages_panel_title' ) }"
 							   width="100%" />
 
 		<components:ContainersPanel id="containersPanel"
+									title="{ resourceManager.getString( 'Scripts_General', 'containers_panel_title' ) }"
 									width="100%" />
 
 		<components:ServerScriptsPanel id="serverScriptsPanel"
+									   title="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_title' ) }"
 									   width="100%" />
 
 		<components:LibrariesPanel id="librariesPanel"
+								   title="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_title' ) }"
 								   width="100%" />
 	</s:VGroup>
 </s:HGroup>

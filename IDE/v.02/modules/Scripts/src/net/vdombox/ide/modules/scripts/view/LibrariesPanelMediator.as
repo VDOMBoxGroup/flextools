@@ -1,10 +1,12 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
+	import net.vdombox.ide.modules.scripts.view.components.LibrariesPanel;
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Panel;
 
 	public class LibrariesPanelMediator extends Mediator implements IMediator
 	{
@@ -15,9 +17,9 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 
-		public function get librariesPanel() : Panel
+		public function get librariesPanel() : LibrariesPanel
 		{
-			return viewComponent as Panel;
+			return viewComponent as LibrariesPanel;
 		}
 
 		override public function onRegister() : void
@@ -34,7 +36,8 @@ package net.vdombox.ide.modules.scripts.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-//			interests.push( ApplicationFacade. );
+			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
+			interests.push( ApplicationFacade.LIBRARIES_GETTED );
 
 			return interests;
 		}
@@ -44,22 +47,49 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-//			switch ( name )
-//			{
-//				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
-//				{
-//					
-//					break;
-//				}
-//			}
+			switch ( name )
+			{
+				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+				{
+					sendNotification( ApplicationFacade.GET_LIBRARIES, body )
+
+					break;
+				}
+
+				case ApplicationFacade.LIBRARIES_GETTED:
+				{
+					librariesPanel.libraries = body as Array;
+
+					break;
+				}
+			}
 		}
 
 		private function addHandlers() : void
 		{
-
+			librariesPanel.addEventListener( LibrariesPanelEvent.CREATE_LIBRARY, createLibraryHandler, false, 0, true );
+			librariesPanel.addEventListener( LibrariesPanelEvent.DELETE_LIBRARY, deleteLibraryHandler, false, 0, true );
+			librariesPanel.addEventListener( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED, selectedLibraryChangedHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
+		{
+			librariesPanel.removeEventListener( LibrariesPanelEvent.CREATE_LIBRARY, createLibraryHandler );
+			librariesPanel.removeEventListener( LibrariesPanelEvent.DELETE_LIBRARY, deleteLibraryHandler );
+			librariesPanel.removeEventListener( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED, selectedLibraryChangedHandler );
+		}
+
+		private function createLibraryHandler( event : LibrariesPanelEvent ) : void
+		{
+
+		}
+
+		private function deleteLibraryHandler( event : LibrariesPanelEvent ) : void
+		{
+
+		}
+
+		private function selectedLibraryChangedHandler( event : LibrariesPanelEvent ) : void
 		{
 
 		}

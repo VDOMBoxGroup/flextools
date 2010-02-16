@@ -27,8 +27,7 @@
 	</fx:Script>
 
 	<s:List id="actionList"
-			dataProvider="{ _scripts }" height="100%" labelField="name"
-			width="100%"
+			dataProvider="{ _scripts }" height="100%" labelField="name" width="100%"
 			change="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) )"
 			requireSelection="true" />
 
@@ -36,8 +35,10 @@
 
 		<mx:Spacer width="100%" />
 
-		<s:Button />
+		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_add' ) }"
+				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )" />
 
-		<s:Button />
+		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_delete' ) }"
+				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) )" />
 	</s:controlBarContent>
 </s:Panel>

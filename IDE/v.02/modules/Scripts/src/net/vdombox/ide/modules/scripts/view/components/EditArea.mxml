@@ -32,7 +32,8 @@
 
 			public function set syntax( value : String ) : void
 			{
-				_syntax = value;
+				if( value )
+					_syntax = value;
 			}
 
 			public function get content() : String

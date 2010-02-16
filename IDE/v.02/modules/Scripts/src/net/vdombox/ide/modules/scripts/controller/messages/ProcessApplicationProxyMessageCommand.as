@@ -42,6 +42,13 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 					break;
 				}
+					
+				case PPMApplicationTargetNames.LIBRARIES:
+				{
+					sendNotification( ApplicationFacade.LIBRARIES_GETTED, body.libraries );
+					
+					break;
+				}
 			}
 		}
 	}

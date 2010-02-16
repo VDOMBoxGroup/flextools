@@ -2,12 +2,17 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 xmlns:components="net.vdombox.ide.modules.scripts.view.components.*" width="100%" height="100%">
+		 xmlns:components="net.vdombox.ide.modules.scripts.view.components.*"
+		 
+		 height="100%" width="100%">
 
 	<fx:Script>
 		<![CDATA[
 			[Bindable]
 			private var _script : String;
+
+			[Bindable]
+			private var _syntax : String = "vscript";
 
 			public function get script() : String
 			{
@@ -18,7 +23,15 @@
 			{
 				_script = value;
 			}
+
+			public function set syntax( value : String ) : void
+			{
+				_syntax = value;
+			}
 		]]>
 	</fx:Script>
-	<components:EditArea height="100%" width="100%" />
+
+	<components:EditArea id="editArea"
+						 height="100%" width="100%"
+						 content="{ _script }" syntax="{ _syntax }" />
 </s:Group>

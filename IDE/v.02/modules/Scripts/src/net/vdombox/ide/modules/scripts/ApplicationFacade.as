@@ -5,6 +5,8 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedObjectRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.scripts.controller.CreateNewActionRequestCommand;
+	import net.vdombox.ide.modules.scripts.controller.CreateNewLibraryRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
@@ -110,7 +112,14 @@ package net.vdombox.ide.modules.scripts
 		public static const GET_SERVER_ACTIONS : String = "getServerActions";
 		public static const SERVER_ACTIONS_GETTED : String = "serverActionsGetted";
 		
+		public static const GET_LIBRARIES : String = "getLibraries";
+		public static const LIBRARIES_GETTED : String = "librariesGetted";
+		
 		public static const SELECTED_SERVER_ACTION_CHANGED : String = "selectedServerActionChanged";
+		public static const SELECTED_LIBRARY_CHANGED : String = "selectedLibraryChanged";
+		
+		public static const CREATE_NEW_ACTION_REQUEST : String = "createNewActionRequest";
+		public static const CREATE_NEW_LIBRARY_REQUEST : String = "createNewLibraryRequest";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -153,6 +162,9 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
+			
+			registerCommand( CREATE_NEW_ACTION_REQUEST, CreateNewActionRequestCommand );
+			registerCommand( CREATE_NEW_LIBRARY_REQUEST, CreateNewLibraryRequestCommand );
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			
