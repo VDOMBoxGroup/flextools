@@ -5,11 +5,11 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedObjectRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateBodyCommand;
-	import net.vdombox.ide.modules.scripts.controller.CreateNewActionRequestCommand;
-	import net.vdombox.ide.modules.scripts.controller.CreateNewLibraryRequestCommand;
+	import net.vdombox.ide.modules.scripts.controller.CreateScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.scripts.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
+	import net.vdombox.ide.modules.scripts.controller.OpenCreateActionWindowCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
 	import net.vdombox.ide.modules.scripts.controller.TearDownCommand;
@@ -118,8 +118,24 @@ package net.vdombox.ide.modules.scripts
 		public static const SELECTED_SERVER_ACTION_CHANGED : String = "selectedServerActionChanged";
 		public static const SELECTED_LIBRARY_CHANGED : String = "selectedLibraryChanged";
 		
-		public static const CREATE_NEW_ACTION_REQUEST : String = "createNewActionRequest";
-		public static const CREATE_NEW_LIBRARY_REQUEST : String = "createNewLibraryRequest";
+		public static const ACTION : String = "action";
+		public static const LIBRARY : String = "library";
+		
+		public static const OPEN_CREATE_ACTION_WINDOW : String = "openCreateActionWindow";
+		
+//		public static const CREATE_ACTION_REQUEST : String = "createActionRequest";
+//		public static const CREATE_LIBRARY_REQUEST : String = "createLibraryRequest";
+		
+		public static const CREATE_SCRIPT_REQUEST : String = "createScriptRequest";
+		
+		public static const CREATE_SEVER_ACTION : String = "createAction";
+		public static const SERVER_ACTION_CREATED : String = "actionCreated";
+		
+		public static const CREATE_LIBRARY : String = "createLibrary";
+		public static const LIBRARY_CREATED : String = "libraryCreated";
+		
+		public static const OPEN_WINDOW : String = "openWidow";
+		public static const CLOSE_WINDOW : String = "closeWidow";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -163,8 +179,11 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 			
-			registerCommand( CREATE_NEW_ACTION_REQUEST, CreateNewActionRequestCommand );
-			registerCommand( CREATE_NEW_LIBRARY_REQUEST, CreateNewLibraryRequestCommand );
+//			registerCommand( CREATE_ACTION_REQUEST, CreateActionRequestCommand );
+//			registerCommand( CREATE_LIBRARY_REQUEST, CreateLibraryRequestCommand );
+			
+			registerCommand( OPEN_CREATE_ACTION_WINDOW, OpenCreateActionWindowCommand );
+			registerCommand( CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
 			
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			

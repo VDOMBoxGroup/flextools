@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.scripts.controller.messages
 {
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
@@ -38,7 +39,15 @@ package net.vdombox.ide.modules.scripts.controller.messages
 					
 				case PPMApplicationTargetNames.SERVER_ACTIONS:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body.serverActions );
+					
+					break;
+				}
+					
+				case PPMApplicationTargetNames.LIBRARY:
+				{
+					if( operation == PPMOperationNames.CREATE )
+						sendNotification( ApplicationFacade.LIBRARY_CREATED, body.libraryVO );
 					
 					break;
 				}

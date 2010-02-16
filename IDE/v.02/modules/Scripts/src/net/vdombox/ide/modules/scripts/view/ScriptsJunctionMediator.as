@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.scripts.view
 {
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -52,6 +52,9 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
+			interests.push( ApplicationFacade.OPEN_WINDOW );
+			interests.push( ApplicationFacade.CLOSE_WINDOW );
+
 			interests.push( ApplicationFacade.GET_TYPES );
 
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
@@ -69,6 +72,9 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
 			interests.push( ApplicationFacade.GET_LIBRARIES );
+
+			interests.push( ApplicationFacade.CREATE_SEVER_ACTION );
+			interests.push( ApplicationFacade.CREATE_LIBRARY );
 
 			return interests;
 		}
@@ -145,6 +151,24 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.SELECT_MODULE, null, multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
+					break;
+				}
+
+				case ApplicationFacade.OPEN_WINDOW:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
+
+					junction.sendMessage( PipeNames.STDCORE, message );
+
+					break;
+				}
+
+				case ApplicationFacade.CLOSE_WINDOW:
+				{
+					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -265,6 +289,27 @@ package net.vdombox.ide.modules.scripts.view
 				case ApplicationFacade.GET_LIBRARIES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break
+				}
+
+				case ApplicationFacade.CREATE_SEVER_ACTION:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.SERVER_ACTION, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.SERVER_ACTION, body );
+
+					if( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break
+				}
+
+				case ApplicationFacade.CREATE_LIBRARY:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.LIBRARY, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
 					break

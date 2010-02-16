@@ -25,7 +25,7 @@ package net.vdombox.ide.modules.scripts.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -48,7 +48,7 @@ package net.vdombox.ide.modules.scripts.view
 			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}

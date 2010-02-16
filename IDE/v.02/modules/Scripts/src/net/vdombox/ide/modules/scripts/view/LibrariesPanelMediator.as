@@ -1,9 +1,10 @@
 package net.vdombox.ide.modules.scripts.view
 {
+	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
 	import net.vdombox.ide.modules.scripts.view.components.LibrariesPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -17,6 +18,8 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 
+		private var libraries : Array;
+		
 		public function get librariesPanel() : LibrariesPanel
 		{
 			return viewComponent as LibrariesPanel;
@@ -38,6 +41,7 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
 			interests.push( ApplicationFacade.LIBRARIES_GETTED );
+			interests.push( ApplicationFacade.LIBRARY_CREATED );
 
 			return interests;
 		}
@@ -58,8 +62,20 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.LIBRARIES_GETTED:
 				{
-					librariesPanel.libraries = body as Array;
+					libraries = body as Array;
+					librariesPanel.libraries = libraries;
 
+					break;
+				}
+					
+				case ApplicationFacade.LIBRARY_CREATED:
+				{
+					if( libraries )
+					{
+						libraries.push( body as LibraryVO );
+						librariesPanel.libraries = libraries;
+					}
+					
 					break;
 				}
 			}
@@ -81,12 +97,12 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function createLibraryHandler( event : LibrariesPanelEvent ) : void
 		{
-
+			sendNotification( ApplicationFacade.OPEN_CREATE_ACTION_WINDOW, ApplicationFacade.LIBRARY );
 		}
 
 		private function deleteLibraryHandler( event : LibrariesPanelEvent ) : void
 		{
-
+			
 		}
 
 		private function selectedLibraryChangedHandler( event : LibrariesPanelEvent ) : void
