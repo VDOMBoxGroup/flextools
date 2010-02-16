@@ -20,14 +20,14 @@ package net.vdombox.ide.common.vo
 			return _id;
 		}
 		
-		public function get applicationID() : String
+		public function get applicationVO() : ApplicationVO
 		{
-			return _applicationVO.id;
+			return _applicationVO;
 		}
 		
-		public function get typeID() : String
+		public function get typeVO() : TypeVO
 		{
-			return _typeVO.id;
+			return _typeVO;
 		}
 		
 		public function get name() : String

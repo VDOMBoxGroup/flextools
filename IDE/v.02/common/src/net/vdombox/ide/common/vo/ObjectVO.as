@@ -1,5 +1,6 @@
 package net.vdombox.ide.common.vo
 {
+	[Bindable]
 	public class ObjectVO
 	{
 		public function ObjectVO( id : String, pageVO : PageVO, typeVO : TypeVO )
@@ -10,7 +11,7 @@ package net.vdombox.ide.common.vo
 		}
 
 		private var _id : String;
-		
+
 		private var _pageVO : PageVO;
 		private var _typeVO : TypeVO;
 
@@ -21,19 +22,14 @@ package net.vdombox.ide.common.vo
 			return _id;
 		}
 
-		public function get applicationID() : String
+		public function get pageVO() : PageVO
 		{
-			return _pageVO.applicationID;
+			return _pageVO;
 		}
-		
-		public function get pageID() : String
+
+		public function get typeVO() : TypeVO
 		{
-			return _pageVO.id;
-		}
-		
-		public function get typeID() : String
-		{
-			return _typeVO.id;
+			return _typeVO;
 		}
 
 		public function get name() : String
@@ -43,13 +39,13 @@ package net.vdombox.ide.common.vo
 
 		public function set name( value : String ) : void
 		{
-
+			_name = value;
 		}
 
 		public function setXMLDescription( description : XML ) : void
 		{
-			_name = description.@Name[ 0 ];
-			name = _name;
+			name = description.@Name[ 0 ];
+			;
 		}
 	}
 }
