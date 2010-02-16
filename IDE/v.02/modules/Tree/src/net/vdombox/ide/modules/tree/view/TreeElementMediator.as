@@ -51,14 +51,14 @@ package net.vdombox.ide.modules.tree.view
 
 			if ( treeElementVO.resourceID )
 			{
-				var resourceVO : ResourceVO = new ResourceVO( treeElementVO.pageVO.applicationID );
+				var resourceVO : ResourceVO = new ResourceVO( treeElementVO.pageVO.applicationVO.id );
 				resourceVO.setID( treeElementVO.resourceID );
 				treeElement.pageResource = resourceVO;
 
 				sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
 			}
 
-			sendNotification( ApplicationFacade.GET_TYPE, { typeID: treeElementVO.pageVO.typeID, recipientID: mediatorName } );
+			sendNotification( ApplicationFacade.GET_TYPE, { typeID: treeElementVO.pageVO.typeVO.id, recipientID: mediatorName } );
 			sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: treeElementVO.pageVO, recipientID: mediatorName } );
 		}
 
