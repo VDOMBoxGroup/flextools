@@ -31,7 +31,7 @@ package net.vdombox.ide.core.controller
 			else
 				throw new Error( "no page VO" );
 
-			applicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + pageVO.applicationID ) as ApplicationProxy;
+			applicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + pageVO.applicationVO.id ) as ApplicationProxy;
 			pageProxy = applicationProxy.getPageProxy( pageVO ) as PageProxy;
 
 			switch ( target )
@@ -56,18 +56,18 @@ package net.vdombox.ide.core.controller
 
 					break;
 				}
-					
+
 				case PPMPageTargetNames.ATTRIBUTES:
 				{
 					pageProxy.getAttributes();
-					
+
 					break;
 				}
-					
+
 				case PPMPageTargetNames.SERVER_ACTIONS:
 				{
 					pageProxy.getServerActions();
-					
+
 					break;
 				}
 			}

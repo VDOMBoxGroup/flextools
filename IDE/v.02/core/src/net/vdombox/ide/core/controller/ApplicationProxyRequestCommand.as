@@ -45,6 +45,13 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+				
+				case PPMApplicationTargetNames.LIBRARIES:
+				{
+					applicationProxy.getLibraries();
+					
+					break;
+				}
 					
 				case PPMApplicationTargetNames.PAGES:
 				{

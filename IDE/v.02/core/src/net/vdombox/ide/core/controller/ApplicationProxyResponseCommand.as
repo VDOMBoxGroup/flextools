@@ -58,7 +58,14 @@ package net.vdombox.ide.core.controller
 					
 				case ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.SERVER_ACTIONS, body );
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.SERVER_ACTIONS, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_LIBRARIES_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );
 					
 					break;
 				}

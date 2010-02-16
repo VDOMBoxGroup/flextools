@@ -117,11 +117,13 @@ package net.vdombox.ide.core
 //		application
 		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
 		public static const APPLICATION_PAGES_GETTED : String = "applicationPagesGetted";
-		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
 
 		public static const APPLICATION_PAGE_CREATED : String = "applicationPageCreated";
 		public static const APPLICATION_PAGE_DELETED : String = "applicationPageDeleted";
-
+		
+		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
+		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
+		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
 		public static const PAGE_ATTRIBUTES_GETTED : String = "pageAttributesGetted";
@@ -202,6 +204,7 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_PAGE_CREATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_PAGE_DELETED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_SERVER_ACTIONS_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_LIBRARIES_GETTED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );

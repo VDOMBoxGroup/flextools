@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -12,7 +12,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -30,7 +30,7 @@ package net.vdombox.ide.core.model
 
 		public function PageProxy( pageVO : PageVO )
 		{
-			super( NAME + "/" + pageVO.applicationID + "/" + pageVO.id, pageVO );
+			super( NAME + "/" + pageVO.applicationVO.id + "/" + pageVO.id, pageVO );
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
@@ -48,21 +48,6 @@ package net.vdombox.ide.core.model
 		{
 			return null;
 		}
-
-//		public function get structure() : XML
-//		{
-//			return null;
-//		}
-
-//		public function get selectedObject() : ObjectVO
-//		{
-//			return null;
-//		}
-
-//		public function get selectedObjectID() : String
-//		{
-//			return null;
-//		}
 
 		override public function onRegister() : void
 		{
@@ -82,7 +67,7 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
-			token = soap.get_child_objects_tree( pageVO.applicationID, pageVO.id );
+			token = soap.get_child_objects_tree( pageVO.applicationVO.id, pageVO.id );
 			token.recipientName = proxyName;
 			token.requestFunctionName = GET_STRUCTURE;
 
@@ -93,7 +78,7 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
-			token = soap.get_one_object( pageVO.applicationID, pageVO.id );
+			token = soap.get_one_object( pageVO.applicationVO.id, pageVO.id );
 			token.recipientName = proxyName;
 			token.requestFunctionName = GET_ATTRIBUTES;
 
@@ -103,7 +88,7 @@ package net.vdombox.ide.core.model
 		public function getObjects() : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_child_objects( pageVO.applicationID, pageVO.id );
+			token = soap.get_child_objects( pageVO.applicationVO.id, pageVO.id );
 
 			token.recipientName = proxyName;
 			token.requestFunctionName = GET_OBJECTS;
@@ -114,13 +99,13 @@ package net.vdombox.ide.core.model
 		public function getServerActions() : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_server_actions( pageVO.applicationID, pageVO.id );
-			
+			token = soap.get_server_actions( pageVO.applicationVO.id, pageVO.id );
+
 			token.recipientName = proxyName;
-			
+
 			return token;
 		}
-		
+
 		public function createObject( objectID : String ) : ObjectVO
 		{
 			return null;
@@ -137,7 +122,7 @@ package net.vdombox.ide.core.model
 		public function getObjectAt( objectID : String ) : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_one_object( pageVO.applicationID, objectID );
+			token = soap.get_one_object( pageVO.applicationVO.id, objectID );
 
 			token.recipientName = proxyName;
 			token.requestFunctionName = GET_OBJECT;
@@ -147,8 +132,8 @@ package net.vdombox.ide.core.model
 
 		public function getObjectProxy( objectVO : ObjectVO ) : ObjectProxy
 		{
-			var objectProxy : ObjectProxy = facade.retrieveProxy( ObjectProxy.NAME + "/" + objectVO.applicationID + "/" + objectVO.pageID + "/" +
-				objectVO.id ) as ObjectProxy;
+			var objectProxy : ObjectProxy = facade.retrieveProxy( ObjectProxy.NAME + "/" + objectVO.pageVO.applicationVO.id + "/" +
+				objectVO.pageVO.id + "/" + objectVO.id ) as ObjectProxy;
 
 			if ( !objectProxy )
 			{
@@ -305,26 +290,26 @@ package net.vdombox.ide.core.model
 				case "get_server_actions":
 				{
 					var serverActions : Array = [];
-					
+
 					var serverActionsXML : XMLList = result.ServerActions.Container.( @ID == pageVO.id ).Action;
-					
+
 					var serverActionVO : ServerActionVO;
 					var serverActionXML : XML;
-					
-					for each( serverActionXML in serverActionsXML )
+
+					for each ( serverActionXML in serverActionsXML )
 					{
 						serverActionVO = new ServerActionVO( serverActionXML.@ID, pageVO );
 						serverActionVO.name = serverActionXML.@Name;
 						serverActionVO.script = serverActionXML[ 0 ];
-						
+
 						serverActions.push( serverActionVO );
 					}
-					
+
 					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, serverActions )
-					
+
 					break;
 				}
-				
+
 				case "get_one_object":
 				{
 					if ( token.requestFunctionName == GET_OBJECT )

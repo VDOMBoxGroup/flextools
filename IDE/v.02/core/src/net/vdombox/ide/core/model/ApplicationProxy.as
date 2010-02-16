@@ -2,9 +2,10 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
@@ -13,7 +14,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy
@@ -32,7 +33,7 @@ package net.vdombox.ide.core.model
 		private var soap : SOAP = SOAP.getInstance();
 
 		private var typesProxy : TypesProxy;
-		
+
 		private var serverProxy : ServerProxy;
 
 		public function get id() : String
@@ -61,14 +62,14 @@ package net.vdombox.ide.core.model
 		override public function onRegister() : void
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
-			
+
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
 			typesProxy = null;
-			
+
 			removeHandlers();
 		}
 
@@ -110,12 +111,22 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 			token = soap.get_server_actions( applicationVO.id, applicationVO.id );
-			
+
 			token.recipientName = proxyName;
-			
+
 			return token;
 		}
-		
+
+		public function getLibraries() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_libraries( applicationVO.id );
+
+			token.recipientName = proxyName;
+
+			return token;
+		}
+
 		public function createPage( typeVO : TypeVO ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -149,7 +160,7 @@ package net.vdombox.ide.core.model
 
 		public function getPageProxy( pageVO : PageVO ) : PageProxy
 		{
-			var pageProxy : PageProxy = facade.retrieveProxy( PageProxy.NAME + "/" + pageVO.applicationID + "/" + pageVO.id ) as PageProxy;
+			var pageProxy : PageProxy = facade.retrieveProxy( PageProxy.NAME + "/" + pageVO.applicationVO.id + "/" + pageVO.id ) as PageProxy;
 
 			if ( !pageProxy )
 			{
@@ -173,6 +184,7 @@ package net.vdombox.ide.core.model
 			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.get_libraries.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -182,6 +194,7 @@ package net.vdombox.ide.core.model
 			soap.get_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createStructure( sourceStructure : XMLList ) : Array
@@ -220,7 +233,7 @@ package net.vdombox.ide.core.model
 					continue;
 
 				var typeVO : TypeVO = typesProxy.getType( typeID );
-				
+
 				var pageVO : PageVO = new PageVO( pageID, applicationVO, typeVO );
 
 				pageVO.setXMLDescription( page );
@@ -244,8 +257,8 @@ package net.vdombox.ide.core.model
 
 			var operationName : String = operation.name;
 
-			var pageID :String;
-			
+			var pageID : String;
+
 			switch ( operationName )
 			{
 				case "set_application_info":
@@ -270,32 +283,53 @@ package net.vdombox.ide.core.model
 					var structure : Array = createStructure( result.Structure[ 0 ].* );
 
 					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, { applicationVO: applicationVO, structure: structure } );
+
 					break;
 				}
 
 				case "get_server_actions":
 				{
 					var serverActions : Array = [];
-					
+
 					var serverActionsXML : XMLList = result.ServerActions.Container.( @ID == applicationVO.id ).Action;
-					
+
 					var serverActionVO : ServerActionVO;
 					var serverActionXML : XML;
-					
-					for each( serverActionXML in serverActionsXML )
+
+					for each ( serverActionXML in serverActionsXML )
 					{
 						serverActionVO = new ServerActionVO( serverActionXML.@ID, applicationVO );
 						serverActionVO.name = serverActionXML.@Name;
 						serverActionVO.script = serverActionXML[ 0 ];
-						
+
 						serverActions.push( serverActionVO );
 					}
-					
+
 					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED, serverActions )
-					
+
 					break;
 				}
-					
+
+				case "get_libraries":
+				{
+					var libraries : Array = [];
+
+					var libraryVO : LibraryVO;
+					var libraryXML : XML;
+
+					for each ( libraryXML in result.Libraries.Library )
+					{
+						libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+						libraryVO.script = libraryXML[ 0 ];
+
+						libraries.push( libraryVO );
+					}
+
+					sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
+
+					break;
+				}
+
 				case "create_object":
 				{
 					var pageXML : XML = result.Object[ 0 ];
@@ -308,7 +342,7 @@ package net.vdombox.ide.core.model
 						return;
 
 					var typeVO : TypeVO = typesProxy.getType( typeID );
-					
+
 					var pageVO : PageVO = new PageVO( pageID, applicationVO, typeVO );
 
 					pageVO.setXMLDescription( pageXML );
@@ -321,22 +355,22 @@ package net.vdombox.ide.core.model
 
 				case "delete_object":
 				{
-					pageID = result.Result[0].toString();
-					
+					pageID = result.Result[ 0 ].toString();
+
 					var deletedPageVO : PageVO;
 					var i : int;
-					
+
 					for ( i = 0; i < _pages.length; i++ )
 					{
-						if( _pages[ i ].id == pageID )
+						if ( _pages[ i ].id == pageID )
 						{
 							deletedPageVO = _pages[ i ];
 							_pages.splice( i, 1 );
 							break;
 						}
 					}
-					
-					if( deletedPageVO )
+
+					if ( deletedPageVO )
 					{
 						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
 					}

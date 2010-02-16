@@ -19,7 +19,7 @@ package net.vdombox.ide.core.model
 
 		public function ObjectProxy( objectVO : ObjectVO )
 		{
-			super( NAME + "/" + objectVO.applicationID + "/" + objectVO.pageID + "/" + objectVO.id, objectVO );
+			super( NAME + "/" + objectVO.pageVO.applicationVO.id + "/" + objectVO.pageVO.id + "/" + objectVO.id, objectVO );
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
@@ -38,7 +38,7 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 
-			token = soap.get_one_object( objectVO.applicationID, objectVO.id );
+			token = soap.get_one_object( objectVO.pageVO.applicationVO.id, objectVO.id );
 			token.recipientName = proxyName;
 
 			return token;
@@ -47,7 +47,7 @@ package net.vdombox.ide.core.model
 		public function getServerActions() : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.get_server_actions( objectVO.applicationID, objectVO.id );
+			token = soap.get_server_actions( objectVO.pageVO.applicationVO.id, objectVO.id );
 			
 			token.recipientName = proxyName;
 			
