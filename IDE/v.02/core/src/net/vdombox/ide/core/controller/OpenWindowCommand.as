@@ -1,5 +1,8 @@
 package net.vdombox.ide.core.controller
 {
+	import flash.display.NativeWindowInitOptions;
+	import flash.display.NativeWindowSystemChrome;
+	
 	import mx.core.UIComponent;
 	
 	import net.vdombox.ide.core.view.MainWindowMediator;
@@ -22,7 +25,13 @@ package net.vdombox.ide.core.controller
 			
 			var mainWindowMediator : MainWindowMediator = facade.retrieveMediator( MainWindowMediator.NAME ) as MainWindowMediator;
 			
-			popUpWindowManager.addPopUp( content, title, mainWindowMediator.mainWindow, isModal );
+			var nativeWindowInitOptions : NativeWindowInitOptions = new NativeWindowInitOptions();
+			
+			nativeWindowInitOptions.resizable = body.resizable;
+			nativeWindowInitOptions.systemChrome = NativeWindowSystemChrome.NONE;
+			nativeWindowInitOptions.transparent = true;
+				
+			popUpWindowManager.addPopUp( content, title, mainWindowMediator.mainWindow, isModal, null, nativeWindowInitOptions );
 		}
 	}
 }

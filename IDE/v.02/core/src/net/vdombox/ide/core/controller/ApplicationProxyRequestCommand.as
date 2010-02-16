@@ -46,6 +46,20 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 				
+				case PPMApplicationTargetNames.LIBRARY:
+				{
+					var name : String = body.name;
+					var script : String = body.script;
+					
+					if( !name )
+						break;
+					
+					if( operation == PPMOperationNames.CREATE )
+						applicationProxy.setLibrary( name, script );
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.LIBRARIES:
 				{
 					applicationProxy.getLibraries();

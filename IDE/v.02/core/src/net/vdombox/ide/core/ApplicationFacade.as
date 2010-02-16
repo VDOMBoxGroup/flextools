@@ -123,6 +123,7 @@ package net.vdombox.ide.core
 		
 		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
+		public static const APPLICATION_LIBRARY_CREATED : String = "applicationLibraryCreated";
 		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
@@ -205,6 +206,7 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_PAGE_DELETED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_SERVER_ACTIONS_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARIES_GETTED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_LIBRARY_CREATED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );

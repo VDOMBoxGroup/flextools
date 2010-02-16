@@ -117,6 +117,16 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function setLibrary( name : String, script : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.set_library( applicationVO.id, name, script );
+
+			token.recipientName = proxyName;
+
+			return token;
+		}
+
 		public function getLibraries() : AsyncToken
 		{
 			var token : AsyncToken;
@@ -184,6 +194,7 @@ package net.vdombox.ide.core.model
 			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_libraries.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 		}
 
@@ -194,6 +205,7 @@ package net.vdombox.ide.core.model
 			soap.get_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
@@ -259,6 +271,9 @@ package net.vdombox.ide.core.model
 
 			var pageID : String;
 
+			var libraryVO : LibraryVO;
+			var libraryXML : XML;
+
 			switch ( operationName )
 			{
 				case "set_application_info":
@@ -305,7 +320,20 @@ package net.vdombox.ide.core.model
 						serverActions.push( serverActionVO );
 					}
 
-					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED, serverActions )
+					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED,
+									  { applicationVO: applicationVO, serverActions: serverActions } );
+
+					break;
+				}
+
+				case "set_library":
+				{
+					libraryXML = result.Library[ 0 ];
+
+					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+					libraryVO.script = libraryXML[ 0 ];
+
+					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_CREATED, { applicationVO: applicationVO, libraryVO: libraryVO } );
 
 					break;
 				}
@@ -313,9 +341,6 @@ package net.vdombox.ide.core.model
 				case "get_libraries":
 				{
 					var libraries : Array = [];
-
-					var libraryVO : LibraryVO;
-					var libraryXML : XML;
 
 					for each ( libraryXML in result.Libraries.Library )
 					{
@@ -350,6 +375,7 @@ package net.vdombox.ide.core.model
 					_pages.push( pageVO );
 
 					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
+
 					break;
 				}
 
@@ -374,6 +400,8 @@ package net.vdombox.ide.core.model
 					{
 						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
 					}
+
+					break;
 				}
 			}
 		}

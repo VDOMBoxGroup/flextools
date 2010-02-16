@@ -63,6 +63,13 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 					
+				case ApplicationFacade.APPLICATION_LIBRARY_CREATED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.LIBRARY, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.APPLICATION_LIBRARIES_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.LIBRARIES, body );
