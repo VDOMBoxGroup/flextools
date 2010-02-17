@@ -15,4 +15,15 @@
 			}
 		]]>
 	</fx:Script>
+
+	<s:Rect bottom="5" left="5" right="5" top="5">
+
+		<s:stroke>
+
+			<s:SolidColorStroke color="gray" />
+		</s:stroke>
+	</s:Rect>
+
+	<s:Label text="Settings Screen for Scripts module"
+			 color="gray" horizontalCenter="0" verticalCenter="0" />
 </s:Group>

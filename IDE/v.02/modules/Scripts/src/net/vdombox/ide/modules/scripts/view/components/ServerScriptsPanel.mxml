@@ -24,10 +24,10 @@
 				actionList.selectedItem = value;
 				actionList.validateNow();
 
-				if ( actionList.selectedIndex == -1 )
-					deleteButton.enabled = false;
-				else
-					deleteButton.enabled = true;
+//				if ( actionList.selectedIndex == -1 )
+//					deleteButton.enabled = false;
+//				else
+//					deleteButton.enabled = true;
 			}
 
 			public function set scripts( value : Array ) : void
@@ -35,13 +35,13 @@
 				if ( value.length > 0 )
 				{
 					_scripts = new ArrayList( value );
-					deleteButton.enabled = false;
+//					deleteButton.enabled = false;
 					actionList.selectedIndex = -1;
 				}
 				else
 				{
 					_scripts = null;
-					deleteButton.enabled = false;
+//					deleteButton.enabled = false;
 					actionList.selectedIndex = -1;
 				}
 
@@ -50,10 +50,10 @@
 
 			protected function actionList_changeHandler() : void
 			{
-				if ( actionList.selectedItem )
-					deleteButton.enabled = true;
-				else
-					deleteButton.enabled = false;
+//				if ( actionList.selectedItem )
+//					deleteButton.enabled = true;
+//				else
+//					deleteButton.enabled = false;
 
 				dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED ) )
 			}
@@ -67,13 +67,13 @@
 	<s:controlBarContent>
 
 		<mx:Spacer width="100%" />
-
+<!--
 		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_add' ) }"
 				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.CREATE_ACTION ) )" />
 
 		<s:Button id="deleteButton"
 				  enabled="false"
 				  label="{ resourceManager.getString( 'Scripts_General', 'server_scripts_panel_delete' ) }"
-				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) )" />
+				  click="dispatchEvent( new ServerScriptsPanelEvent( ServerScriptsPanelEvent.DELETE_ACTION ) )" />-->
 	</s:controlBarContent>
 </s:Panel>
