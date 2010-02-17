@@ -13,6 +13,7 @@
 	
 	<components:EditApplicationView id="editApplicationView"
 									includeIn="default" itemCreationPolicy="immediate"/>
+	
 	<components:CreateApplicationView id="createApplicationView"
 									  includeIn="CreateApplicationView" itemCreationPolicy="immediate"/>
 	

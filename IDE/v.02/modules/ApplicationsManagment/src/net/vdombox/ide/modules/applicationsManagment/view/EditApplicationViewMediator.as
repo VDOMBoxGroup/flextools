@@ -78,7 +78,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			interests.push( ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName );
 			interests.push( ApplicationFacade.SETTINGS_CHANGED );
-			
+
 			interests.push( ApplicationFacade.APPLICATION_EDITED );
 			interests.push( ApplicationFacade.APPLICATION_CREATED );
 			interests.push( ApplicationFacade.RESOURCE_SETTED );
@@ -118,12 +118,12 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.SETTINGS_GETTED + "/" + mediatorName:
 				{
 					settings = body as SettingsVO;
-					
+
 					selectedApplicationChanged = true;
-					
+
 					break;
-				}	
-					
+				}
+
 				case ApplicationFacade.SETTINGS_CHANGED:
 				{
 					selectedApplicationChanged = true;
@@ -158,7 +158,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					if ( resourceVO == newIconResourceVO )
 					{
 						newIconResourceVO = null;
-						
+
 						var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO();
 						applicationInformationVO.iconID = resourceVO.id;
 
@@ -195,6 +195,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_ICON_CHANGED,
 												  applicationIconChangedHandler )
 
+			editApplicationView.addEventListener( EditApplicationViewEvent.APPLICATION_LANGUAGE_CHANGED,
+												  applicationLanguageChangedHandler )
+
 			applicationsList.addEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler,
 											   true );
 
@@ -210,6 +213,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			editApplicationView.removeEventListener( EditApplicationViewEvent.APPLICATION_ICON_CHANGED,
 													 applicationDescriptionChangedHandler )
+
+			editApplicationView.removeEventListener( EditApplicationViewEvent.APPLICATION_LANGUAGE_CHANGED,
+													 applicationLanguageChangedHandler )
 
 			applicationsList.removeEventListener( ApplicationItemRenderer.RENDERER_CREATED, applicationItemRenderer_rendererCreatedHandler,
 												  true );
@@ -245,17 +251,29 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				}
 				else
 				{
-					if ( !settings || !applications )
+					var newSelectedApplication : ApplicationVO;
+
+					if ( !applications )
 						return;
 
-					for ( var i : int = 0; i < applications.length; i++ )
+					if ( settings )
 					{
-						if ( applications[ i ].id == settings.lastApplicationID )
+						for ( var i : int = 0; i < applications.length; i++ )
 						{
-							sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, applications[ i ] );
-							return;
+							if ( applications[ i ].id == settings.lastApplicationID )
+							{
+								newSelectedApplication = applications[ i ];
+								break;
+							}
 						}
+						
+						
 					}
+					
+					if( !newSelectedApplication )
+						newSelectedApplication = applications[ 0 ];
+
+					sendNotification( ApplicationFacade.SET_SELECTED_APPLICATION, newSelectedApplication );
 				}
 			}
 		}
@@ -263,10 +281,23 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		private function refreshApplicationProperties() : void
 		{
 			editApplicationView.applicationName.text = selectedApplicationVO.name;
+			editApplicationView.newApplicationName.text = selectedApplicationVO.name;
+
 			editApplicationView.actionsForLabel.text = StringUtil.substitute( ACTIONS_TEMPLATE, selectedApplicationVO.name );
+
 			editApplicationView.counts.text = StringUtil.substitute( PO_TEMPLATE, selectedApplicationVO.numberOfPages,
-																	 selectedApplicationVO.numberOfObjects )
+																	 selectedApplicationVO.numberOfObjects );
+
 			editApplicationView.applicationDescription.text = selectedApplicationVO.description;
+			editApplicationView.newApplicationDescription.text = selectedApplicationVO.description;
+
+			editApplicationView.iconChooser.iconsList.selectedIndex = -1;
+			editApplicationView.iconChooser.selectedIcon.source = null;
+
+			if ( selectedApplicationVO.scriptingLanguage == "python" )
+				editApplicationView.python.selected = true;
+			else
+				editApplicationView.vbscript.selected = true;
 		}
 
 		private function applicationNameChangedHandler( event : EditApplicationViewEvent ) : void
@@ -315,6 +346,20 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			sendNotification( ApplicationFacade.SET_RESOURCE, newIconResourceVO );
 		}
 
+		private function applicationLanguageChangedHandler( event : EditApplicationViewEvent ) : void
+		{
+			var newApplicationLanguage : String = editApplicationView.languageRBGroup.selectedValue.toString();
+
+			if ( newApplicationLanguage && newApplicationLanguage == selectedApplicationVO.scriptingLanguage )
+				return;
+
+			var applicationInformationVO : ApplicationInformationVO = new ApplicationInformationVO;
+			applicationInformationVO.scriptingLanguage = newApplicationLanguage;
+
+			sendNotification( ApplicationFacade.EDIT_APPLICATION_INFORMATION, { applicationVO: selectedApplicationVO,
+								  applicationInformationVO: applicationInformationVO } );
+		}
+
 		private function applicationItemRenderer_rendererCreatedHandler( event : Event ) : void
 		{
 			var renderer : ApplicationItemRenderer = event.target as ApplicationItemRenderer;
@@ -326,6 +371,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		private function applicationsList_changeHandler( event : IndexChangeEvent ) : void
 		{
 			var newSelectedApplication : ApplicationVO;
+			editApplicationView.currentState = "default";
 
 			if ( event.newIndex != -1 )
 				newSelectedApplication = applications[ event.newIndex ] as ApplicationVO;

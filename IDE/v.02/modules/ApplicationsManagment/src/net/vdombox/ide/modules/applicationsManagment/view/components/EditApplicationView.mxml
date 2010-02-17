@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:NavigatorContent 
-	xmlns:mx="library://ns.adobe.com/flex/halo"
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	
-	height="100%" width="100%"
-	xmlns:components="net.vdombox.ide.modules.applicationsManagment.view.components.*">
+<s:NavigatorContent xmlns:mx="library://ns.adobe.com/flex/halo"
+					xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:components="net.vdombox.ide.modules.applicationsManagment.view.components.*"
+					
+					height="100%" width="100%" creationPolicy="all">
 
 	<fx:Script>
 		<![CDATA[
@@ -13,6 +12,10 @@
 		]]>
 	</fx:Script>
 
+	<fx:Declarations>
+		<s:RadioButtonGroup id="languageRBGroup" />
+	</fx:Declarations>
+	
 	<s:states>
 
 		<s:State name="default" />
@@ -22,6 +25,8 @@
 		<s:State name="changeName" />
 
 		<s:State name="changeDescription" />
+
+		<s:State name="changeLanguage" />
 	</s:states>
 
 	<s:layout>
@@ -29,89 +34,71 @@
 		<s:HorizontalLayout />
 	</s:layout>
 
-	<s:Group 
-		height="100%" width="100%">
+	<s:Group height="100%" width="100%">
 
-		<s:VGroup 
-			bottom="30" left="30" right="30" top="30">
+		<s:VGroup bottom="30" left="30" right="30" top="30">
 
 			<s:Label id="applicationName"
-				fontFamily="Verdana" fontSize="24" fontWeight="bold" />
+					 fontFamily="Verdana" fontSize="24" fontWeight="bold" />
 
 			<s:RichText id="counts"
-				fontFamily="Verdana" fontSize="12" fontWeight="bold" />
+						fontFamily="Verdana" fontSize="12" fontWeight="bold" />
 
 			<s:Label id="objectsCount"
-				fontFamily="Verdana" fontSize="12" fontWeight="bold" />
+					 fontFamily="Verdana" fontSize="12" fontWeight="bold" />
 
-			<s:Scroller 
-				maxHeight="200" minHeight="50" width="100%">
+			<s:Scroller maxHeight="200" minHeight="50" width="100%">
 
 				<s:Group>
 
 					<s:RichText id="applicationDescription"
-						width="100%" />
+								width="100%" />
 				</s:Group>
 			</s:Scroller>
 
 			<s:Label id="actionsForLabel"
-				fontFamily="Verdana" fontSize="18" />
+					 fontFamily="Verdana" fontSize="18" />
 
-			<s:Label 
-				buttonMode="true" text="Change icon:"
-				
-				fontFamily="Verdana" fontSize="14" textDecoration="underline"
-				
-				click="currentState='changeIcon'" />
+			<s:Label buttonMode="true" text="Change Icon:"
+					 fontFamily="Verdana" fontSize="14"
+					 textDecoration="underline"
+					 click="currentState='changeIcon'" />
 
-			<s:VGroup 
-				width="100%"
-				includeIn="changeIcon" itemCreationPolicy="immediate">
+			<s:VGroup width="100%"
+					  includeIn="changeIcon" itemCreationPolicy="immediate">
 
 				<components:IconChooser id="iconChooser"
-					width="100%" />
+										width="100%" />
 
-				<s:Button 
-					label="Save"
-					
-					click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_ICON_CHANGED ) )" />
+				<s:Button label="Save"
+						  click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_ICON_CHANGED ) )" />
 			</s:VGroup>
 
-			<s:Label 
-				buttonMode="true" text="Change name:"
-				
-				fontFamily="Verdana" fontSize="14" textDecoration="underline"
-				
-				click="currentState='changeName'" />
+			<s:Label buttonMode="true" text="Change Name:"
+					 fontFamily="Verdana" fontSize="14"
+					 textDecoration="underline"
+					 click="currentState='changeName'" />
 
-			<s:VGroup 
-				width="100%"
-				includeIn="changeName">
+			<s:VGroup width="100%"
+					  includeIn="changeName" itemCreationPolicy="immediate">
 
 				<s:TextInput id="newApplicationName" />
 
-				<s:Button 
-					label="Save"
-					
-					click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_NAME_CHANGED ) )" />
+				<s:Button label="Save"
+						  click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_NAME_CHANGED ) )" />
 			</s:VGroup>
 
-			<s:Label 
-				buttonMode="true" text="Edit Description:"
-				
-				fontFamily="Verdana" fontSize="14" textDecoration="underline"
-				
-				click="currentState='changeDescription'" />
+			<s:Label buttonMode="true" text="Edit Description:"
+					 fontFamily="Verdana" fontSize="14"
+					 textDecoration="underline"
+					 click="currentState='changeDescription'" />
 
-			<s:VGroup 
-				width="100%"
-				includeIn="changeDescription">
+			<s:VGroup width="100%"
+					  includeIn="changeDescription" itemCreationPolicy="immediate">
 
-				<s:Group 
-					height="50" width="100%">
+				<s:Group height="50" width="100%">
 
-					<s:Rect 
-						height="100%" width="100%">
+					<s:Rect height="100%" width="100%">
 
 						<s:stroke>
 
@@ -125,18 +112,36 @@
 					</s:Rect>
 
 					<s:RichEditableText id="newApplicationDescription"
-						height="100%" width="100%" />
+										height="100%" width="100%" />
 				</s:Group>
 
-				<s:Button 
-					label="Save"
-					
-					click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_DESCRIPTION_CHANGED ) )" />
+				<s:Button label="Save"
+						  click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_DESCRIPTION_CHANGED ) )" />
+			</s:VGroup>
+
+			<s:Label buttonMode="true" text="Edit Script Language:"
+					 fontFamily="Verdana" fontSize="14"
+					 textDecoration="underline"
+					 click="currentState='changeLanguage'" />
+
+			<s:VGroup width="100%"
+					  visible="false" visible.changeLanguage="true">
+
+				<s:RadioButton id="vbscript"
+							   label="vbscript" value="vbscript"
+							   groupName="languageRBGroup" />
+
+				<s:RadioButton id="python"
+							   label="python" value="python"
+							   groupName="languageRBGroup" />
+
+				<s:Button label="Save"
+						  click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_LANGUAGE_CHANGED ) )" />
 			</s:VGroup>
 		</s:VGroup>
 	</s:Group>
 
 	<s:List id="applicationsList"
-		height="100%" width="270"
-		useVirtualLayout="false" />
+			height="100%" width="270"
+			useVirtualLayout="false" />
 </s:NavigatorContent>
