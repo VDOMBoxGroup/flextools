@@ -9,6 +9,8 @@ package net.vdombox.ide.common.vo
 		public var iconID : String
 
 		public var indexPageID : String
+		
+		public var scriptingLanguage : String
 
 		public function toXML() : XML
 		{
@@ -34,7 +36,12 @@ package net.vdombox.ide.common.vo
 				info.appendChild(
 					<Index>{indexPageID}</Index>
 					);
-
+			
+			if ( scriptingLanguage !== null )
+				info.appendChild(
+					<ScriptingLanguage>{scriptingLanguage}</ScriptingLanguage>
+				);
+			
 			return info;
 		}
 	}
