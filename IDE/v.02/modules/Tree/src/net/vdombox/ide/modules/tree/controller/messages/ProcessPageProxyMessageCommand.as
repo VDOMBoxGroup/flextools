@@ -31,7 +31,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 					var allPageRecipients : Object = sessionProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
 						ApplicationFacade.DELIMITER + target );
 
-					var pageRecipient : Array = allPageRecipients[ pageAttributesVO.pageID ];
+					var pageRecipient : Array = allPageRecipients[ pageAttributesVO.pageVO.id ];
 
 					var recipientID : String;
 
@@ -40,7 +40,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + recipientID, pageAttributesVO );
 					}
 
-					delete allPageRecipients[ pageAttributesVO.pageID ];
+					delete allPageRecipients[ pageAttributesVO.pageVO.id ];
 
 					break;
 				}

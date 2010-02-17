@@ -7,24 +7,72 @@
 
 	<fx:Script>
 		<![CDATA[
-			public function set typeName( value : String ) : void
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+
+			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.common.vo.PageAttributesVO;
+			import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
+
+			private var _pageAttributesVO : PageAttributesVO;
+
+			[Bindable]
+			private var titleAttributeVO : AttributeVO;
+
+			[Bindable]
+			private var descriptionAttributeVO : AttributeVO;
+
+			[Bindable]
+			private var imageAttributeVO : AttributeVO;
+
+			public function set pageAttributesVO( value : PageAttributesVO ) : void
 			{
-				typeNameLabel.text = value;
+				_pageAttributesVO = value;
+
+				pageAttributesChanged();
 			}
 
-			public function set pageTitle( value : String ) : void
+			private function pageAttributesChanged() : void
 			{
-				pageTitleInput.text = value;
+				if ( _pageAttributesVO )
+				{
+					titleAttributeVO = getAttributeByName( "title" );
+					descriptionAttributeVO = getAttributeByName( "description" );
+					imageAttributeVO = getAttributeByName( "image" );
+
+					if ( _pageAttributesVO.pageVO.applicationVO.indexPageID == _pageAttributesVO.pageVO.id )
+						makeStartButton.enabled = false;
+					else
+						makeStartButton.enabled = true;
+
+					saveButton.enabled = true;
+					deleteButton.enabled = true;
+
+				}
+				else
+				{
+					saveButton.enabled = false;
+					makeStartButton.enabled = false;
+					deleteButton.enabled = false;
+				}
+
 			}
 
-			public function set pageDescription( value : String ) : void
+			private function getAttributeByName( name : String ) : AttributeVO
 			{
-				pageDescriptionInput.text = value;
-			}
+				var result : AttributeVO;
 
-			public function set pageImage( value : String ) : void
-			{
-				pageImageInput.text = value;
+				for each ( var attributeVO : AttributeVO in _pageAttributesVO.attributes )
+				{
+					if ( attributeVO.name == name )
+					{
+						result = attributeVO;
+
+						break;
+					}
+				}
+
+				return result;
 			}
 		]]>
 	</fx:Script>
@@ -36,8 +84,8 @@
 
 	<s:Label id="typeNameLabel"
 			 height="15" text="TypeName" width="100%"
-			 backgroundColor="#8D8D8D" color="#FFFFFF" horizontalCenter="0"
-			 textAlign="center" verticalAlign="middle" />
+			 backgroundColor="#8D8D8D" color="#FFFFFF" horizontalCenter="0" textAlign="center"
+			 verticalAlign="middle" />
 
 	<mx:Grid width="100%"
 			 horizontalGap="0" verticalGap="0">
@@ -54,7 +102,7 @@
 			<mx:GridItem width="100%">
 
 				<s:TextInput id="pageTitleInput"
-							 width="100%" />
+							 text="@{ titleAttributeVO.value }" width="100%" />
 			</mx:GridItem>
 		</mx:GridRow>
 
@@ -70,7 +118,7 @@
 			<mx:GridItem width="100%">
 
 				<s:TextInput id="pageDescriptionInput"
-							 width="100%" />
+							 text="@{ descriptionAttributeVO.value }" width="100%" />
 			</mx:GridItem>
 		</mx:GridRow>
 
@@ -86,17 +134,26 @@
 			<mx:GridItem width="100%">
 
 				<s:TextInput id="pageImageInput"
-							 width="100%" />
+							 text="@{ imageAttributeVO.value }" width="100%" />
 			</mx:GridItem>
 		</mx:GridRow>
 	</mx:Grid>
 
 	<s:controlBarContent>
 
-		<s:Button label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }" />
+		<s:Button id="saveButton"
+				  enabled="false"
+				  label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_save' ) }"
+				  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES ) )" />
 
-		<s:Button label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }" />
+		<s:Button id="makeStartButton"
+				  enabled="false"
+				  label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_start' ) }"
+				  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.MAKE_START_PAGE ) )" />
 
-		<s:Button label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_delete' ) }" />
+		<s:Button id="deleteButton"
+				  enabled="false"
+				  label="{ resourceManager.getString( 'Tree_General', 'properties_panel_btn_delete' ) }"
+				  click="dispatchEvent( new PropertiesPanelEvent ( PropertiesPanelEvent.DELETE_PAGE ) )" />
 	</s:controlBarContent>
 </s:Panel>

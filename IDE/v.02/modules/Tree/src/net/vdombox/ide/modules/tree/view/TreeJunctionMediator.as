@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.vo.SettingsVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -73,17 +73,18 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.GET_TOP_LEVEL_TYPES );
 
 			interests.push( ApplicationFacade.GET_RESOURCE );
-			
+
 			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
-			
+			interests.push( ApplicationFacade.SET_PAGE_ATTRIBUTES );
+
 			interests.push( ApplicationFacade.OPEN_WINDOW );
 			interests.push( ApplicationFacade.CLOSE_WINDOW );
-			
+
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
-			
+
 			interests.push( ApplicationFacade.CREATE_PAGE );
 			interests.push( ApplicationFacade.DELETE_PAGE );
-			
+
 			interests.push( ApplicationFacade.SEND_TO_LOG );
 
 			return interests;
@@ -166,22 +167,22 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.OPEN_WINDOW:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.CLOSE_WINDOW:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					break;
 				}
 
@@ -242,13 +243,13 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_TOP_LEVEL_TYPES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
 
@@ -260,62 +261,71 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_PAGE_ATTRIBUTES:
 				{
 					var pageAttributesRecipientID : String = body.recipientID;
 					var pageVO : PageVO = body.pageVO;
-					
+
 					var pageAttributesSessionName : String = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.READ +
 						ApplicationFacade.DELIMITER + PPMPageTargetNames.ATTRIBUTES;
-					
+
 					var pageAttributesRecipients : Object = sessionProxy.getObject( pageAttributesSessionName );
-					
+
 					if ( !pageAttributesRecipients.hasOwnProperty( pageVO.id ) )
 						pageAttributesRecipients[ pageVO.id ] = [];
-					
+
 					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );
-					
+
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, pageVO );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
+				case ApplicationFacade.SET_PAGE_ATTRIBUTES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
+
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break;
+				}
+
 				case ApplicationFacade.SET_SELECTED_PAGE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.CREATE_PAGE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.DELETE_PAGE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.SEND_TO_LOG:
 				{
 					message = new LogMessage( LogMessage.DEBUG, multitonKey, body.toString() );
-					
+
 					junction.sendMessage( PipeNames.STDLOG, message );
-					
+
 					break;
 				}
 			}
@@ -475,7 +485,7 @@ package net.vdombox.ide.modules.tree.view
 					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
 					break;
 				}
-					
+
 				case PPMPlaceNames.PAGE:
 				{
 					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );

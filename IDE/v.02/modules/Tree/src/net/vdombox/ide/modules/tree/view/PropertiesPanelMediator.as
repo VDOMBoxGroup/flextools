@@ -1,13 +1,12 @@
 package net.vdombox.ide.modules.tree.view
 {
-	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
+	import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.PropertiesPanel;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -23,9 +22,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private var selectedPageVO : PageVO;
 
-		private var typeVO : TypeVO;
-
-		private var pageAttributes : PageAttributesVO;
+		private var pageAttributesVO : PageAttributesVO;
 
 		public function get propertiesPanel() : PropertiesPanel
 		{
@@ -62,7 +59,7 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED:
 				{
 					var treeElementVO : TreeElementVO = notification.getBody() as TreeElementVO;
-					
+
 					selectedPageVO = treeElementVO.pageVO;
 
 					if ( selectedPageVO )
@@ -73,25 +70,9 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
-					pageAttributes = body as PageAttributesVO;
+					pageAttributesVO = body as PageAttributesVO;
+					propertiesPanel.pageAttributesVO = pageAttributesVO;
 
-					var attributeVO : AttributeVO;
-
-					attributeVO = getAttributeByName( "title" );
-
-					if ( attributeVO )
-						propertiesPanel.pageTitle = attributeVO.value;
-					
-					attributeVO = getAttributeByName( "description" );
-					
-					if ( attributeVO )
-						propertiesPanel.pageDescription = attributeVO.value;
-
-					attributeVO = getAttributeByName( "image" );
-					
-					if ( attributeVO )
-						propertiesPanel.pageImage = attributeVO.value;
-					
 					break;
 				}
 			}
@@ -100,28 +81,33 @@ package net.vdombox.ide.modules.tree.view
 		private function addHandlers() : void
 		{
 
+			propertiesPanel.addEventListener( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES, savePageAttributesHandler, false, 0, true );
+			propertiesPanel.addEventListener( PropertiesPanelEvent.MAKE_START_PAGE, makeStartPageHandler, false, 0, true );
+			propertiesPanel.addEventListener( PropertiesPanelEvent.DELETE_PAGE, deletePageHandler, false, 0, true );
+
 		}
 
 		private function removeHandlers() : void
 		{
+			propertiesPanel.removeEventListener( PropertiesPanelEvent.SAVE_PAGE_ATTRIBUTES, savePageAttributesHandler );
+			propertiesPanel.removeEventListener( PropertiesPanelEvent.MAKE_START_PAGE, makeStartPageHandler );
+			propertiesPanel.removeEventListener( PropertiesPanelEvent.DELETE_PAGE, deletePageHandler );
+		}
+
+		private function savePageAttributesHandler( event : PropertiesPanelEvent ) : void
+		{
+			if ( selectedPageVO && pageAttributesVO )
+				sendNotification( ApplicationFacade.SET_PAGE_ATTRIBUTES, { pageVO: selectedPageVO, pageAttributesVO: pageAttributesVO } );
+		}
+
+		private function makeStartPageHandler( event : PropertiesPanelEvent ) : void
+		{
 
 		}
 
-		private function getAttributeByName( name : String ) : AttributeVO
+		private function deletePageHandler( event : PropertiesPanelEvent ) : void
 		{
-			var result : AttributeVO;
 
-			for each ( var attributeVO : AttributeVO in pageAttributes.attributes )
-			{
-				if ( attributeVO.name == name )
-				{
-					result = attributeVO;
-
-					break;
-				}
-			}
-
-			return result;
 		}
 	}
 }

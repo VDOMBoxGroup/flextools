@@ -118,6 +118,9 @@ package net.vdombox.ide.modules.tree
 //		pages
 		public static const GET_PAGE_ATTRIBUTES : String = "getPageAttributes";
 		public static const PAGE_ATTRIBUTES_GETTED : String = "pageAttributesGetted";
+		
+		public static const SET_PAGE_ATTRIBUTES : String = "setPageAttributes";
+		public static const PAGE_ATTRIBUTES_SETTED : String = "pageAttributesSetted";
 
 //		resources
 		public static const GET_RESOURCE : String = "getResource";
