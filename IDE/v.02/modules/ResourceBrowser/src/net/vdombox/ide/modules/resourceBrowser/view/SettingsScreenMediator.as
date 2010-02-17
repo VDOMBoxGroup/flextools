@@ -41,7 +41,6 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			settingsVO = notification.getBody() as SettingsVO;
-			settingsScreen.saveLastApplication.selected = settingsVO.saveLastApplication;
 		}
 		
 		private function get settingsScreen() : SettingsScreen
@@ -62,9 +61,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		
 		private function performOKHandler( event : Event ) : void
 		{
-			settingsVO.saveLastApplication = settingsScreen.saveLastApplication.selected;
-			
-			sendNotification( ApplicationFacade.SET_SETTINGS, settingsVO );
+//			settingsVO.saveLastApplication = settingsScreen.saveLastApplication.selected;
+//			
+//			sendNotification( ApplicationFacade.SET_SETTINGS, settingsVO );
 		}
 	}
 }

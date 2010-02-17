@@ -49,11 +49,15 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.MODULE_SELECTED:
 				{
+					toolset.toolsetButton.selected = true;
+					
 					break;
 				}
-
+					
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
+					toolset.toolsetButton.selected = false;
+					
 					break;
 				}
 			}
@@ -61,7 +65,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		private function addEventListeners() : void
 		{
-			toolset.resourceButton.addEventListener( MouseEvent.CLICK, resourceButton_click )
+			toolset.toolsetButton.addEventListener( MouseEvent.CLICK, resourceButton_click )
 		}
 		
 		private function resourceButton_click( event : MouseEvent ) : void

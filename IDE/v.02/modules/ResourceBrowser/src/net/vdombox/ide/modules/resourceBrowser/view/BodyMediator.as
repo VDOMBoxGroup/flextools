@@ -1,19 +1,19 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.events.Event;
-
+	
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.events.IndexChangeEvent;
 
 	public class BodyMediator extends Mediator implements IMediator
@@ -131,6 +131,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		private function addEventListeners() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			body.addEventListener( "itemRendererCreated", itemRendererCreatedHandler, true );
 		}
 
 		private function commitProperties() : void
@@ -138,23 +139,36 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			if ( selectedResourceChanged )
 			{
 				selectedResourceChanged = false;
-
-				if ( selectedResource )
-				{
-					var type : String = selectedResource.type;
-
-					if ( type )
-						type.toLowerCase();
-
-					if ( type == "jpg" || type == "jpeg" || type == "png" || type == "gif" )
-						sendNotification( ApplicationFacade.LOAD_RESOURCE, selectedResource );
-					else
-						body.preview.source = null;
-				}
+				
+				if( selectedResource )
+					body.deleteButton.enabled = true;
 				else
-				{
-					body.preview.source = null;
-				}
+					body.deleteButton.enabled = false;
+				
+				body.selectedResourceVO = selectedResource;
+//				
+//				if ( selectedResource )
+//				{
+//					var type : String = selectedResource.type;
+//
+//					if ( type )
+//						type.toLowerCase();
+//
+//					if ( type == "jpg" || type == "jpeg" || type == "png" || type == "gif" )
+//					{
+//						body.preview.source = selectedResource.data;
+//						
+//						sendNotification( ApplicationFacade.LOAD_RESOURCE, selectedResource );
+//					}
+//					else
+//					{
+//						body.preview.source = null;
+//					}
+//				}
+//				else
+//				{
+//					body.preview.source = null;
+//				}
 			}
 		}
 
@@ -181,6 +195,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			selectedResourceChanged = true;
 
 			commitProperties();
+		}
+
+		private function itemRendererCreatedHandler( event : Event ) : void
+		{
+			var resourceVO : ResourceVO = event.target.data;
+			
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 		}
 	}
 }

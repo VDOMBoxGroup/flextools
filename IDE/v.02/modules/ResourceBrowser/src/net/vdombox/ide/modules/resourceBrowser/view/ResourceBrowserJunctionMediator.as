@@ -150,7 +150,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION,
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION,
 													  body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -350,6 +350,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
+				case PPMPlaceNames.STATES:
+				{
+					processStatesProxyMessage( message );
+					break;
+				}
+					
 				case PPMPlaceNames.RESOURCES:
 				{
 					processResourcesProxyMessage( message );
@@ -359,6 +365,18 @@ package net.vdombox.ide.modules.resourceBrowser.view
 		}
 
 		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch ( message.getTarget() )
+			{
+				case PPMStatesTargetNames.SELECTED_APPLICATION:
+				{
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
+					break;
+				}
+			}
+		}
+		
+		private function processStatesProxyMessage( message : ProxiesPipeMessage ) : void
 		{
 			switch ( message.getTarget() )
 			{
@@ -398,24 +416,24 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 					else if ( operation == PPMOperationNames.READ )
 					{
-						var recipientsArray : Array;
-
-						resourceVO = message.getBody() as ResourceVO;
-
-						if ( recipients[ resourceVO ] )
-						{
-							recipientsArray = recipients[ resourceVO ];
-
-							for ( var i : int = 0; i < recipientsArray.length; i++ )
-							{
-								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recipientsArray[ i ],
-												  resourceVO );
-							}
-						}
-						else
-						{
-							sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
-						}
+//						var recipientsArray : Array;
+//
+//						resourceVO = message.getBody() as ResourceVO;
+//
+//						if ( recipients[ resourceVO ] )
+//						{
+//							recipientsArray = recipients[ resourceVO ];
+//
+//							for ( var i : int = 0; i < recipientsArray.length; i++ )
+//							{
+//								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recipientsArray[ i ],
+//												  resourceVO );
+//							}
+//						}
+//						else
+//						{
+//							sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
+//						}
 					}
 					else if ( operation == PPMOperationNames.DELETE )
 					{

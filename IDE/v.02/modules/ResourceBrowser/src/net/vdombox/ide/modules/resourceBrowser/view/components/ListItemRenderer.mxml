@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/halo"
+				
+				creationComplete="dispatchEvent( new Event( 'itemRendererCreated' ) )">
+
+	<fx:Script>
+		<![CDATA[
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+
+				if ( !data || !data.type )
+					return;
+
+				if ( data.type == "jpg" || data.type == "jpeg" || data.type == "png" || data.type == "gif" )
+				{
+					img.visible = true;
+					noPreview.visible = false;
+					img.source = data.data;
+				}
+				else
+				{
+					noPreview.visible = true;
+					img.visible = false;
+				}
+
+			}
+		]]>
+	</fx:Script>
+
+	<s:states>
+
+		<s:State name="normal" />
+
+		<s:State name="hovered" />
+
+		<s:State name="selected" />
+	</s:states>
+
+	<s:Rect bottom="0" left="0" right="0" top="0">
+
+		<s:fill>
+
+			<s:SolidColor color="0x999999"
+						  alpha="0" alpha.hovered="0.2" alpha.selected="0.6" />
+		</s:fill>
+	</s:Rect>
+
+	<s:Group height="100%" width="100%">
+
+		<s:Group id="noPreview"
+				 height="50" width="50"
+				 horizontalCenter="0">
+
+			<s:Rect height="100%" width="100%">
+
+				<s:fill>
+
+					<s:SolidColor color="0xaaaaaa" />
+				</s:fill>
+			</s:Rect>
+
+			<s:RichText height="50" text="no preview" width="50"
+						color="#808080" fontWeight="bold"
+						textAlign="center" verticalAlign="middle" />
+		</s:Group>
+
+		<mx:Image id="img"
+				  height="50" source="{data.data}" width="50"
+				  horizontalCenter="0" />
+
+		<s:Label text="{ data.name }" width="100%"
+				 textAlign="center" top.normal="50" verticalAlign="middle"
+				 lineBreak="explicit" />
+	</s:Group>
+</s:ItemRenderer>
