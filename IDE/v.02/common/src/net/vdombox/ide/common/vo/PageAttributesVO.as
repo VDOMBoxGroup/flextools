@@ -1,14 +1,13 @@
 package net.vdombox.ide.common.vo
 {
-
 	public class PageAttributesVO
 	{
-		public function PageAttributesVO( pageID : String )
+		public function PageAttributesVO( pageVO : PageVO )
 		{
-			_pageID = pageID;
+			_pageVO = pageVO;
 		}
 
-		private var _pageID : String;
+		private var _pageVO : PageVO;
 
 		private var _attributes : Array;
 
@@ -16,9 +15,9 @@ package net.vdombox.ide.common.vo
 
 		private var _objectsList : Array;
 
-		public function get pageID() : String
+		public function get pageVO() : PageVO
 		{
-			return _pageID;
+			return _pageVO;
 		}
 		
 		public function get attributes() : Array
@@ -54,8 +53,22 @@ package net.vdombox.ide.common.vo
 
 			if ( objectsListXML && objectsListXML.length() > 0 )
 				processObjectList( objectsListXML );
-
-
+		}
+		
+		public function getChangedAttributes() : Array
+		{
+			var result : Array = [];
+			
+			var attributeVO : AttributeVO;
+			for each ( attributeVO in attributes )
+			{
+				if( attributeVO.defaultValue != attributeVO.value )
+				{
+					result.push( attributeVO );
+				}
+			}
+			
+			return result;
 		}
 
 		private function processAttributes( attributesXML : XML ) : void
@@ -64,9 +77,7 @@ package net.vdombox.ide.common.vo
 
 			for each ( var attributeXML : XML in attributesXML.* )
 			{
-				attributeVO = new AttributeVO();
-				attributeVO.name = attributeXML.@Name;
-				attributeVO.value = attributeXML[ 0 ];
+				attributeVO = new AttributeVO( attributeXML.@Name, attributeXML[ 0 ] );
 				_attributes.push( attributeVO );
 			}
 		}
