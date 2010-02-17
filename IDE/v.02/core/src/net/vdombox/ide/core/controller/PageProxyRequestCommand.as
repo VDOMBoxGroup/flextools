@@ -60,7 +60,10 @@ package net.vdombox.ide.core.controller
 
 				case PPMPageTargetNames.ATTRIBUTES:
 				{
-					pageProxy.getAttributes();
+					if( operation == PPMOperationNames.READ )
+						pageProxy.getAttributes();
+					else if( operation == PPMOperationNames.UPDATE )
+						pageProxy.setAttributes( body.pageAttributesVO );
 
 					break;
 				}

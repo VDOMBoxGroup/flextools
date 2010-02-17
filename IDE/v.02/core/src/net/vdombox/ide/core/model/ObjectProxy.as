@@ -73,9 +73,7 @@ package net.vdombox.ide.core.model
 
 			for each ( var attributeXML : XML in attributesXML.* )
 			{
-				attribute = new AttributeVO();
-				attribute.name = attributeXML.@Name;
-				attribute.value = attributeXML[ 0 ]; 
+				attribute = new AttributeVO( attributeXML.@Name, attributeXML[ 0 ] );
 				attributes.push( attribute );
 			}
 

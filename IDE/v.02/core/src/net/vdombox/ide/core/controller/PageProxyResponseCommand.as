@@ -47,6 +47,13 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 					
+				case ApplicationFacade.PAGE_ATTRIBUTES_SETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.SERVER_ACTIONS, body );

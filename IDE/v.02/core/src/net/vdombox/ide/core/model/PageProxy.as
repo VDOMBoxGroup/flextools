@@ -2,7 +2,8 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-	
+
+	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -12,7 +13,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -21,6 +22,7 @@ package net.vdombox.ide.core.model
 		public static const NAME : String = "PageProxy";
 
 		private static const GET_ATTRIBUTES : String = "getAttributes";
+		private static const SET_ATTRIBUTES : String = "setAttributes";
 
 		private static const GET_OBJECT : String = "getObject";
 
@@ -85,6 +87,32 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function setAttributes( pageAttributesVO : PageAttributesVO ) : AsyncToken
+		{
+			var token : AsyncToken;
+
+			var attributes : Array = pageAttributesVO.getChangedAttributes();
+
+			if ( attributes.length == 0 )
+				return null;
+
+			var attributesXML : XML =
+				<Attributes/>
+				;
+			var attributeVO : AttributeVO;
+
+			for each ( attributeVO in attributes )
+			{
+				attributesXML.appendChild( attributeVO.toXML() );
+			}
+
+			token = soap.set_attributes( pageVO.applicationVO.id, pageVO.id, attributesXML );
+			token.recipientName = proxyName;
+			token.requestFunctionName = SET_ATTRIBUTES;
+
+			return token;
+		}
+
 		public function getObjects() : AsyncToken
 		{
 			var token : AsyncToken;
@@ -109,31 +137,33 @@ package net.vdombox.ide.core.model
 		public function setServerActions( serverActions : Array ) : AsyncToken
 		{
 			var token : AsyncToken;
-			
+
 			var language : String = "vscript";
-			
-			if( pageVO.applicationVO.scriptingLanguage )
+
+			if ( pageVO.applicationVO.scriptingLanguage )
 				language = pageVO.applicationVO.scriptingLanguage;
-			
-			var serverActionsXML : XML = <ServerActions />;
+
+			var serverActionsXML : XML =
+				<ServerActions/>
+				;
 			var serverActionVO : ServerActionVO;
-			
+
 			for each ( serverActionVO in serverActions )
 			{
-				if( !serverActionVO.language )
+				if ( !serverActionVO.language )
 					serverActionVO.language = language;
-				
+
 				serverActionsXML.appendChild( serverActionVO.toXML() );
 			}
-			
+
 			token = soap.set_server_actions( pageVO.applicationVO.id, pageVO.id, serverActions );
-			
+
 			token.recipientName = proxyName;
-			
+
 			return token;
 		}
 
-		
+
 		public function createObject( objectID : String ) : ObjectVO
 		{
 			return null;
@@ -190,6 +220,7 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
@@ -198,6 +229,7 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_child_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
@@ -295,6 +327,8 @@ package net.vdombox.ide.core.model
 			var operationName : String = operation.name;
 			var notification : ProxyNotification;
 
+			var pageAttributesVO : PageAttributesVO;
+
 			switch ( operationName )
 			{
 				case "get_child_objects_tree":
@@ -328,7 +362,7 @@ package net.vdombox.ide.core.model
 					{
 						serverActionVO = new ServerActionVO( serverActionXML.@Name, pageVO );
 						serverActionVO.setID( serverActionXML.@ID );
-						
+
 						serverActionVO.script = serverActionXML[ 0 ];
 
 						serverActions.push( serverActionVO );
@@ -338,12 +372,12 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
-					
+
 				case "set_server_actions":
 				{
-					
-					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, { pageVO : pageVO } )
-					
+
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, { pageVO: pageVO } )
+
 					break;
 				}
 
@@ -364,12 +398,23 @@ package net.vdombox.ide.core.model
 					}
 					else if ( token.requestFunctionName == GET_ATTRIBUTES )
 					{
-						var pageAttributesVO : PageAttributesVO = new PageAttributesVO( pageVO.id );
+						pageAttributesVO = new PageAttributesVO( pageVO );
 						pageAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
 
 						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
 						notification.token = token;
 					}
+
+					break;
+				}
+
+				case "set_attributes":
+				{
+					pageAttributesVO = new PageAttributesVO( pageVO );
+					pageAttributesVO.setXMLDescription( result.Object[ 0 ] );
+
+					notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, pageAttributesVO );
+					notification.token = token;
 
 					break;
 				}
