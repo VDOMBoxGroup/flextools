@@ -9,7 +9,14 @@
 	<mx:Accordion id="typesAccordion"
 				  height="100%" width="150" />
 
-	<s:Group height="100%" width="100%" />
+	<s:Group height="100%" width="100%">
+		<s:Rect left="2" right="2" top="2" bottom="2">
+			<s:stroke>
+				<mx:SolidColorStroke color="gray" />
+			</s:stroke>
+		</s:Rect>
+		<s:Label text="not implemented yet"  horizontalCenter="0" verticalCenter="0" color="gray"/>
+	</s:Group>
 
 	<s:VGroup height="100%" width="200">
 
@@ -19,6 +26,5 @@
 		<components:ObjectsTreePanel id="objectsTreePanel"
 									 height="100%" width="200" />
 
-		<s:Panel height="200" width="100%" />
 	</s:VGroup>
 </s:HGroup>

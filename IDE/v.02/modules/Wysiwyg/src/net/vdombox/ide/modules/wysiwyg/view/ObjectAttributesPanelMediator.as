@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import mx.collections.ArrayList;
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -32,6 +34,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 			
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			
 			interests.push( ApplicationFacade.TYPE_GETTED );
 			
 			interests.push( ApplicationFacade.PAGE_SELECTED );
@@ -50,6 +54,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			switch ( name )
 			{
+				case ApplicationFacade.MODULE_DESELECTED:
+				{
+					objectAttributesPanel.attributesList.dataProvider = null;
+				}
+					
 				case ApplicationFacade.TYPE_GETTED:
 				{	
 					
@@ -70,21 +79,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{	
 					var objectVO : ObjectVO = body as ObjectVO;
 					
-//					sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, objectVO );
-					sendNotification( ApplicationFacade.GET_TYPE, objectVO.typeID );
+					sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, objectVO );
+//					sendNotification( ApplicationFacade.GET_TYPE, objectVO.typeVO.id );
 					break;
 				}
 					
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED:
 				{	
-					
+					objectAttributesPanel.attributesList.dataProvider = new ArrayList( body as Array );
 					
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_ATTRIBUTES_GETTED:
 				{	
-					
+					objectAttributesPanel.attributesList.dataProvider = new ArrayList( body as Array );
 					
 					break;
 				}

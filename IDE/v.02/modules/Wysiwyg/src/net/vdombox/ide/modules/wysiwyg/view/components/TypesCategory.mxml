@@ -29,6 +29,6 @@
 	</s:layout>
 
 	<s:List dataProvider="{ typeData }" height="100%" labelField="displayName" width="100%"
-			textAlign="center"
+			textAlign="center" useVirtualLayout="false"
 			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer" />
 </s:NavigatorContent>

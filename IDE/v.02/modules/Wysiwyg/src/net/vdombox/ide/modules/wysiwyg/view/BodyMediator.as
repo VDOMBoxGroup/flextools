@@ -3,7 +3,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Body;
 	
@@ -22,6 +21,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		public var selectedApplication : ApplicationVO;
 
+		private var created : Boolean = false;
+		
 		public function get body() : Body
 		{
 			return viewComponent as Body;
@@ -37,6 +38,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
+			interests.push( ApplicationFacade.MODULE_SELECTED );
 
 			return interests;
 		}
@@ -49,6 +51,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					selectedApplication = notification.getBody() as ApplicationVO;
 					sendNotification( ApplicationFacade.GET_PAGES, notification.getBody());
+					
+					break;
+				}
+					
+				case ApplicationFacade.MODULE_SELECTED:
+				{
+					if( created ) 
+						sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 					
 					break;
 				}
@@ -69,6 +79,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			addEventListeners();
 
+			created = true;
+			
 			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
 
 			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:mx="library://ns.adobe.com/flex/halo"
-				xmlns:s="library://ns.adobe.com/flex/spark">
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				
+				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))">
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.vo.ResourceVO;
+
 			[Bindable]
 			private var typeName : String
+
+			[Bindable]
+			private var _resourceVO : ResourceVO;
+
+			public function set resourceVO( value : ResourceVO ) : void
+			{
+				_resourceVO = value;
+			}
 
 			override public function set data( value : Object ) : void
 			{
@@ -20,13 +32,8 @@
 		]]>
 	</fx:Script>
 
-	<s:Rect height="50" width="50"
-			horizontalCenter="0">
-
-		<s:stroke>
-			<s:SolidColorStroke color="black" />
-		</s:stroke>
-	</s:Rect>
+	<mx:Image height="50" source="{ _resourceVO.data }" width="50"
+			  horizontalCenter="0" />
 
 	<s:RichText text="{ typeName }" width="100%"
 				horizontalCenter="0" top="55" />

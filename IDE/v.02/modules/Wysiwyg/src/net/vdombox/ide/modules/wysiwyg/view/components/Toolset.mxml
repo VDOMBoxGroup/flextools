@@ -3,11 +3,11 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark">
 
-
 	<s:layout>
+
 		<s:HorizontalLayout />
 	</s:layout>
 
 	<s:ToggleButton id="toolsetButton"
-					label="Wysiwyg" />
+					label="{ resourceManager.getString( 'Wysiwyg_General', 'toolset_button_label' ) }" />
 </s:Group>

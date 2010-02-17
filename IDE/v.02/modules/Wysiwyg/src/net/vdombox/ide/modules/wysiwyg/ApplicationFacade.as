@@ -57,6 +57,9 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_TYPE : String = "getType";
 		public static const TYPE_GETTED : String = "typeGetted";
 		
+//		resources
+		public static const GET_RESOURCE : String = "getResource";
+		
 //		application	
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
 		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";

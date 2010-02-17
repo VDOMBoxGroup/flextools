@@ -62,6 +62,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_TYPES );
 			interests.push( ApplicationFacade.GET_TYPE );
 			
+			interests.push( ApplicationFacade.GET_RESOURCE );
+			
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			
 			interests.push( ApplicationFacade.GET_PAGES );
@@ -169,6 +171,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.GET_TYPE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_RESOURCE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -401,10 +412,27 @@ package net.vdombox.ide.modules.wysiwyg.view
 					processTypesProxyMessage( message );
 					break;
 				}
+					
+				case PPMPlaceNames.STATES:
+				{
+					processStatesProxyMessage( message );
+					break;
+				}
 			}
 		}
 
 		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
+		{
+			switch ( message.getTarget() )
+			{
+				case PPMStatesTargetNames.SELECTED_APPLICATION:
+				{
+					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
+				}
+			}
+		}
+		
+		private function processStatesProxyMessage( message : ProxiesPipeMessage ) : void
 		{
 			switch ( message.getTarget() )
 			{
@@ -432,6 +460,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			switch ( message.getTarget() )
 			{
+				case PPMObjectTargetNames.ATTRIBUTES:
+				{
+					sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, message.getBody().attributes );
+					
+					break;
+				}
+					
 				case PPMPageTargetNames.STRUCTURE:
 				{
 					sendNotification( ApplicationFacade.PAGE_SRUCTURE_GETTED, message.getBody() );

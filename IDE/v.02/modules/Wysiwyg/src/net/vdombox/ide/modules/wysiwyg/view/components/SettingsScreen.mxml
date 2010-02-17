@@ -3,8 +3,10 @@
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 
-		 height="100%" width="100%"
-		 implements="net.vdombox.ide.common.interfaces.ISettingsScreen">
+		 implements="net.vdombox.ide.common.interfaces.ISettingsScreen"
+		 
+		 height="100%" width="100%">
+
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.common.interfaces.ISettingsScreen;
@@ -13,14 +15,19 @@
 
 			public function performOK() : void
 			{
-				dispatchEvent( new Event( "performOK" ));
+				dispatchEvent( new Event( "performOK" ) );
 			}
 		]]>
 	</fx:Script>
 
-	<s:Label text="Settings application managment"
-			 fontFamily="Verdana" fontSize="14" fontWeight="bold" left="20" top="20" />
+	<s:Rect bottom="5" left="5" right="5" top="5">
 
-	<s:CheckBox id="saveLastApplication"
-				label="Save Last Application" x="20" y="42" />
+		<s:stroke>
+
+			<s:SolidColorStroke color="gray" />
+		</s:stroke>
+	</s:Rect>
+
+	<s:Label text="Settings Screen for WYSIWYG module"
+			 color="gray" horizontalCenter="0" verticalCenter="0" />
 </s:Group>

@@ -50,11 +50,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.MODULE_SELECTED:
 				{
+					toolset.toolsetButton.selected = true;
+					
 					break;
 				}
-
+					
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
+					toolset.toolsetButton.selected = false;
+					
 					break;
 				}
 			}

@@ -49,6 +49,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.PAGE_SRUCTURE_GETTED );
+			
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
 
 			interests.push( ApplicationFacade.OBJECT_GETTED );
 			
@@ -77,6 +79,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 					pageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
 					pageXML.appendChild( pageXMLTree.* );
 					
+					break;
+				}
+				
+				case ApplicationFacade.MODULE_DESELECTED:
+				{
+					objectsTree.dataProvider = null;
 					break;
 				}
 					
@@ -110,7 +118,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			for ( var i : int = 0; i < pages.length; i++ )
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
-				pagesXMLList += <page id={ pages[ i ].id } name={ pages[ i ].name } typeID={ pages[ i ].typeID }/>
+				pagesXMLList += <page id={ pages[ i ].id } name={ pages[ i ].name } typeID={ pages[ i ].typeVO.id }/>
 			}
 
 			objectsTree.dataProvider = pagesXMLList;

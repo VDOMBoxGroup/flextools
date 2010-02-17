@@ -1,9 +1,13 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.events.Event;
+	
 	import mx.containers.Accordion;
 	
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypesCategory;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -40,6 +44,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sendNotification( ApplicationFacade.GET_TYPES );
+			
+			typesAccordion.addEventListener( "TypeRendererCreated", typeRendererCreatedHandler, true );
 		}
 
 		override public function listNotificationInterests() : Array
@@ -97,6 +103,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			return currentCategory;
+		}
+		
+		private function typeRendererCreatedHandler( event : Event ) : void
+		{
+			var typeItemRenderer : TypeItemRenderer = event.target as TypeItemRenderer;
+			
+			var typeVO : TypeVO = typeItemRenderer.data as TypeVO;
+			
+			var resourceVO : ResourceVO = new ResourceVO( typeVO.id );
+			resourceVO.setID( typeVO.iconID );
+			
+			typeItemRenderer.resourceVO = resourceVO;
+			
+			sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
 		}
 	}
 }
