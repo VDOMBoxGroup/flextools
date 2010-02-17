@@ -95,8 +95,8 @@ package net.vdombox.ide.core.view
 
 			setupLanguageList();
 
-			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
-				submit();
+//			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
+//				submit();
 		}
 
 		private function selectLang_changeHandler( event : ListEvent ) : void

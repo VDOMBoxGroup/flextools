@@ -58,6 +58,7 @@
 		</s:stroke>
 		<s:fill>
 			<!--- @private -->
+
 			<s:LinearGradient id="bgFill" rotation="90">
 				<s:GradientEntry color="0x333333" />
 				<s:GradientEntry color="0x000000" />
@@ -78,17 +79,17 @@
 	<!-- layer 2: titlebar + content + status bar -->
 	<s:Group left="1" right="1" top="1" bottom="1" mask="{topMask}" >
 		
-		<!--<s:TitleBar id="titleBar" skinClass="net.vdombox.ide.view.skins.SuperTitleBarSkin" width="100%" minHeight="50" alpha.inactiveGroup="0.5" />-->
+		<s:TitleBar id="titleBar" skinClass="net.vdombox.ide.core.view.skins.MainWindowTitleBarSkin" width="100%" minHeight="50" alpha.inactiveGroup="0.5" />
 		
-		<s:Group height="50" width="100%">
+		<!--<s:Group height="50" width="100%">
 			<s:Rect width="100%" height="100%">
 				<s:fill>
 					<s:SolidColor color="0x333333" />
 				</s:fill>
 			</s:Rect>
-		</s:Group>
+		</s:Group>-->
 		
-		<s:Rect top="50" width="100%" height="25">
+		<s:Rect top="50" width="100%" height="35">
 			<s:fill>
 				<s:LinearGradient rotation="90">
 					<s:GradientEntry color="0xCCCCCC" />
@@ -97,7 +98,7 @@
 			</s:fill>
 		</s:Rect>
 		
-		<s:Rect top="75" bottom="15" width="100%" height="100%" minHeight="0" minWidth="0">
+		<s:Rect top="85" bottom="15" width="100%" height="100%" minHeight="0" minWidth="0">
 			<s:fill>
 				<s:SolidColor color="0x999999" />
 			</s:fill>
@@ -108,7 +109,7 @@
 			requireSelection="true"
 			height="25" top="25" left="100"/>
 		
-		<s:Group width="100%" height="25" top="50">
+		<s:Group width="100%" height="35" top="50">
 			<s:layout>
 				<s:HorizontalLayout verticalAlign="middle" paddingLeft="100" />
 			</s:layout>
@@ -119,14 +120,14 @@
 				</s:layout>
 			</s:Group>
 			
-			<mx:Spacer width="100%" />
-			<s:Button width="70"/>
+			<!--<mx:Spacer width="100%" />
+			<s:Button width="70"/>-->
 		</s:Group>
 		
 		<!-- content -->
 		<!--- Defines the Group container where the content children get pushed into and laid out. -->
 		<s:Group id="contentGroup"
-				 top="75" bottom="15" width="100%" height="100%" minHeight="0" minWidth="0"/>
+				 top="85" bottom="15" width="100%" height="100%" minHeight="0" minWidth="0"/>
 		
 		<!-- status bar -->
 		<!--- Defines the Group container for the status bar. -->

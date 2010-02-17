@@ -196,10 +196,10 @@ package net.vdombox.ide.core.view
 			if(  modulesList.length == 0 )
 				return;
 			
-			for ( var i : int = 0; i < modulesList.length; i++ )
-			{
-				sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, modulesList[ i ] );
-			}
+//			for ( var i : int = 0; i < modulesList.length; i++ )
+//			{
+//				sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, modulesList[ i ] );
+//			}
 			
 			placeToolsets();
 		}
@@ -228,6 +228,9 @@ package net.vdombox.ide.core.view
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void
 		{
+			if ( facade.hasMediator( SettingsWindowMediator.NAME ) )
+				facade.removeMediator( SettingsWindowMediator.NAME );
+			
 			var settingsWindow : SettingsWindow = new SettingsWindow();
 			facade.registerMediator( new SettingsWindowMediator( settingsWindow ));
 

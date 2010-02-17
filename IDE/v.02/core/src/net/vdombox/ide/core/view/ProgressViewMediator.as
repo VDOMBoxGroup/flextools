@@ -151,7 +151,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.TYPES_LOADING:
 				{
 					task= new Task();
-					task.description = "Types loading(0)...";
+					task.description = "Types loading...";
 					task.status = "process";
 					
 					tasks[ "types" ] = task;

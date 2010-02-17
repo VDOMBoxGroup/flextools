@@ -120,10 +120,13 @@ package net.vdombox.ide.core.model
 			
 			for each ( serverActionVO in serverActions )
 			{
+				if( !serverActionVO.language )
+					serverActionVO.language = language;
+				
 				serverActionsXML.appendChild( serverActionVO.toXML() );
 			}
 			
-			token = soap.set_server_actions( pageVO.applicationVO.id, serverActions );
+			token = soap.set_server_actions( pageVO.applicationVO.id, pageVO.id, serverActions );
 			
 			token.recipientName = proxyName;
 			

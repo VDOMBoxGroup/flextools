@@ -85,13 +85,19 @@ package net.vdombox.ide.core.view
 					proxiesIn.connectInput( moduleToCoreProxies );
 
 					// Connect the core's PROXYOUT to the module's PROXYIN
-					var coreToModuleProxies : Pipe = new Pipe();
-					module.acceptInputPipe( PipeNames.PROXIESIN, coreToModuleProxies );
+					var coreToModuleProxies : Pipe = pipesProxy.getPipe( moduleID, PipeNames.PROXIESIN ) as Pipe;
 
-					proxiesOut = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
-					proxiesOut.connect( coreToModuleProxies );
+					if ( !coreToModuleProxies )
+					{
+						coreToModuleProxies = new Pipe();
 
-					pipesProxy.savePipe( moduleVO.moduleID, PipeNames.PROXIESIN, coreToModuleProxies );
+						module.acceptInputPipe( PipeNames.PROXIESIN, coreToModuleProxies );
+
+						proxiesOut = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
+						proxiesOut.connect( coreToModuleProxies );
+
+						pipesProxy.savePipe( moduleVO.moduleID, PipeNames.PROXIESIN, coreToModuleProxies );
+					}
 
 					sendNotification( ApplicationFacade.MODULE_TO_PROXIES_CONNECTED, moduleVO );
 
@@ -120,7 +126,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.STATES_PROXY_RESPONSE:
 				{
 				}
-					
+
 				case ApplicationFacade.APPLICATION_PROXY_RESPONSE:
 				{
 				}
@@ -132,7 +138,7 @@ package net.vdombox.ide.core.view
 				case ApplicationFacade.OBJECT_PROXY_RESPONSE:
 				{
 				}
-					
+
 				case ApplicationFacade.TYPES_PROXY_RESPONSE:
 				{
 				}
@@ -162,10 +168,10 @@ package net.vdombox.ide.core.view
 				case PPMPlaceNames.STATES:
 				{
 					sendNotification( ApplicationFacade.STATES_PROXY_REQUEST, ppMessage );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.TYPES:
 				{
 					sendNotification( ApplicationFacade.TYPES_PROXY_REQUEST, ppMessage );
@@ -193,11 +199,11 @@ package net.vdombox.ide.core.view
 
 					break;
 				}
-					
+
 				case PPMPlaceNames.OBJECT:
 				{
 					sendNotification( ApplicationFacade.OBJECT_PROXY_REQUEST, ppMessage );
-					
+
 					break;
 				}
 			}

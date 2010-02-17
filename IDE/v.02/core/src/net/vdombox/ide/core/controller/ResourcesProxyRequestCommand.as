@@ -37,7 +37,7 @@ package net.vdombox.ide.core.controller
 			
 			if ( body is ResourceVO )
 				resourceVO = body as ResourceVO;
-			else if ( body.hasOwnProperty( "pageVO" ) )
+			else if ( body.hasOwnProperty( "resourceVO" ) )
 				resourceVO = body.resourceVO as ResourceVO;
 			else
 				throw new Error( "no page VO" );

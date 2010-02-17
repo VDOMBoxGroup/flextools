@@ -28,11 +28,11 @@ package net.vdombox.ide.core.model
 		private static const MODULES_XML : XML = <modules>
 				<category name="applicationManagment">
 					<module name="ApplicationsManagment" path="app:/modules/applicationsManagment/ApplicationsManagment.swf"/>
-					<module name="Scripts" path="app:/modules/scripts/Scripts.swf"/>
-					<module name="Tree" path="app:/modules/Tree.swf"/>
 				</category>
 				<category name="Edition">
 					<module name="Wysiwyg" path="app:/modules/Wysiwyg.swf"/>
+					<module name="Scripts" path="app:/modules/scripts/Scripts.swf"/>
+					<module name="Tree" path="app:/modules/Tree.swf"/>
 					<module name="ResourceBrowser" path="app:/modules/ResourceBrowser.swf"/>
 				</category>
 			</modules>

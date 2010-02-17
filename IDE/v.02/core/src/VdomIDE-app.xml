@@ -18,13 +18,13 @@
 	<id>net.vdombox.ide</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>Vdom IDE</filename>
+	<filename>Vdom IDE 2</filename>
 
 	<!-- The name that is displayed in the AIR application installer. Optional. -->
 	<name>Vdom IDE</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
-	<version>1.0.4802</version>
+	<version>2.0.4802</version>
 
 	<!-- Description, displayed in the AIR application installer. Optional. -->
 	<!-- <description></description> -->
