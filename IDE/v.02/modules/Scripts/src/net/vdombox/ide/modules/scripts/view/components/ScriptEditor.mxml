@@ -8,10 +8,8 @@
 
 	<fx:Script>
 		<![CDATA[
-			[Bindable]
 			private var _script : String;
 
-			[Bindable]
 			private var _syntax : String = "vscript";
 
 			public function get script() : String
@@ -21,17 +19,18 @@
 
 			public function set script( value : String ) : void
 			{
-				_script = value;
+				editArea.content = value;
+//				_script = value;
 			}
 
 			public function set syntax( value : String ) : void
 			{
-				_syntax = value;
+				editArea.syntax = _syntax;
+//				_syntax = value;
 			}
 		]]>
 	</fx:Script>
 
 	<components:EditArea id="editArea"
-						 height="100%" width="100%"
-						 content="{ _script }" syntax="{ _syntax }" />
+						 height="100%" width="100%" />
 </s:Group>
