@@ -18,7 +18,7 @@
 	<id>net.vdombox.ide</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>Vdom IDE 2</filename>
+	<filename>VdomIDE2</filename>
 
 	<!-- The name that is displayed in the AIR application installer. Optional. -->
 	<name>Vdom IDE</name>

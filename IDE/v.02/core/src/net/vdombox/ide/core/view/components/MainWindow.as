@@ -1,9 +1,10 @@
 package net.vdombox.ide.core.view.components
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.NativeWindowSystemChrome;
+	import flash.events.Event;
 	
 	import mx.controls.Image;
-	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.core.view.skins.MainWindowSkin;
 	
@@ -19,6 +20,8 @@ package net.vdombox.ide.core.view.components
 			systemChrome = NativeWindowSystemChrome.NONE;
 			width = 1024;
 			height = 768;
+			
+			addEventListener( Event.CLOSE, closeHandler );
 		}
 
 		[SkinPart( required="true" )]
@@ -29,5 +32,10 @@ package net.vdombox.ide.core.view.components
 		
 		[SkinPart( required="true" )]
 		public var settingsButton : Image;
+		
+		private function closeHandler( event : Event ) : void
+		{
+			NativeApplication.nativeApplication.exit();
+		}
 	}
 }
