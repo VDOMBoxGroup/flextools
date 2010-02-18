@@ -5,6 +5,10 @@ package net.vdombox.ide.common.vo
 		public function PageAttributesVO( pageVO : PageVO )
 		{
 			_pageVO = pageVO;
+			
+			_attributes = [];
+			_pageLinks = [];
+			_objectsList = [];
 		}
 
 		private var _pageVO : PageVO;
@@ -25,6 +29,11 @@ package net.vdombox.ide.common.vo
 			return _attributes;
 		}
 
+		public function set attributes( value : Array ) : void
+		{
+			_attributes;
+		}
+		
 		public function get pageLinks() : Array
 		{
 			return _pageLinks;
@@ -41,10 +50,6 @@ package net.vdombox.ide.common.vo
 			var pageLinksXML : XML = xmlDescription.Pagelink[ 0 ];
 			var objectsListXML : XML = xmlDescription.Objectlist[ 0 ];
 
-			_attributes = [];
-			_pageLinks = [];
-			_objectsList = [];
-
 			if ( attributesXML && attributesXML.length() > 0 )
 				processAttributes( attributesXML );
 
@@ -54,6 +59,8 @@ package net.vdombox.ide.common.vo
 			if ( objectsListXML && objectsListXML.length() > 0 )
 				processObjectList( objectsListXML );
 		}
+		
+		
 		
 		public function getChangedAttributes() : Array
 		{
