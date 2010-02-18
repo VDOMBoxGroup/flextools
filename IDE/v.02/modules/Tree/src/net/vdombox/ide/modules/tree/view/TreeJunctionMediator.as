@@ -42,14 +42,16 @@ package net.vdombox.ide.modules.tree.view
 
 		private var sessionProxy : SessionProxy;
 
-		private var recipients : Dictionary;
-
 		override public function onRegister() : void
 		{
-			recipients = new Dictionary( true );
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 		}
 
+		override public function onRemove() : void
+		{
+			sessionProxy = null;
+		}
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -97,6 +99,11 @@ package net.vdombox.ide.modules.tree.view
 			var body : Object = notification.getBody();
 
 			var message : IPipeMessage;
+
+			var pageAttributesRecipientID : String;
+			var pageVO : PageVO;
+			var pageAttributesSessionName : String;
+			var pageAttributesRecipients : Object;
 
 			switch ( notification.getName() )
 			{
@@ -264,13 +271,13 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.GET_PAGE_ATTRIBUTES:
 				{
-					var pageAttributesRecipientID : String = body.recipientID;
-					var pageVO : PageVO = body.pageVO;
-
-					var pageAttributesSessionName : String = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.READ +
+					pageAttributesRecipientID = body.recipientID;
+					pageVO = body.pageVO;
+					
+					pageAttributesSessionName = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.READ +
 						ApplicationFacade.DELIMITER + PPMPageTargetNames.ATTRIBUTES;
-
-					var pageAttributesRecipients : Object = sessionProxy.getObject( pageAttributesSessionName );
+					
+					pageAttributesRecipients = sessionProxy.getObject( pageAttributesSessionName );
 
 					if ( !pageAttributesRecipients.hasOwnProperty( pageVO.id ) )
 						pageAttributesRecipients[ pageVO.id ] = [];
@@ -286,6 +293,19 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SET_PAGE_ATTRIBUTES:
 				{
+					pageAttributesRecipientID = body.recipientID;
+					pageVO = body.pageVO;
+
+					pageAttributesSessionName = PPMPlaceNames.PAGE + ApplicationFacade.DELIMITER + PPMOperationNames.UPDATE +
+						ApplicationFacade.DELIMITER + PPMPageTargetNames.ATTRIBUTES;
+
+					pageAttributesRecipients = sessionProxy.getObject( pageAttributesSessionName );
+
+					if ( !pageAttributesRecipients.hasOwnProperty( pageVO.id ) )
+						pageAttributesRecipients[ pageVO.id ] = [];
+
+					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );
+
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -388,6 +408,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 			junction.removePipe( PipeNames.STDIN );
 			junction.removePipe( PipeNames.STDCORE );
+			junction.removePipe( PipeNames.STDLOG );
+			junction.removePipe( PipeNames.PROXIESOUT );
 		}
 
 		private function processInputPipe( notification : INotification ) : void

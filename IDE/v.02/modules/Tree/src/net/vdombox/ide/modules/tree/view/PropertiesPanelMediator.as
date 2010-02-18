@@ -45,6 +45,7 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED );
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
+			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName );
 
 			return interests;
 		}
@@ -75,6 +76,14 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
+
+				case ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName:
+				{
+					pageAttributesVO = body as PageAttributesVO;
+					propertiesPanel.pageAttributesVO = pageAttributesVO;
+
+					break;
+				}
 			}
 		}
 
@@ -97,7 +106,10 @@ package net.vdombox.ide.modules.tree.view
 		private function savePageAttributesHandler( event : PropertiesPanelEvent ) : void
 		{
 			if ( selectedPageVO && pageAttributesVO )
-				sendNotification( ApplicationFacade.SET_PAGE_ATTRIBUTES, { pageVO: selectedPageVO, pageAttributesVO: pageAttributesVO } );
+			{
+				sendNotification( ApplicationFacade.SET_PAGE_ATTRIBUTES,
+								  { pageVO: selectedPageVO, pageAttributesVO: pageAttributesVO, recipientID: mediatorName } );
+			}
 		}
 
 		private function makeStartPageHandler( event : PropertiesPanelEvent ) : void

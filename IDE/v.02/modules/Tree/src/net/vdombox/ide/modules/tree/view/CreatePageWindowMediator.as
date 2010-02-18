@@ -92,11 +92,15 @@ package net.vdombox.ide.modules.tree.view
 			
 			if( selectedPageType )
 				sendNotification( ApplicationFacade.CREATE_PAGE_REQUEST, selectedPageType );
+			
+			facade.removeMediator( NAME );
 		}
 		
 		private function performCancelHandler ( event : CreatePageWindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
+			
+			facade.removeMediator( NAME );
 		}
 		
 		private function pagesItemRenderer_createdHandler( event : ItemRendererEvent ) : void

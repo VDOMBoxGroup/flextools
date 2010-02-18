@@ -13,9 +13,12 @@ package net.vdombox.ide.modules.tree.controller.body
 		{
 			var createPageWindow : CreatePageWindow = new CreatePageWindow();
 			
+			if( facade.hasMediator( CreatePageWindowMediator.NAME ) )
+				facade.removeMediator( CreatePageWindowMediator.NAME );
+			
 			facade.registerMediator( new CreatePageWindowMediator( createPageWindow ) );
 			
-			sendNotification( ApplicationFacade.OPEN_WINDOW, { content: createPageWindow, title: "Create Page", isModal: true } );
+			sendNotification( ApplicationFacade.OPEN_WINDOW, { content: createPageWindow, title: "Create Page", isModal: true, resizable : true } );
 		}
 	}
 }

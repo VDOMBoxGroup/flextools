@@ -43,6 +43,14 @@ package net.vdombox.ide.modules.tree.view
 			return viewComponent as TreeElement;
 		}
 
+		public function set pageAttributesVO( value : PageAttributesVO ) : void
+		{
+			_pageAttributesVO = value;
+			
+			treeElement.description = getAttributeValue( "description" );
+			treeElement.title = getAttributeValue( "title" );
+		}
+		
 		override public function onRegister() : void
 		{
 			addHandlers();
@@ -74,6 +82,7 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED );
 			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
+			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName );
 
 			return interests;
 		}
@@ -101,13 +110,11 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
-					_pageAttributesVO = body as PageAttributesVO;
-
-					treeElement.description = getAttributeValue( "description" );
-					treeElement.title = getAttributeValue( "title" );
+					pageAttributesVO = body as PageAttributesVO;
+					
 					break;
 				}
-
+					
 				case ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED:
 				{
 					if ( body == treeElementVO )
