@@ -17,10 +17,9 @@ package net.vdombox.ide.modules.tree.controller.body
 
 			var typeVO : TypeVO = notification.getBody() as TypeVO;
 			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
-			var pageAttributesVO : PageAttributesVO = new PageAttributesVO( new PageVO( 
 
 			sendNotification( ApplicationFacade.CREATE_PAGE,
-							  { applicationVO: statesObject[ ApplicationFacade.SELECTED_APPLICATION ], typeVO: typeVO, pageAttributesVO : pageAttributesVO } );
+							  { applicationVO: statesObject[ ApplicationFacade.SELECTED_APPLICATION ], typeVO: typeVO } );
 		}
 	}
 }

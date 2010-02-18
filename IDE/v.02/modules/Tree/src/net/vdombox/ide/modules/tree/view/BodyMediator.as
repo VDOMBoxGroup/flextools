@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -62,8 +62,7 @@ package net.vdombox.ide.modules.tree.view
 
 				body.treeElementsContainer.addElement( treeElement );
 
-				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
-									  treeElementVO: treeElementVO } );
+				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
 			}
 
 			for each ( treeElement in oldElements )
@@ -87,7 +86,7 @@ package net.vdombox.ide.modules.tree.view
 			for each ( linkageVO in linkages )
 			{
 				linkageID = linkageVO.source.id + "/" + linkageVO.target.id + "/" + linkageVO.level.level;
-				
+
 				if ( oldLinkages.hasOwnProperty( linkageID ) )
 				{
 					newLinkages[ linkageID ] = oldLinkages[ linkageID ];
@@ -100,17 +99,17 @@ package net.vdombox.ide.modules.tree.view
 				linkage = new Linkage();
 
 				newLinkages[ linkageID ] = linkage;
-				
+
 				body.linkagesContainer.addElement( linkage );
 
 				sendNotification( ApplicationFacade.LINKAGE_CREATED, { viewComponent: linkage, linkageVO: linkageVO } );
 			}
-			
+
 			for each ( linkage in oldLinkages )
 			{
 				body.linkagesContainer.removeElement( linkage );
 			}
-			
+
 			linkagesObject = newLinkages;
 		}
 
@@ -152,6 +151,98 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 			}
+		}
+
+		public function sortElements() : void
+		{
+			var elements : Array = getTreeElements();
+			var linkages : Array = getLinkages();
+
+			var specialObject : Object = extractLinkagelessElements( elements, linkages );
+		}
+
+		private function extractLinkagelessElements( elements : Array, linkages : Array ) : Object
+		{
+			var treeElement : TreeElement;
+			var linkage : Linkage;
+			var isTarget : Boolean;
+			var isSource : Boolean;
+
+			var parentless : Array = [];
+			var linkageless : Array = [];
+
+			for ( var i : uint = 0; i < elements.length; i++ )
+			{
+				treeElement = elements[ i ];
+
+				isTarget = false;
+				isSource = false;
+
+				for each ( linkage in linkages )
+				{
+					if ( linkage.linkageVO.target == treeElement.treeElementVO )
+					{
+						isTarget = true;
+						break;
+					}
+					else if ( linkage.linkageVO.source == treeElement.treeElementVO )
+					{
+						isSource = true;
+						break;
+					}
+				}
+
+				if ( !isTarget )
+				{
+					if ( !isSource )
+					{
+						linkageless.push( treeElement );
+					}
+					else
+					{
+						parentless.push( treeElement );
+					}
+
+					elements.splice( i, 1 );
+					i--;
+				}
+			}
+
+			return { parentless: parentless, linkageless: linkageless };
+		}
+
+		private function getTreeElements() : Array
+		{
+			var elements : Array = [];
+			var numElements : int = body.treeElementsContainer.numElements;
+			var treeElement : Object;
+
+			for ( var i : uint = 0; i < numElements; i++ )
+			{
+				treeElement = body.treeElementsContainer.getElementAt( i );
+
+				if ( treeElement is TreeElement )
+					elements.push( treeElement );
+			}
+
+			return elements;
+		}
+
+		private function getLinkages() : Array
+		{
+			var linkages : Array = [];
+			var numElements : int = body.linkagesContainer.numElements;
+			var linkage : Object;
+
+			for ( var i : uint = 0; i < numElements; i++ )
+			{
+				linkage = body.treeElementsContainer.getElementAt( i );
+
+				if ( linkage is Linkage && Linkage( linkage ).visible == true )
+					linkages.push( linkage );
+			}
+
+			return linkages;
 		}
 
 		private function addHandlers() : void

@@ -12,12 +12,12 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
-
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-
+			
 			import spark.components.Group;
 
 			[SkinPart( required="true" )]
@@ -118,6 +118,11 @@
 				_typeName = value;
 			}
 
+			public function get treeElementVO() : TreeElementVO
+			{
+				return _treeElementVO;
+			}
+			
 			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;

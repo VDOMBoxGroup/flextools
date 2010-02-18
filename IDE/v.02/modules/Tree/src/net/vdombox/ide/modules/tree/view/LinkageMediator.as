@@ -22,12 +22,12 @@ package net.vdombox.ide.modules.tree.view
 
 		private static var count : uint = 0;
 
-		public function LinkageMediator( viewComponent : Object, linkageVO : LinkageVO )
+		public function LinkageMediator( viewComponent : Linkage, linkageVO : LinkageVO )
 		{
 			super( NAME + ApplicationFacade.DELIMITER + count, viewComponent );
 
 			_linkageVO = linkageVO;
-
+			
 			count++;
 		}
 
@@ -50,7 +50,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private var activeChanged : Boolean;
 
-		public function get arrow() : Linkage
+		public function get linkage() : Linkage
 		{
 			return viewComponent as Linkage;
 		}
@@ -62,6 +62,8 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
+			linkage.linkageVO = _linkageVO;
+			
 			BindingUtils.bindSetter( sourceTargetChange, _linkageVO, "source" );
 			BindingUtils.bindSetter( sourceTargetChange, _linkageVO, "target" );
 
@@ -135,8 +137,8 @@ package net.vdombox.ide.modules.tree.view
 			 */
 			if ( arrowWidth <= fromObjHalfWidth + toObjHalfWidth && arrowHeight <= fromObjHalfHeight + toObjHalfHeight )
 			{
-				arrow.width = 0;
-				arrow.height = 0;
+				linkage.width = 0;
+				linkage.height = 0;
 				return;
 			}
 
@@ -144,13 +146,13 @@ package net.vdombox.ide.modules.tree.view
 			var dY : Number = 0;
 
 			/**
-			 * If arrowRatio > sourceObjectRatio then arrow crosses vertical border of fromObject else - horisontal
+			 * If arrowRatio > sourceObjectRatio then linkage crosses vertical border of fromObject else - horisontal
 			 */
 			if ( arrowRatio > sourceObjectRatio )
 				fromObjVertCross = true;
 
 			/**
-			 * Calculates delta X and delta Y for arrow start point
+			 * Calculates delta X and delta Y for linkage start point
 			 */
 			if ( fromObjVertCross )
 			{
@@ -178,7 +180,7 @@ package net.vdombox.ide.modules.tree.view
 			if ( arrowRatio > targetObjectRatio )
 				toObjVertCross = true;
 			/**
-			 * Calculates delta X and delta Y for arrow end point
+			 * Calculates delta X and delta Y for linkage end point
 			 */
 			if ( toObjVertCross )
 			{
@@ -204,27 +206,27 @@ package net.vdombox.ide.modules.tree.view
 
 			if ( pFromObj.x <= pToObj.x )
 			{
-				arrow.x = pFromObj.x;
-				arrow.width = pToObj.x - pFromObj.x;
+				linkage.x = pFromObj.x;
+				linkage.width = pToObj.x - pFromObj.x;
 				directionalX = LTR;
 			}
 			else
 			{
-				arrow.x = pToObj.x;
-				arrow.width = pFromObj.x - pToObj.x;
+				linkage.x = pToObj.x;
+				linkage.width = pFromObj.x - pToObj.x;
 				directionalX = RTL;
 			}
 
 			if ( pFromObj.y <= pToObj.y )
 			{
-				arrow.y = pFromObj.y;
-				arrow.height = pToObj.y - pFromObj.y;
+				linkage.y = pFromObj.y;
+				linkage.height = pToObj.y - pFromObj.y;
 				directionalY = UTD;
 			}
 			else
 			{
-				arrow.y = pToObj.y;
-				arrow.height = pFromObj.y - pToObj.y;
+				linkage.y = pToObj.y;
+				linkage.height = pFromObj.y - pToObj.y;
 				directionalY = DTU;
 			}
 		}
@@ -238,17 +240,17 @@ package net.vdombox.ide.modules.tree.view
 			var startPoint : Point = new Point();
 			var endPoint : Point = new Point();
 
-			var graphics : Graphics = arrow.graphics;
+			var graphics : Graphics = linkage.graphics;
 
 			if ( directionalX == LTR )
-				endPoint.x = arrow.width;
+				endPoint.x = linkage.width;
 			else
-				startPoint.x = arrow.width;
+				startPoint.x = linkage.width;
 
 			if ( directionalY == UTD )
-				endPoint.y = arrow.height;
+				endPoint.y = linkage.height;
 			else
-				startPoint.y = arrow.height;
+				startPoint.y = linkage.height;
 
 			if ( Math.abs( Point.distance( startPoint, endPoint ) ) <= arrowHeadLength )
 				return;
@@ -295,9 +297,9 @@ package net.vdombox.ide.modules.tree.view
 
 		private function objectsChanged( source : Object ) : void
 		{
-			if ( arrow.visible )
+			if ( linkage.visible )
 			{
-				arrow.graphics.clear();
+				linkage.graphics.clear();
 				calculatePositionAndSize();
 				drawArrow();
 			}
@@ -307,16 +309,16 @@ package net.vdombox.ide.modules.tree.view
 		{	
 			if( _linkageVO.level.visible )
 			{
-				arrow.graphics.clear();
+				linkage.graphics.clear();
 				calculatePositionAndSize();
 				drawArrow();
 			}
 			else
 			{
-				arrow.graphics.clear();
+				linkage.graphics.clear();
 			}
 			
-			arrow.visible = _linkageVO.level.visible;
+			linkage.visible = _linkageVO.level.visible;
 		}
 	}
 }
