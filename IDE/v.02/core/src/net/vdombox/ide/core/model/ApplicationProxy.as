@@ -2,10 +2,12 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
+	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
@@ -14,7 +16,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy
@@ -126,14 +128,14 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
-		
+
 		public function removeLibrary( libraryVO : LibraryVO ) : AsyncToken
 		{
 			var token : AsyncToken;
 			token = soap.remove_library( applicationVO.id, libraryVO.name );
-			
+
 			token.recipientName = proxyName;
-			
+
 			return token;
 		}
 
@@ -147,11 +149,27 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function createPage( typeVO : TypeVO ) : AsyncToken
+		public function createPage( typeVO : TypeVO, name : String = "", pageAttributesVO : PageAttributesVO = null ) : AsyncToken
 		{
 			var token : AsyncToken;
 
-			token = soap.create_object( applicationVO.id, "", typeVO.id, "", "" );
+			var attributesXML : XML
+
+			if ( pageAttributesVO && pageAttributesVO.attributes.length > 0 )
+			{
+				attributesXML =
+					<Attributes/>
+					;
+
+				var attributeVO : AttributeVO;
+
+				for each ( attributeVO in pageAttributesVO.attributes )
+				{
+					attributesXML.appendChild( attributeVO.toXML() );
+				}
+			}
+
+			token = soap.create_object( applicationVO.id, "", typeVO.id, name, attributesXML ? attributesXML : "" );
 
 			token.recipientName = proxyName;
 
@@ -327,7 +345,7 @@ package net.vdombox.ide.core.model
 					{
 						serverActionVO = new ServerActionVO( serverActionXML.@Name, applicationVO );
 						serverActionVO.setID( serverActionXML.@ID );
-						
+
 						serverActionVO.script = serverActionXML[ 0 ];
 
 						serverActions.push( serverActionVO );
@@ -354,15 +372,15 @@ package net.vdombox.ide.core.model
 				case "remove_library":
 				{
 					libraryXML = result.Library[ 0 ];
-					
+
 					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
 					libraryVO.script = libraryXML[ 0 ];
-					
+
 					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_DELETED, { applicationVO: applicationVO, libraryVO: libraryVO } );
-					
+
 					break;
 				}
-					
+
 				case "get_libraries":
 				{
 					var libraries : Array = [];

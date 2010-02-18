@@ -401,7 +401,7 @@ package net.vdombox.ide.core.model
 						pageAttributesVO = new PageAttributesVO( pageVO );
 						pageAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
 
-						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
+						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, { pageVO : pageVO,  pageAttributesVO : pageAttributesVO } );
 						notification.token = token;
 					}
 
@@ -413,7 +413,7 @@ package net.vdombox.ide.core.model
 					pageAttributesVO = new PageAttributesVO( pageVO );
 					pageAttributesVO.setXMLDescription( result.Object[ 0 ] );
 
-					notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, pageAttributesVO );
+					notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, { pageVO : pageVO,  pageAttributesVO : pageAttributesVO } );
 					notification.token = token;
 
 					break;

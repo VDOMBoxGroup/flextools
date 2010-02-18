@@ -155,6 +155,8 @@ package net.vdombox.ide.core.view.managers
 			var oldWidth : Number = window.width;
 			var oldHeight : Number = window.height;
 
+			content.validateNow();
+			
 			var containerWidth : Number = Math.max( content.width, content.getExplicitOrMeasuredWidth() );
 
 			var containerHeight : Number = Math.max( content.height, content.getExplicitOrMeasuredHeight() );
