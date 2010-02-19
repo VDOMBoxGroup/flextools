@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -62,7 +62,8 @@ package net.vdombox.ide.modules.tree.view
 
 				body.treeElementsContainer.addElement( treeElement );
 
-				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
+				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
+									  treeElementVO: treeElementVO } );
 			}
 
 			for each ( treeElement in oldElements )
@@ -134,6 +135,7 @@ package net.vdombox.ide.modules.tree.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.PAGE_DELETED );
+			interests.push( ApplicationFacade.AUTO_SPACING_REQUEST );
 
 			return interests;
 		}
@@ -150,6 +152,12 @@ package net.vdombox.ide.modules.tree.view
 					var pageVO : PageVO = messageBody.pageVO;
 					break;
 				}
+
+				case ApplicationFacade.AUTO_SPACING_REQUEST:
+				{
+					sortElements();
+					break;
+				}
 			}
 		}
 
@@ -159,6 +167,121 @@ package net.vdombox.ide.modules.tree.view
 			var linkages : Array = getLinkages();
 
 			var specialObject : Object = extractLinkagelessElements( elements, linkages );
+
+			var depthArray : Array = [];
+			var currentDepthArray : Array = [];
+			var nextDepthArray : Array;
+
+			var children : Array
+
+			var currentDepth : uint = 0;
+
+			var sortObject : SortObject;
+			var xPosition : uint;
+			var parent : SortObject;
+
+			if ( specialObject.parentless.length > 0 )
+				depthArray[ 0 ] = specialObject.parentless;
+			else
+				depthArray[ 0 ] = [ { element: elements[ 0 ], xPosition: 0 } ];
+
+			currentDepthArray = depthArray[ currentDepth ];
+
+			for each ( sortObject in depthArray[ 0 ] )
+			{
+				placeChildren( sortObject, currentDepth, depthArray, elements, linkages );
+
+				
+				
+//				while (  )
+//				{
+//					children = extractChildren( sortObject.element, elements, linkages );
+//					sortObject.children = children;
+//					
+////					nextDepthArray = nextDepthArray.concat( children );
+//					
+//					if ( children.length > 0 )
+//					{
+//						if ( depthArray[ currentDepth + 1 ] )
+//							depthArray[ currentDepth + 1 ] = depthArray[ currentDepth + 1 ].concat( children );
+//						else
+//							depthArray[ currentDepth + 1 ] = children;
+//						
+//						currentDepth++;
+//						zzzArrays = children;
+//					}
+//				}
+			}
+
+			while ( currentDepthArray && currentDepthArray.length > 0 )
+			{
+				nextDepthArray = [];
+
+				for each ( sortObject in currentDepthArray )
+				{
+					children = extractChildren( sortObject.element, elements, linkages );
+					nextDepthArray = nextDepthArray.concat( children );
+				}
+
+				if ( nextDepthArray.length > 0 )
+				{
+					if ( depthArray[ currentDepth + 1 ] )
+						depthArray[ currentDepth + 1 ] = depthArray[ currentDepth + 1 ].concat( nextDepthArray );
+					else
+						depthArray[ currentDepth + 1 ] = nextDepthArray;
+
+					currentDepth++;
+					currentDepthArray = depthArray[ currentDepth ];
+				}
+				else
+				{
+					currentDepthArray = null;
+				}
+			}
+
+			if ( specialObject.linkageless.length > 0 )
+				depthArray[ depthArray.length ] = specialObject.linkageless;
+		}
+
+		private function placeChildren( sortObject : SortObject, currentDepth : uint, depthArray : Array,
+										elements : Array, linkages : Array ) : void
+		{
+
+			
+			
+		}
+
+		private function extractChildren( sourceElement : TreeElement, elements : Array, linkages : Array ) : Array
+		{
+			var targetElement : TreeElement;
+			var linkage : Linkage;
+
+			var result : Array = [];
+			var sortObject : SortObject;
+
+			for ( var i : uint = 0; i < elements.length; i++ )
+			{
+				targetElement = elements[ i ];
+
+				for each ( linkage in linkages )
+				{
+					if ( linkage.linkageVO.source == sourceElement.treeElementVO && linkage.linkageVO.target == targetElement.treeElementVO )
+					{
+						sortObject = new SortObject();
+						sortObject.element = targetElement;
+
+						result.push( sortObject );
+
+						elements.splice( i, 1 );
+						i--;
+
+						break;
+					}
+
+				}
+			}
+
+			return result;
 		}
 
 		private function extractLinkagelessElements( elements : Array, linkages : Array ) : Object
@@ -170,6 +293,7 @@ package net.vdombox.ide.modules.tree.view
 
 			var parentless : Array = [];
 			var linkageless : Array = [];
+			var sortObject : SortObject;
 
 			for ( var i : uint = 0; i < elements.length; i++ )
 			{
@@ -194,14 +318,13 @@ package net.vdombox.ide.modules.tree.view
 
 				if ( !isTarget )
 				{
+					sortObject = new SortObject();
+					sortObject.element = treeElement;
+
 					if ( !isSource )
-					{
-						linkageless.push( treeElement );
-					}
+						linkageless.push( sortObject );
 					else
-					{
-						parentless.push( treeElement );
-					}
+						parentless.push( sortObject );
 
 					elements.splice( i, 1 );
 					i--;
@@ -236,7 +359,7 @@ package net.vdombox.ide.modules.tree.view
 
 			for ( var i : uint = 0; i < numElements; i++ )
 			{
-				linkage = body.treeElementsContainer.getElementAt( i );
+				linkage = body.linkagesContainer.getElementAt( i );
 
 				if ( linkage is Linkage && Linkage( linkage ).visible == true )
 					linkages.push( linkage );
@@ -255,42 +378,24 @@ package net.vdombox.ide.modules.tree.view
 			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
-//		private function getStructureElement( pageVO : PageVO ) : TreeElementVO
-//		{
-//			var result : TreeElementVO;
-//			var treeElementVO : TreeElementVO
-//
-//			for each ( treeElementVO in structure )
-//			{
-//				if ( treeElementVO.id == pageVO.id )
-//				{
-//					result = treeElementVO;
-//					break;
-//				}
-//			}
-//
-//			return result;
-//		}
-
-//		private function getPageVOByID( pageID : String ) : PageVO
-//		{
-//			var result : PageVO;
-//
-//			for each ( var pageVO : PageVO in pages )
-//			{
-//				if ( pageVO.id == pageID )
-//				{
-//					result = pageVO;
-//					break;
-//				}
-//			}
-//
-//			return result;
-//		}
-
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			sendNotification( ApplicationFacade.BODY_CREATED, body );
 		}
 	}
+}
+
+import net.vdombox.ide.modules.tree.view.components.TreeElement;
+
+class SortObject
+{
+	public var element : TreeElement;
+
+	public var xPosition : uint;
+
+	public var yPosition : uint;
+
+	public var parent : TreeElement;
+
+	public var children : Array;
 }
