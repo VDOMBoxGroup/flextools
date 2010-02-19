@@ -42,7 +42,14 @@ package net.vdombox.ide.core.controller
 			{
 				case PPMApplicationTargetNames.STRUCTURE:
 				{
-					applicationProxy.getStructure();
+					if ( operation == PPMOperationNames.READ )
+					{
+						applicationProxy.getStructure();
+					}
+					else if ( operation == PPMOperationNames.UPDATE )
+					{
+						applicationProxy.setStructure( body.structure );
+					}
 
 					break;
 				}
@@ -56,8 +63,6 @@ package net.vdombox.ide.core.controller
 
 				case PPMApplicationTargetNames.LIBRARY:
 				{
-
-
 					if ( operation == PPMOperationNames.CREATE )
 					{
 						var name : String = body.name;

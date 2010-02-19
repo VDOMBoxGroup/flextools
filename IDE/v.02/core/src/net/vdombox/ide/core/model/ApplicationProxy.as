@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy
@@ -106,6 +106,25 @@ package net.vdombox.ide.core.model
 
 			token.recipientName = proxyName;
 
+			return token;
+		}
+		
+		public function setStructure( strucrure : Array ) : AsyncToken
+		{
+			var token : AsyncToken;
+			
+			var structureXML : XML = <Structure />;
+			var structureObjectVO : StructureObjectVO;
+			
+			for each( structureObjectVO in strucrure )
+			{
+				structureXML.appendChild( structureObjectVO.toXML() );
+			}
+			
+			token = soap.set_application_structure( applicationVO.id, structureXML );
+			
+			token.recipientName = proxyName;
+			
 			return token;
 		}
 
@@ -220,6 +239,7 @@ package net.vdombox.ide.core.model
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.set_application_structure.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_application_info.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
@@ -232,6 +252,7 @@ package net.vdombox.ide.core.model
 			soap.get_top_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_application_structure.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_application_info.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -332,6 +353,13 @@ package net.vdombox.ide.core.model
 					break;
 				}
 
+				case "set_application_structure":
+				{
+					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED, { applicationVO: applicationVO } );
+					
+					break;
+				}
+					
 				case "get_server_actions":
 				{
 					var serverActions : Array = [];
