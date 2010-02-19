@@ -16,5 +16,10 @@ package net.vdombox.ide.common.vo
 		{
 			return _id;
 		}
+		
+		public function toXML() : XML
+		{
+			return <Object ID={_id} Index={index} />
+		}
 	}
 }
