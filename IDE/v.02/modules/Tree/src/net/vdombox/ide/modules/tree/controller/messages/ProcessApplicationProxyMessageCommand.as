@@ -32,7 +32,10 @@ package net.vdombox.ide.modules.tree.controller.messages
 			{
 				case PPMApplicationTargetNames.STRUCTURE:
 				{
-					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, body.structure );
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, body.structure );
+					else if ( operation == PPMOperationNames.UPDATE )
+						sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED, body.structure );
 					
 					break;
 				}

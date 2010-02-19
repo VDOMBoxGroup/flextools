@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.tree.view
 {
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
@@ -10,10 +10,13 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.effects.Move;
+	import spark.effects.easing.EaseInOutBase;
 
 	public class BodyMediator extends Mediator implements IMediator
 	{
@@ -62,8 +65,7 @@ package net.vdombox.ide.modules.tree.view
 
 				body.treeElementsContainer.addElement( treeElement );
 
-				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement,
-									  treeElementVO: treeElementVO } );
+				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, { viewComponent: treeElement, treeElementVO: treeElementVO } );
 			}
 
 			for each ( treeElement in oldElements )
@@ -169,86 +171,111 @@ package net.vdombox.ide.modules.tree.view
 			var specialObject : Object = extractLinkagelessElements( elements, linkages );
 
 			var depthArray : Array = [];
-			var currentDepthArray : Array = [];
-			var nextDepthArray : Array;
-
-			var children : Array
-
 			var currentDepth : uint = 0;
 
+			var currentDepthArray : Array;
+
 			var sortObject : SortObject;
-			var xPosition : uint;
-			var parent : SortObject;
 
-			if ( specialObject.parentless.length > 0 )
-				depthArray[ 0 ] = specialObject.parentless;
-			else
-				depthArray[ 0 ] = [ { element: elements[ 0 ], xPosition: 0 } ];
-
-			currentDepthArray = depthArray[ currentDepth ];
-
-			for each ( sortObject in depthArray[ 0 ] )
+			if ( specialObject.parentless.length == 0 )
 			{
-				placeChildren( sortObject, currentDepth, depthArray, elements, linkages );
-
-				
-				
-//				while (  )
-//				{
-//					children = extractChildren( sortObject.element, elements, linkages );
-//					sortObject.children = children;
-//					
-////					nextDepthArray = nextDepthArray.concat( children );
-//					
-//					if ( children.length > 0 )
-//					{
-//						if ( depthArray[ currentDepth + 1 ] )
-//							depthArray[ currentDepth + 1 ] = depthArray[ currentDepth + 1 ].concat( children );
-//						else
-//							depthArray[ currentDepth + 1 ] = children;
-//						
-//						currentDepth++;
-//						zzzArrays = children;
-//					}
-//				}
+				sortObject = new SortObject();
+				sortObject.element = elements[ 0 ];
+				currentDepthArray = [ sortObject ];
+			}
+			else
+			{
+				currentDepthArray = specialObject.parentless;
 			}
 
-			while ( currentDepthArray && currentDepthArray.length > 0 )
+			depthArray[ currentDepth ] = currentDepthArray;
+
+			for each ( sortObject in currentDepthArray )
 			{
-				nextDepthArray = [];
-
-				for each ( sortObject in currentDepthArray )
-				{
-					children = extractChildren( sortObject.element, elements, linkages );
-					nextDepthArray = nextDepthArray.concat( children );
-				}
-
-				if ( nextDepthArray.length > 0 )
-				{
-					if ( depthArray[ currentDepth + 1 ] )
-						depthArray[ currentDepth + 1 ] = depthArray[ currentDepth + 1 ].concat( nextDepthArray );
-					else
-						depthArray[ currentDepth + 1 ] = nextDepthArray;
-
-					currentDepth++;
-					currentDepthArray = depthArray[ currentDepth ];
-				}
-				else
-				{
-					currentDepthArray = null;
-				}
+				placeChildren( sortObject, currentDepth + 1, depthArray, elements, linkages );
 			}
 
 			if ( specialObject.linkageless.length > 0 )
 				depthArray[ depthArray.length ] = specialObject.linkageless;
+
+
+			var xPosition : uint;
+			var yPosition : uint;
+
+			var i : uint;
+			var j : uint;
+
+			for ( i = 0; i < depthArray.length; i++ )
+			{
+				currentDepthArray = depthArray[ i ];
+				currentDepth = i;
+
+				xPosition = 0;
+
+				for ( j = 0; j < currentDepthArray.length; j++ )
+				{
+					sortObject = currentDepthArray[ j ];
+
+					if ( sortObject.parent && sortObject.parent.xPosition > xPosition )
+					{
+						sortObject.xPosition = sortObject.parent.xPosition;
+						xPosition += sortObject.parent.xPosition - xPosition;
+					}
+
+					sortObject.xPosition = xPosition;
+					sortObject.yPosition = i;
+
+					xPosition += sortObject.children.length > 0 ? sortObject.children.length : 1;
+				}
+			}
+
+			var move : Move;
+			
+			for ( i = 0; i < depthArray.length; i++ )
+			{
+				currentDepthArray = depthArray[ i ];
+				currentDepth = i;
+
+				for ( j = 0; j < currentDepthArray.length; j++ )
+				{
+					sortObject = currentDepthArray[ j ];
+					
+					move = new Move( sortObject.element )
+					
+					move.duration = 1200;
+					move.easer = new EaseInOutBase();
+					
+					move.xFrom = sortObject.element.x;
+					move.xTo = sortObject.xPosition * 220;
+					
+					move.yFrom = sortObject.element.y;
+					move.yTo = sortObject.yPosition * 140;
+					
+					move.stop();
+					move.play();
+				}
+			}
 		}
 
-		private function placeChildren( sortObject : SortObject, currentDepth : uint, depthArray : Array,
-										elements : Array, linkages : Array ) : void
+		private function placeChildren( sortObject : SortObject, currentDepth : uint, depthArray : Array, elements : Array, linkages : Array ) : void
 		{
+			var children : Array = extractChildren( sortObject.element, elements, linkages );
+			var childSortObject : SortObject;
 
-			
-			
+			if ( children.length == 0 )
+				return;
+
+			if ( !depthArray[ currentDepth ] )
+				depthArray[ currentDepth ] = [];
+
+			depthArray[ currentDepth ] = depthArray[ currentDepth ].concat( children );
+			sortObject.children = children;
+
+			for each ( childSortObject in children )
+			{
+				childSortObject.parent = sortObject;
+				placeChildren( childSortObject, currentDepth + 1, depthArray, elements, linkages );
+			}
 		}
 
 		private function extractChildren( sourceElement : TreeElement, elements : Array, linkages : Array ) : Array
@@ -277,7 +304,6 @@ package net.vdombox.ide.modules.tree.view
 
 						break;
 					}
-
 				}
 			}
 
@@ -312,7 +338,6 @@ package net.vdombox.ide.modules.tree.view
 					else if ( linkage.linkageVO.source == treeElement.treeElementVO )
 					{
 						isSource = true;
-						break;
 					}
 				}
 
@@ -325,10 +350,18 @@ package net.vdombox.ide.modules.tree.view
 						linkageless.push( sortObject );
 					else
 						parentless.push( sortObject );
-
-					elements.splice( i, 1 );
-					i--;
 				}
+			}
+
+			var affectedElements : Array = linkageless.concat( parentless );
+			var index : int;
+
+			for each ( sortObject in affectedElements )
+			{
+				index = elements.indexOf( sortObject.element );
+
+				if ( index != -1 )
+					elements.splice( index, 1 );
 			}
 
 			return { parentless: parentless, linkageless: linkageless };
@@ -395,7 +428,7 @@ class SortObject
 
 	public var yPosition : uint;
 
-	public var parent : TreeElement;
+	public var parent : SortObject;
 
-	public var children : Array;
+	public var children : Array = [];
 }

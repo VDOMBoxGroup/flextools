@@ -69,6 +69,8 @@ package net.vdombox.ide.modules.tree.view
 			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
 
 			interests.push( ApplicationFacade.GET_APPLICATION_STRUCTURE );
+			interests.push( ApplicationFacade.SET_APPLICATION_STRUCTURE );
+			
 			interests.push( ApplicationFacade.GET_PAGES );
 
 			interests.push( ApplicationFacade.GET_TYPE );
@@ -217,6 +219,15 @@ package net.vdombox.ide.modules.tree.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.SET_APPLICATION_STRUCTURE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.STRUCTURE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 

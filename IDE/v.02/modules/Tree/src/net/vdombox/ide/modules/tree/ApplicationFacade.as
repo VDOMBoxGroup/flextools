@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.tree.controller.GetTreeLevelsCommand;
+	import net.vdombox.ide.modules.tree.controller.SaveRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.SelectedApplicationGettedCommand;
 	import net.vdombox.ide.modules.tree.controller.SelectedPageGettedCommand;
 	import net.vdombox.ide.modules.tree.controller.StartupCommand;
@@ -106,6 +107,9 @@ package net.vdombox.ide.modules.tree
 		public static const GET_APPLICATION_STRUCTURE : String = "getApplicationStructure";
 		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
 
+		public static const SET_APPLICATION_STRUCTURE : String = "setApplicationStructure";
+		public static const APPLICATION_STRUCTURE_SETTED : String = "applicationStructureSetted";
+		
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED : String = "pagesGetted";
 
@@ -223,6 +227,8 @@ package net.vdombox.ide.modules.tree
 
 			registerCommand( CREATE_PAGE_REQUEST, CreatePageRequestCommand );
 			registerCommand( DELETE_PAGE_REQUEST, DeletePageRequestCommand );
+			
+			registerCommand( SAVE_REQUEST, SaveRequestCommand );
 			
 			registerCommand( PAGE_CREATED, PageCreatedCommand );
 			registerCommand( PAGE_DELETED, PageDeletedCommand );

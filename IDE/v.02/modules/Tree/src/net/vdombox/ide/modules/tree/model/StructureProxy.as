@@ -126,6 +126,56 @@ package net.vdombox.ide.modules.tree.model
 			commitProperties();
 		}
 
+		public function getRawSructure() : Array
+		{
+			var treeElementVO : TreeElementVO;
+			var linkageVO : LinkageVO;
+			
+			var structureObjectVO : StructureObjectVO;
+			var levelObjectVO : LevelObjectVO;
+			
+			var levels : Array;
+			var index : uint;
+		
+			var rawStructure : Array = [];
+			var tempLinkage : Array = _linkages.slice();
+			
+			for each( treeElementVO in treeElements )
+			{
+				structureObjectVO = new StructureObjectVO( treeElementVO.id );
+				structureObjectVO.top = treeElementVO.top;
+				structureObjectVO.left = treeElementVO.left;
+				structureObjectVO.resourceID = treeElementVO.resourceID;
+				structureObjectVO.state = treeElementVO.state;
+				
+				levels = [];
+				index = 0;
+				
+				for ( var i : uint = 0; i < tempLinkage.length; i++ )
+				{
+					linkageVO = tempLinkage[ i ];
+					
+					if( linkageVO.source == treeElementVO )
+					{
+						levelObjectVO = new LevelObjectVO( linkageVO.target.id );
+						levelObjectVO.level = linkageVO.level.level;
+						levelObjectVO.index = index;
+						index++;
+						
+						levels.push( levelObjectVO );
+						
+						tempLinkage.splice( i, 1 );
+						i--;
+					}
+				}
+				
+				structureObjectVO.levels = levels;
+				rawStructure.push( structureObjectVO );
+			}
+			
+			return rawStructure;
+		}
+		
 		public function getTreeElementByVO( pageVO : PageVO ) : TreeElementVO
 		{
 			return treeElementsObject[ pageVO.id ];
