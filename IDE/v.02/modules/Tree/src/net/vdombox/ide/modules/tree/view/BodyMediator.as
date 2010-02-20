@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.tree.view
 {
+	import flash.events.MouseEvent;
+	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
@@ -7,6 +9,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
+	import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
@@ -15,6 +18,7 @@ package net.vdombox.ide.modules.tree.view
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
+	import spark.components.Group;
 	import spark.effects.Move;
 	import spark.effects.easing.EaseInOutBase;
 
@@ -34,6 +38,10 @@ package net.vdombox.ide.modules.tree.view
 		public var linkagesObject : Object;
 
 		public var selectedTreeElement : TreeElementVO;
+
+		public var shadowLinkageVO : LinkageVO;
+
+		public var selectedTreeLevelVO : TreeLevelVO;
 
 		public function get body() : Body
 		{
@@ -138,6 +146,8 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.PAGE_DELETED );
 			interests.push( ApplicationFacade.AUTO_SPACING_REQUEST );
+			interests.push( ApplicationFacade.CREATE_LINKAGE_REQUEST );
+			interests.push( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGED );
 
 			return interests;
 		}
@@ -155,12 +165,58 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
+				case ApplicationFacade.SELECTED_TREE_LEVEL_CHANGED:
+				{
+					selectedTreeLevelVO = messageBody as TreeLevelVO;
+					break;
+				}
+
 				case ApplicationFacade.AUTO_SPACING_REQUEST:
 				{
 					sortElements();
 					break;
 				}
+
+				case ApplicationFacade.CREATE_LINKAGE_REQUEST:
+				{
+					var linkage : Linkage = new Linkage();
+
+					shadowLinkageVO = new LinkageVO();
+
+					var sourceTreeElementVO : TreeElementVO = messageBody as TreeElementVO;
+					var targetTreeElementVO : TreeElementVO = new TreeElementVO( sourceTreeElementVO.pageVO );
+
+					shadowLinkageVO.source = sourceTreeElementVO;
+					shadowLinkageVO.target = targetTreeElementVO;
+					shadowLinkageVO.level = selectedTreeLevelVO;
+
+					linkage.linkageVO = shadowLinkageVO;
+
+					body.linkagesContainer.addElement( linkage );
+					body.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler )
+
+					break;
+				}
 			}
+		}
+
+		private function mouseMoveHandler( event : MouseEvent ) : void
+		{
+			var viewport : Group = body.scroller.viewport as Group;
+			
+			if( viewport.contentMouseX < viewport.contentWidth - 10 )
+				shadowLinkageVO.target.left = viewport.contentMouseX;
+			else
+				shadowLinkageVO.target.left = viewport.contentWidth - 10;
+			
+			shadowLinkageVO.target.top = body.linkagesContainer.mouseY;
+			
+			if( viewport.mouseX > viewport.width - 100 && viewport.horizontalScrollPosition < body.scroller.horizontalScrollBar.maximum )
+				viewport.horizontalScrollPosition += 5;
+			if( viewport.mouseX < viewport.horizontalScrollPosition + 100 && viewport.horizontalScrollPosition > 0 )
+				viewport.horizontalScrollPosition -= 5;
+			
+			
 		}
 
 		public function sortElements() : void
@@ -230,7 +286,7 @@ package net.vdombox.ide.modules.tree.view
 			}
 
 			var move : Move;
-			
+
 			for ( i = 0; i < depthArray.length; i++ )
 			{
 				currentDepthArray = depthArray[ i ];
@@ -239,18 +295,18 @@ package net.vdombox.ide.modules.tree.view
 				for ( j = 0; j < currentDepthArray.length; j++ )
 				{
 					sortObject = currentDepthArray[ j ];
-					
+
 					move = new Move( sortObject.element )
-					
+
 					move.duration = 1200;
 					move.easer = new EaseInOutBase();
-					
+
 					move.xFrom = sortObject.element.x;
 					move.xTo = sortObject.xPosition * 220;
-					
+
 					move.yFrom = sortObject.element.y;
 					move.yTo = sortObject.yPosition * 140;
-					
+
 					move.stop();
 					move.play();
 				}

@@ -166,7 +166,7 @@ package net.vdombox.ide.modules.tree.view
 		
 		private function createLinkageRequestHandler( event : TreeElementEvent ) : void
 		{
-			
+			sendNotification( ApplicationFacade.CREATE_LINKAGE_REQUEST, treeElementVO );
 		}
 	}
 }

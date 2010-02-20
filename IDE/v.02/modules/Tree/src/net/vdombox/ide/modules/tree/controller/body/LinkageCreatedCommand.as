@@ -15,8 +15,13 @@ package net.vdombox.ide.modules.tree.controller.body
 
 			var viewComponent : Linkage = body.viewComponent as Linkage;
 			var linkageVO : LinkageVO = body.linkageVO as LinkageVO;
+			
+			facade.registerMediator( new LinkageMediator( viewComponent ) );
+			
+			viewComponent.linkageVO = linkageVO;
+			
 
-			facade.registerMediator( new LinkageMediator( viewComponent, linkageVO ) );
+			
 		}
 	}
 }

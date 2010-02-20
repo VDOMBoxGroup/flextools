@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableComponent xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
-					  xmlns:mx="library://ns.adobe.com/flex/halo" 
+					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  
-					  height="125" width="200" x="@{ _treeElementVO.left }"
-					  y="@{ _treeElementVO.top }"
+					  height="125" width="200" x="@{ _treeElementVO.left }" y="@{ _treeElementVO.top }"
 					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin">
 
 	<fx:Script>
@@ -12,12 +11,12 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
-			
+
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-			
+
 			import spark.components.Group;
 
 			[SkinPart( required="true" )]
@@ -122,19 +121,16 @@
 			{
 				return _treeElementVO;
 			}
-			
+
 			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;
 
-				widthWatcher = BindingUtils.bindProperty( _treeElementVO, "width", this, "width", false,
-														  true );
-				
-				heightWatcher = BindingUtils.bindProperty( _treeElementVO, "height", this, "height",
-														   false, true );
-				
-				stateWatcher = BindingUtils.bindSetter( statePropertyChanged, _treeElementVO, "state",
-														false, true );
+				widthWatcher = BindingUtils.bindProperty( _treeElementVO, "width", this, "width", false, true );
+
+				heightWatcher = BindingUtils.bindProperty( _treeElementVO, "height", this, "height", false, true );
+
+				stateWatcher = BindingUtils.bindSetter( statePropertyChanged, _treeElementVO, "state", false, true );
 			}
 
 			public function set selected( value : Boolean ) : void
@@ -188,36 +184,31 @@
 				{
 					case "header":
 					{
-						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false,
-												 0, true );
+						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
 						break;
 					}
 
 					case "minimizeButton":
 					{
-						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler,
-														 true, 0, true );
+						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler, true, 0, true );
 						break;
 					}
 
 					case "createLineButton":
 					{
-						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler,
-														   false, 0, true );
+						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler, false, 0, true );
 						break;
 					}
 
 					case "deleteButton":
 					{
-						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false,
-													   0, true );
+						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
 						break;
 					}
 
 					case "setStartPageButton":
 					{
-						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler,
-															 false, 0, true );
+						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler, false, 0, true );
 						break;
 					}
 				}
@@ -273,7 +264,7 @@
 
 			private function createLineButton_clickHandler( event : MouseEvent ) : void
 			{
-
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
 			}
 
 			private function deleteButton_clickHandler( event : MouseEvent ) : void

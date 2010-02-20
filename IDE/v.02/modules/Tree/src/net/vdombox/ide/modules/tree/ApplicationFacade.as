@@ -139,6 +139,7 @@ package net.vdombox.ide.modules.tree
 		
 		public static const CREATE_PAGE_REQUEST : String = "createPageRequest";
 		public static const DELETE_PAGE_REQUEST : String = "deletePageRequest";
+		public static const CREATE_LINKAGE_REQUEST : String = "createLinkageRequest";
 
 		public static const OPEN_CREATE_PAGE_WINDOW_REQUEST : String = "openCreatePageWindowRequest";
 		public static const AUTO_SPACING_REQUEST : String = "autoSpacingRequest";

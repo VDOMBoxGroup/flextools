@@ -22,33 +22,14 @@ package net.vdombox.ide.modules.tree.view
 
 		private static var count : uint = 0;
 
-		public function LinkageMediator( viewComponent : Linkage, linkageVO : LinkageVO )
+		public function LinkageMediator( viewComponent : Linkage )
 		{
 			super( NAME + ApplicationFacade.DELIMITER + count, viewComponent );
 
-			_linkageVO = linkageVO;
-			
 			count++;
 		}
 
-		private const RTL : Number = 0;
-
-		private const LTR : Number = 1;
-
-		private const UTD : Number = 0;
-
-		private const DTU : Number = 1;
-
-
 		private var _linkageVO : LinkageVO;
-
-		private var directionalX : uint;
-
-		private var directionalY : uint;
-
-		private var isActive : Boolean;
-
-		private var activeChanged : Boolean;
 
 		public function get linkage() : Linkage
 		{
@@ -57,268 +38,15 @@ package net.vdombox.ide.modules.tree.view
 
 		public function get linkageVO() : LinkageVO
 		{
-			return _linkageVO;
+			return linkage.linkageVO;
 		}
 
 		override public function onRegister() : void
 		{
-			linkage.linkageVO = _linkageVO;
-			
-			BindingUtils.bindSetter( sourceTargetChange, _linkageVO, "source" );
-			BindingUtils.bindSetter( sourceTargetChange, _linkageVO, "target" );
-
-			BindingUtils.bindSetter( visibleChange, _linkageVO.level, "visible" );
-
-			calculatePositionAndSize();
-			drawArrow();
 		}
 
 		override public function onRemove() : void
 		{
-
-		}
-
-		private function commitProperties() : void
-		{
-			if ( activeChanged )
-			{
-				activeChanged = false;
-
-				if ( isActive )
-				{
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "left" );
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "top" );
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "width" );
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.source, "height" );
-
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "left" );
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "top" );
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "width" );
-					BindingUtils.bindSetter( objectsChanged, _linkageVO.target, "height" );
-				}
-			}
-		}
-
-		private function calculatePositionAndSize() : void
-		{
-			var sourceObject : TreeElementVO = linkageVO.source;
-			var targetObject : TreeElementVO = linkageVO.target;
-
-			var pFromObj : Point;
-			var pToObj : Point;
-
-			var fromObjHalfWidth : Number = 0;
-			var fromObjHalfHeight : Number = 0;
-
-			var toObjHalfWidth : Number = 0;
-			var toObjHalfHeight : Number = 0;
-
-			var fromObjVertCross : Boolean = false;
-			var toObjVertCross : Boolean = false;
-
-			fromObjHalfWidth = sourceObject.width / 2;
-			fromObjHalfHeight = sourceObject.height / 2;
-
-			toObjHalfWidth = targetObject.width / 2;
-			toObjHalfHeight = targetObject.height / 2;
-
-			pFromObj = new Point( sourceObject.left + fromObjHalfWidth, sourceObject.top + fromObjHalfHeight );
-			pToObj = new Point( targetObject.left + toObjHalfWidth, targetObject.top + toObjHalfHeight );
-
-			var arrowWidth : Number = Math.abs( pToObj.x - pFromObj.x );
-			var arrowHeight : Number = Math.abs( pToObj.y - pFromObj.y );
-
-			var arrowRatio : Number = arrowWidth / arrowHeight;
-			var sourceObjectRatio : Number = fromObjHalfWidth / fromObjHalfHeight;
-			var targetObjectRatio : Number = toObjHalfWidth / toObjHalfHeight;
-
-			/**
-			 * If objects overlay each other then return from function
-			 */
-			if ( arrowWidth <= fromObjHalfWidth + toObjHalfWidth && arrowHeight <= fromObjHalfHeight + toObjHalfHeight )
-			{
-				linkage.width = 0;
-				linkage.height = 0;
-				return;
-			}
-
-			var dX : Number = 0;
-			var dY : Number = 0;
-
-			/**
-			 * If arrowRatio > sourceObjectRatio then linkage crosses vertical border of fromObject else - horisontal
-			 */
-			if ( arrowRatio > sourceObjectRatio )
-				fromObjVertCross = true;
-
-			/**
-			 * Calculates delta X and delta Y for linkage start point
-			 */
-			if ( fromObjVertCross )
-			{
-				dX = fromObjHalfWidth;
-				dY = dX / arrowRatio;
-			}
-			else
-			{
-				dY = fromObjHalfHeight;
-				dX = dY * arrowRatio;
-			}
-
-			if ( pFromObj.x < pToObj.x )
-				pFromObj.x += dX;
-			else
-				pFromObj.x -= dX;
-
-
-			if ( pFromObj.y < pToObj.y )
-				pFromObj.y += dY;
-			else
-				pFromObj.y -= dY;
-
-
-			if ( arrowRatio > targetObjectRatio )
-				toObjVertCross = true;
-			/**
-			 * Calculates delta X and delta Y for linkage end point
-			 */
-			if ( toObjVertCross )
-			{
-				dX = toObjHalfWidth;
-				dY = dX / arrowRatio;
-			}
-			else
-			{
-				dY = toObjHalfHeight;
-				dX = dY * arrowRatio;
-			}
-
-			if ( pFromObj.x < pToObj.x )
-				pToObj.x -= dX;
-			else
-				pToObj.x += dX;
-
-
-			if ( pFromObj.y < pToObj.y )
-				pToObj.y -= dY;
-			else
-				pToObj.y += dY;
-
-			if ( pFromObj.x <= pToObj.x )
-			{
-				linkage.x = pFromObj.x;
-				linkage.width = pToObj.x - pFromObj.x;
-				directionalX = LTR;
-			}
-			else
-			{
-				linkage.x = pToObj.x;
-				linkage.width = pFromObj.x - pToObj.x;
-				directionalX = RTL;
-			}
-
-			if ( pFromObj.y <= pToObj.y )
-			{
-				linkage.y = pFromObj.y;
-				linkage.height = pToObj.y - pFromObj.y;
-				directionalY = UTD;
-			}
-			else
-			{
-				linkage.y = pToObj.y;
-				linkage.height = pFromObj.y - pToObj.y;
-				directionalY = DTU;
-			}
-		}
-
-		private function drawArrow() : void
-		{
-			var alphaAngle : Number;
-			var arrowHeadAngle : Number = 0.2;
-			var arrowHeadLength : Number = 10;
-
-			var startPoint : Point = new Point();
-			var endPoint : Point = new Point();
-
-			var graphics : Graphics = linkage.graphics;
-
-			if ( directionalX == LTR )
-				endPoint.x = linkage.width;
-			else
-				startPoint.x = linkage.width;
-
-			if ( directionalY == UTD )
-				endPoint.y = linkage.height;
-			else
-				startPoint.y = linkage.height;
-
-			if ( Math.abs( Point.distance( startPoint, endPoint ) ) <= arrowHeadLength )
-				return;
-
-			var dX : Number;
-			var dY : Number;
-
-			var _numColor : Number = linkageVO.level.color;
-
-			dX = startPoint.x - endPoint.x;
-			dY = startPoint.y - endPoint.y;
-
-			alphaAngle = Math.atan( dY / dX );
-
-			if ( dX < 0 )
-				alphaAngle += Math.PI;
-
-			graphics.lineStyle( 3, _numColor, 1, true, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.BEVEL );
-
-			graphics.moveTo( startPoint.x, startPoint.y );
-			graphics.lineTo( endPoint.x, endPoint.y );
-
-			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength,
-													endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
-
-			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength,
-													endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
-
-			graphics.lineTo( endPoint.x, endPoint.y );
-		}
-
-		private function sourceTargetChange( source : Object ) : void
-		{
-			if ( _linkageVO.source && _linkageVO.target && !isActive )
-				isActive = true;
-			else if ( ( !_linkageVO.source || !_linkageVO.target ) && !isActive )
-				isActive = false;
-			else
-				return;
-
-			activeChanged = true;
-			commitProperties();
-		}
-
-		private function objectsChanged( source : Object ) : void
-		{
-			if ( linkage.visible )
-			{
-				linkage.graphics.clear();
-				calculatePositionAndSize();
-				drawArrow();
-			}
-		}
-
-		private function visibleChange( source : Object ) : void
-		{	
-			if( _linkageVO.level.visible )
-			{
-				linkage.graphics.clear();
-				calculatePositionAndSize();
-				drawArrow();
-			}
-			else
-			{
-				linkage.graphics.clear();
-			}
-			
-			linkage.visible = _linkageVO.level.visible;
 		}
 	}
 }
