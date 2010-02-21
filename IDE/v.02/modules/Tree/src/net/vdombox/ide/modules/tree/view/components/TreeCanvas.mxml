@@ -10,12 +10,16 @@
 			import net.vdombox.ide.modules.tree.view.skins.TreeCanvasSkin;
 			
 			import spark.components.Group;
+			import spark.components.Scroller;
 			
 			[SkinPart( required="true" )]
 			public var treeElementsContainer : Group;
 			
 			[SkinPart( required="true" )]
 			public var linkagesContainer : Group;
+			
+			[SkinPart( required="true" )]
+			public var scroller : Scroller;
 		]]>
 	</fx:Script>
 	

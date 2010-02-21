@@ -148,6 +148,8 @@ package net.vdombox.ide.modules.tree
 		public static const SAVE_REQUEST : String = "saveRequest";
 		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
+		
+		public static const CREATE_LINKAGE : String = "createLinkage";
 		public static const LINKAGE_CREATED : String = "linkageCreated";
 		
 		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";

@@ -37,8 +37,6 @@ package net.vdombox.ide.modules.tree.view
 			return viewComponent as Body;
 		}
 
-		
-
 		override public function onRegister() : void
 		{
 			addHandlers();
@@ -52,8 +50,6 @@ package net.vdombox.ide.modules.tree.view
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-
-			
 
 			return interests;
 		}

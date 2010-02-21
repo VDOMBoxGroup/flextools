@@ -7,7 +7,15 @@
 		[HostComponent("net.vdombox.ide.modules.tree.view.components.TreeCanvas")]
 	</fx:Metadata>
 
-	<s:Scroller height="100%" width="100%">
+	<s:states>
+
+		<s:State name="normal" />
+
+		<s:State name="disabled" />
+	</s:states>
+
+	<s:Scroller id="scroller"
+				height="100%" width="100%">
 
 		<s:Group id="contentGroup">
 
