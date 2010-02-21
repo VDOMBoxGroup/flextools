@@ -11,18 +11,7 @@
 		<s:HorizontalLayout />
 	</s:layout>
 
-	<s:Scroller id="scroller"
-				height="100%" width="100%">
-
-		<s:Group>
-
-			<s:Group id="linkagesContainer"
-					 x="10" y="20" />
-
-			<s:Group id="treeElementsContainer"
-					 x="10" y="20" />
-		</s:Group>
-	</s:Scroller>
+	<components:TreeCanvas id="treeCanvas" height="100%" width="100%" />
 
 	<s:Group height="100%">
 

@@ -17,7 +17,7 @@ package net.vdombox.ide.modules.tree.view.components
 	{
 		public function Linkage()
 		{
-			watchers = [];
+			watchers = {};
 		}
 
 		private const RTL : Number = 0;
@@ -87,8 +87,8 @@ package net.vdombox.ide.modules.tree.view.components
 
 			if ( _linkageVO )
 			{
-				BindingUtils.bindSetter( linkageVOChange, _linkageVO, "source" );
-				BindingUtils.bindSetter( linkageVOChange, _linkageVO, "target" );
+				BindingUtils.bindProperty( this, "source", _linkageVO, "source" );
+				BindingUtils.bindProperty( this, "target", _linkageVO, "target" );
 
 				BindingUtils.bindSetter( linkageVOChange, _linkageVO.level, "visible" );
 			}
