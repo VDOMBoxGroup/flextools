@@ -77,6 +77,14 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+					
+				case PPMPageTargetNames.WYSIWYG:
+				{
+					if( operation == PPMOperationNames.READ )
+						pageProxy.getWYSIWYG();
+					
+					break;
+				}
 			}
 		}
 	}

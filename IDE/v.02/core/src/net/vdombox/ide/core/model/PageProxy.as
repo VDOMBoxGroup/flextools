@@ -163,6 +163,15 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function getWYSIWYG() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.render_wysiwyg( pageVO.applicationVO.id, pageVO.id, "", 1 );
+
+			token.recipientName = proxyName;
+
+			return token;
+		}
 
 		public function createObject( objectID : String ) : ObjectVO
 		{
@@ -222,6 +231,7 @@ package net.vdombox.ide.core.model
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -230,7 +240,8 @@ package net.vdombox.ide.core.model
 			soap.get_child_objects.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -401,7 +412,8 @@ package net.vdombox.ide.core.model
 						pageAttributesVO = new PageAttributesVO( pageVO );
 						pageAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
 
-						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, { pageVO : pageVO,  pageAttributesVO : pageAttributesVO } );
+						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED,
+															  { pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
 						notification.token = token;
 					}
 
@@ -413,7 +425,17 @@ package net.vdombox.ide.core.model
 					pageAttributesVO = new PageAttributesVO( pageVO );
 					pageAttributesVO.setXMLDescription( result.Object[ 0 ] );
 
-					notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, { pageVO : pageVO,  pageAttributesVO : pageAttributesVO } );
+					notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED,
+														  { pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
+					notification.token = token;
+
+					break;
+				}
+
+				case "render_wysiwyg":
+				{
+					var wysiwyg : XML = result.Result.container[ 0 ];
+					notification = new ProxyNotification( ApplicationFacade.PAGE_WYSIWYG_SETTED, { pageVO: pageVO, wysiwyg: wysiwyg } );
 					notification.token = token;
 
 					break;
