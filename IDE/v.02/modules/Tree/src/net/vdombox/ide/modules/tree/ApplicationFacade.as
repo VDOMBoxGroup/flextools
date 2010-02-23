@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.tree
 {
 	import net.vdombox.ide.modules.Tree;
+	import net.vdombox.ide.modules.tree.controller.CreateLinkageCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.tree.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.tree.controller.GetSettingsCommand;
@@ -213,6 +214,7 @@ package net.vdombox.ide.modules.tree
 			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
+			registerCommand( CREATE_LINKAGE, CreateLinkageCommand );
 			registerCommand( LINKAGE_CREATED, LinkageCreatedCommand );
 
 			registerCommand( BODY_CREATED, BodyCreatedCommand );

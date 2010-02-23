@@ -61,6 +61,13 @@ package net.vdombox.ide.modules.tree.model
 			return _linkages;
 		}
 
+		public function addLinkage( value : LinkageVO ) : void
+		{
+			_linkages.push( value );
+			
+			sendNotification( ApplicationFacade.LINKAGES_CHANGED, linkages );
+		}
+		
 		override public function onRegister() : void
 		{
 			treeElementsObject = {};
