@@ -66,7 +66,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.PAGES_GETTED:
 				{	
-					showPages( notification.getBody().pages );
+					showPages( notification.getBody() as Array );
 
 					break;
 				}
@@ -99,13 +99,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function initialize() : void
 		{
-			addEventListeners();
+			addHandlers();
 
 			objectsTree.labelField = "@name";
 			objectsTree.showRoot = true;
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
 		}
@@ -137,7 +137,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if( item.name() == "page" )
 			{
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
-				sendNotification( ApplicationFacade.PAGE_SELECTED, _pages[ id ] );
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
 			}
 			else if ( item.name() == "object" )
 			{

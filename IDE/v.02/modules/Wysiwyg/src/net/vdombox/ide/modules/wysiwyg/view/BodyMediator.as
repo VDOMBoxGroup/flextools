@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	{
 		public static const NAME : String = "BodyMediator";
 
-		public function BodyMediator( viewComponent : Object = null )
+		public function BodyMediator( viewComponent : Body )
 		{
 			super( NAME, viewComponent );
 		}
@@ -30,9 +30,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
-			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+			addHandlers();
 		}
 
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		}
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
@@ -65,9 +70,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+		}
+		
+		private function removeHandlers() : void
+		{
+			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
 		private function commitProperties() : void
@@ -77,17 +87,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			addEventListeners();
-
-			created = true;
-			
-			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
-
-			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
-			
-			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );
-
-			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+			sendNotification( ApplicationFacade.BODY_CREATED, body );
 		}
 	}
 }

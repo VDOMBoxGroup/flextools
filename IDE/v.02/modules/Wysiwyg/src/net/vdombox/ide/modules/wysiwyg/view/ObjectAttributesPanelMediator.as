@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			addHandlers();
 		}
 		
 		override public function listNotificationInterests() : Array
@@ -100,7 +100,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 		}
 		
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			
 		}

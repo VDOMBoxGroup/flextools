@@ -73,6 +73,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
 			interests.push( ApplicationFacade.GET_OBJECT_ATTRIBUTES );
+			
+			interests.push( ApplicationFacade.GET_PAGE_WYSIWYG );
 
 			return interests;
 		}
@@ -248,6 +250,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					break;
 				}
+					
+				case ApplicationFacade.GET_PAGE_WYSIWYG:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.WYSIWYG, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}	
 			}
 
 			super.handleNotification( notification );
@@ -377,168 +388,45 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			switch ( place )
 			{
-				case PPMPlaceNames.SERVER:
-				{
-					processServerProxyMessage( message );
-					break;
-				}
-
 				case PPMPlaceNames.APPLICATION:
 				{
-					processApplicationProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					
 					break;
 				}
 				
 				case PPMPlaceNames.PAGE:
 				{
-					processPageProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
+					
 					break;
 				}
 					
 				case PPMPlaceNames.OBJECT:
 				{
-					processObjectProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
+					
 					break;
 				}
 					
 				case PPMPlaceNames.RESOURCES:
 				{
-					processResourcesProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_RESOURCES_PROXY_MESSAGE, message );
+					
 					break;
 				}
 					
 				case PPMPlaceNames.TYPES:
 				{
-					processTypesProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					
 					break;
 				}
 					
 				case PPMPlaceNames.STATES:
 				{
-					processStatesProxyMessage( message );
-					break;
-				}
-			}
-		}
-
-		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMStatesTargetNames.SELECTED_APPLICATION:
-				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
-				}
-			}
-		}
-		
-		private function processStatesProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMStatesTargetNames.SELECTED_APPLICATION:
-				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
-				}
-			}
-		}
-		
-		private function processApplicationProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMApplicationTargetNames.PAGES:
-				{
-					sendNotification( ApplicationFacade.PAGES_GETTED, message.getBody() );
+					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
 					
-					break;
-				}
-			}
-		}
-		
-		private function processPageProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMObjectTargetNames.ATTRIBUTES:
-				{
-					sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, message.getBody().attributes );
-					
-					break;
-				}
-					
-				case PPMPageTargetNames.STRUCTURE:
-				{
-					sendNotification( ApplicationFacade.PAGE_SRUCTURE_GETTED, message.getBody() );
-					
-					break;
-				}
-					
-				case PPMPageTargetNames.OBJECT:
-				{
-					sendNotification( ApplicationFacade.OBJECT_GETTED, message.getBody() );
-					
-					break;
-				}
-			}
-		}
-		
-		private function processObjectProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMObjectTargetNames.ATTRIBUTES:
-				{
-					sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, message.getBody() );
-					
-					break;
-				}
-			}
-		}
-		
-		private function processTypesProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMTypesTargetNames.TYPES:
-				{
-					sendNotification( ApplicationFacade.TYPES_GETTED, message.getBody() );
-					
-					break;
-				}
-					
-				case PPMTypesTargetNames.TYPE:
-				{
-					sendNotification( ApplicationFacade.TYPE_GETTED, message.getBody() );
-					
-					break;
-				}
-			}
-		}
-		
-		private function processResourcesProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			var operation : String = message.getOperation();
-
-			switch ( message.getTarget() )
-			{
-				case PPMResourcesTargetNames.RESOURCES:
-				{
-					if ( operation == PPMOperationNames.READ )
-					{
-						sendNotification( ApplicationFacade.TYPES_GETTED, message.getBody() );
-					}
-
-					break;
-				}
-
-				case PPMResourcesTargetNames.RESOURCE:
-				{
-					if ( operation == PPMOperationNames.READ )
-					{
-
-					}
-
 					break;
 				}
 			}

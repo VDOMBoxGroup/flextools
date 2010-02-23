@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:mx="library://ns.adobe.com/flex/halo">
+
+	<s:states>
+
+		<s:State name="normal" />
+
+		<s:State name="disabled" />
+	</s:states>
+
+	<s:Rect height="100%" width="100%">
+
+		<s:stroke>
+
+			<s:SolidColorStroke color="gray" />
+		</s:stroke>
+
+		<s:fill>
+
+			<s:SolidColor color="white" />
+		</s:fill>
+	</s:Rect>
+
+	<s:Scroller id="scroller"
+				focusEnabled="false"
+				bottom="0" left="0" right="0" top="0"
+				minViewportInset="1">
+
+		<s:DataGroup id="dataGroup" />
+	</s:Scroller>
+</s:SparkSkin>
