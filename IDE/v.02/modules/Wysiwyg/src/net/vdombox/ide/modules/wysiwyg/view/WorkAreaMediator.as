@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
@@ -8,9 +9,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.List;
-	import spark.skins.spark.ListSkin;
 
 	public class WorkAreaMediator extends Mediator implements IMediator
 	{
@@ -85,10 +83,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
+			workArea.addEventListener( ItemEvent.CREATED, item_createdHandler, true, 0, true );
+			workArea.addEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
+			workArea.removeEventListener( ItemEvent.CREATED, item_createdHandler, true );
 		}
 
 		private function commitProperties() : void
@@ -106,6 +107,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 				isSelectedObjectVOChanged = false;
 
 			}
+		}
+		
+		private function item_createdHandler( event : ItemEvent ) : void
+		{
+			if( event.target != workArea )
+				sendNotification( ApplicationFacade.ITEM_CREATED, event.target );
+		}
+		
+		private function item_getResourceHandler( event : ItemEvent ) : void 
+		{
+			var d : * = "";
 		}
 	}
 }

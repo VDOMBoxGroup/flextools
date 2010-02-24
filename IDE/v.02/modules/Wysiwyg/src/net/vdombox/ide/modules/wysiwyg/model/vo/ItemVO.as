@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		public var order : uint;
 		
 		public var attributes : Array = [];
-		public var content : XML;
+		public var content : XMLList;
 
 		public function getAttributeByName( name : String ) : AttributeVO
 		{
@@ -57,6 +57,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 
 			children = [];
 			attributes = [];
+			content = new XMLList();
 			
 			var childItemVO : ItemVO;
 			var attributeVO : AttributeVO;
@@ -84,7 +85,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 				}
 				else
 				{
-					content = child.copy();
+					content += child.copy();
 				}
 			}
 		}
