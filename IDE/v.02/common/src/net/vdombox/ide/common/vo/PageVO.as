@@ -3,9 +3,8 @@ package net.vdombox.ide.common.vo
 	[Bindable]
 	public class PageVO
 	{
-		public function PageVO( id : String, applicationVO : ApplicationVO, typeVO : TypeVO )
+		public function PageVO( applicationVO : ApplicationVO, typeVO : TypeVO )
 		{
-			_id = id;
 			_applicationVO = applicationVO;
 			_typeVO = typeVO;
 		}
@@ -38,6 +37,11 @@ package net.vdombox.ide.common.vo
 		public function set name( value : String ) : void
 		{
 			_name = value;
+		}
+		
+		public function setID( value : String ):void
+		{
+			_id = value;
 		}
 		
 		public function setXMLDescription( description : XML ) : void
