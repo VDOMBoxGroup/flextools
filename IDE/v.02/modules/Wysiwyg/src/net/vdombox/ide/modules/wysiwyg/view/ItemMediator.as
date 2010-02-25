@@ -1,11 +1,16 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import mx.core.UIComponent;
 	import mx.events.DragEvent;
-
+	
+	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
-
+	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -65,7 +70,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 //			item.addEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true, 0, true );
 			item.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
+			item.addEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
+			item.addEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 		}
+
+		
 
 		private function removeHandlers() : void
 		{
@@ -75,7 +84,44 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function dragEnterHandler( event : DragEvent ) : void
 		{
-			var d : * = "";
+			var typeDescription : Object = event.dragSource.dataForFormat( "typeDescription" );
+
+			if ( !typeDescription )
+				return;
+
+			var containersRE : RegExp = /(\w+)/g;
+			var aviableContainers : Array = typeDescription.aviableContainers.match( containersRE );
+
+			var currentItemName : String = ItemVO( item.data ).typeVO.name;
+
+			if ( aviableContainers.indexOf( currentItemName ) != -1 )
+			{
+				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
+				vdomDragManager.acceptDragDrop( UIComponent( item ) );
+				item.skin.currentState = "highlighted";
+			}
+		}
+		
+		private function dragDropHandler( event : DragEvent ) : void
+		{
+			item.skin.currentState = "normal";
+			
+			var typeVO : TypeVO = TypeItemRenderer( event.dragInitiator ).typeVO;
+			
+			var objectLeft : Number = item.mouseX - 25 + item.layout.horizontalScrollPosition;
+			var objectTop : Number = item.mouseY - 25 + item.layout.verticalScrollPosition;
+			
+			var attributes : Array = [];
+			
+			attributes.push( new AttributeVO( "left", objectLeft.toString() ) );
+			attributes.push( new AttributeVO( "top", objectTop.toString() ) );
+			
+			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { parentID : item.itemVO.id ,typeVO : typeVO, attributes : attributes } );
+		}
+		
+		private function dragExitHandler( event : DragEvent ) : void
+		{
+			item.skin.currentState = "normal";
 		}
 	}
 }

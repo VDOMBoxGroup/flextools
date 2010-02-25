@@ -21,7 +21,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			wysiwyg.addEventListener( Wysiwyg.TEAR_DOWN, tearDownHandler )
-			
 		}
 
 		private function get wysiwyg() : Wysiwyg

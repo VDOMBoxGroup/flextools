@@ -36,8 +36,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
 			
-			interests.push( ApplicationFacade.TYPE_GETTED );
-			
 			interests.push( ApplicationFacade.PAGE_SELECTED );
 			interests.push( ApplicationFacade.OBJECT_SELECTED );
 			
@@ -57,13 +55,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
 					objectAttributesPanel.attributesList.dataProvider = null;
-				}
-					
-				case ApplicationFacade.TYPE_GETTED:
-				{	
-					
-					
-					break;
 				}
 				
 				case ApplicationFacade.PAGE_SELECTED:

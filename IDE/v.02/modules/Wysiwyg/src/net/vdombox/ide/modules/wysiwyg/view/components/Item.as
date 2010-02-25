@@ -1,10 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-
+	
 	import flash.display.DisplayObjectContainer;
-	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
@@ -14,14 +13,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
-
+	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
+	import spark.components.Scroller;
 	import spark.components.SkinnableDataContainer;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
@@ -37,8 +37,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			setStyle( "skinClass", ItemSkin );
 
 
-			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, true );
-			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
+//			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, true );
+//			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
 			addEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler );
 
 		}
@@ -54,9 +54,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		[SkinPart( required="true" )]
 		public var background : Group;
+		
+		[SkinPart(required="true" )]
+		public var scroller: Scroller;
 
 		private var _data : Object;
-
+		private var _itemVO : ItemVO;
+		
 		public function get selected() : Boolean
 		{
 			return false;
@@ -84,6 +88,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 		}
 
+		public function get itemVO () : ItemVO
+		{
+			return _itemVO;
+		}
+		
+		public function set itemVO ( value : ItemVO ) : void
+		{
+			_itemVO = value;
+		}
+		
 		public function get data() : Object
 		{
 			return _data;
@@ -92,34 +106,36 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set data( value : Object ) : void
 		{
 			_data = value;
-			var itemVO : ItemVO = value as ItemVO;
+			_itemVO = value as ItemVO;
+			
+			
 
-			if ( !itemVO )
+			if ( !_itemVO )
 				return;
 
-			var attributeVO : AttributeVO = itemVO.getAttributeByName( "width" );
+			var attributeVO : AttributeVO = _itemVO.getAttributeByName( "width" );
 
 			if ( attributeVO )
 				width = int( attributeVO.value );
 
-			attributeVO = itemVO.getAttributeByName( "height" );
+			attributeVO = _itemVO.getAttributeByName( "height" );
 
 			if ( attributeVO )
 				height = int( attributeVO.value );
 
-			attributeVO = itemVO.getAttributeByName( "top" );
+			attributeVO = _itemVO.getAttributeByName( "top" );
 
 			if ( attributeVO )
 				y = int( attributeVO.value );
 
-			attributeVO = itemVO.getAttributeByName( "left" );
+			attributeVO = _itemVO.getAttributeByName( "left" );
 
 			if ( attributeVO )
 				x = int( attributeVO.value );
 
-			if ( itemVO && itemVO.children.length > 0 )
+			if ( _itemVO && _itemVO.children.length > 0 )
 			{
-				var childrenDataProvider : ArrayCollection = new ArrayCollection( itemVO.children );
+				var childrenDataProvider : ArrayCollection = new ArrayCollection( _itemVO.children );
 				childrenDataProvider.sort = new Sort();
 				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
 				childrenDataProvider.refresh();
@@ -129,7 +145,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			var contetntPart : XML;
 
-			for each ( contetntPart in itemVO.content )
+			for each ( contetntPart in _itemVO.content )
 			{
 				switch ( contetntPart.name().toString() )
 				{
@@ -182,7 +198,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var itemFactory : ClassFactory;
 
-			switch ( itemVO.type )
+			switch ( itemVO.name )
 			{
 				case "container":
 				{
@@ -249,20 +265,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					_style[ "textDecoration" ] = "none";
 		}
 
-		private function mouseOutHandler( event : MouseEvent ) : void
-		{
-			skin.currentState = "normal";
-		}
+//		private function mouseOutHandler( event : MouseEvent ) : void
+//		{
+//			skin.currentState = "normal";
+//		}
 
-		private function mouseOverHandler( event : MouseEvent ) : void
-		{
-			var item : Item = getItemByTarget( event.target as DisplayObjectContainer );
-
-			if ( item == this )
-				skin.currentState = "hovered";
-			else
-				skin.currentState = "normal";
-		}
+//		private function mouseOverHandler( event : MouseEvent ) : void
+//		{
+//			var item : Item = getItemByTarget( event.target as DisplayObjectContainer );
+//
+//			if ( item == this )
+//				skin.currentState = "hovered";
+//			else
+//				skin.currentState = "normal";
+//		}
 
 		private function getItemByTarget( target : DisplayObjectContainer ) : Item
 		{

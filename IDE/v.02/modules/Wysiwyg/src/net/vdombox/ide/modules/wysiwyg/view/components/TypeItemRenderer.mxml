@@ -11,6 +11,7 @@
 			import mx.core.DragSource;
 			
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 
 			[Bindable]
@@ -19,13 +20,22 @@
 			[Bindable]
 			private var _resourceVO : ResourceVO;
 
+			private var _typeVO : TypeVO;
+			
 			public function set resourceVO( value : ResourceVO ) : void
 			{
 				_resourceVO = value;
 			}
 
+			public function get typeVO() : TypeVO
+			{
+				return _typeVO;
+			}
+			
 			override public function set data( value : Object ) : void
 			{
+				_typeVO = value as TypeVO;
+				
 				if ( value )
 					typeName = value.displayName;
 				else

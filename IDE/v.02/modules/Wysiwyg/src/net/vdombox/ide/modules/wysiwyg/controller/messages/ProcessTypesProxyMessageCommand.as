@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.TypesProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -15,6 +16,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 
 			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
 
@@ -29,31 +31,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMTypesTargetNames.TYPES:
 				{
 					if( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.TYPES_GETTED, message.getBody() );
+						typesProxy.types = body as Array;
 					
-					break;
-				}
-				case PPMTypesTargetNames.TYPE:
-				{
-					if( operation != PPMOperationNames.READ )
-						break;
-					
-					var typeVO : TypeVO = body as TypeVO;
-
-					var allTypeRecipients : Object = sessionProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
-						ApplicationFacade.DELIMITER + target );
-
-					var typeRecipient : Array = allTypeRecipients[ typeVO.id ];
-
-					var recipientID : String;
-
-					for each ( recipientID in typeRecipient )
-					{
-						sendNotification( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + recipientID, typeVO );
-					}
-
-					delete allTypeRecipients[ typeVO.id ];
-
 					break;
 				}
 			}

@@ -27,6 +27,17 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 			switch ( target )
 			{
+				case PPMPageTargetNames.OBJECT:
+				{
+					if( operation == PPMOperationNames.CREATE )
+					{
+						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
+						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
+					}
+					
+					break;
+				}
+					
 				case PPMPageTargetNames.WYSIWYG:
 				{
 					if( operation == PPMOperationNames.READ )

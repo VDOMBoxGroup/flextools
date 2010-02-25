@@ -60,7 +60,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
 			interests.push( ApplicationFacade.GET_TYPES );
-			interests.push( ApplicationFacade.GET_TYPE );
 			
 			interests.push( ApplicationFacade.GET_RESOURCE );
 			
@@ -75,6 +74,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_OBJECT_ATTRIBUTES );
 			
 			interests.push( ApplicationFacade.GET_PAGE_WYSIWYG );
+			
+			interests.push( ApplicationFacade.CREATE_OBJECT );
 
 			return interests;
 		}
@@ -170,15 +171,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.GET_TYPE:
-				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPE, body );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
-					break;
-				}
-					
 				case ApplicationFacade.GET_RESOURCE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
@@ -258,7 +250,19 @@ package net.vdombox.ide.modules.wysiwyg.view
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
-				}	
+				}
+					
+				case ApplicationFacade.CREATE_OBJECT:
+				{
+					if( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
+					else if( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
 			}
 
 			super.handleNotification( notification );

@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.BodyCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateBodyCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.CreateObjectRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
@@ -73,10 +74,10 @@ package net.vdombox.ide.modules.wysiwyg
 		
 //		types
 		public static const GET_TYPES : String = "getTypes";
-		public static const TYPES_GETTED : String = "typesGetted";
+		public static const TYPES_CHANGED : String = "typesChanged";
 		
-		public static const GET_TYPE : String = "getType";
-		public static const TYPE_GETTED : String = "typeGetted";
+//		public static const GET_TYPE : String = "getType";
+//		public static const TYPE_GETTED : String = "typeGetted";
 		
 //		resources
 		public static const GET_RESOURCE : String = "getResource";
@@ -128,6 +129,10 @@ package net.vdombox.ide.modules.wysiwyg
 		
 		public static const RENDER_DATA_CHANGED : String = "renderDataChanged";
 		
+		public static const CREATE_OBJECT_REQUEST : String = "createObjectRequest";
+		public static const CREATE_OBJECT : String = "createObject";
+		public static const OBJECT_CREATED : String = "objectCreated";
+		
 		public static const ITEM_CREATED : String = "itemCreated";
 		
 		
@@ -176,6 +181,7 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( ITEM_CREATED, ItemCreatedCommand );
 			
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
+			registerCommand( CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}
