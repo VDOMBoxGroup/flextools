@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
@@ -13,7 +13,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -25,10 +25,10 @@ package net.vdombox.ide.core.model
 		private static const SET_ATTRIBUTES : String = "setAttributes";
 
 		private static const GET_OBJECT : String = "getObject";
-
 		private static const GET_OBJECTS : String = "getObjects";
 
 		private static const GET_STRUCTURE : String = "getStructure";
+		private static const GET_WYSIWYG : String = "getWYSIWYG";
 
 		public function PageProxy( pageVO : PageVO )
 		{
@@ -166,9 +166,10 @@ package net.vdombox.ide.core.model
 		public function getWYSIWYG() : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.render_wysiwyg( pageVO.applicationVO.id, pageVO.id, "", 1 );
+			token = soap.get_child_objects_tree( pageVO.applicationVO.id, pageVO.id );
 
 			token.recipientName = proxyName;
+			token.requestFunctionName = GET_WYSIWYG;
 
 			return token;
 		}
@@ -344,9 +345,21 @@ package net.vdombox.ide.core.model
 			{
 				case "get_child_objects_tree":
 				{
+
 					var structure : XML = generatePageStructure( result.Object[ 0 ] );
-					notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure )
-					notification.token = token;
+					if ( token.requestFunctionName == GET_OBJECT )
+					{
+						notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure )
+						notification.token = token;
+					}
+					else if ( token.requestFunctionName == GET_WYSIWYG )
+					{
+						token = soap.render_wysiwyg( pageVO.applicationVO.id, pageVO.id, "", 1 );
+
+						token.structure = <structure>{ structure }</structure>;
+						token.recipientName = proxyName;
+						token.requestFunctionName = GET_WYSIWYG;
+					}
 
 					break;
 				}
@@ -435,6 +448,25 @@ package net.vdombox.ide.core.model
 				case "render_wysiwyg":
 				{
 					var wysiwyg : XML = result.Result.container[ 0 ];
+
+					var tempList : XMLList = result.Result.descendants( "*" );
+					var tempElement : XML;
+					var structureList : XMLList = token.structure.descendants( "*" );
+					var id : String;
+					var typeID : String;
+					
+					for each( tempElement in tempList )
+					{
+						id = tempElement.@id;
+						if( id == "" )
+							continue;
+						
+						typeID = structureList.( @id == id ).@typeID;
+						
+						if( typeID != "" )
+							tempElement.@typeID = typeID;
+					}
+
 					notification = new ProxyNotification( ApplicationFacade.PAGE_WYSIWYG_SETTED, { pageVO: pageVO, wysiwyg: wysiwyg } );
 					notification.token = token;
 
