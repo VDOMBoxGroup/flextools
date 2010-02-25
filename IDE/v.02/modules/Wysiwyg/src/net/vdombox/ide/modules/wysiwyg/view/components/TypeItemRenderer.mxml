@@ -3,11 +3,15 @@
 				xmlns:mx="library://ns.adobe.com/flex/halo"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				
-				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))">
+				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))"
+				mouseDown="dragIt( event )">
 
 	<fx:Script>
 		<![CDATA[
+			import mx.core.DragSource;
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 
 			[Bindable]
 			private var typeName : String
@@ -29,10 +33,32 @@
 
 				super.data = value;
 			}
+
+			private function dragIt( event : MouseEvent ) : void
+			{
+				var dragInitiator : TypeItemRenderer = this;
+				var ds : DragSource = new DragSource();
+
+				var dataObject : Object = { typeId: data.id, aviableContainers: data.containers, offX: dragInitiator.mouseX,
+						offY: dragInitiator.mouseY };
+
+				ds.addData( dataObject, 'typeDescription' );
+
+				var proxy : Image = new Image();
+
+				proxy.width = 58;
+				proxy.height = 58;
+				proxy.source = typeIcon.source;
+
+				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
+				
+				vdomDragManager.doDrag( dragInitiator, ds, event, proxy, proxy.width / 2 - dragInitiator.mouseX,
+										proxy.height / 2 - dragInitiator.mouseY );
+			}
 		]]>
 	</fx:Script>
 
-	<mx:Image height="50" source="{ _resourceVO.data }" width="50"
+	<mx:Image id="typeIcon" height="50" source="{ _resourceVO.data }" width="50"
 			  horizontalCenter="0" />
 
 	<s:RichText text="{ typeName }" width="100%"

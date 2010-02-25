@@ -14,6 +14,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		public var children : Array = [];
 
 		public var visible : Boolean;
+		
 		public var zindex : uint;
 		public var hierarchy : uint;
 		public var order : uint;

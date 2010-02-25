@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemCreatedCommand;
@@ -79,6 +80,7 @@ package net.vdombox.ide.modules.wysiwyg
 		
 //		resources
 		public static const GET_RESOURCE : String = "getResource";
+		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
 		
 //		states	
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
@@ -172,6 +174,8 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			
 			registerCommand( ITEM_CREATED, ItemCreatedCommand );
+			
+			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

@@ -9,6 +9,7 @@ package com.zavoo.svg.nodes
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
@@ -21,6 +22,10 @@ package com.zavoo.svg.nodes
 
 		public var value : String;
 
+		private var _resourceVO : ResourceVO; 
+		
+		private var loader : Loader;
+		
 		public function SVGImageNode( xml : XML ) : void
 		{
 			super( xml );
@@ -58,7 +63,15 @@ package com.zavoo.svg.nodes
 		
 		public function set resourceVO( value : ResourceVO ) : void
 		{
-			var loader : Loader = new Loader();
+			_resourceVO = value;
+			
+			if( !value.data )
+			{
+				BindingUtils.bindSetter( dataLoaded, value, "data" );
+				return;
+			}
+			
+			loader = new Loader();
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
 			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
 
@@ -71,26 +84,49 @@ package com.zavoo.svg.nodes
 				// FIXME Сделать обработку исключения если не грузится изображение
 			}
 		}
-
-//		
-		/**
-		 * Load image byte array
-		 **/
-		private function loadBytes( byteArray : ByteArray ) : void
+		
+		private function dataLoaded( object : Object ) : void 
 		{
-
-			var loader : Loader = new Loader();
+			loader = new Loader();
 			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
-			loader.loadBytes( byteArray );
+			loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+			
+			try
+			{
+				loader.loadBytes( _resourceVO.data );
+			}
+			catch ( error : Error )
+			{
+				// FIXME Сделать обработку исключения если не грузится изображение
+			}
 		}
+		
+//		
+//		/**
+//		 * Load image byte array
+//		 **/
+//		private function loadBytes( byteArray : ByteArray ) : void
+//		{
+//
+//			var loader : Loader = new Loader();
+//			loader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBytesLoaded );
+//			loader.loadBytes( byteArray );
+//		}
 
 		/**
 		 * Display image bitmap once bytes have loaded
 		 **/
 		private function onBytesLoaded( event : Event ) : void
 		{
+			
+			loader.contentLoaderInfo.removeEventListener( Event.COMPLETE, onBytesLoaded );
+			loader.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, onBytesLoaded );
+			
+			loader = null;
+			
 			if ( event.type == IOErrorEvent.IO_ERROR )
 				return;
+			
 			var content : Bitmap = Bitmap( event.target.content );
 
 			var m : Matrix = new Matrix();
@@ -135,7 +171,7 @@ package com.zavoo.svg.nodes
 		private function ccHandler( event : FlexEvent ) : void 
 		{
 			if( resourceID )
-				svgRoot.parent.dispatchEvent( new ItemEvent( ItemEvent.GET_RESOURCE ) );
+				dispatchEvent( new ItemEvent( ItemEvent.GET_RESOURCE ) );
 		}
 		
 	/*private function transformImage():void {

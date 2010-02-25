@@ -8,14 +8,21 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayList;
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
 			
 			import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
 
 			public function set itemVO( value : ItemVO ) : void
 			{
-				dataProvider = new ArrayList( value.children );
+				var childrenDataProvider : ArrayCollection = new ArrayCollection( value.children );
+				childrenDataProvider.sort = new Sort();
+				childrenDataProvider.sort.fields = [new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" )];
+				childrenDataProvider.refresh();
+				
+				dataProvider = childrenDataProvider;
 			}
 		]]>
 	</fx:Script>

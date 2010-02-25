@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			{
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
-					var selectedApplicationVO : ApplicationVO = notification.getBody() as ApplicationVO;
+					var selectedApplicationVO : ApplicationVO = body as ApplicationVO;
 					
 					sessionProxy.selectedApplication = selectedApplicationVO
 					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, body );

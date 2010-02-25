@@ -1,19 +1,25 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-	
-	import mx.collections.ArrayList;
+
+	import flash.display.DisplayObjectContainer;
+	import flash.events.MouseEvent;
+
+	import mx.collections.ArrayCollection;
+	import mx.collections.Sort;
+	import mx.collections.SortField;
 	import mx.controls.HTML;
 	import mx.controls.Text;
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
-	
+	import mx.events.FlexEvent;
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
-	
+
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.SkinnableDataContainer;
@@ -29,32 +35,28 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			itemRendererFunction = chooseItemRenderer;
 			setStyle( "skinClass", ItemSkin );
-			
-			dispatchEvent( new ItemEvent( ItemEvent.CREATED ) );
+
+
+			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, true );
+			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
+			addEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler );
+
 		}
-		
-		private const styleList : Array = 
-			[
-				["opacity", "backgroundAlpha"],
-				["backgroundcolor", "backgroundColor"],
-				["backgroundimage", "backgroundImage"],
-				["backgroundrepeat", "backgroundRepeat"],
-				["borderwidth", "borderThickness"],
-				["bordercolor", "borderColor"],
-				["color", "color"],
-				["fontfamily", "fontFamily"],
-				["fontsize", "fontSize"],
-				["fontweight", "fontWeight"],
-				["fontstyle", "fontStyle"],
-				["textdecoration", "textDecoration"],
-				["textalign", "textAlign"],
-				["align", "horizontalAlign"],
-				["valign", "verticalAlign"]
-			];
-		
-		[SkinPart(required="true")]
+
+
+
+		private const styleList : Array = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
+											  [ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
+											  [ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
+											  [ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
+											  [ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
+											  [ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
+
+		[SkinPart( required="true" )]
 		public var background : Group;
-		
+
+		private var _data : Object;
+
 		public function get selected() : Boolean
 		{
 			return false;
@@ -84,11 +86,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		public function get data() : Object
 		{
-			return null;
+			return _data;
 		}
 
 		public function set data( value : Object ) : void
 		{
+			_data = value;
 			var itemVO : ItemVO = value as ItemVO;
 
 			if ( !itemVO )
@@ -116,61 +119,59 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( itemVO && itemVO.children.length > 0 )
 			{
-				dataProvider = new ArrayList( itemVO.children );
+				var childrenDataProvider : ArrayCollection = new ArrayCollection( itemVO.children );
+				childrenDataProvider.sort = new Sort();
+				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
+				childrenDataProvider.refresh();
+
+				dataProvider = childrenDataProvider;
 			}
-			
+
 			var contetntPart : XML;
-			
-			for each( contetntPart in itemVO.content )
+
+			for each ( contetntPart in itemVO.content )
 			{
-				switch( contetntPart.name().toString() )
+				switch ( contetntPart.name().toString() )
 				{
 					case "svg":
 					{
 						var svg : SVGViewer = new SVGViewer();
 						var d : * = svg.setXML( contetntPart );
 						background.addElement( svg );
-						
+
 						break
 					}
-						
+
 					case "text":
 					{
 						var richText : Text = new Text();
-						
+
 						richText.x = contetntPart.@left;
 						richText.y = contetntPart.@top;
 						richText.width = contetntPart.@width;
-						
-							
+
+
 						richText.text = contetntPart[ 0 ];
-						
+
 						applyStyles( richText, contetntPart );
-						
+
 						background.addElement( richText );
-						
+
 						break;
 					}
-					case "htmltext" : 
+					case "htmltext":
 					{
 						var html : HTML = new HTML();
-						
+
 						html.x = contetntPart.@left;
 						html.y = contetntPart.@top;
 						html.width = contetntPart.@width;
-						
-						var htmlText  : String =
-							"<html>" + 
-							"<head>" + 
-							"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-							"</head>" +
-							"<body style=\"margin : 0px;\" >" +
-							contetntPart[ 0 ] +
-							"</body>" + 
-							"</html>";
-						
+
+						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+							"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
+
 						html.htmlText = htmlText;
-						
+
 						background.addElement( html );
 					}
 				}
@@ -200,14 +201,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				case "row":
 				{
 					itemFactory = new ClassFactory( Item );
-					itemFactory.properties = { layout: new HorizontalLayout(), percentWidth : 100, percentHeight : 100 };
+					itemFactory.properties = { layout: new HorizontalLayout(), percentWidth: 100, percentHeight: 100 };
 					break;
 				}
 
 				case "cell":
 				{
 					itemFactory = new ClassFactory( Item );
-					itemFactory.properties = { layout: new BasicLayout(), percentWidth : 100, percentHeight : 100 };
+					itemFactory.properties = { layout: new BasicLayout(), percentWidth: 100, percentHeight: 100 };
 					break;
 				}
 			}
@@ -246,6 +247,45 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( _style.hasOwnProperty( "textDecoration" ) )
 				if ( !( _style[ "textDecoration" ] != "none" || _style[ "textDecoration" ] != "underline" ) )
 					_style[ "textDecoration" ] = "none";
+		}
+
+		private function mouseOutHandler( event : MouseEvent ) : void
+		{
+			skin.currentState = "normal";
+		}
+
+		private function mouseOverHandler( event : MouseEvent ) : void
+		{
+			var item : Item = getItemByTarget( event.target as DisplayObjectContainer );
+
+			if ( item == this )
+				skin.currentState = "hovered";
+			else
+				skin.currentState = "normal";
+		}
+
+		private function getItemByTarget( target : DisplayObjectContainer ) : Item
+		{
+			var result : Item;
+			var item : DisplayObjectContainer = target;
+
+			while ( item && item.parent )
+			{
+				if ( item is Item )
+				{
+					result = item as Item;
+					break;
+				}
+
+				item = item.parent;
+			}
+
+			return result;
+		}
+
+		private function creatiomCompleteHandler( event : FlexEvent ) : void
+		{
+			dispatchEvent( new ItemEvent( ItemEvent.CREATED ) );
 		}
 	}
 }

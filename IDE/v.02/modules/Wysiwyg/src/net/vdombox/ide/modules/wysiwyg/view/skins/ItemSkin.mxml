@@ -6,10 +6,16 @@
 	<s:states>
 
 		<s:State name="normal" />
-
+		<s:State name="hovered" />
 		<s:State name="disabled" />
 	</s:states>
 
+	<s:Rect width="100%" height="100%" alpha=".0" alpha.hovered="1">
+		<s:fill>
+			<s:SolidColor color="white" color.hovered="red" />
+		</s:fill>
+	</s:Rect>
+	
 	<s:Group id="background" />
 	
 	<s:Scroller id="scroller"

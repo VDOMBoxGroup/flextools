@@ -1,7 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import mx.events.DragEvent;
+
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 
@@ -62,15 +63,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
-			item.addEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true, 0, true );
+//			item.addEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true, 0, true );
+			item.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 		}
 
 		private function removeHandlers() : void
 		{
-			item.removeEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true )
+//			item.removeEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true )
 		}
 
-		private function item_getResourceHandler( event : ItemEvent ) : void
+
+		private function dragEnterHandler( event : DragEvent ) : void
 		{
 			var d : * = "";
 		}
