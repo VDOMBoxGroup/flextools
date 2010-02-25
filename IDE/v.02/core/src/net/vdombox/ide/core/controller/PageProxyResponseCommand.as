@@ -33,6 +33,14 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+					
+				case ApplicationFacade.PAGE_OBJECT_CREATED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );

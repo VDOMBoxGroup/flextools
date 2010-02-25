@@ -133,6 +133,7 @@ package net.vdombox.ide.core
 		public static const PAGE_ATTRIBUTES_SETTED : String = "pageAttributesSetted";
 		public static const PAGE_OBJECTS_GETTED : String = "pageObjectsGetted";
 		public static const PAGE_OBJECT_GETTED : String = "pageObjectGetted";
+		public static const PAGE_OBJECT_CREATED : String = "pageObjectCreated";
 		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
 		public static const PAGE_SERVER_ACTIONS_SETTED : String = "pageServerActionsGetted";
 		public static const PAGE_WYSIWYG_SETTED : String = "pageWYSIWYGGetted";
@@ -221,6 +222,7 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_ATTRIBUTES_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECTS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECT_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_OBJECT_CREATED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_WYSIWYG_SETTED, PageProxyResponseCommand );

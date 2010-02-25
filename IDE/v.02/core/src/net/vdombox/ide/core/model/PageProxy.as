@@ -174,9 +174,28 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function createObject( objectID : String ) : ObjectVO
+		public function createObject( typeVO : TypeVO, attributes : Array ) : AsyncToken
 		{
-			return null;
+			var token : AsyncToken;
+			
+			var attributesXML : XML;
+			var attributeVO : AttributeVO;
+			
+			if( attributes.length > 0 )
+			{
+				attributesXML = <Attributes />;
+				
+				for each( attributeVO in attributes )
+				{
+					attributesXML.appendChild( <Attribute Name={attributeVO.name}>{attributeVO.value}</Attribute> );
+				}
+			}
+			
+			token = soap.create_object( pageVO.applicationVO.id, pageVO.id, typeVO.id, "", attributesXML );
+			
+			token.recipientName = proxyName;
+			
+			return token;
 		}
 
 		public function deleteObject( objectVO : ObjectVO ) : void
@@ -233,6 +252,7 @@ package net.vdombox.ide.core.model
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -243,6 +263,7 @@ package net.vdombox.ide.core.model
 			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -263,7 +284,8 @@ package net.vdombox.ide.core.model
 
 				var typeVO : TypeVO = typesProxy.getType( typeID );
 
-				var objectVO : ObjectVO = new ObjectVO( objectID, pageVO, typeVO );
+				var objectVO : ObjectVO = new ObjectVO( pageVO, typeVO );
+				objectVO.setID( objectID );
 
 				objectVO.setXMLDescription( object );
 
@@ -340,7 +362,8 @@ package net.vdombox.ide.core.model
 			var notification : ProxyNotification;
 
 			var pageAttributesVO : PageAttributesVO;
-
+			var objectVO : ObjectVO;
+			
 			switch ( operationName )
 			{
 				case "get_child_objects_tree":
@@ -399,7 +422,6 @@ package net.vdombox.ide.core.model
 
 				case "set_server_actions":
 				{
-
 					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, { pageVO: pageVO } )
 
 					break;
@@ -413,7 +435,8 @@ package net.vdombox.ide.core.model
 
 						var typeVO : TypeVO = typesProxy.getType( objectXML.@Type );
 
-						var objectVO : ObjectVO = new ObjectVO( objectXML.@ID, pageVO, typeVO );
+						objectVO = new ObjectVO( pageVO, typeVO );
+						objectVO.setID( objectXML.@ID );
 
 						objectVO.setXMLDescription( objectXML );
 
@@ -470,6 +493,18 @@ package net.vdombox.ide.core.model
 					notification = new ProxyNotification( ApplicationFacade.PAGE_WYSIWYG_SETTED, { pageVO: pageVO, wysiwyg: wysiwyg } );
 					notification.token = token;
 
+					break;
+				}
+					
+				case "create_object":
+				{
+					objectVO = new ObjectVO( pageVO, typesProxy.getType( result.Object.@Type ) );
+					objectVO.setID( result.Object.@ID );
+					objectVO.parentID = result.ParentId[ 0 ];
+					objectVO.setXMLDescription( result.Object[ 0 ] );
+
+					sendNotification( ApplicationFacade.PAGE_OBJECT_CREATED, { pageVO: pageVO, objectVO : objectVO } );
+					
 					break;
 				}
 			}

@@ -53,7 +53,11 @@ package net.vdombox.ide.core.controller
 
 				case PPMPageTargetNames.OBJECT:
 				{
-					pageProxy.getObjectAt( body.objectID );
+					if( operation == PPMOperationNames.READ )
+						pageProxy.getObjectAt( body.objectID );
+					else if( operation == PPMOperationNames.CREATE )
+						pageProxy.createObject( body.typeVO, body.attributes );
+					
 
 					break;
 				}

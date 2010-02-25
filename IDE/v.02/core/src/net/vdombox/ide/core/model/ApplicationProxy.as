@@ -48,18 +48,18 @@ package net.vdombox.ide.core.model
 			return data as ApplicationVO;
 		}
 
-		public function get selectedPage() : PageVO
-		{
-			return _selectedPage;
-		}
-
-		public function get selectedPageID() : String
-		{
-			if ( _selectedPage )
-				return _selectedPage.id;
-			else
-				return null;
-		}
+//		public function get selectedPage() : PageVO
+//		{
+//			return _selectedPage;
+//		}
+//
+//		public function get selectedPageID() : String
+//		{
+//			if ( _selectedPage )
+//				return _selectedPage.id;
+//			else
+//				return null;
+//		}
 
 		override public function onRegister() : void
 		{
@@ -297,7 +297,8 @@ package net.vdombox.ide.core.model
 
 				var typeVO : TypeVO = typesProxy.getType( typeID );
 
-				var pageVO : PageVO = new PageVO( pageID, applicationVO, typeVO );
+				var pageVO : PageVO = new PageVO( applicationVO, typeVO );
+				pageVO.setID( pageID );
 
 				pageVO.setXMLDescription( page );
 
@@ -439,7 +440,8 @@ package net.vdombox.ide.core.model
 
 					var typeVO : TypeVO = typesProxy.getType( typeID );
 
-					var pageVO : PageVO = new PageVO( pageID, applicationVO, typeVO );
+					var pageVO : PageVO = new PageVO( applicationVO, typeVO );
+					pageVO.setID( pageID );
 
 					pageVO.setXMLDescription( pageXML );
 
