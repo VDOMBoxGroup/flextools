@@ -76,6 +76,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_PAGE_WYSIWYG );
 			
 			interests.push( ApplicationFacade.CREATE_OBJECT );
+			
+			interests.push( ApplicationFacade.SELECT_OBJECT );
 
 			return interests;
 		}
@@ -258,6 +260,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
 					else if( body.hasOwnProperty( "objectVO" ) )
 						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SELECT_OBJECT:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

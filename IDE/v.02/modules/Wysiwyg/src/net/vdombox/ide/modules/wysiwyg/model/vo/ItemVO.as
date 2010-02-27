@@ -10,7 +10,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		public var name : String;
 		public var typeVO : TypeVO;
 		
-		public var staticFlag : String;
+		public var staticFlag : Boolean;
 		
 		public var parent : ItemVO;
 		public var children : Array = [];

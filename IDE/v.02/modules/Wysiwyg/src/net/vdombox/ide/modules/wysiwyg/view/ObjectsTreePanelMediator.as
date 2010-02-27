@@ -1,9 +1,14 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import mx.collections.IViewCursor;
+	import mx.collections.Sort;
+	import mx.collections.SortField;
+	import mx.collections.XMLListCollection;
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
 	
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectsTreePanel;
 	
@@ -21,6 +26,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var _pages : Object;
+		
+		private var selectedObject : ObjectVO;
 
 		[Bindable]
 		private var pagesXMLList : XMLList;
@@ -53,6 +60,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
 
 			interests.push( ApplicationFacade.OBJECT_GETTED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			
 			return interests;
 		}
@@ -90,13 +98,44 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 				case ApplicationFacade.OBJECT_GETTED:
 				{	
-					sendNotification( ApplicationFacade.OBJECT_SELECTED, body );
+					selectedObject = body as ObjectVO;
+					sendNotification( ApplicationFacade.OBJECT_SELECTED_REQUEST, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				{	
+					if( selectedObject == body )
+						return;
+					
+					var element : XML = pagesXMLList..object.( @id == body.id )[ 0 ];
+					
+					if( element )
+					{
+						openTree( element );
+						objectsTree.selectedItem = element;
+						objectsTree.scrollToIndex( objectsTree.selectedIndex );
+					}
+					
 					
 					break;
 				}
 			}
 		}
 
+		private function openTree(item:Object):void
+		{
+			//			trace('openTree');
+			var parentItem:Object = XML(item).parent();
+			if (parentItem)
+			{
+				openTree(parentItem);
+				objectsTree.expandItem(parentItem, true, false);
+				objectsTree.validateNow();
+			}
+		}
+		
 		private function initialize() : void
 		{
 			addHandlers();

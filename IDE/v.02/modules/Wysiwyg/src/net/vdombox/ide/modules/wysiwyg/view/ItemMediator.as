@@ -1,11 +1,15 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.display.DisplayObjectContainer;
+	import flash.events.MouseEvent;
+	
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
@@ -45,7 +49,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-//			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
 			return interests;
 		}
@@ -57,24 +61,50 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			switch ( name )
 			{
-//				case ApplicationFacade.SELECTED_PAGE_CHANGED:
-//				{
-//					isSelectedPageVOChanged = true;
-//					commitProperties();
-//					break;
-//				}
+				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				{
+					if( item.itemVO.id == body.id )
+						item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+						
+					break;
+				}
 			}
 		}
 
 		private function addHandlers() : void
 		{
-//			item.addEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true, 0, true );
+			item.addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
+			item.addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
+			item.addEventListener( MouseEvent.CLICK, mouseClickHandler );
 			item.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			item.addEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 			item.addEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 		}
 
-		
+		private function mouseClickHandler(event:MouseEvent):void
+		{
+			event.stopPropagation();
+			item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+		}
+
+		private function mouseOutHandler( event : MouseEvent ) : void
+		{
+			if ( item.skin.currentState == "hovered" )
+				item.skin.currentState = "normal";
+		}
+
+		private function mouseOverHandler( event : MouseEvent ) : void
+		{
+			if ( item.skin.currentState == "highlighted" )
+				return;
+
+			if ( findNearestItem( event.target as DisplayObjectContainer ) == this.item )
+				item.skin.currentState = "hovered";
+			else
+				item.skin.currentState = "normal";
+		}
+
+
 
 		private function removeHandlers() : void
 		{
@@ -101,27 +131,45 @@ package net.vdombox.ide.modules.wysiwyg.view
 				item.skin.currentState = "highlighted";
 			}
 		}
-		
+
 		private function dragDropHandler( event : DragEvent ) : void
 		{
 			item.skin.currentState = "normal";
-			
+
 			var typeVO : TypeVO = TypeItemRenderer( event.dragInitiator ).typeVO;
-			
+
 			var objectLeft : Number = item.mouseX - 25 + item.layout.horizontalScrollPosition;
 			var objectTop : Number = item.mouseY - 25 + item.layout.verticalScrollPosition;
-			
+
 			var attributes : Array = [];
-			
+
 			attributes.push( new AttributeVO( "left", objectLeft.toString() ) );
 			attributes.push( new AttributeVO( "top", objectTop.toString() ) );
-			
-			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { parentID : item.itemVO.id ,typeVO : typeVO, attributes : attributes } );
+
+			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { parentID: item.itemVO.id, typeVO: typeVO, attributes: attributes } );
 		}
-		
+
 		private function dragExitHandler( event : DragEvent ) : void
 		{
 			item.skin.currentState = "normal";
+		}
+
+		private function findNearestItem( currentElement : DisplayObjectContainer ) : Item
+		{
+			var result : Item;
+
+			while ( currentElement && currentElement.parent )
+			{
+				if ( currentElement is Item )
+				{
+					result = currentElement as Item;
+					break;
+				}
+
+				currentElement = currentElement.parent;
+			}
+
+			return result;
 		}
 	}
 }

@@ -25,6 +25,16 @@
 
 	<s:Group id="background" />
 
+	<s:Rect height="100%" width="100%"
+			includeIn="highlighted">
+
+		<s:stroke>
+
+			<s:SolidColorStroke color="green"
+								weight="2" />
+		</s:stroke>
+	</s:Rect>
+
 	<s:Scroller id="scroller"
 				focusEnabled="false"
 				bottom="0" left="0" right="0" top="0"
@@ -37,28 +47,4 @@
 			<s:Group id="upperLayer" />
 		</s:Group>
 	</s:Scroller>
-
-	<s:Group id="locker"
-			 bottom="0" left="0" right="0" top="0"
-			 visible="false">
-
-		<s:Rect bottom="0" left="0" right="0" top="0">
-
-			<s:fill>
-
-				<s:SolidColor color="white"
-							  alpha=".0" />
-			</s:fill>
-		</s:Rect>
-	</s:Group>
-
-	<s:Rect bottom="0" left="0" right="0" top="0"
-			includeIn="highlighted, hovered">
-
-		<s:stroke>
-
-			<s:SolidColorStroke color.highlighted="green" color.hovered="gray"
-								weight="2" />
-		</s:stroke>
-	</s:Rect>
 </s:SparkSkin>

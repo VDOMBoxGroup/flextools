@@ -11,6 +11,8 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemCreatedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.ItemSelectedRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.ObjectSelectedRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
@@ -134,6 +136,8 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const OBJECT_CREATED : String = "objectCreated";
 		
 		public static const ITEM_CREATED : String = "itemCreated";
+		public static const ITEM_SELECTED_REQUEST : String = "itemSelectedRequest";
+		public static const OBJECT_SELECTED_REQUEST : String = "objectSelectedRequest";
 		
 		
 		public static function getInstance( key : String ) : ApplicationFacade
@@ -179,6 +183,8 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
 			
 			registerCommand( ITEM_CREATED, ItemCreatedCommand );
+			registerCommand( ITEM_SELECTED_REQUEST, ItemSelectedRequestCommand );
+			registerCommand( OBJECT_SELECTED_REQUEST, ObjectSelectedRequestCommand );
 			
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			registerCommand( CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );

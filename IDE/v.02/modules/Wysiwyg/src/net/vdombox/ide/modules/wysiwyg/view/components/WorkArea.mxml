@@ -5,19 +5,24 @@
 				 xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
 				 
 				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.Item"
-				 skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin">
+				 skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
-
+			
 			import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-			import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
+			import net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin;
+			
+			import spark.components.Group;
 
 			private var _itemVO : ItemVO;
 
+			[SkinPart(required="false")]
+			public var upperLayer : Group;
+			
 			override public function get itemVO() : ItemVO
 			{
 				return _itemVO;

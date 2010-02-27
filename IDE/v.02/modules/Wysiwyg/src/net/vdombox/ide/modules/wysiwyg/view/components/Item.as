@@ -26,6 +26,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
 	import spark.layouts.VerticalLayout;
+	import spark.primitives.Rect;
 
 	public class Item extends SkinnableDataContainer implements IItemRenderer
 	{
@@ -36,9 +37,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			itemRendererFunction = chooseItemRenderer;
 			setStyle( "skinClass", ItemSkin );
 
-
-//			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, true );
-//			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
 			addEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler );
 
 		}
@@ -57,6 +55,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		
 		[SkinPart(required="true" )]
 		public var scroller: Scroller;
+		
+		[SkinPart(required="true" )]
+		public var locker: Group;
 
 		private var _data : Object;
 		private var _itemVO : ItemVO;
@@ -107,8 +108,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			_data = value;
 			_itemVO = value as ItemVO;
-			
-			
 
 			if ( !_itemVO )
 				return;
@@ -133,6 +132,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( attributeVO )
 				x = int( attributeVO.value );
 
+			if ( _itemVO.staticFlag )
+				locker.visible = true;
+			
 			if ( _itemVO && _itemVO.children.length > 0 )
 			{
 				var childrenDataProvider : ArrayCollection = new ArrayCollection( _itemVO.children );
@@ -264,21 +266,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				if ( !( _style[ "textDecoration" ] != "none" || _style[ "textDecoration" ] != "underline" ) )
 					_style[ "textDecoration" ] = "none";
 		}
-
-//		private function mouseOutHandler( event : MouseEvent ) : void
-//		{
-//			skin.currentState = "normal";
-//		}
-
-//		private function mouseOverHandler( event : MouseEvent ) : void
-//		{
-//			var item : Item = getItemByTarget( event.target as DisplayObjectContainer );
-//
-//			if ( item == this )
-//				skin.currentState = "hovered";
-//			else
-//				skin.currentState = "normal";
-//		}
 
 		private function getItemByTarget( target : DisplayObjectContainer ) : Item
 		{

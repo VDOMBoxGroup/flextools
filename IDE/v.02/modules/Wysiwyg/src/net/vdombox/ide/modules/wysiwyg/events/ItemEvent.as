@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 	{
 		public static var CREATED : String = "created";
 		public static var GET_RESOURCE : String = "getResource";
+		public static var ITEM_CLICKED : String = "itemClicked";
 
 		public function ItemEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

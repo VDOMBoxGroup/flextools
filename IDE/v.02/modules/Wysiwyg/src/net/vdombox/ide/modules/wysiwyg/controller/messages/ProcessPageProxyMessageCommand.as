@@ -34,6 +34,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
 						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
 					}
+					if( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
 					
 					break;
 				}
@@ -42,6 +44,14 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				{
 					if( operation == PPMOperationNames.READ )
 						renderProxy.setRawRenderData( body.wysiwyg as XML );
+					
+					break;
+				}
+				
+				case PPMPageTargetNames.STRUCTURE:
+				{
+					if( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.PAGE_SRUCTURE_GETTED, body );
 					
 					break;
 				}

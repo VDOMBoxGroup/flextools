@@ -57,12 +57,15 @@ package net.vdombox.ide.modules.wysiwyg.model
 			
 			itemVO.typeVO = typesProxy.getTypeVObyID( rawRenderData.@typeID );
 			
+			itemVO.staticFlag = rawRenderData.@contents == "static" ? true : false;
+			
 			delete rawRenderData.@id;
 			delete rawRenderData.@zindex;
 			delete rawRenderData.@hierarchy;
 			delete rawRenderData.@order;
 			delete rawRenderData.@visible;
 			delete rawRenderData.@typeID;
+			delete rawRenderData.@contents;
 			
 			var attribute : XML;
 			var attributeVO : AttributeVO;

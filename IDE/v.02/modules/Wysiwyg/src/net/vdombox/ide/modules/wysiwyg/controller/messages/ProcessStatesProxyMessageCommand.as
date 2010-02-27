@@ -36,7 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMStatesTargetNames.SELECTED_PAGE:
 				{
-					var selectedPageVO : PageVO = notification.getBody() as PageVO;
+					var selectedPageVO : PageVO = body as PageVO;
 					
 					sessionProxy.selectedPage = selectedPageVO
 					sendNotification( ApplicationFacade.SELECTED_PAGE_GETTED, body );
@@ -46,7 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					
 				case PPMStatesTargetNames.SELECTED_OBJECT:
 				{
-					var selectedObjectVO : ObjectVO = notification.getBody() as ObjectVO;
+					var selectedObjectVO : ObjectVO = body as ObjectVO;
 					
 					sessionProxy.selectedObject = selectedObjectVO
 					sendNotification( ApplicationFacade.SELECTED_OBJECT_GETTED, body );
