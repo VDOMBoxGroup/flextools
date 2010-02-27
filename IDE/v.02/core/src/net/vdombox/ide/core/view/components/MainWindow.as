@@ -18,8 +18,8 @@ package net.vdombox.ide.core.view.components
 		{
 			setStyle( "skinClass", MainWindowSkin );
 			systemChrome = NativeWindowSystemChrome.NONE;
-			width = 1024;
-			height = 768;
+			width = 1200;
+			height = 1024;
 			
 			addEventListener( Event.CLOSE, closeHandler );
 		}

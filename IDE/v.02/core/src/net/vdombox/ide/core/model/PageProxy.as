@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
@@ -13,7 +13,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -177,24 +177,28 @@ package net.vdombox.ide.core.model
 		public function createObject( typeVO : TypeVO, attributes : Array ) : AsyncToken
 		{
 			var token : AsyncToken;
-			
+
 			var attributesXML : XML;
 			var attributeVO : AttributeVO;
-			
-			if( attributes.length > 0 )
+
+			if ( attributes.length > 0 )
 			{
-				attributesXML = <Attributes />;
-				
-				for each( attributeVO in attributes )
+				attributesXML =
+					<Attributes/>
+					;
+
+				for each ( attributeVO in attributes )
 				{
-					attributesXML.appendChild( <Attribute Name={attributeVO.name}>{attributeVO.value}</Attribute> );
+					attributesXML.appendChild(
+						<Attribute Name={attributeVO.name}>{attributeVO.value}</Attribute>
+						);
 				}
 			}
-			
+
 			token = soap.create_object( pageVO.applicationVO.id, pageVO.id, typeVO.id, "", attributesXML );
-			
+
 			token.recipientName = proxyName;
-			
+
 			return token;
 		}
 
@@ -363,14 +367,15 @@ package net.vdombox.ide.core.model
 
 			var pageAttributesVO : PageAttributesVO;
 			var objectVO : ObjectVO;
-			
+
 			switch ( operationName )
 			{
 				case "get_child_objects_tree":
 				{
 
 					var structure : XML = generatePageStructure( result.Object[ 0 ] );
-					if ( token.requestFunctionName == GET_OBJECT )
+
+					if ( token.requestFunctionName == GET_STRUCTURE )
 					{
 						notification = new ProxyNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, structure )
 						notification.token = token;
@@ -379,7 +384,9 @@ package net.vdombox.ide.core.model
 					{
 						token = soap.render_wysiwyg( pageVO.applicationVO.id, pageVO.id, "", 1 );
 
-						token.structure = <structure>{ structure }</structure>;
+						token.structure =
+							<structure>{structure}</structure>
+							;
 						token.recipientName = proxyName;
 						token.requestFunctionName = GET_WYSIWYG;
 					}
@@ -440,7 +447,7 @@ package net.vdombox.ide.core.model
 
 						objectVO.setXMLDescription( objectXML );
 
-						notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECT_GETTED, objectVO );
+						notification = new ProxyNotification( ApplicationFacade.PAGE_OBJECT_GETTED, { pageVO: pageVO, objectVO: objectVO } );
 						notification.token = token;
 					}
 					else if ( token.requestFunctionName == GET_ATTRIBUTES )
@@ -477,16 +484,16 @@ package net.vdombox.ide.core.model
 					var structureList : XMLList = token.structure.descendants( "*" );
 					var id : String;
 					var typeID : String;
-					
-					for each( tempElement in tempList )
+
+					for each ( tempElement in tempList )
 					{
 						id = tempElement.@id;
-						if( id == "" )
+						if ( id == "" )
 							continue;
-						
+
 						typeID = structureList.( @id == id ).@typeID;
-						
-						if( typeID != "" )
+
+						if ( typeID != "" )
 							tempElement.@typeID = typeID;
 					}
 
@@ -495,7 +502,7 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
-					
+
 				case "create_object":
 				{
 					objectVO = new ObjectVO( pageVO, typesProxy.getType( result.Object.@Type ) );
@@ -503,8 +510,8 @@ package net.vdombox.ide.core.model
 					objectVO.parentID = result.ParentId[ 0 ];
 					objectVO.setXMLDescription( result.Object[ 0 ] );
 
-					sendNotification( ApplicationFacade.PAGE_OBJECT_CREATED, { pageVO: pageVO, objectVO : objectVO } );
-					
+					sendNotification( ApplicationFacade.PAGE_OBJECT_CREATED, { pageVO: pageVO, objectVO: objectVO } );
+
 					break;
 				}
 			}
