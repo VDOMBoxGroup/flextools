@@ -4,6 +4,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.soap.Operation;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.ObjectAttributesVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -100,9 +101,12 @@ package net.vdombox.ide.core.model
 			{
 				case "get_one_object":
 				{
-					var attributes : Array = generateObjectAttributes( result.Objects.Object.Attributes[ 0 ] );
-
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, attributes );
+					var objectAttributesVO : ObjectAttributesVO = new ObjectAttributesVO( objectVO );
+					objectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
+					
+					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED,
+						{ objectVO: objectVO, objectAttributesVO: objectAttributesVO } );
+					
 					notification.token = token;
 
 					break;
