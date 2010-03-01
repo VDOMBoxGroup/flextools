@@ -14,6 +14,7 @@
 
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.common.vo.ObjectListVO;
 
 			[Bindable]
 			private var _attributeVO : AttributeVO;
@@ -40,12 +41,6 @@
 				codeInterface[ "value" ] = matches[ 2 ];
 
 				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
-				//				valueField.maxChars = uint( codeInterface[ "value" ] );
-				//				valueField.text = _attributeVO.value;
-
-
-
-
 
 				var comboBoxData : ArrayCollection = new ArrayCollection();
 				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
@@ -53,61 +48,32 @@
 				var listValues : Array = [];
 				var selectedItem : Object = {};
 
-				while ( listValues = codeInterfaceValueRE.exec( codeInterface[ "value" ] ) )
+				var objectListVO : ObjectListVO;
+
+				for each ( objectListVO in value.objectsList )
 				{
+					comboBoxData.addItem( objectListVO );
 
-					var listItem : Object = { label: listValues[ 1 ], data: listValues[ 2 ] };
-
-					comboBoxData.addItem( listItem );
-
-					if ( _attributeVO.value == listValues[ 2 ] )
-						selectedItem = comboBoxData[ comboBoxData.length - 1 ];
+					if ( _attributeVO.value == objectListVO.id )
+						selectedItem = objectListVO;
 				}
 
 				comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
+				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
 				comboBoxData.refresh();
 
 				valueField.dataProvider = comboBoxData;
 				valueField.selectedItem = selectedItem;
-
-
-
-
-
-				//				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
-				//				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
-				//				regExpValidator.validate();
 			}
 
 			private var regExpValidator : AttributeValidator = new AttributeValidator();
 
 			private function creationCompleteHandler() : void
 			{
-				//				regExpValidator.source = valueField;
-				//				regExpValidator.property = "text";
-				//				regExpValidator.required = false;
-				//				regExpValidator.trigger = valueField;
-				//
-				//				regExpValidator.triggerEvent = Event.CHANGE;
-				//
-				//				regExpValidator.addEventListener( ValidationResultEvent.VALID, validHandler, false, 0, true );
-				//				regExpValidator.addEventListener( ValidationResultEvent.INVALID, validHandler, false, 0, true );
-				//
-				//				regExpValidator.validate();
 			}
 
 			private function validHandler( event : ValidationResultEvent ) : void
 			{
-				//				if ( event.type == ValidationResultEvent.VALID )
-				//				{
-				//					okButton.enabled = true;
-				//				}
-				//				else if ( event.type == ValidationResultEvent.INVALID )
-				//				{
-				//					okButton.enabled = false;
-				//				}
-
 			}
 
 			private function getColorByGroup( groupNumber : uint ) : String
@@ -161,6 +127,6 @@
 				paddingRight="5" textAlign="right" verticalAlign="middle" />
 
 	<mx:ComboBox id="valueField"
-				 height="100%" minWidth="10" width="110"
+				 height="100%" labelField="name" minWidth="10" width="110"
 				 textAlign="left" />
 </s:ItemRenderer>
