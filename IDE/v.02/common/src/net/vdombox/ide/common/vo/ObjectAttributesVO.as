@@ -109,8 +109,8 @@ package net.vdombox.ide.common.vo
 			for each ( var objectListXML : XML in objectsListXML.* )
 			{
 				objectListVO = new ObjectListVO();
-				objectListVO.id = objectsListXML.@ID;
-				objectListVO.name = objectsListXML.@Name;
+				objectListVO.id = objectListXML.@ID;
+				objectListVO.name = objectListXML.@Name;
 				_objectsList.push( objectListVO );
 			}
 		}
