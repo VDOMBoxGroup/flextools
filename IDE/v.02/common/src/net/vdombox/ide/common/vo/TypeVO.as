@@ -7,8 +7,7 @@ package net.vdombox.ide.common.vo
 
 	public class TypeVO
 	{
-		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database",
-													  "debug" ];
+		private const STANDART_CATEGORIES : Array = [ "usual", "standard", "form", "table", "database", "debug" ];
 
 		public function TypeVO( typeXML : XML )
 		{
@@ -231,7 +230,7 @@ package net.vdombox.ide.common.vo
 			var prepareForResourceBundles : Object = {};
 			var propertyName : String;
 			var propertyValue : String;
-			var propertyRE : RegExp = /#Lang\((\w+)\)/;
+			var propertyRE : RegExp = /#Lang\((\w+)\)/g;
 			var matchResult : Array;
 
 			var property : XML;
@@ -243,20 +242,29 @@ package net.vdombox.ide.common.vo
 
 				matchResult = propertyValue.match( propertyRE );
 
-				if ( !matchResult )
+				if ( !matchResult || matchResult.length == 0 )
 					continue;
 
 				var localeName : String;
-				var sents : XMLList = languages.Sentence.( @ID == matchResult[ 1 ] )
+				var sents : XMLList;
+				var matchItem : String;
+				var phraseID : String;
 
-				for each ( var sent : XML in sents )
+
+				for each( matchItem in matchResult )
 				{
-					localeName = sent.parent().@Code;
+					phraseID = matchItem.substring( 6, matchItem.length - 1 );
+					sents = languages.Sentence.( @ID == phraseID )
 
-					if ( !prepareForResourceBundles.hasOwnProperty( localeName ) )
-						prepareForResourceBundles[ localeName ] = {};
+					for each ( var sent : XML in sents )
+					{
+						localeName = sent.parent().@Code;
 
-					prepareForResourceBundles[ localeName ][ sent.@ID.toString() ] = sent[ 0 ].toString();
+						if ( !prepareForResourceBundles.hasOwnProperty( localeName ) )
+							prepareForResourceBundles[ localeName ] = {};
+
+						prepareForResourceBundles[ localeName ][ sent.@ID.toString() ] = sent[ 0 ].toString();
+					}
 				}
 			}
 

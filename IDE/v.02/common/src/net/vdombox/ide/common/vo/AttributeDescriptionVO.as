@@ -34,11 +34,11 @@ package net.vdombox.ide.common.vo
 
 		private var propertyObject : Object;
 
-		private var propertyRE : RegExp = /#Lang\((\w+)\)/;
+		private var propertyRE : RegExp = /#Lang\((\w+)\)/g;
 
 		public function get typeID() : String
 		{
-			return typeID;
+			return _typeID;
 		}
 
 		public function get name() : String
@@ -48,12 +48,47 @@ package net.vdombox.ide.common.vo
 
 		public function get displayName() : String
 		{
-			return getValue( "displayName" );
+			return getValue( "displayname" );
 		}
 
 		public function get defaultValue() : String
 		{
-			return getValue( "defaultValue" );
+			return getValue( "defaultvalue" );
+		}
+
+		public function get colorGroup() : uint
+		{
+			return uint( getValue( "colorgroup" ) );
+		}
+
+		public function get codeInterface() : String
+		{
+			return getValue( "codeinterface" );
+		}
+
+		public function get interfaceType() : uint
+		{
+			return uint( getValue( "interfacetype" ) );
+		}
+
+		public function get help() : String
+		{
+			return getValue( "help" );
+		}
+
+		public function get visible() : Boolean
+		{
+			return getValue( "visible" ) == "1" ? true : false;
+		}
+
+		public function get errorValidationMessage() : String
+		{
+			return getValue( "errorvalidationmessage" );
+		}
+
+		public function get regularExpressionValidation() : String
+		{
+			return getValue( "regularexpressionvalidation" );
 		}
 
 		private function getValue( valueName : String ) : String
@@ -65,11 +100,19 @@ package net.vdombox.ide.common.vo
 				return value;
 
 			var matchResult : Array = String( propertyObject[ valueName ] ).match( propertyRE );
+			var matchItem : String;
+			var phraseID : String;
 
-			if ( matchResult )
-				value = resourceManager.getString( _typeID, matchResult[ 1 ] );
-			else
-				value = propertyObject[ valueName ];
+			value = propertyObject[ valueName ];
+
+			if ( matchResult && matchResult.length > 0 )
+			{
+				for each ( matchItem in matchResult )
+				{
+					phraseID = matchItem.substring( 6, matchItem.length - 1 );
+					value = value.replace( matchItem, resourceManager.getString( _typeID, phraseID ) );
+				}
+			}
 
 			return value;
 		}
