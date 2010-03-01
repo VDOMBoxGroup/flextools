@@ -27,7 +27,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMPageTargetNames.ATTRIBUTES:
 				{
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, body );
+						sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, body.objectAttributesVO );
 					else if ( operation == PPMOperationNames.UPDATE )
 						var d : * = "";
 					

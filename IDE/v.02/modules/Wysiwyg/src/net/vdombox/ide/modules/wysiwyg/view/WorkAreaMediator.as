@@ -1,8 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.events.MouseEvent;
+
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -14,7 +16,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -91,6 +93,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					workArea.itemVO = body as ItemVO;
 
+					if ( transformMarker )
+						transformMarker.visible = false;
+
 					break;
 				}
 			}
@@ -101,18 +106,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 			workArea.addEventListener( ItemEvent.CREATED, item_createdHandler, true, 0, true );
 			workArea.addEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true, 0, true );
 			workArea.addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true, 0, true );
+			workArea.addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
 
 			workArea.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			workArea.addEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 			workArea.addEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
 		}
 
+		private function mouseClickHandler( event : MouseEvent ) : void
+		{
+			event.stopPropagation();
+			sendNotification( ApplicationFacade.ITEM_SELECTED_REQUEST, workArea.itemVO );
+		}
+
 		private function item_itemClickedHandler( event : ItemEvent ) : void
 		{
 			var item : Item = event.target as Item;
 
-			sendNotification( ApplicationFacade.ITEM_SELECTED_REQUEST, item.itemVO )
-			
+			sendNotification( ApplicationFacade.ITEM_SELECTED_REQUEST, item.itemVO );
+
 			workArea.upperLayer.removeAllElements();
 			workArea.upperLayer.addElement( transformMarker );
 
@@ -153,7 +165,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			workArea.removeEventListener( ItemEvent.CREATED, item_createdHandler, true );
 			workArea.removeEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true );
-			workArea.addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true );
+			workArea.removeEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true );
 
 			workArea.removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			workArea.removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );

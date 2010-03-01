@@ -2,10 +2,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	
+
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -22,12 +22,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	public class ItemMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "ItemMediator";
+		public static var instances : Object = {};
 
 		public function ItemMediator( viewComponent : Item )
 		{
 			var itemVO : ItemVO = viewComponent.data as ItemVO;
 
 			super( NAME + ApplicationFacade.DELIMITER + itemVO.id, viewComponent );
+			instances[ this.mediatorName ] = "";
 		}
 
 		public function get item() : Item
@@ -43,6 +45,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRemove() : void
 		{
 			removeHandlers();
+
+			delete instances[ mediatorName ];
 		}
 
 		override public function listNotificationInterests() : Array
@@ -63,9 +67,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-					if( item.itemVO.id == body.id )
+					if ( body && item.itemVO && item.itemVO.id == body.id )
 						item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
-						
+
 					break;
 				}
 			}
@@ -73,15 +77,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
-			item.addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
-			item.addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
-			item.addEventListener( MouseEvent.CLICK, mouseClickHandler );
-			item.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
-			item.addEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
-			item.addEventListener( DragEvent.DRAG_DROP, dragDropHandler );
+			item.addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
+			item.addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
+			item.addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
+			item.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
+			item.addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
+			item.addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
 		}
 
-		private function mouseClickHandler(event:MouseEvent):void
+		private function mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();
 			item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
@@ -104,11 +108,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				item.skin.currentState = "normal";
 		}
 
-
-
 		private function removeHandlers() : void
 		{
-//			item.removeEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true )
+			item.removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
+			item.removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
+			item.removeEventListener( MouseEvent.CLICK, mouseClickHandler );
+			item.removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
+			item.removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
+			item.removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 		}
 
 

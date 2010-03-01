@@ -5,10 +5,174 @@
 
 	<s:layout>
 
-		<s:VerticalLayout />
+		<s:BasicLayout />
 	</s:layout>
 
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+
+			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
+			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.common.vo.ObjectAttributesVO;
+			import net.vdombox.ide.common.vo.ObjectVO;
+			import net.vdombox.ide.common.vo.PageAttributesVO;
+			import net.vdombox.ide.common.vo.PageVO;
+			import net.vdombox.ide.common.vo.TypeVO;
+
+			private var _attributesVO : Object;
+			private var _objectVO : ObjectVO;
+			private var _pageVO : PageVO;
+			private var _typeVO : TypeVO;
+
+			private var attributes : ArrayCollection;
+			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
+
+			public function set attributesVO( value : Object ) : void
+			{
+				_attributesVO = value;
+
+				if ( value is ObjectAttributesVO )
+				{
+					_objectVO = value.objectVO;
+					_typeVO = _objectVO.typeVO;
+				}
+				else if ( value is PageAttributesVO )
+				{
+					_pageVO = value.pageVO;
+					_typeVO = _pageVO.typeVO;
+				}
+
+				var attributesArray : Array = [];
+				var attributeVO : AttributeVO;
+				var attributeDescriptionVO : AttributeDescriptionVO;
+
+				for each ( attributeVO in _attributesVO.attributes )
+				{
+					attributeDescriptionVO = getAttributeDesctriptionVOByName( attributeVO.name );
+
+					if ( !attributeDescriptionVO.visible )
+						continue;
+
+					attributesArray.push( { group: attributeDescriptionVO.colorGroup, name: attributeDescriptionVO.name, attributeVO: attributeVO,
+							attributeDescriptionVO: attributeDescriptionVO, objectsList: _attributesVO.objectsList,
+							pageLinks: _attributesVO.pageLinks } );
+				}
+
+				attributes = new ArrayCollection( attributesArray );
+				attributes.sort = new Sort();
+				attributes.sort.fields = [ new SortField( "group" ), new SortField( "name" ) ];
+				attributes.refresh();
+
+				attributesList.dataProvider = attributes;
+			}
+
+			private function itemRendererFunction( data : Object ) : IFactory
+			{
+				var attributeDescriptionVO : AttributeDescriptionVO = data.attributeDescriptionVO;
+
+				var codeInterface : Object = {}
+				var matches : Array = attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
+
+				var factory : IFactory;
+
+				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
+				codeInterface[ "value" ] = matches[ 2 ];
+
+				switch ( codeInterface[ "type" ] )
+				{
+					case "number":
+					{
+						factory = new ClassFactory( AttributeNumberItemRenderer );
+						break;
+					}
+
+					case "textfield":
+					{
+						factory = new ClassFactory( AttributeTextFiledItemRenderer );
+						break;
+					}
+
+					case "multiline":
+					{
+						factory = new ClassFactory( AttributeMultilineItemRenderer );
+						break;
+					}
+
+					case "file":
+					{
+						factory = new ClassFactory( AttributeFileItemRenderer );
+						break;
+					}
+
+					case "color":
+					{
+						factory = new ClassFactory( AttributeColorItemRenderer );
+						break;
+					}
+
+					case "dropdown":
+					{
+						factory = new ClassFactory( AttributeDropdownItemRenderer );
+						break;
+					}
+
+					case "pagelink":
+					{
+						factory = new ClassFactory( AttributePagelinkItemRenderer );
+						break;
+					}
+
+					case "objectlist":
+					{
+						factory = new ClassFactory( AttributeObjectlistItemRenderer );
+						break;
+					}
+
+					case "externaleditor":
+					{
+						factory = new ClassFactory( AttributeExternalEditorItemRenderer );
+						break;
+					}
+				}
+
+				return factory;
+			}
+
+			private function getAttributeDesctriptionVOByName( name : String ) : AttributeDescriptionVO
+			{
+				var result : AttributeDescriptionVO;
+				var attributeDescriptionVO : AttributeDescriptionVO;
+
+				for each ( attributeDescriptionVO in _typeVO.attributeDescriptions )
+				{
+					if ( attributeDescriptionVO.name == name )
+					{
+						result = attributeDescriptionVO;
+						break;
+					}
+				}
+
+				return result;
+			}
+		]]>
+	</fx:Script>
+
 	<s:List id="attributesList"
-			height="100%" width="100%" useVirtualLayout="false"
-			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.AttributeItemRenderer" />
+			width="250"
+			bottom="0" top="0"
+			itemRendererFunction="itemRendererFunction" useVirtualLayout="false" />
+
+	<s:controlBarContent>
+
+		<s:Button id="saveButton"
+				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }" />
+
+		<mx:Spacer width="100%" />
+
+		<s:Button id="deleteButton"
+				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_delete') }" />
+	</s:controlBarContent>
 </s:Panel>

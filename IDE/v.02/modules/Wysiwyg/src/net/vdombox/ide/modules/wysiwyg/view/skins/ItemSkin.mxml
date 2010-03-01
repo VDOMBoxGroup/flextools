@@ -14,13 +14,18 @@
 		<s:State name="disabled" />
 	</s:states>
 
-	<s:Rect height="100%" width="100%">
+	<s:Rect id="backgroundRect"
+			bottom="0" left="0" right="0" top="0">
 
 		<s:fill>
 
-			<s:SolidColor color="white"
-						  alpha=".0" />
+			<s:SolidColor alpha=".0" />
 		</s:fill>
+
+		<s:stroke>
+
+			<s:SolidColorStroke alpha=".0" />
+		</s:stroke>
 	</s:Rect>
 
 	<s:Group id="background" />
@@ -32,7 +37,7 @@
 
 		<s:Group>
 
-			<s:DataGroup id="dataGroup" />
+			<s:DataGroup id="dataGroup" bottom="0" left="0" right="0" top="0" />
 
 			<s:Group id="upperLayer" />
 		</s:Group>

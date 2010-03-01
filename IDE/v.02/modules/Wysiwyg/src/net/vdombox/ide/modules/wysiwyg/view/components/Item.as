@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-	
+
 	import flash.display.DisplayObjectContainer;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
@@ -13,12 +13,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
-	
+	import mx.graphics.SolidColor;
+	import mx.graphics.SolidColorStroke;
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
-	
+
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.Scroller;
@@ -26,6 +28,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
 	import spark.layouts.VerticalLayout;
+	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 
 	public class Item extends SkinnableDataContainer implements IItemRenderer
@@ -52,16 +55,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		[SkinPart( required="true" )]
 		public var background : Group;
-		
-		[SkinPart(required="true" )]
-		public var scroller: Scroller;
-		
-		[SkinPart(required="true" )]
-		public var locker: Group;
+
+		[SkinPart( required="true" )]
+		public var scroller : Scroller;
+
+		[SkinPart( required="true" )]
+		public var locker : Group;
+
+		[SkinPart( required="false" )]
+		public var backgroundRect : Rect;
 
 		private var _data : Object;
 		private var _itemVO : ItemVO;
-		
+
 		public function get selected() : Boolean
 		{
 			return false;
@@ -89,16 +95,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 		}
 
-		public function get itemVO () : ItemVO
+		public function get itemVO() : ItemVO
 		{
 			return _itemVO;
 		}
-		
-		public function set itemVO ( value : ItemVO ) : void
+
+		public function set itemVO( value : ItemVO ) : void
 		{
 			_itemVO = value;
 		}
-		
+
 		public function get data() : Object
 		{
 			return _data;
@@ -132,9 +138,28 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( attributeVO )
 				x = int( attributeVO.value );
 
+			attributeVO = _itemVO.getAttributeByName( "backgroundcolor" );
+
+			if ( attributeVO )
+			{
+				SolidColor( backgroundRect.fill ).alpha = 1;
+				SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
+			}
+
+			attributeVO = _itemVO.getAttributeByName( "bordercolor" );
+
+			if ( attributeVO )
+			{
+				SolidColorStroke( backgroundRect.stroke ).alpha = 1;
+				SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
+				attributeVO = _itemVO.getAttributeByName( "borderwidth" );
+				if ( attributeVO )
+					SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
+			}
+
 			if ( _itemVO.staticFlag )
 				locker.visible = true;
-			
+
 			if ( _itemVO && _itemVO.children.length > 0 )
 			{
 				var childrenDataProvider : ArrayCollection = new ArrayCollection( _itemVO.children );
@@ -199,34 +224,41 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function chooseItemRenderer( itemVO : ItemVO ) : IFactory
 		{
 			var itemFactory : ClassFactory;
-
+			var layout : LayoutBase;
 			switch ( itemVO.name )
 			{
 				case "container":
 				{
 					itemFactory = new ClassFactory( Item );
-					itemFactory.properties = { layout: new BasicLayout() };
+					layout = new BasicLayout()
+					itemFactory.properties = { layout: layout };
 					break;
 				}
 
 				case "table":
 				{
 					itemFactory = new ClassFactory( Item );
-					itemFactory.properties = { layout: new VerticalLayout() };
+					layout = new VerticalLayout()
+					VerticalLayout( layout ).gap = 0;
+					itemFactory.properties = { layout: layout };
 					break;
 				}
 
 				case "row":
 				{
 					itemFactory = new ClassFactory( Item );
-					itemFactory.properties = { layout: new HorizontalLayout(), percentWidth: 100, percentHeight: 100 };
+					layout = new HorizontalLayout();
+					HorizontalLayout( layout ).gap = 0;
+					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
+
 					break;
 				}
 
 				case "cell":
 				{
 					itemFactory = new ClassFactory( Item );
-					itemFactory.properties = { layout: new BasicLayout(), percentWidth: 100, percentHeight: 100 };
+					layout = new BasicLayout()
+					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
 					break;
 				}
 			}

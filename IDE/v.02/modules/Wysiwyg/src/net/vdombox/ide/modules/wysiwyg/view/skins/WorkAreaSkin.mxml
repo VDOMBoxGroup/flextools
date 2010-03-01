@@ -23,6 +23,14 @@
 		</s:fill>
 	</s:Rect>
 
+	<s:Rect id="backgroundRect"
+			bottom="0" left="0" right="0" top="0"
+			visible="false">
+		<s:fill>
+			<s:SolidColor />
+		</s:fill>
+	</s:Rect>
+
 	<s:Group id="background" />
 
 	<s:Rect height="100%" width="100%"

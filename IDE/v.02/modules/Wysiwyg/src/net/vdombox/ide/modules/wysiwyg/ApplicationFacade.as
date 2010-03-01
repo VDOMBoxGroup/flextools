@@ -102,7 +102,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED: String = "pagesGetted";
 		public static const GET_PAGE_SRUCTURE : String = "getPageStructure";
-		public static const PAGE_SRUCTURE_GETTED : String = "pageStructureGetted";
+		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
 		public static const SELECT_PAGE : String = "selectPage";
 		public static const PAGE_SELECTED : String = "pageSelected";
 		

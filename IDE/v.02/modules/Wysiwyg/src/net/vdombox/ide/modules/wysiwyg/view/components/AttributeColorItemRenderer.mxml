@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/halo"
+				
+				height="21"
+				xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.events.ValidationResultEvent;
+
+			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
+			import net.vdombox.ide.common.vo.AttributeVO;
+
+			[Bindable]
+			private var _attributeVO : AttributeVO;
+
+			[Bindable]
+			private var _attributeDescriptionVO : AttributeDescriptionVO;
+
+			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
+
+			override public function set data( value : Object ) : void
+			{
+				super.data = value;
+
+				if ( !value )
+					return;
+
+				_attributeVO = value.attributeVO;
+				_attributeDescriptionVO = value.attributeDescriptionVO;
+
+				var codeInterface : Object = {}
+				var matches : Array = _attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
+				//
+				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
+				codeInterface[ "value" ] = matches[ 2 ];
+
+				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
+				//				valueField.maxChars = uint( codeInterface[ "value" ] );
+				//				valueField.text = _attributeVO.value;
+
+
+
+
+
+//				var comboBoxData : ArrayCollection = new ArrayCollection();
+//				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
+//
+//				var listValues : Array = [];
+//				var selectedItem : Object = {};
+//
+//				while ( listValues = codeInterfaceValueRE.exec( codeInterface[ "value" ] ) )
+//				{
+//
+//					var listItem : Object = { label: listValues[ 1 ], data: listValues[ 2 ] };
+//
+//					comboBoxData.addItem( listItem );
+//
+//					if ( _attributeVO.value == listValues[ 2 ] )
+//						selectedItem = comboBoxData[ comboBoxData.length - 1 ];
+//				}
+//
+//				comboBoxData.sort = new Sort();
+//				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
+//				comboBoxData.refresh();
+
+				valueField.color = _attributeVO.value;
+//				valueField.selectedItem = selectedItem;
+
+
+
+
+
+				//				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
+				//				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
+				//				regExpValidator.validate();
+			}
+
+			private var regExpValidator : AttributeValidator = new AttributeValidator();
+
+			private function creationCompleteHandler() : void
+			{
+				//				regExpValidator.source = valueField;
+				//				regExpValidator.property = "text";
+				//				regExpValidator.required = false;
+				//				regExpValidator.trigger = valueField;
+				//
+				//				regExpValidator.triggerEvent = Event.CHANGE;
+				//
+				//				regExpValidator.addEventListener( ValidationResultEvent.VALID, validHandler, false, 0, true );
+				//				regExpValidator.addEventListener( ValidationResultEvent.INVALID, validHandler, false, 0, true );
+				//
+				//				regExpValidator.validate();
+			}
+
+			private function validHandler( event : ValidationResultEvent ) : void
+			{
+				//				if ( event.type == ValidationResultEvent.VALID )
+				//				{
+				//					okButton.enabled = true;
+				//				}
+				//				else if ( event.type == ValidationResultEvent.INVALID )
+				//				{
+				//					okButton.enabled = false;
+				//				}
+
+			}
+
+			private function getColorByGroup( groupNumber : uint ) : String
+			{
+				var colorGroup : String;
+
+				switch ( groupNumber )
+				{
+					case 1:
+					{
+						colorGroup = "#777777";
+						break;
+					}
+
+					case 2:
+					{
+						colorGroup = "#00B000";
+						break;
+					}
+
+					case 3:
+					{
+						colorGroup = "#B00000";
+						break;
+					}
+
+					case 4:
+					{
+						colorGroup = "#8080ff";
+						break;
+					}
+
+					default:
+					{
+						colorGroup = "#777777";
+					}
+				}
+
+				return colorGroup;
+			}
+		]]>
+	</fx:Script>
+
+	<s:layout>
+
+		<s:HorizontalLayout gap="0" />
+	</s:layout>
+
+	<s:RichText id="nameLabel"
+				height="100%" minWidth="70" text="{ _attributeDescriptionVO.displayName }" width="138"
+				paddingRight="5" textAlign="right" verticalAlign="middle" />
+
+	<colorPicker:ColorPicker id="valueField"
+							 height="100%" minWidth="10" width="110"
+							 textAlign="left" />
+</s:ItemRenderer>
