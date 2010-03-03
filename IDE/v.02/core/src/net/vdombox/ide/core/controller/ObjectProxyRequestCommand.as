@@ -1,11 +1,12 @@
 package net.vdombox.ide.core.controller
 {
 	import net.vdombox.ide.common.PPMObjectTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.core.model.ObjectProxy;
 	import net.vdombox.ide.core.model.PageProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -38,7 +39,10 @@ package net.vdombox.ide.core.controller
 			{
 				case PPMObjectTargetNames.ATTRIBUTES:
 				{
-					objectProxy.getAttributes();
+					if( operation == PPMOperationNames.READ )
+						objectProxy.getAttributes();
+					else if( operation == PPMOperationNames.UPDATE )
+						objectProxy.setAttributes( body.attributes );
 
 					break;
 				}
@@ -47,6 +51,14 @@ package net.vdombox.ide.core.controller
 				{
 					objectProxy.getServerActions();
 
+					break;
+				}
+					
+				case PPMObjectTargetNames.OBJECT:
+				{
+					if( operation == PPMOperationNames.CREATE )
+						objectProxy.createObject( body.typeVO, body.attributes );
+					
 					break;
 				}
 			}

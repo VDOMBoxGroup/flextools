@@ -135,13 +135,16 @@ package net.vdombox.ide.core
 		public static const PAGE_OBJECTS_GETTED : String = "pageObjectsGetted";
 		public static const PAGE_OBJECT_GETTED : String = "pageObjectGetted";
 		public static const PAGE_OBJECT_CREATED : String = "pageObjectCreated";
+		public static const PAGE_OBJECT_DELETED : String = "pageObjectDeleted";
 		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
 		public static const PAGE_SERVER_ACTIONS_SETTED : String = "pageServerActionsGetted";
 		public static const PAGE_WYSIWYG_SETTED : String = "pageWYSIWYGGetted";
 
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
+		public static const OBJECT_ATTRIBUTES_SETTED : String = "objectAttributesSetted";
 		public static const OBJECT_SERVER_ACTIONS_GETTED : String = "objectServerActionsGetted";
+		public static const OBJECT_OBJECT_CREATED : String = "objectObjectCreated";
 
 //		window
 		public static const OPEN_WINDOW : String = "openWindow";
@@ -225,13 +228,16 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_OBJECTS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECT_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_OBJECT_CREATED, PageProxyResponseCommand );
+			registerCommand( PAGE_OBJECT_DELETED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_WYSIWYG_SETTED, PageProxyResponseCommand );
 
 			registerCommand( OBJECT_PROXY_REQUEST, ObjectProxyRequestCommand );
 			registerCommand( OBJECT_ATTRIBUTES_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_ATTRIBUTES_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTIONS_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_OBJECT_CREATED, ObjectProxyResponseCommand );
 
 			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
 			registerCommand( RESOURCES_GETTED, ResourcesProxyResponseCommand );

@@ -1,25 +1,26 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.MouseEvent;
-	
+
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
+	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.utils.WindowManager;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -49,23 +50,23 @@ package net.vdombox.ide.core.view
 		{
 			return viewComponent as MainWindow;
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
-			
+
 			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
 			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
-			
+
 			return interests;
 		}
-		
+
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
-			switch ( notification.getName())
+			switch ( notification.getName() )
 			{
 				case ApplicationFacade.SHOW_MODULE_TOOLSET:
 				{
@@ -75,7 +76,7 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.SHOW_MODULE_BODY:
 				{
-					mainWindow.addElement( body.component  as IVisualElement );
+					mainWindow.addElement( body.component as IVisualElement );
 					break;
 				}
 
@@ -83,25 +84,25 @@ package net.vdombox.ide.core.view
 				{
 					var newSelectedModuleID : String = body as String;
 					var moduleVO : ModuleVO = modulesProxy.getModuleByID( newSelectedModuleID );
-					
+
 					selectModule( moduleVO );
 					break;
 				}
-					
+
 				case ApplicationFacade.CLOSE_SETTINGS_WINDOW:
 				{
-					var settingsWindowMediator : SettingsWindowMediator = 
-						facade.retrieveMediator( SettingsWindowMediator.NAME ) as SettingsWindowMediator;
-					
-					if( !settingsWindowMediator )
+					var settingsWindowMediator : SettingsWindowMediator = facade.retrieveMediator( SettingsWindowMediator.NAME ) as
+						SettingsWindowMediator;
+
+					if ( !settingsWindowMediator )
 						return;
-					
+
 					var settingsWindow : SettingsWindow = settingsWindowMediator.settingsWindow;
-					
+
 					windowManager.removeWindow( settingsWindow );
-					
+
 					facade.removeMediator( SettingsWindowMediator.NAME );
-					
+
 					break;
 				}
 			}
@@ -110,8 +111,8 @@ package net.vdombox.ide.core.view
 		override public function onRegister() : void
 		{
 			addHandlers();
-			
-			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;			
+
+			modulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
 		}
 
 		override public function onRemove() : void
@@ -122,23 +123,25 @@ package net.vdombox.ide.core.view
 		public function openWindow() : void
 		{
 			windowManager.addWindow( mainWindow );
+			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			mainWindow.title = "VDOM IDE (v.2b) - User: " + serverProxy.authInfo.username;
 		}
 
 		public function closeWindow() : void
 		{
 			windowManager.removeWindow( mainWindow );
 		}
-	
+
 		private function get toolsetBar() : Group
 		{
 			return mainWindow.toolsetBar;
 		}
-		
+
 		private function addHandlers() : void
 		{
 			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
 		}
-		
+
 		private function removeHandlers() : void
 		{
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
@@ -160,8 +163,8 @@ package net.vdombox.ide.core.view
 			for ( var i : int = 0; i < modulesList.length; i++ )
 			{
 				var moduleVO : ModuleVO = modulesList[ i ];
-				
-				if( moduleVO.module.hasToolset )
+
+				if ( moduleVO.module.hasToolset )
 					moduleVO.module.getToolset();
 			}
 		}
@@ -169,7 +172,7 @@ package net.vdombox.ide.core.view
 		private function selectModule( moduleVO : ModuleVO = null ) : void
 		{
 			mainWindow.removeAllElements();
-			
+
 			if ( !moduleVO )
 			{
 				moduleVO = modulesList[ 0 ] as ModuleVO;
@@ -181,7 +184,7 @@ package net.vdombox.ide.core.view
 			}
 
 			selectedModuleID = moduleVO.moduleID;
-			
+
 			sendNotification( ApplicationFacade.SELECTED_MODULE_CHANGED, moduleVO );
 		}
 
@@ -192,15 +195,15 @@ package net.vdombox.ide.core.view
 			modulesList = modulesProxy.getModulesListByCategory( categoryVO );
 
 			currentModuleCategory = categoryVO;
-			
-			if(  modulesList.length == 0 )
+
+			if ( modulesList.length == 0 )
 				return;
-			
+
 //			for ( var i : int = 0; i < modulesList.length; i++ )
 //			{
 //				sendNotification( ApplicationFacade.CONNECT_MODULE_TO_CORE, modulesList[ i ] );
 //			}
-			
+
 			placeToolsets();
 		}
 
@@ -208,16 +211,16 @@ package net.vdombox.ide.core.view
 		{
 			var modulesCategories : Array = modulesProxy.categories;
 			var tabBar : ButtonBar = mainWindow.tabBar;
-			
+
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
 			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
-			
-			
+
+
 			tabBar.labelField = "name";
 			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
 		}
-		
+
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
 			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;
@@ -230,9 +233,9 @@ package net.vdombox.ide.core.view
 		{
 			if ( facade.hasMediator( SettingsWindowMediator.NAME ) )
 				facade.removeMediator( SettingsWindowMediator.NAME );
-			
+
 			var settingsWindow : SettingsWindow = new SettingsWindow();
-			facade.registerMediator( new SettingsWindowMediator( settingsWindow ));
+			facade.registerMediator( new SettingsWindowMediator( settingsWindow ) );
 
 			windowManager.addWindow( settingsWindow, mainWindow, true );
 		}

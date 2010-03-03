@@ -27,9 +27,23 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 					
+				case ApplicationFacade.OBJECT_ATTRIBUTES_SETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
+					
+					break;
+				}
+					
 				case ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.SERVER_ACTIONS, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.OBJECT_OBJECT_CREATED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.OBJECT, body );
 					
 					break;
 				}

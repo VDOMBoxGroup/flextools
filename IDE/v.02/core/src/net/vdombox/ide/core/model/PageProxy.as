@@ -2,7 +2,8 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	import mx.utils.object_proxy;
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
@@ -13,7 +14,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 
@@ -202,8 +203,16 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function deleteObject( objectVO : ObjectVO ) : void
+		public function deleteObject( objectVO : ObjectVO ) : AsyncToken
 		{
+			var token : AsyncToken;
+			
+			token = soap.delete_object( pageVO.applicationVO.id, objectVO.id );
+			
+			token.recipientName = proxyName;
+			token.objectVO = objectVO;
+			
+			return token;
 		}
 
 		public function deleteObjectAt( objectID : String ) : void
@@ -257,6 +266,7 @@ package net.vdombox.ide.core.model
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -268,6 +278,7 @@ package net.vdombox.ide.core.model
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -512,6 +523,15 @@ package net.vdombox.ide.core.model
 
 					sendNotification( ApplicationFacade.PAGE_OBJECT_CREATED, { pageVO: pageVO, objectVO: objectVO } );
 
+					break;
+				}
+					
+				case "delete_object":
+				{
+					objectVO = token.objectVO;
+					
+					sendNotification( ApplicationFacade.PAGE_OBJECT_DELETED, { pageVO: pageVO, objectVO: objectVO } );
+					
 					break;
 				}
 			}

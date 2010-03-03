@@ -11,6 +11,7 @@ package net.vdombox.ide.core.view.components
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.components.Window;
+	import spark.components.windowClasses.TitleBar;
 
 	public class MainWindow extends Window
 	{
@@ -32,6 +33,9 @@ package net.vdombox.ide.core.view.components
 		
 		[SkinPart( required="true" )]
 		public var settingsButton : Image;
+		
+//		[SkinPart( required="true" )]
+//		public var titleBar : TitleBar;
 		
 		private function closeHandler( event : Event ) : void
 		{

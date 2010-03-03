@@ -57,6 +57,8 @@ package net.vdombox.ide.core.controller
 						pageProxy.getObjectAt( body.objectID );
 					else if( operation == PPMOperationNames.CREATE )
 						pageProxy.createObject( body.typeVO, body.attributes );
+					else if( operation == PPMOperationNames.DELETE )
+						pageProxy.deleteObject( body.objectVO );
 					
 
 					break;

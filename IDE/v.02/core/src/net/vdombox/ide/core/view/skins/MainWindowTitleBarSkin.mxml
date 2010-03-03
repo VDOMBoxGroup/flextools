@@ -1,127 +1,148 @@
 <!--
 
-ADOBE SYSTEMS INCORPORATED
-Copyright 2009 Adobe Systems Incorporated
-All Rights Reserved.
+	 ADOBE SYSTEMS INCORPORATED
+	 Copyright 2009 Adobe Systems Incorporated
+	 All Rights Reserved.
 
-NOTICE: Adobe permits you to use, modify, and distribute this file
-in accordance with the terms of the license agreement accompanying it.
+	 NOTICE: Adobe permits you to use, modify, and distribute this file
+	 in accordance with the terms of the license agreement accompanying it.
 
 -->
 <!--- The default skin class for the title bar of the Spark WindowedApplication component
-and Spark Window component when you use Flex chrome.  
-The title bar skin includes the close, minimize, and maximize buttons, the 
-title icon, and the title text.
+	 and Spark Window component when you use Flex chrome.
+	 The title bar skin includes the close, minimize, and maximize buttons, the
+	 title icon, and the title text.
 
-<p>The Flex chrome is defined by the SparkChromeWindowedApplicationSkin skin class 
-in the spark.skins.spark package. 
-To use the Flex chrome, set <code>systemChrome</code> to "none" in the application's .xml file,
-and set the <code>skinClass</code> style to spark.skins.spark.SparkChromeWindowedApplicationSkin. </p>
+	 <p>The Flex chrome is defined by the SparkChromeWindowedApplicationSkin skin class
+	 in the spark.skins.spark package.
+	 To use the Flex chrome, set <code>systemChrome</code> to "none" in the application's .xml file,
+	 and set the <code>skinClass</code> style to spark.skins.spark.SparkChromeWindowedApplicationSkin. </p>
 
-@langversion 3.0
-@playerversion Flash 10
-@playerversion AIR 1.5
-@productversion Flex 4
+	 @langversion 3.0
+	 @playerversion Flash 10
+	 @playerversion AIR 1.5
+	 @productversion Flex 4
 
-@see spark.components.WindowedApplication
-@see spark.components.Window
+	 @see spark.components.WindowedApplication
+	 @see spark.components.Window
 -->
-<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
-			 xmlns:mx="library://ns.adobe.com/flex/halo" 
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:mx="library://ns.adobe.com/flex/halo"
+			 
 			 minHeight="50" width="100%">
-	
+
 	<fx:Metadata>
 		/**
 		*  The host component of this skin.
 		*/
 		[HostComponent("spark.components.windowClasses.TitleBar")]
-	</fx:Metadata> 
-	
+	</fx:Metadata>
+
 	<fx:Script>
-		/*  Define the skin elements that should not be colorized. 
-		*  Exclude the titleBar and scroller because they are SparkSkins and we 
-		*  don't want to colorize them twice.
-		*/
-		static private const exclusions:Array = ["titleIconImage", "titleText"];
+		/*  Define the skin elements that should not be colorized.
+		 *  Exclude the titleBar and scroller because they are SparkSkins and we
+		 *  don't want to colorize them twice.
+		 */
+		static private const exclusions : Array = [ "titleIconImage", "titleText" ];
+
 		/**
 		 *  @inheritDoc
 		 */
-		override public function get colorizeExclusions():Array {return exclusions;}
-		
+		override public function get colorizeExclusions() : Array
+		{
+			return exclusions;
+		}
 	</fx:Script>
-	
+
 	<s:states>
+
 		<s:State name="normal" />
+
 		<s:State name="disabled" />
+
 		<s:State name="normalAndMaximized" stateGroups="maximizedGroup" />
+
 		<s:State name="disabledAndMaximized" stateGroups="maximizedGroup" />
 	</s:states>
-	
 	<!-- fill -->
 	<!--- Defines the background color of the skin. -->
-	<s:Rect id="background" left="0" right="0" top="0" bottom="0" radiusX="2" radiusY="2" >
+
+	<s:Rect id="background"
+			bottom="0" left="0" right="0" top="0"
+			radiusX="2" radiusY="2">
+
 		<s:fill>
 			<!--- @private -->
-			<s:LinearGradient id="bgFill" rotation="90">
-				<s:GradientEntry color="0x333333" />
-				<s:GradientEntry color="0x000000" />
+
+			<s:LinearGradient id="bgFill"
+							  rotation="90">
+
+				<s:GradientEntry color="0x4D5258" />
+				
+				<s:GradientEntry color="0x232426" />
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
-	
-	<s:Group minHeight="50" width="100%" height="100%" top="2" left="2" right="2" >
-		
+
+	<s:Group height="100%" minHeight="50" width.disabled="100%" width.disabledAndMaximized="100%"
+			 width.normalAndMaximized="100%"
+			 left="2" right="2" top="2">
+
 		<s:layout>
-			<s:HorizontalLayout verticalAlign="top" gap="5" />
+
+			<s:HorizontalLayout verticalAlign="top"
+								gap="5" />
 		</s:layout>
-		
 		<!-- title bar icon -->
 		<!--- Defines the image for the icon in the title bar. -->
-		<s:BitmapImage id="titleIconImage" minWidth="0" resizeMode="noScale"/>
-		
+
+		<s:BitmapImage id="titleIconImage"
+					   minWidth="0"
+					   resizeMode="noScale" />
 		<!-- title -->
 		<!--- Defines the Label control for displaying the title text in the title bar. -->
-		<s:Label id="titleText" textAlign="center" minWidth="0" fontSize="9" color="#585858" maxDisplayedLines="1" width="100%" />
-		
-		<!-- minimize button --> 
-		<!--- 
-		Defines the Button control for the mimimized button in the title bar. 
-		By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
-		to define the skin for the mimimized button.
-		
-		@see spark.skins.spark.windowChrome.MinimizeButtonSkin 
+
+		<s:Label id="titleText"
+				 height="100%" minWidth="0" width="100%"
+				 color="#999999" fontSize="14" fontWeight="bold" paddingTop="10" textAlign="center"
+				 maxDisplayedLines="1" />
+		<!-- minimize button -->
+		<!---
+			 Defines the Button control for the mimimized button in the title bar.
+			 By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
+			 to define the skin for the mimimized button.
+
+			 @see spark.skins.spark.windowChrome.MinimizeButtonSkin
 		-->
+
 		<s:Button id="minimizeButton"
-				  skinClass="spark.skins.spark.windowChrome.MinimizeButtonSkin"
-				  top="2" bottom="2" verticalCenter="0" 
-				  />
-		
+				  bottom="2" top="2" verticalCenter="0"
+				  skinClass="spark.skins.spark.windowChrome.MinimizeButtonSkin" />
 		<!-- maximize button -->
-		<!--- 
-		Defines the Button control for the maximized button in the title bar. 
-		By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
-		to define the skin for the maximized button.
-		
-		@see spark.skins.spark.windowChrome.MaximizeButtonSkin 
+		<!---
+			 Defines the Button control for the maximized button in the title bar.
+			 By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
+			 to define the skin for the maximized button.
+
+			 @see spark.skins.spark.windowChrome.MaximizeButtonSkin
 		-->
-		<s:Button id="maximizeButton" 
+
+		<s:Button id="maximizeButton"
+				  verticalCenter="0"
 				  skinClass="spark.skins.spark.windowChrome.MaximizeButtonSkin"
-				  skinClass.maximizedGroup="spark.skins.spark.windowChrome.RestoreButtonSkin"
-				  verticalCenter="0" 
-				  />
-		
+				  skinClass.maximizedGroup="spark.skins.spark.windowChrome.RestoreButtonSkin" />
 		<!-- close button -->
-		<!--- 
-		Defines the Button control for the close button in the title bar. 
-		By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
-		to define the skin for the close button.
-		
-		@see spark.skins.spark.windowChrome.CloseButtonSkin 
+		<!---
+			 Defines the Button control for the close button in the title bar.
+			 By default, the button uses the spark.skins.spark.windowChrome.MinimizeButtonSkin class
+			 to define the skin for the close button.
+
+			 @see spark.skins.spark.windowChrome.CloseButtonSkin
 		-->
-		<s:Button id="closeButton" 
-				  skinClass="spark.skins.spark.windowChrome.CloseButtonSkin"
-				  verticalCenter="0"  />
-		
+
+		<s:Button id="closeButton"
+				  verticalCenter="0"
+				  skinClass="spark.skins.spark.windowChrome.CloseButtonSkin" />
 	</s:Group>
-	
 </s:SparkSkin>
