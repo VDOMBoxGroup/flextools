@@ -9,5 +9,6 @@ package net.vdombox.ide.common
 		public static const SERVER_ACTIONS : String = "serverActions";
 		public static const LIBRARY : String = "library";
 		public static const LIBRARIES : String = "libraries";
+		public static const REMOTE_CALL : String = "remoteCall";
 	}
 }
