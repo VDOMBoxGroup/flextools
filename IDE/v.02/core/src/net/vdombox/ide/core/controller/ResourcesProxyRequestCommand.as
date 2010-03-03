@@ -42,7 +42,7 @@ package net.vdombox.ide.core.controller
 			else
 				throw new Error( "no page VO" );
 			
-			switch ( message.getOperation() )
+			switch ( operation )
 			{
 				case PPMOperationNames.READ:
 				{	
@@ -98,7 +98,7 @@ package net.vdombox.ide.core.controller
 				{
 					applicationVO = body as ApplicationVO;
 					resourcesProxy.getListResources( applicationVO );
-
+					
 					break;
 				}
 				

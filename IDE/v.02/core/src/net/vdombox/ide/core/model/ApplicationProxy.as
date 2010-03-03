@@ -205,6 +205,17 @@ package net.vdombox.ide.core.model
 
 			return token;
 		}
+		
+		public function remoteCall( objectID : String, functionName:String, value:String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			
+			token = soap.remote_method_call( applicationVO.id, objectID, functionName, value, "" );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
 
 		public function deletePageAt( pageID : String ) : void
 		{
@@ -245,6 +256,7 @@ package net.vdombox.ide.core.model
 			soap.set_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.remove_library.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.get_libraries.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
+			soap.remote_method_call.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -258,6 +270,7 @@ package net.vdombox.ide.core.model
 			soap.set_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.remove_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.remote_method_call.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createStructure( sourceStructure : XMLList ) : Array
@@ -474,6 +487,13 @@ package net.vdombox.ide.core.model
 						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
 					}
 
+					break;
+				}
+					
+				case "remote_method_call":
+				{
+					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_GETTED, { applicationVO: applicationVO, result: result } );
+					
 					break;
 				}
 			}

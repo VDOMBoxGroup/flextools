@@ -90,6 +90,13 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+					
+				case ApplicationFacade.APPLICATION_REMOTE_CALL_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
+					
+					break;
+				}
 			}
 
 			if ( message )

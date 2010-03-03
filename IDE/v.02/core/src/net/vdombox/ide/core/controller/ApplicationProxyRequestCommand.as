@@ -61,6 +61,14 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 
+				case PPMApplicationTargetNames.REMOTE_CALL:
+				{
+					if ( operation == PPMOperationNames.READ )
+						applicationProxy.remoteCall( body.objectID, body.functionName, body.value );
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.LIBRARY:
 				{
 					if ( operation == PPMOperationNames.CREATE )

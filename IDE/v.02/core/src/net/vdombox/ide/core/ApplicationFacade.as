@@ -121,6 +121,7 @@ package net.vdombox.ide.core
 		public static const APPLICATION_PAGES_GETTED : String = "applicationPagesGetted";
 		public static const APPLICATION_PAGE_CREATED : String = "applicationPageCreated";
 		public static const APPLICATION_PAGE_DELETED : String = "applicationPageDeleted";
+		public static const APPLICATION_REMOTE_CALL_GETTED : String = "applicationRemoteCallGetted";
 		
 		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
@@ -215,6 +216,7 @@ package net.vdombox.ide.core
 			registerCommand( APPLICATION_LIBRARIES_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_CREATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_LIBRARY_DELETED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_REMOTE_CALL_GETTED, ApplicationProxyResponseCommand );
 
 			registerCommand( PAGE_PROXY_REQUEST, PageProxyRequestCommand );
 			registerCommand( PAGE_STRUCTURE_GETTED, PageProxyResponseCommand );
