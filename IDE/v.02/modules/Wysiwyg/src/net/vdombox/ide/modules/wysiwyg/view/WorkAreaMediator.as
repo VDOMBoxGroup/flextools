@@ -1,14 +1,15 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.MouseEvent;
-
+	
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
@@ -16,7 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -35,6 +36,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var isSelectedPageVOChanged : Boolean;
 		private var isSelectedObjectVOChanged : Boolean;
+		
+		private var isTransformed : Boolean;
 
 		public function get workArea() : WorkArea
 		{
@@ -91,11 +94,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.RENDER_DATA_CHANGED:
 				{
+					var itemMediatorName : String;
+					var instances : Object = ItemMediator.instances;
+					
+					for ( itemMediatorName in ItemMediator.instances )
+					{
+						facade.removeMediator( itemMediatorName );
+					}
+					
 					workArea.itemVO = body as ItemVO;
 
 					if ( transformMarker )
 						transformMarker.visible = false;
 
+					sendNotification( ApplicationFacade.ITEM_SELECTED_REQUEST, body );
+					
 					break;
 				}
 			}
@@ -111,12 +124,30 @@ package net.vdombox.ide.modules.wysiwyg.view
 			workArea.addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
 			workArea.addEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 			workArea.addEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
+			
+			transformMarker.addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler );
+		}
+
+		private function transformCompleteHandler( event : TransformMarkerEvent ) : void
+		{
+			isTransformed = true;
+			
+			sendNotification( ApplicationFacade.ITEM_TRANSFORMED, { itemVO : event.item.itemVO, properties : event.properties } );
 		}
 
 		private function mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();
+						
+			if( isTransformed )
+			{
+				isTransformed = false;
+				return;
+			}
+			
 			sendNotification( ApplicationFacade.ITEM_SELECTED_REQUEST, workArea.itemVO );
+			
+			workArea.upperLayer.removeAllElements();
 		}
 
 		private function item_itemClickedHandler( event : ItemEvent ) : void

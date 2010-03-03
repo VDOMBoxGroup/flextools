@@ -23,16 +23,17 @@
 				_title = attrValue;
 			}
 
+			[Bindable]
 			public function get value() : String
 			{
 
 				return _value;
 			}
 
-			public function set value( attrValue : String ) : void
+			public function set value( value : String ) : void
 			{
 
-				_value = attrValue;
+				_value = value;
 			}
 
 			/* 			private function openWindow() : void
@@ -61,7 +62,7 @@
 
 			private function multilineWindow_applyHandler( event : MultilineWindowEvent ) : void
 			{
-				_value = event.value;
+				value = event.value;
 				dispatchEvent( new FlexEvent( FlexEvent.VALUE_COMMIT ) );
 				var currentTarget : Object = event.currentTarget;
 

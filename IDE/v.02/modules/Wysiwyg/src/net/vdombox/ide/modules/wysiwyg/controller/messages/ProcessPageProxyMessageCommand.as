@@ -34,8 +34,15 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
 						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
 					}
-					if ( operation == PPMOperationNames.READ )
+					else if ( operation == PPMOperationNames.READ )
+					{
 						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
+					}
+					else if ( operation == PPMOperationNames.DELETE )
+					{
+						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
+						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
+					}
 
 					break;
 				}

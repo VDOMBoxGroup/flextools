@@ -10,15 +10,15 @@
 
 			private var _value : String;
 			
-
+			[Bindable]
 			public function get value() : String
 			{
 				return _value;
 			}
 
-			public function set value( attrValue : String ) : void
+			public function set value( value : String ) : void
 			{
-				_value = attrValue;
+				_value = value;
 			}
 		]]>
 	</mx:Script>

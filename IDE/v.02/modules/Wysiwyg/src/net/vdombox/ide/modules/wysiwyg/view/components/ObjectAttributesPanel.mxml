@@ -21,6 +21,7 @@
 			import net.vdombox.ide.common.vo.PageAttributesVO;
 			import net.vdombox.ide.common.vo.PageVO;
 			import net.vdombox.ide.common.vo.TypeVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 
 			private var _attributesVO : Object;
 			private var _objectVO : ObjectVO;
@@ -168,11 +169,13 @@
 	<s:controlBarContent>
 
 		<s:Button id="saveButton"
-				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }" />
+				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }"
+				  click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ))"/>
 
 		<mx:Spacer width="100%" />
 
 		<s:Button id="deleteButton"
-				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_delete') }" />
+				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_delete') }"
+				  click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.DELETE_REQUEST ))" />
 	</s:controlBarContent>
 </s:Panel>

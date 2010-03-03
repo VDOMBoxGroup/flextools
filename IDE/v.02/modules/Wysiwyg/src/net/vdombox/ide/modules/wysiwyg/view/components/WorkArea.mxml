@@ -52,6 +52,8 @@
 
 				processProperties( _itemVO );
 
+				
+				
 				dataProvider = childrenDataProvider;
 			}
 
@@ -67,22 +69,23 @@
 
 				var attributeVO : AttributeVO;
 
-				for each ( attributeVO in ownItemVO.attributes )
+				attributeVO = _itemVO.getAttributeByName( "backgroundcolor" );
+				
+				if ( attributeVO )
 				{
-					if ( attributeVO.name == "backgroundcolor" )
-					{
-						backgroundRect.visible = true;
-						SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr(1) );
-					}
-					
-					if ( attributeVO.name == "bordercolor" )
-					{
-						var stroke : SolidColorStroke = new SolidColorStroke( uint( "0x" + attributeVO.value.substr(1) ) );
-						backgroundRect.stroke = stroke;
-					}
-
-					if ( styleList.hasOwnProperty( attributeVO.name ) )
-						setStyle( styleList[ attributeVO.name ], attributeVO.value );
+					SolidColor( backgroundRect.fill ).alpha = 1;
+					SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
+				}
+				
+				attributeVO = _itemVO.getAttributeByName( "bordercolor" );
+				
+				if ( attributeVO )
+				{
+					SolidColorStroke( backgroundRect.stroke ).alpha = 1;
+					SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
+					attributeVO = _itemVO.getAttributeByName( "borderwidth" );
+					if ( attributeVO )
+						SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
 				}
 
 				for each ( contetntPart in ownItemVO.content )

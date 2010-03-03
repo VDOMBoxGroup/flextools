@@ -69,7 +69,7 @@
 //				comboBoxData.sort.fields = [ new SortField( "label", true ) ];
 //				comboBoxData.refresh();
 
-				valueField.color = _attributeVO.value;
+//				valueField.color = _attributeVO.value;
 //				valueField.selectedItem = selectedItem;
 
 
@@ -161,7 +161,7 @@
 				height="100%" minWidth="70" text="{ _attributeDescriptionVO.displayName }" width="138"
 				paddingRight="5" textAlign="right" verticalAlign="middle" />
 
-	<colorPicker:ColorPicker id="valueField"
+	<colorPicker:ColorPicker id="valueField" color="@{ _attributeVO.value }"
 							 height="100%" minWidth="10" width="110"
-							 textAlign="left" />
+							 textAlign="left"  />
 </s:ItemRenderer>

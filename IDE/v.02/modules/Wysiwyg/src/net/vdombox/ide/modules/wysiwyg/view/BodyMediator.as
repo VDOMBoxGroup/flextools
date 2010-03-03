@@ -9,6 +9,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.skins.spark.PanelSkin;
 
 	public class BodyMediator extends Mediator implements IMediator
 	{

@@ -8,6 +8,7 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
 			import mx.events.ValidationResultEvent;
 
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
@@ -39,7 +40,7 @@
 
 				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
 				valueField.maxChars = uint( codeInterface[ "value" ] );
-				valueField.text = _attributeVO.value;
+//				valueField.text = _attributeVO.value;
 
 
 				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
@@ -128,6 +129,6 @@
 				paddingRight="5" textAlign="right" verticalAlign="middle" />
 
 	<s:TextInput id="valueField"
-				 height="100%" width="110"
+				 height="100%" text="@{_attributeVO.value}" width="110"
 				 textAlign="left" />
 </s:ItemRenderer>

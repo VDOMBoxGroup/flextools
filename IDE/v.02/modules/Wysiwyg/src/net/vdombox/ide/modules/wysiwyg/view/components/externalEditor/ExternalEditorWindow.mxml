@@ -40,7 +40,7 @@
 
 				public function get value() : String
 				{
-					return "";
+					return externalEditor ?  externalEditor[ "value" ] : "";
 				}
 
 				public function set value( value : String ) : void

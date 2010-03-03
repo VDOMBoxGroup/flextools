@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectAttributesPanel;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -22,6 +23,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var selectedPageVO : PageVO;
 		private var selectedObjectVO : ObjectVO;
 
+		private var attributes : Array;
+		
 		public function get objectAttributesPanel() : ObjectAttributesPanel
 		{
 			return viewComponent as ObjectAttributesPanel;
@@ -105,6 +108,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					objectAttributesPanel.saveButton.enabled = true;
 					objectAttributesPanel.deleteButton.enabled = false;
 					objectAttributesPanel.attributesVO = body;
+					
+					attributes = body.attributes;
 
 					break;
 				}
@@ -115,6 +120,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					objectAttributesPanel.deleteButton.enabled = true;
 					objectAttributesPanel.attributesVO = body;
 
+					attributes = body.attributes;
+					
 					break;
 				}
 			}
@@ -122,22 +129,35 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
+			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, false, 0, true );
+			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler, false, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
+			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler )
+			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler )
 			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true );
 		}
 
-		
+		private function saveRequestHandler( event : ObjectAttributesPanelEvent ) : void
+		{
+			
+		}
+
+		private function deleteRequestHandler( event : ObjectAttributesPanelEvent ) : void
+		{
+			sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: selectedPageVO, objectVO: selectedObjectVO } );
+		}
+
 		private function openExternalHandler( event : AttributeEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
 		}
-		
+
 		private function selectResourceHandler( event : AttributeEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_RESOURCE_SELECTOR_REQUEST, event.target );

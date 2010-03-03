@@ -534,6 +534,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 
 			rmEvent.properties = prop;
+			rmEvent.item = item;
+			event.stopImmediatePropagation();
 			dispatchEvent( rmEvent );
 		}
 

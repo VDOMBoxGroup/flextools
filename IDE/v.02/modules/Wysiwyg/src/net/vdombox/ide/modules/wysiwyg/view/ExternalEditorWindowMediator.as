@@ -115,6 +115,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		private function closeHandler( event : ExternalEditorWindowEvent ) : void
 		{
+			_externalEditor.value = externalEditorWindow.value;
+			
 			PopUpManager.removePopUp( externalEditorWindow );
 			facade.removeMediator( mediatorName );
 		}

@@ -102,7 +102,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			PopUpManager.removePopUp( resourceSelectorWindow );
 			
 			facade.removeMediator( mediatorName );
-			_resourceSelector.value = resourceSelectorWindow.value;
+			_resourceSelector.value = "#Res(" + resourceSelectorWindow.value + ")";
 		}
 
 		private function closeHandler( event : ResourceSelectorWindowEvent ) : void

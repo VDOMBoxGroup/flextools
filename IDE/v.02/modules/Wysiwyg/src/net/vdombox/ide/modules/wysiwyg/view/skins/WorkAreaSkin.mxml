@@ -26,7 +26,9 @@
 	<s:Rect id="backgroundRect"
 			bottom="0" left="0" right="0" top="0"
 			visible="false">
+
 		<s:fill>
+
 			<s:SolidColor />
 		</s:fill>
 	</s:Rect>
@@ -55,4 +57,12 @@
 			<s:Group id="upperLayer" />
 		</s:Group>
 	</s:Scroller>
+
+	<s:Rect bottom="0" left="0" right="0" top="0">
+
+		<s:stroke>
+
+			<s:SolidColorStroke />
+		</s:stroke>
+	</s:Rect>
 </s:SparkSkin>

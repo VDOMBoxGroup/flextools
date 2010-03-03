@@ -21,6 +21,7 @@
 				_resourceID = value;
 			}
 			
+			[Bindable]
 			public function get value() : String
 			{
 				return _value;

@@ -41,7 +41,7 @@
 
 				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
 
-				valueField.value = _attributeVO.value;
+//				valueField.value = _attributeVO.value;
 //				valueField.title = _attributeDescriptionVO.displayName;
 				//
 				//				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
@@ -129,7 +129,7 @@
 				height="100%" text="{ _attributeDescriptionVO.displayName }" width="138"
 				paddingRight="5" textAlign="right" verticalAlign="middle" />
 
-	<resourceSelector:ResourceSelector id="valueField"
+	<resourceSelector:ResourceSelector id="valueField" value="@{ _attributeVO.value }"
 									   height="100%" width="110"
 									   textAlign="left" />
 </s:ItemRenderer>

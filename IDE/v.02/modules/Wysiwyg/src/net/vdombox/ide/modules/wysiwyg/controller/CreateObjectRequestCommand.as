@@ -27,6 +27,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			else
 			{
 				var objectVO : ObjectVO = new ObjectVO( pageVO, body.typeVO );
+				objectVO.setID( body.parentID );
+				
 				sendNotification( ApplicationFacade.CREATE_OBJECT, { objectVO: objectVO, attributes: body.attributes, typeVO: body.typeVO } );
 			}
 		}

@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
@@ -24,12 +24,28 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			
 			switch ( target )
 			{
-				case PPMPageTargetNames.ATTRIBUTES:
+				case PPMObjectTargetNames.ATTRIBUTES:
 				{
 					if ( operation == PPMOperationNames.READ )
+					{
 						sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, body.objectAttributesVO );
+					}
 					else if ( operation == PPMOperationNames.UPDATE )
-						var d : * = "";
+					{
+						sendNotification( ApplicationFacade.ATTRIBUTES_UPDATED, body.objectAttributesVO );
+						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
+					}
+					
+					break;
+				}
+					
+				case PPMObjectTargetNames.OBJECT:
+				{
+					if ( operation == PPMOperationNames.CREATE )
+					{
+						sendNotification( ApplicationFacade.OBJECT_CREATED, body.newObjectVO );
+						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
+					}
 					
 					break;
 				}

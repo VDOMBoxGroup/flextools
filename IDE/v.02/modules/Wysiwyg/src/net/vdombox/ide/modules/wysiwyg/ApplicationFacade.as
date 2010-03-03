@@ -12,6 +12,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemSelectedRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.ItemTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ObjectSelectedRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenResourceSelectorRequestCommand;
@@ -139,13 +140,20 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const CREATE_OBJECT : String = "createObject";
 		public static const OBJECT_CREATED : String = "objectCreated";
 		
+		public static const DELETE_OBJECT : String = "deleteObject";
+		public static const OBJECT_DELETED : String = "objectDeleted";
+		
 		public static const ITEM_CREATED : String = "itemCreated";
+		public static const ITEM_TRANSFORMED : String = "itemTransformed";
 		public static const ITEM_SELECTED_REQUEST : String = "itemSelectedRequest";
 		public static const OBJECT_SELECTED_REQUEST : String = "objectSelectedRequest";
 		
 		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
 		public static const OPEN_EXTERNAL_EDITOR_REQUEST : String = "openExternalEditorRequest";
+		
+		public static const UPDATE_ATTRIBUTES : String = "updateAttributes";
+		public static const ATTRIBUTES_UPDATED : String = "attributesUpdated";
 		
 		public static const REMOTE_CALL_REQUEST : String = "remoteCallRequest";
 		public static const REMOTE_CALL_RESPONSE : String = "remoteСallResponse";
@@ -201,6 +209,8 @@ package net.vdombox.ide.modules.wysiwyg
 			
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			registerCommand( CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );
+			
+			registerCommand( ITEM_TRANSFORMED, ItemTransformedCommand );
 			
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

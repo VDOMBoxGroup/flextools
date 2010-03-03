@@ -100,6 +100,6 @@
 				paddingRight="5" textAlign="right" verticalAlign="middle" />
 
 	<externalEditor:ExternalEditor id="valueField"
-								   height="100%" width="110"
+								   height="100%" value="@{ _attributeVO.value }" width="110"
 								   textAlign="left" />
 </s:ItemRenderer>

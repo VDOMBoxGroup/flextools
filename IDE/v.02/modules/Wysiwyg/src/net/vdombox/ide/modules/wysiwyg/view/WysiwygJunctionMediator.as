@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -56,31 +56,33 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE );
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
-			
+
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
 			interests.push( ApplicationFacade.GET_TYPES );
-			
+
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
-			
+
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
-			
+
 			interests.push( ApplicationFacade.GET_PAGES );
 			interests.push( ApplicationFacade.GET_PAGE_SRUCTURE );
 			interests.push( ApplicationFacade.GET_OBJECTS );
 			interests.push( ApplicationFacade.GET_OBJECT );
-			
+
 			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
 			interests.push( ApplicationFacade.GET_OBJECT_ATTRIBUTES );
-			
+
 			interests.push( ApplicationFacade.GET_PAGE_WYSIWYG );
-			
+
 			interests.push( ApplicationFacade.CREATE_OBJECT );
-			
+			interests.push( ApplicationFacade.DELETE_OBJECT );
+
 			interests.push( ApplicationFacade.SELECT_OBJECT );
-			
+
 			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
+			interests.push( ApplicationFacade.UPDATE_ATTRIBUTES );
 
 			return interests;
 		}
@@ -111,8 +113,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ),
-												  multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -121,8 +122,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
 				{
-					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ),
-												  multitonKey );
+					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ), multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -140,8 +140,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE,
-												 null, multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE, null, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -150,8 +149,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SAVE_SETTINGS_TO_STORAGE:
 				{
-					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body,
-												 multitonKey );
+					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -161,12 +159,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.SELECT_MODULE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.SELECT_MODULE, null, multitonKey );
-					
+
 					junction.sendMessage( PipeNames.STDCORE, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_TYPES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
@@ -175,124 +173,146 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-				
+
 				case ApplicationFacade.GET_RESOURCES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_PAGES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_PAGE_SRUCTURE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_OBJECTS:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECTS, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_OBJECT:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-				
+
 				case ApplicationFacade.GET_PAGE_ATTRIBUTES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_OBJECT_ATTRIBUTES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.ATTRIBUTES, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.GET_PAGE_WYSIWYG:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.WYSIWYG, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.CREATE_OBJECT:
 				{
-					if( body.hasOwnProperty( "pageVO" ) )
+					if ( body.hasOwnProperty( "pageVO" ) )
 						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
-					else if( body.hasOwnProperty( "objectVO" ) )
-						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMPageTargetNames.OBJECT, body );
-					
+					else if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.OBJECT, body );
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
+				case ApplicationFacade.DELETE_OBJECT:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.DELETE, PPMPageTargetNames.OBJECT, body );
+
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break;
+				}
+
 				case ApplicationFacade.SELECT_OBJECT:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
 					break;
 				}
-					
+
 				case ApplicationFacade.REMOTE_CALL_REQUEST:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
-					
+
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
+
+					break;
+				}
+
+				case ApplicationFacade.UPDATE_ATTRIBUTES:
+				{
+					if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
+					else if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
+
+					if ( message )
+						junction.sendMessage( PipeNames.PROXIESOUT, message );
+
 					break;
 				}
 			}
@@ -313,14 +333,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( recipientKey == multitonKey )
 					{
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
-																					null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 					else
 					{
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
-						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
-																					null, multitonKey ) );
+						junction.sendMessage( PipeNames.STDCORE,
+											  new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE, null, multitonKey ) );
 					}
 
 					break;
@@ -331,8 +350,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
-																			SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+					junction.sendMessage( PipeNames.STDLOG,
+										  new LogMessage( LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( ApplicationFacade.PIPES_READY );
 					break;
@@ -427,42 +446,42 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case PPMPlaceNames.APPLICATION:
 				{
 					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-				
+
 				case PPMPlaceNames.PAGE:
 				{
 					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.OBJECT:
 				{
 					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.RESOURCES:
 				{
 					sendNotification( ApplicationFacade.PROCESS_RESOURCES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.TYPES:
 				{
 					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
-					
+
 				case PPMPlaceNames.STATES:
 				{
 					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
-					
+
 					break;
 				}
 			}

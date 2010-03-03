@@ -9,4 +9,7 @@
 
 	<mx:Tree id="objectsTree"
 			 height="100%" width="100%" />
+	<s:controlBarContent>
+		<mx:Spacer height="1" />
+	</s:controlBarContent>
 </s:Panel>

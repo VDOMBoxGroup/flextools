@@ -14,15 +14,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			
 			var selectedPageVO : PageVO = notification.getBody() as PageVO;
-			
-			var itemMediatorName : String;
-			var instances : Object = ItemMediator.instances;
-			
-			for ( itemMediatorName in ItemMediator.instances )
-			{
-				facade.removeMediator( itemMediatorName );
-			}
-			
 			sessionProxy.selectedPage = selectedPageVO;
 		}
 	}
