@@ -13,6 +13,8 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemSelectedRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ObjectSelectedRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.OpenResourceSelectorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
@@ -82,8 +84,10 @@ package net.vdombox.ide.modules.wysiwyg
 //		public static const TYPE_GETTED : String = "typeGetted";
 		
 //		resources
-		public static const GET_RESOURCE : String = "getResource";
-		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
+		public static const GET_RESOURCES : String = "getResources";
+		public static const RESOURCES_GETTED : String = "resourcesGetted";
+		
+		public static const LOAD_RESOURCE : String = "loadResource";
 		
 //		states	
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
@@ -139,6 +143,12 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const ITEM_SELECTED_REQUEST : String = "itemSelectedRequest";
 		public static const OBJECT_SELECTED_REQUEST : String = "objectSelectedRequest";
 		
+		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
+		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
+		public static const OPEN_EXTERNAL_EDITOR_REQUEST : String = "openExternalEditorRequest";
+		
+		public static const REMOTE_CALL_REQUEST : String = "remoteCallRequest";
+		public static const REMOTE_CALL_RESPONSE : String = "remoteСallResponse";
 		
 		public static function getInstance( key : String ) : ApplicationFacade
 		{
@@ -181,6 +191,9 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 			
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			
+			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
+			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
 			
 			registerCommand( ITEM_CREATED, ItemCreatedCommand );
 			registerCommand( ITEM_SELECTED_REQUEST, ItemSelectedRequestCommand );

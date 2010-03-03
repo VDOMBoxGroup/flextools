@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/halo"
+				
+				clipContent="true" measuredHeight="400" measuredWidth="550"
+				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+				creationComplete="creationCompleteHandler()"
+				close="dispatchEvent( new ExternalEditorWindowEvent( ExternalEditorWindowEvent.CLOSE ))"
+				showCloseButton="true">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
+		]]>
+	</fx:Script>
+
+	<s:VGroup>
+
+		<fx:Script>
+			<![CDATA[
+				import net.vdombox.ide.common.interfaces.IExternalManager;
+				import mx.managers.PopUpManager;
+				import mx.managers.SystemManager;
+				import mx.events.FlexEvent;
+				import mx.binding.utils.BindingUtils;
+				import mx.core.IVisualElement;
+
+				import net.vdombox.ide.common.vo.ResourceVO;
+
+				[Bindable]
+				private var _resourceVO : ResourceVO;
+				private var _applicationID : String;
+				private var _objectID : String;
+
+				private var _value : String;
+				private var loader : Loader;
+				private var _externalManager : IExternalManager;
+				private var externalEditor : Object;
+
+				public function get value() : String
+				{
+					return "";
+				}
+
+				public function set value( value : String ) : void
+				{
+					_value = value;
+				}
+
+				public function set externalManager( value : IExternalManager ) : void
+				{
+					_externalManager = value;
+				}
+				
+				public function set resourceVO( value : ResourceVO ) : void
+				{
+					_resourceVO = value;
+				}
+
+				public function set applicationID( value : String ) : void
+				{
+					_applicationID = value;
+				}
+
+				public function set objectID( value : String ) : void
+				{
+					_objectID = value;
+				}
+
+				override protected function measure() : void
+				{
+					super.measure();
+				}
+
+				private function creationCompleteHandler() : void
+				{
+					if ( !_resourceVO.data )
+						BindingUtils.bindSetter( addExternalEditor, _resourceVO, "data" );
+					else
+						addExternalEditor();
+				}
+
+				private function addExternalEditor( object : Object = null ) : void
+				{
+					if ( !_resourceVO.data )
+						return;
+
+					if ( !loader )
+						loader = new Loader();
+
+					loader.contentLoaderInfo.addEventListener( Event.COMPLETE, loader_completeHandler );
+
+					var loaderContext : LoaderContext = new LoaderContext();
+					loaderContext.applicationDomain = new ApplicationDomain();
+					loaderContext.allowLoadBytesCodeExecution = true;
+
+					loader.loadBytes( _resourceVO.data, loaderContext );
+				}
+
+				private function loader_completeHandler( event : Event ) : void
+				{
+					loader.removeEventListener( Event.COMPLETE, loader_completeHandler );
+
+					event.currentTarget.content.addEventListener( FlexEvent.APPLICATION_COMPLETE, applicationCompleteHandler );
+
+					placer.addChild( loader.content );
+				}
+
+				private function applicationCompleteHandler( event : Event ) : void
+				{
+					var d : * = "";
+
+					placer.width = Object( loader.content ).application.width;
+					placer.height = Object( loader.content ).application.height;
+
+					PopUpManager.centerPopUp( this );
+					
+					externalEditor = event.target.application;
+//					externalEditor.addEventListener( CloseEvent.CLOSE, externalEditor_closeHandler );
+					externalEditor[ "externalManager" ] = _externalManager;
+					externalEditor[ "value" ] = _value;
+//					try
+//					{
+//						externalEditor[ "externalManager" ] = _externalManager;
+//						externalEditor[ "value" ] = _value;
+//					}
+//					catch ( err : Error )
+//					{
+//////						/* error002 */
+//////						Alert.show( "External editor returned an error. Could not execute a command.",
+//////							"External Editor Error! (002)" );
+//					}
+				}
+
+//			private function externalEditor_closeHandler(event:Event):void
+//			{
+//				
+//			}
+			]]>
+		</fx:Script>
+
+		<s:SpriteVisualElement id="placer" />
+	</s:VGroup>
+</mx:TitleWindow>

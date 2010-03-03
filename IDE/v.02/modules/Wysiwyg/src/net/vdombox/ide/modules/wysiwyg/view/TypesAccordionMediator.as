@@ -132,7 +132,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			typeItemRenderer.resourceVO = resourceVO;
 
-			sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
+			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 		}
 	}
 }

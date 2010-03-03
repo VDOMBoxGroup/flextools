@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		 
+		 height="20" width="100"
+		 borderColor="#FFFFFF" borderStyle="solid" horizontalAlign="right" verticalAlign="middle">
+
+	<mx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
+
+			private var _value : String;
+			
+
+			public function get value() : String
+			{
+				return _value;
+			}
+
+			public function set value( attrValue : String ) : void
+			{
+				_value = attrValue;
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Label id="lbl"
+			  text="Resource" width="70" />
+
+	<mx:Button height="19" label="..." width="22"
+			   cornerRadius="0" paddingLeft="2" paddingRight="2"
+			   click="dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) )" />
+</mx:HBox>

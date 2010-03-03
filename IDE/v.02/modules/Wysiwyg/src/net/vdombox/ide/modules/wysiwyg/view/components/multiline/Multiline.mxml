@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		 
+		 height="20" width="100"
+		 borderColor="#FFFFFF" borderStyle="solid" horizontalAlign="right" verticalAlign="middle">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			import mx.events.ValidationResultEvent;
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.ide.modules.wysiwyg.events.MultilineWindowEvent;
+
+			private var _value : String;
+			private var _title : String = "Multiline Window";
+			private var multilineWindow : MultilineWindow;
+			
+			public function set title( attrValue : String ) : void
+			{
+
+				_title = attrValue;
+			}
+
+			public function get value() : String
+			{
+
+				return _value;
+			}
+
+			public function set value( attrValue : String ) : void
+			{
+
+				_value = attrValue;
+			}
+
+			/* 			private function openWindow() : void
+			   {
+
+			   MultiLineWindow.show_window( _title, _value, this, true );
+			 } */
+
+			private function openWindow() : void
+			{
+//				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
+				multilineWindow = new MultilineWindow();
+				multilineWindow.minWidth = 600;
+				multilineWindow.minHeight = 400;
+				multilineWindow.percentWidth = 100;
+				multilineWindow.percentHeight = 100;
+
+				multilineWindow.attributeValue = _value;
+				multilineWindow.title = _title;
+
+				multilineWindow.addEventListener( "apply", multilineWindow_applyHandler, false, 0, true );
+
+				PopUpManager.addPopUp( multilineWindow, DisplayObject( UIComponent( parent ).parentApplication ), true );
+				PopUpManager.centerPopUp( multilineWindow );
+			}
+
+			private function multilineWindow_applyHandler( event : MultilineWindowEvent ) : void
+			{
+				_value = event.value;
+				dispatchEvent( new FlexEvent( FlexEvent.VALUE_COMMIT ) );
+				var currentTarget : Object = event.currentTarget;
+
+				if ( currentTarget is MultilineWindow )
+				{
+					UIComponent( currentTarget ).removeEventListener( "apply", multilineWindow_applyHandler, false );
+				}
+
+//				var popUpWindowManager : PopUpManager = PopUpManager.getInstance();
+				PopUpManager.removePopUp( multilineWindow );
+			}
+
+			override public function validationResultHandler( event : ValidationResultEvent ) : void
+			{
+				super.validationResultHandler( event );
+				if ( event.type == "valid" )
+					setStyle( "borderColor", "white" );
+				else if ( event.type == "ivalid" )
+					setStyle( "borderColor", "red" );
+			}
+		]]>
+	</mx:Script>
+
+	<mx:Label id="lbl"
+			  text="Multiline" width="70" />
+
+	<mx:Button height="19" label="..." width="22"
+			   cornerRadius="0" paddingLeft="2" paddingRight="2"
+			   click="openWindow()" />
+</mx:HBox>

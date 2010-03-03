@@ -25,7 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				
 				body.resourceVO = resourceVO;
 				
-				sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
 			}
 		}
 	}

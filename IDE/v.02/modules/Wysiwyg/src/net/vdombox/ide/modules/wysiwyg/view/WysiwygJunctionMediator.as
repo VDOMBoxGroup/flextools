@@ -61,7 +61,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.GET_TYPES );
 			
-			interests.push( ApplicationFacade.GET_RESOURCE );
+			interests.push( ApplicationFacade.GET_RESOURCES );
+			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			
@@ -78,6 +79,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.CREATE_OBJECT );
 			
 			interests.push( ApplicationFacade.SELECT_OBJECT );
+			
+			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
 
 			return interests;
 		}
@@ -172,8 +175,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
+				
+				case ApplicationFacade.GET_RESOURCES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCES, body );
 					
-				case ApplicationFacade.GET_RESOURCE:
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.LOAD_RESOURCE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 					
@@ -269,6 +281,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.SELECT_OBJECT:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.REMOTE_CALL_REQUEST:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

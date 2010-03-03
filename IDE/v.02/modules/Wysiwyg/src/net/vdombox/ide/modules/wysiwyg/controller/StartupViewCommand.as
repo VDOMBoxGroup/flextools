@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.Wysiwyg;
+	import net.vdombox.ide.modules.wysiwyg.view.ExternalManagerMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WysiwygJunctionMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WysiwygMediator;
 	
@@ -15,6 +16,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 			facade.registerMediator( new WysiwygJunctionMediator() );
 			facade.registerMediator( new WysiwygMediator( application ) );
+			facade.registerMediator( new ExternalManagerMediator() );
 		}
 	}
 }

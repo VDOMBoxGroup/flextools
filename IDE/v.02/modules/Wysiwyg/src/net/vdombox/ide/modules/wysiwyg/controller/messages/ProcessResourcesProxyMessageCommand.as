@@ -1,7 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -23,8 +25,10 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 			switch ( target )
 			{
-				case PPMResourcesTargetNames.RESOURCE:
+				case PPMResourcesTargetNames.RESOURCES:
 				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.RESOURCES_GETTED, body );
 					
 					break;
 				}

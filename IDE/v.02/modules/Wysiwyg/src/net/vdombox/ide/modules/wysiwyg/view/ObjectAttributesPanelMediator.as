@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectAttributesPanel;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -29,6 +30,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			addHandlers();
+		}
+
+		override public function onRemove() : void
+		{
+			removeHandlers();
 		}
 
 		override public function listNotificationInterests() : Array
@@ -59,6 +65,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					objectAttributesPanel.attributesVO = null;
 					objectAttributesPanel.saveButton.enabled = false;
 					objectAttributesPanel.deleteButton.enabled = false;
+
+					break;
 				}
 
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
@@ -88,6 +96,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					selectedPageVO = body as PageVO;
 
 					sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, selectedPageVO );
+
 					break;
 				}
 
@@ -113,7 +122,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
+			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
+			objectAttributesPanel.addEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true, 0, true );
+		}
 
+		private function removeHandlers() : void
+		{
+			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
+			objectAttributesPanel.removeEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true );
+		}
+
+		
+		private function openExternalHandler( event : AttributeEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );
+		}
+		
+		private function selectResourceHandler( event : AttributeEvent ) : void
+		{
+			sendNotification( ApplicationFacade.OPEN_RESOURCE_SELECTOR_REQUEST, event.target );
 		}
 	}
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				
+				height="400" width="550"
+				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+				close="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.CLOSE ))"
+				showCloseButton="true">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
+
+			[Bindable]
+			private var _resources : ArrayList;
+
+			private var _value : String;
+
+			public function get value() : String
+			{
+				return resourcesList.selectedItem ? resourcesList.selectedItem.id : "";
+			}
+
+			public function set value( value : String ) : void
+			{
+				_value = value;
+				setSelectedItem();
+			}
+
+			public function set resources( value : Array ) : void
+			{
+				_resources = new ArrayList( value );
+				setSelectedItem();
+			}
+
+			private function setSelectedItem() : void
+			{
+				if ( !_resources || _resources.length == 0 )
+					return;
+
+				var resourceVO : ResourceVO;
+
+				for each ( resourceVO in _resources.source )
+				{
+					if ( resourceVO.id == _value.substring( 5, _value.length - 1 ) )
+					{
+						resourcesList.selectedItem = resourceVO;
+						break;
+					}
+				}
+			}
+		]]>
+	</mx:Script>
+
+	<s:List id="resourcesList"
+			dataProvider="{ _resources }" height="100%" width="100%"
+			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.ResourceItemRenderer"
+			useVirtualLayout="false" />
+
+	<mx:HBox width="100%"
+			 backgroundColor="#C2C2C2" borderColor="#000000" bottom="0" horizontalGap="0" paddingLeft="5"
+			 paddingRight="5" verticalAlign="middle">
+
+		<mx:Spacer width="100%" />
+
+		<mx:Button label="Apply"
+				   cornerRadius="0"
+				   click="dispatchEvent( new ResourceSelectorWindowEvent( ResourceSelectorWindowEvent.APPLY ))" />
+	</mx:HBox>
+</mx:TitleWindow>
