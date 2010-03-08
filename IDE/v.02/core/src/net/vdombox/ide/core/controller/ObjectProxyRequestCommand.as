@@ -3,6 +3,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.vo.ObjectAttributesVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.core.model.ObjectProxy;
 	import net.vdombox.ide.core.model.PageProxy;
@@ -42,7 +43,7 @@ package net.vdombox.ide.core.controller
 					if( operation == PPMOperationNames.READ )
 						objectProxy.getAttributes();
 					else if( operation == PPMOperationNames.UPDATE )
-						objectProxy.setAttributes( body.attributes );
+						objectProxy.setAttributes( body as ObjectAttributesVO );
 
 					break;
 				}
@@ -58,6 +59,14 @@ package net.vdombox.ide.core.controller
 				{
 					if( operation == PPMOperationNames.CREATE )
 						objectProxy.createObject( body.typeVO, body.attributes );
+					
+					break;
+				}
+					
+				case PPMObjectTargetNames.WYSIWYG:
+				{
+					if( operation == PPMOperationNames.READ )
+						objectProxy.getWYSIWYG();
 					
 					break;
 				}

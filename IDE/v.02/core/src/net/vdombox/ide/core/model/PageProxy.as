@@ -508,7 +508,7 @@ package net.vdombox.ide.core.model
 							tempElement.@typeID = typeID;
 					}
 
-					notification = new ProxyNotification( ApplicationFacade.PAGE_WYSIWYG_SETTED, { pageVO: pageVO, wysiwyg: wysiwyg } );
+					notification = new ProxyNotification( ApplicationFacade.PAGE_WYSIWYG_GETTED, { pageVO: pageVO, wysiwyg: wysiwyg } );
 					notification.token = token;
 
 					break;

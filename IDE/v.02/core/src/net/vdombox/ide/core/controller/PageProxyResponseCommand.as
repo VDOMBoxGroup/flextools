@@ -83,7 +83,7 @@ package net.vdombox.ide.core.controller
 					break;
 				}
 					
-				case ApplicationFacade.PAGE_WYSIWYG_SETTED:
+				case ApplicationFacade.PAGE_WYSIWYG_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.WYSIWYG, body );
 					

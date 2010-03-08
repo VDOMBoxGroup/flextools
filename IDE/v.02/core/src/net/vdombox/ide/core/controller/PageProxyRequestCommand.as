@@ -3,6 +3,7 @@ package net.vdombox.ide.core.controller
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.PageProxy;
@@ -69,7 +70,7 @@ package net.vdombox.ide.core.controller
 					if( operation == PPMOperationNames.READ )
 						pageProxy.getAttributes();
 					else if( operation == PPMOperationNames.UPDATE )
-						pageProxy.setAttributes( body.pageAttributesVO );
+						pageProxy.setAttributes( body as PageAttributesVO );
 
 					break;
 				}

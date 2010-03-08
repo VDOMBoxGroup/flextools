@@ -47,6 +47,13 @@ package net.vdombox.ide.core.controller
 					
 					break;
 				}
+					
+				case ApplicationFacade.OBJECT_WYSIWYG_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.WYSIWYG, body );
+					
+					break;
+				}
 			}
 			
 			if ( message )

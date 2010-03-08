@@ -94,7 +94,7 @@ package net.vdombox.ide.core.view
 			loginView.password.appendText( "" );
 
 			setupLanguageList();
-
+//
 			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
 				submit();
 		}

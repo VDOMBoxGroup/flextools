@@ -21,6 +21,8 @@ package net.vdombox.ide.core.model
 
 		private static const GET_ATTRIBUTES : String = "getAttributes";
 		private static const SET_ATTRIBUTES : String = "setAttributes";
+		
+		private static const GET_WYSIWYG : String = "getWYSIWYG";
 
 		public function ObjectProxy( objectVO : ObjectVO )
 		{
@@ -59,9 +61,11 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function setAttributes( attributes : Array ) : AsyncToken
+		public function setAttributes( objectAttributesVO : ObjectAttributesVO ) : AsyncToken
 		{
 			var token : AsyncToken;
+
+			var attributes : Array = objectAttributesVO.getChangedAttributes();
 
 			if ( attributes.length == 0 )
 				return null;
@@ -83,6 +87,17 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function getWYSIWYG() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_child_objects_tree( objectVO.pageVO.applicationVO.id, objectVO.id );
+			
+			token.recipientName = proxyName;
+			token.requestFunctionName = GET_WYSIWYG;
+			
+			return token;
+		}
+		
 		public function getServerActions() : AsyncToken
 		{
 			var token : AsyncToken;
@@ -127,6 +142,8 @@ package net.vdombox.ide.core.model
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -135,6 +152,8 @@ package net.vdombox.ide.core.model
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function generateObjectAttributes( attributesXML : XML ) : Array
@@ -151,6 +170,59 @@ package net.vdombox.ide.core.model
 			return attributes;
 		}
 
+		private function generateObjectStructure( rawObject : XML ) : XML
+		{
+			var structure : XML =
+				<object/>
+			
+			var rawChildren : XMLList = rawObject.Objects.Object;
+			
+			structure.@id = rawObject.@ID;
+			structure.@name = rawObject.@Name;
+			structure.@typeID = rawObject.@Type;
+			
+			if ( rawChildren.length() == 0 )
+				return structure;
+			
+			var child : XML;
+			var rawChild : XML
+			
+			for each ( rawChild in rawChildren )
+			{
+				child = createStructureObject( rawObject );
+				
+				structure.appendChild( child );
+			}
+			
+			return structure;
+		}
+		
+		private function createStructureObject( rawXML : XML ) : XML
+		{
+			var structureObject : XML =
+				<object/>
+				;
+			var rawChildren : XMLList = rawXML.Objects.Object;
+			
+			var child : XML;
+			
+			structureObject.@id = rawXML.@ID;
+			structureObject.@name = rawXML.@Name;
+			structureObject.@typeID = rawXML.@Type;
+			
+			if ( rawChildren.length() == 0 )
+				return structureObject;
+			
+			for each ( var rawChild : XML in rawChildren )
+			{
+				child = createStructureObject( rawChild );
+				
+				structureObject.appendChild( child );
+			}
+			
+			return structureObject;
+		}
+		
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
 			var token : AsyncToken = event.token;
@@ -229,6 +301,52 @@ package net.vdombox.ide.core.model
 														  { objectVO: objectVO, objectAttributesVO: objectAttributesVO } );
 					notification.token = token;
 
+					break;
+				}
+					
+				case "get_child_objects_tree":
+				{
+					var structure : XML = generateObjectStructure( result.Object[ 0 ] );
+					
+					if ( token.requestFunctionName == GET_WYSIWYG )
+					{
+						token = soap.render_wysiwyg( objectVO.pageVO.applicationVO.id, objectVO.id, "", 1 );
+						
+						token.structure =
+							<structure>{structure}</structure>
+						;
+						token.recipientName = proxyName;
+						token.requestFunctionName = GET_WYSIWYG;
+					}
+					
+					break;
+				}
+					
+				case "render_wysiwyg":
+				{
+					var wysiwyg : XML = result.Result.container[ 0 ];
+					
+					var tempList : XMLList = result.Result.descendants( "*" );
+					var tempElement : XML;
+					var structureList : XMLList = token.structure.descendants( "*" );
+					var id : String;
+					var typeID : String;
+					
+					for each ( tempElement in tempList )
+					{
+						id = tempElement.@id;
+						if ( id == "" )
+							continue;
+						
+						typeID = structureList.( @id == id ).@typeID;
+						
+						if ( typeID != "" )
+							tempElement.@typeID = typeID;
+					}
+					
+					notification = new ProxyNotification( ApplicationFacade.OBJECT_WYSIWYG_GETTED, { objectVO: objectVO, wysiwyg: wysiwyg } );
+					notification.token = token;
+					
 					break;
 				}
 			}
