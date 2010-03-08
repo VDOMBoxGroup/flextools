@@ -31,7 +31,7 @@ package net.vdombox.ide.common.vo
 
 		public function set attributes( value : Array ) : void
 		{
-			_attributes;
+			_attributes = value;
 		}
 		
 		public function get pageLinks() : Array
