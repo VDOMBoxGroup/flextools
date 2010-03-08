@@ -15,6 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		public static const SELECTED_APPLICATION : String = "selectedApplication";
 		public static const SELECTED_PAGE : String = "selectedPage";
 		public static const SELECTED_OBJECT : String = "selectedObject";
+		public static const NEED_FOR_UPDATE : String = "needForUpdate";
 
 		public function SessionProxy()
 		{

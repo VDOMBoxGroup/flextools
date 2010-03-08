@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.utils.Dictionary;
-
+	
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -20,9 +20,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
+	import net.vdombox.ide.common.vo.ObjectAttributesVO;
+	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -75,6 +77,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_OBJECT_ATTRIBUTES );
 
 			interests.push( ApplicationFacade.GET_PAGE_WYSIWYG );
+			interests.push( ApplicationFacade.GET_OBJECT_WYSIWYG );
 
 			interests.push( ApplicationFacade.CREATE_OBJECT );
 			interests.push( ApplicationFacade.DELETE_OBJECT );
@@ -263,6 +266,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
+					
+				case ApplicationFacade.GET_OBJECT_WYSIWYG:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.WYSIWYG, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
 
 				case ApplicationFacade.CREATE_OBJECT:
 				{
@@ -305,9 +317,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.UPDATE_ATTRIBUTES:
 				{
-					if ( body.hasOwnProperty( "objectVO" ) )
+					if ( body is ObjectAttributesVO )
 						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
-					else if ( body.hasOwnProperty( "pageVO" ) )
+					else if (  body is PageAttributesVO )
 						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
 
 					if ( message )
@@ -351,7 +363,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						return;
 
 					junction.sendMessage( PipeNames.STDLOG,
-										  new LogMessage( LogMessage.DEBUG, "Module", SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+										  new LogMessage( LogMessage.DEBUG, multitonKey, SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( ApplicationFacade.PIPES_READY );
 					break;

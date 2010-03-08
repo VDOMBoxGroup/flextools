@@ -5,7 +5,7 @@
 				xmlns:multiline="net.vdombox.ide.modules.wysiwyg.view.components.multiline.*"
 				xmlns:resourceSelector="net.vdombox.ide.modules.wysiwyg.view.components.resourceSelector.*"
 				
-				height="21"
+				minHeight="21" width="100%"
 				creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
@@ -121,15 +121,16 @@
 	</fx:Script>
 
 	<s:layout>
-
-		<s:HorizontalLayout gap="0" />
+		
+		<s:HorizontalLayout verticalAlign="middle"
+							gap="0" />
 	</s:layout>
 
 	<s:RichText id="nameLabel"
-				height="100%" text="{ _attributeDescriptionVO.displayName }" width="138"
-				paddingRight="5" textAlign="right" verticalAlign="middle" />
+				minHeight="21" text="{ _attributeDescriptionVO.displayName }" width="100%"
+				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
 
 	<resourceSelector:ResourceSelector id="valueField" value="@{ _attributeVO.value }"
-									   height="100%" width="110"
+									   height="21" width="90"
 									   textAlign="left" />
 </s:ItemRenderer>

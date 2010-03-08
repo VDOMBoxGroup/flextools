@@ -1,9 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-
+	
 	import flash.display.DisplayObjectContainer;
-
+	import flash.events.Event;
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
@@ -15,12 +16,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
-
+	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.Scroller;
@@ -38,13 +38,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			super();
 
 			itemRendererFunction = chooseItemRenderer;
-			setStyle( "skinClass", ItemSkin );
+//			setStyle( "skinClass", ItemSkin );
 
 			addEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler );
+			addEventListener( Event.REMOVED, removeHandler );
 
 		}
-
-
 
 		private const styleList : Array = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
 											  [ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
@@ -67,6 +66,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var _data : Object;
 		private var _itemVO : ItemVO;
+
+		private var _isLocked : Boolean;
 
 		public function get selected() : Boolean
 		{
@@ -172,6 +173,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			var contetntPart : XML;
 
+			background.removeAllElements();
+
 			for each ( contetntPart in _itemVO.content )
 			{
 				switch ( contetntPart.name().toString() )
@@ -219,6 +222,26 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					}
 				}
 			}
+
+			skin.currentState = "normal";
+		}
+
+		public function get isLocked() : Boolean
+		{
+			return _isLocked;
+		}
+
+		public function set isLocked( value : Boolean ) : void
+		{
+			_isLocked = value;
+		}
+
+		public function lock() : void
+		{
+			isLocked = true;
+
+			skin.currentState = "locked";
+			background.removeAllElements();
 		}
 
 		public function chooseItemRenderer( itemVO : ItemVO ) : IFactory
@@ -230,7 +253,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				case "container":
 				{
 					itemFactory = new ClassFactory( Item );
-					layout = new BasicLayout()
+					layout = new BasicLayout();
+					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout };
 					break;
 				}
@@ -238,7 +262,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				case "table":
 				{
 					itemFactory = new ClassFactory( Item );
-					layout = new VerticalLayout()
+					layout = new VerticalLayout();
+					layout.clipAndEnableScrolling = true;
 					VerticalLayout( layout ).gap = 0;
 					itemFactory.properties = { layout: layout };
 					break;
@@ -248,6 +273,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				{
 					itemFactory = new ClassFactory( Item );
 					layout = new HorizontalLayout();
+					layout.clipAndEnableScrolling = true;
 					HorizontalLayout( layout ).gap = 0;
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
 
@@ -257,7 +283,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				case "cell":
 				{
 					itemFactory = new ClassFactory( Item );
-					layout = new BasicLayout()
+					layout = new BasicLayout();
+					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
 					break;
 				}
@@ -321,6 +348,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function creatiomCompleteHandler( event : FlexEvent ) : void
 		{
 			dispatchEvent( new ItemEvent( ItemEvent.CREATED ) );
+		}
+		
+		private function removeHandler( event : Event ) : void
+		{
+			if( event.target == this )
+				dispatchEvent( new ItemEvent( ItemEvent.REMOVED ) );
 		}
 	}
 }

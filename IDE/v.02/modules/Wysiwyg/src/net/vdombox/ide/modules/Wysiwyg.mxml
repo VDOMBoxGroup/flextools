@@ -9,6 +9,22 @@
 		[ResourceBundle("Wysiwyg_General")] 
 	</fx:Metadata>
 
+	<fx:Style>
+		@namespace mx "library://ns.adobe.com/flex/halo";
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace components "net.vdombox.ide.modules.wysiwyg.view.components.*";
+		
+		components|Item
+		{
+			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin"); 
+		}
+		
+		components|WorkArea
+		{
+			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin"); 
+		}
+	</fx:Style>
+	
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;

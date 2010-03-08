@@ -4,12 +4,12 @@
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				
 				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))"
-				mouseDown="dragIt( event )">
+				mouseDown="dragIt( event )" width="100%">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.core.DragSource;
-			
+
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
@@ -21,7 +21,7 @@
 			private var _resourceVO : ResourceVO;
 
 			private var _typeVO : TypeVO;
-			
+
 			public function set resourceVO( value : ResourceVO ) : void
 			{
 				_resourceVO = value;
@@ -31,11 +31,11 @@
 			{
 				return _typeVO;
 			}
-			
+
 			override public function set data( value : Object ) : void
 			{
 				_typeVO = value as TypeVO;
-				
+
 				if ( value )
 					typeName = value.displayName;
 				else
@@ -61,16 +61,17 @@
 				proxy.source = typeIcon.source;
 
 				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
-				
+
 				vdomDragManager.doDrag( dragInitiator, ds, event, proxy, proxy.width / 2 - dragInitiator.mouseX,
 										proxy.height / 2 - dragInitiator.mouseY );
 			}
 		]]>
 	</fx:Script>
 
-	<mx:Image id="typeIcon" height="50" source="{ _resourceVO.data }" width="50"
-			  horizontalCenter="0" />
+	<mx:Image id="typeIcon"
+			  height="50" source="{ _resourceVO.data }" width="50"
+			  horizontalCenter="0"  top="5"/>
 
 	<s:RichText text="{ typeName }" width="100%"
-				horizontalCenter="0" top="55" />
+				color="white" horizontalCenter="0" top="58" />
 </s:ItemRenderer>

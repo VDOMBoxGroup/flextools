@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
 		 
-		 height="20" width="100"
+		 height="20" width="100%"
 		 borderColor="#FFFFFF" borderStyle="solid" horizontalAlign="right" verticalAlign="middle">
 
 	<mx:Script>
@@ -87,7 +87,7 @@
 	</mx:Script>
 
 	<mx:Label id="lbl"
-			  text="Multiline" width="70" />
+			  text="Multiline" />
 
 	<mx:Button height="19" label="..." width="22"
 			   cornerRadius="0" paddingLeft="2" paddingRight="2"

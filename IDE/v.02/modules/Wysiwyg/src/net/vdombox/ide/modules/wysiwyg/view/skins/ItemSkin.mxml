@@ -10,6 +10,8 @@
 		<s:State name="hovered" />
 
 		<s:State name="highlighted" />
+		
+		<s:State name="locked" />
 
 		<s:State name="disabled" />
 	</s:states>
@@ -57,6 +59,14 @@
 		</s:Rect>
 	</s:Group>
 
+	<s:Rect bottom="0" left="0" right="0" top="0"
+			includeIn="locked">
+		
+		<s:fill>
+			<s:SolidColor color="white" />
+		</s:fill>
+	</s:Rect>
+	
 	<s:Rect bottom="0" left="0" right="0" top="0"
 			includeIn="highlighted, hovered">
 

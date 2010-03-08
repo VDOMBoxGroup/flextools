@@ -2,10 +2,8 @@
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo">
-
 	<s:layout>
-
-		<s:BasicLayout />
+		<s:BasicLayout/>
 	</s:layout>
 
 	<fx:Script>
@@ -35,6 +33,13 @@
 			{
 				_attributesVO = value;
 
+				if ( !value )
+				{
+					typeNameLabel.text = "";
+					attributesList.dataProvider = null;
+					return;
+				}
+
 				if ( value is ObjectAttributesVO )
 				{
 					_objectVO = value.objectVO;
@@ -46,6 +51,8 @@
 					_typeVO = _pageVO.typeVO;
 				}
 
+				typeNameLabel.text = _typeVO.displayName;
+				
 				var attributesArray : Array = [];
 				var attributeVO : AttributeVO;
 				var attributeDescriptionVO : AttributeDescriptionVO;
@@ -161,16 +168,25 @@
 		]]>
 	</fx:Script>
 
+	<s:Label id="typeNameLabel"
+			 backgroundColor="#000000" color="#FFFFFF" textAlign="center" verticalAlign="middle"  paddingLeft="3" paddingTop="3" left="1" right="1" height="20"/>
+
 	<s:List id="attributesList"
-			width="250"
-			bottom="0" top="0"
-			itemRendererFunction="itemRendererFunction" useVirtualLayout="false" />
+			width="220"
+			bottom="0" top="20"
+			itemRendererFunction="itemRendererFunction" useVirtualLayout="false">
+
+		<s:layout>
+
+			<s:VerticalLayout gap="0" variableRowHeight="true" />
+		</s:layout>
+	</s:List>
 
 	<s:controlBarContent>
 
 		<s:Button id="saveButton"
 				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }"
-				  click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ))"/>
+				  click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ))" />
 
 		<mx:Spacer width="100%" />
 

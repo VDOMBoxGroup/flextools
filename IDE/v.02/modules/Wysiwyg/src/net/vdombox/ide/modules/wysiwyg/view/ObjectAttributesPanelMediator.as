@@ -1,12 +1,14 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import net.vdombox.ide.common.vo.ObjectAttributesVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.AttributeEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectAttributesPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -23,7 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private var selectedPageVO : PageVO;
 		private var selectedObjectVO : ObjectVO;
 
-		private var attributes : Array;
+		private var attributesVO : Object;
 		
 		public function get objectAttributesPanel() : ObjectAttributesPanel
 		{
@@ -108,8 +110,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					objectAttributesPanel.saveButton.enabled = true;
 					objectAttributesPanel.deleteButton.enabled = false;
 					objectAttributesPanel.attributesVO = body;
-					
-					attributes = body.attributes;
+
+					attributesVO = body;
 
 					break;
 				}
@@ -120,8 +122,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					objectAttributesPanel.deleteButton.enabled = true;
 					objectAttributesPanel.attributesVO = body;
 
-					attributes = body.attributes;
-					
+					attributesVO = body;
+
 					break;
 				}
 			}
@@ -145,6 +147,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function saveRequestHandler( event : ObjectAttributesPanelEvent ) : void
 		{
+			var attributes : Array;
+			
+			if ( attributesVO is ObjectAttributesVO )
+			{
+				var objectAttributesVO : ObjectAttributesVO = attributesVO as ObjectAttributesVO;
+				attributes = objectAttributesVO.getChangedAttributes();
+				
+				if( attributes && attributes.length > 0 )
+					sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, objectAttributesVO );
+			}
+			else if ( attributesVO is PageAttributesVO )
+			{
+				var pageAttributesVO : PageAttributesVO = attributesVO as PageAttributesVO;
+				attributes = pageAttributesVO.getChangedAttributes();
+				
+				if( attributes && attributes.length > 0 )
+					sendNotification( ApplicationFacade.SAVE_ATTRIBUTES_REQUEST, pageAttributesVO );
+			}	
 			
 		}
 

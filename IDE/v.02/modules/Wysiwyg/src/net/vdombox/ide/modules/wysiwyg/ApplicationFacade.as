@@ -11,11 +11,13 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemCreatedCommand;
-	import net.vdombox.ide.modules.wysiwyg.controller.ItemSelectedRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.ItemRemovedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.SelectItemRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ObjectSelectedRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenResourceSelectorRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.SaveAttributesRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
@@ -132,7 +134,8 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const DELIMITER : String = "/";
 		public static const STATES : String = "states";
 		
-		public static const GET_PAGE_WYSIWYG : String = "GetPageWYSIWYG";
+		public static const GET_PAGE_WYSIWYG : String = "getPageWYSIWYG";
+		public static const GET_OBJECT_WYSIWYG : String = "getObjectWYSIWYG";
 		
 		public static const RENDER_DATA_CHANGED : String = "renderDataChanged";
 		
@@ -144,13 +147,15 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const OBJECT_DELETED : String = "objectDeleted";
 		
 		public static const ITEM_CREATED : String = "itemCreated";
+		public static const ITEM_REMOVED : String = "itemRemoved";
 		public static const ITEM_TRANSFORMED : String = "itemTransformed";
-		public static const ITEM_SELECTED_REQUEST : String = "itemSelectedRequest";
+		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
 		public static const OBJECT_SELECTED_REQUEST : String = "objectSelectedRequest";
 		
 		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
 		public static const OPEN_EXTERNAL_EDITOR_REQUEST : String = "openExternalEditorRequest";
+		public static const SAVE_ATTRIBUTES_REQUEST : String = "saveAttributesRequest";
 		
 		public static const UPDATE_ATTRIBUTES : String = "updateAttributes";
 		public static const ATTRIBUTES_UPDATED : String = "attributesUpdated";
@@ -202,9 +207,11 @@ package net.vdombox.ide.modules.wysiwyg
 			
 			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
+			registerCommand( SAVE_ATTRIBUTES_REQUEST, SaveAttributesRequestCommand );
 			
 			registerCommand( ITEM_CREATED, ItemCreatedCommand );
-			registerCommand( ITEM_SELECTED_REQUEST, ItemSelectedRequestCommand );
+			registerCommand( ITEM_REMOVED, ItemRemovedCommand );
+			registerCommand( SELECT_ITEM_REQUEST, SelectItemRequestCommand );
 			registerCommand( OBJECT_SELECTED_REQUEST, ObjectSelectedRequestCommand );
 			
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );

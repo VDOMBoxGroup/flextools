@@ -4,13 +4,12 @@
 				 xmlns:mx="library://ns.adobe.com/flex/halo"
 				 xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
 				 
-				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.Item"
-				 skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin">
+				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.Item">
 
 	<fx:Script>
 		<![CDATA[
 			import com.zavoo.svg.SVGViewer;
-			
+
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
@@ -19,11 +18,11 @@
 			import mx.core.UIComponent;
 			import mx.graphics.SolidColor;
 			import mx.graphics.SolidColorStroke;
-			
+
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin;
-			
+
 			import spark.components.Group;
 
 			private var _itemVO : ItemVO;
@@ -45,6 +44,18 @@
 			{
 				_itemVO = value;
 
+				if ( !_itemVO )
+				{
+					dataProvider = null;
+
+					SolidColor( backgroundRect.fill ).color = 0xCCCCCC;
+					SolidColorStroke( backgroundRect.stroke ).alpha = .5;
+
+					background.removeAllElements();
+
+					return;
+				}
+
 				var childrenDataProvider : ArrayCollection = new ArrayCollection( value.children );
 				childrenDataProvider.sort = new Sort();
 				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
@@ -52,9 +63,9 @@
 
 				processProperties( _itemVO );
 
-				
-				
 				dataProvider = childrenDataProvider;
+
+				skin.currentState = "normal";
 			}
 
 			public function processProperties( ownItemVO : ItemVO ) : void
@@ -70,15 +81,15 @@
 				var attributeVO : AttributeVO;
 
 				attributeVO = _itemVO.getAttributeByName( "backgroundcolor" );
-				
+
 				if ( attributeVO )
 				{
 					SolidColor( backgroundRect.fill ).alpha = 1;
 					SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
 				}
-				
+
 				attributeVO = _itemVO.getAttributeByName( "bordercolor" );
-				
+
 				if ( attributeVO )
 				{
 					SolidColorStroke( backgroundRect.stroke ).alpha = 1;
@@ -171,4 +182,9 @@
 			}
 		]]>
 	</fx:Script>
+
+	<components:layout>
+
+		<s:BasicLayout clipAndEnableScrolling="true" />
+	</components:layout>
 </components:Item>

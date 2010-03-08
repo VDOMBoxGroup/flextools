@@ -3,6 +3,7 @@
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:mx="library://ns.adobe.com/flex/halo">
 
+
 	<s:states>
 
 		<s:State name="normal" />
@@ -10,6 +11,8 @@
 		<s:State name="hovered" />
 
 		<s:State name="highlighted" />
+
+		<s:State name="locked" />
 
 		<s:State name="disabled" />
 	</s:states>
@@ -24,13 +27,17 @@
 	</s:Rect>
 
 	<s:Rect id="backgroundRect"
-			bottom="0" left="0" right="0" top="0"
-			visible="false">
+			bottom="0" left="0" right="0" top="0">
 
 		<s:fill>
 
-			<s:SolidColor />
+			<s:SolidColor color="gray" alpha=".5" />
 		</s:fill>
+
+		<s:stroke>
+
+			<s:SolidColorStroke />
+		</s:stroke>
 	</s:Rect>
 
 	<s:Group id="background" />
@@ -57,6 +64,29 @@
 			<s:Group id="upperLayer" />
 		</s:Group>
 	</s:Scroller>
+
+	<s:Group id="locker"
+			 bottom="0" left="0" right="0" top="0"
+			 visible="false">
+		
+		<s:Rect bottom="0" left="0" right="0" top="0">
+			
+			<s:fill>
+				
+				<s:SolidColor color="white"
+							  alpha=".0" />
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+	
+	<s:Rect bottom="0" left="0" right="0" top="0"
+			includeIn="locked">
+
+		<s:fill>
+
+			<s:SolidColor color="white" />
+		</s:fill>
+	</s:Rect>
 
 	<s:Rect bottom="0" left="0" right="0" top="0">
 

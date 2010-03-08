@@ -14,16 +14,23 @@
 	</fx:Script>
 
 	<mx:Accordion id="typesAccordion"
-				  height="100%" width="150" />
+				  height="100%" width="90"
+				  headerStyleName="headerStyle" />
 
-	<components:WorkArea id="workArea"
-						 height="100%" width="100%" />
+	<s:VGroup height="100%" width="100%" gap="0">
 
-	<s:VGroup height="100%" width="250">
+		<components:WorkArea id="workArea"
+							 height="100%" width="100%" />
+	</s:VGroup>
+
+	<s:VGroup height="100%" width="220">
 
 		<components:ObjectAttributesPanel id="objectAttributesPanel"
 										  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }"
-										  width="100%" />
+										  width="100%"
+										  backgroundAlpha="0" cornerRadius="5"
+										  borderAlpha="0" borderVisible="false"
+										  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin" />
 
 		<components:ObjectsTreePanel id="objectsTreePanel"
 									 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }"

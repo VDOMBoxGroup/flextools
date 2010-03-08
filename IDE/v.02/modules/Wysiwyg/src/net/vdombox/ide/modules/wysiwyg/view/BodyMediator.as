@@ -45,9 +45,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
-			interests.push( ApplicationFacade.MODULE_SELECTED );
+			interests.push( ApplicationFacade.PIPES_READY );
 
-			return interests;
+			return interests;	
 		}
 
 		override public function handleNotification( notification : INotification ) : void
@@ -62,7 +62,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 					
-				case ApplicationFacade.MODULE_SELECTED:
+				case ApplicationFacade.PIPES_READY:
 				{
 					if( created ) 
 						sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
@@ -89,6 +89,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
+			created = true;
 			sendNotification( ApplicationFacade.BODY_CREATED, body );
 		}
 	}

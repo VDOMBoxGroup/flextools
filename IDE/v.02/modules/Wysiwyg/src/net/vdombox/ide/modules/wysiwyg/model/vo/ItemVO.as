@@ -6,7 +6,13 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 	[Bindable]
 	public class ItemVO
 	{
-		public var id : String;
+		public function ItemVO( id : String )
+		{
+			super();
+			
+			_id = id;
+		}
+		
 		public var name : String;
 		public var typeVO : TypeVO;
 		
@@ -23,6 +29,13 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		public var attributes : Array = [];
 		public var content : XMLList;
+		
+		private var _id : String;
+		
+		public function get id() : String
+		{
+			return _id;
+		}
 		
 		public function getAttributeByName( name : String ) : AttributeVO
 		{

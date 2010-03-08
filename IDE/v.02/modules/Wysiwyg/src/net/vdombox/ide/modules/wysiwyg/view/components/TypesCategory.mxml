@@ -25,10 +25,19 @@
 	</fx:Script>
 
 	<s:layout>
+
 		<s:VerticalLayout variableRowHeight="true" />
 	</s:layout>
 
 	<s:List dataProvider="{ typeData }" height="100%" labelField="displayName" width="100%"
-			textAlign="center" useVirtualLayout="false"
-			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer" />
+			textAlign="center"
+			contentBackgroundColor="#5E6367"
+			itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer"
+			useVirtualLayout="false">
+
+		<s:layout>
+
+			<s:VerticalLayout variableRowHeight="true" />
+		</s:layout>
+	</s:List>
 </s:NavigatorContent>

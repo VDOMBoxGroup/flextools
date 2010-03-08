@@ -2,9 +2,9 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/halo"
+				xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*"
 				
-				height="21"
-				xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*">
+				minHeight="21" width="100%">
 
 	<fx:Script>
 		<![CDATA[
@@ -154,14 +154,15 @@
 
 	<s:layout>
 
-		<s:HorizontalLayout gap="0" />
+		<s:HorizontalLayout verticalAlign="middle"
+							gap="0" />
 	</s:layout>
 
 	<s:RichText id="nameLabel"
-				height="100%" minWidth="70" text="{ _attributeDescriptionVO.displayName }" width="138"
-				paddingRight="5" textAlign="right" verticalAlign="middle" />
+				minHeight="21" text="{ _attributeDescriptionVO.displayName }" width="100%"
+				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
 
-	<colorPicker:ColorPicker id="valueField" color="@{ _attributeVO.value }"
-							 height="100%" minWidth="10" width="110"
-							 textAlign="left"  />
+	<colorPicker:ColorPicker id="valueField"
+							 height="21" minWidth="10" width="90"
+							 color="@{ _attributeVO.value }" textAlign="left" />
 </s:ItemRenderer>

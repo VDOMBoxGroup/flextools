@@ -3,7 +3,7 @@
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/halo"
 				
-				height="21"
+				minHeight="21" width="100%"
 				creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
@@ -121,14 +121,15 @@
 
 	<s:layout>
 
-		<s:HorizontalLayout gap="0" />
+		<s:HorizontalLayout verticalAlign="middle"
+							gap="0" />
 	</s:layout>
 
 	<s:RichText id="nameLabel"
-				height="100%" text="{ _attributeDescriptionVO.displayName }" width="138"
-				paddingRight="5" textAlign="right" verticalAlign="middle" />
+				minHeight="21" text="{ _attributeDescriptionVO.displayName }" width="100%"
+				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
 
 	<s:TextInput id="valueField"
-				 height="100%" text="@{_attributeVO.value}" width="110"
+				 height="21" minWidth="0" text="@{_attributeVO.value}" width="90"
 				 textAlign="left" />
 </s:ItemRenderer>

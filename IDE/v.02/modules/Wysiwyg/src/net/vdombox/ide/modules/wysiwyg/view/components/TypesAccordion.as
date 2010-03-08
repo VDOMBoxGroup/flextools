@@ -33,7 +33,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			super();
 		}
-
 		public function set dataProvider( value : XMLList ) : void
 		{
 			if ( !value )

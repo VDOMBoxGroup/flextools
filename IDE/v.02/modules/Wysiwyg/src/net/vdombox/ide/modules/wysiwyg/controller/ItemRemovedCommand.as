@@ -7,18 +7,14 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
-	public class ItemCreatedCommand extends SimpleCommand
+	public class ItemRemovedCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
 			var item : Item = notification.getBody() as Item;
 			
-			var mediatorName : String = ItemMediator.NAME + ApplicationFacade.DELIMITER + item.itemVO.id;
-
-			if ( facade.hasMediator( mediatorName ) )
-				facade.removeMediator( mediatorName );
-
-			facade.registerMediator( new ItemMediator( item ) );
+			if( item.itemVO )
+				facade.removeMediator( ItemMediator.NAME + ApplicationFacade.DELIMITER + item.itemVO.id );
 		}
 	}
 }
