@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:mx="library://ns.adobe.com/flex/halo"
+		  xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+
+			private var item : Item;
+
+			private var attributeName : String;
+
+			private var objectId : String;
+
+			private var resourceId : String;
+
+			private var _selfChanged : Boolean = true;
+
+			private var _selectedItem : Item;
+
+			public function get selectedItem() : Item
+			{
+				return _selectedItem;
+			}
+
+			public function set selectedItem( value : Item ) : void
+			{
+				_selectedItem = value;
+			}
+
+			public function init( item : Item ) : void
+			{
+				this.item = item;
+
+				var container : Object //= item.editableAttributes[ 0 ].sourceObject;
+
+				attributeName = "value";
+
+				objectId = item.itemVO.id;
+
+				var resRegExp : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
+
+				var result : Array = container[ 'value' ].match( resRegExp );
+
+				if ( result && result[ 1 ] )
+					resourceId = container[ 'value' ].match( resRegExp )[ 1 ]
+				else
+					enabled = false;
+			}
+
+			public function close() : void
+			{
+
+			}
+
+			public function get selfChanged() : Boolean
+			{
+
+				return _selfChanged;
+			}
+
+			private function rollback() : void
+			{
+
+				applyChanges( 'rollback', null );
+			}
+
+			private function rotate( value : int ) : void
+			{
+
+				applyChanges( 'rotate',
+							  <Attributes>
+								  <Attribute Name="method">{value}</Attribute>
+							  </Attributes>
+							  );
+			}
+
+			private function brightness( value : Number ) : void
+			{
+
+				applyChanges( 'brightness',
+							  <Attributes>
+								  <Attribute Name="factor">{value}</Attribute>
+							  </Attributes>
+							  );
+			}
+
+			private function contrast( value : Number ) : void
+			{
+
+				applyChanges( 'contrast',
+							  <Attributes>
+								  <Attribute Name="factor">{value}</Attribute>
+							  </Attributes>
+							  );
+			}
+
+			private function flip( value : int ) : void
+			{
+
+				applyChanges( 'flip',
+							  <Attributes>
+								  <Attribute Name="method">{value}</Attribute>
+							  </Attributes>
+							  );
+			}
+
+			private function greyscale() : void
+			{
+
+				applyChanges( 'greyscale', null );
+			}
+
+			private function applyChanges( operation : String, attributes : XML ) : void
+			{
+
+//				item.waitMode = true;
+//				dataManager.addEventListener( DataManagerEvent.MODIFY_RESOURCE_COMPLETE, resourceModifedHandler );
+//				dataManager.modifyResource( resourceId, operation, attributeName, attributes );
+			}
+
+//			private function resourceModifedHandler( event : DataManagerEvent ) : void
+//			{
+//
+//				var resId : String = event.result.Object.Attributes.Attribute.( @Name == "value" )[ 0 ];
+//
+//				var resRegExp : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
+//
+//				resourceId = resId.match( resRegExp )[ 1 ]
+//			}
+		]]>
+	</fx:Script>
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/reset_size.png')"
+							  width="20"
+							  click="rollback()" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/rotate_left.png')"
+							  styleName="toolbarButton" width="20"
+							  click="rotate(0)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/rotate_right.png')"
+							  styleName="toolbarButton" width="20"
+							  click="rotate(1)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/flip_vertical.png')"
+							  styleName="toolbarButton" width="20"
+							  click="flip(0)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/flip_horizontal.png')"
+							  styleName="toolbarButton" width="20"
+							  click="flip(1)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/contrast_up.png')"
+							  styleName="toolbarButton" width="20"
+							  click="contrast(.1)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/contrast_down.png')"
+							  styleName="toolbarButton" width="20"
+							  click="contrast(-.1)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/brightness_up.png')"
+							  styleName="toolbarButton" width="20"
+							  click="brightness(.1)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/brightness_down.png')"
+							  styleName="toolbarButton" width="20"
+							  click="brightness(-.1)" />
+
+	<components:ToolbarButton height="20"
+							  icon="@Embed(source='assets/toolbars/imageToolbar/grayscale.png')"
+							  styleName="toolbarButton" width="20"
+							  click="greyscale()" />
+</s:HGroup>

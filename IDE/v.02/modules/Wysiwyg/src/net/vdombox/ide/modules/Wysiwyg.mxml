@@ -19,6 +19,11 @@
 			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin"); 
 		}
 		
+		components|ToolbarButton
+		{
+			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarButtonSkin"); 
+		}
+		
 		components|WorkArea
 		{
 			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin"); 

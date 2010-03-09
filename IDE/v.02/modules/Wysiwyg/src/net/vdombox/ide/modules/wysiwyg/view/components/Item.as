@@ -23,6 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
+	import spark.components.RichEditableText;
 	import spark.components.Scroller;
 	import spark.components.SkinnableDataContainer;
 	import spark.layouts.BasicLayout;
@@ -46,11 +47,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 		private const styleList : Array = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
-											  [ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
-											  [ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
-											  [ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
-											  [ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
-											  [ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
+											[ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat",
+																						"backgroundRepeat" ],
+											[ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ],
+											[ "color", "color" ], [ "fontfamily", "fontFamily" ], [ "fontsize",
+																									"fontSize" ],
+											[ "fontweight", "fontWeight" ], [ "fontstyle", "fontStyle" ],
+											[ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
+											[ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
 
 		[SkinPart( required="true" )]
 		public var background : Group;
@@ -64,10 +68,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		[SkinPart( required="false" )]
 		public var backgroundRect : Rect;
 
+		public var editableComponent : Object;
+
 		private var _data : Object;
+
 		private var _itemVO : ItemVO;
 
 		private var _isLocked : Boolean;
+
 
 		public function get selected() : Boolean
 		{
@@ -165,7 +173,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				var childrenDataProvider : ArrayCollection = new ArrayCollection( _itemVO.children );
 				childrenDataProvider.sort = new Sort();
-				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
+				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ),
+													 new SortField( "order" ) ];
 				childrenDataProvider.refresh();
 
 				dataProvider = childrenDataProvider;
@@ -182,7 +191,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 					case "svg":
 					{
 						var svg : SVGViewer = new SVGViewer();
-						var d : * = svg.setXML( contetntPart );
+						var editableAttributes : Array = svg.setXML( contetntPart );
+
+						if ( editableAttributes.length > 0 )
+						{
+							editableComponent = editableAttributes[ 0 ].sourceObject;
+						}
+
 						background.addElement( svg );
 
 						break
@@ -190,14 +205,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 					case "text":
 					{
-						var richText : Text = new Text();
+						var richText : UIComponent
+
+						if ( contetntPart.@editable )
+						{
+							richText = new RichEditableText();
+							editableComponent = richText;
+						}
+						else
+						{
+							richText = new Text();
+						}
 
 						richText.x = contetntPart.@left;
 						richText.y = contetntPart.@top;
 						richText.width = contetntPart.@width;
 
 
-						richText.text = contetntPart[ 0 ];
+
+						richText[ "text" ] = contetntPart[ 0 ];
 
 						applyStyles( richText, contetntPart );
 
@@ -213,8 +239,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						html.y = contetntPart.@top;
 						html.width = contetntPart.@width;
 
-						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-							"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
+						if ( contetntPart.@editable )
+							editableComponent = html;
+
+						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
 
 						html.htmlText = htmlText;
 
@@ -349,10 +377,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			dispatchEvent( new ItemEvent( ItemEvent.CREATED ) );
 		}
-		
+
 		private function removeHandler( event : Event ) : void
 		{
-			if( event.target == this )
+			if ( event.target == this )
 				dispatchEvent( new ItemEvent( ItemEvent.REMOVED ) );
 		}
 	}

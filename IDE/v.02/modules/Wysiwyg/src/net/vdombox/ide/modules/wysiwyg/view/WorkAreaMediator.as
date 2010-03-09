@@ -166,7 +166,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 
 			if ( workArea.itemVO )
-				sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, workArea.itemVO );
+				sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, workArea );
 
 			workArea.upperLayer.removeAllElements();
 		}
