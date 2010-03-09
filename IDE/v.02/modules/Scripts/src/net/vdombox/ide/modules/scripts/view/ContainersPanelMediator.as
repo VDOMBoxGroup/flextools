@@ -157,7 +157,10 @@ package net.vdombox.ide.modules.scripts.view
 			var typeVO : TypeVO = getTypeByID( selectedItem.@typeID )
 
 			if ( selectedItem.name() == "object" )
-				selectedObject = new ObjectVO( selectedItem.@id, selectedPageVO, typeVO );
+			{
+				selectedObject = new ObjectVO( selectedPageVO, typeVO );
+				selectedObject.setID( selectedItem.@id );
+			}
 			
 			sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedObject );
 		}
