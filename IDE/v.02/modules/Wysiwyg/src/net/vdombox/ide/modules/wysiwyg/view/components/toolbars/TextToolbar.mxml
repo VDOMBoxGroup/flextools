@@ -6,15 +6,16 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 			import mx.collections.ArrayCollection;
 			import mx.collections.IViewCursor;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
 			import mx.events.ColorPickerEvent;
-			
+
 			import spark.components.RichEditableText;
 			import spark.skins.spark.ToggleButtonSkin;
-			
+
 			private var editableStyles : Array = [ { name: "color", value: "color" }, { name: "fontfamily",
 													   value: "fontFamily" }, { name: "fontsize", value: "fontSize" },
 												   { name: "fontweight", value: "fontWeight" }, { name: "fontstyle",
@@ -157,13 +158,6 @@
 
 				if ( _style.hasOwnProperty( "align" ) )
 				{
-					if ( _style[ "align" ] == "left" )
-					{
-						leftButton.selected = true;
-						centerButton.selected = false;
-						rightButton.selected = false;
-					}
-
 					if ( _style[ "align" ] == "center" )
 					{
 						leftButton.selected = false;
@@ -171,11 +165,17 @@
 						rightButton.selected = false;
 					}
 
-					if ( _style[ "align" ] == "right" )
+					else if ( _style[ "align" ] == "right" )
 					{
 						leftButton.selected = false;
 						centerButton.selected = false;
 						rightButton.selected = true;
+					}
+					else
+					{
+						leftButton.selected = true;
+						centerButton.selected = false;
+						rightButton.selected = false;
 					}
 				}
 
@@ -186,10 +186,10 @@
 				elementForEditing.editable = true;
 				elementForEditing.selectable = true;
 			}
-ToggleButtonSkin
+
 			private function changeWeight() : void
 			{
-				if ( weightButton.selected )
+				if ( !weightButton.selected )
 					elementForEditing.setStyle( "fontWeight", "normal" );
 				else
 					elementForEditing.setStyle( "fontWeight", "bold" );
@@ -199,22 +199,18 @@ ToggleButtonSkin
 
 			private function changeStyle() : void
 			{
-				if ( styleButton.selected )
+				if ( !styleButton.selected )
 					elementForEditing.setStyle( "fontStyle", "normal" );
 				else
 					elementForEditing.setStyle( "fontStyle", "italic" );
-
-				styleButton.selected = !styleButton.selected;
 			}
 
 			private function changeDecoration() : void
 			{
-				if ( decorationButton.selected )
+				if ( !decorationButton.selected )
 					elementForEditing.setStyle( "textDecoration", "none" );
 				else
 					elementForEditing.setStyle( "textDecoration", "underline" );
-
-				decorationButton.selected = !decorationButton.selected;
 			}
 
 			private function changeAlign( value : String ) : void
@@ -330,10 +326,10 @@ ToggleButtonSkin
 	</fx:Script>
 
 	<components:ToolbarButton id="weightButton"
-							  height="24"
+							  focusEnabled="false" height="24"
 							  icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')"
 							  styleName="toolbarButton" width="24"
-							  click="changeWeight()" focusEnabled="false" />
+							  click="changeWeight()" />
 
 	<components:ToolbarButton id="styleButton"
 							  height="24"
