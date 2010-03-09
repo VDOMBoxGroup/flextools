@@ -17,10 +17,14 @@
 				  height="100%" width="90"
 				  headerStyleName="headerStyle" />
 
-	<s:VGroup height="100%" width="100%" gap="0">
+	<s:VGroup height="100%" width="100%"
+			  gap="0">
 
 		<components:WorkArea id="workArea"
 							 height="100%" width="100%" />
+
+		<components:ToolbarPanel id="toolbarPanel"
+								 width="100%" />
 	</s:VGroup>
 
 	<s:VGroup height="100%" width="220">

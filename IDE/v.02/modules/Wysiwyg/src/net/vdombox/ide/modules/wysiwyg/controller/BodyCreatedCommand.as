@@ -21,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
 			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
 			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );
+			facade.registerMediator( new ToolbarPanelMediator( body.toolbarPanel ) );
 
 			sendNotification( ApplicationFacade.GET_TYPES );
 			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );

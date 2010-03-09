@@ -113,7 +113,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( transformMarker )
 						transformMarker.visible = false;
 
-					sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, body );
+					sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, workArea );
 
 					break;
 				}
@@ -175,7 +175,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var item : Item = event.target as Item;
 
-			sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, item.itemVO );
+			sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, item );
 
 			workArea.upperLayer.removeAllElements();
 			workArea.upperLayer.addElement( transformMarker );

@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
+	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -12,7 +13,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var itemVO : ItemVO = notification.getBody() as ItemVO;
+			var body : Item = notification.getBody() as Item;
+			
+			var itemVO : ItemVO = body.itemVO as ItemVO;
 
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
