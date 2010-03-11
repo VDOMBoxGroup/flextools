@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	
@@ -33,13 +34,14 @@ package net.vdombox.ide.modules.wysiwyg.model
 			cache = null;
 		}
 
-		public function setRawRenderData( rawRenderData : XML ) : void
+		public function setRawRenderData( pageVO : PageVO, rawRenderData : XML ) : void
 		{
 			cache = {};
 
 			var itemID : String = rawRenderData.@id;
 
 			_renderData = new ItemVO( itemID );
+			_renderData.pageVO = pageVO;
 
 			cache[ _renderData.id ] = _renderData;
 
@@ -54,12 +56,13 @@ package net.vdombox.ide.modules.wysiwyg.model
 			return _renderData;
 		}
 
-		public function renderItem( rawRenderData : XML ) : ItemVO
+		public function renderItem( pageVO : PageVO, rawRenderData : XML ) : ItemVO
 		{
 			var itemID : String = rawRenderData.@id;
 			var renderItem : ItemVO;
 
 			renderItem = cache[ itemID ] ? cache[ itemID ] : new ItemVO( itemID );
+			renderItem.pageVO = pageVO;
 
 			cache[ renderItem.id ] = renderItem;
 
@@ -124,6 +127,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 				if ( childName == "container" || childName == "table" || childName == "row" || childName == "cell" )
 				{
 					childItemVO = new ItemVO( childID );
+					childItemVO.pageVO = itemVO.pageVO;
 
 					createAttributes( childItemVO, child );
 					createChildren( childItemVO, child );

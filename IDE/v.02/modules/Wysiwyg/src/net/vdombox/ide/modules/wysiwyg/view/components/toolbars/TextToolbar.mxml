@@ -12,10 +12,10 @@
 			import mx.collections.SortField;
 			import mx.events.ColorPickerEvent;
 			import mx.utils.StringUtil;
-			
+
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
-			
+
 			import spark.components.RichEditableText;
 
 //			private var editableStyles : Array = [ { name: "color", value: "color" }, { name: "fontfamily", value: "fontFamily" },
@@ -43,55 +43,47 @@
 																			{ label: "18 px", data: "18" }, { label: "24 px", data: "24" },
 																			{ label: "36 px", data: "36" }, ] );
 
-
-			private var oldValue : String = "";
-
 			private var elementForEditing : Object;
 
-			private var _selfChanged : Boolean = false;
-
-			private var currentRange : *;
-
-//			private var _style : Object = {};
-
-			private var attributes : Object;
-
-			private var _selectedItem : Item;
+			private var attributesObject : Object;
 
 			private var _item : Item;
-			
-			public function get selfChanged() : Boolean
+
+			public function get attributes() : Array
 			{
-				return _selfChanged;
+				var result : Array = [];
+				var attributeVO : AttributeVO;
+
+				if ( attributesObject )
+				{
+					for each ( attributeVO in attributesObject )
+					{
+						result.push( attributeVO );
+					}
+				}
+
+				return result;
 			}
 
-			public function get selectedItem() : Item
+			public function get item() : Item
 			{
-				return _selectedItem;
-			}
-
-			public function set selectedItem( value : Item ) : void
-			{
-				_selectedItem = value;
+				return _item;
 			}
 
 			public function init( item : Item ) : void
 			{
 				_item = item;
-				
-				var container : Object = item.editableComponent;
-				
-				container.setStyle( "paddingTop", 5 );
-				container.setStyle( "paddingBottom", 5 );
-				container.setStyle( "paddingLeft", 5 );
-				container.setStyle( "paddingRight", 5 );
-				
-				selectedItem = item;
-				elementForEditing = container;
-				
-				attributes = extractAttributes( _item );
+
+				elementForEditing = item.editableComponent;
+
+				elementForEditing.setStyle( "paddingTop", 5 );
+				elementForEditing.setStyle( "paddingBottom", 5 );
+				elementForEditing.setStyle( "paddingLeft", 5 );
+				elementForEditing.setStyle( "paddingRight", 5 );
+
+				attributesObject = extractAttributes( _item );
 				applyDefaultStates();
-				
+
 				RichEditableText( elementForEditing ).setFocus();
 
 				elementForEditing.editable = true;
@@ -100,30 +92,30 @@
 
 			public function close() : void
 			{
-				attributes[ "value" ] = elementForEditing.text;
+				attributesObject[ "value" ].value = elementForEditing.text;
 
 				var attributeValue : String;
 //				for each ( var attribute : Array in editableStyles )
 //				{
-//					if ( attributes.hasOwnProperty( [ attribute[ 0 ] ] ) )
+//					if ( attributesObject.hasOwnProperty( [ attribute[ 0 ] ] ) )
 //					{
 //						attributeValue = elementForEditing.getStyle( attribute[ 1 ] );
 //						if ( attributeValue )
-//							attributes[ attribute[ 0 ] ] = attributeValue;
+//							attributesObject[ attribute[ 0 ] ] = attributeValue;
 //					}
 //				}
-
-				if ( attributes[ "color" ] )
-				{
-					var hexColor : String = Number( attributes[ "color" ] ).toString( 16 ).toUpperCase();
-
-					var i : int = 6 - hexColor.length;
-
-					while ( --i >= 0 )
-						hexColor = "0" + hexColor;
-
-					attributes[ "color" ] = hexColor;
-				}
+//
+//				if ( attributesObject[ "color" ] )
+//				{
+//					var hexColor : String = Number( attributesObject[ "color" ].value ).toString( 16 ).toUpperCase();
+//
+//					var i : int = 6 - hexColor.length;
+//
+//					while ( --i >= 0 )
+//						hexColor = "0" + hexColor;
+//
+//					attributesObject[ "color" ].value = hexColor;
+//				}
 
 				elementForEditing.setStyle( "paddingTop", 0 );
 				elementForEditing.setStyle( "paddingBottom", 0 );
@@ -137,128 +129,128 @@
 			{
 				var editableAttributeVO : AttributeVO;
 				var attributeVO : AttributeVO;
-				
-				for each( attributeVO in item.itemVO.attributes )
+
+				for each ( attributeVO in item.itemVO.attributes )
 				{
-					if( attributeVO.name == "editable" )
+					if ( attributeVO.name == "editable" )
 					{
 						editableAttributeVO = attributeVO;
 						break;
 					}
 				}
-				
-				var attributes : Object = {};
+
+				var attributesObject : Object = {};
 				var attributeName : String;
 				var attributeNames : Array = editableAttributeVO.value.split( "," );
-				
-				for each( attributeName in attributeNames )
+
+				for each ( attributeName in attributeNames )
 				{
 					attributeName = StringUtil.trim( attributeName );
-					attributes[ attributeName ] = null;
+					attributesObject[ attributeName ] = null;
 				}
-				
+
 				var editableContent : XML = item.itemVO.content.( @editable )[ 0 ];
-				var editableContentAttributes : XMLList = editableContent.attributes();				
+				var editableContentAttributes : XMLList = editableContent.attributes();
 				var editableContentAttribute : XML;
-				
+
 				for each ( editableContentAttribute in editableContentAttributes )
 				{
 					attributeName = editableContentAttribute.name().toString();
-					
-					if( attributes.hasOwnProperty( attributeName ) )
-						attributes[ attributeName ] = new AttributeVO( attributeName, editableContentAttribute[ 0 ] );
-					
+
+					if ( attributesObject.hasOwnProperty( attributeName ) )
+						attributesObject[ attributeName ] = new AttributeVO( attributeName, editableContentAttribute[ 0 ] );
+
 					// TODO Fix
-					
-					if( attributeName == "textalign" )
-						attributes[ "align" ] = new AttributeVO( "align", editableContentAttribute[ 0 ] );
+
+					if ( attributeName == "textalign" )
+						attributesObject[ "align" ] = new AttributeVO( "align", editableContentAttribute[ 0 ] );
 				}
-				
-				if( attributes.hasOwnProperty( "value" ) )
-					attributes[ "value" ] = new AttributeVO( "value", editableContent[ 0 ] );
-				
-				return attributes;
+
+				if ( attributesObject.hasOwnProperty( "value" ) )
+					attributesObject[ "value" ] = new AttributeVO( "value", editableContent[ 0 ] );
+
+				return attributesObject;
 			}
-			
+
 			private function applyDefaultStates() : void
 			{
 				fonts.sort = new Sort();
 				fonts.sort.fields = [ new SortField( "data" ) ];
 				fonts.refresh();
-				
+
 				fontSelector.dataProvider = fonts;
 				fontSelector.validateNow();
-				
+
 				var cursor : IViewCursor = fonts.createCursor();
-				
-				if ( attributes.hasOwnProperty( "fontfamily" ) )
+
+				if ( attributesObject.hasOwnProperty( "fontfamily" ) )
 				{
-					if ( cursor.findFirst( { data: attributes[ "fontfamily" ].value.toLowerCase() } ) )
+					if ( cursor.findFirst( { data: attributesObject[ "fontfamily" ].value.toLowerCase() } ) )
 						fontSelector.selectedItem = cursor.current;
 				}
-				
-				
+
+
 				fontSize.sort = new Sort();
 				fontSize.sort.fields = [ new SortField( "data", false, false, true ) ];
 				fontSize.refresh();
-				
+
 				sizeSelector.dataProvider = fontSize;
 				sizeSelector.validateNow();
-				
+
 				cursor = fontSize.createCursor();
-				
-				if ( attributes.hasOwnProperty( "fontsize" ) )
+
+				if ( attributesObject.hasOwnProperty( "fontsize" ) )
 				{
-					if ( cursor.findFirst( { data: attributes[ "fontsize" ].value.toLowerCase() } ) )
+					if ( cursor.findFirst( { data: attributesObject[ "fontsize" ].value.toLowerCase() } ) )
 						sizeSelector.selectedItem = cursor.current;
 					else
 						sizeSelector.selectedItem = null;
 				}
-				
-				if ( attributes.hasOwnProperty( "fontweight" ) )
+
+				if ( attributesObject.hasOwnProperty( "fontweight" ) )
 				{
-					if ( attributes[ "fontweight" ].value == "bold" )
+					if ( attributesObject[ "fontweight" ].value == "bold" )
 						weightButton.selected = true;
 					else
 						weightButton.selected = false;
 				}
-				
-				if ( attributes.hasOwnProperty( "fontstyle" ) )
+
+				if ( attributesObject.hasOwnProperty( "fontstyle" ) )
 				{
-					if ( attributes[ "fontstyle" ].value == "italic" )
+					if ( attributesObject[ "fontstyle" ].value == "italic" )
 						styleButton.selected = true;
 					else
 						styleButton.selected = false;
 				}
-				
-				if ( attributes.hasOwnProperty( "textdecoration" ) )
+
+				if ( attributesObject.hasOwnProperty( "textdecoration" ) )
 				{
-					if ( attributes[ "textdecoration" ].value == "underline" )
+					if ( attributesObject[ "textdecoration" ].value == "underline" )
 						decorationButton.selected = true;
 					else
 						decorationButton.selected = false;
 				}
-				
-				if ( attributes.hasOwnProperty( "color" ) )
+
+				if ( attributesObject.hasOwnProperty( "color" ) )
 				{
-					var colorValue : String = attributes[ "color" ].value;
-					
-					if( colorValue.charAt() == "#" )
+					var colorValue : String = attributesObject[ "color" ].value;
+
+					if ( colorValue.charAt() == "#" )
 						colorValue = colorValue.substr( 1 );
-					
+
 					textColor.selectedColor = int( "0x" + colorValue );
 				}
-				
-				if ( attributes.hasOwnProperty( "align" ) )
+
+				if ( attributesObject.hasOwnProperty( "align" ) )
 				{
-					if ( attributes[ "align" ].value == "center" )
+					if ( attributesObject[ "align" ].value == "center" )
 					{
 						leftButton.selected = false;
 						centerButton.selected = true;
 						rightButton.selected = false;
 					}
-						
-					else if ( attributes[ "align" ].value == "right" )
+
+					else if ( attributesObject[ "align" ].value == "right" )
 					{
 						leftButton.selected = false;
 						centerButton.selected = false;
@@ -272,40 +264,56 @@
 					}
 				}
 			}
-			
+
 			private function changeWeight() : void
 			{
-				if ( !weightButton.selected )
-					elementForEditing.setStyle( "fontWeight", "normal" );
-				else
-					elementForEditing.setStyle( "fontWeight", "bold" );
+				if ( !attributesObject.hasOwnProperty( "fontweight" ) )
+					return;
 
-//				weightButton.selected = !weightButton.selected;
+				if ( !weightButton.selected )
+					attributesObject[ "fontweight" ].value = "normal";
+				else
+					attributesObject[ "fontweight" ].value = "bold";
+
+				elementForEditing.setStyle( "fontWeight", attributesObject[ "fontweight" ].value );
 			}
 
 			private function changeStyle() : void
 			{
+				if ( !attributesObject.hasOwnProperty( "fontstyle" ) )
+					return;
+
 				if ( !styleButton.selected )
-					elementForEditing.setStyle( "fontStyle", "normal" );
+					attributesObject[ "fontstyle" ].value = "normal";
 				else
-					elementForEditing.setStyle( "fontStyle", "italic" );
+					attributesObject[ "fontstyle" ].value = "italic";
+
+				elementForEditing.setStyle( "fontStyle", attributesObject[ "fontstyle" ].value );
 			}
 
 			private function changeDecoration() : void
 			{
+				if ( !attributesObject.hasOwnProperty( "textdecoration" ) )
+					return;
+
 				if ( !decorationButton.selected )
-					elementForEditing.setStyle( "textDecoration", "none" );
+					attributesObject[ "textdecoration" ].value = "none";
 				else
-					elementForEditing.setStyle( "textDecoration", "underline" );
+					attributesObject[ "textdecoration" ].value = "underline";
+
+				elementForEditing.setStyle( "textDecoration", attributesObject[ "textdecoration" ].value );
 			}
 
 			private function changeAlign( value : String ) : void
 			{
+				if ( !attributesObject.hasOwnProperty( "align" ) )
+					return;
+
 				switch ( value )
 				{
 					case "left":
 					{
-						elementForEditing.setStyle( "textAlign", "left" );
+						attributesObject[ "align" ].value = "left";
 
 						leftButton.selected = true;
 						centerButton.selected = false;
@@ -315,7 +323,7 @@
 					}
 					case "center":
 					{
-						elementForEditing.setStyle( "textAlign", "center" );
+						attributesObject[ "align" ].value = "center";
 
 						leftButton.selected = false;
 						centerButton.selected = true;
@@ -325,7 +333,7 @@
 					}
 					case "right":
 					{
-						elementForEditing.setStyle( "textAlign", "right" );
+						attributesObject[ "align" ].value = "right";
 
 						leftButton.selected = false;
 						centerButton.selected = false;
@@ -334,38 +342,50 @@
 						break;
 					}
 				}
+
+				elementForEditing.setStyle( "textAlign", attributesObject[ "align" ].value );
 			}
 
 			private function colorTextChanged( event : ColorPickerEvent ) : void
 			{
+				if ( !attributesObject.hasOwnProperty( "color" ) )
+					return;
+				
 				var hexValue : String = event.color.toString( 16 );
 				var hexLength : int = hexValue.length;
 
 				for ( var i : int = hexLength; i < 6; i++ )
 				{
-					hexValue = '0' + hexValue;
+					hexValue = "0" + hexValue;
 				}
-
+				
+				attributesObject[ "color" ].value = hexValue;
+				
 				elementForEditing.setStyle( "color", event.color );
 			}
 
-			/* private function zzz(event:MouseEvent):void
-			   {
-			   event.stopImmediatePropagation();
-			 } */
-
-
-
 			private function changeFamily( value : Object ) : void
 			{
+				if ( !attributesObject.hasOwnProperty( "fontfamily" ) )
+					return;
+				
 				if ( value && value.data )
+				{
+					attributesObject[ "fontfamily" ].value = value.data;
 					elementForEditing.setStyle( "fontFamily", value.data );
+				}
 			}
 
 			private function changeSize( value : Object ) : void
 			{
+				if ( !attributesObject.hasOwnProperty( "fontsize" ) )
+					return;
+				
 				if ( value && value.data )
+				{
+					attributesObject[ "fontsize" ].value = value.data;
 					elementForEditing.setStyle( "fontSize", value.data );
+				}
 			}
 		]]>
 	</fx:Script>
@@ -422,6 +442,7 @@
 				 height="24" styleName="toolbarComboBox" width="100"
 				 change="changeSize(sizeSelector.selectedItem)" />
 
-	<mx:ColorPicker id="textColor" focusEnabled="false" height="24" width="36"
+	<mx:ColorPicker id="textColor"
+					focusEnabled="false" height="24" width="36"
 					change="colorTextChanged(event)" />
 </s:HGroup>

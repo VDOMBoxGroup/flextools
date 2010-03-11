@@ -15,7 +15,9 @@
 			import mx.events.ColorPickerEvent;
 			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
+			import mx.utils.StringUtil;
 			
+			import net.vdombox.ide.common.vo.AttributeVO;			
 			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
@@ -23,26 +25,46 @@
 
 			private var HTMLEditorLoader : HTMLLoader;
 
-			private var _selectedItem : Item;
+//			private var _selectedItem : Item;
 
-			private var oldValue : String = "";
+//			private var oldValue : String = "";
 
-			private var _selfChanged : Boolean = false;
+//			private var _selfChanged : Boolean = false;
 
-			public function get selfChanged() : Boolean
+//			public function get selfChanged() : Boolean
+//			{
+//				return _selfChanged;
+//			}
+
+			private var attributesObject : Object;
+			
+			private var _item : Item;
+			
+			public function get attributes() : Array
 			{
-				return _selfChanged;
+				var result : Array = [];
+				var attributeVO : AttributeVO;
+				
+				if ( attributesObject )
+				{
+					for each ( attributeVO in attributesObject )
+					{
+						result.push( attributeVO );
+					}
+				}
+				
+				return result;
+			}
+			
+			public function get item() : Item
+			{
+				return _item;
 			}
 
-			public function get selectedItem() : Item
-			{
-				return _selectedItem;
-			}
-
-			public function set selectedItem( value : Item ) : void
-			{
-				_selectedItem = value;
-			}
+//			public function set selectedItem( value : Item ) : void
+//			{
+//				_selectedItem = value;
+//			}
 
 			private function get editableHTML() : HTML
 			{
@@ -50,7 +72,7 @@
 
 				try
 				{
-					edHTML = _selectedItem.editableComponent
+					edHTML = _item.editableComponent
 				}
 				catch ( error : Error )
 				{
@@ -107,22 +129,25 @@
 			{
 				registerEvent( false );
 				HTMLEditorLoader = null;
-				HTMLEditorLoader = new HTMLLoader();
-				HTMLEditorLoader.placeLoadStringContentInApplicationSandbox = true;
-
+				
 				if ( !item.editableComponent )
 				{
-					selectedItem = null
+					_item = null
 					return;
 				}
+
+				_item = item;
+				_item.scroller.visible = false;
+				
+				attributesObject = extractAttributes( _item );
+				
+				HTMLEditorLoader = new HTMLLoader();
+				HTMLEditorLoader.placeLoadStringContentInApplicationSandbox = true;
 //
 //				if ( selectedItem && selectedItem.editableAttributes[ 0 ].sourceObject === item.editableAttributes[ 0 ].sourceObject )
 //				{
 //					item.editableAttributes[ 0 ].sourceObject.editabledText = oldValue;
 //				}
-
-				selectedItem = item;
-				selectedItem.scroller.visible = false;
 
 				/* HTMLEditorLoader.addEventListener(
 				   Event.HTML_DOM_INITIALIZE,
@@ -160,7 +185,7 @@
 //						value = editableHTML.editabledText;
 					}
 				else
-					value = oldValue;
+//					value = oldValue;
 
 				if ( !value )
 				{
@@ -173,6 +198,53 @@
 //				selectedItem.editableAttributes[ 0 ].attributes[ "value" ] = value;
 			}
 
+			private function extractAttributes( item : Item ) : Object
+			{
+				var editableAttributeVO : AttributeVO;
+				var attributeVO : AttributeVO;
+				
+				for each ( attributeVO in item.itemVO.attributes )
+				{
+					if ( attributeVO.name == "editable" )
+					{
+						editableAttributeVO = attributeVO;
+						break;
+					}
+				}
+				
+				var attributesObject : Object = {};
+				var attributeName : String;
+				var attributeNames : Array = editableAttributeVO.value.split( "," );
+				
+				for each ( attributeName in attributeNames )
+				{
+					attributeName = StringUtil.trim( attributeName );
+					attributesObject[ attributeName ] = null;
+				}
+				
+				var editableContent : XML = item.itemVO.content.( @editable )[ 0 ];
+				var editableContentAttributes : XMLList = editableContent.attributes();
+				var editableContentAttribute : XML;
+				
+				for each ( editableContentAttribute in editableContentAttributes )
+				{
+					attributeName = editableContentAttribute.name().toString();
+					
+					if ( attributesObject.hasOwnProperty( attributeName ) )
+						attributesObject[ attributeName ] = new AttributeVO( attributeName, editableContentAttribute[ 0 ] );
+					
+					// TODO Fix
+					
+					if ( attributeName == "textalign" )
+						attributesObject[ "align" ] = new AttributeVO( "align", editableContentAttribute[ 0 ] );
+				}
+				
+				if ( attributesObject.hasOwnProperty( "value" ) )
+					attributesObject[ "value" ] = new AttributeVO( "value", editableContent[ 0 ] );
+				
+				return attributesObject;
+			}
+			
 			private function registerEvent( flag : Boolean ) : void
 			{
 				if ( flag )
@@ -228,7 +300,7 @@
 				if ( Math.abs( editableHTML.height - hght ) > 16 && hght > 10 )
 				{
 					editableHTML.height = hght;
-					UIComponent( selectedItem ).invalidateSize();
+					_item.invalidateSize();
 				}
 			}
 
@@ -375,7 +447,7 @@
 				if ( !tinyMCE || !HTMLEditorLoader.loaded )
 				{
 					trace( "alert!!!" );
-					init( selectedItem );
+					init( _item );
 					return;
 				}
 

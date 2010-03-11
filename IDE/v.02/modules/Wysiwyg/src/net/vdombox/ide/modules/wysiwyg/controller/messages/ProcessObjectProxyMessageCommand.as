@@ -74,7 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 							
 							var itemVO : ItemVO = itemMediator.item.data as ItemVO;
 							
-							itemMediator.item.data = renderProxy.renderItem( body.wysiwyg );
+							itemMediator.item.data = renderProxy.renderItem( objectVO.pageVO, body.wysiwyg );
 							delete needForUpdateObject[ objectVO.id ];
 						}
 					}

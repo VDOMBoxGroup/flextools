@@ -152,7 +152,31 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			isTransformed = true;
 
-			sendNotification( ApplicationFacade.ITEM_TRANSFORMED, { itemVO: event.item.itemVO, properties: event.properties } );
+			var attributes : Array = [];
+
+//			var itemVO : ItemVO = event.item.itemVO;
+			var item : Item = event.item;
+			var properties : Object = event.properties;
+
+			var attributeName : String;
+			var attributeVO : AttributeVO;
+
+			for ( attributeName in properties )
+			{
+				for each ( attributeVO in item.itemVO.attributes )
+				{
+					if ( attributeVO.name == attributeName )
+					{
+						attributeVO.value = properties[ attributeName ];
+						attributes.push( attributeVO );
+
+						break;
+					}
+				}
+			}
+
+			if ( attributes.length > 0 )
+				sendNotification( ApplicationFacade.ITEM_TRANSFORMED, { item: item, attributes: attributes } );
 		}
 
 		private function mouseClickHandler( event : MouseEvent ) : void
@@ -175,9 +199,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var item : Item = event.target as Item;
 
-			if( sessionProxy.selectedObject && sessionProxy.selectedObject.id == item.itemVO.id )
+			if ( sessionProxy.selectedObject && sessionProxy.selectedObject.id == item.itemVO.id )
 				return;
-			
+
 			sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, item );
 
 			workArea.upperLayer.removeAllElements();

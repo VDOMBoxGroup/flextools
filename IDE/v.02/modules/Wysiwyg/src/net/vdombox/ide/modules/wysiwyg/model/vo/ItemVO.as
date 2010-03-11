@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.model.vo
 {
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	
 	[Bindable]
@@ -14,6 +15,8 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		}
 		
 		public var name : String;
+		
+		public var pageVO : PageVO;
 		public var typeVO : TypeVO;
 		
 		public var staticFlag : Boolean;
