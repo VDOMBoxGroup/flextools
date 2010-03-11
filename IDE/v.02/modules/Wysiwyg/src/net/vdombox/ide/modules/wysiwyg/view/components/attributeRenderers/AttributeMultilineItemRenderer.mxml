@@ -4,19 +4,16 @@
 				xmlns:mx="library://ns.adobe.com/flex/halo"
 				
 				minHeight="21" width="100%"
-				creationComplete="creationCompleteHandler()">
+				creationComplete="creationCompleteHandler()"
+				xmlns:multiline="net.vdombox.ide.modules.wysiwyg.view.components.multiline.*" xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*">
 
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
-			import mx.collections.Sort;
-			import mx.collections.SortField;
-			import mx.events.ListEvent;
+			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import mx.events.ValidationResultEvent;
 
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.common.vo.ObjectListVO;
 
 			[Bindable]
 			private var _attributeVO : AttributeVO;
@@ -38,44 +35,48 @@
 
 				var codeInterface : Object = {}
 				var matches : Array = _attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
-				//
+
 				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
 				codeInterface[ "value" ] = matches[ 2 ];
 
 				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
-
-				var comboBoxData : ArrayCollection = new ArrayCollection();
-				var codeInterfaceValueRE : RegExp = /\((.*?)\|(.*?)\)/g;
-
-				var listValues : Array = [];
-				var selectedItem : Object = {};
-
-				var objectListVO : ObjectListVO;
-
-				for each ( objectListVO in value.objectsList )
-				{
-					comboBoxData.addItem( objectListVO );
-
-					if ( _attributeVO.value == objectListVO.id )
-						selectedItem = objectListVO;
-				}
-
-				comboBoxData.sort = new Sort();
-				comboBoxData.sort.fields = [ new SortField( "name", true ) ];
-				comboBoxData.refresh();
-
-				valueField.dataProvider = comboBoxData;
-				valueField.selectedItem = selectedItem;
+				
+//				valueField.value = _attributeVO.value;
+				valueField.title = _attributeDescriptionVO.displayName;
+//
+//				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
+//				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
+//				regExpValidator.validate();
 			}
 
 			private var regExpValidator : AttributeValidator = new AttributeValidator();
 
 			private function creationCompleteHandler() : void
 			{
+//				regExpValidator.source = valueField;
+//				regExpValidator.property = "text";
+//				regExpValidator.required = false;
+//				regExpValidator.trigger = valueField;
+//
+//				regExpValidator.triggerEvent = Event.CHANGE;
+//
+//				regExpValidator.addEventListener( ValidationResultEvent.VALID, validHandler, false, 0, true );
+//				regExpValidator.addEventListener( ValidationResultEvent.INVALID, validHandler, false, 0, true );
+//
+//				regExpValidator.validate();
 			}
 
 			private function validHandler( event : ValidationResultEvent ) : void
 			{
+				//				if ( event.type == ValidationResultEvent.VALID )
+				//				{
+				//					okButton.enabled = true;
+				//				}
+				//				else if ( event.type == ValidationResultEvent.INVALID )
+				//				{
+				//					okButton.enabled = false;
+				//				}
+
 			}
 
 			private function getColorByGroup( groupNumber : uint ) : String
@@ -116,16 +117,11 @@
 
 				return colorGroup;
 			}
-
-			protected function valueField_changeHandler( event : ListEvent ) : void
-			{
-				_attributeVO.value = valueField.selectedItem.id;
-			}
 		]]>
 	</fx:Script>
 
 	<s:layout>
-
+		
 		<s:HorizontalLayout verticalAlign="middle"
 							gap="0" />
 	</s:layout>
@@ -134,8 +130,7 @@
 				minHeight="21" text="{ _attributeDescriptionVO.displayName }" width="100%"
 				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
 
-	<mx:ComboBox id="valueField"
-				 height="21" labelField="name" minWidth="10" width="90"
-				 textAlign="left"
-				 change="valueField_changeHandler( event )" />
+	<attributeRenderers:Multiline id="valueField" value="@{ _attributeVO.value }"
+						 height="21" width="90"
+						 textAlign="left" />
 </s:ItemRenderer>

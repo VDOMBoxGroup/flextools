@@ -2,25 +2,26 @@
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:mx="library://ns.adobe.com/flex/halo"
-		  xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*">
+		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 			import mx.collections.ArrayCollection;
 			import mx.collections.IViewCursor;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
 			import mx.events.ColorPickerEvent;
-
+			import mx.utils.StringUtil;
+			
+			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+			
 			import spark.components.RichEditableText;
-			import spark.skins.spark.ToggleButtonSkin;
 
-			private var editableStyles : Array = [ { name: "color", value: "color" }, { name: "fontfamily",
-													   value: "fontFamily" }, { name: "fontsize", value: "fontSize" },
-												   { name: "fontweight", value: "fontWeight" }, { name: "fontstyle",
-													   value: "fontStyle" }, { name: "align", value: "textAlign" },
-												   { name: "textdecoration", value: "textDecoration" } ];
+//			private var editableStyles : Array = [ { name: "color", value: "color" }, { name: "fontfamily", value: "fontFamily" },
+//												   { name: "fontsize", value: "fontSize" }, { name: "fontweight", value: "fontWeight" },
+//												   { name: "fontstyle", value: "fontStyle" }, { name: "align", value: "textAlign" },
+//												   { name: "textdecoration", value: "textDecoration" } ];
 
 			private var fonts : ArrayCollection = new ArrayCollection( [ { label: "Andale Mono", data: "andale mono" },
 																		 { label: "Arial", data: "arial" },
@@ -30,23 +31,16 @@
 																		 { label: "Courier New", data: "courier new" },
 																		 { label: "Georgia", data: "georgia" },
 																		 { label: "Helvetica", data: "helvetica" },
-																		 { label: "Impact", data: "impact" },
-																		 { label: "Symbol", data: "symbol" },
-																		 { label: "Tahoma", data: "tahoma" },
-																		 { label: "Terminal", data: "terminal" },
-																		 { label: "Times New Roman",
-																			 data: "times new roman" },
-																		 { label: "Times", data: "times" },
-																		 { label: "Verdana", data: "verdana" },
+																		 { label: "Impact", data: "impact" }, { label: "Symbol", data: "symbol" },
+																		 { label: "Tahoma", data: "tahoma" }, { label: "Terminal", data: "terminal" },
+																		 { label: "Times New Roman", data: "times new roman" },
+																		 { label: "Times", data: "times" }, { label: "Verdana", data: "verdana" },
 																		 { label: "Webdings", data: "webdings" },
 																		 { label: "Wingdings", data: "wingdings" } ] );
 
-			private var fontSize : ArrayCollection = new ArrayCollection( [ { label: "8 px", data: "8" },
-																			{ label: "10 px", data: "10" },
-																			{ label: "12 px", data: "12" },
-																			{ label: "14 px", data: "14" },
-																			{ label: "18 px", data: "18" },
-																			{ label: "24 px", data: "24" },
+			private var fontSize : ArrayCollection = new ArrayCollection( [ { label: "8 px", data: "8" }, { label: "10 px", data: "10" },
+																			{ label: "12 px", data: "12" }, { label: "14 px", data: "14" },
+																			{ label: "18 px", data: "18" }, { label: "24 px", data: "24" },
 																			{ label: "36 px", data: "36" }, ] );
 
 
@@ -58,12 +52,14 @@
 
 			private var currentRange : *;
 
-			private var _style : Object = {};
+//			private var _style : Object = {};
 
 			private var attributes : Object;
 
 			private var _selectedItem : Item;
 
+			private var _item : Item;
+			
 			public function get selfChanged() : Boolean
 			{
 				return _selfChanged;
@@ -81,91 +77,188 @@
 
 			public function init( item : Item ) : void
 			{
+				_item = item;
+				
 				var container : Object = item.editableComponent;
+				
 				container.setStyle( "paddingTop", 5 );
 				container.setStyle( "paddingBottom", 5 );
 				container.setStyle( "paddingLeft", 5 );
 				container.setStyle( "paddingRight", 5 );
-//				attributes = item.editableAttributes[ 0 ].attributes;
+				
+				selectedItem = item;
+				elementForEditing = container;
+				
+				attributes = extractAttributes( _item );
+				applyDefaultStates();
+				
+				RichEditableText( elementForEditing ).setFocus();
+
+				elementForEditing.editable = true;
+				elementForEditing.selectable = true;
+			}
+
+			public function close() : void
+			{
+				attributes[ "value" ] = elementForEditing.text;
 
 				var attributeValue : String;
-				for each ( var attribute : Object in editableStyles )
-				{
-					attributeValue = container.getStyle( attribute.value );
+//				for each ( var attribute : Array in editableStyles )
+//				{
+//					if ( attributes.hasOwnProperty( [ attribute[ 0 ] ] ) )
+//					{
+//						attributeValue = elementForEditing.getStyle( attribute[ 1 ] );
+//						if ( attributeValue )
+//							attributes[ attribute[ 0 ] ] = attributeValue;
+//					}
+//				}
 
-					if ( attributeValue )
-						_style[ attribute.name ] = attributeValue;
+				if ( attributes[ "color" ] )
+				{
+					var hexColor : String = Number( attributes[ "color" ] ).toString( 16 ).toUpperCase();
+
+					var i : int = 6 - hexColor.length;
+
+					while ( --i >= 0 )
+						hexColor = "0" + hexColor;
+
+					attributes[ "color" ] = hexColor;
 				}
 
-				oldValue = container.text;
+				elementForEditing.setStyle( "paddingTop", 0 );
+				elementForEditing.setStyle( "paddingBottom", 0 );
+				elementForEditing.setStyle( "paddingLeft", 0 );
+				elementForEditing.setStyle( "paddingRight", 0 );
+				elementForEditing.editable = false;
+				elementForEditing.selectable = false;
+			}
 
+			private function extractAttributes( item : Item ) : Object
+			{
+				var editableAttributeVO : AttributeVO;
+				var attributeVO : AttributeVO;
+				
+				for each( attributeVO in item.itemVO.attributes )
+				{
+					if( attributeVO.name == "editable" )
+					{
+						editableAttributeVO = attributeVO;
+						break;
+					}
+				}
+				
+				var attributes : Object = {};
+				var attributeName : String;
+				var attributeNames : Array = editableAttributeVO.value.split( "," );
+				
+				for each( attributeName in attributeNames )
+				{
+					attributeName = StringUtil.trim( attributeName );
+					attributes[ attributeName ] = null;
+				}
+				
+				var editableContent : XML = item.itemVO.content.( @editable )[ 0 ];
+				var editableContentAttributes : XMLList = editableContent.attributes();				
+				var editableContentAttribute : XML;
+				
+				for each ( editableContentAttribute in editableContentAttributes )
+				{
+					attributeName = editableContentAttribute.name().toString();
+					
+					if( attributes.hasOwnProperty( attributeName ) )
+						attributes[ attributeName ] = new AttributeVO( attributeName, editableContentAttribute[ 0 ] );
+					
+					// TODO Fix
+					
+					if( attributeName == "textalign" )
+						attributes[ "align" ] = new AttributeVO( "align", editableContentAttribute[ 0 ] );
+				}
+				
+				if( attributes.hasOwnProperty( "value" ) )
+					attributes[ "value" ] = new AttributeVO( "value", editableContent[ 0 ] );
+				
+				return attributes;
+			}
+			
+			private function applyDefaultStates() : void
+			{
 				fonts.sort = new Sort();
 				fonts.sort.fields = [ new SortField( "data" ) ];
 				fonts.refresh();
-
+				
 				fontSelector.dataProvider = fonts;
 				fontSelector.validateNow();
-
+				
 				var cursor : IViewCursor = fonts.createCursor();
-
-				if ( _style.hasOwnProperty( "fontfamily" ) )
+				
+				if ( attributes.hasOwnProperty( "fontfamily" ) )
 				{
-					if ( cursor.findFirst( { data: _style[ "fontfamily" ].toLowerCase() } ) )
+					if ( cursor.findFirst( { data: attributes[ "fontfamily" ].value.toLowerCase() } ) )
 						fontSelector.selectedItem = cursor.current;
 				}
-
-
+				
+				
 				fontSize.sort = new Sort();
 				fontSize.sort.fields = [ new SortField( "data", false, false, true ) ];
 				fontSize.refresh();
-
+				
 				sizeSelector.dataProvider = fontSize;
 				sizeSelector.validateNow();
-
-				var cursor1 : IViewCursor = fontSize.createCursor();
-
-				if ( _style.hasOwnProperty( "fontsize" ) )
+				
+				cursor = fontSize.createCursor();
+				
+				if ( attributes.hasOwnProperty( "fontsize" ) )
 				{
-					if ( cursor1.findFirst( { data: _style[ "fontsize" ].toLowerCase() } ) )
-						sizeSelector.selectedItem = cursor1.current;
+					if ( cursor.findFirst( { data: attributes[ "fontsize" ].value.toLowerCase() } ) )
+						sizeSelector.selectedItem = cursor.current;
 					else
 						sizeSelector.selectedItem = null;
 				}
-
-				if ( _style.hasOwnProperty( "fontweight" ) )
+				
+				if ( attributes.hasOwnProperty( "fontweight" ) )
 				{
-					if ( _style[ "fontweight" ] == "bold" )
+					if ( attributes[ "fontweight" ].value == "bold" )
 						weightButton.selected = true;
 					else
 						weightButton.selected = false;
 				}
-
-				if ( _style.hasOwnProperty( "fontstyle" ) )
+				
+				if ( attributes.hasOwnProperty( "fontstyle" ) )
 				{
-					if ( _style[ "fontstyle" ] == "italic" )
+					if ( attributes[ "fontstyle" ].value == "italic" )
 						styleButton.selected = true;
 					else
 						styleButton.selected = false;
 				}
-
-				if ( _style.hasOwnProperty( "textdecoration" ) )
+				
+				if ( attributes.hasOwnProperty( "textdecoration" ) )
 				{
-					if ( _style[ "textdecoration" ] == "underline" )
+					if ( attributes[ "textdecoration" ].value == "underline" )
 						decorationButton.selected = true;
 					else
 						decorationButton.selected = false;
 				}
-
-				if ( _style.hasOwnProperty( "align" ) )
+				
+				if ( attributes.hasOwnProperty( "color" ) )
 				{
-					if ( _style[ "align" ] == "center" )
+					var colorValue : String = attributes[ "color" ].value;
+					
+					if( colorValue.charAt() == "#" )
+						colorValue = colorValue.substr( 1 );
+					
+					textColor.selectedColor = int( "0x" + colorValue );
+				}
+				
+				if ( attributes.hasOwnProperty( "align" ) )
+				{
+					if ( attributes[ "align" ].value == "center" )
 					{
 						leftButton.selected = false;
 						centerButton.selected = true;
 						rightButton.selected = false;
 					}
-
-					else if ( _style[ "align" ] == "right" )
+						
+					else if ( attributes[ "align" ].value == "right" )
 					{
 						leftButton.selected = false;
 						centerButton.selected = false;
@@ -178,15 +271,8 @@
 						rightButton.selected = false;
 					}
 				}
-
-				selectedItem = item;
-				elementForEditing = container;
-				RichEditableText( elementForEditing ).setFocus();
-
-				elementForEditing.editable = true;
-				elementForEditing.selectable = true;
 			}
-
+			
 			private function changeWeight() : void
 			{
 				if ( !weightButton.selected )
@@ -268,48 +354,7 @@
 			   event.stopImmediatePropagation();
 			 } */
 
-			public function close() : void
-			{
-				attributes[ "value" ] = elementForEditing.text;
 
-				if ( !elementForEditing.text )
-				{
-					var dummy : * = "";
-				}
-
-				var attributeValue : String;
-				for each ( var attribute : Array in editableStyles )
-				{
-					if ( attributes.hasOwnProperty( [ attribute[ 0 ] ] ) )
-					{
-						attributeValue = elementForEditing.getStyle( attribute[ 1 ] );
-						if ( attributeValue )
-							attributes[ attribute[ 0 ] ] = attributeValue;
-					}
-				}
-
-				//color fix
-
-				if ( attributes[ "color" ] )
-				{
-					var hexColor : String = Number( attributes[ "color" ] ).toString( 16 ).toUpperCase();
-
-					var i : int = 6 - hexColor.length;
-
-					while ( --i >= 0 )
-						hexColor = "0" + hexColor;
-
-					attributes[ "color" ] = hexColor;
-				}
-
-				//	registerEvent(false);
-				elementForEditing.setStyle( "paddingTop", 0 );
-				elementForEditing.setStyle( "paddingBottom", 0 );
-				elementForEditing.setStyle( "paddingLeft", 0 );
-				elementForEditing.setStyle( "paddingRight", 0 );
-				elementForEditing.editable = false;
-				elementForEditing.selectable = false;
-			}
 
 			private function changeFamily( value : Object ) : void
 			{
@@ -325,51 +370,48 @@
 		]]>
 	</fx:Script>
 
-	<components:ToolbarButton id="weightButton"
-							  focusEnabled="false" height="24"
-							  icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')"
-							  styleName="toolbarButton" width="24"
-							  click="changeWeight()" />
+	<controls:ToolbarButton id="weightButton"
+							focusEnabled="false" height="24"
+							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')"
+							styleName="toolbarButton" width="24"
+							click="changeWeight()" />
 
-	<components:ToolbarButton id="styleButton"
-							  height="24"
-							  icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')"
-							  styleName="toolbarButton" width="24"
-							  click="changeStyle()" />
+	<controls:ToolbarButton id="styleButton"
+							height="24"
+							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')"
+							styleName="toolbarButton" width="24"
+							click="changeStyle()" />
 
-	<components:ToolbarButton id="decorationButton"
-							  focusEnabled="false" height="24"
-							  icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')"
-							  styleName="toolbarButton" width="24"
-							  click="changeDecoration()" />
+	<controls:ToolbarButton id="decorationButton"
+							focusEnabled="false" height="24"
+							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')"
+							styleName="toolbarButton" width="24"
+							click="changeDecoration()" />
 
 	<mx:VRule height="24" />
 
-	<components:ToolbarButton id="leftButton"
-							  height="24"
-							  icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')"
-							  styleName="toolbarButton" width="24"
-							  click="changeAlign('left')" />
+	<controls:ToolbarButton id="leftButton"
+							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')"
+							styleName="toolbarButton" width="24"
+							click="changeAlign('left')" />
 
-	<components:ToolbarButton id="centerButton"
-							  height="24"
-							  icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')"
-							  styleName="toolbarButton" width="24"
-							  click="changeAlign('center')" />
+	<controls:ToolbarButton id="centerButton"
+							height="24"
+							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')"
+							styleName="toolbarButton" width="24"
+							click="changeAlign('center')" />
 
-	<components:ToolbarButton id="rightButton"
-							  height="24"
-							  icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')"
-							  styleName="toolbarButton" width="24"
-							  click="changeAlign('right')" />
+	<controls:ToolbarButton id="rightButton"
+							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')"
+							styleName="toolbarButton" width="24"
+							click="changeAlign('right')" />
 
 	<mx:VRule height="24" />
 
 	<mx:Label text="Font" />
 
 	<mx:ComboBox id="fontSelector"
-				 focusEnabled="false" height="24" styleName="toolbarComboBox"
-				 width="100"
+				 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
 				 change="changeFamily(fontSelector.selectedItem)" />
 
 	<mx:VRule height="24" />
@@ -380,6 +422,6 @@
 				 height="24" styleName="toolbarComboBox" width="100"
 				 change="changeSize(sizeSelector.selectedItem)" />
 
-	<mx:ColorPicker focusEnabled="false" height="24" width="36"
+	<mx:ColorPicker id="textColor" focusEnabled="false" height="24" width="36"
 					change="colorTextChanged(event)" />
 </s:HGroup>

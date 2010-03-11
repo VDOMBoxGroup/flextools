@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				
+				height="300" layout="absolute" title="Select custom character" width="600"
+				creationComplete="zzz();"
+				close="closeHandler();" showCloseButton="true" titleStyleName="titleStyle">
+
+	<mx:Style>
+	.titleStyle {
+		textAlign: center;	
+	}
+</mx:Style>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			import mx.core.UIComponent;
+			import mx.controls.Button;
+			import mx.controls.Label;
+			import mx.containers.GridItem;
+			import mx.containers.GridRow;
+
+			include 'charMapArray.as'
+
+			private var _charCode : String;
+
+			private var selectedItem : GridItem;
+
+			public function get charCode() : String
+			{
+
+				return _charCode;
+			}
+
+			private function zzz() : void
+			{
+
+				var charsPerRow : uint = 20, tdWidth : uint = 20, tdHeight : uint = 20;
+				var gridRow : GridRow, gridItem : GridItem;
+				var charMapLength : uint = charmap.length;
+
+				gridRow = new GridRow();
+				charGrid.addChild( gridRow );
+				var cols : uint = 0;
+				var charLabel : Label;
+				for ( var i : uint = 0; i < charMapLength; i++ )
+				{
+
+					if ( !charmap[ i ][ 2 ] )
+						continue;
+
+					gridItem = new GridItem();
+					gridItem.width = tdWidth;
+					gridItem.height = tdHeight;
+					gridItem.setStyle( 'backgroundColor', '#ffffff' );
+					gridItem.setStyle( 'backgroundAlpha', .4 );
+					gridItem.buttonMode = true;
+					gridItem.data = charmap[ i ];
+
+					gridRow.addChild( gridItem );
+
+					charLabel = new Label();
+					charLabel.percentWidth = 100;
+					charLabel.htmlText = charmap[ i ][ 1 ];
+					charLabel.setStyle( 'fontFamily', 'Courier' );
+					charLabel.setStyle( 'fontSize', '13' );
+					charLabel.setStyle( "textAlign", "center" );
+
+					gridItem.addChild( charLabel );
+
+					cols++;
+
+					if ( cols % charsPerRow == 0 )
+					{
+
+						gridRow = new GridRow();
+						charGrid.addChild( gridRow );
+					}
+				}
+			}
+
+
+			private function getElementByClass( target : DisplayObject, classElement : Class, container : DisplayObjectContainer ) : DisplayObject
+			{
+
+				var returnObject : DisplayObject;
+
+				while ( target )
+				{
+
+					if ( returnObject == container )
+						break;
+
+					if ( target is classElement )
+					{
+
+						returnObject = target;
+						break;
+					}
+
+					if ( target.parent )
+						target = target.parent;
+					else
+						target = null;
+				}
+
+				return returnObject;
+			}
+
+			private function mouseOverHandler( event : MouseEvent ) : void
+			{
+
+				var target : DisplayObject = DisplayObject( event.target );
+
+				if ( selectedItem )
+				{
+
+					selectedItem.setStyle( 'backgroundColor', '#ffffff' );
+					preview.htmlText = '';
+					description.text = '';
+					htmlCode.text = '';
+					numCode.text = '';
+				}
+
+				selectedItem = GridItem( getElementByClass( target, GridItem, charGrid ) );
+
+				if ( selectedItem )
+				{
+
+					selectedItem.setStyle( 'backgroundColor', '#606085' );
+					preview.htmlText = selectedItem.data[ 1 ];
+					description.text = selectedItem.data[ 3 ];
+					htmlCode.text = selectedItem.data[ 0 ];
+					numCode.text = selectedItem.data[ 1 ];
+				}
+
+
+			}
+
+			private function mouseClickHandler( event : MouseEvent ) : void
+			{
+
+				var target : DisplayObject = DisplayObject( event.target );
+
+				var currentElement : GridItem = GridItem( getElementByClass( target, GridItem, charGrid ) );
+
+				if ( currentElement )
+				{
+
+					_charCode = currentElement.data[ 1 ];
+					dispatchEvent( new Event( 'charSelected' ) );
+				}
+			}
+
+			private function closeHandler() : void
+			{
+
+				PopUpManager.removePopUp( this );
+			}
+		]]>
+	</mx:Script>
+
+	<mx:HBox width="100%"
+			 paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+
+		<mx:Grid id="charGrid"
+				 horizontalGap="3" verticalGap="3"
+				 click="mouseClickHandler(event)"
+				 mouseOver="mouseOverHandler(event)" />
+
+		<mx:VBox horizontalAlign="center" verticalGap="4">
+
+			<mx:Canvas height="70" width="100"
+					   borderColor="#7C7C7C" borderStyle="solid">
+
+				<mx:Label id="preview"
+						  width="100%" y="10"
+						  fontFamily="Times New Roman" fontSize="40" fontWeight="bold" textAlign="center" />
+			</mx:Canvas>
+
+			<mx:Text id="description"
+					 height="45" text="Text" width="100"
+					 textAlign="center" />
+
+			<mx:Canvas height="50" width="100"
+					   borderColor="#606085" borderStyle="solid">
+
+				<mx:Label text="HTML-Code" width="100%" y="5"
+						  textAlign="center" />
+
+				<mx:Label id="htmlCode"
+						  width="100%" y="25"
+						  fontSize="12" fontWeight="bold" textAlign="center" />
+			</mx:Canvas>
+
+			<mx:Canvas height="50" width="100"
+					   borderColor="#606085" borderStyle="solid">
+
+				<mx:Label text="NUM-Code" width="100%" y="5"
+						  textAlign="center" />
+
+				<mx:Label id="numCode"
+						  width="100%" y="25"
+						  fontSize="12" fontWeight="bold" textAlign="center" />
+			</mx:Canvas>
+		</mx:VBox>
+	</mx:HBox>
+</mx:TitleWindow>

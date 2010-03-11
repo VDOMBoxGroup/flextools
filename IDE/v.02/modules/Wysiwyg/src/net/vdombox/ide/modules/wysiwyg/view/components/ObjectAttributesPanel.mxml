@@ -8,6 +8,15 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeTextFiledItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributePagelinkItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeObjectlistItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeNumberItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeMultilineItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeFileItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeExternalEditorItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeDropdownItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeColorItemRenderer;
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;

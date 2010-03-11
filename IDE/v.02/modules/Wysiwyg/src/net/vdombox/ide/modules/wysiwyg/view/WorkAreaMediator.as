@@ -175,6 +175,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var item : Item = event.target as Item;
 
+			if( sessionProxy.selectedObject && sessionProxy.selectedObject.id == item.itemVO.id )
+				return;
+			
 			sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, item );
 
 			workArea.upperLayer.removeAllElements();

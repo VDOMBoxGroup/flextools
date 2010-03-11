@@ -496,6 +496,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
+			if( !stage )
+				return;
+				
 			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 

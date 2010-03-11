@@ -2,10 +2,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-	
+
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -36,12 +36,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			return viewComponent as Item;
 		}
-		
+
 		public function lock() : void
 		{
 			item.lock();
 		}
-		
+
 		override public function onRegister() : void
 		{
 			addHandlers();
@@ -93,8 +93,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();
-			
-				item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+
+			item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
 		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void

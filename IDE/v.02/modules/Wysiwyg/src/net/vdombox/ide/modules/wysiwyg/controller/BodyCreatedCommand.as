@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.view.ToolbarPanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.TypesAccordionMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WorkAreaMediator;
-	import net.vdombox.ide.modules.wysiwyg.view.components.Body;
+	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

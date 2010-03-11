@@ -2,13 +2,13 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/halo"
+				xmlns:externalEditor="net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.*"
 				
-				minHeight="21" width="100%"
-				creationComplete="creationCompleteHandler()"
-				xmlns:multiline="net.vdombox.ide.modules.wysiwyg.view.components.multiline.*">
+				minHeight="21" width="100%">
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import mx.events.ValidationResultEvent;
 
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
@@ -38,45 +38,17 @@
 				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
 				codeInterface[ "value" ] = matches[ 2 ];
 
+				var resourceID : String = codeInterface[ "value" ];
+				resourceID = resourceID.substr( resourceID.indexOf( "," ) + 1 );
+
 				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
-				
-//				valueField.value = _attributeVO.value;
-				valueField.title = _attributeDescriptionVO.displayName;
-//
-//				regExpValidator.expression = _attributeDescriptionVO.regularExpressionValidation.toString();
-//				regExpValidator.noMatchError = _attributeDescriptionVO.errorValidationMessage;
-//				regExpValidator.validate();
+
+				valueField.value = _attributeVO.value;
+
+				valueField.resourceID = resourceID;
 			}
 
 			private var regExpValidator : AttributeValidator = new AttributeValidator();
-
-			private function creationCompleteHandler() : void
-			{
-//				regExpValidator.source = valueField;
-//				regExpValidator.property = "text";
-//				regExpValidator.required = false;
-//				regExpValidator.trigger = valueField;
-//
-//				regExpValidator.triggerEvent = Event.CHANGE;
-//
-//				regExpValidator.addEventListener( ValidationResultEvent.VALID, validHandler, false, 0, true );
-//				regExpValidator.addEventListener( ValidationResultEvent.INVALID, validHandler, false, 0, true );
-//
-//				regExpValidator.validate();
-			}
-
-			private function validHandler( event : ValidationResultEvent ) : void
-			{
-				//				if ( event.type == ValidationResultEvent.VALID )
-				//				{
-				//					okButton.enabled = true;
-				//				}
-				//				else if ( event.type == ValidationResultEvent.INVALID )
-				//				{
-				//					okButton.enabled = false;
-				//				}
-
-			}
 
 			private function getColorByGroup( groupNumber : uint ) : String
 			{
@@ -129,7 +101,7 @@
 				minHeight="21" text="{ _attributeDescriptionVO.displayName }" width="100%"
 				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
 
-	<multiline:Multiline id="valueField" value="@{ _attributeVO.value }"
-						 height="21" width="90"
-						 textAlign="left" />
+	<externalEditor:ExternalEditor id="valueField"
+								   height="21" value="@{ _attributeVO.value }" width="90"
+								   textAlign="left" />
 </s:ItemRenderer>

@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.wysiwyg.view.components.colorPicker
+package net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers
 {
 	import flash.events.EventDispatcher;
 

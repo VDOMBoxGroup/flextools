@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				
+				height="300" title="HTML Source Editor" width="400"
+				cornerRadius="0"
+				borderAlpha="1" close="closeWithoutSave()" showCloseButton="true" titleStyleName="titleStyle">
+
+	<mx:Style>
+		.titleStyle {
+			textAlign: center;	
+		}
+	</mx:Style>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+
+			[Bindable]
+			private var _codeText : String
+
+			public function set code( value : String ) : void
+			{
+				_codeText = value;
+			}
+
+			public function get code() : String
+			{
+				return _code.text;
+			}
+
+			private function closeWithSave() : void
+			{
+				dispatchEvent( new Event( 'updateCode' ) );
+			}
+
+			private function closeWithoutSave() : void
+			{
+				PopUpManager.removePopUp( this );
+			}
+		]]>
+	</mx:Script>
+
+	<mx:TextArea id="_code"
+				 focusEnabled="false" height="100%" text="{_codeText}" width="100%" />
+
+	<mx:ControlBar paddingBottom="5" paddingLeft="8" paddingRight="8">
+
+		<mx:Button label="Update"
+				   cornerRadius="0"
+				   click="closeWithSave();" />
+
+		<mx:Spacer width="100%" />
+
+		<mx:Button label="Cancel"
+				   cornerRadius="0"
+				   click="closeWithoutSave();" />
+	</mx:ControlBar>
+</mx:TitleWindow>

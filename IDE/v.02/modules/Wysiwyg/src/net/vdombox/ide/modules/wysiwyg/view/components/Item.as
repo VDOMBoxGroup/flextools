@@ -1,10 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-	
+
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
@@ -16,11 +16,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-	
+
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
@@ -47,14 +47,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		}
 
 		private const styleList : Array = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
-											[ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat",
-																						"backgroundRepeat" ],
-											[ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ],
-											[ "color", "color" ], [ "fontfamily", "fontFamily" ], [ "fontsize",
-																									"fontSize" ],
-											[ "fontweight", "fontWeight" ], [ "fontstyle", "fontStyle" ],
-											[ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
-											[ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
+											  [ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
+											  [ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
+											  [ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
+											  [ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
+											  [ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
 
 		[SkinPart( required="true" )]
 		public var background : Group;
@@ -173,8 +170,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				var childrenDataProvider : ArrayCollection = new ArrayCollection( _itemVO.children );
 				childrenDataProvider.sort = new Sort();
-				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ),
-													 new SortField( "order" ) ];
+				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
 				childrenDataProvider.refresh();
 
 				dataProvider = childrenDataProvider;
@@ -242,7 +238,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						if ( contetntPart.@editable )
 							editableComponent = html;
 
-						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
+						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+							"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
 
 						html.htmlText = htmlText;
 
@@ -326,7 +323,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var _style : Object = {};
 			var hasStyle : Boolean = false;
 
-			item.styleName = "WYSIWYGItem";
+//			item.styleName = "WYSIWYGItem";
 
 
 			var xmlList : XMLList;
@@ -342,6 +339,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( !hasStyle )
 				return;
+
+			var styleName : String;
+
+			for ( styleName in _style )
+			{
+				item.setStyle( styleName, _style[ styleName ] );
+			}
 
 			if ( _style.hasOwnProperty( "backgroundColor" ) && !_style.hasOwnProperty( "backgroundAlpha" ) )
 				_style[ "backgroundAlpha" ] = 100;

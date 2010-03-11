@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:mx="library://ns.adobe.com/flex/halo"
+		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
+
+	<fx:Script source="richTextToolbarTemplate.as" />
+
+	<fx:Script>
+		<![CDATA[
+			import flash.html.HTMLLoader;
+			
+			import mx.controls.HTML;
+			import mx.core.UIComponent;
+			import mx.events.ColorPickerEvent;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+			
+			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
+			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
+			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection;
+
+			private var HTMLEditorLoader : HTMLLoader;
+
+			private var _selectedItem : Item;
+
+			private var oldValue : String = "";
+
+			private var _selfChanged : Boolean = false;
+
+			public function get selfChanged() : Boolean
+			{
+				return _selfChanged;
+			}
+
+			public function get selectedItem() : Item
+			{
+				return _selectedItem;
+			}
+
+			public function set selectedItem( value : Item ) : void
+			{
+				_selectedItem = value;
+			}
+
+			private function get editableHTML() : HTML
+			{
+				var edHTML : Object;
+
+				try
+				{
+					edHTML = _selectedItem.editableComponent
+				}
+				catch ( error : Error )
+				{
+				}
+
+				return edHTML as HTML;
+			}
+
+			private function get bodyTag() : *
+			{
+				var bdTag : *;
+				try
+				{
+					bdTag = editableHTML.domWindow.document.getElementsByTagName( "body" )[ 0 ];
+				}
+				catch ( error : Error )
+				{
+				}
+
+				return bdTag;
+			}
+
+			private function get tinyMCE() : *
+			{
+				var tnMCE : *;
+				try
+				{
+					tnMCE = HTMLEditorLoader.window.tinyMCE;
+				}
+				catch ( error : Error )
+				{
+				}
+
+				return tnMCE;
+			}
+
+			private function get elementForEditing() : *
+			{
+				var efEditing : *;
+				try
+				{
+					efEditing = editableHTML.domWindow.document.getElementById( "xEditingArea" );
+				}
+				catch ( error : Error )
+				{
+				}
+
+				return efEditing;
+			}
+
+			private var currentRange : *;
+
+			public function init( item : Item ) : void
+			{
+				registerEvent( false );
+				HTMLEditorLoader = null;
+				HTMLEditorLoader = new HTMLLoader();
+				HTMLEditorLoader.placeLoadStringContentInApplicationSandbox = true;
+
+				if ( !item.editableComponent )
+				{
+					selectedItem = null
+					return;
+				}
+//
+//				if ( selectedItem && selectedItem.editableAttributes[ 0 ].sourceObject === item.editableAttributes[ 0 ].sourceObject )
+//				{
+//					item.editableAttributes[ 0 ].sourceObject.editabledText = oldValue;
+//				}
+
+				selectedItem = item;
+				selectedItem.scroller.visible = false;
+
+				/* HTMLEditorLoader.addEventListener(
+				   Event.HTML_DOM_INITIALIZE,
+				 HTMLEditorLoader_HTMLDomInitalizeHandler ); */
+
+				HTMLEditorLoader.addEventListener( HTMLUncaughtScriptExceptionEvent.UNCAUGHT_SCRIPT_EXCEPTION,
+												   HTMLEditorLoader_uncaughtScriptException );
+
+				//HTMLEditorLoader.addEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
+
+//				oldValue = editableHTML.editabledText;
+
+				if ( !editableHTML.loaded )
+					editableHTML.addEventListener( Event.COMPLETE, editableHTML_completeHandler );
+				else
+					editableHTML_completeHandler( new Event( "true" ) );
+
+			}
+
+			public function close() : void
+			{
+				trace( "close" );
+				registerEvent( false );
+
+				var value : *;
+
+				if ( tinyMCE )
+
+					if ( elementForEditing )
+					{
+						value = tinyMCE.getContent();
+					}
+					else
+					{
+//						value = editableHTML.editabledText;
+					}
+				else
+					value = oldValue;
+
+				if ( !value )
+				{
+					if ( bodyTag && bodyTag.innerText != "" )
+						value = bodyTag.innerText;
+				}
+
+//				editableHTML.editabledText = value;
+
+//				selectedItem.editableAttributes[ 0 ].attributes[ "value" ] = value;
+			}
+
+			private function registerEvent( flag : Boolean ) : void
+			{
+				if ( flag )
+				{
+					HTMLEditorLoader.addEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+				}
+				else
+				{
+					if ( editableHTML )
+					{
+						editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
+						editableHTML.removeEventListener( KeyboardEvent.KEY_UP, editableElement_KeyUpHandler );
+					}
+
+					if ( HTMLEditorLoader )
+					{
+						HTMLEditorLoader.removeEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+
+						HTMLEditorLoader.removeEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
+					}
+				}
+			}
+
+			private function setIFrame( iFrameValue : *, contentDocumentValue : * ) : void
+			{
+				if ( iFrameValue )
+					var iFrame : * = iFrameValue;
+
+				if ( contentDocumentValue )
+					var contentDocument : * = contentDocumentValue;
+			}
+
+			private function recalculateSize() : void
+			{
+				if ( !elementForEditing || !elementForEditing.contentDocument )
+					return;
+
+				var hght : Number = 0;
+				var chi : * = elementForEditing.contentDocument.body.lastChild;
+
+				var i : uint = 0;
+				while ( chi[ i ] )
+				{
+					hght += chi[ i ].offsetHeight + chi[ i ].offsetTop;
+					i++;
+				}
+
+				if ( chi.offsetHeight )
+					hght = chi.offsetHeight + chi.offsetTop + 15;
+				else
+					hght = elementForEditing.contentDocument.body.offsetHeight + elementForEditing.contentDocument.body.offsetTop + 15;
+
+				if ( Math.abs( editableHTML.height - hght ) > 16 && hght > 10 )
+				{
+					editableHTML.height = hght;
+					UIComponent( selectedItem ).invalidateSize();
+				}
+			}
+
+
+
+			private function execCommand( commandName : String, commandAttributes : String = null ) : void
+			{
+				tinyMCE.execCommand( commandName, false, commandAttributes );
+			}
+
+			private function insertLink() : void
+			{
+				var currentSelection : * = elementForEditing.contentWindow.getSelection();
+				try
+				{
+					currentRange = currentSelection.getRangeAt( 0 );
+				}
+				catch ( error : Error )
+				{
+				}
+
+				var linkSelection : LinkSelection = new LinkSelection();
+				linkSelection.addEventListener( "linkSelected", linkSelection_linkSelectedHandler );
+
+				PopUpManager.addPopUp( linkSelection, DisplayObject( this.parentApplication ), true );
+				PopUpManager.centerPopUp( linkSelection );
+			}
+
+			private function linkSelection_linkSelectedHandler( event : Event ) : void
+			{
+				event.currentTarget.removeEventListener( "linkSelected", linkSelection_linkSelectedHandler );
+
+				var currentSelection : * = elementForEditing.contentWindow.getSelection();
+				currentSelection.addRange( currentRange );
+
+				tinyMCE.themes[ "advanced" ]._insertLink( event.currentTarget.url, "_blank" );
+
+				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
+			}
+
+			private function unLink() : void
+			{
+				tinyMCE.execCommand( "unlink", false );
+			}
+
+			private function insertChar() : void
+			{
+				var charMap : CharMap = new CharMap();
+				charMap.addEventListener( "charSelected", charSelectedHandler );
+
+				PopUpManager.addPopUp( charMap, DisplayObject( this.parentApplication ), true );
+				PopUpManager.centerPopUp( charMap );
+			}
+
+			private function changeFont( event : ListEvent ) : void
+			{
+				var val : String = fontSelector.selectedItem.data
+				tinyMCE.execCommand( "FontName", false, val );
+				recalculateSize();
+			}
+
+			private function colorFillChanged( event : ColorPickerEvent ) : void
+			{
+				var hexValue : String = event.color.toString( 16 );
+				var hexLength : int = hexValue.length;
+				for ( var i : int = hexLength; i < 6; i++ )
+					hexValue = "0" + hexValue;
+
+				tinyMCE.execCommand( "HiliteColor", false, hexValue );
+			}
+
+			private function colorTextChanged( event : ColorPickerEvent ) : void
+			{
+				var hexValue : String = event.color.toString( 16 );
+				var hexLength : int = hexValue.length;
+
+				for ( var i : int = hexLength; i < 6; i++ )
+				{
+					hexValue = "0" + hexValue;
+				}
+
+				tinyMCE.execCommand( "forecolor", false, hexValue );
+			}
+
+			private function charSelectedHandler( event : Event ) : void
+			{
+
+				event.currentTarget.removeEventListener( "charSelected", charSelectedHandler );
+
+				tinyMCE.execCommand( "mceInsertContent", false, event.currentTarget.charCode );
+				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
+				recalculateSize();
+			}
+
+			private function openCodeEditor() : void
+			{
+				var codeEditor : CodeEditor = new CodeEditor();
+				codeEditor.code = tinyMCE.getContent( tinyMCE.getWindowArg( "editor_id" ) );
+				codeEditor.addEventListener( "updateCode", updateCodeHandler );
+
+				PopUpManager.addPopUp( codeEditor, DisplayObject( parentApplication ), true );
+				PopUpManager.centerPopUp( codeEditor );
+			}
+
+			private function updateCodeHandler( event : Event ) : void
+			{
+				event.currentTarget.removeEventListener( "updateCode", updateCodeHandler );
+
+				tinyMCE.setContent( event.currentTarget.code );
+				PopUpManager.removePopUp( UIComponent( event.currentTarget ) );
+				recalculateSize();
+			}
+
+			private function editableHTML_completeHandler( event : Event ) : void
+			{
+				trace( "(1)HTMLEditorLoader " + HTMLEditorLoader.name );
+				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
+
+				HTMLEditorLoader.addEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+
+				HTMLEditorLoader.addEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
+
+				HTMLEditorLoader.loadString( template );
+			}
+
+			private function HTMLEditorLoader_HTMLDomInitalizeHandler( event : Event ) : void
+			{
+				trace( "(1.5)HTMLEditorLoader " + HTMLEditorLoader.name );
+				HTMLEditorLoader.removeEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+
+				if ( !bodyTag )
+					return;
+
+				bodyTag.innerHTML = "<span id=\"xEditingArea\">" + bodyTag.innerHTML + "</span>";
+
+				HTMLEditorLoader.window.elementForEditing = bodyTag.firstChild;
+				HTMLEditorLoader.window.setIFrame = setIFrame;
+			}
+
+			private function HTMLEditorLoader_completeHandler( event : Event ) : void
+			{
+				HTMLEditorLoader.removeEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
+
+				if ( !tinyMCE || !HTMLEditorLoader.loaded )
+				{
+					trace( "alert!!!" );
+					init( selectedItem );
+					return;
+				}
+
+				trace( "(2)HTMLEditorLoader " + HTMLEditorLoader.name );
+				trace( "HTMLEditorLoader_completeHandler" );
+
+				tinyMCE.execCommand( "mceAddControl", true, "content" );
+
+				if ( !elementForEditing )
+					return;
+
+				elementForEditing.focus();
+
+				editableHTML.addEventListener( KeyboardEvent.KEY_UP, editableElement_KeyUpHandler );
+
+				var body : * = elementForEditing.contentWindow.document.getElementsByTagName( "body" )[ 0 ];
+				body.style.marginLeft = "5px";
+				body.style.marginRight = "5px";
+				body.style.paddingTop = "5px";
+				body.style.paddingBottom = "5px";
+
+				callLater( recalculateSize );
+			}
+
+			private function HTMLEditorLoader_uncaughtScriptException( event : HTMLUncaughtScriptExceptionEvent ) : void
+			{
+				var dummy : * = "";
+			}
+
+			private function editableElement_KeyUpHandler( event : KeyboardEvent ) : void
+			{
+				recalculateSize();
+			}
+		]]>
+	</fx:Script>
+
+	<s:HGroup gap="0">
+		<!--<components:ToolbarButtonlabel="Save" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_save.png')"
+			 height="24"  focusEnabled="false"/>-->
+
+		<mx:VRule height="24" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_select_all.png')"
+								width="24"
+								click="execCommand('selectall')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_formatting.png')"
+								width="24"
+								click="execCommand('removeformat')" />
+
+		<mx:VRule height="24" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_link.png')"
+								width="24"
+								click="insertLink()" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_link.png')"
+								width="24"
+								click="execCommand('unlink')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rule.png')"
+								width="24"
+								click="execCommand('inserthorizontalrule')" />
+
+		<controls:ToolbarButton focusEnabled="false" height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_char.png')"
+								width="24"
+								click="insertChar()" />
+	</s:HGroup>
+
+	<s:HGroup>
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')"
+								width="24"
+								fontWeight="bold"
+								click="execCommand('Bold')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')"
+								width="24"
+								click="execCommand('Italic')" />
+
+		<controls:ToolbarButton focusEnabled="false" height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')"
+								width="24"
+								click="execCommand('Underline')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_strikethrough.png')"
+								width="24"
+								click="execCommand('Strikethrough')" />
+
+		<mx:VRule height="24" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')"
+								width="24"
+								click="execCommand('JustifyLeft')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')"
+								width="24"
+								click="execCommand('JustifyCenter')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')"
+								width="24"
+								click="execCommand('JustifyRight')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_block.png')"
+								width="24"
+								click="execCommand('JustifyFull')" />
+
+		<mx:VRule height="24" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_numlist.png')"
+								width="24"
+								click="execCommand('InsertOrderedList')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bullist.png')"
+								width="24"
+								click="execCommand('InsertUnorderedList')" />
+
+		<mx:VRule height="24" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_outdent.png')"
+								width="24"
+								click="execCommand('Outdent')" />
+
+		<controls:ToolbarButton height="24"
+								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_indent.png')"
+								width="24"
+								click="execCommand('Indent')" />
+	</s:HGroup>
+
+	<s:HGroup>
+
+		<mx:Label text="Style" />
+
+		<mx:ComboBox id="styleSelector"
+					 height="24" styleName="toolbarComboBox" width="100"
+					 change="{tinyMCE.execCommand('FormatBlock', false, styleSelector.selectedItem.data)}">
+
+			<mx:dataProvider>
+
+				<mx:ArrayCollection>
+
+					<fx:Object data="p" label="Paragraph" />
+
+					<fx:Object data="address" label="Address" />
+
+					<fx:Object data="pre" label="Preformatted" />
+
+					<fx:Object data="h1" label="Heading 1" />
+
+					<fx:Object data="h2" label="Heading 2" />
+
+					<fx:Object data="h3" label="Heading 3" />
+
+					<fx:Object data="h4" label="Heading 4" />
+
+					<fx:Object data="h5" label="Heading 5" />
+
+					<fx:Object data="h6" label="Heading 6" />
+
+					<fx:Object data="div" label="Div" />
+
+					<fx:Object data="blockquote" label="Blockquote" />
+
+					<fx:Object data="code" label="Code" />
+
+					<fx:Object data="dt" label="Definition term" />
+
+					<fx:Object data="dd" label="Definition description" />
+
+					<fx:Object data="samp" label="Code sample" />
+				</mx:ArrayCollection>
+			</mx:dataProvider>
+		</mx:ComboBox>
+
+		<mx:VRule height="24" />
+
+		<mx:Label text="Font" />
+
+		<mx:ComboBox id="fontSelector"
+					 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
+					 change="changeFont(event)">
+
+			<mx:dataProvider>
+
+				<mx:ArrayCollection>
+
+					<fx:Object data="andale mono,times" label="Andale Mono" />
+
+					<fx:Object data="arial,helvetica,sans-serif" label="Arial" />
+
+					<fx:Object data="arial black,avant garde" label="Arial Black" />
+
+					<fx:Object data="book antiqua,palatino" label="Book Antiqua" />
+
+					<fx:Object data="comic sans ms,sans-serif" label="Comic Sans MS" />
+
+					<fx:Object data="courier new,courier" label="Courier New" />
+
+					<fx:Object data="georgia,palatino" label="Georgia" />
+
+					<fx:Object data="helvetica" label="Helvetica" />
+
+					<fx:Object data="impact,chicago" label="Impact" />
+
+					<fx:Object data="symbol" label="Symbol" />
+
+					<fx:Object data="tahoma,arial,helvetica,sans-serif" label="Tahoma" />
+
+					<fx:Object data="terminal,monaco" label="Terminal" />
+
+					<fx:Object data="times new roman,times" label="Times New Roman" />
+
+					<fx:Object data="trebuchet ms,geneva" label="Trebuchet MS" />
+
+					<fx:Object data="verdana,geneva" label="Verdana" />
+
+					<fx:Object data="webdings" label="Webdings" />
+
+					<fx:Object data="wingdings,zapf dingbats" label="Wingdings" />
+				</mx:ArrayCollection>
+			</mx:dataProvider>
+		</mx:ComboBox>
+
+		<mx:VRule height="24" />
+
+		<mx:Label text="Size" />
+
+		<mx:ComboBox id="sizeSelector"
+					 height="24" styleName="toolbarComboBox" width="100"
+					 change="{tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data); recalculateSize();}">
+
+			<mx:dataProvider>
+
+				<mx:ArrayCollection>
+
+					<fx:Object data="1" label="1 (8 pt)" />
+
+					<fx:Object data="2" label="2 (10 pt)" />
+
+					<fx:Object data="3" label="3 (12 pt)" />
+
+					<fx:Object data="4" label="4 (14 pt)" />
+
+					<fx:Object data="5" label="5 (18 pt)" />
+
+					<fx:Object data="6" label="6 (24 pt)" />
+
+					<fx:Object data="7" label="7 (36 pt)" />
+				</mx:ArrayCollection>
+			</mx:dataProvider>
+		</mx:ComboBox>
+
+		<mx:VRule height="24" />
+
+		<mx:ColorPicker focusEnabled="false" height="24" width="36"
+						change="colorTextChanged(event)" />
+
+		<mx:ColorPicker focusEnabled="false" height="24" width="36"
+						change="colorFillChanged(event)" />
+
+		<mx:VRule height="24" />
+
+		<controls:ToolbarButton height="24" label="Source" styleName="toolbarButton"
+								click="openCodeEditor()" />
+	</s:HGroup>
+</s:VGroup>

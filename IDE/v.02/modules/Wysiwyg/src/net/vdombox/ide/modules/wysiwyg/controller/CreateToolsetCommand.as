@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.ToolsetMediator;
-	import net.vdombox.ide.modules.wysiwyg.view.components.Toolset;
+	import net.vdombox.ide.modules.wysiwyg.view.components.main.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

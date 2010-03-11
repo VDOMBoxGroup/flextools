@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.wysiwyg.view.components
+package net.vdombox.ide.modules.wysiwyg.view.components.controls
 {
 	import mx.controls.Image;
 

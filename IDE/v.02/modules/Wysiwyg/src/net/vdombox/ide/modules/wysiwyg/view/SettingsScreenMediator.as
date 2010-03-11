@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.SettingsScreen;
+	import net.vdombox.ide.modules.wysiwyg.view.components.main.SettingsScreen;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

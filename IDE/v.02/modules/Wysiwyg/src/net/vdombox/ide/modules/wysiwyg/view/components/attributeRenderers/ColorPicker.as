@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.wysiwyg.view.components.colorPicker
+package net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components.colorPicker
 	import mx.containers.Canvas;
 	
 	import net.vdombox.ide.modules.wysiwyg.events.ColorPickerEvent;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ColorPickerWindow;
 
 	public class ColorPicker extends Canvas
 	{

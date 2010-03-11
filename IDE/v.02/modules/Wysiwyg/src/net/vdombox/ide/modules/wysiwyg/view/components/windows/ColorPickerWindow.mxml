@@ -4,10 +4,11 @@
 				styleName="popupWindow" title="Color Picker"
 				paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"
 				creationComplete="on_creation_complete()" initialize="on_initialize()"
-				showCloseButton="true" xmlns="*" xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*">
+				showCloseButton="true" xmlns="*" xmlns:colorPicker="net.vdombox.ide.modules.wysiwyg.view.components.colorPicker.*" xmlns:attributeRenderers="net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.*">
 
 	<mx:Script>
 		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ColorHSB;
 			import mx.core.UIComponent;
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
@@ -922,7 +923,7 @@
 				<mx:Canvas height="258" width="258" x="7" y="7"
 						   backgroundColor="#000000">
 
-					<colorPicker:ColorPickerCanvas id="ccc"
+					<attributeRenderers:ColorPickerCanvas id="ccc"
 												   height="256" maxHeight="256" maxWidth="256" minHeight="256"
 												   minWidth="256" width="256" x="1" y="1"
 												   mouseDown="on_ccc_mouse_down(event);" />
@@ -938,7 +939,7 @@
 				<mx:Canvas height="258" width="22" x="7" y="7"
 						   backgroundColor="#000000">
 
-					<colorPicker:ColorPickerCanvas id="ccb"
+					<attributeRenderers:ColorPickerCanvas id="ccb"
 												   height="256" maxHeight="256" maxWidth="20" minHeight="256"
 												   minWidth="20" width="20" x="1" y="1"
 												   mouseDown="on_ccb_mouse_down(event);" />

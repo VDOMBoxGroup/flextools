@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	
 	import net.vdombox.ide.modules.wysiwyg.view.ExternalEditorWindowMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
-	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ExternalEditorWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

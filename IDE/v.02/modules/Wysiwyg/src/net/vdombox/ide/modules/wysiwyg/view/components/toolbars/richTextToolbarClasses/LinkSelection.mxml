@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:richTextToolBarClasses="vdom.controls.richTextToolBarClasses.*"
+	
+	width="400" height="160" 
+	layout="vertical" showCloseButton="true" title="Insert Link" titleStyleName="titleStyle" 
+	backgroundAlpha="1" borderAlpha="1" cornerRadius="0" 
+	
+	creationComplete="creationCompleteHandler();"
+	close="closeHandler();" >
+	
+<mx:Style>
+	.titleStyle {
+		textAlign: center;	
+	}
+</mx:Style>
+
+<mx:Script>
+	<![CDATA[
+		import mx.managers.PopUpManager;
+		
+		private var currentValue:String;
+		
+		public function get url():String
+		{
+			return currentValue;
+		}
+		
+		private function closeWithSave():void
+		{
+			if(linkURL.enabled)
+			{
+				if(!linkURL.text)
+				{
+					closeHandler();
+					return;
+				}
+					
+				currentValue = "http://" + linkURL.text;
+			}
+			else
+			{
+				currentValue = "/"+XML(pageURL.selectedItem).@data+".vdom";
+			}
+				
+			dispatchEvent(new Event('linkSelected'));
+		}
+		
+		private function closeHandler():void
+		{
+			PopUpManager.removePopUp(this);
+		}
+		
+		private function creationCompleteHandler():void
+		{
+//			var dataProvider:XMLList =  new XMLList();
+//			
+//			var lp:XMLList = dataManager.listPages;
+//			for each(var elem:XML in lp)
+//			{
+//				dataProvider += <element label={elem.@Name} data={elem.@ID} />
+//			}
+//			
+//			pageURL.dataProvider = dataProvider;
+		}
+	]]>
+</mx:Script>
+
+<mx:Form width="100%">
+
+	<mx:HBox width="100%"  label="Link URL" horizontalGap="0" verticalAlign="middle">
+		<mx:RadioButton label="Link URL" groupName="rGroup" selected="true" width="100%"
+			click="{
+				linkURL.enabled = true;
+				linkURL.setFocus();
+				pageURL.enabled = false;
+			}"/>
+		<mx:Label  text="http://" fontWeight="bold"/>
+		<mx:TextInput id="linkURL" width="200" fontWeight="bold" enabled="true"/>
+	</mx:HBox>
+	
+	<mx:HBox width="100%" label="Link URL:">
+		<mx:RadioButton label="Pages List" groupName="rGroup" width="100%"
+			click="{
+				linkURL.enabled = false;
+				pageURL.enabled = true;
+			}"/>
+		<mx:ComboBox id="pageURL"
+			labelField="@label"
+			cornerRadius="0" width="200" textAlign="left" enabled="false"/>
+	</mx:HBox>
+	
+	<mx:FormItem horizontalAlign="right" direction="horizontal" width="100%">
+		<mx:Button label="Insert" cornerRadius="0" 
+			click="closeWithSave();"/>
+		<mx:Button label="Cancel" cornerRadius="0" 
+			click="closeHandler();"/>
+	</mx:FormItem>
+</mx:Form>
+	
+</mx:TitleWindow>

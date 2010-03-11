@@ -5,8 +5,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import mx.managers.PopUpManager;
 	
 	import net.vdombox.ide.modules.wysiwyg.view.ResourceSelectorWindowMediator;
-	import net.vdombox.ide.modules.wysiwyg.view.components.resourceSelector.ResourceSelector;
-	import net.vdombox.ide.modules.wysiwyg.view.components.resourceSelector.ResourceSelectorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.ResourceSelector;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ResourceSelectorWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;

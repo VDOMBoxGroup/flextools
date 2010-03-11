@@ -2,7 +2,7 @@
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:mx="library://ns.adobe.com/flex/halo"
-		  xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*">
+		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -71,40 +71,40 @@
 			{
 
 				applyChanges( 'rotate',
-							  <Attributes>
-								  <Attribute Name="method">{value}</Attribute>
-							  </Attributes>
-							  );
+					<Attributes>
+						<Attribute Name="method">{value}</Attribute>
+					</Attributes>
+					);
 			}
 
 			private function brightness( value : Number ) : void
 			{
 
 				applyChanges( 'brightness',
-							  <Attributes>
-								  <Attribute Name="factor">{value}</Attribute>
-							  </Attributes>
-							  );
+					<Attributes>
+						<Attribute Name="factor">{value}</Attribute>
+					</Attributes>
+					);
 			}
 
 			private function contrast( value : Number ) : void
 			{
 
 				applyChanges( 'contrast',
-							  <Attributes>
-								  <Attribute Name="factor">{value}</Attribute>
-							  </Attributes>
-							  );
+					<Attributes>
+						<Attribute Name="factor">{value}</Attribute>
+					</Attributes>
+					);
 			}
 
 			private function flip( value : int ) : void
 			{
 
 				applyChanges( 'flip',
-							  <Attributes>
-								  <Attribute Name="method">{value}</Attribute>
-							  </Attributes>
-							  );
+					<Attributes>
+						<Attribute Name="method">{value}</Attribute>
+					</Attributes>
+					);
 			}
 
 			private function greyscale() : void
@@ -133,53 +133,45 @@
 		]]>
 	</fx:Script>
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/reset_size.png')"
-							  width="20"
-							  click="rollback()" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/reset_size.png')"
+							width="20"
+							click="rollback()" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/rotate_left.png')"
-							  styleName="toolbarButton" width="20"
-							  click="rotate(0)" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_left.png')"
+							styleName="toolbarButton" width="20"
+							click="rotate(0)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/rotate_right.png')"
-							  styleName="toolbarButton" width="20"
-							  click="rotate(1)" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_right.png')"
+							styleName="toolbarButton" width="20"
+							click="rotate(1)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/flip_vertical.png')"
-							  styleName="toolbarButton" width="20"
-							  click="flip(0)" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/flip_vertical.png')"
+							styleName="toolbarButton" width="20"
+							click="flip(0)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/flip_horizontal.png')"
-							  styleName="toolbarButton" width="20"
-							  click="flip(1)" />
+	<controls:ToolbarButton height="20"
+							icon="@Embed(source='assets/toolbars/imageToolbar/flip_horizontal.png')"
+							styleName="toolbarButton" width="20"
+							click="flip(1)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/contrast_up.png')"
-							  styleName="toolbarButton" width="20"
-							  click="contrast(.1)" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_up.png')"
+							styleName="toolbarButton" width="20"
+							click="contrast(.1)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/contrast_down.png')"
-							  styleName="toolbarButton" width="20"
-							  click="contrast(-.1)" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_down.png')"
+							styleName="toolbarButton" width="20"
+							click="contrast(-.1)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/brightness_up.png')"
-							  styleName="toolbarButton" width="20"
-							  click="brightness(.1)" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/brightness_up.png')"
+							styleName="toolbarButton" width="20"
+							click="brightness(.1)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/brightness_down.png')"
-							  styleName="toolbarButton" width="20"
-							  click="brightness(-.1)" />
+	<controls:ToolbarButton height="20"
+							icon="@Embed(source='assets/toolbars/imageToolbar/brightness_down.png')"
+							styleName="toolbarButton" width="20"
+							click="brightness(-.1)" />
 
-	<components:ToolbarButton height="20"
-							  icon="@Embed(source='assets/toolbars/imageToolbar/grayscale.png')"
-							  styleName="toolbarButton" width="20"
-							  click="greyscale()" />
+	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/grayscale.png')"
+							styleName="toolbarButton" width="20"
+							click="greyscale()" />
 </s:HGroup>

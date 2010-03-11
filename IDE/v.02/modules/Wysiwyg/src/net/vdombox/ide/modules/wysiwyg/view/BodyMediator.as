@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.view.components.Body;
+	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

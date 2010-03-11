@@ -6,7 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.view.components.Toolset;
+	import net.vdombox.ide.modules.wysiwyg.view.components.main.Toolset;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

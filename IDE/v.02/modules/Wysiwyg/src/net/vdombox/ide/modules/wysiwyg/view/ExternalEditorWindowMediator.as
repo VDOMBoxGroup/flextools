@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ResourceSelectorWindowEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditor;
-	import net.vdombox.ide.modules.wysiwyg.view.components.externalEditor.ExternalEditorWindow;
+	import net.vdombox.ide.modules.wysiwyg.view.components.windows.ExternalEditorWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

@@ -13,13 +13,14 @@
 		@namespace mx "library://ns.adobe.com/flex/halo";
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace components "net.vdombox.ide.modules.wysiwyg.view.components.*";
+		@namespace controls "net.vdombox.ide.modules.wysiwyg.view.components.controls.*";
 		
 		components|Item
 		{
 			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin"); 
 		}
 		
-		components|ToolbarButton
+		controls|ToolbarButton
 		{
 			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarButtonSkin"); 
 		}

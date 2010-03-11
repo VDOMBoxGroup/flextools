@@ -39,7 +39,7 @@
 
 		<s:Group>
 
-			<s:DataGroup id="dataGroup" bottom="0" left="0" right="0" top="0" />
+			<s:DataGroup id="dataGroup" />
 
 			<s:Group id="upperLayer" />
 		</s:Group>
