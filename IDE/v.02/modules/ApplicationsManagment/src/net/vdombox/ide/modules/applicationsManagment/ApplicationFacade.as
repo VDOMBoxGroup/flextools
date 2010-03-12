@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.applicationsManagment
 	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessResourceProxyMessageCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessServerProxyMessageCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.ProcessStatesProxyMessageCommand;
+	import net.vdombox.ide.modules.applicationsManagment.controller.SettingsChangedCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.SettingsFromStorageRetrievedCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.StartupCommand;
 	import net.vdombox.ide.modules.applicationsManagment.controller.TearDownCommand;
@@ -116,6 +117,7 @@ package net.vdombox.ide.modules.applicationsManagment
 			registerCommand( CREATE_BODY, CreateBodyCommand );
 			
 			registerCommand( SETTINGS_FROM_STORAGE_RETRIEVED, SettingsFromStorageRetrievedCommand );
+			registerCommand( SETTINGS_CHANGED, SettingsChangedCommand );
 			
 			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
 			registerCommand( GET_SETTINGS, GetSettingsCommand );

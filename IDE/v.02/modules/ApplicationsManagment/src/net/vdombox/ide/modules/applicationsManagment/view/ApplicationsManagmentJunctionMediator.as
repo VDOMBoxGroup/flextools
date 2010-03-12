@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
 	import mx.core.UIComponent;
-	
+	 
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -258,7 +258,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					if ( recipientKey != multitonKey )
 						return;
 
-					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
+					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, multitonKey,
 																			SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( ApplicationFacade.PIPES_READY );
