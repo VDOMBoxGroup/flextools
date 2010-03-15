@@ -19,6 +19,7 @@ package net.vdombox.ide.core.view.components
 		{
 			setStyle( "skinClass", MainWindowSkin );
 			systemChrome = NativeWindowSystemChrome.NONE;
+			transparent = true;
 			width = 1200;
 			height = 1024;
 			
