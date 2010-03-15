@@ -26,7 +26,22 @@ package net.vdombox.ide.common.vo
 	
 		public function toXML() : XML
 		{
-			return <Attribute Name={_name}>{value}</Attribute>;
+			var result : XML;
+			var xmlCharRegExp : RegExp = /[<>&"]+/;
+			var value : String = this.value;
+			
+			if( value.search( xmlCharRegExp ) != -1 )
+			{	
+				value = value.replace(/\]\]>/g, "]]]]"+"><![CDATA[>" );
+				value = "<Attribute Name=\""+ name +"\"><![CDATA[" + value + "]" + "]></Attribute>"
+				result = new XML( value );
+			}
+			else
+			{
+				result =  <Attribute Name={_name}>{value}</Attribute>;
+			}
+				
+			return result;
 		}
 		
 		
