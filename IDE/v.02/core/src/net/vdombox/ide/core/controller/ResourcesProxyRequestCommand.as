@@ -34,6 +34,7 @@ package net.vdombox.ide.core.controller
 			var body : Object = message.getBody();
 			
 			var resourceVO : ResourceVO;
+			var applicationVO : ApplicationVO;
 			
 			if ( body is ResourceVO )
 				resourceVO = body as ResourceVO;
@@ -71,7 +72,7 @@ package net.vdombox.ide.core.controller
 				case PPMOperationNames.DELETE:
 				{
 					resourceVO = body.resourceVO as ResourceVO;
-					var applicationVO : ApplicationVO = body.applicationVO;
+					applicationVO = body.applicationVO;
 					
 					if ( !applicationVO && !resourceVO )
 					{
@@ -80,6 +81,22 @@ package net.vdombox.ide.core.controller
 					}
 					
 					resourcesProxy.deleteResource( applicationVO, resourceVO );
+					
+					break;
+				}
+					
+				case PPMOperationNames.UPDATE:
+				{
+					resourceVO = body.resourceVO as ResourceVO;
+					applicationVO = body.applicationVO;
+					
+					if ( !applicationVO && !resourceVO )
+					{
+						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Update resource error." );
+						return;
+					}
+					
+					resourcesProxy.modifyResource( applicationVO, resourceVO, body.attributeName, body.operation, body.attributes );
 					
 					break;
 				}

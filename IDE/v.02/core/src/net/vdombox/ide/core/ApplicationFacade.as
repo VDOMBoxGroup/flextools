@@ -82,16 +82,22 @@ package net.vdombox.ide.core
 		public static const RESOURCE_LOADED : String = "resourceLoaded";
 		public static const RESOURCE_SETTED : String = "resourceSetted";
 		public static const RESOURCE_DELETED : String = "resourceDeleted";
+		public static const RESOURCE_MODIFIED : String = "resourceModified";
+		
 		public static const SERVER_PROXY_REQUEST : String = "serverProxyRequest";
 		public static const SERVER_PROXY_RESPONSE : String = "serverProxyResponse";
 		public static const STATES_PROXY_REQUEST : String = "statesProxyRequest";
 		public static const STATES_PROXY_RESPONSE : String = "statesProxyResponse";
+		
 		public static const TYPES_PROXY_REQUEST : String = "typesProxyRequest";
 		public static const TYPES_PROXY_RESPONSE : String = "typesProxyResponse";
+		
 		public static const APPLICATION_PROXY_REQUEST : String = "applicationProxyRequest";
 		public static const APPLICATION_PROXY_RESPONSE : String = "applicationProxyResponse";
+		
 		public static const PAGE_PROXY_REQUEST : String = "pageProxyRequest";
 		public static const PAGE_PROXY_RESPONSE : String = "pageProxyResponse";
+		
 		public static const OBJECT_PROXY_REQUEST : String = "objectProxyRequest";
 		public static const OBJECT_PROXY_RESPONSE : String = "objectProxyResponse";
 
@@ -246,6 +252,7 @@ package net.vdombox.ide.core
 			registerCommand( RESOURCE_LOADED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_SETTED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_DELETED, ResourcesProxyResponseCommand );
+			registerCommand( RESOURCE_MODIFIED, ResourcesProxyResponseCommand );
 
 			registerCommand( OPEN_WINDOW, OpenWindowCommand );
 			registerCommand( CLOSE_WINDOW, CloseWindowCommand );

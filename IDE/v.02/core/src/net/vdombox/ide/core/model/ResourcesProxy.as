@@ -39,15 +39,18 @@ package net.vdombox.ide.core.model
 
 		public function deleteResource( applicationVO : ApplicationVO, resourceVO : ResourceVO ) : void
 		{
+			var token : AsyncToken = soap.delete_resource( applicationVO.id, resourceVO.id );
 			
-			var asyncToken : AsyncToken = soap.delete_resource( applicationVO.id, resourceVO.id );
-			asyncToken.resourceVO = resourceVO;
+			token.recipientName = proxyName;
+			token.resourceVO = resourceVO;
 		}
 
 		public function getListResources( applicationVO : ApplicationVO ) : void
 		{
-			var asyncToken : AsyncToken = soap.list_resources( applicationVO.id );
-			asyncToken.applicationVO = applicationVO;
+			var token : AsyncToken = soap.list_resources( applicationVO.id );
+			
+			token.recipientName = proxyName;
+			token.applicationVO = applicationVO;
 		}
 
 		public function loadResource( resourceVO : ResourceVO ) : void
@@ -63,8 +66,10 @@ package net.vdombox.ide.core.model
 			}
 			else
 			{
-				var asyncToken : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
-				asyncToken.resourceVO = resourceVO;
+				var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
+				
+				token.recipientName = proxyName;
+				token.resourceVO = resourceVO;
 			}
 		}
 
@@ -104,6 +109,14 @@ package net.vdombox.ide.core.model
 
 			soap_setResource();
 		}
+		
+		public function modifyResource( applicationVO : ApplicationVO, resourceVO : ResourceVO, attributeName : String, operation : String, attributes : XML ) : void
+		{
+			var token : AsyncToken = soap.modify_resource( applicationVO.id, resourceVO.ownerID, resourceVO.id, attributeName, operation, attributes );
+			
+			token.recipientName = proxyName;
+			token.resourceVO = resourceVO;
+		}
 
 		private function addHandlers() : void
 		{
@@ -118,6 +131,9 @@ package net.vdombox.ide.core.model
 
 			soap.delete_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.modify_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.modify_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function createResourcesList( applicationVO : ApplicationVO, resourcesXML : XML ) : Array
@@ -181,23 +197,28 @@ package net.vdombox.ide.core.model
 			base64Data.insertNewLines = false;
 			base64Data.encodeBytes( data );
 
-			var asyncToken : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
+			var token : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
 
-			asyncToken.resourceVO = resourceVO;
+			token.recipientName = proxyName;
+			token.resourceVO = resourceVO;
 		}
 
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
-			var resourceVO : ResourceVO;
+			var token : AsyncToken = event.token;
+			
+			if ( !token.hasOwnProperty( "recipientName" ) || token.recipientName != proxyName )
+				return;
 			
 			var operation : Operation = event.currentTarget as Operation;
 			var result : XML = event.result[ 0 ] as XML;
-
+			
 			if ( !operation || !result )
 				return;
-
+			
 			var operationName : String = operation.name;
-
+			var resourceVO : ResourceVO;
+			
 			switch ( operationName )
 			{
 				case "get_resource":
@@ -255,6 +276,15 @@ package net.vdombox.ide.core.model
 					resourceVO.setPath( null );
 					
 					sendNotification( ApplicationFacade.RESOURCE_DELETED, resourceVO );
+					
+					break;
+				}
+					
+				case "modify_resource":
+				{
+					sendNotification( ApplicationFacade.RESOURCE_MODIFIED, token.resourceVO );
+					
+					break;
 				}
 			}
 		}
