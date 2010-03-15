@@ -2,8 +2,11 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*"
 		 
-		 implements="net.vdombox.ide.common.interfaces.IToolset">
+		 implements="net.vdombox.ide.common.interfaces.IToolset"
+		 
+		 height="100%">
 
 	<fx:Metadata> 
 		[ResourceBundle("ResourceBrowser_General")] 
@@ -21,6 +24,9 @@
 		<s:HorizontalLayout />
 	</s:layout>
 
-	<s:ToggleButton id="toolsetButton"
-					label="{ resourceManager.getString( 'ResourceBrowser_General', 'toolset_button_label' ) }" />
+	<components:ToolsetButton id="toolsetButton"
+							  height="100%"
+							  icon="@Embed('icons/scripts_icon.png')"
+							  label="{ resourceManager.getString( 'ResourceBrowser_General', 'toolset_button_label' ) }"
+							  skinClass="net.vdombox.ide.modules.resourceBrowser.view.skins.ToolsetButtonSkin" />
 </s:Group>
