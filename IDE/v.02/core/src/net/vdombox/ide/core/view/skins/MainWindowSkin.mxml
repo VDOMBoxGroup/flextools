@@ -11,10 +11,7 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayList;
-			import mx.events.FlexEvent;
-			import mx.logging.ILogger;
-			import mx.logging.Log;
+			
 			/*  Define the skin elements that should not be colorized.
 			 *  For WindowedApplication, border and status bar background are colorized,
 			 *  but the content area and status text are not.
@@ -155,9 +152,9 @@
 		</s:Rect>
 
 		<s:ButtonBar id="tabBar"
-					 height="25"
-					 left="100" top="25"
-					 requireSelection="true" />
+					 height="20"
+					 left="100" top="30"
+					 requireSelection="true" skinClass="net.vdombox.ide.core.view.skins.TabBarSkin" />
 
 		<s:Group height="35" width="100%"
 				 top="50">

@@ -91,8 +91,7 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.CLOSE_SETTINGS_WINDOW:
 				{
-					var settingsWindowMediator : SettingsWindowMediator = facade.retrieveMediator( SettingsWindowMediator.NAME ) as
-						SettingsWindowMediator;
+					var settingsWindowMediator : SettingsWindowMediator = facade.retrieveMediator( SettingsWindowMediator.NAME ) as SettingsWindowMediator;
 
 					if ( !settingsWindowMediator )
 						return;
@@ -213,8 +212,8 @@ package net.vdombox.ide.core.view
 			var tabBar : ButtonBar = mainWindow.tabBar;
 
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
+			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
 			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
-
 
 			tabBar.labelField = "name";
 			tabBar.dataProvider = new ArrayList( modulesCategories );
@@ -227,6 +226,7 @@ package net.vdombox.ide.core.view
 
 			showModulesByCategory( categoryVO );
 			selectModule();
+			mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
 		}
 
 		private function settingsButton_clickHandler( event : MouseEvent ) : void
