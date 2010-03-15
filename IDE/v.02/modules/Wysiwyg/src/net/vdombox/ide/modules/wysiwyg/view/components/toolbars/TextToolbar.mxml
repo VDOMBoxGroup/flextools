@@ -123,6 +123,8 @@
 				elementForEditing.setStyle( "paddingRight", 0 );
 				elementForEditing.editable = false;
 				elementForEditing.selectable = false;
+				
+				item.setFocus();
 			}
 
 			private function extractAttributes( item : Item ) : Object
@@ -149,7 +151,7 @@
 					attributesObject[ attributeName ] = null;
 				}
 
-				var editableContent : XML = item.itemVO.content.( @editable )[ 0 ];
+				var editableContent : XML = item.itemVO.content.( "@editable" )[ 0 ];
 				var editableContentAttributes : XMLList = editableContent.attributes();
 				var editableContentAttribute : XML;
 

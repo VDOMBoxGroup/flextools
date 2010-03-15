@@ -65,6 +65,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
+			interests.push( ApplicationFacade.MODIFY_RESOURCE );
 
 			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 
@@ -192,6 +193,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break;
+				}
+					
+				case ApplicationFacade.MODIFY_RESOURCE:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.UPDATE, PPMResourcesTargetNames.RESOURCE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break;
 				}
 

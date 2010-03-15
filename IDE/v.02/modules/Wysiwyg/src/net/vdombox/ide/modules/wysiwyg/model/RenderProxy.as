@@ -119,11 +119,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 				var childName : String = child.name();
 				var childID : String = child.@id;
 
-				if( child.@editable )
-				{
-					itemVO.attributes.push( new AttributeVO( "editable", child.@editable ) );
-				}
-				
 				if ( childName == "container" || childName == "table" || childName == "row" || childName == "cell" )
 				{
 					childItemVO = new ItemVO( childID );
@@ -142,6 +137,19 @@ package net.vdombox.ide.modules.wysiwyg.model
 				{
 					itemVO.content += child.copy();
 				}
+			}
+			
+			if( itemVO.content.length() > 0 )
+			{
+				var editableAttribute : XML;
+				
+				editableAttribute = itemVO.content.@ediatable[ 0 ];
+				
+				if( !editableAttribute )
+					editableAttribute = itemVO.content..@editable[ 0 ];
+				
+				if( editableAttribute )
+					itemVO.attributes.push( new AttributeVO( "editable", editableAttribute ) );
 			}
 		}
 	}

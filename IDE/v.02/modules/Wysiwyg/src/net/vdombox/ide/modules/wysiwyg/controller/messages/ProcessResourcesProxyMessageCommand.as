@@ -5,7 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -25,11 +25,27 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 			switch ( target )
 			{
+				case PPMResourcesTargetNames.RESOURCE:
+				{
+					if ( operation == PPMOperationNames.UPDATE )
+					{
+						if ( sessionProxy.selectedObject )
+						{
+							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, sessionProxy.selectedObject );
+							sendNotification( ApplicationFacade.GET_OBJECT_WYSIWYG, sessionProxy.selectedObject );
+						}
+					}
+					
+					break;
+				}
+					
 				case PPMResourcesTargetNames.RESOURCES:
 				{
 					if ( operation == PPMOperationNames.READ )
+					{
 						sendNotification( ApplicationFacade.RESOURCES_GETTED, body );
-					
+					}
+
 					break;
 				}
 			}

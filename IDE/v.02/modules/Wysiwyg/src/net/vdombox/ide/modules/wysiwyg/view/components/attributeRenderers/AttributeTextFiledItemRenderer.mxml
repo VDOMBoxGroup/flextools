@@ -17,10 +17,12 @@
 
 			[Bindable]
 			private var _attributeVO : AttributeVO;
-
+			
 			[Bindable]
+			private var displayName : String;
+			
 			private var _attributeDescriptionVO : AttributeDescriptionVO;
-
+			
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
 
 			override public function set data( value : Object ) : void
@@ -32,6 +34,7 @@
 
 				_attributeVO = value.attributeVO;
 				_attributeDescriptionVO = value.attributeDescriptionVO;
+				displayName = _attributeDescriptionVO.displayName;
 
 				var codeInterface : Object = {}
 				var matches : Array = _attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
@@ -127,7 +130,7 @@
 	</s:layout>
 
 	<s:RichText id="nameLabel"
-				minHeight="21" text="{ _attributeDescriptionVO.displayName }" width="100%"
+				minHeight="21" text="{ displayName }" width="100%"
 				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
 
 	<s:TextInput id="valueField"

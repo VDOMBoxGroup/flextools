@@ -6,48 +6,55 @@
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+			import net.vdombox.ide.modules.wysiwyg.events.ToolbarEvent;
 
-			private var item : Item;
+			import mx.utils.StringUtil;
 
-			private var attributeName : String;
+			private var elementForEditing : Object;
 
-			private var objectId : String;
+			private var attributesObject : Object;
 
-			private var resourceId : String;
+			private var _item : Item;
 
-			private var _selfChanged : Boolean = true;
-
-			private var _selectedItem : Item;
-
-			public function get selectedItem() : Item
+			public function get item() : Item
 			{
-				return _selectedItem;
+				return _item;
 			}
 
-			public function set selectedItem( value : Item ) : void
+			public function get attributes() : Array
 			{
-				_selectedItem = value;
+				var result : Array = [];
+				var attributeVO : AttributeVO;
+				
+				if ( attributesObject )
+				{
+					for each ( attributeVO in attributesObject )
+					{
+						result.push( attributeVO );
+					}
+				}
+				
+				return result;
 			}
-
+			
 			public function init( item : Item ) : void
 			{
-				this.item = item;
+				_item = item;
 
-				var container : Object //= item.editableAttributes[ 0 ].sourceObject;
+				elementForEditing = item.editableComponent;
 
-				attributeName = "value";
-
-				objectId = item.itemVO.id;
+				attributesObject = extractAttributes( _item );
 
 				var resRegExp : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
 
-				var result : Array = container[ 'value' ].match( resRegExp );
-
-				if ( result && result[ 1 ] )
-					resourceId = container[ 'value' ].match( resRegExp )[ 1 ]
-				else
-					enabled = false;
+//				var result : Array = container[ 'value' ].match( resRegExp );
+//
+//				if ( result && result[ 1 ] )
+//					resourceId = container[ 'value' ].match( resRegExp )[ 1 ]
+//				else
+//					enabled = false;
 			}
 
 			public function close() : void
@@ -55,11 +62,61 @@
 
 			}
 
-			public function get selfChanged() : Boolean
+			private function extractAttributes( item : Item ) : Object
 			{
+				var editableAttributeVO : AttributeVO;
+				var attributeVO : AttributeVO;
 
-				return _selfChanged;
+				for each ( attributeVO in item.itemVO.attributes )
+				{
+					if ( attributeVO.name == "editable" )
+					{
+						editableAttributeVO = attributeVO;
+						break;
+					}
+				}
+
+				var attributesObject : Object = {};
+				var attributeName : String;
+				var attributeNames : Array = editableAttributeVO.value.split( "," );
+
+				for each ( attributeName in attributeNames )
+				{
+					attributeName = StringUtil.trim( attributeName );
+					attributesObject[ attributeName ] = null;
+				}
+
+				var content : XML =
+					<content>{item.itemVO.content}</content>
+					;
+				var editableAttribute : XML = content..*.@editable[ 0 ];
+
+				var editableContent : XML = editableAttribute.parent();
+				var editableContentAttributes : XMLList = editableContent.attributes();
+				var editableContentAttribute : XML;
+
+				for each ( editableContentAttribute in editableContentAttributes )
+				{
+					attributeName = editableContentAttribute.name().toString();
+
+					if ( attributesObject.hasOwnProperty( attributeName ) )
+						attributesObject[ attributeName ] = new AttributeVO( attributeName, editableContentAttribute[ 0 ] );
+
+					// TODO Fix
+
+					if ( attributeName == "href" && attributesObject.hasOwnProperty( "value" ) )
+						attributesObject[ "value" ] = new AttributeVO( "value", editableContentAttribute[ 0 ] );
+				}
+
+				return attributesObject;
 			}
+
+//
+//			public function get selfChanged() : Boolean
+//			{
+//
+//				return _selfChanged;
+//			}
 
 			private function rollback() : void
 			{
@@ -115,6 +172,7 @@
 
 			private function applyChanges( operation : String, attributes : XML ) : void
 			{
+				dispatchEvent( new ToolbarEvent( ToolbarEvent.IMAGE_CHANGED, { operation: operation, attributes: attributes } ) );
 
 //				item.waitMode = true;
 //				dataManager.addEventListener( DataManagerEvent.MODIFY_RESOURCE_COMPLETE, resourceModifedHandler );
@@ -133,45 +191,42 @@
 		]]>
 	</fx:Script>
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/reset_size.png')"
-							width="20"
-							click="rollback()" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/reset_size.png')" width="20"
+			  click="rollback()" />
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_left.png')"
-							styleName="toolbarButton" width="20"
-							click="rotate(0)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_left.png')"
+			  styleName="toolbarButton" width="20"
+			  click="rotate(0)" />
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_right.png')"
-							styleName="toolbarButton" width="20"
-							click="rotate(1)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/rotate_right.png')"
+			  styleName="toolbarButton" width="20"
+			  click="rotate(1)" />
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/flip_vertical.png')"
-							styleName="toolbarButton" width="20"
-							click="flip(0)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/flip_vertical.png')"
+			  styleName="toolbarButton" width="20"
+			  click="flip(0)" />
 
-	<controls:ToolbarButton height="20"
-							icon="@Embed(source='assets/toolbars/imageToolbar/flip_horizontal.png')"
-							styleName="toolbarButton" width="20"
-							click="flip(1)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/flip_horizontal.png')"
+			  styleName="toolbarButton" width="20"
+			  click="flip(1)" />
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_up.png')"
-							styleName="toolbarButton" width="20"
-							click="contrast(.1)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_up.png')"
+			  styleName="toolbarButton" width="20"
+			  click="contrast(.1)" />
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_down.png')"
-							styleName="toolbarButton" width="20"
-							click="contrast(-.1)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/contrast_down.png')"
+			  styleName="toolbarButton" width="20"
+			  click="contrast(-.1)" />
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/brightness_up.png')"
-							styleName="toolbarButton" width="20"
-							click="brightness(.1)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/brightness_up.png')"
+			  styleName="toolbarButton" width="20"
+			  click="brightness(.1)" />
 
-	<controls:ToolbarButton height="20"
-							icon="@Embed(source='assets/toolbars/imageToolbar/brightness_down.png')"
-							styleName="toolbarButton" width="20"
-							click="brightness(-.1)" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/brightness_down.png')"
+			  styleName="toolbarButton" width="20"
+			  click="brightness(-.1)" />
 
-	<controls:ToolbarButton height="20" icon="@Embed(source='assets/toolbars/imageToolbar/grayscale.png')"
-							styleName="toolbarButton" width="20"
-							click="greyscale()" />
+	<mx:Button height="20" icon="@Embed(source='assets/toolbars/imageToolbar/grayscale.png')"
+			  styleName="toolbarButton" width="20"
+			  click="greyscale()" />
 </s:HGroup>

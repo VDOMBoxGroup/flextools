@@ -9,15 +9,15 @@
 	<fx:Script>
 		<![CDATA[
 			import flash.html.HTMLLoader;
-			
+
 			import mx.controls.HTML;
 			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;
 			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
-			
-			import net.vdombox.ide.common.vo.AttributeVO;			
+
+			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
@@ -37,14 +37,14 @@
 //			}
 
 			private var attributesObject : Object;
-			
+
 			private var _item : Item;
-			
+
 			public function get attributes() : Array
 			{
 				var result : Array = [];
 				var attributeVO : AttributeVO;
-				
+
 				if ( attributesObject )
 				{
 					for each ( attributeVO in attributesObject )
@@ -52,10 +52,10 @@
 						result.push( attributeVO );
 					}
 				}
-				
+
 				return result;
 			}
-			
+
 			public function get item() : Item
 			{
 				return _item;
@@ -129,7 +129,7 @@
 			{
 				registerEvent( false );
 				HTMLEditorLoader = null;
-				
+
 				if ( !item.editableComponent )
 				{
 					_item = null
@@ -138,9 +138,9 @@
 
 				_item = item;
 				_item.scroller.visible = false;
-				
+
 				attributesObject = extractAttributes( _item );
-				
+
 				HTMLEditorLoader = new HTMLLoader();
 				HTMLEditorLoader.placeLoadStringContentInApplicationSandbox = true;
 //
@@ -171,28 +171,18 @@
 			{
 				trace( "close" );
 				registerEvent( false );
-
-				var value : *;
+				
+				var value : String;
 
 				if ( tinyMCE )
-
-					if ( elementForEditing )
-					{
-						value = tinyMCE.getContent();
-					}
-					else
-					{
-//						value = editableHTML.editabledText;
-					}
-				else
-//					value = oldValue;
-
-				if ( !value )
 				{
-					if ( bodyTag && bodyTag.innerText != "" )
-						value = bodyTag.innerText;
+					value = tinyMCE.getContent();
+					attributesObject[ "value" ].value = value;
 				}
 
+				bodyTag.innerText = value;
+				HTMLEditorLoader = null;
+				item.setFocus();
 //				editableHTML.editabledText = value;
 
 //				selectedItem.editableAttributes[ 0 ].attributes[ "value" ] = value;
@@ -202,7 +192,7 @@
 			{
 				var editableAttributeVO : AttributeVO;
 				var attributeVO : AttributeVO;
-				
+
 				for each ( attributeVO in item.itemVO.attributes )
 				{
 					if ( attributeVO.name == "editable" )
@@ -211,40 +201,40 @@
 						break;
 					}
 				}
-				
+
 				var attributesObject : Object = {};
 				var attributeName : String;
 				var attributeNames : Array = editableAttributeVO.value.split( "," );
-				
+
 				for each ( attributeName in attributeNames )
 				{
 					attributeName = StringUtil.trim( attributeName );
 					attributesObject[ attributeName ] = null;
 				}
-				
-				var editableContent : XML = item.itemVO.content.( @editable )[ 0 ];
+
+				var editableContent : XML = item.itemVO.content.( "@editable" )[ 0 ];
 				var editableContentAttributes : XMLList = editableContent.attributes();
 				var editableContentAttribute : XML;
-				
+
 				for each ( editableContentAttribute in editableContentAttributes )
 				{
 					attributeName = editableContentAttribute.name().toString();
-					
+
 					if ( attributesObject.hasOwnProperty( attributeName ) )
 						attributesObject[ attributeName ] = new AttributeVO( attributeName, editableContentAttribute[ 0 ] );
-					
+
 					// TODO Fix
-					
+
 					if ( attributeName == "textalign" )
 						attributesObject[ "align" ] = new AttributeVO( "align", editableContentAttribute[ 0 ] );
 				}
-				
+
 				if ( attributesObject.hasOwnProperty( "value" ) )
 					attributesObject[ "value" ] = new AttributeVO( "value", editableContent[ 0 ] );
-				
+
 				return attributesObject;
 			}
-			
+
 			private function registerEvent( flag : Boolean ) : void
 			{
 				if ( flag )

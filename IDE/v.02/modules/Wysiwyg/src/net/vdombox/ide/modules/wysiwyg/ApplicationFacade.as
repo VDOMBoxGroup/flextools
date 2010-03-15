@@ -91,6 +91,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const RESOURCES_GETTED : String = "resourcesGetted";
 		
 		public static const LOAD_RESOURCE : String = "loadResource";
+		public static const MODIFY_RESOURCE : String = "modifyResource";
 		
 //		states	
 		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";

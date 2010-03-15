@@ -1,22 +1,20 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import mx.core.UIComponent;
-
+	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.ToolbarEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ToolbarPanel;
 	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.ImageToolbar;
-	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.TextToolbar;
 	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.RichTextToolbar;
+	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.TextToolbar;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
-	import spark.skins.spark.ToggleButtonSkin;
 
 	public class ToolbarPanelMediator extends Mediator implements IMediator
 	{
@@ -28,8 +26,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var sessionProxy : SessionProxy;
-
 		private var currentToolbar : Object;
+
+		private var item : Item;
 
 		public function get toolbarPanel() : ToolbarPanel
 		{
@@ -52,6 +51,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.SELECT_ITEM_REQUEST );
+			interests.push( ApplicationFacade.MODULE_SELECTED );
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
 
 			return interests;
 		}
@@ -63,17 +64,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			switch ( name )
 			{
+				case ApplicationFacade.MODULE_DESELECTED:
+				{
+					currentToolbar = null;
+					toolbarPanel.removeAllElements();
+
+					break;
+				}
+
 				case ApplicationFacade.SELECT_ITEM_REQUEST:
 				{
-					var item : Item = body as Item;
+					item = body as Item;
+
 					var itemVO : ItemVO = item.itemVO;
 					var typeVO : TypeVO = itemVO.typeVO;
 
 					if ( currentToolbar )
 					{
 						currentToolbar.close();
-						
-						if ( currentToolbar.attributes.length > 0 )
+
+						if ( !( currentToolbar is ImageToolbar ) )
 						{
 							sendNotification( ApplicationFacade.ITEM_TRANSFORMED,
 											  { item: currentToolbar.item, attributes: currentToolbar.attributes } )
@@ -82,6 +92,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					currentToolbar = null;
 					toolbarPanel.removeAllElements();
+
+					if ( !item.editableComponent )
+						return;
 
 					switch ( typeVO.interfaceType )
 					{
@@ -104,7 +117,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						case "3":
 						{
 							var textToolbar : TextToolbar = new TextToolbar();
-							
+
 							currentToolbar = textToolbar;
 							toolbarPanel.addElement( textToolbar );
 							textToolbar.init( item );
@@ -115,7 +128,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 						case "4":
 						{
 							var imageToolbar : ImageToolbar = new ImageToolbar();
-							
+
 							currentToolbar = imageToolbar;
 							toolbarPanel.addElement( imageToolbar );
 							imageToolbar.init( item );
@@ -131,10 +144,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
+			toolbarPanel.addEventListener( ToolbarEvent.IMAGE_CHANGED, imageChangedHandler, true );
 		}
 
 		private function removeHandlers() : void
 		{
+			toolbarPanel.removeEventListener( ToolbarEvent.IMAGE_CHANGED, imageChangedHandler, true );
+		}
+
+		private function imageChangedHandler( event : ToolbarEvent ) : void
+		{
+			var eventBody : Object = event.body;
+
+			var attributeName : String = "value";
+
+			var resourceVO : ResourceVO = new ResourceVO( item.itemVO.id );
+			resourceVO.setID( currentToolbar.attributes[ 0 ].value.toString().substr( 5, 36 ) );
+
+			sendNotification( ApplicationFacade.MODIFY_RESOURCE,
+							  { applicationVO: sessionProxy.selectedApplication, resourceVO: resourceVO, attributeName: attributeName,
+					operation: eventBody.operation, attributes: eventBody.attributes } );
 		}
 	}
 }
