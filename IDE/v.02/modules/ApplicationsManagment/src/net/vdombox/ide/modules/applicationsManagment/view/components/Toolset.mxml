@@ -17,8 +17,8 @@
 		<s:HorizontalLayout />
 	</s:layout>
 	
-	<!--<s:ToggleButton id="createNewApplicatoin"
+	<s:ToggleButton id="createNewApplicatoin"
 					label="New Application"
-					click="dispatchEvent( new ToolsetEvent( ToolsetEvent.OPEN_CREATE_APPLICATION ) ); createNewApplicatoin.selected = false;"/>-->
+					click="dispatchEvent( new ToolsetEvent( ToolsetEvent.OPEN_CREATE_APPLICATION ) ); createNewApplicatoin.selected = false;"/>
 	
 </s:Group>

@@ -172,6 +172,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			applicationInformationVO.name = newApplicationInformation.name;
 			applicationInformationVO.description = newApplicationInformation.description;
+			applicationInformationVO.scriptingLanguage = createApplication.languageGroup.selectedValue.toString();
 
 			if ( newApplicationInformation.hasOwnProperty( "name" ) )
 				sendNotification( ApplicationFacade.CREATE_APPLICATION, applicationInformationVO );

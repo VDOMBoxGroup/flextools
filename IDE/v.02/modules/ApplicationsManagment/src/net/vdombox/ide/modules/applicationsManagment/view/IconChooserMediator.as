@@ -25,6 +25,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	import spark.events.IndexChangeEvent;
+	import spark.skins.spark.TextInputSkin;
 
 	public class IconChooserMediator extends Mediator implements IMediator
 	{
@@ -59,8 +60,17 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			iconChooser.iconsList.addEventListener( IndexChangeEvent.CHANGE, iconList_changeHandler )
 			iconChooser.addEventListener( IconChooserEvent.LOAD_ICON, loadIconHandler )
 			iconChooser.iconsList.dataProvider = new ArrayList( gp.items );
+			iconChooser.iconsList.selectedIndex = 0;
+			
+			showIcon();
 		}
 
+		private function showIcon() : void
+		{
+			if( iconChooser.iconsList.selectedItem )
+				iconChooser.selectedIcon.source = iconChooser.iconsList.selectedItem.content;
+		}
+		
 		private function loadIconHandler( CreateApplicationEvent : Event ) : void
 		{
 			var file : File = new File();
@@ -72,11 +82,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 		private function iconList_changeHandler( event : IndexChangeEvent ) : void
 		{
-			if( event.newIndex != -1 )
-			{
-				var galleryItemVO : GalleryItemVO = event.currentTarget.selectedItem as GalleryItemVO;
-				iconChooser.selectedIcon.source = galleryItemVO.content;
-			}
+			showIcon();
 		}
 
 		private function file_selectHandler( event : Event ) : void

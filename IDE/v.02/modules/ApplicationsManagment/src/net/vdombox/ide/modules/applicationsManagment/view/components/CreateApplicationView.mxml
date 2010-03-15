@@ -1,82 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:NavigatorContent 
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:mx="library://ns.adobe.com/flex/halo"
-	
-	height="100%" width="100%"
-	xmlns:components="net.vdombox.ide.modules.applicationsManagment.view.components.*">
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/halo"
+					xmlns:components="net.vdombox.ide.modules.applicationsManagment.view.components.*"
+					
+					height="100%" width="100%"
+					color="white"
+					creationComplete="navigatorcontent1_creationCompleteHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			import net.vdombox.ide.modules.applicationsManagment.events.CreateApplicationViewEvent;
+
+			protected function navigatorcontent1_creationCompleteHandler( event : FlexEvent ) : void
+			{
+				nameField.skin[ "background" ].alpha = 0;
+			}
 		]]>
 	</fx:Script>
 
-	<s:states>
+	<fx:Declarations>
 
-		<s:State name="default" />
+		<s:RadioButtonGroup id="languageGroup" />
+	</fx:Declarations>
 
-		<s:State name="gallery" />
-	</s:states>
+	<s:VGroup bottom="30" left="30" right="30" top="30">
 
-	<s:VGroup 
-		bottom="30" left="30" right="30" top="30">
+		<s:Group width="470">
 
-		<components:IconChooser id="iconChooser"
-			width="100%" />
+			<s:Rect bottom="0" left="0" right="0" top="0"
+					radiusX="5" radiusY="5">
 
-		<s:HGroup width="100%">
+				<s:fill>
 
-			<s:Label 
-				buttonMode="true" text="Name:"
-				
-				fontFamily="Verdana" fontSize="14" textDecoration="underline" />
+					<s:SolidColor color="0x999999"
+								  alpha=".2" />
+				</s:fill>
+			</s:Rect>
 
-			<s:TextInput id="nameField"
-				width="100%" />
-		</s:HGroup>
+			<s:VGroup bottom="7" left="7" right="7" top="7">
 
-		<s:Label 
-			buttonMode="true" text="Description:"
-			
-			fontFamily="Verdana" fontSize="14" textDecoration="underline" />
+				<s:Label text="Name:"
+						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
 
-		<s:VGroup width="100%">
+				<s:TextInput id="nameField"
+							 width="210"
+							 borderColor="white" focusAlpha="0" />
+			</s:VGroup>
+		</s:Group>
 
-			<s:Group 
-				height="50" width="100%">
+		<s:Group width="470">
 
-				<s:Rect 
-					height="100%" width="100%">
+			<s:Rect bottom="0" left="0" right="0" top="0"
+					radiusX="5" radiusY="5">
 
-					<s:stroke>
+				<s:fill>
 
-						<s:SolidColorStroke color="black" />
-					</s:stroke>
+					<s:SolidColor color="0x999999"
+								  alpha=".2" />
+				</s:fill>
+			</s:Rect>
 
-					<s:fill>
+			<s:VGroup bottom="7" left="7" right="7" top="7">
 
-						<s:SolidColor color="white" />
-					</s:fill>
-				</s:Rect>
+				<s:Label text="Icon:"
+						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
 
-				<s:RichEditableText id="descriptionField"
-					height="100%" width="100%" />
-			</s:Group>
-		</s:VGroup>
+				<components:IconChooser id="iconChooser"
+										width="100%" />
+			</s:VGroup>
+		</s:Group>
+
+		<s:Group width="470">
+
+			<s:Rect bottom="0" left="0" right="0" top="0"
+					radiusX="5" radiusY="5">
+
+				<s:fill>
+
+					<s:SolidColor color="0x999999"
+								  alpha=".2" />
+				</s:fill>
+			</s:Rect>
+
+			<s:VGroup bottom="7" left="7" right="7" top="7">
+
+				<s:Label text="Description:"
+						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
+
+				<s:Group height="50" width="100%">
+
+					<s:Rect height="100%" width="450">
+
+						<s:stroke>
+
+							<s:SolidColorStroke color="white" />
+						</s:stroke>
+					</s:Rect>
+
+					<s:RichEditableText id="descriptionField"
+										height="100%" width="100%"
+										focusThickness="0" paddingBottom="5"
+										paddingLeft="5" paddingRight="5"
+										paddingTop="5" />
+				</s:Group>
+			</s:VGroup>
+		</s:Group>
+
+		<s:Group width="470">
+
+			<s:Rect bottom="0" left="0" right="0" top="0"
+					radiusX="5" radiusY="5">
+
+				<s:fill>
+
+					<s:SolidColor color="0x999999"
+								  alpha=".2" />
+				</s:fill>
+			</s:Rect>
+
+			<s:VGroup bottom="7" left="7" right="7" top="7">
+
+				<s:Label text="Language:"
+						 fontFamily="Verdana" fontSize="14" fontWeight="bold" />
+
+				<s:RadioButton label="vscript" selected="true" value="vscript"
+							   group="{languageGroup}" />
+
+				<s:RadioButton label="python" value="python"
+							   group="{languageGroup}" />
+			</s:VGroup>
+		</s:Group>
 
 		<s:HGroup>
 
 			<s:Button id="saveButton"
-				enabled="false" label="Save"
-				
-				click="dispatchEvent( new CreateApplicationViewEvent( CreateApplicationViewEvent.SAVE ) )" />
+					  enabled="false" label="Save"
+					  click="dispatchEvent( new CreateApplicationViewEvent( CreateApplicationViewEvent.SAVE ) )" />
 
-			<s:Button 
-				label="Cancel"
-				
-				click="dispatchEvent( new CreateApplicationViewEvent( CreateApplicationViewEvent.CANCEL ) )" />
+			<s:Button label="Cancel"
+					  click="dispatchEvent( new CreateApplicationViewEvent( CreateApplicationViewEvent.CANCEL ) )" />
 		</s:HGroup>
 	</s:VGroup>
 </s:NavigatorContent>
