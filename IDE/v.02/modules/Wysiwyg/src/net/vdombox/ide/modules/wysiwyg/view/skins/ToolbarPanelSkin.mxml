@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:mx="library://ns.adobe.com/flex/halo">
+
+	<fx:Metadata>
+		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.ToolbarPanel")]
+	</fx:Metadata>
+
+	<s:states>
+
+		<s:State name="normal" />
+
+		<s:State name="disabled" />
+	</s:states>
+
+	<s:Rect bottom="0" left="0" right="0" top="0"
+			radiusX="3" radiusY="3">
+
+		<s:fill>
+
+			<s:SolidColor color="0x999999"
+						  alpha=".2" />
+		</s:fill>
+	</s:Rect>
+
+	<s:Group id="contentGroup"
+			 bottom="3" left="3" right="3" top="3" />
+</s:SparkSkin>

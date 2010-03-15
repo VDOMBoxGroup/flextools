@@ -2,6 +2,7 @@
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:mx="library://ns.adobe.com/flex/halo"
+		  
 		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
 
 	<fx:Script source="richTextToolbarTemplate.as" />
@@ -22,6 +23,7 @@
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection;
+			import net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin;
 
 			private var HTMLEditorLoader : HTMLLoader;
 
@@ -171,7 +173,7 @@
 			{
 				trace( "close" );
 				registerEvent( false );
-				
+
 				var value : String;
 
 				if ( tinyMCE )
@@ -474,11 +476,11 @@
 		]]>
 	</fx:Script>
 
-	<s:HGroup gap="0">
+	<s:HGroup verticalAlign="middle">
 		<!--<components:ToolbarButtonlabel="Save" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_save.png')"
-			 height="24"  focusEnabled="false"/>-->
+			 height="24"  focusEnabled="false"/>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24" />-->
 
 		<controls:ToolbarButton height="24"
 								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_select_all.png')"
@@ -513,7 +515,7 @@
 								click="insertChar()" />
 	</s:HGroup>
 
-	<s:HGroup>
+	<s:HGroup verticalAlign="middle">
 
 		<controls:ToolbarButton height="24"
 								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')"
@@ -583,12 +585,13 @@
 								click="execCommand('Indent')" />
 	</s:HGroup>
 
-	<s:HGroup>
+	<s:HGroup verticalAlign="middle">
 
-		<mx:Label text="Style" />
+		<s:Label text="Style" />
 
 		<mx:ComboBox id="styleSelector"
 					 height="24" styleName="toolbarComboBox" width="100"
+					 color="black"
 					 change="{tinyMCE.execCommand('FormatBlock', false, styleSelector.selectedItem.data)}">
 
 			<mx:dataProvider>
@@ -630,10 +633,12 @@
 
 		<mx:VRule height="24" />
 
-		<mx:Label text="Font" />
+		<s:Label text="Font" />
 
 		<mx:ComboBox id="fontSelector"
-					 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
+					 focusEnabled="false" height="24"
+					 styleName="toolbarComboBox" width="100"
+					 color="black"
 					 change="changeFont(event)">
 
 			<mx:dataProvider>
@@ -644,11 +649,13 @@
 
 					<fx:Object data="arial,helvetica,sans-serif" label="Arial" />
 
-					<fx:Object data="arial black,avant garde" label="Arial Black" />
+					<fx:Object data="arial black,avant garde"
+							   label="Arial Black" />
 
 					<fx:Object data="book antiqua,palatino" label="Book Antiqua" />
 
-					<fx:Object data="comic sans ms,sans-serif" label="Comic Sans MS" />
+					<fx:Object data="comic sans ms,sans-serif"
+							   label="Comic Sans MS" />
 
 					<fx:Object data="courier new,courier" label="Courier New" />
 
@@ -660,11 +667,13 @@
 
 					<fx:Object data="symbol" label="Symbol" />
 
-					<fx:Object data="tahoma,arial,helvetica,sans-serif" label="Tahoma" />
+					<fx:Object data="tahoma,arial,helvetica,sans-serif"
+							   label="Tahoma" />
 
 					<fx:Object data="terminal,monaco" label="Terminal" />
 
-					<fx:Object data="times new roman,times" label="Times New Roman" />
+					<fx:Object data="times new roman,times"
+							   label="Times New Roman" />
 
 					<fx:Object data="trebuchet ms,geneva" label="Trebuchet MS" />
 
@@ -679,10 +688,11 @@
 
 		<mx:VRule height="24" />
 
-		<mx:Label text="Size" />
+		<s:Label text="Size" />
 
 		<mx:ComboBox id="sizeSelector"
 					 height="24" styleName="toolbarComboBox" width="100"
+					 color="black"
 					 change="{tinyMCE.execCommand('FontSize', false, sizeSelector.selectedItem.data); recalculateSize();}">
 
 			<mx:dataProvider>
@@ -708,15 +718,20 @@
 
 		<mx:VRule height="24" />
 
+		<s:Label text="Text Color" />
+
 		<mx:ColorPicker focusEnabled="false" height="24" width="36"
 						change="colorTextChanged(event)" />
+
+		<s:Label text="Fill Color" />
 
 		<mx:ColorPicker focusEnabled="false" height="24" width="36"
 						change="colorFillChanged(event)" />
 
 		<mx:VRule height="24" />
 
-		<controls:ToolbarButton height="24" label="Source" styleName="toolbarButton"
-								click="openCodeEditor()" />
+		<s:Button height="24" label="Source"
+				  click="openCodeEditor()"
+				  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin" />
 	</s:HGroup>
 </s:VGroup>

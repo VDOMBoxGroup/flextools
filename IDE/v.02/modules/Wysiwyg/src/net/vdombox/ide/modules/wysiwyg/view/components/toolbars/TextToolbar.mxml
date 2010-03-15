@@ -2,6 +2,8 @@
 <s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  xmlns:mx="library://ns.adobe.com/flex/halo"
+		  
+		  verticalAlign="middle"
 		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
 
 	<fx:Script>
@@ -31,16 +33,23 @@
 																		 { label: "Courier New", data: "courier new" },
 																		 { label: "Georgia", data: "georgia" },
 																		 { label: "Helvetica", data: "helvetica" },
-																		 { label: "Impact", data: "impact" }, { label: "Symbol", data: "symbol" },
-																		 { label: "Tahoma", data: "tahoma" }, { label: "Terminal", data: "terminal" },
-																		 { label: "Times New Roman", data: "times new roman" },
-																		 { label: "Times", data: "times" }, { label: "Verdana", data: "verdana" },
+																		 { label: "Impact", data: "impact" },
+																		 { label: "Symbol", data: "symbol" },
+																		 { label: "Tahoma", data: "tahoma" },
+																		 { label: "Terminal", data: "terminal" },
+																		 { label: "Times New Roman",
+																			 data: "times new roman" },
+																		 { label: "Times", data: "times" },
+																		 { label: "Verdana", data: "verdana" },
 																		 { label: "Webdings", data: "webdings" },
 																		 { label: "Wingdings", data: "wingdings" } ] );
 
-			private var fontSize : ArrayCollection = new ArrayCollection( [ { label: "8 px", data: "8" }, { label: "10 px", data: "10" },
-																			{ label: "12 px", data: "12" }, { label: "14 px", data: "14" },
-																			{ label: "18 px", data: "18" }, { label: "24 px", data: "24" },
+			private var fontSize : ArrayCollection = new ArrayCollection( [ { label: "8 px", data: "8" },
+																			{ label: "10 px", data: "10" },
+																			{ label: "12 px", data: "12" },
+																			{ label: "14 px", data: "14" },
+																			{ label: "18 px", data: "18" },
+																			{ label: "24 px", data: "24" },
 																			{ label: "36 px", data: "36" }, ] );
 
 			private var elementForEditing : Object;
@@ -123,7 +132,7 @@
 				elementForEditing.setStyle( "paddingRight", 0 );
 				elementForEditing.editable = false;
 				elementForEditing.selectable = false;
-				
+
 				item.setFocus();
 			}
 
@@ -352,7 +361,7 @@
 			{
 				if ( !attributesObject.hasOwnProperty( "color" ) )
 					return;
-				
+
 				var hexValue : String = event.color.toString( 16 );
 				var hexLength : int = hexValue.length;
 
@@ -360,9 +369,9 @@
 				{
 					hexValue = "0" + hexValue;
 				}
-				
+
 				attributesObject[ "color" ].value = hexValue;
-				
+
 				elementForEditing.setStyle( "color", event.color );
 			}
 
@@ -370,7 +379,7 @@
 			{
 				if ( !attributesObject.hasOwnProperty( "fontfamily" ) )
 					return;
-				
+
 				if ( value && value.data )
 				{
 					attributesObject[ "fontfamily" ].value = value.data;
@@ -382,7 +391,7 @@
 			{
 				if ( !attributesObject.hasOwnProperty( "fontsize" ) )
 					return;
-				
+
 				if ( value && value.data )
 				{
 					attributesObject[ "fontsize" ].value = value.data;
@@ -413,7 +422,8 @@
 	<mx:VRule height="24" />
 
 	<controls:ToolbarButton id="leftButton"
-							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')"
+							height="24"
+							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')"
 							styleName="toolbarButton" width="24"
 							click="changeAlign('left')" />
 
@@ -424,25 +434,31 @@
 							click="changeAlign('center')" />
 
 	<controls:ToolbarButton id="rightButton"
-							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')"
+							height="24"
+							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')"
 							styleName="toolbarButton" width="24"
 							click="changeAlign('right')" />
 
 	<mx:VRule height="24" />
 
-	<mx:Label text="Font" />
+	<s:Label text="Font" />
 
 	<mx:ComboBox id="fontSelector"
-				 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
+				 focusEnabled="false" height="24" styleName="toolbarComboBox"
+				 width="100"
+				 color="black"
 				 change="changeFamily(fontSelector.selectedItem)" />
 
 	<mx:VRule height="24" />
 
-	<mx:Label text="Size" />
+	<s:Label text="Size" />
 
 	<mx:ComboBox id="sizeSelector"
 				 height="24" styleName="toolbarComboBox" width="100"
+				 color="black"
 				 change="changeSize(sizeSelector.selectedItem)" />
+
+	<s:Label text="Text Color" />
 
 	<mx:ColorPicker id="textColor"
 					focusEnabled="false" height="24" width="36"

@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.display.DisplayObject;
+
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -26,6 +28,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		}
 
 		private var sessionProxy : SessionProxy;
+
 		private var currentToolbar : Object;
 
 		private var item : Item;
@@ -38,6 +41,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			toolbarPanel.visible = false;
 			addHandlers();
 		}
 
@@ -66,8 +70,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
-					currentToolbar = null;
-					toolbarPanel.removeAllElements();
+					if ( currentToolbar )
+					{
+						toolbarPanel.removeAllElements();
+						toolbarPanel.visible = false;
+						toolbarPanel.includeInLayout = false;
+						currentToolbar = null;
+					}
 
 					break;
 				}
@@ -85,13 +94,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 						if ( !( currentToolbar is ImageToolbar ) )
 						{
-							sendNotification( ApplicationFacade.ITEM_TRANSFORMED,
-											  { item: currentToolbar.item, attributes: currentToolbar.attributes } )
+							sendNotification( ApplicationFacade.ITEM_TRANSFORMED, { item: currentToolbar.item,
+												  attributes: currentToolbar.attributes } )
 						}
+
+						toolbarPanel.removeAllElements();
+						toolbarPanel.visible = false;
+						toolbarPanel.includeInLayout = false;
+						
+						currentToolbar = null;
 					}
 
-					currentToolbar = null;
-					toolbarPanel.removeAllElements();
+
 
 					if ( !item.editableComponent )
 						return;
@@ -137,6 +151,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 						}
 					}
 
+					if( currentToolbar )
+					{
+						toolbarPanel.visible = true
+						toolbarPanel.includeInLayout = true;
+					}
+					
 					break;
 				}
 			}
@@ -161,9 +181,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var resourceVO : ResourceVO = new ResourceVO( item.itemVO.id );
 			resourceVO.setID( currentToolbar.attributes[ 0 ].value.toString().substr( 5, 36 ) );
 
-			sendNotification( ApplicationFacade.MODIFY_RESOURCE,
-							  { applicationVO: sessionProxy.selectedApplication, resourceVO: resourceVO, attributeName: attributeName,
-					operation: eventBody.operation, attributes: eventBody.attributes } );
+			sendNotification( ApplicationFacade.MODIFY_RESOURCE, { applicationVO: sessionProxy.selectedApplication,
+								  resourceVO: resourceVO, attributeName: attributeName, operation: eventBody.operation,
+								  attributes: eventBody.attributes } );
 		}
 	}
 }

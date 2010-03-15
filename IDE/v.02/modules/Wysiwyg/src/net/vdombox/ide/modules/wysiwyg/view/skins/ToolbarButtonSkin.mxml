@@ -239,7 +239,7 @@
 		</s:stroke>
 	</s:Rect>
 
-	<mx:Image id="iconPart" />
+	<mx:Image top="2" left="2" id="iconPart" />
 	<!-- layer 8: text -->
 
 	<s:Label id="labelDisplay"
