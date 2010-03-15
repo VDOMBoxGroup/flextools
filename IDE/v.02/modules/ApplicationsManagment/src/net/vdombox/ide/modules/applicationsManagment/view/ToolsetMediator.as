@@ -1,9 +1,8 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
-	import flash.events.Event;
-	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
+	import mx.skins.spark.ButtonBarMiddleButtonSkin;
 	
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.events.ToolsetEvent;
@@ -28,7 +27,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 		{
 			return viewComponent as Toolset;
 		}
-
+		
 		override public function onRegister() : void
 		{
 
@@ -41,6 +40,10 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 			interests.push( ApplicationFacade.MODULE_SELECTED );
 			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			interests.push( ApplicationFacade.CREATE_NEW_APP_COMPLETE );
+			interests.push( ApplicationFacade.CREATE_NEW_APP_CANCELED );
+			
+			
 
 			return interests;
 		}
@@ -59,6 +62,18 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
 //					toolset.createNewApplicatoin.selected = false;
+					
+					break;
+				}
+					
+				case ApplicationFacade.CREATE_NEW_APP_COMPLETE:
+				{
+					
+				}
+					
+				case ApplicationFacade.CREATE_NEW_APP_CANCELED:
+				{
+					toolset.createNewApplicatoin.selected = false;
 					
 					break;
 				}
