@@ -133,6 +133,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, false, 0, true );
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler, false, 0, true );
+			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler, false, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true, 0, true );
 		}
@@ -141,6 +142,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler )
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler )
+			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler );
 			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true );
 		}
@@ -173,6 +175,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.DELETE_OBJECT, { pageVO: selectedPageVO, objectVO: selectedObjectVO } );
 		}
 
+		private function currentAttributeChangedHandler( event : ObjectAttributesPanelEvent ) : void
+		{
+			
+		}
+		
 		private function openExternalHandler( event : AttributeEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_EXTERNAL_EDITOR_REQUEST, event.target );

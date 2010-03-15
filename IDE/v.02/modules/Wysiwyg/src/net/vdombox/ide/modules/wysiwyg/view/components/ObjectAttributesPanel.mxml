@@ -2,8 +2,10 @@
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/halo">
+
 	<s:layout>
-		<s:BasicLayout/>
+
+		<s:BasicLayout />
 	</s:layout>
 
 	<fx:Script>
@@ -61,7 +63,7 @@
 				}
 
 				typeNameLabel.text = _typeVO.displayName;
-				
+
 				var attributesArray : Array = [];
 				var attributeVO : AttributeVO;
 				var attributeDescriptionVO : AttributeDescriptionVO;
@@ -178,11 +180,14 @@
 	</fx:Script>
 
 	<s:Label id="typeNameLabel"
-			 backgroundColor="#000000" color="#FFFFFF" textAlign="center" verticalAlign="middle"  paddingLeft="3" paddingTop="3" left="1" right="1" height="20"/>
+			 height="20"
+			 backgroundColor="#000000" color="#FFFFFF" left="1" paddingLeft="3" paddingTop="3" right="1"
+			 textAlign="center" verticalAlign="middle" />
 
 	<s:List id="attributesList"
 			width="220"
 			bottom="0" top="20"
+			change="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED ))"
 			itemRendererFunction="itemRendererFunction" useVirtualLayout="false">
 
 		<s:layout>

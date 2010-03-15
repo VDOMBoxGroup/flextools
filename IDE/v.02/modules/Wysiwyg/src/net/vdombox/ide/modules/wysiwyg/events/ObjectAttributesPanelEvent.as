@@ -6,6 +6,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 	{
 		public static var DELETE_REQUEST : String = "deleteRequest";
 		public static var SAVE_REQUEST : String = "saveRequest";
+		public static var CURRENT_ATTRIBUTE_CHANGED : String = "currentAttributeChanged";
 		
 		public function ObjectAttributesPanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{
