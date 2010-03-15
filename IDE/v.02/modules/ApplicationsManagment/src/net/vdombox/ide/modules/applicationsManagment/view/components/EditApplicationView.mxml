@@ -4,18 +4,27 @@
 					xmlns:s="library://ns.adobe.com/flex/spark"
 					xmlns:components="net.vdombox.ide.modules.applicationsManagment.view.components.*"
 					
-					height="100%" width="100%" creationPolicy="all" color="white">
+					creationPolicy="all" height="100%" width="100%"
+					color="white">
 
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			import net.vdombox.ide.modules.applicationsManagment.events.EditApplicationViewEvent;
+
+			protected function applicationsList_creationCompleteHandler( event : FlexEvent ) : void
+			{
+				if ( applicationsList && applicationsList.skin )
+					applicationsList.skin[ "background" ].alpha = .1;
+			}
 		]]>
 	</fx:Script>
 
 	<fx:Declarations>
+
 		<s:RadioButtonGroup id="languageRBGroup" />
 	</fx:Declarations>
-	
+
 	<s:states>
 
 		<s:State name="default" />
@@ -38,23 +47,42 @@
 
 		<s:VGroup bottom="30" left="30" right="30" top="30">
 
-			<s:Label id="applicationName"
-					 fontFamily="Verdana" fontSize="24" fontWeight="bold" />
+			<s:Group width="450">
 
-			<s:RichText id="counts"
-						fontFamily="Verdana" fontSize="12" fontWeight="bold" />
+				<s:Rect bottom="0" left="0" right="0" top="0"
+						radiusX="5" radiusY="5">
 
-			<s:Label id="objectsCount"
-					 fontFamily="Verdana" fontSize="12" fontWeight="bold" />
+					<s:fill>
 
-			<s:Scroller maxHeight="200" minHeight="50" width="100%">
+						<s:SolidColor color="0x999999"
+									  alpha=".2" />
+					</s:fill>
+				</s:Rect>
 
-				<s:Group>
+				<s:VGroup left="5" right="5" top="5" bottom="5">
 
-					<s:RichText id="applicationDescription"
-								width="100%" />
-				</s:Group>
-			</s:Scroller>
+					<s:Label id="applicationName"
+							 fontFamily="Verdana" fontSize="24"
+							 fontWeight="bold" />
+
+					<s:RichText id="counts"
+								fontFamily="Verdana" fontSize="12"
+								fontWeight="bold" />
+
+					<s:Label id="objectsCount"
+							 fontFamily="Verdana" fontSize="12"
+							 fontWeight="bold" />
+
+					<s:Scroller maxHeight="200" minHeight="10" width="100%">
+
+						<s:Group>
+
+							<s:RichText id="applicationDescription"
+										width="100%" />
+						</s:Group>
+					</s:Scroller>
+				</s:VGroup>
+			</s:Group>
 
 			<s:Label id="actionsForLabel"
 					 fontFamily="Verdana" fontSize="18" />
@@ -94,7 +122,8 @@
 					 click="currentState='changeDescription'" />
 
 			<s:VGroup width="100%"
-					  includeIn="changeDescription" itemCreationPolicy="immediate">
+					  includeIn="changeDescription"
+					  itemCreationPolicy="immediate">
 
 				<s:Group height="50" width="100%">
 
@@ -143,5 +172,6 @@
 
 	<s:List id="applicationsList"
 			height="100%" width="270"
-			useVirtualLayout="false" />
+			creationComplete="applicationsList_creationCompleteHandler(event)"
+			borderVisible="false" useVirtualLayout="false" />
 </s:NavigatorContent>

@@ -298,6 +298,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				editApplicationView.python.selected = true;
 			else
 				editApplicationView.vbscript.selected = true;
+			
 		}
 
 		private function applicationNameChangedHandler( event : EditApplicationViewEvent ) : void
