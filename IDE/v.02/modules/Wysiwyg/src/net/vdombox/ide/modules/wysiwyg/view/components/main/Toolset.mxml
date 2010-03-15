@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 xmlns:s="library://ns.adobe.com/flex/spark">
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+		 
+		 height="100%">
 
 	<s:layout>
 
 		<s:HorizontalLayout />
 	</s:layout>
 
-	<s:ToggleButton id="toolsetButton"
-					label="{ resourceManager.getString( 'Wysiwyg_General', 'toolset_button_label' ) }" />
+	<components:ToolsetButton id="toolsetButton"
+							  height="100%"
+							  icon="@Embed('icons/wysiwyg_icon.png')"
+							  label="{ resourceManager.getString( 'Wysiwyg_General', 'toolset_button_label' ) }"
+							  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.ToolsetButtonSkin" />
 </s:Group>
