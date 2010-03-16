@@ -22,7 +22,7 @@ package net.vdombox.ide.modules.applicationsManagment.model
 
 			var f : File = File.applicationDirectory;
 			
-			f = f.resolvePath( "modules/applicationsManagment/gallery" );
+			f = f.resolvePath( "modules/Applications Managment/gallery" );
 			
 			_items = [];
 			
