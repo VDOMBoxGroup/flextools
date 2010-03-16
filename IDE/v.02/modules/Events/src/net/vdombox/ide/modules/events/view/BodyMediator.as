@@ -18,6 +18,8 @@ package net.vdombox.ide.modules.events.view
 			super( NAME, viewComponent );
 		}
 
+		private var isStatesGetted : Boolean;
+		
 		public function get body() : Body
 		{
 			return viewComponent as Body;
@@ -25,14 +27,26 @@ package net.vdombox.ide.modules.events.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			isStatesGetted = false;
+			
+			addHandlers();
 		}
 
+		override public function onRemove() : void
+		{
+			isStatesGetted = false;
+			
+			removeHandlers();
+		}
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
+			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			
 			interests.push( ApplicationFacade.PIPES_READY );
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
 
 			return interests;
 		}
@@ -43,19 +57,52 @@ package net.vdombox.ide.modules.events.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
+					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					
+					break;
+				}
+					
+				case ApplicationFacade.ALL_STATES_GETTED:
+				{
+					isStatesGetted = true;
+					
+					checkConditions();
+					
+					break;
+				}
+					
+				case ApplicationFacade.MODULE_DESELECTED:
+				{
+					isStatesGetted = false;
+					
+					sendNotification( ApplicationFacade.BODY_STOP );
+					
 					break;
 				}
 			}
 		}
 
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
+		private function removeHandlers() : void
+		{
+			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+		}
+		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-
+			sendNotification( ApplicationFacade.BODY_CREATED, body );
+			
+			checkConditions();
+		}
+		
+		private function checkConditions() : void
+		{
+			if( isStatesGetted && body.initialized )
+				sendNotification( ApplicationFacade.BODY_START );
 		}
 	}
 }

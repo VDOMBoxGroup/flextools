@@ -1,4 +1,4 @@
-package net.vdombox.ide.modules.events.controller
+package net.vdombox.ide.modules.events.controller.messages
 {
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;

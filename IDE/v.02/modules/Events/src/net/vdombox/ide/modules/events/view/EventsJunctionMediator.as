@@ -4,7 +4,10 @@ package net.vdombox.ide.modules.events.view
 	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
+	import net.vdombox.ide.common.PPMApplicationTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
+	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.SimpleMessage;
@@ -42,6 +45,10 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SAVE_SETTINGS_TO_STORAGE );
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
+			
+			interests.push( ApplicationFacade.GET_ALL_STATES );
+			
+			interests.push( ApplicationFacade.GET_PAGES );
 
 			return interests;
 		}
@@ -127,6 +134,24 @@ package net.vdombox.ide.modules.events.view
 
 					break;
 				}
+					
+				case ApplicationFacade.GET_ALL_STATES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_PAGES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
 			}
 
 			super.handleNotification( notification );
@@ -190,9 +215,45 @@ package net.vdombox.ide.modules.events.view
 			
 			switch ( place )
 			{
-				case PPMPlaceNames.SERVER:
+				case PPMPlaceNames.APPLICATION:
 				{
-					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
+					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.PAGE:
+				{
+					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.OBJECT:
+				{
+					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.RESOURCES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_RESOURCES_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.TYPES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					
+					break;
+				}
+					
+				case PPMPlaceNames.STATES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
+					
 					break;
 				}
 			}
