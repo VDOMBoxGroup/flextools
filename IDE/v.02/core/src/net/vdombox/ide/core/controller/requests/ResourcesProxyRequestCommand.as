@@ -1,4 +1,4 @@
-package net.vdombox.ide.core.controller
+package net.vdombox.ide.core.controller.requests
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;

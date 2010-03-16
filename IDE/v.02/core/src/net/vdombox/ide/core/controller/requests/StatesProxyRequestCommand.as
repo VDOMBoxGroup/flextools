@@ -1,4 +1,4 @@
-package net.vdombox.ide.core.controller
+package net.vdombox.ide.core.controller.requests
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
@@ -31,6 +31,21 @@ package net.vdombox.ide.core.controller
 
 			switch ( target )
 			{
+				case PPMStatesTargetNames.ALL_STATES:
+				{
+					if ( operation == PPMOperationNames.READ )
+					{
+						properties = {};
+						
+						properties[ "selectedApplication" ] = statesProxy.selectedApplication;
+						properties[ "selectedPage" ] = statesProxy.selectedPage;
+						properties[ "selectedObject" ] = statesProxy.selectedObject;
+						
+					}
+					
+					break;
+				}
+				
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					if ( operation == PPMOperationNames.READ )

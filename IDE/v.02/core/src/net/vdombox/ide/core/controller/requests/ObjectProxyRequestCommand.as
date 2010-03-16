@@ -1,4 +1,4 @@
-package net.vdombox.ide.core.controller
+package net.vdombox.ide.core.controller.requests
 {
 	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;

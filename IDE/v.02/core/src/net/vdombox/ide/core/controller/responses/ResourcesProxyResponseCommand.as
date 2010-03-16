@@ -1,4 +1,4 @@
-package net.vdombox.ide.core.controller
+package net.vdombox.ide.core.controller.responses
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
