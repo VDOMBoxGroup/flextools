@@ -15,28 +15,66 @@ package net.vdombox.ide.common.vo
 
 			var informationXML : XML = typeXML.Information[ 0 ];
 			var attributesXML : XML = typeXML.Attributes[ 0 ];
+			var eventsXML : XML = typeXML.E2vdom.Events[ 0 ];
+			var actionsXML : XML = typeXML.E2vdom.Actions[ 0 ];
 
-			_typeID = informationXML.ID[ 0 ].toString();
-
-			extractResources( informationXML.*, languages );
-			extractResources( attributesXML.Attribute.*, languages );
-
+			var child : XML;
 			var propertyName : String;
 			var propertyValue : String;
-
-			for each ( var property : XML in informationXML.* )
+			
+			if( informationXML )
 			{
-				propertyName = property.localName().toString().toLowerCase();
-				propertyValue = property[ 0 ];
-
-				informationPropertyObject[ propertyName ] = propertyValue;
+				_typeID = informationXML.ID[ 0 ].toString();
+				
+				var informationXMLList : XMLList = informationXML.*;
+				
+				extractResources( informationXMLList, languages );
+				
+				for each ( child in informationXMLList )
+				{
+					propertyName = child.localName().toString().toLowerCase();
+					propertyValue = child[ 0 ];
+					
+					informationPropertyObject[ propertyName ] = propertyValue;
+				}
 			}
-
-			for each ( var attribute : XML in attributesXML.* )
+			
+			if( attributesXML )
 			{
-				_attributeDescriptions.push( new AttributeDescriptionVO( _typeID, attribute ) );
+				var attributesXMLList : XMLList = attributesXML.*;
+				
+				extractResources( attributesXMLList, languages );
+				
+				for each ( child in attributesXML.* )
+				{
+					_attributeDescriptions.push( new AttributeDescriptionVO( _typeID, child ) );
+				}
 			}
-
+			
+			if( eventsXML )
+			{
+				var eventsXMLList : XMLList = eventsXML..Event;
+				
+				extractResources( eventsXMLList, languages );
+				
+				for each ( child in eventsXMLList )
+				{
+					_events.push( new EventVO( _typeID, child ) );
+				}
+			}
+			
+			if( actionsXML )
+			{
+				var actionsXMLList : XMLList = actionsXML..Action;
+				
+				extractResources( actionsXMLList, languages );
+				
+				for each ( child in actionsXMLList )
+				{
+					_actions.push( new ActionVO( _typeID, child ) );
+				}
+			}
+			
 			resourceManager.update();
 		}
 
@@ -47,8 +85,10 @@ package net.vdombox.ide.common.vo
 		private var _typeID : String;
 
 		private var _information : TypeInformationVO;
-
+		
 		private var _attributeDescriptions : Array = [];
+		private var _events : Array = [];
+		private var _actions : Array = [];
 
 		private var informationPropertyObject : Object = {};
 
@@ -62,6 +102,16 @@ package net.vdombox.ide.common.vo
 			return _attributeDescriptions.slice();
 		}
 
+		public function get actions() : Array
+		{
+			return _actions.slice();
+		}
+		
+		public function get events() : Array
+		{
+			return _events.slice();
+		}
+		
 		public function get id() : String
 		{
 			return getInformationProperty( "id" );
