@@ -18,7 +18,7 @@ package net.vdombox.ide.modules.events.view
 			super( NAME, viewComponent );
 		}
 
-		private var isStatesGetted : Boolean;
+		private var isReady : Boolean;
 		
 		public function get body() : Body
 		{
@@ -27,14 +27,14 @@ package net.vdombox.ide.modules.events.view
 
 		override public function onRegister() : void
 		{
-			isStatesGetted = false;
+			isReady = false;
 			
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
-			isStatesGetted = false;
+			isReady = false;
 			
 			removeHandlers();
 		}
@@ -64,7 +64,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.ALL_STATES_GETTED:
 				{
-					isStatesGetted = true;
+					isReady = true;
 					
 					checkConditions();
 					
@@ -73,7 +73,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
-					isStatesGetted = false;
+					isReady = false;
 					
 					sendNotification( ApplicationFacade.BODY_STOP );
 					
@@ -101,7 +101,7 @@ package net.vdombox.ide.modules.events.view
 		
 		private function checkConditions() : void
 		{
-			if( isStatesGetted && body.initialized )
+			if( isReady && body.initialized )
 				sendNotification( ApplicationFacade.BODY_START );
 		}
 	}

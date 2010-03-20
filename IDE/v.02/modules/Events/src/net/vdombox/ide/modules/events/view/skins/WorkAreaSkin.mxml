@@ -16,5 +16,20 @@
 		<s:State name="disabled" />
 	</s:states>
 
+	<s:Rect id="backgroundRect"
+			bottom="0" left="0" right="0" top="0">
+
+		<s:fill>
+
+			<s:SolidColor color="gray"
+						  alpha=".5" />
+		</s:fill>
+
+		<s:stroke>
+
+			<s:SolidColorStroke />
+		</s:stroke>
+	</s:Rect>
+
 	<s:Group id="contentGroup" />
 </s:SparkSkin>

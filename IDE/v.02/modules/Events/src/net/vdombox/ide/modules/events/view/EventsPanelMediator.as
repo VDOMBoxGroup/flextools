@@ -1,12 +1,12 @@
 package net.vdombox.ide.modules.events.view
 {
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import mx.collections.ArrayList;
+	
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.components.EventsPanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -59,6 +59,8 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
+			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
+
 			return interests;
 		}
 
@@ -85,8 +87,13 @@ package net.vdombox.ide.modules.events.view
 
 					break;
 				}
-			}
 
+				case ApplicationFacade.SERVER_ACTIONS_GETTED:
+				{
+					showActions( body as Array );
+					break;
+				}
+			}
 
 			commitProperties();
 		}
@@ -108,9 +115,21 @@ package net.vdombox.ide.modules.events.view
 
 			if ( currentTarget && currentTarget.id == newTarget.id )
 				return;
-			
+
 			currentTarget = newTarget;
 			currentTypeVO = currentTarget.typeVO;
+
+			eventsPanel.evetsList.dataProvider = new ArrayList( currentTypeVO.events );
+			sendNotification( ApplicationFacade.GET_SERVER_ACTIONS, currentTarget );
+		}
+
+		private function showActions( serverActions : Array ) : void
+		{
+			var allActions : Array = currentTypeVO.actions;
+
+			allActions = allActions.concat( serverActions );
+			
+			eventsPanel.actionsList.dataProvider = new ArrayList( allActions );
 		}
 
 		private function clearData() : void

@@ -49,11 +49,13 @@ package net.vdombox.ide.modules.events.view
 			{
 				case ApplicationFacade.MODULE_SELECTED:
 				{
+					toolset.toolsetButton.selected = true;
 					break;
 				}
 
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
+					toolset.toolsetButton.selected = false;
 					break;
 				}
 			}
@@ -66,6 +68,7 @@ package net.vdombox.ide.modules.events.view
 
 		private function toolsetButton_clickHandler( event : MouseEvent ) : void
 		{
+			toolset.toolsetButton.selected = false;
 			sendNotification( ApplicationFacade.SELECT_MODULE );
 		}
 	}

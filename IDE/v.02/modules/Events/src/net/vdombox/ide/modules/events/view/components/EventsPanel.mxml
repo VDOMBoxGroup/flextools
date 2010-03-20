@@ -3,5 +3,18 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  
-					  skinClass="net.vdombox.ide.modules.events.view.skins.EventsPanelSkin" height="200">
+					  height="200"
+					  skinClass="net.vdombox.ide.modules.events.view.skins.EventsPanelSkin">
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.components.List;
+			
+			[SkinPart(required="true")]
+			public var evetsList : List;
+			
+			[SkinPart(required="true")]
+			public var actionsList : List;
+		]]>
+	</fx:Script>
 </s:SkinnableComponent>

@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.events.controller.messages
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -25,6 +26,13 @@ package net.vdombox.ide.modules.events.controller.messages
 			
 			switch ( target )
 			{
+				case PPMPageTargetNames.SERVER_ACTIONS:
+				{
+					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					
+					break;
+				}
+					
 				case PPMPageTargetNames.OBJECT:
 				{
 //					if ( operation == PPMOperationNames.CREATE )
