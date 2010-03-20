@@ -5,19 +5,6 @@ package net.vdombox.ide.common.vo
 
 	public class ActionParameterVO
 	{
-		public function ActionParameterVO( typeID : String, parameterDescription : XML )
-		{
-			_typeID = typeID;
-			
-			//TODO Гонимая локализация атрибутов "InterfaceName" и "Help"
-			
-			_name = parameterDescription.@ScriptName[ 0 ];
-			_displayName = parameterDescription.@InterfaceName[ 0 ];
-			_defaultValue = parameterDescription.@DefaultValue[ 0 ];
-			_regularExpressionValidation = parameterDescription.@RegularExpressionValidation[ 0 ];
-			_help = parameterDescription.@Help[ 0 ];
-		}
-		
 		private const LANG_RE : RegExp = /#Lang\((\w+)\)/g;
 		
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
@@ -58,6 +45,15 @@ package net.vdombox.ide.common.vo
 		public function get regularExpressionValidation() : String
 		{
 			return _regularExpressionValidation;
+		}
+		
+		public function setProperties( propertiesXML : XML ) : void
+		{
+			//TODO: Гонимая локализация атрибутов "InterfaceName" и "Help"
+			
+			_name = propertiesXML.@ScriptName[ 0 ];
+			_defaultValue = propertiesXML.@DefaultValue[ 0 ];
+			_regularExpressionValidation = propertiesXML.@RegularExpressionValidation[ 0 ];
 		}
 		
 		private function getValue( value : String ) : String

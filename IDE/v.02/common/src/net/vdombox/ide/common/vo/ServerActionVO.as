@@ -1,47 +1,97 @@
 package net.vdombox.ide.common.vo
 {
-
 	public class ServerActionVO
 	{
-		public function ServerActionVO( name : String, container : Object )
-		{
-			_name = name;
-			_container = container;
-		}
+		[Bindable]
+		public var top : int;
+		
+		[Bindable]
+		public var left : int;
+		
+		[Bindable]
+		public var state : Boolean;
 
-		private var _id : String;
-
-		private var _name : String;
-
+		[Bindable]
 		public var script : String;
-
+		
+		[Bindable]
 		public var language : String;
-
-		private var _container : Object;
-
-		public function get container() : Object
-		{
-			return _container;
-		}
-
-		public function get id() : Object
-		{
-			return _id;
-		}
-
-		public function get name() : Object
+		
+		private var _name : String;
+		
+		private var _language : String;
+		
+		private var _objectID : String;
+		
+		private var _containerID : String;
+		
+		public function get name() : String
 		{
 			return _name;
 		}
-
-		public function setID( value : String ) : void
+		
+		public function get objectID() : String
 		{
-			_id = value;
+			return _objectID;
+		}
+		
+		public function get containerID() : String
+		{
+			return _containerID;
+		}
+		
+		public function setContainerID( value : String ) : void
+		{
+			_containerID = value;
+		}
+		
+		public function setObjectID( value : String ) : void
+		{
+			_objectID = value;
+		}
+		
+		// TODO: Во всех VO изменить метод setDescription на setProperties.
+		// TODO: Сделать проверку всех properties на наличие, чтобы при отсутствии не падало.
+		public function setProperties( propertiesXML : XML ) : void
+		{
+			var testValue : String;
+			
+			testValue = propertiesXML.@Name[ 0 ];
+			
+			if( testValue !== null )
+				_name = testValue;
+			
+			testValue = propertiesXML.@Top[ 0 ];
+			
+			if( testValue !== null )
+				top = int( testValue );
+			
+			testValue = propertiesXML.@Left[ 0 ];
+			
+			if( testValue !== null )
+				left = int( testValue );
+			
+			testValue = propertiesXML.@State[ 0 ];
+			
+			if( testValue !== null )
+				state = testValue == "true" ? true : false;
+			
+			testValue = propertiesXML.@ContainerID[ 0 ];
+			
+			if( testValue !== null )
+				_containerID = testValue;
+			
+			testValue = propertiesXML.@ObjSrcID[ 0 ];
+			
+			if( testValue !== null )
+				_objectID = testValue;
+			
+			script = propertiesXML[ 0 ];
 		}
 		
 		public function toXML() : XML
 		{
-			return <Action ID={ _id ? _id : "" } Name={ _name } Language={ language } >{script}</Action>;
+			return <Action ID={ _objectID ? _objectID : "" } Name={ _name } Language={ language } >{script}</Action>;
 		}
 	}
 }

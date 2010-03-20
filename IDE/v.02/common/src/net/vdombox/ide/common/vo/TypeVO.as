@@ -54,24 +54,32 @@ package net.vdombox.ide.common.vo
 			if( eventsXML )
 			{
 				var eventsXMLList : XMLList = eventsXML..Event;
+				var eventVO : EventVO;
 				
 				extractResources( eventsXMLList, languages );
 				
 				for each ( child in eventsXMLList )
 				{
-					_events.push( new EventVO( _typeID, child ) );
+					eventVO = new EventVO();
+					eventVO.setProperties( child );
+					
+					_events.push( eventVO );
 				}
 			}
 			
 			if( actionsXML )
 			{
 				var actionsXMLList : XMLList = actionsXML..Action;
+				var clientActionVO : ClientActionVO;
 				
 				extractResources( actionsXMLList, languages );
 				
 				for each ( child in actionsXMLList )
 				{
-					_actions.push( new ActionVO( _typeID, child ) );
+					clientActionVO = new ClientActionVO();
+					clientActionVO.setProperties( child );
+					
+					_actions.push( clientActionVO );
 				}
 			}
 			

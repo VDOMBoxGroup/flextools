@@ -3,7 +3,7 @@ package net.vdombox.ide.common.vo
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
 
-	public class EventVO
+	public class ClientActionVO
 	{
 		[Bindable]
 		public var top : int;
@@ -16,23 +16,9 @@ package net.vdombox.ide.common.vo
 		
 		private var _name : String;
 		
-		private var _objectID : String;
-		
-		private var _containerID : String;
-		
 		private var _parameters : Array = [];
-
-		public function get name() : String
-		{
-			return _name;
-		}
-
-		public function get objectID() : String
-		{
-			return _name;
-		}
 		
-		public function get containerID() : String
+		public function get name() : String
 		{
 			return _name;
 		}
@@ -46,11 +32,11 @@ package net.vdombox.ide.common.vo
 		{
 			var testValue : String;
 			
-			testValue = propertiesXML.@Name[ 0 ];
+			testValue = propertiesXML.@MethodName[ 0 ];
 			
 			if( testValue !== null )
 				_name = testValue;
-
+			
 			testValue = propertiesXML.@Top[ 0 ];
 			
 			if( testValue !== null )
@@ -66,27 +52,19 @@ package net.vdombox.ide.common.vo
 			if( testValue !== null )
 				state = testValue == "true" ? true : false;
 			
-			testValue = propertiesXML.@ContainerID[ 0 ];
-			
-			if( testValue !== null )
-				_containerID = testValue;
-			
-			testValue = propertiesXML.@ObjSrcID[ 0 ];
-			
-			if( testValue !== null )
-				_objectID = testValue;
-			
 			var parametersXML : XML = propertiesXML.Parameters[ 0 ];
 			var parameterXML : XML;
-			var eventParameterVO : EventParameterVO;
+			
+			var actionParameterVO : ActionParameterVO;
 			
 			if ( parametersXML )
 			{
 				for each ( parameterXML in parametersXML.* )
 				{
-					eventParameterVO = new EventParameterVO();
-					eventParameterVO.setProperties( parameterXML );
-					_parameters.push( eventParameterVO );
+					actionParameterVO = new ActionParameterVO();
+					actionParameterVO.setProperties( parameterXML );
+					
+					_parameters.push( actionParameterVO );
 				}
 			}
 		}
