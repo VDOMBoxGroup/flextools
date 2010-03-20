@@ -133,6 +133,8 @@ package net.vdombox.ide.core
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
 		public static const APPLICATION_LIBRARY_CREATED : String = "applicationLibraryCreated";
 		public static const APPLICATION_LIBRARY_DELETED : String = "applicationLibraryDeleted";
+		public static const APPLICATION_EVENTS_GETTED : String = "applicationEventsGetted";
+		public static const APPLICATION_EVENTS_SETTED : String = "applicationEventsSetted";
 		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";

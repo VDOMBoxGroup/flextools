@@ -98,6 +98,13 @@ package net.vdombox.ide.core.controller.requests
 					break;
 				}
 
+				case PPMApplicationTargetNames.EVENTS:
+				{
+					applicationProxy.getEvents( body.pageVO );
+					
+					break;
+				}
+					
 				case PPMApplicationTargetNames.PAGES:
 				{
 					applicationProxy.getPages();

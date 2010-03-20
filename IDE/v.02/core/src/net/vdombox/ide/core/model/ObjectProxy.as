@@ -272,10 +272,11 @@ package net.vdombox.ide.core.model
 
 					for each ( serverActionXML in serverActionsXML )
 					{
-						serverActionVO = new ServerActionVO( serverActionXML.@Name, objectVO );
-						serverActionVO.setID( serverActionXML.@ID );
-
-						serverActionVO.script = serverActionXML[ 0 ];
+						serverActionVO = new ServerActionVO();
+						
+						serverActionVO.setContainerID( objectVO.pageVO.id );
+						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
+						serverActionVO.setProperties( serverActionXML )
 
 						serverActions.push( serverActionVO );
 					}
