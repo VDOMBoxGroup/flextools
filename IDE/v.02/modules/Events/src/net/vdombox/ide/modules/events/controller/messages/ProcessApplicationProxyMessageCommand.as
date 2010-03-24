@@ -37,6 +37,14 @@ package net.vdombox.ide.modules.events.controller.messages
 					
 					break;
 				}
+					
+				case PPMApplicationTargetNames.EVENTS:
+				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.APPLICATION_EVENTS_GETTED, body.applicationEvents );
+					
+					break;
+				}
 			}
 		}
 	}

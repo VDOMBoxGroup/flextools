@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:mx="library://ns.adobe.com/flex/halo"
+					  xmlns:components="net.vdombox.ide.modules.events.view.components.*"
+					  
+					  width="200" x="@{ data.left }" y="@{ data.top }"
+					  skinClass="net.vdombox.ide.modules.events.view.skins.EventEvementSkin">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.vo.EventParameterVO;
+			import net.vdombox.ide.common.vo.EventVO;
+			import net.vdombox.ide.modules.events.view.skins.EventEvementSkin;
+			
+			import spark.components.Label;
+			import spark.skins.spark.PanelSkin;
+
+			[Embed(source="assets/parameter.png")]
+			private var parameterIcon : Class;
+			
+			[SkinPart( required="true" )]
+			public var titleLabel : Label;
+
+			[Bindable]
+			public var title : String;
+
+			private var _data : EventVO;
+
+			private var isNeedUpdateParameters : Boolean;
+
+			[Bindable]
+			public function get data() : EventVO
+			{
+				return _data;
+			}
+
+			public function set data( value : EventVO ) : void
+			{
+				_data = value as EventVO;
+
+				if ( _data )
+					title = _data.name;
+				else
+					title = null;
+
+				isNeedUpdateParameters = true;
+			}
+
+			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+			{
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
+
+				if ( parametersContainer && isNeedUpdateParameters )
+				{
+					isNeedUpdateParameters = false;
+					parametersContainer.removeAllElements();
+
+					if( _data.parameters.length == 0 )
+						return;
+					
+					var parameter : EventParameterVO;
+					var parameterRenderer : ParameterRenderer;
+
+					var parameterRendererFactory : ClassFactory = new ClassFactory( ParameterRenderer );
+					parameterRendererFactory.properties = { percentWidth : 100, icon : parameterIcon };
+					
+					for each ( parameter in _data.parameters )
+					{
+						parameterRenderer = parameterRendererFactory.newInstance();
+						
+						parameterRenderer.title = parameter.name;
+
+						parametersContainer.addElement( parameterRenderer );
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<s:layout>
+
+		<s:VerticalLayout gap="1" />
+	</s:layout>
+
+	<components:ParameterRenderer title="{ title }" width="100%" />
+
+	<components:ParameterRenderer icon="@Embed('assets/event.png')" title="{ title }" width="100%" />
+
+	<s:VGroup id="parametersContainer" width="100%" gap="1" />
+</s:SkinnableContainer>

@@ -47,6 +47,8 @@ package net.vdombox.ide.modules.events.view
 
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 
+			interests.push( ApplicationFacade.APPLICATION_EVENTS_GETTED );
+
 			return interests;
 		}
 
@@ -83,6 +85,12 @@ package net.vdombox.ide.modules.events.view
 					}
 					break;
 				}
+					
+				case ApplicationFacade.APPLICATION_EVENTS_GETTED:
+				{
+					workArea.dataProvider = body as Array;
+					break;
+				}	
 			}
 		}
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
-				xmlns:mx="library://ns.adobe.com/flex/halo"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
 				
 				focusEnabled="false">
 
@@ -29,7 +29,7 @@
 		<s:State name="selectedAndShowsCaret" />
 	</s:states>
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<!--<s:Rect bottom="0" left="0" right="0" top="0">
 
 		<s:stroke.normalAndShowsCaret>
 
@@ -56,7 +56,7 @@
 						  color.normalAndShowsCaret="{contentBackgroundColor}"
 						  color.selected="{selectionColor}" color.selectedAndShowsCaret="{selectionColor}" />
 		</s:fill>
-	</s:Rect>
+	</s:Rect>-->
 
 	<s:HGroup height="20"
 			  left="0" right="0" verticalAlign="middle">
