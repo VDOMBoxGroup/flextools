@@ -1,7 +1,6 @@
 package net.vdombox.ide.common.vo
 {
-	import mx.resources.IResourceManager;
-	import mx.resources.ResourceManager;
+	
 
 	public class ClientActionVO
 	{
@@ -14,9 +13,16 @@ package net.vdombox.ide.common.vo
 		[Bindable]
 		public var state : Boolean;
 		
+		private var _id : String;
+		
 		private var _name : String;
 		
 		private var _parameters : Array = [];
+		
+		public function get id() : String
+		{
+			return _id;
+		}
 		
 		public function get name() : String
 		{
@@ -31,6 +37,11 @@ package net.vdombox.ide.common.vo
 		public function setProperties( propertiesXML : XML ) : void
 		{
 			var testValue : String;
+			
+			testValue = propertiesXML.@ID[ 0 ];
+			
+			if( testValue !== null )
+				_id = testValue;
 			
 			testValue = propertiesXML.@MethodName[ 0 ];
 			

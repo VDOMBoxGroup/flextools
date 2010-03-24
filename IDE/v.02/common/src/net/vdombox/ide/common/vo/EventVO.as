@@ -1,7 +1,6 @@
 package net.vdombox.ide.common.vo
 {
-	import mx.resources.IResourceManager;
-	import mx.resources.ResourceManager;
+	
 
 	public class EventVO
 	{
@@ -29,17 +28,37 @@ package net.vdombox.ide.common.vo
 
 		public function get objectID() : String
 		{
-			return _name;
+			return _objectID;
 		}
 		
 		public function get containerID() : String
 		{
-			return _name;
+			return _containerID;
 		}
 		
 		public function get parameters() : Array
 		{
 			return _parameters;
+		}
+		
+		public function setName( value : String ) : void
+		{
+			_name = value;
+		}
+		
+		public function setObjectID( value : String ) : void
+		{
+			_objectID = value;
+		}
+		
+		public function setContainerID( value : String ) : void
+		{
+			_containerID = value;
+		}
+		
+		public function setParameters( value : Array ) : void
+		{
+			_parameters = value;
 		}
 		
 		public function setProperties( propertiesXML : XML ) : void
@@ -89,6 +108,19 @@ package net.vdombox.ide.common.vo
 					_parameters.push( eventParameterVO );
 				}
 			}
+		}
+		
+		public function copy() : EventVO
+		{
+			var copy : EventVO = new EventVO();
+			
+			copy.setName( _name );
+			copy.setObjectID( _objectID );
+			copy.setContainerID( _containerID );
+			
+			copy.setParameters( _parameters.slice() );
+			
+			return copy;
 		}
 		
 //		private function getValue( value : String ) : String

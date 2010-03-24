@@ -21,6 +21,8 @@ package net.vdombox.ide.common.vo
 		
 		private var _language : String;
 		
+		private var _id : String;
+		
 		private var _objectID : String;
 		
 		private var _containerID : String;
@@ -28,6 +30,11 @@ package net.vdombox.ide.common.vo
 		public function get name() : String
 		{
 			return _name;
+		}
+		
+		public function get id() : String
+		{
+			return _id;
 		}
 		
 		public function get objectID() : String
@@ -55,6 +62,11 @@ package net.vdombox.ide.common.vo
 		public function setProperties( propertiesXML : XML ) : void
 		{
 			var testValue : String;
+			
+			testValue = propertiesXML.@ID[ 0 ];
+			
+			if( testValue !== null )
+				_id = testValue;
 			
 			testValue = propertiesXML.@Name[ 0 ];
 			
