@@ -1,13 +1,15 @@
 package net.vdombox.ide.modules.applicationsManagment.view
 {
+	import flash.utils.Timer;
+	
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.applicationsManagment.ApplicationFacade;
 	import net.vdombox.ide.modules.applicationsManagment.view.components.Body;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -73,6 +75,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					body.currentState = "default";
 
 					break;
+					
+					var d: Timer
+					d.
 				}
 			}
 		}

@@ -63,7 +63,7 @@ package net.vdombox.ide.modules.applicationsManagment.model
 		{
 			var byteArray : ByteArray = new ByteArray();
 			var name : String = currentFile.name;
-			name = name.substr( 0, name.length - currentFile.extension.length - 1 );
+//			name = name.substr( 0, name.length - currentFile.extension.length - 1 );
 			fileStream.readBytes( byteArray );
 			
 			_items.push( new GalleryItemVO( name, byteArray ) );

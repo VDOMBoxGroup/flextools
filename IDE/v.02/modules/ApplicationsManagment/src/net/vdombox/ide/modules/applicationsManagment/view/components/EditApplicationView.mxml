@@ -10,7 +10,10 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.modules.applicationsManagment.events.EditApplicationViewEvent;
+			
+			import spark.skins.spark.RadioButtonSkin;
 
 			protected function applicationsList_creationCompleteHandler( event : FlexEvent ) : void
 			{
@@ -158,11 +161,11 @@
 
 				<s:RadioButton id="vbscript"
 							   label="vbscript" value="vbscript"
-							   groupName="languageRBGroup" />
+							   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
 
 				<s:RadioButton id="python"
 							   label="python" value="python"
-							   groupName="languageRBGroup" />
+							   groupName="languageRBGroup" skinClass="spark.skins.spark.RadioButtonSkin" />
 
 				<s:Button label="Save"
 						  click="currentState='default';dispatchEvent( new EditApplicationViewEvent( EditApplicationViewEvent.APPLICATION_LANGUAGE_CHANGED ) )" />
