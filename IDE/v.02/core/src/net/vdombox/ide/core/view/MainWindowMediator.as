@@ -1,13 +1,13 @@
 package net.vdombox.ide.core.view
 {
 	import flash.events.MouseEvent;
-
+	
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.FlexEvent;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
@@ -16,11 +16,11 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.view.components.MainWindow;
 	import net.vdombox.ide.core.view.components.SettingsWindow;
 	import net.vdombox.utils.WindowManager;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
@@ -212,12 +212,17 @@ package net.vdombox.ide.core.view
 			var tabBar : ButtonBar = mainWindow.tabBar;
 
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
-			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
 			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
 
 			tabBar.labelField = "name";
 			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
+			
+			var categoryVO : ModulesCategoryVO = tabBar.selectedItem as ModulesCategoryVO;
+			
+			showModulesByCategory( categoryVO );
+			selectModule();
+			mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
 		}
 
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void

@@ -24,12 +24,13 @@
 		<s:Rect id="backgroundRect"
 				left="0" right="0" top="0" bottom="0">
 			<s:fill>
-				<mx:LinearGradient rotation="90">
-					<mx:entries>
-						<mx:GradientEntry color="0x474b50" ratio="0.0" />
-						<mx:GradientEntry color="0x151515" ratio="0.7" />
-					</mx:entries>
-				</mx:LinearGradient>
+				<s:LinearGradient rotation="90">
+					<s:entries>
+						<s:GradientEntry color="0x474b50" ratio="0.0" />
+						<s:GradientEntry color="0x151515" ratio="0.7" />
+					</s:entries>
+							 
+				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
 		

@@ -3,6 +3,7 @@ package net.vdombox.ide.core.view.components
 	import flash.desktop.NativeApplication;
 	import flash.display.NativeWindowSystemChrome;
 	import flash.events.Event;
+	import flash.system.LoaderContext;
 	
 	import mx.controls.Image;
 	

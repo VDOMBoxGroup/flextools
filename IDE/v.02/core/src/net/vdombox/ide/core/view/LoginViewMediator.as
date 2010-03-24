@@ -2,16 +2,17 @@ package net.vdombox.ide.core.view
 {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-
+	
+	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-
+	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.LoginView;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -70,7 +71,7 @@ package net.vdombox.ide.core.view
 
 		private function setupLanguageList() : void
 		{
-			var languageList : Array = localeProxy.locales;
+			var languageList : ArrayList = new ArrayList( localeProxy.locales );
 			loginView.selectLang.labelField = "description"
 			loginView.selectLang.dataProvider = languageList;
 			loginView.selectLang.selectedItem = localeProxy.currentLocale;

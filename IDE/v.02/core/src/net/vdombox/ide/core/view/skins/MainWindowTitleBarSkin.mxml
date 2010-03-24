@@ -98,8 +98,7 @@
 		<!--- Defines the image for the icon in the title bar. -->
 
 		<s:BitmapImage id="titleIconImage"
-					   minWidth="0"
-					   resizeMode="noScale" />
+					   minWidth="0" />
 		<!-- title -->
 		<!--- Defines the Label control for displaying the title text in the title bar. -->
 

@@ -26,7 +26,6 @@
 			protected function application_applicationCompleteHandler() : void
 			{
 				facade.startup( this );
-				var zzz : Accordion = new Accordion();
 			}
 		]]>
 	</fx:Script>

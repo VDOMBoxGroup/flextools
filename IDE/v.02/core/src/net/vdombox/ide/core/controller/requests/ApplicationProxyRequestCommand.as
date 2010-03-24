@@ -65,10 +65,10 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.READ )
 						applicationProxy.remoteCall( body.objectID, body.functionName, body.value );
-					
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.LIBRARY:
 				{
 					if ( operation == PPMOperationNames.CREATE )
@@ -100,11 +100,12 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMApplicationTargetNames.EVENTS:
 				{
-					applicationProxy.getEvents( body.pageVO );
-					
+					if ( operation == PPMOperationNames.READ )
+						applicationProxy.getEvents( body.pageVO );
+
 					break;
 				}
-					
+
 				case PPMApplicationTargetNames.PAGES:
 				{
 					applicationProxy.getPages();
