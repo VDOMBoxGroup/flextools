@@ -75,9 +75,6 @@ package net.vdombox.ide.modules.applicationsManagment.view
 					body.currentState = "default";
 
 					break;
-					
-					var d: Timer
-					d.
 				}
 			}
 		}
