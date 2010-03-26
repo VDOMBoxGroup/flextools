@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:components="net.vdombox.ide.modules.events.view.components.*"
+			 xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:mx="library://ns.adobe.com/flex/halo"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 minWidth="200">
+
+	<fx:Metadata>
+		[HostComponent("net.vdombox.ide.modules.events.view.components.ActionElement")]
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.events.events.ElementEvent;
+
+			protected function hideButton_clickHandler( event : MouseEvent ) : void
+			{
+				if ( currentState == "normal" || currentState == "disabled" )
+				{
+					currentState = currentState + "AndShort";
+				}
+				else
+				{
+					currentState = currentState.substr( 0, currentState.length - 8 );
+				}
+
+				hostComponent.dispatchEvent( new ElementEvent( ElementEvent.STATE_CHANGED ));
+			}
+		]]>
+	</fx:Script>
+
+
+	<s:states>
+
+		<s:State name="normal" stateGroups="full"/>
+		<s:State name="disabled" stateGroups="full"/>
+
+		<s:State name="normalAndShort" stateGroups="short"/>
+		<s:State name="disabledAndShort" stateGroups="short"/>
+	</s:states>
+
+	<!--Shadow-->
+
+	<s:RectangularDropShadow id="dropShadow"
+							 bottom="0" color="#000000" left="0" right="0"
+							 top="0"
+							 alpha="0.42" angle="45" blRadius="10" blurX="8"
+							 blurY="8" brRadius="10" distance="8" tlRadius="10"
+							 trRadius="10"/>
+	<!--Mask-->
+
+	<s:Group id="backgroundMask"
+			 bottom="0" left="0" right="0" top="0">
+
+		<s:Rect bottom="0" left="0" right="0" top="0"
+				radiusX="10" radiusY="10">
+
+			<s:fill>
+
+				<s:SolidColor color="gray"
+							  alpha="0"/>
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+
+	<s:Group bottom="0" left="0" right="0" top="0"
+			 mask="{backgroundMask}">
+
+		<s:Rect bottom="0" left="0" right="0" top="0">
+
+			<s:fill>
+
+				<s:SolidColor color="0xB7B7B7"/>
+			</s:fill>
+		</s:Rect>
+
+		<s:VGroup left="0" right="0"
+				  gap="1">
+
+			<s:Group id="headerGroup"
+					 height="25" width="100%">
+
+				<s:Rect bottom="0" left="0" right="0" top="0">
+
+					<s:fill>
+
+						<s:LinearGradient rotation="90">
+
+							<s:GradientEntry color="0x5E04BE"/>
+
+							<s:GradientEntry color="0x260057"/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Rect>
+
+				<s:Label id="titleLabel"
+						 text="{ hostComponent.title }"
+						 color="#FFFFFF" left="0" right="0" textAlign="center"
+						 verticalCenter="0"/>
+			</s:Group>
+
+			<s:Group id="contentGroup"
+					 width="100%"
+					 itemCreationPolicy="immediate" includeIn="full"/>
+
+			<s:Group width="100%">
+
+				<s:Rect bottom="0" left="0" right="0" top="0">
+
+					<s:fill>
+
+						<s:SolidColor color="0x518000"/>
+					</s:fill>
+				</s:Rect>
+
+				<s:HGroup height="17" width="100%"
+						  gap="1">
+
+					<components:ElementButton id="hideButton"
+											  height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')" label="translate"
+											  minWidth="10" width="100%"
+											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
+											  click="hideButton_clickHandler( event )"/>
+
+					<components:ElementButton height="17" icon="@Embed('assets/arrow.png')" label="translate" minWidth="10"
+											  width="100%"
+											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
+											  click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )"/>
+
+					<components:ElementButton height="17" icon="@Embed('assets/delete.png')" label="translate" minWidth="10"
+											  width="100%"
+											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
+											  click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )"/>
+				</s:HGroup>
+			</s:Group>
+		</s:VGroup>
+	</s:Group>
+</s:SparkSkin>

@@ -4,28 +4,29 @@
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  width="200" x="@{ data.left }" y="@{ data.top }"
-					  skinClass="net.vdombox.ide.modules.events.view.skins.EventElementSkin">
+					  skinClass="net.vdombox.ide.modules.events.view.skins.ActionElementSkin">
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.common.vo.ActionParameterVO;
 			import net.vdombox.ide.common.vo.EventParameterVO;
 			import net.vdombox.ide.common.vo.EventVO;
 			import net.vdombox.ide.modules.events.view.skins.EventElementSkin;
-
+			
 			import spark.components.Group;
 			import spark.components.Label;
 			import spark.skins.spark.PanelSkin;
 
-			[Embed( source="assets/parameter.png" )]
-			private var parameterIcon : Class;
-
 			[SkinPart( required="true" )]
 			public var headerGroup : Group;
+
+			[SkinPart( required="true" )]
+			public var hideButton : ElementButton;
 
 			[Bindable]
 			public var title : String;
 
-			private var _data : EventVO;
+			private var _data : Object;
 
 			private var isNeedUpdateParameters : Boolean;
 
@@ -33,14 +34,14 @@
 			private var mouseOffcetY : int;
 
 			[Bindable]
-			public function get data() : EventVO
+			public function get data() : Object
 			{
 				return _data;
 			}
 
-			public function set data( value : EventVO ) : void
+			public function set data( value : Object ) : void
 			{
-				_data = value as EventVO;
+				_data = value;
 
 				if ( _data )
 					title = _data.name;
@@ -59,20 +60,20 @@
 					isNeedUpdateParameters = false;
 					parametersContainer.removeAllElements();
 
-					if ( _data.parameters.length == 0 )
+					if ( !_data.hasOwnProperty( "parameters" ) || _data.parameters.length == 0 )
 						return;
 
-					var parameter : EventParameterVO;
-					var parameterRenderer : ParameterRenderer;
+					var parameter : ActionParameterVO;
+					var parameterRenderer : EditableParameterRenderer;
 
-					var parameterRendererFactory : ClassFactory = new ClassFactory( ParameterRenderer );
-					parameterRendererFactory.properties = { percentWidth: 100, icon: parameterIcon };
+					var parameterRendererFactory : ClassFactory = new ClassFactory( EditableParameterRenderer );
+					parameterRendererFactory.properties = { percentWidth: 100 };
 
 					for each ( parameter in _data.parameters )
 					{
 						parameterRenderer = parameterRendererFactory.newInstance();
 
-						parameterRenderer.title = parameter.name;
+						parameterRenderer.data = parameter;
 
 						parametersContainer.addElement( parameterRenderer );
 					}
@@ -84,7 +85,19 @@
 				super.partAdded( partName, instance );
 
 				if ( instance == headerGroup )
-					headerGroup.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler );
+					headerGroup.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
+				else if ( instance == hideButton )
+					hideButton.addEventListener( MouseEvent.CLICK, hideButton_clickHandler, false, 0, true );
+			}
+
+			override protected function partRemoved( partName : String, instance : Object ) : void
+			{
+				super.partAdded( partName, instance );
+
+				if ( instance == headerGroup )
+					headerGroup.removeEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler );
+				else if ( instance == hideButton )
+					hideButton.removeEventListener( MouseEvent.CLICK, hideButton_clickHandler );
 			}
 
 			private function header_mouseDownHandler( event : MouseEvent ) : void
@@ -94,6 +107,18 @@
 
 				mouseOffcetX = mouseX;
 				mouseOffcetY = mouseY;
+			}
+
+			private function hideButton_clickHandler( event : MouseEvent ) : void
+			{
+				if ( !_data || !_data.hasOwnProperty( "state" ))
+					return;
+
+				if ( skin.currentState == "normal" || skin.currentState == "disabled" )
+					_data.state = true;
+				else
+					_data.state = false;
+
 			}
 
 			private function stage_mouseMoveHandler( event : MouseEvent ) : void

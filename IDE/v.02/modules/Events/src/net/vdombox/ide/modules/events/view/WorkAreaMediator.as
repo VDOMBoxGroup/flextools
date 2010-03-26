@@ -1,9 +1,10 @@
 package net.vdombox.ide.modules.events.view
 {
+	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.components.WorkArea;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -88,7 +89,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.APPLICATION_EVENTS_GETTED:
 				{
-					workArea.dataProvider = body as Array;
+					workArea.dataProvider = body as ApplicationEventsVO;
 					break;
 				}	
 			}
