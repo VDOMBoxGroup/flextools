@@ -3,6 +3,7 @@ package net.vdombox.ide.core.model
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
 	
+	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -24,7 +25,7 @@ package net.vdombox.ide.core.model
 	public class ApplicationProxy extends Proxy
 	{
 		public static const NAME : String = "ApplicationProxy";
-		
+
 		private static const GET_EVENTS : String = "getEvents";
 
 		public function ApplicationProxy( applicationVO : ApplicationVO )
@@ -124,7 +125,7 @@ package net.vdombox.ide.core.model
 
 			for each ( structureObjectVO in strucrure )
 			{
-				structureXML.appendChild( structureObjectVO.toXML() );
+				structureXML.appendChild( structureObjectVO.toXML());
 			}
 
 			token = soap.set_application_structure( applicationVO.id, structureXML );
@@ -195,14 +196,13 @@ package net.vdombox.ide.core.model
 			if ( pageAttributesVO && pageAttributesVO.attributes.length > 0 )
 			{
 				attributesXML =
-					<Attributes/>
-					;
+					<Attributes/>;
 
 				var attributeVO : AttributeVO;
 
 				for each ( attributeVO in pageAttributesVO.attributes )
 				{
-					attributesXML.appendChild( attributeVO.toXML() );
+					attributesXML.appendChild( attributeVO.toXML());
 				}
 			}
 
@@ -282,7 +282,7 @@ package net.vdombox.ide.core.model
 			soap.get_libraries.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 
 			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
-			
+
 			soap.get_application_events.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 			soap.set_application_events.addEventListener( SOAPEvent.RESULT, soap_resultHandler, false, 0, true );
 
@@ -308,7 +308,7 @@ package net.vdombox.ide.core.model
 			soap.remove_library.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 
 			soap.get_libraries.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			
+
 			soap.get_child_objects_tree.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 
 			soap.get_application_events.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -340,54 +340,54 @@ package net.vdombox.ide.core.model
 		{
 			var structure : XML =
 				<page/>
-			
+
 			var rawObjects : XMLList = rawPage.Objects.Object;
-			
+
 			var object : XML;
-			
+
 			structure.@id = rawPage.@ID;
 			structure.@name = rawPage.@Name;
 			structure.@typeID = rawPage.@Type;
-			
+
 			if ( rawObjects.length() == 0 )
 				return structure;
-			
+
 			for each ( var rawObject : XML in rawObjects )
 			{
 				object = createStructureObject( rawObject );
-				
+
 				structure.appendChild( object );
 			}
-			
+
 			return structure;
 		}
-		
+
 		private function createStructureObject( rawXML : XML ) : XML
 		{
 			var structureObject : XML =
 				<object/>
 				;
 			var rawChildren : XMLList = rawXML.Objects.Object;
-			
+
 			var child : XML;
-			
+
 			structureObject.@id = rawXML.@ID;
 			structureObject.@name = rawXML.@Name;
 			structureObject.@typeID = rawXML.@Type;
-			
+
 			if ( rawChildren.length() == 0 )
 				return structureObject;
-			
+
 			for each ( var rawChild : XML in rawChildren )
 			{
 				child = createStructureObject( rawChild );
-				
+
 				structureObject.appendChild( child );
 			}
-			
+
 			return structureObject;
 		}
-		
+
 		private function createPagesList( pages : XML ) : void
 		{
 			_pages = [];
@@ -415,110 +415,112 @@ package net.vdombox.ide.core.model
 			}
 		}
 
-		private function generateApplicationEvents( applicationEventsXML : XML, pageVO : PageVO, pageStructure : XML ) : Array
+		private function generateApplicationEvents( applicationEventsXML : XML, pageVO : PageVO, pageStructureXML : XML ) : ApplicationEventsVO
 		{
-			/*TODO: Писец! Дла того чтобы пролучить EventVO надо грузить все дерево объектов страницы!!! Т.к. в структуре action-event 
-			мля нет полного описания события. Ну и нахрена такая структура?*/
-			var applicationEvents : Array = [];
+			/*TODO: Писец! Дла того чтобы пролучить EventVO надо грузить все дерево объектов страницы!!! Т.к. в структуре action-event
+			 мля нет полного описания события. Ну и нахрена такая структура?*/
+
+			var applicationEvents : ApplicationEventsVO = new ApplicationEventsVO( pageVO );
+
 			var clientActions : Object = {};
 			var serverActions : Object = {};
 
-			var eventsXML : XML = applicationEventsXML.Events[ 0 ];
-			var clientActionsXML : XML = applicationEventsXML.ClientActions[ 0 ];
-			var serverActionsXML : XML = applicationEventsXML.ServerActions.Container.( @ID == pageVO.id )[ 0 ];
-
-			var eventXML : XML;
-			var eventVO : EventVO;
-			var eventObject : Object;
-			var eventName : Object;
+			var eventsXMLList : XMLList = applicationEventsXML.Events.Event;
+			var clientActionsXMLList : XMLList = applicationEventsXML.ClientActions.Action;
+			var serverActionsXMLList : XMLList = applicationEventsXML.ServerActions.Container;
 			
-			var clientActionXML : XML;
+			if ( serverActionsXMLList.length() > 0 )
+				serverActionsXMLList = serverActionsXMLList.( @ID == pageVO.id ).Action;
+
 			var clientActionVO : ClientActionVO;
-			
-			var serverActionXML : XML;
 			var serverActionVO : ServerActionVO;
-
+			
 			var actionXML : XML;
-			var actionID : String;
-			var child : XML;
-
+			
+			for each ( actionXML in clientActionsXMLList )
+			{
+				clientActionVO = new ClientActionVO();
+				clientActionVO.setProperties( actionXML );
+				
+				if( clientActionVO.id )
+				{
+					clientActions[ clientActionVO.id ] = clientActionVO;
+					applicationEvents.clientActions.push( clientActionVO );
+				}
+			}
+			
+			for each ( actionXML in serverActionsXMLList )
+			{
+				serverActionVO = new ServerActionVO();
+				serverActionVO.setProperties( actionXML );
+				
+				if( serverActionVO.id )
+				{
+					serverActions[ serverActionVO.id ] = serverActionVO;
+					applicationEvents.serverActions.push( serverActionVO );
+				}
+			}
+			
+			var eventXML : XML;
+			var eventObject : Object;
+			
+			var eventName : String;
+			var eventVO : EventVO;
+			
 			var typeID : String;
 			var typeVO : TypeVO;
 			
 			var objectID : String;
 			var objectXML : XML;
 			
-			for each ( eventXML in eventsXML.* )
+			var actionID : String;
+			
+			for each ( eventXML in eventsXMLList )
 			{
 				objectID = eventXML.@ObjSrcID[ 0 ];
 				eventName = eventXML.@Name[ 0 ];
 				
-				if( pageVO.id == objectID )
+				if ( pageVO.id == objectID )
 				{
-					typeVO = pageVO.typeVO	
+					typeVO = pageVO.typeVO
 				}
 				else
 				{
-					objectXML = pageStructure.descendants( "object" ).( @id == objectID )[ 0 ];
+					objectXML = pageStructureXML.descendants( "object" ).( @id == objectID )[ 0 ];
 					typeID = objectXML.@typeID[ 0 ];
 					typeVO = typesProxy.getType( typeID );
 				}
 				
-				for each( eventVO in typeVO.events )
-				{
-					if( eventVO.name == eventName )
-					{
-						eventVO = eventVO.copy();
-						eventVO.setProperties( eventXML );
-						break;
-					}
-					
-					eventVO = null;
-				}
+				if( !typeVO )
+					continue;
 				
+				eventVO = typeVO.getEventVOByName( eventName );
+				
+				if( !eventVO )
+					continue;
+					
+				eventVO = eventVO.copy();
+				eventVO.setProperties( eventXML );
+					
 				eventObject = { eventVO: eventVO, actions: [] };
-
-				for each ( child in eventXML.Action )
+				
+				for each ( actionXML in eventXML.Action )
 				{
-					actionID = child.@ID[ 0 ];
-
-					if ( serverActions[ actionID ] )
+					actionID = actionXML.@ID[ 0 ];
+					
+					if ( serverActions[ actionID ])
 					{
 						eventObject.actions.push( serverActions[ actionID ] );
 						continue;
 					}
-					else if ( clientActions[ actionID ] )
+					else if ( clientActions[ actionID ])
 					{
 						eventObject.actions.push( clientActions[ actionID ] );
 						continue;
 					}
-
-					actionXML = clientActionsXML.Action.( @ID == actionID )[ 0 ];
-
-					if ( actionXML )
-					{
-						clientActionVO = new ClientActionVO();
-						clientActionVO.setProperties( actionXML );
-
-						clientActions[ actionID ] = clientActionVO;
-						eventObject.actions.push( clientActionVO );
-
-						continue;
-					}
-
-					actionXML = serverActionsXML.Action.( @ID == actionID )[ 0 ];
-
-					if ( actionXML )
-					{
-						serverActionVO = new ServerActionVO();
-						serverActionVO.setProperties( actionXML );
-
-						serverActions[ actionID ] = serverActionVO;
-						eventObject.actions.push( serverActionVO );
-					}
 				}
-
-				applicationEvents.push( eventObject );
+				
+				applicationEvents.events.push( eventObject )
 			}
 
 			return applicationEvents;
@@ -552,18 +554,18 @@ package net.vdombox.ide.core.model
 					if ( token.requestFunctionName == GET_EVENTS )
 					{
 						pageVO = token.pageVO;
-						
+
 						token = soap.get_application_events( applicationVO.id, pageVO.id );
-						
+
 						token.recipientName = proxyName;
 						token.requestFunctionName = GET_EVENTS;
 						token.pageVO = pageVO;
-						token.pageStructure = generatePageStructure( result.Object[ 0 ] );
+						token.pageStructure = generatePageStructure( result.Object[ 0 ]);
 					}
-					
+
 					break;
 				}
-					
+
 				case "set_application_info":
 				{
 					var information : XML = result.Information[ 0 ];
@@ -574,9 +576,9 @@ package net.vdombox.ide.core.model
 				}
 				case "get_top_objects":
 				{
-					createPagesList( result.Objects[ 0 ] );
+					createPagesList( result.Objects[ 0 ]);
 
-					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
+					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice()});
 
 					break;
 				}
@@ -585,14 +587,14 @@ package net.vdombox.ide.core.model
 				{
 					var structure : Array = createStructure( result.Structure[ 0 ].* );
 
-					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, { applicationVO: applicationVO, structure: structure } );
+					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, { applicationVO: applicationVO, structure: structure });
 
 					break;
 				}
 
 				case "set_application_structure":
 				{
-					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED, { applicationVO: applicationVO } );
+					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED, { applicationVO: applicationVO });
 
 					break;
 				}
@@ -611,7 +613,7 @@ package net.vdombox.ide.core.model
 						serverActionVO = new ServerActionVO();
 
 						serverActionVO.setContainerID( applicationVO.id );
-						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
+						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ]);
 
 						serverActionVO.script = serverActionXML[ 0 ];
 
@@ -619,7 +621,7 @@ package net.vdombox.ide.core.model
 					}
 
 					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED,
-									  { applicationVO: applicationVO, serverActions: serverActions } );
+						{ applicationVO: applicationVO, serverActions: serverActions });
 
 					break;
 				}
@@ -631,7 +633,7 @@ package net.vdombox.ide.core.model
 					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
 					libraryVO.script = libraryXML[ 0 ];
 
-					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_CREATED, { applicationVO: applicationVO, libraryVO: libraryVO } );
+					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_CREATED, { applicationVO: applicationVO, libraryVO: libraryVO });
 
 					break;
 				}
@@ -643,7 +645,7 @@ package net.vdombox.ide.core.model
 					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
 					libraryVO.script = libraryXML[ 0 ];
 
-					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_DELETED, { applicationVO: applicationVO, libraryVO: libraryVO } );
+					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_DELETED, { applicationVO: applicationVO, libraryVO: libraryVO });
 
 					break;
 				}
@@ -660,17 +662,17 @@ package net.vdombox.ide.core.model
 						libraries.push( libraryVO );
 					}
 
-					sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
+					sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries });
 
 					break;
 				}
 
 				case "get_application_events":
 				{
-					var applicationEvents : Array = generateApplicationEvents( result.E2vdom[ 0 ], token.pageVO, token.pageStructure );
+					var applicationEvents : Object = generateApplicationEvents( result.E2vdom[ 0 ], token.pageVO, token.pageStructure );
 
 					sendNotification( ApplicationFacade.APPLICATION_EVENTS_GETTED,
-									  { applicationVO: applicationVO, applicationEvents: applicationEvents } );
+						{ applicationVO: applicationVO, applicationEvents: applicationEvents });
 					break;
 				}
 
@@ -694,7 +696,7 @@ package net.vdombox.ide.core.model
 
 					_pages.push( pageVO );
 
-					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
+					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO });
 
 					break;
 				}
@@ -718,7 +720,7 @@ package net.vdombox.ide.core.model
 
 					if ( deletedPageVO )
 					{
-						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
+						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO });
 					}
 
 					break;
@@ -726,7 +728,7 @@ package net.vdombox.ide.core.model
 
 				case "remote_method_call":
 				{
-					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_GETTED, { applicationVO: applicationVO, result: result } );
+					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_GETTED, { applicationVO: applicationVO, result: result });
 
 					break;
 				}

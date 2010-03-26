@@ -3,31 +3,31 @@ package net.vdombox.ide.core
 	import mx.rpc.events.FaultEvent;
 	
 	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
-	import net.vdombox.ide.core.controller.requests.ApplicationProxyRequestCommand;
-	import net.vdombox.ide.core.controller.responses.ApplicationProxyResponseCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
 	import net.vdombox.ide.core.controller.ConnectServerCommand;
 	import net.vdombox.ide.core.controller.ConnectionServerSuccessfulCommand;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
 	import net.vdombox.ide.core.controller.LogonSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
-	import net.vdombox.ide.core.controller.requests.ObjectProxyRequestCommand;
-	import net.vdombox.ide.core.controller.responses.ObjectProxyResponseCommand;
 	import net.vdombox.ide.core.controller.OpenWindowCommand;
-	import net.vdombox.ide.core.controller.requests.PageProxyRequestCommand;
-	import net.vdombox.ide.core.controller.responses.PageProxyResponseCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ProcessLogMessage;
 	import net.vdombox.ide.core.controller.ProcessSimpleMessageCommand;
 	import net.vdombox.ide.core.controller.ProcessUIQueryMessageCommand;
-	import net.vdombox.ide.core.controller.requests.ResourcesProxyRequestCommand;
-	import net.vdombox.ide.core.controller.responses.ResourcesProxyResponseCommand;
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
+	import net.vdombox.ide.core.controller.requests.ApplicationProxyRequestCommand;
+	import net.vdombox.ide.core.controller.requests.ObjectProxyRequestCommand;
+	import net.vdombox.ide.core.controller.requests.PageProxyRequestCommand;
+	import net.vdombox.ide.core.controller.requests.ResourcesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.requests.ServerProxyRequestCommand;
-	import net.vdombox.ide.core.controller.responses.ServerProxyResponseCommand;
 	import net.vdombox.ide.core.controller.requests.StatesProxyRequestCommand;
 	import net.vdombox.ide.core.controller.requests.TypesProxyRequestCommand;
+	import net.vdombox.ide.core.controller.responses.ApplicationProxyResponseCommand;
+	import net.vdombox.ide.core.controller.responses.ObjectProxyResponseCommand;
+	import net.vdombox.ide.core.controller.responses.PageProxyResponseCommand;
+	import net.vdombox.ide.core.controller.responses.ResourcesProxyResponseCommand;
+	import net.vdombox.ide.core.controller.responses.ServerProxyResponseCommand;
 	import net.vdombox.ide.core.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
@@ -264,7 +264,8 @@ package net.vdombox.ide.core
 
 		private function soap_faultEvent( event : FaultEvent ) : void
 		{
-			sendNotification( SHOW_ERROR_VIEW, event.fault.faultDetail );
+			var faultDetail : String = event.fault.faultDetail ? event.fault.faultDetail : "";
+			sendNotification( SHOW_ERROR_VIEW, faultDetail );
 		}
 	}
 }
