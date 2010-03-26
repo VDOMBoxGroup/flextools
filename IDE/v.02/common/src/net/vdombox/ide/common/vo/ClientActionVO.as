@@ -64,13 +64,19 @@ package net.vdombox.ide.common.vo
 				state = testValue == "true" ? true : false;
 			
 			var parametersXML : XML = propertiesXML.Parameters[ 0 ];
+			var parametersXMLList : XMLList
 			var parameterXML : XML;
+			
+			if( parametersXML )
+				parametersXMLList = parametersXML.Parameter;
+			else
+				parametersXMLList = propertiesXML.Parameter
 			
 			var actionParameterVO : ActionParameterVO;
 			
-			if ( parametersXML )
+			if ( parametersXMLList )
 			{
-				for each ( parameterXML in parametersXML.* )
+				for each ( parameterXML in parametersXMLList )
 				{
 					actionParameterVO = new ActionParameterVO();
 					actionParameterVO.setProperties( parameterXML );

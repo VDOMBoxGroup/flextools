@@ -7,6 +7,9 @@ package net.vdombox.ide.common.vo
 	{
 		private const LANG_RE : RegExp = /#Lang\((\w+)\)/g;
 		
+		[Bindable]
+		public var value : String;
+		
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 		
 		private var _typeID : String;
@@ -27,20 +30,20 @@ package net.vdombox.ide.common.vo
 			return _name;
 		}
 		
-		public function get displayName() : String
-		{
-			return getValue( _displayName );
-		}
+//		public function get displayName() : String
+//		{
+//			return getValue( _displayName );
+//		}
 		
 		public function get defaultValue() : String
 		{
 			return _defaultValue;
 		}
 		
-		public function get help() : String
-		{
-			return getValue( _help );
-		}
+//		public function get help() : String
+//		{
+//			return getValue( _help );
+//		}
 		
 		public function get regularExpressionValidation() : String
 		{
@@ -51,30 +54,40 @@ package net.vdombox.ide.common.vo
 		{
 			//TODO: Гонимая локализация атрибутов "InterfaceName" и "Help"
 			
+			var defaultValue : String;
+			
 			_name = propertiesXML.@ScriptName[ 0 ];
-			_defaultValue = propertiesXML.@DefaultValue[ 0 ];
+			
+			defaultValue = propertiesXML.@DefaultValue[ 0 ];
+			
+			if( defaultValue === null )
+				defaultValue = propertiesXML[ 0 ];
+			
+			_defaultValue = defaultValue;
+			value = defaultValue;
+			
 			_regularExpressionValidation = propertiesXML.@RegularExpressionValidation[ 0 ];
 		}
 		
-		private function getValue( value : String ) : String
-		{
-			var result : String = value ? value : "";
-			
-			var matchResult : Array = result.match( LANG_RE );
-			
-			var matchItem : String;
-			var phraseID : String;
-			
-			if ( matchResult && matchResult.length > 0 )
-			{
-				for each ( matchItem in matchResult )
-				{
-					phraseID = matchItem.substring( 6, matchItem.length - 1 );
-					result = value.replace( matchItem, resourceManager.getString( _typeID, phraseID ) );
-				}
-			}
-			
-			return result;
-		}
+//		private function getValue( value : String ) : String
+//		{
+//			var result : String = value ? value : "";
+//			
+//			var matchResult : Array = result.match( LANG_RE );
+//			
+//			var matchItem : String;
+//			var phraseID : String;
+//			
+//			if ( matchResult && matchResult.length > 0 )
+//			{
+//				for each ( matchItem in matchResult )
+//				{
+//					phraseID = matchItem.substring( 6, matchItem.length - 1 );
+//					result = value.replace( matchItem, resourceManager.getString( _typeID, phraseID ) );
+//				}
+//			}
+//			
+//			return result;
+//		}
 	}
 }

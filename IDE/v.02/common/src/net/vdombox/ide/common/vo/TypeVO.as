@@ -266,6 +266,23 @@ package net.vdombox.ide.common.vo
 			return int( getInformationProperty( "container" ) );
 		}
 
+		public function getEventVOByName ( eventName : String ) : EventVO
+		{
+			var result : EventVO;
+			var eventVO : EventVO;
+			
+			for each ( eventVO in events )
+			{
+				if ( eventVO.name == eventName )
+				{
+					result = eventVO;
+					break;
+				}
+			}
+			
+			return result;
+		}
+		
 		private function getInformationProperty( valueName : String ) : String
 		{
 			var value : String = "";
