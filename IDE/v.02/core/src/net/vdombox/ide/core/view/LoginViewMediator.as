@@ -16,6 +16,8 @@ package net.vdombox.ide.core.view
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.events.IndexChangeEvent;
 
 	public class LoginViewMediator extends Mediator implements IMediator
 	{
@@ -65,7 +67,7 @@ package net.vdombox.ide.core.view
 			loginView.addEventListener( FlexEvent.SHOW, showHandler );
 
 			loginView.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
-			loginView.selectLang.addEventListener( ListEvent.CHANGE, selectLang_changeHandler );
+			loginView.selectLang.addEventListener( IndexChangeEvent.CHANGE, selectLang_changeHandler );
 			loginView.submitButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
 		}
 
@@ -96,11 +98,11 @@ package net.vdombox.ide.core.view
 
 			setupLanguageList();
 //
-			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
-				submit();
+//			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
+//				submit();
 		}
 
-		private function selectLang_changeHandler( event : ListEvent ) : void
+		private function selectLang_changeHandler( event : IndexChangeEvent ) : void
 		{
 			var selectedItem : LocaleVO = event.currentTarget.selectedItem as LocaleVO;
 			sendNotification( ApplicationFacade.CHANGE_LOCALE, selectedItem );

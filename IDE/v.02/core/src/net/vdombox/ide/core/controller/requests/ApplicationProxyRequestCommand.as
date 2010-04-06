@@ -10,7 +10,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -102,6 +102,8 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if ( operation == PPMOperationNames.READ )
 						applicationProxy.getEvents( body.pageVO );
+					else if( operation == PPMOperationNames.UPDATE )
+						applicationProxy.setEvents( body.applicationEventsVO );
 
 					break;
 				}

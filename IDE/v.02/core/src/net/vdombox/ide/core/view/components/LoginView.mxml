@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					xmlns:s="library://ns.adobe.com/flex/spark" 
-					xmlns:mx="library://ns.adobe.com/flex/halo">
-	
-	<s:VGroup right="100" left="20" styleName="loginForm" top="100">
-		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }"
-					 width="100%" textAlign="right"/>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:mx="library://ns.adobe.com/flex/halo"
+					xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<s:VGroup styleName="loginForm"
+			  left="20" right="100" top="100">
+		<s:HGroup width="100%"
+				  verticalAlign="middle">
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }" width="100%"
+					 color="white" textAlign="right"/>
 			<s:TextInput id="username"
-						 width="240" />
+						 width="240"/>
 		</s:HGroup>
-		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }"
-					 width="100%" textAlign="right" />
+		<s:HGroup width="100%"
+				  verticalAlign="middle">
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
+					 color="white" textAlign="right"/>
 			<s:TextInput id="password"
-						 width="240" />
+						 width="240"/>
 		</s:HGroup>
-		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }"
-					 width="100%" textAlign="right"/>
+		<s:HGroup width="100%"
+				  verticalAlign="middle">
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
+					 color="white" textAlign="right"/>
 			<s:TextInput id="hostname"
-						 width="240" />
+						 width="240"/>
 		</s:HGroup>
-		<s:HGroup width="100%" verticalAlign="middle">
-			<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }"
-					 width="100%" textAlign="right"/>
+		<s:HGroup width="100%"
+				  verticalAlign="middle">
+			<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }" width="100%"
+					 color="white" textAlign="right"/>
 			<s:ComboBox id="selectLang"
-						 width="240" />
+						width="240"/>
 		</s:HGroup>
 	</s:VGroup>
 	<s:Button id="submitButton"
