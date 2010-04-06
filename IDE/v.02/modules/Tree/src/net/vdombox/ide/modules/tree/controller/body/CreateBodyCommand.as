@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.tree.controller.body
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.view.BodyMediator;
+	import net.vdombox.ide.modules.tree.view.TreeMediator;
 	import net.vdombox.ide.modules.tree.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -17,6 +18,8 @@ package net.vdombox.ide.modules.tree.controller.body
 			var body : Body;
 			var bodyMediator : BodyMediator;
 
+			var treeMediator : TreeMediator = facade.retrieveMediator( TreeMediator.NAME ) as TreeMediator;
+			
 			if ( facade.hasMediator( BodyMediator.NAME ) )
 			{
 				bodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;
@@ -28,6 +31,8 @@ package net.vdombox.ide.modules.tree.controller.body
 				facade.registerMediator( new BodyMediator( body ) )
 			}
 			
+			
+			body.moduleFactory = treeMediator.tree.moduleFactory;
 			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 						
 			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = null;

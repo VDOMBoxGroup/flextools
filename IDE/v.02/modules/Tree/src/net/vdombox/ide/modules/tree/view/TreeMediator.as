@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.tree.view
 			tree.addEventListener( Tree.TEAR_DOWN, tearDownHandler )
 		}
 
-		private function get tree() : Tree
+		public function get tree() : Tree
 		{
 			return viewComponent as Tree;
 		}
