@@ -11,11 +11,12 @@ package net.vdombox.ide.common.vo
 		public var left : int;
 		
 		[Bindable]
-		public var state : Boolean;
+		public var state : Boolean = true;
 		
 		private var _name : String;
 		
 		private var _objectID : String;
+		private var _objectName : String;
 		
 		private var _containerID : String;
 		
@@ -29,6 +30,11 @@ package net.vdombox.ide.common.vo
 		public function get objectID() : String
 		{
 			return _objectID;
+		}
+		
+		public function get objectName() : String
+		{
+			return _objectName;
 		}
 		
 		public function get containerID() : String
@@ -49,6 +55,11 @@ package net.vdombox.ide.common.vo
 		public function setObjectID( value : String ) : void
 		{
 			_objectID = value;
+		}
+		
+		public function setObjectName( value : String ) : void
+		{
+			_objectName = value;
 		}
 		
 		public function setContainerID( value : String ) : void
@@ -115,7 +126,9 @@ package net.vdombox.ide.common.vo
 			var copy : EventVO = new EventVO();
 			
 			copy.setName( _name );
+			
 			copy.setObjectID( _objectID );
+			copy.setObjectName( _objectName );
 			copy.setContainerID( _containerID );
 			
 			copy.setParameters( _parameters.slice() );
@@ -123,6 +136,19 @@ package net.vdombox.ide.common.vo
 			return copy;
 		}
 		
+		public function toXML() : XML
+		{
+			var result : XML = <Event />;
+			
+			result.@Name = _name;
+			result.@ObjSrcID = _objectID;
+			result.@ContainerID = _containerID;
+			result.@Top = top;
+			result.@Left = left;
+			result.@State = state;
+			
+			return result;
+		}
 //		private function getValue( value : String ) : String
 //		{
 //			var result : String = value ? value : "";

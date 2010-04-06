@@ -1,6 +1,7 @@
 package net.vdombox.ide.common
 {
 	import mx.modules.Module;
+	import mx.styles.StyleManager;
 	
 	import net.vdombox.ide.common.interfaces.IVIModule;
 	

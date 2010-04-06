@@ -1,6 +1,6 @@
 package net.vdombox.ide.common.vo
 {
-	
+	import mx.utils.UIDUtil;
 
 	public class ClientActionVO
 	{
@@ -15,6 +15,9 @@ package net.vdombox.ide.common.vo
 		
 		private var _id : String;
 		
+		private var _objectID : String;
+		private var _objectName : String;
+		
 		private var _name : String;
 		
 		private var _parameters : Array = [];
@@ -22,6 +25,16 @@ package net.vdombox.ide.common.vo
 		public function get id() : String
 		{
 			return _id;
+		}
+		
+		public function get objectID() : String
+		{
+			return _objectID;
+		}
+		
+		public function get objectName() : String
+		{
+			return _objectName;
 		}
 		
 		public function get name() : String
@@ -34,6 +47,31 @@ package net.vdombox.ide.common.vo
 			return _parameters;
 		}
 		
+		public function setID( value : String ) : void
+		{
+			_id = value;
+		}
+		
+		public function setObjectID( value : String ) : void
+		{
+			_objectID = value;
+		}
+		
+		public function setObjectName( value : String ) : void
+		{
+			_objectName = value;
+		}
+		
+		public function setName( value : String ) : void
+		{
+			_name = value;
+		}
+		
+		public function setParameters( value : Array ) : void
+		{
+			_parameters = value; 
+		}
+		//TODO: Разобраться с переименованием!
 		public function setProperties( propertiesXML : XML ) : void
 		{
 			var testValue : String;
@@ -42,6 +80,11 @@ package net.vdombox.ide.common.vo
 			
 			if( testValue !== null )
 				_id = testValue;
+			
+			testValue = propertiesXML.@ObjTgtID[ 0 ];
+			
+			if( testValue !== null )
+				_objectID = testValue;
 			
 			testValue = propertiesXML.@MethodName[ 0 ];
 			
@@ -84,6 +127,42 @@ package net.vdombox.ide.common.vo
 					_parameters.push( actionParameterVO );
 				}
 			}
+		}
+		
+		public function copy() : ClientActionVO
+		{
+			var copy : ClientActionVO = new ClientActionVO();
+			
+			//TODO: Создавать новый ID или просто копировать старый, если он есть?
+			copy.setID( UIDUtil.createUID() );
+			copy.setName( _name );
+			
+			copy.setObjectID( _objectID );
+			copy.setObjectName( _objectName );
+			
+			copy.setParameters( _parameters.slice() );
+			
+			return copy;
+		}
+		
+		public function toXML() : XML
+		{
+			var result : XML = <Action />;
+			var actionParameterVO : ActionParameterVO;
+			
+			result.@MethodName = _name;
+			result.@ID = _id;
+			result.@ObjTgtID = _objectID;
+			result.@Top = top;
+			result.@Left = left;
+			result.@State = state;
+			
+			for each ( actionParameterVO in _parameters )
+			{
+				result.appendChild( actionParameterVO.toXML() );
+			}
+			
+			return result;
 		}
 		
 //		private function getValue( value : String ) : String

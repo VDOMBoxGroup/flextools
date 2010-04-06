@@ -69,6 +69,26 @@ package net.vdombox.ide.common.vo
 			_regularExpressionValidation = propertiesXML.@RegularExpressionValidation[ 0 ];
 		}
 		
+		public function toXML() : XML
+		{
+			var result : XML;
+			var xmlCharRegExp : RegExp = /[<>&"]+/;
+			var value : String = this.value;
+			
+			if( value.search( xmlCharRegExp ) != -1 )
+			{	
+				value = value.replace(/\]\]>/g, "]]]]"+"><![CDATA[>" );
+				value = "<Parameter ScriptName=\""+ _name +"\"><![CDATA[" + value + "]" + "]></Parameter>"
+				result = new XML( value );
+			}
+			else
+			{
+				result =  <Parameter ScriptName={_name}>{value}</Parameter>;
+			}
+			
+			return result;
+		}
+		
 //		private function getValue( value : String ) : String
 //		{
 //			var result : String = value ? value : "";
