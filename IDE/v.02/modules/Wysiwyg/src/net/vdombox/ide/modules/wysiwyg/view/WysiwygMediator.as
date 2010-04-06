@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			wysiwyg.addEventListener( Wysiwyg.TEAR_DOWN, tearDownHandler )
 		}
 
-		private function get wysiwyg() : Wysiwyg
+		public function get wysiwyg() : Wysiwyg
 		{
 			return viewComponent as Wysiwyg;
 		}

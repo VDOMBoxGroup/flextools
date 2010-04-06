@@ -16,7 +16,7 @@
 	 @playerversion AIR 1.5
 	 @productversion Flex 4
 -->
-<s:SparkSkin xmlns:mx="library://ns.adobe.com/flex/halo"
+<s:SparkSkin xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 

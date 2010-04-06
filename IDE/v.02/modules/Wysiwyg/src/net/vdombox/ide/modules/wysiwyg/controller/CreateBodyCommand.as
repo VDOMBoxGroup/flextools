@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.BodyMediator;
+	import net.vdombox.ide.modules.wysiwyg.view.WysiwygMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -14,6 +15,8 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var body : Body;
 			var bodyMediator : BodyMediator;
 			
+			var wysiwygMediator : WysiwygMediator = facade.retrieveMediator( WysiwygMediator.NAME ) as WysiwygMediator;
+			
 			if( facade.hasMediator( BodyMediator.NAME ) )
 			{
 				bodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;
@@ -25,6 +28,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				facade.registerMediator( new BodyMediator( body ) )
 			}
 			
+			body.moduleFactory = wysiwygMediator.wysiwyg.moduleFactory;
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 		}
 	}

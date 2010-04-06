@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  xmlns:mx="library://ns.adobe.com/flex/halo"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  
 		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
 
@@ -9,15 +9,16 @@
 
 	<fx:Script>
 		<![CDATA[
+			import flash.filesystem.File;
 			import flash.html.HTMLLoader;
-
+			
 			import mx.controls.HTML;
 			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;
 			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
-
+			
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
@@ -241,7 +242,7 @@
 			{
 				if ( flag )
 				{
-					HTMLEditorLoader.addEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+					HTMLEditorLoader.addEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
 				}
 				else
 				{
@@ -253,7 +254,7 @@
 
 					if ( HTMLEditorLoader )
 					{
-						HTMLEditorLoader.removeEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+						HTMLEditorLoader.removeEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
 
 						HTMLEditorLoader.removeEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
 					}
@@ -411,7 +412,7 @@
 				trace( "(1)HTMLEditorLoader " + HTMLEditorLoader.name );
 				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
 
-				HTMLEditorLoader.addEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+				HTMLEditorLoader.addEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
 
 				HTMLEditorLoader.addEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
 
@@ -421,7 +422,8 @@
 			private function HTMLEditorLoader_HTMLDomInitalizeHandler( event : Event ) : void
 			{
 				trace( "(1.5)HTMLEditorLoader " + HTMLEditorLoader.name );
-				HTMLEditorLoader.removeEventListener( Event.HTML_DOM_INITIALIZE, HTMLEditorLoader_HTMLDomInitalizeHandler );
+				
+				HTMLEditorLoader.removeEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
 
 				if ( !bodyTag )
 					return;

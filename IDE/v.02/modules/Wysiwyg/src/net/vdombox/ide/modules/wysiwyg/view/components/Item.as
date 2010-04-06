@@ -1,10 +1,12 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
-
+	
+	import flashx.textLayout.tlf_internal;
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
@@ -16,11 +18,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-
+	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
@@ -74,6 +76,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var _isLocked : Boolean;
 
 
+		public function get itemIndex():int
+		{
+			return 0;
+		}
+		
+		public function set itemIndex(value:int):void
+		{
+		}
+		
+		public function get dragging():Boolean
+		{
+			return false;
+		}
+		
+		public function set dragging(value:Boolean):void
+		{
+		}
+		
 		public function get selected() : Boolean
 		{
 			return false;
@@ -339,23 +359,26 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( !hasStyle )
 				return;
-
+			
 			var styleName : String;
 
 			for ( styleName in _style )
 			{
+				if( styleName == "color" || styleName == "backgroundColor" ||styleName == "borderColor" )
+					_style[ styleName ] = uint( "0x" + String( _style[ styleName ] ).substr( 1 ) );
+				
 				item.setStyle( styleName, _style[ styleName ] );
 			}
 
-			if ( _style.hasOwnProperty( "backgroundColor" ) && !_style.hasOwnProperty( "backgroundAlpha" ) )
-				_style[ "backgroundAlpha" ] = 100;
-
-			if ( _style.hasOwnProperty( "borderColor" ) )
-				_style[ "borderStyle" ] = "solid";
-
-			if ( _style.hasOwnProperty( "textDecoration" ) )
-				if ( !( _style[ "textDecoration" ] != "none" || _style[ "textDecoration" ] != "underline" ) )
-					_style[ "textDecoration" ] = "none";
+//			if ( _style.hasOwnProperty( "backgroundColor" ) && !_style.hasOwnProperty( "backgroundAlpha" ) )
+//				_style[ "backgroundAlpha" ] = 100;
+//
+//			if ( _style.hasOwnProperty( "borderColor" ) )
+//				_style[ "borderStyle" ] = "solid";
+//
+//			if ( _style.hasOwnProperty( "textDecoration" ) )
+//				if ( !( _style[ "textDecoration" ] != "none" || _style[ "textDecoration" ] != "underline" ) )
+//					_style[ "textDecoration" ] = "none";
 		}
 
 		private function getItemByTarget( target : DisplayObjectContainer ) : Item

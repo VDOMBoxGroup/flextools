@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:HGroup xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*"
+		  xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  xmlns:mx="library://ns.adobe.com/flex/halo"
-		  
-		  verticalAlign="middle"
-		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
+		  verticalAlign="middle" enabled="false">
 
 	<fx:Script>
 		<![CDATA[
@@ -26,37 +25,39 @@
 //												   { name: "textdecoration", value: "textDecoration" } ];
 
 			private var fonts : ArrayCollection = new ArrayCollection( [ { label: "Andale Mono", data: "andale mono" },
-																		 { label: "Arial", data: "arial" },
-																		 { label: "Arial Black", data: "arial black" },
-																		 { label: "Book Antiqua", data: "book antiqua" },
-																		 { label: "Comic Sans MS", data: "comic sans ms" },
-																		 { label: "Courier New", data: "courier new" },
-																		 { label: "Georgia", data: "georgia" },
-																		 { label: "Helvetica", data: "helvetica" },
-																		 { label: "Impact", data: "impact" },
-																		 { label: "Symbol", data: "symbol" },
-																		 { label: "Tahoma", data: "tahoma" },
-																		 { label: "Terminal", data: "terminal" },
-																		 { label: "Times New Roman",
-																			 data: "times new roman" },
-																		 { label: "Times", data: "times" },
-																		 { label: "Verdana", data: "verdana" },
-																		 { label: "Webdings", data: "webdings" },
-																		 { label: "Wingdings", data: "wingdings" } ] );
+				{ label: "Arial", data: "arial" },
+				{ label: "Arial Black", data: "arial black" },
+				{ label: "Book Antiqua", data: "book antiqua" },
+				{ label: "Comic Sans MS", data: "comic sans ms" },
+				{ label: "Courier New", data: "courier new" },
+				{ label: "Georgia", data: "georgia" },
+				{ label: "Helvetica", data: "helvetica" },
+				{ label: "Impact", data: "impact" },
+				{ label: "Symbol", data: "symbol" },
+				{ label: "Tahoma", data: "tahoma" },
+				{ label: "Terminal", data: "terminal" },
+				{ label: "Times New Roman",
+					data: "times new roman" },
+				{ label: "Times", data: "times" },
+				{ label: "Verdana", data: "verdana" },
+				{ label: "Webdings", data: "webdings" },
+				{ label: "Wingdings", data: "wingdings" } ] );
 
 			private var fontSize : ArrayCollection = new ArrayCollection( [ { label: "8 px", data: "8" },
-																			{ label: "10 px", data: "10" },
-																			{ label: "12 px", data: "12" },
-																			{ label: "14 px", data: "14" },
-																			{ label: "18 px", data: "18" },
-																			{ label: "24 px", data: "24" },
-																			{ label: "36 px", data: "36" }, ] );
+				{ label: "10 px", data: "10" },
+				{ label: "12 px", data: "12" },
+				{ label: "14 px", data: "14" },
+				{ label: "18 px", data: "18" },
+				{ label: "24 px", data: "24" },
+				{ label: "36 px", data: "36" }, ] );
 
 			private var elementForEditing : Object;
 
 			private var attributesObject : Object;
 
 			private var _item : Item;
+
+			private var isInited : Boolean;
 
 			public function get attributes() : Array
 			{
@@ -91,16 +92,27 @@
 				elementForEditing.setStyle( "paddingRight", 5 );
 
 				attributesObject = extractAttributes( _item );
+
+				if ( !attributesObject )
+					return;
+
 				applyDefaultStates();
 
 				RichEditableText( elementForEditing ).setFocus();
 
 				elementForEditing.editable = true;
 				elementForEditing.selectable = true;
+
+				isInited = true;
+				enabled = true;
 			}
 
 			public function close() : void
 			{
+				if ( !isInited )
+					return;
+				enabled = false;
+				isInited = false;
 				attributesObject[ "value" ].value = elementForEditing.text;
 
 				var attributeValue : String;
@@ -149,6 +161,9 @@
 						break;
 					}
 				}
+
+				if ( !editableAttributeVO )
+					return null;
 
 				var attributesObject : Object = {};
 				var attributeName : String;
@@ -402,65 +417,54 @@
 	</fx:Script>
 
 	<controls:ToolbarButton id="weightButton"
-							focusEnabled="false" height="24"
-							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')"
-							styleName="toolbarButton" width="24"
-							click="changeWeight()" />
+							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')" styleName="toolbarButton"
+							width="24"
+							click="changeWeight()"/>
 
 	<controls:ToolbarButton id="styleButton"
-							height="24"
-							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')"
-							styleName="toolbarButton" width="24"
-							click="changeStyle()" />
+							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')" styleName="toolbarButton" width="24"
+							click="changeStyle()"/>
 
 	<controls:ToolbarButton id="decorationButton"
-							focusEnabled="false" height="24"
-							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')"
-							styleName="toolbarButton" width="24"
-							click="changeDecoration()" />
+							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')" styleName="toolbarButton"
+							width="24"
+							click="changeDecoration()"/>
 
-	<mx:VRule height="24" />
+	<mx:VRule height="24"/>
 
 	<controls:ToolbarButton id="leftButton"
-							height="24"
-							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')"
-							styleName="toolbarButton" width="24"
-							click="changeAlign('left')" />
+							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')" styleName="toolbarButton" width="24"
+							click="changeAlign('left')"/>
 
 	<controls:ToolbarButton id="centerButton"
-							height="24"
-							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')"
-							styleName="toolbarButton" width="24"
-							click="changeAlign('center')" />
+							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')" styleName="toolbarButton" width="24"
+							click="changeAlign('center')"/>
 
 	<controls:ToolbarButton id="rightButton"
-							height="24"
-							icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')"
-							styleName="toolbarButton" width="24"
-							click="changeAlign('right')" />
+							height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')" styleName="toolbarButton" width="24"
+							click="changeAlign('right')"/>
 
-	<mx:VRule height="24" />
+	<mx:VRule height="24"/>
 
-	<s:Label text="Font" />
+	<s:Label text="Font"/>
 
 	<mx:ComboBox id="fontSelector"
-				 focusEnabled="false" height="24" styleName="toolbarComboBox"
-				 width="100"
+				 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
 				 color="black"
-				 change="changeFamily(fontSelector.selectedItem)" />
+				 change="changeFamily(fontSelector.selectedItem)"/>
 
-	<mx:VRule height="24" />
+	<mx:VRule height="24"/>
 
-	<s:Label text="Size" />
+	<s:Label text="Size"/>
 
 	<mx:ComboBox id="sizeSelector"
 				 height="24" styleName="toolbarComboBox" width="100"
 				 color="black"
-				 change="changeSize(sizeSelector.selectedItem)" />
+				 change="changeSize(sizeSelector.selectedItem)"/>
 
-	<s:Label text="Text Color" />
+	<s:Label text="Text Color"/>
 
 	<mx:ColorPicker id="textColor"
 					focusEnabled="false" height="24" width="36"
-					change="colorTextChanged(event)" />
+					change=" colorTextChanged(event)"/>
 </s:HGroup>

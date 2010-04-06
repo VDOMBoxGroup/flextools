@@ -74,6 +74,10 @@
 		<s:State name="down" />
 
 		<s:State name="disabled" />
+		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates" />
+		<s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+		<s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
 	</s:states>
 	<!-- layer 1: shadow -->
 	<!--<s:Rect left="-1" right="-1" top="-1" bottom="-1" radiusX="{cornerRadius}">

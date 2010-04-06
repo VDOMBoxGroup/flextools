@@ -8,10 +8,11 @@
 	<fx:Metadata> 
 		[ResourceBundle("Wysiwyg_General")] 
 	</fx:Metadata>
-
+	
 	<fx:Style>
 		@namespace mx "library://ns.adobe.com/flex/halo";
 		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace common "net.vdombox.ide.common.*";
 		@namespace components "net.vdombox.ide.modules.wysiwyg.view.components.*";
 		@namespace controls "net.vdombox.ide.modules.wysiwyg.view.components.controls.*";
 		

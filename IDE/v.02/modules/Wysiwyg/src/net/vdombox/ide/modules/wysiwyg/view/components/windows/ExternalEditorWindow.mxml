@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/halo"
 				
-				clipContent="true" measuredHeight="400" measuredWidth="550"
-				backgroundColor="#CCCCCC" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+				measuredHeight="400" measuredWidth="550"
+				backgroundColor="#CCCCCC" 
 				creationComplete="creationCompleteHandler()"
 				close="dispatchEvent( new ExternalEditorWindowEvent( ExternalEditorWindowEvent.CLOSE ))"
-				showCloseButton="true">
+				>
 
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.events.ExternalEditorWindowEvent;
 		]]>
 	</fx:Script>
-
-	<s:VGroup>
-
+	
+	<s:layout>
+		<s:VerticalLayout paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" />
+	</s:layout>
+	
 		<fx:Script>
 			<![CDATA[
+				import flash.filesystem.File;
 				import net.vdombox.ide.common.interfaces.IExternalManager;
 				import mx.managers.PopUpManager;
 				import mx.managers.SystemManager;
@@ -93,7 +96,7 @@
 
 					var loaderContext : LoaderContext = new LoaderContext();
 					loaderContext.applicationDomain = new ApplicationDomain();
-					loaderContext.allowLoadBytesCodeExecution = true;
+					loaderContext["allowLoadBytesCodeExecution"] = true;
 
 					loader.loadBytes( _resourceVO.data, loaderContext );
 				}
@@ -141,5 +144,4 @@
 		</fx:Script>
 
 		<s:SpriteVisualElement id="placer" />
-	</s:VGroup>
-</mx:TitleWindow>
+</s:TitleWindow>
