@@ -24,7 +24,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			
 		}
 
-		private function get resourceBrowser() : ResourceBrowser
+		public function get resourceBrowser() : ResourceBrowser
 		{
 			return viewComponent as ResourceBrowser;
 		}

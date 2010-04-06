@@ -1,7 +1,9 @@
 package net.vdombox.ide.modules.resourceBrowser.controller
 {
+	import net.vdombox.ide.modules.ResourceBrowser;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.view.BodyMediator;
+	import net.vdombox.ide.modules.resourceBrowser.view.ResourceBrowserMediator;
 	import net.vdombox.ide.modules.resourceBrowser.view.components.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -14,6 +16,8 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 			var body : Body;
 			var bodyMediator : BodyMediator;
 			
+			var resourceBrowserMediator : ResourceBrowserMediator = facade.retrieveMediator( ResourceBrowserMediator.NAME ) as ResourceBrowserMediator;
+			
 			if( facade.hasMediator( BodyMediator.NAME ) )
 			{
 				bodyMediator = facade.retrieveMediator( BodyMediator.NAME ) as BodyMediator;
@@ -25,6 +29,7 @@ package net.vdombox.ide.modules.resourceBrowser.controller
 				facade.registerMediator( new BodyMediator( body ) )
 			}
 			
+			body.moduleFactory = resourceBrowserMediator.resourceBrowser.moduleFactory;
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 		}
 	}
