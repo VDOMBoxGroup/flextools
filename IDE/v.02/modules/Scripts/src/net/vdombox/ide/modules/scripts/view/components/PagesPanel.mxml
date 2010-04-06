@@ -7,10 +7,12 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayList;
+			
 			import net.vdombox.ide.common.vo.PageVO;
 			import net.vdombox.ide.modules.scripts.events.PagesPanelEvent;
 			[Bindable]
-			private var _pages : Array;
+			private var _pages : ArrayList;
 
 			public function get selectedPage() : PageVO
 			{
@@ -24,12 +26,12 @@
 			
 			public function set pages( value : Array ) : void
 			{
-				_pages = value;
+				_pages = new ArrayList( value );
 			}
 		]]>
 	</fx:Script>
 
-	<mx:ComboBox id="pagesComboBox"
+	<s:ComboBox id="pagesComboBox"
 				 dataProvider="{ _pages }" labelField="name" width="100%"
 				 verticalCenter="0"
 				 change="dispatchEvent( new PagesPanelEvent( PagesPanelEvent.PAGE_CHANGED ) )" />

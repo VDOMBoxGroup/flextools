@@ -40,7 +40,8 @@ package net.vdombox.ide.modules.scripts.controller
 
 					if ( serverScriptsPanelMediator.selectedObjectVO )
 					{
-						serverActionVO = new ServerActionVO( scriptName, serverScriptsPanelMediator.selectedObjectVO );
+						//FIXME Убрал аттрибуты... Надо фиксить создание serverActionVO.
+						serverActionVO = new ServerActionVO( /*scriptName, serverScriptsPanelMediator.selectedObjectVO*/ );
 						serverActionVO.script = "";
 						
 						serverActions.push( serverActionVO );
@@ -51,7 +52,7 @@ package net.vdombox.ide.modules.scripts.controller
 
 					else if ( statesObject[ ApplicationFacade.SELECTED_PAGE ] )
 					{
-						serverActionVO = new ServerActionVO( scriptName, serverScriptsPanelMediator.selectedPageVO );
+						serverActionVO = new ServerActionVO( /*scriptName, serverScriptsPanelMediator.selectedPageVO*/ );
 						serverActionVO.script = "";
 						
 						serverActions.push( serverActionVO );

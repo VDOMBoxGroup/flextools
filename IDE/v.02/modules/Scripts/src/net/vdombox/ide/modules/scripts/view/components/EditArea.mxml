@@ -149,7 +149,7 @@
 						syntax: _syntax } );
 
 				if ( _content )
-					content = _content; // FIXME fix!
+					content = _content; // FIXME: fix!
 			}
 
 			private function showHandler() : void

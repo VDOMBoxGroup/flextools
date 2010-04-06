@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.scripts.view
 			scripts.addEventListener( Scripts.TEAR_DOWN, tearDownHandler )
 		}
 
-		private function get scripts() : Scripts
+		public function get scripts() : Scripts
 		{
 			return viewComponent as Scripts;
 		}
