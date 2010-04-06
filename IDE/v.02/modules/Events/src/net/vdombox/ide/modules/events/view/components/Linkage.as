@@ -291,7 +291,7 @@ package net.vdombox.ide.modules.events.view.components
 			var dX : Number;
 			var dY : Number;
 
-//			var _numColor : Number = linkageVO.level.color;
+			var _numColor : Number = 0x2FDD00;
 
 			dX = startPoint.x - endPoint.x;
 			dY = startPoint.y - endPoint.y;
@@ -301,7 +301,7 @@ package net.vdombox.ide.modules.events.view.components
 			if ( dX < 0 )
 				alphaAngle += Math.PI;
 
-			graphics.lineStyle( 3, /*_numColor*/0, 1, true, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.BEVEL );
+			graphics.lineStyle( 3, _numColor, 1, true, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.BEVEL );
 
 			graphics.moveTo( startPoint.x, startPoint.y );
 			graphics.lineTo( endPoint.x, endPoint.y );

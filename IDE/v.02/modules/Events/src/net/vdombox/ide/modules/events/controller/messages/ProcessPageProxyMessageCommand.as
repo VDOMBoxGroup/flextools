@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.events.controller.messages
 {
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -40,10 +41,11 @@ package net.vdombox.ide.modules.events.controller.messages
 //						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
 //						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
 //					}
-//					else if ( operation == PPMOperationNames.READ )
-//					{
-//						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
-//					}
+//					else 
+					if ( operation == PPMOperationNames.READ )
+					{
+						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
+					}
 //					else if ( operation == PPMOperationNames.DELETE )
 //					{
 //						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
@@ -55,8 +57,8 @@ package net.vdombox.ide.modules.events.controller.messages
 
 				case PPMPageTargetNames.STRUCTURE:
 				{
-//					if ( operation == PPMOperationNames.READ )
-//						sendNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, body );
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.PAGE_STRUCTURE_GETTED, body );
 
 					break;
 				}

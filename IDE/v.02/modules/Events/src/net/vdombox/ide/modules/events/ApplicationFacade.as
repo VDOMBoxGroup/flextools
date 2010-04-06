@@ -122,6 +122,9 @@ package net.vdombox.ide.modules.events
 		
 		public static const GET_APPLICATION_EVENTS : String = "getApplicationEvents";
 		public static const APPLICATION_EVENTS_GETTED : String = "applicationEventsGetted";
+		
+		public static const SET_APPLICATION_EVENTS : String = "setApplicationEvents";
+		public static const APPLICATION_EVENTS_SETTED : String = "applicationEventsSetted";
 
 		public static function getInstance( key : String ) : ApplicationFacade
 		{

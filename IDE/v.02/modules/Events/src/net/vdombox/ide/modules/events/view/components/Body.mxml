@@ -13,7 +13,7 @@
 	<s:VGroup height="100%" width="220">
 
 		<components:ObjectsTreePanel id="objectsTreePanel"
-									 width="100%" />
+									 width="100%" title="{ resourceManager.getString( 'Events_General', 'objects_tree_panel_title' ) }" />
 
 		<components:EventsPanel id="eventsPanel"
 								width="100%" />

@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.events.view
 {
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
+	import net.vdombox.ide.modules.events.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
 	import net.vdombox.ide.modules.events.view.components.WorkArea;
 	
@@ -49,6 +50,7 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 
 			interests.push( ApplicationFacade.APPLICATION_EVENTS_GETTED );
+			interests.push( ApplicationFacade.APPLICATION_EVENTS_SETTED );
 
 			return interests;
 		}
@@ -81,6 +83,7 @@ package net.vdombox.ide.modules.events.view
 				{
 					if ( sessionProxy.selectedApplication && sessionProxy.selectedPage )
 					{
+						workArea.dataProvider = null;
 						sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
 										  { applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
 					}
@@ -91,16 +94,40 @@ package net.vdombox.ide.modules.events.view
 				{
 					workArea.dataProvider = body as ApplicationEventsVO;
 					break;
-				}	
+				}
+					
+				case ApplicationFacade.APPLICATION_EVENTS_SETTED:
+				{
+					workArea.skin.currentState = "normal"; //TODO: добавить public свойство для изменения внутреннего state
+					break;
+				}
 			}
 		}
 
 		private function addHandlers() : void
 		{
+			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
+			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
+			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler );
+			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler );
+		}
+		
+		private function saveHandler( event : WorkAreaEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SET_APPLICATION_EVENTS, { applicationVO: sessionProxy.selectedApplication,
+				pageVO : sessionProxy.selectedPage, applicationEventsVO : workArea.dataProvider } );
+		}
+		
+		private function undoHandler( event : WorkAreaEvent ) : void
+		{
+			workArea.dataProvider = null;
+			
+			sendNotification( ApplicationFacade.GET_APPLICATION_EVENTS,
+				{ applicationVO: sessionProxy.selectedApplication, pageVO: sessionProxy.selectedPage } );
 		}
 	}
 }

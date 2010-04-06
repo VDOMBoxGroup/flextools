@@ -16,7 +16,12 @@ package net.vdombox.ide.modules.events.controller
 			var selectedPageVO : PageVO = notification.getBody() as PageVO;
 			
 			if( sessionProxy.selectedPage == selectedPageVO )
+			{
+				if( sessionProxy.selectedObject )
+					sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, null );
+				
 				return;
+			}
 			
 			if( sessionProxy.selectedPage && selectedPageVO && sessionProxy.selectedPage.id == selectedPageVO.id )
 				return;

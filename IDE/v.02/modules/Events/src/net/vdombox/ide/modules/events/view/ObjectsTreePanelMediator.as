@@ -33,6 +33,8 @@ package net.vdombox.ide.modules.events.view
 
 		[Bindable]
 		private var pagesXMLList : XMLList;
+		
+		private var currentPageXML : XML;
 
 		public function get objectsTreePanel() : ObjectsTreePanel
 		{
@@ -120,10 +122,12 @@ package net.vdombox.ide.modules.events.view
 				{
 					var pageXMLTree : XML = notification.getBody() as XML;
 
-					pageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
-					pageXML.setChildren( new XMLList() );
-					pageXML.appendChild( pageXMLTree.* );
+					currentPageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
+					currentPageXML.setChildren( new XMLList() );
+					currentPageXML.appendChild( pageXMLTree.* );
 
+					objectsTree.validateNow();
+					
 					break;
 				}
 
@@ -137,17 +141,17 @@ package net.vdombox.ide.modules.events.view
 			}
 		}
 
-		private function openTree( item : Object ) : void
-		{
-			//			trace('openTree');
-			var parentItem : Object = XML( item ).parent();
-			if ( parentItem )
-			{
-				openTree( parentItem );
-				objectsTree.expandItem( parentItem, true, false );
-				objectsTree.validateNow();
-			}
-		}
+//		private function openTree( item : Object ) : void
+//		{
+//			//			trace('openTree');
+//			var parentItem : Object = XML( item ).parent();
+//			if ( parentItem )
+//			{
+//				openTree( parentItem );
+//				objectsTree.expandItem( parentItem, true, false );
+//				objectsTree.validateNow();
+//			}
+//		}
 
 		private function clearData() : void
 		{
@@ -188,6 +192,9 @@ package net.vdombox.ide.modules.events.view
 
 			if ( item.name() == "page" )
 			{
+				if( currentPageXML )
+					delete currentPageXML.*;
+				
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
 			}

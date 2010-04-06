@@ -72,8 +72,13 @@ package net.vdombox.ide.modules.events.view
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
 			
 			interests.push( ApplicationFacade.GET_APPLICATION_EVENTS );
+			interests.push( ApplicationFacade.SET_APPLICATION_EVENTS );
+			
+			interests.push( ApplicationFacade.GET_PAGE_SRUCTURE );
 
 			interests.push( ApplicationFacade.GET_PAGES );
+			
+			interests.push( ApplicationFacade.GET_OBJECT );
 
 			return interests;
 		}
@@ -201,9 +206,34 @@ package net.vdombox.ide.modules.events.view
 					break;
 				}
 					
+				case ApplicationFacade.GET_OBJECT:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.GET_APPLICATION_EVENTS:
 				{
 					message = new ProxiesPipeMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.EVENTS, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_APPLICATION_EVENTS:
+				{
+					message = new ProxiesPipeMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.GET_PAGE_SRUCTURE:
+				{
+					message = new ProxiesPipeMessage(  PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;

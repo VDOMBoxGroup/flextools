@@ -4,6 +4,7 @@
 	xmlns:mx="library://ns.adobe.com/flex/halo"
 	xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:common="net.vdombox.ide.common.*">
+	
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.events.ApplicationFacade;

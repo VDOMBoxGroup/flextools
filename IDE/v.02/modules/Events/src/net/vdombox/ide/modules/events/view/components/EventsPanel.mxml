@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableComponent xmlns:fx="http://ns.adobe.com/mxml/2009"
-					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
-					  
+					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  height="200"
 					  skinClass="net.vdombox.ide.modules.events.view.skins.EventsPanelSkin">
-	
+
 	<fx:Script>
 		<![CDATA[
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import mx.managers.DragManager;
+			
 			import spark.components.List;
-			
-			[SkinPart(required="true")]
-			public var evetsList : List;
-			
-			[SkinPart(required="true")]
+
+			[SkinPart( required="true" )]
+			public var eventsList : List;
+
+			[SkinPart( required="true" )]
 			public var actionsList : List;
 		]]>
 	</fx:Script>

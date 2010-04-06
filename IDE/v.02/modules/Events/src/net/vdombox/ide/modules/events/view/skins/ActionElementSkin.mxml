@@ -3,7 +3,7 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 minWidth="200">
+			 minWidth="200" creationComplete="sparkskin1_creationCompleteHandler(event)">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.events.view.components.ActionElement")]
@@ -11,8 +11,26 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.ClientActionVO;
+			import net.vdombox.ide.common.vo.ServerActionVO;
 			import net.vdombox.ide.modules.events.events.ElementEvent;
 
+			private var _data : Object;
+			
+			private var isDataChanged : Boolean = false;
+			private var isStateChanged : Boolean = false;
+			
+			public function set data( value : Object ) : void
+			{
+				_data = value;
+				
+				isDataChanged = true;
+				invalidateProperties();
+			}
+			
 			protected function hideButton_clickHandler( event : MouseEvent ) : void
 			{
 				if ( currentState == "normal" || currentState == "disabled" )
@@ -24,8 +42,72 @@
 					currentState = currentState.substr( 0, currentState.length - 8 );
 				}
 
-				hostComponent.dispatchEvent( new ElementEvent( ElementEvent.STATE_CHANGED ));
+				isStateChanged = true;
+				invalidateProperties();
+				
+				hostComponent.dispatchEvent( new ElementEvent( ElementEvent.STATE_CHANGED ) );
 			}
+			
+			override protected function commitProperties() : void
+			{
+				super.commitProperties();
+				
+				if ( isDataChanged )
+				{
+					isDataChanged = false;
+					
+					if ( hostComponent.data )
+					{
+						if ( !hostComponent.data.state && ( currentState == "normal" || currentState == "disabled" ) )
+							currentState = currentState + "AndShort";
+						else if ( hostComponent.data.state && ( currentState == "normalAndShort" || currentState == "disabledAndShort" ) )
+							currentState = currentState.substring( 0, currentState.length - 8 );
+					}
+				}
+				
+				if ( isStateChanged )
+				{
+					isStateChanged = false;
+					
+					if ( !hostComponent.data )
+						return;
+					
+					if ( currentState == "normal" || currentState == "disabled" )
+						hostComponent.data.state = true;
+					else
+						hostComponent.data.state = false;
+				}
+			}
+			
+			override protected function stateChanged( oldState : String, newState : String, recursive : Boolean ) : void
+			{
+				if ( !hostComponent.data )
+				{
+					titleLabel.text = "";
+					return;
+				}
+
+				if ( newState == "normal" || newState == "disabled" )
+				{
+					if ( hostComponent.data is ClientActionVO )
+						titleLabel.text = headerGroup.toolTip = "Client Action";
+					else if ( hostComponent.data is ServerActionVO )
+						titleLabel.text = headerGroup.toolTip = "Server Action";
+				}
+				else
+				{
+					if ( hostComponent.data is ClientActionVO )
+						titleLabel.text = headerGroup.toolTip = hostComponent.data.objectName + ":" + hostComponent.data.name;
+					else if ( hostComponent.data is ServerActionVO )
+						titleLabel.text = headerGroup.toolTip = hostComponent.data.name;
+				}
+			}
+
+			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+			{
+				BindingUtils.bindProperty( this, "data", hostComponent, "data", true );
+			}
+
 		]]>
 	</fx:Script>
 
@@ -95,8 +177,9 @@
 
 				<s:Label id="titleLabel"
 						 text="{ hostComponent.title }"
-						 color="#FFFFFF" left="0" right="0" textAlign="center"
-						 verticalCenter="0"/>
+						 color="#FFFFFF" left="5" right="5" textAlign="center"
+						 verticalCenter="0"
+						 maxDisplayedLines="1"/>
 			</s:Group>
 
 			<s:Group id="contentGroup"
@@ -117,17 +200,19 @@
 						  gap="1">
 
 					<components:ElementButton id="hideButton"
-											  height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')" label="translate"
+											  height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')"
+											  label.full="{ resourceManager.getString( 'Events_General', 'action_element_hide' ) }"
+											  label.short="{ resourceManager.getString( 'Events_General', 'action_element_show' ) }"
 											  minWidth="10" width="100%"
 											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
 											  click="hideButton_clickHandler( event )"/>
 
-					<components:ElementButton height="17" icon="@Embed('assets/arrow.png')" label="translate" minWidth="10"
-											  width="100%"
-											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
-											  click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )"/>
+					<!--<components:ElementButton height="17" icon="@Embed('assets/arrow.png')" label="translate" minWidth="10"
+						 width="100%"
+						 cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
+						 click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.CREATE_LINKAGE ) )"/>-->
 
-					<components:ElementButton height="17" icon="@Embed('assets/delete.png')" label="translate" minWidth="10"
+					<components:ElementButton height="17" icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Events_General', 'action_element_delete' ) }" minWidth="10"
 											  width="100%"
 											  cornerRadius="0" skinClass="net.vdombox.ide.modules.events.view.skins.ElementButtonSkin"
 											  click="hostComponent.dispatchEvent( new ElementEvent( ElementEvent.DELETE ) )"/>

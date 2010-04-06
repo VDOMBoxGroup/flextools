@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.events.view
 			events.addEventListener( Events.TEAR_DOWN, tearDownHandler )
 		}
 
-		private function get events() : Events
+		public function get events() : Events
 		{
 			return viewComponent as Events;
 		}
