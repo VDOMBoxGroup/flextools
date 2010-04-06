@@ -24,7 +24,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			
 		}
 
-		private function get applicationsManagment() : ApplicationsManagment
+		public function get applicationsManagment() : ApplicationsManagment
 		{
 			return viewComponent as ApplicationsManagment;
 		}
