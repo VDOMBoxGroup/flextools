@@ -7,7 +7,7 @@ package net.vdombox.ide.common.vo
 	public class ServerActionVO
 	{
 		private const TO_XML_TMPL : String =
-			"<Action ID=\"{0}\" Name=\"{1}\" Language=\"{2}\" Top=\"{3}\" Left=\"{4}\" State=\"{5}\"><![CDATA[{6}]\]></Action>";
+			"<Action Name=\"{0}\" Language=\"{1}\" Top=\"{2}\" Left=\"{3}\" State=\"{4}\"><![CDATA[{5}]\]></Action>";
 
 		[Bindable]
 		public var top : int = 0;
@@ -155,15 +155,18 @@ package net.vdombox.ide.common.vo
 			if ( value.search( xmlCharRegExp ) != -1 )
 			{
 				value = value.replace( /\]\]>/g, "]]]]" + "><![CDATA[>" );
-				value = StringUtil.substitute( TO_XML_TMPL, _id, _name, language, top, left, state, value );
+				value = StringUtil.substitute( TO_XML_TMPL, _name, language, top, left, state, value );
 
 				result = new XML( value );
 			}
 			else
 			{
-				result = <Action ID={ _id } Name={ _name } Language={ language } Top={top} Left={left} State={state}>{script}</Action>;
+				result = <Action Name={ _name } Language={ language } Top={top} Left={left} State={state}>{script}</Action>;
 			}
 
+			if( _id && _id != "" )
+				result.@ID = _id;
+			
 			return result;
 		}
 	}

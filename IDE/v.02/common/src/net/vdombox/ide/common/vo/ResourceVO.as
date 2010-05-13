@@ -3,13 +3,25 @@ package net.vdombox.ide.common.vo
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.ByteArray;
-	
+
 	[Bindable]
 	public class ResourceVO
 	{
+		public static const EMPTY : uint = 0;
+
+		public static const UPLOAD_PROGRESS : uint = 1;
+		public static const UPLOADED : uint = 2;
+		public static const UPLOAD_ERROR : uint = 3;
+
+		public static const LOAD_PROGRESS : uint = 4;
+		public static const LOADED : uint = 5;
+		public static const LOAD_ERROR : uint = 6;
+
+
 		public function ResourceVO( ownerID : String )
 		{
 			_ownerID = ownerID;
+			setStatus( EMPTY );
 		}
 
 		private var _ownerID : String;
@@ -24,12 +36,10 @@ package net.vdombox.ide.common.vo
 
 		private var _path : String;
 
-		private var _data : ByteArray;
-
-		private var _status : String;
+		private var _status : uint;
 
 		private var dispatcher : EventDispatcher = new EventDispatcher();
-		
+
 		public function get ownerID() : String
 		{
 			return _ownerID;
@@ -44,7 +54,7 @@ package net.vdombox.ide.common.vo
 		{
 			return _useCount;
 		}
-		
+
 		public function get name() : String
 		{
 			return _name;
@@ -55,6 +65,16 @@ package net.vdombox.ide.common.vo
 			_name = value;
 		}
 
+		public function get status() : uint
+		{
+			return _status;
+		}
+		
+		public function set status( value : uint ) : void
+		{
+			_status = value;
+		}
+		
 		public function get type() : String
 		{
 			return _type;
@@ -70,17 +90,17 @@ package net.vdombox.ide.common.vo
 //		{
 //			trace( "zzzzzz" );
 //		}
-		
-		public var data : ByteArray;		
-		
+
+		public var data : ByteArray;
+
 		public function get size() : int
 		{
-			if ( !_data )
+			if ( !data )
 				return -1;
 
-			_data.position = 0;
+			data.position = 0;
 
-			return _data.bytesAvailable;
+			return data.bytesAvailable;
 		}
 
 		public function get path() : String
@@ -88,16 +108,11 @@ package net.vdombox.ide.common.vo
 			return _path;
 		}
 
-		public function get status() : String
-		{
-			return _status;
-		}
-
 		public function setID( value : String ) : void
 		{
 			_id = value;
 		}
-		
+
 		public function setType( value : String ) : void
 		{
 			_type = value.toLowerCase();
@@ -114,9 +129,9 @@ package net.vdombox.ide.common.vo
 			_path = value;
 		}
 
-		public function setStatus( value : String ) : void
+		public function setStatus( value : uint ) : void
 		{
-			_status = value;
+			status = value;
 		}
 
 		public function setXMLDescription( description : XML ) : void
