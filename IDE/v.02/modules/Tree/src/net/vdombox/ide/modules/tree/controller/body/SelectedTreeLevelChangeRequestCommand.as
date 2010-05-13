@@ -12,17 +12,10 @@ package net.vdombox.ide.modules.tree.controller.body
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 
-			var currenrTreeLevelVO : TreeLevelVO = statesObject[ ApplicationFacade.SELECTED_TREE_LEVEL ] as TreeLevelVO;
 			var treeLevelVO : TreeLevelVO = notification.getBody() as TreeLevelVO;
 			
-			if( currenrTreeLevelVO == treeLevelVO )
-				return;
-			
-			statesObject[ ApplicationFacade.SELECTED_TREE_LEVEL ] = treeLevelVO;
-			
-			sendNotification( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGED, treeLevelVO );
+			sessionProxy.selectedTreeLevel = treeLevelVO
 		}
 	}
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:components="net.vdombox.ide.modules.tree.view.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 width="100%">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.tree.events.AttributeEvent;
+			import net.vdombox.ide.modules.tree.view.skins.AttributeButtonSkin;
+
+			[Bindable]
+			public var value : ResourceVO;
+
+//			[Bindable]
+//			public function get value() : ResourceVO
+//			{
+//				return _value;
+//			}
+//
+//			public function set value( value : ResourceVO ) : void
+//			{
+//				_value = value;
+//			}
+		]]>
+	</fx:Script>
+
+	<components:SmoothImage height="18" source="{ value.data }" width="18"
+							verticalCenter="0"/>
+
+	<s:Rect height="18" width="18">
+		<s:stroke>
+			<mx:SolidColorStroke color="0x646464"
+								 alpha="{ value ? 1 : 0 }"/>
+		</s:stroke>
+	</s:Rect>
+
+	<s:Label id="lbl"
+			 text="{ value ? value.id : '' }"
+			 left="23" right="75" verticalAlign="bottom" verticalCenter="2"
+			 maxDisplayedLines="1"/>
+
+	<!--<s:Group height="14" width="14"
+			 right="70" verticalCenter="0">
+
+		<s:Ellipse bottom="0" left="0" right="0" top="0">
+
+			<s:stroke>
+				<s:SolidColorStroke color="0xB6B6B6"/>
+			</s:stroke>
+
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0xEAEAE8"/>
+					<s:GradientEntry color="0xCCCCCC"/>
+				</s:LinearGradient>
+			</s:fill>
+
+		</s:Ellipse>
+
+		<components:SmoothImage height="9" source="@Embed('assets/delete.png')" width="9"
+								horizontalCenter="0" verticalCenter="0"/>
+
+	</s:Group>-->
+
+
+	<s:Button height="14" label="Browse..." width="65"
+			  color="0x646464" cornerRadius="6" fontFamily="Verdana" fontSize="10"
+			  right="0" skinClass="net.vdombox.ide.modules.tree.view.skins.AttributeButtonSkin" verticalCenter="0"
+			  click="dispatchEvent( new AttributeEvent( AttributeEvent.SELECT_RESOURCE ) )"/>
+</s:Group>

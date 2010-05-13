@@ -11,10 +11,7 @@ package net.vdombox.ide.modules.tree.controller.body
 		override public function execute( notification : INotification ) : void
 		{
 			var structureProxy : StructureProxy = facade.retrieveProxy( StructureProxy.NAME ) as StructureProxy;
-			
 			structureProxy.setPages( notification.getBody() as Array );
-			
-			sendNotification( ApplicationFacade.GET_SELECTED_PAGE );
 		}
 	}
 }

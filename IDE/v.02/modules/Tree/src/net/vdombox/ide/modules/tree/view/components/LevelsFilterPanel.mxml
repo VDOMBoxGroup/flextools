@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 
-		 title="{ resourceManager.getString( 'Tree_General', 'levels_panel_title' ) }"
-		 creationComplete="showHandler()">
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 creationComplete="creationComplete()"
+		 title="{ resourceManager.getString( 'Tree_General', 'levels_panel_title' ) }">
 
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayList;
 
 			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
@@ -26,7 +26,7 @@
 
 			public function set dataProvider( value : Array ) : void
 			{
-				levels = new ArrayList( value );
+				levels = value && value.length > 0 ? new ArrayList( value ) : null;
 			}
 
 			public function get currentStructureLevel() : TreeLevelVO
@@ -59,24 +59,27 @@
 
 				var hasVisible : Boolean = false;
 
-				for each ( var structureLevelVO : TreeLevelVO in levels.source )
+				if ( levels )
 				{
-					if ( structureLevelVO.visible )
+					for each ( var structureLevelVO : TreeLevelVO in levels.source )
 					{
-						hasVisible = true;
-						break;
+						if ( structureLevelVO.visible )
+						{
+							hasVisible = true;
+							break;
+						}
 					}
 				}
-
+				
 				if ( !hasVisible && !selectAll )
 					selectAll = true;
 				else if ( hasVisible && selectAll )
 					selectAll = false;
 			}
 
-			protected function showHandler() : void
+			protected function creationComplete() : void
 			{
-				structureLevelsList.addEventListener( Event.CHANGE, changeHandler, true );
+				structureLevelsList.addEventListener( Event.CHANGE, changeHandler, true, 0, true );
 			}
 		]]>
 	</fx:Script>
@@ -85,39 +88,38 @@
 
 		<s:fill>
 
-			<s:SolidColor color="0x999999" />
+			<s:SolidColor color="0x999999"/>
 		</s:fill>
 	</s:Rect>
 
-	<s:HGroup height="25" width="100%"
+	<s:HGroup id="switchAllGroup"
+			  height="25" width="100%"
 			  paddingLeft="3" paddingRight="3" verticalAlign="middle"
 			  click="switchAll()">
 
-		<mx:Image source="@Embed(source='assets/treeEditor/colored_button_all_levels.png')" />
+		<mx:Image source="@Embed(source='assets/treeEditor/colored_button_all_levels.png')"/>
 
 		<s:Rect width="1"
 				bottom="3" top="3">
 
 			<s:fill>
 
-				<s:SolidColor color="gray" />
+				<s:SolidColor color="gray"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:Label text="{ selectAll ? resourceManager.getString( 'Tree_General', 'level_show_all' ) : resourceManager.getString( 'Tree_General', 'level_hide_all' ) }" width="100%" />
+		<s:Label text="{ selectAll ? resourceManager.getString( 'Tree_General', 'level_show_all' ) : resourceManager.getString( 'Tree_General', 'level_hide_all' ) }" width="100%"/>
 	</s:HGroup>
 
 	<s:Line width="100%">
 
 		<s:stroke>
 
-			<s:SolidColorStroke color="gray" />
+			<s:SolidColorStroke color="gray"/>
 		</s:stroke>
 	</s:Line>
 
 	<s:List id="structureLevelsList"
-			dataProvider="{ levels }" height="100%" width="100%" y="25"
-			change="changeHandler( event )"
-			borderVisible="false" itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }"
-			selectedItem="@{ _currentStructuretLevel }" />
+			dataProvider="{ levels }" height="100%" width="100%" y="25" change="changeHandler( event )"
+			borderVisible="false" itemRenderer="{ new ClassFactory( StructureLevelItemRenderer ) }" selectedItem="@{ _currentStructuretLevel }"/>
 </s:Panel>

@@ -49,14 +49,8 @@ package net.vdombox.ide.modules.tree.controller.messages
 						{
 							sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + recipientID, pageAttributesVO );
 						}
-
-						var mediatorName : String = TreeElementMediator.NAME + ApplicationFacade.DELIMITER + pageAttributesVO.pageVO.id;
-
-						if ( facade.hasMediator( mediatorName ) )
-						{
-							var treeElementMediator : TreeElementMediator = facade.retrieveMediator( mediatorName ) as TreeElementMediator;
-							treeElementMediator.pageAttributesVO = pageAttributesVO;
-						}
+						
+						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, pageAttributesVO );
 					}
 
 					delete allPageRecipients[ pageAttributesVO.pageVO.id ];

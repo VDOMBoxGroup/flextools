@@ -4,9 +4,14 @@ package net.vdombox.ide.modules.tree.events
 	
 	public class TreeElementEvent extends Event
 	{
-		public static var ELEMENT_SELECTION : String = "elementSelection";
-		public static var DELETE_REQUEST : String = "deleteRequest";
-		public static var CREATE_LINKAGE_REQUEST : String = "createLinkageRequest";
+		public static var CREATED : String = "elementCreated";
+		public static var SELECTION : String = "elementSelection";
+		public static var STATE_CHANGED : String = "stateChanged";
+		public static var DELETE : String = "delete";
+		public static var CREATE_LINKAGE : String = "createLinkage";
+		public static var DELETE_LINKAGE : String = "deleteLinkage";
+		public static var MOVED : String = "moved";
+		
 		
 		public function TreeElementEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

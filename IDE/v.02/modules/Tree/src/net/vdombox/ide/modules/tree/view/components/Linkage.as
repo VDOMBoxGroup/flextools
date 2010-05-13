@@ -4,21 +4,35 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import mx.binding.utils.BindingUtils;
+	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
 	
+	import net.vdombox.ide.modules.tree.events.LinkageEvent;
+	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.model.vo.LinkageVO;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	
 	import spark.components.Group;
 
-	public class Linkage extends Group
+	public class Linkage extends UIComponent
 	{
 		public function Linkage()
 		{
 			watchers = {};
+
+			useHandCursor = true;
+			buttonMode = true;
+
+			addEventListener( MouseEvent.CLICK, clickHandler, false, 0, true );
+			addEventListener( FlexEvent.CREATION_COMPLETE, createionCompleteHandler, false, 0, true );
 		}
+
+		[Embed( source="assets/delete_linkage.png" )]
+		private var deleteLinkageClass : Class;
 
 		private const RTL : Number = 0;
 		private const LTR : Number = 1;
@@ -45,6 +59,12 @@ package net.vdombox.ide.modules.tree.view.components
 		private var targetChanged : Boolean;
 
 		private var watchers : Object;
+
+		private var deleteImage : SmoothImage;
+		private var signatureGroup : SignatureGroup;
+
+		private var _signatureVisible : Boolean;
+		private var isSignatureVisibleChanged : Boolean;
 
 		public function get linkageVO() : LinkageVO
 		{
@@ -94,11 +114,69 @@ package net.vdombox.ide.modules.tree.view.components
 			}
 		}
 
+		public function get signatureVisible() : Boolean
+		{
+			return _signatureVisible;
+		}
+
+		public function set signatureVisible( value : Boolean ) : void
+		{
+			if ( value == _signatureVisible )
+				return;
+
+			_signatureVisible = value;
+			isSignatureVisibleChanged = true;
+
+			invalidateProperties();
+		}
+
+		override protected function createChildren() : void
+		{
+			if ( !deleteImage )
+			{
+				deleteImage = new SmoothImage();
+				deleteImage.width = 26;
+				deleteImage.height = 26;
+				deleteImage.source = deleteLinkageClass;
+				deleteImage.addEventListener( MouseEvent.CLICK, deleteImage_clickHandler, false, 0, true );
+			}
+
+			if ( !signatureGroup )
+			{
+				signatureGroup = new SignatureGroup();
+				signatureGroup.addEventListener( MouseEvent.CLICK, signatureGroup_clickHandler, false, 0, true );
+				
+				if( _linkageVO )
+				{
+					signatureGroup.color = _linkageVO.level.color;
+					signatureGroup.number = _linkageVO.index;
+				}
+						
+			}
+		}
+
 		override protected function commitProperties() : void
 		{
 			super.commitProperties();
 
 			var i : uint;
+
+			if ( isSignatureVisibleChanged )
+			{
+				isSignatureVisibleChanged = false;
+
+				if ( _signatureVisible )
+				{
+					signatureGroup.x = width / 2 - signatureGroup.width / 2;
+					signatureGroup.y = height / 2 - signatureGroup.height / 2;
+					addChild( signatureGroup );
+				}
+				else
+				{
+					if( signatureGroup.parent == this )
+						removeChild( signatureGroup );
+				}
+			}
 
 			if ( sourceChanged )
 			{
@@ -285,6 +363,12 @@ package net.vdombox.ide.modules.tree.view.components
 				height = pFromObj.y - pToObj.y;
 				directionalY = DTU;
 			}
+
+			if ( signatureGroup )
+			{
+				signatureGroup.x = width / 2 - signatureGroup.width / 2;
+				signatureGroup.y = height / 2 - signatureGroup.height / 2;
+			}
 		}
 
 		private function drawArrow() : void
@@ -330,10 +414,10 @@ package net.vdombox.ide.modules.tree.view.components
 			graphics.lineTo( endPoint.x, endPoint.y );
 
 			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength,
-													endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
+				endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
 
 			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength,
-													endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
+				endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
 
 			graphics.lineTo( endPoint.x, endPoint.y );
 		}
@@ -372,6 +456,53 @@ package net.vdombox.ide.modules.tree.view.components
 				calculatePositionAndSize();
 				drawArrow();
 			}
+		}
+
+		private function createionCompleteHandler( event : FlexEvent ) : void
+		{
+			dispatchEvent( new LinkageEvent( LinkageEvent.CREATED ) );
+		}
+
+		private function clickHandler( event : MouseEvent ) : void
+		{
+			if ( !stage )
+				return;
+
+			if( event.target is SignatureGroup )
+				return;
+			
+			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
+
+			var buttonX : int = event.localX - deleteImage.width / 2;
+			var buttonY : int = event.localY - deleteImage.height / 2;
+
+			deleteImage.x = buttonX;
+			deleteImage.y = buttonY;
+
+			addChild( deleteImage );
+		}
+
+		private function stage_mouseDownHandler( event : MouseEvent ) : void
+		{
+			if ( stage && event.target != this && event.target != deleteImage )
+			{
+				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
+
+				if ( deleteImage.parent == this )
+					removeChild( deleteImage );
+			}
+		}
+
+		private function deleteImage_clickHandler( event : MouseEvent ) : void
+		{
+			dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE_LINKAGE ) );
+			
+			event.stopImmediatePropagation();
+		}
+
+		private function signatureGroup_clickHandler( event : MouseEvent ) : void
+		{
+			event.stopImmediatePropagation();
 		}
 	}
 }

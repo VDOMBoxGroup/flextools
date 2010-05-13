@@ -1,11 +1,13 @@
 package net.vdombox.ide.modules.tree.view
 {
+	import flash.events.Event;
+	
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
-	import net.vdombox.ide.modules.tree.events.CreatePageWindowEvent;
 	import net.vdombox.ide.modules.tree.events.ItemRendererEvent;
+	import net.vdombox.ide.modules.tree.events.WindowEvent;
 	import net.vdombox.ide.modules.tree.view.components.CreatePageWindow;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -67,16 +69,19 @@ package net.vdombox.ide.modules.tree.view
 			
 			createPageWindow.addEventListener( ItemRendererEvent.CREATED, pagesItemRenderer_createdHandler, true, 0, true );
 			
-			createPageWindow.addEventListener( CreatePageWindowEvent.PERFORM_CREATE, performCreateHandler, false, 0, true );
-			createPageWindow.addEventListener( CreatePageWindowEvent.PERFORM_CANCEL, performCancelHandler, false, 0, true );
+			createPageWindow.addEventListener( WindowEvent.PERFORM_APPLY, performApplyHandler, false, 0, true );
+			createPageWindow.addEventListener( WindowEvent.PERFORM_CANCEL, performCancelHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			createPageWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			
-			createPageWindow.removeEventListener( CreatePageWindowEvent.PERFORM_CREATE, performCreateHandler );
-			createPageWindow.removeEventListener( CreatePageWindowEvent.PERFORM_CANCEL, performCancelHandler );
+			createPageWindow.removeEventListener( ItemRendererEvent.CREATED, pagesItemRenderer_createdHandler, true );
+			
+			createPageWindow.removeEventListener( WindowEvent.PERFORM_APPLY, performApplyHandler );
+			createPageWindow.removeEventListener( WindowEvent.PERFORM_CANCEL, performCancelHandler );
+			
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
@@ -84,7 +89,7 @@ package net.vdombox.ide.modules.tree.view
 			sendNotification( ApplicationFacade.GET_TOP_LEVEL_TYPES );
 		}
 		
-		private function performCreateHandler ( event : CreatePageWindowEvent ) : void
+		private function performApplyHandler ( event : WindowEvent ) : void
 		{
 			var selectedPageType : TypeVO = createPageWindow.selectedPageType;
 			
@@ -96,7 +101,7 @@ package net.vdombox.ide.modules.tree.view
 			facade.removeMediator( NAME );
 		}
 		
-		private function performCancelHandler ( event : CreatePageWindowEvent ) : void
+		private function performCancelHandler ( event : WindowEvent ) : void
 		{
 			sendNotification( ApplicationFacade.CLOSE_WINDOW, createPageWindow );
 			

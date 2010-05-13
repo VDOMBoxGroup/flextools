@@ -9,6 +9,17 @@
 		[ResourceBundle("Tree_General")] 
 	</fx:Metadata>
 
+	<fx:Style>
+		@namespace mx "library://ns.adobe.com/flex/halo";
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace common "net.vdombox.ide.common.*";
+		
+		s|Panel
+		{
+			font-family : "Verdana";
+		}
+	</fx:Style>
+	
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.tree.ApplicationFacade;
@@ -48,7 +59,7 @@
 
 			override public function get hasSettings() : Boolean
 			{
-				return true;
+				return false;
 			}
 
 			override public function get hasBody() : Boolean

@@ -33,11 +33,11 @@ package net.vdombox.ide.modules.tree.controller.body
 			
 			
 			body.moduleFactory = treeMediator.tree.moduleFactory;
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
-						
-			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = null;
-			statesObject[ ApplicationFacade.SELECTED_TREE_ELEMENT ] = null;
-			statesObject[ ApplicationFacade.SELECTED_TREE_LEVEL ] = null;
+//			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
+//						
+//			statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = null;
+//			statesObject[ ApplicationFacade.SELECTED_TREE_ELEMENT ] = null;
+//			statesObject[ ApplicationFacade.SELECTED_TREE_LEVEL ] = null;
 			
 			facade.sendNotification( ApplicationFacade.EXPORT_BODY, body );
 		}

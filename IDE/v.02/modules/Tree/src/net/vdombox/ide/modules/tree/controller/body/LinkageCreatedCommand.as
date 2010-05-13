@@ -11,17 +11,9 @@ package net.vdombox.ide.modules.tree.controller.body
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var body : Object = notification.getBody();
-
-			var viewComponent : Linkage = body.viewComponent as Linkage;
-			var linkageVO : LinkageVO = body.linkageVO as LinkageVO;
+			var linkage : Linkage = notification.getBody() as Linkage;
 			
-			facade.registerMediator( new LinkageMediator( viewComponent ) );
-			
-			viewComponent.linkageVO = linkageVO;
-			
-
-			
+			facade.registerMediator( new LinkageMediator( linkage ) );
 		}
 	}
 }

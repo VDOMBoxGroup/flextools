@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.MenuPanelEvent;
+	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -18,6 +19,10 @@ package net.vdombox.ide.modules.tree.view
 			super( NAME, viewComponent );
 		}
 
+		private var sessionProxy : SessionProxy;
+		
+		private var isActive : Boolean;
+		
 		private var isExpand : Boolean;
 		
 		public function get menuPanel() : Panel
@@ -27,6 +32,10 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRegister() : void
 		{
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			isActive = false;
+			
 			addHandlers();
 			
 			isExpand = true;
@@ -36,6 +45,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 			removeHandlers();
 			
+			clearData();
+			
 			isExpand = true;
 		}
 
@@ -43,7 +54,8 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-//			interests.push( ApplicationFacade. );
+			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
 
 			return interests;
 		}
@@ -53,14 +65,30 @@ package net.vdombox.ide.modules.tree.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-//			switch ( name )
-//			{
-//				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
-//				{
-//					
-//					break;
-//				}
-//			}
+			if ( !isActive && name != ApplicationFacade.BODY_START )
+				return;
+			
+			switch ( name )
+			{
+				case ApplicationFacade.BODY_START:
+				{
+					if ( sessionProxy.selectedApplication )
+					{
+						isActive = true;
+						
+						break;
+					}
+				}
+					
+				case ApplicationFacade.BODY_STOP:
+				{
+					isActive = false;
+					
+					clearData();
+					
+					break;
+				}
+			}
 		}
 
 		private function addHandlers() : void
@@ -83,6 +111,10 @@ package net.vdombox.ide.modules.tree.view
 			menuPanel.removeEventListener( MenuPanelEvent.SAVE, menuPanel_saveHandler );
 		}
 
+		private function clearData() : void
+		{
+		}
+		
 		private function menuPanel_createPageHandler( event : MenuPanelEvent ) : void
 		{
 			sendNotification( ApplicationFacade.OPEN_CREATE_PAGE_WINDOW_REQUEST );

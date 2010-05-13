@@ -1,140 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:SparkSkin xmlns:components="net.vdombox.ide.modules.tree.view.components.*"
+			 xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 xmlns:mx="library://ns.adobe.com/flex/mx">
+			 creationComplete="creationCompleteHandler()">
 
 	<fx:Metadata>
 		[HostComponent("net.vdombox.ide.modules.tree.view.components.TreeElement")]
 	</fx:Metadata>
 
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.common.vo.EventVO;
+			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
+			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
+			
+			import spark.filters.GlowFilter;
+
+			private var selectionFilters : Array;
+
+			private var _treeElementVO : TreeElementVO;
+
+			private var isDataChanged : Boolean = false;
+			private var isStateChanged : Boolean = false;
+			private var isSelected : Boolean = false;
+
+			[Bindable]
+			private var isIndexPage : Boolean
+
+			protected function hideButton_clickHandler( event : MouseEvent ) : void
+			{
+				if ( currentState == "normal" || currentState == "disabled" )
+				{
+					currentState = currentState + "AndShort";
+				}
+				else
+				{
+					currentState = currentState.substr( 0, currentState.length - 8 );
+				}
+
+				isStateChanged = true;
+				invalidateProperties();
+			}
+
+			public function set treeElementVO( value : TreeElementVO ) : void
+			{
+				_treeElementVO = value;
+
+				isDataChanged = true;
+				invalidateProperties();
+			}
+
+			protected function creationCompleteHandler() : void
+			{
+				BindingUtils.bindProperty( this, "treeElementVO", hostComponent, "treeElementVO", true );
+				BindingUtils.bindSetter( selectionChanged, hostComponent, "selected", true );
+				BindingUtils.bindSetter( indexPageChanged, hostComponent, "isIndexPage", true );
+				BindingUtils.bindSetter( statePropertyChanged, hostComponent, [ "treeElementVO", "state" ], true );
+
+				var glowFilter : GlowFilter = new GlowFilter( 0xA8AAA9, 1, 6, 6, 3 );
+
+				selectionFilters = [ new GlowFilter( 0xDF341A, 1, 6, 6, 3 ) ];
+
+				typeImage.filters = [ glowFilter ];
+			}
+
+			override protected function commitProperties() : void
+			{
+				super.commitProperties();
+
+				if ( isDataChanged )
+				{
+					isDataChanged = false;
+
+					if ( _treeElementVO )
+					{
+						if ( !hostComponent.treeElementVO.state && ( currentState == "normal" || currentState == "disabled" ) )
+							currentState = currentState + "AndShort";
+						else if ( hostComponent.treeElementVO.state && ( currentState == "normalAndShort" || currentState == "disabledAndShort" ) )
+							currentState = currentState.substring( 0, currentState.length - 8 );
+					}
+				}
+
+				if ( isStateChanged )
+				{
+					isStateChanged = false;
+
+					if ( !hostComponent.treeElementVO )
+						return;
+
+					if ( currentState == "normal" || currentState == "disabled" )
+						hostComponent.treeElementVO.state = true;
+					else
+						hostComponent.treeElementVO.state = false;
+					
+					hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.STATE_CHANGED ) );
+				}
+			}
+
+			private function statePropertyChanged( value : Boolean ) : void
+			{
+				if ( !value && ( currentState == "normal" || currentState == "disabled" ) )
+					currentState = currentState + "AndShort";
+				else if ( value && ( currentState == "normalAndShort" || currentState == "disabledAndShort" ) )
+					currentState = currentState.substring( 0, currentState.length - 8 );
+
+			}
+
+			private function selectionChanged( value : Boolean ) : void
+			{
+				if ( value && !isSelected )
+				{
+					mainGroup.filters = selectionFilters;
+					isSelected = true;
+				}
+				else if ( !value && isSelected )
+				{
+					mainGroup.filters = null;
+					isSelected = false;
+				}
+			}
+			
+			private function indexPageChanged( value : Boolean ) : void
+			{
+				isIndexPage = value
+			}
+		]]>
+	</fx:Script>
+
 	<s:states>
 
-		<s:State name="normal" stateGroups="normalGroup, unselectedGroup" />
+		<s:State name="normal" stateGroups="full"/>
+		<s:State name="disabled" stateGroups="full"/>
 
-		<s:State name="normalSelected" stateGroups="normalGroup, selectedGroup" />
-
-		<s:State name="minimized" stateGroups="minimizedGroup, unselectedGroup" />
-
-		<s:State name="minimizedSelected" stateGroups="minimizedGroup, selectedGroup" />
-
-		<s:State name="disabled" stateGroups="normalGroup, unselectedGroup" />
+		<s:State name="normalAndShort" stateGroups="short"/>
+		<s:State name="disabledAndShort" stateGroups="short"/>
 	</s:states>
 
-	<s:Group id="topMask"
-			 bottom="1" left="1" right="1" top="1">
+	<!--Shadow-->
 
-		<s:Rect height="100%" width="100%"
-				radiusX="7" radiusY="7">
+	<s:RectangularDropShadow id="dropShadow"
+							 bottom="0" color="#000000" left="0" right="0"
+							 top="0"
+							 alpha="0.42" angle="45" blRadius="10" blurX="8"
+							 blurY="8" brRadius="10" distance="8" tlRadius="10"
+							 trRadius="10"/>
+	<!--Mask-->
 
+	<s:Group id="backgroundMask"
+			 bottom="0" left="0" right="0" top="0">
+
+		<s:Rect bottom="0" left="0" right="0" top="0"
+				radiusX="10" radiusY="10">
 			<s:fill>
-
-				<s:SolidColor color="0x66FF66" />
+				<s:SolidColor color="gray"
+							  alpha="0"/>
 			</s:fill>
 		</s:Rect>
+
 	</s:Group>
 
-	<s:Group height="12" x="7" y="-12">
-
-		<s:Rect height="100%" width="70">
-
-			<s:fill>
-
-				<s:BitmapFill source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='menu')" />
-			</s:fill>
-		</s:Rect>
-
-		<s:Group x="5" verticalCenter="0">
-
-			<s:layout>
-
-				<s:HorizontalLayout />
-			</s:layout>
-
-			<mx:Image id="minimizeButton"
-					  buttonMode="true" height="10"
-					  source.minimizedGroup="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='plus')"
-					  source.normalGroup="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='minus')"
-					  width="10" />
-
-			<mx:Image id="createLineButton"
-					  buttonMode="true" height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='line')"
-					  width="10" />
-
-			<mx:Image id="deleteButton"
-					  buttonMode="true" height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='delete')"
-					  width="10" />
-
-			<mx:Image id="setStartPageButton"
-					  buttonMode="true" height="10"
-					  source="@Embed(source='assets/treeEditor/treeEditor.swf', symbol='start_page')"
-					  width="10" />
-		</s:Group>
-	</s:Group>
-
-	<s:Group height="100%" width="100%"
-			 mask="{ topMask }">
+	<s:Group id="mainGroup"
+			 bottom="0" left="0" right="0" top="0"
+			 mask="{backgroundMask}">
 
 		<s:Rect bottom="0" left="0" right="0" top="0">
-
 			<s:fill>
-
-				<s:SolidColor color="white" />
+				<s:SolidColor color="0xB7B7B7"/>
 			</s:fill>
 		</s:Rect>
 
-		<s:Group id="header"
-				 height="30" width="100%">
+		<s:VGroup left="0" right="0"
+				  gap="1">
 
-			<s:Rect height="100%" width="100%">
+			<s:Group id="headerGroup"
+					 width="100%">
 
-				<s:fill>
+				<s:Rect height="25"
+						bottom="0" left="0" right="0">
+					<s:fill>
+						<s:LinearGradient rotation="90">
+							<s:GradientEntry color="{ isIndexPage ? 0xA90329 : 0x45484D }"/>
+							<s:GradientEntry color="{ isIndexPage ? 0x6E0019 : 0x000000 }"/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Rect>
 
-					<mx:LinearGradient rotation="90">
 
-						<mx:entries>
+				<s:Label id="titleLabel"
+						 text="{ hostComponent.title }"
+						 bottom="5" color="#FFFFFF" left="50" textAlign="left"
+						 maxDisplayedLines="1"/>
 
-							<mx:GradientEntry color="0xcccccc" ratio="0.0" />
+			</s:Group>
 
-							<mx:GradientEntry color="0x151515" ratio="0.7" />
+			<s:Group width="100%">
+				<s:Rect bottom="0" left="0" right="0" top="0">
+					<s:fill>
+						<mx:SolidColor color="white"/>
+					</s:fill>
+				</s:Rect>
 
-							<mx:GradientEntry color="0x151515" ratio="1" />
-						</mx:entries>
-					</mx:LinearGradient>
-				</s:fill>
-			</s:Rect>
+				<s:Group id="contentGroup"
+						 width="100%"
+						 itemCreationPolicy="immediate" includeIn="full"/>
+			</s:Group>
 
-			<s:HGroup width="100%" top="4">
 
-				<mx:Image height="25" source="{ hostComponent.typeResource.data }" width="25" />
+			<s:Group width="100%">
 
-				<s:Label text="{ hostComponent.title }" color="#FFFFFF" />
-			</s:HGroup>
-		</s:Group>
+				<s:Rect bottom="0" left="0" right="0" top="0">
+					<s:fill>
+						<s:SolidColor color="0x518000"/>
+					</s:fill>
+				</s:Rect>
 
-		<s:HGroup height="100%" width="100%"
-				  top="30"
-				  excludeFrom="minimizedGroup">
+				<s:HGroup height="17" width="100%"
+						  gap="1">
 
-			<mx:Image height="80" source="{ hostComponent.pageResource.data }" width="80" />
+					<components:ElementButton id="hideButton"
+											  height="17" icon.full="@Embed('assets/hide.png')" icon.short="@Embed('assets/show.png')" label.full="{ resourceManager.getString( 'Tree_General', 'tree_element_hide' ) }"
+											  label.short="{ resourceManager.getString( 'Tree_General', 'tree_element_show' ) }" minWidth="10" width="100%"
+											  cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
+											  click="hideButton_clickHandler( event )"/>
 
-			<s:VGroup height="100%" width="100%">
+					<components:ElementButton height="17" icon="@Embed('assets/arrow.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_create_linkage' ) }" minWidth="10"
+											  width="100%"
+											  cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"
+											  click="hostComponent.dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE ) )"/>
 
-				<s:RichText height="47" text="{ hostComponent.description }" width="100%" />
-
-				<s:Label text="{ hostComponent.typeName }" width="100%" />
-			</s:VGroup>
-		</s:HGroup>
+					<components:ElementButton id="deleteButton"
+											  height="17" icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Tree_General', 'tree_element_delete' ) }" minWidth="10"
+											  width="100%"
+											  cornerRadius="0" skinClass="net.vdombox.ide.modules.tree.view.skins.ElementButtonSkin"/>
+				</s:HGroup>
+			</s:Group>
+		</s:VGroup>
 	</s:Group>
 
-	<s:Rect height="100%" width="100%"
-			radiusX="7" radiusY="7">
-
-		<s:stroke>
-
-			<s:SolidColorStroke color.selectedGroup="white" color.unselectedGroup="gray"
-								weight="2" />
-		</s:stroke>
-	</s:Rect>
+	<components:SmoothImage id="typeImage"
+							height.full="35" height.short="25" source="{ hostComponent.typeResource.data }" width.full="35"
+							width.short="25" x="7" y.full="-7" y.short="-3"/>
 </s:SparkSkin>

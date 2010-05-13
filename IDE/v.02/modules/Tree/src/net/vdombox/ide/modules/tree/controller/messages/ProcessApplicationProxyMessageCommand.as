@@ -35,7 +35,7 @@ package net.vdombox.ide.modules.tree.controller.messages
 					if ( operation == PPMOperationNames.READ )
 						sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, body.structure );
 					else if ( operation == PPMOperationNames.UPDATE )
-						sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED, body.structure );
+						sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED );
 					
 					break;
 				}
@@ -53,6 +53,14 @@ package net.vdombox.ide.modules.tree.controller.messages
 						sendNotification( ApplicationFacade.PAGE_CREATED, body );
 					else if ( operation == PPMOperationNames.DELETE )
 						sendNotification( ApplicationFacade.PAGE_DELETED, body );
+					
+					break;
+				}
+					
+				case PPMApplicationTargetNames.INFORMATION:
+				{
+					if ( operation == PPMOperationNames.UPDATE )
+						sendNotification( ApplicationFacade.APPLICATION_INFORMATION_SETTED, body );
 					
 					break;
 				}

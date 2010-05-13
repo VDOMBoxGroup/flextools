@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SkinnableComponent xmlns:fx="http://ns.adobe.com/mxml/2009"
-					  xmlns:s="library://ns.adobe.com/flex/spark"
+<s:SkinnableContainer xmlns:components="net.vdombox.ide.modules.tree.view.components.*"
+					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
-					  
-					  height="125" width="200" x="@{ _treeElementVO.left }" y="@{ _treeElementVO.top }"
-					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin">
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  width="200" x="@{ _treeElementVO.left }" y="@{ _treeElementVO.top }"
+					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin"
+					  creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.controls.Image;
-
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TreeElementSkin;
-
+			
 			import spark.components.Group;
+			import spark.filters.DropShadowFilter;
 
 			[SkinPart( required="true" )]
-			public var minimizeButton : Image;
+			public var headerGroup : Group;
 
 			[SkinPart( required="true" )]
-			public var createLineButton : Image;
-
+			public var typeImage : SmoothImage;
+			
 			[SkinPart( required="true" )]
-			public var deleteButton : Image;
-
-			[SkinPart( required="true" )]
-			public var setStartPageButton : Image;
-
-			[SkinPart( required="true" )]
-			public var header : Group;
+			public var deleteButton : ElementButton;
 
 			[Bindable]
 			private var _typeResource : ResourceVO;
@@ -45,22 +42,20 @@
 
 			private var _title : String;
 
+			[Bindable]
 			private var _description : String;
 
+			[Bindable]
 			private var _typeName : String;
 
+			[Bindable]
+			public var isIndexPage : Boolean;
+			
 			private var _selected : Boolean;
 
 			private var mouseOffcetX : int;
 
 			private var mouseOffcetY : int;
-
-			private var widthWatcher : ChangeWatcher;
-
-			private var heightWatcher : ChangeWatcher;
-
-			private var stateWatcher : ChangeWatcher;
-
 
 			[Bindable]
 			public function get typeResource() : ResourceVO
@@ -71,17 +66,6 @@
 			public function set typeResource( value : ResourceVO ) : void
 			{
 				_typeResource = value;
-			}
-
-			[Bindable]
-			public function get pageResource() : ResourceVO
-			{
-				return _pageResource;
-			}
-
-			public function set pageResource( value : ResourceVO ) : void
-			{
-				_pageResource = value;
 			}
 
 			[Bindable]
@@ -125,109 +109,70 @@
 			public function set treeElementVO( value : TreeElementVO ) : void
 			{
 				_treeElementVO = value;
+				
+				if( _treeElementVO && _treeElementVO.pageVO && _treeElementVO.pageVO.id == _treeElementVO.pageVO.applicationVO.indexPageID )
+					isIndexPage = true;
+				else
+					isIndexPage = false;
+			}
 
-				widthWatcher = BindingUtils.bindProperty( _treeElementVO, "width", this, "width", false, true );
-
-				heightWatcher = BindingUtils.bindProperty( _treeElementVO, "height", this, "height", false, true );
-
-				stateWatcher = BindingUtils.bindSetter( statePropertyChanged, _treeElementVO, "state", false, true );
+			[Bindable]
+			public function get selected() : Boolean
+			{
+				return _selected;
 			}
 
 			public function set selected( value : Boolean ) : void
 			{
 				if ( _selected != value )
-				{
 					_selected = value;
-					callLater( invalidateSkinState );
-				}
-			}
-
-			override protected function getCurrentSkinState() : String
-			{
-				var skinStateName : String;
-
-				if ( !_treeElementVO )
-					return skin.currentState;
-
-				if ( _treeElementVO.state )
-				{
-					if ( _selected )
-						skinStateName = "normalSelected";
-					else
-						skinStateName = "normal";
-
-					height = 125;
-				}
-				else
-				{
-					if ( _selected )
-						skinStateName = "minimizedSelected";
-					else
-						skinStateName = "minimized";
-
-					height = 30;
-				}
-
-				return skinStateName;
-			}
-
-			override protected function attachSkin() : void
-			{
-				super.attachSkin();
-
-				skin.addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
 			}
 
 			override protected function partAdded( partName : String, instance : Object ) : void
 			{
-				switch ( partName )
-				{
-					case "header":
-					{
-						header.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
-						break;
-					}
+				super.partAdded( partName, instance );
 
-					case "minimizeButton":
-					{
-						minimizeButton.addEventListener( MouseEvent.CLICK, minimizeButton_clickHandler, true, 0, true );
-						break;
-					}
+				if ( instance == headerGroup )
+					headerGroup.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
 
-					case "createLineButton":
-					{
-						createLineButton.addEventListener( MouseEvent.CLICK, createLineButton_clickHandler, false, 0, true );
-						break;
-					}
-
-					case "deleteButton":
-					{
-						deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
-						break;
-					}
-
-					case "setStartPageButton":
-					{
-						setStartPageButton.addEventListener( MouseEvent.CLICK, setStartPageButton_clickHandler, false, 0, true );
-						break;
-					}
-				}
+				if ( instance == typeImage )
+					typeImage.addEventListener( MouseEvent.MOUSE_DOWN, header_mouseDownHandler, false, 0, true );
+				
+				if ( instance == deleteButton )
+					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
 			}
 
-			private function statePropertyChanged( object : Object ) : void
+			private function sizeChanged( value : Object ) : void
 			{
-				callLater( invalidateSkinState );
+				if( _treeElementVO )
+				{
+					_treeElementVO.width = width;
+					_treeElementVO.height = height;
+				}
+					
+			}
+			
+			private function creationCompleteHandler() : void
+			{
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATED ) );
+
+				BindingUtils.bindSetter( sizeChanged, this, "width" );
+				BindingUtils.bindSetter( sizeChanged, this, "height" );
+				
+				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			}
 
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new TreeElementEvent( TreeElementEvent.ELEMENT_SELECTION ) );
+				if( deleteButton !== event.target )
+					dispatchEvent( new TreeElementEvent( TreeElementEvent.SELECTION ) );
 			}
 
 			private function header_mouseDownHandler( event : MouseEvent ) : void
 			{
 				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
+				stage.addEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
 
 				mouseOffcetX = mouseX;
 				mouseOffcetY = mouseY;
@@ -249,33 +194,64 @@
 					y = newY;
 			}
 
+			private function stage_mouseMoveHandlerExt( event : MouseEvent ) : void
+			{
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.MOVED ) );
+				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandlerExt );
+			}
+			
 			private function stage_mouseUpHandler( event : MouseEvent ) : void
 			{
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler );
 				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
 
-			private function minimizeButton_clickHandler( event : MouseEvent ) : void
-			{
-				_treeElementVO.state = !_treeElementVO.state;
-
-				callLater( invalidateSkinState );
-			}
-
-			private function createLineButton_clickHandler( event : MouseEvent ) : void
-			{
-				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
-			}
-
-			private function deleteButton_clickHandler( event : MouseEvent ) : void
-			{
-				dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE_REQUEST ) );
-			}
-
 			private function setStartPageButton_clickHandler( event : MouseEvent ) : void
 			{
-				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
+//				dispatchEvent( new TreeElementEvent( TreeElementEvent.CREATE_LINKAGE_REQUEST ) );
+			}
+			
+			private function deleteButton_clickHandler( event : MouseEvent ) :void
+			{
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.DELETE ) );
 			}
 		]]>
 	</fx:Script>
-</s:SkinnableComponent>
+
+	<s:layout>
+
+		<s:VerticalLayout gap="1"/>
+	</s:layout>
+
+	<s:Group height="80" width="100%">
+
+		<components:SmoothImage height="55" source="{ _treeElementVO.resourceVO.data }" width="55"
+								left="5" top="5"/>
+
+		<s:Rect bottom="19" left="64" right="4" top="4"
+				filters="{[ new DropShadowFilter(4, 45, 0xC7C7C7, 1,4,4,1,1,true,false) ]}">
+			<s:stroke>
+				<s:SolidColorStroke color="0xC7C7C7"
+									weight="2"/>
+			</s:stroke>
+			<s:fill>
+				<s:SolidColor color="white"/>
+			</s:fill>
+		</s:Rect>
+
+		<s:Scroller bottom="20" left="65" right="5" top="5">
+			<s:Group>
+				<s:RichText text="{ _description }" width="100%"
+							color="0x474747" paddingBottom="3" paddingLeft="3" paddingRight="3"
+							paddingTop="3"/>
+			</s:Group>
+		</s:Scroller>
+
+		<s:Label text="{_typeName.toUpperCase()}"
+				 bottom="3" color="0xC7C7C7" left="75" right="5"
+				 textAlign="right"
+				 maxDisplayedLines="1"/>
+
+	</s:Group>
+
+</s:SkinnableContainer>

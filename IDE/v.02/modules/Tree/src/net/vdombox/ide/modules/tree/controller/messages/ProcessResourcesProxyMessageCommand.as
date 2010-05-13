@@ -1,11 +1,12 @@
 package net.vdombox.ide.modules.tree.controller.messages
 {
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -27,6 +28,20 @@ package net.vdombox.ide.modules.tree.controller.messages
 			{
 				case PPMResourcesTargetNames.RESOURCE:
 				{
+					if ( operation == PPMOperationNames.UPDATE )
+					{
+//						sendNotification( ApplicationFacade.re, body );
+					}
+					
+					break;
+				}
+					
+				case PPMResourcesTargetNames.RESOURCES:
+				{
+					if ( operation == PPMOperationNames.READ )
+					{
+						sendNotification( ApplicationFacade.RESOURCES_GETTED, body );
+					}
 					
 					break;
 				}

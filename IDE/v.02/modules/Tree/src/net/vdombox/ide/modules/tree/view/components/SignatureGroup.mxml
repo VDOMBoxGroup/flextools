@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:components="net.vdombox.ide.modules.tree.view.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 height="27" width="27">
+
+	<fx:Script>
+		<![CDATA[
+			import spark.filters.DropShadowFilter;
+			[Bindable]
+			public var color : uint;
+
+			[Bindable]
+			public var number : uint;
+		]]>
+	</fx:Script>
+
+	<s:Ellipse bottom="0" left="0" right="0" top="0">
+		<s:fill>
+			<mx:SolidColor color="{ color }"/>
+		</s:fill>
+	</s:Ellipse>
+
+	<s:Label text="{ number }"
+			 color="#FFFFFF" fontFamily="Verdana" fontSize="10" fontWeight="bold"
+			 left="0" right="0" textAlign="center" verticalAlign="middle"
+			 verticalCenter="0"
+			 filters="{[new DropShadowFilter(0, 45, 0, 1, 3, 3, 2)]}"/>
+</s:Group>

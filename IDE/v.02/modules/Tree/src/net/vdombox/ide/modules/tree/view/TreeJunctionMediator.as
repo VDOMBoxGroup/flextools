@@ -65,11 +65,16 @@ package net.vdombox.ide.modules.tree.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
-			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
+			interests.push( ApplicationFacade.GET_ALL_STATES );
+			interests.push( ApplicationFacade.SET_ALL_STATES );
 
+			interests.push( ApplicationFacade.GET_RESOURCES );
+			interests.push( ApplicationFacade.LOAD_RESOURCE );
+			
 			interests.push( ApplicationFacade.GET_APPLICATION_STRUCTURE );
 			interests.push( ApplicationFacade.SET_APPLICATION_STRUCTURE );
+			
+			interests.push( ApplicationFacade.SET_APPLICATION_INFORMATION );
 			
 			interests.push( ApplicationFacade.GET_PAGES );
 
@@ -177,6 +182,24 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
+				case ApplicationFacade.GET_ALL_STATES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_ALL_STATES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.OPEN_WINDOW:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.OPEN_WINDOW, body, multitonKey );
@@ -185,7 +208,7 @@ package net.vdombox.ide.modules.tree.view
 
 					break;
 				}
-
+					
 				case ApplicationFacade.CLOSE_WINDOW:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.CLOSE_WINDOW, body, multitonKey );
@@ -195,24 +218,24 @@ package net.vdombox.ide.modules.tree.view
 					break;
 				}
 
-				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				case ApplicationFacade.GET_RESOURCES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
-
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCES, body );
+					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
+					
 					break;
 				}
-
-				case ApplicationFacade.GET_SELECTED_PAGE:
+					
+				case ApplicationFacade.LOAD_RESOURCE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE );
-
+					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
+					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
+					
 					break;
 				}
-
+					
 				case ApplicationFacade.GET_APPLICATION_STRUCTURE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.STRUCTURE, body );
@@ -225,6 +248,15 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.SET_APPLICATION_STRUCTURE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.STRUCTURE, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_APPLICATION_INFORMATION:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.INFORMATION, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					

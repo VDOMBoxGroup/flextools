@@ -11,12 +11,9 @@ package net.vdombox.ide.modules.tree.controller.body
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var body : Object = notification.getBody();
+			var treeElement : TreeElement = notification.getBody() as TreeElement;
 			
-			var viewComponent : TreeElement = body.viewComponent as TreeElement;
-			var treeElementVO : TreeElementVO = body.treeElementVO as TreeElementVO;
-			
-			facade.registerMediator( new TreeElementMediator( viewComponent, treeElementVO ) );
+			facade.registerMediator( new TreeElementMediator( treeElement ) );
 		}
 	}
 }

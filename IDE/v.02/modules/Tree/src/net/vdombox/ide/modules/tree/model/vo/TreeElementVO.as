@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.tree.model.vo
 {
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.ResourceVO;
 
 	[Bindable]
 	public class TreeElementVO
@@ -11,9 +12,10 @@ package net.vdombox.ide.modules.tree.model.vo
 
 			top = 0;
 			left = 0;
-
+			
+			resourceVO = null;
+			
 			state = false;
-			resourceID = "";
 		}
 
 		public var top : int;
@@ -26,7 +28,7 @@ package net.vdombox.ide.modules.tree.model.vo
 
 		public var state : Boolean;
 
-		public var resourceID : String;
+		public var resourceVO : ResourceVO;
 
 		private var _pageVO : PageVO;
 

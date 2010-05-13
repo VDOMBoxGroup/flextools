@@ -1,5 +1,6 @@
 package net.vdombox.ide.modules.tree.view
 {
+	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -7,6 +8,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
+	import net.vdombox.ide.modules.tree.model.SessionProxy;
 	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	
@@ -18,16 +20,12 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "TreeElementMediator";
 
-		public function TreeElementMediator( viewComponent : Object, treeElementVO : TreeElementVO )
+		public function TreeElementMediator( treeElement : TreeElement )
 		{
-			super( NAME + ApplicationFacade.DELIMITER + treeElementVO.id, viewComponent );
-
-			_treeElementVO = treeElementVO;
+			super( NAME + ApplicationFacade.DELIMITER + treeElement.treeElementVO.id, treeElement );
 		}
 
-		private var _pageVO : PageVO;
-
-		private var _treeElementVO : TreeElementVO;
+		private var sessionProxy : SessionProxy;
 
 		private var _pageAttributesVO : PageAttributesVO;
 
@@ -35,7 +33,7 @@ package net.vdombox.ide.modules.tree.view
 
 		public function get treeElementVO() : TreeElementVO
 		{
-			return _treeElementVO;
+			return treeElement ? treeElement.treeElementVO : null;
 		}
 
 		public function get treeElement() : TreeElement
@@ -46,24 +44,20 @@ package net.vdombox.ide.modules.tree.view
 		public function set pageAttributesVO( value : PageAttributesVO ) : void
 		{
 			_pageAttributesVO = value;
-			
+
 			treeElement.description = getAttributeValue( "description" );
 			treeElement.title = getAttributeValue( "title" );
 		}
-		
+
 		override public function onRegister() : void
 		{
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+
 			addHandlers();
 
-			treeElement.treeElementVO = _treeElementVO;
-
-			if ( treeElementVO.resourceID )
+			if ( treeElementVO && treeElementVO.resourceVO && !treeElementVO.resourceVO.data )
 			{
-				var resourceVO : ResourceVO = new ResourceVO( treeElementVO.pageVO.applicationVO.id );
-				resourceVO.setID( treeElementVO.resourceID );
-				treeElement.pageResource = resourceVO;
-
-				sendNotification( ApplicationFacade.GET_RESOURCE, resourceVO );
+				sendNotification( ApplicationFacade.LOAD_RESOURCE, treeElementVO.resourceVO );
 			}
 
 			sendNotification( ApplicationFacade.GET_TYPE, { typeID: treeElementVO.pageVO.typeVO.id, recipientID: mediatorName } );
@@ -79,10 +73,17 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+
+			interests.push( ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS );
+			interests.push( ApplicationFacade.COLLAPSE_ALL_TREE_ELEMENTS );
+
 			interests.push( ApplicationFacade.TYPE_GETTED + ApplicationFacade.DELIMITER + mediatorName );
+
 			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName );
-			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName );
+			interests.push( ApplicationFacade.PAGE_ATTRIBUTES_SETTED );
+			
+			interests.push( ApplicationFacade.APPLICATION_INFORMATION_SETTED );
 
 			return interests;
 		}
@@ -111,31 +112,71 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
 					pageAttributesVO = body as PageAttributesVO;
+
+					break;
+				}
+
+				case ApplicationFacade.PAGE_ATTRIBUTES_SETTED:
+				{
+					var newPageAttributesVO : PageAttributesVO = body as PageAttributesVO;
+					
+					if( newPageAttributesVO && newPageAttributesVO.pageVO.id == treeElementVO.pageVO.id )
+						pageAttributesVO = newPageAttributesVO;
 					
 					break;
 				}
-					
-				case ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGED:
+
+				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					if ( body == treeElementVO )
+					if ( sessionProxy.selectedPage == treeElementVO.pageVO )
 						treeElement.selected = true;
 					else
 						treeElement.selected = false;
+
+					break;
+				}
+
+				case ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS:
+				{
+					if ( treeElementVO && !treeElementVO.state )
+						treeElementVO.state = true;
+
+					break;
+				}
+
+				case ApplicationFacade.COLLAPSE_ALL_TREE_ELEMENTS:
+				{
+					if ( treeElementVO && treeElementVO.state )
+						treeElementVO.state = false;
+
+					break;
+				}
+					
+				case ApplicationFacade.APPLICATION_INFORMATION_SETTED:
+				{
+					var applicationVO : ApplicationVO = body as ApplicationVO;
+					
+					if( applicationVO && treeElementVO && treeElementVO.pageVO.id == applicationVO.indexPageID )
+						treeElement.isIndexPage = true;
+					else
+						treeElement.isIndexPage = false;
+					
+					break;
 				}
 			}
 		}
 
 		private function addHandlers() : void
 		{
-			treeElement.addEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler, false, 0, true );
-			treeElement.addEventListener( TreeElementEvent.DELETE_REQUEST, deleteRequestHandler, false, 0, true );
-			treeElement.addEventListener( TreeElementEvent.CREATE_LINKAGE_REQUEST, createLinkageRequestHandler, false, 0, true );
+			treeElement.addEventListener( TreeElementEvent.SELECTION, elementSelectionHandler, false, 0, true );
+			treeElement.addEventListener( TreeElementEvent.DELETE, deleteRequestHandler, false, 0, true );
+//			treeElement.addEventListener( TreeElementEvent.CREATE_LINKAGE_REQUEST, createLinkageRequestHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
-			treeElement.removeEventListener( TreeElementEvent.ELEMENT_SELECTION, elementSelectionHandler );
-			treeElement.removeEventListener( TreeElementEvent.DELETE_REQUEST, deleteRequestHandler );
+			treeElement.removeEventListener( TreeElementEvent.SELECTION, elementSelectionHandler );
+			treeElement.removeEventListener( TreeElementEvent.DELETE, deleteRequestHandler );
 		}
 
 		private function getAttributeValue( attributeName : String ) : String
@@ -156,17 +197,20 @@ package net.vdombox.ide.modules.tree.view
 
 		private function elementSelectionHandler( event : TreeElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.TREE_ELEMENT_SELECTION, treeElementVO );
+			if ( treeElementVO && treeElementVO.pageVO && sessionProxy.selectedPage != treeElementVO.pageVO )
+			{
+				sendNotification( ApplicationFacade.SELECTED_TREE_ELEMENT_CHANGE_REQUEST, treeElementVO );
+			}
 		}
-		
+
 		private function deleteRequestHandler( event : TreeElementEvent ) : void
 		{
 			sendNotification( ApplicationFacade.DELETE_PAGE_REQUEST, treeElementVO.pageVO );
 		}
-		
+
 		private function createLinkageRequestHandler( event : TreeElementEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CREATE_LINKAGE_REQUEST, treeElementVO );
+//			sendNotification( ApplicationFacade.CREATE_LINKAGE_REQUEST, treeElementVO );
 		}
 	}
 }
