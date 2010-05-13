@@ -90,7 +90,6 @@ package net.vdombox.ide.modules.events
 		public static const SELECTED_OBJECT_GETTED : String = "selectedObjectGetted";
 		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
 		
-		
 		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
 		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
 		public static const SELECTED_OBJECT_SETTED : String = "selectedObjectSetted";
@@ -111,7 +110,6 @@ package net.vdombox.ide.modules.events
 
 //		other
 		public static const DELIMITER : String = "/";
-		public static const STATES : String = "states";
 
 		public static const BODY_CREATED : String = "bodyCreated";
 		public static const BODY_START : String = "bodyStart";

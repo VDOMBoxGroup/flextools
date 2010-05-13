@@ -35,6 +35,7 @@ package net.vdombox.ide.modules.events.view.components
 			addEventListener( ElementEvent.DELETE, element_deleteHandler, true, 0, true );
 			addEventListener( ElementEvent.MOVED, element_movedHandler, true, 0, true );
 			addEventListener( ElementEvent.STATE_CHANGED, element_stateChangedHandler, true, 0, true );
+			addEventListener( ElementEvent.DELETE_LINKAGE, linkage_deleteLinkageHandler, true, 0, true );
 		}
 
 		[SkinPart]
@@ -618,6 +619,45 @@ package net.vdombox.ide.modules.events.view.components
 		private function element_stateChangedHandler( event : ElementEvent ) : void
 		{
 			skin.currentState = "unsaved";
+		}
+		
+		private function linkage_deleteLinkageHandler( event : ElementEvent ) : void
+		{
+			var linkage : Linkage = event.target as Linkage;
+			
+			if( !linkage )
+				return;
+			
+			var eventObject : Object;
+			var actions : Array;
+			
+			for each ( eventObject in applicationEventsVO.events )
+			{
+				if( eventObject.eventVO == linkage.source.data )
+				{
+					actions = eventObject.actions as Array;
+					break;
+				}
+			}
+			
+			if( !actions || actions.length == 0 )
+				return;
+			
+			var i : uint;
+			
+			for ( i = 0; i < actions.length; i++ )
+			{
+				if( actions[ i ] == linkage.target.data )
+				{
+					actions.splice( i, 1 );
+					break;
+				}
+			}
+		
+			skin.currentState = "unsaved";
+			
+			if( linkage.parent == linkagesLayer )
+				linkagesLayer.removeElement( linkage );
 		}
 
 	}

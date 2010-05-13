@@ -4,7 +4,7 @@ package net.vdombox.ide.modules.events.model
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -15,7 +15,6 @@ package net.vdombox.ide.modules.events.model
 		public static const SELECTED_APPLICATION : String = "selectedApplication";
 		public static const SELECTED_PAGE : String = "selectedPage";
 		public static const SELECTED_OBJECT : String = "selectedObject";
-		public static const NEED_FOR_UPDATE : String = "needForUpdate";
 
 		public function SessionProxy()
 		{
@@ -35,7 +34,7 @@ package net.vdombox.ide.modules.events.model
 
 		override public function onRemove() : void
 		{
-			data = null;
+			data = {};
 		}
 
 		public function get selectedApplication() : ApplicationVO
@@ -62,7 +61,7 @@ package net.vdombox.ide.modules.events.model
 		{
 			return data[ SELECTED_PAGE ];
 		}
-		
+
 		public function set selectedPage( value : PageVO ) : void
 		{
 			if ( data[ SELECTED_PAGE ] == value )
@@ -99,19 +98,26 @@ package net.vdombox.ide.modules.events.model
 
 		public function setStates( states : Object ) : void
 		{
-			if ( states.selectedApplication && states.selectedApplication != data[ SELECTED_APPLICATION ] )
+			var selectedApplicationVO : ApplicationVO = states.selectedApplication as ApplicationVO;
+			var selectedPageVO : PageVO = states.selectedPage as PageVO;
+			var selectedObjectVO : ObjectVO = states.selectedObject as ObjectVO;
+
+			if ( ( selectedApplicationVO && data[ SELECTED_APPLICATION ] && selectedApplicationVO.id != data[ SELECTED_APPLICATION ].id ) ||
+				selectedApplicationVO != data[ SELECTED_APPLICATION ] )
 			{
 				data[ SELECTED_APPLICATION ] = states.selectedApplication;
 				isSelectedApplicationChanged = true;
 			}
 
-			if ( states.selectedPage && states.selectedPage != data[ SELECTED_PAGE ] )
+			if ( ( selectedPageVO && data[ SELECTED_PAGE ] && selectedPageVO.id != data[ SELECTED_PAGE ].id ) ||
+				selectedPageVO != data[ SELECTED_PAGE ] )
 			{
 				data[ SELECTED_PAGE ] = states.selectedPage;
 				isSelectedPageChanged = true;
 			}
 
-			if ( states.selectedObject && states.selectedObject != data[ SELECTED_OBJECT ] )
+			if ( ( selectedObjectVO && data[ SELECTED_OBJECT ] && selectedObjectVO.id != data[ SELECTED_OBJECT ].id ) ||
+				selectedObjectVO != data[ SELECTED_OBJECT ] )
 			{
 				data[ SELECTED_OBJECT ] = states.selectedObject;
 				isSelectedObjectChanged = true;
@@ -119,7 +125,7 @@ package net.vdombox.ide.modules.events.model
 
 			sendNotifications();
 		}
-
+		
 		public function getObject( objectID : String ) : Object
 		{
 			if ( !data.hasOwnProperty( objectID ) )
@@ -128,6 +134,11 @@ package net.vdombox.ide.modules.events.model
 			return data[ objectID ];
 		}
 
+		public function cleanup() : void
+		{
+			data = {};
+		}
+		
 		private function sendNotifications() : void
 		{
 			if ( isSelectedApplicationChanged )

@@ -4,18 +4,38 @@ package net.vdombox.ide.modules.events.view.components
 	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
+
 	import mx.binding.utils.BindingUtils;
-	
+	import mx.controls.Image;
+	import mx.core.BitmapAsset;
+	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
+
+	import net.vdombox.ide.modules.events.events.ElementEvent;
+
 	import spark.components.Group;
 
-	public class Linkage extends Group
+	public class Linkage extends UIComponent
 	{
 		public function Linkage()
 		{
 			watchers = {};
+
+			useHandCursor = true;
+			buttonMode = true;
+
+			linkageColor = BASE_COLOR;
+
+			addEventListener( MouseEvent.CLICK, clickHandler, false, 0, true );
 		}
+
+		[Embed( source="assets/delete_linkage.png" )]
+		private var deleteLinkageClass : Class;
+
+		private const BASE_COLOR : uint = 0x2FDD00;
+		private const DELETE_COLOR : uint = 0xFF0000;
 
 		private const RTL : Number = 0;
 		private const LTR : Number = 1;
@@ -40,6 +60,10 @@ package net.vdombox.ide.modules.events.view.components
 		private var targetChanged : Boolean;
 
 		private var watchers : Object;
+
+		private var linkageColor : uint;
+
+		private var deleteImage : Image;
 
 		public function get source() : EventElement
 		{
@@ -68,6 +92,18 @@ package net.vdombox.ide.modules.events.view.components
 				_target = value;
 				targetChanged = true;
 				invalidateProperties();
+			}
+		}
+
+		override protected function createChildren() : void
+		{
+			if ( !deleteImage )
+			{
+				deleteImage = new Image();
+				deleteImage.width = 26;
+				deleteImage.height = 26;
+				deleteImage.source = deleteLinkageClass;
+				deleteImage.addEventListener( MouseEvent.CLICK, deleteImage_clickHandler, false, 0, true );
 			}
 		}
 
@@ -291,8 +327,6 @@ package net.vdombox.ide.modules.events.view.components
 			var dX : Number;
 			var dY : Number;
 
-			var _numColor : Number = 0x2FDD00;
-
 			dX = startPoint.x - endPoint.x;
 			dY = startPoint.y - endPoint.y;
 
@@ -301,16 +335,16 @@ package net.vdombox.ide.modules.events.view.components
 			if ( dX < 0 )
 				alphaAngle += Math.PI;
 
-			graphics.lineStyle( 3, _numColor, 1, true, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.BEVEL );
+			graphics.lineStyle( 3, linkageColor, 1, true, LineScaleMode.NONE, CapsStyle.NONE, JointStyle.BEVEL );
 
 			graphics.moveTo( startPoint.x, startPoint.y );
 			graphics.lineTo( endPoint.x, endPoint.y );
 
 			graphics.lineTo( endPoint.x + Math.cos( alphaAngle + arrowHeadAngle ) * arrowHeadLength,
-													endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
+				endPoint.y + Math.sin( alphaAngle + arrowHeadAngle ) * arrowHeadLength );
 
 			graphics.lineTo( endPoint.x + Math.cos( alphaAngle - arrowHeadAngle ) * arrowHeadLength,
-													endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
+				endPoint.y + Math.sin( alphaAngle - arrowHeadAngle ) * arrowHeadLength );
 
 			graphics.lineTo( endPoint.x, endPoint.y );
 		}
@@ -323,6 +357,44 @@ package net.vdombox.ide.modules.events.view.components
 				calculatePositionAndSize();
 				drawArrow();
 			}
+		}
+
+		private function clickHandler( event : MouseEvent ) : void
+		{
+			if ( !stage )
+				return;
+
+			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
+
+			linkageColor = DELETE_COLOR;
+			drawArrow();
+
+			var buttonX : int = event.localX - deleteImage.width / 2;
+			var buttonY : int = event.localY - deleteImage.height / 2;
+
+			deleteImage.x = buttonX;
+			deleteImage.y = buttonY;
+
+			addChild( deleteImage );
+		}
+
+		private function stage_mouseDownHandler( event : MouseEvent ) : void
+		{
+			if ( stage && event.target != this && event.target != deleteImage )
+			{
+				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
+				linkageColor = BASE_COLOR;
+
+				if ( deleteImage.parent == this )
+					removeChild( deleteImage );
+
+				drawArrow();
+			}
+		}
+
+		private function deleteImage_clickHandler( event : MouseEvent ) : void
+		{
+			dispatchEvent( new ElementEvent( ElementEvent.DELETE_LINKAGE ) );
 		}
 	}
 }
