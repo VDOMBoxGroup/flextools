@@ -2,15 +2,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.FlexEvent;
 	
-	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.skins.spark.PanelSkin;
 
 	public class BodyMediator extends Mediator implements IMediator
 	{
@@ -20,11 +17,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			super( NAME, viewComponent );
 		}
-		
-		public var selectedApplication : ApplicationVO;
 
-		private var created : Boolean = false;
+		private var isBodyStarted : Boolean;
+
+		private var isAllStatesGetted : Boolean;
 		
+		private var isTypesChanged : Boolean;
+
 		public function get body() : Body
 		{
 			return viewComponent as Body;
@@ -32,41 +31,77 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		override public function onRegister() : void
 		{
+			isBodyStarted = false;
+
+			isAllStatesGetted = false;
+			
+			isTypesChanged = false;
+
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
+			isBodyStarted = false;
+
+			isAllStatesGetted = false;
+			
+			isTypesChanged = false;
+			
 			removeHandlers();
 		}
-		
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
-			interests.push( ApplicationFacade.PIPES_READY );
+			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			interests.push( ApplicationFacade.TYPES_CHANGED );
 
-			return interests;	
+			interests.push( ApplicationFacade.PIPES_READY );
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
+
+			return interests;
 		}
 
 		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( notification.getName())
+			switch ( notification.getName() )
 			{
-				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+				case ApplicationFacade.PIPES_READY:
 				{
-					selectedApplication = notification.getBody() as ApplicationVO;
-					sendNotification( ApplicationFacade.GET_PAGES, notification.getBody());
-					
+					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					sendNotification( ApplicationFacade.GET_TYPES );
+
+					break;
+				}
+
+				case ApplicationFacade.ALL_STATES_GETTED:
+				{
+					isAllStatesGetted = true;
+
+					checkConditions();
+
 					break;
 				}
 					
-				case ApplicationFacade.PIPES_READY:
+				case ApplicationFacade.TYPES_CHANGED:
 				{
-					if( created ) 
-						sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+					isTypesChanged = true;
 					
+					checkConditions();
+					
+					break;
+				}
+
+				case ApplicationFacade.MODULE_DESELECTED:
+				{
+					isAllStatesGetted = false;
+
+					sendNotification( ApplicationFacade.BODY_STOP );
+
+					isBodyStarted = false;
+
 					break;
 				}
 			}
@@ -76,21 +111,26 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
-		
+
 		private function removeHandlers() : void
 		{
 			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 		}
 
-		private function commitProperties() : void
-		{
-
-		}
-
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			created = true;
 			sendNotification( ApplicationFacade.BODY_CREATED, body );
+
+			checkConditions();
+		}
+
+		private function checkConditions() : void
+		{
+			if ( isAllStatesGetted && isTypesChanged && body.initialized && !isBodyStarted )
+			{
+				isBodyStarted = true;
+				sendNotification( ApplicationFacade.BODY_START );
+			}
 		}
 	}
 }

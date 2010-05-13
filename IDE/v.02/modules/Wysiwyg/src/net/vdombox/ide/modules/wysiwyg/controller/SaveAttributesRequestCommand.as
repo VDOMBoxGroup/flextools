@@ -16,7 +16,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var needForUpdateObject : Object = sessionProxy.getObject( SessionProxy.NEED_FOR_UPDATE );
+			var needForUpdateObject : Object = sessionProxy.needForUpdate;
 
 			var attributesVO : Object = notification.getBody();
 

@@ -2,9 +2,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 {
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -74,6 +75,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		private function createAttributes( itemVO : ItemVO, rawRenderData : XML ) : void
 		{
+			var typeVO : TypeVO;
+
 			itemVO.name = rawRenderData.name();
 
 			itemVO.visible = rawRenderData.@visible == 1 ? true : false;
@@ -82,7 +85,12 @@ package net.vdombox.ide.modules.wysiwyg.model
 			itemVO.hierarchy = uint( rawRenderData.@hierarchy );
 			itemVO.order = uint( rawRenderData.@order );
 
-			itemVO.typeVO = typesProxy.getTypeVObyID( rawRenderData.@typeID );
+			typeVO = typesProxy.getTypeVObyID( rawRenderData.@typeID );
+
+			if ( typeVO )
+				itemVO.typeVO = typeVO;
+			else
+				var d : * = "";
 
 			itemVO.staticFlag = rawRenderData.@contents == "static" ? true : false;
 
@@ -121,6 +129,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 				if ( childName == "container" || childName == "table" || childName == "row" || childName == "cell" )
 				{
+					if ( !childID )
+						continue;
+
 					childItemVO = new ItemVO( childID );
 					childItemVO.pageVO = itemVO.pageVO;
 
@@ -138,17 +149,17 @@ package net.vdombox.ide.modules.wysiwyg.model
 					itemVO.content += child.copy();
 				}
 			}
-			
-			if( itemVO.content.length() > 0 )
+
+			if ( itemVO.content.length() > 0 )
 			{
 				var editableAttribute : XML;
-				
+
 				editableAttribute = itemVO.content.@ediatable[ 0 ];
-				
-				if( !editableAttribute )
+
+				if ( !editableAttribute )
 					editableAttribute = itemVO.content..@editable[ 0 ];
-				
-				if( editableAttribute )
+
+				if ( editableAttribute )
 					itemVO.attributes.push( new AttributeVO( "editable", editableAttribute ) );
 			}
 		}

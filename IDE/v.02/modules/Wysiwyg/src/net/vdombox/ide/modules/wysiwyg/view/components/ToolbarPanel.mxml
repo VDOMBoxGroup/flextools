@@ -8,7 +8,30 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.core.IVisualElement;
+			
 			import net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin;
+			
+			private var _currentToolbar : IVisualElement;
+			
+			public function get currentToolbar() : IVisualElement
+			{
+				return _currentToolbar;	
+			}
+			
+			public function set currentToolbar( value : IVisualElement ) : void
+			{
+				if( !value && _currentToolbar && _currentToolbar.parent === this )
+				{
+					removeElement( _currentToolbar );
+					_currentToolbar = null;
+				}
+				
+				_currentToolbar = value;
+				
+				if( value )
+					addElement( value );
+			}
 		]]>
 	</fx:Script>
 </s:SkinnableContainer>

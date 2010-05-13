@@ -3,6 +3,7 @@
 				 xmlns:fx="http://ns.adobe.com/mxml/2009"
 				 xmlns:mx="library://ns.adobe.com/flex/halo"
 				 xmlns:s="library://ns.adobe.com/flex/spark"
+				 creationComplete="creationCompleteHandler()"
 				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.Item">
 
 	<fx:Script>
@@ -15,16 +16,17 @@
 			import mx.controls.HTML;
 			import mx.controls.Text;
 			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
 			import mx.graphics.SolidColor;
 			import mx.graphics.SolidColorStroke;
 			
 			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin;
 			
 			import spark.components.Group;
-
-			private var _itemVO : ItemVO;
 
 			[SkinPart( required="false" )]
 			public var upperLayer : Group;
@@ -34,16 +36,18 @@
 					fontfamily: "fontFamily", fontsize: "fontSize", fontweight: "fontWeight", fontstyle: "fontStyle",
 					textdecoration: "textDecoration", textalign: "textAlign", align: "horizontalAlign", valign: "verticalAlign" };
 
+			public var transformMarker : TransformMarker;
+
 			override public function get itemVO() : ItemVO
 			{
-				return _itemVO;
+				return super.itemVO;
 			}
 
 			override public function set itemVO( value : ItemVO ) : void
 			{
-				_itemVO = value;
-
-				if ( !_itemVO )
+				super.itemVO = value;
+				
+				if ( !value )
 				{
 					dataProvider = null;
 
@@ -60,18 +64,22 @@
 				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
 				childrenDataProvider.refresh();
 
-				processProperties( _itemVO );
+				processProperties( value );
 
 				dataProvider = childrenDataProvider;
 
 				skin.currentState = "normal";
+
+				if ( transformMarker )
+				{
+					transformMarker.visible = false;
+					transformMarker.item = null;
+				}
+
 			}
 
 			public function processProperties( ownItemVO : ItemVO ) : void
 			{
-//				_data = value;
-//				_itemVO = value as ItemVO;
-
 				if ( !ownItemVO )
 					return;
 
@@ -79,7 +87,7 @@
 
 				var attributeVO : AttributeVO;
 
-				attributeVO = _itemVO.getAttributeByName( "backgroundcolor" );
+				attributeVO = itemVO.getAttributeByName( "backgroundcolor" );
 
 				if ( attributeVO )
 				{
@@ -87,13 +95,13 @@
 					SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
 				}
 
-				attributeVO = _itemVO.getAttributeByName( "bordercolor" );
+				attributeVO = itemVO.getAttributeByName( "bordercolor" );
 
 				if ( attributeVO )
 				{
 					SolidColorStroke( backgroundRect.stroke ).alpha = 1;
 					SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
-					attributeVO = _itemVO.getAttributeByName( "borderwidth" );
+					attributeVO = itemVO.getAttributeByName( "borderwidth" );
 					if ( attributeVO )
 						SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
 				}
@@ -148,6 +156,19 @@
 				}
 			}
 
+			override protected function partAdded( partName : String, instance : Object ) : void
+			{
+				super.partAdded( partName, instance );
+
+				if ( instance === upperLayer )
+				{
+					transformMarker = new TransformMarker();
+					transformMarker.visible = false;
+
+					upperLayer.addElement( transformMarker );
+				}
+			}
+
 			private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
 			{
 				var _style : Object = {};
@@ -179,11 +200,62 @@
 					if ( !( _style[ "textDecoration" ] != "none" || _style[ "textDecoration" ] != "underline" ) )
 						_style[ "textDecoration" ] = "none";
 			}
+
+			private function creationCompleteHandler() : void
+			{
+				addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true, 0, true );
+				addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, false, 0, true );
+			}
+			
+			private function item_itemClickedHandler( event : ItemEvent ) : void
+			{
+				var item : Item = event.target as Item;
+
+				if ( !item || item === this )
+				{
+					transformMarker.item = null;
+					transformMarker.visible = false;
+					
+					return;
+				}
+
+				switch ( item.itemVO.typeVO.resizable )
+				{
+					case "0":
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_NONE
+						break;
+					}
+
+					case "1":
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_WIDTH
+						break;
+					}
+
+					case "2":
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_HEIGHT
+						break;
+					}
+
+					case "3":
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_ALL
+						break;
+					}
+				}
+
+				transformMarker.moveMode = item.itemVO.typeVO.moveable == "1" ? TransformMarker.MOVE_TRUE : TransformMarker.MOVE_FALSE;
+
+				transformMarker.item = item;
+				transformMarker.visible = true;
+			}
 		]]>
 	</fx:Script>
 
 	<components:layout>
-
 		<s:BasicLayout clipAndEnableScrolling="true"/>
 	</components:layout>
+
 </components:Item>

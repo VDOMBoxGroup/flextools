@@ -3,13 +3,167 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:s="library://ns.adobe.com/flex/spark">
 
+	<fx:Script>
+		<![CDATA[
+			import mx.events.ListEvent;
+			
+			import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
+
+			[Bindable]
+			private var _pages : XMLList;
+
+			public function get pages() : XMLList
+			{
+				return _pages;
+			}
+
+			public function set pages( value : XMLList ) : void
+			{
+				_pages = value;
+			}
+
+			public function get selectedObjectID() : String
+			{
+				var selectedItem : XML = objectsTree.selectedItem as XML;
+				
+				var itemID : String;
+				
+				if( selectedItem && selectedItem.name() == "object" )
+					itemID = selectedItem.@id;
+				
+				return itemID;
+					
+			}
+			
+			public function set selectedObjectID( value : String ) : void
+			{
+				var currentID : String;
+				
+				if( !_pages )
+					return;
+				
+				try
+				{
+					currentID = objectsTree.selectedItem.@id;
+				}
+				catch( error : Error )
+				{
+				}
+				
+				if( !value )
+					objectsTree.selectedIndex = -1;
+				else if( value != currentID )
+					setSelectionByID( value );
+			}
+			
+			public function get selectedPageID() : String
+			{
+				var selectedItem : XML = objectsTree.selectedItem as XML;
+				var itemID : String;
+				var parentItem : XML;
+				
+				if( !selectedItem )
+				{
+				}
+				else if ( selectedItem.name() == "page" )
+				{
+					itemID = selectedItem.@id;
+				}
+				else if ( selectedItem.name() == "object" )
+				{
+					parentItem = selectedItem.parent();
+					
+					while ( parentItem )
+					{
+						if ( parentItem.name() == "page" )
+						{
+							itemID = parentItem.@id;
+							break;
+						}
+						
+						parentItem = parentItem.parent();
+					}
+				}
+				
+				return itemID;
+			}
+			
+			public function set selectedPageID( value : String ) : void
+			{
+				var currentID : String;
+				
+				if( !_pages )
+					return;
+				
+				try
+				{
+					currentID = objectsTree.selectedItem.@id;
+				}
+				catch( error : Error )
+				{
+				}
+				
+				if( !value )
+					objectsTree.selectedIndex = -1;
+				else if( value != currentID )
+					setSelectionByID( value );
+			}
+			
+			public function get selectedItem() : XML
+			{
+				return objectsTree.selectedItem as XML;
+			}
+
+			private function setSelectionByID( id : String ) : void
+			{
+				var elementForSelection : XML;
+				
+				try
+				{
+					elementForSelection = _pages.( @id == id )[0];
+					
+					if( !elementForSelection )
+						_pages..object.( @id == id )[ 0 ];
+				}
+				catch( error : Error )
+				{
+					
+				}
+				
+				if( elementForSelection )
+				{
+					openTree( elementForSelection );
+					objectsTree.selectedItem = elementForSelection;
+					objectsTree.scrollToIndex( objectsTree.selectedIndex );
+				}
+					
+			}
+			
+			private function openTree( item : Object ) : void
+			{
+				var parentItem : Object = XML( item ).parent();
+				
+				if ( parentItem )
+				{
+					openTree( parentItem );
+					objectsTree.expandItem( parentItem, true, false );
+					objectsTree.validateNow();
+				}
+			}
+			
+			private function objectsTree_changeHandler( event : ListEvent ) : void
+			{
+				dispatchEvent( new ObjectsTreePanelEvent( ObjectsTreePanelEvent.CHANGE ) );
+			}
+		]]>
+	</fx:Script>
+
 	<s:layout>
-		<s:VerticalLayout />
+		<s:VerticalLayout/>
 	</s:layout>
 
 	<mx:Tree id="objectsTree"
-			 height="100%" width="100%" />
-	<s:controlBarContent>
-		<mx:Spacer height="1" />
-	</s:controlBarContent>
+			 dataProvider="{ _pages }" height="100%" labelField="@name" showRoot="true"
+			 width="100%"
+			 change="objectsTree_changeHandler(event)"/>
 </s:Panel>

@@ -10,11 +10,11 @@
 	</fx:Metadata>
 	
 	<fx:Style>
-		@namespace mx "library://ns.adobe.com/flex/halo";
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace common "net.vdombox.ide.common.*";
 		@namespace components "net.vdombox.ide.modules.wysiwyg.view.components.*";
 		@namespace controls "net.vdombox.ide.modules.wysiwyg.view.components.controls.*";
+		@namespace mx "library://ns.adobe.com/flex/mx";
 		
 		components|Item
 		{
@@ -30,10 +30,30 @@
 		{
 			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin"); 
 		}
+		
+		.typesAccordionHeader
+		{
+			skin : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.AccordionHeaderSkin");
+			textAlign : center;
+			textSelectedColor : black;
+			color : white;
+		}
+		
+		components|PanelButton
+		{
+			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.PanelButtonSkin");
+		}
+		
+		#stateSelector
+		{
+			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.StateSelectorSkin");
+		}
 	</fx:Style>
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.skins.spark.ButtonSkin;
+			
 			import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 
 			public static const MODULE_ID : String = "net.vdombox.ide.modules.Wysiwyg";
@@ -71,7 +91,7 @@
 
 			override public function get hasSettings() : Boolean
 			{
-				return true;
+				return false;
 			}
 
 			override public function get hasBody() : Boolean

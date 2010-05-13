@@ -5,22 +5,15 @@
 
 
 	<s:states>
-
 		<s:State name="normal" />
-
 		<s:State name="hovered" />
-
 		<s:State name="highlighted" />
-
 		<s:State name="locked" />
-
 		<s:State name="disabled" />
 	</s:states>
 
 	<s:Rect height="100%" width="100%">
-
 		<s:fill>
-
 			<s:SolidColor color="white"
 						  alpha=".0" />
 		</s:fill>
@@ -30,12 +23,10 @@
 			bottom="0" left="0" right="0" top="0">
 
 		<s:fill>
-
-			<s:SolidColor color="gray" alpha=".5" />
+			<s:SolidColor color="gray" alpha="0" />
 		</s:fill>
 
 		<s:stroke>
-
 			<s:SolidColorStroke />
 		</s:stroke>
 	</s:Rect>
@@ -81,18 +72,16 @@
 	
 	<s:Rect bottom="0" left="0" right="0" top="0"
 			includeIn="locked">
-
 		<s:fill>
-
 			<s:SolidColor color="white" />
 		</s:fill>
 	</s:Rect>
 
-	<s:Rect bottom="0" left="0" right="0" top="0">
+	<!--<s:Rect bottom="0" left="0" right="0" top="0">
 
 		<s:stroke>
 
 			<s:SolidColorStroke />
 		</s:stroke>
-	</s:Rect>
+	</s:Rect>-->
 </s:SparkSkin>

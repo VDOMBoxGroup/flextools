@@ -2,9 +2,9 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				xmlns:s="library://ns.adobe.com/flex/spark"
-				
-				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))"
-				mouseDown="dragIt( event )" width="100%">
+				width="100%"
+				creationComplete="dispatchEvent( new Event( 'TypeRendererCreated' ))" mouseDown="mouseDownHandler()"
+				autoDrawBackground="false">
 
 	<fx:Script>
 		<![CDATA[
@@ -13,6 +13,9 @@
 			import net.vdombox.ide.common.vo.ResourceVO;
 			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
+
+			import spark.filters.GlowFilter;
+
 
 			[Bindable]
 			private var typeName : String
@@ -44,8 +47,20 @@
 				super.data = value;
 			}
 
+			override public function set selected( value : Boolean ) : void
+			{
+				super.selected = value;
+
+				if ( value )
+					currentState = "selected";
+				else
+					currentState = "normal";
+			}
+
 			private function dragIt( event : MouseEvent ) : void
 			{
+				removeEventListener( MouseEvent.MOUSE_MOVE, dragIt );
+
 				var dragInitiator : TypeItemRenderer = this;
 				var ds : DragSource = new DragSource();
 
@@ -56,22 +71,53 @@
 
 				var proxy : Image = new Image();
 
-				proxy.width = 58;
-				proxy.height = 58;
+				proxy.width = 40;
+				proxy.height = 40;
+				proxy.smoothBitmapContent = true;
 				proxy.source = typeIcon.source;
 
 				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
 
 				vdomDragManager.doDrag( dragInitiator, ds, event, proxy, proxy.width / 2 - dragInitiator.mouseX,
-										proxy.height / 2 - dragInitiator.mouseY );
+					proxy.height / 2 - dragInitiator.mouseY );
+			}
+
+			private function mouseDownHandler() : void
+			{
+				addEventListener( MouseEvent.MOUSE_MOVE, dragIt, false, 0, true );
+				stage.addEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler, false, 0, true );
+			}
+
+			private function stage_mouseUpHandler( event : MouseEvent ) : void
+			{
+				removeEventListener( MouseEvent.MOUSE_MOVE, dragIt );
+				stage.removeEventListener( MouseEvent.MOUSE_UP, stage_mouseUpHandler );
 			}
 		]]>
 	</fx:Script>
 
-	<mx:Image id="typeIcon"
-			  height="50" source="{ _resourceVO.data }" width="50"
-			  horizontalCenter="0"  top="5"/>
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="selected"/>
+	</s:states>
 
-	<s:RichText text="{ typeName }" width="100%"
-				color="white" horizontalCenter="0" top="58" />
+	<!--<s:Ellipse height="40" height.selected="55" width="40" width.selected="55"
+		 horizontalCenter="0">
+		 <s:fill>
+		 <s:LinearGradient rotation="90">
+		 <s:GradientEntry color="#595C61"/>
+		 <s:GradientEntry color="#3A3B3D"/>
+		 </s:LinearGradient>
+		 </s:fill>
+		 </s:Ellipse>-->
+
+	<mx:Image id="typeIcon"
+			  height="40" source="{ _resourceVO.data }" width="40"
+			  horizontalCenter="0" top="5"
+			  filters.selected="{ [ new GlowFilter( 0xFFFFFF, 1, 6, 6, 2 ) ] }" smoothBitmapContent="true"/>
+
+	<s:RichText includeInLayout="false" includeInLayout.selected="true" text="{ typeName }" width="100%"
+				color="white" fontFamily="Verdana" horizontalCenter="0" top="50"
+				visible="false" visible.selected="true"/>
+
 </s:ItemRenderer>

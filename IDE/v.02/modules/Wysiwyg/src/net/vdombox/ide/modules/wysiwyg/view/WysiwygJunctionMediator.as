@@ -61,13 +61,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
+			interests.push( ApplicationFacade.GET_ALL_STATES );
+			interests.push( ApplicationFacade.SET_ALL_STATES );
+			
 			interests.push( ApplicationFacade.GET_TYPES );
 
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
 			interests.push( ApplicationFacade.MODIFY_RESOURCE );
-
-			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 
 			interests.push( ApplicationFacade.GET_PAGES );
 			interests.push( ApplicationFacade.GET_PAGE_SRUCTURE );
@@ -79,6 +80,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.GET_PAGE_WYSIWYG );
 			interests.push( ApplicationFacade.GET_OBJECT_WYSIWYG );
+			
+			interests.push( ApplicationFacade.GET_XML_PRESENTATION );
 
 			interests.push( ApplicationFacade.CREATE_OBJECT );
 			interests.push( ApplicationFacade.DELETE_OBJECT );
@@ -169,6 +172,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
+				case ApplicationFacade.GET_ALL_STATES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_ALL_STATES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.GET_TYPES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPES );
@@ -202,15 +223,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
-					break;
-				}
-
-				case ApplicationFacade.GET_SELECTED_APPLICATION:
-				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
 					break;
 				}
 
@@ -286,6 +298,30 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
+				case ApplicationFacade.GET_XML_PRESENTATION:
+				{
+					if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.XML_PRESENTATION, body );
+					else if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.XML_PRESENTATION, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
+				case ApplicationFacade.SET_XML_PRESENTATION:
+				{
+					if ( body.hasOwnProperty( "pageVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.XML_PRESENTATION, body );
+					else if ( body.hasOwnProperty( "objectVO" ) )
+						message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.XML_PRESENTATION, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.CREATE_OBJECT:
 				{
 					if ( body.hasOwnProperty( "pageVO" ) )

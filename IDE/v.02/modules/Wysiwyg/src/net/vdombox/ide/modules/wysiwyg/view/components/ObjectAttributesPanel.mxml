@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+<s:Panel xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark">
 
 	<s:layout>
-
-		<s:BasicLayout />
+		<s:BasicLayout/>
 	</s:layout>
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeTextFiledItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributePagelinkItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeObjectlistItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeNumberItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeMultilineItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeFileItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeExternalEditorItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeDropdownItemRenderer;
-			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeColorItemRenderer;
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
@@ -31,6 +22,15 @@
 			import net.vdombox.ide.common.vo.PageVO;
 			import net.vdombox.ide.common.vo.TypeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeColorItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeDropdownItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeExternalEditorItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeFileItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeMultilineItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeNumberItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeObjectlistItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributePagelinkItemRenderer;
+			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeTextFiledItemRenderer;
 
 			private var _attributesVO : Object;
 			private var _objectVO : ObjectVO;
@@ -39,6 +39,11 @@
 
 			private var attributes : ArrayCollection;
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
+
+			public function get attributesVO() : Object
+			{
+				return _attributesVO;
+			}
 
 			public function set attributesVO( value : Object ) : void
 			{
@@ -95,7 +100,7 @@
 				var codeInterface : Object = {}
 				var matches : Array = attributeDescriptionVO.codeInterface.match( codeInterfaceRE );
 
-				var factory : IFactory;
+				var factory : ClassFactory;
 
 				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
 				codeInterface[ "value" ] = matches[ 2 ];
@@ -157,6 +162,8 @@
 					}
 				}
 
+				factory.properties = { autoDrawBackground: false };
+
 				return factory;
 			}
 
@@ -181,8 +188,8 @@
 
 	<s:Label id="typeNameLabel"
 			 height="20"
-			 backgroundColor="#000000" color="#FFFFFF" left="1" paddingLeft="3" paddingTop="3" right="1"
-			 textAlign="center" verticalAlign="middle" />
+			 backgroundColor="#000000" color="#FFFFFF" left="0" paddingLeft="3"
+			 paddingTop="3" right="0" textAlign="center" verticalAlign="middle"/>
 
 	<s:List id="attributesList"
 			width="220"
@@ -191,21 +198,23 @@
 			itemRendererFunction="itemRendererFunction" useVirtualLayout="false">
 
 		<s:layout>
-
-			<s:VerticalLayout gap="0" variableRowHeight="true" />
+			<s:VerticalLayout gap="0" variableRowHeight="true"/>
 		</s:layout>
+		
 	</s:List>
 
 	<s:controlBarContent>
 
-		<s:Button id="saveButton"
-				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }"
-				  click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ))" />
+		<components:PanelButton id="deleteButton"
+								icon="@Embed('assets/delete.png')" label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_delete') }"
+								click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.DELETE_REQUEST ))"/>
 
-		<mx:Spacer width="100%" />
+		<mx:Spacer width="100%"/>
 
-		<s:Button id="deleteButton"
-				  label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_delete') }"
-				  click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.DELETE_REQUEST ))" />
+		<components:PanelButton id="saveButton"
+								icon="@Embed('assets/save.png')" label="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_save') }"
+								click="dispatchEvent( new ObjectAttributesPanelEvent( ObjectAttributesPanelEvent.SAVE_REQUEST ))"/>
+
 	</s:controlBarContent>
+
 </s:Panel>

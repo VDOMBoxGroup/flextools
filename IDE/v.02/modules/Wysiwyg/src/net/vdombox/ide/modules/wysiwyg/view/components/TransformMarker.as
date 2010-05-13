@@ -10,13 +10,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import mx.core.IWindow;
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
-	
+
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 
 	use namespace mx_internal;
@@ -34,28 +34,28 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function TransformMarker()
 		{
 			super();
-			
+
 			visible = false;
-			
+
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
 		}
-		
-		[Embed(source="assets/theme/theme.swf", symbol="LeftRight")]
+
+		[Embed( source="assets/theme/theme.swf", symbol="LeftRight" )]
 		private var leftRightCursor : Class;
-		
-		[Embed(source="assets/theme/theme.swf", symbol="TopDown")]
+
+		[Embed( source="assets/theme/theme.swf", symbol="TopDown" )]
 		private var topDownCursor : Class;
-		
-		[Embed(source="assets/theme/theme.swf", symbol="Move")]
+
+		[Embed( source="assets/theme/theme.swf", symbol="Move" )]
 		private var moveCursor : Class;
-		
-		[Embed(source="assets/theme/theme.swf", symbol="TopLDownR")]
+
+		[Embed( source="assets/theme/theme.swf", symbol="TopLDownR" )]
 		private var topLDownRCursor : Class;
-		
-		[Embed(source="assets/theme/theme.swf", symbol="TopRDownL")]
+
+		[Embed( source="assets/theme/theme.swf", symbol="TopRDownL" )]
 		private var topRDownLCursor : Class;
-		
+
 		private var tl_box : Sprite;
 		private var tc_box : Sprite;
 		private var tr_box : Sprite;
@@ -118,7 +118,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set moveMode( modeValue : Boolean ) : void
 		{
 			_moveMode = modeValue;
-			
+
 			if ( !modeValue )
 				moving = null;
 
@@ -496,9 +496,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseUpHandler( event : MouseEvent ) : void
 		{
-			if( !stage )
+			if ( !stage )
 				return;
-				
+
 			stage.removeEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 			stage.removeEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 

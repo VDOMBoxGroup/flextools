@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.display.DisplayObject;
-
+	
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -13,7 +13,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.ImageToolbar;
 	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.RichTextToolbar;
 	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.TextToolbar;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -29,7 +29,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var sessionProxy : SessionProxy;
 
-		private var currentToolbar : Object;
+		private var isActive : Boolean;
+		
+//		private var currentToolbar : Object;
 
 		private var item : Item;
 
@@ -41,22 +43,29 @@ package net.vdombox.ide.modules.wysiwyg.view
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
+			isActive = false;
+			
 			toolbarPanel.visible = false;
+			
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
+			
+			clearData();
 		}
 
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
+			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
+			
 			interests.push( ApplicationFacade.SELECT_ITEM_REQUEST );
-			interests.push( ApplicationFacade.MODULE_SELECTED );
-			interests.push( ApplicationFacade.MODULE_DESELECTED );
 
 			return interests;
 		}
@@ -66,18 +75,27 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
+			if ( !isActive && name != ApplicationFacade.BODY_START )
+				return;
+			
 			switch ( name )
 			{
-				case ApplicationFacade.MODULE_DESELECTED:
+				case ApplicationFacade.BODY_START:
 				{
-					if ( currentToolbar )
+					if ( sessionProxy.selectedApplication )
 					{
-						toolbarPanel.removeAllElements();
-						toolbarPanel.visible = false;
-						toolbarPanel.includeInLayout = false;
-						currentToolbar = null;
+						isActive = true;
+						
+						break;
 					}
-
+				}
+					
+				case ApplicationFacade.BODY_STOP:
+				{
+					isActive = false;
+					
+					clearData();
+					
 					break;
 				}
 
@@ -88,6 +106,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 					var itemVO : ItemVO = item.itemVO;
 					var typeVO : TypeVO = itemVO.typeVO;
 
+					var currentToolbar : Object = toolbarPanel.currentToolbar;
+					
 					if ( currentToolbar )
 					{
 						currentToolbar.close();
@@ -98,14 +118,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 												  attributes: currentToolbar.attributes } )
 						}
 
-						toolbarPanel.removeAllElements();
-						toolbarPanel.visible = false;
-						toolbarPanel.includeInLayout = false;
-						
-						currentToolbar = null;
+						clearData();
 					}
-
-
 
 					if ( !item.editableComponent )
 						return;
@@ -172,8 +186,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 			toolbarPanel.removeEventListener( ToolbarEvent.IMAGE_CHANGED, imageChangedHandler, true );
 		}
 
+		private function clearData() : void
+		{
+			toolbarPanel.removeAllElements();
+			toolbarPanel.visible = false;
+			toolbarPanel.includeInLayout = false;
+		}
+		
 		private function imageChangedHandler( event : ToolbarEvent ) : void
 		{
+			var currentToolbar : Object = toolbarPanel.currentToolbar;
+			
+			if( currentToolbar )
+				return;
+			
 			var eventBody : Object = event.body;
 
 			var attributeName : String = "value";

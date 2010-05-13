@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			private var _text : String;
+
+			public function set text( value : String ) : void
+			{
+				_text = value;
+				
+				editArea.content = _text;
+			}
+		]]>
+	</fx:Script>
+
+	<components:EditArea id="editArea"
+						 height="100%" width="100%"
+						 syntax="xml"/>
+
+</s:Group>

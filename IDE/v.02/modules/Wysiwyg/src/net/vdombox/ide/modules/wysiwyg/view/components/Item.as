@@ -1,12 +1,13 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-	
+
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
-	
+	import flash.events.MouseEvent;
+
 	import flashx.textLayout.tlf_internal;
-	
+
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
@@ -15,14 +16,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
 	import mx.core.UIComponent;
+	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
+	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-	
+
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
@@ -43,17 +46,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			itemRendererFunction = chooseItemRenderer;
 //			setStyle( "skinClass", ItemSkin );
 
-			addEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler );
-			addEventListener( Event.REMOVED, removeHandler );
-
+			addHandlers();
 		}
 
 		private const styleList : Array = [ [ "opacity", "backgroundAlpha" ], [ "backgroundcolor", "backgroundColor" ],
-											  [ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
-											  [ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
-											  [ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
-											  [ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
-											  [ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
+			[ "backgroundimage", "backgroundImage" ], [ "backgroundrepeat", "backgroundRepeat" ],
+			[ "borderwidth", "borderThickness" ], [ "bordercolor", "borderColor" ], [ "color", "color" ],
+			[ "fontfamily", "fontFamily" ], [ "fontsize", "fontSize" ], [ "fontweight", "fontWeight" ],
+			[ "fontstyle", "fontStyle" ], [ "textdecoration", "textDecoration" ], [ "textalign", "textAlign" ],
+			[ "align", "horizontalAlign" ], [ "valign", "verticalAlign" ] ];
 
 		[SkinPart( required="true" )]
 		public var background : Group;
@@ -76,24 +77,24 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var _isLocked : Boolean;
 
 
-		public function get itemIndex():int
+		public function get itemIndex() : int
 		{
 			return 0;
 		}
-		
-		public function set itemIndex(value:int):void
+
+		public function set itemIndex( value : int ) : void
 		{
 		}
-		
-		public function get dragging():Boolean
+
+		public function get dragging() : Boolean
 		{
 			return false;
 		}
-		
-		public function set dragging(value:Boolean):void
+
+		public function set dragging( value : Boolean ) : void
 		{
 		}
-		
+
 		public function get selected() : Boolean
 		{
 			return false;
@@ -237,8 +238,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						richText.y = contetntPart.@top;
 						richText.width = contetntPart.@width;
 
-
-
 						richText[ "text" ] = contetntPart[ 0 ];
 
 						applyStyles( richText, contetntPart );
@@ -338,15 +337,41 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return itemFactory;
 		}
 
+		private function addHandlers() : void
+		{
+			addEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler, false, 0, true );
+			addEventListener( Event.REMOVED, removeHandler, false, 0, true );
+
+			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
+			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
+			addEventListener( MouseEvent.CLICK, mouseClickHandler, false, 0, true );
+
+			addEventListener( DragEvent.DRAG_ENTER, dragEnterHandler, false, 0, true );
+			addEventListener( DragEvent.DRAG_EXIT, dragExitHandler, false, 0, true );
+			addEventListener( DragEvent.DRAG_DROP, dragDropHandler, false, 0, true );
+		}
+
+		private function removeHandlers() : void
+		{
+			removeEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler );
+			removeEventListener( Event.REMOVED, removeHandler );
+
+			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
+			removeEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
+			removeEventListener( MouseEvent.CLICK, mouseClickHandler );
+
+			removeEventListener( DragEvent.DRAG_ENTER, dragEnterHandler );
+			removeEventListener( DragEvent.DRAG_EXIT, dragExitHandler );
+			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
+		}
+
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
 		{
 			var _style : Object = {};
 			var hasStyle : Boolean = false;
 
-//			item.styleName = "WYSIWYGItem";
-
-
 			var xmlList : XMLList;
+
 			for each ( var attribute : Array in styleList )
 			{
 				xmlList = itemXMLDescription.attribute( attribute[ 0 ] );
@@ -359,26 +384,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			if ( !hasStyle )
 				return;
-			
+
 			var styleName : String;
 
 			for ( styleName in _style )
 			{
-				if( styleName == "color" || styleName == "backgroundColor" ||styleName == "borderColor" )
+				if ( styleName == "color" || styleName == "backgroundColor" || styleName == "borderColor" )
 					_style[ styleName ] = uint( "0x" + String( _style[ styleName ] ).substr( 1 ) );
-				
+
 				item.setStyle( styleName, _style[ styleName ] );
 			}
-
-//			if ( _style.hasOwnProperty( "backgroundColor" ) && !_style.hasOwnProperty( "backgroundAlpha" ) )
-//				_style[ "backgroundAlpha" ] = 100;
-//
-//			if ( _style.hasOwnProperty( "borderColor" ) )
-//				_style[ "borderStyle" ] = "solid";
-//
-//			if ( _style.hasOwnProperty( "textDecoration" ) )
-//				if ( !( _style[ "textDecoration" ] != "none" || _style[ "textDecoration" ] != "underline" ) )
-//					_style[ "textDecoration" ] = "none";
 		}
 
 		private function getItemByTarget( target : DisplayObjectContainer ) : Item
@@ -405,10 +420,86 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			dispatchEvent( new ItemEvent( ItemEvent.CREATED ) );
 		}
 
+		private function dragEnterHandler( event : DragEvent ) : void
+		{
+			var typeDescription : Object = event.dragSource.dataForFormat( "typeDescription" );
+
+			if ( !typeDescription )
+				return;
+
+			var containersRE : RegExp = /(\w+)/g;
+			var aviableContainers : Array = typeDescription.aviableContainers.match( containersRE );
+			var currentItemName : String;
+
+			if ( itemVO )
+				currentItemName = itemVO.typeVO.name;
+
+			if ( aviableContainers.indexOf( currentItemName ) != -1 )
+			{
+				var vdomDragManager : VdomDragManager = VdomDragManager.getInstance();
+				vdomDragManager.acceptDragDrop( UIComponent( this ) );
+				skin.currentState = "highlighted";
+			}
+		}
+
+		private function mouseOutHandler( event : MouseEvent ) : void
+		{
+			if ( skin.currentState == "hovered" )
+				skin.currentState = "normal";
+		}
+
+		private function mouseOverHandler( event : MouseEvent ) : void
+		{
+			if ( skin.currentState == "highlighted" )
+				return;
+
+			if ( findNearestItem( event.target as DisplayObjectContainer ) == this )
+				skin.currentState = "hovered";
+			else
+				skin.currentState = "normal";
+		}
+
+		private function mouseClickHandler( event : MouseEvent ) : void
+		{
+			event.stopPropagation();
+			dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+		}
+
+		private function dragDropHandler( event : DragEvent ) : void
+		{
+			skin.currentState = "normal";
+		}
+
+		private function dragExitHandler( event : DragEvent ) : void
+		{
+			skin.currentState = "normal";
+		}
+
 		private function removeHandler( event : Event ) : void
 		{
 			if ( event.target == this )
+			{
 				dispatchEvent( new ItemEvent( ItemEvent.REMOVED ) );
+				removeHandlers();
+			}
+		}
+
+		private function findNearestItem( currentElement : DisplayObjectContainer ) : Item
+		{
+			var result : Item;
+
+			while ( currentElement && currentElement.parent )
+			{
+				if ( currentElement is Item )
+				{
+					result = currentElement as Item;
+					break;
+				}
+
+				currentElement = currentElement.parent;
+			}
+
+			return result;
 		}
 	}
 }

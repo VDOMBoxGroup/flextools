@@ -1,10 +1,12 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.view.HelpPanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.ObjectAttributesPanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.ObjectsTreePanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.ToolbarPanelMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.TypesAccordionMediator;
+	import net.vdombox.ide.modules.wysiwyg.view.VDOMXMLEditorMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.main.Body;
 	
@@ -19,12 +21,11 @@ package net.vdombox.ide.modules.wysiwyg.controller
 
 			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
 			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
+			facade.registerMediator( new VDOMXMLEditorMediator( body.vdomXMLEditor ) );
 			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
+			facade.registerMediator( new HelpPanelMediator( body.helpPanel ) );
 			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );
 			facade.registerMediator( new ToolbarPanelMediator( body.toolbarPanel ) );
-
-			sendNotification( ApplicationFacade.GET_TYPES );
-			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}
 	}
 }

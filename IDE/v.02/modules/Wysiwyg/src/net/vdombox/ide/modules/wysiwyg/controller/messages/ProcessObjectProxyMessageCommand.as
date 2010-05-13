@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var needForUpdateObject : Object = sessionProxy.getObject( SessionProxy.NEED_FOR_UPDATE );
+			var needForUpdateObject : Object = sessionProxy.needForUpdate;
 			
 			var renderProxy : RenderProxy;
 			var itemMediator : ItemMediator;
@@ -78,6 +78,16 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 							delete needForUpdateObject[ objectVO.id ];
 						}
 					}
+					
+					break;
+				}
+					
+				case PPMObjectTargetNames.XML_PRESENTATION:
+				{
+					if ( operation == PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.XML_PRESENTATION_GETTED, body );
+					else if ( operation == PPMOperationNames.UPDATE )
+						sendNotification( ApplicationFacade.XML_PRESENTATION_SETTED, body );
 					
 					break;
 				}

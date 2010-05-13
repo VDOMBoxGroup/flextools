@@ -1,46 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:HGroup xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
-		  
 		  height="100%" width="100%"
 		  paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7">
 
 	<fx:Script>
 		<![CDATA[
+			import net.vdombox.ide.modules.wysiwyg.view.components.TypesAccordionHeader;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin;
+
+			import spark.events.IndexChangeEvent;
+
+			private function stateSelector_changeHandler() : void
+			{
+				if ( stateSelector.selectedItem && stateSelector.selectedItem.stateName != currentState )
+					currentState = stateSelector.selectedItem.stateName;
+			}
 		]]>
 	</fx:Script>
 
+	<s:states>
+		<s:State name="wysiwyg"/>
+		<s:State name="vdomxml"/>
+	</s:states>
+
 	<mx:Accordion id="typesAccordion"
 				  height="100%" width="90"
-				  headerStyleName="headerStyle" />
+				  headerStyleName="typesAccordionHeader"
+				  headerRenderer="{ new ClassFactory( TypesAccordionHeader ) }"/>
 
 	<s:VGroup height="100%" width="100%"
-			  gap="5">
+			  gap="0">
 
-		<components:WorkArea id="workArea"
-							 height="100%" width="100%" />
+		<s:Group height="100%" width="100%">
 
-		<components:ToolbarPanel id="toolbarPanel"
-								 width="100%" />
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<mx:SolidColor color="gray"/>
+				</s:fill>
+			</s:Rect>
+
+			<s:VGroup height="100%" width="100%"
+					  gap="0" itemCreationPolicy="immediate" includeIn="wysiwyg">
+
+				<components:WorkArea id="workArea"
+									 height="100%" width="100%"/>
+
+				<components:ToolbarPanel id="toolbarPanel"
+										 minHeight="0" width="100%"/>
+			</s:VGroup>
+
+			<components:VDOMXMLEditor id="vdomXMLEditor" height="100%" width="100%"
+									  itemCreationPolicy="immediate" includeIn="vdomxml"/>
+
+		</s:Group>
+
+		<s:ButtonBar id="stateSelector"
+					 labelField="label" selectedIndex="0"
+					 change="stateSelector_changeHandler()"
+					 requireSelection="true">
+			<mx:ArrayList>
+				<fx:Object label="WYSIWYG"
+						   stateName="wysiwyg"/>
+				<fx:Object label="VDOM XML"
+						   stateName="vdomxml"/>
+			</mx:ArrayList>
+		</s:ButtonBar>
+
 	</s:VGroup>
 
 	<s:VGroup height="100%" width="220">
 
 		<components:ObjectAttributesPanel id="objectAttributesPanel"
-										  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }"
 										  width="100%"
-										  backgroundAlpha="0" cornerRadius="5"
-										  borderAlpha="0" borderVisible="false"
-										  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin" />
+										  backgroundAlpha="0" cornerRadius="5" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+										  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }" borderAlpha="0" borderVisible="false"/>
+
+		<components:HelpPanel id="helpPanel"
+							  width="100%"
+							  backgroundAlpha="0" cornerRadius="5" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+							  title="{ resourceManager.getString( 'Wysiwyg_General', 'help_panel_title') }" borderAlpha="0" borderVisible="false"/>
 
 		<components:ObjectsTreePanel id="objectsTreePanel"
-									 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }"
 									 width="100%"
-									 backgroundAlpha="0" cornerRadius="5"
-									 borderAlpha="0" borderVisible="false"
-									 skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin" />
+									 backgroundAlpha="0" cornerRadius="5" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
+									 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }" borderAlpha="0" borderVisible="false"/>
 	</s:VGroup>
 </s:HGroup>

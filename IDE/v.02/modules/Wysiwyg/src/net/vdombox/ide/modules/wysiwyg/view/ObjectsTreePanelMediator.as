@@ -7,6 +7,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
+	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectsTreePanel;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -24,33 +26,37 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var _pages : Object;
 
-		private var selectedObject : ObjectVO;
-		private var selectedPage : PageVO;
+		private var sessionProxy : SessionProxy;
 
-		[Bindable]
-		private var pagesXMLList : XMLList;
+		private var isActive : Boolean;
 
 		public function get objectsTreePanel() : ObjectsTreePanel
 		{
 			return viewComponent as ObjectsTreePanel;
 		}
 
-		public function get objectsTree() : Tree
-		{
-			return objectsTreePanel.objectsTree as Tree;
-		}
-
 		override public function onRegister() : void
 		{
-			if ( !objectsTreePanel.initialized )
-				objectsTreePanel.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			else
-				initialize();
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+
+			isActive = false;
+
+			addHandlers();
+		}
+
+		override public function onRemove() : void
+		{
+			removeHandlers();
+
+			clearData();
 		}
 
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
+
+			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.PAGES_GETTED );
 			interests.push( ApplicationFacade.PAGE_STRUCTURE_GETTED );
@@ -69,10 +75,34 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
+			if ( !isActive && name != ApplicationFacade.BODY_START )
+				return;
+
 			var pageXML : XML;
 
 			switch ( name )
 			{
+				case ApplicationFacade.BODY_START:
+				{
+					if ( sessionProxy.selectedApplication )
+					{
+						isActive = true;
+
+						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
+
+						break;
+					}
+				}
+
+				case ApplicationFacade.BODY_STOP:
+				{
+					isActive = false;
+
+					clearData();
+
+					break;
+				}
+
 				case ApplicationFacade.PAGES_GETTED:
 				{
 					showPages( notification.getBody() as Array );
@@ -82,170 +112,109 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.PAGE_STRUCTURE_GETTED:
 				{
+					if ( !objectsTreePanel.pages )
+						return;
+
 					var pageXMLTree : XML = notification.getBody() as XML;
 
-					pageXML = pagesXMLList.( @id == pageXMLTree.@id )[ 0 ];
-					pageXML.setChildren( new XMLList() );
+					if ( !pageXMLTree )
+						pageXMLTree = new XML();
+
+					pageXML = objectsTreePanel.pages.( @id == pageXMLTree.@id )[ 0 ];
+					pageXML.setChildren( new XMLList() ); //TODO: strange construction
 					pageXML.appendChild( pageXMLTree.* );
 
 					break;
 				}
 
-				case ApplicationFacade.MODULE_DESELECTED:
-				{
-					objectsTree.dataProvider = null;
-					break;
-				}
-
 				case ApplicationFacade.OBJECT_GETTED:
 				{
-					selectedObject = body as ObjectVO;
-					sendNotification( ApplicationFacade.OBJECT_SELECTED_REQUEST, body );
+					var objectVO : ObjectVO = body as ObjectVO;
+
+					sendNotification( ApplicationFacade.OBJECT_SELECTED_REQUEST, objectVO );
 
 					break;
 				}
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					if ( selectedPage == body as PageVO )
-						return;
-
-					selectedPage = body as PageVO;
-
-					if ( selectedPage )
-					{
-						pageXML = pagesXMLList.( @id == body.id )[ 0 ];
-
-						if ( pageXML )
-						{
-							openTree( pageXML );
-							objectsTree.selectedItem = pageXML;
-							objectsTree.scrollToIndex( objectsTree.selectedIndex );
-						}
-					}
+					if ( sessionProxy.selectedPage )
+						objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id;
 					else
-					{
-						objectsTree.selectedIndex = -1;
-					}
-					
+						objectsTreePanel.selectedPageID = "";
+
 					break;
 				}
 
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-					if ( selectedObject == body as ObjectVO )
-						return;
-
-					selectedObject = body as ObjectVO;
-
-					if ( selectedObject )
-					{
-						var objectXML : XML = pagesXMLList..object.( @id == body.id )[ 0 ];
-
-						if ( objectXML )
-						{
-							openTree( objectXML );
-							objectsTree.selectedItem = objectXML;
-							objectsTree.scrollToIndex( objectsTree.selectedIndex );
-						}
-					}
-					else if ( selectedPage )
-					{
-						pageXML = pagesXMLList.( @id == selectedPage.id )[ 0 ];
-
-						if ( pageXML )
-						{
-							openTree( pageXML );
-							objectsTree.selectedItem = pageXML;
-							objectsTree.scrollToIndex( objectsTree.selectedIndex );
-						}
-					}
+					if ( sessionProxy.selectedObject )
+						objectsTreePanel.selectedObjectID = sessionProxy.selectedObject.id;
+					else if ( sessionProxy.selectedPage )
+						objectsTreePanel.selectedPageID = sessionProxy.selectedPage.id;
 					else
-					{
-						objectsTree.selectedIndex = -1;
-					}
+						objectsTreePanel.selectedPageID = "";
 
 					break;
 				}
 			}
 		}
 
-		private function openTree( item : Object ) : void
-		{
-			//			trace('openTree');
-			var parentItem : Object = XML( item ).parent();
-			if ( parentItem )
-			{
-				openTree( parentItem );
-				objectsTree.expandItem( parentItem, true, false );
-				objectsTree.validateNow();
-			}
-		}
-
-		private function initialize() : void
-		{
-			addHandlers();
-
-			objectsTree.labelField = "@name";
-			objectsTree.showRoot = true;
-		}
-
 		private function addHandlers() : void
 		{
-			objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_ChangeHandler );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
+		}
+
+		private function removeHandlers() : void
+		{
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
 		}
 
 		private function showPages( pages : Array ) : void
 		{
-			pagesXMLList = new XMLList();
+			var pagesXMLList : XMLList = new XMLList();
 			_pages = {};
 
 			for ( var i : int = 0; i < pages.length; i++ )
 			{
 				_pages[ pages[ i ].id ] = pages[ i ];
+
 				pagesXMLList +=
-					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}/>
+					<page id={pages[ i ].id} name={pages[ i ].name} typeID={pages[ i ].typeVO.id}/>;
 			}
 
-			objectsTree.dataProvider = pagesXMLList;
+			objectsTreePanel.pages = pagesXMLList;
 		}
 
-		private function creationCompleteHandler( event : FlexEvent ) : void
+		private function clearData() : void
 		{
-			initialize();
+			objectsTreePanel.pages = null;
 		}
 
-		private function objectsTree_ChangeHandler( event : ListEvent ) : void
+		private function changeHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			var item : XML = event.itemRenderer.data as XML;
-			var id : String = item.@id;
+			var currentPageID : String = sessionProxy.selectedPage ? sessionProxy.selectedPage.id : null;
+			var currentObjectID : String = sessionProxy.selectedObject ? sessionProxy.selectedObject.id : null;
 
-			if ( item.name() == "page" )
+			var newPageID : String = objectsTreePanel.selectedPageID;
+			var newObjectID : String = objectsTreePanel.selectedObjectID;
+
+			if ( !_pages.hasOwnProperty( newPageID ) )
 			{
-				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ id ] );
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ id ] );
 			}
-			else if ( item.name() == "object" )
+			else if ( newObjectID && newObjectID != currentObjectID )
 			{
-				var pageID : String
-				var parent : XML = item.parent();
-
-				while ( parent )
-				{
-					if ( parent.name() != "page" )
-					{
-						parent = parent.parent();
-						continue;
-					}
-
-					pageID = parent.@id;
-					parent = null;
-				}
-
-				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ pageID ], objectID: id } );
+				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ newPageID ], objectID: newObjectID } );
+			}
+			else if ( newPageID != currentPageID )
+			{
+				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ newPageID ] );
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ newPageID ] );
+			}
+			else if ( newPageID == currentPageID && !newObjectID )
+			{
+				sendNotification( ApplicationFacade.OBJECT_SELECTED_REQUEST, null );
 			}
 		}
-
-
 	}
 }
