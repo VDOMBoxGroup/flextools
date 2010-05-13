@@ -47,18 +47,25 @@ package net.vdombox.ide.core.controller.requests
 			{
 				case PPMOperationNames.READ:
 				{	
-					resourceVO = body as ResourceVO;
+					if( body is ResourceVO )
+						resourceVO = body as ResourceVO;
+					else if( body.hasOwnProperty( "resourceVO" ) )
+						resourceVO = body.resourceVO;
 					
-					resourcesProxy.loadResource( resourceVO );
+					if( resourceVO )
+						resourcesProxy.loadResource( resourceVO );
 					
 					break;
 				}
 					
 				case PPMOperationNames.CREATE:
 				{
-					resourceVO = body as ResourceVO;
+					if( body is ResourceVO )
+						resourceVO = body as ResourceVO;
+					else if( body.hasOwnProperty( "resourceVO" ) )
+						resourceVO = body.resourceVO;
 					
-					if ( !resourceVO || !resourceVO.data )
+					if ( !resourceVO )
 					{
 						sendNotification( ApplicationFacade.SEND_TO_LOG, "ResourcesProxyRequestCommand: Set resource error." );
 						return;

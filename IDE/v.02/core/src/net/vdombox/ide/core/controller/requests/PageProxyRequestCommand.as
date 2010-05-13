@@ -70,7 +70,17 @@ package net.vdombox.ide.core.controller.requests
 					if( operation == PPMOperationNames.READ )
 						pageProxy.getAttributes();
 					else if( operation == PPMOperationNames.UPDATE )
-						pageProxy.setAttributes( body as PageAttributesVO );
+					{
+						var pageAttributesVO : PageAttributesVO;
+						
+						if( body is PageAttributesVO )
+							pageAttributesVO = body as PageAttributesVO;
+						else if( body.hasOwnProperty( "pageAttributesVO" ) )
+							pageAttributesVO = body.pageAttributesVO as PageAttributesVO;
+						
+						if( pageAttributesVO )
+							pageProxy.setAttributes( pageAttributesVO );
+					}
 
 					break;
 				}
@@ -89,6 +99,16 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if( operation == PPMOperationNames.READ )
 						pageProxy.getWYSIWYG();
+					
+					break;
+				}
+					
+				case PPMPageTargetNames.XML_PRESENTATION:
+				{
+					if( operation == PPMOperationNames.READ )
+						pageProxy.getXMLPresentation();
+					else if( operation == PPMOperationNames.UPDATE )
+						pageProxy.setXMLPresentation( body.xmlPresentation );
 					
 					break;
 				}

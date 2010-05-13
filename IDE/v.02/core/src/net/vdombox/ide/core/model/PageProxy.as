@@ -157,9 +157,10 @@ package net.vdombox.ide.core.model
 				serverActionsXML.appendChild( serverActionVO.toXML() );
 			}
 
-			token = soap.set_server_actions( pageVO.applicationVO.id, pageVO.id, serverActions );
+			token = soap.set_server_actions( pageVO.applicationVO.id, pageVO.id, serverActionsXML );
 
 			token.recipientName = proxyName;
+			token.serverActions = serverActions.slice();
 
 			return token;
 		}
@@ -175,6 +176,26 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
+		public function getXMLPresentation() : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.get_object_script_presentation( pageVO.applicationVO.id, pageVO.id );
+
+			token.recipientName = proxyName;
+
+			return token;
+		}
+
+		public function setXMLPresentation( value : String ) : AsyncToken
+		{
+			var token : AsyncToken;
+			token = soap.submit_object_script_presentation( pageVO.applicationVO.id, pageVO.id, value );
+			
+			token.recipientName = proxyName;
+			
+			return token;
+		}
+		
 		public function createObject( typeVO : TypeVO, attributes : Array ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -185,8 +206,7 @@ package net.vdombox.ide.core.model
 			if ( attributes.length > 0 )
 			{
 				attributesXML =
-					<Attributes/>
-					;
+					<Attributes/>;
 
 				for each ( attributeVO in attributes )
 				{
@@ -206,12 +226,12 @@ package net.vdombox.ide.core.model
 		public function deleteObject( objectVO : ObjectVO ) : AsyncToken
 		{
 			var token : AsyncToken;
-			
+
 			token = soap.delete_object( pageVO.applicationVO.id, objectVO.id );
-			
+
 			token.recipientName = proxyName;
 			token.objectVO = objectVO;
-			
+
 			return token;
 		}
 
@@ -244,19 +264,6 @@ package net.vdombox.ide.core.model
 			return objectProxy;
 		}
 
-//		public function getObjectProxyAt( objectID : String ) : ObjectProxy
-//		{
-//			var objectProxy : ObjectProxy = facade.retrieveProxy( ObjectProxy.NAME + "/" + pageVO.applicationID + "/" + pageVO.id + "/" + objectID ) as ObjectProxy;
-//			
-//			if ( !objectProxy )
-//			{
-//				objectProxy = new ObjectProxy( objectVO ) as ObjectProxy;
-//				facade.registerProxy( objectProxy );
-//			}
-//			
-//			return objectProxy;
-//		}
-
 		private function addHandlers() : void
 		{
 			soap.get_child_objects_tree.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -264,9 +271,12 @@ package net.vdombox.ide.core.model
 			soap.get_one_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.render_wysiwyg.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -276,9 +286,12 @@ package net.vdombox.ide.core.model
 			soap.get_one_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.set_attributes.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_server_actions.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.render_wysiwyg.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.create_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_object.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.submit_object_script_presentation.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createObjectsList( objects : XML ) : void
@@ -379,6 +392,8 @@ package net.vdombox.ide.core.model
 			var pageAttributesVO : PageAttributesVO;
 			var objectVO : ObjectVO;
 
+			var xmlPresentation : String;
+			
 			switch ( operationName )
 			{
 				case "get_child_objects_tree":
@@ -396,8 +411,7 @@ package net.vdombox.ide.core.model
 						token = soap.render_wysiwyg( pageVO.applicationVO.id, pageVO.id, "", 1 );
 
 						token.structure =
-							<structure>{structure}</structure>
-							;
+							<structure>{structure}</structure>;
 						token.recipientName = proxyName;
 						token.requestFunctionName = GET_WYSIWYG;
 					}
@@ -425,24 +439,24 @@ package net.vdombox.ide.core.model
 
 					for each ( serverActionXML in serverActionsXML )
 					{
-						serverActionVO = new ServerActionVO(); //TODO: А нафига pageVO ?
-						
+						serverActionVO = new ServerActionVO();
+
 						serverActionVO.setContainerID( pageVO.id );
 						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
-						
+
 						serverActionVO.setProperties( serverActionXML );
-						
+
 						serverActions.push( serverActionVO );
 					}
 
-					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, serverActions )
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, { pageVO: pageVO, serverActions: serverActions } )
 
 					break;
 				}
 
 				case "set_server_actions":
 				{
-					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_GETTED, { pageVO: pageVO } )
+					sendNotification( ApplicationFacade.PAGE_SERVER_ACTIONS_SETTED, { pageVO: pageVO, serverActions: token.serverActions } )
 
 					break;
 				}
@@ -469,7 +483,7 @@ package net.vdombox.ide.core.model
 						pageAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
 
 						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED,
-															  { pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
+							{ pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
 						notification.token = token;
 					}
 
@@ -482,7 +496,7 @@ package net.vdombox.ide.core.model
 					pageAttributesVO.setXMLDescription( result.Object[ 0 ] );
 
 					notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED,
-														  { pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
+						{ pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
 					notification.token = token;
 
 					break;
@@ -527,12 +541,34 @@ package net.vdombox.ide.core.model
 
 					break;
 				}
-					
+
 				case "delete_object":
 				{
 					objectVO = token.objectVO;
-					
+
 					sendNotification( ApplicationFacade.PAGE_OBJECT_DELETED, { pageVO: pageVO, objectVO: objectVO } );
+
+					break;
+				}
+
+				case "get_object_script_presentation":
+				{
+					try
+					{
+						xmlPresentation = result.Result[ 0 ].*.toString();
+					}
+					catch ( erroe : Error )
+					{
+					}
+
+					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_GETTED, { pageVO: pageVO, xmlPresentation: xmlPresentation } );
+					
+					break;
+				}
+					
+				case "submit_object_script_presentation":
+				{
+					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_SETTED, { pageVO: pageVO, xmlPresentation: xmlPresentation } );
 					
 					break;
 				}

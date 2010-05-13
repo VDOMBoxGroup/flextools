@@ -1,53 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			 xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 
-			 width="550" height="300">
-	
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 height="300" width="550">
+
 	<fx:Metadata>
 		[HostComponent("Object")]
 	</fx:Metadata>
-	
+
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="disabled" stateGroups="disabledGroup" />
-		<s:State name="normalAndInactive" stateGroups="inactiveGroup" />
-		<s:State name="disabledAndInactive" stateGroups="disabledGroup, inactiveGroup" />
+		<s:State name="normal"/>
+		<s:State name="disabled" stateGroups="disabledGroup"/>
+		<s:State name="normalAndInactive" stateGroups="inactiveGroup"/>
+		<s:State name="disabledAndInactive" stateGroups="disabledGroup, inactiveGroup"/>
 	</s:states>
-	
+
 	<!-- main layer -->
-	<s:Group left="1" right="1" top="1" bottom="1" mask="{topMask}">
-		
+	<s:Group bottom="1" left="1" right="1" top="1"
+			 mask="{topMask}">
+
 		<!-- layer 1: background fill -->
 		<!--- Defines the background color of the skin. -->
 		<s:Rect id="backgroundRect"
-				left="0" right="0" top="0" bottom="0">
+				bottom="0" left="0" right="0" top="0">
 			<s:fill>
 				<s:LinearGradient rotation="90">
 					<s:entries>
-						<s:GradientEntry color="0x474b50" ratio="0.0" />
-						<s:GradientEntry color="0x151515" ratio="0.7" />
+						<s:GradientEntry color="0x474b50"
+										 ratio="0.0"/>
+						<s:GradientEntry color="0x151515"
+										 ratio="0.7"/>
 					</s:entries>
-							 
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
-		
+
 		<!-- layer 2: contentGroup -->
 		<s:Group id="contentGroup"
-				 top="25" width="100%" height="100%" minHeight="0" minWidth="0"/>
+				 height="100%" width="100%"
+				 top="25"/>
 	</s:Group>
-	
+
 	<!-- mask for main layer -->
-	<s:Group id="topMask" left="1" right="1" top="1" bottom="1">
-		<s:Rect width="100%" height="100%" y="25" radiusX="10" radiusY="10">
+	<s:Group id="topMask"
+			 bottom="1" left="1" right="1" top="1">
+		<s:Rect height="100%" width="100%" y="25"
+				radiusX="10" radiusY="10">
 			<s:fill>
-				<s:SolidColor color="0xCC0000" alpha="0.3" />
+				<s:SolidColor color="0xCC0000"
+							  alpha="0.0"/>
 			</s:fill>
 		</s:Rect>
 	</s:Group>
-	
-	<s:BitmapImage source="@Embed(source='../assets/login/logo.png')"
-				   x="10" width="70" height="70" />
+
+	<s:BitmapImage height="70" source="@Embed(source='../assets/login/logo.png')" width="70" x="10"/>
 </s:SparkSkin>

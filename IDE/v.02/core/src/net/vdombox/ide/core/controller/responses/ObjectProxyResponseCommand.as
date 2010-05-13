@@ -40,6 +40,13 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+				
+				case ApplicationFacade.OBJECT_SERVER_ACTIONS_SETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS, body );
+					
+					break;
+				}
 					
 				case ApplicationFacade.OBJECT_OBJECT_CREATED:
 				{
@@ -51,6 +58,20 @@ package net.vdombox.ide.core.controller.responses
 				case ApplicationFacade.OBJECT_WYSIWYG_GETTED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.WYSIWYG, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.OBJECT_XML_PRESENTATION_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.XML_PRESENTATION, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.OBJECT_XML_PRESENTATION_SETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.XML_PRESENTATION, body );
 					
 					break;
 				}

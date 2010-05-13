@@ -1,5 +1,6 @@
 package net.vdombox.ide.core.view
 {
+	import flash.desktop.NativeApplication;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
@@ -68,7 +69,8 @@ package net.vdombox.ide.core.view
 
 			loginView.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
 			loginView.selectLang.addEventListener( IndexChangeEvent.CHANGE, selectLang_changeHandler );
-			loginView.submitButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
+			loginView.connectButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
+			loginView.exitButton.addEventListener( MouseEvent.CLICK, exitButton_clickHandler );
 		}
 
 		private function setupLanguageList() : void
@@ -98,8 +100,8 @@ package net.vdombox.ide.core.view
 
 			setupLanguageList();
 //
-//			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
-//				submit();
+			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
+				submit();
 		}
 
 		private function selectLang_changeHandler( event : IndexChangeEvent ) : void
@@ -125,6 +127,11 @@ package net.vdombox.ide.core.view
 		private function submitButton_clickHandler( event : MouseEvent ) : void
 		{
 			submit();
+		}
+		
+		private function exitButton_clickHandler( event : MouseEvent ) : void
+		{
+			NativeApplication.nativeApplication.exit();
 		}
 	}
 }

@@ -60,12 +60,13 @@ package net.vdombox.ide.core.model
 			if ( resource )
 			{
 				resourceVO.setData( resource );
-				resourceVO.setStatus( "loaded" );
+				resourceVO.setStatus( ResourceVO.LOADED );
 				
 				sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 			}
 			else
 			{
+				resourceVO.setStatus( ResourceVO.LOAD_PROGRESS );
 				var token : AsyncToken = soap.get_resource( resourceVO.ownerID, resourceVO.id );
 				
 				token.recipientName = proxyName;
@@ -197,6 +198,8 @@ package net.vdombox.ide.core.model
 			base64Data.insertNewLines = false;
 			base64Data.encodeBytes( data );
 
+			resourceVO.setStatus( ResourceVO.UPLOAD_PROGRESS );
+			
 			var token : AsyncToken = soap.set_resource( resourceVO.ownerID, resourceVO.type, resourceVO.name, base64Data.toString());
 
 			token.recipientName = proxyName;
@@ -237,7 +240,7 @@ package net.vdombox.ide.core.model
 					cacheManager.cacheFile( resourceVO.id, imageSource );
 					
 					resourceVO.setData( imageSource );
-					resourceVO.setStatus( "loaded" );
+					resourceVO.setStatus( ResourceVO.LOADED );
 					
 					sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
 					
@@ -249,6 +252,7 @@ package net.vdombox.ide.core.model
 					resourceVO = event.token.resourceVO as ResourceVO;
 
 					resourceVO.setXMLDescription( result.Resource[ 0 ] );
+					resourceVO.setStatus( ResourceVO.UPLOADED );
 					
 					sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
 					soap_setResource();

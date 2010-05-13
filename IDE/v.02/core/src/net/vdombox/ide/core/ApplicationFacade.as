@@ -132,6 +132,7 @@ package net.vdombox.ide.core
 		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
 		public static const APPLICATION_LIBRARY_CREATED : String = "applicationLibraryCreated";
+		public static const APPLICATION_LIBRARY_UPDATED : String = "applicationLibraryUpdated";
 		public static const APPLICATION_LIBRARY_DELETED : String = "applicationLibraryDeleted";
 		public static const APPLICATION_EVENTS_GETTED : String = "applicationEventsGetted";
 		public static const APPLICATION_EVENTS_SETTED : String = "applicationEventsSetted";
@@ -147,17 +148,21 @@ package net.vdombox.ide.core
 		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
 		public static const PAGE_SERVER_ACTIONS_SETTED : String = "pageServerActionsGetted";
 		public static const PAGE_WYSIWYG_GETTED : String = "pageWYSIWYGGetted";
+		public static const PAGE_XML_PRESENTATION_GETTED : String = "pageXMLPresentationGetted";
+		public static const PAGE_XML_PRESENTATION_SETTED : String = "pageXMLPresentationSetted";
 
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
 		public static const OBJECT_ATTRIBUTES_SETTED : String = "objectAttributesSetted";
 		public static const OBJECT_SERVER_ACTIONS_GETTED : String = "objectServerActionsGetted";
+		public static const OBJECT_SERVER_ACTIONS_SETTED : String = "objectServerActionsSetted";
 		public static const OBJECT_OBJECT_CREATED : String = "objectObjectCreated";
 		public static const OBJECT_WYSIWYG_GETTED : String = "objectWYSIWYGGetted";
+		public static const OBJECT_XML_PRESENTATION_GETTED : String = "objectXMLPresentationGetted";
+		public static const OBJECT_XML_PRESENTATION_SETTED : String = "objectXMLPresentationSetted";
 
 //		window
 		public static const OPEN_WINDOW : String = "openWindow";
-
 		public static const CLOSE_WINDOW : String = "closeWindow";
 
 //		log
@@ -243,13 +248,18 @@ package net.vdombox.ide.core
 			registerCommand( PAGE_SERVER_ACTIONS_GETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_SERVER_ACTIONS_SETTED, PageProxyResponseCommand );
 			registerCommand( PAGE_WYSIWYG_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_XML_PRESENTATION_GETTED, PageProxyResponseCommand );
+			registerCommand( PAGE_XML_PRESENTATION_SETTED, PageProxyResponseCommand );
 
 			registerCommand( OBJECT_PROXY_REQUEST, ObjectProxyRequestCommand );
 			registerCommand( OBJECT_ATTRIBUTES_GETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_ATTRIBUTES_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_SERVER_ACTIONS_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_SERVER_ACTIONS_SETTED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_OBJECT_CREATED, ObjectProxyResponseCommand );
 			registerCommand( OBJECT_WYSIWYG_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_XML_PRESENTATION_GETTED, ObjectProxyResponseCommand );
+			registerCommand( OBJECT_XML_PRESENTATION_SETTED, ObjectProxyResponseCommand );
 
 			registerCommand( RESOURCES_PROXY_REQUEST, ResourcesProxyRequestCommand );
 			registerCommand( RESOURCES_GETTED, ResourcesProxyResponseCommand );

@@ -89,6 +89,20 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+					
+				case ApplicationFacade.PAGE_XML_PRESENTATION_GETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.XML_PRESENTATION, body );
+					
+					break;
+				}
+					
+				case ApplicationFacade.PAGE_XML_PRESENTATION_SETTED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.XML_PRESENTATION, body );
+					
+					break;
+				}
 			}
 			
 			if ( message )

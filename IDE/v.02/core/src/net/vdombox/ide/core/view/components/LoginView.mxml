@@ -4,37 +4,74 @@
 					xmlns:s="library://ns.adobe.com/flex/spark">
 
 	<s:VGroup styleName="loginForm"
-			  left="20" right="100" top="100">
+			  left="20" right="100" top="50"
+			  gap="10">
 		<s:HGroup width="100%"
-				  verticalAlign="middle">
+				  verticalAlign="middle"
+				  gap="20">
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }" width="100%"
-					 color="white" textAlign="right"/>
+					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 			<s:TextInput id="username"
 						 width="240"/>
 		</s:HGroup>
 		<s:HGroup width="100%"
-				  verticalAlign="middle">
+				  verticalAlign="middle"
+				  gap="20">
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
-					 color="white" textAlign="right"/>
+					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 			<s:TextInput id="password"
 						 width="240"/>
 		</s:HGroup>
 		<s:HGroup width="100%"
-				  verticalAlign="middle">
+				  verticalAlign="middle"
+				  gap="20">
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
-					 color="white" textAlign="right"/>
+					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 			<s:TextInput id="hostname"
 						 width="240"/>
 		</s:HGroup>
 		<s:HGroup width="100%"
-				  verticalAlign="middle">
+				  verticalAlign="middle"
+				  gap="20">
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'language' ) }" width="100%"
-					 color="white" textAlign="right"/>
+					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 			<s:ComboBox id="selectLang"
 						width="240"/>
 		</s:HGroup>
 	</s:VGroup>
-	<s:Button id="submitButton"
-			  height="35" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }"
-			  bottom="0" right="0"/>
+
+	<s:BitmapImage source="@Embed(source='../assets/login/vdom_name.png')"
+				   bottom="35" right="0"/>
+
+	<s:Group height="35" width="100%"
+			 bottom="0">
+		<s:Rect bottom="0" left="0" right="0" top="0">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:entries>
+						<s:GradientEntry color="0xEBEBEB"
+										 ratio="0.0"/>
+						<s:GradientEntry color="0xC4C5C6"
+										 ratio="0.7"/>
+					</s:entries>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+
+		<s:Line left="0" right="0" top="1">
+			<s:stroke>
+				<s:SolidColorStroke color="0xC4C5C6"/>
+			</s:stroke>
+		</s:Line>
+
+		<s:Button id="exitButton"
+				  height="35" label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
+				  fontFamily="Verdana" fontSize="14" left="-2" skinClass="net.vdombox.ide.core.view.skins.LoginButtonSkin"/>
+
+		<s:Button id="connectButton"
+				  height="35" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
+				  fontFamily="Verdana" fontSize="14" right="-2" skinClass="net.vdombox.ide.core.view.skins.LoginButtonSkin"/>
+	</s:Group>
 </s:NavigatorContent>
+
+

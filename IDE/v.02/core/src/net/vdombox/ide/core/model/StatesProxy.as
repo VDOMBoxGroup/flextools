@@ -33,8 +33,6 @@ package net.vdombox.ide.core.model
 			_selectedObject = null;
 			_selectedPage = null;
 			_selectedApplication = value;
-			
-			
 		}
 		
 		public function get selectedPage() : PageVO

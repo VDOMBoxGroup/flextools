@@ -27,6 +27,7 @@ package net.vdombox.ide.core.controller.requests
 			var operation : String = message.getOperation();
 
 			var applicationVO : ApplicationVO;
+			var libraryVO : LibraryVO;
 
 			if ( body is ApplicationVO )
 				applicationVO = body as ApplicationVO;
@@ -71,22 +72,14 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMApplicationTargetNames.LIBRARY:
 				{
+					libraryVO = body.libraryVO as LibraryVO;
+					
 					if ( operation == PPMOperationNames.CREATE )
-					{
-						var name : String = body.name;
-						var script : String = body.script;
-
-						if ( !name )
-							break;
-
-						applicationProxy.setLibrary( name, script );
-					}
+						applicationProxy.createLibrary( libraryVO );
+					else if ( operation == PPMOperationNames.UPDATE )
+						applicationProxy.updateLibrary( libraryVO );
 					else if ( operation == PPMOperationNames.DELETE )
-					{
-						var libraryVO : LibraryVO = body.libraryVO;
-
-						applicationProxy.removeLibrary( libraryVO );
-					}
+						applicationProxy.deleteLibrary( libraryVO );
 
 					break;
 				}
@@ -117,8 +110,11 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMApplicationTargetNames.INFORMATION:
 				{
-					var applicationInformationVO : ApplicationInformationVO = body.applicationInformationVO;
-					applicationProxy.changeApplicationInformation( applicationInformationVO );
+					if ( operation == PPMOperationNames.UPDATE )
+					{
+						var applicationInformationVO : ApplicationInformationVO = body.applicationInformationVO;
+						applicationProxy.changeApplicationInformation( applicationInformationVO );
+					}
 
 					break;
 				}

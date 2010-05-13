@@ -50,7 +50,10 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMObjectTargetNames.SERVER_ACTIONS:
 				{
-					objectProxy.getServerActions();
+					if( operation == PPMOperationNames.READ )
+						objectProxy.getServerActions();
+					else if( operation == PPMOperationNames.UPDATE )
+						objectProxy.setServerActions( body.serverActions );
 
 					break;
 				}
@@ -67,6 +70,16 @@ package net.vdombox.ide.core.controller.requests
 				{
 					if( operation == PPMOperationNames.READ )
 						objectProxy.getWYSIWYG();
+					
+					break;
+				}
+					
+				case PPMObjectTargetNames.XML_PRESENTATION:
+				{
+					if( operation == PPMOperationNames.READ )
+						objectProxy.getXMLPresentation();
+					else if( operation == PPMOperationNames.UPDATE )
+						objectProxy.setXMLPresentation( body.xmlPresentation );
 					
 					break;
 				}

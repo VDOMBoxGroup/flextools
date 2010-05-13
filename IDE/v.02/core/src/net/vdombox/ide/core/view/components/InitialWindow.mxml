@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Window xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:Window xmlns:components="net.vdombox.ide.core.view.components.*"
+		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  
-		  xmlns:components="net.vdombox.ide.core.view.components.*"
-		  
 		  height="300" width="550"
-		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }"
-		  transparent="true"
-		  
 		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
-		  
-		  mouseDown="window_mouseDownHandler( event )" >
+		  mouseDown="window_mouseDownHandler( event )"
+		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true">
 
 	<fx:Metadata>
 		[ ResourceBundle( "LoginForm" ) ]
 	</fx:Metadata>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import flash.display.NativeWindowSystemChrome;
 			import flash.events.MouseEvent;
-			
-			import mx.controls.Button;
-			
+
+			import spark.components.Button;
 			import spark.components.RichEditableText;
+
+			[SkinPart]
+			public var exitButton : Button;
+
+			[SkinPart]
+			public var connectButton : Button;
 
 			protected function window_mouseDownHandler( event : MouseEvent ) : void
 			{
 				var target : Object = event.target;
-				
-				if ( target is RichEditableText || target is Button || target is mx.controls.Button )
+
+				if ( target is RichEditableText || target is Button )
 					return;
 
 				nativeWindow.startMove();
@@ -38,11 +38,15 @@
 			}
 		]]>
 	</fx:Script>
-	
+
 	<mx:ViewStack id="viewStack"
-				  width="100%" height="100%" creationPolicy="all">
+				  creationPolicy="all" height="100%" width="100%">
+		
 		<components:ProgressView id="progressView"/>
+		
 		<components:LoginView id="loginView"/>
+		
 		<components:ErrorView id="errorView"/>
+		
 	</mx:ViewStack>
 </s:Window>

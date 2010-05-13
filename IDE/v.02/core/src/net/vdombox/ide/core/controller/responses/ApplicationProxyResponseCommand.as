@@ -76,6 +76,13 @@ package net.vdombox.ide.core.controller.responses
 					
 					break;
 				}
+				
+				case ApplicationFacade.APPLICATION_LIBRARY_UPDATED:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.LIBRARY, body );
+					
+					break;
+				}
 					
 				case ApplicationFacade.APPLICATION_LIBRARY_DELETED:
 				{

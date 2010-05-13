@@ -70,7 +70,7 @@ package net.vdombox.ide.core.controller.requests
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						statesProxy.selectedPage = body as PageVO;
-						properties = body;
+						properties = statesProxy.selectedPage;
 					}
 
 					break;
@@ -85,7 +85,7 @@ package net.vdombox.ide.core.controller.requests
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						statesProxy.selectedObject = body as ObjectVO;
-						properties = body;
+						properties = statesProxy.selectedObject;
 					}
 
 					break;
