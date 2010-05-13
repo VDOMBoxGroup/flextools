@@ -1,6 +1,7 @@
 package net.vdombox.ide.modules.scripts.controller.messages
 {
 	import net.vdombox.ide.common.PPMObjectTargetNames;
+	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	
@@ -23,7 +24,10 @@ package net.vdombox.ide.modules.scripts.controller.messages
 			{
 				case PPMObjectTargetNames.SERVER_ACTIONS:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					if( PPMOperationNames.READ )
+						sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body.serverActions );
+					else if( PPMOperationNames.UPDATE )
+						sendNotification( ApplicationFacade.SERVER_ACTIONS_SETTED, body.serverActions );
 					
 					break;
 				}

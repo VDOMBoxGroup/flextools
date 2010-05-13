@@ -5,6 +5,9 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.events.DragEvent;
+			import mx.managers.DragManager;
+			
 			import net.vdombox.ide.modules.scripts.events.ContainersPanelEvent;
 
 			[Bindable]
@@ -19,18 +22,16 @@
 			{
 				var newSelectedItem : XML;
 
-				if ( value )
+				if ( value != "" && _structure )
 					newSelectedItem = _structure..object.( @id == value )[ 0 ];
 
-				if ( containersTree.selectedItem == newSelectedItem && containersTree.selectedIndex == 0 )
+				if ( containersTree.selectedItem == newSelectedItem )
 					return;
 
 				if ( newSelectedItem )
 					containersTree.selectedItem = newSelectedItem;
 				else
-					containersTree.selectedIndex = 0;
-
-				dispatchEvent( new ContainersPanelEvent( ContainersPanelEvent.CONTAINER_CHANGED ) );
+					containersTree.selectedIndex = -1;
 			}
 
 			public function get selectedItem() : XML

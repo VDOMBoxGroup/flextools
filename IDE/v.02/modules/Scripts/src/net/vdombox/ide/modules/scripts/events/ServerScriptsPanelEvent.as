@@ -7,6 +7,7 @@ package net.vdombox.ide.modules.scripts.events
 		public static var SELECTED_SERVER_ACTION_CHANGED : String = "selectedServerActionChanged";
 		public static var CREATE_ACTION : String = "createAction";
 		public static var DELETE_ACTION : String = "deleteAction";
+		public static var ACTION_DELETED : String = "actionDeleted";
 		
 		public function ServerScriptsPanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
 		{

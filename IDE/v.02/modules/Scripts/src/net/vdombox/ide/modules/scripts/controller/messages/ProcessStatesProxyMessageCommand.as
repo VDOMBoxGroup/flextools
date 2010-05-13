@@ -22,16 +22,21 @@ package net.vdombox.ide.modules.scripts.controller.messages
 			var operation : String = message.getOperation();
 
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 
 			switch ( target )
 			{
+				case PPMStatesTargetNames.ALL_STATES:
+				{
+					sessionProxy.setStates( body );
+					sendNotification( ApplicationFacade.ALL_STATES_GETTED, body );
+					
+					break;
+				}
+				
 				case PPMStatesTargetNames.SELECTED_APPLICATION:
 				{
 					var selectedApplication : ApplicationVO = body as ApplicationVO;
-					statesObject[ ApplicationFacade.SELECTED_APPLICATION ] = selectedApplication;
-
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, body );
+					sessionProxy.selectedApplication = selectedApplication;
 
 					break;
 				}
@@ -39,28 +44,16 @@ package net.vdombox.ide.modules.scripts.controller.messages
 				case PPMStatesTargetNames.SELECTED_PAGE:
 				{
 					var selectedPageVO : PageVO = body as PageVO;
-
-					if ( statesObject[ ApplicationFacade.SELECTED_PAGE ] != selectedPageVO )
-					{
-						statesObject[ ApplicationFacade.SELECTED_PAGE ] = selectedPageVO;
-
-						sendNotification( ApplicationFacade.SELECTED_PAGE_CHANGED, body );
-					}
-
+					sessionProxy.selectedPage = selectedPageVO;
+					
 					break;
 				}
 					
 				case PPMStatesTargetNames.SELECTED_OBJECT:
 				{
 					var selectedObjectVO : ObjectVO = body as ObjectVO;
-
-					if ( statesObject[ ApplicationFacade.SELECTED_OBJECT ] != selectedObjectVO )
-					{
-						statesObject[ ApplicationFacade.SELECTED_OBJECT ] = selectedObjectVO;
-
-						sendNotification( ApplicationFacade.SELECTED_OBJECT_CHANGED, body );
-					}
-
+					sessionProxy.selectedObject = selectedObjectVO;
+					
 					break;
 				}
 			}

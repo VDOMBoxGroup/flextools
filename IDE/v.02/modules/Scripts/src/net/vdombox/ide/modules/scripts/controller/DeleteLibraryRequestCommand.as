@@ -15,9 +15,8 @@ package net.vdombox.ide.modules.scripts.controller
 			var libraryVO : LibraryVO = notification.getBody() as LibraryVO;
 			
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 			
-			var applicationVO : ApplicationVO = statesObject[ ApplicationFacade.SELECTED_APPLICATION ];
+			var applicationVO : ApplicationVO = sessionProxy.selectedApplication;
 			
 			if( libraryVO && applicationVO )
 				sendNotification( ApplicationFacade.DELETE_LIBRARY, { applicationVO : applicationVO, libraryVO : libraryVO } );

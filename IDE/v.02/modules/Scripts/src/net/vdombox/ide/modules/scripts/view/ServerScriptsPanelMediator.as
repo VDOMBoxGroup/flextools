@@ -1,10 +1,9 @@
 package net.vdombox.ide.modules.scripts.view
 {
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.events.ServerScriptsPanelEvent;
+	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ServerScriptsPanel;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -20,36 +19,61 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 
-		public var selectedPageVO : PageVO;
+		private var sessionProxy : SessionProxy;
 
-		public var selectedObjectVO : ObjectVO;
+		private var isActive : Boolean;
 
-		public var serverActions : Array;
+//		
+//		
+//		public var selectedPageVO : PageVO;
+//
+//		public var selectedObjectVO : ObjectVO;
+//
+//		public var serverActions : Array;
 
 		public function get serverScriptsPanel() : ServerScriptsPanel
 		{
 			return viewComponent as ServerScriptsPanel;
 		}
 
+		public function get serverScripts() : Array
+		{	
+			if( serverScriptsPanel && serverScriptsPanel.scripts )
+				return serverScriptsPanel.scripts.slice();
+			else
+				return null;
+		}
+		
 		override public function onRegister() : void
 		{
+			isActive = false;
+
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
 			removeHandlers();
+
+			clearData();
 		}
 
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
+			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
+
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
+
 			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
 
 			interests.push( ApplicationFacade.SERVER_ACTIONS_GETTED );
+			interests.push( ApplicationFacade.SERVER_ACTIONS_SETTED );
 
 			return interests;
 		}
@@ -59,21 +83,37 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
+			if ( !isActive && name != ApplicationFacade.BODY_START )
+				return;
+
 			switch ( name )
 			{
-				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				case ApplicationFacade.BODY_START:
 				{
-					selectedPageVO = body as PageVO;
+					if ( sessionProxy.selectedApplication )
+					{
+						isActive = true;
+						sendNotification( ApplicationFacade.GET_PAGES, sessionProxy.selectedApplication );
 
-					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
+						break;
+					}
+				}
+
+				case ApplicationFacade.BODY_STOP:
+				{
+					isActive = false;
+
+					clearData();
 
 					break;
 				}
 
+				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				{
+				}
+
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-					selectedObjectVO = body as ObjectVO;
-
 					sendNotification( ApplicationFacade.GET_SERVER_ACTIONS_REQUEST );
 
 					break;
@@ -81,10 +121,12 @@ package net.vdombox.ide.modules.scripts.view
 
 				case ApplicationFacade.SERVER_ACTIONS_GETTED:
 				{
-					serverActions = body as Array;
-
-					serverScriptsPanel.scripts = serverActions;
-
+				}
+					
+				case ApplicationFacade.SERVER_ACTIONS_SETTED:
+				{
+					serverScriptsPanel.scripts = body as Array;
+					
 					break;
 				}
 
@@ -101,11 +143,11 @@ package net.vdombox.ide.modules.scripts.view
 		private function addHandlers() : void
 		{
 			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.CREATE_ACTION, createActionHandler,
-												 false, 0, true );
+				false, 0, true );
 			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.DELETE_ACTION, deleteActionHandler,
-												 false, 0, true );
+				false, 0, true );
 			serverScriptsPanel.addEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED,
-												 selectedServerActionChangedHandler, false, 0, true );
+				selectedServerActionChangedHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -113,7 +155,12 @@ package net.vdombox.ide.modules.scripts.view
 			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.CREATE_ACTION, createActionHandler );
 			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.DELETE_ACTION, deleteActionHandler );
 			serverScriptsPanel.removeEventListener( ServerScriptsPanelEvent.SELECTED_SERVER_ACTION_CHANGED,
-													selectedServerActionChangedHandler );
+				selectedServerActionChangedHandler );
+		}
+
+		private function clearData() : void
+		{
+			serverScriptsPanel.scripts = null;
 		}
 
 		private function createActionHandler( event : ServerScriptsPanelEvent ) : void
@@ -128,6 +175,13 @@ package net.vdombox.ide.modules.scripts.view
 			if ( !deletedServerActionVO )
 				return;
 
+			var serverActions : Array = serverScriptsPanel.scripts;
+
+			if ( !serverActions )
+				return;
+
+			serverActions = serverActions.slice();
+
 			for ( var i : uint = 0; i < serverActions.length; i++ )
 			{
 				if ( serverActions[ i ].name == deletedServerActionVO.name )
@@ -136,17 +190,16 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 			}
-
-			if ( selectedObjectVO )
+			
+			if ( sessionProxy.selectedObject )
 			{
-				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { objectVO: selectedObjectVO,
-									  serverActions: serverActions } );
+				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { objectVO: sessionProxy.selectedObject,
+					serverActions: serverActions } );
 			}
-			else if ( selectedPageVO )
+			else if ( sessionProxy.selectedPage )
 			{
-				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { pageVO: selectedPageVO, serverActions: serverActions } );
+				sendNotification( ApplicationFacade.SET_SERVER_ACTIONS, { pageVO: sessionProxy.selectedPage, serverActions: serverActions } );
 			}
-
 		}
 
 		private function selectedServerActionChangedHandler( event : ServerScriptsPanelEvent ) : void

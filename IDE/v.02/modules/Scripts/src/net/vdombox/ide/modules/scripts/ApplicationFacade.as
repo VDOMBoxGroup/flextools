@@ -11,6 +11,7 @@ package net.vdombox.ide.modules.scripts
 	import net.vdombox.ide.modules.scripts.controller.DeleteLibraryRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.GetServerActionsRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.OpenCreateActionWindowCommand;
+	import net.vdombox.ide.modules.scripts.controller.SaveScriptRequestCommand;
 	import net.vdombox.ide.modules.scripts.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.scripts.controller.StartupCommand;
 	import net.vdombox.ide.modules.scripts.controller.TearDownCommand;
@@ -71,9 +72,22 @@ package net.vdombox.ide.modules.scripts
 		public static const PROCESS_PAGE_PROXY_MESSAGE : String = "processPageProxyMessage";
 		public static const PROCESS_OBJECT_PROXY_MESSAGE : String = "processObjectProxyMessage";
 		
-//		server messages
-		public static const GET_SELECTED_APPLICATION : String = "getSelectedApplication";
-		public static const SELECTED_APPLICATION_GETTED : String = "selectedApplicationGetted";
+//		states
+		public static const GET_ALL_STATES : String = "getAllStates";
+		public static const ALL_STATES_GETTED : String = "allStatesGetted";
+		
+		public static const SET_ALL_STATES : String = "setAllStates";
+		public static const ALL_STATES_SETTED : String = "allStatesSetted";
+		
+		public static const SELECTED_APPLICATION_CHANGED : String = "selectedApplicationChanged";
+		
+		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
+		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
+		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
+				
+		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
+		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
+		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
 		
 //		types
 		public static const GET_TYPES : String = "getTypes";
@@ -81,27 +95,14 @@ package net.vdombox.ide.modules.scripts
 		
 //		other
 		public static const DELIMITER : String = "/";
-		public static const STATES : String = "states";
-		
-		public static const SELECTED_APPLICATION : String = "selectedApplication";
-		public static const SELECTED_PAGE : String = "selectedPage";
-		public static const SELECTED_OBJECT : String = "selectedObject";
+//		public static const STATES : String = "states";
 		
 		public static const BODY_CREATED : String = "bodyCreated";
+		public static const BODY_START : String = "bodyStart";
+		public static const BODY_STOP : String = "bodyStop";
 		
 		public static const GET_PAGES : String = "getPages";
 		public static const PAGES_GETTED : String = "pagesGetted";
-		
-		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
-		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
-		
-		public static const GET_SELECTED_PAGE : String = "getSelectedPages";
-		public static const SET_SELECTED_PAGE : String = "setSelectedPages";
-		public static const SELECTED_PAGE_CHANGED : String = "selectedPagesChanged";
-		
-		public static const GET_SELECTED_OBJECT : String = "getSelectedObject";
-		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
-		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
 		
 		public static const GET_OBJECTS : String = "getObjects";
 		public static const OBJECTS_GETTED : String = "objectsGetted";
@@ -127,16 +128,14 @@ package net.vdombox.ide.modules.scripts
 		
 		public static const OPEN_CREATE_ACTION_WINDOW : String = "openCreateActionWindow";
 		
-//		public static const CREATE_ACTION_REQUEST : String = "createActionRequest";
-//		public static const CREATE_LIBRARY_REQUEST : String = "createLibraryRequest";
-		
 		public static const CREATE_SCRIPT_REQUEST : String = "createScriptRequest";
-		
-//		public static const CREATE_SEVER_ACTION : String = "createAction";
-//		public static const SERVER_ACTION_CREATED : String = "actionCreated";
+		public static const SAVE_SCRIPT_REQUEST : String = "saveScriptRequest";
 		
 		public static const CREATE_LIBRARY : String = "createLibrary";
 		public static const LIBRARY_CREATED : String = "libraryCreated";
+		
+		public static const SAVE_LIBRARY : String = "saveLibrary";
+		public static const LIBRARY_SAVED : String = "librarySaved";
 		
 		public static const DELETE_LIBRARY_REQUEST : String = "deleteLibraryRequest";
 		
@@ -188,11 +187,11 @@ package net.vdombox.ide.modules.scripts
 			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 			registerCommand( GET_SERVER_ACTIONS_REQUEST, GetServerActionsRequestCommand );
 			
-//			registerCommand( CREATE_ACTION_REQUEST, CreateActionRequestCommand );
-//			registerCommand( CREATE_LIBRARY_REQUEST, CreateLibraryRequestCommand );
-			
 			registerCommand( OPEN_CREATE_ACTION_WINDOW, OpenCreateActionWindowCommand );
+			
 			registerCommand( CREATE_SCRIPT_REQUEST, CreateScriptRequestCommand );
+			
+			registerCommand( SAVE_SCRIPT_REQUEST, SaveScriptRequestCommand );
 			
 			registerCommand( DELETE_LIBRARY_REQUEST, DeleteLibraryRequestCommand );
 			

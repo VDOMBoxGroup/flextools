@@ -23,8 +23,6 @@ package net.vdombox.ide.modules.scripts.controller
 			facade.registerMediator( new ContainersPanelMediator( body.containersPanel ) );
 			facade.registerMediator( new ServerScriptsPanelMediator( body.serverScriptsPanel ) );
 			facade.registerMediator( new LibrariesPanelMediator( body.librariesPanel ) );
-			
-			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
 		}
 	}
 }

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark">
 
 	<fx:Script>
 		<![CDATA[
-			import spark.events.IndexChangeEvent;
+			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayList;
-
+			import mx.events.FlexEvent;
+			
 			import net.vdombox.ide.common.vo.LibraryVO;
 			import net.vdombox.ide.modules.scripts.events.LibrariesPanelEvent;
+			
+			import spark.events.IndexChangeEvent;
 
 			[Bindable]
 			private var _libraries : ArrayList;
@@ -23,8 +26,8 @@
 			{
 				librariesList.selectedItem = value;
 				librariesList.validateNow();
-				
-				if( librariesList.selectedIndex == -1 )
+
+				if ( librariesList.selectedIndex == -1 )
 					deleteButton.enabled = false;
 				else
 					deleteButton.enabled = true;
@@ -32,45 +35,93 @@
 
 			public function set libraries( value : Array ) : void
 			{
-				if ( value.length > 0 )
+				var oldSelectedItem : LibraryVO;
+				var oldSelectedIndex : int;
+				var isSelectedItemChanged : Boolean = true;
+				
+				if ( librariesList )
 				{
+					oldSelectedIndex = librariesList.selectedIndex;
+					oldSelectedItem = librariesList.selectedItem as LibraryVO;
+				}
+
+				if ( value && value.length > 0 )
+				{
+					var newSelectedIndex : int = -1;
+
+					if ( oldSelectedItem )
+					{
+						var i : uint;
+						for ( i = 0; i < value.length; i++ )
+						{
+							if ( LibraryVO( value[ i ] ).name == oldSelectedItem.name )
+							{
+								isSelectedItemChanged = false;
+								newSelectedIndex = i;
+								break;
+							}
+						}
+					}
+					else
+					{
+						isSelectedItemChanged = false;
+					}
+
 					_libraries = new ArrayList( value );
-					librariesList.selectedIndex = -1;
-					deleteButton.enabled = false;
+
+					if ( newSelectedIndex != -1 )
+						librariesList.validateNow();
+
+					librariesList.selectedIndex = newSelectedIndex;
 				}
 				else
 				{
 					_libraries = null;
-					librariesList.selectedIndex = -1;
-					deleteButton.enabled = false;
+					
+					if( librariesList.selectedIndex != -1 )
+						librariesList.selectedIndex = -1;
+					
+					if( oldSelectedIndex == -1 )
+						isSelectedItemChanged = false;
 				}
+				
+				if( isSelectedItemChanged )
+					dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) )					
 			}
 
 			protected function librariesList_changeHandler() : void
 			{
-				if( librariesList.selectedItem )
-					deleteButton.enabled = true;
-				else
+				dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) );
+			}
+
+			protected function librariesList_creationCompleteHandler( event : FlexEvent ) : void
+			{
+				BindingUtils.bindSetter( indexChanged, librariesList, "selectedIndex", true );
+			}
+
+			private function indexChanged( value : int ) : void
+			{
+				if ( value == -1 && deleteButton.enabled )
 					deleteButton.enabled = false;
-				
-				dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.SELECTED_LIBRARY_CHANGED ) )
+				else if ( !deleteButton.enabled && value != -1 )
+					deleteButton.enabled = true;
 			}
 		]]>
 	</fx:Script>
 
 	<s:List id="librariesList"
 			dataProvider="{ _libraries }" height="100%" labelField="name" width="100%"
-			change="librariesList_changeHandler()" />
+			change="librariesList_changeHandler()" creationComplete="librariesList_creationCompleteHandler(event)"/>
 
 	<s:controlBarContent>
 
-		<mx:Spacer width="100%" />
+		<mx:Spacer width="100%"/>
 
 		<s:Button label="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_add' ) }"
-				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.CREATE_LIBRARY ) )" />
+				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.CREATE_LIBRARY ) )"/>
 
-		<s:Button id="deleteButton" enabled="false"
-				  label="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_delete' ) }"
-				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY ) )" />
+		<s:Button id="deleteButton"
+				  enabled="false" label="{ resourceManager.getString( 'Scripts_General', 'libraries_panel_delete' ) }"
+				  click="dispatchEvent( new LibrariesPanelEvent( LibrariesPanelEvent.DELETE_LIBRARY ) )"/>
 	</s:controlBarContent>
 </s:Panel>

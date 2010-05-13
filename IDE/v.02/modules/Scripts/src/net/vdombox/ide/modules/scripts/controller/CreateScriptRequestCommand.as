@@ -1,11 +1,16 @@
 package net.vdombox.ide.modules.scripts.controller
 {
+	import mx.utils.ObjectUtil;
+	import mx.utils.UIDUtil;
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
+	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.ServerScriptsPanelMediator;
-
+	import net.vdombox.utils.MD5Utils;
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -20,9 +25,7 @@ package net.vdombox.ide.modules.scripts.controller
 
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
-
-			var selectedApplicationVO : ApplicationVO = statesObject[ ApplicationFacade.SELECTED_APPLICATION ] as ApplicationVO;
+			var selectedApplicationVO : ApplicationVO = sessionProxy.selectedApplication;
 
 			if ( !selectedApplicationVO || !scriptName || !target )
 				return;
@@ -31,34 +34,38 @@ package net.vdombox.ide.modules.scripts.controller
 			{
 				case ApplicationFacade.ACTION:
 				{
+					//TODO: сделать более полную обработку исключения...
+					if ( !facade.hasMediator( ServerScriptsPanelMediator.NAME ) )
+						return;
 
 					var serverScriptsPanelMediator : ServerScriptsPanelMediator = facade.retrieveMediator( ServerScriptsPanelMediator.NAME ) as
 						ServerScriptsPanelMediator;
 
-					var serverActions : Array = serverScriptsPanelMediator.serverActions;
+					var serverActions : Array = serverScriptsPanelMediator.serverScripts;
+
+					//TODO: сделать более полную обработку исключения...
+					if ( !serverActions )
+						return;
+
 					var serverActionVO : ServerActionVO;
 
-					if ( serverScriptsPanelMediator.selectedObjectVO )
-					{
-						//FIXME Убрал аттрибуты... Надо фиксить создание serverActionVO.
-						serverActionVO = new ServerActionVO( /*scriptName, serverScriptsPanelMediator.selectedObjectVO*/ );
-						serverActionVO.script = "";
-						
-						serverActions.push( serverActionVO );
+					serverActionVO = new ServerActionVO();
+					serverActionVO.setID( UIDUtil.createUID() );
+					serverActionVO.setName( scriptName );
+					serverActionVO.script = "";
 
+					serverActions.push( serverActionVO );
+
+					if ( sessionProxy.selectedObject )
+					{
 						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
-										  { objectVO: statesObject[ ApplicationFacade.SELECTED_OBJECT ], serverActions: serverActions } );
+							{ objectVO: sessionProxy.selectedObject, serverActions: serverActions } );
 					}
 
-					else if ( statesObject[ ApplicationFacade.SELECTED_PAGE ] )
+					else if ( sessionProxy.selectedPage )
 					{
-						serverActionVO = new ServerActionVO( /*scriptName, serverScriptsPanelMediator.selectedPageVO*/ );
-						serverActionVO.script = "";
-						
-						serverActions.push( serverActionVO );
-
 						sendNotification( ApplicationFacade.SET_SERVER_ACTIONS,
-										  { pageVO: statesObject[ ApplicationFacade.SELECTED_PAGE ], serverActions: serverActions } );
+							{ pageVO: sessionProxy.selectedPage, serverActions: serverActions } );
 					}
 
 					break;
@@ -66,7 +73,10 @@ package net.vdombox.ide.modules.scripts.controller
 
 				case ApplicationFacade.LIBRARY:
 				{
-					sendNotification( ApplicationFacade.CREATE_LIBRARY, { applicationVO: selectedApplicationVO, name: scriptName, script: "" } );
+					var libraryVO : LibraryVO = new LibraryVO( scriptName, selectedApplicationVO );
+					libraryVO.script = "";
+					
+					sendNotification( ApplicationFacade.CREATE_LIBRARY, { applicationVO: selectedApplicationVO, libraryVO : libraryVO } );
 
 					break;
 				}

@@ -11,15 +11,14 @@ package net.vdombox.ide.modules.scripts.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var statesObject : Object = sessionProxy.getObject( ApplicationFacade.STATES );
 			
-			var currentContainer : Object = statesObject[ ApplicationFacade.SELECTED_OBJECT ];
-			
-			if( !currentContainer )
-				currentContainer = statesObject[ ApplicationFacade.SELECTED_PAGE ];
+			var currentContainer : Object = sessionProxy.selectedObject;
 			
 			if( !currentContainer )
-				currentContainer = statesObject[ ApplicationFacade.SELECTED_APPLICATION ];
+				currentContainer = sessionProxy.selectedPage;
+			
+			if( !currentContainer )
+				currentContainer = sessionProxy.selectedApplication;
 			
 			if( !currentContainer )
 				return;

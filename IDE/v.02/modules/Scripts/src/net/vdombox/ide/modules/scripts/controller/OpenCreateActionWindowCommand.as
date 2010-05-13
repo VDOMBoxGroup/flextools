@@ -2,11 +2,11 @@ package net.vdombox.ide.modules.scripts.controller
 {
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
 	import net.vdombox.ide.modules.scripts.view.CreateActionWindowMediator;
 	import net.vdombox.ide.modules.scripts.view.components.CreateActionWindow;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -29,10 +29,20 @@ package net.vdombox.ide.modules.scripts.controller
 			else
 				return;
 
-			var createActionWindow : CreateActionWindow = new CreateActionWindow();
-			var createActionWindowMediator : CreateActionWindowMediator = new CreateActionWindowMediator( createActionWindow );
-
-			facade.registerMediator( createActionWindowMediator );
+			var createActionWindow : CreateActionWindow;
+			var createActionWindowMediator : CreateActionWindowMediator;
+			
+			if( !facade.hasMediator( CreateActionWindowMediator.NAME ) )
+			{
+				createActionWindow = new CreateActionWindow();
+				createActionWindowMediator = new CreateActionWindowMediator( createActionWindow );
+				facade.registerMediator( createActionWindowMediator );
+			}
+			else
+			{
+				createActionWindowMediator = facade.retrieveMediator( CreateActionWindowMediator.NAME ) as CreateActionWindowMediator;
+				createActionWindow = createActionWindowMediator.createActionWindow;
+			}
 
 			createActionWindowMediator.creationTarget = target;
 

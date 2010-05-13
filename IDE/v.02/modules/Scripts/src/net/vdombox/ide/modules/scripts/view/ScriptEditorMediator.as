@@ -4,8 +4,10 @@ package net.vdombox.ide.modules.scripts.view
 	import net.vdombox.ide.common.vo.LibraryVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.modules.scripts.ApplicationFacade;
+	import net.vdombox.ide.modules.scripts.events.ScriptEditorEvent;
+	import net.vdombox.ide.modules.scripts.model.SessionProxy;
 	import net.vdombox.ide.modules.scripts.view.components.ScriptEditor;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -19,9 +21,15 @@ package net.vdombox.ide.modules.scripts.view
 			super( NAME, viewComponent );
 		}
 
+		private var sessionProxy : SessionProxy;
+
+		private var isActive : Boolean;
+		
 		private var serverActionVO : ServerActionVO;
 		private var libraryVO : LibraryVO;
 
+		private var currentVO : Object;
+		
 		public function get scriptEditor() : ScriptEditor
 		{
 			return viewComponent as ScriptEditor;
@@ -30,19 +38,28 @@ package net.vdombox.ide.modules.scripts.view
 		override public function onRegister() : void
 		{
 			scriptEditor.enabled = false;
+			isActive = false;
+
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
+			scriptEditor.enabled = false;
 			removeHandlers();
+
+			clearData();
 		}
 
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
+			interests.push( ApplicationFacade.BODY_START );
+			interests.push( ApplicationFacade.BODY_STOP );
+
 			interests.push( ApplicationFacade.SELECTED_SERVER_ACTION_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_LIBRARY_CHANGED );
 
@@ -54,13 +71,29 @@ package net.vdombox.ide.modules.scripts.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
+			if ( !isActive && name != ApplicationFacade.BODY_START )
+				return;
+
 			switch ( name )
 			{
-				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+				case ApplicationFacade.BODY_START:
 				{
-					var selectedApplicationVO : ApplicationVO = body as ApplicationVO;
+					if ( sessionProxy.selectedApplication )
+					{
+						isActive = true;
 
-					scriptEditor.syntax = selectedApplicationVO.scriptingLanguage;
+						if( sessionProxy.selectedApplication )
+							scriptEditor.syntax = sessionProxy.selectedApplication.scriptingLanguage;
+						
+						break;
+					}
+				}
+
+				case ApplicationFacade.BODY_STOP:
+				{
+					isActive = false;
+
+					clearData();
 
 					break;
 				}
@@ -73,11 +106,13 @@ package net.vdombox.ide.modules.scripts.view
 					{
 						scriptEditor.enabled = true;
 						scriptEditor.script = serverActionVO.script;
+						currentVO = serverActionVO;
 					}
-					else if ( !libraryVO )
+					else
 					{
 						scriptEditor.enabled = false;
 						scriptEditor.script = "";
+						currentVO = null;
 					}
 
 					break;
@@ -91,11 +126,13 @@ package net.vdombox.ide.modules.scripts.view
 					{
 						scriptEditor.enabled = true;
 						scriptEditor.script = libraryVO.script;
+						currentVO = libraryVO;
 					}
-					else if ( !serverActionVO )
+					else
 					{
 						scriptEditor.enabled = false;
 						scriptEditor.script = "";
+						currentVO = null;
 					}
 
 					break;
@@ -105,12 +142,27 @@ package net.vdombox.ide.modules.scripts.view
 
 		private function addHandlers() : void
 		{
-
+			scriptEditor.addEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
+			scriptEditor.removeEventListener( ScriptEditorEvent.SAVE, scriptEditor_saveHandler );
+		}
 
+		private function clearData() : void
+		{
+			serverActionVO = null;
+			libraryVO = null;
+			currentVO = null;
+		}
+		
+		private function scriptEditor_saveHandler( event : ScriptEditorEvent ) : void
+		{
+			if( currentVO is ServerActionVO || currentVO is LibraryVO )
+				currentVO.script = scriptEditor.script;
+			
+			sendNotification( ApplicationFacade.SAVE_SCRIPT_REQUEST, currentVO );
 		}
 	}
 }

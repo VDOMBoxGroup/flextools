@@ -57,17 +57,17 @@ package net.vdombox.ide.modules.scripts.view
 
 			interests.push( ApplicationFacade.GET_TYPES );
 
-			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
 			interests.push( ApplicationFacade.GET_PAGES );
 
 			interests.push( ApplicationFacade.GET_OBJECTS );
 
 			interests.push( ApplicationFacade.GET_STRUCTURE );
 
-			interests.push( ApplicationFacade.GET_SELECTED_PAGE );
+			interests.push( ApplicationFacade.GET_ALL_STATES );
+			interests.push( ApplicationFacade.SET_ALL_STATES );
+			
 			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
 
-			interests.push( ApplicationFacade.GET_SELECTED_OBJECT );
 			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 
 			interests.push( ApplicationFacade.GET_SERVER_ACTIONS );
@@ -76,6 +76,7 @@ package net.vdombox.ide.modules.scripts.view
 			interests.push( ApplicationFacade.GET_LIBRARIES );
 
 			interests.push( ApplicationFacade.CREATE_LIBRARY );
+			interests.push( ApplicationFacade.SAVE_LIBRARY );
 			
 			interests.push( ApplicationFacade.DELETE_LIBRARY );
 
@@ -178,36 +179,27 @@ package net.vdombox.ide.modules.scripts.view
 					break;
 				}
 
-				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				case ApplicationFacade.GET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION, body );
-
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
+					
 					break;
 				}
-
-				case ApplicationFacade.GET_SELECTED_PAGE:
+					
+				case ApplicationFacade.SET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_PAGE, body );
-
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
+					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
+					
 					break;
 				}
-
+					
 				case ApplicationFacade.SET_SELECTED_PAGE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
-
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-
-					break;
-				}
-
-				case ApplicationFacade.GET_SELECTED_OBJECT:
-				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_OBJECT, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -315,6 +307,14 @@ package net.vdombox.ide.modules.scripts.view
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.LIBRARY, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
+					break
+				}
+				
+				case ApplicationFacade.SAVE_LIBRARY:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.LIBRARY, body );
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
 					break
 				}
 					
