@@ -5,11 +5,16 @@ package net.vdombox.ide.modules.resourceBrowser.events
 	public class ToolsetEvent extends Event
 	{
 		public static var OPEN_CREATE_APPLICATION : String = "openCreateApplication";
-		
-		public function ToolsetEvent( type : String, bubbles : Boolean = false, 
-									  cancelable : Boolean = false )
+
+		public function ToolsetEvent( type : String, bubbles : Boolean = false,
+			cancelable : Boolean = false )
 		{
 			super( type, bubbles, cancelable );
+		}
+
+		override public function clone() : Event
+		{
+			return new ToolsetEvent( type, bubbles, cancelable );
 		}
 	}
 }

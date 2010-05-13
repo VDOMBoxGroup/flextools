@@ -25,6 +25,8 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			super( NAME, viewComponent );
 		}
 
+		private var isReady : Boolean;
+		
 		public var selectedResource : ResourceVO;
 
 		public var selectedApplication : ApplicationVO;
@@ -36,23 +38,27 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 		override public function onRegister() : void
 		{
-			addEventListeners();
+			isReady = false;
+			
+			addHandlers();
 		}
 
+		override public function onRemove() : void
+		{
+			isReady = false;
+			
+			removeHandlers();
+		}
+		
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
+			interests.push( ApplicationFacade.ALL_STATES_GETTED );
+			
 			interests.push( ApplicationFacade.PIPES_READY );
-
-			interests.push( ApplicationFacade.SELECTED_APPLICATION_GETTED );
-
-			interests.push( ApplicationFacade.RESOURCE_SETTED );
-			interests.push( ApplicationFacade.RESOURCE_LOADED );
-			interests.push( ApplicationFacade.RESOURCES_GETTED );
-			interests.push( ApplicationFacade.RESOURCE_DELETED );
-
-
+			interests.push( ApplicationFacade.MODULE_DESELECTED );
+			
 			return interests;
 		}
 
@@ -64,144 +70,52 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case ApplicationFacade.PIPES_READY:
 				{
-//					sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
+					sendNotification( ApplicationFacade.GET_ALL_STATES );
+					
 					break;
 				}
-
-				case ApplicationFacade.SELECTED_APPLICATION_GETTED:
+					
+				case ApplicationFacade.ALL_STATES_GETTED:
 				{
-					selectedApplication = notification.getBody() as ApplicationVO;
-
-					if ( selectedApplication )
-						sendNotification( ApplicationFacade.GET_RESOURCES, selectedApplication );
-
+					isReady = true;
+					
+					checkConditions();
+					
 					break;
 				}
-
-				case ApplicationFacade.RESOURCE_SETTED:
+					
+				case ApplicationFacade.MODULE_DESELECTED:
 				{
-					resourceVO = notification.getBody() as ResourceVO;
-
-					if ( body.resourceList.dataProvider.getItemIndex( resourceVO ) == -1 )
-						body.resourceList.dataProvider.addItem( resourceVO );
-
-					break;
-				}
-
-				case ApplicationFacade.RESOURCES_GETTED:
-				{
-					body.resourceList.dataProvider = new ArrayList( notification.getBody() as Array );
-
-					break;
-				}
-
-				case ApplicationFacade.RESOURCE_LOADED:
-				{
-					resourceVO = notification.getBody() as ResourceVO;
-
-					try
-					{
-						body.preview.source = resourceVO.data;
-					}
-					catch ( error : Error )
-					{
-						var d : * = "";
-					}
-
-					break;
-				}
-
-				case ApplicationFacade.RESOURCE_DELETED:
-				{
-					resourceVO = notification.getBody() as ResourceVO;
-
-					if ( selectedResource == resourceVO )
-						selectedResource = null;
-
-					var resources : ArrayList = body.resourceList.dataProvider as ArrayList;
-					resources.removeItem( resourceVO );
-
+					isReady = false;
+					
+					sendNotification( ApplicationFacade.BODY_STOP );
+					
 					break;
 				}
 			}
 		}
 
-		private var selectedResourceChanged : Boolean;
-
-		private function addEventListeners() : void
+		private function addHandlers() : void
 		{
-			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
-			body.addEventListener( "itemRendererCreated", itemRendererCreatedHandler, true );
+			body.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 		}
 
-		private function commitProperties() : void
+		private function removeHandlers() : void
 		{
-			if ( selectedResourceChanged )
-			{
-				selectedResourceChanged = false;
-				
-				if( selectedResource )
-					body.deleteButton.enabled = true;
-				else
-					body.deleteButton.enabled = false;
-				
-				body.selectedResourceVO = selectedResource;
-//				
-//				if ( selectedResource )
-//				{
-//					var type : String = selectedResource.type;
-//
-//					if ( type )
-//						type.toLowerCase();
-//
-//					if ( type == "jpg" || type == "jpeg" || type == "png" || type == "gif" )
-//					{
-//						body.preview.source = selectedResource.data;
-//						
-//						sendNotification( ApplicationFacade.LOAD_RESOURCE, selectedResource );
-//					}
-//					else
-//					{
-//						body.preview.source = null;
-//					}
-//				}
-//				else
-//				{
-//					body.preview.source = null;
-//				}
-			}
+			body.removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
+		}
+		
+		private function checkConditions() : void
+		{
+			if ( isReady && body.initialized )
+				sendNotification( ApplicationFacade.BODY_START );
 		}
 
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
-			facade.registerMediator( new LoadResourcesViewMediator( body.loadResourcesView ) );
-			sendNotification( ApplicationFacade.GET_SELECTED_APPLICATION );
-			body.resourceList.addEventListener( IndexChangeEvent.CHANGE, resourceList_changeHandler );
-			body.addEventListener( "deleteResource", deleteResourceHandler );
-		}
-
-		private function deleteResourceHandler( event : Event ) : void
-		{
-			if ( !selectedResource )
-				return;
-
-			sendNotification( ApplicationFacade.DELETE_RESOURCE, { applicationVO: selectedApplication,
-								  resourceVO: selectedResource } );
-		}
-
-		private function resourceList_changeHandler( event : IndexChangeEvent ) : void
-		{
-			selectedResource = event.currentTarget.selectedItem;
-			selectedResourceChanged = true;
-
-			commitProperties();
-		}
-
-		private function itemRendererCreatedHandler( event : Event ) : void
-		{
-			var resourceVO : ResourceVO = event.target.data;
+			sendNotification( ApplicationFacade.BODY_CREATED, body );
 			
-			sendNotification( ApplicationFacade.LOAD_RESOURCE, resourceVO );
+			checkConditions();
 		}
 	}
 }

@@ -1,43 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:ItemRenderer 
-	xmlns:mx="library://ns.adobe.com/flex/mx"
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	
-	width="100%">
-	
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				height="25"
+				color="#FFFFFF" fontFamily="Verdana"
+				autoDrawBackground="false">
+
 	<s:layout>
-		<s:HorizontalLayout />
+		<s:HorizontalLayout paddingLeft="5" paddingRight="5" verticalAlign="middle"
+							gap="8"/>
 	</s:layout>
-	
+
 	<fx:Script>
 		<![CDATA[
 			import flash.filesystem.File;
 
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+
 			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderItemRendererEvent;
+
+			[Embed( source="assets/new_page.png" )]
+			private var newFile : Class;
 
 			[Bindable]
 			private var resourceVO : ResourceVO;
 
+			private var statusWatcher : ChangeWatcher;
+
+			private var isResourceChanged : Boolean;
+
 			override public function set data( value : Object ) : void
 			{
-				if ( !value || value == resourceVO )
-					return;
+				super.data = value;
 
 				resourceVO = value as ResourceVO;
 
-				pathLabel.text = resourceVO.path;
+				isResourceChanged = true;
+				invalidateProperties();
+			}
 
-				try
-				{
-					var file : File = File.applicationDirectory.resolvePath( resourceVO.path );
-					sizeLabel.text = formatFileSize( file.size );
-				}
-				catch ( error : Error )
-				{
-				}
+			override protected function commitProperties() : void
+			{
+				super.commitProperties();
 
-				super.data = value;
+				if ( isResourceChanged )
+				{
+					isResourceChanged = false;
+
+					if ( resourceVO )
+					{
+						var file : File = new File();
+						file = file.resolvePath( resourceVO.path );
+
+						if ( file.exists )
+						{
+							statusWatcher = BindingUtils.bindSetter( statusChanged, resourceVO, "status" );
+
+							if ( file.icon && file.icon.bitmaps[ 0 ] )
+							{
+								var iconBitmap : Bitmap = new Bitmap( file.icon.bitmaps[ 0 ], PixelSnapping.AUTO, true );
+								resourceIcon.source = iconBitmap;
+							}
+							else
+							{
+								resourceIcon.source = newFile;
+							}
+
+							resourceName.text = resourceVO.name;
+							resourceName.setFocus();
+
+							pathLabel.text = resourceVO.path;
+							pathLabel.toolTip = resourceVO.path;
+
+							sizeLabel.text = formatFileSize( file.size );
+						}
+					}
+					else
+					{
+						if ( statusWatcher )
+						{
+							statusWatcher.unwatch();
+							statusWatcher = null;
+						}
+
+						resourceIcon.source = null;
+						resourceName.text = "";
+						pathLabel.text = "";
+						pathLabel.toolTip = "";
+						sizeLabel.text = "";
+					}
+				}
 			}
 
 			private function formatFileSize( numSize : Number ) : String
@@ -59,29 +113,69 @@
 						strReturn = String( numSize.toFixed( 1 ) + " GB" );
 					}
 				}
-				
+
 				return strReturn;
+			}
+
+			private function statusChanged( status : uint ) : void
+			{
+				if ( status == ResourceVO.EMPTY )
+					currentState = "normal";
+				if ( status == ResourceVO.UPLOAD_PROGRESS )
+					currentState = "upload";
+				if ( status == ResourceVO.UPLOAD_ERROR )
+					currentState = "error";
+				if ( status == ResourceVO.UPLOADED )
+					currentState = "complete";
+			}
+
+			protected function deleteResource_clickHandler() : void
+			{
+				dispatchEvent( new ResourcesLoaderItemRendererEvent( ResourcesLoaderItemRendererEvent.REMOVE ) );
 			}
 		]]>
 	</fx:Script>
+
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="upload"/>
+		<s:State name="error"/>
+		<s:State name="complete"/>
+	</s:states>
+
+	<mx:Image id="resourceIcon"
+			  height="16" width="16"
+			  smoothBitmapContent="true"/>
+
 	<s:TextInput id="resourceName"
-		text="@{ resourceVO.name }" width="200" />
-	
+				 height="20" text="@{ resourceVO.name }" width="200"
+				 borderColor="#464646" color="#6A6A6A" focusAlpha="0" fontFamily="Verdana"
+				 editable="false" editable.normal="true" contentBackgroundAlpha="1" contentBackgroundColor="#CCCCCC"/>
+
 	<s:Label id="pathLabel"
-		maxWidth="200"
-		lineBreak="toFit" maxDisplayedLines="1" />
-	
-	<s:Label id="sizeLabel" />
-	
-	<mx:Spacer 
-		width="100%" />
-	
-	<s:Label 
-		text="Remove"
-		
-		textDecoration="underline"
-		
-		click="dispatchEvent( new Event( 'removeResource' ) )"
-		buttonMode="true" />
-	
+			 width="100%"
+			 fontFamily="Verdana"
+			 maxDisplayedLines="1"/>
+
+	<s:Label id="sizeLabel"
+			 width="70"
+			 fontFamily="Verdana"/>
+
+	<mx:Image id="deleteResource"
+			  height="16" source="@Embed('assets/delete_resource.png')" width="16"
+			  click="deleteResource_clickHandler()"
+			  smoothBitmapContent="true" buttonMode="true" includeIn="normal"/>
+
+	<mx:Image id="uploadResource"
+			  height="16" source="@Embed('assets/upload_resource.png')" width="16"
+			  smoothBitmapContent="true" buttonMode="true" includeIn="upload"/>
+
+	<mx:Image id="errorResource"
+			  height="16" source="@Embed('assets/block_resource.png')" width="16"
+			  click="deleteResource_clickHandler()"
+			  smoothBitmapContent="true" buttonMode="true" includeIn="error"/>
+
+	<mx:Image id="completeResource"
+			  height="16" source="@Embed('assets/accept_resource.png')" width="16"
+			  smoothBitmapContent="true" buttonMode="true" includeIn="complete"/>
 </s:ItemRenderer>

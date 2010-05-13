@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+
+			import net.vdombox.ide.common.vo.ResourceVO;
+
+			private const wordSize : Array = [ "bytes", "KB", "MB", "GB", "TB" ];
+
+			[Bindable]
+			private var _resourceVO : ResourceVO;
+
+			private var isDataChanged : Boolean;
+
+			private var dataWatcher : ChangeWatcher;
+
+			public function set resourceVO( value : ResourceVO ) : void
+			{
+				_resourceVO = value;
+
+				if ( !value )
+				{
+					if( dataWatcher )
+						dataWatcher.unwatch();
+					
+					isDataChanged = true;
+				}
+				else if ( value.data )
+				{
+					isDataChanged = true;
+				}
+				else
+				{
+					dataWatcher = BindingUtils.bindSetter( dataChanged, _resourceVO, "data" );
+				}
+
+				invalidateProperties();
+			}
+
+			private function dataChanged( value : Object ) : void
+			{
+				isDataChanged = true;
+
+				invalidateProperties();
+			}
+
+			override protected function commitProperties() : void
+			{
+				super.commitProperties();
+
+				if ( isDataChanged )
+				{
+					isDataChanged = false;
+
+					var newSizeString : String = "";
+					var newSize : Number;
+
+					if ( _resourceVO && _resourceVO.size != -1 )
+					{
+						newSize = _resourceVO.size;
+						var i : uint = 0;
+
+						for ( ; i < 4; i++ )
+						{
+							if ( newSize / 1024 < 1 )
+								break;
+
+							newSize /= 1024;
+						}
+
+						newSizeString = Math.round( newSize ).toString() + " " + wordSize[ i ];
+					}
+
+					size.text = newSizeString;
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<s:VGroup width="100%"
+			  gap="0">
+
+		<s:Rect height="20" width="100%">
+			<s:fill>
+				<mx:SolidColor color="0xEEEEEE"/>
+			</s:fill>
+		</s:Rect>
+
+		<s:Rect height="20" width="100%">
+			<s:fill>
+				<mx:SolidColor color="0xCCCCCC"/>
+			</s:fill>
+		</s:Rect>
+
+		<s:Rect height="20" width="100%">
+			<s:fill>
+				<mx:SolidColor color="0xEEEEEE"/>
+			</s:fill>
+		</s:Rect>
+
+		<s:Rect height="20" width="100%">
+			<s:fill>
+				<mx:SolidColor color="0xCCCCCC"/>
+			</s:fill>
+		</s:Rect>
+
+	</s:VGroup>
+
+	<s:HGroup width="100%"
+			  gap="5">
+
+		<mx:Spacer width="100%"/>
+
+		<s:VGroup gap="0">
+			<s:Label height="20" text="Name: " width="100%"
+					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
+			<s:Label height="20" text="Type: " width="100%"
+					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
+			<s:Label height="20" text="ID: " width="100%"
+					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
+			<s:Label height="20" text="Size: " width="100%"
+					 fontFamily="Verdana" fontWeight="bold" textAlign="right" verticalAlign="middle"/>
+		</s:VGroup>
+
+		<s:VGroup gap="0">
+			<s:Label height="20" maxWidth="350" text="{ _resourceVO.name }" width="100%"
+					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
+			<s:Label height="20" text="{ _resourceVO.type.toUpperCase() }" width="100%"
+					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
+			<s:Label height="20" text="{ _resourceVO.id }" width="100%"
+					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
+			<s:Label id="size"
+					 height="20" width="100%"
+					 fontFamily="Verdana" fontWeight="normal" verticalAlign="middle"/>
+		</s:VGroup>
+
+		<mx:Spacer width="100%"/>
+
+	</s:HGroup>
+	
+	<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:stroke>
+			<mx:SolidColorStroke color="black"/>
+		</s:stroke>
+	</s:Rect>
+	
+</s:Group>

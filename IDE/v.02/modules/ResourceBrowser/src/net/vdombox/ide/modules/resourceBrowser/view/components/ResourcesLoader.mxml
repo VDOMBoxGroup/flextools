@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 minWidth="300"
+		 creationComplete="creationCompleteHandler()">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderEvent;
+			import net.vdombox.ide.modules.resourceBrowser.events.ResourcesLoaderItemRendererEvent;
+			import net.vdombox.ide.modules.resourceBrowser.view.skins.ResourceLoaderListSkin;
+			
+			import spark.events.RendererExistenceEvent;
+			import spark.filters.DropShadowFilter;
+
+			[Bindable]
+			public var resourcesArrayList : ArrayList;
+
+			private var isNumAddedElementsChanged : Boolean;
+
+			private function creationCompleteHandler() : void
+			{
+				resourcesArrayList = new ArrayList();
+
+				addEventListener( ResourcesLoaderItemRendererEvent.REMOVE, itemRenderer_removeHandler, true, 0, true );
+			}
+
+			override protected function commitProperties() : void
+			{
+				if ( isNumAddedElementsChanged )
+				{
+					isNumAddedElementsChanged = false;
+
+					if ( resourcesArrayList.length == 0 )
+					{
+						resourceList.height = 25;
+						uploadGroup.enabled = false;
+					}
+					else
+					{
+						resourceList.height = 25 * resourcesArrayList.length + 15;
+						uploadGroup.enabled = true;
+					}
+
+//					if( resourceList.height )
+				}
+
+				super.commitProperties();
+			}
+
+			private function resourceList_rendererAddHandler( event : RendererExistenceEvent ) : void
+			{
+				isNumAddedElementsChanged = true;
+
+				invalidateProperties();
+			}
+
+
+			private function resourceList_rendererRemoveHandler( event : RendererExistenceEvent ) : void
+			{
+				isNumAddedElementsChanged = true;
+
+				invalidateProperties();
+			}
+
+			private function itemRenderer_removeHandler( event : ResourcesLoaderItemRendererEvent ) : void
+			{
+				var itemRenderer : ResourceItemRenderer = event.target as ResourceItemRenderer;
+				
+				if ( itemRenderer && itemRenderer.data is ResourceVO )
+				{
+					var resourceVO : ResourceVO = itemRenderer.data as ResourceVO;
+
+					resourcesArrayList.removeItem( resourceVO );
+				}
+			}
+
+			private function uploadGroup_clickHandler() : void
+			{
+				dispatchEvent( new ResourcesLoaderEvent( ResourcesLoaderEvent.START_UPLOAD ) );
+			}
+		]]>
+	</fx:Script>
+
+
+	<s:Scroller id="scroller"
+				width="100%"
+				bottom="40" top="0">
+		<s:Group width="100%"
+				 filters="{[new DropShadowFilter(5)]}">
+
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:SolidColor color="gray"/>
+				</s:fill>
+			</s:Rect>
+
+			<s:List id="resourceList"
+					dataProvider="{ resourcesArrayList }" height="25"
+					bottom="5" left="5" right="5" skinClass="net.vdombox.ide.modules.resourceBrowser.view.skins.ResourceLoaderListSkin"
+					top="5"
+					contentBackgroundAlpha="0" useVirtualLayout="false" borderVisible="false" itemRenderer="net.vdombox.ide.modules.resourceBrowser.view.components.ResourceItemRenderer"
+					rendererAdd="resourceList_rendererAddHandler(event)" rendererRemove="resourceList_rendererRemoveHandler(event)"/>
+
+		</s:Group>
+	</s:Scroller>
+
+	<s:Group height="40" width="100%"
+			 bottom="0">
+
+		<s:Group id="uploadGroup"
+				 enabled="false" height="30"
+				 top="5"
+				 click="uploadGroup_clickHandler()"
+				 filters="{[new DropShadowFilter(5)]}" buttonMode="true">
+
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:SolidColor color="gray"/>
+				</s:fill>
+			</s:Rect>
+
+			<s:HGroup width="100%"
+					  paddingLeft="10" paddingRight="10" verticalAlign="middle" verticalCenter="0"
+					  gap="10" buttonMode="true">
+
+				<s:Label id="loadResourceLabel"
+						 text="Upload Resources" width="100%"
+						 color="white" fontFamily="Verdana" fontWeight="bold" textDecoration="none"
+						 maxDisplayedLines="1"/>
+			</s:HGroup>
+		</s:Group>
+
+		<s:Group id="addResourcesGroup"
+				 height="30" width="45"
+				 right="10"
+				 filters="{[new DropShadowFilter(5)]}">
+
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:SolidColor color="gray"/>
+				</s:fill>
+			</s:Rect>
+
+			<mx:Image height="20" source="@Embed('assets/add_resource.png')" width="20"
+					  horizontalCenter="0" verticalCenter="0"
+					  buttonMode="true"/>
+		</s:Group>
+	</s:Group>
+</s:Group>

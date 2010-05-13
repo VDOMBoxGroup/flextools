@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+
+			import net.vdombox.ide.common.vo.ResourceVO;
+
+			private var _resourceVO : ResourceVO;
+
+			public function get resourceVO() : ResourceVO
+			{
+				return _resourceVO;
+			}
+
+			private var dataWatcher : ChangeWatcher;
+
+			public function set resourceVO( value : ResourceVO ) : void
+			{
+				_resourceVO = value;
+
+				if ( !_resourceVO )
+				{
+					preview.source = null;
+					return;
+				}
+
+				var resourceType : String = type;
+
+				if ( resourceType == "jpg" || resourceType == "jpeg" || resourceType == "png" || resourceType == "gif" )
+				{
+					if ( !_resourceVO.data )
+						dataWatcher = BindingUtils.bindSetter( dataChanged, _resourceVO, "data", true, true );
+					else
+						preview.source = _resourceVO.data;
+				}
+
+			}
+
+			private function get type() : String
+			{
+				return _resourceVO ? resourceVO.type.toLowerCase() : null;
+			}
+
+			private function dataChanged( value : Object ) : void
+			{
+				if ( _resourceVO.data )
+					preview.source = _resourceVO.data;
+			}
+
+			protected function preview_completeHandler( event : Event ) : void
+			{
+				if ( !( preview.content is Bitmap ) )
+					return;
+
+				var maxPreviewWidth : int = width - 20 ? width - 20 : 0;
+				var maxPreviewHeight : int = height - 20 > 0 ? height - 20 : 0;
+
+				if ( preview.content.width > maxPreviewWidth )
+					preview.width = maxPreviewWidth;
+				else
+					preview.width = preview.content.width;
+
+				if ( preview.content.height > maxPreviewHeight )
+					preview.height = maxPreviewHeight;
+				else
+					preview.height = preview.content.height;
+			}
+
+			override protected function updateDisplayList( unscaledWidth : Number, unscaledHeight : Number ) : void
+			{
+				if ( !( preview.content is Bitmap ) )
+					return;
+
+				var maxPreviewWidth : int = unscaledWidth - 20 ? unscaledWidth - 20 : 0;
+				var maxPreviewHeight : int = unscaledHeight - 20 ? unscaledHeight - 20 : 0;
+
+				var realWidth : int = preview.content.width;
+				var realHeight : int = preview.content.height;
+
+				if ( preview.width > maxPreviewWidth || realWidth > maxPreviewWidth )
+					preview.width = maxPreviewWidth;
+
+				if ( preview.content.height > maxPreviewHeight || realHeight > maxPreviewHeight )
+					preview.height = maxPreviewHeight;
+
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
+			}
+		]]>
+	</fx:Script>
+
+	<mx:Image id="preview"
+			  horizontalAlign="center" horizontalCenter="0" verticalAlign="middle" verticalCenter="0"
+			  complete="preview_completeHandler(event)"
+			  maintainAspectRatio="true" scaleContent="true" smoothBitmapContent="true"/>
+
+	<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:stroke>
+			<mx:SolidColorStroke color="0xEEEEEE"/>
+		</s:stroke>
+	</s:Rect>
+
+</s:Group>

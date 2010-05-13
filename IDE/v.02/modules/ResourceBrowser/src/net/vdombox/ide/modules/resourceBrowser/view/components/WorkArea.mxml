@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*"
+					  xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  skinClass="net.vdombox.ide.modules.resourceBrowser.view.skins.WorkAreaSkin">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			import net.vdombox.ide.common.vo.ResourceVO;
+			import net.vdombox.ide.modules.resourceBrowser.events.WorkAreaEvent;
+
+			[SkinPart( required="true" )]
+			public var deleteButton : WorkAreaButton;
+
+			[SkinPart( required="true" )]
+			public var showInfoButton : WorkAreaButton;
+
+			[SkinPart( required="true" )]
+			public var showAddResourcesButton : WorkAreaButton;
+
+			[Bindable]
+			public var isInfoShowed : Boolean = true;
+
+			[Bindable]
+			public var isAddResourcesShowed : Boolean = false;
+
+			public function set resourceVO( value : ResourceVO ) : void
+			{
+				if ( value )
+					deleteButton.enabled = true;
+				else
+					deleteButton.enabled = false;
+			}
+
+			override protected function partAdded( partName : String, instance : Object ) : void
+			{
+				super.partAdded( partName, instance );
+
+				if ( instance === showInfoButton )
+					showInfoButton.addEventListener( MouseEvent.CLICK, showInfoButton_clickHandler, false, 0, true );
+
+				if ( instance === showAddResourcesButton )
+					showAddResourcesButton.addEventListener( MouseEvent.CLICK, showAddResourcesButton_clickHandler, false, 0, true );
+
+				if ( instance === deleteButton )
+					deleteButton.addEventListener( MouseEvent.CLICK, deleteButton_clickHandler, false, 0, true );
+			}
+
+			private function showInfoButton_clickHandler( event : MouseEvent ) : void
+			{
+				isInfoShowed = !isInfoShowed;
+			}
+
+			private function showAddResourcesButton_clickHandler( event : MouseEvent ) : void
+			{
+				isAddResourcesShowed = !isAddResourcesShowed;
+			}
+
+			private function deleteButton_clickHandler( event : MouseEvent ) : void
+			{
+				dispatchEvent( new WorkAreaEvent( WorkAreaEvent.DELETE_RESOURCE ) );
+			}
+		]]>
+	</fx:Script>
+
+	<s:layout>
+		<s:VerticalLayout gap="10"/>
+	</s:layout>
+
+	<components:ResourcesLoader id="resourcesLoader"
+								includeInLayout="{ isAddResourcesShowed }" maxHeight="200" width="100%"
+								visible="{ isAddResourcesShowed }"/>
+
+	<components:PreviewArea id="previewArea"
+							height="100%" width="100%"/>
+
+	<components:InfoArea id="infoArea"
+						 includeInLayout="{ isInfoShowed }" width="100%"
+						 visible="{ isInfoShowed }"/>
+
+</s:SkinnableContainer>

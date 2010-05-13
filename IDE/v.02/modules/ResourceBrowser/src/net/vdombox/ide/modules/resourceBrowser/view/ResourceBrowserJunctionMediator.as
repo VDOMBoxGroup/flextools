@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.resourceBrowser.view
 {
 	import flash.utils.Dictionary;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMOperationNames;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.vo.SettingsVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -56,11 +56,12 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 			interests.push( ApplicationFacade.SELECT_MODULE );
 
-			interests.push( ApplicationFacade.GET_SELECTED_APPLICATION );
+			interests.push( ApplicationFacade.GET_ALL_STATES );
+			interests.push( ApplicationFacade.SET_ALL_STATES );
 
 			interests.push( ApplicationFacade.GET_RESOURCES );
 			interests.push( ApplicationFacade.LOAD_RESOURCE );
-			interests.push( ApplicationFacade.SET_RESOURCES );
+			interests.push( ApplicationFacade.UPLOAD_RESOURCE );
 			interests.push( ApplicationFacade.DELETE_RESOURCE );
 
 			return interests;
@@ -93,7 +94,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.EXPORT_TOOLSET:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.TOOLSET_UI, UIComponent( body ),
-												  multitonKey );
+						multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -103,7 +104,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.EXPORT_SETTINGS_SCREEN:
 				{
 					message = new UIQueryMessage( UIQueryMessageNames.SETTINGS_SCREEN_UI, UIComponent( body ),
-												  multitonKey );
+						multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -122,7 +123,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.RETRIEVE_SETTINGS_FROM_STORAGE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.RETRIEVE_SETTINGS_FROM_STORAGE,
-												 null, multitonKey );
+						null, multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -132,7 +133,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.SAVE_SETTINGS_TO_STORAGE:
 				{
 					message = new SimpleMessage( SimpleMessageHeaders.SAVE_SETTINGS_TO_STORAGE, body,
-												 multitonKey );
+						multitonKey );
 
 					junction.sendMessage( PipeNames.STDCORE, message );
 
@@ -148,10 +149,18 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					break;
 				}
 
-				case ApplicationFacade.GET_SELECTED_APPLICATION:
+				case ApplicationFacade.GET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION,
-													  body );
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+
+					break;
+				}
+
+				case ApplicationFacade.SET_ALL_STATES:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -161,7 +170,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.GET_RESOURCES:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
-													  PPMResourcesTargetNames.RESOURCES, body );
+						PPMResourcesTargetNames.RESOURCES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -189,17 +198,17 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					}
 
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
-													  PPMResourcesTargetNames.RESOURCE, resourceVO );
+						PPMResourcesTargetNames.RESOURCE, resourceVO );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
 					break;
 				}
 
-				case ApplicationFacade.SET_RESOURCES:
+				case ApplicationFacade.UPLOAD_RESOURCE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
-													  PPMResourcesTargetNames.RESOURCES, body );
+						PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -209,7 +218,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case ApplicationFacade.DELETE_RESOURCE:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE,
-													  PPMResourcesTargetNames.RESOURCE, body );
+						PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -234,13 +243,13 @@ package net.vdombox.ide.modules.resourceBrowser.view
 					{
 						sendNotification( ApplicationFacade.MODULE_SELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.CONNECT_PROXIES_PIPE,
-																					null, multitonKey ) );
+							null, multitonKey ) );
 					}
 					else
 					{
 						sendNotification( ApplicationFacade.MODULE_DESELECTED );
 						junction.sendMessage( PipeNames.STDCORE, new SimpleMessage( SimpleMessageHeaders.DISCONNECT_PROXIES_PIPE,
-																					null, multitonKey ) );
+							null, multitonKey ) );
 					}
 
 					break;
@@ -252,7 +261,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 						return;
 
 					junction.sendMessage( PipeNames.STDLOG, new LogMessage( LogMessage.DEBUG, "Module",
-																			SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
+						SimpleMessageHeaders.PROXIES_PIPE_CONNECTED ) );
 
 					sendNotification( ApplicationFacade.PIPES_READY );
 					break;
@@ -346,102 +355,50 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			{
 				case PPMPlaceNames.SERVER:
 				{
-					processServerProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_SERVER_PROXY_MESSAGE, message );
+					
+					break;
+				}
+
+				case PPMPlaceNames.TYPES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_TYPES_PROXY_MESSAGE, message );
+					
+					break;
+				}
+
+				case PPMPlaceNames.RESOURCES:
+				{
+					sendNotification( ApplicationFacade.PROCESS_RESOURCES_PROXY_MESSAGE, message );
+					
 					break;
 				}
 
 				case PPMPlaceNames.STATES:
 				{
-					processStatesProxyMessage( message );
+					sendNotification( ApplicationFacade.PROCESS_STATES_PROXY_MESSAGE, message );
+					
+					break;
+				}
+
+				case PPMPlaceNames.APPLICATION:
+				{
+					sendNotification( ApplicationFacade.PROCESS_APPLICATION_PROXY_MESSAGE, message );
+					
+					break;
+				}
+
+				case PPMPlaceNames.PAGE:
+				{
+					sendNotification( ApplicationFacade.PROCESS_PAGE_PROXY_MESSAGE, message );
+					
 					break;
 				}
 					
-				case PPMPlaceNames.RESOURCES:
+				case PPMPlaceNames.OBJECT:
 				{
-					processResourcesProxyMessage( message );
-					break;
-				}
-			}
-		}
-
-		private function processServerProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMStatesTargetNames.SELECTED_APPLICATION:
-				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
-					break;
-				}
-			}
-		}
-		
-		private function processStatesProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			switch ( message.getTarget() )
-			{
-				case PPMStatesTargetNames.SELECTED_APPLICATION:
-				{
-					sendNotification( ApplicationFacade.SELECTED_APPLICATION_GETTED, message.getBody() );
-					break;
-				}
-			}
-		}
-
-		private function processResourcesProxyMessage( message : ProxiesPipeMessage ) : void
-		{
-			var operation : String = message.getOperation();
-
-			var resourceVO : ResourceVO;
-
-			switch ( message.getTarget() )
-			{
-				case PPMResourcesTargetNames.RESOURCES:
-				{
-					if ( operation == PPMOperationNames.READ )
-					{
-						sendNotification( ApplicationFacade.RESOURCES_GETTED, message.getBody() );
-					}
-
-					break;
-				}
-
-				case PPMResourcesTargetNames.RESOURCE:
-				{
-					if ( operation == PPMOperationNames.CREATE )
-					{
-						resourceVO = message.getBody() as ResourceVO;
-
-						sendNotification( ApplicationFacade.RESOURCE_SETTED, resourceVO );
-					}
-					else if ( operation == PPMOperationNames.READ )
-					{
-//						var recipientsArray : Array;
-//
-//						resourceVO = message.getBody() as ResourceVO;
-//
-//						if ( recipients[ resourceVO ] )
-//						{
-//							recipientsArray = recipients[ resourceVO ];
-//
-//							for ( var i : int = 0; i < recipientsArray.length; i++ )
-//							{
-//								sendNotification( ApplicationFacade.RESOURCE_LOADED + "/" + recipientsArray[ i ],
-//												  resourceVO );
-//							}
-//						}
-//						else
-//						{
-//							sendNotification( ApplicationFacade.RESOURCE_LOADED, resourceVO );
-//						}
-					}
-					else if ( operation == PPMOperationNames.DELETE )
-					{
-						resourceVO = message.getBody() as ResourceVO;
-
-						sendNotification( ApplicationFacade.RESOURCE_DELETED, resourceVO );
-					}
-
+					sendNotification( ApplicationFacade.PROCESS_OBJECT_PROXY_MESSAGE, message );
+					
 					break;
 				}
 			}

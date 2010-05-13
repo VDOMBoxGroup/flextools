@@ -51,7 +51,7 @@ package net.vdombox.ide.modules
 		
 		override public function get hasSettings() : Boolean
 		{
-			return true;
+			return false;
 		}
 		
 		override public function get hasBody() : Boolean

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:components="net.vdombox.ide.modules.resourceBrowser.view.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 filters="{[new DropShadowFilter( 2, 45, 0, .4 )]}">
+
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.events.FlexEvent;
+
+			import net.vdombox.ide.common.vo.ResourceVO;
+
+			import spark.filters.DropShadowFilter;
+
+			[Embed( source="assets/rect.png",
+				scaleGridTop="10", scaleGridBottom="70",
+				scaleGridLeft="10", scaleGridRight="70" )]
+			[Bindable]
+			public var thumb : Class;
+
+			private var _data : ResourceVO;
+
+			private var imageDataWatcher : ChangeWatcher;
+
+			[Bindable]
+			public function get data() : ResourceVO
+			{
+				return _data;
+			}
+
+			public function set data( value : ResourceVO ) : void
+			{
+				_data = value;
+
+				if ( _data && ( data.type == "jpg" || data.type == "jpeg" || data.type == "png" || data.type == "gif" ) )
+				{
+					currentState = "image";
+					imageDataWatcher = BindingUtils.bindProperty( image, "source", _data, "data", true, true );
+				}
+				else
+				{
+					currentState = "nopreview";
+					imageDataWatcher.unwatch();
+					image.source = null;
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="image"/>
+		<s:State name="nopreview"/>
+	</s:states>
+
+	<!--<s:Rect bottom="0" left="0" right="0" top="0">
+		<s:fill>
+			<s:SolidColor color="0xaaaaaa"/>
+		</s:fill>
+	</s:Rect>-->
+
+	<s:Group id="noPreview"
+			 bottom="15" left="15" right="15" textAlign="center"
+			 top="15"
+			 itemCreationPolicy="immediate" includeIn="nopreview">
+
+		<s:RichText text="no preview"
+					bottom="0" color="#808080" fontWeight="bold" left="0"
+					right="0" textAlign="center" top="0" verticalAlign="middle"/>
+	</s:Group>
+
+	<mx:Image id="image"
+			  bottom="15" left="15" right="15" top="15"
+			  includeIn="image" itemCreationPolicy="immediate"/>
+
+	<mx:Image source="{ thumb }"
+			  bottom="0" left="0" right="0" top="0"
+			  smoothBitmapContent="true" maintainAspectRatio="false"/>
+</s:Group>
