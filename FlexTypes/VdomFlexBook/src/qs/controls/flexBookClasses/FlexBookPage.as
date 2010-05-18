@@ -23,17 +23,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 package qs.controls.flexBookClasses
 {
-	import mx.core.UIComponent;
-	import mx.skins.Border;
-	import mx.skins.halo.HaloBorder;
+	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
+	
 	import mx.core.EdgeMetrics;
 	import mx.core.IFlexDisplayObject;
-	import flash.display.DisplayObject;
-	import flash.display.BitmapData;
-	import flash.geom.Rectangle;
-	import flash.geom.Matrix;
-	import flash.events.Event;
+	import mx.core.UIComponent;
 	import mx.events.FlexEvent;
+	import mx.skins.Border;
+	import mx.skins.halo.HaloBorder;
 
 	public class FlexBookPage extends UIComponent
 	{
@@ -98,7 +98,7 @@ package qs.controls.flexBookClasses
 			if(value == _leftRenderer)
 				return;
 				
-			if(_leftRenderer != null)
+			if(_leftRenderer != null && contains(DisplayObject(_leftRenderer)))
 			{
 				removeChild(DisplayObject(_leftRenderer));
 				_leftRenderer.removeEventListener(FlexEvent.UPDATE_COMPLETE,updateCompleteHandler);
@@ -120,7 +120,7 @@ package qs.controls.flexBookClasses
 			if(value == _rightRenderer)
 				return;
 				
-			if(_rightRenderer != null)
+			if(_rightRenderer != null && contains(DisplayObject(_rightRenderer)))
 			{
 				removeChild(DisplayObject(_rightRenderer));
 				_rightRenderer.removeEventListener(FlexEvent.UPDATE_COMPLETE,updateCompleteHandler);

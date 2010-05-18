@@ -18,7 +18,7 @@ Learn more about Flex at http://flex.org
 <link rel="stylesheet" type="text/css" href="history/history.css" />
 <!--  END Browser History required section -->
 
-<title></title>
+<title>${title}</title>
 <script src="AC_OETags.js" language="javascript"></script>
 
 <!--  BEGIN Browser History required section -->
@@ -33,11 +33,11 @@ body { margin: 0px; overflow:hidden }
 // -----------------------------------------------------------------------------
 // Globals
 // Major version of Flash required
-var requiredMajorVersion = 9;
+var requiredMajorVersion = ${version_major};
 // Minor version of Flash required
-var requiredMinorVersion = 0;
+var requiredMinorVersion = ${version_minor};
 // Minor version of Flash required
-var requiredRevision = 124;
+var requiredRevision = ${version_revision};
 // -----------------------------------------------------------------------------
 // -->
 </script>
@@ -63,13 +63,13 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	AC_FL_RunContent(
 		"src", "playerProductInstall",
 		"FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
-		"width", "100%",
-		"height", "100%",
+		"width", "${width}",
+		"height", "${height}",
 		"align", "middle",
-		"id", "VdomFlexBook",
+		"id", "${application}",
 		"quality", "high",
-		"bgcolor", "#869ca7",
-		"name", "VdomFlexBook",
+		"bgcolor", "${bgcolor}",
+		"name", "${application}",
 		"allowScriptAccess","sameDomain",
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer"
@@ -78,14 +78,15 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
-			"src", "VdomFlexBook",
-			"width", "100%",
-			"height", "100%",
+			"src", "${swf}",
+			"width", "${width}",
+			"FlashVars", "sources=images/1.jpg;images/2.jpg;images/3.jpg;images/4.jpg;images/5.jpg;",
+			"height", "${height}",
 			"align", "middle",
-			"id", "VdomFlexBook",
+			"id", "${application}",
 			"quality", "high",
-			"bgcolor", "#869ca7",
-			"name", "VdomFlexBook",
+			"bgcolor", "${bgcolor}",
+			"name", "${application}",
 			"allowScriptAccess","sameDomain",
 			"type", "application/x-shockwave-flash",
 			"pluginspage", "http://www.adobe.com/go/getflashplayer"
@@ -100,14 +101,14 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 </script>
 <noscript>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="VdomFlexBook" width="100%" height="100%"
+			id="${application}" width="${width}" height="${height}"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="VdomFlexBook.swf" />
+			<param name="movie" value="${swf}.swf" />
 			<param name="quality" value="high" />
-			<param name="bgcolor" value="#869ca7" />
+			<param name="bgcolor" value="${bgcolor}" />
 			<param name="allowScriptAccess" value="sameDomain" />
-			<embed src="VdomFlexBook.swf" quality="high" bgcolor="#869ca7"
-				width="100%" height="100%" name="VdomFlexBook" align="middle"
+			<embed src="${swf}.swf" quality="high" bgcolor="${bgcolor}"
+				width="${width}" height="${height}" name="${application}" align="middle"
 				play="true"
 				loop="false"
 				quality="high"
