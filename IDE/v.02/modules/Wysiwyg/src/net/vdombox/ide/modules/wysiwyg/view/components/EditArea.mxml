@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HTML xmlns:mx="http://www.adobe.com/2006/mxml"
 		 horizontalScrollPolicy="off" verticalScrollPolicy="off"
-		 complete="completeHandler()" creationComplete="creationCompleteHandler()"
-		 hide="hideHandler()" show="showHandler()">
+		 complete="completeHandler()" creationComplete="creationCompleteHandler()" hide="hideHandler()" show="showHandler()">
 
 	<mx:Script>
 		<![CDATA[
 			import flash.filesystem.File;
 			import flash.filesystem.FileMode;
 			import flash.filesystem.FileStream;
-			
+
 			import net.vdombox.ide.modules.wysiwyg.events.EditAreaEvent;
 
 			private const ID : String = "code_editor";
@@ -27,7 +26,7 @@
 
 			public function set syntax( value : String ) : void
 			{
-				if( value )
+				if ( value )
 					_syntax = value;
 			}
 

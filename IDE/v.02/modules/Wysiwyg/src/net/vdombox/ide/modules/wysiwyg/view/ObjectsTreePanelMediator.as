@@ -131,7 +131,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					var objectVO : ObjectVO = body as ObjectVO;
 
-					sendNotification( ApplicationFacade.OBJECT_SELECTED_REQUEST, objectVO );
+					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, objectVO );
 
 					break;
 				}
@@ -213,7 +213,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			}
 			else if ( newPageID == currentPageID && !newObjectID )
 			{
-				sendNotification( ApplicationFacade.OBJECT_SELECTED_REQUEST, null );
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, null );
 			}
 		}
 	}

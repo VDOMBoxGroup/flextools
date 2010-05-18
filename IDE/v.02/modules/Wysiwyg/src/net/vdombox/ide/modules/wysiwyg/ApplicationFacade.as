@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg
 {
 	import net.vdombox.ide.modules.Wysiwyg;
 	import net.vdombox.ide.modules.wysiwyg.controller.BodyCreatedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.ChangeSelectedObjectRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateBodyCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateObjectRequestCommand;
@@ -12,13 +13,12 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemRemovedCommand;
-	import net.vdombox.ide.modules.wysiwyg.controller.SelectItemRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemTransformedCommand;
-	import net.vdombox.ide.modules.wysiwyg.controller.ObjectSelectedRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenResourceSelectorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveAttributesRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
+	import net.vdombox.ide.modules.wysiwyg.controller.SelectItemRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.TearDownCommand;
@@ -28,7 +28,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.messages.ProcessResourcesProxyMessageCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.messages.ProcessStatesProxyMessageCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.messages.ProcessTypesProxyMessageCommand;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
 
@@ -115,14 +115,10 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const PAGES_GETTED : String = "pagesGetted";
 		public static const GET_PAGE_SRUCTURE : String = "getPageStructure";
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
-		public static const SELECT_PAGE : String = "selectPage";
-		public static const PAGE_SELECTED : String = "pageSelected";
 
 //		objects
 		public static const GET_OBJECT : String = "getObject";
 		public static const OBJECT_GETTED : String = "objectGetted";
-		public static const SELECT_OBJECT : String = "selectObject";
-		public static const OBJECT_SELECTED : String = "objectSelected";
 		public static const GET_OBJECTS : String = "getObjects";
 		public static const OBJECTS_GETTED : String = "objectsGetted";
 
@@ -159,7 +155,6 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const ITEM_REMOVED : String = "itemRemoved";
 		public static const ITEM_TRANSFORMED : String = "itemTransformed";
 		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
-		public static const OBJECT_SELECTED_REQUEST : String = "objectSelectedRequest";
 
 		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
@@ -215,6 +210,7 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( PROCESS_OBJECT_PROXY_MESSAGE, ProcessObjectProxyMessageCommand );
 
 			registerCommand( CHANGE_SELECTED_PAGE_REQUEST, ChangeSelectedPageRequestCommand );
+			registerCommand( CHANGE_SELECTED_OBJECT_REQUEST, ChangeSelectedObjectRequestCommand );
 
 			registerCommand( OPEN_RESOURCE_SELECTOR_REQUEST, OpenResourceSelectorRequestCommand );
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
@@ -223,7 +219,6 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( ITEM_CREATED, ItemCreatedCommand );
 			registerCommand( ITEM_REMOVED, ItemRemovedCommand );
 			registerCommand( SELECT_ITEM_REQUEST, SelectItemRequestCommand );
-			registerCommand( OBJECT_SELECTED_REQUEST, ObjectSelectedRequestCommand );
 
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			registerCommand( CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );

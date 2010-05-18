@@ -55,7 +55,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
 
-			interests.push( ApplicationFacade.PAGE_SELECTED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 

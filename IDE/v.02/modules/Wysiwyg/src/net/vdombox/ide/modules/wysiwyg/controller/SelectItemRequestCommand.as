@@ -27,12 +27,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				if ( sessionProxy.selectedObject && sessionProxy.selectedObject.id == itemVO.id )
 					return;
 				
+				//FIXME: dirty hack, dont create ObjectVO, try only recieve from core.
 				objectVO = new ObjectVO( sessionProxy.selectedPage, itemVO.typeVO );
 				objectVO.setID( itemVO.id );
 				objectVO.parentID = itemVO.parent.id;
 			}
 
-			sendNotification( ApplicationFacade.SELECT_OBJECT, objectVO );
+			sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, objectVO );
 		}
 	}
 }

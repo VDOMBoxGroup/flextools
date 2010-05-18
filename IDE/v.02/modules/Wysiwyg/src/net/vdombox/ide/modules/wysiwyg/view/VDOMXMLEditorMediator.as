@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.VDOMXMLEditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.VDOMXMLEditor;
 
@@ -101,8 +102,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.XML_PRESENTATION_SETTED:
 				{
-					vdomXMLEditor.enabled = true;
-					vdomXMLEditor.text = body as String;
+//					vdomXMLEditor.enabled = true;
 
 					break;
 				}
@@ -127,12 +127,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			vdomXMLEditor.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 			vdomXMLEditor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+
+			vdomXMLEditor.addEventListener( VDOMXMLEditorEvent.SAVE, saveHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			vdomXMLEditor.removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
 			vdomXMLEditor.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+
+			vdomXMLEditor.removeEventListener( VDOMXMLEditorEvent.SAVE, saveHandler );
 		}
 
 		private function clearData() : void
@@ -169,6 +173,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 			isAddedToStage = false;
 
 			clearData();
+		}
+
+		private function saveHandler( event : Event ) : void
+		{
+			var xmlPresentation : String = vdomXMLEditor.text;
+//			vdomXMLEditor.enabled = false;
+			
+			if ( sessionProxy.selectedObject )
+			{
+				sendNotification( ApplicationFacade.SET_XML_PRESENTATION,
+					{ objectVO: sessionProxy.selectedObject, xmlPresentation: xmlPresentation } );
+			}
+			else if ( sessionProxy.selectedPage )
+			{
+				sendNotification( ApplicationFacade.SET_XML_PRESENTATION, { pageVO: sessionProxy.selectedPage, xmlPresentation: xmlPresentation } );
+			}
 		}
 	}
 }

@@ -7,7 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
-	public class ObjectSelectedRequestCommand extends SimpleCommand
+	public class ChangeSelectedObjectRequestCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
@@ -18,7 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			if ( sessionProxy.selectedObject != objectVO ||
 				( sessionProxy.selectedObject && objectVO && sessionProxy.selectedObject.id != objectVO.id ) )
 			{
-				sendNotification( ApplicationFacade.SELECT_OBJECT, objectVO );
+				sendNotification( ApplicationFacade.SET_SELECTED_OBJECT, objectVO );
 			}
 				
 		}

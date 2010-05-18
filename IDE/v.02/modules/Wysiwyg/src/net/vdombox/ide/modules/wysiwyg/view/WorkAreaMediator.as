@@ -2,11 +2,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	
+
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -19,7 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -39,6 +39,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var isActive : Boolean;
 
+		private var isAddedToStage : Boolean;
+		
 		public function get workArea() : WorkArea
 		{
 			return viewComponent as WorkArea;
@@ -56,6 +58,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			addHandlers();
 
 			isSelectedPageVOChanged = true;
+			
+			if( workArea && workArea.stage )
+				isAddedToStage = true;
 
 			commitProperties();
 		}
@@ -75,7 +80,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
-			
+
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.RENDER_DATA_CHANGED );
 
@@ -120,6 +125,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
+					if( !isAddedToStage )
+						return;
+					
 					isSelectedPageVOChanged = true;
 
 					commitProperties();
@@ -129,12 +137,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-					if( !sessionProxy.selectedObject )
-						workArea.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+					if( !isAddedToStage )
+						return;
 					
+					if ( !sessionProxy.selectedObject )
+						workArea.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+
 					break;
 				}
-					
+
 				case ApplicationFacade.RENDER_DATA_CHANGED:
 				{
 					var itemMediatorName : String;
@@ -156,13 +167,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
-			workArea.addEventListener( Event.ADDED_TO_STAGE, addHandler, false, 0, true );
-			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
-			
+			workArea.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
+			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+
 			workArea.addEventListener( ItemEvent.CREATED, item_createdHandler, true, 0, true );
 			workArea.addEventListener( ItemEvent.REMOVED, item_removedHandler, true, 0, true );
 			workArea.addEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true, 0, true );
-			
+
 			workArea.addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, false, 0, true );
 			workArea.addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true, 0, true );
 
@@ -173,18 +184,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function removeHandlers() : void
 		{
-			workArea.removeEventListener( FlexEvent.ADD, addHandler );
-			workArea.removeEventListener( FlexEvent.REMOVE, removeHandler );
-			
+			workArea.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
+			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+
 			workArea.removeEventListener( ItemEvent.CREATED, item_createdHandler, true );
 			workArea.removeEventListener( ItemEvent.REMOVED, item_removedHandler, true );
 			workArea.removeEventListener( ItemEvent.GET_RESOURCE, item_getResourceHandler, true );
-			
+
 			workArea.removeEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler );
 			workArea.removeEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true );
 
 			workArea.removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
-			
+
 			workArea.transformMarker.removeEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler );
 		}
 
@@ -201,18 +212,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 			workArea.itemVO = null;
 		}
 
-		private function addHandler( event : Event ) : void
+		private function addedToStageHandler( event : Event ) : void
 		{
 			isSelectedPageVOChanged = true;
-			
+			isAddedToStage = true;
+
 			commitProperties();
 		}
-		
-		private function removeHandler( event : Event ) : void
+
+		private function removedFromStageHandler( event : Event ) : void
 		{
+			isAddedToStage = false;
+			
 			clearData();
 		}
-		
+
 		private function transformCompleteHandler( event : TransformMarkerEvent ) : void
 		{
 			var attributes : Array = [];

@@ -63,6 +63,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.GET_ALL_STATES );
 			interests.push( ApplicationFacade.SET_ALL_STATES );
+
+			interests.push( ApplicationFacade.SET_SELECTED_PAGE );
+			interests.push( ApplicationFacade.SET_SELECTED_OBJECT );
 			
 			interests.push( ApplicationFacade.GET_TYPES );
 
@@ -82,11 +85,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_OBJECT_WYSIWYG );
 			
 			interests.push( ApplicationFacade.GET_XML_PRESENTATION );
+			interests.push( ApplicationFacade.SET_XML_PRESENTATION );
 
 			interests.push( ApplicationFacade.CREATE_OBJECT );
 			interests.push( ApplicationFacade.DELETE_OBJECT );
-
-			interests.push( ApplicationFacade.SELECT_OBJECT );
 
 			interests.push( ApplicationFacade.REMOTE_CALL_REQUEST );
 			interests.push( ApplicationFacade.UPDATE_ATTRIBUTES );
@@ -343,15 +345,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.SELECT_OBJECT:
+				case ApplicationFacade.SET_SELECTED_PAGE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
 					break;
 				}
 
+				case ApplicationFacade.SET_SELECTED_OBJECT:
+				{
+					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
+					
+					junction.sendMessage( PipeNames.PROXIESOUT, message );
+					
+					break;
+				}
+					
 				case ApplicationFacade.REMOTE_CALL_REQUEST:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.REMOTE_CALL, body );

@@ -2,21 +2,39 @@
 <s:Group xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
 		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:s="library://ns.adobe.com/flex/spark">
+		 xmlns:s="library://ns.adobe.com/flex/spark" creationComplete="creationCompleteHandler()">
 
 	<s:layout>
 		<s:BasicLayout/>
 	</s:layout>
+	
 	<fx:Script>
 		<![CDATA[
-			private var _text : String;
+			import mx.events.FlexEvent;
+			
+			import net.vdombox.ide.modules.wysiwyg.events.EditAreaEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.VDOMXMLEditorEvent;
 
+			public function get text() : String
+			{
+				return editArea.content;
+			}
+			
 			public function set text( value : String ) : void
 			{
-				_text = value;
-				
-				editArea.content = _text;
+				editArea.content = value;
 			}
+
+			private function creationCompleteHandler():void
+			{
+				editArea.addEventListener( EditAreaEvent.SAVE, editArea_saveHandler );
+			}
+			
+			private function editArea_saveHandler( event : EditAreaEvent ) : void
+			{
+				dispatchEvent( new VDOMXMLEditorEvent( VDOMXMLEditorEvent.SAVE ) );
+			}
+
 		]]>
 	</fx:Script>
 
