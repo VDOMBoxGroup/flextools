@@ -26,6 +26,14 @@ package net.vdombox.ide.core.model.business
 	{
 		private static var instance : SOAP;
 
+		public static function getInstance() : SOAP
+		{
+			if ( !instance )
+				instance = new SOAP();
+			
+			return instance;
+		}
+		
 		private var webService : WebService;
 
 		private var dispatcher : EventDispatcher = new EventDispatcher();
@@ -40,15 +48,12 @@ package net.vdombox.ide.core.model.business
 				throw new Error( "Singleton and can only be accessed through Soap.anyFunction()" );
 		}
 
-		public static function getInstance() : SOAP
+		public function get ready () : Boolean
 		{
-			if ( !instance )
-				instance = new SOAP();
-
-			return instance;
+			return webService ? webService.ready : false;
 		}
 
-		public function init( wsdl : String ) : void
+		public function connect( wsdl : String ) : void
 		{
 			webService = new WebService();
 			webService.wsdl = wsdl;
@@ -58,6 +63,14 @@ package net.vdombox.ide.core.model.business
 			webService.loadWSDL();
 		}
 
+		public function disconnect() : void
+		{
+			if( webService )
+				webService.disconnect();
+			
+			dispatchEvent( new SOAPEvent( SOAPEvent.DISCONNECTED ) );
+		}
+		
 		public function logon( username : String, password : String ) : AsyncToken
 		{
 			var password : String = MD5Utils.encrypt( password );
@@ -70,9 +83,6 @@ package net.vdombox.ide.core.model.business
 
 		public function logout() : AsyncToken
 		{
-			webService.open_session.addEventListener( ResultEvent.RESULT, logoffCompleteHandler );
-			webService.open_session.addEventListener( FaultEvent.FAULT, logoffErrorHandler );
-			
 			return webService.close_session( code.sessionId );
 		}
 
@@ -102,7 +112,6 @@ package net.vdombox.ide.core.model.business
 			args.unshift( code.sessionId, key );
 			operation.addEventListener( ResultEvent.RESULT, operationResultHandler );
 			operation.addEventListener( FaultEvent.FAULT, operationFaultHandler );
-			operation.xmlSpecialCharsFilter = escapeXML;
 
 			token = operation.send.apply( null, args );
 			token.key = key;
@@ -110,27 +119,17 @@ package net.vdombox.ide.core.model.business
 			return token;
 		}
 
-		private function escapeXML( value : Object ) : String
-		{
-			var str : String = 	value.toString();
-			return str;
-		}
-
 		private function getLocalName( name : Object ) : String
 		{
 			if ( name is QName )
-			{
 				return QName( name ).localName;
-			}
 			else
-			{
 				return String( name );
-			}
 		}
 
 		private function loadHandler( event : LoadEvent ) : void
 		{
-			dispatchEvent( new SOAPEvent( SOAPEvent.INIT_COMPLETE ));
+			dispatchEvent( new SOAPEvent( SOAPEvent.CONNECTED ));
 		}
 
 		private function faultHandler( event : FaultEvent ) : void

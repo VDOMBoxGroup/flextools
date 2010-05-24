@@ -8,7 +8,6 @@ package net.vdombox.ide.core.model
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-	[ResourceBundle( "Types" )]
 	public class TypesProxy extends Proxy implements IProxy
 	{
 		public static const NAME : String = "TypesProxy";
@@ -23,45 +22,73 @@ package net.vdombox.ide.core.model
 		private var _types : Array;
 		private var _topLevelTypes : Array;
 
+		private var isSOAPConnected : Boolean;
+		
 		override public function onRegister() : void
 		{
-			_types = [];
-			_topLevelTypes = [];
+			if ( soap.ready )
+			{
+				isSOAPConnected = true;
+				addHandlers();
+			}
+			else
+			{
+				isSOAPConnected = false;
+				soap.addEventListener( SOAPEvent.CONNECTED, soap_connectedHandler, false, 0, true );
+			}
 			
-			addHandlers();
+			soap.addEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler, false, 0, true );
 		}
 
 		override public function onRemove() : void
 		{
-			_types = null;
-			_topLevelTypes = null;
+			unloadTypes();
+
+			soap.removeEventListener( SOAPEvent.CONNECTED, soap_connectedHandler );
+			soap.removeEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler );
 			
 			removeHandlers();
 		}
 
 		public function get types() : Array
 		{
-			return _types.slice();
+			return _types ? _types.slice() : null;
 		}
 
 		public function get topLevelTypes() : Array
 		{
-			return _topLevelTypes.slice();
+			return _topLevelTypes ? _topLevelTypes.slice() : null;
 		}
 		
 		public function get numTypes() : uint
 		{
-			return _types.length;
+			return _types ? _types.length : 0;
 		}
 
 		public function loadTypes() : void
 		{
-			sendNotification( ApplicationFacade.TYPES_LOADING );
-			soap.get_all_types();
+			if( isSOAPConnected )
+			{
+				sendNotification( ApplicationFacade.TYPES_LOADING );
+				soap.get_all_types();
+			}
+			else
+			{
+				sendNotification( ApplicationFacade.SEND_TO_LOG, "SOAP is not connected" );
+			}
 		}
 
+		public function unloadTypes() : void
+		{
+			_types = null;
+			_topLevelTypes = null;
+		}
+		
 		public function getType( typeID : String ) : TypeVO
 		{
+			if( !typeID || !_types || _types.length == 0 )
+				return null;
+			
 			var typeVO : TypeVO;
 			
 			for( var i : int = 0; i < _types.length; i++ )
@@ -85,18 +112,38 @@ package net.vdombox.ide.core.model
 			soap.get_all_types.removeEventListener( SOAPEvent.RESULT, soap_getAllTypesHandler );
 		}
 
+		private function soap_connectedHandler( event : SOAPEvent ) : void
+		{
+			isSOAPConnected = true;
+			addHandlers();
+		}
+		
+		private function soap_disconnectedHandler( event : SOAPEvent ) : void
+		{
+			isSOAPConnected = false;
+		}
+		
 		private function soap_getAllTypesHandler( event : net.vdombox.ide.core.events.SOAPEvent ) : void
 		{
 			var typesXML : XML = event.result.Types[ 0 ];
 			
+			var types : Array = [];
+			var topLevelTypes : Array = [];
+			
 			for each ( var type : XML in typesXML.* )
 			{
 				var typeVO : TypeVO = new TypeVO( type );
-				_types.push( typeVO );
+				types.push( typeVO );
 				
 				if( typeVO.container == 3 )
-					_topLevelTypes.push( typeVO );
+					topLevelTypes.push( typeVO );
 			}
+			
+			if( types.length > 0 )
+				_types = types;
+			
+			if( topLevelTypes.length > 0 )
+				_topLevelTypes = topLevelTypes;
 
 			sendNotification( ApplicationFacade.TYPES_LOADED, types );
 		}

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
-			 xmlns:mx="library://ns.adobe.com/flex/halo"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 height="300" width="550">
 
@@ -16,7 +15,7 @@
 	</s:states>
 
 	<!-- main layer -->
-	<s:Group bottom="1" left="1" right="1" top="1"
+	<s:Group bottom="0" left="0" right="0" top="0"
 			 mask="{topMask}">
 
 		<!-- layer 1: background fill -->
@@ -26,19 +25,45 @@
 			<s:fill>
 				<s:LinearGradient rotation="90">
 					<s:entries>
-						<s:GradientEntry color="0x474b50"
+						<s:GradientEntry color="#474b50"
 										 ratio="0.0"/>
-						<s:GradientEntry color="0x151515"
+						<s:GradientEntry color="#151515"
 										 ratio="0.7"/>
 					</s:entries>
 				</s:LinearGradient>
 			</s:fill>
 		</s:Rect>
 
-		<!-- layer 2: contentGroup -->
+		<s:Group height="35" width="100%"
+				 bottom="0">
+			<s:Rect bottom="0" left="0" right="0" top="0">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:entries>
+							<s:GradientEntry color="#EBEBEB"/>
+							<s:GradientEntry color="#C4C5C6"
+											 ratio="0.7"/>
+						</s:entries>
+					</s:LinearGradient>
+				</s:fill>
+			</s:Rect>
+
+			<s:Line left="0" right="0" top="1">
+				<s:stroke>
+					<s:SolidColorStroke color="#C4C5C6"/>
+				</s:stroke>
+			</s:Line>
+
+			<s:Button id="exitButton"
+					  height="35" label="{ resourceManager.getString( 'LoginForm', 'quit_button' ) }" minWidth="100"
+					  fontFamily="Verdana" fontSize="14" left="-2" skinClass="net.vdombox.ide.core.view.skins.InitialWindowButtonSkin"/>
+		</s:Group>
+		
+		<!-- layer 3: contentGroup -->
 		<s:Group id="contentGroup"
 				 height="100%" width="100%"
 				 top="25"/>
+		
 	</s:Group>
 
 	<!-- mask for main layer -->
@@ -47,7 +72,7 @@
 		<s:Rect height="100%" width="100%" y="25"
 				radiusX="10" radiusY="10">
 			<s:fill>
-				<s:SolidColor color="0xCC0000"
+				<s:SolidColor color="#CC0000"
 							  alpha="0.0"/>
 			</s:fill>
 		</s:Rect>

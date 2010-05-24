@@ -2,7 +2,7 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationEventsVO;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
@@ -19,7 +19,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
 	import net.vdombox.ide.core.model.business.SOAP;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ApplicationProxy extends Proxy
@@ -32,9 +32,13 @@ package net.vdombox.ide.core.model
 		private static const CREATE_LIBRARY : String = "createLibrary";
 		private static const UPDATE_LIBRARY : String = "updateLibrary";
 
+		public static var instances : Object = {};
+
 		public function ApplicationProxy( applicationVO : ApplicationVO )
 		{
 			super( NAME + "/" + applicationVO.id, applicationVO );
+
+			instances[ this.proxyName ] = "";
 		}
 
 		private var _selectedPage : PageVO;
@@ -57,19 +61,6 @@ package net.vdombox.ide.core.model
 			return data as ApplicationVO;
 		}
 
-//		public function get selectedPage() : PageVO
-//		{
-//			return _selectedPage;
-//		}
-//
-//		public function get selectedPageID() : String
-//		{
-//			if ( _selectedPage )
-//				return _selectedPage.id;
-//			else
-//				return null;
-//		}
-
 		override public function onRegister() : void
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
@@ -82,6 +73,8 @@ package net.vdombox.ide.core.model
 			typesProxy = null;
 
 			removeHandlers();
+
+			delete instances[ proxyName ];
 		}
 
 		public function changeApplicationInformation( applicationInformationVO : ApplicationInformationVO ) : AsyncToken
@@ -603,223 +596,223 @@ package net.vdombox.ide.core.model
 			switch ( operationName )
 			{
 				case "get_child_objects_tree":
-				{
-					if ( token.requestFunctionName == GET_EVENTS )
 					{
-						pageVO = token.pageVO;
+						if ( token.requestFunctionName == GET_EVENTS )
+						{
+							pageVO = token.pageVO;
 
-						token = soap.get_application_events( applicationVO.id, pageVO.id );
+							token = soap.get_application_events( applicationVO.id, pageVO.id );
 
-						token.recipientName = proxyName;
-						token.requestFunctionName = GET_EVENTS;
-						token.pageVO = pageVO;
-						token.pageStructure = generatePageStructure( result.Object[ 0 ] );
+							token.recipientName = proxyName;
+							token.requestFunctionName = GET_EVENTS;
+							token.pageVO = pageVO;
+							token.pageStructure = generatePageStructure( result.Object[ 0 ] );
+						}
+
+						break;
 					}
-
-					break;
-				}
 
 				case "set_application_info":
-				{
-					var information : XML = result.Information[ 0 ];
-					applicationVO.setInformation( information )
-					sendNotification( ApplicationFacade.APPLICATION_CHANGED, applicationVO );
+					{
+						var information : XML = result.Information[ 0 ];
+						applicationVO.setInformation( information )
+						sendNotification( ApplicationFacade.APPLICATION_INFORMATION_UPDATED, applicationVO );
 
-					break;
-				}
+						break;
+					}
 				case "get_top_objects":
-				{
-					createPagesList( result.Objects[ 0 ] );
+					{
+						createPagesList( result.Objects[ 0 ] );
 
-					sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
+						sendNotification( ApplicationFacade.APPLICATION_PAGES_GETTED, { applicationVO: applicationVO, pages: _pages.slice() } );
 
-					break;
-				}
+						break;
+					}
 
 				case "get_application_structure":
-				{
-					var structure : Array = createStructure( result.Structure[ 0 ].* );
+					{
+						var structure : Array = createStructure( result.Structure[ 0 ].* );
 
-					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, { applicationVO: applicationVO, structure: structure } );
+						sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_GETTED, { applicationVO: applicationVO, structure: structure } );
 
-					break;
-				}
+						break;
+					}
 
 				case "set_application_structure":
-				{
-					sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED, { applicationVO: applicationVO } );
+					{
+						sendNotification( ApplicationFacade.APPLICATION_STRUCTURE_SETTED, { applicationVO: applicationVO } );
 
-					break;
-				}
+						break;
+					}
 
 				case "get_server_actions":
-				{
-					var serverActions : Array = [];
-
-					serverActionsXML = result.ServerActions.Container.( @ID == applicationVO.id ).Action;
-
-					var serverActionVO : ServerActionVO;
-					var serverActionXML : XML;
-
-					for each ( serverActionXML in serverActionsXML )
 					{
-						serverActionVO = new ServerActionVO();
+						var serverActions : Array = [];
 
-						serverActionVO.setContainerID( applicationVO.id );
-						serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
+						serverActionsXML = result.ServerActions.Container.( @ID == applicationVO.id ).Action;
 
-						serverActionVO.script = serverActionXML[ 0 ];
+						var serverActionVO : ServerActionVO;
+						var serverActionXML : XML;
 
-						serverActions.push( serverActionVO );
+						for each ( serverActionXML in serverActionsXML )
+						{
+							serverActionVO = new ServerActionVO();
+
+							serverActionVO.setContainerID( applicationVO.id );
+							serverActionVO.setObjectID( serverActionXML.@ID[ 0 ] );
+
+							serverActionVO.script = serverActionXML[ 0 ];
+
+							serverActions.push( serverActionVO );
+						}
+
+						sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED,
+							{ applicationVO: applicationVO, serverActions: serverActions } );
+
+						break;
 					}
-
-					sendNotification( ApplicationFacade.APPLICATION_SERVER_ACTIONS_GETTED,
-						{ applicationVO: applicationVO, serverActions: serverActions } );
-
-					break;
-				}
 
 				case "set_server_actions":
-				{
-					if ( token.requestFunctionName == SET_EVENTS )
 					{
-						var applicationEventsVO : ApplicationEventsVO = token.applicationEventsVO;
+						if ( token.requestFunctionName == SET_EVENTS )
+						{
+							var applicationEventsVO : ApplicationEventsVO = token.applicationEventsVO;
 
-						var e2vdom : XML = <E2vdom />;
+							var e2vdom : XML = <E2vdom />;
 
-						var eventsXML : XML = applicationEventsVO.getEventsXML();
-						var clientActionsXML : XML = applicationEventsVO.getClientActionsXML();
+							var eventsXML : XML = applicationEventsVO.getEventsXML();
+							var clientActionsXML : XML = applicationEventsVO.getClientActionsXML();
 
-						e2vdom.appendChild( eventsXML );
-						e2vdom.appendChild( clientActionsXML );
+							e2vdom.appendChild( eventsXML );
+							e2vdom.appendChild( clientActionsXML );
 
-						token = soap.set_application_events( applicationVO.id, applicationEventsVO.pageVO.id, e2vdom );
+							token = soap.set_application_events( applicationVO.id, applicationEventsVO.pageVO.id, e2vdom );
 
-						token.recipientName = proxyName;
-						token.requestFunctionName = SET_EVENTS;
-						token.applicationEventsVO = applicationEventsVO;
+							token.recipientName = proxyName;
+							token.requestFunctionName = SET_EVENTS;
+							token.applicationEventsVO = applicationEventsVO;
+						}
+
+						break;
 					}
 
-					break;
-				}
-
 				case "set_library":
-				{
-					libraryXML = result.Library[ 0 ];
-
-					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
-					libraryVO.script = libraryXML[ 0 ];
-
-					if ( token.requestFunctionName == CREATE_LIBRARY )
-						sendNotification( ApplicationFacade.APPLICATION_LIBRARY_CREATED, { applicationVO: applicationVO, libraryVO: libraryVO } );
-					else if( token.requestFunctionName == UPDATE_LIBRARY )
-						sendNotification( ApplicationFacade.APPLICATION_LIBRARY_UPDATED, { applicationVO: applicationVO, libraryVO: libraryVO } );
-
-
-					break;
-				}
-
-				case "remove_library":
-				{
-					libraryXML = result.Library[ 0 ];
-
-					libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
-					libraryVO.script = libraryXML[ 0 ];
-
-					sendNotification( ApplicationFacade.APPLICATION_LIBRARY_DELETED, { applicationVO: applicationVO, libraryVO: libraryVO } );
-
-					break;
-				}
-
-				case "get_libraries":
-				{
-					var libraries : Array = [];
-
-					for each ( libraryXML in result.Libraries.Library )
 					{
+						libraryXML = result.Library[ 0 ];
+
 						libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
 						libraryVO.script = libraryXML[ 0 ];
 
-						libraries.push( libraryVO );
+						if ( token.requestFunctionName == CREATE_LIBRARY )
+							sendNotification( ApplicationFacade.APPLICATION_LIBRARY_CREATED, { applicationVO: applicationVO, libraryVO: libraryVO } );
+						else if ( token.requestFunctionName == UPDATE_LIBRARY )
+							sendNotification( ApplicationFacade.APPLICATION_LIBRARY_UPDATED, { applicationVO: applicationVO, libraryVO: libraryVO } );
+
+
+						break;
 					}
 
-					sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
+				case "remove_library":
+					{
+						libraryXML = result.Library[ 0 ];
 
-					break;
-				}
+						libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+						libraryVO.script = libraryXML[ 0 ];
+
+						sendNotification( ApplicationFacade.APPLICATION_LIBRARY_DELETED, { applicationVO: applicationVO, libraryVO: libraryVO } );
+
+						break;
+					}
+
+				case "get_libraries":
+					{
+						var libraries : Array = [];
+
+						for each ( libraryXML in result.Libraries.Library )
+						{
+							libraryVO = new LibraryVO( libraryXML.@Name, applicationVO );
+							libraryVO.script = libraryXML[ 0 ];
+
+							libraries.push( libraryVO );
+						}
+
+						sendNotification( ApplicationFacade.APPLICATION_LIBRARIES_GETTED, { applicationVO: applicationVO, libraries: libraries } );
+
+						break;
+					}
 
 				case "get_application_events":
-				{
-					var applicationEvents : Object = generateApplicationEvents( result.E2vdom[ 0 ], token.pageVO, token.pageStructure );
+					{
+						var applicationEvents : Object = generateApplicationEvents( result.E2vdom[ 0 ], token.pageVO, token.pageStructure );
 
-					sendNotification( ApplicationFacade.APPLICATION_EVENTS_GETTED,
-						{ applicationVO: applicationVO, applicationEvents: applicationEvents } );
-					break;
-				}
+						sendNotification( ApplicationFacade.APPLICATION_EVENTS_GETTED,
+							{ applicationVO: applicationVO, applicationEvents: applicationEvents } );
+						break;
+					}
 
 				case "set_application_events":
-				{
-					sendNotification( ApplicationFacade.APPLICATION_EVENTS_SETTED, { applicationVO: applicationVO } );
+					{
+						sendNotification( ApplicationFacade.APPLICATION_EVENTS_SETTED, { applicationVO: applicationVO } );
 
-					break;
-				}
+						break;
+					}
 
 				case "create_object":
-				{
-					var pageXML : XML = result.Object[ 0 ];
+					{
+						var pageXML : XML = result.Object[ 0 ];
 
-					pageID = pageXML.@ID[ 0 ];
+						pageID = pageXML.@ID[ 0 ];
 
-					var typeID : String = pageXML.@Type[ 0 ];
+						var typeID : String = pageXML.@Type[ 0 ];
 
-					if ( !pageID || !typeID )
-						return;
+						if ( !pageID || !typeID )
+							return;
 
-					var typeVO : TypeVO = typesProxy.getType( typeID );
+						var typeVO : TypeVO = typesProxy.getType( typeID );
 
-					pageVO = new PageVO( applicationVO, typeVO );
-					pageVO.setID( pageID );
+						pageVO = new PageVO( applicationVO, typeVO );
+						pageVO.setID( pageID );
 
-					pageVO.setXMLDescription( pageXML );
+						pageVO.setXMLDescription( pageXML );
 
-					_pages.push( pageVO );
+						_pages.push( pageVO );
 
-					sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
+						sendNotification( ApplicationFacade.APPLICATION_PAGE_CREATED, { applicationVO: applicationVO, pageVO: pageVO } );
 
-					break;
-				}
+						break;
+					}
 
 				case "delete_object":
-				{
-					pageID = result.Result[ 0 ].toString();
-
-					var deletedPageVO : PageVO;
-					var i : int;
-
-					for ( i = 0; i < _pages.length; i++ )
 					{
-						if ( _pages[ i ].id == pageID )
+						pageID = result.Result[ 0 ].toString();
+
+						var deletedPageVO : PageVO;
+						var i : int;
+
+						for ( i = 0; i < _pages.length; i++ )
 						{
-							deletedPageVO = _pages[ i ];
-							_pages.splice( i, 1 );
-							break;
+							if ( _pages[ i ].id == pageID )
+							{
+								deletedPageVO = _pages[ i ];
+								_pages.splice( i, 1 );
+								break;
+							}
 						}
-					}
 
-					if ( deletedPageVO )
-					{
-						sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
-					}
+						if ( deletedPageVO )
+						{
+							sendNotification( ApplicationFacade.APPLICATION_PAGE_DELETED, { applicationVO: applicationVO, pageVO: deletedPageVO } );
+						}
 
-					break;
-				}
+						break;
+					}
 
 				case "remote_method_call":
-				{
-					sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_GETTED, { applicationVO: applicationVO, result: result } );
+					{
+						sendNotification( ApplicationFacade.APPLICATION_REMOTE_CALL_GETTED, { applicationVO: applicationVO, result: result } );
 
-					break;
-				}
+						break;
+					}
 			}
 		}
 	}

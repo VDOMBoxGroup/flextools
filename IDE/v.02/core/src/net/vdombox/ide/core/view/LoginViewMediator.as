@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
+	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	
@@ -9,6 +10,7 @@ package net.vdombox.ide.core.view
 	import mx.events.ListEvent;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.events.LoginViewEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
@@ -33,6 +35,21 @@ package net.vdombox.ide.core.view
 
 		private var sharedObjectProxy : SharedObjectProxy;
 
+		public function get username() : String
+		{
+			return loginView.username;
+		}
+		
+		public function get password() : String
+		{
+			return loginView.password;
+		}
+		
+		public function get hostname() : String
+		{
+			return loginView.hostname;
+		}
+		
 		override public function onRegister() : void
 		{
 			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
@@ -41,23 +58,17 @@ package net.vdombox.ide.core.view
 			addHandlers();
 		}
 
-		override public function listNotificationInterests() : Array
-		{
-			var interests : Array = super.listNotificationInterests();
-
-			interests.push( ApplicationFacade.MODULES_LOADED );
-
-			return interests;
-		}
-
-		override public function handleNotification( notification : INotification ) : void
-		{
-			switch ( notification.getName() )
-			{
-
-			}
-		}
-
+//		override public function listNotificationInterests() : Array
+//		{
+//			var interests : Array = super.listNotificationInterests();
+//			
+//			return interests;
+//		}
+//
+//		override public function handleNotification( notification : INotification ) : void
+//		{
+//		}
+		
 		private function get loginView() : LoginView
 		{
 			return viewComponent as LoginView;
@@ -65,73 +76,64 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-			loginView.addEventListener( FlexEvent.SHOW, showHandler );
+			loginView.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 
-			loginView.addEventListener( KeyboardEvent.KEY_DOWN, keyDownHandler );
-			loginView.selectLang.addEventListener( IndexChangeEvent.CHANGE, selectLang_changeHandler );
-			loginView.connectButton.addEventListener( MouseEvent.CLICK, submitButton_clickHandler );
-			loginView.exitButton.addEventListener( MouseEvent.CLICK, exitButton_clickHandler );
+			loginView.addEventListener( LoginViewEvent.SUBMIT, submitHandler, false, 0, true );
+
+			loginView.addEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler, false, 0, true );
 		}
 
-		private function setupLanguageList() : void
+		private function removeHandlers() : void
 		{
-			var languageList : ArrayList = new ArrayList( localeProxy.locales );
-			loginView.selectLang.labelField = "description"
-			loginView.selectLang.dataProvider = languageList;
-			loginView.selectLang.selectedItem = localeProxy.currentLocale;
+			loginView.removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
+
+			loginView.removeEventListener( LoginViewEvent.SUBMIT, submitHandler );
+
+			loginView.removeEventListener( LoginViewEvent.LANGUAGE_CHANGED, languageChangedHandler );
 		}
 
-		private function keyDownHandler( event : KeyboardEvent ) : void
+		private function addedToStageHandler( event : Event ) : void
 		{
-			if ( event.keyCode == 13 )
-				submit();
-		}
+			loginView.username = sharedObjectProxy.username;
+//			loginView.username.appendText( "" ); //FIXME убрать эту конструкцию непонятную, иначе не рефрешит поле.
 
-		private function showHandler( event : FlexEvent ) : void
-		{
-			loginView.username.text = sharedObjectProxy.username;
-			loginView.username.appendText( "" ); //FIXME убрать эту конструкцию непонятную, иначе не рефрешит поле.
+			loginView.hostname = sharedObjectProxy.hostname;
+//			loginView.hostname.appendText( "" );
 
-			loginView.hostname.text = sharedObjectProxy.hostname;
-			loginView.hostname.appendText( "" );
+			loginView.password = sharedObjectProxy.password;
+//			loginView.password.appendText( "" );
 
-			loginView.password.text = sharedObjectProxy.password;
-			loginView.password.appendText( "" );
-
-			setupLanguageList();
+			loginView.languages = new ArrayList( localeProxy.locales );
+			
+			loginView.selectedLanguage = localeProxy.currentLocale;
 //
-			if ( loginView.username.text && loginView.hostname.text && loginView.password.text )
-				submit();
+//			if ( loginView.username && loginView.hostname && loginView.password )
+//				submit();
 		}
 
-		private function selectLang_changeHandler( event : IndexChangeEvent ) : void
+		private function languageChangedHandler( event : Event ) : void
 		{
-			var selectedItem : LocaleVO = event.currentTarget.selectedItem as LocaleVO;
-			sendNotification( ApplicationFacade.CHANGE_LOCALE, selectedItem );
+			if( loginView.selectedLanguage is LocaleVO )
+				sendNotification( ApplicationFacade.CHANGE_LOCALE, loginView.selectedLanguage );
+		}
+
+		private function submitHandler( event : Event ) : void
+		{
+			submit();
 		}
 
 		private function submit() : void
 		{
-			var loginFormData : Object = {};
-			loginFormData.username = loginView.username.text;
-			loginFormData.password = loginView.password.text;
-			loginFormData.hostname = loginView.hostname.text;
+//			var loginFormData : Object = {};
+//			loginFormData.username = loginView.username.text;
+//			loginFormData.password = loginView.password.text;
+//			loginFormData.hostname = loginView.hostname.text;
 
-			sharedObjectProxy.username = loginView.username.text;
-			sharedObjectProxy.password = loginView.password.text;
-			sharedObjectProxy.hostname = loginView.hostname.text;
+//			sharedObjectProxy.username = loginView.username;
+//			sharedObjectProxy.password = loginView.password;
+//			sharedObjectProxy.hostname = loginView.hostname;
 
-			sendNotification( ApplicationFacade.PROCESS_USER_INPUT, loginFormData );
-		}
-
-		private function submitButton_clickHandler( event : MouseEvent ) : void
-		{
-			submit();
-		}
-		
-		private function exitButton_clickHandler( event : MouseEvent ) : void
-		{
-			NativeApplication.nativeApplication.exit();
+			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNUP );
 		}
 	}
 }

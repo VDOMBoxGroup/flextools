@@ -21,7 +21,7 @@ package net.vdombox.ide.core.controller.responses
 
 			switch ( name )
 			{
-				case ApplicationFacade.APPLICATION_CHANGED:
+				case ApplicationFacade.APPLICATION_INFORMATION_UPDATED:
 				{
 					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.INFORMATION, body );
 

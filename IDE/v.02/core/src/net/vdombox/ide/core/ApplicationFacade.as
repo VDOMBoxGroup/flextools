@@ -1,21 +1,25 @@
 package net.vdombox.ide.core
 {
-	import mx.rpc.events.FaultEvent;
-	
-	import net.vdombox.ide.core.controller.ApplicationLoadedCommand;
+	import net.vdombox.ide.core.controller.ChangeLocaleCommand;
+	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
+	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
-	import net.vdombox.ide.core.controller.ConnectServerCommand;
-	import net.vdombox.ide.core.controller.ConnectionServerSuccessfulCommand;
+	import net.vdombox.ide.core.controller.InitialWindowCreatedCommand;
 	import net.vdombox.ide.core.controller.LoadModulesCommand;
-	import net.vdombox.ide.core.controller.LogonSuccessfulCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
+	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
+	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
 	import net.vdombox.ide.core.controller.OpenWindowCommand;
 	import net.vdombox.ide.core.controller.PreinitalizeMacroCommand;
 	import net.vdombox.ide.core.controller.ProcessLogMessage;
 	import net.vdombox.ide.core.controller.ProcessSimpleMessageCommand;
 	import net.vdombox.ide.core.controller.ProcessUIQueryMessageCommand;
+	import net.vdombox.ide.core.controller.RequestForSignoutCommand;
+	import net.vdombox.ide.core.controller.RequestForSignupCommand;
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
+	import net.vdombox.ide.core.controller.ServerLoginSuccessfulCommand;
+	import net.vdombox.ide.core.controller.StartupCommand;
 	import net.vdombox.ide.core.controller.requests.ApplicationProxyRequestCommand;
 	import net.vdombox.ide.core.controller.requests.ObjectProxyRequestCommand;
 	import net.vdombox.ide.core.controller.requests.PageProxyRequestCommand;
@@ -28,7 +32,6 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.responses.PageProxyResponseCommand;
 	import net.vdombox.ide.core.controller.responses.ResourcesProxyResponseCommand;
 	import net.vdombox.ide.core.controller.responses.ServerProxyResponseCommand;
-	import net.vdombox.ide.core.model.business.SOAP;
 	
 	import org.puremvc.as3.multicore.interfaces.IFacade;
 	import org.puremvc.as3.multicore.patterns.facade.Facade;
@@ -37,55 +40,74 @@ package net.vdombox.ide.core
 	{
 		public static const PREINITALIZE : String = "preinitalize";
 		public static const STARTUP : String = "startup";
+		
+		public static const INITIAL_WINDOW_CREATED : String = "initialWindowCreated";
+		
+		public static const OPEN_INITIAL_WINDOW : String = "openInitialWindow";
 		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
+		
+		public static const CLOSE_INITIAL_WINDOW : String = "closeInitialWindow";
+		public static const INITIAL_WINDOW_CLOSED : String = "initialWindowClosed";
+		
+		public static const OPEN_MAIN_WINDOW : String = "openMainWindow";
 		public static const MAIN_WINDOW_OPENED : String = "mainWindowOpened";
-		public static const SHOW_LOGON_VIEW : String = "showLoginView";
-		public static const SHOW_ERROR_VIEW : String = "showErrorView";
-		public static const CLOSE_SETTINGS_WINDOW : String = "closeSettingsWindow";
+		
+		public static const CLOSE_MAIN_WINDOW : String = "closeMainWindow";
+		public static const MAIN_WINDOW_CLOSED : String = "mainWindowClosed";
+		
+		public static const REQUEST_FOR_SIGNUP : String = "requestForSignUp";
+		public static const REQUEST_FOR_SIGNOUT : String = "requestForSignOut";
+		
+//		public static const SHOW_LOGON_VIEW : String = "showLoginView";
+//		public static const SHOW_ERROR_VIEW : String = "showErrorView";
+		
+//		public static const CLOSE_SETTINGS_WINDOW : String = "closeSettingsWindow";
 		public static const CHANGE_LOCALE : String = "changeLocale";
-		public static const PROCESS_USER_INPUT : String = "processUserInput";
-		public static const CONNECT_SERVER : String = "connectServer";
-		public static const CONNECTION_SERVER_STARTS : String = "connectionServerStarts";
-		public static const CONNECTION_SERVER_SUCCESSFUL : String = "connectionServerSuccessful";
-		public static const CONNECTION_SERVER_ERROR : String = "connectionServerError";
-		public static const LOGON_STARTS : String = "logonStarts";
-		public static const LOGON_SUCCESS : String = "logonSuccess";
-		public static const LOGON_ERROR : String = "logonError";
-
-		public static const LOGOFF_STARTS : String = "logoffStarts";
-		public static const LOGOFF_SUCCESS : String = "logoffSuccess";
-		public static const LOGOFF_ERROR : String = "logoffError";
-		public static const APPLICATIONS_LOADING : String = "applicationsLoading";
-		public static const APPLICATIONS_LOADED : String = "applicationsLoaded";
-		public static const APPLICATION_CREATED : String = "applicationCreated";
-		public static const APPLICATION_CHANGED : String = "applicationChanged";
-		public static const TYPES_LOADING : String = "typesLoading";
-		public static const TYPES_LOADED : String = "typesLoaded";
+//		public static const PROCESS_USER_INPUT : String = "processUserInput";
+		
+//		public static const CONNECT_SERVER : String = "connectServer";
+		
+		
+//		public static const LOGON_STARTS : String = "logonStarts";
+//		public static const LOGON_SUCCESS : String = "logonSuccess";
+//		public static const LOGON_ERROR : String = "logonError";
+//
+//		public static const LOGOFF_REQUEST : String = "logoffRequest";
+//		public static const LOGOFF_STARTS : String = "logoffStarts";
+//		public static const LOGOFF_SUCCESS : String = "logoffSuccess";
+//		public static const LOGOFF_ERROR : String = "logoffError";
+		
+//		public static const APPLICATIONS_LOADING : String = "applicationsLoading";
+//		public static const APPLICATIONS_LOADED : String = "applicationsLoaded";
+//		public static const APPLICATION_CREATED : String = "applicationCreated";
+//		public static const APPLICATION_CHANGED : String = "applicationChanged";
+		
 		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
-
 		public static const DISCONNECT_MODULE_TO_CORE : String = "disconnectModuleToCore";
+		
 		public static const CONNECT_MODULE_TO_PROXIES : String = "connectModuleToProxies";
 		public static const MODULE_TO_PROXIES_CONNECTED : String = "moduleToProxiesСonnected";
+		
 		public static const DISCONNECT_MODULE_TO_PROXIES : String = "disconnectModuleToProxies";
 		public static const MODULE_TO_PROXIES_DISCONNECTED : String = "moduleToProxiesDisconnected";
 
-//		settings
-		public static const RETRIEVE_MODULE_SETTINGS : String = "getModuleSettings";
-		public static const MODULE_SETTINGS_GETTED : String = "moduleSettingsGetted";
-		public static const SAVE_MODULE_SETTINGS : String = "setModuleSettings";
-		public static const MODULE_SETTINGS_SETTED : String = "moduleSettingsSetted";
-
+//		simple messages
+		public static const PROCESS_SIMPLE_MESSAGE : String = "processSimpleMessage";
+		public static const PROCESS_UIQUERY_MESSAGE : String = "processUIQueryMessage";
+		public static const PROCESS_LOG_MESSAGE : String = "processLogMessage";
+		
+//		pipes messages
+		public static const SHOW_MODULE_TOOLSET : String = "showModuleToolset";
+		public static const SHOW_MODULE_SETTINGS_SCREEN : String = "showModuleSettingsScreen";
+		public static const SHOW_MODULE_BODY : String = "showModuleBody";
+		
 //		proxies		
 		public static const RESOURCES_PROXY_REQUEST : String = "resourcesProxyRequest";
 		public static const RESOURCES_PROXY_RESPONSE : String = "resourcesProxyResponse";
-		public static const RESOURCES_GETTED : String = "resourcesGetted";
-		public static const RESOURCE_LOADED : String = "resourceLoaded";
-		public static const RESOURCE_SETTED : String = "resourceSetted";
-		public static const RESOURCE_DELETED : String = "resourceDeleted";
-		public static const RESOURCE_MODIFIED : String = "resourceModified";
 		
 		public static const SERVER_PROXY_REQUEST : String = "serverProxyRequest";
 		public static const SERVER_PROXY_RESPONSE : String = "serverProxyResponse";
+		
 		public static const STATES_PROXY_REQUEST : String = "statesProxyRequest";
 		public static const STATES_PROXY_RESPONSE : String = "statesProxyResponse";
 		
@@ -104,60 +126,101 @@ package net.vdombox.ide.core
 //		modules
 		public static const LOAD_MODULES : String = "loadModules";
 		public static const MODULES_LOADED : String = "modulesLoaded";
+		
 		public static const LOAD_MODULE : String = "loadModule";
 		public static const MODULE_LOADED : String = "moduleLoaded";
+		
 		public static const MODULE_READY : String = "moduleReady";
+		
 		public static const CHANGE_SELECTED_MODULE : String = "changeSelectedModule";
 		public static const SELECTED_MODULE_CHANGED : String = "selectedModuleChanged";
 
-//		simple messages
-		public static const PROCESS_SIMPLE_MESSAGE : String = "processSimpleMessage";
-		public static const PROCESS_UIQUERY_MESSAGE : String = "processUIQueryMessage";
-		public static const PROCESS_LOG_MESSAGE : String = "processLogMessage";
-
-//		pipes messages
-		public static const SHOW_MODULE_TOOLSET : String = "showModuleToolset";
-		public static const SHOW_MODULE_SETTINGS_SCREEN : String = "showModuleSettingsScreen";
-		public static const SHOW_MODULE_BODY : String = "showModuleBody";
-
+//		settings
+		public static const RETRIEVE_MODULE_SETTINGS : String = "getModuleSettings";
+		public static const MODULE_SETTINGS_GETTED : String = "moduleSettingsGetted";
+		
+		public static const SAVE_MODULE_SETTINGS : String = "setModuleSettings";
+		public static const MODULE_SETTINGS_SETTED : String = "moduleSettingsSetted";
+		
+//		server
+		public static const SERVER_CONNECTION_START : String = "serverСonnectionStart";
+		public static const SERVER_CONNECTION_SUCCESSFUL : String = "serverСonnectionSuccessful";
+		public static const SERVER_CONNECTION_ERROR : String = "serverСonnectionError";
+		
+		public static const SERVER_LOGIN_START : String = "serverLoginStarts";
+		public static const SERVER_LOGIN_SUCCESSFUL : String = "serverLoginSuccessful";
+		public static const SERVER_LOGIN_ERROR : String = "serverLoginError";
+		
+		public static const SERVER_APPLICATION_CREATED : String = "serverApplicationCreated";
+		public static const SERVER_APPLICATIONS_GETTED : String = "serverApplicationsGetted";
+		
+//		resources
+		public static const RESOURCES_GETTED : String = "resourcesGetted";
+		
+		public static const RESOURCE_LOADED : String = "resourceLoaded";
+		public static const RESOURCE_SETTED : String = "resourceSetted";
+		public static const RESOURCE_DELETED : String = "resourceDeleted";
+		public static const RESOURCE_MODIFIED : String = "resourceModified";
+		
+//		types
+		public static const TYPES_LOADING : String = "typesLoading";
+		public static const TYPES_LOADED : String = "typesLoaded";
+		
 //		application
+		public static const APPLICATION_INFORMATION_UPDATED : String = "applicationInfrmationUpdated";
+		
 		public static const APPLICATION_STRUCTURE_GETTED : String = "applicationStructureGetted";
 		public static const APPLICATION_STRUCTURE_SETTED : String = "applicationStructureSetted";
 		
 		public static const APPLICATION_PAGES_GETTED : String = "applicationPagesGetted";
+		
 		public static const APPLICATION_PAGE_CREATED : String = "applicationPageCreated";
 		public static const APPLICATION_PAGE_DELETED : String = "applicationPageDeleted";
+		
 		public static const APPLICATION_REMOTE_CALL_GETTED : String = "applicationRemoteCallGetted";
 		
 		public static const APPLICATION_SERVER_ACTIONS_GETTED : String = "applicationServerActionsGetted";
+		
 		public static const APPLICATION_LIBRARIES_GETTED : String = "applicationLibrariesGetted";
+		
 		public static const APPLICATION_LIBRARY_CREATED : String = "applicationLibraryCreated";
 		public static const APPLICATION_LIBRARY_UPDATED : String = "applicationLibraryUpdated";
 		public static const APPLICATION_LIBRARY_DELETED : String = "applicationLibraryDeleted";
+		
 		public static const APPLICATION_EVENTS_GETTED : String = "applicationEventsGetted";
 		public static const APPLICATION_EVENTS_SETTED : String = "applicationEventsSetted";
 		
 //		page		
 		public static const PAGE_STRUCTURE_GETTED : String = "pageStructureGetted";
+		
 		public static const PAGE_ATTRIBUTES_GETTED : String = "pageAttributesGetted";
 		public static const PAGE_ATTRIBUTES_SETTED : String = "pageAttributesSetted";
+		
 		public static const PAGE_OBJECTS_GETTED : String = "pageObjectsGetted";
+		
 		public static const PAGE_OBJECT_GETTED : String = "pageObjectGetted";
 		public static const PAGE_OBJECT_CREATED : String = "pageObjectCreated";
 		public static const PAGE_OBJECT_DELETED : String = "pageObjectDeleted";
+		
 		public static const PAGE_SERVER_ACTIONS_GETTED : String = "pageServerActionsGetted";
 		public static const PAGE_SERVER_ACTIONS_SETTED : String = "pageServerActionsGetted";
+		
 		public static const PAGE_WYSIWYG_GETTED : String = "pageWYSIWYGGetted";
+		
 		public static const PAGE_XML_PRESENTATION_GETTED : String = "pageXMLPresentationGetted";
 		public static const PAGE_XML_PRESENTATION_SETTED : String = "pageXMLPresentationSetted";
 
 //		object
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
 		public static const OBJECT_ATTRIBUTES_SETTED : String = "objectAttributesSetted";
+		
 		public static const OBJECT_SERVER_ACTIONS_GETTED : String = "objectServerActionsGetted";
 		public static const OBJECT_SERVER_ACTIONS_SETTED : String = "objectServerActionsSetted";
+		
 		public static const OBJECT_OBJECT_CREATED : String = "objectObjectCreated";
+		
 		public static const OBJECT_WYSIWYG_GETTED : String = "objectWYSIWYGGetted";
+		
 		public static const OBJECT_XML_PRESENTATION_GETTED : String = "objectXMLPresentationGetted";
 		public static const OBJECT_XML_PRESENTATION_SETTED : String = "objectXMLPresentationSetted";
 
@@ -172,17 +235,14 @@ package net.vdombox.ide.core
 		{
 			if ( instanceMap[ key ] == null )
 				instanceMap[ key ] = new ApplicationFacade( key );
+			
 			return instanceMap[ key ] as ApplicationFacade;
 		}
 
 		public function ApplicationFacade( key : String )
 		{
 			super( key );
-
-			soap.addEventListener( FaultEvent.FAULT, soap_faultEvent );
 		}
-
-		private var soap : SOAP = SOAP.getInstance();
 
 		public function preinitalize( application : VdomIDE ) : void
 		{
@@ -198,16 +258,35 @@ package net.vdombox.ide.core
 		{
 			super.initializeController();
 
+//			core
 			registerCommand( PREINITALIZE, PreinitalizeMacroCommand );
+			registerCommand( STARTUP, StartupCommand );
 
-			registerCommand( CONNECT_SERVER, ConnectServerCommand );
-			registerCommand( CONNECTION_SERVER_SUCCESSFUL, ConnectionServerSuccessfulCommand );
-			registerCommand( LOGON_SUCCESS, LogonSuccessfulCommand );
-			registerCommand( APPLICATIONS_LOADED, ApplicationLoadedCommand );
+			registerCommand( INITIAL_WINDOW_CREATED, InitialWindowCreatedCommand );
+
+			registerCommand( OPEN_MAIN_WINDOW, OpenMainWindowCommand );
+			registerCommand( OPEN_INITIAL_WINDOW, OpenInitialWindowCommand );
+			
+			registerCommand( CLOSE_MAIN_WINDOW, CloseMainWindowCommand );
+			registerCommand( CLOSE_INITIAL_WINDOW, CloseInitialWindowCommand );
+			
+			registerCommand( REQUEST_FOR_SIGNUP, RequestForSignupCommand );
+			registerCommand( REQUEST_FOR_SIGNOUT, RequestForSignoutCommand );
+			
+			registerCommand( SERVER_LOGIN_SUCCESSFUL, ServerLoginSuccessfulCommand );
+			
+			registerCommand( CHANGE_LOCALE, ChangeLocaleCommand );
+			
+			                       
+			
+//			registerCommand( CONNECT_SERVER, ConnectServerCommand );
+//			registerCommand( CONNECTION_SERVER_SUCCESSFUL, ConnectionServerSuccessfulCommand );
+//			registerCommand( LOGON_SUCCESS, LogonSuccessfulCommand );
 
 			registerCommand( LOAD_MODULES, LoadModulesCommand );
 			registerCommand( MODULE_LOADED, ModuleLoadedCommand );
 
+//			message requests & responses
 			registerCommand( RETRIEVE_MODULE_SETTINGS, RetrieveModuleSettings );
 			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );
 
@@ -218,12 +297,13 @@ package net.vdombox.ide.core
 			registerCommand( TYPES_PROXY_REQUEST, TypesProxyRequestCommand );
 
 			registerCommand( SERVER_PROXY_REQUEST, ServerProxyRequestCommand );
-			registerCommand( APPLICATION_CREATED, ServerProxyResponseCommand );
+			registerCommand( SERVER_APPLICATION_CREATED, ServerProxyResponseCommand );
+			registerCommand( SERVER_APPLICATIONS_GETTED, ServerProxyResponseCommand );
 
 			registerCommand( STATES_PROXY_REQUEST, StatesProxyRequestCommand );
 
 			registerCommand( APPLICATION_PROXY_REQUEST, ApplicationProxyRequestCommand );
-			registerCommand( APPLICATION_CHANGED, ApplicationProxyResponseCommand );
+			registerCommand( APPLICATION_INFORMATION_UPDATED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_STRUCTURE_SETTED, ApplicationProxyResponseCommand );
 			registerCommand( APPLICATION_PAGES_GETTED, ApplicationProxyResponseCommand );
@@ -270,12 +350,8 @@ package net.vdombox.ide.core
 
 			registerCommand( OPEN_WINDOW, OpenWindowCommand );
 			registerCommand( CLOSE_WINDOW, CloseWindowCommand );
-		}
-
-		private function soap_faultEvent( event : FaultEvent ) : void
-		{
-			var faultDetail : String = event.fault.faultDetail ? event.fault.faultDetail : "";
-			sendNotification( SHOW_ERROR_VIEW, faultDetail );
+			
+//			registerCommand( LOGOFF_REQUEST, LogoffRequestCommand );
 		}
 	}
 }

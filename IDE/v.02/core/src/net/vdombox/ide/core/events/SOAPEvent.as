@@ -6,7 +6,9 @@ package net.vdombox.ide.core.events
 
 	public class SOAPEvent extends Event
 	{
-		public static var INIT_COMPLETE : String = "Init Complete";
+		public static var CONNECTED : String = "connected";
+		public static var DISCONNECTED : String = "disconnected";
+		
 		public static var LOGIN_OK : String = "Login OK";
 		public static var LOGOFF_OK : String = "Logoff OK";
 		public static var RESULT : String = "Result";

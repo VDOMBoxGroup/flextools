@@ -6,7 +6,7 @@ package net.vdombox.ide.core.controller.responses
 	import net.vdombox.ide.common.ProxiesPipeMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -15,27 +15,40 @@ package net.vdombox.ide.core.controller.responses
 		override public function execute( notification : INotification ) : void
 		{
 			var body : Object = notification.getBody();
-			
+
 			var message : ProxiesPipeMessage;
-			
+
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.APPLICATION_CREATED:
+				case ApplicationFacade.SERVER_APPLICATION_CREATED:
 				{
 					var applicationVO : ApplicationVO = body as ApplicationVO;
-					
-					if( !applicationVO )
+
+					if ( !applicationVO )
 					{
-						sendNotification( ApplicationFacade.SEND_TO_LOG, "ServerProxyResponseCommand: APPLICATION_CREATED applicationVO is null." );
+						sendNotification( ApplicationFacade.SEND_TO_LOG,
+										  "ServerProxyResponseCommand: APPLICATION_CREATED applicationVO is null." );
 						return;
 					}
-						
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE, 
-													  PPMServerTargetNames.APPLICATION, applicationVO );
-					
-					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
+
+					message =
+						new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE, PPMServerTargetNames.APPLICATION, applicationVO );
+
+					break;
+				}
+
+				case ApplicationFacade.SERVER_APPLICATIONS_GETTED:
+				{
+					var applications : Array = body as Array;
+
+					message =
+						new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS, applications );
+
+					break;
 				}
 			}
+
+			sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
 		}
 	}
 }

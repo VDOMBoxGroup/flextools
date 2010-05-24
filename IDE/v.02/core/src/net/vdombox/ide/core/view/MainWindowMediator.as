@@ -9,6 +9,7 @@ package net.vdombox.ide.core.view
 	import mx.resources.ResourceManager;
 	
 	import net.vdombox.ide.core.ApplicationFacade;
+	import net.vdombox.ide.core.events.MainWindowEvent;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.ServerProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
@@ -24,6 +25,7 @@ package net.vdombox.ide.core.view
 	import spark.components.ButtonBar;
 	import spark.components.Group;
 	import spark.events.IndexChangeEvent;
+	import spark.skins.spark.ButtonSkin;
 
 	public class MainWindowMediator extends Mediator implements IMediator
 	{
@@ -58,7 +60,7 @@ package net.vdombox.ide.core.view
 			interests.push( ApplicationFacade.SHOW_MODULE_TOOLSET );
 			interests.push( ApplicationFacade.SHOW_MODULE_BODY );
 			interests.push( ApplicationFacade.CHANGE_SELECTED_MODULE );
-			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
+//			interests.push( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 
 			return interests;
 		}
@@ -89,21 +91,22 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.CLOSE_SETTINGS_WINDOW:
-				{
-					var settingsWindowMediator : SettingsWindowMediator = facade.retrieveMediator( SettingsWindowMediator.NAME ) as SettingsWindowMediator;
-
-					if ( !settingsWindowMediator )
-						return;
-
-					var settingsWindow : SettingsWindow = settingsWindowMediator.settingsWindow;
-
-					windowManager.removeWindow( settingsWindow );
-
-					facade.removeMediator( SettingsWindowMediator.NAME );
-
-					break;
-				}
+//				case ApplicationFacade.CLOSE_SETTINGS_WINDOW:
+//				{
+//					var settingsWindowMediator : SettingsWindowMediator =
+//						facade.retrieveMediator( SettingsWindowMediator.NAME ) as SettingsWindowMediator;
+//
+//					if ( !settingsWindowMediator )
+//						return;
+//
+//					var settingsWindow : SettingsWindow = settingsWindowMediator.settingsWindow;
+//
+//					windowManager.removeWindow( settingsWindow );
+//
+//					facade.removeMediator( SettingsWindowMediator.NAME );
+//
+//					break;
+//				}
 			}
 		}
 
@@ -122,8 +125,11 @@ package net.vdombox.ide.core.view
 		public function openWindow() : void
 		{
 			windowManager.addWindow( mainWindow );
+
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+
 			mainWindow.title = "VDOM IDE (v.2b) - User: " + serverProxy.authInfo.username;
+			mainWindow.username = serverProxy.authInfo.username;
 		}
 
 		public function closeWindow() : void
@@ -138,12 +144,14 @@ package net.vdombox.ide.core.view
 
 		private function addHandlers() : void
 		{
-			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
+			mainWindow.addEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler, false, 0, true );
+			mainWindow.addEventListener( MainWindowEvent.LOGOUT, logoutHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			mainWindow.removeEventListener( FlexEvent.CREATION_COMPLETE, mainWindow_creationCompleteHandler );
+			mainWindow.removeEventListener( MainWindowEvent.LOGOUT, logoutHandler );
 		}
 
 		private function cleanup() : void
@@ -217,14 +225,19 @@ package net.vdombox.ide.core.view
 			tabBar.labelField = "name";
 			tabBar.dataProvider = new ArrayList( modulesCategories );
 			tabBar.selectedIndex = 0;
-			
+
 			var categoryVO : ModulesCategoryVO = tabBar.selectedItem as ModulesCategoryVO;
-			
+
 			showModulesByCategory( categoryVO );
 			selectModule();
 			mainWindow.tabBar.callLater( mainWindow.tabBar.drawFocus, [ false ] );
 		}
 
+		private function logoutHandler( event : MainWindowEvent ) : void
+		{
+			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
+		}
+			
 		private function tabBar_indexChangeEvent( event : IndexChangeEvent ) : void
 		{
 			var categoryVO : ModulesCategoryVO = event.target.selectedItem as ModulesCategoryVO;

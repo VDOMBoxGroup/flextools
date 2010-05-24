@@ -34,11 +34,9 @@ package net.vdombox.ide.core.controller.requests
 
 				case PPMServerTargetNames.APPLICATIONS:
 				{
-					var applications : Array = serverProxy.applications;
-
-					message.setBody( applications );
-
-					sendNotification( ApplicationFacade.SERVER_PROXY_RESPONSE, message );
+					if ( operation == PPMOperationNames.READ )
+						serverProxy.loadApplications();
+					
 					break;
 				}
 			}

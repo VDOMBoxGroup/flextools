@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009"
-					xmlns:mx="library://ns.adobe.com/flex/halo"
-					xmlns:s="library://ns.adobe.com/flex/spark">
-	<s:Group id="place"
-			 height="100%" width="100%"
-			 left="100" top="100">
-		<s:layout>
-			<s:VerticalLayout/>
-		</s:layout>
-	</s:Group>
-</s:NavigatorContent>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  skinClass="net.vdombox.ide.core.view.skins.ProgressViewSkin">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+
+</s:SkinnableContainer>

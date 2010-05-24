@@ -29,68 +29,45 @@ package net.vdombox.ide.core.view
 			return viewComponent as VdomIDE
 		}
 
-		private var currentWindow : Window;
-
-		private var initialWindowMediator : InitialWindowMediator;
-
-		private var mainWindowMediator : MainWindowMediator;
-
-//		private var windowManager : WindowManager = net.vdombox.utils.WindowManager.getInstance();
-
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.STARTUP );
 			interests.push( ApplicationFacade.INITIAL_WINDOW_OPENED );
-			interests.push( ApplicationFacade.MAIN_WINDOW_OPENED );
+
+//			interests.push( ApplicationFacade.MAIN_WINDOW_OPENED );
 			interests.push( ApplicationFacade.TYPES_LOADED );
 
 			return interests;
 		}
 
-		override public function handleNotification( note : INotification ) : void
+		override public function handleNotification( notification : INotification ) : void
 		{
-			switch ( note.getName())
+			var name : String = notification.getName();
+
+			switch ( name )
 			{
-				case ApplicationFacade.STARTUP:
-				{
-					initialWindowMediator.openWindow();
-					
-					break;
-				}
-				
 				case ApplicationFacade.TYPES_LOADED:
 				{
-					mainWindowMediator.openWindow();
-					initialWindowMediator.closeWindow();
-					
+					sendNotification( ApplicationFacade.OPEN_MAIN_WINDOW );
+
 					break;
 				}
-					
+
 				case ApplicationFacade.INITIAL_WINDOW_OPENED:
 				{
 					sendNotification( ApplicationFacade.LOAD_MODULES );
-					
+
 					break;
 				}
-				
-				case ApplicationFacade.MAIN_WINDOW_OPENED:
-				{
-					sendNotification( ApplicationFacade.LOAD_MODULES );
-					
-					break;
-				}
+
+//				case ApplicationFacade.MAIN_WINDOW_OPENED:
+//					{
+//						sendNotification( ApplicationFacade.LOAD_MODULES );
+//
+//						break;
+//					}
 			}
-		}
-
-		override public function onRegister() : void
-		{
-			initialWindowMediator = new InitialWindowMediator( new InitialWindow());
-			facade.registerMediator( initialWindowMediator );
-
-			mainWindowMediator = new MainWindowMediator( new MainWindow());
-			facade.registerMediator( mainWindowMediator );
 		}
 	}
 }

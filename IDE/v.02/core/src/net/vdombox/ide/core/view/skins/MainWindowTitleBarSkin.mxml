@@ -27,9 +27,8 @@
 	 @see spark.components.Window
 -->
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
-			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 xmlns:mx="library://ns.adobe.com/flex/halo"
-			 
+			 xmlns:s="library://ns.adobe.com/flex/spark"
 			 minHeight="50" width="100%">
 
 	<fx:Metadata>
@@ -40,30 +39,35 @@
 	</fx:Metadata>
 
 	<fx:Script>
-		/*  Define the skin elements that should not be colorized.
-		 *  Exclude the titleBar and scroller because they are SparkSkins and we
-		 *  don't want to colorize them twice.
-		 */
-		static private const exclusions : Array = [ "titleIconImage", "titleText" ];
+		<![CDATA[
+			static private const exclusions : Array = [ "titleIconImage", "titleText" ];
 
-		/**
-		 *  @inheritDoc
-		 */
-		override public function get colorizeExclusions() : Array
-		{
-			return exclusions;
-		}
+			/**
+			 *  @inheritDoc
+			 */
+			override public function get colorizeExclusions() : Array
+			{
+				return exclusions;
+			}
+
+
+			protected function closeButton_clickHandler( event : MouseEvent ) : void
+			{
+				NativeApplication.nativeApplication.exit();
+			}
+		]]>
+
 	</fx:Script>
 
 	<s:states>
 
-		<s:State name="normal" />
+		<s:State name="normal"/>
 
-		<s:State name="disabled" />
+		<s:State name="disabled"/>
 
-		<s:State name="normalAndMaximized" stateGroups="maximizedGroup" />
+		<s:State name="normalAndMaximized" stateGroups="maximizedGroup"/>
 
-		<s:State name="disabledAndMaximized" stateGroups="maximizedGroup" />
+		<s:State name="disabledAndMaximized" stateGroups="maximizedGroup"/>
 	</s:states>
 	<!-- fill -->
 	<!--- Defines the background color of the skin. -->
@@ -78,34 +82,33 @@
 			<s:LinearGradient id="bgFill"
 							  rotation="90">
 
-				<s:GradientEntry color="0x4D5258" />
-				
-				<s:GradientEntry color="0x232426" />
+				<s:GradientEntry color="0x4D5258"/>
+
+				<s:GradientEntry color="0x232426"/>
 			</s:LinearGradient>
 		</s:fill>
 	</s:Rect>
 
-	<s:Group height="100%" minHeight="50" width.disabled="100%" width.disabledAndMaximized="100%"
-			 width.normalAndMaximized="100%"
+	<s:Group height="100%" minHeight="50" width.disabled="100%" width.disabledAndMaximized="100%" width.normalAndMaximized="100%"
 			 left="2" right="2" top="2">
 
 		<s:layout>
 
-			<s:HorizontalLayout verticalAlign="top"
-								gap="5" />
+			<s:HorizontalLayout gap="5"
+								verticalAlign="top"/>
 		</s:layout>
 		<!-- title bar icon -->
 		<!--- Defines the image for the icon in the title bar. -->
 
 		<s:BitmapImage id="titleIconImage"
-					   minWidth="0" />
+					   minWidth="0"/>
 		<!-- title -->
 		<!--- Defines the Label control for displaying the title text in the title bar. -->
 
 		<s:Label id="titleText"
 				 height="100%" minWidth="0" width="100%"
 				 color="#999999" fontSize="14" fontWeight="bold" paddingTop="10" textAlign="center"
-				 maxDisplayedLines="1" />
+				 maxDisplayedLines="1"/>
 		<!-- minimize button -->
 		<!---
 			 Defines the Button control for the mimimized button in the title bar.
@@ -116,8 +119,7 @@
 		-->
 
 		<s:Button id="minimizeButton"
-				  bottom="2" top="2" verticalCenter="0"
-				  skinClass="spark.skins.spark.windowChrome.MinimizeButtonSkin" />
+				  bottom="2" skinClass="spark.skins.spark.windowChrome.MinimizeButtonSkin" top="2" verticalCenter="0"/>
 		<!-- maximize button -->
 		<!---
 			 Defines the Button control for the maximized button in the title bar.
@@ -128,9 +130,7 @@
 		-->
 
 		<s:Button id="maximizeButton"
-				  verticalCenter="0"
-				  skinClass="spark.skins.spark.windowChrome.MaximizeButtonSkin"
-				  skinClass.maximizedGroup="spark.skins.spark.windowChrome.RestoreButtonSkin" />
+				  skinClass="spark.skins.spark.windowChrome.MaximizeButtonSkin" skinClass.maximizedGroup="spark.skins.spark.windowChrome.RestoreButtonSkin" verticalCenter="0"/>
 		<!-- close button -->
 		<!---
 			 Defines the Button control for the close button in the title bar.
@@ -141,7 +141,7 @@
 		-->
 
 		<s:Button id="closeButton"
-				  verticalCenter="0"
-				  skinClass="spark.skins.spark.windowChrome.CloseButtonSkin" />
+				  skinClass="spark.skins.spark.windowChrome.CloseButtonSkin" verticalCenter="0"
+				  click="closeButton_clickHandler(event)"/>
 	</s:Group>
 </s:SparkSkin>

@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.model
 {
 	import flash.net.SharedObject;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -9,51 +9,61 @@ package net.vdombox.ide.core.model
 	{
 		public static const NAME : String = "SharedObjectProxy";
 
-		public function SharedObjectProxy( data : Object = null )
+		public function SharedObjectProxy()
 		{
-			super( NAME, data );
+			super( NAME, {} );
 		}
-		
-		private var sharedObject : SharedObject = SharedObject.getLocal( "userData" );
+
+		private var sharedObject : SharedObject;
+
+		override public function onRegister() : void
+		{
+			sharedObject = SharedObject.getLocal( "userData" );
+			
+			data.username = sharedObject.data.username ? sharedObject.data.username : "";
+			data.password = sharedObject.data.password ? sharedObject.data.password : "";
+			data.hostname = sharedObject.data.hostname ? sharedObject.data.hostname : "";
+			data.localeCode = sharedObject.data.localeCode ? sharedObject.data.localeCode : "";
+		}
 
 		public function get username() : String
 		{
-			return sharedObject.data.username ? sharedObject.data.username : "";
+			return data.username;
 		}
 
 		public function set username( value : String ) : void
 		{
-			sharedObject.data.username = value;
+			sharedObject.data.username = data.username = value;
 		}
 
 		public function get password() : String
 		{
-			return sharedObject.data.username ? sharedObject.data.password : "";
+			return data.password;
 		}
 
 		public function set password( value : String ) : void
 		{
-			sharedObject.data.password = value;
+			sharedObject.data.password = data.password = value;
 		}
 
 		public function get hostname() : String
 		{
-			return sharedObject.data.username ? sharedObject.data.hostname : "";
+			return data.hostname;
 		}
 
 		public function set hostname( value : String ) : void
 		{
-			sharedObject.data.hostname = value;
+			sharedObject.data.hostname = data.hostname = value;
 		}
-		
+
 		public function get localeCode() : String
 		{
-			return sharedObject.data.localeCode ? sharedObject.data.localeCode : "";
+			return data.localeCode;
 		}
-		
+
 		public function set localeCode( value : String ) : void
 		{
-			sharedObject.data.localeCode = value;
+			sharedObject.data.localeCode = data.localeCode = value;
 		}
 	}
 }

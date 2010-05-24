@@ -37,7 +37,7 @@ package net.vdombox.ide.core.view
 		
 		private function backButtonClickedHandler( event : Event ) : void
 		{
-			sendNotification( ApplicationFacade.SHOW_LOGON_VIEW );
+//			sendNotification( ApplicationFacade.SHOW_LOGON_VIEW );
 		}
 		
 		private function get errorView() : ErrorView

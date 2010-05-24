@@ -24,9 +24,13 @@ package net.vdombox.ide.core.model
 
 		private static const GET_WYSIWYG : String = "getWYSIWYG";
 
+		public static var instances : Object = {};
+		
 		public function ObjectProxy( objectVO : ObjectVO )
 		{
 			super( NAME + "/" + objectVO.pageVO.applicationVO.id + "/" + objectVO.pageVO.id + "/" + objectVO.id, objectVO );
+			
+			instances[ this.proxyName ] = "";
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
@@ -49,6 +53,8 @@ package net.vdombox.ide.core.model
 			typesProxy = null;
 
 			removeHandlers();
+			
+			delete instances[ proxyName ];
 		}
 
 		public function getAttributes() : AsyncToken
@@ -426,7 +432,7 @@ package net.vdombox.ide.core.model
 				{
 					try
 					{
-						xmlPresentation = result.Result[ 0 ].*.toString();
+						xmlPresentation = result.Result[ 0 ].*.toXMLString();
 					}
 					catch ( erroe : Error )
 					{
@@ -439,7 +445,7 @@ package net.vdombox.ide.core.model
 					
 				case "submit_object_script_presentation":
 				{
-					sendNotification( ApplicationFacade.OBJECT_XML_PRESENTATION_SETTED, { objectVO: objectVO, xmlPresentation: xmlPresentation } );
+					sendNotification( ApplicationFacade.OBJECT_XML_PRESENTATION_SETTED, { objectVO: objectVO } );
 					
 					break;
 				}

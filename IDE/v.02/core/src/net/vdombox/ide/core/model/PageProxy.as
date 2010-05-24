@@ -17,7 +17,6 @@ package net.vdombox.ide.core.model
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
-
 	public class PageProxy extends Proxy
 	{
 		public static const NAME : String = "PageProxy";
@@ -31,9 +30,13 @@ package net.vdombox.ide.core.model
 		private static const GET_STRUCTURE : String = "getStructure";
 		private static const GET_WYSIWYG : String = "getWYSIWYG";
 
+		public static var instances : Object = {};
+		
 		public function PageProxy( pageVO : PageVO )
 		{
 			super( NAME + "/" + pageVO.applicationVO.id + "/" + pageVO.id, pageVO );
+			
+			instances[ this.proxyName ] = "";
 		}
 
 		private var soap : SOAP = SOAP.getInstance();
@@ -64,6 +67,8 @@ package net.vdombox.ide.core.model
 			typesProxy = null;
 
 			removeHandlers();
+			
+			delete instances[ proxyName ];
 		}
 
 		public function getStructure() : AsyncToken
@@ -555,7 +560,7 @@ package net.vdombox.ide.core.model
 				{
 					try
 					{
-						xmlPresentation = result.Result[ 0 ].*.toString();
+						xmlPresentation = result.Result[ 0 ].*.toXMLString();
 					}
 					catch ( erroe : Error )
 					{
@@ -568,7 +573,7 @@ package net.vdombox.ide.core.model
 					
 				case "submit_object_script_presentation":
 				{
-					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_SETTED, { pageVO: pageVO, xmlPresentation: xmlPresentation } );
+					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_SETTED, { pageVO: pageVO } );
 					
 					break;
 				}

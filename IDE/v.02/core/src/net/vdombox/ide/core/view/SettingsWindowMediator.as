@@ -158,12 +158,12 @@ package net.vdombox.ide.core.view
 					ISettingsScreen( settingsScreensList[ selectedSettingsID ] ).performOK();
 			}
 			
-			sendNotification( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
+//			sendNotification( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 		}
 		
 		private function performCancel_clickHandler( event : MouseEvent ) : void
 		{
-			sendNotification( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
+//			sendNotification( ApplicationFacade.CLOSE_SETTINGS_WINDOW );
 		}
 	}
 }

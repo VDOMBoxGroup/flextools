@@ -24,13 +24,28 @@ package net.vdombox.ide.core.model
 	{
 		public static const NAME : String = "ResourcesProxy";
 
-		public function ResourcesProxy( data : Object = null )
+		public function ResourcesProxy()
 		{
 			super( NAME, data );
-
-			addHandlers();
 		}
-
+		
+		override public function onRegister():void
+		{
+			if ( soap.ready )
+				addHandlers();
+			else
+				soap.addEventListener( SOAPEvent.CONNECTED, soap_connectedHandler, false, 0, true );
+			
+			soap.addEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler );
+		}
+		
+		override public function onRemove() : void
+		{
+			cleanup();
+			
+			removeHandlers();
+		}
+		
 		private var soap : SOAP = SOAP.getInstance();
 		
 		private var cacheManager : CacheManager = CacheManager.getInstance();
@@ -119,6 +134,11 @@ package net.vdombox.ide.core.model
 			token.resourceVO = resourceVO;
 		}
 
+		public function cleanup() : void
+		{
+			loadQue = null;
+		}
+		
 		private function addHandlers() : void
 		{
 			soap.get_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
@@ -136,7 +156,35 @@ package net.vdombox.ide.core.model
 			soap.modify_resource.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.modify_resource.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
+		
+		private function removeHandlers() : void
+		{
+			soap.get_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.get_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.list_resources.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.list_resources.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.set_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.set_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.delete_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.delete_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+			
+			soap.modify_resource.removeEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.modify_resource.removeEventListener( FaultEvent.FAULT, soap_faultHandler );
+		}
 
+		private function soap_connectedHandler( event : SOAPEvent ) : void
+		{
+			addHandlers();
+		}
+		
+		private function soap_disconnectedHandler( event : SOAPEvent ) : void
+		{
+			
+		}
+		
 		private function createResourcesList( applicationVO : ApplicationVO, resourcesXML : XML ) : Array
 		{
 			var resources : Array = [];

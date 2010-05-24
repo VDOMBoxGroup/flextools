@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.model
 {
 	import mx.rpc.soap.Operation;
-	
+
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -9,7 +9,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.AuthInfoVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -34,82 +34,76 @@ package net.vdombox.ide.core.model
 
 		private var soap : SOAP;
 
-		private var _status : String;
+		private var sharedObjectProxy : SharedObjectProxy;
+		
+		private var isSOAPConnected : Boolean;
 
 		private var _authInfo : AuthInfoVO;
 
-		private var _selectedApplication : ApplicationVO;
-
 		private var _applications : Array;
-
-		public function get status() : String
-		{
-			return _status;
-		}
 
 		public function get authInfo() : AuthInfoVO
 		{
 			return _authInfo;
 		}
 
-		public function get applications() : Array
-		{
-			return _applications.slice();
-		}
-
 		override public function onRegister() : void
 		{
-			_status = NOT_CONNECTED;
+			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
+			
 			soap = SOAP.getInstance();
+
+			if ( soap.ready )
+				soap.disconnect();
+
+			
 
 			addHandlers();
 		}
 
-		public function connect( hostname : String ) : void
+		override public function onRemove() : void
 		{
-			_status = CONNECTION_PROCESS;
+			soap.removeEventListener( SOAPEvent.CONNECTED, soap_connectedHandler );
+			soap.removeEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler );
 
-			_authInfo = new AuthInfoVO();
-			_authInfo.setHostname( hostname );
-
-			sendNotification( ApplicationFacade.CONNECTION_SERVER_STARTS );
-
-			soap.init( _authInfo.WSDLFilePath );
+			removeHandlers();
 		}
 
-		public function logon( username : String, password : String ) : void
+		public function connect() : void
 		{
-			if ( _status == CONNECTED || _status == LOGGED )
-			{
-				sendNotification( ApplicationFacade.LOGON_STARTS );
-				soap.logon( username, password );
-			}
+			_authInfo = new AuthInfoVO();
+
+			_authInfo.setHostname( sharedObjectProxy.hostname );
+			_authInfo.setUsername( sharedObjectProxy.username );
+
+			sendNotification( ApplicationFacade.SERVER_CONNECTION_START );
+
+			soap.connect( _authInfo.WSDLFilePath );
 		}
 
 		public function disconnect() : void
 		{
-			_status = NOT_CONNECTED;
+			soap.logout();
+
+			_authInfo = null;
+			_applications = null;
 		}
 
 		public function loadApplications() : void
 		{
-			soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-
-			sendNotification( ApplicationFacade.APPLICATIONS_LOADING );
-
 			soap.list_applications();
 		}
 
 		public function createApplication( applicationInformationVO : ApplicationInformationVO ) : void
 		{
 			soap.create_application.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			
+
 			soap.create_application( applicationInformationVO.toXML() );
 		}
 
 		public function getApplicationProxy( applicationVO : ApplicationVO ) : ApplicationProxy
 		{
-			if ( applications.indexOf( applicationVO ) == -1 )
+			if ( _applications.indexOf( applicationVO ) == -1 )
 				return null;
 
 			var applicationProxy : ApplicationProxy = facade.retrieveProxy( ApplicationProxy.NAME + "/" + applicationVO.id ) as ApplicationProxy;
@@ -126,24 +120,38 @@ package net.vdombox.ide.core.model
 
 		private function addHandlers() : void
 		{
-			soap.addEventListener( SOAPEvent.INIT_COMPLETE, soap_initCompleteHandler );
-			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
-			soap.addEventListener( SOAPErrorEvent.LOGIN_ERROR, soap_loginErrorHandler );
+			soap.addEventListener( SOAPEvent.CONNECTED, soap_connectedHandler, false, 0, true );
+			soap.addEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler, false, 0, true );
+			
+			soap.addEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler, false, 0, true );
+			soap.addEventListener( SOAPErrorEvent.LOGIN_ERROR, soap_loginErrorHandler, false, 0, true );
+		}
+
+		private function removeHandlers() : void
+		{
+			soap.removeEventListener( SOAPEvent.CONNECTED, soap_connectedHandler );
+			soap.removeEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler );
+			
+			soap.removeEventListener( SOAPEvent.LOGIN_OK, soap_loginOKHandler );
+			soap.removeEventListener( SOAPErrorEvent.LOGIN_ERROR, soap_loginErrorHandler );
+			
+			if( soap.ready )
+				soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 		}
 
 		private function createApplicationList( applications : XML ) : void
-		{			
+		{
 			_applications = [];
-			
+
 			var applicationID : String;
-			
+
 			for each ( var application : XML in applications.* )
 			{
 				applicationID = application.@ID[ 0 ];
-				
-				if( !applicationID )
+
+				if ( !applicationID )
 					continue;
-				
+
 				var applicationVO : ApplicationVO = new ApplicationVO( applicationID );
 				applicationVO.setInformation( application.Information[ 0 ] );
 
@@ -151,23 +159,38 @@ package net.vdombox.ide.core.model
 			}
 		}
 
-		private function soap_initCompleteHandler( event : SOAPEvent ) : void
+		private function soap_connectedHandler( event : SOAPEvent ) : void
 		{
-			_status = CONNECTED;
-			sendNotification( ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL );
+			isSOAPConnected = true;
+
+			if( soap.ready )
+				soap.list_applications.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
+			sendNotification( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
+			sendNotification( ApplicationFacade.SERVER_LOGIN_START );
+
+			soap.logon( sharedObjectProxy.username, sharedObjectProxy.password );
+		}
+
+		private function soap_disconnectedHandler( event : SOAPEvent ) : void
+		{
+			isSOAPConnected = false;
 		}
 
 		private function soap_loginOKHandler( event : SOAPEvent ) : void
 		{
-			_status = LOGGED;
-
 			var result : XML = event.result;
 			_authInfo.setUsername( result.Username[ 0 ] );
 			_authInfo.setHostname( result.Hostname[ 0 ] );
 
-			sendNotification( ApplicationFacade.LOGON_SUCCESS, _authInfo );
+			sendNotification( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL, _authInfo );
 		}
-
+		
+		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
+		{
+			sendNotification( ApplicationFacade.SERVER_LOGIN_ERROR );
+		}
+		
 		private function soap_resultHandler( event : SOAPEvent ) : void
 		{
 			var operation : Operation = event.currentTarget as Operation;
@@ -183,7 +206,8 @@ package net.vdombox.ide.core.model
 				case "list_applications":
 				{
 					createApplicationList( result.Applications[ 0 ] );
-					sendNotification( ApplicationFacade.APPLICATIONS_LOADED, _applications );
+					
+					sendNotification( ApplicationFacade.SERVER_APPLICATIONS_GETTED, _applications.slice() );
 
 					break;
 				}
@@ -194,16 +218,11 @@ package net.vdombox.ide.core.model
 					applicationVO.setInformation( result.Application[ 0 ].Information[ 0 ] );
 					_applications.push( applicationVO );
 
-					sendNotification( ApplicationFacade.APPLICATION_CREATED, applicationVO );
+					sendNotification( ApplicationFacade.SERVER_APPLICATION_CREATED, applicationVO );
 
 					break;
 				}
 			}
-		}
-
-		private function soap_loginErrorHandler( event : SOAPErrorEvent ) : void
-		{
-			sendNotification( ApplicationFacade.LOGON_ERROR );
 		}
 	}
 }

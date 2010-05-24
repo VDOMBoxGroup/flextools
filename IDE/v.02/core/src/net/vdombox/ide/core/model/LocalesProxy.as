@@ -57,7 +57,6 @@ package net.vdombox.ide.core.model
 			
 			var lastLocaleCode : String = sharedObjectProxy.localeCode as String;
 			
-			
 			var localeVO : LocaleVO;
 			var code : String;
 			var description : String;

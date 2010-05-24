@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication 
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:mx="library://ns.adobe.com/flex/halo"
-	
-	preinitialize="application_preinitializeHandler(event)"
-	applicationComplete="application_applicationCompleteHandler()">
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:mx="library://ns.adobe.com/flex/halo"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   preinitialize="application_preinitializeHandler(event)"
+					   applicationComplete="application_applicationCompleteHandler()">
+
+	<fx:Metadata> 
+		[ ResourceBundle( "Core_General" ) ]
+		[ ResourceBundle( "LoginForm" ) ]
+	</fx:Metadata>
 
 	<fx:Script>
 		<![CDATA[
 			import mx.containers.Accordion;
 			import mx.events.FlexEvent;
-			
+
 			import net.vdombox.ide.core.ApplicationFacade;
 
 			public static const NAME : String = "VdomIDE";

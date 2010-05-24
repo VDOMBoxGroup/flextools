@@ -1,9 +1,11 @@
 package net.vdombox.ide.core.view
 {
+	import flash.events.Event;
+
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.view.components.ProgressView;
 	import net.vdombox.ide.core.view.components.Task;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -18,169 +20,180 @@ package net.vdombox.ide.core.view
 		}
 
 		private var tasks : Object;
-		
+
+		public function get progressView() : ProgressView
+		{
+			return viewComponent as ProgressView;
+		}
+
 		override public function onRegister() : void
 		{
 			tasks = {};
+
+			addHandlers();
 		}
-		
+
+		override public function onRemove() : void
+		{
+			removeHandlers();
+		}
+
 		override public function listNotificationInterests() : Array
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.STARTUP );
 			interests.push( ApplicationFacade.LOAD_MODULES );
 			interests.push( ApplicationFacade.MODULES_LOADED );
 			interests.push( ApplicationFacade.MODULE_LOADED );
-			
-			interests.push( ApplicationFacade.CONNECTION_SERVER_STARTS);
-			interests.push( ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL);
-			
-			interests.push( ApplicationFacade.LOGON_STARTS );
-			interests.push( ApplicationFacade.LOGON_SUCCESS );
-			
-			interests.push( ApplicationFacade.APPLICATIONS_LOADING );
-			interests.push( ApplicationFacade.APPLICATIONS_LOADED );
-			
+
+			interests.push( ApplicationFacade.SERVER_CONNECTION_START );
+			interests.push( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
+			interests.push( ApplicationFacade.SERVER_CONNECTION_ERROR );
+
+			interests.push( ApplicationFacade.SERVER_LOGIN_START );
+			interests.push( ApplicationFacade.SERVER_LOGIN_SUCCESSFUL );
+			interests.push( ApplicationFacade.SERVER_LOGIN_ERROR );
+
 			interests.push( ApplicationFacade.TYPES_LOADING );
 			interests.push( ApplicationFacade.TYPES_LOADED );
 
 			return interests;
 		}
-		
+
 		override public function handleNotification( notification : INotification ) : void
 		{
+			var name : String = notification.getName();
+
 			var task : Task;
-			switch ( notification.getName() )
+
+			switch ( name )
 			{
 				case ApplicationFacade.LOAD_MODULES:
 				{
-					task= new Task();
+					task = new Task();
 					task.description = notification.getName();
 					task.status = "begin";
-					
+
 					tasks[ "types" ] = task;
-					
-					progressView.place.addElement( task );
-					
+
+					progressView.addElement( task );
+
 					break;
 				}
-					
+
 				case ApplicationFacade.MODULE_LOADED:
 				{
 					task = tasks[ "types" ];
-					task.status = "loading";
-					
+
+					if ( task )
+						task.status = "loading";
+
 					break;
 				}
-					
+
 				case ApplicationFacade.MODULES_LOADED:
 				{
 					task = tasks[ "types" ];
-					task.status = "OK";
-					
+
+					if ( task )
+						task.status = "OK";
+
 					break;
 				}
-					
-				case ApplicationFacade.CONNECTION_SERVER_STARTS:
+
+				case ApplicationFacade.SERVER_CONNECTION_START:
 				{
-					task= new Task();
+					task = new Task();
 					task.description = "Connect to server...";
 					task.status = "process";
-					
+
 					tasks[ "connect" ] = task;
-					
-					progressView.place.addElement( task );
-					
+
+					progressView.addElement( task );
+
 					break;
 				}
-					
-				case ApplicationFacade.CONNECTION_SERVER_SUCCESSFUL:
+
+				case ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL:
 				{
 					task = tasks[ "connect" ];
-					task.description = "Connect to server";
-					task.status = "OK";
-					
+					if ( task )
+					{
+						task.description = "Connect to server";
+						task.status = "OK";
+					}
+
 					break;
 				}
-					
-				case ApplicationFacade.LOGON_STARTS:
+
+				case ApplicationFacade.SERVER_LOGIN_START:
 				{
-					task= new Task();
+					task = new Task();
 					task.description = "Log on to server...";
 					task.status = "process";
-					
+
 					tasks[ "logon" ] = task;
-					
-					progressView.place.addElement( task );
-					
+
+					progressView.addElement( task );
+
 					break;
 				}
-					
-				case ApplicationFacade.LOGON_SUCCESS:
+
+				case ApplicationFacade.SERVER_LOGIN_SUCCESSFUL:
 				{
 					task = tasks[ "logon" ];
-					task.description = "Log on to server";
-					task.status = "OK";
-					
+					if ( task )
+					{
+						task.description = "Log on to server";
+						task.status = "OK";
+					}
+
 					break;
 				}
-					
-				case ApplicationFacade.APPLICATIONS_LOADING:
-				{
-					task= new Task();
-					task.description = "Applications loading...";
-					task.status = "process";
-					
-					tasks[ "applications" ] = task;
-					
-					progressView.place.addElement( task );
-					
-					break;
-				}
-					
-				case ApplicationFacade.APPLICATIONS_LOADED:
-				{
-					task = tasks[ "applications" ];
-					task.description = "Applications loading";
-					task.status = "OK";
-					
-					break;
-				}
-					
+
 				case ApplicationFacade.TYPES_LOADING:
 				{
-					task= new Task();
+					task = new Task();
 					task.description = "Types loading...";
 					task.status = "process";
-					
+
 					tasks[ "types" ] = task;
-					
-					progressView.place.addElement( task );
-					
+
+					progressView.addElement( task );
+
 					break;
 				}
-					
+
 				case ApplicationFacade.TYPES_LOADED:
 				{
 					task = tasks[ "types" ];
-					task.description = "Types loading(" + notification.getBody().length + ")...";
-					task.status = "OK";
-					
+					if ( task )
+					{
+						task.description = "Types loading(" + notification.getBody().length + ")...";
+						task.status = "OK";
+					}
+
 					break;
 				}
 			}
 		}
-		
+
 		public function cleanup() : void
 		{
-			progressView.place.removeAllElements();
+			progressView.removeAllElements();
 			tasks = {};
 		}
-		
-		private function get progressView() : ProgressView
+
+		private function addHandlers() : void
 		{
-			return viewComponent as ProgressView;
+//			progressView.addEventListener( Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true );
+//			progressView.addEventListener( Event.REMOVED_FROM_STAGE, onRemovedFromStage, false, 0, true );
+		}
+
+		private function removeHandlers() : void
+		{
+//			progressView.removeEventListener( Event.ADDED_TO_STAGE, onAddedToStage );
+//			progressView.removeEventListener( Event.REMOVED_FROM_STAGE, onRemovedFromStage );
 		}
 	}
 }

@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Window xmlns:components="net.vdombox.ide.core.view.components.*"
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
-		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  height="300" width="550"
 		  skinClass="net.vdombox.ide.core.view.skins.InitialWindowSkin"
 		  mouseDown="window_mouseDownHandler( event )"
 		  resizable="false" showStatusBar="false" systemChrome="{ NativeWindowSystemChrome.NONE }" transparent="true">
 
-	<fx:Metadata>
-		[ ResourceBundle( "LoginForm" ) ]
-	</fx:Metadata>
-
 	<fx:Script>
 		<![CDATA[
 			import flash.display.NativeWindowSystemChrome;
 			import flash.events.MouseEvent;
 
+			import mx.controls.SWFLoader;
+			import mx.modules.ModuleLoader;
+			import mx.modules.ModuleManager;
+
+			import net.vdombox.ide.core.events.InitialWindowEvent;
+
 			import spark.components.Button;
 			import spark.components.RichEditableText;
 
-			[SkinPart]
+			[SkinPart( required="true" )]
 			public var exitButton : Button;
 
-			[SkinPart]
-			public var connectButton : Button;
+			override protected function partAdded( partName : String, instance : Object ) : void
+			{
+				super.partAdded( partName, instance );
 
-			protected function window_mouseDownHandler( event : MouseEvent ) : void
+				if ( instance === exitButton )
+					exitButton.addEventListener( MouseEvent.CLICK, exitButton_clickHandler, false, 0, true );
+			}
+
+			private function window_mouseDownHandler( event : MouseEvent ) : void
 			{
 				var target : Object = event.target;
 
@@ -36,17 +42,30 @@
 				nativeWindow.startMove();
 				event.stopImmediatePropagation();
 			}
+
+			private function exitButton_clickHandler( event : MouseEvent ) : void
+			{
+				dispatchEvent( new InitialWindowEvent( InitialWindowEvent.EXIT ) );
+			}
 		]]>
 	</fx:Script>
 
-	<mx:ViewStack id="viewStack"
-				  creationPolicy="all" height="100%" width="100%">
-		
-		<components:ProgressView id="progressView"/>
-		
-		<components:LoginView id="loginView"/>
-		
-		<components:ErrorView id="errorView"/>
-		
-	</mx:ViewStack>
+	<s:states>
+		<s:State name="progressView"/>
+		<s:State name="loginView"/>
+		<s:State name="errorView"/>
+	</s:states>
+
+	<components:ProgressView id="progressView"
+							 height="100%" width="100%"
+							 itemCreationPolicy="immediate" includeIn="progressView"/>
+
+	<components:LoginView id="loginView"
+						  height="100%" width="100%"
+						  itemCreationPolicy="immediate" includeIn="loginView"/>
+
+	<components:ErrorView id="errorView"
+						  height="100%" width="100%"
+						  itemCreationPolicy="immediate" includeIn="errorView"/>
+
 </s:Window>

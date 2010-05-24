@@ -2,22 +2,20 @@ package net.vdombox.ide.core.model
 {
 	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
-	
+
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-
-	[ResourceBundle( "Modules" )]
 
 	public class ModulesProxy extends Proxy implements IProxy
 	{
@@ -34,12 +32,14 @@ package net.vdombox.ide.core.model
 				</category>
 			</modules>
 
-/*					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
-					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
-					<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
-					<module name="Events" path="app:/modules/Events/Events.swf"/>
-					<module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/>*/
-			
+/*
+		   <module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
+		   <module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
+		   <module name="Tree" path="app:/modules/Tree/Tree.swf"/>
+		   <module name="Events" path="app:/modules/Events/Events.swf"/>
+		   <module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/>
+*/
+
 		public function ModulesProxy( data : Object = null )
 		{
 			super( NAME, data );
@@ -48,11 +48,10 @@ package net.vdombox.ide.core.model
 		private var _categories : Array;
 
 		private var loadedModules : Dictionary;
+		
 		private var modulesList : Array;
 
 		private var modulesForLoadQue : Array;
-
-		private var moduleInfo : IModuleInfo;
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
@@ -60,57 +59,62 @@ package net.vdombox.ide.core.model
 		{
 			return _categories.slice();
 		}
-		
+
 		public function get modules() : Array
 		{
 			return modulesList.slice();
 		}
-		
+
 		override public function onRegister() : void
 		{
 			modulesList = [];
 			_categories = [];
 			modulesForLoadQue = [];
 			loadedModules = new Dictionary();
-			
+
 			var category : ModulesCategoryVO;
 			var categoryName : String;
 			var categoryLocalizedName : String;
 			var categoryModulesList : Array;
-			
+
 			var modulePath : String;
-			
+
 			for each ( var categoryXML : XML in MODULES_XML.* ) //TODO Добавить проверку наличия локализованного имени и т.д.
 			{
 				categoryName = categoryXML.@name;
-				categoryLocalizedName = resourceManager.getString( "Modules", categoryName );
-				
+				categoryLocalizedName = resourceManager.getString( "Core_General", categoryName );
+
 				category = new ModulesCategoryVO( categoryName, categoryLocalizedName );
-				
+
 				_categories.push();
-				
+
 				categoryModulesList = [];
-				
+
 				for each ( var module : XML in categoryXML.* )
 				{
 					modulePath = module.@path;
-					modulesList.push( new ModuleVO( category, modulePath ));
+					modulesList.push( new ModuleVO( category, modulePath ) );
 				}
-				
+
 				_categories.push( category );
 			}
+		}
+
+		override public function onRemove():void
+		{
+			cleanup();
 		}
 		
 		public function getModulesListByCategory( categoryVO : ModulesCategoryVO ) : Array
 		{
-			var result : Array = modulesList.filter( 
+			var result : Array = modulesList.filter(
 				function( element : ModuleVO, index : int, arr : Array ) : Boolean
 				{
 					if ( element.category == categoryVO )
 						return true;
 					else
 						return false;
-				});
+				} );
 
 			return result;
 		}
@@ -134,7 +138,7 @@ package net.vdombox.ide.core.model
 		public function loadModule( moduleVO : ModuleVO ) : void
 		{
 			modulesForLoadQue.push( moduleVO );
-			
+
 			loadModuleFromQue();
 		}
 
@@ -143,6 +147,19 @@ package net.vdombox.ide.core.model
 			modulesForLoadQue = modulesList.slice();
 
 			loadModuleFromQue();
+		}
+
+		public function unloadAllModules() : void
+		{
+			cleanup();
+		}
+
+		public function cleanup() : void
+		{
+			modulesList = [];
+			_categories = [];
+			modulesForLoadQue = [];
+			loadedModules = new Dictionary();
 		}
 
 		private function loadModuleFromQue() : void
@@ -160,7 +177,7 @@ package net.vdombox.ide.core.model
 
 			moduleInfo.addEventListener( ModuleEvent.READY, moduleReadyHandler );
 			moduleInfo.addEventListener( ModuleEvent.ERROR, moduleErrorHandler );
-			
+
 			loadedModules[ moduleInfo ] = "";
 			moduleInfo.load();
 
@@ -168,18 +185,18 @@ package net.vdombox.ide.core.model
 
 		private function moduleReadyHandler( event : ModuleEvent ) : void
 		{
-			
+
 			var moduleVO : ModuleVO = event.module.data as ModuleVO;
 			var module : VIModule = event.module.factory.create() as VIModule;
 			module.startup();
 			moduleVO.setModule( module );
-			
+
 			delete loadedModules[ event.module ]
-			
+
 			sendNotification( ApplicationFacade.MODULE_LOADED, moduleVO );
 			loadModuleFromQue();
 		}
-		
+
 		private function moduleErrorHandler( event : ModuleEvent ) : void
 		{
 			var d : * = "";
