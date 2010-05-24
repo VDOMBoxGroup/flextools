@@ -110,20 +110,30 @@ package net.vdombox.utils
 			if ( !handlerDictionary )
 				handlerDictionary = new Dictionary();
 			
+			var nativeWindow : NativeWindow = window.nativeWindow;
+			
+			if( nativeWindow && nativeWindow.closed )
+				return;
+			
 			const windowData : WindowData = new WindowData();
 			
 			windowData.parent = parent;
 			windowData.isModal = parent == null ? false : isModal;
-			
-			
-			window.visible = false;
-			
-			window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
-			window.open( false );
-			
 			windowData.window = window;
 			
 			windowsInfo.push( windowData );
+			
+			if( nativeWindow )
+			{
+				initializeWindow( window );
+			}
+			else
+			{
+				window.visible = false;
+				
+				window.addEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
+				window.open( false );
+			}
 		}
 		
 //		public function addWi
@@ -172,6 +182,62 @@ package net.vdombox.utils
 			}
 		}
 
+		private function initializeWindow( window : Window ) : void
+		{
+			var nativeWindow : NativeWindow = window.nativeWindow;
+			
+			var windowData : WindowData = findWindowInfoByWindow( nativeWindow );
+			
+			if ( !windowData )
+				return;
+			
+			fitToContent( window, windowData.content );
+			moveToCenter( window );
+			
+			var handlers : Array = 
+				[
+					{ type: Event.CLOSE, handler: nativeWindow_closeHandler }, 
+					{ type: Event.ACTIVATE, handler: nativeWindow_activateHandler }
+				];
+			
+			addHandlers( nativeWindow, handlers );
+			
+			if ( windowData.parent == null )
+			{
+				window.visible = true;
+				nativeWindow.activate();
+				return;
+			}
+			
+			var parentNativeWindow : NativeWindow = windowData.parent.stage.nativeWindow;
+			var isParentWindowLocked : Boolean = windowIsLocked( parentNativeWindow );
+			
+			if ( isParentWindowLocked && windowData.isModal )
+			{
+				var parentHandlers : Array = 
+					[
+						{ type: NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler: nativeWindow_displayStateChangingHandler }, 
+						{ type: Event.CLOSING, handler: parent_closingHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler }
+					];
+				
+				addHandlers( parentNativeWindow, parentHandlers );
+				
+				if ( windowData.parent.parentApplication )
+					windowData.parent.parentApplication.enabled = false;
+				else
+					windowData.parent.enabled = false;
+			}
+			
+			if ( handlerDictionary[ parentNativeWindow ] === undefined )
+			{
+				parentNativeWindow.addEventListener( Event.ACTIVATE, nativeWindow_activateHandler );
+				handlerDictionary[ parentNativeWindow ] = [{ type: Event.ACTIVATE, handler: nativeWindow_activateHandler }];
+			}
+			
+			window.visible = true;
+			nativeWindow.activate();
+		}
+		
 		private function fitToContent( window : Window, content : UIComponent ) : void
 		{
 			if( !window || !content )
@@ -315,24 +381,29 @@ package net.vdombox.utils
 
 		private function addHandlers( nativeWindow : NativeWindow, handlers : Array ) : void
 		{
+			removeHandlers( nativeWindow );
+			
 			handlerDictionary[ nativeWindow ] = handlers;
 
 			handlers.forEach( function( element : *, index : int, arr : Array ) : void
-				{
-					nativeWindow.addEventListener( element[ "type" ], element[ "handler" ]);
-				})
+			{
+				nativeWindow.addEventListener( element[ "type" ], element[ "handler" ]);
+			})
 		}
 
 		private function removeHandlers( nativeWindow : NativeWindow ) : void
 		{
 			var handlers : Array = handlerDictionary[ nativeWindow ];
+			
 			if ( handlers == null )
 				return;
 
 			handlers.forEach( function( element : *, index : int, arr : Array ) : void
-				{
-					nativeWindow.removeEventListener( element[ "type" ], element[ "handler" ]);
-				})
+			{
+				nativeWindow.removeEventListener( element[ "type" ], element[ "handler" ]);
+			})
+			
+			delete handlerDictionary[ nativeWindow ]
 		}
 
 		private function nativeWindow_activateHandler( event : Event ) : void
@@ -409,58 +480,7 @@ package net.vdombox.utils
 			var window : Window = event.currentTarget as Window;
 			window.removeEventListener( AIREvent.WINDOW_COMPLETE, window_windowCompleteHandler );
 
-			var nativeWindow : NativeWindow = window.nativeWindow;
-
-			var windowData : WindowData = findWindowInfoByWindow( nativeWindow );
-
-			if ( !windowData )
-				return;
-
-			fitToContent( window, windowData.content );
-			moveToCenter( window );
-
-			var handlers : Array = 
-				[
-					{ type: Event.CLOSE, handler: nativeWindow_closeHandler }, 
-					{ type: Event.ACTIVATE, handler: nativeWindow_activateHandler }
-				];
-
-			addHandlers( nativeWindow, handlers );
-
-			if ( windowData.parent == null )
-			{
-				window.visible = true;
-				nativeWindow.activate();
-				return;
-			}
-
-			var parentNativeWindow : NativeWindow = windowData.parent.stage.nativeWindow;
-			var isParentWindowLocked : Boolean = windowIsLocked( parentNativeWindow );
-
-			if ( isParentWindowLocked && windowData.isModal )
-			{
-				var parentHandlers : Array = 
-					[
-						{ type: NativeWindowDisplayStateEvent.DISPLAY_STATE_CHANGING, handler: nativeWindow_displayStateChangingHandler }, 
-						{ type: Event.CLOSING, handler: parent_closingHandler }, { type: Event.ACTIVATE, handler: nativeWindow_activateHandler }
-					];
-
-				addHandlers( parentNativeWindow, parentHandlers );
-
-				if ( windowData.parent.parentApplication )
-					windowData.parent.parentApplication.enabled = false;
-				else
-					windowData.parent.enabled = false;
-			}
-
-			if ( handlerDictionary[ parentNativeWindow ] === undefined )
-			{
-				parentNativeWindow.addEventListener( Event.ACTIVATE, nativeWindow_activateHandler );
-				handlerDictionary[ parentNativeWindow ] = [{ type: Event.ACTIVATE, handler: nativeWindow_activateHandler }];
-			}
-
-			window.visible = true;
-			nativeWindow.activate();
+			initializeWindow( window );
 		}
 
 		private function nativeWindow_closeHandler( event : Event ) : void
