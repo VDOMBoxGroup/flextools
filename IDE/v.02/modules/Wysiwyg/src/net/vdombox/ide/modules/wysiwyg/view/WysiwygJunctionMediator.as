@@ -443,7 +443,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		public function tearDown() : void
 		{
 			junction.removePipe( PipeNames.STDIN );
+			junction.removePipe( PipeNames.PROXIESIN );
+			
 			junction.removePipe( PipeNames.STDCORE );
+			
+			junction.removePipe( PipeNames.STDOUT );
+			junction.removePipe( PipeNames.PROXIESOUT );
+			junction.removePipe( PipeNames.STDLOG );
 		}
 
 		private function processInputPipe( notification : INotification ) : void

@@ -53,8 +53,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 				return;
 			
 			data[ SELECTED_APPLICATION ] = value;
-			data[ SELECTED_PAGE ] = value;
-			data[ SELECTED_OBJECT ] = value;
+			data[ SELECTED_PAGE ] = null;
+			data[ SELECTED_OBJECT ] = null;
 			
 			isSelectedApplicationChanged = true;
 			

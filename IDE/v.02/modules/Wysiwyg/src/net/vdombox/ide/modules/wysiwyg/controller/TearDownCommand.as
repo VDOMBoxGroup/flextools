@@ -1,5 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
+	import net.vdombox.ide.modules.wysiwyg.view.BodyMediator;
+	import net.vdombox.ide.modules.wysiwyg.view.ItemMediator;
+	import net.vdombox.ide.modules.wysiwyg.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WysiwygJunctionMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -14,6 +17,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				facade.retrieveMediator( WysiwygJunctionMediator.NAME ) as WysiwygJunctionMediator;
 			
 			wysiwygJunctionMediator.tearDown();
+			
+			facade.removeMediator( WorkAreaMediator.NAME );
+			facade.removeMediator( BodyMediator.NAME );
 			
 			//Definitively removes the PureMVC core used to manage this module.
 			Facade.removeCore( multitonKey );
