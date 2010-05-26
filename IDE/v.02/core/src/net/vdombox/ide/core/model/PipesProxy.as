@@ -60,7 +60,7 @@ package net.vdombox.ide.core.model
 
 		public function removePipe( moduleID : String, pipeName : String ) : void
 		{
-			if ( !_storage.hasOwnProperty( moduleID ) && !_storage[ moduleID ].hasOwnProperty( pipeName ) )
+			if ( !_storage.hasOwnProperty( moduleID ) || !_storage[ moduleID ].hasOwnProperty( pipeName ) )
 				return;
 
 			delete _storage[ moduleID ][ pipeName ];

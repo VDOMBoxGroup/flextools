@@ -8,6 +8,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.InitialWindowCreatedCommand;
 	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
 	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
+	import net.vdombox.ide.core.controller.ModuleUnloadingStartCommand;
 	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
 	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
 	import net.vdombox.ide.core.controller.OpenWindowCommand;
@@ -141,6 +142,8 @@ package net.vdombox.ide.core
 		public static const MODULES_LOADING_START : String = "modulesLoadingStart";
 		public static const MODULES_LOADING_SUCCESSFUL : String = "modulesLoadingSuccessful";
 		public static const MODULES_LOADING_ERROR : String = "modulesLoadingError";
+		
+		public static const MODULES_UNLOADING_START : String = "modulesUnloadingStart";
 		
 		public static const MODULE_LOADING_START : String = "moduleLoadingStart";
 		public static const MODULE_LOADING_SUCCESSFUL : String = "moduleLoadingSuccessful";
@@ -303,6 +306,8 @@ package net.vdombox.ide.core
 			registerCommand( LOAD_MODULES_REQUEST, LoadModulesRequestCommand );
 			registerCommand( MODULE_LOADING_SUCCESSFUL, ModuleLoadingSuccessfulCommand );
 
+			registerCommand( MODULES_UNLOADING_START, ModuleUnloadingStartCommand );
+			
 //			message requests & responses
 			registerCommand( RETRIEVE_MODULE_SETTINGS, RetrieveModuleSettings );
 			registerCommand( SAVE_MODULE_SETTINGS, SaveModuleSettings );

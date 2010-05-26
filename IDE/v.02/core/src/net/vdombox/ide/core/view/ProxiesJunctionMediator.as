@@ -7,7 +7,7 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
@@ -63,7 +63,9 @@ package net.vdombox.ide.core.view
 		override public function handleNotification( notification : INotification ) : void
 		{
 			var moduleID : String
+			
 			var proxiesOut : TeeSplit;
+			var proxiesIn : TeeMerge;
 
 			var body : Object = notification.getBody();
 
@@ -78,12 +80,19 @@ package net.vdombox.ide.core.view
 					var module : IPipeAware = moduleVO.module as IPipeAware;
 
 					// Connect the core's PROXYIN to the module's PROXYOUT
-					var moduleToCoreProxies : Pipe = new Pipe();
-					module.acceptOutputPipe( PipeNames.PROXIESOUT, moduleToCoreProxies );
-
-					var proxiesIn : TeeMerge = junction.retrievePipe( PipeNames.PROXIESIN ) as TeeMerge;
-					proxiesIn.connectInput( moduleToCoreProxies );
-
+					var moduleToCoreProxies : Pipe = pipesProxy.getPipe( moduleID, PipeNames.PROXIESOUT ) as Pipe;
+					
+					if ( !moduleToCoreProxies )
+					{
+						moduleToCoreProxies = new Pipe();
+						module.acceptOutputPipe( PipeNames.PROXIESOUT, moduleToCoreProxies );
+						
+						proxiesIn = junction.retrievePipe( PipeNames.PROXIESIN ) as TeeMerge;
+						proxiesIn.connectInput( moduleToCoreProxies );
+						
+						pipesProxy.savePipe( moduleID, PipeNames.PROXIESOUT, moduleToCoreProxies );
+					}
+					
 					// Connect the core's PROXYOUT to the module's PROXYIN
 					var coreToModuleProxies : Pipe = pipesProxy.getPipe( moduleID, PipeNames.PROXIESIN ) as Pipe;
 
@@ -108,13 +117,18 @@ package net.vdombox.ide.core.view
 				{
 					moduleID = body.toString();
 
-					var pipe : IPipeFitting = pipesProxy.getPipe( moduleID, PipeNames.PROXIESIN );
+					var inPipe : IPipeFitting = pipesProxy.getPipe( moduleID, PipeNames.PROXIESIN );
+					var outPipe : IPipeFitting = pipesProxy.getPipe( moduleID, PipeNames.PROXIESOUT );
 
 					proxiesOut = junction.retrievePipe( PipeNames.PROXIESOUT ) as TeeSplit;
+					proxiesIn = junction.retrievePipe( PipeNames.PROXIESIN ) as TeeMerge;
 
-					proxiesOut.disconnectFitting( pipe );
+					proxiesOut.disconnectFitting( inPipe );
+//					proxiesIn.disconnect()
+					
 
 					pipesProxy.removePipe( moduleID, PipeNames.PROXIESIN );
+					pipesProxy.removePipe( moduleID, PipeNames.PROXIESOUT );
 
 					break;
 				}

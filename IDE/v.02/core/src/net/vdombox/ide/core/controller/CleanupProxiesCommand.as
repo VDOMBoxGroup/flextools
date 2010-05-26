@@ -28,11 +28,13 @@ package net.vdombox.ide.core.controller
 			
 			serverProxy.disconnect();
 			
+			modulesProxy.unloadAllModules();
+			
 			pipesProxy.cleanup();
 			typesProxy.unloadTypes();
 			statesProxy.cleanup();
 			resourcesProxy.cleanup();
-			modulesProxy.unloadAllModules();
+			
 			
 			for ( instanceName in ApplicationProxy.instances )
 			{

@@ -131,6 +131,8 @@ package net.vdombox.ide.core.model
 			{
 				moduleVO = modulesList[ i ] as ModuleVO;
 				
+				sendNotification( ApplicationFacade.MODULES_UNLOADING_START, moduleVO );
+				
 				if(moduleVO.module)
 					moduleVO.module.tearDown();
 			}

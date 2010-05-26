@@ -10,9 +10,10 @@ package net.vdombox.ide.core.view
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.PipesProxy;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
@@ -48,6 +49,8 @@ package net.vdombox.ide.core.view
 			var interests : Array = super.listNotificationInterests();
 
 			interests.push( ApplicationFacade.CONNECT_MODULE_TO_CORE );
+			interests.push( ApplicationFacade.DISCONNECT_MODULE_TO_CORE );
+			
 			interests.push( ApplicationFacade.SELECTED_MODULE_CHANGED );
 
 			interests.push( ApplicationFacade.MODULE_TO_PROXIES_CONNECTED );
@@ -99,14 +102,12 @@ package net.vdombox.ide.core.view
 
 					coreOut = junction.retrievePipe( PipeNames.STDOUT ) as TeeSplit;
 
-					var pipes : Object = pipesProxy.getPipes( moduleVO.moduleID );
+					var pipe : IPipeFitting = pipesProxy.getPipe( moduleVO.moduleID, PipeNames.STDIN );
 
-					for each ( var pipe : Pipe in pipes )
-					{
-						coreOut.disconnectFitting( pipe );
-					}
+					coreOut.disconnectFitting( pipe );
 
-					pipesProxy.removePipes( moduleVO.moduleID );
+					pipesProxy.removePipe( moduleVO.moduleID, PipeNames.STDIN );
+					
 					break;
 				}
 
