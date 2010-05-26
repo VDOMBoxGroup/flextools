@@ -2,24 +2,25 @@ package net.vdombox.ide.core.view
 {
 	import flash.desktop.NativeApplication;
 	import flash.events.MouseEvent;
-
+	
 	import mx.controls.ComboBox;
 	import mx.core.INavigatorContent;
 	import mx.events.AIREvent;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.InitialWindowEvent;
 	import net.vdombox.ide.core.model.LocalesProxy;
+	import net.vdombox.ide.core.model.SessionProxy;
 	import net.vdombox.ide.core.model.SharedObjectProxy;
 	import net.vdombox.ide.core.model.vo.LocaleVO;
 	import net.vdombox.ide.core.view.components.InitialWindow;
 	import net.vdombox.utils.WindowManager;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.Button;
 	import spark.components.RichEditableText;
 
@@ -27,9 +28,9 @@ package net.vdombox.ide.core.view
 	{
 		public static const NAME : String = "LoginFormMediator";
 
-		private static const PROGRESS_VIEW_STATE_NAME : String = "progressView";
-		private static const LOGIN_VIEW_STATE_NAME : String = "loginView";
-		private static const ERROR_VIEW_STATE_NAME : String = "errorView";
+		public static const PROGRESS_VIEW_STATE_NAME : String = "progressView";
+		public static const LOGIN_VIEW_STATE_NAME : String = "loginView";
+		public static const ERROR_VIEW_STATE_NAME : String = "errorView";
 
 		public function InitialWindowMediator( viewComponent : Object = null )
 		{
@@ -37,69 +38,23 @@ package net.vdombox.ide.core.view
 		}
 
 		private var windowManager : WindowManager = WindowManager.getInstance();
-
-//		private var localeProxy : LocalesProxy;
-//
-//		private var sharedObjectProxy : SharedObjectProxy;
-//
-//		private var proposedViewName : String;
-//
-//		private var _selectedViewName : String = "";
-//
-//		private var userData : Object;
+		
+		private var sessionProxy : SessionProxy;
 
 		public function get initialWindow() : InitialWindow
 		{
 			return viewComponent as InitialWindow;
 		}
 
-//		public function get selectedViewName() : String
-//		{
-//			return proposedViewName != "" ? proposedViewName : _selectedViewName;
-//		}
-//
-//		public function set selectedViewName( value : String ) : void
-//		{
-//			if( value == _selectedViewName || value == proposedViewName )
-//				return;
-//			
-//			proposedViewName = value;
-//
-//			commitProperties();
-//		}
-//		
-//		public function get username() : String
-//		{
-//			return userData.username;
-//		}
-//		
-//		public function get password() : String
-//		{
-//			return userData.password;
-//		}
-//		
-//		public function get hostname() : String
-//		{
-//			return userData.hostname;
-//		}
-
 		override public function onRegister() : void
 		{
-//			sharedObjectProxy = facade.retrieveProxy( SharedObjectProxy.NAME ) as SharedObjectProxy;
-//			localeProxy = facade.retrieveProxy( LocalesProxy.NAME ) as LocalesProxy;
-//
-//			userData = {};
-
+			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
+			
 			addHandlers();
 		}
 
 		override public function onRemove() : void
 		{
-//			sharedObjectProxy = null;
-//			localeProxy = null;
-//
-//			userData = {};
-
 			removeHandlers();
 		}
 
@@ -107,15 +62,11 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.MODULES_LOADED );
+			interests.push( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
+			
+			interests.push( ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST );
 
 			interests.push( ApplicationFacade.REQUEST_FOR_SIGNUP );
-			
-			
-//			interests.push( ApplicationFacade.TYPES_LOADED );
-//			interests.push( ApplicationFacade.LOGON_ERROR );
-//			interests.push( ApplicationFacade.SHOW_LOGON_VIEW );
-//			interests.push( ApplicationFacade.SHOW_ERROR_VIEW );
 
 			return interests;
 		}
@@ -124,51 +75,34 @@ package net.vdombox.ide.core.view
 		{
 			switch ( notification.getName() )
 			{
-				case ApplicationFacade.MODULES_LOADED:
+				case ApplicationFacade.MODULES_LOADING_SUCCESSFUL:
 				{
-					initialWindow.currentState = LOGIN_VIEW_STATE_NAME;
-					initialWindow.validateNow();
+					if( sessionProxy.errorVO )
+						initialWindow.currentState = ERROR_VIEW_STATE_NAME;
+					else
+						initialWindow.currentState = LOGIN_VIEW_STATE_NAME;
 					
 					break;
 				}
 					
 				case ApplicationFacade.REQUEST_FOR_SIGNUP:
 				{
-					initialWindow.currentState = PROGRESS_VIEW_STATE_NAME
-					initialWindow.validateNow();
+					initialWindow.currentState = PROGRESS_VIEW_STATE_NAME;
+					
+					break;
+				}
+					
+				case ApplicationFacade.SHOW_LOGIN_VIEW_REQUEST:
+				{
+					initialWindow.currentState = LOGIN_VIEW_STATE_NAME;
 					
 					break;
 				}
 			}
+			
+			initialWindow.validateNow();
 		}
-
-				
-//					
-//				case ApplicationFacade.LOGON_ERROR:
-//				{
-//					selectedViewName = ERROR_VIEW_NAME;
-//					
-//					break;
-//				}
-//					
-//				case ApplicationFacade.SHOW_LOGON_VIEW:
-//				{
-//					selectedViewName = LOGIN_VIEW_NAME;
-//					
-//					break;
-//				}
-//					
-//				case ApplicationFacade.SHOW_ERROR_VIEW:
-//				{
-//					selectedViewName = ERROR_VIEW_NAME;
-//					
-//					errorViewMediator.errorText = notification.getBody().toString();
-//					
-//					break;
-//				}
-//			}
-//		}
-
+		
 		public function openWindow() : void
 		{
 			windowManager.addWindow( initialWindow );
@@ -180,6 +114,11 @@ package net.vdombox.ide.core.view
 			windowManager.removeWindow( initialWindow );
 		}
 
+		public function openViewState( viewStateName : String ) : void
+		{
+			initialWindow.currentState = viewStateName;
+		}		
+		
 		private function addHandlers() : void
 		{
 			initialWindow.addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
@@ -203,9 +142,6 @@ package net.vdombox.ide.core.view
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			sendNotification( ApplicationFacade.INITIAL_WINDOW_CREATED, initialWindow );
-
-			if ( initialWindow.currentState != PROGRESS_VIEW_STATE_NAME )
-				initialWindow.currentState = PROGRESS_VIEW_STATE_NAME;
 		}
 
 		private function windowCompleteHandler( event : AIREvent ) : void

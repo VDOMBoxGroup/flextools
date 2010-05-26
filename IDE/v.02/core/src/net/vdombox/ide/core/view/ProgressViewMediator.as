@@ -42,9 +42,9 @@ package net.vdombox.ide.core.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.LOAD_MODULES );
-			interests.push( ApplicationFacade.MODULES_LOADED );
-			interests.push( ApplicationFacade.MODULE_LOADED );
+			interests.push( ApplicationFacade.MODULES_LOADING_START );
+			interests.push( ApplicationFacade.MODULE_LOADING_SUCCESSFUL );
+			interests.push( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
 
 			interests.push( ApplicationFacade.SERVER_CONNECTION_START );
 			interests.push( ApplicationFacade.SERVER_CONNECTION_SUCCESSFUL );
@@ -68,7 +68,7 @@ package net.vdombox.ide.core.view
 
 			switch ( name )
 			{
-				case ApplicationFacade.LOAD_MODULES:
+				case ApplicationFacade.MODULES_LOADING_START:
 				{
 					task = new Task();
 					task.description = notification.getName();
@@ -81,7 +81,7 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.MODULE_LOADED:
+				case ApplicationFacade.MODULE_LOADING_SUCCESSFUL:
 				{
 					task = tasks[ "types" ];
 
@@ -91,7 +91,7 @@ package net.vdombox.ide.core.view
 					break;
 				}
 
-				case ApplicationFacade.MODULES_LOADED:
+				case ApplicationFacade.MODULES_LOADING_SUCCESSFUL:
 				{
 					task = tasks[ "types" ];
 

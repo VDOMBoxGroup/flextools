@@ -89,7 +89,7 @@ package net.vdombox.ide.core.view
 
 					pipesProxy.savePipe( moduleVO.moduleID, PipeNames.STDIN, coreToModule );
 
-					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
+//					sendNotification( ApplicationFacade.MODULE_READY, moduleVO );
 					break;
 				}
 

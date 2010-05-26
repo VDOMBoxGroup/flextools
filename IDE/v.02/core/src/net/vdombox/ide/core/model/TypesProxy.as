@@ -34,18 +34,18 @@ package net.vdombox.ide.core.model
 			else
 			{
 				isSOAPConnected = false;
-				soap.addEventListener( SOAPEvent.CONNECTED, soap_connectedHandler, false, 0, true );
+				soap.addEventListener( SOAPEvent.CONNECTION_OK, soap_connectedHandler, false, 0, true );
 			}
 			
-			soap.addEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler, false, 0, true );
+			soap.addEventListener( SOAPEvent.DISCONNECTON_OK, soap_disconnectedHandler, false, 0, true );
 		}
 
 		override public function onRemove() : void
 		{
 			unloadTypes();
 
-			soap.removeEventListener( SOAPEvent.CONNECTED, soap_connectedHandler );
-			soap.removeEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler );
+			soap.removeEventListener( SOAPEvent.CONNECTION_OK, soap_connectedHandler );
+			soap.removeEventListener( SOAPEvent.DISCONNECTON_OK, soap_disconnectedHandler );
 			
 			removeHandlers();
 		}

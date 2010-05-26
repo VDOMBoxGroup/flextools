@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<fx:Metadata>
+		[HostComponent("net.vdombox.ide.core.view.components.ErrorView")]
+	</fx:Metadata>
+
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
+	</s:states>
+
+	<s:Group id="contentGroup"
+			 bottom="70" left="100" right="30" top="70"/>
+
+	<s:Group height="35" width="100%"
+			 bottom="0">
+
+		<s:Button id="backButton"
+				  height="35" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
+				  fontFamily="Verdana" fontSize="14" right="-2" skinClass="net.vdombox.ide.core.view.skins.InitialWindowButtonSkin"/>
+	</s:Group>
+
+</s:SparkSkin>

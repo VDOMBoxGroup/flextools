@@ -2,18 +2,18 @@ package net.vdombox.ide.core.model
 {
 	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
-
+	
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-
+	
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -67,37 +67,7 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
-			modulesList = [];
-			_categories = [];
-			modulesForLoadQue = [];
-			loadedModules = new Dictionary();
-
-			var category : ModulesCategoryVO;
-			var categoryName : String;
-			var categoryLocalizedName : String;
-			var categoryModulesList : Array;
-
-			var modulePath : String;
-
-			for each ( var categoryXML : XML in MODULES_XML.* ) //TODO Добавить проверку наличия локализованного имени и т.д.
-			{
-				categoryName = categoryXML.@name;
-				categoryLocalizedName = resourceManager.getString( "Core_General", categoryName );
-
-				category = new ModulesCategoryVO( categoryName, categoryLocalizedName );
-
-				_categories.push();
-
-				categoryModulesList = [];
-
-				for each ( var module : XML in categoryXML.* )
-				{
-					modulePath = module.@path;
-					modulesList.push( new ModuleVO( category, modulePath ) );
-				}
-
-				_categories.push( category );
-			}
+			
 		}
 
 		override public function onRemove():void
@@ -144,6 +114,10 @@ package net.vdombox.ide.core.model
 
 		public function loadModules() : void
 		{
+			sendNotification( ApplicationFacade.MODULES_LOADING_START );
+			
+			generateModulesList();
+			
 			modulesForLoadQue = modulesList.slice();
 
 			loadModuleFromQue();
@@ -151,27 +125,75 @@ package net.vdombox.ide.core.model
 
 		public function unloadAllModules() : void
 		{
+			var moduleVO : ModuleVO;
+			
+			for ( var i : int = 0; i < modulesList.length; i++ )
+			{
+				moduleVO = modulesList[ i ] as ModuleVO;
+				
+				if(moduleVO.module)
+					moduleVO.module.tearDown();
+			}
+			
 			cleanup();
 		}
 
 		public function cleanup() : void
 		{
+			modulesList = null;
+			_categories = null;
+			modulesForLoadQue = null;
+			loadedModules = null;
+		}
+
+		private function generateModulesList() : void
+		{
 			modulesList = [];
 			_categories = [];
 			modulesForLoadQue = [];
 			loadedModules = new Dictionary();
+			
+			var category : ModulesCategoryVO;
+			var categoryName : String;
+			var categoryLocalizedName : String;
+			var categoryModulesList : Array;
+			
+			var modulePath : String;
+			
+			for each ( var categoryXML : XML in MODULES_XML.* ) //TODO Добавить проверку наличия локализованного имени и т.д.
+			{
+				categoryName = categoryXML.@name;
+				categoryLocalizedName = resourceManager.getString( "Core_General", categoryName );
+				
+				category = new ModulesCategoryVO( categoryName, categoryLocalizedName );
+				
+				_categories.push();
+				
+				categoryModulesList = [];
+				
+				for each ( var module : XML in categoryXML.* )
+				{
+					modulePath = module.@path;
+					modulesList.push( new ModuleVO( category, modulePath ) );
+				}
+				
+				_categories.push( category );
+			}
 		}
-
+		
 		private function loadModuleFromQue() : void
 		{
 			if ( modulesForLoadQue.length == 0 )
 			{
-				sendNotification( ApplicationFacade.MODULES_LOADED );
+				sendNotification( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
+				
 				return;
 			}
 
 			var moduleVO : ModuleVO = modulesForLoadQue.shift();
-
+			
+			sendNotification( ApplicationFacade.MODULE_LOADING_START, moduleVO );
+			
 			var moduleInfo : IModuleInfo = ModuleManager.getModule( moduleVO.path );
 			moduleInfo.data = moduleVO;
 
@@ -193,13 +215,13 @@ package net.vdombox.ide.core.model
 
 			delete loadedModules[ event.module ]
 
-			sendNotification( ApplicationFacade.MODULE_LOADED, moduleVO );
+			sendNotification( ApplicationFacade.MODULE_LOADING_SUCCESSFUL, moduleVO );
 			loadModuleFromQue();
 		}
 
 		private function moduleErrorHandler( event : ModuleEvent ) : void
 		{
-			var d : * = "";
+			sendNotification( ApplicationFacade.MODULES_LOADING_ERROR, event.module.data as ModuleVO );
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package net.vdombox.ide.core.controller
 {
-	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ApplicationProxy;
+	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.ObjectProxy;
 	import net.vdombox.ide.core.model.PageProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
@@ -12,16 +12,17 @@ package net.vdombox.ide.core.controller
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
-
-	public class RequestForSignoutCommand extends SimpleCommand
+	
+	public class CleanupProxiesCommand extends SimpleCommand
 	{
-		override public function execute( notification : INotification ) : void
+		override public function execute(notification:INotification):void
 		{
 			var pipesProxy : PipesProxy = facade.retrieveProxy( PipesProxy.NAME ) as PipesProxy;
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
+			var modulesProxy : ModulesProxy = facade.retrieveProxy( ModulesProxy.NAME ) as ModulesProxy;
 			
 			var instanceName : String;
 			
@@ -31,6 +32,7 @@ package net.vdombox.ide.core.controller
 			typesProxy.unloadTypes();
 			statesProxy.cleanup();
 			resourcesProxy.cleanup();
+			modulesProxy.unloadAllModules();
 			
 			for ( instanceName in ApplicationProxy.instances )
 			{
@@ -46,8 +48,6 @@ package net.vdombox.ide.core.controller
 			{
 				facade.removeProxy( instanceName );
 			}
-			
-			sendNotification( ApplicationFacade.OPEN_INITIAL_WINDOW );
 		}
 	}
 }

@@ -34,9 +34,9 @@ package net.vdombox.ide.core.model
 			if ( soap.ready )
 				addHandlers();
 			else
-				soap.addEventListener( SOAPEvent.CONNECTED, soap_connectedHandler, false, 0, true );
+				soap.addEventListener( SOAPEvent.CONNECTION_OK, soap_connectedHandler, false, 0, true );
 			
-			soap.addEventListener( SOAPEvent.DISCONNECTED, soap_disconnectedHandler );
+			soap.addEventListener( SOAPEvent.DISCONNECTON_OK, soap_disconnectedHandler );
 		}
 		
 		override public function onRemove() : void

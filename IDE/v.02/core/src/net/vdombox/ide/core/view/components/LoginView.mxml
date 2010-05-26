@@ -102,9 +102,6 @@
 
 	</s:VGroup>
 
-	<s:BitmapImage source="@Embed(source='../assets/login/vdom_name.png')"
-				   bottom="35" right="0"/>
-
 	<s:Group height="35" width="100%"
 			 bottom="0">
 

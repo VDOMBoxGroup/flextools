@@ -20,7 +20,7 @@ package net.vdombox.ide.core.view
 
 	public class ProxiesJunctionMediator extends JunctionMediator
 	{
-		public static const NAME : String = 'ProxiesJunctionMediator';
+		public static const NAME : String = "ProxiesJunctionMediator";
 
 		public function ProxiesJunctionMediator()
 		{

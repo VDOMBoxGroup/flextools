@@ -11,14 +11,16 @@ package net.vdombox.ide.core.model
 	{
 		public static const NAME : String = "StatesProxy";
 
+		public static const SELECTED_APPLICATION : String = "selectedApplication";
+		public static const SELECTED_PAGE : String = "selectedPage";
+		public static const SELECTED_OBJECT : String = "selectedObject";
+		
+		public static const ERROR : String = "error";
+		
 		public function StatesProxy()
 		{
-			super( NAME );
+			super( NAME, {} );
 		}
-
-		private var _selectedApplication : ApplicationVO;
-		private var _selectedPage : PageVO;
-		private var _selectedObject : ObjectVO;
 
 		override public function onRemove() : void
 		{
@@ -27,48 +29,50 @@ package net.vdombox.ide.core.model
 		
 		public function get selectedApplication() : ApplicationVO
 		{
-			return _selectedApplication;
+			return data[ SELECTED_APPLICATION ];
 		}
 
 		public function set selectedApplication( value : ApplicationVO ) : void
 		{
-			if ( _selectedApplication == value )
-				return;
-
-			_selectedObject = null;
-			_selectedPage = null;
-			_selectedApplication = value;
+			data[ SELECTED_APPLICATION ] = value;
+			data[ SELECTED_PAGE ] = null;
+			data[ SELECTED_OBJECT ] = null;
 		}
 
 		public function get selectedPage() : PageVO
 		{
-			return _selectedPage;
+			return data[ SELECTED_PAGE ];
 		}
 
 		public function set selectedPage( value : PageVO ) : void
 		{
-			if ( _selectedPage == value )
-				return;
-
-			_selectedObject = null;
-			_selectedPage = value;
+			data[ SELECTED_PAGE ] = value;
+			data[ SELECTED_OBJECT ] = null;
 		}
 
 		public function get selectedObject() : ObjectVO
 		{
-			return _selectedObject;
+			return data[ SELECTED_OBJECT ];
 		}
 
 		public function set selectedObject( value : ObjectVO ) : void
 		{
-			_selectedObject = value;
+			data[ SELECTED_OBJECT ] = value;
 		}
 
+		public function get error() : Object
+		{
+			return data[ ERROR ];
+		}
+		
+		public function set error( value : Object ) : void
+		{
+			data[ ERROR ] = value;
+		}
+		
 		public function cleanup() : void
 		{
-			_selectedApplication = null;
-			_selectedPage = null;
-			_selectedObject = null;
+			data = {};
 		}
 	}
 }

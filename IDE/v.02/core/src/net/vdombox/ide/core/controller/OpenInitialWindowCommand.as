@@ -11,16 +11,10 @@ package net.vdombox.ide.core.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
+			sendNotification( ApplicationFacade.CLOSE_INITIAL_WINDOW );
 			sendNotification( ApplicationFacade.CLOSE_MAIN_WINDOW );
 			
 			var initialWindowMediator : InitialWindowMediator;
-			
-			if( facade.hasMediator( InitialWindowMediator.NAME ) )
-			{
-				initialWindowMediator = facade.retrieveMediator( InitialWindowMediator.NAME ) as InitialWindowMediator;
-				initialWindowMediator.closeWindow();
-				facade.removeMediator( InitialWindowMediator.NAME );
-			}
 			
 			initialWindowMediator = new InitialWindowMediator( new InitialWindow() );
 			facade.registerMediator( initialWindowMediator );

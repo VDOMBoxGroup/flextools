@@ -59,7 +59,10 @@
 					  fontFamily="Verdana" fontSize="14" left="-2" skinClass="net.vdombox.ide.core.view.skins.InitialWindowButtonSkin"/>
 		</s:Group>
 		
-		<!-- layer 3: contentGroup -->
+		<s:BitmapImage source="@Embed(source='../assets/login/vdom_name.png')"
+					   bottom="35" right="0"/>
+		
+		<!-- layer 4: contentGroup -->
 		<s:Group id="contentGroup"
 				 height="100%" width="100%"
 				 top="25"/>

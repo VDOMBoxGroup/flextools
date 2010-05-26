@@ -56,7 +56,7 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.INITIAL_WINDOW_OPENED:
 				{
-					sendNotification( ApplicationFacade.LOAD_MODULES );
+					sendNotification( ApplicationFacade.LOAD_MODULES_REQUEST );
 
 					break;
 				}

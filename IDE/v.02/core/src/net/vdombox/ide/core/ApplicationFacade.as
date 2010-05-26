@@ -4,9 +4,10 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.CloseInitialWindowCommand;
 	import net.vdombox.ide.core.controller.CloseMainWindowCommand;
 	import net.vdombox.ide.core.controller.CloseWindowCommand;
+	import net.vdombox.ide.core.controller.ErrorMacroCommand;
 	import net.vdombox.ide.core.controller.InitialWindowCreatedCommand;
-	import net.vdombox.ide.core.controller.LoadModulesCommand;
-	import net.vdombox.ide.core.controller.ModuleLoadedCommand;
+	import net.vdombox.ide.core.controller.LoadModulesRequestCommand;
+	import net.vdombox.ide.core.controller.ModuleLoadingSuccessfulCommand;
 	import net.vdombox.ide.core.controller.OpenInitialWindowCommand;
 	import net.vdombox.ide.core.controller.OpenMainWindowCommand;
 	import net.vdombox.ide.core.controller.OpenWindowCommand;
@@ -14,7 +15,7 @@ package net.vdombox.ide.core
 	import net.vdombox.ide.core.controller.ProcessLogMessage;
 	import net.vdombox.ide.core.controller.ProcessSimpleMessageCommand;
 	import net.vdombox.ide.core.controller.ProcessUIQueryMessageCommand;
-	import net.vdombox.ide.core.controller.RequestForSignoutCommand;
+	import net.vdombox.ide.core.controller.RequestForSignoutMacroCommand;
 	import net.vdombox.ide.core.controller.RequestForSignupCommand;
 	import net.vdombox.ide.core.controller.RetrieveModuleSettings;
 	import net.vdombox.ide.core.controller.SaveModuleSettings;
@@ -38,22 +39,12 @@ package net.vdombox.ide.core
 
 	public class ApplicationFacade extends Facade implements IFacade
 	{
+		public static const DELIMITER : String = "/";
+		
 		public static const PREINITALIZE : String = "preinitalize";
 		public static const STARTUP : String = "startup";
 		
-		public static const INITIAL_WINDOW_CREATED : String = "initialWindowCreated";
 		
-		public static const OPEN_INITIAL_WINDOW : String = "openInitialWindow";
-		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
-		
-		public static const CLOSE_INITIAL_WINDOW : String = "closeInitialWindow";
-		public static const INITIAL_WINDOW_CLOSED : String = "initialWindowClosed";
-		
-		public static const OPEN_MAIN_WINDOW : String = "openMainWindow";
-		public static const MAIN_WINDOW_OPENED : String = "mainWindowOpened";
-		
-		public static const CLOSE_MAIN_WINDOW : String = "closeMainWindow";
-		public static const MAIN_WINDOW_CLOSED : String = "mainWindowClosed";
 		
 		public static const REQUEST_FOR_SIGNUP : String = "requestForSignUp";
 		public static const REQUEST_FOR_SIGNOUT : String = "requestForSignOut";
@@ -82,6 +73,27 @@ package net.vdombox.ide.core
 //		public static const APPLICATION_CREATED : String = "applicationCreated";
 //		public static const APPLICATION_CHANGED : String = "applicationChanged";
 		
+//		windows and views
+		public static const INITIAL_WINDOW_CREATED : String = "initialWindowCreated";
+		
+		public static const OPEN_INITIAL_WINDOW : String = "openInitialWindow";
+		public static const INITIAL_WINDOW_OPENED : String = "initialWindowOpened";
+		
+		public static const CLOSE_INITIAL_WINDOW : String = "closeInitialWindow";
+		public static const INITIAL_WINDOW_CLOSED : String = "initialWindowClosed";
+		
+		public static const OPEN_MAIN_WINDOW : String = "openMainWindow";
+		public static const MAIN_WINDOW_OPENED : String = "mainWindowOpened";
+		
+		public static const CLOSE_MAIN_WINDOW : String = "closeMainWindow";
+		public static const MAIN_WINDOW_CLOSED : String = "mainWindowClosed";
+		
+		public static const OPEN_WINDOW : String = "openWindow";
+		public static const CLOSE_WINDOW : String = "closeWindow";
+		
+		public static const SHOW_LOGIN_VIEW_REQUEST : String = "showLoginViewRequest";
+		
+//		*****
 		public static const CONNECT_MODULE_TO_CORE : String = "connectModuleToCore";
 		public static const DISCONNECT_MODULE_TO_CORE : String = "disconnectModuleToCore";
 		
@@ -90,7 +102,7 @@ package net.vdombox.ide.core
 		
 		public static const DISCONNECT_MODULE_TO_PROXIES : String = "disconnectModuleToProxies";
 		public static const MODULE_TO_PROXIES_DISCONNECTED : String = "moduleToProxiesDisconnected";
-
+		
 //		simple messages
 		public static const PROCESS_SIMPLE_MESSAGE : String = "processSimpleMessage";
 		public static const PROCESS_UIQUERY_MESSAGE : String = "processUIQueryMessage";
@@ -124,13 +136,22 @@ package net.vdombox.ide.core
 		public static const OBJECT_PROXY_RESPONSE : String = "objectProxyResponse";
 
 //		modules
-		public static const LOAD_MODULES : String = "loadModules";
-		public static const MODULES_LOADED : String = "modulesLoaded";
+		public static const LOAD_MODULES_REQUEST : String = "loadModulesRequest";
 		
-		public static const LOAD_MODULE : String = "loadModule";
-		public static const MODULE_LOADED : String = "moduleLoaded";
+		public static const MODULES_LOADING_START : String = "modulesLoadingStart";
+		public static const MODULES_LOADING_SUCCESSFUL : String = "modulesLoadingSuccessful";
+		public static const MODULES_LOADING_ERROR : String = "modulesLoadingError";
 		
-		public static const MODULE_READY : String = "moduleReady";
+		public static const MODULE_LOADING_START : String = "moduleLoadingStart";
+		public static const MODULE_LOADING_SUCCESSFUL : String = "moduleLoadingSuccessful";
+		public static const MODULE_LOADING_ERROR : String = "moduleLoadingError";
+		
+		
+//		public static const MODULES_LOADED : String = "modulesLoaded";
+		
+		
+		
+//		public static const MODULE_READY : String = "moduleReady";
 		
 		public static const CHANGE_SELECTED_MODULE : String = "changeSelectedModule";
 		public static const SELECTED_MODULE_CHANGED : String = "selectedModuleChanged";
@@ -224,10 +245,6 @@ package net.vdombox.ide.core
 		public static const OBJECT_XML_PRESENTATION_GETTED : String = "objectXMLPresentationGetted";
 		public static const OBJECT_XML_PRESENTATION_SETTED : String = "objectXMLPresentationSetted";
 
-//		window
-		public static const OPEN_WINDOW : String = "openWindow";
-		public static const CLOSE_WINDOW : String = "closeWindow";
-
 //		log
 		public static const SEND_TO_LOG : String = "sendToLog";
 
@@ -271,7 +288,7 @@ package net.vdombox.ide.core
 			registerCommand( CLOSE_INITIAL_WINDOW, CloseInitialWindowCommand );
 			
 			registerCommand( REQUEST_FOR_SIGNUP, RequestForSignupCommand );
-			registerCommand( REQUEST_FOR_SIGNOUT, RequestForSignoutCommand );
+			registerCommand( REQUEST_FOR_SIGNOUT, RequestForSignoutMacroCommand );
 			
 			registerCommand( SERVER_LOGIN_SUCCESSFUL, ServerLoginSuccessfulCommand );
 			
@@ -283,8 +300,8 @@ package net.vdombox.ide.core
 //			registerCommand( CONNECTION_SERVER_SUCCESSFUL, ConnectionServerSuccessfulCommand );
 //			registerCommand( LOGON_SUCCESS, LogonSuccessfulCommand );
 
-			registerCommand( LOAD_MODULES, LoadModulesCommand );
-			registerCommand( MODULE_LOADED, ModuleLoadedCommand );
+			registerCommand( LOAD_MODULES_REQUEST, LoadModulesRequestCommand );
+			registerCommand( MODULE_LOADING_SUCCESSFUL, ModuleLoadingSuccessfulCommand );
 
 //			message requests & responses
 			registerCommand( RETRIEVE_MODULE_SETTINGS, RetrieveModuleSettings );
@@ -348,6 +365,11 @@ package net.vdombox.ide.core
 			registerCommand( RESOURCE_DELETED, ResourcesProxyResponseCommand );
 			registerCommand( RESOURCE_MODIFIED, ResourcesProxyResponseCommand );
 
+//			errors
+			registerCommand( SERVER_CONNECTION_ERROR, ErrorMacroCommand );
+			registerCommand( SERVER_LOGIN_ERROR, ErrorMacroCommand );
+			
+			
 			registerCommand( OPEN_WINDOW, OpenWindowCommand );
 			registerCommand( CLOSE_WINDOW, CloseWindowCommand );
 			

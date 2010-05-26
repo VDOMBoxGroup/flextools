@@ -42,6 +42,8 @@ package net.vdombox.ide.core.model.business
 
 		private var resourceManager : IResourceManager = ResourceManager.getInstance();
 
+		private var isLoadWSDLProcess : Boolean;
+		
 		public function SOAP()
 		{
 			if ( instance )
@@ -56,10 +58,15 @@ package net.vdombox.ide.core.model.business
 		public function connect( wsdl : String ) : void
 		{
 			webService = new WebService();
+			
 			webService.wsdl = wsdl;
 			webService.useProxy = false;
+			
 			webService.addEventListener( LoadEvent.LOAD, loadHandler );
 			webService.addEventListener( FaultEvent.FAULT, faultHandler );
+			
+			isLoadWSDLProcess = true;
+				
 			webService.loadWSDL();
 		}
 
@@ -68,7 +75,7 @@ package net.vdombox.ide.core.model.business
 			if( webService )
 				webService.disconnect();
 			
-			dispatchEvent( new SOAPEvent( SOAPEvent.DISCONNECTED ) );
+			dispatchEvent( new SOAPEvent( SOAPEvent.DISCONNECTON_OK ) );
 		}
 		
 		public function logon( username : String, password : String ) : AsyncToken
@@ -129,13 +136,29 @@ package net.vdombox.ide.core.model.business
 
 		private function loadHandler( event : LoadEvent ) : void
 		{
-			dispatchEvent( new SOAPEvent( SOAPEvent.CONNECTED ));
+			isLoadWSDLProcess = false;
+			dispatchEvent( new SOAPEvent( SOAPEvent.CONNECTION_OK ));
 		}
 
 		private function faultHandler( event : FaultEvent ) : void
 		{
-			var faultEvent : FaultEvent = FaultEvent.createEvent( event.fault, null, event.message );
-			dispatchEvent( faultEvent );
+			if( isLoadWSDLProcess )
+			{
+				isLoadWSDLProcess = false;
+				
+				var see : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.CONNECTION_ERROR );
+				
+				see.faultCode = event.fault.faultCode;
+				see.faultString = event.fault.faultString;
+				see.faultDetail = event.fault.faultDetail;
+				
+				dispatchEvent( see );
+			}
+			else
+			{
+				var faultEvent : FaultEvent = FaultEvent.createEvent( event.fault, null, event.message );
+				dispatchEvent( faultEvent );				
+			}
 		}
 
 		private function logonCompleteHandler( event : ResultEvent ) : void
@@ -148,6 +171,7 @@ package net.vdombox.ide.core.model.business
 
 			var see : SOAPEvent = new SOAPEvent( SOAPEvent.LOGIN_OK );
 			see.result = resultXML;
+			
 			dispatchEvent( see );
 		}
 
@@ -156,9 +180,11 @@ package net.vdombox.ide.core.model.business
 			if ( event.fault is SOAPFault )
 			{
 				var see : SOAPErrorEvent = new SOAPErrorEvent( SOAPErrorEvent.LOGIN_ERROR );
+				
 				see.faultCode = event.fault.faultCode;
 				see.faultString = event.fault.faultString;
 				see.faultDetail = event.fault.faultDetail;
+				
 				dispatchEvent( see );
 			}
 			else if ( event.fault is Fault )

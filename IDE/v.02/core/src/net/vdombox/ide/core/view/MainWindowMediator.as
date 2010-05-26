@@ -235,6 +235,7 @@ package net.vdombox.ide.core.view
 
 		private function logoutHandler( event : MainWindowEvent ) : void
 		{
+			cleanup();
 			sendNotification( ApplicationFacade.REQUEST_FOR_SIGNOUT );
 		}
 			

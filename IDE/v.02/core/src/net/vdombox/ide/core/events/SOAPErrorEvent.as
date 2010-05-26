@@ -4,7 +4,8 @@ package net.vdombox.ide.core.events
 
 	public class SOAPErrorEvent extends Event
 	{
-		public static var LOGIN_ERROR : String = "Login Error";
+		public static var CONNECTION_ERROR : String = "connectionError";
+		public static var LOGIN_ERROR : String = "loginError";
 
 		public var faultCode : String;
 		public var faultString : String;
