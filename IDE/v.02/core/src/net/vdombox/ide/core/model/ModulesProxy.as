@@ -2,18 +2,18 @@ package net.vdombox.ide.core.model
 {
 	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
-	
+
 	import mx.events.ModuleEvent;
 	import mx.modules.IModuleInfo;
 	import mx.modules.ModuleManager;
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;
-	
+
 	import net.vdombox.ide.common.VIModule;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.vo.ModuleVO;
 	import net.vdombox.ide.core.model.vo.ModulesCategoryVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -23,22 +23,27 @@ package net.vdombox.ide.core.model
 
 		private static const MODULES_DIR : String = "app:/modules/";
 
-		private static const MODULES_XML : XML = <modules>
+		private static const MODULES_XML : XML =
+			<modules>
 				<category name="applicationManagment">
 					<module name="ApplicationsManagment" path="app:/modules/Applications Managment/ApplicationsManagment.swf"/>
 				</category>
 				<category name="Edition">
 					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
+					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
+					<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
+					<module name="Events" path="app:/modules/Events/Events.swf"/>
+					<module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/>
 				</category>
 			</modules>
 
-/*
+		/*
 		   <module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
 		   <module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
 		   <module name="Tree" path="app:/modules/Tree/Tree.swf"/>
 		   <module name="Events" path="app:/modules/Events/Events.swf"/>
 		   <module name="ResourceBrowser" path="app:/modules/Resource Browser/ResourceBrowser.swf"/>
-*/
+		 */
 
 		public function ModulesProxy( data : Object = null )
 		{
@@ -48,7 +53,7 @@ package net.vdombox.ide.core.model
 		private var _categories : Array;
 
 		private var loadedModules : Dictionary;
-		
+
 		private var modulesList : Array;
 
 		private var modulesForLoadQue : Array;
@@ -67,18 +72,17 @@ package net.vdombox.ide.core.model
 
 		override public function onRegister() : void
 		{
-			
+
 		}
 
-		override public function onRemove():void
+		override public function onRemove() : void
 		{
 			cleanup();
 		}
-		
+
 		public function getModulesListByCategory( categoryVO : ModulesCategoryVO ) : Array
 		{
-			var result : Array = modulesList.filter(
-				function( element : ModuleVO, index : int, arr : Array ) : Boolean
+			var result : Array = modulesList.filter( function( element : ModuleVO, index : int, arr : Array ) : Boolean
 				{
 					if ( element.category == categoryVO )
 						return true;
@@ -115,9 +119,9 @@ package net.vdombox.ide.core.model
 		public function loadModules() : void
 		{
 			sendNotification( ApplicationFacade.MODULES_LOADING_START );
-			
+
 			generateModulesList();
-			
+
 			modulesForLoadQue = modulesList.slice();
 
 			loadModuleFromQue();
@@ -126,17 +130,17 @@ package net.vdombox.ide.core.model
 		public function unloadAllModules() : void
 		{
 			var moduleVO : ModuleVO;
-			
+
 			for ( var i : int = 0; i < modulesList.length; i++ )
 			{
 				moduleVO = modulesList[ i ] as ModuleVO;
-				
+
 				sendNotification( ApplicationFacade.MODULES_UNLOADING_START, moduleVO );
-				
-				if(moduleVO.module)
+
+				if ( moduleVO.module )
 					moduleVO.module.tearDown();
 			}
-			
+
 			cleanup();
 		}
 
@@ -154,48 +158,48 @@ package net.vdombox.ide.core.model
 			_categories = [];
 			modulesForLoadQue = [];
 			loadedModules = new Dictionary();
-			
+
 			var category : ModulesCategoryVO;
 			var categoryName : String;
 			var categoryLocalizedName : String;
 			var categoryModulesList : Array;
-			
+
 			var modulePath : String;
-			
+
 			for each ( var categoryXML : XML in MODULES_XML.* ) //TODO Добавить проверку наличия локализованного имени и т.д.
 			{
 				categoryName = categoryXML.@name;
 				categoryLocalizedName = resourceManager.getString( "Core_General", categoryName );
-				
+
 				category = new ModulesCategoryVO( categoryName, categoryLocalizedName );
-				
+
 				_categories.push();
-				
+
 				categoryModulesList = [];
-				
+
 				for each ( var module : XML in categoryXML.* )
 				{
 					modulePath = module.@path;
 					modulesList.push( new ModuleVO( category, modulePath ) );
 				}
-				
+
 				_categories.push( category );
 			}
 		}
-		
+
 		private function loadModuleFromQue() : void
 		{
 			if ( modulesForLoadQue.length == 0 )
 			{
 				sendNotification( ApplicationFacade.MODULES_LOADING_SUCCESSFUL );
-				
+
 				return;
 			}
 
 			var moduleVO : ModuleVO = modulesForLoadQue.shift();
-			
+
 			sendNotification( ApplicationFacade.MODULE_LOADING_START, moduleVO );
-			
+
 			var moduleInfo : IModuleInfo = ModuleManager.getModule( moduleVO.path );
 			moduleInfo.data = moduleVO;
 

@@ -220,7 +220,7 @@ package net.vdombox.ide.core.view
 			var tabBar : ButtonBar = mainWindow.tabBar;
 
 			tabBar.addEventListener( IndexChangeEvent.CHANGE, tabBar_indexChangeEvent );
-			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
+//			mainWindow.settingsButton.addEventListener( MouseEvent.CLICK, settingsButton_clickHandler );
 
 			tabBar.labelField = "name";
 			tabBar.dataProvider = new ArrayList( modulesCategories );
