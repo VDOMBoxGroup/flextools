@@ -4,9 +4,11 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo">
 
 	<s:layout>
-
 		<s:HorizontalLayout />
 	</s:layout>
+	
 	<s:Label id="NameLabel" />
+	
 	<s:Group id="contentGroup" />
+	
 </s:SparkSkin>

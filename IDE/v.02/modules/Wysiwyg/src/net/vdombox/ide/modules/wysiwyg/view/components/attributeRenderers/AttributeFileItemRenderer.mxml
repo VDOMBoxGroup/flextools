@@ -43,7 +43,9 @@
 				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
 				codeInterface[ "value" ] = matches[ 2 ];
 
-				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
+				//				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
+				secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
+				firstColor.color = secondColor.color + 0x222222;
 
 //				valueField.value = _attributeVO.value;
 //				valueField.title = _attributeDescriptionVO.displayName;
@@ -83,42 +85,42 @@
 
 			}
 
-			private function getColorByGroup( groupNumber : uint ) : String
+			private function getColorByGroup( groupNumber : uint ) : uint
 			{
-				var colorGroup : String;
-
+				var colorGroup : uint;
+				
 				switch ( groupNumber )
 				{
 					case 1:
 					{
-						colorGroup = "#777777";
+						colorGroup = 0x777777;
 						break;
 					}
-
+						
 					case 2:
 					{
-						colorGroup = "#00B000";
+						colorGroup = 0x00B000;
 						break;
 					}
-
+						
 					case 3:
 					{
-						colorGroup = "#B00000";
+						colorGroup = 0xB00000;
 						break;
 					}
-
+						
 					case 4:
 					{
-						colorGroup = "#8080ff";
+						colorGroup = 0x8080FF;
 						break;
 					}
-
+						
 					default:
 					{
-						colorGroup = "#777777";
+						colorGroup = 0x777777;
 					}
 				}
-
+				
 				return colorGroup;
 			}
 		]]>
@@ -130,9 +132,22 @@
 							gap="0" />
 	</s:layout>
 
-	<s:RichText id="nameLabel"
-				minHeight="21" text="{ displayName }" width="100%"
-				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
+	<s:Group width="100%" minHeight="21">
+		
+		<s:Rect bottom="0" left="0" right="0" top="0">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry id="firstColor" color="#D8D8D8" />
+					<s:GradientEntry id="secondColor" color="#CDCDCD" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		
+		<s:RichText id="nameLabel"
+					minHeight="21" text="{ displayName }" width="100%"
+					paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
+		
+	</s:Group>
 
 	<attributeRenderers:ResourceSelector id="valueField" value="@{ _attributeVO.value }"
 									   height="21" width="90"

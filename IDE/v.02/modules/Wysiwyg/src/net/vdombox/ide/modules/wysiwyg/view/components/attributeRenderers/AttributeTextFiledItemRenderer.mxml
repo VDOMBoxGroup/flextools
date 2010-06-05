@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
-				xmlns:mx="library://ns.adobe.com/flex/halo"
 				
 				minHeight="21" width="100%"
 				creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
 		<![CDATA[
-			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 			import mx.binding.utils.BindingUtils;
 			import mx.events.ValidationResultEvent;
-
+			import mx.graphics.SolidColor;
+			
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
+			import net.vdombox.ide.modules.wysiwyg.view.components.AttributeValidator;
 
 			[Bindable]
 			private var _attributeVO : AttributeVO;
@@ -42,7 +42,9 @@
 				codeInterface[ "type" ] = matches[ 1 ].toLowerCase();
 				codeInterface[ "value" ] = matches[ 2 ];
 
-				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
+//				nameLabel.setStyle( "backgroundColor", getColorByGroup( _attributeDescriptionVO.colorGroup ) );
+				secondColor.color = getColorByGroup( _attributeDescriptionVO.colorGroup );
+				firstColor.color = secondColor.color + 0x222222;
 				valueField.maxChars = uint( codeInterface[ "value" ] );
 //				valueField.text = _attributeVO.value;
 
@@ -82,42 +84,42 @@
 
 			}
 
-			private function getColorByGroup( groupNumber : uint ) : String
+			private function getColorByGroup( groupNumber : uint ) : uint
 			{
-				var colorGroup : String;
-
+				var colorGroup : uint;
+				
 				switch ( groupNumber )
 				{
 					case 1:
 					{
-						colorGroup = "#777777";
+						colorGroup = 0x777777;
 						break;
 					}
-
+						
 					case 2:
 					{
-						colorGroup = "#00B000";
+						colorGroup = 0x00B000;
 						break;
 					}
-
+						
 					case 3:
 					{
-						colorGroup = "#B00000";
+						colorGroup = 0xB00000;
 						break;
 					}
-
+						
 					case 4:
 					{
-						colorGroup = "#8080ff";
+						colorGroup = 0x8080FF;
 						break;
 					}
-
+						
 					default:
 					{
-						colorGroup = "#777777";
+						colorGroup = 0x777777;
 					}
 				}
-
+				
 				return colorGroup;
 			}
 		]]>
@@ -129,9 +131,23 @@
 							gap="0" />
 	</s:layout>
 
-	<s:RichText id="nameLabel"
-				minHeight="21" text="{ displayName }" width="100%"
-				paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
+	<s:Group width="100%" minHeight="21">
+		
+		<s:Rect bottom="0" left="0" right="0" top="0">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry id="firstColor" color="#D8D8D8" />
+					<s:GradientEntry id="secondColor" color="#CDCDCD" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		
+		<s:RichText id="nameLabel"
+					minHeight="21" text="{ displayName }" width="100%"
+					paddingBottom="2" paddingRight="5" paddingTop="2" textAlign="right" verticalAlign="middle" />
+		
+	</s:Group>
+	
 
 	<s:TextInput id="valueField"
 				 height="21" minWidth="0" text="@{_attributeVO.value}" width="90"
