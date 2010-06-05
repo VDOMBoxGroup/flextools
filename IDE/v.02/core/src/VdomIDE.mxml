@@ -9,7 +9,7 @@
 		[ ResourceBundle( "Core_General" ) ]
 		[ ResourceBundle( "LoginForm" ) ]
 	</fx:Metadata>
-
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.containers.Accordion;

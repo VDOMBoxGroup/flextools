@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:s="library://ns.adobe.com/flex/spark">
+		 xmlns:s="library://ns.adobe.com/flex/spark" >
 
 	<fx:Script>
 		<![CDATA[
@@ -63,7 +63,7 @@
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'username' ) }" width="100%"
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 
-			<s:TextInput focusEnabled="false" text="@{ username }" width="240"/>
+			<s:TextInput text="@{ username }" width="240"/>
 
 		</s:HGroup>
 
@@ -73,7 +73,7 @@
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'password' ) }" width="100%"
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 
-			<s:TextInput focusEnabled="false" text="@{ password }" width="240"/>
+			<s:TextInput text="@{ password }" width="240"/>
 
 		</s:HGroup>
 
@@ -83,7 +83,7 @@
 			<s:Label text="{ resourceManager.getString( 'LoginForm', 'hostname' ) }" width="100%"
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 
-			<s:TextInput focusEnabled="false" text="@{ hostname }" width="240"/>
+			<s:TextInput text="@{ hostname }" width="240"/>
 
 		</s:HGroup>
 
@@ -94,7 +94,7 @@
 					 color="white" fontFamily="Verdana" fontSize="14" textAlign="right"/>
 
 			<s:ComboBox id="selectLang"
-						dataProvider="{ languages }" focusEnabled="false" labelField="description" width="240"
+						dataProvider="{ languages }" labelField="description" width="240"
 						change="selectLang_changeHandler()"
 						selectedItem="@{ _selectedLanguage }"/>
 
