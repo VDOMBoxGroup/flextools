@@ -98,6 +98,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				{
 					applications = notification.getBody() as Array;
 					applicationsChanged = true;
+					selectedApplicationChanged = true;
 
 					break;
 				}
