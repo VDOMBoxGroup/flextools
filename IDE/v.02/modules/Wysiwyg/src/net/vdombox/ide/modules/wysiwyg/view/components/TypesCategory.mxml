@@ -7,17 +7,25 @@
 
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import mx.collections.ArrayList;
-
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			
 			import net.vdombox.ide.common.vo.TypeVO;
 
 			[Bindable]
-			private var typeData : ArrayList;
+			private var typeData : ArrayCollection;
 
 			public function addType( type : TypeVO ) : void
 			{
 				if ( !typeData )
-					typeData = new ArrayList();
+				{
+					typeData = new ArrayCollection();
+					typeData.sort = new Sort();
+					typeData.sort.fields = [ new SortField( "displayName" ) ];
+					typeData.refresh();
+				}
 
 				typeData.addItem( type );
 			}

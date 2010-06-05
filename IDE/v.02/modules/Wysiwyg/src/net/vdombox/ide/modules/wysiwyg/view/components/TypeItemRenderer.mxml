@@ -116,8 +116,7 @@
 			  horizontalCenter="0" top="5"
 			  filters.selected="{ [ new GlowFilter( 0xFFFFFF, 1, 6, 6, 2 ) ] }" smoothBitmapContent="true"/>
 
-	<s:RichText includeInLayout="false" includeInLayout.selected="true" text="{ typeName }" width="100%"
-				color="white" fontFamily="Verdana" horizontalCenter="0" top="50"
-				visible="false" visible.selected="true"/>
+	<s:RichText text="{ typeName }" width="100%"
+				color="white" fontFamily="Verdana" horizontalCenter="0" top="50"/>
 
 </s:ItemRenderer>

@@ -116,6 +116,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function clearData() : void
 		{
 			typesAccordion.removeAllChildren();
+			categories = [];
 		}
 		
 		private function showTypes() : void
