@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 	import net.vdombox.ide.common.PPMServerTargetNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
@@ -136,7 +136,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.GET_APPLICATIONS_LIST:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS );
+					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -145,7 +145,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.GET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.SELECTED_APPLICATION );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -154,7 +154,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.SET_SELECTED_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE,
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE,
 													  PPMStatesTargetNames.SELECTED_APPLICATION, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -164,7 +164,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.CREATE_APPLICATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE,
+					message = new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE,
 													  PPMServerTargetNames.APPLICATION, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -174,7 +174,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.EDIT_APPLICATION_INFORMATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE,
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE,
 													  PPMApplicationTargetNames.INFORMATION, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -205,7 +205,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 						recipients[ resourceVO.id ].push( recipientKey );
 					}
 
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
 													  PPMResourcesTargetNames.RESOURCE, resourceVO );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -215,7 +215,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 
 				case ApplicationFacade.SET_RESOURCE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
 													  PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -344,9 +344,9 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			}
 		}
 
-		private function handleProxiesPipeMessage( message : ProxiesPipeMessage ) : void
+		private function handleProxiesPipeMessage( message : ProxyMessage ) : void
 		{
-			var place : String = message.getPlace();
+			var place : String = message.place;
 
 			switch ( place )
 			{
