@@ -18,7 +18,7 @@
 			 bottom="0">
 
 		<s:Button id="backButton"
-				  height="35" label="{ resourceManager.getString( 'LoginForm', 'ok_button' ) }" minWidth="100"
+				  height="35" label="{ resourceManager.getString( 'LoginForm', 'back_button' ) }" minWidth="100"
 				  fontFamily="Verdana" fontSize="14" right="-2" skinClass="net.vdombox.ide.core.view.skins.InitialWindowButtonSkin"/>
 	</s:Group>
 

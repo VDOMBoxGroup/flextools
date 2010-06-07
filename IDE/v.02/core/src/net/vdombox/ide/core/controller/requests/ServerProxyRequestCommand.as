@@ -2,7 +2,7 @@ package net.vdombox.ide.core.controller.requests
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -17,10 +17,10 @@ package net.vdombox.ide.core.controller.requests
 		{
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var target : String = message.target;
+			var operation : String = message.operation;
 
 			switch ( target )
 			{

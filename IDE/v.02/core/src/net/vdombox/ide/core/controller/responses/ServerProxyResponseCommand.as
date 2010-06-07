@@ -3,7 +3,7 @@ package net.vdombox.ide.core.controller.responses
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMServerTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.controller.responses
 		{
 			var body : Object = notification.getBody();
 
-			var message : ProxiesPipeMessage;
+			var message : ProxyMessage;
 
 			switch ( notification.getName() )
 			{
@@ -32,7 +32,7 @@ package net.vdombox.ide.core.controller.responses
 					}
 
 					message =
-						new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE, PPMServerTargetNames.APPLICATION, applicationVO );
+						new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.CREATE, PPMServerTargetNames.APPLICATION, applicationVO );
 
 					break;
 				}
@@ -42,7 +42,7 @@ package net.vdombox.ide.core.controller.responses
 					var applications : Array = body as Array;
 
 					message =
-						new ProxiesPipeMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS, applications );
+						new ProxyMessage( PPMPlaceNames.SERVER, PPMOperationNames.READ, PPMServerTargetNames.APPLICATIONS, applications );
 
 					break;
 				}

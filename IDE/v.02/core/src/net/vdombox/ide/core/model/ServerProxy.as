@@ -1,7 +1,8 @@
 package net.vdombox.ide.core.model
 {
+	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -10,7 +11,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.AuthInfoVO;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -115,6 +116,8 @@ package net.vdombox.ide.core.model
 
 		private function addHandlers() : void
 		{
+			soap.addEventListener( FaultEvent.FAULT, soap_faultHandler, false, 0, true );
+			
 			soap.addEventListener( SOAPEvent.CONNECTION_OK, soap_connectionOKHandler, false, 0, true );
 			soap.addEventListener( SOAPErrorEvent.CONNECTION_ERROR, soap_connectionErrorHandler, false, 0, true );
 
@@ -177,17 +180,6 @@ package net.vdombox.ide.core.model
 			soap.logon( sharedObjectProxy.username, sharedObjectProxy.password );
 		}
 
-		private function soap_connectionErrorHandler( event : SOAPErrorEvent ) : void
-		{
-			var error : ErrorVO = new ErrorVO();
-
-			error.code = event.faultCode;
-			error.string = event.faultString;
-			error.detail = event.faultDetail;
-
-			sendNotification( ApplicationFacade.SERVER_CONNECTION_ERROR, error );
-		}
-
 		private function soap_disconnectionOKHandler( event : SOAPEvent ) : void
 		{
 			isSOAPConnected = false;
@@ -245,6 +237,28 @@ package net.vdombox.ide.core.model
 					break;
 				}
 			}
+		}
+		
+		private function soap_faultHandler( event : FaultEvent ) : void
+		{
+			var error : ErrorVO = new ErrorVO();
+			
+			error.code = event.fault.faultCode;
+			error.string = event.fault.faultString;
+			error.detail = event.fault.faultDetail;
+			
+			sendNotification( ApplicationFacade.SERVER_ERROR, error );
+		}
+		
+		private function soap_connectionErrorHandler( event : SOAPErrorEvent ) : void
+		{
+			var error : ErrorVO = new ErrorVO();
+			
+			error.code = event.faultCode;
+			error.string = event.faultString;
+			error.detail = event.faultDetail;
+			
+			sendNotification( ApplicationFacade.SERVER_CONNECTION_ERROR, error );
 		}
 	}
 }

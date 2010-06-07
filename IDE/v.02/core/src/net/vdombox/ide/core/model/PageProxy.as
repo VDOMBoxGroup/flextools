@@ -1,6 +1,7 @@
 package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
+	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
 	import mx.utils.object_proxy;
 	
@@ -13,6 +14,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
+	import net.vdombox.ide.core.model.vo.ErrorVO;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
 	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
@@ -281,7 +283,9 @@ package net.vdombox.ide.core.model
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			
 			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
+			soap.submit_object_script_presentation.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
 
 		private function removeHandlers() : void
@@ -581,6 +585,31 @@ package net.vdombox.ide.core.model
 
 			if ( notification )
 				facade.notifyObservers( notification );
+		}
+		
+		private function soap_faultHandler( event : FaultEvent ) : void
+		{
+			var operation : Operation = event.target as Operation;
+			
+			if( !operation )
+				return;
+			
+			var operationName : String = operation.name;
+			var errorVO : ErrorVO;
+			
+			switch( operationName )
+			{
+				case "submit_object_script_presentation":
+				{
+					errorVO = new ErrorVO();
+					errorVO.code = event.fault.faultCode;
+					errorVO.string = "XML not well-formed";
+					
+					sendNotification( ApplicationFacade.SERVER_ERROR, errorVO );
+					
+					break;
+				}
+			}
 		}
 	}
 }

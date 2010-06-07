@@ -2,7 +2,7 @@ package net.vdombox.ide.core.view
 {
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.ModulesProxy;
 	import net.vdombox.ide.core.model.PipesProxy;
@@ -159,7 +159,7 @@ package net.vdombox.ide.core.view
 
 				case ApplicationFacade.RESOURCES_PROXY_RESPONSE:
 				{
-					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxiesPipeMessage );
+					junction.sendMessage( PipeNames.PROXIESOUT, body as ProxyMessage );
 
 					break;
 				}
@@ -168,9 +168,9 @@ package net.vdombox.ide.core.view
 
 		override public function handlePipeMessage( message : IPipeMessage ) : void
 		{
-			var ppMessage : ProxiesPipeMessage = message as ProxiesPipeMessage;
+			var ppMessage : ProxyMessage = message as ProxyMessage;
 
-			switch ( ppMessage.getPlace() )
+			switch ( ppMessage.place )
 			{
 				case PPMPlaceNames.SERVER:
 				{

@@ -3,7 +3,7 @@ package net.vdombox.ide.core.controller.responses
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	
@@ -16,7 +16,7 @@ package net.vdombox.ide.core.controller.responses
 		{
 			var body : Object = notification.getBody();
 			
-			var message : ProxiesPipeMessage;
+			var message : ProxyMessage;
 			
 			var resourceVO : ResourceVO;
 			
@@ -26,7 +26,7 @@ package net.vdombox.ide.core.controller.responses
 				{
 					var resources : Array = body as Array;
 					
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
 						PPMResourcesTargetNames.RESOURCES, resources );
 					
 					break;
@@ -36,7 +36,7 @@ package net.vdombox.ide.core.controller.responses
 				{
 					resourceVO = body as ResourceVO;
 					
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, 
 						PPMResourcesTargetNames.RESOURCE, resourceVO );
 					
 					break;
@@ -52,7 +52,7 @@ package net.vdombox.ide.core.controller.responses
 						return;
 					}
 					
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, 
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE, 
 						PPMResourcesTargetNames.RESOURCE, resourceVO );
 					
 					break;
@@ -68,7 +68,7 @@ package net.vdombox.ide.core.controller.responses
 						return;
 					}
 					
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.UPDATE, 
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.UPDATE, 
 						PPMResourcesTargetNames.RESOURCE, resourceVO );
 					
 					break;
@@ -84,7 +84,7 @@ package net.vdombox.ide.core.controller.responses
 						return;
 					}
 					
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE, 
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE, 
 						PPMResourcesTargetNames.RESOURCE, resourceVO );
 					
 					break;

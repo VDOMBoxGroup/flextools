@@ -171,6 +171,8 @@ package net.vdombox.ide.core
 		public static const SERVER_CONNECTION_SUCCESSFUL : String = "serverСonnectionSuccessful";
 		public static const SERVER_CONNECTION_ERROR : String = "serverСonnectionError";
 		
+		public static const SERVER_ERROR : String = "serverError";
+		
 		public static const SERVER_LOGIN_START : String = "serverLoginStarts";
 		public static const SERVER_LOGIN_SUCCESSFUL : String = "serverLoginSuccessful";
 		public static const SERVER_LOGIN_ERROR : String = "serverLoginError";
@@ -371,6 +373,7 @@ package net.vdombox.ide.core
 			registerCommand( RESOURCE_MODIFIED, ResourcesProxyResponseCommand );
 
 //			errors
+			registerCommand( SERVER_ERROR, ErrorMacroCommand );
 			registerCommand( SERVER_CONNECTION_ERROR, ErrorMacroCommand );
 			registerCommand( SERVER_LOGIN_ERROR, ErrorMacroCommand );
 			

@@ -3,7 +3,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -19,12 +19,12 @@ package net.vdombox.ide.core.controller.requests
 		{
 			var statesProxy : StatesProxy = facade.retrieveProxy( StatesProxy.NAME ) as StatesProxy;
 
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
-			var resultMessage : ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
+			var resultMessage : ProxyMessage;
 
 			var body : Object = message.getBody();
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var target : String = message.target;
+			var operation : String = message.operation;
 
 			var properties : Object;
 			var isResult : Boolean = true;
@@ -100,7 +100,7 @@ package net.vdombox.ide.core.controller.requests
 			if ( !isResult )
 				return;
 
-			resultMessage = new ProxiesPipeMessage( PPMPlaceNames.STATES, operation, target, properties );
+			resultMessage = new ProxyMessage( PPMPlaceNames.STATES, operation, target, properties );
 
 			sendNotification( ApplicationFacade.STATES_PROXY_RESPONSE, resultMessage );
 		}

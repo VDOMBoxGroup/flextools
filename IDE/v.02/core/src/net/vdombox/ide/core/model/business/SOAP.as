@@ -118,7 +118,7 @@ package net.vdombox.ide.core.model.business
 
 			args.unshift( code.sessionId, key );
 			operation.addEventListener( ResultEvent.RESULT, operationResultHandler );
-			operation.addEventListener( FaultEvent.FAULT, operationFaultHandler );
+//			operation.addEventListener( FaultEvent.FAULT, operationFaultHandler );
 
 			token = operation.send.apply( null, args );
 			token.key = key;
@@ -237,9 +237,9 @@ package net.vdombox.ide.core.model.business
 			event.target.dispatchEvent( soapEvent );
 		}
 		
-		private function operationFaultHandler( event : * ) : void
+		private function operationFaultHandler( event : FaultEvent ) : void
 		{
-			var d : * = "";
+//			faultHandler( event );
 		}
 		
 		// Реализация диспатчера

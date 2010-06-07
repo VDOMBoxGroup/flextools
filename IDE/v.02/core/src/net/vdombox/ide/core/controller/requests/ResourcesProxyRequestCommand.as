@@ -2,7 +2,7 @@ package net.vdombox.ide.core.controller.requests
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.core.ApplicationFacade;
@@ -16,21 +16,21 @@ package net.vdombox.ide.core.controller.requests
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
-			if ( message.getTarget() == PPMResourcesTargetNames.RESOURCES )
+			if ( message.target == PPMResourcesTargetNames.RESOURCES )
 				processResourcesTarget( message );
 			else
 				processResourceTarget( message );
 		}
 
-		private function processResourceTarget( message : ProxiesPipeMessage ) : void
+		private function processResourceTarget( message : ProxyMessage ) : void
 		{
 			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
 			var serverProxy : ServerProxy = facade.retrieveProxy( ServerProxy.NAME ) as ServerProxy;
 			
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var target : String = message.target;
+			var operation : String = message.operation;
 			var body : Object = message.getBody();
 			
 			var resourceVO : ResourceVO;
@@ -110,13 +110,13 @@ package net.vdombox.ide.core.controller.requests
 			}
 		}
 		
-		private function processResourcesTarget( message : ProxiesPipeMessage ) : void
+		private function processResourcesTarget( message : ProxyMessage ) : void
 		{
 			var resourcesProxy : ResourcesProxy = facade.retrieveProxy( ResourcesProxy.NAME ) as ResourcesProxy;
 			var body : Object = message.getBody();
 			var applicationVO : ApplicationVO;
 			
-			switch ( message.getOperation() )
+			switch ( message.operation )
 			{
 				case PPMOperationNames.READ:
 				{

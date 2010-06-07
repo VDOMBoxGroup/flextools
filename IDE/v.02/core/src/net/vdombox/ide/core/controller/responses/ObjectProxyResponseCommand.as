@@ -3,7 +3,7 @@ package net.vdombox.ide.core.controller.responses
 	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPlaceNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.core.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -16,62 +16,62 @@ package net.vdombox.ide.core.controller.responses
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
-			var message : ProxiesPipeMessage;
+			var message : ProxyMessage;
 			
 			switch ( name )
 			{
 				case ApplicationFacade.OBJECT_ATTRIBUTES_GETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.ATTRIBUTES, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.ATTRIBUTES, body );
 					
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_ATTRIBUTES_SETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.ATTRIBUTES, body );
 					
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_SERVER_ACTIONS_GETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.SERVER_ACTIONS, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.SERVER_ACTIONS, body );
 					
 					break;
 				}
 				
 				case ApplicationFacade.OBJECT_SERVER_ACTIONS_SETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.SERVER_ACTIONS, body );
 					
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_OBJECT_CREATED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.OBJECT, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.CREATE, PPMObjectTargetNames.OBJECT, body );
 					
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_WYSIWYG_GETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.WYSIWYG, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.WYSIWYG, body );
 					
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_XML_PRESENTATION_GETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.XML_PRESENTATION, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.XML_PRESENTATION, body );
 					
 					break;
 				}
 					
 				case ApplicationFacade.OBJECT_XML_PRESENTATION_SETTED:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.XML_PRESENTATION, body );
+					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.XML_PRESENTATION, body );
 					
 					break;
 				}

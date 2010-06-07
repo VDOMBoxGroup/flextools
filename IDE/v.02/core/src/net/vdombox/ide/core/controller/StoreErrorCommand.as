@@ -16,20 +16,7 @@ package net.vdombox.ide.core.controller
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 			
-			switch ( name )
-			{
-				case ApplicationFacade.SERVER_CONNECTION_ERROR:
-				{
-					
-				}
-					
-				case ApplicationFacade.SERVER_LOGIN_ERROR:
-				{
-					sessionProxy.errorVO = body as ErrorVO;
-					
-					break;
-				}
-			}
+			sessionProxy.errorVO = body as ErrorVO;
 		}
 	}
 }

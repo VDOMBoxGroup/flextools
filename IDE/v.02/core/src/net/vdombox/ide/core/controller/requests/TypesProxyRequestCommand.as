@@ -2,7 +2,7 @@ package net.vdombox.ide.core.controller.requests
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMTypesTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.model.TypesProxy;
@@ -16,11 +16,11 @@ package net.vdombox.ide.core.controller.requests
 		{
 			var typesProxy : TypesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
 			
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 			
 			var body : Object = message.getBody();
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var target : String = message.target;
+			var operation : String = message.operation;
 			
 			if( operation != PPMOperationNames.READ )
 				return;
