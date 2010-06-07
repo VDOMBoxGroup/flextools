@@ -17,6 +17,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			var itemVO : ItemVO = body.itemVO as ItemVO;
 
+			if( !itemVO )
+				return;
+			
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			var isPage : Boolean = itemVO.typeVO.container == 3 ? true : false;
