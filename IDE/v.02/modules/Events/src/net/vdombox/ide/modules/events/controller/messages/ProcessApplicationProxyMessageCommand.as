@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.events.controller.messages
 {
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
@@ -13,11 +13,11 @@ package net.vdombox.ide.modules.events.controller.messages
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var body : Object = message.getBody();
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var target : String = message.target;
+			var operation : String = message.operation;
 
 			var applicationVO : ApplicationVO;
 

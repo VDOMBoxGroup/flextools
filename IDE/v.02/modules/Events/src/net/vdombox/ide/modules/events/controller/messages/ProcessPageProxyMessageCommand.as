@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.events.controller.messages
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	import net.vdombox.ide.modules.events.model.SessionProxy;
@@ -16,12 +16,12 @@ package net.vdombox.ide.modules.events.controller.messages
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var body : Object = message.getBody();
-			var place : String = message.getPlace();
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var place : String = message.proxy;
+			var target : String = message.target;
+			var operation : String = message.operation;
 
 			var pageVO : PageVO = body.pageVO as PageVO;
 			

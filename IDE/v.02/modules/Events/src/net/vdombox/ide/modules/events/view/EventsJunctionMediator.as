@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.events.view
 	import net.vdombox.ide.common.PPMPlaceNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
@@ -163,7 +163,7 @@ package net.vdombox.ide.modules.events.view
 
 				case ApplicationFacade.GET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -172,7 +172,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.SET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -181,7 +181,7 @@ package net.vdombox.ide.modules.events.view
 
 				case ApplicationFacade.SET_SELECTED_PAGE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -190,7 +190,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.SET_SELECTED_OBJECT:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_OBJECT, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -199,7 +199,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.GET_PAGES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -208,7 +208,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.GET_OBJECT:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.OBJECT, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -217,7 +217,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.GET_APPLICATION_EVENTS:
 				{
-					message = new ProxiesPipeMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.EVENTS, body );
+					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
@@ -225,7 +225,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.SET_APPLICATION_EVENTS:
 				{
-					message = new ProxiesPipeMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
+					message = new ProxyMessage(  PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.EVENTS, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
@@ -233,7 +233,7 @@ package net.vdombox.ide.modules.events.view
 					
 				case ApplicationFacade.GET_PAGE_SRUCTURE:
 				{
-					message = new ProxiesPipeMessage(  PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
+					message = new ProxyMessage(  PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.STRUCTURE, body );
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
 					break;
@@ -257,7 +257,7 @@ package net.vdombox.ide.modules.events.view
 					
 					if ( placeName && targetName )
 					{
-						message = new ProxiesPipeMessage( placeName, PPMOperationNames.READ, targetName, body );
+						message = new ProxyMessage( placeName, PPMOperationNames.READ, targetName, body );
 						junction.sendMessage( PipeNames.PROXIESOUT, message );
 					}
 					
@@ -319,11 +319,11 @@ package net.vdombox.ide.modules.events.view
 			}
 		}
 
-		public function handleProxiesPipeMessage( message : ProxiesPipeMessage ) : void
+		public function handleProxyMessage( message : ProxyMessage ) : void
 		{
-			var place : String = message.getPlace();
+			var proxy : String = message.proxy;
 
-			switch ( place )
+			switch ( proxy )
 			{
 				case PPMPlaceNames.APPLICATION:
 				{
@@ -394,7 +394,7 @@ package net.vdombox.ide.modules.events.view
 				case PipeNames.PROXIESIN:
 				{
 					pipe = notification.getBody() as IPipeFitting;
-					pipe.connect( new PipeListener( this, handleProxiesPipeMessage ) );
+					pipe.connect( new PipeListener( this, handleProxyMessage ) );
 					junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
 
 					break;

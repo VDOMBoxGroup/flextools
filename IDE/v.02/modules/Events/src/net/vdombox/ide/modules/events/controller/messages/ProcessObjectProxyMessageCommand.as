@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.events.controller.messages
 {
 	import net.vdombox.ide.common.PPMObjectTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.modules.events.ApplicationFacade;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -12,12 +12,12 @@ package net.vdombox.ide.modules.events.controller.messages
 		override public function execute( notification : INotification ) : void
 		{
 
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var body : Object = message.getBody();
-			var place : String = message.getPlace();
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var place : String = message.proxy;
+			var target : String = message.target;
+			var operation : String = message.operation;
 
 			switch ( target )
 			{
