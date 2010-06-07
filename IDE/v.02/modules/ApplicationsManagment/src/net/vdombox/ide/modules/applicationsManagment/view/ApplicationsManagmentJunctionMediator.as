@@ -303,7 +303,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				case PipeNames.PROXIESIN:
 				{
 					pipe = notification.getBody() as IPipeFitting;
-					pipe.connect( new PipeListener( this, handleProxiesPipeMessage ) );
+					pipe.connect( new PipeListener( this, handleProxyMessage ) );
 					junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
 
 					break;
@@ -344,11 +344,11 @@ package net.vdombox.ide.modules.applicationsManagment.view
 			}
 		}
 
-		private function handleProxiesPipeMessage( message : ProxyMessage ) : void
+		private function handleProxyMessage( message : ProxyMessage ) : void
 		{
-			var place : String = message.place;
+			var proxy : String = message.proxy;
 
-			switch ( place )
+			switch ( proxy )
 			{
 				case PPMPlaceNames.SERVER:
 				{

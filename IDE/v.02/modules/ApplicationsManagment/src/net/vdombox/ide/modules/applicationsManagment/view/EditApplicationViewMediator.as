@@ -254,7 +254,7 @@ package net.vdombox.ide.modules.applicationsManagment.view
 				{
 					var newSelectedApplication : ApplicationVO;
 
-					if ( !applications )
+					if ( !applications || applications.length == 0 )
 						return;
 
 					if ( settings )
