@@ -170,7 +170,7 @@ package net.vdombox.ide.core.view
 		{
 			var ppMessage : ProxyMessage = message as ProxyMessage;
 
-			switch ( ppMessage.place )
+			switch ( ppMessage.proxy )
 			{
 				case PPMPlaceNames.SERVER:
 				{
