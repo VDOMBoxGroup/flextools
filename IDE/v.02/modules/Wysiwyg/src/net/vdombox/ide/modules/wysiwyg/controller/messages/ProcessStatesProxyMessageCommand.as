@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
 	import net.vdombox.ide.common.PPMStatesTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -16,11 +16,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 		override public function execute( notification : INotification ) : void
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 			
 			var body : Object = message.getBody();
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var target : String = message.target;
+			var operation : String = message.operation;
 			
 			switch ( target )
 			{

@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -21,12 +21,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var body : Object = message.getBody();
-			var place : String = message.getPlace();
-			var target : String = message.getTarget();
-			var operation : String = message.getOperation();
+			var target : String = message.target;
+			var operation : String = message.operation;
 
 			var pageVO : PageVO = body.pageVO as PageVO;
 			
