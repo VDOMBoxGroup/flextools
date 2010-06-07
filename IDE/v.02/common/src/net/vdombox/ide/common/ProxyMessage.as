@@ -2,15 +2,17 @@ package net.vdombox.ide.common
 {
 	import org.puremvc.as3.multicore.utilities.pipes.messages.Message;
 
-	public class ProxiesPipeMessage extends Message
+	public class ProxyMessage extends Message
 	{
-		public function ProxiesPipeMessage( place : String, operation : String, target : String, body : Object = null )
+		public const PROXY_MESSAGE : String = "proxyMessage";
+		
+		public function ProxyMessage( place : String, operation : String, target : String, body : Object = null )
 		{
 			_place = place;
 			_operation = operation;
 			_target = target;
 			
-			super( Message.NORMAL, place, body );
+			super( MessageTypes.PROXY_MESSAGE, place, body );
 		}
 
 		protected var _place : String;
@@ -19,17 +21,17 @@ package net.vdombox.ide.common
 
 		protected var _target : String;
 		
-		public function getPlace() : String
+		public function get place() : String
 		{
 			return _place;
 		}
 		
-		public function getOperation() : String
+		public function get operation() : String
 		{
 			return _operation;
 		}
 		
-		public function getTarget() : String
+		public function get target() : String
 		{
 			return _target;			
 		}
