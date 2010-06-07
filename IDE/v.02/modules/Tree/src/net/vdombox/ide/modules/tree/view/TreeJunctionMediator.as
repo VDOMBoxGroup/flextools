@@ -14,7 +14,7 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PPMTypesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
@@ -184,7 +184,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.GET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -193,7 +193,7 @@ package net.vdombox.ide.modules.tree.view
 					
 				case ApplicationFacade.SET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -220,7 +220,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.GET_RESOURCES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCES, body );
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCES, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -229,7 +229,7 @@ package net.vdombox.ide.modules.tree.view
 					
 				case ApplicationFacade.LOAD_RESOURCE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -238,7 +238,7 @@ package net.vdombox.ide.modules.tree.view
 					
 				case ApplicationFacade.GET_APPLICATION_STRUCTURE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.STRUCTURE, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.STRUCTURE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -247,7 +247,7 @@ package net.vdombox.ide.modules.tree.view
 					
 				case ApplicationFacade.SET_APPLICATION_STRUCTURE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.STRUCTURE, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.STRUCTURE, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -256,7 +256,7 @@ package net.vdombox.ide.modules.tree.view
 					
 				case ApplicationFacade.SET_APPLICATION_INFORMATION:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.INFORMATION, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.UPDATE, PPMApplicationTargetNames.INFORMATION, body );
 					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 					
@@ -265,7 +265,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.GET_PAGES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.READ, PPMApplicationTargetNames.PAGES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -287,7 +287,7 @@ package net.vdombox.ide.modules.tree.view
 
 					typeRecipients[ typeID ].push( typeRecipientID );
 
-					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPE, typeID );
+					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TYPE, typeID );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -296,7 +296,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.GET_TOP_LEVEL_TYPES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
+					message = new ProxyMessage( PPMPlaceNames.TYPES, PPMOperationNames.READ, PPMTypesTargetNames.TOP_LEVEL_TYPES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -305,7 +305,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.GET_RESOURCE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ, PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -327,7 +327,7 @@ package net.vdombox.ide.modules.tree.view
 
 					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );
 
-					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, pageVO );
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.ATTRIBUTES, pageVO );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -349,7 +349,7 @@ package net.vdombox.ide.modules.tree.view
 
 					pageAttributesRecipients[ pageVO.id ].push( pageAttributesRecipientID );
 
-					message = new ProxiesPipeMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
+					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.ATTRIBUTES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -358,7 +358,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.SET_SELECTED_PAGE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.SELECTED_PAGE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -367,7 +367,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.CREATE_PAGE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.CREATE, PPMApplicationTargetNames.PAGE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -376,7 +376,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.DELETE_PAGE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
+					message = new ProxyMessage( PPMPlaceNames.APPLICATION, PPMOperationNames.DELETE, PPMApplicationTargetNames.PAGE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -474,7 +474,7 @@ package net.vdombox.ide.modules.tree.view
 				case PipeNames.PROXIESIN:
 				{
 					pipe = notification.getBody() as IPipeFitting;
-					pipe.connect( new PipeListener( this, handleProxiesPipeMessage ) );
+					pipe.connect( new PipeListener( this, handleProxyMessage ) );
 					junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
 
 					break;
@@ -515,9 +515,9 @@ package net.vdombox.ide.modules.tree.view
 			}
 		}
 
-		private function handleProxiesPipeMessage( message : ProxiesPipeMessage ) : void
+		private function handleProxyMessage( message : ProxyMessage ) : void
 		{
-			var place : String = message.getPlace();
+			var place : String = message.proxy;
 
 			switch ( place )
 			{
