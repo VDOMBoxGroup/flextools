@@ -6,24 +6,24 @@ package net.vdombox.ide.common
 	{
 		public const PROXY_MESSAGE : String = "proxyMessage";
 		
-		public function ProxyMessage( place : String, operation : String, target : String, body : Object = null )
+		public function ProxyMessage( proxy : String, operation : String, target : String, body : Object = null )
 		{
-			_place = place;
+			_proxy = proxy;
 			_operation = operation;
 			_target = target;
 			
-			super( MessageTypes.PROXY_MESSAGE, place, body );
+			super( MessageTypes.PROXY_MESSAGE, proxy, body );
 		}
 
-		protected var _place : String;
+		protected var _proxy : String;
 		
 		protected var _operation : String;
 
 		protected var _target : String;
 		
-		public function get place() : String
+		public function get proxy() : String
 		{
-			return _place;
+			return _proxy;
 		}
 		
 		public function get operation() : String
