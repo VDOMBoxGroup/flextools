@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.events.controller.messages
 			{
 				case PPMPageTargetNames.SERVER_ACTIONS:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body.serverActions as Array );
 					
 					break;
 				}

@@ -232,10 +232,13 @@ package net.vdombox.ide.modules.events.view.components
 			// if action created before do nothing
 			var aviableClientActionVO : ClientActionVO;
 
-			for each ( aviableClientActionVO in applicationEventsVO.clientActions )
+			if( applicationEventsVO && applicationEventsVO.clientActions )
 			{
-				if ( aviableClientActionVO.name == clientActionVO.name )
-					return;
+				for each ( aviableClientActionVO in applicationEventsVO.clientActions )
+				{
+					if ( aviableClientActionVO.name == clientActionVO.name )
+						return;
+				}
 			}
 
 			clientActionVO.left = coordinates.x;
@@ -255,7 +258,7 @@ package net.vdombox.ide.modules.events.view.components
 		{
 			// if action created before do nothing
 			
-			if ( serverActionElements.hasOwnProperty( serverActionVO.id ) )
+			if ( serverActionElements && serverActionElements.hasOwnProperty( serverActionVO.id ) )
 				return;
 			
 			serverActionVO.left = coordinates.x;
@@ -264,6 +267,9 @@ package net.vdombox.ide.modules.events.view.components
 			var actionElement : ActionElement = new ActionElement();
 			actionElement.data = serverActionVO;
 			
+			if( !serverActionElements )
+				serverActionElements = {};
+				
 			serverActionElements[ serverActionVO.id ] = actionElement; 
 			addElement( actionElement );
 			
