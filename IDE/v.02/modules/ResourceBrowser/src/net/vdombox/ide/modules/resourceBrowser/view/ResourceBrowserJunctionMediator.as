@@ -11,7 +11,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
 	import net.vdombox.ide.common.PPMStatesTargetNames;
 	import net.vdombox.ide.common.PipeNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.SimpleMessage;
 	import net.vdombox.ide.common.SimpleMessageHeaders;
 	import net.vdombox.ide.common.UIQueryMessage;
@@ -151,7 +151,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.GET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.READ, PPMStatesTargetNames.ALL_STATES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -160,7 +160,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.SET_ALL_STATES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
+					message = new ProxyMessage( PPMPlaceNames.STATES, PPMOperationNames.UPDATE, PPMStatesTargetNames.ALL_STATES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
@@ -169,7 +169,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.GET_RESOURCES:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
 						PPMResourcesTargetNames.RESOURCES, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -197,7 +197,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 						recipients[ resourceVO ].push( recipientKey );
 					}
 
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.READ,
 						PPMResourcesTargetNames.RESOURCE, resourceVO );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -207,7 +207,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.UPLOAD_RESOURCE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.CREATE,
 						PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -217,7 +217,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 
 				case ApplicationFacade.DELETE_RESOURCE:
 				{
-					message = new ProxiesPipeMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE,
+					message = new ProxyMessage( PPMPlaceNames.RESOURCES, PPMOperationNames.DELETE,
 						PPMResourcesTargetNames.RESOURCE, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
@@ -306,7 +306,7 @@ package net.vdombox.ide.modules.resourceBrowser.view
 				case PipeNames.PROXIESIN:
 				{
 					pipe = notification.getBody() as IPipeFitting;
-					pipe.connect( new PipeListener( this, handleProxiesPipeMessage ) );
+					pipe.connect( new PipeListener( this, handleProxyMessage ) );
 					junction.registerPipe( PipeNames.PROXIESIN, Junction.INPUT, pipe );
 
 					break;
@@ -347,9 +347,9 @@ package net.vdombox.ide.modules.resourceBrowser.view
 			}
 		}
 
-		private function handleProxiesPipeMessage( message : ProxiesPipeMessage ) : void
+		private function handleProxyMessage( message : ProxyMessage ) : void
 		{
-			var place : String = message.getPlace();
+			var place : String = message.proxy;
 
 			switch ( place )
 			{

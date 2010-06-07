@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.resourceBrowser.controller.messages
 {
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMResourcesTargetNames;
-	import net.vdombox.ide.common.ProxiesPipeMessage;
+	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.modules.resourceBrowser.ApplicationFacade;
 	import net.vdombox.ide.modules.resourceBrowser.model.SessionProxy;
 	
@@ -15,11 +15,11 @@ package net.vdombox.ide.modules.resourceBrowser.controller.messages
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
-			var message : ProxiesPipeMessage = notification.getBody() as ProxiesPipeMessage;
+			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
-			var place : String = message.getPlace();
-			var operation : String = message.getOperation();
-			var target : String = message.getTarget();
+			var place : String = message.proxy;
+			var operation : String = message.operation;
+			var target : String = message.target;
 
 			var body : Object = message.getBody();
 
