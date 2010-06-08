@@ -15,7 +15,7 @@ package net.vdombox.ide.modules.events.controller.messages
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
 			var body : Object = message.getBody();
-			var place : String = message.proxy;
+			
 			var target : String = message.target;
 			var operation : String = message.operation;
 
@@ -23,7 +23,7 @@ package net.vdombox.ide.modules.events.controller.messages
 			{
 				case PPMObjectTargetNames.SERVER_ACTIONS:
 				{
-					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body );
+					sendNotification( ApplicationFacade.SERVER_ACTIONS_GETTED, body.serverActions as Array );
 					
 					break;
 				}
