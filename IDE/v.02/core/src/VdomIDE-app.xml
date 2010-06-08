@@ -21,7 +21,7 @@
 	<filename>VdomIDE2</filename>
 
 	<!-- The name that is displayed in the AIR application installer. Optional. -->
-	<name>Vdom IDE</name>
+	<name>Vdom IDE 2</name>
 
 	<!-- An application version designator (such as "v1", "2.5", or "Alpha 1"). Required. -->
 	<version>2.0.4802</version>
