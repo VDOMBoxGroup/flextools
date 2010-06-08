@@ -453,10 +453,10 @@ package net.vdombox.ide.core.model
 
 			var eventsXMLList : XMLList = applicationEventsXML.Events.Event;
 			var clientActionsXMLList : XMLList = applicationEventsXML.ClientActions.Action;
-			var serverActionsXMLList : XMLList = applicationEventsXML.ServerActions.Container;
+			var serverActionsXMLList : XMLList = applicationEventsXML.ServerActions..Action;
 
-			if ( serverActionsXMLList.length() > 0 )
-				serverActionsXMLList = serverActionsXMLList.( @ID == pageVO.id ).Action;
+//			if ( serverActionsXMLList.length() > 0 )
+//				serverActionsXMLList = serverActionsXMLList.( @ID == pageVO.id ).Action;
 
 			var clientActionVO : ClientActionVO;
 			var serverActionVO : ServerActionVO;
