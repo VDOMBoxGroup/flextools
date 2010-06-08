@@ -131,14 +131,17 @@ package net.vdombox.ide.core.model
 		{
 			var moduleVO : ModuleVO;
 
-			for ( var i : int = 0; i < modulesList.length; i++ )
+			if( modulesList && modulesList.length > 0 )
 			{
-				moduleVO = modulesList[ i ] as ModuleVO;
-
-				sendNotification( ApplicationFacade.MODULES_UNLOADING_START, moduleVO );
-
-				if ( moduleVO.module )
-					moduleVO.module.tearDown();
+				for ( var i : int = 0; i < modulesList.length; i++ )
+				{
+					moduleVO = modulesList[ i ] as ModuleVO;
+	
+					sendNotification( ApplicationFacade.MODULES_UNLOADING_START, moduleVO );
+	
+					if ( moduleVO.module )
+						moduleVO.module.tearDown();
+				}
 			}
 
 			cleanup();
