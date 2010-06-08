@@ -4,6 +4,7 @@ package net.vdombox.ide.modules.tree.view.components
 	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
@@ -28,6 +29,7 @@ package net.vdombox.ide.modules.tree.view.components
 			buttonMode = true;
 
 			addEventListener( MouseEvent.CLICK, clickHandler, false, 0, true );
+			addEventListener( Event.REMOVED, removedHandler, false, 0, true );
 			addEventListener( FlexEvent.CREATION_COMPLETE, createionCompleteHandler, false, 0, true );
 		}
 
@@ -463,6 +465,11 @@ package net.vdombox.ide.modules.tree.view.components
 			dispatchEvent( new LinkageEvent( LinkageEvent.CREATED ) );
 		}
 
+		private function removedHandler( event : Event ) : void
+		{
+			dispatchEvent( new LinkageEvent( LinkageEvent.REMOVED ) );
+		}
+		
 		private function clickHandler( event : MouseEvent ) : void
 		{
 			if ( !stage )

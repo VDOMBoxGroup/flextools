@@ -16,7 +16,7 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "LevelsPanelMediator";
 
-		public function LevelsPanelMediator( viewComponent : Object )
+		public function LevelsPanelMediator( viewComponent : LevelsFilterPanel )
 		{
 			super( NAME, viewComponent );
 		}
@@ -41,6 +41,8 @@ package net.vdombox.ide.modules.tree.view
 
 		override public function onRemove() : void
 		{
+			sessionProxy = null;
+			
 			removeHandlers();
 
 			clearData();
@@ -92,7 +94,6 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.TREE_LEVELS_GETTED:
 				{
 					levelsPanel.dataProvider = body as Array;
-					levelsPanel.currentStructureLevel = body[ 0 ] as TreeLevelVO;
 
 					sendNotification( ApplicationFacade.SELECTED_TREE_LEVEL_CHANGE_REQUEST, levelsPanel.currentStructureLevel );
 					

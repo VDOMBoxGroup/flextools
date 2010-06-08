@@ -19,6 +19,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.body.DeletePageRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.ExpandAllRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.LinkageCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.LinkageRemovedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.OpenCreatePageWindowRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.OpenResourceSelectorRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.PageCreatedCommand;
@@ -28,6 +29,7 @@ package net.vdombox.ide.modules.tree
 	import net.vdombox.ide.modules.tree.controller.body.SelectedTreeElementChangeRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.SelectedTreeLevelChangeRequestCommand;
 	import net.vdombox.ide.modules.tree.controller.body.TreeElementCreatedCommand;
+	import net.vdombox.ide.modules.tree.controller.body.TreeElementRemovedCommand;
 	import net.vdombox.ide.modules.tree.controller.body.TreeElementSelectionCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessApplicationProxyMessageCommand;
 	import net.vdombox.ide.modules.tree.controller.messages.ProcessPageProxyMessageCommand;
@@ -173,9 +175,12 @@ package net.vdombox.ide.modules.tree
 		public static const UNDO_REQUEST : String = "undoRequest";
 		
 		public static const TREE_ELEMENT_CREATED : String = "treeElementCreated";
+		public static const TREE_ELEMENT_REMOVED : String = "treeElementRemoved";
 		
 		public static const CREATE_LINKAGE : String = "createLinkage";
+		
 		public static const LINKAGE_CREATED : String = "linkageCreated";
+		public static const LINKAGE_REMOVED : String = "linkageRemoved";
 		
 //		public static const TREE_ELEMENT_SELECTION : String = "treeElementSelection";
 		
@@ -246,14 +251,13 @@ package net.vdombox.ide.modules.tree
 			registerCommand( PROCESS_RESOURCES_PROXY_MESSAGE, ProcessResourcesProxyMessageCommand );
 
 			registerCommand( TREE_ELEMENT_CREATED, TreeElementCreatedCommand );
-//			registerCommand( CREATE_LINKAGE, CreateLinkageCommand );
+			registerCommand( TREE_ELEMENT_REMOVED, TreeElementRemovedCommand );
+			
 			registerCommand( LINKAGE_CREATED, LinkageCreatedCommand );
+			registerCommand( LINKAGE_REMOVED, LinkageRemovedCommand );
 
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
 			registerCommand( OPEN_CREATE_PAGE_WINDOW_REQUEST, OpenCreatePageWindowRequestCommand );
-
-//			registerCommand( SELECTED_APPLICATION_GETTED, SelectedApplicationGettedCommand );
-//			registerCommand( SELECTED_PAGE_GETTED, SelectedPageGettedCommand );
 
 			registerCommand( PAGES_GETTED, PagesGettedCommand );
 			registerCommand( APPLICATION_STRUCTURE_GETTED, ApplicationStructureGettedCommand );

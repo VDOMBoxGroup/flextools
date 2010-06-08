@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.tree.events
 	public class TreeElementEvent extends Event
 	{
 		public static var CREATED : String = "elementCreated";
+		public static var REMOVED : String = "elementRemoved";
 		public static var SELECTION : String = "elementSelection";
 		public static var STATE_CHANGED : String = "stateChanged";
 		public static var DELETE : String = "delete";

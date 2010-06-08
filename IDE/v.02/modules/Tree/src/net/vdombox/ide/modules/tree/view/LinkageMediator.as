@@ -21,13 +21,9 @@ package net.vdombox.ide.modules.tree.view
 	{
 		public static const NAME : String = "LinkageMediator";
 
-		private static var count : uint = 0;
-
 		public function LinkageMediator( viewComponent : Linkage )
 		{
-			super( NAME + ApplicationFacade.DELIMITER + count, viewComponent );
-
-			count++;
+			super( NAME + ApplicationFacade.DELIMITER + viewComponent.uid, viewComponent );
 		}
 
 		private var _linkageVO : LinkageVO;

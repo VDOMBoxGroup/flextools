@@ -9,10 +9,11 @@
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
 			import mx.collections.ArrayList;
-
+			
 			import net.vdombox.ide.modules.tree.events.LevelsFilterPanelEvent;
+			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.model.vo.TreeLevelVO;
-
+			
 			import spark.events.IndexChangeEvent;
 
 			[Bindable]
@@ -27,6 +28,11 @@
 			public function set dataProvider( value : Array ) : void
 			{
 				levels = value && value.length > 0 ? new ArrayList( value ) : null;
+				
+				if( levels && levels.length > 0 )
+					currentStructureLevel = levels.getItemAt( 0 ) as TreeLevelVO;
+				else
+					currentStructureLevel = null;
 			}
 
 			public function get currentStructureLevel() : TreeLevelVO

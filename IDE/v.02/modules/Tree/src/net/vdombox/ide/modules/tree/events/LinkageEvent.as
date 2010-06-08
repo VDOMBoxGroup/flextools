@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.tree.events
 	public class LinkageEvent extends Event
 	{
 		public static var CREATED : String = "linkageCreated";
+		public static var REMOVED : String = "linkageRemoved";
 		
 		public function LinkageEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

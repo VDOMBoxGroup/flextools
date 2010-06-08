@@ -2,7 +2,7 @@ package net.vdombox.ide.modules.tree.view
 {
 	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
-
+	
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.LinkageEvent;
@@ -16,11 +16,11 @@ package net.vdombox.ide.modules.tree.view
 	import net.vdombox.ide.modules.tree.view.components.Linkage;
 	import net.vdombox.ide.modules.tree.view.components.TreeElement;
 	import net.vdombox.ide.modules.tree.view.components.WorkArea;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
+	
 	import spark.components.Group;
 	import spark.effects.Move;
 	import spark.effects.easing.EaseInOutBase;
@@ -175,7 +175,12 @@ package net.vdombox.ide.modules.tree.view
 		private function addHandlers() : void
 		{
 			workArea.addEventListener( TreeElementEvent.CREATED, treeElement_createdHandler, true, 0, true );
-
+			workArea.addEventListener( TreeElementEvent.REMOVED, treeElement_removedHandler, true, 0, true );
+			
+			
+			workArea.addEventListener( LinkageEvent.CREATED, linkage_createdHandler, true, 0, true );
+			workArea.addEventListener( LinkageEvent.REMOVED, linkage_removedHandler, true, 0, true );
+			
 			workArea.addEventListener( WorkAreaEvent.SAVE, saveHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.UNDO, undoHandler, false, 0, true );
 
@@ -186,8 +191,6 @@ package net.vdombox.ide.modules.tree.view
 
 			workArea.addEventListener( WorkAreaEvent.SHOW_SIGNATURE, showSignatureHandler, false, 0, true );
 			workArea.addEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler, false, 0, true );
-
-			workArea.addEventListener( LinkageEvent.CREATED, linkage_createdHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -196,6 +199,11 @@ package net.vdombox.ide.modules.tree.view
 			workArea.removeEventListener( WorkAreaEvent.UNDO, undoHandler );
 
 			workArea.removeEventListener( TreeElementEvent.CREATED, treeElement_createdHandler, true );
+			workArea.removeEventListener( TreeElementEvent.REMOVED, treeElement_removedHandler, true );
+
+			workArea.removeEventListener( LinkageEvent.CREATED, linkage_createdHandler, true );
+			workArea.removeEventListener( LinkageEvent.REMOVED, linkage_removedHandler, true );
+			
 			workArea.removeEventListener( WorkAreaEvent.CREATE_PAGE, createPageHandler );
 
 			workArea.removeEventListener( WorkAreaEvent.CREATE_PAGE, createPageHandler );
@@ -203,12 +211,12 @@ package net.vdombox.ide.modules.tree.view
 
 			workArea.removeEventListener( WorkAreaEvent.SHOW_SIGNATURE, showSignatureHandler );
 			workArea.removeEventListener( WorkAreaEvent.HIDE_SIGNATURE, hideSignatureHandler );
-
-			workArea.removeEventListener( LinkageEvent.CREATED, linkage_createdHandler, true );
 		}
 
 		private function clearData() : void
 		{
+			workArea.treeElements = null;
+			workArea.linkages = null;
 		}
 
 		private function saveHandler( event : WorkAreaEvent ) : void
@@ -228,12 +236,24 @@ package net.vdombox.ide.modules.tree.view
 
 		private function treeElement_createdHandler( event : TreeElementEvent ) : void
 		{
-			var treeElement : TreeElement = event.target as TreeElement;
-
-			if ( treeElement )
-				sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, treeElement );
+			sendNotification( ApplicationFacade.TREE_ELEMENT_CREATED, event.target as TreeElement );
 		}
 
+		private function treeElement_removedHandler( event : TreeElementEvent ) : void
+		{
+			sendNotification( ApplicationFacade.TREE_ELEMENT_REMOVED, event.target as TreeElement );
+		}
+		
+		private function linkage_createdHandler( event : LinkageEvent ) : void
+		{
+			sendNotification( ApplicationFacade.LINKAGE_CREATED, event.target as Linkage );
+		}
+		
+		private function linkage_removedHandler( event : LinkageEvent ) : void
+		{
+			sendNotification( ApplicationFacade.LINKAGE_REMOVED, event.target as Linkage );
+		}
+		
 		private function expandAllHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( ApplicationFacade.EXPAND_ALL_TREE_ELEMENTS );
@@ -252,11 +272,6 @@ package net.vdombox.ide.modules.tree.view
 		private function hideSignatureHandler( event : WorkAreaEvent ) : void
 		{
 			sendNotification( ApplicationFacade.HIDE_SIGNATURE );
-		}
-
-		private function linkage_createdHandler( event : LinkageEvent ) : void
-		{
-			sendNotification( ApplicationFacade.LINKAGE_CREATED, event.target );
 		}
 	}
 }

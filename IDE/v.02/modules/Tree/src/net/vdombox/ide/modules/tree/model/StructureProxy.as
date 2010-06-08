@@ -285,7 +285,6 @@ package net.vdombox.ide.modules.tree.model
 			rawStructure = [];
 
 			_treeElements = [];
-			_treeLevels = [];
 			_linkages = [];
 
 			treeElementsChanged = false;

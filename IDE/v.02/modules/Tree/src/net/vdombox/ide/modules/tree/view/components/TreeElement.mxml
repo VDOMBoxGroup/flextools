@@ -5,7 +5,7 @@
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  width="200" x="@{ _treeElementVO.left }" y="@{ _treeElementVO.top }"
 					  skinClass="net.vdombox.ide.modules.tree.view.skins.TreeElementSkin"
-					  creationComplete="creationCompleteHandler()">
+					  creationComplete="creationCompleteHandler()" removed="removedHandler()">
 
 	<fx:Script>
 		<![CDATA[
@@ -162,6 +162,11 @@
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			}
 
+			private function removedHandler() : void
+			{
+				dispatchEvent( new TreeElementEvent( TreeElementEvent.REMOVED ) );
+			}
+			
 			private function mouseDownHandler( event : MouseEvent ) : void
 			{
 				if( deleteButton !== event.target )
