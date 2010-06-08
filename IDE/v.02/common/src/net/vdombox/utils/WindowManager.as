@@ -305,7 +305,8 @@ package net.vdombox.utils
 		{
 			var screen : Screen = Screen.getScreensForRectangle( window.nativeWindow.bounds )[ 0 ];
 
-			window.move( Math.max( screen.bounds.width / 2 - window.width / 2, 0 ), Math.max( screen.bounds.height / 2 - window.height / 2, 0 ));
+			if( screen && window )
+				window.move( Math.max( screen.bounds.width / 2 - window.width / 2, 0 ), Math.max( screen.bounds.height / 2 - window.height / 2, 0 ));
 		}
 
 		private function findWindowInfoByWindow( nativeWindow : NativeWindow ) : WindowData
