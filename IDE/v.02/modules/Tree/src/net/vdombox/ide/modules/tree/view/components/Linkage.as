@@ -29,7 +29,7 @@ package net.vdombox.ide.modules.tree.view.components
 			buttonMode = true;
 
 			addEventListener( MouseEvent.CLICK, clickHandler, false, 0, true );
-			addEventListener( Event.REMOVED, removedHandler, false, 0, true );
+			addEventListener( FlexEvent.REMOVE, removeHandler, false, 0, true );
 			addEventListener( FlexEvent.CREATION_COMPLETE, createionCompleteHandler, false, 0, true );
 		}
 
@@ -465,7 +465,7 @@ package net.vdombox.ide.modules.tree.view.components
 			dispatchEvent( new LinkageEvent( LinkageEvent.CREATED ) );
 		}
 
-		private function removedHandler( event : Event ) : void
+		private function removeHandler( event : FlexEvent ) : void
 		{
 			dispatchEvent( new LinkageEvent( LinkageEvent.REMOVED ) );
 		}
