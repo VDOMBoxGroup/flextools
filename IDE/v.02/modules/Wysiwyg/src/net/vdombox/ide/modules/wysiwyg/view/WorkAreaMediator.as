@@ -46,11 +46,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return viewComponent as WorkArea;
 		}
 
-		public function lock() : void
-		{
-			workArea.lock()
-		}
-
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;

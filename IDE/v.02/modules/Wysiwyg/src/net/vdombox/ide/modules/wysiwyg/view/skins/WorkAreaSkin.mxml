@@ -1,87 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
-			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 xmlns:mx="library://ns.adobe.com/flex/halo">
+			 xmlns:mx="library://ns.adobe.com/flex/halo"
+			 xmlns:s="library://ns.adobe.com/flex/spark" xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*">
 
 
 	<s:states>
-		<s:State name="normal" />
-		<s:State name="hovered" />
-		<s:State name="highlighted" />
-		<s:State name="locked" />
-		<s:State name="disabled" />
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
 	</s:states>
 
-	<s:Rect height="100%" width="100%">
-		<s:fill>
-			<s:SolidColor color="white"
-						  alpha=".0" />
-		</s:fill>
-	</s:Rect>
+	<s:ButtonBar id="buttonBar"
+				 labelField="label" selectedIndex="0"
+				 requireSelection="true"/>
 
-	<s:Rect id="backgroundRect"
-			bottom="0" left="0" right="0" top="0">
-
-		<s:fill>
-			<s:SolidColor color="gray" alpha="0" />
-		</s:fill>
-
-		<s:stroke>
-			<s:SolidColorStroke />
-		</s:stroke>
-	</s:Rect>
-
-	<s:Group id="background" />
-
-	<s:Rect height="100%" width="100%"
-			includeIn="highlighted">
-
-		<s:stroke>
-
-			<s:SolidColorStroke color="green"
-								weight="2" />
-		</s:stroke>
-	</s:Rect>
-
-	<s:Scroller id="scroller"
-				focusEnabled="false"
+	<s:Scroller focusEnabled="false"
 				bottom="0" left="0" right="0" top="0"
 				minViewportInset="1">
-
+		
 		<s:Group>
-
-			<s:DataGroup id="dataGroup" />
-
-			<s:Group id="upperLayer" />
+			
+			<components:TransformMarker id="transformMarker" />
+			
+			<s:Group id="contentGroup"/>
+			
 		</s:Group>
+		
 	</s:Scroller>
 
-	<s:Group id="locker"
-			 bottom="0" left="0" right="0" top="0"
-			 visible="false">
-		
-		<s:Rect bottom="0" left="0" right="0" top="0">
-			
-			<s:fill>
-				
-				<s:SolidColor color="white"
-							  alpha=".0" />
-			</s:fill>
-		</s:Rect>
-	</s:Group>
-	
-	<s:Rect bottom="0" left="0" right="0" top="0"
-			includeIn="locked">
-		<s:fill>
-			<s:SolidColor color="white" />
-		</s:fill>
-	</s:Rect>
-
-	<!--<s:Rect bottom="0" left="0" right="0" top="0">
-
-		<s:stroke>
-
-			<s:SolidColorStroke />
-		</s:stroke>
-	</s:Rect>-->
 </s:SparkSkin>

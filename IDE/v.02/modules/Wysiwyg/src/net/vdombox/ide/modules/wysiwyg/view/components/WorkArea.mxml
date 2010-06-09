@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<components:Item xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
-				 xmlns:fx="http://ns.adobe.com/mxml/2009"
-				 xmlns:mx="library://ns.adobe.com/flex/halo"
-				 xmlns:s="library://ns.adobe.com/flex/spark"
-				 creationComplete="creationCompleteHandler()"
-				 itemRenderer="net.vdombox.ide.modules.wysiwyg.view.components.Item">
+<s:SkinnableContainer xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:mx="library://ns.adobe.com/flex/halo"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
 		<![CDATA[
 			import com.zavoo.svg.SVGViewer;
-			
+
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
@@ -19,231 +18,61 @@
 			import mx.events.FlexEvent;
 			import mx.graphics.SolidColor;
 			import mx.graphics.SolidColorStroke;
-			
+
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin;
-			
+
 			import spark.components.Group;
 
-			[SkinPart( required="false" )]
-			public var upperLayer : Group;
-
-			private const styleList : Object = { opacity: "backgroundAlpha", backgroundcolor: "backgroundColor", backgroundimage: "backgroundImage",
-					backgroundrepeat: "backgroundRepeat", borderwidth: "borderThickness", bordercolor: "borderColor", color: "color",
-					fontfamily: "fontFamily", fontsize: "fontSize", fontweight: "fontWeight", fontstyle: "fontStyle",
-					textdecoration: "textDecoration", textalign: "textAlign", align: "horizontalAlign", valign: "verticalAlign" };
-
+			[SkinPart( required="true" )]
 			public var transformMarker : TransformMarker;
-
-			override public function get itemVO() : ItemVO
-			{
-				return super.itemVO;
-			}
-
-			override public function set itemVO( value : ItemVO ) : void
-			{
-				super.itemVO = value;
-				
-				if ( !value )
-				{
-					dataProvider = null;
-
-					SolidColor( backgroundRect.fill ).color = 0xCCCCCC;
-					SolidColorStroke( backgroundRect.stroke ).alpha = .5;
-
-					background.removeAllElements();
-
-					return;
-				}
-
-				var childrenDataProvider : ArrayCollection = new ArrayCollection( value.children );
-				childrenDataProvider.sort = new Sort();
-				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
-				childrenDataProvider.refresh();
-
-				processProperties( value );
-
-				dataProvider = childrenDataProvider;
-
-				skin.currentState = "normal";
-
-				if ( transformMarker )
-				{
-					transformMarker.visible = false;
-					transformMarker.item = null;
-				}
-
-			}
-
-			public function processProperties( ownItemVO : ItemVO ) : void
-			{
-				if ( !ownItemVO )
-					return;
-
-				var contetntPart : XML;
-
-				var attributeVO : AttributeVO;
-
-				attributeVO = itemVO.getAttributeByName( "backgroundcolor" );
-
-				if ( attributeVO )
-				{
-					SolidColor( backgroundRect.fill ).alpha = 1;
-					SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
-				}
-
-				attributeVO = itemVO.getAttributeByName( "bordercolor" );
-
-				if ( attributeVO )
-				{
-					SolidColorStroke( backgroundRect.stroke ).alpha = 1;
-					SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
-					attributeVO = itemVO.getAttributeByName( "borderwidth" );
-					if ( attributeVO )
-						SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
-				}
-
-				for each ( contetntPart in ownItemVO.content )
-				{
-					switch ( contetntPart.name().toString() )
-					{
-						case "svg":
-						{
-							var svg : SVGViewer = new SVGViewer();
-							svg.setXML( contetntPart );
-							background.addElement( svg );
-
-							break
-						}
-
-						case "text":
-						{
-							var richText : Text = new Text();
-
-							richText.x = contetntPart.@left;
-							richText.y = contetntPart.@top;
-							richText.width = contetntPart.@width;
-
-
-							richText.text = contetntPart[ 0 ];
-
-							applyStyles( richText, contetntPart );
-
-							background.addElement( richText );
-
-							break;
-						}
-						case "htmltext":
-						{
-							var html : HTML = new HTML();
-
-							html.x = contetntPart.@left;
-							html.y = contetntPart.@top;
-							html.width = contetntPart.@width;
-
-							var htmlText : String = "<html>" + "<head>" +
-								"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" + "</head>" +
-								"<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
-
-							html.htmlText = htmlText;
-
-							background.addElement( html );
-						}
-					}
-				}
-			}
-
-			override protected function partAdded( partName : String, instance : Object ) : void
-			{
-				super.partAdded( partName, instance );
-
-				if ( instance === upperLayer )
-				{
-					transformMarker = new TransformMarker();
-					transformMarker.visible = false;
-
-					upperLayer.addElement( transformMarker );
-				}
-			}
-
-			private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
-			{
-				var _style : Object = {};
-				var hasStyle : Boolean = false;
-
-				item.styleName = "WYSIWYGItem";
-
-				var xmlList : XMLList;
-				for each ( var attribute : Array in styleList )
-				{
-					xmlList = itemXMLDescription.attribute( attribute[ 0 ] );
-					if ( xmlList.length() > 0 )
-					{
-						_style[ attribute[ 1 ] ] = xmlList[ 0 ].toString().toLowerCase();
-						hasStyle = true;
-					}
-				}
-
-				if ( !hasStyle )
-					return;
-
-				if ( _style.hasOwnProperty( "backgroundColor" ) && !_style.hasOwnProperty( "backgroundAlpha" ) )
-					_style[ "backgroundAlpha" ] = 100;
-
-				if ( _style.hasOwnProperty( "borderColor" ) )
-					_style[ "borderStyle" ] = "solid";
-
-				if ( _style.hasOwnProperty( "textDecoration" ) )
-					if ( !( _style[ "textDecoration" ] != "none" || _style[ "textDecoration" ] != "underline" ) )
-						_style[ "textDecoration" ] = "none";
-			}
 
 			private function creationCompleteHandler() : void
 			{
 				addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true, 0, true );
 				addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, false, 0, true );
 			}
-			
+
 			private function item_itemClickedHandler( event : ItemEvent ) : void
 			{
 				var item : Item = event.target as Item;
 
-				if ( !item || item === this )
+				if ( !item )
 				{
 					transformMarker.item = null;
 					transformMarker.visible = false;
-					
+
 					return;
 				}
 
 				switch ( item.itemVO.typeVO.resizable )
 				{
 					case "0":
-					{
-						transformMarker.resizeMode = TransformMarker.RESIZE_NONE
-						break;
-					}
+						{
+							transformMarker.resizeMode = TransformMarker.RESIZE_NONE
+							break;
+						}
 
 					case "1":
-					{
-						transformMarker.resizeMode = TransformMarker.RESIZE_WIDTH
-						break;
-					}
+						{
+							transformMarker.resizeMode = TransformMarker.RESIZE_WIDTH
+							break;
+						}
 
 					case "2":
-					{
-						transformMarker.resizeMode = TransformMarker.RESIZE_HEIGHT
-						break;
-					}
+						{
+							transformMarker.resizeMode = TransformMarker.RESIZE_HEIGHT
+							break;
+						}
 
 					case "3":
-					{
-						transformMarker.resizeMode = TransformMarker.RESIZE_ALL
-						break;
-					}
+						{
+							transformMarker.resizeMode = TransformMarker.RESIZE_ALL
+							break;
+						}
 				}
 
 				transformMarker.moveMode = item.itemVO.typeVO.moveable == "1" ? TransformMarker.MOVE_TRUE : TransformMarker.MOVE_FALSE;
@@ -254,8 +83,4 @@
 		]]>
 	</fx:Script>
 
-	<components:layout>
-		<s:BasicLayout clipAndEnableScrolling="true"/>
-	</components:layout>
-
-</components:Item>
+</s:SkinnableContainer>
