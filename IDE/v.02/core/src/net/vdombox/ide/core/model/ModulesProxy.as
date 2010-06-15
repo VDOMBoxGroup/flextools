@@ -29,7 +29,6 @@ package net.vdombox.ide.core.model
 					<module name="ApplicationsManagment" path="app:/modules/Applications Managment/ApplicationsManagment.swf"/>
 				</category>
 				<category name="Edition">
-					<module name="Wysiwyg" path="app:/modules/Wysiwyg/Wysiwyg.swf"/>
 					<module name="Scripts" path="app:/modules/Scripts/Scripts.swf"/>
 					<module name="Tree" path="app:/modules/Tree/Tree.swf"/>
 					<module name="Events" path="app:/modules/Events/Events.swf"/>
