@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
-		 xmlns:fx="http://ns.adobe.com/mxml/2009"
-		 xmlns:mx="library://ns.adobe.com/flex/halo"
-		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 creationComplete="creationCompleteHandler()">
+					  xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:mx="library://ns.adobe.com/flex/halo"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
 		<![CDATA[
 			import com.zavoo.svg.SVGViewer;
-
+			
+			import flashx.textLayout.elements.TabElement;
+			
 			import mx.collections.ArrayCollection;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
@@ -18,22 +20,85 @@
 			import mx.events.FlexEvent;
 			import mx.graphics.SolidColor;
 			import mx.graphics.SolidColorStroke;
-
+			
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.TabEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.WorkAreaSkin;
-
+			
 			import spark.components.Group;
 
 			[SkinPart( required="true" )]
 			public var transformMarker : TransformMarker;
 
+			private var tabsList : Vector.<Tab>;
+
+			private var _selectedTab : Tab;
+			
+			private var isSelectedTabChan : Tab;
+			
+			public function get selectedTab() : Tab
+			{
+				return _selectedTab;
+			}
+			
+			public function set selectedTab( value: Tab ) : void
+			{
+				if( tabsList.indexOf( value ) != -1 )
+				{
+					_selectedTab = value;
+					
+				}
+			}
+			
+			public function getTabByName( name : String ) : Tab
+			{
+				var result : Tab;
+				
+				if( tabsList && tabsList.length > 0 )
+				{
+					for ( var i : uint = 0; i < tabsList.length; i++ )
+					{
+						if( tabsList[ i ].name == name )
+							result = tabsList[ i ];
+					}
+				}
+				
+				return result;
+			}
+
+			public function addTab( tab : Tab ) : void
+			{
+				//FIXME: need check for tab availability in function attribute and tabsList.
+				if ( !tabsList )
+					tabsList = new Vector().<Tab>;
+
+				if ( !tabsList.hasOwnProperty( tab.name ) )
+				{
+					tab.addEventListener( TabEvent.OBJECT_ADD, tab_objectAdd );
+					tab.addEventListener( TabEvent.OBJECT_REMOVE, tab_objectRemove );
+
+					tabsList[ tab.name ] = tab;
+				}
+
+			}
+
 			private function creationCompleteHandler() : void
 			{
 				addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true, 0, true );
 				addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, false, 0, true );
+			}
+
+			private function tab_objectAdd( event : TabEvent ) : void
+			{
+
+			}
+
+			private function tab_objectRemove( event : TabEvent ) : void
+			{
+
 			}
 
 			private function item_itemClickedHandler( event : ItemEvent ) : void
@@ -51,28 +116,28 @@
 				switch ( item.itemVO.typeVO.resizable )
 				{
 					case "0":
-						{
-							transformMarker.resizeMode = TransformMarker.RESIZE_NONE
-							break;
-						}
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_NONE
+						break;
+					}
 
 					case "1":
-						{
-							transformMarker.resizeMode = TransformMarker.RESIZE_WIDTH
-							break;
-						}
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_WIDTH
+						break;
+					}
 
 					case "2":
-						{
-							transformMarker.resizeMode = TransformMarker.RESIZE_HEIGHT
-							break;
-						}
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_HEIGHT
+						break;
+					}
 
 					case "3":
-						{
-							transformMarker.resizeMode = TransformMarker.RESIZE_ALL
-							break;
-						}
+					{
+						transformMarker.resizeMode = TransformMarker.RESIZE_ALL
+						break;
+					}
 				}
 
 				transformMarker.moveMode = item.itemVO.typeVO.moveable == "1" ? TransformMarker.MOVE_TRUE : TransformMarker.MOVE_FALSE;

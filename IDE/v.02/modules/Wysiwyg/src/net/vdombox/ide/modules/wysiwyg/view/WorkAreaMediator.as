@@ -2,11 +2,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
+	
+	import mx.containers.TabNavigator;
+	import mx.containers.ViewStack;
 	import mx.core.UIComponent;
 	import mx.events.DragEvent;
 	import mx.events.FlexEvent;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -19,10 +21,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.Group;
 
 	public class WorkAreaMediator extends Mediator implements IMediator
 	{
@@ -52,12 +56,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			addHandlers();
 
-			isSelectedPageVOChanged = true;
-			
-			if( workArea && workArea.stage )
-				isAddedToStage = true;
-
-			commitProperties();
+//			isSelectedPageVOChanged = true;
+//			
+//			if( workArea && workArea.stage )
+//				isAddedToStage = true;
+//
+//			commitProperties();
 		}
 
 		override public function onRemove() : void
@@ -141,22 +145,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.RENDER_DATA_CHANGED:
-				{
-					var itemMediatorName : String;
-					var instances : Object = ItemMediator.instances;
-
-					for ( itemMediatorName in ItemMediator.instances )
-					{
-						facade.removeMediator( itemMediatorName );
-					}
-
-					workArea.itemVO = body as ItemVO;
-
-					sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, workArea );
-
-					break;
-				}
+//				case ApplicationFacade.RENDER_DATA_CHANGED:
+//				{
+//					var itemMediatorName : String;
+//					var instances : Object = ItemMediator.instances;
+//
+//					for ( itemMediatorName in ItemMediator.instances )
+//					{
+//						facade.removeMediator( itemMediatorName );
+//					}
+//
+//					workArea.itemVO = body as ItemVO;
+//
+//					sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, workArea );
+//
+//					break;
+//				}
 			}
 		}
 
@@ -204,7 +208,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				facade.removeMediator( itemMediatorName );
 			}
 
-			workArea.itemVO = null;
+//			workArea.itemVO = null;
 		}
 
 		private function addedToStageHandler( event : Event ) : void
@@ -297,7 +301,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			attributes.push( new AttributeVO( "left", objectLeft.toString() ) );
 			attributes.push( new AttributeVO( "top", objectTop.toString() ) );
 
-			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { parentID: workArea.itemVO.id, typeVO: typeVO, attributes: attributes } );
+//			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { parentID: workArea.itemVO.id, typeVO: typeVO, attributes: attributes } );
 		}
 	}
 }

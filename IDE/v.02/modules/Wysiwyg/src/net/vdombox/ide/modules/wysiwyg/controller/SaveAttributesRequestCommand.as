@@ -25,7 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				var pageAttributesVO : PageAttributesVO = attributesVO as PageAttributesVO;
 				var workAreaMediator : WorkAreaMediator = facade.retrieveMediator( WorkAreaMediator.NAME ) as WorkAreaMediator;
 
-				workAreaMediator.lock();
+//				workAreaMediator.lock();
 
 				needForUpdateObject[ pageAttributesVO.pageVO.id ] = "";
 
