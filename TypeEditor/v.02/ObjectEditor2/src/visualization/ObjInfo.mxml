@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:RadioButtonGroup id="group1"/>
+		<s:RadioButtonGroup id="group2"/>
+	</fx:Declarations>
+	
+	<s:HGroup >
+		<mx:Form width="100%" color="0x323232" paddingTop="0">
+		<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
+		
+		<mx:FormItem label="Name" toolTip="Имя объекта">
+			<s:TextInput id="fname" width="200"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="DisplayName">
+			<s:TextInput id="fDisplayName" width="200"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="XMLScriptName" toolTip="Имя объекта в xml скриптах в редакторе (rtfm page 66)">
+			<s:TextInput id="fXMLScriptName" width="200"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="RenderType" toolTip="Для контейнеров верхнего уровня - формат, в котором контейнер отдает данные (например, HTML)">
+			<s:TextInput id="fRenderType" width="200"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Description" toolTip="писание объекта и его использования">
+			<s:TextArea id="fDescription" width="200" height="100"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="ClassName" toolTip="Имя класса">
+			<s:TextInput id="fClassName" width="200"/>
+		</mx:FormItem>
+		<mx:FormItem label="ID" toolTip="Уникальный идентификатор объекта">
+			<s:TextInput id="fID" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<!--mx:FormItem label="Icon" toolTip="Иконка объекта">
+			<s:TextInput id="fIcon" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="EditorIcon" toolTip="Иконка объекта для редактора">
+			<s:TextInput id="fEditorIcon" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="StructureIcon" toolTip="Иконка структуры объекта">
+			<s:TextInput id="fStructureIcon" width="200" editable="false"/>
+		</mx:FormItem-->
+		
+		
+		
+		
+
+		
+		<mx:FormItem label="Category" toolTip="Категория объекта (Usual, Standard, ...)">
+			<s:TextInput id="fCategory" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<!--mx:FormItem label="Dynamic" toolTip=" 1 - динамический объекта, 0 - статический">
+			<s:TextInput id="fDynamic" width="200" editable="false"/>
+		</mx:FormItem-->
+		
+		<mx:FormItem label="Version" toolTip="Текущая версия объекта">
+			<s:TextInput id="fVersion" width="200" />
+		</mx:FormItem>
+		
+		
+		
+		<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">
+			<s:TextInput id="fOptimizationPriority" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="WCAG" toolTip="">
+			<s:TextInput id="fWCAG" width="200" editable="false"/>
+		</mx:FormItem>
+		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)">
+			<s:TextInput id="fContainers" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Container" toolTip="Значения: 1 - обычный объект (не контейнер), 2 - контейнер (не может быть контейнером верхнего уровня), 3 - контейнер верхнего уровня">
+			<s:TextInput id="fContainer" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)">
+			<s:TextInput id="fLanguages" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="RemoteMethods" toolTip="писок статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
+			<s:TextInput id="fRemoteMethods" width="200" editable="false"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Handlers" toolTip="Список статических функций объекта - обработчиков событий (set_attr)">
+			<s:TextInput id="fHandlers" width="200" editable="false"/>
+		</mx:FormItem>
+		
+	</mx:Form>
+	
+		<mx:Form width="100%" color="0x323232" paddingTop="0">
+			<mx:FormItem >
+				<s:CheckBox id="fMoveable" label="Moveable"  toolTip="1 - перемещаемый объект, 0 - нет"/>
+				<s:CheckBox id="fDynamic" label="Dynamic"  toolTip="1 - перемещаемый объект, 0 - нет"/>
+			</mx:FormItem>
+			<mx:FormItem label="InterfaceType" 
+						 toolTip="Тип интерфейса в редакторе: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
+				<s:ComboBox >
+					
+				</s:ComboBox>
+				
+				
+			</mx:FormItem>
+			<mx:FormItem label="Resizable" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
+				
+				<s:RadioButton id="trueRadioBtn" label="не масштабируемый объект" groupName="group1"/>
+				<s:RadioButton id="trueRadioBtn1" label="масштабируемый по горизонтали" groupName="group1"/>
+				<s:RadioButton id="trueRadioBtn2" label="масштабируемый по вертикали" groupName="group1"/>
+				<s:RadioButton id="trueRadioBtn3" label="масштабируемый по обоим измерениям" groupName="group1"/>
+			</mx:FormItem>
+		</mx:Form>
+	</s:HGroup>
+</s:Group>
