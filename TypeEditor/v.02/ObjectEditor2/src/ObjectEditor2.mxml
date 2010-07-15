@@ -3,7 +3,7 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:visualization="visualization.*"
-					   width="800" height="600">
+					   width="800" height="600" xmlns:atributes="visualization.atributes.*" xmlns:info="visualization.info.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -15,10 +15,10 @@
 		
 		<mx:TabNavigator  width="100%" height="100%">
 				<s:NavigatorContent label="Tab 1" width="100%" height="100%">
-						<visualization:ObjInfo  />
+						<info:Information  />
 				</s:NavigatorContent>
 				<s:NavigatorContent label="tab2" width="100%" height="100%">
-						<visualization:ObjAtributes />
+						<atributes:ObjAtributes />
 				</s:NavigatorContent>
 		</mx:TabNavigator>
 </s:WindowedApplication>
