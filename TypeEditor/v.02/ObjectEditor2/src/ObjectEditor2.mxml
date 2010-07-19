@@ -3,7 +3,7 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:visualization="visualization.*"
-					   width="800" height="600" xmlns:atributes="visualization.atributes.*" xmlns:info="visualization.info.*">
+					   width="800" height="600" xmlns:atributes="visualization.atributes.*" xmlns:information="visualization.information.*" xmlns:libraries="visualization.libraries.*" xmlns:languages="visualization.languages.*" xmlns:resourses="visualization.resourses.*" xmlns:events="visualization.events.*" xmlns:actions="visualization.actions.*" xmlns:code="visualization.code.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -14,11 +14,29 @@
 	
 		
 		<mx:TabNavigator  width="100%" height="100%">
-				<s:NavigatorContent label="Tab 1" width="100%" height="100%">
-						<info:Information  />
-				</s:NavigatorContent>
-				<s:NavigatorContent label="tab2" width="100%" height="100%">
-						<atributes:ObjAtributes />
-				</s:NavigatorContent>
+			<s:NavigatorContent label="Information" width="100%" height="100%">
+						<information:Information  />		</s:NavigatorContent>
+
+			<s:NavigatorContent label="Atributes" width="100%" height="100%">
+						<atributes:Atributes />		</s:NavigatorContent>
+			
+			<s:NavigatorContent label="Libraries" width="100%" height="100%">
+				<libraries:Libraries />	</s:NavigatorContent>
+			
+			<s:NavigatorContent label="Languages" width="100%" height="100%">
+				<languages:Languages />	</s:NavigatorContent>
+			
+			<s:NavigatorContent label="Resourses" width="100%" height="100%">
+				<resourses:Resourses />			</s:NavigatorContent>
+			
+			<s:NavigatorContent label="Events" width="100%" height="100%">
+				<events:Events />		</s:NavigatorContent>
+			
+			<s:NavigatorContent label="Actions" width="100%" height="100%">
+				<actions:Actions />		</s:NavigatorContent>
+			
+			<s:NavigatorContent label="Actions" width="100%" height="100%">
+				<code:SourceCode />		</s:NavigatorContent>
+			
 		</mx:TabNavigator>
 </s:WindowedApplication>
