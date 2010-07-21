@@ -7,94 +7,247 @@
 		<s:RadioButtonGroup id="group1"/>
 		<s:RadioButtonGroup id="group2"/>
 	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.utils.UIDUtil;
+			
+			private var _data : XML;
+			
+			
+			[Bindable]
+			public var arInterfaceType:ArrayCollection = new ArrayCollection(
+				[ 	{label:"Standard", data:1}, 
+					{label:"RichText Editor", data:2}, 
+					{label:"Text Editor", data:3}, 
+					{label:"Picture", data:4}, 
+					{label:"Special Table", data:5}]);
+		
+			[Bindable]
+			public var aResizable:ArrayCollection = new ArrayCollection(
+				[ 	{label:"Not scalable", data:0}, 
+					{label:"Scalable Horizontal", data:1}, 
+					{label:"Scalable Vertical", data:2}, 
+					{label:"Scalable on both", data:3}]);
+			
+			
+			[Bindable]
+			public var aContainer:ArrayCollection = new ArrayCollection(
+				[ 	{label:"Ordinary Object", data:1}, 
+					{label:"Container", data:2}, 
+					{label:"Top-level container", data:3}]);
+			
+							
+			public function set  dataProvader(xml:XML):void
+			{
+				
+				_data =  xml.descendants("Information")[0];
+				if (!_data) _data = new XML("<Information/>");
+				
+				
+				var item:XML;
+				validateValue("Name");
+				fname.text = _data.Name.toString();	
+				
+				
+				validateValue("DisplayName");
+				fDisplayName.text = _data.DisplayName.toString();	
+				
+				validateValue("XMLScriptName");
+				fXMLScriptName.text = _data.XMLScriptName.toString();	
+				
+				validateValue("RenderType");
+				fRenderType.text = _data.RenderType.toString();
+				
+				validateValue("Description");	
+				fDescription.text = _data.Description.toString();
+				
+				validateValue("ClassName");
+				fClassName.text = _data.ClassName.toString();
+				
+				item = _data.descendants("ID")[0];
+				if (!item)
+				{
+					var _uid: String = UIDUtil.createUID().toLowerCase(); 
+					item = new XML("<ID>" + _uid + "</ID>");
+					_data.appendChild(item);	
+				}	
+				fID.text = _data.ID.toString();
+				
+				validateValue("Category");
+				fCategory.text = _data.Category.toString();
+				
+				validateValue("Containers");
+				fVersion.text = _data.Version.toString();
+				
+				validateValue("OptimizationPriority");
+				fOptimizationPriority.value = int(_data.OptimizationPriority.toString());
+				
+				validateValue("WCAG");
+				fWCAG.text = _data.WCAG.toString();
+				
+				
+//				fContainer.text = _data.Container.toString();
+				
+				validateValue("Containers");
+				fContainers.text = _data.Containers.toString();
+				
+				validateValue("Languages");
+				fLanguages.text = _data.Languages.toString();
+				
+				validateValue("RemoteMethods");
+				fRemoteMethods.text = _data.RemoteMethods.toString();
+				
+				validateValue("Handlers");
+				fHandlers.text = _data.Handlers.toString();
+				
+				validateValue("Moveable");
+				fMoveable.selected = _data.Moveable.toString() == "1";
+				
+				validateValue("Dynamic");
+				fDynamic.selected = _data.Dynamic.toString() == "1";
+				
+				validateValue("InterfaceType");
+				if (_data.InterfaceType.toString() == "")
+					fInterfaceType.selectedIndex = 0;
+				else
+					fInterfaceType.selectedIndex = int(_data.InterfaceType.toString())-1
+						
+				validateValue("Resizable");
+				if (_data.Resizable.toString() == "")
+					fResizable.selectedIndex = 0;
+				else
+					fResizable.selectedIndex = int(_data.Resizable.toString())
+						
+				validateValue("Container");
+				if (_data.InterfaceType.toString() == "")
+					fContainer.selectedIndex = 0;
+				else
+					fContainer.selectedIndex = int(_data.Container.toString())-1
+			}
+			
+			private function validateValue(value:String):void
+			{
+				var item:XML = _data.descendants(value)[0];
+				if (!item)
+				{
+					item = new XML("<"+value+"/>");
+					_data.appendChild(item);	
+				}	
+			}
+			
+			private function saveChanges():void
+			{
+				_data.Name = fname.text;
+				_data.DisplayName = fDisplayName.text;	
+				_data.XMLScriptName = fXMLScriptName.text;	
+				_data.RenderType = fRenderType.text;
+				_data.Description = fDescription.text;
+				_data.ClassName = fClassName.text;
+				_data.ID = fID.text;
+				_data.Category = fCategory.text;
+				_data.Version = fVersion.text;
+				_data.OptimizationPriority = fOptimizationPriority.value;
+				_data.WCAG = fWCAG.text;
+				_data.Containers = fContainers.text;
+				_data.Languages = fLanguages.text;
+				_data.RemoteMethods = fRemoteMethods.text;
+				_data.Handlers = fHandlers.text;
+				_data.Moveable = getIntFromBoolean(fMoveable.selected);
+				_data.Dynamic = getIntFromBoolean(fDynamic.selected);
+				_data.InterfaceType = fInterfaceType.selectedIndex;
+				_data.Resizable = fResizable.selectedIndex;
+				_data.Container = fContainer.selectedIndex + 1;
+			}
+			
+			private function getIntFromBoolean(bool:Boolean):String
+			{
+				if (bool)
+					return "1";
+				return "0";
+			}
+				
+		]]>
+	</fx:Script>
 	
 	<s:HGroup >
 		<mx:Form width="100%" color="0x323232" paddingTop="0">
 		<mx:FormHeading fontSize="10"  label="Enter values into the form." paddingTop="0" />
 		
 		<mx:FormItem label="Name" toolTip="Имя объекта">
-			<s:TextInput id="fname" width="200"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="DisplayName">
-			<s:TextInput id="fDisplayName" width="200"/>
+			<s:TextInput id="fname" width="250" change="{saveChanges()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="XMLScriptName" toolTip="Имя объекта в xml скриптах в редакторе (rtfm page 66)">
-			<s:TextInput id="fXMLScriptName" width="200"/>
+			<s:TextInput id="fXMLScriptName" width="250" change="{saveChanges()}"/>
+		</mx:FormItem>
+			
+		<mx:FormItem label="DisplayName" enabled="false">
+			<s:HGroup>
+				<s:TextInput id="fDisplayName" width="213" editable="false"/>
+				<s:Button label="..." width="30"/>
+			</s:HGroup>
 		</mx:FormItem>
 		
-		<mx:FormItem label="RenderType" toolTip="Для контейнеров верхнего уровня - формат, в котором контейнер отдает данные (например, HTML)">
-			<s:TextInput id="fRenderType" width="200"/>
-		</mx:FormItem>
 		
-		<mx:FormItem label="Description" toolTip="писание объекта и его использования">
-			<s:TextArea id="fDescription" width="200" height="100"/>
+		<mx:FormItem label="Description" toolTip="писание объекта и его использования" enabled="false">
+			<s:HGroup>
+				<s:TextInput id="fDescription" width="213" editable="false" />
+				<s:Button label="..." width="30"/>
+			</s:HGroup>
 		</mx:FormItem>
 		
 		<mx:FormItem label="ClassName" toolTip="Имя класса">
-			<s:TextInput id="fClassName" width="200"/>
+			<s:TextInput id="fClassName" width="250" change="{saveChanges()}"/>
 		</mx:FormItem>
-		<mx:FormItem label="ID" toolTip="Уникальный идентификатор объекта">
-			<s:TextInput id="fID" width="200" editable="false"/>
+		<mx:FormItem label="ID" toolTip="Уникальный идентификатор объекта"
+					 enabled="false">
+			<s:TextInput id="fID" width="250" editable="false"/>
 		</mx:FormItem>
 		
 		<!--mx:FormItem label="Icon" toolTip="Иконка объекта">
-			<s:TextInput id="fIcon" width="200" editable="false"/>
+			<s:TextInput id="fIcon" width="250" editable="false"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="EditorIcon" toolTip="Иконка объекта для редактора">
-			<s:TextInput id="fEditorIcon" width="200" editable="false"/>
+			<s:TextInput id="fEditorIcon" width="250" editable="false"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="StructureIcon" toolTip="Иконка структуры объекта">
-			<s:TextInput id="fStructureIcon" width="200" editable="false"/>
+			<s:TextInput id="fStructureIcon" width="250" editable="false"/>
 		</mx:FormItem-->
-		
-		
-		
-		
-
-		
 		<mx:FormItem label="Category" toolTip="Категория объекта (Usual, Standard, ...)">
-			<s:TextInput id="fCategory" width="200" editable="false"/>
+			<s:TextInput id="fCategory" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
 		
-		<!--mx:FormItem label="Dynamic" toolTip=" 1 - динамический объекта, 0 - статический">
-			<s:TextInput id="fDynamic" width="200" editable="false"/>
-		</mx:FormItem-->
+	
 		
 		<mx:FormItem label="Version" toolTip="Текущая версия объекта">
-			<s:TextInput id="fVersion" width="200" />
-		</mx:FormItem>
-		
-		
-		
-		<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">
-			<s:TextInput id="fOptimizationPriority" width="200" editable="false"/>
+			<s:TextInput id="fVersion" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="WCAG" toolTip="">
-			<s:TextInput id="fWCAG" width="200" editable="false"/>
+			<s:TextInput id="fWCAG" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
-		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)">
-			<s:TextInput id="fContainers" width="200" editable="false"/>
+		<mx:FormItem label="Containers" toolTip="Список поддержываемых форматов контейнера (HTML, Flash, ...)"
+					 enabled="false">
+			<s:HGroup>
+				<s:TextInput id="fContainers" width="213" editable="false" />
+				<s:Button label="..." width="30" />
+			</s:HGroup>
 		</mx:FormItem>
 		
-		<mx:FormItem label="Container" toolTip="Значения: 1 - обычный объект (не контейнер), 2 - контейнер (не может быть контейнером верхнего уровня), 3 - контейнер верхнего уровня">
-			<s:TextInput id="fContainer" width="200" editable="false"/>
-		</mx:FormItem>
-		
-		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)">
-			<s:TextInput id="fLanguages" width="200" editable="false"/>
+		<mx:FormItem label="Languages" toolTip="Список поддерживаемых объектом языков (формат ISO 3168-1)" 
+					 enabled="false">
+			<s:TextInput id="fLanguages" width="250" editable="false"/>
 		</mx:FormItem>
 		
 		<mx:FormItem label="RemoteMethods" toolTip="писок статических функций объекта, доступных через SOAP (execute_sql, get_data, ...)">
-			<s:TextInput id="fRemoteMethods" width="200" editable="false"/>
+			<s:TextInput id="fRemoteMethods" width="250" change="{saveChanges()}" />
 		</mx:FormItem>
 		
 		<mx:FormItem label="Handlers" toolTip="Список статических функций объекта - обработчиков событий (set_attr)">
-			<s:TextInput id="fHandlers" width="200" editable="false"/>
+			<s:TextInput id="fHandlers" width="250"  change="{saveChanges()}"/>
 		</mx:FormItem>
 		
 			
@@ -102,23 +255,32 @@
 	
 		<mx:Form width="100%" color="0x323232" paddingTop="0">
 			<mx:FormItem >
-				<s:CheckBox id="fMoveable" label="Moveable"  toolTip="1 - перемещаемый объект, 0 - нет"/>
-				<s:CheckBox id="fDynamic" label="Dynamic"  toolTip="1 - перемещаемый объект, 0 - нет"/>
+				<s:CheckBox id="fMoveable" label="Moveable"  toolTip="1 - перемещаемый объект, 0 - нет" change="{saveChanges()}"/>
+				<s:CheckBox id="fDynamic" label="Dynamic"  toolTip="1 - перемещаемый объект, 0 - нет" change="{saveChanges()}"/>
 			</mx:FormItem>
+			
 			<mx:FormItem label="InterfaceType" 
 						 toolTip="Тип интерфейса в редакторе: 1 - Standard, 2 - RichText Editor, 3 - Text Editor, 4 - Picture, 5 - Special Table">
-				<s:ComboBox >
-					
-				</s:ComboBox>
-				
-				
+				<s:ComboBox id="fInterfaceType" dataProvider="{arInterfaceType}" close="{saveChanges()}"/>
 			</mx:FormItem>
+		
 			<mx:FormItem label="Resizable" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
+				<s:ComboBox id="fResizable" dataProvider="{aResizable}" close="{saveChanges()}" />
+			</mx:FormItem>
+			
+			<mx:FormItem label="Container" toolTip="0 - не масштабируемый объект, 1 - масштабируемый по горизонтали, 2 - масштабируемый по вертикали, 3 - масштабируемый по обоим измерениям">
+				<s:ComboBox id="fContainer" dataProvider="{aContainer}"  close="{saveChanges()}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="RenderType" toolTip="Для контейнеров верхнего уровня - формат, в котором контейнер отдает данные (например, HTML)"
+						 enabled="{fContainer.selectedIndex == 2}">
+				<s:TextInput id="fRenderType" width="250"  change="{saveChanges()}"/>
+			</mx:FormItem>
+			
+			<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">
 				
-				<s:RadioButton id="trueRadioBtn" label="не масштабируемый объект" groupName="group1"/>
-				<s:RadioButton id="trueRadioBtn1" label="масштабируемый по горизонтали" groupName="group1"/>
-				<s:RadioButton id="trueRadioBtn2" label="масштабируемый по вертикали" groupName="group1"/>
-				<s:RadioButton id="trueRadioBtn3" label="масштабируемый по обоим измерениям" groupName="group1"/>
+				<s:NumericStepper id="fOptimizationPriority" width="55" 
+								  value="0" snapInterval="1" minimum="1" maximum="100"  change="{saveChanges()}"/>
 			</mx:FormItem>
 		</mx:Form>
 	</s:HGroup>

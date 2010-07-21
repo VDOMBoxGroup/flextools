@@ -7,15 +7,71 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			private var xmlObject : XML;
+			private var fileUpload:FileReference = new FileReference();
+			private function openFile():void
+			{
+//				var fileUpload:FileReference = new FileReference();
+				fileUpload.addEventListener(Event.SELECT, fileSelected);
+				
+				fileUpload.browse(new Array(new FileFilter("XML Files (*.xml)", "*.xml")));
+				
+				function fileSelected(event:Event):void
+				{
+					fileUpload.removeEventListener(Event.SELECT, fileSelected);
+					fileUpload.addEventListener(Event.COMPLETE, fileDounloaded);
+					fileUpload.load();
+				}
+				
+				function fileDounloaded(event:Event):void
+				{
+					fileUpload.removeEventListener(Event.COMPLETE, fileDounloaded);
+					xmlObject = new XML(fileUpload.data.toString());
+//					Alert.show(fileUpload.data.toString());
+//					textArea.htmlText =  _lib.echo( fileUpload.data.toString());
+//					panel.title = "PageOne Migration - " + fileUpload.name;
+					information.dataProvader = xmlObject;
+					
+				}
+			}
+			
+			private function saveFile():void
+			{
+				
+			}
+			
+			private function saveAsFile():void
+			{
+				fileUpload.addEventListener(Event.COMPLETE, fileDounloaded);
+
+				fileUpload.save( xmlObject.toXMLString());
+				
+				
+				function fileDounloaded(event:Event):void
+				{
+//					panel.title = "PageOne Migration - " + fileUpload.name;
+				}
+			}
+			
+		]]>
+	</fx:Script>
 		
 	
 		
-	
-		
+	<s:VGroup>
+		<s:HGroup>
+			<s:Button label="Open" click="openFile()"/>
+			<s:Button label="Save" click="saveFile()" enabled="false"/>
+			<s:Button label="SaveAs" click="saveAsFile()" />
+			
+		</s:HGroup>
 		<mx:TabNavigator  width="100%" height="100%">
 			<s:NavigatorContent label="Information" width="100%" height="100%">
-						<information:Information  />		</s:NavigatorContent>
+						<information:Information id="information" />		</s:NavigatorContent>
 
 			<s:NavigatorContent label="Atributes" width="100%" height="100%">
 						<atributes:Atributes />		</s:NavigatorContent>
@@ -39,4 +95,5 @@
 				<code:SourceCode />		</s:NavigatorContent>
 			
 		</mx:TabNavigator>
+</s:VGroup>	
 </s:WindowedApplication>
