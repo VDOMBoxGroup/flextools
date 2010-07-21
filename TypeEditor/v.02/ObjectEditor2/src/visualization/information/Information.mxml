@@ -40,6 +40,7 @@
 							
 			public function set  dataProvader(xml:XML):void
 			{
+				this.enabled = true;
 				
 				_data =  xml.descendants("Information")[0];
 				if (!_data) _data = new XML("<Information/>");
@@ -278,9 +279,8 @@
 			</mx:FormItem>
 			
 			<mx:FormItem label="OptimizationPriority" toolTip="Приоритет объекта при генерации его отображения в контейнере">
-				
 				<s:NumericStepper id="fOptimizationPriority" width="55" 
-								  value="0" snapInterval="1" minimum="1" maximum="100"  change="{saveChanges()}"/>
+							value="0" snapInterval="1" minimum="1" maximum="100"  change="{saveChanges()}"/>
 			</mx:FormItem>
 		</mx:Form>
 	</s:HGroup>

@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" >
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Label text="SourceCode"/>
+	<fx:Script>
+		<![CDATA[
+			private var _data : XML;
+			
+			public function set  dataProvader(xml:XML):void
+			{
+				this.enabled = true;
+//				arLibraries.removeAll();
+//				libCode.text = "";
+				
+				_data =  xml.descendants("SourceCode")[0];
+				if (!_data) _data = new XML("<SourceCode/>");
+				
+				sourceCode.text = _data.toString();
+			}
+			
+			private function saveChange():void
+			{
+//				delete _data[0];
+				_data.appendChild( XML("<![CDATA[" +  sourceCode.text +"]" +"]" +">"));
+				delete _data.children()[0];
+				
+			}
+		]]>
+	</fx:Script>
+	
+	<s:TextArea  id="sourceCode"  width="100%" height="100%" change="{saveChange()}"/>
 </s:Group>
