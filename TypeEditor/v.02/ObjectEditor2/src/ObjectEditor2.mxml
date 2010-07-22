@@ -40,6 +40,7 @@
 					information.dataProvader = xmlObject;
 					libraries.dataProvader = xmlObject;
 					sourceCode.dataProvader = xmlObject;
+					languages.dataProvader = xmlObject;
 					
 				}
 			}
@@ -86,7 +87,7 @@
 				<libraries:Libraries id="libraries" left="10" right="10" bottom="10" enabled="false"  />	</s:NavigatorContent>
 			
 			<s:NavigatorContent label="Languages" width="100%" height="100%">
-				<languages:Languages />	</s:NavigatorContent>
+				<languages:Languages id="languages" enabled="false"  />	</s:NavigatorContent>
 			
 			<s:NavigatorContent label="Resourses" width="100%" height="100%">
 				<resourses:Resourses />			</s:NavigatorContent>
