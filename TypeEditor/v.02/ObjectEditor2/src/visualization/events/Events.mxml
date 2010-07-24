@@ -5,5 +5,226 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Label text="Events"/>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			private var _data : XML
+			
+			[Bindable]
+			public var arEvent:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var arParameters:ArrayCollection = new ArrayCollection();
+			
+			public function set  dataProvader(xml:XML):void
+			{
+				this.enabled = true;
+//				arLibraries.removeAll();
+//				libCode.text = "";
+				
+				_data =  xml.E2vdom.Events.Userinterfaceevents[0];
+				if (!_data) _data = new XML("<Userinterfaceevents/>");
+				
+				for each(var child:XML in _data.children())
+				{
+					arEvent.addItem({label:child.@Name, data:child.@Name});
+				}
+				
+				events.selectedIndex = 0;
+				changeEvent();
+			}
+			
+			private function changeEvent():void
+			{
+				arParameters.removeAll();
+				
+				
+				var eventXML:XML = getCurentEvent();
+
+				tiEventName.text = eventXML.@Name;
+				
+				for each(var child:XML in eventXML.Parameters.children())
+				{
+					arParameters.addItem({label:child.@Name, data:child.@Name});
+				}
+				
+				parameters.selectedIndex = 0;
+				changeParameter();
+			}
+			
+			private function addEvent():void
+			{
+				var newName: String = "name_" + arEvent.length.toString();
+				arEvent.addItem({label:newName, data:newName});
+				
+				_data.appendChild(new XML( "<Event Name='"+newName+"'><Parameters/></Event>"));
+				
+				events.selectedIndex = arEvent.length -1 ;
+				changeEvent();
+			}
+			
+			private function deleteEvent():void
+			{
+				arEvent.removeItemAt(events.selectedIndex);
+				
+				if (arEvent.length)
+				{
+					events.selectedIndex = 0;
+					changeEvent();
+				}
+//				else
+//					libCode.text = "";
+			}
+			
+			private function changeParameter():void
+			{
+				if (parameters.selectedItem  )
+				{
+	//				arParameters.removeAll();
+					var parameter:XML = getCurentParameter(); 
+					
+					fname.text = parameter.@Name;
+					fOrder.text = parameter.@Order;
+					fVbType.text = parameter.@VbType;
+					fHelp.text = parameter.@Help;
+				}
+			}
+				
+			private function addParameter():void
+			{
+				var newName: String = "name_" + arParameters.length.toString();
+				arParameters.addItem({label:newName, data:newName});
+				
+				var xmlEvent : XML = getCurentEvent();
+				
+				xmlEvent.Parameters.appendChild(new XML( "<Parameter Name='"+ newName +"' />"));
+				
+				parameters.selectedIndex = arParameters.length -1;
+				changeParameter();
+			}
+			
+			private function deleteParameter():void
+			{
+				
+			}
+			
+			private function getCurentEvent():XML
+			{
+				var eventName:String = events.selectedItem.data;
+				return _data.Event.(@Name == eventName)[0];
+			}
+			
+			private function getCurentParameter():XML
+			{
+				var eventXML:XML = getCurentEvent();
+				var parameterName:String = parameters.selectedItem.data;
+				return  eventXML.Parameters.Parameter.(@Name == parameterName)[0];
+			}
+			
+			
+			private function changeEventName():void
+			{
+				var index:int = events.selectedIndex;
+				var objEvent:Object = arEvent[arEvent.getItemIndex(events.selectedItem)];
+				
+				var xmlEvent:XML = getCurentEvent();
+				xmlEvent.@Name = tiEventName.text;
+				
+				objEvent["label"] = objEvent["data"] = tiEventName.text;
+				
+				events.dataProvider = null;
+				events.dataProvider = arEvent;
+				events.validateNow();
+				
+				events.selectedIndex = index;
+			}
+			
+			
+			private function changeParametrsValues():void
+			{
+				var index:int = parameters.selectedIndex;
+				var objParameter:Object = arParameters[arParameters.getItemIndex(parameters.selectedItem)];
+				
+				var xmlParameter:XML = getCurentParameter();
+				xmlParameter.@Name = fname.text;
+				xmlParameter.@Order = fOrder.text;
+				xmlParameter.@VbType = fVbType.text;
+				xmlParameter.@Help = fHelp.text;
+				
+				objParameter["label"] = objParameter["data"] = fname.text;
+				
+				parameters.dataProvider = null;
+				parameters.dataProvider = arParameters;
+				parameters.validateNow();
+				
+				parameters.selectedIndex = index;
+			}
+			
+			private function changeParametrsOrder():void
+			{
+				
+			}
+			
+			private function changeParametrsVbType():void
+			{
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+<s:HGroup>
+	<mx:Form  width="100%" height="100%" paddingTop="0">
+		<mx:FormHeading fontSize="10"  label="Select Event:" paddingTop="0" />
+		<s:List id="events" width="200" height="100%" dataProvider="{arEvent}"   change="{changeEvent()}"/>
+		<s:HGroup width="100%">
+			<s:HGroup width="100%"/>
+			<s:Button label="Add" click="{addEvent()}" />
+			<s:Button label="Delete" click="deleteEvent()" enabled="{events.selectedIndex != -1}"/>
+		</s:HGroup>
+	</mx:Form >
+	<mx:Form  width="100%" height="100%" paddingTop="0" >
+		<mx:FormHeading fontSize="10"  label="Events details:" paddingTop="0" />
+		<mx:FormItem label="Name:" toolTip="Name">
+			<s:TextInput id="tiEventName" width="150" change="{changeEventName()}" />
+		</mx:FormItem>
+		
+		<s:HGroup width="100%"/>
+		<s:Label text="Select parameter:" />
+		<s:List id="parameters" width="100%" height="100%" dataProvider="{arParameters}"   change="{changeParameter()}"/>
+		<s:HGroup width="100%" >
+			<s:HGroup width="100%"/>
+			<s:Button label="Add" click="{addParameter()}" />
+			<s:Button label="Delete" click="deleteParameter()" enabled="{parameters.selectedIndex != -1}"/>
+		</s:HGroup>
+	</mx:Form>
+	<mx:Form width="100%" color="0x323232" paddingTop="0">
+		<mx:FormHeading fontSize="10"  label="Parameters detais:" paddingTop="0" />
+		
+		<mx:FormItem label="Name:" toolTip="Имя объекта">
+			<s:TextInput id="fname" width="200" change="{changeParametrsValues()}"/>
+		</mx:FormItem>
+		
+		<mx:FormItem label="Order:" toolTip="Это ордер">
+			<s:TextInput id="fOrder" width="200" change="{changeParametrsValues()}"/>
+		</mx:FormItem>
+		
+		
+		<mx:FormItem label="VbType:" toolTip="Это VbType">
+			<s:TextInput id="fVbType" width="200" change="{changeParametrsValues()}" />
+		</mx:FormItem>
+		
+		<mx:FormItem label="Help:" toolTip="Это Help" enabled="false">
+			<s:HGroup>
+				<s:TextArea id="fHelp" width="163"  height="100" editable="false" />
+				<s:Button label="..." width="30" />
+			</s:HGroup>
+		</mx:FormItem>
+		
+		
+		
+	</mx:Form>
+	</s:HGroup>
 </s:Group>

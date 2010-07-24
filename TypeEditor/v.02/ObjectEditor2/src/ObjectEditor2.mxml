@@ -41,7 +41,7 @@
 					libraries.dataProvader = xmlObject;
 					sourceCode.dataProvader = xmlObject;
 					languages.dataProvader = xmlObject;
-					
+					events.dataProvader = xmlObject;
 				}
 			}
 			
@@ -93,7 +93,7 @@
 				<resourses:Resourses />			</s:NavigatorContent>
 			
 			<s:NavigatorContent label="Events" width="100%" height="100%">
-				<events:Events />		</s:NavigatorContent>
+				<events:Events id="events" enabled="false"/> </s:NavigatorContent>
 			
 			<s:NavigatorContent label="Actions" width="100%" height="100%">
 				<actions:Actions />		</s:NavigatorContent>
