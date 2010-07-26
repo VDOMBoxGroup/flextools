@@ -12,6 +12,8 @@
 		<![CDATA[
 			import mx.controls.Alert;
 			
+			import utils.Language;
+			
 			private var xmlObject : XML;
 			private var fileUpload:FileReference = new FileReference();
 			
@@ -34,6 +36,10 @@
 				{
 					fileUpload.removeEventListener(Event.COMPLETE, fileDounloaded);
 					xmlObject = new XML(fileUpload.data.toString());
+					
+					var language:Language = Language.getInstance();
+					language.dataProvider = xmlObject;
+					
 //					Alert.show(fileUpload.data.toString());
 //					textArea.htmlText =  _lib.echo( fileUpload.data.toString());
 //					panel.title = "PageOne Migration - " + fileUpload.name;
@@ -42,6 +48,7 @@
 					sourceCode.dataProvader = xmlObject;
 					languages.dataProvader = xmlObject;
 					events.dataProvader = xmlObject;
+					resourses.dataProvader = xmlObject;
 				}
 			}
 			
@@ -90,7 +97,7 @@
 				<languages:Languages id="languages" enabled="false"  />	</s:NavigatorContent>
 			
 			<s:NavigatorContent label="Resourses" width="100%" height="100%">
-				<resourses:Resourses />			</s:NavigatorContent>
+				<resourses:Resourses id="resourses" enabled="false" />			</s:NavigatorContent>
 			
 			<s:NavigatorContent label="Events" width="100%" height="100%">
 				<events:Events id="events" enabled="false"/> </s:NavigatorContent>

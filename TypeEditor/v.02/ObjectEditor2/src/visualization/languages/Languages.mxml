@@ -154,7 +154,6 @@
 						word[lan] = word["en_US"];
 					}
 				}
-				
 			}
 			
 			

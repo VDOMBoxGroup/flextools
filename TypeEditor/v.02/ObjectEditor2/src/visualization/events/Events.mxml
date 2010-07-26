@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" xmlns:OEComponents="OEComponents.*">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
@@ -66,29 +66,36 @@
 			
 			private function deleteEvent():void
 			{
+				delete _data.Event.(@Name == tiEventName.text )[0]; 
+				
+				var selectedIndex:int  = events.selectedIndex;
 				arEvent.removeItemAt(events.selectedIndex);
 				
 				if (arEvent.length)
 				{
-					events.selectedIndex = 0;
+					if (selectedIndex == arEvent.length )
+						events.selectedIndex = selectedIndex - 1;
+					else
+						events.selectedIndex = selectedIndex;
+					
 					changeEvent();
 				}
-//				else
-//					libCode.text = "";
+				else
+					cleareEvent();
+			}
+			
+			private function cleareEvent():void
+			{
+				tiEventName.text = "";
+			 	arParameters.removeAll();
+				cleareParametr();
+				
 			}
 			
 			private function changeParameter():void
 			{
-				if (parameters.selectedItem  )
-				{
-	//				arParameters.removeAll();
-					var parameter:XML = getCurentParameter(); 
-					
-					fname.text = parameter.@Name;
-					fOrder.text = parameter.@Order;
-					fVbType.text = parameter.@VbType;
-					fHelp.text = parameter.@Help;
-				}
+				if (parameters.selectedItem)
+					validateParametr();
 			}
 				
 			private function addParameter():void
@@ -106,7 +113,41 @@
 			
 			private function deleteParameter():void
 			{
+				var xmlEvent:XML = getCurentEvent();
+				delete xmlEvent.Parameters.Parameter.(@Name == fname.text )[0]; 
 				
+				var selectedIndex:int  = parameters.selectedIndex;
+				arParameters.removeItemAt(selectedIndex);
+				
+				if (arParameters.length)
+				{
+					if (selectedIndex ==  arParameters.length )
+						parameters.selectedIndex = selectedIndex - 1;
+					else
+						parameters.selectedIndex = selectedIndex;
+					
+					validateParametr();
+				}
+				else
+					cleareParametr();
+			}
+			
+			private function validateParametr():void
+			{
+				var parameter:XML = getCurentParameter(); 
+				
+				fname.text = parameter.@Name;
+				fOrder.text = parameter.@Order;
+				fVbType.text = parameter.@VbType;
+				fHelp.text = parameter.@Help;
+			}
+			
+			private function cleareParametr():void
+			{
+				fname.text = "";
+				fOrder.text = "";
+				fVbType.text = "";
+				fHelp.text = "";
 			}
 			
 			private function getCurentEvent():XML
@@ -218,7 +259,7 @@
 		
 		<mx:FormItem label="Help:" toolTip="Это Help" enabled="false">
 			<s:HGroup>
-				<s:TextArea id="fHelp" width="163"  height="100" editable="false" />
+				<OEComponents:OETextInput id="fHelp" width="163"  editable="false" />
 				<s:Button label="..." width="30" />
 			</s:HGroup>
 		</mx:FormItem>
