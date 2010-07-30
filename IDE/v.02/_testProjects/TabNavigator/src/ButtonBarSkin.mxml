@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		alpha.disabled="0.5">
+
+	<fx:Metadata>
+		<![CDATA[ 
+		[HostComponent("spark.components.ButtonBar")]
+		]]>
+	</fx:Metadata>
+
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
+	</s:states>
+
+	<fx:Declarations>
+		<!---
+			 Specifies the skin class for the first button on the ButtonBar.
+			 @default spark.skins.spark.ButtonBarFirstButtonSkin
+		-->
+		<fx:Component id="firstButton">
+			<s:ButtonBarButton minWidth="50" maxWidth="100"/>
+		</fx:Component>
+
+		<!---
+			 Specifies the skin class for the middle button(s) on the ButtonBar.
+			 @default spark.skins.spark.ButtonBarMiddleButtonSkin
+		-->
+		<fx:Component id="middleButton">
+			<s:ButtonBarButton minWidth="50" maxWidth="100"/>
+		</fx:Component>
+
+		<!---
+			 Specifies the skin class for the last button on the ButtonBar.
+			 @default spark.skins.spark.ButtonBarLastButtonSkin
+		-->
+		<fx:Component id="lastButton">
+			<s:ButtonBarButton minWidth="50" maxWidth="100"/>
+		</fx:Component>
+
+	</fx:Declarations>
+
+	<!---
+		 @copy spark.components.SkinnableDataContainer#dataGroup
+	-->
+	<s:DataGroup id="dataGroup"
+				 height="100%" width="100%">
+		<s:layout>
+			<s:ButtonBarHorizontalLayout gap="0"/>
+		</s:layout>
+	</s:DataGroup>
+
+</s:Skin>

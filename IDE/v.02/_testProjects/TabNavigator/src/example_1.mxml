@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:local="*"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:s="library://ns.adobe.com/flex/spark">
+	<fx:Script>
+		<![CDATA[
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				TabNavigatorSkin( tn.skin ).hsb.changeValueByStep( true );
+			}
+		]]>
+	</fx:Script>
+
+	<local:TabNavigator id="tn" height="112" width="100%" x="13" y="14" skinClass="TabNavigatorSkin" />
+	<s:Button  x="10" y="128" click="button1_clickHandler(event)"/>
+	<s:TabBar x="79" y="279" width="399">
+		<s:ArrayCollection source="['Home', 'Rooms', 'Dining','Home', 'Rooms', 'Dining','Home', 'Rooms', 'Dining']"/>
+	</s:TabBar>
+	
+</s:WindowedApplication>

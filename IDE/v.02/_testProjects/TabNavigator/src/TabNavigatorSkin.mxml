@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:local="*"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 creationComplete="sparkskin1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+
+			import spark.skins.spark.HScrollBarSkin;
+			import spark.skins.spark.ScrollerSkin;
+
+			protected function sparkskin1_creationCompleteHandler( event : FlexEvent ) : void
+			{
+				sss.addEventListener( ResizeEvent.RESIZE, sss_resizeHandler, false, 0, true );
+			}
+
+			private function zzz( value : Object ) : void
+			{
+				var d : * = "";
+			}
+
+			protected function sss_resizeHandler( event : ResizeEvent ) : void
+			{
+				var dWidth : Number = sss.width - sss.contentWidth;
+
+				if ( dWidth < 0 && !hsb.visible )
+				{
+					hsb.visible = true;
+					sss.left = sss.right = 20;
+				}
+				else if ( dWidth >= 0 && hsb.visible )
+				{
+					hsb.visible = false;
+					sss.left = sss.right = 0;
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
+	</s:states>
+
+	<s:Group id="sss"
+			 left="0" right="0"
+			 clipAndEnableScrolling="true">
+		<s:TabBar>
+			<s:dataProvider>
+				<s:ArrayCollection source="['Home', 'Rooms', 'Dining','Home', 'Rooms', 'Dining','Home', 'Rooms', 'Dining']"/>
+			</s:dataProvider>
+		</s:TabBar>
+	</s:Group>
+
+	<local:TabNavigatorScrollBar id="hsb"
+								 height="25" pageSize="60" stepSize="2" width="100%"
+								 repeatInterval="150" skinClass="TabNavigatorScrollBarSkin"
+								 smoothScrolling="true" viewport="{ sss }"/>
+
+</s:SparkSkin>
