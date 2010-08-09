@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 minHeight="21" minWidth="21"
+			 alpha.disabledStates="0.5">
+
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("TabBarButton")]
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			override protected function updateDisplayList( unscaledWidth : Number, unscaleHeight : Number ) : void
+			{
+				closeButton.visible = hostComponent.canClose;
+
+				if ( !closeButton.visible )
+				{
+					labelDisplay.right = 8;
+				}
+				else
+				{
+					labelDisplay.right = 18;
+				}
+
+				super.updateDisplayList( unscaledWidth, unscaledHeight );
+			}
+		]]>
+	</fx:Script>
+
+	<!-- states -->
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over" stateGroups="overStates"/>
+		<s:State name="down" stateGroups="downStates"/>
+		<s:State name="disabled" stateGroups="disabledStates"/>
+		<s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates"/>
+		<s:State name="overAndSelected" stateGroups="overStates, selectedStates"/>
+		<s:State name="downAndSelected" stateGroups="downStates, selectedStates"/>
+		<s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates"/>
+	</s:states>
+
+	<!-- layer 1: fill -->
+	<s:Rect bottom="0" left="0" right="0" top="0">
+
+		<s:stroke>
+			<s:SolidColorStroke color="black"/>
+		</s:stroke>
+
+		<s:fill>
+			<s:SolidColor color="#353535" color.downStates="#949494" color.overStates="#949494" color.selectedUpStates="#7E7E7E"/>
+		</s:fill>
+
+	</s:Rect>
+
+	<!-- layer 2: text -->
+	<!--- Defines the appearance of the label(s) for the middle button(s) in the ButtonBar component. -->
+
+	<s:Label id="labelDisplay"
+			 bottom="2" color="#686868" color.down="white" color.over="white" color.selectedStates="white" fontFamily="Verdana" left="5" right="10" textAlign="center" top="2"
+			 verticalAlign="middle" verticalCenter="1"
+			 maxDisplayedLines="1"/>
+
+	<s:Button id="closeButton"
+			  right="2" skinClass="skins.CloseButtonSkin" verticalCenter="1"/>
+
+</s:SparkSkin>

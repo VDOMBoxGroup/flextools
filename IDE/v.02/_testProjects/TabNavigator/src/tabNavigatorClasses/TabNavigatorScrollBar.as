@@ -9,7 +9,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package
+package tabNavigatorClasses
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
