@@ -124,8 +124,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					if( !isAddedToStage )
-						return;
+//					if( !isAddedToStage )
+//						return;
 					
 					isSelectedPageVOChanged = true;
 
@@ -155,7 +155,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 //						facade.removeMediator( itemMediatorName );
 //					}
 //
-//					workArea.itemVO = body as ItemVO;
+					workArea.itemVO = body as ItemVO;
 //
 //					sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, workArea );
 //

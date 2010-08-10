@@ -1,27 +1,23 @@
 package net.vdombox.ide.modules.wysiwyg.model.vo
 {
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	
 	[Bindable]
-	public class ItemVO
+	public class RenderVO
 	{
-		public function ItemVO( id : String )
+		public function RenderVO( vdomObjectVO : IVDOMObjectVO )
 		{
 			super();
 			
-			_id = id;
+			_vdomObjectVO = vdomObjectVO;
 		}
-		
-		public var name : String;
-		
-		public var pageVO : PageVO;
-		public var typeVO : TypeVO;
 		
 		public var staticFlag : Boolean;
 		
-		public var parent : ItemVO;
+		public var parent : RenderVO;
 		public var children : Array = [];
 
 		public var visible : Boolean;
@@ -33,11 +29,11 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		public var attributes : Array = [];
 		public var content : XMLList;
 		
-		private var _id : String;
+		private var _vdomObjectVO : IVDOMObjectVO;
 		
-		public function get id() : String
+		public function get vdomObjectVO() : IVDOMObjectVO
 		{
-			return _id;
+			return _vdomObjectVO;
 		}
 		
 		public function getAttributeByName( name : String ) : AttributeVO

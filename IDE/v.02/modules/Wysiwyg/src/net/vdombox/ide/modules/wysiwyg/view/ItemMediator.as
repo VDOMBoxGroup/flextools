@@ -9,6 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	
@@ -24,7 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		public function ItemMediator( viewComponent : Item )
 		{
-			var itemVO : ItemVO = viewComponent.data as ItemVO;
+			var renderVO : RenderVO = viewComponent.data as ItemVO;
 
 			super( NAME + ApplicationFacade.DELIMITER + itemVO.id, viewComponent );
 			instances[ this.mediatorName ] = "";

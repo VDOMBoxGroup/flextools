@@ -1,13 +1,11 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import com.zavoo.svg.SVGViewer;
-
+	
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-
-	import flashx.textLayout.tlf_internal;
-
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
 	import mx.collections.SortField;
@@ -20,12 +18,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
 	import spark.components.RichEditableText;
@@ -72,7 +70,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var _data : Object;
 
-		private var _itemVO : ItemVO;
+		private var _renderVO : RenderVO;
 
 		private var _isLocked : Boolean;
 
@@ -122,14 +120,14 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 		}
 
-		public function get itemVO() : ItemVO
+		public function get renderVO() : RenderVO
 		{
-			return _itemVO;
+			return _renderVO;
 		}
 
-		public function set itemVO( value : ItemVO ) : void
+		public function set renderVO( value : RenderVO ) : void
 		{
-			_itemVO = value;
+			_renderVO = value;
 		}
 
 		public function get data() : Object
@@ -288,7 +286,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			background.removeAllElements();
 		}
 
-		public function chooseItemRenderer( itemVO : ItemVO ) : IFactory
+		public function chooseItemRenderer( renderVO : RenderVO ) : IFactory
 		{
 			var itemFactory : ClassFactory;
 			var layout : LayoutBase;

@@ -4,8 +4,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
@@ -35,55 +35,33 @@ package net.vdombox.ide.modules.wysiwyg.model
 			cache = null;
 		}
 
-		public function setRawRenderData( pageVO : PageVO, rawRenderData : XML ) : void
-		{
-			cache = {};
-
-			var itemID : String = rawRenderData.@id;
-
-			_renderData = new ItemVO( itemID );
-			_renderData.pageVO = pageVO;
-
-			cache[ _renderData.id ] = _renderData;
-
-			createAttributes( _renderData, rawRenderData );
-			createChildren( _renderData, rawRenderData )
-
-			sendNotification( ApplicationFacade.RENDER_DATA_CHANGED, _renderData );
-		}
-
-		public function get renderData() : ItemVO
-		{
-			return _renderData;
-		}
-
-		public function renderItem( pageVO : PageVO, rawRenderData : XML ) : ItemVO
+		public function renderItem( pageVO : PageVO, rawRenderData : XML ) : RenderVO
 		{
 			var itemID : String = rawRenderData.@id;
-			var renderItem : ItemVO;
+			var renderVO : RenderVO;
 
-			renderItem = cache[ itemID ] ? cache[ itemID ] : new ItemVO( itemID );
-			renderItem.pageVO = pageVO;
+			renderVO = cache[ itemID ] ? cache[ itemID ] : new RenderVO( itemID );
+			renderVO.vdomObjectVO = pageVO;
 
 			cache[ renderItem.id ] = renderItem;
 
-			createAttributes( renderItem, rawRenderData );
-			createChildren( renderItem, rawRenderData );
+			createAttributes( renderVO, rawRenderData );
+			createChildren( renderVO, rawRenderData );
 
 			return renderItem;
 		}
 
-		private function createAttributes( itemVO : ItemVO, rawRenderData : XML ) : void
+		private function createAttributes( renderVO : RenderVO, rawRenderData : XML ) : void
 		{
 			var typeVO : TypeVO;
 
-			itemVO.name = rawRenderData.name();
+			renderVO.name = rawRenderData.name();
 
-			itemVO.visible = rawRenderData.@visible == 1 ? true : false;
+			renderVO.visible = rawRenderData.@visible == 1 ? true : false;
 
-			itemVO.zindex = uint( rawRenderData.@zindex );
-			itemVO.hierarchy = uint( rawRenderData.@hierarchy );
-			itemVO.order = uint( rawRenderData.@order );
+			renderVO.zindex = uint( rawRenderData.@zindex );
+			renderVO.hierarchy = uint( rawRenderData.@hierarchy );
+			renderVO.order = uint( rawRenderData.@order );
 
 			typeVO = typesProxy.getTypeVObyID( rawRenderData.@typeID );
 
@@ -92,7 +70,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			else
 				var d : * = "";
 
-			itemVO.staticFlag = rawRenderData.@contents == "static" ? true : false;
+			renderVO.staticFlag = rawRenderData.@contents == "static" ? true : false;
 
 			delete rawRenderData.@id;
 			delete rawRenderData.@zindex;
@@ -114,13 +92,13 @@ package net.vdombox.ide.modules.wysiwyg.model
 			}
 		}
 
-		private function createChildren( itemVO : ItemVO, rawRenderData : XML ) : void
+		private function createChildren( renderVO : RenderVO, rawRenderData : XML ) : void
 		{
 			var childItemVO : ItemVO;
 			var child : XML;
 
-			itemVO.children = [];
-			itemVO.content = new XMLList();
+			renderVO.children = [];
+			renderVO.content = new XMLList();
 
 			for each ( child in rawRenderData.* )
 			{
