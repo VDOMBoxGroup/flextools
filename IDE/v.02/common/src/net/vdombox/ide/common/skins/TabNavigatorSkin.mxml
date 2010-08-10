@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 xmlns:tabNavigatorClasses="net.vdombox.ide.common.components.tabNavigatorClasses.*"
+			 creationComplete="creationCompleteHandler()">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+
+			protected function creationCompleteHandler() : void
+			{
+				checkScrollbar();
+			}
+
+			private function checkScrollbar() : void
+			{
+				var dWidth : Number = tabBarGroup.width - tabBarGroup.contentWidth;
+
+				if ( dWidth < 0 && !hsb.visible )
+				{
+					hsb.visible = true;
+					tabBarGroup.left = tabBarGroup.right = 18;
+				}
+				else if ( dWidth >= 0 && hsb.visible )
+				{
+					hsb.visible = false;
+					tabBarGroup.left = tabBarGroup.right = 0;
+				}
+			}
+
+			protected function updateCompleteHandler( event : FlexEvent ) : void
+			{
+				checkScrollbar();
+			}
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
+	</s:states>
+
+	<s:Group id="tabBarGroup"
+			 left="0" right="0"
+			 updateComplete="checkScrollbar()">
+		<s:TabBar id="tabBar"
+				  skinClass="net.vdombox.ide.common.skins.TabBarSkin"/>
+	</s:Group>
+
+	<s:Scroller height="100%" width="100%" y="{ tabBarGroup.height }">
+		<s:Group id="contentGroup"/>
+	</s:Scroller>
+
+	<tabNavigatorClasses:TabNavigatorScrollBar id="hsb"
+											   height="24" pageSize="60" stepSize="2" width="100%"
+											   repeatInterval="150" skinClass="net.vdombox.ide.common.skins.TabNavigatorScrollBarSkin"
+											   visible="false" smoothScrolling="true" viewport="{ tabBarGroup }"/>
+
+</s:SparkSkin>

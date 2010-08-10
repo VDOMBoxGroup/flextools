@@ -1,7 +1,9 @@
 package net.vdombox.ide.common.vo
 {
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+
 	[Bindable]
-	public class PageVO
+	public class PageVO implements IVDOMObjectVO
 	{
 		public function PageVO( applicationVO : ApplicationVO, typeVO : TypeVO )
 		{
