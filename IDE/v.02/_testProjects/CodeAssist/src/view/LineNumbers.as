@@ -8,8 +8,6 @@ package view
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	
-	import org.aswing.JSharedToolTip;
-	
 	public class LineNumbers extends Sprite
 	{
 		private var fmt:TextFormat;
@@ -90,7 +88,7 @@ package view
 				m.graphics.drawRect(0, 0, box.x*5, box.y-1);
 				m.y = (markLines[i]-begin-1) * box.y;
 				
-				JSharedToolTip.getSharedInstance().registerComponent(m, markTips[i]);
+//				JSharedToolTip.getSharedInstance().registerComponent(m, markTips[i]);
 				
 				
 				marks.addChild(m);

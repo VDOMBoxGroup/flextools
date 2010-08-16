@@ -36,7 +36,7 @@ package ro.victordramba.scriptarea
 			doubleClickEnabled = true;
 			focusRect = false;
 			
-			inputTF = new TextField;
+			inputTF = new TextField();
 			inputTF.type = TextFieldType.INPUT;
 			inputTF.addEventListener(TextEvent.TEXT_INPUT, onInputText);
 			var me:ScriptAreaEvents = this;

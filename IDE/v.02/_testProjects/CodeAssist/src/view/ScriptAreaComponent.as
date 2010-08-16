@@ -33,9 +33,9 @@ package view
 				stage.focus = area;
 			});
 			
-			addEventListener(FocusEvent.KEY_FOCUS_CHANGE, function(e:Event):void {
-				e.preventDefault();
-			});
+//			addEventListener(FocusEvent.KEY_FOCUS_CHANGE, function(e:Event):void {
+//				e.preventDefault();
+//			});
 			
 			area.addEventListener(Event.SCROLL, function(e:Event):void {
 		    	if(viewportSizeTesting)
