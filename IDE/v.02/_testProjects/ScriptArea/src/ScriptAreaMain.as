@@ -4,6 +4,8 @@ package {
 	
 	import flash.display.Sprite;
 	import flash.events.*;
+	
+	import ro.victordramba.scriptarea.ScriptAreaEvents;
 
 	[SWF(backgroundColor="#ffffff")]
 	public class ScriptAreaMain extends Sprite

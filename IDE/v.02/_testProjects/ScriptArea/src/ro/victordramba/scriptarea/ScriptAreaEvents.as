@@ -1,10 +1,7 @@
 package ro.victordramba.scriptarea
 {
-	import com.victordramba.console.debug;
-	
 	import flash.desktop.Clipboard;
 	import flash.desktop.ClipboardFormats;
-	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.events.KeyboardEvent;
