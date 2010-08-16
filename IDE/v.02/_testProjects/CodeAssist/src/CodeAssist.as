@@ -8,8 +8,8 @@
 
 package 
 {
-	import com.victordramba.debug.Debugger;
-	import com.victordramba.debug.debug;
+	import com.victordramba.console.Debugger;
+	import com.victordramba.console.debug;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -61,7 +61,7 @@ package
 			stage.scaleMode = 'noScale';
 
 			//Debugger console
-			Debugger.setParent(stage);
+//			Debugger.setParent(stage);
 			
 			UIManager.setLookAndFeel(new OrangeLookAndFeel);
 			AsWingManager.initAsStandard(this);

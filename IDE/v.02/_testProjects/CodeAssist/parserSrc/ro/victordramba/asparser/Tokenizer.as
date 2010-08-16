@@ -10,7 +10,7 @@
 
 package ro.victordramba.asparser
 {
-	import com.victordramba.debug.debug;
+	import com.victordramba.console.debug;
 	
 	import ro.victordramba.util.HashMap;
 
