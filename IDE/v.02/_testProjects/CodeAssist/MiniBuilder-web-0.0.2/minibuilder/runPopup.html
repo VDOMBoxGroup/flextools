@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by Victor Dramba 2009 www.victordramba.com -->
+<html>
+<head>
+<title>ActionScript Playground</title>
+<script src="main.js"></script>
+</head>
+<body style="margin:2px">
+
+<!-- JAVA -->
+<applet width="1" height="1"
+	name="jsap" id="jsap"
+	code="vicAsc.MainClass"
+	archive="asc-v.jar"
+	mayscript="mayscript" scriptable="true">
+	You need Java to run this toy. Check <a href="http://www.java.com/en/download/">Sun Java Download</a> to install Java on your machine.
+</applet>
+<!-- END JAVA -->
+
+<!-- FLASH -->
+<div style="margin:2px;border:solid 1px silver">
+<script type="text/javascript">writeSWF(opener.playTarget, 'SWFPlayground', '#ffffff')</script>
+</div>
+<!-- END FLASH -->
+
+<div style="clear:both" id="res"></div>
+
+<script type="text/javascript">
+	var swfStr;
+	var playgroundInited = false;
+	opener.popupLoaded();
+
+	function compileReady(success, msg, str)
+	{
+		document.getElementById('res').innerHTML = '<pre style="color:red">'+msg.replace(/</g,'&lt;')+'</pre>';
+		if (success)
+		{
+			swfStr = str;
+			if (playgroundInited)
+				document.SWFPlayground.showSWF(str);
+		}
+		if (opener)
+		{
+			opener.hintErrors(msg);
+		}
+	}
+
+	function initPlayground()
+	{
+		if (swfStr)
+		{
+			document.SWFPlayground.showSWF(swfStr);
+			swfStr = null;
+		}
+		playgroundInited = true;
+	}
+
+	function compileCode(code)
+	{
+		document.getElementById('res').innerHTML = '<pre>Compiling...</pre>';
+		document.jsap.compileSource(code, /aswing/i.test(opener.playTarget));
+	}
+</script>
+
+</body>
+</html>
