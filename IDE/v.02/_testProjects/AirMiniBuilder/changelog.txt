@@ -1,0 +1,44 @@
+1.1.2
+	- cut/copy/paste/select all for mac os
+	- other changes
+	- UI preparation for features to come (outline, context reference)
+	- other minor fixes
+
+1.1.1 alpha
+	- implement Goto Definition(F4) and Back(SHIFT+F4) where you were before
+	- configurable keyboard shortcuts
+	- added private, function, void, and others to code hinting
+	- set focus to newly open project window
+	- fully refactored the code completion resolver 
+	- fix bug6 http://code.google.com/p/minibuilder/issues/detail?id=6 (Refresh project)
+
+1.1.0 alpha
+ - new java compiler architecture based on http server (jetty)
+ - show latest MiniBuilder release version in startup page
+ - Flex SDK compiler included (Flex SDK 3.5 MPL release)
+ - remove sdk dependency (flex sdk 3.5 mpl included)
+ 	- fix spaces in sdk path problem
+ 	- fix execution flag problem - starter is java now
+ 	- fix file explorer command for project paths with spaces on linux
+ - editor focus issues:
+ 	- show focus in editor after project startup
+ 	- preserve focus and line number when chaging tabs or using the tree
+ - air project support: 
+ 	- one click run/test with adl
+ 	- set AIR SDK path
+
+1.0 alpha 4
+ - mark unsaved files
+ - quick run opens browser
+ - linux air scripts (run adl, create certificate, package air)
+
+1.0 alpha 3
+ - support for mac ox x
+ - refresh project -> load/parse new files (swc/as)
+ - base class for all windows
+ - prevent autocomplete in comments
+ - fix bug default class is public
+
+1.0 alpha 2
+
+1.0 alpha 1
