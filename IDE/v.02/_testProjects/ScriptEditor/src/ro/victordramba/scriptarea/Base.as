@@ -35,7 +35,7 @@ package ro.victordramba.scriptarea
 		protected function updateSize():void
 		{
 			graphics.clear();
-			graphics.beginFill(0xffffff, 1);
+			graphics.beginFill(0xFFFFFF, 1);
 			//graphics.lineStyle(0);
 			graphics.drawRect(-50, 0, _width+50, _height);
 		}

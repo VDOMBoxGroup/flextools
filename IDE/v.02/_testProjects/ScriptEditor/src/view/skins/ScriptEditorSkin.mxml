@@ -3,7 +3,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:view="view.*"
-		resize="skinnablecontainer1_resizeHandler(event)">
+		addedToStage="skin1_addedToStageHandler(event)" mouseDown="skin1_mouseDownHandler(event)" resize="skinnablecontainer1_resizeHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
@@ -14,9 +14,35 @@
 				ss.paint( width - vsb.width - 20, height - hsb.height - 5 );
 			}
 
-			protected function group1_mouseDownHandler( event : MouseEvent ) : void
+			protected function skin1_mouseDownHandler( event : MouseEvent ) : void
 			{
 				stage.focus = ss;
+			}
+
+			protected function skin1_addedToStageHandler( event : Event ) : void
+			{
+				ss.addEventListener( Event.SCROLL, ss_scrollHandler );
+
+				updateScrollBar();
+			}
+
+			private function ss_scrollHandler( event : Event ) : void
+			{
+				updateScrollBar();
+			}
+
+			private function updateScrollBar() : void
+			{
+				vsb.maximum = ss.maxScrollV;
+				vsb.value = ss.scrollV;
+
+				hsb.maximum = ss.maxScrollH / 8;
+				hsb.value = ss.scrollH / 8;
+			}
+
+			protected function hsb_changeHandler( event : Event ) : void
+			{
+				ss.scrollH = hsb.value * 8;
 			}
 		]]>
 	</fx:Script>
@@ -31,7 +57,11 @@
 								text="asdka ;lda sld"/>
 
 	<s:HScrollBar id="hsb"
-				  bottom="0" left="0" right="{ vsb.width }"/>
+				  minimum="0"
+				  bottom="0" left="0" right="{ vsb.width }"
+				  change="hsb_changeHandler(event)"/>
+
 	<s:VScrollBar id="vsb"
+				  minimum="1"
 				  bottom="{ hsb.height }" right="0" top="0"/>
 </s:Skin>

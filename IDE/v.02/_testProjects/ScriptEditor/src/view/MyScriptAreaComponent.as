@@ -3,12 +3,13 @@ package view
 	import flash.display.InteractiveObject;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
+	import flash.events.IEventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import ro.victordramba.scriptarea.ScriptAreaEvents;
-	
+
 	import spark.core.SpriteVisualElement;
 
 	public class MyScriptAreaComponent extends SpriteVisualElement
@@ -17,102 +18,26 @@ package view
 		{
 			super();
 
-			area = new ScriptAreaEvents;
+			area = new ScriptAreaEvents();
 
 			addChild( area );
 
-			addEventListener( FocusEvent.FOCUS_IN, function( e : FocusEvent ) : void
-			{
-				stage.focus = area;
-			} );
-
-			addEventListener( FocusEvent.KEY_FOCUS_CHANGE, function( e : Event ) : void
-			{
-				e.preventDefault();
-			} );
-
-			area.addEventListener( Event.SCROLL, function( e : Event ) : void
-			{
-				if ( viewportSizeTesting )
-					return;
-				if ( viewPos.y != area.scrollY )
-				{
-					viewPos.y = area.scrollY;
-					updateNums();
-//					fireStateChanged( true );
-				}
-			} );
-
-			area.addEventListener( Event.CHANGE, function( e : Event ) : void
-			{
-//				revalidate();
-			} );
-
 			lineNums = new LineNumbers( area.boxSize, area.textFormat );
 			lineNums.y = 2;
+
 			addChild( lineNums );
 
-			lineNums.addEventListener( MouseEvent.MOUSE_DOWN, area.onMouseDown );
+			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
+			addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 		}
 
-		private var area:ScriptAreaEvents;
-		private var viewportSizeTesting:Boolean = false;
-		private var lineNums:LineNumbers;
-		
-		private var viewPos:Point = new Point();
-		
-		public function markLines( lines : Array /*of int*/, tips : Array /*of String*/, color : uint = 0xff0000 ) : void
-		{
-			lineNums.mark( lines, tips, color );
-		}
+		private var area : ScriptAreaEvents;
 
-		public function getInternalFocusObject() : InteractiveObject
-		{
-			return area;
-		}
+		private var viewportSizeTesting : Boolean = false;
 
-		public function isEditable() : Boolean
-		{
-			return true;
-		}
+		private var lineNums : LineNumbers;
 
-		public function setEditable( value : Boolean ) : void
-		{
-
-		}
-
-		private function updateNums() : void
-		{
-			lineNums.draw( area.scrollY, area.height / area.boxSize.y, 100000 );
-		}
-
-		public function paint( width : Number, height : Number ) : void
-		{
-			area.x = area.boxSize.x * 5;
-//			area.y = b.y;
-			area.width = width - 1;
-			area.height = height-1;
-			//scroll
-			area.scrollRect = new Rectangle(viewPos.x, 0, width, height);
-			area.scrollY = viewPos.y;
-			updateNums();
-		}
-		
-		public function clearFormatRuns() : void
-		{
-			area.clearFormatRuns();
-		}
-
-		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String ) : void
-		{
-			area.addFormatRun( beginIndex, endIndex, bold, italic, color );
-		}
-
-
-		public function applyFormatRuns() : void
-		{
-			area.applyFormatRuns();
-		}
+		private var viewPos : Point = new Point();
 
 		public function get caretIndex() : int
 		{
@@ -129,13 +54,10 @@ package view
 			return area.selectionEndIndex;
 		}
 
-		public function getPointForIndex( index : int ) : Point
+		public function get text() : String
 		{
-			var p : Point = area.getPointForIndex( index );
-			p.offset( lineNums.width, 0 );
-			return p;
+			return area.text;
 		}
-
 
 		public function set text( text : String ) : void
 		{
@@ -143,9 +65,80 @@ package view
 //			revalidate();
 		}
 
-		public function get text() : String
+		public function get internalFocusObject() : InteractiveObject
 		{
-			return area.text;
+			return area ? area : null;
+		}
+
+		public function get scrollV() : int
+		{
+			return area.scrollV;
+		}
+		
+		public function set scrollV( value : int ) : void
+		{
+			area.scrollV = value;
+		}
+		
+		public function get scrollH() : int
+		{
+			return area.scrollH;
+		}
+		
+		public function set scrollH( value : int ) : void
+		{
+			area.scrollH = value;
+		}
+		
+		public function get maxScrollV() : int
+		{
+			return area.maxScrollV;
+		}
+		
+		public function get maxScrollH() : int
+		{
+			return area.maxScrollH;
+		}
+		
+		public function markLines( lines : Array /*of int*/, tips : Array /*of String*/, color : uint = 0xff0000 ) : void
+		{
+			lineNums.mark( lines, tips, color );
+		}
+
+		public function paint( width : Number, height : Number ) : void
+		{
+			area.x = area.boxSize.x * 5;
+//			area.y = b.y;
+			area.width = width - 1;
+			area.height = height - 1;
+
+			//scroll
+			area.scrollRect = new Rectangle( viewPos.x, 0, width, height );
+			area.scrollV = viewPos.y;
+			updateNums();
+		}
+
+		public function clearFormatRuns() : void
+		{
+			area.clearFormatRuns();
+		}
+
+		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String ) : void
+		{
+			area.addFormatRun( beginIndex, endIndex, bold, italic, color );
+		}
+
+
+		public function applyFormatRuns() : void
+		{
+			area.applyFormatRuns();
+		}
+
+		public function getPointForIndex( index : int ) : Point
+		{
+			var p : Point = area.getPointForIndex( index );
+			p.offset( lineNums.width, 0 );
+			return p;
 		}
 
 		public function replaceText( startIndex : int, endIndex : int, text : String ) : void
@@ -153,11 +146,11 @@ package view
 			area.replaceText( startIndex, endIndex, text );
 		}
 
+
 		public function setSelection( beginIndex : int, endIndex : int ) : void
 		{
 			area.setSelection( beginIndex, endIndex );
 		}
-
 
 		//------------------------------------------------------------------------------------
 		// Viewportable
@@ -182,20 +175,73 @@ package view
 		{
 			return area.boxSize.x * 10;
 		}
-
-		public function setVerticalUnitIncrement( increment : int ) : void
+		
+		private function updateNums() : void
 		{
+			lineNums.draw( area.scrollV, area.height / area.boxSize.y, 100000 );
 		}
 
-		public function setVerticalBlockIncrement( increment : int ) : void
+		private function addedToStageHandler( event : Event ) : void
 		{
+			addEventListener( FocusEvent.FOCUS_IN, focusInHandler, false, 0, true );
+			addEventListener( FocusEvent.KEY_FOCUS_CHANGE, keyFocusChangeHandler, false, 0, true );
+
+			if ( area )
+			{
+				area.addEventListener( Event.SCROLL, area_srollHandler, false, 0, true );
+				area.addEventListener( Event.CHANGE, area_changeHandler, false, 0, true );
+			}
+
+			if ( lineNums )
+				lineNums.addEventListener( MouseEvent.MOUSE_DOWN, area.onMouseDown, false, 0, true );
+			
+			updateScrollBars();
 		}
 
-		public function setHorizontalUnitIncrement( increment : int ) : void
+		private function removedFromStageHandler( event : Event ) : void
 		{
+			removeEventListener( FocusEvent.FOCUS_IN, focusInHandler );
+			removeEventListener( FocusEvent.KEY_FOCUS_CHANGE, keyFocusChangeHandler );
+
+			if ( area )
+			{
+				area.removeEventListener( Event.SCROLL, area_srollHandler );
+				area.removeEventListener( Event.CHANGE, area_changeHandler );
+			}
+
+			if ( lineNums )
+				lineNums.removeEventListener( MouseEvent.MOUSE_DOWN, area.onMouseDown );
 		}
 
-		public function setHorizontalBlockIncrement( increment : int ) : void
+		private function focusInHandler( event : FocusEvent ) : void
+		{
+			stage.focus = area;
+		}
+
+		private function keyFocusChangeHandler( event : FocusEvent ) : void
+		{
+			event.preventDefault();
+		}
+
+		private function area_srollHandler( event : Event ) : void
+		{
+			if ( viewportSizeTesting )
+				return;
+
+			if ( viewPos.y != area.scrollV )
+			{
+				viewPos.y = area.scrollV;
+				updateNums();
+//				fireStateChanged( true );
+			}
+		}
+
+		private function area_changeHandler( event : Event ) : void
+		{
+//				revalidate();		
+		}
+		
+		private function updateScrollBars() : void
 		{
 		}
 	}
