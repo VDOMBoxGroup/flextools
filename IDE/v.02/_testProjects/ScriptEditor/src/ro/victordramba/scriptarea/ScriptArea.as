@@ -146,14 +146,26 @@ package ro.victordramba.scriptarea
 			return new Point( letterBoxWidth, letterBoxHeight );
 		}
 
+		[Bindable]
 		public function get maxScrollH() : int
 		{
 			return tf.width - width > 0 ? tf.width - width : 0;
 		}
 
+		public function set maxScrollH( value : int ) : void
+		{
+			
+		}
+		
+		[Bindable]
 		public function get maxScrollV() : int
 		{
 			return _maxScrollV;
+		}
+		
+		public function set maxScrollV( value : int ) : void
+		{
+			
 		}
 
 		public function get caretIndex() : int
@@ -483,7 +495,9 @@ package ro.victordramba.scriptarea
 			if( maxLength == 0 )
 				maxLength = _text.length;
 			
+			maxScrollV = Math.max( 0, lineCount - visibleRows );
 			_maxScrollV = Math.max( 0, lineCount - visibleRows );
+			
 			tf.width = maxLength * 9;
 
 			if ( _scrollV > _maxScrollV )

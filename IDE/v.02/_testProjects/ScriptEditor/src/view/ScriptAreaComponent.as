@@ -74,49 +74,49 @@ package view
 		{
 			return area.scrollV;
 		}
-		
+
 		public function set scrollV( value : int ) : void
 		{
 			area.scrollV = value;
 		}
-		
+
 		public function get scrollH() : int
 		{
 			return area.scrollH;
 		}
-		
+
 		public function set scrollH( value : int ) : void
 		{
 			area.scrollH = value;
 		}
-		
+
 		public function get maxScrollV() : int
 		{
 			return area.maxScrollV;
 		}
-		
+
 		public function get maxScrollH() : int
 		{
 			return area.maxScrollH;
+		}
+
+		override public function set width( value : Number ) : void
+		{
+			super.width = value;
+			
+			update();
+		}
+		
+		override public function set height( value : Number ) : void
+		{
+			super.height = value;
+			
+			update();
 		}
 		
 		public function markLines( lines : Array /*of int*/, tips : Array /*of String*/, color : uint = 0xff0000 ) : void
 		{
 			lineNums.mark( lines, tips, color );
-		}
-
-		public function paint( width : Number, height : Number ) : void
-		{
-			area.x = area.boxSize.x * 5;
-//			area.y = b.y;
-			area.width = width - 1;
-			area.height = height - 1;
-
-			//scroll
-			scrollRect = new Rectangle( viewPos.x, 0, width, height );
-			area.scrollRect = new Rectangle( viewPos.x, 0, width, height );
-			area.scrollV = viewPos.y;
-			updateNums();
 		}
 
 		public function clearFormatRuns() : void
@@ -176,6 +176,20 @@ package view
 		{
 			return area.boxSize.x * 10;
 		}
+
+		private function update() : void
+		{
+			area.x = area.boxSize.x * 5;
+			//			area.y = b.y;
+			area.width = width - 1;
+			area.height = height - 1;
+			
+			//scroll
+			scrollRect = new Rectangle( viewPos.x, 0, width, height );
+			area.scrollRect = new Rectangle( viewPos.x, 0, width, height );
+			area.scrollV = viewPos.y;
+			updateNums();
+		}
 		
 		private function updateNums() : void
 		{
@@ -195,7 +209,7 @@ package view
 
 			if ( lineNums )
 				lineNums.addEventListener( MouseEvent.MOUSE_DOWN, area.onMouseDown, false, 0, true );
-			
+
 			updateScrollBars();
 		}
 
@@ -241,7 +255,7 @@ package view
 		{
 //				revalidate();		
 		}
-		
+
 		private function updateScrollBars() : void
 		{
 		}
