@@ -11,38 +11,38 @@
 
 			protected function skinnablecontainer1_resizeHandler( event : ResizeEvent ) : void
 			{
-				ss.paint( width - vsb.width - 20, height - hsb.height - 5 );
+				scriptAreaComponent.paint( width - vsb.width, height - hsb.height );
 			}
 
 			protected function skin1_mouseDownHandler( event : MouseEvent ) : void
 			{
-				stage.focus = ss;
+				stage.focus = scriptAreaComponent;
 			}
 
 			protected function skin1_addedToStageHandler( event : Event ) : void
 			{
-				ss.addEventListener( Event.SCROLL, ss_scrollHandler );
+				scriptAreaComponent.addEventListener( Event.SCROLL, scriptAreaComponent_scrollHandler );
 
 				updateScrollBar();
 			}
 
-			private function ss_scrollHandler( event : Event ) : void
+			private function scriptAreaComponent_scrollHandler( event : Event ) : void
 			{
 				updateScrollBar();
 			}
 
 			private function updateScrollBar() : void
 			{
-				vsb.maximum = ss.maxScrollV;
-				vsb.value = ss.scrollV;
+				vsb.maximum = scriptAreaComponent.maxScrollV;
+				vsb.value = scriptAreaComponent.scrollV;
 
-				hsb.maximum = ss.maxScrollH / 8;
-				hsb.value = ss.scrollH / 8;
+				hsb.maximum = scriptAreaComponent.maxScrollH / 8;
+				hsb.value = scriptAreaComponent.scrollH / 8;
 			}
 
 			protected function hsb_changeHandler( event : Event ) : void
 			{
-				ss.scrollH = hsb.value * 8;
+				scriptAreaComponent.scrollH = hsb.value * 8;
 			}
 		]]>
 	</fx:Script>
@@ -53,12 +53,12 @@
 	</s:states>
 
 
-	<view:MyScriptAreaComponent id="ss"
+	<view:ScriptAreaComponent id="scriptAreaComponent"
 								text="asdka ;lda sld"/>
 
 	<s:HScrollBar id="hsb"
 				  minimum="0"
-				  bottom="0" left="0" right="{ vsb.width }"
+				  bottom="0" left="40" right="{ vsb.width }"
 				  change="hsb_changeHandler(event)"/>
 
 	<s:VScrollBar id="vsb"

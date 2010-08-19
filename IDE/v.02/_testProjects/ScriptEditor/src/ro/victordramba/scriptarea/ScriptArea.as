@@ -42,8 +42,8 @@ package ro.victordramba.scriptarea
 
 
 			tf.text = " ";
-			boxHeight = tf.getLineMetrics( 0 ).height;
-			boxWidth = tf.getLineMetrics( 0 ).width;
+			letterBoxHeight = tf.getLineMetrics( 0 ).height;
+			letterBoxWidth = tf.getLineMetrics( 0 ).width;
 			tf.text = "";
 
 			addChild( tf );
@@ -53,7 +53,7 @@ package ro.victordramba.scriptarea
 			cursor.x = tf.x;
 			cursor.y = tf.y;
 
-			ScriptCursor.height = boxHeight;
+			ScriptCursor.height = letterBoxHeight;
 
 			addChild( cursor );
 		}
@@ -70,8 +70,8 @@ package ro.victordramba.scriptarea
 
 		private var tf : TextField;
 
-		private var boxHeight : int;
-		private var boxWidth : int;
+		private var letterBoxHeight : int;
+		private var letterBoxWidth : int;
 
 		private var _scrollH : int = 0;
 		private var _scrollV : int = 0;
@@ -143,7 +143,7 @@ package ro.victordramba.scriptarea
 
 		public function get boxSize() : Point
 		{
-			return new Point( boxWidth, boxHeight );
+			return new Point( letterBoxWidth, letterBoxHeight );
 		}
 
 		public function get maxScrollH() : int
@@ -233,20 +233,20 @@ package ro.victordramba.scriptarea
 
 				if ( p0.y == p1.y )
 				{
-					g.drawRect( p0.x, p0.y, p1.x - p0.x, boxHeight );
+					g.drawRect( p0.x, p0.y, p1.x - p0.x, letterBoxHeight );
 				}
 				else
 				{
-					g.drawRect( p0.x, p0.y, tf.width - p0.x, boxHeight );
-					var rows : int = ( p1.y - p0.y ) / boxHeight;
+					g.drawRect( p0.x, p0.y, tf.width - p0.x, letterBoxHeight );
+					var rows : int = ( p1.y - p0.y ) / letterBoxHeight;
 
 					for ( var i : int = 1; i < rows; i++ )
 					{
-						g.drawRect( 1, p0.y + boxHeight * i, tf.width, boxHeight );
+						g.drawRect( 1, p0.y + letterBoxHeight * i, tf.width, letterBoxHeight );
 					}
 
 					//if selection is past last visible pos, we draw a full line
-					g.drawRect( 1, p0.y + boxHeight * i, lastPos >= _selEnd ? p1.x : width, boxHeight );
+					g.drawRect( 1, p0.y + letterBoxHeight * i, lastPos >= _selEnd ? p1.x : width, letterBoxHeight );
 				}
 			}
 
@@ -294,7 +294,7 @@ package ro.victordramba.scriptarea
 		public function replaceSelection( text : String ) : void
 		{
 			replaceText( _selStart, _selEnd, text );
-
+			updateSize();
 			//FIXME filter text
 			_setSelection( _selStart + text.length, _selStart + text.length, true );
 		}
@@ -324,7 +324,7 @@ package ro.victordramba.scriptarea
 			}
 
 			//simple tabs, just 4 spaces, no align
-			return new Point( ( index - lastNL + tabs * 3 ) * boxWidth + 1, ( lines - _scrollV ) * boxHeight + 2 );
+			return new Point( ( index - lastNL + tabs * 3 ) * letterBoxWidth + 1, ( lines - _scrollV ) * letterBoxHeight + 2 );
 		}
 
 		public function addFormatRun( beginIndex : int, endIndex : int, bold : Boolean, italic : Boolean, color : String ) : void
@@ -374,9 +374,9 @@ package ro.victordramba.scriptarea
 
 			tf.width = width;
 			tf.height = height;
-			visibleRows = Math.floor( ( height - 4 ) / boxHeight );
+			visibleRows = Math.floor( ( height - 4 ) / letterBoxHeight );
 			updateScrollProps();
-			cursor.setSize( width, boxHeight );
+			cursor.setSize( width, letterBoxHeight );
 		}
 
 		protected function checkScrollToCursor() : void
@@ -412,9 +412,9 @@ package ro.victordramba.scriptarea
 				return firstPos;
 
 			var pos : int = 0;
-			var y : int = boxHeight;
+			var y : int = letterBoxHeight;
 
-			while ( p.y + _scrollV * boxHeight > y )
+			while ( p.y + _scrollV * letterBoxHeight > y )
 			{
 				pos = _text.indexOf( NL, pos ) + 1;
 
@@ -427,7 +427,7 @@ package ro.victordramba.scriptarea
 					break;
 				}
 
-				y += boxHeight;
+				y += letterBoxHeight;
 			}
 
 			var cx : int = 0;
@@ -435,7 +435,7 @@ package ro.victordramba.scriptarea
 
 			for ( var i : int = pos; i < _text.length && ( c = _text.charAt( i ) ) != NL; i++ )
 			{
-				cx += ( c == "\t" ? 4 : 1 ) * boxWidth;
+				cx += ( c == "\t" ? 4 : 1 ) * letterBoxWidth;
 
 				if ( cx > p.x - tf.x )
 					break;
@@ -480,6 +480,9 @@ package ro.victordramba.scriptarea
 				lineCount++;
 			}
 
+			if( maxLength == 0 )
+				maxLength = _text.length;
+			
 			_maxScrollV = Math.max( 0, lineCount - visibleRows );
 			tf.width = maxLength * 9;
 
@@ -604,8 +607,6 @@ package ro.victordramba.scriptarea
 				slices.push( htmlEnc( _text.substring( pos, lastPos ) ) );
 
 			var visibleText : String = slices.join( "" );
-			/*var visibleText:String = _text.substring(firstPos, lastPos);
-			 visibleText = visibleText.replace(/var/g, '<font color="#0000ff">var</font>');*/
 
 			//simple tabs, 4 spaces, no align
 			visibleText = visibleText.replace( /\t/g, "    " );
