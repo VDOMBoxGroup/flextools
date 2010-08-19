@@ -110,7 +110,7 @@ package ro.victordramba.scriptarea
 				return;
 
 			tf.x = selectionShape.x = -value;
-			 
+
 			updateCaret();
 			dispatchEvent( new Event( Event.SCROLL, true ) );
 		}
@@ -146,26 +146,14 @@ package ro.victordramba.scriptarea
 			return new Point( letterBoxWidth, letterBoxHeight );
 		}
 
-		[Bindable]
 		public function get maxScrollH() : int
 		{
 			return tf.width - width > 0 ? tf.width - width : 0;
 		}
 
-		public function set maxScrollH( value : int ) : void
-		{
-			
-		}
-		
-		[Bindable]
 		public function get maxScrollV() : int
 		{
 			return _maxScrollV;
-		}
-		
-		public function set maxScrollV( value : int ) : void
-		{
-			
 		}
 
 		public function get caretIndex() : int
@@ -384,7 +372,7 @@ package ro.victordramba.scriptarea
 		{
 			super.updateSize();
 
-			tf.width = width;
+//			tf.width = width;
 			tf.height = height;
 			visibleRows = Math.floor( ( height - 4 ) / letterBoxHeight );
 			updateScrollProps();
@@ -452,7 +440,7 @@ package ro.victordramba.scriptarea
 				if ( cx > p.x - tf.x )
 					break;
 			}
-			
+
 			return i;
 		}
 
@@ -492,13 +480,27 @@ package ro.victordramba.scriptarea
 				lineCount++;
 			}
 
-			if( maxLength == 0 )
+			if ( maxLength == 0 )
 				maxLength = _text.length;
-			
-			maxScrollV = Math.max( 0, lineCount - visibleRows );
+
 			_maxScrollV = Math.max( 0, lineCount - visibleRows );
+
+			var newWidth : Number = Math.max( maxLength * ( letterBoxWidth + 1 ), width ); //TODO почему + 1
 			
-			tf.width = maxLength * 9;
+			if( tf.width != newWidth )
+			{
+				tf.width = newWidth;
+				_setSelection( selectionBeginIndex, selectionEndIndex, true )
+				updateCaret();
+			}
+			
+			var newX : Number = width - tf.width;
+
+			if ( tf.x < newX )
+			{
+				tf.x = newX;
+				selectionShape.x = newX;
+			}
 
 			if ( _scrollV > _maxScrollV )
 			{
@@ -526,8 +528,6 @@ package ro.victordramba.scriptarea
 			lastPos = position;
 
 			_replaceText( 0, 0, "" );
-
-			//debug('maxscroll='+_maxscroll+', lastPos='+lastPos+' i='+i);
 		}
 
 		private function _replaceText( startIndex : int, endIndex : int, text : String ) : void

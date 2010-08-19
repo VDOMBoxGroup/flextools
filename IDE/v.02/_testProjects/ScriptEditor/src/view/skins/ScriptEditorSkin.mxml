@@ -29,11 +29,6 @@
 				hsb.value = scriptAreaComponent.scrollH / 8;
 			}
 			
-			private function maxScrollChanged( value : Number ) : void
-			{
-				updateScrollBar();
-			}
-			
 			private function addedToStageHandler() : void
 			{
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
@@ -42,9 +37,8 @@
 				
 				if( scriptAreaComponent )
 				{
-					scriptAreaComponent.addEventListener( Event.SCROLL, scriptAreaComponent_scrollHandler );
-					hcw = BindingUtils.bindSetter( maxScrollChanged, scriptAreaComponent, "maxScrollH", true );
-					vcw = BindingUtils.bindSetter( maxScrollChanged, scriptAreaComponent, "maxScrollV", true );
+					scriptAreaComponent.addEventListener( Event.SCROLL, scriptAreaComponent_scrollHandler, false, 0, true );
+					scriptAreaComponent.addEventListener( Event.CHANGE, scriptAreaComponent_changeHandler, false, 0, true );
 				}
 				
 				if( hsb )
@@ -87,6 +81,11 @@
 			}
 
 			private function scriptAreaComponent_scrollHandler( event : Event ) : void
+			{
+				updateScrollBar();
+			}
+			
+			private function scriptAreaComponent_changeHandler( event : Event ) : void
 			{
 				updateScrollBar();
 			}
