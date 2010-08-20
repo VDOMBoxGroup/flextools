@@ -79,7 +79,6 @@ package pyparser
 				dispatchEvent( new Event( 'status' ) );
 			} );
 		}
-		
 
 		private var parser : Parser;
 		

@@ -40,22 +40,25 @@ package pyparser
 			"False", "True", "None" ];
 
 //		private static const keywordsA:Array = [
-//			'as', 'is', 'in', 'break', 'case', 'continue', 'default', 'do', 'while', 'else', 'for', 'in', 'each',
-//			'if', 'label', 'return', 'super', 'switch', 'throw', 'try', 'catch', 'finally', 'while',
-//			'with', 'dynamic', 'final', 'internal', 'native', 'override', 'private', 'protected',
-//			'public', 'static', 'extends', 'implements', 'new',
-//			'interface', 'namespace', 'default xml namespace', 'import',
-//			'include', 'use', 'delete', 'use namespace', 'false', 'null', 'this', 'true', 'undefined'];
+//			"as", "is", "in", "break", "case", "continue", "default", "do", "while", "else", "for", "in", "each",
+//			"if", "label", "return", "super", "switch", "throw", "try", "catch", "finally", "while",
+//			"with", "dynamic", "final", "internal", "native", "override", "private", "protected",
+//			"public", "static", "extends", "implements", "new",
+//			"interface", "namespace", "default xml namespace", "import",
+//			"include", "use", "delete", "use namespace", "false", "null", "this", "true", "undefined"];
 
 		private static const keywords2A : Array = [
-			'const', 'package', 'var', 'function', 'get', 'set', 'class' ];
+//			"const", "package", "var", "function", "get", "set", "class" 
+			];
 
+//		private static const symbolsA : Array = [
+//			"+", "--", "/", "\\", "++", "%", "*", "-", "+=", "/=", "%=", "*=", "-=", "=", "&", "<<",
+//			"~", "|", ">>", ">>>", "^", "&=", "<<=", "|=", ">>=", ">>>=", "^=", "==", ">",
+//			">=", "!=", /*"<", special, can start an E4X*/ "<=", "===", "!==", "&&", "&&=", "!", "||", "||=", "[", "]",
+//			"as", ",", "?", ".", "instanceof", "::", "new", "{", "}",
+//			"(", ")", "typeof", ";", ":", "...", "..", "#", "`" /*just to unlock*/ ];
 		private static const symbolsA : Array = [
-			'+', '--', '/', '\\', '++', '%', '*', '-', '+=', '/=', '%=', '*=', '-=', '=', '&', '<<',
-			'~', '|', '>>', '>>>', '^', '&=', '<<=', '|=', '>>=', '>>>=', '^=', '==', '>',
-			'>=', '!=', /*'<', special, can start an E4X*/ '<=', '===', '!==', '&&', '&&=', '!', '||', '||=', '[', ']',
-			'as', ',', '?', '.', 'instanceof', '::', 'new', '{', '}',
-			'(', ')', 'typeof', ';', ':', '...', '..', '#', '`' /*just to unlock*/ ];
+			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", "," ];
 
 		private static const keywords : HashMap = new HashMap;
 		private static const keywords2 : HashMap = new HashMap;
@@ -121,39 +124,39 @@ package pyparser
 				str = string.substring( start, pos );
 				return new Token( str, Token.NUMBER, pos );
 			}
-			
-			if ( c == "#")
+
+			if ( c == "#" )
 			{
 				skipUntil( "\r" );
 				return new Token( string.substring( start, pos ), Token.COMMENT, pos );
 			}
-			
-			if ( c == "/" )
-			{
-				if ( nextChar() == "*" )
-				{
-					skipUntil( "*/" );
-					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
-				}
-				else if ( nextChar() == "/" )
-				{
-					skipUntil( "\r" );
-					pos--;
-					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
-				}
-				else
-				{
-					//look for regexp syntax
-					lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
-					if ( lt == '=' || lt == ',' || lt == '[' || lt == '(' || lt == '}' || lt == '{' || lt == ';' || lt == '&&' || lt == '|' )
-					{
-						skipUntilWithEscNL( '/' );
-						while ( isLetter( string.charAt( pos ) ) )
-							pos++;
-						return new Token( string.substring( start, pos ), Token.REGEXP, pos );
-					}
-				}
-			}
+
+//			if ( c == "/" )
+//			{
+//				if ( nextChar() == "*" )
+//				{
+//					skipUntil( "*/" );
+//					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
+//				}
+//				else if ( nextChar() == "/" )
+//				{
+//					skipUntil( "\r" );
+//					pos--;
+//					return new Token( string.substring( start, pos ), Token.COMMENT, pos );
+//				}
+//				else
+//				{
+//					//look for regexp syntax
+//					lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
+//					if ( lt == "=" || lt == "," || lt == "[" || lt == "(" || lt == "}" || lt == "{" || lt == ";" || lt == "&&" || lt == "|" )
+//					{
+//						skipUntilWithEscNL( "/" );
+//						while ( isLetter( string.charAt( pos ) ) )
+//							pos++;
+//						return new Token( string.substring( start, pos ), Token.REGEXP, pos );
+//					}
+//				}
+//			}
 
 			if ( isLetter( c ) )
 			{
@@ -164,8 +167,8 @@ package pyparser
 					type = Token.KEYWORD;
 				else if ( isKeyword2( str ) )
 					type = Token.KEYWORD2;
-				else if ( tokens.length && tokens[ tokens.length - 1 ].string == '[' &&
-					( str == 'Embed' || str == 'Event' || str == 'SWF' || str == 'Bindable' ) )
+				else if ( tokens.length && tokens[ tokens.length - 1 ].string == "[" &&
+					( str == "Embed" || str == "Event" || str == "SWF" || str == "Bindable" ) )
 					type = Token.KEYWORD;
 				else
 					type = Token.STRING_LITERAL;
@@ -177,30 +180,30 @@ package pyparser
 				return new Token( str, Token.SYMBOL, pos );
 			}
 			//look for E4X
-			else if ( c == '<' )
-			{
-				lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
-				if ( lt == '=' || lt == ',' || lt == '[' || lt == '(' || lt == '==' || lt == '!=' )
-				{
-					do
-					{
-						skipUntil( '>' );
-						str = string.substring( start, pos );
-						try
-						{
-							XML( str.replace( /[{}]/g, '"' ) );
-							return new Token( str, Token.E4X, pos );
-						}
-						catch ( e : Error )
-						{
-						}
-						;
-					} while ( pos < string.length );
-					pos = start;
-				}
-				return new Token( c, Token.SYMBOL, ++pos );
-			}
-			else if ( c == '"' || c == "'" )
+//			else if ( c == "<" )
+//			{
+//				lt = tokens.length > 0 ? tokens[ tokens.length - 1 ].string : "";
+//				if ( lt == "=" || lt == "," || lt == "[" || lt == "(" || lt == "==" || lt == "!=" )
+//				{
+//					do
+//					{
+//						skipUntil( ">" );
+//						str = string.substring( start, pos );
+//						try
+//						{
+//							XML( str.replace( /[{}]/g, "\"" ) );
+//							return new Token( str, Token.E4X, pos );
+//						}
+//						catch ( e : Error )
+//						{
+//						}
+//						;
+//					} while ( pos < string.length );
+//					pos = start;
+//				}
+//				return new Token( c, Token.SYMBOL, ++pos );
+//			}
+			else if ( c == "\"" || c == "'" )
 			{ // a string
 				skipUntilWithEscNL( c );
 				return new Token( string.substring( start, pos ), Token.STRING, pos );
@@ -248,7 +251,7 @@ package pyparser
 			//this is faster than regexp
 			pos++;
 			var c : String;
-			while ( ( c = string.charAt( pos ) ) != exit && c != '\r' && c )
+			while ( ( c = string.charAt( pos ) ) != exit && c != "\r" && c )
 			{
 				if ( c == "\\" )
 					pos++;
@@ -279,9 +282,9 @@ package pyparser
 			var c : String;
 			while ( true )
 			{
-				var dot : Boolean = c == '.';
+				var dot : Boolean = c == ".";
 				c = currentChar();
-				if ( !( isLetter( c ) || isNumber( c ) || c == "." || ( dot && c == '*' ) ) )
+				if ( !( isLetter( c ) || isNumber( c ) || c == "." || ( dot && c == "*" ) ) )
 					break;
 				pos++;
 			}
@@ -363,14 +366,14 @@ package pyparser
 			if ( !tokens )
 			{
 				tokens = [];
-				tree = new Token( 'top', null, 0 );
+				tree = new Token( "top", null, 0 );
 				tree.children = [];
 				crtBlock = tree;
 
 				//top scope
-				topScope = scope = new Field( 'top', 0, 'top' );
+				topScope = scope = new Field( "top", 0, "top" );
 				//toplevel package
-				scope.members.setValue( '', new Field( 'package', 0, '' ) );
+				scope.members.setValue( "", new Field( "package", 0, "" ) );
 
 				pos = 0;
 				defParamValue = null;
@@ -386,12 +389,12 @@ package pyparser
 			tokens.push( t );
 			t.parent = crtBlock;
 			crtBlock.children.push( t );
-			if ( t.string == '{' /* || t.string=='[' || t.string=='('*/ )
+			if ( t.string == "{" /* || t.string=="[" || t.string=="("*/ )
 			{
 				crtBlock = t;
 				t.children = [];
 			}
-			if ( t.string == '}' && crtBlock.parent /* || t.string==']' || t.string==')'*/ )
+			if ( t.string == "}" && crtBlock.parent /* || t.string=="]" || t.string==")"*/ )
 			{
 				crtBlock = crtBlock.parent;
 			}
@@ -403,50 +406,50 @@ package pyparser
 			var tp2 : Token = tokens[ tl - 2 ];
 			var tp3 : Token = tokens[ tl - 3 ];
 
-			if ( t.string == 'package' )
+			if ( t.string == "package" )
 				imports = new HashMap;
 
 			//toplevel package
-			if ( t.string == '{' && tp.string == 'package' )
+			if ( t.string == "{" && tp.string == "package" )
 			{
-				_scope = scope.members.getValue( '' );
-					//imports.setItem('.*');
+				_scope = scope.members.getValue( "" );
+					//imports.setItem(".*");
 			}
-			else if ( tp && tp.string == 'import' )
+			else if ( tp && tp.string == "import" )
 			{
 				imports.setValue( t.string, t.string );
 			}
-			else if ( tp && tp.string == 'extends' )
+			else if ( tp && tp.string == "extends" )
 			{
 				field.extendz = new Multiname( t.string, imports );
 			}
-			else if ( t.string == 'private' || t.string == 'protected' || t.string == 'public' || t.string == 'internal' )
+			else if ( t.string == "private" || t.string == "protected" || t.string == "public" || t.string == "internal" )
 			{
 				access = t.string;
 			}
-			else if ( t.string == 'static' )
+			else if ( t.string == "static" )
 			{
 				isStatic = true;
 			}
-			else if ( t.string == 'get' || t.string == 'set' )
+			else if ( t.string == "get" || t.string == "set" )
 			{
 				//do nothing
 			}
-			else if ( tp && ( tp.string == 'package' || tp.string == 'class' || tp.string == 'interface' ||
-				tp.string == 'function' || tp.string == 'catch' || tp.string == 'get' || tp.string == 'set' ||
-				tp.string == 'var' || tp.string == 'const' ) )
+			else if ( tp && ( tp.string == "package" || tp.string == "class" || tp.string == "interface" ||
+				tp.string == "function" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
+				tp.string == "var" || tp.string == "const" ) )
 			{
 				//for package, merge classes in the existing omonimus package
-				if ( tp.string == 'package' && scope.members.hasKey( t.string ) )
+				if ( tp.string == "package" && scope.members.hasKey( t.string ) )
 					_scope = scope.members.getValue( t.string );
 				else
 				{
-					//debug('field-'+tp.string);
+					//debug("field-"+tp.string);
 					//TODO if is "set" make it "*set"
 					field = new Field( tp.string, t.pos, t.string );
-					if ( t.string != '(' ) //anonimus functions are not members
+					if ( t.string != "(" ) //anonimus functions are not members
 						scope.members.setValue( t.string, field );
-					if ( tp.string != 'var' && tp.string != 'const' )
+					if ( tp.string != "var" && tp.string != "const" )
 						_scope = field;
 
 					if ( isStatic ) //consume "static" declaration
@@ -461,14 +464,14 @@ package pyparser
 
 					}
 					//all interface methods are public
-					if ( scope.fieldType == 'interface' )
-						field.access = 'public';
+					if ( scope.fieldType == "interface" )
+						field.access = "public";
 					//this is so members will have the parent set to the scope
 					field.parent = scope;
 				}
-				if ( _scope && ( tp.string == 'class' || tp.string == 'interface' || scope.fieldType == 'package' ) )
+				if ( _scope && ( tp.string == "class" || tp.string == "interface" || scope.fieldType == "package" ) )
 				{
-					_scope.type = new Multiname( 'Class' );
+					_scope.type = new Multiname( "Class" );
 					try
 					{
 						_typeDB.addDefinition( scope.name, field );
@@ -479,11 +482,11 @@ package pyparser
 					}
 				}
 				//add current package to imports
-				if ( tp.string == 'package' )
-					imports.setValue( t.string + '.*', t.string + '.*' );
+				if ( tp.string == "package" )
+					imports.setValue( t.string + ".*", t.string + ".*" );
 			}
 
-			if ( t.string == ';' )
+			if ( t.string == ";" )
 			{
 				field = null;
 				_scope = null;
@@ -491,27 +494,27 @@ package pyparser
 			}
 
 			//parse function params
-			else if ( _scope && ( _scope.fieldType == 'function' || _scope.fieldType == 'catch' || _scope.fieldType == 'set' ) )
+			else if ( _scope && ( _scope.fieldType == "function" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
 			{
-				if ( tp && tp.string == '(' && t.string != ')' )
+				if ( tp && tp.string == "(" && t.string != ")" )
 					paramsBlock = true;
 
 				if ( paramsBlock )
 				{
-					if ( !param && t.string != '...' )
+					if ( !param && t.string != "..." )
 					{
-						param = new Field( 'var', pos, t.string );
+						param = new Field( "var", pos, t.string );
 						t.scope = _scope;
 						_scope.params.setValue( param.name, param );
-						if ( tp.string == '...' )
+						if ( tp.string == "..." )
 						{
 							_scope.hasRestParams = true;
-							param.type = new Multiname( 'Array' );
+							param.type = new Multiname( "Array" );
 						}
 					}
-					else if ( tp.string == ':' )
+					else if ( tp.string == ":" )
 					{
-						if ( _scope.fieldType == 'set' )
+						if ( _scope.fieldType == "set" )
 						{
 							_scope.type = new Multiname( t.string, imports );
 						}
@@ -519,12 +522,12 @@ package pyparser
 							param.type = new Multiname( t.string, imports );
 					}
 
-					else if ( t.string == '=' )
-						defParamValue = '';
+					else if ( t.string == "=" )
+						defParamValue = "";
 
-					else if ( t.string == ',' || t.string == ')' )
+					else if ( t.string == "," || t.string == ")" )
 					{
-						if ( t.string == ')' )
+						if ( t.string == ")" )
 						{
 							paramsBlock = false;
 						}
@@ -541,11 +544,11 @@ package pyparser
 			}
 
 
-			if ( field && tp3 && tp.string == ':' )
+			if ( field && tp3 && tp.string == ":" )
 			{
-				if ( tp3.string == 'var' || tp3.string == 'const' || tp2.string == ')' )
+				if ( tp3.string == "var" || tp3.string == "const" || tp2.string == ")" )
 				{
-					if ( field.fieldType != 'set' )
+					if ( field.fieldType != "set" )
 					{
 						field.type = new Multiname( t.string, imports );
 					}
@@ -554,24 +557,24 @@ package pyparser
 			}
 
 
-			if ( t.string == '{' && _scope )
+			if ( t.string == "{" && _scope )
 			{
 				crtBlock.imports = imports;
 				_scope.pos = t.pos;
 				_scope.parent = scope;
 				scope = _scope;
 				t.scope = scope;
-				//info += pos + ')' + scope.parent.name + '->' + scope.name+'\n';
+				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
 				_scope = null;
 			}
 
-			else if ( t.string == '}' && t.parent.pos == scope.pos )
+			else if ( t.string == "}" && t.parent.pos == scope.pos )
 			{
-				//info += scope.parent.name + '<-' + scope.name+'\n';
+				//info += scope.parent.name + "<-" + scope.name+"\n";
 				scope = scope.parent;
 
 				//force a ; to close the scope here. needs further testing
-				var sepT : Token = new Token( ';', Token.SYMBOL, t.pos + 1 );
+				var sepT : Token = new Token( ";", Token.SYMBOL, t.pos + 1 );
 				sepT.scope = scope;
 				sepT.parent = t.parent;
 				tokens.push( sepT );

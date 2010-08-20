@@ -1,11 +1,11 @@
 package view
 {
 	import flash.events.Event;
-	
+
 	import pyparser.Controller;
-	
+
 	import spark.components.SkinnableContainer;
-	
+
 	import view.skins.ScriptEditorSkin;
 
 	public class ScriptEditor extends SkinnableContainer
@@ -13,7 +13,7 @@ package view
 		public function ScriptEditor()
 		{
 			setStyle( "skinClass", ScriptEditorSkin );
-			
+
 			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
 
@@ -21,6 +21,17 @@ package view
 		public var scriptAreaComponent : ScriptAreaComponent;
 
 		private var controller : Controller;
+		private var fileName : String;
+		private var assistMenu : AssistMenu;
+
+		public function loadSource( source : String, filePath : String ) : void
+		{
+			scriptAreaComponent.text = source.replace( /(\n|\r\n)/g, '\r' );
+			fileName = filePath;
+
+			if ( controller )
+				controller.sourceChanged( scriptAreaComponent.text, fileName );
+		}
 
 		private function initiaize() : void
 		{
@@ -28,25 +39,31 @@ package view
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 
-//			assistMenu = new AssistMenu( this, ctrl, stage, onAssistComplete );
+			assistMenu = new AssistMenu( scriptAreaComponent, controller, stage, assistCompleteHandler );
 
 			addEventListener( Event.CHANGE, changeHandler );
+			controller.sourceChanged( scriptAreaComponent.text, "zz" );
 		}
-		
+
 		private function addedToStageHadler( event : Event ) : void
 		{
-			if( scriptAreaComponent )
+			if ( scriptAreaComponent )
 				initiaize();
 		}
-		
+
 		private function controller_statusHandler( event : Event ) : void
 		{
 			dispatchEvent( new Event( "status" ) );
 		}
-		
-		private function changeHandler ( event : Event ) : void
+
+		private function changeHandler( event : Event ) : void
 		{
-			controller.sourceChanged(scriptAreaComponent.text, "zz");
+			controller.sourceChanged( scriptAreaComponent.text, "zz" );
+		}
+
+		private function assistCompleteHandler() : void
+		{
+			controller.sourceChanged( scriptAreaComponent.text, "zz" );
 		}
 	}
 }

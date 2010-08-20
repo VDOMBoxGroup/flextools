@@ -109,7 +109,7 @@
 
 
 	<view:ScriptAreaComponent id="scriptAreaComponent"
-							  text="asdka ;lda sld"/>
+							  text="def __init__(self):"/>
 
 	<s:HScrollBar id="hsb"
 				  minimum="0"

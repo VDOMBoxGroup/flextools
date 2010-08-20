@@ -4,11 +4,40 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:view="view.*"
 					   focusEnabled="true" minHeight="600" minWidth="500"
-					   backgroundColor="#ccc0c0">
+					   backgroundColor="#ccc0c0"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			private var fs : FileStream;
+
+			protected function windowedapplication1_creationCompleteHandler( event : FlexEvent ) : void
+			{
+				var file : File;
+				
+				if ( !file )
+					file = File.applicationDirectory;
+
+				file = file.resolvePath( "manager.py" );
+				
+				fs = new FileStream();
+				fs.open( file, FileMode.READ );
+				
+				var ba : ByteArray = new ByteArray();
+				
+				fs.readBytes( ba );
+			
+				var text : String = ba.readUTFBytes( ba.length );
+				
+				scriptEditor.loadSource( text, "zzz" );
+			}
+		]]>
+	</fx:Script>
 
 
 
-	<view:ScriptEditor width="100%" height="100%"/>
-
+	<view:ScriptEditor id="scriptEditor"
+					   height="100%" width="100%"/>
 
 </s:WindowedApplication>

@@ -1,10 +1,7 @@
 package view
 {
-	import flash.filters.DropShadowFilter;
 	import flash.events.*;
-	
-	import org.aswing.*;
-	import org.aswing.border.LineBorder;
+	import flash.filters.DropShadowFilter;
 
 	/**
 	 * Simple one level floating menu
@@ -67,28 +64,4 @@ package view
 			(getUI() as PopupUI).resetIndex();
 		}
 	}
-}
-
-
-
-import org.aswing.Component;
-import org.aswing.plaf.basic.BasicListUI;
-import org.aswing.geom.IntRectangle;
-
-class PopupUI extends BasicListUI
-{
-	public function PopupUI()
-	{
-		super();
-	}
-	
-    override protected function paintCellFocus(cellComponent:Component):void
-    {
-    	
-    }
-    
-    public function resetIndex():void
-    {
-    	paintFocusedIndex = -1;
-    }
 }
