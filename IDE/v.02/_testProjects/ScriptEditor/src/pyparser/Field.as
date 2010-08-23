@@ -87,10 +87,12 @@ package pyparser
 
 
 		public var hasRestParams:Boolean = false;
+		
 		public var isGetter:Boolean;
 		
 		public var isStatic:Boolean;
 		
+		public var indent:String;
 		
 		/**
 		 * unresolved type of extended class

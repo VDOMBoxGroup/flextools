@@ -60,28 +60,36 @@ package pyparser
 		private static const symbolsA : Array = [
 			"+", "-", "/", "*", "=", "<", ">", "%", "!", "&", ";", "?", "`", ":", "," ];
 
-		private static const keywords : HashMap = new HashMap;
-		private static const keywords2 : HashMap = new HashMap;
-		private static const symbols : HashMap = new HashMap;
+		private static const keywords : HashMap = new HashMap();
+		private static const keywords2 : HashMap = new HashMap();
+		private static const symbols : HashMap = new HashMap();
 		private static const symbolsLengths : Array = [];
 
 		//static class init
 		private static var init : Boolean = ( function() : Boolean
 		{
 			var s : String;
+			
 			for each ( s in keywordsA )
+			{
 				keywords.setValue( s, true );
+			}
+			
 			for each ( s in keywords2A )
+			{
 				keywords2.setValue( s, true );
+			}
+			
 			for each ( s in symbolsA )
 			{
 				symbols.setValue( s, true );
+				
 				var len : uint = s.length;
+				
 				if ( symbolsLengths.indexOf( len ) == -1 )
 					symbolsLengths.push( len );
 			}
 			symbolsLengths.sort( Array.DESCENDING + Array.NUMERIC );
-			//trace(symbolsLengths);
 
 			return true;
 		} )();
@@ -203,11 +211,27 @@ package pyparser
 //				}
 //				return new Token( c, Token.SYMBOL, ++pos );
 //			}
-			else if ( c == "\"" || c == "'" )
-			{ // a string
-				skipUntilWithEscNL( c );
+			else if ( c == "\"" )
+			{ 
+				if( string.length - pos > 2 && string.substr( pos + 1, 2 ) == "\"\"" )
+				{
+					skipUntil( "\"\"\"" )					
+				}
+				else
+				{
+					skipUntilWithEscNL( c )
+				}
+
 				return new Token( string.substring( start, pos ), Token.STRING, pos );
 			}
+			
+			else if (  c == "'" )
+			{
+				skipUntilWithEscNL( c )
+				
+				return new Token( string.substring( start, pos ), Token.STRING, pos );
+			}
+			
 			//unknown
 			return new Token( c, Token.SYMBOL, ++pos );
 		}
@@ -341,7 +365,7 @@ package pyparser
 		}
 
 		internal var tokens : Array;
-		private var crtBlock : Token;
+		private var currentBlock : Token;
 		private var _scope : Field;
 		private var field : Field;
 		private var param : Field;
@@ -368,7 +392,7 @@ package pyparser
 				tokens = [];
 				tree = new Token( "top", null, 0 );
 				tree.children = [];
-				crtBlock = tree;
+				currentBlock = tree;
 
 				//top scope
 				topScope = scope = new Field( "top", 0, "top" );
@@ -379,7 +403,7 @@ package pyparser
 				defParamValue = null;
 				paramsBlock = false;
 
-				imports = new HashMap;
+				imports = new HashMap();
 			}
 
 			var t : Token = nextToken();
@@ -387,24 +411,24 @@ package pyparser
 				return false;
 
 			tokens.push( t );
-			t.parent = crtBlock;
-			crtBlock.children.push( t );
+			t.parent = currentBlock;
+			currentBlock.children.push( t );
 			if ( t.string == "{" /* || t.string=="[" || t.string=="("*/ )
 			{
-				crtBlock = t;
+				currentBlock = t;
 				t.children = [];
 			}
-			if ( t.string == "}" && crtBlock.parent /* || t.string=="]" || t.string==")"*/ )
+			if ( t.string == "}" && currentBlock.parent /* || t.string=="]" || t.string==")"*/ )
 			{
-				crtBlock = crtBlock.parent;
+				currentBlock = currentBlock.parent;
 			}
 
 			t.scope = scope;
 
-			var tl : uint = tokens.length - 1;
-			var tp : Token = tokens[ tl - 1 ];
-			var tp2 : Token = tokens[ tl - 2 ];
-			var tp3 : Token = tokens[ tl - 3 ];
+			var tokensLength : uint = tokens.length - 1;
+			var tp : Token = tokens[ tokensLength - 1 ];
+			var tp2 : Token = tokens[ tokensLength - 2 ];
+			var tp3 : Token = tokens[ tokensLength - 3 ];
 
 			if ( t.string == "package" )
 				imports = new HashMap;
@@ -559,7 +583,7 @@ package pyparser
 
 			if ( t.string == "{" && _scope )
 			{
-				crtBlock.imports = imports;
+				currentBlock.imports = imports;
 				_scope.pos = t.pos;
 				_scope.parent = scope;
 				scope = _scope;
