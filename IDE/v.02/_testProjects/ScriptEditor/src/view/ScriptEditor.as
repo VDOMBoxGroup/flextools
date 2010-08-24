@@ -2,7 +2,7 @@ package view
 {
 	import flash.events.Event;
 
-	import pyparser.Controller;
+	import parsers.python.Controller;
 
 	import spark.components.SkinnableContainer;
 

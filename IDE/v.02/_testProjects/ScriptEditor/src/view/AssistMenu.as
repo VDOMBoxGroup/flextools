@@ -30,7 +30,7 @@ package view
 
 	import mx.managers.PopUpManager;
 
-	import pyparser.Controller;
+	import parsers.python.Controller;
 
 	import ro.victordramba.util.vectorToArray;
 
