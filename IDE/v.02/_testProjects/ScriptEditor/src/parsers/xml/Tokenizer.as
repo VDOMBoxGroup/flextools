@@ -134,17 +134,17 @@ package parsers.xml
 			var char : String = getCurrentChar();
 			var startPosition : uint = position;
 			var tempPosition : uint = position;
-			
+
 			var tokenString : String;
 			var prevToken : Token;
 
-			if( isWhitespace( char ) )
+			if ( isWhitespace( char ) )
 			{
 				skipWhitespace();
 				startPosition = position;
 				char = getCurrentChar();
 			}
-			
+
 			if ( char == "<" )
 			{
 				if ( nextChar() == "!" )
@@ -199,58 +199,66 @@ package parsers.xml
 			{
 				tokenString = string.substring( startPosition, ++position );
 				isTagInside = false;
-				
+
 				return new Token( tokenString, Token.TAGNAME, position );
+			}
+
+			else if ( char == "\"" && isTagInside )
+			{
+				skipUntil( "\"" );
+				tokenString = string.substring( startPosition, position );
+
+				return new Token( tokenString, Token.ATTRIBUTEVALUE, position );
 			}
 
 			else if ( isLetter( char ) )
 			{
 				prevToken = tokens.length > 0 ? tokens[ tokens.length - 1 ] : null;
-				
-				if( !prevToken )
+
+				if ( !prevToken )
 				{
 					skipUntil( "<" );
 					tokenString = string.substring( startPosition, position );
-					
+
 					return new Token( tokenString, Token.COMMENT, position );
 				}
-				
-				if( prevToken.string == "<" )
+
+				if ( prevToken.string == "<" )
 				{
 					skipToStringEnd();
 					tokenString = string.substring( startPosition, position );
-					
+
 					isTagInside = true;
-					
+
 					return new Token( tokenString, Token.TAGNAME, position );
 				}
 				else if ( prevToken.string == "</" )
 				{
 					skipToStringEnd();
 					tokenString = string.substring( startPosition, position );
-					
+
 					tempPosition = position;
-					
-					if( getCurrentChar() != ">" )
+
+					if ( getCurrentChar() != ">" )
 						skipUntil( ">" );
-					
+
 					return new Token( tokenString, Token.TAGNAME, tempPosition );
 				}
-				else if( isTagInside )
+				else if ( isTagInside )
 				{
-					if( isLetter( char ) )
+					if ( isLetter( char ) )
 					{
 						skipToStringEnd();
 						tokenString = string.substring( startPosition, position );
-						
-						if( prevToken.string == "\"" )
+
+						if ( prevToken.string == "\"" )
 							return new Token( tokenString, Token.ATTRIBUTEVALUE, position );
 						else
 							return new Token( tokenString, Token.ATTRIBUTENAME, position );
 					}
-					
+
 				}
-				
+
 			}
 //			if ( isWhitespace( char ) )
 //			{

@@ -9,53 +9,53 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
-
+			
 			private var fs : FileStream;
-
+			
 			protected function windowedapplication1_creationCompleteHandler( event : FlexEvent ) : void
 			{
 				var file : File = File.applicationDirectory;
-
+				
 				file = file.resolvePath( "manager.py" );
-
+				
 				fs = new FileStream();
 				fs.open( file, FileMode.READ );
-
+				
 				var ba : ByteArray = new ByteArray();
-
+				
 				fs.readBytes( ba );
-
+				
 				var text : String = ba.readUTFBytes( ba.length );
-
-//				pythonScriptEditor.loadSource( text, "zzz" );
-
+				
+				//				pythonScriptEditor.loadSource( text, "zzz" );
+				
 				file = File.applicationDirectory;
 				file = file.resolvePath( "test.xml" );
-
+				
 				ba.position = 0;
 				
 				fs.open( file, FileMode.READ );
 				fs.readBytes( ba );
-
+				
 				text = ba.readUTFBytes( ba.length );
 				xmlScriptEditor.loadSource( text, "zzz" );
 			}
 		]]>
 	</fx:Script>
-
-
-
+	
+	
+	
 	<s:Group height="100%" width="100%">
 		<s:layout>
 			<s:HorizontalLayout/>
 		</s:layout>
-
+		
 		<!--<view:PythonScriptEditor id="pythonScriptEditor"
-								 height="100%" width="100%" visible="false" includeInLayout="false"/>-->
-
+		height="100%" width="100%" visible="false" includeInLayout="false"/>-->
+		
 		<view:XMLScriptEditor id="xmlScriptEditor"
 							  height="100%" width="100%" />
 	</s:Group>
-
-
+	
+	
 </s:WindowedApplication>
