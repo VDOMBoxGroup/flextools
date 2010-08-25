@@ -8,9 +8,9 @@ package view
 
 	import view.skins.ScriptEditorSkin;
 
-	public class ScriptEditor extends SkinnableContainer
+	public class PythonScriptEditor extends SkinnableContainer
 	{
-		public function ScriptEditor()
+		public function PythonScriptEditor()
 		{
 			setStyle( "skinClass", ScriptEditorSkin );
 

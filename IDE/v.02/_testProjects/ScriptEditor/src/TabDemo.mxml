@@ -3,7 +3,7 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:view="view.*"
-					   focusEnabled="true" minHeight="600" minWidth="500"
+					   focusEnabled="true" minHeight="600" minWidth="800"
 					   backgroundColor="#ccc0c0"
 					   creationComplete="windowedapplication1_creationCompleteHandler(event)">
 	<fx:Script>
@@ -14,30 +14,48 @@
 
 			protected function windowedapplication1_creationCompleteHandler( event : FlexEvent ) : void
 			{
-				var file : File;
-				
-				if ( !file )
-					file = File.applicationDirectory;
+				var file : File = File.applicationDirectory;
 
 				file = file.resolvePath( "manager.py" );
-				
+
 				fs = new FileStream();
 				fs.open( file, FileMode.READ );
-				
+
 				var ba : ByteArray = new ByteArray();
-				
+
 				fs.readBytes( ba );
-			
+
 				var text : String = ba.readUTFBytes( ba.length );
+
+//				pythonScriptEditor.loadSource( text, "zzz" );
+
+				file = File.applicationDirectory;
+				file = file.resolvePath( "test.xml" );
+
+				ba.position = 0;
 				
-				scriptEditor.loadSource( text, "zzz" );
+				fs.open( file, FileMode.READ );
+				fs.readBytes( ba );
+
+				text = ba.readUTFBytes( ba.length );
+				xmlScriptEditor.loadSource( text, "zzz" );
 			}
 		]]>
 	</fx:Script>
 
 
 
-	<view:ScriptEditor id="scriptEditor"
-					   height="100%" width="100%"/>
+	<s:Group height="100%" width="100%">
+		<s:layout>
+			<s:HorizontalLayout/>
+		</s:layout>
+
+		<!--<view:PythonScriptEditor id="pythonScriptEditor"
+								 height="100%" width="100%" visible="false" includeInLayout="false"/>-->
+
+		<view:XMLScriptEditor id="xmlScriptEditor"
+							  height="100%" width="100%" />
+	</s:Group>
+
 
 </s:WindowedApplication>

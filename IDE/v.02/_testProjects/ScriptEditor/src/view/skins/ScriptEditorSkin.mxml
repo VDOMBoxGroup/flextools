@@ -13,65 +13,64 @@
 
 			private var hcw : ChangeWatcher;
 			private var vcw : ChangeWatcher;
-			
+
 			private function updateSize() : void
 			{
 				scriptAreaComponent.width = width - vsb.width;
 				scriptAreaComponent.height = height - hsb.height;
 			}
-			
+
 			private function updateScrollBar() : void
 			{
 				vsb.maximum = scriptAreaComponent.maxScrollV;
 				vsb.value = scriptAreaComponent.scrollV;
-				
+
 				hsb.maximum = scriptAreaComponent.maxScrollH / 8;
 				hsb.value = scriptAreaComponent.scrollH / 8;
 			}
-			
+
 			private function addedToStageHandler() : void
 			{
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 				addEventListener( Event.RESIZE, resizeHandler, false, 0, true );
 				addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler, false, 0, true );
-				
-				if( scriptAreaComponent )
+
+				if ( scriptAreaComponent )
 				{
 					scriptAreaComponent.addEventListener( Event.SCROLL, scriptAreaComponent_scrollHandler, false, 0, true );
 					scriptAreaComponent.addEventListener( Event.CHANGE, scriptAreaComponent_changeHandler, false, 0, true );
 				}
-				
-				if( hsb )
+
+				if ( hsb )
 					hsb.addEventListener( Event.CHANGE, hsb_changeHandler, false, 0, true );
-				
-				if( vsb )
+
+				if ( vsb )
 					vsb.addEventListener( Event.CHANGE, vsb_changeHandler, false, 0, true );
-				
+
 				updateSize();
 				updateScrollBar();
 			}
-			
+
 			private function removedFromStageHandler( event : Event ) : void
 			{
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 				removeEventListener( Event.RESIZE, resizeHandler );
 				removeEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
-				
-				if( scriptAreaComponent )
+
+				if ( scriptAreaComponent )
 					scriptAreaComponent.removeEventListener( Event.SCROLL, scriptAreaComponent_scrollHandler );
-				
-				if( hsb )
-					hsb.removeEventListener( Event.CHANGE, hsb_changeHandler);
-				
-				if( vsb )
+
+				if ( hsb )
+					hsb.removeEventListener( Event.CHANGE, hsb_changeHandler );
+
+				if ( vsb )
 					vsb.removeEventListener( Event.CHANGE, vsb_changeHandler );
 			}
-			
+
 			private function resizeHandler( event : ResizeEvent ) : void
 			{
 				updateSize();
 				updateScrollBar();
-//				scriptAreaComponent.paint( width - vsb.width, height - hsb.height );
 			}
 
 			private function mouseDownHandler( event : MouseEvent ) : void
@@ -84,7 +83,7 @@
 			{
 				updateScrollBar();
 			}
-			
+
 			private function scriptAreaComponent_changeHandler( event : Event ) : void
 			{
 				updateScrollBar();
@@ -108,8 +107,7 @@
 	</s:states>
 
 
-	<view:ScriptAreaComponent id="scriptAreaComponent"
-							  text="def __init__(self):"/>
+	<view:ScriptAreaComponent id="scriptAreaComponent"/>
 
 	<s:HScrollBar id="hsb"
 				  minimum="0"
