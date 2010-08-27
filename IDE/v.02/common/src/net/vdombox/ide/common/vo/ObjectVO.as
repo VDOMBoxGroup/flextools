@@ -53,7 +53,6 @@ package net.vdombox.ide.common.vo
 		public function setXMLDescription( description : XML ) : void
 		{
 			name = description.@Name[ 0 ];
-			;
 		}
 	}
 }

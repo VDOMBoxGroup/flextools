@@ -1,4 +1,4 @@
-package net.vdombox.ide.common.components
+package net.vdombox.components
 {
 	import flash.events.Event;
 	
@@ -6,8 +6,8 @@ package net.vdombox.ide.common.components
 	import mx.core.IVisualElement;
 	import mx.events.ListEvent;
 	
-	import net.vdombox.ide.common.components.tabNavigatorClasses.Tab;
-	import net.vdombox.ide.common.components.tabNavigatorClasses.TabBarButton;
+	import net.vdombox.components.tabNavigatorClasses.Tab;
+	import net.vdombox.components.tabNavigatorClasses.TabBarButton;
 	import net.vdombox.ide.common.events.TabEvent;
 	
 	import spark.components.SkinnableContainer;
@@ -22,7 +22,7 @@ package net.vdombox.ide.common.components
 		private var _numTabs : int;
 
 		[Bindable( event="selectedTabChanged" )]
-		public function get selectedTab() : net.vdombox.ide.common.components.tabNavigatorClasses.Tab
+		public function get selectedTab() : net.vdombox.components.tabNavigatorClasses.Tab
 		{
 			return tabBar.selectedItem as Tab;
 		}

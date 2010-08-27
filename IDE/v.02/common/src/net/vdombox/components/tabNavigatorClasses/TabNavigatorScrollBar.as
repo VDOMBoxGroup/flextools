@@ -1,4 +1,4 @@
-package net.vdombox.ide.common.components.tabNavigatorClasses
+package net.vdombox.components.tabNavigatorClasses
 {
 	import flash.events.Event;
 	import flash.events.MouseEvent;

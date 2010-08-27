@@ -1,4 +1,4 @@
-package net.vdombox.ide.common.components.tabNavigatorClasses
+package net.vdombox.components.tabNavigatorClasses
 {
 	import net.vdombox.ide.common.events.TabEvent;
 	

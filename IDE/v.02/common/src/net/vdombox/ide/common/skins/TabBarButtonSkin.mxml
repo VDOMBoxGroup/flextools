@@ -6,7 +6,7 @@
 
 	<!-- host component -->
 	<fx:Metadata>
-		[HostComponent("net.vdombox.ide.common.components.tabNavigatorClasses.TabBarButton")]
+		[HostComponent("net.vdombox.components.tabNavigatorClasses.TabBarButton")]
 	</fx:Metadata>
 
 	<fx:Script>
