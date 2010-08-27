@@ -23,6 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
 			facade.registerMediator( new HelpPanelMediator( body.helpPanel ) );
 			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );
+			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
 		}
 	}
 }

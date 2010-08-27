@@ -9,52 +9,16 @@
 	<fx:Script>
 		<![CDATA[
 			import net.vdombox.ide.modules.wysiwyg.view.components.TypesAccordionHeader;
-			import net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin;
-
-			import spark.events.IndexChangeEvent;
-
-			private function stateSelector_changeHandler() : void
-			{
-				if ( stateSelector.selectedItem && stateSelector.selectedItem.stateName != currentState )
-					currentState = stateSelector.selectedItem.stateName;
-			}
 		]]>
 	</fx:Script>
-
-	<s:states>
-		<s:State name="wysiwyg"/>
-		<s:State name="vdomxml"/>
-	</s:states>
 
 	<mx:Accordion id="typesAccordion"
 				  height="100%" width="90"
 				  headerStyleName="typesAccordionHeader"
 				  headerRenderer="{ new ClassFactory( TypesAccordionHeader ) }"/>
 
-	<s:VGroup gap="0" height="100%" width="100%">
-
-		<s:Group height="100%" width="100%">
-
-			<s:Rect bottom="0" left="0" right="0" top="0">
-				<s:fill>
-					<mx:SolidColor color="gray"/>
-				</s:fill>
-			</s:Rect>
-		</s:Group>
-
-		<s:ButtonBar id="stateSelector"
-					 labelField="label" selectedIndex="0"
-					 change="stateSelector_changeHandler()"
-					 requireSelection="true">
-			<mx:ArrayList>
-				<fx:Object label="WYSIWYG"
-						   stateName="wysiwyg"/>
-				<fx:Object label="VDOM XML"
-						   stateName="vdomxml"/>
-			</mx:ArrayList>
-		</s:ButtonBar>
-
-	</s:VGroup>
+	<components:WorkArea id="workArea"
+						 height="100%" width="100%"/>
 
 	<s:VGroup height="100%" width="220">
 
