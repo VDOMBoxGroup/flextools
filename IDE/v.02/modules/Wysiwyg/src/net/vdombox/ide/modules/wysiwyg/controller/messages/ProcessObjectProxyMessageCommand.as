@@ -8,7 +8,6 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.view.ItemMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -68,13 +67,13 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 						
 						if( facade.hasMediator( mediatorName ) )
 						{
-							itemMediator = facade.retrieveMediator( mediatorName ) as ItemMediator;
-							renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-							
-							var itemVO : ItemVO = itemMediator.item.data as ItemVO;
-							
-							itemMediator.item.data = renderProxy.renderItem( objectVO.pageVO, body.wysiwyg );
-							delete needForUpdateObject[ objectVO.id ];
+//							itemMediator = facade.retrieveMediator( mediatorName ) as ItemMediator;
+//							renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+//							
+//							var itemVO : ItemVO = itemMediator.item.data as ItemVO;
+//							
+//							itemMediator.item.data = renderProxy.renderItem( objectVO.pageVO, body.wysiwyg );
+//							delete needForUpdateObject[ objectVO.id ];
 						}
 					}
 					

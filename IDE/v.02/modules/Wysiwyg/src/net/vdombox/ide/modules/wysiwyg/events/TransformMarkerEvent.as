@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 	import flash.events.Event;
 	
-	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 
 	public class TransformMarkerEvent extends Event
 	{
@@ -15,9 +15,9 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static const TRANSFORM_COMPLETE : String = "complete";
 
 		public var properties : Object;
-		public var item : Item;
+		public var item : ObjectRenderer;
 
-		public function TransformMarkerEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false, item : Item = null,
+		public function TransformMarkerEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false, item : ObjectRenderer = null,
 											  properties : Object = null ) : void
 		{
 

@@ -1,6 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
+	import mx.collections.XMLListCollection;
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -19,7 +22,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 		}
 
 		private var typesProxy : TypesProxy;
-		private var _renderData : ItemVO;
 
 		private var cache : Object;
 
@@ -40,35 +42,25 @@ package net.vdombox.ide.modules.wysiwyg.model
 			var itemID : String = rawRenderData.@id;
 			var renderVO : RenderVO;
 
-			renderVO = cache[ itemID ] ? cache[ itemID ] : new RenderVO( itemID );
-			renderVO.vdomObjectVO = pageVO;
+			renderVO = cache[ itemID ] ? cache[ itemID ] : new RenderVO( pageVO );
 
-			cache[ renderItem.id ] = renderItem;
+			cache[ renderVO.vdomObjectVO.id ] = renderVO;
 
 			createAttributes( renderVO, rawRenderData );
 			createChildren( renderVO, rawRenderData );
 
-			return renderItem;
+			return renderVO;
 		}
 
 		private function createAttributes( renderVO : RenderVO, rawRenderData : XML ) : void
 		{
 			var typeVO : TypeVO;
 
-			renderVO.name = rawRenderData.name();
-
 			renderVO.visible = rawRenderData.@visible == 1 ? true : false;
 
 			renderVO.zindex = uint( rawRenderData.@zindex );
 			renderVO.hierarchy = uint( rawRenderData.@hierarchy );
 			renderVO.order = uint( rawRenderData.@order );
-
-			typeVO = typesProxy.getTypeVObyID( rawRenderData.@typeID );
-
-			if ( typeVO )
-				itemVO.typeVO = typeVO;
-			else
-				var d : * = "";
 
 			renderVO.staticFlag = rawRenderData.@contents == "static" ? true : false;
 
@@ -83,62 +75,91 @@ package net.vdombox.ide.modules.wysiwyg.model
 			var attribute : XML;
 			var attributeVO : AttributeVO;
 
-			itemVO.attributes = [];
+			var attributesList : XMLList = rawRenderData.attributes();
 
-			for each ( attribute in rawRenderData.@* )
+			if ( attributesList && attributesList.length() > 0 )
 			{
-				attributeVO = new AttributeVO( attribute.name(), attribute[ 0 ] );
-				itemVO.attributes.push( attributeVO );
+				renderVO.attributes = [];
+
+				for each ( attribute in attributesList )
+				{
+					attributeVO = new AttributeVO( attribute.name(), attribute[ 0 ] );
+					renderVO.attributes.push( attributeVO );
+				}
 			}
 		}
 
 		private function createChildren( renderVO : RenderVO, rawRenderData : XML ) : void
 		{
-			var childItemVO : ItemVO;
-			var child : XML;
+			var pageVO : PageVO = renderVO.vdomObjectVO is PageVO ? renderVO.vdomObjectVO as PageVO : ObjectVO( renderVO.vdomObjectVO ).pageVO;
+			var objectVO : ObjectVO;
+			
+			var typeVO : TypeVO;
+			var typeID : String;
+			
+			var childRenderVO : RenderVO;
+			
+			var childXML : XML;
+			var childName : String;
+			var childID : String;
 
-			renderVO.children = [];
-			renderVO.content = new XMLList();
-
-			for each ( child in rawRenderData.* )
+			for each ( childXML in rawRenderData.* )
 			{
-				var childName : String = child.name();
-				var childID : String = child.@id;
+				childName = childXML.name();
+				childID = childXML.@id;
 
+				typeID = childXML.@typeID;
+				
 				if ( childName == "container" || childName == "table" || childName == "row" || childName == "cell" )
 				{
-					if ( !childID )
+					
+					typeVO = typesProxy.getTypeVObyID( typeID );
+					
+					if ( !childID || ! typeVO )
 						continue;
 
-					childItemVO = new ItemVO( childID );
-					childItemVO.pageVO = itemVO.pageVO;
+					objectVO = new ObjectVO( pageVO, typeVO );
+					
+					childRenderVO = new RenderVO( objectVO );
 
-					createAttributes( childItemVO, child );
-					createChildren( childItemVO, child );
+					createAttributes( childRenderVO, childXML );
+					createChildren( childRenderVO, childXML );
 
-					childItemVO.parent = itemVO;
+					childRenderVO.parent = renderVO;
 
-					itemVO.children.push( childItemVO );
+					if( !renderVO.children )
+						renderVO.children = [];
+						
+					
+					renderVO.children.push( childRenderVO );
 
-					cache[ childItemVO.id ] = childItemVO;
+					cache[ childRenderVO.vdomObjectVO.id ] = childRenderVO;
 				}
 				else
 				{
-					itemVO.content += child.copy();
+					if( !renderVO.content )
+						renderVO.content = childXML.copy();
+					else
+						renderVO.content += childXML.copy();
 				}
 			}
 
-			if ( itemVO.content.length() > 0 )
+			if ( renderVO.content && renderVO.content.length() > 0 )
 			{
 				var editableAttribute : XML;
 
-				editableAttribute = itemVO.content.@ediatable[ 0 ];
+				editableAttribute = renderVO.content.@ediatable[ 0 ];
 
 				if ( !editableAttribute )
-					editableAttribute = itemVO.content..@editable[ 0 ];
+					editableAttribute = renderVO.content..@editable[ 0 ];
 
 				if ( editableAttribute )
-					itemVO.attributes.push( new AttributeVO( "editable", editableAttribute ) );
+				{
+					if( !renderVO.attributes )
+						renderVO.attributes = [];
+					
+					renderVO.attributes.push( new AttributeVO( "editable", editableAttribute ) );
+				}
 			}
 		}
 	}

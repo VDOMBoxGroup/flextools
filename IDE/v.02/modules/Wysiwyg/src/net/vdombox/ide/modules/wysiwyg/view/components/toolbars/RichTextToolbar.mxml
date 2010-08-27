@@ -20,7 +20,7 @@
 			import mx.utils.StringUtil;
 			
 			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+			import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection;
@@ -41,7 +41,7 @@
 
 			private var attributesObject : Object;
 
-			private var _item : Item;
+			private var _item : ObjectRenderer;
 
 			public function get attributes() : Array
 			{
@@ -59,7 +59,7 @@
 				return result;
 			}
 
-			public function get item() : Item
+			public function get item() : ObjectRenderer
 			{
 				return _item;
 			}
@@ -128,7 +128,7 @@
 
 			private var currentRange : *;
 
-			public function init( item : Item ) : void
+			public function init( item : ObjectRenderer ) : void
 			{
 				registerEvent( false );
 				HTMLEditorLoader = null;
@@ -191,7 +191,7 @@
 //				selectedItem.editableAttributes[ 0 ].attributes[ "value" ] = value;
 			}
 
-			private function extractAttributes( item : Item ) : Object
+			private function extractAttributes( item : ObjectRenderer ) : Object
 			{
 				var editableAttributeVO : AttributeVO;
 				var attributeVO : AttributeVO;

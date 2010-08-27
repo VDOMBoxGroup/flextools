@@ -20,12 +20,9 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			var body : Body = notification.getBody() as Body;
 
 			facade.registerMediator( new TypesAccordionMediator( body.typesAccordion ) );
-			facade.registerMediator( new WorkAreaMediator( body.workArea ) );
-			facade.registerMediator( new VDOMXMLEditorMediator( body.vdomXMLEditor ) );
 			facade.registerMediator( new ObjectsTreePanelMediator( body.objectsTreePanel ) );
 			facade.registerMediator( new HelpPanelMediator( body.helpPanel ) );
 			facade.registerMediator( new ObjectAttributesPanelMediator( body.objectAttributesPanel ) );
-			facade.registerMediator( new ToolbarPanelMediator( body.toolbarPanel ) );
 		}
 	}
 }

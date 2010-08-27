@@ -73,7 +73,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var _moveMode : Boolean;
 		private var _resizeMode : uint;
 
-		private var _selectedItem : Item;
+		private var _selectedItem : ObjectRenderer;
 
 		private var _markerSelected : Boolean;
 
@@ -132,12 +132,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return _markerSelected;
 		}
 
-		public function get item() : Item
+		public function get item() : ObjectRenderer
 		{
 			return _selectedItem;
 		}
 
-		public function set item( item : Item ) : void
+		public function set item( item : ObjectRenderer ) : void
 		{
 			if ( _selectedItem == item || ( transformation && _selectedItem ) )
 				return;

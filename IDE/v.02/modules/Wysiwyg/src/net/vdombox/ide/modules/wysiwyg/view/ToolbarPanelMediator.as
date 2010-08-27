@@ -8,7 +8,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ToolbarEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ToolbarPanel;
 	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.ImageToolbar;
 	import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.RichTextToolbar;
@@ -33,7 +33,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 //		private var currentToolbar : Object;
 
-		private var item : Item;
+		private var item : ObjectRenderer;
 
 		public function get toolbarPanel() : ToolbarPanel
 		{
@@ -101,7 +101,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECT_ITEM_REQUEST:
 				{
-					item = body as Item;
+					item = body as ObjectRenderer;
 
 					var itemVO : ItemVO = item.itemVO;
 					var typeVO : TypeVO = itemVO.typeVO;

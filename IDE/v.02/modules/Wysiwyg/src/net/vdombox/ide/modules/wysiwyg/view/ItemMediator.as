@@ -8,9 +8,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -23,17 +22,17 @@ package net.vdombox.ide.modules.wysiwyg.view
 		
 		public static var instances : Object = {};
 
-		public function ItemMediator( viewComponent : Item )
+		public function ItemMediator( viewComponent : ObjectRenderer )
 		{
-			var renderVO : RenderVO = viewComponent.data as ItemVO;
-
-			super( NAME + ApplicationFacade.DELIMITER + itemVO.id, viewComponent );
-			instances[ this.mediatorName ] = "";
+//			var renderVO : RenderVO = viewComponent.data as ItemVO;
+//
+//			super( NAME + ApplicationFacade.DELIMITER + itemVO.id, viewComponent );
+//			instances[ this.mediatorName ] = "";
 		}
 
-		public function get item() : Item
+		public function get item() : ObjectRenderer
 		{
-			return viewComponent as Item;
+			return viewComponent as ObjectRenderer;
 		}
 
 		public function lock() : void
@@ -71,8 +70,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
-					if ( body && item.itemVO && item.itemVO.id == body.id )
-						item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+//					if ( body && item.itemVO && item.itemVO.id == body.id )
+//						item.dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
 
 					break;
 				}
@@ -107,7 +106,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			attributes.push( new AttributeVO( "left", objectLeft.toString() ) );
 			attributes.push( new AttributeVO( "top", objectTop.toString() ) );
 
-			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { parentID: item.itemVO.id, typeVO: typeVO, attributes: attributes } );
+//			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST, { parentID: item.itemVO.id, typeVO: typeVO, attributes: attributes } );
 		}
 	}
 }

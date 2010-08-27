@@ -35,9 +35,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 
-	public class Item extends SkinnableDataContainer implements IItemRenderer
+	public class ObjectRenderer extends SkinnableDataContainer implements IItemRenderer
 	{
-		public function Item()
+		public function ObjectRenderer()
 		{
 			super();
 
@@ -138,32 +138,32 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set data( value : Object ) : void
 		{
 			_data = value;
-			_itemVO = value as ItemVO;
+			_renderVO = value as RenderVO;
 
-			if ( !_itemVO )
+			if ( !_renderVO )
 				return;
 
-			var attributeVO : AttributeVO = _itemVO.getAttributeByName( "width" );
+			var attributeVO : AttributeVO = _renderVO.getAttributeByName( "width" );
 
 			if ( attributeVO )
 				width = int( attributeVO.value );
 
-			attributeVO = _itemVO.getAttributeByName( "height" );
+			attributeVO = _renderVO.getAttributeByName( "height" );
 
 			if ( attributeVO )
 				height = int( attributeVO.value );
 
-			attributeVO = _itemVO.getAttributeByName( "top" );
+			attributeVO = _renderVO.getAttributeByName( "top" );
 
 			if ( attributeVO )
 				y = int( attributeVO.value );
 
-			attributeVO = _itemVO.getAttributeByName( "left" );
+			attributeVO = _renderVO.getAttributeByName( "left" );
 
 			if ( attributeVO )
 				x = int( attributeVO.value );
 
-			attributeVO = _itemVO.getAttributeByName( "backgroundcolor" );
+			attributeVO = _renderVO.getAttributeByName( "backgroundcolor" );
 
 			if ( attributeVO )
 			{
@@ -171,23 +171,23 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
 			}
 
-			attributeVO = _itemVO.getAttributeByName( "bordercolor" );
+			attributeVO = _renderVO.getAttributeByName( "bordercolor" );
 
 			if ( attributeVO )
 			{
 				SolidColorStroke( backgroundRect.stroke ).alpha = 1;
 				SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
-				attributeVO = _itemVO.getAttributeByName( "borderwidth" );
+				attributeVO = _renderVO.getAttributeByName( "borderwidth" );
 				if ( attributeVO )
 					SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
 			}
 
-			if ( _itemVO.staticFlag )
+			if ( _renderVO.staticFlag )
 				locker.visible = true;
 
-			if ( _itemVO && _itemVO.children.length > 0 )
+			if ( _renderVO && _renderVO.children.length > 0 )
 			{
-				var childrenDataProvider : ArrayCollection = new ArrayCollection( _itemVO.children );
+				var childrenDataProvider : ArrayCollection = new ArrayCollection( _renderVO.children );
 				childrenDataProvider.sort = new Sort();
 				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
 				childrenDataProvider.refresh();
@@ -199,7 +199,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			background.removeAllElements();
 
-			for each ( contetntPart in _itemVO.content )
+			for each ( contetntPart in _renderVO.content )
 			{
 				switch ( contetntPart.name().toString() )
 				{
@@ -290,11 +290,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var itemFactory : ClassFactory;
 			var layout : LayoutBase;
-			switch ( itemVO.name )
+			switch ( renderVO.vdomObjectVO.name )
 			{
 				case "container":
 				{
-					itemFactory = new ClassFactory( Item );
+					itemFactory = new ClassFactory( ObjectRenderer );
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout };
@@ -303,7 +303,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				case "table":
 				{
-					itemFactory = new ClassFactory( Item );
+					itemFactory = new ClassFactory( ObjectRenderer );
 					layout = new VerticalLayout();
 					layout.clipAndEnableScrolling = true;
 					VerticalLayout( layout ).gap = 0;
@@ -313,7 +313,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				case "row":
 				{
-					itemFactory = new ClassFactory( Item );
+					itemFactory = new ClassFactory( ObjectRenderer );
 					layout = new HorizontalLayout();
 					layout.clipAndEnableScrolling = true;
 					HorizontalLayout( layout ).gap = 0;
@@ -324,7 +324,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 				case "cell":
 				{
-					itemFactory = new ClassFactory( Item );
+					itemFactory = new ClassFactory( ObjectRenderer );
 					layout = new BasicLayout();
 					layout.clipAndEnableScrolling = true;
 					itemFactory.properties = { layout: layout, percentWidth: 100, percentHeight: 100 };
@@ -394,16 +394,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
-		private function getItemByTarget( target : DisplayObjectContainer ) : Item
+		private function getItemByTarget( target : DisplayObjectContainer ) : ObjectRenderer
 		{
-			var result : Item;
+			var result : ObjectRenderer;
 			var item : DisplayObjectContainer = target;
 
 			while ( item && item.parent )
 			{
-				if ( item is Item )
+				if ( item is ObjectRenderer )
 				{
-					result = item as Item;
+					result = item as ObjectRenderer;
 					break;
 				}
 
@@ -429,8 +429,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var aviableContainers : Array = typeDescription.aviableContainers.match( containersRE );
 			var currentItemName : String;
 
-			if ( itemVO )
-				currentItemName = itemVO.typeVO.name;
+			if ( _renderVO )
+				currentItemName = _renderVO.vdomObjectVO.typeVO.name;
 
 			if ( aviableContainers.indexOf( currentItemName ) != -1 )
 			{
@@ -482,15 +482,15 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 		}
 
-		private function findNearestItem( currentElement : DisplayObjectContainer ) : Item
+		private function findNearestItem( currentElement : DisplayObjectContainer ) : ObjectRenderer
 		{
-			var result : Item;
+			var result : ObjectRenderer;
 
 			while ( currentElement && currentElement.parent )
 			{
-				if ( currentElement is Item )
+				if ( currentElement is ObjectRenderer )
 				{
-					result = currentElement as Item;
+					result = currentElement as ObjectRenderer;
 					break;
 				}
 

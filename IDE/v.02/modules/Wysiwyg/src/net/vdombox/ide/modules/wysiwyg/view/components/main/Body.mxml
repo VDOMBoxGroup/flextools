@@ -31,8 +31,7 @@
 				  headerStyleName="typesAccordionHeader"
 				  headerRenderer="{ new ClassFactory( TypesAccordionHeader ) }"/>
 
-	<s:VGroup height="100%" width="100%"
-			  gap="0">
+	<s:VGroup gap="0" height="100%" width="100%">
 
 		<s:Group height="100%" width="100%">
 
@@ -41,20 +40,6 @@
 					<mx:SolidColor color="gray"/>
 				</s:fill>
 			</s:Rect>
-
-			<s:VGroup height="100%" width="100%"
-					  gap="0" itemCreationPolicy="immediate" includeIn="wysiwyg">
-
-				<components:WorkArea id="workArea"
-									 height="100%" width="100%"/>
-
-				<components:ToolbarPanel id="toolbarPanel"
-										 minHeight="0" width="100%"/>
-			</s:VGroup>
-
-			<components:VDOMXMLEditor id="vdomXMLEditor" height="100%" width="100%"
-									  itemCreationPolicy="immediate" includeIn="vdomxml"/>
-
 		</s:Group>
 
 		<s:ButtonBar id="stateSelector"

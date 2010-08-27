@@ -15,7 +15,7 @@
 			import mx.utils.StringUtil;
 
 			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.modules.wysiwyg.view.components.Item;
+			import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 
 			import spark.components.RichEditableText;
 
@@ -55,7 +55,7 @@
 
 			private var attributesObject : Object;
 
-			private var _item : Item;
+			private var _item : ObjectRenderer;
 
 			private var isInited : Boolean;
 
@@ -75,12 +75,12 @@
 				return result;
 			}
 
-			public function get item() : Item
+			public function get item() : ObjectRenderer
 			{
 				return _item;
 			}
 
-			public function init( item : Item ) : void
+			public function init( item : ObjectRenderer ) : void
 			{
 				_item = item;
 
@@ -148,7 +148,7 @@
 				item.setFocus();
 			}
 
-			private function extractAttributes( item : Item ) : Object
+			private function extractAttributes( item : ObjectRenderer ) : Object
 			{
 				var editableAttributeVO : AttributeVO;
 				var attributeVO : AttributeVO;

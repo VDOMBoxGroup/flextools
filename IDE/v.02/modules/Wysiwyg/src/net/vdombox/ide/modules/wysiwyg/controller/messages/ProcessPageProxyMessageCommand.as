@@ -54,10 +54,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMPageTargetNames.WYSIWYG:
 				{
 					if ( operation == PPMOperationNames.READ )
-						renderProxy.setRawRenderData( pageVO, body.wysiwyg as XML );
+					{}
 
-					delete[ pageVO.id ];
-					
 					break;
 				}
 					

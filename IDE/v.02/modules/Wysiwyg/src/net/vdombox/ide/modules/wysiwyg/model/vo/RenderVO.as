@@ -18,7 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		public var staticFlag : Boolean;
 		
 		public var parent : RenderVO;
-		public var children : Array = [];
+		public var children : Array;
 
 		public var visible : Boolean;
 		
@@ -26,7 +26,7 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		public var hierarchy : uint;
 		public var order : uint;
 		
-		public var attributes : Array = [];
+		public var attributes : Array;
 		public var content : XMLList;
 		
 		private var _vdomObjectVO : IVDOMObjectVO;

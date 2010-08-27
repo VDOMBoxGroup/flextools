@@ -1,13 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
-	import mx.containers.TabNavigator;
-	import mx.containers.ViewStack;
-	import mx.core.UIComponent;
 	import mx.events.DragEvent;
-	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
@@ -15,18 +10,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
-	import net.vdombox.ide.modules.wysiwyg.model.vo.ItemVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.Item;
-	import net.vdombox.ide.modules.wysiwyg.view.components.TransformMarker;
+	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
-	import spark.components.Group;
 
 	public class WorkAreaMediator extends Mediator implements IMediator
 	{
@@ -177,8 +167,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			workArea.addEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true, 0, true );
 
 			workArea.addEventListener( DragEvent.DRAG_DROP, dragDropHandler );
-
-			workArea.transformMarker.addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -194,8 +182,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 			workArea.removeEventListener( ItemEvent.ITEM_CLICKED, item_itemClickedHandler, true );
 
 			workArea.removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
-
-			workArea.transformMarker.removeEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformCompleteHandler );
 		}
 
 
@@ -230,7 +216,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var attributes : Array = [];
 
-			var item : Item = event.item;
+			var item : ObjectRenderer = event.item;
 			var properties : Object = event.properties;
 
 			var attributeName : String;
@@ -238,16 +224,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			for ( attributeName in properties )
 			{
-				for each ( attributeVO in item.itemVO.attributes )
-				{
-					if ( attributeVO.name == attributeName )
-					{
-						attributeVO.value = properties[ attributeName ];
-						attributes.push( attributeVO );
-
-						break;
-					}
-				}
+//				for each ( attributeVO in item.itemVO.attributes )
+//				{
+//					if ( attributeVO.name == attributeName )
+//					{
+//						attributeVO.value = properties[ attributeName ];
+//						attributes.push( attributeVO );
+//
+//						break;
+//					}
+//				}
 			}
 
 			if ( attributes.length > 0 )
@@ -256,7 +242,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function item_itemClickedHandler( event : ItemEvent ) : void
 		{
-			var item : Item = event.target as Item;
+			var item : ObjectRenderer = event.target as ObjectRenderer;
 
 			sendNotification( ApplicationFacade.SELECT_ITEM_REQUEST, item );
 		}
