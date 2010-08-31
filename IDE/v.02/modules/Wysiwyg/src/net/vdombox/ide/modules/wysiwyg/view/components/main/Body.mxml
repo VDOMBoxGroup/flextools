@@ -4,7 +4,7 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  height="100%" width="100%"
-		  paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7">
+		  paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7" xmlns:panels="net.vdombox.ide.modules.wysiwyg.view.components.panels.*">
 
 	<fx:Script>
 		<![CDATA[
@@ -22,17 +22,17 @@
 
 	<s:VGroup height="100%" width="220">
 
-		<components:ObjectAttributesPanel id="objectAttributesPanel"
+		<panels:ObjectAttributesPanel id="objectAttributesPanel"
 										  width="100%"
 										  backgroundAlpha="0" cornerRadius="5" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
 										  title="{ resourceManager.getString( 'Wysiwyg_General', 'object_attributes_panel_title') }" borderAlpha="0" borderVisible="false"/>
 
-		<components:HelpPanel id="helpPanel"
+		<panels:HelpPanel id="helpPanel"
 							  width="100%"
 							  backgroundAlpha="0" cornerRadius="5" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
 							  title="{ resourceManager.getString( 'Wysiwyg_General', 'help_panel_title') }" borderAlpha="0" borderVisible="false"/>
 
-		<components:ObjectsTreePanel id="objectsTreePanel"
+		<panels:ObjectsTreePanel id="objectsTreePanel"
 									 width="100%"
 									 backgroundAlpha="0" cornerRadius="5" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.PanelSkin"
 									 title="{ resourceManager.getString( 'Wysiwyg_General', 'pages_panel_title') }" borderAlpha="0" borderVisible="false"/>

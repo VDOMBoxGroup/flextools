@@ -1,30 +1,32 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import net.vdombox.ide.common.vo.AttributeDescriptionVO;
+	import mx.events.StateChangeEvent;
+	
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.SkinPartEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.panels.HelpPanel;
+	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
-	public class HelpPanelMediator extends Mediator implements IMediator
+	public class PageEditorMediator extends Mediator implements IMediator
 	{
-		public static const NAME : String = "HelpPanelMediator";
+		public static const NAME : String = "PageEditorMediator";
 
-		public function HelpPanelMediator( viewComponent : HelpPanel )
+		public function PageEditorMediator( pageEditor : PageEditor )
 		{
-			super( NAME, viewComponent );
+			super( NAME, pageEditor );
 		}
 
 		private var sessionProxy : SessionProxy;
 
 		private var isActive : Boolean;
 
-		public function get helpPanel() : HelpPanel
+		public function get pageEditor() : PageEditor
 		{
-			return viewComponent as HelpPanel;
+			return viewComponent as PageEditor;
 		}
 
 		override public function onRegister() : void
@@ -49,8 +51,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
-			
-			interests.push( ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED );
 
 			return interests;
 		}
@@ -62,6 +62,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
+
+			var pageXML : XML;
 
 			switch ( name )
 			{
@@ -83,38 +85,33 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-					
-				case ApplicationFacade.CURRENT_ATTRIBUTE_CHANGED:
-				{
-					var currentAttribute : Object = body as Object;
-					var attributeDescription : AttributeDescriptionVO;
-
-					if( currentAttribute && currentAttribute.hasOwnProperty( "attributeDescriptionVO" ) )
-					{
-						attributeDescription = currentAttribute.attributeDescriptionVO;
-						helpPanel.text = attributeDescription.help;
-					}
-					else
-					{
-						helpPanel.text = "";
-					}
-					
-					break;
-				}
 			}
 		}
 
 		private function addHandlers() : void
 		{
+			pageEditor.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGING, currentStateChangingHandler, false, 0, true );
+			pageEditor.addEventListener( SkinPartEvent.PART_ADDED, partAddedHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
+			pageEditor.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGING, currentStateChangingHandler );
+			pageEditor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
 		}
 
 		private function clearData() : void
 		{
-			helpPanel.text = "";
+		}
+
+		private function currentStateChangingHandler( event : StateChangeEvent ) : void
+		{
+
+		}
+
+		private function partAddedHandler( event : SkinPartEvent ) : void
+		{
+
 		}
 	}
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:components="net.vdombox.ide.modules.wysiwyg.view.components.*"
+			 xmlns:editors="net.vdombox.editors.*"
+			 xmlns:fx="http://ns.adobe.com/mxml/2009"
+			 xmlns:libcomponents="net.vdombox.ide.common.components.*"
+			 xmlns:mx="library://ns.adobe.com/flex/mx"
+			 xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<fx:Metadata>
+		<![CDATA[ 
+		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.PageEditor")]
+		]]>
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import spark.components.ToggleButton;
+			import spark.skins.spark.ButtonSkin;
+			import spark.skins.spark.ToggleButtonSkin;
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="wysiwyg"/>
+		<s:State name="wysiwygDisabled" stateGroups="disabled"/>
+		<s:State name="xml"/>
+		<s:State name="xmlDisabled" stateGroups="disabled"/>
+	</s:states>
+
+	<s:Rect height="20"
+			left="1" right="1" top="1">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0xCDCDCD"/>
+				<s:GradientEntry color="0xE8E8E8"/>
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+
+	<s:HGroup gap="0" height="20"
+			  left="1" right="1" top="1">
+
+		<mx:Spacer width="100%"/>
+
+		<libcomponents:WorkAreaButton id="wysiwygButton"
+									  enabled.disabled="false" enabled.wysiwyg="false" enabled.xml="true" height="20"
+									  label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"
+									  click="currentState='wysiwyg'"
+									  highlighted.wysiwyg="true" highlighted.xml="false"/>
+
+		<libcomponents:WorkAreaButton id="xmlButton"
+									  enabled.disabled="false" enabled.wysiwyg="true" enabled.xml="false" height="20"
+									  label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"
+									  click="currentState='xml'"
+									  highlighted.xml="true" highlighted.wysiwyg="false"/>
+	</s:HGroup>
+
+	<components:PageRenderer id="pageRenderer"
+							 height="100%" width="100%"
+							 top="20"
+							 includeIn="wysiwyg, wysiwygDisabled"/>
+
+	<editors:XMLScriptEditor id="xmlScriptEditor"
+							 height="100%" width="100%"
+							 top="20"
+							 includeIn="xml, xmlDisabled"/>
+
+</s:SparkSkin>

@@ -9,7 +9,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectsTreePanel;
+	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
 
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;

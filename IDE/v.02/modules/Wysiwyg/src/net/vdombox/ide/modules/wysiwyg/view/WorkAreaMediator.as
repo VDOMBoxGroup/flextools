@@ -6,18 +6,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
+	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	
+	import spark.components.Group;
 
 	public class WorkAreaMediator extends Mediator implements IMediator
 	{
@@ -99,7 +103,30 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					workArea.addTab( new Tab() );
+					var pe : PageEditor;
+					var pageVO : PageVO = body as PageVO;
+					
+					if( !pageVO )
+						break;
+					
+					var tab : Tab = workArea.getTabByID( pageVO.id );
+					
+					if( !tab )
+					{
+						tab = new Tab();
+						tab.id = pageVO.id;
+						tab.label = pageVO.name;
+						
+						workArea.addTab( tab );
+						
+						 pe = new PageEditor();
+						 facade.registerMediator( new PageEditorMediator( pe ) );
+						 
+						tab.addElement( pe );
+					}
+					
+					workArea.selectedTab = tab;
+						
 					break;
 				}
 			}

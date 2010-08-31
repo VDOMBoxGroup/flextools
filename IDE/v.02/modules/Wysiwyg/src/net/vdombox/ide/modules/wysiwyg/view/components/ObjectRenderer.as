@@ -23,6 +23,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
 	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
@@ -42,7 +43,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			super();
 
 			itemRendererFunction = chooseItemRenderer;
-//			setStyle( "skinClass", ItemSkin );
+			setStyle( "skinClass", ItemSkin );
 
 			addHandlers();
 		}

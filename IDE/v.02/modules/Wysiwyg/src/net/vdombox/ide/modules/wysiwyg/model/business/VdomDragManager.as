@@ -6,10 +6,13 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 	
 	import mx.core.DragSource;
 	import mx.core.IFlexDisplayObject;
+	import mx.core.IFlexModule;
+	import mx.core.IFlexModuleFactory;
 	import mx.core.IUIComponent;
 	import mx.managers.DragManager;
 	import mx.managers.ISystemManager;
 	import mx.styles.CSSStyleDeclaration;
+	import mx.styles.IStyleManager2;
 	import mx.styles.StyleManager;
 
 	/**
@@ -54,6 +57,18 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			return instance;
 		}
 
+		static private function getStyleManager(dragInitiator:IUIComponent):IStyleManager2
+		{
+			// If the dragInitiator has a styleManager, use that one.
+			// In a situation where a main application that loads a module with drag initiator,
+			// the main application may not link in the DragManager and appropriate styles.
+			// We want to use the styles of the module of the dragInitiator. See SDK-24324.
+			if (dragInitiator is IFlexModule)
+				return StyleManager.getStyleManager(IFlexModule(dragInitiator).moduleFactory);
+			
+			return StyleManager.getStyleManager(sm as IFlexModuleFactory);
+		}
+		
 		//--------------------------------------------------------------------------
 		//
 		//  Constructor
@@ -140,7 +155,8 @@ package net.vdombox.ide.modules.wysiwyg.model.business
 			if ( !dragImage )
 			{
 				// No drag image specified, use default
-				var dragManagerStyleDeclaration : CSSStyleDeclaration = StyleManager.getStyleDeclaration( "DragManager" );
+				var dragManagerStyleDeclaration:CSSStyleDeclaration =
+					getStyleManager(dragInitiator).getMergedStyleDeclaration("mx.managers.DragManager");
 				var dragImageClass : Class = dragManagerStyleDeclaration.getStyle( "defaultDragImageSkin" );
 				dragImage = new dragImageClass();
 				dragProxy.addChild( DisplayObject( dragImage ) );
