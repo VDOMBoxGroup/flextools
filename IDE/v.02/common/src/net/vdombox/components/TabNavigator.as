@@ -14,28 +14,43 @@ package net.vdombox.components
 	import spark.components.SkinnableContainer;
 	import spark.components.TabBar;
 	import spark.events.IndexChangeEvent;
-	
+
 	public class TabNavigator extends SkinnableContainer
 	{
 		public function TabNavigator()
 		{
 			setStyle( "skinClass", TabNavigatorSkin );
 		}
-		
+
 		[SkinPart( required="true" )]
 		public var tabBar : TabBar;
 
 		private var _numTabs : int;
 
 		[Bindable( event="selectedTabChanged" )]
-		public function get selectedTab() : net.vdombox.components.tabNavigatorClasses.Tab
+		public function get selectedTab() : Tab
 		{
 			return tabBar.selectedItem as Tab;
 		}
 
+		private var historyStack : Array;
+
 		public function set selectedTab( tab : Tab ) : void
 		{
+			var currentTab : Tab = tabBar.selectedItem as Tab;
+
+			if ( currentTab == tab )
+				return;
+
+			if ( currentTab )
+				hideTabElements( tabBar.selectedItem as Tab );
+
 			tabBar.selectedItem = tab;
+
+			showTabElements( tab );
+
+			updateHistory()
+
 			dispatchEvent( new Event( "selectedTabChanged" ) );
 		}
 
@@ -85,12 +100,47 @@ package net.vdombox.components
 					removeElement( element );
 			}
 
+			if( historyStack && historyStack.length > 0 )
+			{
+				var historyIndex : int = historyStack.indexOf( tab );
+				
+				if( historyIndex != -1 )
+					historyStack.splice( historyIndex, 1 );
+			}
+			
+			if( selectedTab == tab && historyStack.length > 0 )
+				selectedTab = historyStack[ historyStack.length - 1 ];
+			
 			tabBar.dataProvider.removeItemAt( index );
+			
+			
 		}
 
 		public function getTabAt( index : int ) : Tab
 		{
 			return tabBar.dataProvider.getItemAt( index ) as Tab;
+		}
+
+		public function getTabByID( id : String ) : Tab
+		{
+			var result : Tab;
+			var tab : Tab;
+
+			if ( !tabBar.dataProvider )
+				return result;
+
+			for ( var i : int = 0; i < tabBar.dataProvider.length; i++ )
+			{
+				tab = tabBar.dataProvider.getItemAt( i ) as Tab;
+
+				if ( tab.id == id )
+				{
+					result = tab;
+					break;
+				}
+			}
+
+			return result;
 		}
 
 		override protected function partAdded( partName : String, instance : Object ) : void
@@ -112,12 +162,69 @@ package net.vdombox.components
 				tabBar.removeEventListener( TabBarButton.CLOSE_TAB, closeTabHandler );
 		}
 
+		private function showTabElements( tab : Tab ) : void
+		{
+			var element : IVisualElement;
+			var i : int;
+
+			if ( !tab )
+				return;
+
+			for ( i = 0; i < tab.numElements; i++ )
+			{
+				element = tab.getElementAt( i );
+				element.visible = true;
+				element.includeInLayout = true;
+			}
+		}
+
+		private function hideTabElements( tab : Tab ) : void
+		{
+			var element : IVisualElement;
+			var i : int;
+
+			if ( !tab )
+				return;
+
+			for ( i = 0; i < tab.numElements; i++ )
+			{
+				element = tab.getElementAt( i );
+				element.visible = false;
+				element.includeInLayout = false;
+			}
+		}
+
+		private function updateHistory() : void
+		{
+			if( !selectedTab )
+				return;
+			
+			if ( !historyStack )
+				historyStack = [];
+
+			var tabHistoryIndex : int = historyStack.indexOf( selectedTab );
+
+			if ( tabHistoryIndex != -1 && tabHistoryIndex != historyStack.length - 1 )
+			{
+				historyStack.splice( tabHistoryIndex, 1 );
+				historyStack.push( selectedTab );
+			}
+			else if ( tabHistoryIndex == -1 )
+			{
+				historyStack.push( selectedTab );
+			}
+		}
+
 		private function closeTabHandler( event : ListEvent ) : void
 		{
 			var index : int = event.rowIndex;
 
 			if ( index >= 0 )
 				removeTabAt( index );
+
+			showTabElements( selectedTab );
+			
+			dispatchEvent( new Event( "selectedTabChanged" ) );
 		}
 
 		private function tabBar_changeHandler( event : IndexChangeEvent ) : void
@@ -125,27 +232,14 @@ package net.vdombox.components
 			var oldIndex : int = event.oldIndex;
 			var oldTab : Tab = getTabAt( oldIndex );
 
-			var element : IVisualElement;
-
-			var i : int;
-
-			for ( i = 0; i < oldTab.numElements; i++ )
-			{
-				element = oldTab.getElementAt( i );
-				element.visible = false;
-				element.includeInLayout = false;
-			}
-
 			var newIndex : int = event.newIndex;
 			var newTab : Tab = getTabAt( newIndex );
 
-			for ( i = 0; i < newTab.numElements; i++ )
-			{
-				element = newTab.getElementAt( i );
-				element.visible = true;
-				element.includeInLayout = true;
-			}
-			
+			hideTabElements( oldTab );
+			showTabElements( newTab );
+
+			updateHistory();
+
 			dispatchEvent( new Event( "selectedTabChanged" ) );
 		}
 
@@ -158,7 +252,7 @@ package net.vdombox.components
 			var index : int = event.index;
 
 			var newElementIndex : int;
-			
+
 			var prevTab : Tab;
 			var prevTabIndex : int;
 			var prevElement : IVisualElement;
@@ -176,12 +270,12 @@ package net.vdombox.components
 				else if ( tIndex > 0 )
 				{
 					prevTabIndex = tIndex - 1;
-					
-					while( prevTabIndex > 0 )
+
+					while ( prevTabIndex > 0 )
 					{
 						prevTab = tabBar.dataProvider.getItemAt( tIndex - 1 ) as Tab;
-						
-						if( prevTab.numElements == 0 )
+
+						if ( prevTab.numElements == 0 )
 						{
 							prevTabIndex--;
 							continue;
@@ -189,11 +283,12 @@ package net.vdombox.components
 						else
 						{
 							prevElement = prevTab.getElementAt( prevTab.numElements - 1 );
+							break;
 						}
 					}
 				}
 
-				if( prevElement )
+				if ( prevElement )
 					newElementIndex = contentGroup.getElementIndex( prevElement ) + 1;
 				else
 					newElementIndex = 0

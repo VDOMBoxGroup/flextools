@@ -1,12 +1,12 @@
 package net.vdombox.components.tabNavigatorClasses
 {
-	import net.vdombox.ide.common.events.TabEvent;
-	
 	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
 	
 	import mx.core.IVisualElement;
 	import mx.resources.ResourceManager;
+	
+	import net.vdombox.ide.common.events.TabEvent;
 	
 	import spark.components.Group;
 
@@ -18,6 +18,7 @@ package net.vdombox.components.tabNavigatorClasses
 		}
 
 		public var label : String = "Untitled";
+		public var id : String;
 
 		private var _objects : Vector.<IVisualElement>;
 
