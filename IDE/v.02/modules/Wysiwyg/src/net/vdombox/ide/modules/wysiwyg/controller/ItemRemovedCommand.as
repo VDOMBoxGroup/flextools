@@ -1,9 +1,5 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
-	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
-	import net.vdombox.ide.modules.wysiwyg.view.ItemMediator;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
-	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

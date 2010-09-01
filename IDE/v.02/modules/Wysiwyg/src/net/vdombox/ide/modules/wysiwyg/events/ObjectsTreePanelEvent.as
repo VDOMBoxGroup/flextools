@@ -4,7 +4,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 	
 	public class ObjectsTreePanelEvent extends Event
 	{
-		public static var CHANGE : String = "change";
+		public static var CHANGE : String = "otpe_change";
+		public static var DOUBLE_CLICK : String = "otpe_doubleClick";
 		
 		public function ObjectsTreePanelEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

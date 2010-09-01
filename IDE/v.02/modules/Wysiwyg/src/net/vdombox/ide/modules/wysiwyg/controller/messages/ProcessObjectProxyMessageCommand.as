@@ -8,7 +8,6 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.ItemMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -21,7 +20,6 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			var needForUpdateObject : Object = sessionProxy.needForUpdate;
 			
 			var renderProxy : RenderProxy;
-			var itemMediator : ItemMediator;
 
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
 
@@ -63,10 +61,10 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				{
 					if ( operation == PPMOperationNames.READ )
 					{
-						var mediatorName : String = ItemMediator.NAME + ApplicationFacade.DELIMITER + objectVO.id;
+//						var mediatorName : String = ItemMediator.NAME + ApplicationFacade.DELIMITER + objectVO.id;
 						
-						if( facade.hasMediator( mediatorName ) )
-						{
+//						if( facade.hasMediator( mediatorName ) )
+//						{
 //							itemMediator = facade.retrieveMediator( mediatorName ) as ItemMediator;
 //							renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 //							
@@ -74,7 +72,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 //							
 //							itemMediator.item.data = renderProxy.renderItem( objectVO.pageVO, body.wysiwyg );
 //							delete needForUpdateObject[ objectVO.id ];
-						}
+//						}
 					}
 					
 					break;

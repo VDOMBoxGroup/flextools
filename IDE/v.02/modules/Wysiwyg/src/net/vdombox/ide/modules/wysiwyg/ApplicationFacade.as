@@ -105,7 +105,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const CHANGE_SELECTED_PAGE_REQUEST : String = "changeSelectedPageRequest";
 		public static const SET_SELECTED_PAGE : String = "setSelectedPage";
 		public static const SELECTED_PAGE_CHANGED : String = "selectedPageChanged";
-
+//
 		public static const CHANGE_SELECTED_OBJECT_REQUEST : String = "changeSelectedObjectRequest";
 		public static const SET_SELECTED_OBJECT : String = "setSelectedObject";
 		public static const SELECTED_OBJECT_CHANGED : String = "selectedObjectChanged";
@@ -129,6 +129,10 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const GET_OBJECT_ATTRIBUTES : String = "getObjectAttributes";
 		public static const OBJECT_ATTRIBUTES_GETTED : String = "objectAttributesGetted";
 
+//		objectsTree notifications
+		public static const OPEN_PAGE_REQUEST : String = "openPageRequest";
+		public static const OPEN_OBJECT_REQUEST : String = "openObjectRequest";
+		
 //		other
 		public static const DELIMITER : String = "/";
 		public static const STATES : String = "states";

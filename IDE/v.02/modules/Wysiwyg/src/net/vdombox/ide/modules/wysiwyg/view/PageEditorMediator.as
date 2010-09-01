@@ -15,9 +15,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 	{
 		public static const NAME : String = "PageEditorMediator";
 
+		public static var instancesNameList : Object = {};
+		
 		public function PageEditorMediator( pageEditor : PageEditor )
 		{
-			super( NAME, pageEditor );
+			var instanceName : String = NAME + "/" + pageEditor.name;
+			
+			super( instanceName, pageEditor );
+			
+			instancesNameList[ instanceName ] = null;
 		}
 
 		private var sessionProxy : SessionProxy;

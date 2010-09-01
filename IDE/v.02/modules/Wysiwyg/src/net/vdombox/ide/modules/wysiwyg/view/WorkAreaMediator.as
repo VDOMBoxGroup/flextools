@@ -118,9 +118,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 						tab.label = pageVO.name;
 						
 						workArea.addTab( tab );
-						
-						 pe = new PageEditor();
-						 facade.registerMediator( new PageEditorMediator( pe ) );
+
+						pe = new PageEditor();
+						facade.registerMediator( new PageEditorMediator( pe ) );
 						 
 						tab.addElement( pe );
 					}

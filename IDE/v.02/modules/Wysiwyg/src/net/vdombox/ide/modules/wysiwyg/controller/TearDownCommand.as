@@ -1,7 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.view.BodyMediator;
-	import net.vdombox.ide.modules.wysiwyg.view.ItemMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WorkAreaMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WysiwygJunctionMediator;
 	

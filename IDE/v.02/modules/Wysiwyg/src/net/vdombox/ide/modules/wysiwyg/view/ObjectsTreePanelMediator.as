@@ -3,14 +3,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -163,6 +163,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DOUBLE_CLICK, doubleClickHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -215,6 +216,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			{
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, null );
 			}
+		}
+		
+		private function doubleClickHandler( event : ObjectsTreePanelEvent ) : void
+		{
+			
 		}
 	}
 }

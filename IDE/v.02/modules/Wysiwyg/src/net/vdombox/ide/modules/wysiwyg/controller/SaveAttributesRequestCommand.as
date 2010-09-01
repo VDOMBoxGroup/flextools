@@ -5,7 +5,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.ItemMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.WorkAreaMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
@@ -43,38 +42,38 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				var hasAnotherAttributes : Boolean = false;
 				var objectAttributesVO : ObjectAttributesVO = attributesVO as ObjectAttributesVO;
 
-				var itemMediatorName : String = ItemMediator.NAME + ApplicationFacade.DELIMITER + objectAttributesVO.objectVO.id;
-
-				if ( facade.hasMediator( itemMediatorName ) )
-				{
-					var itemMediator : ItemMediator = facade.retrieveMediator( itemMediatorName ) as ItemMediator;
-
-					var attributes : Array = objectAttributesVO.getChangedAttributes();
-
-					for each ( attributeVO in attributes )
-					{
-						if ( attributeVO.name == "left" )
-							leftAttribute = attributeVO;
-						else if ( attributeVO.name == "top" )
-							topAttribute = attributeVO;
-						else
-							hasAnotherAttributes = true;
-					}
-
-					if ( hasAnotherAttributes )
-					{
-						itemMediator.lock();
-						needForUpdateObject[ objectAttributesVO.objectVO.id ] = "";
-					}
-
-					if ( leftAttribute )
-						itemMediator.item.x = int( leftAttribute.value );
-
-					if ( topAttribute )
-						itemMediator.item.y = int( topAttribute.value );
-
-					sendNotification( ApplicationFacade.UPDATE_ATTRIBUTES, objectAttributesVO );
-				}
+//				var itemMediatorName : String = ItemMediator.NAME + ApplicationFacade.DELIMITER + objectAttributesVO.objectVO.id;
+//
+//				if ( facade.hasMediator( itemMediatorName ) )
+//				{
+//					var itemMediator : ItemMediator = facade.retrieveMediator( itemMediatorName ) as ItemMediator;
+//
+//					var attributes : Array = objectAttributesVO.getChangedAttributes();
+//
+//					for each ( attributeVO in attributes )
+//					{
+//						if ( attributeVO.name == "left" )
+//							leftAttribute = attributeVO;
+//						else if ( attributeVO.name == "top" )
+//							topAttribute = attributeVO;
+//						else
+//							hasAnotherAttributes = true;
+//					}
+//
+//					if ( hasAnotherAttributes )
+//					{
+//						itemMediator.lock();
+//						needForUpdateObject[ objectAttributesVO.objectVO.id ] = "";
+//					}
+//
+//					if ( leftAttribute )
+//						itemMediator.item.x = int( leftAttribute.value );
+//
+//					if ( topAttribute )
+//						itemMediator.item.y = int( topAttribute.value );
+//
+//					sendNotification( ApplicationFacade.UPDATE_ATTRIBUTES, objectAttributesVO );
+//				}
 			}
 		}
 	}
