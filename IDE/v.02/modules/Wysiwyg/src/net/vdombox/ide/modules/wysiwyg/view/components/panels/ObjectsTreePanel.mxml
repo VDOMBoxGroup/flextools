@@ -16,7 +16,9 @@
 			private var _pages : XMLList;
 
 			private var lastHighlightedItem : XML;
-			
+
+			private var isMiddleDown : Boolean;
+
 			public function get pages() : XMLList
 			{
 				return _pages;
@@ -161,11 +163,12 @@
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 				objectsTree.addEventListener( ListEvent.CHANGE, objectsTree_changeHandler, false, 0, true );
-				
+
 				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OVER, objectsTree_highlightChangeHandler, false, 0, true );
-				
-				objectsTree.addEventListener( MouseEvent.MIDDLE_CLICK, objectsTree_doubleClickHandler, false, 0, true );
-				objectsTree.addEventListener( MouseEvent.CLICK, objectsTree_doubleClickHandler, false, 0, true );
+				objectsTree.addEventListener( ListEvent.ITEM_ROLL_OUT, objectsTree_highlightChangeHandler, false, 0, true );
+
+				objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_UP, objectsTree_mouseHandler, false, 0, true );
+				objectsTree.addEventListener( MouseEvent.MIDDLE_MOUSE_DOWN, objectsTree_mouseHandler, false, 0, true );
 			}
 
 			private function removedFromStageHandler( event : Event ) : void
@@ -173,26 +176,66 @@
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 
 				objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_changeHandler );
-				objectsTree.removeEventListener( MouseEvent.DOUBLE_CLICK, objectsTree_doubleClickHandler, true );
 			}
 
 			private function objectsTree_changeHandler( event : ListEvent ) : void
 			{
-//				dispatchEvent( new ObjectsTreePanelEvent( ObjectsTreePanelEvent.CHANGE ) );
+				var otpe : ObjectsTreePanelEvent = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.OPEN );
+				
+				otpe.pageID = selectedPageID;
+				otpe.objectID = selectedObjectID;
+				
+				dispatchEvent( new ObjectsTreePanelEvent( ObjectsTreePanelEvent.CHANGE ) );
 			}
-			
+
 			private function objectsTree_highlightChangeHandler( event : ListEvent ) : void
 			{
-				if( event.type == ListEvent.ITEM_ROLL_OVER )
+				if ( event.type == ListEvent.ITEM_ROLL_OVER )
 					lastHighlightedItem = event.itemRenderer.data as XML;
 				else
 					lastHighlightedItem = null;
 			}
-			
-			protected function objectsTree_doubleClickHandler( event : MouseEvent ) : void
+
+			private function objectsTree_mouseHandler( event : MouseEvent ) : void
 			{
-				trace( event.type )
-//				dispatchEvent( new ObjectsTreePanelEvent( ObjectsTreePanelEvent.DOUBLE_CLICK ) );
+				var otpe : ObjectsTreePanelEvent;
+				var parentItem : XML;
+
+				if( event.type == MouseEvent.MIDDLE_MOUSE_DOWN )
+				{
+					isMiddleDown = true;
+					return;
+				}
+				
+				if ( !lastHighlightedItem && isMiddleDown )
+					return;
+
+				otpe = new ObjectsTreePanelEvent( ObjectsTreePanelEvent.OPEN );
+
+				if ( lastHighlightedItem.name() == "page" )
+				{
+					otpe.pageID = lastHighlightedItem.@id;
+				}
+				else if ( lastHighlightedItem.name() == "object" )
+				{
+					otpe.objectID = lastHighlightedItem.@id;
+					parentItem = lastHighlightedItem.parent();
+
+					while ( parentItem )
+					{
+						if ( parentItem.name() == "page" )
+						{
+							otpe.pageID = parentItem.@id;
+							break;
+						}
+
+						parentItem = parentItem.parent();
+					}
+				}
+
+				isMiddleDown = false;
+				
+				dispatchEvent( otpe );
 			}
 		]]>
 	</fx:Script>

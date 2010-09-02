@@ -55,7 +55,7 @@
 									  highlighted.xml="true" highlighted.wysiwyg="false"/>
 	</s:HGroup>
 
-	<components:PageRenderer id="pageRenderer"
+	<components:PageRenderer id="renderer"
 							 height="100%" width="100%"
 							 top="20"
 							 includeIn="wysiwyg, wysiwygDisabled"/>

@@ -3,14 +3,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
 	import mx.events.ListEvent;
-	
+
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ObjectsTreePanelEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.panels.ObjectsTreePanel;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -30,9 +30,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private var isActive : Boolean;
 
+		private var requestQue : Object;
+
 		public function get objectsTreePanel() : ObjectsTreePanel
 		{
 			return viewComponent as ObjectsTreePanel;
+		}
+
+		public function get currentPageID() : String
+		{
+			return sessionProxy.selectedPage ? sessionProxy.selectedPage.id : null;
+		}
+
+		public function get currentObjectID() : String
+		{
+			return sessionProxy.selectedObject ? sessionProxy.selectedObject.id : null;
 		}
 
 		override public function onRegister() : void
@@ -40,6 +52,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 
 			isActive = false;
+
+			requestQue = {};
 
 			addHandlers();
 		}
@@ -131,7 +145,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					var objectVO : ObjectVO = body as ObjectVO;
 
-					sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, objectVO );
+					var requestElement : Object = requestQue[ objectVO.id ];
+
+					if ( requestElement && requestElement[ "open" ] )
+						sendNotification( ApplicationFacade.OPEN_OBJECT_REQUEST, objectVO );
+					else
+						sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, objectVO );
+
+					delete requestQue[ objectVO.id ];
 
 					break;
 				}
@@ -163,12 +184,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function addHandlers() : void
 		{
 			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler, false, 0, true );
-			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.DOUBLE_CLICK, doubleClickHandler, false, 0, true );
+			objectsTreePanel.addEventListener( ObjectsTreePanelEvent.OPEN, openHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.CHANGE, changeHandler );
+			objectsTreePanel.removeEventListener( ObjectsTreePanelEvent.OPEN, openHandler );
 		}
 
 		private function showPages( pages : Array ) : void
@@ -190,21 +212,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function clearData() : void
 		{
 			objectsTreePanel.pages = null;
+			requestQue = null;
+			sessionProxy = null;
 		}
 
 		private function changeHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			var currentPageID : String = sessionProxy.selectedPage ? sessionProxy.selectedPage.id : null;
-			var currentObjectID : String = sessionProxy.selectedObject ? sessionProxy.selectedObject.id : null;
-
 			var newPageID : String = objectsTreePanel.selectedPageID;
 			var newObjectID : String = objectsTreePanel.selectedObjectID;
 
 			if ( !_pages.hasOwnProperty( newPageID ) )
+				return;
+			
+			if ( newObjectID && newObjectID != currentObjectID )
 			{
-			}
-			else if ( newObjectID && newObjectID != currentObjectID )
-			{
+				if ( !requestQue.hasOwnProperty( newObjectID ) )
+					requestQue[ newObjectID ] = { open: false, change: true };
+				else
+					requestQue[ newObjectID ][ "change" ] = true;
+
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ newPageID ], objectID: newObjectID } );
 			}
 			else if ( newPageID != currentPageID )
@@ -212,15 +238,33 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( ApplicationFacade.GET_PAGE_SRUCTURE, _pages[ newPageID ] );
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, _pages[ newPageID ] );
 			}
+
 			else if ( newPageID == currentPageID && !newObjectID )
 			{
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, null );
 			}
 		}
-		
-		private function doubleClickHandler( event : ObjectsTreePanelEvent ) : void
+
+		private function openHandler( event : ObjectsTreePanelEvent ) : void
 		{
-			
+			if ( !event.pageID || !_pages.hasOwnProperty( event.pageID ) )
+				return;
+
+			if ( !event.objectID )
+			{
+				sendNotification( ApplicationFacade.OPEN_PAGE_REQUEST, _pages[ event.pageID ] );
+			}
+			else
+			{
+				if ( !requestQue.hasOwnProperty( event.objectID ) )
+					requestQue[ event.objectID ] = { open: true, change: false };
+				else
+					requestQue[ event.objectID ][ "open" ] = true;
+
+				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ event.pageID ], objectID: event.objectID } );
+			}
 		}
+
+
 	}
 }

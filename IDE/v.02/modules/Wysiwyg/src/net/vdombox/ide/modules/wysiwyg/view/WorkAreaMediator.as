@@ -5,12 +5,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.DragEvent;
 	
 	import net.vdombox.components.tabNavigatorClasses.Tab;
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
@@ -68,6 +71,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			
+			interests.push( ApplicationFacade.OPEN_PAGE_REQUEST );
+			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
 
 			return interests;
 		}
@@ -103,30 +109,31 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					var pe : PageEditor;
 					var pageVO : PageVO = body as PageVO;
+					var pageEditor : IEditor = workArea.getEditorByVO( pageVO );
 					
-					if( !pageVO )
-						break;
+					if( !pageEditor )
+						pageEditor = workArea.openEditor( pageVO );
 					
-					var tab : Tab = workArea.getTabByID( pageVO.id );
-					
-					if( !tab )
-					{
-						tab = new Tab();
-						tab.id = pageVO.id;
-						tab.label = pageVO.name;
+					workArea.selectedEditor = pageEditor;
 						
-						workArea.addTab( tab );
-
-						pe = new PageEditor();
-						facade.registerMediator( new PageEditorMediator( pe ) );
-						 
-						tab.addElement( pe );
-					}
+					break;
+				}
 					
-					workArea.selectedTab = tab;
-						
+				case ApplicationFacade.OPEN_PAGE_REQUEST:
+				{
+				}
+					
+				case ApplicationFacade.OPEN_OBJECT_REQUEST:
+				{
+					var vdomObjectVO : IVDOMObjectVO = body as IVDOMObjectVO;
+					var editor : IEditor = workArea.getEditorByVO( vdomObjectVO );
+					
+					if( !editor )
+						editor = workArea.openEditor( vdomObjectVO );
+					else
+						workArea.selectedEditor = editor;
+					
 					break;
 				}
 			}
