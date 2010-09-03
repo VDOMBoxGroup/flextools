@@ -17,9 +17,12 @@ package net.vdombox.components.tabNavigatorClasses
 			super();
 		}
 
+		[Bindable]
+		public var closable : Boolean = true;
+		
 		public var label : String = "Untitled";
 		public var id : String;
-
+		
 		private var _objects : Vector.<IVisualElement>;
 
 		public function get numElements() : int

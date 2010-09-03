@@ -1,16 +1,16 @@
 package net.vdombox.components
 {
 	import flash.events.Event;
-	
+
 	import mx.collections.ArrayList;
 	import mx.core.IVisualElement;
 	import mx.events.ListEvent;
-	
+
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabBarButton;
 	import net.vdombox.ide.common.events.TabEvent;
 	import net.vdombox.ide.common.skins.TabNavigatorSkin;
-	
+
 	import spark.components.SkinnableContainer;
 	import spark.components.TabBar;
 	import spark.events.IndexChangeEvent;
@@ -26,14 +26,14 @@ package net.vdombox.components
 		public var tabBar : TabBar;
 
 		private var _numTabs : int;
-
+		
+		private var historyStack : Array;
+		
 		[Bindable( event="selectedTabChanged" )]
 		public function get selectedTab() : Tab
 		{
 			return tabBar.selectedItem as Tab;
 		}
-
-		private var historyStack : Array;
 
 		public function set selectedTab( tab : Tab ) : void
 		{
@@ -67,6 +67,8 @@ package net.vdombox.components
 
 			tabBar.dataProvider.addItem( tab );
 
+			dispatchEvent( new Event( "tabAdded" ) );
+			
 			return tab;
 		}
 
@@ -100,20 +102,20 @@ package net.vdombox.components
 					removeElement( element );
 			}
 
-			if( historyStack && historyStack.length > 0 )
+			if ( historyStack && historyStack.length > 0 )
 			{
 				var historyIndex : int = historyStack.indexOf( tab );
-				
-				if( historyIndex != -1 )
+
+				if ( historyIndex != -1 )
 					historyStack.splice( historyIndex, 1 );
 			}
-			
-			if( selectedTab == tab && historyStack.length > 0 )
+
+			if ( selectedTab == tab && historyStack.length > 0 )
 				selectedTab = historyStack[ historyStack.length - 1 ];
-			
+
 			tabBar.dataProvider.removeItemAt( index );
-			
-			
+
+
 		}
 
 		public function getTabAt( index : int ) : Tab
@@ -196,9 +198,9 @@ package net.vdombox.components
 
 		private function updateHistory() : void
 		{
-			if( !selectedTab )
+			if ( !selectedTab )
 				return;
-			
+
 			if ( !historyStack )
 				historyStack = [];
 
@@ -221,9 +223,11 @@ package net.vdombox.components
 
 			if ( index >= 0 )
 				removeTabAt( index );
-
-			showTabElements( selectedTab );
 			
+			dispatchEvent( new Event( "tabRemoved" ) );
+			
+			showTabElements( selectedTab );
+
 			dispatchEvent( new Event( "selectedTabChanged" ) );
 		}
 

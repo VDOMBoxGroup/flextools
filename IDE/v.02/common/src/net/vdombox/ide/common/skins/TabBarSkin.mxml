@@ -3,7 +3,8 @@
 		xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:local="*"
 		xmlns:s="library://ns.adobe.com/flex/spark"
-		alpha.disabled="0.5" xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*">
+		xmlns:tabNavigatorClasses="net.vdombox.components.tabNavigatorClasses.*"
+		alpha.disabled="0.5">
 
 	<fx:Metadata>
 		<![CDATA[ 
@@ -49,13 +50,14 @@
 		<s:layout>
 			<s:ButtonBarHorizontalLayout gap="-1"/>
 		</s:layout>
+
 		<s:itemRenderer>
 			<fx:Component>
 				<tabNavigatorClasses:TabBarButton maxWidth="100"
-									skinClass="net.vdombox.ide.common.skins.TabBarButtonSkin"
-									mouseChildren="true"/>
+												  mouseChildren="true"/>
 			</fx:Component>
 		</s:itemRenderer>
+
 	</s:DataGroup>
 
 </s:Skin>

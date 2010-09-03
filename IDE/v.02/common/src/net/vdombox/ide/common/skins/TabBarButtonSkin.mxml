@@ -58,8 +58,8 @@
 	<!--- Defines the appearance of the label(s) for the middle button(s) in the ButtonBar component. -->
 
 	<s:Label id="labelDisplay"
-			 bottom="2" color="#686868" color.down="white" color.over="white" color.selectedStates="white" fontFamily="Verdana" left="5" right="10" textAlign="center" top="2"
-			 verticalAlign="middle" verticalCenter="1"
+			 bottom="2" color="#686868" color.down="white" color.over="white" color.selectedStates="white" fontFamily="Verdana" left="5" right="10" textAlign="center" top="2" verticalAlign="middle"
+			 verticalCenter="1"
 			 maxDisplayedLines="1"/>
 
 	<s:Button id="closeButton"
