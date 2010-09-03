@@ -3,43 +3,42 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import mx.events.StateChangeEvent;
 	
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.SkinPartEvent;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
-	public class PageEditorMediator extends Mediator implements IMediator
+	public class ObjectEditorMediator extends Mediator implements IMediator
 	{
-		public static const NAME : String = "PageEditorMediator";
+		public static const NAME : String = "ObjectEditorMediator";
 
 		public static var instancesNameList : Object = {};
 		
-		public function PageEditorMediator( pageEditor : PageEditor )
+		public function ObjectEditorMediator( objectEditor : ObjectEditor )
 		{
-			var instanceName : String = NAME + "/" + pageEditor.name;
+			var instanceName : String = NAME + "/" + objectEditor.id;
 			
-			super( instanceName, pageEditor );
+			super( instanceName, objectEditor );
 			
 			instancesNameList[ instanceName ] = null;
 		}
 
 		private var sessionProxy : SessionProxy;
 
-		private var isActive : Boolean;
-
-		public function get pageEditor() : PageEditor
+		public function get objectEditor() : ObjectEditor
 		{
-			return viewComponent as PageEditor;
+			return viewComponent as ObjectEditor;
 		}
 
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-
-			isActive = false;
 
 			addHandlers();
 		}
@@ -55,8 +54,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var interests : Array = super.listNotificationInterests();
 
-			interests.push( ApplicationFacade.BODY_START );
 			interests.push( ApplicationFacade.BODY_STOP );
+			
+			interests.push( ApplicationFacade.XML_PRESENTATION_GETTED );
 
 			return interests;
 		}
@@ -66,29 +66,21 @@ package net.vdombox.ide.modules.wysiwyg.view
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
 
-			if ( !isActive && name != ApplicationFacade.BODY_START )
-				return;
-
 			var pageXML : XML;
 
 			switch ( name )
 			{
-				case ApplicationFacade.BODY_START:
-				{
-					if ( sessionProxy.selectedApplication )
-					{
-						isActive = true;
-
-						break;
-					}
-				}
-
 				case ApplicationFacade.BODY_STOP:
 				{
-					isActive = false;
-
 					clearData();
 
+					break;
+				}
+					
+				case ApplicationFacade.XML_PRESENTATION_GETTED:
+				{
+					objectEditor.xml = "zzz";
+					
 					break;
 				}
 			}
@@ -96,28 +88,31 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
-			pageEditor.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGING, currentStateChangingHandler, false, 0, true );
-			pageEditor.addEventListener( SkinPartEvent.PART_ADDED, partAddedHandler, false, 0, true );
+			objectEditor.addEventListener( SkinPartEvent.PART_ADDED, partAddedHandler, false, 0, true );
+			objectEditor.addEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler, false, 0, true );
+			objectEditor.addEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler, false, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
-			pageEditor.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGING, currentStateChangingHandler );
-			pageEditor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
+			objectEditor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
 		}
 
 		private function clearData() : void
 		{
 		}
 
-		private function currentStateChangingHandler( event : StateChangeEvent ) : void
-		{
-
-		}
-
 		private function partAddedHandler( event : SkinPartEvent ) : void
 		{
 
+		}
+		
+		private function partOpenedHandler( event : EditorEvent ) : void
+		{
+			if( event.type == EditorEvent.WYSIWYG_OPENED )
+				var d : * = "";
+			else if( event.type == EditorEvent.XML_EDITOR_OPENED )
+				sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO : objectEditor.vdomObjectVO } );
 		}
 	}
 }

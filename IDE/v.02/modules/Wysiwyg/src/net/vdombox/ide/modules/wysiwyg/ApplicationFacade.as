@@ -8,6 +8,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateObjectRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.EditorCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
@@ -133,6 +134,9 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const OPEN_PAGE_REQUEST : String = "openPageRequest";
 		public static const OPEN_OBJECT_REQUEST : String = "openObjectRequest";
 		
+//		editors
+		public static const EDITOR_CREATED : String = "editorCreated";
+		
 //		other
 		public static const DELIMITER : String = "/";
 		public static const STATES : String = "states";
@@ -228,6 +232,7 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );
 
 			registerCommand( ITEM_TRANSFORMED, ItemTransformedCommand );
+			registerCommand( EDITOR_CREATED, EditorCreatedCommand );
 
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

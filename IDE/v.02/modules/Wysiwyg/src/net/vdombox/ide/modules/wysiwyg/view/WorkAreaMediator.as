@@ -11,10 +11,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
@@ -143,12 +146,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			workArea.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+			
+			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
+			
+			workArea.addEventListener( EditorEvent.CREATED, editor_createdHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
-			workArea.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
-			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+			workArea.removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
+			workArea.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+			
+			workArea.removeEventListener( WorkAreaEvent.CHANGE, changeHandler );
+			
+			workArea.removeEventListener( EditorEvent.CREATED, editor_createdHandler, true  );
 		}
 
 		private function clearData() : void
@@ -165,6 +176,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function removedFromStageHandler( event : Event ) : void
 		{
 			clearData();
+		}
+		
+		private function changeHandler( event : WorkAreaEvent ) : void
+		{
+			var selectedEditor : IEditor = workArea.selectedEditor;
+			
+			if( !selectedEditor )
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, null );
+			else if( selectedEditor is PageEditor )
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.vdomObjectVO );
+			else if( selectedEditor is ObjectEditor )
+				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.vdomObjectVO );
+			
+		}
+		
+		private function editor_createdHandler( event : EditorEvent ) : void
+		{
+			sendNotification( ApplicationFacade.EDITOR_CREATED, event.target as IEditor );
 		}
 	}
 }

@@ -23,8 +23,10 @@
 	<s:states>
 		<s:State name="wysiwyg"/>
 		<s:State name="wysiwygDisabled" stateGroups="disabled"/>
+		<s:State name="wysiwygWait" stateGroups="wait"/>
 		<s:State name="xml"/>
 		<s:State name="xmlDisabled" stateGroups="disabled"/>
+		<s:State name="xmlWait" stateGroups="wait"/>
 	</s:states>
 
 	<s:Rect height="20"
