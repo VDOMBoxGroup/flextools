@@ -3,7 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
-	public class ItemRemovedCommand extends SimpleCommand
+	public class RendererRemovedCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{

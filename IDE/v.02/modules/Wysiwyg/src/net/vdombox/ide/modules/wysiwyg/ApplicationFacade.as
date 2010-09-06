@@ -12,8 +12,8 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
-	import net.vdombox.ide.modules.wysiwyg.controller.ItemCreatedCommand;
-	import net.vdombox.ide.modules.wysiwyg.controller.ItemRemovedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.RendererCreatedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ItemTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenResourceSelectorRequestCommand;
@@ -159,10 +159,12 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const DELETE_OBJECT : String = "deleteObject";
 		public static const OBJECT_DELETED : String = "objectDeleted";
 
-		public static const ITEM_CREATED : String = "itemCreated";
-		public static const ITEM_REMOVED : String = "itemRemoved";
-		public static const ITEM_TRANSFORMED : String = "itemTransformed";
-		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
+		public static const RENDERER_CREATED : String = "rendererCreated";
+		public static const RENDERER_REMOVED : String = "rendererRemoved";
+		
+//		public static const RENDERER_TRANSFORMED : String = "itemTransformed";
+		
+//		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
 
 		public static const GET_RESOURCE_REQUEST : String = "getResourceRequest";
 		public static const OPEN_RESOURCE_SELECTOR_REQUEST : String = "openResourceSelectorRequest";
@@ -224,14 +226,16 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( OPEN_EXTERNAL_EDITOR_REQUEST, OpenExternalEditorRequestCommand );
 			registerCommand( SAVE_ATTRIBUTES_REQUEST, SaveAttributesRequestCommand );
 
-			registerCommand( ITEM_CREATED, ItemCreatedCommand );
-			registerCommand( ITEM_REMOVED, ItemRemovedCommand );
-			registerCommand( SELECT_ITEM_REQUEST, SelectItemRequestCommand );
+			registerCommand( RENDERER_CREATED, RendererCreatedCommand );
+			registerCommand( RENDERER_REMOVED, RendererRemovedCommand );
+			
+//			registerCommand( ITEM_TRANSFORMED, ItemTransformedCommand );
+//			registerCommand( SELECT_ITEM_REQUEST, SelectItemRequestCommand );
 
 			registerCommand( GET_RESOURCE_REQUEST, GetResourceRequestCommand );
 			registerCommand( CREATE_OBJECT_REQUEST, CreateObjectRequestCommand );
 
-			registerCommand( ITEM_TRANSFORMED, ItemTransformedCommand );
+			
 			registerCommand( EDITOR_CREATED, EditorCreatedCommand );
 
 			registerCommand( TEAR_DOWN, TearDownCommand );

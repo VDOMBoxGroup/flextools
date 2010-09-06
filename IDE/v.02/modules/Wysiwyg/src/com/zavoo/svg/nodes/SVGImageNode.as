@@ -13,7 +13,7 @@ package com.zavoo.svg.nodes
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.ide.common.vo.ResourceVO;
-	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 
 	public class SVGImageNode extends SVGNode
 	{
@@ -171,7 +171,7 @@ package com.zavoo.svg.nodes
 		private function ccHandler( event : FlexEvent ) : void 
 		{
 			if( resourceID )
-				dispatchEvent( new ItemEvent( ItemEvent.GET_RESOURCE ) );
+				dispatchEvent( new RendererEvent( RendererEvent.GET_RESOURCE ) );
 		}
 		
 	/*private function transformImage():void {

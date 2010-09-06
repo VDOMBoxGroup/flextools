@@ -20,7 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.graphics.SolidColorStroke;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
-	import net.vdombox.ide.modules.wysiwyg.events.ItemEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
@@ -416,7 +416,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function creatiomCompleteHandler( event : FlexEvent ) : void
 		{
-			dispatchEvent( new ItemEvent( ItemEvent.CREATED ) );
+			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
 		}
 
 		private function dragEnterHandler( event : DragEvent ) : void
@@ -461,7 +461,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();
-			dispatchEvent( new ItemEvent( ItemEvent.ITEM_CLICKED ) );
+			dispatchEvent( new RendererEvent( RendererEvent.ITEM_CLICKED ) );
 		}
 
 		private function dragDropHandler( event : DragEvent ) : void
@@ -478,7 +478,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			if ( event.target == this )
 			{
-				dispatchEvent( new ItemEvent( ItemEvent.REMOVED ) );
+				dispatchEvent( new RendererEvent( RendererEvent.REMOVED ) );
 				removeHandlers();
 			}
 		}
