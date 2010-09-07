@@ -9,7 +9,7 @@ package net.vdombox.components
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.components.tabNavigatorClasses.TabBarButton;
 	import net.vdombox.ide.common.events.TabEvent;
-	import net.vdombox.ide.common.skins.TabNavigatorSkin;
+	import net.vdombox.skins.TabNavigatorSkin;
 
 	import spark.components.SkinnableContainer;
 	import spark.components.TabBar;
@@ -67,6 +67,11 @@ package net.vdombox.components
 
 			tabBar.dataProvider.addItem( tab );
 
+			if( tabBar.selectedIndex == -1 )
+				tabBar.selectedIndex = 0;
+			
+			trace( "--> " + tabBar.selectedIndex );
+			
 			dispatchEvent( new Event( "tabAdded" ) );
 			
 			return tab;
@@ -298,9 +303,11 @@ package net.vdombox.components
 					newElementIndex = 0
 			}
 
+			trace( "<--> " + tabBar.selectedIndex );
+			
 			if ( tabBar.selectedIndex != tIndex )
 				event.element.visible = false;
-
+			
 			addElementAt( event.element, newElementIndex );
 		}
 

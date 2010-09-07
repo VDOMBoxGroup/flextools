@@ -63,6 +63,6 @@
 			 maxDisplayedLines="1"/>
 
 	<s:Button id="closeButton"
-			  right="2" skinClass="net.vdombox.ide.common.skins.CloseButtonSkin" verticalCenter="1"/>
+			  right="2" skinClass="net.vdombox.skins.CloseButtonSkin" verticalCenter="1"/>
 
 </s:SparkSkin>
