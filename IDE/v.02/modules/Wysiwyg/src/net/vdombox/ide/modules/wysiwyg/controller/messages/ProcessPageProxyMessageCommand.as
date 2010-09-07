@@ -46,7 +46,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMPageTargetNames.WYSIWYG:
 				{
 					if ( operation == PPMOperationNames.READ )
-					{}
+						sendNotification( ApplicationFacade.WYSIWYG_GETTED, body );
 
 					break;
 				}

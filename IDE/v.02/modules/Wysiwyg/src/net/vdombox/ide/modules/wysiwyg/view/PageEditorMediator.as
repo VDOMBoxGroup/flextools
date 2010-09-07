@@ -1,7 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.StateChangeEvent;
-
+	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
@@ -11,9 +11,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
@@ -40,6 +41,31 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return viewComponent as PageEditor;
 		}
 
+		public function get pageVO() : PageVO
+		{
+			return pageEditor.vdomObjectVO as PageVO;
+		}
+		
+		public function get renderVO() : RenderVO
+		{
+			return pageEditor.renderVO;
+		}
+		
+		public function set renderVO( value : RenderVO ) : void
+		{
+			pageEditor.renderVO = value;
+		}
+		
+		public function get xmlPresentation() : String
+		{
+			return pageEditor.xmlPresentation;
+		}
+		
+		public function set xmlPresentation( value : String ) : void
+		{
+			pageEditor.xmlPresentation = value;
+		}
+		
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
@@ -77,13 +103,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.BODY_STOP:
 				{
 					clearData();
-
-					break;
-				}
-
-				case ApplicationFacade.XML_PRESENTATION_GETTED:
-				{
-					pageEditor.xml = "zzz";
 
 					break;
 				}

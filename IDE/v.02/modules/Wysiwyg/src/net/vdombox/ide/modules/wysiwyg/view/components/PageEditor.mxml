@@ -53,9 +53,6 @@
 			{
 				_renderVO = value;
 
-				if ( _renderVO )
-					_renderVO.staticFlag = true;
-
 				if ( renderer )
 					renderer.renderVO = value;
 			}
@@ -117,7 +114,7 @@
 	</s:states>
 
 	<components:PageRenderer id="renderer"
-							 horizontalCenter="0" verticalCenter="0"
+							 height="100%" width="100%"
 							 includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
 
 	<editors:XMLScriptEditor id="xmlScriptEditor"

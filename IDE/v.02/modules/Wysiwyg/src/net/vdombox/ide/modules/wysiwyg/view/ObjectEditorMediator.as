@@ -2,11 +2,13 @@ package net.vdombox.ide.modules.wysiwyg.view
 {
 	import mx.events.StateChangeEvent;
 	
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.SkinPartEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
+	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	
@@ -36,6 +38,31 @@ package net.vdombox.ide.modules.wysiwyg.view
 			return viewComponent as ObjectEditor;
 		}
 
+		public function get objectVO() : ObjectVO
+		{
+			return objectEditor.vdomObjectVO as ObjectVO;
+		}
+		
+		public function get renderVO() : RenderVO
+		{
+			return objectEditor.renderVO;
+		}
+		
+		public function set renderVO( value : RenderVO ) : void
+		{
+			objectEditor.renderVO = value;
+		}
+		
+		public function get xmlPresentation() : String
+		{
+			return objectEditor.xmlPresentation;
+		}
+		
+		public function set xmlPresentation( value : String ) : void
+		{
+			objectEditor.xmlPresentation = value;
+		}
+		
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
@@ -76,13 +103,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-					
-				case ApplicationFacade.XML_PRESENTATION_GETTED:
-				{
-					objectEditor.xml = "zzz";
-					
-					break;
-				}
 			}
 		}
 
@@ -110,7 +130,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function partOpenedHandler( event : EditorEvent ) : void
 		{
 			if( event.type == EditorEvent.WYSIWYG_OPENED )
-				var d : * = "";
+				sendNotification( ApplicationFacade.GET_WYSIWYG, objectEditor.vdomObjectVO );
 			else if( event.type == EditorEvent.XML_EDITOR_OPENED )
 				sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO : objectEditor.vdomObjectVO } );
 		}

@@ -2,9 +2,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-
+	
 	import mx.collections.XMLListCollection;
-
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
@@ -13,10 +13,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-
+	
 	import spark.components.IItemRenderer;
 
 	public class RenderProxy extends Proxy implements IProxy
@@ -101,6 +101,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			var typeVO : TypeVO;
 
+			renderVO.name = rawRenderData.name()
+			
 			renderVO.visible = rawRenderData.@visible == 1 ? true : false;
 
 			renderVO.zindex = uint( rawRenderData.@zindex );
@@ -183,7 +185,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 				else
 				{
 					if ( !renderVO.content )
-						renderVO.content = childXML.copy();
+						renderVO.content = new XMLList( childXML.copy() );
 					else
 						renderVO.content += childXML.copy();
 				}

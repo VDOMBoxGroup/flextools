@@ -17,6 +17,8 @@ package net.vdombox.ide.modules.wysiwyg.model.vo
 		
 		public var staticFlag : Boolean;
 		
+		public var name : String;
+		
 		public var parent : RenderVO;
 		public var children : Array;
 

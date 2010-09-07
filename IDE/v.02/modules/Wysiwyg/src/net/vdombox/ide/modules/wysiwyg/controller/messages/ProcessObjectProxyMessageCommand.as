@@ -60,20 +60,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMObjectTargetNames.WYSIWYG:
 				{
 					if ( operation == PPMOperationNames.READ )
-					{
-//						var mediatorName : String = ItemMediator.NAME + ApplicationFacade.DELIMITER + objectVO.id;
-						
-//						if( facade.hasMediator( mediatorName ) )
-//						{
-//							itemMediator = facade.retrieveMediator( mediatorName ) as ItemMediator;
-//							renderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
-//							
-//							var itemVO : ItemVO = itemMediator.item.data as ItemVO;
-//							
-//							itemMediator.item.data = renderProxy.renderItem( objectVO.pageVO, body.wysiwyg );
-//							delete needForUpdateObject[ objectVO.id ];
-//						}
-					}
+						sendNotification( ApplicationFacade.WYSIWYG_GETTED, body );
 					
 					break;
 				}

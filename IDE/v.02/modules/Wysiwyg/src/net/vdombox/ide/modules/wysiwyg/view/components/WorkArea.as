@@ -101,6 +101,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			}
 
 			editor.vdomObjectVO = vdomObjectVO;
+			UIComponent( editor ).percentWidth = 100;
+			UIComponent( editor ).percentHeight = 100;
 
 			var tab : Tab = new Tab();
 

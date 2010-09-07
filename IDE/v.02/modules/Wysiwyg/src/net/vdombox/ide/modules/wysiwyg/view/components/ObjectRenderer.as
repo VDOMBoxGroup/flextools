@@ -130,6 +130,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set renderVO( value : RenderVO ) : void
 		{
 			_renderVO = value;
+			
+			refresh();
 		}
 
 		public function get data() : Object
@@ -141,133 +143,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			_data = value;
 			_renderVO = value as RenderVO;
-
-			if ( !_renderVO )
-				return;
-
-			var attributeVO : AttributeVO = _renderVO.getAttributeByName( "width" );
-
-			if ( attributeVO )
-				width = int( attributeVO.value );
-
-			attributeVO = _renderVO.getAttributeByName( "height" );
-
-			if ( attributeVO )
-				height = int( attributeVO.value );
-
-			attributeVO = _renderVO.getAttributeByName( "top" );
-
-			if ( attributeVO )
-				y = int( attributeVO.value );
-
-			attributeVO = _renderVO.getAttributeByName( "left" );
-
-			if ( attributeVO )
-				x = int( attributeVO.value );
-
-			attributeVO = _renderVO.getAttributeByName( "backgroundcolor" );
-
-			if ( attributeVO )
-			{
-				SolidColor( backgroundRect.fill ).alpha = 1;
-				SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
-			}
-
-			attributeVO = _renderVO.getAttributeByName( "bordercolor" );
-
-			if ( attributeVO )
-			{
-				SolidColorStroke( backgroundRect.stroke ).alpha = 1;
-				SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
-				attributeVO = _renderVO.getAttributeByName( "borderwidth" );
-				if ( attributeVO )
-					SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
-			}
-
-			if ( _renderVO.staticFlag )
-				locker.visible = true;
-
-			if ( _renderVO && _renderVO.children.length > 0 )
-			{
-				var childrenDataProvider : ArrayCollection = new ArrayCollection( _renderVO.children );
-				childrenDataProvider.sort = new Sort();
-				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
-				childrenDataProvider.refresh();
-
-				dataProvider = childrenDataProvider;
-			}
-
-			var contetntPart : XML;
-
-			background.removeAllElements();
-
-			for each ( contetntPart in _renderVO.content )
-			{
-				switch ( contetntPart.name().toString() )
-				{
-					case "svg":
-					{
-						var svg : SVGViewer = new SVGViewer();
-						var editableAttributes : Array = svg.setXML( contetntPart );
-
-						if ( editableAttributes.length > 0 )
-						{
-							editableComponent = editableAttributes[ 0 ].sourceObject;
-						}
-
-						background.addElement( svg );
-
-						break
-					}
-
-					case "text":
-					{
-						var richText : UIComponent
-
-						if ( contetntPart.@editable )
-						{
-							richText = new RichEditableText();
-							editableComponent = richText;
-						}
-						else
-						{
-							richText = new Text();
-						}
-
-						richText.x = contetntPart.@left;
-						richText.y = contetntPart.@top;
-						richText.width = contetntPart.@width;
-
-						richText[ "text" ] = contetntPart[ 0 ];
-
-						applyStyles( richText, contetntPart );
-
-						background.addElement( richText );
-
-						break;
-					}
-					case "htmltext":
-					{
-						var html : HTML = new HTML();
-
-						html.x = contetntPart.@left;
-						html.y = contetntPart.@top;
-						html.width = contetntPart.@width;
-
-						if ( contetntPart.@editable )
-							editableComponent = html;
-
-						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-							"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
-
-						html.htmlText = htmlText;
-
-						background.addElement( html );
-					}
-				}
-			}
-
-			skin.currentState = "normal";
+			
+			refresh();
 		}
 
 		public function get isLocked() : Boolean
@@ -292,7 +169,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		{
 			var itemFactory : ClassFactory;
 			var layout : LayoutBase;
-			switch ( renderVO.vdomObjectVO.name )
+			switch ( renderVO.name )
 			{
 				case "container":
 				{
@@ -365,6 +242,136 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( DragEvent.DRAG_DROP, dragDropHandler );
 		}
 
+		private function refresh() : void
+		{
+			if ( !_renderVO )
+				return;
+			
+			var attributeVO : AttributeVO = _renderVO.getAttributeByName( "width" );
+			
+			if ( attributeVO )
+				width = int( attributeVO.value );
+			
+			attributeVO = _renderVO.getAttributeByName( "height" );
+			
+			if ( attributeVO )
+				height = int( attributeVO.value );
+			
+			attributeVO = _renderVO.getAttributeByName( "top" );
+			
+			if ( attributeVO )
+				y = int( attributeVO.value );
+			
+			attributeVO = _renderVO.getAttributeByName( "left" );
+			
+			if ( attributeVO )
+				x = int( attributeVO.value );
+			
+			attributeVO = _renderVO.getAttributeByName( "backgroundcolor" );
+			
+			if ( attributeVO )
+			{
+				SolidColor( backgroundRect.fill ).alpha = 1;
+				SolidColor( backgroundRect.fill ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
+			}
+			
+			attributeVO = _renderVO.getAttributeByName( "bordercolor" );
+			
+			if ( attributeVO )
+			{
+				SolidColorStroke( backgroundRect.stroke ).alpha = 1;
+				SolidColorStroke( backgroundRect.stroke ).color = uint( "0x" + attributeVO.value.substr( 1 ) );
+				attributeVO = _renderVO.getAttributeByName( "borderwidth" );
+				if ( attributeVO )
+					SolidColorStroke( backgroundRect.stroke ).weight = uint( attributeVO.value );
+			}
+			
+			if ( _renderVO.staticFlag )
+				locker.visible = true;
+			
+			if ( _renderVO && _renderVO.children && _renderVO.children.length > 0 )
+			{
+				var childrenDataProvider : ArrayCollection = new ArrayCollection( _renderVO.children );
+				childrenDataProvider.sort = new Sort();
+				childrenDataProvider.sort.fields = [ new SortField( "zindex" ), new SortField( "hierarchy" ), new SortField( "order" ) ];
+				childrenDataProvider.refresh();
+				
+				dataProvider = childrenDataProvider;
+			}
+			
+			var contetntPart : XML;
+			
+			background.removeAllElements();
+			
+			for each ( contetntPart in _renderVO.content )
+			{
+				switch ( contetntPart.name().toString() )
+				{
+					case "svg":
+					{
+						var svg : SVGViewer = new SVGViewer();
+						var editableAttributes : Array = svg.setXML( contetntPart );
+						
+						if ( editableAttributes.length > 0 )
+						{
+							editableComponent = editableAttributes[ 0 ].sourceObject;
+						}
+						
+						background.addElement( svg );
+						
+						break
+					}
+						
+					case "text":
+					{
+						var richText : UIComponent
+						
+						if ( contetntPart.@editable )
+						{
+							richText = new RichEditableText();
+							editableComponent = richText;
+						}
+						else
+						{
+							richText = new Text();
+						}
+						
+						richText.x = contetntPart.@left;
+						richText.y = contetntPart.@top;
+						richText.width = contetntPart.@width;
+						
+						richText[ "text" ] = contetntPart[ 0 ];
+						
+						applyStyles( richText, contetntPart );
+						
+						background.addElement( richText );
+						
+						break;
+					}
+					case "htmltext":
+					{
+						var html : HTML = new HTML();
+						
+						html.x = contetntPart.@left;
+						html.y = contetntPart.@top;
+						html.width = contetntPart.@width;
+						
+						if ( contetntPart.@editable )
+							editableComponent = html;
+						
+						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
+							"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
+						
+						html.htmlText = htmlText;
+						
+						background.addElement( html );
+					}
+				}
+			}
+			
+			skin.currentState = "normal";
+		}
+		
 		private function applyStyles( item : UIComponent, itemXMLDescription : XML ) : void
 		{
 			var _style : Object = {};

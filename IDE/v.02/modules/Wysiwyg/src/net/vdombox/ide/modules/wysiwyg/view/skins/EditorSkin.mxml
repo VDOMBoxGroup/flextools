@@ -5,27 +5,14 @@
 			 xmlns:libcomponents="net.vdombox.ide.common.components.*"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
 			 xmlns:s="library://ns.adobe.com/flex/spark"
-			 currentState="wysiwyg" creationComplete="sparkskin1_creationCompleteHandler(event)">
-
-	<fx:Metadata>
-		<![CDATA[ 
-		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor")]
-		]]>
-	</fx:Metadata>
+			 creationComplete="creationCompleteHandler()">
 
 	<fx:Script>
 		<![CDATA[
-			import mx.events.FlexEvent;
-			
-			import spark.components.ToggleButton;
-			import spark.skins.spark.ButtonSkin;
-			import spark.skins.spark.ToggleButtonSkin;
-
-			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+			private function creationCompleteHandler() : void
 			{
-				currentState = "wysiwyg"
+				currentState = "wysiwyg";
 			}
-
 		]]>
 	</fx:Script>
 
@@ -39,7 +26,7 @@
 	</s:states>
 
 	<s:Rect height="20"
-			left="1" right="1" top="1">
+			left="0" right="0" top="0">
 		<s:fill>
 			<s:LinearGradient rotation="90">
 				<s:GradientEntry color="0xCDCDCD"/>
@@ -54,17 +41,30 @@
 		<mx:Spacer width="100%"/>
 
 		<libcomponents:WorkAreaButton id="wysiwygButton"
-									  enabled.wysiwyg="false" enabled.xml="true" height="20"
-									  label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"
+									  enabled.wysiwyg="false" enabled.xml="true" height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"
 									  click="currentState='wysiwyg'"
 									  highlighted.wysiwyg="true" highlighted.xml="false"/>
 
 		<libcomponents:WorkAreaButton id="xmlButton"
-									  enabled.wysiwyg="true" enabled.xml="false" height="20"
-									  label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"
+									  enabled.wysiwyg="true" enabled.xml="false" height="20" label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"
 									  click="currentState='xml'"
 									  highlighted.xml="true" highlighted.wysiwyg="false"/>
 	</s:HGroup>
+
+	<s:Rect height="100%" width="100%"
+			top="20">
+
+		<s:stroke>
+			<s:SolidColorStroke color="0xE8E8E8"
+								weight="1"/>
+		</s:stroke>
+
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF"
+						   alpha=".2"/>
+		</s:fill>
+
+	</s:Rect>
 
 	<s:Group id="contentGroup"
 			 height="100%" width="100%"
