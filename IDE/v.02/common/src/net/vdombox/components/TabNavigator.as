@@ -70,8 +70,6 @@ package net.vdombox.components
 			if( tabBar.selectedIndex == -1 )
 				tabBar.selectedIndex = 0;
 			
-			trace( "--> " + tabBar.selectedIndex );
-			
 			dispatchEvent( new Event( "tabAdded" ) );
 			
 			return tab;
@@ -303,8 +301,6 @@ package net.vdombox.components
 					newElementIndex = 0
 			}
 
-			trace( "<--> " + tabBar.selectedIndex );
-			
 			if ( tabBar.selectedIndex != tIndex )
 				event.element.visible = false;
 			
