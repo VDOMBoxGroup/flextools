@@ -7,9 +7,9 @@ package net.vdombox.editors
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-
+	
 	import ro.victordramba.scriptarea.ScriptAreaEvents;
-
+	
 	import spark.core.SpriteVisualElement;
 
 	public class ScriptAreaComponent extends SpriteVisualElement
@@ -62,7 +62,7 @@ package net.vdombox.editors
 		public function set text( text : String ) : void
 		{
 			area.text = text;
-//			revalidate();
+			area_changeHandler( new Event( Event.CHANGE ) );
 		}
 
 		public function get internalFocusObject() : InteractiveObject
@@ -260,7 +260,7 @@ package net.vdombox.editors
 
 		private function area_changeHandler( event : Event ) : void
 		{
-//				revalidate();		
+			dispatchEvent( new Event( Event.CHANGE ) );
 		}
 
 		private function updateScrollBars() : void

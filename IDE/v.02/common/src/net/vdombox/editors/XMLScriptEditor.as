@@ -12,8 +12,6 @@ package net.vdombox.editors
 		public function XMLScriptEditor()
 		{
 			setStyle( "skinClass", ScriptEditorSkin );
-
-			addEventListener( Event.ADDED_TO_STAGE, addedToStageHadler, false, 0, true );
 		}
 
 		[SkinPart( required="true" )]
@@ -32,6 +30,14 @@ package net.vdombox.editors
 				controller.sourceChanged( scriptAreaComponent.text, fileName );
 		}
 
+		override protected function partAdded(partName:String, instance:Object):void
+		{
+			super.partAdded( partName, instance );
+			
+			if( instance == scriptAreaComponent )
+				initiaize();
+		}
+		
 		private function initiaize() : void
 		{
 			controller = new Controller( stage, scriptAreaComponent );
@@ -40,14 +46,8 @@ package net.vdombox.editors
 
 //			assistMenu = new AssistMenu( scriptAreaComponent, controller, stage, assistCompleteHandler );
 
-			addEventListener( Event.CHANGE, changeHandler );
+			scriptAreaComponent.addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );
-		}
-
-		private function addedToStageHadler( event : Event ) : void
-		{
-			if ( scriptAreaComponent )
-				initiaize();
 		}
 
 		private function controller_statusHandler( event : Event ) : void

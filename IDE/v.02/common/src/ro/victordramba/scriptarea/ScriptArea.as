@@ -284,6 +284,9 @@ package ro.victordramba.scriptarea
 
 		public function replaceText( startIndex : int, endIndex : int, text : String ) : void
 		{
+			if( !text )
+				text = "";
+			
 			text = text.replace( /\r\n/g, NL );
 			text = text.replace( /\n/g, NL );
 			undoBuff.push( { s: startIndex, e: startIndex + text.length, t: _text.substring( startIndex, endIndex ) } );
