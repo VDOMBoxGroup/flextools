@@ -21,6 +21,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
@@ -36,7 +37,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 
-	public class ObjectRenderer extends SkinnableDataContainer implements IItemRenderer
+	public class ObjectRenderer extends SkinnableDataContainer implements IItemRenderer, IRenderer
 	{
 		public function ObjectRenderer()
 		{
@@ -429,7 +430,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			var containersRE : RegExp = /(\w+)/g;
 			var aviableContainers : Array = typeDescription.aviableContainers.match( containersRE );
 			var currentItemName : String;
-
 			if ( _renderVO )
 				currentItemName = _renderVO.vdomObjectVO.typeVO.name;
 

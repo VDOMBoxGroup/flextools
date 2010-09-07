@@ -30,8 +30,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					{
 						if ( sessionProxy.selectedObject )
 						{
-							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, sessionProxy.selectedObject );
-							sendNotification( ApplicationFacade.GET_OBJECT_WYSIWYG, sessionProxy.selectedObject );
+//							sendNotification( ApplicationFacade.GET_OBJECT_ATTRIBUTES, sessionProxy.selectedObject );
+//							sendNotification( ApplicationFacade.GET_OBJECT_WYSIWYG, sessionProxy.selectedObject );
 						}
 					}
 					

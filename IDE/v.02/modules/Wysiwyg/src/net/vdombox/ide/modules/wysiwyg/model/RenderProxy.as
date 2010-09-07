@@ -1,16 +1,23 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
+	import flash.events.Event;
+	import flash.events.IEventDispatcher;
+
 	import mx.collections.XMLListCollection;
-	
+
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
+
+	import spark.components.IItemRenderer;
 
 	public class RenderProxy extends Proxy implements IProxy
 	{
@@ -23,28 +30,66 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		private var typesProxy : TypesProxy;
 
-		private var cache : Object;
+		private var renderVOCache : Object;
+		private var rendererIndex : Object;
 
 		override public function onRegister() : void
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
-			cache = {};
+			renderVOCache = {};
+			rendererIndex = {};
 		}
 
 		override public function onRemove() : void
 		{
 			typesProxy = null;
-			cache = null;
+			renderVOCache = null;
+			rendererIndex = null;
 		}
 
-		public function renderItem( pageVO : PageVO, rawRenderData : XML ) : RenderVO
+		public function addRenderer( renderer : IRenderer ) : void
+		{
+			IEventDispatcher( renderer ).addEventListener( Event.CHANGE, renderer_changeHandler, false, 0, true );
+
+			var renderVO : RenderVO = IItemRenderer( renderer ).data as RenderVO;
+
+			if ( renderVO && renderVO.vdomObjectVO )
+			{
+				if ( !rendererIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
+					rendererIndex[ renderVO.vdomObjectVO.id ] = [];
+
+				rendererIndex[ renderVO.vdomObjectVO.id ].push( renderer );
+			}
+		}
+
+		public function removeRenderer( renderer : IRenderer ) : void
+		{
+			var renderVO : RenderVO = IItemRenderer( renderer ).data as RenderVO;
+
+			if ( renderVO && renderVO.vdomObjectVO && rendererIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
+			{
+				var index : int = rendererIndex[ renderVO.vdomObjectVO.id ].indexOf( renderer );
+
+				if ( index != -1 )
+					rendererIndex[ renderVO.vdomObjectVO.id ].splice( index, 1 );
+			}
+
+			IEventDispatcher( renderer ).removeEventListener( Event.CHANGE, renderer_changeHandler );
+		}
+
+		public function getRenderersByVO( vdomObjectVO : IVDOMObjectVO ) : Array
+		{
+			return vdomObjectVO ? rendererIndex[ vdomObjectVO.id ] : null;
+		}
+
+		public function generateRenderVO( vdomObjectVO : IVDOMObjectVO, rawRenderData : XML ) : RenderVO
 		{
 			var itemID : String = rawRenderData.@id;
 			var renderVO : RenderVO;
 
-			renderVO = cache[ itemID ] ? cache[ itemID ] : new RenderVO( pageVO );
+			renderVO = renderVOCache[ itemID ] ? renderVOCache[ itemID ] : new RenderVO( vdomObjectVO );
 
-			cache[ renderVO.vdomObjectVO.id ] = renderVO;
+			renderVOCache[ renderVO.vdomObjectVO.id ] = renderVO;
 
 			createAttributes( renderVO, rawRenderData );
 			createChildren( renderVO, rawRenderData );
@@ -93,12 +138,12 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			var pageVO : PageVO = renderVO.vdomObjectVO is PageVO ? renderVO.vdomObjectVO as PageVO : ObjectVO( renderVO.vdomObjectVO ).pageVO;
 			var objectVO : ObjectVO;
-			
+
 			var typeVO : TypeVO;
 			var typeID : String;
-			
+
 			var childRenderVO : RenderVO;
-			
+
 			var childXML : XML;
 			var childName : String;
 			var childID : String;
@@ -109,17 +154,17 @@ package net.vdombox.ide.modules.wysiwyg.model
 				childID = childXML.@id;
 
 				typeID = childXML.@typeID;
-				
+
 				if ( childName == "container" || childName == "table" || childName == "row" || childName == "cell" )
 				{
-					
+
 					typeVO = typesProxy.getTypeVObyID( typeID );
-					
-					if ( !childID || ! typeVO )
+
+					if ( !childID || !typeVO )
 						continue;
 
 					objectVO = new ObjectVO( pageVO, typeVO );
-					
+
 					childRenderVO = new RenderVO( objectVO );
 
 					createAttributes( childRenderVO, childXML );
@@ -127,17 +172,17 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 					childRenderVO.parent = renderVO;
 
-					if( !renderVO.children )
+					if ( !renderVO.children )
 						renderVO.children = [];
-						
-					
+
+
 					renderVO.children.push( childRenderVO );
 
-					cache[ childRenderVO.vdomObjectVO.id ] = childRenderVO;
+					renderVOCache[ childRenderVO.vdomObjectVO.id ] = childRenderVO;
 				}
 				else
 				{
-					if( !renderVO.content )
+					if ( !renderVO.content )
 						renderVO.content = childXML.copy();
 					else
 						renderVO.content += childXML.copy();
@@ -155,12 +200,17 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 				if ( editableAttribute )
 				{
-					if( !renderVO.attributes )
+					if ( !renderVO.attributes )
 						renderVO.attributes = [];
-					
+
 					renderVO.attributes.push( new AttributeVO( "editable", editableAttribute ) );
 				}
 			}
+		}
+
+		private function renderer_changeHandler( event : Event ) : void
+		{
+
 		}
 	}
 }

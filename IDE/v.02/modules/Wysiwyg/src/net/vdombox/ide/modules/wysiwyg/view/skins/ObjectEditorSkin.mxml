@@ -4,29 +4,38 @@
 			 xmlns:fx="http://ns.adobe.com/mxml/2009"
 			 xmlns:libcomponents="net.vdombox.ide.common.components.*"
 			 xmlns:mx="library://ns.adobe.com/flex/mx"
-			 xmlns:s="library://ns.adobe.com/flex/spark">
+			 xmlns:s="library://ns.adobe.com/flex/spark"
+			 currentState="wysiwyg" creationComplete="sparkskin1_creationCompleteHandler(event)">
 
 	<fx:Metadata>
 		<![CDATA[ 
-		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.PageEditor")]
+		[HostComponent("net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor")]
 		]]>
 	</fx:Metadata>
 
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
+			
 			import spark.components.ToggleButton;
 			import spark.skins.spark.ButtonSkin;
 			import spark.skins.spark.ToggleButtonSkin;
+
+			protected function sparkskin1_creationCompleteHandler(event:FlexEvent):void
+			{
+				currentState = "wysiwyg"
+			}
+
 		]]>
 	</fx:Script>
 
 	<s:states>
 		<s:State name="wysiwyg"/>
-		<s:State name="wysiwygDisabled" stateGroups="disabled"/>
-		<s:State name="wysiwygWait" stateGroups="wait"/>
+		<s:State name="wysiwygDisabled"/>
 		<s:State name="xml"/>
-		<s:State name="xmlDisabled" stateGroups="disabled"/>
-		<s:State name="xmlWait" stateGroups="wait"/>
+		<s:State name="xmlDisabled"/>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
 	</s:states>
 
 	<s:Rect height="20"
@@ -45,26 +54,20 @@
 		<mx:Spacer width="100%"/>
 
 		<libcomponents:WorkAreaButton id="wysiwygButton"
-									  enabled.disabled="false" enabled.wysiwyg="false" enabled.xml="true" height="20"
+									  enabled.wysiwyg="false" enabled.xml="true" height="20"
 									  label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_wysiwyg_button_label' ) }"
 									  click="currentState='wysiwyg'"
 									  highlighted.wysiwyg="true" highlighted.xml="false"/>
 
 		<libcomponents:WorkAreaButton id="xmlButton"
-									  enabled.disabled="false" enabled.wysiwyg="true" enabled.xml="false" height="20"
+									  enabled.wysiwyg="true" enabled.xml="false" height="20"
 									  label="{ resourceManager.getString( 'Wysiwyg_General', 'work_area_xml_button_label' ) }"
 									  click="currentState='xml'"
 									  highlighted.xml="true" highlighted.wysiwyg="false"/>
 	</s:HGroup>
 
-	<components:PageRenderer id="renderer"
-							 height="100%" width="100%"
-							 top="20"
-							 includeIn="wysiwyg, wysiwygDisabled"/>
-
-	<editors:XMLScriptEditor id="xmlScriptEditor"
-							 height="100%" width="100%"
-							 top="20"
-							 includeIn="xml, xmlDisabled"/>
+	<s:Group id="contentGroup"
+			 height="100%" width="100%"
+			 top="20"/>
 
 </s:SparkSkin>

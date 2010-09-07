@@ -85,7 +85,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-
+			
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
 
@@ -112,15 +112,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
-					var pageVO : PageVO = body as PageVO;
-					var pageEditor : IEditor = workArea.getEditorByVO( pageVO );
-					
-					if( !pageEditor )
-						pageEditor = workArea.openEditor( pageVO );
-					
-					workArea.selectedEditor = pageEditor;
-						
-					break;
 				}
 					
 				case ApplicationFacade.OPEN_PAGE_REQUEST:
@@ -133,9 +124,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 					var editor : IEditor = workArea.getEditorByVO( vdomObjectVO );
 					
 					if( !editor )
+					{
 						editor = workArea.openEditor( vdomObjectVO );
+						sendNotification( ApplicationFacade.EDITOR_CREATED, editor );
+					}
 					else
+					{
 						workArea.selectedEditor = editor;
+					}
 					
 					break;
 				}

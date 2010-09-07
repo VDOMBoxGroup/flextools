@@ -21,7 +21,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.UIQueryMessage;
 	import net.vdombox.ide.common.UIQueryMessageNames;
 	import net.vdombox.ide.common.vo.ObjectAttributesVO;
+	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageAttributesVO;
+	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
 	
@@ -81,8 +83,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.GET_PAGE_ATTRIBUTES );
 			interests.push( ApplicationFacade.GET_OBJECT_ATTRIBUTES );
 
-			interests.push( ApplicationFacade.GET_PAGE_WYSIWYG );
-			interests.push( ApplicationFacade.GET_OBJECT_WYSIWYG );
+			interests.push( ApplicationFacade.GET_WYSIWYG );
 			
 			interests.push( ApplicationFacade.GET_XML_PRESENTATION );
 			interests.push( ApplicationFacade.SET_XML_PRESENTATION );
@@ -282,21 +283,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 					break;
 				}
 
-				case ApplicationFacade.GET_PAGE_WYSIWYG:
+				case ApplicationFacade.GET_WYSIWYG:
 				{
-					message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.WYSIWYG, body );
-
+					if( body is PageVO )
+						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.READ, PPMPageTargetNames.WYSIWYG, body );
+					else if ( body is ObjectVO )
+						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.WYSIWYG, body );
+					
 					junction.sendMessage( PipeNames.PROXIESOUT, message );
 
-					break;
-				}
-					
-				case ApplicationFacade.GET_OBJECT_WYSIWYG:
-				{
-					message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.READ, PPMObjectTargetNames.WYSIWYG, body );
-					
-					junction.sendMessage( PipeNames.PROXIESOUT, message );
-					
 					break;
 				}
 

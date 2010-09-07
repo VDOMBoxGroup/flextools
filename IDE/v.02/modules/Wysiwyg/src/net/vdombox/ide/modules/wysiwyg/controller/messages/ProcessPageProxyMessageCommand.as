@@ -34,19 +34,11 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMPageTargetNames.OBJECT:
 				{
 					if ( operation == PPMOperationNames.CREATE )
-					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
-						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
-					}
 					else if ( operation == PPMOperationNames.READ )
-					{
 						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
-					}
 					else if ( operation == PPMOperationNames.DELETE )
-					{
 						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
-						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
-					}
 
 					break;
 				}
@@ -86,8 +78,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					else if ( operation == PPMOperationNames.UPDATE )
 						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
 
-					if( needForUpdateObject.hasOwnProperty( pageAttributesVO.pageVO.id ) )
-						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, pageAttributesVO.pageVO );
+//					if( needForUpdateObject.hasOwnProperty( pageAttributesVO.pageVO.id ) )
+//						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, pageAttributesVO.pageVO );
 						
 					break;
 				}

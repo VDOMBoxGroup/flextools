@@ -141,8 +141,7 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const DELIMITER : String = "/";
 		public static const STATES : String = "states";
 
-		public static const GET_PAGE_WYSIWYG : String = "getPageWYSIWYG";
-		public static const GET_OBJECT_WYSIWYG : String = "getObjectWYSIWYG";
+		public static const GET_WYSIWYG : String = "getWYSIWYG";
 
 		public static const GET_XML_PRESENTATION : String = "getXMLPresentation";
 		public static const XML_PRESENTATION_GETTED : String = "XMLPresentationGetted";

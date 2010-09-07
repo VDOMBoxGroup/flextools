@@ -36,7 +36,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					if ( operation == PPMOperationNames.CREATE )
 					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.newObjectVO );
-						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
+//						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, sessionProxy.selectedPage );
 					}
 
 					break;
@@ -51,8 +51,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 					else if ( operation == PPMOperationNames.UPDATE )
 						sendNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED, objectAttributesVO );
 
-					if ( needForUpdateObject.hasOwnProperty( objectAttributesVO.objectVO.id ) )
-						sendNotification( ApplicationFacade.GET_OBJECT_WYSIWYG, objectAttributesVO.objectVO );
+//					if ( needForUpdateObject.hasOwnProperty( objectAttributesVO.objectVO.id ) )
+//						sendNotification( ApplicationFacade.GET_OBJECT_WYSIWYG, objectAttributesVO.objectVO );
 
 					break;
 				}
