@@ -13,9 +13,6 @@ package net.vdombox.editors.parsers.vdomxml
 			this.name = name;
 		}
 
-		//set at resolve time, late
-		public var sourcePath : String;
-
 		public var pos : uint;
 
 		/**
@@ -24,28 +21,10 @@ package net.vdombox.editors.parsers.vdomxml
 		public var fieldType : String;
 
 		/**
-		 * unresolved type
-		 */
-		public var type : Multiname;
-
-
-		/**
 		 * name of the field (e.g. var name)
 		 */
 		public var name : String;
 
-
-		/**
-		 * parent scope
-		 */
-		public var parent : Field;
-
-		/*
-
-		   /**
-		 * public, private, protected, internal or namespace
-		 */
-		public var access : String = "internal";
 
 		/**
 		 * top packages, package classes, class members, function local vars
@@ -59,7 +38,7 @@ package net.vdombox.editors.parsers.vdomxml
 
 		public function toString() : String
 		{
-			return ( access ? access + " " : "" ) + fieldType + " " + name + ( type ? ": " + type.type : "" );
+			return fieldType + " " + name;
 		}
 	}
 }

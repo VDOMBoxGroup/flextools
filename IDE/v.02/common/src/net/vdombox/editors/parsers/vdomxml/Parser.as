@@ -23,12 +23,14 @@ package net.vdombox.editors.parsers.vdomxml
 			//syntax highlighting
 			formats.setValue( 'default', new TextFormat( null, null, 0x111111, false, false ) );
 			formats.setValue( Token.TAGNAME, new TextFormat( null, null, 0x1039FF, true, false ) );
+			formats.setValue( Token.CLOSETAG, new TextFormat( null, null, 0x1039FF, true, false ) );
 			formats.setValue( Token.ATTRIBUTENAME, new TextFormat( null, null, 0x247ECE, true, false ) );
 			formats.setValue( Token.ATTRIBUTEVALUE, new TextFormat( null, null, 0x613BB9, false, false ) );
 			formats.setValue( Token.PROCESSING_INSTRUCTIONS, new TextFormat( null, null, 0xa3a020, false, true ) );
 			formats.setValue( Token.COMMENT, new TextFormat( null, null, 0x109900, false, true ) );
 			formats.setValue( Token.CDATA, new TextFormat( null, null, 0xa3a020, false, false ) );
 			formats.setValue( Token.SYMBOL, new TextFormat( null, null, 0xB30000, false, false ) );
+			formats.setValue( Token.EQUAL, new TextFormat( null, null, 0xB30000, false, false ) );
 			formats.setValue( 'topType', new TextFormat( null, null, 0x981056, false, false ) );
 		}
 
@@ -61,10 +63,6 @@ package net.vdombox.editors.parsers.vdomxml
 		}
 
 
-		public function getTypeData() : ByteArray
-		{
-			return typeDB.toByteArray();
-		}
 
 		/*public function addTypeData(db:TypeDB, name:String):void
 		   {

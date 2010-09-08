@@ -3,11 +3,15 @@ package net.vdombox.editors
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
 	
+	import mx.core.UIComponent;
+	
 	import net.vdombox.editors.parsers.vdomxml.Controller;
+	import net.vdombox.editors.parsers.vdomxml.Token;
 	
 	import ro.victordramba.util.vectorToArray;
 
@@ -77,9 +81,9 @@ package net.vdombox.editors
 
 			if ( String.fromCharCode( e.keyCode ) == ' ' && e.ctrlKey )
 			{
-				/*menuData = ctrl.getAllOptions();
-				   if (menuData && menuData.length)
-				 showMenu(fld.caretIndex);*/
+//				menuData = ctrl.getAllOptions();
+//				   if (menuData && menuData.length)
+//				 showMenu(fld.caretIndex);
 				triggerAssist();
 			}
 		}
@@ -118,33 +122,9 @@ package net.vdombox.editors
 				else if ( e.keyCode == Keyboard.ENTER || e.keyCode == Keyboard.TAB )
 				{
 					fldReplaceText( c - menuStr.length, c, menu.getSelectedValue() );
-					checkAddImports( menu.getSelectedValue() );
 					onComplete();
 				}
 				menu.dispose();
-			}
-		}
-
-		private function checkAddImports( name : String ) : void
-		{
-			var caret : int = fld.caretIndex;
-			if ( !ctrl.isInScope( name, caret - name.length ) )
-			{
-				var missing : Vector.<String> = ctrl.getMissingImports( name, caret - name.length );
-				if ( missing )
-				{
-					var sumChars : int = 0;
-					for ( var i : int = 0; i < missing.length; i++ )
-					{
-						//TODO make a better regexp
-						var pos : int = fld.text.lastIndexOf( 'package ', fld.caretIndex );
-						pos = fld.text.indexOf( '{', pos ) + 1;
-						var imp : String = '\n\t' + ( i > 0 ? '//' : '' ) + 'import ' + missing[ i ] + '.' + name + ';';
-						sumChars += imp.length;
-						fld.replaceText( pos, pos, imp );
-					}
-					fld.setSelection( caret + sumChars, caret + sumChars );
-				}
 			}
 		}
 
@@ -186,38 +166,49 @@ package net.vdombox.editors
 				menuStr = m ? m[ 1 ] : '';
 			}
 			menuStr = menuStr.split( '' ).reverse().join( '' )
-			pos -= menuStr.length + 1;
+//			pos -= menuStr.length + 1;
 
 			//debug('trigger:'+trigger);
 			//debug('str='+menuStr);
 
 			menuData = null;
-			var rt : String = trigger.split( '' ).reverse().join( '' );
-			if ( rt == 'new' || rt == 'as' || rt == 'is' || rt == ':' || rt == 'extends' || rt == 'implements' )
-				menuData = ctrl.getTypeOptions();
-			else if ( trigger == '.' )
-				menuData = ctrl.getMemberList( pos );
-			else if ( trigger == '' )
-				menuData = ctrl.getAllOptions( pos );
-			else if ( trigger == '(' )
+
+			if ( ctrl.isInTag( pos ) )
 			{
-				var fd : String = ctrl.getFunctionDetails( pos );
-				if ( fd )
-				{
-//					tooltip.setTipText( fd );
-					var p : Point = fld.getPointForIndex( fld.caretIndex - 1 );
-					p = fld.localToGlobal( p );
-//					tooltip.showToolTip();
-//					tooltip.moveLocationRelatedTo( new IntPoint( p.x, p.y ) );
-					tooltipCaret = fld.caretIndex;
-					return;
-				}
+				menuData = ctrl.getAllTypes();
 			}
+			else if ( ctrl.isInAttribute( pos ) )
+			{
+				menuData = ctrl.getAttributesList( pos );
+			}
+
+//			var rt : String = trigger.split( '' ).reverse().join( '' );
+//			if ( rt == 'new' || rt == 'as' || rt == 'is' || rt == ':' || rt == 'extends' || rt == 'implements' )
+//				menuData = ctrl.getTypeOptions();
+//			else if ( trigger == '.' )
+//				menuData = ctrl.getMemberList( pos );
+//			else if ( trigger == '' )
+//				menuData = ctrl.getAllOptions( pos );
+//			else if ( trigger == '(' )
+//			{
+//				var fd : String = ctrl.getFunctionDetails( pos );
+//				if ( fd )
+//				{
+////					tooltip.setTipText( fd );
+//					var p : Point = fld.getPointForIndex( fld.caretIndex - 1 );
+//					p = fld.localToGlobal( p );
+////					tooltip.showToolTip();
+////					tooltip.moveLocationRelatedTo( new IntPoint( p.x, p.y ) );
+//					tooltipCaret = fld.caretIndex;
+//					return;
+//				}
+//			}
 
 			if ( !menuData || menuData.length == 0 )
 				return;
 
 			showMenu( pos + 1 );
+
 			if ( menuStr.length )
 				filterMenu();
 		}
@@ -238,6 +229,8 @@ package net.vdombox.editors
 
 			//menu.show(stage, p.x, p.y + 15);
 			menu.show( fld, p.x, 0 );
+			
+			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 
 			stage.focus = menu;
 //			FocusManager.getManager( stage ).setFocusOwner( menu );
@@ -252,6 +245,29 @@ package net.vdombox.editors
 				menu.y = menuRefY - menuH - 2;
 			else
 				menu.y = menuRefY + 15;
+		}
+		
+		private function stage_mouseDownHandler( event : MouseEvent ) : void
+		{
+			var parent : UIComponent = event.target as UIComponent;
+			var isMenu : Boolean;
+			
+			while( parent )
+			{
+				if( parent == menu )
+				{
+					isMenu = true;
+					break;
+				}
+				
+				parent = parent.parent as UIComponent;
+			}
+			
+			if( !isMenu )
+			{
+				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
+				menu.dispose();
+			}			
 		}
 
 	}

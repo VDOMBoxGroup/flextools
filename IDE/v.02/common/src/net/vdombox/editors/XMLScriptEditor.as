@@ -19,7 +19,7 @@ package net.vdombox.editors
 
 		private var controller : Controller;
 		private var fileName : String;
-//		private var assistMenu : AssistMenu;
+		private var assistMenu : AssistMenu;
 
 		public function loadSource( source : String, filePath : String ) : void
 		{
@@ -44,7 +44,7 @@ package net.vdombox.editors
 
 			controller.addEventListener( "status", controller_statusHandler, false, 0, true );
 
-//			assistMenu = new AssistMenu( scriptAreaComponent, controller, stage, assistCompleteHandler );
+			assistMenu = new AssistMenu( scriptAreaComponent, controller, stage, assistCompleteHandler );
 
 			scriptAreaComponent.addEventListener( Event.CHANGE, changeHandler );
 			controller.sourceChanged( scriptAreaComponent.text, "zz" );

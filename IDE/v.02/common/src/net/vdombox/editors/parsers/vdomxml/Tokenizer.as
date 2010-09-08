@@ -152,10 +152,10 @@ package net.vdombox.editors.parsers.vdomxml
 				}
 				else if ( nextChar() == "/" )
 				{
-					position += 2;
+					skipUntil( ">" );
 					tokenString = string.substring( startPosition, position );
 
-					return new Token( tokenString, Token.TAGNAME, position );
+					return new Token( tokenString, Token.CLOSETAG, position );
 				}
 				else
 				{
@@ -171,7 +171,7 @@ package net.vdombox.editors.parsers.vdomxml
 				position += 2;
 				tokenString = string.substring( startPosition, position );
 
-				return new Token( tokenString, Token.TAGNAME, position );
+				return new Token( tokenString, Token.CLOSETAG, position );
 			}
 
 			else if ( char == ">" )
@@ -190,6 +190,13 @@ package net.vdombox.editors.parsers.vdomxml
 				return new Token( tokenString, Token.ATTRIBUTEVALUE, position );
 			}
 
+			else if ( char == "=" && isTagInside )
+			{
+				tokenString = string.substring( startPosition, ++position );
+				
+				return new Token( tokenString, Token.EQUAL, position );
+			}
+			
 			else if ( isLetter( char ) )
 			{
 				prevToken = tokens.length > 0 ? tokens[ tokens.length - 1 ] : null;
@@ -281,14 +288,10 @@ package net.vdombox.editors.parsers.vdomxml
 
 				//top scope
 				topScope = scope = new Field( "top", 0, "top" );
-				//toplevel package
-				scope.members.setValue( "", new Field( "package", 0, "" ) );
-
+				
 				position = 0;
 				defParamValue = null;
 				paramsBlock = false;
-
-				imports = new HashMap();
 			}
 
 			var t : Token = nextToken();
@@ -298,196 +301,19 @@ package net.vdombox.editors.parsers.vdomxml
 			tokens.push( t );
 			t.parent = currentBlock;
 			currentBlock.children.push( t );
-			if ( t.string == "{" /* || t.string=="[" || t.string=="("*/ )
+			
+			if ( t.string == "<" )
 			{
 				currentBlock = t;
 				t.children = [];
 			}
-			if ( t.string == "}" && currentBlock.parent /* || t.string=="]" || t.string==")"*/ )
+			
+			else if ( ( t.string == ">" || t.string == "/>" ) && currentBlock.parent )
 			{
 				currentBlock = currentBlock.parent;
 			}
 
 			t.scope = scope;
-
-			var tokensLength : uint = tokens.length - 1;
-			var tp : Token = tokens[ tokensLength - 1 ];
-			var tp2 : Token = tokens[ tokensLength - 2 ];
-			var tp3 : Token = tokens[ tokensLength - 3 ];
-
-			if ( t.string == "package" )
-				imports = new HashMap;
-
-			//toplevel package
-			if ( t.string == "{" && tp.string == "package" )
-			{
-				_scope = scope.members.getValue( "" );
-					//imports.setItem(".*");
-			}
-			else if ( tp && tp.string == "import" )
-			{
-				imports.setValue( t.string, t.string );
-			}
-			else if ( tp && tp.string == "extends" )
-			{
-				field.extendz = new Multiname( t.string, imports );
-			}
-			else if ( t.string == "private" || t.string == "protected" || t.string == "public" || t.string == "internal" )
-			{
-				access = t.string;
-			}
-			else if ( t.string == "static" )
-			{
-				isStatic = true;
-			}
-			else if ( t.string == "get" || t.string == "set" )
-			{
-				//do nothing
-			}
-			else if ( tp && ( tp.string == "package" || tp.string == "class" || tp.string == "interface" ||
-				tp.string == "function" || tp.string == "catch" || tp.string == "get" || tp.string == "set" ||
-				tp.string == "var" || tp.string == "const" ) )
-			{
-				//for package, merge classes in the existing omonimus package
-				if ( tp.string == "package" && scope.members.hasKey( t.string ) )
-					_scope = scope.members.getValue( t.string );
-				else
-				{
-					//debug("field-"+tp.string);
-					//TODO if is "set" make it "*set"
-					field = new Field( tp.string, t.pos, t.string );
-					if ( t.string != "(" ) //anonimus functions are not members
-						scope.members.setValue( t.string, field );
-					if ( tp.string != "var" && tp.string != "const" )
-						_scope = field;
-
-					if ( isStatic ) //consume "static" declaration
-					{
-						field.isStatic = true;
-						isStatic = false;
-					}
-					if ( access ) //consume access specifier
-					{
-						field.access = access;
-						access = null;
-
-					}
-					//all interface methods are public
-					if ( scope.fieldType == "interface" )
-						field.access = "public";
-					//this is so members will have the parent set to the scope
-					field.parent = scope;
-				}
-				if ( _scope && ( tp.string == "class" || tp.string == "interface" || scope.fieldType == "package" ) )
-				{
-					_scope.type = new Multiname( "Class" );
-					try
-					{
-						_typeDB.addDefinition( scope.name, field );
-					}
-					// failproof for syntax errors
-					catch ( e : Error )
-					{
-					}
-				}
-				//add current package to imports
-				if ( tp.string == "package" )
-					imports.setValue( t.string + ".*", t.string + ".*" );
-			}
-
-			if ( t.string == ";" )
-			{
-				field = null;
-				_scope = null;
-				isStatic = false;
-			}
-
-			//parse function params
-			else if ( _scope && ( _scope.fieldType == "function" || _scope.fieldType == "catch" || _scope.fieldType == "set" ) )
-			{
-				if ( tp && tp.string == "(" && t.string != ")" )
-					paramsBlock = true;
-
-				if ( paramsBlock )
-				{
-					if ( !param && t.string != "..." )
-					{
-						param = new Field( "var", position, t.string );
-						t.scope = _scope;
-						_scope.params.setValue( param.name, param );
-						if ( tp.string == "..." )
-						{
-							_scope.hasRestParams = true;
-							param.type = new Multiname( "Array" );
-						}
-					}
-					else if ( tp.string == ":" )
-					{
-						if ( _scope.fieldType == "set" )
-						{
-							_scope.type = new Multiname( t.string, imports );
-						}
-						else
-							param.type = new Multiname( t.string, imports );
-					}
-
-					else if ( t.string == "=" )
-						defParamValue = "";
-
-					else if ( t.string == "," || t.string == ")" )
-					{
-						if ( t.string == ")" )
-						{
-							paramsBlock = false;
-						}
-						if ( defParamValue )
-						{
-							param.defaultValue = defParamValue;
-							defParamValue = null;
-						}
-						param = null;
-					}
-					else if ( defParamValue != null )
-						defParamValue += t.string;
-				}
-			}
-
-
-			if ( field && tp3 && tp.string == ":" )
-			{
-				if ( tp3.string == "var" || tp3.string == "const" || tp2.string == ")" )
-				{
-					if ( field.fieldType != "set" )
-					{
-						field.type = new Multiname( t.string, imports );
-					}
-					field = null;
-				}
-			}
-
-
-			if ( t.string == "{" && _scope )
-			{
-				currentBlock.imports = imports;
-				_scope.pos = t.pos;
-				_scope.parent = scope;
-				scope = _scope;
-				t.scope = scope;
-				//info += pos + ")" + scope.parent.name + "->" + scope.name+"\n";
-				_scope = null;
-			}
-
-			else if ( t.string == "}" && t.parent.pos == scope.pos )
-			{
-				//info += scope.parent.name + "<-" + scope.name+"\n";
-				scope = scope.parent;
-
-				//force a ; to close the scope here. needs further testing
-				var sepT : Token = new Token( ";", Token.SYMBOL, t.pos + 1 );
-				sepT.scope = scope;
-				sepT.parent = t.parent;
-				tokens.push( sepT );
-			}
 
 			return true;
 		}

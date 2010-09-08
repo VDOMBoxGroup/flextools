@@ -7,10 +7,10 @@ package net.vdombox.editors.parsers.vdomxml
 	import flash.net.SharedObject;
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
-	
+
 	import net.vdombox.editors.Location;
 	import net.vdombox.editors.ScriptAreaComponent;
-	
+
 	import ro.victordramba.thread.ThreadEvent;
 	import ro.victordramba.thread.ThreadsController;
 
@@ -21,34 +21,34 @@ package net.vdombox.editors.parsers.vdomxml
 		public function Controller( stage : Stage, textField : ScriptAreaComponent )
 		{
 			fld = textField;
-			
+
 			//TODO refactor, Controller should probably be a singleton
 			if ( !tc )
 			{
 				tc = new ThreadsController( stage );
-				//TypeDB.setDB('global', TypeDB.formByteArray(new GlobalTypesAsset));
-				//TypeDB.setDB('playerglobal', TypeDB.formByteArray(new PlayerglobalAsset));
+					//TypeDB.setDB('global', TypeDB.formByteArray(new GlobalTypesAsset));
+					//TypeDB.setDB('playerglobal', TypeDB.formByteArray(new PlayerglobalAsset));
 			}
-			
+
 			parser = new Parser;
-			
+
 			//parser.addTypeData(TypeDB.formByteArray(new GlobalTypesAsset), 'global');
 			//parser.addTypeData(TypeDB.formByteArray(new PlayerglobalAsset), 'player');
 			//parser.addTypeData(TypeDB.formByteArray(new ASwingAsset), 'aswing');
-			
-			
-			
+
+
+
 			tc.addEventListener( ThreadEvent.THREAD_READY, function( e : ThreadEvent ) : void
 			{
 				if ( e.thread != parser )
 					return;
-				
+
 				parser.applyFormats( fld );
 				//cursorMoved(textField.caretIndex);
 				status = 'Parse time: ' + ( getTimer() - t0 ) + 'ms ' + parser.tokenCount + ' tokens';
 				dispatchEvent( new Event( 'status' ) );
 			} );
-			
+
 			tc.addEventListener( ThreadEvent.PROGRESS, function( e : ThreadEvent ) : void
 			{
 				if ( e.thread != parser )
@@ -60,7 +60,7 @@ package net.vdombox.editors.parsers.vdomxml
 		}
 
 		private var parser : Parser;
-		
+
 		private var t0 : Number;
 		static private var tc : ThreadsController;
 
@@ -71,20 +71,6 @@ package net.vdombox.editors.parsers.vdomxml
 		//public var typeInfo:Array/*of String*/
 
 		private var fld : ScriptAreaComponent;
-
-		
-
-		public function saveTypeDB() : void
-		{
-			/*var so:SharedObject = SharedObject.getLocal('ascc-type');
-			   so.data.typeDB = parser.getTypeData();
-			 so.flush();*/
-
-			var file : FileReference = new FileReference;
-			var ret : ByteArray = parser.getTypeData();
-			file.save( ret, 'globals.amf' );
-
-		}
 
 		public function restoreTypeDB() : void
 		{
@@ -113,50 +99,40 @@ package net.vdombox.editors.parsers.vdomxml
 			status = 'Processing ...';
 		}
 
-		public function getMemberList( index : int ) : Vector.<String>
+		public function getAttributesList( index : int ) : Vector.<String>
 		{
-			return parser.newResolver().getMemberList( fld.text, index );
+			return parser.newResolver().getAttributesList( fld.text, index );
 		}
 
-		public function getFunctionDetails( index : int ) : String
-		{
-			return parser.newResolver().getFunctionDetails( fld.text, index );
-		}
-
-		public function getTypeOptions() : Vector.<String>
+		public function getAllTypes() : Vector.<String>
 		{
 			return parser.newResolver().getAllTypes();
 		}
 
-		public function getAllOptions( index : int ) : Vector.<String>
+		public function isInTag( pos : int ) : Boolean
 		{
-			return parser.newResolver().getAllOptions( index );
+			return parser.newResolver().isInTag( pos );
 		}
 
-		public function getMissingImports( name : String, pos : int ) : Vector.<String>
+		public function isInAttribute( pos : int ) : Boolean
 		{
-			return parser.newResolver().getMissingImports( name, pos );
+			return parser.newResolver().isInAttribute( pos );
 		}
 
-		public function isInScope( name : String, pos : int ) : Boolean
-		{
-			return parser.newResolver().isInScope( name, pos );
-		}
-
-		public function findDefinition( index : int ) : Location
-		{
-			var field : Field = parser.newResolver().findDefinition( fld.text, index );
-			if ( !field )
-				return null;
-			
-			for ( var parent : Field = field, i : int = 0; parent && i < 10; parent = parent.parent, i++ )
-			{
-				if ( parent.sourcePath )
-				{
-					return new Location( parent.sourcePath, field.pos );
-				}
-			}
-			return new Location( null, field.pos );
-		}
+//		public function findDefinition( index : int ) : Location
+//		{
+//			var field : Field = parser.newResolver().findDefinition( fld.text, index );
+//			if ( !field )
+//				return null;
+//			
+//			for ( var parent : Field = field, i : int = 0; parent && i < 10; parent = parent.parent, i++ )
+//			{
+//				if ( parent.sourcePath )
+//				{
+//					return new Location( parent.sourcePath, field.pos );
+//				}
+//			}
+//			return new Location( null, field.pos );
+//		}
 	}
 }

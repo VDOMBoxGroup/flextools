@@ -7,8 +7,10 @@ package net.vdombox.editors.parsers.vdomxml
 	internal class Token
 	{
 		public static const TAGNAME : String = "tagName";
+		public static const CLOSETAG : String = "closeTag";
 		public static const ATTRIBUTENAME : String = "attributeName";
 		public static const ATTRIBUTEVALUE : String = "attributeValue";
+		public static const EQUAL : String = "equal";
 		public static const PROCESSING_INSTRUCTIONS : String = "processingInstructions";
 		public static const CDATA : String = "cdata";
 		public static const COMMENT : String = "comment";
