@@ -54,6 +54,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 					typeField.members.setValue( attributeDescriptionVO.name, new Field( "attribute", 0, attributeDescriptionVO.name ) );
 				}
 
+				typeField.members.setValue( "name", new Field( "attribute", 0, "name" ) );
+				
 				result.addDefinition( typeField );
 			}
 

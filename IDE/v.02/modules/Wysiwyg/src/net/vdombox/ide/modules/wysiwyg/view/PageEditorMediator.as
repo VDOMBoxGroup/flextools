@@ -115,7 +115,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			pageEditor.addEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler, false, 0, true );
 			pageEditor.addEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler, false, 0, true );
 
-			pageEditor.addEventListener( RendererEvent.CREATED, rendererCreatedHandler, true, 0, true );
+			pageEditor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
+			pageEditor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -140,9 +141,14 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { pageVO: pageEditor.vdomObjectVO } );
 		}
 
-		private function rendererCreatedHandler( event : RendererEvent ) : void
+		private function renderer_createdHandler( event : RendererEvent ) : void
 		{
 			sendNotification( ApplicationFacade.RENDERER_CREATED, event.target as IRenderer );
+		}
+		
+		private function renderer_clickedHandler( event : RendererEvent ) : void
+		{
+			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
 		}
 	}
 }

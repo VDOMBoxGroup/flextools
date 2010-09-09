@@ -468,7 +468,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();
-			dispatchEvent( new RendererEvent( RendererEvent.ITEM_CLICKED ) );
+			dispatchEvent( new RendererEvent( RendererEvent.CLICKED ) );
 		}
 
 		private function dragDropHandler( event : DragEvent ) : void

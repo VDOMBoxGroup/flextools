@@ -12,14 +12,13 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
-	import net.vdombox.ide.modules.wysiwyg.controller.ItemTransformedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenExternalEditorRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.OpenResourceSelectorRequestCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.RendererClickedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererCreatedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.RendererRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveAttributesRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SaveSettingsToProxy;
-	import net.vdombox.ide.modules.wysiwyg.controller.SelectItemRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.SetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.StartupCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.TearDownCommand;
@@ -164,6 +163,8 @@ package net.vdombox.ide.modules.wysiwyg
 		public static const RENDERER_CREATED : String = "rendererCreated";
 		public static const RENDERER_REMOVED : String = "rendererRemoved";
 		
+		public static const RENDERER_CLICKED : String = "rendererClicked";
+		
 //		public static const RENDERER_TRANSFORMED : String = "itemTransformed";
 		
 //		public static const SELECT_ITEM_REQUEST : String = "selectItemRequest";
@@ -231,6 +232,8 @@ package net.vdombox.ide.modules.wysiwyg
 			registerCommand( RENDERER_CREATED, RendererCreatedCommand );
 			registerCommand( RENDERER_REMOVED, RendererRemovedCommand );
 
+			registerCommand( RENDERER_CLICKED, RendererClickedCommand );
+			
 			registerCommand( WYSIWYG_GETTED, WysiwygGettedCommand );
 			registerCommand( XML_PRESENTATION_GETTED, XmlPresentationGettedCommand );
 			

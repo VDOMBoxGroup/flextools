@@ -113,12 +113,20 @@
 		<s:State name="disabled"/>
 	</s:states>
 
-	<components:PageRenderer id="renderer"
-							 height="100%" width="100%"
-							 includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
 
-	<editors:XMLScriptEditor id="xmlScriptEditor"
-							 height="100%" width="100%"
-							 includeIn="xml, xmlDisabled"/>
+	<s:Group height="100%" width="100%">
+		<components:PageRenderer id="renderer"
+								 height="100%" width="100%"
+								 includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
+
+		<editors:XMLScriptEditor id="xmlScriptEditor"
+								 height="100%" width="100%"
+								 includeIn="xml, xmlDisabled"/>
+	</s:Group>
+
+	<components:ToolbarPanel height="100%"/>
 
 </s:SkinnableContainer>

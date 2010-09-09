@@ -166,9 +166,11 @@ package net.vdombox.ide.modules.wysiwyg.model
 						continue;
 
 					objectVO = new ObjectVO( pageVO, typeVO );
-
+					objectVO.setID( childID );
+					objectVO.name = childName;
+					
 					childRenderVO = new RenderVO( objectVO );
-
+					
 					createAttributes( childRenderVO, childXML );
 					createChildren( childRenderVO, childXML );
 
