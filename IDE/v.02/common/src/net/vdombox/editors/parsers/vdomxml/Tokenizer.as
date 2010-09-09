@@ -161,7 +161,7 @@ package net.vdombox.editors.parsers.vdomxml
 				{
 					tokenString = string.substring( startPosition, ++position );
 
-					return new Token( tokenString, Token.TAGNAME, position );
+					return new Token( tokenString, Token.OPENTAG, position );
 				}
 
 			}

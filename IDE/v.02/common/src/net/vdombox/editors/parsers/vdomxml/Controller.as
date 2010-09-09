@@ -99,12 +99,12 @@ package net.vdombox.editors.parsers.vdomxml
 			status = 'Processing ...';
 		}
 
-		public function getAttributesList( index : int ) : Vector.<String>
+		public function getAttributesList( index : int ) : Vector.<Object>
 		{
-			return parser.newResolver().getAttributesList( fld.text, index );
+			return parser.newResolver().getAttributesList( index );
 		}
 
-		public function getAllTypes() : Vector.<String>
+		public function getAllTypes() : Vector.<Object>
 		{
 			return parser.newResolver().getAllTypes();
 		}

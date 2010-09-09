@@ -2,7 +2,7 @@ package net.vdombox.editors.parsers.vdomxml
 {
 	import flash.net.registerClassAlias;
 	import flash.utils.ByteArray;
-
+	
 	import ro.victordramba.util.HashMap;
 
 	public class TypeDB
@@ -77,6 +77,13 @@ package net.vdombox.editors.parsers.vdomxml
 			return a;
 		}
 
+		public function getType( typeName : String ) : Field
+		{
+			typeName = typeName.toLowerCase();
+			
+			return data.getValue( typeName );
+		}
+		
 		public function toString() : String
 		{
 			//return data.toArray().join(',');

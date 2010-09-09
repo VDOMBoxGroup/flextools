@@ -7,17 +7,17 @@ package net.vdombox.editors
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import flash.utils.setTimeout;
-	
+
 	import mx.core.UIComponent;
-	
+
 	import net.vdombox.editors.parsers.vdomxml.Controller;
 	import net.vdombox.editors.parsers.vdomxml.Token;
-	
+
 	import ro.victordramba.util.vectorToArray;
 
 	public class AssistMenu
 	{
-		private var menuData : Vector.<String>
+		private var menuData : Vector.<Object>
 		private var fld : ScriptAreaComponent;
 		private var menu : PopUpMenu;
 		private var ctrl : Controller;
@@ -57,8 +57,8 @@ package net.vdombox.editors
 		private function filterMenu() : Boolean
 		{
 			var a : Array = [];
-			for each ( var s : String in menuData )
-				if ( s.toLowerCase().indexOf( menuStr.toLowerCase() ) == 0 )
+			for each ( var s : Object in menuData )
+				if ( s.value.toLowerCase().indexOf( menuStr.toLowerCase() ) == 0 )
 					a.push( s );
 
 			if ( a.length == 0 )
@@ -72,20 +72,8 @@ package net.vdombox.editors
 
 		private function onKeyDown( e : KeyboardEvent ) : void
 		{
-//			if (tooltip.isShowing())
-//			{
-//				if (e.keyCode == Keyboard.ESCAPE || e.keyCode == Keyboard.UP || e.keyCode == Keyboard.DOWN || 
-//					String.fromCharCode(e.charCode) == ')' || fld.caretIndex < tooltipCaret)
-//					tooltip.disposeToolTip();
-//			}
-
-			if ( String.fromCharCode( e.keyCode ) == ' ' && e.ctrlKey )
-			{
-//				menuData = ctrl.getAllOptions();
-//				   if (menuData && menuData.length)
-//				 showMenu(fld.caretIndex);
+			if ( String.fromCharCode( e.keyCode ) == " " && e.ctrlKey )
 				triggerAssist();
-			}
 		}
 
 		private function onMenuKey( e : KeyboardEvent ) : void
@@ -93,6 +81,7 @@ package net.vdombox.editors
 			if ( e.charCode != 0 )
 			{
 				var c : int = fld.caretIndex;
+
 				if ( e.ctrlKey )
 				{
 
@@ -124,6 +113,7 @@ package net.vdombox.editors
 					fldReplaceText( c - menuStr.length, c, menu.getSelectedValue() );
 					onComplete();
 				}
+
 				menu.dispose();
 			}
 		}
@@ -141,68 +131,53 @@ package net.vdombox.editors
 			setTimeout( function() : void
 			{
 				stage.focus = fld;
-					//???
-//				FocusManager.getManager(stage).setFocusOwner(fld);
 			}, 1 );
 		}
 
 		public function triggerAssist() : void
 		{
 			var pos : int = fld.caretIndex;
-			//look back for last trigger
-			var tmp : String = fld.text.substring( Math.max( 0, pos - 100 ), pos ).split( '' ).reverse().join( '' );
-			var m : Array = tmp.match( /^(\w*?)\s*(\:|\.|\(|\bsa\b|\bwen\b)/ );
-			var trigger : String = m ? m[ 2 ] : '';
 
+			var tmp : String = fld.text.substring( Math.max( 0, pos - 100 ), pos ).split( "" ).reverse().join( "" );
+			var m : Array = tmp.match( /^(\w*)\b/ );
+			var i : int;
+			menuStr = m ? m[ 1 ] : "";
 
-//			if ( tooltip.isShowing() && trigger == '(' )
-//				trigger = '';
-
-			if ( m )
-				menuStr = m[ 1 ];
-			else
-			{
-				m = tmp.match( /^(\w*)\b/ );
-				menuStr = m ? m[ 1 ] : '';
-			}
-			menuStr = menuStr.split( '' ).reverse().join( '' )
-//			pos -= menuStr.length + 1;
-
-			//debug('trigger:'+trigger);
-			//debug('str='+menuStr);
+			menuStr = menuStr.split( "" ).reverse().join( "" )
 
 			menuData = null;
 
 			if ( ctrl.isInTag( pos ) )
 			{
 				menuData = ctrl.getAllTypes();
+
+				if ( menuData && menuData.length > 0 )
+				{
+					for ( i = 0; i < menuData.length; i++ )
+					{
+						menuData[ i ] = { label: menuData[ i ], value: menuData[ i ].toUpperCase() };
+					}
+				}
+
+				if ( !menuData )
+					menuData = new Vector.<Object>;
+
+				menuData.push( { label: "attribute", value: "ATTRIBUTE" } );
 			}
 			else if ( ctrl.isInAttribute( pos ) )
 			{
 				menuData = ctrl.getAttributesList( pos );
-			}
+				var eqStr : String = "=\"\"";
 
-//			var rt : String = trigger.split( '' ).reverse().join( '' );
-//			if ( rt == 'new' || rt == 'as' || rt == 'is' || rt == ':' || rt == 'extends' || rt == 'implements' )
-//				menuData = ctrl.getTypeOptions();
-//			else if ( trigger == '.' )
-//				menuData = ctrl.getMemberList( pos );
-//			else if ( trigger == '' )
-//				menuData = ctrl.getAllOptions( pos );
-//			else if ( trigger == '(' )
-//			{
-//				var fd : String = ctrl.getFunctionDetails( pos );
-//				if ( fd )
-//				{
-////					tooltip.setTipText( fd );
-//					var p : Point = fld.getPointForIndex( fld.caretIndex - 1 );
-//					p = fld.localToGlobal( p );
-////					tooltip.showToolTip();
-////					tooltip.moveLocationRelatedTo( new IntPoint( p.x, p.y ) );
-//					tooltipCaret = fld.caretIndex;
-//					return;
-//				}
-//			}
+				if ( menuData && menuData.length > 0 )
+				{
+					for ( i = 0; i < menuData.length; i++ )
+					{
+						menuData[ i ] = { label: menuData[ i ], value: menuData[ i ] /*+ eqStr*/ };
+					}
+				}
+
+			}
 
 			if ( !menuData || menuData.length == 0 )
 				return;
@@ -229,7 +204,7 @@ package net.vdombox.editors
 
 			//menu.show(stage, p.x, p.y + 15);
 			menu.show( fld, p.x, 0 );
-			
+
 			stage.addEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler, false, 0, true );
 
 			stage.focus = menu;
@@ -246,28 +221,28 @@ package net.vdombox.editors
 			else
 				menu.y = menuRefY + 15;
 		}
-		
+
 		private function stage_mouseDownHandler( event : MouseEvent ) : void
 		{
 			var parent : UIComponent = event.target as UIComponent;
 			var isMenu : Boolean;
-			
-			while( parent )
+
+			while ( parent )
 			{
-				if( parent == menu )
+				if ( parent == menu )
 				{
 					isMenu = true;
 					break;
 				}
-				
+
 				parent = parent.parent as UIComponent;
 			}
-			
-			if( !isMenu )
+
+			if ( !isMenu )
 			{
 				stage.removeEventListener( MouseEvent.MOUSE_DOWN, stage_mouseDownHandler );
 				menu.dispose();
-			}			
+			}
 		}
 
 	}

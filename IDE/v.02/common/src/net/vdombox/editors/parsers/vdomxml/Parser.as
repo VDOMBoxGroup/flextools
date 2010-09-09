@@ -24,6 +24,7 @@ package net.vdombox.editors.parsers.vdomxml
 			formats.setValue( 'default', new TextFormat( null, null, 0x111111, false, false ) );
 			formats.setValue( Token.TAGNAME, new TextFormat( null, null, 0x1039FF, true, false ) );
 			formats.setValue( Token.CLOSETAG, new TextFormat( null, null, 0x1039FF, true, false ) );
+			formats.setValue( Token.OPENTAG, new TextFormat( null, null, 0x1039FF, true, false ) );
 			formats.setValue( Token.ATTRIBUTENAME, new TextFormat( null, null, 0x247ECE, true, false ) );
 			formats.setValue( Token.ATTRIBUTEVALUE, new TextFormat( null, null, 0x613BB9, false, false ) );
 			formats.setValue( Token.PROCESSING_INSTRUCTIONS, new TextFormat( null, null, 0xa3a020, false, true ) );

@@ -1,5 +1,6 @@
 package net.vdombox.editors.parsers.vdomxml
 {
+
 	import ro.victordramba.util.HashMap;
 
 
@@ -7,8 +8,6 @@ package net.vdombox.editors.parsers.vdomxml
 	{
 		private var typeDB : TypeDB;
 		private var tokenizer : Tokenizer;
-
-		private var tokenScopeClass : Field;
 
 		public function Resolver( tokenizer : Tokenizer )
 		{
@@ -22,7 +21,9 @@ package net.vdombox.editors.parsers.vdomxml
 
 			var token : Token = tokenizer.tokenByPos( position );
 
-			if ( token && token.type == Token.TAGNAME && position <= token.pos + token.string.length )
+			if ( token &&
+				( ( token.type == Token.TAGNAME && position <= token.pos + token.string.length ) ||
+				( token.type == Token.OPENTAG && position == token.pos + token.string.length ) ) )
 				result = true;
 
 			return result;
@@ -47,31 +48,54 @@ package net.vdombox.editors.parsers.vdomxml
 			return result;
 		}
 
-		public function getAllTypes() : Vector.<String>
+		public function getAllTypes() : Vector.<Object>
 		{
 			var lst : Vector.<Field> = typeDB.listAll();
-			var a : Vector.<String> = new Vector.<String>;
+			var a : Vector.<Object> = new Vector.<Object>;
 
 			for each ( var f : Field in lst )
 				a.push( f.name );
 
-			a.sort( Array.CASEINSENSITIVE );
-
 			return a;
 		}
 
-		public function getAttributesList( text : String, pos : int ) : Vector.<String>
+		public function getAttributesList( pos : int ) : Vector.<Object>
 		{
-			resolve( text, pos );
-			if ( !resolved )
-				return null;
 
-			//convert member list in string list
-			var a : Vector.<String> = new Vector.<String>;
+			var token : Token = tokenizer.tokenByPos( pos )
+			var typeName : String;
+			var type : Field;
 
-			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
-				a.push( m.name );
-			a.sort( Array.CASEINSENSITIVE );
+			var a : Vector.<Object>
+
+			if ( token && token.parent )
+			{
+				token = token.parent;
+
+				if ( token.type == Token.OPENTAG && token.children && token.children.length > 0 )
+					token = token.children[ 0 ];
+
+				if ( token.type == Token.TAGNAME )
+					typeName = token.string;
+			}
+
+			if ( typeName )
+				type = typeDB.getType( typeName );
+
+
+			if ( type )
+			{
+				a = new Vector.<Object>;
+
+				for each ( var m : Field in type.members.toArray() )
+				{
+					a.push( m.name );
+				}
+			}
+
+//			for each ( var m : Field in listMembers( resolved, resolvedIsClass ).toArray() )
+//				a.push( m.name );
+
 			return a;
 		}
 
