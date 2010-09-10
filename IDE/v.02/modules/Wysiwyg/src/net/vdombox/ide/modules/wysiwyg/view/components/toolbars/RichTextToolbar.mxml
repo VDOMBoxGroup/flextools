@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
-		  xmlns:s="library://ns.adobe.com/flex/spark"
+<s:VGroup xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*"
+		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
 		  
-		  xmlns:controls="net.vdombox.ide.modules.wysiwyg.view.components.controls.*">
+		  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar">
 
-	<fx:Script source="richTextToolbarTemplate.as" />
+	<fx:Script source="richTextToolbarTemplate.as"/>
 
 	<fx:Script>
 		<![CDATA[
 			import flash.filesystem.File;
 			import flash.html.HTMLLoader;
-			
+
 			import mx.controls.HTML;
 			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;
 			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
-			
+
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
@@ -157,7 +158,7 @@
 				 HTMLEditorLoader_HTMLDomInitalizeHandler ); */
 
 				HTMLEditorLoader.addEventListener( HTMLUncaughtScriptExceptionEvent.UNCAUGHT_SCRIPT_EXCEPTION,
-												   HTMLEditorLoader_uncaughtScriptException );
+					HTMLEditorLoader_uncaughtScriptException );
 
 				//HTMLEditorLoader.addEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
 
@@ -242,7 +243,7 @@
 			{
 				if ( flag )
 				{
-					HTMLEditorLoader.addEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
+					HTMLEditorLoader.addEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
 				}
 				else
 				{
@@ -254,7 +255,7 @@
 
 					if ( HTMLEditorLoader )
 					{
-						HTMLEditorLoader.removeEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
+						HTMLEditorLoader.removeEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
 
 						HTMLEditorLoader.removeEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
 					}
@@ -412,7 +413,7 @@
 				trace( "(1)HTMLEditorLoader " + HTMLEditorLoader.name );
 				editableHTML.removeEventListener( Event.COMPLETE, editableHTML_completeHandler );
 
-				HTMLEditorLoader.addEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
+				HTMLEditorLoader.addEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
 
 				HTMLEditorLoader.addEventListener( Event.COMPLETE, HTMLEditorLoader_completeHandler );
 
@@ -422,8 +423,8 @@
 			private function HTMLEditorLoader_HTMLDomInitalizeHandler( event : Event ) : void
 			{
 				trace( "(1.5)HTMLEditorLoader " + HTMLEditorLoader.name );
-				
-				HTMLEditorLoader.removeEventListener( Event["HTML_DOM_INITIALIZE"], HTMLEditorLoader_HTMLDomInitalizeHandler );
+
+				HTMLEditorLoader.removeEventListener( Event[ "HTML_DOM_INITIALIZE" ], HTMLEditorLoader_HTMLDomInitalizeHandler );
 
 				if ( !bodyTag )
 					return;
@@ -482,114 +483,78 @@
 		<!--<components:ToolbarButtonlabel="Save" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_save.png')"
 			 height="24"  focusEnabled="false"/>
 
-		<mx:VRule height="24" />-->
+			 <mx:VRule height="24" />-->
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_select_all.png')"
-								width="24"
-								click="execCommand('selectall')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_select_all.png')" width="24"
+								click="execCommand('selectall')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_formatting.png')"
-								width="24"
-								click="execCommand('removeformat')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_formatting.png')" width="24"
+								click="execCommand('removeformat')"/>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_link.png')"
-								width="24"
-								click="insertLink()" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_link.png')" width="24"
+								click="insertLink()"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_link.png')"
-								width="24"
-								click="execCommand('unlink')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rem_link.png')" width="24"
+								click="execCommand('unlink')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rule.png')"
-								width="24"
-								click="execCommand('inserthorizontalrule')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_rule.png')" width="24"
+								click="execCommand('inserthorizontalrule')"/>
 
-		<controls:ToolbarButton focusEnabled="false" height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_char.png')"
-								width="24"
-								click="insertChar()" />
+		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_ins_char.png')" width="24"
+								click="insertChar()"/>
 	</s:HGroup>
 
 	<s:HGroup verticalAlign="middle">
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')"
-								width="24"
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')" width="24"
 								fontWeight="bold"
-								click="execCommand('Bold')" />
+								click="execCommand('Bold')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')"
-								width="24"
-								click="execCommand('Italic')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_italic.png')" width="24"
+								click="execCommand('Italic')"/>
 
-		<controls:ToolbarButton focusEnabled="false" height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')"
-								width="24"
-								click="execCommand('Underline')" />
+		<controls:ToolbarButton focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')" width="24"
+								click="execCommand('Underline')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_strikethrough.png')"
-								width="24"
-								click="execCommand('Strikethrough')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_strikethrough.png')" width="24"
+								click="execCommand('Strikethrough')"/>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')"
-								width="24"
-								click="execCommand('JustifyLeft')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_left.png')" width="24"
+								click="execCommand('JustifyLeft')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')"
-								width="24"
-								click="execCommand('JustifyCenter')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_center.png')" width="24"
+								click="execCommand('JustifyCenter')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')"
-								width="24"
-								click="execCommand('JustifyRight')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_right.png')" width="24"
+								click="execCommand('JustifyRight')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_block.png')"
-								width="24"
-								click="execCommand('JustifyFull')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_block.png')" width="24"
+								click="execCommand('JustifyFull')"/>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_numlist.png')"
-								width="24"
-								click="execCommand('InsertOrderedList')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_numlist.png')" width="24"
+								click="execCommand('InsertOrderedList')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bullist.png')"
-								width="24"
-								click="execCommand('InsertUnorderedList')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bullist.png')" width="24"
+								click="execCommand('InsertUnorderedList')"/>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_outdent.png')"
-								width="24"
-								click="execCommand('Outdent')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_outdent.png')" width="24"
+								click="execCommand('Outdent')"/>
 
-		<controls:ToolbarButton height="24"
-								icon="@Embed(source='assets/toolbars/richTextToolbar/icon_indent.png')"
-								width="24"
-								click="execCommand('Indent')" />
+		<controls:ToolbarButton height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_indent.png')" width="24"
+								click="execCommand('Indent')"/>
 	</s:HGroup>
 
 	<s:HGroup verticalAlign="middle">
 
-		<s:Label text="Style" />
+		<s:Label text="Style"/>
 
 		<mx:ComboBox id="styleSelector"
 					 height="24" styleName="toolbarComboBox" width="100"
@@ -600,46 +565,45 @@
 
 				<mx:ArrayCollection>
 
-					<fx:Object data="p" label="Paragraph" />
+					<fx:Object data="p" label="Paragraph"/>
 
-					<fx:Object data="address" label="Address" />
+					<fx:Object data="address" label="Address"/>
 
-					<fx:Object data="pre" label="Preformatted" />
+					<fx:Object data="pre" label="Preformatted"/>
 
-					<fx:Object data="h1" label="Heading 1" />
+					<fx:Object data="h1" label="Heading 1"/>
 
-					<fx:Object data="h2" label="Heading 2" />
+					<fx:Object data="h2" label="Heading 2"/>
 
-					<fx:Object data="h3" label="Heading 3" />
+					<fx:Object data="h3" label="Heading 3"/>
 
-					<fx:Object data="h4" label="Heading 4" />
+					<fx:Object data="h4" label="Heading 4"/>
 
-					<fx:Object data="h5" label="Heading 5" />
+					<fx:Object data="h5" label="Heading 5"/>
 
-					<fx:Object data="h6" label="Heading 6" />
+					<fx:Object data="h6" label="Heading 6"/>
 
-					<fx:Object data="div" label="Div" />
+					<fx:Object data="div" label="Div"/>
 
-					<fx:Object data="blockquote" label="Blockquote" />
+					<fx:Object data="blockquote" label="Blockquote"/>
 
-					<fx:Object data="code" label="Code" />
+					<fx:Object data="code" label="Code"/>
 
-					<fx:Object data="dt" label="Definition term" />
+					<fx:Object data="dt" label="Definition term"/>
 
-					<fx:Object data="dd" label="Definition description" />
+					<fx:Object data="dd" label="Definition description"/>
 
-					<fx:Object data="samp" label="Code sample" />
+					<fx:Object data="samp" label="Code sample"/>
 				</mx:ArrayCollection>
 			</mx:dataProvider>
 		</mx:ComboBox>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24"/>
 
-		<s:Label text="Font" />
+		<s:Label text="Font"/>
 
 		<mx:ComboBox id="fontSelector"
-					 focusEnabled="false" height="24"
-					 styleName="toolbarComboBox" width="100"
+					 focusEnabled="false" height="24" styleName="toolbarComboBox" width="100"
 					 color="black"
 					 change="changeFont(event)">
 
@@ -647,50 +611,46 @@
 
 				<mx:ArrayCollection>
 
-					<fx:Object data="andale mono,times" label="Andale Mono" />
+					<fx:Object data="andale mono,times" label="Andale Mono"/>
 
-					<fx:Object data="arial,helvetica,sans-serif" label="Arial" />
+					<fx:Object data="arial,helvetica,sans-serif" label="Arial"/>
 
-					<fx:Object data="arial black,avant garde"
-							   label="Arial Black" />
+					<fx:Object data="arial black,avant garde" label="Arial Black"/>
 
-					<fx:Object data="book antiqua,palatino" label="Book Antiqua" />
+					<fx:Object data="book antiqua,palatino" label="Book Antiqua"/>
 
-					<fx:Object data="comic sans ms,sans-serif"
-							   label="Comic Sans MS" />
+					<fx:Object data="comic sans ms,sans-serif" label="Comic Sans MS"/>
 
-					<fx:Object data="courier new,courier" label="Courier New" />
+					<fx:Object data="courier new,courier" label="Courier New"/>
 
-					<fx:Object data="georgia,palatino" label="Georgia" />
+					<fx:Object data="georgia,palatino" label="Georgia"/>
 
-					<fx:Object data="helvetica" label="Helvetica" />
+					<fx:Object data="helvetica" label="Helvetica"/>
 
-					<fx:Object data="impact,chicago" label="Impact" />
+					<fx:Object data="impact,chicago" label="Impact"/>
 
-					<fx:Object data="symbol" label="Symbol" />
+					<fx:Object data="symbol" label="Symbol"/>
 
-					<fx:Object data="tahoma,arial,helvetica,sans-serif"
-							   label="Tahoma" />
+					<fx:Object data="tahoma,arial,helvetica,sans-serif" label="Tahoma"/>
 
-					<fx:Object data="terminal,monaco" label="Terminal" />
+					<fx:Object data="terminal,monaco" label="Terminal"/>
 
-					<fx:Object data="times new roman,times"
-							   label="Times New Roman" />
+					<fx:Object data="times new roman,times" label="Times New Roman"/>
 
-					<fx:Object data="trebuchet ms,geneva" label="Trebuchet MS" />
+					<fx:Object data="trebuchet ms,geneva" label="Trebuchet MS"/>
 
-					<fx:Object data="verdana,geneva" label="Verdana" />
+					<fx:Object data="verdana,geneva" label="Verdana"/>
 
-					<fx:Object data="webdings" label="Webdings" />
+					<fx:Object data="webdings" label="Webdings"/>
 
-					<fx:Object data="wingdings,zapf dingbats" label="Wingdings" />
+					<fx:Object data="wingdings,zapf dingbats" label="Wingdings"/>
 				</mx:ArrayCollection>
 			</mx:dataProvider>
 		</mx:ComboBox>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24"/>
 
-		<s:Label text="Size" />
+		<s:Label text="Size"/>
 
 		<mx:ComboBox id="sizeSelector"
 					 height="24" styleName="toolbarComboBox" width="100"
@@ -701,39 +661,39 @@
 
 				<mx:ArrayCollection>
 
-					<fx:Object data="1" label="1 (8 pt)" />
+					<fx:Object data="1" label="1 (8 pt)"/>
 
-					<fx:Object data="2" label="2 (10 pt)" />
+					<fx:Object data="2" label="2 (10 pt)"/>
 
-					<fx:Object data="3" label="3 (12 pt)" />
+					<fx:Object data="3" label="3 (12 pt)"/>
 
-					<fx:Object data="4" label="4 (14 pt)" />
+					<fx:Object data="4" label="4 (14 pt)"/>
 
-					<fx:Object data="5" label="5 (18 pt)" />
+					<fx:Object data="5" label="5 (18 pt)"/>
 
-					<fx:Object data="6" label="6 (24 pt)" />
+					<fx:Object data="6" label="6 (24 pt)"/>
 
-					<fx:Object data="7" label="7 (36 pt)" />
+					<fx:Object data="7" label="7 (36 pt)"/>
 				</mx:ArrayCollection>
 			</mx:dataProvider>
 		</mx:ComboBox>
 
-		<mx:VRule height="24" />
+		<mx:VRule height="24"/>
 
-		<s:Label text="Text Color" />
-
-		<mx:ColorPicker focusEnabled="false" height="24" width="36"
-						change="colorTextChanged(event)" />
-
-		<s:Label text="Fill Color" />
+		<s:Label text="Text Color"/>
 
 		<mx:ColorPicker focusEnabled="false" height="24" width="36"
-						change="colorFillChanged(event)" />
+						change="colorTextChanged(event)"/>
 
-		<mx:VRule height="24" />
+		<s:Label text="Fill Color"/>
+
+		<mx:ColorPicker focusEnabled="false" height="24" width="36"
+						change="colorFillChanged(event)"/>
+
+		<mx:VRule height="24"/>
 
 		<s:Button height="24" label="Source"
-				  click="openCodeEditor()"
-				  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin" />
+				  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.FlatButtonSkin"
+				  click="openCodeEditor()"/>
 	</s:HGroup>
 </s:VGroup>

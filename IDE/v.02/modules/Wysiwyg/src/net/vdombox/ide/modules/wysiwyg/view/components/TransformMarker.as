@@ -10,14 +10,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-
+	
+	import mx.core.IVisualElement;
 	import mx.core.IWindow;
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
 	import mx.managers.CursorManager;
-
+	
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 
 	use namespace mx_internal;
 
@@ -73,7 +75,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private var _moveMode : Boolean;
 		private var _resizeMode : uint;
 
-		private var _selectedItem : ObjectRenderer;
+		private var _selectedItem : UIComponent;
 
 		private var _markerSelected : Boolean;
 
@@ -132,19 +134,19 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return _markerSelected;
 		}
 
-		public function get item() : ObjectRenderer
+		public function get renderer() : IRenderer
 		{
-			return _selectedItem;
+			return _selectedItem as IRenderer;
 		}
 
-		public function set item( item : ObjectRenderer ) : void
+		public function set renderer( item : IRenderer ) : void
 		{
 			if ( _selectedItem == item || ( transformation && _selectedItem ) )
 				return;
 
 			visible = false;
 
-			if ( item == null || item.parent == null )
+			if ( item == null || IVisualElement( item ).parent == null )
 			{
 				if ( stage )
 				{
@@ -161,19 +163,22 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 			}
 
-			_selectedItem = item;
+			_selectedItem = item as UIComponent;
 
 			moving = cc_box;
 
 			mousePosition = new Point( _selectedItem.mouseX, _selectedItem.mouseY );
 
+			resizeMode = item.resizable;
+			moveMode = item.movable;
+			
 			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 
 			_selectedItem.addEventListener( FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler );
 
-			beforeTransform = { left: item.x, top: item.y, width: item.width, height: item.height };
+			beforeTransform = { left: _selectedItem.x, top: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 
 			itemChanged = true;
 			invalidateSize();
@@ -347,9 +352,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				graphics.endFill();
 
 				callLater( function() : void
-					{
-						visible = true
-					} );
+				{
+					visible = true
+				} );
 			}
 		}
 
@@ -418,7 +423,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
-			beforeTransform = { left: item.x, top: item.y, width: item.width, height: item.height };
+			beforeTransform = { left: _selectedItem.x, top: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 
 			moving = null;
 			mousePosition = new Point( mouseX, mouseY );
@@ -537,7 +542,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 
 			rmEvent.properties = prop;
-			rmEvent.item = item;
+			rmEvent.item = _selectedItem as IRenderer;
 			event.stopImmediatePropagation();
 			dispatchEvent( rmEvent );
 		}

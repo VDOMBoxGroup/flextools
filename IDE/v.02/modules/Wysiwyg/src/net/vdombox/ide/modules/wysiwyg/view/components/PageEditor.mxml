@@ -4,7 +4,7 @@
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin"
-					  creationComplete="createionCompleteHandler()"
+					  creationComplete="creationCompleteHandler()"
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor">
 	<fx:Script>
 		<![CDATA[
@@ -13,13 +13,17 @@
 
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
+			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
+			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 
 			private var _vdomObjectVO : IVDOMObjectVO;
 
 			private var _xml : String;
 			private var _renderVO : RenderVO;
+
+			private var _renderers : Dictionary;
 
 			public function get vdomObjectVO() : IVDOMObjectVO
 			{
@@ -29,6 +33,8 @@
 			public function set vdomObjectVO( value : IVDOMObjectVO ) : void
 			{
 				_vdomObjectVO = value;
+
+				refreshToolbar();
 			}
 
 			public function get xmlPresentation() : String
@@ -57,11 +63,35 @@
 					renderer.renderVO = value;
 			}
 
+			public function set selectedRenderer( value : IRenderer ) : void
+			{
+				transformMarker.renderer = value;
+			}
+
+			public function getRendererByID( id : String ) : IRenderer
+			{
+				var result : IRenderer;
+
+				for ( var renderer : * in _renderers )
+				{
+					if ( IRenderer( renderer ).renderVO.vdomObjectVO.id == id )
+					{
+						result = renderer as IRenderer;
+						break;
+					}
+				}
+
+				return result;
+			}
+
 			private function addHandlers() : void
 			{
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
 				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
+
+				addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
+				addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
 			}
 
 			private function removeHandlers() : void
@@ -69,6 +99,25 @@
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 
 				skin.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler );
+
+				removeEventListener( RendererEvent.CREATED, renderer_createdHandler, true );
+				removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
+			}
+
+			private function refreshToolbar() : void
+			{
+			}
+
+			private function addRenderer( renderer : IRenderer ) : void
+			{
+				if ( renderer )
+					_renderers[ renderer ] = null;
+			}
+
+			private function removeRenerer( renderer : IRenderer ) : void
+			{
+				if ( renderer )
+					delete _renderers[ renderer ];
 			}
 
 			private function dispatchStateEvent() : void
@@ -81,9 +130,11 @@
 					dispatchEvent( new EditorEvent( EditorEvent.XML_EDITOR_OPENED ) )
 			}
 
-			private function createionCompleteHandler() : void
+			private function creationCompleteHandler() : void
 			{
-				removeEventListener( FlexEvent.CREATION_COMPLETE, createionCompleteHandler );
+				_renderers = new Dictionary( true );
+
+				removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 
 				addHandlers();
 
@@ -94,12 +145,23 @@
 
 			private function removedFromStageHandler( event : Event ) : void
 			{
+				_renderers = null;
 				removeHandlers();
 			}
 
 			private function changeStateHandler( event : StateChangeEvent ) : void
 			{
 				dispatchStateEvent();
+			}
+
+			private function renderer_createdHandler( event : RendererEvent ) : void
+			{
+				addRenderer( event.target as IRenderer );
+			}
+
+			private function renderer_removedHandler( event : RendererEvent ) : void
+			{
+				removeRenerer( event.target as IRenderer );
 			}
 		]]>
 	</fx:Script>
@@ -118,6 +180,7 @@
 	</s:layout>
 
 	<s:Group height="100%" width="100%">
+
 		<components:PageRenderer id="renderer"
 								 height="100%" width="100%"
 								 includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
@@ -125,8 +188,12 @@
 		<editors:XMLScriptEditor id="xmlScriptEditor"
 								 height="100%" width="100%"
 								 includeIn="xml, xmlDisabled"/>
+
+		<components:TransformMarker id="transformMarker"
+									includeIn="wysiwyg, normal"/>
 	</s:Group>
 
-	<components:ToolbarPanel height="100%"/>
+	<components:ToolbarPanel id="toolbarPanel"
+							 width="100%"/>
 
 </s:SkinnableContainer>

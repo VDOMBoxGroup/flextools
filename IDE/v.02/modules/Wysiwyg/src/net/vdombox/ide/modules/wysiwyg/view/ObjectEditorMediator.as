@@ -5,8 +5,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.SkinPartEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
@@ -111,6 +113,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectEditor.addEventListener( SkinPartEvent.PART_ADDED, partAddedHandler, false, 0, true );
 			objectEditor.addEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler, false, 0, true );
 			objectEditor.addEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler, false, 0, true );
+			
+			objectEditor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -133,6 +137,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( ApplicationFacade.GET_WYSIWYG, objectEditor.vdomObjectVO );
 			else if( event.type == EditorEvent.XML_EDITOR_OPENED )
 				sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO : objectEditor.vdomObjectVO } );
+		}
+		
+		private function renderer_clickedHandler( event : RendererEvent ) : void
+		{
+			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
 		}
 	}
 }

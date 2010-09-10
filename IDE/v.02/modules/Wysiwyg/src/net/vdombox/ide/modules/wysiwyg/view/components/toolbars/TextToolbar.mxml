@@ -3,7 +3,9 @@
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  verticalAlign="middle" enabled="false">
+		  enabled="false"
+		  verticalAlign="middle"
+		  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar">
 
 	<fx:Script>
 		<![CDATA[
@@ -417,8 +419,7 @@
 	</fx:Script>
 
 	<controls:ToolbarButton id="weightButton"
-							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')" styleName="toolbarButton"
-							width="24"
+							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_bold.png')" styleName="toolbarButton" width="24"
 							click="changeWeight()"/>
 
 	<controls:ToolbarButton id="styleButton"
@@ -426,8 +427,7 @@
 							click="changeStyle()"/>
 
 	<controls:ToolbarButton id="decorationButton"
-							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')" styleName="toolbarButton"
-							width="24"
+							focusEnabled="false" height="24" icon="@Embed(source='assets/toolbars/richTextToolbar/icon_underline.png')" styleName="toolbarButton" width="24"
 							click="changeDecoration()"/>
 
 	<mx:VRule height="24"/>

@@ -19,7 +19,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.graphics.SolidColor;
 	import mx.graphics.SolidColorStroke;
 	
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
+	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
@@ -134,6 +136,36 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			refresh();
 		}
 
+		public function get vdomObjectVO() : IVDOMObjectVO
+		{
+			return _renderVO ? _renderVO.vdomObjectVO : null;
+		}
+		
+		public function get typeVO() : TypeVO
+		{
+			return _renderVO ? _renderVO.vdomObjectVO.typeVO : null;
+		}
+		
+		public function get resizable() : uint
+		{
+			return typeVO ? uint( typeVO.resizable ) : 0;
+		}
+		
+		public function get movable() : Boolean
+		{
+			var result : Boolean = false;
+			
+			if( typeVO )
+			{
+				if( typeVO.moveable == "0" )
+					result = false;
+				else if( typeVO.moveable == "1" )
+					result = true;
+			}
+			
+			return result;
+		}
+		
 		public function get data() : Object
 		{
 			return _data;

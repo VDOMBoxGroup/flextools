@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
-					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  xmlns:mx="library://ns.adobe.com/flex/halo"
-					  
-					  color="white"
-					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin">
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  color="white" skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.core.IVisualElement;
 			
+			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin;
-			
-			private var _currentToolbar : IVisualElement;
-			
-			public function get currentToolbar() : IVisualElement
+
+			private var _currentToolbar : IToolbar;
+
+			public function get currentToolbar() : IToolbar
 			{
-				return _currentToolbar;	
+				return _currentToolbar;
 			}
-			
-			public function set currentToolbar( value : IVisualElement ) : void
+
+			public function set currentToolbar( value : IToolbar ) : void
 			{
-				if( !value && _currentToolbar && _currentToolbar.parent === this )
+				if ( !value && _currentToolbar && IVisualElement( _currentToolbar ).parent === this )
 				{
-					removeElement( _currentToolbar );
+					_currentToolbar.close();
+					removeElement( _currentToolbar as IVisualElement );
 					_currentToolbar = null;
 				}
-				
+
 				_currentToolbar = value;
-				
-				if( value )
-					addElement( value );
+
+				if ( value )
+					addElement( value as IVisualElement );
 			}
 		]]>
 	</fx:Script>

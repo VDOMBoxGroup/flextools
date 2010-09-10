@@ -78,6 +78,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			removeHandlers();
 
 			clearData();
+			
+			sessionProxy = null;
 		}
 
 		override public function listNotificationInterests() : Array
@@ -87,6 +89,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.XML_PRESENTATION_GETTED );
+			
+			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
+			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
 			return interests;
 		}
@@ -104,6 +109,25 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					clearData();
 
+					break;
+				}
+					
+				case ApplicationFacade.SELECTED_PAGE_CHANGED:
+				{
+					break;
+				}
+					
+				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
+				{
+					var renderer : IRenderer;
+					
+					var selectedObject : ObjectVO = sessionProxy.selectedObject;
+					
+					if( selectedObject )
+						renderer = pageEditor.getRendererByID( selectedObject.id );
+					
+					pageEditor.selectedRenderer = renderer;
+					
 					break;
 				}
 			}
