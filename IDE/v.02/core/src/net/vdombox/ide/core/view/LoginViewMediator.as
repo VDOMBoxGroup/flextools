@@ -107,8 +107,8 @@ package net.vdombox.ide.core.view
 			
 			loginView.selectedLanguage = localeProxy.currentLocale;
 //
-//			if ( loginView.username && loginView.hostname && loginView.password )
-//				submit();
+			if ( loginView.username && loginView.hostname && loginView.password )
+				submit();
 		}
 
 		private function languageChangedHandler( event : Event ) : void
