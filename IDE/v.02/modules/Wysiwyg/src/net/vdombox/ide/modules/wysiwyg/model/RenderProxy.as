@@ -30,20 +30,17 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		private var typesProxy : TypesProxy;
 
-		private var renderVOCache : Object;
 		private var rendererIndex : Object;
 
 		override public function onRegister() : void
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
-			renderVOCache = {};
 			rendererIndex = {};
 		}
 
 		override public function onRemove() : void
 		{
 			typesProxy = null;
-			renderVOCache = null;
 			rendererIndex = null;
 		}
 
@@ -87,9 +84,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 			var itemID : String = rawRenderData.@id;
 			var renderVO : RenderVO;
 
-			renderVO = renderVOCache[ itemID ] ? renderVOCache[ itemID ] : new RenderVO( vdomObjectVO );
-
-			renderVOCache[ renderVO.vdomObjectVO.id ] = renderVO;
+//			renderVO = renderVOCache[ itemID ] ? renderVOCache[ itemID ] : new RenderVO( vdomObjectVO );
+			
+			renderVO =  new RenderVO( vdomObjectVO );
 
 			createAttributes( renderVO, rawRenderData );
 			createChildren( renderVO, rawRenderData );
@@ -181,8 +178,6 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 
 					renderVO.children.push( childRenderVO );
-
-					renderVOCache[ childRenderVO.vdomObjectVO.id ] = childRenderVO;
 				}
 				else
 				{

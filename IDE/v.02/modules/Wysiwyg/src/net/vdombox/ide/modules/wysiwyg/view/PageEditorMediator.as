@@ -1,11 +1,15 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
+	
 	import mx.events.StateChangeEvent;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
+	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.SkinPartEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
@@ -45,27 +49,27 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			return pageEditor.vdomObjectVO as PageVO;
 		}
-		
+
 		public function get renderVO() : RenderVO
 		{
 			return pageEditor.renderVO;
 		}
-		
+
 		public function set renderVO( value : RenderVO ) : void
 		{
 			pageEditor.renderVO = value;
 		}
-		
+
 		public function get xmlPresentation() : String
 		{
 			return pageEditor.xmlPresentation;
 		}
-		
+
 		public function set xmlPresentation( value : String ) : void
 		{
 			pageEditor.xmlPresentation = value;
 		}
-		
+
 		override public function onRegister() : void
 		{
 			sessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
@@ -78,7 +82,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			removeHandlers();
 
 			clearData();
-			
+
 			sessionProxy = null;
 		}
 
@@ -89,7 +93,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.XML_PRESENTATION_GETTED );
-			
+
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
 			interests.push( ApplicationFacade.SELECTED_OBJECT_CHANGED );
 
@@ -111,23 +115,23 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 					break;
 				}
-					
+
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
 					break;
 				}
-					
+
 				case ApplicationFacade.SELECTED_OBJECT_CHANGED:
 				{
 					var renderer : IRenderer;
-					
+
 					var selectedObject : ObjectVO = sessionProxy.selectedObject;
-					
-					if( selectedObject )
+
+					if ( selectedObject )
 						renderer = pageEditor.getRendererByID( selectedObject.id );
-					
+
 					pageEditor.selectedRenderer = renderer;
-					
+
 					break;
 				}
 			}
@@ -141,6 +145,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			pageEditor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 			pageEditor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
+
+			pageEditor.addEventListener( RendererDropEvent.DROP, renderer_dropHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
@@ -169,10 +175,16 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( ApplicationFacade.RENDERER_CREATED, event.target as IRenderer );
 		}
-		
+
 		private function renderer_clickedHandler( event : RendererEvent ) : void
 		{
 			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
+		}
+
+		private function renderer_dropHandler( event : RendererDropEvent ) : void
+		{
+			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST,
+				{ vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
 		}
 	}
 }

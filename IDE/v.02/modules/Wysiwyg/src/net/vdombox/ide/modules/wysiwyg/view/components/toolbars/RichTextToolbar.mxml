@@ -3,25 +3,25 @@
 		  xmlns:fx="http://ns.adobe.com/mxml/2009"
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  xmlns:s="library://ns.adobe.com/flex/spark"
-		  
 		  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar">
 
 	<fx:Script source="richTextToolbarTemplate.as"/>
 
 	<fx:Script>
 		<![CDATA[
-			import flash.filesystem.File;
 			import flash.html.HTMLLoader;
-
+			
 			import mx.controls.HTML;
+			import mx.core.IUIComponent;
+			import mx.core.IVisualElement;
 			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;
 			import mx.events.ListEvent;
 			import mx.managers.PopUpManager;
 			import mx.utils.StringUtil;
-
+			
 			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
+			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CharMap;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.CodeEditor;
 			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.richTextToolbarClasses.LinkSelection;
@@ -29,20 +29,9 @@
 
 			private var HTMLEditorLoader : HTMLLoader;
 
-//			private var _selectedItem : Item;
-
-//			private var oldValue : String = "";
-
-//			private var _selfChanged : Boolean = false;
-
-//			public function get selfChanged() : Boolean
-//			{
-//				return _selfChanged;
-//			}
-
 			private var attributesObject : Object;
 
-			private var _item : ObjectRenderer;
+			private var _item : IRenderer;
 
 			public function get attributes() : Array
 			{
@@ -60,7 +49,7 @@
 				return result;
 			}
 
-			public function get item() : ObjectRenderer
+			public function get item() : IRenderer
 			{
 				return _item;
 			}
@@ -129,7 +118,7 @@
 
 			private var currentRange : *;
 
-			public function init( item : ObjectRenderer ) : void
+			public function init( item : IRenderer ) : void
 			{
 				registerEvent( false );
 				HTMLEditorLoader = null;
@@ -141,7 +130,15 @@
 				}
 
 				_item = item;
-				_item.scroller.visible = false;
+
+				try
+				{
+					Object( _item ).scroller.visible = false;
+				}
+				catch ( error : Error )
+				{
+				}
+
 
 				attributesObject = extractAttributes( _item );
 
@@ -178,6 +175,18 @@
 
 				var value : String;
 
+				try
+				{
+					var body : * = elementForEditing.contentWindow.document.getElementsByTagName( "body" )[ 0 ];
+					body.style.marginLeft = "0";
+					body.style.marginRight = "0";
+					body.style.paddingTop = "0";
+					body.style.paddingBottom = "0";
+				}
+				catch( error : Error )
+				{
+				}
+				
 				if ( tinyMCE )
 				{
 					value = tinyMCE.getContent();
@@ -186,18 +195,18 @@
 
 				bodyTag.innerText = value;
 				HTMLEditorLoader = null;
-				item.setFocus();
+				UIComponent( item ).setFocus();
 //				editableHTML.editabledText = value;
 
 //				selectedItem.editableAttributes[ 0 ].attributes[ "value" ] = value;
 			}
 
-			private function extractAttributes( item : ObjectRenderer ) : Object
+			private function extractAttributes( item : IRenderer ) : Object
 			{
 				var editableAttributeVO : AttributeVO;
 				var attributeVO : AttributeVO;
 
-				for each ( attributeVO in item.itemVO.attributes )
+				for each ( attributeVO in item.renderVO.attributes )
 				{
 					if ( attributeVO.name == "editable" )
 					{
@@ -216,7 +225,7 @@
 					attributesObject[ attributeName ] = null;
 				}
 
-				var editableContent : XML = item.itemVO.content.( "@editable" )[ 0 ];
+				var editableContent : XML = item.renderVO.content.( "@editable" )[ 0 ];
 				var editableContentAttributes : XMLList = editableContent.attributes();
 				var editableContentAttribute : XML;
 
@@ -294,7 +303,7 @@
 				if ( Math.abs( editableHTML.height - hght ) > 16 && hght > 10 )
 				{
 					editableHTML.height = hght;
-					_item.invalidateSize();
+					UIComponent( _item ).invalidateSize();
 				}
 			}
 

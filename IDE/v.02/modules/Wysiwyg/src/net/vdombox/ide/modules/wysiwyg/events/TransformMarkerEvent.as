@@ -4,7 +4,6 @@ package net.vdombox.ide.modules.wysiwyg.events
 	import flash.events.Event;
 	
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 
 	public class TransformMarkerEvent extends Event
 	{

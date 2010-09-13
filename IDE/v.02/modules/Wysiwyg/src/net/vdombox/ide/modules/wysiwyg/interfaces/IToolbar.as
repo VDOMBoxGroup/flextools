@@ -6,9 +6,9 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 	{
 		function get attributes() : Array
 
-		function get item() : IVDOMObjectVO
+		function get item() : IRenderer
 
-		function init( item : IVDOMObjectVO ) : void
+		function init( item : IRenderer ) : void
 
 		function close() : void
 	}

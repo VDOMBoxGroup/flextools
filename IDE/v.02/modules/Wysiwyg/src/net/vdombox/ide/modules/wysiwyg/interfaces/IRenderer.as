@@ -15,5 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 			
 		function get movable() : Boolean;
 		function get resizable() : uint;
+		
+		function get editableComponent() : Object;
 	}
 }

@@ -32,7 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			
 			instancesNameList[ instanceName ] = null;
 		}
-
+ 
 		private var sessionProxy : SessionProxy;
 
 		public function get objectEditor() : ObjectEditor

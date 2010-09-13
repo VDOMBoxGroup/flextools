@@ -16,10 +16,15 @@
 		@namespace controls "net.vdombox.ide.modules.wysiwyg.view.components.controls.*";
 		@namespace mx "library://ns.adobe.com/flex/mx";
 		
-		/* components|Item
+		components|ObjectRenderer
 		{
-			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin"); 
-		} */
+			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin"); 
+		} 
+		
+		components|PageRenderer
+		{
+			skinClass : ClassReference("net.vdombox.ide.modules.wysiwyg.view.skins.PageRendererSkin"); 
+		}
 		
 		/* controls|ToolbarButton
 		{

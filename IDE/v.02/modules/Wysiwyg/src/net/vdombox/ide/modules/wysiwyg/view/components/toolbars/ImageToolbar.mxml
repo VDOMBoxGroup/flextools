@@ -11,6 +11,7 @@
 
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ToolbarEvent;
+			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;
 			import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 
@@ -18,9 +19,9 @@
 
 			private var attributesObject : Object;
 
-			private var _item : ObjectRenderer;
+			private var _item : IRenderer;
 
-			public function get item() : ObjectRenderer
+			public function get item() : IRenderer
 			{
 				return _item;
 			}
@@ -41,7 +42,7 @@
 				return result;
 			}
 
-			public function init( item : ObjectRenderer ) : void
+			public function init( item : IRenderer ) : void
 			{
 				_item = item;
 
@@ -50,26 +51,18 @@
 				attributesObject = extractAttributes( _item );
 
 				var resRegExp : RegExp = /^#Res\(([-a-zA-Z0-9]*)\)/;
-
-//				var result : Array = container[ 'value' ].match( resRegExp );
-//
-//				if ( result && result[ 1 ] )
-//					resourceId = container[ 'value' ].match( resRegExp )[ 1 ]
-//				else
-//					enabled = false;
 			}
 
 			public function close() : void
 			{
-
 			}
 
-			private function extractAttributes( item : ObjectRenderer ) : Object
+			private function extractAttributes( item : IRenderer ) : Object
 			{
 				var editableAttributeVO : AttributeVO;
 				var attributeVO : AttributeVO;
 
-				for each ( attributeVO in item.itemVO.attributes )
+				for each ( attributeVO in item.renderVO.attributes )
 				{
 					if ( attributeVO.name == "editable" )
 					{
@@ -88,9 +81,8 @@
 					attributesObject[ attributeName ] = null;
 				}
 
-				var content : XML =
-					<content>{item.itemVO.content}</content>
-					;
+				var content : XML = <content>{ item.renderVO.content }</content>;
+
 				var editableAttribute : XML = content..*.@editable[ 0 ];
 
 				var editableContent : XML = editableAttribute.parent();

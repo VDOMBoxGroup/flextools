@@ -34,11 +34,17 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMPageTargetNames.OBJECT:
 				{
 					if ( operation == PPMOperationNames.CREATE )
+					{
 						sendNotification( ApplicationFacade.OBJECT_CREATED, body.objectVO );
+						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
+					}
 					else if ( operation == PPMOperationNames.READ )
 						sendNotification( ApplicationFacade.OBJECT_GETTED, body.objectVO );
 					else if ( operation == PPMOperationNames.DELETE )
+					{
 						sendNotification( ApplicationFacade.OBJECT_DELETED, body.objectVO );
+						sendNotification( ApplicationFacade.GET_WYSIWYG, sessionProxy.selectedPage );
+					}
 
 					break;
 				}

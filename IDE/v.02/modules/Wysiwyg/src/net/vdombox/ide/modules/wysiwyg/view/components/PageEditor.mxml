@@ -4,7 +4,7 @@
 					  xmlns:fx="http://ns.adobe.com/mxml/2009"
 					  xmlns:s="library://ns.adobe.com/flex/spark"
 					  skinClass="net.vdombox.ide.modules.wysiwyg.view.skins.EditorSkin"
-					  creationComplete="creationCompleteHandler()"
+					  preinitialize="preinitializeHandler()"
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor">
 	<fx:Script>
 		<![CDATA[
@@ -24,6 +24,7 @@
 			private var _renderVO : RenderVO;
 
 			private var _renderers : Dictionary;
+			private var _selectedRenderer : IRenderer
 
 			public function get vdomObjectVO() : IVDOMObjectVO
 			{
@@ -63,9 +64,15 @@
 					renderer.renderVO = value;
 			}
 
+			[Bindable]
+			public function get selectedRenderer() : IRenderer
+			{
+				return _selectedRenderer;
+			}
+
 			public function set selectedRenderer( value : IRenderer ) : void
 			{
-				transformMarker.renderer = value;
+				_selectedRenderer = value;
 			}
 
 			public function getRendererByID( id : String ) : IRenderer
@@ -88,8 +95,6 @@
 			{
 				addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
 
-				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
-
 				addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 				addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
 			}
@@ -98,7 +103,8 @@
 			{
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
 
-				skin.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler );
+				if( skin )
+					skin.removeEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler );
 
 				removeEventListener( RendererEvent.CREATED, renderer_createdHandler, true );
 				removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
@@ -114,7 +120,7 @@
 					_renderers[ renderer ] = null;
 			}
 
-			private function removeRenerer( renderer : IRenderer ) : void
+			private function removeRenderer( renderer : IRenderer ) : void
 			{
 				if ( renderer )
 					delete _renderers[ renderer ];
@@ -130,14 +136,20 @@
 					dispatchEvent( new EditorEvent( EditorEvent.XML_EDITOR_OPENED ) )
 			}
 
-			private function creationCompleteHandler() : void
+			private function preinitializeHandler() : void
 			{
 				_renderers = new Dictionary( true );
 
+				addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
+				addHandlers();
+			}
+
+			private function creationCompleteHandler( event : FlexEvent ) : void
+			{
 				removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 
-				addHandlers();
-
+				skin.addEventListener( StateChangeEvent.CURRENT_STATE_CHANGE, changeStateHandler, false, 0, true );
+				
 				dispatchEvent( new EditorEvent( EditorEvent.CREATED ) );
 
 				dispatchStateEvent();
@@ -161,7 +173,7 @@
 
 			private function renderer_removedHandler( event : RendererEvent ) : void
 			{
-				removeRenerer( event.target as IRenderer );
+				removeRenderer( event.target as IRenderer );
 			}
 		]]>
 	</fx:Script>
@@ -179,21 +191,21 @@
 		<s:VerticalLayout/>
 	</s:layout>
 
-	<s:Group height="100%" width="100%">
+	<s:Scroller id="scroller"
+				height="100%" width="100%">
+		<s:Group>
+			<components:PageRenderer id="renderer"
+									 height="100%" width="100%"
+									 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
 
-		<components:PageRenderer id="renderer"
-								 height="100%" width="100%"
-								 includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
-
-		<editors:XMLScriptEditor id="xmlScriptEditor"
-								 height="100%" width="100%"
-								 includeIn="xml, xmlDisabled"/>
-
-		<components:TransformMarker id="transformMarker"
-									includeIn="wysiwyg, normal"/>
-	</s:Group>
+			<editors:XMLScriptEditor id="xmlScriptEditor"
+									 height="100%" width="100%"
+									 includeIn="xml, xmlDisabled"/>
+		</s:Group>
+	</s:Scroller>
 
 	<components:ToolbarPanel id="toolbarPanel"
-							 width="100%"/>
+							 includeInLayout="false" width="100%"
+							 selectedRenderer="{ selectedRenderer }"/>
 
 </s:SkinnableContainer>

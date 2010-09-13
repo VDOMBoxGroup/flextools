@@ -47,14 +47,14 @@
 
 	<s:Group id="locker"
 			 bottom="0" left="0" right="0" top="0"
-			 visible="false">
+			 visible="false" includeInLayout="false">
 
 		<s:Rect bottom="0" left="0" right="0" top="0">
 
 			<s:fill>
 
 				<s:SolidColor color="white"
-							  alpha=".0" />
+							  alpha=".3" />
 			</s:fill>
 		</s:Rect>
 	</s:Group>

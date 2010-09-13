@@ -13,18 +13,16 @@
 			import mx.collections.IViewCursor;
 			import mx.collections.Sort;
 			import mx.collections.SortField;
+			import mx.core.UIComponent;
 			import mx.events.ColorPickerEvent;
+			import mx.managers.FocusManager;
+			import mx.managers.IFocusManagerComponent;
 			import mx.utils.StringUtil;
 
 			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
+			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 
 			import spark.components.RichEditableText;
-
-//			private var editableStyles : Array = [ { name: "color", value: "color" }, { name: "fontfamily", value: "fontFamily" },
-//												   { name: "fontsize", value: "fontSize" }, { name: "fontweight", value: "fontWeight" },
-//												   { name: "fontstyle", value: "fontStyle" }, { name: "align", value: "textAlign" },
-//												   { name: "textdecoration", value: "textDecoration" } ];
 
 			private var fonts : ArrayCollection = new ArrayCollection( [ { label: "Andale Mono", data: "andale mono" },
 				{ label: "Arial", data: "arial" },
@@ -57,7 +55,7 @@
 
 			private var attributesObject : Object;
 
-			private var _item : ObjectRenderer;
+			private var _item : IRenderer;
 
 			private var isInited : Boolean;
 
@@ -77,12 +75,12 @@
 				return result;
 			}
 
-			public function get item() : ObjectRenderer
+			public function get item() : IRenderer
 			{
 				return _item;
 			}
 
-			public function init( item : ObjectRenderer ) : void
+			public function init( item : IRenderer ) : void
 			{
 				_item = item;
 
@@ -100,45 +98,34 @@
 
 				applyDefaultStates();
 
-				RichEditableText( elementForEditing ).setFocus();
-
 				elementForEditing.editable = true;
 				elementForEditing.selectable = true;
 
+				RichEditableText( elementForEditing ).setFocus();
+				focusManager.setFocus( elementForEditing as IFocusManagerComponent );
+
 				isInited = true;
 				enabled = true;
+
+				try
+				{
+					Object( _item ).scroller.visible = false;
+				}
+				catch ( error : Error )
+				{
+				}
 			}
 
 			public function close() : void
 			{
 				if ( !isInited )
 					return;
+
 				enabled = false;
 				isInited = false;
 				attributesObject[ "value" ].value = elementForEditing.text;
 
 				var attributeValue : String;
-//				for each ( var attribute : Array in editableStyles )
-//				{
-//					if ( attributesObject.hasOwnProperty( [ attribute[ 0 ] ] ) )
-//					{
-//						attributeValue = elementForEditing.getStyle( attribute[ 1 ] );
-//						if ( attributeValue )
-//							attributesObject[ attribute[ 0 ] ] = attributeValue;
-//					}
-//				}
-//
-//				if ( attributesObject[ "color" ] )
-//				{
-//					var hexColor : String = Number( attributesObject[ "color" ].value ).toString( 16 ).toUpperCase();
-//
-//					var i : int = 6 - hexColor.length;
-//
-//					while ( --i >= 0 )
-//						hexColor = "0" + hexColor;
-//
-//					attributesObject[ "color" ].value = hexColor;
-//				}
 
 				elementForEditing.setStyle( "paddingTop", 0 );
 				elementForEditing.setStyle( "paddingBottom", 0 );
@@ -147,15 +134,15 @@
 				elementForEditing.editable = false;
 				elementForEditing.selectable = false;
 
-				item.setFocus();
+				UIComponent( item ).setFocus();
 			}
 
-			private function extractAttributes( item : ObjectRenderer ) : Object
+			private function extractAttributes( item : IRenderer ) : Object
 			{
 				var editableAttributeVO : AttributeVO;
 				var attributeVO : AttributeVO;
 
-				for each ( attributeVO in item.itemVO.attributes )
+				for each ( attributeVO in item.renderVO.attributes )
 				{
 					if ( attributeVO.name == "editable" )
 					{
@@ -177,7 +164,7 @@
 					attributesObject[ attributeName ] = null;
 				}
 
-				var editableContent : XML = item.itemVO.content.( "@editable" )[ 0 ];
+				var editableContent : XML = item.renderVO.content.( "@editable" )[ 0 ];
 				var editableContentAttributes : XMLList = editableContent.attributes();
 				var editableContentAttribute : XML;
 

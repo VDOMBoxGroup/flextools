@@ -5,6 +5,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
@@ -22,11 +23,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.skins.ItemSkin;
+	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
@@ -46,7 +48,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			super();
 
 			itemRendererFunction = chooseItemRenderer;
-			setStyle( "skinClass", ItemSkin );
 
 			addHandlers();
 		}
@@ -70,7 +71,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		[SkinPart( required="false" )]
 		public var backgroundRect : Rect;
 
-		public var editableComponent : Object;
+		private var _editableComponent : Object;
 
 		private var _data : Object;
 
@@ -189,6 +190,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			_isLocked = value;
 		}
 
+		public function get editableComponent() : Object
+		{
+			return _editableComponent;
+		}
+		
 		public function lock() : void
 		{
 			isLocked = true;
@@ -248,7 +254,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function addHandlers() : void
 		{
-			addEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler, false, 0, true );
+			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
 			addEventListener( Event.REMOVED, removeHandler, false, 0, true );
 
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
@@ -262,7 +268,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function removeHandlers() : void
 		{
-			removeEventListener( FlexEvent.CREATION_COMPLETE, creatiomCompleteHandler );
+			removeEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
 			removeEventListener( Event.REMOVED, removeHandler );
 
 			removeEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
@@ -330,6 +336,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				
 				dataProvider = childrenDataProvider;
 			}
+			else
+			{
+				dataProvider = null;
+			}
 			
 			var contetntPart : XML;
 			
@@ -346,7 +356,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						
 						if ( editableAttributes.length > 0 )
 						{
-							editableComponent = editableAttributes[ 0 ].sourceObject;
+							_editableComponent = editableAttributes[ 0 ].sourceObject;
 						}
 						
 						background.addElement( svg );
@@ -361,7 +371,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						if ( contetntPart.@editable )
 						{
 							richText = new RichEditableText();
-							editableComponent = richText;
+							_editableComponent = richText;
 						}
 						else
 						{
@@ -389,7 +399,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 						html.width = contetntPart.@width;
 						
 						if ( contetntPart.@editable )
-							editableComponent = html;
+							_editableComponent = html;
 						
 						var htmlText : String = "<html>" + "<head>" + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
 							"</head>" + "<body style=\"margin : 0px;\" >" + contetntPart[ 0 ] + "</body>" + "</html>";
@@ -454,7 +464,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return result;
 		}
 
-		private function creatiomCompleteHandler( event : FlexEvent ) : void
+		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
 		}
@@ -506,6 +516,20 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function dragDropHandler( event : DragEvent ) : void
 		{
 			skin.currentState = "normal";
+			
+			var rde : RendererDropEvent = new RendererDropEvent( RendererDropEvent.DROP );
+			
+			var typeVO : TypeVO = TypeItemRenderer( event.dragInitiator ).typeVO;
+			
+			var objectLeft : Number = this.mouseX - 25 + this.layout.horizontalScrollPosition;
+			var objectTop : Number = this.mouseY - 25 + this.layout.verticalScrollPosition;
+			
+			var point : Point = new Point( objectLeft, objectTop );
+			
+			rde.typeVO = typeVO;
+			rde.point = point;
+			
+			dispatchEvent( rde );
 		}
 
 		private function dragExitHandler( event : DragEvent ) : void

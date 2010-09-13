@@ -8,10 +8,29 @@
 		<![CDATA[
 			import mx.core.IVisualElement;
 			
+			import net.vdombox.ide.common.vo.TypeVO;
+			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;
+			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.ImageToolbar;
+			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.RichTextToolbar;
+			import net.vdombox.ide.modules.wysiwyg.view.components.toolbars.TextToolbar;
 			import net.vdombox.ide.modules.wysiwyg.view.skins.ToolbarPanelSkin;
 
 			private var _currentToolbar : IToolbar;
+			private var _selectedRenderer : IRenderer;
+
+			private var isSelectedRendererChanged : Boolean;
+
+			public function set selectedRenderer( value : IRenderer ) : void
+			{
+				if ( _selectedRenderer == value )
+					return;
+
+				_selectedRenderer = value;
+
+				isSelectedRendererChanged = true;
+				invalidateProperties();
+			}
 
 			public function get currentToolbar() : IToolbar
 			{
@@ -31,6 +50,79 @@
 
 				if ( value )
 					addElement( value as IVisualElement );
+			}
+
+			override protected function commitProperties() : void
+			{
+				if( isSelectedRendererChanged )
+				{
+					isSelectedRendererChanged = false;
+					
+					if ( _currentToolbar )
+					{
+						_currentToolbar.close();
+						_currentToolbar = null;
+						
+						removeAllElements();
+					}
+
+					if( !_selectedRenderer || !_selectedRenderer.editableComponent )
+						return;
+					
+					var typeVO : TypeVO = _selectedRenderer.typeVO;
+					
+					switch ( typeVO.interfaceType )
+					{
+						case "1":
+						{
+							break;
+						}
+							
+						case "2":
+						{
+							var richTextToolbar : RichTextToolbar = new RichTextToolbar();
+							
+							_currentToolbar = richTextToolbar;
+							addElement( richTextToolbar );
+							richTextToolbar.init( _selectedRenderer );
+							
+							break;
+						}
+							
+						case "3":
+						{
+							var textToolbar : TextToolbar = new TextToolbar();
+							
+							_currentToolbar = textToolbar;
+							addElement( textToolbar );
+							textToolbar.init( _selectedRenderer );
+							
+							break;
+						}
+							
+						case "4":
+						{
+							var imageToolbar : ImageToolbar = new ImageToolbar();
+							
+							_currentToolbar = imageToolbar;
+							addElement( imageToolbar );
+							imageToolbar.init( _selectedRenderer );
+							
+							break;
+						}
+					}
+					
+					if( currentToolbar )
+					{
+						visible = true;
+						includeInLayout = true;
+					}
+					else
+					{
+						visible = false;
+						includeInLayout = false;
+					}
+				}
 			}
 		]]>
 	</fx:Script>
