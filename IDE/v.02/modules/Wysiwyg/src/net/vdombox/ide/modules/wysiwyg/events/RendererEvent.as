@@ -4,10 +4,11 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 	public class RendererEvent extends Event
 	{
-		public static var CREATED : String = "itemCreated";
-		public static var REMOVED : String = "itemRemoved";
-		public static var GET_RESOURCE : String = "getResource";
-		public static var CLICKED : String = "clicked";
+		public static var CREATED : String = "rendererCreated";
+		public static var REMOVED : String = "rendererRemoved";
+		public static var GET_RESOURCE : String = "rendererGetResource";
+		public static var CLICKED : String = "rendererClicked";
+		public static var MOVE : String = "rendererMove";
 
 		public function RendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

@@ -12,14 +12,16 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.geom.Rectangle;
 	
 	import mx.core.IVisualElement;
-	import mx.core.IWindow;
 	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	import mx.events.FlexEvent;
-	import mx.managers.CursorManager;
+	import mx.events.ScrollEvent;
 	
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+	
+	import spark.components.VScrollBar;
+	import spark.components.supportClasses.ScrollBarBase;
 
 	use namespace mx_internal;
 
@@ -41,6 +43,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
+			
+			addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 		}
 
 		[Embed( source="assets/theme/theme.swf", symbol="LeftRight" )]
@@ -171,13 +175,13 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			resizeMode = item.resizable;
 			moveMode = item.movable;
-			
+
 			addEventListener( MouseEvent.MOUSE_DOWN, mouseDownHandler );
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
 
 			_selectedItem.addEventListener( FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler );
-
+			
 			beforeTransform = { left: _selectedItem.x, top: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 
 			itemChanged = true;
@@ -437,6 +441,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler, true );
 			stage.addEventListener( MouseEvent.MOUSE_UP, mouseUpHandler, true );
+
+			stage.addEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
 		}
 
 		private function mouseOutHandler( event : MouseEvent ) : void
@@ -542,7 +548,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 				return;
 
 			rmEvent.properties = prop;
-			rmEvent.item = _selectedItem as IRenderer;
+			rmEvent.renderer = _selectedItem as IRenderer;
 			event.stopImmediatePropagation();
 			dispatchEvent( rmEvent );
 		}
@@ -744,6 +750,25 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			{
 				mouseUpHandler( null );
 			}
+		}
+
+		private function stage_mouseClickHandler( event : MouseEvent ) : void
+		{
+			event.stopImmediatePropagation();
+			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
+		}
+		
+		private function addedToStageHandler( event : Event ) : void
+		{
+			removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
+			
+			parent.addEventListener( Event.CHANGE, scrollHandler, true, 0, true );
+		}
+		
+		private function scrollHandler( event : Event ) :void
+		{
+			if( event.target is ScrollBarBase )
+				refresh();
 		}
 	}
 }

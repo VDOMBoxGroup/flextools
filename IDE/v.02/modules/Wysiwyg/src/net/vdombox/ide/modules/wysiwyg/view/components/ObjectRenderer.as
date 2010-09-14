@@ -35,6 +35,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.components.RichEditableText;
 	import spark.components.Scroller;
 	import spark.components.SkinnableDataContainer;
+	import spark.components.supportClasses.ScrollBarBase;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
 	import spark.layouts.VerticalLayout;
@@ -464,6 +465,30 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return result;
 		}
 
+		private function isScroller( target : DisplayObjectContainer ) : Boolean
+		{
+			var result : Boolean = false;
+			
+			while ( target )
+			{
+				if( target is ScrollBarBase )
+				{
+					result = true;
+					break;
+				}
+				
+				if( target == this )
+					break;
+				
+				if( target.parent )
+					target = target.parent;
+				else
+					target = null;
+			}
+			
+			return result;
+		}
+		
 		private function creationCompleteHandler( event : FlexEvent ) : void
 		{
 			dispatchEvent( new RendererEvent( RendererEvent.CREATED ) );
@@ -510,7 +535,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function mouseClickHandler( event : MouseEvent ) : void
 		{
 			event.stopPropagation();
-			dispatchEvent( new RendererEvent( RendererEvent.CLICKED ) );
+			
+			if ( !isScroller( event.target as DisplayObjectContainer ) )
+				dispatchEvent( new RendererEvent( RendererEvent.CLICKED ) );
 		}
 
 		private function dragDropHandler( event : DragEvent ) : void
