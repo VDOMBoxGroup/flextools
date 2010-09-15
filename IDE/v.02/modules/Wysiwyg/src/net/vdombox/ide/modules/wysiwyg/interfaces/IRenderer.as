@@ -17,5 +17,7 @@ package net.vdombox.ide.modules.wysiwyg.interfaces
 		function get resizable() : uint;
 		
 		function get editableComponent() : Object;
+		
+		function lock( isRemoveChildren : Boolean = false ) : void
 	}
 }

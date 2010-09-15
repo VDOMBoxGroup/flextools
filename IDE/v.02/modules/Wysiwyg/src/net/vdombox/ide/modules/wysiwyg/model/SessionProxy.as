@@ -1,5 +1,7 @@
 package net.vdombox.ide.modules.wysiwyg.model
 {
+	import flash.utils.Dictionary;
+	
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
@@ -131,10 +133,10 @@ package net.vdombox.ide.modules.wysiwyg.model
 			sendNotifications();
 		}
 		
-		public function get needForUpdate () : Object
+		public function get needForUpdate () : Dictionary
 		{
 			if( !data.hasOwnProperty( NFU ) )
-				data[ NFU ] = {};
+				data[ NFU ] = new Dictionary( true );
 			
 			return data[ NFU ];
 		}

@@ -3,9 +3,10 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	
@@ -18,7 +19,7 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 		{
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var needForUpdateObject : Object = sessionProxy.needForUpdate;
-			
+
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 
 			var message : ProxyMessage = notification.getBody() as ProxyMessage;
@@ -28,7 +29,8 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 			var operation : String = message.operation;
 
 			var pageVO : PageVO = body.pageVO as PageVO;
-			
+			var renderer : *;
+
 			switch ( target )
 			{
 				case PPMPageTargetNames.OBJECT:
@@ -52,18 +54,28 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMPageTargetNames.WYSIWYG:
 				{
 					if ( operation == PPMOperationNames.READ )
+					{
 						sendNotification( ApplicationFacade.WYSIWYG_GETTED, body );
+
+						for ( renderer in needForUpdateObject )
+						{
+							if ( IRenderer( renderer ).vdomObjectVO.id == pageVO.id )
+							{
+								delete needForUpdateObject[ renderer ];
+							}
+						}
+					}
 
 					break;
 				}
-					
+
 				case PPMPageTargetNames.XML_PRESENTATION:
 				{
 					if ( operation == PPMOperationNames.READ )
 						sendNotification( ApplicationFacade.XML_PRESENTATION_GETTED, body );
 					else if ( operation == PPMOperationNames.UPDATE )
 						sendNotification( ApplicationFacade.XML_PRESENTATION_SETTED, body );
-					
+
 					break;
 				}
 
@@ -77,16 +89,26 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 
 				case PPMPageTargetNames.ATTRIBUTES:
 				{
-					var pageAttributesVO : PageAttributesVO = body.pageAttributesVO as PageAttributesVO;
+					var vdomObjectAttributesVO : VdomObjectAttributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
 
 					if ( operation == PPMOperationNames.READ )
-						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
+					{
+						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, vdomObjectAttributesVO );
+					}
 					else if ( operation == PPMOperationNames.UPDATE )
-						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, pageAttributesVO );
+					{
+						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED, vdomObjectAttributesVO );
 
-//					if( needForUpdateObject.hasOwnProperty( pageAttributesVO.pageVO.id ) )
-//						sendNotification( ApplicationFacade.GET_PAGE_WYSIWYG, pageAttributesVO.pageVO );
-						
+						for ( renderer in needForUpdateObject )
+						{
+							if ( IRenderer( renderer ).vdomObjectVO.id == vdomObjectAttributesVO.vdomObjectVO.id )
+							{
+								sendNotification( ApplicationFacade.GET_WYSIWYG, vdomObjectAttributesVO.vdomObjectVO );
+								break;
+							}
+						}
+					}
+
 					break;
 				}
 			}

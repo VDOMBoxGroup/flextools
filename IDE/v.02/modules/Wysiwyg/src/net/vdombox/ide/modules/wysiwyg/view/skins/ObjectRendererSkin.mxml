@@ -4,15 +4,10 @@
 			 xmlns:mx="library://ns.adobe.com/flex/halo">
 
 	<s:states>
-
 		<s:State name="normal" />
-
 		<s:State name="hovered" />
-
 		<s:State name="highlighted" />
-		
 		<s:State name="locked" />
-
 		<s:State name="disabled" />
 	</s:states>
 
@@ -54,7 +49,7 @@
 			<s:fill>
 
 				<s:SolidColor color="white"
-							  alpha=".3" />
+							  alpha="0" />
 			</s:fill>
 		</s:Rect>
 	</s:Group>

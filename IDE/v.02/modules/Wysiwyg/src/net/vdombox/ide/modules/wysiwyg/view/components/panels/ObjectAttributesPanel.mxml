@@ -16,11 +16,8 @@
 
 			import net.vdombox.ide.common.vo.AttributeDescriptionVO;
 			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.common.vo.ObjectAttributesVO;
-			import net.vdombox.ide.common.vo.ObjectVO;
-			import net.vdombox.ide.common.vo.PageAttributesVO;
-			import net.vdombox.ide.common.vo.PageVO;
 			import net.vdombox.ide.common.vo.TypeVO;
+			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ObjectAttributesPanelEvent;
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeColorItemRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeDropdownItemRenderer;
@@ -32,20 +29,18 @@
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributePagelinkItemRenderer;
 			import net.vdombox.ide.modules.wysiwyg.view.components.attributeRenderers.AttributeTextFiledItemRenderer;
 
-			private var _attributesVO : Object;
-			private var _objectVO : ObjectVO;
-			private var _pageVO : PageVO;
+			private var _attributesVO : VdomObjectAttributesVO;
 			private var _typeVO : TypeVO;
 
 			private var attributes : ArrayCollection;
 			private var codeInterfaceRE : RegExp = /^(\w*)\((.*)\)/;
 
-			public function get attributesVO() : Object
+			public function get attributesVO() : VdomObjectAttributesVO
 			{
 				return _attributesVO;
 			}
 
-			public function set attributesVO( value : Object ) : void
+			public function set attributesVO( value : VdomObjectAttributesVO ) : void
 			{
 				_attributesVO = value;
 
@@ -56,16 +51,7 @@
 					return;
 				}
 
-				if ( value is ObjectAttributesVO )
-				{
-					_objectVO = value.objectVO;
-					_typeVO = _objectVO.typeVO;
-				}
-				else if ( value is PageAttributesVO )
-				{
-					_pageVO = value.pageVO;
-					_typeVO = _pageVO.typeVO;
-				}
+				_typeVO = _attributesVO.vdomObjectVO.typeVO;
 
 				typeNameLabel.text = _typeVO.displayName;
 
@@ -188,8 +174,7 @@
 
 	<s:Label id="typeNameLabel"
 			 height="20"
-			 backgroundColor="#000000" color="#FFFFFF" left="0" paddingLeft="3"
-			 paddingTop="3" right="0" textAlign="center" verticalAlign="middle"/>
+			 backgroundColor="#000000" color="#FFFFFF" left="0" paddingLeft="3" paddingTop="3" right="0" textAlign="center" verticalAlign="middle"/>
 
 	<s:List id="attributesList"
 			width="220"
@@ -198,9 +183,10 @@
 			itemRendererFunction="itemRendererFunction" useVirtualLayout="false">
 
 		<s:layout>
-			<s:VerticalLayout gap="0" variableRowHeight="true"/>
+			<s:VerticalLayout gap="0"
+							  variableRowHeight="true"/>
 		</s:layout>
-		
+
 	</s:List>
 
 	<s:controlBarContent>

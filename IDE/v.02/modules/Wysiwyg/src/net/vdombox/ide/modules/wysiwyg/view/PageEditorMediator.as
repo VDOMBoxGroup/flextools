@@ -5,8 +5,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 	
 	import mx.events.StateChangeEvent;
 	
+	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
@@ -143,9 +145,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			pageEditor.addEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler, false, 0, true );
 			pageEditor.addEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler, false, 0, true );
 
+			pageEditor.addEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler, false, 0, true );
+			
 			pageEditor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 			pageEditor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
-
+			
 			pageEditor.addEventListener( RendererDropEvent.DROP, renderer_dropHandler, true, 0, true );
 		}
 
@@ -185,6 +189,43 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST,
 				{ vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
+		}
+		
+		private function rendererTransformedHandler( event : EditorEvent ) : void
+		{
+			var attributeVO : AttributeVO;
+			var attributeName : String;
+			var attributeValue : String;
+			
+			var attributes : Array = [];
+			var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( event.renderer.vdomObjectVO ); 
+			
+			for ( attributeName in event.attributes )
+			{
+				if( attributeName == "x" )
+				{
+					attributeValue = event.attributes[ attributeName ];
+					attributeName = "left";
+				}
+				else if( attributeName == "y" )
+				{
+					attributeValue = event.attributes[ attributeName ];
+					attributeName = "top"
+				}
+				else
+				{
+					attributeValue = event.attributes[ attributeName ];
+				}
+				
+				attributeVO = new AttributeVO( attributeName );
+				attributeVO.value = attributeValue;
+				
+				attributes.push( attributeVO );
+			}
+			
+			vdomObjectAttributesVO.attributes = attributes;
+			
+			sendNotification( ApplicationFacade.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
 		}
 	}
 }

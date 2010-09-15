@@ -182,7 +182,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			_selectedItem.addEventListener( FlexEvent.UPDATE_COMPLETE, refreshCompleteHandler );
 			
-			beforeTransform = { left: _selectedItem.x, top: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
+			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 
 			itemChanged = true;
 			invalidateSize();
@@ -427,7 +427,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function mouseDownHandler( event : MouseEvent ) : void
 		{
-			beforeTransform = { left: _selectedItem.x, top: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
+			beforeTransform = { x: _selectedItem.x, y: _selectedItem.y, width: _selectedItem.width, height: _selectedItem.height };
 
 			moving = null;
 			mousePosition = new Point( mouseX, mouseY );
@@ -754,8 +754,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private function stage_mouseClickHandler( event : MouseEvent ) : void
 		{
-			event.stopImmediatePropagation();
 			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
+			
+			event.stopImmediatePropagation();
 		}
 		
 		private function addedToStageHandler( event : Event ) : void

@@ -2,20 +2,30 @@ package net.vdombox.ide.modules.wysiwyg.events
 {
 	import flash.events.Event;
 	
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+
 	public class EditorEvent extends Event
 	{
 		public static var CREATED : String = "created";
 		public static var XML_EDITOR_OPENED : String = "xmlEditorOpened";
 		public static var WYSIWYG_OPENED : String = "wysiwygOpened";
-		
-		public function EditorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
+		public static var RENDERER_TRANSFORMED : String = "editorRendererTransformed";
+
+		public function EditorEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true, renderer : IRenderer = null,
+									 attributes : Object = null )
 		{
 			super( type, bubbles, cancelable );
+			
+			this.renderer = renderer;
+			this.attributes = attributes;
 		}
+
+		public var renderer : IRenderer;
+		public var attributes : Object;
 		
 		override public function clone() : Event
 		{
-			return new AttributeEvent( type, bubbles, cancelable );
+			return new EditorEvent( type, bubbles, cancelable, renderer, attributes );
 		}
 	}
 }

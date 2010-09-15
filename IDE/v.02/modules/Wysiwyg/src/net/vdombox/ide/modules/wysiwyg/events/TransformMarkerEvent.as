@@ -12,7 +12,7 @@ package net.vdombox.ide.modules.wysiwyg.events
 		public static const TRANSFORM_MARKER_SELECTED : String = "markerSelected";
 		public static const TRANSFORM_MARKER_UNSELECTED : String = "markerUnSelected";
 		public static const TRANSFORM_CHANGING : String = "transformСhanging";
-		public static const TRANSFORM_BEGIN : String = "transformИegin";
+		public static const TRANSFORM_BEGIN : String = "transformBegin";
 		public static const TRANSFORM_COMPLETE : String = "transformComplete";
 
 		public var properties : Object;

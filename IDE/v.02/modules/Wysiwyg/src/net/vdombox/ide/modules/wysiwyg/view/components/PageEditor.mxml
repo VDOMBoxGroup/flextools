@@ -8,9 +8,10 @@
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor">
 	<fx:Script>
 		<![CDATA[
+			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
-
+			
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
@@ -98,6 +99,8 @@
 
 				addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 				addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
+
+				addEventListener( RendererEvent.MOVE, renderer_movedHandler, true, 0, true );
 				addEventListener( TransformMarkerEvent.TRANSFORM_COMPLETE, transformMarker_tansformCompleteHandler, true, 0, true );
 			}
 
@@ -178,9 +181,24 @@
 				removeRenderer( event.target as IRenderer );
 			}
 
+			private function renderer_movedHandler( event : RendererEvent ) : void
+			{
+				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
+
+				ee.renderer = event.target as IRenderer;
+				ee.attributes = { x: UIComponent( ee.renderer ).x, y: UIComponent( ee.renderer ).y };
+
+				dispatchEvent( ee );
+			}
+
 			private function transformMarker_tansformCompleteHandler( event : TransformMarkerEvent ) : void
 			{
-				event.stopImmediatePropagation();
+				var ee : EditorEvent = new EditorEvent( EditorEvent.RENDERER_TRANSFORMED );
+
+				ee.renderer = TransformMarker( event.target ).renderer;
+				ee.attributes = event.properties;
+
+				dispatchEvent( ee );
 			}
 		]]>
 	</fx:Script>
