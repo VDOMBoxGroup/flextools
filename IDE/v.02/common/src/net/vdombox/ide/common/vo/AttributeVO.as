@@ -3,7 +3,7 @@ package net.vdombox.ide.common.vo
 	[Bindable]
 	public class AttributeVO
 	{
-		public function AttributeVO( name : String, value : String )
+		public function AttributeVO( name : String, value : String = undefined )
 		{
 			_name = name;
 			this.value = _defaultValue = value;

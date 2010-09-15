@@ -1,25 +1,27 @@
 package net.vdombox.ide.common.vo
 {
-	public class ObjectAttributesVO
+	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+
+	public class VdomObjectAttributesVO
 	{
-		public function ObjectAttributesVO( objectVO : ObjectVO )
+		public function VdomObjectAttributesVO( vdomObjectVO : IVDOMObjectVO )
 		{
-			_objectVO = objectVO;
+			_objectVO = vdomObjectVO;
 			
 			_attributes = [];
 			_pageLinks = [];
 			_objectsList = [];
 		}
 		
-		private var _objectVO : ObjectVO;
+		private var _objectVO : IVDOMObjectVO;
 		
 		private var _attributes : Array;
 		
 		private var _pageLinks : Array;
 		
 		private var _objectsList : Array;
-		
-		public function get objectVO() : ObjectVO
+
+		public function get vdomObjectVO() : IVDOMObjectVO
 		{
 			return _objectVO;
 		}
@@ -69,7 +71,7 @@ package net.vdombox.ide.common.vo
 			var attributeVO : AttributeVO;
 			for each ( attributeVO in attributes )
 			{
-				if( attributeVO.defaultValue != attributeVO.value )
+				if( attributeVO.defaultValue !== attributeVO.value )
 				{
 					result.push( attributeVO );
 				}
