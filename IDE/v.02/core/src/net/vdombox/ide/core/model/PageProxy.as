@@ -3,20 +3,19 @@ package net.vdombox.ide.core.model
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.soap.Operation;
-	import mx.utils.object_proxy;
-	
+
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.model.vo.ErrorVO;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-	
+
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class PageProxy extends Proxy
@@ -33,11 +32,11 @@ package net.vdombox.ide.core.model
 		private static const GET_WYSIWYG : String = "getWYSIWYG";
 
 		public static var instances : Object = {};
-		
+
 		public function PageProxy( pageVO : PageVO )
 		{
 			super( NAME + "/" + pageVO.applicationVO.id + "/" + pageVO.id, pageVO );
-			
+
 			instances[ this.proxyName ] = "";
 		}
 
@@ -69,7 +68,7 @@ package net.vdombox.ide.core.model
 			typesProxy = null;
 
 			removeHandlers();
-			
+
 			delete instances[ proxyName ];
 		}
 
@@ -95,11 +94,11 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function setAttributes( pageAttributesVO : PageAttributesVO ) : AsyncToken
+		public function setAttributes( vdomObjectAttributesVO : VdomObjectAttributesVO ) : AsyncToken
 		{
 			var token : AsyncToken;
 
-			var attributes : Array = pageAttributesVO.getChangedAttributes();
+			var attributes : Array = vdomObjectAttributesVO.getChangedAttributes();
 
 			if ( attributes.length == 0 )
 				return null;
@@ -197,12 +196,12 @@ package net.vdombox.ide.core.model
 		{
 			var token : AsyncToken;
 			token = soap.submit_object_script_presentation( pageVO.applicationVO.id, pageVO.id, value );
-			
+
 			token.recipientName = proxyName;
-			
+
 			return token;
 		}
-		
+
 		public function createObject( typeVO : TypeVO, attributes : Array ) : AsyncToken
 		{
 			var token : AsyncToken;
@@ -283,7 +282,7 @@ package net.vdombox.ide.core.model
 			soap.create_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.delete_object.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.get_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
-			
+
 			soap.submit_object_script_presentation.addEventListener( SOAPEvent.RESULT, soap_resultHandler );
 			soap.submit_object_script_presentation.addEventListener( FaultEvent.FAULT, soap_faultHandler );
 		}
@@ -398,11 +397,11 @@ package net.vdombox.ide.core.model
 			var operationName : String = operation.name;
 			var notification : ProxyNotification;
 
-			var pageAttributesVO : PageAttributesVO;
+			var vdomObjectAttributesVO : VdomObjectAttributesVO;
 			var objectVO : ObjectVO;
 
 			var xmlPresentation : String;
-			
+
 			switch ( operationName )
 			{
 				case "get_child_objects_tree":
@@ -488,11 +487,12 @@ package net.vdombox.ide.core.model
 					}
 					else if ( token.requestFunctionName == GET_ATTRIBUTES )
 					{
-						pageAttributesVO = new PageAttributesVO( pageVO );
-						pageAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
+						vdomObjectAttributesVO = new VdomObjectAttributesVO( pageVO );
+						vdomObjectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
 
-						notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED,
-							{ pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
+						notification =
+							new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED,
+												   { pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 						notification.token = token;
 					}
 
@@ -501,11 +501,12 @@ package net.vdombox.ide.core.model
 
 				case "set_attributes":
 				{
-					pageAttributesVO = new PageAttributesVO( pageVO );
-					pageAttributesVO.setXMLDescription( result.Object[ 0 ] );
+					vdomObjectAttributesVO = new VdomObjectAttributesVO( pageVO );
+					vdomObjectAttributesVO.setXMLDescription( result.Object[ 0 ] );
 
-					notification = new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED,
-						{ pageVO: pageVO, pageAttributesVO: pageAttributesVO } );
+					notification =
+						new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED,
+											   { pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 					notification.token = token;
 
 					break;
@@ -571,14 +572,14 @@ package net.vdombox.ide.core.model
 					}
 
 					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_GETTED, { pageVO: pageVO, xmlPresentation: xmlPresentation } );
-					
+
 					break;
 				}
-					
+
 				case "submit_object_script_presentation":
 				{
 					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_SETTED, { pageVO: pageVO } );
-					
+
 					break;
 				}
 			}
@@ -586,27 +587,27 @@ package net.vdombox.ide.core.model
 			if ( notification )
 				facade.notifyObservers( notification );
 		}
-		
+
 		private function soap_faultHandler( event : FaultEvent ) : void
 		{
 			var operation : Operation = event.target as Operation;
-			
-			if( !operation )
+
+			if ( !operation )
 				return;
-			
+
 			var operationName : String = operation.name;
 			var errorVO : ErrorVO;
-			
-			switch( operationName )
+
+			switch ( operationName )
 			{
 				case "submit_object_script_presentation":
 				{
 					errorVO = new ErrorVO();
 					errorVO.code = event.fault.faultCode;
 					errorVO.string = "XML not well-formed";
-					
+
 					sendNotification( ApplicationFacade.SERVER_ERROR, errorVO );
-					
+
 					break;
 				}
 			}

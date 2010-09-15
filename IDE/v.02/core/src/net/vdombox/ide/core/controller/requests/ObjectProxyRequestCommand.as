@@ -3,8 +3,8 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.PPMObjectTargetNames;
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.ObjectAttributesVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.core.model.ObjectProxy;
 	import net.vdombox.ide.core.model.PageProxy;
 	
@@ -30,6 +30,8 @@ package net.vdombox.ide.core.controller.requests
 				objectVO = body as ObjectVO;
 			else if ( body.hasOwnProperty( "objectVO" ) )
 				objectVO = body.objectVO as ObjectVO;
+			else if ( body.hasOwnProperty( "vdomObjectVO" ) )
+				objectVO = body.vdomObjectVO as ObjectVO;
 			else
 				throw new Error( "no object VO" );
 
@@ -43,7 +45,7 @@ package net.vdombox.ide.core.controller.requests
 					if( operation == PPMOperationNames.READ )
 						objectProxy.getAttributes();
 					else if( operation == PPMOperationNames.UPDATE )
-						objectProxy.setAttributes( body as ObjectAttributesVO );
+						objectProxy.setAttributes( body as VdomObjectAttributesVO );
 
 					break;
 				}

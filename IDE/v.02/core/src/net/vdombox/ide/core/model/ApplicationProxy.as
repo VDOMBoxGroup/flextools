@@ -10,11 +10,11 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.common.vo.ClientActionVO;
 	import net.vdombox.ide.common.vo.EventVO;
 	import net.vdombox.ide.common.vo.LibraryVO;
-	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.StructureObjectVO;
 	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.interfaces.IPageProxy;
@@ -213,7 +213,7 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function createPage( typeVO : TypeVO, name : String = "", pageAttributesVO : PageAttributesVO = null ) : AsyncToken
+		public function createPage( typeVO : TypeVO, name : String = "", pageAttributesVO : VdomObjectAttributesVO = null ) : AsyncToken
 		{
 			var token : AsyncToken;
 

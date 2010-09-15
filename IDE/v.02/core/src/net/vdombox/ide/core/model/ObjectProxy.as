@@ -2,17 +2,17 @@ package net.vdombox.ide.core.model
 {
 	import mx.rpc.AsyncToken;
 	import mx.rpc.soap.Operation;
-
+	
 	import net.vdombox.ide.common.vo.AttributeVO;
-	import net.vdombox.ide.common.vo.ObjectAttributesVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
 	import net.vdombox.ide.core.patterns.observer.ProxyNotification;
-
+	
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
 
 	public class ObjectProxy extends Proxy
@@ -67,16 +67,16 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function setAttributes( objectAttributesVO : ObjectAttributesVO ) : AsyncToken
+		public function setAttributes( vdomObjectAttributesVO : VdomObjectAttributesVO ) : AsyncToken
 		{
 			var token : AsyncToken;
 
-			var attributes : Array = objectAttributesVO.getChangedAttributes();
+			var attributes : Array = vdomObjectAttributesVO.getChangedAttributes();
 
 			if ( attributes.length == 0 )
 			{
 				facade.notifyObservers( new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_SETTED,
-															   { objectVO: objectAttributesVO.objectVO, objectAttributesVO: objectAttributesVO } ) );
+															   { objectVO: vdomObjectAttributesVO.vdomObjectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } ) );
 
 				return token;
 			}
@@ -306,25 +306,12 @@ package net.vdombox.ide.core.model
 			var operationName : String = operation.name;
 			var notification : ProxyNotification;
 
-			var objectAttributesVO : ObjectAttributesVO;
+			var vdomObjectAttributesVO : VdomObjectAttributesVO;
 			
 			var xmlPresentation : String;
 
 			switch ( operationName )
 			{
-				case "get_one_object":
-				{
-					objectAttributesVO = new ObjectAttributesVO( objectVO );
-					objectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
-
-					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED,
-														  { objectVO: objectVO, objectAttributesVO: objectAttributesVO } );
-
-					notification.token = token;
-
-					break;
-				}
-
 				case "get_server_actions":
 				{
 					var serverActions : Array = [];
@@ -370,13 +357,26 @@ package net.vdombox.ide.core.model
 					break;
 				}
 
+				case "get_one_object":
+				{
+					vdomObjectAttributesVO = new VdomObjectAttributesVO( objectVO );
+					vdomObjectAttributesVO.setXMLDescription( result.Objects.Object[ 0 ] );
+					
+					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_GETTED,
+						{ objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
+					
+					notification.token = token;
+					
+					break;
+				}
+					
 				case "set_attributes":
 				{
-					objectAttributesVO = new ObjectAttributesVO( objectVO );
-					objectAttributesVO.setXMLDescription( result.Object[ 0 ] );
+					vdomObjectAttributesVO = new VdomObjectAttributesVO( objectVO );
+					vdomObjectAttributesVO.setXMLDescription( result.Object[ 0 ] );
 
 					notification = new ProxyNotification( ApplicationFacade.OBJECT_ATTRIBUTES_SETTED,
-														  { objectVO: objectVO, objectAttributesVO: objectAttributesVO } );
+														  { objectVO: objectVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 					notification.token = token;
 
 					break;

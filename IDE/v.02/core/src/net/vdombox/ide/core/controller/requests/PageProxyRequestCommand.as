@@ -3,8 +3,8 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.PageAttributesVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.PageProxy;
 	
@@ -30,6 +30,8 @@ package net.vdombox.ide.core.controller.requests
 				pageVO = body as PageVO;
 			else if ( body.hasOwnProperty( "pageVO" ) )
 				pageVO = body.pageVO as PageVO;
+			else if ( body.hasOwnProperty( "vdomObjectVO" ) )
+				pageVO = body.vdomObjectVO as PageVO;
 			else
 				throw new Error( "no page VO" );
 
@@ -71,15 +73,15 @@ package net.vdombox.ide.core.controller.requests
 						pageProxy.getAttributes();
 					else if( operation == PPMOperationNames.UPDATE )
 					{
-						var pageAttributesVO : PageAttributesVO;
+						var vdomObjectAttributesVO : VdomObjectAttributesVO;
 						
-						if( body is PageAttributesVO )
-							pageAttributesVO = body as PageAttributesVO;
-						else if( body.hasOwnProperty( "pageAttributesVO" ) )
-							pageAttributesVO = body.pageAttributesVO as PageAttributesVO;
+						if( body is VdomObjectAttributesVO )
+							vdomObjectAttributesVO = body as VdomObjectAttributesVO;
+						else if( body.hasOwnProperty( "vdomObjectAttributesVO" ) )
+							vdomObjectAttributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
 						
-						if( pageAttributesVO )
-							pageProxy.setAttributes( pageAttributesVO );
+						if( vdomObjectAttributesVO )
+							pageProxy.setAttributes( vdomObjectAttributesVO );
 					}
 
 					break;
