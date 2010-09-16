@@ -2,14 +2,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import flash.display.CapsStyle;
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Graphics;
 	import flash.display.JointStyle;
 	import flash.display.LineScaleMode;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Timer;
 	
 	import mx.core.IVisualElement;
 	import mx.core.UIComponent;
@@ -17,6 +20,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import mx.events.FlexEvent;
 	import mx.events.ScrollEvent;
 	
+	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	
@@ -40,7 +44,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			super();
 
 			visible = false;
-
+			
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler );
 			
@@ -99,6 +103,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		private var beforeTransform : Object;
 
+		private var timer : Timer;
+		
 		public function get resizeMode() : uint
 		{
 			return _resizeMode;
@@ -551,6 +557,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			rmEvent.renderer = _selectedItem as IRenderer;
 			event.stopImmediatePropagation();
 			dispatchEvent( rmEvent );
+			
+			timer.reset();
+			timer.addEventListener( TimerEvent.TIMER, timerHandler )
+			timer.start();
 		}
 
 		private function mouseMoveHandler( event : MouseEvent ) : void
@@ -764,12 +774,51 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
 			
 			parent.addEventListener( Event.CHANGE, scrollHandler, true, 0, true );
+			parent.addEventListener( RendererEvent.MOVED, render_movedHandler, true, 0, true );
+			
+			timer = new Timer( 100 ); //TODO: cleanup all handlers, timers and other variables aftrer removedFromStage.
 		}
 		
 		private function scrollHandler( event : Event ) :void
-		{
+		{ 
 			if( event.target is ScrollBarBase )
 				refresh();
+		}
+		
+		private function render_movedHandler( event : RendererEvent ) : void
+		{
+			var renderer : IRenderer = event.target as IRenderer;
+			
+			if( !_selectedItem || !renderer )
+				return;
+
+			var inMovedObject:  Boolean = false;
+			var parentRenderer : DisplayObjectContainer;
+			
+			parentRenderer = _selectedItem as DisplayObjectContainer;
+			
+			while( parentRenderer )
+			{
+				if ( parentRenderer == renderer )
+				{
+					inMovedObject = true;
+					break;
+				}
+				
+				if( parentRenderer == parent )
+					break;
+				
+				parentRenderer = parentRenderer.parent;
+			}
+			
+			if( inMovedObject )
+				refresh();
+		}
+		
+		private function timerHandler( event : TimerEvent ) : void
+		{
+			stage.removeEventListener( MouseEvent.CLICK, stage_mouseClickHandler, true );
+			timer.stop();
 		}
 	}
 }

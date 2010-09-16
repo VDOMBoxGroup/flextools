@@ -69,6 +69,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
 
+			var vdomObjectAttributesVO : VdomObjectAttributesVO;
+
 			switch ( name )
 			{
 				case ApplicationFacade.BODY_START:
@@ -119,18 +121,31 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED:
 				{
-					objectAttributesPanel.saveButton.enabled = true;
-					objectAttributesPanel.deleteButton.enabled = false;
-					objectAttributesPanel.attributesVO = body as VdomObjectAttributesVO;
+					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
+
+					if ( sessionProxy.selectedPage && vdomObjectAttributesVO &&
+						sessionProxy.selectedPage.id == vdomObjectAttributesVO.vdomObjectVO.id )
+					{
+
+						objectAttributesPanel.saveButton.enabled = true;
+						objectAttributesPanel.deleteButton.enabled = false;
+						objectAttributesPanel.attributesVO = body as VdomObjectAttributesVO;
+					}
 
 					break;
 				}
 
 				case ApplicationFacade.OBJECT_ATTRIBUTES_GETTED:
 				{
-					objectAttributesPanel.saveButton.enabled = true;
-					objectAttributesPanel.deleteButton.enabled = true;
-					objectAttributesPanel.attributesVO = body as VdomObjectAttributesVO;
+					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
+
+					if ( sessionProxy.selectedObject && vdomObjectAttributesVO &&
+						sessionProxy.selectedObject.id == vdomObjectAttributesVO.vdomObjectVO.id )
+					{
+						objectAttributesPanel.saveButton.enabled = true;
+						objectAttributesPanel.deleteButton.enabled = true;
+						objectAttributesPanel.attributesVO = vdomObjectAttributesVO;
+					}
 
 					break;
 				}
@@ -142,7 +157,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler, false, 0, true );
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler, false, 0, true );
 			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler, false, 0,
-													true );
+				true );
 			objectAttributesPanel.addEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true, 0, true );
 			objectAttributesPanel.addEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true, 0, true );
 		}
@@ -151,7 +166,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.SAVE_REQUEST, saveRequestHandler )
 			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.DELETE_REQUEST, deleteRequestHandler )
-			objectAttributesPanel.addEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler );
+			objectAttributesPanel.removeEventListener( ObjectAttributesPanelEvent.CURRENT_ATTRIBUTE_CHANGED, currentAttributeChangedHandler );
 			objectAttributesPanel.removeEventListener( AttributeEvent.SELECT_RESOURCE, selectResourceHandler, true );
 			objectAttributesPanel.removeEventListener( AttributeEvent.OPEN_EXTERNAL, openExternalHandler, true );
 		}

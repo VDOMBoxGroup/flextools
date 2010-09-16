@@ -63,5 +63,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 			if( settingsChanged )
 				sendNotification( ApplicationFacade.SETTINGS_CHANGED, _settings );
 		}
+		
+		public function cleanup() : void
+		{
+		}
 	}
 }

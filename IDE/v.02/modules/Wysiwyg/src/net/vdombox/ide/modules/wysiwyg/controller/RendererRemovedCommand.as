@@ -1,5 +1,8 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
+	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -7,10 +10,10 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-//			var item : ObjectRenderer = notification.getBody() as ObjectRenderer;
-//			
-//			if( item.itemVO )
-//				facade.removeMediator( ItemMediator.NAME + ApplicationFacade.DELIMITER + item.itemVO.id );
+			var renderer : IRenderer = notification.getBody() as IRenderer;
+			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
+
+			renderProxy.removeRenderer( renderer );
 		}
 	}
 }

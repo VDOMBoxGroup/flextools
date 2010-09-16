@@ -97,6 +97,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 				case ApplicationFacade.MODULE_DESELECTED:
 				{
 					isAllStatesGetted = false;
+					isTypesChanged = false;
 
 					sendNotification( ApplicationFacade.BODY_STOP );
 

@@ -161,6 +161,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 		private function clearData() : void
 		{
 			removeHandlers();
+
+			workArea.closeAllEditors();
 			
 			facade.removeMediator( NAME );
 		}

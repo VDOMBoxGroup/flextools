@@ -174,8 +174,6 @@
 			private function removedFromStageHandler( event : Event ) : void
 			{
 				removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
-
-				objectsTree.removeEventListener( ListEvent.CHANGE, objectsTree_changeHandler );
 			}
 
 			private function objectsTree_changeHandler( event : ListEvent ) : void

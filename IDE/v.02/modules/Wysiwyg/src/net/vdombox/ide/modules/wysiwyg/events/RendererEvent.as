@@ -6,9 +6,12 @@ package net.vdombox.ide.modules.wysiwyg.events
 	{
 		public static var CREATED : String = "rendererCreated";
 		public static var REMOVED : String = "rendererRemoved";
+		public static var RENDER_CHANGING : String = "rendererRenderChanging";
+		public static var RENDER_CHANGED : String = "rendererRenderChanged";
 		public static var GET_RESOURCE : String = "rendererGetResource";
 		public static var CLICKED : String = "rendererClicked";
 		public static var MOVE : String = "rendererMove";
+		public static var MOVED : String = "rendererMoved";
 
 		public function RendererEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = true )
 		{

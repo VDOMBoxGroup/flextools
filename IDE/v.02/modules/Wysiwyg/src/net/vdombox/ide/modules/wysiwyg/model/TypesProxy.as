@@ -22,6 +22,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		public function get types() : Array
 		{
+			if( !_types )
+				_types = [];
+			
 			return _types;
 		}
 
@@ -77,6 +80,11 @@ package net.vdombox.ide.modules.wysiwyg.model
 			}
 
 			return result;
+		}
+		
+		public function cleanup() : void
+		{
+			_types = null;
 		}
 	}
 }

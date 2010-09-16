@@ -2,21 +2,22 @@ package net.vdombox.ide.modules.wysiwyg.model
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
-	
+
 	import mx.collections.XMLListCollection;
-	
+
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
+	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IProxy;
 	import org.puremvc.as3.multicore.patterns.proxy.Proxy;
-	
+
 	import spark.components.IItemRenderer;
 
 	public class RenderProxy extends Proxy implements IProxy
@@ -30,32 +31,45 @@ package net.vdombox.ide.modules.wysiwyg.model
 
 		private var typesProxy : TypesProxy;
 
-		private var rendererIndex : Object;
+		private var _renderersIndex : Object;
+
+		private function get renderersIndex() : Object
+		{
+			if ( !_renderersIndex )
+				_renderersIndex = {};
+
+			return _renderersIndex;
+		}
+
+		private function set renderersIndex( value : Object ) : void
+		{
+			_renderersIndex = value;
+		}
 
 		override public function onRegister() : void
 		{
 			typesProxy = facade.retrieveProxy( TypesProxy.NAME ) as TypesProxy;
-			rendererIndex = {};
 		}
 
 		override public function onRemove() : void
 		{
 			typesProxy = null;
-			rendererIndex = null;
+			cleanup();
 		}
 
 		public function addRenderer( renderer : IRenderer ) : void
 		{
-			IEventDispatcher( renderer ).addEventListener( Event.CHANGE, renderer_changeHandler, false, 0, true );
+			IEventDispatcher( renderer ).addEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler, false, 0, true );
+			IEventDispatcher( renderer ).addEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler, false, 0, true );
 
-			var renderVO : RenderVO = IItemRenderer( renderer ).data as RenderVO;
+			var renderVO : RenderVO = renderer.renderVO;
 
 			if ( renderVO && renderVO.vdomObjectVO )
 			{
-				if ( !rendererIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
-					rendererIndex[ renderVO.vdomObjectVO.id ] = [];
+				if ( !renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
+					renderersIndex[ renderVO.vdomObjectVO.id ] = [];
 
-				rendererIndex[ renderVO.vdomObjectVO.id ].push( renderer );
+				renderersIndex[ renderVO.vdomObjectVO.id ].push( renderer );
 			}
 		}
 
@@ -63,20 +77,21 @@ package net.vdombox.ide.modules.wysiwyg.model
 		{
 			var renderVO : RenderVO = IItemRenderer( renderer ).data as RenderVO;
 
-			if ( renderVO && renderVO.vdomObjectVO && rendererIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
+			if ( renderVO && renderVO.vdomObjectVO && renderersIndex.hasOwnProperty( renderVO.vdomObjectVO.id ) )
 			{
-				var index : int = rendererIndex[ renderVO.vdomObjectVO.id ].indexOf( renderer );
+				var index : int = renderersIndex[ renderVO.vdomObjectVO.id ].indexOf( renderer );
 
 				if ( index != -1 )
-					rendererIndex[ renderVO.vdomObjectVO.id ].splice( index, 1 );
+					renderersIndex[ renderVO.vdomObjectVO.id ].splice( index, 1 );
 			}
 
-			IEventDispatcher( renderer ).removeEventListener( Event.CHANGE, renderer_changeHandler );
+			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGED, renderer_renderchangedHandler );
+			IEventDispatcher( renderer ).removeEventListener( RendererEvent.RENDER_CHANGING, renderer_renderchangingHandler );
 		}
 
 		public function getRenderersByVO( vdomObjectVO : IVDOMObjectVO ) : Array
 		{
-			return vdomObjectVO ? rendererIndex[ vdomObjectVO.id ] : null;
+			return vdomObjectVO ? renderersIndex[ vdomObjectVO.id ] : null;
 		}
 
 		public function generateRenderVO( vdomObjectVO : IVDOMObjectVO, rawRenderData : XML ) : RenderVO
@@ -84,9 +99,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 			var itemID : String = rawRenderData.@id;
 			var renderVO : RenderVO;
 
-//			renderVO = renderVOCache[ itemID ] ? renderVOCache[ itemID ] : new RenderVO( vdomObjectVO );
-			
-			renderVO =  new RenderVO( vdomObjectVO );
+			renderVO = new RenderVO( vdomObjectVO );
 
 			createAttributes( renderVO, rawRenderData );
 			createChildren( renderVO, rawRenderData );
@@ -94,12 +107,18 @@ package net.vdombox.ide.modules.wysiwyg.model
 			return renderVO;
 		}
 
+		public function cleanup() : void
+		{
+			renderersIndex = null;
+			data = null;
+		}
+
 		private function createAttributes( renderVO : RenderVO, rawRenderData : XML ) : void
 		{
 			var typeVO : TypeVO;
 
 			renderVO.name = rawRenderData.name()
-			
+
 			renderVO.visible = rawRenderData.@visible == 1 ? true : false;
 
 			renderVO.zindex = uint( rawRenderData.@zindex );
@@ -165,9 +184,9 @@ package net.vdombox.ide.modules.wysiwyg.model
 					objectVO = new ObjectVO( pageVO, typeVO );
 					objectVO.setID( childID );
 					objectVO.name = childName;
-					
+
 					childRenderVO = new RenderVO( objectVO );
-					
+
 					createAttributes( childRenderVO, childXML );
 					createChildren( childRenderVO, childXML );
 
@@ -207,8 +226,36 @@ package net.vdombox.ide.modules.wysiwyg.model
 			}
 		}
 
-		private function renderer_changeHandler( event : Event ) : void
+		private function renderer_renderchangedHandler( event : RendererEvent ) : void
 		{
+			var renderer : IRenderer = event.currentTarget as IRenderer;
+
+			if ( !renderer || !renderer.vdomObjectVO )
+				return;
+
+			addRenderer( renderer );
+		}
+
+		private function renderer_renderchangingHandler( event : RendererEvent ) : void
+		{
+			var renderer : IRenderer = event.currentTarget as IRenderer;
+			var renderers : Array;
+
+			if ( renderer.vdomObjectVO && renderersIndex.hasOwnProperty( renderer.vdomObjectVO.id ) )
+				renderers = renderersIndex[ renderer.vdomObjectVO.id ];
+
+			var index : int = -1;
+
+			if ( renderers && renderers.length > 0 )
+				index = renderers.indexOf( renderer );
+			else
+				return;
+
+			if ( index != -1 )
+				renderers.splice( index, 1 );
+
+			if ( renderers.length == 0 )
+				delete renderersIndex[ renderer.vdomObjectVO.id ];
 
 		}
 	}

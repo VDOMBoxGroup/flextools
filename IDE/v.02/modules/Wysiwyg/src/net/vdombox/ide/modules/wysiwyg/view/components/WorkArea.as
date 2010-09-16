@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	
+	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
 	import mx.core.IVisualElement;
@@ -139,6 +140,17 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			return result;
 		}
 
+		public function closeAllEditors() : void
+		{
+			var tab : Tab;
+			
+			while ( tabBar.dataProvider.length  > 0 ) 
+			{
+				tab = tabBar.dataProvider.getItemAt( 0 ) as Tab;
+				removeTab( tab );
+			}
+		}
+		
 		private function numTabChangedHandler( event : Event ) : void
 		{
 			if( !tabBar.dataProvider || tabBar.dataProvider.length == 0 )

@@ -139,9 +139,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 		public function set renderVO( value : RenderVO ) : void
 		{
+			dispatchEvent( new RendererEvent( RendererEvent.RENDER_CHANGING ) );
+			
 			_renderVO = value;
 
-			refresh();
+			dispatchEvent( new RendererEvent( RendererEvent.RENDER_CHANGED ) );
+			refresh();			
 		}
 
 		public function get vdomObjectVO() : IVDOMObjectVO
@@ -182,7 +185,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		public function set data( value : Object ) : void
 		{
 			_data = value;
-			_renderVO = value as RenderVO;
+			
+			renderVO = value as RenderVO;
 
 			refresh();
 		}
@@ -269,7 +273,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function addHandlers() : void
 		{
 			addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler, false, 0, true );
-			addEventListener( Event.REMOVED, removeHandler, false, 0, true );
+			addEventListener( Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true );
 
 			addEventListener( MouseEvent.MOUSE_OVER, mouseOverHandler, false, 0, true );
 			addEventListener( MouseEvent.MOUSE_OUT, mouseOutHandler, false, 0, true );
@@ -579,6 +583,8 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 
 			x = x + dx > 0 ? x + dx : 0;
 			y = y + dy > 0 ? y + dy : 0;
+			
+			dispatchEvent( new RendererEvent( RendererEvent.MOVED ) );
 		}
 
 		private function mouseUpHandler( event : MouseEvent ) : void

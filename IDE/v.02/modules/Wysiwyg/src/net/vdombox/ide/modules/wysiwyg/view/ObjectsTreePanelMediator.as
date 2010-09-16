@@ -62,6 +62,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			removeHandlers();
 
+			sessionProxy = null;
+			
+			isActive = false;
+			
 			clearData();
 		}
 
@@ -213,7 +217,6 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			objectsTreePanel.pages = null;
 			requestQue = null;
-			sessionProxy = null;
 		}
 
 		private function changeHandler( event : ObjectsTreePanelEvent ) : void
@@ -264,7 +267,5 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( ApplicationFacade.GET_OBJECT, { pageVO: _pages[ event.pageID ], objectID: event.objectID } );
 			}
 		}
-
-
 	}
 }

@@ -12,7 +12,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 		override public function execute( notification : INotification ) : void
 		{
 			var renderer : IRenderer = notification.getBody() as IRenderer;
-			
 			var renderProxy : RenderProxy = facade.retrieveProxy( RenderProxy.NAME ) as RenderProxy;
 			
 			renderProxy.addRenderer( renderer );

@@ -2,6 +2,7 @@ package net.vdombox.ide.modules.wysiwyg
 {
 	import net.vdombox.ide.modules.Wysiwyg;
 	import net.vdombox.ide.modules.wysiwyg.controller.BodyCreatedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.BodyStopCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ChangeSelectedObjectRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.ChangeSelectedPageRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateBodyCommand;
@@ -209,6 +210,8 @@ package net.vdombox.ide.modules.wysiwyg
 
 			registerCommand( CREATE_BODY, CreateBodyCommand );
 			registerCommand( BODY_CREATED, BodyCreatedCommand );
+			
+			registerCommand( BODY_STOP, BodyStopCommand );
 
 			registerCommand( INITIALIZE_SETTINGS, InitializeSettingsCommand );
 			registerCommand( GET_SETTINGS, GetSettingsCommand );

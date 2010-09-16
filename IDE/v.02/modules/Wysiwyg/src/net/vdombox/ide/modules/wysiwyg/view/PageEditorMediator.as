@@ -1,9 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
-	import flash.utils.Timer;
-	import flash.utils.getTimer;
-	
-	import mx.events.StateChangeEvent;
+	import flash.events.Event;
 	
 	import net.vdombox.ide.common.vo.AttributeVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
@@ -14,11 +11,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.events.RendererDropEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.SkinPartEvent;
-	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
@@ -27,7 +22,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 	public class PageEditorMediator extends Mediator implements IMediator
 	{
-		public static const NAME : String = "ObjectEditorMediator";
+		public static const NAME : String = "PageEditorMediator";
 
 		public static var instancesNameList : Object = {};
 
@@ -37,7 +32,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 			super( instanceName, pageEditor );
 
-			instancesNameList[ instanceName ] = null;
+			instancesNameList[ instanceName ] = true;
 		}
 
 		private var sessionProxy : SessionProxy;
@@ -141,30 +136,54 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 		private function addHandlers() : void
 		{
+			pageEditor.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
+
 			pageEditor.addEventListener( SkinPartEvent.PART_ADDED, partAddedHandler, false, 0, true );
 			pageEditor.addEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler, false, 0, true );
 			pageEditor.addEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler, false, 0, true );
 
 			pageEditor.addEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler, false, 0, true );
-			
+
 			pageEditor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
+			pageEditor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
 			pageEditor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
-			
+
 			pageEditor.addEventListener( RendererDropEvent.DROP, renderer_dropHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
+			pageEditor.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
+
 			pageEditor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
+			pageEditor.removeEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler );
+			pageEditor.removeEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler );
+
+			pageEditor.removeEventListener( EditorEvent.RENDERER_TRANSFORMED, rendererTransformedHandler );
+
+			pageEditor.removeEventListener( RendererEvent.CREATED, renderer_createdHandler, true );
+			pageEditor.removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
+			pageEditor.removeEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true );
+
+			pageEditor.removeEventListener( RendererDropEvent.DROP, renderer_dropHandler, true );
+
 		}
 
 		private function clearData() : void
 		{
+			pageEditor.renderVO = null;
+			pageEditor.vdomObjectVO = null;
+			pageEditor.xmlPresentation = null;
+		}
+
+		private function removedFromStageHandler( event : Event ) : void
+		{
+			facade.removeMediator( mediatorName );
+			delete instancesNameList[ mediatorName ];
 		}
 
 		private function partAddedHandler( event : SkinPartEvent ) : void
 		{
-
 		}
 
 		private function partOpenedHandler( event : EditorEvent ) : void
@@ -180,6 +199,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.RENDERER_CREATED, event.target as IRenderer );
 		}
 
+		private function renderer_removedHandler( event : RendererEvent ) : void
+		{
+			sendNotification( ApplicationFacade.RENDERER_REMOVED, event.target as IRenderer );
+		}
+
 		private function renderer_clickedHandler( event : RendererEvent ) : void
 		{
 			sendNotification( ApplicationFacade.RENDERER_CLICKED, event.target as IRenderer );
@@ -190,24 +214,24 @@ package net.vdombox.ide.modules.wysiwyg.view
 			sendNotification( ApplicationFacade.CREATE_OBJECT_REQUEST,
 				{ vdomObjectVO: ( event.target as IRenderer ).vdomObjectVO, typeVO: event.typeVO, point: event.point } )
 		}
-		
+
 		private function rendererTransformedHandler( event : EditorEvent ) : void
 		{
 			var attributeVO : AttributeVO;
 			var attributeName : String;
 			var attributeValue : String;
-			
+
 			var attributes : Array = [];
-			var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( event.renderer.vdomObjectVO ); 
-			
+			var vdomObjectAttributesVO : VdomObjectAttributesVO = new VdomObjectAttributesVO( event.renderer.vdomObjectVO );
+
 			for ( attributeName in event.attributes )
 			{
-				if( attributeName == "x" )
+				if ( attributeName == "x" )
 				{
 					attributeValue = event.attributes[ attributeName ];
 					attributeName = "left";
 				}
-				else if( attributeName == "y" )
+				else if ( attributeName == "y" )
 				{
 					attributeValue = event.attributes[ attributeName ];
 					attributeName = "top"
@@ -216,15 +240,15 @@ package net.vdombox.ide.modules.wysiwyg.view
 				{
 					attributeValue = event.attributes[ attributeName ];
 				}
-				
+
 				attributeVO = new AttributeVO( attributeName );
 				attributeVO.value = attributeValue;
-				
+
 				attributes.push( attributeVO );
 			}
-			
+
 			vdomObjectAttributesVO.attributes = attributes;
-			
+
 			sendNotification( ApplicationFacade.RENDERER_TRANSFORMED, vdomObjectAttributesVO );
 		}
 	}
