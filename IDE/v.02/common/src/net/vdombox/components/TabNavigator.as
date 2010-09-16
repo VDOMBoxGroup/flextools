@@ -72,6 +72,8 @@ package net.vdombox.components
 			
 			dispatchEvent( new Event( "tabAdded" ) );
 			
+			updateHistory();
+			
 			return tab;
 		}
 
