@@ -6,7 +6,8 @@ package net.vdombox.ide.modules.wysiwyg.events
 
 	public class EditorEvent extends Event
 	{
-		public static var CREATED : String = "created";
+		public static var CREATED : String = "editorCreated";
+		public static var REMOVED : String = "editorRemoved";
 		public static var XML_EDITOR_OPENED : String = "xmlEditorOpened";
 		public static var WYSIWYG_OPENED : String = "wysiwygOpened";
 		public static var RENDERER_TRANSFORMED : String = "editorRendererTransformed";

@@ -144,6 +144,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			_renderVO = value;
 
 			dispatchEvent( new RendererEvent( RendererEvent.RENDER_CHANGED ) );
+			
 			refresh();			
 		}
 
@@ -187,8 +188,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			_data = value;
 			
 			renderVO = value as RenderVO;
-
-			refresh();
 		}
 
 		public function get isLocked() : Boolean
@@ -214,8 +213,12 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			
 			if( isRemoveChildren )
 			{
-				width = width;
-				height = height;
+				if( width > 0 )
+					width = width;
+				
+				if( height > 0 )
+					height = height;
+				
 				background.removeAllElements();
 				dataProvider = null;
 			}
@@ -307,7 +310,10 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function refresh() : void
 		{
 			if ( !_renderVO )
+			{
+				lock( true );
 				return;
+			}
 
 			var attributeVO : AttributeVO = _renderVO.getAttributeByName( "width" );
 

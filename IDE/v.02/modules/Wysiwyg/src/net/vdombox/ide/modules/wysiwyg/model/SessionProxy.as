@@ -18,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		public static const SELECTED_PAGE : String = "selectedPage";
 		public static const SELECTED_OBJECT : String = "selectedObject";
 		public static const NFU : String = "needForUpdate";
+		public static const OPENED_TABS : String = "openedTabs";
 		
 		public function SessionProxy()
 		{
@@ -27,6 +28,8 @@ package net.vdombox.ide.modules.wysiwyg.model
 		private var isSelectedApplicationChanged : Boolean;
 		private var isSelectedPageChanged : Boolean;
 		private var isSelectedObjectChanged : Boolean;
+		
+		private var staticData : Object;
 		
 		override public function onRegister() : void
 		{
@@ -38,6 +41,7 @@ package net.vdombox.ide.modules.wysiwyg.model
 		override public function onRemove() : void
 		{
 			data = null;
+			staticData = null;
 		}
 		
 		public function get selectedApplication() : ApplicationVO
@@ -140,6 +144,15 @@ package net.vdombox.ide.modules.wysiwyg.model
 			
 			return data[ NFU ];
 		}
+		
+		public function get openedTabs () : Array
+		{
+			if( !staticData.hasOwnProperty( OPENED_TABS ) )
+				staticData[ OPENED_TABS ] = [];
+			
+			return staticData[ OPENED_TABS ];
+		}
+		
 		
 		public function getObject( objectID : String ) : Object
 		{

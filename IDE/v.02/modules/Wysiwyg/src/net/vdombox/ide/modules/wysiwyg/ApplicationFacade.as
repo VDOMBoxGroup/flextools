@@ -10,6 +10,7 @@ package net.vdombox.ide.modules.wysiwyg
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateSettingsScreenCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.CreateToolsetCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.EditorCreatedCommand;
+	import net.vdombox.ide.modules.wysiwyg.controller.EditorRemovedCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetResourceRequestCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.GetSettingsCommand;
 	import net.vdombox.ide.modules.wysiwyg.controller.InitializeSettingsCommand;
@@ -138,6 +139,7 @@ package net.vdombox.ide.modules.wysiwyg
 		
 //		editors
 		public static const EDITOR_CREATED : String = "editorCreated";
+		public static const EDITOR_REMOVED : String = "editorRemoved";
 		
 //		other
 		public static const DELIMITER : String = "/";
@@ -248,6 +250,7 @@ package net.vdombox.ide.modules.wysiwyg
 
 			
 			registerCommand( EDITOR_CREATED, EditorCreatedCommand );
+			registerCommand( EDITOR_REMOVED, EditorRemovedCommand );
 
 			registerCommand( TEAR_DOWN, TearDownCommand );
 		}

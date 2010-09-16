@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
-	
+
 	import mx.events.DragEvent;
-	
+
 	import net.vdombox.components.tabNavigatorClasses.Tab;
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
@@ -22,11 +22,11 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
-	
+
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	
+
 	import spark.components.Group;
 
 	public class WorkAreaMediator extends Mediator implements IMediator
@@ -74,7 +74,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			interests.push( ApplicationFacade.BODY_STOP );
 
 			interests.push( ApplicationFacade.SELECTED_PAGE_CHANGED );
-			
+
 			interests.push( ApplicationFacade.OPEN_PAGE_REQUEST );
 			interests.push( ApplicationFacade.OPEN_OBJECT_REQUEST );
 
@@ -85,7 +85,10 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var name : String = notification.getName();
 			var body : Object = notification.getBody();
-			
+
+			var vdomObjectVO : IVDOMObjectVO;
+			var editor : IEditor;
+
 			if ( !isActive && name != ApplicationFacade.BODY_START )
 				return;
 
@@ -112,18 +115,37 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
+					vdomObjectVO = body as IVDOMObjectVO;
+					editor = workArea.getEditorByVO( vdomObjectVO );
+
+					if ( !editor )
+					{
+						if ( workArea.selectedEditor )
+							workArea.selectedEditor.vdomObjectVO = vdomObjectVO;
+						else
+						{
+							editor = workArea.openEditor( vdomObjectVO );
+							sendNotification( ApplicationFacade.EDITOR_CREATED, editor );
+						}
+					}
+					else
+					{
+						workArea.selectedEditor = editor;
+					}
+
+					break;
 				}
-					
+
 				case ApplicationFacade.OPEN_PAGE_REQUEST:
 				{
 				}
-					
+
 				case ApplicationFacade.OPEN_OBJECT_REQUEST:
 				{
-					var vdomObjectVO : IVDOMObjectVO = body as IVDOMObjectVO;
-					var editor : IEditor = workArea.getEditorByVO( vdomObjectVO );
-					
-					if( !editor )
+					vdomObjectVO = body as IVDOMObjectVO;
+					editor = workArea.getEditorByVO( vdomObjectVO );
+
+					if ( !editor )
 					{
 						editor = workArea.openEditor( vdomObjectVO );
 						sendNotification( ApplicationFacade.EDITOR_CREATED, editor );
@@ -132,7 +154,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 					{
 						workArea.selectedEditor = editor;
 					}
-					
+
 					break;
 				}
 			}
@@ -142,20 +164,22 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			workArea.addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler, false, 0, true );
 			workArea.addEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler, false, 0, true );
-			
+
 			workArea.addEventListener( WorkAreaEvent.CHANGE, changeHandler, false, 0, true );
-			
+
 			workArea.addEventListener( EditorEvent.CREATED, editor_createdHandler, true, 0, true );
+			workArea.addEventListener( EditorEvent.REMOVED, editor_removedHandler, true, 0, true );
 		}
 
 		private function removeHandlers() : void
 		{
 			workArea.removeEventListener( Event.ADDED_TO_STAGE, addedToStageHandler );
 			workArea.removeEventListener( Event.REMOVED_FROM_STAGE, removedFromStageHandler );
-			
+
 			workArea.removeEventListener( WorkAreaEvent.CHANGE, changeHandler );
-			
-			workArea.removeEventListener( EditorEvent.CREATED, editor_createdHandler, true  );
+
+			workArea.removeEventListener( EditorEvent.CREATED, editor_createdHandler, true );
+			workArea.removeEventListener( EditorEvent.REMOVED, editor_removedHandler, true );
 		}
 
 		private function clearData() : void
@@ -163,7 +187,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 			removeHandlers();
 
 			workArea.closeAllEditors();
-			
+
 			facade.removeMediator( NAME );
 		}
 
@@ -175,23 +199,28 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			clearData();
 		}
-		
+
 		private function changeHandler( event : WorkAreaEvent ) : void
 		{
 			var selectedEditor : IEditor = workArea.selectedEditor;
-			
-			if( !selectedEditor )
+
+			if ( !selectedEditor )
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, null );
-			else if( selectedEditor is PageEditor )
+			else if ( selectedEditor is PageEditor )
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.vdomObjectVO );
-			else if( selectedEditor is ObjectEditor )
+			else if ( selectedEditor is ObjectEditor )
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.vdomObjectVO );
-			
+
 		}
-		
+
 		private function editor_createdHandler( event : EditorEvent ) : void
 		{
 			sendNotification( ApplicationFacade.EDITOR_CREATED, event.target as IEditor );
+		}
+
+		private function editor_removedHandler( event : EditorEvent ) : void
+		{
+			sendNotification( ApplicationFacade.EDITOR_REMOVED, event.target as IEditor );
 		}
 	}
 }

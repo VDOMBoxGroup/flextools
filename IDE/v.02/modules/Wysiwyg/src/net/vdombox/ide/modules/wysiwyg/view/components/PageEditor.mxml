@@ -11,7 +11,7 @@
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
-			
+
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
@@ -28,6 +28,8 @@
 			private var _renderers : Dictionary;
 			private var _selectedRenderer : IRenderer
 
+			private var isVdomObjectVOChanged : Boolean;
+
 			public function get vdomObjectVO() : IVDOMObjectVO
 			{
 				return _vdomObjectVO;
@@ -37,7 +39,9 @@
 			{
 				_vdomObjectVO = value;
 
-				refreshToolbar();
+				isVdomObjectVOChanged = true;
+
+				invalidateProperties();
 			}
 
 			public function get xmlPresentation() : String
@@ -91,6 +95,27 @@
 				}
 
 				return result;
+			}
+
+			override protected function commitProperties() : void
+			{
+				super.commitProperties();
+				
+				if( isVdomObjectVOChanged )
+				{
+					isVdomObjectVOChanged = false;
+					
+					if( ( !_vdomObjectVO || !renderVO ) || renderVO.vdomObjectVO.id != _vdomObjectVO.id )
+					{
+						renderVO = null;
+						
+						xmlPresentation = "";
+						
+						selectedRenderer = null;
+						
+						refreshToolbar();
+					}
+				}
 			}
 
 			private function addHandlers() : void
@@ -162,6 +187,8 @@
 
 			private function removedFromStageHandler( event : Event ) : void
 			{
+				dispatchEvent( new EditorEvent( EditorEvent.REMOVED ) );
+
 				_renderers = null;
 				removeHandlers();
 			}

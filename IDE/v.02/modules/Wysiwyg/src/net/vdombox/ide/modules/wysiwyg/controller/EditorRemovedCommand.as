@@ -1,7 +1,6 @@
 package net.vdombox.ide.modules.wysiwyg.controller
 {
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
-	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.view.ObjectEditorMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.PageEditorMediator;
 	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
@@ -10,20 +9,12 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
-	public class EditorCreatedCommand extends SimpleCommand
+	public class EditorRemovedCommand extends SimpleCommand
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
 			var editor : IEditor = notification.getBody() as IEditor;
 			
-			if( editor is PageEditor )
-				facade.registerMediator( new PageEditorMediator( editor as PageEditor ) );
-			else if( editor is ObjectEditor )
-				facade.registerMediator( new ObjectEditorMediator( editor as ObjectEditor ) );
-			
-//			if( editor && editor.vdomObjectVO )
-//				sessionProxy.openedTabs.push( editor.vdomObjectVO );
 		}
 	}
 }
