@@ -23,7 +23,8 @@ package net.vdombox.editors.parsers.vdomxml
 
 			if ( token &&
 				( ( token.type == Token.TAGNAME && position <= token.pos + token.string.length ) ||
-				( token.type == Token.OPENTAG && position == token.pos + token.string.length ) ) )
+				( token.type == Token.OPENTAG && position == token.pos + token.string.length ) ) ||
+				( token.type == Token.CLOSETAG && token.string == "</" && position == token.pos + token.string.length ))
 				result = true;
 
 			return result;
