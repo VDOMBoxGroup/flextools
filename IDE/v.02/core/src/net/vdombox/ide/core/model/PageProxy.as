@@ -10,6 +10,7 @@ package net.vdombox.ide.core.model
 	import net.vdombox.ide.common.vo.ServerActionVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.core.ApplicationFacade;
 	import net.vdombox.ide.core.events.SOAPEvent;
 	import net.vdombox.ide.core.model.business.SOAP;
@@ -192,10 +193,10 @@ package net.vdombox.ide.core.model
 			return token;
 		}
 
-		public function setXMLPresentation( value : String ) : AsyncToken
+		public function setXMLPresentation( value : VdomObjectXMLPresentationVO ) : AsyncToken
 		{
 			var token : AsyncToken;
-			token = soap.submit_object_script_presentation( pageVO.applicationVO.id, pageVO.id, value );
+			token = soap.submit_object_script_presentation( pageVO.applicationVO.id, pageVO.id, value.xmlPresentation );
 
 			token.recipientName = proxyName;
 
@@ -492,7 +493,7 @@ package net.vdombox.ide.core.model
 
 						notification =
 							new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED,
-												   { pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
+							{ pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 						notification.token = token;
 					}
 
@@ -506,7 +507,7 @@ package net.vdombox.ide.core.model
 
 					notification =
 						new ProxyNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED,
-											   { pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
+						{ pageVO: pageVO, vdomObjectAttributesVO: vdomObjectAttributesVO } );
 					notification.token = token;
 
 					break;
@@ -567,11 +568,15 @@ package net.vdombox.ide.core.model
 					{
 						xmlPresentation = result.Result[ 0 ].*.toXMLString();
 					}
-					catch ( erroe : Error )
+					catch ( error : Error )
 					{
 					}
 
-					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_GETTED, { pageVO: pageVO, xmlPresentation: xmlPresentation } );
+					var vdomObjectXMLPresentationVO : VdomObjectXMLPresentationVO = new VdomObjectXMLPresentationVO( pageVO );
+					vdomObjectXMLPresentationVO.xmlPresentation = xmlPresentation;
+
+					sendNotification( ApplicationFacade.PAGE_XML_PRESENTATION_GETTED,
+									  { pageVO: pageVO, vdomObjectXMLPresentationVO: vdomObjectXMLPresentationVO } );
 
 					break;
 				}

@@ -5,6 +5,7 @@ package net.vdombox.ide.core.controller.requests
 	import net.vdombox.ide.common.ProxyMessage;
 	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
+	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.core.model.ApplicationProxy;
 	import net.vdombox.ide.core.model.PageProxy;
 	
@@ -110,7 +111,7 @@ package net.vdombox.ide.core.controller.requests
 					if( operation == PPMOperationNames.READ )
 						pageProxy.getXMLPresentation();
 					else if( operation == PPMOperationNames.UPDATE )
-						pageProxy.setXMLPresentation( body.xmlPresentation );
+						pageProxy.setXMLPresentation( body as VdomObjectXMLPresentationVO );
 					
 					break;
 				}
