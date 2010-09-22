@@ -6,7 +6,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.Sort;
@@ -29,7 +28,6 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.business.VdomDragManager;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.skins.ObjectRendererSkin;
 	
 	import spark.components.Group;
 	import spark.components.IItemRenderer;
@@ -43,9 +41,9 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import spark.layouts.supportClasses.LayoutBase;
 	import spark.primitives.Rect;
 
-	public class ObjectRenderer extends SkinnableDataContainer implements IItemRenderer, IRenderer
+	public class RendererBase extends SkinnableDataContainer implements IItemRenderer, IRenderer
 	{
-		public function ObjectRenderer()
+		public function RendererBase()
 		{
 			super();
 

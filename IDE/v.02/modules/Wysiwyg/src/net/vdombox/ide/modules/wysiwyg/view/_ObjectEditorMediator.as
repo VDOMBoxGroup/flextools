@@ -3,6 +3,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import flash.events.Event;
 	
 	import net.vdombox.ide.common.vo.ObjectVO;
+	import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
@@ -10,19 +11,20 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
+	import net.vdombox.ide.modules.wysiwyg.view.components._ObjectEditor;
+	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
 	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 
-	public class ObjectEditorMediator extends Mediator implements IMediator
+	public class _ObjectEditorMediator extends Mediator implements IMediator
 	{
 		public static const NAME : String = "ObjectEditorMediator";
 
 		public static var instancesNameList : Object = {};
 		
-		public function ObjectEditorMediator( objectEditor : ObjectEditor )
+		public function _ObjectEditorMediator( objectEditor : _ObjectEditor )
 		{
 			var instanceName : String = NAME + "/" + objectEditor.id;
 			
@@ -33,9 +35,9 @@ package net.vdombox.ide.modules.wysiwyg.view
  
 		private var sessionProxy : SessionProxy;
 
-		public function get objectEditor() : ObjectEditor
+		public function get objectEditor() : _ObjectEditor
 		{
-			return viewComponent as ObjectEditor;
+			return viewComponent as _ObjectEditor;
 		}
 
 		public function get objectVO() : ObjectVO
@@ -53,12 +55,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectEditor.renderVO = value;
 		}
 		
-		public function get xmlPresentation() : String
+		public function get xmlPresentation() : VdomObjectXMLPresentationVO
 		{
 			return objectEditor.xmlPresentation;
 		}
 		
-		public function set xmlPresentation( value : String ) : void
+		public function set xmlPresentation( value : VdomObjectXMLPresentationVO ) : void
 		{
 			objectEditor.xmlPresentation = value;
 		}
@@ -114,6 +116,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectEditor.addEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler, false, 0, true );
 			objectEditor.addEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler, false, 0, true );
 			
+			objectEditor.addEventListener( EditorEvent.XML_SAVE, xmlSaveHandler, false, 0, true );
+			
 			objectEditor.addEventListener( RendererEvent.CREATED, renderer_createdHandler, true, 0, true );
 			objectEditor.addEventListener( RendererEvent.REMOVED, renderer_removedHandler, true, 0, true );
 			objectEditor.addEventListener( RendererEvent.CLICKED, renderer_clickedHandler, true, 0, true );
@@ -126,6 +130,8 @@ package net.vdombox.ide.modules.wysiwyg.view
 			objectEditor.removeEventListener( SkinPartEvent.PART_ADDED, partAddedHandler );
 			objectEditor.removeEventListener( EditorEvent.WYSIWYG_OPENED, partOpenedHandler );
 			objectEditor.removeEventListener( EditorEvent.XML_EDITOR_OPENED, partOpenedHandler );
+			
+			objectEditor.removeEventListener( EditorEvent.XML_SAVE, xmlSaveHandler );
 			
 			objectEditor.removeEventListener( RendererEvent.CREATED, renderer_createdHandler, true );
 			objectEditor.removeEventListener( RendererEvent.REMOVED, renderer_removedHandler, true );
@@ -156,6 +162,18 @@ package net.vdombox.ide.modules.wysiwyg.view
 				sendNotification( ApplicationFacade.GET_WYSIWYG, objectEditor.vdomObjectVO );
 			else if( event.type == EditorEvent.XML_EDITOR_OPENED )
 				sendNotification( ApplicationFacade.GET_XML_PRESENTATION, { objectVO : objectEditor.vdomObjectVO } );
+		}
+		
+		private function xmlSaveHandler( event : EditorEvent ) : void
+		{
+			objectEditor.status = PageEditor.STATUS_SAVING;
+			sendNotification( ApplicationFacade.SET_XML_PRESENTATION, objectEditor.xmlPresentation );
+		}
+		
+		private function objectChangedHandler( event : EditorEvent ) : void
+		{
+			if ( objectEditor.vdomObjectVO )
+				sendNotification( ApplicationFacade.GET_WYSIWYG, objectEditor.vdomObjectVO );
 		}
 		
 		private function renderer_createdHandler( event : RendererEvent ) : void

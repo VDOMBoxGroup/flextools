@@ -1,9 +1,9 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.utils.Dictionary;
-
+	
 	import mx.core.UIComponent;
-
+	
 	import net.vdombox.ide.common.LogMessage;
 	import net.vdombox.ide.common.LoggingJunctionMediator;
 	import net.vdombox.ide.common.PPMApplicationTargetNames;
@@ -25,7 +25,7 @@ package net.vdombox.ide.modules.wysiwyg.view
 	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.SettingsVO;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
@@ -308,9 +308,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 
 				case ApplicationFacade.SET_XML_PRESENTATION:
 				{
-					if ( body.hasOwnProperty( "pageVO" ) )
+					if ( body.vdomObjectVO is PageVO )
 						message = new ProxyMessage( PPMPlaceNames.PAGE, PPMOperationNames.UPDATE, PPMPageTargetNames.XML_PRESENTATION, body );
-					else if ( body.hasOwnProperty( "objectVO" ) )
+					else if ( body.vdomObjectVO is ObjectVO )
 						message = new ProxyMessage( PPMPlaceNames.OBJECT, PPMOperationNames.UPDATE, PPMObjectTargetNames.XML_PRESENTATION, body );
 
 					junction.sendMessage( PipeNames.PROXIESOUT, message );

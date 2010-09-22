@@ -1,8 +1,10 @@
 package net.vdombox.ide.modules.wysiwyg.view.components
 {
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 	
+	import mx.binding.utils.BindingUtils;
 	import mx.collections.ArrayList;
 	import mx.core.ClassFactory;
 	import mx.core.IFactory;
@@ -16,6 +18,7 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
 	import net.vdombox.ide.common.vo.ObjectVO;
 	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 
@@ -88,32 +91,32 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 			if ( editor )
 				return editor;
 
-			var uid : String = UIDUtil.createUID();
-
-			if ( vdomObjectVO is PageVO )
-			{
-				editor = new PageEditor();
-				UIComponent( editor ).id = "pageEditor_" + uid
-			}
-			else if ( vdomObjectVO is ObjectVO )
-			{
-				editor = new ObjectEditor();
-				UIComponent( editor ).id = "objectEditor_" + uid
-			}
-
-			editor.vdomObjectVO = vdomObjectVO;
-			UIComponent( editor ).percentWidth = 100;
-			UIComponent( editor ).percentHeight = 100;
-
+			editor = new VdomObjectEditor();
+			editor.editorVO.vdomObjectVO = vdomObjectVO;
+			
+//			
+//			if ( vdomObjectVO is PageVO )
+//			{
+//				editor = new PageEditor();
+//				UIComponent( editor ).id = "pageEditor_" + uid
+//			}
+//			else if ( vdomObjectVO is ObjectVO )
+//			{
+//				editor = new _ObjectEditor();
+//				UIComponent( editor ).id = "objectEditor_" + uid
+//			}
+			
 			var tab : Tab = new Tab();
-
-			tab.id = "tab_" + uid;
 			tab.label = vdomObjectVO.name;
-
+			
+			IEventDispatcher( editor ).addEventListener( EditorEvent.OBJECT_CHANGED, editor_objectChangedHandler, false, 0, true );
+			
 			addTab( tab );
-
+			
 			tab.addElement( editor as IVisualElement );
-
+			
+//			tab.id = "tab_" + uid;
+			
 			if ( !_editors )
 				_editors = new Dictionary( true );
 
@@ -176,6 +179,11 @@ package net.vdombox.ide.modules.wysiwyg.view.components
 		private function selectedTabChangedHandler( event : Event ) : void
 		{
 			dispatchEvent( new WorkAreaEvent( WorkAreaEvent.CHANGE ) );
+		}
+		
+		private function editor_objectChangedHandler( event : EditorEvent ) : void
+		{
+			
 		}
 	}
 }

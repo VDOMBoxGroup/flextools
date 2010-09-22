@@ -7,8 +7,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
-	
+
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -16,7 +15,7 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	{
 		override public function execute( notification : INotification ) : void
 		{
-			var body : IRenderer = notification.getBody() as ObjectRenderer;
+			var body : IRenderer = notification.getBody() as IRenderer;
 
 			var renderVO : RenderVO = body.renderVO as RenderVO;
 
@@ -24,17 +23,13 @@ package net.vdombox.ide.modules.wysiwyg.controller
 				return;
 
 			var vdomObjectVO : IVDOMObjectVO = renderVO.vdomObjectVO;
-			
+
 			var sessionProxy : SessionProxy = facade.retrieveProxy( SessionProxy.NAME ) as SessionProxy;
-			
-			if( vdomObjectVO is ObjectVO )
-			{
+
+			if ( vdomObjectVO is ObjectVO )
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, vdomObjectVO );
-			}
-			else if( vdomObjectVO is PageVO && sessionProxy.selectedPage == vdomObjectVO )
-			{
+			else if ( vdomObjectVO is PageVO && sessionProxy.selectedPage == vdomObjectVO )
 				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, null );
-			}
 		}
 	}
 }

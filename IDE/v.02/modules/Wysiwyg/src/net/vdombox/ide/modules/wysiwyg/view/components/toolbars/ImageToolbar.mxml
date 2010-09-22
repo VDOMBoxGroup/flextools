@@ -8,12 +8,11 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.utils.StringUtil;
-
+			
 			import net.vdombox.ide.common.vo.AttributeVO;
 			import net.vdombox.ide.modules.wysiwyg.events.ToolbarEvent;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IToolbar;
-			import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
 
 			private var elementForEditing : Object;
 

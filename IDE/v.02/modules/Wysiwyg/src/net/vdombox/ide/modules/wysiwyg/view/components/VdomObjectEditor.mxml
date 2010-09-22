@@ -8,67 +8,107 @@
 					  implements="net.vdombox.ide.modules.wysiwyg.interfaces.IEditor">
 	<fx:Script>
 		<![CDATA[
+			import mx.binding.utils.BindingUtils;
 			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.StateChangeEvent;
-
+			
+			import net.vdombox.ide.common.components.WorkAreaButton;
 			import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
+			import net.vdombox.ide.common.vo.VdomObjectXMLPresentationVO;
 			import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
 			import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 			import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
+			import net.vdombox.ide.modules.wysiwyg.model.vo.EditorVO;
 			import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
+			
+			import spark.components.Label;
+
+			public static const STATUS_NULL : uint = 0;
+			public static const STATUS_SAVING : uint = 1;
+			public static const STATUS_SAVING_OK : uint = 2;
+			public static const STATUS_LOADING : uint = 3;
+			public static const STATUS_LOADING_OK : uint = 4;
+			
+			[SkinPart( required="true" )]
+			public var saveXMLButton : WorkAreaButton;
+			
+			[SkinPart( required="true" )]
+			public var statusLabel : Label;
 
 			private var _vdomObjectVO : IVDOMObjectVO;
 
-			private var _xml : String;
+			private var _xmlPresentation : VdomObjectXMLPresentationVO;
 			private var _renderVO : RenderVO;
 
 			private var _renderers : Dictionary;
 			private var _selectedRenderer : IRenderer
 
+			private var _status : uint;
+			
 			private var isVdomObjectVOChanged : Boolean;
+			private var isStatusChanged : Boolean;
 
-			public function get vdomObjectVO() : IVDOMObjectVO
+			private var _editorVO : EditorVO;
+			
+			public function get editorVO() : EditorVO
 			{
-				return _vdomObjectVO;
+				if( !_editorVO )
+					_editorVO = createEditorVO();
+				
+				return _editorVO;
 			}
-
-			public function set vdomObjectVO( value : IVDOMObjectVO ) : void
-			{
-				_vdomObjectVO = value;
-
-				isVdomObjectVOChanged = true;
-
-				invalidateProperties();
-			}
-
-			public function get xmlPresentation() : String
-			{
-				return xmlScriptEditor ? xmlScriptEditor.scriptAreaComponent.text : _xml;
-			}
-
-			public function set xmlPresentation( value : String ) : void
-			{
-				_xml = value;
-
-				if ( xmlScriptEditor )
-					xmlScriptEditor.scriptAreaComponent.text = value;
-			}
-
-			public function get renderVO() : RenderVO
-			{
-				return renderer ? renderer.renderVO : _renderVO;
-			}
-
-			public function set renderVO( value : RenderVO ) : void
-			{
-				_renderVO = value;
-
-				if ( renderer )
-					renderer.renderVO = value;
-			}
+			
+//			public function get vdomObjectVO() : IVDOMObjectVO
+//			{
+//				return _vdomObjectVO;
+//			}
+//
+//			public function set vdomObjectVO( value : IVDOMObjectVO ) : void
+//			{
+//				_vdomObjectVO = value;
+//
+//				isVdomObjectVOChanged = true;
+//
+//				invalidateProperties();
+//			}
+//
+//			public function get xmlPresentation() : VdomObjectXMLPresentationVO
+//			{
+//				if ( xmlScriptEditor && _xmlPresentation )
+//					_xmlPresentation.xmlPresentation = xmlScriptEditor.scriptAreaComponent.text
+//
+//				return _xmlPresentation;
+//			}
+//
+//			public function set xmlPresentation( value : VdomObjectXMLPresentationVO ) : void
+//			{
+//				_xmlPresentation = value;
+//
+//				if ( xmlScriptEditor )
+//				{
+//					if ( vdomObjectVO && _xmlPresentation && vdomObjectVO.id == _xmlPresentation.vdomObjectVO.id )
+//						xmlScriptEditor.scriptAreaComponent.text = _xmlPresentation.xmlPresentation;
+//					else
+//						xmlScriptEditor.scriptAreaComponent.text = "";
+//				}
+//
+//			}
+//
+//			public function get renderVO() : RenderVO
+//			{
+//				return renderer ? renderer.renderVO : _renderVO;
+//			}
+//
+//			public function set renderVO( value : RenderVO ) : void
+//			{
+//				_renderVO = value;
+//
+//				if ( renderer )
+//					renderer.renderVO = value;
+//			}
 
 			[Bindable]
 			public function get selectedRenderer() : IRenderer
@@ -81,13 +121,26 @@
 				_selectedRenderer = value;
 			}
 
+			[Bindable]
+			public function get status() : uint
+			{
+				return _status;
+			}
+			
+			public function set status( value : uint ) : void
+			{
+				_status = value;
+				
+				isStatusChanged = true;
+			}
+			
 			public function getRendererByID( id : String ) : IRenderer
 			{
 				var result : IRenderer;
 
 				for ( var renderer : * in _renderers )
 				{
-					if ( IRenderer( renderer ).renderVO.vdomObjectVO.id == id )
+					if ( IRenderer( renderer ).renderVO && IRenderer( renderer ).renderVO.vdomObjectVO.id == id )
 					{
 						result = renderer as IRenderer;
 						break;
@@ -100,21 +153,28 @@
 			override protected function commitProperties() : void
 			{
 				super.commitProperties();
-				
-				if( isVdomObjectVOChanged )
+
+				if( isStatusChanged )
 				{
-					isVdomObjectVOChanged = false;
+					isStatusChanged = false;
 					
-					if( ( !_vdomObjectVO || !renderVO ) || renderVO.vdomObjectVO.id != _vdomObjectVO.id )
-					{
-						renderVO = null;
-						
-						xmlPresentation = "";
-						
-						selectedRenderer = null;
-						
-						refreshToolbar();
-					}
+					if( skin )
+						skin.invalidateProperties();
+				}
+			}
+
+			override protected function partAdded( partName : String, instance : Object ) : void
+			{
+				super.partAdded( partName, instance );
+
+				if ( instance == saveXMLButton )
+				{
+					saveXMLButton.addEventListener( MouseEvent.CLICK, saveXMLButton_clickHandler, false, 0, true );
+				}
+				else if( instance == statusLabel )
+				{
+					isStatusChanged = true;
+					invalidateProperties();
 				}
 			}
 
@@ -156,6 +216,35 @@
 					delete _renderers[ renderer ];
 			}
 
+			private function createEditorVO() : EditorVO
+			{
+				var newEditorVO : EditorVO;
+				
+				newEditorVO = new EditorVO();
+				
+				BindingUtils.bindSetter( vdomObjectChanged, newEditorVO, "vdomObjectVO", true, true );
+				BindingUtils.bindSetter( renderVOChanged, newEditorVO, "renderVO", true, true );
+				BindingUtils.bindSetter( xmlPresentationChanged, newEditorVO, "vdomObjectXMLPresentationVO", true, true );
+				
+				return newEditorVO;
+			}
+			
+			private function vdomObjectChanged( value : IVDOMObjectVO ) : void
+			{
+				isVdomObjectVOChanged = true;
+				invalidateProperties();
+			}
+			
+			private function renderVOChanged( value : RenderVO ) : void
+			{
+				
+			}
+			
+			private function xmlPresentationChanged( value : VdomObjectXMLPresentationVO ) : void
+			{
+				
+			}
+			
 			private function dispatchStateEvent() : void
 			{
 				currentState = skin.currentState;
@@ -196,6 +285,15 @@
 			private function changeStateHandler( event : StateChangeEvent ) : void
 			{
 				dispatchStateEvent();
+			}
+
+			private function saveXMLButton_clickHandler( event : MouseEvent ) : void
+			{
+//				if( xmlPresentation )
+//				{
+//					var ee : EditorEvent = new EditorEvent( EditorEvent.XML_SAVE );
+//					dispatchEvent( ee );
+//				}
 			}
 
 			private function renderer_createdHandler( event : RendererEvent ) : void
@@ -244,9 +342,9 @@
 	</s:layout>
 
 	<s:Group height="100%" width="100%">
-		<components:PageRenderer id="renderer"
+		<!--<components:PageRenderer id="renderer"
 								 height="100%" width="100%"
-								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>
+								 selectedRenderer="{ selectedRenderer }" includeIn="wysiwyg, wysiwygDisabled, normal, disabled"/>-->
 
 		<editors:XMLScriptEditor id="xmlScriptEditor"
 								 height="100%" width="100%"

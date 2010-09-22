@@ -1,33 +1,18 @@
 package net.vdombox.ide.modules.wysiwyg.view
 {
 	import flash.events.Event;
-
-	import mx.events.DragEvent;
-
-	import net.vdombox.components.tabNavigatorClasses.Tab;
+	
 	import net.vdombox.ide.common.interfaces.IVDOMObjectVO;
-	import net.vdombox.ide.common.vo.AttributeVO;
-	import net.vdombox.ide.common.vo.ObjectVO;
-	import net.vdombox.ide.common.vo.PageVO;
-	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.wysiwyg.ApplicationFacade;
 	import net.vdombox.ide.modules.wysiwyg.events.EditorEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.RendererEvent;
-	import net.vdombox.ide.modules.wysiwyg.events.TransformMarkerEvent;
 	import net.vdombox.ide.modules.wysiwyg.events.WorkAreaEvent;
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IEditor;
 	import net.vdombox.ide.modules.wysiwyg.model.SessionProxy;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectEditor;
-	import net.vdombox.ide.modules.wysiwyg.view.components.ObjectRenderer;
-	import net.vdombox.ide.modules.wysiwyg.view.components.PageEditor;
-	import net.vdombox.ide.modules.wysiwyg.view.components.TypeItemRenderer;
 	import net.vdombox.ide.modules.wysiwyg.view.components.WorkArea;
-
+	
 	import org.puremvc.as3.multicore.interfaces.IMediator;
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-
-	import spark.components.Group;
 
 	public class WorkAreaMediator extends Mediator implements IMediator
 	{
@@ -121,12 +106,9 @@ package net.vdombox.ide.modules.wysiwyg.view
 					if ( !editor )
 					{
 						if ( workArea.selectedEditor )
-							workArea.selectedEditor.vdomObjectVO = vdomObjectVO;
+							workArea.selectedEditor.editorVO.vdomObjectVO = vdomObjectVO;
 						else
-						{
 							editor = workArea.openEditor( vdomObjectVO );
-							sendNotification( ApplicationFacade.EDITOR_CREATED, editor );
-						}
 					}
 					else
 					{
@@ -204,12 +186,12 @@ package net.vdombox.ide.modules.wysiwyg.view
 		{
 			var selectedEditor : IEditor = workArea.selectedEditor;
 
-			if ( !selectedEditor )
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, null );
-			else if ( selectedEditor is PageEditor )
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.vdomObjectVO );
-			else if ( selectedEditor is ObjectEditor )
-				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.vdomObjectVO );
+//			if ( !selectedEditor )
+//				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, null );
+//			else if ( selectedEditor is PageEditor )
+//				sendNotification( ApplicationFacade.CHANGE_SELECTED_PAGE_REQUEST, selectedEditor.vdomObjectVO );
+//			else if ( selectedEditor is _ObjectEditor )
+//				sendNotification( ApplicationFacade.CHANGE_SELECTED_OBJECT_REQUEST, selectedEditor.vdomObjectVO );
 
 		}
 

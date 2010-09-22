@@ -72,9 +72,19 @@ package net.vdombox.ide.modules.wysiwyg.controller.messages
 				case PPMPageTargetNames.XML_PRESENTATION:
 				{
 					if ( operation == PPMOperationNames.READ )
+					{
 						sendNotification( ApplicationFacade.XML_PRESENTATION_GETTED, body );
+					}
 					else if ( operation == PPMOperationNames.UPDATE )
+					{
+						if( pageVO )
+						{
+							sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, pageVO )
+							sendNotification( ApplicationFacade.GET_WYSIWYG, pageVO )
+						}
+						
 						sendNotification( ApplicationFacade.XML_PRESENTATION_SETTED, body );
+					}
 
 					break;
 				}

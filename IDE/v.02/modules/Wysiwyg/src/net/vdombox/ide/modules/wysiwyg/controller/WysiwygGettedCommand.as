@@ -6,8 +6,6 @@ package net.vdombox.ide.modules.wysiwyg.controller
 	import net.vdombox.ide.modules.wysiwyg.interfaces.IRenderer;
 	import net.vdombox.ide.modules.wysiwyg.model.RenderProxy;
 	import net.vdombox.ide.modules.wysiwyg.model.vo.RenderVO;
-	import net.vdombox.ide.modules.wysiwyg.view.ObjectEditorMediator;
-	import net.vdombox.ide.modules.wysiwyg.view.PageEditorMediator;
 	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
@@ -31,44 +29,44 @@ package net.vdombox.ide.modules.wysiwyg.controller
 			
 			var renderer : IRenderer;
 			
-			if( renderers && renderers.length != 0 )
-			{
-				for each( renderer in renderers )
-				{
-					renderer.renderVO = renderVO;
-				}
-			}
-			
-			if ( vdomObjectVO is PageVO )
-			{
-				var pageEditorMediator : PageEditorMediator;
-
-				for ( var pageEditorMediatorName : String in PageEditorMediator.instancesNameList )
-				{
-					pageEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as PageEditorMediator;
-
-					if ( pageEditorMediator && pageEditorMediator.pageVO && pageEditorMediator.pageVO.id == vdomObjectVO.id )
-					{
-						pageEditorMediator.renderVO = renderVO;
-						break;
-					}
-				}
-			}
-			else if ( vdomObjectVO is ObjectVO )
-			{
-				var objectEditorMediator : ObjectEditorMediator;
-
-				for ( var objectEditorMediatorName : String in ObjectEditorMediator.instancesNameList )
-				{
-					objectEditorMediator = facade.retrieveMediator( objectEditorMediatorName ) as ObjectEditorMediator;
-
-					if ( objectEditorMediator.objectVO && objectEditorMediator.objectVO.id == vdomObjectVO.id )
-					{
-						objectEditorMediator.renderVO = renderVO;
-						break;
-					}
-				}
-			}
+//			if( renderers && renderers.length != 0 )
+//			{
+//				for each( renderer in renderers )
+//				{
+//					renderer.renderVO = renderVO;
+//				}
+//			}
+//			
+//			if ( vdomObjectVO is PageVO )
+//			{
+//				var pageEditorMediator : PageEditorMediator;
+//
+//				for ( var pageEditorMediatorName : String in PageEditorMediator.instancesNameList )
+//				{
+//					pageEditorMediator = facade.retrieveMediator( pageEditorMediatorName ) as PageEditorMediator;
+//
+//					if ( pageEditorMediator && pageEditorMediator.pageVO && pageEditorMediator.pageVO.id == vdomObjectVO.id )
+//					{
+//						pageEditorMediator.renderVO = renderVO;
+//						break;
+//					}
+//				}
+//			}
+//			else if ( vdomObjectVO is ObjectVO )
+//			{
+//				var objectEditorMediator : ObjectEditorMediator;
+//
+//				for ( var objectEditorMediatorName : String in ObjectEditorMediator.instancesNameList )
+//				{
+//					objectEditorMediator = facade.retrieveMediator( objectEditorMediatorName ) as ObjectEditorMediator;
+//
+//					if ( objectEditorMediator.objectVO && objectEditorMediator.objectVO.id == vdomObjectVO.id )
+//					{
+//						objectEditorMediator.renderVO = renderVO;
+//						break;
+//					}
+//				}
+//			}
 		}
 	}
 }
