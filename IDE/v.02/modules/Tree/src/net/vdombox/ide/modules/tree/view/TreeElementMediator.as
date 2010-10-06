@@ -2,10 +2,9 @@ package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.common.vo.ApplicationVO;
 	import net.vdombox.ide.common.vo.AttributeVO;
-	import net.vdombox.ide.common.vo.PageAttributesVO;
-	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.ResourceVO;
 	import net.vdombox.ide.common.vo.TypeVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.TreeElementEvent;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
@@ -27,7 +26,7 @@ package net.vdombox.ide.modules.tree.view
 
 		private var sessionProxy : SessionProxy;
 
-		private var _pageAttributesVO : PageAttributesVO;
+		private var _vdomObjectAttributesVO : VdomObjectAttributesVO;
 
 		private var _typeVO : TypeVO;
 
@@ -41,9 +40,9 @@ package net.vdombox.ide.modules.tree.view
 			return viewComponent as TreeElement;
 		}
 
-		public function set pageAttributesVO( value : PageAttributesVO ) : void
+		public function set vdomObjectAttributesVO( value : VdomObjectAttributesVO ) : void
 		{
-			_pageAttributesVO = value;
+			_vdomObjectAttributesVO = value;
 
 			treeElement.description = getAttributeValue( "description" );
 			treeElement.title = getAttributeValue( "title" );
@@ -111,17 +110,17 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
-					pageAttributesVO = body as PageAttributesVO;
+					vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
 					break;
 				}
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_SETTED:
 				{
-					var newPageAttributesVO : PageAttributesVO = body as PageAttributesVO;
+					var newPageAttributesVO : VdomObjectAttributesVO = body as VdomObjectAttributesVO;
 					
-					if( newPageAttributesVO && newPageAttributesVO.pageVO.id == treeElementVO.pageVO.id )
-						pageAttributesVO = newPageAttributesVO;
+					if( newPageAttributesVO && newPageAttributesVO.vdomObjectVO.id == treeElementVO.pageVO.id )
+						vdomObjectAttributesVO = newPageAttributesVO;
 					
 					break;
 				}
@@ -183,7 +182,7 @@ package net.vdombox.ide.modules.tree.view
 		{
 			var result : String;
 
-			for each ( var attributeVO : AttributeVO in _pageAttributesVO.attributes )
+			for each ( var attributeVO : AttributeVO in _vdomObjectAttributesVO.attributes )
 			{
 				if ( attributeVO.name == attributeName )
 				{

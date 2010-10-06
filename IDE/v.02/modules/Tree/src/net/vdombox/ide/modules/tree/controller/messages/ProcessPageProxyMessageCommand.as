@@ -3,11 +3,10 @@ package net.vdombox.ide.modules.tree.controller.messages
 	import net.vdombox.ide.common.PPMOperationNames;
 	import net.vdombox.ide.common.PPMPageTargetNames;
 	import net.vdombox.ide.common.ProxyMessage;
-	import net.vdombox.ide.common.vo.PageAttributesVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
-	import net.vdombox.ide.modules.tree.view.TreeElementMediator;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 
@@ -28,32 +27,32 @@ package net.vdombox.ide.modules.tree.controller.messages
 			{
 				case PPMPageTargetNames.ATTRIBUTES:
 				{
-					var pageAttributesVO : PageAttributesVO = body.pageAttributesVO as PageAttributesVO;
+					var vdomObjectAttributesVO : VdomObjectAttributesVO = body.vdomObjectAttributesVO as VdomObjectAttributesVO;
 
 					var allPageRecipients : Object = sessionProxy.getObject( place + ApplicationFacade.DELIMITER + operation +
 						ApplicationFacade.DELIMITER + target );
 
-					var pageRecipient : Array = allPageRecipients[ pageAttributesVO.pageVO.id ];
+					var pageRecipient : Array = allPageRecipients[ vdomObjectAttributesVO.vdomObjectVO.id ];
 					var recipientID : String;
 
 					if ( operation == PPMOperationNames.READ )
 					{
 						for each ( recipientID in pageRecipient )
 						{
-							sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + recipientID, pageAttributesVO );
+							sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + recipientID, vdomObjectAttributesVO );
 						}
 					}
 					else if ( operation == PPMOperationNames.UPDATE )
 					{
 						for each ( recipientID in pageRecipient )
 						{
-							sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + recipientID, pageAttributesVO );
+							sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + recipientID, vdomObjectAttributesVO );
 						}
 						
-						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, pageAttributesVO );
+						sendNotification( ApplicationFacade.PAGE_ATTRIBUTES_SETTED, vdomObjectAttributesVO );
 					}
 
-					delete allPageRecipients[ pageAttributesVO.pageVO.id ];
+					delete allPageRecipients[ vdomObjectAttributesVO.vdomObjectVO.id ];
 
 					break;
 				}

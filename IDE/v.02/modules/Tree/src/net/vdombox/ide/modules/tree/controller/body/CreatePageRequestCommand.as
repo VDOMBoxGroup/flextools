@@ -1,11 +1,9 @@
 package net.vdombox.ide.modules.tree.controller.body
 {
-	import net.vdombox.ide.common.vo.PageAttributesVO;
-	import net.vdombox.ide.common.vo.PageVO;
 	import net.vdombox.ide.common.vo.TypeVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
-
+	
 	import org.puremvc.as3.multicore.interfaces.INotification;
 	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
 

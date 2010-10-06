@@ -2,13 +2,11 @@ package net.vdombox.ide.modules.tree.view
 {
 	import net.vdombox.ide.common.vo.ApplicationInformationVO;
 	import net.vdombox.ide.common.vo.ApplicationVO;
-	import net.vdombox.ide.common.vo.PageAttributesVO;
-	import net.vdombox.ide.common.vo.PageVO;
+	import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 	import net.vdombox.ide.modules.tree.ApplicationFacade;
 	import net.vdombox.ide.modules.tree.events.AttributeEvent;
 	import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
 	import net.vdombox.ide.modules.tree.model.SessionProxy;
-	import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 	import net.vdombox.ide.modules.tree.view.components.PropertiesPanel;
 	import net.vdombox.ide.modules.tree.view.components.ResourceSelector;
 	
@@ -99,7 +97,7 @@ package net.vdombox.ide.modules.tree.view
 				case ApplicationFacade.SELECTED_PAGE_CHANGED:
 				{
 					propertiesPanel.treeElementVO = null;
-					propertiesPanel.pageAttributesVO = null
+					propertiesPanel.vdomObjectAttributesVO = null
 						
 					if ( sessionProxy.selectedPage )
 						sendNotification( ApplicationFacade.GET_PAGE_ATTRIBUTES, { pageVO: sessionProxy.selectedPage, recipientID: mediatorName } );
@@ -109,7 +107,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_GETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
-					propertiesPanel.pageAttributesVO = body as PageAttributesVO;
+					propertiesPanel.vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
 					if ( sessionProxy.selectedTreeElement && sessionProxy.selectedTreeElement.resourceVO &&
 						sessionProxy.selectedTreeElement.resourceVO.id && !sessionProxy.selectedTreeElement.resourceVO.data )
@@ -123,7 +121,7 @@ package net.vdombox.ide.modules.tree.view
 
 				case ApplicationFacade.PAGE_ATTRIBUTES_SETTED + ApplicationFacade.DELIMITER + mediatorName:
 				{
-					propertiesPanel.pageAttributesVO = body as PageAttributesVO;
+					propertiesPanel.vdomObjectAttributesVO = body as VdomObjectAttributesVO;
 
 					break;
 				}
@@ -168,10 +166,10 @@ package net.vdombox.ide.modules.tree.view
 
 		private function savePageAttributesHandler( event : PropertiesPanelEvent ) : void
 		{
-			if ( propertiesPanel.pageAttributesVO )
+			if ( propertiesPanel.vdomObjectAttributesVO )
 			{
 				sendNotification( ApplicationFacade.SET_PAGE_ATTRIBUTES,
-					{ pageVO: propertiesPanel.pageAttributesVO.pageVO, pageAttributesVO: propertiesPanel.pageAttributesVO,
+					{ pageVO: propertiesPanel.vdomObjectAttributesVO.vdomObjectVO, pageAttributesVO: propertiesPanel.vdomObjectAttributesVO,
 						recipientID: mediatorName } );
 			}
 		}

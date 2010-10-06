@@ -8,23 +8,19 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
-			import mx.binding.utils.ChangeWatcher;
-			
 			import net.vdombox.ide.common.vo.AttributeVO;
-			import net.vdombox.ide.common.vo.PageAttributesVO;
+			import net.vdombox.ide.common.vo.ObjectVO;
+			import net.vdombox.ide.common.vo.PageVO;
+			import net.vdombox.ide.common.vo.VdomObjectAttributesVO;
 			import net.vdombox.ide.modules.tree.events.PropertiesPanelEvent;
 			import net.vdombox.ide.modules.tree.model.vo.TreeElementVO;
 			import net.vdombox.ide.modules.tree.view.skins.TextAreaShadowedSkin;
 			import net.vdombox.ide.modules.tree.view.skins.TextInputShadowedSkin;
-			
-			import spark.skins.spark.PanelSkin;
-			import spark.skins.spark.TextInputSkin;
 
 			[Bindable]
 			public var treeElementVO : TreeElementVO;
 			
-			private var _pageAttributesVO : PageAttributesVO;
+			private var _vdomObjectAttributesVO : VdomObjectAttributesVO;
 
 			[Bindable]
 			private var titleAttributeVO : AttributeVO;
@@ -32,26 +28,33 @@
 			[Bindable]
 			private var descriptionAttributeVO : AttributeVO;
 
-			public function get pageAttributesVO() : PageAttributesVO
+			public function get vdomObjectAttributesVO() : VdomObjectAttributesVO
 			{
-				return _pageAttributesVO;
+				return _vdomObjectAttributesVO;
 			}
 
-			public function set pageAttributesVO( value : PageAttributesVO ) : void
+			public function set vdomObjectAttributesVO( value : VdomObjectAttributesVO ) : void
 			{
-				_pageAttributesVO = value;
+				_vdomObjectAttributesVO = value;
 
 				pageAttributesChanged();
 			}
 			
 			private function pageAttributesChanged() : void
 			{
-				if ( _pageAttributesVO )
+				if ( _vdomObjectAttributesVO )
 				{
 					titleAttributeVO = getAttributeByName( "title" );
 					descriptionAttributeVO = getAttributeByName( "description" );
+					
+					var indexPageID : String;
 
-					if ( _pageAttributesVO.pageVO.applicationVO.indexPageID == _pageAttributesVO.pageVO.id )
+					if( _vdomObjectAttributesVO.vdomObjectVO is PageVO )
+						indexPageID = PageVO( _vdomObjectAttributesVO.vdomObjectVO ).applicationVO.indexPageID
+					else if( _vdomObjectAttributesVO.vdomObjectVO is ObjectVO )
+						indexPageID = ObjectVO( _vdomObjectAttributesVO.vdomObjectVO ).pageVO.applicationVO.indexPageID
+					
+					if ( indexPageID == _vdomObjectAttributesVO.vdomObjectVO.id )
 						makeStartButton.enabled = false;
 					else
 						makeStartButton.enabled = true;
@@ -73,7 +76,7 @@
 			{
 				var result : AttributeVO;
 
-				for each ( var attributeVO : AttributeVO in _pageAttributesVO.attributes )
+				for each ( var attributeVO : AttributeVO in _vdomObjectAttributesVO.attributes )
 				{
 					if ( attributeVO.name == name )
 					{
