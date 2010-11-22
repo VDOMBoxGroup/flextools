@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Панель настроек-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 height="100%" width="100%"
+		 implements="net.vdombox.ide.common.interfaces.ISettingsScreen">
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.common.interfaces.ISettingsScreen;
+
+			public function performOK() : void
+			{
+				dispatchEvent( new Event( "performOK" ) );
+			}
+		]]>
+	</fx:Script>
+
+	<s:Rect bottom="5" left="5" right="5" top="5">
+		<s:stroke>
+			<s:SolidColorStroke color="gray"/>
+		</s:stroke>
+	</s:Rect>
+
+	<s:Label text="Settings Screen for Sample module"
+			 color="gray" horizontalCenter="0" verticalCenter="0"/>
+</s:Group>

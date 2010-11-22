@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+	 Основной файл модуля, наследуется от VIModule (VDOM IDE Module). Не имеет визуального отображение, и является, по сути, реализацией
+	 интерфейса IVIModule для взаимодействия с IDE Core.
+
+-->
+
+<common:VIModule xmlns:common="net.vdombox.ide.common.*"
+				 xmlns:fx="http://ns.adobe.com/mxml/2009"
+				 xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<fx:Metadata> 
+		[ResourceBundle("Sample_General")] 
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import net.vdombox.ide.modules.sample.ApplicationFacade;
+
+			public static const MODULE_ID : String = "net.vdombox.ide.modules.Wysiwyg";
+
+			public static const MODULE_NAME : String = "Wysiwyg";
+
+			public static const VERSION : String = "0.0.1";
+
+			public static const TEAR_DOWN : String = "tearDown";
+
+//			 ID модуля, используется для его однозначной идентификации.
+			override public function get moduleID() : String
+			{
+				return MODULE_ID;
+			}
+
+//			 Имя модуля
+			override public function get moduleName() : String
+			{
+				return MODULE_NAME;
+			}
+
+//			 Версия, м.б. исользована для обновления модуля
+			override public function get version() : String
+			{
+				return VERSION;
+			}
+
+//			 Наличие у модуля панели инструментов
+			override public function get hasToolset() : Boolean
+			{
+				return true;
+			}
+
+//			 Наличие у модуля панели свойств
+			override public function get hasSettings() : Boolean
+			{
+				return false;
+			}
+
+//			 Наличие у модуля основной части
+			override public function get hasBody() : Boolean
+			{
+				return true;
+			}
+
+//			 Вызывается ядром сразу после успешной загрузки модуля
+			override public function startup() : void
+			{
+				facade = ApplicationFacade.getInstance( MODULE_ID );
+				ApplicationFacade( facade ).startup( this );
+			}
+
+//			 запрос на получение панели инструментов
+			override public function getToolset() : void
+			{
+				facade.sendNotification( ApplicationFacade.CREATE_TOOLSET );
+			}
+
+//			 запрос на получение панели свойств
+			override public function getSettingsScreen() : void
+			{
+				facade.sendNotification( ApplicationFacade.CREATE_SETTINGS_SCREEN );
+			}
+
+//			 запрос на получение основной части
+			override public function getBody() : void
+			{
+				facade.sendNotification( ApplicationFacade.CREATE_BODY );
+			}
+
+//			 запрос на получение настроек по умолчанию
+			override public function initializeSettings() : void
+			{
+				facade.sendNotification( ApplicationFacade.INITIALIZE_SETTINGS );
+			}
+
+//			 вызывается при остановки модуля
+			override public function tearDown() : void
+			{
+				dispatchEvent( new Event( TEAR_DOWN ) );
+			}
+		]]>
+	</fx:Script>
+</common:VIModule>

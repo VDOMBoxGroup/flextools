@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Панель инструментов-->
+<s:Group xmlns:components="net.vdombox.ide.common.components.*"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 height="100%">
+
+	<s:layout>
+		<s:HorizontalLayout/>
+	</s:layout>
+
+	<components:ToolsetButton id="toolsetButton"
+							  height="100%" icon="@Embed('icons/sample_icon.png')"
+							  label="{ resourceManager.getString( 'Sample_General', 'toolset_button_label' ) }"/>
+</s:Group>

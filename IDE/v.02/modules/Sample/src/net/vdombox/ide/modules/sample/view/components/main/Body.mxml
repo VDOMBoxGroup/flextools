@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Основная часть модуля, показвается в центральной части ядра-->
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  height="100%" width="100%"
+		  paddingBottom="7" paddingLeft="7" paddingRight="7" paddingTop="7">
+</s:HGroup>
