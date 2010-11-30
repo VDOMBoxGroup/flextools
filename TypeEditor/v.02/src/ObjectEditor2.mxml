@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:ns="net.vdombox.help_editor.view.essence.*"
+					   xmlns:vs="net.vdombox.help_editor.view.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects)  -->
+	</fx:Declarations>
+	<s:HGroup width="100%" height="100%" >
+		<mx:Accordion width="200" height="100%">
+			<s:NavigatorContent label="Accordion Button for Panel 1">
+				<mx:Label text="Accordion container panel 1"/>
+			</s:NavigatorContent>
+			
+			<s:NavigatorContent label="Accordion Button for Panel 2">
+				<mx:Label text="Accordion container panel 2"/>
+			</s:NavigatorContent>
+		</mx:Accordion>
+		<mx:TabNavigator  width="100%" height="100%">
+			
+			<s:NavigatorContent label="HTMLContainer">
+				<vs:ObjectView/>
+			</s:NavigatorContent>	
+			
+			<s:NavigatorContent label="Form">
+				<vs:ObjectView/>
+			</s:NavigatorContent>	
+			
+			<s:NavigatorContent label="Button">
+				<vs:ObjectView/>
+			</s:NavigatorContent>
+			
+			
+			<s:NavigatorContent label="Copy">
+				<vs:ObjectView/>
+			</s:NavigatorContent>	
+		</mx:TabNavigator>
+	</s:HGroup>
+</s:WindowedApplication>
