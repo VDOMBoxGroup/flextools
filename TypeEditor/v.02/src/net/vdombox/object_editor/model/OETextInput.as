@@ -1,4 +1,4 @@
-package net.vdombox.help_editor.model
+package net.vdombox.object_editor.model
 {
 	import mx.states.OverrideBase;
 	

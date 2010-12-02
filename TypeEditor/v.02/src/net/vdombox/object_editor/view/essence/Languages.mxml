@@ -13,7 +13,7 @@
 			import mx.events.DataGridEvent;
 			import mx.managers.PopUpManager;
 			
-			import net.vdombox.help_editor.view.popups.NewLanguage;
+			import net.vdombox.object_editor.view.popups.NewLanguage;
 			
 			private var _data : XML;
 			private var prentXML :XML;

@@ -14,7 +14,7 @@
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
-			import net.vdombox.help_editor.model.Language;
+			import net.vdombox.object_editor.model.Language;
 			
 			import spark.events.TextOperationEvent;
 			
