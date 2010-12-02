@@ -23,8 +23,8 @@
 //				arLibraries.removeAll();
 //				libCode.text = "";
 				
-				_data =  net.vdombox.object_editor.view.essence.Events.Userinterfaceevents[0];
-				if (!_data) _data = new XML("<Userinterfaceevents/>");
+//				_data =  net.vdombox.object_editor.view.essence.Events.Userinterfaceevents[0];
+//				if (!_data) _data = new XML("<Userinterfaceevents/>");
 				
 				for each(var child:XML in _data.children())
 				{
