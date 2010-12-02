@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			private var _data : XML;
+			
+			[Bindable]
+			public var arLibraries:ArrayCollection = new ArrayCollection();
+			
+			public function set  dataProvader(xml:XML):void
+			{
+				this.enabled = true;
+				arLibraries.removeAll();
+				libCode.text = "";
+				
+				_data =  xml.descendants("Libraries")[0];
+				if (!_data) _data = new XML("<Libraries/>");
+				
+				for each(var child:XML in _data.children())
+				{
+					if (child.name() == "Library")
+						arLibraries.addItem({label:child.name(), data:child[0]});
+					
+					if (arLibraries.length > 0)
+					{
+						libraries.selectedIndex = 0;
+						libCode.text = libraries.selectedItem["data"];
+					}
+				}
+			}
+			
+			private function changeLibrary(event:Event):void
+			{
+				libCode.text = List(event.target).selectedItem.data; // ["data"];
+			}
+ 			
+			private function saveChange():void
+			{
+//				_data = XML("<Libraries/>");
+				for (var i:String in _data.children())
+				{
+					delete _data.Library[0];
+				}
+				
+				if (arLibraries.length > 0)
+					arLibraries[libraries.selectedIndex]["data"] = libCode.text;
+				
+//				delete _data.Library[libraries.selectedIndex] //= XML("<![CDATA[" +libCode.text +"]" +"]" +">");
+				for (i in arLibraries)
+				{
+					var library :XML = new XML("<Library Target='Html'/>");
+					library.appendChild(XML("<![CDATA[" + arLibraries[i]["data"] +"]" +"]" +">"));
+					_data.appendChild(library);
+				}
+			}
+			
+			
+			private function addLibrary():void
+			{
+				arLibraries.addItem({label:"Library", data:""});
+				libCode.text = "";
+				libraries.selectedIndex = arLibraries.length - 1;
+				saveChange();
+			}
+			
+			private function deleteLibrary():void
+			{
+				if (libraries.selectedIndex != -1)
+				{
+					arLibraries.removeItemAt(libraries.selectedIndex);
+					
+					if (arLibraries.length)
+					{
+						libraries.selectedIndex = 0;
+						libCode.text = arLibraries[0]["data"]
+					}
+					else
+						libCode.text = "";
+					
+					saveChange();
+				}
+			}
+				
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%" height="100%">
+		<s:VGroup width="200" height="100%">
+			<s:List id="libraries" width="100%" height="100%" dataProvider="{arLibraries}"   change="{changeLibrary(event)}"/>
+			
+			<s:HGroup right="0" >
+				<s:Button label="Add" click="{addLibrary()}" />
+				<s:Button label="Delete" click="deleteLibrary()"/>
+			</s:HGroup>
+		</s:VGroup>
+		<s:VGroup width="100%" height="100%">	
+			<s:HGroup right="0">
+				<s:Label text="Target: 'HTML'"/>
+				
+			</s:HGroup>
+			<mx:TextArea  id="libCode"  width="100%" height="100%" change="{saveChange()}"/>
+		</s:VGroup>	
+	</s:HGroup>
+	
+</s:Group>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="230" height="104"
+			   creationComplete="creationComplete()" title="New language">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import spark.events.TextOperationEvent;
+			
+//			[bindable]
+			public var languageName:String = "";
+			private function creationComplete():void 
+			{
+				addEventListener(CloseEvent.CLOSE, closeHandler); 
+				PopUpManager.centerPopUp(this);
+			}
+			
+			private function closeHandler(cEvent:CloseEvent):void 
+			{
+//				languageName = lnName.text;
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function lnName_changeHandler(event:TextOperationEvent):void
+			{
+				// TODO Auto-generated method stub
+//				languageName = event.target.text;
+			}
+
+
+			protected function lnName_enterHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				languageName = lnName.text;
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+
+
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				languageName = lnName.text;
+				dispatchEvent( new CloseEvent( CloseEvent.CLOSE ) );
+			}
+
+		]]>
+	</fx:Script>
+	<s:Button label="Ok" x="143" y="39" click="button1_clickHandler(event)"/>
+	<s:Label  x="10" y="10" text="Input language like: en_US" width="203" height="25"/>
+	<s:TextInput id="lnName" x="6" y="39" change="lnName_changeHandler(event)"  enter="lnName_enterHandler(event)" width="128"/>
+</s:TitleWindow>
