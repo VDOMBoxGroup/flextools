@@ -3,14 +3,15 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:ns="net.vdombox.object_editor.view.essence.*"
-					   xmlns:vs="net.vdombox.object_editor.view.*">
+					   xmlns:vs="net.vdombox.object_editor.view.*" 
+					   minWidth="900" minHeight="600">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects)  -->
 	</fx:Declarations>
 	<s:HGroup width="100%" height="100%" >
-		<mx:VBox>
-			<s:Button/>
-		<mx:Accordion width="200" height="100%" >
+		<mx:VBox width="100%" height="100%" >
+			<s:Button label="Open"/>
+		<mx:Accordion width="150" height="100%" >
 			<s:NavigatorContent label="Accordion Button for Panel 1">
 				<mx:Label id="labll" text="Accordion container panel 1"/>
 				
