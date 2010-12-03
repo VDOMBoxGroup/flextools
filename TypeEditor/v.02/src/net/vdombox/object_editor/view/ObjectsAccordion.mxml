@@ -2,20 +2,27 @@
 
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100" height="100%">
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-<fx:Script>
-	<![CDATA[
-		
-	]]>
-</fx:Script>	
+	
+	<fx:Script>
+		<![CDATA[		
+			public static const CHOSE_OBJECT:String = "ChoseObject";
+			
+			public function choseObject():void
+			{			
+				dispatchEvent( new Event( CHOSE_OBJECT ) );
+			}		
+		]]>
+	</fx:Script>
+	
 	<s:layout>
 		<s:HorizontalLayout verticalAlign="top" horizontalAlign="left" />
 	</s:layout>
 	
-	<s:Panel title="Accordion Container" width="80" height="100%"
+	<s:Panel title="Accordion Container" width="100%" height="100%"
 			 color="0x000000" 
 			 borderAlpha="0.15">		
 		<s:layout>
@@ -23,8 +30,7 @@
 		</s:layout>
 		
 		<mx:Accordion id="accordion" color="0x323232" width="100%" height="100%">
-			<!-- Define each panel using a VBox container. -->
-			<s:NavigatorContent label="Standart" >
+			<s:NavigatorContent label="Standart" doubleClick="choseObject()">
 				<mx:Label text="11111" visible="false"/>
 			</s:NavigatorContent>			
 		</mx:Accordion>				

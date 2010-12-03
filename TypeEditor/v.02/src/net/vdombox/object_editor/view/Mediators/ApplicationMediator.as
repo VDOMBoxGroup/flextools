@@ -1,8 +1,10 @@
 /*
   Class ApplicationMediator register all Mediators
 */
-package view
+package net.vdombox.object_editor.view.Mediators
 {
+	import net.vdombox.object_editor.view.Mediators.AccordionMediator;
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.patterns.facade.Facade;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -10,7 +12,7 @@ package view
 	public class ApplicationMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "ApplicationMediator";
-		
+				
 		protected function get app():ObjectEditor2
 		{
 			return viewComponent as ObjectEditor2
@@ -20,8 +22,8 @@ package view
 		{			
 			super( NAME, viewComponent );	
 			
-			facade.registerMediator( new OpenMediator( app.controlPanel ) ); 		
-//			facade.registerMediator( new SaveMediator( app.fileContent ) );
+			facade.registerMediator( new OpenMediator( app.openButton ) ); 		
+			facade.registerMediator( new AccordionMediator( app.objAccordion ) );
 //			facade.registerMediator( new TXTMediator( app.fileContent ) );
 		}		
 	}

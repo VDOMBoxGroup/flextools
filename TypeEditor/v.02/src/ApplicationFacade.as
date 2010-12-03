@@ -5,14 +5,21 @@
  */
 package 
 {	
-	import controller.StartupCommand;
+	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
+	import net.vdombox.object_editor.controller.StartupCommand;
 	
+	import org.puremvc.as3.interfaces.*;
+	import org.puremvc.as3.patterns.facade.*;
 	import org.puremvc.as3.patterns.facade.Facade;
-
+	import org.puremvc.as3.patterns.proxy.*;
+	
     public class ApplicationFacade extends Facade
     {
-		public static const STARTUP:String 		   = "startup";
-		public static const LOAD_XML_FILES:String = "loadXMLFiles";				
+		public static const STARTUP:String		  			= "startup";
+		public static const LOAD_XML_FILES:String 			= "loadXMLFiles";	
+		public static const OPEN_OBJECT:String 	  			= "openObject";
+		public static const NEW_NAVIGATOR_CONTENT:String 	= "NewNavigatorContent";
+		
 		
         public static function getInstance() : ApplicationFacade 
 		{
@@ -26,11 +33,11 @@ package
 		override protected function initializeController( ) : void 
 		{
 			super.initializeController(); 
-			registerCommand( STARTUP,   StartupCommand );
-//			registerCommand( LOAD_FILE, OpenFileCommand );			
+			registerCommand( STARTUP, StartupCommand );
+			registerCommand( LOAD_XML_FILES, OpenDirectoryCommand );			
 		}
 		
-		public function startup( app:FilesLoading ):void
+		public function startup( app:ObjectEditor2 ):void
 		{
 			sendNotification( STARTUP, app );
 		}

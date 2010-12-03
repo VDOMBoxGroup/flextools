@@ -1,41 +1,34 @@
-package view
-{
-	import controller.OpenFileCommand;
-	
+package net.vdombox.object_editor.view.Mediators
+{	
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	
+	import net.vdombox.object_editor.view.ObjectsAccordion;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
-	import view.components.ControlPanel;
-
+	import spark.components.Button;
+	
 	public class OpenMediator extends Mediator implements IMediator
-	{
-		// Cannonical name of the Mediator
+	{		
 		public static const NAME:String = "OpenMediator";
-//		public static const OPEN_BUTTON_PRESSED :String = "openButtonPressed";
 		
-		/**
-		 * Constructor. 
-		 */
 		public function OpenMediator( viewComponent:Object ) 
-		{
-			trace("set lisenner");
-			super( NAME, viewComponent );					
-			controlPanel.addEventListener( ControlPanel.OPEN_BUTTON_PRESSED, load );	
-			trace("OpenMediator конец");
+		{			
+			super( NAME, viewComponent );
+
+			loadButton.addEventListener( MouseEvent.CLICK, load );			
 		}		
 		
 		private function load( event:Event = null ) : void
 		{
-			sendNotification( ApplicationFacade.LOAD_FILE );
+			sendNotification( ApplicationFacade.LOAD_XML_FILES );
 		}
 				
-		protected function get controlPanel():ControlPanel
+		protected function get loadButton():Button
 		{
-			return viewComponent as ControlPanel;
+			return viewComponent as Button;
 		}
-		
-		private var openFileCommand:OpenFileCommand;
 	}
 }
