@@ -1,7 +1,7 @@
 /*
 Class OETextInputProxy is a wrapper over the OETextInput
 */
-package net.vdombox.object_editor.model.proxy1
+package net.vdombox.object_editor.model.proxy
 {
 	import mx.rpc.IResponder;
 	
