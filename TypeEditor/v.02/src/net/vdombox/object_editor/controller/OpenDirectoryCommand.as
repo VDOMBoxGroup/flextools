@@ -4,40 +4,52 @@ package net.vdombox.object_editor.controller
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
-	import flash.net.FileReference;
-
+	import flash.net.SharedObject;
+	
 	import net.vdombox.object_editor.model.Item;
-	import net.vdombox.object_editor.view.ObjectsAccordion;
 	import net.vdombox.object_editor.view.mediators.AccordionMediator;
-
+	
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
-	import org.puremvc.as3.patterns.facade.*;
-	import org.puremvc.as3.patterns.facade.Facade;
-
-	import spark.components.NavigatorContent;	
+	
+	import spark.components.NavigatorContent;
 
 	public class OpenDirectoryCommand extends SimpleCommand
 	{
 		override public function execute( note:INotification ) :void    
 		{	
-
-
-			var directory:File = File.applicationStorageDirectory;				
-			try
-			{
-				directory.browseForDirectory("Select Directory");
-				directory.addEventListener(Event.SELECT, directorySelected);
-//TODO: write path into file. какой файл?    directory.Path;
+			var so:SharedObject = SharedObject.getLocal("directoryPath");
+			var directory:File = File.applicationStorageDirectory;
+			
+			if( so.data.path )
+			{					
+				directory.nativePath = so.data.path;
+				parseXMLFiles();
 			}
-			catch (error:Error)
-			{
-				trace("Failed:", error.message);
+			else
+			{							
+				try
+				{
+					directory.browseForDirectory("Select Directory");
+					directory.addEventListener(Event.SELECT, directorySelected);
+				}
+				catch (error:Error)
+				{
+					trace("Failed:", error.message);
+				}
 			}
-
+			
 			function directorySelected(event:Event):void 
 			{
-				directory = event.target as File;			
+				directory = event.target as File;
+				so.clear();
+				so.data.path = directory.nativePath;				
+				so.flush();				
+				parseXMLFiles();
+			}
+
+			function parseXMLFiles():void
+			{
 				//get content of folder
 				var filesArray:Array = directory.getDirectoryListing();
 				var accMediator:AccordionMediator = facade.retrieveMediator(AccordionMediator.NAME) as AccordionMediator;			
@@ -46,9 +58,8 @@ package net.vdombox.object_editor.controller
 				for(var i:uint = 0; i < filesArray.length; i++)
 				{	
 					var file:File = filesArray[i] as File;
-					if (!file.isDirectory && i != 0)
-					{						
-
+					if ( !file.isDirectory )
+					{
 						var stream:FileStream = new FileStream();   
 						stream.open(filesArray[i], FileMode.READ);
 						var data:String = stream.readUTFBytes(stream.bytesAvailable);
@@ -73,7 +84,6 @@ package net.vdombox.object_editor.controller
 			function getImgResourseID(information:XML):String
 			{
 				var iconValue:String  = information.Icon.toString();
-//				trace("iconValue: "+iconValue);
 				var phraseRE:RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:([-a-zA-Z0-9]*))/;
 
 				var imgResourseID:String = "";
@@ -91,9 +101,13 @@ package net.vdombox.object_editor.controller
 				var imgResourse:String = "";
 				var resource: XML = objectXML.Resources.Resource.(@ID == imgResourseID)[0];	
 				if (resource) 
+				{
 					imgResourse =  resource.toString();
+				}
 				else
+				{
 					trace("resource: " +imgResourseID+" not found!");
+				}
 
 				return imgResourse;
 			}
