@@ -12,15 +12,10 @@
 	
 <fx:Script>
 	<![CDATA[	
-		import net.vdombox.object_editor.view.Mediators.OpenMediator;
-		
+		import net.vdombox.object_editor.view.Mediators.OpenMediator;		
 		import org.puremvc.as3.patterns.facade.Facade;
-		
-		
-		private var facade:ApplicationFacade = ApplicationFacade.getInstance();
-		
-		
-		
+				
+		private var facade:ApplicationFacade = ApplicationFacade.getInstance();		
 	]]>
 </fx:Script>
 	

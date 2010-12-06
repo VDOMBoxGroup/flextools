@@ -17,7 +17,6 @@ package net.vdombox.object_editor.view.Mediators
 		public function OpenMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );
-
 			loadButton.addEventListener( MouseEvent.CLICK, load );			
 		}		
 		
