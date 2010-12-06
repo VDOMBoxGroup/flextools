@@ -24,7 +24,6 @@ package net.vdombox.object_editor.view.mediators
 			
 			facade.registerMediator( new OpenMediator( app.openButton ) ); 		
 			facade.registerMediator( new AccordionMediator( app.objAccordion ) );
-//			facade.registerMediator( new TXTMediator( app.fileContent ) );
 		}		
 	}
 }
