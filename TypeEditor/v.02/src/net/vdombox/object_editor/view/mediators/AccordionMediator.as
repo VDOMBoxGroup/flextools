@@ -1,4 +1,4 @@
-package net.vdombox.object_editor.view.mediators1
+package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
 	
