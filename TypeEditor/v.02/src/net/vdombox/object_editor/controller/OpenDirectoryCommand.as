@@ -7,7 +7,7 @@ package net.vdombox.object_editor.controller
 	import flash.net.FileReference;
 	
 	import net.vdombox.object_editor.model.Item;
-	import net.vdombox.object_editor.view.Mediators.AccordionMediator;
+	import net.vdombox.object_editor.view.mediators.AccordionMediator;
 	import net.vdombox.object_editor.view.ObjectsAccordion;
 	
 	import org.puremvc.as3.interfaces.INotification;
@@ -21,6 +21,8 @@ package net.vdombox.object_editor.controller
 	{
 		override public function execute( note:INotification ) :void    
 		{	
+			
+			
 			var directory:File = File.applicationStorageDirectory;				
 			try
 			{

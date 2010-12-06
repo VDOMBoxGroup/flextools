@@ -3,11 +3,9 @@
 */
 package net.vdombox.object_editor.controller
 {  
-	import net.vdombox.object_editor.view.Mediators.ApplicationMediator;
-	
+	import net.vdombox.object_editor.view.mediators.ApplicationMediator;	
 	import org.puremvc.as3.interfaces.*;
-	import org.puremvc.as3.patterns.command.*;
-    
+	import org.puremvc.as3.patterns.command.*;    
     
     public class StartupCommand extends SimpleCommand implements ICommand
     {
