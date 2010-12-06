@@ -2,15 +2,29 @@
 	xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:mx="library://ns.adobe.com/flex/mx"
-	doubleClickEnabled="true">
+	doubleClickEnabled="true" creationComplete="itemrenderer1_creationCompleteHandler(event)">
 
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.utils.Base64Decoder;
 			protected function pageClick(event:MouseEvent):void
 			{
 				Alert.show(txt.text);
 			}
+
+			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+				var decoder : Base64Decoder = new Base64Decoder();
+				decoder.decode( data.img );
+				
+				image.source = decoder.toByteArray();
+				image.visible = true;
+			}
+
 		]]>
 	</fx:Script>
 	
@@ -25,7 +39,7 @@
 	</s:layout>
 	
 	<s:HGroup verticalAlign="middle" paddingTop="0" paddingBottom="0" >
-		<!--mx:Image source="{data.img}" width="50" height="40" alpha.hovered=".5" click="pageClick(event)"/-->
+		<mx:Image  id="image"  width="20" height="20" alpha.hovered=".5" click="pageClick(event)" visible="false"/>
 		<s:Label id="txt" text="{data.label}" color.hovered="0x1313cd" color.selected="0x000000" verticalAlign="bottom"/>
 	</s:HGroup>
 	

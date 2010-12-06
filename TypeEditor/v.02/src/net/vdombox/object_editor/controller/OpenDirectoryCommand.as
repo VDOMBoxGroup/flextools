@@ -46,28 +46,56 @@ package net.vdombox.object_editor.controller
 				for(var i:uint = 0; i < filesArray.length; i++)
 				{	
 					var file:File = filesArray[i] as File;
-					if (!file.isDirectory)
+					if (!file.isDirectory && i != 0)
 					{						
-						if(i != 0)
-						{							
-							var stream:FileStream = new FileStream();   
-							stream.open(filesArray[i], FileMode.READ);
-							var data:String = stream.readUTFBytes(stream.bytesAvailable);
-							var myXML:XML = new XML(data);	
 
-							var item:Item = new Item;
-							item.groupName = myXML.Information.Category.toString();
-							item.label = myXML.Information.Name.toString();
+						var stream:FileStream = new FileStream();   
+						stream.open(filesArray[i], FileMode.READ);
+						var data:String = stream.readUTFBytes(stream.bytesAvailable);
+						var objectXML:XML = new XML(data);	
 
-							item.path  = file.nativePath;// or .url
-//							item.img = "view\pictures\picture.jpg";						
-//							facade.sendNotification(ApplicationFacade.NEW_NAVIGATOR_CONTENT, item);
+						var item:Item = new Item;
+						var information:XML = objectXML.Information[0];
 
-							accMediator.newContent(item);									
-							stream.close();												
-						}	
+						item.groupName = information.Category.toString();
+						item.label = information.Name.toString();
+
+						var imgResourseID:String =  getImgResourseID(information);
+						item.img = getImgResourse(objectXML, imgResourseID)	;
+						item.path  = file.nativePath;// or .url
+
+						accMediator.newContent(item);									
+						stream.close();												
 					}
 				}	
+			}
+
+			function getImgResourseID(information:XML):String
+			{
+				var iconValue:String  = information.Icon.toString();
+//				trace("iconValue: "+iconValue);
+				var phraseRE:RegExp = /^(?:#Res\(([-a-zA-Z0-9]*)\))|(?:([-a-zA-Z0-9]*))/;
+
+				var imgResourseID:String = "";
+				var matchResult : Array = iconValue.match( phraseRE );
+				if (matchResult)
+				{
+					imgResourseID = matchResult[1]
+//					trace("imgResourseID: "+imgResourseID);
+				}
+				return imgResourseID;
+			}
+
+			function getImgResourse(objectXML:XML, imgResourseID:String):String
+			{
+				var imgResourse:String = "";
+				var resource: XML = objectXML.Resources.Resource.(@ID == imgResourseID)[0];	
+				if (resource) 
+					imgResourse =  resource.toString();
+				else
+					trace("resource: " +imgResourseID+" not found!");
+
+				return imgResourse;
 			}
 		}
 	}	
