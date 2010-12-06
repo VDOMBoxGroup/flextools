@@ -1,7 +1,7 @@
 /*
 	Class LanguageProxy is a wrapper over the Language
  */
-package net.vdombox.object_editor.model.Proxy
+package net.vdombox.object_editor.model.proxy1
 {
 	import mx.rpc.IResponder;
 	

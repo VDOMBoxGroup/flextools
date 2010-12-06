@@ -1,7 +1,7 @@
 /*
 	Class ObjectProxy is a wrapper over the ObjectModel
  */
-package net.vdombox.object_editor.model.Proxy
+package net.vdombox.object_editor.model.proxy1
 {
 	import mx.rpc.IResponder;
 	
