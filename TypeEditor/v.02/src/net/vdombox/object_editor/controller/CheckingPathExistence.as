@@ -16,7 +16,7 @@ package net.vdombox.object_editor.controller
 			var so:SharedObject = SharedObject.getLocal("directoryPath");
 			if( so.data.path )
 			{				
-				ApplicationFacade.LOAD_XML_FILES;
+				facade.sendNotification( ApplicationFacade.LOAD_XML_FILES );
 			}			
 		}
 	}
