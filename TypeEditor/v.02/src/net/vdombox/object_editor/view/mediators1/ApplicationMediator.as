@@ -1,9 +1,9 @@
 /*
   Class ApplicationMediator register all Mediators
 */
-package net.vdombox.object_editor.view.Mediators
+package net.vdombox.object_editor.view.mediators1
 {
-	import net.vdombox.object_editor.view.Mediators.AccordionMediator;
+	import net.vdombox.object_editor.view.mediators1.AccordionMediator;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.patterns.facade.Facade;
