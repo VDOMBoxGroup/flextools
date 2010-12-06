@@ -5,24 +5,24 @@ package net.vdombox.object_editor.controller
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.net.FileReference;
-	
+
 	import net.vdombox.object_editor.model.Item;
-	import net.vdombox.object_editor.view.mediators.AccordionMediator;
 	import net.vdombox.object_editor.view.ObjectsAccordion;
-	
+	import net.vdombox.object_editor.view.mediators.AccordionMediator;
+
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 	import org.puremvc.as3.patterns.facade.*;
 	import org.puremvc.as3.patterns.facade.Facade;
-	
+
 	import spark.components.NavigatorContent;	
-	
+
 	public class OpenDirectoryCommand extends SimpleCommand
 	{
 		override public function execute( note:INotification ) :void    
 		{	
-			
-			
+
+
 			var directory:File = File.applicationStorageDirectory;				
 			try
 			{
@@ -34,7 +34,7 @@ package net.vdombox.object_editor.controller
 			{
 				trace("Failed:", error.message);
 			}
-			
+
 			function directorySelected(event:Event):void 
 			{
 				directory = event.target as File;			
@@ -42,10 +42,11 @@ package net.vdombox.object_editor.controller
 				var filesArray:Array = directory.getDirectoryListing();
 				var accMediator:AccordionMediator = facade.retrieveMediator(AccordionMediator.NAME) as AccordionMediator;			
 				accMediator.removeAllObjects();
-				
+
 				for(var i:uint = 0; i < filesArray.length; i++)
-				{					
-					if (!filesArray[i].isDirectory)
+				{	
+					var file:File = filesArray[i] as File;
+					if (!file.isDirectory)
 					{						
 						if(i != 0)
 						{							
@@ -53,14 +54,15 @@ package net.vdombox.object_editor.controller
 							stream.open(filesArray[i], FileMode.READ);
 							var data:String = stream.readUTFBytes(stream.bytesAvailable);
 							var myXML:XML = new XML(data);	
-							
+
 							var item:Item = new Item;
 							item.groupName = myXML.Information.Category.toString();
 							item.label = myXML.Information.Name.toString();
-//							item.path  = filesArray[i].
+
+							item.path  = file.nativePath;// or .url
 //							item.img = "view\pictures\picture.jpg";						
 //							facade.sendNotification(ApplicationFacade.NEW_NAVIGATOR_CONTENT, item);
-												
+
 							accMediator.newContent(item);									
 							stream.close();												
 						}	
@@ -70,3 +72,4 @@ package net.vdombox.object_editor.controller
 		}
 	}	
 }
+
