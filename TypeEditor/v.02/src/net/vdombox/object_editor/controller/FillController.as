@@ -9,7 +9,7 @@ package net.vdombox.object_editor.controller
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 
-	public class CreateNovigatorsController extends SimpleCommand 
+	public class FillController extends SimpleCommand 
 	{
 		override public function execute( note:INotification ) :void
 		{
