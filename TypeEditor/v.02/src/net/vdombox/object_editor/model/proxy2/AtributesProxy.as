@@ -1,7 +1,7 @@
 /*
 	Class AtributesProxy is a wrapper over the Atributes
  */
-package net.vdombox.object_editor.model.proxy
+package net.vdombox.object_editor.model.proxy2
 {
 	import mx.rpc.IResponder;
 	

@@ -1,7 +1,7 @@
 /*
 	Class EventsProxy is a wrapper over the Events
  */
-package net.vdombox.object_editor.model.proxy
+package net.vdombox.object_editor.model.proxy2
 {
 	import mx.rpc.IResponder;
 	
