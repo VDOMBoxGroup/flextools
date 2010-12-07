@@ -1,7 +1,7 @@
 /*
 	Class ActionsProxy is a wrapper over the Actions
  */
-package net.vdombox.object_editor.model.proxy2
+package net.vdombox.object_editor.model.proxy
 {
 	import mx.rpc.IResponder;
 	

@@ -1,7 +1,7 @@
 /*
 	Class LibrariesProxy is a wrapper over the Libraries
  */
-package net.vdombox.object_editor.model.proxy2
+package net.vdombox.object_editor.model.proxy
 {
 	import mx.rpc.IResponder;
 	
