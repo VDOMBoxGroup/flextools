@@ -14,9 +14,10 @@ package net.vdombox.object_editor.controller
 		override public function execute(note:INotification):void    
 		{			
 			var so:SharedObject = SharedObject.getLocal("directoryPath");
-			if( so.data.path )
+			var path:String = so.data.path;
+			if( path )
 			{				
-				facade.sendNotification( ApplicationFacade.LOAD_XML_FILES );
+				facade.sendNotification( ApplicationFacade.PARSE_XML_FILES, path );
 			}			
 		}
 	}

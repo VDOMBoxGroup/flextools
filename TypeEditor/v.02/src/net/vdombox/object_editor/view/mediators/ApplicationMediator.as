@@ -3,9 +3,11 @@
 */
 package net.vdombox.object_editor.view.mediators
 {
+	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.view.mediators.AccordionMediator;
 	
 	import org.puremvc.as3.interfaces.IMediator;
+	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.facade.Facade;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 
@@ -24,6 +26,6 @@ package net.vdombox.object_editor.view.mediators
 			
 			facade.registerMediator( new OpenMediator( app.openButton ) ); 		
 			facade.registerMediator( new AccordionMediator( app.objAccordion ) );
-		}		
+		}
 	}
 }

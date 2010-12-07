@@ -12,6 +12,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.view.ObjectsAccordion;
 	
 	import org.puremvc.as3.interfaces.IMediator;
+	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
 	import spark.components.List;
@@ -26,7 +27,7 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME, viewComponent );			
 			objAccordion.addEventListener( ObjectsAccordion.CHOSE_OBJECT, openObject );
-//			facade.addEventListener( ApplicationFacade.NEW_NAVIGATOR_CONTENT, newContent );			
+//			objAccordion.addEventListener( ApplicationFacade.NEW_NAVIGATOR_CONTENT, newContent );			
 		}
 		
 		public function openObject( event:Event = null ) : void
@@ -34,7 +35,7 @@ package net.vdombox.object_editor.view.mediators
 			sendNotification( ApplicationFacade.OPEN_OBJECT );
 		}	
 			
-//TODO: загрузка не по такому параметру, по note		
+//TODO: загрузка не по такому параметру, по note?		
 		public function newContent( item:Item ) : void
 		{
 			var list:AccordionNavigatorContent =  objAccordion.getObjectdByName(item.groupName) as AccordionNavigatorContent;
@@ -57,6 +58,25 @@ package net.vdombox.object_editor.view.mediators
 		public function removeAllObjects():void
 		{
 			objAccordion.removeAllObjects();
+		}
+		
+		override public function listNotificationInterests():Array 
+		{			
+			return [ ApplicationFacade.NEW_NAVIGATOR_CONTENT,
+					 ApplicationFacade.REMOVE_ALL_OBJECT ];
+		}
+		
+		override public function handleNotification( note:INotification ):void 
+		{
+			switch ( note.getName() ) 
+			{				
+				case ApplicationFacade.NEW_NAVIGATOR_CONTENT:
+					newContent(note.getBody() as Item);
+					break;
+				case ApplicationFacade.REMOVE_ALL_OBJECT:
+					removeAllObjects();
+					break;
+			}
 		}
 	}
 }

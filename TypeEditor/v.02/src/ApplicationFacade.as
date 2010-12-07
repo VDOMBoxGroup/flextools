@@ -5,6 +5,7 @@
  */
 package 
 {	
+	import net.vdombox.object_editor.controller.CreateNovigatorsController;
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.controller.StartupCommand;
 	
@@ -15,12 +16,13 @@ package
 	
     public class ApplicationFacade extends Facade
     {
-		public static const STARTUP:String		  			= "startup";
-		public static const LOAD_XML_FILES:String 			= "loadXMLFiles";	
-		public static const OPEN_OBJECT:String 	  			= "openObject";
-		public static const NEW_NAVIGATOR_CONTENT:String 	= "NewNavigatorContent";
-		
-		
+		public static const STARTUP					:String	= "startup";
+		public static const LOAD_XML_FILES			:String = "loadXMLFiles";	
+		public static const OPEN_OBJECT				:String = "openObject";
+		public static const NEW_NAVIGATOR_CONTENT	:String = "NewNavigatorContent";
+		public static const REMOVE_ALL_OBJECT		:String	= "RemoveAllObjects";
+		public static const PARSE_XML_FILES			:String	= "ParseXMLFiles";
+			
         public static function getInstance() : ApplicationFacade 
 		{
             if ( instance == null )
@@ -34,7 +36,8 @@ package
 		{
 			super.initializeController(); 
 			registerCommand( STARTUP, StartupCommand );
-			registerCommand( LOAD_XML_FILES, OpenDirectoryCommand );			
+			registerCommand( LOAD_XML_FILES,  OpenDirectoryCommand );	
+			registerCommand( PARSE_XML_FILES, CreateNovigatorsController );			
 		}
 		
 		public function startup( app:ObjectEditor2 ):void
