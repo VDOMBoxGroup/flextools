@@ -24,14 +24,23 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		public function newObjectTypeVO(xml:XML):ObjectTypeVO
 		{				
 			var objType: ObjectTypeVO = new ObjectTypeVO;
-//TODO: delete
-			objType.data = xml; 			
-			objType.information = objType.data.Information;
+			var information: XML = xml.Information[0];
+			objType.name 		= information.Name;
+			objType.category 	= information.Category;
+			objType.className 	= information.ClassName;
+			objType.id		 	= information.ID;			
+			objType.dynamic		= information.Dynamic.toString() == "1";
+			objType.moveable	= information.Moveable.toString() == "1";
+			//исправить
+			objType.resizable	= information.Resizable;	
+			objType.container	= information.Container;	
+			objType.version		= information.Version;	
+			objType.interfaceType	= information.InterfaceType;	
+			objType.optimizationPriority	= information.OptimizationPriority;	
 			
-			objType.name 		= objType.data.Information.Name//xml.Type.Information.Name;
-			objType.category 	= objType.information.Category;
-			objType.className 	= objType.information.ClassName;
-			objType.id		 	= objType.information.ID;
+			
+			
+			objType.sourceCode	= xml.SourceCode;
 			
 			_objectTypeList[objType.id] = objType;
 			return objType;

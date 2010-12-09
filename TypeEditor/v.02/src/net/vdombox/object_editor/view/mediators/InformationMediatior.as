@@ -20,7 +20,7 @@ package net.vdombox.object_editor.view.mediators
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			information.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
-			information.addEventListener( FlexEvent.SHOW, showInformation );
+//			information.addEventListener( FlexEvent.SHOW, showInformation );
 		}
 		
 		private function showInformation(event: FlexEvent): void
@@ -48,12 +48,16 @@ package net.vdombox.object_editor.view.mediators
 		{	
 //			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 //			var objType: ObjectTypeVO = objTypeProxy.getObjectTypeVO( inf.ID );
-		
-			information.fname.text 		= objectTypeVO.name;
-			information.fClassName.text = objectTypeVO.className;
-			information.fID.text 		= objectTypeVO.id;
-			information.fCategory.text	= objectTypeVO.category;
+			
+//TODO запускается каждый раз как переходим на вкладку!!!!!!!!
+			
+			information.fname.text 			= objectTypeVO.name;
+			information.fClassName.text		= objectTypeVO.className;
+			information.fID.text 			= objectTypeVO.id;
+			information.fCategory.text		= objectTypeVO.category;
+			information.fDynamic.selected	=  objectTypeVO.dynamic;
 			trace("compliteInformation");
+			
 		}		
 		
 		protected function get information():Information

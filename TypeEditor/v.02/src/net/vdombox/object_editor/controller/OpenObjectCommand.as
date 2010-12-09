@@ -14,7 +14,7 @@ package net.vdombox.object_editor.controller
 	import org.puremvc.as3.patterns.command.SimpleCommand;
 
 	public class OpenObjectCommand extends SimpleCommand
-	{   	
+	{   
 		override public function execute(note:INotification):void    
 		{
 			var item:Item = note.getBody() as Item;			
