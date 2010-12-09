@@ -5,6 +5,7 @@ package net.vdombox.object_editor.view.mediators
 {
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.mediators.AccordionMediator;
 	
 	import org.puremvc.as3.interfaces.IMediator;
@@ -16,7 +17,8 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME			:String = "ApplicationMediator";				
 		public static const LOAD_INFORMATION:String = "LoadInformation";
-				
+			
+		
 		public function ApplicationMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );	
@@ -28,8 +30,11 @@ package net.vdombox.object_editor.view.mediators
 		
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
 		{			
-			app.addObjectView( objTypeVO );
-			trace("newObjectView");
+			var objView:ObjectView = new ObjectView();
+			//TODO: add id of objTypeVO
+			objView.label = objTypeVO.name;					
+			app.tabNavigator.addChild(objView);
+			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );					
 		}
 		
 		override public function listNotificationInterests():Array 

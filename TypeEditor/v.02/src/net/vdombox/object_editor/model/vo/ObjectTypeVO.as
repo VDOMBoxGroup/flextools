@@ -2,9 +2,11 @@ package net.vdombox.object_editor.model.vo
 {
 	import flash.utils.Dictionary;
 	import flash.xml.XMLNode;
+	
+	import mx.utils.UIDUtil;
 
 	public class ObjectTypeVO
-	{
+	{		
 		public var data:XML;
 		public var information:XMLList;		
 		
@@ -24,9 +26,7 @@ package net.vdombox.object_editor.model.vo
 		public var id			:String = "";
 					
 		public function ObjectTypeVO()
-		{
-			
-		}
-		
+		{				
+		}		
 	}
 }

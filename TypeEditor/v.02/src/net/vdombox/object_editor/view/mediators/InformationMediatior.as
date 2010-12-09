@@ -1,5 +1,7 @@
 package net.vdombox.object_editor.view.mediators
 {
+	import mx.events.FlexEvent;
+	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.essence.Information;
@@ -11,10 +13,19 @@ package net.vdombox.object_editor.view.mediators
 	public class InformationMediatior extends Mediator implements IMediator
 	{
 		public static const NAME:String = "InformationMediatior";
+		private var objectTypeVO:ObjectTypeVO;
 		
-		public function InformationMediatior( viewComponent:Object ) 
+		public function InformationMediatior( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
-			super( NAME, viewComponent );			
+			super( NAME+objTypeVO.id, viewComponent );
+			this.objectTypeVO = objTypeVO;	
+			information.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
+			information.addEventListener( FlexEvent.SHOW, showInformation );
+		}
+		
+		private function showInformation(event: FlexEvent): void
+		{
+			compliteInformation();
 		}
 				
 		override public function listNotificationInterests():Array 
@@ -28,20 +39,21 @@ package net.vdombox.object_editor.view.mediators
 			{				
 				case ApplicationMediator.LOAD_INFORMATION:
 					trace("InformationMediatior");
-					compliteInformation(note.getBody() as XML);
+					compliteInformation();
 					break;				
 			}
 		}
 		
-		protected function compliteInformation( inf:XML):void
+		protected function compliteInformation( ):void
 		{	
-			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
-			var objType: ObjectTypeVO = objTypeProxy.getObjectTypeVO( inf.ID );
+//			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
+//			var objType: ObjectTypeVO = objTypeProxy.getObjectTypeVO( inf.ID );
 		
-			information.fname.text 		= inf.Name;
-			information.fClassName.text = inf.ClassName;
-			information.fID.text 		= inf.ID;
-			information.fCategory.text	= inf.Category;
+			information.fname.text 		= objectTypeVO.name;
+			information.fClassName.text = objectTypeVO.className;
+			information.fID.text 		= objectTypeVO.id;
+			information.fCategory.text	= objectTypeVO.category;
+			trace("compliteInformation");
 		}		
 		
 		protected function get information():Information

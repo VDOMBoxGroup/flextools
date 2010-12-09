@@ -21,14 +21,7 @@
 				
 		private var facade:ApplicationFacade = ApplicationFacade.getInstance();	
 		
-		public function addObjectView( objTypeVO:ObjectTypeVO ):void
-		{
-			var objView:ObjectView = new ObjectView;
-//TODO: add id of objTypeVO
-			objView.label = objTypeVO.name;
-			facade.registerMediator( new ObjectViewMediator( objView ) );		
-			tabNavigator.addChild(objView);
-		}
+		
 	]]>
 </fx:Script>
 	

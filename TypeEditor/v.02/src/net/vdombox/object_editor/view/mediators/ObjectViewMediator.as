@@ -3,6 +3,7 @@ package net.vdombox.object_editor.view.mediators
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
+	import net.vdombox.object_editor.view.essence.Information;
 	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
@@ -11,19 +12,23 @@ package net.vdombox.object_editor.view.mediators
 	public class ObjectViewMediator extends Mediator implements IMediator
 	{
 		public static const NAME:String = "ObjectViewMediator";
+		private var objectTypeVO:ObjectTypeVO;
 			
-		public function ObjectViewMediator( viewComponent:Object ) 
-		{			
-			super( NAME, viewComponent );		
-					
+		public function ObjectViewMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
+		{	
+			super( NAME+objTypeVO.id, viewComponent );		
+			this.objectTypeVO = objTypeVO;			
+			var information:Information  = new Information();
+			objectView.tabNavigator.addChild(information);
+			
+			
 			objectTypeProxy = ObjectTypeProxy( facade.retrieveProxy( ObjectTypeProxy.NAME ) );
-			facade.registerMediator( new InformationMediatior( objectView.information ) );
+			facade.registerMediator( new InformationMediatior( information, objTypeVO ) );
 		}
 		
 		protected function compliteObject( objTypeVO: ObjectTypeVO ):void
 		{
-//TODO: registerMediator and retrieveMediator with GUID
-			
+//TODO: registerMediator and retrieveMediator with GUID			
 			var infMediator:InformationMediatior = InformationMediatior( facade.retrieveMediator( InformationMediatior.NAME ) );
 //			infMediator.
 		}

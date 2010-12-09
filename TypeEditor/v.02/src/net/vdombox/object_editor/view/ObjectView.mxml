@@ -6,7 +6,34 @@
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<mx:TabNavigator >
+	<fx:Script>
+		<![CDATA[
+			import mx.containers.TabNavigator;
+			private var _tabNavigator:TabNavigator;
+			public function get tabNavigator():TabNavigator
+			{
+				if (!_tabNavigator)
+				{
+					_tabNavigator = new TabNavigator();
+					addElement(_tabNavigator)
+				}
+				return _tabNavigator;
+			}
+			
+			public function set  tabNavigator(obj:TabNavigator):void
+			{
+				if (!_tabNavigator)
+				{
+					_tabNavigator = new TabNavigator();
+					addElement(_tabNavigator)
+				} 
+				 _tabNavigator = obj;
+			}
+			
+		]]>
+	</fx:Script>
+		
+	<!--mx:TabNavigator id="tabNavigator" >
 		
 		<s:NavigatorContent label="Information">
 			<ns:Information id="information"/>	</s:NavigatorContent>
@@ -34,5 +61,5 @@
 		<s:NavigatorContent label="Events">
 			<ns:Events/> 	</s:NavigatorContent>
 		
-	</mx:TabNavigator>
+	</mx:TabNavigator-->
 </s:NavigatorContent>
