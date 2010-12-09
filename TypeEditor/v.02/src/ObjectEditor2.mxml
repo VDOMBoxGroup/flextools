@@ -5,6 +5,7 @@
 					   xmlns:ns="net.vdombox.object_editor.view.essence.*"
 					   xmlns:vs="net.vdombox.object_editor.view.*" 
 					   minWidth="900" minHeight="600" xmlns:local="*"
+					   xmlns:containers="flexlib.containers.*"
 					   creationComplete="facade.startup(this)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects)  -->
@@ -25,14 +26,16 @@
 	]]>
 </fx:Script>
 	
-		<mx:HDividedBox width="100%" height="100%">
+	<mx:HDividedBox width="100%" height="100%">
 		<mx:VBox  height="100%" width="150" >
 			<s:Button id="openButton" label="Open" />
 			<vs:ObjectsAccordion id="objAccordion" width="100%"/>		
 		</mx:VBox>
 		
-		<mx:TabNavigator id="tabNavigator" width="100%" height="100%">
-			<!--vs:ObjectView/-->
-		</mx:TabNavigator>
-			</mx:HDividedBox> 
+		<containers:SuperTabNavigator id="tabNavigator" width="100%" height="100%"
+									  stopScrollingEvent="{MouseEvent.MOUSE_OUT}"
+									  startScrollingEvent="{MouseEvent.MOUSE_OVER}">
+			<vs:ObjectView/>
+		</containers:SuperTabNavigator>
+	</mx:HDividedBox> 
 </s:WindowedApplication>
