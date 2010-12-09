@@ -3,8 +3,9 @@
 */
 package net.vdombox.object_editor.controller
 {
-
+    import net.vdombox.object_editor.model.proxy.FileProxy;
     import net.vdombox.object_editor.model.proxy.ItemProxy;
+    import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
     import net.vdombox.object_editor.view.mediators.ApplicationMediator;
     
     import org.puremvc.as3.interfaces.*;
@@ -20,6 +21,8 @@ package net.vdombox.object_editor.controller
 // Create and register proxy
 //			facade.registerProxy(new OpenFileProxy());
 			facade.registerProxy(new ItemProxy());
+			facade.registerProxy(new ObjectTypeProxy());
+			facade.registerProxy(new FileProxy());
 			facade.registerMediator( new ApplicationMediator( note.getBody() ) );			
 		} 
     }

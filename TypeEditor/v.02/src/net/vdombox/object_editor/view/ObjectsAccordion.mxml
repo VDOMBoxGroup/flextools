@@ -12,20 +12,14 @@
 	
 	<fx:Script>
 		<![CDATA[		
-			public static const CHOSE_OBJECT:String = "ChoseObject";
-			
-			public function choseObject():void
-			{			
-				dispatchEvent( new Event( CHOSE_OBJECT ) );
-			}
-			
+						
 			public function  addObject(object:DisplayObject):void
 			{
 				accordion.addChild(object);
 				accordion.validateNow();				
 			}	
 			
-			public function   getObjectdByName(name:String ):DisplayObject
+			public function  getObjectdByName(name:String ):DisplayObject
 			{
 				return accordion.getChildByName(name);
 			}

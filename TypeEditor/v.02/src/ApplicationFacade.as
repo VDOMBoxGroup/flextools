@@ -7,6 +7,7 @@ package
 {	
 	import net.vdombox.object_editor.controller.FillController;
 	import net.vdombox.object_editor.controller.OpenDirectoryCommand;
+	import net.vdombox.object_editor.controller.OpenObjectCommand;
 	import net.vdombox.object_editor.controller.StartupCommand;
 	
 	import org.puremvc.as3.interfaces.*;
@@ -22,7 +23,8 @@ package
 		public static const NEW_NAVIGATOR_CONTENT	:String = "NewNavigatorContent";
 		public static const REMOVE_ALL_OBJECT		:String	= "RemoveAllObjects";
 		public static const PARSE_XML_FILES			:String	= "ParseXMLFiles";
-			
+		public static const OBJECT_COMPLIT			:String	= "ObjectComplit";
+				
         public static function getInstance() : ApplicationFacade 
 		{
             if ( instance == null )
@@ -35,9 +37,10 @@ package
 		override protected function initializeController( ) : void 
 		{
 			super.initializeController(); 
-			registerCommand( STARTUP, StartupCommand );
-			registerCommand( LOAD_XML_FILES,  OpenDirectoryCommand );	
-			registerCommand( PARSE_XML_FILES, FillController );			
+			registerCommand( STARTUP,			StartupCommand );
+			registerCommand( LOAD_XML_FILES,  	OpenDirectoryCommand );	
+			registerCommand( PARSE_XML_FILES, 	FillController );
+			registerCommand( OPEN_OBJECT, 		OpenObjectCommand );
 		}
 		
 		public function startup( app:ObjectEditor2 ):void

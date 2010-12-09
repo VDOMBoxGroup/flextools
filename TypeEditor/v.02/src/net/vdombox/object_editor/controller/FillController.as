@@ -27,7 +27,7 @@ package net.vdombox.object_editor.controller
 				var file:File = filesArray[i] as File;
 				if ( !file.isDirectory )
 				{				
-					var item:Item = itemProxy.getItem(file) ;
+					var item:Item = itemProxy.getItem(file) ;					
 					facade.sendNotification(ApplicationFacade.NEW_NAVIGATOR_CONTENT, item);												
 				}
 			}	

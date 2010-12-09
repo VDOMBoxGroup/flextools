@@ -48,7 +48,7 @@ package net.vdombox.object_editor.model
 			return _path;
 		}
 				
-		public function set path(img:String):void
+		public function set path(path:String):void
 		{
 			_path = path;
 		}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:WindowedApplication  xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:ns="net.vdombox.object_editor.view.essence.*"
@@ -12,13 +12,25 @@
 	
 <fx:Script>
 	<![CDATA[	
-		import net.vdombox.object_editor.view.mediators.OpenMediator;		
+		import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+		import net.vdombox.object_editor.view.ObjectView;
+		import net.vdombox.object_editor.view.mediators.ObjectViewMediator;
+		import net.vdombox.object_editor.view.mediators.OpenMediator;
+		
 		import org.puremvc.as3.patterns.facade.Facade;
 				
-		private var facade:ApplicationFacade = ApplicationFacade.getInstance();		
+		private var facade:ApplicationFacade = ApplicationFacade.getInstance();	
+		
+		public function addObjectView( objTypeVO:ObjectTypeVO ):void
+		{
+			var objView:ObjectView = new ObjectView;
+//TODO: add id of objTypeVO
+			objView.label = objTypeVO.name;
+			facade.registerMediator( new ObjectViewMediator( objView ) );		
+			tabNavigator.addChild(objView);
+		}
 	]]>
 </fx:Script>
-	
 	
 		<mx:HDividedBox width="100%" height="100%">
 		<mx:VBox  height="100%" width="150" >
@@ -27,11 +39,7 @@
 		</mx:VBox>
 		
 		<mx:TabNavigator id="tabNavigator" width="100%" height="100%">
-			
-			<s:NavigatorContent label="HTMLContainer">
-				<vs:ObjectView/>
-			</s:NavigatorContent>	
-				
+			<!--vs:ObjectView/-->
 		</mx:TabNavigator>
 			</mx:HDividedBox> 
 </s:WindowedApplication>

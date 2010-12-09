@@ -5,18 +5,22 @@
 	doubleClickEnabled="true" creationComplete="itemrenderer1_creationCompleteHandler(event)">
 
 	<fx:Script>
-		<![CDATA[
+		<![CDATA[			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.utils.Base64Decoder;
-			protected function pageClick(event:MouseEvent):void
-			{
-				Alert.show(txt.text);
+			
+			public static const CHOSE_OBJECT:String = "ChoseObject";
+			public static const NAME		:String = "ListItemRenderer";
+			
+			public function choseObject():void
+			{			
+				dispatchEvent( new Event(MouseEvent.DOUBLE_CLICK ) );
 			}
 
 			protected function itemrenderer1_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
+				// TODO: Auto-generated method stub
 				
 				var decoder : Base64Decoder = new Base64Decoder();
 				decoder.decode( data.img );
@@ -24,7 +28,6 @@
 				image.source = decoder.toByteArray();
 				image.visible = true;
 			}
-
 		]]>
 	</fx:Script>
 	
@@ -38,8 +41,8 @@
 		<s:VerticalLayout/>
 	</s:layout>
 	
-	<s:HGroup verticalAlign="middle" paddingTop="0" paddingBottom="0" >
-		<mx:Image  id="image"  width="20" height="20" alpha.hovered=".5" click="pageClick(event)" visible="false"/>
+	<s:HGroup verticalAlign="middle" paddingTop="0" paddingBottom="0"  doubleClickEnabled="true" >
+		<mx:Image  id="image"  width="20" height="20" alpha.hovered=".5" visible="false"/>
 		<s:Label id="txt" text="{data.label}" color.hovered="0x1313cd" color.selected="0x000000" verticalAlign="bottom"/>
 	</s:HGroup>
 	

@@ -1,5 +1,5 @@
 /*
-class CheckingPathExistence checking the existence of path and sends a notification to execute commands LOAD_XML_FILES
+	Class CheckingPathExistence checking the existence of path and sends a notification to execute commands LOAD_XML_FILES
 */
 package net.vdombox.object_editor.controller
 {

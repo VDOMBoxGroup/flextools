@@ -10,6 +10,7 @@ package net.vdombox.object_editor.view.mediators
 	
 	import spark.components.Button;
 	
+	//TODO: rename to loadButtonMediator
 	public class OpenMediator extends Mediator implements IMediator
 	{		
 		public static const NAME:String = "OpenMediator";

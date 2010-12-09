@@ -1,6 +1,7 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import mx.core.ClassFactory;
 	import mx.states.AddChild;
@@ -19,6 +20,7 @@ package net.vdombox.object_editor.view.mediators
 	import spark.components.NavigatorContent;
 	import spark.components.supportClasses.ItemRenderer;
 
+//TODO: rename class to ObjectsAccordionMediator
 	public class AccordionMediator extends Mediator implements IMediator
 	{		
 		public static const NAME:String = "AccordionMediator";			
@@ -26,13 +28,14 @@ package net.vdombox.object_editor.view.mediators
 		public function AccordionMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );			
-			objAccordion.addEventListener( ObjectsAccordion.CHOSE_OBJECT, openObject );
-//			objAccordion.addEventListener( ApplicationFacade.NEW_NAVIGATOR_CONTENT, newContent );			
+			objAccordion.addEventListener( MouseEvent.DOUBLE_CLICK, openObject );			
 		}
 		
-		public function openObject( event:Event = null ) : void
+		public function openObject( event:MouseEvent = null ) : void
 		{
-			sendNotification( ApplicationFacade.OPEN_OBJECT );
+			var accordioNavigatorContent:AccordionNavigatorContent =  objAccordion.accordion.selectedChild as AccordionNavigatorContent;
+			var object:Item = accordioNavigatorContent.selectedObject as Item;
+			sendNotification( ApplicationFacade.OPEN_OBJECT, object);
 		}	
 			
 //TODO: загрузка не по такому параметру, по note?		
@@ -47,13 +50,13 @@ package net.vdombox.object_editor.view.mediators
 				 list.label = item.groupName;
 				 objAccordion.addObject(list);
 			}			
-			list.appendObject(item);
+			list.appendObject(item);			
 		}
 	
 		protected function get objAccordion():ObjectsAccordion
 		{
 			return viewComponent as ObjectsAccordion;
-		}	
+		}		
 		
 		public function removeAllObjects():void
 		{
