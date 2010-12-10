@@ -44,7 +44,7 @@ package net.vdombox.object_editor.view.mediators
 			objectView.validateNow();
 		}
 
-		private function saveObjectType():void
+		private function saveObjectType(event:MouseEvent):void
 		{
 			facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objectTypeVO ); 
 		}
