@@ -1,11 +1,13 @@
 package net.vdombox.object_editor.view.mediators
 {
+	import flash.events.MouseEvent;
+	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.SourceCode;
-
+	
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -36,34 +38,17 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
 
+
+			objectView.saveObjectTypeButton.addEventListener( MouseEvent.CLICK, saveObjectType );
+			trace("ObjectViewMediator constructor");
 			objectView.validateNow();
-			trace("ObjectViewMediator constructor: " + objTypeVO.id);
 		}
 
-		protected function compliteObject( objTypeVO: ObjectTypeVO ):void
+		private function saveObjectType():void
 		{
-//TODO: registerMediator and retrieveMediator with GUID			
-			var infMediator:InformationMediator = InformationMediator( facade.retrieveMediator( InformationMediator.NAME ) );
-//			infMediator.
-			trace("я тут? o_O");
+			facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objectTypeVO ); 
 		}
-
-//		override public function listNotificationInterests():Array 
-//		{			
-////			return [ ApplicationFacade.OBJECT_COMPLIT ];
-//		}
-
-//		override public function handleNotification( note:INotification ):void 
-//		{
-//			switch ( note.getName() ) 
-//			{				
-//				case ApplicationFacade.OBJECT_COMPLIT:
-//					trace("ObjectViewMediator");
-//					compliteObject(note.getBody() as ObjectView);
-//					break;				
-//			}
-//		}
-
+		
 		override public function listNotificationInterests():Array 
 		{			
 			return [ OBJECT_TYPE_CHAGED ];

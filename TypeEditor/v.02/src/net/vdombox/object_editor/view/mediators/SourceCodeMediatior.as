@@ -20,7 +20,7 @@ package net.vdombox.object_editor.view.mediators
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
-			sourceCode.addEventListener( FlexEvent.CONTENT_CREATION_COMPLETE, showSourceCode );
+			sourceCode.addEventListener( FlexEvent.SHOW, showSourceCode );
 		}
 		
 		private function showSourceCode(event: FlexEvent): void

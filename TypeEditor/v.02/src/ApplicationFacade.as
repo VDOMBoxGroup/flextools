@@ -25,6 +25,7 @@ package
 		public static const PARSE_XML_FILES			:String	= "ParseXMLFiles";
 		public static const OBJECT_COMPLIT			:String	= "ObjectComplit";
 		public static const OBJECT_EXIST			:String	= "objectExist";
+		public static const SAVE_OBJECT_TYPE		:String	= "saveObjectType";
 
 		public static function getInstance() : ApplicationFacade 
 		{

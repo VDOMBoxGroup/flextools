@@ -19,35 +19,23 @@
 				if (!_tabNavigator)
 				{
 					_tabNavigator = new TabNavigator();
-					addElement(_tabNavigator)					
+					addElementAt(_tabNavigator, 0)
+					
 				}
 				return _tabNavigator;
 			}
-			
-//			public function get saveButton():Button
-//			{
-//				if (!_saveButton)
-//				{
-//					_saveButton = new Button();
-//					
-//					_saveButton: Button = new Button();
-//					_saveButton.id		= "saveButton";
-//					_saveButton.label 	= "Save";
-//					_saveButton.AD
-//					_tabNavigator.addElement(_saveButton);
-//				}
-//				return _saveButton;
-//			}
 			
 			public function set  tabNavigator(obj:TabNavigator):void
 			{
 				if (!_tabNavigator)
 				{
 					_tabNavigator = new TabNavigator();
-					addElement(_tabNavigator)
+					addElementAt(_tabNavigator, 0)
 				} 
 				 _tabNavigator = obj;
 			}
+			
+//		
 			
 		]]>
 	</fx:Script>
@@ -81,4 +69,6 @@
 			<ns:Events/> 	</s:NavigatorContent>
 		
 	</mx:TabNavigator-->
+	<s:Button label="Save" id="saveObjectTypeButton" />
+		
 </mx:VBox>
