@@ -8,6 +8,7 @@ package net.vdombox.object_editor.view.mediators
 
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
 
 	import org.puremvc.as3.interfaces.IMediator;
@@ -32,11 +33,13 @@ package net.vdombox.object_editor.view.mediators
 		public function validateObjectTypeVO(event:Event):void
 		{
 			information.label= "Information*";
+			facade.sendNotification( ObjectViewMediator.OBJECT_TYPE_CHAGED, objectTypeVO);
 		}
 
 		private function showInformation(event: FlexEvent): void
 		{
 			compliteInformation();
+
 		}
 
 		override public function listNotificationInterests():Array 
