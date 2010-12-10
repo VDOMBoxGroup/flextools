@@ -1,7 +1,6 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.Event;
-	import flash.net.dns.AAAARecord;
 
 	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
@@ -64,8 +63,6 @@ package net.vdombox.object_editor.view.mediators
 
 //			var objTypeProxy:ObjectTypeProxy = facade.retrieveProxy(ObjectTypeProxy.NAME) as ObjectTypeProxy;
 //			var objType: ObjectTypeVO = objTypeProxy.getObjectTypeVO( inf.ID );
-
-//TODO запускается каждый раз как переходим на вкладку!!!!!!!!
 
 			information.fname.text 			= objectTypeVO.name;
 			information.fClassName.text		= objectTypeVO.className;

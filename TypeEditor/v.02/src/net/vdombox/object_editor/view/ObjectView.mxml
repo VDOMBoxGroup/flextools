@@ -9,16 +9,35 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.containers.TabNavigator;
+			
+			import spark.components.Button;
 			private var _tabNavigator:TabNavigator;
+			private var _saveButton:Button;
+			
 			public function get tabNavigator():TabNavigator
 			{
 				if (!_tabNavigator)
 				{
 					_tabNavigator = new TabNavigator();
-					addElement(_tabNavigator)
+					addElement(_tabNavigator)					
 				}
 				return _tabNavigator;
 			}
+			
+//			public function get saveButton():Button
+//			{
+//				if (!_saveButton)
+//				{
+//					_saveButton = new Button();
+//					
+//					_saveButton: Button = new Button();
+//					_saveButton.id		= "saveButton";
+//					_saveButton.label 	= "Save";
+//					_saveButton.AD
+//					_tabNavigator.addElement(_saveButton);
+//				}
+//				return _saveButton;
+//			}
 			
 			public function set  tabNavigator(obj:TabNavigator):void
 			{

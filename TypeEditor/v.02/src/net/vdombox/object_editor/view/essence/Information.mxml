@@ -21,7 +21,7 @@
 			import net.vdombox.object_editor.model.Language;
 			import net.vdombox.object_editor.view.popups.ChangeWord;
 			
-			public static const NAME:String = "InformationMediator";
+			public static const INFORMATION_CHANGE:String = "InformationChange";
 			
 			private var language:Language = Language.getInstance();
 			

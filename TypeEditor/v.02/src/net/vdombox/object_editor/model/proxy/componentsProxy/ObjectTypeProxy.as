@@ -46,23 +46,23 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 //			if (!_data) _data = new XML("<Information/>");
 						
 //			var count:uint = 
-			for each ( var data : XML in xml.descendants("Attribute"))  //xml.descendants("Attributes") )
-			{
-				var atrib:AttributeVO = new AttributeVO;
-				
-				atrib.name			= data.Name;
-				atrib.displayName	= data.DisplayName;
-				atrib.defaultValue	= data.DefaultValue;
-				atrib.visible		= data.Visible.toString() == "1";
-				atrib.help			= data.Help;
-				atrib.interfaceType	= data.InterfaceType;//uint
-				atrib.codeInterface	= data.CodeInterface;
-				atrib.colorgroup	= data.Colorgroup;
-				atrib.errorValidationMessage		= data.ErrorValidationMessage;
-				atrib.regularExpressionValidation	= data.RegularExpressionValidation;
-							
-				objType.atributes
-			}
+//			for each ( var data : XML in xml.descendants("Attribute"))  //xml.descendants("Attributes") )
+//			{
+//				var atrib:AttributeVO = new AttributeVO;
+//				
+//				atrib.name			= data.Name;
+//				atrib.displayName	= data.DisplayName;
+//				atrib.defaultValue	= data.DefaultValue;
+//				atrib.visible		= data.Visible.toString() == "1";
+//				atrib.help			= data.Help;
+//				atrib.interfaceType	= data.InterfaceType;//uint
+//				atrib.codeInterface	= data.CodeInterface;
+//				atrib.colorgroup	= data.Colorgroup;
+//				atrib.errorValidationMessage		= data.ErrorValidationMessage;
+//				atrib.regularExpressionValidation	= data.RegularExpressionValidation;
+//							
+//				objType.atributes
+//			}
 			_objectTypeList[objType.id] = objType;
 			return objType;
 			
