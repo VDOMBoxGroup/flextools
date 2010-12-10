@@ -3,8 +3,6 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
-	
-	
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	
 	import org.puremvc.as3.interfaces.*;
@@ -22,7 +20,8 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
         }	
 		
 		public function newObjectTypeVO(xml:XML):ObjectTypeVO
-		{				
+		{	
+			trace("newObjectTypeVO");
 			var objType: ObjectTypeVO = new ObjectTypeVO;
 			var information: XML = xml.Information[0];
 			objType.name 		= information.Name;
@@ -30,20 +29,18 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objType.className 	= information.ClassName;
 			objType.id		 	= information.ID;			
 			objType.dynamic		= information.Dynamic.toString() == "1";
-			objType.moveable	= information.Moveable.toString() == "1";
-			//исправить
+			objType.moveable	= information.Moveable.toString() == "1";			
 			objType.resizable	= information.Resizable;	
 			objType.container	= information.Container;	
 			objType.version		= information.Version;	
 			objType.interfaceType	= information.InterfaceType;	
-			objType.optimizationPriority	= information.OptimizationPriority;	
-			
-			
+			objType.optimizationPriority = information.OptimizationPriority;	
 			
 			objType.sourceCode	= xml.SourceCode;
 			
 			_objectTypeList[objType.id] = objType;
 			return objType;
+			
 		}
 		
 		public function getObjectTypeVO(id:String):ObjectTypeVO

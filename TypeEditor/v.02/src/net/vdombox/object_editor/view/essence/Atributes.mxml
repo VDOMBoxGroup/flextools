@@ -15,8 +15,7 @@
 					{label:"RichText Editor", data:2}, 
 					{label:"Text Editor", data:3}, 
 					{label:"Picture", data:4}, 
-					{label:"Special Table", data:5}]);
-			
+					{label:"Special Table", data:5}]);			
 		]]>
 	</fx:Script>
 	<s:HGroup>

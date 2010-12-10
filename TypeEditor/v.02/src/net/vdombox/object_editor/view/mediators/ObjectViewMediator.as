@@ -26,15 +26,18 @@ package net.vdombox.object_editor.view.mediators
 			var sourceCode:SourceCode  = new SourceCode();
 			objectView.tabNavigator.addChild(sourceCode);
 
-			facade.registerMediator( new InformationMediatior( information, objTypeVO ) );
-			facade.registerMediator( new SourceCodeMediatior ( sourceCode,  objTypeVO ) );
+			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
+			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
+			
+			trace("ObjectViewMediator constructor");
 		}
 		
 		protected function compliteObject( objTypeVO: ObjectTypeVO ):void
 		{
 //TODO: registerMediator and retrieveMediator with GUID			
-			var infMediator:InformationMediatior = InformationMediatior( facade.retrieveMediator( InformationMediatior.NAME ) );
+			var infMediator:InformationMediator = InformationMediator( facade.retrieveMediator( InformationMediator.NAME ) );
 //			infMediator.
+			trace("я тут? o_O");
 		}
 		
 //		override public function listNotificationInterests():Array 

@@ -1,5 +1,6 @@
 package net.vdombox.object_editor.view.mediators
 {
+	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
 	
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
@@ -10,16 +11,17 @@ package net.vdombox.object_editor.view.mediators
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 	
-	public class InformationMediatior extends Mediator implements IMediator
+	public class InformationMediator extends Mediator implements IMediator
 	{
-		public static const NAME:String = "InformationMediatior";
+		public static const NAME:String = "InformationMediator";
 		private var objectTypeVO:ObjectTypeVO;
 		
-		public function InformationMediatior( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
+		public function InformationMediator( viewComponent:Object, objTypeVO:ObjectTypeVO ) 
 		{			
 			super( NAME+objTypeVO.id, viewComponent );
 			this.objectTypeVO = objTypeVO;	
 			information.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
+			trace("InformationMediator");
 //			information.addEventListener( FlexEvent.SHOW, showInformation );
 		}
 		
@@ -56,8 +58,14 @@ package net.vdombox.object_editor.view.mediators
 			information.fID.text 			= objectTypeVO.id;
 			information.fCategory.text		= objectTypeVO.category;
 			information.fDynamic.selected	=  objectTypeVO.dynamic;
-			trace("compliteInformation");
+			information.fMoveable.selected	=  objectTypeVO.moveable;
+			information.fVersion.text 		= objectTypeVO.version;
 			
+			information.fResizable.selectedIndex 	 = objectTypeVO.resizable;
+			information.fContainer.selectedIndex 	 = objectTypeVO.container;			
+			information.fInterfaceType.selectedIndex = objectTypeVO.interfaceType;
+			information.fOptimizationPriority.value  = objectTypeVO.optimizationPriority;
+			trace("compliteInformation");
 		}		
 		
 		protected function get information():Information

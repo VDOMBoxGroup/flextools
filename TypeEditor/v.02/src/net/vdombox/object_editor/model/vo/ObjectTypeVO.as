@@ -24,11 +24,12 @@ package net.vdombox.object_editor.model.vo
 		public var className	:String = "";
 		public var category		:String = "";
 		public var id			:String = "";
+		public var version		:String = "";
 		public var dynamic		:Boolean = false;	
 		public var moveable		:Boolean = false;
 		public var resizable	:uint = 0;
 		public var container	:uint = 0;
-		public var version		:uint = 0;
+		
 		public var interfaceType:uint = 0;
 		public var optimizationPriority	:uint = 0;
 					

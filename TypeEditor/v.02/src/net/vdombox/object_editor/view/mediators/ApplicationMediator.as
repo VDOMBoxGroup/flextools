@@ -34,7 +34,8 @@ package net.vdombox.object_editor.view.mediators
 			//TODO: add id of objTypeVO
 			objView.label = objTypeVO.name;					
 			app.tabNavigator.addChild(objView);
-			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );					
+			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
+			trace("newObjectView, register ObjectViewMediator");
 		}
 		
 		override public function listNotificationInterests():Array 
