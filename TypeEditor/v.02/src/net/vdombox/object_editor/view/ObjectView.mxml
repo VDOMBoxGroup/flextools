@@ -17,26 +17,26 @@
 			public function get tabNavigator():TabNavigator
 			{
 				if (!_tabNavigator)
-				{
-					_tabNavigator = new TabNavigator();
-					addElementAt(_tabNavigator, 0)
-					
-				}
+					creatTabNavegator();					
+
 				return _tabNavigator;
 			}
 			
 			public function set  tabNavigator(obj:TabNavigator):void
 			{
 				if (!_tabNavigator)
-				{
-					_tabNavigator = new TabNavigator();
-					addElementAt(_tabNavigator, 0)
-				} 
-				 _tabNavigator = obj;
+					creatTabNavegator();
+
+				_tabNavigator = obj;
 			}
 			
-//		
-			
+			private function creatTabNavegator():void
+			{
+				_tabNavigator = new TabNavigator();
+				_tabNavigator.percentHeight = 100;
+				_tabNavigator.percentWidth = 100;
+				addElement(_tabNavigator)
+			}
 		]]>
 	</fx:Script>
 		
