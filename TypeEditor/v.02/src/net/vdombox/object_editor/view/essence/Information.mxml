@@ -21,6 +21,7 @@
 			import net.vdombox.object_editor.model.Language;
 			import net.vdombox.object_editor.view.popups.ChangeWord;
 			
+			public static const NAME:String = "InformationMediator";
 			
 			private var language:Language = Language.getInstance();
 			
@@ -150,6 +151,7 @@
 			
 			private function saveChanges():void
 			{
+				dispatchEvent(new Event( Event.CHANGE ));
 //				_data.Name = fname.text;
 //				_data.DisplayName = fDisplayName.text;	
 //				_data.XMLScriptName = fXMLScriptName.text;	
