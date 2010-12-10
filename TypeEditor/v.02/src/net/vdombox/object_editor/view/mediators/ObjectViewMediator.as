@@ -1,13 +1,13 @@
 package net.vdombox.object_editor.view.mediators
 {
 	import flash.events.MouseEvent;
-	
+
 	import net.vdombox.object_editor.model.proxy.componentsProxy.ObjectTypeProxy;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
 	import net.vdombox.object_editor.view.ObjectView;
 	import net.vdombox.object_editor.view.essence.Information;
 	import net.vdombox.object_editor.view.essence.SourceCode;
-	
+
 	import org.puremvc.as3.interfaces.IMediator;
 	import org.puremvc.as3.interfaces.INotification;
 	import org.puremvc.as3.patterns.mediator.Mediator;
@@ -48,7 +48,7 @@ package net.vdombox.object_editor.view.mediators
 		{
 			facade.sendNotification( ApplicationFacade.SAVE_OBJECT_TYPE, objectTypeVO ); 
 		}
-		
+
 		override public function listNotificationInterests():Array 
 		{			
 			return [ OBJECT_TYPE_CHAGED ];
