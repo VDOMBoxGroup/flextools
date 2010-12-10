@@ -36,7 +36,8 @@ package net.vdombox.object_editor.view.mediators
 			facade.registerMediator( new InformationMediator( information, objTypeVO ) );
 			facade.registerMediator( new SourceCodeMediatior( sourceCode,  objTypeVO ) );
 
-			trace("ObjectViewMediator constructor");
+			objectView.validateNow();
+			trace("ObjectViewMediator constructor: " + objTypeVO.id);
 		}
 
 		protected function compliteObject( objTypeVO: ObjectTypeVO ):void

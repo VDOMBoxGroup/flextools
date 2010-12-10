@@ -25,7 +25,7 @@ package net.vdombox.object_editor.view.mediators
 			this.objectTypeVO = objTypeVO;	
 			information.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			information.addEventListener( Event.CHANGE, validateObjectTypeVO );
-			trace("InformationMediator");
+			trace("InformationMediator: " + objTypeVO.id);
 //			information.addEventListener( FlexEvent.SHOW, showInformation );
 		}
 
@@ -51,7 +51,7 @@ package net.vdombox.object_editor.view.mediators
 			switch ( note.getName() ) 
 			{				
 				case ApplicationMediator.LOAD_INFORMATION:
-					trace("InformationMediatior");
+					trace("InformationMediatior - ");
 					compliteInformation();
 					break;				
 			}
