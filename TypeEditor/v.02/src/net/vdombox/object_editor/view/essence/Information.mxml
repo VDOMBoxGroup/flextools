@@ -52,8 +52,10 @@
 							
 			public function set  dataProvader(xml:XML):void
 			{
+				return;
 				this.enabled = true;
 				
+				/*
 				_data =  xml.descendants("Information")[0];
 				if (!_data) _data = new XML("<Information/>");
 				
@@ -137,6 +139,7 @@
 					fContainer.selectedIndex = 0;
 				else
 					fContainer.selectedIndex = int(_data.Container.toString())-1
+				*/
 			}
 			
 			private function validateValue(value:String):void
