@@ -1,19 +1,11 @@
 package net.vdombox.object_editor.model.vo
 {
-	import flash.utils.Dictionary;
-	import flash.xml.XMLNode;
-	
-	import mx.utils.UIDUtil;
-
 	public class ObjectTypeVO
 	{			
-//		public var information:XMLList;		
-		
-//		public var information:Dictionary;
 		public var sourceCode:String;
 		
 		public var actions:Array;
-		public var atributes:Array;
+		public var atributes:Array = [];
 		public var events:Array;
 		public var language:Array;
 		public var libraris:Array;
@@ -28,8 +20,7 @@ package net.vdombox.object_editor.model.vo
 		public var dynamic		:Boolean = false;	
 		public var moveable		:Boolean = false;
 		public var resizable	:uint = 0;
-		public var container	:uint = 0;
-		
+		public var container	:uint = 0;		
 		public var interfaceType:uint = 0;
 		public var optimizationPriority	:uint = 0;
 					

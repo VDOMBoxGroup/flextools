@@ -1,5 +1,7 @@
 package net.vdombox.object_editor.view.mediators
 {
+	import flash.net.dns.AAAARecord;
+	
 	import mx.collections.ArrayCollection;
 	import mx.events.FlexEvent;
 	
@@ -23,6 +25,11 @@ package net.vdombox.object_editor.view.mediators
 			information.addEventListener( FlexEvent.CREATION_COMPLETE, showInformation );
 			trace("InformationMediator");
 //			information.addEventListener( FlexEvent.SHOW, showInformation );
+		}
+		
+		public function validateObjectTypeVO():void
+		{
+		
 		}
 		
 		private function showInformation(event: FlexEvent): void

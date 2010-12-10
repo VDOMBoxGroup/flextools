@@ -3,7 +3,9 @@
  */
 package net.vdombox.object_editor.model.proxy.componentsProxy
 {
+	import net.vdombox.object_editor.model.vo.AttributeVO;
 	import net.vdombox.object_editor.model.vo.ObjectTypeVO;
+	import net.vdombox.object_editor.view.essence.Atributes;
 	
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.proxy.Proxy;
@@ -23,6 +25,7 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 		{	
 			trace("newObjectTypeVO");
 			var objType: ObjectTypeVO = new ObjectTypeVO;
+			//information
 			var information: XML = xml.Information[0];
 			objType.name 		= information.Name;
 			objType.category 	= information.Category;
@@ -35,9 +38,31 @@ package net.vdombox.object_editor.model.proxy.componentsProxy
 			objType.version		= information.Version;	
 			objType.interfaceType	= information.InterfaceType;	
 			objType.optimizationPriority = information.OptimizationPriority;	
-			
-			objType.sourceCode	= xml.SourceCode;
-			
+			//sourceCode
+			objType.sourceCode	= xml.SourceCode.toString();
+			//atributes
+
+//			_data =  xml.descendants("Information")[0];
+//			if (!_data) _data = new XML("<Information/>");
+						
+//			var count:uint = 
+			for each ( var data : XML in xml.descendants("Attribute"))  //xml.descendants("Attributes") )
+			{
+				var atrib:AttributeVO = new AttributeVO;
+				
+				atrib.name			= data.Name;
+				atrib.displayName	= data.DisplayName;
+				atrib.defaultValue	= data.DefaultValue;
+				atrib.visible		= data.Visible.toString() == "1";
+				atrib.help			= data.Help;
+				atrib.interfaceType	= data.InterfaceType;//uint
+				atrib.codeInterface	= data.CodeInterface;
+				atrib.colorgroup	= data.Colorgroup;
+				atrib.errorValidationMessage		= data.ErrorValidationMessage;
+				atrib.regularExpressionValidation	= data.RegularExpressionValidation;
+							
+				objType.atributes
+			}
 			_objectTypeList[objType.id] = objType;
 			return objType;
 			

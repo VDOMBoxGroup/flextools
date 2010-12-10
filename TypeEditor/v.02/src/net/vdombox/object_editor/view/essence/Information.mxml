@@ -150,25 +150,25 @@
 			
 			private function saveChanges():void
 			{
-				_data.Name = fname.text;
-				_data.DisplayName = fDisplayName.text;	
-				_data.XMLScriptName = fXMLScriptName.text;	
-				_data.RenderType = fRenderType.text;
-				_data.Description = fDescription.text;
-				_data.ClassName = fClassName.text;
-				_data.ID = fID.text;
-				_data.Category = fCategory.text;
-				_data.Version = fVersion.text;
-				_data.OptimizationPriority = fOptimizationPriority.value;
-				_data.WCAG = fWCAG.text;
-				_data.Containers = fContainers.text;
-				_data.RemoteMethods = fRemoteMethods.text;
-				_data.Handlers = fHandlers.text;
-				_data.Moveable = getIntFromBoolean(fMoveable.selected);
-				_data.Dynamic = getIntFromBoolean(fDynamic.selected);
-				_data.InterfaceType = fInterfaceType.selectedIndex;
-				_data.Resizable = fResizable.selectedIndex;
-				_data.Container = fContainer.selectedIndex + 1;
+//				_data.Name = fname.text;
+//				_data.DisplayName = fDisplayName.text;	
+//				_data.XMLScriptName = fXMLScriptName.text;	
+//				_data.RenderType = fRenderType.text;
+//				_data.Description = fDescription.text;
+//				_data.ClassName = fClassName.text;
+//				_data.ID = fID.text;
+//				_data.Category = fCategory.text;
+//				_data.Version = fVersion.text;
+//				_data.OptimizationPriority = fOptimizationPriority.value;
+//				_data.WCAG = fWCAG.text;
+//				_data.Containers = fContainers.text;
+//				_data.RemoteMethods = fRemoteMethods.text;
+//				_data.Handlers = fHandlers.text;
+//				_data.Moveable = getIntFromBoolean(fMoveable.selected);
+//				_data.Dynamic = getIntFromBoolean(fDynamic.selected);
+//				_data.InterfaceType = fInterfaceType.selectedIndex;
+//				_data.Resizable = fResizable.selectedIndex;
+//				_data.Container = fContainer.selectedIndex + 1;
 			}
 			
 			private function getIntFromBoolean(bool:Boolean):String

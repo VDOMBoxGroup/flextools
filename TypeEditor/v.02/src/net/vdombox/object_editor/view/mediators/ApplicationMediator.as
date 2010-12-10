@@ -17,21 +17,18 @@ package net.vdombox.object_editor.view.mediators
 	{
 		public static const NAME			:String = "ApplicationMediator";				
 		public static const LOAD_INFORMATION:String = "LoadInformation";
-			
-		
+				
 		public function ApplicationMediator( viewComponent:Object ) 
 		{			
 			super( NAME, viewComponent );	
 			
 			facade.registerMediator( new OpenMediator( app.openButton ) ); 		
 			facade.registerMediator( new AccordionMediator( app.objAccordion ) );
-//			facade.registerMediator( new AccordionMediator( app.objAccordion ) );
 		}
 		
 		public function newObjectView( objTypeVO:ObjectTypeVO ) : void
 		{			
 			var objView:ObjectView = new ObjectView();
-			//TODO: add id of objTypeVO
 			objView.label = objTypeVO.name;					
 			app.tabNavigator.addChild(objView);
 			facade.registerMediator( new ObjectViewMediator( objView, objTypeVO ) );	
