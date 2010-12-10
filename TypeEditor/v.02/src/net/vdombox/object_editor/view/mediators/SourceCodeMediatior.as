@@ -24,8 +24,9 @@ package net.vdombox.object_editor.view.mediators
 		}
 		
 		private function showSourceCode(event: FlexEvent): void
-		{
+		{			
 			compliteSourceCode();
+			sourceCode.validateNow();
 		}
 	
 		protected function compliteSourceCode( ):void
